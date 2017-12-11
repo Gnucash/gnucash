@@ -214,14 +214,14 @@ options specified in the Options panels."))
 (define (sortkey-get-info sortkey info)
   (cdr (assq info (cdr (assq sortkey sortkey-list)))))
 
-(define (timepair-year tp)    (gnc:timepair-get-year tp))
-(define (timepair-quarter tp) (+ (* 10 (timepair-year tp))  (gnc:timepair-get-quarter tp)))
-(define (timepair-month tp)   (+ (* 100 (timepair-year tp)) (gnc:timepair-get-month tp)))
-(define (timepair-week tp)    (+ (* 100 (timepair-year tp)) (gnc:timepair-get-week tp)))
-(define (split-week a) (timepair-week (gnc-transaction-get-date-posted (xaccSplitGetParent a))))
-(define (split-month a) (timepair-month (gnc-transaction-get-date-posted (xaccSplitGetParent a))))
-(define (split-quarter a) (timepair-quarter (gnc-transaction-get-date-posted (xaccSplitGetParent a))))
-(define (split-year a) (timepair-year (gnc-transaction-get-date-posted (xaccSplitGetParent a))))
+(define (time64-year t64)    (gnc:date-get-year (gnc-localtime t64)))
+(define (time64-quarter t64) (+ (* 10 (gnc:date-get-year (gnc-localtime t64)))  (gnc:date-get-quarter (gnc-localtime t64))))
+(define (time64-month t64)   (+ (* 100 (gnc:date-get-year (gnc-localtime t64))) (gnc:date-get-month (gnc-localtime t64))))
+(define (time64-week t64)    (gnc:date-get-week (gnc-localtime t64)))
+(define (split-week a) (time64-week (xaccTransGetDate (xaccSplitGetParent a))))
+(define (split-month a) (time64-month (xaccTransGetDate (xaccSplitGetParent a))))
+(define (split-quarter a) (time64-quarter (xaccTransGetDate (xaccSplitGetParent a))))
+(define (split-year a) (time64-year (xaccTransGetDate (xaccSplitGetParent a))))
 
 (define date-subtotal-list
   ;; List for date option.
@@ -999,8 +999,8 @@ Credit Card, and Income accounts."))))))
          ((month) gnc:date-get-month-year-string)
          ((quarter) gnc:date-get-quarter-year-string)
          ((year) gnc:date-get-year-string))
-       (gnc:timepair->date
-        (gnc-transaction-get-date-posted
+       (gnc-localtime
+        (xaccTransGetDate
          (xaccSplitGetParent split)))))
 
     (define (render-account renderer-key split anchor?)
@@ -1055,17 +1055,17 @@ Credit Card, and Income accounts."))))))
                     (if transaction-row?
                         (gnc:make-html-table-cell/markup
                          "date-cell"
-                         (gnc-print-date (gnc-transaction-get-date-posted trans)))
+                         (qof-print-date (xaccTransGetDate trans)))
                         "")))
 
         (if (column-uses? 'reconciled-date used-columns)
             (addto! row-contents
                     (gnc:make-html-table-cell/markup
                      "date-cell"
-                     (let ((date (gnc-split-get-date-reconciled split)))
-                       (if (equal? date (cons 0 0))
+                     (let ((date (xaccSplitGetDateReconciled split)))
+                       (if (zero? date)
                            ""
-                           (gnc-print-date date))))))
+                           (qof-print-date date))))))
 
         (if (column-uses? 'num used-columns)
             (addto! row-contents
