@@ -610,7 +610,7 @@
     split-value))
 
 
-(define date-sorting-types (list 'date 'register-order))
+(define date-sorting-types (list 'date 'reconciled-date))
 
 (define (trep-options-generator)
   (define gnc:*transaction-report-options* (gnc:new-options))
