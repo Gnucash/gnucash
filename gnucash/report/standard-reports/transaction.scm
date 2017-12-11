@@ -610,7 +610,7 @@
     split-value))
 
 
-(define date-sorting-types (list 'date 'exact-time 'register-order))
+(define date-sorting-types (list 'date 'register-order))
 
 (define (trep-options-generator)
   (define gnc:*transaction-report-options* (gnc:new-options))
@@ -768,10 +768,6 @@ Use a period (.) to match a single character e.g. '20../.' will match 'Travel 20
                            (N_ "Date")
                            (N_ "Sort by date."))
 
-                   (vector 'exact-time
-                           (N_ "Exact Time")
-                           (N_ "Sort by exact time."))
-
                    (vector 'reconciled-date
                            (N_ "Reconciled Date")
                            (N_ "Sort by the Reconciled Date."))
@@ -822,10 +818,6 @@ Use a period (.) to match a single character e.g. '20../.' will match 'Travel 20
                    (vector 'date
                            (N_ "Date")
                            (N_ "Sort by date."))
-
-                   (vector 'exact-time
-                           (N_ "Exact Time")
-                           (N_ "Sort by exact time."))
 
                    (vector 'reconciled-date
                            (N_ "Reconciled Date")
@@ -1423,9 +1415,6 @@ Credit Card, and Income accounts."))))))
                                   split-account-code-same-p
                                   render-account-subheading
                                   render-account-subtotal))
-            (cons 'exact-time    (vector
-                                  (list SPLIT-TRANS TRANS-DATE-POSTED)
-                                  #f #f #f))
             (cons 'date          (vector
                                   (list SPLIT-TRANS TRANS-DATE-POSTED)
                                   #f #f #f))
