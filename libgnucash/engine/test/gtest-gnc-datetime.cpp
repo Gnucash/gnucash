@@ -282,13 +282,15 @@ TEST(gnc_datetime_constructors, test_struct_tm_constructor)
 
     const time64 time = 2394187200; //2045-11-13 12:00:00 Z
     GncDateTime atime(tm);
-    EXPECT_EQ(static_cast<time64>(atime), time);
+    EXPECT_EQ(static_cast<time64>(atime) + atime.offset(), time);
     const struct tm tm1 = static_cast<struct tm>(atime);
     EXPECT_EQ(tm1.tm_year, tm.tm_year);
     EXPECT_EQ(tm1.tm_mon, tm.tm_mon);
+// We have to contort these a bit to handle offsets > 12, e.g. New Zealand during DST.
+//    EXPECT_EQ(tm1.tm_mday - (11 + atime.offset() / 3600) / 24 , tm.tm_mday);
+//    EXPECT_EQ((24 + tm1.tm_hour - atime.offset() / 3600) % 24, tm.tm_hour);
     EXPECT_EQ(tm1.tm_mday, tm.tm_mday);
-// We have to contort this a bit to handle offsets > 12, e.g. New Zealand during DST.
-    EXPECT_EQ((24 + tm1.tm_hour - atime.offset() / 3600) % 24, tm.tm_hour);
+    EXPECT_EQ(tm1.tm_hour, tm.tm_hour);
     EXPECT_EQ(tm1.tm_min, tm.tm_min);
 }
 
@@ -324,8 +326,10 @@ TEST(gnc_datetime_constructors, test_gncdate_neutral_constructor)
 TEST(gnc_datetime_functions, test_format)
 {
     GncDateTime atime(2394187200); //2045-11-13 12:00:00 Z
-    //Date only to finesse timezone issues. It will still fail in +12 DST.
-    EXPECT_EQ(atime.format("%d-%m-%Y"), "13-11-2045");
+    if ((atime.offset() / 3600) > 12)
+        EXPECT_EQ(atime.format("%d-%m-%Y"), "14-11-2045");
+    else
+        EXPECT_EQ(atime.format("%d-%m-%Y"), "13-11-2045");
 }
 
 TEST(gnc_datetime_functions, test_format_zulu)
@@ -343,9 +347,10 @@ TEST(gnc_datetime_functions, test_date)
     auto ymd = gncd.year_month_day();
     EXPECT_EQ(ymd.year, 2045);
     EXPECT_EQ(ymd.month, 11);
-    EXPECT_EQ(ymd.day, 13);
+    EXPECT_EQ(ymd.day - (12 + atime.offset() / 3600) / 24, 13);
 }
-
+/* This test works only in the America/LosAngeles time zone and
+ * there's no way at present to make it more flexible.
 TEST(gnc_datetime_functions, test_timezone_offset)
 {
 
@@ -356,3 +361,4 @@ TEST(gnc_datetime_functions, test_timezone_offset)
     GncDateTime gncdt3(1490525940);  //26 Mar 2017
     EXPECT_EQ(-25200, gncdt3.offset());
 }
+*/

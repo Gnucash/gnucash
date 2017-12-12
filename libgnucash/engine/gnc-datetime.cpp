@@ -29,6 +29,7 @@ extern "C"
 }
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/date_time/local_time/local_time.hpp>
 #include <boost/regex.hpp>
 #include <libintl.h>
 #include <map>
@@ -163,11 +164,22 @@ LDT_from_struct_tm(const struct tm tm)
         auto tdur = boost::posix_time::time_duration(tm.tm_hour, tm.tm_min,
                                                      tm.tm_sec, 0);
         auto tz = tzp.get(tdate.year());
-        return LDT(PTime(tdate, tdur), tz);
+        LDT ldt(tdate, tdur, tz, LDTBase::EXCEPTION_ON_ERROR);
+        if (tm.tm_isdst == -1 && ldt.is_dst())
+            ldt += tz->dst_offset();
+        return ldt;
     }
     catch(boost::gregorian::bad_year)
     {
         throw(std::invalid_argument("Time value is outside the supported year range."));
+    }
+    catch(boost::local_time::time_label_invalid)
+    {
+        throw(std::invalid_argument("Struct tm does not resolve to a valid time."));
+    }
+    catch(boost::local_time::ambiguous_result)
+    {
+        throw(std::invalid_argument("Struct tm can resolve to more than one time."));
     }
 }
 

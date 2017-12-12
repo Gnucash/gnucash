@@ -594,7 +594,6 @@ void gnc_tm_set_day_start (struct tm *tm)
     tm->tm_hour = 0;
     tm->tm_min = 0;
     tm->tm_sec = 0;
-    tm->tm_isdst = -1;
 }
 
 /** The gnc_tm_set_day_middle() inline routine will set the appropriate
@@ -609,7 +608,6 @@ void gnc_tm_set_day_middle (struct tm *tm)
     tm->tm_hour = 12;
     tm->tm_min = 0;
     tm->tm_sec = 0;
-    tm->tm_isdst = -1;
 }
 
 /** The gnc_tm_set_day_end() inline routine will set the appropriate
@@ -624,7 +622,6 @@ void gnc_tm_set_day_end (struct tm *tm)
     tm->tm_hour = 23;
     tm->tm_min = 59;
     tm->tm_sec = 59;
-    tm->tm_isdst = -1;
 }
 
 /** The gnc_time64_get_day_start() routine will take the given time in

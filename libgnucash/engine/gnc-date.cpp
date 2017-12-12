@@ -208,7 +208,8 @@ gnc_mktime (struct tm* time)
     {
         normalize_struct_tm (time);
         GncDateTime gncdt(*time);
-        return static_cast<time64>(gncdt) - gncdt.offset();
+        *time = static_cast<struct tm>(gncdt);
+        return static_cast<time64>(gncdt);
     }
     catch(std::invalid_argument)
     {
@@ -222,7 +223,14 @@ gnc_timegm (struct tm* time)
     try
     {
         normalize_struct_tm(time);
-        return static_cast<time64>(GncDateTime(*time));
+        GncDateTime gncdt(*time);
+        *time = static_cast<struct tm>(gncdt);
+        time->tm_sec -= gncdt.offset();
+        normalize_struct_tm(time);
+#ifdef HAVE_STRUcT_TM_GMTOFF
+        time->tm_gmtoff = 0;
+#endif
+        return static_cast<time64>(gncdt) - gncdt.offset();
     }
     catch(std::invalid_argument)
     {

@@ -268,10 +268,10 @@ test_gnc_mktime (void)
 #endif
     };
     guint ind;
-    int offset = timegm(&time[4]) - mktime(&time[4]);
 
     for (ind = 0; ind < G_N_ELEMENTS (time); ind++)
     {
+        int offset = timegm(&time[ind]) - mktime(&time[ind]);
         time64 secs = gnc_mktime (&time[ind]);
 #if !PLATFORM(WINDOWS)
 	//The timezone database uses local time for some
@@ -319,7 +319,8 @@ test_gnc_mktime_normalization (void)
 #endif
     };
     guint ind;
-    int offset = timegm(&normal_time) - mktime(&normal_time);
+    time_t calc_timegm = timegm(&normal_time);
+    time_t calc_time = mktime(&normal_time);
     for (ind = 0; ind < G_N_ELEMENTS (time); ind++)
     {
         time64 secs = gnc_mktime (&time[ind]);
@@ -330,7 +331,7 @@ test_gnc_mktime_normalization (void)
         g_assert_cmpint (time[ind].tm_mday, ==, normal_time.tm_mday);
         g_assert_cmpint (time[ind].tm_mon, ==, normal_time.tm_mon);
         g_assert_cmpint (time[ind].tm_year, ==, normal_time.tm_year);
-        g_assert_cmpint (secs, ==, ans - offset);
+        g_assert_cmpint (secs, ==, ans - (calc_timegm - calc_time));
     }
 }
 
@@ -705,9 +706,11 @@ test_timespecCanonicalDayTime (void)
     const int sec_per_day = 24 * 3600;
     const int sec_per_mo = 30 * sec_per_day;
     const time64 sec_per_yr = 365 * sec_per_day;
-    const time64 secs = 8 * 3600 + 43 * 60 + 11;
-    const time64 secs1 = 23 * sec_per_yr + 5 * sec_per_mo + 11 * sec_per_day + 8 * 3600 + 43 * 60 + 11;
-    const time64 secs2 = 21 * sec_per_yr + 11 * sec_per_mo + 19 * sec_per_day + 21 * 3600 + 9 * 60 + 48;
+    const time64 secs = 8 * 3600 + 43 * 60 + 11; /* 1970-01-01 08:43:11 Z */
+    const time64 secs1 = 23 * sec_per_yr + 5 * sec_per_mo +
+        11 * sec_per_day + 8 * 3600 + 43 * 60 + 11; /* 1993-05-11 08:43:60 Z */
+    const time64 secs2 = 21 * sec_per_yr + 11 * sec_per_mo +
+        19 * sec_per_day + 21 * 3600 + 9 * 60 + 48; /* 1991-11-19 21:09:48 Z */
 
     Timespec t0 = { secs, 0 };
     Timespec ta = { secs1, 0 };
@@ -998,9 +1001,9 @@ test_qof_print_date_buff (void)
     gchar buff[MAX_DATE_LENGTH], ans[MAX_DATE_LENGTH];
     gchar *locale = g_strdup (setlocale (LC_TIME, NULL));
 
-    time64 time1 = 154440000; //1974-11-23 12:00:00
-    time64 time2 = -281188800; //1961-02-02 12:00:00
-    time64 time3 = 2381227200LL; //2045-06-16 12:00:00
+    time64 time1 = 154436399; //1974-11-23 10:59:59
+    time64 time2 = -281192401; //1961-02-02 10:59:59
+    time64 time3 = 2381223599LL; //2045-06-16 10:59:59
     struct tm tm1 = {0, 0, 12, 23, 10, 74};
     struct tm tm2 = {0, 0, 12, 2, 1, 61};
     struct tm tm3 = {0, 0, 12, 16, 5, 145};
@@ -1280,9 +1283,9 @@ test_qof_print_date (void)
 {
     gchar *locale = g_strdup (setlocale (LC_TIME, NULL));
     char ans[MAX_DATE_LENGTH];
-    time64 time1 = 154440000; //1974-11-23 12:00:00
-    time64 time2 = -281188800; //1961-02-02 12:00:00
-    time64 time3 = 2381227200LL; //2045-06-16 12:00:00
+    time64 time1 = 154436399; //1974-11-23 10:59:59
+    time64 time2 = -281192401; //1961-02-02 10:59:59
+    time64 time3 = 2381223599LL; //2045-06-16 10:59:59
     struct tm tm1 = {0, 0, 12, 23, 10, 74};
     struct tm tm2 = {0, 0, 12, 2, 1, 61};
     struct tm tm3 = {0, 0, 12, 16, 5, 145};
@@ -1812,7 +1815,7 @@ static void
 test_gnc_dmy2timespec (FixtureB *f, gconstpointer pData)
 {
     gchar *msg1 = "[qof_dmy2timespec()] Date computation error from Y-M-D 1257-7-2: Time value is outside the supported year range.";
-    gint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
+    gint loglevel = G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL;
     gchar *logdomain = "qof.engine";
     TestErrorStruct check = {loglevel, logdomain, msg1, 0};
     GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
@@ -1828,13 +1831,14 @@ test_gnc_dmy2timespec (FixtureB *f, gconstpointer pData)
 #endif
         Timespec r_t = gnc_dmy2timespec (f->test[i].day, f->test[i].mon,
                                          f->test[i].yr);
-        int offset = gnc_mktime(&tm) - gnc_timegm(&tm);
+        struct tm time1 = tm, time2 = tm;
+        int offset = gnc_mktime(&time1) - gnc_timegm(&time2);
         if (f->test[i].secs == INT64_MAX)
             /* We use INT64_MAX as invalid timespec.secs.
              * As we can't *add* to the max, we can ignore the tz offset in this case. */
             g_assert_cmpint (r_t.tv_sec, ==, INT64_MAX);
         else
-            g_assert_cmpint (r_t.tv_sec, ==, f->test[i].secs + offset);
+            g_assert_cmpint (r_t.tv_sec, ==, f->test[i].secs - offset);
     }
     g_log_set_default_handler (hdlr, 0);
 }
@@ -1868,7 +1872,7 @@ test_gnc_dmy2timespec_end (FixtureB *f, gconstpointer pData)
              * As we can't *add* to the max, we can ignore the tz offset in this case. */
             g_assert_cmpint (r_t.tv_sec, ==, INT64_MAX);
         else
-            g_assert_cmpint (r_t.tv_sec, ==, f->test[i].secs + offset);
+            g_assert_cmpint (r_t.tv_sec, ==, f->test[i].secs - offset);
     }
     g_log_set_default_handler (hdlr, 0);
 }
