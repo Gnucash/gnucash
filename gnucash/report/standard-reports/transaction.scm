@@ -1107,8 +1107,11 @@ Credit Card, and Income accounts."))))))
             (addto! row-contents (xaccSplitGetAmount split)))
 
         (if (column-uses? 'price used-columns)
-            (addto! row-contents  (gnc:make-gnc-monetary (xaccTransGetCurrency parent)
-                                                         (xaccSplitGetSharePrice split))))
+            (addto! row-contents
+                    (gnc:make-html-table-cell/markup
+                     "number-cell"
+                     (gnc:make-gnc-monetary (xaccTransGetCurrency trans)
+                                            (xaccSplitGetSharePrice split)))))
 
         (for-each (lambda (cell)
                     (let ((cell-content (vector-ref cell 0))
