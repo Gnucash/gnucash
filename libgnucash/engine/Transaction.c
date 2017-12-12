@@ -2424,7 +2424,20 @@ xaccTransGetDatePostedGDate (const Transaction *trans)
         if (G_VALUE_HOLDS_BOXED (&v))
              result = *(GDate*)g_value_get_boxed (&v);
 	if (! g_date_valid (&result))
-            result = timespec_to_gdate(xaccTransRetDatePostedTS(trans));
+        {
+             /* Well, this txn doesn't have a GDate saved in a
+              * slot. Avoid getting the date in the local TZ by
+              * converting to UTC before generating the
+              * date. (timespec_to_gdate doesn't do this so don't use
+              * it.
+              */
+             time64 time = xaccTransGetDate(trans);
+             struct tm *stm = gnc_gmtime(&time);
+             g_date_set_dmy(&result, stm->tm_mday,
+                            (GDateMonth)(stm->tm_mon + 1),
+                            stm->tm_year + 1900);
+             free(stm);
+        }
     }
     return result;
 }
