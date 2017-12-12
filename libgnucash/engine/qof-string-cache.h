@@ -79,18 +79,18 @@ void qof_string_cache_destroy(void);
 /** You can use this function as a destroy notifier for a GHashTable
    that uses common strings as keys (or values, for that matter.)
 */
-void qof_string_cache_remove(gconstpointer key);
+void qof_string_cache_remove(const char * key);
 
 /** You can use this function with g_hash_table_insert(), for the key
    (or value), as long as you use the destroy notifier above.
 */
-gpointer qof_string_cache_insert(gconstpointer key);
+char * qof_string_cache_insert(const char * key);
 
 /** Same as CACHE_REPLACE below, but safe to call from C++.
  */
-void qof_string_cache_replace(gconstpointer * dst, gconstpointer src);
+char * qof_string_cache_replace(const char * dst, const char * src);
 
-#define CACHE_INSERT(str) qof_string_cache_insert((gconstpointer)(str))
+#define CACHE_INSERT(str) qof_string_cache_insert((str))
 #define CACHE_REMOVE(str) qof_string_cache_remove((str))
 
 /* Replace cached string currently in 'dst' with string in 'src'.

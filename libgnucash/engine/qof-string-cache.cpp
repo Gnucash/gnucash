@@ -82,7 +82,7 @@ qof_string_cache_destroy (void)
 /* If the key exists in the cache, check the refcount.  If 1, just
  * remove the key.  Otherwise, decrement the refcount */
 void
-qof_string_cache_remove(gconstpointer key)
+qof_string_cache_remove(const char * key)
 {
     if (key)
     {
@@ -106,8 +106,8 @@ qof_string_cache_remove(gconstpointer key)
 
 /* If the key exists in the cache, increment the refcount.  Otherwise,
  * add it with a refcount of 1. */
-gpointer
-qof_string_cache_insert(gconstpointer key)
+char *
+qof_string_cache_insert(const char * key)
 {
     if (key)
     {
@@ -118,7 +118,7 @@ qof_string_cache_insert(gconstpointer key)
         {
             guint* refcount = (guint*)value;
             ++(*refcount);
-            return cache_key;
+            return static_cast <char *> (cache_key);
         }
         else
         {
@@ -126,17 +126,17 @@ qof_string_cache_insert(gconstpointer key)
             guint* refcount = static_cast<unsigned int*>(g_malloc(sizeof(guint)));
             *refcount = 1;
             g_hash_table_insert(cache, new_key, refcount);
-            return new_key;
+            return static_cast <char *> (new_key);
         }
     }
     return NULL;
 }
 
-void
-qof_string_cache_replace(gconstpointer * dst, gconstpointer src)
+char *
+qof_string_cache_replace(char const * dst, char const * src)
 {
-    gpointer tmp {qof_string_cache_insert(src)};
-    qof_string_cache_remove(&dst);
-    *dst = tmp;
+    char * tmp {qof_string_cache_insert (src)};
+    qof_string_cache_remove (dst);
+    return tmp;
 }
 /* ************************ END OF FILE ***************************** */

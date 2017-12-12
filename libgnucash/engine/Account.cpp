@@ -1108,7 +1108,7 @@ gnc_account_create_root (QofBook *book)
     rpriv = GET_PRIVATE(root);
     xaccAccountBeginEdit(root);
     rpriv->type = ACCT_TYPE_ROOT;
-    qof_string_cache_replace((void const **)(&rpriv->accountName), "Root Account");
+    rpriv->accountName = qof_string_cache_replace(rpriv->accountName, "Root Account");
     mark_account (root);
     xaccAccountCommitEdit(root);
     gnc_book_set_root_account(book, root);
@@ -2245,7 +2245,7 @@ xaccAccountSetName (Account *acc, const char *str)
         return;
 
     xaccAccountBeginEdit(acc);
-    qof_string_cache_replace((void const **)(&priv->accountName), str);
+    priv->accountName = qof_string_cache_replace(priv->accountName, str);
     mark_account (acc);
     xaccAccountCommitEdit(acc);
 }
@@ -2264,7 +2264,7 @@ xaccAccountSetCode (Account *acc, const char *str)
         return;
 
     xaccAccountBeginEdit(acc);
-    qof_string_cache_replace((void const **)(&priv->accountCode), str ? str : "");
+    priv->accountCode = qof_string_cache_replace(priv->accountCode, str ? str : "");
     mark_account (acc);
     xaccAccountCommitEdit(acc);
 }
@@ -2283,7 +2283,7 @@ xaccAccountSetDescription (Account *acc, const char *str)
         return;
 
     xaccAccountBeginEdit(acc);
-    qof_string_cache_replace((void const **)(&priv->description), str ? str : "");
+    priv->description = qof_string_cache_replace(priv->description, str ? str : "");
     mark_account (acc);
     xaccAccountCommitEdit(acc);
 }
