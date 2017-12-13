@@ -37,7 +37,7 @@ typedef struct
     int day; //1-31
 } ymd;
 
-enum class DayPart {
+enum DayPart : int {
     start,  // 00:00
     neutral,  // 10:59
     end,  // 23:59

@@ -183,6 +183,8 @@ LDT_from_struct_tm(const struct tm tm)
     }
 }
 
+using TD = boost::posix_time::time_duration;
+
 class GncDateTimeImpl
 {
 public:
@@ -204,8 +206,10 @@ public:
     std::string format_zulu(const char* format) const;
 private:
     LDT m_time;
+    static const TD time_of_day[3];
 };
 
+const TD GncDateTimeImpl::time_of_day[3] = {TD(0, 0, 0), TD(10, 59, 0), TD(23, 59, 59)};
 /** Private implementation of GncDate. See the documentation for that class.
  */
 class GncDateImpl
@@ -235,33 +239,24 @@ private:
 
 /* Member function definitions for GncDateTimeImpl.
  */
-GncDateTimeImpl::GncDateTimeImpl(const GncDateImpl& date, DayPart part) :
-    m_time(unix_epoch, utc_zone)
-{
-    using TD = boost::posix_time::time_duration;
-    static const TD start(0, 0, 0);
-    static const TD neutral(10, 59, 0);
-    static const TD end(23,59, 59);
-    TD time_of_day;
-    switch (part)
-    {
-        case DayPart::start:
-            time_of_day = start;
-            break;
-        case DayPart::neutral:
-            time_of_day = neutral;
-            break;
-        case DayPart::end:
-            time_of_day = end;
-            break;
-    }
 
+GncDateTimeImpl::GncDateTimeImpl(const GncDateImpl& date, DayPart part) :
+    m_time(date.m_greg, time_of_day[part], tzp.get(date.m_greg.year()),
+                     LDT::NOT_DATE_TIME_ON_ERROR)
+{
+    using boost::posix_time::hours;
     try
     {
-        auto tz = utc_zone;
-        if (part != DayPart::neutral)
-            tz = tzp.get(date.m_greg.year());
-        m_time = LDT(date.m_greg, time_of_day, tz, LDT::EXCEPTION_ON_ERROR);
+        if (part == DayPart::neutral)
+        {
+            auto offset = m_time.local_time() - m_time.utc_time();
+            m_time = LDT(date.m_greg, time_of_day[part], utc_zone,
+                         LDT::EXCEPTION_ON_ERROR);
+            if (offset < hours(-10))
+                m_time -= hours(offset.hours() + 10);
+            if (offset > hours(13))
+                m_time -= hours(offset.hours() - 10);
+        }
     }
     catch(boost::gregorian::bad_year)
     {
