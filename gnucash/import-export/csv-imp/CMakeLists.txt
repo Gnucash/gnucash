@@ -18,6 +18,8 @@ SET(csv_import_SOURCES
   gnc-csv-gnumeric-popup.c
   gnc-csv-tokenizer.cpp
   gnc-csv-import-settings.cpp
+  gnc-csv-price-import-settings.cpp
+  gnc-csv-trans-import-settings.cpp
   gnc-dummy-tokenizer.cpp
   gnc-fw-tokenizer.cpp
   gnc-price-import.cpp
@@ -46,6 +48,8 @@ SET(csv_import_noinst_HEADERS
   gnc-csv-gnumeric-popup.h
   gnc-csv-tokenizer.hpp
   gnc-csv-import-settings.hpp
+  gnc-csv-price-import-settings.hpp
+  gnc-csv-trans-import-settings.hpp
   gnc-dummy-tokenizer.hpp
   gnc-fw-tokenizer.hpp
   gnc-price-import.hpp

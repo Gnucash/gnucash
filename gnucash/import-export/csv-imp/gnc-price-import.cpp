@@ -42,7 +42,7 @@ extern "C" {
 #include "gnc-price-props.hpp"
 #include "gnc-csv-tokenizer.hpp"
 #include "gnc-fw-tokenizer.hpp"
-#include "gnc-csv-import-settings.hpp"
+#include "gnc-csv-price-import-settings.hpp"
 
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 
@@ -272,7 +272,7 @@ void GncPriceImport::separators (std::string separators)
 }
 std::string GncPriceImport::separators () { return m_settings.m_separators; }
 
-void GncPriceImport::settings (const CsvImportSettings& settings)
+void GncPriceImport::settings (const CsvPriceImpSettings& settings)
 {
     /* First apply file format as this may recreate the tokenizer */
     file_format (settings.m_file_format);
