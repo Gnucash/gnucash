@@ -319,7 +319,8 @@ test_gnc_mktime_normalization (void)
 #endif
     };
     guint ind;
-    time_t calc_timegm = timegm(&normal_time);
+    struct tm other_time = normal_time;
+    time_t calc_timegm = timegm(&other_time);
     time_t calc_time = mktime(&normal_time);
     for (ind = 0; ind < G_N_ELEMENTS (time); ind++)
     {
@@ -1001,12 +1002,12 @@ test_qof_print_date_buff (void)
     gchar buff[MAX_DATE_LENGTH], ans[MAX_DATE_LENGTH];
     gchar *locale = g_strdup (setlocale (LC_TIME, NULL));
 
-    time64 time1 = 154436399; //1974-11-23 10:59:59
-    time64 time2 = -281192401; //1961-02-02 10:59:59
-    time64 time3 = 2381223599LL; //2045-06-16 10:59:59
     struct tm tm1 = {0, 0, 12, 23, 10, 74};
     struct tm tm2 = {0, 0, 12, 2, 1, 61};
     struct tm tm3 = {0, 0, 12, 16, 5, 145};
+    time64 time1 = gnc_mktime(&tm1);
+    time64 time2 = gnc_mktime(&tm2);
+    time64 time3 = gnc_mktime(&tm3);
 
     qof_date_format_set (QOF_DATE_FORMAT_UK);
     memset ((gpointer)buff, 0, sizeof (buff));
@@ -1283,12 +1284,12 @@ test_qof_print_date (void)
 {
     gchar *locale = g_strdup (setlocale (LC_TIME, NULL));
     char ans[MAX_DATE_LENGTH];
-    time64 time1 = 154436399; //1974-11-23 10:59:59
-    time64 time2 = -281192401; //1961-02-02 10:59:59
-    time64 time3 = 2381223599LL; //2045-06-16 10:59:59
     struct tm tm1 = {0, 0, 12, 23, 10, 74};
     struct tm tm2 = {0, 0, 12, 2, 1, 61};
     struct tm tm3 = {0, 0, 12, 16, 5, 145};
+    time64 time1 = gnc_mktime(&tm1);
+    time64 time2 = gnc_mktime(&tm2);
+    time64 time3 = gnc_mktime(&tm3);
 
     qof_date_format_set (QOF_DATE_FORMAT_UK);
     test_assert_qof_print_date (time1, "23/11/1974");
@@ -1902,13 +1903,24 @@ test_gnc_dmy2timespec_neutral (FixtureB *f, gconstpointer pData)
     gchar *logdomain = "qof.engine";
     TestErrorStruct check = {loglevel, logdomain, msg1, 0};
     GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
-    for (int i = 0; i < sizeof(f->test)/sizeof(TimeMap); ++i)
+    struct tm check_tz;
+    gnc_localtime_r(&(f->test[0].secs), &check_tz);
+    /* gnc_dmy2timespec_neutral returns the timespec for 10:59:00 Z
+     * for timezones in the range -11 to +13. If the timezone being
+     * tested is outside that range then the day of the month will be
+     * different from the one in the test fixture and we skip the
+     * test.
+     */
+    if (check_tz.tm_mday == f->test[0].day)
     {
-        Timespec r_t = gnc_dmy2timespec_neutral (f->test[i].day, f->test[i].mon,
-                                             f->test[i].yr);
+         g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
+         for (int i = 0; i < sizeof(f->test)/sizeof(TimeMap); ++i)
+         {
+              Timespec r_t = gnc_dmy2timespec_neutral (f->test[i].day, f->test[i].mon,
+                                                       f->test[i].yr);
 
-        g_assert_cmpint (r_t.tv_sec, ==, f->test[i].secs);
+              g_assert_cmpint (r_t.tv_sec, ==, f->test[i].secs);
+         }
     }
     g_log_set_default_handler (hdlr, 0);
 }
@@ -2005,21 +2017,32 @@ test_gdate_to_timespec (FixtureB *f, gconstpointer pData)
     gchar *logdomain = G_LOG_DOMAIN;
     TestErrorStruct check = {loglevel, logdomain, msg, 0};
     GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
-    g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
-    for (int i = 0; i < sizeof(f->test)/sizeof(TimeMap); ++i)
+    struct tm check_tz;
+    gnc_localtime_r(&(f->test[0].secs), &check_tz);
+    /* gdate_to_timespec returns the timespec for 10:59:00 Z
+     * for timezones in the range -11 to +13. If the timezone being
+     * tested is outside that range then the day of the month will be
+     * different from the one in the test fixture and we skip the
+     * test.
+     */
+    if (check_tz.tm_mday == f->test[0].day)
     {
-        GDate gd, gd2;
-        Timespec r_t;
-        g_date_clear(&gd, 1);
-        g_date_clear(&gd2, 1);
-        g_date_set_dmy(&gd, f->test[i].day, f->test[i].mon, f->test[i].yr);
-        r_t = gdate_to_timespec(gd);
-        g_assert_cmpint (r_t.tv_sec, ==, f->test[i].secs);
-        if (f->test[i].secs < INT64_MAX)
-        {
-            gd2 = timespec_to_gdate(r_t);
-            g_assert (g_date_compare (&gd2, &gd) == 0);
-        }
+         g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
+         for (int i = 0; i < sizeof(f->test)/sizeof(TimeMap); ++i)
+         {
+              GDate gd, gd2;
+              Timespec r_t;
+              g_date_clear(&gd, 1);
+              g_date_clear(&gd2, 1);
+              g_date_set_dmy(&gd, f->test[i].day, f->test[i].mon, f->test[i].yr);
+              r_t = gdate_to_timespec(gd);
+              g_assert_cmpint (r_t.tv_sec, ==, f->test[i].secs);
+              if (f->test[i].secs < INT64_MAX)
+              {
+                   gd2 = timespec_to_gdate(r_t);
+                   g_assert (g_date_compare (&gd2, &gd) == 0);
+              }
+         }
     }
     g_log_set_default_handler (hdlr, 0);
 }

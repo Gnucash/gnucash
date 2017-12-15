@@ -320,13 +320,22 @@ TEST(gnc_datetime_constructors, test_gncdate_neutral_constructor)
 {
     const ymd aymd = { 2017, 04, 20 };
     GncDateTime atime(GncDate(aymd.year, aymd.month, aymd.day), DayPart::neutral);
-    EXPECT_EQ(atime.format("%d-%m-%Y %H:%M:%S %z"), "20-04-2017 10:59:00 UTC");
+    GncDateTime gncdt(1492685940); /* 20 Apr 2017 10:59:00 Z */
+    /* The ymd constructor sets the time of day at 10:59:00 for
+     * timezones between UTC-10 and UTC+13. For other timezones the
+     * time of day is adjusted to ensure a consistent date and the
+     * adjustment invalidates the test, so skip it.
+     */
+    constexpr time64 max_western_offset = -10 * 3600;
+    constexpr time64 max_eastern_offset = 13 * 3600;
+    if (gncdt.offset() >= max_western_offset && gncdt.offset() <= max_eastern_offset)
+        EXPECT_EQ(atime.format("%d-%m-%Y %H:%M:%S %z"), "20-04-2017 10:59:00 UTC");
 }
 
 TEST(gnc_datetime_functions, test_format)
 {
     GncDateTime atime(2394187200); //2045-11-13 12:00:00 Z
-    if ((atime.offset() / 3600) > 12)
+    if ((atime.offset() / 3600) > 11 || (atime.offset() / 3600) < -11)
         EXPECT_EQ(atime.format("%d-%m-%Y"), "14-11-2045");
     else
         EXPECT_EQ(atime.format("%d-%m-%Y"), "13-11-2045");

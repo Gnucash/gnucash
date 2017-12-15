@@ -149,7 +149,7 @@ test_qofsession_aqb_kvp( void )
             // Check the kvp slots of a aqbanking-enabled account
             QofBook *book = qof_session_get_book(new_session);
             Account* account = gnc_book_get_root_account(book);
-            GDate retrieved_date, original_date;
+            struct tm *retrieved_date, *original_date;
             gchar buff[MAX_DATE_LENGTH];
 
             g_assert(account);
@@ -160,18 +160,17 @@ test_qofsession_aqb_kvp( void )
             {
                 Timespec retrieved_ts = gnc_ab_get_account_trans_retrieval(account);
                 g_test_message("retrieved_ts=%s\n", gnc_print_date(retrieved_ts));
-                //printf("Time=%s\n", gnc_print_date(retrieved_ts));
 
-                retrieved_date = timespec_to_gdate(retrieved_ts);
-                g_date_set_dmy(&original_date, 29, 8, 2014);
-
-                g_assert_cmpint(g_date_compare(&retrieved_date, &original_date), ==, 0);
+                retrieved_date = gnc_gmtime (&retrieved_ts.tv_sec);
+                g_assert_cmpint (retrieved_date->tm_year, ==, 114);
+                g_assert_cmpint (retrieved_date->tm_mon, ==, 7);
+                g_assert_cmpint (retrieved_date->tm_mday, ==, 29);
             }
 
             // A lower-level test here: Can we write and read again the
             // trans_retrieval date? This wouldn't need this particular
             // Account, just a general Account object.
-            if (0)
+            if (1)
             {
                 Timespec original_ts = timespec_now(), retrieved_ts;
 
@@ -179,21 +178,15 @@ test_qofsession_aqb_kvp( void )
                 // is written and read again correctly.
                 gnc_ab_set_account_trans_retrieval(account, original_ts);
                 retrieved_ts = gnc_ab_get_account_trans_retrieval(account);
+                g_test_message("original_ts=%s\n", gnc_print_date(original_ts));
+                g_test_message("retrieved_ts=%s\n", gnc_print_date(retrieved_ts));
 
-//                printf("original_ts=%s = %d  retrieved_ts=%s = %d\n",
-//                       gnc_print_date(original_ts), original_ts.tv_sec,
-//                       gnc_print_date(retrieved_ts), retrieved_ts.tv_sec);
+                original_date = gnc_gmtime (&original_ts.tv_sec);
+                retrieved_date = gnc_gmtime (&retrieved_ts.tv_sec);
 
-                original_date = timespec_to_gdate(original_ts);
-                retrieved_date = timespec_to_gdate(retrieved_ts);
-
-                qof_print_gdate (buff, sizeof (buff), &original_date);
-                //printf("original_date=%s\n", buff);
-                qof_print_gdate (buff, sizeof (buff), &retrieved_date);
-                //printf("retrieved_date=%s\n", buff);
-
-                // Is the retrieved date identical to the one written
-                g_assert_cmpint(g_date_compare(&retrieved_date, &original_date), ==, 0);
+                g_assert_cmpint (retrieved_date->tm_year, ==, original_date->tm_year);
+                g_assert_cmpint (retrieved_date->tm_mon, ==, original_date->tm_mon);
+                g_assert_cmpint (retrieved_date->tm_mday, ==, original_date->tm_mday);
             }
 
         }

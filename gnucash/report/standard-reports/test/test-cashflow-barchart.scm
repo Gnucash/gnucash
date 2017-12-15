@@ -93,7 +93,8 @@
         (set-option report gnc:pagename-general "Price Source" 'pricedb-nearest)
         (set-option report gnc:pagename-general "Report's currency"  (gnc-default-report-currency))
         (set-option report gnc:pagename-accounts "Accounts" (list wallet-account bank-account))
-
+        (format #t "Create first transaction on ~a~%" (gnc-ctime (gnc:timepair->secs date-1)))
+        (format #t "Create second transaction on ~a~%" (gnc-ctime (gnc:timepair->secs date-2)))
         (let ((doc (renderer report)))
           (gnc:html-document-set-style-sheet! doc (gnc:report-stylesheet report))
           (let* ((result (gnc:html-document-render doc #f))
@@ -112,16 +113,18 @@
                                                  (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1))
 					 result))))
             (and (every (lambda (row)                 ; test in=net & out=0 in all rows (all days)
-                          (and (equal? (second row) (fourth row))
-                               (= 0 (string->number (car (third row))))))
+                          (and (or (equal? (second row) (fourth row))
+                                   (begin (format #t "Failed, ~a and ~a differ~%" (second row) (fourth row)) #f))
+                               (or (= 0 (string->number (car (third row))))
+                                   (begin (format #t "Failed ~d isn't 0~%" (car (third row))) #f))))
                         tbl)
-                 (= 0 (tbl-ref->number tbl 0 1))      ; 1st day in =0
-                 (= 1 (tbl-ref->number tbl 1 1))      ; 2nd day in =1
-                 (= 5 (tbl-ref->number tbl 2 1))      ; 3rd day in =5
-                 (= (tbl-ref->number total 0 0) (tbl-ref->number total 0 2)) ; total in=total net
-                 (= 0 (tbl-ref->number total 0 1))    ; total out=0
-                 (= 3 (tbl-row-count tbl))
-                 (= 4 (tbl-column-count tbl)))))
+                 (or (= 0 (tbl-ref->number tbl 0 1)) (begin (format #t "Failed refnum ~d isn't 0~%" (tbl-ref->number tbl 0 1) )) #f))      ; 1st day in =0
+                 (or (= 1 (tbl-ref->number tbl 1 1)) (begin (format #t "Failed refnum ~d isn't 1~%" (tbl-ref->number tbl 1 1)) #f))      ; 2nd day in =1
+                 (or (= 5 (tbl-ref->number tbl 2 1)) (begin (format #t "Failed refnum ~d isn't 5~%" (tbl-ref->number tbl 2 1)) #f))     ; 3rd day in =5
+                 (or (= (tbl-ref->number total 0 0) (tbl-ref->number total 0 2)) (begin (format #t "Failed refnums ~d and ~d differ ~%" (tbl-ref->number total 0 0) (tbl-ref->number total 0 2)) #f)); total in=total net
+                 (or (= 0 (tbl-ref->number total 0 1)) (begin (format #t "Failed refnum ~d isn't 0~%" (tbl-ref->number total 0 1)) #f))   ; total out=0
+                 (or (= 3 (tbl-row-count tbl)) (begin (format #t "Failed row count ~d isn't 3~%" (tbl-row-count tbl)) #f))
+                 (or (= 4 (tbl-column-count tbl)) (begin (format #t "Failed column count ~d isn't 4~%" (tbl-column-count tbl)) #f))))
         )
       )
     )

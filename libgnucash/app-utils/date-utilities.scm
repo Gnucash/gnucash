@@ -229,7 +229,7 @@
       (set-tm:mday newtm (op (tm:mday newtm) (tm:mday delta)))
       (set-tm:mon newtm (op (tm:mon newtm) (tm:mon delta)))
       (set-tm:year newtm (op (tm:year newtm) (tm:year delta)))
-      (set-tm:isdst newtm -1)
+      (set-tm:isdst newtm 0)
       (gnc:date->timepair newtm))))
 
 ;; Add or subtract time from a date
@@ -324,7 +324,7 @@
     (set-tm:year zd 0)
     (set-tm:yday zd 0)
     (set-tm:wday zd 0)
-    (set-tm:isdst zd -1)
+    (set-tm:isdst zd 0)
     zd))
 
 

@@ -37,9 +37,9 @@
 	   (wallet (cdr (assoc "Wallet" accounts))))
 
       (env-create-daily-transactions env start-date-tp end-date-tp bank-account wallet)
-
+      (format #t "Created transactions for each day from ~a to ~a~%" (gnc-ctime (gnc:timepair->secs start-date-tp)) (gnc-ctime (gnc:timepair->secs end-date-tp)))
       (let ((splits (gnc:account-get-trans-type-splits-interval (list bank-account wallet)
 							      ACCT-TYPE-ASSET
 							      q-start-date-tp q-end-date-tp)))
 	;; 10 is the right number (5 days, two splits per tx)
-	(and (equal? 10 (length splits)))))))
+	(or (equal? 10 (length splits)) (begin (format #t "Fail, ~d splits, expected 10~%" (length splits)) #f))))))
