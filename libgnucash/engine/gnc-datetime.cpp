@@ -165,8 +165,6 @@ LDT_from_struct_tm(const struct tm tm)
                                                      tm.tm_sec, 0);
         auto tz = tzp.get(tdate.year());
         LDT ldt(tdate, tdur, tz, LDTBase::EXCEPTION_ON_ERROR);
-        if (tm.tm_isdst == -1 && ldt.is_dst())
-            ldt += tz->dst_offset();
         return ldt;
     }
     catch(boost::gregorian::bad_year)
@@ -255,7 +253,7 @@ GncDateTimeImpl::GncDateTimeImpl(const GncDateImpl& date, DayPart part) :
             if (offset < hours(-10))
                 m_time -= hours(offset.hours() + 10);
             if (offset > hours(13))
-                m_time -= hours(offset.hours() - 10);
+                m_time -= hours(offset.hours() - 11);
         }
     }
     catch(boost::gregorian::bad_year)
