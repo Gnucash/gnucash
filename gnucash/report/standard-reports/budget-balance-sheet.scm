@@ -310,7 +310,7 @@
 	 (company-name (get-option gnc:pagename-general optname-party-name))
          (budget (get-option gnc:pagename-general optname-budget))
          (budget-valid? (and budget (not (null? budget))))
-         (date-tp (if budget-valid? (gnc:budget-get-start-date budget) #f))
+         (date-t64 (if budget-valid? (gnc:budget-get-start-date budget) #f))
          (report-form? (get-option gnc:pagename-general
                                optname-report-form))
          (accounts (get-option gnc:pagename-accounts
@@ -379,7 +379,7 @@
 
          ;; exchange rates calculation parameters
 	 (exchange-fn
-	  (gnc:case-exchange-fn price-source report-commodity date-tp))
+	  (gnc:case-exchange-fn price-source report-commodity date-t64))
 	 )
     
     ;; Wrapper to call gnc:html-table-add-labeled-amount-line!
@@ -652,7 +652,7 @@
             (
               (get-total-value-fn
                 (lambda (account)
-                  (gnc:account-get-comm-value-at-date account date-tp #f)))
+                  (gnc:account-get-comm-value-at-date account date-t64 #f)))
               (asset-basis
                 (gnc:accounts-get-comm-total-assets
                   asset-accounts get-total-value-fn))
