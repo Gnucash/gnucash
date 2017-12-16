@@ -4,10 +4,10 @@
 # Мирослав Николић <miroslavnikolic@rocketmail.com>, 2015—2017.
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash-2.6.17\n"
+"Project-Id-Version: gnucash-2.6.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-02 11:51-0700\n"
-"PO-Revision-Date: 2017-08-06 13:17+0200\n"
+"POT-Creation-Date: 2017-09-22 15:13-0700\n"
+"PO-Revision-Date: 2017-11-05 08:54+0200\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <(nothing)>\n"
 "Language: sr\n"
@@ -733,7 +733,7 @@ msgstr "Дуг"
 msgid "Credit"
 msgstr "Кредит"
 
-#: ../src/app-utils/option-util.c:1685
+#: ../src/app-utils/option-util.c:1656
 #, c-format
 msgid ""
 "There is a problem with option %s:%s.\n"
@@ -1075,7 +1075,7 @@ msgstr "Гнуов новчић %s развојно издање"
 #. 2nd %s is the scm type (svn/svk/git/bzr);
 #. 3rd %s is the scm revision number;
 #. 4th %s is the build date
-#: ../src/bin/gnucash-bin.c:452 ../src/gnome-utils/gnc-main-window.c:4385
+#: ../src/bin/gnucash-bin.c:452 ../src/gnome-utils/gnc-main-window.c:4386
 #, c-format
 msgid ""
 "%s\n"
@@ -1092,7 +1092,7 @@ msgstr "Гнуов новчић %s"
 #. Translators: 1st %s is a fixed message, which is translated independently;
 #. 2nd %s is the scm (svn/svk/git/bzr) revision number;
 #. 3rd %s is the build date
-#: ../src/bin/gnucash-bin.c:463 ../src/gnome-utils/gnc-main-window.c:4392
+#: ../src/bin/gnucash-bin.c:463 ../src/gnome-utils/gnc-main-window.c:4393
 #, c-format
 msgid ""
 "%s\n"
@@ -1148,12 +1148,12 @@ msgstr "Ваучер"
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:4
 #: ../src/import-export/csv-imp/gnc-csv-model.c:70
 #: ../src/import-export/import-pending-matches.c:192
-#: ../src/report/standard-reports/transaction.scm:685
-#: ../src/report/standard-reports/transaction.scm:722
-#: ../src/report/standard-reports/transaction.scm:777
-#: ../src/report/standard-reports/transaction.scm:839
-#: ../src/report/standard-reports/transaction.scm:987
-#: ../src/report/standard-reports/transaction.scm:997
+#: ../src/report/standard-reports/transaction.scm:690
+#: ../src/report/standard-reports/transaction.scm:727
+#: ../src/report/standard-reports/transaction.scm:782
+#: ../src/report/standard-reports/transaction.scm:844
+#: ../src/report/standard-reports/transaction.scm:992
+#: ../src/report/standard-reports/transaction.scm:1002
 msgid "None"
 msgstr "Ништа"
 
@@ -1824,7 +1824,7 @@ msgstr "Отворен"
 #: ../src/report/standard-reports/transaction.scm:384
 #: ../src/report/standard-reports/transaction.scm:385
 #: ../src/report/standard-reports/transaction.scm:442
-#: ../src/report/standard-reports/transaction.scm:946
+#: ../src/report/standard-reports/transaction.scm:951
 msgid "Num"
 msgstr "Број"
 
@@ -1876,9 +1876,9 @@ msgstr "БК?"
 #: ../src/report/standard-reports/register.scm:851
 #: ../src/report/standard-reports/transaction.scm:398
 #: ../src/report/standard-reports/transaction.scm:458
-#: ../src/report/standard-reports/transaction.scm:758
-#: ../src/report/standard-reports/transaction.scm:813
-#: ../src/report/standard-reports/transaction.scm:983
+#: ../src/report/standard-reports/transaction.scm:763
+#: ../src/report/standard-reports/transaction.scm:818
+#: ../src/report/standard-reports/transaction.scm:988
 msgid "Amount"
 msgstr "Износ"
 
@@ -3116,9 +3116,9 @@ msgstr "Изаберите прозорче власника"
 #: ../src/report/standard-reports/sx-summary.scm:447
 #: ../src/report/standard-reports/transaction.scm:388
 #: ../src/report/standard-reports/transaction.scm:444
-#: ../src/report/standard-reports/transaction.scm:762
-#: ../src/report/standard-reports/transaction.scm:817
-#: ../src/report/standard-reports/transaction.scm:947
+#: ../src/report/standard-reports/transaction.scm:767
+#: ../src/report/standard-reports/transaction.scm:822
+#: ../src/report/standard-reports/transaction.scm:952
 msgid "Description"
 msgstr "Опис"
 
@@ -3205,8 +3205,8 @@ msgstr "Адреса обрачуна"
 #: ../src/report/standard-reports/sx-summary.scm:488
 #: ../src/report/standard-reports/transaction.scm:420
 #: ../src/report/standard-reports/transaction.scm:447
-#: ../src/report/standard-reports/transaction.scm:948
-#: ../src/report/standard-reports/transaction.scm:978
+#: ../src/report/standard-reports/transaction.scm:953
+#: ../src/report/standard-reports/transaction.scm:983
 msgid "Notes"
 msgstr "Белешке"
 
@@ -3513,9 +3513,9 @@ msgstr "Објави на"
 #: ../src/report/standard-reports/register.scm:812
 #: ../src/report/standard-reports/transaction.scm:380
 #: ../src/report/standard-reports/transaction.scm:427
-#: ../src/report/standard-reports/transaction.scm:734
-#: ../src/report/standard-reports/transaction.scm:789
-#: ../src/report/standard-reports/transaction.scm:942
+#: ../src/report/standard-reports/transaction.scm:739
+#: ../src/report/standard-reports/transaction.scm:794
+#: ../src/report/standard-reports/transaction.scm:947
 msgid "Date"
 msgstr "Датум"
 
@@ -3532,7 +3532,7 @@ msgstr "Датум"
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2865
 #: ../src/gnome-utils/gtkbuilder/gnc-date-format.glade.h:6
 #: ../src/import-export/csv-exp/csv-transactions-export.c:418
-#: ../src/report/standard-reports/transaction.scm:821
+#: ../src/report/standard-reports/transaction.scm:826
 msgid "Number"
 msgstr "Број"
 
@@ -3582,9 +3582,9 @@ msgstr "Повраћај"
 #: ../src/report/standard-reports/transaction.scm:408
 #: ../src/report/standard-reports/transaction.scm:447
 #: ../src/report/standard-reports/transaction.scm:448
-#: ../src/report/standard-reports/transaction.scm:774
-#: ../src/report/standard-reports/transaction.scm:825
-#: ../src/report/standard-reports/transaction.scm:972
+#: ../src/report/standard-reports/transaction.scm:779
+#: ../src/report/standard-reports/transaction.scm:830
+#: ../src/report/standard-reports/transaction.scm:977
 msgid "Memo"
 msgstr "Белешка"
 
@@ -4242,12 +4242,12 @@ msgid " + "
 msgstr " + "
 
 #: ../src/engine/Recurrence.c:598
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:33
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:32
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:41
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:20
 #: ../src/report/standard-reports/account-piecharts.scm:125
 #: ../src/report/standard-reports/category-barchart.scm:132
-#: ../src/report/standard-reports/transaction.scm:840
+#: ../src/report/standard-reports/transaction.scm:845
 msgid "Weekly"
 msgstr "Недељно"
 
@@ -4296,7 +4296,7 @@ msgid "%s %s"
 msgstr "%s %s"
 
 #: ../src/engine/Recurrence.c:687
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:31
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:30
 msgid "Semi-monthly"
 msgstr "Полумесечно"
 
@@ -4320,18 +4320,18 @@ msgstr "Дневно"
 #. g_warning("nth weekday not handled");
 #. g_string_printf(buf, "@fixme: nth weekday not handled");
 #: ../src/engine/Recurrence.c:736 ../src/engine/Recurrence.c:750
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:30
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:29
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:43
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:30
 #: ../src/report/standard-reports/account-piecharts.scm:122
 #: ../src/report/standard-reports/category-barchart.scm:129
-#: ../src/report/standard-reports/transaction.scm:841
+#: ../src/report/standard-reports/transaction.scm:846
 msgid "Monthly"
 msgstr "Месечно"
 
 #: ../src/engine/Recurrence.c:762 ../src/gnome/gtkbuilder/dialog-sx.glade.h:45
 #: ../src/report/standard-reports/account-piecharts.scm:119
-#: ../src/report/standard-reports/transaction.scm:843
+#: ../src/report/standard-reports/transaction.scm:848
 msgid "Yearly"
 msgstr "Годишње"
 
@@ -4640,7 +4640,7 @@ msgstr "Симбол"
 #: ../src/report/standard-reports/register.scm:440
 #: ../src/report/standard-reports/transaction.scm:394
 #: ../src/report/standard-reports/transaction.scm:454
-#: ../src/report/standard-reports/transaction.scm:956
+#: ../src/report/standard-reports/transaction.scm:961
 msgid "Shares"
 msgstr "Акције"
 
@@ -4742,7 +4742,7 @@ msgstr "Вредност"
 #: ../src/gnome-search/dialog-search.c:893
 #: ../src/gnome-search/dialog-search.c:899
 #: ../src/import-export/csv-exp/csv-transactions-export.c:422
-#: ../src/report/standard-reports/transaction.scm:766
+#: ../src/report/standard-reports/transaction.scm:771
 msgid "Number/Action"
 msgstr "Број/радња"
 
@@ -4757,7 +4757,7 @@ msgstr "Број/радња"
 #: ../src/gnome-search/dialog-search.c:895
 #: ../src/gnome-search/dialog-search.c:901
 #: ../src/import-export/csv-exp/csv-transactions-export.c:418
-#: ../src/report/standard-reports/transaction.scm:770
+#: ../src/report/standard-reports/transaction.scm:775
 msgid "Transaction Number"
 msgstr "Број трансакције"
 
@@ -6075,7 +6075,7 @@ msgstr "Подели"
 
 #: ../src/gnome/gnc-plugin-page-register2.c:482
 #: ../src/gnome/gnc-plugin-page-register.c:487
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:24
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:23
 msgid "Schedule"
 msgstr "Планирање"
 
@@ -7601,7 +7601,7 @@ msgid "Enter the annual interest rate in percent. Accepts values from 0.001 - 10
 msgstr "Унесите годишњу каматну стопу у процентима. Прихвата вредности од 0.001 до 100. Помоћник хипотеке не подржава зајмове са нултном каматом."
 
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:16
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:17
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:16
 #: ../src/gnome/gtkbuilder/dialog-tax-info.glade.h:4
 msgid "Type:"
 msgstr "Врста:"
@@ -7969,106 +7969,102 @@ msgid "Interest rate"
 msgstr "Каматна стопа"
 
 #: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:6
-msgid "Clear the entry"
-msgstr "Очистите унос"
-
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:7
 msgid "Present value"
 msgstr "Тренутна вредност"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:8
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:7
 msgid "Periodic payment"
 msgstr "Периодично плаћање"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:9
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:8
 msgid "Future value"
 msgstr "Будућа вредност"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:10
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:9
 msgid "Recalculate the (single) blank entry in the above fields."
 msgstr "Поново израчунајте (један) банковни унос у горњим пољима."
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:11
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:10
 msgid "Calculate"
 msgstr "Израчунај"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:12
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:11
 msgid "<b>Payment Options</b>"
 msgstr "<b>Опције плаћања</b>"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:13
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:12
 msgid "Payment Total:"
 msgstr "Укупно плаћања:"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:14
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:13
 msgid "total"
 msgstr "укупно"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:15
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:14
 msgid "Discrete"
 msgstr "Засебно"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:16
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:15
 msgid "Continuous"
 msgstr "Непрекидно"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:18
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:17
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:51
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:1
 msgid "Frequency:"
 msgstr "Учесталост:"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:19
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:18
 msgid "When paid:"
 msgstr "Када је плаћено:"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:20
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:19
 msgid "Beginning"
 msgstr "Почетак"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:21
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:20
 msgid "End"
 msgstr "Крај"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:22
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:21
 msgid "<b>Compounding:</b>"
 msgstr "<b>Израчунавање:</b>"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:23
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:22
 msgid "<b>Period:</b>"
 msgstr "<b>Раздобље:</b>"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:25
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:24
 msgid "Annual"
 msgstr "Годишње"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:26
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:25
 msgid "Semi-annual"
 msgstr "Полугодишње"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:27
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:26
 msgid "Tri-annual"
 msgstr "Трогодишње"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:28
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:27
 #: ../src/gnome/gtkbuilder/dialog-sx.glade.h:44
-#: ../src/report/standard-reports/transaction.scm:842
+#: ../src/report/standard-reports/transaction.scm:847
 msgid "Quarterly"
 msgstr "Тромесечно"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:29
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:28
 msgid "Bi-monthly"
 msgstr "Двомесечно"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:32
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:31
 msgid "Bi-weekly"
 msgstr "Двонедељно"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:34
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:33
 msgid "Daily (360)"
 msgstr "Дневно (360)"
 
-#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:35
+#: ../src/gnome/gtkbuilder/dialog-fincalc.glade.h:34
 msgid "Daily (365)"
 msgstr "Дневно (365)"
 
@@ -8890,8 +8886,8 @@ msgid "Keep normal account order."
 msgstr "Задржите уобичајени поредак налога."
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:30
-#: ../src/report/standard-reports/transaction.scm:735
-#: ../src/report/standard-reports/transaction.scm:790
+#: ../src/report/standard-reports/transaction.scm:740
+#: ../src/report/standard-reports/transaction.scm:795
 msgid "Sort by date."
 msgstr "Поређајте према датуму."
 
@@ -8920,8 +8916,8 @@ msgid "Amo_unt"
 msgstr "_Износ"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:38
-#: ../src/report/standard-reports/transaction.scm:759
-#: ../src/report/standard-reports/transaction.scm:814
+#: ../src/report/standard-reports/transaction.scm:764
+#: ../src/report/standard-reports/transaction.scm:819
 msgid "Sort by amount."
 msgstr "Поређајте према износу."
 
@@ -8930,14 +8926,14 @@ msgid "_Memo"
 msgstr "_Белешка"
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:40
-#: ../src/report/standard-reports/transaction.scm:775
-#: ../src/report/standard-reports/transaction.scm:826
+#: ../src/report/standard-reports/transaction.scm:780
+#: ../src/report/standard-reports/transaction.scm:831
 msgid "Sort by memo."
 msgstr "Поређајте према белешки."
 
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:42
-#: ../src/report/standard-reports/transaction.scm:763
-#: ../src/report/standard-reports/transaction.scm:818
+#: ../src/report/standard-reports/transaction.scm:768
+#: ../src/report/standard-reports/transaction.scm:823
 msgid "Sort by description."
 msgstr "Поређајте према опису."
 
@@ -9726,31 +9722,31 @@ msgid "Select the default selection."
 msgstr "Изаберите основни избор."
 
 #. The reset button on each option page
-#: ../src/gnome-utils/dialog-options.c:1131
+#: ../src/gnome-utils/dialog-options.c:1136
 msgid "Reset defaults"
 msgstr "Врати основности"
 
-#: ../src/gnome-utils/dialog-options.c:1133
+#: ../src/gnome-utils/dialog-options.c:1138
 msgid "Reset all values to their defaults."
 msgstr "Вратите све вредности на њихове основности."
 
-#: ../src/gnome-utils/dialog-options.c:1459
+#: ../src/gnome-utils/dialog-options.c:1464
 msgid "Page"
 msgstr "Страница"
 
-#: ../src/gnome-utils/dialog-options.c:2139
+#: ../src/gnome-utils/dialog-options.c:2144
 msgid "Clear"
 msgstr "Очисти"
 
-#: ../src/gnome-utils/dialog-options.c:2140
+#: ../src/gnome-utils/dialog-options.c:2145
 msgid "Clear any selected image file."
 msgstr "Очистите сваку изабрану датотеку слике."
 
-#: ../src/gnome-utils/dialog-options.c:2142
+#: ../src/gnome-utils/dialog-options.c:2147
 msgid "Select image"
 msgstr "Изаберите слику"
 
-#: ../src/gnome-utils/dialog-options.c:2144
+#: ../src/gnome-utils/dialog-options.c:2149
 msgid "Select an image file."
 msgstr "Изаберите датотеку слике."
 
@@ -10604,14 +10600,15 @@ msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
 msgstr "Гнуов новчић лични управник финансијама. Гнуов начин за управљање вашим новцем!"
 
 #: ../src/gnome-utils/gnc-main-window.c:4372
-msgid "© 1997-2017 Contributors"
-msgstr "© 1997-2017. доприносиоци"
+#, c-format
+msgid "© 1997-%s Contributors"
+msgstr "© 1997-%s. доприносиоци"
 
 #. Translators: the following string will be shown in Help->About->Credits
 #. * Enter your name or that of your team and an email contact for feedback.
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
-#: ../src/gnome-utils/gnc-main-window.c:4409
+#: ../src/gnome-utils/gnc-main-window.c:4410
 msgid "translator_credits"
 msgstr ""
 "Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
@@ -10939,7 +10936,7 @@ msgstr "Исплатница"
 #: ../src/report/standard-reports/register.scm:450
 #: ../src/report/standard-reports/transaction.scm:396
 #: ../src/report/standard-reports/transaction.scm:456
-#: ../src/report/standard-reports/transaction.scm:957
+#: ../src/report/standard-reports/transaction.scm:962
 msgid "Price"
 msgstr "Цена"
 
@@ -11024,9 +11021,9 @@ msgstr "Поново _израчунај"
 #: ../src/report/standard-reports/general-ledger.scm:82
 #: ../src/report/standard-reports/general-ledger.scm:102
 #: ../src/report/standard-reports/transaction.scm:390
-#: ../src/report/standard-reports/transaction.scm:726
-#: ../src/report/standard-reports/transaction.scm:781
-#: ../src/report/standard-reports/transaction.scm:949
+#: ../src/report/standard-reports/transaction.scm:731
+#: ../src/report/standard-reports/transaction.scm:786
+#: ../src/report/standard-reports/transaction.scm:954
 #: ../src/report/standard-reports/trial-balance.scm:664
 msgid "Account Name"
 msgstr "Назив налога"
@@ -11043,9 +11040,9 @@ msgstr "Роба"
 #: ../src/report/standard-reports/general-ledger.scm:104
 #: ../src/report/standard-reports/sx-summary.scm:85
 #: ../src/report/standard-reports/transaction.scm:410
-#: ../src/report/standard-reports/transaction.scm:730
-#: ../src/report/standard-reports/transaction.scm:785
-#: ../src/report/standard-reports/transaction.scm:951
+#: ../src/report/standard-reports/transaction.scm:735
+#: ../src/report/standard-reports/transaction.scm:790
+#: ../src/report/standard-reports/transaction.scm:956
 msgid "Account Code"
 msgstr "Код налога"
 
@@ -11744,7 +11741,7 @@ msgstr "_Белешке:"
 msgid "Ta_x related"
 msgstr "Односи се на _порез"
 
-#. Translators: use the same words here as in 'Ta_x Report Options'.
+#. Translators: use the same words here as in
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:21
 msgid "Use Edit->Tax Report Options to set the tax-related flag and assign a tax code to this account."
 msgstr "Користите „Уреди → Опције пореског извештаја“ да подесите пореско-односну заставицу и да доделите пореску шифру овом налогу."
@@ -11893,7 +11890,7 @@ msgstr "Један или више под-налога садржи транса
 
 #: ../src/gnome-utils/gtkbuilder/dialog-account.glade.h:50
 #: ../src/gnome-utils/gtkbuilder/gnc-tree-view-owner.glade.h:1
-#: ../src/report/standard-reports/transaction.scm:665
+#: ../src/report/standard-reports/transaction.scm:670
 msgid "Filter By..."
 msgstr "Издвој према..."
 
@@ -17454,7 +17451,7 @@ msgid "Sort by expense amount."
 msgstr "Поређајте према износу расхода."
 
 #: ../src/report/business-reports/customer-summary.scm:472
-#: ../src/report/standard-reports/transaction.scm:831
+#: ../src/report/standard-reports/transaction.scm:836
 msgid "Ascending"
 msgstr "Растуће"
 
@@ -17463,7 +17460,7 @@ msgid "A to Z, smallest to largest."
 msgstr "Од А до Ш (A-Z), од мањег ка већем."
 
 #: ../src/report/business-reports/customer-summary.scm:475
-#: ../src/report/standard-reports/transaction.scm:834
+#: ../src/report/standard-reports/transaction.scm:839
 msgid "Descending"
 msgstr "Опадајуће"
 
@@ -17552,7 +17549,7 @@ msgstr "Произвољна ниска за замену фактуре, рач
 #: ../src/report/business-reports/invoice.scm:245
 #: ../src/report/business-reports/taxinvoice.scm:169
 #: ../src/report/standard-reports/register.scm:411
-#: ../src/report/standard-reports/transaction.scm:942
+#: ../src/report/standard-reports/transaction.scm:947
 msgid "Display the date?"
 msgstr "Да ли да приказује датум?"
 
@@ -17560,7 +17557,7 @@ msgstr "Да ли да приказује датум?"
 #: ../src/report/business-reports/fancy-invoice.scm:265
 #: ../src/report/business-reports/invoice.scm:250
 #: ../src/report/standard-reports/register.scm:426
-#: ../src/report/standard-reports/transaction.scm:947
+#: ../src/report/standard-reports/transaction.scm:952
 msgid "Display the description?"
 msgstr "Да ли да приказује опис?"
 
@@ -17673,7 +17670,7 @@ msgstr "Да ли да приказује вредност уноса?"
 #: ../src/report/standard-reports/transaction.scm:412
 #: ../src/report/standard-reports/transaction.scm:414
 #: ../src/report/standard-reports/transaction.scm:420
-#: ../src/report/standard-reports/transaction.scm:1063
+#: ../src/report/standard-reports/transaction.scm:1068
 msgid "Display"
 msgstr "Приказ"
 
@@ -17716,7 +17713,7 @@ msgstr "Да ли да приказује све појединачне поре
 #: ../src/report/standard-reports/general-ledger.scm:93
 #: ../src/report/standard-reports/general-ledger.scm:113
 #: ../src/report/standard-reports/register.scm:474
-#: ../src/report/standard-reports/transaction.scm:960
+#: ../src/report/standard-reports/transaction.scm:965
 msgid "Totals"
 msgstr "Збир"
 
@@ -17724,7 +17721,7 @@ msgstr "Збир"
 #: ../src/report/business-reports/fancy-invoice.scm:310
 #: ../src/report/business-reports/invoice.scm:295
 #: ../src/report/standard-reports/register.scm:475
-#: ../src/report/standard-reports/transaction.scm:960
+#: ../src/report/standard-reports/transaction.scm:965
 msgid "Display the totals?"
 msgstr "Да ли да приказује збир?"
 
@@ -20967,7 +20964,7 @@ msgstr "Салда од %s до %s"
 
 #: ../src/report/standard-reports/category-barchart.scm:602
 #: ../src/report/standard-reports/transaction.scm:301
-#: ../src/report/standard-reports/transaction.scm:1031
+#: ../src/report/standard-reports/transaction.scm:1036
 msgid "Grand Total"
 msgstr "Велики збир"
 
@@ -21079,7 +21076,7 @@ msgstr "Општи журнал"
 #: ../src/report/standard-reports/register.scm:145
 #: ../src/report/standard-reports/register.scm:416
 #: ../src/report/standard-reports/transaction.scm:386
-#: ../src/report/standard-reports/transaction.scm:945
+#: ../src/report/standard-reports/transaction.scm:950
 msgid "Num/Action"
 msgstr "Број/радња"
 
@@ -21089,7 +21086,7 @@ msgstr "Број/радња"
 #: ../src/report/standard-reports/general-ledger.scm:112
 #: ../src/report/standard-reports/register.scm:469
 #: ../src/report/standard-reports/transaction.scm:404
-#: ../src/report/standard-reports/transaction.scm:959
+#: ../src/report/standard-reports/transaction.scm:964
 msgid "Running Balance"
 msgstr "Радни салдо"
 
@@ -21101,7 +21098,7 @@ msgid "Sorting"
 msgstr "Ређање"
 
 #: ../src/report/standard-reports/general-ledger.scm:65
-#: ../src/report/standard-reports/transaction.scm:681
+#: ../src/report/standard-reports/transaction.scm:686
 msgid "Filter Type"
 msgstr "Врста филтера"
 
@@ -21114,9 +21111,9 @@ msgstr "Поништене трансакције"
 #: ../src/report/standard-reports/general-ledger.scm:98
 #: ../src/report/standard-reports/transaction.scm:382
 #: ../src/report/standard-reports/transaction.scm:429
-#: ../src/report/standard-reports/transaction.scm:742
-#: ../src/report/standard-reports/transaction.scm:797
-#: ../src/report/standard-reports/transaction.scm:943
+#: ../src/report/standard-reports/transaction.scm:747
+#: ../src/report/standard-reports/transaction.scm:802
+#: ../src/report/standard-reports/transaction.scm:948
 msgid "Reconciled Date"
 msgstr "Датум измирења"
 
@@ -21125,52 +21122,52 @@ msgstr "Датум измирења"
 #: ../src/report/standard-reports/transaction.scm:439
 #: ../src/report/standard-reports/transaction.scm:523
 #: ../src/report/standard-reports/transaction.scm:525
-#: ../src/report/standard-reports/transaction.scm:965
+#: ../src/report/standard-reports/transaction.scm:970
 msgid "Trans Number"
 msgstr "Број трансакције"
 
 #: ../src/report/standard-reports/general-ledger.scm:83
 #: ../src/report/standard-reports/general-ledger.scm:103
 #: ../src/report/standard-reports/transaction.scm:406
-#: ../src/report/standard-reports/transaction.scm:950
+#: ../src/report/standard-reports/transaction.scm:955
 msgid "Use Full Account Name"
 msgstr "Користи пун назив налога"
 
 #: ../src/report/standard-reports/general-ledger.scm:85
 #: ../src/report/standard-reports/general-ledger.scm:105
 #: ../src/report/standard-reports/transaction.scm:392
-#: ../src/report/standard-reports/transaction.scm:750
-#: ../src/report/standard-reports/transaction.scm:805
-#: ../src/report/standard-reports/transaction.scm:952
+#: ../src/report/standard-reports/transaction.scm:755
+#: ../src/report/standard-reports/transaction.scm:810
+#: ../src/report/standard-reports/transaction.scm:957
 msgid "Other Account Name"
 msgstr "Назив другог налога"
 
 #: ../src/report/standard-reports/general-ledger.scm:86
 #: ../src/report/standard-reports/general-ledger.scm:106
 #: ../src/report/standard-reports/transaction.scm:414
-#: ../src/report/standard-reports/transaction.scm:954
+#: ../src/report/standard-reports/transaction.scm:959
 msgid "Use Full Other Account Name"
 msgstr "Користи пуни назив другог налога"
 
 #: ../src/report/standard-reports/general-ledger.scm:87
 #: ../src/report/standard-reports/general-ledger.scm:107
 #: ../src/report/standard-reports/transaction.scm:412
-#: ../src/report/standard-reports/transaction.scm:754
-#: ../src/report/standard-reports/transaction.scm:809
-#: ../src/report/standard-reports/transaction.scm:955
+#: ../src/report/standard-reports/transaction.scm:759
+#: ../src/report/standard-reports/transaction.scm:814
+#: ../src/report/standard-reports/transaction.scm:960
 msgid "Other Account Code"
 msgstr "Шифра другог налога"
 
 #: ../src/report/standard-reports/general-ledger.scm:94
 #: ../src/report/standard-reports/general-ledger.scm:114
-#: ../src/report/standard-reports/transaction.scm:993
-#: ../src/report/standard-reports/transaction.scm:1064
+#: ../src/report/standard-reports/transaction.scm:998
+#: ../src/report/standard-reports/transaction.scm:1069
 msgid "Sign Reverses"
 msgstr "Промена знака"
 
 #: ../src/report/standard-reports/general-ledger.scm:121
 #: ../src/report/standard-reports/transaction.scm:617
-#: ../src/report/standard-reports/transaction.scm:1070
+#: ../src/report/standard-reports/transaction.scm:1075
 msgid "Style"
 msgstr "Стил"
 
@@ -21181,13 +21178,13 @@ msgstr "Главни кључ"
 
 #: ../src/report/standard-reports/general-ledger.scm:133
 #: ../src/report/standard-reports/transaction.scm:418
-#: ../src/report/standard-reports/transaction.scm:862
+#: ../src/report/standard-reports/transaction.scm:867
 msgid "Show Full Account Name"
 msgstr "Прикажи пуни назив налога"
 
 #: ../src/report/standard-reports/general-ledger.scm:134
 #: ../src/report/standard-reports/transaction.scm:416
-#: ../src/report/standard-reports/transaction.scm:869
+#: ../src/report/standard-reports/transaction.scm:874
 msgid "Show Account Code"
 msgstr "Прикажи шифру налога"
 
@@ -21202,7 +21199,7 @@ msgid "Primary Subtotal for Date Key"
 msgstr "Главни подзбир за кључ датума"
 
 #: ../src/report/standard-reports/general-ledger.scm:137
-#: ../src/report/standard-reports/transaction.scm:890
+#: ../src/report/standard-reports/transaction.scm:895
 msgid "Primary Sort Order"
 msgstr "Главни поредак ређања"
 
@@ -21222,7 +21219,7 @@ msgid "Secondary Subtotal for Date Key"
 msgstr "Споредни подзбир за кључ датума"
 
 #: ../src/report/standard-reports/general-ledger.scm:141
-#: ../src/report/standard-reports/transaction.scm:927
+#: ../src/report/standard-reports/transaction.scm:932
 msgid "Secondary Sort Order"
 msgstr "Споредни поредак ређања"
 
@@ -21246,12 +21243,12 @@ msgstr "Да ли ће да укључи ред који показује зби
 msgid "Total Trading"
 msgstr "Укупно трговање"
 
-#: ../src/report/standard-reports/income-statement.scm:718
+#: ../src/report/standard-reports/income-statement.scm:720
 #: ../src/report/standard-reports/trial-balance.scm:617
 msgid "Income Statement"
 msgstr "Стање прихода"
 
-#: ../src/report/standard-reports/income-statement.scm:719
+#: ../src/report/standard-reports/income-statement.scm:721
 msgid "Profit & Loss"
 msgstr "Зарада и губитак"
 
@@ -21483,13 +21480,13 @@ msgid "Display the check number/action?"
 msgstr "Да ли да приказује број чека/радњу?"
 
 #: ../src/report/standard-reports/register.scm:421
-#: ../src/report/standard-reports/transaction.scm:945
-#: ../src/report/standard-reports/transaction.scm:946
+#: ../src/report/standard-reports/transaction.scm:950
+#: ../src/report/standard-reports/transaction.scm:951
 msgid "Display the check number?"
 msgstr "Да ли да приказује број чека?"
 
 #: ../src/report/standard-reports/register.scm:431
-#: ../src/report/standard-reports/transaction.scm:973
+#: ../src/report/standard-reports/transaction.scm:978
 msgid "Display the memo?"
 msgstr "Да ли да приказује белешку?"
 
@@ -21498,7 +21495,7 @@ msgid "Display the account?"
 msgstr "Да ли да приказује налог?"
 
 #: ../src/report/standard-reports/register.scm:441
-#: ../src/report/standard-reports/transaction.scm:956
+#: ../src/report/standard-reports/transaction.scm:961
 msgid "Display the number of shares?"
 msgstr "Да ли да приказује број акција?"
 
@@ -21507,33 +21504,33 @@ msgid "Display the name of lot the shares are in?"
 msgstr "Да ли да приказује назив артикла у коме су акције?"
 
 #: ../src/report/standard-reports/register.scm:451
-#: ../src/report/standard-reports/transaction.scm:957
+#: ../src/report/standard-reports/transaction.scm:962
 msgid "Display the shares price?"
 msgstr "Да ли да приказује цену акција?"
 
 #: ../src/report/standard-reports/register.scm:456
-#: ../src/report/standard-reports/transaction.scm:984
+#: ../src/report/standard-reports/transaction.scm:989
 msgid "Display the amount?"
 msgstr "Да ли да приказује износ?"
 
 #: ../src/report/standard-reports/register.scm:459
 #: ../src/report/standard-reports/transaction.scm:624
-#: ../src/report/standard-reports/transaction.scm:988
+#: ../src/report/standard-reports/transaction.scm:993
 msgid "Single"
 msgstr "Један"
 
 #: ../src/report/standard-reports/register.scm:459
-#: ../src/report/standard-reports/transaction.scm:988
+#: ../src/report/standard-reports/transaction.scm:993
 msgid "Single Column Display."
 msgstr "Приказиваће у једној колони."
 
 #: ../src/report/standard-reports/register.scm:460
-#: ../src/report/standard-reports/transaction.scm:989
+#: ../src/report/standard-reports/transaction.scm:994
 msgid "Double"
 msgstr "Две"
 
 #: ../src/report/standard-reports/register.scm:460
-#: ../src/report/standard-reports/transaction.scm:989
+#: ../src/report/standard-reports/transaction.scm:994
 msgid "Two Column Display."
 msgstr "Приказиваће у две колоне."
 
@@ -21542,7 +21539,7 @@ msgid "Display the value in transaction currency?"
 msgstr "Да ли да приказује вредност у валути трансакције?"
 
 #: ../src/report/standard-reports/register.scm:470
-#: ../src/report/standard-reports/transaction.scm:959
+#: ../src/report/standard-reports/transaction.scm:964
 msgid "Display a running balance?"
 msgstr "Да ли да приказује покренути салдо?"
 
@@ -21626,259 +21623,263 @@ msgstr "Претворите све трансакције у општу вал�
 msgid "Formats the table suitable for cut & paste exporting with extra cells."
 msgstr "Обликујте табелу пригодну за извоз исецањем и убацивањем са додатним пољима."
 
-#: ../src/report/standard-reports/transaction.scm:666
+#: ../src/report/standard-reports/transaction.scm:665
+msgid "Account Substring"
+msgstr "Подниска налога"
+
+#: ../src/report/standard-reports/transaction.scm:671
 msgid "Filter on these accounts."
 msgstr "Издвојте из ових налога."
 
-#: ../src/report/standard-reports/transaction.scm:682
+#: ../src/report/standard-reports/transaction.scm:687
 msgid "Filter account."
 msgstr "Издвојте налог."
 
-#: ../src/report/standard-reports/transaction.scm:686
+#: ../src/report/standard-reports/transaction.scm:691
 msgid "Do not do any filtering."
 msgstr "Неће одрадити никакво издвајање."
 
-#: ../src/report/standard-reports/transaction.scm:688
+#: ../src/report/standard-reports/transaction.scm:693
 msgid "Include Transactions to/from Filter Accounts"
 msgstr "Укључи налоге филтера трансакција на/из"
 
-#: ../src/report/standard-reports/transaction.scm:689
+#: ../src/report/standard-reports/transaction.scm:694
 msgid "Include transactions to/from filter accounts only."
 msgstr "Укључите налоге филтера трансакција на/из."
 
-#: ../src/report/standard-reports/transaction.scm:691
+#: ../src/report/standard-reports/transaction.scm:696
 msgid "Exclude Transactions to/from Filter Accounts"
 msgstr "Искључи налоге филтера трансакција на/из"
 
-#: ../src/report/standard-reports/transaction.scm:692
+#: ../src/report/standard-reports/transaction.scm:697
 msgid "Exclude transactions to/from all filter accounts."
 msgstr "Искључите налоге филтера трансакција на/из."
 
-#: ../src/report/standard-reports/transaction.scm:700
+#: ../src/report/standard-reports/transaction.scm:705
 msgid "How to handle void transactions."
 msgstr "Како да рукује поништеним трансакцијама."
 
-#: ../src/report/standard-reports/transaction.scm:704
+#: ../src/report/standard-reports/transaction.scm:709
 msgid "Non-void only"
 msgstr "Само непоништене"
 
-#: ../src/report/standard-reports/transaction.scm:705
+#: ../src/report/standard-reports/transaction.scm:710
 msgid "Show only non-voided transactions."
 msgstr "Прикажите само непоништене трансакције."
 
-#: ../src/report/standard-reports/transaction.scm:708
+#: ../src/report/standard-reports/transaction.scm:713
 msgid "Void only"
 msgstr "Само поништене"
 
-#: ../src/report/standard-reports/transaction.scm:709
+#: ../src/report/standard-reports/transaction.scm:714
 msgid "Show only voided transactions."
 msgstr "Прикажите само поништене трансакције."
 
-#: ../src/report/standard-reports/transaction.scm:712
+#: ../src/report/standard-reports/transaction.scm:717
 msgid "Both"
 msgstr "Оба"
 
-#: ../src/report/standard-reports/transaction.scm:713
+#: ../src/report/standard-reports/transaction.scm:718
 msgid "Show both (and include void transactions in totals)."
 msgstr "Прикажите обе (и укључите поништене трансакције у збировима)."
 
-#: ../src/report/standard-reports/transaction.scm:723
-#: ../src/report/standard-reports/transaction.scm:778
+#: ../src/report/standard-reports/transaction.scm:728
+#: ../src/report/standard-reports/transaction.scm:783
 msgid "Do not sort."
 msgstr "Не ређај."
 
-#: ../src/report/standard-reports/transaction.scm:727
-#: ../src/report/standard-reports/transaction.scm:782
+#: ../src/report/standard-reports/transaction.scm:732
+#: ../src/report/standard-reports/transaction.scm:787
 msgid "Sort & subtotal by account name."
 msgstr "Поређајте и израчунајте подзбир према називу налога."
 
-#: ../src/report/standard-reports/transaction.scm:731
-#: ../src/report/standard-reports/transaction.scm:786
+#: ../src/report/standard-reports/transaction.scm:736
+#: ../src/report/standard-reports/transaction.scm:791
 msgid "Sort & subtotal by account code."
 msgstr "Поређајте и израчунајте подзбир према шифри налога."
 
-#: ../src/report/standard-reports/transaction.scm:738
-#: ../src/report/standard-reports/transaction.scm:793
+#: ../src/report/standard-reports/transaction.scm:743
+#: ../src/report/standard-reports/transaction.scm:798
 msgid "Exact Time"
 msgstr "Тачно време"
 
-#: ../src/report/standard-reports/transaction.scm:739
-#: ../src/report/standard-reports/transaction.scm:794
+#: ../src/report/standard-reports/transaction.scm:744
+#: ../src/report/standard-reports/transaction.scm:799
 msgid "Sort by exact time."
 msgstr "Поређајте према тачном времену."
 
-#: ../src/report/standard-reports/transaction.scm:743
-#: ../src/report/standard-reports/transaction.scm:798
+#: ../src/report/standard-reports/transaction.scm:748
+#: ../src/report/standard-reports/transaction.scm:803
 msgid "Sort by the Reconciled Date."
 msgstr "Поређајте према датуму измирења."
 
-#: ../src/report/standard-reports/transaction.scm:746
-#: ../src/report/standard-reports/transaction.scm:801
+#: ../src/report/standard-reports/transaction.scm:751
+#: ../src/report/standard-reports/transaction.scm:806
 msgid "Register Order"
 msgstr "Поредак регистра"
 
-#: ../src/report/standard-reports/transaction.scm:747
-#: ../src/report/standard-reports/transaction.scm:802
+#: ../src/report/standard-reports/transaction.scm:752
+#: ../src/report/standard-reports/transaction.scm:807
 msgid "Sort as with the register."
 msgstr "Поређајте као са регистром."
 
-#: ../src/report/standard-reports/transaction.scm:751
-#: ../src/report/standard-reports/transaction.scm:806
+#: ../src/report/standard-reports/transaction.scm:756
+#: ../src/report/standard-reports/transaction.scm:811
 msgid "Sort by account transferred from/to's name."
 msgstr "Поређајте према називу налога пребаченог из/у."
 
-#: ../src/report/standard-reports/transaction.scm:755
-#: ../src/report/standard-reports/transaction.scm:810
+#: ../src/report/standard-reports/transaction.scm:760
+#: ../src/report/standard-reports/transaction.scm:815
 msgid "Sort by account transferred from/to's code."
 msgstr "Поређајте према шифри налога пребаченог из/у."
 
-#: ../src/report/standard-reports/transaction.scm:767
+#: ../src/report/standard-reports/transaction.scm:772
 msgid "Sort by check number/action."
 msgstr "Поређајте према броју/радњи чека."
 
-#: ../src/report/standard-reports/transaction.scm:771
+#: ../src/report/standard-reports/transaction.scm:776
 msgid "Sort by transaction number."
 msgstr "Поређајте према броју трансакције."
 
-#: ../src/report/standard-reports/transaction.scm:822
+#: ../src/report/standard-reports/transaction.scm:827
 msgid "Sort by check/transaction number."
 msgstr "Поређајте према броју чека/трансакције."
 
-#: ../src/report/standard-reports/transaction.scm:832
+#: ../src/report/standard-reports/transaction.scm:837
 msgid "Smallest to largest, earliest to latest."
 msgstr "Од мањег ка већем, од старијег ка новијем."
 
-#: ../src/report/standard-reports/transaction.scm:835
+#: ../src/report/standard-reports/transaction.scm:840
 msgid "Largest to smallest, latest to earliest."
 msgstr "Од већег ка мањем, од новијег ка старијем."
 
-#: ../src/report/standard-reports/transaction.scm:839
+#: ../src/report/standard-reports/transaction.scm:844
 msgid "None."
 msgstr "Ништа."
 
-#: ../src/report/standard-reports/transaction.scm:840
+#: ../src/report/standard-reports/transaction.scm:845
 msgid "Weekly."
 msgstr "Недељно."
 
-#: ../src/report/standard-reports/transaction.scm:841
+#: ../src/report/standard-reports/transaction.scm:846
 msgid "Monthly."
 msgstr "Месечно."
 
-#: ../src/report/standard-reports/transaction.scm:842
+#: ../src/report/standard-reports/transaction.scm:847
 msgid "Quarterly."
 msgstr "Тромесечно."
 
-#: ../src/report/standard-reports/transaction.scm:843
+#: ../src/report/standard-reports/transaction.scm:848
 msgid "Yearly."
 msgstr "Годишње."
 
-#: ../src/report/standard-reports/transaction.scm:849
+#: ../src/report/standard-reports/transaction.scm:854
 msgid "Sort by this criterion first."
 msgstr "Прво поређајте према овом услову."
 
-#: ../src/report/standard-reports/transaction.scm:864
+#: ../src/report/standard-reports/transaction.scm:869
 msgid "Show the full account name for subtotals and subtitles?"
 msgstr "Да ли да приказује пуни назив налога за подзбирове и поднаслове?"
 
-#: ../src/report/standard-reports/transaction.scm:871
+#: ../src/report/standard-reports/transaction.scm:876
 msgid "Show the account code for subtotals and subtitles?"
 msgstr "Да ли да приказује шифру налога за подзбирове и поднаслове?"
 
-#: ../src/report/standard-reports/transaction.scm:878
+#: ../src/report/standard-reports/transaction.scm:883
 msgid "Subtotal according to the primary key?"
 msgstr "Да израчунам подзбир у складу са главним кључем?"
 
-#: ../src/report/standard-reports/transaction.scm:884
-#: ../src/report/standard-reports/transaction.scm:921
+#: ../src/report/standard-reports/transaction.scm:889
+#: ../src/report/standard-reports/transaction.scm:926
 msgid "Do a date subtotal."
 msgstr "Израчунајте подзбир датума."
 
-#: ../src/report/standard-reports/transaction.scm:891
+#: ../src/report/standard-reports/transaction.scm:896
 msgid "Order of primary sorting."
 msgstr "Редослед главног ређања."
 
-#: ../src/report/standard-reports/transaction.scm:900
+#: ../src/report/standard-reports/transaction.scm:905
 msgid "Sort by this criterion second."
 msgstr "Поређајте према овом услову као другом."
 
-#: ../src/report/standard-reports/transaction.scm:915
+#: ../src/report/standard-reports/transaction.scm:920
 msgid "Subtotal according to the secondary key?"
 msgstr "Да израчунам подзбир у складу са споредним кључем?"
 
-#: ../src/report/standard-reports/transaction.scm:928
+#: ../src/report/standard-reports/transaction.scm:933
 msgid "Order of Secondary sorting."
 msgstr "Редослед споредног ређања."
 
-#: ../src/report/standard-reports/transaction.scm:943
+#: ../src/report/standard-reports/transaction.scm:948
 msgid "Display the reconciled date?"
 msgstr "Да ли да приказује измирени датум?"
 
-#: ../src/report/standard-reports/transaction.scm:948
+#: ../src/report/standard-reports/transaction.scm:953
 msgid "Display the notes if the memo is unavailable?"
 msgstr "Да ли да приказује напомене ако белешке нису доступне?"
 
-#: ../src/report/standard-reports/transaction.scm:949
+#: ../src/report/standard-reports/transaction.scm:954
 msgid "Display the account name?"
 msgstr "Да ли да приказује назив налога?"
 
-#: ../src/report/standard-reports/transaction.scm:950
-#: ../src/report/standard-reports/transaction.scm:954
+#: ../src/report/standard-reports/transaction.scm:955
+#: ../src/report/standard-reports/transaction.scm:959
 msgid "Display the full account name?"
 msgstr "Да ли да приказује пуни назив налога?"
 
-#: ../src/report/standard-reports/transaction.scm:951
+#: ../src/report/standard-reports/transaction.scm:956
 msgid "Display the account code?"
 msgstr "Да ли да приказује шифру налога?"
 
-#: ../src/report/standard-reports/transaction.scm:952
+#: ../src/report/standard-reports/transaction.scm:957
 msgid "Display the other account name? (if this is a split transaction, this parameter is guessed)."
 msgstr "Да ли да приказује назив другог налога? (ако је ово трансакција поделе, овај параметар се погађа.)"
 
-#: ../src/report/standard-reports/transaction.scm:955
+#: ../src/report/standard-reports/transaction.scm:960
 msgid "Display the other account code?"
 msgstr "Да ли да приказује шифру другог налога?"
 
-#: ../src/report/standard-reports/transaction.scm:966
+#: ../src/report/standard-reports/transaction.scm:971
 msgid "Display the trans number?"
 msgstr "Да ли да приказује број трансакције?"
 
-#: ../src/report/standard-reports/transaction.scm:987
+#: ../src/report/standard-reports/transaction.scm:992
 msgid "No amount display."
 msgstr "Неће приказивати износ."
 
-#: ../src/report/standard-reports/transaction.scm:994
+#: ../src/report/standard-reports/transaction.scm:999
 msgid "Reverse amount display for certain account types."
 msgstr "Обрнуће знак приказаних износа за одређене врсте налога."
 
-#: ../src/report/standard-reports/transaction.scm:997
+#: ../src/report/standard-reports/transaction.scm:1002
 msgid "Don't change any displayed amounts."
 msgstr "Неће променити знак приказаних износа."
 
-#: ../src/report/standard-reports/transaction.scm:998
+#: ../src/report/standard-reports/transaction.scm:1003
 msgid "Income and Expense"
 msgstr "Приход и расход"
 
-#: ../src/report/standard-reports/transaction.scm:999
+#: ../src/report/standard-reports/transaction.scm:1004
 msgid "Reverse amount display for Income and Expense Accounts."
 msgstr "Обрнуће знак приказаних износа за налоге прихода и расхода."
 
-#: ../src/report/standard-reports/transaction.scm:1000
+#: ../src/report/standard-reports/transaction.scm:1005
 msgid "Credit Accounts"
 msgstr "Налози кредита"
 
-#: ../src/report/standard-reports/transaction.scm:1001
+#: ../src/report/standard-reports/transaction.scm:1006
 msgid "Reverse amount display for Liability, Payable, Equity, Credit Card, and Income accounts."
 msgstr "Обрнуће знак приказаних износа за налоге дуговања, отплаћивања, акција, кредитних картица и прихода."
 
-#: ../src/report/standard-reports/transaction.scm:1014
+#: ../src/report/standard-reports/transaction.scm:1019
 msgid "From %s To %s"
 msgstr "Од %s до %s"
 
-#: ../src/report/standard-reports/transaction.scm:1018
-#: ../src/report/standard-reports/transaction.scm:1024
-#: ../src/report/standard-reports/transaction.scm:1030
-#: ../src/report/standard-reports/transaction.scm:1036
-#: ../src/report/standard-reports/transaction.scm:1042
+#: ../src/report/standard-reports/transaction.scm:1023
+#: ../src/report/standard-reports/transaction.scm:1029
+#: ../src/report/standard-reports/transaction.scm:1035
+#: ../src/report/standard-reports/transaction.scm:1041
+#: ../src/report/standard-reports/transaction.scm:1047
 #: ../src/report/stylesheets/stylesheet-easy.scm:102
 #: ../src/report/stylesheets/stylesheet-easy.scm:109
 #: ../src/report/stylesheets/stylesheet-easy.scm:116
@@ -21931,27 +21932,27 @@ msgstr "Од %s до %s"
 msgid "Colors"
 msgstr "Боје"
 
-#: ../src/report/standard-reports/transaction.scm:1019
+#: ../src/report/standard-reports/transaction.scm:1024
 msgid "Primary Subtotals/headings"
 msgstr "Главни подзбирови/заглавља"
 
-#: ../src/report/standard-reports/transaction.scm:1025
+#: ../src/report/standard-reports/transaction.scm:1030
 msgid "Secondary Subtotals/headings"
 msgstr "Споредни подзбирови/заглавља"
 
-#: ../src/report/standard-reports/transaction.scm:1037
+#: ../src/report/standard-reports/transaction.scm:1042
 msgid "Split Odd"
 msgstr "Подели непарне"
 
-#: ../src/report/standard-reports/transaction.scm:1043
+#: ../src/report/standard-reports/transaction.scm:1048
 msgid "Split Even"
 msgstr "Подели парне"
 
-#: ../src/report/standard-reports/transaction.scm:1539
+#: ../src/report/standard-reports/transaction.scm:1544
 msgid "No matching transactions found"
 msgstr "Нисам пронашао одговарајуће трансакције"
 
-#: ../src/report/standard-reports/transaction.scm:1541
+#: ../src/report/standard-reports/transaction.scm:1546
 msgid "No transactions were found that match the time interval and account selection specified in the Options panel."
 msgstr "Нисам пронашао трансакције које одговарају избору временског интервала и налога наведеног у панелу опција."
 
@@ -23084,6 +23085,9 @@ msgstr "Да претражујете све ваше трансакције, з
 #: ../doc/tip_of_the_day.list.in:106
 msgid "To visually compare on screen the contents of 2 tabs, in one of the tabs, select Window -> New Window with Page from the menu to duplicate that tab in a new window."
 msgstr "Да на екрану упоредите садржај 2 језичка, у једном језичку, изаберите „Прозор → Нови прозор са страницом“ из изборника да удвостручите тај језичак у новом прозору."
+
+#~ msgid "Clear the entry"
+#~ msgstr "Очистите унос"
 
 #~ msgid "CURRENCY"
 #~ msgstr "ВАЛУТА"
