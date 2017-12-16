@@ -257,6 +257,7 @@ gnc_commodity * gnc_price_get_commodity(const GNCPrice *p);
 /*@ dependent @*/
 gnc_commodity * gnc_price_get_currency(const GNCPrice *p);
 Timespec        gnc_price_get_time(const GNCPrice *p);
+time64          gnc_price_get_time64(const GNCPrice *p);
 PriceSource     gnc_price_get_source(const GNCPrice *p);
 const char *    gnc_price_get_source_string(const GNCPrice *p);
 const char *    gnc_price_get_typestr(const GNCPrice *p);

@@ -591,6 +591,13 @@ gnc_price_get_commodity(const GNCPrice *p)
     return p->commodity;
 }
 
+time64
+gnc_price_get_time64(const GNCPrice *p)
+{
+    if (!p) return 0;
+    return p->tmspec.tv_sec;
+}
+
 Timespec
 gnc_price_get_time(const GNCPrice *p)
 {
