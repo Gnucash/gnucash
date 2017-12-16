@@ -594,6 +594,7 @@ ADD_CUSTOM_COMMAND(OUTPUT ${DIST_FILE}.gz ${DIST_FILE}.bz2
            -D BUILDING_FROM_VCS=${BUILDING_FROM_VCS}
            -D SHELL=${SHELL}
            -D AUTOTOOLS_IN_DIST=${AUTOTOOLS_IN_DIST}
+           -D WITH_GNUCASH=${WITH_GNUCASH}
            -P ${CMAKE_SOURCE_DIR}/src/cmake_modules/MakeDist.cmake
 
         DEPENDS
@@ -626,8 +627,17 @@ configure_file(
 add_custom_target(uninstall
         COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
 
-SET_TARGET_PROPERTIES(gnc-qof gnc-core-utils gnc-module gnc-backend-sql gnc-backend-xml-utils
-  gnc-business-ledger gnc-gnome PROPERTIES
+SET(_MODULES gnc-qof gnc-core-utils gnc-module gnc-backend-xml-utils)
+
+IF (WITH_SQL)
+  LIST(APPEND _MODULES gnc-backend-sql)
+ENDIF(WITH_SQL)
+
+IF (WITH_GNUCASH)
+  LIST(APPEND _MODULES gnc-business-ledger gnc-gnome)
+ENDIF(WITH_GNUCASH)
+
+SET_TARGET_PROPERTIES(${_MODULES} PROPERTIES
   LIBRARY_OUTPUT_DIRECTORY         ${CMAKE_BINARY_DIR}/lib
   IF (XCODE_VERSION)
     LIBRARY_OUTPUT_DIRECTORY_DEBUG   ${CMAKE_BINARY_DIR}/lib
