@@ -2402,6 +2402,12 @@ xaccTransRetDatePostedTS (const Transaction *trans)
     return trans ? trans->date_posted : ts;
 }
 
+time64
+xaccTransRetDatePosted (const Transaction *trans)
+{
+    return trans ? trans->date_posted.tv_sec : 0;
+}
+
 GDate
 xaccTransGetDatePostedGDate (const Transaction *trans)
 {
@@ -2443,6 +2449,12 @@ xaccTransRetDateEnteredTS (const Transaction *trans)
 {
     Timespec ts = {0, 0};
     return trans ? trans->date_entered : ts;
+}
+
+time64
+xaccTransRetDateEntered (const Transaction *trans)
+{
+    return trans ? trans->date_entered.tv_sec : 0;
 }
 
 void

@@ -656,6 +656,7 @@ void          xaccTransGetDatePostedTS (const Transaction *trans, Timespec *ts);
     having different function names, GetDate and GetDatePosted refer
     to the same single date.)*/
 Timespec      xaccTransRetDatePostedTS (const Transaction *trans);
+time64        xaccTransRetDatePosted   (const Transaction *trans);
 /** Retrieve the posted date of the transaction. The posted date is
     the date when this transaction was posted at the bank. */
 GDate      xaccTransGetDatePostedGDate (const Transaction *trans);
@@ -671,6 +672,7 @@ void          xaccTransGetDateEnteredTS (const Transaction *trans, Timespec *ts)
 /** Retrieve the date of when the transaction was entered. The entered
  * date is the date when the register entry was made.*/
 Timespec      xaccTransRetDateEnteredTS (const Transaction *trans);
+time64        xaccTransRetDateEntered (const Transaction *trans);
 
 /** Dates and txn-type for A/R and A/P "invoice" postings */
 Timespec      xaccTransRetDateDueTS (const Transaction *trans);
