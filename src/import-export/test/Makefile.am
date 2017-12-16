@@ -6,6 +6,7 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/app-utils \
+  -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/import-export \
   -I${top_srcdir}/src/libqof/qof \
   -I${top_srcdir}/src/engine/test-core \
@@ -56,7 +57,9 @@ TESTS_ENVIRONMENT = \
 
 check_PROGRAMS = \
   test-link \
-  test-import-parse
+  test-import-parse \
+  test-import-pending-matches \
+  test-flat-bayes
 
 TEST_PROGS += test-import-pending-matches
 
@@ -73,6 +76,18 @@ test_import_pending_matches_LDADD = \
   ${GLIB_LIBS}
 
 test_import_pending_matches_CFLAGS = $(AM_CPPFLAGS)
+
+test_flat_bayes_SOURCES = test-flat-bayes.c
+
+test_flat_bayes_LDADD = \
+  ${top_builddir}/src/libqof/qof/libgnc-qof.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
+  ../libgncmod-generic-import.la \
+  ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
+  ${top_builddir}/src/test-core/libtest-core.la \
+  ${GLIB_LIBS}
+
+test_flat_bayes_CFLAGS = $(AM_CPPFLAGS)
 
 clean-local:
 	rm -f translog.*
