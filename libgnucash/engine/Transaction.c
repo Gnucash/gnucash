@@ -2471,7 +2471,7 @@ xaccTransGetDateDueTS (const Transaction *trans, Timespec *ts)
 }
 
 time64
-xaccTransRetDateDueTime64 (const Transaction *trans)
+xaccTransRetDateDue(const Transaction *trans)
 {
     return xaccTransRetDateDueTS (trans).tv_sec;
 }
