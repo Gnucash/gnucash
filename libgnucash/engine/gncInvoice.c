@@ -835,6 +835,24 @@ Timespec gncInvoiceGetDateDue (const GncInvoice *invoice)
     return xaccTransRetDateDueTS (txn);
 }
 
+time64 gncInvoiceGetDateOpenedTT (const GncInvoice *invoice)
+{
+    if (!invoice) return 0;
+    return invoice->date_opened.tv_sec;
+}
+
+time64 gncInvoiceGetDatePostedTT (const GncInvoice *invoice)
+{
+    if (!invoice) return 0;
+    return invoice->date_posted.tv_sec;
+}
+
+time64 gncInvoiceGetDateDueTT (const GncInvoice *invoice)
+{
+    if (!invoice) return 0;
+    return gncInvoiceGetDateDue (invoice).tv_sec;
+}
+
 GncBillTerm * gncInvoiceGetTerms (const GncInvoice *invoice)
 {
     if (!invoice) return NULL;
