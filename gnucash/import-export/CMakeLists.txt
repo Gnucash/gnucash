@@ -3,18 +3,14 @@
 ADD_SUBDIRECTORY(test)
 
 # ############################################################
-if (WITH_AQBANKING)
-  ADD_SUBDIRECTORY(aqb)
-endif()
+ADD_SUBDIRECTORY(aqb)
 ADD_SUBDIRECTORY(bi-import)
 ADD_SUBDIRECTORY(csv-exp)
 ADD_SUBDIRECTORY(csv-imp)
 ADD_SUBDIRECTORY(customer-import)
 ADD_SUBDIRECTORY(gschemas)
 ADD_SUBDIRECTORY(log-replay)
-if (WITH_OFX)
-  ADD_SUBDIRECTORY(ofx)
-endif()
+ADD_SUBDIRECTORY(ofx)
 ADD_SUBDIRECTORY(qif)
 ADD_SUBDIRECTORY(qif-imp)
 

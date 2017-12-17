@@ -1,5 +1,27 @@
 Version history:
 ------- -------
+2.6.19 - 16 December 2017
+
+The following bugs are fixed:
+     Bug 787497 - Disabling OFX, AqBanking or python-bindings support cripples
+                  the dist build target. (Partial: The requisite files for AQB
+                  and OFX are provided. There remain ways to break the
+                  distribution.)
+     Bug 789928 - FTBFS with libdbi 0.9.0-5 on Debian
+     Bug 790620 - Failed to create file
+                  "/usr/share/glib-2.0/schemas/gschemas.compiled.XY789Y".
+
+Other repairs not marked as bugs in git:
+     Adapter for new flat KVP scheme for bayes import maps to be introduced in 2.8.0.
+     A better way to handle MySQL's 0000-00-00 invalid date indicator.
+     Fix python build and test errors on Mac.
+     Don't try to unref a NULL GDateTime*.
+     Add translator hint comments to C and glade files.
+     Improve type of bank accounts in SKR03
+     Stop testing GObject's handling of invalid parameters
+
+Updated Translations: Dutch, German, Russian, Serbian
+
 2.7.2 - 26 November 2017
 
     The Gnucash Development Team is pleased to release Gnucash 2.7.2,
@@ -327,7 +349,6 @@ KNOWN PROBLEMS:
 
     test-import-bayes built with autotools intermittently fails at
     line 381, where the returned value is 1 instead of the expected 6.
-
 2.6.18 - 24 September 2017
 
 The following bugs are fixed:

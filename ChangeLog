@@ -1,6 +1,198 @@
+2017-12-15 John Ralls 
+
+	* Handle mid-pacific timezones in date-sensitive tests. (HEAD -> unstable, origin/unstable)
+
+2017-12-15 John Ralls 
+
+	* Revert post-construction adjustment of ldt for DST.
+
+2017-12-12 John Ralls 
+
+	* Fix neutral time for consistent dates in mid-pacific time zones.
+
+2017-12-12 John Ralls 
+
+	* Fix posted-date scrub incrementing the day in central pacific timezones.
+
+2017-12-12 John Ralls 
+
+	* Remove (unused because of an error) parse-to-tm string timespec construction.
+
+2017-12-12 John Ralls 
+
+	* Fix offset handling in GncDateTime struct tm ctor, gnc_mktime, & gnc_timegm.
+
+2017-12-11 Geert Janssens 
+
+	* Add infrastructure to handle preference schema migrations and use it to replace one preference
+
+2017-12-08 John Ralls 
+
+	* Fix the Mac install_name_dir to point at CMAKE_INSTALL_FULL_LIBDIR.
+
+2017-12-10 John Ralls 
+
+	* Bug 791422 - gnucash 2.7 no longer opens sqlite3...
+
+2017-12-09 John Ralls 
+
+	* Test more thoroughly gnc-timezone's parsing of the zoneinfo database.
+
+2017-12-08 Geert Janssens 
+
+	* Fix transient parent warnings for tip-of-the-day and file dialogs
+
+2017-12-08 Geert Janssens 
+
+	* Fix transient parent warnings in search callbacks (origin/master, origin/HEAD, master)
+
+2017-12-06 Geert Janssens 
+
+	* Add transient parent for search dialog
+
+2017-12-03 Geert Janssens 
+
+	* Fix missing transient parent warnings for several business dialogs
+
+2017-11-16 Geert Janssens 
+
+	* Fix transient parent for SX since last run... at startup
+
+2017-11-16 Geert Janssens 
+
+	* Set transient parents for all query views and dialogs
+
+2017-11-26 Geert Janssens 
+
+	* Alter function signature of gnc_(verify|yes_no|info|warning|error)_dialog
+
+2017-11-25 Geert Janssens 
+
+	* Improve window management
+
+2017-11-16 Geert Janssens 
+
+	* Ensure the main window is mapped before any reminder dialogs are shown at startup
+
+2017-11-16 Geert Janssens 
+
+	* Handle the splash/lock file warning more the gtk way
+
+2017-12-05 John Ralls 
+
+	* Rework directory determination in CMake builds.
+
+2017-12-02 John Ralls 
+
+	* One more stray header in libexec.
+
+2017-12-01 John Ralls 
+
+	* LIBDIR is not lib--two more CMakeLists.txt.
+
+2017-12-01 John Ralls 
+
+	* Remove gnucash/test.
+
+2017-12-01 John Ralls 
+
+	* Some fixes to complete removing gnucash/overrides.
+
+2017-12-01 Rob Gowin 
+
+	* Handle cases where LIBDIR is not "lib"
+
+2017-12-01 John Ralls 
+
+	* Fix autotools build after removing gnucash/overrides.
+
+2017-12-01 Rob Gowin 
+
+	* Handle cases where LIBDIR is not "lib"
+
+2017-12-01 John Ralls 
+
+	* Remove overrides directory as being obsolete.
+
+2017-11-30 John Ralls 
+
+	* More GNUInstallDirs path fixes.
+
+2017-12-01 John Ralls 
+
+	* Fix the fixed path to compiled guile files.
+
+2017-11-30 John Ralls 
+
+	* Fix path to compiled guile files in environment.in.
+
+2017-11-30 John Ralls 
+
+	* Add GLIB_CFLAGS and srcdir to SWIG includes.
+
+2017-11-30 John Ralls 
+
+	* Remove unset variable SWIG_ARGS from Makefile.am
+
+2017-11-30 Geert Janssens 
+
+	* Fix installation destinations for overrides and quotes scripts
+
+2017-11-28 John Ralls 
+
+	* Fix python test failure on Travis.
+
+2017-11-28 John Ralls 
+
+	* Merge branch 'PyGncNumeric' into unstable
+
+2017-06-03 Guy Taylor 
+
+	* Use builtin SWIG conversions for glib types
+
+2017-06-03 Guy Taylor 
+
+	* Use glib.h over custom typedefs in Python SWIG
+
+2017-05-28 Guy Taylor 
+
+	* Add GncNumeric to native Python Fraction
+
+2017-05-17 Guy Taylor 
+
+	* Fix Python GncNumeric for non (int, int) pairs
+
+2017-11-28 John Ralls 
+
+	* Fix null pointer dereference segfault.
+
+2017-11-28 John Ralls 
+
+	* Merge Aaron Laws's 'unneeded-build-flag' into unstable
+
+2017-11-28 John Ralls 
+
+	* Use GNUInstallDirs in CMake Builds
+
+2017-11-28 John Ralls 
+
+	* Fix python tests in tarball builds.
+
+2017-11-28 lmat 
+
+	* Removing Arch Linux Autotools build
+
+2017-11-28 lmat 
+
+	* Removing unneeded build flag from docker
+
+2017-11-28 John Ralls 
+
+	* Remove common/test-core/unittest_support.py from git.
+
 2017-11-25 John Ralls 
 
-	* Release 2.7.2 (HEAD -> unstable)
+	* Release 2.7.2 (tag: 2.7.2)
 
 2017-11-25 John Ralls 
 
@@ -8,7 +200,7 @@
 
 2017-11-25 John Ralls 
 
-	* Correct GUILE_LOAD_COMPILE_PATH to include Guile's own modules as well as ours. (origin/unstable)
+	* Correct GUILE_LOAD_COMPILE_PATH to include Guile's own modules as well as ours.
 
 2017-11-24 John Ralls 
 
@@ -28,7 +220,7 @@
 
 2017-11-23 Rob Gowin 
 
-	* Bug 790620 - Failed to create file “/usr/share/glib-2.0/schemas/gschemas.compiled.XY789Y” (origin/maint, maint)
+	* Bug 790620 - Failed to create file “/usr/share/glib-2.0/schemas/gschemas.compiled.XY789Y”
 
 2017-11-23 Robert Fewell 
 
@@ -100,7 +292,7 @@
 
 2017-11-21 Geert Janssens 
 
-	* Merge branch 'gtk3-update8' of https://github.com/Bob-IT/gnucash into unstable (origin/master, origin/HEAD)
+	* Merge branch 'gtk3-update8' of https://github.com/Bob-IT/gnucash into unstable
 
 2017-11-21 Geert Janssens 
 
@@ -296,7 +488,7 @@
 
 2017-10-31 John Ralls 
 
-	* Merge branch J. Marino's fix-report-colors into unstable (manjusri/master)
+	* Merge branch J. Marino's fix-report-colors into unstable
 
 2017-10-31 John Ralls 
 
@@ -520,7 +712,7 @@
 
 2017-10-20 fell 
 
-	* Add a bunch of translator comments and a few accelerators to glade files (manjusri/maint)
+	* Add a bunch of translator comments and a few accelerators to glade files
 
 2017-10-20 Geert Janssens 
 
@@ -960,7 +1152,7 @@
 
 2017-09-16 John Ralls 
 
-	* Fix the fix from mac for test-userdata-dir.c (master)
+	* Fix the fix from mac for test-userdata-dir.c
 
 2017-09-16 John Ralls 
 
@@ -7041,4 +7233,12 @@
 2016-01-02 John Ralls 
 
 	* Remove xaccSchedXactionGetInstanceAfter
+
+2016-01-02 fell 
+
+	* Add a missing gettext in plugin page owner tree
+
+2016-01-01 fell 
+
+	* Bug 760052 - missing flag translatable in Custom Report
 

@@ -63,21 +63,22 @@ SET(backend_sql_DIST ${backend_sql_DIST_local} ${test_backend_sql_DIST} PARENT_S
 
 # Add dependency on config.h
 SET_SOURCE_FILES_PROPERTIES (${gnc_backend_sql_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+IF(WITH_SQL)
+  ADD_LIBRARY (gnc-backend-sql
+    ${backend_sql_SOURCES}
+    ${backend_sql_noinst_HEADERS}
+    )
 
-ADD_LIBRARY	(gnc-backend-sql
-  ${backend_sql_SOURCES}
-  ${backend_sql_noinst_HEADERS}
-)
+  TARGET_LINK_LIBRARIES(gnc-backend-sql gncmod-engine)
 
-TARGET_LINK_LIBRARIES(gnc-backend-sql gncmod-engine)
+  TARGET_COMPILE_DEFINITIONS (gnc-backend-sql PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.sql\")
 
-TARGET_COMPILE_DEFINITIONS (gnc-backend-sql PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.sql\")
+  TARGET_INCLUDE_DIRECTORIES(gnc-backend-sql PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-TARGET_INCLUDE_DIRECTORIES(gnc-backend-sql PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+  INSTALL(TARGETS gnc-backend-sql
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-INSTALL(TARGETS gnc-backend-sql
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
-
-# No headers to install
+  # No headers to install
+ENDIF(WITH_SQL)
