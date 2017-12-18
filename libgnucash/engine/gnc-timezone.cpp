@@ -677,8 +677,9 @@ TimeZoneProvider::parse_file(const std::string& tzname)
 /* if the transitions end before the end of the zoneinfo coverage
  * period then the zone rescinded DST and we need a final no-dstzone.
  */
-    if (last_time.is_not_a_date_time() ||
-        last_time.date().year() < parser.last_year)
+    if (last_time.is_not_a_date_time())
+        zone_vector.push_back(zone_no_dst(max_year, last_info));
+    else if (last_time.date().year() < parser.last_year)
         zone_vector.push_back(zone_no_dst(last_time.date().year(), last_info));
 }
 
