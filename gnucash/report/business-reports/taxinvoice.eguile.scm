@@ -79,8 +79,8 @@
                      (lambda (s1 s2)
                        (let ((t1 (xaccSplitGetParent s1))
                              (t2 (xaccSplitGetParent s2)))
-                         (< (car (gnc-transaction-get-date-posted t1))
-                            (car (gnc-transaction-get-date-posted t2))))))))
+                         (< (xaccTransGetDate t1)
+                            (xaccTransGetDate t2)))))))
 
 
       ;; Is this an invoice or something else
@@ -246,7 +246,7 @@
         <td align="right" class="invnum"><big><strong><?scm:d invoiceid ?></strong></big></td>
       </tr>
       <?scm )) ?>
-      <?scm (if (equal? postdate (cons 0 0)) (begin ?>
+      <?scm (if (zero? postdate) (begin ?>
         <tr>
            <td colspan="2" align="right"><?scm:d (_ "Invoice in progress...") ?></td>
         </tr>
@@ -254,12 +254,12 @@
         <tr>
            <td align="right"><?scm:d (nbsp (_ "Invoice Date")) ?>:&nbsp;</td>
            <td align="right"><?scm:d (nbsp (strftime dateformat
-                                            (localtime (car postdate)))) ?></td>
+                                            (localtime postdate))) ?></td>
         </tr>
         <tr>
            <td align="right"><?scm:d (nbsp (_ "Due Date")) ?>:&nbsp;</td>
            <td align="right"><?scm:d (nbsp (strftime dateformat
-                                            (localtime (car duedate)))) ?></td>
+                                            (localtime duedate))) ?></td>
         </tr> <?scm )) ?>
         <?scm (if (not (string=? billingid "")) (begin ?>
           <tr>
@@ -347,7 +347,7 @@
     ?>
     <tr valign="top">
       <?scm (if opt-col-date (begin ?>
-      <td align="center" ><nobr><?scm:d (nbsp (gnc-print-date (gncEntryGetDate entry))) ?></nobr></td>
+      <td align="center" ><nobr><?scm:d (nbsp (qof-print-date (gncEntryGetDate entry))) ?></nobr></td>
       <?scm )) ?>
       <td align="left"><?scm:d (gncEntryGetDescription entry) ?></td>
       <!-- td align="left">< ?scm:d (gncEntryGetNotes entry) ?></td -->
@@ -419,7 +419,7 @@
     ?>
     <tr valign="top">
       <?scm (if opt-col-date (begin ?>
-      <td align="center"><?scm:d (gnc-print-date (gnc-transaction-get-date-posted t)) ?></td>
+      <td align="center"><?scm:d (qof-print-date (xaccTransGetDate t)) ?></td>
       <?scm )) ?>
       <td align="left" colspan="<?scm:d (+ tbl_cols (if opt-col-date 0 1)) ?>"><?scm:d opt-payment-recd-heading ?></td>
       <td align="right"><?scm:d (fmtmoney c a) ?></td>
