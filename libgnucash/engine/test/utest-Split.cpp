@@ -1670,7 +1670,6 @@ test_xaccSplitGetSharePrice (Fixture *fixture, gconstpointer pData)
     gnc_numeric expected = gnc_numeric_create (1, 1);
     Split *split = fixture->split;
     /* Warning: this is a define in Split.c */
-    const guint PRICE_SIGFIGS = 6;
     char *logdomain = "gnc.engine";
     GLogLevelFlags loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     TestErrorStruct check = { loglevel, logdomain, NULL, 0 };
@@ -1685,7 +1684,6 @@ test_xaccSplitGetSharePrice (Fixture *fixture, gconstpointer pData)
 
     expected = gnc_numeric_div (split->value, split->amount,
                                 GNC_DENOM_AUTO,
-                                GNC_HOW_DENOM_SIGFIGS (PRICE_SIGFIGS) |
                                 GNC_HOW_RND_ROUND_HALF_UP);
 
     result = xaccSplitGetSharePrice (split);
@@ -1710,7 +1708,6 @@ test_xaccSplitGetSharePrice (Fixture *fixture, gconstpointer pData)
     split->value = gnc_numeric_create (3, 789304166);
     quotient = gnc_numeric_div (split->value, split->amount,
                                 GNC_DENOM_AUTO,
-                                GNC_HOW_DENOM_SIGFIGS (PRICE_SIGFIGS) |
                                 GNC_HOW_RND_ROUND_HALF_UP);
     check.msg = g_strdup_printf ("[xaccSplitGetSharePrice()] "
                                  "Computing share price failed (%d): [ %"
@@ -1730,7 +1727,6 @@ test_xaccSplitGetSharePrice (Fixture *fixture, gconstpointer pData)
     split->value = gnc_numeric_create (3, 0);
     quotient = gnc_numeric_div (split->value, split->amount,
                                 GNC_DENOM_AUTO,
-                                GNC_HOW_DENOM_SIGFIGS (PRICE_SIGFIGS) |
                                 GNC_HOW_RND_ROUND_HALF_UP);
     check.msg = g_strdup_printf ("[xaccSplitGetSharePrice()] "
                                  "Computing share price failed (%d): [ %"
@@ -1750,7 +1746,6 @@ test_xaccSplitGetSharePrice (Fixture *fixture, gconstpointer pData)
     split->value = gnc_numeric_create (3, 789304166);
     quotient = gnc_numeric_div (split->value, split->amount,
                                 GNC_DENOM_AUTO,
-                                GNC_HOW_DENOM_SIGFIGS (PRICE_SIGFIGS) |
                                 GNC_HOW_RND_ROUND_HALF_UP);
     check.msg = g_strdup_printf ("[xaccSplitGetSharePrice()] "
                                  "Computing share price failed (%d): [ %"

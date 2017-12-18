@@ -60,8 +60,6 @@
 const char *void_former_amt_str = "void-former-amount";
 const char *void_former_val_str = "void-former-value";
 
-#define PRICE_SIGFIGS 6
-
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_ENGINE;
 
@@ -1956,7 +1954,6 @@ xaccSplitGetSharePrice (const Split * split)
     }
     price = gnc_numeric_div(val, amt,
                             GNC_DENOM_AUTO,
-                            GNC_HOW_DENOM_SIGFIGS(PRICE_SIGFIGS) |
                             GNC_HOW_RND_ROUND_HALF_UP);
 
     /* During random checks we can get some very weird prices.  Let's
