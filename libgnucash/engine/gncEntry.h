@@ -161,6 +161,8 @@ is a misleading extra information. We are only dealing with the day
 information! */
 Timespec gncEntryGetDate (const GncEntry *entry);
 Timespec gncEntryGetDateEntered (const GncEntry *entry);
+time64 gncEntryGetDateTT (const GncEntry *entry);
+time64 gncEntryGetDateEnteredTT (const GncEntry *entry);
 const char * gncEntryGetDescription (const GncEntry *entry);
 const char * gncEntryGetAction (const GncEntry *entry);
 const char * gncEntryGetNotes (const GncEntry *notes);

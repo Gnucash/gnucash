@@ -884,6 +884,11 @@ Timespec gncEntryGetDate (const GncEntry *entry)
     return entry->date;
 }
 
+time64 gncEntryGetDateTT (const GncEntry *entry)
+{
+    return entry ? entry->date.tv_sec : 0;
+}
+
 GDate gncEntryGetDateGDate(const GncEntry *entry)
 {
     return timespec_to_gdate(gncEntryGetDate(entry));
@@ -896,6 +901,11 @@ Timespec gncEntryGetDateEntered (const GncEntry *entry)
     ts.tv_nsec = 0;
     if (!entry) return ts;
     return entry->date_entered;
+}
+
+time64 gncEntryGetDateEnteredTT (const GncEntry *entry)
+{
+    return entry ? entry->date_entered.tv_sec : 0;
 }
 
 const char * gncEntryGetDescription (const GncEntry *entry)
