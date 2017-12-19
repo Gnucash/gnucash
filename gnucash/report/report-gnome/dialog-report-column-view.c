@@ -432,7 +432,7 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data)
                 oldlist = SCM_CDR(oldlist);
             }
             newlist = scm_append
-                      (scm_listify(scm_reverse(scm_cons(SCM_LIST4(new_report,
+                      (scm_list_n (scm_reverse(scm_cons(SCM_LIST4(new_report,
                                                scm_from_int (1),
                                                scm_from_int (1),
                                                SCM_BOOL_F),
@@ -443,7 +443,7 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data)
         else
         {
             newlist = scm_append
-                      (scm_listify(oldlist,
+                      (scm_list_n (oldlist,
                                    SCM_LIST1(SCM_LIST4(new_report,
                                              scm_from_int (1),
                                              scm_from_int (1),
@@ -485,7 +485,7 @@ gnc_column_view_edit_remove_cb(GtkButton * button, gpointer user_data)
             }
             if (count <= oldlength)
             {
-                newlist = scm_append(scm_listify(scm_reverse(newlist), SCM_CDR(oldlist), SCM_UNDEFINED));
+                newlist = scm_append(scm_list_n (scm_reverse(newlist), SCM_CDR(oldlist), SCM_UNDEFINED));
             }
         }
 
@@ -528,7 +528,7 @@ gnc_edit_column_view_move_up_cb(GtkButton * button, gpointer user_data)
         temp = SCM_CAR(oldlist);
         oldlist = SCM_CDR(oldlist);
         newlist = scm_cons(temp, scm_cons(SCM_CAR(oldlist), newlist));
-        newlist = scm_append(scm_listify(scm_reverse(newlist), SCM_CDR(oldlist), SCM_UNDEFINED));
+        newlist = scm_append(scm_list_n (scm_reverse(newlist), SCM_CDR(oldlist), SCM_UNDEFINED));
 
         scm_gc_unprotect_object(r->contents_list);
         r->contents_list = newlist;
@@ -566,7 +566,7 @@ gnc_edit_column_view_move_down_cb(GtkButton * button, gpointer user_data)
         temp = SCM_CAR(oldlist);
         oldlist = SCM_CDR(oldlist);
         newlist = scm_cons(temp, scm_cons(SCM_CAR(oldlist), newlist));
-        newlist = scm_append(scm_listify(scm_reverse(newlist), SCM_CDR(oldlist), SCM_UNDEFINED));
+        newlist = scm_append(scm_list_n (scm_reverse(newlist), SCM_CDR(oldlist), SCM_UNDEFINED));
 
         scm_gc_unprotect_object(r->contents_list);
         r->contents_list = newlist;

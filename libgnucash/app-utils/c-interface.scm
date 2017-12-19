@@ -15,25 +15,67 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
-(define (gnc:error->string tag args)
-  (define (write-error port)
-    (if (and (list? args) (not (null? args)))
-        (let ((func (car args)))
-          (if func
-              (begin
-                (display "Function: " port)
-                (display func port)
-                (display ", " port)
-                (display tag port)
-                (display "\n\n" port)))))
-    (false-if-exception
-     (apply display-error (fluid-ref the-last-stack) port args))
-    (display-backtrace (fluid-ref the-last-stack) port)
-    (force-output port))
-  
-  (false-if-exception
-   (call-with-output-string write-error)))
+(define (gnc:call-with-error-handling cmd args)
+  (let ((captured-stack #f)
+        (captured-error #f)
+        (result #f))
+    (catch #t
+        (lambda ()
+            ;; Execute the code in which
+            ;; you want to catch errors here.
+            (if (procedure? cmd)
+                (set! result (apply cmd args)))
+            (if (string? cmd)
+                (set! result (eval-string cmd)))
+            )
+        (lambda (key . parameters)
+            ;; Put the code which you want
+            ;; to handle an error after the
+            ;; stack has been unwound here.
+            (let* ((str-port (open-output-string)))
+                    (display-backtrace captured-stack str-port)
+                    (display "\n" str-port)
+                    (print-exception str-port #f key parameters)
+                    (set! captured-error (get-output-string str-port))))
+        (lambda (key . parameters)
+            ;; Capture the stack here, cut the last 3 frames which are
+            ;; make-stack, this one, and the throw handler.
+                (set! captured-stack (make-stack #t 3))))
 
+    (list result captured-error)
+))
+
+;; gnc:eval-string-with-error-handling will evaluate the input string (cmd)
+;; an captures any exception that would be generated. It returns
+;; a list with 2 elements: the output of the evaluation and a backtrace.
+;; The first may be set if string evaluation did generate
+;; output, the latter is set when an exception was caught.
+;; We'll use this to wrap guile calls in C(++), allowing
+;; the C(++) code to decide how to handle the errors.
+(define (gnc:eval-string-with-error-handling cmd)
+    (gnc:call-with-error-handling cmd '()))
+
+;; gnc:apply-with-error-handling will call guile's apply to run func with args
+;; an captures any exception that would be generated. It returns
+;; a list with 2 elements: the output of the evaluation and a backtrace.
+;; The first may be set if the result of the apply did generate
+;; output, the latter is set when an exception was caught.
+;; We'll use this to wrap guile calls in C(++), allowing
+;; the C(++) code to decide how to handle the errors.
+(define (gnc:apply-with-error-handling func args)
+    (gnc:call-with-error-handling func args))
+
+
+(define (gnc:backtrace-if-exception proc . args)
+  (let* ((apply-result (gnc:apply-with-error-handling proc args))
+         (result (car apply-result))
+         (error (cadr apply-result)))
+        (if error
+            (begin
+                (display error (current-error-port))
+                (if (defined? 'gnc:warn)
+                    (gnc:warn error)))
+            result)))
 
 ;; This database can be used to store and retrieve translatable
 ;; strings. Strings that are returned by the lookup function are
@@ -56,5 +98,5 @@
       (if func
           (apply func args)
           (gnc:warn "string-database: bad message" message "\n"))))
-  
+
   dispatch)

@@ -100,7 +100,10 @@ endif
 
 if GNC_HAVE_GUILE_2
 GUILE_COMPILE_ENV = \
+  --gnc-module-dir ${top_builddir}/libgnucash/engine \
+  --guile-load-dir ${top_builddir}/libgnucash/app-utils \
   --guile-load-dir ${top_builddir}/libgnucash/core-utils \
+  --guile-load-dir ${top_builddir}/libgnucash/engine \
   --guile-load-dir ${top_builddir}/libgnucash/gnc-module \
   --guile-load-dir ${top_builddir}/libgnucash/scm \
   --library-dir    ${top_builddir}/libgnucash/engine \

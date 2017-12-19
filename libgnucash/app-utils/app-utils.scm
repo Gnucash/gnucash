@@ -43,7 +43,9 @@
 (re-export N_)
 
 ;; c-interface.scm
-(export gnc:error->string)
+(export gnc:apply-with-error-handling)
+(export gnc:eval-string-with-error-handling)
+(export gnc:backtrace-if-exception)
 (export gnc:make-string-database)
 
 ;; options.scm

@@ -88,12 +88,12 @@ FUNCTION(GNC_ADD_SCHEME_TARGETS _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
         "${current_bindir}" "${CMAKE_BINARY_DIR}/libgnucash/scm")  # to pick up generated build-config.scm
     SET(_GUILE_LOAD_COMPILED_PATH "${current_bindir}")
 
-    SET(_GUILE_CACHE_DIR ${LIBDIR_BUILD}/gnucash/scm/ccache/2.0)
+    SET(_GUILE_CACHE_DIR ${LIBDIR_BUILD}/gnucash/scm/ccache/${GUILE_EFFECTIVE_VERSION})
     SET(_GUILE_LOAD_PATH "${current_srcdir}")
     IF (MAKE_LINKS)
       LIST(APPEND _GUILE_LOAD_PATH "${build_datadir}/gnucash/scm")
     ENDIF()
-    SET(_GUILE_LOAD_COMPILED_PATH ${build_libdir}/gnucash/scm/ccache/2.0)
+    SET(_GUILE_LOAD_COMPILED_PATH ${build_libdir}/gnucash/scm/ccache/${GUILE_EFFECTIVE_VERSION})
 
     SET(_TARGET_FILES "")
 

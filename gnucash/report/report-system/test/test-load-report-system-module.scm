@@ -1,4 +1,3 @@
-(debug-enable 'debug)
 (debug-enable 'backtrace)
 
 (debug-set! stack 500000)
@@ -7,7 +6,11 @@
 
 (display "  testing report module load ... ")
 (setenv "GNC_UNINSTALLED" "1")
-(use-modules (ice-9 syncase))
+(cond-expand
+  (guile-2 )
+  (else
+    ;; Syncase is deprecated and redundant in guile 2
+    (use-modules (ice-9 syncase))))
 (use-modules (gnucash gnc-module))
 
 (gnc:module-system-init)

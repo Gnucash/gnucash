@@ -135,7 +135,7 @@ main (int argc, char **argv)
 /* When built with clang, guile-1.8.8's scm_c_eval_string truncates all
  * integer values to int32, which causes this test to fail.
  */
-#if !(defined(__clang__)) || defined(HAVE_GUILE20)
+#if !(defined(__clang__)) || defined(HAVE_GUILE20) || defined(HAVE_GUILE22)
     scm_boot_guile (argc, argv, main_helper, NULL);
 #endif
     return 0;

@@ -21,6 +21,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-modules (gnucash main))
+(use-modules (gnucash app-utils))
 (use-modules (gnucash printf))
 (use-modules (gnucash gettext))
 (cond-expand

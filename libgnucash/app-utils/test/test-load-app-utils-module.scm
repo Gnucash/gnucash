@@ -21,10 +21,10 @@
       (display "Failed - module gnucash/app-utils not loaded successfully\n")
       (set! exit-code -1)))
 
-(if (procedure? gnc:error->string)
-    (display "Procedure gnc:error->string found\n")
+(if (procedure? gnc:apply-with-error-handling)
+    (display "Procedure gnc:apply-with-error-handling found\n")
     (begin
-      (display "Failed - procedure gnc:error->string not found\n")
+      (display "Failed - procedure gnc:apply-with-error-handling not found\n")
       (set! exit-code -1)))
 
 (if (procedure? gnc-default-currency)

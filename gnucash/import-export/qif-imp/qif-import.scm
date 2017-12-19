@@ -26,6 +26,7 @@
 
 (define-module (gnucash import-export qif-import))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash app-utils))
 
 ;; We do this initialization here because src/gnome isn't a real module.
 ;; Note: Guile 2 needs to find the symbols from the extension at compile time already
@@ -43,7 +44,6 @@
 (use-modules (ice-9 regex))
 (use-modules (srfi srfi-1))
 
-(debug-enable 'debug)
 (debug-enable 'backtrace)
 
 (gnc:module-load "gnucash/engine" 0)
