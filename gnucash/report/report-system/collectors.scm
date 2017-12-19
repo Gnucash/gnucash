@@ -183,7 +183,8 @@
       (throw 'error (list "not a collector" collector))))
 
 (define (collector-add-all collector values)
-  (if (null-list? values) (collector-end collector)
+  (if (null-list? values)
+      (collector-end collector)
       (collector-add-all (collector-add collector (car values))
 			 (cdr values))))
 
