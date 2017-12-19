@@ -14,11 +14,7 @@ SET (scm_SCHEME_4
 
 # FIXME: ${BUILD_CONFIG_SCM} needs a rule to cause it to be generated, I think.
 
-IF (HAVE_GUILE1)
-  GNC_CONFIGURE(build-config.scm.in build-config.scm)
-ELSE()
-  GNC_CONFIGURE2(build-config-scm build-config.scm.in build-config.scm)
-ENDIF()
+GNC_CONFIGURE2(build-config-scm build-config.scm.in build-config.scm)
 
 # CONFIGURE_FILE(build-config.scm.in ${BUILD_CONFIG_SCM})
 

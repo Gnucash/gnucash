@@ -18,11 +18,6 @@
 (define-module (gnucash main)
   #:use-module (gnucash printf))
 
-;; This is to silence warnings with guile-1.8:
-(if (and (>= (string->number (major-version)) 1) 
-         (>= (string->number (minor-version)) 8))
-    (default-duplicate-binding-handler 'last))
-
 ;; Turn off the scheme compiler's "possibly unbound variable" warnings.
 ;; In guile 2.0 we get nearly 7500 of them loading the scheme files.
 ;; This is the default value for auto-compilation-options without "unbound-variable".

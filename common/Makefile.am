@@ -39,5 +39,4 @@ EXTRA_DIST = \
   gnc-test-env.pl \
   guile-mappings.h \
   platform.h \
-  swig-utf8.patch \
   CMakeLists.txt

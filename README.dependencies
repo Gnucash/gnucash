@@ -64,7 +64,7 @@ Libraries/Deps
   --------		_______
 glib2			2.40.0
 gtk+3			3.14.0
-guile			1.8.5 or 2.0.0
+guile			2.2.0 or 2.0.0
 libxml2			2.5.10
 libxslt
 ICU                                             International Compnents for

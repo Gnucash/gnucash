@@ -269,7 +269,7 @@ IF(BUILDING_FROM_VCS)
 ENDIF()
 
 # Find Guile and determine which version we are using.
-# Look for guile versions in this order: 2.2 > 2.0 > 1.8
+# Look for guile versions in this order: 2.2 > 2.0
 
 # guile library and include dir
 GNC_PKG_CHECK_MODULES (GUILE22 guile-2.2 QUIET)
@@ -302,19 +302,7 @@ ELSE(GUILE22_FOUND)
     MESSAGE(STATUS "Using guile-2.0.x")
     FIND_PROGRAM (GUILE_EXECUTABLE NAMES guile2.0 guile)
   ELSE(GUILE2_FOUND)
-
-    # look for guile 1.8
-    GNC_PKG_CHECK_MODULES (GUILE1 guile-1.8>=1.8.8 QUIET)
-    IF (NOT GUILE1_FOUND)
-      MESSAGE (FATAL_ERROR "Neither guile 1.8 nor guile 2.0 were found GnuCash can't run without one of them. Ensure that one is installed and can be found with pgk-config.")
-    ENDIF(NOT GUILE1_FOUND)
-
-    SET(HAVE_GUILE1 TRUE)
-    SET(GUILE_EFFECTIVE_VERSION 1.8)
-    SET(GUILE_INCLUDE_DIRS ${GUILE1_INCLUDE_DIRS})
-    SET(GUILE_LDFLAGS ${GUILE1_LDFLAGS})
-    MESSAGE(STATUS "Using guile-1.8.x")
-    FIND_PROGRAM (GUILE_EXECUTABLE NAMES guile1.8 guile)
+    MESSAGE (FATAL_ERROR "Neither guile 2.2 nor guile 2.0 were found GnuCash can't run without one of them. Ensure that one is installed and can be found with pgk-config.")
   ENDIF(GUILE2_FOUND)
 ENDIF(GUILE22_FOUND)
 

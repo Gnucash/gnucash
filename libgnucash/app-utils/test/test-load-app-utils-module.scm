@@ -7,12 +7,8 @@
 ;; otherwise the N_ syntax-rule won't be found at compile time
 ;; causing the test to fail
 ;; That's what the wrapper below is meant for:
-(cond-expand
-   (guile-2
-    (define-syntax-rule (begin-for-syntax form ...)
-      (eval-when (load compile eval) (begin form ...))))
-   (else
-    (define begin-for-syntax begin)))
+(define-syntax-rule (begin-for-syntax form ...)
+      (eval-when (load compile eval) (begin form ...)))
 
 (begin-for-syntax (define loaded-module (gnc:module-load "gnucash/app-utils" 0)))
 (if loaded-module

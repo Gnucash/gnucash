@@ -27,13 +27,6 @@ if BUILDING_FROM_VCS
 swig-report-system.c: report-system.i ${top_srcdir}/common/base-typemaps.i
 	$(SWIG) -guile -Linkage module \
 	-I${top_srcdir}/common -o $@ $<
-if ! OS_WIN32
-if ! SWIG_DIST_FAIL
-	if ! `grep "define scm_from_utf8_string" $@ > /dev/null 2>&1`; then \
-	  patch $@ $(top_srcdir)/common/swig-utf8.patch; \
-	fi
-endif
-endif
 endif
 
 AM_CPPFLAGS = \
@@ -105,7 +98,6 @@ if ! OS_WIN32
 	touch .scm-links
 endif
 
-if GNC_HAVE_GUILE_2
 GUILE_COMPILE_ENV = \
   --gnc-module-dir ${top_builddir}/libgnucash/app-utils \
   --gnc-module-dir ${top_builddir}/libgnucash/engine \
@@ -143,7 +135,6 @@ gncmodscmcache_DATA = $(gncmodscm_DATA:.scm=.go)
 
 gncscmcachedir = ${pkglibdir}/scm/ccache/@GUILE_EFFECTIVE_VERSION@
 gncscmcache_DATA = $(gncscm_DATA:.scm=.go)
-endif
 
 noinst_DATA = .scm-links
 

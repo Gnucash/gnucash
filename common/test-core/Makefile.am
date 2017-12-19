@@ -28,13 +28,6 @@ swig-unittest-support-guile.c: unittest-support.i $(top_srcdir)/common/base-type
 	$(SWIG) -guile -Linkage module \
 	-I${top_srcdir}/common \
 	${AM_CPPFLAGS} -o $@ $<
-if ! OS_WIN32
-if ! SWIG_DIST_FAIL
-	if ! `grep "define scm_from_utf8_string" $@ > /dev/null 2>&1`; then \
-	  patch $@ $(top_srcdir)/common/swig-utf8.patch; \
-	fi
-endif
-endif
 
 swig-unittest-support-python.c: unittest-support.i $(top_srcdir)/common/base-typemaps.i
 	$(SWIG) -python  -Wall -Werror \
@@ -110,7 +103,6 @@ if ! OS_WIN32
 	touch .scm-links
 endif
 
-if GNC_HAVE_GUILE_2
 GUILE_COMPILE_ENV = \
   --library-dir    ${top_builddir}/common/test-core \
   --library-dir    ${top_builddir}/libgnucash/engine \
@@ -125,7 +117,6 @@ GUILE_COMPILE_ENV = \
 
 gncscmmodcachedir = ${pkglibdir}/scm/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash
 gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
-endif
 
 clean-local:
 	$(RM) -rf gnucash

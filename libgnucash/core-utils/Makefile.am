@@ -42,13 +42,7 @@ if BUILDING_FROM_VCS
 swig-core-utils-guile.c: core-utils.i ${top_srcdir}/common/base-typemaps.i
 	$(SWIG) -guile -Linkage module \
 	-I${top_srcdir}/common -o $@ $<
-if ! OS_WIN32
-if ! SWIG_DIST_FAIL
-	if ! `grep "define scm_from_utf8_string" $@ > /dev/null 2>&1`; then \
-	  patch $@ $(top_srcdir)/common/swig-utf8.patch; \
-	fi
-endif
-endif
+
 swig-core-utils-python.c: core-utils.i ${top_srcdir}/common/base-typemaps.i
 	$(SWIG) -python -Wall -Werror \
 	-I${GLIB_CFLAGS} -I${top_srcdir}/common -I${srcdir} -o $@ $<
@@ -107,7 +101,6 @@ if ! OS_WIN32
 	touch .scm-links
 endif
 
-if GNC_HAVE_GUILE_2
 GUILE_COMPILE_ENV = \
   --library-dir    ${top_builddir}/libgnucash/core-utils
 
@@ -119,7 +112,6 @@ GUILE_COMPILE_ENV = \
 
 gncscmmodcachedir = ${pkglibdir}/scm/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash
 gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
-endif
 
 noinst_DATA = .scm-links
 BUILT_SOURCES = gncla-dir.h gnc-version.h

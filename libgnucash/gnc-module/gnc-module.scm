@@ -28,13 +28,9 @@
 (define-module (gnucash gnc-module))
 
 ;; Guile 2 needs to find the symbols from the extension at compile time already
-(cond-expand
-  (guile-2
-    (eval-when
+(eval-when
       (compile load eval expand)
-      (load-extension "libgnc-module" "scm_init_sw_gnc_module_module")))
-  (else
-    (load-extension "libgnc-module" "scm_init_sw_gnc_module_module")))
+      (load-extension "libgnc-module" "scm_init_sw_gnc_module_module"))
 
 (use-modules (sw_gnc_module))
 
@@ -52,9 +48,5 @@
 (export gnc:module-begin-syntax)
 
 ;; Guile 2 needs to load external modules at compile time
-(cond-expand
-   (guile-2
-    (define-syntax-rule (gnc:module-begin-syntax form ...)
-      (eval-when (load compile eval expand) (begin form ...))))
-   (else
-    (define gnc:module-begin-syntax begin)))
+(define-syntax-rule (gnc:module-begin-syntax form ...)
+      (eval-when (load compile eval expand) (begin form ...)))

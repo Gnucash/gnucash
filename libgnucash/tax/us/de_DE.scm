@@ -20,13 +20,10 @@
 (define-module (gnucash tax de_DE))
 
 (use-modules (gnucash gnc-module))
-(cond-expand
-  (guile-2
-    (eval-when
+(eval-when
       (compile load eval expand)
       (load-extension "libgncmod-engine" "scm_init_sw_engine_module")
-      (load-extension "libgncmod-app-utils" "scm_init_sw_app_utils_module")))
-  (else ))
+      (load-extension "libgncmod-app-utils" "scm_init_sw_app_utils_module"))
 (use-modules (sw_app_utils))
 (use-modules (sw_engine))
 (use-modules (gnucash app-utils))

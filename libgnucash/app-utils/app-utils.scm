@@ -16,12 +16,9 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
 (define-module (gnucash app-utils))
-(cond-expand
-  (guile-2
-    (eval-when
+(eval-when
       (compile load eval expand)
-      (load-extension "libgncmod-app-utils" "scm_init_sw_app_utils_module")))
-  (else ))
+      (load-extension "libgncmod-app-utils" "scm_init_sw_app_utils_module"))
 (use-modules (sw_app_utils))
 (use-modules (srfi srfi-1))
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
@@ -29,13 +26,9 @@
 (use-modules (gnucash gettext))
 
 ;; Guile 2 needs to find the symbols from the c module at compile time already
-(cond-expand
-  (guile-2
-    (eval-when
+(eval-when
       (compile load eval expand)
-      (gnc:module-load "gnucash/engine" 0)))
-  (else
-    (gnc:module-load "gnucash/engine" 0)))
+      (gnc:module-load "gnucash/engine" 0))
 
 ;; gettext.scm
 (re-export gnc:gettext)

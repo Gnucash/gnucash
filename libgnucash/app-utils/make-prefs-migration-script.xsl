@@ -25,13 +25,9 @@
 (use-modules (gnucash core-utils))
 ;(use-modules (gnucash gnc-module))
 ;; Guile 2 needs to find the symbols from the c module at compile time already
-;(cond-expand
-;  (guile-2
-;    (eval-when
-;      (compile load eval) 
-;      (load-extension "libgnc-core-utils" "scm_init_sw_core_utils_module")))
-;  (else
-;    (load-extension "libgnc-core-utils" "scm_init_sw_core_utils_module")))
+;(eval-when
+;      (compile load eval)
+;      (load-extension "libgnc-core-utils" "scm_init_sw_core_utils_module"))
 ;(use-modules (sw_core_utils))
 
 (define (run-migration-internal)

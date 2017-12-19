@@ -237,9 +237,8 @@ you'll need for the systems we know about:
     current:
       libgnome-dev
       libwebkit-dev
-      guile1.8
+      guile
       libguile9-dev
-      libguile9-slib
 
 
   SuSE:
