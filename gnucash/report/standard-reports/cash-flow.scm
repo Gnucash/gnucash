@@ -143,18 +143,18 @@
                                   optname-show-rates))
          (show-full-names? (get-option gnc:pagename-general 
                                        optname-show-full-names))
-         (from-date-tp (gnc:timepair-start-day-time 
+         (from-date-t64 (gnc:time64-start-day-time 
                         (gnc:date-option-absolute-time
                          (get-option gnc:pagename-general
                                      optname-from-date))))
-         (to-date-tp (gnc:timepair-end-day-time 
+         (to-date-t64 (gnc:time64-end-day-time 
                       (gnc:date-option-absolute-time
                        (get-option gnc:pagename-general
                                    optname-to-date))))
 
          ;; calculate the exchange rates
          (exchange-fn (gnc:case-exchange-fn
-                       price-source report-currency to-date-tp))
+                       price-source report-currency to-date-t64))
 
          (doc (gnc:make-html-document))
          (table (gnc:make-html-table))
@@ -162,10 +162,10 @@
 
     (gnc:html-document-set-title! 
      doc (string-append
-	  (get-option gnc:pagename-general gnc:optname-reportname)
-	  " - "
-	  (sprintf #f (_ "%s to %s")
-		   (gnc-print-date from-date-tp) (gnc-print-date to-date-tp))))
+          (get-option gnc:pagename-general gnc:optname-reportname)
+          " - "
+          (sprintf #f (_ "%s to %s")
+                   (qof-print-date from-date-t64) (qof-print-date to-date-t64))))
 
 
     ;; add subaccounts if requested
@@ -195,7 +195,7 @@
 	       ;; nearest available exchange rate if that is what is specified
 	       (time-exchange-fn (gnc:case-exchange-time-fn
 				  price-source report-currency
-				  commodity-list to-date-tp
+				  commodity-list to-date-t64
 				  0 0)))
 
 	  ;; Helper function to convert currencies
@@ -208,8 +208,8 @@
 
           (let ((result (cash-flow-calc-money-in-out
 			 (list (cons 'accounts accounts)
-			       (cons 'to-date-tp to-date-tp)
-			       (cons 'from-date-tp from-date-tp)
+			       (cons 'to-date-t64 to-date-t64)
+			       (cons 'from-date-t64 from-date-t64)
 			       (cons 'report-currency report-currency)
 			       (cons 'include-trading-accounts include-trading-accounts)
 			       (cons 'to-report-currency to-report-currency)))))
@@ -391,8 +391,8 @@
 ;; function to add inflow and outflow of money
 (define (cash-flow-calc-money-in-out settings)
   (let* ((accounts (cdr (assq 'accounts settings)))
-	 (to-date-tp (cdr (assq 'to-date-tp settings)))
-	 (from-date-tp (cdr (assq 'from-date-tp settings)))
+	 (to-date-t64 (cdr (assq 'to-date-t64 settings)))
+	 (from-date-t64 (cdr (assq 'from-date-t64 settings)))
 	 (report-currency (cdr (assq 'report-currency settings)))
 	 (include-trading-accounts (cdr (assq 'include-trading-accounts settings)))
 	 (to-report-currency (cdr (assq 'to-report-currency settings)))
@@ -407,7 +407,7 @@
 	 (money-out-hash (make-hash-table))
 	 (money-out-collector (gnc:make-commodity-collector))
 
-	 (all-splits (gnc:account-get-trans-type-splits-interval accounts '() from-date-tp to-date-tp))
+	 (all-splits (gnc:account-get-trans-type-splits-interval accounts '() from-date-t64 to-date-t64))
 	 (splits-to-do (length all-splits))
 	 (splits-seen-table (make-hash-table))
 	 (work-done 0))
@@ -423,8 +423,8 @@
       (if (= (modulo work-done 100) 0)
 	  (gnc:report-percent-done (* 85 (/ work-done splits-to-do))))
       (let ((parent (xaccSplitGetParent split)))
-	(if (and (gnc:timepair-le (gnc-transaction-get-date-posted parent) to-date-tp)
-		 (gnc:timepair-ge (gnc-transaction-get-date-posted parent) from-date-tp))
+	(if (and (<= (xaccTransGetDate parent) to-date-t64)
+		 (>= (xaccTransGetDate parent) from-date-t64))
 	    (let* ((parent-description (xaccTransGetDescription parent))
 		   (parent-currency (xaccTransGetCurrency parent)))
 					(gnc:debug parent-description
@@ -467,7 +467,7 @@
 				       )
 				   (let ((s-report-value (to-report-currency parent-currency
 									     (gnc-numeric-neg s-value)
-									     (gnc-transaction-get-date-posted
+									     (xaccTransGetDate
 									      parent))))
 				     (money-in-collector 'add report-currency s-report-value)
 				     (s-account-in-collector 'add report-currency s-report-value))
@@ -487,7 +487,7 @@
 				       )
 				   (let ((s-report-value (to-report-currency parent-currency
 									     s-value
-									     (gnc-transaction-get-date-posted
+									     (xaccTransGetDate
 									      parent))))
 				     (money-out-collector 'add report-currency s-report-value)
 				     (s-account-out-collector 'add report-currency s-report-value))
