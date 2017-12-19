@@ -16,11 +16,14 @@ test_scm_query_string_SOURCES = test-scm-query-string.cpp
 test_sx_SOURCES = test-sx.cpp
 test_print_parse_amount_SOURCES = test-print-parse-amount.cpp
 
-GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/libgnucash/engine \
+GNC_TEST_DEPS = \
+  --gnc-module-dir ${top_builddir}/libgnucash/engine \
+  --gnc-module-dir ${top_builddir}/libgnucash/engine/test \
   --gnc-module-dir ${top_builddir}/libgnucash/app-utils \
   --guile-load-dir ${top_builddir}/libgnucash/core-utils \
   --guile-load-dir ${top_builddir}/libgnucash/gnc-module \
   --guile-load-dir ${top_builddir}/libgnucash/engine \
+  --guile-load-dir ${top_builddir}/libgnucash/engine/test \
   --guile-load-dir ${top_builddir}/libgnucash/scm \
   --guile-load-dir ${top_builddir}/libgnucash/app-utils \
   --library-dir    ${top_builddir}/libgnucash/core-utils \
@@ -74,7 +77,7 @@ test_app_utils_CXXFLAGS = \
 	-DTESTPROG=test_app_utils \
 	${GLIB_CFLAGS}
 
-SCM_TESTS =   test-load-app-utils-module
+SCM_TESTS =   test-load-app-utils-module test-c-interface
 SCM_TEST_SRCS = $(SCM_TESTS:%=%.scm)
 
 $(SCM_TESTS): %: $(srcdir)/%.scm Makefile
