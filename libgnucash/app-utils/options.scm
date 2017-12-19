@@ -562,13 +562,24 @@
          subtype
          relative-date-list)
   (define (date-legal date)
-    (and (pair? date) 
-         (or 
+    (and (pair? date)
+         (or
           (and (eq? 'relative (car date)) (symbol? (cdr date)))
-          (and (eq? 'absolute (car date)) 
-               (pair? (cdr date)) 
-               (exact? (cadr date)) 
-               (exact? (cddr date))))))
+          (and (eq? 'absolute (car date))
+               (or (and (pair? (cdr date))   ; we can still accept
+                        (exact? (cadr date)) ; old-style timepairs
+                        (exact? (cddr date)))
+                   (and (number? (cdr date))
+                        (exact? (cdr date))))))))
+  (define (maybe-convert-to-time64 date)
+    ;; compatibility shim. this is triggered only when date is type
+    ;; (cons 'absolute (cons sec nsec)) - we'll convert to
+    ;; (cons 'absolute sec). this shim must always be kept for gnucash
+    ;; to reload saved reports, or reload reports launched at startup,
+    ;; which had been saved as timepairs.
+    (if (pair? (cdr date))
+        (cons (car date) (cadr date))
+        date))
   (define (list-lookup list item)
     (cond
      ((null? list) #f)
@@ -582,7 +593,7 @@
      (lambda () value)
      (lambda (date)
        (if (date-legal date)
-           (set! value date)
+           (set! value (maybe-convert-to-time64 date))
            (gnc:error "Illegal date value set:" date)))
      default-getter
      (gnc:restore-form-generator value->string)
