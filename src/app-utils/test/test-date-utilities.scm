@@ -5,7 +5,7 @@
 (define (run-test)
   (and (test test-weeknum-calculator)))
 
-(define (create->time64 l)
+(define (create-time64 l)
   (let ((now (gnc-localtime (current-time))))
     (set-tm:sec now (list-ref l 0))
     (set-tm:min now (list-ref l 1))
