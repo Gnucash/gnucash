@@ -279,7 +279,7 @@ main (int argc, char *argv[])
     GNC_TEST_ADD (suitename, "guid_bayes_entry", Fixture, NULL, setup, &write_guid_bayes_entry, teardown);
     GNC_TEST_ADD (suitename, "normal_bayes_find", Fixture, NULL, setup, &find_normal_bayes_account, teardown);
     GNC_TEST_ADD (suitename, "guid_bayes_find", Fixture, NULL, setup, &find_guid_bayes_account, teardown);
-    GNC_TEST_ADD (suitename, "normal_bayes_find", Fixture, NULL, setup, &find_normal_bayes_when_non_exists, teardown);
+    GNC_TEST_ADD (suitename, "normal_bayes_find_none", Fixture, NULL, setup, &find_normal_bayes_when_non_exists, teardown);
     GNC_TEST_ADD (suitename, "Mixed case", Fixture, NULL, setup, &group_account_name_and_guid_in_mixed_case, teardown);
     GNC_TEST_ADD (suitename, "Read flat bayes", Fixture, NULL, setup, &read_flat_bayes, teardown);
     GNC_TEST_ADD (suitename, "Write flat bayes", Fixture, NULL, setup, &write_flat_bayes, teardown);
