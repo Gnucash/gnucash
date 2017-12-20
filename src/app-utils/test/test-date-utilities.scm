@@ -16,15 +16,11 @@
     (set-tm:isdst now -1)
     (gnc-mktime now)))
 
-(define (list->time64 l)
-  (create-time64 (list-ref l 0) (list-ref l 1) (list-ref l 2)
-                 (list-ref l 3) (list-ref l 4) (list-ref l 5)))
-
 (define (weeknums-equal? pair-of-dates)
   (let ((d1 (car pair-of-dates))
         (d2 (cdr pair-of-dates)))
-    (equal? (gnc:date-to-week (list->time64 d1))
-            (gnc:date-to-week (list->time64 d2)))))
+    (equal? (gnc:date-to-week (create-time64 d1))
+            (gnc:date-to-week (create-time64 d2)))))
 
 (define (test-weeknum-calculator)
   (and (weeknums-equal? (cons '(1970 1 1 0 0 0)
