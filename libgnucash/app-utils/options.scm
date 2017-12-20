@@ -1681,32 +1681,50 @@
           (let ((option-hash (hash-ref section-hash name)))
             (if option-hash
                 option-hash
-                ; Option name was not found. Perhaps it was renamed ?
-                ; Let's try to map it to a known new name
+                ;; Option name was not found. Perhaps it was renamed ?
+                ;; Let's try to map it to a known new name.
+                ;; This list will try match names - if one is found
+                ;; the next item will describe a pair.
+                ;; (cons newsection newname)
+                ;; If newsection is #f then reuse previous section name.
+                ;;
+                ;; Please note the rename list currently supports renaming
+                ;; individual option names, or individual option names moved
+                ;; to another section. It does not currently support renaming
+                ;; whole sections.
                 (let* ((new-names-list (list
-                        "Accounts to include" "Accounts"
-                        "Exclude transactions between selected accounts?" "Exclude transactions between selected accounts"
-                        "Filter Accounts" "Filter By..."
-                        "Flatten list to depth limit?" "Flatten list to depth limit"
-                        "From" "Start Date"
-                        "Report Accounts" "Accounts"
-                        "Report Currency" "Report's currency"
-                        "Show Account Code?" "Show Account Code"
-                        "Show Full Account Name?" "Show Full Account Name"
-                        "Show Multi-currency Totals?" "Show Multi-currency Totals"
-                        "Show zero balance items?" "Show zero balance items"
-                        "Sign Reverses?" "Sign Reverses"
-                        "To" "End Date"
-                        "Use Full Account Name?" "Use Full Account Name"
-                        "Use Full Other Account Name?" "Use Full Other Account Name"
-                        "Void Transactions?" "Void Transactions"
-                        ))
+                                        "Accounts to include" (cons #f "Accounts")
+                                        "Exclude transactions between selected accounts?" (cons #f "Exclude transactions between selected accounts")
+                                        "Filter Accounts" (cons #f "Filter By...")
+                                        "Flatten list to depth limit?" (cons #f "Flatten list to depth limit")
+                                        "From" (cons #f "Start Date")
+                                        "Report Accounts" (cons #f "Accounts")
+                                        "Report Currency" (cons #f "Report's currency")
+                                        "Show Account Code?" (cons #f "Show Account Code")
+                                        "Show Full Account Name?" (cons #f "Show Full Account Name")
+                                        "Show Multi-currency Totals?" (cons #f "Show Multi-currency Totals")
+                                        "Show zero balance items?" (cons #f "Show zero balance items")
+                                        "Sign Reverses?" (cons #f "Sign Reverses")
+                                        "To" (cons #f "End Date")
+                                        "Use Full Account Name?" (cons #f "Use Full Account Name")
+                                        "Use Full Other Account Name?" (cons #f "Use Full Other Account Name")
+                                        "Void Transactions?" (cons "Filter" "Void Transactions")
+                                        "Void Transactions" (cons "Filter" "Void Transactions")
+                                        "Account Substring" (cons "Filter" "Account Matcher")
+                                        ))
                        (name-match (member name new-names-list)))
 
-                      (if name-match 
-                        (let ((new-name (cadr name-match)))
-                             (lookup-option section new-name))
-                        #f))))
+                  (and name-match
+                       (let ((new-section (car (cadr name-match)))
+                             (new-name (cdr (cadr name-match))))
+                         ;; compare if new-section name exists.
+                         (if new-section
+                             ;; if so, if it's different to current section name
+                             ;; then try new section name
+                             (and (not (string=? new-section section))
+                                  (lookup-option new-section new-name))
+                             ;; else reuse section-name with new-name
+                             (lookup-option section new-name)))))))
           #f)))
 
   (define (option-changed section name)
