@@ -29,5 +29,7 @@ GNC_ADD_SCHEME_TEST(scm-test-load-module test-load-module.in)
 
 CONFIGURE_FILE(test-load-module.in test-load-module @ONLY)
 
+GNC_ADD_SCHEME_TEST(scm-test-date-utilities test-date-utilities.scm)
+
 SET_DIST_LIST(test_app_utils_DIST CMakeLists.txt Makefile.am test-exp-parser.c test-link-module.c test-load-module.in
-        test-print-parse-amount.c test-print-queries.c test-scm-query-string.c test-sx.c)
+        test-print-parse-amount.c test-print-queries.c test-scm-query-string.c test-sx.c test-date-utilities.scm)

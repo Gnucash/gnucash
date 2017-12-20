@@ -4,6 +4,7 @@ TESTS = \
   test-exp-parser \
   test-scm-query-string \
   test-print-parse-amount \
+  test-date-utilities \
   test-sx
 
 test_exp_parser_SOURCES = \
