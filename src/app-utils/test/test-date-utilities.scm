@@ -7,12 +7,12 @@
 
 (define (create-time64 l)
   (let ((now (gnc-localtime (current-time))))
-    (set-tm:sec now (list-ref l 0))
-    (set-tm:min now (list-ref l 1))
-    (set-tm:hour now (list-ref l 2))
-    (set-tm:mday now (list-ref l 3))
-    (set-tm:mon now (list-ref l 4))
-    (set-tm:year now (list-ref l 5))
+    (set-tm:sec now (list-ref l 5))
+    (set-tm:min now (list-ref l 4))
+    (set-tm:hour now (list-ref l 3))
+    (set-tm:mday now (list-ref l 2))
+    (set-tm:mon now (list-ref l 1))
+    (set-tm:year now (list-ref l 0))
     (set-tm:isdst now -1)
     (gnc-mktime now)))
 
