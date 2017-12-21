@@ -134,18 +134,14 @@ AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.core-utils\" -DGNC_SCM_INSTALL_DIR="\"${GNC_
 gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-		-e 's#@-DATADIRNAME-@#${DATADIRNAME}#g' \
-		-e 's#@-libdir-@#${libdir}#g' \
-		-e 's#@-bindir-@#${bindir}#g' \
-		-e 's#@-sysconfdir-@#${sysconfdir}#g' \
-		-e 's#@-datadir-@#${datadir}#g' \
-		-e 's#@-prefix-@#${prefix}#g'
+		-e 's#[@]DATADIRNAME[@]#${DATADIRNAME}#g' \
+		-e 's#[@]libdir[@]#${libdir}#g' \
+		-e 's#[@]bindir[@]#${bindir}#g' \
+		-e 's#[@]sysconfdir[@]#${sysconfdir}#g' \
+		-e 's#[@]datadir[@]#${datadir}#g' \
+		-e 's#[@]prefix[@]#${prefix}#g'
 	mv $@.tmp $@
 
-## We borrow guile's convention and use @-...-@ as the substitution
-## brackets here, instead of the usual @...@.  This prevents autoconf
-## from substituting the values directly into the left-hand sides of
-## the sed substitutions.
 gnc-version.h: _gnc-version.h
 	-if [ ! -f gnc-version.h ]; then cp _gnc-version.h gnc-version.h; fi
 	-cmp -s _gnc-version.h gnc-version.h || cp _gnc-version.h gnc-version.h

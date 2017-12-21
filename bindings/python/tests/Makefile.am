@@ -23,16 +23,11 @@ TESTS_ENVIRONMENT = \
   PYTHONPATH=$$PYTHONPATH:$(top_srcdir)/common/test-core/ \
   PYTHONPATH=$$PYTHONPATH:$(top_builddir)/common/test-core/.libs \
   $(shell ${abs_top_srcdir}/common/gnc-test-env.pl --noexports ${GNC_TEST_DEPS})
-  
-## We borrow guile's convention and use @-...-@ as the substitution
-## brackets below, instead of the usual @...@.  This prevents autoconf
-## from substituting the values directly into the left-hand sides of
-## the sed substitutions.  *sigh*
 
 runTests.py: runTests.py.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-	    -e 's#@-PYTHON-@#${PYTHON}#'
+	    -e 's#[@]PYTHON[@]#${PYTHON}#'
 	mv $@.tmp $@
 	chmod u+x $@
 

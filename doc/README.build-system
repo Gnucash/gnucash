@@ -42,16 +42,12 @@ exceptions) manually with sed.  For example, we have
 src/scm/bootstrap.scm.in which is processed in src/scm/Makefile.in
 according to the following rule:
 
-  ## We borrow guile's convention and use @-...-@ as the substitution
-  ## brackets here, instead of the usual @...@.  This prevents autoconf
-  ## from substituting the values directly into the left-hand sides of
-  ## the sed substitutions.  *sigh*
   bootstrap.scm: bootstrap.scm.in
         rm -f $@.tmp
         sed < $@.in > $@.tmp \
-            -e 's:@-VERSION-@:${VERSION}:g' \
-            -e 's:@-GNC_CONFIGDIR-@:${GNC_SHAREDIR}:g' \
-            -e 's:@-GNC_SHAREDIR-@:${GNC_CONFIGDIR}:g'
+            -e 's:[@]VERSION[@]:${VERSION}:g' \
+            -e 's:[@]GNC_CONFIGDIR[@]:${GNC_SHAREDIR}:g' \
+            -e 's:[@]GNC_SHAREDIR[@]:${GNC_CONFIGDIR}:g'
         chmod +x $@.tmp
         mv $@.tmp $@
 

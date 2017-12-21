@@ -30,7 +30,6 @@ EXTRA_DIST = \
   cmake_modules/MakeDistFiles.cmake \
   cmake_modules/MacroAddSourceFileCompileFlags.cmake \
   cmake_modules/MakeDistCheck.cmake \
-  cmake_modules/GncConfigure.cmake \
   cmake_modules/GncAddSchemeTargets.cmake \
   cmake_modules/GncAddGSchemaTargets.cmake \
   cmake_modules/GncFindPkgConfig.cmake \

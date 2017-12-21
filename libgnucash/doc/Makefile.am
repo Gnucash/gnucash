@@ -50,13 +50,9 @@ maintainer-clean-local:
 uninstall-hook:
 	rm -rf ${docdir}/html
 
-## We borrow guile's convention and use @-...-@ as the substitution
-## brackets here, instead of the usual @...@.  This prevents autoconf
-## from substituting the values directly into the left-hand sides of
-## the sed substitutions.
 doxygen.cfg: doxygen.cfg.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-            -e 's:@-top_srcdir-@:${top_srcdir}:g; s:@-VERSION-@:${VERSION}:g'
+            -e 's:[@]top_srcdir[@]:${top_srcdir}:g; s:[@]VERSION[@]:${VERSION}:g'
 	mv $@.tmp $@
 

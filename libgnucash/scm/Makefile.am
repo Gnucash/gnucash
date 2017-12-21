@@ -70,15 +70,11 @@ EXTRA_DIST = \
   ${SCM_FILES} \
   CMakeLists.txt
 
-## We borrow guile's convention and use @-...-@ as the substitution
-## brackets here, instead of the usual @...@.  This prevents autoconf
-## from substituting the values directly into the left-hand sides of
-## the sed substitutions.  *sigh*
 build-config.scm: ${srcdir}/build-config.scm.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-            -e 's#@-VERSION-@#${VERSION}#' \
-            -e 's#@-GNC_HELPDIR-@#${GNC_HELPDIR}#'
+            -e 's#[@]VERSION[@]#${VERSION}#' \
+            -e 's#[@]GNC_HELPDIR[@]#${GNC_HELPDIR}#'
 	mv $@.tmp $@
 
 CLEANFILES = .scm-links ${gncscmmodcache_DATA} ${gncscmcache_DATA}

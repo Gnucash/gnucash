@@ -110,15 +110,11 @@ EXTRA_DIST = \
   util/gnc-vcs-info \
   util/CMakeLists.txt
 
-## We borrow guile's convention and use @-...-@ as the substitution
-## brackets here, instead of the usual @...@.  This prevents autoconf
-## from substituting the values directly into the left-hand sides of
-## the sed substitutions.
 make-gnucash-potfiles: make-gnucash-potfiles.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-            -e 's:@-SRCDIR-@:${srcdir}:g' \
-            -e 's:@-PERL-@:${PERL}:g'
+            -e 's:[@]SRCDIR[@]:${srcdir}:g' \
+            -e 's:[@]PERL[@]:${PERL}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
 

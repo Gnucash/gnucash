@@ -23,11 +23,11 @@
  *  02110-1301, USA.
  */
 
-#define PREFIX "@-prefix-@"
-#define DATADIR "@-datadir-@"
-#define SYSCONFDIR "@-sysconfdir-@"
+#define PREFIX "@prefix@"
+#define DATADIR "@datadir@"
+#define SYSCONFDIR "@sysconfdir@"
 
-#define BINDIR "@-bindir-@"
-#define LIBDIR "@-libdir-@"
+#define BINDIR "@bindir@"
+#define LIBDIR "@libdir@"
 
-#define LOCALEDIR "@-localedir-@"
+#define LOCALEDIR "@localedir@"
