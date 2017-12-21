@@ -13,31 +13,27 @@ EXTRA_DIST = \
   gnc-value-portfolio \
   CMakeLists.txt
 
-## We borrow guile's convention and use @-...-@ as the substitution
-## brackets here, instead of the usual @...@.  This prevents autoconf
-## from substituting the values directly into the left-hand sides of
-## the sed substitutions.
 gnc-fq-helper: gnc-fq-helper.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-            -e 's:@-PERL-@:${PERL}:g' \
-            -e 's:@-PERLINCL-@:${PERLINCL}:g'
+            -e 's:[@]PERL[@]:${PERL}:g' \
+            -e 's:[@]PERLINCL[@]:${PERLINCL}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
 gnc-fq-check: gnc-fq-check.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-            -e 's:@-PERL-@:${PERL}:g' \
-            -e 's:@-PERLINCL-@:${PERLINCL}:g'
+            -e 's:[@]PERL[@]:${PERL}:g' \
+            -e 's:[@]PERLINCL[@]:${PERLINCL}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
 gnc-fq-update: gnc-fq-update.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-            -e 's:@-PERL-@:${PERL}:g' \
-            -e 's:@-PERLINCL-@:${PERLINCL}:g'
+            -e 's:[@]PERL[@]:${PERL}:g' \
+            -e 's:[@]PERLINCL[@]:${PERLINCL}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
 

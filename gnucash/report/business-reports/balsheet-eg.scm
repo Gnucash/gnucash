@@ -39,10 +39,7 @@
 (use-modules (gnucash report eguile-utilities))
 
 (use-modules (ice-9 regex))  ; for regular expressions
-(cond-expand
-  (guile-2
-      (use-modules (ice-9 local-eval)))  ; for the-environment
-  (else ))
+(use-modules (ice-9 local-eval))  ; for the-environment
 (use-modules (srfi srfi-13)) ; for extra string functions
 
 (gnc:module-load "gnucash/report/report-system" 0)

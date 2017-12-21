@@ -335,7 +335,7 @@ TEST(gnc_datetime_constructors, test_gncdate_neutral_constructor)
 TEST(gnc_datetime_functions, test_format)
 {
     GncDateTime atime(2394187200); //2045-11-13 12:00:00 Z
-    if ((atime.offset() / 3600) > 11 || (atime.offset() / 3600) < -11)
+    if ((atime.offset() / 3600) > 11)
         EXPECT_EQ(atime.format("%d-%m-%Y"), "14-11-2045");
     else
         EXPECT_EQ(atime.format("%d-%m-%Y"), "13-11-2045");

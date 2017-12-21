@@ -16,10 +16,7 @@
 
 (define-module (gnucash report receipt))
 
-(cond-expand
-  (guile-2
-      (use-modules (ice-9 local-eval)))  ; for the-environment
-  (else ))
+(use-modules (ice-9 local-eval))  ; for the-environment
 (use-modules (gnucash main))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))

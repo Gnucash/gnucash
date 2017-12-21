@@ -52,9 +52,12 @@ SET (report_system_SCHEME
     eguile-html-utilities.scm
 )
 
-SET (report_system_SCHEME_2
+SET (report_system_SCHEME_2a
     collectors.scm
     list-extras.scm
+)
+
+SET (report_system_SCHEME_2b
     report-collectors.scm
 )
 
@@ -87,17 +90,24 @@ GNC_ADD_SCHEME_TARGETS(scm-report-system
   FALSE
 )
 
-GNC_ADD_SCHEME_TARGETS(scm-report-system-2
-  "${report_system_SCHEME_2}"
+GNC_ADD_SCHEME_TARGETS(scm-report-system-2a
+  "${report_system_SCHEME_2a}"
   "gnucash/report/report-system"
   scm-report-system
+  FALSE
+)
+
+GNC_ADD_SCHEME_TARGETS(scm-report-system-2b
+  "${report_system_SCHEME_2b}"
+  "gnucash/report/report-system"
+  scm-report-system-2a
   FALSE
 )
 
 GNC_ADD_SCHEME_TARGETS(scm-report-system-3
   "${report_system_SCHEME_3}"
   ""
-  scm-report-system-2
+  scm-report-system-2b
   FALSE
 )
 

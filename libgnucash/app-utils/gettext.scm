@@ -18,16 +18,11 @@
 (define-module (gnucash gettext))
 
 ;; Load a few different modules depending on the version of guile
-(cond-expand
-  (guile-2
-    ;; Our app-utils gnc module must be evaluated at compile time
-    ;; Without it sw_app_utils can't be evaluated below
-    (eval-when
+;; Our app-utils gnc module must be evaluated at compile time
+;; Without it sw_app_utils can't be evaluated below
+(eval-when
       (compile load eval expand)
-      (load-extension "libgncmod-app-utils" "scm_init_sw_app_utils_module")))
-  (else
-    ;; Syncase is deprecated and redundant in guile 2
-    (use-modules (ice-9 syncase))))
+      (load-extension "libgncmod-app-utils" "scm_init_sw_app_utils_module"))
 (use-modules (sw_app_utils))
 
 ;; gettext functions

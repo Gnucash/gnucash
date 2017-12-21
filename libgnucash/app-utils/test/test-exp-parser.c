@@ -189,9 +189,9 @@ test_parser (void)
                    "- 42.72 + 13.32 + 15.48 + 23.4 + 115.4",
                    gnc_numeric_create(35897, 100) );
 
-    /* This must be defined for the function-parsing to work. */
-    scm_c_eval_string("(define (gnc:error->string tag args)   (define (write-error port)     (if (and (list? args) (not (null? args)))         (let ((func (car args)))           (if func               (begin                 (display \"Function: \" port)                 (display func port)                 (display \", \" port)                 (display tag port)                 (display \"\n\n\" port)))))     (false-if-exception      (apply display-error (fluid-ref the-last-stack) port args))     (display-backtrace (fluid-ref the-last-stack) port)     (force-output port))   (false-if-exception    (call-with-output-string write-error)))");
-
+    /* gnc:apply-with-error-handling must be defined because it's used
+     * indirectly through gfec_apply by the expression parser */
+    scm_c_eval_string("(define (gnc:apply-with-error-handling cmd args)  (let ((captured-stack #f)  (captured-error #f)  (result #f))  (catch #t  (lambda ()  (if (procedure? cmd)  (set! result (apply cmd args)))  (if (string? cmd)  (set! result (eval-string cmd))))  (lambda (key . parameters)  (let* ((str-port (open-output-string)))  (display-backtrace captured-stack str-port)  (display \"\n\" str-port)  (print-exception str-port #f key parameters)  (set! captured-error (get-output-string str-port))))  (lambda (key . parameters)  (set! captured-stack (make-stack #t 3))))  (list result captured-error)))");
     scm_c_eval_string( "(define (gnc:plus a b) (+ a b))" );
     add_pass_test("plus(2 : 1)", NULL, gnc_numeric_create(3, 1));
     add_fail_test("plus(1:2) plus(3:4)", NULL, 15);

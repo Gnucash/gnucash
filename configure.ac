@@ -504,40 +504,38 @@ GUILE_EFFECTIVE_VERSION=0
 # - determine GUILE_CFLAGS and GUILE_LIBS
 
 AC_ARG_WITH([guile],
-    AS_HELP_STRING([--with-guile=1.8|2.0|auto],
+    AS_HELP_STRING([--with-guile=2.2|2.0|auto],
                    [which guile version to compile against @<:@default: auto@:>@]),
     [],
     [with_guile=auto]
 )
 
-AS_IF([test "$with_guile" = "2.0"],
+AS_IF([test "$with_guile" = "2.2"],
+      [PKG_CHECK_MODULES(GUILE, [guile-2.2 >= 2.2.0],
+                         [GUILE_EFFECTIVE_VERSION=2.2])],
+      [test "$with_guile" = "2.0"],
       [PKG_CHECK_MODULES(GUILE, [guile-2.0 >= 2.0.0],
-                         [GUILE_EFFECTIVE_VERSION=2.0
-                          AC_PATH_PROG([GUILD], guild)])],
-      [test "$with_guile" = "1.8"],
-      [PKG_CHECK_MODULES(GUILE, [guile-1.8 >= 1.8.5],
-                         [GUILE_EFFECTIVE_VERSION=1.8])],
+                         [GUILE_EFFECTIVE_VERSION=2.0])],
       [test "$with_guile" = "auto"],
-      [PKG_CHECK_MODULES(GUILE, [guile-2.0 >= 2.0.0],
-          [GUILE_EFFECTIVE_VERSION=2.0
-           AC_PATH_PROG([GUILD], guild)],
-          [PKG_CHECK_MODULES(GUILE, [guile-1.8 >= 1.8.5],
-                             [GUILE_EFFECTIVE_VERSION=1.8],
+      [PKG_CHECK_MODULES(GUILE, [guile-2.2 >= 2.2.0],
+          [GUILE_EFFECTIVE_VERSION=2.2],
+          [PKG_CHECK_MODULES(GUILE, [guile-2.0 >= 2.0.0],
+                             [GUILE_EFFECTIVE_VERSION=2.0],
                              [GUILE_EFFECTIVE_VERSION=0])
           ])],
       # else
       [AC_MSG_ERROR([invalid guile version specified])]
 )
 
+AC_PATH_PROG([GUILD], guild)
 AS_IF([test "$GUILE_EFFECTIVE_VERSION" = "0"],
       [AC_MSG_ERROR([
        guile does not appear to be installed correctly, or is not in the
        correct version range.  Perhaps you have not installed the guile
-       development packages?  Gnucash requires at least version 1.8.5 to build.
+       development packages?  Gnucash requires at least version 2.0.0 to build.
        ])]
 )
 
-AM_CONDITIONAL(GNC_HAVE_GUILE_2, [test "$GUILE_EFFECTIVE_VERSION" = "2.0"])
 AC_SUBST(GUILE_EFFECTIVE_VERSION)
 AC_SUBST(GUILE, [`pwd`/gnc-guile])
 
@@ -553,48 +551,13 @@ the libtool(-ltdl) development package?])])
 # version 2.0.10 of SWIG, because that's the first version that supports
 # guile 2.
 #
-# For a guile 1.8 build we accept an older version, but won't allow you
-# to build the dist because we need to apply a patch to the swig
-# generated files that needs to go into the release tarball. At that
-# point we don't know yet which version of guile will be used together
-# with that tarball so we have to prepare the tarball for guile 2
-# compatibility.
-#
 if test "${BUILDING_FROM_VCS}" = yes
 then
-    AX_PKG_SWIG(2.0.10, [gnc_have_swig_2_0_10=yes], [gnc_have_swig_2_0_10=no])
-
-    if test "${GUILE_EFFECTIVE_VERSION}" = "2.0"
-    then
-        if test "${gnc_have_swig_2_0_10}" = no
-        then
-            AC_MSG_ERROR([
-    You are building from ${VCS_TYPE} but swig was not found or too old.
-    To build gnucash you need at least swig version 2.0.10.
-            ])
-        fi
-    else  # using guile 1.8
-        if test "${gnc_have_swig_2_0_10}" = no
-        then
-            AX_PKG_SWIG(1.3.31, [],
+    AX_PKG_SWIG(2.0.10, ,
                 [AC_MSG_ERROR([
     You are building from ${VCS_TYPE} but swig was not found or too old.
-    To build gnucash with guile 1.8 you need at least swig version 1.3.31.
-            ])])
-        fi
-    fi
-
-    # If we get here then we have an okay version to build locally.
-    # Check if we can build dist (which always requires swig 2.0.10)
-    if test "${gnc_have_swig_2_0_10}" = no
-    then
-        AC_MSG_WARN([You don't have SWIG 2.0.10 so you will not be able to "make dist"])
-    fi
-    AM_CONDITIONAL([SWIG_DIST_FAIL], test "${gnc_have_swig_2_0_10}" != yes)
-else
-    # When building from tarball, all the prerequisites to build dist are already
-    # met so make sure it's allowed
-    AM_CONDITIONAL([SWIG_DIST_FAIL], test yes != yes)
+    To build gnucash you need at least swig version 2.0.10.
+                ])])
 fi
 
 ### --------------------------------------------------------------------------

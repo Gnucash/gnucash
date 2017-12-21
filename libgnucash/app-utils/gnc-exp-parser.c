@@ -302,7 +302,7 @@ func_op(const char *fname, int argc, void **argv)
         printf( "gnc:\"%s\" is not a scm procedure\n", fname );
         return NULL;
     }
-    scmArgs = scm_listify( SCM_UNDEFINED );
+    scmArgs = scm_list_n (SCM_UNDEFINED);
     for ( i = 0; i < argc; i++ )
     {
         /* cons together back-to-front. */

@@ -26,12 +26,8 @@
 ;; otherwise the N_ syntax-rule won't be found at compile time
 ;; causing the test to fail
 ;; That's what the wrapper below is meant for:
-(cond-expand
-   (guile-2
-    (define-syntax-rule (begin-for-syntax form ...)
-      (eval-when (load compile eval expand) (begin form ...))))
-   (else
-    (define begin-for-syntax begin)))
+(define-syntax-rule (begin-for-syntax form ...)
+      (eval-when (load compile eval expand) (begin form ...)))
 
 (begin-for-syntax (gnc:module-load "gnucash/report/report-system" 0))
 (use-modules (gnucash engine))

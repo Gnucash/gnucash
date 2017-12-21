@@ -28,11 +28,6 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
-;; 'debug is deprecated and unused since guile 2
-(cond-expand
-  (guile-2 )
-  (else
-    (debug-enable 'debug)))
 (debug-enable 'backtrace)
 
 (gnc:module-load "gnucash/report/report-system" 0)

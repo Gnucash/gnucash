@@ -42,13 +42,7 @@ if BUILDING_FROM_VCS
 swig-core-utils-guile.c: core-utils.i ${top_srcdir}/common/base-typemaps.i
 	$(SWIG) -guile -Linkage module \
 	-I${top_srcdir}/common -o $@ $<
-if ! OS_WIN32
-if ! SWIG_DIST_FAIL
-	if ! `grep "define scm_from_utf8_string" $@ > /dev/null 2>&1`; then \
-	  patch $@ $(top_srcdir)/common/swig-utf8.patch; \
-	fi
-endif
-endif
+
 swig-core-utils-python.c: core-utils.i ${top_srcdir}/common/base-typemaps.i
 	$(SWIG) -python -Wall -Werror \
 	-I${GLIB_CFLAGS} -I${top_srcdir}/common -I${srcdir} -o $@ $<
@@ -107,7 +101,6 @@ if ! OS_WIN32
 	touch .scm-links
 endif
 
-if GNC_HAVE_GUILE_2
 GUILE_COMPILE_ENV = \
   --library-dir    ${top_builddir}/libgnucash/core-utils
 
@@ -119,7 +112,6 @@ GUILE_COMPILE_ENV = \
 
 gncscmmodcachedir = ${pkglibdir}/scm/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash
 gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
-endif
 
 noinst_DATA = .scm-links
 BUILT_SOURCES = gncla-dir.h gnc-version.h
@@ -142,18 +134,14 @@ AM_CPPFLAGS += -DG_LOG_DOMAIN=\"gnc.core-utils\" -DGNC_SCM_INSTALL_DIR="\"${GNC_
 gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-		-e 's#@-DATADIRNAME-@#${DATADIRNAME}#g' \
-		-e 's#@-libdir-@#${libdir}#g' \
-		-e 's#@-bindir-@#${bindir}#g' \
-		-e 's#@-sysconfdir-@#${sysconfdir}#g' \
-		-e 's#@-datadir-@#${datadir}#g' \
-		-e 's#@-prefix-@#${prefix}#g'
+		-e 's#[@]DATADIRNAME[@]#${DATADIRNAME}#g' \
+		-e 's#[@]libdir[@]#${libdir}#g' \
+		-e 's#[@]bindir[@]#${bindir}#g' \
+		-e 's#[@]sysconfdir[@]#${sysconfdir}#g' \
+		-e 's#[@]datadir[@]#${datadir}#g' \
+		-e 's#[@]prefix[@]#${prefix}#g'
 	mv $@.tmp $@
 
-## We borrow guile's convention and use @-...-@ as the substitution
-## brackets here, instead of the usual @...@.  This prevents autoconf
-## from substituting the values directly into the left-hand sides of
-## the sed substitutions.
 gnc-version.h: _gnc-version.h
 	-if [ ! -f gnc-version.h ]; then cp _gnc-version.h gnc-version.h; fi
 	-cmp -s _gnc-version.h gnc-version.h || cp _gnc-version.h gnc-version.h

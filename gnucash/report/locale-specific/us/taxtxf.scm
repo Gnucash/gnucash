@@ -97,12 +97,9 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
-(cond-expand
-  (guile-2
-    (eval-when
+(eval-when
       (compile load eval expand)
-      (load-extension "libgncmod-gnome-utils" "scm_init_sw_gnome_utils_module")))
-  (else ))
+      (load-extension "libgncmod-gnome-utils" "scm_init_sw_gnome_utils_module"))
 (use-modules (sw_gnome_utils)) ;; to get to gnc-error-dialog
 
 (use-modules (gnucash printf))

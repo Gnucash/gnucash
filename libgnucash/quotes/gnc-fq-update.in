@@ -1,4 +1,4 @@
-#!@-PERL-@ -w
+#!@PERL@ -w
 ######################################################################
 ### gnc-fq-update - presents a scheme interface to Finance::Quote
 ### Copyright 2001 Gnumatic, Inc.

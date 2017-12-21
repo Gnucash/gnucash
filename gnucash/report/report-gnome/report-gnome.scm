@@ -33,13 +33,10 @@
 
 (use-modules (gnucash printf))
 
-(cond-expand
-  (guile-2
-    (eval-when
+(eval-when
       (compile load eval expand)
       (load-extension "libgncmod-gnome-utils" "scm_init_sw_gnome_utils_module")
-      (load-extension "libgncmod-report-gnome" "scm_init_sw_report_gnome_module")))
-  (else ))
+      (load-extension "libgncmod-report-gnome" "scm_init_sw_report_gnome_module"))
 (use-modules (sw_report_gnome))
 
 (gnc:module-load "gnucash/gnome-utils" 0)
