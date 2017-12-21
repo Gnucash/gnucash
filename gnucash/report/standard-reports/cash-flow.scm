@@ -427,9 +427,9 @@
 		 (gnc:timepair-ge (gnc-transaction-get-date-posted parent) from-date-tp))
 	    (let* ((parent-description (xaccTransGetDescription parent))
 		   (parent-currency (xaccTransGetCurrency parent)))
-					;(gnc:debug parent-description
-					;           " - "
-					;           (gnc-commodity-get-printname parent-currency))
+					(gnc:debug parent-description
+					           " - "
+					           (gnc-commodity-get-printname parent-currency))
 	      (for-each
 	       (lambda (s)
 		 (let* ((s-account (xaccSplitGetAccount s))
@@ -444,7 +444,7 @@
 			(string-append
 			 "WARNING: s-account is NULL for split: "
 			 (gncSplitGetGUID s) "\n")))
-					;(gnc:debug (xaccAccountGetName s-account))
+					(gnc:debug (xaccAccountGetName s-account))
 		   (if (and	 ;; make sure we don't have
 			(not (null? s-account)) ;;  any dangling splits
 			(or include-trading-accounts (not (eq? s-account-type ACCT-TYPE-TRADING)))
@@ -453,7 +453,7 @@
 			   (begin
 			     (if (gnc-numeric-negative-p s-value)
 				 (let ((s-account-in-collector (account-hashtable-ref money-in-hash s-account)))
-					;(gnc:debug "in:" (gnc-commodity-get-printname s-commodity)
+                                        ;(gnc:debug "in:" (gnc-commodity-get-printname s-commodity)
 					;	     (gnc-numeric-to-double s-amount)
 					;	     (gnc-commodity-get-printname parent-currency)
 					;	     (gnc-numeric-to-double s-value))
@@ -494,14 +494,14 @@
 				   )
 				 )
 			     )
-			   )
-		       )
+                           )
+                       )
 		   )
 		 )
 	       (xaccTransGetSplitList parent)
 	       )
 	      )
-	    )
+            )
 	)
       )
 

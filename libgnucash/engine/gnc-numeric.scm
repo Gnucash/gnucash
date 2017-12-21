@@ -47,26 +47,6 @@
 (define GNC-ERROR-DENOM-DIFF   -3)
 (define GNC-ERROR-REMAINDER    -4)
 
-(define <gnc-numeric>
-  (make-record-type "<gnc-numeric>" 
-                    '(num denom)))
-
-(define gnc:make-gnc-numeric 
-  (record-constructor <gnc-numeric>))
-
-(define gnc:gnc-numeric? 
-  (record-predicate <gnc-numeric>))
-
-(define gnc:gnc-numeric-num
-  (record-accessor <gnc-numeric> 'num))
-
-(define gnc:gnc-numeric-denom
-  (record-accessor <gnc-numeric> 'denom))
-
-(define (gnc:gnc-numeric-denom-reciprocal arg)
-  (- arg))
-
-
 
 (define <gnc-monetary> 
   (make-record-type "<gnc-monetary>" 
@@ -76,7 +56,7 @@
 (define (gnc:make-gnc-monetary c a)
   ;;FIXME: we used to type-check the values, like:
   ;; (gw:wcp-is-of-type? <gnc:commodity*> c)
-  (if (and #t (gnc:gnc-numeric? a))
+  (if (and #t (number? a))
       ((record-constructor <gnc-monetary>) c a)
       (warn "wrong arguments for gnc:make-gnc-monetary: " c a)))
 

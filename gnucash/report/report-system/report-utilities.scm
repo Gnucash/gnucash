@@ -266,24 +266,24 @@
 
 
 ;; Same as above but with gnc:numeric
-(define (gnc:make-numeric-collector)
+(define (gnc:make-number-collector)
   (let ;;; values
-      ((value (gnc-numeric-zero)))
+      ((value 0))
     (lambda (action amount)  ;;; Dispatch function
       (case action
-	((add) (if (gnc:gnc-numeric? amount) 
-                   (set! value (gnc-numeric-add amount value
-                                                GNC-DENOM-AUTO GNC-DENOM-LCD))
-                   (gnc:warn 
-                    "gnc:numeric-collector called with wrong argument: "
+	((add) (if (number? amount)
+                     (set! value (gnc-numeric-add amount value
+                                                  GNC-DENOM-AUTO GNC-DENOM-LCD))
+                   (gnc:warn
+                    "gnc:Number-collector called with wrong argument: "
                     amount)))
 	((total) value)
-	(else (gnc:warn "bad gnc:numeric-collector action: " action))))))
+	(else (gnc:warn "bad gnc:number-collector action: " action))))))
 
 ;; Replace all 'action function calls by the normal functions below.
-(define (gnc:numeric-collector-add collector amount)
+(define (gnc:number-collector-add collector amount)
   (collector 'add amount))
-(define (gnc:numeric-collector-total collector)
+(define (gnc:number-collector-total collector)
   (collector 'total #f))
 
 ;; A commodity collector. This is intended to handle multiple
@@ -338,12 +338,12 @@
                      (gnc-commodity-get-fraction commodity) GNC-RND-ROUND)))
 	(if (not pair)
 	    (begin
-	      ;; create a new pair, using the gnc:numeric-collector
-	      (set! pair (list commodity (gnc:make-numeric-collector)))
+	      ;; create a new pair, using the gnc:number-collector
+	      (set! pair (list commodity (gnc:make-number-collector)))
 	      ;; and add it to the alist
 	      (set! commoditylist (cons pair commoditylist))))
 	;; add the value
-	(gnc:numeric-collector-add (cadr pair) rvalue)))
+	(gnc:number-collector-add (cadr pair) rvalue)))
     
     ;; helper function to walk an association list, adding each
     ;; (commodity -> collector) pair to our list at the appropriate 
@@ -352,7 +352,7 @@
       (cond ((null? clist) '())
 	    (else (add-commodity-value 
 		   (caar clist) 
-		   (gnc:numeric-collector-total (cadar clist)))
+		   (gnc:number-collector-total (cadar clist)))
 		  (add-commodity-clist (cdr clist)))))
 
     (define (minus-commodity-clist clist)
@@ -360,7 +360,7 @@
 	    (else (add-commodity-value 
 		   (caar clist) 
 		   (gnc-numeric-neg
-		    (gnc:numeric-collector-total (cadar clist))))
+		    (gnc:number-collector-total (cadar clist))))
 		  (minus-commodity-clist (cdr clist)))))
 
     ;; helper function walk the association list doing a callback on
@@ -368,7 +368,7 @@
     (define (process-commodity-list fn clist)
       (map 
        (lambda (pair) (fn (car pair) 
-			  (gnc:numeric-collector-total (cadr pair))))
+			  (gnc:number-collector-total (cadr pair))))
        clist))
 
     ;; helper function which is given a commodity and returns, if
@@ -381,8 +381,8 @@
 		  (gnc-numeric-zero)
 		  (if sign?
 		      (gnc-numeric-neg
-		       (gnc:numeric-collector-total (cadr pair)))
-		      (gnc:numeric-collector-total (cadr pair))))
+		       (gnc:number-collector-total (cadr pair)))
+		      (gnc:number-collector-total (cadr pair))))
 	      '()))))
 
     ;; helper function which is given a commodity and returns, if
@@ -395,8 +395,8 @@
 	       (gnc-numeric-zero)
 	       (if sign?
 		   (gnc-numeric-neg
-		    (gnc:numeric-collector-total (cadr pair)))
-		   (gnc:numeric-collector-total (cadr pair)))))))
+		    (gnc:number-collector-total (cadr pair)))
+		   (gnc:number-collector-total (cadr pair)))))))
     
     ;; Dispatch function
     (lambda (action commodity amount)

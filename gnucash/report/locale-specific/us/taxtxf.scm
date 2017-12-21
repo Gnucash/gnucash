@@ -701,7 +701,7 @@
                               (gnc-commodity-equiv account-commodity
                                                                  USD-currency)))
                      (xaccSplitGetValue split)
-                     (gnc:make-gnc-numeric 100 100)))
+                     100/100))
      (missing-pricedb-entry? #f)
      (pricedb-lookup-price #f)
      (pricedb-lookup-price-value (gnc-numeric-zero))
@@ -798,7 +798,7 @@
                                                            trans-currency
                                                            USD-currency))
                                            (gnc-numeric-div
-                                               (gnc:make-gnc-numeric 100 100)
+                                               100/100
                                                (xaccSplitGetSharePrice split)
                                                GNC-DENOM-AUTO
                                                (logior (GNC-DENOM-SIGFIGS 6)

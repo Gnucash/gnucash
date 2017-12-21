@@ -288,7 +288,7 @@
 <?scm
       (for xpair in xlist do
           (let* ((comm (car xpair))
-                 (one-num (gnc:make-gnc-numeric 10000 1))
+                 (one-num 10000/1)
                  (one-foreign-mny (gnc:make-gnc-monetary comm one-num))
                  (one-local-mny (exchange-fn one-foreign-mny opt-report-commodity)))
 ?>

@@ -50,11 +50,8 @@ GSList * gnc_query_scm2path (SCM path_scm);
 SCM gnc_query2scm (QofQuery * q);
 QofQuery * gnc_scm2query (SCM query_scm);
 
-int gnc_gh_gint64_p(SCM num);
-
 SCM gnc_numeric_to_scm(gnc_numeric arg);
 gnc_numeric gnc_scm_to_numeric(SCM arg);
-int gnc_numeric_p(SCM arg);
 gnc_commodity * gnc_scm_to_commodity(SCM scm);
 SCM gnc_commodity_to_scm (const gnc_commodity *commodity);
 SCM gnc_book_to_scm (const QofBook *book);

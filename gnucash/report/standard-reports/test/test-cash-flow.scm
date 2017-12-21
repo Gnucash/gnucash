@@ -36,7 +36,7 @@
 	 (exchange-fn (lambda (currency amount date) amount))
 	 (report-currency (gnc-default-report-currency))
 	 )
-    (env-create-transaction env to-date-tp bank-account expense-account (gnc:make-gnc-numeric 100 1))
+    (env-create-transaction env to-date-tp bank-account expense-account 100/1)
     (let ((result (cash-flow-calc-money-in-out (list (cons 'accounts (list bank-account))
 						     (cons 'to-date-tp to-date-tp)
 						     (cons 'from-date-tp from-date-tp)
@@ -48,16 +48,24 @@
 	     (money-in-alist (cdr (assq 'money-in-alist result)))
 	     (money-out-alist (cdr (assq 'money-out-alist result)))
 	     (expense-acc-in-collector (cadr (assoc expense-account money-in-alist))))
-	(and (null? money-out-alist)
-	     (equal? (gnc:make-gnc-numeric 10000 100)
+	(and (or (null? money-out-alist)
+                 (begin (format #t "The money-out-alist is not null.~%") #f))
+	     (or (equal? 10000/100
 		     (gnc:gnc-monetary-amount (gnc:sum-collector-commodity expense-acc-in-collector
 									   report-currency exchange-fn)))
-	     (equal? (gnc:make-gnc-numeric 10000 100)
+                 (begin (format #t "Failed expense-acc-in-collector ~g expected 100.00~%" (gnc:gnc-monetary-amount (gnc:sum-collector-commodity expense-acc-in-collector
+									   report-currency exchange-fn))) #f))
+	     (or (equal? 10000/100
 		     (gnc:gnc-monetary-amount (gnc:sum-collector-commodity money-in-collector
 									   report-currency exchange-fn)))
-	     (equal? (gnc:make-gnc-numeric 0 1)
+                 (begin (format #t "Failed money-in-collector ~g expected 100.00~%" (gnc:gnc-monetary-amount (gnc:sum-collector-commodity money-in-collector
+									   report-currency exchange-fn))) #f))
+	     (or (equal? 0/1
 		     (gnc:gnc-monetary-amount (gnc:sum-collector-commodity money-out-collector
 									   report-currency exchange-fn)))
+                 (begin (format #t "Failed sum-collector-commodity ~g expected 100.00~%" (gnc:gnc-monetary-amount (gnc:sum-collector-commodity money-out-collector
+                                                                                                                                               report-currency exchange-fn))) #f))
+             (begin (format #t "test-one-tx-in-cash-flow success~%") #t)
 	     )))))
 
 (define (test-one-tx-skip-cash-flow)
@@ -72,7 +80,7 @@
 	 (exchange-fn (lambda (currency amount date) amount))
 	 (report-currency (gnc-default-report-currency))
 	 )
-    (env-create-transaction env to-date-tp bank-account wallet-account (gnc:make-gnc-numeric 100 1))
+    (env-create-transaction env to-date-tp bank-account wallet-account 100/1)
     (let ((result (cash-flow-calc-money-in-out (list (cons 'accounts (list wallet-account bank-account))
 						     (cons 'to-date-tp to-date-tp)
 						     (cons 'from-date-tp from-date-tp)
@@ -85,12 +93,14 @@
 	     (money-out-alist (cdr (assq 'money-out-alist result))))
 	(and (null? money-in-alist)
 	     (null? money-out-alist)
-	     (equal? (gnc:make-gnc-numeric 0 1)
+	     (equal? 0/1
 		     (gnc:gnc-monetary-amount (gnc:sum-collector-commodity money-in-collector
 									   report-currency exchange-fn)))
-	     (equal? (gnc:make-gnc-numeric 0 1)
+	     (equal? 0/1
 		     (gnc:gnc-monetary-amount (gnc:sum-collector-commodity money-out-collector
-									   report-currency exchange-fn))))))))
+									   report-currency exchange-fn)))
+             (begin (format #t "test-one-tx-skip-cash-flow success~%") #t)
+             )))))
 
 (define (test-both-way-cash-flow)
   (let* ((env (create-test-env))
@@ -104,8 +114,8 @@
 	 (exchange-fn (lambda (currency amount date) amount))
 	 (report-currency (gnc-default-report-currency))
 	 )
-    (env-create-transaction env to-date-tp bank-account expense-account (gnc:make-gnc-numeric 100 1))
-    (env-create-transaction env to-date-tp expense-account bank-account (gnc:make-gnc-numeric 50 1))
+    (env-create-transaction env to-date-tp bank-account expense-account 100/1)
+    (env-create-transaction env to-date-tp expense-account bank-account 50/1)
     (let ((result (cash-flow-calc-money-in-out (list (cons 'accounts (list wallet-account bank-account))
 						     (cons 'to-date-tp to-date-tp)
 						     (cons 'from-date-tp from-date-tp)
@@ -124,11 +134,13 @@
 	     (expenses-out-total (gnc:gnc-monetary-amount (gnc:sum-collector-commodity expense-acc-out-collector
 										       report-currency
 										       exchange-fn))))
-	(and (equal? (gnc:make-gnc-numeric 10000 100) expenses-in-total)
-	     (equal? (gnc:make-gnc-numeric 5000 100) expenses-out-total)
-	     (equal? (gnc:make-gnc-numeric 10000 100)
+	(and (equal? 10000/100 expenses-in-total)
+	     (equal? 5000/100 expenses-out-total)
+	     (equal? 10000/100
 		     (gnc:gnc-monetary-amount (gnc:sum-collector-commodity money-in-collector
 									   report-currency exchange-fn)))
-	     (equal? (gnc:make-gnc-numeric 5000 100)
+	     (equal? 5000/100
 		     (gnc:gnc-monetary-amount (gnc:sum-collector-commodity money-out-collector
-									   report-currency exchange-fn))))))))
+									   report-currency exchange-fn)))
+             (begin (format #t "test-both-way-cash-flow success~%") #t)
+             )))))

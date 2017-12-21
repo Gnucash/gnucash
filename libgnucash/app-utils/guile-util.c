@@ -520,7 +520,7 @@ gnc_split_scm_get_amount(SCM split_scm)
         return gnc_numeric_zero ();
 
     result = scm_call_1(getters.split_scm_amount, split_scm);
-    if (!gnc_numeric_p(result))
+    if (!scm_rational_p(result))
         return gnc_numeric_zero ();
 
     return gnc_scm_to_numeric(result);
@@ -545,7 +545,7 @@ gnc_split_scm_get_value(SCM split_scm)
         return gnc_numeric_zero ();
 
     result = scm_call_1(getters.split_scm_value, split_scm);
-    if (!gnc_numeric_p(result))
+    if (!scm_rational_p(result))
         return gnc_numeric_zero ();
 
     return gnc_scm_to_numeric(result);
