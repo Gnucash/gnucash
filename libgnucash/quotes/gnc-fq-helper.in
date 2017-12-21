@@ -1,4 +1,4 @@
-#!@-PERL-@ -w
+#!@PERL@ -w
 ######################################################################
 ### gnc-fq-helper - present a scheme interface to Finance::Quote
 ### Copyright 2001 Rob Browning <rlb@cs.utexas.edu>

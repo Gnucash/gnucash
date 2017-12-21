@@ -1,6 +1,6 @@
-@-NOTE If you make any changes here, you should probably    -@
-@-NOTE also verify that modifications performed in          -@
-@-NOTE - gnucash-on-windows.git:gnucash.iss don't conflict. -@
+@NOTE If you make any changes here, you should probably    @
+@NOTE also verify that modifications performed in          @
+@NOTE - gnucash-on-windows.git:gnucash.iss don't conflict. @
 # environment
 #
 # This configuration file defines a number of environment variables to set/alter
@@ -64,7 +64,7 @@ GUILE_LOAD_PATH={GNC_DATA}/scm;{GUILE_LIBS};{GUILE_LOAD_PATH}
 
 # On Windows {GNC_LIB} points to {GNC_HOME}/bin because that's where the DLLs
 # are. It's not where the compiled scheme files are so we use {SYS_LIB} here.
-GUILE_LOAD_COMPILED_PATH={SYS_LIB}/guile/@-GUILE_EFFECTIVE_VERSION-@/ccache;{SYS_LIB}/gnucash/scm/ccache/@-GUILE_EFFECTIVE_VERSION-@;{GUILE_COMPILED_LIBS};{GUILE_LOAD_COMPILED_PATH}
+GUILE_LOAD_COMPILED_PATH={SYS_LIB}/guile/@GUILE_EFFECTIVE_VERSION@/ccache;{SYS_LIB}/gnucash/scm/ccache/@GUILE_EFFECTIVE_VERSION@;{GUILE_COMPILED_LIBS};{GUILE_LOAD_COMPILED_PATH}
 
 # Tell Guile where to find GnuCash specific shared libraries
 GNC_LIBRARY_PATH={SYS_LIB};{GNC_LIB}

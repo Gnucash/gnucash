@@ -1,4 +1,4 @@
-#!@-PYTHON-@
+#!@PYTHON@
 
 import unittest
 import os

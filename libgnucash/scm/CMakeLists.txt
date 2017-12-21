@@ -7,16 +7,7 @@ SET (scm_SCHEME_4
     xml-generator.scm
 )
 
-# We need to replace a couple of variables in build-config.scm. Normally, I 
-# would use CONFIGURE_FILE to do this. But this scheme files is using a different
-# replacement marking scheme ("@-", "-@") than the usual one with just "@" 
-# that CONFIGURE_FILE expects.
-
-# FIXME: ${BUILD_CONFIG_SCM} needs a rule to cause it to be generated, I think.
-
-GNC_CONFIGURE2(build-config-scm build-config.scm.in build-config.scm)
-
-# CONFIGURE_FILE(build-config.scm.in ${BUILD_CONFIG_SCM})
+configure_file(build-config.scm.in ${BUILD_CONFIG_SCM})
 
 SET(GUILE_DEPENDS      scm-core-utils scm-gnc-module)
 

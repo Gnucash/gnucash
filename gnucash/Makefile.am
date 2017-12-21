@@ -81,16 +81,16 @@ GNUCASH_BIN_INSTALL_NAME=`echo ${BIN_NAME} | sed -e '$(transform)'`
 gnucash-valgrind: gnucash-valgrind.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-	    -e "s#@-TOP_SRC_DIR-@#${abs_top_srcdir}#g" \
-	    -e "s#@-GNUCASH_BIN_INSTALL_NAME-@#${GNUCASH_BIN_INSTALL_NAME}#g"
+	    -e "s#[@]TOP_SRC_DIR[@]#${abs_top_srcdir}#g" \
+	    -e "s#[@]GNUCASH_BIN_INSTALL_NAME[@]#${GNUCASH_BIN_INSTALL_NAME}#g"
 	mv $@.tmp $@
 	chmod u+x $@
 
 environment: environment.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-	    -e '/@-NOTE.*-@/ D' \
-	    -e "s#@-GUILE_EFFECTIVE_VERSION-@#@GUILE_EFFECTIVE_VERSION@#g"
+	    -e '/[@]NOTE.*[@]/ D' \
+	    -e "s#[@]GUILE_EFFECTIVE_VERSION[@]#@GUILE_EFFECTIVE_VERSION@#g"
 if CUSTOM_GNC_DBD_DIR
 	echo 'GNC_DBD_DIR=@GNC_DBD_DIR@' >> $@.tmp
 endif
