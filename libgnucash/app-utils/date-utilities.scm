@@ -159,11 +159,9 @@
 
 ;; is leap year?
 (define (gnc:leap-year? year)
-  (if (= (remainder year 4) 0)
-      (if (= (remainder year 100) 0)
-	  (if (= (remainder year 400) 0) #t #f)
-	  #t)
-      #f))
+  (or (and (zero? (remainder year 4))
+           (not (zero? (remainder year 100))))
+      (zero? (remainder year 400))))
 
 ;; number of days in year
 (define (gnc:days-in-year year)
