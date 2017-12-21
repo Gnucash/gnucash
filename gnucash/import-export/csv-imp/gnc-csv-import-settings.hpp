@@ -1,5 +1,5 @@
 /*******************************************************************\
- * gnc-csv-trans-settings.h   -- Save and Load CSV Import Settings  *
+ * gnc-csv-import-settings.hpp -- Save and Load CSV Import Settings *
  *                                                                  *
  * Copyright (C) 2014 Robert Fewell                                 *
  *                                                                  *
@@ -20,22 +20,24 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/** @file gnc-csv-trans-settings.h
+/** @file gnc-csv-import-settings.hpp
     @brief CSV Import Settings
     @author Copyright (c) 2014 Robert Fewell
     @author Copyright (c) 2016 Geert Janssens
 */
-#ifndef GNC_CSV_TRANS_SETTINGS_H
-#define GNC_CSV_TRANS_SETTINGS_H
+#ifndef GNC_CSV_IMPORT_SETTINGS_H
+#define GNC_CSV_IMPORT_SETTINGS_H
 
 extern "C" {
 #include <config.h>
 #include "Account.h"
+#include "gnc-commodity.h"
 }
 
 #include <string>
 #include <vector>
-#include "gnc-trans-props.hpp"
+#include <boost/optional.hpp>
+#include <gnc-datetime.hpp>
 #include "gnc-tokenizer.hpp"
 
 /** Enumeration for separator checkbutton types. These are the
@@ -47,70 +49,63 @@ enum SEP_BUTTON_TYPES {SEP_SPACE, SEP_TAB, SEP_COMMA, SEP_COLON, SEP_SEMICOLON, 
 /** Enumeration for the settings combo's */
 enum SETTINGS_COL {SET_GROUP, SET_NAME};
 
-struct CsvTransSettings
+struct CsvImportSettings
 {
-    CsvTransSettings() : m_file_format (GncImpFileFormat::CSV), m_encoding {"UTF-8"},
-            m_multi_split (false), m_date_format {0}, m_currency_format {0},
+    CsvImportSettings() : m_file_format (GncImpFileFormat::CSV), m_encoding {"UTF-8"},
+            m_date_format {0}, m_currency_format {0},
             m_skip_start_lines{0}, m_skip_end_lines{0}, m_skip_alt_lines (false),
-            m_separators {","}, m_base_account {nullptr},
-            m_load_error {false} { }
+            m_separators {","}, m_load_error {false} { }
 
 /** Save the gathered widget properties to a key File.
  *
  *  @return true if there was a problem in saving.
  */
-bool save (void);
+bool save_common (void);
 
 /** Load the widget properties from a key File.
  *
  *  @return true if there was a problem.
  */
-bool load (void);
+bool load_common (void);
 
 /** Remove the preset from the state file.
  */
-void remove (void);
+void remove_common (void);
 
-/** Check whether the user is allowed to save (over) or delete this preset or not.
- *  The internally generated presets are read-only. The others
- *  can be saved to the state file or deleted.
- *
- *  @return true if there was a problem.
- */
-bool read_only (void);
+std::string   m_settings_type;                // Settings Type, TRANS, PRICE etc.
 
-
+// Common Settings
 std::string   m_name;                         // Name given to this preset by the user
 GncImpFileFormat m_file_format;               // CSV import Format
 std::string   m_encoding;                     // File encoding
-bool          m_multi_split;                  // Assume multiple lines per transaction
 int           m_date_format;                  // Date Active id
 int           m_currency_format;              // Currency Active id
 uint32_t      m_skip_start_lines;             // Number of header rows to skip
 uint32_t      m_skip_end_lines;               // Number of footer rows to skip
 bool          m_skip_alt_lines;               // Skip alternate rows
 std::string   m_separators;                   // Separators for csv format
-
-Account      *m_base_account;                 // Base account
-std::vector<GncTransPropType> m_column_types; // The Column types in order
-std::vector<uint32_t> m_column_widths;            // The Column widths
-
 bool          m_load_error;                   // Was there an error while parsing the state file ?
+std::vector<uint32_t> m_column_widths;        // The Column widths
 };
 
-using preset_vec = std::vector<std::shared_ptr<CsvTransSettings>>;
-/** Creates a vector of CsvTransSettings which combines
- *  - one or more internally defined presets
- *  - all preset found in the state key file.
- *
- *  @return a reference to the populated vector.
- */
-const preset_vec& get_trans_presets (void);
+std::string get_no_settings (void);
+std::string get_gnc_exp (void);
+std::string get_prefix (void);
 
 /** Check whether name can be used as a preset name.
  *  The names of the internal presets are considered reserved.
  *  A preset with such a name should not be saved or deleted.
  */
-bool trans_preset_is_reserved_name (const std::string& name);
+bool preset_is_reserved_name (const std::string& name);
+
+/**************************************************
+ * handle_load_error
+ *
+ * record possible errors in the log file
+ * ignore key-not-found errors though. We'll just
+ * use a default value and go on.
+ **************************************************/
+bool
+handle_load_error (GError **key_error, const std::string& group);
 
 #endif
