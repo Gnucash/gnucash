@@ -587,108 +587,62 @@ tags within description, notes or memo. ")
      (vector 'both          (N_ "Both") (N_ "Show both (and include void transactions in totals).")))))
 
   ;; Sorting options
-
-  (let ((key-choice-list
-         (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
-             (list (vector 'none
-                           (N_ "None")
-                           (N_ "Do not sort."))
-
-                   (vector 'account-name
-                           (N_ "Account Name")
-                           (N_ "Sort & subtotal by account name."))
-
-                   (vector 'account-code
-                           (N_ "Account Code")
-                           (N_ "Sort & subtotal by account code."))
-
-                   (vector 'date
-                           (N_ "Date")
-                           (N_ "Sort by date."))
-
-                   (vector 'reconciled-date
-                           (N_ "Reconciled Date")
-                           (N_ "Sort by the Reconciled Date."))
-
-                   (vector 'register-order
-                           (N_ "Register Order")
-                           (N_ "Sort as in the register."))
-
-                   (vector 'corresponding-acc-name
-                           (N_ "Other Account Name")
-                           (N_ "Sort by account transferred from/to's name."))
-
-                   (vector 'corresponding-acc-code
-                           (N_ "Other Account Code")
-                           (N_ "Sort by account transferred from/to's code."))
-
-                   (vector 'amount
-                           (N_ "Amount")
-                           (N_ "Sort by amount."))
-
-                   (vector 'description
-                           (N_ "Description")
-                           (N_ "Sort by description."))
-
-                   (vector 'number
-                           (N_ "Number/Action")
-                           (N_ "Sort by check number/action."))
   
-                   (vector 't-number
-                           (N_ "Transaction Number")
-                           (N_ "Sort by transaction number."))
+  (let ((key-choice-list
+         (append
+          (list (vector 'none
+                        (N_ "None")
+                        (N_ "Do not sort."))
 
-                   (vector 'memo
-                           (N_ "Memo")
-                           (N_ "Sort by memo.")))
+                (vector 'account-name
+                        (N_ "Account Name")
+                        (N_ "Sort & subtotal by account name."))
 
-             (list (vector 'none
-                           (N_ "None")
-                           (N_ "Do not sort."))
+                (vector 'account-code
+                        (N_ "Account Code")
+                        (N_ "Sort & subtotal by account code."))
 
-                   (vector 'account-name
-                           (N_ "Account Name")
-                           (N_ "Sort & subtotal by account name."))
+                (vector 'date
+                        (N_ "Date")
+                        (N_ "Sort by date."))
 
-                   (vector 'account-code
-                           (N_ "Account Code")
-                           (N_ "Sort & subtotal by account code."))
+                (vector 'reconciled-date
+                        (N_ "Reconciled Date")
+                        (N_ "Sort by the Reconciled Date."))
 
-                   (vector 'date
-                           (N_ "Date")
-                           (N_ "Sort by date."))
+                (vector 'register-order
+                        (N_ "Register Order")
+                        (N_ "Sort as in the register."))
 
-                   (vector 'reconciled-date
-                           (N_ "Reconciled Date")
-                           (N_ "Sort by the Reconciled Date."))
+                (vector 'corresponding-acc-name
+                        (N_ "Other Account Name")
+                        (N_ "Sort by account transferred from/to's name."))
 
-                   (vector 'register-order
-                           (N_ "Register Order")
-                           (N_ "Sort as in the register."))
+                (vector 'corresponding-acc-code
+                        (N_ "Other Account Code")
+                        (N_ "Sort by account transferred from/to's code."))
 
-                   (vector 'corresponding-acc-name
-                           (N_ "Other Account Name")
-                           (N_ "Sort by account transferred from/to's name."))
+                (vector 'amount
+                        (N_ "Amount")
+                        (N_ "Sort by amount."))
 
-                   (vector 'corresponding-acc-code
-                           (N_ "Other Account Code")
-                           (N_ "Sort by account transferred from/to's code."))
+                (vector 'description
+                        (N_ "Description")
+                        (N_ "Sort by description."))
 
-                   (vector 'amount
-                           (N_ "Amount")
-                           (N_ "Sort by amount."))
-
-                   (vector 'description
-                           (N_ "Description")
-                           (N_ "Sort by description."))
-
-                   (vector 'number
-                           (N_ "Number")
-                           (N_ "Sort by check/transaction number."))
-
-                   (vector 'memo
-                           (N_ "Memo")
-                           (N_ "Sort by memo.")))))
+                (vector 'number
+                        (N_ "Number/Action")
+                        (N_ "Sort by check number/action.")))
+          (if (qof-book-use-split-action-for-num-field (gnc-get-current-book))
+              (list
+               (vector 't-number
+                       (N_ "Transaction Number")
+                       (N_ "Sort by transaction number.")))
+              '())
+          (list
+           (vector 'memo
+                   (N_ "Memo")
+                   (N_ "Sort by memo.")))))
 
         (ascending-choice-list
          (list
