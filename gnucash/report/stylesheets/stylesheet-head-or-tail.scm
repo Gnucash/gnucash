@@ -534,7 +534,7 @@
               (gnc:make-html-text
                 (gnc:html-markup-i
                   (_ "Report Creation Date: ")
-                  (gnc-print-date (gnc:get-today))
+                  (qof-print-date (gnc:get-today))
                   " "
                   (strftime "%X %Z" (localtime (current-time)))
                 )
@@ -543,7 +543,7 @@
               (gnc:make-html-text
                 (gnc:html-markup-i
                   (_ "Report Creation Date: ")
-                  (gnc-print-date (gnc:get-today))
+                  (qof-print-date (gnc:get-today))
                 )
                 (gnc:html-markup-br)
               )
@@ -659,7 +659,7 @@
             (gnc:make-html-text
               (gnc:html-markup-i
                 (_ "Report Creation Date: ")
-                (gnc-print-date (gnc:get-today))
+                (qof-print-date (gnc:get-today))
                 " "
                 (strftime "%X %Z" (localtime (current-time)))
               )
@@ -668,7 +668,7 @@
             (gnc:make-html-text
               (gnc:html-markup-i
                 (_ "Report Creation Date: ")
-                (gnc-print-date (gnc:get-today))
+                (qof-print-date (gnc:get-today))
                 (gnc:html-markup-br)
               )
             )
