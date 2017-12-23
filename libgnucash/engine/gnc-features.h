@@ -51,6 +51,7 @@ extern "C" {
 #define GNC_FEATURE_BOOK_CURRENCY "Use a Book-Currency"
 #define GNC_FEATURE_GUID_BAYESIAN "Account GUID based Bayesian data"
 #define GNC_FEATURE_GUID_FLAT_BAYESIAN "Account GUID based bayesian with flat KVP"
+#define GNC_FEATURE_SQLITE3_ISO_DATES "ISO-8601 formatted date strings in SQLite3 databases."
 
 /** @} */
 

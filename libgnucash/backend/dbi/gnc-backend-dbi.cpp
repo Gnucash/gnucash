@@ -59,7 +59,7 @@ extern "C"
 #include "gnc-engine.h"
 #include "SX-book.h"
 #include "Recurrence.h"
-
+#include <gnc-features.h>
 #include "gnc-uri-utils.h"
 #include "gnc-filepath-utils.h"
 #include <gnc-path.h>
@@ -76,6 +76,7 @@ extern "C"
 #include <string>
 #include <iomanip>
 
+#include <qofsession.hpp>
 #include <gnc-backend-prov.hpp>
 #include "gnc-backend-dbi.h"
 #include "gnc-backend-dbi.hpp"
@@ -470,7 +471,6 @@ GncDbiBackend<DbType::DBI_SQLITE>::session_begin(QofSession* session,
      * Let's start logging */
     xaccLogSetBaseName (filepath.c_str());
     PINFO ("logpath=%s", filepath.c_str() ? filepath.c_str() : "(null)");
-
     LEAVE ("");
 }
 
@@ -829,6 +829,9 @@ GncDbiBackend<Type>::load (QofBook* book, QofBackendLoadType loadType)
     }
 
     GncSqlBackend::load(book, loadType);
+
+    if (Type == DbType::DBI_SQLITE)
+        gnc_features_set_used(book, GNC_FEATURE_SQLITE3_ISO_DATES);
 
     if (GNUCASH_RESAVE_VERSION > get_table_version("Gnucash"))
     {

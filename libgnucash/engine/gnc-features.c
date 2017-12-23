@@ -47,6 +47,7 @@ static gncFeature known_features[] =
     { GNC_FEATURE_BOOK_CURRENCY, "User specifies a 'book-currency'; costs of other currencies/commodities tracked in terms of book-currency (requires at least GnuCash 2.7.0)" },
     { GNC_FEATURE_GUID_BAYESIAN, "Use account GUID as key for Bayesian data (requires at least GnuCash 2.6.12)" },
     { GNC_FEATURE_GUID_FLAT_BAYESIAN, "Use account GUID as key for bayesian data and store KVP flat (requires at least Gnucash 2.6.19)" },
+    { GNC_FEATURE_SQLITE3_ISO_DATES, "Use ISO formatted date-time strings in SQLite3 databases (requires at least GnuCash 2.6.20)"},
     { NULL },
 };
 
