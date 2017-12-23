@@ -166,7 +166,7 @@
 
     (if (date-col column-vector)
         (addto! row-contents
-                (gnc-print-date (gncEntryGetDate entry))))
+                (qof-print-date (gncEntryGetDate entry))))
 
     (if (description-col column-vector)
         (addto! row-contents
@@ -426,7 +426,7 @@
 
 	(if (date-col used-columns)
 	    (addto! row
-		    (gnc-print-date (gnc-transaction-get-date-posted t))))
+		    (qof-print-date (xaccTransGetDate t))))
 
 	(if (description-col used-columns)
 	    (addto! row (_ "Payment, thank you")))
@@ -611,7 +611,7 @@
    (list
     (string-append label ":&nbsp;")
     (string-expand (strftime date-format
-                             (localtime (car date)))
+                             (localtime date))
                              #\space "&nbsp;"))))
 
 (define (make-date-table)
@@ -780,7 +780,7 @@
         (let ((date-table #f)
               (post-date (gncInvoiceGetDatePosted invoice))
               (due-date (gncInvoiceGetDateDue invoice)))
-          (if (not (equal? post-date (cons 0 0)))
+          (if (not (zero? post-date))
             (begin
               (set! date-table (make-date-table))
               (make-date-row! date-table (_ "Date") post-date date-format)
