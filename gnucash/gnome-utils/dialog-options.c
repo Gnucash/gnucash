@@ -3791,16 +3791,13 @@ gnc_option_get_ui_value_date (GNCOption *option, GtkWidget *widget)
     }
     else if (g_strcmp0(subtype, "absolute") == 0)
     {
-        Timespec ts;
-
-        ts.tv_sec  = gnc_date_edit_get_date(GNC_DATE_EDIT(widget));
-        ts.tv_nsec = 0;
-
-        result = scm_cons(scm_from_locale_symbol ("absolute"), gnc_timespec2timepair(ts));
+        time64 time;
+        time = gnc_date_edit_get_date(GNC_DATE_EDIT(widget));
+        result = scm_cons(scm_from_locale_symbol ("absolute"), scm_from_int64(time));
     }
     else if (g_strcmp0(subtype, "both") == 0)
     {
-        Timespec ts;
+        time64 time;
         int index;
         SCM val;
         GList *widget_list;
@@ -3815,9 +3812,8 @@ gnc_option_get_ui_value_date (GNCOption *option, GtkWidget *widget)
         /* if it's an absolute date */
         if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ab_button)))
         {
-            ts.tv_sec = gnc_date_edit_get_date(GNC_DATE_EDIT(ab_widget));
-            ts.tv_nsec = 0;
-            result = scm_cons(scm_from_locale_symbol ("absolute"), gnc_timespec2timepair(ts));
+            time = gnc_date_edit_get_date(GNC_DATE_EDIT(ab_widget));
+            result = scm_cons(scm_from_locale_symbol ("absolute"), scm_from_int64 (time));
         }
         else
         {
