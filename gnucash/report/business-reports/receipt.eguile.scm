@@ -30,8 +30,8 @@
     (let* (; invoice and company details
            (invoiceid  (gncInvoiceGetID         opt-invoice))
            (book       (gncInvoiceGetBook       opt-invoice))
-           (postdate   (gncInvoiceGetDatePostedTT opt-invoice))
-           (duedate    (gncInvoiceGetDateDueTT    opt-invoice))
+           (postdate   (gncInvoiceGetDatePosted opt-invoice))
+           (duedate    (gncInvoiceGetDateDue    opt-invoice))
            (billingid  (gncInvoiceGetBillingID  opt-invoice))
            (notes      (gncInvoiceGetNotes      opt-invoice))
            (terms      (gncInvoiceGetTerms      opt-invoice))
@@ -193,7 +193,7 @@
                   (dsc-total 'add currency rdiscval)
         ?>
         <tr valign="top">
-          <td align="left"><?scm:d (qof-print-date (gncEntryGetDateTT entry)) ?></td>
+          <td align="left"><?scm:d (qof-print-date (gncEntryGetDate entry)) ?></td>
           <td align="left" ><?scm:d (gncEntryGetDescription entry) ?></td>
           <td align="right"><?scm:d (fmtnumeric qty) ?></td>
           <td align="right"><?scm:d (format #f "~4,2,,,'0f" (gnc-numeric-to-double each)) ?></td>
