@@ -58,7 +58,7 @@ run_test (void)
     Transaction *transaction;
     gnc_numeric old_amt, new_amt, old_val, new_val;
     QofBook *book;
-    Timespec ts;
+    time64 time;
     time64 now;
 
     const char *reason = "because I can";
@@ -97,10 +97,10 @@ run_test (void)
 
     xaccTransVoid(transaction, reason);
 
-    ts = xaccTransGetVoidTime (transaction);
+    time = xaccTransGetVoidTime (transaction);
 
     /* figure at most 2 seconds difference */
-    if ((ts.tv_sec < now) || ((ts.tv_sec - now) > 2))
+    if ((time < now) || ((time - now) > 2))
     {
         failure("bad void time");
     }
@@ -146,10 +146,10 @@ run_test (void)
      */
     xaccTransUnvoid(transaction);
 
-    ts = xaccTransGetVoidTime (transaction);
+    time = xaccTransGetVoidTime (transaction);
 
     /* figure at most 2 seconds difference */
-    if ((ts.tv_sec != 0) || (ts.tv_sec != 0))
+    if ((time != 0))
     {
         failure("void time not zero after restore");
     }
@@ -193,7 +193,7 @@ run_test (void)
     xaccTransSetReadOnly (transaction, "Read-only void test");
     xaccTransVoid(transaction, reason);
 
-    ts = xaccTransGetVoidTime (transaction);
+    time = xaccTransGetVoidTime (transaction);
 
     if (xaccTransGetVoidStatus(transaction))
     {

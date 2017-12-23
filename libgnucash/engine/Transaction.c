@@ -2754,19 +2754,19 @@ xaccTransGetVoidReason(const Transaction *trans)
     return NULL;
 }
 
-Timespec
+time64
 xaccTransGetVoidTime(const Transaction *tr)
 {
     GValue v = G_VALUE_INIT;
     const char *s = NULL;
-    Timespec void_time = {0, 0};
+    time64 void_time = 0;
 
     g_return_val_if_fail(tr, void_time);
     qof_instance_get_kvp (QOF_INSTANCE (tr), &v, 1, void_time_str);
     if (G_VALUE_HOLDS_STRING (&v))
         s = g_value_get_string (&v);
     if (s)
-        return gnc_iso8601_to_timespec_gmt (s);
+        return gnc_iso8601_to_timespec_gmt (s).tv_sec;
     return void_time;
 }
 
