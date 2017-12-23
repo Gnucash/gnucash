@@ -174,7 +174,7 @@
 
     (if (date-col column-vector)
         (addto! row-contents
-                (gnc-print-date (gncEntryGetDate entry))))
+                (qof-print-date (gncEntryGetDate entry))))
 
     (if (description-col column-vector)
         (addto! row-contents
@@ -455,7 +455,7 @@
 
 	(if (date-col used-columns)
 	    (addto! row
-		    (gnc-print-date (gnc-transaction-get-date-posted t))))
+		    (qof-print-date (xaccTransGetDate t))))
 
 	(if (description-col used-columns)
 	    (addto! row (_ "Payment, thank you")))
@@ -663,9 +663,9 @@
     ;; for the invoice date/due date fields
     ;; I could have taken the format from the report options, but... ;)
     (string-expand (strftime (gnc-default-strftime-date-format)
-                             (gnc-localtime (car date)))
+                             (gnc-localtime date))
                    #\space "&nbsp;")
-    ;;(string-expand (gnc-print-date date) #\space "&nbsp;")
+    ;;(string-expand (qof-print-date date) #\space "&nbsp;")
     )))
 
 (define (make-date-table)
@@ -740,7 +740,7 @@
 ;;    (gnc:html-table-append-row! table (list
 ;;				       (strftime
 ;;					date-format
-;;					(gnc-localtime (car (gnc:get-today))))))
+;;					(gnc-localtime (gnc:get-today)))))
     table))
 
 (define (make-break! document)
@@ -861,7 +861,7 @@
 		(post-date (gncInvoiceGetDatePosted invoice))
 		(due-date (gncInvoiceGetDateDue invoice)))
 
-	    (if (not (equal? post-date (cons 0 0)))
+	    (if (not (zero? post-date))
 		(begin
 		  (set! date-table (make-date-table))
 		  ;; oli-custom - moved invoice number here
