@@ -1091,11 +1091,14 @@ loan_info_page_save( GtkAssistant *assistant, gpointer user_data )
 
         tmpTT = gnc_date_edit_get_date( ldd->prmStartDateGDE );
         tmpTm = gnc_localtime ( &tmpTT );
-        g_date_set_dmy( ldd->ld.startDate,
-                        tmpTm->tm_mday,
-                        (tmpTm->tm_mon + 1),
-                        (1900 + tmpTm->tm_year) );
-	gnc_tm_free (tmpTm);
+        if (tmpTm)
+        {
+            g_date_set_dmy( ldd->ld.startDate,
+                            tmpTm->tm_mday,
+                            (tmpTm->tm_mon + 1),
+                            (1900 + tmpTm->tm_year) );
+            gnc_tm_free (tmpTm);
+        }
     }
 
     /* len / periods */

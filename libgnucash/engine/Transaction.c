@@ -2426,10 +2426,13 @@ xaccTransGetDatePostedGDate (const Transaction *trans)
               */
              time64 time = xaccTransGetDate(trans);
              struct tm *stm = gnc_gmtime(&time);
-             g_date_set_dmy(&result, stm->tm_mday,
-                            (GDateMonth)(stm->tm_mon + 1),
-                            stm->tm_year + 1900);
-             free(stm);
+             if (stm)
+             {
+                 g_date_set_dmy(&result, stm->tm_mday,
+                                (GDateMonth)(stm->tm_mon + 1),
+                                stm->tm_year + 1900);
+                 free(stm);
+             }
         }
     }
     return result;
