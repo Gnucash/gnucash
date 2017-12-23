@@ -96,44 +96,44 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
 (define (split-same-corr-account-code-p a b)
   (= (xaccSplitCompareOtherAccountCodes a b) 0))
 
-(define (timepair-same-year tp-a tp-b)
-  (= (gnc:timepair-get-year tp-a)
-     (gnc:timepair-get-year tp-b)))
+(define (time64-same-year tp-a tp-b)
+  (= (gnc:time64-get-year tp-a)
+     (gnc:time64-get-year tp-b)))
 
-(define (timepair-same-quarter tp-a tp-b)
-  (and (timepair-same-year tp-a tp-b)
-       (= (gnc:timepair-get-quarter tp-a)
-          (gnc:timepair-get-quarter tp-b))))
+(define (time64-same-quarter tp-a tp-b)
+  (and (time64-same-year tp-a tp-b)
+       (= (gnc:time64-get-quarter tp-a)
+          (gnc:time64-get-quarter tp-b))))
 
-(define (timepair-same-month tp-a tp-b)
-  (and (timepair-same-year tp-a tp-b)
-       (= (gnc:timepair-get-month tp-a)
-          (gnc:timepair-get-month tp-b))))
+(define (time64-same-month tp-a tp-b)
+  (and (time64-same-year tp-a tp-b)
+       (= (gnc:time64-get-month tp-a)
+          (gnc:time64-get-month tp-b))))
 
-(define (timepair-same-week tp-a tp-b)
-  (and (timepair-same-year tp-a tp-b)
-       (= (gnc:timepair-get-week tp-a)
-          (gnc:timepair-get-week tp-b))))
+(define (time64-same-week tp-a tp-b)
+  (and (time64-same-year tp-a tp-b)
+       (= (gnc:time64-get-week tp-a)
+          (gnc:time64-get-week tp-b))))
 
 (define (split-same-week-p a b)
-  (let ((tp-a (gnc-transaction-get-date-posted (xaccSplitGetParent a)))
-        (tp-b (gnc-transaction-get-date-posted (xaccSplitGetParent b))))
-    (timepair-same-week tp-a tp-b)))
+  (let ((tp-a (xaccTransGetDate (xaccSplitGetParent a)))
+        (tp-b (xaccTransGetDate (xaccSplitGetParent b))))
+    (time64-same-week tp-a tp-b)))
 
 (define (split-same-month-p a b)
-  (let ((tp-a (gnc-transaction-get-date-posted (xaccSplitGetParent a)))
-        (tp-b (gnc-transaction-get-date-posted (xaccSplitGetParent b))))
-    (timepair-same-month tp-a tp-b)))
+  (let ((tp-a (xaccTransGetDate (xaccSplitGetParent a)))
+        (tp-b (xaccTransGetDate (xaccSplitGetParent b))))
+    (time64-same-month tp-a tp-b)))
 
 (define (split-same-quarter-p a b)
-  (let ((tp-a (gnc-transaction-get-date-posted (xaccSplitGetParent a)))
-        (tp-b (gnc-transaction-get-date-posted (xaccSplitGetParent b))))
-    (timepair-same-quarter tp-a tp-b)))
+  (let ((tp-a (xaccTransGetDate (xaccSplitGetParent a)))
+        (tp-b (xaccTransGetDate (xaccSplitGetParent b))))
+    (time64-same-quarter tp-a tp-b)))
 
 (define (split-same-year-p a b)
-  (let ((tp-a (gnc-transaction-get-date-posted (xaccSplitGetParent a)))
-        (tp-b (gnc-transaction-get-date-posted (xaccSplitGetParent b))))
-    (timepair-same-year tp-a tp-b)))
+  (let ((tp-a (xaccTransGetDate (xaccSplitGetParent a)))
+        (tp-b (xaccTransGetDate (xaccSplitGetParent b))))
+    (time64-same-year tp-a tp-b)))
 
 (define (set-last-row-style! table tag . rest)
   (let ((arg-list
@@ -197,29 +197,29 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
 
 (define (render-week-subheading split table width subheading-style column-vector)
   (add-subheading-row (gnc:date-get-week-year-string
-                       (gnc:timepair->date
-                        (gnc-transaction-get-date-posted
+                       (gnc-localtime
+                        (xaccTransGetDate
                          (xaccSplitGetParent split))))
                       table width subheading-style))
 
 (define (render-month-subheading split table width subheading-style column-vector)
   (add-subheading-row (gnc:date-get-month-year-string
-                       (gnc:timepair->date
-                        (gnc-transaction-get-date-posted
+                       (gnc-localtime
+                        (xaccTransGetDate
                          (xaccSplitGetParent split))))
                       table width subheading-style))
 
 (define (render-quarter-subheading split table width subheading-style column-vector)
   (add-subheading-row (gnc:date-get-quarter-year-string
-                       (gnc:timepair->date
-                        (gnc-transaction-get-date-posted
+                       (gnc-localtime
+                        (xaccTransGetDate
                          (xaccSplitGetParent split))))
                       table width subheading-style))
 
 (define (render-year-subheading split table width subheading-style column-vector)
   (add-subheading-row (gnc:date-get-year-string
-                       (gnc:timepair->date
-                        (gnc-transaction-get-date-posted
+                       (gnc-localtime
+                        (xaccTransGetDate
                          (xaccSplitGetParent split))))
                       table width subheading-style))
 
@@ -293,7 +293,7 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
 
 (define (render-week-subtotal
          table width split total-collector subtotal-style column-vector export?)
-  (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted
+  (let ((tm (gnc-localtime (xaccTransGetDate
                                  (xaccSplitGetParent split)))))
     (add-subtotal-row table width
                       (total-string (gnc:date-get-week-year-string tm))
@@ -301,7 +301,7 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
 
 (define (render-month-subtotal
          table width split total-collector subtotal-style column-vector export?)
-  (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted
+  (let ((tm (gnc-localtime (xaccTransGetDate
                                  (xaccSplitGetParent split)))))
     (add-subtotal-row table width
                       (total-string (gnc:date-get-month-year-string tm))
@@ -310,7 +310,7 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
 
 (define (render-quarter-subtotal
          table width split total-collector subtotal-style column-vector export?)
-  (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted
+  (let ((tm (gnc-localtime (xaccTransGetDate
                                  (xaccSplitGetParent split)))))
     (add-subtotal-row table width
                       (total-string (gnc:date-get-quarter-year-string tm))
@@ -318,7 +318,7 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
 
 (define (render-year-subtotal
          table width split total-collector subtotal-style column-vector export?)
-  (let ((tm (gnc:timepair->date (gnc-transaction-get-date-posted
+  (let ((tm (gnc-localtime (xaccTransGetDate
                                  (xaccSplitGetParent split)))))
     (add-subtotal-row table width
                       (total-string (strftime "%Y" tm))
@@ -518,7 +518,7 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
                               (opt-val gnc:pagename-general optname-currency)
                               currency))
          (sign-reverses? (opt-val gnc:pagename-display (N_ "Sign Reverses")))
-         (trans-date (gnc-transaction-get-date-posted parent))
+         (trans-date (xaccTransGetDate parent))
          (converted (lambda (num)
                       (gnc:exchange-by-pricedb-nearest
                        (gnc:make-gnc-monetary currency num)
@@ -540,15 +540,15 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
         (addto! row-contents
                 (if transaction-row?
                     (gnc:make-html-table-cell/markup "date-cell"
-                                                     (gnc-print-date (gnc-transaction-get-date-posted parent)))
+                                                     (qof-print-date (xaccTransGetDate parent)))
                     " ")))
     (if (used-reconciled-date column-vector)
         (addto! row-contents
                 (gnc:make-html-table-cell/markup "date-cell"
-                                                 (let ((date (gnc-split-get-date-reconciled split)))
-                                                   (if (equal? date (cons 0 0))
+                                                 (let ((date (xaccSplitGetDateReconciled split)))
+                                                   (if (zero? date)
                                                        " "
-                                                       (gnc-print-date date))))))
+                                                       (qof-print-date date))))))
     (if (used-num column-vector)
         (addto! row-contents
                 (if transaction-row?
@@ -1148,8 +1148,8 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
 
 
 (define (display-date-interval begin end)
-  (let ((begin-string (gnc-print-date begin))
-        (end-string (gnc-print-date end)))
+  (let ((begin-string (qof-print-date begin))
+        (end-string (qof-print-date end)))
     (sprintf #f (_ "From %s To %s") begin-string end-string)))
 
 (define (get-primary-subtotal-style options)
@@ -1616,10 +1616,10 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
          (accounts-sales (filter (lambda (acc) (eq? (xaccAccountGetType acc) ACCT-TYPE-INCOME)) c_account_1))
          (accounts-purchases (filter (lambda (acc) (eq? (xaccAccountGetType acc) ACCT-TYPE-EXPENSE)) c_account_1))
          (filter-mode (opt-val gnc:pagename-accounts "Filter Type"))
-         (begindate (gnc:timepair-start-day-time
+         (begindate (gnc:time64-start-day-time
                      (gnc:date-option-absolute-time
                       (opt-val gnc:pagename-general "Start Date"))))
-         (enddate (gnc:timepair-end-day-time
+         (enddate (gnc:time64-end-day-time
                    (gnc:date-option-absolute-time
                     (opt-val gnc:pagename-general "End Date"))))
          (transaction-matcher (opt-val gnc:pagename-general optname-transaction-matcher))
@@ -1648,7 +1648,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
           (xaccQueryAddAccountMatch query
                                     c_account_1
                                     QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-          (xaccQueryAddDateMatchTS
+          (xaccQueryAddDateMatchTT
            query #t begindate #t enddate QOF-QUERY-AND)
           (qof-query-set-sort-order query
                                     (get-query-sortkey primary-key)
