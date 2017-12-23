@@ -354,6 +354,13 @@ GDate timespec_to_gdate (Timespec ts);
 /** Turns a GDate into a Timespec, returning the first second of the day  */
 Timespec gdate_to_timespec (GDate d);
 
+/** Convert a day, month, and year to a time64, returning the first second of the day */
+time64 gnc_dmy2time64 (gint day, gint month, gint year);
+
+time64 gnc_dmy2time64_neutral (gint day, gint month, gint year);
+
+time64 gnc_dmy2time64_end (gint day, gint month, gint year);
+
 /** Convert a day, month, and year to a Timespec, returning the first second of the day */
 Timespec gnc_dmy2timespec (gint day, gint month, gint year);
 

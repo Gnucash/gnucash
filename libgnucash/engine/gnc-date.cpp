@@ -1287,6 +1287,24 @@ gnc_dmy2timespec_internal (int day, int month, int year, DayPart day_part)
     }
 }
 
+time64
+gnc_dmy2time64 (int day, int month, int year)
+{
+    return gnc_dmy2timespec_internal (day, month, year, DayPart::start).tv_sec;
+}
+
+time64
+gnc_dmy2time64_end (int day, int month, int year)
+{
+    return gnc_dmy2timespec_internal (day, month, year, DayPart::end).tv_sec;
+}
+
+time64
+gnc_dmy2time64_neutral (int day, int month, int year)
+{
+    return gnc_dmy2timespec_internal (day, month, year, DayPart::neutral).tv_sec;
+}
+
 Timespec
 gnc_dmy2timespec (int day, int month, int year)
 {
