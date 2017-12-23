@@ -314,8 +314,15 @@ GncDateTimeImpl::GncDateTimeImpl(const std::string str) :
         input_facet->set_iso_extended_format();
         PTime pdt(not_a_date_time);
         ss >> pdt;
+        if (pdt.is_special())
+        {
+            input_facet->format("%Y%m%d%H%M%S");
+            ss.clear(); //Reset to the beginning.
+            ss.seekg(0);
+            ss >> pdt;
+        }
         m_time = LDT(pdt.date(), pdt.time_of_day(), tzptr,
-                     LDTBase::NOT_DATE_TIME_ON_ERROR);
+                         LDTBase::NOT_DATE_TIME_ON_ERROR);
     }
     catch(boost::gregorian::bad_year)
     {
