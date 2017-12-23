@@ -20,6 +20,7 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
+
 (use-modules (gnucash core-utils)
              (gnucash printf)
              (gnucash gettext))
@@ -27,20 +28,25 @@
 (define gnc:reldate-list '())
 
 (define (gnc:timepair->secs tp)
+  (gnc:warn "deprecated timepair->secs, use time64 directly")
   (inexact->exact 
    (+ (car tp)
       (/ (cdr tp) 1000000000))))
 
 (define (gnc:secs->timepair secs)
+  (gnc:warn "deprecated secs->timepair, use time64 direclty")
   (cons secs 0))
 
 (define (gnc:timepair->date tp)
+  (gnc:warn "deprecated timepair->date, use gnc-localtime")
   (gnc-localtime (gnc:timepair->secs tp)))
 
 (define (gnc:date->timepair date)
+  (gnc:warn "deprecated timepair->date, use gnc-mktime")
   (gnc:secs->timepair (gnc-mktime date)))
 
 (define (gnc:timepair? date)
+  (gnc:warn "deprecated timepair?")
   (and (number? (car date))
        (number? (cdr date))))
 
@@ -66,25 +72,53 @@
   (+ (tm:yday datevec) 1))
 
 (define (gnc:timepair-get-year tp)
+  (gnc:warn "deprecated timepair-get-year")
   (gnc:date-get-year (gnc:timepair->date tp)))
 
 (define (gnc:timepair-get-quarter tp)
+  (gnc:warn "deprecated timepair-get-quarter")
   (gnc:date-get-quarter (gnc:timepair->date tp)))
 
 (define (gnc:timepair-get-month-day tp)
+  (gnc:warn "deprecated timepair-get-month-day")
   (gnc:date-get-month-day (gnc:timepair->date tp)))
 
 (define (gnc:timepair-get-month tp)
+  (gnc:warn "deprecated timepair-get-month")
   (gnc:date-get-month (gnc:timepair->date tp)))
 
 (define (gnc:timepair-get-week-day tp)
+  (gnc:warn "deprecated timepair-get-week-day")
   (gnc:date-get-week-day (gnc:timepair->date tp)))
 
 (define (gnc:timepair-get-week tp)
+  (gnc:warn "deprecated timepair-get-week")
   (gnc:date-get-week (gnc:timepair->date tp)))
 
 (define (gnc:timepair-get-year-day tp)
+  (gnc:warn "deprecated timepair-get-year-day")
   (gnc:date-get-year-day (gnc:timepair->date tp)))
+
+(define (gnc:time64-get-year t64)
+  (gnc:date-get-year (gnc-localtime t64)))
+
+(define (gnc:time64-get-quarter t64)
+  (gnc:date-get-quarter (gnc-localtime t64)))
+
+(define (gnc:time64-get-month-day t64)
+  (gnc:date-get-month-day (gnc-localtime t64)))
+
+(define (gnc:time64-get-month t64)
+  (gnc:date-get-month (gnc-localtime t64)))
+
+(define (gnc:time64-get-week-day t64)
+  (gnc:date-get-week-day (gnc-localtime t64)))
+
+(define (gnc:time64-get-week t64)
+  (gnc:date-get-week (gnc-localtime t64)))
+
+(define (gnc:time64-get-year-day t64)
+  (gnc:date-get-year-day (gnc-localtime t64)))
 
 (define (gnc:date-get-year-string datevec)
   (gnc-locale-to-utf8 (strftime "%Y" datevec)))
@@ -105,21 +139,24 @@
   (gnc-locale-to-utf8 (strftime "%B %Y" datevec)))
 
 (define (gnc:date-get-week-year-string datevec)
-  (let ((begin-string (gnc-print-date
-		       (gnc:secs->timepair
-			(+ (* (gnc:date-to-week
-			    (gnc:timepair->secs
-			     (gnc:timepair-start-day-time
-			      (gnc:date->timepair datevec))))
-			   604800 ) 345600))))
-        (end-string (gnc-print-date
-		       (gnc:secs->timepair
-			(+ (* (gnc:date-to-week
-			    (gnc:timepair->secs
-			     (gnc:timepair-start-day-time
-			      (gnc:date->timepair datevec))))
-			   604800 ) 864000)))))
-  (sprintf #f (_ "%s to %s") begin-string end-string)))
+  (let* ((beginweekt64 (* (gnc:time64-get-week
+                            (gnc-mktime datevec))
+                          604800))
+         (begin-string (qof-print-date (+ beginweekt64 345600)))
+         (end-string (qof-print-date (+ beginweekt64 864000))))
+    (sprintf #f (_ "%s to %s") begin-string end-string)))
+    
+;  (let ((begin-string (qof-print-date
+;                       (+ (* (gnc:date-get-week
+;                              (gnc:time64-start-day-time
+;                               (gnc-mktime datevec)))
+;                             604800) 345600)))
+;        (end-string (qof-print-date
+;                     (+ (* (gnc:date-get-week
+;                            (gnc:time64-start-day-time
+;                             (gnc-mktime datevec)))
+;                           604800) 864000))))
+;    (sprintf #f (_ "%s to %s") begin-string end-string)))
 
 ;; is leap year?
 (define (gnc:leap-year? year)
@@ -221,6 +258,7 @@
 
 ;; Modify a date
 (define (moddate op adate delta)
+  (gnc:warn "deprecated moddate. use moddate64 instead.")
   (let ((newtm (gnc:timepair->date adate)))
     (begin
       (set-tm:sec newtm (op (tm:sec newtm) (tm:sec delta)))
@@ -232,36 +270,60 @@
       (set-tm:isdst newtm 0)
       (gnc:date->timepair newtm))))
 
+(define (moddate64 op adate delta)
+  (let ((newtm (gnc-localtime adate)))
+    (begin
+      (set-tm:sec newtm (op (tm:sec newtm) (tm:sec delta)))
+      (set-tm:min newtm (op (tm:min newtm) (tm:min delta)))
+      (set-tm:hour newtm (op (tm:hour newtm) (tm:hour delta)))
+      (set-tm:mday newtm (op (tm:mday newtm) (tm:mday delta)))
+      (set-tm:mon newtm (op (tm:mon newtm) (tm:mon delta)))
+      (set-tm:year newtm (op (tm:year newtm) (tm:year delta)))
+      (set-tm:isdst newtm -1)
+      (gnc-mktime newtm))))
+
 ;; Add or subtract time from a date
 (define (decdate adate delta)(moddate - adate delta ))
 (define (incdate adate delta)(moddate + adate delta ))
 
+(define (decdate64 adate delta) (moddate64 - adate delta ))
+(define (incdate64 adate delta) (moddate64 + adate delta ))
+
 ;; Time comparison, true if t2 is later than t1
 ;; FIXME: RENAME THIS FUNCTION!!!!
+;; NOTE ALL THESE FUNCTIONS WILL BECOME OBSOLETE SOON
 
 (define (gnc:timepair-later t1 t2)
+  (gnc:warn "deprecated timepair-later")
   (cond ((< (car t1) (car t2)) #t)
         ((= (car t1) (car t2)) (< (cdr t2) (cdr t2)))
         (else #f)))
 
-(define gnc:timepair-lt gnc:timepair-later)
+(define (gnc:timepair-lt t1 t2)
+  (gnc:warn "deprecated timepair-lt")
+  (gnc:timepair-later t1 t2))
 
 (define (gnc:timepair-earlier t1 t2)
+  (gnc:warn "deprecated timepair-earlier")
   (gnc:timepair-later t2 t1))
 
 (define (gnc:timepair-gt t1 t2)
+  (gnc:warn "deprecated timepair-gt")
   (gnc:timepair-earlier t1 t2))
 
 ;; t1 <= t2
 (define (gnc:timepair-le t1 t2)
+  (gnc:warn "deprecated timepair-le")
   (cond ((< (car t1) (car t2)) #t)
         ((= (car t1) (car t2)) (<= (cdr t2) (cdr t2)))
         (else #f)))
 
 (define (gnc:timepair-ge t1 t2)
+  (gnc:warn "deprecated timepair-ge")
   (gnc:timepair-le t2 t1))
 
 (define (gnc:timepair-eq t1 t2)
+  (gnc:warn "deprecated timepair-eq")
   (and (= (car t1) (car t2)) (= (cdr t1) (cdr t2))))
 
 ;; date-granularity comparison functions.
@@ -274,22 +336,32 @@
   (gnc:timepair-earlier-date t2 t1))
 
 (define (gnc:timepair-le-date t1 t2)
+  (gnc:warn "deprecated gnc:timepair-le-date. use gnc:time64-le-date")
   (gnc:timepair-le (timespecCanonicalDayTime t1)
 		   (timespecCanonicalDayTime t2)))
 
 (define (gnc:timepair-ge-date t1 t2)
+  (gnc:warn "deprecated timepair-ge-date")
   (gnc:timepair-le t2 t1))
 
 (define (gnc:timepair-eq-date t1 t2)
   (gnc:timepair-eq (timespecCanonicalDayTime t1)
 		   (timespecCanonicalDayTime t2)))
 
+(define (gnc:time64-le-date t1 t2)
+  (<= (time64CanonicalDayTime t1)
+      (time64CanonicalDayTime t2)))
+
+(define (gnc:time64-ge-date t1 t2)
+  (gnc:time64-le-date t2 t1))
+
 ;; Build a list of time intervals. 
 ;;
 ;; Note that the last interval will be shorter than <incr> if
 ;; (<curd>-<endd>) is not an integer multiple of <incr>. If you don't
 ;; want that you'll have to write another function.
-(define (gnc:make-date-interval-list curd endd incr) 
+(define (gnc:make-datepair-interval-list curd endd incr)
+  (gnc:warn "deprecated gnc:make-date-interval-list")
   (cond ((gnc:timepair-later curd endd)
 	 (let ((nextd (incdate curd incr)))
 	   (cond ((gnc:timepair-later nextd endd)
@@ -298,18 +370,35 @@
 		  (else (cons (list curd endd '()) '())))))
 	(else '())))
 
+(define (gnc:make-date-interval-list current-date end-date increment)
+  (if (< current-date end-date)
+      (let ((next-date (incdate64 current-date increment)))
+        (if (< next-date end-date)
+            (cons (list current-date (decdate64 next-date SecDelta) '())
+                  (gnc:make-date-interval-list next-date end-date increment))
+            (cons (list current-date end-date '())
+                  '())))
+      '()))
+  
 ;; Build a list of times.  The dates are evenly spaced with the
 ;; stepsize 'incr'. If the difference of 'startdate' and 'enddate' is
 ;; not an integer multiple of 'incr', 'enddate' will be added as the
 ;; last element of the list, thus making the last interval smaller
 ;; than 'incr'.
-(define (gnc:make-date-list startdate enddate incr) 
+(define (gnc:make-datepair-list startdate enddate incr)
+  (gnc:warn "deprecated gnc:make-date-list")
   (cond ((gnc:timepair-later startdate enddate)
 	 (cons startdate 
 	       (gnc:make-date-list (incdate startdate incr) 
 				   enddate incr)))
 	(else (list enddate))))
 
+(define (gnc:make-date-list startdate enddate incr)
+  (if (< startdate enddate)
+      (cons startdate
+            (gnc:make-date-list (incdate64 startdate incr)
+                                enddate incr))
+      (list enddate)))
 
 ; A reference zero date - the Beginning Of The Epoch
 ; Note: use of eval is evil... by making this a generator function, 
@@ -401,6 +490,7 @@
 
 ;; Find difference in seconds time 1 and time2
 (define (gnc:timepair-delta t1 t2)
+  (gnc:warn "(gnc:timepair-delta) obsolete. use (-) directly")
   (- (gnc:timepair->secs t2) (gnc:timepair->secs t1)))
 
 ;; find float difference between times 
@@ -419,6 +509,7 @@
 ;; converts it to be midday that day.
 
 (define (gnc:timepair-start-day-time tp)
+  (gnc:warn "(gnc:timepair-start-day-time) obsolete")
   (let ((bdt (gnc:timepair->date tp)))
     (set-tm:sec bdt 0)
     (set-tm:min bdt 0)
@@ -427,6 +518,7 @@
     (gnc:date->timepair bdt)))
 
 (define (gnc:timepair-end-day-time tp)
+  (gnc:warn "(gnc:timepair-end-day-time) obsolete")
   (let ((bdt (gnc:timepair->date tp)))
     (set-tm:sec bdt 59)
     (set-tm:min bdt 59)
@@ -435,10 +527,36 @@
     (gnc:date->timepair bdt)))
 
 (define (gnc:timepair-previous-day tp)
+  (gnc:warn "gnc:timepair-previous-day obsolete")
   (decdate tp DayDelta))
 
 (define (gnc:timepair-next-day tp)
+  (gnc:warn "gnc:timepair-next-day obsolete")
   (incdate tp DayDelta))
+
+;; new time64 helper functions
+(define (gnc:time64-start-day-time t64)
+  (let ((bdt (gnc-localtime t64)))
+    (set-tm:sec bdt 0)
+    (set-tm:min bdt 0)
+    (set-tm:hour bdt 0)
+    (set-tm:isdst bdt -1)
+    (gnc-mktime bdt)))
+
+(define (gnc:time64-end-day-time t64)
+  (let ((bdt (gnc-localtime t64)))
+    (set-tm:sec bdt 59)
+    (set-tm:min bdt 59)
+    (set-tm:hour bdt 23)
+    (set-tm:isdst bdt -1)
+    (gnc-mktime bdt)))
+
+(define (gnc:time64-previous-day t64)
+  (decdate64 t64 DayDelta))
+
+(define (gnc:time64-next-day t64)
+  (incdate64 t64 DayDelta))
+
 
 (define (gnc:reldate-get-symbol x) (vector-ref x 0))
 (define (gnc:reldate-get-string x) (vector-ref x 1))
@@ -486,7 +604,7 @@
     (set-tm:mday now 1)
     (set-tm:mon now 0)
     (set-tm:isdst now -1)
-    (gnc:date->timepair now)))
+    (gnc-mktime now)))
 
 (define (gnc:get-end-cal-year)
   (let ((now (gnc-localtime (current-time))))
@@ -496,7 +614,7 @@
     (set-tm:mday now 31)
     (set-tm:mon now 11)
     (set-tm:isdst now -1)
-    (gnc:date->timepair now)))
+    (gnc-mktime now)))
 
 (define (gnc:get-start-prev-year)
   (let ((now (gnc-localtime (current-time))))
@@ -507,7 +625,7 @@
     (set-tm:mon now 0)
     (set-tm:year now (- (tm:year now) 1))
     (set-tm:isdst now -1)
-    (gnc:date->timepair now)))
+    (gnc-mktime now)))
 
 (define (gnc:get-end-prev-year)
   (let ((now (gnc-localtime (current-time))))
@@ -518,7 +636,7 @@
     (set-tm:mon now 11)
     (set-tm:year now (- (tm:year now) 1))
     (set-tm:isdst now -1)
-    (gnc:date->timepair now)))
+    (gnc-mktime now)))
 
 (define (gnc:get-start-next-year)
   (let ((now (gnc-localtime (current-time))))
@@ -529,7 +647,7 @@
     (set-tm:mon now 0)
     (set-tm:year now (+ (tm:year now) 1))
     (set-tm:isdst now -1)
-    (gnc:date->timepair now)))
+    (gnc-mktime now)))
 
 (define (gnc:get-end-next-year)
   (let ((now (gnc-localtime (current-time))))
@@ -540,13 +658,13 @@
     (set-tm:mon now 11)
     (set-tm:year now (+ (tm:year now) 1))
     (set-tm:isdst now -1)
-    (gnc:date->timepair now)))
+    (gnc-mktime now)))
 
 (define (gnc:get-start-accounting-period)
-  (gnc:secs->timepair (gnc-accounting-period-fiscal-start)))
+  (gnc-accounting-period-fiscal-start))
 
 (define (gnc:get-end-accounting-period)
-  (gnc:secs->timepair (gnc-accounting-period-fiscal-end)))
+  (gnc-accounting-period-fiscal-end))
 
 (define (gnc:get-start-this-month)
   (let ((now (gnc-localtime (current-time))))
@@ -555,7 +673,7 @@
     (set-tm:hour now 0)
     (set-tm:mday now 1)
     (set-tm:isdst now -1)
-    (gnc:date->timepair now)))
+    (gnc-mktime now)))
 
 (define (gnc:get-end-this-month)
   (let ((now (gnc-localtime (current-time))))
@@ -565,7 +683,7 @@
     (set-tm:mday now (gnc:days-in-month (+ (tm:mon now) 1) 
 					(+ (tm:year now) 1900)))
     (set-tm:isdst now -1)
-    (gnc:date->timepair now)))
+    (gnc-mktime now)))
     
 (define (gnc:get-start-prev-month)
   (let ((now (gnc-localtime (current-time))))
@@ -579,7 +697,7 @@
 	  (set-tm:year now (- (tm:year now) 1)))
 	(set-tm:mon now (- (tm:mon now) 1)))
     (set-tm:isdst now -1)
-    (gnc:date->timepair now)))
+    (gnc-mktime now)))
 
 (define (gnc:get-end-prev-month)
   (let ((now (gnc-localtime (current-time))))
@@ -594,7 +712,7 @@
     (set-tm:mday now (gnc:days-in-month (+ (tm:mon now) 1) 
 					(+ (tm:year now) 1900)))
     (set-tm:isdst now -1)
-    (gnc:date->timepair now)))
+    (gnc-mktime now)))
     
 (define (gnc:get-start-next-month)
   (let ((now (gnc-localtime (current-time))))
@@ -608,7 +726,7 @@
 	  (set-tm:year now (+ (tm:year now) 1)))
 	(set-tm:mon now (+ (tm:mon now) 1)))
     (set-tm:isdst now -1)
-    (gnc:date->timepair now)))
+    (gnc-mktime now)))
 
 (define (gnc:get-end-next-month)
   (let ((now (gnc-localtime (current-time))))
@@ -623,7 +741,7 @@
     (set-tm:mday now (gnc:days-in-month (+ (tm:mon now) 1) 
 					(+ (tm:year now) 1900)))
     (set-tm:isdst now -1)
-    (gnc:date->timepair now)))
+    (gnc-mktime now)))
     
 (define (gnc:get-start-current-quarter)
   (let ((now (gnc-localtime (current-time))))
@@ -633,7 +751,7 @@
     (set-tm:mday now 1)
     (set-tm:mon now (- (tm:mon now) (modulo (tm:mon now) 3)))
     (set-tm:isdst now -1)
-    (gnc:date->timepair now)))
+    (gnc-mktime now)))
 
 (define (gnc:get-end-current-quarter)
   (let ((now (gnc-localtime (current-time))))
@@ -645,7 +763,7 @@
     (set-tm:mday now (gnc:days-in-month (+ (tm:mon now) 1)
                                         (+ (tm:year now) 1900)))
     (set-tm:isdst now -1)
-    (gnc:date->timepair now)))
+    (gnc-mktime now)))
 
 (define (gnc:get-start-prev-quarter)
   (let ((now (gnc-localtime (current-time))))
@@ -660,7 +778,7 @@
 	  (set-tm:year now (- (tm:year now) 1)))
 	(set-tm:mon now (- (tm:mon now) 3)))
     (set-tm:isdst now -1)
-    (gnc:date->timepair now)))
+    (gnc-mktime now)))
 
 (define (gnc:get-end-prev-quarter)
   (let ((now (gnc-localtime (current-time))))
@@ -676,7 +794,7 @@
     (set-tm:mday now (gnc:days-in-month (+ (tm:mon now) 1)
                                         (+ (tm:year now) 1900)))
     (set-tm:isdst now -1)
-    (gnc:date->timepair now)))
+    (gnc-mktime now)))
 
 (define (gnc:get-start-next-quarter)
   (let ((now (gnc-localtime (current-time))))
@@ -690,7 +808,7 @@
 	  (set-tm:year now (+ (tm:year now) 1)))
         (set-tm:mon now (+ (tm:mon now) (- 3 (modulo (tm:mon now) 3)))))
     (set-tm:isdst now -1)
-    (gnc:date->timepair now)))
+    (gnc-mktime now)))
 
 (define (gnc:get-end-next-quarter)
   (let ((now (gnc-localtime (current-time))))
@@ -706,10 +824,10 @@
     (set-tm:mday now (gnc:days-in-month (+ (tm:mon now) 1)
                                         (+ (tm:year now) 1900)))
     (set-tm:isdst now -1)
-    (gnc:date->timepair now)))
+    (gnc-mktime now)))
 
 (define (gnc:get-today)
-  (cons (current-time) 0))
+  (current-time))
 
 (define (gnc:get-one-month-ago)
   (let ((now (gnc-localtime (current-time))))
@@ -723,7 +841,7 @@
       (if (> month-length (tm:mday now))
 	  (set-tm:mday now month-length))
       (set-tm:isdst now -1)
-      (gnc:date->timepair now))))
+      (gnc-mktime now))))
 
 (define (gnc:get-three-months-ago)
   (let ((now (gnc-localtime (current-time))))
@@ -737,7 +855,7 @@
       (if (> month-days (tm:mday now))
 	  (set-tm:mday now month-days))
       (set-tm:isdst now -1)
-      (gnc:date->timepair now))))
+      (gnc-mktime now))))
 
 (define (gnc:get-six-months-ago)
   (let ((now (gnc-localtime (current-time))))
@@ -761,7 +879,7 @@
       (if (> month-days (tm:mday now))
 	  (set-tm:mday now month-days))
       (set-tm:isdst now -1)
-      (gnc:date->timepair now))))
+      (gnc-mktime now))))
 
 (define (gnc:get-one-month-ahead)
   (let ((now (gnc-localtime (current-time))))
@@ -775,7 +893,7 @@
       (if (> month-length (tm:mday now))
 	  (set-tm:mday now month-length))
       (set-tm:isdst now -1)
-      (gnc:date->timepair now))))
+      (gnc-mktime now))))
 
 (define (gnc:get-three-months-ahead)
   (let ((now (gnc-localtime (current-time))))
@@ -789,7 +907,7 @@
       (if (> month-days (tm:mday now))
 	  (set-tm:mday now month-days))
       (set-tm:isdst now -1)
-      (gnc:date->timepair now))))
+      (gnc-mktime now))))
 
 (define (gnc:get-six-months-ahead)
   (let ((now (gnc-localtime (current-time))))
@@ -803,7 +921,7 @@
       (if (> month-days (tm:mday now))
 	  (set-tm:mday now month-days))
       (set-tm:isdst now -1)
-      (gnc:date->timepair now))))
+      (gnc-mktime now))))
 
 (define (gnc:get-one-year-ahead)
   (let ((now (gnc-localtime (current-time))))
@@ -813,7 +931,7 @@
       (if (> month-days (tm:mday now))
 	  (set-tm:mday now month-days))
       (set-tm:isdst now -1)
-      (gnc:date->timepair now))))
+      (gnc-mktime now))))
 
 ;; There is no GNC:RELATIVE-DATES list like the one mentioned in
 ;; gnucash-design.info, is there? Here are the currently defined
