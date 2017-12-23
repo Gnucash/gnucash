@@ -1097,16 +1097,16 @@ tags within description, notes or memo. ")
                        (timespecCanonicalDayTime trans-date))))
            (split-value (lambda (s) (convert s (damount s)))) ; used for correct debit/credit
            (amount (lambda (s) (split-value s)))
-           (debit-amount (lambda (s) (and (gnc-numeric-positive-p (gnc:gnc-monetary-amount (split-value s)))
+           (debit-amount (lambda (s) (and (positive? (gnc:gnc-monetary-amount (split-value s)))
                                           (split-value s))))
-           (credit-amount (lambda (s) (if (gnc-numeric-positive-p (gnc:gnc-monetary-amount (split-value s)))
+           (credit-amount (lambda (s) (if (positive? (gnc:gnc-monetary-amount (split-value s)))
                                           #f
                                           (gnc:monetary-neg (split-value s)))))
            (original-amount (lambda (s) (gnc:make-gnc-monetary (currency s) (damount s))))
-           (original-debit-amount (lambda (s) (if (gnc-numeric-positive-p (damount s))
+           (original-debit-amount (lambda (s) (if (positive? (damount s))
                                                   (original-amount s)
                                                   #f)))
-           (original-credit-amount (lambda (s) (if (gnc-numeric-positive-p (damount s))
+           (original-credit-amount (lambda (s) (if (positive? (damount s))
                                                    #f
                                                    (gnc:monetary-neg (original-amount s)))))
            (running-balance (lambda (s) (gnc:make-gnc-monetary (currency s) (xaccSplitGetBalance s)))))
@@ -1117,7 +1117,7 @@ tags within description, notes or memo. ")
          ;;         reverse-column?                              ;; to optionally reverse signs
          ;;         subtotal?                                    ;; subtotal? to allow subtotals (ie irrelevant for running balance)
          ;;         (vector start-dual-column?                   ;; #t for the left side of a dual column (i.e. debit/credit)
-         ;;                 merging-function))                   ;; function to apply to dual-subtotal (gnc-numeric-add/sub)
+         ;;                 merging-function))                   ;; function to apply to dual-subtotal (+ / -)
          ;;         friendly-heading-fn                          ;; retrieve friendly heading name for account debit/credit
          (if (column-uses? 'amount-single)
              (list (vector (header-commodity (_ "Amount"))
@@ -1128,11 +1128,11 @@ tags within description, notes or memo. ")
          (if (column-uses? 'amount-double)
              (list (vector (header-commodity (_ "Debit"))
                            debit-amount #f #t
-                           (vector #t gnc-numeric-add)
+                           (vector #t +)
                            friendly-debit)
                    (vector (header-commodity (_ "Credit"))
                            credit-amount #f #t
-                           (vector #f gnc-numeric-sub)
+                           (vector #f -)
                            friendly-credit))
              '())
 
@@ -1148,11 +1148,11 @@ tags within description, notes or memo. ")
                   (column-uses? 'amount-double))
              (list (vector (_ "Debit")
                            original-debit-amount #f #t
-                           (vector #t gnc-numeric-add)
+                           (vector #t +)
                            friendly-debit)
                    (vector (_ "Credit")
                            original-credit-amount #f #t
-                           (vector #f gnc-numeric-sub)
+                           (vector #f -)
                            friendly-credit))
              '())
 
@@ -1254,20 +1254,19 @@ tags within description, notes or memo. ")
 
         (define (add-columns commodity)
           (let ((start-dual-column? #f)
-                (dual-subtotal (gnc:make-gnc-numeric 0 1)))
+                (dual-subtotal 0))
             (for-each (lambda (column merge-entry)
                         (let* ((mon (retrieve-commodity column commodity))
                                (column-amount (and mon (gnc:gnc-monetary-amount mon)))
                                (merge? (vector-ref merge-entry 0))
                                (merge-fn (vector-ref merge-entry 1)))
                           (if merge?
-                              ;; We're merging. Run merge-fn (usu gnc-numeric-add or sub)
+                              ;; We're merging. Run merge-fn (usu + or -)
                               ;; and store total in dual-subtotal. Do NOT add column.
                               (begin
                                 (if column-amount
                                     (set! dual-subtotal
-                                          (merge-fn dual-subtotal column-amount
-                                                    GNC-DENOM-AUTO GNC-HOW-RND-ROUND)))
+                                          (merge-fn dual-subtotal column-amount)))
                                 (set! start-dual-column? #t))
                               (if start-dual-column?
                                   (begin
@@ -1275,9 +1274,8 @@ tags within description, notes or memo. ")
                                     ;; and add the columns.
                                     (if column-amount
                                         (set! dual-subtotal
-                                              (merge-fn dual-subtotal column-amount
-                                                        GNC-DENOM-AUTO GNC-HOW-RND-ROUND)))
-                                    (if (gnc-numeric-positive-p dual-subtotal)
+                                              (merge-fn dual-subtotal column-amount)))
+                                    (if (positive? dual-subtotal)
                                         (begin
                                           (addto! row-contents
                                                   (gnc:make-html-table-cell/markup
@@ -1291,9 +1289,9 @@ tags within description, notes or memo. ")
                                                    "total-number-cell"
                                                    (gnc:make-gnc-monetary
                                                     commodity
-                                                    (gnc-numeric-neg dual-subtotal))))))
+                                                    (- dual-subtotal))))))
                                     (set! start-dual-column? #f)
-                                    (set! dual-subtotal (gnc:make-gnc-numeric 0 1)))
+                                    (set! dual-subtotal 0))
                                   ;; Default; not merging/completed merge. Just
                                   ;; display monetary amount
                                   (addto! row-contents
@@ -1689,7 +1687,7 @@ tags within description, notes or memo. ")
               ((corresponding-acc-code) (lambda (s) (xaccSplitGetCorrAccountCode s)))
               ((reconciled-status) (lambda (s) (length (memq (xaccSplitGetReconcile s)
                                                              '(#\n #\c #\y #\f #\v)))))
-              ((amount) (lambda (s) (gnc-numeric-to-double (xaccSplitGetValue s))))
+              ((amount) (lambda (s) (gnc-numeric-to-scm (xaccSplitGetValue s))))
               ((description) (lambda (s) (xaccTransGetDescription (xaccSplitGetParent s))))
               ((number) (lambda (s)
                           (if BOOK-SPLIT-ACTION
