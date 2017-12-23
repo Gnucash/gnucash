@@ -177,7 +177,9 @@ guid_to_string_buff (const GncGUID * guid, gchar *str)
 
     gnc::GUID temp {*guid};
     auto val = temp.to_string ();
-    /*We need to be sure to copy the terminating null character.*/
+    /*We need to be sure to copy the terminating null character.
+     * The standard guarantees that std::basic_string::c_str ()
+     * returns with a terminating null character, too.*/
     std::copy (val.c_str (), val.c_str () + val.size () + 1, str);
     return str + val.size ();
 }
@@ -353,6 +355,21 @@ GUID::from_string (std::string const & str)
     catch (...)
     {
         throw guid_syntax_exception {};
+    }
+}
+
+bool
+GUID::is_valid_guid (std::string const & str)
+{
+    try
+    {
+        static boost::uuids::string_generator strgen;
+        auto a = strgen (str);
+        return true;
+    }
+    catch (...)
+    {
+        return false;
     }
 }
 

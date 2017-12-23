@@ -143,6 +143,29 @@ test_clear_error_list (void)
     message_queue = NULL;
 }
 
+
+gboolean
+test_list_substring_handler (const char *log_domain, GLogLevelFlags log_level,
+                      const gchar *msg, gpointer user_data)
+{
+    GList *list = g_list_first (message_queue);
+    const guint fatal = G_LOG_FLAG_FATAL;
+    while (list)
+    {
+        TestErrorStruct *error = (TestErrorStruct*)list->data;
+        if (!g_strcmp0 (log_domain, error->log_domain)
+                && ((log_level | fatal) == (error->log_level | fatal))
+                && g_strrstr (msg, error->msg))
+        {
+            ++(error->hits);
+            return FALSE;
+        }
+        list = g_list_next (list);
+    }
+    /* No list or no matches, fall through */
+    return test_checked_substring_handler (log_domain, log_level, msg, user_data);
+}
+
 static gboolean
 do_test_list_handler (const char *log_domain, GLogLevelFlags log_level,
                       const gchar *msg, gpointer user_data, gboolean hits)
@@ -203,6 +226,27 @@ do_test_checked_handler (const char *log_domain, GLogLevelFlags log_level,
         ++(tdata->hits);
     return FALSE;
 
+}
+
+gboolean
+test_checked_substring_handler (const char *log_domain, GLogLevelFlags log_level,
+                                         const gchar *msg, gpointer user_data)
+{
+    TestErrorStruct *tdata = (TestErrorStruct*)user_data;
+    if ((tdata == NULL)
+            || (tdata->log_domain != NULL
+                && g_strcmp0 (log_domain, tdata->log_domain))
+            || (tdata->log_level && tdata->log_level != log_level)
+            || (tdata->msg && !g_strrstr (msg, tdata->msg)))
+    {
+        gchar *level = test_log_level (log_level);
+        g_printf ( "<%s> (%s) %s\n", level, log_domain, msg);
+        g_free (level);
+        g_assert (log_level ^ G_LOG_FLAG_FATAL);
+        return FALSE;
+    }
+    ++(tdata->hits);
+    return FALSE;
 }
 
 gboolean

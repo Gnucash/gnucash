@@ -53,6 +53,10 @@ typedef struct _GncCommodityNamespaceClass gnc_commodity_namespaceClass;
 #include <glib/gi18n.h>
 #include "gnc-engine.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* --- type macros --- */
 #define GNC_TYPE_COMMODITY            (gnc_commodity_get_type ())
 #define GNC_COMMODITY(o)              \
@@ -1055,6 +1059,10 @@ void gnc_monetary_list_free(MonetaryList *list);
 /** @} */
 
 /** @} */
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 
 #endif /* GNC_COMMODITY_H */
 /** @} */

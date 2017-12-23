@@ -65,6 +65,10 @@
 #include "gnc-engine.h"
 /*#include "gnc-lot-p.h"*/
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct
 {
     QofInstanceClass parent_class;
@@ -174,6 +178,11 @@ GNCLot * gnc_lot_make_default (Account * acc);
 #define LOT_BALANCE     "balance"
 #define LOT_TITLE       "lot-title"
 #define LOT_NOTES       "notes"
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
+
 #endif /* GNC_LOT_H */
 /** @} */
 /** @} */

@@ -38,6 +38,7 @@ extern "C"
 #include <sstream>
 #include <algorithm>
 #include <vector>
+#include <numeric>
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = "qof.kvp";
@@ -67,137 +68,119 @@ KvpFrameImpl::~KvpFrameImpl() noexcept
     m_valuemap.clear();
 }
 
-static inline Path
-make_vector(std::string key)
+KvpFrame *
+KvpFrame::get_child_frame_or_nullptr (Path const & path) noexcept
 {
-    Path path;
-    for (auto length = key.find(delim); length != std::string::npos;)
-    {
-        if (length != 0)
-            path.push_back(key.substr(0, length));
-        key = key.substr(length + 1);
-        length = key.find(delim);
-    }
-    if (!key.empty())
-	path.push_back(key);
-    return path;
+    if (!path.size ())
+        return this;
+    auto key = path.front ();
+    if (m_valuemap.find (key.c_str ()) == m_valuemap.end ())
+        return nullptr;
+    auto child = m_valuemap.at (key.c_str ())->get <KvpFrame *> ();
+    Path send;
+    std::copy (path.begin () + 1, path.end (), std::back_inserter (send));
+    return child->get_child_frame_or_nullptr (send);
 }
 
-KvpValue*
-KvpFrameImpl::set(const char* key, KvpValue* value) noexcept
+KvpFrame *
+KvpFrame::get_child_frame_or_create (Path const & path) noexcept
 {
-    if (!key) return nullptr;
-    if (strchr(key, delim))
-        return set(make_vector(key), value);
-    KvpValue* ret {nullptr};
-    auto spot = m_valuemap.find(key);
-    if (spot != m_valuemap.end())
-    {
-        qof_string_cache_remove(spot->first);
-        ret = spot->second;
-        m_valuemap.erase(spot);
-    }
+    if (!path.size ())
+        return this;
+    auto key = path.front ();
+    auto spot = m_valuemap.find (key.c_str ());
+    if (spot == m_valuemap.end () || spot->second->get_type () != KvpValue::Type::FRAME)
+        delete set_impl (key.c_str (), new KvpValue {new KvpFrame});
+    Path send;
+    std::copy (path.begin () + 1, path.end (), std::back_inserter (send));
+    auto child_val = m_valuemap.at (key.c_str ());
+    auto child = child_val->get <KvpFrame *> ();
+    return child->get_child_frame_or_create (send);
+}
 
+
+KvpValue *
+KvpFrame::set_impl (std::string const & key, KvpValue * value) noexcept
+{
+    KvpValue * ret {};
+    auto spot = m_valuemap.find (key.c_str ());
+    if (spot != m_valuemap.end ())
+    {
+        qof_string_cache_remove (spot->first);
+        ret = spot->second;
+        m_valuemap.erase (spot);
+    }
     if (value)
     {
-        auto cachedkey =
-            static_cast<const char *>(qof_string_cache_insert(key));
-        m_valuemap.insert({cachedkey,value});
+        auto cachedkey = static_cast <char const *> (qof_string_cache_insert (key.c_str ()));
+        m_valuemap.emplace (cachedkey, value);
     }
-
     return ret;
 }
 
-static inline KvpFrameImpl*
-walk_path_or_nullptr(const KvpFrameImpl* frame, Path& path)
+KvpValue *
+KvpFrameImpl::set (Path path, KvpValue* value) noexcept
 {
-    KvpFrameImpl* cur_frame = const_cast<KvpFrameImpl*>(frame);
-    for(auto key:path)
-    {
-        auto slot = cur_frame->get_slot(key.c_str());
-        if (slot == nullptr || slot->get_type() != KvpValue::Type::FRAME)
-            return nullptr;
-        cur_frame = slot->get<KvpFrame*>();
-    }
-    return cur_frame;
-}
-
-KvpValue*
-KvpFrameImpl::set(Path path, KvpValue* value) noexcept
-{
-    auto last_key = path.back();
-    path.pop_back();
-    auto cur_frame = walk_path_or_nullptr(this, path);
-    if (cur_frame == nullptr)
+    auto key = path.back ();
+    path.pop_back ();
+    auto target = get_child_frame_or_nullptr (path);
+    if (!target)
         return nullptr;
-    if (last_key.find(delim) != std::string::npos)
-        return set(make_vector(last_key), value);
-    return cur_frame->set(last_key.c_str(), value);
+    return target->set_impl (key, value);
 }
 
-static inline KvpFrameImpl*
-walk_path_and_create(KvpFrameImpl* frame, Path path)
+KvpValue *
+KvpFrameImpl::set_path (Path path, KvpValue* value) noexcept
 {
-     for(auto key:path)
-    {
-	if (key.empty())
-	    continue;
-        if (key.find(delim) != std::string::npos)
-        {
-            frame = walk_path_and_create(frame, make_vector(key));
-            continue;
-        }
-        auto slot = frame->get_slot(key.c_str());
-        if (slot == nullptr || slot->get_type() != KvpValue::Type::FRAME)
-        {
-            auto new_frame = new KvpFrame;
-            delete frame->set(key.c_str(), new KvpValue{new_frame});
-            frame = new_frame;
-            continue;
-        }
-        frame = slot->get<KvpFrame*>();
-    }
-    return frame;
-}
-
-KvpValue*
-KvpFrameImpl::set_path(const char* path, KvpValue* value) noexcept
-{
-    return set_path(make_vector(path), value);
-}
-
-KvpValue*
-KvpFrameImpl::set_path(Path path, KvpValue* value) noexcept
-{
-    auto cur_frame = this;
-    auto last_key = path.back();
+    auto key = path.back();
     path.pop_back();
-    cur_frame = walk_path_and_create(const_cast<KvpFrame*>(this), path);
-    if (last_key.find(delim) != std::string::npos)
-        return set_path(make_vector(last_key), value);
-    return cur_frame->set(last_key.c_str(), value);
+    auto target = get_child_frame_or_create (path);
+    if (!target)
+        return nullptr;
+    return target->set_impl (key, value);
+}
+
+KvpValue *
+KvpFrameImpl::get_slot (Path path) noexcept
+{
+    auto key = path.back();
+    path.pop_back();
+    auto target = get_child_frame_or_nullptr (path);
+    if (!target)
+        return nullptr;
+    auto spot = target->m_valuemap.find (key.c_str ());
+    if (spot != target->m_valuemap.end ())
+        return spot->second;
+    return nullptr;
 }
 
 std::string
 KvpFrameImpl::to_string() const noexcept
 {
-    std::ostringstream ret;
-    ret << "{\n";
+    return to_string("");
+}
 
+std::string
+KvpFrameImpl::to_string(std::string const & prefix) const noexcept
+{
+    if (!m_valuemap.size())
+        return prefix;
+    std::ostringstream ret;
     std::for_each(m_valuemap.begin(), m_valuemap.end(),
-        [this,&ret](const map_type::value_type &a)
+        [this,&ret,&prefix](const map_type::value_type &a)
         {
-            ret << "    ";
+            std::string new_prefix {prefix};
             if (a.first)
-                ret << a.first;
-            ret << " => ";
+            {
+                new_prefix += a.first;
+                new_prefix += "/";
+            }
             if (a.second)
-                ret << a.second->to_string();
-            ret << ",\n";
+                ret << a.second->to_string(new_prefix) << "\n";
+            else
+                ret << new_prefix << "(null)\n";
         }
     );
-
-    ret << "}\n";
     return ret.str();
 }
 
@@ -212,46 +195,6 @@ KvpFrameImpl::get_keys() const noexcept
         }
     );
     return ret;
-}
-
-void
-KvpFrameImpl::for_each_slot(void (*proc)(const char *key, KvpValue *value,
-                                         void * data),
-                            void *data) const noexcept
-{
-    if (!proc) return;
-    std::for_each (m_valuemap.begin(), m_valuemap.end(),
-        [proc,data](const KvpFrameImpl::map_type::value_type & a)
-        {
-            proc (a.first, a.second, data);
-        }
-    );
-}
-
-KvpValueImpl *
-KvpFrameImpl::get_slot(const char * key) const noexcept
-{
-    if (!key) return nullptr;
-    if (strchr(key, delim))
-        return get_slot(make_vector(key));
-    auto spot = m_valuemap.find(key);
-    if (spot == m_valuemap.end())
-        return nullptr;
-    return spot->second;
-}
-
-KvpValueImpl *
-KvpFrameImpl::get_slot(Path path) const noexcept
-{
-    auto last_key = path.back();
-    path.pop_back();
-    auto cur_frame = walk_path_or_nullptr(this, path);
-    if (cur_frame == nullptr)
-        return nullptr;
-    if (last_key.find(delim) != std::string::npos)
-        return get_slot(make_vector(last_key));
-    return cur_frame->get_slot(last_key.c_str());
-
 }
 
 int compare(const KvpFrameImpl * one, const KvpFrameImpl * two) noexcept
@@ -479,4 +422,30 @@ gnc_value_list_get_type (void)
     return type;
 }
 
-/* ========================== END OF FILE ======================= */
+void
+KvpFrame::flatten_kvp_impl(std::vector <std::string> path, std::vector <KvpEntry> & entries) const noexcept
+{
+    for (auto const & entry : m_valuemap)
+    {
+        std::vector<std::string> new_path {path};
+        new_path.push_back("/");
+        if (entry.second->get_type() == KvpValue::Type::FRAME)
+        {
+            new_path.push_back(entry.first);
+            entry.second->get<KvpFrame*>()->flatten_kvp_impl(new_path, entries);
+        }
+        else
+        {
+            new_path.emplace_back (entry.first);
+            entries.emplace_back (new_path, entry.second);
+        }
+    }
+}
+
+std::vector <KvpEntry>
+KvpFrame::flatten_kvp(void) const noexcept
+{
+    std::vector <KvpEntry> ret;
+    flatten_kvp_impl({}, ret);
+    return ret;
+}

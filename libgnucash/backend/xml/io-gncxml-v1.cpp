@@ -808,7 +808,7 @@ kvp_frame_slot_end_handler (gpointer data_for_children,
     if (key_node_count != 1) return (FALSE);
 
     value_cr->should_cleanup = TRUE;
-    f->set (key, value);
+    f->set ({key}, value);
     if (delete_value)
         delete value;
     return (TRUE);

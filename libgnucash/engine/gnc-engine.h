@@ -39,6 +39,10 @@
 #include <glib.h>
 #include "qof.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** \name QofLogModule identifiers */
 // @{
 #define GNC_MOD_ROOT      "gnc"
@@ -257,6 +261,9 @@ void gnc_engine_signal_commit_error( QofBackendError errcode );
 #define GNC_OWNER_GUID    "owner-guid"
 #define GNC_SX_ID         "sched-xaction"
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 
 #endif
 /** @} */

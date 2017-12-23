@@ -38,7 +38,6 @@ extern "C"
 #include <cashobjects.h>
 #include <TransLog.h>
 
-#include <test-stuff.h>
 #include <test-engine-stuff.h>
 #include <unittest-support.h>
 
@@ -53,7 +52,7 @@ extern "C"
 #include "../sixtp-dom-parsers.h"
 #include "../io-gncxml-gen.h"
 #include "test-file-stuff.h"
-
+#include <test-stuff.h>
 static QofBook* book;
 
 extern gboolean gnc_transaction_xml_v2_testing;

@@ -26,6 +26,7 @@
  *
  * Copyright (C) 2003 Linas Vepstas <linas@linas.org>
  * Copyright (c) 2007 David Hampton <hampton@employees.org>
+ * Copyright 2017 Aaron Laws <dartme18@gmail.com>
  */
 
 #include "guid.hpp"
@@ -1059,23 +1060,53 @@ qof_instance_has_kvp (QofInstance *inst)
     return (inst->kvp_data != NULL && !inst->kvp_data->empty());
 }
 
-void
-qof_instance_set_kvp (QofInstance *inst, const gchar *key, const GValue *value)
+void qof_instance_set_path_kvp (QofInstance * inst, GValue const * value, std::vector<std::string> const & path)
 {
-    delete inst->kvp_data->set_path(key, kvp_value_from_gvalue(value));
+    delete inst->kvp_data->set_path (path, kvp_value_from_gvalue (value));
 }
 
 void
-qof_instance_get_kvp (const QofInstance *inst, const gchar *key, GValue *value)
+qof_instance_set_kvp (QofInstance * inst, GValue const * value, unsigned count, ...)
 {
-    auto temp = gvalue_from_kvp_value (inst->kvp_data->get_slot(key));
+    std::vector<std::string> path;
+    va_list args;
+    va_start (args, count);
+    for (unsigned i{0}; i < count; ++i)
+        path.push_back (va_arg (args, char const *));
+    va_end (args);
+    delete inst->kvp_data->set_path (path, kvp_value_from_gvalue (value));
+}
+
+void qof_instance_get_path_kvp (QofInstance * inst, GValue * value, std::vector<std::string> const & path)
+{
+    auto temp = gvalue_from_kvp_value (inst->kvp_data->get_slot (path));
     if (G_IS_VALUE (temp))
     {
         if (G_IS_VALUE (value))
             g_value_unset (value);
         g_value_init (value, G_VALUE_TYPE (temp));
-	g_value_copy (temp, value);
-	gnc_gvalue_free (temp);
+        g_value_copy (temp, value);
+        gnc_gvalue_free (temp);
+    }
+}
+
+void
+qof_instance_get_kvp (QofInstance * inst, GValue * value, unsigned count, ...)
+{
+    std::vector<std::string> path;
+    va_list args;
+    va_start (args, count);
+    for (unsigned i{0}; i < count; ++i)
+        path.push_back (va_arg (args, char const *));
+    va_end (args);
+    auto temp = gvalue_from_kvp_value (inst->kvp_data->get_slot (path));
+    if (G_IS_VALUE (temp))
+    {
+        if (G_IS_VALUE (value))
+            g_value_unset (value);
+        g_value_init (value, G_VALUE_TYPE (temp));
+        g_value_copy (temp, value);
+        gnc_gvalue_free (temp);
     }
 }
 
@@ -1113,18 +1144,18 @@ qof_instance_kvp_add_guid (const QofInstance *inst, const char* path,
     g_return_if_fail (inst->kvp_data != NULL);
 
     auto container = new KvpFrame;
-    container->set(key, new KvpValue(const_cast<GncGUID*>(guid)));
-    container->set("date", new KvpValue(time));
-    delete inst->kvp_data->set_path(path, new KvpValue(container));
+    container->set({key}, new KvpValue(const_cast<GncGUID*>(guid)));
+    container->set({"date"}, new KvpValue(time));
+    delete inst->kvp_data->set_path({path}, new KvpValue(container));
 }
 
 inline static gboolean
-kvp_match_guid (KvpValue *v, const char *key, const GncGUID *guid)
+kvp_match_guid (KvpValue *v, std::vector<std::string> const & path, const GncGUID *guid)
 {
     if (v->get_type() != KvpValue::Type::FRAME)
         return FALSE;
     auto frame = v->get<KvpFrame*>();
-    auto val = frame->get_slot(key);
+    auto val = frame->get_slot(path);
     if (val == nullptr || val->get_type() != KvpValue::Type::GUID)
         return FALSE;
     auto this_guid = val->get<GncGUID*>();
@@ -1139,13 +1170,13 @@ qof_instance_kvp_has_guid (const QofInstance *inst, const char *path,
     g_return_val_if_fail (inst->kvp_data != NULL, FALSE);
     g_return_val_if_fail (guid != NULL, FALSE);
 
-    auto v = inst->kvp_data->get_slot(path);
+    auto v = inst->kvp_data->get_slot({path});
     if (v == nullptr) return FALSE;
 
     switch (v->get_type())
     {
     case KvpValue::Type::FRAME:
-        return kvp_match_guid (v, key, guid);
+        return kvp_match_guid (v, {key}, guid);
         break;
     case KvpValue::Type::GLIST:
     {
@@ -1153,7 +1184,7 @@ qof_instance_kvp_has_guid (const QofInstance *inst, const char *path,
         for (auto node = list; node != NULL; node = node->next)
         {
             auto val = static_cast<KvpValue*>(node->data);
-            if (kvp_match_guid (val, key, guid))
+            if (kvp_match_guid (val, {key}, guid))
             {
                 return TRUE;
             }
@@ -1174,15 +1205,15 @@ qof_instance_kvp_remove_guid (const QofInstance *inst, const char *path,
     g_return_if_fail (inst->kvp_data != NULL);
     g_return_if_fail (guid != NULL);
 
-    auto v = inst->kvp_data->get_slot(path);
+    auto v = inst->kvp_data->get_slot({path});
     if (v == NULL) return;
 
     switch (v->get_type())
     {
     case KvpValue::Type::FRAME:
-        if (kvp_match_guid (v, key, guid))
+        if (kvp_match_guid (v, {key}, guid))
         {
-            delete inst->kvp_data->set_path(path, nullptr);
+            delete inst->kvp_data->set_path({path}, nullptr);
             delete v;
         }
         break;
@@ -1192,7 +1223,7 @@ qof_instance_kvp_remove_guid (const QofInstance *inst, const char *path,
         for (auto node = list; node != nullptr; node = node->next)
         {
             auto val = static_cast<KvpValue*>(node->data);
-            if (kvp_match_guid (val, key, guid))
+            if (kvp_match_guid (val, {key}, guid))
             {
                 list = g_list_delete_link (list, node);
                 v->set(list);
@@ -1216,19 +1247,19 @@ qof_instance_kvp_merge_guids (const QofInstance *target,
     g_return_if_fail (target != NULL);
     g_return_if_fail (donor != NULL);
 
-    if (! qof_instance_has_slot (donor, path)) return;
-    auto v = donor->kvp_data->get_slot(path);
+    if (! qof_instance_has_slot (donor, {path})) return;
+    auto v = donor->kvp_data->get_slot({path});
     if (v == NULL) return;
 
-    auto target_val = target->kvp_data->get_slot(path);
+    auto target_val = target->kvp_data->get_slot({path});
     switch (v->get_type())
     {
     case KvpValue::Type::FRAME:
         if (target_val)
             target_val->add(v);
         else
-            target->kvp_data->set_path(path, v);
-        donor->kvp_data->set(path, nullptr); //Contents moved, Don't delete!
+            target->kvp_data->set_path({path}, v);
+        donor->kvp_data->set({path}, nullptr); //Contents moved, Don't delete!
         break;
     case KvpValue::Type::GLIST:
         if (target_val)
@@ -1238,8 +1269,8 @@ qof_instance_kvp_merge_guids (const QofInstance *target,
             target_val->set(list);
         }
         else
-            target->kvp_data->set(path, v);
-        donor->kvp_data->set(path, nullptr); //Contents moved, Don't delete!
+            target->kvp_data->set({path}, v);
+        donor->kvp_data->set({path}, nullptr); //Contents moved, Don't delete!
         break;
     default:
         PWARN ("Instance KVP on path %s contains the wrong type.", path);
@@ -1247,29 +1278,62 @@ qof_instance_kvp_merge_guids (const QofInstance *target,
     }
 }
 
+bool qof_instance_has_path_slot (QofInstance const * inst, std::vector<std::string> const & path)
+{
+    return inst->kvp_data->get_slot (path) != nullptr;
+}
+
 gboolean
 qof_instance_has_slot (const QofInstance *inst, const char *path)
 {
-    return inst->kvp_data->get_slot(path) != NULL;
+    return inst->kvp_data->get_slot({path}) != NULL;
+}
+
+void qof_instance_slot_path_delete (QofInstance const * inst, std::vector<std::string> const & path)
+{
+    delete inst->kvp_data->set (path, nullptr);
 }
 
 void
-qof_instance_slot_delete (const QofInstance *inst, const char *path)
+qof_instance_slot_delete (QofInstance const *inst, char const * path)
 {
-    inst->kvp_data->set(path, nullptr);
+    delete inst->kvp_data->set ({path}, nullptr);
 }
 
-void
-qof_instance_slot_delete_if_empty (const QofInstance *inst, const char *path)
+void qof_instance_slot_path_delete_if_empty (QofInstance const * inst, std::vector<std::string> const & path)
 {
-    auto slot = inst->kvp_data->get_slot(path);
+    auto slot = inst->kvp_data->get_slot (path);
     if (slot)
     {
-        auto frame = slot->get<KvpFrame*>();
+        auto frame = slot->get <KvpFrame*> ();
         if (frame && frame->empty())
-            inst->kvp_data->set(path, nullptr);
+            delete inst->kvp_data->set (path, nullptr);
     }
 }
+
+void
+qof_instance_slot_delete_if_empty (QofInstance const *inst, char const * path)
+{
+    auto slot = inst->kvp_data->get_slot ({path});
+    if (slot)
+    {
+        auto frame = slot->get <KvpFrame*> ();
+        if (frame && frame->empty ())
+            delete inst->kvp_data->set ({path}, nullptr);
+    }
+}
+
+std::vector <std::pair <std::string, KvpValue*>>
+qof_instance_get_slots_prefix (QofInstance const * inst, std::string const & prefix)
+{
+    std::vector <std::pair <std::string, KvpValue*>> ret;
+    inst->kvp_data->for_each_slot_temp ([&prefix, &ret] (std::string const & key, KvpValue * val) {
+        if (key.find (prefix) == 0)
+            ret.emplace_back (key, val);
+    });
+    return ret;
+}
+
 namespace {
 struct wrap_param
 {
@@ -1277,11 +1341,11 @@ struct wrap_param
     void *user_data;
 };
 }
+
 static void
-wrap_gvalue_function (const char* key, KvpValue *val, gpointer data)
+wrap_gvalue_function (const char* key, KvpValue *val, wrap_param & param)
 {
     GValue *gv;
-    auto param = static_cast<wrap_param*>(data);
     if (val->get_type() != KvpValue::Type::FRAME)
         gv = gvalue_from_kvp_value(val);
     else
@@ -1290,7 +1354,7 @@ wrap_gvalue_function (const char* key, KvpValue *val, gpointer data)
         g_value_init (gv, G_TYPE_STRING);
         g_value_set_string (gv, nullptr);
     }
-    param->proc(key, gv, param->user_data);
+    param.proc(key, gv, param.user_data);
     g_slice_free (GValue, gv);
 }
 
@@ -1299,12 +1363,12 @@ qof_instance_foreach_slot (const QofInstance *inst, const char* path,
                            void (*proc)(const char*, const GValue*, void*),
                            void* data)
 {
-    auto slot = inst->kvp_data->get_slot(path);
+    auto slot = inst->kvp_data->get_slot({path});
     if (slot == nullptr || slot->get_type() != KvpValue::Type::FRAME)
         return;
     auto frame = slot->get<KvpFrame*>();
     wrap_param new_data {proc, data};
-    frame->for_each_slot(wrap_gvalue_function, &new_data);
+    frame->for_each_slot_temp(&wrap_gvalue_function, new_data);
 }
 
 /* ========================== END OF FILE ======================= */

@@ -25,7 +25,7 @@ test_kvp_get_slot (int run,
                    KvpFrame* test_frame1, const KvpValue* test_val1,
                    const gchar* test_key)
 {
-    auto test_val2 = test_frame1->get_slot (test_key);
+    auto test_val2 = test_frame1->get_slot ({test_key});
     auto msg = "KvpFrame::get_slot";
     if (compare (test_val1, test_val2) == 0)
     {
@@ -70,7 +70,7 @@ test_kvp_copy_get_slot (int run,
                         const gchar* test_key)
 {
     auto test_frame2 = new KvpFrame (*test_frame1);
-    auto test_val2 = test_frame2->get_slot (test_key);
+    auto test_val2 = test_frame2->get_slot ({test_key});
     auto msg = "KvpFrame::get_slot() from a copy-constructed frame";
     if (compare (test_val1, test_val2) == 0)
     {
@@ -114,7 +114,7 @@ test_kvp_frames1 (void)
         auto test_frame1 = new KvpFrame;
         auto test_key = get_random_string_without ("/");
 
-        test_frame1->set (test_key, test_val1);
+        test_frame1->set ({test_key}, test_val1);
 
         test_kvp_get_slot (i, test_frame1, test_val1, test_key);
         test_kvp_copy_compare (i, test_frame1, test_val1, test_key);
