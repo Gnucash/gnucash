@@ -46,6 +46,7 @@ static gncFeature known_features[] =
     { GNC_FEATURE_KVP_EXTRA_DATA, "Extra data for addresses, jobs or invoice entries (requires at least GnuCash 2.6.4)" },
     { GNC_FEATURE_GUID_BAYESIAN, "Use account GUID as key for Bayesian data (requires at least GnuCash 2.6.12)" },
     { GNC_FEATURE_GUID_FLAT_BAYESIAN, "Use account GUID as key for bayesian data and store KVP flat (requires at least GnuCash 2.6.19)" },
+    { GNC_FEATURE_SQLITE3_ISO_DATES, "Use ISO formatted date-time strings in SQLite3 databases (requires at least GnuCash 2.6.20)"},
     { NULL },
 };
 

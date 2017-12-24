@@ -46,6 +46,7 @@
 #define GNC_FEATURE_KVP_EXTRA_DATA "Extra data in addresses, jobs or invoice entries"
 #define GNC_FEATURE_GUID_BAYESIAN "Account GUID based Bayesian data"
 #define GNC_FEATURE_GUID_FLAT_BAYESIAN "Account GUID based bayesian with flat KVP"
+#define GNC_FEATURE_SQLITE3_ISO_DATES "ISO-8601 formatted date strings in SQLite3 databases."
 
 /** @} */
 

@@ -1855,7 +1855,9 @@ typedef Timespec (*TimespecAccessFunc)( const gpointer );
 typedef void (*TimespecSetterFunc)( const gpointer, Timespec );
 
 #define TIMESPEC_STR_FORMAT "%04d%02d%02d%02d%02d%02d"
+#define TIMESPEC_ALT_FORMAT "%04d-%02d%-02d %02d:%02d:%02d"
 #define TIMESPEC_COL_SIZE (4+2+2+2+2+2)
+#define TIMESPEC_ALT_COL_SIZE (4+3+3+3+3+3)
 
 /* This is required because we're passing be->timespace_format to
  * g_strdup_printf.
@@ -1926,22 +1928,24 @@ load_timespec( const GncSqlBackend* be, GncSqlRow* row,
 	else if (G_VALUE_HOLDS_STRING (val))
 	{
             const gchar* s = g_value_get_string( val );
-            if ( s != NULL )
+            if ( s != NULL && strlen(s) == TIMESPEC_COL_SIZE)
             {
-                 if (! g_str_has_prefix (s, "0000-00-00"))
-                 {
-                      gchar* buf;
-                      buf = g_strdup_printf( "%c%c%c%c-%c%c-%c%c %c%c:%c%c:%c%c",
-                                             s[0], s[1], s[2], s[3],
-                                             s[4], s[5],
-                                             s[6], s[7],
-                                             s[8], s[9],
-                                             s[10], s[11],
-                                             s[12], s[13] );
-                      ts = gnc_iso8601_to_timespec_gmt( buf );
-                      g_free( buf );
-                 }
-                 isOK = TRUE;
+                gchar* buf;
+                buf = g_strdup_printf( "%c%c%c%c-%c%c-%c%c %c%c:%c%c:%c%c",
+                                       s[0], s[1], s[2], s[3],
+                                       s[4], s[5],
+                                       s[6], s[7],
+                                       s[8], s[9],
+                                       s[10], s[11],
+                                       s[12], s[13] );
+                ts = gnc_iso8601_to_timespec_gmt( buf );
+                g_free( buf );
+                isOK = TRUE;
+            }
+            else if (! g_str_has_prefix (s, "0000-00-00"))
+            {
+                ts = gnc_iso8601_to_timespec_gmt (s);
+                isOK = TRUE;
             }
         }
         else
