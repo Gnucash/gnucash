@@ -1104,7 +1104,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
         {
             doc_coords(dcal, doc, &x1, &y1, &x2, &y2);
             memset(dayNumBuf, 0, 3);
-            snprintf(dayNumBuf, 3, "%d", g_date_get_day(&d));
+            snprintf(dayNumBuf, 3, "%hhu", g_date_get_day(&d));
             pango_layout_set_text(layout, dayNumBuf, -1);
             pango_layout_get_pixel_size(layout, &numW, &numH);
             w = (x2 - x1) + 1;
