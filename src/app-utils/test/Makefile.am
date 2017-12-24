@@ -4,8 +4,12 @@ TESTS = \
   test-exp-parser \
   test-scm-query-string \
   test-print-parse-amount \
-  test-date-utilities \
-  test-sx
+  test-sx \
+  $(SCM_TESTS)
+
+SCM_TESTS =   test-date-utilities
+
+SCM_TEST_SRCS = $(SCM_TESTS:%=%.scm)
 
 test_exp_parser_SOURCES = \
   test-exp-parser.c
@@ -18,6 +22,7 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --guile-load-dir ${top_builddir}/src/core-utils \
   --guile-load-dir ${top_builddir}/src/gnc-module \
   --guile-load-dir ${top_builddir}/src/engine \
+  --guile-load-dir ${top_builddir}/src/engine/test \
   --guile-load-dir ${top_builddir}/src/scm \
   --guile-load-dir ${top_builddir}/src/app-utils \
   --library-dir    ${top_builddir}/src/libqof/qof \
@@ -27,6 +32,12 @@ GNC_TEST_DEPS = --gnc-module-dir ${top_builddir}/src/engine \
   --library-dir    ${top_builddir}/src/backend/xml \
   --library-dir    ${top_builddir}/src/backend/sql \
   --library-dir    ${top_builddir}/src/app-utils
+
+$(SCM_TESTS): %: $(srcdir)/%.scm Makefile .scm-links
+	echo 'export GNC_BUILDDIR="${abs_top_builddir}";' > $@
+	echo 'export GNC_UNINSTALLED=yes;' >> $@
+	echo '${GUILE} --debug -l $(srcdir)/$*.scm -c "(exit (run-test))"' >> $@
+	chmod a+x $@
 
 TESTS_ENVIRONMENT = \
   GUILE_WARN_DEPRECATED=no \
@@ -68,3 +79,20 @@ AM_CPPFLAGS = \
   -I${top_srcdir}/src/libqof/qof \
   ${GUILE_CFLAGS} \
   ${GLIB_CFLAGS}
+
+.scm-links:
+	$(RM) -rf gnucash
+	mkdir -p  gnucash/app-utils/test
+	( cd gnucash/app-utils/test; for A in $(SCM_TEST_HELPERS) ; do $(LN_S) -f $(abs_srcdir)/$$A . ; done )
+if ! OS_WIN32
+# Windows knows no "ln -s" but uses "cp": must copy every time (see bug #566567).
+	touch .scm-links
+endif
+
+clean-local:
+	$(RM) -rf gnucash
+	$(RM) *.log
+
+noinst_DATA = .scm-links
+CLEANFILES = .scm-links
+DISTCLEANFILES = $(SCM_TESTS)
