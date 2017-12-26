@@ -133,7 +133,7 @@ guid_null (void)
     return s_null_gncguid;
 }
 
-void
+static void
 guid_assign (GncGUID & target, gnc::GUID const & source)
 {
     memcpy (&target, &source, sizeof (GncGUID));

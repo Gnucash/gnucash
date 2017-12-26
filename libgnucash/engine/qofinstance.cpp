@@ -1247,7 +1247,7 @@ qof_instance_kvp_merge_guids (const QofInstance *target,
     g_return_if_fail (target != NULL);
     g_return_if_fail (donor != NULL);
 
-    if (! qof_instance_has_slot (donor, {path})) return;
+    if (! qof_instance_has_slot (donor, path)) return;
     auto v = donor->kvp_data->get_slot({path});
     if (v == NULL) return;
 

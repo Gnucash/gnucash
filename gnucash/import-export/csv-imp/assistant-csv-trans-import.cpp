@@ -355,12 +355,12 @@ static void csv_tximp_preview_currency_fmt_sel_cb (GtkComboBox* format_selector,
     info->preview_update_currency_format();
 }
 
-void csv_tximp_preview_col_type_changed_cb (GtkComboBox* cbox, CsvImpTransAssist* info)
+static void csv_tximp_preview_col_type_changed_cb (GtkComboBox* cbox, CsvImpTransAssist* info)
 {
     info->preview_update_col_type (cbox);
 }
 
-gboolean
+static bool
 csv_tximp_preview_treeview_clicked_cb (GtkTreeView* treeview, GdkEventButton* event,
                                         CsvImpTransAssist* info)
 {
@@ -1054,7 +1054,7 @@ CsvImpTransAssist::preview_update_currency_format ()
     preview_refresh_table ();
 }
 
-gboolean
+static gboolean
 csv_imp_preview_queue_rebuild_table (CsvImpTransAssist *assist)
 {
     assist->preview_refresh_table ();
@@ -1417,7 +1417,7 @@ CsvImpTransAssist::preview_style_column (uint32_t col_num, GtkTreeModel* model)
 
 /* Helper to create a shared store for the header comboboxes in the preview treeview.
  * It holds the possible column types */
-GtkTreeModel*
+static GtkTreeModel*
 make_column_header_model (bool multi_split)
 {
     auto combostore = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_INT);

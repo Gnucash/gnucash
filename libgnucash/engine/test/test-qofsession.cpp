@@ -51,7 +51,8 @@ public:
     void export_coa(QofBook*);
 };
 
-void example_hook (QofSession & session)
+static void
+example_hook (QofSession & session)
 {
     hook_called = true;
 }
@@ -77,7 +78,8 @@ void QofSessionMockBackend::export_coa(QofBook * book)
     exported_book = book;
 }
 
-QofBackend * test_backend_factory ()
+static QofBackend*
+test_backend_factory ()
 {
     return new QofSessionMockBackend;
 }
@@ -90,7 +92,8 @@ struct MockProvider : public QofBackendProvider
     bool type_check (char const * type) {return true;}
 };
 
-QofBackendProvider_ptr get_provider ()
+static QofBackendProvider_ptr
+get_provider ()
 {
     return QofBackendProvider_ptr {new MockProvider {"Mock Backend", "file"}};
 }
