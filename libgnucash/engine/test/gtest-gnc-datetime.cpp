@@ -328,8 +328,11 @@ TEST(gnc_datetime_constructors, test_gncdate_neutral_constructor)
      */
     constexpr time64 max_western_offset = -10 * 3600;
     constexpr time64 max_eastern_offset = 13 * 3600;
-    if (gncdt.offset() >= max_western_offset && gncdt.offset() <= max_eastern_offset)
+    if (gncdt.offset() >= max_western_offset &&
+        gncdt.offset() <= max_eastern_offset)
+    {
         EXPECT_EQ(atime.format("%d-%m-%Y %H:%M:%S %z"), "20-04-2017 10:59:00 UTC");
+    }
 }
 
 TEST(gnc_datetime_functions, test_format)
