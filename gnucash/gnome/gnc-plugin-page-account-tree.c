@@ -587,6 +587,19 @@ gnc_plugin_page_account_tree_get_current_account (GncPluginPageAccountTree *page
     return account;
 }
 
+gboolean
+gnc_plugin_page_account_tree_focus (GncPluginPageAccountTree *page)
+{
+    if (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page))
+    {
+        GncPluginPageAccountTreePrivate *priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
+        GtkTreeView *view = GTK_TREE_VIEW(priv->tree_view);
+
+        if (!gtk_widget_is_focus (GTK_WIDGET(view)))
+            gtk_widget_grab_focus (GTK_WIDGET(view));
+    }
+    return FALSE;
+}
 
 /* Virtual Functions */
 
