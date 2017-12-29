@@ -566,7 +566,7 @@ void gnc_entry_ledger_set_default_invoice (GncEntryLedger *ledger,
      * to understand why.
      */
     if (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_VENDOR)
-        ledger->last_date_entered = timespec_to_gdate(gncInvoiceGetDateOpened (invoice));
+        ledger->last_date_entered = time64_to_gdate(gncInvoiceGetDateOpened (invoice));
 
     if (!ledger->query && invoice)
         create_invoice_query (ledger);
