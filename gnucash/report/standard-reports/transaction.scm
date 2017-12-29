@@ -92,10 +92,10 @@
 
 ;;Filtering
 (define pagename-filter (N_ "Filter"))
-(define optname-account-matcher (N_ "Account Matcher"))
-(define optname-account-matcher-regex (N_ "Account Matcher uses regular expressions for extended matching"))
-(define optname-transaction-matcher (N_ "Transaction Matcher"))
-(define optname-transaction-matcher-regex (N_ "Transaction Matcher uses regular expressions for extended matching"))
+(define optname-account-matcher (N_ "Account Name Filter"))
+(define optname-account-matcher-regex (N_ "Use regular expressions for account name filter"))
+(define optname-transaction-matcher (N_ "Transaction Filter"))
+(define optname-transaction-matcher-regex (N_ "Use regular expressions for transaction filter"))
 (define optname-reconcile-status (N_ "Reconcile Status"))
 (define optname-void-transactions (N_ "Void Transactions"))
 
@@ -474,16 +474,16 @@ Credit Card, and Income accounts."))
   (gnc:register-trep-option
    (gnc:make-string-option
     pagename-filter optname-account-matcher
-    "a5" (_ "Match only accounts whose fullname is matched e.g. ':Travel' will match \
+    "a5" (_ "Show only accounts whose full name matches this filter e.g. ':Travel' will match \
 Expenses:Travel:Holiday and Expenses:Business:Travel. It can be left blank, which will \
-disable the matcher.")
+disable the filter.")
     ""))
 
   (gnc:register-trep-option
    (gnc:make-simple-boolean-option
     pagename-filter optname-account-matcher-regex
     "a6"
-    (_ "By default the account matcher will search substring only. Set this to true to \
+    (_ "By default the account filter will search substring only. Set this to true to \
 enable full POSIX regular expressions capabilities. 'Car|Flights' will match both \
 Expenses:Car and Expenses:Flights. Use a period (.) to match a single character e.g. \
 '20../.' will match 'Travel 2017/1 London'. ")
@@ -492,16 +492,16 @@ Expenses:Car and Expenses:Flights. Use a period (.) to match a single character 
   (gnc:register-trep-option
    (gnc:make-string-option
     pagename-filter optname-transaction-matcher
-    "i1" (_ "Match only transactions whose substring is matched e.g. '#gift' \
-will find all transactions with #gift in description, notes or memo. It can be left \
-blank, which will disable the matcher.")
+    "i1" (_ "Show only transactions where description, notes, or memo matches this filter.
+e.g. '#gift' will find all transactions with #gift in description, notes or memo. It can be left \
+blank, which will disable the filter.")
     ""))
 
   (gnc:register-trep-option
    (gnc:make-simple-boolean-option
     pagename-filter optname-transaction-matcher-regex
     "i2"
-    (_ "By default the transaction matcher will search substring only. Set this to true to \
+    (_ "By default the transaction filter will search substring only. Set this to true to \
 enable full POSIX regular expressions capabilities. '#work|#family' will match both \
 tags within description, notes or memo. ")
     #f))
