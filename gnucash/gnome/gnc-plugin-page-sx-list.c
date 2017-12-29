@@ -200,10 +200,10 @@ gnc_plugin_page_sx_list_new (void)
     GncPluginPageSxList *plugin_page;
     const GList *object = gnc_gobject_tracking_get_list (GNC_PLUGIN_PAGE_SX_LIST_NAME);
     if (object && GNC_IS_PLUGIN_PAGE_SX_LIST (object->data))
-	plugin_page = GNC_PLUGIN_PAGE_SX_LIST (object->data);
+        plugin_page = GNC_PLUGIN_PAGE_SX_LIST (object->data);
     else
     {
-	plugin_page = g_object_new (GNC_TYPE_PLUGIN_PAGE_SX_LIST, NULL);
+        plugin_page = g_object_new (GNC_TYPE_PLUGIN_PAGE_SX_LIST, NULL);
     }
     return GNC_PLUGIN_PAGE(plugin_page);
 }

@@ -181,13 +181,13 @@ gnc_split_reg_get_type( void )
         GTypeInfo type_info =
         {
             sizeof(GNCSplitRegClass),      /* class_size */
-            NULL,   			/* base_init */
-            NULL,				/* base_finalize */
+            NULL,               /* base_init */
+            NULL,               /* base_finalize */
             (GClassInitFunc)gnc_split_reg_class_init,
-            NULL,				/* class_finalize */
-            NULL,				/* class_data */
-            sizeof(GNCSplitReg),		/* */
-            0,				/* n_preallocs */
+            NULL,               /* class_finalize */
+            NULL,               /* class_data */
+            sizeof(GNCSplitReg),        /* */
+            0,                  /* n_preallocs */
             (GInstanceInitFunc)gnc_split_reg_init,
         };
 
@@ -928,7 +928,7 @@ gsr_default_associate_handler_file (GNCSplitReg *gsr, Transaction *trans, gboole
 
         const gchar *uri = xaccTransGetAssociation (trans);
 
-        if (valid_path_head && g_str_has_prefix (uri,"file:/") && !g_str_has_prefix (uri,"file://")) 
+        if (valid_path_head && g_str_has_prefix (uri,"file:/") && !g_str_has_prefix (uri,"file://"))
         {
             const gchar *part = uri + strlen ("file:");
             new_uri = g_strconcat (path_head, part, NULL);
@@ -952,7 +952,7 @@ gsr_default_associate_handler_file (GNCSplitReg *gsr, Transaction *trans, gboole
 
     if (response == GTK_RESPONSE_ACCEPT)
     {
-	gchar *dialog_uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
+        gchar *dialog_uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
 
         PINFO("Dialog File URI: %s\n", dialog_uri);
 
@@ -1337,37 +1337,35 @@ gnc_split_reg_duplicate_trans_cb(GtkWidget *w, gpointer data)
 void
 gsr_default_schedule_handler( GNCSplitReg *gsr, gpointer data )
 {
+    GncGUID *fromSXId = NULL;
+    SchedXaction *theSX = NULL;
+    GList *sxElts;
     SplitRegister *reg = gnc_ledger_display_get_split_register( gsr->ledger );
     Transaction *pending_trans = gnc_split_register_get_current_trans (reg);
 
     /* If the transaction has a sched-xact KVP frame, then go to the editor
      * for the existing SX; otherwise, do the sx-from-trans dialog. */
+
+    qof_instance_get (QOF_INSTANCE (pending_trans),
+              "from-sched-xaction", &fromSXId,
+              NULL);
+
+    /* Get the correct SX */
+    for ( sxElts = gnc_book_get_schedxactions (gnc_get_current_book())->sx_list;
+          (!theSX) && sxElts;
+          sxElts = sxElts->next )
     {
-	GncGUID *fromSXId = NULL;
-	SchedXaction *theSX = NULL;
-	GList *sxElts;
-	qof_instance_get (QOF_INSTANCE (pending_trans),
-			  "from-sched-xaction", &fromSXId,
-			  NULL);
-
-	/* Get the correct SX */
-	for ( sxElts = gnc_book_get_schedxactions (gnc_get_current_book())->sx_list;
-	      (!theSX) && sxElts;
-	      sxElts = sxElts->next )
-	{
-	    SchedXaction *sx = (SchedXaction*)sxElts->data;
-	    theSX =
-		((guid_equal (xaccSchedXactionGetGUID (sx), fromSXId))
-		 ? sx : NULL);
-	}
-
-	if ( theSX )
-	{
-	    gnc_ui_scheduled_xaction_editor_dialog_create(theSX, FALSE);
-	    return;
-	}
+        SchedXaction *sx = (SchedXaction*)sxElts->data;
+        theSX =
+        ((guid_equal (xaccSchedXactionGetGUID (sx), fromSXId))
+         ? sx : NULL);
     }
 
+    if ( theSX )
+    {
+        gnc_ui_scheduled_xaction_editor_dialog_create(theSX, FALSE);
+        return;
+    }
     gnc_sx_create_from_trans(pending_trans);
 }
 

@@ -354,13 +354,13 @@ gnc_plugin_business_get_type (void)
         static const GTypeInfo our_info =
         {
             sizeof (GncPluginBusinessClass),
-            NULL,		/* base_init */
-            NULL,		/* base_finalize */
+            NULL,       /* base_init */
+            NULL,       /* base_finalize */
             (GClassInitFunc) gnc_plugin_business_class_init,
-            NULL,		/* class_finalize */
-            NULL,		/* class_data */
+            NULL,       /* class_finalize */
+            NULL,       /* class_data */
             sizeof (GncPluginBusiness),
-            0,		/* n_preallocs */
+            0,          /* n_preallocs */
             (GInstanceInitFunc) gnc_plugin_business_init
         };
 
@@ -953,17 +953,17 @@ static void
 gnc_plugin_business_cmd_test_init_data (GtkAction *action,
                                         GncMainWindowActionData *data)
 {
-    QofBook *book		= gnc_get_current_book();
-    GncCustomer *customer	= gncCustomerCreate(book);
-    GncAddress *address	= gncCustomerGetAddr(customer);
-    GncInvoice *invoice	= gncInvoiceCreate(book);
-    GncOwner *owner		= gncOwnerNew();
-    GncJob *job		= gncJobCreate(book);
-    Account *root		= gnc_book_get_root_account(book);
-    Account *inc_acct	= xaccMallocAccount(book);
-    Account *bank_acct	= xaccMallocAccount(book);
-    Account *tax_acct	= xaccMallocAccount(book);
-    Account *ar_acct	= xaccMallocAccount(book);
+    QofBook *book       = gnc_get_current_book();
+    GncCustomer *customer   = gncCustomerCreate(book);
+    GncAddress *address = gncCustomerGetAddr(customer);
+    GncInvoice *invoice = gncInvoiceCreate(book);
+    GncOwner *owner     = gncOwnerNew();
+    GncJob *job         = gncJobCreate(book);
+    Account *root       = gnc_book_get_root_account(book);
+    Account *inc_acct   = xaccMallocAccount(book);
+    Account *bank_acct  = xaccMallocAccount(book);
+    Account *tax_acct   = xaccMallocAccount(book);
+    Account *ar_acct    = xaccMallocAccount(book);
     Timespec now;
 
     // Create Customer

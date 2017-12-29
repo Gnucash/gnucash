@@ -393,8 +393,8 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
     },
     {
         "ScrubAllAction", NULL,
-		/* Translators: The following 2 are Scrub actions in register view */
-		N_("_All transactions"), NULL, NULL,
+        /* Translators: The following 2 are Scrub actions in register view */
+        N_("_All transactions"), NULL, NULL,
         G_CALLBACK (gnc_plugin_page_register_cmd_scrub_all)
     },
     {
@@ -488,11 +488,11 @@ static const gchar *view_style_actions[] =
 /** Short labels for use on the toolbar buttons. */
 static action_toolbar_labels toolbar_labels[] =
 {
-    { "ActionsTransferAction", 	            N_("Transfer") },
-    { "RecordTransactionAction", 	        N_("Enter") },
-    { "CancelTransactionAction", 	        N_("Cancel") },
-    { "DeleteTransactionAction", 	        N_("Delete") },
-	{ "DuplicateTransactionAction",         N_("Duplicate") },
+    { "ActionsTransferAction",              N_("Transfer") },
+    { "RecordTransactionAction",            N_("Enter") },
+    { "CancelTransactionAction",            N_("Cancel") },
+    { "DeleteTransactionAction",            N_("Delete") },
+    { "DuplicateTransactionAction",         N_("Duplicate") },
     { "SplitTransactionAction",             N_("Split") },
     { "ScheduleTransactionAction",          N_("Schedule") },
     { "BlankTransactionAction",             N_("Blank") },
@@ -1323,10 +1323,10 @@ static const gchar *style_names[] =
 #define KEY_REGISTER_STYLE      "RegisterStyle"
 #define KEY_DOUBLE_LINE         "DoubleLineMode"
 
-#define LABEL_ACCOUNT		"Account"
-#define LABEL_SUBACCOUNT	"SubAccount"
-#define LABEL_GL		"GL"
-#define LABEL_SEARCH		"Search"
+#define LABEL_ACCOUNT       "Account"
+#define LABEL_SUBACCOUNT    "SubAccount"
+#define LABEL_GL            "GL"
+#define LABEL_SEARCH        "Search"
 
 
 /** Save enough information about this register page that it can be
@@ -2219,10 +2219,10 @@ gnc_plugin_page_register_filter_dmy2time (char *date_string)
     struct tm when;
 
     PINFO("Date string is %s", date_string);
-    memset (&when, 0, sizeof (when));
+        memset (&when, 0, sizeof (when));
 
     sscanf (date_string, "%d-%d-%d", &when.tm_mday,
-	    &when.tm_mon, &when.tm_year);
+        &when.tm_mon, &when.tm_year);
 
     when.tm_mon -= 1;
     when.tm_year -= 1900;
@@ -4162,7 +4162,7 @@ gnc_plugin_page_register_event_handler (QofInstance *entity,
     GtkWidget *window;
     gchar *label, *color;
 
-    g_return_if_fail(page);	/* Required */
+    g_return_if_fail(page); /* Required */
     if (!GNC_IS_TRANS(entity) && !GNC_IS_ACCOUNT(entity))
         return;
 
