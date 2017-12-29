@@ -31,10 +31,9 @@ extern "C"
 
 typedef struct
 {
-    Timespec ts;
+    time64 time;
     guint s_block_count;
-    guint ns_block_count;
-} TimespecParseInfo;
+} Time64ParseInfo;
 
 #define TIMESPEC_TIME_FORMAT  "%Y-%m-%d %H:%M:%S"
 #define TIMESPEC_PARSE_TIME_FORMAT  "%Y-%m-%d %H:%M:%S"
@@ -94,7 +93,7 @@ gboolean generic_timespec_start_handler (GSList* sibling_data,
                                          gpointer* result,
                                          const gchar* tag, gchar** attrs);
 
-gboolean timespec_parse_ok (TimespecParseInfo* info);
+gboolean timespec_parse_ok (Time64ParseInfo* info);
 
 gboolean generic_timespec_secs_end_handler (
     gpointer data_for_children,

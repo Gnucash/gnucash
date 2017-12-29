@@ -90,11 +90,11 @@ order_dom_tree_create (GncOrder* order)
                                              gncOrderGetOwner (order)));
 
     ts = gncOrderGetDateOpened (order);
-    xmlAddChild (ret, timespec_to_dom_tree (order_opened_string, &ts));
+    xmlAddChild (ret, time64_to_dom_tree (order_opened_string, ts.tv_sec));
 
     ts = gncOrderGetDateClosed (order);
-    if (ts.tv_sec || ts.tv_nsec)
-        xmlAddChild (ret, timespec_to_dom_tree (order_closed_string, &ts));
+    if (ts.tv_sec)
+        xmlAddChild (ret, time64_to_dom_tree (order_closed_string, ts.tv_sec));
 
     maybe_add_string (ret, order_notes_string, gncOrderGetNotes (order));
     maybe_add_string (ret, order_reference_string, gncOrderGetReference (order));

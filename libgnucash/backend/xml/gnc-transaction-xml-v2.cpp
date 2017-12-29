@@ -59,9 +59,9 @@ add_gnc_num (xmlNodePtr node, const gchar* tag, gnc_numeric num)
 static void
 add_timespec (xmlNodePtr node, const gchar* tag, Timespec tms, gboolean always)
 {
-    if (always || ! ((tms.tv_sec == 0) && (tms.tv_nsec == 0)))
+    if (always || tms.tv_sec)
     {
-        xmlAddChild (node, timespec_to_dom_tree (tag, &tms));
+        xmlAddChild (node, time64_to_dom_tree (tag, tms.tv_sec));
     }
 }
 

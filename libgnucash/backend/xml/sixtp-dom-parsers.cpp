@@ -871,15 +871,3 @@ dom_tree_valid_time64 (time64 val, const xmlChar * name)
             "with a date of 1969-12-31 or 1970-01-01.", name);
     return FALSE;
 }
-
-gboolean
-dom_tree_valid_timespec (Timespec* ts, const xmlChar* name)
-{
-
-    if (ts->tv_sec || ts->tv_nsec)
-        return TRUE;
-
-    g_warning ("Invalid timestamp in data file.  Look for a '%s' entry "
-               "with a date of 1969-12-31 or 1970-01-01.", name);
-    return FALSE;
-}

@@ -83,8 +83,8 @@ maybe_add_string (xmlNodePtr ptr, const char* tag, const char* str)
 static void
 maybe_add_timespec (xmlNodePtr ptr, const char* tag, Timespec ts)
 {
-    if (ts.tv_sec || ts.tv_nsec)
-        xmlAddChild (ptr, timespec_to_dom_tree (tag, &ts));
+    if (ts.tv_sec)
+        xmlAddChild (ptr, time64_to_dom_tree (tag, ts.tv_sec));
 }
 
 static xmlNodePtr
@@ -112,7 +112,7 @@ invoice_dom_tree_create (GncInvoice* invoice)
                                              gncInvoiceGetOwner (invoice)));
 
     ts = gncInvoiceGetDateOpened (invoice);
-    xmlAddChild (ret, timespec_to_dom_tree (invoice_opened_string, &ts));
+    xmlAddChild (ret, time64_to_dom_tree (invoice_opened_string, ts.tv_sec));
 
     maybe_add_timespec (ret, invoice_posted_string,
                         gncInvoiceGetDatePosted (invoice));
