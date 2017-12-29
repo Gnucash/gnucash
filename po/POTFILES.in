@@ -294,8 +294,10 @@ gnucash/import-export/csv-imp/assistant-csv-trans-import.glade
 gnucash/import-export/csv-imp/csv-account-import.c
 gnucash/import-export/csv-imp/gnc-csv-account-map.c
 gnucash/import-export/csv-imp/gnc-csv-gnumeric-popup.c
-gnucash/import-export/csv-imp/gnc-csv-tokenizer.cpp
 gnucash/import-export/csv-imp/gnc-csv-import-settings.cpp
+gnucash/import-export/csv-imp/gnc-csv-price-import-settings.cpp
+gnucash/import-export/csv-imp/gnc-csv-tokenizer.cpp
+gnucash/import-export/csv-imp/gnc-csv-trans-import-settings.cpp
 gnucash/import-export/csv-imp/gnc-dummy-tokenizer.cpp
 gnucash/import-export/csv-imp/gnc-fw-tokenizer.cpp
 gnucash/import-export/csv-imp/gncmod-csv-import.c
