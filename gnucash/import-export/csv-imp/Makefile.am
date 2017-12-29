@@ -5,6 +5,7 @@ pkglib_LTLIBRARIES=libgncmod-csv-import.la
 libgncmod_csv_import_la_SOURCES = \
   gncmod-csv-import.c \
   assistant-csv-account-import.c \
+  assistant-csv-price-import.cpp \
   assistant-csv-trans-import.cpp \
   gnc-plugin-csv-import.c \
   csv-account-import.c \
@@ -13,13 +14,18 @@ libgncmod_csv_import_la_SOURCES = \
   gnc-csv-gnumeric-popup.c \
   gnc-dummy-tokenizer.cpp \
   gnc-fw-tokenizer.cpp \
+  gnc-price-import.cpp \
+  gnc-price-props.cpp \
   gnc-tokenizer.cpp \
   gnc-tx-import.cpp \
   gnc-trans-props.cpp \
-  gnc-csv-trans-settings.cpp
+  gnc-csv-import-settings.cpp \
+  gnc-csv-price-import-settings.cpp \
+  gnc-csv-trans-import-settings.cpp
 
 noinst_HEADERS = \
   assistant-csv-account-import.h \
+  assistant-csv-price-import.h \
   assistant-csv-trans-import.h \
   gnc-plugin-csv-import.h \
   csv-account-import.h \
@@ -28,10 +34,14 @@ noinst_HEADERS = \
   gnc-csv-gnumeric-popup.h \
   gnc-dummy-tokenizer.hpp \
   gnc-fw-tokenizer.hpp \
+  gnc-price-import.hpp \
+  gnc-price-props.hpp \
   gnc-tokenizer.hpp \
   gnc-tx-import.hpp \
   gnc-trans-props.hpp \
-  gnc-csv-trans-settings.hpp
+  gnc-csv-import-settings.hpp \
+  gnc-csv-price-import-settings.hpp \
+  gnc-csv-trans-import-settings.hpp
 
 libgncmod_csv_import_la_LDFLAGS = -avoid-version
 
@@ -75,6 +85,7 @@ ui_DATA = \
 gtkbuilderdir = ${GNC_GTKBUILDER_DIR}
 gtkbuilder_DATA = \
 	assistant-csv-account-import.glade \
+	assistant-csv-price-import.glade \
 	assistant-csv-trans-import.glade
 
 EXTRA_DIST = $(ui_DATA) $(gtkbuilder_DATA) CMakeLists.txt

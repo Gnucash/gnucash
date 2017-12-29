@@ -43,7 +43,7 @@ extern "C" {
 
 #include "gnc-tokenizer.hpp"
 #include "gnc-trans-props.hpp"
-#include "gnc-csv-trans-settings.hpp"
+#include "gnc-csv-trans-import-settings.hpp"
 #include <boost/optional.hpp>
 
 
@@ -136,7 +136,7 @@ public:
     void separators (std::string separators);
     std::string separators ();
 
-    void settings (const CsvTransSettings& settings);
+    void settings (const CsvTransImpSettings& settings);
     bool save_settings ();
 
     void settings_name (std::string name);
@@ -189,8 +189,8 @@ private:
     void update_pre_trans_props (uint32_t row, uint32_t col, GncTransPropType prop_type);
     void update_pre_split_props (uint32_t row, uint32_t col, GncTransPropType prop_type);
 
-    struct CsvTranSettings;
-    CsvTransSettings m_settings;
+    struct CsvTranImpSettings; //FIXME do we need this line
+    CsvTransImpSettings m_settings;
     bool m_skip_errors;
     bool m_req_mapped_accts;
 

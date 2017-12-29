@@ -287,17 +287,21 @@ gnucash/import-export/csv-exp/gnc-plugin-csv-export.c
 [type: gettext/gsettings]gnucash/import-export/csv-exp/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in.in
 gnucash/import-export/csv-imp/assistant-csv-account-import.c
 gnucash/import-export/csv-imp/assistant-csv-account-import.glade
+gnucash/import-export/csv-imp/assistant-csv-price-import.cpp
+gnucash/import-export/csv-imp/assistant-csv-price-import.glade
 gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp
 gnucash/import-export/csv-imp/assistant-csv-trans-import.glade
 gnucash/import-export/csv-imp/csv-account-import.c
 gnucash/import-export/csv-imp/gnc-csv-account-map.c
 gnucash/import-export/csv-imp/gnc-csv-gnumeric-popup.c
 gnucash/import-export/csv-imp/gnc-csv-tokenizer.cpp
-gnucash/import-export/csv-imp/gnc-csv-trans-settings.cpp
+gnucash/import-export/csv-imp/gnc-csv-import-settings.cpp
 gnucash/import-export/csv-imp/gnc-dummy-tokenizer.cpp
 gnucash/import-export/csv-imp/gnc-fw-tokenizer.cpp
 gnucash/import-export/csv-imp/gncmod-csv-import.c
 gnucash/import-export/csv-imp/gnc-plugin-csv-import.c
+gnucash/import-export/csv-imp/gnc-price-import.cpp
+gnucash/import-export/csv-imp/gnc-price-props.cpp
 gnucash/import-export/csv-imp/gnc-tokenizer.cpp
 gnucash/import-export/csv-imp/gnc-trans-props.cpp
 gnucash/import-export/csv-imp/gnc-tx-import.cpp

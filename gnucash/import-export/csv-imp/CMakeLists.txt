@@ -10,15 +10,20 @@ SET(csv_import_remote_SOURCES
 SET(csv_import_SOURCES
   gncmod-csv-import.c
   assistant-csv-account-import.c
+  assistant-csv-price-import.cpp
   assistant-csv-trans-import.cpp
   gnc-plugin-csv-import.c
   csv-account-import.c
   gnc-csv-account-map.c
   gnc-csv-gnumeric-popup.c
   gnc-csv-tokenizer.cpp
-  gnc-csv-trans-settings.cpp
+  gnc-csv-import-settings.cpp
+  gnc-csv-price-import-settings.cpp
+  gnc-csv-trans-import-settings.cpp
   gnc-dummy-tokenizer.cpp
   gnc-fw-tokenizer.cpp
+  gnc-price-import.cpp
+  gnc-price-props.cpp
   gnc-tokenizer.cpp
   gnc-trans-props.cpp
   gnc-tx-import.cpp
@@ -35,15 +40,20 @@ SET(csv_import_remote_HEADERS
 
 SET(csv_import_noinst_HEADERS
   assistant-csv-account-import.h
+  assistant-csv-price-import.h
   assistant-csv-trans-import.h
   gnc-plugin-csv-import.h
   csv-account-import.h
   gnc-csv-account-map.h
   gnc-csv-gnumeric-popup.h
   gnc-csv-tokenizer.hpp
-  gnc-csv-trans-settings.hpp
+  gnc-csv-import-settings.hpp
+  gnc-csv-price-import-settings.hpp
+  gnc-csv-trans-import-settings.hpp
   gnc-dummy-tokenizer.hpp
   gnc-fw-tokenizer.hpp
+  gnc-price-import.hpp
+  gnc-price-props.hpp
   gnc-tokenizer.hpp
   gnc-trans-props.hpp
   gnc-tx-import.hpp
@@ -84,7 +94,7 @@ INSTALL(TARGETS gncmod-csv-import
 # No headers to install
 
 SET(csv_import_GLADE assistant-csv-account-import.glade
-      assistant-csv-trans-import.glade)
+      assistant-csv-price-import.glade assistant-csv-trans-import.glade)
 
 INSTALL(FILES ${csv_import_GLADE} DESTINATION ${CMAKE_INSTALL_DATADIR}/gnucash/gtkbuilder)
 
