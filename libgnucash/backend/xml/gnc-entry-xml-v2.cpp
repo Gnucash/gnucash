@@ -124,10 +124,10 @@ entry_dom_tree_create (GncEntry* entry)
                                         qof_instance_get_guid (QOF_INSTANCE (entry))));
 
     ts = gncEntryGetDate (entry);
-    xmlAddChild (ret, timespec_to_dom_tree (entry_date_string, &ts));
+    xmlAddChild (ret, time64_to_dom_tree (entry_date_string, ts.tv_sec));
 
     ts = gncEntryGetDateEntered (entry);
-    xmlAddChild (ret, timespec_to_dom_tree (entry_dateentered_string, &ts));
+    xmlAddChild (ret, time64_to_dom_tree (entry_dateentered_string, ts.tv_sec));
 
     maybe_add_string (ret, entry_description_string,
                       gncEntryGetDescription (entry));

@@ -439,7 +439,7 @@ gnc_price_to_dom_tree (const xmlChar* tag, GNCPrice* price)
     if (!add_child_or_kill_parent (price_xml, tmpnode)) return NULL;
 
     timesp = gnc_price_get_time (price);
-    tmpnode = timespec_to_dom_tree ("price:time", &timesp);
+    tmpnode = time64_to_dom_tree ("price:time", timesp.tv_sec);
     if (!add_child_or_kill_parent (price_xml, tmpnode)) return NULL;
 
     sourcestr = gnc_price_get_source_string (price);
