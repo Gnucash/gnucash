@@ -640,6 +640,7 @@ void          xaccTransSetDateEnteredTS (Transaction *trans,
 
 /** Dates and txn-type for A/R and A/P "invoice" postings */
 void	      xaccTransSetDateDueTS (Transaction *trans, const Timespec *ts);
+void          xaccTransSetDateDue (Transaction * trans, time64 time);
 
 /** Retrieve the posted date of the transaction. The posted date is
     the date when this transaction was posted at the bank. (Although

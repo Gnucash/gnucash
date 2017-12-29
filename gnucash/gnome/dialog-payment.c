@@ -485,7 +485,6 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
         const gchar *doc_deb_str  = NULL;
         const gchar *doc_cred_str = NULL;
         GtkTreeIter iter;
-        Timespec doc_date;
         GncInvoice *document;
         gnc_numeric value = gnc_numeric_zero();
         gnc_numeric debit = gnc_numeric_zero();
@@ -497,17 +496,16 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
 
         /* Find the document's date or pre-payment date */
         if (document)
-            doc_date = gncInvoiceGetDatePosted (document);
+            doc_date_time = gncInvoiceGetDatePosted (document);
         else
         {
             /* Calculate the payment date based on the lot splits */
             Transaction *trans = xaccSplitGetParent (gnc_lot_get_latest_split (lot));
             if (trans)
-                doc_date = xaccTransRetDatePostedTS (trans);
+                doc_date_time = xaccTransRetDatePosted (trans);
             else
                 continue; /* No valid split in this lot, skip it */
         }
-        doc_date_time = timespecToTime64 (doc_date);
 
         /* Find the document type. No type means pre-payment in this case */
         if (document)

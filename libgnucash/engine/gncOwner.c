@@ -704,7 +704,7 @@ gint
 gncOwnerLotsSortFunc (GNCLot *lotA, GNCLot *lotB)
 {
     GncInvoice *ia, *ib;
-    Timespec da, db;
+    time64 da, db;
 
     ia = gncInvoiceGetInvoiceFromLot (lotA);
     ib = gncInvoiceGetInvoiceFromLot (lotB);
@@ -712,14 +712,14 @@ gncOwnerLotsSortFunc (GNCLot *lotA, GNCLot *lotB)
     if (ia)
         da = gncInvoiceGetDateDue (ia);
     else
-        da = xaccTransRetDatePostedTS (xaccSplitGetParent (gnc_lot_get_earliest_split (lotA)));
+        da = xaccTransRetDatePostedTS (xaccSplitGetParent (gnc_lot_get_earliest_split (lotA))).tv_sec;
 
     if (ib)
         db = gncInvoiceGetDateDue (ib);
     else
-        db = xaccTransRetDatePostedTS (xaccSplitGetParent (gnc_lot_get_earliest_split (lotB)));
+        db = xaccTransRetDatePostedTS (xaccSplitGetParent (gnc_lot_get_earliest_split (lotB))).tv_sec;
 
-    return timespec_cmp (&da, &db);
+    return (da > db) - (da < db);
 }
 
 GNCLot *

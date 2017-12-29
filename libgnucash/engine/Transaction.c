@@ -2056,6 +2056,13 @@ xaccTransSetDate (Transaction *trans, int day, int mon, int year)
 }
 
 void
+xaccTransSetDateDue (Transaction * trans, time64 time)
+{
+    Timespec ts_send = {time, 0};
+    xaccTransSetDateDueTS (trans, &ts_send);
+}
+
+void
 xaccTransSetDateDueTS (Transaction *trans, const Timespec *ts)
 {
     GValue v = G_VALUE_INIT;
