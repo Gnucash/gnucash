@@ -659,7 +659,7 @@ gnc_tree_view_account_color_update (gpointer gsettings, gchar *key, gpointer use
         priv->show_account_color = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, key);
 }
 
-/** Add the account color background data function to the GncTreeViewAccount column to 
+/** Add the account color background data function to the GncTreeViewAccount column to
  *  show or not the column background in the account color.
  */
 void
@@ -1521,7 +1521,7 @@ gnc_tree_view_account_set_selected_accounts (GncTreeViewAccount *view,
              */
             continue;
         }
-        
+
         path = gnc_tree_model_account_get_path_from_account (GNC_TREE_MODEL_ACCOUNT(model), account);
         if (path == NULL)
         {
@@ -2670,4 +2670,16 @@ static gboolean gnc_tree_view_search_compare (GtkTreeModel *model, gint column, 
 
     // inverted return (FALSE means a match)
     return !match;
+}
+
+void gnc_tree_view_account_set_editing_started_cb(GncTreeViewAccount *view,
+    GFunc editing_started_cb, gpointer editing_cb_data)
+{
+    gnc_tree_view_set_editing_started_cb (GNC_TREE_VIEW(view), editing_started_cb, editing_cb_data);
+}
+
+void gnc_tree_view_account_set_editing_finished_cb(GncTreeViewAccount *view,
+    GFunc editing_finished_cb, gpointer editing_cb_data)
+{
+    gnc_tree_view_set_editing_finished_cb (GNC_TREE_VIEW(view), editing_finished_cb, editing_cb_data);
 }
