@@ -92,21 +92,21 @@ static char error_404_body[] = N_("The specified URL could not be loaded.");
 #define GNC_PREF_RPT_DFLT_ZOOM "default-zoom"
 
 static gboolean webkit_decide_policy_cb (WebKitWebView* web_view,
-					 WebKitPolicyDecision *decision,
-					 WebKitPolicyDecisionType decision_type,
-					 gpointer user_data);
+                     WebKitPolicyDecision *decision,
+                     WebKitPolicyDecisionType decision_type,
+                     gpointer user_data);
 static void webkit_mouse_target_cb (WebKitWebView* web_view,
-				    WebKitHitTestResult *hit,
-				    guint modifiers, gpointer data);
+                     WebKitHitTestResult *hit,
+                     guint modifiers, gpointer data);
 #if WEBKIT_MINOR_VERSION >= 8
 static gboolean webkit_notification_cb (WebKitWebView *web_view,
-					WebKitNotification *note,
-					gpointer user_data);
+                     WebKitNotification *note,
+                     gpointer user_data);
 #endif
 static gboolean webkit_load_failed_cb (WebKitWebView *web_view,
-				       WebKitLoadEvent event,
-				       gchar *uri, GError *error,
-				       gpointer user_data);
+                     WebKitLoadEvent event,
+                     gchar *uri, GError *error,
+                     gpointer user_data);
 static void webkit_resource_load_started_cb (WebKitWebView *web_view,
                                              WebKitWebResource *resource,
                                              WebKitURIRequest *request,
@@ -134,14 +134,14 @@ gnc_html_webkit_webview_new (void)
      GValue val = G_VALUE_INIT;
      GtkStateFlags state = gtk_style_context_get_state (style);
      gtk_style_context_get_property (style, GTK_STYLE_PROPERTY_FONT,
-				     state, &val);
+                     state, &val);
 
      if (G_VALUE_HOLDS_BOXED (&val))
      {
-	  const PangoFontDescription *font =
-	       (const PangoFontDescription*)g_value_get_boxed (&val);
-	  default_font_family = pango_font_description_get_family (font);
-	  g_value_unset (&val);
+      const PangoFontDescription *font =
+           (const PangoFontDescription*)g_value_get_boxed (&val);
+      default_font_family = pango_font_description_get_family (font);
+      g_value_unset (&val);
      }
 /* Set default webkit settings */
      webkit_settings = webkit_web_view_get_settings (WEBKIT_WEB_VIEW (view));
@@ -162,9 +162,8 @@ gnc_html_webkit_webview_new (void)
                    NULL);
      if (default_font_family != NULL)
      {
-	  g_object_set (G_OBJECT (webkit_settings),
-			"default-font-family", default_font_family,
-			NULL);
+          g_object_set (G_OBJECT (webkit_settings),
+              "default-font-family", default_font_family, NULL);
      }
      return view;
 }
@@ -186,7 +185,7 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
 
      /* Scale everything up */
      zoom = gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL_REPORT,
-				 GNC_PREF_RPT_DFLT_ZOOM);
+                 GNC_PREF_RPT_DFLT_ZOOM);
      webkit_web_view_set_zoom_level (priv->web_view, zoom);
 
 
@@ -297,8 +296,8 @@ extract_base_name(URLType type, const gchar* path)
 {
      gchar       machine_rexp[] = "^(//[^/]*)/*(/.*)?$";
      gchar       path_rexp[] = "^/*(.*)/+([^/]*)$";
-     regex_t    compiled_m, compiled_p;
-     regmatch_t match[4];
+     regex_t     compiled_m, compiled_p;
+     regmatch_t  match[4];
      gchar       * machine = NULL, * location = NULL, * base = NULL;
      gchar       * basename = NULL;
 
@@ -330,7 +329,6 @@ extract_base_name(URLType type, const gchar* path)
                                          match[2].rm_eo - match[2].rm_so);
                }
           }
-
      }
      else
      {
@@ -533,7 +531,7 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
                          g_strdup_printf( error_404_format,
                                           _(error_404_title), _(error_404_body) );
                     webkit_web_view_load_html (priv->web_view, fdata,
-					       BASE_URI_NAME);
+                           BASE_URI_NAME);
                }
 
                g_free( fdata );
@@ -546,7 +544,6 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
                     }
                     /* No action required: Webkit jumps to the anchor on its own. */
                }
-
                return;
           }
      }
@@ -580,7 +577,6 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
                {
                     gnc_build_url( type, location, label );
                }
-
           }
           else
           {
@@ -593,26 +589,25 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
                webkit_web_view_load_html (priv->web_view, fdata, BASE_URI_NAME);
                g_free( fdata );
           }
-
      }
      while ( FALSE );
 }
 #ifdef WEBKIT2_4
 static gboolean
 perform_navigation_policy (WebKitWebView *web_view,
-			   WebKitNavigationPolicyDecision *decision,
-			   GncHtml *self)
+               WebKitNavigationPolicyDecision *decision,
+               GncHtml *self)
 {
      WebKitURIRequest *req = NULL;
      const gchar* uri; // Can't init it here.
      gchar *scheme = NULL, *location = NULL, *label = NULL;
      WebKitNavigationAction *action =
-	  webkit_navigation_policy_decision_get_navigation_action (decision);
+      webkit_navigation_policy_decision_get_navigation_action (decision);
      if (webkit_navigation_action_get_navigation_type (action) !=
-	 WEBKIT_NAVIGATION_TYPE_LINK_CLICKED)
+         WEBKIT_NAVIGATION_TYPE_LINK_CLICKED)
      {
-	  webkit_policy_decision_use ((WebKitPolicyDecision*)decision);
-	  return TRUE;
+          webkit_policy_decision_use ((WebKitPolicyDecision*)decision);
+          return TRUE;
      }
      req = webkit_navigation_action_get_request (action);
      uri = webkit_uri_request_get_uri (req);
@@ -631,20 +626,20 @@ perform_navigation_policy (WebKitWebView *web_view,
 
 static gboolean
 webkit_decide_policy_cb (WebKitWebView *web_view,
-			 WebKitPolicyDecision *decision,
-			 WebKitPolicyDecisionType decision_type,
-			 gpointer user_data)
+             WebKitPolicyDecision *decision,
+             WebKitPolicyDecisionType decision_type,
+             gpointer user_data)
 {
 /* This turns out to be the signal to intercept for handling a link-click. */
 #ifdef WEBKIT2_4
      if (decision_type != WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION)
      {
-	  webkit_policy_decision_use (decision);
-	  return TRUE;
+          webkit_policy_decision_use (decision);
+          return TRUE;
      }
      return perform_navigation_policy (
-	  web_view, (WebKitNavigationPolicyDecision*) decision,
-	  GNC_HTML (user_data));
+      web_view, (WebKitNavigationPolicyDecision*) decision,
+      GNC_HTML (user_data));
 #else
      webkit_policy_decision_use (decision);
      return TRUE;
@@ -653,14 +648,14 @@ webkit_decide_policy_cb (WebKitWebView *web_view,
 
 static void
 webkit_mouse_target_cb (WebKitWebView *web_view, WebKitHitTestResult *hit,
-			guint modifiers, gpointer user_data)
+            guint modifiers, gpointer user_data)
 {
      GncHtmlWebkitPrivate* priv;
      GncHtmlWebkit *self = (GncHtmlWebkit*)user_data;
      gchar *uri;
 
      if (!webkit_hit_test_result_context_is_link (hit))
-	  return;
+         return;
 
      priv = GNC_HTML_WEBKIT_GET_PRIVATE (self);
      uri = g_strdup (webkit_hit_test_result_get_link_uri (hit));
@@ -669,13 +664,13 @@ webkit_mouse_target_cb (WebKitWebView *web_view, WebKitHitTestResult *hit,
      if (priv->base.flyover_cb)
      {
           (priv->base.flyover_cb) (GNC_HTML (self), uri,
-				   priv->base.flyover_cb_data);
+                   priv->base.flyover_cb_data);
      }
 }
 #if WEBKIT_MINOR_VERSION >= 8
 static gboolean
 webkit_notification_cb (WebKitWebView* web_view, WebKitNotification *note,
-			gpointer user_data)
+            gpointer user_data)
 {
      GtkWindow *top = NULL;
      GtkWidget *dialog = NULL;
@@ -963,7 +958,6 @@ impl_webkit_show_url( GncHtml* self, URLType type,
 
           }
           while ( FALSE );
-
      }
      else
      {
@@ -1056,7 +1050,7 @@ impl_webkit_copy_to_clipboard( GncHtml* self )
 
      priv = GNC_HTML_WEBKIT_GET_PRIVATE(self);
      webkit_web_view_execute_editing_command (priv->web_view,
-					      WEBKIT_EDITING_COMMAND_COPY);
+                          WEBKIT_EDITING_COMMAND_COPY);
 }
 
 /**************************************************************
