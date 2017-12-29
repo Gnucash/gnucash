@@ -626,6 +626,28 @@ gnc_plugin_page_account_tree_close_cb (gpointer user_data)
     gnc_main_window_close_page(plugin_page);
 }
 
+static void
+gnc_plugin_page_account_editing_started_cd (gpointer various, GncPluginPageRegister *page)
+{
+    GncPluginPage *plugin_page = GNC_PLUGIN_PAGE(page);
+    GtkAction *action = gnc_main_window_find_action (GNC_MAIN_WINDOW(plugin_page->window),
+                                                     "EditDeleteAccountAction");
+
+    if (action != NULL)
+        gtk_action_set_sensitive (action, FALSE);
+}
+
+static void
+gnc_plugin_page_account_editing_finished_cb (gpointer various, GncPluginPageRegister *page)
+{
+    GncPluginPage *plugin_page = GNC_PLUGIN_PAGE(page);
+    GtkAction *action = gnc_main_window_find_action (GNC_MAIN_WINDOW(plugin_page->window),
+                                                     "EditDeleteAccountAction");
+
+    if (action != NULL)
+        gtk_action_set_sensitive (action, TRUE);
+}
+
 static GtkWidget *
 gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 {
@@ -680,6 +702,12 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
             gnc_tree_view_account_description_edited_cb);
     gnc_tree_view_account_set_notes_edited(GNC_TREE_VIEW_ACCOUNT(tree_view),
                                            gnc_tree_view_account_notes_edited_cb);
+
+    // Setup some callbacks so menu actions can be disabled/enabled
+    gnc_tree_view_account_set_editing_started_cb(GNC_TREE_VIEW_ACCOUNT(tree_view),
+        (GFunc)gnc_plugin_page_account_editing_started_cd, page);
+    gnc_tree_view_account_set_editing_finished_cb(GNC_TREE_VIEW_ACCOUNT(tree_view),
+        (GFunc)gnc_plugin_page_account_editing_finished_cb, page);
 
     priv->tree_view = tree_view;
     selection = gtk_tree_view_get_selection(tree_view);

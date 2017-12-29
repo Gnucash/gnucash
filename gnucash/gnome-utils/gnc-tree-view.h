@@ -453,6 +453,20 @@ gnc_tree_view_keynav(GncTreeView *view, GtkTreeViewColumn **col,
 gboolean
 gnc_tree_view_path_is_valid(GncTreeView *view, GtkTreePath *path);
 
+/** Setup a callback for when the user starts editing so appropiate actions can be taken
+ *  like disable the actions delete menu option.
+ */
+void
+gnc_tree_view_set_editing_started_cb(GncTreeView *view,
+                    GFunc editing_started_cb, gpointer editing_cb_data);
+
+/** Setup a callback for when the user finishes editing so appropiate actions can be taken
+ *  like enable the actions delete menu option.
+ */
+void
+gnc_tree_view_set_editing_finished_cb(GncTreeView *view,
+                   GFunc editing_finished_cb, gpointer editing_cb_data);
+
 /** @} */
 
 /** @} */

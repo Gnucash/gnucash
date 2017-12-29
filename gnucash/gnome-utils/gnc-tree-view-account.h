@@ -471,10 +471,23 @@ void gnc_tree_view_account_select_subaccounts (GncTreeViewAccount *view,
  */
 void gnc_tree_view_account_expand_to_account (GncTreeViewAccount *view, Account *account);
 
-/** Add the account color background data function to the GncTreeViewAccount column to 
+/** Add the account color background data function to the GncTreeViewAccount column to
  *  show or not the column background in the account color.
  */
 void gnc_tree_view_account_column_add_color (GncTreeViewAccount *view, GtkTreeViewColumn *col);
+
+/** Setup the callback for when the user starts editing the account tree so actions can be disabled
+ *  like the delete menu option as required.
+ */
+void gnc_tree_view_account_set_editing_started_cb
+    (GncTreeViewAccount *view, GFunc editing_started_cb, gpointer editing_cb_data );
+
+/** Setup the callback for when the user finishes editing the account tree so actions can be enabled
+ *  like the delete menu option as required.
+ */
+void gnc_tree_view_account_set_editing_finished_cb
+    (GncTreeViewAccount *view, GFunc editing_finished_cb, gpointer editing_cb_data );
+
 
 /** @} */
 
