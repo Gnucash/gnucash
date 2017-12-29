@@ -1,4 +1,4 @@
-#!@-PERL-@ -w
+#!@PERL@ -w
 ######################################################################
 ### gnc-fq-check - check for the presence of  Finance::Quote
 ### From gnc-fq-helper.

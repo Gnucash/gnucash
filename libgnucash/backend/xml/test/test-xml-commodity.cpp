@@ -28,7 +28,6 @@ extern "C"
 
 #include "gnc-module.h"
 #include "qof.h"
-#include "test-stuff.h"
 #include "test-engine-stuff.h"
 
 #include "Account.h"
@@ -41,6 +40,7 @@ extern "C"
 #include "sixtp-dom-parsers.h"
 #include "io-gncxml-gen.h"
 #include "test-file-stuff.h"
+#include "test-stuff.h"
 
 static QofBook* book;
 

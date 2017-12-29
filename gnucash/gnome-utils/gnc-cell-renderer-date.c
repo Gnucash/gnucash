@@ -437,7 +437,8 @@ gcrd_time2dmy (time64 raw_time, gint *day, gint *month, gint *year)
     struct tm * timeinfo;
   
     timeinfo = gnc_localtime (&raw_time);
- 
+    if (timeinfo == NULL)
+        return FALSE;
     *day = timeinfo->tm_mday;
     *month = timeinfo->tm_mon + 1;
     *year = timeinfo->tm_year + 1900;

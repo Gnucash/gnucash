@@ -321,7 +321,7 @@
                ;; If the units ratio is zero the stock is worthless and the value should be zero too
 	       (value-ratio (if (gnc-numeric-zero-p units-ratio)
 	                        (gnc-numeric-zero)
-                                (gnc-numeric-div (gnc:make-gnc-numeric 1 1) units-ratio GNC-DENOM-AUTO GNC-DENOM-REDUCE))))
+                                (gnc-numeric-div 1/1 units-ratio GNC-DENOM-AUTO GNC-DENOM-REDUCE))))
 
 	  (gnc:debug "blist is " b-list " current units is "
 	             (gnc-numeric-to-string current-units)
@@ -341,7 +341,7 @@
 
 	(gnc:debug "this is a spinoff")
 	(gnc:debug "blist is " b-list " value ratio is " (gnc-numeric-to-string value-ratio))
-	(apply-basis-ratio b-list (gnc:make-gnc-numeric 1 1) value-ratio))
+	(apply-basis-ratio b-list 1/1 value-ratio))
       )
 
      ;; when all else fails, just send the b-list back
@@ -473,7 +473,7 @@
                                        (exchange-fn
                                           (gnc:make-gnc-monetary
                                             (gnc-price-get-currency price)
-                                            (gnc:make-gnc-numeric 100 1))
+                                            100/1)
                                           currency))))
                 (set! price #f))
 
@@ -514,7 +514,7 @@
             ;; If we still don't have a price, use a price of 1 and complain later
             (if (not price)
               (begin
-                (set! price (gnc:make-gnc-monetary currency (gnc:make-gnc-numeric 1 1)))
+                (set! price (gnc:make-gnc-monetary currency 1/1))
                 ;; If use-txn is set, but pricing-txn isn't set, it's a bogus price
                 (set! use-txn #t)
                 (set! pricing-txn #f)

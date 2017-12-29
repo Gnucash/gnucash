@@ -19,12 +19,9 @@
 
 (define-module (gnucash engine))
 
-(cond-expand
-  (guile-2
-    (eval-when
+(eval-when
       (compile load eval expand)
-      (load-extension "libgncmod-engine" "scm_init_sw_engine_module")))
-  (else ))
+      (load-extension "libgncmod-engine" "scm_init_sw_engine_module"))
 (use-modules (sw_engine))
 
 (export GNC-RND-FLOOR)
@@ -46,12 +43,6 @@
 (export GNC-ERROR-OVERFLOW)
 (export GNC-ERROR-DENOM-DIFF)
 (export GNC-ERROR-REMAINDER)
-(export <gnc-numeric>)
-(export gnc:gnc-numeric?)
-(export gnc:make-gnc-numeric)
-(export gnc:gnc-numeric-denom)
-(export gnc:gnc-numeric-num)
-(export gnc:gnc-numeric-denom-reciprocal)
 (export <gnc-monetary>)
 (export gnc:gnc-monetary?)
 (export gnc:make-gnc-monetary)

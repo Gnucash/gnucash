@@ -56,7 +56,7 @@ else()
   SET(sysconfdir ${CMAKE_INSTALL_FULL_SYSCONFDIR})
   SET(localedir "${CMAKE_INSTALL_FULL_DATAROOTDIR}/locale")
 endif()
-GNC_CONFIGURE(gncla-dir.h.in gncla-dir.h)
+configure_file(gncla-dir.h.in gncla-dir.h)
 
 ### Create gnc-version.h ###
 

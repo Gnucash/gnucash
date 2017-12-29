@@ -115,7 +115,7 @@
 	(cons 'sink (make-test-sink))))
 
 (define (env-random-amount env n)
-  (gnc:make-gnc-numeric (env-random env n) 1))
+  (/ (env-random env n) 1))
 
 (define (env-random env n)
   (random n (assoc-ref env 'random)))
@@ -183,9 +183,9 @@
       (for-each (lambda (date)
 		  (env-create-transaction env date to-account
 					  from-account
-					  (gnc:make-gnc-numeric
-					   (gnc:date-get-month-day (gnc:timepair->date date))
-					   1)))
+					  (/
+                                           (gnc:date-get-month-day (gnc:timepair->date date))
+                                           1)))
 		(cdr (reverse dates-this-month)))))
 
 (define (env-create-account-structure env account-structure)

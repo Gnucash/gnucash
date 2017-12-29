@@ -306,20 +306,20 @@ developing over time"))
                      (let* ((start-frac-avg (averaging-fraction-func (gnc:timepair->secs from-date-tp)))
                              (end-frac-avg (averaging-fraction-func (+ 1 (gnc:timepair->secs to-date-tp))))
                              (diff-avg (- end-frac-avg start-frac-avg))
-                             (diff-avg-numeric (gnc:make-gnc-numeric
+                             (diff-avg-numeric (/
                                                 (inexact->exact (round (* diff-avg 1000000))) ; 6 decimals precision
                                                 1000000))
                              (start-frac-int (interval-fraction-func (gnc:timepair->secs from-date-tp)))
                              (end-frac-int (interval-fraction-func (+ 1 (gnc:timepair->secs to-date-tp))))
                              (diff-int (- end-frac-int start-frac-int))
-                             (diff-int-numeric (gnc:make-gnc-numeric
+                             (diff-int-numeric (/
                                                 (inexact->exact diff-int) 1))
                             )
                      ;; Extra sanity check to ensure a number smaller than 1
                      (if (> diff-avg diff-int)
                          (gnc-numeric-div diff-int-numeric diff-avg-numeric GNC-DENOM-AUTO GNC-RND-ROUND)
-                         (gnc:make-gnc-numeric 1 1)))
-                     (gnc:make-gnc-numeric 1 1)))
+                         1/1))
+                     1/1))
                ;; If there is averaging, the report-title is extended
                ;; accordingly.
                (report-title

@@ -79,12 +79,12 @@
                               date-1
                               bank-account
                               income-account
-                              (gnc:make-gnc-numeric 1 1))
+                              1/1)
       (env-create-transaction env
                               date-2
                               wallet-account
                               income-account
-                              (gnc:make-gnc-numeric 5 1))
+                              5/1)
       (begin
         (set-option report gnc:pagename-display "Show Table" #t)
         (set-option report gnc:pagename-general "Start Date" (cons 'absolute date-0))
@@ -111,25 +111,27 @@
                                            (list (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
                                                  (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
                                                  (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1))
-					 result))))
+                                           result))))
+            (format #t "Report Result ~a~%" result)
             (and (every (lambda (row)                 ; test in=net & out=0 in all rows (all days)
                           (and (or (equal? (second row) (fourth row))
                                    (begin (format #t "Failed, ~a and ~a differ~%" (second row) (fourth row)) #f))
                                (or (= 0 (string->number (car (third row))))
                                    (begin (format #t "Failed ~d isn't 0~%" (car (third row))) #f))))
                         tbl)
-                 (or (= 0 (tbl-ref->number tbl 0 1)) (begin (format #t "Failed refnum ~d isn't 0~%" (tbl-ref->number tbl 0 1) )) #f))      ; 1st day in =0
-                 (or (= 1 (tbl-ref->number tbl 1 1)) (begin (format #t "Failed refnum ~d isn't 1~%" (tbl-ref->number tbl 1 1)) #f))      ; 2nd day in =1
-                 (or (= 5 (tbl-ref->number tbl 2 1)) (begin (format #t "Failed refnum ~d isn't 5~%" (tbl-ref->number tbl 2 1)) #f))     ; 3rd day in =5
-                 (or (= (tbl-ref->number total 0 0) (tbl-ref->number total 0 2)) (begin (format #t "Failed refnums ~d and ~d differ ~%" (tbl-ref->number total 0 0) (tbl-ref->number total 0 2)) #f)); total in=total net
-                 (or (= 0 (tbl-ref->number total 0 1)) (begin (format #t "Failed refnum ~d isn't 0~%" (tbl-ref->number total 0 1)) #f))   ; total out=0
-                 (or (= 3 (tbl-row-count tbl)) (begin (format #t "Failed row count ~d isn't 3~%" (tbl-row-count tbl)) #f))
-                 (or (= 4 (tbl-column-count tbl)) (begin (format #t "Failed column count ~d isn't 4~%" (tbl-column-count tbl)) #f))))
+                 (or (= 0 (tbl-ref->number tbl 0 1))
+                     (begin (format #t "Failed refnum ~g isn't 0~%" (tbl-ref->number tbl 0 1)) #f))      ; 1st day in =0
+                 (or (= 1 (tbl-ref->number tbl 1 1)) (begin (format #t "Failed refnum ~g isn't 1~%" (tbl-ref->number tbl 1 1)) #f))      ; 2nd day in =1
+                 (or (= 5 (tbl-ref->number tbl 2 1)) (begin (format #t "Failed refnum ~g isn't 5~%" (tbl-ref->number tbl 2 1)) #f))     ; 3rd day in =5
+                 (or (= (tbl-ref->number total 0 0) (tbl-ref->number total 0 2)) (begin (format #t "Failed refnums ~g and ~g differ ~%" (tbl-ref->number total 0 0) (tbl-ref->number total 0 2)) #f)); total in=total net
+                 (or (= 0 (tbl-ref->number total 0 1)) (begin (format #t "Failed refnum ~g isn't 0~%" (tbl-ref->number total 0 1)) #f))   ; total out=0
+                 (or (= 3 (tbl-row-count tbl)) (begin (format #t "Failed row count ~g isn't 3~%" (tbl-row-count tbl)) #f))
+                 (or (= 4 (tbl-column-count tbl)) (begin (format #t "Failed column count ~g isn't 4~%" (tbl-column-count tbl)) #f))))
         )
       )
     )
   )
-
+)
 
 ;; Test two transactions from two different assets to expense in two different days
 (define (test-out-txn)
@@ -151,22 +153,22 @@
                               date-1
                               bank-account
                               income-account
-                              (gnc:make-gnc-numeric 100 1))   ; large in txn to avoid negative net (hard to parse)
+                              100/1)   ; large in txn to avoid negative net (hard to parse)
       (env-create-transaction env
                               date-1
                               expense-account
                               bank-account
-                              (gnc:make-gnc-numeric 1 1))
+                              1/1)
       (env-create-transaction env
                               date-2
                               wallet-account
                               income-account
-                              (gnc:make-gnc-numeric 100 1))   ; large in txn to avoid negative net (hard to parse)
+                              100/1)   ; large in txn to avoid negative net (hard to parse)
       (env-create-transaction env
                               date-2
                               expense-account
                               wallet-account
-                              (gnc:make-gnc-numeric 5 1))
+                              5/1)
       (begin
         (set-option report gnc:pagename-display "Show Table" #t)
         (set-option report gnc:pagename-general "Start Date" (cons 'absolute date-0))
@@ -234,17 +236,17 @@
                               date-1
                               bank-account
                               income-account
-                              (gnc:make-gnc-numeric 1 1))
+                              1/1)
       (env-create-transaction env
                               date-1
                               bank-account
                               wallet-account
-                              (gnc:make-gnc-numeric 20 1))  ; this transaction should not be counted
+                              20/1)  ; this transaction should not be counted
       (env-create-transaction env
                               date-2
                               wallet-account
                               income-account
-                              (gnc:make-gnc-numeric 5 1))
+                              5/1)
 
       (begin
         (set-option report gnc:pagename-display "Show Table" #t)

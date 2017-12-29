@@ -142,62 +142,40 @@ qof_book_get_property (GObject* object,
     switch (prop_id)
     {
     case PROP_OPT_TRADING_ACCOUNTS:
-	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
-			       OPTION_SECTION_ACCOUNTS,
-			       OPTION_NAME_TRADING_ACCOUNTS);
-	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
-	g_free (key);
-	break;
+        qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
+                OPTION_SECTION_ACCOUNTS, OPTION_NAME_TRADING_ACCOUNTS});
+        break;
     case PROP_OPT_BOOK_CURRENCY:
-	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
-			       OPTION_SECTION_ACCOUNTS,
-                   OPTION_NAME_BOOK_CURRENCY);
-	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
-	g_free (key);
-	break;
+        qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
+                OPTION_SECTION_ACCOUNTS, OPTION_NAME_BOOK_CURRENCY});
+        break;
     case PROP_OPT_DEFAULT_GAINS_POLICY:
-	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
-			       OPTION_SECTION_ACCOUNTS,
-                   OPTION_NAME_DEFAULT_GAINS_POLICY);
-	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
-	g_free (key);
-	break;
+        qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
+                OPTION_SECTION_ACCOUNTS, OPTION_NAME_DEFAULT_GAINS_POLICY});
+        break;
     case PROP_OPT_DEFAULT_GAINS_ACCOUNT_GUID:
-	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
-			       OPTION_SECTION_ACCOUNTS,
-                   OPTION_NAME_DEFAULT_GAINS_LOSS_ACCT_GUID);
-	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
-	g_free (key);
-	break;
+        qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
+                OPTION_SECTION_ACCOUNTS, OPTION_NAME_DEFAULT_GAINS_LOSS_ACCT_GUID});
+        break;
     case PROP_OPT_AUTO_READONLY_DAYS:
-	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
-			       OPTION_SECTION_ACCOUNTS,
-			       OPTION_NAME_AUTO_READONLY_DAYS);
-	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
-	g_free (key);
-	break;
+        qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
+                OPTION_SECTION_ACCOUNTS, OPTION_NAME_AUTO_READONLY_DAYS});
+        break;
     case PROP_OPT_NUM_FIELD_SOURCE:
-	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
-			       OPTION_SECTION_ACCOUNTS,
-			       OPTION_NAME_NUM_FIELD_SOURCE);
-	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
-	g_free (key);
-	break;
+        qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
+                OPTION_SECTION_ACCOUNTS, OPTION_NAME_NUM_FIELD_SOURCE});
+        break;
     case PROP_OPT_DEFAULT_BUDGET:
-	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
-			       OPTION_SECTION_ACCOUNTS,
-			       OPTION_NAME_DEFAULT_BUDGET);
-	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
-	g_free (key);
-	break;
+        qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
+                OPTION_SECTION_ACCOUNTS, OPTION_NAME_DEFAULT_BUDGET});
+        break;
     case PROP_OPT_FY_END:
-	key = const_cast<char*>("fy_end");
-	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
-	break;
+        qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {"fy_end"});
+        break;
     case PROP_AB_TEMPLATES:
-	key = const_cast<char*>(AB_KEY "/" AB_TEMPLATES);
-	qof_instance_get_kvp (QOF_INSTANCE (book), key, value);
-	break;
+        key = const_cast<char*>(AB_KEY "/" AB_TEMPLATES);
+        qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {"AB_KEY", "AB_TEMPLATES"});
+        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -220,62 +198,39 @@ qof_book_set_property (GObject      *object,
     switch (prop_id)
     {
     case PROP_OPT_TRADING_ACCOUNTS:
-	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
-			       OPTION_SECTION_ACCOUNTS,
-			       OPTION_NAME_TRADING_ACCOUNTS);
-	qof_instance_set_kvp (QOF_INSTANCE (book), key, value);
-	g_free (key);
-	break;
+        qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
+                OPTION_SECTION_ACCOUNTS, OPTION_NAME_TRADING_ACCOUNTS});
+        break;
     case PROP_OPT_BOOK_CURRENCY:
-	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
-			       OPTION_SECTION_ACCOUNTS,
-                   OPTION_NAME_BOOK_CURRENCY);
-	qof_instance_set_kvp (QOF_INSTANCE (book), key, value);
-	g_free (key);
-	break;
+        qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
+                OPTION_SECTION_ACCOUNTS, OPTION_NAME_BOOK_CURRENCY});
+        break;
     case PROP_OPT_DEFAULT_GAINS_POLICY:
-	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
-			       OPTION_SECTION_ACCOUNTS,
-                   OPTION_NAME_DEFAULT_GAINS_POLICY);
-	qof_instance_set_kvp (QOF_INSTANCE (book), key, value);
-	g_free (key);
-	break;
+        qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
+                OPTION_SECTION_ACCOUNTS, OPTION_NAME_DEFAULT_GAINS_POLICY});
+        break;
     case PROP_OPT_DEFAULT_GAINS_ACCOUNT_GUID:
-	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
-			       OPTION_SECTION_ACCOUNTS,
-                   OPTION_NAME_DEFAULT_GAINS_LOSS_ACCT_GUID);
-	qof_instance_set_kvp (QOF_INSTANCE (book), key, value);
-	g_free (key);
-	break;
+        qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
+                OPTION_SECTION_ACCOUNTS, OPTION_NAME_DEFAULT_GAINS_LOSS_ACCT_GUID});
+        break;
     case PROP_OPT_AUTO_READONLY_DAYS:
-	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
-			       OPTION_SECTION_ACCOUNTS,
-			       OPTION_NAME_AUTO_READONLY_DAYS);
-	qof_instance_set_kvp (QOF_INSTANCE (book), key, value);
-	g_free (key);
-	break;
+        qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
+                OPTION_SECTION_ACCOUNTS, OPTION_NAME_AUTO_READONLY_DAYS});
+        break;
     case PROP_OPT_NUM_FIELD_SOURCE:
-	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
-			       OPTION_SECTION_ACCOUNTS,
-			       OPTION_NAME_NUM_FIELD_SOURCE);
-	qof_instance_set_kvp (QOF_INSTANCE (book), key, value);
-	g_free (key);
-	break;
+        qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
+                OPTION_SECTION_ACCOUNTS, OPTION_NAME_NUM_FIELD_SOURCE});
+        break;
     case PROP_OPT_DEFAULT_BUDGET:
-	key = g_strdup_printf ("%s/%s/%s", KVP_OPTION_PATH,
-			       OPTION_SECTION_ACCOUNTS,
-			       OPTION_NAME_DEFAULT_BUDGET);
-	qof_instance_set_kvp (QOF_INSTANCE (book), key, value);
-	g_free (key);
-	break;
+        qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
+                OPTION_SECTION_ACCOUNTS, OPTION_NAME_DEFAULT_BUDGET});
+        break;
     case PROP_OPT_FY_END:
-	key = const_cast<char*>("fy_end");
-	qof_instance_set_kvp (QOF_INSTANCE (book), key, value);
-	break;
+        qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {"fy_end"});
+        break;
     case PROP_AB_TEMPLATES:
-	key = const_cast<char*>(AB_KEY "/" AB_TEMPLATES);
-	qof_instance_set_kvp (QOF_INSTANCE (book), key, value);
-	break;
+        qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {AB_KEY, AB_TEMPLATES});
+        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -608,7 +563,7 @@ qof_book_get_collection (const QofBook *book, QofIdType entity_type)
         col = qof_collection_new (entity_type);
         g_hash_table_insert(
             book->hash_of_collections,
-            qof_string_cache_insert((gpointer) entity_type), col);
+            qof_string_cache_insert(entity_type), col);
     }
     return col;
 }
@@ -1085,7 +1040,7 @@ GDate* qof_book_get_autoreadonly_gdate (const QofBook *book)
 const char*
 qof_book_get_string_option(const QofBook* book, const char* opt_name)
 {
-    auto slot = qof_instance_get_slots(QOF_INSTANCE (book))->get_slot(opt_name);
+    auto slot = qof_instance_get_slots(QOF_INSTANCE (book))->get_slot({opt_name});
     if (slot == nullptr)
         return nullptr;
     return slot->get<const char*>();
@@ -1097,9 +1052,9 @@ qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_
     qof_book_begin_edit(book);
     auto frame = qof_instance_get_slots(QOF_INSTANCE(book));
     if (opt_val && (*opt_val != '\0'))
-        delete frame->set(opt_name, new KvpValue(g_strdup(opt_val)));
+        delete frame->set({opt_name}, new KvpValue(g_strdup(opt_val)));
     else
-        delete frame->set(opt_name, nullptr);
+        delete frame->set({opt_name}, nullptr);
     qof_instance_set_dirty (QOF_INSTANCE (book));
     qof_book_commit_edit(book);
 }
@@ -1118,10 +1073,10 @@ static void commit_err (G_GNUC_UNUSED QofInstance *inst, QofBackendError errcode
 
 #define GNC_FEATURES "features"
 static void
-add_feature_to_hash (const gchar *key, KvpValue *value, gpointer user_data)
+add_feature_to_hash (const gchar *key, KvpValue *value, GHashTable * user_data)
 {
     gchar *descr = g_strdup(value->get<const char*>());
-    g_hash_table_insert (*(GHashTable**)user_data, (gchar*)key, descr);
+    g_hash_table_insert (user_data, (gchar*)key, descr);
 }
 
 GHashTable *
@@ -1131,11 +1086,11 @@ qof_book_get_features (QofBook *book)
     GHashTable *features = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                   NULL, g_free);
 
-    auto slot = frame->get_slot(GNC_FEATURES);
+    auto slot = frame->get_slot({GNC_FEATURES});
     if (slot != nullptr)
     {
-	frame = slot->get<KvpFrame*>();
-	frame->for_each_slot(&add_feature_to_hash, &features);
+        frame = slot->get<KvpFrame*>();
+        frame->for_each_slot_temp(&add_feature_to_hash, features);
     }
     return features;
 }
@@ -1145,11 +1100,11 @@ qof_book_set_feature (QofBook *book, const gchar *key, const gchar *descr)
 {
     KvpFrame *frame = qof_instance_get_slots (QOF_INSTANCE (book));
     KvpValue* feature = nullptr;
-    auto feature_slot = frame->get_slot(GNC_FEATURES);
+    auto feature_slot = frame->get_slot({GNC_FEATURES});
     if (feature_slot)
     {
         auto feature_frame = feature_slot->get<KvpFrame*>();
-        feature = feature_frame->get_slot(key);
+        feature = feature_frame->get_slot({key});
     }
     if (feature == nullptr || g_strcmp0 (feature->get<const char*>(), descr))
     {
@@ -1223,7 +1178,7 @@ qof_book_options_delete (QofBook *book, GSList *path)
         delete root->set_path(path_v, nullptr);
     }
     else
-        delete root->set_path(KVP_OPTION_PATH, nullptr);
+        delete root->set_path({KVP_OPTION_PATH}, nullptr);
 }
 
 /* QofObject function implementation and registration */

@@ -32,7 +32,6 @@ extern "C"
 #include <gnc-engine.h>
 #include <cashobjects.h>
 
-#include <test-stuff.h>
 #include <test-engine-stuff.h>
 #include <unittest-support.h>
 
@@ -45,6 +44,7 @@ extern "C"
 #include "../sixtp-parsers.h"
 #include "../sixtp-dom-parsers.h"
 #include "test-file-stuff.h"
+#include <test-stuff.h>
 
 static QofBook* sixbook;
 

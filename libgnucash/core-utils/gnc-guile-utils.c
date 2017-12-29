@@ -297,33 +297,12 @@ gchar *gnc_scm_strip_comments (SCM scm_text)
     splits = g_strsplit(raw_text, "\n", -1);
     for (i = j = 0; splits[i]; i++)
     {
-        gchar *haystack, *needle;
         if ((splits[i][0] == ';') || (splits[i][0] == '\0'))
         {
             g_free(splits[i]);
             continue;
         }
-
-        /* Work around a bug in guile 1.8 that escapes spaces
-         * in a symbol printed on a string port. We don't
-         * want this, because this string can't be properly
-         * converted back into a symbol later on. */
-
-        haystack = splits [i];
-        needle = g_strstr_len (haystack, -1, "\\ ");
-        while (needle)
-        {
-            gchar *new_haystack = NULL;
-            gsize prefix_size = needle - haystack;
-            gchar *prefix = g_strndup (haystack, prefix_size);
-            needle++;
-            new_haystack = g_strconcat (prefix, needle, NULL);
-            g_free (prefix);
-            g_free (haystack);
-            haystack = new_haystack;
-            needle = g_strstr_len (haystack, -1, "\\ ");
-        }
-        splits[j++] = haystack;
+        splits[j++] = splits [i];
     }
     splits[j] = NULL;
 

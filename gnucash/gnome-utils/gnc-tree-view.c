@@ -116,6 +116,11 @@ typedef struct GncTreeViewPrivate
     /* Sort callback model */
     GtkTreeModel      *sort_model;
 
+    /* Editing callback functions */
+    GFunc editing_started_cb;
+    GFunc editing_finished_cb;
+    gpointer editing_cb_data;
+
     /* State related values */
     gchar             *state_section;
     gboolean           seen_state_visibility;
@@ -1756,6 +1761,35 @@ gnc_tree_view_add_toggle_column (GncTreeView *view,
     return column;
 }
 
+static void
+renderer_editing_canceled_cb (GtkCellRenderer *renderer, gpointer user_data)
+{
+    GncTreeView *view = user_data;
+    GncTreeViewPrivate *priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+    if (priv->editing_finished_cb)
+        (priv->editing_finished_cb)(view, priv->editing_cb_data);
+}
+
+static void
+renderer_editing_started_cb (GtkCellRenderer *renderer,
+               GtkCellEditable *editable, gchar *path, gpointer user_data)
+{
+    GncTreeView *view = user_data;
+    GncTreeViewPrivate *priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+    if (priv->editing_started_cb)
+        (priv->editing_started_cb)(view, priv->editing_cb_data);
+}
+
+static void
+renderer_edited_cb (GtkCellRendererText *renderer, gchar *path,
+                    gchar *new_text, gpointer user_data)
+{
+    GncTreeView *view = user_data;
+    GncTreeViewPrivate *priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+    if (priv->editing_finished_cb)
+        (priv->editing_finished_cb)(view, priv->editing_cb_data);
+}
+
 /** This function adds a new text column to a GncTreeView base view.
  *  It takes all the parameters necessary to hook a GtkTreeModel
  *  column to a GtkTreeViewColumn.  If the tree has a state section
@@ -1795,6 +1829,16 @@ gnc_tree_view_add_text_column (GncTreeView *view,
     /* Set up a text renderer and attributes */
     renderer = gtk_cell_renderer_text_new ();
     gtk_tree_view_column_pack_start (column, renderer, TRUE);
+
+    /* Set up the callbacks for when editing */
+    g_signal_connect(G_OBJECT(renderer), "editing-canceled",
+                         (GCallback) renderer_editing_canceled_cb, view);
+
+    g_signal_connect(G_OBJECT(renderer), "editing-started",
+                         (GCallback) renderer_editing_started_cb, view);
+
+    g_signal_connect(G_OBJECT(renderer), "edited",
+                         (GCallback) renderer_edited_cb, view);
 
     /* Set renderer attributes controlled by the model */
     if (model_data_column != GNC_TREE_VIEW_COLUMN_DATA_NONE)
@@ -2147,6 +2191,34 @@ gnc_tree_view_keynav(GncTreeView *view, GtkTreeViewColumn **col,
         break;
     }
     return;
+}
+
+void
+gnc_tree_view_set_editing_started_cb(GncTreeView *view, GFunc editing_started_cb, gpointer editing_cb_data)
+{
+    GncTreeViewPrivate *priv;
+
+    if (!view && !editing_started_cb)
+        return;
+
+    priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+
+    priv->editing_started_cb = editing_started_cb;
+    priv->editing_cb_data = editing_cb_data;
+}
+
+void
+gnc_tree_view_set_editing_finished_cb(GncTreeView *view, GFunc editing_finished_cb, gpointer editing_cb_data)
+{
+    GncTreeViewPrivate *priv;
+
+    if (!view && !editing_finished_cb)
+        return;
+
+    priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+
+    priv->editing_finished_cb = editing_finished_cb;
+    priv->editing_cb_data = editing_cb_data;
 }
 
 /** @} */

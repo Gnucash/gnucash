@@ -80,7 +80,7 @@
 			       (gnc:get-start-this-month)
 			       my-income-account
 			       my-asset-account
-			       (gnc:make-gnc-numeric -1 1))
+			       -1/1)
       (begin
 	(set-option report gnc:pagename-display "Show table" #t)
 	(set-option report gnc:pagename-general "Start Date"
@@ -131,12 +131,12 @@
 			       date-1
 			       my-income-account
 			       my-asset-account
-			       (gnc:make-gnc-numeric -1 1))
+			       -1/1)
       (env-create-transaction env
 			       date-2
 			       my-income-account
 			       my-asset-account
-			       (gnc:make-gnc-numeric -5 1))
+			       -5/1)
       (begin
 	(set-option report gnc:pagename-display "Show table" #t)
 	(set-option report gnc:pagename-general "Start Date" (cons 'absolute date-0))
@@ -187,10 +187,10 @@
 	   (date-0 (gnc:get-start-this-month))
 	   (date-1 (gnc:timepair-next-day date-0))
 	   (date-2 (gnc:timepair-next-day date-1)))
-      (env-create-transaction env date-1 my-income-account my-asset-account (gnc:make-gnc-numeric -1 1))
-      (env-create-transaction env date-1 my-expense-account my-liability-account (gnc:make-gnc-numeric -1 1))
-      (env-create-transaction env date-2 my-income-account my-asset-account (gnc:make-gnc-numeric -5 1))
-      (env-create-transaction env date-2 my-expense-account my-liability-account (gnc:make-gnc-numeric -5 1))
+      (env-create-transaction env date-1 my-income-account my-asset-account -1/1)
+      (env-create-transaction env date-1 my-expense-account my-liability-account -1/1)
+      (env-create-transaction env date-2 my-income-account my-asset-account -5/1)
+      (env-create-transaction env date-2 my-expense-account my-liability-account -5/1)
       (begin
 	(set-option report gnc:pagename-display "Show table" #t)
 	(set-option report gnc:pagename-general "Start Date" (cons 'absolute date-0))

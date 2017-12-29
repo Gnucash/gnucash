@@ -82,7 +82,7 @@
 			       (gnc:get-start-this-month)
 			       my-income-account
 			       my-asset-account
-			       (gnc:make-gnc-numeric -1 1))
+			       -1/1)
       (begin
 	(set-option report gnc:pagename-display "Show table" #t)
 	(set-option report gnc:pagename-general "Start Date"
@@ -106,11 +106,13 @@
 					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
 					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1))
 					 result))))
-	    (and (= 1 (tbl-ref->number tbl 0 1))
+	    (or (and (= 1 (tbl-ref->number tbl 0 1))
 			 (= 0 (tbl-ref->number tbl 0 2))
 			 (= 1 (tbl-ref->number tbl 0 3))
 			 (= 1 (tbl-row-count tbl))
-			 (= 4 (tbl-column-count tbl)))))))))
+			 (= 4 (tbl-column-count tbl)))
+                (begin (format #t "Single-txn test ~a failed~%" uuid) #f))
+                ))))))
 
 
 (define (two-txn-test uuid)
@@ -133,12 +135,12 @@
 			       date-1
 			       my-income-account
 			       my-asset-account
-			       (gnc:make-gnc-numeric -1 1))
+			       -1/1)
       (env-create-transaction env
 			       date-2
 			       my-income-account
 			       my-asset-account
-			       (gnc:make-gnc-numeric -5 1))
+			       -5/1)
       (begin
 	(set-option report gnc:pagename-display "Show table" #t)
 	(set-option report gnc:pagename-general "Start Date" (cons 'absolute date-0))
@@ -160,15 +162,24 @@
 					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
 					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1))
 					 result))))
-	    (and (every (lambda (row)
-				  (and (equal? (second row) (fourth row))
-				       (= 0 (string->number (car (third row))))))
+	    (or (and (every (lambda (row)
+                              (and (or (equal? (second row) (fourth row))
+                                       (begin (format "Second Element ~g != fourth element ~g~%" (second row) (fourth row)) #f))
+                                   (or (= 0 (string->number (car (third row))))
+                                       (begin (format "third row element ~a not 0~%" (car (third row))) #f))))
 				tbl)
-			 (= 0 (tbl-ref->number tbl 0 1))
-			 (= 1 (tbl-ref->number tbl 1 1))
-			 (= 6 (tbl-ref->number tbl 2 1))
-			 (= 3 (tbl-row-count tbl))
-			 (= 4 (tbl-column-count tbl)))))))))
+                     (or (= 0 (tbl-ref->number tbl 0 1))
+                         (begin (format #t "Item 1 failed: ~g not 0~%" (tbl-ref->number tbl 0 1)) #f))
+                     (or (= 1 (tbl-ref->number tbl 1 1))
+                         (begin (format #t "Item 1 failed: ~g not 1~%" (tbl-ref->number tbl 1 1)) #f))
+                     (or (= 6 (tbl-ref->number tbl 2 1))
+                         (begin (format #t "Item 2 failed: ~g not 6~%" (tbl-ref->number tbl 2 1)) #f))
+                     (or (= 3 (tbl-row-count tbl))
+                         (begin (format #t "Item 3 failed: ~g not 3~%" (tbl-row-count tbl)) #f))
+                     (or (= 4 (tbl-column-count tbl))
+                         (begin (format #t "Item 4 failed: ~g not 4~%" (tbl-column-count tbl)) #f)))
+                (begin (format #t "Two-txn test ~a failed~%" uuid) #f))
+                ))))))
 
 
 (define (two-txn-test-2 uuid)
@@ -189,10 +200,10 @@
 	   (date-0 (gnc:get-start-this-month))
 	   (date-1 (gnc:timepair-next-day date-0))
 	   (date-2 (gnc:timepair-next-day date-1)))
-      (env-create-transaction env date-1 my-income-account my-asset-account (gnc:make-gnc-numeric -1 1))
-      (env-create-transaction env date-1 my-expense-account my-liability-account (gnc:make-gnc-numeric -1 1))
-      (env-create-transaction env date-2 my-income-account my-asset-account (gnc:make-gnc-numeric -5 1))
-      (env-create-transaction env date-2 my-expense-account my-liability-account (gnc:make-gnc-numeric -5 1))
+      (env-create-transaction env date-1 my-income-account my-asset-account -1/1)
+      (env-create-transaction env date-1 my-expense-account my-liability-account -1/1)
+      (env-create-transaction env date-2 my-income-account my-asset-account -5/1)
+      (env-create-transaction env date-2 my-expense-account my-liability-account -5/1)
       (begin
 	(set-option report gnc:pagename-display "Show table" #t)
 	(set-option report gnc:pagename-general "Start Date" (cons 'absolute date-0))
@@ -214,7 +225,7 @@
 					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
 					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1))
 					 result))))
-	    (and (every (lambda (row)
+	    (or (and (every (lambda (row)
 				  (and (= (string->number (car (fourth row)))
 					  (+ (string->number (car (second row)))
 					     (string->number (car (third row)))))
@@ -225,7 +236,9 @@
 			 (= 1 (tbl-ref->number tbl 1 1))
 			 (= 6 (tbl-ref->number tbl 2 1))
 			 (= 3 (tbl-row-count tbl))
-			 (= 4 (tbl-column-count tbl)))))))))
+			 (= 4 (tbl-column-count tbl)))
+                (begin (format #t "two-txn test 2 ~a failed~%" uuid) #f))
+                ))))))
 
 (define (two-txn-test-income uuid)
   (let* ((template (gnc:find-report-template uuid))
@@ -245,10 +258,10 @@
 	   (date-0 (gnc:get-start-this-month))
 	   (date-1 (gnc:timepair-next-day date-0))
 	   (date-2 (gnc:timepair-next-day date-1)))
-      (env-create-transaction env date-1 my-income-account my-asset-account (gnc:make-gnc-numeric -1 1))
-      (env-create-transaction env date-1 my-expense-account my-liability-account (gnc:make-gnc-numeric -1 1))
-      (env-create-transaction env date-2 my-income-account my-asset-account (gnc:make-gnc-numeric -5 1))
-      (env-create-transaction env date-2 my-expense-account my-liability-account (gnc:make-gnc-numeric -5 1))
+      (env-create-transaction env date-1 my-income-account my-asset-account -1/1)
+      (env-create-transaction env date-1 my-expense-account my-liability-account -1/1)
+      (env-create-transaction env date-2 my-income-account my-asset-account -5/1)
+      (env-create-transaction env date-2 my-expense-account my-liability-account -5/1)
       (begin
 	(set-option report gnc:pagename-display "Show table" #t)
 	(set-option report gnc:pagename-general "Start Date" (cons 'absolute date-0))
@@ -270,7 +283,7 @@
 					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
 					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1))
 					 result))))
-	    (and (every (lambda (row)
+	    (or (and (every (lambda (row)
 				  (and (= (string->number (car (fourth row)))
 					  (+ (string->number (car (second row)))
 					     (string->number (car (third row)))))
@@ -281,7 +294,9 @@
 			 (= 1 (tbl-ref->number tbl 1 1))
 			 (= 5 (tbl-ref->number tbl 2 1))
 			 (= 3 (tbl-row-count tbl))
-			 (= 4 (tbl-column-count tbl)))))))))
+			 (= 4 (tbl-column-count tbl)))
+                (begin (format #t "two-txn-income test ~a failed~%" uuid) #f))
+                ))))))
 
 
 (define (closing-test uuid)
@@ -306,12 +321,12 @@
 	   (date-2 (gnc:timepair-next-day date-1))
 	   (date-3 (gnc:timepair-next-day date-2)))
 
-      (env-create-transaction env date-1 my-income-account my-asset-account (gnc:make-gnc-numeric -1 1))
-      (env-create-transaction env date-2 my-income-account my-asset-account (gnc:make-gnc-numeric -2 1))
-      (env-create-transaction env date-3 my-income-account my-asset-account (gnc:make-gnc-numeric -3 1))
+      (env-create-transaction env date-1 my-income-account my-asset-account -1/1)
+      (env-create-transaction env date-2 my-income-account my-asset-account -2/1)
+      (env-create-transaction env date-3 my-income-account my-asset-account -3/1)
 
       (let ((closing-txn (env-create-transaction env date-2 my-asset-account my-equity-account
-						 (gnc:make-gnc-numeric 300 1))))
+						 300/1)))
 	(xaccTransSetIsClosingTxn closing-txn #t))
 
       (begin
@@ -335,7 +350,7 @@
 					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
 					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1))
 					 result))))
-	    (and (every (lambda (row)
+	    (or (and (every (lambda (row)
 				  (and (= (string->number (car (fourth row)))
 					  (+ (string->number (car (second row)))
 					     (string->number (car (third row)))))))
@@ -345,5 +360,7 @@
 			 (= 2 (tbl-ref->number tbl 2 1))
 			 (= 3 (tbl-ref->number tbl 3 1))
 			 (= 4 (tbl-row-count tbl))
-			 (= 4 (tbl-column-count tbl)))))))))
+			 (= 4 (tbl-column-count tbl)))
+                (begin (format #t "Closing-txn test ~a failed~%" uuid) #f))
+                ))))))
 

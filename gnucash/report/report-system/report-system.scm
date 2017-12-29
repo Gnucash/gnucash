@@ -671,7 +671,7 @@
 (export gnc:make-stats-collector)
 (export gnc:make-drcr-collector)
 (export gnc:make-value-collector)
-(export gnc:make-numeric-collector)
+(export gnc:make-number-collector)
 (export gnc:make-commodity-collector)
 (export gnc:commodity-collector-get-negated)
 (export gnc:commodity-collectorlist-get-merged)

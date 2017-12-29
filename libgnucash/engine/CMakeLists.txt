@@ -136,7 +136,7 @@ ADD_CUSTOM_COMMAND (
 ADD_CUSTOM_TARGET(iso-4217-c DEPENDS ${ISO_4217_C})
 
 SET (engine_SOURCES
-  Account.c
+  Account.cpp
   Recurrence.c
   Query.c
   SchedXaction.c
@@ -235,6 +235,7 @@ ADD_LIBRARY (gncmod-engine
 TARGET_LINK_LIBRARIES(gncmod-engine gnc-core-utils gnc-module ${Boost_DATE_TIME_LIBRARIES}  ${Boost_REGEX_LIBRARIES} ${REGEX_LDFLAGS} ${GMODULE_LDFLAGS} ${GLIB2_LDFLAGS} ${GOBJECT_LDFLAGS} ${GUILE_LDFLAGS})
 
 TARGET_COMPILE_DEFINITIONS (gncmod-engine PRIVATE -DG_LOG_DOMAIN=\"gnc.engine\")
+TARGET_COMPILE_OPTIONS (gncmod-engine PRIVATE -Wno-deprecated-register)
 
 TARGET_INCLUDE_DIRECTORIES (gncmod-engine
     PRIVATE ${CMAKE_CURRENT_BINARY_DIR} # for iso-4217-currencies.c

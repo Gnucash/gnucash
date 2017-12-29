@@ -203,7 +203,7 @@ GncSqlPriceBackend::commit (GncSqlBackend* sql_be, QofInstance* inst)
     return is_ok;
 }
 
-gboolean
+static gboolean
 write_price (GNCPrice* p, gpointer data)
 {
     auto s = reinterpret_cast<write_objects_t*>(data);

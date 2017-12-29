@@ -355,7 +355,7 @@
                            (guid (gncAccountGetGUID account))
                            (num-bal (hash-ref sx-value-hash guid)))
                       (if num-bal
-                          (if (eq? 0 (gnc:gnc-numeric-denom num-bal))
+                          (if (eq? 0 (denominator num-bal))
                               (gnc:warn "Oops, invalid gnc_numeric when looking up SX balance for account GUID " guid ": " num-bal)
                               (begin
                                 (balance-collector

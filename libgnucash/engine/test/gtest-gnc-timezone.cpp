@@ -67,8 +67,33 @@ TEST(gnc_timezone_constructors, test_posix_timezone)
     TZ_Ptr tz = tzp.get(2006);
     EXPECT_EQ(tz->std_zone_abbrev(), "FST");
     EXPECT_EQ(tz->dst_zone_abbrev(), "FDT");
+    EXPECT_TRUE(tz->has_dst());
     EXPECT_EQ(tz->base_utc_offset().hours(), 8L);
     EXPECT_EQ(tz->dst_offset().hours(), 7L);
+}
+
+TEST(gnc_timezone_constructors, test_gmt_timezone)
+{
+    std::string timezone("GMT");
+    TimeZoneProvider tzp(timezone);
+    TZ_Ptr tz = tzp.get(2006);
+    EXPECT_EQ(tz->std_zone_abbrev(), "GMT");
+    EXPECT_FALSE(tz->has_dst());
+    EXPECT_EQ(tz->dst_zone_abbrev(), "");
+    EXPECT_EQ(tz->base_utc_offset().hours(), 0L);
+    EXPECT_EQ(tz->dst_offset().hours(), 0L);
+}
+
+TEST(gnc_timezone_constructors, test_GMT_plus_7_timezone)
+{
+    std::string timezone("Etc/GMT+7");
+    TimeZoneProvider tzp(timezone);
+    TZ_Ptr tz = tzp.get(2006);
+    EXPECT_EQ(tz->std_zone_abbrev(), "-07");
+    EXPECT_EQ(tz->dst_zone_abbrev(), "");
+    EXPECT_FALSE(tz->has_dst());
+    EXPECT_EQ(tz->base_utc_offset().hours(), -7);
+    EXPECT_EQ(tz->dst_offset().hours(), 0L);
 }
 
 TEST(gnc_timezone_constructors, test_IANA_Belize_tz)

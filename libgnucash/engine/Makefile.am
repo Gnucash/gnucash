@@ -18,7 +18,7 @@ AM_CPPFLAGS = \
 
 
 libgncmod_engine_la_SOURCES = \
-  Account.c \
+  Account.cpp \
   Recurrence.c \
   Query.c \
   SchedXaction.c \
@@ -275,7 +275,6 @@ if ! OS_WIN32
 	touch .scm-links
 endif
 
-if GNC_HAVE_GUILE_2
 GUILE_COMPILE_ENV = \
   --guile-load-dir ${top_builddir}/libgnucash/gnc-module \
   --library-dir    ${top_builddir}/libgnucash/engine \
@@ -293,7 +292,6 @@ gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
 
 gncscmcachedir = ${pkglibdir}/scm/ccache/@GUILE_EFFECTIVE_VERSION@
 gncscmcache_DATA = $(gncscm_DATA:.scm=.go)
-endif
 
 noinst_DATA = .scm-links
 
@@ -303,13 +301,6 @@ swig-engine.c: engine.i $(top_srcdir)/common/base-typemaps.i \
                $(gncinclude_HEADERS) $(noinst_HEADERS)
 	$(SWIG) -guile -Linkage module \
 	-I${top_srcdir}/common -o $@ $<
-if ! OS_WIN32
-if ! SWIG_DIST_FAIL
-	if ! `grep "define scm_from_utf8_string" $@ > /dev/null 2>&1`; then \
-	  patch $@ $(top_srcdir)/common/swig-utf8.patch; \
-	fi
-endif
-endif
 endif
 
 

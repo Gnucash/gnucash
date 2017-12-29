@@ -24,10 +24,7 @@
 ; (see http://wiki.gnucash.org/wiki/Custom_Reports )
 (define-module (gnucash report taxinvoice))
 
-(cond-expand
-  (guile-2
-      (use-modules (ice-9 local-eval)))  ; for the-environment
-  (else ))
+(use-modules (ice-9 local-eval))  ; for the-environment
 (use-modules (gnucash main))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
@@ -56,7 +53,7 @@
   (if (or (not taxable) (eq? taxtable '()))
     (display "&nbsp;")
     (let* ((amttot  (gnc:make-commodity-collector))
-           (pctot   (gnc:make-numeric-collector)) 
+           (pctot   (gnc:make-number-collector)) 
            (entries (gncTaxTableGetEntries taxtable))
            (amt?    #f)  ; becomes #t if any entries are amounts
            (pc?     #f)) ; becomes #t if any entries are percentages

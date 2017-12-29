@@ -62,7 +62,6 @@ if ! OS_WIN32
 	touch .scm-links
 endif
 
-if GNC_HAVE_GUILE_2
 GUILE_COMPILE_ENV = \
   --gnc-module-dir ${top_builddir}/libgnucash/app-utils \
   --gnc-module-dir ${top_builddir}/libgnucash/engine \
@@ -97,7 +96,6 @@ GUILE_COMPILE_ENV = \
 
 gncscmmodcachedir = ${pkglibdir}/scm/ccache/@GUILE_EFFECTIVE_VERSION@/gnucash/report
 gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
-endif
 
 clean-local:
 	$(RM) -rf gnucash

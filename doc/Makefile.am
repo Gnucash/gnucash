@@ -38,33 +38,25 @@ EXTRA_DIST = \
   tip_of_the_day.list.in \
   CMakeLists.txt
 
-gnucash.1: gnucash.1.in Makefile
-	rm -f $@.tmp
 if BUILDING_FROM_VCS
-	GNC_VCS_REV_Y_M=`perl -ne 'print if $$_=~s/.*GNC_VCS_REV_Y_M "(.*)"/$$1/' ${top_builddir}/libgnucash/core-utils/gnc-vcs-info.h` ; \
-	${SED} < $< > $@.tmp \
-            -e 's:$${VERSION}:${VERSION}:g' \
-            -e 's:$${DATE}:'$${GNC_VCS_REV_Y_M}':g'
-	chmod +x $@.tmp
-	mv $@.tmp $@
+top_basedir = $(top_builddir)
 else
-	GNC_VCS_REV_Y_M=`perl -ne 'print if $$_=~s/.*GNC_VCS_REV_Y_M "(.*)"/$$1/' ${top_srcdir}/libgnucash/core-utils/gnc-vcs-info.h` ; \
-	${SED} < $< > $@.tmp \
-	-e 's:$${VERSION}:${VERSION}:g' \
-	-e 's:$${DATE}:'$${GNC_VCS_REV_Y_M}':g'
-	chmod +x $@.tmp
-	mv $@.tmp $@
+top_basedir = $(top_srcdir)
 endif
 
-## We borrow guile's convention and use @-...-@ as the substitution
-## brackets here, instead of the usual @...@.  This prevents autoconf
-## from substituting the values directly into the left-hand sides of
-## the sed substitutions.
+gnucash.1: gnucash.1.in Makefile
+	rm -f $@.tmp
+	GNC_VCS_REV_Y_M=`perl -ne 'print if $$_=~s/.*GNC_VCS_REV_Y_M "(.*)"/$$1/' ${top_basedir}/libgnucash/core-utils/gnc-vcs-info.h` ; \
+	${SED} < $< > $@.tmp \
+	-e 's:[@]VERSION[@]:${VERSION}:g' \
+	-e 's:[@]DATE[@]:'$${GNC_VCS_REV_Y_M}':g'
+	chmod +x $@.tmp
+	mv $@.tmp $@
+
 tip_of_the_day.list: tip_of_the_day.list.in Makefile
 	${CC} -E -P -x c -D'N_(x)=x' -o $@.tmp $<
 	cat -s $@.tmp | ${SED} -e 's/^ *"//' \
-	                       -e 's/"* *[|] */|/' \
-                           -e 's:@-GNUCASH_LATEST_STABLE_SERIES-@:${GNUCASH_LATEST_STABLE_SERIES}:g' > $@
+	                       -e 's/"* *[|] */|/' > $@
 	rm -f $@.tmp
 if PLATFORM_WIN32
 	perl -pi.bak -e 's/" *$$//' $@

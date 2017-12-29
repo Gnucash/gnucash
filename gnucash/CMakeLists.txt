@@ -1,5 +1,10 @@
 # CMakeLists.txt for gnucash/
 
+# Preparations for macro add_gschema_targets and gschemas.compiled target
+set(SCHEMADIR_BUILD ${DATADIR_BUILD}/glib-2.0/schemas)
+file(MAKE_DIRECTORY ${SCHEMADIR_BUILD})
+unset(gschema_depends CACHE)
+
 # The subdirectories
 ADD_SUBDIRECTORY (gnome)
 ADD_SUBDIRECTORY (gnome-utils)
@@ -93,7 +98,7 @@ SET(GNUCASH_BIN_INSTALL_NAME "gnucash")
 SET(VALGRIND_OUTDIR ${BINDIR_BUILD})
 
 CONFIGURE_FILE(gnucash.rc.in gnucash.rc @ONLY NEWLINE_STYLE WIN32)
-GNC_CONFIGURE(gnucash-valgrind.in ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/gnucash-valgrind)
+configure_file(gnucash-valgrind.in ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/gnucash-valgrind @ONLY)
 
 FILE(COPY ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/gnucash-valgrind
           DESTINATION ${VALGRIND_OUTDIR}
@@ -107,10 +112,9 @@ FILE(STRINGS ${CMAKE_CURRENT_SOURCE_DIR}/environment.in ENV_STRINGS_IN)
 SET(ENV_STRINGS_LIST "")
 
 FOREACH(line ${ENV_STRINGS_IN})
-  STRING(REGEX REPLACE "@-|-@" "@" line2 "${line}")
-    STRING(REPLACE ";" "\;" line3 "${line2}")
-  IF(NOT "${line3}" MATCHES "@NOTE")
-    LIST(APPEND ENV_STRINGS_LIST "${line3}\n")
+  STRING(REPLACE ";" "\;" line2 "${line}")
+  IF(NOT "${line2}" MATCHES "@NOTE")
+    LIST(APPEND ENV_STRINGS_LIST "${line2}\n")
   ENDIF()
 ENDFOREACH()
 
@@ -218,6 +222,24 @@ IF (WIN32)
 
   INSTALL(PROGRAMS ${CMD_FILE} DESTINATION  ${CMAKE_INSTALL_BINDIR})
 ENDIF(WIN32)
+
+
+# Handle gschemas.compiled
+set(CMAKE_COMMAND_TMP "")
+if (${CMAKE_VERSION} VERSION_GREATER 3.1)
+    set(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
+endif()
+
+add_custom_command(
+    OUTPUT ${SCHEMADIR_BUILD}/gschemas.compiled
+    COMMAND ${CMAKE_COMMAND_TMP} ${GLIB_COMPILE_SCHEMAS} ${SCHEMADIR_BUILD}
+    DEPENDS ${gschema_depends}
+)
+
+add_custom_target(compiled-schemas ALL DEPENDS ${SCHEMADIR_BUILD}/gschemas.compiled)
+
+install(FILES ${SCHEMADIR_BUILD}/gschemas.compiled DESTINATION ${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas)
+
 
 # The GResource Files are absolute paths but SET_LOCAL_DIST requires
 # relative paths.

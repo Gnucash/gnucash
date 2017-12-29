@@ -319,8 +319,8 @@ int
 gnc_timepair_p(SCM x)
 {
     return(scm_is_pair(x) &&
-           gnc_gh_gint64_p(SCM_CAR(x)) &&
-           gnc_gh_gint64_p(SCM_CDR(x)));
+           (scm_is_signed_integer(SCM_CAR(x), INT64_MIN, INT64_MAX) &&
+            scm_is_signed_integer(SCM_CDR(x), INT64_MIN, INT64_MAX)));
 }
 
 SCM
@@ -1110,10 +1110,8 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
                 break;
             scm = SCM_CAR (query_term_scm);
             query_term_scm = SCM_CDR (query_term_scm);
-            amount = scm_to_double (scm);
-
-            val = double_to_gnc_numeric (amount, GNC_DENOM_AUTO,
-                                         GNC_HOW_DENOM_SIGFIGS(6) | GNC_HOW_RND_ROUND_HALF_UP);
+            val = gnc_numeric_create (scm_to_int64(scm_numerator(scm)),
+                                      scm_to_int64(scm_denominator(scm)));
 
             if (!g_strcmp0 (pr_type, "pr-price"))
             {
@@ -1997,95 +1995,22 @@ gnc_scm2query (SCM query_scm)
     return q;
 }
 
-int
-gnc_gh_gint64_p(SCM num)
-{
-    static int initialized = 0;
-    static SCM maxval;
-    static SCM minval;
-
-    if (!initialized)
-    {
-        /* to be super safe, we have to build these manually because
-           though we know that we have gint64's here, we *don't* know how
-           to portably specify a 64bit constant to the compiler (i.e. like
-           0x7FFFFFFFFFFFFFFF). */
-        gint64 tmp;
-
-        tmp = 0x7FFFFFFF;
-        tmp <<= 32;
-        tmp |= 0xFFFFFFFF;
-        maxval = scm_from_int64(tmp);
-
-        tmp = 0x80000000;
-        tmp <<= 32;
-        minval = scm_from_int64(tmp);
-
-        scm_gc_protect_object(maxval);
-        scm_gc_protect_object(minval);
-        initialized = 1;
-    }
-
-    return (scm_is_exact(num) &&
-            (scm_geq_p(num, minval) != SCM_BOOL_F) &&
-            (scm_leq_p(num, maxval) != SCM_BOOL_F));
-}
-
 gnc_numeric
 gnc_scm_to_numeric(SCM gncnum)
 {
-    static SCM get_num   = SCM_BOOL_F;
-    static SCM get_denom = SCM_BOOL_F;
-
-    if (get_num == SCM_BOOL_F)
-    {
-        get_num = scm_c_eval_string("gnc:gnc-numeric-num");
-    }
-    if (get_denom == SCM_BOOL_F)
-    {
-        get_denom = scm_c_eval_string("gnc:gnc-numeric-denom");
-    }
-
-    return gnc_numeric_create(scm_to_int64(scm_call_1(get_num, gncnum)),
-                              scm_to_int64(scm_call_1(get_denom, gncnum)));
+    if (scm_is_signed_integer(scm_numerator(gncnum), INT64_MIN, INT64_MAX) &&
+        scm_is_signed_integer(scm_denominator(gncnum), INT64_MIN, INT64_MAX))
+        return gnc_numeric_create(scm_to_int64(scm_numerator(gncnum)),
+                                  scm_to_int64(scm_denominator(gncnum)));
+    return gnc_numeric_create(0, GNC_ERROR_OVERFLOW);
 }
 
 SCM
 gnc_numeric_to_scm(gnc_numeric arg)
 {
-    static SCM maker = SCM_BOOL_F;
-
-    if (maker == SCM_BOOL_F)
-    {
-        maker = scm_c_eval_string("gnc:make-gnc-numeric");
-    }
-
-    return scm_call_2(maker, scm_from_int64(gnc_numeric_num(arg)),
-                      scm_from_int64(gnc_numeric_denom(arg)));
+    return scm_divide(scm_from_int64(arg.num),
+                           scm_from_int64(arg.denom));
 }
-
-int
-gnc_numeric_p(SCM arg)
-{
-    static SCM type_p = SCM_BOOL_F;
-    SCM        ret    = SCM_BOOL_F;
-
-    if (type_p == SCM_BOOL_F)
-    {
-        type_p = scm_c_eval_string("gnc:gnc-numeric?");
-    }
-    ret = scm_call_1(type_p, arg);
-
-    if (ret == SCM_BOOL_F)
-    {
-        return FALSE;
-    }
-    else
-    {
-        return TRUE;
-    }
-}
-
 
 static SCM
 gnc_generic_to_scm(const void *cx, const gchar *type_str)

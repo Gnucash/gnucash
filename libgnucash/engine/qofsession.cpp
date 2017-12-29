@@ -50,12 +50,12 @@ extern "C"
 
 #include <glib.h>
 #include "qof.h"
-#include "qofbook-p.h"
 #include "qofobject-p.h"
 
 static QofLogModule log_module = QOF_MOD_SESSION;
 } //extern 'C'
 
+#include "qofbook-p.h"
 #include "qof-backend.hpp"
 #include "qofsession.hpp"
 #include "gnc-backend-prov.hpp"
@@ -701,12 +701,14 @@ void qof_session_load_backend (QofSession * session, const char * access_method)
     session->load_backend (access_method);
 }
 
-void qof_session_clear_error (QofSession * session)
+static void
+qof_session_clear_error (QofSession * session)
 {
     session->clear_error ();
 }
 
-void qof_session_destroy_backend (QofSession * session)
+static void
+qof_session_destroy_backend (QofSession * session)
 {
     session->destroy_backend ();
 }

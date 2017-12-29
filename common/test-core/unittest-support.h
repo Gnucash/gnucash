@@ -179,6 +179,14 @@ GSList *test_log_set_fatal_handler (GSList *list, TestErrorStruct *error,
 void test_free_log_handler (gpointer item);
 
 /**
+ * Check that the user_data error message is a substring of the
+ * actual error otherwise assert.  Displays the error (and asserts
+ * if G_LOG_FLAG_FATAL is TRUE) if NULL is passed as user_data,
+ * but a NULL or 0 value member matches anything.
+ */
+gboolean test_checked_substring_handler (const char *log_domain, GLogLevelFlags log_level,
+                                         const gchar *msg, gpointer user_data);
+/**
  * Check the user_data against the actual error and assert on any
  * differences.  Displays the error (and asserts if G_LOG_FLAG_FATAL
  * is TRUE) if NULL is passed as user_data, but a NULL or 0 value
@@ -212,6 +220,18 @@ gboolean test_null_handler (const char *log_domain, GLogLevelFlags log_level,
  */
 void test_add_error (TestErrorStruct *error);
 void test_clear_error_list (void);
+
+/**
+ * Checks received errors against the list created by
+ * test_add_error. Rather than checking for an exact match, this function
+ * checks using a substring match. If the list is empty or nothing
+ * matches, passes control on to test_checked_substring_handler, giving
+ * the opportunity for an additional check that's not in the list
+ * (set user_data to NULL if you want test_checked_handler to
+ * immediately print the error).
+ */
+gboolean test_list_substring_handler (const char *log_domain, GLogLevelFlags log_level,
+                      const gchar *msg, gpointer user_data);
 
 /**
  * Checks received errors against the list created by

@@ -10,8 +10,7 @@ SET(common_EXTRA_DIST
         config.h.cmake.in
         gnc-test-env.pl
         guile-mappings.h
-        platform.h
-	swig-utf8.patch)
+        platform.h)
 
 IF (BUILDING_FROM_VCS)
   SET (SWIG_RUNTIME_H ${CMAKE_CURRENT_BINARY_DIR}/swig-runtime.h PARENT_SCOPE)

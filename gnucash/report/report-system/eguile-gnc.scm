@@ -85,10 +85,7 @@
 
 (use-modules (ice-9 regex))       ; for regular expressions
 (use-modules (ice-9 rdelim))      ; for read-line
-(cond-expand
-  (guile-2
-      (use-modules (ice-9 local-eval)))  ; for the-environment
-  (else ))
+(use-modules (ice-9 local-eval))  ; for the-environment
 (use-modules (gnucash printf))
 (use-modules (gnucash app-utils)) ; for _
 

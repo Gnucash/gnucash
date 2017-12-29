@@ -28,12 +28,18 @@ GNC_ADD_TEST_WITH_GUILE(test-scm-query-string test-scm-query-string.cpp
 ADD_APP_UTILS_TEST(test-sx test-sx.cpp)
 
 SET(GUILE_DEPENDS
+  scm-test-engine
   scm-app-utils
   gnc-core-utils
   gnc-module
   gncmod-engine
   gncmod-backend-xml
   gncmod-backend-xml
+)
+
+set(test_app_utils_scheme_SOURCES
+  test-c-interface.scm
+  test-load-app-utils-module.scm
 )
 
 GNC_ADD_SCHEME_TARGETS(scm-test-load-app-utils-module
@@ -43,7 +49,14 @@ GNC_ADD_SCHEME_TARGETS(scm-test-load-app-utils-module
   FALSE
 )
 
-GNC_ADD_SCHEME_TESTS("test-load-app-utils-module.scm")
+GNC_ADD_SCHEME_TARGETS(scm-test-c-interface
+  "test-c-interface.scm"
+  ""
+  "${GUILE_DEPENDS}"
+  FALSE
+)
+
+GNC_ADD_SCHEME_TESTS(${test_app_utils_scheme_SOURCES})
 # Doesn't work yet:
 GNC_ADD_TEST_WITH_GUILE(test-app-utils "${test_app_utils_SOURCES}" APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
 
@@ -56,6 +69,7 @@ SET_DIST_LIST(test_app_utils_DIST
   test-print-queries.cpp
   test-scm-query-string.cpp
   test-sx.cpp
-  test-load-app-utils-module.scm
+  test-c-interface.scm
+  ${test_app_utils_scheme_SOURCES}
   ${test_app_utils_SOURCES}
 )

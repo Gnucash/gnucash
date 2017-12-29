@@ -18,11 +18,6 @@
 (define-module (gnucash main)
   #:use-module (gnucash printf))
 
-;; This is to silence warnings with guile-1.8:
-(if (and (>= (string->number (major-version)) 1) 
-         (>= (string->number (minor-version)) 8))
-    (default-duplicate-binding-handler 'last))
-
 ;; Turn off the scheme compiler's "possibly unbound variable" warnings.
 ;; In guile 2.0 we get nearly 7500 of them loading the scheme files.
 ;; This is the default value for auto-compilation-options without "unbound-variable".
@@ -53,7 +48,6 @@
 (export gnc:error)
 (export gnc:msg)
 (export gnc:debug)
-(export gnc:backtrace-if-exception)
 (export gnc:safe-strcmp) ;; only used by aging.scm atm...
 
 ;; Get the Makefile.am/configure.in generated variables.
@@ -64,15 +58,6 @@
 ;; These are needed for a guile 1.3.4 bug
 (debug-enable 'backtrace)
 (read-enable 'positions)
-
-;; These options should only be set for guile < 2.0
-;; 'debug (deprecated and unused since guile 2)
-;; maxdepth (removed since guile 2)
-(cond-expand
-  (guile-2 )
-  (else
-    (debug-enable 'debug)
-    (debug-set! maxdepth 100000)))
 (debug-set! stack    200000)
 
 ;; Initalialize localization, otherwise reports may output
@@ -93,32 +78,6 @@
        (a 1)
        (b -1)
        (else 0))))
-
-(define (gnc:backtrace-if-exception proc . args)
-  (define (dumper key . args)
-    (let ((stack (make-stack #t dumper)))
-      ;; Send debugging output to the console.
-      (display-backtrace stack (current-error-port))
-      (apply display-error stack (current-error-port) args)
-
-      ;; Send debugging output to the log.
-      (if (defined? 'gnc:warn)
-          (let ((string-port (open-output-string)))
-            (display-backtrace stack string-port)
-            (apply display-error stack string-port args)
-            (gnc:warn (get-output-string string-port))
-            (close-output-port string-port)))
-
-      (throw 'ignore)))
-  
-  (catch 
-      'ignore
-    (lambda () 
-      (lazy-catch #t 
-                  (lambda () (apply proc args))
-                  dumper))
-    (lambda (key . args)
-      #f)))
 
 ;;;; Status output functions.
 

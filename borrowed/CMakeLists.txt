@@ -1,6 +1,6 @@
 ADD_SUBDIRECTORY(libc)
 ADD_SUBDIRECTORY(goffice)
-if (WITH_AQBANKING)
+if (WITH_AQBANKING AND NOT HAVE_GWEN_GTK3)
   ADD_SUBDIRECTORY(gwengui-gtk3)
 endif()
 SET_LOCAL_DIST(borrowed_DIST_local CMakeLists.txt Makefile.am README)

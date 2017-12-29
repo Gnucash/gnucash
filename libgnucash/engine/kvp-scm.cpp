@@ -25,21 +25,30 @@ extern "C"
 KvpValue *
 gnc_scm_to_kvp_value_ptr(SCM val)
 {
-    if (scm_is_number(val))
+    if (scm_is_rational(val))
     {
-        /* in guile 1.8 (exact? ) only works on numbers */
-        if (scm_is_exact (val) && gnc_gh_gint64_p(val))
+        if (scm_is_exact(val) &&
+            (scm_is_signed_integer(val, INT64_MIN, INT64_MAX) ||
+             scm_is_unsigned_integer(val, INT64_MIN, INT64_MAX)))
         {
             return new KvpValue{scm_to_int64(val)};
+        }
+        else if (scm_is_exact(val) &&
+                 (scm_is_signed_integer(scm_numerator(val),
+                                       INT64_MIN, INT64_MAX) ||
+                  scm_is_unsigned_integer(scm_numerator(val),
+                                          INT64_MIN, INT64_MAX)) &&
+                 (scm_is_signed_integer(scm_denominator(val),
+                                        INT64_MIN, INT64_MAX) ||
+                  (scm_is_unsigned_integer(scm_denominator(val),
+                                           INT64_MIN, INT64_MAX))))
+        {
+            return new KvpValue{gnc_scm_to_numeric(val)};
         }
         else
         {
             return new KvpValue{scm_to_double(val)};
         }
-    }
-    else if (gnc_numeric_p(val))
-    {
-        return new KvpValue{gnc_scm_to_numeric(val)};
     }
     else if (gnc_guid_p(val))
     {

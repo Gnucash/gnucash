@@ -218,7 +218,7 @@ gnc_euro_currency_get_rate (const gnc_commodity *currency)
         return gnc_numeric_zero ();
 
     return double_to_gnc_numeric (result->rate, GNC_DENOM_AUTO,
-                                  GNC_HOW_DENOM_SIGFIGS(6) | GNC_HOW_RND_ROUND_HALF_UP);
+                                  GNC_HOW_RND_ROUND_HALF_UP);
 }
 
 /* ------------------------------------------------------ */

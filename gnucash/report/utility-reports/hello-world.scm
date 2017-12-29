@@ -28,11 +28,6 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
-;; 'debug is deprecated and unused since guile 2
-(cond-expand
-  (guile-2 )
-  (else
-    (debug-enable 'debug)))
 (debug-enable 'backtrace)
 
 (gnc:module-load "gnucash/report/report-system" 0)
@@ -414,7 +409,7 @@ new, totally cool report, consult the mailing list %s.")
           (_ "The number option formatted as currency is %s.")
           (gnc:html-markup-b
            (xaccPrintAmount
-            (gnc:make-gnc-numeric (inexact->exact num-val) 1)
+            (inexact->exact num-val)
             (gnc-default-print-info #f)))))))
 
       ;; you can add as many objects as you want.  Here's another 

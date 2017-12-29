@@ -97,12 +97,9 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
-(cond-expand
-  (guile-2
-    (eval-when
+(eval-when
       (compile load eval expand)
-      (load-extension "libgncmod-gnome-utils" "scm_init_sw_gnome_utils_module")))
-  (else ))
+      (load-extension "libgncmod-gnome-utils" "scm_init_sw_gnome_utils_module"))
 (use-modules (sw_gnome_utils)) ;; to get to gnc-error-dialog
 
 (use-modules (gnucash printf))
@@ -704,7 +701,7 @@
                               (gnc-commodity-equiv account-commodity
                                                                  USD-currency)))
                      (xaccSplitGetValue split)
-                     (gnc:make-gnc-numeric 100 100)))
+                     100/100))
      (missing-pricedb-entry? #f)
      (pricedb-lookup-price #f)
      (pricedb-lookup-price-value (gnc-numeric-zero))
@@ -801,7 +798,7 @@
                                                            trans-currency
                                                            USD-currency))
                                            (gnc-numeric-div
-                                               (gnc:make-gnc-numeric 100 100)
+                                               100/100
                                                (xaccSplitGetSharePrice split)
                                                GNC-DENOM-AUTO
                                                (logior (GNC-DENOM-SIGFIGS 6)

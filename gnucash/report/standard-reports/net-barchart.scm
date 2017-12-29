@@ -314,11 +314,11 @@
 	      (liabilities (assoc-ref rpt 'liability)))
 	 (set! assets-list (if assets (car assets)
 			       (map (lambda (d)
-				      (gnc:make-gnc-monetary report-currency (gnc:make-gnc-numeric 0 1)))
+				      (gnc:make-gnc-monetary report-currency 0/1))
 				    dates-list)))
 	 (set! liability-list (if liabilities (car liabilities)
 				  (map (lambda (d)
-				      (gnc:make-gnc-monetary report-currency (gnc:make-gnc-numeric 0 1)))
+				      (gnc:make-gnc-monetary report-currency 0/1))
 				    dates-list)))
 	 )
 

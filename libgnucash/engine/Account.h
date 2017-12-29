@@ -48,6 +48,9 @@
 #include "gnc-engine.h"
 #include "policy.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 typedef gnc_numeric (*xaccGetBalanceFn)( const Account *account );
 
 typedef gnc_numeric (*xaccGetBalanceInCurrencyFn) (
@@ -1446,11 +1449,6 @@ gchar *gnc_account_get_map_entry (Account *acc, const char *full_category);
  */
 void gnc_account_delete_map_entry (Account *acc, char *full_category, gboolean empty);
 
-/** Search for Bayesian entries with mappings based on full account name and change
- *  them to be based on the account guid
- */
-void gnc_account_imap_convert_bayes (QofBook *book);
-
 /** @} */
 
 
@@ -1516,6 +1514,10 @@ const char * dxaccAccountGetQuoteTZ (const Account *account);
 /** This is the type-override when you want to match all accounts.  Used
  * in the gnome-search parameter list.  Be careful when you use this. */
 #define ACCOUNT_MATCH_ALL_TYPE	"account-match-all"
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 
 #endif /* XACC_ACCOUNT_H */
 /** @} */

@@ -415,8 +415,8 @@
     ;; numeric-collectors, where [abc] are numeric-collectors. See the
     ;; real variable names below.
     (define (make-newrate unknown-coll un->known-coll known-pair)
-      (let ((a (gnc:make-numeric-collector))
-            (b (gnc:make-numeric-collector)))
+      (let ((a (gnc:make-number-collector))
+            (b (gnc:make-number-collector)))
         (a 'add (unknown-coll 'total #f))
         (b 'add
            ;; round to (at least) 8 significant digits
@@ -459,7 +459,7 @@
                          ;; If this is an Euro currency, create the
                          ;; pair of appropriately exchanged amounts.
                          (if euro-monetary
-                             (let ((a (gnc:make-numeric-collector)))
+                             (let ((a (gnc:make-number-collector)))
                                (a 'add
                                   (gnc:gnc-monetary-amount euro-monetary))
                                (list report-commodity
@@ -532,8 +532,8 @@
 
 (define (create-commodity-list inner-comm outer-comm share-amount value-amount)
   (let ((foreignlist (list inner-comm
-                    (cons (gnc:make-numeric-collector)
-                          (gnc:make-numeric-collector))))
+                    (cons (gnc:make-number-collector)
+                          (gnc:make-number-collector))))
         (comm-list #f))
     ((caadr foreignlist) 'add share-amount)
     ((cdadr foreignlist) 'add value-amount)
@@ -560,8 +560,8 @@
     (if (not pair)
         (begin
           (set! pair (list (car foreignlist)
-                         (cons (gnc:make-numeric-collector)
-                               (gnc:make-numeric-collector))))
+                         (cons (gnc:make-number-collector)
+                               (gnc:make-number-collector))))
           (gnc:debug "New commodity "
                      (gnc-commodity-get-mnemonic (car foreignlist)))))
     pair))

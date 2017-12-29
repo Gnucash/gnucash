@@ -12,12 +12,7 @@ SET(gnome_GSCHEMA
   org.gnucash.window.pages.gschema.xml
 )
 
-# If you edit one of the above files, you need to rerun cmake.
-# When we can use CONFIGURE_FILE() instead of GNC_CONFIGURE()
-# this issue will go away.
-
-
-ADD_GSCHEMA_TARGETS(gnome-gschema "${gnome_GSCHEMA}")
+add_gschema_targets("${gnome_GSCHEMA}")
 
 SET(gnome_gschema_DIST_local "")
 FOREACH(file ${gnome_GSCHEMA})

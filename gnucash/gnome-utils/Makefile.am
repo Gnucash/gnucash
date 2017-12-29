@@ -222,13 +222,6 @@ swig-gnome-utils.c: gnome-utils.i \
                     ${top_srcdir}/common/base-typemaps.i
 	$(SWIG) -guile -Linkage module \
 	-I${top_srcdir}/common -o $@ $<
-if ! OS_WIN32
-if ! SWIG_DIST_FAIL
-	if ! `grep "define scm_from_utf8_string" $@ > /dev/null 2>&1`; then \
-	  patch $@ $(top_srcdir)/common/swig-utf8.patch; \
-	fi
-endif
-endif
 endif
 
 gncscmmoddir = ${GNC_SCM_INSTALL_DIR}/gnucash
@@ -267,7 +260,6 @@ if ! OS_WIN32
 	touch .scm-links
 endif
 
-if GNC_HAVE_GUILE_2
 GUILE_COMPILE_ENV = \
   --guile-load-dir ${top_builddir}/libgnucash/core-utils \
   --guile-load-dir ${top_builddir}/libgnucash/gnc-module \
@@ -290,7 +282,6 @@ gncscmmodcache_DATA = $(gncscmmod_DATA:.scm=.go)
 
 gncscmcachedir = ${pkglibdir}/scm/ccache/@GUILE_EFFECTIVE_VERSION@
 gncscmcache_DATA = $(gncscm_DATA:.scm=.go)
-endif
 
 noinst_DATA = .scm-links
 clean-local:

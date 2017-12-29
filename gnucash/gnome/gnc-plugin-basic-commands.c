@@ -528,7 +528,7 @@ gnc_main_window_cmd_file_export_accounts (GtkAction *action, GncMainWindowAction
 #ifdef HAVE_DBI_DBI_H
     gnc_ui_file_access_for_export (GTK_WINDOW (data->window));
 #else
-    gnc_file_export ();
+    gnc_file_export (GTK_WINDOW (data->window));
 #endif
     gnc_window_set_progressbar_window (NULL);
 }

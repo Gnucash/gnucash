@@ -54,8 +54,8 @@ FUNCTION(GNC_ADD_SCHEME_TARGETS _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
     MAKE_UNIX_PATH(CMAKE_SOURCE_DIR)
   ENDIF(MINGW64)
 
-  # For guile 1, we simple link (or copy, for Windows) each source file to the dest directory
-  IF(HAVE_GUILE1 OR MAKE_LINKS)
+  # If links are requested, we simple link (or copy, for Windows) each source file to the dest directory
+  IF(MAKE_LINKS)
     SET(_LINK_DIR ${DATADIR_BUILD}/gnucash/scm/${_OUTPUT_DIR})
     FILE(MAKE_DIRECTORY ${_LINK_DIR})
     SET(_SCHEME_LINKS "")
@@ -74,30 +74,25 @@ FUNCTION(GNC_ADD_SCHEME_TARGETS _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
         )
       ENDIF()
     ENDFOREACH(scheme_file)
-    IF(HAVE_GUILE1)
-      ADD_CUSTOM_TARGET(${_TARGET} ALL DEPENDS ${_SCHEME_LINKS})
-    ELSE()
-      ADD_CUSTOM_TARGET(${_TARGET}-links ALL DEPENDS ${_SCHEME_LINKS})
-    ENDIF()
-  ENDIF(HAVE_GUILE1 OR MAKE_LINKS)
+    ADD_CUSTOM_TARGET(${_TARGET}-links ALL DEPENDS ${_SCHEME_LINKS})
+  ENDIF(MAKE_LINKS)
 
-  IF(HAVE_GUILE2)
-    # Construct the guile source and compiled load paths
+  # Construct the guile source and compiled load paths
 
-    SET(_GUILE_LOAD_PATH "${current_srcdir}"
-        "${current_bindir}" "${CMAKE_BINARY_DIR}/libgnucash/scm")  # to pick up generated build-config.scm
-    SET(_GUILE_LOAD_COMPILED_PATH "${current_bindir}")
+  SET(_GUILE_LOAD_PATH "${current_srcdir}"
+      "${current_bindir}" "${CMAKE_BINARY_DIR}/libgnucash/scm")  # to pick up generated build-config.scm
+  SET(_GUILE_LOAD_COMPILED_PATH "${current_bindir}")
 
-    SET(_GUILE_CACHE_DIR ${LIBDIR_BUILD}/gnucash/scm/ccache/2.0)
-    SET(_GUILE_LOAD_PATH "${current_srcdir}")
-    IF (MAKE_LINKS)
+  SET(_GUILE_CACHE_DIR ${LIBDIR_BUILD}/gnucash/scm/ccache/${GUILE_EFFECTIVE_VERSION})
+  SET(_GUILE_LOAD_PATH "${current_srcdir}")
+  IF (MAKE_LINKS)
       LIST(APPEND _GUILE_LOAD_PATH "${build_datadir}/gnucash/scm")
-    ENDIF()
-    SET(_GUILE_LOAD_COMPILED_PATH ${build_libdir}/gnucash/scm/ccache/2.0)
+  ENDIF()
+  SET(_GUILE_LOAD_COMPILED_PATH ${build_libdir}/gnucash/scm/ccache/${GUILE_EFFECTIVE_VERSION})
 
-    SET(_TARGET_FILES "")
+  SET(_TARGET_FILES "")
 
-    FOREACH(source_file ${_SOURCE_FILES})
+  FOREACH(source_file ${_SOURCE_FILES})
       SET(guile_depends ${_GUILE_DEPENDS})
       GET_FILENAME_COMPONENT(basename ${source_file} NAME_WE)
 
@@ -121,11 +116,11 @@ FUNCTION(GNC_ADD_SCHEME_TARGETS _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
         SET(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
       ENDIF()
       IF (MINGW64)
-	set(fpath "")
-	foreach(dir $ENV{PATH})
-	  MAKE_UNIX_PATH(dir)
-	  set(fpath "${fpath}${dir}:")
-	endforeach(dir)
+        set(fpath "")
+        foreach(dir $ENV{PATH})
+            MAKE_UNIX_PATH(dir)
+            set(fpath "${fpath}${dir}:")
+        endforeach(dir)
         SET(LIBRARY_PATH "PATH=\"${build_bindir}:${fpath}\"")
       ELSE (MINGW64)
         SET (LIBRARY_PATH "LD_LIBRARY_PATH=${LIBDIR_BUILD}:${LIBDIR_BUILD}/gnucash:${_GUILE_LD_LIBRARY_PATH}")
@@ -135,7 +130,7 @@ FUNCTION(GNC_ADD_SCHEME_TARGETS _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
       ENDIF (APPLE)
       SET(_GNC_MODULE_PATH "")
       IF(MINGW64)
-	SET(_GNC_MODULE_PATH "${build_bindir}")
+        SET(_GNC_MODULE_PATH "${build_bindir}")
       ELSE(MINGW64)
         SET(_GNC_MODULE_PATH "${LIBDIR_BUILD}" "${LIBDIR_BUILD}/gnucash" "${GNC_MODULE_PATH}")
       ENDIF(MINGW64)
@@ -144,31 +139,30 @@ FUNCTION(GNC_ADD_SCHEME_TARGETS _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
       MAKE_UNIX_PATH_LIST(_GUILE_LD_LIBRARY_PATH)
       MAKE_UNIX_PATH_LIST(_GNC_MODULE_PATH)
       IF (__DEBUG)
-	MESSAGE("  ")
-	MESSAGE("   LIBRARY_PATH: ${LIBRARY_PATH}")
-	MESSAGE("   GUILE_LOAD_PATH: ${_GUILE_LOAD_PATH}")
-	MESSAGE("   GUILE_LOAD_COMPILED_PATH: ${_GUILE_LOAD_COMPILED_PATH}")
-	MESSAGE("   GNC_MODULE_PATH: ${_GNC_MODULE_PATH}")
+        MESSAGE("  ")
+        MESSAGE("   LIBRARY_PATH: ${LIBRARY_PATH}")
+        MESSAGE("   GUILE_LOAD_PATH: ${_GUILE_LOAD_PATH}")
+        MESSAGE("   GUILE_LOAD_COMPILED_PATH: ${_GUILE_LOAD_COMPILED_PATH}")
+        MESSAGE("   GNC_MODULE_PATH: ${_GNC_MODULE_PATH}")
       ENDIF(__DEBUG)
       ADD_CUSTOM_COMMAND(
         OUTPUT ${output_file}
         COMMAND ${CMAKE_COMMAND_TMP}
-	   ${LIBRARY_PATH}
-           GNC_UNINSTALLED=YES
-           GNC_BUILDDIR=${CMAKE_BINARY_DIR}
-           GUILE_LOAD_PATH=${_GUILE_LOAD_PATH}
-           GUILE_LOAD_COMPILED_PATH=${_GUILE_LOAD_COMPILED_PATH}
-           GNC_MODULE_PATH=${_GNC_MODULE_PATH}
-           ${GUILE_EXECUTABLE} -e '\(@@ \(guild\) main\)' -s ${GUILD_EXECUTABLE} compile -o ${output_file} ${source_file_abs_path}
+            ${LIBRARY_PATH}
+            GNC_UNINSTALLED=YES
+            GNC_BUILDDIR=${CMAKE_BINARY_DIR}
+            GUILE_LOAD_PATH=${_GUILE_LOAD_PATH}
+            GUILE_LOAD_COMPILED_PATH=${_GUILE_LOAD_COMPILED_PATH}
+            GNC_MODULE_PATH=${_GNC_MODULE_PATH}
+            ${GUILE_EXECUTABLE} -e '\(@@ \(guild\) main\)' -s ${GUILD_EXECUTABLE} compile -o ${output_file} ${source_file_abs_path}
         DEPENDS ${guile_depends}
         MAIN_DEPENDENCY ${source_file_abs_path}
         )
-    ENDFOREACH(source_file)
-    IF (__DEBUG)
-      MESSAGE("TARGET_FILES are ${_TARGET_FILES}")
-    ENDIF(__DEBUG)
-    ADD_CUSTOM_TARGET(${_TARGET} ALL DEPENDS ${_TARGET_FILES})
-    INSTALL(FILES ${_TARGET_FILES} DESTINATION ${SCHEME_INSTALLED_CACHE_DIR}/${_OUTPUT_DIR})
-  ENDIF(HAVE_GUILE2)
+  ENDFOREACH(source_file)
+  IF (__DEBUG)
+    MESSAGE("TARGET_FILES are ${_TARGET_FILES}")
+  ENDIF(__DEBUG)
+  ADD_CUSTOM_TARGET(${_TARGET} ALL DEPENDS ${_TARGET_FILES})
+  INSTALL(FILES ${_TARGET_FILES} DESTINATION ${SCHEME_INSTALLED_CACHE_DIR}/${_OUTPUT_DIR})
   INSTALL(FILES ${_SOURCE_FILES} DESTINATION ${SCHEME_INSTALLED_SOURCE_DIR}/${_OUTPUT_DIR})
 ENDFUNCTION(GNC_ADD_SCHEME_TARGETS)

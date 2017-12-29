@@ -35,7 +35,6 @@ extern "C"
 #include <TransactionP.h>
 #include <gnc-lot.h>
 #include <gnc-event.h>
-#include <qofinstance-p.h>
 
 #if defined(__clang__) && (__clang_major__ == 5 || (__clang_major__ == 3 && __clang_minor__ < 5))
 #define USE_CLANG_FUNC_SIG 1
@@ -45,6 +44,7 @@ static const gchar *suitename = "/engine/Split";
 void test_suite_split ( void );
 }
 
+#include <qofinstance-p.h>
 #include <kvp-frame.hpp>
 
 typedef struct
@@ -735,12 +735,12 @@ test_xaccSplitDetermineGainStatus (Fixture *fixture, gconstpointer pData)
 
     fixture->split->gains = GAINS_STATUS_UNKNOWN;
     fixture->split->gains_split = NULL;
-    g_assert (fixture->split->inst.kvp_data->get_slot("gains_source") == NULL);
+    g_assert (fixture->split->inst.kvp_data->get_slot({"gains_source"}) == NULL);
     xaccSplitDetermineGainStatus (fixture->split);
     g_assert (fixture->split->gains_split == NULL);
     g_assert_cmpint (fixture->split->gains, ==, GAINS_STATUS_A_VDIRTY | GAINS_STATUS_DATE_DIRTY);
 
-    fixture->split->inst.kvp_data->set("gains-source", new KvpValue(const_cast<GncGUID*>(guid_copy(g_guid))));
+    fixture->split->inst.kvp_data->set({"gains-source"}, new KvpValue(guid_copy(g_guid)));
     g_assert (fixture->split->gains_split == NULL);
     fixture->split->gains = GAINS_STATUS_UNKNOWN;
     xaccSplitDetermineGainStatus (fixture->split);
@@ -1670,7 +1670,6 @@ test_xaccSplitGetSharePrice (Fixture *fixture, gconstpointer pData)
     gnc_numeric expected = gnc_numeric_create (1, 1);
     Split *split = fixture->split;
     /* Warning: this is a define in Split.c */
-    const guint PRICE_SIGFIGS = 6;
     char *logdomain = "gnc.engine";
     GLogLevelFlags loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     TestErrorStruct check = { loglevel, logdomain, NULL, 0 };
@@ -1685,7 +1684,6 @@ test_xaccSplitGetSharePrice (Fixture *fixture, gconstpointer pData)
 
     expected = gnc_numeric_div (split->value, split->amount,
                                 GNC_DENOM_AUTO,
-                                GNC_HOW_DENOM_SIGFIGS (PRICE_SIGFIGS) |
                                 GNC_HOW_RND_ROUND_HALF_UP);
 
     result = xaccSplitGetSharePrice (split);
@@ -1710,7 +1708,6 @@ test_xaccSplitGetSharePrice (Fixture *fixture, gconstpointer pData)
     split->value = gnc_numeric_create (3, 789304166);
     quotient = gnc_numeric_div (split->value, split->amount,
                                 GNC_DENOM_AUTO,
-                                GNC_HOW_DENOM_SIGFIGS (PRICE_SIGFIGS) |
                                 GNC_HOW_RND_ROUND_HALF_UP);
     check.msg = g_strdup_printf ("[xaccSplitGetSharePrice()] "
                                  "Computing share price failed (%d): [ %"
@@ -1730,7 +1727,6 @@ test_xaccSplitGetSharePrice (Fixture *fixture, gconstpointer pData)
     split->value = gnc_numeric_create (3, 0);
     quotient = gnc_numeric_div (split->value, split->amount,
                                 GNC_DENOM_AUTO,
-                                GNC_HOW_DENOM_SIGFIGS (PRICE_SIGFIGS) |
                                 GNC_HOW_RND_ROUND_HALF_UP);
     check.msg = g_strdup_printf ("[xaccSplitGetSharePrice()] "
                                  "Computing share price failed (%d): [ %"
@@ -1750,7 +1746,6 @@ test_xaccSplitGetSharePrice (Fixture *fixture, gconstpointer pData)
     split->value = gnc_numeric_create (3, 789304166);
     quotient = gnc_numeric_div (split->value, split->amount,
                                 GNC_DENOM_AUTO,
-                                GNC_HOW_DENOM_SIGFIGS (PRICE_SIGFIGS) |
                                 GNC_HOW_RND_ROUND_HALF_UP);
     check.msg = g_strdup_printf ("[xaccSplitGetSharePrice()] "
                                  "Computing share price failed (%d): [ %"
@@ -1802,7 +1797,7 @@ test_xaccSplitGetOtherSplit (Fixture *fixture, gconstpointer pData)
     g_assert (xaccSplitGetOtherSplit (split1) == NULL);
 
     g_assert (xaccTransUseTradingAccounts (txn) == FALSE);
-    g_assert (split->inst.kvp_data->get_slot("lot-split") == NULL);
+    g_assert (split->inst.kvp_data->get_slot({"lot-split"}) == NULL);
     g_assert_cmpint (xaccTransCountSplits (txn), !=, 2);
     g_assert (xaccSplitGetOtherSplit (split) == NULL);
 
@@ -1813,18 +1808,18 @@ test_xaccSplitGetOtherSplit (Fixture *fixture, gconstpointer pData)
     xaccSplitSetParent (split2, txn);
     g_assert (xaccSplitGetOtherSplit (split) == NULL);
 
-    split->inst.kvp_data->set("lot-split", kvpnow);
-    g_assert (split->inst.kvp_data->get_slot("lot-split"));
+    split->inst.kvp_data->set({"lot-split"}, kvpnow);
+    g_assert (split->inst.kvp_data->get_slot({"lot-split"}));
     g_assert (xaccSplitGetOtherSplit (split) == NULL);
 
-    split1->inst.kvp_data->set("lot-split", kvpnow);
-    g_assert (split1->inst.kvp_data->get_slot("lot-split"));
+    split1->inst.kvp_data->set({"lot-split"}, kvpnow);
+    g_assert (split1->inst.kvp_data->get_slot({"lot-split"}));
     g_assert (xaccSplitGetOtherSplit (split) == split2);
 
-    split->inst.kvp_data->set("lot-split", NULL);
-    g_assert (split->inst.kvp_data->get_slot("lot-split") == NULL);
-    split1->inst.kvp_data->set("lot-split", NULL);
-    g_assert (split1->inst.kvp_data->get_slot("lot-split") == NULL);
+    split->inst.kvp_data->set({"lot-split"}, NULL);
+    g_assert (split->inst.kvp_data->get_slot({"lot-split"}) == NULL);
+    split1->inst.kvp_data->set({"lot-split"}, NULL);
+    g_assert (split1->inst.kvp_data->get_slot({"lot-split"}) == NULL);
     qof_book_begin_edit (book);
     qof_instance_set (QOF_INSTANCE (book),
 		      "trading-accts", "t",

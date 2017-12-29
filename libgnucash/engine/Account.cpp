@@ -41,6 +41,9 @@
 #include "gnc-pricedb.h"
 #include "qofinstance-p.h"
 #include "gnc-features.h"
+#include "guid.hpp"
+
+#include <numeric>
 
 static QofLogModule log_module = GNC_MOD_ACCOUNT;
 
@@ -54,6 +57,10 @@ static const char *KEY_ASSOC_INCOME_ACCOUNT = "ofx/associated-income-account";
 #define AB_ACCOUNT_UID "account-uid"
 #define AB_BANK_CODE "bank-code"
 #define AB_TRANS_RETRIEVAL "trans-retrieval"
+
+using FinalProbabilityVec=std::vector<std::pair<std::string, int32_t>>;
+using ProbabilityVec=std::vector<std::pair<std::string, struct AccountProbability>>;
+using FlatKvpEntry=std::pair<std::string, KvpValue*>;
 
 enum
 {
@@ -171,7 +178,7 @@ gchar *gnc_account_name_violations_errmsg (const gchar *separator, GList* invali
     for ( node = invalid_account_names;  node; node = g_list_next(node))
     {
         if ( !account_list )
-            account_list = node->data;
+            account_list = static_cast<gchar *>(node->data);
         else
         {
             gchar *tmp_list = NULL;
@@ -251,9 +258,9 @@ gnc_account_init(Account* acc)
     priv->parent   = NULL;
     priv->children = NULL;
 
-    priv->accountName = CACHE_INSERT("");
-    priv->accountCode = CACHE_INSERT("");
-    priv->description = CACHE_INSERT("");
+    priv->accountName = static_cast<char*>(qof_string_cache_insert(""));
+    priv->accountCode = static_cast<char*>(qof_string_cache_insert(""));
+    priv->description = static_cast<char*>(qof_string_cache_insert(""));
 
     priv->type = ACCT_TYPE_NONE;
 
@@ -403,34 +410,27 @@ gnc_account_get_property (GObject         *object,
     case PROP_SORT_REVERSED:
         g_value_set_boolean(value, xaccAccountGetSortReversed(account));
     case PROP_LOT_NEXT_ID:
-        key = "lot-mgmt/next-id";
         /* Pre-set the value in case the frame is empty */
         g_value_set_int64 (value, 0);
-        qof_instance_get_kvp (QOF_INSTANCE (account), key, value);
+        qof_instance_get_path_kvp (QOF_INSTANCE (account), value, {"lot-mgmt", "next-id"});
         break;
     case PROP_ONLINE_ACCOUNT:
-        key = "online_id";
-        qof_instance_get_kvp (QOF_INSTANCE (account), key, value);
+        qof_instance_get_path_kvp (QOF_INSTANCE (account), value, {"online_id"});
         break;
     case PROP_OFX_INCOME_ACCOUNT:
-        key = KEY_ASSOC_INCOME_ACCOUNT;
-        qof_instance_get_kvp (QOF_INSTANCE (account), key, value);
+        qof_instance_get_path_kvp (QOF_INSTANCE (account), value, {KEY_ASSOC_INCOME_ACCOUNT});
         break;
     case PROP_AB_ACCOUNT_ID:
-        key = AB_KEY "/" AB_ACCOUNT_ID;
-        qof_instance_get_kvp (QOF_INSTANCE (account), key, value);
+        qof_instance_get_path_kvp (QOF_INSTANCE (account), value, {AB_KEY, AB_ACCOUNT_ID});
         break;
     case PROP_AB_ACCOUNT_UID:
-        key = AB_KEY "/" AB_ACCOUNT_UID;
-        qof_instance_get_kvp (QOF_INSTANCE (account), key, value);
+        qof_instance_get_path_kvp (QOF_INSTANCE (account), value, {AB_KEY, AB_ACCOUNT_UID});
         break;
     case PROP_AB_BANK_CODE:
-        key = AB_KEY "/" AB_BANK_CODE;
-        qof_instance_get_kvp (QOF_INSTANCE (account), key, value);
+        qof_instance_get_path_kvp (QOF_INSTANCE (account), value, {AB_KEY, AB_BANK_CODE});
         break;
     case PROP_AB_TRANS_RETRIEVAL:
-        key = AB_KEY "/" AB_TRANS_RETRIEVAL;
-        qof_instance_get_kvp (QOF_INSTANCE (account), key, value);
+        qof_instance_get_path_kvp (QOF_INSTANCE (account), value, {AB_KEY, AB_TRANS_RETRIEVAL});
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -446,10 +446,7 @@ gnc_account_set_property (GObject         *object,
 {
     Account *account;
     gnc_numeric *number;
-    const gchar *key = NULL;
-
     g_return_if_fail(GNC_IS_ACCOUNT(object));
-
     account = GNC_ACCOUNT(object);
     if (prop_id < PROP_RUNTIME_0)
         g_assert (qof_instance_get_editlevel(account));
@@ -473,10 +470,10 @@ gnc_account_set_property (GObject         *object,
         break;
     case PROP_TYPE:
         // NEED TO BE CONVERTED TO A G_TYPE_ENUM
-        xaccAccountSetType(account, g_value_get_int(value));
+        xaccAccountSetType(account, static_cast<GNCAccountType>(g_value_get_int(value)));
         break;
     case PROP_COMMODITY:
-        xaccAccountSetCommodity(account, g_value_get_object(value));
+        xaccAccountSetCommodity(account, static_cast<gnc_commodity*>(g_value_get_object(value)));
         break;
     case PROP_COMMODITY_SCU:
         xaccAccountSetCommoditySCU(account, g_value_get_int(value));
@@ -491,19 +488,19 @@ gnc_account_set_property (GObject         *object,
         gnc_account_set_balance_dirty(account);
         break;
     case PROP_START_BALANCE:
-        number = g_value_get_boxed(value);
+        number = static_cast<gnc_numeric*>(g_value_get_boxed(value));
         gnc_account_set_start_balance(account, *number);
         break;
     case PROP_START_CLEARED_BALANCE:
-        number = g_value_get_boxed(value);
+        number = static_cast<gnc_numeric*>(g_value_get_boxed(value));
         gnc_account_set_start_cleared_balance(account, *number);
         break;
     case PROP_START_RECONCILED_BALANCE:
-        number = g_value_get_boxed(value);
+        number = static_cast<gnc_numeric*>(g_value_get_boxed(value));
         gnc_account_set_start_reconciled_balance(account, *number);
         break;
     case PROP_POLICY:
-        gnc_account_set_policy(account, g_value_get_pointer(value));
+        gnc_account_set_policy(account, static_cast<GNCPolicy*>(g_value_get_pointer(value)));
         break;
     case PROP_MARK:
         xaccAccountSetMark(account, g_value_get_int(value));
@@ -537,32 +534,25 @@ gnc_account_set_property (GObject         *object,
     case PROP_SORT_REVERSED:
         xaccAccountSetSortReversed(account, g_value_get_boolean(value));
     case PROP_LOT_NEXT_ID:
-        key = "lot-mgmt/next-id";
-        qof_instance_set_kvp (QOF_INSTANCE (account), key, value);
+        qof_instance_set_path_kvp (QOF_INSTANCE (account), value, {"lot-mgmt", "next-id"});
         break;
     case PROP_ONLINE_ACCOUNT:
-        key = "online_id";
-        qof_instance_set_kvp (QOF_INSTANCE (account), key, value);
+        qof_instance_set_path_kvp (QOF_INSTANCE (account), value, {"online_id"});
         break;
     case PROP_OFX_INCOME_ACCOUNT:
-        key = KEY_ASSOC_INCOME_ACCOUNT;
-        qof_instance_set_kvp (QOF_INSTANCE (account), key, value);
+        qof_instance_set_path_kvp (QOF_INSTANCE (account), value, {KEY_ASSOC_INCOME_ACCOUNT});
         break;
     case PROP_AB_ACCOUNT_ID:
-        key = AB_KEY "/" AB_ACCOUNT_ID;
-        qof_instance_set_kvp (QOF_INSTANCE (account), key, value);
+        qof_instance_set_path_kvp (QOF_INSTANCE (account), value, {AB_KEY, AB_ACCOUNT_ID});
         break;
     case PROP_AB_ACCOUNT_UID:
-        key = AB_KEY "/" AB_ACCOUNT_UID;
-        qof_instance_set_kvp (QOF_INSTANCE (account), key, value);
+        qof_instance_set_path_kvp (QOF_INSTANCE (account), value, {AB_KEY, AB_ACCOUNT_UID});
         break;
     case PROP_AB_BANK_CODE:
-        key = AB_KEY "/" AB_BANK_CODE;
-        qof_instance_set_kvp (QOF_INSTANCE (account), key, value);
+        qof_instance_set_path_kvp (QOF_INSTANCE (account), value, {AB_KEY, AB_BANK_CODE});
         break;
     case PROP_AB_TRANS_RETRIEVAL:
-        key = AB_KEY "/" AB_TRANS_RETRIEVAL;
-        qof_instance_set_kvp (QOF_INSTANCE (account), key, value);
+        qof_instance_set_path_kvp (QOF_INSTANCE (account), value, {AB_KEY, AB_TRANS_RETRIEVAL});
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -595,7 +585,7 @@ gnc_account_class_init (AccountClass *klass)
                           "repeated. but no two accounts that share "
                           "a parent may have the same name.",
                           NULL,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -606,7 +596,7 @@ gnc_account_class_init (AccountClass *klass)
                           "all its parent account names to indicate "
                           "a unique account.",
                           NULL,
-                          G_PARAM_READABLE));
+                          static_cast<GParamFlags>(G_PARAM_READABLE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -618,7 +608,7 @@ gnc_account_class_init (AccountClass *klass)
                           "be reporting code that is a synonym for "
                           "the accountName.",
                           NULL,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -630,7 +620,7 @@ gnc_account_class_init (AccountClass *klass)
                           "to be a longer, 1-5 sentence description of "
                           "what this account is all about.",
                           NULL,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -641,7 +631,7 @@ gnc_account_class_init (AccountClass *klass)
                           "by the user. It is intended to highlight the "
                           "account based on the users wishes.",
                           NULL,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -652,7 +642,7 @@ gnc_account_class_init (AccountClass *klass)
                           "for the user to attach any other text that "
                           "they would like to associate with the account.",
                           NULL,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -665,7 +655,7 @@ gnc_account_class_init (AccountClass *klass)
                        ACCT_TYPE_NONE,
                        NUM_ACCOUNT_TYPES - 1,
                        ACCT_TYPE_BANK,
-                       G_PARAM_READWRITE));
+                       static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -676,7 +666,7 @@ gnc_account_class_init (AccountClass *klass)
                           "'stuff' stored  in this account, whether "
                           "it is USD, gold, stock, etc.",
                           GNC_TYPE_COMMODITY,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -691,7 +681,7 @@ gnc_account_class_init (AccountClass *klass)
                        0,
                        G_MAXINT32,
                        1000000,
-                       G_PARAM_READWRITE));
+                       static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -704,7 +694,7 @@ gnc_account_class_init (AccountClass *klass)
                            "mismatched values in older versions of "
                            "GnuCash.",
                            FALSE,
-                           G_PARAM_READWRITE));
+                           static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -719,7 +709,7 @@ gnc_account_class_init (AccountClass *klass)
                           "affect the sort order of the account. Note: "
                           "This value can only be set to TRUE.",
                           FALSE,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -733,7 +723,7 @@ gnc_account_class_init (AccountClass *klass)
                           "the engine to say a split has been modified. "
                           "Note: This value can only be set to TRUE.",
                           FALSE,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -749,7 +739,7 @@ gnc_account_class_init (AccountClass *klass)
                         "the 'starting balance' will represent the "
                         "summation of the splits up to that date.",
                         GNC_TYPE_NUMERIC,
-                        G_PARAM_READWRITE));
+                        static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -766,7 +756,7 @@ gnc_account_class_init (AccountClass *klass)
                         "balance' will represent the summation of the "
                         "splits up to that date.",
                         GNC_TYPE_NUMERIC,
-                        G_PARAM_READWRITE));
+                        static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -783,7 +773,7 @@ gnc_account_class_init (AccountClass *klass)
                         "balance' will represent the summation of the "
                         "splits up to that date.",
                         GNC_TYPE_NUMERIC,
-                        G_PARAM_READWRITE));
+                        static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -818,7 +808,7 @@ gnc_account_class_init (AccountClass *klass)
                         "the starting balance and all reconciled splits "
                         "in the account.",
                         GNC_TYPE_NUMERIC,
-                        G_PARAM_READABLE));
+                        static_cast<GParamFlags>(G_PARAM_READABLE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -826,7 +816,7 @@ gnc_account_class_init (AccountClass *klass)
      g_param_spec_pointer ("policy",
                            "Policy",
                            "The account lots policy.",
-                           G_PARAM_READWRITE));
+                           static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -837,7 +827,7 @@ gnc_account_class_init (AccountClass *klass)
                        0,
                        G_MAXINT16,
                        0,
-                       G_PARAM_READWRITE));
+                       static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -847,7 +837,7 @@ gnc_account_class_init (AccountClass *klass)
                            "Whether the account maps to an entry on an "
                            "income tax document.",
                            FALSE,
-                           G_PARAM_READWRITE));
+                           static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -859,7 +849,7 @@ gnc_account_class_init (AccountClass *klass)
                           "United States it is used to transfer totals "
                           "into tax preparation software.",
                           NULL,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -868,7 +858,7 @@ gnc_account_class_init (AccountClass *klass)
                           "Tax Source",
                           "This specifies where exported name comes from.",
                           NULL,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -880,7 +870,7 @@ gnc_account_class_init (AccountClass *klass)
                          (gint64)1,
                          G_MAXINT64,
                          (gint64)1,
-                         G_PARAM_READWRITE));
+                         static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -890,7 +880,7 @@ gnc_account_class_init (AccountClass *klass)
                            "Whether the account should be hidden in the  "
                            "account tree.",
                            FALSE,
-                           G_PARAM_READWRITE));
+                           static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -900,7 +890,7 @@ gnc_account_class_init (AccountClass *klass)
                            "Whether the account is a placeholder account which does not "
                            "allow transactions to be created, edited or deleted.",
                            FALSE,
-                           G_PARAM_READWRITE));
+                           static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -910,7 +900,7 @@ gnc_account_class_init (AccountClass *klass)
                           "The account filter is a value saved to allow "
                           "filters to be recalled.",
                           NULL,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -920,7 +910,7 @@ gnc_account_class_init (AccountClass *klass)
                           "The account sort order is a value saved to allow "
                           "the sort order to be recalled.",
                           NULL,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -929,7 +919,7 @@ gnc_account_class_init (AccountClass *klass)
                           "Account Sort Reversed",
                           "Parameter to store whether the sort order is reversed or not.",
                           FALSE,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -940,7 +930,7 @@ gnc_account_class_init (AccountClass *klass)
                          (gint64)1,
                          G_MAXINT64,
                          (gint64)1,
-                         G_PARAM_READWRITE));
+                         static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -950,7 +940,7 @@ gnc_account_class_init (AccountClass *klass)
                           "The online account which corresponds to this "
                           "account for OFX import",
                           NULL,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
      g_object_class_install_property(
        gobject_class,
@@ -959,7 +949,7 @@ gnc_account_class_init (AccountClass *klass)
                            "Associated income account",
                            "Used by the OFX importer.",
                            GNC_TYPE_GUID,
-                           G_PARAM_READWRITE));
+                           static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -969,7 +959,7 @@ gnc_account_class_init (AccountClass *klass)
                           "The AqBanking account which corresponds to this "
                           "account for AQBanking import",
                           NULL,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
     g_object_class_install_property
     (gobject_class,
      PROP_AB_BANK_CODE,
@@ -978,7 +968,7 @@ gnc_account_class_init (AccountClass *klass)
                           "The online account which corresponds to this "
                           "account for AQBanking import",
                           NULL,
-                          G_PARAM_READWRITE));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -989,7 +979,7 @@ gnc_account_class_init (AccountClass *klass)
                          (gint64)1,
                          G_MAXINT64,
                          (gint64)1,
-                         G_PARAM_READWRITE));
+                         static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     g_object_class_install_property
     (gobject_class,
@@ -999,7 +989,7 @@ gnc_account_class_init (AccountClass *klass)
                         "The time of the last transaction retrieval for this "
                         "account.",
                         GNC_TYPE_TIMESPEC,
-                        G_PARAM_READWRITE));
+                        static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
 }
 
@@ -1028,7 +1018,7 @@ static Account *
 gnc_coll_get_root_account (QofCollection *col)
 {
     if (!col) return NULL;
-    return qof_collection_get_data (col);
+    return static_cast<Account*>(qof_collection_get_data (col));
 }
 
 static void
@@ -1101,7 +1091,7 @@ xaccMallocAccount (QofBook *book)
 
     g_return_val_if_fail (book, NULL);
 
-    acc = g_object_new (GNC_TYPE_ACCOUNT, NULL);
+    acc = static_cast<Account*>(g_object_new (GNC_TYPE_ACCOUNT, NULL));
     xaccInitAccount (acc, book);
     qof_event_gen (&acc->inst, QOF_EVENT_CREATE, NULL);
 
@@ -1118,7 +1108,7 @@ gnc_account_create_root (QofBook *book)
     rpriv = GET_PRIVATE(root);
     xaccAccountBeginEdit(root);
     rpriv->type = ACCT_TYPE_ROOT;
-    CACHE_REPLACE(rpriv->accountName, "Root Account");
+    rpriv->accountName = qof_string_cache_replace(rpriv->accountName, "Root Account");
     mark_account (root);
     xaccAccountCommitEdit(root);
     gnc_book_set_root_account(book, root);
@@ -1135,7 +1125,7 @@ xaccCloneAccount(const Account *from, QofBook *book)
     g_return_val_if_fail(QOF_IS_BOOK(book), NULL);
 
     ENTER (" ");
-    ret = g_object_new (GNC_TYPE_ACCOUNT, NULL);
+    ret = static_cast<Account*>(g_object_new (GNC_TYPE_ACCOUNT, NULL));
     g_return_val_if_fail (ret, NULL);
 
     from_priv = GET_PRIVATE(from);
@@ -1147,9 +1137,9 @@ xaccCloneAccount(const Account *from, QofBook *book)
      * Also let caller issue the generate_event (EVENT_CREATE) */
     priv->type = from_priv->type;
 
-    priv->accountName = CACHE_INSERT(from_priv->accountName);
-    priv->accountCode = CACHE_INSERT(from_priv->accountCode);
-    priv->description = CACHE_INSERT(from_priv->description);
+    priv->accountName = static_cast<char*>(qof_string_cache_insert(from_priv->accountName));
+    priv->accountCode = static_cast<char*>(qof_string_cache_insert(from_priv->accountCode));
+    priv->description = static_cast<char*>(qof_string_cache_insert(from_priv->description));
 
     qof_instance_copy_kvp (QOF_INSTANCE (ret), QOF_INSTANCE (from));
 
@@ -1229,7 +1219,7 @@ xaccFreeAccount (Account *acc)
 
         for (lp = priv->lots; lp; lp = lp->next)
         {
-            GNCLot *lot = lp->data;
+            GNCLot *lot = static_cast<GNCLot*>(lp->data);
             gnc_lot_destroy (lot);
         }
         g_list_free (priv->lots);
@@ -1261,15 +1251,16 @@ xaccFreeAccount (Account *acc)
 */
     }
 
-    CACHE_REPLACE(priv->accountName, NULL);
-    CACHE_REPLACE(priv->accountCode, NULL);
-    CACHE_REPLACE(priv->description, NULL);
+    qof_string_cache_remove(priv->accountName);
+    qof_string_cache_remove(priv->accountCode);
+    qof_string_cache_remove(priv->description);
+    priv->accountName = priv->accountCode = priv->description = nullptr;
 
     /* zero out values, just in case stray
      * pointers are pointing here. */
 
-    priv->parent = NULL;
-    priv->children = NULL;
+    priv->parent = nullptr;
+    priv->children = nullptr;
 
     priv->balance  = gnc_numeric_zero();
     priv->cleared_balance = gnc_numeric_zero();
@@ -1327,7 +1318,7 @@ destroy_pending_splits_for_account(QofInstance *ent, gpointer acc)
     Split *split;
 
     if (xaccTransIsOpen(trans))
-        while ((split = xaccTransFindSplitByAccount(trans, acc)))
+        while ((split = xaccTransFindSplitByAccount(trans, static_cast<Account*>(acc))))
             xaccSplitDestroy(split);
 }
 
@@ -1365,7 +1356,7 @@ xaccAccountCommitEdit (Account *acc)
             slist = g_list_copy(priv->splits);
             for (lp = slist; lp; lp = lp->next)
             {
-                Split *s = lp->data;
+                Split *s = static_cast<Split *>(lp->data);
                 xaccSplitDestroy (s);
             }
             g_list_free(slist);
@@ -1392,7 +1383,7 @@ xaccAccountCommitEdit (Account *acc)
             /* the lots should be empty by now */
             for (lp = priv->lots; lp; lp = lp->next)
             {
-                GNCLot *lot = lp->data;
+                GNCLot *lot = static_cast<GNCLot*>(lp->data);
                 gnc_lot_destroy (lot);
             }
         }
@@ -1455,7 +1446,7 @@ xaccAcctChildrenEqual(const GList *na,
 
     while (na)
     {
-        Account *aa = na->data;
+        Account *aa = static_cast<Account*>(na->data);
         Account *ab;
         GList *node = g_list_find_custom ((GList*)nb, aa,
                                           (GCompareFunc)compare_account_by_name);
@@ -1465,7 +1456,7 @@ xaccAcctChildrenEqual(const GList *na,
             PINFO ("Unable to find matching child account.");
             return FALSE;
         }
-        ab = node->data;
+        ab = static_cast<Account*>(node->data);
         if (!xaccAccountEqual(aa, ab, check_guids))
         {
             char sa[GUID_ENCODING_LENGTH + 1];
@@ -1883,7 +1874,7 @@ xaccClearMarkDown (Account *acc, short val)
     priv->mark = val;
     for (node = priv->children; node; node = node->next)
     {
-        xaccClearMarkDown(node->data, val);
+        xaccClearMarkDown(static_cast<Account*>(node->data), val);
     }
 }
 
@@ -2254,7 +2245,7 @@ xaccAccountSetName (Account *acc, const char *str)
         return;
 
     xaccAccountBeginEdit(acc);
-    CACHE_REPLACE(priv->accountName, str);
+    priv->accountName = qof_string_cache_replace(priv->accountName, str);
     mark_account (acc);
     xaccAccountCommitEdit(acc);
 }
@@ -2273,7 +2264,7 @@ xaccAccountSetCode (Account *acc, const char *str)
         return;
 
     xaccAccountBeginEdit(acc);
-    CACHE_REPLACE(priv->accountCode, str ? str : "");
+    priv->accountCode = qof_string_cache_replace(priv->accountCode, str ? str : "");
     mark_account (acc);
     xaccAccountCommitEdit(acc);
 }
@@ -2292,7 +2283,7 @@ xaccAccountSetDescription (Account *acc, const char *str)
         return;
 
     xaccAccountBeginEdit(acc);
-    CACHE_REPLACE(priv->description, str ? str : "");
+    priv->description = qof_string_cache_replace(priv->description, str ? str : "");
     mark_account (acc);
     xaccAccountCommitEdit(acc);
 }
@@ -2306,20 +2297,20 @@ set_kvp_string_tag (Account *acc, const char *tag, const char *value)
     if (value)
     {
         gchar *tmp = g_strstrip(g_strdup(value));
-	if (strlen (tmp))
-	{
-	     GValue v = G_VALUE_INIT;
-	     g_value_init (&v, G_TYPE_STRING);
-	     g_value_set_string (&v, tmp);
-	     qof_instance_set_kvp (QOF_INSTANCE (acc), tag , &v);
-	}
-	else
-	     qof_instance_set_kvp (QOF_INSTANCE (acc), tag, NULL);
+        if (strlen (tmp))
+        {
+            GValue v = G_VALUE_INIT;
+            g_value_init (&v, G_TYPE_STRING);
+            g_value_set_string (&v, tmp);
+            qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {tag});
+        }
+        else
+            qof_instance_set_path_kvp (QOF_INSTANCE (acc), NULL, {tag});
         g_free(tmp);
     }
     else
     {
-	 qof_instance_set_kvp (QOF_INSTANCE (acc), tag, NULL);
+         qof_instance_set_path_kvp (QOF_INSTANCE (acc), NULL, {tag});
     }
     mark_account (acc);
     xaccAccountCommitEdit(acc);
@@ -2330,7 +2321,7 @@ get_kvp_string_tag (const Account *acc, const char *tag)
 {
     GValue v = G_VALUE_INIT;
     if (acc == NULL || tag == NULL) return NULL;
-    qof_instance_get_kvp (QOF_INSTANCE (acc), tag, &v);
+    qof_instance_get_path_kvp (QOF_INSTANCE (acc), &v, {tag});
     return G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
 }
 
@@ -2355,7 +2346,7 @@ xaccAccountSetSortOrder (Account *acc, const char *str)
 void
 xaccAccountSetSortReversed (Account *acc, gboolean sortreversed)
 {
-     set_kvp_string_tag (acc, "sort-reversed", sortreversed ? "true" : NULL);
+    set_kvp_string_tag (acc, "sort-reversed", sortreversed ? "true" : NULL);
 }
 
 static void
@@ -2503,7 +2494,7 @@ DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency)
     if ((!acc) || (!currency)) return;
     g_value_init (&v, G_TYPE_STRING);
     g_value_set_string (&v, s);
-    qof_instance_set_kvp (QOF_INSTANCE (acc), "old-currency", &v);
+    qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {"old-currency"});
     mark_account (acc);
     xaccAccountCommitEdit(acc);
 
@@ -2691,7 +2682,7 @@ Account *
 gnc_account_nth_child (const Account *parent, gint num)
 {
     g_return_val_if_fail(GNC_IS_ACCOUNT(parent), NULL);
-    return g_list_nth_data(GET_PRIVATE(parent)->children, num);
+    return static_cast<Account*>(g_list_nth_data(GET_PRIVATE(parent)->children, num));
 }
 
 gint
@@ -2706,7 +2697,7 @@ gnc_account_n_descendants (const Account *account)
     priv = GET_PRIVATE(account);
     for (node = priv->children; node; node = g_list_next(node))
     {
-        count += gnc_account_n_descendants(node->data) + 1;
+        count += gnc_account_n_descendants(static_cast<Account*>(node->data)) + 1;
     }
     return count;
 }
@@ -2745,7 +2736,7 @@ gnc_account_get_tree_depth (const Account *account)
 
     for (node = priv->children; node; node = g_list_next(node))
     {
-        child_depth = gnc_account_get_tree_depth(node->data);
+        child_depth = gnc_account_get_tree_depth(static_cast<Account const *>(node->data));
         depth = MAX(depth, child_depth);
     }
     return depth + 1;
@@ -2768,7 +2759,7 @@ gnc_account_get_descendants (const Account *account)
     {
         descendants = g_list_append(descendants, child->data);
         descendants = g_list_concat(descendants,
-                                    gnc_account_get_descendants(child->data));
+                gnc_account_get_descendants(static_cast<Account const *>(child->data)));
     }
     return descendants;
 }
@@ -2793,7 +2784,7 @@ gnc_account_get_descendants_sorted (const Account *account)
     {
         descendants = g_list_append(descendants, child->data);
         descendants = g_list_concat(descendants,
-                                    gnc_account_get_descendants_sorted(child->data));
+                gnc_account_get_descendants_sorted(static_cast<Account const *>(child->data)));
     }
     g_list_free(children);
     return descendants;
@@ -2813,7 +2804,7 @@ gnc_account_lookup_by_name (const Account *parent, const char * name)
     ppriv = GET_PRIVATE(parent);
     for (node = ppriv->children; node; node = node->next)
     {
-        child = node->data;
+        child = static_cast<Account*>(node->data);
         cpriv = GET_PRIVATE(child);
         if (g_strcmp0(cpriv->accountName, name) == 0)
             return child;
@@ -2823,7 +2814,7 @@ gnc_account_lookup_by_name (const Account *parent, const char * name)
      * Recursively search each of the child accounts next */
     for (node = ppriv->children; node; node = node->next)
     {
-        child = node->data;
+        child = static_cast<Account*>(node->data);
         result = gnc_account_lookup_by_name (child, name);
         if (result)
             return result;
@@ -2846,7 +2837,7 @@ gnc_account_lookup_by_code (const Account *parent, const char * code)
     ppriv = GET_PRIVATE(parent);
     for (node = ppriv->children; node; node = node->next)
     {
-        child = node->data;
+        child = static_cast<Account*>(node->data);
         cpriv = GET_PRIVATE(child);
         if (g_strcmp0(cpriv->accountCode, code) == 0)
             return child;
@@ -2856,7 +2847,7 @@ gnc_account_lookup_by_code (const Account *parent, const char * code)
      * Recursively search each of the child accounts next */
     for (node = ppriv->children; node; node = node->next)
     {
-        child = node->data;
+        child = static_cast<Account*>(node->data);
         result = gnc_account_lookup_by_code (child, code);
         if (result)
             return result;
@@ -2884,7 +2875,7 @@ gnc_account_lookup_by_full_name_helper (const Account *parent,
     ppriv = GET_PRIVATE(parent);
     for (node = ppriv->children; node; node = node->next)
     {
-        Account *account = node->data;
+        Account *account = static_cast<Account*>(node->data);
 
         priv = GET_PRIVATE(account);
         if (g_strcmp0(priv->accountName, names[0]) == 0)
@@ -2950,7 +2941,7 @@ gnc_account_foreach_child (const Account *acc,
     priv = GET_PRIVATE(acc);
     for (node = priv->children; node; node = node->next)
     {
-        thunk (node->data, user_data);
+        thunk (static_cast<Account*>(node->data), user_data);
     }
 }
 
@@ -2969,7 +2960,7 @@ gnc_account_foreach_descendant (const Account *acc,
     priv = GET_PRIVATE(acc);
     for (node = priv->children; node; node = node->next)
     {
-        child = node->data;
+        child = static_cast<Account*>(node->data);
         thunk(child, user_data);
         gnc_account_foreach_descendant(child, thunk, user_data);
     }
@@ -2991,7 +2982,7 @@ gnc_account_foreach_descendant_until (const Account *acc,
     priv = GET_PRIVATE(acc);
     for (node = priv->children; node; node = node->next)
     {
-        child = node->data;
+        child = static_cast<Account*>(node->data);
         result = thunk(child, user_data);
         if (result)
             return(result);
@@ -3067,7 +3058,7 @@ gnc_account_get_full_name(const Account *account)
 
     /* Get all the pointers in the right order. The root node "entry"
      * becomes the terminating NULL pointer for the array of strings. */
-    names = g_malloc(level * sizeof(gchar *));
+    names = (gchar **)g_malloc(level * sizeof(gchar *));
     names[--level] = NULL;
     for (a = account; level > 0; a = priv->parent)
     {
@@ -3140,7 +3131,7 @@ DxaccAccountGetCurrency (const Account *acc)
     gnc_commodity_table *table;
 
     if (!acc) return NULL;
-    qof_instance_get_kvp (QOF_INSTANCE(acc), "old-currency", &v);
+    qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {"old-currency"});
     if (G_VALUE_HOLDS_STRING (&v))
         s = g_value_get_string (&v);
     if (!s) return NULL;
@@ -3267,7 +3258,7 @@ xaccAccountGetProjectedMinimumBalance (const Account *acc)
     today = gnc_time64_get_today_end();
     for (node = g_list_last(priv->splits); node; node = node->prev)
     {
-        Split *split = node->data;
+        Split *split = static_cast<Split*>(node->data);
 
         if (!seen_a_transaction)
         {
@@ -3383,7 +3374,7 @@ xaccAccountGetPresentBalance (const Account *acc)
     today = gnc_time64_get_today_end();
     for (node = g_list_last(priv->splits); node; node = node->prev)
     {
-        Split *split = node->data;
+        Split *split = static_cast<Split*>(node->data);
 
         if (xaccTransGetDate (xaccSplitGetParent (split)) <= today)
             return xaccSplitGetBalance (split);
@@ -3517,7 +3508,7 @@ typedef struct
 static void
 xaccAccountBalanceHelper (Account *acc, gpointer data)
 {
-    CurrencyBalance *cb = data;
+    CurrencyBalance *cb = static_cast<CurrencyBalance*>(data);
     gnc_numeric balance;
 
     if (!cb->fn || !cb->currency)
@@ -3531,7 +3522,7 @@ xaccAccountBalanceHelper (Account *acc, gpointer data)
 static void
 xaccAccountBalanceAsOfDateHelper (Account *acc, gpointer data)
 {
-    CurrencyBalance *cb = data;
+    CurrencyBalance *cb = static_cast<CurrencyBalance*>(data);
     gnc_numeric balance;
 
     g_return_if_fail (cb->asOfDateFn && cb->currency);
@@ -3768,7 +3759,7 @@ xaccAccountFindOpenLots (const Account *acc,
     priv = GET_PRIVATE(acc);
     for (lot_list = priv->lots; lot_list; lot_list = lot_list->next)
     {
-        GNCLot *lot = lot_list->data;
+        GNCLot *lot = static_cast<GNCLot*>(lot_list->data);
 
         /* If this lot is closed, then ignore it */
         if (gnc_lot_is_closed (lot))
@@ -3807,7 +3798,7 @@ xaccAccountForEachLot(const Account *acc,
 }
 
 static void
-set_boolean_key (Account *acc, const char* key, gboolean option)
+set_boolean_key (Account *acc, std::vector<std::string> const & path, gboolean option)
 {
     GValue v = G_VALUE_INIT;
     g_return_if_fail(GNC_IS_ACCOUNT(acc));
@@ -3815,17 +3806,17 @@ set_boolean_key (Account *acc, const char* key, gboolean option)
     g_value_init (&v, G_TYPE_BOOLEAN);
     g_value_set_boolean (&v, option);
     xaccAccountBeginEdit (acc);
-    qof_instance_set_kvp (QOF_INSTANCE (acc),key , &v);
+    qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, path);
     mark_account (acc);
     xaccAccountCommitEdit (acc);
 }
 
 static gboolean
-boolean_from_key (const Account *acc, const char *key)
+boolean_from_key (const Account *acc, std::vector<std::string> const & path)
 {
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    qof_instance_get_kvp (QOF_INSTANCE(acc), key, &v);
+    qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, path);
     if (G_VALUE_HOLDS_INT64 (&v))
         return g_value_get_int64 (&v) != 0;
     if (G_VALUE_HOLDS_BOOLEAN (&v))
@@ -3842,13 +3833,13 @@ boolean_from_key (const Account *acc, const char *key)
 gboolean
 xaccAccountGetTaxRelated (const Account *acc)
 {
-    return boolean_from_key(acc, "tax-related");
+    return boolean_from_key(acc, {"tax-related"});
 }
 
 void
 xaccAccountSetTaxRelated (Account *acc, gboolean tax_related)
 {
-    set_boolean_key(acc, "tax-related", tax_related);
+    set_boolean_key(acc, {"tax-related"}, tax_related);
 }
 
 const char *
@@ -3856,7 +3847,7 @@ xaccAccountGetTaxUSCode (const Account *acc)
 {
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    qof_instance_get_kvp (QOF_INSTANCE(acc), "/tax-US/code", &v);
+    qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {"tax-US", "code"});
     return G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
 }
 
@@ -3869,7 +3860,7 @@ xaccAccountSetTaxUSCode (Account *acc, const char *code)
     g_value_init (&v, G_TYPE_STRING);
     g_value_set_string (&v, code);
     xaccAccountBeginEdit (acc);
-    qof_instance_set_kvp (QOF_INSTANCE (acc), "/tax-US/code", &v);
+    qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {"tax-US", "code"});
     mark_account (acc);
     xaccAccountCommitEdit (acc);
 }
@@ -3879,8 +3870,7 @@ xaccAccountGetTaxUSPayerNameSource (const Account *acc)
 {
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    qof_instance_get_kvp (QOF_INSTANCE(acc),
-                          "/tax-US/payer-name-source", &v);
+    qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {"tax-US", "payer-name-source"});
     return G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
  }
 
@@ -3893,7 +3883,7 @@ xaccAccountSetTaxUSPayerNameSource (Account *acc, const char *source)
     g_value_init (&v, G_TYPE_STRING);
     g_value_set_string (&v, source);
     xaccAccountBeginEdit (acc);
-    qof_instance_set_kvp (QOF_INSTANCE (acc), "/tax-US/payer-name-source", &v);
+    qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {"tax-US", "payer-name-source"});
     mark_account (acc);
     xaccAccountCommitEdit (acc);
 }
@@ -3904,7 +3894,7 @@ xaccAccountGetTaxUSCopyNumber (const Account *acc)
     gint64 copy_number = 0;
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    qof_instance_get_kvp (QOF_INSTANCE(acc), "/tax-US/copy-number", &v);
+    qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {"tax-US", "copy-number"});
     if (G_VALUE_HOLDS_INT64 (&v))
         copy_number = g_value_get_int64 (&v);
 
@@ -3921,11 +3911,11 @@ xaccAccountSetTaxUSCopyNumber (Account *acc, gint64 copy_number)
         GValue v = G_VALUE_INIT;
         g_value_init (&v, G_TYPE_INT64);
         g_value_set_int64 (&v, copy_number);
-        qof_instance_set_kvp (QOF_INSTANCE (acc), "/tax-US/copy-number", &v);
+        qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {"tax-US", "copy-number"});
     }
     else
     {
-        qof_instance_set_kvp (QOF_INSTANCE (acc), "/tax-US/copy-number", NULL);
+        qof_instance_set_path_kvp (QOF_INSTANCE (acc), nullptr, {"tax-US", "copy-number"});
     }
     mark_account (acc);
     xaccAccountCommitEdit (acc);
@@ -3937,13 +3927,13 @@ xaccAccountSetTaxUSCopyNumber (Account *acc, gint64 copy_number)
 gboolean
 xaccAccountGetPlaceholder (const Account *acc)
 {
-    return boolean_from_key(acc, "placeholder");
+    return boolean_from_key(acc, {"placeholder"});
 }
 
 void
 xaccAccountSetPlaceholder (Account *acc, gboolean val)
 {
-    set_boolean_key(acc, "placeholder", val);
+    set_boolean_key(acc, {"placeholder"}, val);
 }
 
 GNCPlaceholderType
@@ -3973,13 +3963,13 @@ xaccAccountGetDescendantPlaceholder (const Account *acc)
 gboolean
 xaccAccountGetHidden (const Account *acc)
 {
-    return boolean_from_key (acc, "hidden");
+    return boolean_from_key (acc, {"hidden"});
 }
 
 void
 xaccAccountSetHidden (Account *acc, gboolean val)
 {
-    set_boolean_key (acc, "hidden", val);
+    set_boolean_key (acc, {"hidden"}, val);
 }
 
 gboolean
@@ -4111,7 +4101,7 @@ xaccAccountStringToEnum(const char* str)
 /********************************************************************\
 \********************************************************************/
 
-static char *
+static char const *
 account_type_name[NUM_ACCOUNT_TYPES] =
 {
     N_("Bank"),
@@ -4310,7 +4300,7 @@ xaccAccountGetReconcileLastDate (const Account *acc, time64 *last_date)
     gint64 date = 0;
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    qof_instance_get_kvp (QOF_INSTANCE(acc), "reconcile-info/last-date", &v);
+    qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {"reconcile-info", "last-date"});
     if (G_VALUE_HOLDS_INT64 (&v))
         date = g_value_get_int64 (&v);
 
@@ -4335,7 +4325,7 @@ xaccAccountSetReconcileLastDate (Account *acc, time64 last_date)
     g_value_init (&v, G_TYPE_INT64);
     g_value_set_int64 (&v, last_date);
     xaccAccountBeginEdit (acc);
-    qof_instance_set_kvp (QOF_INSTANCE (acc), "/reconcile-info/last-date", &v);
+    qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {"reconcile-info", "last-date"});
     mark_account (acc);
     xaccAccountCommitEdit (acc);
 }
@@ -4352,10 +4342,10 @@ xaccAccountGetReconcileLastInterval (const Account *acc,
 
     if (!acc) return FALSE;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    qof_instance_get_kvp (QOF_INSTANCE(acc),
-                          "reconcile-info/last-interval/months", &v1);
-    qof_instance_get_kvp (QOF_INSTANCE(acc),
-                          "reconcile-info/last-interval/days", &v2);
+    qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v1,
+            {"reconcile-info", "last-interval", "months"});
+    qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v2,
+            {"reconcile-info", "last-interval", "days"});
     if (G_VALUE_HOLDS_INT64 (&v1))
         m = g_value_get_int64 (&v1);
     if (G_VALUE_HOLDS_INT64 (&v2))
@@ -4385,10 +4375,10 @@ xaccAccountSetReconcileLastInterval (Account *acc, int months, int days)
     g_value_init (&v2, G_TYPE_INT64);
     g_value_set_int64 (&v2, days);
     xaccAccountBeginEdit (acc);
-    qof_instance_set_kvp (QOF_INSTANCE (acc),
-                          "reconcile-info/last-interval/months", &v1);
-    qof_instance_set_kvp (QOF_INSTANCE (acc),
-                          "reconcile-info/last-interval/days", &v2);
+    qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v1,
+            {"reconcile-info", "last-interval", "months"});
+    qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v2,
+            {"reconcile-info", "last-interval", "days"});
     mark_account (acc);
     xaccAccountCommitEdit (acc);
 }
@@ -4402,8 +4392,8 @@ xaccAccountGetReconcilePostponeDate (const Account *acc, time64 *postpone_date)
     gint64 date = 0;
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    qof_instance_get_kvp (QOF_INSTANCE(acc),
-                          "reconcile-info/postpone/date", &v);
+    qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v,
+            {"reconcile-info", "postpone", "date"});
     if (G_VALUE_HOLDS_INT64 (&v))
         date = g_value_get_int64 (&v);
 
@@ -4428,8 +4418,8 @@ xaccAccountSetReconcilePostponeDate (Account *acc, time64 postpone_date)
     g_value_init (&v, G_TYPE_INT64);
     g_value_set_int64 (&v, postpone_date);
     xaccAccountBeginEdit (acc);
-    qof_instance_set_kvp (QOF_INSTANCE (acc),
-                          "/reconcile-info/postpone/date", &v);
+    qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v,
+            {"reconcile-info", "postpone", "date"});
     mark_account (acc);
     xaccAccountCommitEdit (acc);
 }
@@ -4444,8 +4434,8 @@ xaccAccountGetReconcilePostponeBalance (const Account *acc,
     gnc_numeric bal = gnc_numeric_zero ();
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    qof_instance_get_kvp (QOF_INSTANCE(acc),
-                          "reconcile-info/postpone/balance", &v);
+    qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v,
+            {"reconcile-info", "postpone", "balance"});
     if (!G_VALUE_HOLDS_INT64 (&v))
         return FALSE;
 
@@ -4471,8 +4461,8 @@ xaccAccountSetReconcilePostponeBalance (Account *acc, gnc_numeric balance)
     g_value_init (&v, GNC_TYPE_NUMERIC);
     g_value_set_boxed (&v, &balance);
     xaccAccountBeginEdit (acc);
-    qof_instance_set_kvp (QOF_INSTANCE (acc),
-                          "/reconcile-info/postpone/balance", &v);
+    qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v,
+            {"reconcile-info", "postpone", "balance"});
     mark_account (acc);
     xaccAccountCommitEdit (acc);
 }
@@ -4487,7 +4477,7 @@ xaccAccountClearReconcilePostpone (Account *acc)
     if (!acc) return;
 
     xaccAccountBeginEdit (acc);
-    qof_instance_set_kvp (QOF_INSTANCE(acc), "reconcile-info/postpone", NULL);
+    qof_instance_set_path_kvp (QOF_INSTANCE(acc), nullptr, {"reconcile-info", "postpone"});
     mark_account (acc);
     xaccAccountCommitEdit (acc);
 }
@@ -4502,7 +4492,7 @@ xaccAccountClearReconcilePostpone (Account *acc)
 gboolean
 xaccAccountGetAutoInterestXfer (const Account *acc, gboolean default_value)
 {
-    return boolean_from_key (acc, "reconcile-info/auto-interest-transfer");
+    return boolean_from_key (acc, {"reconcile-info", "auto-interest-transfer"});
 }
 
 /********************************************************************\
@@ -4511,7 +4501,7 @@ xaccAccountGetAutoInterestXfer (const Account *acc, gboolean default_value)
 void
 xaccAccountSetAutoInterestXfer (Account *acc, gboolean option)
 {
-    set_boolean_key (acc, "reconcile-info/auto-interest-transfer", option);
+    set_boolean_key (acc, {"reconcile-info", "auto-interest-transfer"}, option);
 }
 
 /********************************************************************\
@@ -4522,7 +4512,7 @@ xaccAccountGetLastNum (const Account *acc)
 {
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    qof_instance_get_kvp (QOF_INSTANCE(acc), "last-num", &v);
+    qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {"last-num"});
     return G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
 }
 
@@ -4538,7 +4528,7 @@ xaccAccountSetLastNum (Account *acc, const char *num)
 
     g_value_set_string (&v, num);
     xaccAccountBeginEdit (acc);
-    qof_instance_set_kvp (QOF_INSTANCE (acc), "last-num", &v);
+    qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {"last-num"});
     mark_account (acc);
     xaccAccountCommitEdit (acc);
 }
@@ -4592,13 +4582,13 @@ Account *
 xaccAccountGainsAccount (Account *acc, gnc_commodity *curr)
 {
     GValue v = G_VALUE_INIT;
-    gchar *curr_name = g_strdup_printf ("/lot-mgmt/gains-act/%s",
-                                      gnc_commodity_get_unique_name (curr));
+    std::vector<std::string> path {"lot-mgmt", "gains-acct",
+        gnc_commodity_get_unique_name (curr)};
     GncGUID *guid = NULL;
     Account *gains_account;
 
     g_return_val_if_fail (acc != NULL, NULL);
-    qof_instance_get_kvp (QOF_INSTANCE(acc), curr_name, &v);
+    qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, path);
     if (G_VALUE_HOLDS_BOXED (&v))
         guid = (GncGUID*)g_value_get_boxed (&v);
     if (guid == NULL) /* No gains account for this currency */
@@ -4611,7 +4601,7 @@ xaccAccountGainsAccount (Account *acc, gnc_commodity *curr)
              GValue vr = G_VALUE_INIT;
              g_value_init (&vr, GNC_TYPE_GUID);
              g_value_set_boxed (&vr, guid);
-             qof_instance_set_kvp (QOF_INSTANCE (acc), curr_name, &vr);
+             qof_instance_set_path_kvp (QOF_INSTANCE (acc), &vr, path);
              qof_instance_set_dirty (QOF_INSTANCE (acc));
         }
         xaccAccountCommitEdit (acc);
@@ -4620,7 +4610,6 @@ xaccAccountGainsAccount (Account *acc, gnc_commodity *curr)
         gains_account = xaccAccountLookup (guid,
                                            qof_instance_get_book(acc));
 
-    g_free (curr_name);
     return gains_account;
 }
 
@@ -4640,11 +4629,10 @@ dxaccAccountSetPriceSrc(Account *acc, const char *src)
             GValue v = G_VALUE_INIT;
             g_value_init (&v, G_TYPE_STRING);
             g_value_set_string (&v, src);
-            qof_instance_set_kvp (QOF_INSTANCE(acc),
-                                  "old-price-source", &v);
+            qof_instance_set_path_kvp (QOF_INSTANCE(acc), &v, {"old-price-source"});
         }
         else
-            qof_instance_set_kvp (QOF_INSTANCE(acc), "old-price-source", NULL);
+            qof_instance_set_path_kvp (QOF_INSTANCE(acc), nullptr, {"old-price-source"});
 
         mark_account (acc);
         xaccAccountCommitEdit(acc);
@@ -4662,7 +4650,7 @@ dxaccAccountGetPriceSrc(const Account *acc)
 
     if (!xaccAccountIsPriced(acc)) return NULL;
 
-    qof_instance_get_kvp (QOF_INSTANCE(acc), "old-price-source", &v);
+    qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {"old-price-source"});
     return G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
 }
 
@@ -4678,7 +4666,7 @@ dxaccAccountSetQuoteTZ(Account *acc, const char *tz)
     xaccAccountBeginEdit(acc);
     g_value_init (&v, G_TYPE_STRING);
     g_value_set_string (&v, tz);
-    qof_instance_set_kvp (QOF_INSTANCE (acc), "old-quote-tz", &v);
+    qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {"old-quote-tz"});
     mark_account (acc);
     xaccAccountCommitEdit(acc);
 }
@@ -4692,7 +4680,7 @@ dxaccAccountGetQuoteTZ(const Account *acc)
     GValue v = G_VALUE_INIT;
     if (!acc) return NULL;
     if (!xaccAccountIsPriced(acc)) return NULL;
-    qof_instance_get_kvp (QOF_INSTANCE (acc), "old-quote-tz", &v);
+    qof_instance_get_path_kvp (QOF_INSTANCE (acc), &v, {"old-quote-tz"});
     return G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
 }
 
@@ -4712,8 +4700,8 @@ xaccAccountSetReconcileChildrenStatus(Account *acc, gboolean status)
      */
     g_value_init (&v, G_TYPE_INT64);
     g_value_set_int64 (&v, status);
-    qof_instance_set_kvp (QOF_INSTANCE (acc),
-                          "/reconcile-info/include-children", &v);
+    qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v,
+            {"reconcile-info", "include-children"});
     mark_account(acc);
     xaccAccountCommitEdit (acc);
 }
@@ -4730,8 +4718,8 @@ xaccAccountGetReconcileChildrenStatus(const Account *acc)
      */
     GValue v = G_VALUE_INIT;
     if (!acc) return FALSE;
-    qof_instance_get_kvp (QOF_INSTANCE (acc),
-                          "reconcile-info/include-children", &v);
+    qof_instance_get_path_kvp (QOF_INSTANCE (acc), &v,
+            {"reconcile-info", "include-children"});
     return G_VALUE_HOLDS_INT64 (&v) ? g_value_get_int64 (&v) : FALSE;
 }
 
@@ -4763,7 +4751,7 @@ finder_help_function(const Account *acc, const char *description,
     priv = GET_PRIVATE(acc);
     for (slp = g_list_last(priv->splits); slp; slp = slp->prev)
     {
-        Split *lsplit = slp->data;
+        Split *lsplit = static_cast<Split*>(slp->data);
         Transaction *ltrans = xaccSplitGetParent(lsplit);
 
         if (g_strcmp0 (description, xaccTransGetDescription (ltrans)) == 0)
@@ -4821,7 +4809,7 @@ gnc_account_join_children (Account *to_parent, Account *from_parent)
     ENTER (" ");
     children = g_list_copy(from_priv->children);
     for (node = children; node; node = g_list_next(node))
-        gnc_account_append_child(to_parent, node->data);
+        gnc_account_append_child(to_parent, static_cast <Account*> (node->data));
     g_list_free(children);
     LEAVE (" ");
 }
@@ -4839,12 +4827,12 @@ gnc_account_merge_children (Account *parent)
     ppriv = GET_PRIVATE(parent);
     for (node_a = ppriv->children; node_a; node_a = node_a->next)
     {
-        Account *acc_a = node_a->data;
+        Account *acc_a = static_cast <Account*> (node_a->data);
 
         priv_a = GET_PRIVATE(acc_a);
         for (node_b = node_a->next; node_b; node_b = g_list_next(node_b))
         {
-            Account *acc_b = node_b->data;
+            Account *acc_b = static_cast <Account*> (node_b->data);
 
             priv_b = GET_PRIVATE(acc_b);
             if (0 != null_strcmp(priv_a->accountName, priv_b->accountName))
@@ -4881,7 +4869,7 @@ gnc_account_merge_children (Account *parent)
 
             /* consolidate transactions */
             while (priv_b->splits)
-                xaccSplitSetAccount (priv_b->splits->data, acc_a);
+                xaccSplitSetAccount (static_cast <Split*> (priv_b->splits->data), acc_a);
 
             /* move back one before removal. next iteration around the loop
              * will get the node after node_b */
@@ -4906,7 +4894,7 @@ xaccSplitsBeginStagedTransactionTraversals (GList *splits)
 
     for (lp = splits; lp; lp = lp->next)
     {
-        Split *s = lp->data;
+        Split *s = static_cast <Split*> (lp->data);
         Transaction *trans = s->parent;
 
         if (trans)
@@ -4987,7 +4975,7 @@ xaccAccountStagedTransactionTraversal (const Account *acc,
          * a thunk removes splits from this account. */
         next = g_list_next(split_p);
 
-        s = split_p->data;
+        s = static_cast <Split*> (split_p->data);
         trans = s->parent;
         if (trans && (trans->marker < stage))
         {
@@ -5021,15 +5009,15 @@ gnc_account_tree_staged_transaction_traversal (const Account *acc,
     priv = GET_PRIVATE(acc);
     for (acc_p = priv->children; acc_p; acc_p = g_list_next(acc_p))
     {
-        retval = gnc_account_tree_staged_transaction_traversal(acc_p->data, stage,
-                 thunk, cb_data);
+        retval = gnc_account_tree_staged_transaction_traversal(static_cast <Account*> (acc_p->data),
+                stage, thunk, cb_data);
         if (retval) return retval;
     }
 
     /* Now this account */
     for (split_p = priv->splits; split_p; split_p = g_list_next(split_p))
     {
-        s = split_p->data;
+        s = static_cast <Split*> (split_p->data);
         trans = s->parent;
         if (trans && (trans->marker < stage))
         {
@@ -5105,17 +5093,14 @@ gnc_account_imap_find_account (GncImportMatchMap *imap,
 {
     GValue v = G_VALUE_INIT;
     GncGUID * guid = NULL;
-    char *kvp_path;
-
     if (!imap || !key) return NULL;
-    if (!category)
-        kvp_path = g_strdup_printf (IMAP_FRAME "/%s", key);
-    else
-        kvp_path = g_strdup_printf (IMAP_FRAME "/%s/%s", category, key);
-    qof_instance_get_kvp (QOF_INSTANCE (imap->acc), kvp_path, &v);
+    std::vector<std::string> path {IMAP_FRAME};
+    if (category)
+        path.push_back (category);
+    path.push_back (key);
+    qof_instance_get_path_kvp (QOF_INSTANCE (imap->acc), &v, path);
     if (G_VALUE_HOLDS_BOXED (&v))
         guid = (GncGUID*)g_value_get_boxed (&v);
-    g_free (kvp_path);
     return xaccAccountLookup (guid, imap->book);
 }
 
@@ -5127,19 +5112,15 @@ gnc_account_imap_add_account (GncImportMatchMap *imap,
                               Account *acc)
 {
     GValue v = G_VALUE_INIT;
-    char *kvp_path;
-
     if (!imap || !key || !acc || (strlen (key) == 0)) return;
-    if (!category)
-        kvp_path = g_strdup_printf (IMAP_FRAME "/%s", key);
-    else
-        kvp_path = g_strdup_printf (IMAP_FRAME "/%s/%s", category, key);
-
+    std::vector<std::string> path {IMAP_FRAME};
+    if (category)
+        path.emplace_back (category);
+    path.emplace_back (key);
     g_value_init (&v, GNC_TYPE_GUID);
     g_value_set_boxed (&v, xaccAccountGetGUID (acc));
     xaccAccountBeginEdit (imap->acc);
-    qof_instance_set_kvp (QOF_INSTANCE (imap->acc), kvp_path, &v);
-    g_free (kvp_path);
+    qof_instance_set_path_kvp (QOF_INSTANCE (imap->acc), &v, path);
     qof_instance_set_dirty (QOF_INSTANCE (imap->acc));
     xaccAccountCommitEdit (imap->acc);
 }
@@ -5150,28 +5131,18 @@ gnc_account_imap_delete_account (GncImportMatchMap *imap,
                                  const char *category,
                                  const char *key)
 {
-    char *kvp_path;
-
     if (!imap || !key) return;
-    if (!category)
-        kvp_path = g_strdup_printf (IMAP_FRAME "/%s", key);
-    else
-        kvp_path = g_strdup_printf (IMAP_FRAME "/%s/%s", category, key);
-
+    std::vector<std::string> path {IMAP_FRAME};
+    if (category)
+        path.emplace_back (category);
+    path.emplace_back (key);
     xaccAccountBeginEdit (imap->acc);
-
-    if (qof_instance_has_slot (QOF_INSTANCE (imap->acc), kvp_path))
+    if (qof_instance_has_path_slot (QOF_INSTANCE (imap->acc), path))
     {
-        qof_instance_slot_delete (QOF_INSTANCE (imap->acc), kvp_path);
-        g_free (kvp_path);
-
+        qof_instance_slot_path_delete (QOF_INSTANCE (imap->acc), path);
         if (category)
-        {
-            kvp_path = g_strdup_printf (IMAP_FRAME "/%s", category);
-            qof_instance_slot_delete_if_empty (QOF_INSTANCE (imap->acc), kvp_path);
-            g_free (kvp_path);
-        }
-        qof_instance_slot_delete_if_empty (QOF_INSTANCE (imap->acc), IMAP_FRAME);
+            qof_instance_slot_path_delete_if_empty (QOF_INSTANCE (imap->acc), {IMAP_FRAME, category});
+        qof_instance_slot_path_delete_if_empty (QOF_INSTANCE (imap->acc), {IMAP_FRAME});
     }
     qof_instance_set_dirty (QOF_INSTANCE (imap->acc));
     xaccAccountCommitEdit (imap->acc);
@@ -5182,312 +5153,322 @@ gnc_account_imap_delete_account (GncImportMatchMap *imap,
 --------------------------------------------------------------------------*/
 
 
-struct account_token_count
-{
-    char* account_guid;
-    gint64 token_count; /**< occurrences of a given token for this account_guid */
-};
-
-/** total_count and the token_count for a given account let us calculate the
- * probability of a given account with any single token
- */
-struct token_accounts_info
-{
-    GList *accounts; /**< array of struct account_token_count */
-    gint64 total_count;
-};
-
-/** gpointer is a pointer to a struct token_accounts_info
- * \note Can always assume that keys are unique, reduces code in this function
- */
-static void
-buildTokenInfo(const char *key, const GValue *value, gpointer data)
-{
-    struct token_accounts_info *tokenInfo = (struct token_accounts_info*)data;
-    struct account_token_count* this_account;
-
-    //  PINFO("buildTokenInfo: account '%s', token_count: '%" G_GINT64_FORMAT "'", (char*)key,
-    //                  g_value_get_int64(value));
-
-    /* add the count to the total_count */
-    tokenInfo->total_count += g_value_get_int64(value);
-
-    /* allocate a new structure for this account and it's token count */
-    this_account = (struct account_token_count*)
-                   g_new0(struct account_token_count, 1);
-
-    /* fill in the account guid and number of tokens found for this account guid */
-    this_account->account_guid = (char*)key;
-    this_account->token_count = g_value_get_int64(value);
-
-    /* append onto the glist a pointer to the new account_token_count structure */
-    tokenInfo->accounts = g_list_prepend(tokenInfo->accounts, this_account);
-}
-
 /** intermediate values used to calculate the bayes probability of a given account
   where p(AB) = (a*b)/[a*b + (1-a)(1-b)], product is (a*b),
   product_difference is (1-a) * (1-b)
  */
-struct account_probability
+struct AccountProbability
 {
     double product; /* product of probabilities */
     double product_difference; /* product of (1-probabilities) */
 };
 
-/** convert a hash table of account names and (struct account_probability*)
-  into a hash table of 100000x the percentage match value, ie. 10% would be
-  0.10 * 100000 = 10000
+struct AccountTokenCount
+{
+    std::string account_guid;
+    int64_t token_count; /** occurrences of a given token for this account_guid */
+};
+
+/** total_count and the token_count for a given account let us calculate the
+ * probability of a given account with any single token
  */
-#define PROBABILITY_FACTOR 100000
-static void
-buildProbabilities(gpointer key, gpointer value, gpointer data)
+struct TokenAccountsInfo
 {
-    GHashTable *final_probabilities = (GHashTable*)data;
-    struct account_probability *account_p = (struct account_probability*)value;
-
-    /* P(AB) = A*B / [A*B + (1-A)*(1-B)]
-     * NOTE: so we only keep track of a running product(A*B*C...)
-     * and product difference ((1-A)(1-B)...)
-     */
-    gint32 probability =
-        (account_p->product /
-         (account_p->product + account_p->product_difference))
-        * PROBABILITY_FACTOR;
-
-    PINFO("P('%s') = '%d'", (char*)key, probability);
-
-    g_hash_table_insert(final_probabilities, key, GINT_TO_POINTER(probability));
-}
-
-/** Frees an array of the same time that buildProperties built */
-static void
-freeProbabilities(gpointer key, gpointer value, gpointer data)
-{
-    /* free up the struct account_probability that was allocated
-     * in gnc_account_find_account_bayes()
-     */
-    g_free(value);
-}
+    std::vector<AccountTokenCount> accounts;
+    int64_t total_count;
+};
 
 /** holds an account guid and its corresponding integer probability
   the integer probability is some factor of 10
  */
-struct account_info
+struct AccountInfo
 {
-    char* account_guid;
-    gint32 probability;
+    std::string account_guid;
+    int32_t probability;
 };
 
-/** Find the highest probability and the corresponding account guid
-    store in data, a (struct account_info*)
-    NOTE: this is a g_hash_table_foreach() function for a hash table of entries
-    key is a  pointer to the account guid, value is a gint32, 100000x
-    the probability for this account
-*/
 static void
-highestProbability(gpointer key, gpointer value, gpointer data)
+build_token_info(char const * key, KvpValue * value, TokenAccountsInfo & tokenInfo)
 {
-    struct account_info *account_i = (struct account_info*)data;
-
-    /* if the current probability is greater than the stored, store the current */
-    if (GPOINTER_TO_INT(value) > account_i->probability)
-    {
-        /* Save the new highest probability and the assoaciated account guid */
-        account_i->probability = GPOINTER_TO_INT(value);
-        account_i->account_guid = key;
-    }
+    tokenInfo.total_count += value->get<int64_t>();
+    AccountTokenCount this_account;
+    std::string account_guid {key};
+    /*By convention, the key ends with the account GUID.*/
+    this_account.account_guid = account_guid.substr(account_guid.size() - GUID_ENCODING_LENGTH);
+    this_account.token_count = value->get<int64_t>();
+    tokenInfo.accounts.push_back(this_account);
 }
 
+/** We scale the probability values by probability_factor.
+  ie. with probability_factor of 100000, 10% would be
+  0.10 * 100000 = 10000 */
+static constexpr int probability_factor = 100000;
 
-#define threshold (.90 * PROBABILITY_FACTOR) /* 90% */
+static FinalProbabilityVec
+build_probabilities(ProbabilityVec const & first_pass)
+{
+    FinalProbabilityVec ret;
+    for (auto const & first_pass_prob : first_pass)
+    {
+        auto const & account_probability = first_pass_prob.second;
+        /* P(AB) = A*B / [A*B + (1-A)*(1-B)]
+         * NOTE: so we only keep track of a running product(A*B*C...)
+         * and product difference ((1-A)(1-B)...)
+         */
+        int32_t probability = (account_probability.product /
+                (account_probability.product + account_probability.product_difference)) * probability_factor;
+        ret.push_back({first_pass_prob.first, probability});
+    }
+    return ret;
+}
+
+static AccountInfo
+highest_probability(FinalProbabilityVec const & probabilities)
+{
+    AccountInfo ret {"", std::numeric_limits<int32_t>::min()};
+    for (auto const & prob : probabilities)
+        if (prob.second > ret.probability)
+            ret = AccountInfo {prob.first, prob.second};
+    return ret;
+}
+
+static ProbabilityVec
+get_first_pass_probabilities(GncImportMatchMap * imap, GList * tokens)
+{
+    ProbabilityVec ret;
+    /* find the probability for each account that contains any of the tokens
+     * in the input tokens list. */
+    for (auto current_token = tokens; current_token; current_token = current_token->next)
+    {
+        TokenAccountsInfo tokenInfo{};
+        auto path = std::string{IMAP_FRAME_BAYES "/"} + static_cast <char const *> (current_token->data);
+        qof_instance_foreach_slot_prefix (QOF_INSTANCE (imap->acc), path, &build_token_info, tokenInfo);
+        for (auto const & current_account_token : tokenInfo.accounts)
+        {
+            auto item = std::find_if(ret.begin(), ret.end(), [&current_account_token]
+                (std::pair<std::string, AccountProbability> const & a) {
+                    return current_account_token.account_guid == a.first;
+                });
+            if (item != ret.end())
+            {/* This account is already in the map */
+                item->second.product = ((double)current_account_token.token_count /
+                                      (double)tokenInfo.total_count) * item->second.product;
+                item->second.product_difference = ((double)1 - ((double)current_account_token.token_count /
+                                              (double)tokenInfo.total_count)) * item->second.product_difference;
+            }
+            else
+            {
+                /* add a new entry */
+                AccountProbability new_probability;
+                new_probability.product = ((double)current_account_token.token_count /
+                                      (double)tokenInfo.total_count);
+                new_probability.product_difference = 1 - (new_probability.product);
+                ret.push_back({current_account_token.account_guid, std::move(new_probability)});
+            }
+        } /* for all accounts in tokenInfo */
+    }
+    return ret;
+}
+
+static std::string
+look_for_old_separator_descendants (Account *root, std::string const & full_name, const gchar *separator)
+{
+    GList *top_accounts, *ptr;
+    gint   found_len = 0;
+    gchar  found_sep;
+    top_accounts = gnc_account_get_descendants (root);
+    PINFO("Incoming full_name is '%s', current separator is '%s'", full_name.c_str (), separator);
+    /* Go through list of top level accounts */
+    for (ptr = top_accounts; ptr; ptr = g_list_next (ptr))
+    {
+        const gchar *name = xaccAccountGetName (static_cast <Account const *> (ptr->data));
+        // we are looking for the longest top level account that matches
+        if (g_str_has_prefix (full_name.c_str (), name))
+        {
+            gint name_len = strlen (name);
+            const gchar old_sep = full_name[name_len];
+            if (!g_ascii_isalnum (old_sep)) // test for non alpha numeric
+            {
+                if (name_len > found_len)
+                {
+                    found_sep = full_name[name_len];
+                    found_len = name_len;
+                }
+            }
+        }
+    }
+    g_list_free (top_accounts); // Free the List
+    std::string new_name {full_name};
+    if (found_len > 1)
+        std::replace (new_name.begin (), new_name.end (), found_sep, *separator);
+    PINFO ("Return full_name is '%s'", new_name.c_str ());
+    return new_name;
+}
+
+static std::string
+get_guid_from_account_name (Account * root, std::string const & name)
+{
+    auto map_account = gnc_account_lookup_by_full_name (root, name.c_str ());
+    if (!map_account)
+    {
+        auto temp_account_name = look_for_old_separator_descendants (root, name,
+             gnc_get_account_separator_string ());
+        map_account = gnc_account_lookup_by_full_name (root, temp_account_name.c_str ());
+    }
+    auto temp_guid = gnc::GUID {*xaccAccountGetGUID (map_account)};
+    return temp_guid.to_string ();
+}
+
+static FlatKvpEntry
+convert_entry (KvpEntry entry, Account* root)
+{
+    /*We need to make a copy here.*/
+    auto account_name = entry.first.back();
+    if (!gnc::GUID::is_valid_guid (account_name))
+    {
+        /* Earlier version stored the account name in the import map, and
+         * there were early beta versions of 2.7 that stored a GUID.
+         * If there is no GUID, we assume it's an account name. */
+        /* Take off the account name and replace it with the GUID */
+        entry.first.pop_back();
+        auto guid_str = get_guid_from_account_name (root, account_name);
+        entry.first.emplace_back (guid_str);
+    }
+    std::string new_key {std::accumulate (entry.first.begin(), entry.first.end(), std::string {})};
+    new_key = IMAP_FRAME_BAYES + new_key;
+    return {new_key, entry.second};
+}
+
+static std::vector<FlatKvpEntry>
+get_new_flat_imap (Account * acc)
+{
+    auto frame = qof_instance_get_slots (QOF_INSTANCE (acc));
+    auto slot = frame->get_slot ({IMAP_FRAME_BAYES});
+    if (!slot)
+        return {};
+    auto imap_frame = slot->get<KvpFrame*> ();
+    auto flat_kvp = imap_frame->flatten_kvp ();
+    auto root = gnc_account_get_root (acc);
+    std::vector <FlatKvpEntry> ret;
+    for (auto const & flat_entry : flat_kvp)
+    {
+        auto converted_entry = convert_entry (flat_entry, root);
+        /*If the entry was invalid, we don't perpetuate it.*/
+        if (converted_entry.first.size())
+            ret.emplace_back (converted_entry);
+    }
+    return ret;
+}
+
+static bool
+convert_imap_account_bayes_to_flat (Account *acc)
+{
+    auto frame = qof_instance_get_slots (QOF_INSTANCE (acc));
+    if (!frame->get_keys().size())
+        return false;
+    auto new_imap = get_new_flat_imap(acc);
+    xaccAccountBeginEdit(acc);
+    frame->set({IMAP_FRAME_BAYES}, nullptr);
+    if (!new_imap.size ())
+    {
+        xaccAccountCommitEdit(acc);
+        return false;
+    }
+    std::for_each(new_imap.begin(), new_imap.end(), [&frame] (FlatKvpEntry const & entry) {
+        frame->set({entry.first.c_str()}, entry.second);
+    });
+    qof_instance_set_dirty (QOF_INSTANCE (acc));
+    xaccAccountCommitEdit(acc);
+    return true;
+}
+
+/*
+ * Checks for import map data and converts them when found.
+ */
+static bool
+imap_convert_bayes_to_flat (QofBook * book)
+{
+    auto root = gnc_book_get_root_account (book);
+    auto accts = gnc_account_get_descendants_sorted (root);
+    bool ret = false;
+    for (auto ptr = accts; ptr; ptr = g_list_next (ptr))
+    {
+        Account *acc = static_cast <Account*> (ptr->data);
+        if (convert_imap_account_bayes_to_flat (acc))
+        {
+            ret = true;
+            gnc_features_set_used (book, GNC_FEATURE_GUID_FLAT_BAYESIAN);
+        }
+    }
+    g_list_free (accts);
+    return ret;
+}
+
+/*
+ * Here we check to see the state of import map data.
+ *
+ * If the GUID_FLAT_BAYESIAN feature flag is set, everything
+ * should be fine.
+ *
+ * If it is not set, there are two possibilities: import data
+ * are present from a previous version or not. If they are,
+ * they are converted, and the feature flag set. If there are
+ * no previous data, nothing is done.
+ */
+static void
+check_import_map_data (QofBook *book)
+{
+    if (gnc_features_check_used (book, GNC_FEATURE_GUID_FLAT_BAYESIAN))
+        return;
+    /* This function will set GNC_FEATURE_GUID_FLAT_BAYESIAN if necessary.*/
+    imap_convert_bayes_to_flat (book);
+}
+
+static constexpr double threshold = .90 * probability_factor; /* 90% */
 
 /** Look up an Account in the map */
 Account*
 gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
 {
-    struct token_accounts_info tokenInfo; /**< holds the accounts and total
-                                           * token count for a single token */
-    GList *current_token;                 /**< pointer to the current
-                                           * token from the input GList
-                                           * tokens */
-    GList *current_account_token;         /**< pointer to the struct
-                                           * account_token_count */
-    struct account_token_count *account_c; /**< an account name and the number
-                                            * of times a token has appeared
-                                            * for the account */
-    struct account_probability *account_p; /**< intermediate storage of values
-                                            * to compute the bayes probability
-                                            * of an account */
-    GHashTable *running_probabilities = g_hash_table_new(g_str_hash,
-                                                         g_str_equal);
-    GHashTable *final_probabilities = g_hash_table_new(g_str_hash,
-                                                       g_str_equal);
-    struct account_info account_i;
-
-    ENTER(" ");
-
-    /* check to see if the imap is NULL */
     if (!imap)
-    {
-        PINFO("imap is null, returning null");
-        LEAVE(" ");
-        return NULL;
+        return nullptr;
+    check_import_map_data (imap->book);
+    auto first_pass = get_first_pass_probabilities(imap, tokens);
+    if (!first_pass.size())
+        return nullptr;
+    auto final_probabilities = build_probabilities(first_pass);
+    if (!final_probabilities.size())
+        return nullptr;
+    auto best = highest_probability(final_probabilities);
+    if (best.account_guid == "")
+        return nullptr;
+    if (best.probability < threshold)
+        return nullptr;
+    gnc::GUID guid;
+    try {
+        guid = gnc::GUID::from_string(best.account_guid);
+    } catch (gnc::guid_syntax_exception) {
+        return nullptr;
     }
-
-    /* find the probability for each account that contains any of the tokens
-     * in the input tokens list
-     */
-    for (current_token = tokens; current_token;
-         current_token = current_token->next)
-    {
-        char* path = g_strdup_printf (IMAP_FRAME_BAYES "/%s",
-                                            (char*)current_token->data);
-        /* zero out the token_accounts_info structure */
-        memset(&tokenInfo, 0, sizeof(struct token_accounts_info));
-
-        PINFO("token: '%s'", (char*)current_token->data);
-
-        /* process the accounts for this token, adding the account if it
-         * doesn't already exist or adding to the existing accounts token
-         * count if it does
-         */
-        qof_instance_foreach_slot(QOF_INSTANCE (imap->acc), path,
-                                  buildTokenInfo, &tokenInfo);
-        g_free (path);
-        /* for each account we have just found, see if the account
-         * already exists in the list of account probabilities, if not
-         * add it
-         */
-        for (current_account_token = tokenInfo.accounts; current_account_token;
-                current_account_token = current_account_token->next)
-        {
-            /* get the account name and corresponding token count */
-            account_c = (struct account_token_count*)current_account_token->data;
-
-            PINFO("account_c->account_guid('%s'), "
-                  "account_c->token_count('%" G_GINT64_FORMAT
-                  "')/total_count('%" G_GINT64_FORMAT "')",
-                  account_c->account_guid, account_c->token_count,
-                  tokenInfo.total_count);
-
-            account_p = g_hash_table_lookup(running_probabilities,
-                                            account_c->account_guid);
-
-            /* if the account exists in the list then continue
-             * the running probablities
-             */
-            if (account_p)
-            {
-                account_p->product = (((double)account_c->token_count /
-                                      (double)tokenInfo.total_count)
-                                      * account_p->product);
-                account_p->product_difference =
-                    ((double)1 - ((double)account_c->token_count /
-                                  (double)tokenInfo.total_count))
-                    * account_p->product_difference;
-                PINFO("product == %f, product_difference == %f",
-                      account_p->product, account_p->product_difference);
-            }
-            else
-            {
-                /* add a new entry */
-                PINFO("adding a new entry for this account");
-                account_p = (struct account_probability*)
-                            g_new0(struct account_probability, 1);
-
-                /* set the product and product difference values */
-                account_p->product = ((double)account_c->token_count /
-                                      (double)tokenInfo.total_count);
-                account_p->product_difference =
-                    (double)1 - ((double)account_c->token_count /
-                                 (double)tokenInfo.total_count);
-
-                PINFO("product == %f, product_difference == %f",
-                      account_p->product, account_p->product_difference);
-
-                /* add the account guid and (struct account_probability*)
-                 * to the hash table */
-                g_hash_table_insert(running_probabilities,
-                                    account_c->account_guid, account_p);
-            }
-        } /* for all accounts in tokenInfo */
-
-        /* free the data in tokenInfo */
-        for (current_account_token = tokenInfo.accounts; current_account_token;
-                current_account_token = current_account_token->next)
-        {
-            /* free up each struct account_token_count we allocated */
-            g_free((struct account_token_count*)current_account_token->data);
-        }
-
-        g_list_free(tokenInfo.accounts); /* free the accounts GList */
-    }
-
-    /* build a hash table of account names and their final probabilities
-     * from each entry in the running_probabilties hash table
-     */
-    g_hash_table_foreach(running_probabilities, buildProbabilities,
-                         final_probabilities);
-
-    /* find the highest probabilty and the corresponding account */
-    memset(&account_i, 0, sizeof(struct account_info));
-    g_hash_table_foreach(final_probabilities, highestProbability, &account_i);
-
-    /* free each element of the running_probabilities hash */
-    g_hash_table_foreach(running_probabilities, freeProbabilities, NULL);
-
-    /* free the hash tables */
-    g_hash_table_destroy(running_probabilities);
-    g_hash_table_destroy(final_probabilities);
-
-    PINFO("highest P('%s') = '%d'",
-          account_i.account_guid ? account_i.account_guid : "(null)",
-          account_i.probability);
-
-    /* has this probability met our threshold? */
-    if (account_i.probability >= threshold)
-    {
-        GncGUID *guid;
-        Account *account = NULL;
-
-        PINFO("Probability has met threshold");
-
-        guid = g_new (GncGUID, 1);
-
-        if (string_to_guid (account_i.account_guid, guid))
-            account = xaccAccountLookup (guid, imap->book);
-
-        g_free (guid);
-
-        if (account != NULL)
-            LEAVE("Return account is '%s'", xaccAccountGetName (account));
-        else
-            LEAVE("Return NULL, account for Guid '%s' can not be found", account_i.account_guid);
-
-        return account;
-    }
-    PINFO("Probability has not met threshold");
-    LEAVE("Return NULL");
-
-    return NULL; /* we didn't meet our threshold, return NULL for an account */
+    auto account = xaccAccountLookup (reinterpret_cast<GncGUID*>(&guid), imap->book);
+    return account;
 }
 
-
 static void
-change_imap_entry (GncImportMatchMap *imap, gchar *kvp_path, int64_t token_count)
+change_imap_entry (GncImportMatchMap *imap, std::string const & path, int64_t token_count)
 {
     GValue value = G_VALUE_INIT;
 
-    PINFO("Source Account is '%s', kvp_path is '%s', Count is '%" G_GINT64_FORMAT "'",
-           xaccAccountGetName (imap->acc), kvp_path, token_count);
+    PINFO("Source Account is '%s', Count is '%" G_GINT64_FORMAT "'",
+           xaccAccountGetName (imap->acc), token_count);
 
     // check for existing guid entry
-    if (qof_instance_has_slot (QOF_INSTANCE(imap->acc), kvp_path))
+    if (qof_instance_has_slot (QOF_INSTANCE(imap->acc), path.c_str ()))
     {
         int64_t  existing_token_count = 0;
 
         // get the existing_token_count value
-        qof_instance_get_kvp (QOF_INSTANCE (imap->acc), kvp_path, &value);
+        qof_instance_get_path_kvp (QOF_INSTANCE (imap->acc), &value, {path});
 
         if (G_VALUE_HOLDS_INT64 (&value))
             existing_token_count = g_value_get_int64 (&value);
@@ -5503,14 +5484,9 @@ change_imap_entry (GncImportMatchMap *imap, gchar *kvp_path, int64_t token_count
     g_value_set_int64 (&value, token_count);
 
     // Add or Update the entry based on guid
-    qof_instance_set_kvp (QOF_INSTANCE (imap->acc), kvp_path, &value);
-
-    /* Set a feature flag in the book for the change to use guid.
-     * This will prevent older GnuCash versions that don't support this feature
-     * from opening this file. */
-    gnc_features_set_used (imap->book, GNC_FEATURE_GUID_BAYESIAN);
+    qof_instance_set_path_kvp (QOF_INSTANCE (imap->acc), &value, {path});
+    gnc_features_set_used (imap->book, GNC_FEATURE_GUID_FLAT_BAYESIAN);
 }
-
 
 /** Updates the imap for a given account using a list of tokens */
 void
@@ -5520,7 +5496,7 @@ gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
 {
     GList *current_token;
     gint64 token_count;
-    char *account_fullname, *kvp_path;
+    char *account_fullname;
     char *guid_string;
 
     ENTER(" ");
@@ -5529,6 +5505,7 @@ gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
         LEAVE(" ");
         return;
     }
+    check_import_map_data (imap->book);
 
     g_return_if_fail (acc != NULL);
     account_fullname = gnc_account_get_full_name(acc);
@@ -5548,180 +5525,106 @@ gnc_account_imap_add_account_bayes (GncImportMatchMap *imap,
                  skip this case here. */
         if (!current_token->data || (*((char*)current_token->data) == '\0'))
             continue;
-
         /* start off with one token for this account */
         token_count = 1;
-
         PINFO("adding token '%s'", (char*)current_token->data);
-
-        kvp_path = g_strdup_printf (IMAP_FRAME_BAYES "/%s/%s",
-                                    (char*)current_token->data,
-                                    guid_string);
-
+        auto path = std::string {IMAP_FRAME_BAYES} + '/' + static_cast<char*>(current_token->data) + '/' + guid_string;
         /* change the imap entry for the account */
-        change_imap_entry (imap, kvp_path, token_count);
-
-        g_free (kvp_path);
+        change_imap_entry (imap, path, token_count);
     }
-
     /* free up the account fullname and guid string */
     qof_instance_set_dirty (QOF_INSTANCE (imap->acc));
     xaccAccountCommitEdit (imap->acc);
     g_free (account_fullname);
     g_free (guid_string);
-
     LEAVE(" ");
 }
 
 /*******************************************************************************/
 
 static void
-build_bayes_layer_two (const char *key, const GValue *value, gpointer user_data)
+build_non_bayes (const char *key, const GValue *value, gpointer user_data)
 {
+    if (!G_VALUE_HOLDS_BOXED (value))
+        return;
     QofBook     *book;
-    Account     *map_account = NULL;
-    GncGUID     *guid;
+    GncGUID     *guid = NULL;
     gchar       *kvp_path;
-    gchar       *count;
-
-    struct imap_info *imapInfo_node;
-
-    struct imap_info *imapInfo = (struct imap_info*)user_data;
-
+    gchar       *guid_string = NULL;
+    auto imapInfo = (GncImapInfo*)user_data;
     // Get the book
     book = qof_instance_get_book (imapInfo->source_account);
 
-    if (G_VALUE_HOLDS_INT64 (value))
-    {
-        PINFO("build_bayes_layer_two: account '%s', token_count: '%" G_GINT64_FORMAT "'",
-                                  (char*)key, g_value_get_int64(value));
+    guid = (GncGUID*)g_value_get_boxed (value);
+    guid_string = guid_to_string (guid);
 
-        count = g_strdup_printf ("%" G_GINT64_FORMAT, g_value_get_int64 (value));
-    }
-    else
-        count = g_strdup ("0");
+    PINFO("build_non_bayes: account '%s', match account guid: '%s'",
+                            (char*)key, guid_string);
 
     kvp_path = g_strconcat (imapInfo->category_head, "/", key, NULL);
 
-    PINFO("build_bayes_layer_two: kvp_path is '%s'", kvp_path);
+    PINFO("build_non_bayes: kvp_path is '%s'", kvp_path);
 
-    guid = g_new (GncGUID, 1);
-
-    if (string_to_guid (key, guid))
-        map_account = xaccAccountLookup (guid, book);
-
-    g_free (guid);
-
-    imapInfo_node = g_malloc(sizeof(*imapInfo_node));
+    auto imapInfo_node = static_cast <GncImapInfo*> (g_malloc(sizeof(GncImapInfo)));
 
     imapInfo_node->source_account = imapInfo->source_account;
-    imapInfo_node->map_account    = map_account;
+    imapInfo_node->map_account    = xaccAccountLookup (guid, book);
     imapInfo_node->full_category  = g_strdup (kvp_path);
-    imapInfo_node->match_string   = g_strdup (imapInfo->match_string);
+    imapInfo_node->match_string   = g_strdup (key);
     imapInfo_node->category_head  = g_strdup (imapInfo->category_head);
-    imapInfo_node->count          = g_strdup (count);
+    imapInfo_node->count          = g_strdup (" ");
 
     imapInfo->list = g_list_append (imapInfo->list, imapInfo_node);
 
     g_free (kvp_path);
-    g_free (count);
+    g_free (guid_string);
+}
+
+static std::tuple<std::string, std::string, std::string>
+parse_bayes_imap_info (std::string const & imap_bayes_entry)
+{
+    auto header_length = strlen (IMAP_FRAME_BAYES);
+    std::string header {imap_bayes_entry.substr (0, header_length)};
+    auto guid_start = imap_bayes_entry.size() - GUID_ENCODING_LENGTH;
+    std::string keyword {imap_bayes_entry.substr (header_length + 1, guid_start - header_length - 2)};
+    std::string account_guid {imap_bayes_entry.substr (guid_start)};
+    return std::tuple <std::string, std::string, std::string> {header, keyword, account_guid};
 }
 
 static void
-build_bayes (const char *key, const GValue *value, gpointer user_data)
+build_bayes (const char *key, KvpValue * value, GncImapInfo & imapInfo)
 {
-    gchar *kvp_path;
-    struct imap_info *imapInfo = (struct imap_info*)user_data;
-    struct imap_info  imapInfol2;
-
-    PINFO("build_bayes: match string '%s'", (char*)key);
-
-    if (G_VALUE_HOLDS (value, G_TYPE_STRING) && g_value_get_string (value) == NULL)
+    auto slots = qof_instance_get_slots_prefix (QOF_INSTANCE (imapInfo.source_account), IMAP_FRAME_BAYES);
+    if (!slots.size()) return;
+    for (auto const & entry : slots)
     {
-        kvp_path = g_strdup_printf (IMAP_FRAME_BAYES "/%s", key);
-
-        if (qof_instance_has_slot (QOF_INSTANCE(imapInfo->source_account), kvp_path))
-        {
-            PINFO("build_bayes: kvp_path is '%s', key '%s'", kvp_path, key);
-
-            imapInfol2.source_account = imapInfo->source_account;
-            imapInfol2.match_string   = g_strdup (key);
-            imapInfol2.category_head  = g_strdup (kvp_path);
-            imapInfol2.list           = imapInfo->list;
-
-            qof_instance_foreach_slot (QOF_INSTANCE(imapInfo->source_account), kvp_path,
-                                       build_bayes_layer_two, &imapInfol2);
-
-            imapInfo->list = imapInfol2.list;
-            g_free (imapInfol2.match_string);
-            g_free (imapInfol2.category_head);
-        }
-        g_free (kvp_path);
-    }
+        auto parsed_key = parse_bayes_imap_info (entry.first);
+        auto temp_guid = gnc::GUID::from_string (std::get <2> (parsed_key));
+        GncGUID guid = temp_guid;
+        auto map_account = xaccAccountLookup (&guid, gnc_account_get_book (imapInfo.source_account));
+        std::string category_head {std::get <0> (parsed_key) + "/" + std::get <1> (parsed_key)};
+        auto imap_node = static_cast <GncImapInfo*> (g_malloc (sizeof (GncImapInfo)));
+        auto count = entry.second->get <int64_t> ();
+        imap_node->source_account = imapInfo.source_account;
+        imap_node->map_account = map_account;
+        imap_node->full_category = g_strdup (key);
+        imap_node->match_string = g_strdup (std::get <1> (parsed_key).c_str ());
+        imap_node->category_head = g_strdup (category_head.c_str ());
+        imap_node->count = g_strdup_printf ("%" G_GINT64_FORMAT, count);
+        imapInfo.list = g_list_append (imapInfo.list, imap_node);
+    };
 }
-
-
-static void
-build_non_bayes (const char *key, const GValue *value, gpointer user_data)
-{
-    if (G_VALUE_HOLDS_BOXED (value))
-    {
-        QofBook     *book;
-        GncGUID     *guid = NULL;
-        gchar       *kvp_path;
-        gchar       *guid_string = NULL;
-
-        struct imap_info *imapInfo_node;
-
-        struct imap_info *imapInfo = (struct imap_info*)user_data;
-
-        // Get the book
-        book = qof_instance_get_book (imapInfo->source_account);
-
-        guid = (GncGUID*)g_value_get_boxed (value);
-        guid_string = guid_to_string (guid);
-
-        PINFO("build_non_bayes: account '%s', match account guid: '%s'",
-                                (char*)key, guid_string);
-
-        kvp_path = g_strconcat (imapInfo->category_head, "/", key, NULL);
-
-        PINFO("build_non_bayes: kvp_path is '%s'", kvp_path);
-
-        imapInfo_node = g_malloc(sizeof(*imapInfo_node));
-
-        imapInfo_node->source_account = imapInfo->source_account;
-        imapInfo_node->map_account    = xaccAccountLookup (guid, book);
-        imapInfo_node->full_category  = g_strdup (kvp_path);
-        imapInfo_node->match_string   = g_strdup (key);
-        imapInfo_node->category_head  = g_strdup (imapInfo->category_head);
-        imapInfo_node->count          = g_strdup (" ");
-
-        imapInfo->list = g_list_append (imapInfo->list, imapInfo_node);
-
-        g_free (kvp_path);
-        g_free (guid_string);
-    }
-}
-
 
 GList *
 gnc_account_imap_get_info_bayes (Account *acc)
 {
-    GList *list = NULL;
-
-    GncImapInfo imapInfo;
-
-    imapInfo.source_account = acc;
-    imapInfo.list = list;
-
-    if (qof_instance_has_slot (QOF_INSTANCE(acc), IMAP_FRAME_BAYES))
-        qof_instance_foreach_slot (QOF_INSTANCE(acc), IMAP_FRAME_BAYES,
-                                   build_bayes, &imapInfo);
-
+    check_import_map_data (gnc_account_get_book (acc));
+    /* A dummy object which is used to hold the specified account, and the list
+     * of data about which we care. */
+    GncImapInfo imapInfo {acc, nullptr};
+    qof_instance_foreach_slot_prefix (QOF_INSTANCE (acc), IMAP_FRAME_BAYES, &build_bayes, imapInfo);
     return imapInfo.list;
 }
-
 
 GList *
 gnc_account_imap_get_info (Account *acc, const char *category)
@@ -5753,12 +5656,10 @@ gnc_account_get_map_entry (Account *acc, const char *full_category)
 {
     GValue v = G_VALUE_INIT;
     gchar *text = NULL;
-    gchar *kvp_path = g_strdup (full_category);
-
-    if (qof_instance_has_slot (QOF_INSTANCE(acc), kvp_path))
+    std::vector<std::string> path {full_category};
+    if (qof_instance_has_path_slot (QOF_INSTANCE (acc), path))
     {
-        qof_instance_get_kvp (QOF_INSTANCE(acc), kvp_path, &v);
-
+        qof_instance_get_path_kvp (QOF_INSTANCE (acc), &v, path);
         if (G_VALUE_HOLDS_STRING (&v))
         {
             gchar const *string;
@@ -5766,7 +5667,6 @@ gnc_account_get_map_entry (Account *acc, const char *full_category)
             text = g_strdup (string);
         }
     }
-    g_free (kvp_path);
     return text;
 }
 
@@ -5775,226 +5675,20 @@ void
 gnc_account_delete_map_entry (Account *acc, char *full_category, gboolean empty)
 {
     gchar *kvp_path = g_strdup (full_category);
-
     if ((acc != NULL) && qof_instance_has_slot (QOF_INSTANCE(acc), kvp_path))
     {
         xaccAccountBeginEdit (acc);
-
         if (empty)
-            qof_instance_slot_delete_if_empty (QOF_INSTANCE(acc), kvp_path);
+            qof_instance_slot_path_delete_if_empty (QOF_INSTANCE(acc), {kvp_path});
         else
-            qof_instance_slot_delete (QOF_INSTANCE(acc), kvp_path);
-
+            qof_instance_slot_path_delete (QOF_INSTANCE(acc), {kvp_path});
         PINFO("Account is '%s', path is '%s'", xaccAccountGetName (acc), kvp_path);
-
         qof_instance_set_dirty (QOF_INSTANCE(acc));
         xaccAccountCommitEdit (acc);
     }
     g_free (kvp_path);
     g_free (full_category);
 }
-
-/*******************************************************************************/
-
-static gchar *
-look_for_old_separator_descendants (Account *root, gchar *full_name, const gchar *separator)
-{
-    GList *top_accounts, *ptr;
-    gint   found_len = 0;
-    gchar  found_sep;
-
-    top_accounts = gnc_account_get_descendants (root);
-
-    PINFO("Incoming full_name is '%s', current separator is '%s'", full_name, separator);
-
-    /* Go through list of top level accounts */
-    for (ptr = top_accounts; ptr; ptr = g_list_next (ptr))
-    {
-        const gchar *name = xaccAccountGetName (ptr->data);
-
-        // we are looking for the longest top level account that matches
-        if (g_str_has_prefix (full_name, name))
-        {
-            gint name_len = strlen (name);
-            const gchar old_sep = full_name[name_len];
-
-            if (!g_ascii_isalnum (old_sep)) // test for non alpha numeric
-            {
-                if (name_len > found_len)
-                {
-                    found_sep = full_name[name_len];
-                    found_len = name_len;
-                }
-            }
-        }
-    }
-    g_list_free (top_accounts); // Free the List
-
-    if (found_len > 1)
-        full_name = g_strdelimit (full_name, &found_sep, *separator);
-
-    PINFO("Return full_name is '%s'", full_name);
-
-    return full_name;
-}
-
-
-static void
-convert_imap_entry (GncImapInfo *imapInfo, Account *map_account)
-{
-    GncImportMatchMap *imap;
-    gchar   *guid_string;
-    gchar   *kvp_path;
-    int64_t  token_count = 1;
-
-    GValue value = G_VALUE_INIT;
-
-    // Create an ImportMatchMap object
-    imap = gnc_account_imap_create_imap (imapInfo->source_account);
-
-    xaccAccountBeginEdit (imapInfo->source_account);
-
-    guid_string = guid_to_string (xaccAccountGetGUID (map_account));
-
-    PINFO("Map Account is '%s', GUID is '%s', Count is %s", xaccAccountGetName (map_account),
-               guid_string, imapInfo->count);
-
-    // save converting string, get the count value
-    qof_instance_get_kvp (QOF_INSTANCE (imapInfo->source_account), imapInfo->full_category, &value);
-
-    if (G_VALUE_HOLDS_INT64 (&value))
-        token_count = g_value_get_int64 (&value);
-
-    // Delete the old entry based on full account name
-    kvp_path = g_strdup (imapInfo->full_category);
-    gnc_account_delete_map_entry (imapInfo->source_account, kvp_path, FALSE);
-
-    // create path based on guid
-    kvp_path = g_strdup_printf ("/%s/%s", imapInfo->category_head, guid_string);
-
-    // change the imap entry of source_account
-    change_imap_entry (imap, kvp_path, token_count);
-
-    qof_instance_set_dirty (QOF_INSTANCE (imapInfo->source_account));
-    xaccAccountCommitEdit (imapInfo->source_account);
-
-    g_free (kvp_path);
-    g_free (guid_string);
-}
-
-
-static Account *
-look_for_old_mapping (GncImapInfo *imapInfo)
-{
-    Account       *root, *map_account = NULL;
-    const gchar   *sep = gnc_get_account_separator_string ();
-    gchar         *full_name;
-
-    PINFO("Category Head is '%s', Full Category is '%s'", imapInfo->category_head, imapInfo->full_category);
-
-    // do we have a map_account all ready, implying a guid string
-    if (imapInfo->map_account != NULL)
-        return NULL;
-
-    root = gnc_account_get_root (imapInfo->source_account);
-
-    full_name = g_strdup (imapInfo->full_category + strlen (imapInfo->category_head) + 1);
-
-    // may be top level or match with existing separator
-    map_account = gnc_account_lookup_by_full_name (root, full_name);
-
-    // do we have a valid account, if not, look for old separator
-    if (map_account == NULL)
-    {
-        full_name = look_for_old_separator_descendants (root, full_name, sep);
-        map_account = gnc_account_lookup_by_full_name (root, full_name); // lets try again
-    }
-
-    PINFO("Full account name is '%s'", full_name);
-
-    g_free (full_name);
-
-    return map_account;
-}
-
-static void
-convert_imap_account (Account *acc)
-{
-    GList *imap_list, *node;
-    gchar *acc_name = NULL;
-
-    acc_name = gnc_account_get_full_name (acc);
-    PINFO("Source Acc '%s'", acc_name);
-
-    imap_list = gnc_account_imap_get_info_bayes (acc);
-
-    if (g_list_length (imap_list) > 0) // we have mappings
-    {
-        PINFO("List length is %d", g_list_length (imap_list));
-        xaccAccountBeginEdit(acc);
-        for (node = imap_list;  node; node = g_list_next (node))
-        {
-            Account *map_account = NULL;
-            GncImapInfo *imapInfo = node->data;
-
-            // Lets start doing stuff
-            map_account = look_for_old_mapping (imapInfo);
-
-            if (map_account != NULL) // we have an account, try and update it
-                convert_imap_entry (imapInfo, map_account);
-            // Free the members and structure
-            g_free (imapInfo->category_head);
-            g_free (imapInfo->full_category);
-            g_free (imapInfo->match_string);
-            g_free (imapInfo->count);
-            g_free (imapInfo);
-        }
-        xaccAccountCommitEdit(acc);
-    }
-    g_free (acc_name);
-    g_list_free (imap_list); // Free the List
-}
-
-void
-gnc_account_imap_convert_bayes (QofBook *book)
-{
-    Account      *root;
-    GList        *accts, *ptr;
-    gboolean      run_once = FALSE;
-    GValue        value_s = G_VALUE_INIT;
-
-    // get the run-once value
-    qof_instance_get_kvp (QOF_INSTANCE (book), "changed-bayesian-to-guid", &value_s);
-
-    if (G_VALUE_HOLDS_STRING (&value_s) && (strcmp(g_value_get_string (&value_s), "true") == 0))
-        run_once = TRUE;
-
-    if (run_once == FALSE)
-    {
-        GValue value_b = G_VALUE_INIT;
-
-        /* Get list of Accounts */
-        root = gnc_book_get_root_account (book);
-        accts = gnc_account_get_descendants_sorted (root);
-
-        /* Go through list of accounts */
-        for (ptr = accts; ptr; ptr = g_list_next (ptr))
-        {
-            Account *acc = ptr->data;
-
-            convert_imap_account (acc);
-        }
-        g_list_free (accts);
-
-        g_value_init (&value_b, G_TYPE_BOOLEAN);
-
-        g_value_set_boolean (&value_b, TRUE);
-
-        // set the run-once value
-        qof_instance_set_kvp (QOF_INSTANCE (book), "changed-bayesian-to-guid", &value_b);
-    }
-}
-
 
 /* ================================================================ */
 /* QofObject function implementation and registration */
@@ -6003,7 +5697,6 @@ static void
 gnc_account_book_end(QofBook* book)
 {
     Account *root_account = gnc_book_get_root_account(book);
-
     xaccAccountBeginEdit(root_account);
     xaccAccountDestroy(root_account);
 }
@@ -6020,7 +5713,7 @@ static QofObject account_object_def =
     DI(.interface_version = ) QOF_OBJECT_VERSION,
     DI(.e_type            = ) GNC_ID_ACCOUNT,
     DI(.type_label        = ) "Account",
-    DI(.create            = ) (gpointer)xaccMallocAccount,
+    DI(.create            = ) (void*(*)(QofBook*)) xaccMallocAccount,
     DI(.book_begin        = ) NULL,
     DI(.book_end          = ) gnc_account_book_end,
     DI(.is_dirty          = ) qof_collection_is_dirty,
