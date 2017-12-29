@@ -1811,7 +1811,7 @@ tags within description, notes or memo. ")
                 (gnc:html-markup-h2 NO-MATCHING-ACCT-HEADER)
                 (gnc:html-markup-p NO-MATCHING-ACCT-TEXT)))
 
-              (if (member 'nomatch infobox-display)
+              (if (member 'no-match infobox-display)
                   (gnc:html-document-add-object!
                    document
                    (infobox)))))
