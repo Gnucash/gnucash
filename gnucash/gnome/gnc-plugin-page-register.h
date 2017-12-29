@@ -163,6 +163,16 @@ gnc_plugin_page_register_get_account (GncPluginPageRegister *page);
 Transaction *
 gnc_plugin_page_register_get_current_txn (GncPluginPageRegister *page);
 
+/** Given a pointer to a register plugin page, set the focus to
+ *  the sheet. This is used in a g_idle_add so return FALSE.
+ *
+ *  @param page The "register" page.
+ *
+ *  @return FALSE
+ */
+gboolean
+gnc_plugin_page_register_focus (GncPluginPageRegister *page);
+
 G_END_DECLS
 /** @} */
 /** @} */

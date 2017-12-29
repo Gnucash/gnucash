@@ -836,6 +836,18 @@ gnc_plugin_page_register_get_current_txn (GncPluginPageRegister *page)
     return gnc_split_register_get_current_trans(reg);
 }
 
+gboolean
+gnc_plugin_page_register_focus (GncPluginPageRegister *page)
+{
+    if (GNC_IS_PLUGIN_PAGE_REGISTER(page))
+    {
+        GncPluginPageRegisterPrivate *priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+        GNCSplitReg *gsr = gnc_plugin_page_register_get_gsr(GNC_PLUGIN_PAGE(page));
+        gnc_split_reg_focus_on_sheet (gsr);
+    }
+    return FALSE;
+}
+
 /* This is the list of actions which are switched inactive in a read-only book. */
 static const char* readonly_inactive_actions[] =
 {

@@ -233,6 +233,11 @@ void gnc_split_reg_jump_to_blank (GNCSplitReg *gsr);
 void gnc_split_reg_jump_to_split(GNCSplitReg *gsr, Split *split);
 void gnc_split_reg_jump_to_split_amount(GNCSplitReg *gsr, Split *split);
 
+/**
+ * Set the focus of the register to the sheet
+ **/
+void gnc_split_reg_focus_on_sheet (GNCSplitReg *gsr);
+
 /*
  * Create a transaction entry with given amount and date. One account is
  * specified, the other is undefined i.e. it defaults to orphan account.

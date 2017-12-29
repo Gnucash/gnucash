@@ -1520,6 +1520,17 @@ gnc_split_reg_jump_to_blank (GNCSplitReg *gsr)
 }
 
 void
+gnc_split_reg_focus_on_sheet (GNCSplitReg *gsr)
+{
+    GnucashRegister *reg = gsr->reg;
+    GnucashSheet *sheet = gnucash_register_get_sheet (reg);
+
+    // Make sure the sheet is the focus
+    if (!gtk_widget_has_focus(GTK_WIDGET (sheet)))
+        gtk_widget_grab_focus (GTK_WIDGET (sheet));
+}
+
+void
 gnc_split_reg_balancing_entry(GNCSplitReg *gsr, Account *account,
                               time64 statement_date, gnc_numeric balancing_amount)
 {
