@@ -86,6 +86,7 @@ void gnc_invoice_save_page (InvoiceWindow *iw, GKeyFile *key_file, const gchar *
 GtkWidget * gnc_invoice_create_page (InvoiceWindow *iw, gpointer page);
 
 GtkWidget *gnc_invoice_get_register(InvoiceWindow *iw);
+GtkWidget *gnc_invoice_get_notes(InvoiceWindow *iw);
 
 /* definitions for CB functions */
 void gnc_invoice_window_destroy_cb (GtkWidget *widget, gpointer data);

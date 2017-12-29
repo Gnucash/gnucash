@@ -256,12 +256,12 @@ static const gchar *can_unpost_actions[] =
 /** Short labels for use on the toolbar buttons. */
 static action_toolbar_labels toolbar_labels[] =
 {
-    { "RecordEntryAction", 	  N_("Enter") },
-    { "CancelEntryAction", 	  N_("Cancel") },
-    { "DeleteEntryAction", 	  N_("Delete") },
-    { "DuplicateEntryAction",       N_("Duplicate") },
-    { "EntryUpAction", N_("Up") },
-    { "EntryDownAction", N_("Down") },
+    { "RecordEntryAction",    N_("Enter") },
+    { "CancelEntryAction",    N_("Cancel") },
+    { "DeleteEntryAction",    N_("Delete") },
+    { "DuplicateEntryAction", N_("Duplicate") },
+    { "EntryUpAction",        N_("Up") },
+    { "EntryDownAction",      N_("Down") },
     { "BlankEntryAction",           N_("Blank") },
     { "EditPostInvoiceAction",      N_("Post") },
     { "EditUnpostInvoiceAction",    N_("Unpost") },
@@ -443,6 +443,63 @@ gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, g
 }
 
 
+static gboolean
+gnc_plugin_page_invoice_focus (InvoiceWindow *iw)
+{
+    GtkWidget *regWidget = gnc_invoice_get_register(iw);
+    GtkWidget *notes = gnc_invoice_get_notes(iw);
+    GnucashSheet *sheet;
+
+    if (!GNUCASH_IS_REGISTER(regWidget))
+        return FALSE;
+    
+    sheet = gnucash_register_get_sheet (GNUCASH_REGISTER(regWidget));
+
+    // Test for the sheet being read only
+    if (!gnucash_sheet_is_read_only (sheet))
+    {
+        if (!gtk_widget_is_focus (GTK_WIDGET(sheet)))
+            gtk_widget_grab_focus (GTK_WIDGET(sheet));
+    }
+    else // set focus to the notes field
+    {
+        if (!gtk_widget_is_focus (GTK_WIDGET(notes)))
+            gtk_widget_grab_focus (GTK_WIDGET(notes));
+    }
+    return FALSE;
+}
+
+
+/**
+ * Whenever the current page is changed, if an invoice page is
+ * the current page, set focus on the sheet or notes field.
+ */
+static void
+gnc_plugin_page_invoice_main_window_page_changed (GncMainWindow *window,
+        GncPluginPage *plugin_page, gpointer user_data)
+{
+    // We continue only if the plugin_page is a valid
+    if (!plugin_page || !GNC_IS_PLUGIN_PAGE(plugin_page))
+        return;
+
+    if (gnc_main_window_get_current_page (window) == plugin_page)
+    {
+        GncPluginPageInvoice *page;
+        GncPluginPageInvoicePrivate *priv;
+
+        if (!GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page))
+            return;
+
+        page = GNC_PLUGIN_PAGE_INVOICE(plugin_page);
+        priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(page);
+
+        // The page changed signal is emitted multiple times so we need
+        // to use an idle_add to change the focus to the sheet
+        g_idle_add ((GSourceFunc)gnc_plugin_page_invoice_focus, priv->iw);
+    }
+}
+
+
 /* Virtual Functions */
 
 static GtkWidget *
@@ -451,6 +508,7 @@ gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page)
     GncPluginPageInvoice *page;
     GncPluginPageInvoicePrivate *priv;
     GtkWidget *regWidget, *widget;
+    GncMainWindow  *window;
 
     ENTER("page %p", plugin_page);
     page = GNC_PLUGIN_PAGE_INVOICE (plugin_page);
@@ -496,6 +554,11 @@ gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page)
         gnc_register_gui_component(GNC_PLUGIN_PAGE_INVOICE_NAME,
                                    gnc_plugin_page_invoice_refresh_cb,
                                    NULL, page);
+
+    window = GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window);
+    g_signal_connect(window, "page_changed",
+                     G_CALLBACK(gnc_plugin_page_invoice_main_window_page_changed),
+                     plugin_page);
 
     LEAVE("");
     return priv->widget;

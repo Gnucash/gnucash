@@ -237,6 +237,14 @@ gnc_invoice_get_register(InvoiceWindow *iw)
     return NULL;
 }
 
+GtkWidget *
+gnc_invoice_get_notes(InvoiceWindow *iw)
+{
+    if (iw)
+        return (GtkWidget *)iw->notes_text;
+    return NULL;
+}
+
 /*******************************************************************************/
 /* FUNCTIONS FOR UNPOSTING */
 
