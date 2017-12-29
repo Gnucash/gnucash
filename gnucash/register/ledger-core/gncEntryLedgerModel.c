@@ -187,11 +187,11 @@ static const char * get_date_entry (VirtualLocation virt_loc,
 {
     GncEntryLedger *ledger = user_data;
     GncEntry *entry;
-    Timespec ts;
+    Timespec ts = {0,0};
 
     entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
 
-    ts = gncEntryGetDate (entry);
+    ts.tv_sec = gncEntryGetDate (entry);
     return gnc_print_date (ts);
 }
 

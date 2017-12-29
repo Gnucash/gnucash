@@ -724,14 +724,12 @@ gnc_dialog_post_invoice(InvoiceWindow *iw, char *message,
     if (entries && ((gncInvoiceGetOwnerType (invoice) == GNC_OWNER_VENDOR) ||
                     (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_EMPLOYEE)))
     {
-        *postdate = gncEntryGetDate ((GncEntry*)entries->data);
+        postdate->tv_sec = gncEntryGetDate ((GncEntry*)entries->data);
         for (entries_iter = entries; entries_iter != NULL; entries_iter = g_list_next(entries_iter))
         {
-            Timespec entrydate;
-
-            entrydate = gncEntryGetDate ((GncEntry*)entries_iter->data);
-            if (timespec_cmp(&entrydate, postdate) > 0)
-                *postdate = entrydate;
+            time64 entrydate = gncEntryGetDate ((GncEntry*)entries_iter->data);
+            if (entrydate > postdate->tv_sec)
+                postdate->tv_sec = entrydate;
         }
     }
 

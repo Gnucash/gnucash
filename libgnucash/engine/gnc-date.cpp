@@ -1405,6 +1405,13 @@ gnc_gdate_set_time64 (GDate* gd, time64 time)
                     tm.tm_year + 1900);
 }
 
+time64 gdate_to_time64 (GDate d)
+{
+    return gnc_dmy2time64_neutral (g_date_get_day(&d),
+                                     g_date_get_month(&d),
+                                     g_date_get_year(&d));
+}
+
 Timespec gdate_to_timespec (GDate d)
 {
     return gnc_dmy2timespec_neutral (g_date_get_day(&d),
