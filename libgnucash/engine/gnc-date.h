@@ -392,7 +392,7 @@ Timespec gnc_dmy2timespec_neutral (gint day, gint month, gint year);
  * XXX Caution: this routine does not handle strings that specify
  * times before January 1 1970.
  */
-Timespec gnc_iso8601_to_timespec_gmt(const gchar *);
+time64 gnc_iso8601_to_time64_gmt(const gchar *);
 
 /** The gnc_timespec_to_iso8601_buff() routine takes the input
  *    UTC Timespec value and prints it as an ISO-8601 style string.

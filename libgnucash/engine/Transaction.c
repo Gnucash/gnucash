@@ -2766,7 +2766,7 @@ xaccTransGetVoidTime(const Transaction *tr)
     if (G_VALUE_HOLDS_STRING (&v))
         s = g_value_get_string (&v);
     if (s)
-        return gnc_iso8601_to_timespec_gmt (s).tv_sec;
+        return gnc_iso8601_to_time64_gmt (s);
     return void_time;
 }
 

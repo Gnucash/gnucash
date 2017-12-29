@@ -46,6 +46,7 @@ typedef struct KvpFrameImpl KvpFrame;
 #define __KVP_FRAME
 #endif
 Timespec* get_random_timespec(void);
+time64 get_random_time(void);
 void random_timespec_zero_nsec (gboolean zero_nsec);
 void random_timespec_usec_resolution (gboolean usec_resolution);
 

@@ -1198,25 +1198,25 @@ gnc_date_timestamp (void)
  */
 
 #define ISO_DATE_FORMAT "%d-%d-%d %d:%d:%lf%s"
-Timespec
-gnc_iso8601_to_timespec_gmt(const char *cstr)
+time64
+gnc_iso8601_to_time64_gmt(const char *cstr)
 {
     time64 time;
-    if (!cstr) return {0, 0};
+    if (!cstr) return 0;
     try
     {
         GncDateTime gncdt(cstr);
-        return {static_cast<time64>(gncdt), 0};
+        return static_cast<time64>(gncdt);
     }
     catch(std::logic_error& err)
     {
         PWARN("Error processing %s: %s", cstr, err.what());
-        return {0, 0};
+        return 0;
     }
     catch(std::runtime_error& err)
     {
         PWARN("Error processing time64 %s: %s", cstr, err.what());
-        return {0, 0};
+        return 0;
     }
 }
 

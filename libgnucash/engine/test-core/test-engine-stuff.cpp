@@ -227,6 +227,15 @@ get_random_glist_depth (gint depth)
 /* ========================================================== */
 /* Time/Date, GncGUID data stuff */
 
+time64
+get_random_time (void)
+{
+    time64 ret {0};
+    while (ret <= 0)
+        ret = rand();
+    return ret;
+}
+
 Timespec*
 get_random_timespec(void)
 {
