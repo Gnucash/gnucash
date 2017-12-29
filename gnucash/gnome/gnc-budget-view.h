@@ -68,6 +68,7 @@ gboolean gnc_budget_view_restore(GncBudgetView* view, GKeyFile *key_file, const 
 GtkTreeSelection* gnc_budget_view_get_selection(GncBudgetView* view);
 Account* gnc_budget_view_get_account_from_path(GncBudgetView* view, GtkTreePath* path);
 GList* gnc_budget_view_get_selected_accounts(GncBudgetView* view);
+GtkWidget *gnc_budget_view_get_account_tree_view (GncBudgetView* view);
 
 G_END_DECLS
 

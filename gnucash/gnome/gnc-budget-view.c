@@ -290,6 +290,17 @@ gnc_budget_view_get_account_from_path(GncBudgetView* view, GtkTreePath* path)
     return gnc_tree_view_account_get_account_from_path(GNC_TREE_VIEW_ACCOUNT(priv->tree_view), path);
 }
 
+GtkWidget*
+gnc_budget_view_get_account_tree_view (GncBudgetView* view)
+{
+    GncBudgetViewPrivate *priv;
+    
+    g_return_val_if_fail(GNC_IS_BUDGET_VIEW(view), NULL);
+        
+    priv =  GNC_BUDGET_VIEW_GET_PRIVATE(view);
+    return GTK_WIDGET(priv->fd->tree_view);
+}
+
 GList*
 gnc_budget_view_get_selected_accounts(GncBudgetView* view)
 {

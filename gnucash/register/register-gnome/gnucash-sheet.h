@@ -110,5 +110,7 @@ void gnucash_sheet_set_text_bounds (GnucashSheet *sheet, GdkRectangle *rect,
 gint gnucash_sheet_get_text_offset (GnucashSheet *sheet, const VirtualLocation virt_loc,
                                     gint rect_width, gint logical_width);
 
+gboolean gnucash_sheet_is_read_only (GnucashSheet *sheet);
+
 /** @} */
 #endif

@@ -258,6 +258,48 @@ gnc_plugin_page_report_set_property( GObject *obj,
 
 }
 
+static gboolean
+gnc_plugin_page_report_focus (GtkWidget *widget)
+{
+    if (GTK_IS_WIDGET(widget))
+    {
+        if (!gtk_widget_is_focus (GTK_WIDGET(widget)))
+            gtk_widget_grab_focus (GTK_WIDGET(widget));
+    }
+    return FALSE;
+}
+
+/**
+ * Whenever the current page is changed, if a report page is
+ * the current page, set focus on the report.
+ */
+static void
+gnc_plugin_page_report_main_window_page_changed (GncMainWindow *window,
+        GncPluginPage *plugin_page, gpointer user_data)
+{
+    // We continue only if the plugin_page is a valid
+    if (!plugin_page || !GNC_IS_PLUGIN_PAGE(plugin_page))
+        return;
+
+    if (gnc_main_window_get_current_page (window) == plugin_page)
+    {
+        GncPluginPageReport *report;
+        GncPluginPageReportPrivate *priv;
+        GtkWidget *widget;
+
+        if (!GNC_IS_PLUGIN_PAGE_REPORT(plugin_page))
+            return;
+
+        report = GNC_PLUGIN_PAGE_REPORT(plugin_page);
+        priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+        widget = gnc_html_get_widget(priv->html);
+
+        // The page changed signal is emitted multiple times so we need
+        // to use an idle_add to change the focus to the webkit widget
+        g_idle_add ((GSourceFunc)gnc_plugin_page_report_focus, widget);
+    }
+}
+
 static void
 gnc_plugin_page_report_class_init (GncPluginPageReportClass *klass)
 {
@@ -328,7 +370,7 @@ gnc_plugin_page_report_set_progressbar (GncPluginPage *page, gboolean set)
     GtkAllocation allocation;
 
     progressbar = gnc_window_get_progressbar (GNC_WINDOW(page->window));
-    gtk_widget_get_allocation (GTK_WIDGET(progressbar), &allocation); 
+    gtk_widget_get_allocation (GTK_WIDGET(progressbar), &allocation);
 
     // this sets the minimum size of the progressbar to that allocated
     if (set)
@@ -401,6 +443,7 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
 {
     GncPluginPageReport *report;
     GncPluginPageReportPrivate *priv;
+    GncMainWindow  *window;
     GtkWindow *topLvl;
     URLType type;
     char * id_name;
@@ -456,6 +499,11 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     /* load uri when view is realized */
     g_signal_connect (G_OBJECT(GTK_WIDGET(priv->container)), "realize",
                       G_CALLBACK(gnc_plugin_page_report_realize_uri), page);
+
+    window = GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(page)->window);
+    g_signal_connect(window, "page_changed",
+                     G_CALLBACK(gnc_plugin_page_report_main_window_page_changed),
+                     page);
 
     gtk_widget_show_all( GTK_WIDGET(priv->container) );
     LEAVE("container %p", priv->container);

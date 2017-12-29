@@ -175,10 +175,10 @@ static const gchar *actions_requiring_account[] =
 /** Short labels for use on the toolbar buttons. */
 static action_toolbar_labels toolbar_labels[] =
 {
-    { "OpenAccountAction", 	    N_("Open") },
-    { "DeleteBudgetAction", 	    N_("Delete") },
-    { "OptionsBudgetAction", 	    N_("Options") },
-    { "EstimateBudgetAction", 	    N_("Estimate") },
+    { "OpenAccountAction",          N_("Open") },
+    { "DeleteBudgetAction",         N_("Delete") },
+    { "OptionsBudgetAction",        N_("Options") },
+    { "EstimateBudgetAction",       N_("Estimate") },
     { NULL, NULL },
 };
 
@@ -365,6 +365,22 @@ gnc_plugin_page_budget_close_cb (gpointer user_data)
 {
     GncPluginPage *page = GNC_PLUGIN_PAGE(user_data);
     gnc_main_window_close_page (page);
+}
+
+
+gboolean
+gnc_plugin_page_budget_focus (GncPluginPageBudget *page)
+{
+    if (GNC_IS_PLUGIN_PAGE_BUDGET(page))
+    {
+        GncPluginPageBudgetPrivate *priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
+        GncBudgetView *budget_view = priv->budget_view;
+        GtkWidget *account_view = gnc_budget_view_get_account_tree_view (budget_view);
+
+        if (!gtk_widget_is_focus (GTK_WIDGET(account_view)))
+            gtk_widget_grab_focus (GTK_WIDGET(account_view));
+    }
+    return FALSE;
 }
 
 

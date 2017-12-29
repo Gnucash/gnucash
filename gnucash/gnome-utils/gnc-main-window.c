@@ -3539,6 +3539,18 @@ gnc_main_window_window_menu (GncMainWindow *window)
 #endif
 };
 
+/* This is used to prevent the tab having focus */
+static gboolean
+gnc_main_window_page_focus_in (GtkWidget *widget, GdkEvent  *event,
+                               gpointer user_data)
+{
+    GncMainWindow *window = user_data;
+    GncPluginPage *page = gnc_main_window_get_current_page (window);
+
+    g_signal_emit (window, main_window_signals[PAGE_CHANGED], 0, page);
+    return FALSE;
+}
+
 static void
 gnc_main_window_setup_window (GncMainWindow *window)
 {
@@ -3579,6 +3591,8 @@ gnc_main_window_setup_window (GncMainWindow *window)
                       G_CALLBACK (gnc_main_window_switch_page), window);
     g_signal_connect (G_OBJECT (priv->notebook), "page-reordered",
                       G_CALLBACK (gnc_main_window_page_reordered), window);
+    g_signal_connect (G_OBJECT (priv->notebook), "focus-in-event",
+                      G_CALLBACK (gnc_main_window_page_focus_in), window);
     gtk_box_pack_start (GTK_BOX (main_vbox), priv->notebook,
                         TRUE, TRUE, 0);
 

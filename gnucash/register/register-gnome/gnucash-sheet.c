@@ -746,6 +746,14 @@ gnucash_sheet_redraw_block (GnucashSheet *sheet, VirtualCellLocation vcell_loc)
     gtk_widget_queue_draw_area (GTK_WIDGET(sheet), x, y, w + 1, h + 1);
 }
 
+gboolean
+gnucash_sheet_is_read_only (GnucashSheet *sheet)
+{
+    g_return_val_if_fail (sheet != NULL, TRUE);
+    g_return_val_if_fail (GNUCASH_IS_SHEET(sheet), TRUE);
+    return gnc_table_model_read_only (sheet->table->model);
+}
+
 static void
 gnucash_sheet_finalize (GObject *object)
 {
