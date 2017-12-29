@@ -335,12 +335,12 @@ static void csv_price_imp_preview_commodity_sel_cb (GtkComboBox* commodity_selec
     info->preview_update_commodity();
 }
 
-void csv_price_imp_preview_col_type_changed_cb (GtkComboBox* cbox, CsvImpPriceAssist* info)
+static void csv_price_imp_preview_col_type_changed_cb (GtkComboBox* cbox, CsvImpPriceAssist* info)
 {
     info->preview_update_col_type (cbox);
 }
 
-gboolean
+static gboolean
 csv_price_imp_preview_treeview_clicked_cb (GtkTreeView* treeview, GdkEventButton* event,
                                         CsvImpPriceAssist* info)
 {
@@ -1117,7 +1117,7 @@ CsvImpPriceAssist::preview_update_commodity ()
     preview_refresh_table ();
 }
 
-gboolean
+static gboolean
 csv_imp_preview_queue_rebuild_table (CsvImpPriceAssist *assist)
 {
     assist->preview_refresh_table ();
@@ -1518,7 +1518,7 @@ CsvImpPriceAssist::preview_style_column (uint32_t col_num, GtkTreeModel* model)
 
 /* Helper to create a shared store for the header comboboxes in the preview treeview.
  * It holds the possible column types */
-GtkTreeModel*
+static GtkTreeModel*
 make_column_header_model_price (void)
 {
     auto combostore = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_INT);
