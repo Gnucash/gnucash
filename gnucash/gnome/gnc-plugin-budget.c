@@ -97,13 +97,13 @@ gnc_plugin_budget_get_type (void)
         static const GTypeInfo our_info =
         {
             sizeof (GncPluginBudgetClass),
-            NULL,		/* base_init */
-            NULL,		/* base_finalize */
+            NULL,       /* base_init */
+            NULL,       /* base_finalize */
             (GClassInitFunc) gnc_plugin_budget_class_init,
-            NULL,		/* class_finalize */
-            NULL,		/* class_data */
+            NULL,       /* class_finalize */
+            NULL,       /* class_data */
             sizeof (GncPluginBudget),
-            0,		/* n_preallocs */
+            0,          /* n_preallocs */
             (GInstanceInitFunc) gnc_plugin_budget_init
         };
 

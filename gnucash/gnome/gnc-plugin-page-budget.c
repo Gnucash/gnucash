@@ -175,10 +175,10 @@ static const gchar *actions_requiring_account[] =
 /** Short labels for use on the toolbar buttons. */
 static action_toolbar_labels toolbar_labels[] =
 {
-    { "OpenAccountAction", 	    N_("Open") },
-    { "DeleteBudgetAction", 	    N_("Delete") },
-    { "OptionsBudgetAction", 	    N_("Options") },
-    { "EstimateBudgetAction", 	    N_("Estimate") },
+    { "OpenAccountAction",          N_("Open") },
+    { "DeleteBudgetAction",         N_("Delete") },
+    { "OptionsBudgetAction",        N_("Options") },
+    { "EstimateBudgetAction",       N_("Estimate") },
     { NULL, NULL },
 };
 
