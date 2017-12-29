@@ -363,16 +363,9 @@ simple_chars_only_parser_new (sixtp_end_handler end_handler)
 */
 
 gboolean
-string_to_timespec_secs (const gchar* str, Timespec* ts)
+string_to_time64 (const gchar* str, time64* time)
 {
-    *ts = gnc_iso8601_to_timespec_gmt (str);
-    return (TRUE);
-}
-
-gboolean
-string_to_timespec_nsecs (const gchar* str, Timespec* ts)
-{
-    /* We don't do nanoseconds anymore. */
+    *time = gnc_iso8601_to_time64_gmt (str);
     return (TRUE);
 }
 
@@ -459,7 +452,7 @@ generic_timespec_secs_end_handler (gpointer data_for_children,
     txt = concatenate_child_result_chars (data_from_children);
     g_return_val_if_fail (txt, FALSE);
 
-    ok = string_to_timespec_secs (txt, & (info->ts));
+    ok = string_to_time64 (txt, & (info->ts.tv_sec));
     g_free (txt);
 
     g_return_val_if_fail (ok, FALSE);
@@ -491,22 +484,7 @@ generic_timespec_nsecs_end_handler (gpointer data_for_children,
                                     gpointer parent_data, gpointer global_data,
                                     gpointer* result, const gchar* tag)
 {
-    gchar* txt = NULL;
-    TimespecParseInfo* info = (TimespecParseInfo*) parent_data;
-    gboolean ok;
-
-    g_return_val_if_fail (parent_data, FALSE);
-
-    txt = concatenate_child_result_chars (data_from_children);
-    g_return_val_if_fail (txt, FALSE);
-
-    ok = string_to_timespec_nsecs (txt, & (info->ts));
-    g_free (txt);
-
-    g_return_val_if_fail (ok, FALSE);
-
-    info->ns_block_count++;
-    return (TRUE);
+    return TRUE;
 }
 
 static sixtp*

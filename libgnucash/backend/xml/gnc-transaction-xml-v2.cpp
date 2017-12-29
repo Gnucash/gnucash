@@ -275,13 +275,9 @@ static gboolean
 spl_reconcile_date_handler (xmlNodePtr node, gpointer data)
 {
     struct split_pdata* pdata = static_cast<decltype (pdata)> (data);
-    Timespec ts;
-
-    ts = dom_tree_to_timespec (node);
-    if (!dom_tree_valid_timespec (&ts, node->name)) return FALSE;
-
-    xaccSplitSetDateReconciledTS (pdata->split, &ts);
-
+    time64 time  = dom_tree_to_time64 (node);
+    if (!dom_tree_valid_time64 (time, node->name)) return FALSE;
+    xaccSplitSetDateReconciledSecs (pdata->split, time);
     return TRUE;
 }
 
@@ -434,14 +430,10 @@ static inline gboolean
 set_tran_date (xmlNodePtr node, Transaction* trn,
                void (*func) (Transaction* trn, const Timespec* tm))
 {
-    Timespec tm;
-
-    tm = dom_tree_to_timespec (node);
-
-    if (!dom_tree_valid_timespec (&tm, node->name)) return FALSE;
-
-    func (trn, &tm);
-
+    time64 time = dom_tree_to_time64 (node);
+    if (!dom_tree_valid_time64 (time, node->name)) return FALSE;
+    Timespec ts {time, 0};
+    func (trn, &ts);
     return TRUE;
 }
 

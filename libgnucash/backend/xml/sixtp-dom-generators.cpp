@@ -132,6 +132,12 @@ commodity_ref_to_dom_tree (const char* tag, const gnc_commodity* c)
 }
 
 char*
+time64_to_string (time64 time)
+{
+    return gnc_print_time64 (time, TIMESPEC_TIME_FORMAT " %q");
+}
+
+char*
 timespec_sec_to_string (const Timespec* ts)
 {
     return gnc_print_time64 (ts->tv_sec, "%Y-%m-%d %H:%M:%S %q");
@@ -141,6 +147,21 @@ gchar*
 timespec_nsec_to_string (const Timespec* ts)
 {
     return g_strdup_printf ("%ld", ts->tv_nsec);
+}
+
+xmlNodePtr
+time64_to_dom_tree (const char* tag, const time64 time)
+{
+    xmlNodePtr ret;
+    g_return_val_if_fail (time, NULL);
+    auto date_str = gnc_print_time64 (time, TIMESPEC_TIME_FORMAT " %q");
+    if (!date_str)
+        return NULL;
+    ret = xmlNewNode (NULL, BAD_CAST tag);
+    xmlNewTextChild (ret, NULL, BAD_CAST "ts:date",
+                     checked_char_cast (date_str));
+    g_free (date_str);
+    return ret;
 }
 
 xmlNodePtr
