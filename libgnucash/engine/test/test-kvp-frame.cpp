@@ -201,16 +201,16 @@ TEST (KvpFrameTestForEachPrefix, for_each_prefix_1)
     unsigned count {};
     auto counter = [] (char const *, KvpValue*, unsigned & count) { ++count; };
     fr.for_each_slot_prefix("one", counter, count);
-    EXPECT_EQ(count, 3);
+    EXPECT_EQ(count, UINT32_C(3));
     count = 0;
     fr.for_each_slot_prefix("onetwo", counter, count);
-    EXPECT_EQ(count, 2);
+    EXPECT_EQ(count, UINT32_C(2));
     count = 0;
     fr.for_each_slot_prefix("onetwothree", counter, count);
-    EXPECT_EQ(count, 1);
+    EXPECT_EQ(count, UINT32_C(1));
     count = 0;
     fr.for_each_slot_prefix("two", counter, count);
-    EXPECT_EQ(count, 0);
+    EXPECT_EQ(count, UINT32_C(0));
 }
 
 TEST (KvpFrameTestForEachPrefix, for_each_prefix_2)
