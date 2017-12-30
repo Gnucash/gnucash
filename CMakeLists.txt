@@ -821,7 +821,7 @@ ADD_CUSTOM_COMMAND(OUTPUT ${DIST_FILE}.gz ${DIST_FILE}.bz2
            -P ${CMAKE_SOURCE_DIR}/common/cmake_modules/MakeDist.cmake
 
         DEPENDS
-          ${ALL_DIST} ${DIST_GENERATED_FILES2} gnc-vcs-info iso-4217-c gnc-warnings-c build-config-scm gnucash-design-info ChangeLog
+          ${ALL_DIST} ${DIST_GENERATED_FILES2} gnc-vcs-info iso-4217-c gnc-warnings-c gnucash-design-info ChangeLog
         )
 
 ADD_CUSTOM_TARGET(dist DEPENDS ${DIST_FILE}.gz ${DIST_FILE}.bz2)
