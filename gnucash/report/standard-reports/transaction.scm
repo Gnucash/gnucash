@@ -1071,7 +1071,7 @@ tags within description, notes or memo. ")
           ((damount (lambda (s) (if (gnc:split-voided? s)
                                     (xaccSplitVoidFormerAmount s)
                                     (xaccSplitGetAmount s))))
-           (trans-date (lambda (s) (gnc-transaction-get-date-posted (xaccSplitGetParent s))))
+           (trans-date (lambda (s) (xaccTransGetDate (xaccSplitGetParent s))))
            (currency (lambda (s) (xaccAccountGetCommodity (xaccSplitGetAccount s))))
            (report-currency (lambda (s) (if (column-uses? 'common-currency)
                                             (opt-val gnc:pagename-general optname-currency)
@@ -1087,7 +1087,6 @@ tags within description, notes or memo. ")
                                      (gnc-commodity-get-mnemonic
                                       (opt-val gnc:pagename-general optname-currency)))
                                     ""))))
-           (time64CanonicalDayTime (lambda (t64)  (gnc-tm-set-day-middle (gnc-localtime t64))))
            (convert (lambda (s num)
                       (gnc:exchange-by-pricedb-nearest
                        (gnc:make-gnc-monetary (currency s) num)
@@ -1095,7 +1094,7 @@ tags within description, notes or memo. ")
                        ;; Use midday as the transaction time so it matches a price
                        ;; on the same day.  Otherwise it uses midnight which will
                        ;; likely match a price on the previous day
-                       (timespecCanonicalDayTime (trans-date s)))))
+                       (time64CanonicalDayTime (trans-date s)))))
            (split-value (lambda (s) (convert s (damount s)))) ; used for correct debit/credit
            (amount (lambda (s) (split-value s)))
            (debit-amount (lambda (s) (and (positive? (gnc:gnc-monetary-amount (split-value s)))
