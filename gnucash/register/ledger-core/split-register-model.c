@@ -2059,11 +2059,11 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
                 g_free (name);
             }
         }
-        title = _("Change Transaction containing a reconciled split?");
+        title = _("Change transaction containing a reconciled split?");
         message_format =
-         _("You are about to change a protected transaction field as it contains reconciled splits in the following accounts... \n%s"
-           "\n\nAfter transaction editing is completed, all reconciled splits will be unreconcile and "
-          "this might make future reconciliation difficult! Continue with this change?");
+         _("The transaction you are about to change is protected because it contains reconciled splits in the following accounts:\n%s"
+           "\n\nIf you continue editing this transaction all reconciled splits will be unreconciled. "
+          "This might make future reconciliation difficult! Continue with this change?");
 
         message = g_strdup_printf (message_format, acc_list);
         g_free (acc_list);
@@ -2074,8 +2074,8 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
         title = _("Change reconciled split?");
         message =
          _("You are about to change a protected field of a reconciled split. "
-           "After transaction editing is completed, this split will be unreconciled "
-           "and this might make future reconciliation difficult! Continue with this change?");
+           "If you continue editing this split it will be unreconciled. "
+           "This might make future reconciliation difficult! Continue with this change?");
     }
 
     if ((recn == YREC && protected_split_cell) || protected_trans_cell)
