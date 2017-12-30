@@ -31,6 +31,7 @@
 #include "gnc-filepath-utils.h"
 #include "gnc-pricedb.h"
 #include "gnc-lot.h"
+#include "gnc-session.h"
 #include "gnc-hooks-scm.h"
 #include "engine-helpers.h"
 #include "engine-helpers-guile.h"
@@ -187,6 +188,7 @@ SplitList * qof_query_run_subquery (QofQuery *q, const QofQuery *q);
 
 %typemap(in) QofQueryParamList * "$1 = gnc_query_scm2path($input);"
 
+%include <gnc-session.h>
 %include <Query.h>
 %ignore qof_query_run;
 %ignore qof_query_last_run;
