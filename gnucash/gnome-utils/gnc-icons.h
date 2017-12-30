@@ -49,7 +49,7 @@ G_BEGIN_DECLS
 #define GNC_ICON_PDF_EXPORT "gnc-gnome-pdf"
 
 //FIXME: use own budget icons?
-#define GNC_ICON_BUDGET "gnc-budget"
+#define GNC_ICON_BUDGET "gnc-account"
 #define GNC_ICON_NEW_BUDGET "gnc-account"
 #define GNC_ICON_OPEN_BUDGET "gnc-account-open"
 //#define GNC_ICON_CLOSE_BUDGET "gnc-close-account"
