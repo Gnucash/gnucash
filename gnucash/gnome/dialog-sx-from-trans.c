@@ -612,7 +612,8 @@ sxftd_advanced_clicked(SXFromTransInfo *sxfti)
     context = g_main_context_default();
     while (g_main_context_iteration(context, FALSE));
 
-    gnc_ui_scheduled_xaction_editor_dialog_create(sxfti->sx, TRUE /* newSX */);
+    gnc_ui_scheduled_xaction_editor_dialog_create(gnc_ui_get_main_window (sxfti->dialog),
+        sxfti->sx, TRUE /* newSX */);
     /* close ourself, since advanced editing entails us, and there are sync
      * issues otherwise. */
     sxftd_close(sxfti, FALSE);
@@ -752,7 +753,7 @@ sxftd_update_excal_adapt( GObject *o, gpointer ud )
  * Create the dialog *
  ********************/
 void
-gnc_sx_create_from_trans( Transaction *trans )
+gnc_sx_create_from_trans( GtkWindow *parent, Transaction *trans )
 {
 #ifndef __MINGW32__
     int errno;
@@ -770,6 +771,8 @@ gnc_sx_create_from_trans( Transaction *trans )
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncSxFromTransDialog");
+
+    gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
 
     sxfti->builder = builder;
     sxfti->dialog = dialog;

@@ -639,6 +639,7 @@ gnc_plugin_page_sx_list_recreate_page (GtkWidget *window,
 static void
 gnc_plugin_page_sx_list_cmd_new(GtkAction *action, GncPluginPageSxList *page)
 {
+    GtkWindow *window = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
     SchedXaction *new_sx;
     gboolean new_sx_flag = TRUE;
 
@@ -655,7 +656,7 @@ gnc_plugin_page_sx_list_cmd_new(GtkAction *action, GncPluginPageSxList *page)
         schedule = g_list_append(schedule, r);
         gnc_sx_set_schedule(new_sx, schedule);
     }
-    gnc_ui_scheduled_xaction_editor_dialog_create(new_sx, new_sx_flag);
+    gnc_ui_scheduled_xaction_editor_dialog_create(window, new_sx, new_sx_flag);
 }
 
 #ifdef REGISTER2_ENABLED
@@ -663,6 +664,7 @@ gnc_plugin_page_sx_list_cmd_new(GtkAction *action, GncPluginPageSxList *page)
 static void
 gnc_plugin_page_sx_list_cmd_new2 (GtkAction *action, GncPluginPageSxList *page)
 {
+    GtkWindow *window = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
     SchedXaction *new_sx;
     gboolean new_sx_flag = TRUE;
 
@@ -679,7 +681,7 @@ gnc_plugin_page_sx_list_cmd_new2 (GtkAction *action, GncPluginPageSxList *page)
         schedule = g_list_append (schedule, r);
         gnc_sx_set_schedule (new_sx, schedule);
     }
-    gnc_ui_scheduled_xaction_editor_dialog_create2 (new_sx, new_sx_flag);
+    gnc_ui_scheduled_xaction_editor_dialog_create2 (window, new_sx, new_sx_flag);
 }
 /*################## Added for Reg2 #################*/
 #endif
@@ -687,7 +689,8 @@ gnc_plugin_page_sx_list_cmd_new2 (GtkAction *action, GncPluginPageSxList *page)
 static void
 _edit_sx(gpointer data, gpointer user_data)
 {
-    gnc_ui_scheduled_xaction_editor_dialog_create((SchedXaction*)data, FALSE);
+    gnc_ui_scheduled_xaction_editor_dialog_create(GTK_WINDOW(user_data),
+        (SchedXaction*)data, FALSE);
 }
 
 #ifdef REGISTER2_ENABLED
@@ -695,7 +698,8 @@ _edit_sx(gpointer data, gpointer user_data)
 static void
 _edit_sx2 (gpointer data, gpointer user_data)
 {
-    gnc_ui_scheduled_xaction_editor_dialog_create2 ((SchedXaction*)data, FALSE);
+    gnc_ui_scheduled_xaction_editor_dialog_create2 (GTK_WINDOW(user_data),
+        (SchedXaction*)data, FALSE);
 }
 /*################## Added for Reg2 #################*/
 #endif
@@ -711,6 +715,7 @@ static void
 gnc_plugin_page_sx_list_cmd_edit(GtkAction *action, GncPluginPageSxList *page)
 {
     GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
+    GtkWindow *window = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
     GtkTreeSelection *selection;
     GList *selected_paths, *to_edit;
     GtkTreeModel *model;
@@ -726,7 +731,7 @@ gnc_plugin_page_sx_list_cmd_edit(GtkAction *action, GncPluginPageSxList *page)
     to_edit = gnc_g_list_map(selected_paths,
                              (GncGMapFunc)_argument_reorder_fn,
                              priv->tree_view);
-    g_list_foreach(to_edit, (GFunc)_edit_sx, NULL);
+    g_list_foreach(to_edit, (GFunc)_edit_sx, window);
     g_list_free(to_edit);
     g_list_foreach(selected_paths, (GFunc)gtk_tree_path_free, NULL);
     g_list_free(selected_paths);
@@ -738,6 +743,7 @@ static void
 gnc_plugin_page_sx_list_cmd_edit2 (GtkAction *action, GncPluginPageSxList *page)
 {
     GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE (page);
+    GtkWindow *window = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
     GtkTreeSelection *selection;
     GList *selected_paths, *to_edit;
     GtkTreeModel *model;
@@ -753,7 +759,7 @@ gnc_plugin_page_sx_list_cmd_edit2 (GtkAction *action, GncPluginPageSxList *page)
     to_edit = gnc_g_list_map (selected_paths,
                              (GncGMapFunc)_argument_reorder_fn,
                              priv->tree_view);
-    g_list_foreach(to_edit, (GFunc)_edit_sx2, NULL);
+    g_list_foreach(to_edit, (GFunc)_edit_sx2, window);
     g_list_free (to_edit);
     g_list_foreach (selected_paths, (GFunc)gtk_tree_path_free, NULL);
     g_list_free (selected_paths);
@@ -769,9 +775,10 @@ gppsl_row_activated_cb(GtkTreeView *tree_view,
 {
     GncPluginPageSxList *page = GNC_PLUGIN_PAGE_SX_LIST(user_data);
     GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
+    GtkWindow *window = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
 
     SchedXaction *sx = gnc_tree_view_sx_list_get_sx_from_path(GNC_TREE_VIEW_SX_LIST(priv->tree_view), path);
-    gnc_ui_scheduled_xaction_editor_dialog_create(sx, FALSE);
+    gnc_ui_scheduled_xaction_editor_dialog_create(window, sx, FALSE);
 }
 
 

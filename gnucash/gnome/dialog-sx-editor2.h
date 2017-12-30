@@ -36,8 +36,8 @@
 
 typedef struct _GncSxEditorDialog2 GncSxEditorDialog2;
 
-GncSxEditorDialog2* gnc_ui_scheduled_xaction_editor_dialog_create2 (SchedXaction *sx,
-        gboolean newSX);
+GncSxEditorDialog2* gnc_ui_scheduled_xaction_editor_dialog_create2 (GtkWindow *parent,
+    SchedXaction *sx, gboolean newSX);
 
 void gnc_ui_scheduled_xaction_editor_dialog_destroy2 (GncSxEditorDialog2 *sxd);
 

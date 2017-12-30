@@ -1363,10 +1363,10 @@ gsr_default_schedule_handler( GNCSplitReg *gsr, gpointer data )
 
     if ( theSX )
     {
-        gnc_ui_scheduled_xaction_editor_dialog_create(theSX, FALSE);
+        gnc_ui_scheduled_xaction_editor_dialog_create(GTK_WINDOW(data), theSX, FALSE);
         return;
     }
-    gnc_sx_create_from_trans(pending_trans);
+    gnc_sx_create_from_trans(GTK_WINDOW(data), pending_trans);
 }
 
 void
