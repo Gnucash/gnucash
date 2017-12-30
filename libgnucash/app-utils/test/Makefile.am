@@ -77,7 +77,7 @@ test_app_utils_CXXFLAGS = \
 	-DTESTPROG=test_app_utils \
 	${GLIB_CFLAGS}
 
-SCM_TESTS =   test-load-app-utils-module test-c-interface
+SCM_TESTS =   test-load-app-utils-module test-c-interface test-date-utilities
 SCM_TEST_SRCS = $(SCM_TESTS:%=%.scm)
 
 $(SCM_TESTS): %: $(srcdir)/%.scm Makefile

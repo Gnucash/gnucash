@@ -40,6 +40,7 @@ SET(GUILE_DEPENDS
 set(test_app_utils_scheme_SOURCES
   test-c-interface.scm
   test-load-app-utils-module.scm
+  test-date-utilities.scm
 )
 
 GNC_ADD_SCHEME_TARGETS(scm-test-load-app-utils-module
