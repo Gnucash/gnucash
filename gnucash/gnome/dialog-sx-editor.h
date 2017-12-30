@@ -24,6 +24,7 @@
 #define DIALOG_SX_EDITOR_H
 
 #include "SchedXaction.h"
+#include <gtk/gtk.h>
 
 #define DIALOG_SCHEDXACTION_CM_CLASS "dialog-scheduledtransactions"
 #define DIALOG_SCHEDXACTION_EDITOR_CM_CLASS "dialog-scheduledtransaction-editor"
@@ -36,8 +37,8 @@
 
 typedef struct _GncSxEditorDialog GncSxEditorDialog;
 
-GncSxEditorDialog* gnc_ui_scheduled_xaction_editor_dialog_create(SchedXaction *sx,
-        gboolean newSX);
+GncSxEditorDialog* gnc_ui_scheduled_xaction_editor_dialog_create(GtkWindow *parent,
+    SchedXaction *sx, gboolean newSX);
 
 void gnc_ui_scheduled_xaction_editor_dialog_destroy(GncSxEditorDialog *sxd);
 

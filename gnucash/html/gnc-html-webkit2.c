@@ -1123,7 +1123,7 @@ impl_webkit_print (GncHtml* self)
 
      priv = GNC_HTML_WEBKIT_GET_PRIVATE (self);
      op = webkit_print_operation_new (priv->web_view);
-     top = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (self)));
+     top = GTK_WINDOW(priv->base.parent);
      webkit_print_operation_run_dialog (op, top);
      g_object_unref (op);
 }

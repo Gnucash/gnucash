@@ -1197,7 +1197,7 @@ gnc_prefs_connect_one (const gchar *name,
  *  @return A pointer to the newly created dialog.
  */
 static GtkWidget *
-gnc_preferences_dialog_create(void)
+gnc_preferences_dialog_create(GtkWindow *parent)
 {
     GtkBuilder *builder;
     GtkWidget *dialog, *notebook, *label, *image;
@@ -1236,6 +1236,9 @@ gnc_preferences_dialog_create(void)
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncPreferenceDialog");
 
+    /* parent */
+    gtk_window_set_transient_for (GTK_WINDOW(dialog), GTK_WINDOW(parent));
+
 #ifndef REGISTER2_ENABLED
     /* Hide preferences that are related to register2 */
     box = GTK_WIDGET (gtk_builder_get_object (builder, "label14"));
@@ -1273,8 +1276,8 @@ gnc_preferences_dialog_create(void)
     book = gnc_get_current_book();
     g_date_clear (&fy_end, 1);
     qof_instance_get (QOF_INSTANCE (book),
-		      "fy-end", &fy_end,
-		      NULL);
+              "fy-end", &fy_end,
+              NULL);
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_START_PERIOD));
     period = gnc_period_select_new(TRUE);
@@ -1425,7 +1428,7 @@ close_handler (gpointer user_data)
  *  preferences dialog already exists it will be raised to the top of
  *  the window stack instead of creating a new dialog. */
 void
-gnc_preferences_dialog (void)
+gnc_preferences_dialog (GtkWindow *parent)
 {
     GtkWidget *dialog;
 
@@ -1437,7 +1440,7 @@ gnc_preferences_dialog (void)
         return;
     }
 
-    dialog = gnc_preferences_dialog_create();
+    dialog = gnc_preferences_dialog_create(parent);
 
     gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(dialog));
     gtk_widget_show(dialog);

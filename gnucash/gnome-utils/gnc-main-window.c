@@ -4199,7 +4199,7 @@ gnc_main_window_cmd_edit_paste (GtkAction *action, GncMainWindow *window)
 static void
 gnc_main_window_cmd_edit_preferences (GtkAction *action, GncMainWindow *window)
 {
-    gnc_preferences_dialog ();
+    gnc_preferences_dialog (GTK_WINDOW(window));
 }
 
 static void

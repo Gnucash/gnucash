@@ -3799,13 +3799,15 @@ gnc_plugin_page_register_cmd_schedule (GtkAction *action,
                                        GncPluginPageRegister *plugin_page)
 {
     GncPluginPageRegisterPrivate *priv;
+    GtkWindow *window;
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
 
+    window = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (plugin_page)));
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
-    gsr_default_schedule_handler(priv->gsr, NULL);
+    gsr_default_schedule_handler(priv->gsr, window);
     LEAVE(" ");
 }
 

@@ -616,7 +616,7 @@ static void
 gnc_main_window_cmd_tools_imap_editor (GtkAction *action, GncMainWindowActionData *data)
 {
     gnc_set_busy_cursor(NULL, TRUE);
-    gnc_imap_dialog (NULL);
+    gnc_imap_dialog (GTK_WIDGET (data->window));
     gnc_unset_busy_cursor(NULL);
 }
 
@@ -624,7 +624,7 @@ static void
 gnc_main_window_cmd_tools_trans_assoc (GtkAction *action, GncMainWindowActionData *data)
 {
     gnc_set_busy_cursor (NULL, TRUE);
-    gnc_trans_assoc_dialog ();
+    gnc_trans_assoc_dialog (GTK_WINDOW (data->window));
     gnc_unset_busy_cursor (NULL);
 }
 
@@ -632,7 +632,7 @@ static void
 gnc_main_window_cmd_tools_price_editor (GtkAction *action, GncMainWindowActionData *data)
 {
     gnc_set_busy_cursor(NULL, TRUE);
-    gnc_prices_dialog (NULL);
+    gnc_prices_dialog (GTK_WIDGET (data->window));
     gnc_unset_busy_cursor(NULL);
 }
 
@@ -640,14 +640,14 @@ static void
 gnc_main_window_cmd_tools_commodity_editor (GtkAction *action, GncMainWindowActionData *data)
 {
     gnc_set_busy_cursor(NULL, TRUE);
-    gnc_commodities_dialog (NULL);
+    gnc_commodities_dialog (GTK_WIDGET (data->window));
     gnc_unset_busy_cursor(NULL);
 }
 
 static void
 gnc_main_window_cmd_tools_financial_calculator (GtkAction *action, GncMainWindowActionData *data)
 {
-    gnc_ui_fincalc_dialog_create();
+    gnc_ui_fincalc_dialog_create(GTK_WINDOW (data->window));
 }
 
 static void

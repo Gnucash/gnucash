@@ -10,7 +10,6 @@
     <property name="page_increment">1</property>
   </object>
   <object class="GtkDialog" id="budget_estimate_dialog">
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Estimate Budget Values</property>
@@ -174,7 +173,6 @@
     <property name="page_increment">12</property>
   </object>
   <object class="GtkDialog" id="budget_options_container_dialog">
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Budget Options</property>
     <property name="modal">True</property>
@@ -393,7 +391,6 @@
     </action-widgets>
   </object>
   <object class="GtkDialog" id="budget_list_dialog - Not Used">
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Budget List</property>

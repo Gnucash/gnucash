@@ -910,6 +910,10 @@ gnc_plugin_business_update_menus (GncPluginPage *plugin_page)
     if (!plugin_page || !GNC_IS_PLUGIN_PAGE(plugin_page))
         return;
 
+    // Check that this is a main window and not embedded sx
+    if (!GNC_IS_MAIN_WINDOW(plugin_page->window))
+        return;
+
     is_txn_register = GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page);
     window = GNC_MAIN_WINDOW(plugin_page->window);
     g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
@@ -1053,6 +1057,10 @@ static void update_inactive_actions(GncPluginPage *plugin_page)
 
     // We continue only if the current page is a plugin page
     if (!plugin_page || !GNC_IS_PLUGIN_PAGE(plugin_page))
+        return;
+
+    // Check that this is a main window and not embedded sx
+    if (!GNC_IS_MAIN_WINDOW(plugin_page->window))
         return;
 
     window = GNC_MAIN_WINDOW(plugin_page->window);

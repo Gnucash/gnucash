@@ -3622,6 +3622,7 @@ gnc_plugin_page_register2_cmd_schedule (GtkAction *action,
     GncPluginPageRegister2Private *priv;
     GncTreeViewSplitReg *view;
     Transaction *trans;
+    GtkWindow *window;
 
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
 
@@ -3629,6 +3630,7 @@ gnc_plugin_page_register2_cmd_schedule (GtkAction *action,
 
     priv = GNC_PLUGIN_PAGE_REGISTER2_GET_PRIVATE(plugin_page);
     view = gnc_ledger_display2_get_split_view_register (priv->ledger);
+    window = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (plugin_page)));
 
     trans = gnc_tree_view_split_reg_get_current_trans (view);
 
@@ -3682,12 +3684,12 @@ gnc_plugin_page_register2_cmd_schedule (GtkAction *action,
 
 	if (theSX)
 	{
-	    gnc_ui_scheduled_xaction_editor_dialog_create2 (theSX, FALSE);
+	    gnc_ui_scheduled_xaction_editor_dialog_create2 (window, theSX, FALSE);
 	    LEAVE(" ");
 	    return;
 	}
     }
-    gnc_sx_create_from_trans (trans);
+    gnc_sx_create_from_trans (window, trans);
     LEAVE(" ");
 }
 

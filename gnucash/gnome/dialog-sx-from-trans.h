@@ -27,6 +27,6 @@
 
 #include "Transaction.h"
 
-void gnc_sx_create_from_trans(Transaction *trans);
+void gnc_sx_create_from_trans(GtkWindow *parent, Transaction *trans);
 
 #endif

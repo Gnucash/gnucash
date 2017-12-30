@@ -1087,8 +1087,8 @@ sxed_delete_event (GtkWidget *widget, GdkEvent *event, gpointer ud)
  * Create the Schedule Editor Dialog *
  ************************************/
 GncSxEditorDialog2 *
-gnc_ui_scheduled_xaction_editor_dialog_create2 (SchedXaction *sx,
-					       gboolean newSX)
+gnc_ui_scheduled_xaction_editor_dialog_create2 (GtkWindow *parent, 
+    SchedXaction *sx, gboolean newSX)
 {
     GncSxEditorDialog2 *sxed;
     GtkBuilder *builder;
@@ -1166,11 +1166,12 @@ gnc_ui_scheduled_xaction_editor_dialog_create2 (SchedXaction *sx,
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(sxed->dialog), "GncSxEditorDialog");
 
+    gtk_window_set_transient_for (GTK_WINDOW (sxed->dialog), parent);
+
     /* Setup the end-date GNC widget */
     {
         GtkWidget *endDateBox = GTK_WIDGET(gtk_builder_get_object (builder, "editor_end_date_box"));
-        sxed->endDateEntry = GNC_DATE_EDIT (gnc_date_edit_new (gnc_time (NULL),
-							      FALSE, FALSE));
+        sxed->endDateEntry = GNC_DATE_EDIT (gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE));
         gtk_widget_show (GTK_WIDGET (sxed->endDateEntry));
         g_signal_connect (sxed->endDateEntry, "date-changed",
                           G_CALLBACK (sxed_excal_update_adapt_cb), sxed);
@@ -1665,6 +1666,7 @@ typedef struct _acct_deletion_handler_data
 {
     GList *affected_sxes;
     GtkWidget *dialog;
+    GtkWindow *parent;
 } acct_deletion_handler_data;
 
 
@@ -1677,8 +1679,8 @@ _open_editors (GtkDialog *dialog, gint response_code, gpointer data)
         GList *sx_iter;
         for (sx_iter = adhd->affected_sxes; sx_iter; sx_iter = sx_iter->next)
         {
-            gnc_ui_scheduled_xaction_editor_dialog_create2 ((SchedXaction*)sx_iter->data,
-                    FALSE);
+            gnc_ui_scheduled_xaction_editor_dialog_create2 (GTK_WINDOW(adhd->parent),
+                (SchedXaction*)sx_iter->data, FALSE);
         }
     }
     g_list_free (adhd->affected_sxes);
@@ -1710,6 +1712,7 @@ _sx_engine_event_handler (QofInstance *ent, QofEventId event_type, gpointer user
         acct_deletion_handler_data *data;
         GtkBuilder *builder;
         GtkWidget *dialog;
+        GtkWindow *parent;
         GtkListStore *name_list;
         GtkTreeView *list;
         GtkTreeViewColumn *name_column;
@@ -1719,6 +1722,9 @@ _sx_engine_event_handler (QofInstance *ent, QofEventId event_type, gpointer user
         gnc_builder_add_from_file (builder, "dialog-sx.glade", "account_deletion_dialog");
 
         dialog = GTK_WIDGET (gtk_builder_get_object (builder, "account_deletion_dialog"));
+        parent = gnc_ui_get_main_window (NULL);
+        
+        gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
 
         list = GTK_TREE_VIEW (gtk_builder_get_object (builder, "sx_list"));
 
@@ -1727,6 +1733,7 @@ _sx_engine_event_handler (QofInstance *ent, QofEventId event_type, gpointer user
 
         data = (acct_deletion_handler_data*)g_new0 (acct_deletion_handler_data, 1);
         data->dialog = dialog;
+        data->parent = parent;
         data->affected_sxes = affected_sxes;
         name_list = gtk_list_store_new (1, G_TYPE_STRING);
         for (sx_iter = affected_sxes; sx_iter != NULL; sx_iter = sx_iter->next)

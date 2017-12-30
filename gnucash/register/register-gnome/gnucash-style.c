@@ -209,8 +209,8 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
                 cd->pixel_height = gnc_item_edit_get_margin (item_edit, top_bottom) +
                                    gnc_item_edit_get_padding_border (item_edit, top_bottom);
             }
-
-            max_height = MAX(max_height, cd->pixel_height);
+            // add 1 to cd->pixel_height to allow for a cell border
+            max_height = MAX(max_height, cd->pixel_height + 1);
 
             if (cd->pixel_width > 0)
                 continue;

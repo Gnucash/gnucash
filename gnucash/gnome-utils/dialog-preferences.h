@@ -60,6 +60,8 @@
 #ifndef GNC_DIALOG_PREFERENCES_H
 #define GNC_DIALOG_PREFERENCES_H
 
+#include <gtk/gtk.h>
+
 /** This function adds a full page of preferences to the preferences
  *  dialog.  When the dialog is created, the specified widget will be
  *  pulled from the specified glade file and added to the preferences
@@ -100,7 +102,7 @@ void gnc_preferences_add_to_page (const gchar *filename,
  *  the user.  The preferences dialog is a singleton, so if a
  *  preferences dialog already exists it will be raised to the top of
  *  the window stack instead of creating a new dialog. */
-void gnc_preferences_dialog (void);
+void gnc_preferences_dialog (GtkWindow *parent);
 
 #endif
 /** @} */

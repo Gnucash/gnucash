@@ -375,7 +375,7 @@ get_trans_info (AssocDialog *assoc_dialog)
 }
 
 static void
-gnc_assoc_dialog_create (AssocDialog *assoc_dialog)
+gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
 {
     GtkWidget         *dialog;
     GtkBuilder        *builder;
@@ -395,6 +395,10 @@ gnc_assoc_dialog_create (AssocDialog *assoc_dialog)
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncTransAssocDialog");
+
+    /* parent */
+    if (parent != NULL)
+        gtk_window_set_transient_for (GTK_WINDOW(dialog), GTK_WINDOW(parent));
 
     assoc_dialog->view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
     path_head = GTK_WIDGET(gtk_builder_get_object (builder, "path-head"));
@@ -500,7 +504,7 @@ show_handler (const char *klass, gint component_id,
  * Return: nothing                                                  *
 \********************************************************************/
 void
-gnc_trans_assoc_dialog ()
+gnc_trans_assoc_dialog (GtkWindow *parent)
 {
     AssocDialog *assoc_dialog;
 
@@ -512,7 +516,7 @@ gnc_trans_assoc_dialog ()
     }
     assoc_dialog = g_new0 (AssocDialog, 1);
 
-    gnc_assoc_dialog_create (assoc_dialog);
+    gnc_assoc_dialog_create (parent, assoc_dialog);
 
     gnc_register_gui_component (DIALOG_ASSOC_CM_CLASS,
                    refresh_handler, close_handler,

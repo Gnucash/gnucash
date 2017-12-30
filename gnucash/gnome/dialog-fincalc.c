@@ -549,7 +549,7 @@ fincalc_init_commodity_gae (GNCAmountEdit *edit)
 }
 
 void
-gnc_ui_fincalc_dialog_create(void)
+gnc_ui_fincalc_dialog_create(GtkWindow *parent)
 {
     FinCalcDialog *fcd;
     GtkWidget *button;
@@ -574,6 +574,10 @@ gnc_ui_fincalc_dialog_create(void)
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(fcd->dialog), "GncFinCalcDialog");
+
+    /* parent */
+    if (parent != NULL)
+        gtk_window_set_transient_for (GTK_WINDOW(fcd->dialog), GTK_WINDOW(parent));
 
     gnc_register_gui_component (DIALOG_FINCALC_CM_CLASS,
                                 NULL, close_handler, fcd);

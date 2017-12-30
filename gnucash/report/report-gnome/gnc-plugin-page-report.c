@@ -1537,10 +1537,12 @@ gnc_get_export_filename (SCM choice)
     filepath = gnc_file_dialog (gnc_ui_get_main_window (NULL),
                                 title, NULL, default_dir, GNC_FILE_DIALOG_EXPORT);
 
-    /* Try to test for extension on file name, add if missing */
-    if (g_strrstr(filepath, ".") == NULL)
-        filepath = g_strconcat(filepath, ".", g_ascii_strdown(type, strlen(type)), NULL);
-
+    if (filepath != NULL) // test for cancel pressed
+    {
+        /* Try to test for extension on file name, add if missing */
+        if (g_strrstr(filepath, ".") == NULL)
+            filepath = g_strconcat(filepath, ".", g_ascii_strdown(type, strlen(type)), NULL);
+    }
     g_free (type);
     g_free (title);
     g_free (default_dir);

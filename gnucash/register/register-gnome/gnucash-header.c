@@ -49,22 +49,6 @@ enum
     PROP_CURSOR_NAME, /* the name of the current cursor */
 };
 
-static gboolean
-gnc_header_draw (GtkWidget *header, cairo_t *cr)
-{
-    GnucashSheet *sheet = GNC_HEADER(header)->sheet;
-    GdkWindow *sheet_layout_win = gtk_layout_get_bin_window (GTK_LAYOUT(sheet));
-    gint x, y;
-
-    // use this to get the scroll x value to align the header
-    gdk_window_get_position (sheet_layout_win, &x, &y);
-
-    cairo_set_source_surface (cr, GNC_HEADER(header)->surface, x, 0);
-    cairo_paint (cr);
-
-    return TRUE;
-}
-
 static void
 gnc_header_draw_offscreen (GncHeader *header)
 {
@@ -199,6 +183,28 @@ gnc_header_draw_offscreen (GncHeader *header)
     gtk_style_context_restore (stylectxt);
 
     cairo_destroy (cr);
+}
+
+
+static gboolean
+gnc_header_draw (GtkWidget *header, cairo_t *cr)
+{
+    GnucashSheet *sheet = GNC_HEADER(header)->sheet;
+    GdkWindow *sheet_layout_win = gtk_layout_get_bin_window (GTK_LAYOUT(sheet));
+    gint x, y;
+
+    // use this to get the scroll x value to align the header
+    gdk_window_get_position (sheet_layout_win, &x, &y);
+
+    // if the register page is moved to another window, the surface is
+    // not created so test for a surface and create one if null
+    if (GNC_HEADER(header)->surface == NULL)
+        gnc_header_draw_offscreen (GNC_HEADER(header));
+
+    cairo_set_source_surface (cr, GNC_HEADER(header)->surface, x, 0);
+    cairo_paint (cr);
+
+    return TRUE;
 }
 
 
