@@ -518,6 +518,27 @@ gnc_price_set_time(GNCPrice *p, Timespec t)
 }
 
 void
+gnc_price_set_time64(GNCPrice *p, time64 t64)
+{
+    if (!p) return;
+    if (p->tmspec.tv_sec != t64)  // do we need to check nsec as well?
+    {
+        /* Changing the datestamp requires the hash table
+         * position to be modified. The easiest way of doing
+         * this is to remove and reinsert. */
+        gnc_price_ref (p);
+        remove_price (p->db, p, FALSE);
+        gnc_price_begin_edit (p);
+        p->tmspec.tv_sec = t64;
+	p->tmspec.tv_nsec = 0;
+        gnc_price_set_dirty(p);
+        gnc_price_commit_edit (p);
+        add_price (p->db, p);
+        gnc_price_unref (p);
+    }
+}
+
+void
 gnc_price_set_source(GNCPrice *p, PriceSource s)
 {
     if (!p) return;
@@ -2255,6 +2276,18 @@ gnc_pricedb_lookup_day(GNCPriceDB *db,
                        const gnc_commodity *currency,
                        Timespec t)
 {
+    return lookup_nearest_in_time(db, c, currency, t, TRUE);
+}
+
+GNCPrice *
+gnc_pricedb_lookup_day_t64(GNCPriceDB *db,
+                       const gnc_commodity *c,
+                       const gnc_commodity *currency,
+                       time64 t64)
+{
+    Timespec t;
+    t.tv_sec = t64;
+    t.tv_nsec = 0;
     return lookup_nearest_in_time(db, c, currency, t, TRUE);
 }
 

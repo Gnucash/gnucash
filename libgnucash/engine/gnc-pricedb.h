@@ -239,6 +239,7 @@ void gnc_price_commit_edit (GNCPrice *p);
 void gnc_price_set_commodity(GNCPrice *p, gnc_commodity *c);
 void gnc_price_set_currency(GNCPrice *p, gnc_commodity *c);
 void gnc_price_set_time(GNCPrice *p, Timespec t);
+void gnc_price_set_time64(GNCPrice *p, time64 t64);
 void gnc_price_set_source(GNCPrice *p, PriceSource source);
 void gnc_price_set_source_string(GNCPrice *p, const char* s);
 void gnc_price_set_typestr(GNCPrice *p, const char* type);
@@ -495,6 +496,10 @@ GNCPrice * gnc_pricedb_lookup_day(GNCPriceDB *db,
                                   const gnc_commodity *currency,
                                   Timespec t);
 
+GNCPrice * gnc_pricedb_lookup_day_t64(GNCPriceDB *db,
+                                  const gnc_commodity *commodity,
+                                  const gnc_commodity *currency,
+                                  time64 t64);
 
 /** @brief Return the price between the two commoditiesz nearest to the given
  * time.
