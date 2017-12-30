@@ -163,7 +163,7 @@ static GtkActionEntry gnc_plugin_page_budget_actions [] =
 static guint gnc_plugin_page_budget_n_actions =
     G_N_ELEMENTS (gnc_plugin_page_budget_actions);
 
-#if 0 
+#if 0
 static const gchar *actions_requiring_account[] =
 {
     "OpenAccountAction",
@@ -785,8 +785,7 @@ gnc_plugin_page_budget_cmd_view_options (GtkAction *action,
 
         priv->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "budget_options_container_dialog"));
 
-        gtk_window_set_transient_for(
-            GTK_WINDOW(priv->dialog),
+        gtk_window_set_transient_for(GTK_WINDOW(priv->dialog),
             GTK_WINDOW(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page))));
 
         gbname = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetName"));
@@ -939,8 +938,7 @@ gnc_plugin_page_budget_cmd_estimate_budget(GtkAction *action,
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "budget_estimate_dialog"));
 
-    gtk_window_set_transient_for(
-        GTK_WINDOW(dialog),
+    gtk_window_set_transient_for(GTK_WINDOW(dialog),
         GTK_WINDOW(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page))));
 
     hb = GTK_WIDGET(gtk_builder_get_object (builder, "StartDate_hbox"));

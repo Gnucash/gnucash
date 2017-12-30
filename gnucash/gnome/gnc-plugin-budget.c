@@ -242,7 +242,7 @@ gnc_plugin_budget_cmd_open_budget (GtkAction *action,
         }
         else
         {
-            bgt = gnc_budget_gui_select_budget(book);
+            bgt = gnc_budget_gui_select_budget(GTK_WINDOW(data->window), book);
         }
 
         if (bgt) gnc_main_window_open_page(
@@ -276,7 +276,7 @@ gnc_plugin_budget_cmd_copy_budget (GtkAction *action,
         }
         else
         {
-            bgt = gnc_budget_gui_select_budget(book);
+            bgt = gnc_budget_gui_select_budget(GTK_WINDOW(data->window), book);
         }
 
         if (bgt)
@@ -311,7 +311,7 @@ row_activated_cb(GtkTreeView *tv, GtkTreePath *path, GtkTreeViewColumn *column,
 }
 
 GncBudget *
-gnc_budget_gui_select_budget(QofBook *book)
+gnc_budget_gui_select_budget(GtkWindow *parent, QofBook *book)
 {
     GncBudget *bgt;
     GtkDialog *dlg;
@@ -323,7 +323,7 @@ gnc_budget_gui_select_budget(QofBook *book)
     gboolean ok;
 
     dlg = GTK_DIALOG(gtk_dialog_new_with_buttons(
-                         _("Select a Budget"), NULL, GTK_DIALOG_MODAL,
+                         _("Select a Budget"), parent, GTK_DIALOG_MODAL,
                          _("_OK"), GTK_RESPONSE_OK,
                          _("_Cancel"), GTK_RESPONSE_CANCEL, NULL));
 
