@@ -21,7 +21,6 @@
     </columns>
   </object>
   <object class="GtkDialog" id="transaction_association_dialog">
-    <property name="visible">True</property>
     <property name="can_focus">True</property>
     <property name="has_focus">True</property>
     <property name="can_default">True</property>

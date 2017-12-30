@@ -361,7 +361,6 @@
     </columns>
   </object>
   <object class="GtkDialog" id="deletion_date_dialog">
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Remove Old Prices</property>
