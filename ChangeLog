@@ -1,10 +1,682 @@
+2017-12-30 John Ralls 
+
+	* Merge Bob Fewell's 'gtk3-update12' into unstable. (HEAD -> unstable, origin/unstable)
+
+2017-12-30 John Ralls 
+
+	* Prevent "Save before closing" dialog from appearing at startup.
+
+2017-12-30 John Ralls 
+
+	* Fix distcheck errors.
+
+2017-12-30 John Ralls 
+
+	* Fix -Wsign-compare error.
+
+2017-12-30 John Ralls 
+
+	* Merge branch 'maint' into unstable
+
+2017-12-30 Robert Fewell 
+
+	* Fix register move to another window
+
+2017-12-30 Robert Fewell 
+
+	* Fix some transient parent warnings
+
+2017-12-30 Robert Fewell 
+
+	* Fix There is no budget icon yet so set it to the account one.
+
+2017-12-30 Robert Fewell 
+
+	* Fix error when sheet is read only.
+
+2017-12-30 Robert Fewell 
+
+	* Fix transient parent warnings for budgets
+
+2017-12-30 Robert Fewell 
+
+	* Fix Invalid cast from GncWebkitHtml to GtkWindow
+
+2017-12-30 Robert Fewell 
+
+	* Fix Test for filepath is NULL when cancel pressed for export
+
+2017-12-30 Robert Fewell 
+
+	* Fix Critical errors when SX editor loaded
+
+2017-12-30 Robert Fewell 
+
+	* Fix Transient parent warnings for SX editor
+
+2017-12-30 Robert Fewell 
+
+	* Add a left margin to report zoom to align with other options
+
+2017-12-30 Robert Fewell 
+
+	* Fix register cell height by adding 1px for cell border
+
+2017-12-30 Geert Janssens 
+
+	* A few translatable string changes in the warnings for editing reconciled splits
+
+2017-11-29 Robert Fewell 
+
+	* Bug 771667 - Change reconciled splits warning
+
+2017-12-30 Christopher Lam 
+
+	* ENH: display infobox when no accounts matched
+
+2017-12-29 John Ralls 
+
+	* Bug 616709 - Pressing delete key while editing account name offers...
+
+2017-12-29 John Ralls 
+
+	* Fix crash in customer/employee/vendor reports.
+
+2017-12-29 John Ralls 
+
+	* Merge Bob Fewell's 'gtk3-update11' into unstable.
+
+2017-12-29 Geert Janssens 
+
+	* Merge branch 'unstable-TR-plus' of https://github.com/christopherlam/gnucash into unstable
+
+2017-12-30 Christopher Lam 
+
+	* COSMETIC: amend strings in options
+
+2017-12-29 Geert Janssens 
+
+	* Update POTEFILES.in
+
+2017-12-29 Geert Janssens 
+
+	* Fix a few compile warnings-turned-errors
+
+2017-12-29 Geert Janssens 
+
+	* Merge branch 'prices-in' of https://github.com/Bob-IT/gnucash into unstable
+
+2017-12-29 Robert Fewell 
+
+	* Bug 616709 - Stop the delete button on the Account page
+
+2017-12-29 Robert Fewell 
+
+	* Set focus for invoice pages
+
+2017-12-29 Robert Fewell 
+
+	* Add function to get whether sheet is read only
+
+2017-12-29 Robert Fewell 
+
+	* Make sure the tree view is the focus on an owner page
+
+2017-12-29 Robert Fewell 
+
+	* Replace tabs with spaces for budget files
+
+2017-12-29 Robert Fewell 
+
+	* ake sure the Account tree view has focus when budgets open
+
+2017-12-29 Robert Fewell 
+
+	* Change tabs to spaces in gnc-html-webkit2.c
+
+2017-12-29 Robert Fewell 
+
+	*  Make sure the webkit widget has focus on report load
+
+2017-12-29 Robert Fewell 
+
+	* Replace tabs with spaces in a couple of source files
+
+2017-12-29 Robert Fewell 
+
+	* Make sure the sx tree view has focus on page load
+
+2017-12-29 Robert Fewell 
+
+	* Make sure the sheet has focus in a register when opened
+
+2017-12-29 Robert Fewell 
+
+	* Prevent the tab being the focus
+
+2017-12-29 Robert Fewell 
+
+	* Make sure the tree view has focus on Account tree page load
+
+2017-12-27 John Ralls 
+
+	* Fix Travis 'dangling else' warning.
+
+2017-12-26 John Ralls 
+
+	* Another attempt to make Travis's g++ happy about compiler warnings.
+
+2017-12-26 John Ralls 
+
+	* Fix CXX Flags for g++.
+
+2017-12-23 John Ralls 
+
+	* Bug 791848 - GC 2.6.x does not handle ISO dates introduced with GC 2.7.
+
+2017-12-26 John Ralls 
+
+	* Enforce -Werror on C++ files and fix resulting errors.
+
+2017-12-23 John Ralls 
+
+	* Test struct tm* returns from gnc_gmtime and gnc_localtime
+
+2017-12-23 John Ralls 
+
+	* Fix autotools test setup for test-date-utilities. (origin/maint, maint)
+
+2017-12-23 John Ralls 
+
+	* Fix picky gcc-7.2 complaint about a %d conversion not fitting in 3 bytes.
+
+2017-12-23 John Ralls 
+
+	* Bug 791848 - GC 2.6.x does not handle ISO dates introduced with GC 2.7
+
+2017-12-23 John Ralls 
+
+	* Enable reading undelimited YYYYMMDDHHMMSS time strings.
+
+2017-12-24 Christopher Lam 
+
+	* REFACTOR: gnc-numeric not available in scheme anymore
+
+2017-12-05 Christopher Lam 
+
+	* ENH: Optionally hide transactions
+
+2017-12-13 Christopher Lam 
+
+	* ENH: Add 'daily subtotal strategy
+
+2017-12-02 Christopher Lam 
+
+	* ENH: Formalise Reconciliation Report as a new menu item.
+
+2017-11-30 Christopher Lam 
+
+	* ENH: Add indenting for main data and subheadings/subtotals
+
+2017-11-30 Christopher Lam 
+
+	* ENH: Add sortkey Reconciled Status
+
+2017-11-30 Christopher Lam 
+
+	* ENH: Add debit/credit friendly names in subheading rendering
+
+2017-11-27 Christopher Lam 
+
+	* ENH: Add option to choose infobox display summary
+
+2017-12-11 Christopher Lam 
+
+	* COSMETIC: if grand-totals=#f then omit <hr>
+
+2017-11-29 Christopher Lam 
+
+	* REFACTOR: remove 'renderer-key lookup symbol, simplify custom sorter
+
+2017-11-29 Christopher Lam 
+
+	* REFACTOR: simplify num/t-num display code
+
+2017-12-11 Christopher Lam 
+
+	* REFACTOR: centralize left-cols to a vector-list
+
+2017-11-28 Christopher Lam 
+
+	* ENH: if no Display/* selected, insert empty left-column
+
+2017-11-28 Christopher Lam 
+
+	* REFACTOR: simplify render-summary
+
+2017-11-28 Christopher Lam 
+
+	* REFACTOR: simplify do-rows-with-subtotals
+
+2017-11-27 Christopher Lam 
+
+	* REFACTOR:bisect subtotal-get-info into primary/secondary
+
+2017-12-11 Christopher Lam 
+
+	* REFACTOR: start refactor subtotal
+
+2017-12-11 Christopher Lam 
+
+	* BUGFIX: Reverse sign on display only
+
+2017-12-11 Christopher Lam 
+
+	* BUGFIX: Fix incorrect N_ and _ handling
+
+2017-12-11 Christopher Lam 
+
+	* ENH: Upgrade Sign Reversal to use global preference by default
+
+2017-11-26 Christopher Lam 
+
+	* REFACTOR: move calculated-cells to allow access from add-subtotal-row
+
+2017-12-11 Christopher Lam 
+
+	* ENH: 'original currency amt' now shows dual columns
+
+2017-12-11 Christopher Lam 
+
+	* REFACTOR+ENH:Add common-currency mnemonic to header if enabled
+
+2017-12-11 Christopher Lam 
+
+	* REFACTOR: move column-uses? location
+
+2017-12-11 Christopher Lam 
+
+	* REFACTOR:Move Void-status filter to filter tab
+
+2017-11-26 Christopher Lam 
+
+	* REFACTOR:Centralise sign-reverse-list
+
+2017-12-10 Christopher Lam 
+
+	* ENH: add infobox to summarise options used
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: Centralize options
+
+2017-11-27 Christopher Lam 
+
+	* ENH: disable filter accounts selector if filter-mode=none
+
+2017-12-10 Christopher Lam 
+
+	* ENH: dual columns subtotals now in correct column
+
+2017-12-11 Christopher Lam 
+
+	* REFACTOR: Use time64 instead of timepair
+
+2017-12-10 Christopher Lam 
+
+	* COSMETIC: Move Display>Sign reversal option
+
+2017-12-10 Christopher Lam 
+
+	* ENH: Enable sign reversal for amount 'single only
+
+2017-12-10 Christopher Lam 
+
+	* ENH: "Shares" column gets number-cell styling
+
+2017-12-13 Christopher Lam 
+
+	* ENH: "Price" column gets number-cell styling.
+
+2017-12-15 Christopher Lam 
+
+	* ENH: show original currency, and enable multicolumns.
+
+2017-12-15 Christopher Lam 
+
+	* ENH: add custom sorter which can handle periodic dates
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: simplify do-rows-with-subtotals to use fewer args
+
+2017-12-15 Christopher Lam 
+
+	* REFACTOR: use scheme idioms
+
+2017-12-15 Christopher Lam 
+
+	* REFACTOR: Simplify Trans Number handling
+
+2017-12-10 Christopher Lam 
+
+	* COSMETIC:Rename subtitles -> subheadings in sorting/account display
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: initialize accounts/filter by to null list
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: rewrite renderers to lookup 'renderer-key from sortlists
+
+2017-12-10 Christopher Lam 
+
+	* ENH: Show account description in subheadings
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: move add-split-row into make-split-table
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: move *-choice-list into options-generator
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: simplify functions, reduce arguments
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: improve heading-list to handle dual headings
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: centralize BOOK-SPLIT-ACTION
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: centralize DATE-SORTING-TYPES and SUBTOTAL-ENABLED
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: centralize key-choice-list
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: centralize date-subtotal-list
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: centralize sortkey-list
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: centralize numerous used-* into column-uses? helper function
+
+2017-12-22 Christopher Lam 
+
+	* REFACTOR: combine 2 key-choice-list into 1
+
+2017-12-22 Christopher Lam 
+
+	* REFACTOR: move some funcs to refactor later
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: always run qof-query-destroyer
+
+2017-12-09 Christopher Lam 
+
+	* ENH: Optimise Transaction Matcher filter
+
+2017-12-10 Christopher Lam 
+
+	* ENH: add reconciled status filtering
+
+2017-12-10 Christopher Lam 
+
+	* ENH: Move Account matcher to Filter tab
+
+2017-12-09 Christopher Lam 
+
+	* REFACTOR: Delete unused functions
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: rename funcs, centralize strings
+
+2017-12-10 Christopher Lam 
+
+	* ***reindent and remove trailing whitespace***
+
+2017-12-09 Christopher Lam 
+
+	* ENH: Move Transaction Matcher to new Filter tab
+
+2017-12-12 Christopher Lam 
+
+	* BUGFIX: change date-sorting-types
+
+2017-12-12 Christopher Lam 
+
+	* OBSOLETE: 'exact-time removed
+
+2017-12-21 Christopher Lam 
+
+	* options.scm: upgrade lookup-value to learn section changes
+
+2017-12-23 Geert Janssens 
+
+	* Merge branch 'fix_bayes' of https://github.com/limitedAtonement/gnucash into unstable
+
+2017-12-22 Geert Janssens 
+
+	* Remove cmake hoop to change file permissions
+
+2017-12-21 Geert Janssens 
+
+	* Replace GNC_CONFIGURE(2) with configure_file
+
+2017-12-22 John Ralls 
+
+	* Fix use of guile function introduced in 2.0.10, not available in Ubuntu14.04.
+
+2017-12-22 John Ralls 
+
+	* Don't build borrowed/gwengui-gtk3 if its provided by gwenhywfar.
+
+2017-12-21 John Ralls 
+
+	* Replace the gnc:numeric pair with normal Scheme rationals.
+
+2017-12-18 John Ralls 
+
+	* Remove SIGFIG rounding from price calculation.
+
+2017-12-21 lmat 
+
+	* Adding to version info to feature string
+
+2017-12-12 lmat 
+
+	* Correct string cache code
+
+2017-12-10 lmat 
+
+	* Rename qofinstance function
+
+2017-12-09 lmat 
+
+	* Changed bayes import map design
+
+2017-12-06 lmat 
+
+	* Code review responses
+
+2017-12-01 lmat 
+
+	* Changed some constants to constexpr
+
+2017-11-28 lmat 
+
+	* Remove unused kvp function
+
+2017-11-28 lmat 
+
+	* kvp string: allocate enough space
+
+2017-11-28 lmat 
+
+	* Correct kvp to_string typo
+
+2017-11-16 lmat 
+
+	* Keep tokens as they are, don't translate them
+
+2017-11-15 lmat 
+
+	* Corrected memory management issue
+
+2017-11-09 lmat 
+
+	* Renaming functions to get rid of temporary name
+
+2017-11-06 lmat 
+
+	* Kvp no longer parses entries looking for delimiters
+
+2017-11-03 lmat 
+
+	* Added test for and corrected get_bayes_info
+
+2017-11-02 lmat 
+
+	* Removed qof_instance_set_kvp, qof_instance_get_kvp
+
+2017-10-27 lmat 
+
+	* Fixed conversion problem
+
+2017-10-19 lmat 
+
+	* Implement flat bayes kvp
+
+2017-10-19 lmat 
+
+	* Change kvp string representation
+
+2017-10-05 lmat 
+
+	* kvp frame to template and correcting failure macro
+
+2017-08-14 lmat 
+
+	* Account.c to Account.cpp
+
+2017-12-20 Geert Janssens 
+
+	* Force build order on report system support files
+
+2017-12-19 Geert Janssens 
+
+	* Add unit test for rewritten scheme error handlers
+
+2017-12-19 Geert Janssens 
+
+	* Drop guile 1.8 support
+
+2017-12-19 Geert Janssens 
+
+	* Add support for guile 2.2
+
+2017-12-19 John Ralls 
+
+	* Merge Chris Lam's Bug 790526 fix into maint.
+
+2017-12-20 christopherlam 
+
+	* fix silly mistake (PR232)
+
+2017-12-20 christopherlam 
+
+	* fix unit test again
+
+2017-12-19 John Ralls 
+
+	* Add test-date-utilities to CMakeLists.txt and Makefile.am.
+
+2017-12-19 John Ralls 
+
+	* Fix duplicate test-case name.
+
+2017-12-20 christopherlam 
+
+	* typo
+
+2017-12-20 christopherlam 
+
+	* add unittest for bugzilla 790526
+
+2017-12-19 christopherlam 
+
+	* Fix -DWITH_SQL=OFF Build.
+
+2017-12-08 Robert Fewell 
+
+	* Change the relative path to a full one for rpath
+
+2017-12-19 John Ralls 
+
+	* Fix date offset error in datetime test.
+
+2017-12-18 John Ralls 
+
+	* Add tests for GMT and GMT+7 timezones.
+
+2017-12-18 John Ralls 
+
+	* Fix timezone constructor crash when zone file has no transitions.
+
+2017-12-17 John Ralls 
+
+	* Merge branch 'maint' into unstable (origin/master, origin/HEAD)
+
+2017-12-16 John Ralls 
+
+	* Release 2.6.19 (tag: 2.6.19)
+
+2017-12-16 John Ralls 
+
+	* Fix python tests when building from tarball.
+
+2017-12-16 John Ralls 
+
+	* Update Dutch and Serbian translations from the Translation project.
+
+2017-12-16 John Ralls 
+
+	* Merge Rob Gowin's Partial Fix for Bug 787497 into maint.
+
+2017-12-16 John Ralls 
+
+	* Add test-flat-bayes to autotools build.
+
+2017-12-16 John Ralls 
+
+	* Add minimum version to feature and fix copy-paste error in test-flat-bayes.
+
 2017-12-15 John Ralls 
 
-	* Handle mid-pacific timezones in date-sensitive tests. (HEAD -> unstable, origin/unstable)
+	* Handle mid-pacific timezones in date-sensitive tests.
 
 2017-12-15 John Ralls 
 
 	* Revert post-construction adjustment of ldt for DST.
+
+2017-12-14 Robert Fewell 
+
+	* Change the way the import settings are handled
 
 2017-12-12 John Ralls 
 
@@ -26,6 +698,10 @@
 
 	* Add infrastructure to handle preference schema migrations and use it to replace one preference
 
+2017-12-11 Robert Fewell 
+
+	* Remove surplus statement
+
 2017-12-08 John Ralls 
 
 	* Fix the Mac install_name_dir to point at CMAKE_INSTALL_FULL_LIBDIR.
@@ -33,6 +709,106 @@
 2017-12-10 John Ralls 
 
 	* Bug 791422 - gnucash 2.7 no longer opens sqlite3...
+
+2017-12-10 Robert Fewell 
+
+	* Update file with changes for transient dialog changes
+
+2017-12-10 Robert Fewell 
+
+	* Replace magic numbers used in std::get... with values from enum
+
+2017-12-10 Robert Fewell 
+
+	* Merge branch 'prices-in' of /mygit/gnucash into prices-in
+
+2017-12-07 Robert Fewell 
+
+	* Add a test for empty values
+
+2017-12-07 Robert Fewell 
+
+	* Replace date parse function with one from gnc_datetime
+
+2017-12-04 Robert Fewell 
+
+	* Make changes for Gtk3 compatibility
+
+2017-12-01 Robert Fewell 
+
+	* Pot file changes for new files and settings rename
+
+2017-12-01 Robert Fewell 
+
+	* Rename gnc-csv-trans-settings.* to gnc-csv-import-settings.*
+
+2017-12-01 Robert Fewell 
+
+	* Reorder the create price procedure.
+
+2017-12-01 Robert Fewell 
+
+	* Add the ability to test from_commodity and to_currency being the same.
+
+2017-12-01 Robert Fewell 
+
+	* Add a test for from_commodity not being the same as to_currency
+
+2017-12-01 Robert Fewell 
+
+	* Various changes to comments in source files and displayed text.
+
+2017-12-01 Robert Fewell 
+
+	* Change the way commodity and currency combo's are shown.
+
+2017-12-01 Robert Fewell 
+
+	* Minor changes and tidy up
+
+2017-12-01 Robert Fewell 
+
+	* Change the settings file to save and load price settings.
+
+2017-12-01 Robert Fewell 
+
+	* Fix some errors in conversion of some function names
+
+2017-12-01 Robert Fewell 
+
+	* Remove duplicated function
+
+2017-12-01 Robert Fewell 
+
+	* Made changes to preset column types to align with other changes
+
+2017-12-01 Robert Fewell 
+
+	* Add option to specify Commodity from and Currency to for whole file
+
+2017-12-01 Robert Fewell 
+
+	* Some text changes
+
+2017-12-01 Robert Fewell 
+
+	* Remove not required account update
+
+2017-12-01 Robert Fewell 
+
+	* Add CSV Price importer assistant files
+
+2017-12-01 Robert Fewell 
+
+	* Rename function gnc_csv_price_col_type_strs to gnc_price_col_type_strs
+
+2017-12-01 Robert Fewell 
+
+	* Add price import files for the csv price importer
+
+2017-12-01 Robert Fewell 
+
+	* Add property files for the csv price importer
 
 2017-12-09 John Ralls 
 
@@ -44,7 +820,15 @@
 
 2017-12-08 Geert Janssens 
 
-	* Fix transient parent warnings in search callbacks (origin/master, origin/HEAD, master)
+	* Fix transient parent warnings in search callbacks
+
+2017-12-07 Robert Fewell 
+
+	* Add a test for empty values
+
+2017-12-07 Robert Fewell 
+
+	* Replace date parse function with one from gnc_datetime
 
 2017-12-06 Geert Janssens 
 
@@ -78,9 +862,97 @@
 
 	* Handle the splash/lock file warning more the gtk way
 
+2017-11-22 lmat 
+
+	* GUID/Flat bayes handling in 2.6
+
 2017-12-05 John Ralls 
 
 	* Rework directory determination in CMake builds.
+
+2017-12-04 Robert Fewell 
+
+	* Make changes for Gtk3 compatibility
+
+2017-12-01 Robert Fewell 
+
+	* Pot file changes for new files and settings rename
+
+2017-12-01 Robert Fewell 
+
+	* Rename gnc-csv-trans-settings.* to gnc-csv-import-settings.*
+
+2017-12-01 Robert Fewell 
+
+	* Reorder the create price procedure.
+
+2017-12-01 Robert Fewell 
+
+	* Add the ability to test from_commodity and to_currency being the same.
+
+2017-12-01 Robert Fewell 
+
+	* Add a test for from_commodity not being the same as to_currency
+
+2017-12-01 Robert Fewell 
+
+	* Various changes to comments in source files and displayed text.
+
+2017-12-01 Robert Fewell 
+
+	* Change the way commodity and currency combo's are shown.
+
+2017-12-01 Robert Fewell 
+
+	* Minor changes and tidy up
+
+2017-12-01 Robert Fewell 
+
+	* Change the settings file to save and load price settings.
+
+2017-12-01 Robert Fewell 
+
+	* Fix some errors in conversion of some function names
+
+2017-12-01 Robert Fewell 
+
+	* Remove duplicated function
+
+2017-12-01 Robert Fewell 
+
+	* Made changes to preset column types to align with other changes
+
+2017-12-01 Robert Fewell 
+
+	* Add option to specify Commodity from and Currency to for whole file
+
+2017-12-01 Robert Fewell 
+
+	* Some text changes
+
+2017-12-01 Robert Fewell 
+
+	* Remove not required account update
+
+2017-12-01 Robert Fewell 
+
+	* Add CSV Price importer assistant files
+
+2017-12-01 Robert Fewell 
+
+	* Rename function gnc_csv_price_col_type_strs to gnc_price_col_type_strs
+
+2017-12-01 Robert Fewell 
+
+	* Add price import files for the csv price importer
+
+2017-12-01 Robert Fewell 
+
+	* Add property files for the csv price importer
+
+2017-12-02 Rob Gowin 
+
+	* Partial fix for Bug 787497 - Disabling options cripples dist package
 
 2017-12-02 John Ralls 
 
@@ -137,6 +1009,10 @@
 2017-11-30 Geert Janssens 
 
 	* Fix installation destinations for overrides and quotes scripts
+
+2017-11-19 Christopher Lam 
+
+	* Bugzilla 790526 Correct weeknum calculator
 
 2017-11-28 John Ralls 
 
@@ -1068,7 +1944,7 @@
 
 2017-09-26 Geert Janssens 
 
-	* Fix build failures if userdata_home exists but gnc_userdata_home  doesn't
+	* Fix build failures if userdata_home exists but gnc_userdata_home  doesn't (master)
 
 2017-09-26 Josep-Maria Prat 
 
@@ -7237,8 +8113,4 @@
 2016-01-02 fell 
 
 	* Add a missing gettext in plugin page owner tree
-
-2016-01-01 fell 
-
-	* Bug 760052 - missing flag translatable in Custom Report
 
