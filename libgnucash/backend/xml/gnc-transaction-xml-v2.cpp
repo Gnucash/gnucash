@@ -57,6 +57,13 @@ add_gnc_num (xmlNodePtr node, const gchar* tag, gnc_numeric num)
 }
 
 static void
+add_time64 (xmlNodePtr node, const gchar * tag, time64 time, gboolean always)
+{
+    if (always || time)
+        xmlAddChild (node, time64_to_dom_tree (tag, time));
+}
+
+static void
 add_timespec (xmlNodePtr node, const gchar* tag, Timespec tms, gboolean always)
 {
     if (always || tms.tv_sec)
@@ -172,10 +179,10 @@ gnc_transaction_dom_tree_create (Transaction* trn)
     }
     g_free (str);
 
-    add_timespec (ret, "trn:date-posted", xaccTransRetDatePostedTS (trn), TRUE);
+    add_time64 (ret, "trn:date-posted", xaccTransRetDatePosted (trn), TRUE);
 
-    add_timespec (ret, "trn:date-entered",
-                  xaccTransRetDateEnteredTS (trn), TRUE);
+    add_time64 (ret, "trn:date-entered",
+                  xaccTransRetDateEntered (trn), TRUE);
 
     str = g_strdup (xaccTransGetDescription (trn));
     if (str)
@@ -426,6 +433,16 @@ set_tran_string (xmlNodePtr node, Transaction* trn,
     return TRUE;
 }
 
+static gboolean
+set_tran_time64 (xmlNodePtr node, Transaction * trn,
+        void (*func) (Transaction *, time64))
+{
+    time64 time = dom_tree_to_time64 (node);
+    if (!dom_tree_valid_time64 (time, node->name)) return FALSE;
+    func (trn, time);
+    return TRUE;
+}
+
 static inline gboolean
 set_tran_date (xmlNodePtr node, Transaction* trn,
                void (*func) (Transaction* trn, const Timespec* tm))
@@ -481,7 +498,7 @@ trn_date_posted_handler (xmlNodePtr node, gpointer trans_pdata)
     struct trans_pdata* pdata = static_cast<decltype (pdata)> (trans_pdata);
     Transaction* trn = pdata->trans;
 
-    return set_tran_date (node, trn, xaccTransSetDatePostedTS);
+    return set_tran_time64 (node, trn, xaccTransSetDatePostedSecs);
 }
 
 static gboolean
@@ -490,7 +507,7 @@ trn_date_entered_handler (xmlNodePtr node, gpointer trans_pdata)
     struct trans_pdata* pdata = static_cast<decltype (pdata)> (trans_pdata);
     Transaction* trn = pdata->trans;
 
-    return set_tran_date (node, trn, xaccTransSetDateEnteredTS);
+    return set_tran_time64 (node, trn, xaccTransSetDateEnteredSecs);
 }
 
 static gboolean

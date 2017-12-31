@@ -344,8 +344,7 @@ get_trans_info (AssocDialog *assoc_dialog)
             {
                 gchar *uri_u;
                 gboolean rel = FALSE;
-                Timespec ts = {0,0};
-                xaccTransGetDatePostedTS (trans, &ts);
+                Timespec ts = {xaccTransRetDatePosted (trans),0};
 
                 if (ts.tv_sec == 0)
                     ts.tv_sec = gnc_time (NULL);

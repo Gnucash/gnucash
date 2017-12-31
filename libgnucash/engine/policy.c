@@ -114,7 +114,7 @@ DirectionPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot, short reverse)
     gnc_numeric baln;
     Split *osplit;
     Transaction *otrans;
-    Timespec open_ts;
+    time64 open_time;
     Account* lot_account;
 
     if (!pcy || !lot || !gnc_lot_get_split_list(lot)) return NULL;
@@ -136,7 +136,7 @@ DirectionPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot, short reverse)
        and the lot may end up too thin or too fat. */
     osplit = gnc_lot_get_latest_split (lot);
     otrans = osplit ? xaccSplitGetParent (osplit) : 0;
-    open_ts = xaccTransRetDatePostedTS (otrans);
+    open_time = xaccTransRetDatePosted (otrans);
 
     /* Walk over *all* splits in the account, till we find one that
      * hasn't been assigned to a lot.  Return that split.
@@ -151,15 +151,13 @@ DirectionPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot, short reverse)
     {
         gboolean is_match;
         gboolean is_positive;
-        Timespec this_ts;
+        time64 this_time;
         split = node->data;
         if (split->lot) goto donext;
 
         /* Skip it if it's too early */
-        this_ts = xaccTransRetDatePostedTS ( xaccSplitGetParent (split));
-        if ((this_ts.tv_sec < open_ts.tv_sec) ||
-                ((this_ts.tv_sec == open_ts.tv_sec) &&
-                 (this_ts.tv_nsec < open_ts.tv_nsec)))
+        this_time = xaccTransRetDatePosted ( xaccSplitGetParent (split));
+        if (this_time < open_time)
         {
             if (reverse)
                 /* Going backwards, no point in looking further */
