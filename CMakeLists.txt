@@ -598,6 +598,7 @@ SET(gnucash_DOCS
     ChangeLog.2014
     ChangeLog.2015
     ChangeLog.2016
+    ChangeLog.2017
     DOCUMENTERS
     HACKING
     LICENSE
@@ -884,7 +885,7 @@ ENDIF()
 
 IF (BUILDING_FROM_VCS)
   ADD_CUSTOM_TARGET(ChangeLog ALL
-    COMMAND ${GIT_EXECUTABLE} log --format=\"%ad %aN %n%n%x09* %s%d%n\" --date=short --since=2016-01-01 > ${CMAKE_BINARY_DIR}/ChangeLog
+    COMMAND ${GIT_EXECUTABLE} log --format=\"%ad %aN %n%n%x09* %s%d%n\" --date=short --since=2018-01-01 > ${CMAKE_BINARY_DIR}/ChangeLog
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
   )
   INSTALL(FILES ${CMAKE_BINARY_DIR}/ChangeLog DESTINATION ${CMAKE_INSTALL_DOCDIR})
