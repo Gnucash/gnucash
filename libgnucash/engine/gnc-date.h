@@ -379,8 +379,8 @@ Timespec gnc_dmy2timespec_end (gint day, gint month, gint year);
  */
 Timespec gnc_dmy2timespec_neutral (gint day, gint month, gint year);
 
-/** The gnc_iso8601_to_timespec_gmt() routine converts an ISO-8601 style
- *    date/time string to Timespec.  Please note that ISO-8601 strings
+/** The gnc_iso8601_to_time64_gmt() routine converts an ISO-8601 style
+ *    date/time string to time64.  Please note that ISO-8601 strings
  *    are a representation of Universal Time (UTC), and as such, they
  *    'store' UTC.  To make them human readable, they show time zone
  *    information along with a local-time string.  But fundamentally,
