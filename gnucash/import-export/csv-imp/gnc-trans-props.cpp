@@ -552,10 +552,10 @@ static void trans_add_split (Transaction* trans, Account* account, GncNumeric am
         value = amount * *price;
     else
     {
-        auto tts = xaccTransRetDatePostedTS (trans);
+        Timespec ts = {xaccTransRetDatePosted (trans), 0};
         /* Import data didn't specify price, let's lookup the nearest in time */
         auto nprice = gnc_pricedb_lookup_nearest_in_time(gnc_pricedb_get_db(book),
-                acct_comm, trans_curr, tts);
+                acct_comm, trans_curr, ts);
         if (nprice)
         {
             /* Found a usable price. Let's check if the conversion direction is right */

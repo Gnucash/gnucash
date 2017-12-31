@@ -277,10 +277,9 @@ equals_node_val_vs_kvp_frame (xmlNodePtr node, const KvpFrame* frm)
 }
 
 gboolean
-equals_node_val_vs_date (xmlNodePtr node, const Timespec tm)
+equals_node_val_vs_date (xmlNodePtr node, time64 time)
 {
-    time64 time = dom_tree_to_time64 (node);
-    return time == tm.tv_sec;
+    return time == dom_tree_to_time64 (node);
 }
 
 /***********************************************************************/

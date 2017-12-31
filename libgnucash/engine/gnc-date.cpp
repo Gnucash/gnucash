@@ -1224,6 +1224,13 @@ gnc_iso8601_to_time64_gmt(const char *cstr)
 \********************************************************************/
 
 char *
+gnc_time64_to_iso8601_buff (time64 time, char * buff)
+{
+    Timespec ts = {time, 0};
+    return gnc_timespec_to_iso8601_buff (ts, buff);
+}
+
+char *
 gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
 {
     constexpr size_t max_iso_date_length = 32;

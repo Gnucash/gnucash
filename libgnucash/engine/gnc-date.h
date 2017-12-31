@@ -414,6 +414,7 @@ time64 gnc_iso8601_to_time64_gmt(const gchar *);
  *    on the machine on which it is executing to create the time string.
  */
 gchar * gnc_timespec_to_iso8601_buff (Timespec ts, gchar * buff);
+gchar * gnc_time64_to_iso8601_buff (time64, char * buff);
 
 /** Set the proleptic Gregorian day, month, and year from a Timespec
  * \param ts: input timespec

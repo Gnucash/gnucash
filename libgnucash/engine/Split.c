@@ -1538,11 +1538,9 @@ xaccSplitOrderDateOnly (const Split *sa, const Split *sb)
     if ( !tb ) return -1;
     if ( !ta ) return +1;
 
-    /* if dates differ, return */
-    DATE_CMP(ta, tb, date_posted);
-
-    /* If the dates are the same, do not change the order */
-    return -1;
+    if (ta->date_posted == tb->date_posted)
+        return -1; // Keep the same order
+    return (ta->date_posted > tb->date_posted) - (ta->date_posted < tb->date_posted);
 }
 
 static gboolean
