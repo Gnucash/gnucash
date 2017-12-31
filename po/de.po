@@ -17145,7 +17145,7 @@ msgid ""
 "to proceed."
 msgstr ""
 "Um ein Konto zu auszutauschen, doppelklicken Sie auf das gewünschte Konto, dann "
-"»Vorwärts«, um fortzufahren."
+"»Vor«, um fortzufahren."
 
 #. A list of the transactions we create
 #: ../src/import-export/csv-imp/assistant-csv-trans-import.c:1520
@@ -17183,7 +17183,7 @@ msgstr ""
 "Trennzeichen zu importieren.\n"
 "\n"
 "Alle importierten Buchungen eines Imports werden mit einem bestimmten Konto "
-"pro Import assoziiert. Wenn Sie eine Kontospalte wählen wird das Konto aus "
+"pro Import assoziiert. Wenn Sie eine Kontospalte wählen, wird das Konto aus "
 "der ersten Zeile für den gesamten Import verwendet.\n"
 "\n"
 "Es gibt verschiedene Optionen, Trennzeichen zu bestimmen, ebenso, wie eine "
