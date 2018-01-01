@@ -214,7 +214,6 @@ SET(engine_test_SCHEME
   test-create-account.scm
   test-test-extras.scm
   test-split.scm
-  test-test-extras.scm
   )
 
 #LIST(APPEND engine_test_SCHEME  test-scm-query-import.scm) Fails
