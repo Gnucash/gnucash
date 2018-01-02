@@ -1039,7 +1039,7 @@
                                 domestic)))
                   ((pricedb-nearest)
                    (lambda (foreign domestic date)
-                    (find-price (gnc-pricedb-lookup-nearest-in-time-any-currency
+                    (find-price (gnc-pricedb-lookup-nearest-in-time-any-currency-t64
 		     pricedb foreign (time64CanonicalDayTime date)) domestic)))))
 	       (headercols (list (_ "Account")))
 	       (totalscols (list (gnc:make-html-table-cell/markup "total-label-cell" (_ "Total"))))
