@@ -517,6 +517,11 @@ GNCPrice   * gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
         const gnc_commodity *currency,
         Timespec t);
 
+GNCPrice   * gnc_pricedb_lookup_nearest_in_time64(GNCPriceDB *db,
+        const gnc_commodity *c,
+        const gnc_commodity *currency,
+        time64 t);
+
 /** @brief Return the price nearest in time to that given between the given
  * commodity and every other.
  *
@@ -532,6 +537,9 @@ GNCPrice   * gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
 PriceList * gnc_pricedb_lookup_nearest_in_time_any_currency(GNCPriceDB *db,
         const gnc_commodity *c,
         Timespec t);
+PriceList * gnc_pricedb_lookup_nearest_in_time_any_currency_t64(GNCPriceDB *db,
+        const gnc_commodity *c,
+        time64 t64);
 
 /** @brief Return the latest price between the given commodities before the
  * given time.

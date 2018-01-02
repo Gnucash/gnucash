@@ -2069,6 +2069,18 @@ gnc_pricedb_lookup_nearest_in_time_any_currency(GNCPriceDB *db,
 }
 
 PriceList *
+gnc_pricedb_lookup_nearest_in_time_any_currency_t64(GNCPriceDB *db,
+                                                    const gnc_commodity *commodity,
+                                                    time64 t64)
+{
+    Timespec t;
+    t.tv_sec = t64;
+    t.tv_nsec = 0;
+
+    return gnc_pricedb_lookup_nearest_in_time_any_currency(db, commodity, t);
+}
+
+PriceList *
 gnc_pricedb_lookup_latest_before_any_currency(GNCPriceDB *db,
                                               const gnc_commodity *commodity,
                                               Timespec t)
@@ -2439,6 +2451,18 @@ gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
                                    const gnc_commodity *currency,
                                    Timespec t)
 {
+    return lookup_nearest_in_time(db, c, currency, t, FALSE);
+}
+
+GNCPrice *
+gnc_pricedb_lookup_nearest_in_time64(GNCPriceDB *db,
+                                     const gnc_commodity *c,
+                                     const gnc_commodity *currency,
+                                     time64 t64)
+{
+    Timespec t;
+    t.tv_sec = t64;
+    t.tv_nsec = 0;
     return lookup_nearest_in_time(db, c, currency, t, FALSE);
 }
 
