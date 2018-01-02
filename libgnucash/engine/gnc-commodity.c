@@ -160,6 +160,7 @@ static gnc_quote_source currency_quote_source =
 
 static gnc_quote_source single_quote_sources[] =
 {
+    { FALSE, 0, 0, "Alphavantage USA", "ALPHAVANTAGE", "alphavantage" },
     { FALSE, 0, 0, "Amsterdam Euronext eXchange, NL", "AEX", "aex" },
     { FALSE, 0, 0, "American International Assurance, HK", "AIAHK", "aiahk" },
     { FALSE, 0, 0, "Association  of  Mutual  Funds  in  India", "AMFIINDIA", "amfiindia" },
@@ -169,20 +170,26 @@ static gnc_quote_source single_quote_sources[] =
     { FALSE, 0, 0, "BMO NesbittBurns, CA", "BMONESBITTBURNS", "bmonesbittburns" },
     { FALSE, 0, 0, "Bucharest Stock Exchange, RO", "BSERO", "bsero" },
     { FALSE, 0, 0, "Budapest Stock Exchange (BET), ex-BUX, HU", "BSE", "bse" },
+    { FALSE, 0, 0, "Canada Mutual", "CANADAMUTUAL", "canadamutual" },
     { FALSE, 0, 0, "Citywire Funds, GB", "citywire", "citywire" },
     { FALSE, 0, 0, "Colombo Stock Exchange, LK", "CSE", "cse" },
     { FALSE, 0, 0, "Cominvest, ex-Adig, DE", "COMINVEST", "cominvest" },
     { FALSE, 0, 0, "Deka Investments, DE", "DEKA", "deka" },
+    { FALSE, 0, 0, "Dutch", "DUTCH", "dutch" },
     { FALSE, 0, 0, "DWS, DE", "DWS", "dwsfunds" },
-	{ FALSE, 0, 0, "Equinox Unit Trusts, ZA", "ZA_unittrusts", "za_unittrusts" },
+    { FALSE, 0, 0, "Equinox Unit Trusts, ZA", "ZA_unittrusts", "za_unittrusts" },
+    { FALSE, 0, 0, "Fidelity", "FIDELITY", "fidelity" },
     { FALSE, 0, 0, "Fidelity Direct", "FIDELITY_DIRECT", "fidelity_direct" },
     { FALSE, 0, 0, "Finance Canada", "FINANCECANADA", "financecanada" },
     { FALSE, 0, 0, "Financial Times Funds service, GB", "FTFUNDS", "ftfunds" },
     { FALSE, 0, 0, "Finanzpartner, DE", "FINANZPARTNER", "finanzpartner" },
-    { FALSE, 0, 0, "First Trust Portfolios, US", "FTPORTFOLIOS_DIRECT", "ftportfolios_direct" },
+    { FALSE, 0, 0, "First Trust Portfolios, US", "FTPORTFOLIOS", "ftportfolios" },
     { FALSE, 0, 0, "Fund Library, CA", "FUNDLIBRARY", "fundlibrary" },
     { FALSE, 0, 0, "GoldMoney spot rates, JE", "GOLDMONEY", "goldmoney" },
-    { FALSE, 0, 0, "HElsinki stock eXchange, FI", "HEX", "hex" },
+    { FALSE, 0, 0, "Greece", "GREECE", "greece" },
+    { FALSE, 0, 0, "Helsinki stock eXchange, FI", "HEX", "hex" },
+    { FALSE, 0, 0, "Hungary", "HU", "hu" },
+    { FALSE, 0, 0, "India Mutual", "INDIAMUTUAL", "indiamutual" },
     { FALSE, 0, 0, "Man Investments, AU", "maninv", "maninv" },
     { FALSE, 0, 0, "Morningstar, GB", "MSTARUK", "mstaruk" },
     { FALSE, 0, 0, "Morningstar, JP", "MORNINGSTARJP", "morningstarjp" },
@@ -192,6 +199,7 @@ static gnc_quote_source single_quote_sources[] =
     { FALSE, 0, 0, "Paris Stock Exchange/Boursorama, FR", "BOURSO", "bourso" },
     { FALSE, 0, 0, "Paris Stock Exchange/LeRevenu, FR", "LEREVENU", "lerevenu" },
     { FALSE, 0, 0, "Platinum Asset Management, AU", "PLATINUM", "platinum" },
+    { FALSE, 0, 0, "Romania", "romania", "romania" },
     { FALSE, 0, 0, "SIX Swiss Exchange funds, CH", "SIXFUNDS", "sixfunds" },
     { FALSE, 0, 0, "SIX Swiss Exchange shares, CH", "SIXSHARES", "sixshares" },
     { FALSE, 0, 0, "Skandinaviska Enskilda Banken, SE", "SEB_FUNDS", "seb_funds" },
@@ -201,47 +209,23 @@ static gnc_quote_source single_quote_sources[] =
     { FALSE, 0, 0, "TD Efunds, CA", "TDEFUNDS", "tdefunds" },
     { FALSE, 0, 0, "TIAA-CREF, US", "TIAACREF", "tiaacref" },
     { FALSE, 0, 0, "Toronto Stock eXchange, CA", "TSX", "tsx" },
+    { FALSE, 0, 0, "T. Rowe Price", "TRPRICE", "troweprice" },
     { FALSE, 0, 0, "T. Rowe Price, US", "TRPRICE_DIRECT", "troweprice_direct" },
     { FALSE, 0, 0, "Trustnet via tnetuk.pm, GB", "TNETUK", "tnetuk" },
     { FALSE, 0, 0, "Trustnet via trustnet.pm, GB", "TRUSTNET", "trustnet" },
+    { FALSE, 0, 0, "U.K. Unit Trusts", "UKUNITTRUSTS", "uk_unit_trusts" },
     { FALSE, 0, 0, "Union Investment, DE", "UNIONFUNDS", "unionfunds" },
     { FALSE, 0, 0, "US Treasury Bonds", "usfedbonds", "usfedbonds" },
     { FALSE, 0, 0, "US Govt. Thrift Savings Plan", "TSP", "tsp" },
     { FALSE, 0, 0, "Vanguard", "VANGUARD", "vanguard" }, /* No module seen in F::Q 1.17. */
     { FALSE, 0, 0, "VWD, DE (unmaintained)", "VWD", "vwd" },
-    { FALSE, 0, 0, "Yahoo USA", "YAHOO", "yahoo" },
-    { FALSE, 0, 0, "Yahoo Asia", "YAHOO_ASIA", "yahoo_asia" },
-    { FALSE, 0, 0, "Yahoo Australia", "YAHOO_AUSTRALIA", "yahoo_australia" },
-    { FALSE, 0, 0, "Yahoo Brasil", "YAHOO_BRASIL", "yahoo_brasil" },
-    { FALSE, 0, 0, "Yahoo Europe", "YAHOO_EUROPE", "yahoo_europe" },
-    { FALSE, 0, 0, "Yahoo New Zealand", "YAHOO_NZ", "yahoo_nz" },
     { FALSE, 0, 0, "Yahoo as JSON", "YAHOO_JSON", "yahoo_json" },
 };
 static gnc_quote_source multiple_quote_sources[] =
 {
-    { FALSE, 0, 0, "Asia (Yahoo, ...)", "ASIA", "asia" },
-    { FALSE, 0, 0, "Australia (ASX, Yahoo, ...)", "AUSTRALIA", "australia" },
-    { FALSE, 0, 0, "Brasil (Yahoo, ...)", "BRASIL", "brasil" },
-    { FALSE, 0, 0, "Canada (Yahoo, ...)", "CANADA", "canada" },
-    { FALSE, 0, 0, "Canada Mutual (Fund Library, ...)", "CANADAMUTUAL", "canadamutual" },
-    { FALSE, 0, 0, "Dutch (AEX, ...)", "DUTCH", "dutch" },
-    { FALSE, 0, 0, "Europe (Yahoo, ...)", "EUROPE", "europe" },
-    { FALSE, 0, 0, "Greece (ASE, ...)", "GREECE", "greece" },
-    { FALSE, 0, 0, "Hungary (Bamosz, BET)", "HU", "hu" },
-    { FALSE, 0, 0, "India Mutual (AMFI, ...)", "INDIAMUTUAL", "indiamutual" },
-    { FALSE, 0, 0, "Fidelity (Fidelity, ...)", "FIDELITY", "fidelity" },
-    { FALSE, 0, 0, "Finland (HEX, ...)", "FINLAND", "finland" },
-    { FALSE, 0, 0, "First Trust (First Trust, ...)", "FTPORTFOLIOS", "ftportfolios" },
-    { FALSE, 0, 0, "France (Boursorama, ...)", "FRANCE", "france" },
-    { FALSE, 0, 0, "Nasdaq (Yahoo, ...)", "NASDAQ", "nasdaq" },
-    { FALSE, 0, 0, "New Zealand (Yahoo, ...)", "NZ", "nz" },
-    { FALSE, 0, 0, "NYSE (Yahoo, ...)", "NYSE", "nyse" },
-    /*    { FALSE, 0, 0, "South Africa (Sharenet, ...)", "ZA", "za" }, */
-    { FALSE, 0, 0, "Romania (BSE-RO, ...)", "romania", "romania" },
-    { FALSE, 0, 0, "T. Rowe Price", "TRPRICE", "troweprice" },
+    { FALSE, 0, 0, "Europe (Athens, Boursorama, Bucharest)", "EUROPE", "europe" },
+    { FALSE, 0, 0, "France (Boursorama, LeRevenue)", "FRANCE", "france" },
     { FALSE, 0, 0, "U.K. Funds (citywire, FTfunds, MStar, tnetuk, ...)", "ukfunds", "ukfunds" },
-    { FALSE, 0, 0, "U.K. Unit Trusts (trustnet, ...)", "UKUNITTRUSTS", "uk_unit_trusts" },
-    { FALSE, 0, 0, "USA (Yahoo, Fool, ...)", "USA", "usa" },
 };
 
 static const int num_single_quote_sources =
@@ -1123,7 +1107,7 @@ gnc_commodity_get_default_quote_source(const gnc_commodity *cm)
     if (cm && gnc_commodity_is_iso(cm))
         return &currency_quote_source;
     /* Should make this a user option at some point. */
-    return gnc_quote_source_lookup_by_internal("yahoo");
+    return gnc_quote_source_lookup_by_internal("alphavantage");
 }
 
 /********************************************************************

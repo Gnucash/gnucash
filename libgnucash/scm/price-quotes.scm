@@ -118,7 +118,7 @@
   ;;
   ;; (<fq-method> sym sym ...)
   ;;
-  ;; i.e. (yahoo "RHAT" "LNUX" "IBM")
+  ;; i.e. (alphavantage "RHAT" "LNUX" "IBM")
   ;;
   ;; for currencies, we have
   ;;
@@ -210,7 +210,7 @@
     ;; gnc-fq-helper.  Each item will of the list will be of the
     ;; form:
     ;;
-    ;; (("yahoo" (commodity-1 currency-1 tz-1)
+    ;; (("alphavantage" (commodity-1 currency-1 tz-1)
     ;;           (commodity-2 currency-2 tz-2) ...)
     ;;  ("fidelity_direct" (commodity-3 currency-3 tz-3)
     ;;                     (commodity-4 currency-4 tz-4) ...)
@@ -259,10 +259,10 @@
     ;; their fq-suitable symbol strings.  i.e. turn the former into
     ;; the latter:
     ;;
-    ;; ("yahoo" (commodity-1 currency-1 tz-1)
+    ;; ("alphavantage" (commodity-1 currency-1 tz-1)
     ;;          (commodity-2 currency-2 tz-2) ...)
     ;;
-    ;; ("yahoo" "IBM" "AMD" ...)
+    ;; ("alphavantage" "IBM" "AMD" ...)
     ;;
 
     (if (equal? (car fq-call-data) "currency")

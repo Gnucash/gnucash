@@ -48,16 +48,14 @@ side :>).
 (<method-name> symbol symbol symbol ...)
 
 where <method-name> indicates the desired Finance::Quote method.
-The currently recognized subset is yahoo, yahoo_europe,
-fidelity_direct, troweprice_direct, vanguard, asx, tiaacref,
-and currency.
+One can list the many methods by running gnc-fq-check.
 
 For currency quotes, the symbols alternate between the 'from'
 and 'to' currencies.
 
 For example:
 
-(yahoo "IBM" "LNUX")
+(alphavantage "IBM" "LNUX")
 (fidelity_direct "FBIOX" "FSELX")
 (currency "USD" "AUD")
 
@@ -78,7 +76,7 @@ need to convert it to that.
 
 For example:
 
- $ echo '(yahoo "CSCO" "JDSU" "^IXIC")' | ./gnc-fq-helper
+ $ echo '(alphavantage "CSCO" "JDSU" "^IXIC")' | ./gnc-fq-helper
 (("CSCO" (symbol . "CSCO")
          (gnc:time-no-zone . "2001-03-13 19:27:00")
          (last . 20.375)
@@ -95,7 +93,7 @@ For example:
 On error, the overall result may be #f, or on individual errors, the
 list sub-item for a given symbol may be #f, like this:
 
- $ echo '(yahoo "CSCO" "JDSU")' | ./gnc-fq-helper
+ $ echo '(alphavantage "CSCO" "JDSU")' | ./gnc-fq-helper
 (#f
  ("JDSU" (symbol . "JDSU")
          (gnc:time-no-zone . "2001-03-13 19:27:00")
