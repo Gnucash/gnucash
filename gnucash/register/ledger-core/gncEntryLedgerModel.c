@@ -2,6 +2,7 @@
  * gncEntryLedgerModel.c -- Model for GncEntry ledger
  * Copyright (C) 2001, 2002, 2003 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
+ * Copyright (C) 2017 Aaron Laws
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -186,11 +187,11 @@ static const char * get_date_entry (VirtualLocation virt_loc,
 {
     GncEntryLedger *ledger = user_data;
     GncEntry *entry;
-    Timespec ts;
+    Timespec ts = {0,0};
 
     entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
 
-    ts = gncEntryGetDate (entry);
+    ts.tv_sec = gncEntryGetDate (entry);
     return gnc_print_date (ts);
 }
 
@@ -569,7 +570,6 @@ static char * get_date_help (VirtualLocation virt_loc, gpointer user_data)
     BasicCell *cell;
     char string[1024];
     struct tm tm;
-    Timespec ts;
     time64 tt;
 
     cell = gnc_table_get_cell (ledger->table, virt_loc);
@@ -579,8 +579,7 @@ static char * get_date_help (VirtualLocation virt_loc, gpointer user_data)
     if (!cell->value || *cell->value == '\0')
         return NULL;
 
-    gnc_date_cell_get_date ((DateCell *) cell, &ts);
-    tt = ts.tv_sec;
+    gnc_date_cell_get_date ((DateCell *) cell, &tt);
     gnc_localtime_r (&tt, &tm);
     qof_strftime (string, sizeof(string), _("%A %d %B %Y"), &tm);
 

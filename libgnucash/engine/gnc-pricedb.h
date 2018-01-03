@@ -239,6 +239,7 @@ void gnc_price_commit_edit (GNCPrice *p);
 void gnc_price_set_commodity(GNCPrice *p, gnc_commodity *c);
 void gnc_price_set_currency(GNCPrice *p, gnc_commodity *c);
 void gnc_price_set_time(GNCPrice *p, Timespec t);
+void gnc_price_set_time64(GNCPrice *p, time64 t64);
 void gnc_price_set_source(GNCPrice *p, PriceSource source);
 void gnc_price_set_source_string(GNCPrice *p, const char* s);
 void gnc_price_set_typestr(GNCPrice *p, const char* type);
@@ -257,6 +258,7 @@ gnc_commodity * gnc_price_get_commodity(const GNCPrice *p);
 /*@ dependent @*/
 gnc_commodity * gnc_price_get_currency(const GNCPrice *p);
 Timespec        gnc_price_get_time(const GNCPrice *p);
+time64          gnc_price_get_time64(const GNCPrice *p);
 PriceSource     gnc_price_get_source(const GNCPrice *p);
 const char *    gnc_price_get_source_string(const GNCPrice *p);
 const char *    gnc_price_get_typestr(const GNCPrice *p);
@@ -494,6 +496,10 @@ GNCPrice * gnc_pricedb_lookup_day(GNCPriceDB *db,
                                   const gnc_commodity *currency,
                                   Timespec t);
 
+GNCPrice * gnc_pricedb_lookup_day_t64(GNCPriceDB *db,
+                                  const gnc_commodity *commodity,
+                                  const gnc_commodity *currency,
+                                  time64 t64);
 
 /** @brief Return the price between the two commoditiesz nearest to the given
  * time.
@@ -511,6 +517,11 @@ GNCPrice   * gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
         const gnc_commodity *currency,
         Timespec t);
 
+GNCPrice   * gnc_pricedb_lookup_nearest_in_time64(GNCPriceDB *db,
+        const gnc_commodity *c,
+        const gnc_commodity *currency,
+        time64 t);
+
 /** @brief Return the price nearest in time to that given between the given
  * commodity and every other.
  *
@@ -526,6 +537,9 @@ GNCPrice   * gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
 PriceList * gnc_pricedb_lookup_nearest_in_time_any_currency(GNCPriceDB *db,
         const gnc_commodity *c,
         Timespec t);
+PriceList * gnc_pricedb_lookup_nearest_in_time_any_currency_t64(GNCPriceDB *db,
+        const gnc_commodity *c,
+        time64 t64);
 
 /** @brief Return the latest price between the given commodities before the
  * given time.

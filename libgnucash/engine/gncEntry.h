@@ -101,8 +101,8 @@ void gncEntrySetDateGDate (GncEntry *entry, const GDate* date);
 /** DEPRECATED - use gncEntrySetDateGDate() instead! (Because the time-of-day
 is a misleading extra information. We are only dealing with the day
 information! */
-void gncEntrySetDate (GncEntry *entry, Timespec date);
-void gncEntrySetDateEntered (GncEntry *entry, Timespec date);
+void gncEntrySetDate (GncEntry *entry, time64 date);
+void gncEntrySetDateEntered (GncEntry *entry, time64 date);
 void gncEntrySetDescription (GncEntry *entry, const char *desc);
 void gncEntrySetAction (GncEntry *entry, const char *action);
 void gncEntrySetNotes (GncEntry *entry, const char *notes);
@@ -159,8 +159,8 @@ GDate gncEntryGetDateGDate (const GncEntry *entry);
 /** DEPRECATED - use gncEntryGetDateGDate() instead! (Because the time-of-day
 is a misleading extra information. We are only dealing with the day
 information! */
-Timespec gncEntryGetDate (const GncEntry *entry);
-Timespec gncEntryGetDateEntered (const GncEntry *entry);
+time64 gncEntryGetDate (const GncEntry *entry);
+time64 gncEntryGetDateEntered (const GncEntry *entry);
 const char * gncEntryGetDescription (const GncEntry *entry);
 const char * gncEntryGetAction (const GncEntry *entry);
 const char * gncEntryGetNotes (const GncEntry *notes);

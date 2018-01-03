@@ -1399,11 +1399,11 @@ xaccTransScrubPostedDate (Transaction *trans)
 {
     time64 orig = xaccTransGetDate(trans);
     GDate date = xaccTransGetDatePostedGDate(trans);
-    Timespec ts = gdate_to_timespec(date);
-    if (orig && orig != ts.tv_sec)
+    time64 time = gdate_to_time64(date);
+    if (orig && orig != time)
     {
         /* xaccTransSetDatePostedTS handles committing the change. */
-        xaccTransSetDatePostedTS(trans, &ts);
+        xaccTransSetDatePostedSecs(trans, time);
     }
 }
 

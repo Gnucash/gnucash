@@ -54,17 +54,15 @@ static QofLogModule log_module = GNC_MOD_ENGINE;
 Timespec
 gnc_transaction_get_date_posted(const Transaction *t)
 {
-    Timespec result;
-    xaccTransGetDatePostedTS(t, &result);
-    return(result);
+    Timespec ret = {xaccTransRetDatePosted(t), 0};
+    return ret;
 }
 
 Timespec
 gnc_transaction_get_date_entered(const Transaction *t)
 {
-    Timespec result;
-    xaccTransGetDateEnteredTS(t, &result);
-    return(result);
+    Timespec result = {xaccTransRetDateEntered(t), 0};
+    return result;
 }
 
 Timespec
@@ -78,7 +76,7 @@ gnc_split_get_date_reconciled(const Split *s)
 void
 gnc_transaction_set_date(Transaction *t, Timespec ts)
 {
-    xaccTransSetDatePostedTS(t, &ts);
+    xaccTransSetDatePostedSecs(t, ts.tv_sec);
 }
 
 /** Gets the transaction Number or split Action based on book option:
@@ -309,10 +307,10 @@ gnc_timepair2timespec(SCM x)
     return(result);
 }
 
-GDate gnc_timepair_to_GDate(SCM x)
+GDate gnc_time64_to_GDate(SCM x)
 {
-    Timespec tspec = gnc_timepair2timespec(x);
-    return timespec_to_gdate(tspec);
+    time64 time = scm_to_int64 (x);
+    return time64_to_gdate(time);
 }
 
 int

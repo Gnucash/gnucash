@@ -132,54 +132,23 @@ commodity_ref_to_dom_tree (const char* tag, const gnc_commodity* c)
 }
 
 char*
-timespec_sec_to_string (const Timespec* ts)
+time64_to_string (time64 time)
 {
-    return gnc_print_time64 (ts->tv_sec, "%Y-%m-%d %H:%M:%S %q");
-}
-
-gchar*
-timespec_nsec_to_string (const Timespec* ts)
-{
-    return g_strdup_printf ("%ld", ts->tv_nsec);
+    return gnc_print_time64 (time, TIMESPEC_TIME_FORMAT " %q");
 }
 
 xmlNodePtr
-timespec_to_dom_tree (const char* tag, const Timespec* spec)
+time64_to_dom_tree (const char* tag, const time64 time)
 {
     xmlNodePtr ret;
-    gchar* date_str = NULL;
-    gchar* ns_str = NULL;
-
-    g_return_val_if_fail (spec, NULL);
-
-    date_str = timespec_sec_to_string (spec);
-
+    g_return_val_if_fail (time, NULL);
+    auto date_str = time64_to_string (time);
     if (!date_str)
-    {
         return NULL;
-    }
-
     ret = xmlNewNode (NULL, BAD_CAST tag);
-
     xmlNewTextChild (ret, NULL, BAD_CAST "ts:date",
                      checked_char_cast (date_str));
-
-    if (spec->tv_nsec > 0)
-    {
-        ns_str = timespec_nsec_to_string (spec);
-        if (ns_str)
-        {
-            xmlNewTextChild (ret, NULL, BAD_CAST "ts:ns",
-                             checked_char_cast (ns_str));
-        }
-    }
-
     g_free (date_str);
-    if (ns_str)
-    {
-        g_free (ns_str);
-    }
-
     return ret;
 }
 
@@ -311,7 +280,7 @@ add_kvp_value_node (xmlNodePtr node, const gchar* tag, KvpValue* val)
     case KvpValue::Type::TIMESPEC:
     {
         auto ts = val->get<Timespec> ();
-        val_node = timespec_to_dom_tree (tag, &ts);
+        val_node = time64_to_dom_tree (tag, ts.tv_sec);
         xmlSetProp (val_node, BAD_CAST "type", BAD_CAST "timespec");
         xmlAddChild (node, val_node);
         break;

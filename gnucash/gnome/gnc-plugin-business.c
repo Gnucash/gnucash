@@ -957,18 +957,17 @@ static void
 gnc_plugin_business_cmd_test_init_data (GtkAction *action,
                                         GncMainWindowActionData *data)
 {
-    QofBook *book       = gnc_get_current_book();
+    QofBook *book           = gnc_get_current_book();
     GncCustomer *customer   = gncCustomerCreate(book);
-    GncAddress *address = gncCustomerGetAddr(customer);
-    GncInvoice *invoice = gncInvoiceCreate(book);
-    GncOwner *owner     = gncOwnerNew();
-    GncJob *job         = gncJobCreate(book);
-    Account *root       = gnc_book_get_root_account(book);
-    Account *inc_acct   = xaccMallocAccount(book);
-    Account *bank_acct  = xaccMallocAccount(book);
-    Account *tax_acct   = xaccMallocAccount(book);
-    Account *ar_acct    = xaccMallocAccount(book);
-    Timespec now;
+    GncAddress *address     = gncCustomerGetAddr(customer);
+    GncInvoice *invoice     = gncInvoiceCreate(book);
+    GncOwner *owner         = gncOwnerNew();
+    GncJob *job             = gncJobCreate(book);
+    Account *root           = gnc_book_get_root_account(book);
+    Account *inc_acct       = xaccMallocAccount(book);
+    Account *bank_acct      = xaccMallocAccount(book);
+    Account *tax_acct       = xaccMallocAccount(book);
+    Account *ar_acct        = xaccMallocAccount(book);
 
     // Create Customer
     gncCustomerSetID(customer, "000001");
@@ -983,10 +982,9 @@ gnc_plugin_business_cmd_test_init_data (GtkAction *action,
     gncOwnerInitCustomer(owner, customer);
 
     // Create the Invoice
-    timespecFromTime64(&now, time(NULL));
     gncInvoiceSetID(invoice, "000012");
     gncInvoiceSetOwner(invoice, owner);
-    gncInvoiceSetDateOpened(invoice, now);
+    gncInvoiceSetDateOpened(invoice, gnc_time (NULL));
     gncInvoiceSetCurrency(invoice, gnc_default_currency());
 
     // Create the Job

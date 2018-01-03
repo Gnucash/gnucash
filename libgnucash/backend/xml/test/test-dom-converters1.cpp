@@ -132,17 +132,11 @@ test_dom_tree_to_timespec (void)
     int i;
     for (i = 0; i < 20; i++)
     {
-        Timespec* test_spec1;
-        Timespec test_spec2;
         xmlNodePtr test_node;
-
-        test_spec1 = get_random_timespec ();
-
-        test_node = timespec_to_dom_tree ("test-spec", test_spec1);
-
-        test_spec2 = dom_tree_to_timespec (test_node);
-
-        if (!dom_tree_valid_timespec (&test_spec2, (const xmlChar*)"test-spec"))
+        time64 test_spec1 = get_random_time ();
+        test_node = time64_to_dom_tree ("test-spec", test_spec1);
+        time64 test_spec2 = dom_tree_to_time64 (test_node);
+        if (!dom_tree_valid_time64 (test_spec2, (const xmlChar*)"test-spec"))
         {
             failure_args ("dom_tree_to_timespec",
                           __FILE__, __LINE__, "NULL return");
@@ -150,8 +144,7 @@ test_dom_tree_to_timespec (void)
             xmlElemDump (stdout, NULL, test_node);
             printf ("\n");
         }
-
-        else if (timespec_cmp (test_spec1, &test_spec2) == 0)
+        else if (test_spec1 == test_spec2)
         {
             success ("dom_tree_to_timespec");
         }
@@ -161,15 +154,9 @@ test_dom_tree_to_timespec (void)
             printf ("Node looks like:\n");
             xmlElemDump (stdout, NULL, test_node);
             printf ("\n");
-            printf ("Secs are %" G_GUINT64_FORMAT " vs %" G_GUINT64_FORMAT " :: ",
-                    test_spec1->tv_sec,
-                    test_spec2.tv_sec);
-            printf ("NSecs are %ld vs %ld\n",
-                    test_spec1->tv_nsec,
-                    test_spec2.tv_nsec);
+            printf ("passed: %" G_GUINT64_FORMAT "  got: %" G_GUINT64_FORMAT ".\n",
+                    test_spec1, test_spec2);
         }
-
-        g_free (test_spec1);
         xmlFreeNode (test_node);
     }
 }

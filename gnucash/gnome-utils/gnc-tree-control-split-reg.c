@@ -1521,7 +1521,7 @@ static gboolean gtcsr_move_current_entry_updown(GncTreeViewSplitReg *view,
         /* Only continue if both have the same date and num, because the
          * "standard ordering" is tied to the date anyway. */
         {
-            Timespec t1, t2;
+            time64 time1, time2;
             GDate d1 = xaccTransGetDatePostedGDate(current_trans),
                   d2 = xaccTransGetDatePostedGDate(target_trans);
             if (g_date_compare(&d1, &d2) != 0)
@@ -1540,9 +1540,9 @@ static gboolean gtcsr_move_current_entry_updown(GncTreeViewSplitReg *view,
             dates as timespec. See the comment in gncEntrySetDateGDate() for the
             reason: Some code used the timespec at noon for the EntryDate, other
             code used the timespec at the start of day. */
-            t1 = xaccTransRetDatePostedTS(current_trans);
-            t2 = xaccTransRetDatePostedTS(target_trans);
-            if (really_do_it && !timespec_equal(&t1, &t2))
+            time1 = xaccTransRetDatePosted(current_trans);
+            time2 = xaccTransRetDatePosted(target_trans);
+            if (really_do_it && time1 != time2)
             {
                 /* Timespecs are not equal, even though the GDates were equal? Then
                 we set the GDates again. This will force the timespecs to be equal
@@ -1587,12 +1587,12 @@ static gboolean gtcsr_move_current_entry_updown(GncTreeViewSplitReg *view,
             /* Swap the date-entered of both entries. That's already
              * sufficient! */
             {
-                Timespec time_current = xaccTransRetDateEnteredTS(current_trans);
-                Timespec time_target = xaccTransRetDateEnteredTS(target_trans);
+                time64 time_current = xaccTransRetDateEntered(current_trans);
+                time64 time_target = xaccTransRetDateEntered(target_trans);
 
                 /* Special treatment for identical times (potentially caused
                  * by the "duplicate entry" command) */
-                if (timespec_equal(&time_current, &time_target))
+                if (time_current == time_target)
                 {
                     g_warning("Surprise - both DateEntered are equal.");
                     /* We just increment the DateEntered of the previously
@@ -1600,14 +1600,14 @@ static gboolean gtcsr_move_current_entry_updown(GncTreeViewSplitReg *view,
                      * issues if multiple entries had this problem, but
                      * whatever. */
                     if (move_up)
-                        time_current.tv_sec++;
+                        ++time_current;
                     else
-                        time_target.tv_sec++;
+                        ++time_target;
                 }
 
                 /* Write the new DateEntered. */
-                xaccTransSetDateEnteredTS(current_trans, &time_target);
-                xaccTransSetDateEnteredTS(target_trans, &time_current);
+                xaccTransSetDateEnteredSecs(current_trans, time_target);
+                xaccTransSetDateEnteredSecs(target_trans, time_current);
 
                 /* FIXME: Do we need to notify anyone about the changed ordering? */
             }

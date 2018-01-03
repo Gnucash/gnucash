@@ -356,34 +356,27 @@ simple_chars_only_parser_new (sixtp_end_handler end_handler)
        <ns>658864000</ns>
      </date-posted>
 
-   and produce a Timespec*.  The start handler for the top allocates
-   the Timespec * and passes it to the children.  The <s> block sets
-   the seconds and the <ns> block (if any) sets the nanoseconds.  If
-   all goes well, returns the Timespec* as the result.
+   and produce a time64.  The start handler for the top allocates
+   the time64 and passes it to the children.  The <s> block sets
+   the seconds and the <ns> block is ignored.  If
+   all goes well, returns the time64 as the result.
 */
 
 gboolean
-string_to_timespec_secs (const gchar* str, Timespec* ts)
+string_to_time64 (const gchar* str, time64* time)
 {
-    *ts = gnc_iso8601_to_timespec_gmt (str);
-    return (TRUE);
-}
-
-gboolean
-string_to_timespec_nsecs (const gchar* str, Timespec* ts)
-{
-    /* We don't do nanoseconds anymore. */
+    *time = gnc_iso8601_to_time64_gmt (str);
     return (TRUE);
 }
 
 /* Top level timespec node:
 
    input: user end handler *
-   returns: Timespec*
+   returns: time64
 
-   start: Allocates TimespecParseInfo* for data_for_children.
+   start: Allocates Time64ParseInfo* for data_for_children.
    characters: none (whitespace only).
-   end: g_free TimespecParseInfo + any other actions
+   end: g_free Time64ParseInfo + any other actions
 
    cleanup-result: NA
    cleanup-chars: NA
@@ -399,7 +392,7 @@ generic_timespec_start_handler (GSList* sibling_data, gpointer parent_data,
                                 gpointer* data_for_children, gpointer* result,
                                 const gchar* tag, gchar** attrs)
 {
-    TimespecParseInfo* tsp = g_new0 (TimespecParseInfo, 1);
+    Time64ParseInfo* tsp = g_new0 (Time64ParseInfo, 1);
     g_return_val_if_fail (tsp, FALSE);
     *data_for_children = tsp;
     return (TRUE);
@@ -410,18 +403,9 @@ generic_timespec_start_handler (GSList* sibling_data, gpointer parent_data,
    new timespec.  Otherwise, you can presume that everything's been
    cleaned up properly and return FALSE.  */
 gboolean
-timespec_parse_ok (TimespecParseInfo* info)
+timespec_parse_ok (Time64ParseInfo* info)
 {
-
-    if ((info->s_block_count > 1) || (info->ns_block_count > 1) ||
-        ((info->s_block_count == 0) && (info->ns_block_count == 0)))
-    {
-        return (FALSE);
-    }
-    else
-    {
-        return (TRUE);
-    }
+    return info->s_block_count != 1;
 }
 
 /* generic_timespec_end_handler - must be customized and provided by
@@ -429,12 +413,12 @@ timespec_parse_ok (TimespecParseInfo* info)
 
 /* <s> (parent timespec-node)
 
-   input: TimespecParseInfo *
+   input: Time64ParseInfo *
    returns: NA
 
    start: NA
    characters: accumulate.
-   end: convert characters to secs part of input Timespec and inc s_block_count.
+   end: convert characters to secs part of input time64 and inc s_block_count.
 
    cleanup-result: NA
    cleanup-chars: g_free data.
@@ -451,7 +435,7 @@ generic_timespec_secs_end_handler (gpointer data_for_children,
                                    gpointer* result, const gchar* tag)
 {
     gchar* txt = NULL;
-    TimespecParseInfo* info = (TimespecParseInfo*) parent_data;
+    Time64ParseInfo* info = (Time64ParseInfo*) parent_data;
     gboolean ok;
 
     g_return_val_if_fail (parent_data, FALSE);
@@ -459,7 +443,7 @@ generic_timespec_secs_end_handler (gpointer data_for_children,
     txt = concatenate_child_result_chars (data_from_children);
     g_return_val_if_fail (txt, FALSE);
 
-    ok = string_to_timespec_secs (txt, & (info->ts));
+    ok = string_to_time64 (txt, & info->time);
     g_free (txt);
 
     g_return_val_if_fail (ok, FALSE);
@@ -470,15 +454,15 @@ generic_timespec_secs_end_handler (gpointer data_for_children,
 
 /* <s> (parent timespec-node)
 
-   input: TimespecParseInfo *
+   input: Time64ParseInfo *
    returns: NA
 
    start: NA
    characters: accumulate.
-   end: convert characters to secs part of input Timespec and inc s_block_count.
+   end: NA
 
    cleanup-result: NA
-   cleanup-chars: g_free data.
+   cleanup-chars: NA.
    fail: NA
    result-fail: NA
    chars-fail: g_free data.
@@ -491,22 +475,7 @@ generic_timespec_nsecs_end_handler (gpointer data_for_children,
                                     gpointer parent_data, gpointer global_data,
                                     gpointer* result, const gchar* tag)
 {
-    gchar* txt = NULL;
-    TimespecParseInfo* info = (TimespecParseInfo*) parent_data;
-    gboolean ok;
-
-    g_return_val_if_fail (parent_data, FALSE);
-
-    txt = concatenate_child_result_chars (data_from_children);
-    g_return_val_if_fail (txt, FALSE);
-
-    ok = string_to_timespec_nsecs (txt, & (info->ts));
-    g_free (txt);
-
-    g_return_val_if_fail (ok, FALSE);
-
-    info->ns_block_count++;
-    return (TRUE);
+    return TRUE;
 }
 
 static sixtp*

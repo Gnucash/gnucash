@@ -81,17 +81,17 @@ maybe_add_string (xmlNodePtr ptr, const char* tag, const char* str)
 }
 
 static void
-maybe_add_timespec (xmlNodePtr ptr, const char* tag, Timespec ts)
+maybe_add_time64 (xmlNodePtr ptr, const char* tag, time64 time)
 {
-    if (ts.tv_sec || ts.tv_nsec)
-        xmlAddChild (ptr, timespec_to_dom_tree (tag, &ts));
+    if (time)
+        xmlAddChild (ptr, time64_to_dom_tree (tag, time));
 }
 
 static xmlNodePtr
 invoice_dom_tree_create (GncInvoice* invoice)
 {
     xmlNodePtr ret;
-    Timespec ts;
+    time64 time;
     Transaction* txn;
     GNCLot* lot;
     Account* acc;
@@ -111,11 +111,10 @@ invoice_dom_tree_create (GncInvoice* invoice)
     xmlAddChild (ret, gnc_owner_to_dom_tree (invoice_owner_string,
                                              gncInvoiceGetOwner (invoice)));
 
-    ts = gncInvoiceGetDateOpened (invoice);
-    xmlAddChild (ret, timespec_to_dom_tree (invoice_opened_string, &ts));
+    time = gncInvoiceGetDateOpened (invoice);
+    xmlAddChild (ret, time64_to_dom_tree (invoice_opened_string, time));
 
-    maybe_add_timespec (ret, invoice_posted_string,
-                        gncInvoiceGetDatePosted (invoice));
+    maybe_add_time64 (ret, invoice_posted_string, gncInvoiceGetDatePosted (invoice));
 
     term = gncInvoiceGetTerms (invoice);
     if (term)
@@ -185,13 +184,12 @@ set_string (xmlNodePtr node, GncInvoice* invoice,
 }
 
 static inline gboolean
-set_timespec (xmlNodePtr node, GncInvoice* invoice,
-              void (*func) (GncInvoice* invoice, Timespec ts))
+set_time64 (xmlNodePtr node, GncInvoice* invoice,
+              void (*func) (GncInvoice* invoice, time64 time))
 {
-    Timespec ts = dom_tree_to_timespec (node);
-    if (!dom_tree_valid_timespec (&ts, node->name)) return FALSE;
-
-    func (invoice, ts);
+    time64 time = dom_tree_to_time64 (node);
+    if (!dom_tree_valid_time64 (time, node->name)) return FALSE;
+    func (invoice, time);
     return TRUE;
 }
 
@@ -247,16 +245,14 @@ static gboolean
 invoice_opened_handler (xmlNodePtr node, gpointer invoice_pdata)
 {
     struct invoice_pdata* pdata = static_cast<decltype (pdata)> (invoice_pdata);
-
-    return set_timespec (node, pdata->invoice, gncInvoiceSetDateOpened);
+    return set_time64 (node, pdata->invoice, gncInvoiceSetDateOpened);
 }
 
 static gboolean
 invoice_posted_handler (xmlNodePtr node, gpointer invoice_pdata)
 {
     struct invoice_pdata* pdata = static_cast<decltype (pdata)> (invoice_pdata);
-
-    return set_timespec (node, pdata->invoice, gncInvoiceSetDatePosted);
+    return set_time64 (node, pdata->invoice, gncInvoiceSetDatePosted);
 }
 
 static gboolean

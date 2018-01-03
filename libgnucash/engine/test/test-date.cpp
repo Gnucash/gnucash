@@ -52,7 +52,7 @@ check_time (Timespec ts, gboolean always_print)
      * the time, in seconds, is identical to the local time in
      * Greenwich (GMT).
      */
-    ts_2 = gnc_iso8601_to_timespec_gmt (str);
+    ts_2 = {gnc_iso8601_to_time64_gmt (str), 0};
 
     ok = timespec_equal (&ts, &ts_2);
 
@@ -85,7 +85,7 @@ check_conversion (const char * str, Timespec expected_ts)
     int day, month, year;
     GDate d1, d2;
 
-    ts = gnc_iso8601_to_timespec_gmt (str);
+    ts = {gnc_iso8601_to_time64_gmt (str), 0};
 
     // We test the conversion to GDate against the timespec2dmy
     // conversion, and also the conversion back to timespec and again
@@ -309,31 +309,31 @@ run_test (void)
 
 
     /* Various leap-year days and near-leap times. */
-    ts = gnc_iso8601_to_timespec_gmt ("1980-02-29 00:00:00.000000 -0000");
+    ts = {gnc_iso8601_to_time64_gmt ("1980-02-29 00:00:00.000000 -0000"), 0};
     check_time (ts, do_print);
 
-    ts = gnc_iso8601_to_timespec_gmt ("1979-02-28 00:00:00.000000 -0000");
+    ts = {gnc_iso8601_to_time64_gmt ("1979-02-28 00:00:00.000000 -0000"), 0};
     check_time (ts, do_print);
 
-    ts = gnc_iso8601_to_timespec_gmt ("1990-02-28 00:00:00.000000 -0000");
+    ts = {gnc_iso8601_to_time64_gmt ("1990-02-28 00:00:00.000000 -0000"), 0};
     check_time (ts, do_print);
 
-    ts = gnc_iso8601_to_timespec_gmt ("2000-02-29 00:00:00.000000 -0000");
+    ts = {gnc_iso8601_to_time64_gmt ("2000-02-29 00:00:00.000000 -0000"), 0};
     check_time (ts, do_print);
 
-    ts = gnc_iso8601_to_timespec_gmt ("2004-02-29 00:00:00.000000 -0000");
+    ts = {gnc_iso8601_to_time64_gmt ("2004-02-29 00:00:00.000000 -0000"), 0};
     check_time (ts, do_print);
 
-    ts = gnc_iso8601_to_timespec_gmt ("2008-02-29 00:00:00.000000 -0000");
+    ts = {gnc_iso8601_to_time64_gmt ("2008-02-29 00:00:00.000000 -0000"), 0};
     check_time (ts, do_print);
 
-    ts = gnc_iso8601_to_timespec_gmt ("2008-02-29 00:01:00.000000 -0000");
+    ts = {gnc_iso8601_to_time64_gmt ("2008-02-29 00:01:00.000000 -0000"), 0};
     check_time (ts, do_print);
 
-    ts = gnc_iso8601_to_timespec_gmt ("2008-02-29 02:02:00.000000 -0000");
+    ts = {gnc_iso8601_to_time64_gmt ("2008-02-29 02:02:00.000000 -0000"), 0};
     check_time (ts, do_print);
 
-    ts = gnc_iso8601_to_timespec_gmt ("2008-02-28 23:23:23.000000 -0000");
+    ts = {gnc_iso8601_to_time64_gmt ("2008-02-28 23:23:23.000000 -0000"), 0};
     check_time (ts, do_print);
 
     /* Here's a date ten days after the 2038 rollover that should work

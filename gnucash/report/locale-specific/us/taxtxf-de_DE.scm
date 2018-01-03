@@ -91,19 +91,18 @@
 
 (define levelx-collector (make-level-collector MAX-LEVELS))
 
-(define today (timespecCanonicalDayTime
-               (cons (current-time) 0)))
+(define today (time64CanonicalDayTime (current-time)))
 
 (define bdtm
-  (let ((result (gnc:timepair->date today)))
+  (let ((result (gnc-localtime today)))
     (set-tm:mday result 16)             ; 16
     (set-tm:mon result 3)               ; Apr
     (set-tm:isdst result -1)
     result))
 
-(define tax-day (cons (gnc-mktime bdtm) 0))
+(define tax-day (gnc-mktime bdtm))
 
-(define after-tax-day (gnc:timepair-later tax-day today))
+(define after-tax-day (< tax-day today))
 
 (define (make-split-list account split-filter-pred)
   (reverse (filter split-filter-pred
@@ -111,14 +110,14 @@
 
 ;; returns a predicate that returns true only if a split is
 ;; between early-date and late-date
-(define (split-report-make-date-filter-predicate begin-date-tp
-                                                 end-date-tp)
+(define (split-report-make-date-filter-predicate begin-date
+                                                 end-date)
   (lambda (split) 
-    (let ((tp
-           (gnc-transaction-get-date-posted
+    (let ((t
+           (xaccTransGetDate
             (xaccSplitGetParent split))))
-      (and (gnc:timepair-ge-date tp begin-date-tp)
-           (gnc:timepair-le-date tp end-date-tp)))))
+      (and (>= t begin-date)
+           (<= t end-date)))))
 
 ;; This is nearly identical to, and could be shared with
 ;; display-report-list-item in report.scm. This adds warn-msg parameter
@@ -322,10 +321,10 @@
         (let* ((type (xaccAccountGetType account))
                (code (gnc:account-get-txf-code account))
                (date-str (if date
-                             (strftime "%d.%m.%Y" (gnc-localtime (car date)))
+                             (strftime "%d.%m.%Y" (gnc-localtime date))
                              #f))
                (x-date-str (if x-date
-                               (strftime "%d.%m.%Y" (gnc-localtime (car x-date)))
+                               (strftime "%d.%m.%Y" (gnc-localtime x-date))
                                #f))
                ;; Only formats 1,3 implemented now! Others are treated as 1.
                (format (gnc:get-txf-format code (eq? type ACCT-TYPE-INCOME)))
@@ -410,7 +409,7 @@
 (define (render-level-x-account table level max-level account lx-value
                                 suppress-0 full-names txf-date)
   (let* ((account-name (if txf-date	; special split
-                           (strftime "%d.%m.%Y" (gnc-localtime (car txf-date)))
+                           (strftime "%d.%m.%Y" (gnc-localtime txf-date))
                            (if (or full-names (equal? level 1))
                                (gnc-account-get-full-name account)
                                (xaccAccountGetName account))))
@@ -490,7 +489,7 @@
   (gnc:report-starting reportname)
   (let* ((from-value (gnc:date-option-absolute-time 
                       (get-option gnc:pagename-general "From")))
-         (to-value (gnc:timepair-end-day-time
+         (to-value (gnc:time64-end-day-time
                     (gnc:date-option-absolute-time 		       
                      (get-option gnc:pagename-general "To"))))
          (alt-period (get-option gnc:pagename-general "Alternate Period"))
@@ -517,8 +516,8 @@
 	 (work-done 0)
 
          ;; Alternate dates are relative to from-date
-         (from-date (gnc:timepair->date from-value))
-         (from-value (gnc:timepair-start-day-time
+         (from-date (gnc-localtime from-value))
+         (from-value (gnc:time64-start-day-time
                       (let ((bdtm from-date))
                         (if (member alt-period 
                                     '(last-year 1st-last 2nd-last
@@ -547,9 +546,9 @@
                               ((4th-est 4th-last) ; Oct 1
                                (set-tm:mon bdtm 9))))
                         (set-tm:isdst bdtm -1)
-                        (cons (gnc-mktime bdtm) 0))))
+                        (gnc-mktime bdtm))))
 
-         (to-value (gnc:timepair-end-day-time
+         (to-value (gnc:time64-end-day-time
                     (let ((bdtm from-date))
                       (if (member alt-period 
                                   '(last-year 1st-last 2nd-last
@@ -573,8 +572,8 @@
                             ((3rd-est 3rd-last) ; Aug 31
                              (set-tm:mon bdtm 7))
                             ((4th-est 4th-last last-year) ; Dec 31
-                             (set-tm:mon bdtm 11))
-                            (else (set! bdtm (gnc:timepair->date to-value))))
+                             (set-tm:mon bdtm 11)) 
+                            (else (set! bdtm (gnc-mktime to-value))))
                           ;; Tax quaters equal Real quarters
                           (case alt-period
                             ((1st-est 1st-last) ; Mar 31
@@ -588,9 +587,9 @@
                             ((4th-est 4th-last last-year) ; Dec 31
                              (set-tm:mon bdtm 11))
                             (else 
-                             (set! bdtm (gnc:timepair->date to-value)))))
+                             (set! bdtm (gnc-mktime to-value)))))
                       (set-tm:isdst bdtm -1)
-                      (cons (gnc-mktime bdtm) 0))))
+                      (gnc-mktime bdtm))))
 
          (txf-feedback-str-lst '())
          (doc (gnc:make-html-document))
@@ -603,8 +602,8 @@
                (txf-special-split? (gnc:account-get-txf-code account)))
           (let* 
               ((full-year?
-                (let ((bdto (gnc-localtime (car to-value)))
-                      (bdfrom (gnc-localtime (car from-value))))
+                (let ((bdto (gnc-localtime to-value))
+                      (bdfrom (gnc-localtime from-value)))
                   (and (equal? (tm:year bdto) (tm:year bdfrom))
                        (equal? (tm:mon bdfrom) 0)
                        (equal? (tm:mday bdfrom) 1)
@@ -613,23 +612,23 @@
                ;; Adjust dates so we get the final Estimated Tax
                ;; paymnent from the right year
                (from-est (if full-year?
-                             (let ((bdtm (gnc:timepair->date
-                                          (timespecCanonicalDayTime
+                             (let ((bdtm (gnc-localtime
+                                          (time64CanonicalDayTime
                                            from-value))))
                                (set-tm:mday bdtm 1) ; 01
                                (set-tm:mon bdtm 2) ; Mar
                                (set-tm:isdst bdtm -1)
-                               (cons (gnc-mktime bdtm) 0))
+                               (gnc-mktime bdtm))
                              from-value))
                (to-est (if full-year?
-                           (let* ((bdtm (gnc:timepair->date
-                                         (timespecCanonicalDayTime
+                           (let* ((bdtm (gnc-localtime
+                                         (time64CanonicalDayTime
                                           from-value))))
                              (set-tm:mday bdtm 28) ; 28
                              (set-tm:mon bdtm 1) ; Feb
                              (set-tm:year bdtm (+ (tm:year bdtm) 1))
                              (set-tm:isdst bdtm -1)
-                             (cons (gnc-mktime bdtm) 0))
+                             (gnc-mktime bdtm))
                            to-value)))
             (list from-est to-est full-year?))
           #f))
@@ -646,12 +645,12 @@
                      (+ 1 level)
                      level)))
         (map (lambda (spl) 
-               (let* ((date (gnc-transaction-get-date-posted
+               (let* ((date (xaccTransGetDate
                              (xaccSplitGetParent spl)))
                       (amount (xaccSplitGetAmount spl))
                       ;; TurboTax 1999 and 2000 ignore dates after Dec 31
                       (fudge-date (if (and full-year? 
-                                           (gnc:timepair-lt to-value date))
+                                           (< to-value date))
                                       to-value
                                       date)))
                  (if tax-mode?
@@ -765,13 +764,13 @@
             ;; Ignore
             '())))
 
-    (let ((from-date  (strftime "%d.%m.%Y" (gnc-localtime (car from-value))))
-          (to-date    (strftime "%d.%m.%Y" (gnc-localtime (car to-value))))
-	  (to-year    (strftime "%Y" (gnc-localtime (car to-value))))
+    (let ((from-date  (strftime "%d.%m.%Y" (gnc-localtime from-value)))
+          (to-date    (strftime "%d.%m.%Y" (gnc-localtime to-value)))
+	  (to-year    (strftime "%Y" (gnc-localtime to-value)))
           (today-date (strftime "%d.%m.%Y" 
                                 (gnc-localtime 
-                                 (car (timespecCanonicalDayTime
-                                       (cons (current-time) 0))))))
+                                 (time64CanonicalDayTime
+                                       (current-time)))))
 	  (tax-nr (or
                    (gnc:option-get-value book gnc:*tax-label* gnc:*tax-nr-label*)
 		   ""))

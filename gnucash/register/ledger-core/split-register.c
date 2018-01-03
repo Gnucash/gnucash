@@ -21,6 +21,7 @@
  * split-register.c
  * author Copyright (c) 1998-2000 Linas Vepstas <linas@linas.org>
  * author Copyright (c) 2000-2001 Dave Peticolas <dave@krondo.com>
+ * author Copyright (c) 2017 Aaron Laws
  */
 #include <config.h>
 
@@ -1382,12 +1383,10 @@ gnc_split_register_save_to_scm (SplitRegister *reg,
     if (gnc_table_layout_get_cell_changed (reg->table->layout, DATE_CELL, TRUE))
     {
         BasicCell *cell;
-        Timespec ts;
-
+        time64 time;
         cell = gnc_table_layout_get_cell (reg->table->layout, DATE_CELL);
-        gnc_date_cell_get_date ((DateCell *) cell, &ts);
-
-        gnc_trans_scm_set_date(trans_scm, &ts);
+        gnc_date_cell_get_date ((DateCell *) cell, &time);
+        gnc_trans_scm_set_date(trans_scm, time);
     }
 
     if (gnc_table_layout_get_cell_changed (reg->table->layout, NUM_CELL, TRUE))
@@ -2076,9 +2075,10 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value,
     GNCPrice *price;
     gnc_numeric price_value;
     int scu = gnc_commodity_get_fraction(curr);
-    Timespec ts;
+    time64 time;
     BasicCell *cell = gnc_table_layout_get_cell (reg->table->layout, DATE_CELL);
     gboolean swap = FALSE;
+    Timespec ts;
 
     /* Only record the price for account types that don't have a
      * "rate" cell. They'll get handled later by
@@ -2086,7 +2086,9 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value,
      */
     if (gnc_split_reg_has_rate_cell (reg->type))
         return;
-    gnc_date_cell_get_date ((DateCell*)cell, &ts);
+    gnc_date_cell_get_date ((DateCell*)cell, &time);
+    ts.tv_sec = time;
+    ts.tv_nsec = 0;
     price = gnc_pricedb_lookup_day (pricedb, comm, curr, ts);
     if (gnc_commodity_equiv (comm, gnc_price_get_currency (price)))
             swap = TRUE;

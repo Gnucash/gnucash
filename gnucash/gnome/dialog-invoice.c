@@ -308,7 +308,7 @@ static void gnc_ui_to_invoice (InvoiceWindow *iw, GncInvoice *invoice)
     GtkTextBuffer* text_buffer;
     GtkTextIter start, end;
     gchar *text;
-    Timespec ts;
+    time64 time;
     gboolean is_credit_note = gncInvoiceGetIsCreditNote (invoice);
 
     if (iw->dialog_type == VIEW_INVOICE)
@@ -341,8 +341,8 @@ static void gnc_ui_to_invoice (InvoiceWindow *iw, GncInvoice *invoice)
                                 (GTK_EDITABLE (iw->billing_id_entry), 0, -1));
         gncInvoiceSetTerms (invoice, iw->terms);
 
-        ts = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (iw->opened_date));
-        gncInvoiceSetDateOpened (invoice, ts);
+        time = gnc_date_edit_get_date (GNC_DATE_EDIT (iw->opened_date));
+        gncInvoiceSetDateOpened (invoice, time);
 
         gnc_owner_get_owner (iw->owner_choice, &(iw->owner));
         if (iw->job_choice)
@@ -724,14 +724,12 @@ gnc_dialog_post_invoice(InvoiceWindow *iw, char *message,
     if (entries && ((gncInvoiceGetOwnerType (invoice) == GNC_OWNER_VENDOR) ||
                     (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_EMPLOYEE)))
     {
-        *postdate = gncEntryGetDate ((GncEntry*)entries->data);
+        postdate->tv_sec = gncEntryGetDate ((GncEntry*)entries->data);
         for (entries_iter = entries; entries_iter != NULL; entries_iter = g_list_next(entries_iter))
         {
-            Timespec entrydate;
-
-            entrydate = gncEntryGetDate ((GncEntry*)entries_iter->data);
-            if (timespec_cmp(&entrydate, postdate) > 0)
-                *postdate = entrydate;
+            time64 entrydate = gncEntryGetDate ((GncEntry*)entries_iter->data);
+            if (entrydate > postdate->tv_sec)
+                postdate->tv_sec = entrydate;
         }
     }
 
@@ -950,7 +948,7 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
     else
         auto_pay = gnc_prefs_get_bool (GNC_PREFS_GROUP_BILL, GNC_PREF_AUTO_PAY);
 
-    gncInvoicePostToAccount (invoice, acc, &postdate, &ddue, memo, accumulate, auto_pay);
+    gncInvoicePostToAccount (invoice, acc, postdate.tv_sec, ddue.tv_sec, memo, accumulate, auto_pay);
 
 cleanup:
     gncInvoiceCommitEdit (invoice);
@@ -1749,8 +1747,8 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
         GtkTextBuffer* text_buffer;
         const char *string;
         gchar * tmp_string;
-        Timespec ts, ts_zero = {0, 0};
         Account *acct;
+        time64 time;
 
         gtk_entry_set_text (GTK_ENTRY (iw->id_entry), gncInvoiceGetID (invoice));
 
@@ -1765,15 +1763,15 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
             gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (iw->active_check),
                                           gncInvoiceGetActive (invoice));
 
-        ts = gncInvoiceGetDateOpened (invoice);
-        if (timespec_equal (&ts, &ts_zero))
+        time = gncInvoiceGetDateOpened (invoice);
+        if (!time)
         {
             gnc_date_edit_set_time (GNC_DATE_EDIT (iw->opened_date),
                                     gnc_time (NULL));
         }
         else
         {
-            gnc_date_edit_set_time_ts (GNC_DATE_EDIT (iw->opened_date), ts);
+            gnc_date_edit_set_time (GNC_DATE_EDIT (iw->opened_date), time);
         }
 
         /* fill in the terms text */
@@ -1818,8 +1816,8 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
              */
             can_unpost = TRUE;
 
-            ts = gncInvoiceGetDatePosted (invoice);
-            gnc_date_edit_set_time_ts (GNC_DATE_EDIT (iw->posted_date), ts);
+            time = gncInvoiceGetDatePosted (invoice);
+            gnc_date_edit_set_time (GNC_DATE_EDIT (iw->posted_date), time);
 
             tmp_string = gnc_account_get_full_name (acct);
             gtk_entry_set_text (GTK_ENTRY (acct_entry), tmp_string);

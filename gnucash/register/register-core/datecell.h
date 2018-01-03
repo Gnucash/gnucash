@@ -72,6 +72,7 @@
  * HISTORY:
  * Copyright (c) 1998, 1999, 2000 Linas Vepstas <linas@linas.org>
  * Copyright (c) 2000 Dave Peticolas
+ * Copyright (c) 2017 Aaron Laws
  */
 
 #ifndef DATE_CELL_H
@@ -121,9 +122,9 @@ void        gnc_date_cell_commit (DateCell *cell);
 
 /** Set a Timespec to the value in the DateCell.
  * @param cell The DateCell
- * @param ts A Timespec* to which the function will write the date.
+ * @param time A time64* to which the function will write the time.
  */
-void        gnc_date_cell_get_date (DateCell *cell, Timespec *ts);
+void        gnc_date_cell_get_date (DateCell *cell, time64 *time);
 
 /**  Timespec to the value in the DateCell.
  * @param cell The DateCell

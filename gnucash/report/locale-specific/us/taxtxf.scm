@@ -120,31 +120,29 @@
 
 (define selected-accounts-sorted-by-form-line-acct (list))
 
-(define today (timespecCanonicalDayTime (cons (current-time) 0)))
+(define today (time64CanonicalDayTime (current-time)))
 
 (define bdtm
-  (let ((result (gnc:timepair->date today)))
+  (let ((result (gnc-localtime today)))
     (set-tm:mday result 16)             ; 16
     (set-tm:mon result 3)               ; Apr
     (set-tm:isdst result -1)
     result))
 
-(define tax-day (cons (gnc-mktime bdtm) 0))
+(define tax-day (gnc-mktime bdtm))
 
-(define after-tax-day (gnc:timepair-later tax-day today))
+(define after-tax-day (< tax-day today))
 
 (define (make-split-list account split-filter-pred)
   (filter split-filter-pred (xaccAccountGetSplitList account)))
 
 ;; returns a predicate that returns true only if a split is
 ;; between early-date and late-date
-(define (split-report-make-date-filter-predicate begin-date-tp end-date-tp)
+(define (split-report-make-date-filter-predicate begin-date-t64 end-date-t64)
   (lambda (split)
-    (let ((tp
-           (gnc-transaction-get-date-posted
-            (xaccSplitGetParent split))))
-      (and (gnc:timepair-ge-date tp begin-date-tp)
-           (gnc:timepair-le-date tp end-date-tp)))))
+    (let ((t64 (xaccTransGetDate (xaccSplitGetParent split))))
+      (and (>= t64 begin-date-t64)
+           (<= t64 end-date-t64)))))
 
 ;; This is nearly identical to, and could be shared with
 ;; display-report-list-item in report.scm. This adds warn-msg parameter
@@ -549,10 +547,10 @@
     (if (and txf?
              (not (gnc-numeric-zero-p account-value)))
         (let* ((date-str (if date
-                             (strftime "%m/%d/%Y" (gnc-localtime (car date)))
+                             (strftime "%m/%d/%Y" (gnc-localtime date))
                              #f))
                (x-date-str (if x-date
-                               (strftime "%m/%d/%Y" (gnc-localtime (car x-date)))
+                               (strftime "%m/%d/%Y" (gnc-localtime x-date))
                                #f))
                ;; Only formats 1,3,4,6 implemented now! Others are treated as 1.
                (format (get-acct-txf-info 'format type code))
@@ -721,11 +719,11 @@
                               (begin ;; do so
                                 (set! missing-pricedb-entry? #f)
                                 (set! pricedb-lookup-price
-                                        (let ((price (gnc-pricedb-lookup-nearest-in-time
+                                        (let ((price (gnc-pricedb-lookup-nearest-in-time64
                                           pricedb
                                           account-commodity
                                           USD-currency
-                                          (timespecCanonicalDayTime
+                                          (time64CanonicalDayTime
                                            lookup-date))))
                                           (if (gnc-commodity-equiv account-commodity (gnc-price-get-currency price))
                                               (set! price (gnc-price-invert price)))
@@ -734,7 +732,7 @@
                                         (gnc-price-get-value
                                                           pricedb-lookup-price))
                                 (set! pricedb-lookup-price-time
-                                        (gnc-price-get-time
+                                        (gnc-price-get-time64
                                                           pricedb-lookup-price))
                                 (gnc-pricedb-convert-balance-nearest-price
                                         pricedb
@@ -746,7 +744,7 @@
                      ;; Use midday as the transaction time so it matches a price
                      ;; on the same day.  Otherwise it uses midnight which will
 	                 ;; likely match a price on the previous day
-                                        (timespecCanonicalDayTime lookup-date))
+                                        (time64CanonicalDayTime lookup-date))
                               )
                               (begin ;; otherwise set flag and set to zero
                                 (set! missing-pricedb-entry? #t)
@@ -822,7 +820,7 @@
                                (string-append
                                  " on "
                                  (strftime "%Y-%b-%d"
-                                    (gnc-localtime (car pricedb-lookup-price-time)))
+                                    (gnc-localtime pricedb-lookup-price-time))
                                  ")"
                                )
                                ""))
@@ -1231,7 +1229,7 @@
                                            account-commodity
                                            (if (equal? currency-conversion-date
                                                              'conv-to-tran-date)
-                                               (gnc:timepair-previous-day
+                                               (gnc:time64-previous-day
                                                                      from-value)
                                                to-value)
                                            account-commodity ;; force price lookup
@@ -1261,9 +1259,8 @@
                             ""
                             (string-append "Balance on "
                                          (strftime "%Y-%b-%d"
-                                            (gnc-localtime (car
-                                               (gnc:timepair-previous-day
-                                                                  from-value))))
+                                            (gnc-localtime (gnc:time64-previous-day
+                                                                  from-value)))
                                          (if (string=? curr-conv-note "")
                                              ":"
                                              (string-append  " " curr-conv-note)
@@ -1345,11 +1342,11 @@
       (set! output
         (map (lambda (split)
            (let* ((parent (xaccSplitGetParent split))
-                  (trans-date (gnc-transaction-get-date-posted parent))
+                  (trans-date (xaccTransGetDate parent))
                   ;; TurboTax 1999 and 2000 ignore dates after Dec 31
                   (fudge-date (if splits-period
                                   (if (and full-year?
-                                           (gnc:timepair-lt to-value trans-date))
+                                           (< to-value trans-date))
                                       to-value
                                       trans-date)
                                   trans-date))
@@ -1495,7 +1492,7 @@
                             (gnc:make-html-table-cell/markup
                                          "date-cell"
                                          (strftime "%Y-%b-%d"
-                                                 (gnc-localtime (car trans-date)))))
+                                                 (gnc-localtime trans-date))))
                        (gnc:html-table-set-style! num-table "table" 
                                           'attribute (list "border" "0")
                                           'attribute (list "cellspacing" "0")
@@ -1686,14 +1683,14 @@
                                     #f
                                     (if (txf-beg-bal-only? tax-code)
                                         (string-append "Balance on "
-                                           (strftime "%Y-%b-%d" (gnc-localtime (car
-                                                (gnc:timepair-previous-day
-                                                                  from-value))))
+                                           (strftime "%Y-%b-%d" (gnc-localtime 
+                                                (gnc:time64-previous-day
+                                                                  from-value)))
                                            " For "
                                         )
                                         (string-append "Balance on "
                                            (strftime "%Y-%b-%d"
-                                                     (gnc-localtime (car to-value)))
+                                                     (gnc-localtime to-value))
                                            " For "
                                         )
                                     )
@@ -2042,7 +2039,7 @@
   (gnc:report-starting reportname)
   (let* ((from-value (gnc:date-option-absolute-time
                       (get-option gnc:pagename-general "From")))
-         (to-value (gnc:timepair-end-day-time
+         (to-value (gnc:time64-end-day-time
                     (gnc:date-option-absolute-time
                      (get-option gnc:pagename-general "To"))))
          (alt-period (get-option gnc:pagename-general "Alternate Period"))
@@ -2087,8 +2084,8 @@
          (work-done 0)
 
          ;; Alternate dates are relative to from-date
-         (from-date (gnc:timepair->date from-value))
-         (from-value (gnc:timepair-start-day-time
+         (from-date (gnc-localtime from-value))
+         (from-value (gnc:time64-start-day-time
                       (let ((bdtm from-date))
                         (if (member alt-period
                                     '(last-year 1st-last 2nd-last
@@ -2118,9 +2115,9 @@
                               ((4th-est 4th-last) ; Oct 1
                                (set-tm:mon bdtm 9))))
                         (set-tm:isdst bdtm -1)
-                        (cons (gnc-mktime bdtm) 0))))
+                        (gnc-mktime bdtm))))
 
-         (to-value (gnc:timepair-end-day-time
+         (to-value (gnc:time64-end-day-time
                     (let ((bdtm from-date))
                       (if (member alt-period
                                   '(last-year 1st-last 2nd-last
@@ -2146,7 +2143,7 @@
                              (set-tm:mon bdtm 7))
                             ((4th-est 4th-last last-year) ; Dec 31
                              (set-tm:mon bdtm 11))
-                            (else (set! bdtm (gnc:timepair->date to-value))))
+                            (else (set! bdtm (gnc-localtime to-value))))
                           ;; Tax quaters equal Real quarters
                           (case alt-period
                             ((1st-est 1st-last) ; Mar 31
@@ -2160,9 +2157,9 @@
                             ((4th-est 4th-last last-year) ; Dec 31
                              (set-tm:mon bdtm 11))
                             (else
-                             (set! bdtm (gnc:timepair->date to-value)))))
+                             (set! bdtm (gnc-localtime to-value)))))
                       (set-tm:isdst bdtm -1)
-                      (cons (gnc-mktime bdtm) 0))))
+                      (gnc-mktime bdtm))))
 
          (form-line-acct-header-printed? #f)
          (form-schedule-header-printed? #f)
@@ -2179,8 +2176,8 @@
                (txf-special-date? (gnc:account-get-txf-code account)))
           (let*
               ((full-year?
-                (let ((bdto (gnc-localtime (car to-value)))
-                      (bdfrom (gnc-localtime (car from-value))))
+                (let ((bdto (gnc-localtime to-value))
+                      (bdfrom (gnc-localtime from-value)))
                   (and (equal? (tm:year bdto) (tm:year bdfrom))
                        (equal? (tm:mon bdfrom) 0)
                        (equal? (tm:mday bdfrom) 1)
@@ -2189,23 +2186,23 @@
               ;; Adjust dates so we get the final Estimated Tax
               ;; paymnent from the right year
                (from-est (if full-year?
-                             (let ((bdtm (gnc:timepair->date
-                                          (timespecCanonicalDayTime
+                             (let ((bdtm (gnc-localtime
+                                          (time64CanonicalDayTime
                                            from-value))))
                                (set-tm:mday bdtm 1) ; 01
                                (set-tm:mon bdtm 2) ; Mar
                                (set-tm:isdst bdtm -1)
-                               (cons (gnc-mktime bdtm) 0))
+                               (gnc-mktime bdtm))
                              from-value))
                (to-est (if full-year?
-                           (let* ((bdtm (gnc:timepair->date
-                                         (timespecCanonicalDayTime
+                           (let* ((bdtm (gnc-localtime
+                                         (time64CanonicalDayTime
                                           from-value))))
                              (set-tm:mday bdtm 28) ; 28
                              (set-tm:mon bdtm 1) ; Feb
                              (set-tm:year bdtm (+ (tm:year bdtm) 1))
                              (set-tm:isdst bdtm -1)
-                             (cons (gnc-mktime bdtm) 0))
+                             (gnc-mktime bdtm))
                            to-value)))
             (list from-est to-est full-year?))
           #f))
@@ -2253,7 +2250,7 @@
                                          (or (eq? account-type ACCT-TYPE-INCOME)
                                            (eq? account-type ACCT-TYPE-EXPENSE)))
                              (gnc:account-get-comm-balance-at-date account
-                                      (gnc:timepair-previous-day from-value) #f)
+                                      (gnc:time64-previous-day from-value) #f)
                              #f))
               (acct-end-bal-collector (if (not
                                          (or (eq? account-type ACCT-TYPE-INCOME)
@@ -2393,13 +2390,13 @@
           ) ;; end of let*
     )
 
-    (let ((from-date  (strftime "%Y-%b-%d" (gnc-localtime (car from-value))))
-          (to-date    (strftime "%Y-%b-%d" (gnc-localtime (car to-value))))
+    (let ((from-date  (strftime "%Y-%b-%d" (gnc-localtime from-value)))
+          (to-date    (strftime "%Y-%b-%d" (gnc-localtime to-value)))
           (today-date (strftime "D%m/%d/%Y"
                                 (gnc-localtime
-                                 (car (timespecCanonicalDayTime
-                                       (cons (current-time) 0))))))
-          (tax-year   (strftime "%Y" (gnc-localtime (car from-value))))
+                                 (time64CanonicalDayTime
+                                  (current-time)))))
+          (tax-year   (strftime "%Y" (gnc-localtime from-value)))
           (tax-entity-type (gnc-get-current-book-tax-type))
           (tax-entity-type-valid? #f)
           (prior-form-schedule "")

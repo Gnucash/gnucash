@@ -101,10 +101,10 @@ GncInvoice *gncInvoiceCopy (const GncInvoice *other_invoice);
 void gncInvoiceSetID (GncInvoice *invoice, const char *id);
 void gncInvoiceSetOwner (GncInvoice *invoice, GncOwner *owner);
 /** Set the DateOpened using a GDate argument. (Note: Internally this stores
-the date in a Timespec as created through timespecCanonicalDayTime()). */
+the date in a time64 as created through timespecCanonicalDayTime()). */
 void gncInvoiceSetDateOpenedGDate (GncInvoice *invoice, const GDate *date);
-void gncInvoiceSetDateOpened (GncInvoice *invoice, Timespec date);
-void gncInvoiceSetDatePosted (GncInvoice *invoice, Timespec date);
+void gncInvoiceSetDateOpened (GncInvoice *invoice, time64 date);
+void gncInvoiceSetDatePosted (GncInvoice *invoice, time64 date);
 void gncInvoiceSetTerms (GncInvoice *invoice, GncBillTerm *terms);
 void gncInvoiceSetBillingID (GncInvoice *invoice, const char *billing_id);
 void gncInvoiceSetNotes (GncInvoice *invoice, const char *notes);
@@ -137,9 +137,9 @@ void gncInvoiceRemoveEntries (GncInvoice *invoice);
  @{ */
 const char * gncInvoiceGetID (const GncInvoice *invoice);
 const GncOwner * gncInvoiceGetOwner (const GncInvoice *invoice);
-Timespec gncInvoiceGetDateOpened (const GncInvoice *invoice);
-Timespec gncInvoiceGetDatePosted (const GncInvoice *invoice);
-Timespec gncInvoiceGetDateDue (const GncInvoice *invoice);
+time64 gncInvoiceGetDateOpened (const GncInvoice *invoice);
+time64 gncInvoiceGetDatePosted (const GncInvoice *invoice);
+time64 gncInvoiceGetDateDue (const GncInvoice *invoice);
 GncBillTerm * gncInvoiceGetTerms (const GncInvoice *invoice);
 const char * gncInvoiceGetBillingID (const GncInvoice *invoice);
 const char * gncInvoiceGetNotes (const GncInvoice *invoice);
@@ -209,7 +209,7 @@ GHashTable *gncInvoiceGetForeignCurrencies (const GncInvoice *invoice);
  */
 Transaction *
 gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
-                         Timespec *posted_date, Timespec *due_date,
+                         time64 posted_date, time64 due_date,
                          const char *memo, gboolean accumulatesplits,
                          gboolean autopay);
 
@@ -250,7 +250,7 @@ gncInvoiceAutoApplyPayments (GncInvoice *invoice);
 void
 gncInvoiceApplyPayment (const GncInvoice *invoice, Transaction *txn,
                         Account *xfer_acc, gnc_numeric amount,
-                        gnc_numeric exch, Timespec date,
+                        gnc_numeric exch, time64 date,
                         const char *memo, const char *num);
 
 

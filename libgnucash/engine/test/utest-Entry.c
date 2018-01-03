@@ -63,7 +63,7 @@ teardown( Fixture *fixture, gconstpointer pData )
 static void
 test_entry_basics ( Fixture *fixture, gconstpointer pData )
 {
-    Timespec ts1 = timespec_now(), ts2;
+    time64 ts1 = gnc_time(NULL), ts2;
     const char *desc = "Test description with éà unicode chars";
     const char *action = "Test action with éà unicode chars";
     const char *note = "Test note with éà unicode chars";
@@ -77,11 +77,11 @@ test_entry_basics ( Fixture *fixture, gconstpointer pData )
     g_test_message( "  Date" );
     gncEntrySetDate (entry, ts1);
     ts2 = gncEntryGetDate (entry);
-    g_assert(timespec_equal (&ts2, &ts1));
+    g_assert(ts2 == ts1);
     g_test_message( "  DateEntered" );
     gncEntrySetDateEntered (entry, ts1);
     ts2 = gncEntryGetDateEntered (entry);
-    g_assert(timespec_equal (&ts2, &ts1));
+    g_assert(ts2 == ts1);
     g_test_message( "  Description" );
     gncEntrySetDescription (entry, desc);
     g_assert(g_strcmp0 (gncEntryGetDescription (entry), desc) == 0);

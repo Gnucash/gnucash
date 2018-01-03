@@ -704,7 +704,7 @@ gint
 gncOwnerLotsSortFunc (GNCLot *lotA, GNCLot *lotB)
 {
     GncInvoice *ia, *ib;
-    Timespec da, db;
+    time64 da, db;
 
     ia = gncInvoiceGetInvoiceFromLot (lotA);
     ib = gncInvoiceGetInvoiceFromLot (lotB);
@@ -712,14 +712,14 @@ gncOwnerLotsSortFunc (GNCLot *lotA, GNCLot *lotB)
     if (ia)
         da = gncInvoiceGetDateDue (ia);
     else
-        da = xaccTransRetDatePostedTS (xaccSplitGetParent (gnc_lot_get_earliest_split (lotA)));
+        da = xaccTransRetDatePosted (xaccSplitGetParent (gnc_lot_get_earliest_split (lotA)));
 
     if (ib)
         db = gncInvoiceGetDateDue (ib);
     else
-        db = xaccTransRetDatePostedTS (xaccSplitGetParent (gnc_lot_get_earliest_split (lotB)));
+        db = xaccTransRetDatePosted (xaccSplitGetParent (gnc_lot_get_earliest_split (lotB)));
 
-    return timespec_cmp (&da, &db);
+    return (da > db) - (da < db);
 }
 
 GNCLot *
@@ -814,7 +814,7 @@ gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction **preset_txn,
         /* set per book option */
         xaccTransSetCurrency (txn, commodity);
         xaccTransSetDateEnteredSecs (txn, gnc_time (NULL));
-        xaccTransSetDatePostedTS (txn, &date);
+        xaccTransSetDatePostedSecs (txn, date.tv_sec);
 
 
         /* The split for the transfer account */
@@ -1100,7 +1100,7 @@ gncOwnerCreateLotLink (GNCLot *from_lot, GNCLot *to_lot, const GncOwner *owner)
     const gchar *name = gncOwnerGetName (gncOwnerGetEndOwner (owner));
     Transaction *ll_txn = NULL;
     gnc_numeric from_lot_bal, to_lot_bal;
-    Timespec from_ts, to_ts;
+    time64 from_time, to_time;
     time64 time_posted;
     Split *split;
 
@@ -1110,12 +1110,12 @@ gncOwnerCreateLotLink (GNCLot *from_lot, GNCLot *to_lot, const GncOwner *owner)
         return;
 
     /* Determine transaction date based on lot splits */
-    from_ts = xaccTransRetDatePostedTS (xaccSplitGetParent (gnc_lot_get_latest_split (from_lot)));
-    to_ts   = xaccTransRetDatePostedTS (xaccSplitGetParent (gnc_lot_get_latest_split (to_lot)));
-    if (timespecToTime64 (from_ts) >= timespecToTime64 (to_ts))
-        time_posted = timespecToTime64 (from_ts);
+    from_time = xaccTransRetDatePosted (xaccSplitGetParent (gnc_lot_get_latest_split (from_lot)));
+    to_time   = xaccTransRetDatePosted (xaccSplitGetParent (gnc_lot_get_latest_split (to_lot)));
+    if (from_time >= to_time)
+        time_posted = from_time;
     else
-        time_posted = timespecToTime64 (to_ts);
+        time_posted = to_time;
 
     /* Figure out how much we can offset between the lots */
     from_lot_bal = gnc_lot_get_balance (from_lot);
@@ -1137,31 +1137,22 @@ gncOwnerCreateLotLink (GNCLot *from_lot, GNCLot *to_lot, const GncOwner *owner)
     if (!ll_txn)
     {
         /* No pre-existing lot link. Create one. */
-        Timespec ts;
-
-        timespecFromTime64 (&ts, time_posted);
-
         ll_txn = xaccMallocTransaction (gnc_lot_get_book (from_lot));
         xaccTransBeginEdit (ll_txn);
-
         xaccTransSetDescription (ll_txn, name ? name : "(Unknown)");
         xaccTransSetCurrency (ll_txn, xaccAccountGetCommodity(acct));
         xaccTransSetDateEnteredSecs (ll_txn, gnc_time (NULL));
-        xaccTransSetDatePostedTS (ll_txn, &ts);
+        xaccTransSetDatePostedSecs (ll_txn, time_posted);
         xaccTransSetTxnType (ll_txn, TXN_TYPE_LINK);
     }
     else
     {
-        Timespec ts = xaccTransRetDatePostedTS (ll_txn);
+        time64 time = xaccTransRetDatePosted (ll_txn);
         xaccTransBeginEdit (ll_txn);
 
         /* Maybe we need to update the post date of the transaction ? */
-        if (time_posted > timespecToTime64 (ts))
-        {
-            timespecFromTime64 (&ts, time_posted);
-            xaccTransSetDatePostedTS (ll_txn, &ts);
-
-        }
+        if (time_posted > time)
+            xaccTransSetDatePostedSecs (ll_txn, time_posted);
     }
 
     /* Create a split for the from_lot */

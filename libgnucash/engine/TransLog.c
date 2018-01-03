@@ -227,7 +227,6 @@ xaccTransWriteLog (Transaction *trans, char flag)
     char split_guid_str[GUID_ENCODING_LENGTH + 1];
     const char *trans_notes;
     char dnow[100], dent[100], dpost[100], drecn[100];
-    Timespec ts;
 
     if (!gen_logs)
     {
@@ -236,21 +235,16 @@ xaccTransWriteLog (Transaction *trans, char flag)
     }
     if (!trans_log) return;
 
-    timespecFromTime64(&ts, gnc_time (NULL));
-    gnc_timespec_to_iso8601_buff (ts, dnow);
-
-    timespecFromTime64(&ts, trans->date_entered.tv_sec);
-    gnc_timespec_to_iso8601_buff (ts, dent);
-
-    timespecFromTime64(&ts, trans->date_posted.tv_sec);
-    gnc_timespec_to_iso8601_buff (ts, dpost);
-
+    gnc_time64_to_iso8601_buff (gnc_time(NULL), dnow);
+    gnc_time64_to_iso8601_buff (trans->date_entered, dent);
+    gnc_time64_to_iso8601_buff (trans->date_posted, dpost);
     guid_to_string_buff (xaccTransGetGUID(trans), trans_guid_str);
     trans_notes = xaccTransGetNotes(trans);
     fprintf (trans_log, "===== START\n");
 
     for (node = trans->splits; node; node = node->next)
     {
+        Timespec ts;
         Split *split = node->data;
         const char * accname = "";
         char acc_guid_str[GUID_ENCODING_LENGTH + 1];

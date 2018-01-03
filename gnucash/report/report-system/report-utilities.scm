@@ -489,7 +489,7 @@
 
       (qof-query-set-book query (gnc-get-current-book))
       (xaccQueryAddSingleAccountMatch query account QOF-QUERY-AND)
-      (xaccQueryAddDateMatchTS query #f date #t date QOF-QUERY-AND)
+      (xaccQueryAddDateMatchTT query #f date #t date QOF-QUERY-AND)
       (qof-query-set-sort-order query
 				(list SPLIT-TRANS TRANS-DATE-POSTED)
 				(list QUERY-DEFAULT-SORT)
@@ -529,9 +529,9 @@
     ;; Build a query to find all splits between the indicated dates.
     (qof-query-set-book query (gnc-get-current-book))
     (xaccQueryAddSingleAccountMatch query account QOF-QUERY-AND)
-    (xaccQueryAddDateMatchTS query
-                             (and start-date #t) start-date
-                             (and end-date #t) end-date
+    (xaccQueryAddDateMatchTT query
+                             (and start-date #t) (if start-date start-date 0)
+                             (and end-date #t) (if end-date end-date 0)
                              QOF-QUERY-AND)
 
     ;; Get the query results.
@@ -718,14 +718,13 @@
 ;; the type is an alist '((str "match me") (cased #f) (regexp #f))
 ;; If type is #f, sums all non-closing splits in the interval
 (define (gnc:account-get-trans-type-balance-interval
-	 account-list type start-date-tp end-date-tp)
+	 account-list type start-date end-date)
   (let* ((total (gnc:make-commodity-collector)))
     (map (lambda (split)
            (let* ((shares (xaccSplitGetAmount split))
                   (acct-comm (xaccAccountGetCommodity
                               (xaccSplitGetAccount split)))
-                  (txn (xaccSplitGetParent split))
-                  )
+                  (txn (xaccSplitGetParent split)))
              (if type 
                 (gnc-commodity-collector-add total acct-comm shares)
                 (if (not (xaccTransGetIsClosingTxn txn))
@@ -733,7 +732,7 @@
              )))
            )
 	 (gnc:account-get-trans-type-splits-interval
-          account-list type start-date-tp end-date-tp)
+          account-list type start-date end-date)
 	 )
     total
     )
@@ -743,7 +742,7 @@
 ;; the type is an alist '((str "match me") (cased #f) (regexp #f))
 ;; If type is #f, sums all splits in the interval (even closing splits)
 (define (gnc:account-get-trans-type-balance-interval-with-closing
-	 account-list type start-date-tp end-date-tp)
+	 account-list type start-date end-date)
   (let* ((total (gnc:make-commodity-collector)))
     (map (lambda (split)
            (let* ((shares (xaccSplitGetAmount split))
@@ -754,7 +753,7 @@
              )
            )
 	 (gnc:account-get-trans-type-splits-interval
-          account-list type start-date-tp end-date-tp)
+          account-list type start-date end-date)
 	 )
     total
     )
@@ -763,7 +762,7 @@
 ;; Filters the splits from the source to the target accounts
 ;; returns a commodity collector
 ;; does NOT do currency exchanges
-(define (gnc:account-get-total-flow direction target-account-list from-date-tp to-date-tp)
+(define (gnc:account-get-total-flow direction target-account-list from-date to-date)
 
   (let* (
           (total-flow (gnc:make-commodity-collector))
@@ -784,11 +783,11 @@
             ;; ----------------------------------------------------
             (let* (
                     (transaction (xaccSplitGetParent target-account-split))
-                    (transaction-date-posted (gnc-transaction-get-date-posted transaction))
+                    (transaction-date-posted (xaccTransGetDate transaction))
                   )
               (if (and
-                    (gnc:timepair-le transaction-date-posted to-date-tp)
-                    (gnc:timepair-ge transaction-date-posted from-date-tp)
+                    (<= transaction-date-posted to-date)
+                    (>= transaction-date-posted from-date)
                   )
                 ;; -------------------------------------------------------------
                 ;; get the split information
@@ -830,7 +829,7 @@
 ;; similar, but only counts transactions with non-negative shares and
 ;; *ignores* any closing entries
 (define (gnc:account-get-pos-trans-total-interval
-	 account-list type start-date-tp end-date-tp)
+	 account-list type start-date end-date)
   (let* ((str-query (qof-query-create-for-splits))
 	 (sign-query (qof-query-create-for-splits))
 	 (total-query #f)
@@ -850,14 +849,16 @@
     (gnc:query-set-match-non-voids-only! sign-query (gnc-get-current-book))
     (xaccQueryAddAccountMatch str-query account-list QOF-GUID-MATCH-ANY QOF-QUERY-AND)
     (xaccQueryAddAccountMatch sign-query account-list QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-    (xaccQueryAddDateMatchTS
+    (xaccQueryAddDateMatchTT
      str-query
-     (and start-date-tp #t) start-date-tp
-     (and end-date-tp #t) end-date-tp QOF-QUERY-AND)
-    (xaccQueryAddDateMatchTS
+     (and start-date #t) (if start-date start-date 0)
+     (and end-date #t) (if end-date end-date 0)
+     QOF-QUERY-AND)
+    (xaccQueryAddDateMatchTT
      sign-query
-     (and start-date-tp #t) start-date-tp
-     (and end-date-tp #t) end-date-tp QOF-QUERY-AND)
+     (and start-date #t) (if start-date start-date 0)
+     (and end-date #t) (if end-date end-date 0)
+     QOF-QUERY-AND)
     (xaccQueryAddDescriptionMatch
      str-query matchstr case-sens regexp QOF-COMPARE-CONTAINS QOF-QUERY-AND)
     (set! total-query
@@ -885,9 +886,7 @@
          splits
          )
     (qof-query-destroy total-query)
-    total
-    )
-  )
+    total))
 
 ;; Return the splits that match an account list, date range, and (optionally) type
 ;; where type is defined as an alist like:
@@ -898,7 +897,7 @@
 ;; only non-closing transactions will be returned, and if it is omitted then both
 ;; kinds of transactions will be returned.
 (define (gnc:account-get-trans-type-splits-interval
-         account-list type start-date-tp end-date-tp)
+         account-list type start-date end-date)
   (if (null? account-list)
       ;; No accounts given. Return empty list.
       '()
@@ -917,10 +916,11 @@
     (qof-query-set-book query (gnc-get-current-book))
     (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
     (xaccQueryAddAccountMatch query account-list QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-    (xaccQueryAddDateMatchTS
+    (xaccQueryAddDateMatchTT
      query
-     (and start-date-tp #t) start-date-tp
-     (and end-date-tp #t) end-date-tp QOF-QUERY-AND)
+     (and start-date #t) (if start-date start-date 0)
+     (and end-date #t) (if end-date end-date 0)
+     QOF-QUERY-AND)
     (if (or matchstr closing) 
          (begin
            (set! query2 (qof-query-create-for-splits))

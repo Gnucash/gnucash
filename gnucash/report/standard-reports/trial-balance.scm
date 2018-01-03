@@ -302,9 +302,9 @@
          (start-date-printable (gnc:date-option-absolute-time
 				(get-option gnc:pagename-general
 					    optname-start-date)))
-         (start-date-tp (gnc:timepair-end-day-time
-			 (gnc:timepair-previous-day start-date-printable)))
-         (end-date-tp (gnc:timepair-end-day-time 
+         (start-date (gnc:time64-end-day-time
+			 (gnc:time64-previous-day start-date-printable)))
+         (end-date (gnc:time64-end-day-time 
 		       (gnc:date-option-absolute-time
 			(get-option gnc:pagename-general
 				    optname-end-date))))
@@ -384,13 +384,13 @@
 	 (doc (gnc:make-html-document))
          ;; exchange rates calculation parameters
 	 (exchange-fn
-	  (gnc:case-exchange-fn price-source report-commodity end-date-tp))
+	  (gnc:case-exchange-fn price-source report-commodity end-date))
 	 (terse-period? #t)
 	 (period-for (if terse-period?
 			 (string-append " " (_ "for Period"))
 			 (sprintf #f (string-append ", " (_ "%s to %s"))
-				  (gnc-print-date start-date-printable)
-				  (gnc-print-date end-date-tp))
+				  (qof-print-date start-date-printable)
+				  (qof-print-date end-date))
 			 ))
 	 )
     
@@ -398,12 +398,12 @@
      doc (if (equal? report-variant 'current)
 	     (sprintf #f (string-append "%s %s %s")
 		      company-name report-title
-		      (gnc-print-date end-date-tp))
+		      (qof-print-date end-date))
 	     (sprintf #f (string-append "%s %s "
 					(_ "For Period Covering %s to %s"))
 		      company-name report-title
-		      (gnc-print-date start-date-printable)
-		      (gnc-print-date end-date-tp))
+		      (qof-print-date start-date-printable)
+		      (qof-print-date end-date))
 	     )
      )
     
@@ -523,7 +523,7 @@
                       (unrealized-gain-collector (gnc:make-commodity-collector))
                       (cost-fn (gnc:case-exchange-fn 'average-cost
                                                      report-commodity
-                                                     end-date-tp))
+                                                     end-date))
                       (value #f)
                       (cost #f))
 
@@ -533,7 +533,7 @@
                    (lambda (acct)
                      (book-balance 'merge
                                    (gnc:account-get-comm-balance-at-date
-                                    acct end-date-tp #f)
+                                    acct end-date #f)
                      #f))
                    all-accounts)
 
@@ -573,7 +573,7 @@
 	  (set! table-env
 		(list
 		 (list 'start-date #f)
-		 (list 'end-date end-date-tp)
+		 (list 'end-date end-date)
 		 (list 'display-tree-depth
 		       (if (integer? depth-limit) depth-limit #f))
 		 (list 'depth-limit-behavior 'flatten)
@@ -710,7 +710,7 @@
 				  (list 'regexp closing-regexp)
 				  (list 'closing #t)
 				  )
-			    start-date-tp end-date-tp
+			    start-date end-date
 			    ))
 			  (adjusting
 			   (gnc:account-get-trans-type-balance-interval-with-closing
@@ -719,7 +719,7 @@
 				  (list 'cased adjusting-cased)
 				  (list 'regexp adjusting-regexp)
 				  )
-			    start-date-tp end-date-tp
+			    start-date end-date
 			    ))
 			  (is? (member acct all-is-accounts))
 			  (ga-or-is? (or (member acct all-ga-accounts) is?))
@@ -733,7 +733,7 @@
 				       (list 'regexp adjusting-regexp)
 				       (list 'positive #t)
 				       )
-				 start-date-tp end-date-tp
+				 start-date end-date
 				 )
 				))
 			  (neg-adjusting
@@ -1136,9 +1136,7 @@
     
     (gnc:report-finished)
     
-    doc
-    )
-  )
+    doc))
 
 (gnc:define-report 
  'version 1
@@ -1153,4 +1151,3 @@
 		 (trial-balance-renderer report-obj #f filename)))
 
 ;; END
-

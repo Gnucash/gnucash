@@ -42,8 +42,8 @@ struct _gncEntry
 {
     QofInstance inst;
 
-    Timespec	date;
-    Timespec	date_entered;
+    time64	date;
+    time64	date_entered;
     char *	desc;
     char *	action;
     char *	notes;
@@ -87,7 +87,7 @@ struct _gncEntry
     gnc_numeric	i_tax_value_rounded;
     gnc_numeric	i_disc_value;
     gnc_numeric	i_disc_value_rounded;
-    Timespec	i_taxtable_modtime;
+    time64	i_taxtable_modtime;
 
     /* vendor bill */
     gnc_numeric	b_value;
@@ -95,7 +95,7 @@ struct _gncEntry
     GList *	b_tax_values;
     gnc_numeric	b_tax_value;
     gnc_numeric	b_tax_value_rounded;
-    Timespec	b_taxtable_modtime;
+    time64	b_taxtable_modtime;
 };
 
 struct _gncEntryClass
@@ -478,14 +478,12 @@ static void gncEntryFree (GncEntry *entry)
 /* ================================================================ */
 /* Set Functions */
 
-void gncEntrySetDate (GncEntry *entry, Timespec date)
+void gncEntrySetDate (GncEntry *entry, time64 date)
 {
     gboolean first_date = FALSE;
-    Timespec zero_time = { 0, 0 };
-
     if (!entry) return;
-    if (timespec_equal (&entry->date, &date)) return;
-    if (timespec_equal (&entry->date, &zero_time))
+    if (entry->date == date) return;
+    if (!entry->date)
         first_date = TRUE;
     gncEntryBeginEdit (entry);
     entry->date = date;
@@ -510,15 +508,15 @@ void gncEntrySetDateGDate (GncEntry *entry, const GDate* date)
     /* Watch out: Here we are deviating from the initial convention that a
     GDate always converts to the start time of the day. Instead, the GDate is
     converted to "noon" on the respective date. This is not nice, but this
-    convention was used for the Timespec of GncEntry all the time, so we better
+    convention was used for the time64 of GncEntry all the time, so we better
     stick to it.*/
-    gncEntrySetDate(entry, timespecCanonicalDayTime(gdate_to_timespec(*date)));
+    gncEntrySetDate(entry, time64CanonicalDayTime(gdate_to_time64(*date)));
 }
 
-void gncEntrySetDateEntered (GncEntry *entry, Timespec date)
+void gncEntrySetDateEntered (GncEntry *entry, time64 date)
 {
     if (!entry) return;
-    if (timespec_equal (&entry->date_entered, &date)) return;
+    if (entry->date_entered == date) return;
     gncEntryBeginEdit (entry);
     entry->date_entered = date;
     mark_entry (entry);
@@ -875,27 +873,19 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest, gboolean add_entry)
 /* ================================================================ */
 /* Get Functions */
 
-Timespec gncEntryGetDate (const GncEntry *entry)
+time64 gncEntryGetDate (const GncEntry *entry)
 {
-    Timespec ts;
-    ts.tv_sec = 0;
-    ts.tv_nsec = 0;
-    if (!entry) return ts;
-    return entry->date;
+    return entry ? entry->date : 0;
 }
 
 GDate gncEntryGetDateGDate(const GncEntry *entry)
 {
-    return timespec_to_gdate(gncEntryGetDate(entry));
+    return time64_to_gdate(gncEntryGetDate(entry));
 }
 
-Timespec gncEntryGetDateEntered (const GncEntry *entry)
+time64 gncEntryGetDateEntered (const GncEntry *entry)
 {
-    Timespec ts;
-    ts.tv_sec = 0;
-    ts.tv_nsec = 0;
-    if (!entry) return ts;
-    return entry->date_entered;
+    return entry ? entry->date_entered : 0;
 }
 
 const char * gncEntryGetDescription (const GncEntry *entry)
@@ -1343,19 +1333,19 @@ gncEntryRecomputeValues (GncEntry *entry)
     if (entry->i_tax_table)
     {
         Timespec modtime = gncTaxTableLastModified (entry->i_tax_table);
-        if (timespec_cmp (&entry->i_taxtable_modtime, &modtime))
+        if (entry->i_taxtable_modtime != modtime.tv_sec)
         {
             entry->values_dirty = TRUE;
-            entry->i_taxtable_modtime = modtime;
+            entry->i_taxtable_modtime = modtime.tv_sec;
         }
     }
     if (entry->b_tax_table)
     {
         Timespec modtime = gncTaxTableLastModified (entry->b_tax_table);
-        if (timespec_cmp (&entry->b_taxtable_modtime, &modtime))
+        if (entry->b_taxtable_modtime == modtime.tv_sec)
         {
             entry->values_dirty = TRUE;
-            entry->b_taxtable_modtime = modtime;
+            entry->b_taxtable_modtime = modtime.tv_sec;
         }
     }
 
@@ -1602,11 +1592,8 @@ int gncEntryCompare (const GncEntry *a, const GncEntry *b)
     if (!a && b) return -1;
     if (a && !b) return 1;
 
-    compare = timespec_cmp (&(a->date), &(b->date));
-    if (compare) return compare;
-
-    compare = timespec_cmp (&(a->date_entered), &(b->date_entered));
-    if (compare) return compare;
+    if (a->date != b->date) return a->date - b->date;
+    if (a->date_entered != b->date_entered) return a->date_entered - b->date_entered;
 
     compare = g_strcmp0 (a->desc, b->desc);
     if (compare) return compare;

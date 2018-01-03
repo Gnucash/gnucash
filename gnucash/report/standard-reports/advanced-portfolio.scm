@@ -535,11 +535,11 @@
 	       (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
 
 	       (let* ((parent (xaccSplitGetParent split))
-		      (txn-date (gnc-transaction-get-date-posted parent))
+		      (txn-date (xaccTransGetDate parent))
 		      (commod-currency (xaccTransGetCurrency parent))
 		      (commod-currency-frac (gnc-commodity-get-fraction commod-currency)))
 
-		 (if (and (gnc:timepair-le txn-date to-date)
+		 (if (and (<= txn-date to-date)
 		          (not (assoc-ref seen_trans (gncTransGetGUID parent))))
 		     (let ((trans-income (gnc-numeric-zero))
 		           (trans-brokerage (gnc-numeric-zero))
@@ -828,9 +828,9 @@
 	                   ;; This is safe because xaccSplitGetAccount returns null for a null split
 	                   (other-acct (xaccSplitGetAccount other-split))
 	                   (parent (xaccSplitGetParent split))
-	                   (txn-date (gnc-transaction-get-date-posted parent)))
+	                   (txn-date (xaccTransGetDate parent)))
 	              (if (and (not (null? other-acct))
-	                       (gnc:timepair-le txn-date to-date)
+	                       (<= txn-date to-date)
 	                       (string=? (xaccAccountGetName other-acct) account-name)
 	                       (gnc-commodity-is-currency (xaccAccountGetCommodity other-acct)))
 	                ;; This is a two split transaction where the other split is to an
@@ -1025,7 +1025,7 @@
     (gnc:html-document-set-title!
      document (string-append
                report-title
-               (sprintf #f " %s" (gnc-print-date to-date))))
+               (sprintf #f " %s" (qof-print-date to-date))))
 
     (if (not (null? accounts))
         ; at least 1 account selected
@@ -1039,8 +1039,8 @@
                                 domestic)))
                   ((pricedb-nearest)
                    (lambda (foreign domestic date)
-                    (find-price (gnc-pricedb-lookup-nearest-in-time-any-currency
-		     pricedb foreign (timespecCanonicalDayTime date)) domestic)))))
+                    (find-price (gnc-pricedb-lookup-nearest-in-time-any-currency-t64
+		     pricedb foreign (time64CanonicalDayTime date)) domestic)))))
 	       (headercols (list (_ "Account")))
 	       (totalscols (list (gnc:make-html-table-cell/markup "total-label-cell" (_ "Total"))))
 	       (sum-total-moneyin (gnc-numeric-zero))

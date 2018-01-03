@@ -133,6 +133,7 @@ finder_helper (GNCLot *lot,  gpointer user_data)
     Transaction *trans;
     gnc_numeric bal;
     gboolean opening_is_positive, bal_is_positive;
+    Timespec posted_ts = {0,0};
 
     if (gnc_lot_is_closed (lot)) return NULL;
 
@@ -157,9 +158,10 @@ finder_helper (GNCLot *lot,  gpointer user_data)
         return NULL;
     }
 
-    if (els->date_pred (els->ts, trans->date_posted))
+    posted_ts.tv_sec = trans->date_posted;
+    if (els->date_pred (els->ts, posted_ts))
     {
-        els->ts = trans->date_posted;
+        els->ts.tv_sec = trans->date_posted;
         els->lot = lot;
     }
 
@@ -762,7 +764,6 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
     {
         Transaction *trans;
         Split *lot_split, *gain_split;
-        Timespec ts;
         gboolean new_gain_split;
         gnc_numeric negvalue = gnc_numeric_neg (value);
 
@@ -869,8 +870,8 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
         if (new_gain_split)
         {
             /* Common to both */
-            ts = xaccTransRetDatePostedTS (split->parent);
-            xaccTransSetDatePostedTS (trans, &ts);
+            time64 time = xaccTransRetDatePosted (split->parent);
+            xaccTransSetDatePostedSecs (trans, time);
             xaccTransSetDateEnteredSecs (trans, gnc_time (NULL));
 
             xaccSplitSetAmount (lot_split, zero);

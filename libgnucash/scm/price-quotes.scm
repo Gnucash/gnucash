@@ -353,10 +353,9 @@
                        fq-results)
              (reverse result-list)))))
 
-  (define (timestr->time-pair timestr time-zone)
+  (define (timestr->time64 timestr time-zone)
     ;; time-zone is ignored currently
-    (cons (gnc-parse-time-to-time64 timestr "%Y-%m-%d %H:%M:%S")
-          0))
+    (gnc-parse-time-to-time64 timestr "%Y-%m-%d %H:%M:%S"))
 
   (define (commodity-tz-quote-triple->price book c-tz-quote-triple)
     ;; return a string like "NASDAQ:CSCO" on error, or a price on
@@ -413,16 +412,16 @@
                                                    GNC-RND-ROUND))))
 
       (if gnc-time
-          (set! gnc-time (timestr->time-pair gnc-time time-zone))
+          (set! gnc-time (timestr->time64 gnc-time time-zone))
           (set! gnc-time (gnc:get-today)))
 
       (if (not (and commodity currency gnc-time price price-type))
           (string-append
            currency-str ":" (gnc-commodity-get-mnemonic commodity))
           (begin
-            (set! saved-price (gnc-pricedb-lookup-day pricedb
-                                                      commodity currency
-                                                      gnc-time))
+            (set! saved-price (gnc-pricedb-lookup-day64 pricedb
+							commodity currency
+							gnc-time))
             (if (not (null? saved-price))
                 (begin
                   (if (gnc-commodity-equiv (gnc-price-get-currency saved-price)
@@ -431,7 +430,7 @@
                   (if (>= (gnc-price-get-source saved-price) PRICE-SOURCE-FQ)
                       (begin
                         (gnc-price-begin-edit saved-price)
-                        (gnc-price-set-time saved-price gnc-time)
+                        (gnc-price-set-time64 saved-price gnc-time)
                         (gnc-price-set-source saved-price PRICE-SOURCE-FQ)
                         (gnc-price-set-typestr saved-price price-type)
                         (gnc-price-set-value saved-price price)
@@ -446,7 +445,7 @@
                         (gnc-price-begin-edit gnc-price)
                         (gnc-price-set-commodity gnc-price commodity)
                         (gnc-price-set-currency gnc-price currency)
-                        (gnc-price-set-time gnc-price gnc-time)
+                        (gnc-price-set-time64 gnc-price gnc-time)
                         (gnc-price-set-source gnc-price PRICE-SOURCE-FQ)
                         (gnc-price-set-typestr gnc-price price-type)
                         (gnc-price-set-value gnc-price price)

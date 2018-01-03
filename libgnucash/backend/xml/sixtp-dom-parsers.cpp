@@ -233,14 +233,9 @@ dom_tree_to_guid_kvp_value (xmlNodePtr node)
 }
 
 static KvpValue*
-dom_tree_to_timespec_kvp_value (xmlNodePtr node)
+dom_tree_to_time64_kvp_value (xmlNodePtr node)
 {
-    Timespec ts;
-    KvpValue* ret = nullptr;
-
-    ts = dom_tree_to_timespec (node);
-    ret = new KvpValue {ts};
-    return ret;
+    return new KvpValue {Timespec {dom_tree_to_time64 (node), 0}};
 }
 
 static KvpValue*
@@ -360,7 +355,7 @@ struct kvp_val_converter val_converters[] =
     { "numeric", dom_tree_to_numeric_kvp_value },
     { "string", dom_tree_to_string_kvp_value },
     { "guid", dom_tree_to_guid_kvp_value },
-    { "timespec", dom_tree_to_timespec_kvp_value },
+    { "timespec", dom_tree_to_time64_kvp_value },
     { "gdate", dom_tree_to_gdate_kvp_value },
     { "list", dom_tree_to_list_kvp_value },
     { "frame", dom_tree_to_frame_kvp_value },
@@ -528,17 +523,15 @@ dom_tree_to_gnc_numeric (xmlNodePtr node)
     return ret;
 }
 
-static inline Timespec
-timespec_failure (Timespec ts)
+static time64
+time_parse_failure ()
 {
-    ts.tv_sec = 0;
-    ts.tv_nsec = 0;
-    return ts;
+    return 0;
 }
 
 
-Timespec
-dom_tree_to_timespec (xmlNodePtr node)
+time64
+dom_tree_to_time64 (xmlNodePtr node)
 {
     /* Turn something like this
 
@@ -547,18 +540,15 @@ dom_tree_to_timespec (xmlNodePtr node)
          <ns>658864000</ns>
        </date-posted>
 
-       into a Timespec.  If this returns FALSE, the effects on *ts are
+       into a time64.  If this returns FALSE, the effects on *ts are
        undefined.  The XML is valid if it has at least one of <s> or <ns>
        and no more than one of each.  Order is irrelevant. */
 
-    Timespec ret;
+    time64 ret {0};
     gboolean seen_s = FALSE;
     gboolean seen_ns = FALSE;
     xmlNodePtr n;
 
-
-    ret.tv_sec = 0;
-    ret.tv_nsec = 0;
     for (n = node->xmlChildrenNode; n; n = n->next)
     {
         switch (n->type)
@@ -571,52 +561,29 @@ dom_tree_to_timespec (xmlNodePtr node)
             {
                 if (seen_s)
                 {
-                    return timespec_failure (ret);
+                    return time_parse_failure ();
                 }
                 else
                 {
                     gchar* content = dom_tree_to_text (n);
                     if (!content)
                     {
-                        return timespec_failure (ret);
+                        return time_parse_failure ();
                     }
 
-                    if (!string_to_timespec_secs (content, &ret))
+                    if (!string_to_time64 (content, &ret))
                     {
                         g_free (content);
-                        return timespec_failure (ret);
+                        return time_parse_failure ();
                     }
                     g_free (content);
                     seen_s = TRUE;
                 }
             }
-            else if (g_strcmp0 ("ts:ns", (char*)n->name) == 0)
-            {
-                if (seen_ns)
-                {
-                    return timespec_failure (ret);
-                }
-                else
-                {
-                    gchar* content = dom_tree_to_text (n);
-                    if (!content)
-                    {
-                        return timespec_failure (ret);
-                    }
-
-                    if (!string_to_timespec_nsecs (content, &ret))
-                    {
-                        g_free (content);
-                        return timespec_failure (ret);
-                    }
-                    g_free (content);
-                    seen_ns = TRUE;
-                }
-            }
             break;
         default:
             PERR ("unexpected sub-node.");
-            return timespec_failure (ret);
+            return time_parse_failure ();
             break;
         }
     }
@@ -624,7 +591,7 @@ dom_tree_to_timespec (xmlNodePtr node)
     if (!seen_s)
     {
         PERR ("no ts:date node found.");
-        return timespec_failure (ret);
+        return time_parse_failure ();
     }
 
     return ret;
@@ -896,13 +863,11 @@ dom_tree_generic_parse (xmlNodePtr node, struct dom_tree_handler* handlers,
 }
 
 gboolean
-dom_tree_valid_timespec (Timespec* ts, const xmlChar* name)
+dom_tree_valid_time64 (time64 val, const xmlChar * name)
 {
-
-    if (ts->tv_sec || ts->tv_nsec)
+    if (val)
         return TRUE;
-
-    g_warning ("Invalid timestamp in data file.  Look for a '%s' entry "
-               "with a date of 1969-12-31 or 1970-01-01.", name);
+    g_warning ("Invalid timestamp in data file. Look for a '%s' entry "
+            "with a date of 1969-12-31 or 1970-01-01.", name);
     return FALSE;
 }

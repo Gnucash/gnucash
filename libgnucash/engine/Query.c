@@ -597,13 +597,13 @@ xaccQueryGetEarliestDateFound(QofQuery * q)
 
     /* Safe until 2038 on archs where time64 is 32bit */
     sp = spl->data;
-    earliest = sp->parent->date_posted.tv_sec;
+    earliest = sp->parent->date_posted;
     for (; spl; spl = spl->next)
     {
         sp = spl->data;
-        if (sp->parent->date_posted.tv_sec < earliest)
+        if (sp->parent->date_posted < earliest)
         {
-            earliest = sp->parent->date_posted.tv_sec;
+            earliest = sp->parent->date_posted;
         }
     }
     return earliest;
@@ -627,9 +627,9 @@ xaccQueryGetLatestDateFound(QofQuery * q)
     for (; spl; spl = spl->next)
     {
         sp = spl->data;
-        if (sp->parent->date_posted.tv_sec > latest)
+        if (sp->parent->date_posted > latest)
         {
-            latest = sp->parent->date_posted.tv_sec;
+            latest = sp->parent->date_posted;
         }
     }
     return latest;

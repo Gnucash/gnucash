@@ -138,15 +138,15 @@
   (let ((txn (xaccMallocTransaction (gnc-get-current-book)))
 	(split-1 (xaccMallocSplit  (gnc-get-current-book)))
 	(split-2 (xaccMallocSplit  (gnc-get-current-book)))
-	(gnc-localtime (gnc:timepair->date date)))
+	(datevec (gnc-localtime date)))
     (with-transaction txn
 		      (lambda ()
 			(xaccTransSetDescription txn (env-string env "ponies"))
 			(xaccTransSetCurrency txn (gnc-default-report-currency))
 			(xaccTransSetDate txn
-					  (gnc:date-get-month-day gnc-localtime)
-					  (gnc:date-get-month gnc-localtime)
-					  (gnc:date-get-year gnc-localtime))
+					  (gnc:date-get-month-day datevec)
+					  (gnc:date-get-month datevec)
+					  (gnc:date-get-year datevec))
 			(xaccSplitSetParent split-1 txn)
 			(xaccSplitSetParent split-2 txn)
 			(xaccSplitSetAccount split-1 credit)
@@ -184,8 +184,8 @@
 		  (env-create-transaction env date to-account
 					  from-account
 					  (/
-                                           (gnc:date-get-month-day (gnc:timepair->date date))
-                                           1)))
+					   (gnc:date-get-month-day (gnc-localtime date))
+					   1)))
 		(cdr (reverse dates-this-month)))))
 
 (define (env-create-account-structure env account-structure)
