@@ -435,7 +435,7 @@ AccountPickerDialog* gnc_import_account_assist_setup(GtkWidget *parent)
     picker->account_online_id_label = GTK_WIDGET(gtk_builder_get_object (builder, "online_id_label"));
 
     /* Add the New Account Button */
-    button = gtk_button_new_with_mnemonic ("_New Account");
+    button = gtk_button_new_with_mnemonic (_("_New Account"));
     h_box = gtk_hbox_new(TRUE, 0);
     gtk_box_pack_start(GTK_BOX(h_box), button, FALSE, FALSE, 0);
     gtk_box_pack_start( GTK_BOX(box), h_box, FALSE, FALSE, 6);
