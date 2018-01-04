@@ -30,7 +30,7 @@
 (use-modules (gnucash report report-system test test-extras))
 
 (use-modules (gnucash report standard-reports test test-generic-net-barchart))
-(use-modules (gnucash report standard-reports net-barchart))
+(use-modules (gnucash report standard-reports net-charts))
 
 ;; Explicitly set locale to make the report output predictable
 (setlocale LC_ALL "C")
