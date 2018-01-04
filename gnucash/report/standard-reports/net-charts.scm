@@ -256,7 +256,7 @@
     (define (monetary+ a b)
       (if (and (gnc:gnc-monetary? a) (gnc:gnc-monetary? b))
           (let ((same-currency? (gnc-commodity-equal (gnc:gnc-monetary-commodity a) (gnc:gnc-monetary-commodity b)))
-                (amount (gnc-numeric-add (gnc:gnc-monetary-amount a) (gnc:gnc-monetary-amount b) GNC-DENOM-AUTO GNC-RND-ROUND)))
+                (amount (+ (gnc:gnc-monetary-amount a) (gnc:gnc-monetary-amount b))))
             (if same-currency?
                 (gnc:make-gnc-monetary (gnc:gnc-monetary-commodity a) amount)
                 (warn "incompatible currencies in monetary+: " a b)))
