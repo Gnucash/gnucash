@@ -499,12 +499,11 @@
              (gnc:html-document-add-object! document chart)
              (if show-table?
                  (let ((table (gnc:make-html-table)))
-                   (if linechart?
-                       (gnc:html-table-set-style!
-                        table "table"
-                        'attribute (list "border" 0)
-                        'attribute (list "cellspacing" 0)
-                        'attribute (list "cellpadding" 4)))
+                   (gnc:html-table-set-style!
+                    table "table"
+                    'attribute (list "border" 0)
+                    'attribute (list "cellspacing" 0)
+                    'attribute (list "cellpadding" 4))
                    (gnc:html-table-set-col-headers!
                     table
                     (append
