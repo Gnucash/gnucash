@@ -207,24 +207,25 @@ gnc_get_default_report_font_family(void)
     GtkWidget            *top_widget;
     PangoFontDescription *font_desc;
     GtkStyleContext      *top_widget_style_c;
-    const gchar*          default_font_family;
+    gchar                *default_font_family;
 
     top_list = gtk_window_list_toplevels();
-    g_return_val_if_fail (top_list != NULL, NULL);
+    if (top_list == NULL)
+        return g_strdup ("Arial");
     top_widget = GTK_WIDGET(top_list->data);
     g_list_free(top_list);
     top_widget_style_c = gtk_widget_get_style_context (top_widget);
     gtk_style_context_get (top_widget_style_c, gtk_widget_get_state_flags (GTK_WIDGET(top_widget)),
                            "font", &font_desc, NULL);
 
-    default_font_family = pango_font_description_get_family (font_desc);
+    default_font_family = g_strdup(pango_font_description_get_family (font_desc));
 
     pango_font_description_free (font_desc);
 
     if (default_font_family == NULL)
         return g_strdup("Arial");
     else
-        return g_strdup(default_font_family);
+        return default_font_family;
 }
 
 static gboolean
