@@ -7,6 +7,7 @@ SET(scm_test_standard_reports_SOURCES
 )
 
 set(scm_test_with_srfi64_SOURCES
+  test-transaction.scm
 )
 
 SET(scm_test_report_SUPPORT
