@@ -115,7 +115,9 @@ static GtkActionEntry gnc_plugin_actions [] =
         G_CALLBACK(gnc_plugin_ab_cmd_issue_transaction)
     },
     {
-        "ABIssueSepaTransAction", NULL, N_("_Issue SEPA Transaction..."), NULL,
+        "ABIssueSepaTransAction", NULL,
+		/* Translators: https://en.wikipedia.org/wiki/Single_Euro_Payments_Area */
+		N_("_Issue SEPA Transaction..."), NULL,
         N_("Issue a new international European (SEPA) transaction online through Online Banking"),
         G_CALLBACK(gnc_plugin_ab_cmd_issue_sepatransaction)
     },
@@ -137,7 +139,10 @@ static GtkActionEntry gnc_plugin_actions [] =
 
     /* File -> Import menu item */
     {
-        "Mt940ImportAction", GTK_STOCK_CONVERT, N_("Import _MT940"), NULL,
+        "Mt940ImportAction", GTK_STOCK_CONVERT,
+		/* Translators: Message types MTxxxx are exchange formats used by the SWIFT network
+		   https://en.wikipedia.org/wiki/Society_for_Worldwide_Interbank_Financial_Telecommunication */
+		N_("Import _MT940"), NULL,
         N_("Import a MT940 file into GnuCash"),
         G_CALLBACK(gnc_plugin_ab_cmd_mt940_import)
     },
@@ -147,7 +152,10 @@ static GtkActionEntry gnc_plugin_actions [] =
         G_CALLBACK(gnc_plugin_ab_cmd_mt942_import)
     },
     {
-        "DtausImportAction", GTK_STOCK_CONVERT, N_("Import _DTAUS"), NULL,
+        "DtausImportAction", GTK_STOCK_CONVERT,
+		/* Translators: DTAUS is a traditional german exchange format.
+           https://de.wikipedia.org/wiki/Datentr%C3%A4geraustauschverfahren */
+		N_("Import _DTAUS"), NULL,
         N_("Import a DTAUS file into GnuCash"),
         G_CALLBACK(gnc_plugin_ab_cmd_dtaus_import)
     },

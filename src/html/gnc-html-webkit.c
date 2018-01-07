@@ -1146,7 +1146,7 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
         gchar *export_dirname = NULL;
         gchar* basename;
 
-        // Before we save the PDF file, we always as the user for the export
+        // Before we save the PDF file, we always ask the user for the export
         // file name. We will store the chosen directory in the gtk print settings
         // as well.
         dialog = gtk_file_chooser_dialog_new (_("Export to PDF File"),

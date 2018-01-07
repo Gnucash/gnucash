@@ -39,7 +39,8 @@
 (use-modules (ice-9 regex)) ;; for regexp-substitute/global, used by jpqplot
 (load-from-path "html-jqplot") ;; for jqplot-escape-string
 
-(define reportname (N_ "Budget Barchart"))
+(define reportname
+  (N_ "Budget Barchart"))
 
 (define optname-accounts (N_ "Accounts"))
 (define optname-budget (N_ "Budget"))

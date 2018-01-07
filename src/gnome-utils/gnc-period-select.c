@@ -66,7 +66,7 @@ static GtkComboBoxClass *parent_class;
 
 const gchar *start_strings[GNC_ACCOUNTING_PERIOD_LAST] =
 {
-    /* CY Strings */
+    /* CY (current year) Strings */
     N_("Today"),
     N_("Start of this month"),
     N_("Start of previous month"),
@@ -75,14 +75,14 @@ const gchar *start_strings[GNC_ACCOUNTING_PERIOD_LAST] =
     N_("Start of this year"),
     N_("Start of previous year"),
 
-    /* FY Strings */
+    /* FY (fiscal year) Strings */
     N_("Start of this accounting period"),
     N_("Start of previous accounting period"),
 };
 
 const gchar *end_strings[GNC_ACCOUNTING_PERIOD_LAST] =
 {
-    /* CY Strings */
+    /* CY (current year) Strings */
     N_("Today"),
     N_("End of this month"),
     N_("End of previous month"),
@@ -91,7 +91,7 @@ const gchar *end_strings[GNC_ACCOUNTING_PERIOD_LAST] =
     N_("End of this year"),
     N_("End of previous year"),
 
-    /* FY Strings */
+    /* FY (fiscal year) Strings */
     N_("End of this accounting period"),
     N_("End of previous accounting period"),
 };

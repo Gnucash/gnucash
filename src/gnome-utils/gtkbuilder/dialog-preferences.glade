@@ -47,7 +47,7 @@
       </row>
       <row>
         <col id="0" translatable="yes">Locale</col>
-        <col id="1" translatable="yes">(dummy)</col>
+        <col id="1" comments="Because it will be overwritten no translation is reqired">(dummy)</col>
       </row>
     </data>
   </object>

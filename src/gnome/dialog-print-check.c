@@ -1508,11 +1508,12 @@ read_one_check_directory(PrintCheckDialog *pcd, GtkListStore *store,
                       _("There is a duplicate check format file."));
             gtk_message_dialog_format_secondary_text
             (GTK_MESSAGE_DIALOG(dialog),
-             /* Translators: %1$s is the type of the first check
-              * format (user defined or application defined); %2$s
-              * is the filename of that format; %3$s the type of
-              * the other check format; and %4$s the filename of
-              * that other format. */
+             /* Translators:
+              * %1$s is the type of the first check format
+              *  (user defined or application defined);
+              * %2$s is the filename of that format;
+              * %3$s the type of the other check format; and
+              * %4$s the filename of that other format.      */
              _("The GUIDs in the %s check format file '%s' and "
                "the %s check format file '%s' match."),
              existing->group, existing->filename,

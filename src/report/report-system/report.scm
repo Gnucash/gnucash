@@ -142,7 +142,9 @@
 		;; FIXME: We should pass the top-level window
 		;; instead of the '() to gnc-error-dialog, but I
 		;; have no idea where to get it from.
-		(gnc-error-dialog '() (string-append (_ "One of your reports has a report-guid that is a duplicate. Please check the report system, especially your saved reports, for a report with this report-guid: ") report-guid))
+		(gnc-error-dialog '() (string-append
+          (_ "One of your reports has a report-guid that is a duplicate. Please check the report system, especially your saved reports, for a report with this report-guid: ")
+          report-guid))
 		)))
 	(begin
 	  (if (gnc:report-template-name report-rec)

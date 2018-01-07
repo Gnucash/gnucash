@@ -1,6 +1,10 @@
  N_( "The GnuCash online manual has lots of helpful information. \
 You can access the manual under the Help menu.")
 
+ N_( "The GnuCash developers are easy to contact. As well \
+as several mailing lists, you can chat to them live on IRC! \
+Join them on #gnucash at irc.gnome.org")
+
  N_( "You can easily import your existing financial data from Quicken, \
 MS Money or other programs that export QIF files or OFX files. In the \
 File menu, click on the sub-menu Import and click on QIF or OFX file, \
@@ -88,9 +92,13 @@ you can choose the monthly basic frequency and then set 'Every \
 registers after midnight, to get the new date as default for new \
 transactions. It is not necessary to restart GnuCash.")
 
- N_( "The GnuCash developers are easy to contact. As well \
-as several mailing lists, you can chat to them live on IRC! \
-Join them on #gnucash at irc.gnome.org")
+ N_( "To search through all your transactions, start a search (Edit -> \
+Find...) from the main accounts hierarchy page. To limit your search \
+to a single account, start the search from that account's register.")
+
+ N_( "To visually compare on screen the contents of 2 tabs, \
+in one of the tabs, select Window -> New Window with Page \
+from the menu to duplicate that tab in a new window.")
 
  N_( "There is a theory that if ever anyone discovers what \
 the Universe is for and why it is here, it will instantly \
@@ -99,10 +107,4 @@ inexplicable.\n\
 There is another theory that this has already happened.\n\n\
 Douglas Adams, \"The Restaurant at the End of the Universe\"")
 
- N_( "To search through all your transactions, start a search (Edit -> \
-Find...) from the main accounts hierarchy page. To limit your search \
-to a single account, start the search from that account's register.")
-
- N_( "To visually compare on screen the contents of 2 tabs, \
-in one of the tabs, select Window -> New Window with Page \
-from the menu to duplicate that tab in a new window.")
+/* Douglas Adams should be the last tip. Insert new tips in front of it. */

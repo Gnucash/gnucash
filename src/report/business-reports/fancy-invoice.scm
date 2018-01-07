@@ -888,6 +888,9 @@
 		  (set! date-table (make-date-table))
 		  ;; oli-custom - moved invoice number here
 		  (gnc:html-table-append-row!
+                  ;; Translators: %s below is "Invoice" or "Bill" or even the
+                  ;; custom title from the options. The next column contains
+                  ;; the number of the document.
 		   date-table (list (sprintf #f (_ "%s&nbsp;#") title) (gncInvoiceGetID invoice)))
                   ;; Translators: The first %s below is "Invoice" or
                   ;; "Bill" or even the custom title from the
@@ -899,8 +902,9 @@
 		  date-table)
 		(gnc:make-html-text
 		  ;; oli-custom - FIXME: I have a feeling I broke a
-		 ;; translation by not using string-expand for &nbsp;
-		  (string-append title "<br>" (_ "Invoice in progress..."))))))
+          ;; translation by not using string-expand for &nbsp;
+		  (string-append title "<br>"
+            (_ "Invoice in progress..."))))))
 
 	  (gnc:html-table-append-row!
 	  	helper-table

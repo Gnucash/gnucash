@@ -52,11 +52,15 @@
 (define opthelp-incomeaccounts
   (N_ "The income accounts where the sales and income was recorded."))
 ;(define optname-account-ar (N_ "A/R Account"))
+;; The line break in the next expressions will suppress above comment as translator comments.
 
-(define pagename-expenseaccounts (N_ "Expense Accounts"))
+(define pagename-expenseaccounts
+        (N_ "Expense Accounts"))
 (define optname-expenseaccounts (N_ "Expense Accounts"))
 ;(define optname-account-ap (N_ "A/P Account"))
-(define opthelp-expenseaccounts (N_ "The expense accounts where the expenses are recorded which are subtracted from the sales to give the profit."))
+;; The line break in the next expressions will suppress above comment as translator comments.
+(define opthelp-expenseaccounts
+        (N_ "The expense accounts where the expenses are recorded which are subtracted from the sales to give the profit."))
 
 (define optname-show-column-expense (N_ "Show Expense Column"))
 (define opthelp-show-column-expense (N_ "Show the column with the expenses per customer."))
@@ -79,7 +83,10 @@
 ;(define optname-show-txn-table (N_ "(Experimental) Show Transaction Table"))
 ;(define opthelp-show-txn-table (N_ "Show the table with all transactions. If false, only show the total amount per customer."))
 
-(define optname-show-zero-lines (N_ "Show Lines with All Zeros"))
+;; The line break in the next expression will suppress above comments as translator comments.
+
+(define optname-show-zero-lines
+         (N_ "Show Lines with All Zeros"))
 (define opthelp-show-zero-lines (N_ "Show the table lines with customers which did not have any transactions in the reporting period, hence would show all zeros in the columns."))
 (define optname-show-inactive (N_ "Show Inactive Customers"))
 (define opthelp-show-inactive (N_ "Include customers that have been marked inactive."))
@@ -835,8 +842,9 @@
                 (total-sales (gnc-numeric-zero))
                 (total-expense (gnc-numeric-zero))
                 (heading-list
-                 ;; Translators: "Markup" is profit amount divided by sales amount
-                 (list (_ "Customer") (_ "Profit") (_ "Markup") (_ "Sales"))))
+                 (list (_ "Customer") (_ "Profit")
+                  ;; Translators: "Markup" is profit amount divided by sales amount
+                  (_ "Markup") (_ "Sales"))))
 
             ;; helper for sorting an owner list
             (define (owner-name<? a b)

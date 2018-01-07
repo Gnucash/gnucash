@@ -43,7 +43,8 @@
 ;;(define optname-from-date (N_ "Start Date"))
 ;;(define optname-to-date (N_ "End Date"))
 
-(define optname-display-depth (N_ "Account Display Depth"))
+(define optname-display-depth
+  (N_ "Account Display Depth"))
 (define optname-show-subaccounts (N_ "Always show sub-accounts"))
 (define optname-accounts (N_ "Account"))
 

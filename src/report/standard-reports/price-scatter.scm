@@ -45,8 +45,10 @@
 (define optname-invert (N_ "Invert prices"))
 
 ;;      (optname-accounts (N_ "Accounts"))
+;; The line break in the next expression will suppress above comment as translator comment.
 
-(define optname-inc-exp (N_ "Show Income/Expense"))
+(define optname-inc-exp
+  (N_ "Show Income/Expense"))
 (define optname-show-profit (N_ "Show Net Profit"))
 
 (define optname-sep-bars (N_ "Show Asset & Liability bars"))

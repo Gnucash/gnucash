@@ -460,19 +460,27 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
     gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
     g_object_unref(store);
 
-    /* Add the columns */
-    add_text_column(view, _("Date"), DOWNLOADED_COL_DATE);
+    /* Add the columns *
+     * (keep the line break below to avoid a translator comment) */
+    add_text_column(view,
+    		        _("Date"), DOWNLOADED_COL_DATE);
     column = add_text_column(view, _("Account"), DOWNLOADED_COL_ACCOUNT);
     gtk_tree_view_column_set_visible(column, show_account);
     add_text_column(view, _("Amount"), DOWNLOADED_COL_AMOUNT);
     add_text_column(view, _("Description"), DOWNLOADED_COL_DESCRIPTION);
     add_text_column(view, _("Memo"), DOWNLOADED_COL_MEMO);
-    add_toggle_column(view, _("A"), DOWNLOADED_COL_ACTION_ADD,
+    add_toggle_column(view,
+                      /* toggle column: add new transaction */
+                      _("A"), DOWNLOADED_COL_ACTION_ADD,
                       G_CALLBACK(gnc_gen_trans_add_toggled_cb), info);
-    column = add_toggle_column(view, _("U+R"), DOWNLOADED_COL_ACTION_UPDATE,
+    column = add_toggle_column(view,
+            /* toggle column: update existing transaction & mark it reconciled */
+            _("U+R"), DOWNLOADED_COL_ACTION_UPDATE,
                                G_CALLBACK(gnc_gen_trans_update_toggled_cb), info);
     gtk_tree_view_column_set_visible(column, show_update);
-    add_toggle_column(view, _("R"), DOWNLOADED_COL_ACTION_CLEAR,
+    add_toggle_column(view,
+            /* toggle column: mark existing transaction reconciled */
+            _("R"), DOWNLOADED_COL_ACTION_CLEAR,
                       G_CALLBACK(gnc_gen_trans_clear_toggled_cb), info);
 
     /* The last column has multiple renderers */

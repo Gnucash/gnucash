@@ -241,6 +241,7 @@ gnc_split_register_get_num_label (VirtualLocation virt_loc,
     {
     case RECEIVABLE_REGISTER:
     case PAYABLE_REGISTER:
+        /* Column label for Invoice IDs in A/P & A/R accounts */
         return _("Ref");
     default:
         return _("Num");

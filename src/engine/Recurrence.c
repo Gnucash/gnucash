@@ -747,7 +747,9 @@ recurrenceListToCompactString(GList *rs)
         {
             //g_warning("nth weekday not handled");
             //g_string_printf(buf, "@fixme: nth weekday not handled");
-            g_string_printf(buf, "%s", _("Monthly"));
+        	/* (keep the line break below to avoid a translator comment) */
+            g_string_printf(buf,
+            		"%s", _("Monthly"));
             if (multiplier > 1)
             {
                 /* translators: %u is the recurrence multiplier. */

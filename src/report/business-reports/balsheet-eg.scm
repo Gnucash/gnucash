@@ -506,9 +506,12 @@
              (and opt-omit-zb-accts?)
                   ;(> (accrec-depth accrec) 1))
              ;; Reason 1: zero Imbalance a/c
-             (string-prefix? (_ "Imbalance") (xaccAccountGetName (accrec-account accrec)))
+             ;; The line break in the next expressions will suppress comments as translator comments.
+             (string-prefix?
+               (_ "Imbalance") (xaccAccountGetName (accrec-account accrec)))
              ;; Reason 2: zero Orphan a/c
-             (string-prefix? (_ "Orphan") (xaccAccountGetName (accrec-account accrec))))))
+             (string-prefix?
+               (_ "Orphan") (xaccAccountGetName (accrec-account accrec))))))
 
     (define (flattened-acc-depth acc)
       ;; Accounts deeper than required get moved to the requested depth
