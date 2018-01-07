@@ -1764,6 +1764,16 @@
        new-option
        (lambda () (option-changed section name)))))
 
+  (define (unregister-option section name)
+    (let* ((section-hash (hash-ref option-hash section)))
+      (if (and section-hash
+               (hash-ref section-hash name))
+          (begin
+            (hash-remove! section-hash name)
+            (if (zero? (hash-count (const #t) section-hash))
+                (hash-remove! option-hash section)))
+          (gnc:error "options:unregister-option: no such option\n"))))
+
 ;   Call (thunk option) for each option in the database
   (define (options-for-each thunk)
     (define (section-for-each section-hash thunk)
@@ -1899,6 +1909,7 @@
     (case key
       ((lookup) lookup-option)
       ((register-option) register-option)
+      ((unregister-option) unregister-option)
       ((register-callback) register-callback)
       ((unregister-callback-id) unregister-callback-id)
       ((for-each) options-for-each)
@@ -1938,6 +1949,9 @@
   (if options
       ((options 'lookup) section name)
       #f))
+
+(define (gnc:unregister-option options section name)
+  ((options 'unregister-option) section name))
 
 (define (gnc:generate-restore-forms options options-string)
   ((options 'generate-restore-forms) options-string))
@@ -2103,3 +2117,11 @@
       )))
   (gnc:options-make-end-date! options pagename name-to
                               (string-append sort-tag "b") info-to))
+
+(define (gnc:option-make-internal! options section name)
+  ;; this function will hide the option specified
+  ;; the option functionality is unchanged
+  (let ((opt (gnc:lookup-option options section name)))
+    (if opt
+        (vector-set! opt 3 'internal)
+        (error "gnc:option-make-internal! cannot find section / name"))))

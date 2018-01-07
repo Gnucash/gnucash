@@ -104,7 +104,7 @@
 (export gnc:render-options-changed)
 (export gnc:options-make-end-date!)
 (export gnc:options-make-date-interval!)
-
+(export gnc:option-make-internal!)
 (export gnc:make-number-range-option)
 (export gnc:make-number-plot-size-option)
 (export gnc:plot-size-option-value-type)
@@ -131,6 +131,7 @@
 (export gnc:new-options)
 
 (export gnc:register-option)
+(export gnc:unregister-option)
 (export gnc:options-register-callback)
 (export gnc:options-register-c-callback)
 (export gnc:options-unregister-callback-id)
