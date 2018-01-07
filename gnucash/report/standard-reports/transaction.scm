@@ -1204,6 +1204,7 @@ tags within description, notes or memo. ")
         (for-each (lambda (cell) (addto! row-contents cell))
                   (gnc:html-make-empty-cells left-indent))
         (if (and (opt-val pagename-sorting optname-show-informal-headers)
+                 (column-uses? 'amount-double)
                  (member sortkey SORTKEY-INFORMAL-HEADERS))
             (begin
               (if export?
