@@ -30,6 +30,7 @@
 #include <string>
 #include <iostream>
 #include <gtest/gtest.h>
+#include <boost/version.hpp>
 
 TEST (GncGUID, creation)
 {
@@ -82,8 +83,10 @@ TEST (GncGUID, from_string)
     }
     /* Currently, boost uuid string parsing is mostly very permissive, but it has some
      * odd pet peves. See https://svn.boost.org/trac/boost/ticket/12253 for more.*/
-    //EXPECT_TRUE (fail) << "Parsing the bogus string should throw";
-    EXPECT_FALSE (fail) << "Perhaps boost uuid is fixed.";
+    if (BOOST_VERSION >= 106600)
+        EXPECT_TRUE (fail) << "Parsing the bogus string should throw";
+    else
+        EXPECT_FALSE (fail) << "Perhaps boost uuid is fixed.";
 }
 
 TEST (GncGUID, round_trip)
