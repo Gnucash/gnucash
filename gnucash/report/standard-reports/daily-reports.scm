@@ -2,6 +2,7 @@
 ;; daily-reports.scm: reports based on the day of the week
 ;;
 ;; Copyright (C) 2003, Andy Wingo <wingo at pobox dot com>
+;; Christopher Lam upgrade to time64 (2017)
 ;;
 ;; based on account-piecharts.scm by Robert Merkel (rgmerk@mira.net)
 ;; and Christian Stimming <stimming@tu-harburg.de> with
@@ -154,8 +155,8 @@
              (list interval-start
                    interval-end
                    (/ (stats-accum 'total #f)
-                      (gnc:timepair-delta interval-start 
-                                          interval-end))
+                      (- interval-end 
+                         interval-start))
                    (minmax-accum 'getmax #f)
                    (minmax-accum 'getmin #f)
                    (gain-loss-accum 'debits #f) 
@@ -195,9 +196,8 @@
         
         
         (define (update-stats  split-amt split-time)
-          (let ((time-difference (gnc:timepair-delta 
-                                  last-balance-time
-                                  split-time)))
+          (let ((time-difference (- split-time
+                                    last-balance-time)))
             (stats-accum 'add (* last-balance time-difference))
             (set! last-balance (+ last-balance split-amt))
             (set! last-balance-time split-time)
@@ -205,15 +205,13 @@
             (gain-loss-accum 'add split-amt)))
 
         (define (split-recurse)
-          (if (or (null? splits) (gnc:timepair-gt 
-                                  (gnc-transaction-get-date-posted
-                                   (xaccSplitGetParent
-                                    (car splits))) to)) 
+          (if (or (null? splits)
+                  (> (xaccTransGetDate (xaccSplitGetParent (car splits)))
+                     to))
               #f
               (let* 
                   ((split (car splits))
-                   (split-time (gnc-transaction-get-date-posted
-                                (xaccSplitGetParent split)))
+                   (split-time (xaccTransGetDate (xaccSplitGetParent split)))
                    ;; FIXME: Which date should we use here? The 'to'
                    ;; date? the 'split-time'?
                    (split-amt (get-split-value split split-time)))
@@ -225,7 +223,7 @@
 ;                (gnc:debug "splits " splits)
                 (update-stats split-amt split-time)
                 (set! splits (cdr splits))
-		(split-recurse))))
+                (split-recurse))))
 
                                         ;  the minmax accumulator
 
@@ -237,16 +235,14 @@
         ;; insert a null transaction at the end of the interval
         (update-stats 0.0 to)
         (list minmax-accum stats-accum gain-loss-accum last-balance splits)))
-    
-    
+
     (for-each
      (lambda (interval)
-       (let* 
-           
-           ((interval-results 
-             (process-interval 
-              splits 
-              (car interval) 
+       (let*
+           ((interval-results
+             (process-interval
+              splits
+              (car interval)
               (cadr interval)
               start-bal-double))
             (min-max-accum (car interval-results))
@@ -261,8 +257,7 @@
                      (cadr interval) 
                      stats-accum 
                      min-max-accum gain-loss-accum)))
-     interval-list)
-    
+     interval-list)    
     
     (reverse data-rows)))
 
@@ -283,10 +278,10 @@
   (gnc:report-starting reportname)
 
   ;; Get all options
-  (let* ((to-date-tp (gnc:timepair-end-day-time 
+  (let* ((to-date (gnc:time64-end-day-time 
                      (gnc:date-option-absolute-time
                       (get-option gnc:pagename-general optname-to-date))))
-         (from-date-tp (gnc:timepair-start-day-time 
+         (from-date (gnc:time64-start-day-time 
                         (gnc:date-option-absolute-time 
                          (get-option gnc:pagename-general 
                                      optname-from-date))))
@@ -308,8 +303,8 @@
          (exchange-fn #f)
          (print-info (gnc-commodity-print-info report-currency #t))
         
-         (beforebegindate (gnc:timepair-end-day-time 
-                           (gnc:timepair-previous-day from-date-tp)))
+         (beforebegindate (gnc:time64-end-day-time 
+                           (gnc:time64-previous-day from-date)))
          (document (gnc:make-html-document))
          (chart (gnc:make-html-piechart))
          (topl-accounts (gnc:filter-accountlist-type 
@@ -372,7 +367,7 @@
 	  (gnc:report-percent-done 5)
 	  (set! exchange-fn (gnc:case-exchange-time-fn 
                              price-source report-currency 
-                             commodity-list to-date-tp
+                             commodity-list to-date
 			     5 20))
 	  (gnc:report-percent-done 20)
           
@@ -406,8 +401,8 @@
           (xaccQueryAddAccountMatch query accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
           
           ;; match splits between start and end dates 
-          (xaccQueryAddDateMatchTS
-           query #t from-date-tp #t to-date-tp QOF-QUERY-AND)
+          (xaccQueryAddDateMatchTT
+           query #t from-date #t to-date QOF-QUERY-AND)
           (qof-query-set-sort-order query
 				    (list SPLIT-TRANS TRANS-DATE-POSTED)
 				    (list QUERY-DEFAULT-SORT)
@@ -438,7 +433,7 @@
 	  
           ;; and analyze the data 
           (set! data (analyze-splits splits startbal
-                                     from-date-tp to-date-tp 
+                                     from-date to-date 
                                      DayDelta monetary->double))
 	  (gnc:report-percent-done 70)
           
@@ -448,7 +443,7 @@
           
           (for-each
            (lambda (split)
-             (let ((k (modulo (- (gnc:timepair-get-week-day
+             (let ((k (modulo (- (gnc:time64-get-week-day
                                   (list-ref split 1)) 1) 7))) ; end-date
                (list-set! daily-totals k
                           (+ (list-ref daily-totals k)
@@ -482,8 +477,8 @@
                    chart (string-append
                           (sprintf #f
                                    (_ "%s to %s")
-                                   (gnc-print-date from-date-tp)
-                                   (gnc-print-date to-date-tp))
+                                   (qof-print-date from-date)
+                                   (qof-print-date to-date))
                           (if show-total?
                               (let ((total (apply + daily-totals)))
                                 (sprintf
