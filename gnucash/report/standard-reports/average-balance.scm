@@ -169,11 +169,11 @@
                         gain-loss-accum)
       (set! data-rows
             (cons 
-             (list (gnc-print-date interval-start)
-                   (gnc-print-date interval-end)
+             (list (qof-print-date interval-start)
+                   (qof-print-date interval-end)
                    (/ (stats-accum 'total #f)
-                      (gnc:timepair-delta interval-start 
-                                          interval-end))
+                      (- interval-end
+                         interval-start))
                    (minmax-accum 'getmax #f)
                    (minmax-accum 'getmin #f)
                    (gain-loss-accum 'debits #f) 
@@ -213,9 +213,8 @@
         
         
         (define (update-stats  split-amt split-time)
-          (let ((time-difference (gnc:timepair-delta 
-                                  last-balance-time
-                                  split-time)))
+          (let ((time-difference (- split-time
+                                    last-balance-time)))
             (stats-accum 'add (* last-balance time-difference))
             (set! last-balance (+ last-balance split-amt))
             (set! last-balance-time split-time)
@@ -223,15 +222,13 @@
             (gain-loss-accum 'add split-amt)))
 
         (define (split-recurse)
-          (if (or (null? splits) (gnc:timepair-gt 
-                                  (gnc-transaction-get-date-posted
-                                   (xaccSplitGetParent
-                                    (car splits))) to)) 
+          (if (or (null? splits)
+                  (> (xaccTransGetDate (xaccSplitGetParent (car splits)))
+                     to))
               #f
               (let* 
                   ((split (car splits))
-                   (split-time (gnc-transaction-get-date-posted
-                                (xaccSplitGetParent split)))
+                   (split-time (xaccTransGetDate (xaccSplitGetParent split)))
                    ;; FIXME: Which date should we use here? The 'to'
                    ;; date? the 'split-time'?
 		   (split-amt (get-split-value split split-time))
@@ -323,10 +320,10 @@
   (gnc:report-starting reportname)
   (let* ((report-title (get-option gnc:pagename-general 
                                    gnc:optname-reportname))
-         (begindate (gnc:timepair-start-day-time
+         (begindate (gnc:time64-start-day-time
                      (gnc:date-option-absolute-time 
                       (get-option gnc:pagename-general optname-from-date))))
-         (enddate (gnc:timepair-end-day-time 
+         (enddate (gnc:time64-end-day-time 
                    (gnc:date-option-absolute-time 
                     (get-option gnc:pagename-general optname-to-date))))
          (stepsize (gnc:deltasym-to-delta (get-option gnc:pagename-general optname-stepsize)))
@@ -348,8 +345,8 @@
 	 (commodity-list #f)
 	 (exchange-fn #f)
 
-         (beforebegindate (gnc:timepair-end-day-time 
-                           (gnc:timepair-previous-day begindate)))
+         (beforebegindate (gnc:time64-end-day-time 
+                           (gnc:time64-previous-day begindate)))
          (all-zeros? #t)
          ;; startbal will be a commodity-collector
          (startbal  '()))
@@ -423,7 +420,7 @@
           (xaccQueryAddAccountMatch query accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
           
           ;; match splits between start and end dates 
-          (xaccQueryAddDateMatchTS
+          (xaccQueryAddDateMatchTT
            query #t begindate #t enddate QOF-QUERY-AND)
           (qof-query-set-sort-order query
 				    (list SPLIT-TRANS TRANS-DATE-POSTED)
