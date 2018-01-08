@@ -35,11 +35,11 @@
 
 
 ;; Returns a list of all splits in the 'currency-accounts' up to
-;; 'end-date-tp' which have two different commodities involved, one of
+;; 'end-date' which have two different commodities involved, one of
 ;; which is equivalent to 'commodity' (the latter constraint only if
 ;; 'commodity' != #f ).
 (define (gnc:get-match-commodity-splits
-         currency-accounts end-date-tp commodity)
+         currency-accounts end-date commodity)
   (let ((query (qof-query-create-for-splits))
         (splits #f))
 
@@ -48,8 +48,8 @@
     (xaccQueryAddAccountMatch query
                               currency-accounts
                               QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-    (xaccQueryAddDateMatchTS
-     query #f end-date-tp #t end-date-tp QOF-QUERY-AND)
+    (xaccQueryAddDateMatchTT
+     query #f end-date #t end-date QOF-QUERY-AND)
 
     ;; Get the query result, i.e. all splits in currency
     ;; accounts.
@@ -89,23 +89,22 @@
     splits))
 
 ;; Returns a sorted list of all splits in the 'currency-accounts' up
-;; to 'end-date-tp' which have the 'commodity' and one other commodity
+;; to 'end-date' which have the 'commodity' and one other commodity
 ;; involved. The splits are sorted by date.
 (define (gnc:get-match-commodity-splits-sorted currency-accounts
-                                               end-date-tp
+                                               end-date
                                                commodity)
   (sort (gnc:get-match-commodity-splits currency-accounts
-                                        end-date-tp commodity)
+                                        end-date commodity)
         (lambda (a b)
-          (gnc:timepair-lt
-           (gnc-transaction-get-date-posted (xaccSplitGetParent a))
-           (gnc-transaction-get-date-posted (xaccSplitGetParent b))))))
+          (< (xaccTransGetDate (xaccSplitGetParent a))
+             (xaccTransGetDate (xaccSplitGetParent b))))))
 
 
 ;; Returns a list of all splits in the currency-accounts up to
 ;; end-date which have two *different* commodities involved.
-(define (gnc:get-all-commodity-splits currency-accounts end-date-tp)
-  (gnc:get-match-commodity-splits currency-accounts end-date-tp #f))
+(define (gnc:get-all-commodity-splits currency-accounts end-date)
+  (gnc:get-match-commodity-splits currency-accounts end-date #f))
 
 
 
@@ -131,11 +130,11 @@
 
 ;; Create a list of all prices of 'price-commodity' measured in the
 ;; currency 'report-currency'. The prices are taken from all splits in
-;; 'currency-accounts' up until the date 'end-date-tp'. Returns a list
+;; 'currency-accounts' up until the date 'end-date'. Returns a list
 ;; of lists. Each listelement looks like the list (time price), where
-;; 'time' is the timepair when the <gnc:numeric*> 'price' was valid.
+;; 'time' is the time64 when the <gnc:numeric*> 'price' was valid.
 (define (gnc:get-commodity-totalavg-prices
-         currency-accounts end-date-tp price-commodity report-currency)
+         currency-accounts end-date price-commodity report-currency)
   (let ((total-foreign (gnc-numeric-zero))
         (total-domestic (gnc-numeric-zero)))
     (filter
@@ -150,7 +149,7 @@
                               (xaccSplitGetAmount a)))
                (value-amount (gnc-numeric-abs
                               (xaccSplitGetValue a)))
-               (transaction-date (gnc-transaction-get-date-posted
+               (transaction-date (xaccTransGetDate
                                   (xaccSplitGetParent a)))
                (foreignlist
                 (if (gnc-commodity-equiv transaction-comm
@@ -213,7 +212,7 @@
       ;; date.
       (gnc:get-match-commodity-splits-sorted
        currency-accounts
-       end-date-tp price-commodity)))))
+       end-date price-commodity)))))
 
 ;; Create a list of prices for all commodities in 'commodity-list',
 ;; i.e. the same thing as in get-commodity-totalavg-prices but
@@ -221,7 +220,7 @@
 ;; of the foreign-currency and the appropriate list from
 ;; gnc:get-commodity-totalavg-prices, see there.
 (define (gnc:get-commoditylist-totalavg-prices
-         commodity-list report-currency end-date-tp
+         commodity-list report-currency end-date
          start-percent delta-percent)
   (let ((currency-accounts
          ;;(filter gnc:account-has-shares?
@@ -238,17 +237,17 @@
               (+ start-percent (* delta-percent (/ work-done work-to-do)))))
          (cons c
                (gnc:get-commodity-totalavg-prices
-                currency-accounts end-date-tp c report-currency))))
+                currency-accounts end-date c report-currency))))
      commodity-list)))
 
 ;; Get the instantaneous prices for the 'price-commodity', measured in
 ;; amounts of the 'report-currency'. The prices are taken from all
 ;; splits in 'currency-accounts' up until the date
-;; 'end-date-tp'. Returns a list of lists. Each listelement looks like
-;; the list (time price), where 'time' is the timepair when the
+;; 'end-date'. Returns a list of lists. Each listelement looks like
+;; the list (time price), where 'time' is the time64 when the
 ;; <gnc:numeric*> 'price' was valid.
 (define (gnc:get-commodity-inst-prices
-         currency-accounts end-date-tp price-commodity report-currency)
+         currency-accounts end-date price-commodity report-currency)
   ;; go through all splits; convert all splits into a price.
   (filter
    gnc:price-is-not-zero?
@@ -262,7 +261,7 @@
                             (xaccSplitGetAmount a)))
              (value-amount (gnc-numeric-abs
                             (xaccSplitGetValue a)))
-             (transaction-date (gnc-transaction-get-date-posted
+             (transaction-date (xaccTransGetDate
                                 (xaccSplitGetParent a)))
              (foreignlist
               (if (gnc-commodity-equiv transaction-comm price-commodity)
@@ -314,7 +313,7 @@
     ;; Get all the interesting splits, sorted by date.
     (gnc:get-match-commodity-splits-sorted
      currency-accounts
-     end-date-tp price-commodity))))
+     end-date price-commodity))))
 
 ;; Get the instantaneous prices for all commodities in
 ;; 'commodity-list', i.e. the same thing as get-commodity-inst-prices
@@ -322,7 +321,7 @@
 ;; consists of the foreign-currency and the appropriate list from
 ;; gnc:get-commodity-inst-prices, see there.
 (define (gnc:get-commoditylist-inst-prices
-         commodity-list report-currency end-date-tp
+         commodity-list report-currency end-date
          start-percent delta-percent)
   (let ((currency-accounts
          ;;(filter gnc:account-has-shares?
@@ -339,7 +338,7 @@
               (+ start-percent (* delta-percent (/ work-done work-to-do)))))
          (cons c
                (gnc:get-commodity-inst-prices
-                currency-accounts end-date-tp c report-currency))))
+                currency-accounts end-date c report-currency))))
      commodity-list)))
 
 
@@ -350,26 +349,26 @@
 (define (gnc:pricelist-price-find-nearest
          pricelist date)
   (let* ((later (find (lambda (p)
-                        (gnc:timepair-lt date (first p)))
+                        (< date (first p)))
                       pricelist))
          (earlierlist (take-while
                        (lambda (p)
-                         (gnc:timepair-ge date (first p)))
+                         (>= date (first p)))
                        pricelist))
          (earlier (and (not (null? earlierlist))
                        (last earlierlist))))
     ;;          (if earlier
     ;;              (warn "earlier"
-    ;;                    (gnc-print-date (first earlier))
+    ;;                    (qof-print-date (first earlier))
     ;;                    (gnc-numeric-to-double (second earlier))))
     ;;          (if later
     ;;              (warn "later"
-    ;;                    (gnc-print-date (first later))
+    ;;                    (qof-print-date (first later))
     ;;                    (gnc-numeric-to-double (second later))))
 
     (if (and earlier later)
-        (if (< (abs (gnc:timepair-delta date (first earlier)))
-               (abs (gnc:timepair-delta date (first later))))
+        (if (< (abs (- (first earlier) date))
+               (abs (- (first later) date)))
             (second earlier)
             (second later))
         (or
@@ -827,7 +826,7 @@
             (gnc-pricedb-get-db (gnc-get-current-book))
             (gnc:gnc-monetary-amount foreign)
             (gnc:gnc-monetary-commodity foreign)
-            domestic (timespecCanonicalDayTime date))))
+            domestic (time64CanonicalDayTime date))))
       #f))
 
 ;; Exchange by the nearest price from pricelist. This function takes
@@ -868,18 +867,18 @@
 ;; the value of 'source-option', whose possible values are set in
 ;; gnc:options-add-price-source!.
 (define (gnc:case-exchange-fn
-         source-option report-currency to-date-tp)
+         source-option report-currency to-date)
   (case source-option
     ((average-cost) (gnc:make-exchange-function
                      (gnc:make-exchange-alist
-                      report-currency to-date-tp #t)))
+                      report-currency to-date #t)))
     ((weighted-average) (gnc:make-exchange-function
                          (gnc:make-exchange-alist
-                          report-currency to-date-tp #f)))
+                          report-currency to-date #f)))
     ((pricedb-latest) gnc:exchange-by-pricedb-latest)
     ((pricedb-nearest) (lambda (foreign domestic)
                          (gnc:exchange-by-pricedb-nearest
-                          foreign domestic to-date-tp)))
+                          foreign domestic to-date)))
     (else
      (begin
        ;; FIX-ME
@@ -892,7 +891,7 @@
                  source-option " using pricedb-nearest.")
        (lambda (foreign domestic)
          (gnc:exchange-by-pricedb-nearest
-          foreign domestic to-date-tp))))))
+          foreign domestic to-date))))))
 
 ;; Return a ready-to-use function. Which one to use is determined by
 ;; the value of 'source-option', whose possible values are set in
@@ -902,25 +901,25 @@
 ;; section of the progress bar while running this function.
 ;;
 (define (gnc:case-exchange-time-fn
-         source-option report-currency commodity-list to-date-tp
+         source-option report-currency commodity-list to-date
          start-percent delta-percent)
   (case source-option
     ;; Make this the same as gnc:case-exchange-fn
     ((average-cost) (let* ((exchange-fn (gnc:make-exchange-function
                                          (gnc:make-exchange-alist
-                                          report-currency to-date-tp #t))))
+                                          report-currency to-date #t))))
                       (lambda (foreign domestic date)
                         (exchange-fn foreign domestic))))
     ((weighted-average) (let ((pricealist
                                (gnc:get-commoditylist-totalavg-prices
-                                commodity-list report-currency to-date-tp
+                                commodity-list report-currency to-date
                                 start-percent delta-percent)))
                           (lambda (foreign domestic date)
                             (gnc:exchange-by-pricealist-nearest
                              pricealist foreign domestic date))))
     ((actual-transactions) (let ((pricealist
                                   (gnc:get-commoditylist-inst-prices
-                                   commodity-list report-currency to-date-tp)))
+                                   commodity-list report-currency to-date)))
                              (lambda (foreign domestic date)
                                (gnc:exchange-by-pricealist-nearest
                                 pricealist foreign domestic date))))
@@ -933,8 +932,7 @@
                  source-option ". Using pricedb-nearest.")
        ;; FIX-ME another hack to prevent report crashing when an
        ;; unimplemented source-option comes through
-       gnc:exchange-by-pricedb-nearest
-       ))))
+       gnc:exchange-by-pricedb-nearest))))
 
 
 
@@ -972,15 +970,10 @@
                             ;; returns #f instead of an actual
                             ;; <gnc:monetary>.  Better to just return #f.
                             (exchange-fn (gnc:make-gnc-monetary curr val)
-                                         domestic))
-                           )
-                  )
-              )
+                                         domestic)))))
             #f)
            (balance 'getmonetary domestic #f)))
-        (else #f)
-        )
-  )
+        (else #f)))
 
 ;; As above, but adds only the commodities of other stocks and
 ;; mutual-funds. Returns a commodity-collector, (not a <gnc:monetary>)
@@ -1019,13 +1012,8 @@
 (define (gnc:uniform-commodity? amt report-commodity)
   ;; function to see if the commodity-collector amt
   ;; contains any foreign commodities
-  (let ((elts (gnc-commodity-collector-commodity-count amt))
-        )
+  (let ((elts (gnc-commodity-collector-commodity-count amt)))
     (or (equal? elts 0)
         (and (equal? elts 1)
              (gnc-commodity-collector-contains-commodity?
-              amt report-commodity)
-             )
-        )
-    )
-  )
+              amt report-commodity)))))
