@@ -102,7 +102,7 @@
      (gnc:make-date-option
       (N_ "Hello, World!") (N_ "Just a Date Option")
       "d" (N_ "This is a date option.")
-      (lambda () (cons 'absolute (cons (current-time) 0)))
+      (lambda () (cons 'absolute (current-time)))
       #f 'absolute #f ))
     
     ;; This is another date option, but the user can also select
@@ -111,7 +111,7 @@
      (gnc:make-date-option
       (N_ "Hello, World!") (N_ "Time and Date Option")
       "e" (N_ "This is a date option with time.")
-      (lambda () (cons 'absolute (cons (current-time) 0)))
+      (lambda () (cons 'absolute (current-time)))
       #t 'absolute #f ))
     
     (add-option
