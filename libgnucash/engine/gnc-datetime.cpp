@@ -294,16 +294,12 @@ GncDateTimeImpl::GncDateTimeImpl(const std::string str) :
         auto input_facet(new Facet());
         std::istringstream ss(str.substr(0, tzpos));
         ss.imbue(std::locale(std::locale(), input_facet));
-        input_facet->set_iso_extended_format();
+        if (str.find("-") == 4)
+            input_facet->set_iso_extended_format();
+        else /* Not in iso format, try squashed format. */
+            input_facet->format("%Y%m%d%H%M%S");
         PTime pdt(not_a_date_time);
         ss >> pdt;
-        if (pdt.is_special())
-        {
-            input_facet->format("%Y%m%d%H%M%S");
-            ss.clear(); //Reset to the beginning.
-            ss.seekg(0);
-            ss >> pdt;
-        }
         m_time = LDT(pdt.date(), pdt.time_of_day(), tzptr,
                          LDTBase::NOT_DATE_TIME_ON_ERROR);
     }
@@ -450,7 +446,7 @@ GncDateTime::GncDateTime(const time64 time) :
     m_impl(new GncDateTimeImpl(time)) {}
 GncDateTime::GncDateTime(const struct tm tm) :
     m_impl(new GncDateTimeImpl(tm)) {}
-GncDateTime::GncDateTime(const std::string str, std::string fmt) :
+GncDateTime::GncDateTime(const std::string str) :
     m_impl(new GncDateTimeImpl(str)) {}
 GncDateTime::~GncDateTime() = default;
 

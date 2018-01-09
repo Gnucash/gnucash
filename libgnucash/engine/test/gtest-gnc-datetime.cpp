@@ -293,6 +293,16 @@ TEST(gnc_datetime_constructors, test_string_constructor)
     EXPECT_EQ(tm.tm_hour, 15);
     EXPECT_EQ(tm.tm_min, 8);
     EXPECT_EQ(tm.tm_sec, 19);
+/* Squashed format from SQLite3 databases */
+    timestr = "20151205115703";
+    GncDateTime time4(timestr);
+    tm = time4.utc_tm();
+    EXPECT_EQ(tm.tm_year, 115);
+    EXPECT_EQ(tm.tm_mon, 11);
+    EXPECT_EQ(tm.tm_mday, 5);
+    EXPECT_EQ(tm.tm_hour,11);
+    EXPECT_EQ(tm.tm_min, 57);
+    EXPECT_EQ(tm.tm_sec, 3);
 }
 
 TEST(gnc_datetime_constructors, test_struct_tm_constructor)
