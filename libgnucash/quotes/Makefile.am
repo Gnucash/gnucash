@@ -10,7 +10,6 @@ EXTRA_DIST = \
   gnc-fq-dump \
   gnc-fq-helper.in \
   gnc-fq-update.in \
-  gnc-value-portfolio \
   CMakeLists.txt
 
 gnc-fq-helper: gnc-fq-helper.in Makefile
