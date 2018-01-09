@@ -261,15 +261,38 @@ TEST(gnc_datetime_constructors, test_time64_constructor)
 
 TEST(gnc_datetime_constructors, test_string_constructor)
 {
-    std::string timestr("2015-12-05 00:01:00");
-    GncDateTime time(timestr);
-    auto tm = time.utc_tm();
+/* Plain UTC date-time */
+    std::string timestr("2015-12-05 11:57:03");
+    GncDateTime time1(timestr);
+    auto tm = time1.utc_tm();
     EXPECT_EQ(tm.tm_year, 115);
     EXPECT_EQ(tm.tm_mon, 11);
     EXPECT_EQ(tm.tm_mday, 5);
-    EXPECT_EQ(tm.tm_hour, 0);
-    EXPECT_EQ(tm.tm_min, 1);
-    EXPECT_EQ(tm.tm_sec, 0);
+    EXPECT_EQ(tm.tm_hour,11);
+    EXPECT_EQ(tm.tm_min, 57);
+    EXPECT_EQ(tm.tm_sec, 3);
+
+/* Datetime with an offset */
+    timestr = "1993-07-22 15:21:19 +0300";
+    GncDateTime time2(timestr);
+    tm = time2.utc_tm();
+    EXPECT_EQ(tm.tm_year, 93);
+    EXPECT_EQ(tm.tm_mon, 6);
+    EXPECT_EQ(tm.tm_mday, 22);
+    EXPECT_EQ(tm.tm_hour, 12);
+    EXPECT_EQ(tm.tm_min, 21);
+    EXPECT_EQ(tm.tm_sec, 19);
+
+/* Bug 767824 date-time */
+    timestr = "1993-07-22 15:21:19 +0013";
+    GncDateTime time3(timestr);
+    tm = time3.utc_tm();
+    EXPECT_EQ(tm.tm_year, 93);
+    EXPECT_EQ(tm.tm_mon, 6);
+    EXPECT_EQ(tm.tm_mday, 22);
+    EXPECT_EQ(tm.tm_hour, 15);
+    EXPECT_EQ(tm.tm_min, 8);
+    EXPECT_EQ(tm.tm_sec, 19);
 }
 
 TEST(gnc_datetime_constructors, test_struct_tm_constructor)

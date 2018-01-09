@@ -262,48 +262,31 @@ GncDateTimeImpl::GncDateTimeImpl(const GncDateImpl& date, DayPart part) :
     }
 }
 
+using PTZ = boost::local_time::posix_time_zone;
+
+static TZ_Ptr
+tz_from_string(std::string str)
+{
+    if (str.empty()) return utc_zone;
+    std::string tzstr = "XXX" + str;
+    if (tzstr.length() > 6 && tzstr[6] != ':') //6 for XXXsHH, s is + or -
+        tzstr.insert(6, ":");
+    if (tzstr.length() > 9 && tzstr[9] != ':') //9 for XXXsHH:MM
+    {
+        tzstr.insert(9, ":");
+    }
+    return TZ_Ptr(new PTZ(tzstr));
+}
+
 GncDateTimeImpl::GncDateTimeImpl(const std::string str) :
     m_time(unix_epoch, utc_zone)
 {
     if (str.empty()) return;
 
-    using std::string;
-    using PTZ = boost::local_time::posix_time_zone;
-    TZ_Ptr tzptr;
     auto tzpos = str.find_first_of("+-", str.find(":"));
-    int offset = 0L;
-    if (tzpos != str.npos)
-    {
-        string tzstr = "XXX" + str.substr(tzpos);
-        if (tzstr.length() > 6 && tzstr[6] != ':') //6 for XXXsHH, s is + or -
-            tzstr.insert(6, ":");
-        if (tzstr.length() > 9 && tzstr[9] != ':') //9 for XXXsHH:MM
-        {
-            tzstr.insert(9, ":");
-        /* Bug 767824: A GLib bug in parsing the UTC timezone on
-         * Windows may have created a bogus timezone of a random
-         * number of minutes. Since there are no fractional-hour
-         * timezones around the prime meridian we can safely check for
-         * this in files by looking for minutes-only offsets and
-         * making the appropriate correction.
-         */
-            if (tzstr.compare(7,8, "00") &&
-                (tzstr.length() > 10 ? tzstr[10] != '0' :
-                 !tzstr.compare(10, 11, "00")))
-            {
-                offset = atoi(tzstr.substr(10,11).c_str());
-                if (offset && tzpos == '-')
-                    offset = -offset;
-                tzstr.replace(10, 11, "00");
-            }
-        }
-        tzptr.reset(new PTZ(tzstr));
-        if (str[tzpos - 1] == ' ') --tzpos;
-    }
-    else
-    {
-        tzptr = utc_zone;
-    }
+    auto tzptr = tz_from_string(tzpos != str.npos ? str.substr(tzpos) : "");
+    if (tzpos != str.npos && str[tzpos - 1] == ' ') --tzpos;
+
     try
     {
         using Facet = boost::posix_time::time_input_facet;
@@ -328,8 +311,15 @@ GncDateTimeImpl::GncDateTimeImpl(const std::string str) :
     {
         throw(std::invalid_argument("The date string was outside of the supported year range."));
     }
-    if (offset)
-        m_time -= boost::posix_time::minutes(offset);
+    /* Bug 767824: A GLib bug in parsing the UTC timezone on Windows may have
+     * created a bogus timezone of a random number of minutes. Since there are
+     * no fractional-hour timezones around the prime meridian we can safely
+     * check for this in files by resetting to UTC if there's a
+     * less-than-an-hour offset.
+     */
+    auto offset = tzptr->base_utc_offset().seconds();
+    if (offset != 0 && std::abs(offset) < 3600)
+        m_time = m_time.local_time_in(utc_zone);
 }
 
 GncDateTimeImpl::operator time64() const
@@ -460,7 +450,7 @@ GncDateTime::GncDateTime(const time64 time) :
     m_impl(new GncDateTimeImpl(time)) {}
 GncDateTime::GncDateTime(const struct tm tm) :
     m_impl(new GncDateTimeImpl(tm)) {}
-GncDateTime::GncDateTime(const std::string str) :
+GncDateTime::GncDateTime(const std::string str, std::string fmt) :
     m_impl(new GncDateTimeImpl(str)) {}
 GncDateTime::~GncDateTime() = default;
 
