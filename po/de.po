@@ -588,9 +588,7 @@ msgstr ""
 
 #: ../gnucash/gnome/assistant-hierarchy.c:1145
 msgid "Please choose the currency to use for new accounts."
-msgstr ""
-"\n"
-"Wählen Sie eine Währung für die neuen Konten."
+msgstr "Wählen Sie eine Währung für die neuen Konten."
 
 #. The options dialog gets added to the notebook so it doesn't need a parent.
 #: ../gnucash/gnome/assistant-hierarchy.c:1190
@@ -2411,7 +2409,7 @@ msgstr ""
 
 #: ../gnucash/gnome/dialog-payment.c:1517
 msgid "Warning"
-msgstr "Warnung 
+msgstr "Warnung"
 
 #: ../gnucash/gnome/dialog-payment.c:1520
 #: ../gnucash/gnome/dialog-payment.c:1638
