@@ -35,9 +35,8 @@ msgid "Baltic"
 msgstr "Bbaltisch"
 
 #: ../borrowed/goffice/go-charmap-sel.c:72
-#, fuzzy
 msgid "Central European"
-msgstr "Europäisch"
+msgstr "Mitteleuropäisch"
 
 #: ../borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
@@ -588,7 +587,6 @@ msgid ""
 msgstr ""
 
 #: ../gnucash/gnome/assistant-hierarchy.c:1145
-#, fuzzy
 msgid "Please choose the currency to use for new accounts."
 msgstr ""
 "\n"
@@ -1371,27 +1369,22 @@ msgid "The number of payments cannot be negative."
 msgstr "Die Anzahl der Zahlungen kann nicht negativ sein."
 
 #: ../gnucash/gnome/dialog-find-account.c:310
-#, fuzzy
 msgid "Place Holder"
 msgstr "Platzhalter"
 
 #: ../gnucash/gnome/dialog-find-account.c:321
-#, fuzzy
 msgid "Hidden"
 msgstr "_Versteckt"
 
 #: ../gnucash/gnome/dialog-find-account.c:332
-#, fuzzy
 msgid "Not Used"
-msgstr "Nicht vorgemerkt"
+msgstr "Nicht genutzt"
 
 #: ../gnucash/gnome/dialog-find-account.c:343
-#, fuzzy
 msgid "Balance Zero"
 msgstr "Bilanz (Periodenbezogen)"
 
 #: ../gnucash/gnome/dialog-find-account.c:361
-#, fuzzy
 msgid "Search from "
 msgstr " Suchen "
 
@@ -1652,9 +1645,8 @@ msgid "Find Transaction"
 msgstr "Buchungen suchen"
 
 #: ../gnucash/gnome/dialog-imap-editor.c:119
-#, fuzzy
 msgid "Are you sure you want to delete the entries ?"
-msgstr "Sind Sie sicher, dass Sie diesen Eintrag löschen möchten?"
+msgstr "Sind Sie sicher, dass Sie diese Einträge löschen möchten?"
 
 #: ../gnucash/gnome/dialog-imap-editor.c:412
 #, fuzzy
@@ -1667,15 +1659,13 @@ msgid "Bayesian"
 msgstr ""
 
 #. Description
-#: ../gnucash/gnome/dialog-imap-editor.c:518
-#, fuzzy
 msgid "Description Field"
-msgstr "Beschreibung"
+msgstr "Beschreibungsfeld"
 
 #. Memo
 #: ../gnucash/gnome/dialog-imap-editor.c:521
 msgid "Memo Field"
-msgstr ""
+msgstr "Memofeld"
 
 #. CSV Account Map
 #: ../gnucash/gnome/dialog-imap-editor.c:524
@@ -1684,9 +1674,8 @@ msgid "CSV Account Map"
 msgstr "Kontobezeichnung"
 
 #: ../gnucash/gnome/dialog-imap-editor.c:561
-#, fuzzy
 msgid "Online Id"
-msgstr "Online"
+msgstr "Online Id"
 
 #. Translators: In this context,
 #. * 'Billing information' maps to the
@@ -2409,6 +2398,8 @@ msgid ""
 "The selected transaction doesn't have splits that can be assigned as a "
 "payment"
 msgstr ""
+"Die ausgewählte Buchung hat keine Teile, die einer Zahlung zugewiesen "
+"werden kann."
 
 #: ../gnucash/gnome/dialog-payment.c:1514
 msgid ""
@@ -2419,15 +2410,13 @@ msgid ""
 msgstr ""
 
 #: ../gnucash/gnome/dialog-payment.c:1517
-#, fuzzy
 msgid "Warning"
-msgstr "Warnung zurücksetzen"
+msgstr "Warnung 
 
 #: ../gnucash/gnome/dialog-payment.c:1520
 #: ../gnucash/gnome/dialog-payment.c:1638
-#, fuzzy
 msgid "Continue"
-msgstr "Kontinuierlich"
+msgstr "Fortsetzen"
 
 #: ../gnucash/gnome/dialog-payment.c:1521
 #: ../gnucash/gnome/gnc-plugin-page-invoice.c:260
@@ -2470,7 +2459,6 @@ msgid "Entries"
 msgstr "Einträge"
 
 #: ../gnucash/gnome/dialog-price-edit-db.c:451
-#, fuzzy
 msgid "Are you sure you want to delete these prices ?"
 msgstr "Sind Sie sicher, dass Sie den gewählten Kurswert löschen wollen?"
 
@@ -2851,7 +2839,7 @@ msgstr "Art der Steuererklärung"
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-options.glade.h:5
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-reset-warnings.glade.h:3
 msgid "_Apply"
-msgstr ""
+msgstr "_Anwenden"
 
 #: ../gnucash/gnome/dialog-tax-info.c:1191
 msgid ""
@@ -2867,28 +2855,24 @@ msgstr "Formular"
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:203
 msgid "File Found"
-msgstr ""
+msgstr "Datei gefunden"
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:205
-#, fuzzy
 msgid "File Not Found"
-msgstr "Nicht gefunden"
+msgstr "Datei nicht gefunden"
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:215
-#, fuzzy
 msgid "Address Found"
-msgstr "Telelefon "
+msgstr "Adresse gefunden"
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:217
-#, fuzzy
 msgid "Address Not Found"
-msgstr "Telelefon "
+msgstr "adresse nicht gefunden"
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:276
 #: ../gnucash/gnome/gnc-split-reg.c:1143
-#, fuzzy
 msgid "This transaction is not associated with a valid URI."
-msgstr "Diesem Buchungssatz ist keine URI zugeordnet."
+msgstr "Diesem Buchungssatz ist keine gültige URI zugeordnet."
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:418
 msgid "Path head for files is, "
@@ -2899,7 +2883,6 @@ msgid "Path head does not exist, "
 msgstr ""
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:432
-#, fuzzy
 msgid "Relative"
 msgstr "_Relativ:"
 
@@ -3147,7 +3130,6 @@ msgid "Archive old data using accounting periods"
 msgstr "Alte Daten abschließen und in vorigen Buchführungsperioden speichern."
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:191
-#, fuzzy
 msgid "_Price Database"
 msgstr "Kurs-Datenbank"
 
@@ -3187,9 +3169,8 @@ msgstr ""
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:212
 msgid "View and Delete Bayesian and Non Bayesian information"
 msgstr ""
-
-#: ../gnucash/gnome/gnc-plugin-basic-commands.c:216
 #, fuzzy
+#: ../gnucash/gnome/gnc-plugin-basic-commands.c:216
 msgid "_Transaction Associations"
 msgstr "Buchungsinformationen"
 
@@ -3643,9 +3624,8 @@ msgstr "Ausgewähltes Konto löschen"
 #: ../gnucash/gnome/gnc-plugin-page-account-tree.c:233
 #: ../gnucash/gnome/gnc-plugin-page-register2.c:248
 #: ../gnucash/gnome/gnc-plugin-page-register.c:256
-#, fuzzy
 msgid "F_ind Account"
-msgstr "Konto _bearbeiten"
+msgstr "Konto _suchen"
 
 #: ../gnucash/gnome/gnc-plugin-page-account-tree.c:229
 #: ../gnucash/gnome/gnc-plugin-page-account-tree.c:234
@@ -9011,7 +8991,6 @@ msgid "Price Database"
 msgstr "Kurs-Datenbank"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-price.glade.h:49
-#, fuzzy
 msgid "_Get Quotes"
 msgstr "Kurse abrufen"
 
@@ -15040,12 +15019,10 @@ msgid "GnuCash Tip Of The Day"
 msgstr "GnuCash Tipp des Tages"
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-totd.glade.h:2
-#, fuzzy
 msgid "_Back"
 msgstr "Zurück"
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-totd.glade.h:3
-#, fuzzy
 msgid "_Forward"
 msgstr "Vorwärts"
 
