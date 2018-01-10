@@ -155,7 +155,7 @@
     (list min-date max-date dates)))
 
 (define (category-report-dates-accumulate dates)
-  (let* ((min-date (decdate64 (car (list-min-max dates <)) DayDelta))
+  (let* ((min-date (decdate (car (list-min-max dates <)) DayDelta))
          (max-date (cdr (list-min-max dates <)))
          (datepairs (reverse! (cdr (fold (lambda (next acc)
                                            (let ((prev (car acc))

@@ -204,14 +204,14 @@
 
 (define (make-interval-list to-date)
   (let ((begindate to-date))
-    (set! begindate (decdate64 begindate ThirtyDayDelta))
-    (set! begindate (decdate64 begindate ThirtyDayDelta))
-    (set! begindate (decdate64 begindate ThirtyDayDelta))
+    (set! begindate (decdate begindate ThirtyDayDelta))
+    (set! begindate (decdate begindate ThirtyDayDelta))
+    (set! begindate (decdate begindate ThirtyDayDelta))
     (gnc:make-date-list begindate to-date ThirtyDayDelta)))
 
 ;; Have make-list create a stepped list, then add a date in the future for the "current" bucket 
 (define (make-extended-interval-list to-date) 
-    (define dayforcurrent (incdate64 to-date YearDelta)) ;; MAGIC CONSTANT 
+    (define dayforcurrent (incdate to-date YearDelta)) ;; MAGIC CONSTANT 
     (define oldintervalreversed (reverse (make-interval-list to-date)))          
     (reverse (cons dayforcurrent oldintervalreversed))) 
 

@@ -129,8 +129,8 @@
                   ;; The date should be close to the same.. +/- a week.
                   (let ((date (xaccTransGetDate xtn)))
                     (xaccQueryAddDateMatchTT query
-                                             #t (decdate64 date WeekDelta)
-                                             #t (incdate64 date WeekDelta)
+                                             #t (decdate date WeekDelta)
+                                             #t (incdate date WeekDelta)
                                              QOF-QUERY-AND))
 
                   ;; For each split in the new transaction, add a

@@ -203,7 +203,7 @@
     (else #f)))
 
 ;; Modify a date
-(define (moddate64 op adate delta)
+(define (moddate op adate delta)
   (let ((newtm (gnc-localtime adate)))
     (begin
       (set-tm:sec newtm (op (tm:sec newtm) (tm:sec delta)))
@@ -216,8 +216,8 @@
       (gnc-mktime newtm))))
 
 ;; Add or subtract time from a date
-(define (decdate64 adate delta) (moddate64 - adate delta ))
-(define (incdate64 adate delta) (moddate64 + adate delta ))
+(define (decdate adate delta) (moddate - adate delta ))
+(define (incdate adate delta) (moddate + adate delta ))
 
 ;; date-granularity comparison functions.
 
@@ -235,9 +235,9 @@
 ;; want that you'll have to write another function.
 (define (gnc:make-date-interval-list current-date end-date increment)
   (if (< current-date end-date)
-      (let ((next-date (incdate64 current-date increment)))
+      (let ((next-date (incdate current-date increment)))
         (if (< next-date end-date)
-            (cons (list current-date (decdate64 next-date SecDelta) '())
+            (cons (list current-date (decdate next-date SecDelta) '())
                   (gnc:make-date-interval-list next-date end-date increment))
             (cons (list current-date end-date '())
                   '())))
@@ -251,7 +251,7 @@
 (define (gnc:make-date-list startdate enddate incr)
   (if (< startdate enddate)
       (cons startdate
-            (gnc:make-date-list (incdate64 startdate incr)
+            (gnc:make-date-list (incdate startdate incr)
                                 enddate incr))
       (list enddate)))
 
@@ -363,10 +363,10 @@
     (gnc-mktime bdt)))
 
 (define (gnc:time64-previous-day t64)
-  (decdate64 t64 DayDelta))
+  (decdate t64 DayDelta))
 
 (define (gnc:time64-next-day t64)
-  (incdate64 t64 DayDelta))
+  (incdate t64 DayDelta))
 
 
 (define (gnc:reldate-get-symbol x) (vector-ref x 0))

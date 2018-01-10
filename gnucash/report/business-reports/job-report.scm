@@ -118,9 +118,9 @@
 
 (define (make-interval-list to-date)
   (let ((begindate to-date))
-    (set! begindate (decdate64 begindate ThirtyDayDelta))
-    (set! begindate (decdate64 begindate ThirtyDayDelta))
-    (set! begindate (decdate64 begindate ThirtyDayDelta))
+    (set! begindate (decdate begindate ThirtyDayDelta))
+    (set! begindate (decdate begindate ThirtyDayDelta))
+    (set! begindate (decdate begindate ThirtyDayDelta))
     (gnc:make-date-list begindate to-date ThirtyDayDelta)))
 
 
