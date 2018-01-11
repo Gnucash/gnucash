@@ -3081,7 +3081,7 @@ msgstr "_Optionen Steuerbericht"
 #. * So adjust this string
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:158
 msgid "Setup relevant accounts for tax reports, e.g. US income tax"
-msgstr "Konten für Steuerbericht (MwSt.) einrichten"
+msgstr "Konten für Steuerbericht (USt.) einrichten"
 
 #. Actions menu
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:164
@@ -3471,7 +3471,7 @@ msgstr "Den Dialog für die Suche nach Auslagenerstattungen öffnen"
 
 #: ../gnucash/gnome/gnc-plugin-business.c:275
 msgid "Sales _Tax Table"
-msgstr "MwSt.-_Steuertabelle..."
+msgstr "USt.-_Steuertabelle..."
 
 #: ../gnucash/gnome/gnc-plugin-business.c:276
 msgid "View and edit the list of Sales Tax Tables (GST/VAT)"
@@ -3494,12 +3494,10 @@ msgid "Open the Bills Due Reminder dialog"
 msgstr "Das Fenster mit Erinnerungen an fällige Rechnungen öffnen"
 
 #: ../gnucash/gnome/gnc-plugin-business.c:290
-#, fuzzy
 msgid "Invoices _Due Reminder"
-msgstr "Erinnerung an _fällige Rechnungen"
+msgstr "_Fällige Rechnungen mahnen"
 
 #: ../gnucash/gnome/gnc-plugin-business.c:291
-#, fuzzy
 msgid "Open the Invoices Due Reminder dialog"
 msgstr "Das Fenster mit Erinnerungen an fällige Rechnungen öffnen"
 
@@ -5351,7 +5349,7 @@ msgstr ""
 
 #: ../gnucash/gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:5
 msgid "Is tax included in this type of business entry?"
-msgstr "Ist der Preis des Postens inklusive MwSt.?"
+msgstr "Ist der Preis des Postens inklusive USt.?"
 
 #: ../gnucash/gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:6
 msgid ""
@@ -16011,14 +16009,13 @@ msgid "Start Online Banking Wizard"
 msgstr "Onlinebanking Einrichtungs-Assistenten starten"
 
 #: ../gnucash/import-export/aqb/assistant-ab-initial.glade.h:22
-#, fuzzy
 msgid ""
 "Double Click on the line of an Online Banking account name if you want to "
 "match it to a GnuCash account. Click \"Next\" when all desired accounts are "
 "matching."
 msgstr ""
-"Doppel-Klicken Sie auf die Zeile eines Online-Banking-Kontos, um diesem HBCI-"
-"Konto ein GnuCash-Konto zuzuordnen. Klicken Sie »Vor«, wenn alle gewünschten "
+"Doppelklicken Sie auf die Zeile eines Online-Banking-Kontos, um diesem HBCI-"
+"Konto ein GnuCash-Konto zuzuordnen. Klicken Sie »Weiter«, wenn alle gewünschten "
 "Konten zugeordnet sind."
 
 #: ../gnucash/import-export/aqb/assistant-ab-initial.glade.h:23
@@ -16411,7 +16408,7 @@ msgid ""
 "execute the command line program \"aqhbci-tool\" for your account, as "
 "follows: aqhbci-tool4 getaccsepa -b %s -a %s"
 msgstr ""
-"Ihr lokales Bankkonto hat keine SPA Konteninformationen gespeichert. Es tut "
+"Ihr lokales Bankkonto hat keine SEPA Konteninformationen gespeichert. Es tut "
 "uns leid. aber in dieser Entwicklerversion ist ein weiterer Schritt "
 "notwendig, welcher noch nicht direkt in GnuCash implementiert ist- Bite "
 "führen Sie das Kommandozeilenprogramm \"aqhbci-tool\" für Ihr Konto wie "
@@ -17759,7 +17756,7 @@ msgstr "Duplizieren"
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1768
 msgid " replaced.</b></span>"
 msgstr ""
-
+#, fuzzy
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1801
 #, c-format
 msgid ""
@@ -17769,11 +17766,15 @@ msgid ""
 "Error message:\n"
 "%s"
 msgstr ""
+"Ein unerwarteter Fehler sit aufgetreten"
+"Bitte berichtichten Sie dies als fehhler.\n"
+"\n"
+"Fehlermeldung:\n"
+"%s"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.glade.h:1
-#, fuzzy
 msgid "CSV Price Import"
-msgstr "CSV-Buchungen-Import"
+msgstr "CSV-Kurs Import"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.glade.h:2
 msgid ""
@@ -17823,20 +17824,18 @@ msgstr "Wählen Sie eine Datei, die importiert werden soll"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.glade.h:21
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:20
-#, fuzzy
 msgid "Delete Settings"
-msgstr "Vorschau-Einstellungen"
+msgstr "Lösch-Einstellungen"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.glade.h:22
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:21
-#, fuzzy
 msgid "Save Settings"
-msgstr "Vorschau-Einstellungen"
+msgstr "Speichern-Einstellungen"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.glade.h:23
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:22
 msgid " <b>Load and Save Settings</b>"
-msgstr ""
+msgstr " <b>Lade- und Speichern-Einstellungen</b>"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.glade.h:25
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:24
@@ -17885,19 +17884,16 @@ msgstr ""
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.glade.h:38
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:40
-#, fuzzy
 msgid "<b>File Format</b>"
-msgstr "<b>Zeit</b>"
+msgstr "<b>Dateiformat</b>"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.glade.h:40
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:42
-#, fuzzy
 msgid "Currency Format"
 msgstr "Währungsformat"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.glade.h:41
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:43
-#, fuzzy
 msgid "Encoding"
 msgstr "Zeichenkodierung: "
 
@@ -17932,9 +17928,8 @@ msgstr ""
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.glade.h:49
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:51
-#, fuzzy
 msgid "<b>Miscellaneous</b>"
-msgstr "<b>Lieferantenrechnungen</b>"
+msgstr "<b>Verschiedenes/b>"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.glade.h:50
 #, fuzzy
@@ -17991,6 +17986,11 @@ msgid ""
 "Error message:\n"
 "%s"
 msgstr ""
+"Ein unerwarteter Feler ist aufgetreten während der Zuordnung der Konten. "
+"Bitte berichten Sie dies als Fehler.\n"
+"\n"
+"Fehlermeldung:\n"
+"%s"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1900
 #, c-format
@@ -18001,6 +18001,11 @@ msgid ""
 "Error message:\n"
 "%s"
 msgstr ""
+"Ein unerwarteter Feler ist aufgetreten während der Erstellung der Buchungen. "
+"Bitte berichten Sie dies als Fehler.\n"
+"\n"
+"Fehlermeldung:\n"
+"%s"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1909
 msgid "Double click on rows to change, then click on Apply to Import"
@@ -18018,6 +18023,7 @@ msgid "CSV Transaction Import"
 msgstr "CSV-Buchungen-Import"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:2
+#, fuzzy
 msgid ""
 "This assistant will help you import a delimited file containing a list of "
 "transactions. It supports both token separated files (such as comma "
@@ -18046,7 +18052,29 @@ msgid ""
 "settings name and press the Save Settings button. Note you can't save to "
 "built-in presets."
 msgstr ""
-
+"Dieser Assistent möchte Ihnen helfen, strukturierte Textdateien mit Buchungen zu "
+"importieren. Er unterstützt beides nämlich zeichenseparierte Dateien (durch Kommata "
+"oder Semikola getrennte Daten) und mit daten fester Breite.\n"
+"\n"
+"Für einen erfolgreichen Import müssen diese drei Spalten in der zu importierenden Datei vorhanden sein:"
+"• eine Datumsspalte\n"
+"• eine Beschreibungsspalte\n"
+"• eine Spalte Einzahlung oder Auszahlung\n"
+"\n"
+"Wenn keine Kontoangabe verfügbar ist, kann ein Basiskonto ausgewählt werden, "
+"auf das alle DDaten importiert werden.\n"
+"\n"
+"Alle importierten Buchungen eines Imports werden mit einem bestimmten Konto "
+"pro Import assiziiert. Wenn Sie eine Kontospalte wählen wird das Konto aus "
+"der ersten Zeile für den gesamten Import verwendet.\n"
+"\n"
+"Es gibt verschiedene Optionen, Trennzeichen zu bestimmen, ebenso, wie eine "
+"Option für feste Spaltenbreiten. Bei fester Spaltenbreite doppelklicken Sie "
+"auf den Balken über den dargestellten Zeilen, um die Breite festzulegen.\n"
+"\n"
+"Schließlich gibt es eine Option zur Bestimmung der ersten und letzten Zeile, "
+"welche benutzt werden kann, wenn sie einige Kopfzeilen oder mehrere Konten "
+"in einer Datei haben."
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:35
 #, fuzzy
 msgid "Multi-split"
@@ -18069,9 +18097,8 @@ msgid ""
 msgstr ""
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:52
-#, fuzzy
 msgid "<b>Account</b>"
-msgstr "<b>_Konten</b>"
+msgstr "<b>_Konto</b>"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:55
 msgid "Select a row to change the mappings:"
@@ -18098,7 +18125,6 @@ msgstr "Gleiche QIF-Konten mit GnuCash Konten ab"
 
 # Fixme: Source should be more precise "in this file"
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:61
-#, fuzzy
 msgid ""
 "On the following page you will be able to associate each transaction to a "
 "category.\n"
@@ -18122,7 +18148,10 @@ msgstr ""
 "Auf der folgenden Seite haben Sie die Möglicjkeit, jeder Buchung eine "
 "Kategorie zuzuordnen.\n"
 "\n"
-"Wenn dies ihr erster Import in diese Datei ist, müssen Sie leider alle "
+"Wenn es Probleme mit den Import-Einstellungen gibt, bringt Sie der Klick auf Weiter "
+"zurück zur vorherigen Seite, um dies zu prüfen und zu korrigieren."
+"\n"
+"Wenn dies ihr erster Import ist, müssen Sie leider alle "
 "Zeilen manuell zuordnen. Bei späteren Importen wird das Import-Modul "
 "versuchen, die Zuordnung basierend auf den früheren Importen vorzunehmen.\n"
 "\n"
@@ -18161,9 +18190,8 @@ msgid "Row %u, account %s not in %s\n"
 msgstr "Zeile %u, Konto %s nicht in %s\n"
 
 #: ../gnucash/import-export/csv-imp/gnc-csv-import-settings.cpp:45
-#, fuzzy
 msgid "No Settings"
-msgstr "Vorschau-Einstellungen"
+msgstr "Keine Einstellungen"
 
 #: ../gnucash/import-export/csv-imp/gnc-csv-import-settings.cpp:46
 #, fuzzy
@@ -18210,9 +18238,8 @@ msgstr "Komma: 123.456,78"
 
 #: ../gnucash/import-export/csv-imp/gnc-price-import.cpp:428
 #: ../gnucash/import-export/csv-imp/gnc-tx-import.cpp:462
-#, fuzzy
 msgid "Please select a date column."
-msgstr "Sie müssen eine Datei angeben, die geladen werden soll."
+msgstr "Bitte wählen Sie die Datumsspalte."
 
 #: ../gnucash/import-export/csv-imp/gnc-price-import.cpp:433
 #, fuzzy
@@ -18430,16 +18457,15 @@ msgstr "Wählen Sie eine Kontoart"
 msgid ""
 "Please select an account column or set a base account in the Account field."
 msgstr ""
+"Bitte wählen Sie eine Kontenspalte oder setzen das Basiskonto in das Kontenfeld"
 
 #: ../gnucash/import-export/csv-imp/gnc-tx-import.cpp:478
-#, fuzzy
 msgid "Please select a description column."
-msgstr "Sie müssen eine Datei angeben, die geladen werden soll."
+msgstr "Bitte wählen Sie eine Beschreibunsspalte."
 
 #: ../gnucash/import-export/csv-imp/gnc-tx-import.cpp:484
-#, fuzzy
 msgid "Please select a deposit or withdrawal column."
-msgstr "Keine Spalte für Saldo, Gutschrift oder Belastung."
+msgstr "Bitte wählen die eine Einzahlungs- oder Auszahlungsspalte."
 
 #: ../gnucash/import-export/csv-imp/gnc-tx-import.cpp:494
 #, fuzzy
@@ -18457,6 +18483,8 @@ msgid ""
 "No account column selected and no default account specified either.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
+"Weder wurde eine Kontenspalte ausgewählt noch ein Standardkonto angegeben.\n"
+"Dies sollte nimald passieren. Bitte berichten Sie dies als Fehler.\n"
 
 #: ../gnucash/import-export/customer-import/dialog-customer-import-gui.c:173
 msgid "Import Customers from csv"
@@ -20289,7 +20317,7 @@ msgstr "Steuerbar?"
 
 #: ../gnucash/register/ledger-core/gncEntryLedgerModel.c:106
 msgid "Tax Included?"
-msgstr "Inkl. MwSt.?"
+msgstr "Inkl. USt.?"
 
 #: ../gnucash/register/ledger-core/gncEntryLedgerModel.c:111
 msgid "Invoiced?"
@@ -20355,11 +20383,11 @@ msgstr "Wählen Sie die Nachlassart"
 
 #: ../gnucash/register/ledger-core/gncEntryLedgerModel.c:660
 msgid "Tax computed after discount is applied"
-msgstr "MwSt.-Berechnung nach Anwendung des Nachlasses"
+msgstr "USt.-Berechnung nach Anwendung des Nachlasses"
 
 #: ../gnucash/register/ledger-core/gncEntryLedgerModel.c:663
 msgid "Discount and tax both applied on pretax value"
-msgstr "Nachlass und MwSt. beides auf Nettobetrag anwenden"
+msgstr "Nachlass und USt. beides auf Nettobetrag anwenden"
 
 #: ../gnucash/register/ledger-core/gncEntryLedgerModel.c:666
 msgid "Discount computed after tax is applied"
@@ -20367,7 +20395,7 @@ msgstr "Nachlass auf Brutto-Betrag anwenden"
 
 #: ../gnucash/register/ledger-core/gncEntryLedgerModel.c:669
 msgid "Select how to compute the Discount and Taxes"
-msgstr "Wählen Sie, wie Nachlass und MwSt. berechnet werden"
+msgstr "Wählen Sie, wie Nachlass und USt. berechnet werden"
 
 #: ../gnucash/register/ledger-core/gncEntryLedgerModel.c:682
 msgid "Enter the unit-Price for this Entry"
@@ -20388,7 +20416,7 @@ msgstr "Wird dieser Posten besteuert?"
 
 #: ../gnucash/register/ledger-core/gncEntryLedgerModel.c:724
 msgid "Is the tax already included in the price of this entry?"
-msgstr "Ist der Preis des Postens inklusive MwSt.?"
+msgstr "Ist der Preis des Postens inklusive USt.?"
 
 #: ../gnucash/register/ledger-core/gncEntryLedgerModel.c:742
 msgid "Is this entry invoiced?"
@@ -20416,7 +20444,7 @@ msgstr "Zwischensumme dieses Postens"
 
 #: ../gnucash/register/ledger-core/gncEntryLedgerModel.c:784
 msgid "The total tax of this entry "
-msgstr "Gesamte MwSt. dieses Postens "
+msgstr "Gesamte USt. dieses Postens "
 
 #: ../gnucash/register/ledger-core/gncEntryLedgerModel.c:793
 msgid "Is this entry billable to a customer or job?"
@@ -29750,7 +29778,7 @@ msgid ""
 msgstr ""
 "Wenn Sie GnuCash über Mitternacht hinaus arbeiten, sollten Sie nach "
 "Mitternacht die verwendeten Kontofenster einmal schließen und wieder öffnen, "
-"damit das neue Datum als voreingestelltes Buchungsdatum vorhanden ist.Es ist "
+"damit das neue Datum als voreingestelltes Buchungsdatum vorhanden ist. Es ist "
 "nicht notwendig, GnuCash neu zu starten."
 
 #: ../doc/tip_of_the_day.list.in:91
