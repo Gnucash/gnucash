@@ -101,6 +101,7 @@
 (export gnc:make-radiobutton-option)
 (export gnc:make-radiobutton-callback-option)
 (export gnc:make-list-option)
+(export gnc:render-options-changed)
 (export gnc:options-make-end-date!)
 (export gnc:options-make-date-interval!)
 

@@ -14,8 +14,6 @@
 ;; - add custom sorter in scheme
 ;; - common currency - optionally show original currency amount
 ;;   and enable multiple data columns
-;; - add informational box, summarising options used, useful
-;;   to troubleshoot reports
 ;; - add support for indenting for better grouping
 ;; - add defaults suitable for a reconciliation report
 ;;
@@ -1717,83 +1715,6 @@ tags within description, notes or memo. ")
       (generic-less? X Y 'date 'none #t))
 
 
-    ;; infobox
-    (define (infobox)
-      (define (highlight title . data)
-        (string-append "<b>" title "</b>: " (string-join data " ") "<br>"))
-      (define (bool->string tf)
-        (if tf
-            (_ "Enabled")
-            (_ "Disabled")))
-      (gnc:make-html-text
-       (if (string-null? account-matcher)
-           ""
-           (string-append
-            (highlight
-             (string-append optname-account-matcher
-                            (if (opt-val pagename-filter optname-account-matcher-regex)
-                                (_ " regex")
-                                ""))
-             account-matcher)
-            (highlight
-             (_ "Accounts produced")
-             (string-join (map xaccAccountGetName c_account_1) ", "))))
-       (if (eq? filter-mode 'none)
-           ""
-           (highlight
-            (keylist-get-info filter-list filter-mode 'text)
-            (string-join (map xaccAccountGetName c_account_2) ", ")))
-       (if (string-null? transaction-matcher)
-           ""
-           (string-append
-            (highlight
-             (string-append optname-transaction-matcher
-                            (if (opt-val pagename-filter optname-transaction-matcher-regex)
-                                (_ " regex")
-                                ""))
-             transaction-matcher)))
-       (if reconcile-status-filter
-           (highlight
-            optname-reconcile-status
-            (keylist-get-info reconcile-status-list reconcile-status-filter 'text))
-           "")
-       (if (eq? void-status 'non-void-only)
-           ""
-           (highlight
-            optname-void-transactions
-            (keylist-get-info show-void-list void-status 'text)))
-       (if (eq? primary-key 'none)
-           ""
-           (highlight
-            optname-prime-sortkey
-            (keylist-get-info sortkey-list primary-key 'text)
-            (keylist-get-info ascending-list primary-order 'text)))
-       (if (eq? primary-key 'none)
-           ""
-           (if (member primary-key DATE-SORTING-TYPES)
-               (highlight
-                optname-prime-date-subtotal
-                (keylist-get-info date-subtotal-list primary-date-subtotal 'text))
-               (highlight
-                optname-prime-subtotal
-                (bool->string (opt-val pagename-sorting optname-prime-subtotal)))))
-       (if (eq? secondary-key 'none)
-           ""
-           (highlight
-            optname-sec-sortkey
-            (keylist-get-info sortkey-list secondary-key 'text)
-            (keylist-get-info ascending-list secondary-order 'text)))
-       (if (eq? secondary-key 'none)
-           ""
-           (if (member secondary-key DATE-SORTING-TYPES)
-               (highlight
-                optname-sec-date-subtotal
-                (keylist-get-info date-subtotal-list secondary-date-subtotal 'text))
-               (highlight
-                optname-sec-subtotal
-                (bool->string (opt-val pagename-sorting optname-sec-subtotal)))))
-       "<br>"))
-
     (if (or (null? c_account_1) (and-map not c_account_1))
 
         (if (null? c_account_0)
@@ -1814,7 +1735,7 @@ tags within description, notes or memo. ")
               (if (member 'no-match infobox-display)
                   (gnc:html-document-add-object!
                    document
-                   (infobox)))))
+                   (gnc:render-options-changed options)))))
 
         (begin
 
@@ -1881,7 +1802,7 @@ tags within description, notes or memo. ")
                 (if (member 'no-match infobox-display)
                     (gnc:html-document-add-object!
                      document
-                     (infobox))))
+                     (gnc:render-options-changed options))))
 
               (let ((table (make-split-table splits options)))
 
@@ -1899,7 +1820,7 @@ tags within description, notes or memo. ")
                 (if (member 'match infobox-display)
                     (gnc:html-document-add-object!
                      document
-                     (infobox)))
+                     (gnc:render-options-changed options)))
 
                 (gnc:html-document-add-object! document table)))))
 
