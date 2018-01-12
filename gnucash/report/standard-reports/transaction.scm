@@ -870,7 +870,10 @@ tags within description, notes or memo. ")
       gnc:pagename-display (N_ "Sign Reverses")
       "m1" (_ "Reverse amount display for certain account types.")
       'global
-      (keylist->vectorlist sign-reverse-list))))
+      (keylist->vectorlist sign-reverse-list)))
+
+    (gnc:register-trep-option
+     (gnc:make-internal-option "__trep" "unique-transactions" #f)))
 
   (gnc:options-set-default-section options gnc:pagename-general)
   options)
@@ -878,9 +881,13 @@ tags within description, notes or memo. ")
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Here comes the big function that builds the whole table.
 
-(define (make-split-table splits options)
+(define (make-split-table splits options custom-calculated-cells)
 
-  (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
+  (define (opt-val section name)
+    (let ((option (gnc:lookup-option options section name)))
+      (if option
+          (gnc:option-value option)
+          (error (format #f "cannot find ~a ~a" section name)))))
   (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
 
   (define (build-columns-used)
@@ -1059,7 +1066,7 @@ tags within description, notes or memo. ")
     ;;
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    (define calculated-cells
+    (define default-calculated-cells
       (letrec
           ((damount (lambda (s) (if (gnc:split-voided? s)
                                     (xaccSplitVoidFormerAmount s)
@@ -1148,6 +1155,14 @@ tags within description, notes or memo. ")
                            running-balance #t #f #f
                            (lambda (a) "")))
              '()))))
+
+    (define calculated-cells
+      ;; this part will check whether custom-calculated-cells were specified. this
+      ;; describes a custom function which consumes an options list, and generates
+      ;; a vectorlist similar to default-calculated-cells as above.
+      (if custom-calculated-cells
+          (custom-calculated-cells options)
+          default-calculated-cells))
 
     (define headings-left-columns
       (map (lambda (column)
@@ -1588,7 +1603,7 @@ tags within description, notes or memo. ")
 ;; Here comes the renderer function for this report.
 
 
-(define (trep-renderer report-obj)
+(define* (trep-renderer report-obj #:key custom-calculated-cells empty-report-message)
   (define options (gnc:report-options report-obj))
   (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
   (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
@@ -1710,9 +1725,17 @@ tags within description, notes or memo. ")
         ;; error condition: no accounts specified or obtained after filtering
         (begin
 
-          (gnc:html-document-add-object!
-           document
-           (gnc:html-make-no-account-warning report-title (gnc:report-id report-obj)))
+            ;; error condition: no accounts specified
+            (begin
+
+              (gnc:html-document-add-object!
+               document
+               (gnc:html-make-no-account-warning report-title (gnc:report-id report-obj)))
+
+              (and empty-report-message
+                   (gnc:html-document-add-object!
+                    document
+                    empty-report-message)))
 
           (if (member 'no-match infobox-display)
               (gnc:html-document-add-object!
@@ -1738,7 +1761,10 @@ tags within description, notes or memo. ")
                                                (eq? primary-order 'ascend)
                                                (eq? secondary-order 'ascend)
                                                #t)))
-          (set! splits (qof-query-run query))
+
+          (if (opt-val "__trep" "unique-transactions")
+              (set! splits (xaccQueryGetSplitsUniqueTrans query))
+              (set! splits (qof-query-run query)))
 
           (qof-query-destroy query)
 
@@ -1786,7 +1812,7 @@ tags within description, notes or memo. ")
                      document
                      (gnc:render-options-changed options))))
 
-              (let ((table (make-split-table splits options)))
+              (let ((table (make-split-table splits options custom-calculated-cells)))
 
                 (gnc:html-document-set-title! document report-title)
 
@@ -1810,6 +1836,11 @@ tags within description, notes or memo. ")
 
     document))
 
+(define trep-guid "2fe3b9833af044abb929a88d5a59620f")
+(export trep-guid)
+(export trep-renderer)
+(export trep-options-generator)
+
 ;; Define the report.
 (gnc:define-report
  'version 1
@@ -1822,6 +1853,6 @@ tags within description, notes or memo. ")
 (gnc:define-report
  'version 1
  'name reportname
- 'report-guid "2fe3b9833af044abb929a88d5a59620f"
+ 'report-guid trep-guid
  'options-generator trep-options-generator
  'renderer trep-renderer)
