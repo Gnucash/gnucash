@@ -17962,9 +17962,8 @@ msgstr ""
 "oder »Abbrechen«, um den Vorgang abzubrechen."
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.glade.h:56
-#, fuzzy
 msgid "Import Prices Now"
-msgstr "_Konten jetzt importieren"
+msgstr "_Kurse jetzt importieren"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1638
 #, fuzzy
@@ -18014,7 +18013,6 @@ msgstr ""
 "zum Import."
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1941
-#, fuzzy
 msgid "The transactions were imported from the file '"
 msgstr "Die Buchungen wurden aus der Datei »%s« importiert."
 
@@ -18023,7 +18021,6 @@ msgid "CSV Transaction Import"
 msgstr "CSV-Buchungen-Import"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:2
-#, fuzzy
 msgid ""
 "This assistant will help you import a delimited file containing a list of "
 "transactions. It supports both token separated files (such as comma "
@@ -18215,14 +18212,12 @@ msgid "Import Transactions from a CSV file"
 msgstr "Buchungen aus Datei mit durch Komma o.ä. getrennten Werten importieren"
 
 #: ../gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:60
-#, fuzzy
 msgid "Import _Prices from a CSV file..."
-msgstr "Konten aus Textdatei importieren"
+msgstr "K_urse aus Textdatei importieren..."
 
 #: ../gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:61
-#, fuzzy
 msgid "Import Prices from a CSV file"
-msgstr "Konten aus Textdatei importieren"
+msgstr "Kurse aus Textdatei importieren"
 
 #: ../gnucash/import-export/csv-imp/gnc-price-import.cpp:51
 #: ../gnucash/import-export/csv-imp/gnc-tx-import.cpp:48
@@ -18484,7 +18479,7 @@ msgid ""
 "This should never happen. Please report this as a bug."
 msgstr ""
 "Weder wurde eine Kontenspalte ausgewählt noch ein Standardkonto angegeben.\n"
-"Dies sollte nimald passieren. Bitte berichten Sie dies als Fehler.\n"
+"Dies sollte nimald passieren. Bitte berichten Sie dies als Fehler."
 
 #: ../gnucash/import-export/customer-import/dialog-customer-import-gui.c:173
 msgid "Import Customers from csv"
