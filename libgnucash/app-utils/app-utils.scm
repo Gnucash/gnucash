@@ -201,6 +201,7 @@
 (export gnc:date-get-quarter-year-string)
 (export gnc:date-get-month-string)
 (export gnc:date-get-month-year-string)
+(export gnc:date-get-weekday-string)
 (export gnc:date-get-week-year-string)
 (export gnc:leap-year?)
 (export gnc:days-in-year)

@@ -242,8 +242,10 @@ in the Options panel."))
 (define (time64-quarter t64) (+ (* 10 (gnc:date-get-year (gnc-localtime t64)))  (gnc:date-get-quarter (gnc-localtime t64))))
 (define (time64-month t64)   (+ (* 100 (gnc:date-get-year (gnc-localtime t64))) (gnc:date-get-month (gnc-localtime t64))))
 (define (time64-week t64)    (gnc:date-get-week (gnc-localtime t64)))
+(define (time64-weekday t64) (gnc:time64-get-week-day t64))
 (define (time64-day t64)     (+ (* 500 (gnc:date-get-year (gnc-localtime t64))) (gnc:date-get-year-day (gnc-localtime t64))))
 (define (time64->daily-string t) (qof-print-date t))
+(define (time64->weekday-string t) (gnc:date-get-weekday-string (gnc-localtime t)))
 (define (split->time64 s) (xaccTransGetDate (xaccSplitGetParent s)))
 
 (define date-subtotal-list
@@ -261,6 +263,12 @@ in the Options panel."))
                 (cons 'text (_ "None"))
                 (cons 'tip (_ "None."))
                 (cons 'renderer-fn #f)))
+
+   (cons 'weekday (list
+                   (cons 'split-sortvalue (lambda (s) (time64-weekday (split->time64 s))))
+                   (cons 'text (_ "Weekday"))
+                   (cons 'tip (_ "Weekday."))
+                   (cons 'renderer-fn (lambda (s) (time64->weekday-string (split->time64 s))))))
 
    (cons 'daily (list
                   (cons 'split-sortvalue (lambda (s) (time64-day (split->time64 s))))
@@ -1791,6 +1799,7 @@ tags within description, notes or memo. ")
                 ((quarterly) (lambda (s) (time64-quarter (date s))))
                 ((weekly)    (lambda (s) (time64-week (date s))))
                 ((daily)     (lambda (s) (time64-day (date s))))
+                ((weekday)   (lambda (s) (time64-weekday (date s))))
                 ((none)      (lambda (s) (date s)))))
             (case key
               ((account-name) (lambda (s) (gnc-account-get-full-name (xaccSplitGetAccount s))))

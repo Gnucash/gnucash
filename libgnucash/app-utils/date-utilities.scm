@@ -85,6 +85,9 @@
 (define (gnc:date-get-month-year-string datevec)
   (gnc-locale-to-utf8 (strftime "%B %Y" datevec)))
 
+(define (gnc:date-get-weekday-string datevec)
+  (gnc-locale-to-utf8 (strftime "%A" datevec)))
+
 (define (gnc:date-get-week-year-string datevec)
   (let* ((beginweekt64 (* (gnc:time64-get-week
                             (gnc-mktime datevec))
