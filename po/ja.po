@@ -32,20 +32,19 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr ""
+msgstr "アラブ語"
 
 #: ../borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr ""
+msgstr "バルト諸語"
 
 #: ../borrowed/goffice/go-charmap-sel.c:72
-#, fuzzy
 msgid "Central European"
-msgstr "ヨーロッパ"
+msgstr "中欧"
 
 #: ../borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr ""
+msgstr "中国語"
 
 #: ../borrowed/goffice/go-charmap-sel.c:74
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:242
@@ -53,29 +52,28 @@ msgid "Cyrillic"
 msgstr "キリル文字"
 
 #: ../borrowed/goffice/go-charmap-sel.c:75
-#, fuzzy
 msgid "Greek"
-msgstr "緑"
+msgstr "ギリシャ語"
 
 #: ../borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr ""
+msgstr "ヘブライ語"
 
 #: ../borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
-msgstr ""
+msgstr "インド語"
 
 #: ../borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr ""
+msgstr "日本語"
 
 #: ../borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr ""
+msgstr "韓国語"
 
 #: ../borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr ""
+msgstr "トルコ語"
 
 #: ../borrowed/goffice/go-charmap-sel.c:81
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:224
@@ -84,12 +82,11 @@ msgstr "Unicode"
 
 #: ../borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr ""
+msgstr "ベトナム語"
 
 #: ../borrowed/goffice/go-charmap-sel.c:83
-#, fuzzy
 msgid "Western"
-msgstr "記録簿"
+msgstr "西欧"
 
 #: ../borrowed/goffice/go-charmap-sel.c:84
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:60
@@ -101,364 +98,351 @@ msgstr "その他"
 
 #: ../borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "アラビア語 (IBM-864)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr ""
+msgstr "アラビア語 (IBM-864-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "アラビア語 (ISO-8859-6)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr ""
+msgstr "アラビア語 (ISO-8859-6-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr ""
+msgstr "アラビア語 (ISO-8859-6-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:121
 msgid "Arabic (MacArabic)"
-msgstr ""
+msgstr "アラビア語 (MacArabic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:122
 msgid "Arabic (Windows-1256)"
-msgstr ""
+msgstr "アラビア語 (Windows-1256)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
-msgstr ""
+msgstr "アルメニア語 (ARMSCII-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:124
-#, fuzzy
 msgid "Baltic (ISO-8859-13)"
-msgstr "ISO-8859-13 (バルト語)"
+msgstr "バルト語 (ISO-8859-13)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
-msgstr ""
+msgstr "バルト語 (ISO-8859-4)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:126
 msgid "Baltic (Windows-1257)"
-msgstr ""
+msgstr "バルト語 (Windows-1257)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:127
-#, fuzzy
 msgid "Celtic (ISO-8859-14)"
-msgstr "ISO-8859-14 (ケルト語)"
+msgstr "ケルト語 (ISO-8859-14)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
-msgstr ""
+msgstr "中欧 (IBM-852)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:130
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "中欧 (ISO-8859-2)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:132
 msgid "Central European (MacCE)"
-msgstr ""
+msgstr "中欧 (MacCE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:134
 msgid "Central European (Windows-1250)"
-msgstr ""
+msgstr "中欧 (Windwos-1250)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:136
 msgid "Chinese Simplified (GB18030)"
-msgstr ""
+msgstr "簡体字中国語 (GB18030)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:137
 msgid "Chinese Simplified (GB2312)"
-msgstr ""
+msgstr "簡体字中国語 (GB2312)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:138
 msgid "Chinese Simplified (GBK)"
-msgstr ""
+msgstr "簡体字中国語 (GBK)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:139
 msgid "Chinese Simplified (HZ)"
-msgstr ""
+msgstr "簡体字中国語 (HZ)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:140
 msgid "Chinese Simplified (Windows-936)"
-msgstr ""
+msgstr "簡体字中国語 (Windows-936)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr ""
+msgstr "繁体字中国語 (Big5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr ""
+msgstr "繁体字中国語 (Big5-HKSCS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
-msgstr ""
+msgstr "繁体字中国語 (EUC-TW)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:147
 msgid "Croatian (MacCroatian)"
-msgstr ""
+msgstr "クロアチア語 (MacCroatian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:149
-#, fuzzy
 msgid "Cyrillic (IBM-855)"
-msgstr "キリル文字"
+msgstr "キリル文字 (IBM-855)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:150
 msgid "Cyrillic (ISO-8859-5)"
-msgstr ""
+msgstr "キリル文字 (ISO-8859-5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:152
 msgid "Cyrillic (ISO-IR-111)"
-msgstr ""
+msgstr "キリル文字 (ISO-IR-111)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:154
-#, fuzzy
 msgid "Cyrillic (KOI8-R)"
-msgstr "キリル文字"
+msgstr "キリル文字 (KOI8-R)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:155
 msgid "Cyrillic (MacCyrillic)"
-msgstr ""
+msgstr "キリル文字 (MacCyrillic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:157
 msgid "Cyrillic (Windows-1251)"
-msgstr ""
+msgstr "キリル文字 (Windows-1251)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
-msgstr ""
+msgstr "ロシア語 (CP-866)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:160
 msgid "Ukrainian (KOI8-U)"
-msgstr ""
+msgstr "ウクライナ語 (KOI8-U)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:161
-#, fuzzy
 msgid "Ukrainian (MacUkrainian)"
-msgstr "KOI8-U (ウクライナ語)"
+msgstr "ウクライナ語 (MacUkrainian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:163
 msgid "English (ASCII)"
-msgstr ""
+msgstr "英語 (ASCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
-msgstr ""
+msgstr "ペルシア語 (MacFarsi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:166
 msgid "Georgian (GEOSTD8)"
-msgstr ""
+msgstr "グルジア語 (GEOSTD8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:167
-#, fuzzy
 msgid "Greek (ISO-8859-7)"
-msgstr "ISO-8859-7 (ギリシャ語)"
+msgstr "ギリシア語 (ISO-8859-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:168
 msgid "Greek (MacGreek)"
-msgstr ""
+msgstr "ギリシア語 (MacGreek)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:169
 msgid "Greek (Windows-1253)"
-msgstr ""
+msgstr "ギリシア語 (Windows-1253)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:170
 msgid "Gujarati (MacGujarati)"
-msgstr ""
+msgstr "グジャラート語 (MacGujarati)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:172
 msgid "Gurmukhi (MacGurmukhi)"
-msgstr ""
+msgstr "グルムキー文字 (MacGurmukhi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr ""
+msgstr "ヘブライ語 (IBM-862)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr ""
+msgstr "ヘブライ語 (ISO-8859-8-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr ""
+msgstr "ヘブライ語 (ISO-8859-8-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr ""
+msgstr "ヘブライ語 (MacDevanagari)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
-msgstr ""
+msgstr "ヘブライ語 (Windows-1255)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
-msgstr ""
+msgstr "ヒンディー語 (MacDevanagari)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
-msgstr ""
+msgstr "アイスランド語 (MacIcelandic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:186
 msgid "Japanese (EUC-JP)"
-msgstr ""
+msgstr "日本語 (EUC-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:187
 msgid "Japanese (ISO-2022-JP)"
-msgstr ""
+msgstr "日本語 (ISO-2022-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:189
 msgid "Japanese (Shift_JIS)"
-msgstr ""
+msgstr "日本語 (シフトJIS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:190
 msgid "Korean (EUC-KR)"
-msgstr ""
+msgstr "韓国語 (EUC-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:191
 msgid "Korean (ISO-2022-KR)"
-msgstr ""
+msgstr "韓国語 (ISO-2022-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:192
 msgid "Korean (JOHAB)"
-msgstr ""
+msgstr "韓国語 (JOHAB)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:193
 msgid "Korean (UHC)"
-msgstr ""
+msgstr "韓国語 (UHC)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:194
-#, fuzzy
 msgid "Nordic (ISO-8859-10)"
-msgstr "ISO-8859-10 (ノルウェー語)"
+msgstr "北欧 (ISO-8859-10)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:195
 msgid "Romanian (MacRomanian)"
-msgstr ""
+msgstr "ルーマニア語 (MacRomanian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:197
 msgid "Romanian (ISO-8859-16)"
-msgstr ""
+msgstr "ルーマニア語 (ISO-8859-16)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:199
 msgid "South European (ISO-8859-3)"
-msgstr ""
+msgstr "南欧 (ISO-8859-3)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:201
 msgid "Thai (TIS-620)"
-msgstr ""
+msgstr "タイ語 (TIS-620)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:202
 msgid "Turkish (IBM-857)"
-msgstr ""
+msgstr "トルコ語 (IBM-857)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:203
 msgid "Turkish (ISO-8859-9)"
-msgstr ""
+msgstr "トルコ語 (ISO-8859-9)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:204
 msgid "Turkish (MacTurkish)"
-msgstr ""
+msgstr "トルコ語 (MacTurkish)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:206
 msgid "Turkish (Windows-1254)"
-msgstr ""
+msgstr "トルコ語 (Windows-1254)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:208
-#, fuzzy
 msgid "Unicode (UTF-7)"
-msgstr "Unicode"
+msgstr "ユニコード (UTF-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:209
-#, fuzzy
 msgid "Unicode (UTF-8)"
-msgstr "Unicode"
+msgstr "ユニコード (UTF-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:210
 msgid "Unicode (UTF-16BE)"
-msgstr ""
+msgstr "ユニコード (UTF-16BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:211
 msgid "Unicode (UTF-16LE)"
-msgstr ""
+msgstr "ユニコード (UTF-16LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:212
 msgid "Unicode (UTF-32BE)"
-msgstr ""
+msgstr "ユニコード (UTF-32BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:213
 msgid "Unicode (UTF-32LE)"
-msgstr ""
+msgstr "ユニコード (UTF-32LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:214
-#, fuzzy
 msgid "User Defined"
-msgstr "ユーザ名"
+msgstr "ユーザ定義"
 
 #: ../borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
-msgstr ""
+msgstr "ベトナム語 (TCVN)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:217
 msgid "Vietnamese (VISCII)"
-msgstr ""
+msgstr "ベトナム語 (VISCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:218
 msgid "Vietnamese (VPS)"
-msgstr ""
+msgstr "ベトナム語 (VPS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:219
 msgid "Vietnamese (Windows-1258)"
-msgstr ""
+msgstr "ベトナム語 (Windows-1258)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "ヘブライ語 (ISO-8859-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
-msgstr ""
+msgstr "西欧 (IBM-850)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:224
 msgid "Western (ISO-8859-1)"
-msgstr ""
+msgstr "西欧 (ISO-8859-1)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:225
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "西欧 (ISO-8859-15)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:227
 msgid "Western (MacRoman)"
-msgstr ""
+msgstr "西欧 (MacRoman)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:228
 msgid "Western (Windows-1252)"
-msgstr ""
+msgstr "西欧 (Windows-1252)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:441
-#, fuzzy
 msgid "Locale: "
-msgstr "ロケール(_A):"
+msgstr "ロケール: "
 
 #: ../borrowed/goffice/go-charmap-sel.c:476
-#, fuzzy
 msgid "Conversion Direction"
-msgstr "変換が完了しました"
+msgstr "変換方向"
 
 #: ../borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr ""
+msgstr "この値は実行するiconvテストを決定します．"
 
 #: ../borrowed/goffice/go-optionmenu.c:410
 msgid "Menu"
-msgstr ""
+msgstr "メニュー"
 
 #: ../borrowed/goffice/go-optionmenu.c:410
-#, fuzzy
 msgid "The menu of options"
-msgstr "数値オプションは %s です。"
+msgstr "オプションメニュー"
 
 #: ../gnucash/gnome/assistant-acct-period.c:190
 msgid "The book was closed successfully."
@@ -17084,9 +17068,8 @@ msgid "Select Separator Type"
 msgstr "2. インポートの種類を選択します"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.glade.h:22
-#, fuzzy
 msgid "Preview"
-msgstr "4. 確認します"
+msgstr "プレビュー"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.glade.h:23
 msgid "Import Account Preview, first 10 rows only"
@@ -20376,7 +20359,7 @@ msgstr "Eメール"
 
 #: ../gnucash/report/business-reports/aging.scm:789
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: ../gnucash/report/business-reports/aging.scm:789
 #, fuzzy
@@ -23230,7 +23213,7 @@ msgstr ""
 
 #: ../gnucash/report/report-system/options-utilities.scm:226
 msgid "Dash"
-msgstr ""
+msgstr "破線"
 
 #: ../gnucash/report/report-system/options-utilities.scm:227
 msgid "Filled diamond"
@@ -26230,7 +26213,7 @@ msgstr ""
 #. (define optname-x-grid (N_ "X grid"))
 #: ../gnucash/report/standard-reports/net-linechart.scm:66
 msgid "Grid"
-msgstr ""
+msgstr "グリッド"
 
 #: ../gnucash/report/standard-reports/net-linechart.scm:158
 msgid "Add grid lines."
@@ -27921,7 +27904,6 @@ msgid "Fancy Date Format"
 msgstr "装飾的な日付の書式"
 
 #: ../libgnucash/app-utils/app-utils.scm:330
-#, fuzzy
 msgid "custom"
 msgstr "カスタム"
 
@@ -29271,2231 +29253,3 @@ msgstr ""
 "2個のタブの内容を画面上で視覚的に比較するには、タブを新しいウィンドウに移動す"
 "るために、メニューから ウィンドウ->このページを新規ウィンドウへを選択してくだ"
 "さい。"
-
-#~ msgid "Enable debugging mode: increasing logging to provide deep detail."
-#~ msgstr ""
-#~ "デバッグモードを有効にする: より詳細な情報を得るためログレベルを増加。"
-
-#~ msgid ""
-#~ "Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,"
-#~ "error}\""
-#~ msgstr ""
-#~ "ログレベル設定: 形式は \"log.ger.path={debug,info,warn,crit,error}\""
-
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from %s rev %s on %s."
-#~ msgstr ""
-#~ "%s\n"
-#~ "この版は %s %s、ビルド日は %s です。"
-
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from rev %s on %s."
-#~ msgstr ""
-#~ "%s\n"
-#~ "この版は %s、ビルド日は %s です。"
-
-#~ msgid ""
-#~ "An error occurred while creating the directory:\n"
-#~ "  %s\n"
-#~ "Please correct the problem and restart GnuCash.\n"
-#~ "The reported error was '%s' (errno %d).\n"
-#~ msgstr ""
-#~ "ディレクトリ:\n"
-#~ "  %s\n"
-#~ "の作成中にエラーが発生しました\n"
-#~ "問題を修正してGnuCashを再起動してください。\n"
-#~ "報告されたエラーは '%s' (errno %d) です。\n"
-
-#~ msgid ""
-#~ "The directory\n"
-#~ "  %s\n"
-#~ "exists but cannot be accessed. This program \n"
-#~ "must have full access (read/write/execute) to \n"
-#~ "the directory in order to function properly.\n"
-#~ msgstr ""
-#~ "ディレクトリー:\n"
-#~ "  %s\n"
-#~ "は存在しますがアクセスできません。本プログラムが\n"
-#~ "適切に動作するためには、このディレクトリーへの\n"
-#~ "完全なアクセス権限（読出/書込/実行）が必要です。\n"
-
-#~ msgid ""
-#~ "The path\n"
-#~ "  %s\n"
-#~ "exists but it is not a directory. Please delete\n"
-#~ "the file and start GnuCash again.\n"
-#~ msgstr ""
-#~ "パス:\n"
-#~ "  %s\n"
-#~ "は存在しますがディレクトリでありません。\n"
-#~ "このファイルを削除してGnuCashを再起動してください。\n"
-
-#, fuzzy
-#~| msgid ""
-#~| "An unknown error occurred when validating that the\n"
-#~| "  %s\n"
-#~| "directory exists and is usable. Please correct the\n"
-#~| "problem and restart GnuCash.  The reported error \n"
-#~| "was '%s' (errno %d)."
-#~ msgid ""
-#~ "An unknown error occurred when validating that the\n"
-#~ "  %s\n"
-#~ "directory exists and is usable. Please correct the\n"
-#~ "problem and restart GnuCash. The reported error \n"
-#~ "was '%s' (errno %d)."
-#~ msgstr ""
-#~ "ディレクトリ:\n"
-#~ "  %s\n"
-#~ "の存在と利用可能性の検査中に、不明なエラーが発生しました。\n"
-#~ "問題を修正してGnuCashを再起動してください。\n"
-#~ "報告されたエラーは '%s' (errno %d) です。"
-
-#~ msgid ""
-#~ "The permissions are wrong on the directory\n"
-#~ "  %s\n"
-#~ "They must be at least 'rwx' for the user.\n"
-#~ msgstr ""
-#~ "ディレクトリ:\n"
-#~ "  %s\n"
-#~ "に対する権限の設定が誤っています。\n"
-#~ "このユーザに対して少なくとも 'rwx' でなければなりません。\n"
-
-#~ msgid "CURRENCY"
-#~ msgstr "通貨"
-
-#~ msgid "_Price Editor"
-#~ msgstr "価格エディター(_P)"
-
-#~ msgid "General Ledger2"
-#~ msgstr "総勘定元帳2"
-
-#~ msgid "General Ledger Report"
-#~ msgstr "総勘定元帳帳票"
-
-#~ msgid "_General Ledger"
-#~ msgstr "総勘定元帳(_G)"
-
-#~ msgid "<No information>"
-#~ msgstr "<情報なし>"
-
-#~ msgid ""
-#~ "If active, the register will be colored as specified by the system theme. "
-#~ "This can be overridden to provide custom colors by editing the gtkrc file "
-#~ "in the users home directory. Otherwise the standard register colors will "
-#~ "be used that GnuCash has always used."
-#~ msgstr ""
-#~ "選択した場合、記録簿はシステムテーマで指定された色で表示されます。これは、"
-#~ "ユーザのホームディレクトリにあるgtkrcファイルを編集することで指定されたカ"
-#~ "スタム色より優先されます。選択しない場合GnuCashで使われる記録簿の標準色が"
-#~ "利用されます。"
-
-#~ msgid "Clear the entry"
-#~ msgstr "項目をクリアします。"
-
-#, fuzzy
-#~| msgid ""
-#~| "If activated, delete manually entered stock prices dated earlier than "
-#~| "the specified date.  Otherwise only stock prices added by Finance::Quote "
-#~| "will be deleted."
-#~ msgid ""
-#~ "If activated, delete manually entered stock prices dated earlier than the "
-#~ "specified date. Otherwise only stock prices added by Finance::Quote will "
-#~ "be deleted."
-#~ msgstr ""
-#~ "有効にすると、指定した日付以前に手で入力した株価を削除します。そうでなけれ"
-#~ "ば、Finance::Quoteによって追加された株価だけが削除されます。"
-
-#~ msgid "Delete _last price for a stock"
-#~ msgstr "日付以前の最新株価も削除(_L)"
-
-#, fuzzy
-#~| msgid ""
-#~| "If activated, delete all prices before the specified date.  Otherwise "
-#~| "the last stock price dated before the date will be kept and all earlier "
-#~| "quotes deleted."
-#~ msgid ""
-#~ "If activated, delete all prices before the specified date. Otherwise the "
-#~ "last stock price dated before the date will be kept and all earlier "
-#~ "quotes deleted."
-#~ msgstr ""
-#~ "有効にすると、指定した日付以前の価格をすべて削除します。そうでなければ、日"
-#~ "付以前の最後の株価は保存し、それより前の株価がすべて削除されます。"
-
-#~ msgid "Get _Quotes"
-#~ msgstr "相場表を取得(_Q)"
-
-#~ msgid "You must select a commodity. To create a new one, click \"New\""
-#~ msgstr ""
-#~ "商品を選択してください。新規に作成する場合は、\"新規\"をクリックしてくださ"
-#~ "い。"
-
-#~ msgid "_Delete Account"
-#~ msgstr "勘定科目の削除(_D)"
-
-#~ msgid "_New Account"
-#~ msgstr "新規勘定科目(_N)"
-
-#~ msgid "Last modified on %x %X"
-#~ msgstr "最終更新: %x %X"
-
-#~ msgid ""
-#~ "The GnuCash personal finance manager. The GNU way to manage your money!"
-#~ msgstr "GnuCash個人用財務管理。GNUでお金を管理しよう!"
-
-#~ msgid "Version: GnuCash-%s %s (rev %s built %s)"
-#~ msgstr "バージョン: GnuCash-%s %s (リビジョン %s ビルド日 %s)"
-
-#~ msgid "Version: GnuCash-%s (rev %s built %s)"
-#~ msgstr "バージョン: GnuCash-%s (リビジョン %s、ビルド日 %s)"
-
-#~ msgid "Remember _PIN"
-#~ msgstr "暗証番号を記憶する(_P)"
-
-#~ msgid ""
-#~ "This assistant will help you export the Transactions to a file.\n"
-#~ "\n"
-#~ "Select the settings you require for the file and then click 'Forward' to "
-#~ "proceed or 'Cancel' to Abort Export.\n"
-#~ msgstr ""
-#~ "このアシスタントは取引をファイルにエクスポートするお手伝いをします。\n"
-#~ "\n"
-#~ "ファイルに必要な設定を選択し、処理を行う場合は '進む' をクリックしてくださ"
-#~ "い。エクスポートを中止する場合は 'キャンセル' をクリックしてください。\n"
-
-#~ msgid "Quotes"
-#~ msgstr "ダブルクォーテーションマークを使用する"
-
-#, fuzzy
-#~| msgid "From Now"
-#~ msgid "From Num."
-#~ msgstr "現在から"
-
-#, fuzzy
-#~| msgid ""
-#~| "The rows displayed below had errors. You can attempt to correct these "
-#~| "errors by changing the configuration."
-#~ msgid ""
-#~ "The rows displayed below had errors which are in the last column. You can "
-#~ "attempt to correct them by changing the configuration."
-#~ msgstr ""
-#~ "表示された行にエラーがあります。設定を変更してこれらのエラーを修正してくだ"
-#~ "さい。"
-
-#, fuzzy
-#~| msgid "GnuCash Datafile Import Assistant"
-#~ msgid "Transaction Import Assistant"
-#~ msgstr "GnuCash データファイルインポートアシスタント"
-
-#, fuzzy
-#~| msgid "Start of reporting period"
-#~ msgid "Start import on row "
-#~ msgstr "帳票の対象期間の開始日です。"
-
-#~ msgid "Data type: "
-#~ msgstr "データファイルの種類: "
-
-#~ msgid "Separated"
-#~ msgstr "区切り"
-
-#~ msgid "File opening failed."
-#~ msgstr "ファイルを開けませんでした。"
-
-#~ msgid "Unknown encoding."
-#~ msgstr "文字コードが不明です。"
-
-#~ msgid "This report has no options."
-#~ msgstr "この帳票にはオプションはありません"
-
-#, fuzzy
-#~ msgid "Compress prior/later periods"
-#~ msgstr "ファイルを圧縮する(_P)"
-
-#~ msgid "Income Barchart"
-#~ msgstr "収益棒グラフ"
-
-#~ msgid "Expense Barchart"
-#~ msgstr "費用棒グラフ"
-
-#~ msgid "Liability Barchart"
-#~ msgstr "負債棒グラフ"
-
-#~ msgid "Style"
-#~ msgstr "スタイル"
-
-#, fuzzy
-#~| msgid "Report style"
-#~ msgid "Report style."
-#~ msgstr "帳票のスタイル"
-
-#, fuzzy
-#~| msgid "Display N lines"
-#~ msgid "Display N lines."
-#~ msgstr "N行表示"
-
-#, fuzzy
-#~| msgid "Display 1 line"
-#~ msgid "Display 1 line."
-#~ msgstr "1行表示"
-
-#~ msgid "Exact Time"
-#~ msgstr "正確な時間"
-
-#, fuzzy
-#~| msgid "Sort by exact time"
-#~ msgid "Sort by exact time."
-#~ msgstr "正確な時間順にソート"
-
-#, fuzzy
-#~ msgid "postd"
-#~ msgstr "入金"
-
-#, fuzzy
-#~ msgid "duedate"
-#~ msgstr "終了日付"
-
-#, fuzzy
-#~ msgid "question"
-#~ msgstr "テスト中"
-
-#~ msgid "set true"
-#~ msgstr "真である"
-
-#, fuzzy
-#~| msgid "Remove the current price"
-#~ msgid "Retrieve the current online quote"
-#~ msgstr "現在の価格を除去"
-
-#, fuzzy
-#~| msgid "Owner Name "
-#~ msgid "Owner Name"
-#~ msgstr "所有者名 "
-
-#, fuzzy
-#~| msgid "Order ID"
-#~ msgid "Owner ID"
-#~ msgstr "注文ID"
-
-#~ msgid "_Use system theme colors"
-#~ msgstr "システムのテーマカラーを使用(_U)"
-
-#, fuzzy
-#~| msgid ""
-#~| "If checked, the system color theme will be applied to register windows.  "
-#~| "If clear, the original GnuCash register colors will be used."
-#~ msgid ""
-#~ "If checked, the system color theme will be applied to register windows. "
-#~ "If clear, the original GnuCash register colors will be used."
-#~ msgstr ""
-#~ "選択した場合、記録簿ウィンドウにシステムのテーマカラーが適用されます。選択"
-#~ "しない場合、GnuCashオリジナルの記録簿カラーが使用されます。"
-
-#~ msgid "Dates earlier than 1970 are not supported."
-#~ msgstr "1970以前の日付はサポートしていません。"
-
-#~ msgid "The last stable version was "
-#~ msgstr "最新の安定バージョン: "
-
-#~ msgid "The next stable version will be "
-#~ msgstr "次の安定バージョン: "
-
-#~ msgid "Set the prefix path for gconf queries"
-#~ msgstr "gconf問い合わせのプレフィックスパスを設定する"
-
-#~ msgid "GCONFPATH"
-#~ msgstr "GCONFPATH"
-
-#~ msgid "Built %s from r%s"
-#~ msgstr "ビルド日時: %s, リビジョン: r%s"
-
-#~ msgid "Negative amounts are not allowed."
-#~ msgstr "マイナスの金額は許されません。"
-
-#~ msgid "Percentage amount must be between 0 and 100."
-#~ msgstr "パーセントの値は0から100までで入力してください。"
-
-#~ msgid "You may not post an invoice with a negative total value."
-#~ msgstr "合計金額が負の得意先請求書を記帳することはできません。"
-
-#~ msgid ""
-#~ "You may not post an expense voucher with a negative total cash value."
-#~ msgstr "合計金額が負の領収書を記帳することはできません。"
-
-#~ msgid ""
-#~ "You must enter the amount of the payment.  The payment amount must be "
-#~ "greater than zero."
-#~ msgstr ""
-#~ "支払金額を入力してください。支払金額は0より大きな値でなければなりません。"
-
-#~ msgid "Your selected post account, %s, does not exist"
-#~ msgstr "選択した記帳勘定科目%sは存在しません。"
-
-#~ msgid ""
-#~ "Days\n"
-#~ "Proximo"
-#~ msgstr ""
-#~ "日数\n"
-#~ "翌月"
-
-#~ msgid "What Tax Table should be applied to this customer?"
-#~ msgstr "この得意先にはどの税額表を適用しますか?"
-
-#~ msgid ""
-#~ "The invoice being paid.\n"
-#~ "\n"
-#~ "Note that is field is optional. If you leave it blank, GnuCash will "
-#~ "automatically assign the payment to the first unpaid invoice for this "
-#~ "company."
-#~ msgstr ""
-#~ "支払が行われた得意先請求書です。\n"
-#~ "\n"
-#~ "この欄はオプションです。空白のままにした場合は、この会社に対する最初の未払"
-#~ "得意先請求書にGnuCashが自動的に支払を割り当てます。"
-
-#~ msgid "What Tax Table should be applied to this vendor?"
-#~ msgstr "この仕入先にはどの税額表を適用しますか?"
-
-#~ msgid "Reload invoice report"
-#~ msgstr "得意先請求書帳票を再読込"
-
-#~ msgid "Reload invoice report scheme file"
-#~ msgstr "得意先請求書帳票のschemeファイルを再読込"
-
-#~ msgid "Reload owner report"
-#~ msgstr "所有者帳票を再読込"
-
-#~ msgid "Reload owner report scheme file"
-#~ msgstr "所有者帳票のschemeファイルを再読込"
-
-#~ msgid "Reload receivable report"
-#~ msgstr "売掛金帳票を再読込"
-
-#~ msgid "Reload receivable report scheme file"
-#~ msgstr "売掛金帳票のschemeファイルを再読込"
-
-#~ msgid "You must select a commodity."
-#~ msgstr "商品の種類を選択して下さい。"
-
-#~ msgid ""
-#~ "You must select closing date that is greater than the closing date of the "
-#~ "previous book."
-#~ msgstr "前期の帳簿の決算日以降の決算日を選択してください。"
-
-#~ msgid "You must select closing date that is not in the future."
-#~ msgstr "未来でない決算日を選択してください。"
-
-#~ msgid "Are you sure you want to cancel the Mortgage/Loan Setup Assistant?"
-#~ msgstr "本当にローンセットアップアシスタントをキャンセルしてもいいですか?"
-
-#~ msgid "Please select a valid \"from\" account."
-#~ msgstr "有効な「資金移動元」勘定科目を選択してください。"
-
-#~ msgid "Please select a valid \"to\" account."
-#~ msgstr "有効な「資金移動先」勘定科目を選択してください。"
-
-#~ msgid "Please select a valid \"interest\" account."
-#~ msgstr "有効な「利子」勘定科目を選択して下さい。"
-
-#~ msgid "Payment: \"%s\""
-#~ msgstr "支払額: \"%s\""
-
-#~ msgid "You must enter a valid distribution amount."
-#~ msgstr "有効な株式数を入力してください。"
-
-#~ msgid "You must enter a distribution amount."
-#~ msgstr "株式数を入力してください。"
-
-#~ msgid "You must either enter a valid price or leave it blank."
-#~ msgstr "有効な株価を入力するか、空白のままにしてください。"
-
-#~ msgid "The price must be positive."
-#~ msgstr "株価を正の値にしてください。"
-
-#~ msgid "You must either enter a valid cash amount or leave it blank."
-#~ msgstr "有効な分配金額を入力するか、空白のままにしてください。"
-
-#~ msgid "The cash distribution must be positive."
-#~ msgstr "分配金額は正の値にしてください。"
-
-#~ msgid "You must select an income account for the cash distribution."
-#~ msgstr "分配のための収益勘定科目を選択してください。"
-
-#~ msgid "You must select an asset account for the cash distribution."
-#~ msgstr "分配のための資産勘定科目を選択してください。"
-
-#~ msgid "New Account (not implemented)"
-#~ msgstr "新規勘定科目（未実装）"
-
-#~ msgid "Select or add a GnuCash account"
-#~ msgstr "GnuCashの勘定科目を選択あるいは追加"
-
-#~ msgid ""
-#~ "Use Commodity Value\n"
-#~ "1\n"
-#~ "1/10\n"
-#~ "1/100\n"
-#~ "1/1000\n"
-#~ "1/10000\n"
-#~ "1/100000\n"
-#~ "1/1000000"
-#~ msgstr ""
-#~ "商品の値を利用\n"
-#~ "1\n"
-#~ "1/10\n"
-#~ "1/100\n"
-#~ "1/1000\n"
-#~ "1/10000\n"
-#~ "1/100000\n"
-#~ "1/1000000"
-
-#~ msgid "Enter a title for this book."
-#~ msgstr "この帳簿のタイトルを入力してください"
-
-#~ msgid "Enter notes that describe this book."
-#~ msgstr "この帳簿を説明する備考を入力してください"
-
-#~ msgid "Finish Closing Books"
-#~ msgstr "決算を終了する"
-
-#~ msgid ""
-#~ "day(s)\n"
-#~ "week(s)\n"
-#~ "month(s)\n"
-#~ "year(s)"
-#~ msgstr ""
-#~ "日ごと\n"
-#~ "週ごと\n"
-#~ "月ごと\n"
-#~ "年ごと"
-
-#~ msgid "Account Information"
-#~ msgstr "勘定科目情報"
-
-#~ msgid ""
-#~ "Annual\n"
-#~ "Semi-annual\n"
-#~ "Tri-annual\n"
-#~ "Quarterly\n"
-#~ "Bi-monthly\n"
-#~ "Monthly\n"
-#~ "Semi-monthly\n"
-#~ "Bi-weekly\n"
-#~ "Weekly\n"
-#~ "Daily (360)\n"
-#~ "Daily (365)"
-#~ msgstr ""
-#~ "毎年\n"
-#~ "年2回\n"
-#~ "年3回\n"
-#~ "四半期ごと\n"
-#~ "2か月ごと\n"
-#~ "毎月\n"
-#~ "月2回\n"
-#~ "隔週\n"
-#~ "毎週\n"
-#~ "毎日(360)\n"
-#~ "毎日(365)"
-
-#~ msgid "Co_mpounding:"
-#~ msgstr "複利(_M):"
-
-#~ msgid "_Effective Date:"
-#~ msgstr "発行日(_E):"
-
-#~ msgid "_Initial Payment:"
-#~ msgstr "初期支払額(_I):"
-
-#~ msgid "_Payments:"
-#~ msgstr "支払額(_P):"
-
-#~ msgid "<b>_Mini-Viewer</b>"
-#~ msgstr "<b>概要表示(_M)</b>"
-
-#~ msgid "A summary of all of the transactions in the selected lot"
-#~ msgstr "選択したロットのすべての取引に関する要約"
-
-#~ msgid ""
-#~ "Bid\n"
-#~ "Ask\n"
-#~ "Last\n"
-#~ "Net Asset Value\n"
-#~ "Unknown"
-#~ msgstr ""
-#~ "買気配値\n"
-#~ "売気配値\n"
-#~ "終値\n"
-#~ "基準価格\n"
-#~ "不明"
-
-#~ msgid ""
-#~ "Inches\n"
-#~ "Centimeters\n"
-#~ "Millimeters\n"
-#~ "Points"
-#~ msgstr ""
-#~ "インチ\n"
-#~ "センチメートル\n"
-#~ "ミリメートル\n"
-#~ "ポイント"
-
-#~ msgid ""
-#~ "Quicken/QuickBooks (tm) US-Letter\n"
-#~ "Deluxe(tm) Personal Checks US-Letter\n"
-#~ "Quicken(tm) Wallet Checks w/ side stub\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Quicken/QuickBooks (tm) USレター\n"
-#~ "Deluxe(tm) Personal Checks USレター\n"
-#~ "Quicken(tm) Wallet Checks w/ side stub\n"
-#~ "カスタム"
-
-#~ msgid ""
-#~ "Top\n"
-#~ "Middle\n"
-#~ "Bottom\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "上\n"
-#~ "中央\n"
-#~ "下\n"
-#~ "カスタム"
-
-#~ msgid "Copy Transaction"
-#~ msgstr "取引をコピー"
-
-#~ msgid "Copy the selected transaction"
-#~ msgstr "選択された取引をコピーする"
-
-#~ msgid "Cut Transaction"
-#~ msgstr "取引を切り取り"
-
-#~ msgid "Dup_licate Transaction..."
-#~ msgstr "取引を複製(_L)..."
-
-#~ msgid "Edit Exchange Rate"
-#~ msgstr "為替・交換レートを編集"
-
-#~ msgid "Edit the exchange rate for the current split"
-#~ msgstr "現在のスプリットに対する為替・交換レートを編集します。"
-
-#~ msgid "Erase all splits except the one for this account."
-#~ msgstr ""
-#~ "このスプリットを除いた、この勘定科目内のすべてのスプリットを消去します。"
-
-#~ msgid "Jump"
-#~ msgstr "ジャンプ"
-
-#~ msgid "Remove Transaction Splits"
-#~ msgstr "取引のスプリットを除去する"
-
-#~ msgid "Schedule..."
-#~ msgstr "スケジュール..."
-
-#~ msgid "Sort by Amount"
-#~ msgstr "金額順にソート"
-
-#~ msgid "Sort by Date"
-#~ msgstr "日付順にソート"
-
-#~ msgid "Sort by Description"
-#~ msgstr "説明順にソートします。"
-
-#~ msgid "Sort by Memo"
-#~ msgstr "摘要順にソートします。"
-
-#~ msgid "Sort by Number"
-#~ msgstr "番号順にソートします。"
-
-#~ msgid "St_yle"
-#~ msgstr "スタイル(_Y)"
-
-#~ msgid "_Amount"
-#~ msgstr "金額(_A)"
-
-#~ msgid "_Number"
-#~ msgstr "番号(_N)"
-
-#~ msgid "_Statement Date"
-#~ msgstr "計算書発行日(_S)"
-
-#~ msgid ""
-#~ "1st\n"
-#~ "2nd\n"
-#~ "3rd\n"
-#~ "4th\n"
-#~ "5th\n"
-#~ "6th\n"
-#~ "7th\n"
-#~ "8th\n"
-#~ "9th\n"
-#~ "10th\n"
-#~ "11th\n"
-#~ "12th\n"
-#~ "13th\n"
-#~ "14th\n"
-#~ "15th\n"
-#~ "16th\n"
-#~ "17th\n"
-#~ "18th\n"
-#~ "19th\n"
-#~ "20th\n"
-#~ "21st\n"
-#~ "22nd\n"
-#~ "23rd\n"
-#~ "24th\n"
-#~ "25th\n"
-#~ "26th\n"
-#~ "27th\n"
-#~ "28th\n"
-#~ "29th\n"
-#~ "30th\n"
-#~ "31st\n"
-#~ "Last day of month\n"
-#~ "Last Monday\n"
-#~ "Last Tuesday\n"
-#~ "Last Wednesday\n"
-#~ "Last Thursday\n"
-#~ "Last Friday\n"
-#~ "Last Saturday\n"
-#~ "Last Sunday"
-#~ msgstr ""
-#~ "1日\n"
-#~ "2日\n"
-#~ "3日\n"
-#~ "4日\n"
-#~ "5日\n"
-#~ "6日\n"
-#~ "7日\n"
-#~ "8日\n"
-#~ "9日\n"
-#~ "10日\n"
-#~ "11日\n"
-#~ "12日\n"
-#~ "13日\n"
-#~ "14日\n"
-#~ "15日\n"
-#~ "16日\n"
-#~ "17日\n"
-#~ "18日\n"
-#~ "19日\n"
-#~ "20日\n"
-#~ "21日\n"
-#~ "22日\n"
-#~ "23日\n"
-#~ "24日\n"
-#~ "25日\n"
-#~ "26日\n"
-#~ "27日\n"
-#~ "28日\n"
-#~ "29日\n"
-#~ "30日\n"
-#~ "31日\n"
-#~ "月末\n"
-#~ "最終月曜日\n"
-#~ "最終火曜日\n"
-#~ "最終水曜日\n"
-#~ "最終木曜日\n"
-#~ "最終金曜日\n"
-#~ "最終土曜日\n"
-#~ "最終日曜日"
-
-#~ msgid "<b>End</b>"
-#~ msgstr "<b>終了日</b>"
-
-#~ msgid "<b>Upcoming</b>"
-#~ msgstr "<b>今後の予定</b>"
-
-#~ msgid "Creation State"
-#~ msgstr "作成状態"
-
-#~ msgid ""
-#~ "Current Year\n"
-#~ "Now + 1 Year\n"
-#~ "Whole Loan\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "今年\n"
-#~ "来年\n"
-#~ "ローン全体\n"
-#~ "カスタム"
-
-#~ msgid ""
-#~ "Daily\n"
-#~ "Weekly\n"
-#~ "Bi-Weekly\n"
-#~ "Monthly\n"
-#~ "Quarterly\n"
-#~ "Yearly"
-#~ msgstr ""
-#~ "毎日\n"
-#~ "毎週\n"
-#~ "隔週\n"
-#~ "毎月\n"
-#~ "四半期毎\n"
-#~ "毎年"
-
-#~ msgid "Do you..."
-#~ msgstr "以下の項目を選択してください"
-
-#~ msgid ""
-#~ "Fixed Rate\n"
-#~ "3/1 Year ARM\n"
-#~ "5/1 Year ARM\n"
-#~ "7/1 Year ARM\n"
-#~ "10/1 Year ARM"
-#~ msgstr ""
-#~ "固定金利\n"
-#~ "3年固定型変動金利\n"
-#~ "5年固定型変動金利\n"
-#~ "7年固定型変動金利\n"
-#~ "10年固定型変動金利"
-
-#~ msgid "Loan Information"
-#~ msgstr "ローン情報"
-
-#~ msgid ""
-#~ "No change\n"
-#~ "Use previous weekday\n"
-#~ "Use next weekday"
-#~ msgstr ""
-#~ "変更しない\n"
-#~ "前の平日を使う\n"
-#~ "次の平日を使う"
-
-#~ msgid ""
-#~ "None\n"
-#~ "Once\n"
-#~ "Daily\n"
-#~ "Weekly\n"
-#~ "Semi-Monthly\n"
-#~ "Monthly"
-#~ msgstr ""
-#~ "なし\n"
-#~ "1回\n"
-#~ "日\n"
-#~ "週\n"
-#~ "月2回\n"
-#~ "月"
-
-#~ msgid "Press apply to commit these changes."
-#~ msgstr "これらの変更を確定する場合は適用をクリックしてください"
-
-#~ msgid "Repayment Type"
-#~ msgstr "返済タイプ"
-
-#~ msgid "Start Date: "
-#~ msgstr "開始日: "
-
-#~ msgid ""
-#~ "months\n"
-#~ "years"
-#~ msgstr ""
-#~ "月\n"
-#~ "年"
-
-#~ msgid "Set the budget options using this dialog."
-#~ msgstr "このダイアログを用いて予算オプションを設定する。"
-
-#~ msgid "Remo_ve Transaction Splits"
-#~ msgstr "取引のスプリットを除去(_V)"
-
-#~ msgid "Account Transaction Report"
-#~ msgstr "勘定科目取引出納帳"
-
-#~ msgid "Show the Full Name column"
-#~ msgstr "フルネーム列を表示"
-
-#~ msgid "Show the ISIN/CUSIP Code (Exchange Specific Data) column"
-#~ msgstr "ISIN/証券コード(交換のためのデータ)列を表示する"
-
-#~ msgid "Show the Namespace column"
-#~ msgstr "ネームスペース列を表示"
-
-#~ msgid "Show the Print Name column"
-#~ msgstr "表示名の列を表示"
-
-#~ msgid "Show the Quote Source column"
-#~ msgstr "相場表情報源の列を表示"
-
-#~ msgid "Show the Quote Timezone column"
-#~ msgstr "相場表タイムゾーンの列を表示"
-
-#~ msgid "Show the Unique Name column"
-#~ msgstr "一意名の列を表示"
-
-#~ msgid "Show the fraction column"
-#~ msgstr "小数部の列を表示"
-
-#~ msgid "Show the symbol column"
-#~ msgstr "記号の列を表示"
-
-#~ msgid "Columns used for sorting"
-#~ msgstr "ソートに用いる列"
-
-#~ msgid ""
-#~ "The X,Y coordinates of the top left corner of the window when it was last "
-#~ "closed."
-#~ msgstr "最後に閉じたウィンドウの左上隅X, Y座標。"
-
-#~ msgid "Window position"
-#~ msgstr "ウィンドウ位置"
-
-#~ msgid "Show the Price column"
-#~ msgstr "価格の列を表示"
-
-#~ msgid "Show the Source column"
-#~ msgstr "情報源の列を表示"
-
-#~ msgid "Show the Type column"
-#~ msgstr "タイプの列を表示"
-
-#~ msgid "Show the date column"
-#~ msgstr "日付の列を表示"
-
-#~ msgid "This setting enables the Price column."
-#~ msgstr "この設定は価格の列を有効にします。"
-
-#~ msgid "This setting enables the Source column."
-#~ msgstr "この設定は情報源の列を有効にします。"
-
-#~ msgid "This setting enables the Type column."
-#~ msgstr "この設定はタイプの列を有効にします。"
-
-#~ msgid "This setting enables the commodity column."
-#~ msgstr "この設定は商品の列を有効にします。"
-
-#~ msgid "This setting enables the currency column."
-#~ msgstr "この設定は通貨の列を有効にします。"
-
-#, fuzzy
-#~ msgid "Accounts to reverse the balance"
-#~ msgstr "印刷される残高に子勘定科目の残高を含めますか?"
-
-#~ msgid "Default view style for new register"
-#~ msgstr "新しい記録簿のデフォルト表示スタイル"
-
-#~ msgid "Enables Euro support"
-#~ msgstr "ユーロを使用可能にする"
-
-#~ msgid "Enables additional support for the European Union EURO currency."
-#~ msgstr "ヨーロッパ連合のユーロ通貨を使用可能にする"
-
-#~ msgid "Labels on toolbar buttons"
-#~ msgstr "ツールバーボタンのラベル"
-
-#~ msgid "Position of the notebook tabs"
-#~ msgstr "タブの位置"
-
-#~ msgid "Source of default account currency"
-#~ msgstr "デフォルトの勘定科目通貨の情報源"
-
-#~ msgid "Source of default report currency"
-#~ msgstr "デフォルトの帳票通貨の情報源"
-
-#~ msgid "New item"
-#~ msgstr "新規作成"
-
-#~ msgid "Case Insensitive?"
-#~ msgstr "大文字/小文字を区別しない?"
-
-#~ msgid ""
-#~ "When you click Apply, GnuCash will modify your ~/.gconf.path file and "
-#~ "restart the gconf backend."
-#~ msgstr ""
-#~ "適用をクリックすると、GnuCashは ~/.gconf.path ファイルを修正し、gconfバッ"
-#~ "クエンドを再起動します。"
-
-#~ msgid ""
-#~ "When you click Apply, GnuCash will install the gconf data into your local "
-#~ "~/.gconf file and restart the gconf backend.  The %s script must be found "
-#~ "in your search path for this to work correctly."
-#~ msgstr ""
-#~ "適用をクリックすると GnuCash はローカルの ~/.gconf ファイルにデータをイン"
-#~ "ストールして gconf バックエンドを再起動します。是が正しく動作するためには "
-#~ "%s スクリプトが検索パスに含まれていなければいけません。"
-
-#~ msgid ""
-#~ "You have chosen to correct the problem by yourself.  When you click "
-#~ "Apply, GnuCash will exit.  Please correct the problem and restart the "
-#~ "gconf backend with the command 'gconftool-2 --shutdown' before restarting "
-#~ "GnuCash.  If you have not already done so, you can click the Back button "
-#~ "and copy the necessary text from the dialog."
-#~ msgstr ""
-#~ "自分自身で問題を修正することを選択しました。適用をクリックすると GnuCash "
-#~ "は終了します。GnuCash を再起動する前に問題を修正し、 'gconftool-2 --"
-#~ "shutdown' コマンドを使用して gconf バックエンドを再起動してください。まだ"
-#~ "問題を修正していない場合は戻るボタンをクリックしてダイアログから必要なテキ"
-#~ "ストをコピーしてください。"
-
-#~ msgid ""
-#~ "You have chosen to correct the problem by yourself.  When you click "
-#~ "Apply, GnuCash will exit.  Please run the %s script which will install "
-#~ "the configuration data and restart the gconf backend."
-#~ msgstr ""
-#~ "自分自身で問題を修正することを選択しました。適用をクリックすると GnuCash "
-#~ "は終了します。 %s スクリプトを実行して設定データをインストールし、 gconf "
-#~ "バックエンドを再起動してください。"
-
-#~ msgid ""
-#~ "You have already corrected the problem and restarted the gconf backend "
-#~ "with the command 'gconftool-2 --shutdown'.  When you click Apply, GnuCash "
-#~ "will continue loading."
-#~ msgstr ""
-#~ "すでに問題を修正して gconf バックエンドを 'gconftool-2 --shutdown' コマン"
-#~ "ドを使用して再起動しました。適用をクリックすると GnuCash は読み込みを継続"
-#~ "します。"
-
-#~ msgid "That GnuCash XML file is already loaded. Please select another file."
-#~ msgstr ""
-#~ "そのGnuCash XMLファイルはすでにロードされています。別のファイルを選択して"
-#~ "ください。"
-
-#~ msgid ""
-#~ "No files to merge. Please add ones by clicking on 'Load another file'."
-#~ msgstr ""
-#~ "マージするファイルがありません。'別のファイルをロード'をクリックして加えて"
-#~ "ください。"
-
-#~ msgid ""
-#~ "<b>Cannot find default values</b>\n"
-#~ "\n"
-#~ "The configuration data used to specify default values for GnuCash cannot "
-#~ "be found in the default system locations.  Without this data GnuCash will "
-#~ "still operate properly but it may require some extra time to setup.  Do "
-#~ "you wish to setup the configuration data?"
-#~ msgstr ""
-#~ "<b>デフォルトの値が見つかりません</b>\n"
-#~ "\n"
-#~ "GnuCash のデフォルトの値として指定された設定データがシステムのデフォルトの"
-#~ "場所にありません。このデータが無くても GnuCash は正常に動作します。しかし"
-#~ "セットアップに余分な時間が必要となります。設定データをセットアップします"
-#~ "か?"
-
-#~ msgid "Choose method"
-#~ msgstr "方法を選択"
-
-#~ msgid "Finish changes"
-#~ msgstr "変更を終了"
-
-#~ msgid "GnuCash will install the data for you."
-#~ msgstr "Gnucash でデータをインストールします。"
-
-#~ msgid "GnuCash will update the system path for you."
-#~ msgstr "GnuCash でシステムパスを更新します。"
-
-#~ msgid "Install into home directory"
-#~ msgstr "ホームディレクトリにインストール"
-
-#~ msgid ""
-#~ "Please add the following lines at the end of your ~/.gconf.path file:"
-#~ msgstr "次の行を ~/.gconf.path ファイルの最後に加えてください:"
-
-#~ msgid "Please run the following commands:"
-#~ msgstr "次のコマンドを実行してください:"
-
-#~ msgid "S_kip"
-#~ msgstr "スキップ(_K)"
-
-#~ msgid ""
-#~ "The configuration data is stored in a non-standard location.  There are "
-#~ "two methods that can be used to make this data visible to GnuCash.  The "
-#~ "first is to modify a system search path to include the data location.  "
-#~ "The second is to copy the data into your home directory."
-#~ msgstr ""
-#~ "設定データが非標準の場所に保存されています。GnuCash でこのデータを参照でき"
-#~ "るようにするためには二種類の方法があります。一つ目はシステム検索パスにデー"
-#~ "タの位置が含まれるように変更することです。二つ目はホームディレクトリにデー"
-#~ "タをコピーすることです。"
-
-#~ msgid ""
-#~ "The configuration data used by GnuCash to specify its default values "
-#~ "cannot be found in the default system locations.  Without this data "
-#~ "GnuCash will still operate properly, but it may require some extra time "
-#~ "to set up."
-#~ msgstr ""
-#~ "デフォルト値を指定するための GnuCash で使用される設定データがシステム標準"
-#~ "の場所にありません。このデータが無くても GnuCash は正常に動作します。しか"
-#~ "しセットアップに余分な時間がかかります。"
-
-#~ msgid "The data has _already been installed in another window"
-#~ msgstr "データが他のウィンドウで既にインストールされている (_A)"
-
-#~ msgid "The search path has _already been updated in another window"
-#~ msgstr "検索パスが他のウィンドウで既に更新されている (_A)"
-
-#~ msgid ""
-#~ "This method will install the GnuCash default settings and descriptions "
-#~ "into the .gconf directory within your home directory.  The disadvantage "
-#~ "to this method is that future updates to GnuCash will not update your "
-#~ "local settings to add in new keys."
-#~ msgstr ""
-#~ "この方法では GnuCash のデフォルト設定および説明をホームディレクトリの ."
-#~ "gconf ディレクトリ内にインストールします。この方法の欠点は GnuCash の今後"
-#~ "のアップデートで新しくキーが追加されたとしても、ローカルの設定が更新されな"
-#~ "いことです。"
-
-#~ msgid ""
-#~ "This method will modify the file .gconf.path in your home directory.  It "
-#~ "will add the GnuCash install directory to this path so that GnuCash can "
-#~ "find its default settings and their descriptions."
-#~ msgstr ""
-#~ "この方法はホームディレクトリの .gconf.path ファイルを修正します。これによ"
-#~ "り GnuCash のデフォルト設定と説明をGnuCash が見つけることができるように "
-#~ "GnuCash のインストールディレクトリがパスに追加されます。"
-
-#~ msgid "Update GnuCash configuration data"
-#~ msgstr "GnuCash設定データを更新"
-
-#~ msgid "Update gconf settings - GnuCash"
-#~ msgstr "gconf設定 - GnuCash を更新"
-
-#~ msgid "Update search path"
-#~ msgstr "検索パスを更新"
-
-#~ msgid ""
-#~ "You have chosen to install the configuration data used by GnuCash into "
-#~ "the ~/.gconf directory.  GnuCash can do this for you, or tell you how to "
-#~ "do it yourself."
-#~ msgstr ""
-#~ "GnuCash で使用される設定データを ~/.gconf ディレクトリにインストールするこ"
-#~ "とを選択しました。 GnuCash がこれを実行することができます。または自分自身"
-#~ "で行うためにはどのようにするかを通知することができます。"
-
-#~ msgid ""
-#~ "You have chosen to update the system search path.  GnuCash can do this "
-#~ "for you, or it can tell you how to do it yourself."
-#~ msgstr ""
-#~ "システムの検索パスを更新することを選択しました。GnuCashがこれを実行するこ"
-#~ "とができます。または自分自身で行うためにはどのようにするかを通知することが"
-#~ "できます。"
-
-#~ msgid ""
-#~ "You will then need to restart the gconf backend with the\n"
-#~ "command 'gconftool-2 --shutdown'."
-#~ msgstr ""
-#~ "次に 'gconftool-2 --shutdown' コマンドを使用して gconf バックエンド\n"
-#~ "を再起動する必要があります。"
-
-#~ msgid "_GnuCash installs the data"
-#~ msgstr "GnuCash でデータをインストールする(_G)"
-
-#~ msgid "_GnuCash updates the search path"
-#~ msgstr "GnuCash で検索パスを更新する(_G)"
-
-#~ msgid "_Install into home directory"
-#~ msgstr "ホームディレクトリにインストールする(_I)"
-
-#~ msgid "_Setup"
-#~ msgstr "設定(_S)"
-
-#~ msgid "_Update search path"
-#~ msgstr "検索パスを更新する(_U)"
-
-#~ msgid "_You install the data yourself"
-#~ msgstr "自分自身でデータをインストールする(_Y)"
-
-#~ msgid "_You update the search path yourself"
-#~ msgstr "自分自身で検索パスを更新する(_Y)"
-
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to import at this time. "
-#~ "Do this if you have saved your accounts to separate GnuCash files.\n"
-#~ "\n"
-#~ "Click \"Forward\" to finish loading files and move to the next step of "
-#~ "the GnuCash Datafile import process."
-#~ msgstr ""
-#~ "インポートするデータがまだある場合には、\"別のファイルをロード\" をクリッ"
-#~ "クしてください。別々のGnuCashファイルに分けて勘定科目を保存した場合も同様"
-#~ "です。\n"
-#~ "\n"
-#~ "ファイルのロードを完了し、GnuCashデータファイルのインポート処理ステップを"
-#~ "進めるには、\"次へ\" をクリックしてください。"
-
-#~ msgid "Do not merge"
-#~ msgstr "マージしない"
-
-#~ msgid "GnuCash data files you have loaded"
-#~ msgstr "ロード済のGnuCashデータファイル"
-
-#~ msgid "Load another file"
-#~ msgstr "別のファイルをロード"
-
-#~ msgid "Unload selected file"
-#~ msgstr "選択したファイルをアンロード"
-
-#~ msgid "<b>Current File List</b>"
-#~ msgstr "<b>現在のファイル一覧</b>"
-
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to load at this time.\n"
-#~ "\n"
-#~ "Click \"Next\" to finish loading files and move to the next step. "
-#~ msgstr ""
-#~ "ロードするデータがまだある場合には、\"別のファイルをロード\"\n"
-#~ "をクリックしてください。複数の QIF ファイルに科目を保存した場合も同様で"
-#~ "す。\n"
-#~ "\n"
-#~ "QIF ファイルの読み込みを終了し、次のステップに進む場合には、\"進む\" を\n"
-#~ "クリックしてください。"
-
-#~ msgid "<b>Exchange/Price Information</b>"
-#~ msgstr "<b>為替/価格情報</b>"
-
-#~ msgid "To A_mount:"
-#~ msgstr "資金移動先合計(_M):"
-
-#~ msgid "_Exchange Rate:"
-#~ msgstr "為替・交換レート(_E):"
-
-#~ msgid "_From:"
-#~ msgstr "開始日(_F):"
-
-#~ msgid "_To:"
-#~ msgstr "終了日(_T):"
-
-#~ msgid ""
-#~ "US (12/31/2001)\n"
-#~ "UK (31/12/2001)\n"
-#~ "Europe (31.12.2001)\n"
-#~ "ISO (2001-12-31)\n"
-#~ "UTC\n"
-#~ "Locale\n"
-#~ "Custom\n"
-#~ msgstr ""
-#~ "米国 (12/31/2001)\n"
-#~ "英国 (31/12/2001)\n"
-#~ "ヨーロッパ (31.12.2001)\n"
-#~ "ISO (2001-12-31)\n"
-#~ "UTC\n"
-#~ "ロケール\n"
-#~ "カスタム\n"
-
-#~ msgid "Don't tell me again this session."
-#~ msgstr "このセッションでは今後報告しない。"
-
-#~ msgid "Don't tell me again."
-#~ msgstr "今後報告しない。"
-
-#~ msgid "Remember the answer and don't tell me again this session."
-#~ msgstr "回答を記憶してこのセッションでは今後報告しない。"
-
-#~ msgid "Remember the answer and don't tell me again."
-#~ msgstr "回答を記憶して今後報告しない。"
-
-#~ msgid "<b>Toolbar Style</b>"
-#~ msgstr "<b>ツールバースタイル</b>"
-
-#~ msgid "Display toolbar items as icons only."
-#~ msgstr "アイコンのみでツールバー項目を表示します。"
-
-#~ msgid "Display toolbar items as text only."
-#~ msgstr "テキストのみでツールバー項目を表示します。"
-
-#~ msgid ""
-#~ "Display toolbar items with the text label below the icon.  Labels are "
-#~ "show for all items."
-#~ msgstr ""
-#~ "アイコンの下にテキストラベルをつけてツールバー項目を表示します。ラベルは全"
-#~ "項目に表示されます。"
-
-#~ msgid ""
-#~ "Display toolbar items with the text label beside the icon.  Labels are "
-#~ "only shown for the most important items."
-#~ msgstr ""
-#~ "アイコンの横にテキストラベルをつけてツールバー項目を表示します。ラベルは最"
-#~ "も重要な項目にのみ表示されます。"
-
-#~ msgid "Priority text besi_de icons"
-#~ msgstr "主なアイコンの隣にテキスト(_D)"
-
-#~ msgid "Text _below icons"
-#~ msgstr "アイコンの下にテキスト(_B)"
-
-#~ msgid "Use s_ystem default"
-#~ msgstr "システムのデフォルトを使用(_Y)"
-
-#~ msgid "Use the date format common in continental Europe."
-#~ msgstr "ヨーロッパ大陸で一般的な日付書式を使用します。"
-
-#~ msgid "Use the date format common in the United Kingdom."
-#~ msgstr "英国で一般的な日付書式を使用します。"
-
-#~ msgid "Use the date format common in the United States."
-#~ msgstr "米国で一般的な日付書式を使用します。"
-
-#~ msgid "Use the date format specified by the ISO-8601 standard."
-#~ msgstr "ISO-8601標準で規定されている日付書式を使用します。"
-
-#~ msgid "Use the system setting for displaying toolbar items."
-#~ msgstr "システム設定をツールバー項目の表示に使用します。"
-
-#~ msgid "_Europe:"
-#~ msgstr "ヨーロッパ(_E):"
-
-#~ msgid "_Icons only"
-#~ msgstr "アイコンのみ(_I)"
-
-#~ msgid "_Text only"
-#~ msgstr "テキストのみ(_T)"
-
-#~ msgid "Failed to process file: %s"
-#~ msgstr "ファイル処理に失敗しました: %s"
-
-#~ msgid "Failed to open file: %s: %s"
-#~ msgstr "ファイル %s を開くことができませんでした: %s"
-
-#~ msgid "Add a new transaction to the account"
-#~ msgstr "勘定科目に取引を新規追加します。"
-
-#~ msgid "Select an CSV/Fixed-Width file to import"
-#~ msgstr "インポートするCSV/固定幅ファイルを選択する"
-
-#~ msgid "Import CSV/Fixed-Width File"
-#~ msgstr "CSV/固定幅ファイルをインポート"
-
-#~ msgid "Import _CSV/Fixed-Width..."
-#~ msgstr "CSV/固定幅ファイルをインポート(_C)..."
-
-#~ msgid " a CSV/Fixed-Width file"
-#~ msgstr "CSV/固定幅ファイルをインポートします。"
-
-#~ msgid "Other Account"
-#~ msgstr "相手勘定科目"
-
-#~ msgid "Period-as-decimal (1,000.00)"
-#~ msgstr "小数点=ピリオド (1,000.00)"
-
-#~ msgid "Comma-as-decimal (1.000,00)"
-#~ msgstr "小数点=カンマ (1.000,00)"
-
-#~ msgid "y-d-m"
-#~ msgstr "年-日-月"
-
-#~ msgid "You must enter an account name."
-#~ msgstr "勘定科目名を入力してください。"
-
-#~ msgid "Delete the currently selected report"
-#~ msgstr "現在選択している帳票を削除します"
-
-#~ msgid "Run the currently selected report"
-#~ msgstr "現在選択している帳票を作成します"
-
-#~ msgid "_Run"
-#~ msgstr "作成(_R)"
-
-#~ msgid "Add _Report"
-#~ msgstr "帳票を追加(_R)"
-
-#, fuzzy
-#~ msgid ""
-#~ "No valid customer selected. Click on the Options button to select a "
-#~ "customer."
-#~ msgstr ""
-#~ "有効な %s が選択されていません。オプションボタンをクリックして会社を選択し"
-#~ "てください。"
-
-#, fuzzy
-#~ msgid ""
-#~ "No valid employee selected. Click on the Options button to select an "
-#~ "employee."
-#~ msgstr ""
-#~ "有効な %s が選択されていません。オプションボタンをクリックして会社を選択し"
-#~ "てください。"
-
-#, fuzzy
-#~ msgid ""
-#~ "No valid company selected. Click on the Options button to select a "
-#~ "company."
-#~ msgstr ""
-#~ "有効な %s が選択されていません。オプションボタンをクリックして会社を選択し"
-#~ "てください。"
-
-#~ msgid "Custom Reports"
-#~ msgstr "カスタム帳票"
-
-#~ msgid "Asterisk"
-#~ msgstr "星印"
-
-#~ msgid ""
-#~ "Your report \"%s\" has been saved into the configuration file \"%s\"."
-#~ msgstr "レポート「%s」は設定ファイル「%s」に保存されました。"
-
-#~ msgid "and"
-#~ msgstr "および"
-
-#~ msgid "Most recent to report"
-#~ msgstr "帳票にもっとも最近"
-
-#~ msgid "The most recent recorded price before report date"
-#~ msgstr "帳票の日付以前でもっとも最近に記帳された価格"
-
-#~ msgid "FILO"
-#~ msgstr "FILO"
-
-#~ msgid "Enable hyperlinks in reports"
-#~ msgstr "帳票内のハイパーリンクを有効にする"
-
-#~ msgid "Welcome to GnuCash 2.4!"
-#~ msgstr "GnuCash 2.4にようこそ!"
-
-#~ msgid ""
-#~ "A list of directories (strings) indicating where to look for html and "
-#~ "parsed-html files. Each element must be a string representing a directory "
-#~ "or a symbol where 'default expands to the default path, and 'current "
-#~ "expands to the current value of the path."
-#~ msgstr ""
-#~ "html および構文解析済み html ファイルを検索するディレクトリ (文字列) の一"
-#~ "覧です。各要素はディレクトリを表す文字列またはシンボルでなければいけませ"
-#~ "ん。'default シンボルはデフォルトのパスに展開されます。 'current は現在の"
-#~ "パスに展開されます。"
-
-#~ msgid "Set the search path for documentation files"
-#~ msgstr "文書ファイル検索パスを設定する"
-
-#, fuzzy
-#~ msgid ""
-#~ "The invoice being paid.\n"
-#~ "\n"
-#~ "Note that is field is optional. If you leave it blank, GnuCash will "
-#~ "automatically assign the payment to the first unpaid invoice for this "
-#~ "company.\t"
-#~ msgstr ""
-#~ "支払が行われた得意先請求書です。\n"
-#~ "\n"
-#~ "この欄はオプションです。空白のままにした場合は、この会社に対する最初の未払"
-#~ "得意先請求書にGnuCashが自動的に支払を割り当てます。"
-
-#~ msgid "Invalid Entry:  You need to supply %s."
-#~ msgstr "無効な入力: %s を入力する必要があります。"
-
-#~ msgid "This SX has changed; are you sure you want to cancel?"
-#~ msgstr "この予定取引は変更されています。本当に取り消してよろしいですか?"
-
-#~ msgid "Crea_te in advance, days:"
-#~ msgstr "前もって作成する日数(_T):"
-
-#~ msgid "R_emind in advance, days:"
-#~ msgstr "前もって通知する日数(_E):"
-
-#~ msgid "New %s"
-#~ msgstr "%sを新規作成"
-
-#~ msgid "item"
-#~ msgstr "項目"
-
-#~ msgid ""
-#~ "Enable the EDIT action in the transaction matcher.  NOT YET SUPPORTED"
-#~ msgstr "取引マッチングで編集アクションを有効にする。未サポート"
-
-#~ msgid "The two passwords didn't match. Please try again."
-#~ msgstr "二つのパスワードが一致しません。もう一度試してください。"
-
-#~ msgid "Co_nfigure"
-#~ msgstr "設定(_N)"
-
-#~ msgid "The file %s does not exist. Would you like to create it now?"
-#~ msgstr "ファイル %s が存在しません。作成しますか?"
-
-#~ msgid ""
-#~ "The directory for file %s does not exist. Please choose another place for "
-#~ "this file."
-#~ msgstr ""
-#~ "ファイル %s 用のディレクトリが存在しません。別の場所を選択してください。"
-
-#~ msgid "Online Banking Version"
-#~ msgstr "インターネットバンキングのバージョン"
-
-#~ msgid "Start AqBanking Setup Wizard"
-#~ msgstr "AqBanking設定ウィザードを開始"
-
-#~ msgid "Enter and confirm your new password"
-#~ msgstr "パスワードを入力し確認してください"
-
-#~ msgid "Enter new Password"
-#~ msgstr "新規パスワード入力"
-
-#~ msgid "Activate verbose debug messages for Online Banking."
-#~ msgstr "インターネットバンキング用のデバッグメッセージを有効にする"
-
-#~ msgid "Remember the Online Banking PIN in memory during a session."
-#~ msgstr ""
-#~ "セッション中、インターネットバンキングのPIN(暗証番号)をメモリ内に記憶する"
-
-#~ msgid ""
-#~ "The PIN you entered was wrong.\n"
-#~ "Do you want to try again?"
-#~ msgstr ""
-#~ "入力したPIN(暗証番号)が間違っています。\n"
-#~ "もう一度試しますか?"
-
-#~ msgid ""
-#~ "The PIN you entered was wrong.\n"
-#~ "ATTENTION: You have zero further wrong retries left!\n"
-#~ "Do you want to try again?"
-#~ msgstr ""
-#~ "入力したPIN(暗証番号)が間違っています。\n"
-#~ "注意: これ以上間違えられません!\n"
-#~ "もう一度試しますか?"
-
-#~ msgid ""
-#~ "Unfortunately you entered a wrong PIN for too many times. Your chip card "
-#~ "is therefore destroyed. Aborting."
-#~ msgstr ""
-#~ "あいにく、PIN(暗証番号)の間違い回数が多すぎました。そのため、あなたのIC"
-#~ "カードは破壊されました。中止します。"
-
-#~ msgid ""
-#~ "No chip card has been found in the chip card reader. Do you want to try "
-#~ "again?"
-#~ msgstr "ICカードリーダにICカードが挿入されていません。もう一度試しますか?"
-
-#~ msgid ""
-#~ "Unfortunately this Online Banking job is not supported by your bank or "
-#~ "for your account. Aborting."
-#~ msgstr ""
-#~ "あいにく、あなたの銀行あるいは口座はこのインターネットバンキングジョブをサ"
-#~ "ポートしていません。中止します。"
-
-#~ msgid ""
-#~ "The server of your bank refused the Online Banking connection. Please try "
-#~ "again later. Aborting."
-#~ msgstr ""
-#~ "あなたの銀行のサーバがインターネットバンキング接続を拒絶しました。後ほど試"
-#~ "してください。中止します。"
-
-#~ msgid "Import a CSV file into GnuCash"
-#~ msgstr "CSVファイルをGnuCashにインポートする"
-
-#~ msgid "Import CSV and s_end..."
-#~ msgstr "CSVをインポートして送信(_E)..."
-
-#~ msgid ""
-#~ "Import a CSV file into GnuCash and send the transfers online through "
-#~ "Online Banking"
-#~ msgstr ""
-#~ "CSVファイルをGnuCashにインポートし、インターネットバンキングを通して送金す"
-#~ "る"
-
-#~ msgid ""
-#~ "The PIN needs to be at least %d characters long. Do you want to try again?"
-#~ msgstr "PIN(暗証番号)は%d文字以上の長さが必要です。もう一度試しますか?"
-
-#~ msgid ""
-#~ "You entered %ld characters, but the PIN must be no longer than %d "
-#~ "characters. Do you want to try again?"
-#~ msgstr ""
-#~ "%ld文字入力しましたが、PIN(暗証番号)の長さは%d文字以下にしなければなりませ"
-#~ "ん。もう一度試しますか?"
-
-#~ msgid ""
-#~ "This TAN needs to be at least %d characters long. Do you want to try "
-#~ "again?"
-#~ msgstr "取引番号は%d文字以上の長さが必要です。もう一度試しますか?"
-
-#~ msgid ""
-#~ "You entered %ld characters, but the TAN must be no longer than %d "
-#~ "characters. Do you want to try again?"
-#~ msgstr ""
-#~ "%ld文字入力しましたが、取引番号の長さは%d文字以下にしなければなりません。"
-#~ "もう一度試しますか?"
-
-#~ msgid "Enable EDIT transaction action"
-#~ msgstr "取引編集アクションを有効にする"
-
-#~ msgid ""
-#~ "Enable the EDIT action in the transaction matcher. NOT YET SUPPORTED."
-#~ msgstr "取引マッチングで編集アクションを有効にする。未サポート"
-
-#, fuzzy
-#~ msgid "PSL Budget Report"
-#~ msgstr "予算帳票"
-
-#~ msgid "Account: %s"
-#~ msgstr "勘定科目: %s"
-
-#, fuzzy
-#~ msgid "Plot account balance over time."
-#~ msgstr "親勘定科目残高"
-
-#~ msgid ""
-#~ "Blue items are exportable to a German Tax XML file. Press Export to "
-#~ "actually export them."
-#~ msgstr ""
-#~ "青色の項目はドイツ税XMLFファイルにエクスポートすることができます。実際にエ"
-#~ "クスポートするにはエクスポートを押してください。"
-
-#~ msgid ""
-#~ "No Tax Related accounts were found.  Go to the Edit->Tax Options dialog "
-#~ "to set up tax-related accounts."
-#~ msgstr ""
-#~ "税金に関連する勘定科目が見つかりませんでした。税金関連勘定科目を設定するに"
-#~ "は、編集->税金オプションダイアログに行ってください。"
-
-#~ msgid ""
-#~ "Warning!! This is a DEVELOPMENT version of GnuCash. It probably has lots "
-#~ "of bugs and unstable features! If you are looking for a stable personal "
-#~ "finance application, you should use the latest release of GnuCash %s."
-#~ msgstr ""
-#~ "警告!! これは GnuCash の開発バージョンです。たくさんのバグと不安定な機能が"
-#~ "あるかもしれません。もし安定版の個人向け財務アプリケーションをお探しなら"
-#~ "ば、最新のリリースである GnuCash %s を使用すべきです。"
-
-#~ msgid "CONFIGPATH"
-#~ msgstr "CONFIGPATH"
-
-#~ msgid "Set shared data file search path"
-#~ msgstr "共有データファイル検索パスを設定する"
-
-#~ msgid "SHAREPATH"
-#~ msgstr "SHAREPATH"
-
-#~ msgid "Default number of register rows to display in Invoices."
-#~ msgstr "得意先請求書に表示する記録簿のデフォルト行数を指定します。"
-
-#~ msgid ""
-#~ "The invoice to be paid.\n"
-#~ "\n"
-#~ "Note that is field is optional. If you leave it blank, GnuCash will "
-#~ "automatically assign the payment to the first unpaid invoice for this "
-#~ "company."
-#~ msgstr ""
-#~ "支払が行われる予定の得意先請求書です。\n"
-#~ "\n"
-#~ "この欄はオプションです。空白のままにした場合は、この会社に対する最初の未払"
-#~ "得意先請求書にGnuCashが自動的に支払を割り当てます。"
-
-#~ msgid "The number of rows in an invoice"
-#~ msgstr "得意先請求書の行数"
-
-#~ msgid ""
-#~ "This field sets the number of rows to show in an invoice. It does not "
-#~ "actually affect the display of the contents of the window. It is only "
-#~ "used to set the size of the window when first opened."
-#~ msgstr ""
-#~ "このフィールドは得意先請求書に表示する行数を設定します。これは実際にはウィ"
-#~ "ンドウの内容の表示には影響せず、最初に開くときのウィンドウのサイズを決める"
-#~ "ためにのみ使われます。"
-
-#~ msgid ""
-#~ "This field sets the number of rows to show in a register. It does not "
-#~ "actually affect the display of the contents of the window. It is only "
-#~ "used to set the size of the window when first opened."
-#~ msgstr ""
-#~ "この欄には記録簿に表示される行の数を設定します。これは実際にウィンドウに表"
-#~ "示される内容には影響しません。ウィンドウを最初に開いたときの大きさを設定す"
-#~ "るのに使用されるだけです。"
-
-#~ msgid "Display this many rows when a register is created."
-#~ msgstr "記録簿を作成するときこれだけの行数を表示する。"
-
-#~ msgid "Transaction _journal"
-#~ msgstr "取引仕訳帳(_J)"
-
-#~ msgid "Payment rec'd..."
-#~ msgstr "支払の受取…"
-
-#~ msgid "DOCPATH"
-#~ msgstr "DOCPATH"
-
-#~ msgid "<b>Contained Accounts</b>"
-#~ msgstr "<b>含まれる勘定科目</b>"
-
-#~ msgid "<b>Description</b>"
-#~ msgstr "<b>説明</b>"
-
-#~ msgid "<b>New Account Currency</b>"
-#~ msgstr "<b>新規勘定科目の通貨</b>"
-
-#~ msgid ""
-#~ "If you would like an account to have an opening balance, click on the "
-#~ "account and enter the starting balance in the box on the right. All "
-#~ "accounts except Equity and placeholder accounts may have an opening "
-#~ "balance."
-#~ msgstr ""
-#~ "勘定科目に開始残高を設定したい場合は、勘定科目をクリックして右側のボックス"
-#~ "に開始残高を入力してください。純資産やプレースホルダー以外のどの勘定科目も"
-#~ "開始残高を設定することができます。"
-
-#~ msgid "This is Sample2."
-#~ msgstr "これは Sample2 です。"
-
-#~ msgid "Auto-Created Transactions Notification"
-#~ msgstr "取引自動作成の通知"
-
-#~ msgid "Create"
-#~ msgstr "作成する"
-
-#~ msgid "Create as scheduled"
-#~ msgstr "予定済として作成する"
-
-#~ msgid "Created Transaction Review"
-#~ msgstr "作成された取引を確認"
-
-#~ msgid "Creating transactions..."
-#~ msgstr "取引の作成中..."
-
-#, fuzzy
-#~ msgid "Days Away"
-#~ msgstr "日"
-
-#, fuzzy
-#~ msgid "Disposition?"
-#~ msgstr "入金"
-
-#~ msgid "Obsolete Scheduled Transactions"
-#~ msgstr "以前の予定取引"
-
-#~ msgid "Postpone"
-#~ msgstr "延期"
-
-#~ msgid "Scheduled Transaction"
-#~ msgstr "予定取引"
-
-#~ msgid "Since Last Run"
-#~ msgstr "前回起動時以降"
-
-#~ msgid "State"
-#~ msgstr "状態"
-
-#~ msgid "Template Transaction (Read-Only)"
-#~ msgstr "テンプレート取引（読出し専用）"
-
-#~ msgid ""
-#~ "The following scheduled transactions have expired.  Select those you wish "
-#~ "to delete."
-#~ msgstr ""
-#~ "以下の予定取引は期間が終了しています。削除したい予定取引を選択してくださ"
-#~ "い。"
-
-#~ msgid ""
-#~ "The listed Scheduled Transactions are to-be created soon.  Select any "
-#~ "which you would like to create now, and click \"Forward\" to create them."
-#~ msgstr ""
-#~ "一覧にある予定取引はまもなく作成されます。今すぐに作成したい取引がある場合"
-#~ "はそれらを選択して\"進む\"をクリックしてください。"
-
-#~ msgid ""
-#~ "This assistant will walk you through any scheduled transactions that "
-#~ "should be created."
-#~ msgstr "このウィザードでは予定取引に関して一通り実行します。"
-
-#~ msgid "To-Create Transaction Preparation"
-#~ msgstr "作成される取引の準備"
-
-#~ msgid "Transaction Reminders"
-#~ msgstr "取引の通知"
-
-#~ msgid "Unselect All"
-#~ msgstr "すべて選択解除"
-
-#~ msgid "Value:"
-#~ msgstr "価値:"
-
-#~ msgid "Variable"
-#~ msgstr "変数"
-
-#~ msgid "Variables"
-#~ msgstr "変数"
-
-#~ msgid "Defaults"
-#~ msgstr "デフォルト"
-
-#~ msgid "Start of this fiscal year"
-#~ msgstr "今年度の開始日"
-
-#~ msgid "Start of previous fiscal year"
-#~ msgstr "前年度の開始日"
-
-#~ msgid "End of this fiscal year"
-#~ msgstr "今年度の終了日"
-
-#~ msgid "End of previous fiscal year"
-#~ msgstr "前年度の終了日"
-
-#~ msgid "Accounts to include"
-#~ msgstr "含める勘定科目"
-
-#~ msgid "Show Full Account Name?"
-#~ msgstr "勘定科目のフルネームを表示しますか?"
-
-#~ msgid "Filter Accounts"
-#~ msgstr "フィルタする勘定科目"
-
-#~ msgid "Current Year Start"
-#~ msgstr "今年度の開始日"
-
-#~ msgid "Previous Year Start"
-#~ msgstr "前年度の開始日"
-
-#~ msgid "Previous Year End"
-#~ msgstr "前年度の終了日"
-
-#~ msgid "End of the Previous Year"
-#~ msgstr "前暦年の終了日"
-
-#~ msgid "Start of Financial Period"
-#~ msgstr "会計期間の始期"
-
-#~ msgid "End of Financial Period"
-#~ msgstr "会計期間の終期"
-
-#~ msgid "End of the accounting period, as set in the global preferences"
-#~ msgstr "グローバル設定で設定されている会計期間の終期"
-
-#~ msgid "End of the current month"
-#~ msgstr "今月の終了日"
-
-#~ msgid "The beginning of the previous month"
-#~ msgstr "前月の開始日"
-
-#~ msgid "The end of the latest quarterly accounting period"
-#~ msgstr "会計上の今四半期の終了日"
-
-#~ msgid "QSF _Invoice..."
-#~ msgstr "QSF得意先請求書(_I)..."
-
-#~ msgid "Export one or more invoices to QSF"
-#~ msgstr "1件以上の得意先請求書をQSFにエクスポートする"
-
-#~ msgid "QSF _Customer..."
-#~ msgstr "QSF得意先(_C)..."
-
-#~ msgid "Export one or more customers to QSF"
-#~ msgstr "1件以上の得意先をQSFにエクスポート"
-
-#~ msgid "QSF _Vendor..."
-#~ msgstr "QSF仕入先(_V)..."
-
-#~ msgid "Export one or more vendors to QSF"
-#~ msgstr "1件以上の仕入先をQSFにエクスポート"
-
-#~ msgid "QSF _Employee..."
-#~ msgstr "QSF従業員(_E)..."
-
-#~ msgid "Export one or more employees to QSF"
-#~ msgstr "1件以上の従業員をQSFにエクスポート"
-
-#~ msgid "Export Invoices to XML"
-#~ msgstr "得意先請求書をXMLにエクスポート"
-
-#~ msgid "Export Vendors to XML"
-#~ msgstr "仕入先をXMLにエクスポート"
-
-#~ msgid "Export Employees to XML"
-#~ msgstr "従業員をXMLにエクスポート"
-
-#~ msgid "Export Chart of Accounts to QSF XML"
-#~ msgstr "勘定科目表をQSF XMLにエクスポートする"
-
-#~ msgid ""
-#~ "Error: Please resolve all %d conflicts before trying to commit the data."
-#~ msgstr "エラー: データを確定する前に%d個の競合をすべて解決してください。"
-
-#~ msgid "Error: the Commit operation failed, error code %d."
-#~ msgstr "エラー: 確定処理に失敗しました。エラーコード %d"
-
-#~ msgid "%i conflict needs to be resolved."
-#~ msgid_plural "%i conflicts need to be resolved."
-#~ msgstr[0] "%i個の競合を解決する必要があります。"
-
-#~ msgid "%i: Parameter name: %s "
-#~ msgstr "%i: パラメーター名: %s "
-
-#~ msgid "Import data : %s "
-#~ msgstr "インポートデータ : %s "
-
-#~ msgid "Original data : %s\n"
-#~ msgstr "オリジナルデータ : %s\n"
-
-#~ msgid "Click to choose the filename and location."
-#~ msgstr "クリックしてファイル名と場所を選んでください。"
-
-#~ msgid "Export Chart of Accounts"
-#~ msgstr "勘定科目表をエクスポート"
-
-#~ msgid ""
-#~ "Select the date to use and click Export to choose the filename and "
-#~ "location. Future dates are not supported."
-#~ msgstr ""
-#~ "用いる日付を選択し、エクスポートをクリックしてファイル名と場所を選択してく"
-#~ "ださい。\n"
-#~ "未来の日付はサポートしていません。"
-
-#~ msgid ""
-#~ "The Chart of Accounts includes the balance for each account, on the date "
-#~ "specified.  Note that future dates are not supported."
-#~ msgstr ""
-#~ "勘定科目表は、各勘定科目の指定された日においての残高を含んでいます。未来の"
-#~ "日付はサポートしていません。"
-
-#~ msgid ""
-#~ "You can export the Chart of Accounts to a QSF XML file that can be "
-#~ "imported into another GnuCash file or used in other programs."
-#~ msgstr ""
-#~ "勘定科目表をQSF XMLファイルにエクスポートできます。QSF XMLファイルは、他の"
-#~ "GnuCashのファイルにインポートすることができ、また、他のプログラムでも利用"
-#~ "できます。"
-
-#~ msgid "1. Update your existing book with the import data"
-#~ msgstr "1. 現在の帳簿をインポートデータで更新する"
-
-#~ msgid "2. Ignore the import data, leave original unchanged"
-#~ msgstr "2. インポートデータを無視し、原本を変更せずそのままにする"
-
-#~ msgid "3. Import the data as a NEW object"
-#~ msgstr "3. 新規オブジェクトとしてデータをインポートする"
-
-#~ msgid "Add the import as a new object, leave original in place"
-#~ msgstr ""
-#~ "インポートデータを新規オブジェクトとして加え、原本データはそのまま残す"
-
-#~ msgid "Commit QSF Import Data to data file"
-#~ msgstr "QSFからインポートしたデータをデータファイルに書き出すことを確定する"
-
-#~ msgid "Please resolve any conflicts in the merge"
-#~ msgstr "併合時の競合を解決してください"
-
-#~ msgid ""
-#~ "Press `Apply' to merge your QSF data into the current GnuCash file.\n"
-#~ "\n"
-#~ "Press `Back' to review your selections.\n"
-#~ "\n"
-#~ "Press `Cancel' to close this dialog without changing your current data "
-#~ "file.\n"
-#~ "\n"
-#~ "REMEMBER: There is no way to undo this final operation! Make sure you "
-#~ "have a backup before clicking 'Apply'."
-#~ msgstr ""
-#~ "QSFデータを現在の GnuCash ファイルに併合する場合は`適用'を押してくださ"
-#~ "い。\n"
-#~ "\n"
-#~ "選択した項目を確認するためには`戻る'を押してください。\n"
-#~ "\n"
-#~ "現在のデータを変更せずにダイアログを閉じるには`キャンセル'を押してくださ"
-#~ "い。\n"
-#~ "\n"
-#~ "注意: この最後の操作を取り消すことはできません! `適用'をクリックする前に確"
-#~ "実にバックアップを取ってください。"
-
-#~ msgid "QSF Data Import Setup"
-#~ msgstr "QSF データインポート設定"
-
-#~ msgid "Shows how your QSF data conflicts with existing data in your file."
-#~ msgstr ""
-#~ "QSFデータと既存のファイルに存在するデータがどのように競合しているかを表示"
-#~ "します。"
-
-#~ msgid ""
-#~ "This assistant will merge your QSF data into the currently open GnuCash "
-#~ "file.\n"
-#~ "\n"
-#~ "You will be asked how to proceed if some QSF data clashes with the your "
-#~ "existing GnuCash data file.\n"
-#~ "\n"
-#~ "There is NO way to undo this operation! Please ensure you have a backup "
-#~ "of your file BEFORE continuing! You will be given the option to cancel "
-#~ "the merge at all stages until the final merge operation. Once you click "
-#~ "Finish, the new QSF data will be committed to your current data file.\n"
-#~ "\n"
-#~ "There is currently no currency or price support in the merge operation, "
-#~ "the new data will inherit any default currency or you can change the "
-#~ "currency after the merge is complete.\n"
-#~ "\n"
-#~ "Your QSF data is ready to import\n"
-#~ "\n"
-#~ "Click 'Cancel'  if you do not wish to merge your QSF data now."
-#~ msgstr ""
-#~ "このウィザードでは QSF データを現在開いている GnuCash ファイルに併合しま"
-#~ "す。\n"
-#~ "\n"
-#~ "QSF データが既存の GnuCash データと衝突する場合はどのように処理するか尋ね"
-#~ "られます。\n"
-#~ "\n"
-#~ "この操作をやりなおすことは「できません」! 続ける「前」にファイルのバック"
-#~ "アップを取得していることを確認してください! 最後の併合操作より前のすべての"
-#~ "段階までは併合をキャンセルすることができます。いったん完了をクリックしたら"
-#~ "現在のデータファイルに対する新規 QSF データの併合が確定されます。\n"
-#~ "\n"
-#~ "現在、併合操作では通貨または価格がサポートされていません。新規データはデ"
-#~ "フォルト通貨の設定が適用されます。併合完了後に通貨設定を変更してくださ"
-#~ "い。\n"
-#~ "\n"
-#~ "QSF データのインポート準備ができました。\n"
-#~ "\n"
-#~ "今 QSF データを併合したくない場合は「キャンセル」をクリックしてください。"
-
-#~ msgid ""
-#~ "You have three choices for each collision: \n"
-#~ "1. The import object can be allowed to overwrite the target - use this to "
-#~ "update your existing book. \n"
-#~ "2. The import object can be ignored - use this if the import is a "
-#~ "duplicate of an object in the existing book. \n"
-#~ "3. The import object can be created as a new object in the existing book."
-#~ msgstr ""
-#~ "各競合に対して3種類の選択肢があります。\n"
-#~ "1. インポートするデータで上書きする - 既存の帳簿をアップデートするときに使"
-#~ "用してください。\n"
-#~ "2. インポートするデータを無視する - 既存の帳簿とデータが重複しているときに"
-#~ "使用してください。\n"
-#~ "3. インポートするデータを既存の帳簿に新規のデータとして作成する。"
-
-#~ msgid "ignore the import, leave the original untouched"
-#~ msgstr "インポートデータを無視し、元のデータをそのままにする"
-
-#~ msgid "overwrite the original with the import data"
-#~ msgstr "インポートデータで元のデータを上書きする"
-
-#~ msgid "Import a QSF object file"
-#~ msgstr "QSFオブジェクトファイルをインポート"
-
-#~ msgid "Export the chart of accounts for a date with balances as QSF"
-#~ msgstr "ある日の勘定科目表と残高をQSFとしてエクスポートする"
-
-#~ msgid "Error: Loading failed, error code %d - %s."
-#~ msgstr "エラー: ロード失敗。エラーコード %d - %s。"
-
-#~ msgid "Select the QSF file to import into GnuCash"
-#~ msgstr "GnuCashにインポートするQSFファイルを選択する"
-
-#~ msgid "Level of compression to use: 0 for none, 9 for highest."
-#~ msgstr "利用する圧縮レベルの指定: 0は無圧縮、9は最高圧縮。"
-
-#~ msgid ""
-#~ "QOF can compress QSF XML files using gzip. Note that compression is not "
-#~ "used when outputting to STDOUT."
-#~ msgstr ""
-#~ "QOFはQSF XMFファイルをgzipを利用して圧縮することができます。標準出力に出力"
-#~ "する場合は圧縮されないことに注意してください。"
-
-#~ msgid "List of QSF map files to use for this session."
-#~ msgstr "このセッションで使用されるQSFマップファイルの一覧"
-
-#~ msgid "String encoding to use when writing the XML file."
-#~ msgstr "XMLファイルを書くときに用いる文字列エンコーディング。"
-
-#~ msgid ""
-#~ "QSF defaults to UTF-8. Other encodings are supported by passing the "
-#~ "string encoding in this option."
-#~ msgstr ""
-#~ "QSFのデフォルトはUTF-8です。このオプションで文字列エンコーディングを与える"
-#~ "ことにより、他のエンコーディングがサポートされます。"
-
-#~ msgid "Due date:"
-#~ msgstr "期日:"
-
-#~ msgid "<h2>Tax Invoice</h2>"
-#~ msgstr "<h2>税金請求書</h2>"
-
-#~ msgid "<p>This report is designed for customer (sales) invoices only.\n"
-#~ msgstr ""
-#~ "<p>この帳票は得意先 (売上) 請求書を作成するためにのみ設計されています。\n"
-
-#, fuzzy
-#~ msgid "one"
-#~ msgstr "なし"
-
-#, fuzzy
-#~ msgid "Imbalance-"
-#~ msgstr "貸借不一致"
-
-#, fuzzy
-#~ msgid "Orphan-"
-#~ msgstr "不明"
-
-#, fuzzy
-#~ msgid "Total "
-#~ msgstr "合計"
-
-#, fuzzy
-#~ msgid "Retained earnings"
-#~ msgstr "利益剰余金"
-
-#, fuzzy
-#~ msgid "Retained loss"
-#~ msgstr "欠損金"
-
-#~ msgid "Could not open the file: "
-#~ msgstr "ファイルを開くことができません: "
-
-#~ msgid ". The error is: "
-#~ msgstr "。エラー: "
-
-#~ msgid "CSS"
-#~ msgstr "スタイルシート"
-
-#~ msgid "Default CSS"
-#~ msgstr "デフォルトスタイルシート"
-
-#~ msgid "Set the logging level from 0 (least) to 6 (most)"
-#~ msgstr "ログレベルを0から6の間で設定する"
-
-#~ msgid "LOGLEVEL"
-#~ msgstr "LOGLEVEL"
-
-#~ msgid "_Tax Table Editor"
-#~ msgstr "税額表エディタ(_T)"
-
-#~ msgid "Value '%s' cannot be interpreted as a float number."
-#~ msgstr "値 '%s' が小数付きの数値として解釈できません。"
-
-#~ msgid ""
-#~ "Key file contains key '%s' in group '%s' which has a value that cannot be "
-#~ "interpreted."
-#~ msgstr ""
-#~ "グループ '%2$s'、キー '%1$s' を含むキーファイルを解釈することができませ"
-#~ "ん。"
-
-#~ msgid ""
-#~ "If you would like an account to have an opening balance, click on the row "
-#~ "containing the account, click again in the opening balances column, and "
-#~ "then enter the starting balance. All accounts except Equity and "
-#~ "placeholder accounts may have an opening balance.\n"
-#~ "\n"
-#~ "If you would like an account to be a placeholder account, just click the "
-#~ "checkbox for that account.\n"
-#~ msgstr ""
-#~ "勘定科目に開始残高を設定したい場合は、その勘定科目の行をクリックし、さらに"
-#~ "開始残高のカラムをクリックして、開始残高を入力してください。純資産とプレー"
-#~ "スホルダ以外のどの勘定科目も開始残高を設定することができます。\n"
-#~ "\n"
-#~ "勘定科目をプレースホルダにしたい場合は、その勘定科目のチェックボックスをク"
-#~ "リックしてください。\n"
-
-#~ msgid "Setup new accounts"
-#~ msgstr "新規勘定科目の設定"
-
-#~ msgid "Income Ta_x Options"
-#~ msgstr "所得税オプション(_X)"
-
-#~ msgid "Setup income tax information for relevant accounts"
-#~ msgstr "関連する勘定科目に所得税情報を設定する"
-
-#~ msgid "Print GnuCash Document"
-#~ msgstr "GnuCashドキュメントの印刷"
-
-#~ msgid "Notes/Action:Memo"
-#~ msgstr "備考/アクション:摘要"
-
-#~ msgid "Transfer To/From Account(s)"
-#~ msgstr "資金移動先/資金移動元勘定科目"
-
-#, fuzzy
-#~ msgid "(Converted "
-#~ msgstr "そのファイルを変換する"
-
-#, fuzzy
-#~ msgid " @ transaction split rate of "
-#~ msgstr "取引のスプリットに未照合マークをつける"
-
-#, fuzzy
-#~ msgid " on "
-#~ msgstr "が右の日付"
-
-#, fuzzy
-#~ msgid " (Account Commodity: "
-#~ msgstr " (勘定科目の商品: "
-
-#, fuzzy
-#~ msgid "Item "
-#~ msgstr "項目"
-
-#~ msgid " (TXF Parameter: "
-#~ msgstr " (TXFパラメータ: "
-
-#~ msgid " (TXF Parameters: "
-#~ msgstr " (TXFパラメータ:"
-
-#~ msgid ":"
-#~ msgstr ":"
-
-#, fuzzy
-#~ msgid " For "
-#~ msgstr "フォーム"
-
-#~ msgid ": Parameters"
-#~ msgstr ": パラメータ"
-
-#, fuzzy
-#~ msgid " Line "
-#~ msgstr "オンライン"
-
-#, fuzzy
-#~ msgid ": Payer Name Option "
-#~ msgstr "日付のみのオプション"
-
-#~ msgid ", TXF Format "
-#~ msgstr "、TXF形式 "
-
-#~ msgid "Tax Name: %s<BR>"
-#~ msgstr "税金名: %s<BR>"
-
-#~ msgid "None specified"
-#~ msgstr "未指定"
-
-#~ msgid "Error Description"
-#~ msgstr "エラーの説明"
-
-#, fuzzy
-#~ msgid ""
-#~ "No Tax Related accounts were found with your account selection. Change "
-#~ "your selection or go to the Edit->Income Tax Options dialog to set up tax-"
-#~ "related accounts."
-#~ msgstr ""
-#~ "選択した勘定科目に税金関連の勘定科目が見つかりませんでした。税金関連勘定科"
-#~ "目を設定するには、編集->税金収益オプションダイアログに行ってください。"
-
-#~ msgid "Subset of accounts"
-#~ msgstr "勘定科目の部分集合"
-
-#, fuzzy
-#~ msgid "No accounts (none = all accounts)"
-#~ msgstr "勘定科目を選択(なし=すべて)"
-
-#, fuzzy
-#~ msgid "Suppress $0.00 valued Tax Codes"
-#~ msgstr "金額0の項目を印刷しない"
-
-#, fuzzy
-#~ msgid "Do not suppress $0.00 valued Tax Codes"
-#~ msgstr "金額0の項目を印刷しない"
-
-#~ msgid "Display full account names"
-#~ msgstr "勘定科目名をフルネームで表示する"
-
-#~ msgid "Do not display full account names"
-#~ msgstr "勘定科目名をフルネームでは表示しない"
-
-#~ msgid "Display all Transfer To/From Accounts"
-#~ msgstr "資金移動元/資金移動先勘定科目をすべて表示する"
-
-#~ msgid "Do not display all Transfer To/From Accounts"
-#~ msgstr "資金移動元/資金移動先勘定科目をすべては表示しない"
-
-#~ msgid "Do not Print TXF export parameters"
-#~ msgstr "TXF エクスポートパラメーターを印刷しない"
-
-#~ msgid "Do not display Action:Memo data"
-#~ msgstr "アクション:摘要データを表示しない"
-
-#~ msgid "Display transactions for selected accounts"
-#~ msgstr "選択した勘定科目の取引を表示する"
-
-#~ msgid "Do not display transactions for selected accounts"
-#~ msgstr "選択した勘定科目の取引を表示しない"
-
-#~ msgid "Do not include transactions outside of selected dates"
-#~ msgstr "選択した日付以外の取引を含めない"
-
-#~ msgid "Include some transactions outside of selected dates"
-#~ msgstr "選択した日付以外の取引も一部含む"
-
-#, fuzzy
-#~ msgid "Do not shade alternate transactions"
-#~ msgstr "2行モードのとき取引ごとに色を交換する(_M)"
-
-#~ msgid "PriceDB lookups nearest to transaction date"
-#~ msgstr "取引日付に最も近い価格データーベースを検索する"
-
-#~ msgid "PriceDB lookups nearest to report end date"
-#~ msgstr "帳票終了日に最も近い価格データーベースを検索する"

@@ -26,20 +26,20 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr ""
+msgstr "Arabisch"
 
+# oost europees?
 #: ../borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr ""
+msgstr "Baltisch"
 
 #: ../borrowed/goffice/go-charmap-sel.c:72
-#, fuzzy
 msgid "Central European"
-msgstr "Europees"
+msgstr "Centraal-Europees"
 
 #: ../borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr ""
+msgstr "Chinees"
 
 #: ../borrowed/goffice/go-charmap-sel.c:74
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:242
@@ -47,43 +47,42 @@ msgid "Cyrillic"
 msgstr "Cyrillisch"
 
 #: ../borrowed/goffice/go-charmap-sel.c:75
-#, fuzzy
 msgid "Greek"
-msgstr "Groen"
+msgstr "Grieks"
 
 #: ../borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr ""
+msgstr "Hebreeuws"
 
 #: ../borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
-msgstr ""
+msgstr "Indisch"
 
 #: ../borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr ""
+msgstr "Japans"
 
 #: ../borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr ""
+msgstr "Koreaans"
 
 #: ../borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr ""
+msgstr "Turks"
 
 #: ../borrowed/goffice/go-charmap-sel.c:81
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:224
 msgid "Unicode"
 msgstr "Unicode"
 
+# trema?
 #: ../borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr ""
+msgstr "Vietnamees"
 
 #: ../borrowed/goffice/go-charmap-sel.c:83
-#, fuzzy
 msgid "Western"
-msgstr "Grootboekkaart"
+msgstr "Westers"
 
 #: ../borrowed/goffice/go-charmap-sel.c:84
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:60
@@ -95,364 +94,354 @@ msgstr "Overige"
 
 #: ../borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "Arabisch (IBM-864)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr ""
+msgstr "Arabisch (IBM-864-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "Arabisch (ISO-8859-6)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr ""
+msgstr "Arabisch (ISO-8859-6-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr ""
+msgstr "Arabisch (ISO-8859-6-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:121
 msgid "Arabic (MacArabic)"
-msgstr ""
+msgstr "Arabisch (MacArabic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:122
 msgid "Arabic (Windows-1256)"
-msgstr ""
+msgstr "Arabisch (Windows-1256)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
-msgstr ""
+msgstr "Armeens (ARMSCII-8)"
 
+# oost europees?
 #: ../borrowed/goffice/go-charmap-sel.c:124
-#, fuzzy
 msgid "Baltic (ISO-8859-13)"
-msgstr "ISO-8859-13 (Baltisch)"
+msgstr "Baltisch (ISO-8859-13)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
-msgstr ""
+msgstr "Baltisch (ISO-8859-4)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:126
 msgid "Baltic (Windows-1257)"
-msgstr ""
+msgstr "Baltisch (Windows-1257)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:127
-#, fuzzy
 msgid "Celtic (ISO-8859-14)"
-msgstr "ISO-8859-14 (Keltisch)"
+msgstr "Keltisch (ISO-8859-14)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
-msgstr ""
+msgstr "Centraal Europees (IBM-852)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:130
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "Centraal Europees (ISO-8859-2)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:132
 msgid "Central European (MacCE)"
-msgstr ""
+msgstr "Centraal Europees (MacCE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:134
 msgid "Central European (Windows-1250)"
-msgstr ""
+msgstr "Centraal Europees (Windows-1250)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:136
 msgid "Chinese Simplified (GB18030)"
-msgstr ""
+msgstr "Chinees Vereenvoudigd (GB18030)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:137
 msgid "Chinese Simplified (GB2312)"
-msgstr ""
+msgstr "Chinees Vereenvoudigd (GB2312)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:138
 msgid "Chinese Simplified (GBK)"
-msgstr ""
+msgstr "Chinees Vereenvoudigd (GBK)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:139
 msgid "Chinese Simplified (HZ)"
-msgstr ""
+msgstr "Chinees Vereenvoudigd (HZ)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:140
 msgid "Chinese Simplified (Windows-936)"
-msgstr ""
+msgstr "Chinees Vereenvoudigd (Windows-936)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr ""
+msgstr "Chinees Traditioneel (Big5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr ""
+msgstr "Chinees Traditioneel (Big5-HKSCS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
-msgstr ""
+msgstr "Chinees Traditioneel (EUC-TW)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:147
 msgid "Croatian (MacCroatian)"
-msgstr ""
+msgstr "Kroatisch (MacCroatian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:149
-#, fuzzy
 msgid "Cyrillic (IBM-855)"
-msgstr "Cyrillisch"
+msgstr "Cyrillisch (IBM-855)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:150
 msgid "Cyrillic (ISO-8859-5)"
-msgstr ""
+msgstr "Cyrillisch (ISO-8859-5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:152
 msgid "Cyrillic (ISO-IR-111)"
-msgstr ""
+msgstr "Cyrillisch (ISO-IR-111)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:154
-#, fuzzy
 msgid "Cyrillic (KOI8-R)"
-msgstr "Cyrillisch"
+msgstr "Cyrillisch (KOI8-R)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:155
 msgid "Cyrillic (MacCyrillic)"
-msgstr ""
+msgstr "Cyrillisch (MacCyrillic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:157
 msgid "Cyrillic (Windows-1251)"
-msgstr ""
+msgstr "Cyrillisch (Windows-1251)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
-msgstr ""
+msgstr "Russisch (CP-866)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:160
 msgid "Ukrainian (KOI8-U)"
-msgstr ""
+msgstr "Ukraïns (KOI8-U)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:161
-#, fuzzy
 msgid "Ukrainian (MacUkrainian)"
-msgstr "KOI8-U (Oekraïens)"
+msgstr "Ukraïns (MacUkraïns)<"
 
 #: ../borrowed/goffice/go-charmap-sel.c:163
 msgid "English (ASCII)"
-msgstr ""
+msgstr "Engels (ASCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
-msgstr ""
+msgstr "Farsi (MacFarsi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:166
 msgid "Georgian (GEOSTD8)"
-msgstr ""
+msgstr "Georgisch (GEOSTD8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:167
-#, fuzzy
 msgid "Greek (ISO-8859-7)"
-msgstr "ISO-8859-7 (Grieks)"
+msgstr "Grieks (ISO-8859-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:168
 msgid "Greek (MacGreek)"
-msgstr ""
+msgstr "Grieks (MacGreek)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:169
 msgid "Greek (Windows-1253)"
-msgstr ""
+msgstr "Grieks (Windows-1253)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:170
 msgid "Gujarati (MacGujarati)"
-msgstr ""
+msgstr "Gujarati (MacGujarati)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:172
 msgid "Gurmukhi (MacGurmukhi)"
-msgstr ""
+msgstr "Gurmukhi (MacGurmukhi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr ""
+msgstr "Hebreeuws (IBM-862)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr ""
+msgstr "Hebreeuws (ISO-8859-8-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr ""
+msgstr "Hebreeuws (ISO-8859-8-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr ""
+msgstr "Hebreeuws (MacHebrew)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
-msgstr ""
+msgstr "Hebreeuws (Windows-1255)"
 
+# Hindoestaans?
 #: ../borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
-msgstr ""
+msgstr "Hindi (MacDevanagari)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
-msgstr ""
+msgstr "IJslands (MacIcelandic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:186
 msgid "Japanese (EUC-JP)"
-msgstr ""
+msgstr "Japans (EUC-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:187
 msgid "Japanese (ISO-2022-JP)"
-msgstr ""
+msgstr "Japans (ISO-2022-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:189
 msgid "Japanese (Shift_JIS)"
-msgstr ""
+msgstr "Japans (Shift_JIS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:190
 msgid "Korean (EUC-KR)"
-msgstr ""
+msgstr "Koreaans (EUC-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:191
 msgid "Korean (ISO-2022-KR)"
-msgstr ""
+msgstr "Koreaans (ISO-2022-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:192
 msgid "Korean (JOHAB)"
-msgstr ""
+msgstr "Koreaans (JOHAB)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:193
 msgid "Korean (UHC)"
-msgstr ""
+msgstr "Koreaans (UHC)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:194
-#, fuzzy
 msgid "Nordic (ISO-8859-10)"
-msgstr "ISO-8859-10 (Scandinavisch)"
+msgstr "Noors (ISO-8859-10)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:195
 msgid "Romanian (MacRomanian)"
-msgstr ""
+msgstr "Roemeens (MacRomanian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:197
 msgid "Romanian (ISO-8859-16)"
-msgstr ""
+msgstr "Roemeens (ISO-8859-16)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:199
 msgid "South European (ISO-8859-3)"
-msgstr ""
+msgstr "Zuid Europees (ISO-8859-3)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:201
 msgid "Thai (TIS-620)"
-msgstr ""
+msgstr "Thais (TIS-620)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:202
 msgid "Turkish (IBM-857)"
-msgstr ""
+msgstr "Turks (IBM-857)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:203
 msgid "Turkish (ISO-8859-9)"
-msgstr ""
+msgstr "Turks (ISO-8859-9)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:204
 msgid "Turkish (MacTurkish)"
-msgstr ""
+msgstr "Turks (MacTurkish)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:206
 msgid "Turkish (Windows-1254)"
-msgstr ""
+msgstr "Turks (Windows-1254)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:208
-#, fuzzy
 msgid "Unicode (UTF-7)"
-msgstr "Unicode"
+msgstr "Unicode (UTF-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:209
-#, fuzzy
 msgid "Unicode (UTF-8)"
-msgstr "Unicode"
+msgstr "Unicode (UTF-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:210
 msgid "Unicode (UTF-16BE)"
-msgstr ""
+msgstr "Unicode (UTF-16BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:211
 msgid "Unicode (UTF-16LE)"
-msgstr ""
+msgstr "Unicode (UTF-16LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:212
 msgid "Unicode (UTF-32BE)"
-msgstr ""
+msgstr "Unicode (UTF-32BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:213
 msgid "Unicode (UTF-32LE)"
-msgstr ""
+msgstr "Unicode (UTF-32LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:214
-#, fuzzy
 msgid "User Defined"
-msgstr "Gebruikersnaam"
+msgstr "Gebruikersbepaald"
 
+# trema?
 #: ../borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
-msgstr ""
+msgstr "Vietnamees (TCVN)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:217
 msgid "Vietnamese (VISCII)"
-msgstr ""
+msgstr "Vietnamees (VISCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:218
 msgid "Vietnamese (VPS)"
-msgstr ""
+msgstr "Vietnamees (VPS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:219
 msgid "Vietnamese (Windows-1258)"
-msgstr ""
+msgstr "Vietnamees (Windows-1258)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "Visueel Hebreews (ISO-8859-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
-msgstr ""
+msgstr "Westers (IBM-850)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:224
 msgid "Western (ISO-8859-1)"
-msgstr ""
+msgstr "Westers (ISO-8859-1)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:225
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "Westers (ISO-8859-15)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:227
 msgid "Western (MacRoman)"
-msgstr ""
+msgstr "Westers (MacRoman)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:228
 msgid "Western (Windows-1252)"
-msgstr ""
+msgstr "Westers (Windows-1252)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:441
-#, fuzzy
 msgid "Locale: "
-msgstr "_Landinstelling:"
+msgstr "Taalinstelling: "
 
 #: ../borrowed/goffice/go-charmap-sel.c:476
-#, fuzzy
 msgid "Conversion Direction"
-msgstr "Conversie afgerond"
+msgstr "Conversierichting"
 
 #: ../borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr ""
+msgstr "Deze waarde bepaalt welke iconf-test wordt uitgevoerd."
 
 #: ../borrowed/goffice/go-optionmenu.c:410
 msgid "Menu"
-msgstr ""
+msgstr "Menu"
 
 #: ../borrowed/goffice/go-optionmenu.c:410
-#, fuzzy
 msgid "The menu of options"
-msgstr "De numerieke optie is %s."
+msgstr "Het menu met opties"
 
 #: ../gnucash/gnome/assistant-acct-period.c:190
 msgid "The book was closed successfully."
@@ -28348,9 +28337,8 @@ msgid "Fancy Date Format"
 msgstr "Uitgebreide datumopmaak"
 
 #: ../libgnucash/app-utils/app-utils.scm:330
-#, fuzzy
 msgid "custom"
-msgstr "Aangepast"
+msgstr "aangepast"
 
 #: ../libgnucash/app-utils/business-prefs.scm:24
 msgid "Counters"
@@ -29717,998 +29705,3 @@ msgstr ""
 "Om de inhoud van twee tabbladen op het scherm met elkaar te kunnen "
 "vergelijken kiest u, vanuit een van beide tabbladen, menukeuze ‘Vensters ‣ "
 "Nieuw venster met pagina’ om dat tabblad in een nieuw venster te openen."
-
-#~ msgid "Enable debugging mode: increasing logging to provide deep detail."
-#~ msgstr ""
-#~ "Debug-modus inschakelen: meer uitvoer creëren voor gedetailleerdere "
-#~ "informatie."
-
-#~ msgid ""
-#~ "Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,"
-#~ "error}\""
-#~ msgstr ""
-#~ "Log-niveau instellen, in de vorm “com.po.nent={debug,info,warn,crit,"
-#~ "error}”"
-
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from %s rev %s on %s."
-#~ msgstr ""
-#~ "%s\n"
-#~ "Dit exemplaar is gecompileerd uit %s r%s op %s."
-
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from rev %s on %s."
-#~ msgstr ""
-#~ "%s\n"
-#~ "Dit exemplaar is gecompileerd uit r%s op %s."
-
-#~ msgid ""
-#~ "An error occurred while creating the directory:\n"
-#~ "  %s\n"
-#~ "Please correct the problem and restart GnuCash.\n"
-#~ "The reported error was '%s' (errno %d).\n"
-#~ msgstr ""
-#~ "Er is een fout opgetreden bij het aanmaken van de map:\n"
-#~ "  %s\n"
-#~ "Corrigeer het probleem en start GnuCash opnieuw.\n"
-#~ "De gemelde fout was ‘%s’ (foutnr %d).\n"
-
-#~ msgid ""
-#~ "Note: the directory\n"
-#~ "  %s\n"
-#~ "doesn't exist. This is however not fatal.\n"
-#~ msgstr ""
-#~ "NB: de map\n"
-#~ " %s\n"
-#~ "bestaat niet. Dit is echter niet fataal.\n"
-
-#~ msgid ""
-#~ "The directory\n"
-#~ "  %s\n"
-#~ "exists but cannot be accessed. This program \n"
-#~ "must have full access (read/write/execute) to \n"
-#~ "the directory in order to function properly.\n"
-#~ msgstr ""
-#~ "De map\n"
-#~ "  %s\n"
-#~ "bestaat, maar kan niet worden geopend. Dit programma\n"
-#~ "moet volledige toegang (lezen / schrijven / uitvoeren)\n"
-#~ "tot de directory hebben om goed te kunnen functioneren.\n"
-
-#~ msgid ""
-#~ "The path\n"
-#~ "  %s\n"
-#~ "exists but it is not a directory. Please delete\n"
-#~ "the file and start GnuCash again.\n"
-#~ msgstr ""
-#~ "Het pad\n"
-#~ "  %s\n"
-#~ "bestaat wel, maar is geen map. Verwijder\n"
-#~ "het bestand en start GnuCash opnieuw.\n"
-
-#~ msgid ""
-#~ "An unknown error occurred when validating that the\n"
-#~ "  %s\n"
-#~ "directory exists and is usable. Please correct the\n"
-#~ "problem and restart GnuCash. The reported error \n"
-#~ "was '%s' (errno %d)."
-#~ msgstr ""
-#~ "Er is een onbekende fout opgetreden bij de controle\n"
-#~ "op bestaan en bruikbaarheid van de map:\n"
-#~ "  %s\n"
-#~ "Corrigeer het probleem en start GnuCash opnieuw.\n"
-#~ "De gemelde fout was ‘%s’ (foutnr %d)."
-
-#~ msgid ""
-#~ "The permissions are wrong on the directory\n"
-#~ "  %s\n"
-#~ "They must be at least 'rwx' for the user.\n"
-#~ msgstr ""
-#~ "De gebruiker heeft niet de juiste rechten op de map\n"
-#~ "  %s\n"
-#~ "Deze moeten ten minste ‘rwx’ zijn.\n"
-
-#~ msgid "_Price Editor"
-#~ msgstr "_Koersen bewerken"
-
-#~ msgid "General Ledger2"
-#~ msgstr "Grootboek2"
-
-#~ msgid "General Ledger Report"
-#~ msgstr "Grootboekrapport"
-
-#~ msgid "_General Ledger"
-#~ msgstr "_Grootboek"
-
-#~ msgid "<No information>"
-#~ msgstr "<geen gegevens>"
-
-#~ msgid ""
-#~ "If active, the register will be colored as specified by the system theme. "
-#~ "This can be overridden to provide custom colors by editing the gtkrc file "
-#~ "in the users home directory. Otherwise the standard register colors will "
-#~ "be used that GnuCash has always used."
-#~ msgstr ""
-#~ "Door activering van deze optie wordt het kleurschema van grootboekkaarten "
-#~ "gelijkgetrokken met de systeeminstellingen. Deze kunnen in het gtkrc-"
-#~ "bestand in de thuismap van de gebruiker door hem/haar worden aangepast. "
-#~ "Zonder deze optie wordt het standaard kleurschema van GnuCash gebruikt."
-
-#~ msgid ""
-#~ "If activated, delete manually entered stock prices dated earlier than the "
-#~ "specified date. Otherwise only stock prices added by Finance::Quote will "
-#~ "be deleted."
-#~ msgstr ""
-#~ "Bij activering van deze optie worden alle handmatig ingevoerde koersen "
-#~ "vóór de aangegeven datum verwijderd. Zonder deze optie worden uitsluitend "
-#~ "aandelenkoersen afkomstig uit Finance::Quote verwijderd."
-
-#~ msgid "Delete _last price for a stock"
-#~ msgstr "De _laatste koers van een aandeel verwijderen"
-
-#~ msgid ""
-#~ "If activated, delete all prices before the specified date. Otherwise the "
-#~ "last stock price dated before the date will be kept and all earlier "
-#~ "quotes deleted."
-#~ msgstr ""
-#~ "Bij activering van deze optie worden alle koersen vóór de aangegeven "
-#~ "datum verwijderd. Zonder deze optie zal de laatst vastgelegde koers vóór "
-#~ "de aangegeven datum bewaard blijven en worden alle eerdere koersen "
-#~ "verwijderd."
-
-#~ msgid "Get _Quotes"
-#~ msgstr "Koersen o_phalen"
-
-#~ msgid "_Delete Account"
-#~ msgstr "Rekening ver_wijderen"
-
-#~ msgid "_New Account"
-#~ msgstr "_Nieuwe rekening"
-
-#~ msgid "Last modified on %x %X"
-#~ msgstr "Laatst gewijzigd op %x %X"
-
-#~ msgid ""
-#~ "The GnuCash personal finance manager. The GNU way to manage your money!"
-#~ msgstr ""
-#~ "GnuCash financieel beheer voor uw huishoudboekje. De vrije manier om uw "
-#~ "geldzaken te managen!"
-
-#~ msgid "Version: GnuCash-%s %s (rev %s built %s)"
-#~ msgstr "Versie: GnuCash-%s %s (r%s, gecompileerd op %s)"
-
-#~ msgid "Version: GnuCash-%s (rev %s built %s)"
-#~ msgstr "Version: GnuCash-%s (rev %s built %s)"
-
-#~ msgid "Remember _PIN"
-#~ msgstr "_PIN onthouden"
-
-#~ msgid ""
-#~ "This assistant will help you export the Transactions to a file.\n"
-#~ "\n"
-#~ "Select the settings you require for the file and then click 'Forward' to "
-#~ "proceed or 'Cancel' to Abort Export.\n"
-#~ msgstr ""
-#~ "Deze assistent helpt u bij het exporteren van de boekingen naar een "
-#~ "bestand.\n"
-#~ "\n"
-#~ "Kies de instellingen die u nodig hebt voor het bestand en klik op "
-#~ "[Volgende] om verder te gaan of op [Annuleren] om de export af te "
-#~ "breken.\n"
-
-#~ msgid "Quotes"
-#~ msgstr "Koersen"
-
-#~ msgid "Category"
-#~ msgstr "Categorie"
-
-#~ msgid "From With Sym"
-#~ msgstr "Van met sym"
-
-#~ msgid "To Num."
-#~ msgstr "Tot num."
-
-#~ msgid "From Num."
-#~ msgstr "Van num."
-
-#~ msgid "From Rate/Price"
-#~ msgstr "Van koers/prijs"
-
-#~ msgid ""
-#~ "The rows displayed below had errors which are in the last column. You can "
-#~ "attempt to correct them by changing the configuration."
-#~ msgstr ""
-#~ "Bij hieronder weergegeven regels traden de fouten op die in de laatste "
-#~ "kolom staan weergegeven. U kunt proberen deze op te heffen door het "
-#~ "wijzigen van de instellingen."
-
-#~ msgid ""
-#~ "There are problems with the import settings!\n"
-#~ "The date format could be wrong or there are not enough columns set..."
-#~ msgstr ""
-#~ "Er zijn fouten met de instellingen voor importeren!\n"
-#~ "Misschien is de datumopmaak fout of zijn er niet voldoende kolommen "
-#~ "ingesteld…"
-
-#~ msgid ""
-#~ "To Change the account, double click on the required account, click "
-#~ "Forward to proceed."
-#~ msgstr ""
-#~ "Dubbelklik op de vereiste rekening als u de rekening wilt wijzigen en "
-#~ "klik [Volgende] om verder te gaan."
-
-#~ msgid ""
-#~ "This assistant will help you import a delimited file containing a list of "
-#~ "transactions.\n"
-#~ "\n"
-#~ "All transactions imported will be associated to one account for each "
-#~ "import and if you select the account column, the account in the first row "
-#~ "will be used for all rows.\n"
-#~ "\n"
-#~ "Various options exist for specifying the delimiter as well as a fixed "
-#~ "width option. With the fixed width option, double click on the bar above "
-#~ "the displayed rows to set the column width.\n"
-#~ "\n"
-#~ "There is an option for specifying the start row, end row and an option to "
-#~ "skip alternate rows begining from the start row. These can be used if you "
-#~ "have some header text, a points collected status row or multiple accounts "
-#~ "in the same file."
-#~ msgstr ""
-#~ "Deze module ondersteunt met het importeren van een bestand met "
-#~ "boekingen.\n"
-#~ "\n"
-#~ "Alle geïmporteerde boekingen worden gekoppeld aan één rekening per import "
-#~ "en wanneer u de kolom ‘Rekening’ selecteert, wordt de rekening in de "
-#~ "eerste rij gebruikt voor alle rijen.\n"
-#~ "\n"
-#~ "Er zijn verschillende opties voor het specificeren van een "
-#~ "scheidingsteken en een optie ‘vaste kolombreedte’. Bij deze laatste optie "
-#~ "kunt u dubbelklikken in de balk boven de weergegeven rijen om de "
-#~ "kolombreedte in te stellen.\n"
-#~ "\n"
-#~ "Er zijn ook opties om de begin- en eindrij te specificeren en om elke "
-#~ "tweede rij over te slaan. Deze kunnen gebruikt worden als er sprake is "
-#~ "van kopregels, een informatieregel over verzamelde punten of meerdere "
-#~ "rekeningen in hetzelfde bestand."
-
-#~ msgid "Transaction Import Assistant"
-#~ msgstr "Importeermodule boekingen"
-
-#~ msgid "Start import on row "
-#~ msgstr "De import starten bij rij"
-
-#~ msgid " and stop on row "
-#~ msgstr " en stoppen bij rij "
-
-#~ msgid "Skip alternate rows from the start row"
-#~ msgstr "Elke tweede rij vanaf de startrij overslaan"
-
-#~ msgid "Data type: "
-#~ msgstr "Gegevenssoort: "
-
-#~ msgid "Separated"
-#~ msgstr "Gescheiden"
-
-#~ msgid "Step over Account Page if Setup"
-#~ msgstr "Rekening-pagina overslaan indien ingesteld"
-
-#~ msgid "File opening failed."
-#~ msgstr "Openen bestand mislukt."
-
-#~ msgid "Unknown encoding."
-#~ msgstr "Onbekende tekenset."
-
-#~ msgid "This report has no options."
-#~ msgstr "Dit rapport kent geen opties."
-
-#~ msgid "Compress prior/later periods"
-#~ msgstr "Eerdere/latere periodes comprimeren"
-
-#~ msgid ""
-#~ "Accumulate columns for periods before and after the current period to "
-#~ "allow focus on the current period."
-#~ msgstr ""
-#~ "De kolommen met periodes vóór en ná de huidige periode samenvoegen om zo "
-#~ "de focus op de huidige periode te leggen."
-
-#~ msgid "Income Barchart"
-#~ msgstr "Staafgrafiek opbrengsten"
-
-#~ msgid "Expense Barchart"
-#~ msgstr "Staafgrafiek kosten"
-
-#~ msgid "Liability Barchart"
-#~ msgstr "Staafgrafiek vreemd vermogen"
-
-#~ msgid "Style"
-#~ msgstr "Stijl"
-
-#~ msgid "Report style."
-#~ msgstr "Rapportstijl."
-
-#~ msgid "Display N lines."
-#~ msgstr "Veel regels weergeven."
-
-#~ msgid "Display 1 line."
-#~ msgstr "Een regel weergeven."
-
-#~ msgid "Account Substring"
-#~ msgstr "Subreeks rekening"
-
-#~ msgid "Exact Time"
-#~ msgstr "Tijdstip"
-
-#~ msgid "Sort by exact time."
-#~ msgstr "Op tijdstip sorteren."
-
-#~ msgid "Clear the entry"
-#~ msgstr "De invoer wissen"
-
-#~ msgid "You must select a commodity. To create a new one, click \"New\""
-#~ msgstr ""
-#~ "U moet een goed (effect/valuta) selecteren. Om een nieuw goed aan te "
-#~ "maken klikt u op ‘Nieuw’"
-
-#~ msgid "set true"
-#~ msgstr "instellen als ‘waar’"
-
-#~ msgid "UTC"
-#~ msgstr "UTC"
-
-#~ msgid "Dates earlier than 1970 are not supported."
-#~ msgstr "Datums vóór 1970 worden niet ondersteund."
-
-#~ msgid "Owner Name"
-#~ msgstr "Naam eigenaar"
-
-#~ msgid "Owner ID"
-#~ msgstr "ID eigenaar"
-
-#~ msgid "Dummy message"
-#~ msgstr "Tijdelijk bericht"
-
-#~ msgid "postd"
-#~ msgstr "boekdatum"
-
-#~ msgid "duedate"
-#~ msgstr "vervaldatum"
-
-#~ msgid "acct"
-#~ msgstr "rekening"
-
-#~ msgid "question"
-#~ msgstr "vraag"
-
-#~ msgid "Retrieve the current online quote"
-#~ msgstr "De huidige koers online opvragen"
-
-#~ msgid "Auto pay on post_ing"
-#~ msgstr "Automatisch betalen bij het boe_ken"
-
-#~ msgid "_Use system theme colors"
-#~ msgstr "_Systeemkleuren gebruiken"
-
-#~ msgid ""
-#~ "If checked, the system color theme will be applied to register windows. "
-#~ "If clear, the original GnuCash register colors will be used."
-#~ msgstr ""
-#~ "Als deze optie wordt geactiveerd, zal het kleurschema uit de "
-#~ "systeeminstellingen worden toegepast op de grootboekkaarten. Zonder deze "
-#~ "optie zal het originele GnuCash-kleurschema worden gebruikt."
-
-#~ msgid "Negative amounts are not allowed."
-#~ msgstr "Negatieve bedragen zijn niet toegestaan."
-
-#~ msgid "Percentage amount must be between 0 and 100."
-#~ msgstr "Percentage moet tussen 0 en 100 liggen."
-
-#~ msgid "You must select at least one document or pre-payment to process."
-#~ msgstr "U moet ten minste één in te schatten rekening selecteren."
-
-#~ msgid "Internal link between invoice and payment lots"
-#~ msgstr "Interne koppeling tussen factuur en partijen met betalingen"
-
-#~ msgid "New item"
-#~ msgstr "Nieuw item"
-
-#~ msgid "%s at %s (code %s)"
-#~ msgstr "%s op %s (code %s)"
-
-#~ msgid "%s at bank code %s"
-#~ msgstr "%s op bankcode %s"
-
-#~ msgid "Semicolon Separated with Quotes"
-#~ msgstr "Puntkomma-gescheiden met aanhalingstekens"
-
-#~ msgid "Comma Separated with Quotes"
-#~ msgstr "Kommagescheiden met aanhalingstekens"
-
-#, fuzzy
-#~ msgid "Run preconfigured report"
-#~ msgstr "Afgestemd (rapport)"
-
-#, fuzzy
-#~ msgid "Preconfigured Reports"
-#~ msgstr "Afgestemd (rapport)"
-
-#~ msgid "Net Price"
-#~ msgstr "Bedrag excl. BTW"
-
-#~ msgid "Total Price"
-#~ msgstr "Totaalbedrag"
-
-#~ msgid "Amount Due"
-#~ msgstr "Verschuldigd bedrag"
-
-#~ msgid "Invoice number: "
-#~ msgstr "Verkoopfactuurnummer: "
-
-#~ msgid "Job number: "
-#~ msgstr "Opdrachtnummer: "
-
-#~ msgid "Job name: "
-#~ msgstr "Opdrachtnaam: "
-
-#, fuzzy
-#~ msgid ""
-#~ "You must enter the amount of the payment. The payment amount must not be "
-#~ "zero."
-#~ msgstr ""
-#~ "U moet het bedrag van de betaling opgeven. Dit bedrag mag geen nul zijn."
-
-#~ msgid ""
-#~ "Do you really want to overwrite your changes with the contents of the "
-#~ "template \"%s\"?"
-#~ msgstr ""
-#~ "Weet u zeker dat u uw wijzigingen wilt overschrijven met de inhoud van "
-#~ "sjabloon ‘%s’?"
-
-#~ msgid "Custom Reports"
-#~ msgstr "Aangepaste rapporten"
-
-#~ msgid "Cross."
-#~ msgstr "Kruisje."
-
-#~ msgid "Plus."
-#~ msgstr "Plusteken."
-
-#~ msgid "Dash."
-#~ msgstr "Streepje."
-
-#~ msgid "and"
-#~ msgstr "en"
-
-#~ msgid "Ignore brokerage fees when calculating returns"
-#~ msgstr "Transactiekosten bij resultaatberekening buiten beschouwing laten"
-
-#~ msgid "Most recent to report"
-#~ msgstr "Laatste op rapportdatum"
-
-#~ msgid "The most recent recorded price before report date."
-#~ msgstr "De laatst bekende koers op de rapportdatum."
-
-#~ msgid "FILO"
-#~ msgstr "LIFO"
-
-#~ msgid "Use first-in last-out method for basis."
-#~ msgstr "Het ‘last in - first out’-principe hanteren."
-
-#~ msgid "Welcome to GnuCash 2.4!"
-#~ msgstr "Welkom bij GnuCash 2.4!"
-
-#~ msgid "Set the prefix path for gconf queries"
-#~ msgstr "Het voorkeurspad voor gconf-queries instellen"
-
-#~ msgid "GCONFPATH"
-#~ msgstr "GCONFPAD"
-
-#~ msgid "Customer Credit Note"
-#~ msgstr "Creditnota voor klant"
-
-#~ msgid "Vendor Credit Note"
-#~ msgstr "Creditnota van leverancier"
-
-#~ msgid "Employee Credit Note"
-#~ msgstr "Creditnota voor werknemer"
-
-#~ msgid ""
-#~ "When you click Apply, GnuCash will modify your ~/.gconf.path file and "
-#~ "restart the gconf backend. There will be a short delay before GnuCash is "
-#~ "loaded."
-#~ msgstr ""
-#~ "Zodra u op [Toepassen] klikt, zal GnuCash uw bestand ~/.gconf.path "
-#~ "aanpassen en de gconf-daemon herstarten. Na een korte vertraging zal "
-#~ "GnuCash worden geladen."
-
-#~ msgid ""
-#~ "When you click Apply, GnuCash will install the gconf data into your local "
-#~ "~/.gconf file and restart the gconf backend. The %s script must be found "
-#~ "in your search path for this to work correctly."
-#~ msgstr ""
-#~ "Zodra u op [Toepassen] klikt, zal GnuCash de configuratiegegevens in uw "
-#~ "bestand ~/.gconf opslaan en de gconf-daemon herstarten. Hiervoor moet het "
-#~ "script %s binnen uw zoekpad te vinden zijn."
-
-#~ msgid ""
-#~ "You have chosen to correct the problem by yourself. When you click Apply, "
-#~ "GnuCash will exit. Please correct the problem and restart the gconf "
-#~ "backend with the command 'gconftool-2 --shutdown' before restarting "
-#~ "GnuCash. If you have not already done so, you can click the Back button "
-#~ "and copy the necessary text from the dialog."
-#~ msgstr ""
-#~ "U hebt ervoor gekozen dit probleem zelf op te lossen. GnuCash zal zich "
-#~ "afsluiten zodra u op [Toepassen] klikt. Hierna dient u het probleem op te "
-#~ "lossen en de gconf-daemon te herstarten met het commando ‘gconftool-2 --"
-#~ "shutdown’ voordat u GnuCash opnieuw opstart. U kunt op [Terug] klikken om "
-#~ "de benodigde informatie nogmaals op het scherm getoond te krijgen."
-
-#~ msgid ""
-#~ "You have chosen to correct the problem by yourself. When you click Apply, "
-#~ "GnuCash will exit. Please run the %s script which will install the "
-#~ "configuration data and restart the gconf backend."
-#~ msgstr ""
-#~ "U hebt ervoor gekozen dit probleem zelf op te lossen. GnuCash zal zich "
-#~ "afsluiten zodra u op [Toepassen] klikt. Hierna dient u het script %s te "
-#~ "starten om de configuratiegegevens te installeren en de gconf-daemon te "
-#~ "herstarten."
-
-#~ msgid ""
-#~ "You have already corrected the problem and restarted the gconf backend "
-#~ "with the command 'gconftool-2 --shutdown'. When you click Apply, there "
-#~ "will be a short delay before GnuCash is loaded."
-#~ msgstr ""
-#~ "U hebt dit probleem inmiddels zelf gecorrigeerd en de gconf-daemon "
-#~ "opnieuw gestart met het commando ‘gconftool-2 --shutdown’. Zodra u op "
-#~ "[Toepassen] klikt zal GnuCash na een korte vertraging het laden hervatten."
-
-#~ msgid "S_kip"
-#~ msgstr "O_verslaan"
-
-#~ msgid "_Setup"
-#~ msgstr "_Instellen"
-
-#~ msgid ""
-#~ "<b>Cannot find default values</b>\n"
-#~ "\n"
-#~ "The configuration data used to specify default values for GnuCash cannot "
-#~ "be found in the default system locations.  Without this data GnuCash will "
-#~ "still operate properly but it may require some extra time to setup.  Do "
-#~ "you wish to setup the configuration data?"
-#~ msgstr ""
-#~ "<b>Kan standaardinstellingen niet vinden</b>\n"
-#~ "\n"
-#~ "De configuratiegegevens met de standaardinstellingen voor GnuCash zijn "
-#~ "niet op de standaardlocatie aangetroffen. Zonder deze gegevens kan "
-#~ "GnuCash wel draaien, maar bent u mogelijk extra tijd kwijt voor het "
-#~ "instellen ervan. Wilt u de configuratiegegevens alsnog installeren?"
-
-#, fuzzy
-#~ msgid "Update GnuCash Configuration Data"
-#~ msgstr "GnuCash configuratiegegevens bijwerken"
-
-#~ msgid ""
-#~ "The configuration data used by GnuCash to specify its default values "
-#~ "cannot be found in the default system locations.  Without this data "
-#~ "GnuCash will still operate properly, but it may require some extra time "
-#~ "to set up."
-#~ msgstr ""
-#~ "De configuratiegegevens met de standaardinstellingen voor GnuCash zijn "
-#~ "niet op de standaardlocatie aangetroffen. Zonder deze gegevens kan "
-#~ "GnuCash wel draaien, maar bent u mogelijk extra tijd kwijt voor het "
-#~ "instellen ervan."
-
-#~ msgid "_Update search path"
-#~ msgstr "Zoek_pad bijwerken"
-
-#~ msgid "_Install into home directory"
-#~ msgstr "In thuismap _installeren"
-
-#, fuzzy
-#~ msgid "Choose Method"
-#~ msgstr "Een methode selecteren"
-
-#~ msgid "_GnuCash updates the search path"
-#~ msgstr "_GnuCash het zoekpad laten bijwerken"
-
-#~ msgid "_You update the search path yourself"
-#~ msgstr "_Zelf het zoekpad bijwerken"
-
-#~ msgid "The search path has _already been updated in another window"
-#~ msgstr "Het zoekpad is _al bijgewerkt in een ander venster"
-
-#~ msgid ""
-#~ "Please add the following lines at the end of your ~/.gconf.path file:"
-#~ msgstr ""
-#~ "Voeg de volgende regels aan het eind van uw bestand ~/.gconf.path toe:"
-
-#~ msgid "GnuCash will update the system path for you."
-#~ msgstr "GnuCash zal het systeempad voor u bijwerken."
-
-#, fuzzy
-#~ msgid "Update Search Path"
-#~ msgstr "Zoekpad bijwerken"
-
-#~ msgid "_GnuCash installs the data"
-#~ msgstr "_GnuCash de gegevens laten installeren"
-
-#~ msgid "_You install the data yourself"
-#~ msgstr "_Zelf de gegevens installeren"
-
-#~ msgid "The data has _already been installed in another window"
-#~ msgstr "De gegevens zijn _al geïnstalleerd in een ander venster"
-
-#~ msgid "Please run the following commands:"
-#~ msgstr "Voer de volgende opdrachten uit:"
-
-#~ msgid "GnuCash will install the data for you."
-#~ msgstr "GnuCash zal de gegevens voor u installeren."
-
-#, fuzzy
-#~ msgid "Install Into Home Directory"
-#~ msgstr "In thuismap installeren"
-
-#~ msgid "GnuCash will fill this text in based upon the previous choices."
-#~ msgstr "GnuCash zal deze tekst vullen op basis van de voorgaande keuzes."
-
-#, fuzzy
-#~ msgid "Apply Changes"
-#~ msgstr "Waardeverandering"
-
-#, fuzzy
-#~ msgid ""
-#~ "The configuration data is stored in a non-standard location. There are "
-#~ "two methods that can be used to make this data visible to GnuCash. The "
-#~ "first is to modify a system search path to include the data location. The "
-#~ "second is to copy the data into your home directory."
-#~ msgstr ""
-#~ "De configuratiegegevens zijn niet op een standaardlocatie opgeslagen. Er "
-#~ "zijn twee manieren om deze gegevens voor GnuCash zichtbaar te maken: "
-#~ "ofwel de huidige locatie wordt aan het systeembrede zoekpad toegevoegd, "
-#~ "ofwel de gegevens worden naar uw thuismap gekopieerd."
-
-#, fuzzy
-#~ msgid ""
-#~ "This method will modify the file .gconf.path in your home directory. It "
-#~ "will add the GnuCash install directory to this path so that GnuCash can "
-#~ "find its default settings and their descriptions."
-#~ msgstr ""
-#~ "Deze methode zal het bestand .gconf.path in uw thuismap aanpassen. De "
-#~ "GnuCash installatiemap zal aan het pad worden toegevoegd, zodat GnuCash "
-#~ "in staat is om zijn standaardinstellingen (met bijbehorende "
-#~ "beschrijvingen) te vinden."
-
-#, fuzzy
-#~ msgid ""
-#~ "This method will install the GnuCash default settings and descriptions "
-#~ "into the .gconf directory within your home directory. The disadvantage to "
-#~ "this method is that future updates to GnuCash will not update your local "
-#~ "settings to add in new keys."
-#~ msgstr ""
-#~ "Deze methode zal de GnuCash standaardinstellingen (met bijbehorende "
-#~ "beschrijvingen) in de map .gconf van uw thuismap installeren. Het nadeel "
-#~ "van deze methode is dat eventuele nieuwe instellingen (uit latere "
-#~ "updates) niet zullen worden toegevoegd."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to update the system search path. GnuCash can do this for "
-#~ "you, or it can tell you how to do it yourself."
-#~ msgstr ""
-#~ "U hebt ervoor gekozen het zoekpad van het systeem bij te werken. GnuCash "
-#~ "kan dit voor u verzorgen, maar kan u ook vertellen hoe u dit zelf kunt "
-#~ "uitvoeren."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to install the configuration data used by GnuCash into "
-#~ "the ~/.gconf directory. GnuCash can do this for you, or tell you how to "
-#~ "do it yourself."
-#~ msgstr ""
-#~ "U hebt ervoor gekozen om de configuratiegegevens voor GnuCash in de map "
-#~ "~/.gconf te installeren. GnuCash kan dit voor u verzorgen, maar kan u ook "
-#~ "vertellen hoe u dit zelf kunt uitvoeren."
-
-#, fuzzy
-#~ msgid ""
-#~ "You will then need to restart the gconf backend with the command "
-#~ "'gconftool-2 --shutdown'."
-#~ msgstr ""
-#~ "Hierna moet u de gconf-daemon opnieuw starten met het\n"
-#~ "commando ‘gconftool-2 --shutdown’."
-
-#~ msgid "Use the date format specified by the ISO-8601 standard."
-#~ msgstr "De datumopmaak uit de ISO-8601 standaard gebruiken."
-
-#~ msgid "_Europe:"
-#~ msgstr "E_uropa:"
-
-#~ msgid "Use the date format common in continental Europe."
-#~ msgstr "De datumopmaak uit continentaal Europa gebruiken."
-
-#~ msgid "Use the date format common in the United Kingdom."
-#~ msgstr "De datumopmaak uit het Verenigd Koninkrijk gebruiken."
-
-#~ msgid "Use the date format common in the United States."
-#~ msgstr "De datumopmaak uit de Verenigde Staten gebruiken."
-
-#~ msgid "_Text only"
-#~ msgstr "Alleen _tekst"
-
-#~ msgid "Display toolbar items as text only."
-#~ msgstr "Werkbalkknoppen uitsluitend als tekst weergeven."
-
-#~ msgid "_Icons only"
-#~ msgstr "Alleen _iconen"
-
-#~ msgid "Display toolbar items as icons only."
-#~ msgstr "Werkbalkknoppen uitsluitend als icoon weergeven."
-
-#~ msgid "Priority text besi_de icons"
-#~ msgstr "Tekstlabel naast _belangrijke iconen"
-
-#~ msgid ""
-#~ "Display toolbar items with the text label beside the icon.  Labels are "
-#~ "only shown for the most important items."
-#~ msgstr ""
-#~ "Werkbalkknoppen als icoon met tekstlabel weergeven. Alleen de "
-#~ "belangrijkste knoppen krijgen een label. "
-
-#~ msgid "Text _below icons"
-#~ msgstr "Tekstlabel _onder iconen"
-
-#~ msgid ""
-#~ "Display toolbar items with the text label below the icon.  Labels are "
-#~ "show for all items."
-#~ msgstr ""
-#~ "Werkbalkknoppen als icoon met tekstlabel weergeven. Alle knoppen krijgen "
-#~ "een label."
-
-#~ msgid "Use s_ystem default"
-#~ msgstr "S_ysteeminstelling gebruiken"
-
-#~ msgid "Use the system setting for displaying toolbar items."
-#~ msgstr ""
-#~ "De GNOME systeeminstelling voor het weergeven van werkbalkknoppen "
-#~ "gebruiken."
-
-#~ msgid "<b>Toolbar Style</b>"
-#~ msgstr "<b>Werkbalkstijl</b>"
-
-#~ msgid "Remo_ve Transaction Splits"
-#~ msgstr "Boekregels _verwijderen"
-
-#~ msgid "_Shift Transaction Forward"
-#~ msgstr "Transactie naar voren _schuiven"
-
-#~ msgid "Account Transaction Report"
-#~ msgstr "Boekingsverslag rekening"
-
-#~ msgid "Order of columns in the dialog"
-#~ msgstr "Volgorde van de kolommen in het venster"
-
-#~ msgid ""
-#~ "This setting contains a list of names which controls the order in which "
-#~ "the columns are listed in the dialog. Names may be reordered or removed "
-#~ "from this list to control which columns appear in the dialog and in what "
-#~ "order."
-#~ msgstr ""
-#~ "Deze instelling bevat een lijst met namen die de volgorde bepaalt waarin "
-#~ "kolommen in het venster worden getoond. Door in deze lijst namen te "
-#~ "verwijderen of te verplaatsen bepaalt u de selectie en volgorde van de "
-#~ "kolommen in het venster."
-
-#~ msgid "Show the Namespace column"
-#~ msgstr "Kolom ‘Naamruimte’ weergeven"
-
-#~ msgid "Show the symbol column"
-#~ msgstr "Kolom ‘Symbool’ weergeven"
-
-#~ msgid "Show the name column"
-#~ msgstr "Kolom ‘Naam’ weergeven"
-
-#~ msgid "Show the Full Name column"
-#~ msgstr "Kolom ‘Volledige naam’ weergeven"
-
-#~ msgid "Show the Print Name column"
-#~ msgstr "Kolom ‘Afdruknaam’ weergeven"
-
-#~ msgid "Show the Unique Name column"
-#~ msgstr "Kolom ‘Unieke naam’ weergeven"
-
-#~ msgid "Show the ISIN/CUSIP Code (Exchange Specific Data) column"
-#~ msgstr "Kolom ‘ISIN’ weergeven"
-
-#~ msgid "Show the fraction column"
-#~ msgstr "Kolom ‘Coupure’ weergeven"
-
-#~ msgid "Show the Quote Flag column"
-#~ msgstr "Kolom ‘Koersmarker’ weergeven"
-
-#~ msgid "Show the Quote Source column"
-#~ msgstr "Kolom ‘Noteringsbron’ weergeven"
-
-#~ msgid "Show the Quote Timezone column"
-#~ msgstr "Kolom ‘Tijdzone koers’ weergeven"
-
-#~ msgid "Window position"
-#~ msgstr "Vensterpositie"
-
-#~ msgid ""
-#~ "The X,Y coordinates of the top left corner of the window when it was last "
-#~ "closed."
-#~ msgstr ""
-#~ "De (X,Y)-coördinaten van de linkerbovenhoek van het venster toen dit voor "
-#~ "het laatst werd afgesloten."
-
-#~ msgid "The width and size of the window when it was last closed."
-#~ msgstr ""
-#~ "De breedte en hoogte van het venster toen dit voor het laatst werd "
-#~ "afgesloten."
-
-#~ msgid "Columns used for sorting"
-#~ msgstr "Kolommen waarop wordt gesorteerd"
-
-#~ msgid ""
-#~ "This setting indicates which column in the tree is used for sorting. "
-#~ "Possible values for this setting are the name of any column in this "
-#~ "window (see the column_order key) or the keyword 'none'."
-#~ msgstr ""
-#~ "Deze instelling bepaalt de kolom waarop het rekeningschema wordt "
-#~ "gesorteerd. Mogelijke waardes voor deze instelling zijn de naam van een "
-#~ "willekeurige kolom uit het venster (zie tevens de sleutel ‘column_order’) "
-#~ "of het trefwoord “none” (geen)."
-
-#~ msgid ""
-#~ "This setting indicates how the key column is sorted. Possible values for "
-#~ "this setting are 'ascending' and 'descending'."
-#~ msgstr ""
-#~ "Deze instelling bepaalt de sorteervolgorde. Mogelijke waardes voor deze "
-#~ "instelling zijn “ascending” (oplopend) en “descending” (aflopend)."
-
-#~ msgid "This setting enables the commodity column."
-#~ msgstr "Deze instelling activeert de kolom ‘Goed (effect/valuta)’."
-
-#~ msgid "This setting enables the currency column."
-#~ msgstr "Deze instelling activeert de kolom ‘Munteenheid’."
-
-#~ msgid "Show the date column"
-#~ msgstr "Kolom ‘Datum’ tonen"
-
-#~ msgid "Show the Source column"
-#~ msgstr "Kolom ‘Bron’ weergeven"
-
-#~ msgid "This setting enables the Source column."
-#~ msgstr "Deze instelling activeert de kolom ‘Bron’."
-
-#~ msgid "Show the Type column"
-#~ msgstr "Kolom ‘Soort’ weergeven"
-
-#~ msgid "This setting enables the Type column."
-#~ msgstr "Deze instelling activeert de kolom ‘Soort’."
-
-#~ msgid "Show the Price column"
-#~ msgstr "Kolom ‘Koers’ weergeven"
-
-#~ msgid "This setting enables the Price column."
-#~ msgstr "Deze instelling activeert de kolom ‘Koers’."
-
-#~ msgid ""
-#~ "This value contains the Y coordinate for the bottom edge of the check. "
-#~ "This coordinate is from the bottom edge of the sheet of paper."
-#~ msgstr ""
-#~ "Dit is het Y-coördinaat voor de onderrand van de cheque, gemeten vanaf de "
-#~ "onderrand van het papier."
-
-#~ msgid "Enables Euro support"
-#~ msgstr "Euro-ondersteuning inschakelen"
-
-#~ msgid "Enables additional support for the European Union EURO currency."
-#~ msgstr "Verzorgt aanvullende ondersteuning voor de Euro(-conversie)."
-
-#~ msgid "Accounts to reverse the balance"
-#~ msgstr "Rekeningen met van teken te wisselen saldi"
-
-#~ msgid "Labels on toolbar buttons"
-#~ msgstr "Labels op werkbalkknoppen"
-
-#~ msgid ""
-#~ "This setting controls how the labels on toolbar buttons are shown. If set "
-#~ "to \"system\" then GnuCash will use the desktop setting for how to draw "
-#~ "toolbar buttons. If set to \"icon\" then only icons will be show on "
-#~ "toolbar buttons.. If set to \"text\" only the labels will be shown. If "
-#~ "set to \"both\" then both icons and labels will be shown. If set to "
-#~ "\"both-horiz\" then icons will be shown for all buttons with labels added "
-#~ "on important buttons."
-#~ msgstr ""
-#~ "Deze instelling bepaalt hoe de werkbalkknoppen worden weergegeven. Bij de "
-#~ "instelling “system” neemt GnuCash de systeeminstelling voor het weergeven "
-#~ "van knoppenbalken over. Bij de instellingen “icon” of “text” worden "
-#~ "uitsluitend iconen respectievelijk tekstlabels op de knoppenbalk "
-#~ "weergegeven. De instelling “both” zorgt ervoor dat de knoppen als icoon "
-#~ "met tekstlabel worden weergegeven. Indien deze instelling op “both-horiz” "
-#~ "wordt ingesteld wordt bij alle knoppen het icoon weergegeven en krijgen "
-#~ "de belangrijke knoppen een tekstlabel ernaast."
-
-#~ msgid "Source of default account currency"
-#~ msgstr "Bron voor standaard munteenheid rekeningen"
-
-#~ msgid "How to interpret dates without a year"
-#~ msgstr "Hoe datums zonder jaartal moeten worden geïnterpreteerd"
-
-#, fuzzy
-#~ msgid "Show the Calendar buttons"
-#~ msgstr "Kolom ‘Naam’ weergeven"
-
-#, fuzzy
-#~ msgid "Show the Date Entered"
-#~ msgstr "Kolom ‘Datum’ tonen"
-
-#, fuzzy
-#~ msgid "The number of Characters needed"
-#~ msgstr "Aantal aandelen weergeven"
-
-#, fuzzy
-#~ msgid "The number of transactions displayed"
-#~ msgstr "Aantal _boekingen:"
-
-#~ msgid "Default view style for new register"
-#~ msgstr "Standaardopmaak voor nieuwe grootboekkaart"
-
-#~ msgid "Source of default report currency"
-#~ msgstr "Bron voor standaard munteenheid rapporten"
-
-#~ msgid ""
-#~ "This setting specifies the default currency used for reports if the "
-#~ "currency_choice setting is set to \"other\". This field must contain the "
-#~ "three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
-#~ msgstr ""
-#~ "Deze instelling bepaalt de munteenheid die standaard in rapporten wordt "
-#~ "gehanteerd indien de sleutel ‘currency_choice’ op “other” is ingesteld. "
-#~ "Dit veld moet de drieletterige ISO 4217-code voor de munteenheid "
-#~ "(bijvoorbeeld USD, GBP of EUR)."
-
-#~ msgid "Position of the notebook tabs"
-#~ msgstr "Positie van de tabbladen"
-
-#~ msgid "Width of a column in the dialog"
-#~ msgstr "Breedte van een kolom in het venster"
-
-#~ msgid ""
-#~ "This setting contains the width of the named column in the most recently "
-#~ "closed register window. Changing these values will change the sizes of "
-#~ "the columns in the next opened register"
-#~ msgstr ""
-#~ "Deze instelling bevat de breedte van de benoemde kolom in de laatst "
-#~ "afgesloten grootboekkaart. Door het aanpassen van deze waarde verandert "
-#~ "de kolombreedte van de eerstvolgende geopende grootboekkaart"
-
-#~ msgid ""
-#~ "Error: Failure saving state file.\n"
-#~ "  %s"
-#~ msgstr ""
-#~ "Fout: Opslaan statusbestand mislukt.\n"
-#~ "  %s"
-
-#~ msgid "Run the currently selected report"
-#~ msgstr "Het geselecteerde rapport genereren"
-
-#~ msgid "_Run"
-#~ msgstr "_Genereren"
-
-#~ msgid "Add _Report"
-#~ msgstr "_Rapport toevoegen"
-
-#~ msgid ""
-#~ "Your report \"%s\" has been saved into the configuration file \"%s\"."
-#~ msgstr "Uw rapport ‘%s’ is opgeslagen in het configuratiebestand ‘%s’."
-
-#~ msgid "Enable hyperlinks in reports"
-#~ msgstr "Koppelingen in rapporten activeren"
-
-#~ msgid "Thank you for your patronage"
-#~ msgstr "Bedankt voor uw klandizie"
-
-#~ msgid "This report requires accounts to be selected."
-#~ msgstr "Voor dit rapport moeten er rekeningen geselecteerd zijn."

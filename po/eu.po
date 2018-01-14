@@ -23,64 +23,61 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr ""
+msgstr "Arabiarra"
 
 #: ../borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr ""
+msgstr "Baltikokoa"
 
 #: ../borrowed/goffice/go-charmap-sel.c:72
 msgid "Central European"
-msgstr ""
+msgstr "Europako Erdialdekoa"
 
 #: ../borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr ""
+msgstr "Txinatarra"
 
 #: ../borrowed/goffice/go-charmap-sel.c:74
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:242
 msgid "Cyrillic"
-msgstr ""
+msgstr "Zirilikoa"
 
 #: ../borrowed/goffice/go-charmap-sel.c:75
-#, fuzzy
 msgid "Greek"
-msgstr "Unekoa"
+msgstr "Grekoa"
 
 #: ../borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr ""
+msgstr "Hebrearra"
 
 #: ../borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
-msgstr ""
+msgstr "Indiakoa"
 
 #: ../borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr ""
+msgstr "Japoniarra"
 
 #: ../borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr ""
+msgstr "Korearra"
 
 #: ../borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr ""
+msgstr "Turkiarra"
 
 #: ../borrowed/goffice/go-charmap-sel.c:81
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:224
-#, fuzzy
 msgid "Unicode"
-msgstr "Sarrera"
+msgstr "Unicode"
 
 #: ../borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr ""
+msgstr "Vietnamdarra"
 
 #: ../borrowed/goffice/go-charmap-sel.c:83
-#, fuzzy
 msgid "Western"
-msgstr "Erregistroa"
+msgstr "Mendebaldekoa"
 
 #: ../borrowed/goffice/go-charmap-sel.c:84
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:60
@@ -92,358 +89,351 @@ msgstr "Bestelakoa"
 
 #: ../borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "Arabiarra (IBM-864)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr ""
+msgstr "Arabiarra (IBM-864-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "Arabiarra (ISO-8859-6)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr ""
+msgstr "Arabiarra (ISO-8859-6-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr ""
+msgstr "Arabiarra (ISO-8859-6-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:121
 msgid "Arabic (MacArabic)"
-msgstr ""
+msgstr "Arabiarra (MacArabic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:122
 msgid "Arabic (Windows-1256)"
-msgstr ""
+msgstr "Arabiarra (Windows-1256)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
-msgstr ""
+msgstr "Armeniarra (ARMSCII-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:124
 msgid "Baltic (ISO-8859-13)"
-msgstr ""
+msgstr "Baltikokoa (ISO-8859-13)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
-msgstr ""
+msgstr "Baltikokoa (ISO-8859-4)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:126
 msgid "Baltic (Windows-1257)"
-msgstr ""
+msgstr "Baltikokoa (Windows-1257)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:127
 msgid "Celtic (ISO-8859-14)"
-msgstr ""
+msgstr "Zeltikoa (ISO-8859-14)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
-msgstr ""
+msgstr "Europako Erdialdekoa (IBM-852)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:130
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "Europako Erdialdekoa (ISO-8859-2)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:132
 msgid "Central European (MacCE)"
-msgstr ""
+msgstr "Europako Erdialdekoa (MacCE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:134
 msgid "Central European (Windows-1250)"
-msgstr ""
+msgstr "Europako Erdialdekoa (Windows-1250)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:136
 msgid "Chinese Simplified (GB18030)"
-msgstr ""
+msgstr "Txinatar soildua (GB18030)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:137
 msgid "Chinese Simplified (GB2312)"
-msgstr ""
+msgstr "Txinatar soildua (GB2312)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:138
 msgid "Chinese Simplified (GBK)"
-msgstr ""
+msgstr "Txinatar soildua (GBK)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:139
 msgid "Chinese Simplified (HZ)"
-msgstr ""
+msgstr "Txinatar soildua (HZ)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:140
 msgid "Chinese Simplified (Windows-936)"
-msgstr ""
+msgstr "Txinatar soildua (Windows-936)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr ""
+msgstr "Txinatar tradizionala (Big5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr ""
+msgstr "Txinatar tradizionala (Big5-HKSCS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
-msgstr ""
+msgstr "Txinatar tradizionala (EUC-TW)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:147
 msgid "Croatian (MacCroatian)"
-msgstr ""
+msgstr "Kroaziarra (MacCroatian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:149
 msgid "Cyrillic (IBM-855)"
-msgstr ""
+msgstr "Zirilikoa (IBM-855)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:150
 msgid "Cyrillic (ISO-8859-5)"
-msgstr ""
+msgstr "Zirilikoa (ISO-8859-5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:152
 msgid "Cyrillic (ISO-IR-111)"
-msgstr ""
+msgstr "Zirilikoa (ISO-IR-111)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:154
 msgid "Cyrillic (KOI8-R)"
-msgstr ""
+msgstr "Zirilikoa (KOI8-R)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:155
 msgid "Cyrillic (MacCyrillic)"
-msgstr ""
+msgstr "Zirilikoa (MacCyrillic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:157
 msgid "Cyrillic (Windows-1251)"
-msgstr ""
+msgstr "Zirilikoa (Windows-1251)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
-msgstr ""
+msgstr "Errusiarra (CP-866)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:160
 msgid "Ukrainian (KOI8-U)"
-msgstr ""
+msgstr "Ukrainarra (KOI8-U)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:161
 msgid "Ukrainian (MacUkrainian)"
-msgstr ""
+msgstr "Ukrainarra (MacUkrainian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:163
 msgid "English (ASCII)"
-msgstr ""
+msgstr "Ingelesa (ASCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
-msgstr ""
+msgstr "Farsia (MacFarsi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:166
 msgid "Georgian (GEOSTD8)"
-msgstr ""
+msgstr "Georgiarra (GEOSTD8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:167
 msgid "Greek (ISO-8859-7)"
-msgstr ""
+msgstr "Grekoa (ISO-8859-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:168
 msgid "Greek (MacGreek)"
-msgstr ""
+msgstr "Grekoa (MacGreek)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:169
 msgid "Greek (Windows-1253)"
-msgstr ""
+msgstr "Grekoa (Windows-1253)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:170
 msgid "Gujarati (MacGujarati)"
-msgstr ""
+msgstr "Gujaratia (MacGujarati)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:172
 msgid "Gurmukhi (MacGurmukhi)"
-msgstr ""
+msgstr "Gurmukhia (MacGurmukhi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr ""
+msgstr "Hebrearra (IBM-862)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr ""
+msgstr "Hebrearra (ISO-8859-8-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr ""
+msgstr "Hebrearra (ISO-8859-8-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr ""
+msgstr "Hebrearra (MacHebrew)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
-msgstr ""
+msgstr "Hebrearra (Windows-1255)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
-msgstr ""
+msgstr "Hindia (MacDevanagari)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
-msgstr ""
+msgstr "Islandiarra (MacIcelandic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:186
 msgid "Japanese (EUC-JP)"
-msgstr ""
+msgstr "Japoniarra (EUC-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:187
 msgid "Japanese (ISO-2022-JP)"
-msgstr ""
+msgstr "Japoniarra (ISO-2022-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:189
 msgid "Japanese (Shift_JIS)"
-msgstr ""
+msgstr "Japoniarra (Shift_JIS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:190
 msgid "Korean (EUC-KR)"
-msgstr ""
+msgstr "Korearra (EUC-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:191
 msgid "Korean (ISO-2022-KR)"
-msgstr ""
+msgstr "Korearra (ISO-2022-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:192
 msgid "Korean (JOHAB)"
-msgstr ""
+msgstr "Korearra (JOHAB)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:193
 msgid "Korean (UHC)"
-msgstr ""
+msgstr "Korearra (UHC)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:194
 msgid "Nordic (ISO-8859-10)"
-msgstr ""
+msgstr "Nordikoa (ISO-8859-10)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:195
 msgid "Romanian (MacRomanian)"
-msgstr ""
+msgstr "Errumaniarra (MacRomanian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:197
 msgid "Romanian (ISO-8859-16)"
-msgstr ""
+msgstr "Errumaniarra (ISO-8859-16)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:199
 msgid "South European (ISO-8859-3)"
-msgstr ""
+msgstr "Europako Hegoaldekoa (ISO-8859-3)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:201
 msgid "Thai (TIS-620)"
-msgstr ""
+msgstr "Thailandiarra (TIS-620)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:202
 msgid "Turkish (IBM-857)"
-msgstr ""
+msgstr "Turkiarra (IBM-857)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:203
 msgid "Turkish (ISO-8859-9)"
-msgstr ""
+msgstr "Turkiarra (ISO-8859-9)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:204
 msgid "Turkish (MacTurkish)"
-msgstr ""
+msgstr "Turkiarra (MacTurkish)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:206
 msgid "Turkish (Windows-1254)"
-msgstr ""
+msgstr "Turkiarra (Windows-1254)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:208
-#, fuzzy
 msgid "Unicode (UTF-7)"
-msgstr "Sarrera"
+msgstr "Unicode (UTF-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:209
-#, fuzzy
 msgid "Unicode (UTF-8)"
-msgstr "Sarrera"
+msgstr "Unicode (UTF-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:210
 msgid "Unicode (UTF-16BE)"
-msgstr ""
+msgstr "Unicode (UTF-16BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:211
 msgid "Unicode (UTF-16LE)"
-msgstr ""
+msgstr "Unicode (UTF-16LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:212
 msgid "Unicode (UTF-32BE)"
-msgstr ""
+msgstr "Unicode (UTF-32BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:213
 msgid "Unicode (UTF-32LE)"
-msgstr ""
+msgstr "Unicode (UTF-32LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:214
-#, fuzzy
 msgid "User Defined"
-msgstr "Erabiltzaile-izena"
+msgstr "Erabiltzaileak definiturikoa"
 
 #: ../borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
-msgstr ""
+msgstr "Vietnamdarra (TCVN)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:217
 msgid "Vietnamese (VISCII)"
-msgstr ""
+msgstr "Vietnamdarra (VISCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:218
 msgid "Vietnamese (VPS)"
-msgstr ""
+msgstr "Vietnamdarra (VPS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:219
 msgid "Vietnamese (Windows-1258)"
-msgstr ""
+msgstr "Vietnamdarra (Windows-1258)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "Hebrear bisuala (ISO-8859-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
-msgstr ""
+msgstr "Mendebaldekoa (IBM-850)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:224
 msgid "Western (ISO-8859-1)"
-msgstr ""
+msgstr "Mendebaldekoa (ISO-8859-1)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:225
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "Mendebaldekoa (ISO-8859-15)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:227
 msgid "Western (MacRoman)"
-msgstr ""
+msgstr "Mendebaldekoa (MacRoman)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:228
 msgid "Western (Windows-1252)"
-msgstr ""
+msgstr "Mendebaldekoa (Windows-1252)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:441
-#, fuzzy
 msgid "Locale: "
-msgstr "Konfigurazio lokala"
+msgstr "Eskualde-ezarpenak: "
 
 #: ../borrowed/goffice/go-charmap-sel.c:476
-#, fuzzy
 msgid "Conversion Direction"
-msgstr "Konexioa ixten"
+msgstr "Bihurketaren noranzkoa"
 
 #: ../borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr ""
+msgstr "Balio honek zer iconv proba egingo den zehazten du."
 
 #: ../borrowed/goffice/go-optionmenu.c:410
-#, fuzzy
 msgid "Menu"
-msgstr "Menuak"
+msgstr "Menua"
 
 #: ../borrowed/goffice/go-optionmenu.c:410
-#, fuzzy
 msgid "The menu of options"
-msgstr "Zenbaki-aukera %s da."
+msgstr "Aukeren menua"
 
 #: ../gnucash/gnome/assistant-acct-period.c:190
 msgid "The book was closed successfully."
@@ -2927,9 +2917,8 @@ msgid "Path head does not exist, "
 msgstr ""
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:432
-#, fuzzy
 msgid "Relative"
-msgstr "Deskontua"
+msgstr "Erlatiboa"
 
 #: ../gnucash/gnome/dialog-vendor.c:214
 #, fuzzy
@@ -7893,9 +7882,8 @@ msgstr "Azalpena:"
 #: ../gnucash/gnome/gtkbuilder/dialog-billterms.glade.h:28
 #: ../gnucash/gnome/gtkbuilder/dialog-price.glade.h:17
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-commodity.glade.h:15
-#, fuzzy
 msgid "_Type:"
-msgstr "Mota:"
+msgstr "_Mota:"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-billterms.glade.h:29
 msgid "The description of the Billing Term, printed on invoices"
@@ -8302,9 +8290,8 @@ msgid "total"
 msgstr "guztira"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-fincalc.glade.h:29
-#, fuzzy
 msgid "Discrete"
-msgstr "Banak"
+msgstr "Diskretua"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-fincalc.glade.h:30
 #, fuzzy
@@ -9149,9 +9136,8 @@ msgid "The origin point is the lower left-hand corner of the page."
 msgstr ""
 
 #: ../gnucash/gnome/gtkbuilder/dialog-print-check.glade.h:40
-#, fuzzy
 msgid "Degrees"
-msgstr "Gutxiagotu"
+msgstr "Graduak"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-print-check.glade.h:41
 #, fuzzy
@@ -9699,9 +9685,8 @@ msgstr "Ezarri _bitartea..."
 #: ../gnucash/gnome/gtkbuilder/gnc-plugin-page-register2.glade.h:10
 #: ../gnucash/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:9
 #: ../gnucash/import-export/csv-exp/assistant-csv-export.glade.h:22
-#, fuzzy
 msgid "Start:"
-msgstr "Egoera"
+msgstr "Hasi:"
 
 #: ../gnucash/gnome/gtkbuilder/gnc-plugin-page-register2.glade.h:11
 #: ../gnucash/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:10
@@ -9735,9 +9720,8 @@ msgstr "Azkena"
 #: ../gnucash/gnome/gtkbuilder/gnc-plugin-page-register2.glade.h:15
 #: ../gnucash/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:15
 #: ../gnucash/import-export/csv-exp/assistant-csv-export.glade.h:27
-#, fuzzy
 msgid "End:"
-msgstr "Amaitu"
+msgstr "Amaitu:"
 
 #: ../gnucash/gnome/gtkbuilder/gnc-plugin-page-register2.glade.h:16
 #: ../gnucash/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:16
@@ -11148,7 +11132,7 @@ msgstr ""
 
 #: ../gnucash/gnome-utils/dialog-options.c:3019
 msgid "Percent"
-msgstr ""
+msgstr "Ehunekoa"
 
 #. Translators: Both %s will be the account separator character; the
 #. resulting string is a demonstration how the account separator
@@ -15145,7 +15129,7 @@ msgstr ""
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:221
 msgid "_Width:"
-msgstr ""
+msgstr "_Zabalera:"
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:222
 msgid ""
@@ -17651,9 +17635,8 @@ msgid "description"
 msgstr "Azalpena"
 
 #: ../gnucash/import-export/csv-exp/csv-tree-export.c:156
-#, fuzzy
 msgid "color"
-msgstr "Koloreak"
+msgstr "kolorea"
 
 #: ../gnucash/import-export/csv-exp/csv-tree-export.c:157
 #, fuzzy
@@ -17836,9 +17819,8 @@ msgid "Select Separator Type"
 msgstr "Kontu-bereizlea"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.glade.h:22
-#, fuzzy
 msgid "Preview"
-msgstr "Berrikusi"
+msgstr "Aurrebista"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.glade.h:23
 msgid "Import Account Preview, first 10 rows only"
@@ -18963,19 +18945,16 @@ msgid "(none)"
 msgstr "(bat ere ez)"
 
 #: ../gnucash/import-export/dialog-import.glade.h:54
-#, fuzzy
 msgid "Red"
-msgstr "Grabatu"
+msgstr "Gorria"
 
 #: ../gnucash/import-export/dialog-import.glade.h:55
-#, fuzzy
 msgid "Yellow"
-msgstr "Saldu"
+msgstr "Horia"
 
 #: ../gnucash/import-export/dialog-import.glade.h:56
-#, fuzzy
 msgid "Green"
-msgstr "Unekoa"
+msgstr "Berdea"
 
 #: ../gnucash/import-export/dialog-import.glade.h:57
 msgid "List of downloaded transactions (source split shown):"
@@ -19208,9 +19187,8 @@ msgstr "Lineako ekintzak"
 
 #: ../gnucash/import-export/import-pending-matches.c:194
 #: ../libgnucash/engine/policy.c:61
-#, fuzzy
 msgid "Manual"
-msgstr "Laguntzako eskuliburua"
+msgstr "Eskuz"
 
 #: ../gnucash/import-export/import-pending-matches.c:196
 #: ../gnucash/report/business-reports/balsheet-eg.scm:323
@@ -19601,9 +19579,8 @@ msgstr ""
 "fitxategitan badituzu. \n"
 
 #: ../gnucash/import-export/qif-imp/assistant-qif-import.glade.h:13
-#, fuzzy
 msgid "_Select..."
-msgstr "Hautatu..."
+msgstr "_Hautatu..."
 
 #: ../gnucash/import-export/qif-imp/assistant-qif-import.glade.h:14
 msgid "Select a QIF file to load"
@@ -20090,7 +20067,7 @@ msgstr "Interes marjinala"
 #: ../gnucash/import-export/qif-imp/qif-file.scm:85
 #: ../gnucash/import-export/qif-imp/qif-file.scm:93
 msgid "Line"
-msgstr ""
+msgstr "Marra"
 
 #: ../gnucash/import-export/qif-imp/qif-file.scm:96
 msgid "Read aborted."
@@ -21230,7 +21207,7 @@ msgstr "Helb. el.: "
 
 #: ../gnucash/report/business-reports/aging.scm:789
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: ../gnucash/report/business-reports/aging.scm:789
 #, fuzzy
@@ -22117,9 +22094,8 @@ msgid "The minimum width of the invoice."
 msgstr ""
 
 #: ../gnucash/report/business-reports/easy-invoice.scm:355
-#, fuzzy
 msgid "Text"
-msgstr "Testua bakarrik"
+msgstr "Testua"
 
 #: ../gnucash/report/business-reports/easy-invoice.scm:356
 #, fuzzy
@@ -24149,9 +24125,8 @@ msgid "Plus"
 msgstr ""
 
 #: ../gnucash/report/report-system/options-utilities.scm:226
-#, fuzzy
 msgid "Dash"
-msgstr "- (Marratxoa)"
+msgstr "Marra"
 
 #: ../gnucash/report/report-system/options-utilities.scm:227
 msgid "Filled diamond"
@@ -28064,7 +28039,7 @@ msgstr "Izenburu-titularra"
 #: ../gnucash/report/stylesheets/stylesheet-footer.scm:98
 #: ../gnucash/report/stylesheets/stylesheet-head-or-tail.scm:154
 msgid "Left"
-msgstr ""
+msgstr "Ezkerrean"
 
 #: ../gnucash/report/stylesheets/stylesheet-easy.scm:86
 #: ../gnucash/report/stylesheets/stylesheet-fancy.scm:80
@@ -28077,9 +28052,8 @@ msgstr ""
 #: ../gnucash/report/stylesheets/stylesheet-fancy.scm:82
 #: ../gnucash/report/stylesheets/stylesheet-footer.scm:101
 #: ../gnucash/report/stylesheets/stylesheet-head-or-tail.scm:157
-#, fuzzy
 msgid "Center"
-msgstr "Sartu"
+msgstr "Erdian"
 
 #: ../gnucash/report/stylesheets/stylesheet-easy.scm:89
 #: ../gnucash/report/stylesheets/stylesheet-fancy.scm:83
@@ -28093,7 +28067,7 @@ msgstr ""
 #: ../gnucash/report/stylesheets/stylesheet-footer.scm:104
 #: ../gnucash/report/stylesheets/stylesheet-head-or-tail.scm:160
 msgid "Right"
-msgstr ""
+msgstr "Eskuinean"
 
 #: ../gnucash/report/stylesheets/stylesheet-easy.scm:92
 #: ../gnucash/report/stylesheets/stylesheet-fancy.scm:86
@@ -28940,9 +28914,8 @@ msgid "Fancy Date Format"
 msgstr "Gaurko data-formatua"
 
 #: ../libgnucash/app-utils/app-utils.scm:330
-#, fuzzy
 msgid "custom"
-msgstr "Pertsonalizatua"
+msgstr "pertsonalizatua"
 
 #: ../libgnucash/app-utils/business-prefs.scm:24
 #, fuzzy
@@ -30312,3644 +30285,3 @@ msgid ""
 "select Window -> New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
-
-#~ msgid "Unknown database access mode '%s'. Using default mode: multi-user."
-#~ msgstr ""
-#~ "'%s' datu-basea atzitzeko modu ezezaguna. Modu lehenetsia erabiliko da: "
-#~ "erabiltzaile anitzekoa."
-
-#~ msgid "The last stable version was "
-#~ msgstr "Azken bertsio egonkorra: "
-
-#~ msgid "The next stable version will be "
-#~ msgstr "Hurrengo bertsio egonkorra: "
-
-#~ msgid "Set the logging level from 0 (least) to 6 (most)"
-#~ msgstr "Ezarri egunkarian sartzeko maila 0 (gutxien) eta 6 (gehien) artean"
-
-#~ msgid "Set shared data file search path"
-#~ msgstr "Ezarri datu-fitxategi partekatuen bilaketa-bidea"
-
-#~ msgid "Set the search path for documentation files"
-#~ msgstr "Ezarri dokumentazio-fitxategien bilaketa-bidea"
-
-#, fuzzy
-#~ msgid "Set the prefix path for gconf queries"
-#~ msgstr "Ezarri dokumentazio-fitxategien bilaketa-bidea"
-
-#~ msgid "Automatic Payment Forward"
-#~ msgstr "Ordainketa-birbidaltze automatikoa"
-
-#, fuzzy
-#~ msgid "You may not post an invoice with a negative total value."
-#~ msgstr "Ezin duzu moneta nazional berririk sortu."
-
-#, fuzzy
-#~ msgid "The following bills are due"
-#~ msgstr "Faktura hauen mugaeguna:"
-
-#~ msgid ""
-#~ "You must enter the amount of the payment.  The payment amount must be "
-#~ "greater than zero."
-#~ msgstr ""
-#~ "Ordainketaren zenbatekoa idatzi behar duzu. Zero baino handiagoa izan "
-#~ "behar du."
-
-#~ msgid "Your selected post account, %s, does not exist"
-#~ msgstr "%s kontabilitate-kontua hautatu duzu, baina ez dago."
-
-#, fuzzy
-#~ msgid ""
-#~ "Days\n"
-#~ "Proximo"
-#~ msgstr "Datorren hilean"
-
-#~ msgid "Default number of register rows to display in Invoices."
-#~ msgstr ""
-#~ "Fakturetan bistaratu beharreko erregistro-errenkaden kopuru lehenetsia"
-
-#~ msgid "What Tax Table should be applied to this customer?"
-#~ msgstr "Zein zerga-taula aplikatu behar zaio bezero honi?"
-
-#~ msgid "acct"
-#~ msgstr "ktu."
-
-#~ msgid "duedate"
-#~ msgstr "mugaeguna"
-
-#~ msgid "postd"
-#~ msgstr "kontab"
-
-#~ msgid "question"
-#~ msgstr "galdera"
-
-#~ msgid "What Tax Table should be applied to this vendor?"
-#~ msgstr "Zein zerga-taula aplikatu behar zaio hornitzaile honi?"
-
-#~ msgid "_Tax Table Editor"
-#~ msgstr "_Zerga-taularen editorea"
-
-#, fuzzy
-#~ msgid "QSF _Invoice..."
-#~ msgstr "Bilatu faktura"
-
-#, fuzzy
-#~ msgid "QSF _Customer..."
-#~ msgstr "Bilatu bezeroa"
-
-#, fuzzy
-#~ msgid "QSF _Vendor..."
-#~ msgstr "Bilatu hornitzailea"
-
-#, fuzzy
-#~ msgid "QSF _Employee..."
-#~ msgstr "Bilatu enplegatua"
-
-#~ msgid "Reload invoice report"
-#~ msgstr "Birkargatu faktura-txostena"
-
-#~ msgid "Reload invoice report scheme file"
-#~ msgstr "Birkargatu faktura-txostenaren eskema-fitxategia"
-
-#~ msgid "Reload owner report"
-#~ msgstr "Birkargatu jabearen txostena"
-
-#~ msgid "Reload owner report scheme file"
-#~ msgstr "Birkargatu jabe-txostenaren eskema-fitxategia"
-
-#~ msgid "Reload receivable report"
-#~ msgstr "Birkargatu kobratzekoen txostena"
-
-#~ msgid "Reload receivable report scheme file"
-#~ msgstr "Birkargatu kobratzekoen txostenaren eskema-fitxategia"
-
-#, fuzzy
-#~ msgid "Export Employees to XML"
-#~ msgstr "Editatu enplegatua"
-
-#, fuzzy
-#~ msgid "The number of rows in an invoice"
-#~ msgstr ""
-#~ "Fakturetan bistaratu beharreko erregistro-errenkaden kopuru lehenetsia"
-
-#~ msgid "Invalid Entry:  You need to supply %s."
-#~ msgstr "Sarrera baliogabea. %s eman behar duzu."
-
-#, fuzzy
-#~ msgid "Export Chart of Accounts to QSF XML"
-#~ msgstr "Kontuen diagrama bat sortzeko"
-
-#~ msgid "You must select a commodity."
-#~ msgstr "Balore bat hautatu behar duzu."
-
-#, fuzzy
-#~ msgid "You must select closing date that is not in the future."
-#~ msgstr "Transferentzia-kontu bat hautatu behar duzu kontu-zuhaitzean."
-
-#~ msgid "Are you sure you want to cancel the Mortgage/Loan Setup Druid?"
-#~ msgstr ""
-#~ "Ziur zaude hipoteka eta maileguen morroia bertan behera utzi nahi duzula?"
-
-#~ msgid "Please select a valid \"from\" account."
-#~ msgstr "Hautatu baliozko \"nondik\" kontu bat."
-
-#~ msgid "Please select a valid \"to\" account."
-#~ msgstr "Hautatu baliozko \"nora\" kontu bat."
-
-#~ msgid "Please select a valid \"interest\" account."
-#~ msgstr "Hautatu baliozko \"interes\" kontu bat."
-
-#~ msgid "Escrow "
-#~ msgstr "Fiduziarioa "
-
-#~ msgid "You must enter a valid distribution amount."
-#~ msgstr "Baliozko banaketa-zenbateko bat sartu behar duzu."
-
-#~ msgid "You must enter a distribution amount."
-#~ msgstr "Banaketa-zenbateko bat sartu behar duzu."
-
-#, fuzzy
-#~ msgid "You must either enter a valid price or leave it blank."
-#~ msgstr ""
-#~ "Baliozko prezio bat sartu behar duzu\n"
-#~ "edo hutsik utzi bestela."
-
-#~ msgid "The price must be positive."
-#~ msgstr "Prezioak positiboa izan behar du."
-
-#, fuzzy
-#~ msgid "You must either enter a valid cash amount or leave it blank."
-#~ msgstr ""
-#~ "Baliozko diru-kopuru bat sartu behar duzu\n"
-#~ "edo hutsik utzi bestela."
-
-#~ msgid "The cash distribution must be positive."
-#~ msgstr "Banaketak positiboa izan behar du."
-
-#, fuzzy
-#~ msgid "You must select an income account for the cash distribution."
-#~ msgstr ""
-#~ "Sarrera-kontu bat hautatu behar duzu\n"
-#~ "diru-banaketa egiteko."
-
-#, fuzzy
-#~ msgid "You must select an asset account for the cash distribution."
-#~ msgstr ""
-#~ "Aktiboko kontu bat hautatu behar duzu\n"
-#~ "diru-banaketa egiteko."
-
-#, fuzzy
-#~ msgid "<b>Contained Accounts</b>"
-#~ msgstr "Kontabilitate-kontua"
-
-#, fuzzy
-#~ msgid "<b>Description</b>"
-#~ msgstr "Azalpena"
-
-#, fuzzy
-#~ msgid "<b>New Account Currency</b>"
-#~ msgstr "Kontu berriaren moneta lehenetsia"
-
-#, fuzzy
-#~ msgid ""
-#~ "If you would like an account to have an opening balance, click on the "
-#~ "account and enter the starting balance in the box on the right. All "
-#~ "accounts except Equity and placeholder accounts may have an opening "
-#~ "balance."
-#~ msgstr ""
-#~ "Kontuak hasierako saldoa izatea nahi baduzu, egin klik kontuan eta "
-#~ "idatzi\n"
-#~ "hasierako saldoa eskuineko koadroan. Baliabide propioak eta Leku-marka "
-#~ "moduko \n"
-#~ "kontuek izan ezik, kontu guztiek izan dezakete hasierako saldoa."
-
-#, fuzzy
-#~ msgid ""
-#~ "If you would like an account to have an opening balance, click on the row "
-#~ "containing the account, click again in the opening balances column, and "
-#~ "then enter the starting balance. All accounts except Equity and "
-#~ "placeholder accounts may have an opening balance.\n"
-#~ "\n"
-#~ "If you would like an account to be a placeholder account, just click the "
-#~ "checkbox for that account.\n"
-#~ msgstr ""
-#~ "Kontuak hasierako saldoa izatea nahi baduzu, egin klik kontuan eta "
-#~ "idatzi\n"
-#~ "hasierako saldoa eskuineko koadroan. Baliabide propioak eta Leku-marka "
-#~ "moduko \n"
-#~ "kontuek izan ezik, kontu guztiek izan dezakete hasierako saldoa."
-
-#~ msgid "New Account (not implemented)"
-#~ msgstr "Kontu berria (inplementatu gabe)"
-
-#, fuzzy
-#~ msgid "Setup new accounts"
-#~ msgstr "Sortu kontu berria"
-
-#, fuzzy
-#~ msgid "Enter a title for this book."
-#~ msgstr "Idatzi txostenaren izen adierazgarria"
-
-#, fuzzy
-#~ msgid "Enter notes that describe this book."
-#~ msgstr "Idatzi sarreraren azalpena"
-
-#, fuzzy
-#~ msgid "This is Sample2."
-#~ msgstr "Hau zenbaki-aukera bat da."
-
-#, fuzzy
-#~ msgid "Click to choose the filename and location."
-#~ msgstr "Sakatu \"Hurrengoa\", informazioa onartu eta aurrera egiteko."
-
-#, fuzzy
-#~ msgid "Export Chart of Accounts"
-#~ msgstr "Kontuen diagrama bat sortzeko"
-
-#~ msgid "Account Information"
-#~ msgstr "Kontuaren informazioa"
-
-#, fuzzy
-#~ msgid "Co_mpounding:"
-#~ msgstr "Konposatua:"
-
-#, fuzzy
-#~ msgid "_Effective Date:"
-#~ msgstr "Data efektiboa:"
-
-#, fuzzy
-#~ msgid "_Initial Payment:"
-#~ msgstr "Hasierako ordainketa:"
-
-#, fuzzy
-#~ msgid "_Payments:"
-#~ msgstr "Ordainketak:"
-
-#, fuzzy
-#~ msgid "Get _Quotes"
-#~ msgstr "Hartu kotizazioak"
-
-#~ msgid "Copy Transaction"
-#~ msgstr "Kopiatu transakzioa"
-
-#~ msgid "Copy the selected transaction"
-#~ msgstr "Kopiatu hautatutako transakzioa"
-
-#~ msgid "Cut Transaction"
-#~ msgstr "Ebaki transakzioa"
-
-#~ msgid "Dup_licate Transaction..."
-#~ msgstr "_Bikoiztu transakzioa..."
-
-#~ msgid "Edit Exchange Rate"
-#~ msgstr "Editatu kanbio-tasa"
-
-#~ msgid "Edit the exchange rate for the current split"
-#~ msgstr "Editatu uneko zatiaren kanbio-tasa"
-
-#~ msgid "Erase all splits except the one for this account."
-#~ msgstr "Ezabatu zati guztiak, kontu honena izan ezik."
-
-#~ msgid "Jump"
-#~ msgstr "Joan"
-
-#~ msgid "Remove Transaction Splits"
-#~ msgstr "Kendu transakzio-zatiak"
-
-#~ msgid "Schedule..."
-#~ msgstr "Planifikazioa..."
-
-#~ msgid "Sort by Date"
-#~ msgstr "Ordenatu dataz"
-
-#~ msgid "Sort by Memo"
-#~ msgstr "Ordenatu memoz"
-
-#~ msgid "Sort by Number"
-#~ msgstr "Ordenatu zenbakiz"
-
-#~ msgid "St_yle"
-#~ msgstr "Es_tiloa"
-
-#~ msgid "_Amount"
-#~ msgstr "_Zenbatekoa"
-
-#~ msgid "_Number"
-#~ msgstr "_Zenbakia"
-
-#~ msgid "_Statement Date"
-#~ msgstr "_Laburpen-data"
-
-#, fuzzy
-#~ msgid "<b>Upcoming</b>"
-#~ msgstr "Laster egitekoak"
-
-#~ msgid "Auto-Created Transactions Notification"
-#~ msgstr "Automatikoki sortutako transakzioen jakinarazpena"
-
-#~ msgid "Create"
-#~ msgstr "Sortu"
-
-#~ msgid "Create as scheduled"
-#~ msgstr "Sortu planifikatu gisa"
-
-#~ msgid "Created Transaction Review"
-#~ msgstr "Sortutako transakzioaren berrikustea"
-
-#~ msgid "Creation State"
-#~ msgstr "Sortze-egoera"
-
-#~ msgid "Days Away"
-#~ msgstr "Zenbat egunera"
-
-#~ msgid "Disposition?"
-#~ msgstr "Antolaera?"
-
-#~ msgid "Do you..."
-#~ msgstr "Nahi duzu..."
-
-#~ msgid "Loan Information"
-#~ msgstr "Mailegu-informazioa"
-
-#~ msgid "Mortgage/Loan Druid"
-#~ msgstr "Hipoteka eta maileguen morroia"
-
-#~ msgid "Obsolete Scheduled Transactions"
-#~ msgstr "Zaharkitutako transakzio planifikatua"
-
-#~ msgid "Postpone"
-#~ msgstr "Atzeratu"
-
-#, fuzzy
-#~ msgid "Repayment Type"
-#~ msgstr "<amortizazio-mota>"
-
-#~ msgid "Scheduled Transaction"
-#~ msgstr "Transakzio planifikatua"
-
-#~ msgid "Since Last Run"
-#~ msgstr "Azken exekutatu zenetik"
-
-#~ msgid "Start Date: "
-#~ msgstr "Hasiera-data: "
-
-#~ msgid "State"
-#~ msgstr "Egoera"
-
-#~ msgid "Template Transaction (Read-Only)"
-#~ msgstr "Transakzio-txantiloia (irakurtzeko soilik)"
-
-#, fuzzy
-#~ msgid ""
-#~ "The following scheduled transactions have expired.  Select those you wish "
-#~ "to delete."
-#~ msgstr ""
-#~ "Transakzio planifikatu hauek iraungita daude.\n"
-#~ "Hautatu ezabatu nahi dituzunak."
-
-#, fuzzy
-#~ msgid ""
-#~ "The listed Scheduled Transactions are to-be created soon.  Select any "
-#~ "which you would like to create now, and click \"Forward\" to create them."
-#~ msgstr ""
-#~ "Zerrendako transakzio planifikatuak laster sortzekoak dira.\n"
-#~ "Hautatu orain sortu nahi dituzunak, eta sakatu \"Hurrengoa\"\n"
-#~ "sortzen hasteko."
-
-#~ msgid "To-Create Transaction Preparation"
-#~ msgstr "Sortu beharreko transakzioen prestaketa"
-
-#~ msgid "Transaction Reminders"
-#~ msgstr "Transakzioen oroigarriak"
-
-#~ msgid "Unselect All"
-#~ msgstr "Desautatu dena"
-
-#~ msgid "Value:"
-#~ msgstr "Balioa:"
-
-#~ msgid "Variable"
-#~ msgstr "Aldakorra"
-
-#~ msgid "Variables"
-#~ msgstr "Aldakorrak"
-
-#~ msgid "What to do, what to do?"
-#~ msgstr "Zer egin behar da?"
-
-#, fuzzy
-#~ msgid ""
-#~ "months\n"
-#~ "years"
-#~ msgstr "hilabete"
-
-#, fuzzy
-#~ msgid "Import a QSF object file"
-#~ msgstr "Inportatu QIF fitxategiak"
-
-#, fuzzy
-#~ msgid "Export the chart of accounts for a date with balances as QSF"
-#~ msgstr "Saldoa kontrako zeinukoa duten kontu-motak"
-
-#~ msgid "Ta_x Options"
-#~ msgstr "Ze_rga-aukerak"
-
-#~ msgid "_Price Editor"
-#~ msgstr "_Prezioen editorea"
-
-#, fuzzy
-#~ msgid "Select the QSF file to import into GnuCash"
-#~ msgstr "Hautatu QIF fitxategi bat kargatzeko"
-
-#, fuzzy
-#~ msgid "Set the budget options using this dialog."
-#~ msgstr ""
-#~ "Ezarri nahi dituzun txosten-aukerak elkarrizketa-koadro honen bidez."
-
-#, fuzzy
-#~ msgid "Remo_ve Transaction Splits"
-#~ msgstr "Kendu transakzio-zatiak"
-
-#, fuzzy
-#~ msgid "Account Transaction Report"
-#~ msgstr "Transakzio-txostena"
-
-#~ msgid "General Ledger Report"
-#~ msgstr "Liburu nagusi orokorraren txostena"
-
-#~ msgid "_General Ledger"
-#~ msgstr "_Liburu nagusi orokorra"
-
-#~ msgid "<No information>"
-#~ msgstr "<ez dago informaziorik>"
-
-#, fuzzy
-#~ msgid ""
-#~ "The current transaction has been changed.  Would you like to record the "
-#~ "changes before closing this page, close the page without recording the "
-#~ "changes, or cancel the close?"
-#~ msgstr ""
-#~ "Uneko transakzio-txantiloia aldatu egin da.\n"
-#~ "Aldaketak gorde nahi dituzu?"
-
-#, fuzzy
-#~ msgid "Show the Full Name column"
-#~ msgstr "Kontu-izen osoa erakutsi legendan?"
-
-#, fuzzy
-#~ msgid "Show the Print Name column"
-#~ msgstr "Erakutsi sarreren eta gastuen kontuak"
-
-#, fuzzy
-#~ msgid "Show the Quote Source column"
-#~ msgstr "Kotizazioaren iturburua"
-
-#, fuzzy
-#~ msgid "Show the Quote Timezone column"
-#~ msgstr "Erakutsi sarreren eta gastuen kontuak"
-
-#, fuzzy
-#~ msgid "Show the Unique Name column"
-#~ msgstr "Erakutsi sarreren eta gastuen kontuak"
-
-#, fuzzy
-#~ msgid "Columns used for sorting"
-#~ msgstr "Exportatzeko taula"
-
-#, fuzzy
-#~ msgid "Show the Source column"
-#~ msgstr "Zehaztu iturburuko kontua"
-
-#, fuzzy
-#~ msgid "Show the Type column"
-#~ msgstr "Mozkin garbia erakutsi?"
-
-#, fuzzy
-#~ msgid "Accounts to reverse the balance"
-#~ msgstr "Erakutsi zero saldoa duten kontuak."
-
-#, fuzzy
-#~ msgid "Default view style for new register"
-#~ msgstr "Erregistro-leihoaren estilo lehenetsia"
-
-#, fuzzy
-#~ msgid "Enables Euro support"
-#~ msgstr "Gaitu EUROaren euskarria"
-
-#, fuzzy
-#~ msgid "Enables additional support for the European Union EURO currency."
-#~ msgstr "Europar Batasuneko EUROaren euskarria gaitzen du"
-
-#, fuzzy
-#~ msgid "Source of default account currency"
-#~ msgstr "Ezarri QIF kontuaren izen lehenetsia"
-
-#, fuzzy
-#~ msgid "Source of default report currency"
-#~ msgstr "Txostenen moneta lehenetsia"
-
-#~ msgid "New %s"
-#~ msgstr "%s berria"
-
-#~ msgid "item"
-#~ msgstr "elementu"
-
-#~ msgid "set true"
-#~ msgstr "ezarri egiazkoa"
-
-#~ msgid "Case Insensitive?"
-#~ msgstr "Maiuskulak/minuskulak bereizi gabe?"
-
-#, fuzzy
-#~ msgid ""
-#~ "Error: Failure saving state file.\n"
-#~ "  %s"
-#~ msgstr ""
-#~ "Errorea OpenHBCI konfig. fitxategia kargatzean:\n"
-#~ "  %s\n"
-
-#, fuzzy
-#~ msgid "You must select a commodity. To create a new one, click \"New\""
-#~ msgstr ""
-#~ "Balore bat hautatu behar duzu.\n"
-#~ "Berri bat sortzeko, egin klik \"Berria\"n"
-
-#~ msgid "Defaults"
-#~ msgstr "Lehenetsiak"
-
-#, fuzzy
-#~ msgid "That GnuCash XML file is already loaded. Please select another file."
-#~ msgstr ""
-#~ "QIF fitxategi hori kargatuta dago.\n"
-#~ "Hautatu beste fitxategi bat."
-
-#, fuzzy
-#~ msgid "Choose method"
-#~ msgstr "Aukeratu esportatzeko formatua"
-
-#, fuzzy
-#~ msgid "Finish changes"
-#~ msgstr "Amaituta"
-
-#, fuzzy
-#~ msgid "Update GnuCash configuration data"
-#~ msgstr "GnuCash-en konfigurazio-aukerak"
-
-#, fuzzy
-#~ msgid "Update search path"
-#~ msgstr "Ezarri datu-fitxategi partekatuen bilaketa-bidea"
-
-#, fuzzy
-#~ msgid "_GnuCash updates the search path"
-#~ msgstr "Ezarri datu-fitxategi partekatuen bilaketa-bidea"
-
-#, fuzzy
-#~ msgid "_Update search path"
-#~ msgstr "Ezarri datu-fitxategi partekatuen bilaketa-bidea"
-
-#, fuzzy
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to import at this time. "
-#~ "Do this if you have saved your accounts to separate GnuCash files.\n"
-#~ "\n"
-#~ "Click \"Forward\" to finish loading files and move to the next step of "
-#~ "the GnuCash Datafile import process."
-#~ msgstr ""
-#~ "Datu gehiago inportatu behar badituzu, sakatu \"Kargatu beste fitxategi \n"
-#~ "bat\". Egin ezazu kontuak OFX fitxategi bereizietan gorde badituzu.\n"
-#~ "\n"
-#~ "Fitxategiak kargatzen amaitu eta OFX inportazio-prozesuaren hurrengo \n"
-#~ "urratsera joateko, sakatu \"Hurrengoa\". "
-
-#, fuzzy
-#~ msgid "Do not merge"
-#~ msgstr "Ez ordenatu"
-
-#, fuzzy
-#~ msgid "GnuCash data files you have loaded"
-#~ msgstr "Kargatu dituzun OFX fitxategiak"
-
-#~ msgid "Load another file"
-#~ msgstr "Kargatu beste fitxategi bat"
-
-#~ msgid "Unload selected file"
-#~ msgstr "Deskargatu hautatutako fitxategia"
-
-#, fuzzy
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to load at this time.\n"
-#~ "\n"
-#~ "Click \"Next\" to finish loading files and move to the next step. "
-#~ msgstr ""
-#~ "Datu gehiago inportatu behar badituzu, sakatu \"Kargatu beste fitxategi \n"
-#~ "bat\". Egin ezazu kontuak OFX fitxategi bereizietan gorde badituzu.\n"
-#~ "\n"
-#~ "Fitxategiak kargatzen amaitu eta OFX inportazio-prozesuaren hurrengo \n"
-#~ "urratsera joateko, sakatu \"Hurrengoa\". "
-
-#, fuzzy
-#~ msgid "<b>Exchange/Price Information</b>"
-#~ msgstr "Kanbio/prezio informazioa"
-
-#, fuzzy
-#~ msgid "To A_mount:"
-#~ msgstr "Zenbatekora:"
-
-#, fuzzy
-#~ msgid "_From:"
-#~ msgstr "Nondik:"
-
-#, fuzzy
-#~ msgid "_To:"
-#~ msgstr "Nora:"
-
-#, fuzzy
-#~ msgid "Transaction _journal"
-#~ msgstr "Transakzioen egunkaria"
-
-#, fuzzy
-#~ msgid "Use s_ystem default"
-#~ msgstr "Erabili GNOMEren lehenespenak"
-
-#, fuzzy
-#~ msgid "_Icons only"
-#~ msgstr "Ikonoak bakarrik"
-
-#, fuzzy
-#~ msgid "Failed to process file: %s"
-#~ msgstr ""
-#~ "QIF fitxategi-analizatzeak huts egin du:\n"
-#~ "%s"
-
-#~ msgid "_Delete Account"
-#~ msgstr "_Ezabatu kontua"
-
-#~ msgid "<no file>"
-#~ msgstr "<ez dago fitxategirik>"
-
-#, fuzzy
-#~ msgid ""
-#~ "The GnuCash personal finance manager. The GNU way to manage your money!"
-#~ msgstr ""
-#~ "GnuCash-en finantza pertsonalen kudeatzailea.\n"
-#~ "Zure dirua kontrolatzeko GNUk ematen duen bidea!\n"
-#~ "http://www.gnucash.org/"
-
-#, fuzzy
-#~ msgid "Start of this fiscal year"
-#~ msgstr "Aurtengo urtearen hasiera"
-
-#, fuzzy
-#~ msgid "Start of previous fiscal year"
-#~ msgstr "Aurreko hiruhilekoaren hasiera"
-
-#, fuzzy
-#~ msgid "End of this fiscal year"
-#~ msgstr "Aurreko urtearen amaiera"
-
-#, fuzzy
-#~ msgid "End of previous fiscal year"
-#~ msgstr "Aurreko hiruhilekoaren amaiera"
-
-#, fuzzy
-#~ msgid "Version: GnuCash-%s svn (r%s built %s)"
-#~ msgstr "Bertsioa: Gnucash-cvs (%s)"
-
-#, fuzzy
-#~ msgid "Version: GnuCash-%s (r%s built %s)"
-#~ msgstr "Bertsioa: Gnucash-cvs (%s)"
-
-#, fuzzy
-#~ msgid "CUSIP code"
-#~ msgstr "CUSIP edo beste kode bat:"
-
-#~ msgid "Print GnuCash Document"
-#~ msgstr "Inprimatu GnuCash dokumentua"
-
-#, fuzzy
-#~ msgid ""
-#~ "Enable the SKIP action in the transaction matcher.  If enabled, a "
-#~ "transaction whose best match's score is in the yellow zone (above the "
-#~ "Auto-ADD threshold but below the Auto-CLEAR threshold) will be SKIPed by "
-#~ "default."
-#~ msgstr ""
-#~ "Parekatze-puntuazio onena zona gorrian duten transakzioak (bistaratzeko "
-#~ "atalasearen gainetik, baina automatikoki gehitzekoaren azpitik edo "
-#~ "parean) lehenespenez gehituko dira."
-
-#~ msgid ""
-#~ "For a new transaction, click on the \"Other Account\" entry to choose the "
-#~ "other (destination) account of this transaction.\n"
-#~ "For a transaction that is a duplicate of an existing one, click on the "
-#~ "\"Other Account\" or \"Description\" entry to \n"
-#~ "check whether GnuCash chose the right existing transaction.\n"
-#~ "To switch transactions between both states, click on the checkmark in the "
-#~ "\"New\" column.\n"
-#~ "When all new transactions have the correct destination account and all "
-#~ "duplicates are matched with the right existing transaction, \n"
-#~ "click \"Ok\"."
-#~ msgstr ""
-#~ "Transakzio berrietan, hautatu \"Beste kontu bat\" izeneko sarrera "
-#~ "transakzioaren (helburuko) beste kontu bat aukeratzeko.\n"
-#~ "Beste bat bikoiztuta sortutako transakzioetan, hautatu \"Beste kontu bat"
-#~ "\" edo \"Azalpena\" izeneko sarrera \n"
-#~ "GnuCash-ek transakzio egokia aukeratu duen egiaztatzeko.\n"
-#~ "Transakzioak egoera batetik bestera aldatzeko, egin klik \"Berria\" "
-#~ "zutabeko hautamarkan.\n"
-#~ "Transakzio berri guztiek helburuko kontu egokia dutenean eta bikoiztu "
-#~ "guztiak jatorrizko transakzio egokiarekin parekatuta \n"
-#~ "daudenean, sakatu \"Ados\"."
-
-#~ msgid "Other Account"
-#~ msgstr "Beste kontu bat"
-
-#, fuzzy
-#~ msgid "do not translate"
-#~ msgstr "hau ez daukana"
-
-#, fuzzy
-#~ msgid "gnc-new-account"
-#~ msgstr "Sarrera-kontua"
-
-#, fuzzy
-#~ msgid ""
-#~ "The job was sent to the bank successfully, but the bank is refusing to "
-#~ "execute the job. Please check the log window for the exact error message "
-#~ "of the bank. The line with the error message contains a code number that "
-#~ "is greater than 9000.\n"
-#~ "\n"
-#~ "Do you want to enter the job again?"
-#~ msgstr ""
-#~ "Lana behar bezala bidali da bankura, baina bankuak uko \n"
-#~ "egin dio lana exekutatzeari. Begiratu egunkariaren \n"
-#~ "leihoan zein den bankuaren errore-mezua. Errore-mezuan \n"
-#~ "ageri den kode-zenbakia 9000 baino handiagoa da.\n"
-#~ "\n"
-#~ "Lana berriro sartu nahi duzu?"
-
-#, fuzzy
-#~ msgid "The two passwords didn't match. Please try again."
-#~ msgstr ""
-#~ "Bi pasahitzak ez datoz bat. \n"
-#~ "Saiatu berriro."
-
-#~ msgid "%s at %s (code %s)"
-#~ msgstr "%s - %s (%s kodea)"
-
-#~ msgid "%s at bank code %s"
-#~ msgstr "%s - %s banku-kodean"
-
-#, fuzzy
-#~ msgid "Co_nfigure"
-#~ msgstr "Konfigurazio-fitxategia"
-
-#, fuzzy
-#~ msgid "The file %s does not exist. Would you like to create it now?"
-#~ msgstr ""
-#~ "%s fitxategia ez dago. \n"
-#~ "Sortu nahi duzu?"
-
-#, fuzzy
-#~ msgid ""
-#~ "The directory for file %s does not exist. Please choose another place for "
-#~ "this file."
-#~ msgstr ""
-#~ "%s\n"
-#~ "fitxategiaren direktorioa\n"
-#~ "ez dago. \n"
-#~ "Aukeratu beste kokaleku bat."
-
-#, fuzzy
-#~ msgid "Choose an Online Banking Version to use with the selected bank:"
-#~ msgstr "Aukeratu hautatutako bankuarekin erabiltzeko HBCI bertsioa:"
-
-#, fuzzy
-#~ msgid "Online Banking Version"
-#~ msgstr "Lineako bankua"
-
-#, fuzzy
-#~ msgid "Start AqBanking Setup Wizard"
-#~ msgstr "Abiatu AqHBCI konfiguratzeko morroia"
-
-#~ msgid "Enter and confirm your new password"
-#~ msgstr "Idatzi eta berretsi pasahitz berria"
-
-#~ msgid "Enter new Password"
-#~ msgstr "Idatzi pasahitz berria"
-
-#, fuzzy
-#~ msgid "Activate verbose debug messages for Online Banking."
-#~ msgstr "HBCI lineako bankuaren arazketa-mezu xehatuak aktibatu."
-
-#, fuzzy
-#~ msgid "Remember _PIN"
-#~ msgstr "HBCI gogoratu PIN memorian"
-
-#, fuzzy
-#~ msgid "Remember the Online Banking PIN in memory during a session."
-#~ msgstr "Saioan zehar, gogoratu HBCIren PIN zenbakia"
-
-#~ msgid ""
-#~ "The PIN you entered was wrong.\n"
-#~ "Do you want to try again?"
-#~ msgstr ""
-#~ "Idatzi duzun PIN zenbakia okerrekoa da.\n"
-#~ "Berriro saiatu nahi duzu?"
-
-#~ msgid ""
-#~ "The PIN you entered was wrong.\n"
-#~ "ATTENTION: You have zero further wrong retries left!\n"
-#~ "Do you want to try again?"
-#~ msgstr ""
-#~ "Idatzi duzun PIN zenbakia okerrekoa da.\n"
-#~ "KONTUZ: Ezin duzu berriro kale egin!\n"
-#~ "Berriro saiatu nahi duzu?"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unfortunately you entered a wrong PIN for too many times. Your chip card "
-#~ "is therefore destroyed. Aborting."
-#~ msgstr ""
-#~ "Gehiegitan idatzi duzu PIN zenbakia oker.\n"
-#~ "Ondorioz, zure txip-txartela suntsituta dago. Abortatzen."
-
-#, fuzzy
-#~ msgid ""
-#~ "No chip card has been found in the chip card reader. Do you want to try "
-#~ "again?"
-#~ msgstr ""
-#~ "Ez da txip-txartelik aurkitu txip-txartelen irakurgailuan.\n"
-#~ "Berriro saiatu nahi duzu?"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unfortunately this Online Banking job is not supported by your bank or "
-#~ "for your account. Aborting."
-#~ msgstr ""
-#~ "Lastima da, baina zure bankuak edo kontuak \n"
-#~ "ez du onartzen HBCI lan hau. Abortatzen."
-
-#, fuzzy
-#~ msgid ""
-#~ "The server of your bank refused the Online Banking connection. Please try "
-#~ "again later. Aborting."
-#~ msgstr ""
-#~ "Zure bankuko zerbitzariak atzera bota du HBCI konexioa.\n"
-#~ "Saiatu geroago. Abortatzen."
-
-#, fuzzy
-#~ msgid ""
-#~ "One of the jobs was sent to the bank successfully, but the bank is "
-#~ "refusing to execute the job. Please check the log window for the exact "
-#~ "error message of the bank. The line with the error message contains a "
-#~ "code number that is greater than 9000.\n"
-#~ "\n"
-#~ "The job has been removed from the queue."
-#~ msgstr ""
-#~ "Lana behar bezala bidali da bankura, baina bankuak uko \n"
-#~ "egin dio lana exekutatzeari. Begiratu egunkariaren \n"
-#~ "leihoan zein den bankuaren errore-mezua. Errore-mezuan \n"
-#~ "ageri den kode-zenbakia 9000 baino handiagoa da.\n"
-#~ "\n"
-#~ "Lana berriro sartu nahi duzu?"
-
-#, fuzzy
-#~ msgid ""
-#~ "You entered %ld characters, but the PIN must be no longer than %d "
-#~ "characters. Do you want to try again?"
-#~ msgstr ""
-#~ "PIN zenbakiak %d karaktere izan behar ditu \n"
-#~ "gutxienez. Berriro saiatu nahi duzu?"
-
-#, fuzzy
-#~ msgid ""
-#~ "This TAN needs to be at least %d characters long. Do you want to try "
-#~ "again?"
-#~ msgstr ""
-#~ "TAN honek %d karaktere izan behar ditu \n"
-#~ "gutxienez. Berriro saiatu nahi duzu?"
-
-#, fuzzy
-#~ msgid ""
-#~ "You entered %ld characters, but the TAN must be no longer than %d "
-#~ "characters. Do you want to try again?"
-#~ msgstr ""
-#~ "TAN honek %d karaktere izan behar ditu \n"
-#~ "gutxienez. Berriro saiatu nahi duzu?"
-
-#, fuzzy
-#~ msgid "(no)"
-#~ msgstr "(bat ere ez)"
-
-#, fuzzy
-#~ msgid "Sample data:"
-#~ msgstr "Hasiera-data:"
-
-#, fuzzy
-#~ msgid "QIF file load warning: %s"
-#~ msgstr ""
-#~ "QIF fitxategi-kargatzearen abisua:\n"
-#~ "%s"
-
-#, fuzzy
-#~ msgid "QIF file load failed: %s"
-#~ msgstr ""
-#~ "QIF fitxategi-kargatzeak huts egin du:\n"
-#~ "%s"
-
-#, fuzzy
-#~ msgid "QIF file parse failed: %s"
-#~ msgstr ""
-#~ "QIF fitxategi-analizatzeak huts egin du:\n"
-#~ "%s"
-
-#~ msgid ""
-#~ "An error occurred while importing QIF transactions into GnuCash. Your "
-#~ "accounts are unchanged."
-#~ msgstr ""
-#~ "Errorea QIF transakzioak GnuCash-era inportatzean. Zure kontuak ez dira "
-#~ "aldatu."
-
-#~ msgid "You must enter a Type for the commodity."
-#~ msgstr "Balorearen mota adierazi behar duzu."
-
-#~ msgid "You must enter a name for the commodity."
-#~ msgstr "Balorearen izena adierazi behar duzu."
-
-#~ msgid "You must enter an abbreviation for the commodity."
-#~ msgstr "Balorearen laburtzapena adierazi behar duzu."
-
-#~ msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
-#~ msgstr "Aukeratu balorearen burtsa edo zerrenda (NASDAQ, NYSE, etab.)."
-
-#~ msgid ""
-#~ "Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation "
-#~ "for the name."
-#~ msgstr ""
-#~ "Idatzi izen horren kotizazio-ikurra (adib.\"RHAT\") edo laburtzapen "
-#~ "esklusiboa."
-
-#, fuzzy
-#~ msgid "Click \"Forward\" to accept the information and move on."
-#~ msgstr "Sakatu \"Hurrengoa\", informazioa onartu eta aurrera egiteko."
-
-#~ msgid "Dup?"
-#~ msgstr "Bikoiztua?"
-
-#, fuzzy
-#~ msgid "Click \"Forward\" to check matchings for QIF categories. "
-#~ msgstr "Sakatu \"Hurrengoa\" QIF kategorien bat etortzea egiaztatzeko. "
-
-#, fuzzy
-#~ msgid ""
-#~ "Click \"Forward\" to enter information about stocks and mutual funds in "
-#~ "the imported data."
-#~ msgstr ""
-#~ "Sakatu \"Hurrengoa\" inportatutako datuetan akzioei eta\n"
-#~ "inbertsio-funtsei buruzko informazioa sartzeko."
-
-#, fuzzy
-#~ msgid ""
-#~ "Click \"Forward\" to enter information about the currency used in your "
-#~ "QIF files."
-#~ msgstr ""
-#~ "Sakatu \"Hurrengoa\" QIF fitxategietan erabilitako monetari buruzko "
-#~ "informazioa sartzeko."
-
-#~ msgid "Enter the currency used for new accounts"
-#~ msgstr "Idatzi kontu berrietan erabiltzeko moneta"
-
-#, fuzzy
-#~ msgid ""
-#~ "If you are importing a QIF file downloaded from a bank or other financial "
-#~ "institution, some of the information in the QIF file may duplicate "
-#~ "information already in your GnuCash accounts.  GnuCash will try to detect "
-#~ "duplicates of existing transactions.  \n"
-#~ "\n"
-#~ "On the next page, you will be asked to confirm that an existing "
-#~ "transaction matches an imported transaction.  Imported transactions are "
-#~ "shown on the left side of the page, and possible  matches for the "
-#~ "selected left-hand transaction are shown  to the right.  There may be "
-#~ "several old transactions that could match an imported transaction; you "
-#~ "will be able to select the correct one by double-clicking in the \"Dup?\" "
-#~ "column of the correct transaction.\n"
-#~ "\n"
-#~ "You can control the rules used by GnuCash to find duplicate transactions "
-#~ "in the \"QIF Import\" section of the GnuCash Preferences dialog.\n"
-#~ "\n"
-#~ "Click \"Forward\" to find duplicate transactions. "
-#~ msgstr ""
-#~ "Banku batetik edo finantza-erakunde batetik deskargatutako QIF "
-#~ "fitxategi \n"
-#~ "bat inportatzen ari bazara, QIF fitxategiko datu batzuek lehendik GnuCash-"
-#~ "eko\n"
-#~ "kontuetan dagoen informazioa bikoitz dezakete. GnuCash transakzio "
-#~ "bikoiztuak\n"
-#~ "detektatzen saiatuko da.  \n"
-#~ "\n"
-#~ "Hurrengo orrian, lehendik dagoen transakzio bat inportatutakoaren "
-#~ "berdina \n"
-#~ "den galdetuko zaizu. Inportatutako transakzioa ezkerrean azalduko da,\n"
-#~ "eta bikoiztuta egon litezkeen lehengo transakzioak eskuinean.\n"
-#~ "Transakzio zahar bat baino gehiago etor litezke bat "
-#~ "inportatutakoarekin; \n"
-#~ "transakzio egokia hautatzeko, egin klik transakzioaren \"Bikoiztua?\" \n"
-#~ "zutabean.\n"
-#~ "\n"
-#~ "GnuCash-ek transakzio bikoiztuak aurkitzeko erabiltzen dituen arauak "
-#~ "alda \n"
-#~ "ditzakezu GnuCash-en hobespenen elkarrizketa-koadroko \"QIF inportazioa"
-#~ "\"n.\n"
-#~ "\n"
-#~ "Transakzio bikoiztuak bilatzeko, sakatu \"Hurrengoa\"."
-
-#~ msgid "Imported transactions with duplicates"
-#~ msgstr "Bikoiztudun transakzio inportatuak"
-
-#, fuzzy
-#~ msgid "type:bank"
-#~ msgstr "nire_bankua"
-
-#, fuzzy
-#~ msgid "type:port"
-#~ msgstr "Txostena"
-
-#, fuzzy
-#~ msgid "type:oth a"
-#~ msgstr "Mota: "
-
-#, fuzzy
-#~ msgid "type:oth l"
-#~ msgstr "Mota: "
-
-#, fuzzy
-#~ msgid "type:cat"
-#~ msgstr "Mota:"
-
-#, fuzzy
-#~ msgid "type:security"
-#~ msgstr "Balore berria"
-
-#, fuzzy
-#~ msgid "account"
-#~ msgstr "Kontua"
-
-#~ msgid "Int"
-#~ msgstr "Int"
-
-#~ msgid "ATM"
-#~ msgstr "Kutxazain automatikoa"
-
-#~ msgid "Div"
-#~ msgstr "Dib"
-
-#, fuzzy
-#~ msgid "Add _Report"
-#~ msgstr "_Txostenak"
-
-#, fuzzy
-#~ msgid ""
-#~ "Add the current report to the `Custom' menu for later use. The report "
-#~ "will be saved in the file ~/.gnucash/saved-reports-2.0. It will be "
-#~ "accessible as menu entry in the report menu at the next startup of "
-#~ "GnuCash."
-#~ msgstr ""
-#~ "Gorde uneko txostena ~/.gnucash/saved-reports-1.8 fitxategian, geroago "
-#~ "txosten-menuko sarrera baten bitartez erabiltzeko. Hurrengo batean "
-#~ "gnucash abiatzean erabilgarri izango da."
-
-#~ msgid "The file contains an unknown Action '%s'."
-#~ msgstr "Fitxategiak '%s' ekintza ezezagun bat du."
-
-#, fuzzy
-#~ msgid "Welcome to GnuCash 2.0!"
-#~ msgstr "Ongi etorri GnuCash 1.8ra"
-
-#~ msgid "Sub-"
-#~ msgstr "Sub-"
-
-#~ msgid "Blue items are exportable to a .TXF file."
-#~ msgstr "Elementu urdinak .TXF fitxategi batera esporta daitezke."
-
-#~ msgid ""
-#~ "No Tax Related accounts were found.  Go to the Edit->Tax Options dialog "
-#~ "to set up tax-related accounts."
-#~ msgstr ""
-#~ "Ez da aurkitu zergei lotutako konturik. Joan Editatu->Zerga-aukerak "
-#~ "elkarrizketa-koadrora kontu zergadunak konfiguratzeko."
-
-#~ msgid "TXF"
-#~ msgstr "TXF"
-
-#, fuzzy
-#~ msgid ""
-#~ "Blue items are exportable to a German Tax XML file. Press Export to "
-#~ "actually export them."
-#~ msgstr "Elementu urdinak .TXF fitxategi batera esporta daitezke."
-
-#, fuzzy
-#~ msgid "Accounts to include"
-#~ msgstr "Kontuaren kodea"
-
-#~ msgid "Income Barchart"
-#~ msgstr "Sarreren barra-diagrama"
-
-#~ msgid "Expense Barchart"
-#~ msgstr "Gastuen barra-diagrama"
-
-#~ msgid "Liability Barchart"
-#~ msgstr "Pasiboaren barra-diagrama"
-
-#~ msgid "and"
-#~ msgstr "eta"
-
-#~ msgid "Style"
-#~ msgstr "Estiloa"
-
-#~ msgid "Show Full Account Name?"
-#~ msgstr "Kontu-izen osoa erakutsi?"
-
-#, fuzzy
-#~ msgid "The most recent recorded price before report date"
-#~ msgstr "Erregistratutako prezio berriena"
-
-#~ msgid "%s - %s to %s for"
-#~ msgstr "%s - %s --  %s - "
-
-#~ msgid "Report style"
-#~ msgstr "Txostenaren estiloa"
-
-#~ msgid "Display N lines"
-#~ msgstr "Bistaratu N lerro"
-
-#~ msgid "Exact Time"
-#~ msgstr "Ordu zehatza"
-
-#~ msgid "Sort by exact time"
-#~ msgstr "Ordenatu ordu zehatzaren arabera"
-
-#, fuzzy
-#~ msgid "Compute unrealized gains and losses"
-#~ msgstr "Sartu irabaziak eta galerak"
-
-#~ msgid "Enable hyperlinks in reports"
-#~ msgstr "Gaitu hiperestekak txostenetan"
-
-#~ msgid "Asterisk"
-#~ msgstr "Izartxoa"
-
-#~ msgid " Stylesheet"
-#~ msgstr " Estilo-orria"
-
-#~ msgid "This report has no options."
-#~ msgstr "Txosten honek ez du aukerarik."
-
-#~ msgid ""
-#~ "A list of directories (strings) indicating where to look for html and "
-#~ "parsed-html files. Each element must be a string representing a directory "
-#~ "or a symbol where 'default expands to the default path, and 'current "
-#~ "expands to the current value of the path."
-#~ msgstr ""
-#~ "html fitxategiak eta html fitxategi analizatuak bilatzeko direktorio-"
-#~ "zerrenda. Elementu bakoitzak direktorio bat adierazten duen kate bat izan "
-#~ "behar du, edo ikur bat, 'lehenetsia izanik bide-izen lehenetsia, eta "
-#~ "'unekoa bide-izenaren uneko balioa."
-
-#, fuzzy
-#~ msgid "Invoice&nbsp;#&nbsp;%d"
-#~ msgstr "Faktura&nbsp;Data"
-
-#~ msgid "Invoice&nbsp;Date"
-#~ msgstr "Faktura&nbsp;Data"
-
-#~ msgid "<br>Invoice&nbsp;in&nbsp;progress...."
-#~ msgstr "<br>Faktura&nbsp;progresioa...."
-
-#~ msgid "Current Year Start"
-#~ msgstr "Aurtengo urtearen hasiera"
-
-#~ msgid "Current Year End"
-#~ msgstr "Aurtengo urtearen amaiera"
-
-#~ msgid "Previous Year Start"
-#~ msgstr "Aurreko urtearen hasiera"
-
-#~ msgid "End of the Previous Year"
-#~ msgstr "Aurreko urtearen amaiera"
-
-#, fuzzy
-#~ msgid "Start of Financial Period"
-#~ msgstr "Txostenaren denboraldi-hasiera"
-
-#, fuzzy
-#~ msgid "End of Financial Period"
-#~ msgstr "Aurreko finantza-urtearen amaiera"
-
-#~ msgid "End of the current month"
-#~ msgstr "Hil honen amaiera"
-
-#~ msgid "The beginning of the previous month"
-#~ msgstr "Aurreko hilaren hasiera"
-
-#~ msgid "The end of the latest quarterly accounting period"
-#~ msgstr "Kontabilitateko azken hiruhilekoaren amaiera"
-
-#~ msgid "Changes have been made since the last Save. Save the data to file?"
-#~ msgstr ""
-#~ "Aldaketak egin dira azkeneko aldiz gorde zenetik. Datuak gorde nahi "
-#~ "dituzu?"
-
-#~ msgid "-- Single Sources --"
-#~ msgstr "-- Iturburu bakunak --"
-
-#~ msgid "-- Multiple Sources --"
-#~ msgstr "-- Iturburu anizkoitzak --"
-
-#~ msgid "Choose the type of Billing Term"
-#~ msgstr "Aukeratu ordaintzeko modua"
-
-#~ msgid "Number of days from now"
-#~ msgstr "Zenbat egun gaurtik aurrera"
-
-#~ msgid "Absolute Day-of-the-month"
-#~ msgstr "Hileko eguna"
-
-#~ msgid "Credit Account:"
-#~ msgstr "Abonu-kontua:"
-
-#~ msgid "_New Invoice"
-#~ msgstr "_Faktura berria"
-
-#~ msgid "Display the toolbar"
-#~ msgstr "Erakutsi tresna-barra"
-
-#~ msgid "Display the Summary Bar"
-#~ msgstr "Erakutsi laburpen-barra"
-
-#~ msgid "Process Pa_yment"
-#~ msgstr "Prozesatu _ordainketa"
-
-#~ msgid "_Gnucash Users Manual"
-#~ msgstr "_Gnucash-en erabiltzailearen eskuliburua"
-
-#~ msgid "Close this invoice window"
-#~ msgstr "Itxi faktura-leiho hau"
-
-#~ msgid "Entity type does not match Customer: %s"
-#~ msgstr "Entitate-mota ez dator bat Bezeroarekin: %s"
-
-#~ msgid "Entity type does not match Vendor: %s"
-#~ msgstr "Entitate-mota ez dator bat Hornitzailearekin: %s"
-
-#~ msgid "Entity type does not match Employee: %s"
-#~ msgstr "Entitate-mota ez dator bat Enplegatuarekin: %s"
-
-#~ msgid "Entity type does not match Invoice: %s"
-#~ msgstr "Entitate-mota ez dator bat Fakturarekin: %s"
-
-#~ msgid "Error message not available"
-#~ msgstr "Ez dago errore-mezurik erabilgarri"
-
-#~ msgid ""
-#~ "Error occurred while saving Account:\n"
-#~ "%d: %s"
-#~ msgstr ""
-#~ "Errorea kontua gordetzean:\n"
-#~ "%d: %s"
-
-#~ msgid "Once: %s"
-#~ msgstr "Behin: %s"
-
-#~ msgid "Weekdays: (x%u)"
-#~ msgstr "Astegunetan: (x%u)"
-
-#~ msgid "Weekdays"
-#~ msgstr "Astegunetan"
-
-#~ msgid "Weekly (x%d): %s"
-#~ msgstr "Astero (x%d): %s"
-
-#~ msgid "Weekly: %s"
-#~ msgstr "Astero: %s"
-
-#~ msgid "Bi-Weekly, %ss"
-#~ msgstr "Bi astez behin: %ss"
-
-#~ msgid "Semi-monthly (x%u): %s, %s"
-#~ msgstr "Hamabostean behin (x%u): %s, %s"
-
-#~ msgid "Semi-monthly: %s, %s"
-#~ msgstr "Hamabostean behin: %s, %s"
-
-#~ msgid "Monthly (x%u): %u"
-#~ msgstr "Hilero (x%u): %u"
-
-#~ msgid "Monthly: %u"
-#~ msgstr "Hilero: %u"
-
-#~ msgid "Quarterly (x%u): %u"
-#~ msgstr "Hiru hilez behin (x%u): %u"
-
-#~ msgid "Quarterly: %u"
-#~ msgstr "Hiru hilez behin: %u"
-
-#~ msgid "Tri-Yearly (x%u): %u"
-#~ msgstr "Lau hilez behin (x%u): %u"
-
-#~ msgid "Tri-Yearly: %u"
-#~ msgstr "Lau hilez behin: %u"
-
-#~ msgid "Semi-Yearly (x%u): %u"
-#~ msgstr "Urtean birritan (x%u): %u"
-
-#~ msgid "Semi-Yearly: %u"
-#~ msgstr "Urtean birritan: %u"
-
-#~ msgid "Yearly (x%u): %s/%u"
-#~ msgstr "Urtero (x%u): %s/%u"
-
-#~ msgid "Yearly: %s/%u"
-#~ msgstr "Urtero: %s/%u"
-
-#~ msgid ""
-#~ "Another user has modified this transaction\n"
-#~ "\tjust a moment ago. Please look at their changes,\n"
-#~ "\tand try again, if needed.\n"
-#~ msgstr ""
-#~ "Beste erabiltzaile batek transakzioa aldatu du\n"
-#~ "\toraintxe. Begiratu zer aldatu duen, eta, behar\n"
-#~ "\tizanez gero, saiatu berriro.\n"
-
-#~ msgid "Check Register"
-#~ msgstr "Egiaztatu erregistroa"
-
-#~ msgid "Print a check using a standard format"
-#~ msgstr "Inprimatu txekea formatu estandarrean"
-
-#~ msgid "Print _Check"
-#~ msgstr "Inprimatu _txekea"
-
-#~ msgid "Date _Range"
-#~ msgstr "Data-_bitartea"
-
-#~ msgid "_All"
-#~ msgstr "_Denak"
-
-#~ msgid "Chec_k & Repair"
-#~ msgstr "_Egiaztatu eta konpondu"
-
-#~ msgid "Reconcile the main account for this register"
-#~ msgstr "Berdinkatu erregistro honen kontu nagusia"
-
-#~ msgid "Register date ranges"
-#~ msgstr "Erregistroko data-bitarteak"
-
-#~ msgid "Set Date Range"
-#~ msgstr "Ezarri data-bitartea"
-
-#~ msgid "End date:"
-#~ msgstr "Amaiera-data:"
-
-#~ msgid "[rtw] THIS WINDOW SHOULD NOT BE CREATED"
-#~ msgstr "[rtw] THIS WINDOW SHOULD NOT BE CREATED"
-
-#~ msgid "[rmw] THIS WINDOW SHOULD NOT BE CREATED"
-#~ msgstr "[rmw] THIS WINDOW SHOULD NOT BE CREATED"
-
-#~ msgid "N_otes"
-#~ msgstr "O_harrak"
-
-#~ msgid "[wrtw] THIS WINDOW SHOULD NOT BE CREATED"
-#~ msgstr "[wrtw] THIS WINDOW SHOULD NOT BE CREATED"
-
-#~ msgid "NOTUSED: Defined in src/gnome/window-register.c"
-#~ msgstr "ERABILI GABEA: Hemen Definitua: src/gnome/window-register.c"
-
-#~ msgid "Commodity:"
-#~ msgstr "Balorea:"
-
-#~ msgid "Timezone for these quotes:"
-#~ msgstr "Kotizazio hauen ordu-zona:"
-
-#~ msgid "General Information"
-#~ msgstr "Informazio orokorra"
-
-#~ msgid "Transfer Type"
-#~ msgstr "Transferentzia-mota"
-
-#~ msgid "Enter opening balances"
-#~ msgstr "Sartu hasierako saldoak"
-
-#~ msgid "Add"
-#~ msgstr "Gehitu"
-
-#~ msgid "End of Period Payments"
-#~ msgstr "Denboraldi-amaierako ordainketak"
-
-#~ msgid "Beginning of Period Payments"
-#~ msgstr "Ordainketa periodikoen hasiera"
-
-#~ msgid "Discrete Compounding"
-#~ msgstr "Konposatu diskretua"
-
-#~ msgid "Continuous Compounding"
-#~ msgstr "Konposatu jarraitua"
-
-#~ msgid "Help Topics"
-#~ msgstr "Laguntza-gaiak"
-
-#~ msgid "Topics"
-#~ msgstr "Gaiak"
-
-#~ msgid "Search GnuCash Help"
-#~ msgstr "Bilatu GnuCash-en laguntzan"
-
-#~ msgid ""
-#~ "Type a single term into the box and hit 'search'. At the moment, this "
-#~ "search engine does not support complex searches, just single words."
-#~ msgstr ""
-#~ "Idatzi hitz bat koadroan eta sakatu 'bilatu'. Oraingoz, hitz soilak "
-#~ "bakarrik onartzen ditu bilatzaileak, ez du bilaketa konplexurik egiten."
-
-#~ msgid "Help"
-#~ msgstr "Laguntza"
-
-#~ msgid "Search results"
-#~ msgstr "Bilaketaren emaitza"
-
-#~ msgid ""
-#~ "Uncheck if you do not want this dialog to run if you start GnuCash up "
-#~ "again. "
-#~ msgstr ""
-#~ "Berriro GnuCash irekitzen duzunean elkarrizketa-koadro hau ikusi nahi ez "
-#~ "baduzu, desauta ezazu. "
-
-#~ msgid "Run dialog for new user again?"
-#~ msgstr "Erabiltzaile berriaren elkarrizketa berriro exekutatu?"
-
-#~ msgid "Prices"
-#~ msgstr "Prezioak"
-
-#~ msgid "                                  "
-#~ msgstr "                                  "
-
-#~ msgid "                    "
-#~ msgstr "                    "
-
-#~ msgid "%P %%"
-#~ msgstr "%% %P"
-
-#~ msgid "YYYY-MM-DD"
-#~ msgstr "YYYY-MM-DD"
-
-#~ msgid "Create "
-#~ msgstr "Sortu "
-
-#~ msgid "No End"
-#~ msgstr "Amaierarik ez"
-
-#~ msgid "End Date: "
-#~ msgstr "Amaiera-data: "
-
-#~ msgid "Remaining Occurrences:"
-#~ msgstr "Geratzen diren gertaldiak:"
-
-#~ msgid "Remaining Number of Occurrences"
-#~ msgstr "Geratzen den gertaldi-kopurua"
-
-#~ msgid "Recurrence Frequency"
-#~ msgstr "Errepikatze-maiztasuna"
-
-#~ msgid "This window should never be realized."
-#~ msgstr "Leiho honek ez luke azaldu beharko."
-
-#~ msgid "Daily [M-F]"
-#~ msgstr "Egunero [al-or]"
-
-#~ msgid "Select initial date, above."
-#~ msgstr "Hautatu hasiera-data goian."
-
-#~ msgid "Occuring in"
-#~ msgstr "Noiz gertatu:"
-
-#~ msgid "Tri-Yearly"
-#~ msgstr "Lau hilez behin"
-
-#~ msgid "Semi-Yearly"
-#~ msgstr "Urtean birritan"
-
-#~ msgid "REPLACEME with the Register control box"
-#~ msgstr "REPLACEME with the Register control box"
-
-#~ msgid "End "
-#~ msgstr "Amaitu "
-
-#~ msgid "%v/%u (%p%%)"
-#~ msgstr "%v/%u (%% %p)"
-
-#~ msgid "Share Distribution:"
-#~ msgstr "Akzio-banaketa:"
-
-#~ msgid "Cash Amount:"
-#~ msgstr "Diru-kopurua:"
-
-#~ msgid "You must enter values for the other quantities."
-#~ msgstr "Beste kantitateen balioak sartu behar dituzu."
-
-#~ msgid "You must enter a valid expression."
-#~ msgstr "Baliozko adierazpide bat sartu behar duzu."
-
-#~ msgid "old-file-import"
-#~ msgstr "old-file-import"
-
-#~ msgid "user:price-editor"
-#~ msgstr "erabiltzailea:prezio-editorea"
-
-#~ msgid "user:stock-split"
-#~ msgstr "erabiltzailea:akzio-zatitzea"
-
-#~ msgid "user:xfer-dialog"
-#~ msgstr "erabiltzailea:xfer-elkarrizketa"
-
-#~ msgid ""
-#~ "The following transactions are presently being edited;\n"
-#~ "are you sure you want to delete them?"
-#~ msgstr ""
-#~ "Ondorengo transakzioak editatzen ari dira orain;\n"
-#~ "ziur zaude ezabatu nahi dituzula?"
-
-#~ msgid ""
-#~ "Cancelling the Since-Last-Run dialog will revert all changes.\n"
-#~ "Are you sure you want to lose all Scheduled Transaction changes?"
-#~ msgstr ""
-#~ "Azken-exekutatu-zenetik bertan behera uzten baduzu, aldaketak galduko "
-#~ "dituzu.\n"
-#~ "Ziur zaude transakzio planifikatuan egindako aldaketak galdu nahi "
-#~ "dituzula?"
-
-#~ msgid "Needs values for variables"
-#~ msgstr "Aldagaien balioak behar dira"
-
-#~ msgid "Tip of the Day"
-#~ msgstr "Eguneko aholkua"
-
-#~ msgid "Display this dialog next time"
-#~ msgstr "Bistaratu elkarrizketa hau hurrengo aldian"
-
-#~ msgid "-*-helvetica-bold-r-normal-*-*-180-*-*-p-*-*-*"
-#~ msgstr "-*-helvetica-bold-r-normal-*-*-180-*-*-p-*-*-*"
-
-#~ msgid "You must enter a valid balance."
-#~ msgstr "Baliozko saldo bat sartu behar duzu."
-
-#~ msgid "3/1 Year"
-#~ msgstr "3/1 urte"
-
-#~ msgid "5/1 Year"
-#~ msgstr "5/1 urte"
-
-#~ msgid "7/1 Year"
-#~ msgstr "7/1 urte"
-
-#~ msgid "10/1 Year"
-#~ msgstr "10/1 urte"
-
-#~ msgid "Enter GnuCash Network passphrase:"
-#~ msgstr "Sartu GnuCash-en sareko pasaesaldia:"
-
-#~ msgid "GnuCash Network authorization failed."
-#~ msgstr "GnuCash sareko baimenak huts egin du."
-
-#~ msgid "Enter passphrase:"
-#~ msgstr "Sartu pasaesaldia:"
-
-#~ msgid "Verify passphrase:"
-#~ msgstr "Egiaztatu pasaesaldia:"
-
-#~ msgid "Passphrases did not match."
-#~ msgstr "Pasaesaldiak ez datoz bat"
-
-#~ msgid "Version: Gnucash-%s"
-#~ msgstr "Bertsioa: Gnucash-%s"
-
-#~ msgid "Account Tree"
-#~ msgstr "Kontu-zuhaitza"
-
-#~ msgid "Name of account view"
-#~ msgstr "Kontu-ikuspegiaren izena"
-
-#~ msgid ""
-#~ "To open an account, you must first\n"
-#~ "choose an account to open."
-#~ msgstr ""
-#~ "Kontu bat irekitzeko, kontua aukeratu\n"
-#~ "behar da lehendabizi."
-
-#~ msgid ""
-#~ "To edit an account, you must first\n"
-#~ "choose an account to edit.\n"
-#~ msgstr ""
-#~ "Kontu bat editatzeko, kontua aukeratu\n"
-#~ "behar da lehendabizi.\n"
-
-#~ msgid "Are you sure you want to delete the %s account?"
-#~ msgstr "Ziur zaude %s kontua ezabatu nahi duzula?"
-
-#~ msgid ""
-#~ "Are you sure you want to delete the %s\n"
-#~ "account and all its children?"
-#~ msgstr ""
-#~ "Ziur zaude %s kontua eta bere ume guztiak\n"
-#~ "ezabatu nahi dituzula?"
-
-#~ msgid ""
-#~ "To delete an account, you must first\n"
-#~ "choose an account to delete.\n"
-#~ msgstr ""
-#~ "Kontu bat ezabatzeko, kontua aukeratu\n"
-#~ "behar da lehendabizi.\n"
-
-#~ msgid ""
-#~ "To reconcile an account, you must first\n"
-#~ "choose an account to reconcile."
-#~ msgstr ""
-#~ "Kontu bat berdinkatzeko, kontua aukeratu\n"
-#~ "behar da lehendabizi."
-
-#~ msgid "You must select an account to check and repair."
-#~ msgstr "Egiaztatu eta konpondu beharreko kontua hautatu behar duzu."
-
-#~ msgid "Edit the account view options"
-#~ msgstr "Editatu kontua ikusteko aukerak"
-
-#~ msgid "Stock S_plit..."
-#~ msgstr "Akzio-_zatitzea..."
-
-#~ msgid "Open S_ubaccounts"
-#~ msgstr "Ireki _azpikontuak"
-
-#~ msgid "Net Assets non currency commodities total"
-#~ msgstr "Aktibo garbia (dibisa ez diren baloreak) guztira"
-
-#~ msgid "Net Assets grand total"
-#~ msgstr "Aktibo garbiaren totala"
-
-#~ msgid "Profits total"
-#~ msgstr "Irabazia guztira"
-
-#~ msgid "Profits grand total"
-#~ msgstr "Irabaziaren totala"
-
-#~ msgid "Select \"Exit\" to exit GnuCash."
-#~ msgstr "GnuCash-etik irteteko, hautatu \"Irten\"."
-
-#~ msgid "Open _Recent"
-#~ msgstr "_Azken fitxategiak"
-
-#~ msgid "Commodity _Editor"
-#~ msgstr "Baloreen _editorea"
-
-#~ msgid "Financial _Calculator"
-#~ msgstr "_Kalkulagailu finantzarioa"
-
-#~ msgid "Save the file to disk"
-#~ msgstr "Gorde fitxategia diskoan"
-
-#~ msgid "Exit"
-#~ msgstr "Irten"
-
-#~ msgid "Finish"
-#~ msgstr "Amaitu"
-
-#~ msgid ""
-#~ "The current transaction has been changed.\n"
-#~ "Would you like to record it?"
-#~ msgstr ""
-#~ "Transakzioa aldatu egin da.\n"
-#~ "Gorde nahi duzu?"
-
-#~ msgid ""
-#~ "You would be modifying a transaction with reconciled splits!\n"
-#~ "This is not a good idea as it will cause your reconciled balance to be "
-#~ "off."
-#~ msgstr ""
-#~ "Berdinkatutako zatiak dituen transakzio bat aldatuko duzu!\n"
-#~ "Ez da batere ideia ona, berdinkatutako saldoa okertuko baituzu."
-
-#~ msgid ""
-#~ "Are you sure you want to delete\n"
-#~ "   %s\n"
-#~ "from the transaction\n"
-#~ "   %s ?"
-#~ msgstr ""
-#~ "Ziur zaude\n"
-#~ "   %s\n"
-#~ "ezabatu nahi duzula\n"
-#~ "   %s transakziotik?"
-
-#~ msgid "Are you sure you want to delete the current transaction?"
-#~ msgstr "Ziur zaude transakzio hau ezabatu nahi duzula?"
-
-#~ msgid "Add criterion"
-#~ msgstr "Gehitu irizpidea"
-
-#~ msgid "Search for..."
-#~ msgstr "Bilatu..."
-
-#~ msgid "Currency/security:"
-#~ msgstr "Dibisa/titulua:"
-
-#~ msgid ""
-#~ "Enter the ticker symbol or currency code for the commodity. Example: USD"
-#~ msgstr "Sartu balorearen kotizazio-ikurra edo moneta-kodea. Adibidez: USD"
-
-#~ msgid ""
-#~ "Enter the type of commodity. For stocks, this is often an exchange on "
-#~ "which the stock is traded. You can choose an existing type from the list "
-#~ "or enter a new type with the keyboard."
-#~ msgstr ""
-#~ "Sartu balore-mota. Akzioetan, akzioak kotizatzen duen burtsa izan ohi da. "
-#~ "Zerrendako mota bat aukera dezakezu, edo mota berri bat idatzi "
-#~ "teklatuaren bidez."
-
-#~ msgid "No options!"
-#~ msgstr "Ez dago aukerarik!"
-
-#~ msgid "Old Value"
-#~ msgstr "Balio zaharra"
-
-#~ msgid "The following changes must be made. Continue?"
-#~ msgstr "Ondorengo aldaketak egin behar dira. Jarraitu nahi duzu?"
-
-#~ msgid "There was an error loading the specified URL."
-#~ msgstr "Errorea gertatu da zehaztutako URLa kargatzean"
-
-#~ msgid "Error message"
-#~ msgstr "Errore-mezua"
-
-#~ msgid ""
-#~ "GnuCash Network is disabled and the link you have clicked requires it.\n"
-#~ "You can enable it in the Network section\n"
-#~ "of the Preferences dialog."
-#~ msgstr ""
-#~ "GnuCash-en Sarea desgaituta dago, eta esteka horrek sarea behar du.\n"
-#~ "Gaitzeko, joan Hobespenen elkarrizketa-koadroko\n"
-#~ "Sarea izeneko atalera."
-
-#~ msgid "Enter URI to load:"
-#~ msgstr "Sartu kargatu beharreko URIa:"
-
-#~ msgid "Print Help window"
-#~ msgstr "Inprimatu laguntza-leihoa"
-
-#~ msgid "Close this Help window"
-#~ msgstr "Itxi laguntza-leiho hau"
-
-#~ msgid "Transfer Information"
-#~ msgstr "Transferentzia-informazioa"
-
-#~ msgid " "
-#~ msgstr " "
-
-#~ msgid ""
-#~ "The account %s\n"
-#~ "does not allow transactions.\n"
-#~ msgstr ""
-#~ "%s kontuak \n"
-#~ "ez du transakziorik onartzen.\n"
-
-#~ msgid "Import currency and stock information"
-#~ msgstr "Inportatu dibisa eta akzioen informazioa"
-
-#~ msgid "Import currency and stock information "
-#~ msgstr "Inportatu dibisa eta akzioen informazioa "
-
-#~ msgid ""
-#~ "The file you are loading is from an older version of GnuCash. \n"
-#~ "Information about currencies, stocks, and mutual funds needs to\n"
-#~ "be updated for the new version. \n"
-#~ "\n"
-#~ "This dialog will prompt you for some additional information about \n"
-#~ "each currency, stock, and mutual fund that appear in your\n"
-#~ "accounts.  After you have entered this information, you can\n"
-#~ "update your accounts for the new version of GnuCash.\n"
-#~ "\n"
-#~ "Hit \"Cancel\" now to stop loading the file. "
-#~ msgstr ""
-#~ "Kargatzen ari zaren fitxategia GnuCash-en bertsio zaharragokoa da. \n"
-#~ "Dibisei, akzioei eta inbertsio-funtsei buruzko informazioa\n"
-#~ "bertsio-berrira eguneratu behar da. \n"
-#~ "\n"
-#~ "Zure kontuetan azaltzen diren dibisa, akzio eta inbertsio-funtsei\n"
-#~ "buruzko datu batzuk eskatuko zaizkizu elkarrizketa-koadro honetan.\n"
-#~ "Datu horiek sartutakoan, zure kontuak eguneratu ahal izango dituzu\n"
-#~ "GnuCash-en bertsio berrira egokitzeko.\n"
-#~ "\n"
-#~ "Fitxategia kargatzeari uzteko, sakatu \"Utzi\". "
-
-#~ msgid "Update your accounts with the new information"
-#~ msgstr "Eguneratu kontuak informazio berriarekin"
-
-#~ msgid ""
-#~ "Click \"Finish\" to update your accounts to use the new \n"
-#~ "information you have entered.\n"
-#~ "\n"
-#~ "Click \"Cancel\" to cancel the file-loading process.  \n"
-#~ "\n"
-#~ "Click \"Back\" to review your currency selections."
-#~ msgstr ""
-#~ "Sakatu \"Amaitu\" kontua eguneratu eta sartu duzun \n"
-#~ "informazioa erabiltzen hasteko.\n"
-#~ "\n"
-#~ "Sakatu \"Utzi\" fitxategia kargatzeko prozesua ezeztatzeko. \n"
-#~ "\n"
-#~ "Sakatu \"Atzera\" dibisa-hautapena berrikusteko."
-
-#~ msgid ""
-#~ "Pick the type of the currency or security. For national currencies, \n"
-#~ "use \"CURRENCY\". Enter a new type in the box if the ones in the\n"
-#~ "pick list are inappropriate."
-#~ msgstr ""
-#~ "Hautatu dibisa- edo titulu-mota. Moneta nazionalak direnean, \n"
-#~ "erabili \"MONETA\". Zerrendako motak ez badira egokiak, idatzi\n"
-#~ "mota berria koadroan."
-
-#~ msgid ""
-#~ "Enter a descriptive name for the currency or stock, such as \n"
-#~ "\"US Dollar\" or \"Red Hat Stock\""
-#~ msgstr ""
-#~ "Sartu dibisaren edo akzioaren izen ulergarria; esate baterako \n"
-#~ "\"US dolarrak\" edo \"Red Hat akzioak\""
-
-#~ msgid ""
-#~ "Enter the ticker symbol (such as \"RHAT\"), national currency symbol \n"
-#~ "(such as \"USD\"), or other unique abbreviation for the name."
-#~ msgstr ""
-#~ "Sartu kotizazioaren ikurra (adib. \"RHAT\"), moneta nazionalaren ikurra\n"
-#~ "(adib. \"USD\"), edo izenari dagokion bestelako laburtzapen bat."
-
-#~ msgid ""
-#~ "Click \"Next\" to accept the information and move \n"
-#~ "to the next currency or stock."
-#~ msgstr ""
-#~ "Sakatu \"Hurrengoa\" informazioa onartu eta hurrengo \n"
-#~ "dibisa edo akziora joateko."
-
-#~ msgid ""
-#~ "You must put values for the type, name,\n"
-#~ "and abbreviation of the currency/stock."
-#~ msgstr ""
-#~ "Dibisaren/akzioaren motan, izenean, eta\n"
-#~ "laburtzapenean balioak sartu behar dituzu."
-
-#~ msgid "New Account (child of selected) ..."
-#~ msgstr "Kontu berria (hautatutakoaren umea) ..."
-
-#~ msgid "EDIT"
-#~ msgstr "EDITATU"
-
-#~ msgid ""
-#~ "-Red transactions require your intervention or they will NOT be "
-#~ "imported.\n"
-#~ "-Yellow transactions probably require your intervention or they will be "
-#~ "imported unbalanced.\n"
-#~ "-Green transactions will be imported balanced (you may still want to "
-#~ "double check the match or destination account).\n"
-#~ "\n"
-#~ "-Select \"A\" to Add the transaction as new\n"
-#~ "-Select \"R\" to Reconcile a matching transaction\n"
-#~ "-Select neither to Skip (The transaction won't be imported at all)\n"
-#~ "-\"Select Import Action\" allows you to change the matching transaction "
-#~ "to reconcile, or the destination account of the auto-balance split (if "
-#~ "required)."
-#~ msgstr ""
-#~ "-Transakzio GORRIetan zuk esku hartu behar duzu, edo EZ dira "
-#~ "inportatuko.\n"
-#~ "-Transakzio HORIetan beharbada zuk esku hartu beharko duzu, edo "
-#~ "deskoadratuta inportatuko dira.\n"
-#~ "-Transakzio BERDEak koadratuta inportatuko dira (nahi baduzu, egiaztatu "
-#~ "bat datozen edo helburuko kontua).\n"
-#~ "\n"
-#~ "-Hautatu \"A\" transakzio berri gisa gehitzeko\n"
-#~ "-Hautatu \"R\" bat datorren transakzio bat berdinkatzeko\n"
-#~ "-Ez hautatu ezer saltatzeko (Transakzioa ez da inportatuko)\n"
-#~ "-\"Hautatu inportatzeko ekintza\" erabil dezakezu transakzioa "
-#~ "berdinkatzeko markatzeko, edo automatikoki koadratutako zatiaren "
-#~ "helburuko kontua aldatzeko (behar izanez gero)."
-
-#~ msgid "Initial HBCI Setup"
-#~ msgstr "Hasierako HBCI konfigurazioa"
-
-#~ msgid "HBCI account name"
-#~ msgstr "HBCI kontuaren izena"
-
-#~ msgid ""
-#~ "Update \n"
-#~ "account list"
-#~ msgstr ""
-#~ "Eguneratu \n"
-#~ "kontu-zerrenda"
-
-#~ msgid ""
-#~ "AqHBCI \n"
-#~ "Setup"
-#~ msgstr ""
-#~ "AqHBCI \n"
-#~ "konfigurazioa"
-
-#~ msgid "HBCI Version"
-#~ msgstr "HBCI bertsioa"
-
-#~ msgid ""
-#~ "The PIN you entered was wrong.\n"
-#~ "You have one further wrong retry left.\n"
-#~ "Do you want to try again?"
-#~ msgstr ""
-#~ "Idatzi duzun PIN zenbakia okerrekoa da.\n"
-#~ "Beste behin bakarrik sar dezakezu kodea oker.\n"
-#~ "Berriro saiatu nahi duzu?"
-
-#~ msgid ""
-#~ "The PIN you entered was wrong.\n"
-#~ "You have two further wrong retries left.\n"
-#~ "Do you want to try again?"
-#~ msgstr ""
-#~ "Idatzi duzun PIN zenbakia okerrekoa da.\n"
-#~ "Beste bi aldiz bakarrik sar dezakezu kodea oker.\n"
-#~ "Berriro saiatu nahi duzu?"
-
-#~ msgid ""
-#~ "The PIN you entered was too short.\n"
-#~ "Do you want to try again?"
-#~ msgstr ""
-#~ "Idatzi duzun PIN zenbakia laburregia da.\n"
-#~ "Berriro saiatu nahi duzu?"
-
-#~ msgid ""
-#~ "There was an error when loading the plugin for your security medium \n"
-#~ "(see log window). Probably the versions of your currently installed \n"
-#~ "OpenHBCI library and of the plugin do not match. In that case you need \n"
-#~ "to recompile and reinstall the plugin again. Aborting now."
-#~ msgstr ""
-#~ "Errore bat gertatu zure segurtasuneko euskarriaren plugin-a kargatzean \n"
-#~ "(ikus egunkariaren leihoa). Instalatuta daukazun OpenHBCI "
-#~ "liburutegiaren \n"
-#~ "bertsioa eta plugin-arena ez dira bat etorriko seguru asko. Horrela "
-#~ "bada,\n"
-#~ "plugin-a berriro konpilatu eta instalatu beharko duzu. Abortatzen."
-
-#~ msgid ""
-#~ "Your security medium is not supported. No appropriate plugin \n"
-#~ "has been found for that medium. Aborting."
-#~ msgstr ""
-#~ "Segurtasuneko euskarria ez da onartzen. Ez da plugin egokirik \n"
-#~ "aurkitu euskarri horrentzat. Abortatzen."
-
-#~ msgid "Choose HBCI bank"
-#~ msgstr "Aukeratu HBCI bankua"
-
-#~ msgid ""
-#~ "More than one HBCI bank is available for \n"
-#~ "the requested operation. Please choose \n"
-#~ "the one that should be used."
-#~ msgstr ""
-#~ "Eragiketa hori egiteko HBCI banku bat baino \n"
-#~ "gehiago dituzu erabilgarri. Aukeratu erabili \n"
-#~ "nahi duzuna."
-
-#~ msgid "%s (%s) at bank %s (%s)"
-#~ msgstr "%s (%s), %s (%s) bankuan"
-
-#~ msgid "Choose HBCI customer"
-#~ msgstr "Aukeratu HBCI bezeroa"
-
-#~ msgid ""
-#~ "More than one HBCI customer is available for \n"
-#~ "the requested operation. Please choose \n"
-#~ "the one that should be used."
-#~ msgstr ""
-#~ "Eragiketa hori egiteko HBCI bezero bat baino \n"
-#~ "gehiago dituzu erabilgarri. Aukeratu erabili \n"
-#~ "nahi duzuna."
-
-#~ msgid "Choose HBCI user"
-#~ msgstr "Aukeratu HBCI erabiltzailea"
-
-#~ msgid ""
-#~ "More than one HBCI user is available for \n"
-#~ "the requested operation. Please choose \n"
-#~ "the one that should be used."
-#~ msgstr ""
-#~ "Eragiketa hori egiteko HBCI erabiltzaile bat \n"
-#~ "baino gehiago dituzu erabilgarri. Aukeratu \n"
-#~ "erabili nahi duzuna."
-
-#~ msgid "HBCI Issue Direct Debit"
-#~ msgstr "HBCI jaulki zuzeneko kargua"
-
-#~ msgid "Online Banking & Importing"
-#~ msgstr "Lineako bankua eta inportazioa"
-
-#~ msgid "Do you really want to sort the list of templates?"
-#~ msgstr "Benetan ordenatu nahi duzu txantiloi-zerrenda?"
-
-#~ msgid "Online HBCI Transaction"
-#~ msgstr "Lineako HBCI transakzioa"
-
-#~ msgid "OFX Import"
-#~ msgstr "OFX inportazioa"
-
-#~ msgid "Import OFX files"
-#~ msgstr "Inportatu OFX fitxategiak"
-
-#~ msgid ""
-#~ "GnuCash can import financial data from OFX (Quicken \n"
-#~ "Interchange Format) files written by Quicken/QuickBooks,\n"
-#~ "MS Money, Moneydance, and many other programs. \n"
-#~ "\n"
-#~ "The import process has several steps. Your GnuCash\n"
-#~ "accounts will not be changed until you click \"Finish\"\n"
-#~ "at the end of the process. \n"
-#~ "\n"
-#~ "Click \"Next\" to start loading your OFX data, or \"Cancel\"\n"
-#~ "to abort the process. "
-#~ msgstr ""
-#~ "GnuCash-ek OFX (Quicken Interchange Format) fitxategietatik \n"
-#~ "inporta ditzake datu finantzarioak. Fitxategi horiek \n"
-#~ "Quicken/QuickBooks, MS Money, Moneydance, eta beste programa\n"
-#~ "askorekin egindakoak izan daitezke. \n"
-#~ "\n"
-#~ "Inportazio-prozesuak hainbat urrats ditu. GnuCash-eko \n"
-#~ "kontuak ez dira aldatuko harik eta \"Amaitu\" sakatu arte.\n"
-#~ "\n"
-#~ "Sakatu \"Hurrengoa\" OFX datuak kargatzen hasteko, edo \"Utzi\"\n"
-#~ "prozesua abortatzeko. "
-
-#~ msgid "OFX Files"
-#~ msgstr "OFX fitxategiak"
-
-#~ msgid "QIF Filename:"
-#~ msgstr "QIF fitxategi-izena:"
-
-#~ msgid "QIF Files"
-#~ msgstr "QIF fitxategiak"
-
-#~ msgid ""
-#~ "You are about to change a reconciled split.\n"
-#~ "Are you sure you want to do that?"
-#~ msgstr ""
-#~ "Berdinkatutako zati bat aldatzera zoaz.\n"
-#~ "Ziur zaude hori dela egin nahi duzuna?"
-
-#~ msgid ""
-#~ "register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
-#~ msgstr ""
-#~ "register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
-
-#~ msgid ""
-#~ "register-hint-font:-adobe-helvetica-medium-o-normal--*-120-*-*-*-*-*-*"
-#~ msgstr ""
-#~ "register-hint-font:-adobe-helvetica-medium-o-normal--*-120-*-*-*-*-*-*"
-
-#~ msgid "Style sheet template:"
-#~ msgstr "Estilo-orriaren txantiloia:"
-
-#~ msgid "                       "
-#~ msgstr "                       "
-
-#~ msgid "(Report not found)"
-#~ msgstr "(Txostena ez du aurkitu)"
-
-#~ msgid "Print report window"
-#~ msgstr "Inprimatu txostenaren leihoa"
-
-#~ msgid "Save report"
-#~ msgstr "Gorde txostena"
-
-#~ msgid ""
-#~ "GnuCash can act as a simple web browser!  To display\n"
-#~ "a web page as a report, use the Sample & Custom -> \n"
-#~ "\"Custom Web Report\" report."
-#~ msgstr ""
-#~ "GnuCash web arakatzaile soil gisa era erabil daiteke! \n"
-#~ "Txosten bat web orri gisa ikusteko, erabili Adibidea eta \n"
-#~ "pertsonalizatua -> \"Web txosten pertsonalizatua\" txostena."
-
-#~ msgid ""
-#~ "If you keep multiple account views open, it may be helpful to give each "
-#~ "one a descriptive name"
-#~ msgstr ""
-#~ "Hainbat kontu-ikuspegi edukitzen badituzu irekita, lagungarria izango "
-#~ "zaizu ikuspegi bakoitzari izena ematea"
-
-#~ msgid "Double click expands parent accounts"
-#~ msgstr "Klik bikoitzak kontu gurasoak zabaltzen ditu"
-
-#~ msgid ""
-#~ "Double clicking on an account with children expands the account instead "
-#~ "of opening a register."
-#~ msgstr ""
-#~ "Umeak dituen kontu batean klik bikoitza egitean, kontua zabaltzen da, "
-#~ "erregistroa ireki beharrean."
-
-#~ msgid "Account types to display"
-#~ msgstr "Bistaratzeko kontu-motak"
-
-#~ msgid "Account fields to display"
-#~ msgstr "Bistaratzeko kontu-eremuak"
-
-#~ msgid "Balance in Report Currency"
-#~ msgstr "Saldoa txostenaren monetan"
-
-#~ msgid "Present Balance in Report Currency"
-#~ msgstr "Oraingo saldoa txostenaren monetan"
-
-#~ msgid "Cleared Balance"
-#~ msgstr "Saldo kitatua"
-
-#~ msgid "Cleared Balance in Report Currency"
-#~ msgstr "Saldo kitatua txostenaren monetan"
-
-#~ msgid "Reconciled Balance in Report Currency"
-#~ msgstr "Saldo berdinkatua txostenaren monetan"
-
-#~ msgid "Future Minimum Balance"
-#~ msgstr "Etorkizuneko gutxieneko saldoa"
-
-#~ msgid "Future Minimum Balance in Report Currency"
-#~ msgstr "Etorkizuneko gutxieneko saldoa txostenaren monetan"
-
-#~ msgid "Total in Report Currency"
-#~ msgstr "Totala txostenaren monetan"
-
-#~ msgid "Can't save window state"
-#~ msgstr "Ezin da gorde leihoaren egoera"
-
-#~ msgid "Loading tip-of-the-day..."
-#~ msgstr "Eguneko aholkua kargatzen..."
-
-#~ msgid "Loading configs..."
-#~ msgstr "Konfigurazioak kargatzen..."
-
-#~ msgid "_Style Sheets..."
-#~ msgstr "_Estilo-orriak..."
-
-#~ msgid "Show version."
-#~ msgstr "Erakutsi bertsioa."
-
-#~ msgid "Generate an argument summary."
-#~ msgstr "Sortu argumentuen laburpena."
-
-#~ msgid "Don't load any file, including autoloading the last file."
-#~ msgstr ""
-#~ "Ez kargatu fitxategirik bat ere, eta ez kargatu automatikoki azken "
-#~ "fitxategia."
-
-#~ msgid "Enable debugging code."
-#~ msgstr "Gaitu arazketa-kodea."
-
-#~ msgid "Enable developers mode."
-#~ msgstr "Gaitu garatzaileen modua."
-
-#~ msgid "Logging level from 0 (least logging) to 5 (most logging)."
-#~ msgstr ""
-#~ "Egunkarian erregistratzeko maila 0 (oso gutxi) eta 5 (ia dena) artekoa"
-
-#~ msgid ""
-#~ "List of directories to search when looking for config files. Each element "
-#~ "must be a string representing a directory or a symbol where 'default "
-#~ "expands to the default path, and 'current expands to the current value of "
-#~ "the path."
-#~ msgstr ""
-#~ "Konfigurazio-fitxategiak bilatzeko direktorio-zerrenda. Elementu "
-#~ "bakoitzak direktorio bat adierazten duen kate bat izan behar du, edo ikur "
-#~ "bat, 'lehenetsia izanik bide-izen lehenetsia, eta 'unekoa bide-izenaren "
-#~ "uneko balioa."
-
-#~ msgid ""
-#~ "List of directories to search when looking for shared data files. Each "
-#~ "element must be a string representing a directory or a symbol where "
-#~ "'default expands to the default path, and 'current expands to the current "
-#~ "value of the path."
-#~ msgstr ""
-#~ "Datu-fitxategi partekatuak bilatzeko direktorio-zerrenda. Elementu "
-#~ "bakoitzak direktorio bat adierazten duen kate bat izan behar du, edo ikur "
-#~ "bat, 'lehenetsia izanik bide-izen lehenetsia, eta 'unekoa bide-izenaren "
-#~ "uneko balioa."
-
-#~ msgid "Show this help message"
-#~ msgstr "Erakutsi laguntza-mezu hau"
-
-#~ msgid "Enable debugging mode"
-#~ msgstr "Gaitu arazketa-modua"
-
-#~ msgid "Enable developers mode"
-#~ msgstr "Gaitu garatzaileen modua"
-
-#~ msgid "Evaluate the guile command"
-#~ msgstr "Ebaluatu guile komandoa"
-
-#~ msgid "Load the given .scm file"
-#~ msgstr "Kargatu emandako .scm fitxategia"
-
-#~ msgid "Run the RPC Server if GnuCash was configured with --enable-rpc"
-#~ msgstr ""
-#~ "Exekutatu RPC zerbitzaria GnuCash konfiguratzeko --enable-rpc erabili bada"
-
-#~ msgid "GnuCash Tutorial and Concepts Guide"
-#~ msgstr "GnuCash-en tutoriala eta kontzeptuen gida"
-
-#~ msgid "Features"
-#~ msgstr "Eginbideak"
-
-#~ msgid "Easy to Use"
-#~ msgstr "Erabilerraza"
-
-#~ msgid "Tracks Your Investments"
-#~ msgstr "Zure inbertsioen jarraipena"
-
-#~ msgid "International Support"
-#~ msgstr "Nazioarteko euskarria"
-
-#~ msgid "Business Support"
-#~ msgstr "Negozioaren euskarria"
-
-#~ msgid "Misc"
-#~ msgstr "Hainbat"
-
-#~ msgid "What's New in v1.8"
-#~ msgstr "Zer da berri 1.8 bertsioan?"
-
-#~ msgid "About this Book"
-#~ msgstr "Liburu honi buruz"
-
-#~ msgid "Top Ten Reasons to Use GnuCash"
-#~ msgstr "GnuCash erabiltzeko 10 arrazoi nagusiak"
-
-#~ msgid "Installation"
-#~ msgstr "Instalazioa"
-
-#~ msgid "Accounting Concepts"
-#~ msgstr "Kontabilitateko kontzeptuak"
-
-#~ msgid "The 5 Basic Accounts"
-#~ msgstr "Oinarrizko 5 kontuak"
-
-#~ msgid "The Principal Accounting Equation"
-#~ msgstr "Kontabilitateko ekuazio nagusia"
-
-#~ msgid "Double Entry"
-#~ msgstr "Partida bikoa"
-
-#~ msgid "Data Entry Concepts"
-#~ msgstr "Datuak sartzeko kontzeptuak"
-
-#~ msgid "File, Accounts and Transactions"
-#~ msgstr "Fitxategia, kontuak eta transakzioak"
-
-#~ msgid "The GnuCash Interface"
-#~ msgstr "GnuCash-en interfazea"
-
-#~ msgid "Account Tree Window"
-#~ msgstr "Kontu-zuhaitzaren leihoa"
-
-#~ msgid "Tool Bar Buttons"
-#~ msgstr "Tresna-barrako botoiak"
-
-#~ msgid "Menu Items"
-#~ msgstr "Menu-elementuak"
-
-#~ msgid "Menu Shortcuts"
-#~ msgstr "Menuaren lasterbideak"
-
-#~ msgid "International"
-#~ msgstr "Nazioartekoa"
-
-#~ msgid "Register Colors"
-#~ msgstr "Erregistro-koloreak"
-
-#~ msgid "Getting Help"
-#~ msgstr "Laguntza lortzea"
-
-#~ msgid "Web Access"
-#~ msgstr "Web sarbidea"
-
-#~ msgid "Topic Search"
-#~ msgstr "Gai-bilaketa"
-
-#~ msgid "Creating and Saving Files"
-#~ msgstr "Fitxategiak sortu eta gordetzea"
-
-#~ msgid "Importing QIF Files"
-#~ msgstr "QIF fitxategiak inportatzea"
-
-#~ msgid "Backing Up and Recovering Data"
-#~ msgstr "Datuen babeskopia egin eta berreskuratzea"
-
-#~ msgid "Backup file (.xac)"
-#~ msgstr "Babeskopia-fitxategia (.xac)"
-
-#~ msgid "Log file (.log)"
-#~ msgstr "Egunkari-fitxategia (.log)"
-
-#~ msgid "Lock files (.LNK and .LCK)"
-#~ msgstr "Blokeo-fitxategiak (.LNK eta .LCK)"
-
-#~ msgid "Putting It All Together"
-#~ msgstr "Dena batera jartzea"
-
-#~ msgid "Balance Sheet Accounts"
-#~ msgstr "Balantzeko kontuak"
-
-#~ msgid "Income and Expense Accounts"
-#~ msgstr "Sarrera eta gastuen kontuak"
-
-#~ msgid "Principle of Balance"
-#~ msgstr "Saldoaren printzipioa"
-
-#~ msgid "Simple Example"
-#~ msgstr "Adibide soila"
-
-#~ msgid "The Basic Top Level Accounts"
-#~ msgstr "Goi-mailako oinarrizko kontuak"
-
-#~ msgid "Making Sub-Accounts"
-#~ msgstr "Azpikontuak sortzea"
-
-#~ msgid "Basic Concepts"
-#~ msgstr "Oinarrizko kontzeptuak"
-
-#~ msgid "The Account Register"
-#~ msgstr "Kontu-erregistroa"
-
-#~ msgid "Simple Two Account Transaction"
-#~ msgstr "Bi kontuko transakzio soila"
-
-#~ msgid "Features of the Account Register"
-#~ msgstr "Kontu-erregistroaren eginbideak"
-
-#~ msgid "Choosing a Register Style"
-#~ msgstr "Erregistro-estilo bat aukeratzea"
-
-#~ msgid "Using Entry Shortcuts"
-#~ msgstr "Sarreren lasterbideak erabiltzea"
-
-#~ msgid "Reconcile Window"
-#~ msgstr "Berdinkatze-leihoa"
-
-#~ msgid "Creating from the Ledger"
-#~ msgstr "Liburu nagusitik sortzea"
-
-#~ msgid "Creating from the Editor"
-#~ msgstr "Editoretik sortzea"
-
-#~ msgid "Additional Transaction Examples"
-#~ msgstr "Transakzioen adibide gehiago"
-
-#~ msgid "Checkbook"
-#~ msgstr "Txeke-liburua"
-
-#~ msgid "Entering Deposits"
-#~ msgstr "Gordailuak sartzea"
-
-#~ msgid "Entering Withdrawals"
-#~ msgstr "Diru-ateratzeak sartzea"
-
-#~ msgid "ATM/Cash Withdrawals"
-#~ msgstr "Kutxazaineko/Kutxako diru-ateratzeak"
-
-#~ msgid "Reconciling Your Accounts"
-#~ msgstr "Zure kontuak berdinkatzea"
-
-#~ msgid "Credit Cards"
-#~ msgstr "Kreditu-txartelak"
-
-#~ msgid "Concepts"
-#~ msgstr "Kontzeptuak"
-
-#~ msgid "Complete Setup"
-#~ msgstr "Konfigurazio osoa"
-
-#~ msgid "Entering Charges"
-#~ msgstr "Karguak sartzea"
-
-#~ msgid "Entering Payments"
-#~ msgstr "Ordainketak sartzea"
-
-#~ msgid "Purchases"
-#~ msgstr "Erosketak"
-
-#~ msgid "Loans"
-#~ msgstr "Maileguak"
-
-#~ msgid "Terminology"
-#~ msgstr "Terminologia"
-
-#~ msgid "Setting Up Accounts"
-#~ msgstr "Kontuak konfiguratzea"
-
-#~ msgid "Mortgage (How-To)"
-#~ msgstr "Hipoteka (Nola)"
-
-#~ msgid "Example: Monthly Payments"
-#~ msgstr "Adibidez: hileroko ordainketak"
-
-#~ msgid "Example: Length of Loan"
-#~ msgstr "Adibidez: maileguaren luzera"
-
-#~ msgid "Advanced: Calculation Details"
-#~ msgstr "Aurreratua: kalkuluaren xehetasunak"
-
-#~ msgid "Types of Investments"
-#~ msgstr "Inbertsio-motak"
-
-#~ msgid "Predefined Accounts"
-#~ msgstr "Aurrez definitutako kontuak"
-
-#~ msgid "Custom Accounts Example"
-#~ msgstr "Kontu pertsonalizatuen adibidea"
-
-#~ msgid "Interest Bearing Accounts"
-#~ msgstr "Interesa ematen duten kontuak"
-
-#~ msgid "Account Setup"
-#~ msgstr "Kontu-konfigurazioa"
-
-#~ msgid "Setup Your Stock Portfolio"
-#~ msgstr "Konfiguratu zure akzio-zorroa"
-
-#~ msgid "Setup Your Preexisting Stocks"
-#~ msgstr "Konfiguratu zure lehengo akzioak"
-
-#~ msgid "Buying New Investments"
-#~ msgstr "Inbertsio berriak erostea"
-
-#~ msgid "Setting Stock Price"
-#~ msgstr "Akzioaren prezioa ezartzea"
-
-#~ msgid "Initial Price Editor Setup"
-#~ msgstr "Hasierako prezio-editorearen konfigurazioa"
-
-#~ msgid "Setting Stock Price Manually"
-#~ msgstr "Akzioaren prezioa eskuz ezartzea"
-
-#~ msgid "Setting Stock Price Automatically"
-#~ msgstr "Akzioaren prezioa automatikoki ezartzea"
-
-#~ msgid "Display Stock Value"
-#~ msgstr "Akzioaren balioa bistaratzea"
-
-#~ msgid "Selling Stocks"
-#~ msgstr "Akzioak saltzea"
-
-#~ msgid "Todo Investment Docs"
-#~ msgstr "Egiteko inbertsioen dokumentuak"
-
-#~ msgid "Selling"
-#~ msgstr "Saltzea"
-
-#~ msgid "Caution about Valuation"
-#~ msgstr "Balorazioari buruzko arazoak"
-
-#~ msgid "Taxation"
-#~ msgstr "Zergak"
-
-#~ msgid "Multiple Currencies"
-#~ msgstr "Moneta anitz"
-
-#~ msgid "GnuCash Currency Support"
-#~ msgstr "GnuCash-en moneten euskarria"
-
-#~ msgid "Setting International Preferences"
-#~ msgstr "Nazioarteko hobespenak ezartzea"
-
-#~ msgid "Recording Currency Exchange (How-To)"
-#~ msgstr "Moneten kanbioa erregistratzea (Nola)"
-
-#~ msgid "Recording Purchases in a Foreign Currency (How-To)"
-#~ msgstr "Atzerri-monetako erosketak erregistratzea (Nola)"
-
-#~ msgid "Tracking Currency Investments (How-To)"
-#~ msgstr "Dibisa-inbertsioen jarraipena (Nola)"
-
-#~ msgid "Reconciling Statements in a Foreign Currency (How-To)"
-#~ msgstr "Atzerri-monetako kontu-laburpenak berdinkatzea (Nola)"
-
-#~ msgid "Updating Exchange Rates (How-To)"
-#~ msgstr "Kanbio-tasak eguneratzea (Nola)"
-
-#~ msgid "Putting It All Together (Examples)"
-#~ msgstr "Dena batera jartzea (adibideak)"
-
-#~ msgid "Depreciation"
-#~ msgstr "Balio-galera"
-
-#~ msgid "Depreciation Schemes"
-#~ msgstr "Balio-galeraren eskemak"
-
-#~ msgid "Overview of Business Features"
-#~ msgstr "Negozioetako eginbideen azalpen orokorra"
-
-#~ msgid "Initial Setup"
-#~ msgstr "Hasierako konfigurazioa"
-
-#~ msgid "Register Your Company"
-#~ msgstr "Erregistratu zure enpresa"
-
-#~ msgid "System Components"
-#~ msgstr "Sistema-osagaiak"
-
-#~ msgid "Find and Edit"
-#~ msgstr "Bilatu eta editatu"
-
-#~ msgid "Assign Starting Invoice Number"
-#~ msgstr "Esleitu hasierako faktura-zenbakia"
-
-#~ msgid "Customer Jobs"
-#~ msgstr "Bezeroaren lanak"
-
-#~ msgid "Changing the Invoice Appearance"
-#~ msgstr "Fakturaren itxura aldatzea"
-
-#~ msgid "Bills"
-#~ msgstr "Fakturak"
-
-#~ msgid "Vendor Jobs"
-#~ msgstr "Hornitzailearen lanak"
-
-#~ msgid "Payroll"
-#~ msgstr "Nomina"
-
-#~ msgid "Protocol"
-#~ msgstr "Protokoloa"
-
-#~ msgid "Step 1: Deductions List"
-#~ msgstr "1. urratsa: kenkarien zerrenda"
-
-#~ msgid "Step 3: Pay the Employee"
-#~ msgstr "3. urratsa: ordaindu enplegatuari"
-
-#~ msgid "Step 4: Pay the Government"
-#~ msgstr "4. urratsa: ordaindu gobernuari"
-
-#~ msgid "Build Protocol"
-#~ msgstr "Eraiki protokoloa"
-
-#~ msgid "Pay an Employee"
-#~ msgstr "Ordaindu enplegatuari"
-
-#~ msgid "Pay the Government"
-#~ msgstr "Ordaindu gobernuari"
-
-#~ msgid "Appendix A: Migration Guide"
-#~ msgstr "A eranskina: migrazio-gida"
-
-#~ msgid "Appendix B: Frequently Asked Questions"
-#~ msgstr "B eranskina: maiz egiten diren galderak"
-
-#~ msgid "Appendix C: Contributed Account Trees"
-#~ msgstr "C eranskina: emandako kontu-zuhaitzak"
-
-#~ msgid "Appendix D: GNU Free Documentation License"
-#~ msgstr "D eranskina: GNU Dokumentazio librearen lizentzia"
-
-#~ msgid "Introduction to GnuCash"
-#~ msgstr "GnuCash-en sarrera"
-
-#~ msgid "What is GnuCash?"
-#~ msgstr "Zer da GnuCash?"
-
-#~ msgid "Getting Started"
-#~ msgstr "Erabiltzen hasteko"
-
-#~ msgid "Running GnuCash for the First Time"
-#~ msgstr "GnuCash lehen aldiz abiaraztean"
-
-#~ msgid "Usage"
-#~ msgstr "Erabilera"
-
-#~ msgid "List of Transactions"
-#~ msgstr "Transakzio-zerrenda"
-
-#~ msgid "Report Window"
-#~ msgstr "Txostenaren leihoa"
-
-#~ msgid "Tool Windows"
-#~ msgstr "Tresnen leihoak"
-
-#~ msgid "Scheduled Transactions Window"
-#~ msgstr "Transakzio planifikatuen leihoa"
-
-#~ msgid "Help Window"
-#~ msgstr "Laguntza-leihoa"
-
-#~ msgid "Setting Up and Editing Accounts"
-#~ msgstr "Kontuak konfiguratu eta editatzea"
-
-#~ msgid "Types of GnuCash Accounts"
-#~ msgstr "GnuCash-eko kontu-motak"
-
-#~ msgid "To Create a New Account"
-#~ msgstr "Kontu berria sortzeko"
-
-#~ msgid "To Edit an Account"
-#~ msgstr "Kontu bat editatzeko"
-
-#~ msgid "To Edit a Chart of Accounts"
-#~ msgstr "Kontuen diagrama bat editatzeko"
-
-#~ msgid "To Delete an Account"
-#~ msgstr "Kontu bat ezabatzeko"
-
-#~ msgid "To Jump to Another Account"
-#~ msgstr "Beste kontu batera joateko"
-
-#~ msgid "To Reconcile an Account to a Statement"
-#~ msgstr "Kontu bat kontu-laburpenarekin berdinkatzeko"
-
-#~ msgid "To Perform a Stock Split"
-#~ msgstr "Akzio-zatitzea egiteko"
-
-#~ msgid "Stock Split Druid"
-#~ msgstr "Akzio-zatitzeko morroia"
-
-#~ msgid "Using the Register to Record Transactions"
-#~ msgstr "Erregistroa erabiltzea transakzioak gordetzeko"
-
-#~ msgid "Changing the Register View"
-#~ msgstr "Erregistroaren ikuspegia aldatzea"
-
-#~ msgid "Enter Directly in the Register Window"
-#~ msgstr "Sartu zuzenean erregistro-leihoan"
-
-#~ msgid "Enter in the Transfer Funds Window"
-#~ msgstr "Sartu funtsak transferitzeko leihoan"
-
-#~ msgid "To Enter Multiple Split Transactions"
-#~ msgstr "Zati anitzeko transakzioak sartzeko"
-
-#~ msgid "To Enter Multiple Currency Transactions"
-#~ msgstr "Moneta anitzeko transakzioak sartzeko"
-
-#~ msgid "To Edit a Transaction"
-#~ msgstr "Transakzio bat editatzeko"
-
-#~ msgid "To Delete a Transaction"
-#~ msgstr "Transakzio bat ezabatzeko"
-
-#~ msgid "To Remove Transaction Splits"
-#~ msgstr "Transakzio-zatiak kentzeko"
-
-#~ msgid "To Copy a Transaction"
-#~ msgstr "Transakzio bat kopiatzeko"
-
-#~ msgid "To Schedule Transactions"
-#~ msgstr "Transakzioak planifikatzeko"
-
-#~ msgid "Scheduled Transaction Editor"
-#~ msgstr "Transakzio planifikatuen editorea"
-
-#~ msgid "Mortgage & Loan Repayment Druid"
-#~ msgstr "Hipoteka eta maileguen amortizazioaren morroia"
-
-#~ msgid "To Print Checks"
-#~ msgstr "Txekeak inprimatzeko"
-
-#~ msgid "Using GnuCash Reports and Charts"
-#~ msgstr "GnuCash-en txostenen eta diagramen erabilera"
-
-#~ msgid "Types of Reports and Graphs"
-#~ msgstr "Txostenen eta grafikoen motak"
-
-#~ msgid "Assets & Liabilities"
-#~ msgstr "Aktiboa eta Pasiboa"
-
-#~ msgid "Income & Expense"
-#~ msgstr "Sarrerak eta Gastuak"
-
-#~ msgid "Business Reports"
-#~ msgstr "Negozio-txostenak"
-
-#~ msgid "To Create Reports and Graphs"
-#~ msgstr "Txostenak eta grafikoak sortzeko"
-
-#~ msgid "To Customize Reports and Graphs"
-#~ msgstr "Txostenak eta grafikoak pertsonalizatzeko"
-
-#~ msgid "To Print or Export Reports and Graphs"
-#~ msgstr "Txostenak eta grafikoak inprimatzeko edo esportatzeko"
-
-#~ msgid "Customizing GnuCash"
-#~ msgstr "GnuCash pertsonalizatzea"
-
-#~ msgid "Setting Your Preferences"
-#~ msgstr "Hobespenak ezartzea"
-
-#~ msgid "User Info"
-#~ msgstr "Erabiltzailearen datuak"
-
-#~ msgid "Advanced"
-#~ msgstr "Aurreratua"
-
-#~ msgid "Changing Style Sheets"
-#~ msgstr "Estilo-orriak aldatzea"
-
-#~ msgid "Setting Tax Options"
-#~ msgstr "Zerga-aukerak ezartzea"
-
-#~ msgid "TXF Export - Known Anomalies and Limitations"
-#~ msgstr "TXF esportazioa - Anomalia eta muga ezagunak"
-
-#~ msgid "Report a bug"
-#~ msgstr "Akatsen berri eman"
-
-#~ msgid "Date Format Display"
-#~ msgstr "Data-formatuaren bistaratzea"
-
-#~ msgid "US-style: mm/dd/yyyy"
-#~ msgstr "US estiloa: hh/ee/uuuu"
-
-#~ msgid "UK-style dd/mm/yyyy"
-#~ msgstr "UK estiloa: ee/hh/uuuu"
-
-#~ msgid "Continental Europe: dd.mm.yyyy"
-#~ msgstr "Europa kontinentala: ee.hh.uuuu"
-
-#~ msgid "ISO Standard: yyyy-mm-dd"
-#~ msgstr "ISO estandarra: uuuu-hh-ee"
-
-#~ msgid "Default system locale format"
-#~ msgstr "Sistemaren konfigurazio lokalaren formatu lehenetsia"
-
-#~ msgid "Basic Ledger"
-#~ msgstr "Oinarrizko liburu nagusia"
-
-#~ msgid "Auto-Split Ledger"
-#~ msgstr "Zatiketa automatikoko liburu nagusia"
-
-#~ msgid "Confirm before changing reconciled"
-#~ msgstr "Berretsi berdinkatua aldatu aurretik"
-
-#~ msgid ""
-#~ "If selected, use a dialog to confirm a change to a reconciled transaction."
-#~ msgstr ""
-#~ "Hautatzen bada, elkarrizketa-koadro bat azalduko da berdinkatutako "
-#~ "transakzioak aldatu aurretik."
-
-#~ msgid "The font to use in the register"
-#~ msgstr "Erregistroan erabiliko den letra-tipoa"
-
-#~ msgid "The font used to show hints in the register"
-#~ msgstr "Erregistroko aholkuak erakusteko erabiliko den letra-tipoa"
-
-#~ msgid "The header background color"
-#~ msgstr "Goiburuaren atzeko planoko kolorea"
-
-#~ msgid "Primary color"
-#~ msgstr "Lehen mailako kolorea"
-
-#~ msgid "The default background color for register rows"
-#~ msgstr "Erregistroko errenkaden atzeko planoko kolore lehenetsia"
-
-#~ msgid "Secondary color"
-#~ msgstr "Bigarren mailako kolorea"
-
-#~ msgid "The default secondary background color for register rows"
-#~ msgstr "Erregistroko errenkaden atzeko planoko bigarren mailako kolorea"
-
-#~ msgid "Primary active color"
-#~ msgstr "Lehen mailako kolore aktiboa"
-
-#~ msgid "Secondary active color"
-#~ msgstr "Bigarren mailako kolore aktiboa"
-
-#~ msgid "The secondary background color for the current register row"
-#~ msgstr ""
-#~ "Uneko erregistro-errenkadaren atzeko planoko bigarren mailako kolorea"
-
-#~ msgid "The default background color for split rows in the register"
-#~ msgstr "Erregistroko zatien errenkaden atzeko planoko kolore lehenetsia"
-
-#~ msgid "Start date"
-#~ msgstr "Hasiera-data"
-
-#~ msgid "End date"
-#~ msgstr "Amaiera-data"
-
-#~ msgid "Allow modification of less commonly used settings."
-#~ msgstr "Utzi gutxien erabiltzen diren ezarpenak aldatzen"
-
-#~ msgid "Choose whether to display icons, text, or both for toolbar buttons"
-#~ msgstr "Aukeratu tresna-barrako botoietan ikonoak, testua, ala biak ikusi"
-
-#~ msgid "Icons and Text"
-#~ msgstr "Ikonoak eta testua"
-
-#~ msgid "Show both icons and text"
-#~ msgstr "Erakutsi ikonoak eta testua"
-
-#~ msgid "/ (Slash)"
-#~ msgstr "/ (Barra)"
-
-#~ msgid "Income/Salary/Taxable"
-#~ msgstr "Sarrera/Soldata/Zergaduna"
-
-#~ msgid "\\ (Backslash)"
-#~ msgstr "\\ (Alderantzizko barra)"
-
-#~ msgid "Income\\Salary\\Taxable"
-#~ msgstr "Sarrera\\Soldata\\Zergaduna"
-
-#~ msgid "Income-Salary-Taxable"
-#~ msgstr "Sarrera-Soldata-Zergaduna"
-
-#~ msgid "Income.Salary.Taxable"
-#~ msgstr "Sarrera.Soldata.Zergaduna"
-
-#~ msgid "Use file compression"
-#~ msgstr "Erabili fitxategi-konpresioa"
-
-#~ msgid "Run on GnuCash start"
-#~ msgstr "Exekutatu GnuCash abiaraztean"
-
-#~ msgid "Should the Since-Last-Run window appear on GnuCash startup?"
-#~ msgstr "Azken-exekutatu-zenetik leihoa erakutsi GnuCash abiaraztean?"
-
-#~ msgid "Auto-Create new Scheduled Transactions by default"
-#~ msgstr "Automatikoki sortu transakzio planifikatu berria lehenespenez"
-
-#~ msgid ""
-#~ "Should new Scheduled Transactions have the 'Auto Create' flag set by "
-#~ "default?"
-#~ msgstr ""
-#~ "Transakzio planifikatu berriei 'automatikoki sortu' marka ezarri behar "
-#~ "zaie lehenespenez?"
-
-#~ msgid ""
-#~ "Should new Scheduled Transactions with the 'AutoCreate' flag set also be "
-#~ "set to notify?"
-#~ msgstr ""
-#~ "'Automatikoki sortu' marka duten transakzio planifikatu berriei "
-#~ "jakinarazteko marka ere ezarri behar zaie?"
-
-#~ msgid "Default number of days in advance to create"
-#~ msgstr "Zenbat egun lehenago sortu"
-
-#~ msgid ""
-#~ "Default number of days in advance to create new Scheduled Transactions."
-#~ msgstr "Zenbat egun lehenago sortu transakzio planifikatua"
-
-#~ msgid ""
-#~ "Default number of days in advance to remind on new Scheduled Transactions."
-#~ msgstr "Zenbat egun lehenago oroitarazi transakzio planifikatua"
-
-#~ msgid "How many lines in the template register?"
-#~ msgstr "Zenbat lerro txantiloiko erregistroan?"
-
-#~ msgid "_+Advanced"
-#~ msgstr "_+Aurreratua"
-
-#~ msgid "Application MDI mode"
-#~ msgstr "Aplikazioaren MDI modua"
-
-#~ msgid "Choose how new windows are created for reports and account trees."
-#~ msgstr ""
-#~ "Aukeratu nola sortu behar diren txostenen eta kontu-zuhaitzen leihoak."
-
-#~ msgid "Notebook"
-#~ msgstr "Koadernoa"
-
-#~ msgid ""
-#~ "One window is used for all displays (select contents through Window menu)"
-#~ msgstr ""
-#~ "Leiho bakarra erabiliko da bistaratzen guztietan (Leihoa menuaren bidez "
-#~ "hautatuko da edukia)"
-
-#~ msgid "Default MDI mode can be set in the GNOME Control Center"
-#~ msgstr "MDI modu lehenetsia GNOMEren kontrol-zentroan ezar daiteke"
-
-#~ msgid "By default, show every transaction in an account."
-#~ msgstr "Lehenespenez, erakutsi kontuko transakzio guztiak."
-
-#~ msgid "Current Financial Year Start"
-#~ msgstr "Aurtengo finantza-urtearen hasiera"
-
-#~ msgid "Start of the current financial year/accounting period"
-#~ msgstr "Aurtengo finantza-/kontabilitate-urtearen hasiera"
-
-#~ msgid "Previous Financial Year Start"
-#~ msgstr "Aurreko finantza-urtearen hasiera"
-
-#~ msgid "The start of the previous financial year/accounting period"
-#~ msgstr "Aurreko finantza-/kontabilitate-urtearen hasiera"
-
-#~ msgid "End of the previous Financial year/Accounting Period"
-#~ msgstr "Aurreko finantza-/kontabilitate-urtearen amaiera"
-
-#~ msgid "End Current Financial Year"
-#~ msgstr "Aurtengo finantza-urtearen amaiera"
-
-#~ msgid "End of the current Financial year/Accounting Period"
-#~ msgstr "Aurtengo finantza-/kontabilitate-urtearen amaiera"
-
-#~ msgid "URL to frame"
-#~ msgstr "Markoaren URLa"
-
-#~ msgid "URL to display in report"
-#~ msgstr "Txostenean bistaratzeko URLa"
-
-#~ msgid "Custom Web Report"
-#~ msgstr "Web txosten pertsonalizatua"
-
-#~ msgid "online book"
-#~ msgstr "lineako liburua"
-
-#~ msgid "Show Foreign Currencies/Shares of Stock"
-#~ msgstr "Erakutsi dibisak/akzioak"
-
-#~ msgid "Include splits with no shares for calculating money-in and money-out"
-#~ msgstr ""
-#~ "Txertatu akzioarik gabeko diru-sarrera eta diru-irteera kalkulatzeko"
-
-#~ msgid "Profit And Loss"
-#~ msgstr "Galdu-irabaziak"
-
-#~ msgid "Show account with 0.0 balance"
-#~ msgstr "Erakutsi kontua 0.0 saldoarekin"
-
-#~ msgid "Auto-CLEAR threshold"
-#~ msgstr "Automatikoki garbitzeko atalasea"
-
-#~ msgid "View the quick report of bills coming due soon."
-#~ msgstr "Laster ordaindu beharreko fakturen txosten bizkorra."
-
-#~ msgid "View and Edit the available Billing Terms"
-#~ msgstr "Ikusi eta editatu erabilgarri dauden ordaintzeko moduak"
-
-#~ msgid "View and Edit the available Tax Tables"
-#~ msgstr "Ikusi eta editatu erabilgarri dauden zerga-taulak"
-
-#~ msgid "Invoice Tax Included?"
-#~ msgstr "Faktura-zerga barne?"
-
-#~ msgid "Bill Tax Included?"
-#~ msgstr "Faktura-zerga barne?"
-
-#~ msgid "Notify Bills Due?"
-#~ msgstr "Fakturen mugaegunaren berri eman?"
-
-#~ msgid "Bills Due Days"
-#~ msgstr "Fakturen mugaeguna"
-
-#~ msgid " Report: "
-#~ msgstr " Txostena: "
-
-#~ msgid "Type Menu"
-#~ msgstr "Motaren menua"
-
-#~ msgid "(taxincluded)"
-#~ msgstr "(zerga barne)"
-
-#~ msgid "(taxtables)"
-#~ msgstr "(zerga-taulak)"
-
-#~ msgid "(terms)"
-#~ msgstr "(baldintzak)"
-
-#~ msgid "Value ($)"
-#~ msgstr "Balioa ($)"
-
-#~ msgid "Apr, Jul, Dec"
-#~ msgstr "api.,uzt.,abe."
-
-#~ msgid "Apr, Oct"
-#~ msgstr "api.,urr."
-
-#~ msgid "April"
-#~ msgstr "apirila"
-
-#~ msgid "August"
-#~ msgstr "abuztua"
-
-#~ msgid "Feb, Apr, Oct"
-#~ msgstr "ots.,api.,urr."
-
-#~ msgid "Feb, Aug"
-#~ msgstr "ots.,abu."
-
-#~ msgid "Feb, May, Aug, Nov"
-#~ msgstr "ots.,mai.,abu.,aza."
-
-#~ msgid "February"
-#~ msgstr "otsaila"
-
-#~ msgid "Jan, Apr, Jul, Oct"
-#~ msgstr "urt.,api.,uzt.,urr."
-
-#~ msgid "Jan, Jul"
-#~ msgstr "urt.,uzt."
-
-#~ msgid "Jan, May, Sep"
-#~ msgstr "urt.,mai.,ira."
-
-#~ msgid "January"
-#~ msgstr "urtarrila"
-
-#~ msgid "July"
-#~ msgstr "uztaila"
-
-#~ msgid "Jun, Dec"
-#~ msgstr "eka.,abe."
-
-#~ msgid "June"
-#~ msgstr "ekaina"
-
-#~ msgid "Mar, Jun, Nov"
-#~ msgstr "mar.,eka.,aza."
-
-#~ msgid "Mar, Jun, Sep, Dec"
-#~ msgstr "mar.,eka.,ira.,abe."
-
-#~ msgid "Mar, Sep"
-#~ msgstr "mar.,ira."
-
-#~ msgid "March"
-#~ msgstr "martxoa"
-
-#~ msgid "May"
-#~ msgstr "maiatza"
-
-#~ msgid "May, Nov"
-#~ msgstr "mai.,aza."
-
-#~ msgid "November"
-#~ msgstr "azaroa"
-
-#~ msgid "October"
-#~ msgstr "urria"
-
-#~ msgid "September"
-#~ msgstr "iraila"
-
-#~ msgid "[29th/last]"
-#~ msgstr "[29/azkena]"
-
-#~ msgid "[30th/last]"
-#~ msgstr "[30/azkena]"
-
-#~ msgid "[31st/last]"
-#~ msgstr "[31/azkena]"
-
-#~ msgid "years"
-#~ msgstr "urte"
-
-#~ msgid "Money Management"
-#~ msgstr "Diru-kudeaketa"
-
-#~ msgid "GnuCash Personal Finance"
-#~ msgstr "GnuCash Finantza pertsonala"
-
-#~ msgid "10010010"
-#~ msgstr "10010010"
-
-#~ msgid "280"
-#~ msgstr "280"
-
-#~ msgid ""
-#~ "Add \n"
-#~ "Bank"
-#~ msgstr ""
-#~ "Gehitu \n"
-#~ "Bankua"
-
-#~ msgid ""
-#~ "Add \n"
-#~ "User"
-#~ msgstr ""
-#~ "Gehitu \n"
-#~ "Erabiltzailea"
-
-#~ msgid "Bank Code:"
-#~ msgstr "Bankuaren kodea:"
-
-#~ msgid "Bank Identification"
-#~ msgstr "Bankuaren identifikazioa"
-
-#~ msgid "Choose OpenHBCI Configuration File"
-#~ msgstr "Aukeratu OpenHBCI konfigurazio-fitxategia"
-
-#~ msgid "Country Code (Germany: 280)"
-#~ msgstr "Estatuaren kodea (Alemania: 280)"
-
-#~ msgid "Customer ID (\"Kundennummer\")"
-#~ msgstr "Bezeroaren IDa (\"Kundennummer\")"
-
-#~ msgid "DDV Medium (Chip Card)"
-#~ msgstr "DDV euskarria (txip-txartela)"
-
-#~ msgid "Do these values match the values on your paper Ini-Letter?"
-#~ msgstr "Balio hauek bat datoz papereko Ini-Letter gutunekoekin?"
-
-#~ msgid "Enter Bank Information"
-#~ msgstr "Sartu banku-informazioa"
-
-#~ msgid "Enter OpenHBCI Configuration File"
-#~ msgstr "Sartu OpenHBCI konfigurazio-fitxategia"
-
-#~ msgid "Enter User Information"
-#~ msgstr "Sartu erabiltzailearen informazioa"
-
-#~ msgid ""
-#~ "Enter the IDs given from your bank here. Please make sure the spelling is "
-#~ "correct. "
-#~ msgstr "Sartu bankuak emandako IDak. Ziurtatu ongi idazten dituzula. "
-
-#~ msgid ""
-#~ "HBCI\n"
-#~ "Version"
-#~ msgstr ""
-#~ "HBCI\n"
-#~ "bertsioa"
-
-#~ msgid ""
-#~ "If you already have a key file, please choose it here and make sure the "
-#~ "User ID and\n"
-#~ "Customer ID match the ones when you created that key file earlier. \n"
-#~ "If you do not have one yet, choose a filename, and a key file will be "
-#~ "created there. Make\n"
-#~ "sure to remember the exact User ID and Customer ID specified now."
-#~ msgstr ""
-#~ "Gako-fitxategi bat baldin baduzu, aukeratu hemen eta ziurtatu "
-#~ "erabiltzaile-IDa \n"
-#~ "eta Bezero-IDa bat datozela gako-fitxategian azaltzen direnekin. \n"
-#~ "Gako-fitxategirik ez baduzu, aukeratu fitxategi-izen bat, eta bertan "
-#~ "sortuko da \n"
-#~ "gako-fitxategia. Ez ahaztu orain emandako Erabiltzaile-IDa eta Bezero-IDa."
-
-#~ msgid ""
-#~ "If you already have an OpenHBCI configuration file (e.g. from "
-#~ "'aqmoney'), \n"
-#~ "please select it here. GnuCash will continue to use your existing "
-#~ "configuration.\n"
-#~ "\n"
-#~ "If you do not yet have an OpenHBCI configuration file, please specify a "
-#~ "file name here. \n"
-#~ "A new OpenHBCI configuration file with that name will be created when "
-#~ "this HBCI \n"
-#~ "Setup finishes."
-#~ msgstr ""
-#~ "OpenHBCI konfigurazio-fitxategi bat baduzu ('aqmoney'rena adib.), "
-#~ "hautatu \n"
-#~ "hemen. GnuCash-ek konfigurazio hori erabiltzen jarraituko du.\n"
-#~ "\n"
-#~ "OpenHBCI konfigurazio-fitxategirik ez baduzu , zehaztu fitxategi-izen bat "
-#~ "hemen. \n"
-#~ "Izen horretako OpenHBCI konfigurazio-fitxategi berri bat sortuko da "
-#~ "HBCI \n"
-#~ "konfigurazioa amaitzen denean."
-
-#~ msgid ""
-#~ "If you have a Chip Card but are not sure about the exact User ID and "
-#~ "Customer ID, you can \n"
-#~ "use the tool 'hbcicard' from the libchipcard package to read these "
-#~ "numbers from the Chip Card."
-#~ msgstr ""
-#~ "Txip-txartel bat baldin baduzu, baina Erabiltzaile-IDa eta Bezero-IDa "
-#~ "ziur ez badakizkizu \n"
-#~ "erabili libchipcard paketeko 'hbcicard' tresna, txip-txarteletik zenbaki "
-#~ "horiek irakurtzeko."
-
-#~ msgid "If your bank did not specify a Customer ID, enter the User ID here."
-#~ msgstr "Bankuak ez badizu eman Bezero-IDrik, sartu Erabiltzaile-IDa hemen."
-
-#~ msgid ""
-#~ "In order to setup HBCI access to your bank, OpenHBCI first has to \n"
-#~ "retrieve the cryptographic public keys of your bank. You will need \n"
-#~ "to enter your PIN for this to happen. After the successful key \n"
-#~ "retrieval, you need to verify those against the Ini-Letter that \n"
-#~ "your bank gave to you on paper.\n"
-#~ "\n"
-#~ "Press 'Next' now to retrieve the keys from the bank. If you have just\n"
-#~ "created a new key file, you have to enter its PIN again. \n"
-#~ "\n"
-#~ "You can then see the progress of the HBCI connection in the HBCI\n"
-#~ "connection window. Please do not close the HBCI connection window\n"
-#~ "before this whole druid has finished."
-#~ msgstr ""
-#~ "Bankuan sartzeko HBCI sarbidea konfiguratzeko, bankuaren gako publiko\n"
-#~ "kriptografikoak eskuratu behar ditu OpenHBCI-k. Horretarako, zure PIN\n"
-#~ "zenbakia sartu beharko duzu. Gakoak eskuratutakoan, bankuak paperean \n"
-#~ "eman dizun Ini-Letter gutuneko gakoekin egiaztatu beharko dituzu \n"
-#~ "\n"
-#~ "Bankuaren gakoak eskuratzeko, egin klik 'Hurrengoan'. Gako-fitxategi \n"
-#~ "berria sortu baduzu, PIN zenbakia berriz sartu beharko duzu. \n"
-#~ "\n"
-#~ "HBCI konexioaren progresioa ikusiko duzu HBCI konexio-leihoan.\n"
-#~ "Ez itxi HBCI konexio-leihoa harik eta morroiak egin beharreko lan \n"
-#~ "guztiak egin arte."
-
-#~ msgid ""
-#~ "In order to update your list of HBCI-enabled accounts, your bank\n"
-#~ "server will be contacted and will be queried for the \n"
-#~ "HBCI-accessible accounts.\n"
-#~ "\n"
-#~ "Press 'Next' now to contact the bank server. You can then see the \n"
-#~ "progress of the HBCI connection in the HBCI connection window."
-#~ msgstr ""
-#~ "HBCI gaituta duten kontuen zerrenda eguneratzeko, zure bankuko \n"
-#~ "zerbitzariarekin kontaktatuko da, eta HBCI bidez atzi daitezkeen \n"
-#~ "kontuen kontsulta egingo zaio.\n"
-#~ "\n"
-#~ "Sakatu 'Hurrengoa' bankuko zerbitzariarekin kontaktatzeko. HBCI\n"
-#~ "konexioaren progresioa HBCI konexio-leihoan ikusiko duzu."
-
-#~ msgid "Ini-Letter Server"
-#~ msgstr "Ini-Letter zerbitzaria"
-
-#~ msgid "Ini-Letter User"
-#~ msgstr "Ini-Letter erabiltzailea"
-
-#~ msgid "Internet Address"
-#~ msgstr "Interneteko helbidea"
-
-#~ msgid ""
-#~ "Manually add\n"
-#~ "Account"
-#~ msgstr ""
-#~ "Eskuz gehitu\n"
-#~ "Kontua"
-
-#~ msgid "Name (optional)"
-#~ msgstr "Izena (aukerakoa)"
-
-#~ msgid ""
-#~ "Now you need to send your cryptographic public keys to the bank\n"
-#~ "server. Once you press 'Next', you public keys are sent to the \n"
-#~ "bank. ATTENTION: This step cannot be undone. Once you have sent \n"
-#~ "your keys to the bank, you cannot generate new ones but instead \n"
-#~ "have to use these for months to come (unless you personally ask \n"
-#~ "your bank to reset them).\n"
-#~ "\n"
-#~ "AGAIN ATTENTION: If you happen to encounter a bug in this unstable\n"
-#~ "Gnucash version and/or OpenHBCI, these keys might get broken and you\n"
-#~ "might actually have ask your bank to reset them and generate new ones.\n"
-#~ "\n"
-#~ "If you are really sure to proceed, then press 'Next' now to send \n"
-#~ "the keys to the bank. You can then see the progress of the HBCI \n"
-#~ "connection in the HBCI connection window."
-#~ msgstr ""
-#~ "Orain zure gako publiko kriptografikoak bidali behar dituzu bankuko \n"
-#~ "zerbitzarira. 'Hurrengoa' sakatzen duzunean, zure gako publikoak "
-#~ "bankura \n"
-#~ "bidaliko dira. KONTUZ: Urrats hori ezin da desegin. Gakoak bankura \n"
-#~ "bidali ondoren, ezingo duzu gako berririk sortu, eta hilabete batzuetan \n"
-#~ "gako horiek erabili beharko dituzu (bankuari pertsonalki gako-aldaketa \n"
-#~ "eskatu ezean).\n"
-#~ "\n"
-#~ "ETA KONTUZ: Gnucash-en bertsio ezegonkor honetan edo OpenHBCI-n akatsen \n"
-#~ "bat topatzen baduzu, gako horiek hondatu egin daitezke, eta, orduan "
-#~ "bai, \n"
-#~ "bankuari eskatu beharko dizkiozu ordezkoak.\n"
-#~ "\n"
-#~ "Ziur bazaude aurrera jarraitu nahi duzula, sakatu 'Hurrengoa' gakoak \n"
-#~ "bankura bidaltzeko. HBCI konexioaren progresioa ikusiko duzu HBCI \n"
-#~ "konexio-leihoan."
-
-#~ msgid ""
-#~ "Now you need to sign your (the User's) Ini-Letter and send it to your "
-#~ "bank. \n"
-#~ "\n"
-#~ "The initial HBCI setup is now finished.\n"
-#~ "\n"
-#~ "Once your bank has received and processed your Ini-Letter, you\n"
-#~ "have to execute this \"HBCI Setup\" druid again in order \n"
-#~ "to use the HBCI functionality in your accounts.\n"
-#~ "\n"
-#~ "Press 'Finish' now."
-#~ msgstr ""
-#~ "Orain zure (erabiltzailearen) Ini-Letter gutuna sinatu, eta bankura "
-#~ "bidali behar duzu. \n"
-#~ "\n"
-#~ "Hasierako HBCI konfigurazioa amaitu da.\n"
-#~ "\n"
-#~ "Bankuak zure Ini-Letter gutuna jaso eta prozesatzen duenean, berriro\n"
-#~ "exekutatu beharko duzu \"HBCI konfiguratzeko\" morroi hau, zure \n"
-#~ "kontuetan HBCI funtzionalitatea erabili hala izateko.\n"
-#~ "\n"
-#~ "Orain sakatu 'Amaitu'."
-
-#~ msgid "OpenHBCI Configuration File"
-#~ msgstr "OpenHBCI konfigurazio-fitxategia"
-
-#~ msgid "Path to Key File"
-#~ msgstr "Gako-fitxategiaren bide-izena"
-
-#~ msgid "Print Ini-Letter of User"
-#~ msgstr "Inprimatu erabiltzailearen Ini-Letter gutuna"
-
-#~ msgid "Public Keys will be retrieved"
-#~ msgstr "Gako publikoak eskuratuko dira"
-
-#~ msgid "RDH Medium (Key File)"
-#~ msgstr "RDH euskarria (gako-fitxategia)"
-
-#~ msgid ""
-#~ "This is the Ini-Letter of you, the user. Please print out a paper copy \n"
-#~ "by pressing 'Print'. Then press 'Next'."
-#~ msgstr ""
-#~ "Hau da zure (erabiltzailearen) Ini-Letter gutuna. Inprima ezazu "
-#~ "paperean \n"
-#~ "'Inprimatu' sakatuta. Ondoren, sakatu 'Hurrengoa'."
-
-#~ msgid "User ID (\"Benutzerkennung\")"
-#~ msgstr "Erabiltzaile-IDa (\"Benutzerkennung\")"
-
-#~ msgid "User Identification"
-#~ msgstr "Erabiltzailearen identifikazioa"
-
-#~ msgid "User Keys will be sent"
-#~ msgstr "Erabiltzailearen gakoak bidaliko dira"
-
-#~ msgid "Verify Ini-Letter from Server"
-#~ msgstr "Egiaztatu Ini-Letter gutuna zerbitzaritik"
-
-#~ msgid "www.hbci-kernel.de"
-#~ msgstr "www.hbci-kernel.de"
-
-#~ msgid ""
-#~ "You have changed the HBCI version. GnuCash will now need to \n"
-#~ "update various system parameters, including the account list.\n"
-#~ "Press 'Ok' now to proceed to updating the system and the account list."
-#~ msgstr ""
-#~ "HBCI bertsioa aldatu duzu. GnuCash-ek sistemako parametro batzuk \n"
-#~ "eguneratu beharko ditu, besteak beste, kontu-zerrenda.\n"
-#~ "Sakatu 'Ados' sistema eta kontu-zerrenda eguneratzen hasteko."
-
-#~ msgid ""
-#~ "Enter account id for new account \n"
-#~ "at bank %s (bank code %s):"
-#~ msgstr ""
-#~ "Idatzi %s bankuko (%s banku-kodea) \n"
-#~ "kontu berriaren kontu-IDa:"
-
-#~ msgid "An account with this account id at this bank already exists."
-#~ msgstr "Banku horretan badago kontu-ID hori duen kontu bat."
-
-#~ msgid "Default Customer"
-#~ msgstr "Bezero lehenetsia"
-
-#~ msgid ""
-#~ "Since the cryptographic keys of the bank cannot be verified,\n"
-#~ "you should stop contacting this Server Internet Address\n"
-#~ "and contact your bank. To help your bank figure out the\n"
-#~ "problem, you should print out this erroneous Ini-Letter\n"
-#~ "and show it to your bank. Please abort the HBCI setup\n"
-#~ "druid now."
-#~ msgstr ""
-#~ "Bankuaren gako kriptografikoak ezin direnez egiaztatu, hobe \n"
-#~ "izango duzu zerbitzari horren Interneteko helbidearekin \n"
-#~ "kontaktatzeari utzi, eta bankuarekin harremanetan jartzea. \n"
-#~ "Bankua arazoaz jabe dadin, erakuts iezaiozu Ini-Letter \n"
-#~ "akastun honen kopia. Abortatu HBCI konfiguratzeko morroia \n"
-#~ "orain. "
-
-#~ msgid ""
-#~ "Please enter and confirm new PIN for \n"
-#~ "user '%s' at bank '%s',\n"
-#~ "with at least %d characters."
-#~ msgstr ""
-#~ "Idatzi eta berretsi '%s' erabiltzailearen\n"
-#~ "'%s' bankuko PIN berria,\n"
-#~ "%d karakterekoa gutxienez."
-
-#~ msgid ""
-#~ "Please enter and confirm a new PIN for \n"
-#~ "user '%s',\n"
-#~ "with at least %d characters."
-#~ msgstr ""
-#~ "Idatzi eta berretsi '%s' \n"
-#~ "erabiltzailearen PIN berria,\n"
-#~ "%d karakterekoa gutxienez."
-
-#~ msgid ""
-#~ "Please enter and confirm a new PIN\n"
-#~ "with at least %d characters."
-#~ msgstr ""
-#~ "Idatzi eta berretsi PIN berria\n"
-#~ "%d karakterekoa gutxienez."
-
-#~ msgid ""
-#~ "Please enter PIN for \n"
-#~ "user '%s' at bank '%s'."
-#~ msgstr ""
-#~ "Idatzi '%s' erabiltzailearen\n"
-#~ "'%s' bankuko PIN zenbakia."
-
-#~ msgid ""
-#~ "Please enter PIN for \n"
-#~ "user '%s' at unknown bank."
-#~ msgstr ""
-#~ "Idatzi '%s' erabiltzailearen\n"
-#~ "banku ezezaguneko PIN zenbakia."
-
-#~ msgid ""
-#~ "Please enter the PIN for \n"
-#~ "the newly created user."
-#~ msgstr ""
-#~ "Idatzi erabiltzaile sortu\n"
-#~ "berriaren PIN zenbakia."
-
-#~ msgid ""
-#~ "Please make sure the key file for user '%s' at bank '%s' can be \n"
-#~ "accessed. If the key file is on your harddisk, simply press 'Ok'. If \n"
-#~ "the key file is on a floppy disk or other removable media, please make \n"
-#~ "sure the floppy disk or medium is correctly mounted."
-#~ msgstr ""
-#~ "Ziurtatu '%s' erabiltzailearen '%s' bankuko gako-fitxategia atzi \n"
-#~ "daitekeela. Gako-fitxategia disko gogorrean badago, sakatu 'Ados'. \n"
-#~ "Disketean edo beste euskarri aldagarri batean badago, ziurtatu "
-#~ "euskarria \n"
-#~ "behar den bezala muntatuta dagoela."
-
-#~ msgid ""
-#~ "Please make sure the key file for user '%s' can be \n"
-#~ "accessed. If the key file is on your harddisk, simply press 'Ok'. If \n"
-#~ "the key file is on a floppy disk or other removable media, please make \n"
-#~ "sure the floppy disk or medium is correctly mounted."
-#~ msgstr ""
-#~ "Ziurtatu '%s' erabiltzailearen gako-fitxategia atzi \n"
-#~ "daitekeela. Gako-fitxategia disko gogorrean badago, sakatu 'Ados'. \n"
-#~ "Disketean edo beste euskarri aldagarri batean badago, ziurtatu "
-#~ "euskarria \n"
-#~ "behar den bezala muntatuta dagoela."
-
-#~ msgid ""
-#~ "Please insert chip card for \n"
-#~ "user '%s' at bank '%s'."
-#~ msgstr ""
-#~ "Sartu '%s' erabiltzailearen\n"
-#~ "'%s' bankuko txip-txartela."
-
-#~ msgid ""
-#~ "Please insert chip card for \n"
-#~ "user '%s'."
-#~ msgstr ""
-#~ "Sartu '%s' erabiltzailearen \n"
-#~ "txip-txartela."
-
-#~ msgid ""
-#~ "Please make sure the key file for the newly created user can be \n"
-#~ "accessed. If you want to create the key file on your harddisk, simply \n"
-#~ "press 'Ok'. If you want to create the key on a floppy disk or other \n"
-#~ "removable media, please make sure the floppy disk or medium is \n"
-#~ "correctly mounted."
-#~ msgstr ""
-#~ "Ziurtatu erabiltzaile sortu berriaren gako-fitxategia atzi \n"
-#~ "daitekeela. Gako-fitxategia disko gogorrean sortu nahi baduzu, sakatu \n"
-#~ "'Ados'. Disketean edo beste euskarri aldagarri batean sortu nahi "
-#~ "baduzu, \n"
-#~ "ziurtatu euskarria behar den bezala muntatuta dagoela."
-
-#~ msgid ""
-#~ "The key file does not seem to be the correct \n"
-#~ "file for user '%s' at bank '%s'. Please make \n"
-#~ "sure the correct key file can be accessed."
-#~ msgstr ""
-#~ "Gako-fitxategi horrek ez dirudi %s erabiltzailearen \n"
-#~ "%s bankukoa. Ziurtatu behar den gako-fitxategia \n"
-#~ "atzi daitekeela."
-
-#~ msgid ""
-#~ "The key file does not seem to be the correct \n"
-#~ "file for user '%s'. Please make sure the \n"
-#~ "correct key file can be accessed."
-#~ msgstr ""
-#~ "Gako-fitxategi horrek ez dirudi %s erabiltzailearena. \n"
-#~ "Ziurtatu behar den gako-fitxategia atzi \n"
-#~ "daitekeela."
-
-#~ msgid ""
-#~ "Please insert the correct chip card for \n"
-#~ "user '%s' at bank '%s'."
-#~ msgstr ""
-#~ "Sartu '%s' erabiltzailearen\n"
-#~ "'%s' bankuko txip-txartel egokia."
-
-#~ msgid ""
-#~ "Please insert the correct chip card for \n"
-#~ "user '%s'."
-#~ msgstr ""
-#~ "Sartu '%s' erabiltzailearen \n"
-#~ "txip-txartel egokia."
-
-#~ msgid ""
-#~ "The key file does not seem to be the correct \n"
-#~ "file for the newly created user. Please make \n"
-#~ "sure the correct key file can be accessed."
-#~ msgstr ""
-#~ "Gako-fitxategi horrek ez dirudi erabiltzaile \n"
-#~ "sortu berriarena. Ziurtatu behar den gako-fitxategia \n"
-#~ "atzi daitekeela."
-
-#~ msgid ""
-#~ "Please insert the correct chip card for \n"
-#~ "the newly created user."
-#~ msgstr ""
-#~ "Sartu erabiltzaile sortu\n"
-#~ "berriaren txip-txartel egokia."
-
-#~ msgid ""
-#~ "Please enter PIN for \n"
-#~ "user '%s' at bank '%s'\n"
-#~ "at the keypad of your chip card reader."
-#~ msgstr ""
-#~ "Idatzi '%s' erabiltzailearen \n"
-#~ "'%s' bankuko PIN zenbakia \n"
-#~ "txip-txartelen irakurgailuaren teklatuan."
-
-#~ msgid ""
-#~ "Please enter PIN for \n"
-#~ "user '%s'\n"
-#~ "at the keypad of your chip card reader."
-#~ msgstr ""
-#~ "Idatzi '%s' erabiltzailearen \n"
-#~ "PIN zenbakia \n"
-#~ "txip-txartelen irakurgailuaren teklatuan."
-
-#~ msgid ""
-#~ "Please enter PIN for \n"
-#~ "the newly created user \n"
-#~ "at the keypad of your chip card reader."
-#~ msgstr ""
-#~ "Idatzi erabiltzaile sortu berriaren \n"
-#~ "PIN zenbakia \n"
-#~ "txip-txartelen irakurgailuaren teklatuan."
-
-#~ msgid "Opening Network Connection"
-#~ msgstr "Sare-konexioa irekitzen"
-
-#~ msgid "Closing Network Connection"
-#~ msgstr "Sare-konexioa ixten"
-
-#~ msgid "Job: Get Balance"
-#~ msgstr "Lana: Hartu saldoa"
-
-#~ msgid "Job: Get Transactions"
-#~ msgstr "Lana: Hartu transakzioa"
-
-#~ msgid "Job: New Transfer"
-#~ msgstr "Lana: Transferentzia berria"
-
-#~ msgid "Job: Debit Note"
-#~ msgstr "Lana: Kargu-agiria"
-
-#~ msgid "Job: Get Standing Orders"
-#~ msgstr "Lana: Hartu agindu iraunkorrak"
-
-#~ msgid "Job: New Standing Order"
-#~ msgstr "Lana: Agindu iraunkor berria"
-
-#~ msgid "Job: Delete Standing Order"
-#~ msgstr "Lana: Ezabatu agindu iraunkorra"
-
-#~ msgid "Job: Retrieve Account List"
-#~ msgstr "Lana: Eskuratu kontu-zerrenda"
-
-#~ msgid "Job: Get System ID"
-#~ msgstr "Lana: Hartu sistema-IDa"
-
-#~ msgid "Job: Get Keys"
-#~ msgstr "Lana: Hartu gakoak"
-
-#~ msgid "Job: Send Keys"
-#~ msgstr "Lana: Bidali gakoak"
-
-#~ msgid "Job: Disable Keys"
-#~ msgstr "Lana: Desgaitu gakoak"
-
-#~ msgid "Job: Change Keys"
-#~ msgstr "Lana: Aldatu gakoak"
-
-#~ msgid "Job: Get Status Reports"
-#~ msgstr "Lana: Hartu egoera-txostenak"
-
-#~ msgid "Done"
-#~ msgstr "Eginda"
-
-#~ msgid "Sending message"
-#~ msgstr "Mezua bidaltzen"
-
-#~ msgid "Waiting for response"
-#~ msgstr "Erantzunaren zain"
-
-#~ msgid "Creating HBCI Job"
-#~ msgstr "HBCI lana sortzen"
-
-#~ msgid "Contacting Server"
-#~ msgstr "Zerbitzariarekin kontaktatzen"
-
-#~ msgid "Checking Job result"
-#~ msgstr "Lanaren emaitza egiaztatzen"
-
-#~ msgid "Updating local system"
-#~ msgstr "Sistema lokala eguneratzen"

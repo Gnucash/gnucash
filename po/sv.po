@@ -27,20 +27,19 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr ""
+msgstr "Arabiska"
 
 #: ../borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr ""
+msgstr "Baltiska"
 
 #: ../borrowed/goffice/go-charmap-sel.c:72
-#, fuzzy
 msgid "Central European"
-msgstr "Europeisk"
+msgstr "Centraleuropeiska"
 
 #: ../borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr ""
+msgstr "Kinesiska"
 
 #: ../borrowed/goffice/go-charmap-sel.c:74
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:242
@@ -48,29 +47,28 @@ msgid "Cyrillic"
 msgstr "Kyrillisk"
 
 #: ../borrowed/goffice/go-charmap-sel.c:75
-#, fuzzy
 msgid "Greek"
-msgstr "Grön"
+msgstr "Grekiska"
 
 #: ../borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr ""
+msgstr "Hebreiska"
 
 #: ../borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
-msgstr ""
+msgstr "Indiska"
 
 #: ../borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr ""
+msgstr "Japanska"
 
 #: ../borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr ""
+msgstr "Koreanska"
 
 #: ../borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr ""
+msgstr "Turkiska"
 
 #: ../borrowed/goffice/go-charmap-sel.c:81
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:224
@@ -79,12 +77,11 @@ msgstr "Unicode"
 
 #: ../borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr ""
+msgstr "Vietnamesiska"
 
 #: ../borrowed/goffice/go-charmap-sel.c:83
-#, fuzzy
 msgid "Western"
-msgstr "Register"
+msgstr "Västerländsk"
 
 #: ../borrowed/goffice/go-charmap-sel.c:84
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:60
@@ -96,364 +93,351 @@ msgstr "Annat"
 
 #: ../borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "Arabiska (IBM-864)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr ""
+msgstr "Arabiska (IBM-864-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "Arabiska (ISO-8859-6)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr ""
+msgstr "Arabiska (ISO-8859-6-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr ""
+msgstr "Arabiska (ISO-8859-6-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:121
 msgid "Arabic (MacArabic)"
-msgstr ""
+msgstr "Arabiska (MacArabic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:122
 msgid "Arabic (Windows-1256)"
-msgstr ""
+msgstr "Arabiska (Windows-1256)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
-msgstr ""
+msgstr "Armeniska (ARMSCII-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:124
-#, fuzzy
 msgid "Baltic (ISO-8859-13)"
-msgstr "ISO-8859-13 (Baltisk)"
+msgstr "Baltiska (ISO-8859-13)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
-msgstr ""
+msgstr "Baltiska (ISO-8859-4)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:126
 msgid "Baltic (Windows-1257)"
-msgstr ""
+msgstr "Baltiska (Windows-1257)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:127
-#, fuzzy
 msgid "Celtic (ISO-8859-14)"
-msgstr "ISO-8859-14 (Keltisk)"
+msgstr "Keltiska (ISO-8859-14)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
-msgstr ""
+msgstr "Centraleuropeiska (IBM-852)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:130
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "Centraleuropeiska (ISO-8859-2)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:132
 msgid "Central European (MacCE)"
-msgstr ""
+msgstr "Centraleuropeiska (MacCE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:134
 msgid "Central European (Windows-1250)"
-msgstr ""
+msgstr "Centraleuropeiska (Windows-1250)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:136
 msgid "Chinese Simplified (GB18030)"
-msgstr ""
+msgstr "Kinesiska förenklad (GB18030)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:137
 msgid "Chinese Simplified (GB2312)"
-msgstr ""
+msgstr "Kinesiska förenklad (GB2312)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:138
 msgid "Chinese Simplified (GBK)"
-msgstr ""
+msgstr "Kinesiska förenklad (GBK)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:139
 msgid "Chinese Simplified (HZ)"
-msgstr ""
+msgstr "Kinesiska förenklad (HZ)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:140
 msgid "Chinese Simplified (Windows-936)"
-msgstr ""
+msgstr "Kinesiska förenklad (Windows-936)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr ""
+msgstr "Kinesiska traditionell (Big5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr ""
+msgstr "Kinesiska traditionell (Big5-HKSCS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
-msgstr ""
+msgstr "Kinesiska traditionell (EUC-TW)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:147
 msgid "Croatian (MacCroatian)"
-msgstr ""
+msgstr "Croatiska (MacCroatian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:149
-#, fuzzy
 msgid "Cyrillic (IBM-855)"
-msgstr "Kyrillisk"
+msgstr "Kyrilliska (IBM-855)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:150
 msgid "Cyrillic (ISO-8859-5)"
-msgstr ""
+msgstr "Kyrilliska (ISO-8859-5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:152
 msgid "Cyrillic (ISO-IR-111)"
-msgstr ""
+msgstr "Kyrilliska (ISO-IR-111)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:154
-#, fuzzy
 msgid "Cyrillic (KOI8-R)"
-msgstr "Kyrillisk"
+msgstr "Kyrilliska (KOI8-R)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:155
 msgid "Cyrillic (MacCyrillic)"
-msgstr ""
+msgstr "Kyrilliska (MacCyrillic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:157
 msgid "Cyrillic (Windows-1251)"
-msgstr ""
+msgstr "Kyrilliska (Windows-1251)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
-msgstr ""
+msgstr "Ryska (CP-866)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:160
 msgid "Ukrainian (KOI8-U)"
-msgstr ""
+msgstr "Ukrainska (KOI8-U)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:161
-#, fuzzy
 msgid "Ukrainian (MacUkrainian)"
-msgstr "KOI8-U (Ukrainsk)"
+msgstr "Ukrainska (MacUkrainian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:163
 msgid "English (ASCII)"
-msgstr ""
+msgstr "Engelska (ASCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
-msgstr ""
+msgstr "Farsi (MacFarsi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:166
 msgid "Georgian (GEOSTD8)"
-msgstr ""
+msgstr "Georgiska (GEOSTD8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:167
-#, fuzzy
 msgid "Greek (ISO-8859-7)"
-msgstr "ISO-8859-7 (Grekisk)"
+msgstr "Grekiska (ISO-8859-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:168
 msgid "Greek (MacGreek)"
-msgstr ""
+msgstr "Grekiska (MacGreek)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:169
 msgid "Greek (Windows-1253)"
-msgstr ""
+msgstr "Grekiska (Windows-1253)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:170
 msgid "Gujarati (MacGujarati)"
-msgstr ""
+msgstr "Gujarati (MacGujarati)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:172
 msgid "Gurmukhi (MacGurmukhi)"
-msgstr ""
+msgstr "Gurmukhi (MacGurmukhi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr ""
+msgstr "Hebreiska (IBM-862)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr ""
+msgstr "Hebreiska (ISO-8859-8-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr ""
+msgstr "Hebreiska (ISO-8859-8-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr ""
+msgstr "Hebreiska (MacHebrew)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
-msgstr ""
+msgstr "Hebreiska (Windows-1253)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
-msgstr ""
+msgstr "Hindi (MacDevanagari)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
-msgstr ""
+msgstr "Isländska (MacIcelandic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:186
 msgid "Japanese (EUC-JP)"
-msgstr ""
+msgstr "Japanska (EUC-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:187
 msgid "Japanese (ISO-2022-JP)"
-msgstr ""
+msgstr "Japanska (ISO-2022-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:189
 msgid "Japanese (Shift_JIS)"
-msgstr ""
+msgstr "Japanska (Shift_JIS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:190
 msgid "Korean (EUC-KR)"
-msgstr ""
+msgstr "Koreanska (EUC-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:191
 msgid "Korean (ISO-2022-KR)"
-msgstr ""
+msgstr "Koreanska (ISO-2022-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:192
 msgid "Korean (JOHAB)"
-msgstr ""
+msgstr "Koreanska (JOHAB)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:193
 msgid "Korean (UHC)"
-msgstr ""
+msgstr "Koreanska (UHC)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:194
-#, fuzzy
 msgid "Nordic (ISO-8859-10)"
-msgstr "ISO-8859-10 (Nordisk)"
+msgstr "Nordiska (ISO-8859-10)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:195
 msgid "Romanian (MacRomanian)"
-msgstr ""
+msgstr "Rumänska (MacRomanian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:197
 msgid "Romanian (ISO-8859-16)"
-msgstr ""
+msgstr "Rumänska (ISO-8859-16)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:199
 msgid "South European (ISO-8859-3)"
-msgstr ""
+msgstr "Sydeuropeiska (ISO-8859-3)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:201
 msgid "Thai (TIS-620)"
-msgstr ""
+msgstr "Thai (TIS-620)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:202
 msgid "Turkish (IBM-857)"
-msgstr ""
+msgstr "Turkiska (IBM-857)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:203
 msgid "Turkish (ISO-8859-9)"
-msgstr ""
+msgstr "Turkiska (ISO-8859-9)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:204
 msgid "Turkish (MacTurkish)"
-msgstr ""
+msgstr "Turkiska (MacTurkish)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:206
 msgid "Turkish (Windows-1254)"
-msgstr ""
+msgstr "Turkiska (Windows-1254)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:208
-#, fuzzy
 msgid "Unicode (UTF-7)"
-msgstr "Unicode"
+msgstr "Unicode (UTF-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:209
-#, fuzzy
 msgid "Unicode (UTF-8)"
-msgstr "Unicode"
+msgstr "Unicode (UTF-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:210
 msgid "Unicode (UTF-16BE)"
-msgstr ""
+msgstr "Unicode (UTF-16BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:211
 msgid "Unicode (UTF-16LE)"
-msgstr ""
+msgstr "Unicode (UTF-16LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:212
 msgid "Unicode (UTF-32BE)"
-msgstr ""
+msgstr "Unicode (UTF-32BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:213
 msgid "Unicode (UTF-32LE)"
-msgstr ""
+msgstr "Unicode (UTF-32LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:214
-#, fuzzy
 msgid "User Defined"
-msgstr "Användarnamn"
+msgstr "Egendefinierad"
 
 #: ../borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
-msgstr ""
+msgstr "Vietnamesiska (TVCN)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:217
 msgid "Vietnamese (VISCII)"
-msgstr ""
+msgstr "Vietnamesiska (VISCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:218
 msgid "Vietnamese (VPS)"
-msgstr ""
+msgstr "Vietnamesiska (VPS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:219
 msgid "Vietnamese (Windows-1258)"
-msgstr ""
+msgstr "Vietnamesiska (Windows-1258)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "Visuell Hebreiska (ISO-8859-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
-msgstr ""
+msgstr "Västerländsk (IBM-850)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:224
 msgid "Western (ISO-8859-1)"
-msgstr ""
+msgstr "Västerländsk (ISO-8859-1)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:225
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "Västerländsk (ISO-8859-15)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:227
 msgid "Western (MacRoman)"
-msgstr ""
+msgstr "Västerländsk (MacRoman)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:228
 msgid "Western (Windows-1252)"
-msgstr ""
+msgstr "Västerländsk (Windows-1252)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:441
-#, fuzzy
 msgid "Locale: "
-msgstr "Lo_kal:"
+msgstr "Lokal: "
 
 #: ../borrowed/goffice/go-charmap-sel.c:476
-#, fuzzy
 msgid "Conversion Direction"
-msgstr "Konverterar"
+msgstr "Konverteringsriktning"
 
 #: ../borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr ""
+msgstr "Det här värdet avgör vilket iconv-test som skall utföras."
 
 #: ../borrowed/goffice/go-optionmenu.c:410
 msgid "Menu"
-msgstr ""
+msgstr "Meny"
 
 #: ../borrowed/goffice/go-optionmenu.c:410
-#, fuzzy
 msgid "The menu of options"
-msgstr "Nummeralternativet är %s."
+msgstr "Inställningsmenyn"
 
 #: ../gnucash/gnome/assistant-acct-period.c:190
 msgid "The book was closed successfully."
@@ -18610,7 +18594,7 @@ msgstr "Marginalränta"
 #: ../gnucash/import-export/qif-imp/qif-file.scm:85
 #: ../gnucash/import-export/qif-imp/qif-file.scm:93
 msgid "Line"
-msgstr ""
+msgstr "Linje"
 
 #: ../gnucash/import-export/qif-imp/qif-file.scm:96
 msgid "Read aborted."
@@ -19680,7 +19664,7 @@ msgstr "E-post"
 
 #: ../gnucash/report/business-reports/aging.scm:789
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: ../gnucash/report/business-reports/aging.scm:789
 #, fuzzy
@@ -25239,7 +25223,7 @@ msgstr ""
 #. (define optname-x-grid (N_ "X grid"))
 #: ../gnucash/report/standard-reports/net-linechart.scm:66
 msgid "Grid"
-msgstr ""
+msgstr "Rutnät"
 
 #: ../gnucash/report/standard-reports/net-linechart.scm:158
 msgid "Add grid lines."
@@ -26895,9 +26879,8 @@ msgid "Fancy Date Format"
 msgstr ""
 
 #: ../libgnucash/app-utils/app-utils.scm:330
-#, fuzzy
 msgid "custom"
-msgstr "Anpassad"
+msgstr "anpassad"
 
 #: ../libgnucash/app-utils/business-prefs.scm:24
 msgid "Counters"
@@ -28161,194 +28144,3 @@ msgid ""
 "select Window -> New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
-
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from %s rev %s on %s."
-#~ msgstr ""
-#~ "%s\n"
-#~ "Denna kopia byggdes från %s rev %s %s."
-
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from rev %s on %s."
-#~ msgstr ""
-#~ "%s\n"
-#~ "Denna kopia byggdes från rev %s %s."
-
-#~ msgid ""
-#~ "An error occurred while creating the directory:\n"
-#~ "  %s\n"
-#~ "Please correct the problem and restart GnuCash.\n"
-#~ "The reported error was '%s' (errno %d).\n"
-#~ msgstr ""
-#~ "Ett fel uppstod när katalogen skulle skapas:\n"
-#~ "  %s\n"
-#~ "Rätta till problemet och starta om GnuCash.\n"
-#~ "Det rapporterade problemet var '%s' (errno %d).\n"
-
-#~ msgid ""
-#~ "The directory\n"
-#~ "  %s\n"
-#~ "exists but cannot be accessed. This program \n"
-#~ "must have full access (read/write/execute) to \n"
-#~ "the directory in order to function properly.\n"
-#~ msgstr ""
-#~ "Katalogen\n"
-#~ "  %s\n"
-#~ "finns med åtkomst till den nekas. Programmet \n"
-#~ "måste ha fullständig tillgång (läs/skriv/exekvera) \n"
-#~ "till katalogen för att fungera korrekt.\n"
-
-#~ msgid ""
-#~ "The path\n"
-#~ "  %s\n"
-#~ "exists but it is not a directory. Please delete\n"
-#~ "the file and start GnuCash again.\n"
-#~ msgstr ""
-#~ "Sökvägen\n"
-#~ "  %s\n"
-#~ "existerar men är inte en katalog. Ta bort\n"
-#~ "filen och starta GnuCash igen.\n"
-
-#~ msgid ""
-#~ "An unknown error occurred when validating that the\n"
-#~ "  %s\n"
-#~ "directory exists and is usable. Please correct the\n"
-#~ "problem and restart GnuCash. The reported error \n"
-#~ "was '%s' (errno %d)."
-#~ msgstr ""
-#~ "Ett okänt fel inträffade när katalogen\n"
-#~ "  %s\n"
-#~ "skulle kontrolleras. Rätta till felet och\n"
-#~ "starta om GnuCash. Det rapporterade felet \n"
-#~ "var '%s' (errno %d)."
-
-#~ msgid ""
-#~ "The permissions are wrong on the directory\n"
-#~ "  %s\n"
-#~ "They must be at least 'rwx' for the user.\n"
-#~ msgstr ""
-#~ "Rättigheterna är felaktiga för katalogen\n"
-#~ "  %s\n"
-#~ "De måste vara åtminstone 'rwx' för användaren.\n"
-
-#~ msgid "_Price Editor"
-#~ msgstr "_Prisredigerare"
-
-#~ msgid "General Ledger Report"
-#~ msgstr "Huvudboksrapport"
-
-#~ msgid "_General Ledger"
-#~ msgstr "_Huvudbok"
-
-#~ msgid "<No information>"
-#~ msgstr "<Ingen information>"
-
-#~ msgid "Clear the entry"
-#~ msgstr "Töm inmatningsrutan"
-
-#~ msgid ""
-#~ "If activated, delete manually entered stock prices dated earlier than the "
-#~ "specified date. Otherwise only stock prices added by Finance::Quote will "
-#~ "be deleted."
-#~ msgstr ""
-#~ "Om detta val är aktiverat kommer manuellt inskrivna aktiepriser som är "
-#~ "äldre än angivet datum att tas bort. Annars kommer bara aktiepriser som "
-#~ "hämtats med Finance::Quote att tas bort."
-
-#~ msgid "Get _Quotes"
-#~ msgstr "Hämta _kurser"
-
-#~ msgid "set true"
-#~ msgstr "sätt sann"
-
-#~ msgid "You must select a commodity. To create a new one, click \"New\""
-#~ msgstr "Du måste välja en vara. Klicka på \"Ny\" för att skapa en ny"
-
-#~ msgid "_Delete Account"
-#~ msgstr "_Ta bort konto"
-
-#~ msgid "_New Account"
-#~ msgstr "_Nytt konto"
-
-#~ msgid ""
-#~ "The GnuCash personal finance manager. The GNU way to manage your money!"
-#~ msgstr ""
-#~ "GnuCash tar hand om dina personliga finanser. GNU-sättet att hantera dina "
-#~ "pengar!"
-
-#~ msgid "Version: GnuCash-%s %s (rev %s built %s)"
-#~ msgstr "Version: GnuCash-%s %s (rev %s byggd %s)"
-
-#~ msgid "Version: GnuCash-%s (rev %s built %s)"
-#~ msgstr "Version: GnuCash-%s (rev %s byggd %s)"
-
-#~ msgid "Owner Name"
-#~ msgstr "Ägarnamn"
-
-#~ msgid "UTC"
-#~ msgstr "UTC"
-
-#~ msgid "Category"
-#~ msgstr "Kategori"
-
-#~ msgid "This report has no options."
-#~ msgstr "Denna rapport har inga alternativ."
-
-#~ msgid "Income Barchart"
-#~ msgstr "Stapeldiagram över intäkter"
-
-#~ msgid "Expense Barchart"
-#~ msgstr "Stapeldiagram över kostnader"
-
-#~ msgid "Liability Barchart"
-#~ msgstr "Stapeldiagram över skulder"
-
-#~ msgid "Style"
-#~ msgstr "Stil"
-
-#~ msgid "Report style."
-#~ msgstr "Rapportstil."
-
-#~ msgid "Display N lines."
-#~ msgstr "Visa N rader."
-
-#~ msgid "Display 1 line."
-#~ msgstr "Visa en rad."
-
-#~ msgid "Exact Time"
-#~ msgstr "Exakt tid"
-
-#~ msgid "Sort by exact time."
-#~ msgstr "Sortera efter exakt tid."
-
-#~ msgid "duedate"
-#~ msgstr "förfallodatum"
-
-#~ msgid "question"
-#~ msgstr "fråga"
-
-#~ msgid "Negative amounts are not allowed."
-#~ msgstr "Negativa belopp är inte tillåtna."
-
-#~ msgid "Percentage amount must be between 0 and 100."
-#~ msgstr "Procentsatsen måste vara mellan 0 och 100."
-
-#~ msgid "New item"
-#~ msgstr "_Ny post"
-
-#~ msgid "Save _Report"
-#~ msgstr "Spara _rapport"
-
-#~ msgid "Save Report As..."
-#~ msgstr "Spara rapport s_om..."
-
-#~ msgid "Invoice number: "
-#~ msgstr "Fakturanummer: "
-
-#~ msgid "Job number: "
-#~ msgstr "Jobbnummer: "
-
-#~ msgid "Job name: "
-#~ msgstr "Jobbnamn: "

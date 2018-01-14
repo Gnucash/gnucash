@@ -20,66 +20,95 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: KBabel 1.11.4\n"
 
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/trans.h:283
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:283
 #: ../borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr ""
+msgstr "Arab"
 
 #: ../borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr ""
+msgstr "Balti"
 
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/trans.h:239
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:239
 #: ../borrowed/goffice/go-charmap-sel.c:72
-#, fuzzy
 msgid "Central European"
-msgstr "Európai"
+msgstr "Közép-európai"
 
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/trans.h:220
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:220
 #: ../borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr ""
+msgstr "Kínai"
 
 #: ../borrowed/goffice/go-charmap-sel.c:74
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:242
 msgid "Cyrillic"
 msgstr "Cirill"
 
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/trans.h:299
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:299
 #: ../borrowed/goffice/go-charmap-sel.c:75
-#, fuzzy
 msgid "Greek"
-msgstr "Zöld"
+msgstr "Görög"
 
 #: ../borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr ""
+msgstr "Héber"
 
 #: ../borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
-msgstr ""
+msgstr "Indiai"
 
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/trans.h:222
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:222
 #: ../borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr ""
+msgstr "Japán"
 
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/trans.h:223
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:223
 #: ../borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr ""
+msgstr "Koreai"
 
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/trans.h:316
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:316
 #: ../borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr ""
+msgstr "Török"
 
 #: ../borrowed/goffice/go-charmap-sel.c:81
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:224
 msgid "Unicode"
 msgstr "Unicode"
 
+# #-#-#-#-#  epiphany.HEAD.hu.po-new.po (Epiphany CVS)  #-#-#-#-#
+# src/trans.h:270
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:270
 #: ../borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr ""
+msgstr "Vietnami"
 
 #: ../borrowed/goffice/go-charmap-sel.c:83
-#, fuzzy
 msgid "Western"
-msgstr "Folyószámla-könyv"
+msgstr "Nyugati"
 
 #: ../borrowed/goffice/go-charmap-sel.c:84
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:60
@@ -89,348 +118,469 @@ msgstr "Folyószámla-könyv"
 msgid "Other"
 msgstr "egyéb"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:283
 #: ../borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "Arab (IBM-864)"
 
+# src/trans.h:283
 #: ../borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr ""
+msgstr "Arab (IBM-864-I)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:230
 #: ../borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "Arab (ISO-8859-6)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:230
 #: ../borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr ""
+msgstr "Arab (ISO-8859-6-E)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:230
 #: ../borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr ""
+msgstr "Arab (ISO-8859-6-I)"
 
+# src/trans.h:283
 #: ../borrowed/goffice/go-charmap-sel.c:121
 msgid "Arabic (MacArabic)"
-msgstr ""
+msgstr "Arab (MacArabic)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:231
 #: ../borrowed/goffice/go-charmap-sel.c:122
 msgid "Arabic (Windows-1256)"
-msgstr ""
+msgstr "Arab (Windows-1256)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:228 src/trans.h:279
 #: ../borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
-msgstr ""
+msgstr "Örmény (ARMSCII-8)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:229
 #: ../borrowed/goffice/go-charmap-sel.c:124
-#, fuzzy
 msgid "Baltic (ISO-8859-13)"
-msgstr "ISO-8859-13 (balti)"
+msgstr "Balti (ISO-8859-13)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:230
 #: ../borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
-msgstr ""
+msgstr "Balti (ISO-8859-4)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:231
 #: ../borrowed/goffice/go-charmap-sel.c:126
 msgid "Baltic (Windows-1257)"
-msgstr ""
+msgstr "Balti (Windows-1257)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:232
 #: ../borrowed/goffice/go-charmap-sel.c:127
-#, fuzzy
 msgid "Celtic (ISO-8859-14)"
-msgstr "ISO-8859-14 (kelta)"
+msgstr "Kelta (ISO-8859-14)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:233
 #: ../borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
-msgstr ""
+msgstr "Közép-európai (IBM-852)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:234
 #: ../borrowed/goffice/go-charmap-sel.c:130
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "Közép-európai (ISO-8859-2)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:235
 #: ../borrowed/goffice/go-charmap-sel.c:132
 msgid "Central European (MacCE)"
-msgstr ""
+msgstr "Közép-európai (MacCE)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:236
 #: ../borrowed/goffice/go-charmap-sel.c:134
 msgid "Central European (Windows-1250)"
-msgstr ""
+msgstr "Közép-európai (Windows-1250)"
 
+# src/trans.h:238
 #: ../borrowed/goffice/go-charmap-sel.c:136
 msgid "Chinese Simplified (GB18030)"
-msgstr ""
+msgstr "Egyszerűsített kínai (GB18030)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:237
 #: ../borrowed/goffice/go-charmap-sel.c:137
 msgid "Chinese Simplified (GB2312)"
-msgstr ""
+msgstr "Egyszerűsített kínai (GB2312)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:238
 #: ../borrowed/goffice/go-charmap-sel.c:138
 msgid "Chinese Simplified (GBK)"
-msgstr ""
+msgstr "Egyszerűsített kínai (GBK)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:238
 #: ../borrowed/goffice/go-charmap-sel.c:139
 msgid "Chinese Simplified (HZ)"
-msgstr ""
+msgstr "Egyszerűsített kínai (HZ)"
 
+# src/trans.h:238
 #: ../borrowed/goffice/go-charmap-sel.c:140
 msgid "Chinese Simplified (Windows-936)"
-msgstr ""
+msgstr "Egyszerűsített kínai (Windows-936)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:240
 #: ../borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr ""
+msgstr "Hagyományos kínai (Big5)"
 
+# src/trans.h:240
 #: ../borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr ""
+msgstr "Hagyományos kínai (Big5-HKSCS)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:241
 #: ../borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
-msgstr ""
+msgstr "Hagyományos kínai (EUC-TW)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:242
 #: ../borrowed/goffice/go-charmap-sel.c:147
 msgid "Croatian (MacCroatian)"
-msgstr ""
+msgstr "Horvát (MacCroatian)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:243
 #: ../borrowed/goffice/go-charmap-sel.c:149
-#, fuzzy
 msgid "Cyrillic (IBM-855)"
-msgstr "Cirill"
+msgstr "Cirill (IBM-855)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:244
 #: ../borrowed/goffice/go-charmap-sel.c:150
 msgid "Cyrillic (ISO-8859-5)"
-msgstr ""
+msgstr "Cirill (ISO-8859-5)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:245
 #: ../borrowed/goffice/go-charmap-sel.c:152
 msgid "Cyrillic (ISO-IR-111)"
-msgstr ""
+msgstr "Cirill (ISO-IR-111)"
 
+# src/trans.h:243
 #: ../borrowed/goffice/go-charmap-sel.c:154
-#, fuzzy
 msgid "Cyrillic (KOI8-R)"
-msgstr "Cirill"
+msgstr "Cirill (KOI8-R)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:249
 #: ../borrowed/goffice/go-charmap-sel.c:155
 msgid "Cyrillic (MacCyrillic)"
-msgstr ""
+msgstr "Cirill (MacCyrillic)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:246
 #: ../borrowed/goffice/go-charmap-sel.c:157
 msgid "Cyrillic (Windows-1251)"
-msgstr ""
+msgstr "Cirill (Windows-1251)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
-msgstr ""
+msgstr "Orosz (CP-866)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:160
 msgid "Ukrainian (KOI8-U)"
-msgstr ""
+msgstr "Ukrán (KOI8-U)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:161
-#, fuzzy
 msgid "Ukrainian (MacUkrainian)"
-msgstr "KOI8-U (ukrán)"
+msgstr "Ukrán (MacUkrainian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:163
 msgid "English (ASCII)"
-msgstr ""
+msgstr "Angol (ASCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
-msgstr ""
+msgstr "Farsi (MacFarsi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:166
 msgid "Georgian (GEOSTD8)"
-msgstr ""
+msgstr "Grúz (GEOSTD8)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:250
 #: ../borrowed/goffice/go-charmap-sel.c:167
-#, fuzzy
 msgid "Greek (ISO-8859-7)"
-msgstr "ISO-8859-7 (görög)"
+msgstr "Görög (ISO-8859-7)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:251
 #: ../borrowed/goffice/go-charmap-sel.c:168
 msgid "Greek (MacGreek)"
-msgstr ""
+msgstr "Görög (MacGreek)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:252
 #: ../borrowed/goffice/go-charmap-sel.c:169
 msgid "Greek (Windows-1253)"
-msgstr ""
+msgstr "Görög (Windows-1253)"
 
+# src/trans.h:242
 #: ../borrowed/goffice/go-charmap-sel.c:170
 msgid "Gujarati (MacGujarati)"
-msgstr ""
+msgstr "Gujarati (MacGujarati)"
 
+# src/trans.h:264
 #: ../borrowed/goffice/go-charmap-sel.c:172
 msgid "Gurmukhi (MacGurmukhi)"
-msgstr ""
+msgstr "Gurmukhi (MacGurmukhi)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:274
 #: ../borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr ""
+msgstr "Héber (IBM-862)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:272
 #: ../borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr ""
+msgstr "Héber (ISO-8859-8-E)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:272
 #: ../borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr ""
+msgstr "Héber (ISO-8859-8-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr ""
+msgstr "Hebrew (MacHebrew)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:252
 #: ../borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
-msgstr ""
+msgstr "Héber (Windows-1255)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
-msgstr ""
+msgstr "Hindi (MacDevanagari)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:253
 #: ../borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
-msgstr ""
+msgstr "Izlandi (MacIcelandic)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:254
 #: ../borrowed/goffice/go-charmap-sel.c:186
 msgid "Japanese (EUC-JP)"
-msgstr ""
+msgstr "Japán (EUC-JP)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:255
 #: ../borrowed/goffice/go-charmap-sel.c:187
 msgid "Japanese (ISO-2022-JP)"
-msgstr ""
+msgstr "Japán (ISO-2022-JP)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:256
 #: ../borrowed/goffice/go-charmap-sel.c:189
 msgid "Japanese (Shift_JIS)"
-msgstr ""
+msgstr "Japán (Shift_JIS)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:257
 #: ../borrowed/goffice/go-charmap-sel.c:190
 msgid "Korean (EUC-KR)"
-msgstr ""
+msgstr "Koreai (EUC-KR)"
 
+# src/trans.h:257
 #: ../borrowed/goffice/go-charmap-sel.c:191
 msgid "Korean (ISO-2022-KR)"
-msgstr ""
+msgstr "Koreai (ISO-2022-KR)"
 
+# src/trans.h:304
 #: ../borrowed/goffice/go-charmap-sel.c:192
 msgid "Korean (JOHAB)"
-msgstr ""
+msgstr "Koreai (JOHAB)"
 
+# src/trans.h:257
 #: ../borrowed/goffice/go-charmap-sel.c:193
 msgid "Korean (UHC)"
-msgstr ""
+msgstr "Koreai (UHC)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:258
 #: ../borrowed/goffice/go-charmap-sel.c:194
-#, fuzzy
 msgid "Nordic (ISO-8859-10)"
-msgstr "ISO-8859-10 (északi)"
+msgstr "Skandináv (ISO-8859-10)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:259
 #: ../borrowed/goffice/go-charmap-sel.c:195
 msgid "Romanian (MacRomanian)"
-msgstr ""
+msgstr "Román (MacRomanian)"
 
+# src/trans.h:230
 #: ../borrowed/goffice/go-charmap-sel.c:197
 msgid "Romanian (ISO-8859-16)"
-msgstr ""
+msgstr "Román (ISO-8859-16)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:260
 #: ../borrowed/goffice/go-charmap-sel.c:199
 msgid "South European (ISO-8859-3)"
-msgstr ""
+msgstr "Dél-európai (ISO-8859-3)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:261
 #: ../borrowed/goffice/go-charmap-sel.c:201
 msgid "Thai (TIS-620)"
-msgstr ""
+msgstr "Thai (TIS-620)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:262
 #: ../borrowed/goffice/go-charmap-sel.c:202
 msgid "Turkish (IBM-857)"
-msgstr ""
+msgstr "Török (IBM-857)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:263
 #: ../borrowed/goffice/go-charmap-sel.c:203
 msgid "Turkish (ISO-8859-9)"
-msgstr ""
+msgstr "Török (ISO-8859-9)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:264
 #: ../borrowed/goffice/go-charmap-sel.c:204
 msgid "Turkish (MacTurkish)"
-msgstr ""
+msgstr "Török (MacTurkish)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:265
 #: ../borrowed/goffice/go-charmap-sel.c:206
 msgid "Turkish (Windows-1254)"
-msgstr ""
+msgstr "Török (Windows-1254)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:266
 #: ../borrowed/goffice/go-charmap-sel.c:208
-#, fuzzy
 msgid "Unicode (UTF-7)"
-msgstr "Unicode"
+msgstr "Unicode (UTF-7)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:267
 #: ../borrowed/goffice/go-charmap-sel.c:209
-#, fuzzy
 msgid "Unicode (UTF-8)"
-msgstr "Unicode"
+msgstr "Unicode (UTF-8)"
 
+# src/trans.h:266
 #: ../borrowed/goffice/go-charmap-sel.c:210
 msgid "Unicode (UTF-16BE)"
-msgstr ""
+msgstr "Unicode (UTF-16BE)"
 
+# src/trans.h:266
 #: ../borrowed/goffice/go-charmap-sel.c:211
 msgid "Unicode (UTF-16LE)"
-msgstr ""
+msgstr "Unicode (UTF-16LE)"
 
+# src/trans.h:266
 #: ../borrowed/goffice/go-charmap-sel.c:212
 msgid "Unicode (UTF-32BE)"
-msgstr ""
+msgstr "Unicode (UTF-32BE)"
 
+# src/trans.h:266
 #: ../borrowed/goffice/go-charmap-sel.c:213
 msgid "Unicode (UTF-32LE)"
-msgstr ""
+msgstr "Unicode (UTF-32LE)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/prefs.c:378
 #: ../borrowed/goffice/go-charmap-sel.c:214
-#, fuzzy
 msgid "User Defined"
-msgstr "Felhasználónév"
+msgstr "Felhasználó által megadott"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:268
 #: ../borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
-msgstr ""
+msgstr "Vietnami (TCVN)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:269
 #: ../borrowed/goffice/go-charmap-sel.c:217
 msgid "Vietnamese (VISCII)"
-msgstr ""
+msgstr "Vietnami (VISCII)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:270
 #: ../borrowed/goffice/go-charmap-sel.c:218
 msgid "Vietnamese (VPS)"
-msgstr ""
+msgstr "Vietnami (VPS)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:271
 #: ../borrowed/goffice/go-charmap-sel.c:219
 msgid "Vietnamese (Windows-1258)"
-msgstr ""
+msgstr "Vietnami (Windows-1258)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:272
 #: ../borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "Vizuális héber (ISO-8859-8)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:274
 #: ../borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
-msgstr ""
+msgstr "Nyugati (IBM-850)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:275
 #: ../borrowed/goffice/go-charmap-sel.c:224
 msgid "Western (ISO-8859-1)"
-msgstr ""
+msgstr "Nyugati (ISO-8859-1)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:276
 #: ../borrowed/goffice/go-charmap-sel.c:225
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "Nyugati (ISO-8859-15)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:277
 #: ../borrowed/goffice/go-charmap-sel.c:227
 msgid "Western (MacRoman)"
-msgstr ""
+msgstr "Nyugati (MacRoman)"
 
+# #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
+# src/trans.h:278
 #: ../borrowed/goffice/go-charmap-sel.c:228
 msgid "Western (Windows-1252)"
-msgstr ""
+msgstr "Nyugati (Windows-1252)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:441
-#, fuzzy
 msgid "Locale: "
-msgstr "Helyi:"
+msgstr "Locale: "
 
 #: ../borrowed/goffice/go-charmap-sel.c:476
 #, fuzzy
@@ -443,7 +593,7 @@ msgstr ""
 
 #: ../borrowed/goffice/go-optionmenu.c:410
 msgid "Menu"
-msgstr ""
+msgstr "Menü"
 
 #: ../borrowed/goffice/go-optionmenu.c:410
 #, fuzzy
@@ -17168,7 +17318,6 @@ msgid "Select Separator Type"
 msgstr "2. Válasszon import típust"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.glade.h:22
-#, fuzzy
 msgid "Preview"
 msgstr "Előnézet"
 
@@ -20423,7 +20572,7 @@ msgstr "Email "
 
 #: ../gnucash/report/business-reports/aging.scm:789
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: ../gnucash/report/business-reports/aging.scm:789
 #, fuzzy
@@ -27983,9 +28132,8 @@ msgid "Fancy Date Format"
 msgstr "Különleges dátum-alak"
 
 #: ../libgnucash/app-utils/app-utils.scm:330
-#, fuzzy
 msgid "custom"
-msgstr "Egyéni"
+msgstr "egyéni"
 
 #: ../libgnucash/app-utils/business-prefs.scm:24
 msgid "Counters"
@@ -29281,2588 +29429,3 @@ msgid ""
 "select Window -> New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
-
-#~ msgid "Enable debugging mode: increasing logging to provide deep detail."
-#~ msgstr "Hibakereső mód engedélyezése, részletesebb naplózással."
-
-#, fuzzy
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from %s rev %s on %s."
-#~ msgstr "%s E példány az r%s sorszámú svn-változatból épült %s -n."
-
-#, fuzzy
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from rev %s on %s."
-#~ msgstr "%s E példány az r%s változatból épült %s gépen."
-
-#~ msgid "postd"
-#~ msgstr "Rögzítve"
-
-#~ msgid "duedate"
-#~ msgstr "határidő"
-
-#~ msgid "acct"
-#~ msgstr "Folyószámla"
-
-#~ msgid "question"
-#~ msgstr "kérdés"
-
-#~ msgid ""
-#~ "An error occurred while creating the directory:\n"
-#~ "  %s\n"
-#~ "Please correct the problem and restart GnuCash.\n"
-#~ "The reported error was '%s' (errno %d).\n"
-#~ msgstr ""
-#~ "Hiba történt a mappa létrehozásakor:\n"
-#~ "  %s\n"
-#~ "Jelentse a hibát és indítsa újra GnuCash-t!\n"
-#~ "A jelentett hiba ?%s? (hibaszám %d).\n"
-
-#~ msgid ""
-#~ "The directory\n"
-#~ "  %s\n"
-#~ "exists but cannot be accessed. This program \n"
-#~ "must have full access (read/write/execute) to \n"
-#~ "the directory in order to function properly.\n"
-#~ msgstr ""
-#~ "A  %s\n"
-#~ "mappa létezik, de nem elérhető. A programnak \n"
-#~ "teljes jogú elérés kell (olvasás/írás/végrehajtás) \n"
-#~ "a mappához, hogy rendesen működjön.\n"
-
-#~ msgid ""
-#~ "The path\n"
-#~ "  %s\n"
-#~ "exists but it is not a directory. Please delete\n"
-#~ "the file and start GnuCash again.\n"
-#~ msgstr ""
-#~ "Az  %s\n"
-#~ "elérési út létezik, de nem mappa. Törölje a\n"
-#~ "fájlt, és indítsa újra GnuCash-t!\n"
-
-#~ msgid ""
-#~ "An unknown error occurred when validating that the\n"
-#~ "  %s\n"
-#~ "directory exists and is usable. Please correct the\n"
-#~ "problem and restart GnuCash. The reported error \n"
-#~ "was '%s' (errno %d)."
-#~ msgstr ""
-#~ "Ismeretlen hiba történt\n"
-#~ "  %s\n"
-#~ "mappa meglétének és használhatóságának ellenőrzése\n"
-#~ "közben. Jelentse a hibát és indítsa újra GnuCash-t!\n"
-#~ "A jelentett hiba ?%s? volt (hibakód %d)."
-
-#~ msgid ""
-#~ "The permissions are wrong on the directory\n"
-#~ "  %s\n"
-#~ "They must be at least 'rwx' for the user.\n"
-#~ msgstr ""
-#~ "Az jogosultságok nem megfelelőek a\n"
-#~ "  %smappán.\n"
-#~ " Legalább a használónak 'rwx' kell.\n"
-
-#~ msgid "_Price Editor"
-#~ msgstr "Árfolyamszerkesztő"
-
-#, fuzzy
-#~ msgid "General Ledger2"
-#~ msgstr "Főkönyv"
-
-#~ msgid "General Ledger Report"
-#~ msgstr "Főkönyvjelentés"
-
-#~ msgid "_General Ledger"
-#~ msgstr "Főkönyv"
-
-#~ msgid "<No information>"
-#~ msgstr "<Nincs információ>"
-
-#~ msgid ""
-#~ "If active, the register will be colored as specified by the system theme. "
-#~ "This can be overridden to provide custom colors by editing the gtkrc file "
-#~ "in the users home directory. Otherwise the standard register colors will "
-#~ "be used that GnuCash has always used."
-#~ msgstr ""
-#~ "Aktiválva a regiszter a rendszer témájának színeit veszi fel. Ezt "
-#~ "felülírhatják egyedi színekkel a felhasználó saját könyvtárában levő "
-#~ "gtkrc fájl szerkesztésével. Különben a szabványos regiszterszíneket "
-#~ "használják, amiket GnuCash mindig is használt."
-
-#~ msgid "Clear the entry"
-#~ msgstr "A tétel törlése"
-
-#~ msgid ""
-#~ "If activated, delete manually entered stock prices dated earlier than the "
-#~ "specified date. Otherwise only stock prices added by Finance::Quote will "
-#~ "be deleted."
-#~ msgstr ""
-#~ "Aktiválva, a megadott dátum előtti manuálisan is megadott árak törlődnek. "
-#~ "Különben csak a Pénzügy::Árfolyamok által hozzáadott árak törlődnek."
-
-#~ msgid "Delete _last price for a stock"
-#~ msgstr "A részvény _utolsó árának törlése"
-
-#~ msgid ""
-#~ "If activated, delete all prices before the specified date. Otherwise the "
-#~ "last stock price dated before the date will be kept and all earlier "
-#~ "quotes deleted."
-#~ msgstr ""
-#~ "Bekapcsolva, minden ár törlése a megadott dátum előtt. Különben,az utolsó "
-#~ "részvényár megtartása az adott dátum előtt és minden korábbi törlése."
-
-#~ msgid "Get _Quotes"
-#~ msgstr "_Árfolyamadatok lehívása"
-
-#~ msgid "set true"
-#~ msgstr "igaz"
-
-#~ msgid "You must select a commodity. To create a new one, click \"New\""
-#~ msgstr "Válasszon egy árut. Létrehozáshoz kattintson az \"Új\"-ra"
-
-#~ msgid "_Delete Account"
-#~ msgstr "Számla _törlése"
-
-#~ msgid "_New Account"
-#~ msgstr "Új számla"
-
-#~ msgid ""
-#~ "The GnuCash personal finance manager. The GNU way to manage your money!"
-#~ msgstr "GnuCash a személyes pénzügyek kezelője. Pénzügyek GNU-módra!"
-
-#, fuzzy
-#~ msgid "Version: GnuCash-%s %s (rev %s built %s)"
-#~ msgstr "Változat: GnuCash-%s svn (r%s kelt: %s)"
-
-#, fuzzy
-#~ msgid "Version: GnuCash-%s (rev %s built %s)"
-#~ msgstr "Változat: Gnucash-%s svn (r%s kelt: %s)"
-
-#, fuzzy
-#~ msgid "Owner Name"
-#~ msgstr "Tulajdonos neve"
-
-#, fuzzy
-#~ msgid "Owner ID"
-#~ msgstr "Rendelésszám"
-
-#~ msgid "Remember _PIN"
-#~ msgstr "_PIN megőrzése"
-
-#, fuzzy
-#~ msgid "Quotes"
-#~ msgstr "Adatszerzés"
-
-#, fuzzy
-#~ msgid "From Num."
-#~ msgstr "Mától"
-
-#, fuzzy
-#~ msgid "Transaction Import Assistant"
-#~ msgstr "GnuCash import tündér"
-
-#, fuzzy
-#~ msgid "Start import on row "
-#~ msgstr "Jelentés időszakának kezdete"
-
-#~ msgid "Data type: "
-#~ msgstr "Adat típus: "
-
-#~ msgid "Separated"
-#~ msgstr "elkülönített"
-
-#~ msgid "File opening failed."
-#~ msgstr "A fájl megnyitása sikertelen volt."
-
-#~ msgid "Dates earlier than 1970 are not supported."
-#~ msgstr "1970 előtti dátumok nem támogatottak"
-
-#~ msgid "This report has no options."
-#~ msgstr "E jelentésnek nincsenek beállításai."
-
-#~ msgid "Compress prior/later periods"
-#~ msgstr "Compress prior/later periods"
-
-#~ msgid "Income Barchart"
-#~ msgstr "Bevétel-oszlopdiagram"
-
-#~ msgid "Expense Barchart"
-#~ msgstr "Költség-oszlopdiagram"
-
-#~ msgid "Liability Barchart"
-#~ msgstr "Kötelezettség-oszlopdiagram"
-
-#~ msgid "Style"
-#~ msgstr "Stílus"
-
-#, fuzzy
-#~ msgid "Report style."
-#~ msgstr "Jelentésstílus"
-
-#, fuzzy
-#~ msgid "Display N lines."
-#~ msgstr "N sor megjelenítése"
-
-#, fuzzy
-#~ msgid "Display 1 line."
-#~ msgstr "1 sor megjelenítése"
-
-#~ msgid "Exact Time"
-#~ msgstr "Pontos idő"
-
-#, fuzzy
-#~ msgid "Sort by exact time."
-#~ msgstr "Rendezés pontos idő szerint"
-
-#, fuzzy
-#~ msgid "Retrieve the current online quote"
-#~ msgstr "A jelenlegi ár eltávolítása"
-
-#~ msgid "Set the prefix path for gconf queries"
-#~ msgstr "Gconf kérések telepítési útvonala"
-
-#~ msgid "GCONFPATH"
-#~ msgstr "GCONFPATH"
-
-#~ msgid "Negative amounts are not allowed."
-#~ msgstr "Negatív összeg nem engedélyezett."
-
-#~ msgid "Percentage amount must be between 0 and 100."
-#~ msgstr "Százaléknak 0 és 100 között kell lennie."
-
-#, fuzzy
-#~ msgid "Credit note"
-#~ msgstr "Hitelek"
-
-#, fuzzy
-#~ msgid ""
-#~ "You must enter the amount of the payment. The payment amount must not be "
-#~ "zero."
-#~ msgstr ""
-#~ "Meg kell adni a kifizetés összegét! Nullánál nagyobbnak kell lennie."
-
-#, fuzzy
-#~ msgid "Customer Credit Note"
-#~ msgstr "Vevőjelentés"
-
-#, fuzzy
-#~ msgid "Vendor Credit Note"
-#~ msgstr "Eladó jelentés"
-
-#, fuzzy
-#~ msgid "Employee Credit Note"
-#~ msgstr "Alkalmazott-jelentés"
-
-#~ msgid "Remo_ve Transaction Splits"
-#~ msgstr "Tranzakciókifejtések _törlése"
-
-#~ msgid "_Shift Transaction Forward"
-#~ msgstr "_Tranzakció mozgatása előre"
-
-#~ msgid "Account Transaction Report"
-#~ msgstr "Folyószámlatranzakció jelentés"
-
-#~ msgid "Order of columns in the dialog"
-#~ msgstr "Oszlopok sorrendje a párbeszédablakban"
-
-#~ msgid "Show the Full Name column"
-#~ msgstr "Teljes név oszlop megjelenítése"
-
-#~ msgid "Show the ISIN/CUSIP Code (Exchange Specific Data) column"
-#~ msgstr "ISIN/CUSIP kód (Exchange Specific Data) megjelenítése"
-
-#~ msgid "Show the Namespace column"
-#~ msgstr "Névtér oszlop megjelenítése"
-
-#~ msgid "Show the Print Name column"
-#~ msgstr "Nyomtatási név oszlop megjelenítése"
-
-#~ msgid "Show the Quote Flag column"
-#~ msgstr "Árfolyam oszlop megjelenítése"
-
-#~ msgid "Show the Quote Source column"
-#~ msgstr "Árfolyam forrás oszlop megjelenítése"
-
-#~ msgid "Show the Quote Timezone column"
-#~ msgstr "Árfolyam időzóna oszlop megjelenítése"
-
-#~ msgid "Show the Unique Name column"
-#~ msgstr "Egyedi név oszlop megjelenítése"
-
-#~ msgid "Show the fraction column"
-#~ msgstr "Egység oszlop megjelenítése"
-
-#~ msgid "Show the name column"
-#~ msgstr "Név oszlop megjelenítése"
-
-#~ msgid "Show the symbol column"
-#~ msgstr "Jelkép oszlop megjelenítése"
-
-#~ msgid ""
-#~ "This setting contains a list of names which controls the order in which "
-#~ "the columns are listed in the dialog. Names may be reordered or removed "
-#~ "from this list to control which columns appear in the dialog and in what "
-#~ "order."
-#~ msgstr ""
-#~ "E beállítás nevek listáját tartalmazza, ami a dialógusban felsorolt "
-#~ "oszlopok sorrendjét vezérlik. A nevek átrendezésével vagy eltávolításával "
-#~ "e listából a dialógusban megjelenő oszlopokat, illetve azok sorrendjét "
-#~ "határozzák meg."
-
-#~ msgid "Columns used for sorting"
-#~ msgstr "A rendezéshez használt oszlopok"
-
-#~ msgid ""
-#~ "The X,Y coordinates of the top left corner of the window when it was last "
-#~ "closed."
-#~ msgstr ""
-#~ "Az párbeszédablak bal felső sarkának X,Y koordinátái az utolsó bezáráskor."
-
-#~ msgid "The width and size of the window when it was last closed."
-#~ msgstr "Az párbeszédablak szélessége és mérete az utolsó bezáráskor."
-
-#~ msgid "Window position"
-#~ msgstr "Ablakpozíció"
-
-#~ msgid "Show the Price column"
-#~ msgstr "Az ár oszlop feltüntetése"
-
-#~ msgid "Show the Source column"
-#~ msgstr "A forrás oszlop feltüntetése"
-
-#~ msgid "Show the Type column"
-#~ msgstr "A típus oszlop feltüntetése"
-
-#~ msgid "Show the date column"
-#~ msgstr "A dátum oszlop feltüntetése"
-
-#~ msgid "This setting enables the Price column."
-#~ msgstr "E beállítás engedélyezi az ár oszlopot."
-
-#~ msgid "This setting enables the Source column."
-#~ msgstr "E beállítás engedélyezi a forrás oszlopot."
-
-#~ msgid "This setting enables the Type column."
-#~ msgstr "E beállítás engedélyezi a típus oszlopot."
-
-#~ msgid "This setting enables the commodity column."
-#~ msgstr "E beállítás engedélyezi a áru oszlopot."
-
-#~ msgid "This setting enables the currency column."
-#~ msgstr "E beállítás engedélyezi a pénznem oszlopot."
-
-#~ msgid ""
-#~ "This value contains the Y coordinate for the bottom edge of the check. "
-#~ "This coordinate is from the bottom edge of the sheet of paper."
-#~ msgstr ""
-#~ "Ez az érték tartalmazza a csekk alsó szélének Y koordinátáját. Ezt a "
-#~ "koordinátát a lap alsó szélétől számítják."
-
-#~ msgid "Accounts to reverse the balance"
-#~ msgstr "Számlák az egyenleg megfordításához"
-
-#~ msgid "Default view style for new register"
-#~ msgstr "A regiszter alapértelmezett stílusa"
-
-#~ msgid "Enables Euro support"
-#~ msgstr "Euró támogatás engedélyezése"
-
-#~ msgid "Enables additional support for the European Union EURO currency."
-#~ msgstr "Engedélyezi az EU pénzének (EUR) a használatát."
-
-#~ msgid "Labels on toolbar buttons"
-#~ msgstr "Címkék az eszköztár gombjain"
-
-#~ msgid "Position of the notebook tabs"
-#~ msgstr "A fülek helye"
-
-#, fuzzy
-#~ msgid "Show the Calendar buttons"
-#~ msgstr "Név oszlop megjelenítése"
-
-#, fuzzy
-#~ msgid "Show the Date Entered"
-#~ msgstr "A dátum oszlop feltüntetése"
-
-#~ msgid "Source of default account currency"
-#~ msgstr "Folyószámla alapértelmezett pénznemének forrása"
-
-#~ msgid "Source of default report currency"
-#~ msgstr "Jelentés alapértelmezett pénznemének forrása"
-
-#, fuzzy
-#~ msgid "The number of Characters needed"
-#~ msgstr "Részvények számának megjelenítése"
-
-#, fuzzy
-#~ msgid "The number of transactions displayed"
-#~ msgstr "_Tranzakciók száma:"
-
-#~ msgid ""
-#~ "This setting contains the width of the named column in the most recently "
-#~ "closed register window. Changing these values will change the sizes of "
-#~ "the columns in the next opened register"
-#~ msgstr ""
-#~ "E beállítás tartalmazza a megnevezett oszlop szélességét a legutóbb "
-#~ "bezárt regiszterablakban. Az értékek megváltoztatása a következő "
-#~ "megnyitott regiszterben megjelenő oszlopokra lesz hatással"
-
-#~ msgid "Width of a column in the dialog"
-#~ msgstr "Oszlop szélessége a dialógusban"
-
-#~ msgid "New item"
-#~ msgstr "Új tétel"
-
-#~ msgid ""
-#~ "Error: Failure saving state file.\n"
-#~ "  %s"
-#~ msgstr ""
-#~ "Hiba: Nem sikerült az állapotfájl mentése.\n"
-#~ "  %s"
-
-#, fuzzy
-#~ msgid ""
-#~ "When you click Apply, GnuCash will modify your ~/.gconf.path file and "
-#~ "restart the gconf backend. There will be a short delay before GnuCash is "
-#~ "loaded."
-#~ msgstr ""
-#~ "Amint az 'Alkalmazás'-ra kattint, GnuCash módosítja a ~/.gconf.path fájlt "
-#~ "és újraindítja a gconf backend-et."
-
-#, fuzzy
-#~ msgid ""
-#~ "When you click Apply, GnuCash will install the gconf data into your local "
-#~ "~/.gconf file and restart the gconf backend. The %s script must be found "
-#~ "in your search path for this to work correctly."
-#~ msgstr ""
-#~ "Amint az 'Alkalmazás'-ra kattint, GnuCash telepíti a gconf adatokat a "
-#~ "helyi ~/.gconf fájlba és újraindítja a gconf háttért. A %s szkriptnek a "
-#~ "keresési útvonalaban kell lennie, hogy ez rendesen működjön."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to correct the problem by yourself. When you click Apply, "
-#~ "GnuCash will exit. Please correct the problem and restart the gconf "
-#~ "backend with the command 'gconftool-2 --shutdown' before restarting "
-#~ "GnuCash. If you have not already done so, you can click the Back button "
-#~ "and copy the necessary text from the dialog."
-#~ msgstr ""
-#~ "Ön azt választotta, hogy maga oldja meg a problémát. Amint az "
-#~ "'Alkalmazás'-ra kattint, a GnuCash kilép. Javítsa ki a hibát és indítsa "
-#~ "újra a gconf backend -et (gconftool-2 --shutdown) mielőtt a GnuCash-t "
-#~ "újraindítja. Ha még nem csinát ilyet, másolja kia szöveget a zárójelekből "
-#~ "és indítsa parancssorban."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to correct the problem by yourself. When you click Apply, "
-#~ "GnuCash will exit. Please run the %s script which will install the "
-#~ "configuration data and restart the gconf backend."
-#~ msgstr ""
-#~ "Ön azt választotta, hogy maga oldja meg a problémát. Amint az "
-#~ "'Alkalmazás'-ra kattint, a GnuCash kilép. Kérem futtassa %s a szkriptet, "
-#~ "ami telepíti a konfigurációs adatokat, majd indítsa újra a GnuCash-t."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have already corrected the problem and restarted the gconf backend "
-#~ "with the command 'gconftool-2 --shutdown'. When you click Apply, there "
-#~ "will be a short delay before GnuCash is loaded."
-#~ msgstr ""
-#~ "Újraindította a 'gconf backend'-et a 'gconf-2 --shutdown' paranccsal. Ha "
-#~ "az Alkalmazásra kattint, GnuCash folytatja a betöltést."
-
-#, fuzzy
-#~ msgid "Withdrawl"
-#~ msgstr "Kivét"
-
-#~ msgid ""
-#~ "<b>Cannot find default values</b>\n"
-#~ "\n"
-#~ "The configuration data used to specify default values for GnuCash cannot "
-#~ "be found in the default system locations. Without this data GnuCash will "
-#~ "still operate properly but it may require some extra time to setup. Do "
-#~ "you wish to setup the configuration data?"
-#~ msgstr ""
-#~ "<b>Alapértékek nem találhatók</b>\n"
-#~ "\n"
-#~ "Az alapértékek meghatározására használt konfigurációs adatok nem "
-#~ "találhatók az alapértelmezett rendszerhelyeken. Ezen adatok nélkül "
-#~ "GnuCash még rendesen működik, de több időt vesz igénybe a beállítása. Be "
-#~ "akarja állítani a konfigurációs adatokat?"
-
-#, fuzzy
-#~ msgid "Apply Changes"
-#~ msgstr "Érték változás"
-
-#, fuzzy
-#~ msgid "Choose Method"
-#~ msgstr "Eljárás kiválasztása"
-
-#~ msgid "GnuCash will install the data for you."
-#~ msgstr "GnuCash telepíti az adatokat."
-
-#~ msgid "GnuCash will update the system path for you."
-#~ msgstr "GnuCash frissíti a rendszer elérési útját."
-
-#, fuzzy
-#~ msgid "Install Into Home Directory"
-#~ msgstr "Saját mappába telepítés"
-
-#~ msgid ""
-#~ "Please add the following lines at the end of your ~/.gconf.path file:"
-#~ msgstr "Adja meg a következő sorokat a ~/.gconf.path fájl végén:"
-
-#~ msgid "Please run the following commands:"
-#~ msgstr "Futtassa a következő parancsokat:"
-
-#~ msgid "S_kip"
-#~ msgstr "_Kihagy"
-
-#, fuzzy
-#~ msgid ""
-#~ "The configuration data is stored in a non-standard location. There are "
-#~ "two methods that can be used to make this data visible to GnuCash. The "
-#~ "first is to modify a system search path to include the data location. The "
-#~ "second is to copy the data into your home directory."
-#~ msgstr ""
-#~ "A konfigurációs adatok nem szabványos helyen vannak. Két eljárás van, ami "
-#~ "használható arra, hogy ezeket az adatokat lássa a GnuCash. Az első a "
-#~ "rendszer keresési útjának megváltoztatása, hogy tartalmazza az adatok "
-#~ "helyét. A második, az adatok másolása a saját mappába."
-
-#~ msgid ""
-#~ "The configuration data used by GnuCash to specify its default values "
-#~ "cannot be found in the default system locations. Without this data "
-#~ "GnuCash will still operate properly, but it may require some extra time "
-#~ "to set up."
-#~ msgstr ""
-#~ "A konfigurációs adatok, amiket GnuCash használ az alapértékek "
-#~ "meghatározására, nem találhatók az alapértelmezett rendszerhelyeken. Ezen "
-#~ "adatok nélkül GnuCash még mindig jól működik, de több időt vesz igénybe a "
-#~ "beállítása."
-
-#~ msgid "The data has _already been installed in another window"
-#~ msgstr "Az adatokat _már telepítették egy másik ablakban"
-
-#~ msgid "The search path has _already been updated in another window"
-#~ msgstr "A keresési utat már frissítették egy másik ablakban"
-
-#, fuzzy
-#~ msgid ""
-#~ "This method will install the GnuCash default settings and descriptions "
-#~ "into the .gconf directory within your home directory. The disadvantage to "
-#~ "this method is that future updates to GnuCash will not update your local "
-#~ "settings to add in new keys."
-#~ msgstr ""
-#~ "Ez az eljárás telepíti GnuCash alapértelmezett beállításait és leírásait "
-#~ "a .gconf mappába a saját könyvtárban. Ezen eljárás hátránya, hogy a "
-#~ "GnuCash jövőbeli frissítései nem változtatják a helyi beállításokat új "
-#~ "kulcsok hozzáadásával."
-
-#, fuzzy
-#~ msgid ""
-#~ "This method will modify the file .gconf.path in your home directory. It "
-#~ "will add the GnuCash install directory to this path so that GnuCash can "
-#~ "find its default settings and their descriptions."
-#~ msgstr ""
-#~ "Ez az eljárás megváltoztatja a .gconf.path fájlt a saját mappában. "
-#~ "Hozzáadja a GnuCash telepítőmappáját ehhez az úthoz, így GnuCash "
-#~ "megtalálhatja az alapbeállításokat és azok leírásait."
-
-#, fuzzy
-#~ msgid "Update GnuCash Configuration Data"
-#~ msgstr "GnuCash konfigurációs adatainak frissítése"
-
-#~ msgid "Update GnuCash configuration data"
-#~ msgstr "GnuCash konfigurációs adatainak frissítése"
-
-#, fuzzy
-#~ msgid "Update Search Path"
-#~ msgstr "Keresési út frissítése"
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to install the configuration data used by GnuCash into "
-#~ "the ~/.gconf directory. GnuCash can do this for you, or tell you how to "
-#~ "do it yourself."
-#~ msgstr ""
-#~ "Azt választotta, hogy a GnuCash használta konfigurációs adatokat a ~/."
-#~ "gconf mappába telepítsék. GnuCash megteheti ezt, vagy megmondhatja, "
-#~ "hogyan kell ezt tenni."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to update the system search path. GnuCash can do this for "
-#~ "you, or it can tell you how to do it yourself."
-#~ msgstr ""
-#~ "Azt választották, hogy a rendszer keresési útját időszerűsítsék. GnuCash "
-#~ "megteheti ezt, vagy megmondhatja, hogy kell azt tenni."
-
-#, fuzzy
-#~ msgid ""
-#~ "You will then need to restart the gconf backend with the command "
-#~ "'gconftool-2 --shutdown'."
-#~ msgstr ""
-#~ "Újraindította a 'gconf backend'-et a 'gconf-2 --shutdown' paranccsal. Ha "
-#~ "az Alkalmazásra kattint, GnuCash folytatja a betöltést."
-
-#~ msgid "_GnuCash installs the data"
-#~ msgstr "_GnuCash telepíti az adatokat"
-
-#~ msgid "_GnuCash updates the search path"
-#~ msgstr "_GnuCash frissíti a keresési utat"
-
-#~ msgid "_Install into home directory"
-#~ msgstr "Saját mappába telepítés"
-
-#~ msgid "_Setup"
-#~ msgstr "Beállítá_s"
-
-#~ msgid "_Update search path"
-#~ msgstr "Keresési útvonal frissítése"
-
-#~ msgid "_You install the data yourself"
-#~ msgstr "Ön telepíti az adatokat"
-
-#~ msgid "_You update the search path yourself"
-#~ msgstr "Ön frissíti a keresési utat"
-
-#~ msgid "<b>Toolbar Style</b>"
-#~ msgstr "<b>Eszköztár stílusa</b>"
-
-#~ msgid "Display toolbar items as icons only."
-#~ msgstr "Eszköztár elemei csak ikonként."
-
-#~ msgid "Display toolbar items as text only."
-#~ msgstr "Eszköztár elemei csak szövegként."
-
-#~ msgid ""
-#~ "Display toolbar items with the text label below the icon. Labels are show "
-#~ "for all items."
-#~ msgstr ""
-#~ "Eszköztárelemek megjelenítése szövegcímkével az ikon alatt. Címkék minden "
-#~ "elemre."
-
-#~ msgid ""
-#~ "Display toolbar items with the text label beside the icon. Labels are "
-#~ "only shown for the most important items."
-#~ msgstr ""
-#~ "Eszköztárelemek megjelenítése szövegcímkével az ikon mellett. Címkék csak "
-#~ "a legtöbbet használt  elemekre."
-
-#~ msgid ""
-#~ "If checked, the system color theme will be applied to register windows. "
-#~ "If clear, the original GnuCash register colors will be used."
-#~ msgstr ""
-#~ "Bejelölve a rendszer színtémáit használja a regiszterablak. Különben az "
-#~ "eredeti GnuCash regiszterszíneket használja."
-
-#~ msgid "Priority text besi_de icons"
-#~ msgstr "Szöveg az ikonok mellett"
-
-#~ msgid "Text _below icons"
-#~ msgstr "Szöveg ikonok alatt"
-
-#~ msgid "Use s_ystem default"
-#~ msgstr "Rendszer _alapértelmezés használata"
-
-#~ msgid "Use the date format common in continental Europe."
-#~ msgstr "Európában szokásos dátumalak használata."
-
-#~ msgid "Use the date format common in the United Kingdom."
-#~ msgstr "Az Egyesült Királyságban szokásos dátumalak használata."
-
-#~ msgid "Use the date format common in the United States."
-#~ msgstr "Az Egyesült Államokban szokásos dátumalak használata."
-
-#~ msgid "Use the date format specified by the ISO-8601 standard."
-#~ msgstr "Az ISO-8601 szabvány szerinti dátumalak használata."
-
-#~ msgid "Use the system setting for displaying toolbar items."
-#~ msgstr "A rendszerbeállítások használata eszköztár elemek megjelenítésére."
-
-#~ msgid "_Europe:"
-#~ msgstr "_Európa:"
-
-#~ msgid "_Icons only"
-#~ msgstr "Csak _ikonok"
-
-#~ msgid "_Text only"
-#~ msgstr "Csak _szöveg"
-
-#~ msgid "_Use system theme colors"
-#~ msgstr "Rendszertéma színeinek _használata"
-
-#~ msgid "%s at %s (code %s)"
-#~ msgstr "%s at %s (code %s)"
-
-#~ msgid "%s at bank code %s"
-#~ msgstr "%s bankkódja %s"
-
-#, fuzzy
-#~ msgid "Comma Separated with Quotes"
-#~ msgstr "Vesszővel elválasztott"
-
-#, fuzzy
-#~ msgid "Semicolon Separated with Quotes"
-#~ msgstr "Pontos vesszővel elválasztva"
-
-#~ msgid "Delete the currently selected report"
-#~ msgstr "A kiválasztott jelentés törlése"
-
-#~ msgid "Run the currently selected report"
-#~ msgstr "A kiválasztott jelentés futtatása"
-
-#~ msgid "_Run"
-#~ msgstr "Futtatás"
-
-#~ msgid "Add _Report"
-#~ msgstr "Jelentés felvétele"
-
-#, fuzzy
-#~ msgid "Net Price"
-#~ msgstr "Nettó ár:"
-
-#, fuzzy
-#~ msgid "Total Price"
-#~ msgstr "Összár"
-
-#, fuzzy
-#~ msgid "Amount Due"
-#~ msgstr "Esedékes összeg"
-
-#, fuzzy
-#~ msgid "Invoice number: "
-#~ msgstr "Számlaszám"
-
-#, fuzzy
-#~ msgid "Job number: "
-#~ msgstr "Megbízásszám"
-
-#~ msgid "Custom Reports"
-#~ msgstr "Saját jelentés"
-
-#~ msgid "and"
-#~ msgstr "és"
-
-#~ msgid "Most recent to report"
-#~ msgstr "Legutóbbi jelentenivaló"
-
-#~ msgid "The most recent recorded price before report date"
-#~ msgstr "A jelentés dátuma előtti legutóbb rögzített ár"
-
-#~ msgid "FILO"
-#~ msgstr "FILO"
-
-#~ msgid "Use first-in last-out method for basis"
-#~ msgstr "Első be utolsó ki eljárás használata alapként"
-
-#~ msgid "Enable hyperlinks in reports"
-#~ msgstr "Hiperhivatkozások engedélyezése a reportokban"
-
-#~ msgid "Welcome to GnuCash 2.4!"
-#~ msgstr "Üdvözli a GnuCash 2.4!"
-
-#~ msgid "The last stable version was "
-#~ msgstr "Az utolsó stabil változat: "
-
-#~ msgid "The next stable version will be "
-#~ msgstr "A következő stabil változat: "
-
-#~ msgid "Built %s from r%s"
-#~ msgstr "Készült: %s v%s"
-
-#~ msgid "You may not post an invoice with a negative total value."
-#~ msgstr "Nem rögzíthet számlát negatív egyenleggel."
-
-#~ msgid ""
-#~ "You may not post an expense voucher with a negative total cash value."
-#~ msgstr "Nem rögzíthet kiadási bizonylatot negatív összeggel."
-
-#~ msgid "Your selected post account, %s, does not exist"
-#~ msgstr "A kiválasztott folyószámla, %s, nem létezik"
-
-#~ msgid ""
-#~ "Days\n"
-#~ "Proximo"
-#~ msgstr ""
-#~ "Nap\n"
-#~ "Következő hónap"
-
-#~ msgid "What Tax Table should be applied to this customer?"
-#~ msgstr "Milyen adótáblát kell alkalmazni erre a vevőre?"
-
-#~ msgid "What Tax Table should be applied to this vendor?"
-#~ msgstr "Milyen adótáblázatot kell alkalmazni e beszállítóra?"
-
-#~ msgid "Reload invoice report"
-#~ msgstr "Számlajelentés újratöltése"
-
-#~ msgid "Reload invoice report scheme file"
-#~ msgstr "Számlajelentés forrásfájl újratöltése"
-
-#~ msgid "Reload owner report"
-#~ msgstr "Tulajdonos-jelentés újratöltése"
-
-#~ msgid "Reload owner report scheme file"
-#~ msgstr "Tulajdonos-jelentés forrásfájl újratöltése"
-
-#~ msgid "Reload receivable report"
-#~ msgstr "Követelés-jelentés újratöltése"
-
-#~ msgid "Reload receivable report scheme file"
-#~ msgstr "Követelés-jelentés forrásfájl újratöltése"
-
-#~ msgid "Automatic Payment Forward"
-#~ msgstr "A teljesítés automatikus továbbítása"
-
-#~ msgid "You must select a commodity."
-#~ msgstr "Ki kell választani egy pénznemet."
-
-#~ msgid ""
-#~ "You must select closing date that is greater than the closing date of the "
-#~ "previous book."
-#~ msgstr ""
-#~ "Ki kell választania egy záró dátumot, ami későbbi az előző könyv záró "
-#~ "dátumánál."
-
-#~ msgid "You must select closing date that is not in the future."
-#~ msgstr "Nem lehet jövőbeni záró dátumot választani."
-
-#~ msgid "Are you sure you want to cancel the Mortgage/Loan Setup Assistant?"
-#~ msgstr "Biztosan törölni kívánja a Jelzálog/kölcsön beállító varázslót?"
-
-#~ msgid "Please select a valid \"from\" account."
-#~ msgstr "Válasszon ki egy érvényes forrásszámlát."
-
-#~ msgid "Please select a valid \"to\" account."
-#~ msgstr "Válasszon ki egy érvényes célszámlát."
-
-#~ msgid "Please select a valid \"interest\" account."
-#~ msgstr "Válasszon ki egy érvényes \"kamat\" folyószámlát."
-
-#~ msgid "Payment: \"%s\""
-#~ msgstr "Kifizetés: \"%s\""
-
-#~ msgid "You must enter a valid distribution amount."
-#~ msgstr "Érvényes összeget kell megadni."
-
-#~ msgid "You must enter a distribution amount."
-#~ msgstr "Adja meg a kibocsátási összeget."
-
-#~ msgid "You must either enter a valid price or leave it blank."
-#~ msgstr "Érvényes árat adjon meg, vagy hagyja üresen."
-
-#~ msgid "The price must be positive."
-#~ msgstr "Az ár pozitív kell legyen."
-
-#~ msgid "You must either enter a valid cash amount or leave it blank."
-#~ msgstr "Adjon meg érvényes készpénzösszeget, vagy hagyja üresen."
-
-#~ msgid "The cash distribution must be positive."
-#~ msgstr "A készpénzkiadás pozitív kell legyen."
-
-#~ msgid "You must select an income account for the cash distribution."
-#~ msgstr "Ki kell választani egy bevételszámlát a készpénzkiadáshoz."
-
-#~ msgid "You must select an asset account for the cash distribution."
-#~ msgstr "Ki kell választani egy eszközszámlát a készpénzkiadáshoz."
-
-#~ msgid "New Account (not implemented)"
-#~ msgstr "Új Számla (nem megvalósított)"
-
-#~ msgid "Select or add a GnuCash account"
-#~ msgstr "GnuCash-számla kiválasztása vagy hozzáadása"
-
-#~ msgid ""
-#~ "Use Commodity Value\n"
-#~ "1\n"
-#~ "1/10\n"
-#~ "1/100\n"
-#~ "1/1000\n"
-#~ "1/10000\n"
-#~ "1/100000\n"
-#~ "1/1000000"
-#~ msgstr ""
-#~ "Alkalmazandó egység\n"
-#~ "1\n"
-#~ "1/10\n"
-#~ "1/100\n"
-#~ "1/1000\n"
-#~ "1/10000\n"
-#~ "1/100000\n"
-#~ "1/1000000"
-
-#~ msgid "Enter a title for this book."
-#~ msgstr "Adjon egy címet a könyvnek."
-
-#~ msgid "Enter notes that describe this book."
-#~ msgstr "Adjon meg megjegyzéseket a könyvről."
-
-#~ msgid "Finish Closing Books"
-#~ msgstr "Könyvek lezárásának befejezése"
-
-#~ msgid ""
-#~ "day(s)\n"
-#~ "week(s)\n"
-#~ "month(s)\n"
-#~ "year(s)"
-#~ msgstr ""
-#~ "nap\n"
-#~ "hét\n"
-#~ "hónap\n"
-#~ "év"
-
-#~ msgid "Account Information"
-#~ msgstr "A számla jellemzői"
-
-#~ msgid "Co_mpounding:"
-#~ msgstr "Ö_sszetétel:"
-
-#~ msgid "_Effective Date:"
-#~ msgstr "Tényl_eges dátum:"
-
-#~ msgid "_Initial Payment:"
-#~ msgstr "Kezdet_i kifizetés:"
-
-#~ msgid "_Payments:"
-#~ msgstr "_Fizetések:"
-
-#~ msgid "<b>_Mini-Viewer</b>"
-#~ msgstr "<b>_Mini-néző</b>"
-
-#~ msgid "A summary of all of the transactions in the selected lot"
-#~ msgstr "A tranzakciók összefoglalása a kiválasztott tételben"
-
-#~ msgid ""
-#~ "Bid\n"
-#~ "Ask\n"
-#~ "Last\n"
-#~ "Net Asset Value\n"
-#~ "Unknown"
-#~ msgstr ""
-#~ "Vételi árfolyam\n"
-#~ "Eladási árfolyam\n"
-#~ "Teljesítés\n"
-#~ "Nettó eszközérték\n"
-#~ "Ismeretlen"
-
-#~ msgid ""
-#~ "Inches\n"
-#~ "Centimeters\n"
-#~ "Millimeters\n"
-#~ "Points"
-#~ msgstr ""
-#~ "hüvelyk\n"
-#~ "centiméter\n"
-#~ "milliméter\n"
-#~ "pont"
-
-#~ msgid ""
-#~ "Quicken/QuickBooks (tm) US-Letter\n"
-#~ "Deluxe(tm) Personal Checks US-Letter\n"
-#~ "Quicken(tm) Wallet Checks w/ side stub\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Quicken/QuickBooks (tm) US-Letter\n"
-#~ "Deluxe(tm) Personal Checks US-Letter\n"
-#~ "Quicken(tm) Wallet Checks w/ side stub\n"
-#~ "Egyedi"
-
-#~ msgid ""
-#~ "Top\n"
-#~ "Middle\n"
-#~ "Bottom\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "fent\n"
-#~ "középen\n"
-#~ "lent\n"
-#~ "egyedi"
-
-#~ msgid "Copy Transaction"
-#~ msgstr "Tranzakció másolása"
-
-#~ msgid "Copy the selected transaction"
-#~ msgstr "A jelenlegi tranzakció másolása"
-
-#~ msgid "Cut Transaction"
-#~ msgstr "Tranzakció kivágása"
-
-#~ msgid "Dup_licate Transaction..."
-#~ msgstr "Tra_nzakció duplikálása"
-
-#~ msgid "Edit Exchange Rate"
-#~ msgstr "Árfolyamszerkesztés"
-
-#~ msgid "Edit the exchange rate for the current split"
-#~ msgstr "A jelenlegi kifejtés árfolyamának szerkesztése"
-
-#~ msgid "Erase all splits except the one for this account."
-#~ msgstr "Minden felosztás törlése kivéve, ami ehhez a számlához tartozik."
-
-#~ msgid "Jump"
-#~ msgstr "Ugrás"
-
-#~ msgid "Remove Transaction Splits"
-#~ msgstr "Tranzakcióosztások törlése"
-
-#~ msgid "Schedule..."
-#~ msgstr "Ütemezés..."
-
-#~ msgid "Sort by Amount"
-#~ msgstr "Összeg szerinti rendezés"
-
-#~ msgid "Sort by Date"
-#~ msgstr "Rendezés dátum szerint"
-
-#~ msgid "Sort by Description"
-#~ msgstr "Magyarázat szerinti rendezés"
-
-#~ msgid "Sort by Memo"
-#~ msgstr "Megjegyzés szerinti rendezés"
-
-#~ msgid "Sort by Number"
-#~ msgstr "Szám szerinti rendezés"
-
-#~ msgid "St_yle"
-#~ msgstr "St_ílus"
-
-#~ msgid "_Amount"
-#~ msgstr "_Összeg"
-
-#~ msgid "_Number"
-#~ msgstr "_Szám"
-
-#~ msgid "_Statement Date"
-#~ msgstr "A bank_számlakivonat dátuma"
-
-#~ msgid ""
-#~ "1st\n"
-#~ "2nd\n"
-#~ "3rd\n"
-#~ "4th\n"
-#~ "5th\n"
-#~ "6th\n"
-#~ "7th\n"
-#~ "8th\n"
-#~ "9th\n"
-#~ "10th\n"
-#~ "11th\n"
-#~ "12th\n"
-#~ "13th\n"
-#~ "14th\n"
-#~ "15th\n"
-#~ "16th\n"
-#~ "17th\n"
-#~ "18th\n"
-#~ "19th\n"
-#~ "20th\n"
-#~ "21st\n"
-#~ "22nd\n"
-#~ "23rd\n"
-#~ "24th\n"
-#~ "25th\n"
-#~ "26th\n"
-#~ "27th\n"
-#~ "28th\n"
-#~ "29th\n"
-#~ "30th\n"
-#~ "31st\n"
-#~ "Last day of month\n"
-#~ "Last Monday\n"
-#~ "Last Tuesday\n"
-#~ "Last Wednesday\n"
-#~ "Last Thursday\n"
-#~ "Last Friday\n"
-#~ "Last Saturday\n"
-#~ "Last Sunday"
-#~ msgstr ""
-#~ "1.\n"
-#~ "2.\n"
-#~ "3.\n"
-#~ "4.\n"
-#~ "5.\n"
-#~ "6.\n"
-#~ "7.\n"
-#~ "8.\n"
-#~ "9.\n"
-#~ "10.\n"
-#~ "11.\n"
-#~ "12.\n"
-#~ "13.\n"
-#~ "14.\n"
-#~ "15.\n"
-#~ "16.\n"
-#~ "17.\n"
-#~ "18.\n"
-#~ "19.\n"
-#~ "20.\n"
-#~ "21.\n"
-#~ "22.\n"
-#~ "23.\n"
-#~ "24.\n"
-#~ "25.\n"
-#~ "26.\n"
-#~ "27.\n"
-#~ "28.\n"
-#~ "29.\n"
-#~ "30.\n"
-#~ "31.\n"
-#~ "Hónap utlsó napja\n"
-#~ "Utolsó hétfő\n"
-#~ "Utolsó kedd\n"
-#~ "Utolsó szerda\n"
-#~ "Utolsó  csütörtök\n"
-#~ "Utolsó péntek\n"
-#~ "Utolsó szombat\n"
-#~ "Utolsó vasárnap"
-
-#~ msgid "<b>End</b>"
-#~ msgstr "<b>Végződés</b>"
-
-#~ msgid "<b>Upcoming</b>"
-#~ msgstr "<b>Következő</b>"
-
-#~ msgid "Creation State"
-#~ msgstr "Létrehozási állapot"
-
-#~ msgid ""
-#~ "Current Year\n"
-#~ "Now + 1 Year\n"
-#~ "Whole Loan\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Aktuális év\n"
-#~ "Idei+1 év\n"
-#~ "Teljes hitel\n"
-#~ "Egyéni"
-
-#~ msgid ""
-#~ "Daily\n"
-#~ "Weekly\n"
-#~ "Bi-Weekly\n"
-#~ "Monthly\n"
-#~ "Quarterly\n"
-#~ "Yearly"
-#~ msgstr ""
-#~ "Napi\n"
-#~ "Heti\n"
-#~ "Kétheti\n"
-#~ "Havi\n"
-#~ "Negyedéves\n"
-#~ "Éves"
-
-#~ msgid "Do you..."
-#~ msgstr "Ön..."
-
-#~ msgid "Loan Information"
-#~ msgstr "Kölcsöninformáció"
-
-#~ msgid "Press apply to commit these changes."
-#~ msgstr "Nyomjon 'alkalmaz' -t a változások érvényesítéséhez."
-
-#~ msgid "Repayment Type"
-#~ msgstr "Törlesztés típusa"
-
-#~ msgid "Start Date: "
-#~ msgstr "Kezdő dátum: "
-
-#~ msgid ""
-#~ "months\n"
-#~ "years"
-#~ msgstr ""
-#~ "hónapok\n"
-#~ "évek"
-
-#~ msgid "Set the budget options using this dialog."
-#~ msgstr "A dialógus a költségvetés beállítására való."
-
-#~ msgid "Case Insensitive?"
-#~ msgstr "Kis-nagybetűre érzéketlen ?"
-
-#~ msgid "That GnuCash XML file is already loaded. Please select another file."
-#~ msgstr "A GnuCash XML fájl már be van töltve. Válasszon ki egy másik fájlt."
-
-#~ msgid "Finish changes"
-#~ msgstr "Változtatás befejezése"
-
-#~ msgid "Update gconf settings - GnuCash"
-#~ msgstr "Gconf beállítások frissítése - GnuCash"
-
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to import at this time. "
-#~ "Do this if you have saved your accounts to separate GnuCash files.\n"
-#~ "\n"
-#~ "Click \"Forward\" to finish loading files and move to the next step of "
-#~ "the GnuCash Datafile import process."
-#~ msgstr ""
-#~ "Kattintson a \"Másik fájl betöltése\"-re,ha egyszerre több fájlt szeretne "
-#~ "importálni. Tegye ezt akkor,ha a számlák külön GnuCash-fájlban mentve "
-#~ "vannak.\n"
-#~ "\n"
-#~ "A fájlok betöltésének befejezéshez és a GnuCash importálási eljárás "
-#~ "következő lépéséhez, kattintson az \"Tovább\" gombra."
-
-#~ msgid "Do not merge"
-#~ msgstr "Nincs összefésülés"
-
-#~ msgid "GnuCash data files you have loaded"
-#~ msgstr "Betöltött GnuCash fájlok"
-
-#~ msgid "Load another file"
-#~ msgstr "Másik fájl betöltése"
-
-#~ msgid "Unload selected file"
-#~ msgstr "A kiválasztott fájl kihagyása"
-
-#~ msgid "<b>Current File List</b>"
-#~ msgstr "<b>Jelenlegi fájllista</b>"
-
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to load at this time.\n"
-#~ "\n"
-#~ "Click \"Next\" to finish loading files and move to the next step. "
-#~ msgstr ""
-#~ "Kattintson a \"Másik fájl betöltése\"-re,ha több fájlt szeretne "
-#~ "importálni\n"
-#~ "\n"
-#~ "A fájlok betöltésének befejezéséhez és a továbblépéshez,kattintson a "
-#~ "\"Következő\"-re "
-
-#~ msgid "<b>Exchange/Price Information</b>"
-#~ msgstr "<b>Árfolyam/ár-információ</b>"
-
-#~ msgid "To A_mount:"
-#~ msgstr "Célösszeget:"
-
-#~ msgid "_Exchange Rate:"
-#~ msgstr "Árfolyam:"
-
-#~ msgid "_From:"
-#~ msgstr "Innen:"
-
-#~ msgid "_To:"
-#~ msgstr "Eddig:"
-
-#~ msgid ""
-#~ "US (12/31/2001)\n"
-#~ "UK (31/12/2001)\n"
-#~ "Europe (31.12.2001)\n"
-#~ "ISO (2001-12-31)\n"
-#~ "UTC\n"
-#~ "Locale\n"
-#~ "Custom\n"
-#~ msgstr ""
-#~ "USA (12/31/2001)\n"
-#~ "UK (31/12/2001)\n"
-#~ "Európa (31.12.2001)\n"
-#~ "ISO (2001-12-31)\n"
-#~ "UTC\n"
-#~ "Helyi\n"
-#~ "Egyedi\n"
-
-#~ msgid "Don't tell me again this session."
-#~ msgstr "Nem mondja még egyszer e munkamenetben."
-
-#~ msgid "Don't tell me again."
-#~ msgstr "Nem mondja még egyszer."
-
-#~ msgid "Remember the answer and don't tell me again this session."
-#~ msgstr "Válasz megjegyzése erre a munkamenetre."
-
-#~ msgid "Remember the answer and don't tell me again."
-#~ msgstr "Válasz megjegyzése, nem kérdezi ismét."
-
-#~ msgid "Failed to process file: %s"
-#~ msgstr "%s fájl feldolgozása sikertelen"
-
-#~ msgid "Failed to open file: %s: %s"
-#~ msgstr "%s fájl megnyitása sikertelen: %s"
-
-#~ msgid "Add a new transaction to the account"
-#~ msgstr "Új tranzakció felvétele a folyószámlára"
-
-#~ msgid "Select an CSV/Fixed-Width file to import"
-#~ msgstr "Importálandó fix szélességű CSV fájl kiválasztása"
-
-#~ msgid "Import CSV/Fixed-Width File"
-#~ msgstr "Import CSV/rögzített szélességű fájl"
-
-#~ msgid "Import _CSV/Fixed-Width..."
-#~ msgstr "_Fix szélességű CSV fájl importálása..."
-
-#~ msgid " a CSV/Fixed-Width file"
-#~ msgstr "egy CSV/ rögzített szélességű fájl"
-
-#~ msgid ""
-#~ "For a new transaction, click on the \"Other Account\" entry to choose the "
-#~ "other (destination) account of this transaction.\n"
-#~ "For a transaction that is a duplicate of an existing one, click on the "
-#~ "\"Other Account\" or \"Description\" entry to \n"
-#~ "check whether GnuCash chose the right existing transaction.\n"
-#~ "To switch transactions between both states, click on the checkmark in the "
-#~ "\"New\" column.\n"
-#~ "When all new transactions have the correct destination account and all "
-#~ "duplicates are matched with the right existing transaction, \n"
-#~ "click \"OK\"."
-#~ msgstr ""
-#~ "For a new transaction, click on the \"Other Account\" entry to choose the "
-#~ "other (destination) account of this transaction.\n"
-#~ "For a transaction that is a duplicate of an existing one, click on the "
-#~ "\"Other Account\" or \"Description\" entry to \n"
-#~ "check whether GnuCash chose the right existing transaction.\n"
-#~ "To switch transactions between both states, click on the checkmark in the "
-#~ "\"New\" column.\n"
-#~ "When all new transactions have the correct destination account and all "
-#~ "duplicates are matched with the right existing transaction, \n"
-#~ "click \"OK\"."
-
-#~ msgid "Other Account"
-#~ msgstr "Más számla"
-
-#~ msgid "Period-as-decimal (1,000.00)"
-#~ msgstr "Pont,tizedesként (1,000.00)"
-
-#~ msgid "Comma-as-decimal (1.000,00)"
-#~ msgstr "Vessző,tizedesként (1.000,00)"
-
-#~ msgid "y-d-m"
-#~ msgstr "é-n-h"
-
-#~ msgid "(no)"
-#~ msgstr "(nem)"
-
-#~ msgid "You must enter an account name."
-#~ msgstr "Meg kell adni egy számlanevet."
-
-#~ msgid ""
-#~ "No valid customer selected. Click on the Options button to select a "
-#~ "customer."
-#~ msgstr ""
-#~ "Nincs érvényesen kiválasztott ügyfél %s. Ügyfél kiválasztásához "
-#~ "kattintson az opciók gombra."
-
-#~ msgid ""
-#~ "No valid employee selected. Click on the Options button to select an "
-#~ "employee."
-#~ msgstr ""
-#~ "Nincs érvényesen kiválasztott alkalmazott. Alkalmazott kiválasztásához "
-#~ "kattintson az opciók gombra."
-
-#~ msgid ""
-#~ "No valid company selected. Click on the Options button to select a "
-#~ "company."
-#~ msgstr ""
-#~ "Nincs érvényesen kiválasztott cég. Cég kiválasztásához kattintson az "
-#~ "opciók gombra."
-
-#~ msgid "Asterisk"
-#~ msgstr "Csillag"
-
-#~ msgid "Set the search path for documentation files"
-#~ msgstr "Adja meg a dokumentációs fájlok keresési útját"
-
-#~ msgid ""
-#~ "Enable the SKIP action in the transaction matcher. If enabled, a "
-#~ "transaction whose best match's score is in the yellow zone (above the "
-#~ "Auto-ADD threshold but below the Auto-CLEAR threshold) will be SKIPed by "
-#~ "default."
-#~ msgstr ""
-#~ "KIHAGYÁS tranzakció engedélyezése a tranzakció-illesztőben. Ha "
-#~ "engedélyezve,akkor azon tranzakció, melynek legjobb egyezési pontszáma a "
-#~ "sárga sávba esik (az auto-bővítés küszöb felett, de az auto-törlés küszöb "
-#~ "alatt),alapértelmezésként kihagyva."
-
-#~ msgid ""
-#~ "Blue items are exportable to a German Tax XML file. Press Export to "
-#~ "actually export them."
-#~ msgstr ""
-#~ "A kék tételek exportálhatók egy német adó XML fájlba. Nyomjon Exportot a "
-#~ "tényleges exportáláshoz."
-
-#~ msgid ""
-#~ "No Tax Related accounts were found. Go to the Edit->Tax Options dialog to "
-#~ "set up tax-related accounts."
-#~ msgstr ""
-#~ "Nincs adóvonatkozású számla. Nyissa meg a Számlák->Adóinformáció "
-#~ "dialógust, és készítsen adóvonatkozású számlákat."
-
-#~ msgid "Default number of register rows to display in Invoices."
-#~ msgstr "A számlákban megjelenítendő cellák száma."
-
-#~ msgid "The number of rows in an invoice"
-#~ msgstr "A sorok száma egy számlán"
-
-#~ msgid ""
-#~ "This field sets the number of rows to show in an invoice. It does not "
-#~ "actually affect the display of the contents of the window. It is only "
-#~ "used to set the size of the window when first opened."
-#~ msgstr ""
-#~ "E mező állítja be a számlán megjelenített sorok számát. Nem befolyásolja "
-#~ "az ablakban megjelenített tartalmat. Csak az ablak első megnyitásakor az "
-#~ "ablakméret beállítására használják."
-
-#~ msgid "Invalid Entry:  You need to supply %s."
-#~ msgstr "Érvénytelen tétel: Meg kell adni: %s."
-
-#~ msgid "This SX has changed; are you sure you want to cancel?"
-#~ msgstr "Ez az ütemezés megváltozott. Biztosan elveti?"
-
-#~ msgid "Crea_te in advance, days:"
-#~ msgstr "Korábbi _létrehozás,napok:"
-
-#~ msgid "R_emind in advance, days:"
-#~ msgstr "Megelőző _emlékeztetés, nap:"
-
-#~ msgid ""
-#~ "This field sets the number of rows to show in a register. It does not "
-#~ "actually affect the display of the contents of the window. It is only "
-#~ "used to set the size of the window when first opened."
-#~ msgstr ""
-#~ "E mező határozza meg a regiszterben megjelenítendő sorok számát. "
-#~ "Ténylegesen nem befolyásolja az ablak tartalmának megjelenítését. Csak az "
-#~ "első megnyitáskoriméret meghatározásához használják."
-
-#~ msgid "New %s"
-#~ msgstr "Új %s"
-
-#~ msgid "item"
-#~ msgstr "tétel"
-
-#~ msgid "Display this many rows when a register is created."
-#~ msgstr "Ennyi sor megjelenítése regiszter teremtésekor."
-
-#~ msgid "Enable the EDIT action in the transaction matcher. NOT YET SUPPORTED"
-#~ msgstr "SZERKESZTÉS engedélyezése a tranzakció-illesztő. MÉG NEM TÁMOGATOTT"
-
-#~ msgid ""
-#~ "The job was sent to the bank successfully, but the bank is refusing to "
-#~ "execute the job. Please check the log window for the exact error message "
-#~ "of the bank. The line with the error message contains a code number that "
-#~ "is greater than 9000.\n"
-#~ "\n"
-#~ "Do you want to enter the job again?"
-#~ msgstr ""
-#~ "A feladatot sikerült elküldeni a bankba, de a bank elutasította a feladat "
-#~ "végrehajtását. Ellenőrizze a napló ablakot a bank pontos hibaüzenetéért! "
-#~ "A hibaüzenet sora 9000-nél nagyobb kódszámot tartalmaz.\n"
-#~ "\n"
-#~ "Akarja újból bevinni a feladatot?"
-
-#~ msgid "The two passwords didn't match. Please try again."
-#~ msgstr "A két jelszó nem egyezik. Próbálja újra."
-
-#~ msgid "Choose AqBanking Backend"
-#~ msgstr "Válasszon AqBanking Modul-t"
-
-#~ msgid "Please choose an AqBanking backend to be configured"
-#~ msgstr "Válasszon AqBanking Modult a beállításhoz"
-
-#~ msgid "Co_nfigure"
-#~ msgstr "Beállítás"
-
-#~ msgid "The file %s does not exist. Would you like to create it now?"
-#~ msgstr "A %s fájl nem létezik. Akarja létrehozni?"
-
-#~ msgid ""
-#~ "The directory for file %s does not exist. Please choose another place for "
-#~ "this file."
-#~ msgstr "%s fájl mappája nem létezik. Válasszon egy másik helyet a fájlnak."
-
-#~ msgid "Choose an Online Banking Version to use with the selected bank:"
-#~ msgstr "Válassza ki a banknál használni kívánt Online Banking változatot:"
-
-#~ msgid "Enter and confirm your new password"
-#~ msgstr "Adja meg és erősítse meg az új jelszavát"
-
-#~ msgid "Enter new Password"
-#~ msgstr "Új jelszó bevitele"
-
-#~ msgid "Activate verbose debug messages for Online Banking."
-#~ msgstr "Bőbeszédű hibaüzenetek aktiválása az Online Banking-hez."
-
-#~ msgid ""
-#~ "The PIN you entered was wrong.\n"
-#~ "Do you want to try again?"
-#~ msgstr ""
-#~ "Rossz a megadott PIN-kód.\n"
-#~ "Kívánja újrapróbálni?"
-
-#~ msgid ""
-#~ "The PIN you entered was wrong.\n"
-#~ "ATTENTION: You have zero further wrong retries left!\n"
-#~ "Do you want to try again?"
-#~ msgstr ""
-#~ "Rossz a megadott PIN-kód.\n"
-#~ "FIGYELEM: nulla újrapróbálás maradt!\n"
-#~ " Akarja újrapróbálni?"
-
-#~ msgid ""
-#~ "Unfortunately you entered a wrong PIN for too many times. Your chip card "
-#~ "is therefore destroyed. Aborting."
-#~ msgstr ""
-#~ "Sajnos túl sokszor adott meg rossz PIN-kódot. Ezért a chipkártya "
-#~ "használhatatlanná vált. Kilépés."
-
-#~ msgid ""
-#~ "No chip card has been found in the chip card reader. Do you want to try "
-#~ "again?"
-#~ msgstr "Nincs chipkártya a chipkártya-olvasóban. Akarja újrapróbálni?"
-
-#~ msgid ""
-#~ "The server of your bank refused the Online Banking connection. Please try "
-#~ "again later. Aborting."
-#~ msgstr ""
-#~ "A bank kiszolgálója elutasította az Online Banking kapcsolatot. Próbálja "
-#~ "újra később. Kilépés."
-
-#~ msgid ""
-#~ "One of the jobs was sent to the bank successfully, but the bank is "
-#~ "refusing to execute the job. Please check the log window for the exact "
-#~ "error message of the bank. The line with the error message contains a "
-#~ "code number that is greater than 9000.\n"
-#~ "\n"
-#~ "The job has been removed from the queue."
-#~ msgstr ""
-#~ "A feladatot sikerült elküldeni a bankba, de a bank elutasította a feladat "
-#~ "végrehajtását. Ellenőrizze a napló ablakot a bank pontos hibaüzenetéért! "
-#~ "A hibaüzenet sora 9000-nél nagyobb kódszámot tartalmaz.\n"
-#~ "\n"
-#~ "A feladat el lett távolítva a kérésből."
-
-#~ msgid ""
-#~ "The PIN needs to be at least %d characters long. Do you want to try again?"
-#~ msgstr "A PIN-kód legalább %d karakter kell legyen. Akarja újrapróbálni?"
-
-#~ msgid ""
-#~ "You entered %ld characters, but the PIN must be no longer than %d "
-#~ "characters. Do you want to try again?"
-#~ msgstr ""
-#~ "%ld betűt adtak meg, de a PIN legfeljebb %d betű lehet. Akarja "
-#~ "újrapróbálni?"
-
-#~ msgid ""
-#~ "This TAN needs to be at least %d characters long. Do you want to try "
-#~ "again?"
-#~ msgstr "A TAN legalább %d karakter kell legyen. Akarja újrapróbálni?"
-
-#~ msgid ""
-#~ "You entered %ld characters, but the TAN must be no longer than %d "
-#~ "characters. Do you want to try again?"
-#~ msgstr ""
-#~ "%ld betűt adtak meg, de a TAN legfeljebb %d betű lehet. Akarja "
-#~ "újrapróbálni?"
-
-#~ msgid "Enable EDIT transaction action"
-#~ msgstr "Tranzakció szerkesztésének engedélyezése"
-
-#~ msgid ""
-#~ "Enable the EDIT action in the transaction matcher. NOT YET SUPPORTED."
-#~ msgstr ""
-#~ "Tranzakció szerkesztésének engedélyezése a tranzakció-illesztőben. MÉG "
-#~ "NEM TÁMOGATOTT."
-
-#~ msgid "CONFIGPATH"
-#~ msgstr "CONFIGPATH"
-
-#~ msgid "Set shared data file search path"
-#~ msgstr "Adja meg a megosztott adatok keresési útját"
-
-#~ msgid "SHAREPATH"
-#~ msgstr "SHAREPATH"
-
-#~ msgid "Transaction _journal"
-#~ msgstr "Tranzakció napló"
-
-#, fuzzy
-#~ msgid "Payment rec'd..."
-#~ msgstr "Törlesztés gyakorisága"
-
-#~ msgid "<b>Contained Accounts</b>"
-#~ msgstr "<b>Tartalmazott számlák</b>"
-
-#~ msgid "<b>Description</b>"
-#~ msgstr "<b>Magyarázat</b>"
-
-#~ msgid "<b>New Account Currency</b>"
-#~ msgstr "<b>Új számlák pénzneme</b>"
-
-#~ msgid ""
-#~ "If you would like an account to have an opening balance, click on the "
-#~ "account and enter the starting balance in the box on the right. All "
-#~ "accounts except Equity and placeholder accounts may have an opening "
-#~ "balance."
-#~ msgstr ""
-#~ "Ha kívánja, hogy a számlának legyen nyitóegyenlege, akkor kattintson a "
-#~ "számlára, és adja meg a kezdő egyenleget a jobboldali mezőben. A saját "
-#~ "tőke és a töltelék kivételével bármely számlának lehet nyitóegyenlege."
-
-#~ msgid "This is Sample2."
-#~ msgstr "Ez a 2. példa."
-
-#~ msgid "Auto-Created Transactions Notification"
-#~ msgstr "Értesítés,automatikusan létrehozott tranzakciókról"
-
-#~ msgid "Create"
-#~ msgstr "Létrehozás"
-
-#~ msgid "Create as scheduled"
-#~ msgstr "Létrehozás Ütemezettként"
-
-#~ msgid "Created Transaction Review"
-#~ msgstr "Létrehozott tranzakció-áttekintés"
-
-#~ msgid "Creating transactions..."
-#~ msgstr "Tranzakciók létrehozása..."
-
-#~ msgid "Days Away"
-#~ msgstr "nap múlva"
-
-#~ msgid "Disposition?"
-#~ msgstr "Rendelkezés?"
-
-#~ msgid "Obsolete Scheduled Transactions"
-#~ msgstr "Elavult időzített tranzakciók"
-
-#~ msgid "Postpone"
-#~ msgstr "Halaszt"
-
-#~ msgid "Scheduled Transaction"
-#~ msgstr "Időzített tranzakciók"
-
-#~ msgid "Since Last Run"
-#~ msgstr "Utolsó futás óta"
-
-#~ msgid "State"
-#~ msgstr "Állapot"
-
-#~ msgid "Template Transaction (Read-Only)"
-#~ msgstr "Tranzakciósablon (csak olvasható)"
-
-#~ msgid ""
-#~ "The following scheduled transactions have expired. Select those you wish "
-#~ "to delete."
-#~ msgstr ""
-#~ "A következő időzített tranzakciók lejártak. Válassza ki a törlendőket."
-
-#, fuzzy
-#~ msgid ""
-#~ "This assistant will walk you through any scheduled transactions that "
-#~ "should be created."
-#~ msgstr "A tündér fogja önt segíteni az időzített átutalások létrehozásában."
-
-#~ msgid "To-Create Transaction Preparation"
-#~ msgstr "Tranzakció-készítés létrehozása"
-
-#~ msgid "Transaction Reminders"
-#~ msgstr "Tranzakció-emlékeztető"
-
-#~ msgid "Unselect All"
-#~ msgstr "A kijelölések megszüntetése"
-
-#~ msgid "Value:"
-#~ msgstr "Érték:"
-
-#~ msgid "Variable"
-#~ msgstr "Változó"
-
-#~ msgid "Variables"
-#~ msgstr "Változók"
-
-#~ msgid "What to do, what to do?"
-#~ msgstr "Mit tegyek, mit tegyek?"
-
-#~ msgid "Defaults"
-#~ msgstr "Alapértelmezések"
-
-#~ msgid "Start of this fiscal year"
-#~ msgstr "Jelen pénzügyi év kezdete"
-
-#~ msgid "Start of previous fiscal year"
-#~ msgstr "Előző pénzügyi év kezdete"
-
-#~ msgid "End of this fiscal year"
-#~ msgstr "Jelen pénzügyi év vége"
-
-#~ msgid "End of previous fiscal year"
-#~ msgstr "Előző pénzügyi év vége"
-
-#~ msgid "Current Year Start"
-#~ msgstr "Idei év kezdete"
-
-#~ msgid "Previous Year Start"
-#~ msgstr "Tavalyi év kezdete"
-
-#~ msgid "Previous Year End"
-#~ msgstr "Tavalyi év vége"
-
-#~ msgid "End of the Previous Year"
-#~ msgstr "Tavalyi naptári év vége"
-
-#~ msgid "Start of Financial Period"
-#~ msgstr "Pénzügyi időszak kezdete"
-
-#~ msgid "End of Financial Period"
-#~ msgstr "Pénzügyi időszak vége"
-
-#~ msgid "End of the accounting period, as set in the global preferences"
-#~ msgstr "Számviteli időszak vége a globális beállításoknak megfelelően"
-
-#~ msgid "End of the current month"
-#~ msgstr "A jelen hónap vége"
-
-#~ msgid "The beginning of the previous month"
-#~ msgstr "Az előző hónap kezdete"
-
-#~ msgid "The end of the latest quarterly accounting period"
-#~ msgstr "Az utolsó negyedéves könyvelési időszak vége"
-
-#~ msgid "Accounts to include"
-#~ msgstr "Felhasználandó számlák"
-
-#~ msgid "Show Full Account Name?"
-#~ msgstr "Teljes számlanév megjelenítése?"
-
-#~ msgid "Filter Accounts"
-#~ msgstr "Számlák szűrése"
-
-#, fuzzy
-#~ msgid "Flatten list to depth limit?"
-#~ msgstr "Lista lapítása mélységi korlát szerint"
-
-#~ msgid "DOCPATH"
-#~ msgstr "DOCPATH"
-
-#~ msgid "QSF _Invoice..."
-#~ msgstr "QSF _számla..."
-
-#~ msgid "Export one or more invoices to QSF"
-#~ msgstr "Exportáljon egy vagy több számlát QSF-be"
-
-#~ msgid "QSF _Customer..."
-#~ msgstr "QSF _ügyfél..."
-
-#~ msgid "Export one or more customers to QSF"
-#~ msgstr "Exportáljon egy vagy több ügyfelet QSF-be"
-
-#~ msgid "QSF _Vendor..."
-#~ msgstr "QSF _beszállító..."
-
-#~ msgid "Export one or more vendors to QSF"
-#~ msgstr "Exportáljon egy vagy több beszállítót QSF-be"
-
-#~ msgid "QSF _Employee..."
-#~ msgstr "QSF _munkatárs..."
-
-#~ msgid "Export one or more employees to QSF"
-#~ msgstr "Exportáljon egy vagy több alkalmazottat QSF-be"
-
-#~ msgid "Export Invoices to XML"
-#~ msgstr "Számlák exportálása XML-be"
-
-#~ msgid "Export Vendors to XML"
-#~ msgstr "Exportáljon beszállítókat XML-be"
-
-#~ msgid "Export Employees to XML"
-#~ msgstr "Exportáljon alkalmazottakat XML-be"
-
-#~ msgid "Export Chart of Accounts to QSF XML"
-#~ msgstr "Folyószámlakészlet exportálása QSF XML-be"
-
-#~ msgid ""
-#~ "Error: Please resolve all %d conflicts before trying to commit the data."
-#~ msgstr "Hiba: Oldja fel mind a %d ütközést, mielőtt jóváhagyja az adatokat."
-
-#~ msgid "Error: the Commit operation failed, error code %d."
-#~ msgstr "Hiba: a jóváhagyási művelet sikertelen. Hibakód %d."
-
-#~ msgid "%i conflict needs to be resolved."
-#~ msgid_plural "%i conflicts need to be resolved."
-#~ msgstr[0] "%i ütközést kell feloldani."
-
-#~ msgid "%i parameter value for this \"%s\" object."
-#~ msgid_plural "%i parameter values for this \"%s\" object."
-#~ msgstr[0] "%i paraméterérték ?%s? objektumhoz."
-
-#, fuzzy
-#~ msgid "%i: Parameter name: %s "
-#~ msgstr "%i: Paraméternév: %s "
-
-#~ msgid "Import data : %s "
-#~ msgstr "Importadatok : %s "
-
-#~ msgid "Original data : %s\n"
-#~ msgstr "Eredeti adatok : %s\n"
-
-#~ msgid "Click to choose the filename and location."
-#~ msgstr "Kattintson a fájlnév és hely kiválasztásához."
-
-#~ msgid "Export Chart of Accounts"
-#~ msgstr "Számlakészlet exportálása"
-
-#, fuzzy
-#~ msgid ""
-#~ "Select the date to use and click Export to choose the filename and "
-#~ "location. Future dates are not supported."
-#~ msgstr ""
-#~ "Válasszon dátumot és kattintson az Exportra, hogy fájlnevet és helyet "
-#~ "válasszon."
-
-#~ msgid ""
-#~ "The Chart of Accounts includes the balance for each account, on the date "
-#~ "specified. Note that future dates are not supported."
-#~ msgstr ""
-#~ "A számlakészlet tartalmazza minden számla egyenlegét, a megadott napon. "
-#~ "Jövőbeni dátumokat nem támogatottak."
-
-#~ msgid ""
-#~ "You can export the Chart of Accounts to a QSF XML file that can be "
-#~ "imported into another GnuCash file or used in other programs."
-#~ msgstr ""
-#~ "Exportálhatja a számlakészletet QSF XML fájlba, ami importálható más "
-#~ "GnuCash fájlba, vagy más programok használhatják."
-
-#~ msgid "1. Update your existing book with the import data"
-#~ msgstr "1. A meglévő könyv frissítése az importált adatokkal"
-
-#~ msgid "2. Ignore the import data, leave original unchanged"
-#~ msgstr ""
-#~ "2. Mellőzze az importált adatokat, hagyja az eredetieket változatlanul"
-
-#~ msgid "3. Import the data as a NEW object"
-#~ msgstr "3. Importálja az adatokat ÚJ objektumként"
-
-#~ msgid "Add the import as a new object, leave original in place"
-#~ msgstr "Vegye fel az importot új objektumként, hagyja az eredetit a helyén"
-
-#~ msgid "Commit QSF Import Data to data file"
-#~ msgstr "A hozzácsatolt QSF fájlok importálása a fájlba"
-
-#~ msgid "Please resolve any conflicts in the merge"
-#~ msgstr "Oldja fel az ütközéseket az összefésülésben"
-
-#~ msgid ""
-#~ "Press `Apply' to merge your QSF data into the current GnuCash file.\n"
-#~ "\n"
-#~ "Press `Back' to review your selections.\n"
-#~ "\n"
-#~ "Press `Cancel' to close this dialog without changing your current data "
-#~ "file.\n"
-#~ "\n"
-#~ "REMEMBER: There is no way to undo this final operation! Make sure you "
-#~ "have a backup before clicking 'Apply'."
-#~ msgstr ""
-#~ "Kattintson az 'Alkalmazás' -ra a QSF fájlok importálásához\n"
-#~ " \n"
-#~ " Kattintson a 'Vissza' -ra az ellenőrzéshez\n"
-#~ " \n"
-#~ " Kattintson a 'Megszakítás' -ra a kilépéshez,változtatás nélkül. \n"
-#~ " \n"
-#~ " Figyelem:Alkalmazás után már nem lehet visszacsinálni!Készítsen "
-#~ "biztonsági mentést."
-
-#~ msgid "QSF Data Import Setup"
-#~ msgstr "QSF adatimportálás beállítása"
-
-#~ msgid "Shows how your QSF data conflicts with existing data in your file."
-#~ msgstr "Mutatja a QSF adatütközéseket a jelenlegi fájllal."
-
-#, fuzzy
-#~ msgid ""
-#~ "This assistant will merge your QSF data into the currently open GnuCash "
-#~ "file.\n"
-#~ "\n"
-#~ "You will be asked how to proceed if some QSF data clashes with the your "
-#~ "existing GnuCash data file.\n"
-#~ "\n"
-#~ "There is NO way to undo this operation! Please ensure you have a backup "
-#~ "of your file BEFORE continuing! You will be given the option to cancel "
-#~ "the merge at all stages until the final merge operation. Once you click "
-#~ "Finish, the new QSF data will be committed to your current data file.\n"
-#~ "\n"
-#~ "There is currently no currency or price support in the merge operation, "
-#~ "the new data will inherit any default currency or you can change the "
-#~ "currency after the merge is complete.\n"
-#~ "\n"
-#~ "Your QSF data is ready to import\n"
-#~ "\n"
-#~ "Click 'Cancel'  if you do not wish to merge your QSF data now."
-#~ msgstr ""
-#~ "E tündér befésüli a QSF adatokat az jelenleg nyitott GnuCash fájlba.\n"
-#~ "\n"
-#~ "Ha valmi QSF adat ütközik a meglévő GnuCash adatfájllal, akkor önt "
-#~ "kérdezi meg a program arról, hogyan folytassa.\n"
-#~ "\n"
-#~ "Nincs mód a művelet visszavonására! Bizonyosodjon meg arról, hogy a "
-#~ "fájlról készült biztonsági mentés, mielőtt folytatja. Minden fázisban "
-#~ "lesz lehetőség az összefésülés elvetésére a végső összefésülő művelet "
-#~ "előtt. Amint a Befejezésre kattint, az új QSF adat bekerül a jelenlegi "
-#~ "adatfájlba.\n"
-#~ "\n"
-#~ "Nincs jelenleg pénznem vagy ártámogatás az összefésülés műveletben, az új "
-#~ "adatok örökölnek minden alapértelmezett pénznemet, vagy az "
-#~ "megváltoztatható miután az összefésülés elkészült.\n"
-#~ "\n"
-#~ "A QSF adatok készen állnak a behozatalra\n"
-#~ "\n"
-#~ " Kattintson a 'Megszakítás' -ra ha nem akarja összefésülni a fájlokat."
-
-#~ msgid ""
-#~ "You have three choices for each collision: \n"
-#~ "1. The import object can be allowed to overwrite the target - use this to "
-#~ "update your existing book. \n"
-#~ "2. The import object can be ignored - use this if the import is a "
-#~ "duplicate of an object in the existing book. \n"
-#~ "3. The import object can be created as a new object in the existing book."
-#~ msgstr ""
-#~ "Három lehetőség van az ütközések feloldására: \n"
-#~ "1. Az importálandó objektum felülírja a meglévő fájlt.Használja ezt,az ön "
-#~ "GnuCash fájlja frissítésére. \n"
-#~ "2. Az importálandó objektum elvetése.Használja ezt,ha az importálandó "
-#~ "objektum,másolata a meglévő fájlnak. \n"
-#~ "3. Az importálandó objektum létrehozható új objektumként a meglévő "
-#~ "fájlban."
-
-#~ msgid "ignore the import, leave the original untouched"
-#~ msgstr "Az importálás mellőzése, az eredeti érintetlenül hagyása"
-
-#~ msgid "overwrite the original with the import data"
-#~ msgstr "az eredeti felülírása a importtáltal"
-
-#~ msgid "Import a QSF object file"
-#~ msgstr "QSF-fájl importálása"
-
-#~ msgid "Export the chart of accounts for a date with balances as QSF"
-#~ msgstr "Számlakészlet exportálása QSF-be"
-
-#~ msgid "Select the QSF file to import into GnuCash"
-#~ msgstr "Betöltendő QSF-fájl kiválasztása"
-
-#~ msgid ""
-#~ "Invalid QSF Object file! The QSF object file %s failed to validate "
-#~ "against the QSF object schema. The XML structure of the file is either "
-#~ "not well-formed or contains illegal data."
-#~ msgstr ""
-#~ "Érvénytelen QSF-tárgyfájl! %s QSF-tárgyfájl érvényesítése sikertelen a "
-#~ "QSF-tárgyséma szerint. A fájl XML-struktúrája vagy nem jól formált, vagy "
-#~ "érvénytelen adatokat tartalmaz."
-
-#~ msgid ""
-#~ "Invalid QSF Map file! The QSF map file %s failed to validate against the "
-#~ "QSF map schema. The XML structure of the file is either not well-formed "
-#~ "or contains illegal data."
-#~ msgstr ""
-#~ "Érvénytelen QSF-térképfájl! A %s QSF-térképfájl érvényesítése sikertelen "
-#~ "a QSF-térképséma szerint. A fájl XML-struktúrája vagy nem jól formált, "
-#~ "vagy érvénytelen adatokat tartalmaz."
-
-#~ msgid ""
-#~ "The QSF Map file %s was written for a different version of QOF. It may "
-#~ "need to be modified to work with your current QOF installation."
-#~ msgstr ""
-#~ "%s QSF-térképfájlt a QOF egy másik változatához készítették. Talán "
-#~ "módosítani kellene, hogy működjön a jelenleg telepített QOF-fel."
-
-#~ msgid ""
-#~ "The selected QSF map %s contains unusable data. This is usually because "
-#~ "not all the required parameters for the defined objects have calculations "
-#~ "described in the map."
-#~ msgstr ""
-#~ "%s, a kiválasztott QSF-térképfájl instabil adatokat tartalmaz. Ez "
-#~ "rendszerint azért van, mert nem minden, a meghatározott tárgyakhoz "
-#~ "szükséges, paramétert írtak le a térképen."
-
-#~ msgid ""
-#~ "The selected QSF object file %s contains one or more invalid GUIDs. The "
-#~ "file cannot be processed - please check the source of the file and try "
-#~ "again."
-#~ msgstr ""
-#~ "%s, a kiválasztott QSF-tárgyfájl egy vagy több érvénytelen GUID-t "
-#~ "tartalmaz. A fájlt nem lehet feldolgozni. Kérem ellenőrizze a forrásfájlt "
-#~ "és próbálja újra."
-
-#~ msgid ""
-#~ "The selected QSF Object file %s requires a map but it was not provided."
-#~ msgstr ""
-#~ "%s, a kiválasztott QSF-tárgyfájlhoz szükséges egy térképfájl, de nincs "
-#~ "megadva."
-
-#~ msgid ""
-#~ "Wrong QSF map selected. The selected map %s validates but was written for "
-#~ "different QOF objects. The list of objects defined in this map does not "
-#~ "include all the objects described in the current QSF object file."
-#~ msgstr ""
-#~ "Rossz a kiválasztott QSF-térképfájl. %s, a kiválasztott térkép érvényes, "
-#~ "de más QOF-tárgyakhoz írták. E térképen megadott tárgyak listája nem "
-#~ "tartalmazza a jelenlegi QSF-tárgyfájlban leírt összes tárgyat."
-
-#~ msgid ""
-#~ "The selected file %s is a QSF map and cannot be opened as a QSF object."
-#~ msgstr ""
-#~ "%s, a kiválasztott fájl QSF-térkép, és nem nyitható meg QSF-tárgyként."
-
-#~ msgid ""
-#~ "When converting XML strings into numbers, an overflow has been detected. "
-#~ "The QSF object file %s contains invalid data in a field that is meant to "
-#~ "hold a number."
-#~ msgstr ""
-#~ "XML szövegek számmá való átalakításakor túlcsordulás történt. %s, a QSF-"
-#~ "tárgyfájl érvénytelen adatokat tartalmaz egy olyan mezőben, aminek számot "
-#~ "kellene tartalmazina."
-
-#~ msgid ""
-#~ "The QSF object file %s is valid and contains GnuCash objects. However, "
-#~ "GnuCash cannot open the file directly because the data needs to be merged "
-#~ "into an existing GnuCash data book. Please open a GnuCash file or create "
-#~ "a new one, then import this QSF object file so that the data can be "
-#~ "merged into the main data book."
-#~ msgstr ""
-#~ "%s QSF-tárgyfájl érvényes és GnuCash tárgyakat tartalmaz. Azonban GnuCash "
-#~ "nem tudja közvetlenül megnyitni a fájlt, mert az adatoka egy meglévő "
-#~ "GnuCash adatkönyvbe kell belefésülni. Kérem nyisson meg egy GnuCash-"
-#~ "fájlt, vagy teremtsen egyet, azután importálja e QSF tárgyfájlt, így az "
-#~ "adatokat belefésüli a fő adatkönyvbe."
-
-#~ msgid "Level of compression to use: 0 for none, 9 for highest."
-#~ msgstr "Használt tömörítési foka: 0 nincs, 9 legnagyobb."
-
-#~ msgid ""
-#~ "QOF can compress QSF XML files using gzip. Note that compression is not "
-#~ "used when outputting to STDOUT."
-#~ msgstr ""
-#~ "QOF tömöríthet QSF XML fájlokat gzip használatával. STDOUT kimenetnél "
-#~ "nincs tömörítés."
-
-#~ msgid "List of QSF map files to use for this session."
-#~ msgstr "E munkamenetben használt QSF térképfájlok listája."
-
-#~ msgid ""
-#~ "QOF can convert objects within QSF XML files using a map of the changes "
-#~ "required."
-#~ msgstr ""
-#~ "QOF átalakíthat objektumokat QSF XML fájlokban a szükséges változástérkép "
-#~ "szerint."
-
-#~ msgid "String encoding to use when writing the XML file."
-#~ msgstr "Szövegkódolás használata XML fájl írásakor."
-
-#, fuzzy
-#~ msgid "Default CSS"
-#~ msgstr "Alapértelmezett"
-
-#, fuzzy
-#~ msgid "Could not open the file: "
-#~ msgstr "%s fájlt nem lehet megnyitni. A hiba: %s"
-
-#, fuzzy
-#~ msgid "Due date:"
-#~ msgstr "Határidő"
-
-#, fuzzy
-#~ msgid "<h2>Tax Invoice</h2>"
-#~ msgstr "<b>Kimenő számlák</b>"
-
-#~ msgid "Set the logging level from 0 (least) to 6 (most)"
-#~ msgstr "Adja meg a naplózás szintjét 0 (legkevesebb) és 6 (legtöbb) között"
-
-#~ msgid "LOGLEVEL"
-#~ msgstr "LOGLEVEL"
-
-#~ msgid "_Tax Table Editor"
-#~ msgstr "Adó_táblázat szerkesztő"
-
-#, fuzzy
-#~ msgid "Value '%s' cannot be interpreted as a float number."
-#~ msgstr "A(z) '%s' érték nem értelmezhető lebegő számként."
-
-#~ msgid ""
-#~ "Key file contains key '%s' in group '%s' which has a value that cannot be "
-#~ "interpreted."
-#~ msgstr ""
-#~ "Kulcs fájl '%s' kulcsot tartalmaz a(z) '%s' csoportban, melynek értéke "
-#~ "nem értelmezhető."
-
-#~ msgid ""
-#~ "If you would like an account to have an opening balance, click on the row "
-#~ "containing the account, click again in the opening balances column, and "
-#~ "then enter the starting balance. All accounts except Equity and "
-#~ "placeholder accounts may have an opening balance.\n"
-#~ "\n"
-#~ "If you would like an account to be a placeholder account, just click the "
-#~ "checkbox for that account.\n"
-#~ msgstr ""
-#~ "Ha kívánja, hogy a számlának legyen nyitóegyenlege, akkor kattintson a "
-#~ "számla sorára, kattintson újra a nyitóegyenleg oszlopra, és adja meg a "
-#~ "nyitóegyenleget. A saját tőke és a töltelék kivételével bármely számlának "
-#~ "lehet nyitóegyenlege.\n"
-#~ "\n"
-#~ "Ha akarja, hogy egy számla töltelék legyen, kattintson csak az ellenőrző "
-#~ "dobozra, ami ahhoz a számlához tartozik!\n"
-
-#~ msgid "Setup new accounts"
-#~ msgstr "Új számlák beállítása"
-
-#, fuzzy
-#~ msgid "Income Ta_x Options"
-#~ msgstr "Adóbeállítások"
-
-#, fuzzy
-#~ msgid "Setup income tax information for relevant accounts"
-#~ msgstr "Az összes bevétel- és költségszámla adóinformációinak beállítása"
-
-#~ msgid "Print GnuCash Document"
-#~ msgstr "GnuCash-dokumentum kinyomtatása"
-
-#, fuzzy
-#~ msgid "Transfer To/From Account(s)"
-#~ msgstr "Származási folyószámla"
-
-#, fuzzy
-#~ msgid "(Converted "
-#~ msgstr "Fájl átalakítása"
-
-#, fuzzy
-#~ msgid " @ transaction split rate of "
-#~ msgstr "Tranzakciókifejtés megjelölése nem egyeztettként"
-
-#, fuzzy
-#~ msgid " on "
-#~ msgstr "egy időben van"
-
-#, fuzzy
-#~ msgid " (Account Commodity: "
-#~ msgstr ""
-#~ "\n"
-#~ "Áru: "
-
-#, fuzzy
-#~ msgid "Item "
-#~ msgstr "tétel"
-
-#, fuzzy
-#~ msgid " (TXF Parameter: "
-#~ msgstr "%i: Paraméternév: %s "
-
-#, fuzzy
-#~ msgid "Balance on "
-#~ msgstr "Egyenleg"
-
-#, fuzzy
-#~ msgid "Account: "
-#~ msgstr "Folyószáml_a:"
-
-#, fuzzy
-#~ msgid " For "
-#~ msgstr "Űrlap"
-
-#, fuzzy
-#~ msgid ": Parameters"
-#~ msgstr "%i: Paraméternév: %s "
-
-#, fuzzy
-#~ msgid " Line "
-#~ msgstr "Online"
-
-#, fuzzy
-#~ msgid ": Payer Name Option "
-#~ msgstr "Csak egy dátum-opció"
-
-#, fuzzy
-#~ msgid ", TXF Format "
-#~ msgstr "Formátum:"
-
-#, fuzzy
-#~ msgid "None specified"
-#~ msgstr "Meghatározatlan"
-
-#, fuzzy
-#~ msgid "Error Description"
-#~ msgstr "Magyarázat"
-
-#, fuzzy
-#~ msgid ""
-#~ "No Tax Related accounts were found with your account selection. Change "
-#~ "your selection or go to the Edit->Income Tax Options dialog to set up tax-"
-#~ "related accounts."
-#~ msgstr ""
-#~ "Nincs adóvonatkozású számla. Nyissa meg a Számlák->Adóinformáció "
-#~ "dialógust, és készítsen adóvonatkozású számlákat."
-
-#, fuzzy
-#~ msgid "Subset of accounts"
-#~ msgstr "Számlakiválasztás"
-
-#, fuzzy
-#~ msgid "No accounts (none = all accounts)"
-#~ msgstr "Számlák kiválasztása (egyik sem = minden)"
-
-#, fuzzy
-#~ msgid "Suppress $0.00 valued Tax Codes"
-#~ msgstr "A 0Ft értékek elnyomása"
-
-#, fuzzy
-#~ msgid "Do not suppress $0.00 valued Tax Codes"
-#~ msgstr "A 0Ft értékek elnyomása"
-
-#, fuzzy
-#~ msgid "Display full account names"
-#~ msgstr "Teljes számlanév megjelenítése"
-
-#, fuzzy
-#~ msgid "Do not display full account names"
-#~ msgstr "Teljes számlanév megjelenítése"
-
-#, fuzzy
-#~ msgid "Display all Transfer To/From Accounts"
-#~ msgstr "Származási folyószámla"
-
-#, fuzzy
-#~ msgid "Do not display all Transfer To/From Accounts"
-#~ msgstr "Forrás számlák egyenlegeinek elrejtése"
-
-#, fuzzy
-#~ msgid "Display transactions for selected accounts"
-#~ msgstr "Új tranzakció felvétele a folyószámlára"
-
-#, fuzzy
-#~ msgid "Do not display transactions for selected accounts"
-#~ msgstr "Minden forrás számla alösszegeinek elrejtése"
-
-#, fuzzy
-#~ msgid "Include some transactions outside of selected dates"
-#~ msgstr "Minden kiválasztott számla alszámláját beleértve"
-
-#, fuzzy
-#~ msgid "Do not shade alternate transactions"
-#~ msgstr "Tranzakciók váltakozó dupla _módú színekkel"
-
-#, fuzzy
-#~ msgid "PriceDB lookups nearest to transaction date"
-#~ msgstr "Tranzakciódátum megjelenítése?"
-
-#, fuzzy
-#~ msgid "PriceDB lookups nearest to report end date"
-#~ msgstr "A jelentés dátumához időben legközelebb eső rögzített ár"
-
-#~ msgid "The following bills are due"
-#~ msgstr "A következő számlák esedékesek"
-
-#~ msgid "Escrow "
-#~ msgstr "Letét"
-
-#, fuzzy
-#~ msgid "Show Hidden"
-#~ msgstr "Re_jtett"
-
-#, fuzzy
-#~ msgid "Show hidden accounts."
-#~ msgstr "Rej_tett számlák megjelenítése"
-
-#~ msgid "<no file>"
-#~ msgstr "<nincs fájl>"
-
-#, fuzzy
-#~ msgid "A bug was detected while reading the QIF file."
-#~ msgstr "A QIF fájl betöltésekor hiba történt."
-
-#~ msgid "Int"
-#~ msgstr "Belső"
-
-#~ msgid "Div"
-#~ msgstr "Div"
-
-#~ msgid "Compute unrealized gains and losses"
-#~ msgstr "Nem realizált nyereségek és veszteségek feltüntetése"
-
-#~ msgid "ATM"
-#~ msgstr "ATM"
-
-#~ msgid "Future dates are not supported"
-#~ msgstr "Jövőbeli dátumokat nem támogatottak"
-
-#~ msgid "<br>Invoice&nbsp;in&nbsp;progress...."
-#~ msgstr "<br>Számla&nbsp;folyamatban...."
-
-#, fuzzy
-#~ msgid " Date"
-#~ msgstr "Dátum"
-
-#~ msgid "Unknown database access mode '%s'. Using default mode: multi-user."
-#~ msgstr ""
-#~ "Ismeretlen adatbázis elérési mód ?%s?. Alapértelmezett (többfelhasználós) "
-#~ "lesz használva."
-
-#~ msgid "From the Postgresql Server: %s"
-#~ msgstr "A PostgreSQL kiszolgálótól: %s"
-
-#~ msgid "Backend connection is not available"
-#~ msgstr "Nincs kapcsolat a kiszolgálóval"
-
-#~ msgid "Query could not be executed"
-#~ msgstr "A lekérdezést nem lehetett végrehajtani"
-
-#~ msgid ""
-#~ "The current transaction has been changed. Would you like to record the "
-#~ "changes before closing this page, close the page without recording the "
-#~ "changes, or cancel the close?"
-#~ msgstr ""
-#~ "A jelenlegi tranzakció megváltozott. Kívánja menteni a változásokat a lap "
-#~ "bezárása előtt, bezárni a lapot a változások mentése nélkül, vagy nyitva "
-#~ "hagyni?"
-
-#~ msgid "CUSIP code"
-#~ msgstr "CUSIP kód"
-
-#~ msgid "do not translate"
-#~ msgstr "fordítás nélkül"
-
-#~ msgid "gnc-new-account"
-#~ msgstr "gnc-new-account"
-
-#~ msgid "QIF file load warning: %s"
-#~ msgstr "Figyelmeztetés a QIF-fájl betöltésekor: %s"
-
-#~ msgid "QIF file load failed: %s"
-#~ msgstr "A QIF fájl betöltése sikertelen: %s"
-
-#~ msgid ""
-#~ "An error occurred while importing QIF transactions into GnuCash. Your "
-#~ "accounts are unchanged."
-#~ msgstr ""
-#~ "A QIF-tranzakciók GnuCash-be való importálása során hiba történt. A "
-#~ "számlái nem változtak."
-
-#~ msgid "You must enter a Type for the commodity."
-#~ msgstr "Meg kell adni az áru típusát."
-
-#~ msgid "You must enter a name for the commodity."
-#~ msgstr "Meg kell adni az áru nevét."
-
-#~ msgid "You must enter an abbreviation for the commodity."
-#~ msgstr "Meg kell adni az áru rövidítését."
-
-#~ msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
-#~ msgstr ""
-#~ "Válassza ki az áru tőzsdéjét vagy besorolását (BUX, NASDAQ, NYSE stb.)."
-
-#, fuzzy
-#~ msgid "Click \"Forward\" to accept the information and move on."
-#~ msgstr "Kattintson a fájlnév és hely kiválasztásához."
-
-#~ msgid "Dup?"
-#~ msgstr "Dup?"
-
-#~ msgid "Enter the currency used for new accounts"
-#~ msgstr "Új folyószámlák pénznemének megadása"
-
-#, fuzzy
-#~ msgid ""
-#~ "If you are importing a QIF file downloaded from a bank or other financial "
-#~ "institution, some of the information in the QIF file may duplicate "
-#~ "information already in your GnuCash accounts. GnuCash will try to detect "
-#~ "duplicates of existing transactions. \n"
-#~ "\n"
-#~ "On the next page, you will be asked to confirm that an existing "
-#~ "transaction matches an imported transaction. Imported transactions are "
-#~ "shown on the left side of the page, and possible matches for the selected "
-#~ "left-hand transaction are shown to the right. There may be several old "
-#~ "transactions that could match an imported transaction; you will be able "
-#~ "to select the correct one by double-clicking in the \"Dup?\" column of "
-#~ "the correct transaction.\n"
-#~ "\n"
-#~ "You can control the rules used by GnuCash to find duplicate transactions "
-#~ "in the \"QIF Import\" section of the GnuCash Preferences dialog.\n"
-#~ "\n"
-#~ "Click \"Forward\" to find duplicate transactions. "
-#~ msgstr ""
-#~ "Egy bank vagy más pénzintézet QIF fájljának importálásakor, némelyik "
-#~ "információ a QIF fájlban megduplázhat információkat a GnuCash-fájlban. A "
-#~ "GnuCash megkísérli a létező tranzakciók duplikált információit "
-#~ "felderíteni.\n"
-#~ "\n"
-#~ "A következő oldalon válaszhat,hogy egy létező tranzakció megfelel -e egy "
-#~ "importált tranzakciónak. Bal oldalon láthatóak az importáltak, jobb "
-#~ "oldalon a meglévő,lehetséges megfelelő tranzakciók.Több régi tranzakció "
-#~ "is megfelelhet az importáltnak, kiválaszthatja a megfelelőt dupla "
-#~ "kattintással a megfelelő tranzakció \"Dup\" oszlopára.\n"
-#~ "\n"
-#~ "Vezérelheti a GnuCash által használt szabályokat a megduplázott "
-#~ "tranzakciók megtalálására, a GnuCash Beállítások párbeszédablak, \"QIF "
-#~ "Import\"részében.\n"
-#~ "\n"
-#~ "Kattintson az \"Előre\" gombra a folytatáshoz. "
-
-#~ msgid "Imported transactions with duplicates"
-#~ msgstr "Importált duplikált tranzakciók"
-
-#~ msgid ""
-#~ "In the next pages, you will be asked to provide information about stocks, "
-#~ "mutual funds, and other tradable commodities that appear in the QIF "
-#~ "file(s) you are importing. GnuCash requires more information about "
-#~ "tradable commodities than the QIF format can represent. \n"
-#~ "\n"
-#~ "Each stock, mutual fund, or other commodity must have a type, which is "
-#~ "the exchange or listing that it is found on (NASDAQ, NYSE, US Mutual "
-#~ "Funds, etc), a full name, and an abbreviation.\n"
-#~ "\n"
-#~ "Check to see if there is an existing Type that is appropriate; if not, "
-#~ "you can enter a new Type name by hand in the box. Make sure that the "
-#~ "abbreviation you enter matches the ticker symbol used for the commodity "
-#~ "on the exchange or listing for its type."
-#~ msgstr ""
-#~ "A következő oldalakon az importálandó QIF-fájl(ok)ban előforduló "
-#~ "részvényekkel, befektetési alapokkal és egyeb forgalmazható "
-#~ "jószágokkalkapcsolatos kérdések következnek. A GnuCash-nek több "
-#~ "információra van szüksége a forgalmazható javakról, mint amennyi a QIF-"
-#~ "formátumban megjeleníthető.\n"
-#~ "\n"
-#~ "Minden részvénynek, befektetési alapnak és egyéb árunak kell legyen "
-#~ "típusa, neve és rövidítése. A típus az a tőzsde vagy lista, ahol a "
-#~ "részvény található (BUX, NASDAQ, NYSE, US Mutual Funds stb.)\n"
-#~ "\n"
-#~ "Vizsgálja meg, hogy van-e megfelelő típus. Ha nincs, újat is megadhat az "
-#~ "input mezőben. Nézze meg, hogy a megadott rövidítés megegyezik-e a jószág "
-#~ "típusánál a tőzsdén vagy listán használt jelöléssel."
-
-#~ msgid "Blue items are exportable to a .TXF file."
-#~ msgstr "A kék tételek exportálhatók egy .TXF-fájlba."
-
-#~ msgid "TXF"
-#~ msgstr "TXF"
-
-#~ msgid "The file contains an unknown Action '%s'."
-#~ msgstr "A fájl '%s' ismeretlen műveletet tartalmazza."
-
-#~ msgid "INVOICE"
-#~ msgstr "SZÁMLA"
-
-#~ msgid "Invoice&nbsp;#&nbsp;%d"
-#~ msgstr "Számla&nbsp;#&nbsp;%d"
-
-#~ msgid "Invoice&nbsp;Date"
-#~ msgstr "Számladátum"
-
-#~ msgid "%s - %s to %s for"
-#~ msgstr "%s - %s és %s között"
-
-#~ msgid "Once: %s"
-#~ msgstr "Egyszer: %s"
-
-#~ msgid "Daily (x%u)"
-#~ msgstr "Naponta (x%u)"
-
-#~ msgid "Weekdays: (x%u)"
-#~ msgstr "Hét napjai: (x%u)"
-
-#~ msgid "Weekdays"
-#~ msgstr "Hét napjai"
-
-#~ msgid "Weekly (x%d): %s"
-#~ msgstr "Hetente (x%d): %s"
-
-#~ msgid "Weekly: %s"
-#~ msgstr "Hetente: %s"
-
-#~ msgid "Bi-Weekly, %ss"
-#~ msgstr "Két hetente, %ss"
-
-#~ msgid "Semi-monthly (x%u): %s, %s"
-#~ msgstr "Félhavonta (x%u): %s, %s"
-
-#~ msgid "Semi-monthly: %s, %s"
-#~ msgstr "Félhavonta: %s, %s"
-
-#~ msgid "Monthly (x%u): %u"
-#~ msgstr "Havonta (x%u): %u"
-
-#~ msgid "Monthly: %u"
-#~ msgstr "Havonta: %u"
-
-#~ msgid "Quarterly (x%u): %u"
-#~ msgstr "Negyedévente (x%u): %u"
-
-#~ msgid "Quarterly: %u"
-#~ msgstr "Negyedévente: %u"
-
-#~ msgid "Tri-Yearly (x%u): %u"
-#~ msgstr "Négyhavonta (x%u): %u"
-
-#~ msgid "Tri-Yearly: %u"
-#~ msgstr "Négyhavonta: %u"
-
-#~ msgid "Semi-Yearly (x%u): %u"
-#~ msgstr "Félévente (x%u): %u"
-
-#~ msgid "Semi-Yearly: %u"
-#~ msgstr "Félévente: %u"
-
-#~ msgid "Yearly (x%u): %s/%u"
-#~ msgstr "Évente (x%u): %s/%u"
-
-#~ msgid "Yearly: %s/%u"
-#~ msgstr "Évente: %s/%u"
-
-#~ msgid "button1"
-#~ msgstr "button1"
-
-#~ msgid "checkbutton1"
-#~ msgstr "checkbutton1"
-
-#~ msgid "radiobutton1"
-#~ msgstr "radiobutton1"
-
-#~ msgid "togglebutton1"
-#~ msgstr "togglebutton1"
-
-#~ msgid "type:bank"
-#~ msgstr "type:bank"
-
-#~ msgid "type:cash"
-#~ msgstr "type:cash"
-
-#~ msgid "type:ccard"
-#~ msgstr "type:ccard"
-
-#~ msgid "type:invst"
-#~ msgstr "type:invst"
-
-#~ msgid "type:port"
-#~ msgstr "type:port"
-
-#~ msgid "type:oth a"
-#~ msgstr "type:oth a"
-
-#~ msgid "type:oth l"
-#~ msgstr "type:oth l"
-
-#~ msgid "type:class"
-#~ msgstr "type:class"
-
-#~ msgid "type:security"
-#~ msgstr "type:security"
-
-#~ msgid "account"
-#~ msgstr "folyószámla "
-
-#~ msgid "option:autoswitch"
-#~ msgstr "option:autoswitch"
-
-#~ msgid "clear:autoswitch"
-#~ msgstr "clear:autoswitch"
-
-#~ msgid "The Date format is ambiguous. Please choose the correct format."
-#~ msgstr "A dátumformátum bizonytalan. Válassza ki a jó formátumot."
-
-#~ msgid " Stylesheet"
-#~ msgstr " Stíluslap"
-
-#~ msgid "Include splits with no shares for calculating money-in and money-out"
-#~ msgstr ""
-#~ "Részek nélküli osztások feltüntetése pénz-be és pénz-ki számításához"
-
-#~ msgid "Sub-"
-#~ msgstr "Al-"

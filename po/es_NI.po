@@ -14,65 +14,61 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr ""
+msgstr "Árabe"
 
 #: ../borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr ""
+msgstr "Báltico"
 
 #: ../borrowed/goffice/go-charmap-sel.c:72
-#, fuzzy
 msgid "Central European"
-msgstr "Europa"
+msgstr "Centroeuropeo"
 
 #: ../borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr ""
+msgstr "Chino"
 
 #: ../borrowed/goffice/go-charmap-sel.c:74
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:242
 msgid "Cyrillic"
-msgstr ""
+msgstr "Cirílico"
 
 #: ../borrowed/goffice/go-charmap-sel.c:75
-#, fuzzy
 msgid "Greek"
-msgstr "Actualmente:"
+msgstr "Griego"
 
 #: ../borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr ""
+msgstr "Hebreo"
 
 #: ../borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
-msgstr ""
+msgstr "Indio"
 
 #: ../borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr ""
+msgstr "Japonés"
 
 #: ../borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr ""
+msgstr "Coreano"
 
 #: ../borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr ""
+msgstr "Turco"
 
 #: ../borrowed/goffice/go-charmap-sel.c:81
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:224
-#, fuzzy
 msgid "Unicode"
-msgstr "Ingreso"
+msgstr "Unicode"
 
 #: ../borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr ""
+msgstr "Vietnamita"
 
 #: ../borrowed/goffice/go-charmap-sel.c:83
-#, fuzzy
 msgid "Western"
-msgstr "Registrar"
+msgstr "Occidental"
 
 #: ../borrowed/goffice/go-charmap-sel.c:84
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:60
@@ -84,357 +80,351 @@ msgstr "Otro"
 
 #: ../borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "Árabe (IBM-864)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr ""
+msgstr "Árabe (IBM-864-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "Árabe (ISO-8859-6)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr ""
+msgstr "Árabe (ISO-8859-6-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr ""
+msgstr "Árabe (ISO-8859-6-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:121
 msgid "Arabic (MacArabic)"
-msgstr ""
+msgstr "Árabe (MacArabic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:122
 msgid "Arabic (Windows-1256)"
-msgstr ""
+msgstr "Árabe (Windows-1256)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
-msgstr ""
+msgstr "Armenio (ARMSCII-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:124
 msgid "Baltic (ISO-8859-13)"
-msgstr ""
+msgstr "Báltico (ISO-8859-13)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
-msgstr ""
+msgstr "Báltico (ISO-8859-4)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:126
 msgid "Baltic (Windows-1257)"
-msgstr ""
+msgstr "Báltico (Windows-1257)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:127
 msgid "Celtic (ISO-8859-14)"
-msgstr ""
+msgstr "Celta (ISO-8859-14)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
-msgstr ""
+msgstr "Centroeuropeo (IBM-852)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:130
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "Centroeuropeo (ISO-8859-2)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:132
 msgid "Central European (MacCE)"
-msgstr ""
+msgstr "Centroeuropeo (MacCE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:134
 msgid "Central European (Windows-1250)"
-msgstr ""
+msgstr "Centroeuropeo (Windows-1250)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:136
 msgid "Chinese Simplified (GB18030)"
-msgstr ""
+msgstr "Chino simplificado (GB18030)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:137
 msgid "Chinese Simplified (GB2312)"
-msgstr ""
+msgstr "Chino simplificado (GB2312)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:138
 msgid "Chinese Simplified (GBK)"
-msgstr ""
+msgstr "Chino simplificado (GBK)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:139
 msgid "Chinese Simplified (HZ)"
-msgstr ""
+msgstr "Chino simplificado (HZ)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:140
 msgid "Chinese Simplified (Windows-936)"
-msgstr ""
+msgstr "Chino simplificado (Windows-936)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr ""
+msgstr "Chino tradicional (Big 5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr ""
+msgstr "Chino tradicional (Big5-HKSCS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
-msgstr ""
+msgstr "Chino tradicional (EUC-TW)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:147
 msgid "Croatian (MacCroatian)"
-msgstr ""
+msgstr "Croata (MacCroatian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:149
 msgid "Cyrillic (IBM-855)"
-msgstr ""
+msgstr "Cirílico (IBM-855)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:150
 msgid "Cyrillic (ISO-8859-5)"
-msgstr ""
+msgstr "Cirílico (ISO-8859-5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:152
 msgid "Cyrillic (ISO-IR-111)"
-msgstr ""
+msgstr "Cirílico (ISO-IR-111)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:154
 msgid "Cyrillic (KOI8-R)"
-msgstr ""
+msgstr "Cirílico (KOI8-R)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:155
 msgid "Cyrillic (MacCyrillic)"
-msgstr ""
+msgstr "Cirílico (MacCyrillic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:157
 msgid "Cyrillic (Windows-1251)"
-msgstr ""
+msgstr "Cirílico (Windows-1251)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
-msgstr ""
+msgstr "Ruso (CP-866)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:160
 msgid "Ukrainian (KOI8-U)"
-msgstr ""
+msgstr "Ucraniano (KOI8-U)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:161
 msgid "Ukrainian (MacUkrainian)"
-msgstr ""
+msgstr "Ucraniano (MacUkrainian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:163
 msgid "English (ASCII)"
-msgstr ""
+msgstr "Inglés (ASCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
-msgstr ""
+msgstr "Farsi (MacFarsi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:166
 msgid "Georgian (GEOSTD8)"
-msgstr ""
+msgstr "Georgiano (GEOSTD8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:167
 msgid "Greek (ISO-8859-7)"
-msgstr ""
+msgstr "Griego (ISO-8859-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:168
 msgid "Greek (MacGreek)"
-msgstr ""
+msgstr "Griego (MacGreek)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:169
 msgid "Greek (Windows-1253)"
-msgstr ""
+msgstr "Griego (Windows-1253)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:170
 msgid "Gujarati (MacGujarati)"
-msgstr ""
+msgstr "Gujarati (MacGujarati)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:172
 msgid "Gurmukhi (MacGurmukhi)"
-msgstr ""
+msgstr "Gurmukhi (MacGurmukhi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr ""
+msgstr "Hebreo (IBM-862)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr ""
+msgstr "Hebreo (ISO-8859-8-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr ""
+msgstr "Hebreo (ISO-8859-8-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr ""
+msgstr "Hebreo (MacHebrew)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
-msgstr ""
+msgstr "Hebreo (Windows-1255)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
-msgstr ""
+msgstr "Hindi (MacDevanagari)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
-msgstr ""
+msgstr "Islandés (MacIcelandic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:186
 msgid "Japanese (EUC-JP)"
-msgstr ""
+msgstr "Japonés (EUC-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:187
 msgid "Japanese (ISO-2022-JP)"
-msgstr ""
+msgstr "Japonés (ISO-2022-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:189
 msgid "Japanese (Shift_JIS)"
-msgstr ""
+msgstr "Japonés (Shift_JIS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:190
 msgid "Korean (EUC-KR)"
-msgstr ""
+msgstr "Coreano (EUC-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:191
 msgid "Korean (ISO-2022-KR)"
-msgstr ""
+msgstr "Coreano (ISO-2022-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:192
 msgid "Korean (JOHAB)"
-msgstr ""
+msgstr "Coreano (JOHAB)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:193
 msgid "Korean (UHC)"
-msgstr ""
+msgstr "Coreano (UHC)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:194
 msgid "Nordic (ISO-8859-10)"
-msgstr ""
+msgstr "Nórdico (ISO-8859-10)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:195
 msgid "Romanian (MacRomanian)"
-msgstr ""
+msgstr "Rumano (MacRomanian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:197
 msgid "Romanian (ISO-8859-16)"
-msgstr ""
+msgstr "Rumano (ISO-8859-16)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:199
 msgid "South European (ISO-8859-3)"
-msgstr ""
+msgstr "Sur de Europa (ISO-8859-3)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:201
 msgid "Thai (TIS-620)"
-msgstr ""
+msgstr "Tailandés (TIS-620)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:202
 msgid "Turkish (IBM-857)"
-msgstr ""
+msgstr "Turco (IBM-857)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:203
 msgid "Turkish (ISO-8859-9)"
-msgstr ""
+msgstr "Turco (ISO-8859-9)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:204
 msgid "Turkish (MacTurkish)"
-msgstr ""
+msgstr "Turco (MacTurkish)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:206
 msgid "Turkish (Windows-1254)"
-msgstr ""
+msgstr "Turco (Windows-1254)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:208
-#, fuzzy
 msgid "Unicode (UTF-7)"
-msgstr "Ingreso"
+msgstr "Unicode (UTF-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:209
-#, fuzzy
 msgid "Unicode (UTF-8)"
-msgstr "Ingreso"
+msgstr "Unicode (UTF-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:210
 msgid "Unicode (UTF-16BE)"
-msgstr ""
+msgstr "Unicode (UTF-16BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:211
 msgid "Unicode (UTF-16LE)"
-msgstr ""
+msgstr "Unicode (UTF-16LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:212
 msgid "Unicode (UTF-32BE)"
-msgstr ""
+msgstr "Unicode (UTF-32BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:213
 msgid "Unicode (UTF-32LE)"
-msgstr ""
+msgstr "Unicode (UTF-32LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:214
-#, fuzzy
 msgid "User Defined"
-msgstr "Nombre de usuario:"
+msgstr "Definido por el usuario"
 
 #: ../borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
-msgstr ""
+msgstr "Vietnamita (TCVN)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:217
 msgid "Vietnamese (VISCII)"
-msgstr ""
+msgstr "Vietnamita (VISCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:218
 msgid "Vietnamese (VPS)"
-msgstr ""
+msgstr "Vietnamita (VPS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:219
 msgid "Vietnamese (Windows-1258)"
-msgstr ""
+msgstr "Vietnamita (Windows-1258)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "Hebreo visual (ISO-8859-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
-msgstr ""
+msgstr "Occidental (IBM-850)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:224
 msgid "Western (ISO-8859-1)"
-msgstr ""
+msgstr "Occidental (ISO-8859-1)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:225
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "Occidental (ISO-8859-15)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:227
 msgid "Western (MacRoman)"
-msgstr ""
+msgstr "Occidental (MacRoman)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:228
 msgid "Western (Windows-1252)"
-msgstr ""
+msgstr "Occidental (Windows-1252)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:441
 msgid "Locale: "
-msgstr ""
+msgstr "Localización: "
 
 #: ../borrowed/goffice/go-charmap-sel.c:476
-#, fuzzy
 msgid "Conversion Direction"
-msgstr "Ordenación"
+msgstr "Dirección de conversión"
 
 #: ../borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr ""
+msgstr "Esta variable determina qué test de iconv realizar."
 
 #: ../borrowed/goffice/go-optionmenu.c:410
-#, fuzzy
 msgid "Menu"
-msgstr "Tipo"
+msgstr "Menú"
 
 #: ../borrowed/goffice/go-optionmenu.c:410
-#, fuzzy
 msgid "The menu of options"
-msgstr "La opción de número es %s."
+msgstr "El menú de opciones"
 
 #: ../gnucash/gnome/assistant-acct-period.c:190
 msgid "The book was closed successfully."
@@ -2281,9 +2271,8 @@ msgid "Open"
 msgstr "Abrir"
 
 #: ../gnucash/gnome/dialog-lot-viewer.c:852 ../gnucash/gnome/dialog-order.c:898
-#, fuzzy
 msgid "Closed"
-msgstr "Cerrar"
+msgstr "Cerrada"
 
 #: ../gnucash/gnome/dialog-lot-viewer.c:862
 #: ../gnucash/report/report-system/html-fonts.scm:89
@@ -2603,16 +2592,14 @@ msgstr "Propio"
 #: ../gnucash/import-export/csv-exp/assistant-csv-export.glade.h:11
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.glade.h:32
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:31
-#, fuzzy
 msgid "Custom"
-msgstr "Propio"
+msgstr "Personalizado"
 
 #: ../gnucash/gnome/dialog-print-check.c:2593
 #: ../gnucash/gnome/gtkbuilder/dialog-print-check.glade.h:9
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:214
-#, fuzzy
 msgid "Top"
-msgstr "Hacia"
+msgstr "Superior"
 
 #: ../gnucash/gnome/dialog-progress.c:484
 #: ../gnucash/gnome/dialog-progress.c:533
@@ -2968,9 +2955,8 @@ msgid "Path head does not exist, "
 msgstr ""
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:432
-#, fuzzy
 msgid "Relative"
-msgstr "Descuento"
+msgstr "Relativo"
 
 #: ../gnucash/gnome/dialog-vendor.c:214
 msgid ""
@@ -7374,7 +7360,7 @@ msgstr ""
 #: ../gnucash/report/business-reports/invoice.scm:146
 #, no-c-format
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:33
 #: ../gnucash/gnome/gtkbuilder/dialog-fincalc.glade.h:31
@@ -7958,9 +7944,8 @@ msgstr "Descripción:"
 #: ../gnucash/gnome/gtkbuilder/dialog-billterms.glade.h:28
 #: ../gnucash/gnome/gtkbuilder/dialog-price.glade.h:17
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-commodity.glade.h:15
-#, fuzzy
 msgid "_Type:"
-msgstr "Tipo:"
+msgstr "_Tipo:"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-billterms.glade.h:29
 #, fuzzy
@@ -8389,9 +8374,8 @@ msgid "total"
 msgstr "Total"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-fincalc.glade.h:29
-#, fuzzy
 msgid "Discrete"
-msgstr "Cuenta"
+msgstr "Discreto"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-fincalc.glade.h:30
 #, fuzzy
@@ -8415,9 +8399,8 @@ msgid "Beginning"
 msgstr "Apertura"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-fincalc.glade.h:35
-#, fuzzy
 msgid "End"
-msgstr "Terminando"
+msgstr "Final"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-fincalc.glade.h:36
 #, fuzzy
@@ -9142,9 +9125,8 @@ msgstr ""
 
 #: ../gnucash/gnome/gtkbuilder/dialog-print-check.glade.h:11
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:216
-#, fuzzy
 msgid "Bottom"
-msgstr "Opciones de Informe"
+msgstr "Abajo"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-print-check.glade.h:13
 msgid "Quicken/QuickBooks (tm) US-Letter"
@@ -9194,15 +9176,13 @@ msgstr "Dirección de usuario/a"
 msgid "Checks on first _page:"
 msgstr ""
 
-# don't need translation<
 #: ../gnucash/gnome/gtkbuilder/dialog-print-check.glade.h:28
 msgid "x"
-msgstr ""
+msgstr "x"
 
-# don't need translation<
 #: ../gnucash/gnome/gtkbuilder/dialog-print-check.glade.h:29
 msgid "y"
-msgstr ""
+msgstr "y"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-print-check.glade.h:30
 #, fuzzy
@@ -9248,9 +9228,8 @@ msgid "The origin point is the lower left-hand corner of the page."
 msgstr ""
 
 #: ../gnucash/gnome/gtkbuilder/dialog-print-check.glade.h:40
-#, fuzzy
 msgid "Degrees"
-msgstr "Disminuir"
+msgstr "Grados"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-print-check.glade.h:41
 #, fuzzy
@@ -9805,9 +9784,8 @@ msgstr "Colocar _Rango"
 #: ../gnucash/gnome/gtkbuilder/gnc-plugin-page-register2.glade.h:10
 #: ../gnucash/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:9
 #: ../gnucash/import-export/csv-exp/assistant-csv-export.glade.h:22
-#, fuzzy
 msgid "Start:"
-msgstr "Estado"
+msgstr "Inicio:"
 
 #: ../gnucash/gnome/gtkbuilder/gnc-plugin-page-register2.glade.h:11
 #: ../gnucash/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:10
@@ -9841,9 +9819,8 @@ msgstr "Último"
 #: ../gnucash/gnome/gtkbuilder/gnc-plugin-page-register2.glade.h:15
 #: ../gnucash/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:15
 #: ../gnucash/import-export/csv-exp/assistant-csv-export.glade.h:27
-#, fuzzy
 msgid "End:"
-msgstr "Terminando"
+msgstr "Fin:"
 
 #: ../gnucash/gnome/gtkbuilder/gnc-plugin-page-register2.glade.h:16
 #: ../gnucash/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:16
@@ -11285,9 +11262,8 @@ msgid "Pixels"
 msgstr ""
 
 #: ../gnucash/gnome-utils/dialog-options.c:3019
-#, fuzzy
 msgid "Percent"
-msgstr "Actualmente:"
+msgstr "Porcentaje"
 
 #. Translators: Both %s will be the account separator character; the
 #. resulting string is a demonstration how the account separator
@@ -12091,9 +12067,8 @@ msgstr ""
 
 #. Toplevel
 #: ../gnucash/gnome-utils/gnc-main-window.c:264
-#, fuzzy
 msgid "_File"
-msgstr "Archivos"
+msgstr "_Archivo"
 
 #: ../gnucash/gnome-utils/gnc-main-window.c:268
 #, fuzzy
@@ -14150,7 +14125,6 @@ msgstr "Tipo de Cuenta"
 msgid "<b>_Parent Account</b>"
 msgstr "Cuenta superior"
 
-# does not need translation
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-account.glade.h:57
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:119
 #: ../gnucash/report/report-system/report.scm:69
@@ -14219,7 +14193,7 @@ msgstr "Cuenta superior"
 #: ../gnucash/report/utility-reports/view-column.scm:56
 #: ../gnucash/report/utility-reports/view-column.scm:82
 msgid "General"
-msgstr ""
+msgstr "General"
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-account.glade.h:58
 #, fuzzy
@@ -15294,7 +15268,7 @@ msgstr ""
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:221
 msgid "_Width:"
-msgstr ""
+msgstr "_Anchura:"
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:222
 msgid ""
@@ -17766,9 +17740,8 @@ msgid "description"
 msgstr "Descripción"
 
 #: ../gnucash/import-export/csv-exp/csv-tree-export.c:156
-#, fuzzy
 msgid "color"
-msgstr "Colores"
+msgstr "color"
 
 #: ../gnucash/import-export/csv-exp/csv-tree-export.c:157
 #, fuzzy
@@ -17950,9 +17923,8 @@ msgid "Select Separator Type"
 msgstr "Seleccionar cuenta"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.glade.h:22
-#, fuzzy
 msgid "Preview"
-msgstr "Resumen"
+msgstr "Vista previa"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.glade.h:23
 msgid "Import Account Preview, first 10 rows only"
@@ -19069,19 +19041,16 @@ msgid "(none)"
 msgstr "(ninguno)"
 
 #: ../gnucash/import-export/dialog-import.glade.h:54
-#, fuzzy
 msgid "Red"
-msgstr "Volver a cargar"
+msgstr "Rojo"
 
 #: ../gnucash/import-export/dialog-import.glade.h:55
-#, fuzzy
 msgid "Yellow"
-msgstr "Vender"
+msgstr "Amarillo"
 
 #: ../gnucash/import-export/dialog-import.glade.h:56
-#, fuzzy
 msgid "Green"
-msgstr "Actualmente:"
+msgstr "Verde"
 
 #: ../gnucash/import-export/dialog-import.glade.h:57
 msgid "List of downloaded transactions (source split shown):"
@@ -19297,9 +19266,8 @@ msgstr "En línea"
 
 #: ../gnucash/import-export/import-pending-matches.c:194
 #: ../libgnucash/engine/policy.c:61
-#, fuzzy
 msgid "Manual"
-msgstr "Anual"
+msgstr "Manual"
 
 #: ../gnucash/import-export/import-pending-matches.c:196
 #: ../gnucash/report/business-reports/balsheet-eg.scm:323
@@ -19700,9 +19668,8 @@ msgstr ""
 "preocupe si sus datos son distribuidos en varios archivos.\n"
 
 #: ../gnucash/import-export/qif-imp/assistant-qif-import.glade.h:13
-#, fuzzy
 msgid "_Select..."
-msgstr "Seleccionar..."
+msgstr "_Seleccionar..."
 
 #: ../gnucash/import-export/qif-imp/assistant-qif-import.glade.h:14
 msgid "Select a QIF file to load"
@@ -20179,9 +20146,8 @@ msgstr "Intereses marginales"
 
 #: ../gnucash/import-export/qif-imp/qif-file.scm:85
 #: ../gnucash/import-export/qif-imp/qif-file.scm:93
-#, fuzzy
 msgid "Line"
-msgstr "Ninguno"
+msgstr "Línea"
 
 #: ../gnucash/import-export/qif-imp/qif-file.scm:96
 #, fuzzy
@@ -21352,7 +21318,7 @@ msgstr "Día"
 
 #: ../gnucash/report/business-reports/aging.scm:789
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: ../gnucash/report/business-reports/aging.scm:789
 #, fuzzy
@@ -21552,16 +21518,15 @@ msgstr ""
 
 #: ../gnucash/report/business-reports/balsheet-eg.scm:269
 msgid "Font family"
-msgstr ""
+msgstr "Familia tipográfica"
 
 #: ../gnucash/report/business-reports/balsheet-eg.scm:270
 msgid "Font definition in CSS font-family format."
 msgstr ""
 
 #: ../gnucash/report/business-reports/balsheet-eg.scm:271
-#, fuzzy
 msgid "Font size"
-msgstr "Meses"
+msgstr "Tamaño de la tipografía"
 
 #: ../gnucash/report/business-reports/balsheet-eg.scm:272
 msgid "Font size in CSS font-size format (e.g. \"medium\" or \"10pt\")."
@@ -21879,9 +21844,8 @@ msgstr "Ordenar por monto"
 #. Translators: "Markup" is profit amount divided by sales amount
 #: ../gnucash/report/business-reports/customer-summary.scm:456
 #: ../gnucash/report/business-reports/customer-summary.scm:837
-#, fuzzy
 msgid "Markup"
-msgstr "Marcador"
+msgstr "Marcado"
 
 #: ../gnucash/report/business-reports/customer-summary.scm:457
 msgid "Sort by markup (which is profit amount divided by sales)."
@@ -22263,9 +22227,8 @@ msgid "The minimum width of the invoice."
 msgstr ""
 
 #: ../gnucash/report/business-reports/easy-invoice.scm:355
-#, fuzzy
 msgid "Text"
-msgstr "Sólo texto"
+msgstr "Texto"
 
 #: ../gnucash/report/business-reports/easy-invoice.scm:356
 #, fuzzy
@@ -24341,7 +24304,7 @@ msgstr ""
 
 #: ../gnucash/report/report-system/options-utilities.scm:226
 msgid "Dash"
-msgstr ""
+msgstr "Dash"
 
 #: ../gnucash/report/report-system/options-utilities.scm:227
 msgid "Filled diamond"
@@ -26908,9 +26871,8 @@ msgstr "Mostrar Todas las Transacciones"
 
 #: ../gnucash/report/standard-reports/income-gst-statement.scm:797
 #: ../gnucash/report/standard-reports/transaction.scm:324
-#, fuzzy
 msgid "Both"
-msgstr "Mes"
+msgstr "Ambos"
 
 #: ../gnucash/report/standard-reports/income-gst-statement.scm:798
 #: ../gnucash/report/standard-reports/transaction.scm:325
@@ -28333,7 +28295,7 @@ msgstr "Logotipo"
 #: ../gnucash/report/stylesheets/stylesheet-footer.scm:98
 #: ../gnucash/report/stylesheets/stylesheet-head-or-tail.scm:154
 msgid "Left"
-msgstr ""
+msgstr "Izquierda"
 
 #: ../gnucash/report/stylesheets/stylesheet-easy.scm:86
 #: ../gnucash/report/stylesheets/stylesheet-fancy.scm:80
@@ -28346,9 +28308,8 @@ msgstr ""
 #: ../gnucash/report/stylesheets/stylesheet-fancy.scm:82
 #: ../gnucash/report/stylesheets/stylesheet-footer.scm:101
 #: ../gnucash/report/stylesheets/stylesheet-head-or-tail.scm:157
-#, fuzzy
 msgid "Center"
-msgstr "Ingrese"
+msgstr "Centro"
 
 #: ../gnucash/report/stylesheets/stylesheet-easy.scm:89
 #: ../gnucash/report/stylesheets/stylesheet-fancy.scm:83
@@ -28362,7 +28323,7 @@ msgstr ""
 #: ../gnucash/report/stylesheets/stylesheet-footer.scm:104
 #: ../gnucash/report/stylesheets/stylesheet-head-or-tail.scm:160
 msgid "Right"
-msgstr ""
+msgstr "Derecha"
 
 #: ../gnucash/report/stylesheets/stylesheet-easy.scm:92
 #: ../gnucash/report/stylesheets/stylesheet-fancy.scm:86
@@ -29219,9 +29180,8 @@ msgid "Fancy Date Format"
 msgstr "Formato de fecha:"
 
 #: ../libgnucash/app-utils/app-utils.scm:330
-#, fuzzy
 msgid "custom"
-msgstr "Propio"
+msgstr "personalizado"
 
 #: ../libgnucash/app-utils/business-prefs.scm:24
 #, fuzzy
@@ -30606,1834 +30566,3 @@ msgid ""
 "select Window -> New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
-
-#, fuzzy
-#~ msgid "postd"
-#~ msgstr "Coste"
-
-#, fuzzy
-#~ msgid "duedate"
-#~ msgstr "Fecha final"
-
-#, fuzzy
-#~ msgid "question"
-#~ msgstr "Probando"
-
-#~ msgid "_Price Editor"
-#~ msgstr "Editor de _precios"
-
-#, fuzzy
-#~ msgid "General Ledger2"
-#~ msgstr "Libro diario"
-
-#~ msgid "General Ledger Report"
-#~ msgstr "Reporte de libro diario"
-
-#~ msgid "_General Ledger"
-#~ msgstr "Libro mayor"
-
-#, fuzzy
-#~ msgid "<No information>"
-#~ msgstr "&lt;Sin información&gt;"
-
-#~ msgid "Clear the entry"
-#~ msgstr "Borrar la entrada"
-
-#, fuzzy
-#~ msgid "Get _Quotes"
-#~ msgstr "Obtener cotizaciones"
-
-#, fuzzy
-#~ msgid "set true"
-#~ msgstr "cierto"
-
-#, fuzzy
-#~ msgid "You must select a commodity. To create a new one, click \"New\""
-#~ msgstr ""
-#~ "Tiene que seleccionar un bién\n"
-#~ "para crear un nuevo, presione \"Nuevo\""
-
-#~ msgid "_Delete Account"
-#~ msgstr "_Borrar Cuenta"
-
-#~ msgid "_New Account"
-#~ msgstr "_Nueva Cuenta"
-
-#, fuzzy
-#~ msgid ""
-#~ "The GnuCash personal finance manager. The GNU way to manage your money!"
-#~ msgstr ""
-#~ "El gestor personal de finanzas GnuCash.\n"
-#~ "¡La manera GNUevo de gestionar su dinero!"
-
-#, fuzzy
-#~ msgid "Owner Name"
-#~ msgstr "Nombre y apellido de usuario/a"
-
-#, fuzzy
-#~ msgid "Owner ID"
-#~ msgstr "Nombre y apellido de usuario/a"
-
-#, fuzzy
-#~ msgid "Quotes"
-#~ msgstr "Obtener cotizaciones"
-
-#, fuzzy
-#~ msgid "From Num."
-#~ msgstr "Desde Ahora"
-
-#, fuzzy
-#~ msgid "Transaction Import Assistant"
-#~ msgstr "Informe de Transacción"
-
-#, fuzzy
-#~ msgid "Start import on row "
-#~ msgstr "Comienzo del periodo de informe"
-
-#, fuzzy
-#~ msgid "Data type: "
-#~ msgstr "Fecha:"
-
-#, fuzzy
-#~ msgid "Separated"
-#~ msgstr "Fecha de comienzo"
-
-#, fuzzy
-#~ msgid "File opening failed."
-#~ msgstr ""
-#~ "Falló la interpretación del archivo QIF:\n"
-#~ "%s"
-
-#, fuzzy
-#~ msgid "This report has no options."
-#~ msgstr "Este informe no tiene parámetros."
-
-#, fuzzy
-#~ msgid "Compress prior/later periods"
-#~ msgstr "Crear un archivo nuevo"
-
-#~ msgid "Income Barchart"
-#~ msgstr "Diagrama de barra de ingresos"
-
-#~ msgid "Expense Barchart"
-#~ msgstr "Diagrama de barra de egresos"
-
-#~ msgid "Liability Barchart"
-#~ msgstr "Diagrama de barra del pasivo"
-
-#~ msgid "Style"
-#~ msgstr "_Estilo"
-
-#, fuzzy
-#~ msgid "Report style."
-#~ msgstr "Estilo de informe"
-
-#, fuzzy
-#~ msgid "Display N lines."
-#~ msgstr "Mostrar N líneas"
-
-#, fuzzy
-#~ msgid "Display 1 line."
-#~ msgstr "Mostrar 1 línea"
-
-#~ msgid "Exact Time"
-#~ msgstr "Tiempo exácto"
-
-#, fuzzy
-#~ msgid "Sort by exact time."
-#~ msgstr "Ordenar por tiempo de entrada exacto"
-
-#, fuzzy
-#~ msgid "Retrieve the current online quote"
-#~ msgstr "Remover el precio actual"
-
-#, fuzzy
-#~ msgid "Set the prefix path for gconf queries"
-#~ msgstr "Especificar la via de acceso para archivos de documentación"
-
-#, fuzzy
-#~ msgid "Negative amounts are not allowed."
-#~ msgstr "Mostrar cantidades negativos en rojo"
-
-#, fuzzy
-#~ msgid "Credit note"
-#~ msgstr "Líneas de Crédito"
-
-#, fuzzy
-#~ msgid "Customer Credit Note"
-#~ msgstr "Reporte de registro"
-
-#, fuzzy
-#~ msgid "Vendor Credit Note"
-#~ msgstr "_Informes"
-
-#, fuzzy
-#~ msgid "Employee Credit Note"
-#~ msgstr "Completo"
-
-#, fuzzy
-#~ msgid "Remo_ve Transaction Splits"
-#~ msgstr "Recalcular Transacción"
-
-#, fuzzy
-#~ msgid "_Shift Transaction Forward"
-#~ msgstr "Diario de transacciones"
-
-#, fuzzy
-#~ msgid "Account Transaction Report"
-#~ msgstr "Informe de Transacción"
-
-#, fuzzy
-#~ msgid "Show the Full Name column"
-#~ msgstr "¿Mostrar el nombre completo de la cuenta en la leyenda?"
-
-#, fuzzy
-#~ msgid "Show the Print Name column"
-#~ msgstr "Mostrar las cuentas de ingreso y egreso."
-
-#, fuzzy
-#~ msgid "Show the Quote Source column"
-#~ msgstr "Precio de cotización"
-
-#, fuzzy
-#~ msgid "Show the Quote Timezone column"
-#~ msgstr "Mostrar las cuentas de ingreso y egreso."
-
-#, fuzzy
-#~ msgid "Show the Unique Name column"
-#~ msgstr "Mostrar las cuentas de ingreso y egreso."
-
-#, fuzzy
-#~ msgid "Show the name column"
-#~ msgstr "¿Mostrar la utilidad neta?"
-
-#, fuzzy
-#~ msgid "Show the Source column"
-#~ msgstr "Seleccionar cuenta"
-
-#, fuzzy
-#~ msgid "Show the Type column"
-#~ msgstr "¿Mostrar la utilidad neta?"
-
-#, fuzzy
-#~ msgid "Show the date column"
-#~ msgstr "Mostrar sólo texto"
-
-#, fuzzy
-#~ msgid "Accounts to reverse the balance"
-#~ msgstr "Cuentas de acciones para realizar informe"
-
-#, fuzzy
-#~ msgid "Default view style for new register"
-#~ msgstr "Seleccionar el modo por defecto para las ventanas de registro"
-
-#, fuzzy
-#~ msgid "Enables Euro support"
-#~ msgstr "Permitir soporte de EURO"
-
-#, fuzzy
-#~ msgid "Enables additional support for the European Union EURO currency."
-#~ msgstr "Permitir soporte para la moneda de la Unión Europea EURO"
-
-#, fuzzy
-#~ msgid "Labels on toolbar buttons"
-#~ msgstr "Botones de la Barra de Herramientas"
-
-#, fuzzy
-#~ msgid "Show the Calendar buttons"
-#~ msgstr "¿Mostrar la utilidad neta?"
-
-#, fuzzy
-#~ msgid "Show the Date Entered"
-#~ msgstr "Mostrar sólo texto"
-
-#, fuzzy
-#~ msgid "Source of default account currency"
-#~ msgstr "Nombre de cuenta QIF por defecto:"
-
-#, fuzzy
-#~ msgid "Source of default report currency"
-#~ msgstr "Moneda por defecto"
-
-#, fuzzy
-#~ msgid "The number of Characters needed"
-#~ msgstr "Coincidir número de acciones"
-
-#, fuzzy
-#~ msgid "The number of transactions displayed"
-#~ msgstr "Número de Columnas"
-
-#, fuzzy
-#~ msgid "New item"
-#~ msgstr "Nuevo..."
-
-#, fuzzy
-#~ msgid "Withdrawl"
-#~ msgstr "Retirar"
-
-#, fuzzy
-#~ msgid "Apply Changes"
-#~ msgstr "Verificar Cambios"
-
-#, fuzzy
-#~ msgid "Choose Method"
-#~ msgstr "Ordenar por Memo"
-
-#, fuzzy
-#~ msgid "GnuCash will update the system path for you."
-#~ msgstr "Especificar el directorio compartido"
-
-#, fuzzy
-#~ msgid "The data has _already been installed in another window"
-#~ msgstr "Cerrar esta ventana de ayuda"
-
-#, fuzzy
-#~ msgid "The search path has _already been updated in another window"
-#~ msgstr "Cerrar esta ventana de ayuda"
-
-#, fuzzy
-#~ msgid "Update GnuCash Configuration Data"
-#~ msgstr "Opciones de configuración GnuCash"
-
-#, fuzzy
-#~ msgid "Update GnuCash configuration data"
-#~ msgstr "Opciones de configuración GnuCash"
-
-#, fuzzy
-#~ msgid "Update Search Path"
-#~ msgstr "Especificar el directorio compartido"
-
-#, fuzzy
-#~ msgid "_GnuCash updates the search path"
-#~ msgstr "Especificar el directorio compartido"
-
-#, fuzzy
-#~ msgid "_Setup"
-#~ msgstr "Configuración básica"
-
-#, fuzzy
-#~ msgid "_Update search path"
-#~ msgstr "Especificar el directorio compartido"
-
-#, fuzzy
-#~ msgid "_You update the search path yourself"
-#~ msgstr "Especificar el directorio compartido"
-
-#, fuzzy
-#~ msgid "Use s_ystem default"
-#~ msgstr "Valor por defecto de GNOME"
-
-#, fuzzy
-#~ msgid "_Europe:"
-#~ msgstr "Europa"
-
-#, fuzzy
-#~ msgid "_Icons only"
-#~ msgstr "Sólo iconos"
-
-#, fuzzy
-#~ msgid "_Text only"
-#~ msgstr "Sólo texto"
-
-#, fuzzy
-#~ msgid "%s at %s (code %s)"
-#~ msgstr "%s a %s"
-
-#, fuzzy
-#~ msgid "%s at bank code %s"
-#~ msgstr "%s a %s"
-
-#, fuzzy
-#~ msgid "Comma Separated with Quotes"
-#~ msgstr "Fecha de comienzo"
-
-#, fuzzy
-#~ msgid "Semicolon Separated with Quotes"
-#~ msgstr "Fecha de comienzo"
-
-#, fuzzy
-#~ msgid "Delete the currently selected report"
-#~ msgstr "Cortar la transacción seleccionada"
-
-#, fuzzy
-#~ msgid "Run the currently selected report"
-#~ msgstr "Volver a cargar el reporte actual"
-
-#, fuzzy
-#~ msgid "Add _Report"
-#~ msgstr "Informes"
-
-#, fuzzy
-#~ msgid "Net Price"
-#~ msgstr "Nuevo precio:"
-
-#, fuzzy
-#~ msgid "Total Price"
-#~ msgstr ". (Periodo)"
-
-#, fuzzy
-#~ msgid "Amount Due"
-#~ msgstr "Cantidad"
-
-#, fuzzy
-#~ msgid "Invoice number: "
-#~ msgstr "Factura"
-
-#, fuzzy
-#~ msgid "Job number: "
-#~ msgstr "Número"
-
-#, fuzzy
-#~ msgid "Custom Reports"
-#~ msgstr "Reporte de registro"
-
-#, fuzzy
-#~ msgid "and"
-#~ msgstr "Terminando"
-
-#, fuzzy
-#~ msgid "Most recent to report"
-#~ msgstr "Mas reciente"
-
-#, fuzzy
-#~ msgid "The most recent recorded price before report date"
-#~ msgstr "La cotización más reciente"
-
-#~ msgid "Enable hyperlinks in reports"
-#~ msgstr "Activar hiper-enlaces en informes"
-
-#, fuzzy
-#~ msgid "Welcome to GnuCash 2.4!"
-#~ msgstr "¡Bienvenido a GnuCash 1.6!"
-
-#, fuzzy
-#~ msgid "The last stable version was "
-#~ msgstr "La última versión estable fue %s."
-
-#, fuzzy
-#~ msgid "The next stable version will be "
-#~ msgstr "La siguiente versión estable será %s."
-
-#, fuzzy
-#~ msgid "You may not post an invoice with a negative total value."
-#~ msgstr "No puede crear una nueva mondea nacional."
-
-#, fuzzy
-#~ msgid "Your selected post account, %s, does not exist"
-#~ msgstr "No ha seleccionado ninguna cuenta."
-
-#, fuzzy
-#~ msgid ""
-#~ "Days\n"
-#~ "Proximo"
-#~ msgstr "Cartera"
-
-#, fuzzy
-#~ msgid "Reload invoice report"
-#~ msgstr "Volver a cargar el reporte actual"
-
-#, fuzzy
-#~ msgid "Reload owner report"
-#~ msgstr "Volver a cargar el reporte actual"
-
-#, fuzzy
-#~ msgid "Reload receivable report"
-#~ msgstr "Volver a cargar el reporte actual"
-
-#~ msgid "You must select a commodity."
-#~ msgstr "Debe seleccionar valores."
-
-#, fuzzy
-#~ msgid ""
-#~ "You must select closing date that is greater than the closing date of the "
-#~ "previous book."
-#~ msgstr "Debe seleccionar una impresora primero."
-
-#, fuzzy
-#~ msgid "You must select closing date that is not in the future."
-#~ msgstr "Debe seleccionar una impresora primero."
-
-#, fuzzy
-#~ msgid "Are you sure you want to cancel the Mortgage/Loan Setup Assistant?"
-#~ msgstr "¿Está seguro de que quiere borrar el precio actual?"
-
-#, fuzzy
-#~ msgid "Please select a valid \"from\" account."
-#~ msgstr "Debe especificar el archivo a cargar.\n"
-
-#, fuzzy
-#~ msgid "Please select a valid \"to\" account."
-#~ msgstr "Debe especificar el archivo a cargar.\n"
-
-#, fuzzy
-#~ msgid "Please select a valid \"interest\" account."
-#~ msgstr "Debe seleccionar una cuenta padre válida."
-
-#, fuzzy
-#~ msgid "Payment: \"%s\""
-#~ msgstr "Pagos"
-
-#~ msgid "You must enter a valid distribution amount."
-#~ msgstr "Tiene que ingresar un monto de distribución válido."
-
-#~ msgid "You must enter a distribution amount."
-#~ msgstr "Debe ingresar un monto de distribución."
-
-#, fuzzy
-#~ msgid "You must either enter a valid price or leave it blank."
-#~ msgstr ""
-#~ "Tiene que ingresar un precio válido,\n"
-#~ "o dejarlo vació."
-
-#~ msgid "The price must be positive."
-#~ msgstr "El precio tiene que ser positivo."
-
-#, fuzzy
-#~ msgid "You must either enter a valid cash amount or leave it blank."
-#~ msgstr ""
-#~ "O tiene que ingresar un monto en efectio\n"
-#~ "o dejarlo vacío."
-
-#~ msgid "The cash distribution must be positive."
-#~ msgstr "La distribución del efectivo tiene que ser positivo."
-
-#, fuzzy
-#~ msgid "You must select an income account for the cash distribution."
-#~ msgstr ""
-#~ "Debe seleccionar una cuenta de ingresos\n"
-#~ "para la distribución en efectivo."
-
-#, fuzzy
-#~ msgid "You must select an asset account for the cash distribution."
-#~ msgstr ""
-#~ "Tiene que seleccionar una cuenta de activos\n"
-#~ "para la distribución del efectivo."
-
-#, fuzzy
-#~ msgid "New Account (not implemented)"
-#~ msgstr "Nueva cuenta (hija de la seleccionada) ..."
-
-#~ msgid "Select or add a GnuCash account"
-#~ msgstr "Seleccionar o agregar una cuenta GnuCash."
-
-#, fuzzy
-#~ msgid "Enter a title for this book."
-#~ msgstr "Introducir una descripción para este reporte"
-
-#, fuzzy
-#~ msgid "Enter notes that describe this book."
-#~ msgstr "Ordenar por descripción"
-
-#~ msgid "Account Information"
-#~ msgstr "Información de la Cuenta"
-
-#, fuzzy
-#~ msgid "Co_mpounding:"
-#~ msgstr "Valores"
-
-#, fuzzy
-#~ msgid "_Effective Date:"
-#~ msgstr "Fecha efectiva:"
-
-#, fuzzy
-#~ msgid "_Initial Payment:"
-#~ msgstr "Pago inicial"
-
-#, fuzzy
-#~ msgid "_Payments:"
-#~ msgstr "Pagos"
-
-#~ msgid "Copy Transaction"
-#~ msgstr "Copiar Transacción"
-
-#~ msgid "Copy the selected transaction"
-#~ msgstr "Copiar la transacción seleccionada"
-
-#~ msgid "Cut Transaction"
-#~ msgstr "Cortar Transacción"
-
-#, fuzzy
-#~ msgid "Dup_licate Transaction..."
-#~ msgstr "Duplicar transacción"
-
-#, fuzzy
-#~ msgid "Edit Exchange Rate"
-#~ msgstr "Taza de cambio:"
-
-#, fuzzy
-#~ msgid "Edit the exchange rate for the current split"
-#~ msgstr "Editar la cuenta principal para este registro"
-
-#~ msgid "Jump"
-#~ msgstr "Saltar"
-
-#, fuzzy
-#~ msgid "Remove Transaction Splits"
-#~ msgstr "Recalcular Transacción"
-
-#, fuzzy
-#~ msgid "Schedule..."
-#~ msgstr "Planificación"
-
-#~ msgid "Sort by Amount"
-#~ msgstr "Ordenar por monto"
-
-#~ msgid "Sort by Date"
-#~ msgstr "Ordenar por Fecha"
-
-#~ msgid "Sort by Description"
-#~ msgstr "Ordenar por descripción"
-
-#~ msgid "Sort by Memo"
-#~ msgstr "Ordenar por Memo"
-
-#, fuzzy
-#~ msgid "Sort by Number"
-#~ msgstr "Ordenar por Num"
-
-#, fuzzy
-#~ msgid "St_yle"
-#~ msgstr "_Estilo"
-
-#, fuzzy
-#~ msgid "_Amount"
-#~ msgstr "Cantidad"
-
-#, fuzzy
-#~ msgid "_Number"
-#~ msgstr "Número"
-
-#, fuzzy
-#~ msgid "_Statement Date"
-#~ msgstr "Fecha de ejecución:"
-
-#, fuzzy
-#~ msgid "<b>End</b>"
-#~ msgstr "Fecha final"
-
-#, fuzzy
-#~ msgid "<b>Upcoming</b>"
-#~ msgstr "Reconciliación"
-
-#, fuzzy
-#~ msgid "Creation State"
-#~ msgstr "Iniciando"
-
-#, fuzzy
-#~ msgid "Loan Information"
-#~ msgstr "Información de impuestos"
-
-#, fuzzy
-#~ msgid "Repayment Type"
-#~ msgstr "Pago"
-
-#, fuzzy
-#~ msgid "Start Date: "
-#~ msgstr "Fecha de comienzo"
-
-#, fuzzy
-#~ msgid ""
-#~ "months\n"
-#~ "years"
-#~ msgstr "Meses"
-
-#, fuzzy
-#~ msgid "Set the budget options using this dialog."
-#~ msgstr "Probar el diálogo de presupuestos."
-
-#, fuzzy
-#~ msgid "Case Insensitive?"
-#~ msgstr "Sensible a mayús/minús"
-
-#, fuzzy
-#~ msgid "That GnuCash XML file is already loaded. Please select another file."
-#~ msgstr ""
-#~ "Este archivo QIF ya está cargado.\n"
-#~ "Porfavor seleccionar otro archivo."
-
-#, fuzzy
-#~ msgid "Finish changes"
-#~ msgstr "Finalizar"
-
-#, fuzzy
-#~ msgid "Update gconf settings - GnuCash"
-#~ msgstr "Abrir el Manual de GnuCash"
-
-#, fuzzy
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to import at this time. "
-#~ "Do this if you have saved your accounts to separate GnuCash files.\n"
-#~ "\n"
-#~ "Click \"Forward\" to finish loading files and move to the next step of "
-#~ "the GnuCash Datafile import process."
-#~ msgstr ""
-#~ "Pulse \"Cargar otro archivo\" si le falta importar mas datos.\n"
-#~ "Haga eso si ha grabado sus cuentas en archivos QIF separados.\n"
-#~ "\n"
-#~ "Pulse \"Siguiente\" para terminar de cargar los archivos y proceder al\n"
-#~ "siguiente paso de la importación QIF."
-
-#, fuzzy
-#~ msgid "Do not merge"
-#~ msgstr "No ordenar"
-
-#, fuzzy
-#~ msgid "GnuCash data files you have loaded"
-#~ msgstr ""
-#~ "Archivo QIF cargados:\n"
-#~ "%s"
-
-#~ msgid "Load another file"
-#~ msgstr "Cargar otro archivo"
-
-#~ msgid "Unload selected file"
-#~ msgstr "Deshacer carga del archivo seleccionado"
-
-#, fuzzy
-#~ msgid "<b>Current File List</b>"
-#~ msgstr "Contenido"
-
-#, fuzzy
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to load at this time.\n"
-#~ "\n"
-#~ "Click \"Next\" to finish loading files and move to the next step. "
-#~ msgstr ""
-#~ "Pulse \"Cargar otro archivo\" si le falta importar mas datos.\n"
-#~ "Haga eso si ha grabado sus cuentas en archivos QIF separados.\n"
-#~ "\n"
-#~ "Pulse \"Siguiente\" para terminar de cargar los archivos y proceder al\n"
-#~ "siguiente paso de la importación QIF."
-
-#, fuzzy
-#~ msgid "<b>Exchange/Price Information</b>"
-#~ msgstr "Información de precios"
-
-#, fuzzy
-#~ msgid "To A_mount:"
-#~ msgstr "Cantidad a:"
-
-#, fuzzy
-#~ msgid "_Exchange Rate:"
-#~ msgstr "Taza de cambio:"
-
-#, fuzzy
-#~ msgid "_From:"
-#~ msgstr "Desde:"
-
-#, fuzzy
-#~ msgid "_To:"
-#~ msgstr "Hasta:"
-
-#, fuzzy
-#~ msgid "Failed to process file: %s"
-#~ msgstr ""
-#~ "Falló la interpretación del archivo QIF:\n"
-#~ "%s"
-
-#, fuzzy
-#~ msgid "Failed to open file: %s: %s"
-#~ msgstr ""
-#~ "Hubo un error al abrir el fichero\n"
-#~ "     %s\n"
-#~ "\n"
-#~ "%s"
-
-#~ msgid "Add a new transaction to the account"
-#~ msgstr "Añadir una transacción nueva a la cuenta"
-
-#, fuzzy
-#~ msgid "Select an CSV/Fixed-Width file to import"
-#~ msgstr "Seleccione format de exportación"
-
-#, fuzzy
-#~ msgid "Import _CSV/Fixed-Width..."
-#~ msgstr "Importar QIF..."
-
-#~ msgid "Other Account"
-#~ msgstr "Otra Cuenta"
-
-#, fuzzy
-#~ msgid "(no)"
-#~ msgstr "(ninguno)"
-
-#~ msgid "You must enter an account name."
-#~ msgstr "Tiene que ingresar un nombre de cuenta."
-
-#, fuzzy
-#~ msgid ""
-#~ "Blue items are exportable to a German Tax XML file. Press Export to "
-#~ "actually export them."
-#~ msgstr "Incisos azules puede exportarse a un archivo .TXF."
-
-#, fuzzy
-#~ msgid ""
-#~ "No Tax Related accounts were found. Go to the Edit->Tax Options dialog to "
-#~ "set up tax-related accounts."
-#~ msgstr ""
-#~ "No se encontraron cuentas relacionadas a impuestos. Utilize el dialogo "
-#~ "Cuentas&gt;Información Impuestos para configurar cuentas relacionadas a "
-#~ "impuestos."
-
-#, fuzzy
-#~ msgid ""
-#~ "A list of directories (strings) indicating where to look for html and "
-#~ "parsed-html files. Each element must be a string representing a directory "
-#~ "or a symbol where 'default expands to the default path, and 'current "
-#~ "expands to the current value of the path."
-#~ msgstr ""
-#~ "Una lista de cadenas de caracteres indicando donde buscar por archivos "
-#~ "html y parsed-html (interpretados). Cada elemento tiene que representar "
-#~ "un directorio o un símbolo donde \"'default\" expande a la via por "
-#~ "defecto y \"'current\" expande al directorio actual."
-
-#~ msgid "Set the search path for documentation files"
-#~ msgstr "Especificar la via de acceso para archivos de documentación"
-
-#, fuzzy
-#~ msgid "Default number of register rows to display in Invoices."
-#~ msgstr "Número de filas de registros a mostrar por defecto."
-
-#, fuzzy
-#~ msgid "The number of rows in an invoice"
-#~ msgstr "Número de filas de registros a mostrar por defecto."
-
-#, fuzzy
-#~ msgid "This SX has changed; are you sure you want to cancel?"
-#~ msgstr ""
-#~ "Esta cuenta no está balanceada.\n"
-#~ "¿Está seguro/a de que desea terminar?"
-
-#, fuzzy
-#~ msgid "New %s"
-#~ msgstr "Nuevo"
-
-#, fuzzy
-#~ msgid "item"
-#~ msgstr "Título"
-
-#, fuzzy
-#~ msgid "Co_nfigure"
-#~ msgstr "Directorio de configuración."
-
-#, fuzzy
-#~ msgid "The file %s does not exist. Would you like to create it now?"
-#~ msgstr ""
-#~ "La cuenta %s no existe.\n"
-#~ "¿Le gustaría crearla?"
-
-#, fuzzy
-#~ msgid "Online Banking Version"
-#~ msgstr "Buscar Transacciones"
-
-#, fuzzy
-#~ msgid "Enter and confirm your new password"
-#~ msgstr "Ingresar nombre de usuario y clave"
-
-#, fuzzy
-#~ msgid "Enter new Password"
-#~ msgstr "Nombre de usuario y Clave"
-
-#, fuzzy
-#~ msgid "Import a CSV file into GnuCash"
-#~ msgstr "Seleccione Archivo QIF"
-
-#, fuzzy
-#~ msgid ""
-#~ "Warning!! This is a DEVELOPMENT version of GnuCash. It probably has lots "
-#~ "of bugs and unstable features! If you are looking for a stable personal "
-#~ "finance application, you should use the latest release of GnuCash %s."
-#~ msgstr ""
-#~ "¡Atención! Esta es una versión en DESARROLLO de GnuCash.\n"
-#~ "¡Probablemenete tiene un montón de errores y funciones inestables!\n"
-#~ "Si busca una aplicación financiera personal debe usar la última de las "
-#~ "versiones 1.4 de GnuCash"
-
-#, fuzzy
-#~ msgid "Set shared data file search path"
-#~ msgstr "Especificar el directorio compartido"
-
-#, fuzzy
-#~ msgid "Transaction _journal"
-#~ msgstr "Diario de transacciones"
-
-#, fuzzy
-#~ msgid "Payment rec'd..."
-#~ msgstr "Dirección de Cliente"
-
-#, fuzzy
-#~ msgid "<b>Contained Accounts</b>"
-#~ msgstr "Cuentas Perdidas"
-
-#, fuzzy
-#~ msgid "<b>Description</b>"
-#~ msgstr "Descripción"
-
-#, fuzzy
-#~ msgid "<b>New Account Currency</b>"
-#~ msgstr "Moneda por defecto"
-
-#, fuzzy
-#~ msgid ""
-#~ "If you would like an account to have an opening balance, click on the "
-#~ "account and enter the starting balance in the box on the right. All "
-#~ "accounts except Equity and placeholder accounts may have an opening "
-#~ "balance."
-#~ msgstr ""
-#~ "Si quiere que una cuenta tenga un balance de apertura, pulse en la cuenta "
-#~ "e ingrese el balance de apertura en la caja de entrada a la derecha. "
-#~ "Todas las cuentas con excepción a las cuentas de equidad pueden tener un "
-#~ "balance de apertura."
-
-#, fuzzy
-#~ msgid "This is Sample2."
-#~ msgstr "Esta es una opción numérica"
-
-#, fuzzy
-#~ msgid "Auto-Created Transactions Notification"
-#~ msgstr "Transacciones con duplicados"
-
-#~ msgid "Create"
-#~ msgstr "Crear"
-
-#, fuzzy
-#~ msgid "Create as scheduled"
-#~ msgstr "Crear un archivo nuevo"
-
-#, fuzzy
-#~ msgid "Created Transaction Review"
-#~ msgstr "Pegar Transacción"
-
-#, fuzzy
-#~ msgid "Creating transactions..."
-#~ msgstr "Coincidir Transacciones..."
-
-#, fuzzy
-#~ msgid "Days Away"
-#~ msgstr "Días"
-
-#, fuzzy
-#~ msgid "Disposition?"
-#~ msgstr "Depositar"
-
-#, fuzzy
-#~ msgid "Obsolete Scheduled Transactions"
-#~ msgstr "Borrar la transacción completa"
-
-#, fuzzy
-#~ msgid "Postpone"
-#~ msgstr "_Postergar"
-
-#, fuzzy
-#~ msgid "Scheduled Transaction"
-#~ msgstr "Borrar Transacción"
-
-#, fuzzy
-#~ msgid "State"
-#~ msgstr "Estado"
-
-#, fuzzy
-#~ msgid "Template Transaction (Read-Only)"
-#~ msgstr "Borrar Transacción"
-
-#, fuzzy
-#~ msgid "To-Create Transaction Preparation"
-#~ msgstr "Información de transacción"
-
-#, fuzzy
-#~ msgid "Transaction Reminders"
-#~ msgstr "Informe de Transacción"
-
-#, fuzzy
-#~ msgid "Unselect All"
-#~ msgstr "Seleccionar Todo"
-
-#, fuzzy
-#~ msgid "Value:"
-#~ msgstr "Valor"
-
-#, fuzzy
-#~ msgid "Variable"
-#~ msgstr "No es una variable"
-
-#, fuzzy
-#~ msgid "Variables"
-#~ msgstr "Tablas"
-
-#, fuzzy
-#~ msgid "Defaults"
-#~ msgstr "Seleccionar por Defecto"
-
-#, fuzzy
-#~ msgid "Start of this fiscal year"
-#~ msgstr "Comienzo del año agenda actual"
-
-#, fuzzy
-#~ msgid "Start of previous fiscal year"
-#~ msgstr "Comienzo del anterior trimestre"
-
-#, fuzzy
-#~ msgid "End of this fiscal year"
-#~ msgstr "Final del año anterior"
-
-#, fuzzy
-#~ msgid "End of previous fiscal year"
-#~ msgstr "Final del trimestre anterior"
-
-#~ msgid "Current Year Start"
-#~ msgstr "Comienzo del año actual"
-
-#~ msgid "Current Year End"
-#~ msgstr "Final del año actual"
-
-#~ msgid "Previous Year Start"
-#~ msgstr "Comienzo del año anterior"
-
-#~ msgid "Previous Year End"
-#~ msgstr "Final del año anterior"
-
-#~ msgid "End of the Previous Year"
-#~ msgstr "Final del año anterior"
-
-#, fuzzy
-#~ msgid "Start of Financial Period"
-#~ msgstr "Comienzo del periodo de informe"
-
-#, fuzzy
-#~ msgid "End of Financial Period"
-#~ msgstr "Final del año financiero anterior"
-
-#~ msgid "End of the current month"
-#~ msgstr "Final del mes actual"
-
-#~ msgid "The beginning of the previous month"
-#~ msgstr "El comienzo del mes anterior"
-
-#~ msgid "The end of the latest quarterly accounting period"
-#~ msgstr "El final del último periodo contable trimestral"
-
-#, fuzzy
-#~ msgid "Accounts to include"
-#~ msgstr "Código de Cuenta"
-
-#, fuzzy
-#~ msgid "Show Full Account Name?"
-#~ msgstr "¿Usar nombre completo de cuenta?"
-
-#, fuzzy
-#~ msgid "Filter Accounts"
-#~ msgstr "Otra Cuenta"
-
-#, fuzzy
-#~ msgid "QSF _Invoice..."
-#~ msgstr "Factura"
-
-#, fuzzy
-#~ msgid "QSF _Customer..."
-#~ msgstr "Propio"
-
-#, fuzzy
-#~ msgid "QSF _Vendor..."
-#~ msgstr "Buscar "
-
-#, fuzzy
-#~ msgid "QSF _Employee..."
-#~ msgstr "Completo"
-
-#, fuzzy
-#~ msgid "Export Chart of Accounts to QSF XML"
-#~ msgstr "Crear un nuevo conjunto de  cuentas"
-
-#, fuzzy
-#~ msgid "%i: Parameter name: %s "
-#~ msgstr "Parámetros"
-
-#, fuzzy
-#~ msgid "Import data : %s "
-#~ msgstr "Exportar datos como texto."
-
-#, fuzzy
-#~ msgid "Click to choose the filename and location."
-#~ msgstr "Pulse \"Siguiente\" para acceptar la información o continuar."
-
-#, fuzzy
-#~ msgid "Export Chart of Accounts"
-#~ msgstr "Crear un nuevo conjunto de  cuentas"
-
-#, fuzzy
-#~ msgid ""
-#~ "Select the date to use and click Export to choose the filename and "
-#~ "location. Future dates are not supported."
-#~ msgstr "Pulse \"Siguiente\" para acceptar la información o continuar."
-
-#, fuzzy
-#~ msgid "Commit QSF Import Data to data file"
-#~ msgstr "Exportar la jerarquía de cuentas a un nuevo archivo"
-
-#, fuzzy
-#~ msgid ""
-#~ "Press `Apply' to merge your QSF data into the current GnuCash file.\n"
-#~ "\n"
-#~ "Press `Back' to review your selections.\n"
-#~ "\n"
-#~ "Press `Cancel' to close this dialog without changing your current data "
-#~ "file.\n"
-#~ "\n"
-#~ "REMEMBER: There is no way to undo this final operation! Make sure you "
-#~ "have a backup before clicking 'Apply'."
-#~ msgstr ""
-#~ "Pulse \"Terminar\" para crear sus nuevas cuentas.\n"
-#~ "\n"
-#~ "Pulse \"Regresar\" para revisar sus selecciones.\n"
-#~ "\n"
-#~ "Pulse \"Cancelar\" para cerrar este diálogo sin crear ninguna nueva "
-#~ "cuenta."
-
-#, fuzzy
-#~ msgid "QSF Data Import Setup"
-#~ msgstr "Importar QIF"
-
-#, fuzzy
-#~ msgid "Import a QSF object file"
-#~ msgstr "Importar archivos QIF"
-
-#, fuzzy
-#~ msgid "Export the chart of accounts for a date with balances as QSF"
-#~ msgstr "¡No tiene ningúna cuenta de valores con balances!"
-
-#, fuzzy
-#~ msgid "Select the QSF file to import into GnuCash"
-#~ msgstr "Seleccione Archivo QIF"
-
-#, fuzzy
-#~ msgid "Default CSS"
-#~ msgstr "Seleccionar por Defecto"
-
-#, fuzzy
-#~ msgid "Due date:"
-#~ msgstr "Fecha"
-
-#, fuzzy
-#~ msgid "<h2>Tax Invoice</h2>"
-#~ msgstr "Factura"
-
-#~ msgid "Set the logging level from 0 (least) to 6 (most)"
-#~ msgstr "Especificar el nivel de mensajes de 0 (mínimo) a 8 (máximo)"
-
-#, fuzzy
-#~ msgid "_Tax Table Editor"
-#~ msgstr "Editor de _precios"
-
-#, fuzzy
-#~ msgid ""
-#~ "If you would like an account to have an opening balance, click on the row "
-#~ "containing the account, click again in the opening balances column, and "
-#~ "then enter the starting balance. All accounts except Equity and "
-#~ "placeholder accounts may have an opening balance.\n"
-#~ "\n"
-#~ "If you would like an account to be a placeholder account, just click the "
-#~ "checkbox for that account.\n"
-#~ msgstr ""
-#~ "Si quiere que una cuenta tenga un balance de apertura, pulse en la cuenta "
-#~ "e ingrese el balance de apertura en la caja de entrada a la derecha. "
-#~ "Todas las cuentas con excepción a las cuentas de equidad pueden tener un "
-#~ "balance de apertura."
-
-#, fuzzy
-#~ msgid "Setup new accounts"
-#~ msgstr "Crear una cuenta nueva"
-
-#, fuzzy
-#~ msgid "Income Ta_x Options"
-#~ msgstr "Opciones"
-
-#, fuzzy
-#~ msgid "Setup income tax information for relevant accounts"
-#~ msgstr ""
-#~ "Configurar información fiscal para todas las cuentas de ingresos y egresos"
-
-#~ msgid "Print GnuCash Document"
-#~ msgstr "Imprimir documento GnuCash"
-
-#, fuzzy
-#~ msgid "Transfer To/From Account(s)"
-#~ msgstr "Transferir Hacia"
-
-#, fuzzy
-#~ msgid "(Converted "
-#~ msgstr "Crear un archivo nuevo"
-
-#, fuzzy
-#~ msgid " @ transaction split rate of "
-#~ msgstr "La transacción actual no está balanceada"
-
-#, fuzzy
-#~ msgid " (Account Commodity: "
-#~ msgstr "Valores"
-
-#, fuzzy
-#~ msgid "Item "
-#~ msgstr "Título"
-
-#, fuzzy
-#~ msgid " (TXF Parameter: "
-#~ msgstr "Parámetros"
-
-#, fuzzy
-#~ msgid "Balance on "
-#~ msgstr "Balance"
-
-#, fuzzy
-#~ msgid "Account: "
-#~ msgstr "_Cuenta"
-
-#, fuzzy
-#~ msgid " For "
-#~ msgstr "Formato"
-
-#, fuzzy
-#~ msgid ": Parameters"
-#~ msgstr "Parámetros"
-
-#, fuzzy
-#~ msgid " Line "
-#~ msgstr "Ninguno"
-
-#, fuzzy
-#~ msgid ": Payer Name Option "
-#~ msgstr "Sólo una Opción de Fecha"
-
-#, fuzzy
-#~ msgid ", TXF Format "
-#~ msgstr "Formato"
-
-#, fuzzy
-#~ msgid "None specified"
-#~ msgstr "No especificado"
-
-#, fuzzy
-#~ msgid "Error Description"
-#~ msgstr "Descripción"
-
-#, fuzzy
-#~ msgid ""
-#~ "No Tax Related accounts were found with your account selection. Change "
-#~ "your selection or go to the Edit->Income Tax Options dialog to set up tax-"
-#~ "related accounts."
-#~ msgstr ""
-#~ "No se encontraron cuentas relacionadas a impuestos. Utilize el dialogo "
-#~ "Cuentas&gt;Información Impuestos para configurar cuentas relacionadas a "
-#~ "impuestos."
-
-#, fuzzy
-#~ msgid "Selected Report Options:<BR>"
-#~ msgstr "Moneda por defecto"
-
-#, fuzzy
-#~ msgid "Subset of accounts"
-#~ msgstr "Seleccionar cuenta"
-
-#, fuzzy
-#~ msgid "No accounts (none = all accounts)"
-#~ msgstr "Seleccionar cuenta (nada = todos)"
-
-#, fuzzy
-#~ msgid "Suppress $0.00 valued Tax Codes"
-#~ msgstr "Suprimir valorse de 0.00"
-
-#, fuzzy
-#~ msgid "Do not suppress $0.00 valued Tax Codes"
-#~ msgstr "Suprimir valorse de 0.00"
-
-#, fuzzy
-#~ msgid "Display full account names"
-#~ msgstr "¿Mostrar el nombre completo de la cuenta?"
-
-#, fuzzy
-#~ msgid "Do not display full account names"
-#~ msgstr "¿Mostrar el nombre completo de la cuenta?"
-
-#, fuzzy
-#~ msgid "Display all Transfer To/From Accounts"
-#~ msgstr "Transferir Hacia"
-
-#, fuzzy
-#~ msgid "Do not display all Transfer To/From Accounts"
-#~ msgstr "Mostrar balances para cuentas superiores"
-
-#, fuzzy
-#~ msgid "Display transactions for selected accounts"
-#~ msgstr "Añadir una transacción nueva a la cuenta"
-
-#, fuzzy
-#~ msgid "Do not display transactions for selected accounts"
-#~ msgstr "Mostrar balances para cuentas superiores"
-
-#, fuzzy
-#~ msgid "Include some transactions outside of selected dates"
-#~ msgstr "Incluir las subcuentas de todas las cuentas seleccionadas"
-
-#, fuzzy
-#~ msgid "Do not shade alternate transactions"
-#~ msgstr "Colores del modo doble alternados con transacciones"
-
-#, fuzzy
-#~ msgid "PriceDB lookups nearest to transaction date"
-#~ msgstr "Mostrar el informe Informe de Transacción."
-
-#, fuzzy
-#~ msgid "PriceDB lookups nearest to report end date"
-#~ msgstr "La cotización grabada mas próxia en tiempo a la fecha del reporte"
-
-#, fuzzy
-#~ msgid "Escrow "
-#~ msgstr "Cuenta"
-
-#, fuzzy
-#~ msgid "Show Hidden"
-#~ msgstr "En Medio"
-
-#, fuzzy
-#~ msgid "Show hidden accounts."
-#~ msgstr "Mostrar nombres de cuentas largas"
-
-#, fuzzy
-#~ msgid "A bug was detected while reading the QIF file."
-#~ msgstr "Ocurrio un error al cargar el archivo QIF."
-
-#, fuzzy
-#~ msgid "Compute unrealized gains and losses"
-#~ msgstr "Incluir las subcuentas de todas las cuentas seleccionadas"
-
-#~ msgid "ATM"
-#~ msgstr "Cajero Automático"
-
-#, fuzzy
-#~ msgid " Date"
-#~ msgstr "Fecha"
-
-#, fuzzy
-#~ msgid ""
-#~ "The current transaction has been changed. Would you like to record the "
-#~ "changes before closing this page, close the page without recording the "
-#~ "changes, or cancel the close?"
-#~ msgstr ""
-#~ "La transacción actual ha cambiado.\n"
-#~ "¿Le gustaría grabarla?"
-
-#, fuzzy
-#~ msgid "CUSIP code"
-#~ msgstr "CUSIP u otro código:"
-
-#, fuzzy
-#~ msgid "gnc-new-account"
-#~ msgstr "Cuenta de ingreso"
-
-#, fuzzy
-#~ msgid "QIF file load warning: %s"
-#~ msgstr ""
-#~ "Aviso al cargar el archivo QIF:\n"
-#~ "%s"
-
-#, fuzzy
-#~ msgid "QIF file load failed: %s"
-#~ msgstr ""
-#~ "Falló la carga del archivo QIF:\n"
-#~ "%s"
-
-#~ msgid ""
-#~ "An error occurred while importing QIF transactions into GnuCash. Your "
-#~ "accounts are unchanged."
-#~ msgstr ""
-#~ "Ocurrio un error al importar transacciones QIF en GnuCash. Sus cuentas no "
-#~ "han sido cambiados. "
-
-#~ msgid "You must enter a Type for the commodity."
-#~ msgstr "Tiene que ingresar primero un tipo para los valores."
-
-#~ msgid "You must enter a name for the commodity."
-#~ msgstr "Tiene que ingresar un nombre para los valores."
-
-#~ msgid "You must enter an abbreviation for the commodity."
-#~ msgstr "Tiene que ingresar una abreviación para los valores."
-
-#~ msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
-#~ msgstr ""
-#~ "Seleccione el cambio o el boletín de los valores (NASDAQ, NYSE, etc)."
-
-#~ msgid ""
-#~ "Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation "
-#~ "for the name."
-#~ msgstr ""
-#~ "Ingrese el símbolo bolsátil (como \"RHAT\") u otra abreviación única para "
-#~ "el nombre."
-
-#, fuzzy
-#~ msgid "Click \"Forward\" to accept the information and move on."
-#~ msgstr "Pulse \"Siguiente\" para acceptar la información o continuar."
-
-#~ msgid "Dup?"
-#~ msgstr "Dup?"
-
-#, fuzzy
-#~ msgid "Click \"Forward\" to check matchings for QIF categories. "
-#~ msgstr ""
-#~ "Pulse \"Siguiente\" para crear las cuentas correspondientes de las "
-#~ "categorias QIF."
-
-#, fuzzy
-#~ msgid ""
-#~ "Click \"Forward\" to enter information about stocks and mutual funds in "
-#~ "the imported data."
-#~ msgstr ""
-#~ "Pulse \"Next\" para ingresar información sobre acciones y\n"
-#~ "fondos mutuos de los datos importados"
-
-#, fuzzy
-#~ msgid ""
-#~ "Click \"Forward\" to enter information about the currency used in your "
-#~ "QIF files."
-#~ msgstr ""
-#~ "Pulse \"Siguiente\" para ingresar información sobre la moneda usado en "
-#~ "sus archivos QIF."
-
-#~ msgid "Enter the currency used for new accounts"
-#~ msgstr "Moneda por defecto para cuentas nuevas"
-
-#, fuzzy
-#~ msgid ""
-#~ "If you are importing a QIF file downloaded from a bank or other financial "
-#~ "institution, some of the information in the QIF file may duplicate "
-#~ "information already in your GnuCash accounts. GnuCash will try to detect "
-#~ "duplicates of existing transactions. \n"
-#~ "\n"
-#~ "On the next page, you will be asked to confirm that an existing "
-#~ "transaction matches an imported transaction. Imported transactions are "
-#~ "shown on the left side of the page, and possible matches for the selected "
-#~ "left-hand transaction are shown to the right. There may be several old "
-#~ "transactions that could match an imported transaction; you will be able "
-#~ "to select the correct one by double-clicking in the \"Dup?\" column of "
-#~ "the correct transaction.\n"
-#~ "\n"
-#~ "You can control the rules used by GnuCash to find duplicate transactions "
-#~ "in the \"QIF Import\" section of the GnuCash Preferences dialog.\n"
-#~ "\n"
-#~ "Click \"Forward\" to find duplicate transactions. "
-#~ msgstr ""
-#~ "Se está importando archivos QIF bajados de un banco u otra institución "
-#~ "financiera, alguna información en el archivo QIF puede ser duplicado ya "
-#~ "en sus cuentas GnuCash. GnuCash trata de detectar duplicados de "
-#~ "transacciones existentes.\n"
-#~ "\n"
-#~ "En la siguiente páginas se le solicita confirmar que transacciónes "
-#~ "existentes coniciden con transacciones importados. Transacciones "
-#~ "importados se muestran al lado izquierda de la página, y posibles "
-#~ "coincidencias para la transacción seleccionada a mano izquierda se "
-#~ "muestran a la derecha. Pueden haber varias transacciones viejas que "
-#~ "pueden coincidir con una transacción importada; tendrá la oportunidad de "
-#~ "seleccionar la correcta pulsando en la columna \"Dup?\"de la transacción "
-#~ "correcta.\n"
-#~ "\n"
-#~ "Puede controlar las reglas usado por GnuCash para encontrar transacciones "
-#~ "duplicadas en la sección \"Importación QIF\" del diálogo de preferencias "
-#~ "de GnuCash.\n"
-#~ "\n"
-#~ "Pulse \"Siguiente\" para encontrar transacciones duplicadas."
-
-#~ msgid "Imported transactions with duplicates"
-#~ msgstr "Transacciones con duplicados"
-
-#, fuzzy
-#~ msgid ""
-#~ "In the next pages, you will be asked to provide information about stocks, "
-#~ "mutual funds, and other tradable commodities that appear in the QIF "
-#~ "file(s) you are importing. GnuCash requires more information about "
-#~ "tradable commodities than the QIF format can represent. \n"
-#~ "\n"
-#~ "Each stock, mutual fund, or other commodity must have a type, which is "
-#~ "the exchange or listing that it is found on (NASDAQ, NYSE, US Mutual "
-#~ "Funds, etc), a full name, and an abbreviation.\n"
-#~ "\n"
-#~ "Check to see if there is an existing Type that is appropriate; if not, "
-#~ "you can enter a new Type name by hand in the box. Make sure that the "
-#~ "abbreviation you enter matches the ticker symbol used for the commodity "
-#~ "on the exchange or listing for its type."
-#~ msgstr ""
-#~ "En las próximas páginas se le solicita información sobre accions, fondos "
-#~ "mutuos y otros valores negociables que aparecen en los archivos QIF que "
-#~ "está importando. GnuCash requiere mas información sobre valores "
-#~ "negociables que el formato QIF puede representar.\n"
-#~ "\n"
-#~ "Cada acción o fondo mutuo tiene que tener un tipo, que es el cambio o "
-#~ "boletín (que se encuentra en NASDAQ, NYSE, US Mutual Funds, etc), un "
-#~ "nombre completo y una abreviacion.\n"
-#~ "\n"
-#~ "Comprueba si hay un tipo existente apropiado, si no, puede ingresar un "
-#~ "nuevo tipo manualmente en la caja de entrada. Asegurese que la "
-#~ "abreviación que ingresa coincide con el símbolo bolsátil usado para el "
-#~ "valor en el intercambio o boletín para su tipo."
-
-#~ msgid "Blue items are exportable to a .TXF file."
-#~ msgstr "Incisos azules puede exportarse a un archivo .TXF."
-
-#, fuzzy
-#~ msgid "Invoice&nbsp;#&nbsp;%d"
-#~ msgstr "Factura"
-
-#, fuzzy
-#~ msgid "Invoice&nbsp;Date"
-#~ msgstr "Factura"
-
-#, fuzzy
-#~ msgid "%s - %s to %s for"
-#~ msgstr "%s a %s"
-
-#, fuzzy
-#~ msgid "Daily (x%u)"
-#~ msgstr "Diario (360)"
-
-#, fuzzy
-#~ msgid "Weekdays"
-#~ msgstr "Semanas"
-
-#, fuzzy
-#~ msgid "Weekly: %s"
-#~ msgstr "Semanal"
-
-#, fuzzy
-#~ msgid "Bi-Weekly, %ss"
-#~ msgstr "Bisemanal"
-
-#, fuzzy
-#~ msgid "Semi-monthly (x%u): %s, %s"
-#~ msgstr "Dos veces al mes"
-
-#, fuzzy
-#~ msgid "Semi-monthly: %s, %s"
-#~ msgstr "Dos veces al mes"
-
-#, fuzzy
-#~ msgid "Monthly: %u"
-#~ msgstr "Mensual"
-
-#, fuzzy
-#~ msgid "Quarterly (x%u): %u"
-#~ msgstr "Trimestral"
-
-#, fuzzy
-#~ msgid "Quarterly: %u"
-#~ msgstr "Trimestral"
-
-#, fuzzy
-#~ msgid "Tri-Yearly: %u"
-#~ msgstr "Anual"
-
-#, fuzzy
-#~ msgid "Yearly: %s/%u"
-#~ msgstr "Anual"
-
-#, fuzzy
-#~ msgid "type:port"
-#~ msgstr "Informe"
-
-#, fuzzy
-#~ msgid "type:oth a"
-#~ msgstr "Tipo:"
-
-#, fuzzy
-#~ msgid "type:oth l"
-#~ msgstr "Tipo:"
-
-#, fuzzy
-#~ msgid "type:security"
-#~ msgstr "Seguridad"
-
-#, fuzzy
-#~ msgid "account"
-#~ msgstr "Cuenta"
-
-#~ msgid " Stylesheet"
-#~ msgstr "Estilo"
-
-#, fuzzy
-#~ msgid "Enables support for the European Union EURO currency."
-#~ msgstr "Permitir soporte para la moneda de la Unión Europea EURO"
-
-#, fuzzy
-#~ msgid "_Enable euro support"
-#~ msgstr "Permitir soporte de EURO"
-
-#, fuzzy
-#~ msgid "Save Check Description"
-#~ msgstr "Ordenar por descripción"
-
-#, fuzzy
-#~ msgid "New Check Format Title"
-#~ msgstr "No puede guardar a este archivo."
-
-#~ msgid "online book"
-#~ msgstr "en línea"
-
-#, fuzzy
-#~ msgid "Custom Check"
-#~ msgstr "Propio"
-
-#, fuzzy
-#~ msgid "Three"
-#~ msgstr "Tercer nivel"
-
-#, fuzzy
-#~ msgid "Four"
-#~ msgstr "Formato"
-
-#, fuzzy
-#~ msgid "Five"
-#~ msgstr "Campo"
-
-#, fuzzy
-#~ msgid "Seven"
-#~ msgstr "Guardar"
-
-#, fuzzy
-#~ msgid "Eight"
-#~ msgstr "Editar"
-
-#, fuzzy
-#~ msgid "Ten"
-#~ msgstr "Probando"
-
-#, fuzzy
-#~ msgid "Twelve"
-#~ msgstr "Cajero"
-
-#, fuzzy
-#~ msgid "Thirteen"
-#~ msgstr "Tercer nivel"
-
-#, fuzzy
-#~ msgid "Fourteen"
-#~ msgstr "Cuarto nivel"
-
-#, fuzzy
-#~ msgid "Fifteen"
-#~ msgstr "Honorario"
-
-#, fuzzy
-#~ msgid "Sixteen"
-#~ msgstr "Sexto nivel"
-
-#, fuzzy
-#~ msgid "Twenty"
-#~ msgstr "Sólo texto"
-
-#, fuzzy
-#~ msgid "Forty"
-#~ msgstr "Formato"
-
-#, fuzzy
-#~ msgid "Sixty"
-#~ msgstr "Seguridad"
-
-#, fuzzy
-#~ msgid "Seventy"
-#~ msgstr "Seleccionado"
-
-#, fuzzy
-#~ msgid "Eighty"
-#~ msgstr "Equidad"
-
-#, fuzzy
-#~ msgid "Ninety"
-#~ msgstr "Ninguno"
-
-#, fuzzy
-#~ msgid "Thousand"
-#~ msgstr "Hoy"
-
-#, fuzzy
-#~ msgid "Million"
-#~ msgstr "Factura"
-
-#, fuzzy
-#~ msgid "Billion"
-#~ msgstr "Factura"
-
-#, fuzzy
-#~ msgid "Trillion"
-#~ msgstr "Factura"
-
-#, fuzzy
-#~ msgid "Quintillion"
-#~ msgstr "Probando"
-
-#, fuzzy
-#~ msgid "%s and %"
-#~ msgstr "%s a %s"
-
-#, fuzzy
-#~ msgid "Root Account"
-#~ msgstr "Exportar cuentas..."
-
-#, fuzzy
-#~ msgid "Semi-monthly "
-#~ msgstr "Dos veces al mes"
-
-#, fuzzy
-#~ msgid "_Lot Viewer..."
-#~ msgstr "Nuevo..."
-
-#~ msgid "Enable debugging mode"
-#~ msgstr "Habilitar modo de depuración"
-
-#, fuzzy
-#~ msgid "Number of days from now"
-#~ msgstr "Número de Columnas"
-
-#, fuzzy
-#~ msgid "Value ($)"
-#~ msgstr "Valor"
-
-#, fuzzy
-#~ msgid "Needs values for variables"
-#~ msgstr "No es una variable"
-
-#, fuzzy
-#~ msgid "Obsolete"
-#~ msgstr "Completo"
-
-#, fuzzy
-#~ msgid "Open a register showing the transactions in this lot"
-#~ msgstr ""
-#~ "Abrir una ventana de reporte en forma de factura para esta transacción"
-
-#, fuzzy
-#~ msgid "<b>Recurrence Frequency</b>"
-#~ msgstr "Moneda por defecto"
-
-#, fuzzy
-#~ msgid "December"
-#~ msgstr "31 Diciembre, 2000"
-
-#, fuzzy
-#~ msgid "End "
-#~ msgstr "Terminando"
-
-#, fuzzy
-#~ msgid "May"
-#~ msgstr "Día"
-
-#, fuzzy
-#~ msgid "November"
-#~ msgstr "Número"
-
-#, fuzzy
-#~ msgid "Occuring in"
-#~ msgstr "Periódico"
-
-#, fuzzy
-#~ msgid "October"
-#~ msgstr "Otro"
-
-#, fuzzy
-#~ msgid "Select initial date, above."
-#~ msgstr "Selecciona la fecha en la cual crear el informe"
-
-#, fuzzy
-#~ msgid "Semi-Yearly"
-#~ msgstr "Anual"
-
-#, fuzzy
-#~ msgid "September"
-#~ msgstr "31 Diciembre, 2000"
-
-#, fuzzy
-#~ msgid "Tri-Yearly"
-#~ msgstr "Anual"
-
-#, fuzzy
-#~ msgid "years"
-#~ msgstr "Años"
-
-#~ msgid "Select pixmap"
-#~ msgstr "Seleccionar imagen"
-
-#~ msgid ""
-#~ "Enter the type of commodity. For stocks, this is often an exchange on "
-#~ "which the stock is traded. You can choose an existing type from the list "
-#~ "or enter a new type with the keyboard."
-#~ msgstr ""
-#~ "Ingrese el tipo de los valores. Para acciones esto muchas veces es un "
-#~ "intercambio con el cual se negocian los acciones. Puede escoger un tipo "
-#~ "existente de la lista o ingresar un tipo nuevo con el teclado."
-
-#, fuzzy
-#~ msgid "There was an error loading the specified URL."
-#~ msgstr "Hubo un error al guardar el archivo."
-
-#, fuzzy
-#~ msgid "Quit GnuCash?"
-#~ msgstr "Salir de GnuCash"
-
-#, fuzzy
-#~ msgid ""
-#~ "The GnuCash personal finance manager.\n"
-#~ "The GNU way to manage your money!\n"
-#~ "http://www.gnucash.org/"
-#~ msgstr ""
-#~ "El gestor personal de finanzas GnuCash.\n"
-#~ "¡La manera GNUevo de gestionar su dinero!"
-
-#, fuzzy
-#~ msgid "HBCI Version"
-#~ msgstr "Cortar Transacción"
-
-#, fuzzy
-#~ msgid "HBCI account name"
-#~ msgstr "Nombre de cuenta QIF"
-
-#, fuzzy
-#~ msgid "Online HBCI Transaction"
-#~ msgstr "Buscar Transacciones"
-
-#~ msgid "Old Value"
-#~ msgstr "Valor Anterior"
-
-#, fuzzy
-#~ msgid ""
-#~ "The QIF file format does not specify which order the day, month, and year "
-#~ "components of a date are printed. In most cases, it is possible to "
-#~ "automatically determine which format is in use in a particular file. "
-#~ "However, in the file you have just imported there exist more than one "
-#~ "possible format that fits the data. \n"
-#~ "\n"
-#~ "Please select a date format for the file. QIF files created by European "
-#~ "software are likely  to be in \"d-m-y\" or day-month-year format, where "
-#~ "US QIF files are likely to be \"m-d-y\" or month-year-day.   \n"
-#~ msgstr ""
-#~ "El formato QIF no especifica el orden en cual aparecen los componentes "
-#~ "día, mes y año de una fecha. En la mayoría de los casos se puede "
-#~ "determinar automáticamente el formato utilizado en un archivo, si embargo "
-#~ "en el archivo que acaba de importar hay más que un formato posible para "
-#~ "las fechas.\n"
-#~ "\n"
-#~ "Porfavor selecciona un formato de fechas para el archivo. Archivos QIF "
-#~ "creado por programas europeos probablemente utilizan \"d-m-a\", o día-mes-"
-#~ "áño, mientras\n"
-#~ "archivos QIF de los EE.UU. probablemente utilizan \"m-d-a\", o mes-año-"
-#~ "día.\n"
-
-#, fuzzy
-#~ msgid ""
-#~ "AqHBCI \n"
-#~ "Setup"
-#~ msgstr "Configuración básica"
-
-#, fuzzy
-#~ msgid "HBCI Setup"
-#~ msgstr "Configuración básica"
-
-#, fuzzy
-#~ msgid ""
-#~ "Update \n"
-#~ "account list"
-#~ msgstr "Utilizar etiquetas contables"

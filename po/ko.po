@@ -15,20 +15,19 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr ""
+msgstr "아랍어"
 
 #: ../borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
 msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:72
-#, fuzzy
 msgid "Central European"
-msgstr "유럽"
+msgstr "중앙 유럽어"
 
 #: ../borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr ""
+msgstr "중국어"
 
 #: ../borrowed/goffice/go-charmap-sel.c:74
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:242
@@ -36,29 +35,28 @@ msgid "Cyrillic"
 msgstr "키릭"
 
 #: ../borrowed/goffice/go-charmap-sel.c:75
-#, fuzzy
 msgid "Greek"
-msgstr "녹색"
+msgstr "그리스어"
 
 #: ../borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr ""
+msgstr "히브리어"
 
 #: ../borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
-msgstr ""
+msgstr "인도어"
 
 #: ../borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr ""
+msgstr "일본어"
 
 #: ../borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr ""
+msgstr "한국어"
 
 #: ../borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr ""
+msgstr "터키어"
 
 #: ../borrowed/goffice/go-charmap-sel.c:81
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:224
@@ -67,12 +65,11 @@ msgstr "유니코드"
 
 #: ../borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr ""
+msgstr "베트남어"
 
 #: ../borrowed/goffice/go-charmap-sel.c:83
-#, fuzzy
 msgid "Western"
-msgstr "등록"
+msgstr "서양어"
 
 #: ../borrowed/goffice/go-charmap-sel.c:84
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:60
@@ -84,48 +81,47 @@ msgstr "기타"
 
 #: ../borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "아랍어 (IBM-864)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr ""
+msgstr "아랍어 (IBM-864-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "아랍어 (ISO-8859-6)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr ""
+msgstr "아랍어 (ISO-8859-6-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr ""
+msgstr "아랍어 (ISO-8859-6-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:121
 msgid "Arabic (MacArabic)"
-msgstr ""
+msgstr "아랍어 (MacArabic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:122
 msgid "Arabic (Windows-1256)"
-msgstr ""
+msgstr "아랍어 (Windows-1256)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
 msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:124
-#, fuzzy
 msgid "Baltic (ISO-8859-13)"
-msgstr "ISO-8859-13 (발틱)"
+msgstr "발트어 (ISO-8859-13)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
-msgstr ""
+msgstr "발트어 (ISO-8859-4)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:126
 msgid "Baltic (Windows-1257)"
-msgstr ""
+msgstr "발트어 (Windows-1257)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:127
 #, fuzzy
@@ -134,81 +130,79 @@ msgstr "ISO-8859-14 (셀틱)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
-msgstr ""
+msgstr "중앙 유럽 (IBM-852)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:130
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "중앙 유럽 (ISO-8859-2)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:132
 msgid "Central European (MacCE)"
-msgstr ""
+msgstr "중앙 유럽 (MacCE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:134
 msgid "Central European (Windows-1250)"
-msgstr ""
+msgstr "중앙 유럽 (Windows-1250)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:136
 msgid "Chinese Simplified (GB18030)"
-msgstr ""
+msgstr "중국어 간체 (GB18030)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:137
 msgid "Chinese Simplified (GB2312)"
-msgstr ""
+msgstr "중국어 간체 (GB2312)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:138
 msgid "Chinese Simplified (GBK)"
-msgstr ""
+msgstr "중국어 간체 (GBK)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:139
 msgid "Chinese Simplified (HZ)"
-msgstr ""
+msgstr "중국어 간체 (HZ)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:140
 msgid "Chinese Simplified (Windows-936)"
-msgstr ""
+msgstr "중국어 간체 (Windows-936)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr ""
+msgstr "중국어 번체 (Big5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr ""
+msgstr "중국어 번체 (Big5-HKSCS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
-msgstr ""
+msgstr "중국어 번체 (EUC-TW)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:147
 msgid "Croatian (MacCroatian)"
 msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:149
-#, fuzzy
 msgid "Cyrillic (IBM-855)"
-msgstr "키릭"
+msgstr "키릴어 (IBM-855)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:150
 msgid "Cyrillic (ISO-8859-5)"
-msgstr ""
+msgstr "키릴어 (ISO-8859-5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:152
 msgid "Cyrillic (ISO-IR-111)"
-msgstr ""
+msgstr "키릴어 (ISO-IR-111)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:154
-#, fuzzy
 msgid "Cyrillic (KOI8-R)"
-msgstr "키릭"
+msgstr "키릴어 (KOI8-R)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:155
 msgid "Cyrillic (MacCyrillic)"
-msgstr ""
+msgstr "키릴어 (MacCyrillic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:157
 msgid "Cyrillic (Windows-1251)"
-msgstr ""
+msgstr "키릴어 (Windows-1251)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
@@ -225,7 +219,7 @@ msgstr "KOI8-U (우크라이나)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:163
 msgid "English (ASCII)"
-msgstr ""
+msgstr "영어 (ASCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
@@ -236,17 +230,16 @@ msgid "Georgian (GEOSTD8)"
 msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:167
-#, fuzzy
 msgid "Greek (ISO-8859-7)"
-msgstr "ISO-8859-7 (그리스)"
+msgstr "그리스어 (ISO-8859-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:168
 msgid "Greek (MacGreek)"
-msgstr ""
+msgstr "그리스어 (MacGreek)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:169
 msgid "Greek (Windows-1253)"
-msgstr ""
+msgstr "그리스어 (Windows-1253)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:170
 msgid "Gujarati (MacGujarati)"
@@ -258,23 +251,23 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr ""
+msgstr "히브리어 (IBM-862)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr ""
+msgstr "히브리어 (ISO-8859-8-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr ""
+msgstr "히브리어 (ISO-8859-8-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr ""
+msgstr "히브리어 (MacHebrew)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
-msgstr ""
+msgstr "히브리어 (Windows-1255)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
@@ -286,31 +279,31 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:186
 msgid "Japanese (EUC-JP)"
-msgstr ""
+msgstr "일본어 (EUC-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:187
 msgid "Japanese (ISO-2022-JP)"
-msgstr ""
+msgstr "일본어 (ISO-2022-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:189
 msgid "Japanese (Shift_JIS)"
-msgstr ""
+msgstr "일본어 (Shift_JIS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:190
 msgid "Korean (EUC-KR)"
-msgstr ""
+msgstr "한국어 (EUC-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:191
 msgid "Korean (ISO-2022-KR)"
-msgstr ""
+msgstr "한국어 (ISO-2022-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:192
 msgid "Korean (JOHAB)"
-msgstr ""
+msgstr "한국어 (조합)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:193
 msgid "Korean (UHC)"
-msgstr ""
+msgstr "한국어 (통합 한글)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:194
 #, fuzzy
@@ -335,66 +328,63 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:202
 msgid "Turkish (IBM-857)"
-msgstr ""
+msgstr "터키어 (IBM-857)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:203
 msgid "Turkish (ISO-8859-9)"
-msgstr ""
+msgstr "터키어 (ISO-8859-9)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:204
 msgid "Turkish (MacTurkish)"
-msgstr ""
+msgstr "터키어 (MacTurkish)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:206
 msgid "Turkish (Windows-1254)"
-msgstr ""
+msgstr "터키어 (Windows-1254)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:208
-#, fuzzy
 msgid "Unicode (UTF-7)"
-msgstr "유니코드"
+msgstr "유니코드 (UTF-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:209
-#, fuzzy
 msgid "Unicode (UTF-8)"
-msgstr "유니코드"
+msgstr "유니코드 (UTF-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:210
 msgid "Unicode (UTF-16BE)"
-msgstr ""
+msgstr "유니코드 (UTF-16BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:211
 msgid "Unicode (UTF-16LE)"
-msgstr ""
+msgstr "유니코드 (UTF-16LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:212
 msgid "Unicode (UTF-32BE)"
-msgstr ""
+msgstr "유니코드 (UTF-32BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:213
 msgid "Unicode (UTF-32LE)"
-msgstr ""
+msgstr "유니코드 (UTF-32LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:214
-#, fuzzy
 msgid "User Defined"
-msgstr "사용자명"
+msgstr "사용자 정의"
 
 #: ../borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
-msgstr ""
+msgstr "베트남어 (TCVN)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:217
 msgid "Vietnamese (VISCII)"
-msgstr ""
+msgstr "베트남어 (VISCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:218
 msgid "Vietnamese (VPS)"
-msgstr ""
+msgstr "베트남어 (VPS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:219
 msgid "Vietnamese (Windows-1258)"
-msgstr ""
+msgstr "베트남어 (Windows-1258)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
@@ -402,28 +392,27 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
-msgstr ""
+msgstr "서양어 (IBM-850)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:224
 msgid "Western (ISO-8859-1)"
-msgstr ""
+msgstr "서양어 (ISO-8859-1)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:225
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "서양어 (ISO-8859-15)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:227
 msgid "Western (MacRoman)"
-msgstr ""
+msgstr "서양어 (MacRoman)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:228
 msgid "Western (Windows-1252)"
-msgstr ""
+msgstr "서양어 (Windows-1252)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:441
-#, fuzzy
 msgid "Locale: "
-msgstr "로케일(_A)"
+msgstr "로케일: "
 
 #: ../borrowed/goffice/go-charmap-sel.c:476
 #, fuzzy
@@ -16849,9 +16838,8 @@ msgid "Select Separator Type"
 msgstr "할인형태 선택"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.glade.h:22
-#, fuzzy
 msgid "Preview"
-msgstr "재검토"
+msgstr "미리보기"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.glade.h:23
 msgid "Import Account Preview, first 10 rows only"
@@ -18914,9 +18902,8 @@ msgstr "마진 이익"
 
 #: ../gnucash/import-export/qif-imp/qif-file.scm:85
 #: ../gnucash/import-export/qif-imp/qif-file.scm:93
-#, fuzzy
 msgid "Line"
-msgstr "온라인"
+msgstr "선"
 
 #: ../gnucash/import-export/qif-imp/qif-file.scm:96
 msgid "Read aborted."
@@ -28931,1843 +28918,3 @@ msgid ""
 "select Window -> New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
-
-#~ msgid "Enable debugging mode: increasing logging to provide deep detail."
-#~ msgstr "디버깅 모드 가능: 아주 자세하게 제공하기 위하여 로깅 증가."
-
-#, fuzzy
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from %s rev %s on %s."
-#~ msgstr "%s 이 사본은 svn r%s은 %s에 작성된 것입니다."
-
-#, fuzzy
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from rev %s on %s."
-#~ msgstr "%s 이 사본은 하위버전 r%s은 %s에 작성된 것입니다."
-
-#~ msgid "duedate"
-#~ msgstr "만기일"
-
-#~ msgid "acct"
-#~ msgstr "계정"
-
-#~ msgid "question"
-#~ msgstr "질의"
-
-#~ msgid "_Price Editor"
-#~ msgstr "가격 편집기(_P)"
-
-#, fuzzy
-#~ msgid "General Ledger2"
-#~ msgstr "일반 원장"
-
-#~ msgid "General Ledger Report"
-#~ msgstr "일반 원장 보고서"
-
-#~ msgid "_General Ledger"
-#~ msgstr "일반 원장(_G)"
-
-#~ msgid "<No information>"
-#~ msgstr "<정보 없음>"
-
-#~ msgid "Clear the entry"
-#~ msgstr "기입사항 삭제"
-
-#~ msgid "Delete _last price for a stock"
-#~ msgstr "주식 마지막 가격 삭제(_L)"
-
-#~ msgid "Get _Quotes"
-#~ msgstr "가격 견적 얻음"
-
-#~ msgid "set true"
-#~ msgstr "참 설정"
-
-#~ msgid "You must select a commodity. To create a new one, click \"New\""
-#~ msgstr "상품을 선택하여야 합니다. 새 상품을 생성하기 위하여 \"새로\" 클릭"
-
-#~ msgid "_Delete Account"
-#~ msgstr "계정 삭제(_D)"
-
-#~ msgid "_New Account"
-#~ msgstr "새 계정(_N)"
-
-#~ msgid ""
-#~ "The GnuCash personal finance manager. The GNU way to manage your money!"
-#~ msgstr ""
-#~ "GnuCash는 개인 재정 관리자입니다. 당신의 돈을 관리할 수 있는 GNU 방식!"
-
-#, fuzzy
-#~ msgid "Version: GnuCash-%s %s (rev %s built %s)"
-#~ msgstr "버전 : GnuCash-%s svn (r%s 빌트   %s)"
-
-#, fuzzy
-#~ msgid "Version: GnuCash-%s (rev %s built %s)"
-#~ msgstr "버전 : GnuCash-%s svn (r%s 빌트   %s)"
-
-#, fuzzy
-#~ msgid "Owner Name"
-#~ msgstr "소유자 이름"
-
-#, fuzzy
-#~ msgid "Owner ID"
-#~ msgstr "오더 ID"
-
-#~ msgid "Remember _PIN"
-#~ msgstr "PIN 기억(_P)"
-
-#, fuzzy
-#~ msgid "Quotes"
-#~ msgstr "가격 견적 얻음"
-
-#, fuzzy
-#~ msgid "From Num."
-#~ msgstr "지금부터"
-
-#, fuzzy
-#~ msgid "Transaction Import Assistant"
-#~ msgstr "GnuCash 자료파일 읽어오기 드루이드"
-
-#, fuzzy
-#~ msgid "Data type: "
-#~ msgstr "날짜: "
-
-#, fuzzy
-#~ msgid "Separated"
-#~ msgstr "시작 날짜"
-
-#, fuzzy
-#~ msgid "File opening failed."
-#~ msgstr "QIF 파일 파싱 오류: %s"
-
-#, fuzzy
-#~ msgid "Dates earlier than 1970 are not supported."
-#~ msgstr "미래 날짜를 지원하지 않음"
-
-#, fuzzy
-#~ msgid "Compress prior/later periods"
-#~ msgstr "파일 압축(_P)"
-
-#~ msgid "Income Barchart"
-#~ msgstr "수입 막대차트"
-
-#~ msgid "Expense Barchart"
-#~ msgstr "지출 막대차트"
-
-#~ msgid "Liability Barchart"
-#~ msgstr "부채 막대차트"
-
-#~ msgid "Style"
-#~ msgstr "스타일"
-
-#, fuzzy
-#~ msgid "Report style."
-#~ msgstr "보고서 스타일"
-
-#, fuzzy
-#~ msgid "Display N lines."
-#~ msgstr "N 줄 보이기"
-
-#, fuzzy
-#~ msgid "Display 1 line."
-#~ msgstr "1 줄 보이기"
-
-#~ msgid "Exact Time"
-#~ msgstr "정확한 시간"
-
-#, fuzzy
-#~ msgid "Sort by exact time."
-#~ msgstr "정확한 시간에 의한 정렬"
-
-#, fuzzy
-#~ msgid "Retrieve the current online quote"
-#~ msgstr "현재 가격 제거"
-
-#~ msgid "Set the prefix path for gconf queries"
-#~ msgstr "gconf 질의 접두 경로 설정"
-
-#~ msgid "GCONFPATH"
-#~ msgstr "Gconf경로"
-
-#~ msgid "Negative amounts are not allowed."
-#~ msgstr "음의 값은 허용하지 않음"
-
-#~ msgid "Percentage amount must be between 0 and 100."
-#~ msgstr "백분율은 0에서 100사이이어야 합니다."
-
-#, fuzzy
-#~ msgid "Credit note"
-#~ msgstr "신용 계정"
-
-#, fuzzy
-#~ msgid ""
-#~ "You must enter the amount of the payment. The payment amount must not be "
-#~ "zero."
-#~ msgstr "지불 계정을 입력해야 합니다. 지불 계정을 0보다 커야 합니다."
-
-#, fuzzy
-#~ msgid "Customer Credit Note"
-#~ msgstr "고객 보고서"
-
-#, fuzzy
-#~ msgid "Vendor Credit Note"
-#~ msgstr "판매인 보고서"
-
-#, fuzzy
-#~ msgid "Employee Credit Note"
-#~ msgstr "종업원 보고서"
-
-#~ msgid "Remo_ve Transaction Splits"
-#~ msgstr "거래 분할 제거(_V)"
-
-#, fuzzy
-#~ msgid "_Shift Transaction Forward"
-#~ msgstr "전체 거래 보기(_T)"
-
-#~ msgid "Account Transaction Report"
-#~ msgstr "계정 거래 보고서"
-
-#~ msgid "Order of columns in the dialog"
-#~ msgstr "대화창에서 열 순서"
-
-#~ msgid "Show the Full Name column"
-#~ msgstr "전체 이름 열 보이기"
-
-#, fuzzy
-#~ msgid "Show the ISIN/CUSIP Code (Exchange Specific Data) column"
-#~ msgstr "CUSIP 코드(특별 자료 교환) 열 보이기"
-
-#~ msgid "Show the Namespace column"
-#~ msgstr "이름 공간 열 보이기"
-
-#~ msgid "Show the Print Name column"
-#~ msgstr "출력 이름 열 보이기"
-
-#~ msgid "Show the Quote Flag column"
-#~ msgstr "인용 꼬리 열 보이기"
-
-#~ msgid "Show the Quote Source column"
-#~ msgstr "인용 소스 열 보이기"
-
-#~ msgid "Show the Quote Timezone column"
-#~ msgstr "인용 시간대 열 보이기"
-
-#~ msgid "Show the Unique Name column"
-#~ msgstr "단일 이름 열 보이기"
-
-#~ msgid "Show the fraction column"
-#~ msgstr "분량 열 보이기"
-
-#~ msgid "Show the name column"
-#~ msgstr "이름 열 보이기"
-
-#~ msgid "Show the symbol column"
-#~ msgstr "심볼 열 보이기"
-
-#~ msgid "Columns used for sorting"
-#~ msgstr "정렬을 위해 사용된 열"
-
-#, fuzzy
-#~ msgid ""
-#~ "The X,Y coordinates of the top left corner of the window when it was last "
-#~ "closed."
-#~ msgstr "마지막 닫힐 때 대화창의 상단 왼쪽 끝의 X,Y 좌표"
-
-#, fuzzy
-#~ msgid "The width and size of the window when it was last closed."
-#~ msgstr "마지막 닫힐 때 대화창의 너비 및 크기"
-
-#~ msgid ""
-#~ "This setting indicates how the key column is sorted. Possible values for "
-#~ "this setting are 'ascending' and 'descending'."
-#~ msgstr ""
-#~ "이 설정은 키 열이 어떻게 정렬될 지를 지시. 이 설정의 가능한 값은 오름차와 "
-#~ "내림차입니다."
-
-#, fuzzy
-#~ msgid ""
-#~ "This setting indicates which column in the tree is used for sorting. "
-#~ "Possible values for this setting are the name of any column in this "
-#~ "window (see the column_order key) or the keyword 'none'."
-#~ msgstr ""
-#~ "이 설정은 키 열이 어떻게 정렬될 지를 지시. 이 설정의 가능한 값은 오름차와 "
-#~ "내림차입니다."
-
-#~ msgid "Window position"
-#~ msgstr "작업창 위치"
-
-#~ msgid "Show the Price column"
-#~ msgstr "가격 열 보이기"
-
-#~ msgid "Show the Source column"
-#~ msgstr "소스 열 보이기"
-
-#~ msgid "Show the Type column"
-#~ msgstr "형태 열 보이기"
-
-#~ msgid "Show the date column"
-#~ msgstr "날짜 열 보이기"
-
-#~ msgid "This setting enables the Price column."
-#~ msgstr "이 설정은 가격열을 가능"
-
-#~ msgid "This setting enables the Source column."
-#~ msgstr "이 설정은 소스 열 허용"
-
-#~ msgid "This setting enables the Type column."
-#~ msgstr "이 설정은 형태 열 허용"
-
-#~ msgid "This setting enables the commodity column."
-#~ msgstr "이 설정은 상품 열 허용"
-
-#~ msgid "This setting enables the currency column."
-#~ msgstr "이 설정은 통화 열 허용"
-
-#~ msgid "Default view style for new register"
-#~ msgstr "새 등록의 기본 보기 스타일"
-
-#~ msgid "Enables Euro support"
-#~ msgstr "유로 지원 가능"
-
-#~ msgid "Enables additional support for the European Union EURO currency."
-#~ msgstr "유로 통화 부가 지원 가능"
-
-#~ msgid "Labels on toolbar buttons"
-#~ msgstr "도구 마개 단추에서 라벨"
-
-#~ msgid "Position of the notebook tabs"
-#~ msgstr "장부북 탭 위치"
-
-#, fuzzy
-#~ msgid "Show the Calendar buttons"
-#~ msgstr "이름 열 보이기"
-
-#, fuzzy
-#~ msgid "Show the Date Entered"
-#~ msgstr "날짜 열 보이기"
-
-#~ msgid "Source of default account currency"
-#~ msgstr "기본 계정 통화 소스"
-
-#~ msgid "Source of default report currency"
-#~ msgstr "기본 보고서 통화 소스"
-
-#, fuzzy
-#~ msgid "The number of Characters needed"
-#~ msgstr "구매 계좌 갯수 보이기"
-
-#, fuzzy
-#~ msgid "The number of transactions displayed"
-#~ msgstr "거래 갯수(_T):"
-
-#~ msgid "Width of a column in the dialog"
-#~ msgstr "대화창의 열 너비"
-
-#, fuzzy
-#~ msgid "New item"
-#~ msgstr "새 항목(_N)..."
-
-#~ msgid ""
-#~ "Error: Failure saving state file.\n"
-#~ "  %s"
-#~ msgstr ""
-#~ "오류: 상태 파일 저장 중 실패.\n"
-#~ "  %s"
-
-#, fuzzy
-#~ msgid ""
-#~ "When you click Apply, GnuCash will modify your ~/.gconf.path file and "
-#~ "restart the gconf backend. There will be a short delay before GnuCash is "
-#~ "loaded."
-#~ msgstr ""
-#~ "적용을 누를 때, GnuCash는 ~/.gconf.path 파일을 수정하고 gconf backend를 재"
-#~ "시작합니다."
-
-#, fuzzy
-#~ msgid ""
-#~ "When you click Apply, GnuCash will install the gconf data into your local "
-#~ "~/.gconf file and restart the gconf backend. The %s script must be found "
-#~ "in your search path for this to work correctly."
-#~ msgstr ""
-#~ "적용을 누를 때, GnuCash는 ~/.gconf.path 파일을 수정하고 gconf backend를 재"
-#~ "시작합니다."
-
-#, fuzzy
-#~ msgid "Withdrawl"
-#~ msgstr "출금"
-
-#, fuzzy
-#~ msgid "Apply Changes"
-#~ msgstr "변경하지 않음"
-
-#, fuzzy
-#~ msgid "Choose Method"
-#~ msgstr "방법 선택"
-
-#~ msgid "GnuCash will install the data for you."
-#~ msgstr "GnuCash가 자료를 설치할 것입니다."
-
-#, fuzzy
-#~ msgid "Install Into Home Directory"
-#~ msgstr "홈 폴더에 설치"
-
-#~ msgid "Please run the following commands:"
-#~ msgstr "다음 명령어를 실행하시오:"
-
-#~ msgid "S_kip"
-#~ msgstr "건너뛰기(_K)"
-
-#~ msgid "The data has _already been installed in another window"
-#~ msgstr "자료가 이미 다른 창에서 설치되었습니다(_A)"
-
-#, fuzzy
-#~ msgid "Update GnuCash Configuration Data"
-#~ msgstr "GnuCash 설정 자료 업데이트"
-
-#~ msgid "Update GnuCash configuration data"
-#~ msgstr "GnuCash 설정 자료 업데이트"
-
-#, fuzzy
-#~ msgid "Update Search Path"
-#~ msgstr "찾기 경로 업데이트"
-
-#~ msgid "_GnuCash installs the data"
-#~ msgstr "Guncash가 자료 설치(_G)"
-
-#~ msgid "_GnuCash updates the search path"
-#~ msgstr "GnuCash가 찾기 경로 업데이트(_G)"
-
-#~ msgid "_Install into home directory"
-#~ msgstr "홈 폴더에 설치(_I)"
-
-#~ msgid "_Setup"
-#~ msgstr "설정(_S)"
-
-#~ msgid "_Update search path"
-#~ msgstr "찾기 경로 업데이트(_U)"
-
-#~ msgid "_You install the data yourself"
-#~ msgstr "자료를 스스로 설치(_Y)"
-
-#~ msgid "_You update the search path yourself"
-#~ msgstr "찾기 경로를 스스로 업데이트(_Y)"
-
-#~ msgid "<b>Toolbar Style</b>"
-#~ msgstr "<b>도구막대 모양</b>"
-
-#~ msgid "Display toolbar items as icons only."
-#~ msgstr "도구막대 항목을 아이콘으로만 보이기."
-
-#~ msgid "Display toolbar items as text only."
-#~ msgstr "도구막대 항목을 문자열로만 보이기"
-
-#~ msgid ""
-#~ "Display toolbar items with the text label below the icon. Labels are show "
-#~ "for all items."
-#~ msgstr ""
-#~ "도구막대 항목을 아이콘 아래 문자열로 보이기. 라벨은 전체 항목에서 보입니"
-#~ "다."
-
-#~ msgid ""
-#~ "Display toolbar items with the text label beside the icon. Labels are "
-#~ "only shown for the most important items."
-#~ msgstr ""
-#~ "도구막대 항목이 아이콘 옆 문자열로 보이기. 라벨이 가장 중요한 항목으로 보"
-#~ "입니다."
-
-#~ msgid "Priority text besi_de icons"
-#~ msgstr "아이콘과 나란히 문자열 우선(_D)"
-
-#~ msgid "Text _below icons"
-#~ msgstr "아이콘 아래 문자열(_B)"
-
-#~ msgid "Use s_ystem default"
-#~ msgstr "시스템 기본 사용(_Y)"
-
-#~ msgid "Use the date format common in continental Europe."
-#~ msgstr "유럽 대륙의 날짜 형식 사용"
-
-#~ msgid "Use the date format common in the United Kingdom."
-#~ msgstr "영국의 날짜 형식 사용"
-
-#~ msgid "Use the date format common in the United States."
-#~ msgstr "미국의 날짜 형식 사용"
-
-#~ msgid "Use the date format specified by the ISO-8601 standard."
-#~ msgstr "ISO-8601 표준에 의해 지정된 날짜 형식 사용"
-
-#~ msgid "_Europe:"
-#~ msgstr "유럽(_E):"
-
-#~ msgid "_Icons only"
-#~ msgstr "아이콘만(_I)"
-
-#~ msgid "_Text only"
-#~ msgstr "문자열만(_T)"
-
-#~ msgid "_Use system theme colors"
-#~ msgstr "시스템 테마 색상 사용(_U)"
-
-#~ msgid "%s at %s (code %s)"
-#~ msgstr "%s (%s 에서) (코드 %s)"
-
-#~ msgid "%s at bank code %s"
-#~ msgstr "%s (은행 코드 %s에서)"
-
-#, fuzzy
-#~ msgid "Comma Separated with Quotes"
-#~ msgstr "시작 날짜"
-
-#, fuzzy
-#~ msgid "Semicolon Separated with Quotes"
-#~ msgstr "시작 날짜"
-
-#, fuzzy
-#~ msgid "Delete the currently selected report"
-#~ msgstr "현재 선택된 거래 서식을 제거"
-
-#, fuzzy
-#~ msgid "Run the currently selected report"
-#~ msgstr "현재 보고서 인쇄하기"
-
-#~ msgid "Add _Report"
-#~ msgstr "보고서 더하기(_R)"
-
-#, fuzzy
-#~ msgid "Net Price"
-#~ msgstr "새 가격(_P):"
-
-#, fuzzy
-#~ msgid "Total Price"
-#~ msgstr "합계 (기간)"
-
-#, fuzzy
-#~ msgid "Amount Due"
-#~ msgstr "금액"
-
-#, fuzzy
-#~ msgid "Invoice number: "
-#~ msgstr "청구서 번호"
-
-#, fuzzy
-#~ msgid "Job number: "
-#~ msgstr "작업 번호"
-
-#, fuzzy
-#~ msgid "Custom Reports"
-#~ msgstr "고객 보고서"
-
-#~ msgid "and"
-#~ msgstr "와 "
-
-#~ msgid "Most recent to report"
-#~ msgstr "보고할 가장 최근 내용"
-
-#~ msgid "FILO"
-#~ msgstr "FILO"
-
-#~ msgid "Use first-in last-out method for basis"
-#~ msgstr "기준에 대한 처음 들어가 마지막 나오는 방법(FILO) 사용"
-
-#~ msgid "Enable hyperlinks in reports"
-#~ msgstr "보고서에 하이퍼링크 가능"
-
-#, fuzzy
-#~ msgid "Welcome to GnuCash 2.4!"
-#~ msgstr "안녕하세요. GnuCash 2.0입니다!"
-
-#~ msgid "The last stable version was "
-#~ msgstr "마지막 안정 버전은"
-
-#~ msgid "The next stable version will be "
-#~ msgstr "다음 안정 버전은 "
-
-#~ msgid "Built %s from r%s"
-#~ msgstr "빌트 %s( r%s 에서)"
-
-#~ msgid "Your selected post account, %s, does not exist"
-#~ msgstr "선택된 은행 계정 %s이 없습니다."
-
-#~ msgid ""
-#~ "Days\n"
-#~ "Proximo"
-#~ msgstr ""
-#~ "일\n"
-#~ "내달"
-
-#~ msgid "What Tax Table should be applied to this customer?"
-#~ msgstr "세금표는 이 고객에게 어떻게 적용됩니까?"
-
-#~ msgid "Reload invoice report"
-#~ msgstr "청구서 보고서 다시 읽어오기"
-
-#~ msgid "Reload invoice report scheme file"
-#~ msgstr "청구서 보고서 스킴 파일을 다시 읽어오기"
-
-#~ msgid "Reload owner report"
-#~ msgstr "소유자 보고서 다시 읽어오기"
-
-#~ msgid "Reload owner report scheme file"
-#~ msgstr "소유자 보고서 스킴 파일 다시 읽어오기"
-
-#~ msgid "Reload receivable report"
-#~ msgstr "받을 수 있는 보고서를 다시 읽어오기"
-
-#~ msgid "Reload receivable report scheme file"
-#~ msgstr "받을 수 있는 보고서 스킴 파일 다시 읽어오기"
-
-#~ msgid "Automatic Payment Forward"
-#~ msgstr "자동 지불 앞으로"
-
-#~ msgid "You must select a commodity."
-#~ msgstr "상품을 선택해야 합니다."
-
-#~ msgid ""
-#~ "You must select closing date that is greater than the closing date of the "
-#~ "previous book."
-#~ msgstr "이전 장부의 마감 날짜보다 더 큰 마감 날짜를 선택해야 합니다."
-
-#~ msgid "You must select closing date that is not in the future."
-#~ msgstr "미래에 없는 마감 날짜를 선택하여야 합니다."
-
-#, fuzzy
-#~ msgid "Are you sure you want to cancel the Mortgage/Loan Setup Assistant?"
-#~ msgstr "저당/대출 설정 드루이드를 취소하겠습니까?"
-
-#~ msgid "Please select a valid \"from\" account."
-#~ msgstr "유효한 \"에서\"계정을 선택하시오."
-
-#~ msgid "Please select a valid \"to\" account."
-#~ msgstr "유효한 \"로\"계정을 선택하시오."
-
-#~ msgid "Please select a valid \"interest\" account."
-#~ msgstr "유효한 \"이자\"계정을 선택하시오."
-
-#~ msgid "Payment: \"%s\""
-#~ msgstr "지불: \"%s\""
-
-#~ msgid "You must enter a valid distribution amount."
-#~ msgstr "유효한 분배량을 입력하여야 합니다."
-
-#~ msgid "You must enter a distribution amount."
-#~ msgstr "분배량을 입력하여야 합니다."
-
-#~ msgid "You must either enter a valid price or leave it blank."
-#~ msgstr "적합한 가격을 입력하거나 공란으로 두시오."
-
-#~ msgid "The price must be positive."
-#~ msgstr "가격이 양수이어야 합니다."
-
-#~ msgid "You must either enter a valid cash amount or leave it blank."
-#~ msgstr "유효한 현금량 또는 공백으로 입력해야 합니다."
-
-#~ msgid "The cash distribution must be positive."
-#~ msgstr "현금 분배는 양수이어야 합니다."
-
-#~ msgid "You must select an income account for the cash distribution."
-#~ msgstr "현금 분배를 위한 수입 계정을 선택하여야 합니다."
-
-#~ msgid "You must select an asset account for the cash distribution."
-#~ msgstr "자금 분배를 위한 자산 계정을 선택하여야 합니다."
-
-#~ msgid "New Account (not implemented)"
-#~ msgstr "새 계정 (이행되지 않음)"
-
-#~ msgid "Select or add a GnuCash account"
-#~ msgstr "GnuCash 계정 선택 또는 더하기"
-
-#~ msgid ""
-#~ "Use Commodity Value\n"
-#~ "1\n"
-#~ "1/10\n"
-#~ "1/100\n"
-#~ "1/1000\n"
-#~ "1/10000\n"
-#~ "1/100000\n"
-#~ "1/1000000"
-#~ msgstr ""
-#~ "상품 가격 사용\n"
-#~ "1\n"
-#~ "1/10\n"
-#~ "1/100\n"
-#~ "1/1000\n"
-#~ "1/10000\n"
-#~ "1/100000\n"
-#~ "1/1000000"
-
-#~ msgid "Enter a title for this book."
-#~ msgstr "장부 제목 입력"
-
-#~ msgid "Enter notes that describe this book."
-#~ msgstr "이 장부를 설명하기 위한 장부 입력"
-
-#~ msgid "Finish Closing Books"
-#~ msgstr "종료 장부 끝내기"
-
-#~ msgid ""
-#~ "day(s)\n"
-#~ "week(s)\n"
-#~ "month(s)\n"
-#~ "year(s)"
-#~ msgstr ""
-#~ "일\n"
-#~ "주\n"
-#~ "월\n"
-#~ "년"
-
-#~ msgid "Account Information"
-#~ msgstr "계정 정보"
-
-#~ msgid ""
-#~ "Annual\n"
-#~ "Semi-annual\n"
-#~ "Tri-annual\n"
-#~ "Quarterly\n"
-#~ "Bi-monthly\n"
-#~ "Monthly\n"
-#~ "Semi-monthly\n"
-#~ "Bi-weekly\n"
-#~ "Weekly\n"
-#~ "Daily (360)\n"
-#~ "Daily (365)"
-#~ msgstr ""
-#~ "년\n"
-#~ "6개월\n"
-#~ "4개월\n"
-#~ "3개월\n"
-#~ "2개월\n"
-#~ "1개월\n"
-#~ "0.5개월\n"
-#~ "2주\n"
-#~ "1주\n"
-#~ "일 (360)\n"
-#~ "일 (365)"
-
-#~ msgid "Co_mpounding:"
-#~ msgstr "배합(_M):"
-
-#~ msgid "_Effective Date:"
-#~ msgstr "유효 날짜(_E):"
-
-#~ msgid "_Initial Payment:"
-#~ msgstr "초기 지불(_I):"
-
-#~ msgid "_Payments:"
-#~ msgstr "지불(_P):"
-
-#~ msgid "<b>_Mini-Viewer</b>"
-#~ msgstr "<b>최소 뷰어(_M)</b>"
-
-#~ msgid ""
-#~ "Bid\n"
-#~ "Ask\n"
-#~ "Last\n"
-#~ "Net Asset Value\n"
-#~ "Unknown"
-#~ msgstr ""
-#~ "입찰\n"
-#~ "질의\n"
-#~ "마지막\n"
-#~ "순 자산 값\n"
-#~ "미지"
-
-#~ msgid ""
-#~ "Inches\n"
-#~ "Centimeters\n"
-#~ "Millimeters\n"
-#~ "Points"
-#~ msgstr ""
-#~ "인치\n"
-#~ "센티미터\n"
-#~ "밀리미터\n"
-#~ "포인트"
-
-#~ msgid ""
-#~ "Top\n"
-#~ "Middle\n"
-#~ "Bottom\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "상단\n"
-#~ "중간\n"
-#~ "하단\n"
-#~ "사용자"
-
-#~ msgid "Copy Transaction"
-#~ msgstr "거래 복사"
-
-#~ msgid "Copy the selected transaction"
-#~ msgstr "선택된 거래 복사"
-
-#~ msgid "Cut Transaction"
-#~ msgstr "거래 잘라내기"
-
-#~ msgid "Dup_licate Transaction..."
-#~ msgstr "거래 복제(_L)..."
-
-#~ msgid "Edit Exchange Rate"
-#~ msgstr "교환비율 편집"
-
-#~ msgid "Edit the exchange rate for the current split"
-#~ msgstr "현재 분리를 ㅟ한 교환비율 편집"
-
-#~ msgid "Erase all splits except the one for this account."
-#~ msgstr "이 계정에서 하나를 제외하고 전체 분리 삭제"
-
-#~ msgid "Jump"
-#~ msgstr "이동"
-
-#~ msgid "Remove Transaction Splits"
-#~ msgstr "거래 스플릿 제거"
-
-#~ msgid "Schedule..."
-#~ msgstr "일정..."
-
-#~ msgid "Sort by Amount"
-#~ msgstr "양에 의한 배열"
-
-#~ msgid "Sort by Date"
-#~ msgstr "날짜에 의한 배열"
-
-#~ msgid "Sort by Description"
-#~ msgstr "세부 항목에 의한 배열"
-
-#~ msgid "Sort by Memo"
-#~ msgstr "메모에 의한 배열"
-
-#~ msgid "Sort by Number"
-#~ msgstr "번호에 의한 배열"
-
-#~ msgid "St_yle"
-#~ msgstr "스타일(_Y)"
-
-#~ msgid "_Amount"
-#~ msgstr "양(_A)"
-
-#~ msgid "_Number"
-#~ msgstr "번호(_N)"
-
-#~ msgid "_Statement Date"
-#~ msgstr "보고 날짜(_S)"
-
-#~ msgid "<b>End</b>"
-#~ msgstr "<b>끝</b>"
-
-#~ msgid "<b>Upcoming</b>"
-#~ msgstr "<b>다가올 날짜</b>"
-
-#~ msgid "Creation State"
-#~ msgstr "생성 상태"
-
-#~ msgid ""
-#~ "Current Year\n"
-#~ "Now + 1 Year\n"
-#~ "Whole Loan\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "금년\n"
-#~ "금년 + 1 년\n"
-#~ "전체 대출\n"
-#~ "사용자"
-
-#~ msgid ""
-#~ "Daily\n"
-#~ "Weekly\n"
-#~ "Bi-Weekly\n"
-#~ "Monthly\n"
-#~ "Quarterly\n"
-#~ "Yearly"
-#~ msgstr ""
-#~ "매일\n"
-#~ "매주\n"
-#~ "매2주\n"
-#~ "매달\n"
-#~ "분기별\n"
-#~ "매년"
-
-#~ msgid ""
-#~ "Fixed Rate\n"
-#~ "3/1 Year ARM\n"
-#~ "5/1 Year ARM\n"
-#~ "7/1 Year ARM\n"
-#~ "10/1 Year ARM"
-#~ msgstr ""
-#~ "고정 비율\n"
-#~ "3/1 년 ARM\n"
-#~ "5/1 년 ARM\n"
-#~ "7/1 년 ARM\n"
-#~ "10/1 년 ARM"
-
-#~ msgid "Loan Information"
-#~ msgstr "대출 정보"
-
-#~ msgid ""
-#~ "None\n"
-#~ "Once\n"
-#~ "Daily\n"
-#~ "Weekly\n"
-#~ "Semi-Monthly\n"
-#~ "Monthly"
-#~ msgstr ""
-#~ "없음\n"
-#~ "한번\n"
-#~ "매일\n"
-#~ "매주\n"
-#~ "반달\n"
-#~ "매월"
-
-#~ msgid "Press apply to commit these changes."
-#~ msgstr "이들 변경을 허용하기 위하여 적용 누름."
-
-#~ msgid "Repayment Type"
-#~ msgstr "상환 형태"
-
-#~ msgid "Start Date: "
-#~ msgstr "시작 날짜: "
-
-#~ msgid ""
-#~ "months\n"
-#~ "years"
-#~ msgstr ""
-#~ "월\n"
-#~ "년"
-
-#~ msgid "Set the budget options using this dialog."
-#~ msgstr "이 대화창을 이용하여 예산 설정을 설정"
-
-#~ msgid "Case Insensitive?"
-#~ msgstr "대소문자구별?"
-
-#~ msgid "Finish changes"
-#~ msgstr "변경 종료"
-
-#~ msgid "Update gconf settings - GnuCash"
-#~ msgstr "gconf 설정 업데이트 - GnuCash"
-
-#~ msgid "Do not merge"
-#~ msgstr "병합하지 않음"
-
-#~ msgid "GnuCash data files you have loaded"
-#~ msgstr "읽어온 GnuCash 자료 파일"
-
-#~ msgid "Load another file"
-#~ msgstr "다른 파일 읽어오기"
-
-#~ msgid "Unload selected file"
-#~ msgstr "선택된 파일 읽어오지 않기"
-
-#~ msgid "<b>Current File List</b>"
-#~ msgstr "<b>현재 파일 목록</b>"
-
-#~ msgid "_Exchange Rate:"
-#~ msgstr "환전 비율(_E):"
-
-#~ msgid "_From:"
-#~ msgstr "에서(_F):"
-
-#~ msgid "_To:"
-#~ msgstr "로(_T):"
-
-#~ msgid ""
-#~ "US (12/31/2001)\n"
-#~ "UK (31/12/2001)\n"
-#~ "Europe (31.12.2001)\n"
-#~ "ISO (2001-12-31)\n"
-#~ "UTC\n"
-#~ "Locale\n"
-#~ "Custom\n"
-#~ msgstr ""
-#~ "미국 (12/31/2001)\n"
-#~ "영국 (31/12/2001)\n"
-#~ "유럽 (31.12.2001)\n"
-#~ "ISO (2001-12-31)\n"
-#~ "세계시\n"
-#~ "로케일\n"
-#~ "사용자\n"
-
-#~ msgid "Don't tell me again this session."
-#~ msgstr "이 세션을 다시 언급하지 마시오."
-
-#~ msgid "Don't tell me again."
-#~ msgstr "다시 언급하지 마시오."
-
-#~ msgid "Remember the answer and don't tell me again this session."
-#~ msgstr "답을 기억하고 이 세션을 다시 언급하지 마시오."
-
-#~ msgid "Remember the answer and don't tell me again."
-#~ msgstr "답을 기억하고 다시 언급하지 마시오"
-
-#~ msgid "Failed to process file: %s"
-#~ msgstr "파일 진행 실패: %s"
-
-#~ msgid "Failed to open file: %s: %s"
-#~ msgstr "파일 열기 실패: %s: %s"
-
-#~ msgid "Add a new transaction to the account"
-#~ msgstr "새 거래를 계정에 더하기"
-
-#, fuzzy
-#~ msgid "Select an CSV/Fixed-Width file to import"
-#~ msgstr "읽어올 파일 선택"
-
-#, fuzzy
-#~ msgid "Import _CSV/Fixed-Width..."
-#~ msgstr "CSV 읽어오기 및 보내기(_E)..."
-
-#~ msgid "Other Account"
-#~ msgstr "다른 계정"
-
-#~ msgid "Period-as-decimal (1,000.00)"
-#~ msgstr "소수점을 점으로"
-
-#~ msgid "Comma-as-decimal (1.000,00)"
-#~ msgstr "소수점을 콤마로"
-
-#~ msgid "y-d-m"
-#~ msgstr "년-일-월"
-
-#~ msgid "(no)"
-#~ msgstr "(없음)"
-
-#~ msgid "You must enter an account name."
-#~ msgstr "게정 이름을 입력해야 합니다."
-
-#, fuzzy
-#~ msgid ""
-#~ "No valid customer selected. Click on the Options button to select a "
-#~ "customer."
-#~ msgstr "선택된 유효 %s 없음. 회사를 선택하기 위하여 설정 버튼을 클릭."
-
-#, fuzzy
-#~ msgid ""
-#~ "No valid employee selected. Click on the Options button to select an "
-#~ "employee."
-#~ msgstr "선택된 유효 %s 없음. 회사를 선택하기 위하여 설정 버튼을 클릭."
-
-#, fuzzy
-#~ msgid ""
-#~ "No valid company selected. Click on the Options button to select a "
-#~ "company."
-#~ msgstr "선택된 유효 %s 없음. 회사를 선택하기 위하여 설정 버튼을 클릭."
-
-#~ msgid "Asterisk"
-#~ msgstr "별표"
-
-#~ msgid "Set the search path for documentation files"
-#~ msgstr "문서화 파일의 찾기 경로 설정"
-
-#~ msgid "Default number of register rows to display in Invoices."
-#~ msgstr "청구서에서 나타내는 등록 행의 기본 갯수"
-
-#~ msgid "The number of rows in an invoice"
-#~ msgstr "청구서에서 열 갯수"
-
-#~ msgid "Invalid Entry:  You need to supply %s."
-#~ msgstr "유효하지 않은 입력: 공급 %s 가 필요합니다."
-
-#~ msgid "Crea_te in advance, days:"
-#~ msgstr "미리 날짜 날짜(_T):"
-
-#~ msgid "R_emind in advance, days:"
-#~ msgstr "미리 기억   일:"
-
-#~ msgid "New %s"
-#~ msgstr "새 %s"
-
-#~ msgid "item"
-#~ msgstr "항목"
-
-#~ msgid "Display this many rows when a register is created."
-#~ msgstr "등록 생성시 다수 행 보이기"
-
-#~ msgid "The two passwords didn't match. Please try again."
-#~ msgstr "두 암호가 일치하지 않습니다. 다시 시도하세요"
-
-#~ msgid "Choose AqBanking Backend"
-#~ msgstr "aq뱅킹 백엔드 선택"
-
-#~ msgid "Please choose an AqBanking backend to be configured"
-#~ msgstr "설정된 Aq뱅킹 백엔드 선택하시오."
-
-#~ msgid "Co_nfigure"
-#~ msgstr "설정(_N)"
-
-#~ msgid "The file %s does not exist. Would you like to create it now?"
-#~ msgstr "파일 %s가 없습니다. 지금 생성할까요?"
-
-#~ msgid ""
-#~ "The directory for file %s does not exist. Please choose another place for "
-#~ "this file."
-#~ msgstr "파일 %s 폴더가 없습니다. 이 파일의 다른 폴더를 선택하겠습니까?"
-
-#~ msgid "Choose an Online Banking Version to use with the selected bank:"
-#~ msgstr "선택된 은행의 이용할 온라인 뱅킹 버전 선택:"
-
-#~ msgid "Online Banking Version"
-#~ msgstr "온라인 뱅킹 버전"
-
-#~ msgid "Start AqBanking Setup Wizard"
-#~ msgstr "Aq뱅킹 설정 마법사 시작"
-
-#~ msgid "Enter and confirm your new password"
-#~ msgstr "새 암호를 입력하고 확인"
-
-#~ msgid "Enter new Password"
-#~ msgstr "새 암호 입력"
-
-#~ msgid "Activate verbose debug messages for Online Banking."
-#~ msgstr "온라인 뱅킹에 대한 다양한 디버그 메세지 활성화."
-
-#~ msgid "Remember the Online Banking PIN in memory during a session."
-#~ msgstr "세션동안 메모리에 온라인 뱅킹 PIN을 기억시킵니다."
-
-#~ msgid ""
-#~ "The PIN you entered was wrong.\n"
-#~ "Do you want to try again?"
-#~ msgstr ""
-#~ "입력한 PIN이 오류입니다.\n"
-#~ "다시 하시겠습니까??"
-
-#~ msgid ""
-#~ "The PIN you entered was wrong.\n"
-#~ "ATTENTION: You have zero further wrong retries left!\n"
-#~ "Do you want to try again?"
-#~ msgstr ""
-#~ "입력된 PIN이 오류입니다.\n"
-#~ "주의: 당신은 제로를 가져 더 이상 남아있는 오류 재시도가 없습니다.!\n"
-#~ "다시 시도하시겠습니까?"
-
-#~ msgid "Import a CSV file into GnuCash"
-#~ msgstr "CSV 파일 읽어오기"
-
-#~ msgid "Import CSV and s_end..."
-#~ msgstr "CSV 읽어오기 및 보내기(_E)..."
-
-#, fuzzy
-#~ msgid ""
-#~ "Warning!! This is a DEVELOPMENT version of GnuCash. It probably has lots "
-#~ "of bugs and unstable features! If you are looking for a stable personal "
-#~ "finance application, you should use the latest release of GnuCash %s."
-#~ msgstr ""
-#~ "주의! 이것은 GnuCash 개발버전입니다. 아마 많은 버그와 불안전한 요소를 가지"
-#~ "고 있을 것입니다! 안정적인 재정 응용프로그램을 찾는다면, GnuCash 2.0. 최"
-#~ "신 버전을 사용하시오."
-
-#~ msgid "CONFIGPATH"
-#~ msgstr "설정경로"
-
-#~ msgid "Set shared data file search path"
-#~ msgstr "공유 자료 파일 찾기 경로 설정"
-
-#~ msgid "SHAREPATH"
-#~ msgstr "공유경로"
-
-#~ msgid "Transaction _journal"
-#~ msgstr "거래 일지(_J)"
-
-#, fuzzy
-#~ msgid "Payment rec'd..."
-#~ msgstr "지불 주기"
-
-#~ msgid "<b>Contained Accounts</b>"
-#~ msgstr "<b>포함 계정</b>"
-
-#~ msgid "<b>Description</b>"
-#~ msgstr "<b>세부 항목</b>"
-
-#~ msgid "<b>New Account Currency</b>"
-#~ msgstr "<b>새 계정 통화</b>"
-
-#~ msgid ""
-#~ "If you would like an account to have an opening balance, click on the "
-#~ "account and enter the starting balance in the box on the right. All "
-#~ "accounts except Equity and placeholder accounts may have an opening "
-#~ "balance."
-#~ msgstr ""
-#~ "잔고가 있는 계정을 원한다면, 계정을 클릭하고 상자 오른쪽의 시작 수지를 입"
-#~ "력하시오. 자기자본과 자리표시자 계정을 제외한 전체 계정은 잔고를 가질 것입"
-#~ "니다."
-
-#~ msgid "This is Sample2."
-#~ msgstr "이것은 샘플2임."
-
-#~ msgid "Auto-Created Transactions Notification"
-#~ msgstr "자동 생성된 거래 알림"
-
-#~ msgid "Create"
-#~ msgstr "생성"
-
-#~ msgid "Create as scheduled"
-#~ msgstr "자동이체로 생성"
-
-#~ msgid "Created Transaction Review"
-#~ msgstr "생성된 거래 다시 보기"
-
-#~ msgid "Creating transactions..."
-#~ msgstr "거래 생성 중..."
-
-#~ msgid "Disposition?"
-#~ msgstr "처분?"
-
-#~ msgid "Obsolete Scheduled Transactions"
-#~ msgstr "오래된 자동 이체"
-
-#~ msgid "Postpone"
-#~ msgstr "연기"
-
-#~ msgid "Scheduled Transaction"
-#~ msgstr "자동 이체"
-
-#~ msgid "Since Last Run"
-#~ msgstr "마지막 실행 이후"
-
-#~ msgid "State"
-#~ msgstr "상태"
-
-#~ msgid "Template Transaction (Read-Only)"
-#~ msgstr "서식 거래 (읽기만)"
-
-#~ msgid ""
-#~ "The following scheduled transactions have expired. Select those you wish "
-#~ "to delete."
-#~ msgstr "다음 자동 이체가 종료되었습니다. 삭제하기 위하여 그들을 선택."
-
-#~ msgid ""
-#~ "The listed Scheduled Transactions are to-be created soon. Select any "
-#~ "which you would like to create now, and click \"Forward\" to create them."
-#~ msgstr ""
-#~ "목록화된 자동 이체를 곧 생성될 것입니다. 지금 생성하려는 것을 선택, 그들"
-#~ "을 생성하기 위하여 \"앞으로\" 클릭"
-
-#, fuzzy
-#~ msgid ""
-#~ "This assistant will walk you through any scheduled transactions that "
-#~ "should be created."
-#~ msgstr "이 드루이드는 생성될 임의 자동 이체를 도와드립니다."
-
-#~ msgid "To-Create Transaction Preparation"
-#~ msgstr "거래 준비 생성"
-
-#~ msgid "Transaction Reminders"
-#~ msgstr "거래 독촉장"
-
-#~ msgid "Unselect All"
-#~ msgstr "전체 선택 해제"
-
-#~ msgid "Value:"
-#~ msgstr "가치:"
-
-#~ msgid "Variable"
-#~ msgstr "변수"
-
-#~ msgid "Variables"
-#~ msgstr "변수"
-
-#~ msgid "What to do, what to do?"
-#~ msgstr "어떻게 할지, 어떻게 할지?"
-
-#~ msgid "Defaults"
-#~ msgstr "기본값"
-
-#~ msgid "Start of this fiscal year"
-#~ msgstr "올 회계년도 시작"
-
-#~ msgid "Start of previous fiscal year"
-#~ msgstr "이전 회계년도 시작"
-
-#~ msgid "End of this fiscal year"
-#~ msgstr "올 회계년도 끝"
-
-#~ msgid "End of previous fiscal year"
-#~ msgstr "이전 회계년도 끝"
-
-#~ msgid "Current Year Start"
-#~ msgstr "금년 시작일"
-
-#~ msgid "Previous Year Start"
-#~ msgstr "이전년 시작일"
-
-#~ msgid "Previous Year End"
-#~ msgstr "이전년 종료일"
-
-#~ msgid "Start of Financial Period"
-#~ msgstr "재정 기간 시작"
-
-#~ msgid "End of Financial Period"
-#~ msgstr "재정 기간 종료"
-
-#~ msgid "End of the accounting period, as set in the global preferences"
-#~ msgstr "계정 기간의 종료, 전역 설정에서 설정"
-
-#~ msgid "End of the current month"
-#~ msgstr "현재 달의 끝"
-
-#~ msgid "The beginning of the previous month"
-#~ msgstr "이전 달의 시작"
-
-#~ msgid "The end of the latest quarterly accounting period"
-#~ msgstr "최근 분기의 게정 기간의 끝"
-
-#~ msgid "Accounts to include"
-#~ msgstr "포함될 계정"
-
-#~ msgid "Show Full Account Name?"
-#~ msgstr "전체 계정명을 보일까요?"
-
-#~ msgid "Filter Accounts"
-#~ msgstr "필터 계정"
-
-#~ msgid "DOCPATH"
-#~ msgstr "자료경로"
-
-#~ msgid "QSF _Invoice..."
-#~ msgstr "QSF 청구서(_I)..."
-
-#~ msgid "Export one or more invoices to QSF"
-#~ msgstr "하나 이상의 청구서를 QSF로 내보내기"
-
-#~ msgid "QSF _Customer..."
-#~ msgstr "QSF 고객(_C)..."
-
-#~ msgid "Export one or more customers to QSF"
-#~ msgstr "한 명 이상의 고객을 QSF로 내보내기"
-
-#~ msgid "QSF _Vendor..."
-#~ msgstr "QSF 판매자(_V)..."
-
-#~ msgid "Export one or more vendors to QSF"
-#~ msgstr "한 명 이상의 판매자를 QSF로 내보내기"
-
-#~ msgid "QSF _Employee..."
-#~ msgstr "QSF 종업원(_E)..."
-
-#~ msgid "Export one or more employees to QSF"
-#~ msgstr "한 명 이상의 종업원을 QSF로 내보내기"
-
-#~ msgid "Export Invoices to XML"
-#~ msgstr "청구서를 XML로 내보내기"
-
-#~ msgid "Export Vendors to XML"
-#~ msgstr "판매인을 XML로 내보내기"
-
-#~ msgid "Export Employees to XML"
-#~ msgstr "종업원을 XML로 내보내기"
-
-#~ msgid "Export Chart of Accounts to QSF XML"
-#~ msgstr "계정 차트를 QSF XML로 내보내기"
-
-#~ msgid ""
-#~ "Error: Please resolve all %d conflicts before trying to commit the data."
-#~ msgstr "오류: 잘를 허용을 하기 전 전체 %d 충돌을 해결하십시오."
-
-#~ msgid "Error: the Commit operation failed, error code %d."
-#~ msgstr "오류: 작동 허용 실패, 오류 코드 %d."
-
-#, fuzzy
-#~ msgid "%i conflict needs to be resolved."
-#~ msgid_plural "%i conflicts need to be resolved."
-#~ msgstr[0] "%i 충돌이 해결되어야 합니다."
-#~ msgstr[1] "%i 충돌이 해결되어야 합니다."
-
-#, fuzzy
-#~ msgid "%i parameter value for this \"%s\" object."
-#~ msgid_plural "%i parameter values for this \"%s\" object."
-#~ msgstr[0] "%i 인자 값 (이 \"%s\" 객체)."
-#~ msgstr[1] "%i 인자 값 (이 \"%s\" 객체)."
-
-#, fuzzy
-#~ msgid "%i: Parameter name: %s "
-#~ msgstr "%i:인자 이름: %s "
-
-#~ msgid "Import data : %s "
-#~ msgstr "자료 읽어오기 : %s"
-
-#~ msgid "Original data : %s\n"
-#~ msgstr "원 자료 : %s\n"
-
-#~ msgid "Click to choose the filename and location."
-#~ msgstr "파일명과 위치 선택하기 위하여 클릭"
-
-#~ msgid "Export Chart of Accounts"
-#~ msgstr "계정 차트 내보내기"
-
-#, fuzzy
-#~ msgid ""
-#~ "Select the date to use and click Export to choose the filename and "
-#~ "location. Future dates are not supported."
-#~ msgstr "이용 날짜를 선택하고 파일명과 위치를 선택하기 위하여 내보내기 클릭"
-
-#~ msgid ""
-#~ "The Chart of Accounts includes the balance for each account, on the date "
-#~ "specified. Note that future dates are not supported."
-#~ msgstr ""
-#~ "계정 차트는 지정된 날짜의 각 계정의 수지를 포함함. 미래 날짜를 지원하지 않"
-#~ "음을 유의."
-
-#~ msgid ""
-#~ "You can export the Chart of Accounts to a QSF XML file that can be "
-#~ "imported into another GnuCash file or used in other programs."
-#~ msgstr ""
-#~ "계정 차트를 다른 GnuCash 파일로 읽어올 수 있거나 다른 프로그램에서 사용되"
-#~ "는 QSF XML 파일로 내보내기 할 수 있음."
-
-#~ msgid "1. Update your existing book with the import data"
-#~ msgstr "1. 자료 읽어오기로 기존 장부 업데이트"
-
-#~ msgid "2. Ignore the import data, leave original unchanged"
-#~ msgstr "2. 자로 읽어오기 무시, 원래 변경되지 않은 원본으로 두기"
-
-#~ msgid "3. Import the data as a NEW object"
-#~ msgstr "3. 자료를 새 객체로 읽어오기"
-
-#~ msgid "Add the import as a new object, leave original in place"
-#~ msgstr "읽어온 것을 새 객체로 더하기, 원래 위치에 두기"
-
-#~ msgid "Commit QSF Import Data to data file"
-#~ msgstr "QSF 읽기 자ㅇ료를 자료 파일로 허요"
-
-#~ msgid "Please resolve any conflicts in the merge"
-#~ msgstr "병합시 충돌을 해결하시오"
-
-#~ msgid ""
-#~ "Press `Apply' to merge your QSF data into the current GnuCash file.\n"
-#~ "\n"
-#~ "Press `Back' to review your selections.\n"
-#~ "\n"
-#~ "Press `Cancel' to close this dialog without changing your current data "
-#~ "file.\n"
-#~ "\n"
-#~ "REMEMBER: There is no way to undo this final operation! Make sure you "
-#~ "have a backup before clicking 'Apply'."
-#~ msgstr ""
-#~ "QSF 자료를 자료를  GnuCash 파일로 병합하려면 `적용`을 누르시오.\n"
-#~ "\n"
-#~ "선택을 재검토하기 위하여 `뒤로`를 누르시오.\n"
-#~ "\n"
-#~ "현자 자료 파일 변경없이 이 대화창을 닫기 위하여 `취소`를 누르시오.\n"
-#~ "\n"
-#~ "주의: 이것은 마직막 작업을 작업취소하기 위한 방법이 아닙니다! 적용을 누르"
-#~ "기 전에 백업을 확인하시오."
-
-#~ msgid "QSF Data Import Setup"
-#~ msgstr "QSF 자료 읽어오기 설정"
-
-#~ msgid "Shows how your QSF data conflicts with existing data in your file."
-#~ msgstr "파일에서 QSF 자료와 기존자료가 충돌하는지를 보이기."
-
-#~ msgid "overwrite the original with the import data"
-#~ msgstr "원본을 읽어온 자료로 덮어씀"
-
-#~ msgid "Import a QSF object file"
-#~ msgstr "QSF 목적 파일 읽어오기"
-
-#~ msgid "Export the chart of accounts for a date with balances as QSF"
-#~ msgstr "잔액을 가진 날짜의 계정 차트를 QSF로 내보내기"
-
-#~ msgid "Error: Loading failed, error code %d - %s."
-#~ msgstr "오류: 읽는 중 오류, 오류 코드 %d - %s."
-
-#~ msgid "Select the QSF file to import into GnuCash"
-#~ msgstr "GnuCash로 읽어오기 위하여 QSF 파일을 선택"
-
-#~ msgid "String encoding to use when writing the XML file."
-#~ msgstr "XML 파일을 쓸 때 사용하기 위한 문자열 암호화."
-
-#~ msgid ""
-#~ "QSF defaults to UTF-8. Other encodings are supported by passing the "
-#~ "string encoding in this option."
-#~ msgstr "QSF는 기본적으로 UF-8 사용."
-
-#, fuzzy
-#~ msgid "Default CSS"
-#~ msgstr "기본값"
-
-#, fuzzy
-#~ msgid "Could not open the file: "
-#~ msgstr "파일 %s의 백업 생성을 할 수 없습니다"
-
-#, fuzzy
-#~ msgid "Due date:"
-#~ msgstr "어음 만기일"
-
-#, fuzzy
-#~ msgid "<h2>Tax Invoice</h2>"
-#~ msgstr "<b>청구서</b>"
-
-#~ msgid "Set the logging level from 0 (least) to 6 (most)"
-#~ msgstr "로깅 레벨을 0(최소)에서 6(최대)까지 설정"
-
-#~ msgid "LOGLEVEL"
-#~ msgstr "로그레벨"
-
-#~ msgid "_Tax Table Editor"
-#~ msgstr "세무 제표 편집기"
-
-#~ msgid ""
-#~ "If you would like an account to have an opening balance, click on the row "
-#~ "containing the account, click again in the opening balances column, and "
-#~ "then enter the starting balance. All accounts except Equity and "
-#~ "placeholder accounts may have an opening balance.\n"
-#~ "\n"
-#~ "If you would like an account to be a placeholder account, just click the "
-#~ "checkbox for that account.\n"
-#~ msgstr ""
-#~ "잔고가 있는 계정을 원한다면 계정을 포함하는 행을 클릭하고, 다시 잔고 열을 "
-#~ "클릭합니다, 그리고 그 때 시작 잔액을 입력합니다. 자기 자본과 자리표시자 계"
-#~ "정을 제외한 전체 계정은 잔고를 가져야 합니다.\n"
-#~ "\n"
-#~ "자리표시자 계정이 될 계정을 원한다면, 단지 그 계정의 체크박스를 클릭하시"
-#~ "오.\n"
-
-#~ msgid "Setup new accounts"
-#~ msgstr "새 계정 설정"
-
-#, fuzzy
-#~ msgid "Income Ta_x Options"
-#~ msgstr "세금 설정(_X)"
-
-#, fuzzy
-#~ msgid "Setup income tax information for relevant accounts"
-#~ msgstr "전체 수입과 지출 게정의 세금 정보 설정"
-
-#~ msgid "Print GnuCash Document"
-#~ msgstr "GnuCash  문서 출력"
-
-#, fuzzy
-#~ msgid "Transfer To/From Account(s)"
-#~ msgstr "이체 계좌"
-
-#, fuzzy
-#~ msgid "(Converted "
-#~ msgstr "파일 변환"
-
-#, fuzzy
-#~ msgid " @ transaction split rate of "
-#~ msgstr "거래 스플릿을 통장정리 안함으로 만듦"
-
-#, fuzzy
-#~ msgid " on "
-#~ msgstr "켬 상태"
-
-#, fuzzy
-#~ msgid " (Account Commodity: "
-#~ msgstr ""
-#~ "\n"
-#~ "상품: "
-
-#, fuzzy
-#~ msgid "Item "
-#~ msgstr "항목"
-
-#, fuzzy
-#~ msgid "Balance on "
-#~ msgstr "잔액"
-
-#, fuzzy
-#~ msgid "Account: "
-#~ msgstr "계정(_A):"
-
-#, fuzzy
-#~ msgid " For "
-#~ msgstr "양식"
-
-#, fuzzy
-#~ msgid ": Parameters"
-#~ msgstr "%i:인자 이름: %s "
-
-#, fuzzy
-#~ msgid " Line "
-#~ msgstr "온라인"
-
-#, fuzzy
-#~ msgid ": Payer Name Option "
-#~ msgstr "날짜 설정만"
-
-#, fuzzy
-#~ msgid ", TXF Format "
-#~ msgstr "형식: "
-
-#, fuzzy
-#~ msgid "None specified"
-#~ msgstr "지정안됨"
-
-#, fuzzy
-#~ msgid "Error Description"
-#~ msgstr "세부 항목"
-
-#, fuzzy
-#~ msgid "Subset of accounts"
-#~ msgstr "계정 선택"
-
-#, fuzzy
-#~ msgid "No accounts (none = all accounts)"
-#~ msgstr "계정 선택 (없음 = 전체)"
-
-#, fuzzy
-#~ msgid "Suppress $0.00 valued Tax Codes"
-#~ msgstr "$0.00 가격으로 억제"
-
-#, fuzzy
-#~ msgid "Do not suppress $0.00 valued Tax Codes"
-#~ msgstr "$0.00 가격으로 억제"
-
-#, fuzzy
-#~ msgid "Display full account names"
-#~ msgstr "전체 계정명을 보이기"
-
-#, fuzzy
-#~ msgid "Do not display full account names"
-#~ msgstr "전체 계정명을 보이기"
-
-#, fuzzy
-#~ msgid "Display all Transfer To/From Accounts"
-#~ msgstr "이체 계좌"
-
-#, fuzzy
-#~ msgid "Do not display all Transfer To/From Accounts"
-#~ msgstr "부모 계정의 수지를 보이지 않기"
-
-#, fuzzy
-#~ msgid "Display transactions for selected accounts"
-#~ msgstr "새 거래를 계정에 더하기"
-
-#, fuzzy
-#~ msgid "Do not display transactions for selected accounts"
-#~ msgstr "부모 계정의 부분합계를 보이지 않기"
-
-#, fuzzy
-#~ msgid "Include some transactions outside of selected dates"
-#~ msgstr "전체 선택된 계정의 하위 계정을 포함"
-
-#, fuzzy
-#~ msgid "Do not shade alternate transactions"
-#~ msgstr "거래에 이중 모드 색상 대체(_M)"
-
-#, fuzzy
-#~ msgid "PriceDB lookups nearest to transaction date"
-#~ msgstr "거래 날짜를 보입니까?"
-
-#~ msgid "The following bills are due"
-#~ msgstr "다음 어음들은 만기입니다"
-
-#~ msgid "Escrow "
-#~ msgstr "요구불 날인 증서(에스크로) "
-
-#, fuzzy
-#~ msgid "Show Hidden"
-#~ msgstr "숨김(_I)"
-
-#~ msgid "<no file>"
-#~ msgstr "<작업 파일 없음>"
-
-#, fuzzy
-#~ msgid "A bug was detected while reading the QIF file."
-#~ msgstr "QIF 파일 읽는 중 발생한 오류"
-
-#~ msgid "Div"
-#~ msgstr "나누기"
-
-#~ msgid "Compute unrealized gains and losses"
-#~ msgstr "미회수 이득과 손실 계산"
-
-#~ msgid ""
-#~ "Include unrealized gains and losses in the computation. Will produce "
-#~ "incorrect results if the current file uses commodity trading accounts"
-#~ msgstr ""
-#~ "계산에서 미회수 이득과 손실을 포함. 현재 파일이 상품 거래 계정을 사용시 부"
-#~ "적확한 결과가 나옴"
-
-#~ msgid "ATM"
-#~ msgstr "ATM"
-
-#~ msgid "Unknown database access mode '%s'. Using default mode: multi-user."
-#~ msgstr "미지의 데이타베이스 접근 모드 '%s'. 기본 모드 사용 중: 다수 사용자."
-
-#~ msgid "From the Postgresql Server: %s"
-#~ msgstr "Poestgresql 서버: %s"
-
-#~ msgid "Backend connection is not available"
-#~ msgstr "백엔드 연결이 불가능합니다"
-
-#~ msgid "Query could not be executed"
-#~ msgstr "질의를 실행할 수 없습니다"
-
-#~ msgid "Once: %s"
-#~ msgstr "한번: %s"
-
-#~ msgid "Daily (x%u)"
-#~ msgstr "매일 (x%u)"
-
-#~ msgid "Weekdays: (x%u)"
-#~ msgstr "주: (x%u)"
-
-#~ msgid "Weekdays"
-#~ msgstr "주"
-
-#~ msgid "Weekly (x%d): %s"
-#~ msgstr "매주 (x%d): %s"
-
-#~ msgid "Weekly: %s"
-#~ msgstr "매주: %s"
-
-#~ msgid "Bi-Weekly, %ss"
-#~ msgstr "격주, %ss"
-
-#~ msgid "Semi-monthly (x%u): %s, %s"
-#~ msgstr "월 2회 (x%u): %s, %s"
-
-#~ msgid "Semi-monthly: %s, %s"
-#~ msgstr "월 2회: %s, %s"
-
-#~ msgid "Monthly (x%u): %u"
-#~ msgstr "매월 (x%u): %u"
-
-#~ msgid "Monthly: %u"
-#~ msgstr "매월: %u"
-
-#~ msgid "Quarterly (x%u): %u"
-#~ msgstr "매분기 (x%u): %u"
-
-#~ msgid "Quarterly: %u"
-#~ msgstr "매분기: %u"
-
-#~ msgid "Tri-Yearly (x%u): %u"
-#~ msgstr "연간 3회 (x%u): %u"
-
-#~ msgid "Tri-Yearly: %u"
-#~ msgstr "연간 3회: %u"
-
-#~ msgid "Semi-Yearly (x%u): %u"
-#~ msgstr "연간 2회 (x%u): %u"
-
-#~ msgid "Semi-Yearly: %u"
-#~ msgstr "연간 2회: %u"
-
-#~ msgid "Yearly (x%u): %s/%u"
-#~ msgstr "매년 (x%u): %s/%u"
-
-#~ msgid "Yearly: %s/%u"
-#~ msgstr "매년: %s/%u"
-
-#~ msgid "button1"
-#~ msgstr "단추1"
-
-#~ msgid "checkbutton1"
-#~ msgstr "체크단추1"
-
-#~ msgid "radiobutton1"
-#~ msgstr "라디오단추1"
-
-#~ msgid "togglebutton1"
-#~ msgstr "토글단추1"
-
-#~ msgid ""
-#~ "The current transaction has been changed. Would you like to record the "
-#~ "changes before closing this page, close the page without recording the "
-#~ "changes, or cancel the close?"
-#~ msgstr ""
-#~ "현재 거래가 변경되었습니다. 이 페이지를 닫기전 변경을 저장할까요,  변경을 "
-#~ "저장없이 페이지를 닫을까요, 아니면 닫기를 취소할까요?"
-
-#~ msgid "calendar:week_start:0"
-#~ msgstr "달력:주 시작:0"
-
-#~ msgid "CUSIP code"
-#~ msgstr "CUSIP 코드"
-
-#~ msgid "do not translate"
-#~ msgstr "번역하지 않음"
-
-#~ msgid "gnc-new-account"
-#~ msgstr "gnc-new-account"
-
-#~ msgid "QIF file load warning: %s"
-#~ msgstr "QIF 파일 읽기 경고: %s"
-
-#~ msgid "QIF file load failed: %s"
-#~ msgstr "QIF 파일 읽기 오류: %s"
-
-#~ msgid ""
-#~ "An error occurred while importing QIF transactions into GnuCash. Your "
-#~ "accounts are unchanged."
-#~ msgstr ""
-#~ "QIF 거래를 GnuCash로 읽는 동안 발생한 오류. 계정이 변하지 않았습니다."
-
-#~ msgid "You must enter a Type for the commodity."
-#~ msgstr "상품 형태를 입력해야 합니다."
-
-#~ msgid "You must enter a name for the commodity."
-#~ msgstr "상품명을 입력해야 합니다."
-
-#~ msgid "You must enter an abbreviation for the commodity."
-#~ msgstr "상품의 약어를 입력해야 합니다."
-
-#~ msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
-#~ msgstr "상품 교환 또는 목록을 고르시오(NASDAQ, NYSE, 기타 등등)."
-
-#~ msgid ""
-#~ "Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation "
-#~ "for the name."
-#~ msgstr "시세 기호(예\"RHAT\") 또는 다른 유일한 약어를 입력"
-
-#~ msgid "Click \"Next\" to accept the information and move on."
-#~ msgstr "정보를 허용하고 계속 하기 위하여 \"다음\" 클릭"
-
-#~ msgid "Enter the currency used for new accounts"
-#~ msgstr "새 계정에 사용된 통화 입력"
-
-#~ msgid "type:cash"
-#~ msgstr "형태:현금"
-
-#~ msgid "type:ccard"
-#~ msgstr "형태:신용카드"
-
-#~ msgid "type:invst"
-#~ msgstr "형태:투자"
-
-#~ msgid "type:port"
-#~ msgstr "형태:포트폴리오"
-
-#~ msgid " Stylesheet"
-#~ msgstr "스타일시트"
-
-#~ msgid "Sub-"
-#~ msgstr "하위-"
-
-#~ msgid "Blue items are exportable to a .TXF file."
-#~ msgstr "청색 항목은 .TXF 파일로 내보내기 할 수 있습니다."
-
-#~ msgid "TXF"
-#~ msgstr "TXF"
-
-#~ msgid "The file contains an unknown Action '%s'."
-#~ msgstr "파일은 미지의 작업 '%s'를 포함합니다."
-
-#~ msgid "INVOICE"
-#~ msgstr "청구서"
-
-#~ msgid "A Simple Checkbook"
-#~ msgstr "단순 수표책"
-
-#~ msgid "Business Accounts"
-#~ msgstr "사업 계정"
-
-#~ msgid "Car Loan"
-#~ msgstr "차 대출"
-
-#~ msgid "CD and Money Market"
-#~ msgstr "양도성 예금증서(CD) 및 머니마켓"
-
-#~ msgid "Childcare Expenses"
-#~ msgstr "육아 지출"
-
-#~ msgid "Common Accounts"
-#~ msgstr "일반 계정"
-
-#~ msgid ""
-#~ "Use this if you just want to balance your checkbook. Later on, you can "
-#~ "start tracking income and expenses in more detail if you feel the need."
-#~ msgstr ""
-#~ "수표장 수지를 맞추기를 원하면 이것을 사용. 후에 필요시 자세히 수입 및 지"
-#~ "출 추적을 시작할 수 있습니다."

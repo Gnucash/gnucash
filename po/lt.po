@@ -22,20 +22,19 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr ""
+msgstr "Arabų"
 
 #: ../borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr ""
+msgstr "Baltų"
 
 #: ../borrowed/goffice/go-charmap-sel.c:72
-#, fuzzy
 msgid "Central European"
-msgstr "Europos"
+msgstr "Vidurio Europos"
 
 #: ../borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr ""
+msgstr "Kinų"
 
 #: ../borrowed/goffice/go-charmap-sel.c:74
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:242
@@ -43,29 +42,28 @@ msgid "Cyrillic"
 msgstr "Kirilica"
 
 #: ../borrowed/goffice/go-charmap-sel.c:75
-#, fuzzy
 msgid "Greek"
-msgstr "Žalia"
+msgstr "Graikų"
 
 #: ../borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr ""
+msgstr "hebrajų"
 
 #: ../borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
-msgstr ""
+msgstr "Indų"
 
 #: ../borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr ""
+msgstr "Japonų"
 
 #: ../borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr ""
+msgstr "Korėjiečių"
 
 #: ../borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr ""
+msgstr "Turkų"
 
 #: ../borrowed/goffice/go-charmap-sel.c:81
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:224
@@ -74,12 +72,11 @@ msgstr "Unikodas"
 
 #: ../borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr ""
+msgstr "Vietnamiečių"
 
 #: ../borrowed/goffice/go-charmap-sel.c:83
-#, fuzzy
 msgid "Western"
-msgstr "Registras"
+msgstr "Vakarietiškas"
 
 #: ../borrowed/goffice/go-charmap-sel.c:84
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:60
@@ -91,296 +88,287 @@ msgstr "Kita"
 
 #: ../borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "Arabų (IBM-864)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr ""
+msgstr "Arabų (IBM-864-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "Arabų (ISO-8859-6)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr ""
+msgstr "Arabų (ISO-8859-6-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr ""
+msgstr "Arabų (ISO-8859-6-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:121
 msgid "Arabic (MacArabic)"
-msgstr ""
+msgstr "Arabų (MacArabic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:122
 msgid "Arabic (Windows-1256)"
-msgstr ""
+msgstr "Arabų (Windows-1256)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
-msgstr ""
+msgstr "Armėnų (ARMSCII-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:124
-#, fuzzy
 msgid "Baltic (ISO-8859-13)"
-msgstr "ISO-8859-13 (baltų)"
+msgstr "Baltų (ISO-8859-13)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
-msgstr ""
+msgstr "Baltų (ISO-8859-4)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:126
 msgid "Baltic (Windows-1257)"
-msgstr ""
+msgstr "Baltų (Windows-1257)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:127
-#, fuzzy
 msgid "Celtic (ISO-8859-14)"
-msgstr "ISO-8859-14 (keltų)"
+msgstr "Keltų (ISO-8859-14)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
-msgstr ""
+msgstr "Vidurio Europos (IBM-852)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:130
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "Vidurio Europos (ISO-8859-2)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:132
 msgid "Central European (MacCE)"
-msgstr ""
+msgstr "Vidurio Europos (MacCE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:134
 msgid "Central European (Windows-1250)"
-msgstr ""
+msgstr "Vidurio Europos (Windows-1250)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:136
 msgid "Chinese Simplified (GB18030)"
-msgstr ""
+msgstr "Kinų supaprastintoji (GB18030)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:137
 msgid "Chinese Simplified (GB2312)"
-msgstr ""
+msgstr "Kinų supaprastintoji (GB2312)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:138
 msgid "Chinese Simplified (GBK)"
-msgstr ""
+msgstr "Kinų supaprastinta (GBK)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:139
 msgid "Chinese Simplified (HZ)"
-msgstr ""
+msgstr "Kinų supaprastintoji (HZ)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:140
 msgid "Chinese Simplified (Windows-936)"
-msgstr ""
+msgstr "Kinų supaprastintoji (Windows-936)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr ""
+msgstr "Kinų tradicinė (Big5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr ""
+msgstr "Kinų tradicinė (Big5-HKSCS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
-msgstr ""
+msgstr "Kinų tradicinė (EUC-TW)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:147
 msgid "Croatian (MacCroatian)"
-msgstr ""
+msgstr "Kroatų (MacCroatian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:149
-#, fuzzy
 msgid "Cyrillic (IBM-855)"
-msgstr "Kirilica"
+msgstr "Kirilica (IBM-855)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:150
 msgid "Cyrillic (ISO-8859-5)"
-msgstr ""
+msgstr "Kirilica (ISO-8859-5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:152
 msgid "Cyrillic (ISO-IR-111)"
-msgstr ""
+msgstr "Kirilica (ISO-IR-111)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:154
-#, fuzzy
 msgid "Cyrillic (KOI8-R)"
-msgstr "Kirilica"
+msgstr "Kirilica (KOI8-R)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:155
 msgid "Cyrillic (MacCyrillic)"
-msgstr ""
+msgstr "Kirilica (MacCyrillic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:157
 msgid "Cyrillic (Windows-1251)"
-msgstr ""
+msgstr "Kirilica (Windows-1251)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
-msgstr ""
+msgstr "Rusų (CP-866)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:160
 msgid "Ukrainian (KOI8-U)"
-msgstr ""
+msgstr "Ukrainiečių (KOI8-U)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:161
-#, fuzzy
 msgid "Ukrainian (MacUkrainian)"
-msgstr "KOI8-U (ukrainiečių)"
+msgstr "Ukrainiečių (MacUkrainian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:163
 msgid "English (ASCII)"
-msgstr ""
+msgstr "Anglų (ASCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
-msgstr ""
+msgstr "Persų (MacFarsi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:166
 msgid "Georgian (GEOSTD8)"
-msgstr ""
+msgstr "Gruzinų (GEOSTD8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:167
-#, fuzzy
 msgid "Greek (ISO-8859-7)"
-msgstr "ISO-8859-7 (graikų)"
+msgstr "Graikų (ISO-8859-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:168
 msgid "Greek (MacGreek)"
-msgstr ""
+msgstr "Graikų (MacGreek)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:169
 msgid "Greek (Windows-1253)"
-msgstr ""
+msgstr "Graikų (Windows-1253)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:170
 msgid "Gujarati (MacGujarati)"
-msgstr ""
+msgstr "Gudžaratų (MacGujarati)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:172
 msgid "Gurmukhi (MacGurmukhi)"
-msgstr ""
+msgstr "Gurmukhi (MacGurmukhi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr ""
+msgstr "Hebrajų (IBM-862)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr ""
+msgstr "Hebrajų (ISO-8859-8-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr ""
+msgstr "Hebrajų (ISO-8859-8-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr ""
+msgstr "Hebrajų (MacHebrew)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
-msgstr ""
+msgstr "Hebrajų (Windows-1255)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
-msgstr ""
+msgstr "Hindi (MacDevanagari)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
-msgstr ""
+msgstr "Islandų (MacIcelandic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:186
 msgid "Japanese (EUC-JP)"
-msgstr ""
+msgstr "Japonų (EUC-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:187
 msgid "Japanese (ISO-2022-JP)"
-msgstr ""
+msgstr "Japonų (ISO-2022-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:189
 msgid "Japanese (Shift_JIS)"
-msgstr ""
+msgstr "Japonų (Shift_JIS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:190
 msgid "Korean (EUC-KR)"
-msgstr ""
+msgstr "Korėjiečių (EUC-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:191
 msgid "Korean (ISO-2022-KR)"
-msgstr ""
+msgstr "Korėjiečių (ISO-2022-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:192
 msgid "Korean (JOHAB)"
-msgstr ""
+msgstr "Korėjiečių (JOHAB)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:193
 msgid "Korean (UHC)"
-msgstr ""
+msgstr "Korėjiečių (UHC)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:194
-#, fuzzy
 msgid "Nordic (ISO-8859-10)"
-msgstr "ISO-8859-10 (skandinavų)"
+msgstr "Šiaurės Europos (ISO-8859-10)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:195
 msgid "Romanian (MacRomanian)"
-msgstr ""
+msgstr "Rumunų (MacRomanian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:197
 msgid "Romanian (ISO-8859-16)"
-msgstr ""
+msgstr "Rumunų (ISO-8859-16)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:199
 msgid "South European (ISO-8859-3)"
-msgstr ""
+msgstr "Pietų Europos (ISO-8859-3)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:201
 msgid "Thai (TIS-620)"
-msgstr ""
+msgstr "Tajų (TIS-620)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:202
 msgid "Turkish (IBM-857)"
-msgstr ""
+msgstr "Turkų (IBM-857)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:203
 msgid "Turkish (ISO-8859-9)"
-msgstr ""
+msgstr "Turkų (ISO-8859-9)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:204
 msgid "Turkish (MacTurkish)"
-msgstr ""
+msgstr "Turkų (MacTurkish)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:206
 msgid "Turkish (Windows-1254)"
-msgstr ""
+msgstr "Turkų (Windows-1254)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:208
-#, fuzzy
 msgid "Unicode (UTF-7)"
-msgstr "Unikodas"
+msgstr "Unikodas (UTF-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:209
-#, fuzzy
 msgid "Unicode (UTF-8)"
-msgstr "Unikodas"
+msgstr "Unikodas (UTF-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:210
 msgid "Unicode (UTF-16BE)"
-msgstr ""
+msgstr "Unikodas (UTF-16BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:211
 msgid "Unicode (UTF-16LE)"
-msgstr ""
+msgstr "Unikodas (UTF-16LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:212
 msgid "Unicode (UTF-32BE)"
-msgstr ""
+msgstr "Unikodas (UTF-32BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:213
 msgid "Unicode (UTF-32LE)"
-msgstr ""
+msgstr "Unikodas (UTF-32LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:214
 #, fuzzy
@@ -389,48 +377,47 @@ msgstr "Naudotojo vardas"
 
 #: ../borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
-msgstr ""
+msgstr "Vietnamiečių (TCVN)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:217
 msgid "Vietnamese (VISCII)"
-msgstr ""
+msgstr "Vietnamiečių (VISCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:218
 msgid "Vietnamese (VPS)"
-msgstr ""
+msgstr "Vietnamiečių (VPS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:219
 msgid "Vietnamese (Windows-1258)"
-msgstr ""
+msgstr "Vietnamiečių (Windows-1258)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "Vizualioji hebrajų (ISO-8859-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
-msgstr ""
+msgstr "Vakarų Europos (IBM-850)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:224
 msgid "Western (ISO-8859-1)"
-msgstr ""
+msgstr "Vakarų Europos (ISO-8859-1)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:225
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "Vakarų Europos (ISO-8859-15)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:227
 msgid "Western (MacRoman)"
-msgstr ""
+msgstr "Vakarų Europos (MacRoman)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:228
 msgid "Western (Windows-1252)"
-msgstr ""
+msgstr "Vakarų Europos (Windows-1252)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:441
-#, fuzzy
 msgid "Locale: "
-msgstr "_Lokalė:"
+msgstr "Lokalė:"
 
 #: ../borrowed/goffice/go-charmap-sel.c:476
 #, fuzzy
@@ -443,7 +430,7 @@ msgstr ""
 
 #: ../borrowed/goffice/go-optionmenu.c:410
 msgid "Menu"
-msgstr ""
+msgstr "Meniu"
 
 #: ../borrowed/goffice/go-optionmenu.c:410
 #, fuzzy
@@ -20499,7 +20486,7 @@ msgstr "El. paštas"
 
 #: ../gnucash/report/business-reports/aging.scm:789
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: ../gnucash/report/business-reports/aging.scm:789
 #, fuzzy
@@ -29240,409 +29227,3 @@ msgid ""
 "select Window -> New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
-
-#~ msgid "Enable debugging mode: increasing logging to provide deep detail."
-#~ msgstr ""
-#~ "Įjungti derinimo veikseną: padidinamas registravimas išsamiai "
-#~ "informacijai pateikti."
-
-#~ msgid ""
-#~ "Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,"
-#~ "error}\""
-#~ msgstr ""
-#~ "Žurnalo lygio nustelbimai, tokio pavidalo \"log.ger.path={debug,info,warn,"
-#~ "crit,error}\""
-
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from %s rev %s on %s."
-#~ msgstr ""
-#~ "%s\n"
-#~ "Ši kopija sukurta iš %s revizijos %s, sukūrimo data: %s."
-
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from rev %s on %s."
-#~ msgstr ""
-#~ "%s\n"
-#~ "Ši kopija sukurta iš revizijos %s, sukūrimo data: %s."
-
-#~ msgid "Dummy message"
-#~ msgstr "Fiktyvus pranešimas"
-
-#~ msgid "postd"
-#~ msgstr "regst"
-
-#~ msgid "acct"
-#~ msgstr "sąsk"
-
-#~ msgid "question"
-#~ msgstr "klausimas"
-
-#~ msgid ""
-#~ "An error occurred while creating the directory:\n"
-#~ "  %s\n"
-#~ "Please correct the problem and restart GnuCash.\n"
-#~ "The reported error was '%s' (errno %d).\n"
-#~ msgstr ""
-#~ "Įvyko klaida kuriant katalogą:\n"
-#~ "  %s\n"
-#~ "Ištaisykite klaidą ir paleiskite GnuCash iš naujo.\n"
-#~ "Pranešta klaida „%s“ (klaidos nr. %d).\n"
-
-#~ msgid ""
-#~ "The directory\n"
-#~ "  %s\n"
-#~ "exists but cannot be accessed. This program \n"
-#~ "must have full access (read/write/execute) to \n"
-#~ "the directory in order to function properly.\n"
-#~ msgstr ""
-#~ "Katalogas\n"
-#~ "  %s\n"
-#~ "egzistuoja, tačiau neprieinamas. Kad ši programa \n"
-#~ "tinkamai veiktų, reikalinga visiška prieiga \n"
-#~ "(skaitymas/rašymas/vykdymas) prie katalogo.\n"
-
-#~ msgid ""
-#~ "The path\n"
-#~ "  %s\n"
-#~ "exists but it is not a directory. Please delete\n"
-#~ "the file and start GnuCash again.\n"
-#~ msgstr ""
-#~ "Kelias\n"
-#~ "  %s\n"
-#~ "egzistuoja, bet tai nėra katalogas. Pašalinkite failą\n"
-#~ "ir paleiskite GnuCash iš naujo.\n"
-
-#~ msgid ""
-#~ "An unknown error occurred when validating that the\n"
-#~ "  %s\n"
-#~ "directory exists and is usable. Please correct the\n"
-#~ "problem and restart GnuCash. The reported error \n"
-#~ "was '%s' (errno %d)."
-#~ msgstr ""
-#~ "Įvyko nežinoma klaida tikrinant, ar\n"
-#~ "  %s\n"
-#~ "katalogas egzistuoja ir panaudojamas. Ištaisykite\n"
-#~ "klaidą ir paleiskite GnuCash iš naujo. Pranešta klaida\n"
-#~ "„%s“ (klaidos nr. %d)."
-
-#~ msgid ""
-#~ "The permissions are wrong on the directory\n"
-#~ "  %s\n"
-#~ "They must be at least 'rwx' for the user.\n"
-#~ msgstr ""
-#~ "Katalogo leidimai neteisingi\n"
-#~ "  %s\n"
-#~ "Jie privalo būti bent „rwx“ naudotojui.\n"
-
-#~ msgid "_Price Editor"
-#~ msgstr "_Kainų tvarkytuvė"
-
-#~ msgid "General Ledger2"
-#~ msgstr "Didžioji knyga2"
-
-#~ msgid "General Ledger Report"
-#~ msgstr "Didžiosios knygos ataskaita"
-
-#~ msgid "_General Ledger"
-#~ msgstr "_Didžioji knyga"
-
-#~ msgid "<No information>"
-#~ msgstr "<Nėra informacijos>"
-
-#~ msgid "Clear the entry"
-#~ msgstr "Išvalyti įrašą"
-
-#~ msgid ""
-#~ "If activated, delete manually entered stock prices dated earlier than the "
-#~ "specified date. Otherwise only stock prices added by Finance::Quote will "
-#~ "be deleted."
-#~ msgstr ""
-#~ "Jei aktyvuota, pašalinti rankiniu būdu įvestas akcijų kainas ankstesnes, "
-#~ "nei nurodyta data. Kitu atveju bus pašalintos tik Finance::Quote pridėtos "
-#~ "akcijų kainos."
-
-#~ msgid "Delete _last price for a stock"
-#~ msgstr "Pašalinti _paskutinę akcijos kainą"
-
-#~ msgid ""
-#~ "If activated, delete all prices before the specified date. Otherwise the "
-#~ "last stock price dated before the date will be kept and all earlier "
-#~ "quotes deleted."
-#~ msgstr ""
-#~ "Jei aktyvuota, pašalinti visas kainas ankstesnes, nei nurodyta data. Kitu "
-#~ "atveju paskutinė akcijų kaina prieš nurodytą datą bus palikta, o visos "
-#~ "ankstesnės pašalintos."
-
-#~ msgid "Get _Quotes"
-#~ msgstr "Gauti _pasiūlymus"
-
-#~ msgid "set true"
-#~ msgstr "tiesa"
-
-#~ msgid "You must select a commodity. To create a new one, click \"New\""
-#~ msgstr ""
-#~ "Privalote pasirinkti prekę. Naujai prekei sukurti spauskite „Naujas“"
-
-#~ msgid "_Delete Account"
-#~ msgstr "_Pašalinti sąskaitą"
-
-#~ msgid "_New Account"
-#~ msgstr "_Nauja sąskaita"
-
-#, fuzzy
-#~ msgid "Last modified on %x %X"
-#~ msgstr "Paskutinė modifikacija %a, %Y m. %b %e d. %H:%M"
-
-#~ msgid ""
-#~ "The GnuCash personal finance manager. The GNU way to manage your money!"
-#~ msgstr ""
-#~ "Asmeninių finansų apskaitos programa GnuCash. „GNU“ būdas valdyti savo "
-#~ "pinigus!"
-
-#, fuzzy
-#~ msgid "© 1997-2015 Contributors"
-#~ msgstr "© 1997-2013 Talkininkai"
-
-#~ msgid "Version: GnuCash-%s %s (rev %s built %s)"
-#~ msgstr "Versija: GnuCash-%s %s (rev. %s, sukurta %s)"
-
-#~ msgid "Version: GnuCash-%s (rev %s built %s)"
-#~ msgstr "Versija: GnuCash-%s (rev. %s, sukurta %s)"
-
-#~ msgid "Owner Name"
-#~ msgstr "Savininko vardas"
-
-#~ msgid "Owner ID"
-#~ msgstr "Savininko ID"
-
-#~ msgid "UTC"
-#~ msgstr "UTC"
-
-#~ msgid "Remember _PIN"
-#~ msgstr "Prisiminti _PIN kodą"
-
-#~ msgid ""
-#~ "This assistant will help you export the Transactions to a file.\n"
-#~ "\n"
-#~ "Select the settings you require for the file and then click 'Forward' to "
-#~ "proceed or 'Cancel' to Abort Export.\n"
-#~ msgstr ""
-#~ "Šis pagelbiklis padės išeksportuoti operacijas į failą.\n"
-#~ "\n"
-#~ "Pasirinkite reikalingus nustatymus failui ir spauskite „Pirmyn“ norėdami "
-#~ "tęsti arba „Atsisakyti“ eksportui nutraukti.\n"
-
-#~ msgid "Quotes"
-#~ msgstr "Kabutės"
-
-#~ msgid "Category"
-#~ msgstr "Kategorija"
-
-#, fuzzy
-#~ msgid "From Num."
-#~ msgstr "Nuo dabar"
-
-#~ msgid ""
-#~ "The rows displayed below had errors which are in the last column. You can "
-#~ "attempt to correct them by changing the configuration."
-#~ msgstr ""
-#~ "Žemiau rodomos eilutės su klaidomis, kurios rodomos paskutiniame "
-#~ "stulpelyje. Galite pamėginti išspręsti šias klaidas keisdami "
-#~ "konfigūraciją."
-
-#~ msgid ""
-#~ "There are problems with the import settings!\n"
-#~ "The date format could be wrong or there are not enough columns set..."
-#~ msgstr ""
-#~ "Yra problemų su importo nustatymais!\n"
-#~ "Datos formatas gali būti neteisingas arba yra nustatyta per mažai "
-#~ "stulpelių..."
-
-#~ msgid ""
-#~ "To Change the account, double click on the required account, click "
-#~ "Forward to proceed."
-#~ msgstr ""
-#~ "Norėdami pakeisti sąskaitą, du kartus spauskite ant reikalingos "
-#~ "sąskaitos, spauskite „Pirmyn“ norėdami tęsti."
-
-#, fuzzy
-#~ msgid ""
-#~ "This assistant will help you import a delimited file containing a list of "
-#~ "transactions.\n"
-#~ "\n"
-#~ "All transactions imported will be associated to one account for each "
-#~ "import and if you select the account column, the account in the first row "
-#~ "will be used for all rows.\n"
-#~ "\n"
-#~ "Various options exist for specifying the delimiter as well as a fixed "
-#~ "width option. With the fixed width option, double click on the bar above "
-#~ "the displayed rows to set the column width.\n"
-#~ "\n"
-#~ "There is an option for specifying the start row, end row and an option to "
-#~ "skip alternate rows begining from the start row. These can be used if you "
-#~ "have some header text, a points collected status row or multiple accounts "
-#~ "in the same file."
-#~ msgstr ""
-#~ "Šis pagelbiklis padės importuoti skirtukais atskirtą failą su operacijų "
-#~ "sąrašu.\n"
-#~ "\n"
-#~ "Visos importuotos operacijos bus susietos su viena sąskaita kiekvienam "
-#~ "importui, o jei pasirinksite sąskaitos stulpelį, sąskaita pirmoje "
-#~ "eilutėje bus naudojama visoms eilutėms.\n"
-#~ "\n"
-#~ "Egzistuoja įvairūs nustatymai skirtukui nurodyti, taip pat fiksuoto "
-#~ "pločio nustatymas. Su fiksuoto pločio nustatymu du kartus spauskite ant "
-#~ "juostos virš eilučių stulpelio pločiui nustatyti.\n"
-#~ "\n"
-#~ "Yra nustatymas pradžios ir pabaigos eilutėms nurodyti, kuris gali būti "
-#~ "naudojamas, jei tame pačiame faile yra antraštės tekstas ar keletas "
-#~ "sąskaitų."
-
-#~ msgid "Transaction Import Assistant"
-#~ msgstr "Operacijų importo pagelbiklis"
-
-#~ msgid "Start import on row "
-#~ msgstr "Pradėti importą eilute "
-
-#~ msgid " and stop on row "
-#~ msgstr " ir baigti eilute "
-
-#~ msgid "Data type: "
-#~ msgstr "Duomenų tipas: "
-
-#~ msgid "Separated"
-#~ msgstr "Atskirti"
-
-#~ msgid "File opening failed."
-#~ msgstr "Nepavyko atverti failo."
-
-#~ msgid "Unknown encoding."
-#~ msgstr "Nežinoma koduotė."
-
-#~ msgid "Dates earlier than 1970 are not supported."
-#~ msgstr "Datos, ankstesnės už 1970 m., nepalaikomos."
-
-#~ msgid "This report has no options."
-#~ msgstr "Ši ataskaita neturi parinkčių."
-
-#~ msgid "Compress prior/later periods"
-#~ msgstr "Suspausti ankstesnius/vėlesnius laikotarpius"
-
-#~ msgid "Income Barchart"
-#~ msgstr "Pajamų histograma"
-
-#~ msgid "Expense Barchart"
-#~ msgstr "Sąnaudų histograma"
-
-#~ msgid "Liability Barchart"
-#~ msgstr "Įsipareigojimų histograma"
-
-#~ msgid "Style"
-#~ msgstr "Stilius"
-
-#~ msgid "Report style."
-#~ msgstr "Ataskaitos stilius."
-
-#~ msgid "Display N lines."
-#~ msgstr "Rodyti N eilučių."
-
-#~ msgid "Display 1 line."
-#~ msgstr "Rodyti 1 eilutę."
-
-#~ msgid "Exact Time"
-#~ msgstr "Tikslus laikas"
-
-#~ msgid "Sort by exact time."
-#~ msgstr "Rikiuoti pagal tikslų laiką."
-
-#, fuzzy
-#~ msgid "Retrieve the current online quote"
-#~ msgstr "Pašalinti dabartinį skaidymą"
-
-#~ msgid "Negative amounts are not allowed."
-#~ msgstr "Neigiamos sumos neleidžiamos."
-
-#~ msgid "Percentage amount must be between 0 and 100."
-#~ msgstr "Procentų suma privalo būti tarp 0 ir 100."
-
-#~ msgid ""
-#~ "You must enter the amount of the payment. The payment amount must not be "
-#~ "zero."
-#~ msgstr ""
-#~ "Privalote įvesti mokėjimo sumą. Mokėjimo suma privalo būti ne nulis."
-
-#~ msgid "Auto pay on post_ing"
-#~ msgstr "Automatiškai apmokėti _registruojant"
-
-#~ msgid "Internal link between invoice and payment lots"
-#~ msgstr "Vidinė nuoroda tarp sąskaitos faktūros ir mokėjimo partijų"
-
-#~ msgid "New item"
-#~ msgstr "Naujas elementas"
-
-#~ msgid "_Use system theme colors"
-#~ msgstr "_Naudoti sistemos temos spalvas"
-
-#~ msgid ""
-#~ "If checked, the system color theme will be applied to register windows. "
-#~ "If clear, the original GnuCash register colors will be used."
-#~ msgstr ""
-#~ "Jei pažymėta, sistemos spalvų tema bus pritaikyta registrų langams. Jei "
-#~ "nepažymėta, bus naudojamos originalios GnuCash registrų spalvos."
-
-#, fuzzy
-#~ msgid "%s at %s (code %s)"
-#~ msgstr "%s iš %s (kodas %s)"
-
-#, fuzzy
-#~ msgid "%s at bank code %s"
-#~ msgstr "%s banko kodu %s"
-
-#~ msgid "Semicolon Separated with Quotes"
-#~ msgstr "Atskirta kabliataškiu su kabutėmis"
-
-#~ msgid "Comma Separated with Quotes"
-#~ msgstr "Atskirta kableliu su kabutėmis"
-
-#~ msgid "Run preconfigured report"
-#~ msgstr "Suformuoti anksčiau išsaugotą ataskaitą"
-
-#~ msgid "Preconfigured Reports"
-#~ msgstr "Anksčiau išsaugotos ataskaitos"
-
-#, fuzzy
-#~ msgid "Net Price"
-#~ msgstr "_Nauja kaina:"
-
-#, fuzzy
-#~ msgid "Total Price"
-#~ msgstr "Iš viso"
-
-#~ msgid "Invoice number: "
-#~ msgstr "Sąskaitos faktūros numeris: "
-
-#~ msgid "Job number: "
-#~ msgstr "Užduoties numeris: "
-
-#~ msgid "Job name: "
-#~ msgstr "Užduoties pavadinimas: "
-
-#~ msgid "and"
-#~ msgstr "ir"
-
-#~ msgid "Ignore brokerage fees when calculating returns"
-#~ msgstr "Ignoruoti maklerio mokesčius, kai skaičiuojamas pelnas"
-
-#~ msgid "Most recent to report"
-#~ msgstr "Naujausia iki ataskaitos"
-
-#~ msgid "The most recent recorded price before report date."
-#~ msgstr "Naujausia įrašyta kaina prieš ataskaitos datą."
-
-#~ msgid "FILO"
-#~ msgstr "FILO"
-
-#~ msgid "Use first-in last-out method for basis."
-#~ msgstr "Naudoti „pirmasis į, paskutinis iš“ metodą kaip bazę."

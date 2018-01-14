@@ -25,20 +25,19 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr ""
+msgstr "Arabské"
 
 #: ../borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr ""
+msgstr "Pobaltské"
 
 #: ../borrowed/goffice/go-charmap-sel.c:72
-#, fuzzy
 msgid "Central European"
-msgstr "Európske"
+msgstr "Stredoeurópske"
 
 #: ../borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr ""
+msgstr "Čínske"
 
 #: ../borrowed/goffice/go-charmap-sel.c:74
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:242
@@ -46,29 +45,28 @@ msgid "Cyrillic"
 msgstr "Cyrilika"
 
 #: ../borrowed/goffice/go-charmap-sel.c:75
-#, fuzzy
 msgid "Greek"
-msgstr "Zelená"
+msgstr "Grécke"
 
 #: ../borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr ""
+msgstr "Hebrejské"
 
 #: ../borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
-msgstr ""
+msgstr "Indické"
 
 #: ../borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr ""
+msgstr "Japonské"
 
 #: ../borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr ""
+msgstr "Kórejské"
 
 #: ../borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr ""
+msgstr "Turecké"
 
 #: ../borrowed/goffice/go-charmap-sel.c:81
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:224
@@ -77,12 +75,11 @@ msgstr "Unicode"
 
 #: ../borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr ""
+msgstr "Vietnamské"
 
 #: ../borrowed/goffice/go-charmap-sel.c:83
-#, fuzzy
 msgid "Western"
-msgstr "Register"
+msgstr "Západné"
 
 #: ../borrowed/goffice/go-charmap-sel.c:84
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:60
@@ -94,364 +91,351 @@ msgstr "Ostatné"
 
 #: ../borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "Arabské (IBM-864)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr ""
+msgstr "Arabské (IBM-864-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "Arabské (ISO-8859-6)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr ""
+msgstr "Arabské (ISO-8859-6-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr ""
+msgstr "Arabské (ISO-8859-6-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:121
 msgid "Arabic (MacArabic)"
-msgstr ""
+msgstr "Arabské (MacArabic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:122
 msgid "Arabic (Windows-1256)"
-msgstr ""
+msgstr "Arabské (Windows-1256)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
-msgstr ""
+msgstr "Arménske (ARMSCII-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:124
-#, fuzzy
 msgid "Baltic (ISO-8859-13)"
-msgstr "ISO-8859-13 (Baltické)"
+msgstr "Pobaltské (ISO-8859-13)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
-msgstr ""
+msgstr "Pobaltské (ISO-8859-4)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:126
 msgid "Baltic (Windows-1257)"
-msgstr ""
+msgstr "Pobaltské (Windows-1257)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:127
-#, fuzzy
 msgid "Celtic (ISO-8859-14)"
-msgstr "ISO-8859-14 (Keltské)"
+msgstr "Keltské (ISO-8859-14)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
-msgstr ""
+msgstr "Stredoeurópske (IBM-852)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:130
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "Stredoeurópske (ISO-8859-2)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:132
 msgid "Central European (MacCE)"
-msgstr ""
+msgstr "Stredoeurópske (MacCE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:134
 msgid "Central European (Windows-1250)"
-msgstr ""
+msgstr "Stredoeurópske (Windows-1250)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:136
 msgid "Chinese Simplified (GB18030)"
-msgstr ""
+msgstr "Zjednodušené čínske (GB18030)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:137
 msgid "Chinese Simplified (GB2312)"
-msgstr ""
+msgstr "Zjednodušené čínske (GB2312)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:138
 msgid "Chinese Simplified (GBK)"
-msgstr ""
+msgstr "Zjednodušené čínske (GBK)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:139
 msgid "Chinese Simplified (HZ)"
-msgstr ""
+msgstr "Zjednodušené čínske (HZ)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:140
 msgid "Chinese Simplified (Windows-936)"
-msgstr ""
+msgstr "Zjednodušené čínske (Windows-936)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr ""
+msgstr "Tradičné čínske (Big5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr ""
+msgstr "Tradičné čínske (Big5-HKSCS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
-msgstr ""
+msgstr "Tradičné čínske (EUC-TW)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:147
 msgid "Croatian (MacCroatian)"
-msgstr ""
+msgstr "Chorvátske (MacCroatian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:149
-#, fuzzy
 msgid "Cyrillic (IBM-855)"
-msgstr "Cyrilika"
+msgstr "Azbuka (IBM-855)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:150
 msgid "Cyrillic (ISO-8859-5)"
-msgstr ""
+msgstr "Azbuka (ISO-8859-5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:152
 msgid "Cyrillic (ISO-IR-111)"
-msgstr ""
+msgstr "Azbuka (ISO-IR-111)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:154
-#, fuzzy
 msgid "Cyrillic (KOI8-R)"
-msgstr "Cyrilika"
+msgstr "Azbuka (KOI8-R)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:155
 msgid "Cyrillic (MacCyrillic)"
-msgstr ""
+msgstr "Azbuka (MacCyrillic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:157
 msgid "Cyrillic (Windows-1251)"
-msgstr ""
+msgstr "Azbuka (Windows-1251)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
-msgstr ""
+msgstr "Ruské (CP-866)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:160
 msgid "Ukrainian (KOI8-U)"
-msgstr ""
+msgstr "Ukrajinské (KOI8-U)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:161
-#, fuzzy
 msgid "Ukrainian (MacUkrainian)"
-msgstr "KOI8-U (Ukrajinské)"
+msgstr "Ukrajinské (MacUkrainian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:163
 msgid "English (ASCII)"
-msgstr ""
+msgstr "Anglické (ASCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
-msgstr ""
+msgstr "Fársí (MacFarsi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:166
 msgid "Georgian (GEOSTD8)"
-msgstr ""
+msgstr "Gruzínske (GEOSTD8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:167
-#, fuzzy
 msgid "Greek (ISO-8859-7)"
-msgstr "ISO-8859-7 (Grécke)"
+msgstr "Grécke (ISO-8859-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:168
 msgid "Greek (MacGreek)"
-msgstr ""
+msgstr "Grécke (MacGreek)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:169
 msgid "Greek (Windows-1253)"
-msgstr ""
+msgstr "Grécke (Windows-1253)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:170
 msgid "Gujarati (MacGujarati)"
-msgstr ""
+msgstr "Gudžarati (MacGujarati)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:172
 msgid "Gurmukhi (MacGurmukhi)"
-msgstr ""
+msgstr "Gurmuchské (MacGurmukhi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr ""
+msgstr "Hebrejské (IBM-862)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr ""
+msgstr "Hebrejské (ISO-8859-8-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr ""
+msgstr "Hebrejské (ISO-8859-8-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr ""
+msgstr "Hebrejské (MacHebrew)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
-msgstr ""
+msgstr "Hebrejské (Windows-1255)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
-msgstr ""
+msgstr "Hindské (MacDevanagari)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
-msgstr ""
+msgstr "Islandské (MacIcelandic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:186
 msgid "Japanese (EUC-JP)"
-msgstr ""
+msgstr "Japonské (EUC-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:187
 msgid "Japanese (ISO-2022-JP)"
-msgstr ""
+msgstr "Japonské (ISO-2022-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:189
 msgid "Japanese (Shift_JIS)"
-msgstr ""
+msgstr "Japonské (Shift_JIS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:190
 msgid "Korean (EUC-KR)"
-msgstr ""
+msgstr "Kórejské (EUC-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:191
 msgid "Korean (ISO-2022-KR)"
-msgstr ""
+msgstr "Kórejské (ISO-2022-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:192
 msgid "Korean (JOHAB)"
-msgstr ""
+msgstr "Kórejské (JOHAB)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:193
 msgid "Korean (UHC)"
-msgstr ""
+msgstr "Kórejské (UHC)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:194
-#, fuzzy
 msgid "Nordic (ISO-8859-10)"
-msgstr "ISO-8859-10 (Škandinávske)"
+msgstr "Severské (ISO-8859-10)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:195
 msgid "Romanian (MacRomanian)"
-msgstr ""
+msgstr "Rumunské (MacRomanian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:197
 msgid "Romanian (ISO-8859-16)"
-msgstr ""
+msgstr "Rumunské (ISO-8859-16)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:199
 msgid "South European (ISO-8859-3)"
-msgstr ""
+msgstr "Južná Európa (ISO-8859-3)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:201
 msgid "Thai (TIS-620)"
-msgstr ""
+msgstr "Thajské (TIS-620)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:202
 msgid "Turkish (IBM-857)"
-msgstr ""
+msgstr "Turecké (IBM-857)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:203
 msgid "Turkish (ISO-8859-9)"
-msgstr ""
+msgstr "Turecké (ISO-8859-9)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:204
 msgid "Turkish (MacTurkish)"
-msgstr ""
+msgstr "Turecké (MacTurkish)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:206
 msgid "Turkish (Windows-1254)"
-msgstr ""
+msgstr "Turecké (Windows-1254)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:208
-#, fuzzy
 msgid "Unicode (UTF-7)"
-msgstr "Unicode"
+msgstr "Unicode (UTF-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:209
-#, fuzzy
 msgid "Unicode (UTF-8)"
-msgstr "Unicode"
+msgstr "Unicode (UTF-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:210
 msgid "Unicode (UTF-16BE)"
-msgstr ""
+msgstr "Unicode (UTF-16BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:211
 msgid "Unicode (UTF-16LE)"
-msgstr ""
+msgstr "Unicode (UTF-16LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:212
 msgid "Unicode (UTF-32BE)"
-msgstr ""
+msgstr "Unicode (UTF-32BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:213
 msgid "Unicode (UTF-32LE)"
-msgstr ""
+msgstr "Unicode (UTF-32LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:214
-#, fuzzy
 msgid "User Defined"
-msgstr "Meno používateľa"
+msgstr "Vlastné"
 
 #: ../borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
-msgstr ""
+msgstr "Vietnamské (TCVN)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:217
 msgid "Vietnamese (VISCII)"
-msgstr ""
+msgstr "Vietnamské (VISCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:218
 msgid "Vietnamese (VPS)"
-msgstr ""
+msgstr "Vietnamské (VPS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:219
 msgid "Vietnamese (Windows-1258)"
-msgstr ""
+msgstr "Vietnamské (Windows-1258)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "Vizuálne hebrejské (ISO-8859-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
-msgstr ""
+msgstr "Západné (IBM-850)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:224
 msgid "Western (ISO-8859-1)"
-msgstr ""
+msgstr "Západné (ISO-8859-1)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:225
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "Západné (ISO-8859-15)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:227
 msgid "Western (MacRoman)"
-msgstr ""
+msgstr "Západné (MacRoman)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:228
 msgid "Western (Windows-1252)"
-msgstr ""
+msgstr "Západné (Windows-1252)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:441
-#, fuzzy
 msgid "Locale: "
-msgstr "Loc_ale:"
+msgstr "Lokálne nastavenie:"
 
 #: ../borrowed/goffice/go-charmap-sel.c:476
-#, fuzzy
 msgid "Conversion Direction"
-msgstr "Načítavanie je ukončené"
+msgstr "Smer prevodu"
 
 #: ../borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr ""
+msgstr "Táto hodnota určuje, či sa spúšťa test iconv."
 
 #: ../borrowed/goffice/go-optionmenu.c:410
 msgid "Menu"
-msgstr ""
+msgstr "Menu"
 
 #: ../borrowed/goffice/go-optionmenu.c:410
-#, fuzzy
 msgid "The menu of options"
-msgstr "Nastavenie čísla je %s."
+msgstr "Menu možností"
 
 #: ../gnucash/gnome/assistant-acct-period.c:190
 msgid "The book was closed successfully."
@@ -16992,7 +16976,6 @@ msgid "Select Separator Type"
 msgstr "Zvolte typ zľavy"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.glade.h:22
-#, fuzzy
 msgid "Preview"
 msgstr "Náhľad"
 
@@ -20192,7 +20175,7 @@ msgstr "E-mail"
 
 #: ../gnucash/report/business-reports/aging.scm:789
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: ../gnucash/report/business-reports/aging.scm:789
 #, fuzzy
@@ -26087,7 +26070,7 @@ msgstr ""
 #. (define optname-x-grid (N_ "X grid"))
 #: ../gnucash/report/standard-reports/net-linechart.scm:66
 msgid "Grid"
-msgstr ""
+msgstr "Mriežka"
 
 #: ../gnucash/report/standard-reports/net-linechart.scm:158
 msgid "Add grid lines."
@@ -27802,9 +27785,8 @@ msgid "Fancy Date Format"
 msgstr "Efektný formát dátumu"
 
 #: ../libgnucash/app-utils/app-utils.scm:330
-#, fuzzy
 msgid "custom"
-msgstr "Vlastné"
+msgstr "vlastná"
 
 #: ../libgnucash/app-utils/business-prefs.scm:24
 msgid "Counters"
@@ -29071,1566 +29053,3 @@ msgid ""
 "select Window -> New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
-
-#~ msgid "The last stable version was "
-#~ msgstr "Posledná stabilná verzia bola "
-
-#~ msgid "The next stable version will be "
-#~ msgstr "Ďalšia stabilná verzia bude "
-
-#~ msgid "Enable debugging mode: increasing logging to provide deep detail."
-#~ msgstr ""
-#~ "Povoliť ladiaci režim: zvýšenie zaznamenávania pre poskytovanie "
-#~ "podrobností."
-
-#~ msgid ""
-#~ "Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,"
-#~ "error}\""
-#~ msgstr ""
-#~ "Nahradenie úrovne zaznamenávania v tvare \"ces.ta.záznamu={debug,info,"
-#~ "warn,crit,error}\""
-
-#~ msgid "Set the prefix path for gconf queries"
-#~ msgstr "Nastaviť cestu pre gconf požiadavky"
-
-#~ msgid "GCONFPATH"
-#~ msgstr "GCONFPATH"
-
-#~ msgid "Built %s from r%s"
-#~ msgstr "Vytvorené %s z r%s"
-
-#~ msgid "Negative amounts are not allowed."
-#~ msgstr "Zobrazovať hodnoty nie sú prípustné."
-
-#~ msgid "Percentage amount must be between 0 and 100."
-#~ msgstr "Percentuálna čiastka musí byť medzi 0 a 100."
-
-#~ msgid "You may not post an invoice with a negative total value."
-#~ msgstr "Nemôžete vystaviť faktúru so zápornou celkovou sumou."
-
-#~ msgid ""
-#~ "You may not post an expense voucher with a negative total cash value."
-#~ msgstr ""
-#~ "Nemôžete vystaviť výdavkovú poukážku s celkovou negatívnou hotovostnou "
-#~ "sumou."
-
-#~ msgid ""
-#~ "You must enter the amount of the payment.  The payment amount must be "
-#~ "greater than zero."
-#~ msgstr "Musíte zadať čiastku platby. Čiastka musí byť väčšia ako nula."
-
-#~ msgid "Your selected post account, %s, does not exist"
-#~ msgstr "Vami zvolený účet pre vystavenie %s neexistuje"
-
-#~ msgid ""
-#~ "Days\n"
-#~ "Proximo"
-#~ msgstr ""
-#~ "Dni\n"
-#~ "Proximo "
-
-#~ msgid "What Tax Table should be applied to this customer?"
-#~ msgstr "Aká daň by sa mala použiť pre tohoto odberateľa ?"
-
-#~ msgid "acct"
-#~ msgstr "zúčtovanie"
-
-#~ msgid "duedate"
-#~ msgstr "Dátum zdaniteľného plnenia"
-
-#~ msgid "postd"
-#~ msgstr "vystavené"
-
-#~ msgid "question"
-#~ msgstr "otázka"
-
-#~ msgid "What Tax Table should be applied to this vendor?"
-#~ msgstr "Aká daňová tabuľka sa má použiť pri tomto dodávateľovi?"
-
-#~ msgid "Reload invoice report"
-#~ msgstr "Znovu načíta výkaz faktúr"
-
-#~ msgid "Reload invoice report scheme file"
-#~ msgstr "Obnoviť súbor schém výkazu faktúr"
-
-#~ msgid "Reload owner report"
-#~ msgstr "Obnoviť výkaz vlastníkov"
-
-#~ msgid "Reload owner report scheme file"
-#~ msgstr "Obnoviť súbor schém výkazu vlastníkov"
-
-#~ msgid "Reload receivable report"
-#~ msgstr "Obnoviť výkaz pohľadávok"
-
-#~ msgid "Reload receivable report scheme file"
-#~ msgstr "Obnoviť súbor schém výkazu pohľadávok"
-
-#~ msgid ""
-#~ "The path\n"
-#~ "  %s\n"
-#~ "exists but it is not a directory. Please delete\n"
-#~ "the file and start GnuCash again.\n"
-#~ msgstr ""
-#~ "Cesta\n"
-#~ "  %s\n"
-#~ "existuje, ale nie je to priečinok. Prosím odstráňte\n"
-#~ "súbor a znovu spustite GnuCash.\n"
-
-#~ msgid "Automatic Payment Forward"
-#~ msgstr "Automatická platba vopred"
-
-#~ msgid "You must select a commodity."
-#~ msgstr "Musíte zvoliť komoditu."
-
-#~ msgid "Are you sure you want to cancel the Mortgage/Loan Setup Assistant?"
-#~ msgstr "Ste si istý, že chcete zrušiť asistenta hypotéky/úveru?"
-
-#~ msgid "Please select a valid \"from\" account."
-#~ msgstr "Vyberte si, prosím, platný účet \"z\"."
-
-#~ msgid "Please select a valid \"to\" account."
-#~ msgstr "Vyberte si, prosím, platný účet \"na\"."
-
-#~ msgid "Please select a valid \"interest\" account."
-#~ msgstr "Vyberte si, prosím, platný \"úrokový\" účet."
-
-#~ msgid "Payment: \"%s\""
-#~ msgstr "Platba: \"%s\""
-
-#~ msgid "You must enter a valid distribution amount."
-#~ msgstr "Musíte vložiť platný distribučný obnos."
-
-#~ msgid "You must enter a distribution amount."
-#~ msgstr "Musíte vložiť distribučnú sumu."
-
-#~ msgid "You must either enter a valid price or leave it blank."
-#~ msgstr "Buď vložíte platnú cenu, alebo ju nechajte prázdnu."
-
-#~ msgid "The price must be positive."
-#~ msgstr "Cena musí byť kladné číslo."
-
-#~ msgid "The cash distribution must be positive."
-#~ msgstr "Hotovostná distribúcia musí byť pozitívna."
-
-#~ msgid "New Account (not implemented)"
-#~ msgstr "Nový účet (neimplementované)"
-
-#~ msgid "Select or add a GnuCash account"
-#~ msgstr "Zvoľte alebo pridajte GnuCash účet"
-
-#~ msgid ""
-#~ "Use Commodity Value\n"
-#~ "1\n"
-#~ "1/10\n"
-#~ "1/100\n"
-#~ "1/1000\n"
-#~ "1/10000\n"
-#~ "1/100000\n"
-#~ "1/1000000"
-#~ msgstr ""
-#~ "Použiť hodnotu komodity\n"
-#~ "1\n"
-#~ "1/10\n"
-#~ "1/100\n"
-#~ "1/1000\n"
-#~ "1/10000\n"
-#~ "1/100000\n"
-#~ "1/1000000"
-
-#~ msgid "Enter a title for this book."
-#~ msgstr "Vložte titulok pre túto knihu."
-
-#~ msgid "Enter notes that describe this book."
-#~ msgstr "Vložte poznámky, ktoré popisujú túto knihu."
-
-#~ msgid "Finish Closing Books"
-#~ msgstr "Dokončiť uzatvorenie kníh"
-
-#~ msgid ""
-#~ "day(s)\n"
-#~ "week(s)\n"
-#~ "month(s)\n"
-#~ "year(s)"
-#~ msgstr ""
-#~ "dní\n"
-#~ "týždňov\n"
-#~ "mesiacov\n"
-#~ "rokov"
-
-#~ msgid "Account Information"
-#~ msgstr "Informácie o účte"
-
-#~ msgid ""
-#~ "Annual\n"
-#~ "Semi-annual\n"
-#~ "Tri-annual\n"
-#~ "Quarterly\n"
-#~ "Bi-monthly\n"
-#~ "Monthly\n"
-#~ "Semi-monthly\n"
-#~ "Bi-weekly\n"
-#~ "Weekly\n"
-#~ "Daily (360)\n"
-#~ "Daily (365)"
-#~ msgstr ""
-#~ "Ročne\n"
-#~ "Dva krát do roka\n"
-#~ "Tri krát do roka\n"
-#~ "Štvrťročne\n"
-#~ "Dvojmesačne\n"
-#~ "Mesačne\n"
-#~ "Dva krát za mesiac\n"
-#~ "Dvojtýždenne\n"
-#~ "Týždenne\n"
-#~ "Denne (360)\n"
-#~ "Denne (365)"
-
-#~ msgid "Co_mpounding:"
-#~ msgstr "S_kladanie:"
-
-#~ msgid "_Effective Date:"
-#~ msgstr "Dátum účinnosti:"
-
-#~ msgid "_Initial Payment:"
-#~ msgstr "Počiatočná platba:"
-
-#~ msgid "_Payments:"
-#~ msgstr "_Platby:"
-
-#~ msgid "<b>_Mini-Viewer</b>"
-#~ msgstr "<b>_Miniprehliadač</b>"
-
-#~ msgid ""
-#~ "Bid\n"
-#~ "Ask\n"
-#~ "Last\n"
-#~ "Net Asset Value\n"
-#~ "Unknown"
-#~ msgstr ""
-#~ "Ponuka\n"
-#~ "Dopyt\n"
-#~ "Posledná\n"
-#~ "Čistá hodnota aktíva\n"
-#~ "Neznáma"
-
-#~ msgid "Delete _last price for a stock"
-#~ msgstr "Odstrániť pos_lednú cenu pre akciu"
-
-#~ msgid "Get _Quotes"
-#~ msgstr "Získať ceny"
-
-#~ msgid ""
-#~ "Inches\n"
-#~ "Centimeters\n"
-#~ "Millimeters\n"
-#~ "Points"
-#~ msgstr ""
-#~ "Palce\n"
-#~ "Centimetre\n"
-#~ "Milimetre\n"
-#~ "Body"
-
-#~ msgid ""
-#~ "Top\n"
-#~ "Middle\n"
-#~ "Bottom\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Hore\n"
-#~ "V strede\n"
-#~ "Dole\n"
-#~ "Vlastné"
-
-#~ msgid "Copy Transaction"
-#~ msgstr "Kopírovať transakciu"
-
-#~ msgid "Copy the selected transaction"
-#~ msgstr "Skopíruje zvolenú transakciu"
-
-#~ msgid "Cut Transaction"
-#~ msgstr "Vystrihnúť transakciu"
-
-#~ msgid "Dup_licate Transaction..."
-#~ msgstr "Dup_likovať transakciu..."
-
-#~ msgid "Edit Exchange Rate"
-#~ msgstr "Upraviť kurz"
-
-#~ msgid "Edit the exchange rate for the current split"
-#~ msgstr "Upraviť kurz pre aktuálne rozdelenie"
-
-#~ msgid "Erase all splits except the one for this account."
-#~ msgstr "Odstrániť všetky rozdelenia okrem toho pre tento účet."
-
-#~ msgid "Jump"
-#~ msgstr "Skočiť"
-
-#~ msgid "Remove Transaction Splits"
-#~ msgstr "Odstrániť rozdelenie transakcie"
-
-#~ msgid "Schedule..."
-#~ msgstr "Plán..."
-
-#~ msgid "Sort by Amount"
-#~ msgstr "Triediť podľa sumy"
-
-#~ msgid "Sort by Date"
-#~ msgstr "Triediť podľa dátumu"
-
-#~ msgid "Sort by Description"
-#~ msgstr "Triediť podľa popisu"
-
-#~ msgid "Sort by Memo"
-#~ msgstr "Triediť podľa poznámky"
-
-#~ msgid "Sort by Number"
-#~ msgstr "Triediť podľa čísla"
-
-#~ msgid "St_yle"
-#~ msgstr "Š_týl"
-
-#~ msgid "_Amount"
-#~ msgstr "Sum_a"
-
-#~ msgid "_Number"
-#~ msgstr "Čís_lo"
-
-#~ msgid "_Statement Date"
-#~ msgstr "_Dátum vyúčtovania"
-
-#~ msgid ""
-#~ "1st\n"
-#~ "2nd\n"
-#~ "3rd\n"
-#~ "4th\n"
-#~ "5th\n"
-#~ "6th\n"
-#~ "7th\n"
-#~ "8th\n"
-#~ "9th\n"
-#~ "10th\n"
-#~ "11th\n"
-#~ "12th\n"
-#~ "13th\n"
-#~ "14th\n"
-#~ "15th\n"
-#~ "16th\n"
-#~ "17th\n"
-#~ "18th\n"
-#~ "19th\n"
-#~ "20th\n"
-#~ "21st\n"
-#~ "22nd\n"
-#~ "23rd\n"
-#~ "24th\n"
-#~ "25th\n"
-#~ "26th\n"
-#~ "27th\n"
-#~ "28th\n"
-#~ "29th\n"
-#~ "30th\n"
-#~ "31st\n"
-#~ "Last day of month\n"
-#~ "Last Monday\n"
-#~ "Last Tuesday\n"
-#~ "Last Wednesday\n"
-#~ "Last Thursday\n"
-#~ "Last Friday\n"
-#~ "Last Saturday\n"
-#~ "Last Sunday"
-#~ msgstr ""
-#~ "1\n"
-#~ "2\n"
-#~ "3\n"
-#~ "4\n"
-#~ "5\n"
-#~ "6\n"
-#~ "7\n"
-#~ "8\n"
-#~ "9\n"
-#~ "10\n"
-#~ "11\n"
-#~ "12\n"
-#~ "13\n"
-#~ "14\n"
-#~ "15\n"
-#~ "16\n"
-#~ "17\n"
-#~ "18\n"
-#~ "19\n"
-#~ "20\n"
-#~ "21\n"
-#~ "22\n"
-#~ "23\n"
-#~ "24\n"
-#~ "25\n"
-#~ "26\n"
-#~ "27\n"
-#~ "28\n"
-#~ "29\n"
-#~ "30\n"
-#~ "31\n"
-#~ "Posledný deň v mesiaci\n"
-#~ "Posledný Pondelok\n"
-#~ "Posledný Utorok\n"
-#~ "Posledná Streda\n"
-#~ "Posledný Štvrtok\n"
-#~ "Posledný Piatok\n"
-#~ "Posledná Sobota\n"
-#~ "Posledná Nedeľa"
-
-#~ msgid "<b>End</b>"
-#~ msgstr "<b>Koniec</b>"
-
-#~ msgid "<b>Upcoming</b>"
-#~ msgstr "<b>Nasledujúce</b>"
-
-#~ msgid "Creation State"
-#~ msgstr "Stav vytvorenia"
-
-#~ msgid ""
-#~ "Current Year\n"
-#~ "Now + 1 Year\n"
-#~ "Whole Loan\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Súčasný rok\n"
-#~ "Teraz + 1 rok\n"
-#~ "Celkový úrok\n"
-#~ "Vlastné"
-
-#~ msgid ""
-#~ "Daily\n"
-#~ "Weekly\n"
-#~ "Bi-Weekly\n"
-#~ "Monthly\n"
-#~ "Quarterly\n"
-#~ "Yearly"
-#~ msgstr ""
-#~ "Denne\n"
-#~ "Týždenne\n"
-#~ "Dvojtýždenne\n"
-#~ "Mesačne\n"
-#~ "Štvrťročne\n"
-#~ "Ročne"
-
-#~ msgid "Do you..."
-#~ msgstr " "
-
-#~ msgid "Loan Information"
-#~ msgstr "Informácie o úvere"
-
-#~ msgid ""
-#~ "No change\n"
-#~ "Use previous weekday\n"
-#~ "Use next weekday"
-#~ msgstr ""
-#~ "Bez zmeny\n"
-#~ "Použiť predchádzajúci pracovný deň\n"
-#~ "Použiť nasledujúci pracovný deň"
-
-#~ msgid ""
-#~ "None\n"
-#~ "Once\n"
-#~ "Daily\n"
-#~ "Weekly\n"
-#~ "Semi-Monthly\n"
-#~ "Monthly"
-#~ msgstr ""
-#~ "Nikdy\n"
-#~ "Raz\n"
-#~ "Denne\n"
-#~ "Týždenne\n"
-#~ "Dvojtýždenne\n"
-#~ "Mesačne"
-
-#~ msgid "Press apply to commit these changes."
-#~ msgstr "Stlačte použiť na potvrdenie zmien."
-
-#~ msgid "Repayment Type"
-#~ msgstr "Typ splácania:"
-
-#~ msgid "Start Date: "
-#~ msgstr "Dátum od: "
-
-#~ msgid ""
-#~ "months\n"
-#~ "years"
-#~ msgstr ""
-#~ "mesiace\n"
-#~ "roky"
-
-#~ msgid "_Price Editor"
-#~ msgstr "Edito_r cien"
-
-#~ msgid "Set the budget options using this dialog."
-#~ msgstr "Pomocou tohoto dialógu nastavte možnosti výkazu."
-
-#~ msgid "Remo_ve Transaction Splits"
-#~ msgstr "Odstrániť rozdelenie transakcie"
-
-#~ msgid "_Shift Transaction Forward"
-#~ msgstr "_Presunúť transakciu dopredu"
-
-#~ msgid "Account Transaction Report"
-#~ msgstr "Výkaz účtovnej transakcie"
-
-#~ msgid "General Ledger Report"
-#~ msgstr "Výkaz účtovného denníka"
-
-#~ msgid "_General Ledger"
-#~ msgstr "_Účtovný denník"
-
-#~ msgid "<No information>"
-#~ msgstr "<Bez informácii>"
-
-#, fuzzy
-#~ msgid "Order of columns in the dialog"
-#~ msgstr "Počet stĺpcov v tabuľke"
-
-#, fuzzy
-#~ msgid "Show the Full Name column"
-#~ msgstr "Zobraziť úplné mená účtov v legende?"
-
-#, fuzzy
-#~ msgid "Show the Namespace column"
-#~ msgstr "Zobraziť stĺpec v_eľkosť"
-
-#, fuzzy
-#~ msgid "Show the Print Name column"
-#~ msgstr "Zobraziť tlačidlá v hlavičke stĺpcov"
-
-#, fuzzy
-#~ msgid "Show the Quote Source column"
-#~ msgstr "Zobraziť stĺpec príznaku cien"
-
-#, fuzzy
-#~ msgid "Show the Quote Timezone column"
-#~ msgstr "Zobraziť stĺpec príznaku cien"
-
-#, fuzzy
-#~ msgid "Show the Unique Name column"
-#~ msgstr "Jednoznačný názov akcie."
-
-#, fuzzy
-#~ msgid "Show the fraction column"
-#~ msgstr "Zobraziť stĺpec v_eľkosť"
-
-#, fuzzy
-#~ msgid "Show the symbol column"
-#~ msgstr "Zobraziť stĺpec v_eľkosť"
-
-#, fuzzy
-#~ msgid "Columns used for sorting"
-#~ msgstr "Metrika použitá pre pravítko"
-
-#~ msgid "Window position"
-#~ msgstr "Pozícia okna"
-
-#~ msgid "Show the Price column"
-#~ msgstr "Zobraziť stĺpec Cena"
-
-#~ msgid "Show the Source column"
-#~ msgstr "Zobraziť stĺpec Zdroj"
-
-#~ msgid "Show the Type column"
-#~ msgstr "Zobraziť stĺpec Typ"
-
-#~ msgid "Show the date column"
-#~ msgstr "Zobraziť stĺpec Dátum"
-
-#, fuzzy
-#~ msgid "Accounts to reverse the balance"
-#~ msgstr "Vyberte <b>cestu</b>, ktorej smer sa má obrátiť."
-
-#~ msgid "Default view style for new register"
-#~ msgstr "Štandardný štýl okien účtovnej knihy"
-
-#~ msgid "Enables Euro support"
-#~ msgstr "Povoliť podporu Euro"
-
-#, fuzzy
-#~ msgid "Labels on toolbar buttons"
-#~ msgstr "Typ skosenia okolo tlačidiel panelu"
-
-#~ msgid "Position of the notebook tabs"
-#~ msgstr "Umiestnenie kariet"
-
-#, fuzzy
-#~ msgid "Source of default account currency"
-#~ msgstr "Zvoliť štandardný výber účtu."
-
-#, fuzzy
-#~ msgid "Source of default report currency"
-#~ msgstr "Štandardná mena pre nové účty"
-
-#, fuzzy
-#~ msgid "Width of a column in the dialog"
-#~ msgstr "V jednotkách šírky ťahu"
-
-#~ msgid "New item"
-#~ msgstr "Nová položka"
-
-#~ msgid "set true"
-#~ msgstr "je pravda"
-
-#~ msgid "Case Insensitive?"
-#~ msgstr "Rozlišovať veľkosť písmen?"
-
-#, fuzzy
-#~ msgid ""
-#~ "Error: Failure saving state file.\n"
-#~ "  %s"
-#~ msgstr ""
-#~ "Vyskytla sa chyba počas ukladania do súboru.\n"
-#~ "\n"
-#~ "%s"
-
-#~ msgid ""
-#~ "No files to merge. Please add ones by clicking on 'Load another file'."
-#~ msgstr ""
-#~ "Nie sú žiadne súbory pre spojenie. Pridajte prosím nejaké pomocou "
-#~ "kliknutia na 'Načítať ďalší súbor"
-
-#~ msgid "Choose method"
-#~ msgstr "Vybrať metódu"
-
-#~ msgid "Finish changes"
-#~ msgstr "Dokončiť zmeny"
-
-#~ msgid "GnuCash will install the data for you."
-#~ msgstr "GnuCash Vám nainštaluje dáta,"
-
-#~ msgid "Install into home directory"
-#~ msgstr "Inštalovať do domovského priečinku"
-
-#~ msgid "Please run the following commands:"
-#~ msgstr "Prosím spustite nasledovné príkazy:"
-
-#~ msgid "S_kip"
-#~ msgstr "Pre_skočiť"
-
-#~ msgid "Update GnuCash configuration data"
-#~ msgstr "Aktualizovať GnuCash nastavenia"
-
-#~ msgid "Update gconf settings - GnuCash"
-#~ msgstr "Aktualizovať gconf nastavenia - GnuCash"
-
-#~ msgid "Update search path"
-#~ msgstr "Aktualizovať cestu hľadania"
-
-#~ msgid "_GnuCash installs the data"
-#~ msgstr "GnuCash inštaluje dáta"
-
-#~ msgid "_GnuCash updates the search path"
-#~ msgstr "GnuCash aktualizuje cestu hľadania"
-
-#~ msgid "_Install into home directory"
-#~ msgstr "_Inštalovať do domovského priečinku"
-
-#~ msgid "_Setup"
-#~ msgstr "_Nastavenie"
-
-#~ msgid "_Update search path"
-#~ msgstr "Akt_ualizovať cestu hľadania"
-
-#~ msgid "_You install the data yourself"
-#~ msgstr "_Sami si nainštalujte dáta"
-
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to import at this time. "
-#~ "Do this if you have saved your accounts to separate GnuCash files.\n"
-#~ "\n"
-#~ "Click \"Forward\" to finish loading files and move to the next step of "
-#~ "the GnuCash Datafile import process."
-#~ msgstr ""
-#~ "Kliknite na \"Načítať iný súbor\", ak máte viac dát na naimportovanie. "
-#~ "Urobte tak, ak ste uložili svoje účty do viacerých samostatných GnuCash "
-#~ "súborov.\n"
-#~ "\n"
-#~ "Kliknite na \"Nasledujúci\" na dokončenie načítavania súborov a presuňte "
-#~ "sa k ďalšiemu kroku v procese importovania GnuCash dát."
-
-#~ msgid "Do not merge"
-#~ msgstr "Nezlúčiť"
-
-#~ msgid "GnuCash data files you have loaded"
-#~ msgstr "GnuCash dáta, ktoré ste načítali"
-
-#~ msgid "Load another file"
-#~ msgstr "Načítať ďalší súbor"
-
-#~ msgid "Unload selected file"
-#~ msgstr "Zrušiť zvolený súbor"
-
-#~ msgid "<b>Current File List</b>"
-#~ msgstr "<b>Aktuálny zoznam súborov</b>"
-
-#~ msgid "<b>Exchange/Price Information</b>"
-#~ msgstr "<b>Informácie o kurze/cene</b>"
-
-#~ msgid "To A_mount:"
-#~ msgstr "Na su_mu:"
-
-#~ msgid "_Exchange Rate:"
-#~ msgstr "Vým_enný kurz:"
-
-#~ msgid "_From:"
-#~ msgstr "_Od:"
-
-#~ msgid "_To:"
-#~ msgstr "D_o:"
-
-#~ msgid ""
-#~ "US (12/31/2001)\n"
-#~ "UK (31/12/2001)\n"
-#~ "Europe (31.12.2001)\n"
-#~ "ISO (2001-12-31)\n"
-#~ "UTC\n"
-#~ "Locale\n"
-#~ "Custom\n"
-#~ msgstr ""
-#~ "US (12/31/2001)\n"
-#~ "UK (31/12/2001)\n"
-#~ "Európsky (31.12.2001)\n"
-#~ "ISO (2001-12-31)\n"
-#~ "UTC\n"
-#~ "Locale\n"
-#~ "Vlastné\n"
-
-#~ msgid "Don't tell me again this session."
-#~ msgstr "Už mi nepripomínať počas tohto sedenia."
-
-#~ msgid "Don't tell me again."
-#~ msgstr "Už mi nepripomínať."
-
-#~ msgid "Remember the answer and don't tell me again."
-#~ msgstr "Pamätať si odpoveď a už mi nepripomínať znova."
-
-#~ msgid "<b>Toolbar Style</b>"
-#~ msgstr "<b>Štýl panela nástrojov</b>"
-
-#~ msgid "Display toolbar items as icons only."
-#~ msgstr "Zobraziť panel nástrojov iba s ikonami."
-
-#~ msgid "Display toolbar items as text only."
-#~ msgstr "Zobraziť panel nástrojov iba s textovým popisom."
-
-#~ msgid "Priority text besi_de icons"
-#~ msgstr "Prioritne text ve_dľa ikon"
-
-#~ msgid "Text _below icons"
-#~ msgstr "Text po_d ikonami"
-
-#~ msgid "Use s_ystem default"
-#~ msgstr "Použiť s_ystémové štandardy"
-
-#~ msgid "_Europe:"
-#~ msgstr "_Európa:"
-
-#~ msgid "_Icons only"
-#~ msgstr "Iba _ikony"
-
-#~ msgid "_Text only"
-#~ msgstr "Iba _text"
-
-#~ msgid "_Use system theme colors"
-#~ msgstr "Po_užiť farby systémovej témy"
-
-#, fuzzy
-#~ msgid "Failed to process file: %s"
-#~ msgstr "Zlyhalo spracovanie OPF súboru"
-
-#, fuzzy
-#~ msgid "Failed to open file: %s: %s"
-#~ msgstr "Nepodarilo sa otvoriť súbor '%s': %s"
-
-#~ msgid "_Delete Account"
-#~ msgstr "O_dstrániť účet"
-
-#~ msgid "_New Account"
-#~ msgstr "_Nový účet"
-
-#~ msgid ""
-#~ "The GnuCash personal finance manager. The GNU way to manage your money!"
-#~ msgstr ""
-#~ "GnuCash - správca osobných financií. GNU spôsob spravovania svojich "
-#~ "peňazí!"
-
-#~ msgid "%s  This copy was built from svn r%s on %s."
-#~ msgstr "%s  Táto kópia bola zostavená z svn r%s na %s."
-
-#~ msgid "%s  This copy was built from r%s on %s."
-#~ msgstr "%s  Táto kópia bola zostavená z r%s na %s."
-
-#~ msgid "Version: GnuCash-%s svn (r%s built %s)"
-#~ msgstr "Verzia: GnuCash-%s svn (r%s vytvorené %s)"
-
-#~ msgid "Version: GnuCash-%s (r%s built %s)"
-#~ msgstr "Verzia: GnuCash-%s (r%s vytvorené %s)"
-
-#~ msgid "Add a new transaction to the account"
-#~ msgstr "Pridá novú transakciu do účtu"
-
-#~ msgid "Remember _PIN"
-#~ msgstr "Pamätať si _PIN"
-
-#~ msgid "%s at %s (code %s)"
-#~ msgstr "%s v %s (kód %s)"
-
-#~ msgid "%s at bank code %s"
-#~ msgstr "%s v bankom kóde %s"
-
-#, fuzzy
-#~ msgid "Select an CSV/Fixed-Width file to import"
-#~ msgstr "Zvoliť súbor pre import"
-
-#, fuzzy
-#~ msgid "Unknown encoding."
-#~ msgstr ": neznáme kódovanie"
-
-#~ msgid "Data type: "
-#~ msgstr "Typ dát:"
-
-#~ msgid "Import CSV/Fixed-Width File"
-#~ msgstr "Importovať súbor CSV/s fixnou šírkou"
-
-#, fuzzy
-#~ msgid "Separated"
-#~ msgstr "Dátum od"
-
-#, fuzzy
-#~ msgid "Import _CSV/Fixed-Width..."
-#~ msgstr "Importovať súbor CSV/s fixnou šírkou"
-
-#~ msgid " a CSV/Fixed-Width file"
-#~ msgstr "  súbor CSV/s fixnou šírkou"
-
-#~ msgid ""
-#~ "For a new transaction, click on the \"Other Account\" entry to choose the "
-#~ "other (destination) account of this transaction.\n"
-#~ "For a transaction that is a duplicate of an existing one, click on the "
-#~ "\"Other Account\" or \"Description\" entry to \n"
-#~ "check whether GnuCash chose the right existing transaction.\n"
-#~ "To switch transactions between both states, click on the checkmark in the "
-#~ "\"New\" column.\n"
-#~ "When all new transactions have the correct destination account and all "
-#~ "duplicates are matched with the right existing transaction, \n"
-#~ "click \"OK\"."
-#~ msgstr ""
-#~ "Pre novú transakciu zvoľte druhý (cieľový) účet tejto transakcie\n"
-#~ "kliknutím na \"Iný účet\".\n"
-#~ "Pre transakciu, ktorá je duplikátom existujúcej, skontrolujte, či\n"
-#~ "GnuCash zvolil správnu existujúcu transakciu, kliknutím na pole\n"
-#~ "\"Iný účet\" alebo \"Popis\".\n"
-#~ "Transakciu prepínajte medzi oboma stavmi kliknutím na škrkátko v stĺpci\n"
-#~ "\"Nový\".\n"
-#~ "Až budú mať všetky transakcie správny cieľový účet a všetky duplikáty\n"
-#~ "budú priradené k správnym existujúcim transakciám, kliknite na \"OK\"."
-
-#~ msgid "Other Account"
-#~ msgstr "Ďalší účet"
-
-#~ msgid "Period-as-decimal (1,000.00)"
-#~ msgstr "Bodka ako des. oddeľovač (1,000.00)"
-
-#~ msgid "Comma-as-decimal (1.000,00)"
-#~ msgstr "Čiarka ako des. oddeľovač (1.000,00)"
-
-#~ msgid "y-d-m"
-#~ msgstr "r-d-m"
-
-#~ msgid "(no)"
-#~ msgstr "(nie)"
-
-#~ msgid "You must enter an account name."
-#~ msgstr "Musíte vložiť názov účtu."
-
-#, fuzzy
-#~ msgid "Delete the currently selected report"
-#~ msgstr "Aktuálne zvolená položka ponuky"
-
-#, fuzzy
-#~ msgid "Run the currently selected report"
-#~ msgstr "Aktuálne zvolená položka ponuky"
-
-#~ msgid "_Run"
-#~ msgstr "_Spustiť"
-
-#~ msgid "Add _Report"
-#~ msgstr "P_ridať výkaz"
-
-#, fuzzy
-#~ msgid ""
-#~ "Add the current report to the `Custom' menu for later use. The report "
-#~ "will be saved in the file ~/.gnucash/saved-reports-2.4. It will be "
-#~ "accessible as menu entry in the report menu at the next startup of "
-#~ "GnuCash."
-#~ msgstr ""
-#~ "Pridať aktuálny výkaz do ponuky `Vlastné' pre neskoršie použitie. Výkaz "
-#~ "bude uložený do súboru ~/.gnucash/saved-reports-2.0. Dostupný bude ako "
-#~ "položka v ponuke výkazov pri nasledujúcom spustení GnuCash."
-
-#~ msgid "Dates earlier than 1970 are not supported."
-#~ msgstr "Dátumy staršie ako 1970 nie sú podporované."
-
-#~ msgid "This report has no options."
-#~ msgstr "Tento výkaz nemá nastavenia"
-
-#~ msgid "Custom Reports"
-#~ msgstr "Vlastné výkazy"
-
-#~ msgid "Asterisk"
-#~ msgstr "Hviezdička"
-
-#~ msgid "and"
-#~ msgstr "a"
-
-#, fuzzy
-#~ msgid "Most recent to report"
-#~ msgstr "Presunúť _naposledy použitú kartu dopredu"
-
-#~ msgid "FILO"
-#~ msgstr "FILO"
-
-#, fuzzy
-#~ msgid "Compress prior/later periods"
-#~ msgstr "Kom_primovať súbory"
-
-#~ msgid "Income Barchart"
-#~ msgstr "Stĺpcový graf Príjmov"
-
-#~ msgid "Expense Barchart"
-#~ msgstr "Stĺpcový graf výdavkov"
-
-#~ msgid "Liability Barchart"
-#~ msgstr "Stĺpcový graf Pasív"
-
-#~ msgid "Style"
-#~ msgstr "Štýl"
-
-#~ msgid "Report style"
-#~ msgstr "Štýl výkazov"
-
-#~ msgid "Display N lines"
-#~ msgstr "Zobraziť N riadkov"
-
-#~ msgid "Exact Time"
-#~ msgstr "Presný čas"
-
-#~ msgid "Sort by exact time"
-#~ msgstr "Triediť podľa presného času"
-
-#~ msgid "Enable hyperlinks in reports"
-#~ msgstr "Povolí hyperodkazy vo výkaze"
-
-#~ msgid "Welcome to GnuCash 2.4!"
-#~ msgstr "Vitajte v GnuCash 2.4!"
-
-#~ msgid ""
-#~ "A list of directories (strings) indicating where to look for html and "
-#~ "parsed-html files. Each element must be a string representing a directory "
-#~ "or a symbol where 'default expands to the default path, and 'current "
-#~ "expands to the current value of the path."
-#~ msgstr ""
-#~ "Zoznam priečinkov (reťazcov) indikujúci, kde hľadať súbory html a parsed-"
-#~ "html. Každý element musí byť reťazec reprezentujúci priečinok alebo "
-#~ "symbol, kde 'default sa rozvinie na implicitnú cestu a 'current na "
-#~ "aktuálnu hodnotu cesty."
-
-#~ msgid "Set the search path for documentation files"
-#~ msgstr "Nastaviť cestu pre hľadanie dokumentácie"
-
-#~ msgid ""
-#~ "Blue items are exportable to a German Tax XML file. Press Export to "
-#~ "actually export them."
-#~ msgstr ""
-#~ "Modré položky je možné exportovať do Nemeckého daňového XML súboru. "
-#~ "Stlačte Export na ich vyexportovanie."
-
-#~ msgid ""
-#~ "No Tax Related accounts were found.  Go to the Edit->Tax Options dialog "
-#~ "to set up tax-related accounts."
-#~ msgstr ""
-#~ "Neboli nájdené žiadne účty súvisiace s daňami. Nastavte účty súvisiace s "
-#~ "daňami prechodom do dialógu Upraviť->Daňové nastavenia"
-
-#~ msgid "Set the logging level from 0 (least) to 6 (most)"
-#~ msgstr "Nastaviť úroveň protokolovania od 0 (najmenej) po 6 (najviac)"
-
-#~ msgid "LOGLEVEL"
-#~ msgstr "ÚROVEŇLADENIA"
-
-#~ msgid "CONFIGPATH"
-#~ msgstr "KONFIGURAČNÁCESTA"
-
-#~ msgid "Set shared data file search path"
-#~ msgstr "Nastaviť cestu pre zdieľané dáta"
-
-#~ msgid "SHAREPATH"
-#~ msgstr "ZDIELANÁCESTA"
-
-#~ msgid "DOCPATH"
-#~ msgstr "DOCPATH"
-
-#~ msgid "Default number of register rows to display in Invoices."
-#~ msgstr "Štandardný počet riadkov registra zobrazených vo faktúrach."
-
-#~ msgid "_Tax Table Editor"
-#~ msgstr "Editor _daňových tabuliek"
-
-#~ msgid "QSF _Invoice..."
-#~ msgstr "QSF _faktúra..."
-
-#~ msgid "Export one or more invoices to QSF"
-#~ msgstr "Exportovať jednu alebo viac faktúr do QSF"
-
-#~ msgid "QSF _Customer..."
-#~ msgstr "QSF odberateľ..."
-
-#~ msgid "Export one or more customers to QSF"
-#~ msgstr "Exportovať jedného alebo viac odberateľov do QSF"
-
-#~ msgid "QSF _Vendor..."
-#~ msgstr "QSF dodá_vateľ..."
-
-#~ msgid "Export one or more vendors to QSF"
-#~ msgstr "Exportovať jedného alebo viac dodávateľov do QSF"
-
-#~ msgid "QSF _Employee..."
-#~ msgstr "QSF _zamestnanec..."
-
-#~ msgid "Export one or more employees to QSF"
-#~ msgstr "Exportovať jednu alebo viac faktúr do QSF"
-
-#~ msgid "Export Invoices to XML"
-#~ msgstr "Exportovať faktúry do XML"
-
-#~ msgid "Export Vendors to XML"
-#~ msgstr "Exportovať dodávateľov do XML"
-
-#~ msgid "Export Employees to XML"
-#~ msgstr "Exportovať zamestnancov do XML"
-
-#~ msgid "Invalid Entry:  You need to supply %s."
-#~ msgstr "Neplatná položky:  Musíte zabezpečiť %s."
-
-#~ msgid ""
-#~ "Key file contains key '%s' in group '%s' which has a value that cannot be "
-#~ "interpreted."
-#~ msgstr ""
-#~ "Súbor kľúčov obsahuje kľúč '%s', v skupine '%s', ktorý má hodnotu, "
-#~ "ktorúnie je možné interpretovať."
-
-#~ msgid ""
-#~ "Error: Please resolve all %d conflicts before trying to commit the data."
-#~ msgstr ""
-#~ "Chyba: Prosím vyriešte všetky %d konflikty pred pokusom o odoslanie dát."
-
-#~ msgid "Error: the Commit operation failed, error code %d."
-#~ msgstr "Chyba: potvrdenie operácie zlyhalo s chybovým kódom %d."
-
-#~ msgid "%i conflict needs to be resolved."
-#~ msgid_plural "%i conflicts need to be resolved."
-#~ msgstr[0] "%i konflikt je potrebné vyriešiť."
-#~ msgstr[1] "%i konflikty je potrebné vyriešiť."
-#~ msgstr[2] "%i konfliktov je potrebné vyriešiť."
-
-#~ msgid "%i parameter value for this \"%s\" object."
-#~ msgid_plural "%i parameter values for this \"%s\" object."
-#~ msgstr[0] "%i parameter hodnoty pre tento \"%s\" objekt."
-#~ msgstr[1] "%i parametre hodnoty pre tento \"%s\" objekt."
-#~ msgstr[2] "%i parametrov hodnoty pre tento \"%s\" objekt."
-
-#~ msgid "%i: Parameter name: %s "
-#~ msgstr "%i: Názov parametra: %s "
-
-#~ msgid "Import data : %s "
-#~ msgstr "Importované dáta: %s"
-
-#~ msgid "Original data : %s\n"
-#~ msgstr "Pôvodné dáta : %s\n"
-
-#~ msgid "<b>Contained Accounts</b>"
-#~ msgstr "<b>Obsiahnuté účty</b>"
-
-#~ msgid "<b>Description</b>"
-#~ msgstr "<b>Popis</b>"
-
-#~ msgid "<b>New Account Currency</b>"
-#~ msgstr "<b>Mena nového účtu</b>"
-
-#~ msgid ""
-#~ "If you would like an account to have an opening balance, click on the "
-#~ "account and enter the starting balance in the box on the right. All "
-#~ "accounts except Equity and placeholder accounts may have an opening "
-#~ "balance."
-#~ msgstr ""
-#~ "Pokiaľ chcete, aby mal účet začiatočný stav, kliknite na neho a vložte do "
-#~ "poľa vpravo sumu. Všetky účty okrem Vlastného imania a účtov držiacich "
-#~ "miesto, môžu mať počiatočnú hodnotu."
-
-#~ msgid ""
-#~ "If you would like an account to have an opening balance, click on the row "
-#~ "containing the account, click again in the opening balances column, and "
-#~ "then enter the starting balance. All accounts except Equity and "
-#~ "placeholder accounts may have an opening balance.\n"
-#~ "\n"
-#~ "If you would like an account to be a placeholder account, just click the "
-#~ "checkbox for that account.\n"
-#~ msgstr ""
-#~ "Pokiaľ chcete, aby mal účet začiatočný stav, kliknite na neho a ešte raz "
-#~ "kliknite do stĺpca počiatočný stav a do poľa vložte  sumu. Všetky účty "
-#~ "okrem Vlastného imania a účtov držiacich miesto, môžu mať počiatočnú "
-#~ "hodnotu.\n"
-#~ "\n"
-#~ "Pokiaľ chcete, aby iba účet držal miesto, kliknite na zaškrtávacie pole "
-#~ "pre tento účet.\n"
-
-#~ msgid "Setup new accounts"
-#~ msgstr "Nastaviť nové účty"
-
-#~ msgid "This is Sample2."
-#~ msgstr "Toto je ukážka2"
-
-#~ msgid "Click to choose the filename and location."
-#~ msgstr "Kliknutím vyberte názov súboru a umiestnenie."
-
-#~ msgid "Export Chart of Accounts"
-#~ msgstr "Exportovať zoznam účtov"
-
-#~ msgid ""
-#~ "You can export the Chart of Accounts to a QSF XML file that can be "
-#~ "imported into another GnuCash file or used in other programs."
-#~ msgstr ""
-#~ "Zoznam účtov môžete vyexportovať do QSF XML súboru, ktorý môžete "
-#~ "naimportovať do iného GnuCash súboru, alebo iného programu."
-
-#~ msgid "1. Update your existing book with the import data"
-#~ msgstr "1. Aktualizovať existujúcu účtovnú knihu importovanými dátami"
-
-#~ msgid "2. Ignore the import data, leave original unchanged"
-#~ msgstr "2. Ignorovať importovaná dáta, nechať pôvodné dáta nezmenené"
-
-#~ msgid "3. Import the data as a NEW object"
-#~ msgstr "3. Importovať dáta ako nový objekt"
-
-#~ msgid "Add the import as a new object, leave original in place"
-#~ msgstr "Pridať import ako nový objekt, pôvodný nechať na mieste"
-
-#~ msgid "Commit QSF Import Data to data file"
-#~ msgstr "Potvrdiť QSF Import dát do dátového súboru"
-
-#~ msgid "Auto-Created Transactions Notification"
-#~ msgstr "Upozornenie na automaticky vytvorené transakcie"
-
-#~ msgid "Crea_te in advance, days:"
-#~ msgstr "Vytvoriť skôr o:"
-
-#~ msgid "Create"
-#~ msgstr "Vytvoriť"
-
-#~ msgid "Create as scheduled"
-#~ msgstr "Vytvoriť ako naplánované"
-
-#~ msgid "Created Transaction Review"
-#~ msgstr "Vytvorený prehľad transakcií"
-
-#~ msgid "Creating transactions..."
-#~ msgstr "Vytváranie transakcií..."
-
-#~ msgid "Days Away"
-#~ msgstr "Zostávajúce dni"
-
-#~ msgid "Disposition?"
-#~ msgstr "Dispozícia?"
-
-#~ msgid "Obsolete Scheduled Transactions"
-#~ msgstr "Neplatné plánované transakcie"
-
-#~ msgid "Postpone"
-#~ msgstr "Odložiť"
-
-#~ msgid "R_emind in advance, days:"
-#~ msgstr "Pripom_enúť skôr o:"
-
-#~ msgid "Scheduled Transaction"
-#~ msgstr "Plánovaná transakcia"
-
-#~ msgid "Since Last Run"
-#~ msgstr "Od posledného spustenia"
-
-#~ msgid "State"
-#~ msgstr "Stav"
-
-#~ msgid "Template Transaction (Read-Only)"
-#~ msgstr "Šablóna transakcie (iba pre čítanie)"
-
-#~ msgid "To-Create Transaction Preparation"
-#~ msgstr "Príprava vytvárania transakcie"
-
-#~ msgid "Transaction Reminders"
-#~ msgstr "Pripomenutie transakcií"
-
-#~ msgid "Unselect All"
-#~ msgstr "Všetko odznačiť"
-
-#~ msgid "Value:"
-#~ msgstr "Hodnota:"
-
-#~ msgid "Variable"
-#~ msgstr "Premenná"
-
-#~ msgid "Variables"
-#~ msgstr "Premenné"
-
-#~ msgid "What to do, what to do?"
-#~ msgstr "Čo robiť, čo robiť?"
-
-#~ msgid "Import a QSF object file"
-#~ msgstr "Importovanie súbor s QSF objektmi"
-
-#~ msgid "Income Ta_x Options"
-#~ msgstr "Nastavenia dane z príjmu"
-
-#, fuzzy
-#~ msgid "Setup income tax information for relevant accounts"
-#~ msgstr "Nastavenie daňových informácií pre všetky príjmové a výdavkové účty"
-
-#~ msgid "Error: Loading failed, error code %d - %s."
-#~ msgstr "Chyba: Načítavanie zlyhalo, chybový kód %d - %s."
-
-#~ msgid "New %s"
-#~ msgstr "Nov(ý/á/é) %s"
-
-#~ msgid "item"
-#~ msgstr "položka"
-
-#~ msgid "Defaults"
-#~ msgstr "Štandard"
-
-#~ msgid "Transaction _journal"
-#~ msgstr "Denník _transakcií"
-
-#~ msgid "Start of this fiscal year"
-#~ msgstr "Začiatku tohto fiškálneho roku"
-
-#~ msgid "Start of previous fiscal year"
-#~ msgstr "Začiatku predchádzajúceho fiškálneho roku"
-
-#~ msgid "End of this fiscal year"
-#~ msgstr "Konca tohto fiškálneho roku"
-
-#~ msgid "End of previous fiscal year"
-#~ msgstr "Konca predchádzajúceho fiškálneho roku"
-
-#~ msgid "Print GnuCash Document"
-#~ msgstr "Vytlačiť GnuCash dokument"
-
-#, fuzzy
-#~ msgid "Choose AqBanking Backend"
-#~ msgstr "Vybrať  AqBanking Backend"
-
-#~ msgid "Co_nfigure"
-#~ msgstr "Ko_nfigurácia"
-
-#, fuzzy
-#~ msgid "Choose an Online Banking Version to use with the selected bank:"
-#~ msgstr "Vyberte HBCI verziu pre používanie so zvolenou bankou:"
-
-#, fuzzy
-#~ msgid "Online Banking Version"
-#~ msgstr "Verzia online bankingu"
-
-#, fuzzy
-#~ msgid "Start AqBanking Setup Wizard"
-#~ msgstr "Spustiť sprievodcu nastavenia AqHBCI "
-
-#~ msgid "Enter and confirm your new password"
-#~ msgstr "Vložte a potvrďte svoje nové heslo"
-
-#~ msgid "Enter new Password"
-#~ msgstr "Zadajte nové heslo"
-
-#~ msgid "Activate verbose debug messages for Online Banking."
-#~ msgstr "Aktivovať podrobné ladiace správy pre Online Banking."
-
-#~ msgid "Remember the Online Banking PIN in memory during a session."
-#~ msgstr "Uchovať v pamäti počas sedenia PIN pre Online Banking"
-
-#~ msgid ""
-#~ "The PIN you entered was wrong.\n"
-#~ "Do you want to try again?"
-#~ msgstr ""
-#~ "Vložili ste nesprávny PIN.\n"
-#~ "Chcete to skúsiť znova?"
-
-#~ msgid ""
-#~ "The PIN you entered was wrong.\n"
-#~ "ATTENTION: You have zero further wrong retries left!\n"
-#~ "Do you want to try again?"
-#~ msgstr ""
-#~ "Vložili ste nesprávny PIN.\n"
-#~ "POZOR: Nezostáva vám už žiadny nesprávny pokus!\n"
-#~ "Chcete to skúsiť znova?"
-
-#~ msgid "Import a CSV file into GnuCash"
-#~ msgstr "Importovať súbor CSV do GnuCash"
-
-#~ msgid "Import CSV and s_end..."
-#~ msgstr "Importovať CSV a odo_slať..."
-
-#, fuzzy
-#~ msgid "Payment rec'd..."
-#~ msgstr "Frekvencia platieb"
-
-#, fuzzy
-#~ msgid "Due date:"
-#~ msgstr "Dátum splatnosti"
-
-#, fuzzy
-#~ msgid "<h2>Tax Invoice</h2>"
-#~ msgstr "<b>Faktúry</b>"
-
-#~ msgid "Accounts to include"
-#~ msgstr "Zaradiť účty"
-
-#~ msgid "Show Full Account Name?"
-#~ msgstr "Zobrazovať úplné názvy účtov"
-
-#, fuzzy
-#~ msgid "Could not open the file: "
-#~ msgstr "Nepodarilo sa určiť formát súboru obrázku pre '%s': %s"
-
-#, fuzzy
-#~ msgid "Transfer To/From Account(s)"
-#~ msgstr "Prevodový účet"
-
-#, fuzzy
-#~ msgid "(Converted "
-#~ msgstr "Konvertovať do: "
-
-#, fuzzy
-#~ msgid " @ transaction split rate of "
-#~ msgstr "Použiť šablónu transakcií"
-
-#, fuzzy
-#~ msgid " on "
-#~ msgstr "je"
-
-#, fuzzy
-#~ msgid " (Account Commodity: "
-#~ msgstr ""
-#~ "\n"
-#~ "Komodita: "
-
-#, fuzzy
-#~ msgid "Item "
-#~ msgstr "položka"
-
-#, fuzzy
-#~ msgid " (TXF Parameter: "
-#~ msgstr "Názov súbora:|#N"
-
-#, fuzzy
-#~ msgid "Balance on "
-#~ msgstr "Saldo"
-
-#, fuzzy
-#~ msgid "Account: "
-#~ msgstr "_Účet:"
-
-#, fuzzy
-#~ msgid " For "
-#~ msgstr "Formulár"
-
-#, fuzzy
-#~ msgid ": Parameters"
-#~ msgstr "Názov súbora:|#N"
-
-#, fuzzy
-#~ msgid " Line "
-#~ msgstr "Riadok"
-
-#, fuzzy
-#~ msgid ": Payer Name Option "
-#~ msgstr "Iba nastavenie dátumu"
-
-#, fuzzy
-#~ msgid ", TXF Format "
-#~ msgstr "Formát:"
-
-#, fuzzy
-#~ msgid "None specified"
-#~ msgstr "Nešpecifikovaný"
-
-#, fuzzy
-#~ msgid "Error Description"
-#~ msgstr "Popis"
-
-#, fuzzy
-#~ msgid ""
-#~ "No Tax Related accounts were found with your account selection. Change "
-#~ "your selection or go to the Edit->Income Tax Options dialog to set up tax-"
-#~ "related accounts."
-#~ msgstr ""
-#~ "Neboli nájdené žiadne účty súvisiace s daňami. Nastavte účty súvisiace s "
-#~ "daňami prechodom do dialógu Upraviť->Daňové nastavenia"
-
-#~ msgid "Subset of accounts"
-#~ msgstr "Podmnožina účtov"
-
-#, fuzzy
-#~ msgid "No accounts (none = all accounts)"
-#~ msgstr "Zvolené účty (nič = všetko)"
-
-#, fuzzy
-#~ msgid "Suppress $0.00 valued Tax Codes"
-#~ msgstr "Skryť hodnoty 0,00 Sk"
-
-#, fuzzy
-#~ msgid "Do not suppress $0.00 valued Tax Codes"
-#~ msgstr "Skryť hodnoty 0,00 Sk"
-
-#, fuzzy
-#~ msgid "Display full account names"
-#~ msgstr "Zobraziť úplný názov účtu"
-
-#, fuzzy
-#~ msgid "Do not display full account names"
-#~ msgstr "Zobraziť úplný názov účtu"
-
-#, fuzzy
-#~ msgid "Display all Transfer To/From Accounts"
-#~ msgstr "Prevodový účet"
-
-#, fuzzy
-#~ msgid "Display transactions for selected accounts"
-#~ msgstr "Pridá novú transakciu do účtu"
-
-#, fuzzy
-#~ msgid "Include some transactions outside of selected dates"
-#~ msgstr "Vrátane podúčtov všetkých zvolených účtov"
-
-#, fuzzy
-#~ msgid "Do not shade alternate transactions"
-#~ msgstr "Dvoj_farebný alternatívny režim s transakciami"
-
-#, fuzzy
-#~ msgid "PriceDB lookups nearest to transaction date"
-#~ msgstr "Zobraziť dátum transakcie?"
-
-#, fuzzy
-#~ msgid "PriceDB lookups nearest to report end date"
-#~ msgstr "Cena zaznamenaná najbližšie k času výkazu"
-
-#~ msgid "Default CSS"
-#~ msgstr "Prednastavené CSS"
-
-#~ msgid "Current Year Start"
-#~ msgstr "Začiatku aktuálneho roku"
-
-#~ msgid "Previous Year Start"
-#~ msgstr "Začiatok predchádzajúceho roka"
-
-#~ msgid "End of the Previous Year"
-#~ msgstr "konca predchádzajúceho roku"
-
-#~ msgid "Start of Financial Period"
-#~ msgstr "Začiatok finančného obdobia"
-
-#~ msgid "End of Financial Period"
-#~ msgstr "konca finančného obdobia"
-
-#~ msgid "End of the accounting period, as set in the global preferences"
-#~ msgstr ""
-#~ "Koniec účtovného obdobia, ako je nastavené vo všeobecných nastaveniach"
-
-#~ msgid "End of the current month"
-#~ msgstr "konca aktuálneho mesiaca"
-
-#~ msgid "The beginning of the previous month"
-#~ msgstr "Začiatku predchádzajúceho mesiaca"
-
-#~ msgid "The end of the latest quarterly accounting period"
-#~ msgstr "konca posledného kvartálneho účtovného obdobia"
-
-#~ msgid "The following bills are due"
-#~ msgstr "Nasledujúce faktúry sú splatné"
-
-#~ msgid "Escrow "
-#~ msgstr "Escrow "
-
-#, fuzzy
-#~ msgid "Show Hidden"
-#~ msgstr "S_krytý"
-
-#, fuzzy
-#~ msgid "Show hidden accounts."
-#~ msgstr "Zobraziť s_kryté účty"
-
-#~ msgid "<no file>"
-#~ msgstr "<žiaden súbor>"
-
-#, fuzzy
-#~ msgid "A bug was detected while reading the QIF file."
-#~ msgstr "Vyskytla sa chyba pri načítavaní QIF súboru."
-
-#~ msgid "Int"
-#~ msgstr "Úrok"
-
-#~ msgid "ATM"
-#~ msgstr "ATM"
-
-#~ msgid "Div"
-#~ msgstr "Dividenda"
-
-#~ msgid "Compute unrealized gains and losses"
-#~ msgstr "Vypočítať nezrealizované zisky a straty"
-
-#~ msgid ""
-#~ "Include unrealized gains and losses in the computation.  Will produce "
-#~ "incorrect results if the current file uses commodity trading accounts"
-#~ msgstr ""
-#~ "Zahrnúť nezrealizované zisky a straty do výpočtu. Spôsobí, že výsledky "
-#~ "nebudú správne, ak aktuálny súbor používa účty pre obchodovanie s "
-#~ "komoditami."
-
-#~ msgid "Future dates are not supported"
-#~ msgstr "Budúce dátumy nie sú podporované"
-
-#~ msgid "<br>Invoice&nbsp;in&nbsp;progress...."
-#~ msgstr "<br>Spracovanie&nbsp;faktúry...."
-
-#, fuzzy
-#~ msgid " Date"
-#~ msgstr "Dátum"
-
-#~ msgid "Unknown database access mode '%s'. Using default mode: multi-user."
-#~ msgstr ""
-#~ "Neznámy režim prístup databázy '%s'. Použije sa štandardný režim: multi-"
-#~ "používateľ."
-
-#~ msgid "From the Postgresql Server: %s"
-#~ msgstr "Z Postgresql servera: %s"
-
-#~ msgid "Backend connection is not available"
-#~ msgstr "Pripojenie k backendu nie je dostupné"
-
-#~ msgid "Query could not be executed"
-#~ msgstr "Požiadavka nemohla byť vykonaná"
-
-#~ msgid "Blue items are exportable to a .TXF file."
-#~ msgstr "Modré položky je možné exportovať do .TXF súboru"
-
-#~ msgid "TXF"
-#~ msgstr "TXF"
-
-#~ msgid "INVOICE"
-#~ msgstr "FAKTÚRA"
-
-#~ msgid "Invoice&nbsp;#&nbsp;%d"
-#~ msgstr "Faktúra&nbsp;#&nbsp;%d"
-
-#~ msgid "Invoice&nbsp;Date"
-#~ msgstr "Faktúra&nbsp;Dátum"

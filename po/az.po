@@ -19,33 +19,32 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr ""
+msgstr "Ərəb dili"
 
 #: ../borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr ""
+msgstr "Baltik dillər"
 
 #: ../borrowed/goffice/go-charmap-sel.c:72
-#, fuzzy
 msgid "Central European"
-msgstr "Avropa"
+msgstr "Mərkəzi Avropa dilləri"
 
 #: ../borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr ""
+msgstr "Çin Dili"
 
 #: ../borrowed/goffice/go-charmap-sel.c:74
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:242
 msgid "Cyrillic"
-msgstr ""
+msgstr "Kiril dilləri"
 
 #: ../borrowed/goffice/go-charmap-sel.c:75
 msgid "Greek"
-msgstr ""
+msgstr "Yunan dili"
 
 #: ../borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr ""
+msgstr "Yəhudi dili"
 
 #: ../borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
@@ -53,29 +52,28 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr ""
+msgstr "Yapon dili"
 
 #: ../borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr ""
+msgstr "Koreya dili"
 
 #: ../borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr ""
+msgstr "Türk dili"
 
 #: ../borrowed/goffice/go-charmap-sel.c:81
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:224
 msgid "Unicode"
-msgstr ""
+msgstr "Yunikod"
 
 #: ../borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr ""
+msgstr "Vyetnam dili"
 
 #: ../borrowed/goffice/go-charmap-sel.c:83
-#, fuzzy
 msgid "Western"
-msgstr "Qeyd Ol"
+msgstr "Qərb dilləri"
 
 #: ../borrowed/goffice/go-charmap-sel.c:84
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:60
@@ -351,7 +349,7 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:209
 msgid "Unicode (UTF-8)"
-msgstr ""
+msgstr "Yunikod (UTF-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:210
 msgid "Unicode (UTF-16BE)"
@@ -370,9 +368,8 @@ msgid "Unicode (UTF-32LE)"
 msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:214
-#, fuzzy
 msgid "User Defined"
-msgstr "İstifadəçi Adı:"
+msgstr "İstifadəçi Tə'yinli"
 
 #: ../borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
@@ -429,11 +426,11 @@ msgstr ""
 
 #: ../borrowed/goffice/go-optionmenu.c:410
 msgid "Menu"
-msgstr ""
+msgstr "Menyu"
 
 #: ../borrowed/goffice/go-optionmenu.c:410
 msgid "The menu of options"
-msgstr ""
+msgstr "Seçimlər menyusu"
 
 #: ../gnucash/gnome/assistant-acct-period.c:190
 msgid "The book was closed successfully."
@@ -7000,7 +6997,7 @@ msgstr ""
 #: ../gnucash/report/business-reports/invoice.scm:146
 #, no-c-format
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:33
 #: ../gnucash/gnome/gtkbuilder/dialog-fincalc.glade.h:31
@@ -7529,9 +7526,8 @@ msgstr "İzahat:"
 #: ../gnucash/gnome/gtkbuilder/dialog-billterms.glade.h:28
 #: ../gnucash/gnome/gtkbuilder/dialog-price.glade.h:17
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-commodity.glade.h:15
-#, fuzzy
 msgid "_Type:"
-msgstr "Növ:"
+msgstr "_Növ:"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-billterms.glade.h:29
 msgid "The description of the Billing Term, printed on invoices"
@@ -13205,7 +13201,6 @@ msgstr "Hesab adı:"
 #: ../gnucash/report/report-system/html-style-sheet.scm:291
 #: ../gnucash/report/report-system/report.scm:246
 #: ../gnucash/report/stylesheets/stylesheet-plain.scm:316
-#, fuzzy
 msgid "Default"
 msgstr "Əsas"
 
@@ -13329,7 +13324,6 @@ msgstr ""
 #: ../gnucash/report/stylesheets/stylesheet-plain.scm:58
 #: ../gnucash/report/utility-reports/view-column.scm:56
 #: ../gnucash/report/utility-reports/view-column.scm:82
-#, fuzzy
 msgid "General"
 msgstr "Ümumi"
 
@@ -16818,9 +16812,8 @@ msgid "Select Separator Type"
 msgstr "Təhlükəsizlik"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.glade.h:22
-#, fuzzy
 msgid "Preview"
-msgstr "Sil"
+msgstr "Ön Nümayiş"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.glade.h:23
 msgid "Import Account Preview, first 10 rows only"
@@ -17867,9 +17860,8 @@ msgid "(none)"
 msgstr "(heç biri)"
 
 #: ../gnucash/import-export/dialog-import.glade.h:54
-#, fuzzy
 msgid "Red"
-msgstr "Yenilə"
+msgstr "Qırmızı"
 
 #: ../gnucash/import-export/dialog-import.glade.h:55
 msgid "Yellow"
@@ -17877,7 +17869,7 @@ msgstr ""
 
 #: ../gnucash/import-export/dialog-import.glade.h:56
 msgid "Green"
-msgstr ""
+msgstr "Yaşıl"
 
 #: ../gnucash/import-export/dialog-import.glade.h:57
 msgid "List of downloaded transactions (source split shown):"
@@ -18428,9 +18420,8 @@ msgid ""
 msgstr ""
 
 #: ../gnucash/import-export/qif-imp/assistant-qif-import.glade.h:13
-#, fuzzy
 msgid "_Select..."
-msgstr "Seç..."
+msgstr "_Seç..."
 
 #: ../gnucash/import-export/qif-imp/assistant-qif-import.glade.h:14
 msgid "Select a QIF file to load"
@@ -18813,7 +18804,7 @@ msgstr ""
 #: ../gnucash/import-export/qif-imp/qif-file.scm:85
 #: ../gnucash/import-export/qif-imp/qif-file.scm:93
 msgid "Line"
-msgstr ""
+msgstr "Sətir"
 
 #: ../gnucash/import-export/qif-imp/qif-file.scm:96
 msgid "Read aborted."
@@ -20745,9 +20736,8 @@ msgid "The minimum width of the invoice."
 msgstr ""
 
 #: ../gnucash/report/business-reports/easy-invoice.scm:355
-#, fuzzy
 msgid "Text"
-msgstr "Sadəcə mətn"
+msgstr "Mətn"
 
 #: ../gnucash/report/business-reports/easy-invoice.scm:356
 msgid "Extra notes to put on the invoice (simple HTML is accepted)."
@@ -27191,9 +27181,8 @@ msgid "Fancy Date Format"
 msgstr "Tarix növü"
 
 #: ../libgnucash/app-utils/app-utils.scm:330
-#, fuzzy
 msgid "custom"
-msgstr "Xüsusi"
+msgstr "xüsusi"
 
 #: ../libgnucash/app-utils/business-prefs.scm:24
 #, fuzzy
@@ -28412,252 +28401,3 @@ msgid ""
 "select Window -> New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
-
-#, fuzzy
-#~ msgid "question"
-#~ msgstr "İzahat"
-
-#, fuzzy
-#~ msgid "Account Information"
-#~ msgstr "Hesab Haqqında"
-
-#, fuzzy
-#~ msgid "Remove Transaction Splits"
-#~ msgstr "Transaksiya Raportu"
-
-#, fuzzy
-#~ msgid "Schedule..."
-#~ msgstr "Plan"
-
-#, fuzzy
-#~ msgid "St_yle"
-#~ msgstr "Tərz"
-
-#, fuzzy
-#~ msgid "_Amount"
-#~ msgstr "Miqdar:"
-
-#, fuzzy
-#~ msgid "_Number"
-#~ msgstr "Rəqəm"
-
-#, fuzzy
-#~ msgid "_Statement Date"
-#~ msgstr "Başlama tarixi :"
-
-#, fuzzy
-#~ msgid "Create"
-#~ msgstr "İştirakçılar"
-
-#, fuzzy
-#~ msgid "Days Away"
-#~ msgstr "Gün"
-
-#, fuzzy
-#~ msgid "Disposition?"
-#~ msgstr "İzahat"
-
-#, fuzzy
-#~ msgid "Loan Information"
-#~ msgstr "Hesab Haqqında"
-
-#, fuzzy
-#~ msgid "Postpone"
-#~ msgstr "_Sonraya burax"
-
-#, fuzzy
-#~ msgid "Start Date: "
-#~ msgstr "Başlama tarixi :"
-
-#, fuzzy
-#~ msgid "State"
-#~ msgstr "Qeyd Et"
-
-#, fuzzy
-#~ msgid "Unselect All"
-#~ msgstr "Hamısını Seç"
-
-#, fuzzy
-#~ msgid "Value:"
-#~ msgstr "Qiymət"
-
-#, fuzzy
-#~ msgid "Variable"
-#~ msgstr "Qiymət"
-
-#, fuzzy
-#~ msgid "Variables"
-#~ msgstr "Cədvəl"
-
-#, fuzzy
-#~ msgid "Ta_x Options"
-#~ msgstr "Seçənəklər"
-
-#, fuzzy
-#~ msgid "Remo_ve Transaction Splits"
-#~ msgstr "Transaksiya Raportu"
-
-#, fuzzy
-#~ msgid "New %s"
-#~ msgstr "Yeni"
-
-#, fuzzy
-#~ msgid "item"
-#~ msgstr "Başlıq"
-
-#, fuzzy
-#~ msgid "set true"
-#~ msgstr "doğru"
-
-#, fuzzy
-#~ msgid "Case Insensitive?"
-#~ msgstr "Böyük/kiçik hərfə həssas"
-
-#, fuzzy
-#~ msgid "Defaults"
-#~ msgstr "Əsas"
-
-#, fuzzy
-#~ msgid "To A_mount:"
-#~ msgstr "Miqdar:"
-
-#, fuzzy
-#~ msgid "_From:"
-#~ msgstr "Etibarən"
-
-#, fuzzy
-#~ msgid "_To:"
-#~ msgstr "Buraya Qədər"
-
-#, fuzzy
-#~ msgid "Transaction _journal"
-#~ msgstr "Transaksiya Raportu"
-
-#, fuzzy
-#~ msgid "Use s_ystem default"
-#~ msgstr "Əsas qiyməti ver"
-
-#, fuzzy
-#~ msgid "_Europe:"
-#~ msgstr "Avropa"
-
-#, fuzzy
-#~ msgid "_Icons only"
-#~ msgstr "Təkcə timsallar"
-
-#, fuzzy
-#~ msgid "gnc-new-account"
-#~ msgstr "Yeni Hesab"
-
-#, fuzzy
-#~ msgid "(no)"
-#~ msgstr "(heç biri)"
-
-#, fuzzy
-#~ msgid "type:port"
-#~ msgstr "Raportlar"
-
-#, fuzzy
-#~ msgid "type:security"
-#~ msgstr "Təhlükəsizlik"
-
-#, fuzzy
-#~ msgid "account"
-#~ msgstr "Hesab"
-
-#, fuzzy
-#~ msgid "Int"
-#~ msgstr "Int"
-
-#, fuzzy
-#~ msgid "Add _Report"
-#~ msgstr "_Raportlar"
-
-#~ msgid "Style"
-#~ msgstr "Tərz"
-
-#, fuzzy
-#~ msgid "Show Full Account Name?"
-#~ msgstr "Hesab adı"
-
-#~ msgid "Exact Time"
-#~ msgstr "Dəqiq Vaxt"
-
-#~ msgid "Help"
-#~ msgstr "Yardım"
-
-#~ msgid "-*-helvetica-bold-r-normal-*-*-180-*-*-p-*-*-*"
-#~ msgstr "-*-helvetica-bold-r-normal-*-*-180-*-*-p-*-*-*"
-
-#~ msgid "Any"
-#~ msgstr "Hər hansı biri"
-
-#~ msgid "At least"
-#~ msgstr "Ən Az"
-
-#~ msgid "Exactly"
-#~ msgstr "Dəqiq"
-
-#, fuzzy
-#~ msgid "Add"
-#~ msgstr "Əlavə Et"
-
-#, fuzzy
-#~ msgid "Normal"
-#~ msgstr "Normal"
-
-#, fuzzy
-#~ msgid "Recurring"
-#~ msgstr "Təkrarlayan"
-
-#, fuzzy
-#~ msgid " "
-#~ msgstr " "
-
-#, fuzzy
-#~ msgid "Couldn't find pixmap file: %s"
-#~ msgstr "Rəsm faylını tapa bilmədim: %s"
-
-#, fuzzy
-#~ msgid "_Preferences..."
-#~ msgstr "_Seçənəklər..."
-
-#, fuzzy
-#~ msgid "Exit"
-#~ msgstr "Çıx"
-
-#, fuzzy
-#~ msgid "_Style"
-#~ msgstr "_Tərz"
-
-#, fuzzy
-#~ msgid "Show this help message"
-#~ msgstr "Bu kömək ismarıcını göstər"
-
-#, fuzzy
-#~ msgid "Welcome"
-#~ msgstr "Xoş Gəldiniz"
-
-#, fuzzy
-#~ msgid "Keyboard"
-#~ msgstr "Klaviatura"
-
-#, fuzzy
-#~ msgid "Journal"
-#~ msgstr "Jurnal"
-
-#, fuzzy
-#~ msgid "Primary color"
-#~ msgstr "Birincil rəng"
-
-#, fuzzy
-#~ msgid "Icons and Text"
-#~ msgstr "Timsal və Mətn"
-
-#, fuzzy
-#~ msgid "Notebook"
-#~ msgstr "Qeyd dəftəri"
-
-#, fuzzy
-#~ msgid "Network"
-#~ msgstr "Şəbəkə"

@@ -57,20 +57,19 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr ""
+msgstr "Àrab"
 
 #: ../borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr ""
+msgstr "Bàltic"
 
 #: ../borrowed/goffice/go-charmap-sel.c:72
-#, fuzzy
 msgid "Central European"
-msgstr "Europea"
+msgstr "Centreeuropeu"
 
 #: ../borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr ""
+msgstr "Xinès"
 
 #: ../borrowed/goffice/go-charmap-sel.c:74
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:242
@@ -78,29 +77,28 @@ msgid "Cyrillic"
 msgstr "Ciríl·lica"
 
 #: ../borrowed/goffice/go-charmap-sel.c:75
-#, fuzzy
 msgid "Greek"
-msgstr "Verd"
+msgstr "Grec"
 
 #: ../borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr ""
+msgstr "Hebreu"
 
 #: ../borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
-msgstr ""
+msgstr "Indi"
 
 #: ../borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr ""
+msgstr "Japonès"
 
 #: ../borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr ""
+msgstr "Coreà"
 
 #: ../borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr ""
+msgstr "Turc"
 
 #: ../borrowed/goffice/go-charmap-sel.c:81
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:224
@@ -109,12 +107,11 @@ msgstr "Unicode"
 
 #: ../borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr ""
+msgstr "Vietnamita"
 
 #: ../borrowed/goffice/go-charmap-sel.c:83
-#, fuzzy
 msgid "Western"
-msgstr "Registre"
+msgstr "Occidental"
 
 #: ../borrowed/goffice/go-charmap-sel.c:84
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:60
@@ -126,365 +123,352 @@ msgstr "Altres"
 
 #: ../borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "Àrab (IBM-864)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr ""
+msgstr "Àrab (IBM-864-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "Àrab (ISO-8859-6)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr ""
+msgstr "Àrab (ISO-8859-6-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr ""
+msgstr "Àrab (ISO-8859-6-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:121
 msgid "Arabic (MacArabic)"
-msgstr ""
+msgstr "Àrab (MacArabic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:122
 msgid "Arabic (Windows-1256)"
-msgstr ""
+msgstr "Àrab (Windows-1256)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
-msgstr ""
+msgstr "Armeni (ARMSCII-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:124
-#, fuzzy
 msgid "Baltic (ISO-8859-13)"
-msgstr "ISO-8859-13 (bàltica)"
+msgstr "Bàltic (ISO-8859-13)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
-msgstr ""
+msgstr "Bàltic (ISO-8859-4)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:126
 msgid "Baltic (Windows-1257)"
-msgstr ""
+msgstr "Bàltic (Windows-1257)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:127
-#, fuzzy
 msgid "Celtic (ISO-8859-14)"
-msgstr "ISO-8859-14 (cèltica)"
+msgstr "Cèltic (ISO-8859-14)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
-msgstr ""
+msgstr "Centreeuropeu (IBM-852)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:130
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "Centreeuropeu (ISO-8859-2)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:132
 msgid "Central European (MacCE)"
-msgstr ""
+msgstr "Centreeuropeu (MacCE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:134
 msgid "Central European (Windows-1250)"
-msgstr ""
+msgstr "Centreeuropeu (Windows-1250)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:136
 msgid "Chinese Simplified (GB18030)"
-msgstr ""
+msgstr "Xinès simplificat (GB18030)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:137
 msgid "Chinese Simplified (GB2312)"
-msgstr ""
+msgstr "Xinès simplificat (GB2312)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:138
 msgid "Chinese Simplified (GBK)"
-msgstr ""
+msgstr "Xinès simplificat (GBK)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:139
 msgid "Chinese Simplified (HZ)"
-msgstr ""
+msgstr "Xinès simplificat (HZ)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:140
 msgid "Chinese Simplified (Windows-936)"
-msgstr ""
+msgstr "Xinès simplificat (Windows-936)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr ""
+msgstr "Xinès tradicional (Big5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr ""
+msgstr "Xinès tradicional (Big5-HKSCS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
-msgstr ""
+msgstr "Xinès tradicional (EUC-TW)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:147
 msgid "Croatian (MacCroatian)"
-msgstr ""
+msgstr "Croata (MacCroatian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:149
-#, fuzzy
 msgid "Cyrillic (IBM-855)"
-msgstr "Ciríl·lica"
+msgstr "Ciríl·lic (IBM-855)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:150
 msgid "Cyrillic (ISO-8859-5)"
-msgstr ""
+msgstr "Ciríl·lic (ISO-8859-5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:152
 msgid "Cyrillic (ISO-IR-111)"
-msgstr ""
+msgstr "Ciríl·lic (ISO-IR-111)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:154
-#, fuzzy
 msgid "Cyrillic (KOI8-R)"
-msgstr "Ciríl·lica"
+msgstr "Ciríl·lic (KOI8-R)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:155
 msgid "Cyrillic (MacCyrillic)"
-msgstr ""
+msgstr "Ciríl·lic (MacCyrillic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:157
 msgid "Cyrillic (Windows-1251)"
-msgstr ""
+msgstr "Ciríl·lic (Windows-1251)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
-msgstr ""
+msgstr "Rus (CP-866)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:160
 msgid "Ukrainian (KOI8-U)"
-msgstr ""
+msgstr "Ucraïnès (KOI8-U)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:161
-#, fuzzy
 msgid "Ukrainian (MacUkrainian)"
-msgstr "KOI8-U (ucraïnesa)"
+msgstr "Ucraïnès (MacUkrainian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:163
 msgid "English (ASCII)"
-msgstr ""
+msgstr "Anglès (ASCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
-msgstr ""
+msgstr "Farsi (MacFarsi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:166
 msgid "Georgian (GEOSTD8)"
-msgstr ""
+msgstr "Georgià (GEOSTD8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:167
-#, fuzzy
 msgid "Greek (ISO-8859-7)"
-msgstr "ISO-8859-7 (grega)"
+msgstr "Grec (ISO-8859-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:168
 msgid "Greek (MacGreek)"
-msgstr ""
+msgstr "Grec (MacGreek)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:169
 msgid "Greek (Windows-1253)"
-msgstr ""
+msgstr "Grec (Windows-1253)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:170
 msgid "Gujarati (MacGujarati)"
-msgstr ""
+msgstr "Gujarati (MacGujarati)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:172
 msgid "Gurmukhi (MacGurmukhi)"
-msgstr ""
+msgstr "Gurmukhi (MacGurmukhi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr ""
+msgstr "Hebreu (IBM-862)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr ""
+msgstr "Hebreu (ISO-8859-8-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr ""
+msgstr "Hebreu (ISO-8859-8-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr ""
+msgstr "Hebreu (MacHebrew)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
-msgstr ""
+msgstr "Hebreu (Windows-1255)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
-msgstr ""
+msgstr "Hindi (MacDevanagari)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
-msgstr ""
+msgstr "Islandès (MacIcelandic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:186
 msgid "Japanese (EUC-JP)"
-msgstr ""
+msgstr "Japonès (EUC-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:187
 msgid "Japanese (ISO-2022-JP)"
-msgstr ""
+msgstr "Japonès (ISO-2022-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:189
 msgid "Japanese (Shift_JIS)"
-msgstr ""
+msgstr "Japonès (Shift_JIS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:190
 msgid "Korean (EUC-KR)"
-msgstr ""
+msgstr "Coreà (EUC-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:191
 msgid "Korean (ISO-2022-KR)"
-msgstr ""
+msgstr "Coreà (ISO-2022-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:192
 msgid "Korean (JOHAB)"
-msgstr ""
+msgstr "Coreà (JOHAB)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:193
 msgid "Korean (UHC)"
-msgstr ""
+msgstr "Coreà (UHC)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:194
-#, fuzzy
 msgid "Nordic (ISO-8859-10)"
-msgstr "ISO-8859-10 (nòrdica)"
+msgstr "Nòrdic (ISO-8859-10)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:195
 msgid "Romanian (MacRomanian)"
-msgstr ""
+msgstr "Romanès (MacRomanian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:197
 msgid "Romanian (ISO-8859-16)"
-msgstr ""
+msgstr "Romanès (ISO-8859-16)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:199
 msgid "South European (ISO-8859-3)"
-msgstr ""
+msgstr "Europa del sud (ISO-8859-3)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:201
 msgid "Thai (TIS-620)"
-msgstr ""
+msgstr "Tailandès (TIS-620)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:202
 msgid "Turkish (IBM-857)"
-msgstr ""
+msgstr "Turc (IBM-857)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:203
 msgid "Turkish (ISO-8859-9)"
-msgstr ""
+msgstr "Turc (ISO-8859-9)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:204
 msgid "Turkish (MacTurkish)"
-msgstr ""
+msgstr "Turc (MacTurkish)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:206
 msgid "Turkish (Windows-1254)"
-msgstr ""
+msgstr "Turc (Windows-1254)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:208
-#, fuzzy
 msgid "Unicode (UTF-7)"
-msgstr "Unicode"
+msgstr "Unicode (UTF-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:209
-#, fuzzy
 msgid "Unicode (UTF-8)"
-msgstr "Unicode"
+msgstr "Unicode (UTF-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:210
 msgid "Unicode (UTF-16BE)"
-msgstr ""
+msgstr "Unicode (UTF-16BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:211
 msgid "Unicode (UTF-16LE)"
-msgstr ""
+msgstr "Unicode (UTF-16LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:212
 msgid "Unicode (UTF-32BE)"
-msgstr ""
+msgstr "Unicode (UTF-32BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:213
 msgid "Unicode (UTF-32LE)"
-msgstr ""
+msgstr "Unicode (UTF-32LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:214
-#, fuzzy
 msgid "User Defined"
-msgstr "Nom d'usuari"
+msgstr "Definit per l'usuari"
 
 #: ../borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
-msgstr ""
+msgstr "Vietnamita (TCVN)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:217
 msgid "Vietnamese (VISCII)"
-msgstr ""
+msgstr "Vietnamita (VISCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:218
 msgid "Vietnamese (VPS)"
-msgstr ""
+msgstr "Vietnamita (VPS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:219
 msgid "Vietnamese (Windows-1258)"
-msgstr ""
+msgstr "Vietnamita (Windows-1258)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "Hebreu visual (ISO-8859-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
-msgstr ""
+msgstr "Occidental (IBM-850)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:224
 msgid "Western (ISO-8859-1)"
-msgstr ""
+msgstr "Occidental (ISO-8859-1)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:225
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "Occidental (ISO-8859-15)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:227
 msgid "Western (MacRoman)"
-msgstr ""
+msgstr "Occidental (MacRoman)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:228
 msgid "Western (Windows-1252)"
-msgstr ""
+msgstr "Occidental (Windows-1252)"
 
+# src/functions/fn-logical.c:231
 #: ../borrowed/goffice/go-charmap-sel.c:441
-#, fuzzy
 msgid "Locale: "
-msgstr "Loc_ale:"
+msgstr "Localització: "
 
 #: ../borrowed/goffice/go-charmap-sel.c:476
-#, fuzzy
 msgid "Conversion Direction"
-msgstr "S'ha completat la conversió"
+msgstr "Direcció de la conversió"
 
 #: ../borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr ""
+msgstr "Aquest valor determina quin test de l'iconv es realitzarà."
 
 #: ../borrowed/goffice/go-optionmenu.c:410
-#, fuzzy
 msgid "Menu"
-msgstr "Menú de tipus"
+msgstr "Menú"
 
 #: ../borrowed/goffice/go-optionmenu.c:410
-#, fuzzy
 msgid "The menu of options"
-msgstr "L'opció de nombre és %s."
+msgstr "El menú d'opcions"
 
 #: ../gnucash/gnome/assistant-acct-period.c:190
 msgid "The book was closed successfully."
@@ -28400,9 +28384,8 @@ msgid "Fancy Date Format"
 msgstr "Format de data decorat"
 
 #: ../libgnucash/app-utils/app-utils.scm:330
-#, fuzzy
 msgid "custom"
-msgstr "Personalitzat"
+msgstr "personalitzat"
 
 #: ../libgnucash/app-utils/business-prefs.scm:24
 msgid "Counters"
@@ -29781,2763 +29764,3 @@ msgstr ""
 "Per comparar visualment a la pantalla els continguts de 2 pestanyes, a una "
 "de les pestanyes trieu Finestra -> Nova finestra amb pàgina des del menú per "
 "duplicar aquesta pestanya a una finestra nova."
-
-#~ msgid "Enable debugging mode: increasing logging to provide deep detail."
-#~ msgstr ""
-#~ "Habilita el mode de depuració: es registraran més dades per a oferir "
-#~ "informació més detallada."
-
-#~ msgid ""
-#~ "Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,"
-#~ "error}\""
-#~ msgstr ""
-#~ "Omissions del nivell de registre, amb el següent format «log.ger."
-#~ "path={debug,info,warn,crit,error}»"
-
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from %s rev %s on %s."
-#~ msgstr ""
-#~ "%s\n"
-#~ "Aquesta còpia s'ha muntat a partir de %s rev %s sobre %s."
-
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from rev %s on %s."
-#~ msgstr "%s Aquesta còpia s'ha muntat a partir de la versió %s el %s."
-
-#~ msgid ""
-#~ "An error occurred while creating the directory:\n"
-#~ "  %s\n"
-#~ "Please correct the problem and restart GnuCash.\n"
-#~ "The reported error was '%s' (errno %d).\n"
-#~ msgstr ""
-#~ "S'ha produït un error en crear el directori:\n"
-#~ "  %s\n"
-#~ "Hauríeu de solucionar el problema i reiniciar el GnuCash.\n"
-#~ "L'error és «%s» (errnúm %d).\n"
-
-#~ msgid ""
-#~ "Note: the directory\n"
-#~ "  %s\n"
-#~ "doesn't exist. This is however not fatal.\n"
-#~ msgstr ""
-#~ "Nota: el directori\n"
-#~ "  %s\n"
-#~ "no existeix. No obstant, això on és fatal.\n"
-
-#~ msgid ""
-#~ "The directory\n"
-#~ "  %s\n"
-#~ "exists but cannot be accessed. This program \n"
-#~ "must have full access (read/write/execute) to \n"
-#~ "the directory in order to function properly.\n"
-#~ msgstr ""
-#~ "El directori\n"
-#~ "  %s\n"
-#~ "existeix però no es pot accedir. El programa\n"
-#~ "ha de tenir accés complet (lectura/escriptura/execució)\n"
-#~ "al directori per a funcionar correctament.\n"
-
-#~ msgid ""
-#~ "The path\n"
-#~ "  %s\n"
-#~ "exists but it is not a directory. Please delete\n"
-#~ "the file and start GnuCash again.\n"
-#~ msgstr ""
-#~ "El camí\n"
-#~ "  %s\n"
-#~ "existeix però no és un directori. Si us plau esborreu\n"
-#~ "el fitxer i inicieu GnuCash un altre cop.\n"
-
-#~ msgid ""
-#~ "An unknown error occurred when validating that the\n"
-#~ "  %s\n"
-#~ "directory exists and is usable. Please correct the\n"
-#~ "problem and restart GnuCash. The reported error \n"
-#~ "was '%s' (errno %d)."
-#~ msgstr ""
-#~ "Ha ocorregut un error desconegut quan s'estava validant que el directori\n"
-#~ "  %s\n"
-#~ "existeix i és usable. Si us plau corregiu el problema i reinicieu\n"
-#~ "Gnucash. L'error reportat va ser '%s' (errno %d)."
-
-#~ msgid ""
-#~ "The permissions are wrong on the directory\n"
-#~ "  %s\n"
-#~ "They must be at least 'rwx' for the user.\n"
-#~ msgstr ""
-#~ "Són incorrectes els permisos al directori\n"
-#~ "  %s\n"
-#~ "Han de ser almenys «rwx» per a l'usuari.\n"
-
-#~ msgid "_Price Editor"
-#~ msgstr "_Editor de cotitzacions"
-
-#~ msgid "General Ledger2"
-#~ msgstr "Llibre major general2"
-
-#~ msgid "General Ledger Report"
-#~ msgstr "Informe del llibre major general"
-
-#~ msgid "_General Ledger"
-#~ msgstr "Llibre ma_jor general"
-
-#~ msgid "<No information>"
-#~ msgstr "<Sense informació>"
-
-#~ msgid ""
-#~ "If active, the register will be colored as specified by the system theme. "
-#~ "This can be overridden to provide custom colors by editing the gtkrc file "
-#~ "in the users home directory. Otherwise the standard register colors will "
-#~ "be used that GnuCash has always used."
-#~ msgstr ""
-#~ "Si està activat, el color del registre serà el del tema del sistema. Això "
-#~ "es pot anul·lar per proveir colors personalitzats editant el fitxer gtkrc "
-#~ "al directori de l'usuari. En cas contrari s'usaran els colors estàndard "
-#~ "del registre que sempre ha usat el GnuCash."
-
-#~ msgid "Clear the entry"
-#~ msgstr "Esborra l'entrada"
-
-#~ msgid ""
-#~ "If activated, delete manually entered stock prices dated earlier than the "
-#~ "specified date. Otherwise only stock prices added by Finance::Quote will "
-#~ "be deleted."
-#~ msgstr ""
-#~ "Si està habilitat, se suprimiran les cotitzacions anteriors a la data "
-#~ "especificada que s'hagin introduït manualment. Si no està habilitat només "
-#~ "se suprimiran aquelles que s'hagin afegit a través del mòdul Finance::"
-#~ "Quote."
-
-#~ msgid "Delete _last price for a stock"
-#~ msgstr "Suprimeix la _darrera cotització d'un valor"
-
-#~ msgid ""
-#~ "If activated, delete all prices before the specified date. Otherwise the "
-#~ "last stock price dated before the date will be kept and all earlier "
-#~ "quotes deleted."
-#~ msgstr ""
-#~ "Si està habilitat, se suprimiran totes les cotitzacions anteriors a la "
-#~ "data especificada. Si no està habilitat, es mantindrà la darrera "
-#~ "cotització abans d'aquesta data i se suprimiran totes les anteriors."
-
-#~ msgid "Get _Quotes"
-#~ msgstr "Baixa les _cotitzacions"
-
-#~ msgid "You must select a commodity. To create a new one, click \"New\""
-#~ msgstr ""
-#~ "Heu de seleccionar un valor o divisa. Per a crear-ne un de nou, cliqueu a "
-#~ "«Nou»"
-
-#~ msgid "_Delete Account"
-#~ msgstr "_Suprimeix el compte"
-
-#~ msgid "_New Account"
-#~ msgstr "Compte _nou"
-
-#~ msgid "Last modified on %x %X"
-#~ msgstr "Modificat per últim cop en %x %X"
-
-#~ msgid ""
-#~ "The GnuCash personal finance manager. The GNU way to manage your money!"
-#~ msgstr ""
-#~ "GnuCash, el gestor de finances personal. La manera GNU de gestionar els "
-#~ "vostres diners."
-
-#~ msgid "© 1997-2016 Contributors"
-#~ msgstr "© 1997-2016 Contribuïdors"
-
-#~ msgid "Version: GnuCash-%s %s (rev %s built %s)"
-#~ msgstr "Versió: Gnucash-%s %s (rev %s muntada el %s)"
-
-#~ msgid "Version: GnuCash-%s (rev %s built %s)"
-#~ msgstr "Versió: Gnucash-%s (rev %s muntada el %s)"
-
-#~ msgid "Remember _PIN"
-#~ msgstr "Recorda el _PIN"
-
-#~ msgid ""
-#~ "This assistant will help you export the Transactions to a file.\n"
-#~ "\n"
-#~ "Select the settings you require for the file and then click 'Forward' to "
-#~ "proceed or 'Cancel' to Abort Export.\n"
-#~ msgstr ""
-#~ "Aquest assistent us ajudarà a exportar els assentament a un fitxer.\n"
-#~ "\n"
-#~ "Seleccioneu els paràmetres que requeriu per al fitxer i després cliqueu "
-#~ "'Endavant' per procedir o 'Cancel·la' per  l'exportació.\n"
-
-#~ msgid "Quotes"
-#~ msgstr "Cotitzacions"
-
-#~ msgid "Category"
-#~ msgstr "Categoria"
-
-#~ msgid "From With Sym"
-#~ msgstr "De Amb Sim"
-
-#~ msgid "To Num."
-#~ msgstr "A Num."
-
-#~ msgid "From Num."
-#~ msgstr "Des de num."
-
-#~ msgid "From Rate/Price"
-#~ msgstr "De Taxa/Preu"
-
-#~ msgid ""
-#~ "The rows displayed below had errors which are in the last column. You can "
-#~ "attempt to correct them by changing the configuration."
-#~ msgstr ""
-#~ "Les files mostrades tenien errors que estan a l'última columna. Podeu "
-#~ "intentar corregir-les canviant la configuració."
-
-#~ msgid ""
-#~ "There are problems with the import settings!\n"
-#~ "The date format could be wrong or there are not enough columns set..."
-#~ msgstr ""
-#~ "Hi ha problemes amb la configuració de la importació!\n"
-#~ "El format de data podria ser incorrecte o no hi ha suficients columnes "
-#~ "establertes..."
-
-#~ msgid ""
-#~ "To Change the account, double click on the required account, click "
-#~ "Forward to proceed."
-#~ msgstr ""
-#~ "Per canviar el compte, feu un doble clic sobre el compte requerit, "
-#~ "cliqueu Endavant per procedir."
-
-#~ msgid ""
-#~ "This assistant will help you import a delimited file containing a list of "
-#~ "transactions.\n"
-#~ "\n"
-#~ "All transactions imported will be associated to one account for each "
-#~ "import and if you select the account column, the account in the first row "
-#~ "will be used for all rows.\n"
-#~ "\n"
-#~ "Various options exist for specifying the delimiter as well as a fixed "
-#~ "width option. With the fixed width option, double click on the bar above "
-#~ "the displayed rows to set the column width.\n"
-#~ "\n"
-#~ "There is an option for specifying the start row, end row and an option to "
-#~ "skip alternate rows begining from the start row. These can be used if you "
-#~ "have some header text, a points collected status row or multiple accounts "
-#~ "in the same file."
-#~ msgstr ""
-#~ "Aquest assistent us ajudarà a importar un fitxer delimitat que conté\n"
-#~ "una llista d'assentaments.\n"
-#~ "\n"
-#~ "Tots els assentaments importats s'associaran a un compte per a cada "
-#~ "importació i si seleccioneu la columna del compte, el compte a la primera "
-#~ "fila s'usarà per a totes les files.\n"
-#~ "\n"
-#~ "Existeixen diverses opcions per especificar el delimitador així com "
-#~ "l'opció d'amplada fixa. Amb l'opció d'amplada fixa, feu un doble clic "
-#~ "sobre la barra a sobre de la fila mostrada per establir l'amplada de la "
-#~ "columna.\n"
-#~ "\n"
-#~ "Hi ha una opció per especificar la fila d'inici, fila final i una opció "
-#~ "per saltar-se files alternatives començant a la fila inicial. Es poden "
-#~ "usar s teniu un text de capçalera, una fila d'estat de punts col·lectats "
-#~ "o comptes múltiples al mateix fitxer."
-
-#~ msgid "Transaction Import Assistant"
-#~ msgstr "Assistent d'importació d'assentaments"
-
-#~ msgid "Start import on row "
-#~ msgstr "Inicia la importació a la línia "
-
-#~ msgid " and stop on row "
-#~ msgstr " i atura't a la fila "
-
-#~ msgid "Skip alternate rows from the start row"
-#~ msgstr "Ignora les files alternatives des de la fila inicial"
-
-#~ msgid "Data type: "
-#~ msgstr "Tipus de data: "
-
-#~ msgid "Separated"
-#~ msgstr "Separat"
-
-#~ msgid "Step over Account Page if Setup"
-#~ msgstr "Salta la pàgina del compte si s'està a la configuració"
-
-#~ msgid "File opening failed."
-#~ msgstr "No s'ha pogut obrir el fitxer."
-
-#~ msgid "Unknown encoding."
-#~ msgstr "Codificació desconeguda"
-
-#~ msgid "This report has no options."
-#~ msgstr "Aquest informe no té opcions"
-
-#~ msgid "Compress prior/later periods"
-#~ msgstr "Comprimeix els períodes anteiors/posteriors"
-
-#~ msgid ""
-#~ "Accumulate columns for periods before and after the current period to "
-#~ "allow focus on the current period."
-#~ msgstr ""
-#~ "Acumula les columnes dels períodes abans i després del període  per "
-#~ "permetre enfocar-se en el període corrent."
-
-#~ msgid "Income Barchart"
-#~ msgstr "Diagrama de barres dels ingressos"
-
-#~ msgid "Expense Barchart"
-#~ msgstr "Diagrama de barres de les despeses"
-
-#~ msgid "Liability Barchart"
-#~ msgstr "Diagrama de barres del passiu"
-
-#~ msgid "Style"
-#~ msgstr "Estil"
-
-#~ msgid "Report style."
-#~ msgstr "Estil de l'informe."
-
-#~ msgid "Display N lines."
-#~ msgstr "Mostra N línies."
-
-#~ msgid "Display 1 line."
-#~ msgstr "Mostra una línia."
-
-#~ msgid "Exact Time"
-#~ msgstr "Hora exacta"
-
-#~ msgid "Sort by exact time."
-#~ msgstr "Ordena per l'hora exacta."
-
-#~ msgid "Dummy message"
-#~ msgstr "Missatge comodí"
-
-#~ msgid "postd"
-#~ msgstr "comptabilitzat"
-
-#~ msgid "duedate"
-#~ msgstr "data de venciment"
-
-#~ msgid "acct"
-#~ msgstr "cte"
-
-#~ msgid "question"
-#~ msgstr "pregunta"
-
-#~ msgid "set true"
-#~ msgstr "estableix a vertader"
-
-#~ msgid "Owner Name"
-#~ msgstr "Nom del propietari"
-
-#~ msgid "Owner ID"
-#~ msgstr "Identificador del propietari"
-
-#~ msgid "UTC"
-#~ msgstr "UTC"
-
-#~ msgid "Dates earlier than 1970 are not supported."
-#~ msgstr "No estan suportades les dates anteriors a 1970."
-
-#~ msgid "Negative amounts are not allowed."
-#~ msgstr "El valors negatius no estan permesos."
-
-#~ msgid "Percentage amount must be between 0 and 100."
-#~ msgstr "El valor del percentatge ha d'estar entre 0 i 100."
-
-#~ msgid "You must select at least one document or pre-payment to process."
-#~ msgstr "Heu d'escollir almenys un document o pre-pagament per processar."
-
-#~ msgid "Auto pay on post_ing"
-#~ msgstr "Paga automàticament quan s'estigui publ_icant"
-
-#~ msgid "Internal link between invoice and payment lots"
-#~ msgstr "Enllaç intern entre lots de factures i pagaments"
-
-#~ msgid "New item"
-#~ msgstr "Element nou..."
-
-#~ msgid "Retrieve the current online quote"
-#~ msgstr "Recupera la cotització actual de banca electrònica"
-
-#~ msgid "_Use system theme colors"
-#~ msgstr "_Utilitza els colors del tema del sistema"
-
-#~ msgid ""
-#~ "If checked, the system color theme will be applied to register windows. "
-#~ "If clear, the original GnuCash register colors will be used."
-#~ msgstr ""
-#~ "Si s'habilita, s'utilitzaran els colors del tema de sistema en les "
-#~ "finestres de registre. Si no s'habilita, s'utilitzaran els colors "
-#~ "originals del GnuCash per als registres."
-
-#~ msgid "%s at %s (code %s)"
-#~ msgstr "%s a %s (codi %s)"
-
-#~ msgid "%s at bank code %s"
-#~ msgstr "%s al codi de banc %s"
-
-#~ msgid "Semicolon Separated with Quotes"
-#~ msgstr "Separat per punt i comes amb cometes"
-
-#~ msgid "Comma Separated with Quotes"
-#~ msgstr "Separat per comes amb cometes"
-
-#~ msgid "Run preconfigured report"
-#~ msgstr "Executa l'informe preconfigurat"
-
-#~ msgid "Preconfigured Reports"
-#~ msgstr "Informes preconfigurats"
-
-#~ msgid "Net Price"
-#~ msgstr "Cotització_neta"
-
-#~ msgid "Total Price"
-#~ msgstr "Cotització_total"
-
-#~ msgid "Amount Due"
-#~ msgstr "Quantitat_a_pagar"
-
-#~ msgid "Invoice number: "
-#~ msgstr "Número_de_factura"
-
-#~ msgid "Job number: "
-#~ msgstr "Número_de_tasca: "
-
-#~ msgid "Job name: "
-#~ msgstr "Nom de la tasca: "
-
-#~ msgid ""
-#~ "You must enter the amount of the payment. The payment amount must not be "
-#~ "zero."
-#~ msgstr ""
-#~ "Heu d'introduir la quantitat a pagar.  La quantitat a pagar no pot ser "
-#~ "zero."
-
-#~ msgid "and"
-#~ msgstr "i"
-
-#~ msgid "Ignore brokerage fees when calculating returns"
-#~ msgstr "Ignora els honoraris de corretatge quan es calculin els rendiments"
-
-#~ msgid "Most recent to report"
-#~ msgstr "La més recent a l'informe"
-
-#~ msgid "The most recent recorded price before report date."
-#~ msgstr "La cotització registrada més recent abans de l'informe."
-
-#~ msgid "FILO"
-#~ msgstr "Mètode de valoració FILO"
-
-#~ msgid "Use first-in last-out method for basis."
-#~ msgstr "Usa el mètode primer en entrar últim en sortir com a base."
-
-#~ msgid "Custom Reports"
-#~ msgstr "Informes personalitzats"
-
-#~ msgid "Cross."
-#~ msgstr "Creu."
-
-#~ msgid "Dash."
-#~ msgstr "Traç."
-
-#~ msgid "Welcome to GnuCash 2.4!"
-#~ msgstr "Us donem la benvinguda al GnuCash 2.0!"
-
-#~ msgid "Set the prefix path for gconf queries"
-#~ msgstr "Estableix el prefix del camí per a les consultes al gconf"
-
-#~ msgid "GCONFPATH"
-#~ msgstr "CAMÍCONFIGURACIÓ"
-
-#~ msgid "Customer Credit Note"
-#~ msgstr "Nota de crèdit del client"
-
-#~ msgid "Vendor Credit Note"
-#~ msgstr "Nota de crèdit del distribuïdor"
-
-#~ msgid "Employee Credit Note"
-#~ msgstr "Nota de crèdit de treballador"
-
-#~ msgid ""
-#~ "When you click Apply, GnuCash will modify your ~/.gconf.path file and "
-#~ "restart the gconf backend. There will be a short delay before GnuCash is "
-#~ "loaded."
-#~ msgstr ""
-#~ "En clicar a «Aplica», el GnuCash modificarà el vostre fitxer\n"
-#~ "~/.gconf.path i reinicialitzarà el rerefons gconf. Hi haurà un petit\n"
-#~ "retard fins que GnuCash es carregui."
-
-#~ msgid ""
-#~ "When you click Apply, GnuCash will install the gconf data into your local "
-#~ "~/.gconf file and restart the gconf backend. The %s script must be found "
-#~ "in your search path for this to work correctly."
-#~ msgstr ""
-#~ "En clicar a Aplica, el Gnucash instal·larà les dades gconf al vostre\n"
-#~ "fitxer local ~/.gconf i reiniciarà el dorsal gconf. El fitxer de "
-#~ "seqüència\n"
-#~ "d'ordres %s ha de estar en el camí de búsqueda perquè això funcioni\n"
-#~ "correctament."
-
-#~ msgid ""
-#~ "You have chosen to correct the problem by yourself. When you click Apply, "
-#~ "GnuCash will exit. Please run the %s script which will install the "
-#~ "configuration data and restart the gconf backend."
-#~ msgstr ""
-#~ "Heu escollit corregir vos mateix el problema. Quan cliqueu Aplica,\n"
-#~ "GnuCash es tancarà. Si us plau executeu el fitxer de seqüència\n"
-#~ "d'ordres %s que instal·larà la\n"
-#~ "dades de configuració i reiniciaran el dorsal gconf."
-
-#~ msgid ""
-#~ "You have already corrected the problem and restarted the gconf backend "
-#~ "with the command 'gconftool-2 --shutdown'. When you click Apply, there "
-#~ "will be a short delay before GnuCash is loaded."
-#~ msgstr ""
-#~ "Ja heu corregit correctament el problema i heu reinciat el dorsal\n"
-#~ "gconf amb l'ordre 'gconftool-2 --shutdown'. Quan cliqueu Aplica, hi\n"
-#~ "haurà un petit retard abans que GnuCash es carregui."
-
-#~ msgid "S_kip"
-#~ msgstr "O_met"
-
-#~ msgid "_Setup"
-#~ msgstr "_Configura"
-
-#, fuzzy
-#~ msgid "Update GnuCash Configuration Data"
-#~ msgstr "Actualitza les dades de configuració del GnuCash"
-
-#~ msgid "Update GnuCash configuration data"
-#~ msgstr "Actualitza les dades de configuració del GnuCash"
-
-#~ msgid "_Update search path"
-#~ msgstr "_Actualitza el camí de cerca"
-
-#~ msgid "_Install into home directory"
-#~ msgstr "_Instal·la a la carpeta d'inici"
-
-#, fuzzy
-#~ msgid "Choose Method"
-#~ msgstr "Trieu el mètode"
-
-#~ msgid "_GnuCash updates the search path"
-#~ msgstr "El _GnuCash actualitza el camí de cerca"
-
-#~ msgid "_You update the search path yourself"
-#~ msgstr "_Jo mateix/a actualitzaré el camí de cerca"
-
-#~ msgid ""
-#~ "Please add the following lines at the end of your ~/.gconf.path file:"
-#~ msgstr ""
-#~ "Afegiu les línies següents al final del vostre fitxer ~/.gconf.path:"
-
-#~ msgid "GnuCash will update the system path for you."
-#~ msgstr "El GnuCash actualitzarà el camí del sistema."
-
-#, fuzzy
-#~ msgid "Update Search Path"
-#~ msgstr "Actualitza el camí de cerca"
-
-#~ msgid "_GnuCash installs the data"
-#~ msgstr "El _GnuCash instal·la les dades"
-
-#~ msgid "_You install the data yourself"
-#~ msgstr "_Jo mateix/a instal·laré les dades"
-
-#~ msgid "Please run the following commands:"
-#~ msgstr "Executeu les ordres següents:"
-
-#~ msgid "GnuCash will install the data for you."
-#~ msgstr "El GnuCash instal·larà les dades."
-
-#, fuzzy
-#~ msgid "Install Into Home Directory"
-#~ msgstr "Instal·la a la carpeta d'inici"
-
-#, fuzzy
-#~ msgid "Apply Changes"
-#~ msgstr "Verifica els canvis"
-
-#~ msgid "Use the date format specified by the ISO-8601 standard."
-#~ msgstr "Utilitza el format de data especificat a l'estàndard ISO-8601."
-
-#~ msgid "_Europe:"
-#~ msgstr "_Europa:"
-
-#~ msgid "Use the date format common in continental Europe."
-#~ msgstr "Utilitza el format de data habitual a l'Europa continental."
-
-#~ msgid "Use the date format common in the United Kingdom."
-#~ msgstr "Utilitza el format de data habitual al Regne Unit"
-
-#~ msgid "Use the date format common in the United States."
-#~ msgstr "Utilitza el format de data habitual als Estats Units."
-
-#~ msgid "_Text only"
-#~ msgstr "Només _text"
-
-#~ msgid "Display toolbar items as text only."
-#~ msgstr "Mostra els elements de la barra d'eines només com a text."
-
-#~ msgid "_Icons only"
-#~ msgstr "Només _icones"
-
-#~ msgid "Display toolbar items as icons only."
-#~ msgstr "Mostra els elements de la barra d'eines només com a icones."
-
-#~ msgid "Priority text besi_de icons"
-#~ msgstr "Text al co_stat de les icones més importants"
-
-#~ msgid ""
-#~ "Display toolbar items with the text label beside the icon.  Labels are "
-#~ "only shown for the most important items."
-#~ msgstr ""
-#~ "Mostra els elements de la barra d'eines amb l'etiqueta de text al costat "
-#~ "de la icona. Les etiquetes es mostraran només per a les icones més "
-#~ "importants."
-
-#~ msgid "Text _below icons"
-#~ msgstr "Text _sota les icones"
-
-#~ msgid ""
-#~ "Display toolbar items with the text label below the icon.  Labels are "
-#~ "show for all items."
-#~ msgstr ""
-#~ "Mostra els elements de la barra d'eines amb l'etiqueta de text sota la "
-#~ "icona. Les etiquetes es mostraran per a tots els elements."
-
-#~ msgid "Use s_ystem default"
-#~ msgstr "Utilitza el valor per defecte del s_istema"
-
-#~ msgid "Use the system setting for displaying toolbar items."
-#~ msgstr ""
-#~ "Utilitza la configuració del sistema en mostrar els elements de la barra "
-#~ "d'eines."
-
-#~ msgid "<b>Toolbar Style</b>"
-#~ msgstr "<b>Estil de la barra d'eines</b>"
-
-#~ msgid "Remo_ve Transaction Splits"
-#~ msgstr "_Suprimeix els desglossaments de l'assentament"
-
-#, fuzzy
-#~ msgid "_Shift Transaction Forward"
-#~ msgstr "Diari d'assen_taments"
-
-#~ msgid "Account Transaction Report"
-#~ msgstr "Informe d'assentament del compte"
-
-#~ msgid "Order of columns in the dialog"
-#~ msgstr "Ordre de les columnes en el diàleg"
-
-#~ msgid "Show the Namespace column"
-#~ msgstr "Mostra la columna de l'espai de noms"
-
-#~ msgid "Show the symbol column"
-#~ msgstr "Mostra la columna del símbol"
-
-#~ msgid "Show the name column"
-#~ msgstr "Mostra la columna del nom"
-
-#~ msgid "Show the Full Name column"
-#~ msgstr "Mostra la columna del «Nom complet»"
-
-#, fuzzy
-#~ msgid "Show the ISIN/CUSIP Code (Exchange Specific Data) column"
-#~ msgstr "Mostra la columna del codi CUSIP"
-
-#~ msgid "Show the fraction column"
-#~ msgstr "Mostra la columna de la fracció"
-
-#~ msgid "Show the Quote Source column"
-#~ msgstr "Mostra la columna de la font de la cotització"
-
-#~ msgid "Show the Quote Timezone column"
-#~ msgstr "Mostra la columna de la zona horària de la cotització"
-
-#~ msgid "Window position"
-#~ msgstr "Posició de la finestra"
-
-#, fuzzy
-#~ msgid ""
-#~ "The X,Y coordinates of the top left corner of the window when it was last "
-#~ "closed."
-#~ msgstr ""
-#~ "Les coordenades X,Y de la cantonada superior esquerra del diàleg la "
-#~ "darrera vegada que es va tancar."
-
-#, fuzzy
-#~ msgid "The width and size of the window when it was last closed."
-#~ msgstr "L'amplada i mida del diàleg la darrera vegada que es va tancar."
-
-#~ msgid "Columns used for sorting"
-#~ msgstr "Columnes utilitzades per a l'ordenació"
-
-#~ msgid "This setting enables the currency column."
-#~ msgstr "Aquest paràmetre habilita la columna de la divisa."
-
-#~ msgid "Show the date column"
-#~ msgstr "Mostra la columna de la data"
-
-#~ msgid "Show the Source column"
-#~ msgstr "Mostra la columna de la font"
-
-#~ msgid "This setting enables the Source column."
-#~ msgstr "Aquest paràmetre habilita la columna de la font."
-
-#~ msgid "Show the Type column"
-#~ msgstr "Mostra la columna del tipus"
-
-#~ msgid "This setting enables the Type column."
-#~ msgstr "Aquest paràmetre habilita la columna del tipus."
-
-#~ msgid "Show the Price column"
-#~ msgstr "Mostra la columna del preu"
-
-#~ msgid "This setting enables the Price column."
-#~ msgstr "Aquest paràmetre habilita la columna del preu."
-
-#~ msgid "Enables Euro support"
-#~ msgstr "Habilita el suport per a l'Euro"
-
-#~ msgid "Enables additional support for the European Union EURO currency."
-#~ msgstr "Habilita el suport per a la divisa de la Unió Europea (EURO)."
-
-#~ msgid "Accounts to reverse the balance"
-#~ msgstr "Comptes per als quals s'ha d'invertir el saldo"
-
-#~ msgid "Labels on toolbar buttons"
-#~ msgstr "Etiquetes als botons de les barres d'eines"
-
-#, fuzzy
-#~ msgid "Show the Calendar buttons"
-#~ msgstr "Mostra la columna del nom"
-
-#, fuzzy
-#~ msgid "Show the Date Entered"
-#~ msgstr "Mostra la columna de la data"
-
-#, fuzzy
-#~ msgid "The number of Characters needed"
-#~ msgstr "Mostra el nombre d'accions"
-
-#, fuzzy
-#~ msgid "The number of transactions displayed"
-#~ msgstr "Nombre d'_assentaments:"
-
-#~ msgid "Default view style for new register"
-#~ msgstr "Visualització per defecte per als registres nous"
-
-#~ msgid "Position of the notebook tabs"
-#~ msgstr "Posició de les pestanyes"
-
-#~ msgid ""
-#~ "Error: Failure saving state file.\n"
-#~ "  %s"
-#~ msgstr ""
-#~ "Error: s'ha produït una fallada en desar el fitxer d'estat.\n"
-#~ "  %s"
-
-#, fuzzy
-#~ msgid "Run the currently selected report"
-#~ msgstr "Imprimeix l'informe actual"
-
-#~ msgid "Add _Report"
-#~ msgstr "Afegeix l'info_rme"
-
-#~ msgid "Enable hyperlinks in reports"
-#~ msgstr "Habilita els hiperenllaços dins dels informes"
-
-#~ msgid "The last stable version was "
-#~ msgstr "La darrera versió estable fou la "
-
-#~ msgid "The next stable version will be "
-#~ msgstr "La propera versió estable serà la "
-
-#~ msgid "Built %s from r%s"
-#~ msgstr "Muntat el %s a partir de r%s"
-
-#~ msgid "You may not post an invoice with a negative total value."
-#~ msgstr "No podeu comptabilitzar una factura amb valor negatiu."
-
-#~ msgid ""
-#~ "You may not post an expense voucher with a negative total cash value."
-#~ msgstr ""
-#~ "No podeu comptabilitzar un justificant de despesa amb un valor en "
-#~ "metàl·lic negatiu."
-
-#~ msgid "Your selected post account, %s, does not exist"
-#~ msgstr "El compte de comptabilització seleccionat %s no existeix"
-
-#~ msgid ""
-#~ "Days\n"
-#~ "Proximo"
-#~ msgstr ""
-#~ "Dies\n"
-#~ "El mes següent"
-
-#~ msgid "What Tax Table should be applied to this customer?"
-#~ msgstr "Quina taula d'impostos cal aplicar a aquest client?"
-
-#~ msgid ""
-#~ "The invoice being paid.\n"
-#~ "\n"
-#~ "Note that is field is optional. If you leave it blank, GnuCash will "
-#~ "automatically assign the payment to the first unpaid invoice for this "
-#~ "company."
-#~ msgstr ""
-#~ "La factura que s'està pagant.\n"
-#~ "\n"
-#~ "Noteu que aquest camp és opcional. Si el deixeu en blanc, Gnucash "
-#~ "assignarà el pagament automàticament a la primera fatura inpagada "
-#~ "d'aquesta empresa."
-
-#~ msgid "What Tax Table should be applied to this vendor?"
-#~ msgstr "Quina taula d'impostos cal aplicar a aquest proveïdor?"
-
-#~ msgid "Reload invoice report"
-#~ msgstr "Actualitza l'informe de la factura"
-
-# «scheme» es refereix al llenguatge de programació, per
-# tant, no s'ha de traduir (dpm)
-#~ msgid "Reload invoice report scheme file"
-#~ msgstr "Actualitza el fitxer scheme de l'informe de la factura"
-
-#~ msgid "Reload owner report"
-#~ msgstr "Actualitza l'informe del client"
-
-#~ msgid "Reload owner report scheme file"
-#~ msgstr "Actualitza el fitxer scheme de l'informe del client"
-
-#~ msgid "Reload receivable report"
-#~ msgstr "Actualitza l'informe dels cobraments pendents"
-
-#~ msgid "Reload receivable report scheme file"
-#~ msgstr "Actualitza el fitxer scheme de l'informe dels cobraments pendents"
-
-#~ msgid ""
-#~ "Value $\n"
-#~ "Percent %"
-#~ msgstr ""
-#~ "Valor €\n"
-#~ "Percentatge %"
-
-#~ msgid "Automatic Payment Forward"
-#~ msgstr "Reenviament automàtic de pagaments"
-
-#~ msgid "You must select a commodity."
-#~ msgstr "Heu de seleccionar una divisa o valor."
-
-#~ msgid ""
-#~ "You must select closing date that is greater than the closing date of the "
-#~ "previous book."
-#~ msgstr ""
-#~ "Heu de seleccionar una data de tancament més recent que la de l'exercici "
-#~ "anterior."
-
-#~ msgid "You must select closing date that is not in the future."
-#~ msgstr "Heu de seleccionar una data de tancament que no sigui en el futur."
-
-#~ msgid "Are you sure you want to cancel the Mortgage/Loan Setup Assistant?"
-#~ msgstr ""
-#~ "Esteu segurs que voleu cancel·lar l'assistent de configuració d'una "
-#~ "hipoteca o préstec?"
-
-#~ msgid "Please select a valid \"from\" account."
-#~ msgstr "Seleccioneu un compte «de» vàlid."
-
-#~ msgid "Please select a valid \"to\" account."
-#~ msgstr "Seleccioneu un compte «a» vàlid."
-
-#~ msgid "Please select a valid \"interest\" account."
-#~ msgstr "Seleccioneu un compte d'«interès» vàlid."
-
-#~ msgid "Payment: \"%s\""
-#~ msgstr "Pagament: «%s»"
-
-#~ msgid "You must enter a valid distribution amount."
-#~ msgstr "Heu d'introduir una quantitat vàlida per la distribució."
-
-#~ msgid "You must enter a distribution amount."
-#~ msgstr "Heu d'entrar una quantitat per a la distribució."
-
-#~ msgid "You must either enter a valid price or leave it blank."
-#~ msgstr "Heu d'entrar una cotització vàlida, o bé deixar-la en blanc."
-
-#~ msgid "The price must be positive."
-#~ msgstr "La cotització ha de ser positiva."
-
-#~ msgid "You must either enter a valid cash amount or leave it blank."
-#~ msgstr ""
-#~ "Heu d'introduir un import en efectiu vàlid, o bé deixar-lo en blanc."
-
-#~ msgid "The cash distribution must be positive."
-#~ msgstr "La distribució en efectiu ha de ser positiva."
-
-#~ msgid "You must select an income account for the cash distribution."
-#~ msgstr ""
-#~ "Heu de seleccionar un compte d'ingressos per a la distribució en efectiu."
-
-#~ msgid "You must select an asset account for the cash distribution."
-#~ msgstr ""
-#~ "Heu de seleccionar un compte de despeses per a la distribució en efectiu."
-
-#~ msgid "New Account (not implemented)"
-#~ msgstr "Nou compte (no implementat)"
-
-#~ msgid "Select or add a GnuCash account"
-#~ msgstr "Selecciona o afegeix un compte del GnuCash"
-
-#~ msgid ""
-#~ "Use Commodity Value\n"
-#~ "1\n"
-#~ "1/10\n"
-#~ "1/100\n"
-#~ "1/1000\n"
-#~ "1/10000\n"
-#~ "1/100000\n"
-#~ "1/1000000"
-#~ msgstr ""
-#~ "El mateix que el valor/divisa\n"
-#~ "1\n"
-#~ "1/10\n"
-#~ "1/100\n"
-#~ "1/1000\n"
-#~ "1/10000\n"
-#~ "1/100000\n"
-#~ "1/1000000"
-
-#~ msgid "Enter a title for this book."
-#~ msgstr "Introduïu un títol per a aquest llibre."
-
-#~ msgid "Enter notes that describe this book."
-#~ msgstr "Introduïu una nota que descrigui aquest llibre."
-
-#~ msgid "Finish Closing Books"
-#~ msgstr "Finalització del tancament de llibres"
-
-#~ msgid ""
-#~ "day(s)\n"
-#~ "week(s)\n"
-#~ "month(s)\n"
-#~ "year(s)"
-#~ msgstr ""
-#~ "dies\n"
-#~ "setmanes\n"
-#~ "mesos\n"
-#~ "anys"
-
-#~ msgid "Account Information"
-#~ msgstr "Informació del compte"
-
-#~ msgid ""
-#~ "Annual\n"
-#~ "Semi-annual\n"
-#~ "Tri-annual\n"
-#~ "Quarterly\n"
-#~ "Bi-monthly\n"
-#~ "Monthly\n"
-#~ "Semi-monthly\n"
-#~ "Bi-weekly\n"
-#~ "Weekly\n"
-#~ "Daily (360)\n"
-#~ "Daily (365)"
-#~ msgstr ""
-#~ "Anual\n"
-#~ "Semianual\n"
-#~ "Triennal\n"
-#~ "Trimestral\n"
-#~ "Bimensual\n"
-#~ "Semimensual\n"
-#~ "Quinzenal\n"
-#~ "Setmanal\n"
-#~ "A diari (360)\n"
-#~ "A diari (365)"
-
-#~ msgid "Co_mpounding:"
-#~ msgstr "Càlcul de l'i_nterès:"
-
-#~ msgid "_Effective Date:"
-#~ msgstr "Data _efectiva:"
-
-#~ msgid "_Initial Payment:"
-#~ msgstr "Pagament _inicial:"
-
-#~ msgid "_Payments:"
-#~ msgstr "_Pagaments:"
-
-#~ msgid "<b>_Mini-Viewer</b>"
-#~ msgstr "<b>_Minivisualitzador</b>"
-
-# FIXME: això segur que es pot millorar (dpm)
-#~ msgid ""
-#~ "Bid\n"
-#~ "Ask\n"
-#~ "Last\n"
-#~ "Net Asset Value\n"
-#~ "Unknown"
-#~ msgstr ""
-#~ "Compra\n"
-#~ "Venda\n"
-#~ "Última\n"
-#~ "Valor net de l'actiu\n"
-#~ "Desconeguda"
-
-#~ msgid ""
-#~ "Inches\n"
-#~ "Centimeters\n"
-#~ "Millimeters\n"
-#~ "Points"
-#~ msgstr ""
-#~ "Polzades\n"
-#~ "Centímetres\n"
-#~ "Mil·límetres\n"
-#~ "Punts"
-
-#~ msgid ""
-#~ "Top\n"
-#~ "Middle\n"
-#~ "Bottom\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "A dalt\n"
-#~ "Al mig\n"
-#~ "A baix\n"
-#~ "Personalitzat"
-
-#~ msgid "Copy Transaction"
-#~ msgstr "Copia l'assentament"
-
-#~ msgid "Copy the selected transaction"
-#~ msgstr "Copia l'assentament seleccionat"
-
-#~ msgid "Cut Transaction"
-#~ msgstr "Retalla l'assentament"
-
-#~ msgid "Dup_licate Transaction..."
-#~ msgstr "Dup_lica l'assentament..."
-
-#~ msgid "Edit Exchange Rate"
-#~ msgstr "Edita el tipus de canvi"
-
-#~ msgid "Edit the exchange rate for the current split"
-#~ msgstr "Edita el tipus de canvi del desglossament actual"
-
-#~ msgid "Erase all splits except the one for this account."
-#~ msgstr "Esborra tots els desglossaments excepte el d'aquest compte."
-
-#~ msgid "Jump"
-#~ msgstr "Salta"
-
-#~ msgid "Remove Transaction Splits"
-#~ msgstr "Elimina desglossaments de l'assentament"
-
-#~ msgid "Schedule..."
-#~ msgstr "Planifica..."
-
-#~ msgid "Sort by Amount"
-#~ msgstr "Ordena per quantitat"
-
-#~ msgid "Sort by Date"
-#~ msgstr "Ordena per data"
-
-#~ msgid "Sort by Description"
-#~ msgstr "Ordena per descripció"
-
-#~ msgid "Sort by Memo"
-#~ msgstr "Ordena per nota d'abonament"
-
-#~ msgid "Sort by Number"
-#~ msgstr "Ordena per número"
-
-#~ msgid "St_yle"
-#~ msgstr "Est_il"
-
-#~ msgid "_Amount"
-#~ msgstr "_Quantitat"
-
-#~ msgid "_Number"
-#~ msgstr "_Número"
-
-#~ msgid "_Statement Date"
-#~ msgstr "Data de l'e_xtracte bancari"
-
-#~ msgid ""
-#~ "1st\n"
-#~ "2nd\n"
-#~ "3rd\n"
-#~ "4th\n"
-#~ "5th\n"
-#~ "6th\n"
-#~ "7th\n"
-#~ "8th\n"
-#~ "9th\n"
-#~ "10th\n"
-#~ "11th\n"
-#~ "12th\n"
-#~ "13th\n"
-#~ "14th\n"
-#~ "15th\n"
-#~ "16th\n"
-#~ "17th\n"
-#~ "18th\n"
-#~ "19th\n"
-#~ "20th\n"
-#~ "21st\n"
-#~ "22nd\n"
-#~ "23rd\n"
-#~ "24th\n"
-#~ "25th\n"
-#~ "26th\n"
-#~ "27th\n"
-#~ "28th\n"
-#~ "29th\n"
-#~ "30th\n"
-#~ "31st\n"
-#~ "Last day of month\n"
-#~ "Last Monday\n"
-#~ "Last Tuesday\n"
-#~ "Last Wednesday\n"
-#~ "Last Thursday\n"
-#~ "Last Friday\n"
-#~ "Last Saturday\n"
-#~ "Last Sunday"
-#~ msgstr ""
-#~ "dia 1\n"
-#~ "dia 2\n"
-#~ "dia 3\n"
-#~ "dia 4\n"
-#~ "dia 5\n"
-#~ "dia 6\n"
-#~ "dia 7\n"
-#~ "dia 8\n"
-#~ "dia 9\n"
-#~ "dia 10\n"
-#~ "dia 11\n"
-#~ "dia 12\n"
-#~ "dia 13\n"
-#~ "dia 14\n"
-#~ "dia 15\n"
-#~ "dia 16\n"
-#~ "dia 17\n"
-#~ "dia 18\n"
-#~ "dia 19\n"
-#~ "dia 20\n"
-#~ "dia 21\n"
-#~ "dia 22\n"
-#~ "dia 23\n"
-#~ "dia 24\n"
-#~ "dia 25\n"
-#~ "dia 26\n"
-#~ "dia 27\n"
-#~ "dia 28\n"
-#~ "dia 29\n"
-#~ "dia 30\n"
-#~ "dia 31\n"
-#~ "Darrer dia del mes\n"
-#~ "Darrer dilluns\n"
-#~ "Darrer dimarts\n"
-#~ "Darrer dimecres\n"
-#~ "Darrer dijous\n"
-#~ "Darrer divendres\n"
-#~ "Darrer dissabte\n"
-#~ "Darrer diumenge"
-
-#~ msgid "<b>End</b>"
-#~ msgstr "<b>Finalització</b>"
-
-#~ msgid "<b>Upcoming</b>"
-#~ msgstr "<b>Propers</b>"
-
-#~ msgid "Creation State"
-#~ msgstr "Estat de la creació"
-
-#~ msgid ""
-#~ "Current Year\n"
-#~ "Now + 1 Year\n"
-#~ "Whole Loan\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Any actual\n"
-#~ "Any actual + 1 any\n"
-#~ "Préstec complet\n"
-#~ "Personalitzat"
-
-#~ msgid ""
-#~ "Daily\n"
-#~ "Weekly\n"
-#~ "Bi-Weekly\n"
-#~ "Monthly\n"
-#~ "Quarterly\n"
-#~ "Yearly"
-#~ msgstr ""
-#~ "A diari\n"
-#~ "Setmanal\n"
-#~ "Quinzenal\n"
-#~ "Mensual\n"
-#~ "Trimestral\n"
-#~ "Anual"
-
-#~ msgid "Do you..."
-#~ msgstr "Voleu..."
-
-# ARM : Adjustable-Rate Mortgage. Tipus d'interès mixt, el qual després d'uns
-# anys de ser fix passa a ser variable. S'utilitza la notació X/Y, on X és el
-# nombre d'anys que l'interès és fix, i Y és el període de revisions un cop
-# ha passat a ser variable. Els valors d'Y poden ser 1 (1 any) o 6 (6 mesos)
-# (dpm)
-#~ msgid ""
-#~ "Fixed Rate\n"
-#~ "3/1 Year ARM\n"
-#~ "5/1 Year ARM\n"
-#~ "7/1 Year ARM\n"
-#~ "10/1 Year ARM"
-#~ msgstr ""
-#~ "Fix\n"
-#~ "Mixt  3/1 any\n"
-#~ "Mixt  5/1 any\n"
-#~ "Mixt  7/1 any\n"
-#~ "Mixt 10/1 any"
-
-#~ msgid "Loan Information"
-#~ msgstr "Informació del préstec"
-
-#~ msgid ""
-#~ "None\n"
-#~ "Once\n"
-#~ "Daily\n"
-#~ "Weekly\n"
-#~ "Semi-Monthly\n"
-#~ "Monthly"
-#~ msgstr ""
-#~ "Cap\n"
-#~ "Una vegada\n"
-#~ "A diari\n"
-#~ "Setmanal\n"
-#~ "Semimensual\n"
-#~ "Mensual"
-
-#~ msgid "Press apply to commit these changes."
-#~ msgstr "Premeu «Aplica» per a consumar aquests canvis."
-
-#~ msgid "Repayment Type"
-#~ msgstr "Tipus d'amortització"
-
-#~ msgid "Start Date: "
-#~ msgstr "Data d'inici: "
-
-#~ msgid ""
-#~ "months\n"
-#~ "years"
-#~ msgstr ""
-#~ "mesos\n"
-#~ "anys"
-
-#~ msgid "Set the budget options using this dialog."
-#~ msgstr "Establiu les opcions del pressupost en aquest diàleg."
-
-#~ msgid "Case Insensitive?"
-#~ msgstr "Sense distinció de majús/minús?"
-
-#~ msgid "That GnuCash XML file is already loaded. Please select another file."
-#~ msgstr ""
-#~ "Aquest fitxer XML del GnuCash ja està carregat. Hauríeu de seleccionar-ne "
-#~ "un altre."
-
-#~ msgid ""
-#~ "No files to merge. Please add ones by clicking on 'Load another file'."
-#~ msgstr ""
-#~ "No hi ha fitxers a fusionar. Hauríeu d'afegir-los fent clic a «Carrega un "
-#~ "altre fitxer»."
-
-#~ msgid "Finish changes"
-#~ msgstr "Finalització dels canvis"
-
-#~ msgid "Update gconf settings - GnuCash"
-#~ msgstr "Actualitza els paràmetres del gconf - GnuCash"
-
-#~ msgid "Do not merge"
-#~ msgstr "No ho fusionis"
-
-#~ msgid "GnuCash data files you have loaded"
-#~ msgstr "Fitxers de dades del GnuCash que heu carregat"
-
-#~ msgid "Load another file"
-#~ msgstr "Carrega un altre fitxer"
-
-#~ msgid "Unload selected file"
-#~ msgstr "Descarrega el fitxer seleccionat"
-
-#~ msgid "<b>Current File List</b>"
-#~ msgstr "<b>Llista de fitxers actual</b>"
-
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to load at this time.\n"
-#~ "\n"
-#~ "Click \"Next\" to finish loading files and move to the next step. "
-#~ msgstr ""
-#~ "Feu clic a «Carrega un altre fitxer» si teniu més dades a carregar.\n"
-#~ "\n"
-#~ "Feu clic a «Següent» per finalitzar el carregament de fitxers i avançar "
-#~ "cap al pas següent. "
-
-#~ msgid "<b>Exchange/Price Information</b>"
-#~ msgstr "<b>Informació del canvi/cotització</b>"
-
-#~ msgid "To A_mount:"
-#~ msgstr "A _quantitat:"
-
-#~ msgid "_Exchange Rate:"
-#~ msgstr "Ti_pus de canvi:"
-
-#~ msgid "_From:"
-#~ msgstr "_De:"
-
-#~ msgid "_To:"
-#~ msgstr "_A:"
-
-#~ msgid ""
-#~ "US (12/31/2001)\n"
-#~ "UK (31/12/2001)\n"
-#~ "Europe (31.12.2001)\n"
-#~ "ISO (2001-12-31)\n"
-#~ "UTC\n"
-#~ "Locale\n"
-#~ "Custom\n"
-#~ msgstr ""
-#~ "EUA (12/31/2001)\n"
-#~ "Regne Unit (31/12/2001)\n"
-#~ "Europa (31.12.2001)\n"
-#~ "ISO (2001-12-31)\n"
-#~ "UTC\n"
-#~ "Locale\n"
-#~ "Personalitzat\n"
-
-#~ msgid "Don't tell me again this session."
-#~ msgstr "No m'ho recordis més durant aquesta sessió."
-
-#~ msgid "Don't tell me again."
-#~ msgstr "No m'ho recordis més."
-
-#~ msgid "Remember the answer and don't tell me again this session."
-#~ msgstr ""
-#~ "Recorda la resposta i no m'ho tornis a recordar durant aquesta sessió."
-
-#~ msgid "Remember the answer and don't tell me again."
-#~ msgstr "Recorda la resposta i no m'ho tornis a demanar."
-
-#~ msgid "Failed to process file: %s"
-#~ msgstr "No s'ha pogut processar el fitxer: %s"
-
-#~ msgid "Failed to open file: %s: %s"
-#~ msgstr "No s'ha pogut obrir el fitxer: %s: %s"
-
-#~ msgid "Add a new transaction to the account"
-#~ msgstr "Afegeix un assentament nou al compte"
-
-#~ msgid "Select an CSV/Fixed-Width file to import"
-#~ msgstr "Seleccioneu un fitxer a importar"
-
-#~ msgid "Import _CSV/Fixed-Width..."
-#~ msgstr "Importa un fitxer CSV i _envia..."
-
-#~ msgid "Period-as-decimal (1,000.00)"
-#~ msgstr "Punt co m a separador decimal (1,000.00)"
-
-#~ msgid "Comma-as-decimal (1.000,00)"
-#~ msgstr "Coma com a separador decimal (1.000,00)"
-
-#~ msgid "y-d-m"
-#~ msgstr "a-d-m"
-
-#~ msgid "(no)"
-#~ msgstr "(no)"
-
-#~ msgid "You must enter an account name."
-#~ msgstr "Heu d'introduir un nom de compte"
-
-#~ msgid ""
-#~ "No valid customer selected. Click on the Options button to select a "
-#~ "customer."
-#~ msgstr ""
-#~ "No s'ha seleccionat cap compte vàlid. Cliqueu al botó «Opcions» i "
-#~ "seleccioneu el compte a utilitzar."
-
-#, fuzzy
-#~ msgid ""
-#~ "No valid employee selected. Click on the Options button to select an "
-#~ "employee."
-#~ msgstr ""
-#~ "No s'ha seleccionat cap compte vàlid. Cliqueu al botó «Opcions» i "
-#~ "seleccioneu el compte a utilitzar."
-
-#~ msgid "Asterisk"
-#~ msgstr "Asterisc"
-
-#~ msgid ""
-#~ "A list of directories (strings) indicating where to look for html and "
-#~ "parsed-html files. Each element must be a string representing a directory "
-#~ "or a symbol where 'default expands to the default path, and 'current "
-#~ "expands to the current value of the path."
-#~ msgstr ""
-#~ "Una llista de carpetes (cadenes) indicant on cercar fitxers html o html "
-#~ "analitzat. Cada element ha d'ésser una cadena que representi una carpeta "
-#~ "o un símbol on 'omissió s'expandeix a la ruta per omissió i 'actual "
-#~ "s'expandeix al valor actual de la ruta."
-
-#~ msgid "Set the search path for documentation files"
-#~ msgstr "Estableix el camí de cerca per als fitxers de documentació"
-
-#~ msgid "Unknown database access mode '%s'. Using default mode: multi-user."
-#~ msgstr ""
-#~ "El mode «%s» d'accés a la base de dades és desconegut. S'utilitzarà el "
-#~ "mode per omissió: multi-usuari."
-
-#~ msgid "From the Postgresql Server: %s"
-#~ msgstr "Des del Servidor Postgresql: %s"
-
-#~ msgid "Backend connection is not available"
-#~ msgstr "La connexió al rerefons no està disponible"
-
-#~ msgid "Query could not be executed"
-#~ msgstr "No s'ha pogut executar la consulta"
-
-#~ msgid "Set the logging level from 0 (least) to 6 (most)"
-#~ msgstr "Estableix el nivell de registre de 0 (mínim) a 6 (màxim)"
-
-#~ msgid "LOGLEVEL"
-#~ msgstr "NIVELL DE REGISTRE"
-
-#~ msgid "CONFIGPATH"
-#~ msgstr "CAMÍCONFIGURACIÓ"
-
-#~ msgid "Set shared data file search path"
-#~ msgstr "Estableix el camí de cerca de fitxers de dades compartides"
-
-#~ msgid "SHAREPATH"
-#~ msgstr "CAMÍCOMPARTITS"
-
-#~ msgid "DOCPATH"
-#~ msgstr "CAMÍDOCS"
-
-#~ msgid "The following bills are due"
-#~ msgstr "Les factures següents són pagables"
-
-#~ msgid "Default number of register rows to display in Invoices."
-#~ msgstr ""
-#~ "Nombre de files del registre que es presenten per omissió a les factures."
-
-#~ msgid "_Tax Table Editor"
-#~ msgstr "Editor de _taules d'impostos"
-
-#~ msgid "QSF _Invoice..."
-#~ msgstr "Factu_ra en format QSF..."
-
-#~ msgid "Export one or more invoices to QSF"
-#~ msgstr "Exporta una o més factures al format QSF"
-
-#~ msgid "QSF _Customer..."
-#~ msgstr "_Client en format QSF..."
-
-#~ msgid "Export one or more customers to QSF"
-#~ msgstr "Exporta un o més clients al format QSF"
-
-#~ msgid "QSF _Vendor..."
-#~ msgstr "Pro_veïdor en format QSF..."
-
-#~ msgid "Export one or more vendors to QSF"
-#~ msgstr "Exporta un o més proveïdors al format QSF"
-
-#~ msgid "QSF _Employee..."
-#~ msgstr "Tr_eballador en format QSF..."
-
-#~ msgid "Export one or more employees to QSF"
-#~ msgstr "Exporta un o més treballadors al format QSF"
-
-#~ msgid "Export Invoices to XML"
-#~ msgstr "Exporta les factures a XML"
-
-#~ msgid "Export Vendors to XML"
-#~ msgstr "Exporta els proveïdors a XML"
-
-#~ msgid "Export Employees to XML"
-#~ msgstr "Exporta els treballadors a XML"
-
-#~ msgid "The number of rows in an invoice"
-#~ msgstr "El nombre de files en una factura"
-
-#~ msgid "Invalid Entry:  You need to supply %s."
-#~ msgstr "Assentament no vàlid:  heu de subministrar %s."
-
-#~ msgid "Value '%s' cannot be interpreted as a float number."
-#~ msgstr "No s'ha pogut interpretar el valor «%s» com a número decimal."
-
-#~ msgid ""
-#~ "Key file contains key '%s' in group '%s' which has a value that cannot be "
-#~ "interpreted."
-#~ msgstr ""
-#~ "El fitxer de claus conté la clau «%s» en el grup «%s», el valor de la "
-#~ "qual no s'ha pogut interpretar."
-
-#~ msgid "Export Chart of Accounts to QSF XML"
-#~ msgstr "Exporta l'arbre de comptes en format QSF XML"
-
-#~ msgid "Escrow "
-#~ msgstr "Aval"
-
-#~ msgid ""
-#~ "Error: Please resolve all %d conflicts before trying to commit the data."
-#~ msgstr ""
-#~ "Error: hauríeu de resoldre tots els %d conflictes abans de consumar els "
-#~ "canvis en les dades."
-
-#~ msgid "Error: the Commit operation failed, error code %d."
-#~ msgstr "Error: l'operació de consumació ha fallar amb el codi d'error %d."
-
-#~ msgid "%i conflict needs to be resolved."
-#~ msgid_plural "%i conflicts need to be resolved."
-#~ msgstr[0] "s'ha de resoldre %i conflicte."
-#~ msgstr[1] "s'han de resoldre %i conflictes."
-
-#~ msgid "%i parameter value for this \"%s\" object."
-#~ msgid_plural "%i parameter values for this \"%s\" object."
-#~ msgstr[0] "%i valor de paràmetre per a aquest objecte «%s»."
-#~ msgstr[1] "%i valor de paràmetre per a aquests objectes «%s»."
-
-#~ msgid "%i:Parameter name: %s "
-#~ msgstr "%i:nom del paràmetre: %s"
-
-#~ msgid "Import data : %s "
-#~ msgstr "Dades importades: %s "
-
-#~ msgid "Original data : %s\n"
-#~ msgstr "Dades originals : %s\n"
-
-#~ msgid "<b>Contained Accounts</b>"
-#~ msgstr "<b>Comptes que conté</b>"
-
-#~ msgid "<b>Description</b>"
-#~ msgstr "<b>Descripció</b>"
-
-#~ msgid "<b>New Account Currency</b>"
-#~ msgstr "<b>Divisa per als comptes nous</b>"
-
-#~ msgid ""
-#~ "If you would like an account to have an opening balance, click on the "
-#~ "account and enter the starting balance in the box on the right. All "
-#~ "accounts except Equity and placeholder accounts may have an opening "
-#~ "balance."
-#~ msgstr ""
-#~ "Si voleu que un compte tingui un saldo d'obertura, cliqueu sobre el "
-#~ "comptei entreu el saldo inicial al camp de la dreta. Tots els comptes "
-#~ "excepte els patrimonials i els contenidors d'altres comptes poden tenir "
-#~ "un saldo inicial."
-
-#~ msgid ""
-#~ "If you would like an account to have an opening balance, click on the row "
-#~ "containing the account, click again in the opening balances column, and "
-#~ "then enter the starting balance. All accounts except Equity and "
-#~ "placeholder accounts may have an opening balance.\n"
-#~ "\n"
-#~ "If you would like an account to be a placeholder account, just click the "
-#~ "checkbox for that account.\n"
-#~ msgstr ""
-#~ "Si voleu que un compte tingui un saldo d'obertura, cliqueu a la fila on "
-#~ "és, llavors torneu a clicar a la columna de saldos d'obertura i escriviu "
-#~ "el saldo inicial. Tots els comptes excepte els patrimonials i els "
-#~ "contenidors d'altres comptes poden tenir un saldo inicial.\n"
-#~ "\n"
-#~ "Si voleu que un compte sigui de tipus contenidor, cliqueu a la casella de "
-#~ "selecció corresponent a la columna «Contenidor».\n"
-
-#~ msgid "Setup new accounts"
-#~ msgstr "Configureu els comptes nous"
-
-#~ msgid "This is Sample2."
-#~ msgstr "This is Sample2."
-
-#~ msgid "button1"
-#~ msgstr "button1"
-
-#~ msgid "checkbutton1"
-#~ msgstr "checkbutton1"
-
-#~ msgid "radiobutton1"
-#~ msgstr "radiobutton1"
-
-#~ msgid "togglebutton1"
-#~ msgstr "togglebutton1"
-
-#~ msgid "Click to choose the filename and location."
-#~ msgstr "Cliqueu per a triar el nom del fitxer i la ubicació."
-
-#~ msgid "Export Chart of Accounts"
-#~ msgstr "Exporta un conjunt de comptes"
-
-#~ msgid ""
-#~ "Select the date to use and click Export to choose the filename and "
-#~ "location."
-#~ msgstr ""
-#~ "Seleccioneu la data a utilitzar i cliqueu a «Exporta» per a seleccionar "
-#~ "el nom del fitxer i la ubicació."
-
-#~ msgid ""
-#~ "The Chart of Accounts includes the balance for each account, on the date "
-#~ "specified.  Note that future dates are not supported."
-#~ msgstr ""
-#~ "El grup de comptes inclou el saldo de cada compte a la data especificada. "
-#~ "Teniu en compte que les dates en el futur no estan implementades."
-
-#~ msgid ""
-#~ "You can export the Chart of Accounts to a QSF XML file that can be "
-#~ "imported into another GnuCash file or used in other programs."
-#~ msgstr ""
-#~ "Podeu exportar l'arbre de comptes en un fitxer QSF XML, el qual pot ésser "
-#~ "importat en un altre fitxer del GnuCash o bé utilitzat en altres "
-#~ "programes."
-
-#~ msgid "QSF Data Import Setup"
-#~ msgstr "Configuració de la importació de dades QSF"
-
-#~ msgid "ignore the import, leave the original untouched"
-#~ msgstr "ignora la importació i no modifiquis l'original"
-
-#~ msgid "overwrite the original with the import data"
-#~ msgstr "sobreescriu l'original amb les dades importades"
-
-#~ msgid "Auto-Created Transactions Notification"
-#~ msgstr "Notificació d'assentaments creats automàticament"
-
-#~ msgid "Crea_te in advance, days:"
-#~ msgstr "C_rea per endavant, en dies:"
-
-#~ msgid "Create"
-#~ msgstr "Crea"
-
-#~ msgid "Create as scheduled"
-#~ msgstr "Crea tal com s'ha planificat"
-
-#~ msgid "Created Transaction Review"
-#~ msgstr "Revisió de l'assentament creat"
-
-#~ msgid "Days Away"
-#~ msgstr "Dies en el futur"
-
-#~ msgid "Obsolete Scheduled Transactions"
-#~ msgstr "Assentaments periòdics obsolets"
-
-#~ msgid "Postpone"
-#~ msgstr "Ajorna"
-
-#~ msgid "R_emind in advance, days:"
-#~ msgstr "R_ecorda-m'ho per endavant, en dies:"
-
-#~ msgid "Scheduled Transaction"
-#~ msgstr "Assentament periòdic"
-
-#~ msgid "Since Last Run"
-#~ msgstr "Des de la darrera execució"
-
-#~ msgid "State"
-#~ msgstr "Estat"
-
-#~ msgid "Template Transaction (Read-Only)"
-#~ msgstr "Assentament plantilla (només lectura)"
-
-#~ msgid ""
-#~ "The following scheduled transactions have expired.  Select those you wish "
-#~ "to delete."
-#~ msgstr ""
-#~ "Els assentaments periòdics següents han vençut. Seleccioneu els que "
-#~ "vulgueu suprimir."
-
-#~ msgid ""
-#~ "The listed Scheduled Transactions are to-be created soon.  Select any "
-#~ "which you would like to create now, and click \"Forward\" to create them."
-#~ msgstr ""
-#~ "Els assentaments periòdics llistats són a punt d'ésser creats. "
-#~ "Seleccioneu-ne qualsevol que vuñgueu crear ara, i feu clic a «Endavant» "
-#~ "per a crear-los."
-
-#~ msgid ""
-#~ "This druid will walk you through any scheduled transactions that should "
-#~ "be created."
-#~ msgstr "Aquest assistent us ajudarà a crear assentaments periòdics."
-
-#~ msgid "To-Create Transaction Preparation"
-#~ msgstr "Preparació dels assentaments per crear"
-
-#~ msgid "Transaction Reminders"
-#~ msgstr "Recordatoris d'assentaments"
-
-#~ msgid "Unselect All"
-#~ msgstr "Desselecciona-ho tot"
-
-#~ msgid "Value:"
-#~ msgstr "Valor:"
-
-#~ msgid "Variable"
-#~ msgstr "Variable"
-
-#~ msgid "Variables"
-#~ msgstr "Variables"
-
-#~ msgid "What to do, what to do?"
-#~ msgstr "Què s'ha de fer?"
-
-#~ msgid "Import a QSF object file"
-#~ msgstr "Importa un fitxer objecte QSF"
-
-#~ msgid "Export the chart of accounts for a date with balances as QSF"
-#~ msgstr ""
-#~ "Exporta l'arbre de comptes amb els saldos d'una data determinada en "
-#~ "format QSF"
-
-#~ msgid "Ta_x Options"
-#~ msgstr "_Opcions dels impostos"
-
-#~ msgid "Error: Loading failed, error code %d - %s."
-#~ msgstr "Error: no s'ha pogut carregar, codi d'error %d - %s."
-
-#~ msgid "Select the QSF file to import into GnuCash"
-#~ msgstr "Trieu el fitxer QSF a importar al GnuCash"
-
-#~ msgid ""
-#~ "The current transaction has been changed.  Would you like to record the "
-#~ "changes before closing this page, close the page without recording the "
-#~ "changes, or cancel the close?"
-#~ msgstr ""
-#~ "S'ha modificat l'assentament actual. Voleu registrar-ne els canvis abans "
-#~ "de tancar aquesta pàgina, tancar la pàgina sense registrar els canvis, o "
-#~ "bé no tancar la pàgina?"
-
-#~ msgid "New %s"
-#~ msgstr "Nou/nova %s"
-
-#~ msgid "item"
-#~ msgstr "element"
-
-#~ msgid "Defaults"
-#~ msgstr "Valors predeterminats"
-
-#~ msgid "Display this many rows when a register is created."
-#~ msgstr "Mostra aquest nombre de files en crear un registre."
-
-#~ msgid "Transaction _journal"
-#~ msgstr "_Diari d'assentaments"
-
-#~ msgid "calendar:week_start:0"
-#~ msgstr "calendar:week_start:0"
-
-#~ msgid ""
-#~ "The selected file %s is a QSF map and cannot be opened as a QSF object."
-#~ msgstr ""
-#~ "El fitxer %s seleccionat és un mapa QSF i no es pot obrir com a objecte "
-#~ "QSF."
-
-#~ msgid "<no file>"
-#~ msgstr "<fitxer sense desar>"
-
-#~ msgid "Start of this fiscal year"
-#~ msgstr "Inici d'aquest any fiscal"
-
-#~ msgid "Start of previous fiscal year"
-#~ msgstr "Inici de l'any fiscal anterior"
-
-#~ msgid "End of this fiscal year"
-#~ msgstr "Final d'aquest any fiscal"
-
-#~ msgid "End of previous fiscal year"
-#~ msgstr "Final de l'any fiscal anterior"
-
-#~ msgid "CUSIP code"
-#~ msgstr "Codi CUSIP"
-
-#~ msgid "Print GnuCash Document"
-#~ msgstr "Imprimeix el document del GnuCash"
-
-#~ msgid "do not translate"
-#~ msgstr "do not translate"
-
-#~ msgid "gnc-new-account"
-#~ msgstr "gnc-new-account"
-
-#~ msgid "The two passwords didn't match. Please try again."
-#~ msgstr "Les dues contrasenyes no concorden. Torneu-ho a intentar."
-
-#~ msgid "Choose AqBanking Backend"
-#~ msgstr "Trieu el rerefons de l'AqBanking"
-
-#~ msgid "Please choose an AqBanking backend to be configured"
-#~ msgstr "Trieu un rerefons de l'AqBanking a configurar"
-
-#~ msgid "Co_nfigure"
-#~ msgstr "Co_nfigura"
-
-#~ msgid "The file %s does not exist. Would you like to create it now?"
-#~ msgstr "El fitxer %s no existeix. Voleu crear-lo ara?"
-
-#~ msgid ""
-#~ "The directory for file %s does not exist. Please choose another place for "
-#~ "this file."
-#~ msgstr ""
-#~ "El directori per al fitxer %s no existeix. Hauríeu de seleccionar una "
-#~ "altra ubicació per a aquest fitxer."
-
-#~ msgid "Choose an Online Banking Version to use with the selected bank:"
-#~ msgstr "Trieu la versió HBCI a emprar amb el banc seleccionat:"
-
-#~ msgid "Online Banking Version"
-#~ msgstr "Versió de la banca electrònica"
-
-#~ msgid "Start AqBanking Setup Wizard"
-#~ msgstr "Inicia l'assistent de configuració de l'AqBanking"
-
-#~ msgid "Enter and confirm your new password"
-#~ msgstr "Introduïu i confirmeu la vostra nova contrasenya"
-
-#~ msgid "Enter new Password"
-#~ msgstr "Introduïu la nova contrasenya"
-
-#~ msgid "Activate verbose debug messages for Online Banking."
-#~ msgstr ""
-#~ "Habilita els missatges de depuració detallats per a la banca electrònica."
-
-#~ msgid "Remember the Online Banking PIN in memory during a session."
-#~ msgstr "Recorda el PIN per a la banca electrònica durant una sessió."
-
-#~ msgid ""
-#~ "The PIN you entered was wrong.\n"
-#~ "Do you want to try again?"
-#~ msgstr ""
-#~ "Heu introduït un PIN incorrecte.\n"
-#~ "Ho voleu tornar a intentar?"
-
-#~ msgid "Import a CSV file into GnuCash"
-#~ msgstr "Importa un fitxer CSV al GnuCash"
-
-#~ msgid ""
-#~ "Import a CSV file into GnuCash and send the transfers online through "
-#~ "Online Banking"
-#~ msgstr ""
-#~ "Importa un fitxer CSV en el GnuCash i envia les transferències en línia a "
-#~ "través de la banca electrònica"
-
-#~ msgid ""
-#~ "You entered %ld characters, but the PIN must be no longer than %d "
-#~ "characters. Do you want to try again?"
-#~ msgstr ""
-#~ "Heu escrit %ld caràcters, però el PIN no pot tenir més de %d caràcters. "
-#~ "Voleu tornar-ho a intentar?"
-
-#~ msgid ""
-#~ "This TAN needs to be at least %d characters long. Do you want to try "
-#~ "again?"
-#~ msgstr ""
-#~ "Aquest TAN ha de tenir %d caràcters com a mínim. Voleu tornar-ho a "
-#~ "intentar?"
-
-#~ msgid ""
-#~ "You entered %ld characters, but the TAN must be no longer than %d "
-#~ "characters. Do you want to try again?"
-#~ msgstr ""
-#~ "Heu escrit %ld caràcters, però el TAN no pot tenir més de %d caràcters. "
-#~ "Voleu tornar-ho a intentar?"
-
-#~ msgid "QIF file load warning: %s"
-#~ msgstr "Avís en carregar el fitxer QIF: %s"
-
-#~ msgid "QIF file load failed: %s"
-#~ msgstr "No s'ha pogut carregar el fitxer QIF: %s"
-
-#~ msgid ""
-#~ "An error occurred while importing QIF transactions into GnuCash. Your "
-#~ "accounts are unchanged."
-#~ msgstr ""
-#~ "S'ha produït un error en importar els assentaments QIF al GnuCash. No "
-#~ "s'han modificat els vostres comptes."
-
-#~ msgid ""
-#~ "Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation "
-#~ "for the name."
-#~ msgstr ""
-#~ "Entreu el símbol del valor (com ara \"GAS\") o una altra abreviació única "
-#~ "pel nom."
-
-#, fuzzy
-#~ msgid "Click \"Forward\" to accept the information and move on."
-#~ msgstr "Cliqueu a «Següent» per a acceptar la informació i continuar."
-
-#~ msgid "Dup?"
-#~ msgstr "Duplicat?"
-
-#~ msgid "Click \"Forward\" to check matchings for QIF categories. "
-#~ msgstr ""
-#~ "Cliqueu a «Endavant» per a comprovar la concordança amb categories QIF. "
-
-#~ msgid ""
-#~ "Click \"Forward\" to enter information about stocks and mutual funds in "
-#~ "the imported data."
-#~ msgstr ""
-#~ "Premeu «Endavant» per a introduir informació sobre valors i fons "
-#~ "d'inversió en les dades importades."
-
-#~ msgid ""
-#~ "Click \"Forward\" to enter information about the currency used in your "
-#~ "QIF files."
-#~ msgstr ""
-#~ "Premeu «Endavant» per a introduirr informació sobre la divisa utilitzada "
-#~ "en els vostres fitxers QIF."
-
-#~ msgid "Enter the currency used for new accounts"
-#~ msgstr "Introduïu la divisa a utilitzar per als comptes nous"
-
-#~ msgid "Imported transactions with duplicates"
-#~ msgstr "Assentaments importats amb duplicats"
-
-#~ msgid ""
-#~ "In the next pages, you will be asked to provide information about stocks, "
-#~ "mutual funds, and other tradable commodities that appear in the QIF "
-#~ "file(s) you are importing. GnuCash requires more information about "
-#~ "tradable commodities than the QIF format can represent. \n"
-#~ "\n"
-#~ "Each stock, mutual fund, or other commodity must have a type, which is "
-#~ "the exchange or listing that it is found on (NASDAQ, NYSE, US Mutual "
-#~ "Funds, etc), a full name, and an abbreviation.\n"
-#~ "\n"
-#~ "Check to see if there is an existing Type that is appropriate; if not, "
-#~ "you can enter a new Type name by hand in the box. Make sure that the "
-#~ "abbreviation you enter matches the ticker symbol used for the commodity "
-#~ "on the exchange or listing for its type."
-#~ msgstr ""
-#~ "En les pàgines següents, se us demanarà que faciliteu informació sobre "
-#~ "accions, fons d'inversió, i altres béns comercialitzables que apareixen "
-#~ "al fitxer o fitxers QIF que esteu important. El GnuCash requereix més "
-#~ "informació sobre aquests béns comercials que no pas la el format QIF pot "
-#~ "representar. \n"
-#~ "\n"
-#~ "Cada acció, fons d'inversió o qualsevol altre bé ha de tenir un tipus "
-#~ "apropiat, corresponent al mercat de valors o índex on cotitza (NASDAQ, "
-#~ "IBEX, NYSE, etc), un nom complet i una abreviació.\n"
-#~ "\n"
-#~ "Comproveu si hi ha un tipus existent que sigui apropiat. Si no és el cas, "
-#~ "podeu introduir-ne un de nou manualment en el quadre de text. Assegureu-"
-#~ "vos que l'abreviació introduïda concorda amb el símbol de l'acció o "
-#~ "divisa en el mercat de valors o índex especificat com a tipus."
-
-#~ msgid "type:bank"
-#~ msgstr "type:bank"
-
-#~ msgid "type:cash"
-#~ msgstr "type:cash"
-
-#~ msgid "type:ccard"
-#~ msgstr "type:ccard"
-
-#~ msgid "type:invst"
-#~ msgstr "type:invst"
-
-#~ msgid "type:port"
-#~ msgstr "type:port"
-
-#~ msgid "type:oth a"
-#~ msgstr "type:oth a"
-
-#~ msgid "type:oth l"
-#~ msgstr "type:oth l"
-
-#~ msgid "type:class"
-#~ msgstr "type:class"
-
-#~ msgid "type:cat"
-#~ msgstr "type:cat"
-
-#~ msgid "type:security"
-#~ msgstr "type:security"
-
-#~ msgid "account"
-#~ msgstr "account"
-
-#~ msgid "option:autoswitch"
-#~ msgstr "option:autoswitch"
-
-#~ msgid "clear:autoswitch"
-#~ msgstr "clear:autoswitch"
-
-#~ msgid "The Date format is ambiguous.  Please choose the correct format."
-#~ msgstr "El format de la data és ambigu. Trieu el format correcte."
-
-#~ msgid "Enable EDIT transaction action"
-#~ msgstr "Abilita l'acció EDITA dels assentaments"
-
-# Es refereix a l'interès (dpm)
-#~ msgid "Int"
-#~ msgstr "Int"
-
-#~ msgid "ATM"
-#~ msgstr "Caixer automàtic"
-
-#~ msgid "Div"
-#~ msgstr "Dividends"
-
-#~ msgid "Level of compression to use: 0 for none, 9 for highest."
-#~ msgstr "Nivell de compressió a utilitzar: 0 (cap), 9 (màxim)."
-
-# INFO: http://qof.sourceforge.net (dpm)
-#~ msgid ""
-#~ "QOF can compress QSF XML files using gzip. Note that compression is not "
-#~ "used when outputting to STDOUT."
-#~ msgstr ""
-#~ "El QOF pot comprimir fitxers QSF XML a través del gzip. Teniu en compte "
-#~ "que no s'utilitzarà la compressió si la sortida és el dispositiu de "
-#~ "sortida estàndard (STDOUT)"
-
-#~ msgid "List of QSF map files to use for this session."
-#~ msgstr "Llista dels fitxers de mapa QSF a utilitzar per a aquesta sessió."
-
-#~ msgid ""
-#~ "QOF can convert objects within QSF XML files using a map of the changes "
-#~ "required."
-#~ msgstr ""
-#~ "El QOF pot convertir objectes en fitxers QSF XML a través d'un mapa "
-#~ "(correspondència) dels canvis requerits."
-
-#~ msgid "String encoding to use when writing the XML file."
-#~ msgstr ""
-#~ "Codificació de les cadenes de text a utilitzar en escriure al fitxer XML."
-
-#~ msgid ""
-#~ "QSF defaults to UTF-8. Other encodings are supported by passing the "
-#~ "string encoding in this option."
-#~ msgstr ""
-#~ "El format QSF utilitza la codificació UTF-8 per defecte. ES poden "
-#~ "utilitzar altres codificacions en passar el tipus de codificació a "
-#~ "utilitzar a través d'aquesta opció."
-
-#~ msgid "The file contains an unknown Action '%s'."
-#~ msgstr "El fitxer conté una acció «%s» desconeguda."
-
-#~ msgid "Blue items are exportable to a .TXF file."
-#~ msgstr "Les entrades de color blau es poden exportar a un fitxer TXF."
-
-#~ msgid ""
-#~ "No Tax Related accounts were found.  Go to the Edit->Tax Options dialog "
-#~ "to set up tax-related accounts."
-#~ msgstr ""
-#~ "No s'han trobat comptes relacionats amb impostos. Obriu el diàleg Edita-"
-#~ ">Opcions dels impostos per a establir comptes relacionats amb impostos."
-
-#~ msgid "TXF"
-#~ msgstr "TXF"
-
-#~ msgid ""
-#~ "Blue items are exportable to a German Tax XML file. Press Export to "
-#~ "actually export them."
-#~ msgstr ""
-#~ "Els elements de color blau es poden exportar a un fitxer XML d'impostos "
-#~ "per a Alemanya. Permeu «Exporta» per a iniciar l'exportació."
-
-#~ msgid "Accounts to include"
-#~ msgstr "Comptes a incloure"
-
-#~ msgid "Show Full Account Name?"
-#~ msgstr "Voleu mostrar el nom complet del compte?"
-
-#~ msgid "Compute unrealized gains and losses"
-#~ msgstr "Calcula els guanys i pèrdues no realitzats"
-
-#~ msgid " Stylesheet"
-#~ msgstr " Full d'estil"
-
-#~ msgid ""
-#~ "Your report \"%s\" has been saved into the configuration file \"%s\".  "
-#~ "The report will be available in the menu Reports -> Custom at the next "
-#~ "startup of GnuCash."
-#~ msgstr ""
-#~ "L'informe «%s» s'ha desat en el fitxer de configuració «%s», i hi podreu "
-#~ "accedir des del menú «Informes -> Personalitzat» la propera vegada que "
-#~ "inicieu el GnuCash."
-
-#~ msgid "INVOICE"
-#~ msgstr "FACTURA"
-
-#~ msgid "Invoice&nbsp;#&nbsp;%d"
-#~ msgstr "Factura&nbsp;#&nbsp;%d"
-
-#~ msgid "Current Year Start"
-#~ msgstr "Inici de l'any en curs"
-
-#~ msgid "Current Year End"
-#~ msgstr "Final de l'any actual"
-
-#~ msgid "Previous Year Start"
-#~ msgstr "Inici de l'any anterior"
-
-#~ msgid "Previous Year End"
-#~ msgstr "Final de l'any anterior"
-
-#~ msgid "End of the Previous Year"
-#~ msgstr "Final de l'any anterior"
-
-# FIXME: (dpm)
-#~ msgid "Start of Financial Period"
-#~ msgstr "Inici del període fiscal"
-
-# FIXME: (dpm)
-#~ msgid "End of Financial Period"
-#~ msgstr "Final del període fiscal"
-
-#~ msgid "End of the accounting period, as set in the global preferences"
-#~ msgstr "El final del període comptable establert a les preferències globals"
-
-#~ msgid "End of the current month"
-#~ msgstr "Final del mes actual"
-
-#~ msgid "The beginning of the previous month"
-#~ msgstr "L'inici del mes anterior"
-
-#~ msgid "The end of the latest quarterly accounting period"
-#~ msgstr "El final del darrer període comptable trimestral"
-
-#~ msgid "Once: %s"
-#~ msgstr "Una vegada: %s"
-
-#~ msgid "Daily (x%u)"
-#~ msgstr "A diari (x%u)"
-
-#~ msgid "Weekdays: (x%u)"
-#~ msgstr "Laborables: (x%u)"
-
-#~ msgid "Weekdays"
-#~ msgstr "Laborables"
-
-#~ msgid "Weekly (x%d): %s"
-#~ msgstr "Setmanal (x%d): %s"
-
-#~ msgid "Weekly: %s"
-#~ msgstr "Setmanal: %s"
-
-#~ msgid "Bi-Weekly, %ss"
-#~ msgstr "Quinzenal, %ss"
-
-#~ msgid "Semi-monthly (x%u): %s, %s"
-#~ msgstr "Semi-mensual (x%u): %s, %s"
-
-#~ msgid "Semi-monthly: %s, %s"
-#~ msgstr "Semi-mensual: %s, %s"
-
-#~ msgid "Monthly (x%u): %u"
-#~ msgstr "Mensual (x%u): %u"
-
-#~ msgid "Monthly: %u"
-#~ msgstr "Mensual: %u"
-
-#~ msgid "Quarterly (x%u): %u"
-#~ msgstr "Trimestral (x%u): %u"
-
-#~ msgid "Quarterly: %u"
-#~ msgstr "Trimestral: %u"
-
-#~ msgid "Tri-Yearly (x%u): %u"
-#~ msgstr "Triennal (x%u): %u"
-
-#~ msgid "Tri-Yearly: %u"
-#~ msgstr "Triennal: %u"
-
-#~ msgid "Semi-Yearly (x%u): %u"
-#~ msgstr "Semi-anual (x%u): %u"
-
-#~ msgid "Semi-Yearly: %u"
-#~ msgstr "Semi-anual: %u"
-
-#~ msgid "Yearly (x%u): %s/%u"
-#~ msgstr "Anual (x%1$u): el %3$u de %2$s"
-
-#~ msgid "Yearly: %s/%u"
-#~ msgstr "Anual: el %2$u de %1$s"
-
-#~ msgid "Changes have been made since the last Save. Save the data to file?"
-#~ msgstr ""
-#~ "S'han fet canvis des del darrer Desar. Voleu desar les dades al fitxer?"
-
-#~ msgid "-- Single Sources --"
-#~ msgstr "-- Font única --"
-
-#~ msgid "-- Multiple Sources --"
-#~ msgstr "-- Fonts múltiples --"
-
-#~ msgid "Choose the type of Billing Term"
-#~ msgstr "Escolliu el tipus de condició de pagament"
-
-#~ msgid "Number of days from now"
-#~ msgstr "Nombre de dies des d'avui"
-
-#~ msgid "Absolute Day-of-the-month"
-#~ msgstr "Dia del mes"
-
-#~ msgid "_Gnucash Users Manual"
-#~ msgstr "Manual d'usuari del _GnuCash"
-
-#~ msgid "Entity type does not match Customer: %s"
-#~ msgstr "El tipus d'entitat no quadra amb el client: %s"
-
-#~ msgid "Entity type does not match Vendor: %s"
-#~ msgstr "El tipus d'entitat no quadra amb el proveïdor: %s"
-
-#~ msgid "Entity type does not match Employee: %s"
-#~ msgstr "El tipus d'entitat no quadra amb el treballador: %s"
-
-#~ msgid ""
-#~ "Error occurred while saving Account:\n"
-#~ "%d: %s"
-#~ msgstr ""
-#~ "S'ha produït un error en desar el compte:\n"
-#~ "%d: %s"
-
-#~ msgid "_All"
-#~ msgstr "_Tots"
-
-#~ msgid "Reconcile the main account for this register"
-#~ msgstr "Concilia el compte principal d'aquest registre"
-
-#~ msgid "Timezone for these quotes:"
-#~ msgstr "Zona horària de les cotitzacions:"
-
-#~ msgid "Enter opening balances"
-#~ msgstr "Entreu els saldos d'obertura"
-
-#~ msgid "Add"
-#~ msgstr "Afegeix"
-
-#~ msgid "Search GnuCash Help"
-#~ msgstr "Cerca a l'ajuda del GnuCash"
-
-#~ msgid "Help"
-#~ msgstr "Ajuda"
-
-#~ msgid "Search results"
-#~ msgstr "Resultats de la cerca"
-
-#~ msgid ""
-#~ "Uncheck if you do not want this dialog to run if you start GnuCash up "
-#~ "again. "
-#~ msgstr ""
-#~ "Desmarqueu si no voleu que es mostri aquest diàleg quan torneu a engegar "
-#~ "GnuCash. "
-
-#~ msgid "Create "
-#~ msgstr "Crea "
-
-#~ msgid "Display this dialog next time"
-#~ msgstr "Mostra aquesta finestra la propera vegada"
-
-#~ msgid "-*-helvetica-bold-r-normal-*-*-180-*-*-p-*-*-*"
-#~ msgstr "-*-helvetica-bold-r-normal-*-*-180-*-*-p-*-*-*"
-
-#~ msgid "You must enter a valid balance."
-#~ msgstr "Heu d'entrar un balanç vàlid."
-
-#~ msgid "Passphrases did not match."
-#~ msgstr "Les contrassenyes no concorden."
-
-#~ msgid "Version: Gnucash-%s"
-#~ msgstr "Versió: Gnucash-%s"
-
-#~ msgid ""
-#~ "Are you sure you want to delete the %s\n"
-#~ "account and all its children?"
-#~ msgstr ""
-#~ "Esteu segur de voler esborrar el compte %s\n"
-#~ "i tots els seus descendents?"
-
-#~ msgid ""
-#~ "To delete an account, you must first\n"
-#~ "choose an account to delete.\n"
-#~ msgstr ""
-#~ "Per esborrar un compte, cal que primer\n"
-#~ "escolliu un compte a esborrar.\n"
-
-#~ msgid ""
-#~ "To reconcile an account, you must first\n"
-#~ "choose an account to reconcile."
-#~ msgstr ""
-#~ "Per conciliar un compte, cal que primer\n"
-#~ "escolliu un compte a conciliar."
-
-#~ msgid "Financial _Calculator"
-#~ msgstr "_Calculadora financera"
-
-#~ msgid "Exit"
-#~ msgstr "Eixir"
-
-#~ msgid "Finish"
-#~ msgstr "Acabar"
-
-#~ msgid "Add criterion"
-#~ msgstr "Afegeix criteri"
-
-#~ msgid "Currency/security:"
-#~ msgstr "Divisa/valor:"
-
-#~ msgid ""
-#~ "Enter the ticker symbol or currency code for the commodity. Example: USD"
-#~ msgstr ""
-#~ "Entreu el símbol del valor o el codi de divisa pel producte. Exemple: EUR"
-
-#~ msgid "Import currency and stock information"
-#~ msgstr "Importa la informació de divisa i valor bursàtil"
-
-#~ msgid "Import currency and stock information "
-#~ msgstr "Importa la informació de divisa i valor bursàtil "
-
-#~ msgid ""
-#~ "The file you are loading is from an older version of GnuCash. \n"
-#~ "Information about currencies, stocks, and mutual funds needs to\n"
-#~ "be updated for the new version. \n"
-#~ "\n"
-#~ "This dialog will prompt you for some additional information about \n"
-#~ "each currency, stock, and mutual fund that appear in your\n"
-#~ "accounts.  After you have entered this information, you can\n"
-#~ "update your accounts for the new version of GnuCash.\n"
-#~ "\n"
-#~ "Hit \"Cancel\" now to stop loading the file. "
-#~ msgstr ""
-#~ "El fitxer que esteu carregant és d'una versió anterior de GnuCash. \n"
-#~ "La informació de divises, accions i fons d'inversió s'ha d'actualitzar\n"
-#~ "a la nova versió. \n"
-#~ "\n"
-#~ "Aquesta caixa de diàleg us demanarà alguna informació addicional sobre \n"
-#~ " cara divisa, acció o fons d'inversió que aparegui als vostres comptes.  "
-#~ "Després\n"
-#~ "que hagueu introduït aquesta informació, podreu actualitzar els vostres "
-#~ "comptes\n"
-#~ "a la nova versió de GnuCash.\n"
-#~ "\n"
-#~ "Premeu \"Cancel·lar\" ara per avortar la càrrega del fitxer. "
-
-#~ msgid ""
-#~ "Click \"Finish\" to update your accounts to use the new \n"
-#~ "information you have entered.\n"
-#~ "\n"
-#~ "Click \"Cancel\" to cancel the file-loading process.  \n"
-#~ "\n"
-#~ "Click \"Back\" to review your currency selections."
-#~ msgstr ""
-#~ "Feu clic a \"Acabar\" per actualitzar els vostres comptes \n"
-#~ "amb la nova informació que heu entrat.\n"
-#~ "\n"
-#~ "Feu clic a \"Cancel·lar\" per cancel·lar la càrrega del fitxer.  \n"
-#~ "\n"
-#~ "Feu clic a \"Enrere\" per revisar les vostres seleccions de divisa."
-
-#~ msgid ""
-#~ "Pick the type of the currency or security. For national currencies, \n"
-#~ "use \"CURRENCY\". Enter a new type in the box if the ones in the\n"
-#~ "pick list are inappropriate."
-#~ msgstr ""
-#~ "Escolliu el tipus de divisa o valor. Per monedes nacionals, \n"
-#~ "useu \"DIVISA\". Entreu-ne un nou tipus si els que hi ha\n"
-#~ "a la llista no són apropiats."
-
-#~ msgid ""
-#~ "Enter a descriptive name for the currency or stock, such as \n"
-#~ "\"US Dollar\" or \"Red Hat Stock\""
-#~ msgstr ""
-#~ "Entreu un nom descriptiu per la divisa o valor, com ara \n"
-#~ "\"Euros\" o \"Accions de 'La Caixa'\""
-
-#~ msgid ""
-#~ "Enter the ticker symbol (such as \"RHAT\"), national currency symbol \n"
-#~ "(such as \"USD\"), or other unique abbreviation for the name."
-#~ msgstr ""
-#~ "Entreu el símbol del valor (com ara \"GASN\"), símbol de moneda "
-#~ "nacional \n"
-#~ "(com ara \"EUR\"), o una altra abreviació única pel nom."
-
-#~ msgid ""
-#~ "-Red transactions require your intervention or they will NOT be "
-#~ "imported.\n"
-#~ "-Yellow transactions probably require your intervention or they will be "
-#~ "imported unbalanced.\n"
-#~ "-Green transactions will be imported balanced (you may still want to "
-#~ "double check the match or destination account).\n"
-#~ "\n"
-#~ "-Select \"A\" to Add the transaction as new\n"
-#~ "-Select \"R\" to Reconcile a matching transaction\n"
-#~ "-Select neither to Skip (The transaction won't be imported at all)\n"
-#~ "-\"Select Import Action\" allows you to change the matching transaction "
-#~ "to reconcile, or the destination account of the auto-balance split (if "
-#~ "required)."
-#~ msgstr ""
-#~ "-Les transaccions en vermell necessiten la vostra intervenció o NO "
-#~ "s'importaran.\n"
-#~ "-Les transaccions en groc probablement necessitaran la vostra intervenció "
-#~ "o s'importaran desequilibrades.\n"
-#~ "-Les transaccions en verd s'importaran equilibrades (tanmateix, potser "
-#~ "voldreu comprovar la correspondència o el compte de destí).\n"
-#~ "\n"
-#~ "-Seleccioneu \"A\" per afegir la transacció com a nova\n"
-#~ "-Selecioneu \"R\" per conciliar una transacció que es correspongui\n"
-#~ "-No en seleccioneu cap per saltar-vos-la (la transacció no s'importarà)\n"
-#~ "-\"Seleccioneu l'acció d'importació\" us permet de canviar la transacció "
-#~ "a conciliar, o el compte de destí de l'entrada de quadrat automàtic (si "
-#~ "s'escau)."
-
-#~ msgid "Server Address"
-#~ msgstr "Adreça del servidor"
-
-#~ msgid "HBCI account name"
-#~ msgstr "Nom del compte HBCI"
-
-#~ msgid ""
-#~ "HBCI\n"
-#~ "Version"
-#~ msgstr ""
-#~ "HBCI\n"
-#~ "Versió"
-
-#~ msgid ""
-#~ "Now you need to send your cryptographic public keys to the bank\n"
-#~ "server. Once you press 'Next', you public keys are sent to the \n"
-#~ "bank. ATTENTION: This step cannot be undone. Once you have sent \n"
-#~ "your keys to the bank, you cannot generate new ones but instead \n"
-#~ "have to use these for months to come (unless you personally ask \n"
-#~ "your bank to reset them).\n"
-#~ "\n"
-#~ "AGAIN ATTENTION: If you happen to encounter a bug in this unstable\n"
-#~ "Gnucash version and/or OpenHBCI, these keys might get broken and you\n"
-#~ "might actually have ask your bank to reset them and generate new ones.\n"
-#~ "\n"
-#~ "If you are really sure to proceed, then press 'Next' now to send \n"
-#~ "the keys to the bank. You can then see the progress of the HBCI \n"
-#~ "connection in the HBCI connection window."
-#~ msgstr ""
-#~ "Ara cal que envieu les vostres claus criptogràfiques públiques al "
-#~ "servidor\n"
-#~ "del banc. Quan premeu 'Següent', les vostres claus públiques s'enviaran.\n"
-#~ "ATENCIÓ: Aques pas no es pot desfer. Quan les hagueu enviat, no podreu \n"
-#~ "generar-ne de noves sinó que haureu d'emprar aquestes els propers mesos \n"
-#~ "(a no ser que demaneu personalment al banc que les dóni de baixa).\n"
-#~ "\n"
-#~ "MÉS ATENCIÓ: Si trobeu algun error en aquesta versió de GnuCash i/o \n"
-#~ "de OpenHBCI, podria ser que aquestes claus es trenquessin i haguéssiu "
-#~ "de \n"
-#~ "demanar al vostre banc que les anul·lés i en generés de noves.\n"
-#~ "\n"
-#~ "Si esteu realment segur de prosseguir, premeu ara 'Següent' per enviar "
-#~ "les claus \n"
-#~ "al banc. Podeu veure la marxa de la connexió a la finestra de la connexió "
-#~ "HBCI."
-
-#~ msgid "HBCI Version"
-#~ msgstr "Versió HBCI"
-
-#~ msgid ""
-#~ "You have changed the HBCI version. GnuCash will now need to \n"
-#~ "update various system parameters, including the account list.\n"
-#~ "Press 'Ok' now to proceed to updating the system and the account list."
-#~ msgstr ""
-#~ "Heu canviat la versió de HBCI. Al GnuCash li cal ara actualitzar "
-#~ "diversos \n"
-#~ "paràmetres del sistema, incloent-hi el llistat de comptes.\n"
-#~ "Premeu 'Acceptar' per procedir a actualitzar el sistema i la lista de "
-#~ "comptes."
-
-#~ msgid "Job: New Transfer"
-#~ msgstr "Tasca: Nova transferència"
-
-#~ msgid "Job: Debit Note"
-#~ msgstr "Tasca: Nota de dèbit"
-
-#~ msgid "Job: Get Standing Orders"
-#~ msgstr "Tasca: Obtenir comandes pendents"
-
-#~ msgid "Job: New Standing Order"
-#~ msgstr "Tasca: Nova comanda pendent"
-
-#~ msgid "Job: Delete Standing Order"
-#~ msgstr "Tasca: Esborrar comanda pendent"
-
-#~ msgid "Job: Retrieve Account List"
-#~ msgstr "Tasca: Recuperar el llistat de comptes"
-
-#~ msgid "Job: Get System ID"
-#~ msgstr "Tasca: Obtenir ID del sistema"
-
-#~ msgid "Job: Get Keys"
-#~ msgstr "Tasca: Obtenir les claus"
-
-#~ msgid "Job: Send Keys"
-#~ msgstr "Tasca: Enviar les claus"
-
-#~ msgid "Job: Disable Keys"
-#~ msgstr "Tasca: Deshabilitar les claus"
-
-#~ msgid "Job: Change Keys"
-#~ msgstr "Tasca: Canviar les claus"
-
-#~ msgid "Job: Get Status Reports"
-#~ msgstr "Tasca: Obtenir els informes d'estat"
-
-#~ msgid "Done"
-#~ msgstr "Fet"
-
-#~ msgid "Sending message"
-#~ msgstr "Enviant el missatge"
-
-#~ msgid "Waiting for response"
-#~ msgstr "Esperant la resposta"
-
-#~ msgid ""
-#~ "register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
-#~ msgstr ""
-#~ "register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
-
-#~ msgid ""
-#~ "register-hint-font:-adobe-helvetica-medium-o-normal--*-120-*-*-*-*-*-*"
-#~ msgstr ""
-#~ "register-hint-font:-adobe-helvetica-medium-o-normal--*-120-*-*-*-*-*-*"
-
-#~ msgid "Style sheet template:"
-#~ msgstr "Plantilla de full d'estil:"
-
-#~ msgid "Current Financial Year Start"
-#~ msgstr "Inici de l'any fiscal actual"
-
-#~ msgid "Start of the current financial year/accounting period"
-#~ msgstr "Inici de l'any o període comptable fiscal actual"
-
-#~ msgid "Previous Financial Year Start"
-#~ msgstr "Inici de l'any fiscal anterior"
-
-#~ msgid "International"
-#~ msgstr "Internacional"
-
-#~ msgid "Continental Europe: dd.mm.yyyy"
-#~ msgstr "Europa continental: dd.mm.yyyy"
-
-#~ msgid "ISO Standard: yyyy-mm-dd"
-#~ msgstr "Estàndard ISO: yyyy-mm-dd"
-
-#, fuzzy
-#~ msgid "Basic Ledger"
-#~ msgstr "Llibre Major"
-
-#, fuzzy
-#~ msgid "Auto-Split Ledger"
-#~ msgstr "Auto-Split Ledger"
-
-#~ msgid "Header color"
-#~ msgstr "Color de la capçalera"
-
-#~ msgid "The header background color"
-#~ msgstr "El color de fons de la capçalera"
-
-#~ msgid "Primary color"
-#~ msgstr "Color principal"
-
-#~ msgid "The default background color for register rows"
-#~ msgstr "El color de fons per omissió de les files del registre"
-
-#~ msgid "Secondary color"
-#~ msgstr "Color secundari"
-
-#~ msgid "The default secondary background color for register rows"
-#~ msgstr "El color secundari de fons per omissió de les files del registre"
-
-#~ msgid "Primary active color"
-#~ msgstr "Color actiu principal"
-
-#~ msgid "The background color for the current register row"
-#~ msgstr "El color de fons per la fila del registre actual"
-
-#~ msgid "Secondary active color"
-#~ msgstr "Color actiu secundari"
-
-#~ msgid "The secondary background color for the current register row"
-#~ msgstr "El color secundari de fons de la fila del registre actual"
-
-#~ msgid "The default background color for split rows in the register"
-#~ msgstr "El color de fons per omissió dels desglossaments"
-
-#~ msgid "Show Advanced Settings"
-#~ msgstr "Mostra opcions avançades"
-
-#~ msgid "Allow modification of less commonly used settings."
-#~ msgstr "Permet la modificació de les opcions menys utilitzades."
-
-#~ msgid "Choose whether to display icons, text, or both for toolbar buttons"
-#~ msgstr ""
-#~ "Escull entre mostrar icones, text o ambdós als botons de la barra d'eines"
-
-#~ msgid "Icons and Text"
-#~ msgstr "Icones i text"
-
-#~ msgid "Show both icons and text"
-#~ msgstr "Mostra icones i text alhora"
-
-#~ msgid "/ (Slash)"
-#~ msgstr "/ (Barra)"
-
-#~ msgid "Income/Salary/Taxable"
-#~ msgstr "Ingressos/Salari/Imponible"
-
-#~ msgid "\\ (Backslash)"
-#~ msgstr "\\ (Contrabarra)"
-
-#~ msgid "Income\\Salary\\Taxable"
-#~ msgstr "Ingressos\\Salari\\Imponible"
-
-#~ msgid "Income-Salary-Taxable"
-#~ msgstr "Ingressos-Salari-Imponible"
-
-#~ msgid "Income.Salary.Taxable"
-#~ msgstr "Ingressos.Salari.Imponible"
-
-#~ msgid "Income & Expense"
-#~ msgstr "Ingressos i despeses"
-
-#~ msgid "Use file compression"
-#~ msgstr "Empra la compressió de fitxers"
-
-#~ msgid "Choose how new windows are created for reports and account trees."
-#~ msgstr ""
-#~ "Escolliu com s'han de crear les finestres noves per als informes i arbres "
-#~ "de comptes."
-
-#~ msgid "View and Edit the available Billing Terms"
-#~ msgstr "Veure i Editar les condicions de pagament disponibles"
-
-#~ msgid "Invoice Tax Included?"
-#~ msgstr "Inclou l'impost repercutit de les factures?"
-
-#~ msgid "Bill Tax Included?"
-#~ msgstr "Inclou l'impost suportat de les factures?"
-
-#~ msgid "Bills Due Days"
-#~ msgstr "Dies abans del venciment"
-
-#~ msgid "Profit And Loss"
-#~ msgstr "Compte de Resultats"
-
-#~ msgid "online book"
-#~ msgstr "llibre en línia"
-
-#~ msgid ""
-#~ "List of directories to search when looking for config files. Each element "
-#~ "must be a string representing a directory or a symbol where 'default "
-#~ "expands to the default path, and 'current expands to the current value of "
-#~ "the path."
-#~ msgstr ""
-#~ "Una llista de carpetes (cadenes) indicant on cercar fitxers de "
-#~ "configuració. Cada element ha d'ésser una cadena que representi una "
-#~ "carpeta o un símbol on 'omissió s'expandeix a la ruta per omissió i "
-#~ "'actual s'expandeix al valor actual de la ruta."
-
-#~ msgid ""
-#~ "List of directories to search when looking for shared data files. Each "
-#~ "element must be a string representing a directory or a symbol where "
-#~ "'default expands to the default path, and 'current expands to the current "
-#~ "value of the path."
-#~ msgstr ""
-#~ "Una llista de carpetes (cadenes) indicant on cercar fitxers de dades "
-#~ "compartides. Cada element ha d'ésser una cadena que representi una "
-#~ "carpeta o un símbol on 'omissió s'expandeix a la ruta per omissió i "
-#~ "'actual s'expandeix al valor actual de la ruta."
-
-#~ msgid "Show this help message"
-#~ msgstr "Mostra aquest missatge d'ajuda"
-
-#~ msgid "Tracks Your Investments"
-#~ msgstr "Segueix les vostres inversions"
-
-#~ msgid "Balance Sheet Accounts"
-#~ msgstr "Comptes del Balanç de Situació"
-
-#~ msgid "ATM/Cash Withdrawals"
-#~ msgstr "Reintegraments caixer"
-
-#~ msgid "Types of Investments"
-#~ msgstr "Tipus d'inversions"
-
-#~ msgid "Buying New Investments"
-#~ msgstr "Adquirint noves inversions"
-
-#~ msgid "Advanced"
-#~ msgstr "Avançades"
-
-#~ msgid "Changing Style Sheets"
-#~ msgstr "Canviant els fulls d'estil"
-
-#~ msgid "Double click expands parent accounts"
-#~ msgstr "El doble clic expandeix els comptes pare"
-
-#~ msgid "_Style Sheets..."
-#~ msgstr "_Fulls d'estil..."
-
-#~ msgid " Variables are in the form 'name=value'"
-#~ msgstr " Les variables tenen el format «nom=valor»"
-
-#~ msgid "Enable debugging mode"
-#~ msgstr "Activa el mode de depuració d'errors"
-
-#~ msgid "*"
-#~ msgstr "*"
-
-#~ msgid "Value ($)"
-#~ msgstr "Valor ($)"
-
-#~ msgid "does not contain"
-#~ msgstr "no conté"
-
-#~ msgid "Old Value"
-#~ msgstr "Valor antic"
-
-#~ msgid "The following changes must be made. Continue?"
-#~ msgstr "S'han de fer els següents canvis. Voleu continuar?"
-
-#~ msgid "Missing file encoding"
-#~ msgstr "Manca la codificació del fitxer"
-
-#, fuzzy
-#~ msgid "Enables support for the European Union EURO currency."
-#~ msgstr "Habilita el suport per a la divisa de la Unió Europea (EURO)"
-
-#, fuzzy
-#~ msgid "_Enable euro support"
-#~ msgstr "Habilita el suport per a l'EURO"
-
-#, fuzzy
-#~ msgid "Quit GnuCash?"
-#~ msgstr "Eixir de GnuCash"
-
-#, fuzzy
-#~ msgid "Open a register showing the transactions in this lot"
-#~ msgstr "Obre una finestra d'informe de registre per aquesta transacció"
-
-#, fuzzy
-#~ msgid "December"
-#~ msgstr "Reducció"
-
-#, fuzzy
-#~ msgid "March"
-#~ msgstr "Cerca"
-
-#, fuzzy
-#~ msgid "May"
-#~ msgstr "Dia"
-
-#, fuzzy
-#~ msgid "October"
-#~ msgstr "Altres"
-
-#, fuzzy
-#~ msgid "_Lot Viewer..."
-#~ msgstr "Veure..."
-
-#~ msgid "_Description"
-#~ msgstr "_Descripció"
-
-#~ msgid "Application MDI mode"
-#~ msgstr "Comportament MDI de l'aplicació"

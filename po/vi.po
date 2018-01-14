@@ -19,20 +19,19 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr ""
+msgstr "Ả Rập"
 
 #: ../borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr ""
+msgstr "Ban-tích"
 
 #: ../borrowed/goffice/go-charmap-sel.c:72
-#, fuzzy
 msgid "Central European"
-msgstr "Âu"
+msgstr "Vùng Trung Âu"
 
 #: ../borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr ""
+msgstr "Trung Quốc"
 
 #: ../borrowed/goffice/go-charmap-sel.c:74
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:242
@@ -40,29 +39,28 @@ msgid "Cyrillic"
 msgstr "Ki-rin"
 
 #: ../borrowed/goffice/go-charmap-sel.c:75
-#, fuzzy
 msgid "Greek"
-msgstr "Lục"
+msgstr "Hy Lạp"
 
 #: ../borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr ""
+msgstr "Do Thái"
 
 #: ../borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
-msgstr ""
+msgstr "Ấn Độ"
 
 #: ../borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr ""
+msgstr "Nhật"
 
 #: ../borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr ""
+msgstr "Hàn"
 
 #: ../borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr ""
+msgstr "Thổ Nhĩ Kỳ"
 
 #: ../borrowed/goffice/go-charmap-sel.c:81
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:224
@@ -71,12 +69,11 @@ msgstr "Unicode"
 
 #: ../borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr ""
+msgstr "Việt"
 
 #: ../borrowed/goffice/go-charmap-sel.c:83
-#, fuzzy
 msgid "Western"
-msgstr "Sổ cái"
+msgstr "Phương Tây"
 
 #: ../borrowed/goffice/go-charmap-sel.c:84
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:60
@@ -88,364 +85,351 @@ msgstr "Khác"
 
 #: ../borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "Ả Rập (IBM-864)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr ""
+msgstr "Ả Rập (IBM-864-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "Ả Rập (ISO-8859-6)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr ""
+msgstr "Ả Rập (ISO-8859-6-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr ""
+msgstr "Ả Rập (ISO-8859-6-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:121
 msgid "Arabic (MacArabic)"
-msgstr ""
+msgstr "Ả Rập (MacArabic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:122
 msgid "Arabic (Windows-1256)"
-msgstr ""
+msgstr "Ả Rập (Windows-1256)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
-msgstr ""
+msgstr "Armenia (ARMSCII-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:124
-#, fuzzy
 msgid "Baltic (ISO-8859-13)"
-msgstr "ISO 8859-13 (Ban-tích)"
+msgstr "Ban-tích (ISO-8859-13)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
-msgstr ""
+msgstr "Ban-tích (ISO-8859-4)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:126
 msgid "Baltic (Windows-1257)"
-msgstr ""
+msgstr "Ban-tích (Windows-1257)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:127
-#, fuzzy
 msgid "Celtic (ISO-8859-14)"
-msgstr "ISO 8859-14 (Xen-tơ)"
+msgstr "Celtic (ISO-8859-14)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
-msgstr ""
+msgstr "Vùng Trung Âu (IBM-852)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:130
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "Vùng Trung Âu (ISO-8859-2)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:132
 msgid "Central European (MacCE)"
-msgstr ""
+msgstr "Vùng Trung Âu (MacCE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:134
 msgid "Central European (Windows-1250)"
-msgstr ""
+msgstr "Vùng Trung Âu (Windows-1250)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:136
 msgid "Chinese Simplified (GB18030)"
-msgstr ""
+msgstr "Tiếng Hoa Giản thể (GB18030)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:137
 msgid "Chinese Simplified (GB2312)"
-msgstr ""
+msgstr "Tiếng Hoa Giản thể (GB2312)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:138
 msgid "Chinese Simplified (GBK)"
-msgstr ""
+msgstr "Tiếng Hoa Giản thể (GBK)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:139
 msgid "Chinese Simplified (HZ)"
-msgstr ""
+msgstr "Tiếng Hoa Giản thể (HZ)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:140
 msgid "Chinese Simplified (Windows-936)"
-msgstr ""
+msgstr "Tiếng Hoa Giản thể (Windows-936)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr ""
+msgstr "Tiếng Hoa Phồn thể (Big5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr ""
+msgstr "Tiếng Hoa Phồn thể (Big5-HKSCS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
-msgstr ""
+msgstr "Tiếng Hoa Phồn thể (EUC-TW)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:147
 msgid "Croatian (MacCroatian)"
-msgstr ""
+msgstr "Cợ-rô-a-ti-a (MacCroatian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:149
-#, fuzzy
 msgid "Cyrillic (IBM-855)"
-msgstr "Ki-rin"
+msgstr "Ki-rin (IBM-855)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:150
 msgid "Cyrillic (ISO-8859-5)"
-msgstr ""
+msgstr "Ki-rin (ISO-8859-5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:152
 msgid "Cyrillic (ISO-IR-111)"
-msgstr ""
+msgstr "Ki-rin (ISO-IR-111)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:154
-#, fuzzy
 msgid "Cyrillic (KOI8-R)"
-msgstr "Ki-rin"
+msgstr "Ki-rin (KOI8-R)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:155
 msgid "Cyrillic (MacCyrillic)"
-msgstr ""
+msgstr "Ki-rin (MacCyrillic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:157
 msgid "Cyrillic (Windows-1251)"
-msgstr ""
+msgstr "Ki-rin (Windows-1251)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
-msgstr ""
+msgstr "Nga (CP-866)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:160
 msgid "Ukrainian (KOI8-U)"
-msgstr ""
+msgstr "U-cợ-rainh (KOI8-U)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:161
-#, fuzzy
 msgid "Ukrainian (MacUkrainian)"
-msgstr "KOI8-U (U-cợ-rainh)"
+msgstr "U-cợ-rainh (MacUkrainian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:163
 msgid "English (ASCII)"
-msgstr ""
+msgstr "Anh (ASCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
-msgstr ""
+msgstr "Pha-xi (MacFarsi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:166
 msgid "Georgian (GEOSTD8)"
-msgstr ""
+msgstr "Gi-oa-gi-a (GEOSTD8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:167
-#, fuzzy
 msgid "Greek (ISO-8859-7)"
-msgstr "ISO 8859-7 (Hy Lạp)"
+msgstr "Hy Lạp (ISO-8859-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:168
 msgid "Greek (MacGreek)"
-msgstr ""
+msgstr "Hy Lạp (MacGreek)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:169
 msgid "Greek (Windows-1253)"
-msgstr ""
+msgstr "Hy Lạp (Windows-1253)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:170
 msgid "Gujarati (MacGujarati)"
-msgstr ""
+msgstr "Gu-gia-ra-ti (MacGujarati)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:172
 msgid "Gurmukhi (MacGurmukhi)"
-msgstr ""
+msgstr "Guổ-mu-khi (MacGurmukhi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr ""
+msgstr "Do Thái (IBM-862)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr ""
+msgstr "Do Thái (ISO-8859-8-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr ""
+msgstr "Do Thái (ISO-8859-8-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr ""
+msgstr "Do Thái (MacHebrew)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
-msgstr ""
+msgstr "Do Thái (Windows-1255)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
-msgstr ""
+msgstr "Hin-đi (MacDevanagari)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
-msgstr ""
+msgstr "Băng Đảo (MacIcelandic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:186
 msgid "Japanese (EUC-JP)"
-msgstr ""
+msgstr "Nhật (EUC-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:187
 msgid "Japanese (ISO-2022-JP)"
-msgstr ""
+msgstr "Nhật (ISO-2022-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:189
 msgid "Japanese (Shift_JIS)"
-msgstr ""
+msgstr "Nhật (Shift_JIS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:190
 msgid "Korean (EUC-KR)"
-msgstr ""
+msgstr "Hàn (EUC-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:191
 msgid "Korean (ISO-2022-KR)"
-msgstr ""
+msgstr "Hàn (ISO-2022-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:192
 msgid "Korean (JOHAB)"
-msgstr ""
+msgstr "Hàn (JOHAB)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:193
 msgid "Korean (UHC)"
-msgstr ""
+msgstr "Hàn (UHC)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:194
-#, fuzzy
 msgid "Nordic (ISO-8859-10)"
-msgstr "ISO 8859-10 (Bắc Âu)"
+msgstr "Na Uy (ISO-8859-10)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:195
 msgid "Romanian (MacRomanian)"
-msgstr ""
+msgstr "Ru-ma-ni (MacRomanian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:197
 msgid "Romanian (ISO-8859-16)"
-msgstr ""
+msgstr "Ru-ma-ni (ISO-8859-16)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:199
 msgid "South European (ISO-8859-3)"
-msgstr ""
+msgstr "Vùng Nam Âu (ISO-8859-3)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:201
 msgid "Thai (TIS-620)"
-msgstr ""
+msgstr "Thái Lan (TIS-620)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:202
 msgid "Turkish (IBM-857)"
-msgstr ""
+msgstr "Thổ Nhĩ Kỳ (IBM-857)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:203
 msgid "Turkish (ISO-8859-9)"
-msgstr ""
+msgstr "Thổ Nhĩ Kỳ (ISO-8859-9)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:204
 msgid "Turkish (MacTurkish)"
-msgstr ""
+msgstr "Thổ Nhĩ Kỳ (MacTurkish)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:206
 msgid "Turkish (Windows-1254)"
-msgstr ""
+msgstr "Thổ Nhĩ Kỳ (Windows-1254)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:208
-#, fuzzy
 msgid "Unicode (UTF-7)"
-msgstr "Unicode"
+msgstr "Unicode (UTF-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:209
-#, fuzzy
 msgid "Unicode (UTF-8)"
-msgstr "Unicode"
+msgstr "Unicode (UTF-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:210
 msgid "Unicode (UTF-16BE)"
-msgstr ""
+msgstr "Unicode (UTF-16BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:211
 msgid "Unicode (UTF-16LE)"
-msgstr ""
+msgstr "Unicode (UTF-16LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:212
 msgid "Unicode (UTF-32BE)"
-msgstr ""
+msgstr "Unicode (UTF-32BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:213
 msgid "Unicode (UTF-32LE)"
-msgstr ""
+msgstr "Unicode (UTF-32LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:214
-#, fuzzy
 msgid "User Defined"
-msgstr "Tên người dùng"
+msgstr "Tự xác định"
 
 #: ../borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
-msgstr ""
+msgstr "Việt (TCVN)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:217
 msgid "Vietnamese (VISCII)"
-msgstr ""
+msgstr "Việt (VISCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:218
 msgid "Vietnamese (VPS)"
-msgstr ""
+msgstr "Việt (VPS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:219
 msgid "Vietnamese (Windows-1258)"
-msgstr ""
+msgstr "Việt (Windows-1258)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "Do Thái trực quan (ISO-8859-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
-msgstr ""
+msgstr "Phương Tây (IBM-850)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:224
 msgid "Western (ISO-8859-1)"
-msgstr ""
+msgstr "Phương Tây (ISO-8859-1)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:225
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "Phương Tây (ISO-8859-15)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:227
 msgid "Western (MacRoman)"
-msgstr ""
+msgstr "Phương Tây (MacRoman)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:228
 msgid "Western (Windows-1252)"
-msgstr ""
+msgstr "Phương Tây (Windows-1252)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:441
-#, fuzzy
 msgid "Locale: "
-msgstr "Miền đị_a phương:"
+msgstr "Miền địa phương: "
 
 #: ../borrowed/goffice/go-charmap-sel.c:476
-#, fuzzy
 msgid "Conversion Direction"
-msgstr "Sắp xếp"
+msgstr "Hướng chuyển đổi"
 
 #: ../borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr ""
+msgstr "Giá trị này xác định tiến trình thử iconv nào cần thực hiện."
 
 #: ../borrowed/goffice/go-optionmenu.c:410
 msgid "Menu"
-msgstr ""
+msgstr "Trình đơn"
 
 #: ../borrowed/goffice/go-optionmenu.c:410
-#, fuzzy
 msgid "The menu of options"
-msgstr "Tùy chọn số là %s."
+msgstr "Trình đơn các tùy chọn"
 
 #: ../gnucash/gnome/assistant-acct-period.c:190
 msgid "The book was closed successfully."
@@ -17559,9 +17543,8 @@ msgid "Select Separator Type"
 msgstr "Chọn kiểu tiền bớt"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.glade.h:22
-#, fuzzy
 msgid "Preview"
-msgstr "Xem lại"
+msgstr "Xem thử"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.glade.h:23
 msgid "Import Account Preview, first 10 rows only"
@@ -19304,9 +19287,8 @@ msgstr ""
 "Bạn sẽ có dịp nạp thêm tập tin, nếu dữ liệu nằm trong nhiều tập tin.\n"
 
 #: ../gnucash/import-export/qif-imp/assistant-qif-import.glade.h:13
-#, fuzzy
 msgid "_Select..."
-msgstr "Chọn..."
+msgstr "_Chọn..."
 
 #: ../gnucash/import-export/qif-imp/assistant-qif-import.glade.h:14
 msgid "Select a QIF file to load"
@@ -19770,9 +19752,8 @@ msgstr "Lãi bảo chứng"
 
 #: ../gnucash/import-export/qif-imp/qif-file.scm:85
 #: ../gnucash/import-export/qif-imp/qif-file.scm:93
-#, fuzzy
 msgid "Line"
-msgstr "Trực tuyến"
+msgstr "Đường"
 
 #: ../gnucash/import-export/qif-imp/qif-file.scm:96
 msgid "Read aborted."
@@ -20918,7 +20899,7 @@ msgstr "Địa chỉ thư : "
 
 #: ../gnucash/report/business-reports/aging.scm:789
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: ../gnucash/report/business-reports/aging.scm:789
 #, fuzzy
@@ -21118,16 +21099,15 @@ msgstr ""
 
 #: ../gnucash/report/business-reports/balsheet-eg.scm:269
 msgid "Font family"
-msgstr ""
+msgstr "Nhóm phông"
 
 #: ../gnucash/report/business-reports/balsheet-eg.scm:270
 msgid "Font definition in CSS font-family format."
 msgstr ""
 
 #: ../gnucash/report/business-reports/balsheet-eg.scm:271
-#, fuzzy
 msgid "Font size"
-msgstr "Tháng"
+msgstr "Cỡ phông"
 
 #: ../gnucash/report/business-reports/balsheet-eg.scm:272
 msgid "Font size in CSS font-size format (e.g. \"medium\" or \"10pt\")."
@@ -21442,9 +21422,8 @@ msgstr "Sắp xếp theo số tiền"
 #. Translators: "Markup" is profit amount divided by sales amount
 #: ../gnucash/report/business-reports/customer-summary.scm:456
 #: ../gnucash/report/business-reports/customer-summary.scm:837
-#, fuzzy
 msgid "Markup"
-msgstr "Dấu hiệu"
+msgstr "Mã định dạng"
 
 #: ../gnucash/report/business-reports/customer-summary.scm:457
 msgid "Sort by markup (which is profit amount divided by sales)."
@@ -23843,7 +23822,7 @@ msgstr ""
 
 #: ../gnucash/report/report-system/options-utilities.scm:226
 msgid "Dash"
-msgstr ""
+msgstr "Gạch"
 
 #: ../gnucash/report/report-system/options-utilities.scm:227
 msgid "Filled diamond"
@@ -26926,7 +26905,7 @@ msgstr ""
 #. (define optname-x-grid (N_ "X grid"))
 #: ../gnucash/report/standard-reports/net-linechart.scm:66
 msgid "Grid"
-msgstr ""
+msgstr "Lưới"
 
 #: ../gnucash/report/standard-reports/net-linechart.scm:158
 msgid "Add grid lines."
@@ -28652,9 +28631,8 @@ msgid "Fancy Date Format"
 msgstr "Định dạng ngày đẹp"
 
 #: ../libgnucash/app-utils/app-utils.scm:330
-#, fuzzy
 msgid "custom"
-msgstr "Tự chọn"
+msgstr "tự chọn"
 
 #: ../libgnucash/app-utils/business-prefs.scm:24
 #, fuzzy
@@ -30017,2784 +29995,3 @@ msgid ""
 "select Window -> New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
-
-#~ msgid "Enable debugging mode: increasing logging to provide deep detail."
-#~ msgstr ""
-#~ "Bật chế độ gỡ lỗi: đang tăng cấp ghi lưu để cung cấp nhiều chi tiết."
-
-#~ msgid ""
-#~ "Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,"
-#~ "error}\""
-#~ msgstr ""
-#~ "Lệnh ghi đè cấp ghi lưu có dạng « log.ger.path={debug,info,warn,crit,"
-#~ "error} »"
-
-#, fuzzy
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from %s rev %s on %s."
-#~ msgstr "%s  Bản sao này được xây dựng từ svn r%s vào %s."
-
-#, fuzzy
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from rev %s on %s."
-#~ msgstr "%s  Bản sao này được xây dựng từ r%s vào %s."
-
-#~ msgid "postd"
-#~ msgstr "vào"
-
-#~ msgid "duedate"
-#~ msgstr "ngàytới"
-
-#~ msgid "acct"
-#~ msgstr "tàik"
-
-#~ msgid "question"
-#~ msgstr "câu hỏi"
-
-#~ msgid ""
-#~ "An error occurred while creating the directory:\n"
-#~ "  %s\n"
-#~ "Please correct the problem and restart GnuCash.\n"
-#~ "The reported error was '%s' (errno %d).\n"
-#~ msgstr ""
-#~ "Gặp lỗi trong khi tạo thư mục:\n"
-#~ "  %s\n"
-#~ "Hãy sửa chữa lỗi này, rồi khởi chạy lại GnuCash.\n"
-#~ "Lỗi đã thông báo là « %s » (mã lỗi %d).\n"
-
-#~ msgid ""
-#~ "The directory\n"
-#~ "  %s\n"
-#~ "exists but cannot be accessed. This program \n"
-#~ "must have full access (read/write/execute) to \n"
-#~ "the directory in order to function properly.\n"
-#~ msgstr ""
-#~ "Thư mục\n"
-#~ "  %s\n"
-#~ "có phải tồn tại còn không thể truy cập được.\n"
-#~ "Chương trình này phải có quyền truy cập\n"
-#~ "hoàn toàn (đọc/ghi/thực hiện) cho thư mục\n"
-#~ "để hoạt động đúng.\n"
-
-#~ msgid ""
-#~ "The path\n"
-#~ "  %s\n"
-#~ "exists but it is not a directory. Please delete\n"
-#~ "the file and start GnuCash again.\n"
-#~ msgstr ""
-#~ "Đường dẫn\n"
-#~ "  %s\n"
-#~ "có phải tồn tại còn không phải thư mục.\n"
-#~ "Hãy xoá tập tin rồi khởi chạy lại GnuCash.\n"
-
-#~ msgid ""
-#~ "An unknown error occurred when validating that the\n"
-#~ "  %s\n"
-#~ "directory exists and is usable. Please correct the\n"
-#~ "problem and restart GnuCash. The reported error \n"
-#~ "was '%s' (errno %d)."
-#~ msgstr ""
-#~ "Gặp lỗi không rõ khi thẩm tra thư mục\n"
-#~ "  %s\n"
-#~ "có phải tồn tại và có thể dùng được.\n"
-#~ "Hãy sửa chữa lỗi rồi khởi chạy lại GnuCash.\n"
-#~ "Lỗi đã thông báo là « %s » (mã lỗi %d)."
-
-#~ msgid ""
-#~ "The permissions are wrong on the directory\n"
-#~ "  %s\n"
-#~ "They must be at least 'rwx' for the user.\n"
-#~ msgstr ""
-#~ "Có quyền hạn không đúng về thư mục\n"
-#~ "  %s\n"
-#~ "Phải có ít nhất quyền « rwx » cho người dùng.\n"
-
-#~ msgid "_Price Editor"
-#~ msgstr "Bộ sửa _giá"
-
-#, fuzzy
-#~ msgid "General Ledger2"
-#~ msgstr "Sổ cái chung"
-
-#~ msgid "General Ledger Report"
-#~ msgstr "Báo cáo sổ cái chung"
-
-#~ msgid "_General Ledger"
-#~ msgstr "Sổ cái chun_g"
-
-#~ msgid "<No information>"
-#~ msgstr "<Không có thông tin>"
-
-#~ msgid ""
-#~ "If active, the register will be colored as specified by the system theme. "
-#~ "This can be overridden to provide custom colors by editing the gtkrc file "
-#~ "in the users home directory. Otherwise the standard register colors will "
-#~ "be used that GnuCash has always used."
-#~ msgstr ""
-#~ "Bật thì sổ cái có màu sắc theo sắc thái hệ thống. Cũng có thể ghi đè để "
-#~ "cung cấp các màu sắc riêng, bằng cách chỉnh sửa tập tin gtkrc trong thư "
-#~ "mục chính của người dùng. Không thì GnuCash hiển thị màu sắc sổ cái bình "
-#~ "thường."
-
-#~ msgid "Clear the entry"
-#~ msgstr "Gột mục nhập"
-
-#~ msgid ""
-#~ "If activated, delete manually entered stock prices dated earlier than the "
-#~ "specified date. Otherwise only stock prices added by Finance::Quote will "
-#~ "be deleted."
-#~ msgstr ""
-#~ "Bật thì xoá các giá chứng khoán đã gõ bằng tay nằm trước ngày tháng đã "
-#~ "ghi rõ. Không thì xoá chỉ những giá chứng khoán được Finance::Quote thêm."
-
-#~ msgid "Delete _last price for a stock"
-#~ msgstr "Xoá giá _cuối cho một chứng khoán"
-
-#~ msgid ""
-#~ "If activated, delete all prices before the specified date. Otherwise the "
-#~ "last stock price dated before the date will be kept and all earlier "
-#~ "quotes deleted."
-#~ msgstr ""
-#~ "Bật thì xoá tất cả các giá nằm trước ngày tháng đã ghi rõ. Không thì giữ "
-#~ "giá chứng khoán cuối cùng nằm trước ngày đó, xoá mọi chào giá cũ hơn."
-
-#~ msgid "Get _Quotes"
-#~ msgstr "Lấy _chào giá"
-
-#~ msgid "set true"
-#~ msgstr "đặt là đúng"
-
-#~ msgid "You must select a commodity. To create a new one, click \"New\""
-#~ msgstr "Phải chọn một hàng hoá. Để tạo điều mới, nhấn vào cái nút « Mới »."
-
-#~ msgid "_Delete Account"
-#~ msgstr "_Xoá tài khoản"
-
-#~ msgid "_New Account"
-#~ msgstr "Tài khoản _mới"
-
-#~ msgid ""
-#~ "The GnuCash personal finance manager. The GNU way to manage your money!"
-#~ msgstr ""
-#~ "Bộ quản lý tài chính cá nhân GnuCash. Cách GNU để quản lý tiền của bạn !"
-
-#, fuzzy
-#~ msgid "Version: GnuCash-%s %s (rev %s built %s)"
-#~ msgstr "Phiên bản: GnuCash-%s svn (r%s xây dựng %s)"
-
-#, fuzzy
-#~ msgid "Version: GnuCash-%s (rev %s built %s)"
-#~ msgstr "Phiên bản: GnuCash-%s (r%s xây dựng %s)"
-
-#, fuzzy
-#~ msgid "Owner Name"
-#~ msgstr "Tên người sở hữu "
-
-#, fuzzy
-#~ msgid "Owner ID"
-#~ msgstr "Mã đơn đặt hàng"
-
-#~ msgid "Remember _PIN"
-#~ msgstr "Nhớ số _PIN"
-
-#, fuzzy
-#~ msgid "Quotes"
-#~ msgstr "Lấy chào giá"
-
-#, fuzzy
-#~ msgid "From Num."
-#~ msgstr "Cách đây"
-
-#, fuzzy
-#~ msgid "Transaction Import Assistant"
-#~ msgstr "Trợ lý Nhập khẩu Tập tin Dữ liệu GnuCash"
-
-#, fuzzy
-#~ msgid "Start import on row "
-#~ msgstr "Bắt đầu kỳ báo cáo"
-
-#, fuzzy
-#~ msgid "Data type: "
-#~ msgstr "Ngày: "
-
-#, fuzzy
-#~ msgid "Separated"
-#~ msgstr "Ngày bắt đầu"
-
-#, fuzzy
-#~ msgid "File opening failed."
-#~ msgstr "Lỗi phân tích tập tin QIF: %s"
-
-#, fuzzy
-#~ msgid "Dates earlier than 1970 are not supported."
-#~ msgstr "Không hỗ trợ ngày trong tương lai"
-
-#~ msgid "This report has no options."
-#~ msgstr "Báo cáo này không có tùy chọn."
-
-#, fuzzy
-#~ msgid "Compress prior/later periods"
-#~ msgstr "Nén tậ_p tin"
-
-#~ msgid "Income Barchart"
-#~ msgstr "Đồ thị thanh Thu nhập"
-
-#~ msgid "Expense Barchart"
-#~ msgstr "Đồ thị thanh Phí tổn"
-
-#~ msgid "Liability Barchart"
-#~ msgstr "Đồ thị thanh Tài sản nợ"
-
-#~ msgid "Style"
-#~ msgstr "Kiểu dáng"
-
-#, fuzzy
-#~ msgid "Report style."
-#~ msgstr "Kiểu dáng báo cáo"
-
-#, fuzzy
-#~ msgid "Display N lines."
-#~ msgstr "Hiển thị N dòng"
-
-#, fuzzy
-#~ msgid "Display 1 line."
-#~ msgstr "Hiển thị 1 dòng"
-
-#~ msgid "Exact Time"
-#~ msgstr "Thời gian chính xác"
-
-#, fuzzy
-#~ msgid "Sort by exact time."
-#~ msgstr "Sắp xếp theo thời gian chính xác"
-
-#, fuzzy
-#~ msgid "Retrieve the current online quote"
-#~ msgstr "Gỡ bỏ giá hiện có"
-
-#~ msgid "Set the prefix path for gconf queries"
-#~ msgstr "Đặt đường dẫn tiền tố cho truy cấn gconf"
-
-#~ msgid "GCONFPATH"
-#~ msgstr "ĐƯỜNG DẪN GCONF"
-
-#~ msgid "Negative amounts are not allowed."
-#~ msgstr "Không cho phép số tiền âm."
-
-#~ msgid "Percentage amount must be between 0 and 100."
-#~ msgstr "Giá trị phần trăm phải nằm giữa 0 và 100."
-
-#, fuzzy
-#~ msgid "Credit note"
-#~ msgstr "Khoản tín dụng"
-
-#, fuzzy
-#~ msgid ""
-#~ "You must enter the amount of the payment. The payment amount must not be "
-#~ "zero."
-#~ msgstr "Phải gõ số tiền trả hơn số không."
-
-#, fuzzy
-#~ msgid "Customer Credit Note"
-#~ msgstr "Báo cáo Khách hàng"
-
-#, fuzzy
-#~ msgid "Vendor Credit Note"
-#~ msgstr "Báo cáo Nhà sản xuất"
-
-#, fuzzy
-#~ msgid "Employee Credit Note"
-#~ msgstr "Báo cáo Nhận viên"
-
-#~ msgid "Remo_ve Transaction Splits"
-#~ msgstr "Gỡ _bỏ các sự phân tách giao dịch"
-
-#, fuzzy
-#~ msgid "_Shift Transaction Forward"
-#~ msgstr "Nhật _ký giao dịch"
-
-#~ msgid "Account Transaction Report"
-#~ msgstr "Báo cáo giao dịch tài khoản"
-
-#~ msgid "Order of columns in the dialog"
-#~ msgstr "Thứ tự các cột trong hộp thoại"
-
-#~ msgid "Show the Full Name column"
-#~ msgstr "Hiển thị cột Tên đầy đủ"
-
-#, fuzzy
-#~ msgid "Show the ISIN/CUSIP Code (Exchange Specific Data) column"
-#~ msgstr "Hiển thị cột mã CUSIP (dữ liệu đặc trưng cho hội suất)"
-
-#~ msgid "Show the Namespace column"
-#~ msgstr "Hiển thị cột Miền tên"
-
-#~ msgid "Show the Print Name column"
-#~ msgstr "Hiển thị cột In tên"
-
-#~ msgid "Show the Quote Flag column"
-#~ msgstr "Hiển thị cột Cờ chào giá"
-
-#~ msgid "Show the Quote Source column"
-#~ msgstr "Hiển thị cột Nguồn chào giá"
-
-#~ msgid "Show the Quote Timezone column"
-#~ msgstr "Hiển thị cột Mũi giờ chào giá"
-
-#~ msgid "Show the Unique Name column"
-#~ msgstr "Hiển thị cột Tên duy nhất"
-
-#~ msgid "Show the fraction column"
-#~ msgstr "Hiển thị cột Phân số"
-
-#~ msgid "Show the name column"
-#~ msgstr "Hiển thị cột Tên"
-
-#~ msgid "Show the symbol column"
-#~ msgstr "Hiển thị cột Ký hiệu"
-
-#~ msgid ""
-#~ "This setting contains a list of names which controls the order in which "
-#~ "the columns are listed in the dialog. Names may be reordered or removed "
-#~ "from this list to control which columns appear in the dialog and in what "
-#~ "order."
-#~ msgstr ""
-#~ "Thiết lập này chứa danh sách tên mà điều khiển thứ tự liệt kê các cột "
-#~ "trong hộp thoại. Có thể sắp xếp lại các tên, hoặc gỡ bỏ tên khỏi hộp "
-#~ "thoại, để điều khiển những cột nào xuất hiện trong hộp thoại, và theo thứ "
-#~ "tự nào."
-
-#~ msgid "Columns used for sorting"
-#~ msgstr "Cột dùng để sắp xếp"
-
-#, fuzzy
-#~ msgid ""
-#~ "The X,Y coordinates of the top left corner of the window when it was last "
-#~ "closed."
-#~ msgstr ""
-#~ "Toạ đồ X,Y của góc trên bên trái của hộp thoại khi nó bị đóng cuối cùng."
-
-#, fuzzy
-#~ msgid "The width and size of the window when it was last closed."
-#~ msgstr "Chiều rộng và kích cỡ của hộp thoại khi nó bị đóng cuối cùng."
-
-#~ msgid ""
-#~ "This setting indicates how the key column is sorted. Possible values for "
-#~ "this setting are 'ascending' and 'descending'."
-#~ msgstr ""
-#~ "Thiết lập này ngụ ý cách sắp xếp cột khoá. Giá trị có thể là:\n"
-#~ " • ascending\t\ttăng dần\n"
-#~ " • descending\t\tgiảm dần."
-
-#, fuzzy
-#~ msgid ""
-#~ "This setting indicates which column in the tree is used for sorting. "
-#~ "Possible values for this setting are the name of any column in this "
-#~ "window (see the column_order key) or the keyword 'none'."
-#~ msgstr ""
-#~ "Thiết lập này ngụ ý có nên sắp xếp theo cột nào của cây. Giá trị có thể "
-#~ "là tên của bất cứ cột nào trong hộp thoại này (xem khoá « column—order "
-#~ "»), hoặc từ khoá « none » (không có)."
-
-#~ msgid "Window position"
-#~ msgstr "Vị trí cửa sổ"
-
-#~ msgid "Show the Price column"
-#~ msgstr "Hiển thị cột Giá"
-
-#~ msgid "Show the Source column"
-#~ msgstr "Hiển thị cột Nguồn"
-
-#~ msgid "Show the Type column"
-#~ msgstr "Hiển thị cột Kiểu"
-
-#~ msgid "Show the date column"
-#~ msgstr "Hiển thị cột Ngày"
-
-#~ msgid "This setting enables the Price column."
-#~ msgstr "Thiết lập này hiệu lực cột Giá."
-
-#~ msgid "This setting enables the Source column."
-#~ msgstr "Thiết lập này hiệu lực cột Nguồn."
-
-#~ msgid "This setting enables the Type column."
-#~ msgstr "Thiết lập này hiệu lực cột Kiểu."
-
-#~ msgid "This setting enables the commodity column."
-#~ msgstr "Thiết lập này hiệu lực cột Hàng hoá."
-
-#~ msgid "This setting enables the currency column."
-#~ msgstr "Thiết lập này hiệu lực cột Tiền tệ."
-
-#~ msgid ""
-#~ "This value contains the Y coordinate for the bottom edge of the check. "
-#~ "This coordinate is from the bottom edge of the sheet of paper."
-#~ msgstr ""
-#~ "Giá trị này chứa toạ đồ Y cho đầu của cạnh dưới của séc. Toạ độ được tính "
-#~ "từ cạnh dưới của tờ giấy."
-
-#~ msgid "Accounts to reverse the balance"
-#~ msgstr "Tài khoản để đảo ngược số dư"
-
-#~ msgid "Default view style for new register"
-#~ msgstr "Kiểu dáng xem mặc định cho sổ cái mới"
-
-#~ msgid "Enables Euro support"
-#~ msgstr "Bật hỗ trợ đồng Euro €"
-
-#~ msgid "Enables additional support for the European Union EURO currency."
-#~ msgstr "Hiệu lực hỗ trợ thêm cho tiền tệ Euro (€) của Liên Bang Âu."
-
-#~ msgid "Labels on toolbar buttons"
-#~ msgstr "Nhãn trên cái nút thanh công cụ"
-
-#~ msgid "Position of the notebook tabs"
-#~ msgstr "Vị trí của các thẻ trong vở"
-
-#, fuzzy
-#~ msgid "Show the Calendar buttons"
-#~ msgstr "Hiển thị cột Tên"
-
-#, fuzzy
-#~ msgid "Show the Date Entered"
-#~ msgstr "Hiển thị cột Ngày"
-
-#~ msgid "Source of default account currency"
-#~ msgstr "Nguồn tiền tệ tài khoản mặc định"
-
-#~ msgid "Source of default report currency"
-#~ msgstr "Nguồn tiền tệ báo cáo mặc địn"
-
-#, fuzzy
-#~ msgid "The number of Characters needed"
-#~ msgstr "Hiện số chứng khoán"
-
-#, fuzzy
-#~ msgid "The number of transactions displayed"
-#~ msgstr "Số _giao dịch:"
-
-#~ msgid ""
-#~ "This setting controls how the labels on toolbar buttons are shown. If set "
-#~ "to \"system\" then GnuCash will use the desktop setting for how to draw "
-#~ "toolbar buttons. If set to \"icon\" then only icons will be show on "
-#~ "toolbar buttons.. If set to \"text\" only the labels will be shown. If "
-#~ "set to \"both\" then both icons and labels will be shown. If set to "
-#~ "\"both-horiz\" then icons will be shown for all buttons with labels added "
-#~ "on important buttons."
-#~ msgstr ""
-#~ "Thiết lập này điều khiển cách hiển thị nhãn trên cái nút thanh công cụ:\n"
-#~ " • system\t\ttheo thiết lập của môi trường làm việc\n"
-#~ " • icon\t\tchỉ hiển thị biểu tượng\n"
-#~ " • text\t\tchỉ hiển thị nhãn\n"
-#~ " • both\t\thiển thị cả hai biểu tượng và nhãn\n"
-#~ " • both-horiz\thiển thị biểu tượng, cùng với nhãn trên cái nút quan trọng."
-
-#~ msgid ""
-#~ "This setting specifies the default currency used for reports if the "
-#~ "currency_choice setting is set to \"other\". This field must contain the "
-#~ "three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
-#~ msgstr ""
-#~ "Thiết lập này ghi rõ tiền tệ mặc định được dùng cho các báo cáo nếu giá "
-#~ "trị của « currency_choice » (chọn tiền tệ) được đặt thành « other "
-#~ "» (khác). Trường này phải chứa mã ISO 4217 ba chữ của tiền tệ (v.d. VND, "
-#~ "AUD, EUR, USD)"
-
-#~ msgid ""
-#~ "This setting contains the width of the named column in the most recently "
-#~ "closed register window. Changing these values will change the sizes of "
-#~ "the columns in the next opened register"
-#~ msgstr ""
-#~ "Thiết lập này đặt chiều rộng của cột có tên trong cửa sổ kiểu sổ cái mới "
-#~ "đóng. Thay đổi giá trị này thì cũng thay đổi kích cỡ của cột trong sổ cái "
-#~ "sẽ mở kế tiếp."
-
-#~ msgid "Width of a column in the dialog"
-#~ msgstr "Bề rộng của cột trong hộp thoại"
-
-#, fuzzy
-#~ msgid "New item"
-#~ msgstr "Mục mớ_i..."
-
-#~ msgid ""
-#~ "Error: Failure saving state file.\n"
-#~ "  %s"
-#~ msgstr ""
-#~ "Gặp lỗi khi lưu tập tin tình trạng.\n"
-#~ "  %s"
-
-#, fuzzy
-#~ msgid ""
-#~ "When you click Apply, GnuCash will modify your ~/.gconf.path file and "
-#~ "restart the gconf backend. There will be a short delay before GnuCash is "
-#~ "loaded."
-#~ msgstr ""
-#~ "Nhấn vào nút « Áp dụng » thì GnuCash sẽ sửa đổi tập tin đường dẫn « ~/."
-#~ "gconf.path » rồi khởi chạy lại hậu phương cấu hình gconf."
-
-#, fuzzy
-#~ msgid ""
-#~ "When you click Apply, GnuCash will install the gconf data into your local "
-#~ "~/.gconf file and restart the gconf backend. The %s script must be found "
-#~ "in your search path for this to work correctly."
-#~ msgstr ""
-#~ "Nhấn vào nút « Áp dụng » thì GnuCash sẽ cài đặt dữ liệu cấu hình gconf "
-#~ "vào tập tin « ~/.gconf » cục bộ của bạn, rồi khởi chạy lại hậu phương "
-#~ "gconf. Văn lệnh %s phải nằm trên đường dẫn tìm kiếm để mà tiến trình này "
-#~ "hoạt động được."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to correct the problem by yourself. When you click Apply, "
-#~ "GnuCash will exit. Please correct the problem and restart the gconf "
-#~ "backend with the command 'gconftool-2 --shutdown' before restarting "
-#~ "GnuCash. If you have not already done so, you can click the Back button "
-#~ "and copy the necessary text from the dialog."
-#~ msgstr ""
-#~ "Bạn đã chọn tự sửa chữa vấn đề. Nhấn vào nút « Áp dụng » thì GnuCash sẽ "
-#~ "thoát. Hãy sửa chữa vấn đề, rồi khởi chạy lại hậu phương cấu hình gconf "
-#~ "bằng lệnh « gconftool-2 --shutdown » trước khi khởi chạy lại GnuCash. Nếu "
-#~ "chưa làm, bạn cũng có thể nhấn vào cái nút « Lùi » và sao chép văn bản "
-#~ "thích hợp từ hộp thoại."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to correct the problem by yourself. When you click Apply, "
-#~ "GnuCash will exit. Please run the %s script which will install the "
-#~ "configuration data and restart the gconf backend."
-#~ msgstr ""
-#~ "Bạn đã chọn tự sửa chữa vấn đề. Nhấn vào nút « Áp dụng » thì GnuCash sẽ "
-#~ "thoát. Hãy chạy văn lệnh %s mà sẽ cài đặt dữ liệu cấu hình rồi khởi chạy "
-#~ "lại hậu phương cấu hình gconf."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have already corrected the problem and restarted the gconf backend "
-#~ "with the command 'gconftool-2 --shutdown'. When you click Apply, there "
-#~ "will be a short delay before GnuCash is loaded."
-#~ msgstr ""
-#~ "Bạn đã sửa chữa vấn đề và khởi chạy lại hậu phương cấu hình gconf bằng "
-#~ "lệnh « gconftool-2 --shutdown ». Khi bạn nhấn vào cái nút « Áp dụng », "
-#~ "GnuCash sẽ tiếp tục lại nạp."
-
-#, fuzzy
-#~ msgid "Withdrawl"
-#~ msgstr "Rút"
-
-#~ msgid ""
-#~ "<b>Cannot find default values</b>\n"
-#~ "\n"
-#~ "The configuration data used to specify default values for GnuCash cannot "
-#~ "be found in the default system locations. Without this data GnuCash will "
-#~ "still operate properly but it may require some extra time to setup. Do "
-#~ "you wish to setup the configuration data?"
-#~ msgstr ""
-#~ "<b>Không tìm thấy giá trị mặc định</b>\n"
-#~ "\n"
-#~ "Dữ liệu cấu hình dùng để ghi rõ các giá trị mặc định cho GnuCash không "
-#~ "được tìm thấy trong vị trí hệ thống mặc định. Không có dữ liệu này thì "
-#~ "GnuCash vẫn còn chạy đúng, nhưng có thể mất nhiều thời gian hơn để thiết "
-#~ "lập. Bạn có muốn thiết lập dữ liệu cấu hình không?"
-
-#, fuzzy
-#~ msgid "Apply Changes"
-#~ msgstr "Thay đổi ròng"
-
-#, fuzzy
-#~ msgid "Choose Method"
-#~ msgstr "Chọn phương pháp"
-
-#~ msgid "GnuCash will install the data for you."
-#~ msgstr "GnuCash sẽ cài đặt dữ liệu cho bạn."
-
-#~ msgid "GnuCash will update the system path for you."
-#~ msgstr "GnuCash sẽ cập nhật đường dẫn hệ thống cho bạn"
-
-#, fuzzy
-#~ msgid "Install Into Home Directory"
-#~ msgstr "Cài đặt vào thư mục chính"
-
-#~ msgid ""
-#~ "Please add the following lines at the end of your ~/.gconf.path file:"
-#~ msgstr ""
-#~ "Hãy thêm những dòng theo đây vào kết thúc của tập tin « ~/.gconf.path » "
-#~ "của bạn:"
-
-#~ msgid "Please run the following commands:"
-#~ msgstr "Hãy chạy những lệnh này:"
-
-#~ msgid "S_kip"
-#~ msgstr "Bỏ _qua"
-
-#, fuzzy
-#~ msgid ""
-#~ "The configuration data is stored in a non-standard location. There are "
-#~ "two methods that can be used to make this data visible to GnuCash. The "
-#~ "first is to modify a system search path to include the data location. The "
-#~ "second is to copy the data into your home directory."
-#~ msgstr ""
-#~ "Dữ liệu cấu hình được cất giữ trong vị trí không chuẩn. Có hai phương "
-#~ "pháp có thể dùng để cho GnuCash thấy dữ liệu này. Điều thứ nhất là sửa "
-#~ "đổi một đường dẫn tìm kiếm hệ thống để bao gồm vị trí của dữ liệu. Điều "
-#~ "thứ hai là sao chép dữ liệu vào thư mục chính của bạn."
-
-#~ msgid ""
-#~ "The configuration data used by GnuCash to specify its default values "
-#~ "cannot be found in the default system locations. Without this data "
-#~ "GnuCash will still operate properly, but it may require some extra time "
-#~ "to set up."
-#~ msgstr ""
-#~ "Dữ liệu cấu hình dùng bởi GnuCash để ghi rõ các giá trị mặc định không "
-#~ "thể được tìm thấy trong vị trí hệ thống mặc định. Không có dữ liệu này "
-#~ "thì GnuCash vẫn còn chạy đúng, nhưng có thể mất nhiều thời gian hơn để "
-#~ "thiết lập."
-
-#~ msgid "The data has _already been installed in another window"
-#~ msgstr "Dữ liệu đã được cài đặt trong cử_a sổ khác."
-
-#~ msgid "The search path has _already been updated in another window"
-#~ msgstr "Đường dẫn tìm kiếm đã được cập nhật trong cử_a sổ khác."
-
-#, fuzzy
-#~ msgid ""
-#~ "This method will install the GnuCash default settings and descriptions "
-#~ "into the .gconf directory within your home directory. The disadvantage to "
-#~ "this method is that future updates to GnuCash will not update your local "
-#~ "settings to add in new keys."
-#~ msgstr ""
-#~ "Phương pháp này sẽ cài đặt các thiết lập và mô tả đều mặc định của "
-#~ "GnuCash vào thư mục « .gconf » bên trong thư mục chính của bạn. Bất lợi "
-#~ "là bản cập nhật GnuCash sau sẽ không cập nhật thiết lập cục bộ để thêm "
-#~ "khoá mới."
-
-#, fuzzy
-#~ msgid ""
-#~ "This method will modify the file .gconf.path in your home directory. It "
-#~ "will add the GnuCash install directory to this path so that GnuCash can "
-#~ "find its default settings and their descriptions."
-#~ msgstr ""
-#~ "Phương pháp này sẽ sửa đổi tập tin « .gconf.path » trong thư mục chính "
-#~ "của bạn. Nó sẽ thêm thư mục cài đặt GnuCash vào đường dẫn này để GnuCash "
-#~ "tìm thấy được các thiết lập và mô tả đều mặc định."
-
-#, fuzzy
-#~ msgid "Update GnuCash Configuration Data"
-#~ msgstr "Cập nhật dữ liệu cấu hình GnuCash"
-
-#~ msgid "Update GnuCash configuration data"
-#~ msgstr "Cập nhật dữ liệu cấu hình GnuCash"
-
-#, fuzzy
-#~ msgid "Update Search Path"
-#~ msgstr "Cập nhật đường dẫn tìm kiếm"
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to install the configuration data used by GnuCash into "
-#~ "the ~/.gconf directory. GnuCash can do this for you, or tell you how to "
-#~ "do it yourself."
-#~ msgstr ""
-#~ "Bạn đã chọn cài đặt vào thư mục « ~/.gconf » dữ liệu cấu hình dùng bởi "
-#~ "GnuCash. GnuCash có thể làm việc này cho bạn, hoặc báo bạn tự làm nó."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to update the system search path. GnuCash can do this for "
-#~ "you, or it can tell you how to do it yourself."
-#~ msgstr ""
-#~ "Bạn đã chọn cập nhật đường dẫn tìm kiếm hệ thống. GnuCash có thể làm việc "
-#~ "này cho bạn, hoặc báo bạn tự làm nó"
-
-#, fuzzy
-#~ msgid ""
-#~ "You will then need to restart the gconf backend with the command "
-#~ "'gconftool-2 --shutdown'."
-#~ msgstr ""
-#~ "Sau đó, bạn cần phải khởi chạy lại hậu phương cấu hình gconf\n"
-#~ "bằng lệnh « gconftool-2 --shutdown »."
-
-#~ msgid "_GnuCash installs the data"
-#~ msgstr "_GnuCash cài đặt dữ liệu"
-
-#~ msgid "_GnuCash updates the search path"
-#~ msgstr "_GnuCash cập nhật đường dẫn tim kiếm"
-
-#~ msgid "_Install into home directory"
-#~ msgstr "Cà_i đặt vào thư mục chính"
-
-#~ msgid "_Setup"
-#~ msgstr "Thiết _lập"
-
-#~ msgid "_Update search path"
-#~ msgstr "Cậ_p nhật đường dẫn tìm kiếm"
-
-#~ msgid "_You install the data yourself"
-#~ msgstr "_Bạn tự cài đặt dữ liệu"
-
-#~ msgid "_You update the search path yourself"
-#~ msgstr "_Bạn tự cập nhật đường dẫn tìm kiếm"
-
-#~ msgid "<b>Toolbar Style</b>"
-#~ msgstr "<b>Kiểu thanh công cụ</b>"
-
-#~ msgid "Display toolbar items as icons only."
-#~ msgstr "Hiển thị mục thanh công cụ chỉ là hình."
-
-#~ msgid "Display toolbar items as text only."
-#~ msgstr "Hiển thị mục thanh công cụ chỉ là nhãn."
-
-#~ msgid ""
-#~ "Display toolbar items with the text label below the icon. Labels are show "
-#~ "for all items."
-#~ msgstr ""
-#~ "Hiển thị mục thanh công cụ có nhãn bên dưới hình. Nhãn được hiển thị cho "
-#~ "mọi mục."
-
-#~ msgid ""
-#~ "Display toolbar items with the text label beside the icon. Labels are "
-#~ "only shown for the most important items."
-#~ msgstr ""
-#~ "Hiển thị mục thanh công cụ có nhãn bên cạnh hình. Nhãn chỉ được hiển thị "
-#~ "cho những mục quan trọng nhất."
-
-#~ msgid ""
-#~ "If checked, the system color theme will be applied to register windows. "
-#~ "If clear, the original GnuCash register colors will be used."
-#~ msgstr ""
-#~ "Bật thì sắc thái màu hệ thống sẽ được áp dụng cho các cửa sổ kiểu sổ cái. "
-#~ "Không thì dùng màu sắc sổ cái GnuCash gốc."
-
-#~ msgid "Priority text besi_de icons"
-#~ msgstr "_Nhãn ưu tiên cạnh hình"
-
-#~ msgid "Text _below icons"
-#~ msgstr "Nhãn _dưới hình"
-
-#~ msgid "Use s_ystem default"
-#~ msgstr "Dùng _giá trị mặc định của hệ thống"
-
-#~ msgid "Use the date format common in continental Europe."
-#~ msgstr "Dùng định dạng ngày tháng thường dùng ở Châu Âu."
-
-#~ msgid "Use the date format common in the United Kingdom."
-#~ msgstr "Dùng định dạng ngày tháng thường dùng ở Anh Quốc."
-
-#~ msgid "Use the date format common in the United States."
-#~ msgstr "Dùng định dạng ngày tháng thường dùng ở Mỹ."
-
-#~ msgid "Use the date format specified by the ISO-8601 standard."
-#~ msgstr "Dùng định dạng ngày tháng được tiêu chuẩn ISO-8601 ghi rõ."
-
-#~ msgid "Use the system setting for displaying toolbar items."
-#~ msgstr "Dùng thiết lập hệ thống để hiển thị mục thanh công cụ."
-
-#~ msgid "_Europe:"
-#~ msgstr "_Châu Âu :"
-
-#~ msgid "_Icons only"
-#~ msgstr "_Chỉ hình"
-
-#~ msgid "_Text only"
-#~ msgstr "Chỉ _nhãn"
-
-#~ msgid "_Use system theme colors"
-#~ msgstr "Dùng các mà_u của sắc thái hệ thống"
-
-#~ msgid "%s at %s (code %s)"
-#~ msgstr "%s lúc %s (mã %s)"
-
-#~ msgid "%s at bank code %s"
-#~ msgstr "%s ở ngân hàng mã %s"
-
-#, fuzzy
-#~ msgid "Comma Separated with Quotes"
-#~ msgstr "Ngày bắt đầu"
-
-#, fuzzy
-#~ msgid "Semicolon Separated with Quotes"
-#~ msgstr "Ngày bắt đầu"
-
-#, fuzzy
-#~ msgid "Delete the currently selected report"
-#~ msgstr "Xoá mẫu giao dịch được chọn hiện thời"
-
-#, fuzzy
-#~ msgid "Run the currently selected report"
-#~ msgstr "In báo cáo hiện tại"
-
-#~ msgid "Add _Report"
-#~ msgstr "Thêm _báo cáo"
-
-#, fuzzy
-#~ msgid "Net Price"
-#~ msgstr "_Giá mới:"
-
-#, fuzzy
-#~ msgid "Total Price"
-#~ msgstr "Tổng (Kỳ)"
-
-#, fuzzy
-#~ msgid "Amount Due"
-#~ msgstr "Số tiền đến hạn"
-
-#, fuzzy
-#~ msgid "Invoice number: "
-#~ msgstr "Số hiệu đơn hàng gửi"
-
-#, fuzzy
-#~ msgid "Job number: "
-#~ msgstr "Số thứ tự công việc"
-
-#, fuzzy
-#~ msgid "Custom Reports"
-#~ msgstr "Báo cáo Khách hàng"
-
-#~ msgid "and"
-#~ msgstr "và"
-
-#~ msgid "Most recent to report"
-#~ msgstr "Gần nhất báo cáo"
-
-#~ msgid "The most recent recorded price before report date"
-#~ msgstr "Giá được ghi vào điểm thời gian gần nhất trước ngày tháng báo cáo"
-
-#~ msgid "FILO"
-#~ msgstr "FILO"
-
-#~ msgid "Use first-in last-out method for basis"
-#~ msgstr "Dùng phương pháp Vào trước, Ra sau là cơ bản"
-
-#~ msgid "Enable hyperlinks in reports"
-#~ msgstr "Hiệu lực siêu liên kết trong báo cáo"
-
-#, fuzzy
-#~ msgid "Welcome to GnuCash 2.4!"
-#~ msgstr "Chúc mừng bạn dùng GnuCash 2.0 !"
-
-#~ msgid "The last stable version was "
-#~ msgstr "Phiên bản ổn định vừa nhất: "
-
-#~ msgid "The next stable version will be "
-#~ msgstr "Phiên bản ổn định kế tiếp: "
-
-#~ msgid "Built %s from r%s"
-#~ msgstr "Xây dựng %s từ r%s"
-
-#~ msgid "You may not post an invoice with a negative total value."
-#~ msgstr "Không thể vào sổ cái một đơn hàng gửi lên tới tổng sổ âm."
-
-#~ msgid ""
-#~ "You may not post an expense voucher with a negative total cash value."
-#~ msgstr "Không thể vào sổ cái một giấy phí tổn lên tới tổng sổ tiền âm"
-
-#~ msgid "Your selected post account, %s, does not exist"
-#~ msgstr "Bạn đã chọn một tài khoản vào sổ cái, %s, mà không tồn tại."
-
-#~ msgid ""
-#~ "Days\n"
-#~ "Proximo"
-#~ msgstr ""
-#~ "Ngày\n"
-#~ "Tháng sau"
-
-#~ msgid "What Tax Table should be applied to this customer?"
-#~ msgstr "Có nên áp dụng Bảng Thuế nào cho khách hàng này?"
-
-#~ msgid "What Tax Table should be applied to this vendor?"
-#~ msgstr "Có nên áp dụng Bảng Thuế nào cho nhà sản xuất này?"
-
-#~ msgid "Reload invoice report"
-#~ msgstr "Nạp lại báo cáo hàng gửi"
-
-#~ msgid "Reload invoice report scheme file"
-#~ msgstr "Nạp lại tập tin sơ đồ báo cáo hàng gửi"
-
-#~ msgid "Reload owner report"
-#~ msgstr "Nạp lại báo cáo người sở hữu"
-
-#~ msgid "Reload owner report scheme file"
-#~ msgstr "Nạp lại tập tin sơ đồ báo cáo người sở hữu"
-
-#~ msgid "Reload receivable report"
-#~ msgstr "Nạp lại báo cáo nhận được"
-
-#~ msgid "Reload receivable report scheme file"
-#~ msgstr "Nạp lại tập tin sơ đồ báo cáo nhận được"
-
-#~ msgid "Automatic Payment Forward"
-#~ msgstr "Tự động trả trước"
-
-#~ msgid "You must select a commodity."
-#~ msgstr "Phải chọn một hàng hoá."
-
-#~ msgid ""
-#~ "You must select closing date that is greater than the closing date of the "
-#~ "previous book."
-#~ msgstr ""
-#~ "Phải chọn một ngày tháng đóng nằm sau ngày tháng đóng sổ sách trước."
-
-#~ msgid "You must select closing date that is not in the future."
-#~ msgstr "Phải chọn một ngày tháng đóng không nằm trong tương lai."
-
-#, fuzzy
-#~ msgid "Are you sure you want to cancel the Mortgage/Loan Setup Assistant?"
-#~ msgstr "Bạn có chắc muốn thôi Trợ lý Thiết lập Thế chấp/Khoản vay không?"
-
-#~ msgid "Please select a valid \"from\" account."
-#~ msgstr "Hãy chọn một tài khoản « từ » hợp lệ"
-
-#~ msgid "Please select a valid \"to\" account."
-#~ msgstr "Hãy chọn một tài khoản « cho » hợp lệ"
-
-#~ msgid "Please select a valid \"interest\" account."
-#~ msgstr "Hãy chọn một tài khoản « lãi » hợp lệ"
-
-#~ msgid "Payment: \"%s\""
-#~ msgstr "Chuyển tiền: « %s »"
-
-#~ msgid "You must enter a valid distribution amount."
-#~ msgstr "Phải gõ một số lượng phân phối hợp lệ."
-
-#~ msgid "You must enter a distribution amount."
-#~ msgstr "Phải gõ một số lượng phân phối."
-
-#~ msgid "You must either enter a valid price or leave it blank."
-#~ msgstr "Phải gõ một giá hợp lệ, hoặc bỏ trống."
-
-#~ msgid "The price must be positive."
-#~ msgstr "Giá phải là số dương."
-
-#~ msgid "You must either enter a valid cash amount or leave it blank."
-#~ msgstr "Phải gõ một số tiền mặt hợp lệ, hoặc bỏ trống."
-
-#~ msgid "The cash distribution must be positive."
-#~ msgstr "Tiền mật phân phối phải là số dương."
-
-#~ msgid "You must select an income account for the cash distribution."
-#~ msgstr "Phải chọn một tài khoản thu nhập để phân phối tiền mặt."
-
-#~ msgid "You must select an asset account for the cash distribution."
-#~ msgstr "Phải chọn một tài khoản tài sản để phân phối tiền mặt"
-
-#~ msgid "New Account (not implemented)"
-#~ msgstr "Tài khoản mới (chưa được thi hành)"
-
-#~ msgid "Select or add a GnuCash account"
-#~ msgstr "Chọn hay thêm một tài khoản GnuCash"
-
-#~ msgid ""
-#~ "Use Commodity Value\n"
-#~ "1\n"
-#~ "1/10\n"
-#~ "1/100\n"
-#~ "1/1000\n"
-#~ "1/10000\n"
-#~ "1/100000\n"
-#~ "1/1000000"
-#~ msgstr ""
-#~ "Tính giá trị hàng hoá\n"
-#~ "1\n"
-#~ "1/10\n"
-#~ "1/100\n"
-#~ "1/1000\n"
-#~ "1/10000\n"
-#~ "1/100000\n"
-#~ "1/1000000"
-
-#~ msgid "Enter a title for this book."
-#~ msgstr "Gõ tên cho sổ sách này."
-
-#~ msgid "Enter notes that describe this book."
-#~ msgstr "Gõ mô tả của sổ sách này."
-
-#~ msgid "Finish Closing Books"
-#~ msgstr "Đóng xong các sổ sách"
-
-#~ msgid ""
-#~ "day(s)\n"
-#~ "week(s)\n"
-#~ "month(s)\n"
-#~ "year(s)"
-#~ msgstr ""
-#~ "ngày\n"
-#~ "tuần\n"
-#~ "tháng\n"
-#~ "năm"
-
-#~ msgid "Account Information"
-#~ msgstr "Thông tin tài khoản"
-
-#~ msgid ""
-#~ "Annual\n"
-#~ "Semi-annual\n"
-#~ "Tri-annual\n"
-#~ "Quarterly\n"
-#~ "Bi-monthly\n"
-#~ "Monthly\n"
-#~ "Semi-monthly\n"
-#~ "Bi-weekly\n"
-#~ "Weekly\n"
-#~ "Daily (360)\n"
-#~ "Daily (365)"
-#~ msgstr ""
-#~ "Hàng năm\n"
-#~ "Một năm hai lần\n"
-#~ "Một năm ba lần\n"
-#~ "Hàng quý\n"
-#~ "Hai tháng một lần\n"
-#~ "Hàng tháng\n"
-#~ "Một tháng hai lần\n"
-#~ "Hai tuần một lần\n"
-#~ "Hàng tuần\n"
-#~ "Hàng ngày (360)\n"
-#~ "Hàng ngày (365)"
-
-#~ msgid "Co_mpounding:"
-#~ msgstr "Tính ké_p:"
-
-#~ msgid "_Effective Date:"
-#~ msgstr "Ngày hiệu _dụng:"
-
-#~ msgid "_Initial Payment:"
-#~ msgstr "Trả đầu t_iên:"
-
-#~ msgid "_Payments:"
-#~ msgstr "_Số tiền trả:"
-
-#~ msgid "<b>_Mini-Viewer</b>"
-#~ msgstr "<b>Bộ xe_m nhỏ</b>"
-
-#~ msgid "A summary of all of the transactions in the selected lot"
-#~ msgstr "Bản tóm tắt tất cả các giao dịch trong lô đã chọn"
-
-#~ msgid ""
-#~ "Bid\n"
-#~ "Ask\n"
-#~ "Last\n"
-#~ "Net Asset Value\n"
-#~ "Unknown"
-#~ msgstr ""
-#~ "Giá chào mua\n"
-#~ "Giá bán\n"
-#~ "Giá cuối\n"
-#~ "Giá trị tài sản ròng\n"
-#~ "Không rõ"
-
-#~ msgid ""
-#~ "Inches\n"
-#~ "Centimeters\n"
-#~ "Millimeters\n"
-#~ "Points"
-#~ msgstr ""
-#~ "Insơ\n"
-#~ "Xenti-mét\n"
-#~ "Mili-mét\n"
-#~ "Điểm"
-
-#~ msgid ""
-#~ "Quicken/QuickBooks (tm) US-Letter\n"
-#~ "Deluxe(tm) Personal Checks US-Letter\n"
-#~ "Quicken(tm) Wallet Checks w/ side stub\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Quicken/QuickBooks™ Thư Mỹ\n"
-#~ "Deluxe™ Personal Checks Thư Mỹ\n"
-#~ "Quicken™ Wallet Checks có cuống bên\n"
-#~ "Tự chọn"
-
-#~ msgid ""
-#~ "Top\n"
-#~ "Middle\n"
-#~ "Bottom\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Trên\n"
-#~ "Giữa\n"
-#~ "Dưới\n"
-#~ "Tự chọn"
-
-#~ msgid "Copy Transaction"
-#~ msgstr "Chép giao dịch"
-
-#~ msgid "Copy the selected transaction"
-#~ msgstr "Sao chép giao dịch đã chọn"
-
-#~ msgid "Cut Transaction"
-#~ msgstr "Cắt giao dịch"
-
-#~ msgid "Dup_licate Transaction..."
-#~ msgstr "Nhân đôi gi_ao dịch..."
-
-#~ msgid "Edit Exchange Rate"
-#~ msgstr "Sửa tỷ lệ hội suất"
-
-#~ msgid "Edit the exchange rate for the current split"
-#~ msgstr "Chỉnh sửa tỷ lệ hội suất cho sự phân tách hiện thời"
-
-#~ msgid "Erase all splits except the one for this account."
-#~ msgstr "Xoá tất cả các sự phân tách, trừ điều cho tài khoản này."
-
-#~ msgid "Jump"
-#~ msgstr "Nhảy"
-
-#~ msgid "Remove Transaction Splits"
-#~ msgstr "Gỡ bỏ sự phân tách giao dịch"
-
-#~ msgid "Schedule..."
-#~ msgstr "Định thời..."
-
-#~ msgid "Sort by Amount"
-#~ msgstr "Sắp xếp theo số tiền"
-
-#~ msgid "Sort by Date"
-#~ msgstr "Sắp xếp theo ngày"
-
-#~ msgid "Sort by Description"
-#~ msgstr "Sắp xếp theo mô tả"
-
-#~ msgid "Sort by Memo"
-#~ msgstr "Sắp xếp theo bản ghi nhớ"
-
-#~ msgid "Sort by Number"
-#~ msgstr "Sắp xếp theo số"
-
-#~ msgid "St_yle"
-#~ msgstr "_Kiểu dáng"
-
-#~ msgid "_Amount"
-#~ msgstr "_Số tiền"
-
-#~ msgid "_Number"
-#~ msgstr "_Số"
-
-#~ msgid "_Statement Date"
-#~ msgstr "Ngày ghi _bảng kê"
-
-#~ msgid ""
-#~ "1st\n"
-#~ "2nd\n"
-#~ "3rd\n"
-#~ "4th\n"
-#~ "5th\n"
-#~ "6th\n"
-#~ "7th\n"
-#~ "8th\n"
-#~ "9th\n"
-#~ "10th\n"
-#~ "11th\n"
-#~ "12th\n"
-#~ "13th\n"
-#~ "14th\n"
-#~ "15th\n"
-#~ "16th\n"
-#~ "17th\n"
-#~ "18th\n"
-#~ "19th\n"
-#~ "20th\n"
-#~ "21st\n"
-#~ "22nd\n"
-#~ "23rd\n"
-#~ "24th\n"
-#~ "25th\n"
-#~ "26th\n"
-#~ "27th\n"
-#~ "28th\n"
-#~ "29th\n"
-#~ "30th\n"
-#~ "31st\n"
-#~ "Last day of month\n"
-#~ "Last Monday\n"
-#~ "Last Tuesday\n"
-#~ "Last Wednesday\n"
-#~ "Last Thursday\n"
-#~ "Last Friday\n"
-#~ "Last Saturday\n"
-#~ "Last Sunday"
-#~ msgstr ""
-#~ "Ngày 1\n"
-#~ "Ngày 2\n"
-#~ "Ngày 3\n"
-#~ "Ngày 4\n"
-#~ "Ngày 5\n"
-#~ "Ngày 6\n"
-#~ "Ngày 7\n"
-#~ "Ngày 8\n"
-#~ "Ngày 9\n"
-#~ "Ngày 10\n"
-#~ "Ngày 11\n"
-#~ "Ngày 12\n"
-#~ "Ngày 13\n"
-#~ "Ngày 14\n"
-#~ "Ngày 15\n"
-#~ "Ngày 16\n"
-#~ "Ngày 17\n"
-#~ "Ngày 18\n"
-#~ "Ngày 19\n"
-#~ "Ngày 20\n"
-#~ "Ngày 21\n"
-#~ "Ngày 22\n"
-#~ "Ngày 23\n"
-#~ "Ngày 24\n"
-#~ "Ngày 25\n"
-#~ "Ngày 26\n"
-#~ "Ngày 27\n"
-#~ "Ngày 28\n"
-#~ "Ngày 29\n"
-#~ "Ngày 30\n"
-#~ "Ngày 31\n"
-#~ "Ngày cuối trong tháng\n"
-#~ "Hôm Thứ Hai cuối\n"
-#~ "Hôm Thứ Ba cuối\n"
-#~ "Hôm Thứ Tư cuối\n"
-#~ "Hôm Thứ Năm cuốinHôm Thứ Sáu cuối\n"
-#~ "Hôm Thứ Bảy cuối\n"
-#~ "Hôm Chủ Nhật cuối"
-
-#~ msgid "<b>End</b>"
-#~ msgstr "<b>Kết thúc</b>"
-
-#~ msgid "<b>Upcoming</b>"
-#~ msgstr "<b>Sắp đến</b>"
-
-#~ msgid "Creation State"
-#~ msgstr "Tình trạng tạo"
-
-#~ msgid ""
-#~ "Current Year\n"
-#~ "Now + 1 Year\n"
-#~ "Whole Loan\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Năm nay\n"
-#~ "Một năm sau\n"
-#~ "Toàn khoản vay\n"
-#~ "Tự chọn"
-
-#~ msgid ""
-#~ "Daily\n"
-#~ "Weekly\n"
-#~ "Bi-Weekly\n"
-#~ "Monthly\n"
-#~ "Quarterly\n"
-#~ "Yearly"
-#~ msgstr ""
-#~ "Hàng ngày\n"
-#~ "Hàng tuần\n"
-#~ "Hai tuần một lần\n"
-#~ "Hàng tháng\n"
-#~ "Hàng quý\n"
-#~ "Hàng năm"
-
-#~ msgid "Do you..."
-#~ msgstr "Bạn có..."
-
-#~ msgid ""
-#~ "Fixed Rate\n"
-#~ "3/1 Year ARM\n"
-#~ "5/1 Year ARM\n"
-#~ "7/1 Year ARM\n"
-#~ "10/1 Year ARM"
-#~ msgstr ""
-#~ "Tỷ lệ cố định\n"
-#~ "3/1 năm ARM\n"
-#~ "5/1 năm ARM\n"
-#~ "7/1 năm ARM\n"
-#~ "10/1 năm ARM"
-
-#~ msgid "Loan Information"
-#~ msgstr "Thông tin khoản vay"
-
-#~ msgid ""
-#~ "None\n"
-#~ "Once\n"
-#~ "Daily\n"
-#~ "Weekly\n"
-#~ "Semi-Monthly\n"
-#~ "Monthly"
-#~ msgstr ""
-#~ "Không có\n"
-#~ "Một lần\n"
-#~ "Hàng ngày\n"
-#~ "Hàng tuần\n"
-#~ "Hai tuần một lần\n"
-#~ "Hàng tháng"
-
-#~ msgid "Press apply to commit these changes."
-#~ msgstr "Bấm nút « Áp dụng » để ghi chép các thay đổi này."
-
-#~ msgid "Repayment Type"
-#~ msgstr "Cách trả lại"
-
-#~ msgid "Start Date: "
-#~ msgstr "Ngày bắt đầu : "
-
-#~ msgid ""
-#~ "months\n"
-#~ "years"
-#~ msgstr ""
-#~ "tháng\n"
-#~ "năm"
-
-#~ msgid "Set the budget options using this dialog."
-#~ msgstr "Đặt các tùy chọn ngân sách bằng hộp thoại này."
-
-#~ msgid "Case Insensitive?"
-#~ msgstr "Chữ hoa/thường cũng được ?"
-
-#~ msgid "That GnuCash XML file is already loaded. Please select another file."
-#~ msgstr "Tập tin XML GnuCash đó đã được nạp. Hãy chọn tập tin khác."
-
-#~ msgid ""
-#~ "No files to merge. Please add ones by clicking on 'Load another file'."
-#~ msgstr ""
-#~ "Không có tập tin cần trộn. Hãy thêm tập tin băng cách nhấn vào « Nạp tập "
-#~ "tin khác »."
-
-#~ msgid "Finish changes"
-#~ msgstr "Thay đổi xong"
-
-#~ msgid "Update gconf settings - GnuCash"
-#~ msgstr "Cập nhật thiết lập Gconf — GnuCash"
-
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to import at this time. "
-#~ "Do this if you have saved your accounts to separate GnuCash files.\n"
-#~ "\n"
-#~ "Click \"Forward\" to finish loading files and move to the next step of "
-#~ "the GnuCash Datafile import process."
-#~ msgstr ""
-#~ "Nhấn vào « Nạp tập tin khác » nếu bạ có dữ liệu thêm cần nhập khẩu vào "
-#~ "lúc này. Làm như thế nếu bạn đã lưu các tài khoản vào các tập tin GnuCash "
-#~ "khác nhau.\n"
-#~ "\n"
-#~ "Nhấn vào « Tiếp » để nạp xong các tập tin, rồi tiếp đến bước sau của tiến "
-#~ "trình nhập khẩu tập tin dữ liệu vào GnuCash."
-
-#~ msgid "Do not merge"
-#~ msgstr "Không trộn"
-
-#~ msgid "GnuCash data files you have loaded"
-#~ msgstr "Tập tin dữ liệu GnuCash bạn đã nạp"
-
-#~ msgid "Load another file"
-#~ msgstr "Nạp tập tin khác"
-
-#~ msgid "Unload selected file"
-#~ msgstr "Bỏ nạp tập tin đã chọn"
-
-#~ msgid "<b>Current File List</b>"
-#~ msgstr "<b>Danh sách tập tin hiện có</b>"
-
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to load at this time.\n"
-#~ "\n"
-#~ "Click \"Next\" to finish loading files and move to the next step. "
-#~ msgstr ""
-#~ "Nhấn vào « Nạp tập tin khác » nếu bạn có dữ liệu thêm cần nạp vào lúc "
-#~ "này.\n"
-#~ "\n"
-#~ "Nhấn vào « Kế » để nạp xong các tập tin và tiếp đến bước sau."
-
-#~ msgid "<b>Exchange/Price Information</b>"
-#~ msgstr "<b>Thông tin hội xuất/giá</b>"
-
-#~ msgid "To A_mount:"
-#~ msgstr "Đến _số tiền:"
-
-#~ msgid "_Exchange Rate:"
-#~ msgstr "Tỷ lệ hội _suất:"
-
-#~ msgid "_From:"
-#~ msgstr "_Từ :"
-
-#~ msgid "_To:"
-#~ msgstr "Ch_o :"
-
-#~ msgid ""
-#~ "US (12/31/2001)\n"
-#~ "UK (31/12/2001)\n"
-#~ "Europe (31.12.2001)\n"
-#~ "ISO (2001-12-31)\n"
-#~ "UTC\n"
-#~ "Locale\n"
-#~ "Custom\n"
-#~ msgstr ""
-#~ "Mỹ (12/31/2001)\n"
-#~ "Anh (31/12/2001)\n"
-#~ "Âu (31.12.2001)\n"
-#~ "ISO (2001-12-31)\n"
-#~ "UTC\n"
-#~ "Miền địa phương\n"
-#~ "Tự chọn\n"
-
-#~ msgid "Don't tell me again this session."
-#~ msgstr "Đừng báo lại trong phiên chạy này."
-
-#~ msgid "Don't tell me again."
-#~ msgstr "Đừng báo lần nữa."
-
-#~ msgid "Remember the answer and don't tell me again this session."
-#~ msgstr "Nhớ đáp ứng và đừng báo lại trong phiên chạy này."
-
-#~ msgid "Remember the answer and don't tell me again."
-#~ msgstr "Nhớ đáp ứng và đừng báo lần nữa."
-
-#~ msgid "Failed to process file: %s"
-#~ msgstr "Lỗi xử lý tập tin: %s"
-
-#~ msgid "Failed to open file: %s: %s"
-#~ msgstr "Lỗi mở tập tin: %s: %s"
-
-#~ msgid "Add a new transaction to the account"
-#~ msgstr "Thêm một giao dịch mới vào tài khoản"
-
-#, fuzzy
-#~ msgid "Select an CSV/Fixed-Width file to import"
-#~ msgstr "Chọn tập tin cần nhập"
-
-#, fuzzy
-#~ msgid "Import _CSV/Fixed-Width..."
-#~ msgstr "Nhập CS_V và gửi..."
-
-#~ msgid ""
-#~ "Enable the SKIP action in the transaction matcher. If enabled, a "
-#~ "transaction whose best match's score is in the yellow zone (above the "
-#~ "Auto-ADD threshold but below the Auto-CLEAR threshold) will be SKIPed by "
-#~ "default."
-#~ msgstr ""
-#~ "Hiệu lực hành động Bỏ Qua trong bộ khớp giao dịch. Bật thì giao dịch có "
-#~ "điểm khớp tốt nhất nằm trong vùng màu vàng (lớn hơn ngưỡng tự động Thêm "
-#~ "nhưng nhỏ hơn ngưỡng tự động Chuyển) thì được Bỏ Qua theo mặc định."
-
-#~ msgid ""
-#~ "For a new transaction, click on the \"Other Account\" entry to choose the "
-#~ "other (destination) account of this transaction.\n"
-#~ "For a transaction that is a duplicate of an existing one, click on the "
-#~ "\"Other Account\" or \"Description\" entry to \n"
-#~ "check whether GnuCash chose the right existing transaction.\n"
-#~ "To switch transactions between both states, click on the checkmark in the "
-#~ "\"New\" column.\n"
-#~ "When all new transactions have the correct destination account and all "
-#~ "duplicates are matched with the right existing transaction, \n"
-#~ "click \"OK\"."
-#~ msgstr ""
-#~ "Đối với giao dịch mới, nhấn vào mục nhập « Tài khoản khác » để chọn tài "
-#~ "khoản khác (đích) của giao dịch này.\n"
-#~ "Đối với giao dịch trùng với điều đã tồn tại, nhấn vào mục nhập « Tài "
-#~ "khoản khác » hay « Mô tả » để kiểm tra nếu GnuCash đã chọn giao dịch đã "
-#~ "tồn tại đúng.\n"
-#~ "Để chuyển đổi giao dịch giữa hai tình trạng này, nhấn vào dấu kiểm trong "
-#~ "cột « Mới ».\n"
-#~ "Khi mọi giao dịch mới có tài khoản đích đúng và mọi điều trùng được khớp "
-#~ "với giao dịch đã tồn tại đúng, nhấn vào nút « OK »."
-
-#~ msgid "Other Account"
-#~ msgstr "Tài khoản khác"
-
-#~ msgid "Period-as-decimal (1,000.00)"
-#~ msgstr "Dấu chấm làm thập phân (1,000.00)"
-
-#~ msgid "Comma-as-decimal (1.000,00)"
-#~ msgstr "Dấu phẩy làm thập phân (1.000,00)"
-
-#~ msgid "y-d-m"
-#~ msgstr "y-d-m"
-
-#~ msgid "(no)"
-#~ msgstr "(không)"
-
-#~ msgid "You must enter an account name."
-#~ msgstr "Bạn phải gõ một tên tài khoản."
-
-#, fuzzy
-#~ msgid ""
-#~ "No valid customer selected. Click on the Options button to select a "
-#~ "customer."
-#~ msgstr ""
-#~ "Chưa chọn %s hợp lệ. Nhấn vào cái nút « Tùy chọn » rồi chọn công ty."
-
-#, fuzzy
-#~ msgid ""
-#~ "No valid employee selected. Click on the Options button to select an "
-#~ "employee."
-#~ msgstr ""
-#~ "Chưa chọn %s hợp lệ. Nhấn vào cái nút « Tùy chọn » rồi chọn công ty."
-
-#, fuzzy
-#~ msgid ""
-#~ "No valid company selected. Click on the Options button to select a "
-#~ "company."
-#~ msgstr ""
-#~ "Chưa chọn %s hợp lệ. Nhấn vào cái nút « Tùy chọn » rồi chọn công ty."
-
-#~ msgid ""
-#~ "Blue items are exportable to a German Tax XML file. Press Export to "
-#~ "actually export them."
-#~ msgstr ""
-#~ "Mục màu xanh có thể được xuất khẩu ra một tập tin XML Thuế Đức. Bấm cái "
-#~ "nút Xuất để thực sự xuất khẩu các mục này."
-
-#~ msgid ""
-#~ "No Tax Related accounts were found. Go to the Edit->Tax Options dialog to "
-#~ "set up tax-related accounts."
-#~ msgstr ""
-#~ "Không tìm thấy tài khoản liên quan đến thuế. Mở hộp thoại « Sửa > Tùy "
-#~ "chọn thuế » để thiết lập tài khoản liên quan đến thuế."
-
-#~ msgid "Asterisk"
-#~ msgstr "Sao"
-
-#~ msgid ""
-#~ "A list of directories (strings) indicating where to look for html and "
-#~ "parsed-html files. Each element must be a string representing a directory "
-#~ "or a symbol where 'default expands to the default path, and 'current "
-#~ "expands to the current value of the path."
-#~ msgstr ""
-#~ "Danh sách các thư mục (chuỗi) ngụ ý cần tìm tập tin HTML và HTML đã phân "
-#~ "tích ở đâu. Mỗi yếu tố phải là một chuỗi đại diện một thư mục hay ký hiệu "
-#~ "mà « default » mở rộng thành đường dẫn mặc định, và « current » mở rộng "
-#~ "thành giá trị hiện thời của đường dẫn."
-
-#~ msgid "Set the search path for documentation files"
-#~ msgstr "Đặt đường dẫn tìm kiếm tập tin tài liệu"
-
-#~ msgid "Default number of register rows to display in Invoices."
-#~ msgstr "Số hàng sổ cái cần hiển thị trong đơn hàng gửi."
-
-#~ msgid "The number of rows in an invoice"
-#~ msgstr "Số hàng trong đơn hàng gửi"
-
-#~ msgid ""
-#~ "This field sets the number of rows to show in an invoice. It does not "
-#~ "actually affect the display of the contents of the window. It is only "
-#~ "used to set the size of the window when first opened."
-#~ msgstr ""
-#~ "Trường này đặt số hàng cần hiển thị trong đơn hàng gửi. Nó không ảnh "
-#~ "hưởng đến cách hiển thị nội dung của cửa sổ. Nó chỉ dùng để đặt kích cỡ "
-#~ "của cửa sổ khi mới tạo."
-
-#~ msgid "Invalid Entry:  You need to supply %s."
-#~ msgstr "Mục nhập sai: phải cung cấp %s."
-
-#~ msgid "This SX has changed; are you sure you want to cancel?"
-#~ msgstr "SX này bị thay đổi: bạn có chắc muốn thôi không?"
-
-#~ msgid "Crea_te in advance, days:"
-#~ msgstr "_Tạo trước (theo ngày):"
-
-#~ msgid "R_emind in advance, days:"
-#~ msgstr "Nhắc nhở trước (th_eo ngày):"
-
-#~ msgid ""
-#~ "This field sets the number of rows to show in a register. It does not "
-#~ "actually affect the display of the contents of the window. It is only "
-#~ "used to set the size of the window when first opened."
-#~ msgstr ""
-#~ "Trường này đặt số hàng cần hiển thị trong sổ cái. Nó không có tác động "
-#~ "cách hiển thị nội dung của cửa sổ. Nó chỉ dùng để đặt kích cỡ của cửa sổ "
-#~ "khi mới tạo."
-
-#~ msgid "New %s"
-#~ msgstr "%s mới"
-
-#~ msgid "item"
-#~ msgstr "mục"
-
-#~ msgid "Display this many rows when a register is created."
-#~ msgstr "Hiển thị số hàng này khi tạo sổ cái."
-
-#~ msgid "Enable the EDIT action in the transaction matcher. NOT YET SUPPORTED"
-#~ msgstr "Hiệu lực hành động Sửa trong bộ khớp giao dịch. CHƯA HỖ TRỢ"
-
-#~ msgid ""
-#~ "The job was sent to the bank successfully, but the bank is refusing to "
-#~ "execute the job. Please check the log window for the exact error message "
-#~ "of the bank. The line with the error message contains a code number that "
-#~ "is greater than 9000.\n"
-#~ "\n"
-#~ "Do you want to enter the job again?"
-#~ msgstr ""
-#~ "Công việc đã được gửi cho ngân hàng, nhưng ngân hàng từ chối thực hiện "
-#~ "nó. Hãy kiểm tra cửa sổ ghi lưu tìm thông điệp lỗi chính xác của ngân "
-#~ "hàng. Dòng chứa thông điệp lỗi cũng chứa số mã hơn 9000.\n"
-#~ "\n"
-#~ "Bạn có muốn gõ lại công việc này không?"
-
-#~ msgid "The two passwords didn't match. Please try again."
-#~ msgstr "Hai mật khẩu không trùng nhau: hãy thử lại."
-
-#~ msgid "Choose AqBanking Backend"
-#~ msgstr "Chọn hậu phương AqBanking"
-
-#~ msgid "Please choose an AqBanking backend to be configured"
-#~ msgstr "Hãy chọn hậu phương AqBanking cần cấu hình"
-
-#~ msgid "Co_nfigure"
-#~ msgstr "Cấu hì_nh"
-
-#~ msgid "The file %s does not exist. Would you like to create it now?"
-#~ msgstr ""
-#~ "Tập tin « %s » không tồn tại. Bạn có muốn tạo nó ngay bây giờ không?"
-
-#~ msgid ""
-#~ "The directory for file %s does not exist. Please choose another place for "
-#~ "this file."
-#~ msgstr ""
-#~ "Thư mục cho tập tin %s không tồn tại. Hãy chọn vị trí khác cho tập tin "
-#~ "này."
-
-#~ msgid "Choose an Online Banking Version to use with the selected bank:"
-#~ msgstr ""
-#~ "Hãy chọn Phiên bản Ngân hàng Trực tuyến cần dùng với ngân hàng đã chọn:"
-
-#~ msgid "Online Banking Version"
-#~ msgstr "Phiên bản Ngân hàng Trực tuyến"
-
-#~ msgid "Start AqBanking Setup Wizard"
-#~ msgstr "Khởi chạy Trợ lý Thiết lập AqBanking"
-
-#~ msgid "Enter and confirm your new password"
-#~ msgstr "Hãy gõ và xấc nhận mật khẩu mới của bạn"
-
-#~ msgid "Enter new Password"
-#~ msgstr "Hãy gõ mật khẩu mới"
-
-#~ msgid "Activate verbose debug messages for Online Banking."
-#~ msgstr ""
-#~ "Hiển thị các thông điệp gỡ lỗi chi tiết về dịch vụ Ngân hàng Trực tuyến."
-
-#~ msgid "Remember the Online Banking PIN in memory during a session."
-#~ msgstr ""
-#~ "Nhớ PIN (số nhận diện cá nhân) Ngân hàng Trực tuyến trong toàn phiên chạy."
-
-#~ msgid ""
-#~ "The PIN you entered was wrong.\n"
-#~ "Do you want to try again?"
-#~ msgstr ""
-#~ "Bạn đã gõ một PIN không đúng.\n"
-#~ "Bạn có muốn thử lại không?"
-
-#~ msgid ""
-#~ "The PIN you entered was wrong.\n"
-#~ "ATTENTION: You have zero further wrong retries left!\n"
-#~ "Do you want to try again?"
-#~ msgstr ""
-#~ "Bạn đã gõ một PIN không đúng.\n"
-#~ "GHI CHÚ : không thể làm lỗi nữa.\n"
-#~ "Bạn có muốn thử lại không"
-
-#~ msgid ""
-#~ "Unfortunately you entered a wrong PIN for too many times. Your chip card "
-#~ "is therefore destroyed. Aborting."
-#~ msgstr ""
-#~ "Tiếc là bạn đã gõ PIN không đúng quá nhiều lần. Vì thế thẻ chíp của bạn "
-#~ "đã bị hủy. Đang hủy bỏ."
-
-#~ msgid ""
-#~ "No chip card has been found in the chip card reader. Do you want to try "
-#~ "again?"
-#~ msgstr ""
-#~ "Không tìm thấy thẻ chíp trong máy đọc thẻ. Bạn có muốn thử lại không?"
-
-#~ msgid ""
-#~ "Unfortunately this Online Banking job is not supported by your bank or "
-#~ "for your account. Aborting."
-#~ msgstr ""
-#~ "Tiếc là công việc Ngân hàng Trực tuyến này không được hỗ trợ bởi ngân "
-#~ "hàng của bạn, hoặc cho tài khoản của bạn. Đang hủy bỏ."
-
-#~ msgid ""
-#~ "The server of your bank refused the Online Banking connection. Please try "
-#~ "again later. Aborting."
-#~ msgstr ""
-#~ "Máy phục vụ của ngân hàng của bạn đã từ chối kết nối Ngân hàng Trực "
-#~ "tuyến. Hãy thử lại sau. Đang hủy bỏ."
-
-#~ msgid ""
-#~ "Executing the Online Banking outbox failed. Please check the log window."
-#~ msgstr ""
-#~ "Lỗi thực hiện Hộp Thư Đi của Ngân hàng Trực tuyến. Hãy kiểm tra lại cửa "
-#~ "sổ ghi lưu."
-
-#~ msgid ""
-#~ "A debit note has been refused by the bank. The refused debit note has the "
-#~ "following data:\n"
-#~ "Remote bank code: \"%s\"\n"
-#~ "Remote account number: \"%s\"\n"
-#~ "Description and remote name: \"%s\"\n"
-#~ "Value: \"%s\"\n"
-#~ msgstr ""
-#~ "Một thương phiếu nợ nào đó đã bị từ chối bởi ngân hàng.\n"
-#~ "Thương phiếu nợ này có dữ liệu này:\n"
-#~ " • Mã ngân hàng từ xa: « %s »\n"
-#~ " • Số hiệu tài khoản từ xa: « %s »\n"
-#~ " • Mô tả và tên từ xa: « %s »\n"
-#~ " • Giá trị: « %s »\n"
-
-#~ msgid ""
-#~ "One of the jobs was sent to the bank successfully, but the bank is "
-#~ "refusing to execute the job. Please check the log window for the exact "
-#~ "error message of the bank. The line with the error message contains a "
-#~ "code number that is greater than 9000.\n"
-#~ "\n"
-#~ "The job has been removed from the queue."
-#~ msgstr ""
-#~ "Một của những công việc đã được gửi cho ngân hàng, nhưng ngân hàng từ "
-#~ "chối thực hiện nó. Hãy kiểm tra cửa sổ ghi lưu để tìm thông điệp lỗi "
-#~ "chính xác của ngân hàng. Dòng chứa thông điệp lỗi này cũng chứa số mã hơn "
-#~ "9000.\n"
-#~ "\n"
-#~ "Công việc bị từ chối cũng bị gỡ bỏ khỏi hàng đợi."
-
-#~ msgid "Import a CSV file into GnuCash"
-#~ msgstr "Nhập khẩu một tập tin CSV vào GnuCash"
-
-#~ msgid "Import CSV and s_end..."
-#~ msgstr "Nhập CS_V và gửi..."
-
-#~ msgid ""
-#~ "Import a CSV file into GnuCash and send the transfers online through "
-#~ "Online Banking"
-#~ msgstr ""
-#~ "Nhập khẩu một tập tin CSV vào GnuCash và gửi các giao dịch một cách trực "
-#~ "tuyến qua dịch vụ Ngân hàng Trực tuyến"
-
-#~ msgid ""
-#~ "The PIN needs to be at least %d characters long. Do you want to try again?"
-#~ msgstr "Số PIN phải chứa ít nhất %d ký tự. Bạn có muốn thử lại không?"
-
-#~ msgid ""
-#~ "You entered %ld characters, but the PIN must be no longer than %d "
-#~ "characters. Do you want to try again?"
-#~ msgstr ""
-#~ "Bạn đã gõ %ld ký tự, nhưng số PIN chứa nhiều nhất %d ký tự. Bạn có muốn "
-#~ "thử lại không?"
-
-#~ msgid ""
-#~ "This TAN needs to be at least %d characters long. Do you want to try "
-#~ "again?"
-#~ msgstr "Số TAN phải chứa ít nhất %d ký tự. Bạn có muốn thử lại không"
-
-#~ msgid ""
-#~ "You entered %ld characters, but the TAN must be no longer than %d "
-#~ "characters. Do you want to try again?"
-#~ msgstr ""
-#~ "Bạn đã gõ %ld ký tự, nhưng số TAN chứa nhiều nhất %d ký tự. Bạn có muốn "
-#~ "thử lại không"
-
-#~ msgid "Enable EDIT transaction action"
-#~ msgstr "Bật hành động SỬA giao dịch"
-
-#~ msgid ""
-#~ "Enable the EDIT action in the transaction matcher. NOT YET SUPPORTED."
-#~ msgstr "Hiệu lực hành động SỬA trong bộ khớp giao dịch. CHƯA HỖ TRỢ."
-
-#~ msgid "CONFIGPATH"
-#~ msgstr "ĐƯỜNG DẪN CẤU HÌNH"
-
-#~ msgid "Set shared data file search path"
-#~ msgstr "Đặt đường dẫn tìm kiếm tập tin dữ liệu dùng chung"
-
-#~ msgid "SHAREPATH"
-#~ msgstr "ĐƯỜNG DẪN DÙNG CHUNG"
-
-#~ msgid "Transaction _journal"
-#~ msgstr "Nhật _ký giao dịch"
-
-#, fuzzy
-#~ msgid "Payment rec'd..."
-#~ msgstr "Tần suất trả"
-
-#~ msgid "<b>Contained Accounts</b>"
-#~ msgstr "<b>Tài khoản đã chứa</b>"
-
-#~ msgid "<b>Description</b>"
-#~ msgstr "<b>Mô tả</b>"
-
-#~ msgid "<b>New Account Currency</b>"
-#~ msgstr "<b>Tiền tệ tài khoản mới</b>"
-
-#~ msgid ""
-#~ "If you would like an account to have an opening balance, click on the "
-#~ "account and enter the starting balance in the box on the right. All "
-#~ "accounts except Equity and placeholder accounts may have an opening "
-#~ "balance."
-#~ msgstr ""
-#~ "Muốn tài khoản có số dư đầu kỳ thì nhấn vào tài khoản rồi gõ số dư đầu kỳ "
-#~ "vào hộp bên phải. Tất cả các tài khoản trừ tài khoản cổ phiếu và tài "
-#~ "khoản giữ chỗ có thể chứa số dư đầu kỳ."
-
-#~ msgid "This is Sample2."
-#~ msgstr "Đây là Mẫu2."
-
-#~ msgid "Auto-Created Transactions Notification"
-#~ msgstr "Thông báo về giao dịch tạo tự động"
-
-#~ msgid "Create"
-#~ msgstr "Tạo"
-
-#~ msgid "Create as scheduled"
-#~ msgstr "Tạo như lập lịch"
-
-#~ msgid "Created Transaction Review"
-#~ msgstr "Xem lại giao dịch đã tạo"
-
-#~ msgid "Creating transactions..."
-#~ msgstr "Đang tạo giao dịch..."
-
-#~ msgid "Days Away"
-#~ msgstr "Ngày sau nay"
-
-#~ msgid "Disposition?"
-#~ msgstr "Chuyển nhượng ?"
-
-#~ msgid "Obsolete Scheduled Transactions"
-#~ msgstr "Giao dịch đã định thời cũ"
-
-#~ msgid "Postpone"
-#~ msgstr "Hoãn"
-
-#~ msgid "Scheduled Transaction"
-#~ msgstr "Giao tác đã định thời"
-
-#~ msgid "Since Last Run"
-#~ msgstr "Kể từ lần chạy cuối"
-
-#~ msgid "State"
-#~ msgstr "Tình trạng"
-
-#~ msgid "Template Transaction (Read-Only)"
-#~ msgstr "Mẫu giao dịch (chỉ đọc)"
-
-#~ msgid ""
-#~ "The following scheduled transactions have expired. Select those you wish "
-#~ "to delete."
-#~ msgstr ""
-#~ "Theo đây có những giao dịch đã định thời cũng đã hết hạn. Hãy chọn những "
-#~ "điều cần xoá."
-
-#~ msgid ""
-#~ "The listed Scheduled Transactions are to-be created soon. Select any "
-#~ "which you would like to create now, and click \"Forward\" to create them."
-#~ msgstr ""
-#~ "Danh sách này chứa những giao dịch đã định thời sẽ được tạo sớm. Hãy chọn "
-#~ "những điều bạn muốn tạo ngay bây giờ, rồi bấm nút « Tiếp » để tạo."
-
-#, fuzzy
-#~ msgid ""
-#~ "This assistant will walk you through any scheduled transactions that "
-#~ "should be created."
-#~ msgstr ""
-#~ "Trợ lý này sắp hướng dẫn bạn theo bất kỳ giao dịch đã định thời nên tạo."
-
-#~ msgid "To-Create Transaction Preparation"
-#~ msgstr "Chuẩn bị giao dịch cần tạo"
-
-#~ msgid "Transaction Reminders"
-#~ msgstr "Nhắc nhở về giao dịch"
-
-#~ msgid "Unselect All"
-#~ msgstr "Bỏ chọn tất cả"
-
-#~ msgid "Value:"
-#~ msgstr "Giá trị:"
-
-#~ msgid "Variable"
-#~ msgstr "Biến"
-
-#~ msgid "Variables"
-#~ msgstr "Biến"
-
-#~ msgid "What to do, what to do?"
-#~ msgstr "Bạn có muốn làm gì vậy?"
-
-#~ msgid "Defaults"
-#~ msgstr "Mặc định"
-
-#~ msgid "Start of this fiscal year"
-#~ msgstr "Đầu của năm tài chính nay"
-
-#~ msgid "Start of previous fiscal year"
-#~ msgstr "Đầu của năm tài chính qua"
-
-#~ msgid "End of this fiscal year"
-#~ msgstr "Cuối của năm tài chính nay"
-
-#~ msgid "End of previous fiscal year"
-#~ msgstr "Cuối của năm tài chính qua"
-
-#~ msgid "Current Year Start"
-#~ msgstr "Đầu năm nay"
-
-#~ msgid "Previous Year Start"
-#~ msgstr "Đầu năm qua"
-
-#~ msgid "Previous Year End"
-#~ msgstr "Kết thúc năm qua"
-
-#~ msgid "End of the Previous Year"
-#~ msgstr "Kết thúc của năm lịch trước"
-
-#~ msgid "Start of Financial Period"
-#~ msgstr "Đầu kỳ tài chính"
-
-#~ msgid "End of Financial Period"
-#~ msgstr "Cuối kỳ tài chính"
-
-#~ msgid "End of the accounting period, as set in the global preferences"
-#~ msgstr "Kết thúc của thời kỳ kế toán, như đặt trong tùy thích toàn cục"
-
-#~ msgid "End of the current month"
-#~ msgstr "Cuối tháng nay"
-
-#~ msgid "The beginning of the previous month"
-#~ msgstr "Đầu tháng qua"
-
-#~ msgid "The end of the latest quarterly accounting period"
-#~ msgstr "Kết thúc của thời kỳ kế toán từng quý mới nhất"
-
-#~ msgid "Accounts to include"
-#~ msgstr "Tài khoản cần bao gồm"
-
-#~ msgid "Show Full Account Name?"
-#~ msgstr "Hiện tên tài khoản đầy đủ không?"
-
-#~ msgid "Filter Accounts"
-#~ msgstr "Tài khoản lọc"
-
-#, fuzzy
-#~ msgid "Flatten list to depth limit?"
-#~ msgstr "Làm phẳng danh sách thành giới hạn bề sâu"
-
-#~ msgid "DOCPATH"
-#~ msgstr "ĐƯỜNG DẪN TÀI LIỆU"
-
-#~ msgid "QSF _Invoice..."
-#~ msgstr "Đơn hàng gử_i QSF..."
-
-#~ msgid "Export one or more invoices to QSF"
-#~ msgstr "Xuất một hay nhiều đơn hàng gửi vào QSF"
-
-#~ msgid "QSF _Customer..."
-#~ msgstr "_Khách QSF..."
-
-#~ msgid "Export one or more customers to QSF"
-#~ msgstr "Xuất một hay nhiều khách hàng vào QSF"
-
-#~ msgid "QSF _Vendor..."
-#~ msgstr "Nhà _sản xuất QSF..."
-
-#~ msgid "Export one or more vendors to QSF"
-#~ msgstr "Xuất một hay nhiều nhà sản xuất vào QS"
-
-#~ msgid "QSF _Employee..."
-#~ msgstr "Nhân _viên QSF..."
-
-#~ msgid "Export one or more employees to QSF"
-#~ msgstr "Xuất một hay nhiều nhân viên vào QS"
-
-#~ msgid "Export Invoices to XML"
-#~ msgstr "Xuất đơn hàng gửi dạng XML"
-
-#~ msgid "Export Vendors to XML"
-#~ msgstr "Xuất nhà sản xuất dạng XML"
-
-#~ msgid "Export Employees to XML"
-#~ msgstr "Xuất nhân viên dạng XM"
-
-#~ msgid "Export Chart of Accounts to QSF XML"
-#~ msgstr "Xuất Sơ đồ Tài khoản dạng XML QSF"
-
-#~ msgid ""
-#~ "Error: Please resolve all %d conflicts before trying to commit the data."
-#~ msgstr ""
-#~ "Lỗi: hãy giải quyết tất cả các %d trường hợp xung đột trước khi thử ghi "
-#~ "chép dữ liệu."
-
-#~ msgid "Error: the Commit operation failed, error code %d."
-#~ msgstr "Lỗi: thao tác Ghi chép không thành công, mã lỗi %d."
-
-#~ msgid "%i conflict needs to be resolved."
-#~ msgid_plural "%i conflicts need to be resolved."
-#~ msgstr[0] "%i trường hợp xung đột cần giải quyết."
-
-#~ msgid "%i parameter value for this \"%s\" object."
-#~ msgid_plural "%i parameter values for this \"%s\" object."
-#~ msgstr[0] "%i giá trị tham số cho đối tượng « %s » này."
-
-#~ msgid "%i: Parameter name: %s "
-#~ msgstr "%i: Tên tham số : %s "
-
-#~ msgid "Import data : %s "
-#~ msgstr "Nhập dữ liệu : %s "
-
-#~ msgid "Original data : %s\n"
-#~ msgstr "Dữ liệu gốc: %s\n"
-
-#~ msgid "Click to choose the filename and location."
-#~ msgstr "Nhấn để chọn tên tập tin và vị trí."
-
-#~ msgid "Export Chart of Accounts"
-#~ msgstr "Xuất Sơ đồ Tài khoản"
-
-#, fuzzy
-#~ msgid ""
-#~ "Select the date to use and click Export to choose the filename and "
-#~ "location. Future dates are not supported."
-#~ msgstr ""
-#~ "Hãy chọn ngày tháng cần dùng, rồi nhấn vào nút Xuất để chọn tên tập tin "
-#~ "và vị trí."
-
-#~ msgid ""
-#~ "The Chart of Accounts includes the balance for each account, on the date "
-#~ "specified. Note that future dates are not supported."
-#~ msgstr ""
-#~ "Sơ đồ Tài khoản gồm có số dư cho mỗi tài khoản, vào ngày tháng đã ghi rõ. "
-#~ "Ghi chú rằng không hỗ trợ ngày trong tương lai."
-
-#~ msgid ""
-#~ "You can export the Chart of Accounts to a QSF XML file that can be "
-#~ "imported into another GnuCash file or used in other programs."
-#~ msgstr ""
-#~ "Bạn có khả năng xuất khẩu Sơ đồ Tài khoản dạng tập tin XML QSF có thể "
-#~ "nhập khẩu lại vào tập tin GnuCash khác, hoặc sử dụng trong chương trình "
-#~ "khác."
-
-#~ msgid "1. Update your existing book with the import data"
-#~ msgstr "1. Cập nhật sổ sách tồn tại với dữ liệu nhập khẩu"
-
-#~ msgid "2. Ignore the import data, leave original unchanged"
-#~ msgstr "2. Lờ đi dữ liệu nhập khẩu nên không thay đổi dữ liệu gốc"
-
-#~ msgid "3. Import the data as a NEW object"
-#~ msgstr "3. Nhập khẩu dữ liệu dạng một đối tượng MỚI"
-
-#~ msgid "Add the import as a new object, leave original in place"
-#~ msgstr "Thêm việc nhập khẩu dạng một đối tượng mới, để lại dữ liệu gốc"
-
-#~ msgid "Commit QSF Import Data to data file"
-#~ msgstr "Ghi chép Dữ liệu Nhập khẩu QSF vào tập tin dữ liệu"
-
-#~ msgid "Please resolve any conflicts in the merge"
-#~ msgstr "Hãy giải quyết sự xung đột nào trong tiến trình trộn"
-
-#~ msgid ""
-#~ "Press `Apply' to merge your QSF data into the current GnuCash file.\n"
-#~ "\n"
-#~ "Press `Back' to review your selections.\n"
-#~ "\n"
-#~ "Press `Cancel' to close this dialog without changing your current data "
-#~ "file.\n"
-#~ "\n"
-#~ "REMEMBER: There is no way to undo this final operation! Make sure you "
-#~ "have a backup before clicking 'Apply'."
-#~ msgstr ""
-#~ "Bấm nút « Áp dụng » để trộn dữ liệu QSF với tập tin GnuCash hiện tại.\n"
-#~ "\n"
-#~ "Bấm « Lùi » để xem lại các vùng chọn.\n"
-#~ "\n"
-#~ "Bấm « Thôi » để đóng hộp thoại này, không thay đổi tập tin dữ liệu hiện "
-#~ "tại.\n"
-#~ "\n"
-#~ "GHI CHÚ : không thể hủy bước cuối cùng này ! Kiểm tra xem bạn có bản sao "
-#~ "lưu trước khi bấm « Áp dụng »."
-
-#~ msgid "QSF Data Import Setup"
-#~ msgstr "Thiết lập Nhập khẩu Dữ liệu QSF"
-
-#~ msgid "Shows how your QSF data conflicts with existing data in your file."
-#~ msgstr ""
-#~ "Hiển thị các sự xung đột giữa dữ liệu QSF và dữ liệu đã tồn tại trong tập "
-#~ "tin của bạn."
-
-#, fuzzy
-#~ msgid ""
-#~ "This assistant will merge your QSF data into the currently open GnuCash "
-#~ "file.\n"
-#~ "\n"
-#~ "You will be asked how to proceed if some QSF data clashes with the your "
-#~ "existing GnuCash data file.\n"
-#~ "\n"
-#~ "There is NO way to undo this operation! Please ensure you have a backup "
-#~ "of your file BEFORE continuing! You will be given the option to cancel "
-#~ "the merge at all stages until the final merge operation. Once you click "
-#~ "Finish, the new QSF data will be committed to your current data file.\n"
-#~ "\n"
-#~ "There is currently no currency or price support in the merge operation, "
-#~ "the new data will inherit any default currency or you can change the "
-#~ "currency after the merge is complete.\n"
-#~ "\n"
-#~ "Your QSF data is ready to import\n"
-#~ "\n"
-#~ "Click 'Cancel'  if you do not wish to merge your QSF data now."
-#~ msgstr ""
-#~ "Trợ lý này sẽ trộn dữ liệu QSF với tập tin GnuCash hiện thời được mở.\n"
-#~ "\n"
-#~ "Có dữ liệu QSF xung đột với tập tin tập tin GnuCash đã tồn tại thì trợ lý "
-#~ "sẽ hỏi bạn có muốn tiếp tục như thế nào.\n"
-#~ "\n"
-#~ "KHÔNG thể hủy bước này ! Hãy kiểm tra xem bạn có bản sao lưu tập tin "
-#~ "TRƯỚC khi tiếp tục ! Vẫn còn có thể thôi tiến trình, đến bước trộn cuối "
-#~ "cùng. Một khi bấm nút « Kết thúc » thì dữ liệu QSIF mới được ghi chép vào "
-#~ "tập tin dữ liệu hiện tại.\n"
-#~ "\n"
-#~ "Hiện thời tiến trình trộn không hỗ trợ tiền tệ hay giá nên dữ liệu mới kế "
-#~ "thừa tiền tệ tập tin, hoặc bạn có thể thay đổi tiền tệ sau khi trộn "
-#~ "xong.\n"
-#~ "\n"
-#~ "Dữ liệu QSF sẵn sàng nhập khẩu.\n"
-#~ "\n"
-#~ "Bấm nút « Thôi » nếu bạn không muốn trộn dữ liệu QSF ngay bây giờ."
-
-#~ msgid ""
-#~ "You have three choices for each collision: \n"
-#~ "1. The import object can be allowed to overwrite the target - use this to "
-#~ "update your existing book. \n"
-#~ "2. The import object can be ignored - use this if the import is a "
-#~ "duplicate of an object in the existing book. \n"
-#~ "3. The import object can be created as a new object in the existing book."
-#~ msgstr ""
-#~ "Bạn có ba tùy chọn về mỗi sự xung đột:\n"
-#~ " 1. Cho phép đối tượng nhập khẩu ghi đè lên đích — hãy dùng tùy chọn này "
-#~ "để cập nhật sổ sách đã có.\n"
-#~ " 2. Có thể lờ đi đối tượng nhập khẩu — hãy dùng tùy chọn này nếu đối "
-#~ "tượng nhập khẩu trùng với đối tượng trong sổ sách đã có.\n"
-#~ " 3. Có thể tạo đối tượng nhập khẩu dạng một đối tượng mới trong sổ sách "
-#~ "đã có."
-
-#~ msgid "ignore the import, leave the original untouched"
-#~ msgstr "Lờ đi tiến trình nhập khẩu, dữ liệu gốc vẫn không hề thay đổi"
-
-#~ msgid "overwrite the original with the import data"
-#~ msgstr "ghi đè lên dữ liệu gốc bằng dữ liệu nhập khẩu"
-
-#~ msgid "Import a QSF object file"
-#~ msgstr "Nhập một tập tin đối tượng QSF"
-
-#~ msgid "Export the chart of accounts for a date with balances as QSF"
-#~ msgstr "Xuất dạng QSF sơ đồ tài khoản vào một ngày đã chọn với số dư"
-
-#~ msgid "Error: Loading failed, error code %d - %s."
-#~ msgstr "Lỗi: nạp không thành công, mã lỗi %d - %s"
-
-#~ msgid "Select the QSF file to import into GnuCash"
-#~ msgstr "Chọn tập tin QSF cần nhập khẩu vào GnuCash"
-
-#~ msgid ""
-#~ "Invalid QSF Object file! The QSF object file %s failed to validate "
-#~ "against the QSF object schema. The XML structure of the file is either "
-#~ "not well-formed or contains illegal data."
-#~ msgstr ""
-#~ "Tập tin đối tượng QSF không hợp lệ. Tập tin đối tượng QSF %s không hợp lệ "
-#~ "hóa được với giản đồ đối tượng QSF. Hoặc cấu trúc XML của tập tin dạng "
-#~ "sai hoặc tập tin chứa dữ liệu không được phép."
-
-#~ msgid ""
-#~ "Invalid QSF Map file! The QSF map file %s failed to validate against the "
-#~ "QSF map schema. The XML structure of the file is either not well-formed "
-#~ "or contains illegal data."
-#~ msgstr ""
-#~ "Tập tin sơ đồ QSF không hợp lệ. Tập tin sơ đồ QSF %s không hợp lệ hóa "
-#~ "được với giản đồ sơ đồ QSF. Hoặc cấu trúc XML của tập tin dạng sai hoặc "
-#~ "tập tin chứa dữ liệu không được phép."
-
-#~ msgid ""
-#~ "The QSF Map file %s was written for a different version of QOF. It may "
-#~ "need to be modified to work with your current QOF installation."
-#~ msgstr ""
-#~ "Tập tin sơ đồ QSF %s đã được ghi cho phiên bản QOF khác. Có lẽ cần phải "
-#~ "sửa đổi nó để hoạt động với bản cài đặt QOF hiện thời của bạn."
-
-#~ msgid ""
-#~ "The selected QSF map %s contains unusable data. This is usually because "
-#~ "not all the required parameters for the defined objects have calculations "
-#~ "described in the map."
-#~ msgstr ""
-#~ "Sơ đồ QSF đã chọn %s chứa dữ liệu vô ích. Thường gặp lỗi này vì chưa diễn "
-#~ "tả trong sơ đồ tất cả các tham số cần thiết cho những đối tượng đã định "
-#~ "nghĩa."
-
-#~ msgid ""
-#~ "The selected QSF object file %s contains one or more invalid GUIDs. The "
-#~ "file cannot be processed - please check the source of the file and try "
-#~ "again."
-#~ msgstr ""
-#~ "Tập tin đối tượng QSF đã chọn %s chứa một hay nhiều GUID không hợp lệ. Vì "
-#~ "thế không thể xử lý tập tin này: hãy kiểm tra lại mã nguồn của tập tin, "
-#~ "rồi thử lại."
-
-#~ msgid ""
-#~ "The selected QSF Object file %s requires a map but it was not provided."
-#~ msgstr "Tập tin đối tượng QSF %s cần thiết sơ đồ mà chưa được cung cấp."
-
-#~ msgid ""
-#~ "Wrong QSF map selected. The selected map %s validates but was written for "
-#~ "different QOF objects. The list of objects defined in this map does not "
-#~ "include all the objects described in the current QSF object file."
-#~ msgstr ""
-#~ "Đã chọn sơ đồ QSF không đúng. Sơ đồ đã chọn %s thẩm tra được, nhưng mà nó "
-#~ "đã được ghi cho đối tượng QOF khác. Danh sách đối tượng được định nghĩa "
-#~ "trong sơ đồ này không bao gồm tất cả các đối tượng được diễn tả trong tập "
-#~ "tin đối tượng QSF hiện thời."
-
-#~ msgid ""
-#~ "The selected file %s is a QSF map and cannot be opened as a QSF object."
-#~ msgstr ""
-#~ "Tập tin đã chọn %s là một sơ đồ QSF nên không thể được mở dạng đối tượng "
-#~ "QSF."
-
-#~ msgid ""
-#~ "When converting XML strings into numbers, an overflow has been detected. "
-#~ "The QSF object file %s contains invalid data in a field that is meant to "
-#~ "hold a number."
-#~ msgstr ""
-#~ "Khi chuyển đổi chuỗi XML sang con số, đã phát hiện tràn. Tập tin đối "
-#~ "tượng QSF %s chứa dữ liệu không hợp lệ trong trường nên chứa con số."
-
-#~ msgid ""
-#~ "The QSF object file %s is valid and contains GnuCash objects. However, "
-#~ "GnuCash cannot open the file directly because the data needs to be merged "
-#~ "into an existing GnuCash data book. Please open a GnuCash file or create "
-#~ "a new one, then import this QSF object file so that the data can be "
-#~ "merged into the main data book."
-#~ msgstr ""
-#~ "Tập tin đối tượng QSF %s là hợp lệ và chứa đối tượng GnuCash. Tuy nhiên, "
-#~ "GnuCash không thể mở tập tin một cách trực tiếp vì dữ liệu cần phải được "
-#~ "trộn vào một cuốn dữ liệu GnuCash đã tồn tại. Hãy mở một tập tin GnuCash "
-#~ "đã có, hoặc tạo một điều mới, rồi nhập khẩu tập tin đối tượng QSF này để "
-#~ "mà dữ liệu có thể được trộn vào cuốn dữ liệu chính."
-
-#~ msgid "Level of compression to use: 0 for none, 9 for highest."
-#~ msgstr "Mức độ nén cần dùng: từ 0 (không có) đến 9 (cao nhất)."
-
-#~ msgid ""
-#~ "QOF can compress QSF XML files using gzip. Note that compression is not "
-#~ "used when outputting to STDOUT."
-#~ msgstr ""
-#~ "QOF có thể nén tập tin XML QSF bằng gzip. Ghi chú rằng không nén gì khi "
-#~ "xuất ra đầu ra tiêu chuẩn (stdout)."
-
-#~ msgid "List of QSF map files to use for this session."
-#~ msgstr "Danh sách các tập tin sơ đồ QSF cần dùng trong phiên chạy này."
-
-#~ msgid ""
-#~ "QOF can convert objects within QSF XML files using a map of the changes "
-#~ "required."
-#~ msgstr ""
-#~ "QOF có thể chuyển đổi các đối tượng ở trong tập tin XML QSF, bằng sơ đồ "
-#~ "các thay đổi."
-
-#~ msgid "String encoding to use when writing the XML file."
-#~ msgstr "Bảng mã chuỗi cần dùng khi ghi tập tin XML."
-
-#~ msgid ""
-#~ "QSF defaults to UTF-8. Other encodings are supported by passing the "
-#~ "string encoding in this option."
-#~ msgstr ""
-#~ "Mặc định là QSF dùng UTF-8. Cũng hỗ trợ bảng mã khác bằng gửi bảng mã "
-#~ "chuỗi qua tiến trình bằng tùy chọn này."
-
-#, fuzzy
-#~ msgid "Default CSS"
-#~ msgstr "Mặc định"
-
-#, fuzzy
-#~ msgid "Could not open the file: "
-#~ msgstr "Không thể mở tập tin %s. Lỗi: %s"
-
-#, fuzzy
-#~ msgid "Due date:"
-#~ msgstr "Ngày tới hạn"
-
-#, fuzzy
-#~ msgid "<h2>Tax Invoice</h2>"
-#~ msgstr "<b>Đơn hàng gửi</b>"
-
-#~ msgid "Set the logging level from 0 (least) to 6 (most)"
-#~ msgstr "Đặt cấp ghi lưu, từ 0 (thấp nhất) đến 6 (cao nhất)"
-
-#~ msgid "LOGLEVEL"
-#~ msgstr "CẤP GHI LƯU"
-
-#~ msgid "_Tax Table Editor"
-#~ msgstr "Bộ sửa Bảng _Thuế"
-
-#~ msgid "Value '%s' cannot be interpreted as a float number."
-#~ msgstr "Không thể giải dịch giá trị « %s » dạng con số nổi."
-
-#~ msgid ""
-#~ "Key file contains key '%s' in group '%s' which has a value that cannot be "
-#~ "interpreted."
-#~ msgstr ""
-#~ "Tập tin khóa chứa khóa « %s » trong nhóm « %s » mà có giá trị không có "
-#~ "khả năng giải dịch."
-
-#~ msgid ""
-#~ "If you would like an account to have an opening balance, click on the row "
-#~ "containing the account, click again in the opening balances column, and "
-#~ "then enter the starting balance. All accounts except Equity and "
-#~ "placeholder accounts may have an opening balance.\n"
-#~ "\n"
-#~ "If you would like an account to be a placeholder account, just click the "
-#~ "checkbox for that account.\n"
-#~ msgstr ""
-#~ "Muốn tài khoản có số dư đầu kỳ thì nhấn vào hàng chứa tài khoản đó, nhấn "
-#~ "lại vào cột số dư đầu kỳ, rồi gõ số dư đầu kỳ. Tất cả các tài khoản trừ "
-#~ "tài khoản cổ phiếu và tài khoản giữ chỗ có thể chứa số dư đầu kỳ.\n"
-#~ "\n"
-#~ "Muốn tài khoản này cũng là tài khoản giữ chỗ thì chỉ nhấn vào ô chọn cho "
-#~ "tài khoản đó.\n"
-
-#~ msgid "Setup new accounts"
-#~ msgstr "Thiết lập tài khoản mới"
-
-#, fuzzy
-#~ msgid "Income Ta_x Options"
-#~ msgstr "Tù_y chọn thuế"
-
-#, fuzzy
-#~ msgid "Setup income tax information for relevant accounts"
-#~ msgstr ""
-#~ "Thiết lập thông tin thuế cho tất cả các tài khoản kiểu thu nhập và phí "
-#~ "tổn."
-
-#~ msgid "Print GnuCash Document"
-#~ msgstr "In tài liệu GnuCash"
-
-#, fuzzy
-#~ msgid "Transfer To/From Account(s)"
-#~ msgstr "Tài khoản chuyển"
-
-#, fuzzy
-#~ msgid "(Converted "
-#~ msgstr "Chuyển đổi tập tin"
-
-#, fuzzy
-#~ msgid " @ transaction split rate of "
-#~ msgstr "Đánh dấu sự phân tách giao dịch như « chưa chỉnh hợp »"
-
-#, fuzzy
-#~ msgid " on "
-#~ msgstr "vào"
-
-#, fuzzy
-#~ msgid " (Account Commodity: "
-#~ msgstr ""
-#~ "\n"
-#~ "Hàng hoá: "
-
-#, fuzzy
-#~ msgid "Item "
-#~ msgstr "mục"
-
-#, fuzzy
-#~ msgid " (TXF Parameter: "
-#~ msgstr "%i: Tên tham số : %s "
-
-#, fuzzy
-#~ msgid "Balance on "
-#~ msgstr "Số dư"
-
-#, fuzzy
-#~ msgid "Account: "
-#~ msgstr "Tài _khoản:"
-
-#, fuzzy
-#~ msgid " For "
-#~ msgstr "Đơn"
-
-#, fuzzy
-#~ msgid ": Parameters"
-#~ msgstr "%i: Tên tham số : %s "
-
-#, fuzzy
-#~ msgid " Line "
-#~ msgstr "Trực tuyến"
-
-#, fuzzy
-#~ msgid ": Payer Name Option "
-#~ msgstr "Chỉ là một tùy chọn ngày tháng"
-
-#, fuzzy
-#~ msgid ", TXF Format "
-#~ msgstr "Định dạng:"
-
-#, fuzzy
-#~ msgid "None specified"
-#~ msgstr "Chưa ghi rõ"
-
-#, fuzzy
-#~ msgid "Error Description"
-#~ msgstr "Mô tả"
-
-#, fuzzy
-#~ msgid ""
-#~ "No Tax Related accounts were found with your account selection. Change "
-#~ "your selection or go to the Edit->Income Tax Options dialog to set up tax-"
-#~ "related accounts."
-#~ msgstr ""
-#~ "Không tìm thấy tài khoản liên quan đến thuế. Mở hộp thoại « Sửa > Tùy "
-#~ "chọn thuế » để thiết lập tài khoản liên quan đến thuế."
-
-#, fuzzy
-#~ msgid "Subset of accounts"
-#~ msgstr "Chọn tài khoản"
-
-#, fuzzy
-#~ msgid "No accounts (none = all accounts)"
-#~ msgstr "Chọn tài khoản (0 = tất cả)"
-
-#, fuzzy
-#~ msgid "Suppress $0.00 valued Tax Codes"
-#~ msgstr "Thu hồi giá trị $0.00"
-
-#, fuzzy
-#~ msgid "Do not suppress $0.00 valued Tax Codes"
-#~ msgstr "Thu hồi giá trị $0.00"
-
-#, fuzzy
-#~ msgid "Display full account names"
-#~ msgstr "Hiển thị tên tài khoản đầy đủ không?"
-
-#, fuzzy
-#~ msgid "Do not display full account names"
-#~ msgstr "Hiển thị tên tài khoản đầy đủ không?"
-
-#, fuzzy
-#~ msgid "Display all Transfer To/From Accounts"
-#~ msgstr "Tài khoản chuyển"
-
-#, fuzzy
-#~ msgid "Do not display all Transfer To/From Accounts"
-#~ msgstr "Không hiển thị số dư của tài khoản cha"
-
-#, fuzzy
-#~ msgid "Display transactions for selected accounts"
-#~ msgstr "Thêm một giao dịch mới vào tài khoản"
-
-#, fuzzy
-#~ msgid "Do not display transactions for selected accounts"
-#~ msgstr "Không hiển thị tổng số phụ cho tài khoản cha"
-
-#, fuzzy
-#~ msgid "Include some transactions outside of selected dates"
-#~ msgstr "Gồm có các tài khoản con của mỗi tài khoản đã chọn"
-
-#, fuzzy
-#~ msgid "Do not shade alternate transactions"
-#~ msgstr "_Màu sắc chế độ đôi thay phiên với giao dịch"
-
-#, fuzzy
-#~ msgid "PriceDB lookups nearest to transaction date"
-#~ msgstr "Hiển thị ngày giao dịch không?"
-
-#, fuzzy
-#~ msgid "PriceDB lookups nearest to report end date"
-#~ msgstr "Giá được ghi vào điểm thời gian gần nhất ngày tháng báo cáo"
-
-#~ msgid "The following bills are due"
-#~ msgstr "Theo đây có các hoà đơn đến hạn"
-
-#~ msgid "Escrow "
-#~ msgstr "Bên thứ ba "
-
-#, fuzzy
-#~ msgid "Show Hidden"
-#~ msgstr "Ẩ_n"
-
-#, fuzzy
-#~ msgid "Show hidden accounts."
-#~ msgstr "_Hiện các tài khoản bị ẩn"
-
-#~ msgid "<no file>"
-#~ msgstr "<không có tập tin>"
-
-#, fuzzy
-#~ msgid "A bug was detected while reading the QIF file."
-#~ msgstr "Gặp lỗi khi nạp tập tin QIF."
-
-#~ msgid "Int"
-#~ msgstr "Lãi"
-
-#~ msgid "Div"
-#~ msgstr "Cổ tức"
-
-#~ msgid "Compute unrealized gains and losses"
-#~ msgstr "Tính lợi/lỗ chưa xảy ra"
-
-#~ msgid ""
-#~ "Include unrealized gains and losses in the computation. Will produce "
-#~ "incorrect results if the current file uses commodity trading accounts"
-#~ msgstr ""
-#~ "Cao gồm lợi/lỗ chưa xảy ra trong phép tính. Kết quả sai nếu tập tin hiện "
-#~ "thời dùng tài khoản buôn hàng hoá."
-
-#~ msgid "ATM"
-#~ msgstr "ATM"
-
-#~ msgid "Future dates are not supported"
-#~ msgstr "Không hỗ trợ ngày trong tương lai"
-
-#~ msgid "<br>Invoice&nbsp;in&nbsp;progress...."
-#~ msgstr "<br>Đơn&nbsp;hàng&nbsp;gửi&nbsp;đang&nbsp;tiến hành..."
-
-#, fuzzy
-#~ msgid " Date"
-#~ msgstr "Ngày"
-
-#~ msgid "Unknown database access mode '%s'. Using default mode: multi-user."
-#~ msgstr ""
-#~ "Không rõ chế độ truy cập cơ sở dữ liệu « %s » nên dùng chế độ mặc định: "
-#~ "đa người dùng."
-
-#~ msgid "From the Postgresql Server: %s"
-#~ msgstr "Từ máy phục vụ PostgreSQL: %s"
-
-#~ msgid "Backend connection is not available"
-#~ msgstr "Kết nối hậu phương không sẵn sàng"
-
-#~ msgid "Query could not be executed"
-#~ msgstr "Không thể thực hiện truy vấn"
-
-#~ msgid ""
-#~ "The current transaction has been changed. Would you like to record the "
-#~ "changes before closing this page, close the page without recording the "
-#~ "changes, or cancel the close?"
-#~ msgstr ""
-#~ "Giao dịch hiện thời đã bị thay đổi. Bạn có muốn ghi chép các thay đổi "
-#~ "trước khi đóng trang này, đóng trang mà không ghi chép thay đỗi, hoặc "
-#~ "thôi thao tác đóng?"
-
-#~ msgid "calendar:week_start:0"
-#~ msgstr "calendar:week_start:1"
-
-#~ msgid "CUSIP code"
-#~ msgstr "Mã CUSIP"
-
-#~ msgid "do not translate"
-#~ msgstr "đừng dịch"
-
-#~ msgid "gnc-new-account"
-#~ msgstr "tài-khoản-mới-gnc"
-
-#~ msgid "QIF file load warning: %s"
-#~ msgstr "Cảnh báo nạp tập tin QIF: %s"
-
-#~ msgid "QIF file load failed: %s"
-#~ msgstr "Lỗi nạp tập tin QIF: %s"
-
-#~ msgid ""
-#~ "An error occurred while importing QIF transactions into GnuCash. Your "
-#~ "accounts are unchanged."
-#~ msgstr ""
-#~ "Gặp lỗi khi nhập khẩu vào GnuCash các giao dịch QIF. Các tài khoản của "
-#~ "bạn chưa thay đổi."
-
-#~ msgid "You must enter a Type for the commodity."
-#~ msgstr "Bạn phải gõ một kiểu cho hàng hoá này."
-
-#~ msgid "You must enter a name for the commodity."
-#~ msgstr "Bạn phải gõ một tên cho hàng hoá này."
-
-#~ msgid "You must enter an abbreviation for the commodity."
-#~ msgstr "Bạn phải gõ một từ viết tắt cho hàng hoá này."
-
-#~ msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
-#~ msgstr "Kén hội suất hay sự niêm yết (NASDAQ, NYSE, v.v.)."
-
-#~ msgid ""
-#~ "Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation "
-#~ "for the name."
-#~ msgstr ""
-#~ "Gõ ký hiệu trình điểm chứng khoán (v.d. « RHAT ») hoặc từ viết tắt duy "
-#~ "nhất khác cho tên đó."
-
-#~ msgid "Click \"Forward\" to accept the information and move on."
-#~ msgstr "Nhấn vào cái nút « Tiếp » để chấp nhận thông tin và tiếp tục."
-
-#~ msgid "Dup?"
-#~ msgstr "Trùng?"
-
-#~ msgid "Click \"Forward\" to check matchings for QIF categories. "
-#~ msgstr "Nhấn vào cái nút « Tiếp » để kiểm tra cách khớp với phân loại QIF. "
-
-#~ msgid ""
-#~ "Click \"Forward\" to enter information about stocks and mutual funds in "
-#~ "the imported data."
-#~ msgstr ""
-#~ "Nhấn vào cái nút « Tiếp » để gõ thông tin về chứng khoán và quỹ tương hỗ "
-#~ "đều nằm trong dữ liệu được nhập khẩu."
-
-#~ msgid ""
-#~ "Click \"Forward\" to enter information about the currency used in your "
-#~ "QIF files."
-#~ msgstr ""
-#~ "Nhấn vào cái nút « Tiếp » để gõ thông tin về tiền tệ dùng trong tập tin "
-#~ "QIF."
-
-#~ msgid "Enter the currency used for new accounts"
-#~ msgstr "Gõ tiền tệ dùng cho tài khoản mới"
-
-#~ msgid ""
-#~ "If you are importing a QIF file downloaded from a bank or other financial "
-#~ "institution, some of the information in the QIF file may duplicate "
-#~ "information already in your GnuCash accounts. GnuCash will try to detect "
-#~ "duplicates of existing transactions. \n"
-#~ "\n"
-#~ "On the next page, you will be asked to confirm that an existing "
-#~ "transaction matches an imported transaction. Imported transactions are "
-#~ "shown on the left side of the page, and possible matches for the selected "
-#~ "left-hand transaction are shown to the right. There may be several old "
-#~ "transactions that could match an imported transaction; you will be able "
-#~ "to select the correct one by double-clicking in the \"Dup?\" column of "
-#~ "the correct transaction.\n"
-#~ "\n"
-#~ "You can control the rules used by GnuCash to find duplicate transactions "
-#~ "in the \"QIF Import\" section of the GnuCash Preferences dialog.\n"
-#~ "\n"
-#~ "Click \"Forward\" to find duplicate transactions. "
-#~ msgstr ""
-#~ "Nếu bạn nhập khẩu tập tin QIF được tải xuống ngân hàng hay tổ chức tài "
-#~ "chính khác, một số thông tin trong tập tin QIF có thể trùng với thông tin "
-#~ "đã tồn tại trong tài khoản GnuCash. GnuCash sẽ thử phát hiện bản sao của "
-#~ "giao dịch đã có.\n"
-#~ "\n"
-#~ "Trên trang kế tiếp, bạn sẽ được nhắc xác nhận rằng giao dịch đã tồn tại "
-#~ "có tương ứng với giao dịch đã nhập khẩu. Các giao dịch đã nhập khẩu có "
-#~ "hiển thị bên trái trang, còn các sự khớp có thể sẽ hiển thị bên phải. Có "
-#~ "lẽ vài giao dịch cũ đều có thể khớp cùng một giao dịch đã nhập khẩu ; bạn "
-#~ "sẽ có dịp lựa chọn điều đúng bằng cách nhấn đôi vào cột « Trùng? » của "
-#~ "giao dịch đúng.\n"
-#~ "\n"
-#~ "Bạn có thể điều khiển những quy tắc được GnuCash dùng để tìm giao dịch "
-#~ "trùng, trong phần « Nhập khẩu QIF » của hộp thoại Tùy thích GnuCash.\n"
-#~ "\n"
-#~ "Nhấn vào cái nút « Tiếp » để tìm giao dịch trùng."
-
-#~ msgid "Imported transactions with duplicates"
-#~ msgstr "Giao dịch đã nhập khẩu có bản sao"
-
-#~ msgid ""
-#~ "In the next pages, you will be asked to provide information about stocks, "
-#~ "mutual funds, and other tradable commodities that appear in the QIF "
-#~ "file(s) you are importing. GnuCash requires more information about "
-#~ "tradable commodities than the QIF format can represent. \n"
-#~ "\n"
-#~ "Each stock, mutual fund, or other commodity must have a type, which is "
-#~ "the exchange or listing that it is found on (NASDAQ, NYSE, US Mutual "
-#~ "Funds, etc), a full name, and an abbreviation.\n"
-#~ "\n"
-#~ "Check to see if there is an existing Type that is appropriate; if not, "
-#~ "you can enter a new Type name by hand in the box. Make sure that the "
-#~ "abbreviation you enter matches the ticker symbol used for the commodity "
-#~ "on the exchange or listing for its type."
-#~ msgstr ""
-#~ "Trên những trang sau, bạn sẽ được nhắc cung cấp thông tin về chứng khoán, "
-#~ "quỹ tương hỗ và các hàng hoá khác có thể buôn được mà xuất hiện trong "
-#~ "(các) tập tin QIF bạn đang nhập khẩu. GnuCash cần thiết nhiều thông tin "
-#~ "về các hàng hoá có thể buôn được hơn định dạng QIF có thể tiêu biểu.\n"
-#~ "\n"
-#~ "Mỗi chứng khoán, quỹ tương hỗ hay hàng hoá khác phải có kiểu, mà là hội "
-#~ "suất hay sự niêm yết chứa nó (NASDAQ, NYSE, Quỹ Tương Hỗ Mỹ v.v.), một "
-#~ "tên đầy đủ và một từ viết tắt.\n"
-#~ "\n"
-#~ "Hãy kiểm tra xem có Kiểu tồn tại mà thích hợp; không thì bạn có thể tự gõ "
-#~ "vào hộp một tên Kiểu mới. Cũng kiểm tra xem từ viết tắt tương ứng với ký "
-#~ "hiệu trình điểm chứng khoán tiêu biểu hàng hoá đó ở hội suất hay sự niêm "
-#~ "yết cho kiểu của nó."
-
-#~ msgid ""
-#~ "A custom report with this name already exists. Either rename the report "
-#~ "to store it with a different name, or edit your saved-reports file and "
-#~ "delete the section with the following name: "
-#~ msgstr ""
-#~ "Đã có một báo cáo tự chọn có tên này. Hoặc thay đổi tên của báo cáo này "
-#~ "để lưu nó theo tên khác, hoặc chỉnh sửa tập tin báo cáo đã lưu và xoá "
-#~ "phần có tên này: "
-
-#~ msgid ""
-#~ "Your report \"%s\" has been saved into the configuration file \"%s\". The "
-#~ "report will be available in the menu Reports -> Custom at the next "
-#~ "startup of GnuCash."
-#~ msgstr ""
-#~ "Báo cáo « %s » của bạn đã được lưu vào tập tin cấu hình « %s ». Báo cáo "
-#~ "này sẽ sẵn sàng trong trình đơn « Báo cáo > Tự chọn » một khi khởi chạy "
-#~ "lại GnuCash."
-
-#~ msgid "Blue items are exportable to a .TXF file."
-#~ msgstr "Mục màu xanh có thể được xuất ra tập tin .TXF."
-
-#~ msgid "TXF"
-#~ msgstr "TXF"
-
-#~ msgid "The file contains an unknown Action '%s'."
-#~ msgstr "Tập tin chứa một hành động không rõ « %s »."
-
-#~ msgid "INVOICE"
-#~ msgstr "ĐƠN HÀNG GỬI"
-
-#~ msgid "Invoice&nbsp;#&nbsp;%d"
-#~ msgstr "Đơn hàng gửi&nbsp;#&nbsp;%d"
-
-#~ msgid "Invoice&nbsp;Date"
-#~ msgstr "Ngày&nbsp;Đơn&nbsp;hàng&nbsp;gửi"
-
-#~ msgid "button1"
-#~ msgstr "nút1"
-
-#~ msgid "checkbutton1"
-#~ msgstr "nút_chọn1"
-
-#~ msgid "radiobutton1"
-#~ msgstr "nút_chọn_một1"
-
-#~ msgid "togglebutton1"
-#~ msgstr "nút_bật_tắt1"
-
-#~ msgid "type:bank"
-#~ msgstr "kiểu:ngân hàng"
-
-#~ msgid "type:cash"
-#~ msgstr "kiểu:tiền mặt"
-
-#~ msgid "type:ccard"
-#~ msgstr "kiểu:thẻ tín dụng"
-
-#~ msgid "type:invst"
-#~ msgstr "kiểu:đầu tư"
-
-#~ msgid "type:port"
-#~ msgstr "kiểu:danh sách vốn đầu tư"
-
-#~ msgid "type:oth a"
-#~ msgstr "kiểu:khác a"
-
-#~ msgid "type:oth l"
-#~ msgstr "kiểu:khác l"
-
-#~ msgid "type:class"
-#~ msgstr "kiểu:hạng"
-
-#~ msgid "type:security"
-#~ msgstr "kiểu:chứng khoán"
-
-#~ msgid "account"
-#~ msgstr "tài khoản"
-
-#~ msgid "option:autoswitch"
-#~ msgstr "tùy chọn:tự động chuyển đổi"
-
-#~ msgid "clear:autoswitch"
-#~ msgstr "chuyển:tự động chuyển đổi"
-
-#~ msgid "The Date format is ambiguous. Please choose the correct format."
-#~ msgstr "Định dạng ngày tháng chưa rõ ràng. Hãy chọn định dạng đúng."
-
-#~ msgid "Sub-"
-#~ msgstr "Con "
-
-#~ msgid "%s - %s to %s for"
-#~ msgstr "%s - %s đến %s cho"
-
-#~ msgid " Stylesheet"
-#~ msgstr " Bảng kiểu dáng"

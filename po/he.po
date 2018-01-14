@@ -20,62 +20,61 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr ""
+msgstr "ערבית"
 
 #: ../borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr ""
+msgstr "בלטי"
 
 #: ../borrowed/goffice/go-charmap-sel.c:72
 msgid "Central European"
-msgstr ""
+msgstr "מרכז אירופאי"
 
 #: ../borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr ""
+msgstr "סינית"
 
 #: ../borrowed/goffice/go-charmap-sel.c:74
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:242
 msgid "Cyrillic"
-msgstr ""
+msgstr "סירלית"
 
 #: ../borrowed/goffice/go-charmap-sel.c:75
 msgid "Greek"
-msgstr ""
+msgstr "יוונית"
 
 #: ../borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr ""
+msgstr "עברית"
 
 #: ../borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
-msgstr ""
+msgstr "הודית"
 
 #: ../borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr ""
+msgstr "יפנית"
 
 #: ../borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr ""
+msgstr "קוריאנית"
 
 #: ../borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr ""
+msgstr "טורקית"
 
 #: ../borrowed/goffice/go-charmap-sel.c:81
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:224
 msgid "Unicode"
-msgstr ""
+msgstr "יוניקוד"
 
 #: ../borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr ""
+msgstr "ויאטנמית"
 
 #: ../borrowed/goffice/go-charmap-sel.c:83
-#, fuzzy
 msgid "Western"
-msgstr "רישום"
+msgstr "מערבי"
 
 #: ../borrowed/goffice/go-charmap-sel.c:84
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:60
@@ -87,67 +86,67 @@ msgstr "אחר"
 
 #: ../borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "ערבית (IBM-864)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr ""
+msgstr "ערבית (IBM-864-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "ערבית (ISO-8859-6)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr ""
+msgstr "ערבית (ISO-8859-6-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr ""
+msgstr "ערבית (ISO-8859-6-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:121
 msgid "Arabic (MacArabic)"
-msgstr ""
+msgstr "ערבית (MacArabic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:122
 msgid "Arabic (Windows-1256)"
-msgstr ""
+msgstr "ערבית (Windows-1256)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
-msgstr ""
+msgstr "ארמנית (ARMSCII-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:124
 msgid "Baltic (ISO-8859-13)"
-msgstr ""
+msgstr "בלטית (ISO-8859-13)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
-msgstr ""
+msgstr "בלטית (ISO-8859-4)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:126
 msgid "Baltic (Windows-1257)"
-msgstr ""
+msgstr "בלטית (Windows-1257)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:127
 msgid "Celtic (ISO-8859-14)"
-msgstr ""
+msgstr "קלטית (ISO-8859-14)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
-msgstr ""
+msgstr "מרכז אירופאי (IBM-852)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:130
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "מרכז אירופאי (ISO-8859-2)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:132
 msgid "Central European (MacCE)"
-msgstr ""
+msgstr "מרכז אירופאי (MacCE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:134
 msgid "Central European (Windows-1250)"
-msgstr ""
+msgstr "מרכז אירופאי (Windows-1250)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:136
 msgid "Chinese Simplified (GB18030)"
@@ -211,7 +210,7 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
-msgstr ""
+msgstr "רוסית (CP-866)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:160
 msgid "Ukrainian (KOI8-U)"
@@ -223,7 +222,7 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:163
 msgid "English (ASCII)"
-msgstr ""
+msgstr "אנגלית (ASCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
@@ -255,23 +254,23 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr ""
+msgstr "עברית (IBM-862)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr ""
+msgstr "עברית (ISO-8859-8-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr ""
+msgstr "עברית (ISO-8859-8-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr ""
+msgstr "עברית (MacHebrew)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
-msgstr ""
+msgstr "עברית (Windows-1255)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
@@ -347,32 +346,31 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:208
 msgid "Unicode (UTF-7)"
-msgstr ""
+msgstr "יוניקוד (UTF-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:209
 msgid "Unicode (UTF-8)"
-msgstr ""
+msgstr "יוניקוד (UTF-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:210
 msgid "Unicode (UTF-16BE)"
-msgstr ""
+msgstr "יוניקוד (UTF-16BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:211
 msgid "Unicode (UTF-16LE)"
-msgstr ""
+msgstr "יוניקוד (UTF-16LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:212
 msgid "Unicode (UTF-32BE)"
-msgstr ""
+msgstr "יוניקוד (UTF-32BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:213
 msgid "Unicode (UTF-32LE)"
-msgstr ""
+msgstr "יוניקוד (UTF-32LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:214
-#, fuzzy
 msgid "User Defined"
-msgstr "שם משתמש"
+msgstr "מוגדר אישית"
 
 #: ../borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
@@ -392,7 +390,7 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "עברית ויזואלית (ISO-8859-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
@@ -6974,7 +6972,7 @@ msgstr ""
 #: ../gnucash/report/business-reports/invoice.scm:146
 #, no-c-format
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:33
 #: ../gnucash/gnome/gtkbuilder/dialog-fincalc.glade.h:31
@@ -13066,7 +13064,7 @@ msgstr "מס' חשבון"
 #: ../gnucash/report/report-system/report.scm:246
 #: ../gnucash/report/stylesheets/stylesheet-plain.scm:316
 msgid "Default"
-msgstr ""
+msgstr "ברירת מחדל"
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-account.glade.h:46
 msgid "No_tes:"
@@ -16667,7 +16665,7 @@ msgstr "בחר את סוג ההנחה"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.glade.h:22
 msgid "Preview"
-msgstr ""
+msgstr "תצוגה מקדימה"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.glade.h:23
 msgid "Import Account Preview, first 10 rows only"
@@ -18699,7 +18697,7 @@ msgstr ""
 #: ../gnucash/import-export/qif-imp/qif-file.scm:85
 #: ../gnucash/import-export/qif-imp/qif-file.scm:93
 msgid "Line"
-msgstr ""
+msgstr "קו"
 
 #: ../gnucash/import-export/qif-imp/qif-file.scm:96
 msgid "Read aborted."
@@ -20640,7 +20638,7 @@ msgstr ""
 
 #: ../gnucash/report/business-reports/easy-invoice.scm:355
 msgid "Text"
-msgstr ""
+msgstr "טקסט"
 
 #: ../gnucash/report/business-reports/easy-invoice.scm:356
 msgid "Extra notes to put on the invoice (simple HTML is accepted)."
@@ -28387,455 +28385,3 @@ msgid ""
 "select Window -> New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
-
-#~ msgid "question"
-#~ msgstr "שאלה"
-
-#~ msgid "_Price Editor"
-#~ msgstr "עורך _מחירים"
-
-#~ msgid "set true"
-#~ msgstr "קבע נכון"
-
-#~ msgid "You must select a commodity. To create a new one, click \"New\""
-#~ msgstr "עליך לבחור מטבע. ליצירת מטבע חדש לחץ על \"חדש\""
-
-#~ msgid "_Delete Account"
-#~ msgstr "_מחק חשבון"
-
-#~ msgid "_New Account"
-#~ msgstr "_חשבון חדש"
-
-#, fuzzy
-#~ msgid "Owner Name"
-#~ msgstr "שם בעל המטלה"
-
-#, fuzzy
-#~ msgid "Owner ID"
-#~ msgstr "שם בעל המטלה"
-
-#, fuzzy
-#~ msgid "Transaction Import Assistant"
-#~ msgstr "דו\"ח עסקאות"
-
-#, fuzzy
-#~ msgid "Data type: "
-#~ msgstr "שעור (שכר לשעה) "
-
-#, fuzzy
-#~ msgid "Separated"
-#~ msgstr "נוצר"
-
-#, fuzzy
-#~ msgid "Compress prior/later periods"
-#~ msgstr "דחו_ס קבצים"
-
-#, fuzzy
-#~ msgid "Report style."
-#~ msgstr "דוחות"
-
-#, fuzzy
-#~ msgid "Display N lines."
-#~ msgstr "השתמש בתוויות חשבון רשמיות"
-
-#, fuzzy
-#~ msgid "Sort by exact time."
-#~ msgstr "כמות"
-
-#, fuzzy
-#~ msgid "Retrieve the current online quote"
-#~ msgstr "מחק את הפעולה הנוכחית"
-
-#~ msgid "Negative amounts are not allowed."
-#~ msgstr "לא ניתן להכניס ערכים שליליים."
-
-#~ msgid "Percentage amount must be between 0 and 100."
-#~ msgstr "ערכים באחוזים חייבים להיות בטווח של 0 עד 100."
-
-#, fuzzy
-#~ msgid "Credit note"
-#~ msgstr "זכה חשבון"
-
-#, fuzzy
-#~ msgid ""
-#~ "You must enter the amount of the payment. The payment amount must not be "
-#~ "zero."
-#~ msgstr ""
-#~ "עליך להכניס את סכום התשלום.\n"
-#~ "סכום התשלום חייב להיות גדול מ0."
-
-#, fuzzy
-#~ msgid "Customer Credit Note"
-#~ msgstr "מזהה לקוח: "
-
-#, fuzzy
-#~ msgid "Employee Credit Note"
-#~ msgstr "שם העובד"
-
-#~ msgid "Remo_ve Transaction Splits"
-#~ msgstr "מח_ק פיצולי פעולות"
-
-#, fuzzy
-#~ msgid "_Shift Transaction Forward"
-#~ msgstr "יומן עסקה"
-
-#, fuzzy
-#~ msgid "New item"
-#~ msgstr "_פריט חדש..."
-
-#, fuzzy
-#~ msgid "Withdrawl"
-#~ msgstr "משיכה"
-
-#, fuzzy
-#~ msgid "Apply Changes"
-#~ msgstr "סה\"כ לחיוב:"
-
-#, fuzzy
-#~ msgid "Update Search Path"
-#~ msgstr " חיפוש "
-
-#~ msgid "<b>Toolbar Style</b>"
-#~ msgstr "<b>סגנון סרגל כלים</b>"
-
-#~ msgid "Priority text besi_de icons"
-#~ msgstr "טקסט עדיפות על-ידי האייקונים"
-
-#~ msgid "Text _below icons"
-#~ msgstr "טקסט מתחת לאיקונים"
-
-#~ msgid "Use s_ystem default"
-#~ msgstr "השתמש בביררת המחדל של ה_מערכת"
-
-#~ msgid "_Icons only"
-#~ msgstr "אייקונים _בלבד"
-
-#~ msgid "_Text only"
-#~ msgstr "_טקסט בלבד"
-
-#~ msgid "_Use system theme colors"
-#~ msgstr "השתמש בצבעים _מערכת נושא"
-
-#, fuzzy
-#~ msgid "Comma Separated with Quotes"
-#~ msgstr "נוצר"
-
-#, fuzzy
-#~ msgid "Semicolon Separated with Quotes"
-#~ msgstr "נוצר"
-
-#, fuzzy
-#~ msgid "Delete the currently selected report"
-#~ msgstr "מחק את הפעולה הנוכחית"
-
-#, fuzzy
-#~ msgid "Run the currently selected report"
-#~ msgstr "הדפס את הדף הנוכחי"
-
-#, fuzzy
-#~ msgid "Net Price"
-#~ msgstr "מחיר ליחידה"
-
-#, fuzzy
-#~ msgid "Total Price"
-#~ msgstr "סה\"כ לחיוב:"
-
-#, fuzzy
-#~ msgid "Amount Due"
-#~ msgstr "סכום"
-
-#, fuzzy
-#~ msgid "Invoice number: "
-#~ msgstr "בעל החשבונית"
-
-#, fuzzy
-#~ msgid "Job number: "
-#~ msgstr "מספר מטלה"
-
-#, fuzzy
-#~ msgid "Custom Reports"
-#~ msgstr "לקוח"
-
-#~ msgid "The last stable version was "
-#~ msgstr "הגרסה היציבה האחרונה היתה"
-
-#~ msgid "The next stable version will be "
-#~ msgstr "הגרסה היציבה הבאה תהיה"
-
-#~ msgid "You may not post an invoice with a negative total value."
-#~ msgstr "לא ניתן לשלוח חשבונית עם ערך סה\"כ שלילי"
-
-#~ msgid ""
-#~ "You may not post an expense voucher with a negative total cash value."
-#~ msgstr "לא ניתן לשלוח שובר הוצאות עם ערך מזומן סה\"כ שלילי."
-
-#~ msgid "Your selected post account, %s, does not exist"
-#~ msgstr "החשבון לשליחה שבחרת, %s, לא קיים."
-
-#~ msgid "What Tax Table should be applied to this customer?"
-#~ msgstr "איזו טבלת מס תקבע עבור הלקוח?"
-
-#~ msgid "What Tax Table should be applied to this vendor?"
-#~ msgstr "איזו טבלת מס תקבע לספק?"
-
-#, fuzzy
-#~ msgid "Are you sure you want to cancel the Mortgage/Loan Setup Assistant?"
-#~ msgstr "אתה בטוח שברצונך לבטל את אשף המשכנתה/הלוואה?"
-
-#~ msgid "Payment: \"%s\""
-#~ msgstr "תשלום: \"%s\""
-
-#~ msgid "You must either enter a valid price or leave it blank."
-#~ msgstr "עליך להקליד מחיר תקין או להשאיר את זה ריק."
-
-#~ msgid "The price must be positive."
-#~ msgstr "על המחיר להיות חיובי."
-
-#~ msgid "You must either enter a valid cash amount or leave it blank."
-#~ msgstr "עליך להקליד סכום מזומן תקין או להשאיר את זה ריק."
-
-#~ msgid "New Account (not implemented)"
-#~ msgstr "חשבון חדש"
-
-#~ msgid ""
-#~ "Use Commodity Value\n"
-#~ "1\n"
-#~ "1/10\n"
-#~ "1/100\n"
-#~ "1/1000\n"
-#~ "1/10000\n"
-#~ "1/100000\n"
-#~ "1/1000000"
-#~ msgstr ""
-#~ "השתמש בערך\n"
-#~ "1\n"
-#~ "1/10\n"
-#~ "1/100\n"
-#~ "1/1000\n"
-#~ "1/10000\n"
-#~ "1/100000\n"
-#~ "1/1000000"
-
-#~ msgid ""
-#~ "day(s)\n"
-#~ "week(s)\n"
-#~ "month(s)\n"
-#~ "year(s)"
-#~ msgstr ""
-#~ "יום/ימים\n"
-#~ "שבוע/ות\n"
-#~ "חודש/ים\n"
-#~ "שנה/ים"
-
-#~ msgid "Account Information"
-#~ msgstr "פרטי חשבון"
-
-#~ msgid "Cut Transaction"
-#~ msgstr "גזור פעולה"
-
-#~ msgid "Dup_licate Transaction..."
-#~ msgstr "שכ_פל פעולה..."
-
-#~ msgid "Edit Exchange Rate"
-#~ msgstr "ערוך שער חליפין"
-
-#~ msgid "Edit the exchange rate for the current split"
-#~ msgstr "ערוך את שער החליפין לפיצול הנוכחי"
-
-#~ msgid "Start Date: "
-#~ msgstr "תאריך התחלה:"
-
-#~ msgid "Set the budget options using this dialog."
-#~ msgstr "קבע אפשרויות של התקציב באמצעות חלון זה."
-
-#~ msgid "Case Insensitive?"
-#~ msgstr "בלי הבדלת רישיות?"
-
-#, fuzzy
-#~ msgid "Import _CSV/Fixed-Width..."
-#~ msgstr "ייבא קובץ QIF..."
-
-#~ msgid "Default number of register rows to display in Invoices."
-#~ msgstr "מספר שורות יומן ברירת מחדל שיוצגו בחשבוניות"
-
-#~ msgid "R_emind in advance, days:"
-#~ msgstr "תזכורת מראש, בימים:"
-
-#~ msgid "New %s"
-#~ msgstr "%s חדש"
-
-#~ msgid "item"
-#~ msgstr "פריט"
-
-#~ msgid "<b>Contained Accounts</b>"
-#~ msgstr "<b>חשבונות מוכללים</b>"
-
-#~ msgid "<b>Description</b>"
-#~ msgstr "<b>תיאור</b>"
-
-#~ msgid "<b>New Account Currency</b>"
-#~ msgstr "<b>המטבע של החשבון החדש</b>"
-
-#~ msgid ""
-#~ "If you would like an account to have an opening balance, click on the "
-#~ "account and enter the starting balance in the box on the right. All "
-#~ "accounts except Equity and placeholder accounts may have an opening "
-#~ "balance."
-#~ msgstr ""
-#~ "אם אתה רוצה שלחשבון יהיה מאזן פתיחה, לחץ על החשבון והכנס את מאזן הפתיחה "
-#~ "בצד שמאל. אפשר להגדיר מאזן פתיחה בכל החשבונון חוץ מחשבונות הון עצמי "
-#~ "ושומרי מקום."
-
-#~ msgid "Since Last Run"
-#~ msgstr "מאז הרצה אחרונה"
-
-#~ msgid "Defaults"
-#~ msgstr "ברירת מחדל"
-
-#~ msgid "Start of this fiscal year"
-#~ msgstr "תחילת שנת הכספים הנוכחית"
-
-#~ msgid "End of this fiscal year"
-#~ msgstr "סוף שנת הכספים הנוכחית"
-
-#~ msgid "QSF _Invoice..."
-#~ msgstr "_חשבונית QSF..."
-
-#~ msgid "Export one or more invoices to QSF"
-#~ msgstr "ייצא חשבונית אחת או יותר לQSF"
-
-#~ msgid "QSF _Customer..."
-#~ msgstr "לקוח _QSF..."
-
-#~ msgid "Export one or more customers to QSF"
-#~ msgstr "ייצא לקוח אחד או יותר לQSF"
-
-#~ msgid "QSF _Vendor..."
-#~ msgstr "ס_פק QSF..."
-
-#~ msgid "Export one or more vendors to QSF"
-#~ msgstr "ייצא ספק אחד או יותר לQSF"
-
-#~ msgid "QSF _Employee..."
-#~ msgstr "ע_ובד QSF..."
-
-#~ msgid "Export one or more employees to QSF"
-#~ msgstr "ייצא עובד אחד או יותר לQSF"
-
-#~ msgid "Export Invoices to XML"
-#~ msgstr "ייצא חשבוניות לXML"
-
-#~ msgid "Export Vendors to XML"
-#~ msgstr "ייצא ספקים לXML"
-
-#~ msgid "Export Employees to XML"
-#~ msgstr "ייצא עובדים לXML"
-
-#~ msgid "Import a QSF object file"
-#~ msgstr "ייבא קובץ אובייקט QSF"
-
-#~ msgid "Export the chart of accounts for a date with balances as QSF"
-#~ msgstr "ייצא את טבלת החשבונות עבור תאריך עם מאזנים כQSF"
-
-#, fuzzy
-#~ msgid "Default CSS"
-#~ msgstr "_ברירת מחדל"
-
-#, fuzzy
-#~ msgid "Due date:"
-#~ msgstr "תאריך חיוב"
-
-#, fuzzy
-#~ msgid "<h2>Tax Invoice</h2>"
-#~ msgstr "<b>חשבוניות</b>"
-
-#~ msgid "_Tax Table Editor"
-#~ msgstr "_עורך טבלאות המס"
-
-#~ msgid ""
-#~ "If you would like an account to have an opening balance, click on the row "
-#~ "containing the account, click again in the opening balances column, and "
-#~ "then enter the starting balance. All accounts except Equity and "
-#~ "placeholder accounts may have an opening balance.\n"
-#~ "\n"
-#~ "If you would like an account to be a placeholder account, just click the "
-#~ "checkbox for that account.\n"
-#~ msgstr ""
-#~ "אם אתה רוצה שלחשבון יהיה מאזן פתיחה, לחץ על השורה שמכילה את החשבון, לחץ "
-#~ "שוב בעמודת 'מאזן פתיחה' ואז הכנס את מאזן הפתיחה. ניתן להגדיר מאזן פתיחה "
-#~ "בכל החשבונות חוץ מחשבונות הון עצמי ושומרי מקום.\n"
-#~ "\n"
-#~ "אם ברצונך שהחשבון יהיה שומר מקום, לחץ על תיבת הסימון המתאימה בחשבון.\n"
-
-#~ msgid "Setup new accounts"
-#~ msgstr "הגדר חשבון חדש"
-
-#, fuzzy
-#~ msgid "Transfer To/From Account(s)"
-#~ msgstr "חשבון להעברה"
-
-#, fuzzy
-#~ msgid " @ transaction split rate of "
-#~ msgstr "מצא פעולות לפי חיפוש"
-
-#, fuzzy
-#~ msgid " on "
-#~ msgstr "ב"
-
-#, fuzzy
-#~ msgid " (Account Commodity: "
-#~ msgstr "מס' חשבון"
-
-#, fuzzy
-#~ msgid "Item "
-#~ msgstr "פריט"
-
-#, fuzzy
-#~ msgid "Account: "
-#~ msgstr "_חשבון:"
-
-#, fuzzy
-#~ msgid " For "
-#~ msgstr "טופס"
-
-#, fuzzy
-#~ msgid ": Parameters"
-#~ msgstr "תווים:"
-
-#, fuzzy
-#~ msgid ", TXF Format "
-#~ msgstr "תבנית:"
-
-#, fuzzy
-#~ msgid "Error Description"
-#~ msgstr "תיאור"
-
-#, fuzzy
-#~ msgid "Subset of accounts"
-#~ msgstr "הגדר חשבון חדש"
-
-#, fuzzy
-#~ msgid "Display all Transfer To/From Accounts"
-#~ msgstr "חשבון להעברה"
-
-#~ msgid "The following bills are due"
-#~ msgstr "עבר תאריך החיוב עבור התשלומים הבאים"
-
-#, fuzzy
-#~ msgid "Show Hidden"
-#~ msgstr "מו_סתר"
-
-#~ msgid "<no file>"
-#~ msgstr "<אין קובץ>"
-
-#, fuzzy
-#~ msgid " Date"
-#~ msgstr "תאריך"
-
-#~ msgid ""
-#~ "The current transaction has been changed. Would you like to record the "
-#~ "changes before closing this page, close the page without recording the "
-#~ "changes, or cancel the close?"
-#~ msgstr ""
-#~ "הפעולה הנוכחית עודכנה. האם ברצונך לשמור את השינויים לפני סגירת העמוד, "
-#~ "לסגור את העמוד בלי לשמור את השינויים, או לבטל את סגירת העמוד?"

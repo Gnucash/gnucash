@@ -28,20 +28,19 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr ""
+msgstr "Arabisch"
 
 #: ../borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr ""
+msgstr "Baltisch"
 
 #: ../borrowed/goffice/go-charmap-sel.c:72
-#, fuzzy
 msgid "Central European"
-msgstr "Europäisch"
+msgstr "Zentraleuropäisch"
 
 #: ../borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr ""
+msgstr "Chinesisch"
 
 #: ../borrowed/goffice/go-charmap-sel.c:74
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:242
@@ -49,29 +48,28 @@ msgid "Cyrillic"
 msgstr "Kyrillisch"
 
 #: ../borrowed/goffice/go-charmap-sel.c:75
-#, fuzzy
 msgid "Greek"
-msgstr "Grün"
+msgstr "Griechisch"
 
 #: ../borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr ""
+msgstr "Hebräisch"
 
 #: ../borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
-msgstr ""
+msgstr "Indisch"
 
 #: ../borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr ""
+msgstr "Japanisch"
 
 #: ../borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr ""
+msgstr "Koreanisch"
 
 #: ../borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr ""
+msgstr "Türkisch"
 
 #: ../borrowed/goffice/go-charmap-sel.c:81
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:224
@@ -80,12 +78,11 @@ msgstr "Unicode"
 
 #: ../borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr ""
+msgstr "Vietnamesisch"
 
 #: ../borrowed/goffice/go-charmap-sel.c:83
-#, fuzzy
 msgid "Western"
-msgstr "Kontobuch"
+msgstr "Westeuropäisch"
 
 #: ../borrowed/goffice/go-charmap-sel.c:84
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:60
@@ -97,364 +94,351 @@ msgstr "Weitere"
 
 #: ../borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "Arabisch (IBM-864)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr ""
+msgstr "Arabisch (IBM-864-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "Arabisch (ISO-8859-6)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr ""
+msgstr "Arabisch (ISO-8859-6-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr ""
+msgstr "Arabisch (ISO-8859-6-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:121
 msgid "Arabic (MacArabic)"
-msgstr ""
+msgstr "Arabisch (MacArabic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:122
 msgid "Arabic (Windows-1256)"
-msgstr ""
+msgstr "Arabisch (Windows-1256)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
-msgstr ""
+msgstr "Armenisch (ARMSCII-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:124
-#, fuzzy
 msgid "Baltic (ISO-8859-13)"
-msgstr "ISO-8859-13 (Baltisch)"
+msgstr "Baltisch (ISO-8859-13)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
-msgstr ""
+msgstr "Baltisch (ISO-8859-4)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:126
 msgid "Baltic (Windows-1257)"
-msgstr ""
+msgstr "Baltisch (Windows-1257)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:127
-#, fuzzy
 msgid "Celtic (ISO-8859-14)"
-msgstr "ISO-8859-14 (Keltisch)"
+msgstr "Keltisch (ISO-8859-14)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
-msgstr ""
+msgstr "Zentraleuropäisch (IBM-852)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:130
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "Zentraleuropäisch (ISO-8859-2)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:132
 msgid "Central European (MacCE)"
-msgstr ""
+msgstr "Zentraleuropäisch (MacCE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:134
 msgid "Central European (Windows-1250)"
-msgstr ""
+msgstr "Zentraleuropäisch (Windows-1250)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:136
 msgid "Chinese Simplified (GB18030)"
-msgstr ""
+msgstr "Vereinfachtes Chinesisch (GB18030)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:137
 msgid "Chinese Simplified (GB2312)"
-msgstr ""
+msgstr "Vereinfachtes Chinesisch (GB2312)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:138
 msgid "Chinese Simplified (GBK)"
-msgstr ""
+msgstr "Vereinfachtes Chinesisch (GBK)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:139
 msgid "Chinese Simplified (HZ)"
-msgstr ""
+msgstr "Vereinfachtes Chinesisch (HZ)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:140
 msgid "Chinese Simplified (Windows-936)"
-msgstr ""
+msgstr "Vereinfachtes Chinesisch (Windows-936)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr ""
+msgstr "Traditionelles Chinesisch (Big5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr ""
+msgstr "Traditionelles Chinesisch (Big5-HKSCS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
-msgstr ""
+msgstr "Traditionelles Chinesisch (EUC-TW)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:147
 msgid "Croatian (MacCroatian)"
-msgstr ""
+msgstr "Kroatisch (MacCroatian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:149
-#, fuzzy
 msgid "Cyrillic (IBM-855)"
-msgstr "Kyrillisch"
+msgstr "Kyrillisch (IBM-855)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:150
 msgid "Cyrillic (ISO-8859-5)"
-msgstr ""
+msgstr "Kyrillisch (ISO-8859-5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:152
 msgid "Cyrillic (ISO-IR-111)"
-msgstr ""
+msgstr "Kyrillisch (ISO-IR-111)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:154
-#, fuzzy
 msgid "Cyrillic (KOI8-R)"
-msgstr "Kyrillisch"
+msgstr "Kyrillisch (KOI8-R)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:155
 msgid "Cyrillic (MacCyrillic)"
-msgstr ""
+msgstr "Kyrillisch (MacCyrillic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:157
 msgid "Cyrillic (Windows-1251)"
-msgstr ""
+msgstr "Kyrillisch (Windows-1251)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
-msgstr ""
+msgstr "Russisch (CP-866)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:160
 msgid "Ukrainian (KOI8-U)"
-msgstr ""
+msgstr "Ukrainisch (KOI8-U)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:161
-#, fuzzy
 msgid "Ukrainian (MacUkrainian)"
-msgstr "KOI8-U (Ukraninisch)"
+msgstr "Ukrainisch (MacUkrainian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:163
 msgid "English (ASCII)"
-msgstr ""
+msgstr "Englisch (ASCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
-msgstr ""
+msgstr "Farsi (MacFarsi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:166
 msgid "Georgian (GEOSTD8)"
-msgstr ""
+msgstr "Georgisch (GEOSTD8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:167
-#, fuzzy
 msgid "Greek (ISO-8859-7)"
-msgstr "ISO-8859-7 (Griechisch)"
+msgstr "Griechisch (ISO-8859-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:168
 msgid "Greek (MacGreek)"
-msgstr ""
+msgstr "Griechisch (MacGreek)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:169
 msgid "Greek (Windows-1253)"
-msgstr ""
+msgstr "Griechisch (Windows-1253)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:170
 msgid "Gujarati (MacGujarati)"
-msgstr ""
+msgstr "Gujarati (MacGujarati)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:172
 msgid "Gurmukhi (MacGurmukhi)"
-msgstr ""
+msgstr "Gurmukhi (MacGurmukhi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr ""
+msgstr "Hebräisch (IBM-862)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr ""
+msgstr "Hebräisch (ISO-8859-8-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr ""
+msgstr "Hebräisch (ISO-8859-8-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr ""
+msgstr "Hebräisch (MacHebrew)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
-msgstr ""
+msgstr "Hebräisch (Windows-1255)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
-msgstr ""
+msgstr "Hindi (MacDevanagari)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
-msgstr ""
+msgstr "Isländisch (MacIcelandic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:186
 msgid "Japanese (EUC-JP)"
-msgstr ""
+msgstr "Japanisch (EUC-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:187
 msgid "Japanese (ISO-2022-JP)"
-msgstr ""
+msgstr "Japanisch (ISO-2022-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:189
 msgid "Japanese (Shift_JIS)"
-msgstr ""
+msgstr "Japanisch (Shift_JIS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:190
 msgid "Korean (EUC-KR)"
-msgstr ""
+msgstr "Koreanisch (EUC-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:191
 msgid "Korean (ISO-2022-KR)"
-msgstr ""
+msgstr "Koreanisch (ISO-2022-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:192
 msgid "Korean (JOHAB)"
-msgstr ""
+msgstr "Koreanisch (JOHAB)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:193
 msgid "Korean (UHC)"
-msgstr ""
+msgstr "Koreanisch (UHC)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:194
-#, fuzzy
 msgid "Nordic (ISO-8859-10)"
-msgstr "ISO-8859-10 (Skandinavisch)"
+msgstr "Nordisch (ISO-8859-10)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:195
 msgid "Romanian (MacRomanian)"
-msgstr ""
+msgstr "Rumänisch (MacRomanian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:197
 msgid "Romanian (ISO-8859-16)"
-msgstr ""
+msgstr "Rumänisch (ISO-8859-16)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:199
 msgid "South European (ISO-8859-3)"
-msgstr ""
+msgstr "Südeuropäisch (ISO-8859-3)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:201
 msgid "Thai (TIS-620)"
-msgstr ""
+msgstr "Thai (TIS-620)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:202
 msgid "Turkish (IBM-857)"
-msgstr ""
+msgstr "Türkisch (IBM-857)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:203
 msgid "Turkish (ISO-8859-9)"
-msgstr ""
+msgstr "Türkisch (ISO-8859-9)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:204
 msgid "Turkish (MacTurkish)"
-msgstr ""
+msgstr "Türkisch (MacTurkish)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:206
 msgid "Turkish (Windows-1254)"
-msgstr ""
+msgstr "Türkisch (Windows-1254)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:208
-#, fuzzy
 msgid "Unicode (UTF-7)"
-msgstr "Unicode"
+msgstr "Unicode (UTF-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:209
-#, fuzzy
 msgid "Unicode (UTF-8)"
-msgstr "Unicode"
+msgstr "Unicode (UTF-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:210
 msgid "Unicode (UTF-16BE)"
-msgstr ""
+msgstr "Unicode (UTF-16BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:211
 msgid "Unicode (UTF-16LE)"
-msgstr ""
+msgstr "Unicode (UTF-16LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:212
 msgid "Unicode (UTF-32BE)"
-msgstr ""
+msgstr "Unicode (UTF-32BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:213
 msgid "Unicode (UTF-32LE)"
-msgstr ""
+msgstr "Unicode (UTF-32LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:214
-#, fuzzy
 msgid "User Defined"
-msgstr "Benutzername"
+msgstr "Benutzerdefiniert"
 
 #: ../borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
-msgstr ""
+msgstr "Vietnamesisch (TCVN)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:217
 msgid "Vietnamese (VISCII)"
-msgstr ""
+msgstr "Vietnamesisch (VISCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:218
 msgid "Vietnamese (VPS)"
-msgstr ""
+msgstr "Vietnamesisch (VPS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:219
 msgid "Vietnamese (Windows-1258)"
-msgstr ""
+msgstr "Vietnamesisch (Windows-1258)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "Hebräisch, visuell (ISO-8859-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
-msgstr ""
+msgstr "Westlich (IBM-850)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:224
 msgid "Western (ISO-8859-1)"
-msgstr ""
+msgstr "Westlich (ISO-8859-1)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:225
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "Westlich (ISO-8859-15)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:227
 msgid "Western (MacRoman)"
-msgstr ""
+msgstr "Westlich (MacRoman)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:228
 msgid "Western (Windows-1252)"
-msgstr ""
+msgstr "Westlich (Windows-1252)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:441
-#, fuzzy
 msgid "Locale: "
-msgstr "_Systemeinstellung:"
+msgstr "Standorteinstellungen: "
 
 #: ../borrowed/goffice/go-charmap-sel.c:476
-#, fuzzy
 msgid "Conversion Direction"
-msgstr "Vollständig konvertiert"
+msgstr "Konvertierungsrichtung"
 
 #: ../borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr ""
+msgstr "Dieser Wert legt fest, welcher iconv-Test durchgeführt werden soll."
 
 #: ../borrowed/goffice/go-optionmenu.c:410
 msgid "Menu"
-msgstr ""
+msgstr "Menü"
 
 #: ../borrowed/goffice/go-optionmenu.c:410
-#, fuzzy
 msgid "The menu of options"
-msgstr "Die Zahlen-Option ist %s."
+msgstr "Das Optionsmenü"
 
 #: ../gnucash/gnome/assistant-acct-period.c:190
 msgid "The book was closed successfully."
@@ -2912,9 +2896,8 @@ msgid "Path head does not exist, "
 msgstr ""
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:432
-#, fuzzy
 msgid "Relative"
-msgstr "_Relativ:"
+msgstr "Relativ"
 
 #: ../gnucash/gnome/dialog-vendor.c:214
 msgid ""
@@ -11099,9 +11082,8 @@ msgid "Pixels"
 msgstr ""
 
 #: ../gnucash/gnome-utils/dialog-options.c:3019
-#, fuzzy
 msgid "Percent"
-msgstr "Prozent (%)"
+msgstr "Prozent"
 
 #. Translators: Both %s will be the account separator character; the
 #. resulting string is a demonstration how the account separator
@@ -28444,9 +28426,8 @@ msgid "Fancy Date Format"
 msgstr "Ausführliches Datumsformat"
 
 #: ../libgnucash/app-utils/app-utils.scm:330
-#, fuzzy
 msgid "custom"
-msgstr "Benutzerdefiniert"
+msgstr "benutzerdefiniert"
 
 #: ../libgnucash/app-utils/business-prefs.scm:24
 msgid "Counters"
@@ -29837,491 +29818,3 @@ msgstr ""
 "Um den Inhalt zweiter Reiter in einem der Reiter optisch zu vergleichen,"
 "wählen Sie im Menü 'Fenster -> Neues Fenster mit Seite', um diesen Reiter in "
 "einem neuen Fenster anzuzeigen "
-
-#~ msgid "Enable debugging mode: increasing logging to provide deep detail."
-#~ msgstr "Debug-Modus aktivieren: Besonders viele Log-Meldungen ausgeben."
-
-#~ msgid ""
-#~ "Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,"
-#~ "error}\""
-#~ msgstr ""
-#~ "Loglevel einstellen; Beispiel »komponente.irgendwas={debug,info,warn,crit,"
-#~ "error}«"
-
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from %s rev %s on %s."
-#~ msgstr ""
-#~ "%s\n"
-#~ "Dieses Programm wurde aus %s Version %s am %s erstellt."
-
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from rev %s on %s."
-#~ msgstr ""
-#~ "%s\n"
-#~ "Dieses Programm wurde aus Version %s am %s erstellt."
-
-#~ msgid ""
-#~ "An error occurred while creating the directory:\n"
-#~ "  %s\n"
-#~ "Please correct the problem and restart GnuCash.\n"
-#~ "The reported error was '%s' (errno %d).\n"
-#~ msgstr ""
-#~ "Ein Fehler ist aufgetreten, als das Verzeichnis\n"
-#~ "  %s\n"
-#~ "erstellt werden sollte. Bitte beheben Sie das Problem und\n"
-#~ "starten Sie GnuCash neu.\n"
-#~ "Folgender Fehler wurde gemeldet: »%s« (errno %d)\n"
-
-#~ msgid ""
-#~ "Note: the directory\n"
-#~ "  %s\n"
-#~ "doesn't exist. This is however not fatal.\n"
-#~ msgstr ""
-#~ "Beachten Sie: das Verzeichnis\n"
-#~ "  %s\n"
-#~ "existiert nicht. Dies ist allerdings nicht schlimm.\n"
-
-#~ msgid ""
-#~ "The directory\n"
-#~ "  %s\n"
-#~ "exists but cannot be accessed. This program \n"
-#~ "must have full access (read/write/execute) to \n"
-#~ "the directory in order to function properly.\n"
-#~ msgstr ""
-#~ "Das Verzeichnis\n"
-#~ "  %s\n"
-#~ "existiert, aber es kann nicht darauf zugegriffen werden. Dieses\n"
-#~ "Programm muss alle Zugriffrechte (Lesen/Schreiben/Ausführen) zu diesem\n"
-#~ "Verzeichnis besitzen, um korrekt zu funktionieren.\n"
-
-# Fixme: Check source
-#~ msgid ""
-#~ "The path\n"
-#~ "  %s\n"
-#~ "exists but it is not a directory. Please delete\n"
-#~ "the file and start GnuCash again.\n"
-#~ msgstr ""
-#~ "Der Pfad\n"
-#~ "  %s\n"
-#~ "existiert, ist aber kein Verzeichnis. Bitte löschen Sie diese Datei\n"
-#~ "oder wählen einen anderen Pfad. Starten Sie dann GnuCash neu.\n"
-
-# Fixme: Source
-#~ msgid ""
-#~ "An unknown error occurred when validating that the\n"
-#~ "  %s\n"
-#~ "directory exists and is usable. Please correct the\n"
-#~ "problem and restart GnuCash. The reported error \n"
-#~ "was '%s' (errno %d)."
-#~ msgstr ""
-#~ "Ein unbekannter Fehler ist aufgetreten, als das Verzeichnis\n"
-#~ "  %s\n"
-#~ "auf seine Existenz und Verwendbarkeit überprüft wurde.\n"
-#~ "Bitte beheben Sie das Problem und starten Sie GnuCash neu.\n"
-#~ "Der gemeldete Fehler war: »%s« (errno %d)."
-
-#~ msgid ""
-#~ "The permissions are wrong on the directory\n"
-#~ "  %s\n"
-#~ "They must be at least 'rwx' for the user.\n"
-#~ msgstr ""
-#~ "Die Zugriffsrechte im Verzeichnis\n"
-#~ "  %s\n"
-#~ "sind nicht korrekt. Die Zugriffsrechte müssen »rwx«\n"
-#~ "(Lesen/Schreiben/Ausführen) für den aktuellen Benutzer erlauben.\n"
-
-#~ msgid "_Price Editor"
-#~ msgstr "_Kurs-Editor"
-
-#~ msgid "General Ledger2"
-#~ msgstr "Journal2"
-
-#~ msgid "General Ledger Report"
-#~ msgstr "Journal Bericht"
-
-#~ msgid "_General Ledger"
-#~ msgstr "_Journal"
-
-#~ msgid "<No information>"
-#~ msgstr "<keine Informationen>"
-
-#~ msgid ""
-#~ "If active, the register will be colored as specified by the system theme. "
-#~ "This can be overridden to provide custom colors by editing the gtkrc file "
-#~ "in the users home directory. Otherwise the standard register colors will "
-#~ "be used that GnuCash has always used."
-#~ msgstr ""
-#~ "Wenn aktiviert, werden die Farben im Kontofenster gemäß den systemweiten "
-#~ "Einstellungen (Theme) gewählt. Dies kann von Benutzern in der gtkrc-Datei "
-#~ "geändert werden. Andernfalls werden im Kontofenster die von GnuCash "
-#~ "voreingestellten Farben verwendet."
-
-#~ msgid ""
-#~ "If activated, delete manually entered stock prices dated earlier than the "
-#~ "specified date. Otherwise only stock prices added by Finance::Quote will "
-#~ "be deleted."
-#~ msgstr ""
-#~ "Wenn gewählt, werden auch manuell eingegebene Kurse vor dem gewählten "
-#~ "Datum gelöscht. Andernfalls werden nur von Finance::Quote hinzugefügte "
-#~ "Kurse gelöscht."
-
-#~ msgid "Delete _last price for a stock"
-#~ msgstr "Auch _letzten Kurswert eines Wertpapieres löschen"
-
-#~ msgid ""
-#~ "If activated, delete all prices before the specified date. Otherwise the "
-#~ "last stock price dated before the date will be kept and all earlier "
-#~ "quotes deleted."
-#~ msgstr ""
-#~ "Wenn gewählt, werden alle Kurswerte vor dem gewählten Datum gelöscht. "
-#~ "Andernfalls wird der letzte Kurs vor dem Datum behalten und alle früheren "
-#~ "werden gelöscht."
-
-#~ msgid "Get _Quotes"
-#~ msgstr "_Kurse abrufen"
-
-#~ msgid "_Delete Account"
-#~ msgstr "_Konto löschen"
-
-#~ msgid "_New Account"
-#~ msgstr "_Neues Konto"
-
-#~ msgid "Last modified on %x %X"
-#~ msgstr "Zuletzt geändert am %x %X"
-
-#~ msgid ""
-#~ "The GnuCash personal finance manager. The GNU way to manage your money!"
-#~ msgstr ""
-#~ "GnuCash: Ihr privater Finanzmanager. Die freie Lösung zur "
-#~ "Finanzverwaltung."
-
-#~ msgid "Version: GnuCash-%s %s (rev %s built %s)"
-#~ msgstr "Version: GnuCash-%s %s (Revision %s, erstellt am %s)"
-
-#~ msgid "Version: GnuCash-%s (rev %s built %s)"
-#~ msgstr "Version: GnuCash-%s (Revision %s, erstellt am %s)"
-
-#~ msgid ""
-#~ "This assistant will help you export the Transactions to a file.\n"
-#~ "\n"
-#~ "Select the settings you require for the file and then click 'Forward' to "
-#~ "proceed or 'Cancel' to Abort Export.\n"
-#~ msgstr ""
-#~ "Mit diesem Assistenten können Sie Ihre Buchungen in eine Datei "
-#~ "exportieren.\n"
-#~ "\n"
-#~ "Wählen Sie die Einstellungen für die Datei und klicken Sie »Weiter«. Mit "
-#~ "»Abbrechen« können Sie den Export abbrechen.\n"
-
-#~ msgid "Quotes"
-#~ msgstr "Kurse"
-
-#~ msgid "Category"
-#~ msgstr "Kategorie"
-
-#~ msgid "From With Sym"
-#~ msgstr "Von m. Währung"
-
-#~ msgid "To Num."
-#~ msgstr "Nach numerisch"
-
-#~ msgid "From Num."
-#~ msgstr "Von numerisch"
-
-#~ msgid "From Rate/Price"
-#~ msgstr "Von Kurs"
-
-#~ msgid ""
-#~ "The rows displayed below had errors which are in the last column. You can "
-#~ "attempt to correct them by changing the configuration."
-#~ msgstr ""
-#~ "Die unten angezeigten Zeilen zeigen Fehler in der letzten Spalte. Sie "
-#~ "können versuchen, die Fehler durch veränderte Einstellungen zu beheben."
-
-#~ msgid ""
-#~ "There are problems with the import settings!\n"
-#~ "The date format could be wrong or there are not enough columns set..."
-#~ msgstr ""
-#~ "Es gibt Probleme mit den Importeinstellungen!\n"
-#~ "Das Datumformat könnte falsch sein oder die Spaltenzahl ist zu klein..."
-
-#~ msgid ""
-#~ "To Change the account, double click on the required account, click "
-#~ "Forward to proceed."
-#~ msgstr ""
-#~ "Um ein Konto zu auszutauschen, doppelklicken Sie auf das gewünschte "
-#~ "Konto, dann »Vorwärts«, um fortzufahren."
-
-#~ msgid ""
-#~ "This assistant will help you import a delimited file containing a list of "
-#~ "transactions.\n"
-#~ "\n"
-#~ "All transactions imported will be associated to one account for each "
-#~ "import and if you select the account column, the account in the first row "
-#~ "will be used for all rows.\n"
-#~ "\n"
-#~ "Various options exist for specifying the delimiter as well as a fixed "
-#~ "width option. With the fixed width option, double click on the bar above "
-#~ "the displayed rows to set the column width.\n"
-#~ "\n"
-#~ "There is an option for specifying the start row, end row and an option to "
-#~ "skip alternate rows begining from the start row. These can be used if you "
-#~ "have some header text, a points collected status row or multiple accounts "
-#~ "in the same file."
-#~ msgstr ""
-#~ "Dieser Assistent möchte Ihnen helfen, Buchungen aus einer Textdateie mit "
-#~ "Trennzeichen zu importieren.\n"
-#~ "\n"
-#~ "Alle importierten Buchungen eines Imports werden mit einem bestimmten "
-#~ "Konto pro Import assoziiert. Wenn Sie eine Kontospalte wählen wird das "
-#~ "Konto aus der ersten Zeile für den gesamten Import verwendet.\n"
-#~ "\n"
-#~ "Es gibt verschiedene Optionen, Trennzeichen zu bestimmen, ebenso, wie "
-#~ "eine Option für feste Spaltenbreiten. Bei fester Spaltenbreite "
-#~ "doppelklicken Sie auf den Balken über den dargestellten Zeilen, um die "
-#~ "Breite festzulegen.\n"
-#~ "\n"
-#~ "Schließlich gibt es eine Option zur Bestimmung der ersten und letzten "
-#~ "Zeile, sowie eine Option Zeilen abwechselnd zu überspringen. Diese "
-#~ "Optionen können benutzt werden, wenn sie einige Kopfzeilen oder mehrere "
-#~ "Konten in einer Datei haben."
-
-#~ msgid "Transaction Import Assistant"
-#~ msgstr "Buchungen-Import-Assistent"
-
-#~ msgid "Start import on row "
-#~ msgstr "Starte den Import auf Zeile "
-
-#~ msgid " and stop on row "
-#~ msgstr " und stoppe auf Zeile "
-
-#~ msgid "Skip alternate rows from the start row"
-#~ msgstr "Überspringe abwechseld Zeilen ab der Startzeile"
-
-#~ msgid "Data type: "
-#~ msgstr "Datentyp: "
-
-#~ msgid "Separated"
-#~ msgstr "Getrennt"
-
-#~ msgid "Step over Account Page if Setup"
-#~ msgstr "Konten-Seite überspringen, wenn bereits eingerichtet"
-
-#~ msgid "File opening failed."
-#~ msgstr "Datei öffnen ist fehlgeschlagen."
-
-#~ msgid "Unknown encoding."
-#~ msgstr "Unbekannte Zeichenkodierung."
-
-#~ msgid "This report has no options."
-#~ msgstr "Dieser Bericht hat keine Optionen."
-
-#~ msgid "Compress prior/later periods"
-#~ msgstr "Komprimiere vorherige/spätere Zeiträume"
-
-#~ msgid ""
-#~ "Accumulate columns for periods before and after the current period to "
-#~ "allow focus on the current period."
-#~ msgstr ""
-#~ "Akkumuliere Spalten für Zeiträume vor und nach dem aktuellen, um die die "
-#~ "aktuelle Periode zu fokussieren."
-
-#~ msgid "Income Barchart"
-#~ msgstr "Erträge Balkendiagramm"
-
-#~ msgid "Expense Barchart"
-#~ msgstr "Aufwendungen Balkendiagramm"
-
-#~ msgid "Liability Barchart"
-#~ msgstr "Fremdkapital Balkendiagramm"
-
-#~ msgid "Style"
-#~ msgstr "Stil"
-
-#~ msgid "Report style."
-#~ msgstr "Berichtsstil."
-
-#~ msgid "Display N lines."
-#~ msgstr "Viele Zeilen anzeigen."
-
-#~ msgid "Display 1 line."
-#~ msgstr "Eine Zeile anzeigen."
-
-# Fixme: da gibt es bestimmt was Schöneres...
-#~ msgid "Account Substring"
-#~ msgstr "Teilzeichenkette Konto"
-
-#~ msgid "Exact Time"
-#~ msgstr "Genaue Zeit"
-
-#~ msgid "Sort by exact time."
-#~ msgstr "Nach genauem Zeitpunkt sortieren."
-
-#~ msgid "Remember _PIN"
-#~ msgstr "_PIN merken"
-
-#~ msgid "CURRENCY"
-#~ msgstr "WÄHRUNG"
-
-#~ msgid ""
-#~ "On high-resolution displays the reports will be unreadable by default. "
-#~ "Setting a zoom factor to a number bigger than 1.0 can help improve this "
-#~ "situation."
-#~ msgstr ""
-#~ "Auf hochauflösenden Monitoren können Berichte in der Standardeinstellung "
-#~ "schwer lesbar sein. Das Setzen eines Vergrößerungsfaktors größer 1 kann "
-#~ "dann eine ABhilfe sein."
-
-#~ msgid "Clear the entry"
-#~ msgstr "Löschen des Eintrages"
-
-#~ msgid "You must select a commodity. To create a new one, click \"New\""
-#~ msgstr ""
-#~ "Sie müssen eine Devise/Wertpapier auswählen. Wenn Sie eine neue anlegen "
-#~ "möchten, klicken Sie auf »Neu«."
-
-#~ msgid "set true"
-#~ msgstr "auf wahr setzen"
-
-#~ msgid "UTC"
-#~ msgstr "UTC"
-
-#~ msgid "Dates earlier than 1970 are not supported."
-#~ msgstr "Ein Datum vor 1970 wird nicht unterstützt"
-
-#~ msgid "Owner Name"
-#~ msgstr "Inhabername"
-
-#~ msgid "Owner ID"
-#~ msgstr "Inhaber ID"
-
-#~ msgid "Dummy message"
-#~ msgstr "Beispiel-Nachricht"
-
-#~ msgid "postd"
-#~ msgstr "Gebucht"
-
-#~ msgid "duedate"
-#~ msgstr "Fällig"
-
-#~ msgid "acct"
-#~ msgstr "Konto"
-
-#~ msgid "question"
-#~ msgstr "Frage"
-
-#~ msgid "Retrieve the current online quote"
-#~ msgstr "Aktuellen Kurs online abrufen"
-
-#~ msgid "Auto pay on post_ing"
-#~ msgstr "Automatisch durchbuchen"
-
-#~ msgid "_Use system theme colors"
-#~ msgstr "Farben der _systemweiten Einstellungen verwenden"
-
-#~ msgid ""
-#~ "If checked, the system color theme will be applied to register windows. "
-#~ "If clear, the original GnuCash register colors will be used."
-#~ msgstr ""
-#~ "Wenn aktiviert, werden die systemweiten Farbeinstellungen in den "
-#~ "Kontofenstern verwendet. Wenn nicht aktiviert, werden GnuCash-spezifische "
-#~ "Farben in den Kontofenstern verwendet."
-
-#~ msgid "Negative amounts are not allowed."
-#~ msgstr "Negative Beträge sind hier nicht möglich."
-
-#~ msgid "Percentage amount must be between 0 and 100."
-#~ msgstr "Die Prozentzahl muss zwischen 0 und 100 liegen."
-
-#~ msgid ""
-#~ "You must enter the amount of the payment. The payment amount must not be "
-#~ "zero."
-#~ msgstr ""
-#~ "Sie müssen den Zahlungsbetrag angeben. Der Betrag muss größer als Null "
-#~ "sein."
-
-#~ msgid "Internal link between invoice and payment lots"
-#~ msgstr "Interne Verknüpfung zwischen Rechnungs- und Zahlungsposten"
-
-#~ msgid ""
-#~ "Since you are creating a new file, you will next see a dialog for setting "
-#~ "book options. These can affect how GnuCash transactions are handled "
-#~ "later, during account setup. If you come back to this page without "
-#~ "cancelling and starting over, the dialog for setting book options will "
-#~ "not be shown a second time when you go forward. You can access it "
-#~ "directly from the menu via File->Properties."
-#~ msgstr ""
-#~ "Da gerade eine neue Datei erstellt werden soll, wird als nächstes ein "
-#~ "Fenster für die »Buch-Eigenschaften« geöffnet. Die Einstellungen dieser "
-#~ "Eigenschaften sind wichtig für die Eröffnungsbuchungen, die mit den neuen "
-#~ "Konten im darauf folgenden Schritt erzeugt werden.\n"
-#~ "\n"
-#~ "Die Buch-Eigenschaften können später jederzeit geändert werden über den "
-#~ "Menüeintrag Datei->Eigenschaften."
-
-#~ msgid "New item"
-#~ msgstr "Neuer Eintrag"
-
-#~ msgid "%s at %s (code %s)"
-#~ msgstr "%s bei %s (BLZ %s)"
-
-#~ msgid "%s at bank code %s"
-#~ msgstr "%s bei %s"
-
-#~ msgid "Semicolon Separated with Quotes"
-#~ msgstr "Semikolon-getrennt mit Anführungszeichen"
-
-#~ msgid "Comma Separated with Quotes"
-#~ msgstr "Komma-getrennt mit Anführungszeichen"
-
-#~ msgid "Run preconfigured report"
-#~ msgstr "Konfigurierten Bericht öffnen"
-
-#~ msgid "Preconfigured Reports"
-#~ msgstr "Konfigurierte Berichte"
-
-#~ msgid "Net Price"
-#~ msgstr "Nettobetrag"
-
-#~ msgid "Total Price"
-#~ msgstr "Gesamtbetrag"
-
-#~ msgid "Amount Due"
-#~ msgstr "Fälliger_Betrag"
-
-#~ msgid "Invoice number: "
-#~ msgstr "Rechnungsnummer: "
-
-#~ msgid "Job number: "
-#~ msgstr "Auftragsnummer: "
-
-#~ msgid "Job name: "
-#~ msgstr "Auftragsname: "
-
-#~ msgid "Custom Reports"
-#~ msgstr "_Benutzerdefinierte Berichte"
-
-#~ msgid "and"
-#~ msgstr "und"
-
-#~ msgid "Ignore brokerage fees when calculating returns"
-#~ msgstr "Ignoriere Vermittlungsgebühren bei der Ermittlung der Erträge"
-
-#~ msgid "Most recent to report"
-#~ msgstr "Neuester vor Berichtsdatum"
-
-#~ msgid "The most recent recorded price before report date."
-#~ msgstr "Der aktuellste aufgezeichnete Preis vor dem Datum des Berichts."
-
-#~ msgid "FILO"
-#~ msgstr "FILO"
-
-#~ msgid "Use first-in last-out method for basis."
-#~ msgstr ""
-#~ "Verwende die First-In Last-Out-Zuordnung (zuerst erworbene werden zuletzt "
-#~ "verkauft) zur Ermittlung der Basis."
-
-#~ msgid "Welcome to GnuCash 2.4!"
-#~ msgstr "Willkommen zu GnuCash 2.4!"

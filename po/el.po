@@ -47,20 +47,19 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr ""
+msgstr "Αραβικά"
 
 #: ../borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr ""
+msgstr "Βαλτικά"
 
 #: ../borrowed/goffice/go-charmap-sel.c:72
-#, fuzzy
 msgid "Central European"
-msgstr "Ευρωπαϊκή"
+msgstr "Κεντρικής Ευρώπης"
 
 #: ../borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr ""
+msgstr "Κινέζικα"
 
 #: ../borrowed/goffice/go-charmap-sel.c:74
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:242
@@ -68,29 +67,28 @@ msgid "Cyrillic"
 msgstr "Κυριλλική"
 
 #: ../borrowed/goffice/go-charmap-sel.c:75
-#, fuzzy
 msgid "Greek"
-msgstr "Πράσινο"
+msgstr "Ελληνικά"
 
 #: ../borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr ""
+msgstr "Εβραϊκά"
 
 #: ../borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
-msgstr ""
+msgstr "Ινδιάνικα"
 
 #: ../borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr ""
+msgstr "Ιαπωνικά"
 
 #: ../borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr ""
+msgstr "Κορεάτικα"
 
 #: ../borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr ""
+msgstr "Τουρκικά"
 
 #: ../borrowed/goffice/go-charmap-sel.c:81
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:224
@@ -99,12 +97,11 @@ msgstr "Unicode"
 
 #: ../borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr ""
+msgstr "Βιετναμέζικα"
 
 #: ../borrowed/goffice/go-charmap-sel.c:83
-#, fuzzy
 msgid "Western"
-msgstr "Μητρώο"
+msgstr "Δυτική"
 
 #: ../borrowed/goffice/go-charmap-sel.c:84
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:60
@@ -116,85 +113,83 @@ msgstr "Άλλο"
 
 #: ../borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "Αραβικά (IBM-864)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr ""
+msgstr "Αραβική (IBM-864-Ι)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "Αραβικά (ISO-8859-6)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr ""
+msgstr "Αραβικά (ISO-8859-6-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr ""
+msgstr "Αραβικά (ISO-8859-6-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:121
 msgid "Arabic (MacArabic)"
-msgstr ""
+msgstr "Αραβική (MacArabic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:122
 msgid "Arabic (Windows-1256)"
-msgstr ""
+msgstr "Αραβικά (Windows-1256)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
-msgstr ""
+msgstr "Αρμενική (ARMSCII-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:124
-#, fuzzy
 msgid "Baltic (ISO-8859-13)"
-msgstr "ISO-8859-13 (Baltic)"
+msgstr "Baltic (ISO-8859-13)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
-msgstr ""
+msgstr "Baltic (ISO-8859-4)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:126
 msgid "Baltic (Windows-1257)"
-msgstr ""
+msgstr "Βαλτικής (Windows-1257)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:127
-#, fuzzy
 msgid "Celtic (ISO-8859-14)"
-msgstr "ISO-8859-14 (Κέλτικα)"
+msgstr "Κελτική (ISO-8859-14)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
-msgstr ""
+msgstr "Κεντρικής Ευρώπης (IBM-852)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:130
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "Κεντρικής Ευρώπης(ISO-8859-2)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:132
 msgid "Central European (MacCE)"
-msgstr ""
+msgstr "Κεντρικής Ευρώπης (MacCE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:134
 msgid "Central European (Windows-1250)"
-msgstr ""
+msgstr "Κεντρικής Ευρώπης (Windows-1250)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:136
 msgid "Chinese Simplified (GB18030)"
-msgstr ""
+msgstr "Απλοποιημένη Κινέζικη (GB18030)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:137
 msgid "Chinese Simplified (GB2312)"
-msgstr ""
+msgstr "Κινεζική απλοποιημένη (GB2312)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:138
 msgid "Chinese Simplified (GBK)"
-msgstr ""
+msgstr "Κινέζικα Απλοποιημένα (GBK)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:139
 msgid "Chinese Simplified (HZ)"
-msgstr ""
+msgstr "Κινέζικα Απλοποιημένα (HZ)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:140
 msgid "Chinese Simplified (Windows-936)"
@@ -202,7 +197,7 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr ""
+msgstr "Κινεζική παραδοσιακή  (Big5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
@@ -210,37 +205,35 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
-msgstr ""
+msgstr "Κινεζική παραδοσιακή (EUC-TW)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:147
 msgid "Croatian (MacCroatian)"
-msgstr ""
+msgstr "Κροατική (MacCroatian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:149
-#, fuzzy
 msgid "Cyrillic (IBM-855)"
-msgstr "Κυριλλική"
+msgstr "Κυριλλικά (IBM-855)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:150
 msgid "Cyrillic (ISO-8859-5)"
-msgstr ""
+msgstr "Κυριλλική (ISO-8859-5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:152
 msgid "Cyrillic (ISO-IR-111)"
-msgstr ""
+msgstr "Κυριλλική (ISO-IR-111)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:154
-#, fuzzy
 msgid "Cyrillic (KOI8-R)"
-msgstr "Κυριλλική"
+msgstr "Κυριλλική (KOI8-R)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:155
 msgid "Cyrillic (MacCyrillic)"
-msgstr ""
+msgstr "Κυριλλική (MacCyrillic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:157
 msgid "Cyrillic (Windows-1251)"
-msgstr ""
+msgstr "Κυριλλική (Windows-1251)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
@@ -265,24 +258,23 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:166
 msgid "Georgian (GEOSTD8)"
-msgstr ""
+msgstr "Γεωργιανή (GEOSTD8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:167
-#, fuzzy
 msgid "Greek (ISO-8859-7)"
-msgstr "ISO-8859-7 (Ελληνικά)"
+msgstr "Ελληνική (ISO-8859-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:168
 msgid "Greek (MacGreek)"
-msgstr ""
+msgstr "Ελληνική (MacGreek)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:169
 msgid "Greek (Windows-1253)"
-msgstr ""
+msgstr "Ελληνική (Windows-1253)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:170
 msgid "Gujarati (MacGujarati)"
-msgstr ""
+msgstr "Gujarati (MacGujarati)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:172
 msgid "Gurmukhi (MacGurmukhi)"
@@ -290,23 +282,23 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr ""
+msgstr "Εβραϊκά (IBM-862)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr ""
+msgstr "Εβραϊκά (ISO-8859-8-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr ""
+msgstr "Εβραϊκά (ISO-8859-8-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr ""
+msgstr "Εβραϊκή (_MacHebrew)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
-msgstr ""
+msgstr "Εβραϊκή  (Windows-1255)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
@@ -314,44 +306,43 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
-msgstr ""
+msgstr "Ισλανδικά (MacIcelandic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:186
 msgid "Japanese (EUC-JP)"
-msgstr ""
+msgstr "Ιαπωνική (EUC-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:187
 msgid "Japanese (ISO-2022-JP)"
-msgstr ""
+msgstr "Ιαπωνική (ISO-2022-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:189
 msgid "Japanese (Shift_JIS)"
-msgstr ""
+msgstr "Ιαπωνική (Shift_JIS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:190
 msgid "Korean (EUC-KR)"
-msgstr ""
+msgstr "Κορεατική (EUC-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:191
 msgid "Korean (ISO-2022-KR)"
-msgstr ""
+msgstr "Κορεάτικη (ISO-2022-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:192
 msgid "Korean (JOHAB)"
-msgstr ""
+msgstr "Κορεάτικη (JOHAB)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:193
 msgid "Korean (UHC)"
-msgstr ""
+msgstr "Κορεάτικη (UHC)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:194
-#, fuzzy
 msgid "Nordic (ISO-8859-10)"
-msgstr "ISO-8859-10 (Nordic)"
+msgstr "Νορβηγική (ISO-8859-10)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:195
 msgid "Romanian (MacRomanian)"
-msgstr ""
+msgstr "Ρουμανική (MacRomanian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:197
 msgid "Romanian (ISO-8859-16)"
@@ -359,53 +350,51 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:199
 msgid "South European (ISO-8859-3)"
-msgstr ""
+msgstr "Νότιας Ευρώπης (ISO-8859-3)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:201
 msgid "Thai (TIS-620)"
-msgstr ""
+msgstr "Ταϊλανδική (TIS-620)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:202
 msgid "Turkish (IBM-857)"
-msgstr ""
+msgstr "Τουρκικά (IBM-857)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:203
 msgid "Turkish (ISO-8859-9)"
-msgstr ""
+msgstr "Τουρκική (ISO-8859-9)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:204
 msgid "Turkish (MacTurkish)"
-msgstr ""
+msgstr "Τουρκική (MacTurkish)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:206
 msgid "Turkish (Windows-1254)"
-msgstr ""
+msgstr "Τουρκική (Windows-1254)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:208
-#, fuzzy
 msgid "Unicode (UTF-7)"
-msgstr "Unicode"
+msgstr "Unicode (UTF-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:209
-#, fuzzy
 msgid "Unicode (UTF-8)"
-msgstr "Unicode"
+msgstr "Unicode (UTF-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:210
 msgid "Unicode (UTF-16BE)"
-msgstr ""
+msgstr "Unicode (UTF-16BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:211
 msgid "Unicode (UTF-16LE)"
-msgstr ""
+msgstr "Unicode (UTF-16LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:212
 msgid "Unicode (UTF-32BE)"
-msgstr ""
+msgstr "Unicode (UTF-32BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:213
 msgid "Unicode (UTF-32LE)"
-msgstr ""
+msgstr "Unicode (UTF-32LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:214
 #, fuzzy
@@ -414,43 +403,43 @@ msgstr "Όνομα χρήστη"
 
 #: ../borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
-msgstr ""
+msgstr "Βιετναμέζικα (TCVN)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:217
 msgid "Vietnamese (VISCII)"
-msgstr ""
+msgstr "Βιετναμική (VISCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:218
 msgid "Vietnamese (VPS)"
-msgstr ""
+msgstr "Βιετναμική (VPS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:219
 msgid "Vietnamese (Windows-1258)"
-msgstr ""
+msgstr "Βιετναμική (Windows-1258)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "Οπτικά Εβραϊκά (ISO-8859-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
-msgstr ""
+msgstr "Δυτικής Ευρώπης (IBM-850)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:224
 msgid "Western (ISO-8859-1)"
-msgstr ""
+msgstr "Δυτική (ISO-8859-1)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:225
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "Δυτική (ISO-8859-15)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:227
 msgid "Western (MacRoman)"
-msgstr ""
+msgstr "Δυτική (MacRoman)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:228
 msgid "Western (Windows-1252)"
-msgstr ""
+msgstr "Δυτική (Windows-1252)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:441
 #, fuzzy
@@ -468,7 +457,7 @@ msgstr ""
 
 #: ../borrowed/goffice/go-optionmenu.c:410
 msgid "Menu"
-msgstr ""
+msgstr "Μενού"
 
 #: ../borrowed/goffice/go-optionmenu.c:410
 #, fuzzy
@@ -17387,9 +17376,8 @@ msgid "Select Separator Type"
 msgstr "Επιλογή του τύπου έκπτωσης"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.glade.h:22
-#, fuzzy
 msgid "Preview"
-msgstr "Ανασκόπηση"
+msgstr "Προεπισκόπηση"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.glade.h:23
 msgid "Import Account Preview, first 10 rows only"
@@ -20608,7 +20596,7 @@ msgstr "Email"
 
 #: ../gnucash/report/business-reports/aging.scm:789
 msgid "Y"
-msgstr ""
+msgstr "Ψ"
 
 #: ../gnucash/report/business-reports/aging.scm:789
 #, fuzzy
@@ -28288,9 +28276,8 @@ msgid "Fancy Date Format"
 msgstr "Μορφή ημερομηνίας Fancy"
 
 #: ../libgnucash/app-utils/app-utils.scm:330
-#, fuzzy
 msgid "custom"
-msgstr "Προσαρμογή"
+msgstr "προσαρμοσμένο"
 
 #: ../libgnucash/app-utils/business-prefs.scm:24
 #, fuzzy
@@ -29619,2080 +29606,3 @@ msgid ""
 "select Window -> New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
-
-#~ msgid "Enable debugging mode: increasing logging to provide deep detail."
-#~ msgstr ""
-#~ "Ενεργοποίηση κατάστασης αποσφαλμάτωσης: αύξηση καταγραφών για παροχή "
-#~ "αναλυτικότερων πληροφοριών/ "
-
-#, fuzzy
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from %s rev %s on %s."
-#~ msgstr "%s  Αυτό το αντίγραφο κατασκευάστηκε από το  svn r%s στις %s."
-
-#, fuzzy
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from rev %s on %s."
-#~ msgstr "%s  Αυτό το αντίγραφο κατασκευάστηκε από το r%s στις %s."
-
-#~ msgid "postd"
-#~ msgstr "κατ/θηκε"
-
-#~ msgid "duedate"
-#~ msgstr "ημ/νια οφειλής"
-
-#~ msgid "acct"
-#~ msgstr "λογ."
-
-#~ msgid "question"
-#~ msgstr "ερώτηση"
-
-#~ msgid ""
-#~ "An error occurred while creating the directory:\n"
-#~ "  %s\n"
-#~ "Please correct the problem and restart GnuCash.\n"
-#~ "The reported error was '%s' (errno %d).\n"
-#~ msgstr ""
-#~ "Συνέβη ένα σφάλμα κατά την δημιουργία του καταλόγου:\n"
-#~ " %s\n"
-#~ "Παρακαλώ διορθώστε το πρόβλημα και εκκινήστε ξανά το GnuCash.\n"
-#~ "Το σφάλμα που αναφέρθηκε ήταν '%s' (errno %d).\n"
-
-#~ msgid ""
-#~ "The directory\n"
-#~ "  %s\n"
-#~ "exists but cannot be accessed. This program \n"
-#~ "must have full access (read/write/execute) to \n"
-#~ "the directory in order to function properly.\n"
-#~ msgstr ""
-#~ "Ο κατάλογος\n"
-#~ " %s\n"
-#~ "υπάρχει αλλά δεν υπάρχει πρόσβαση σε αυτόν. Αυτό\n"
-#~ "το πρόγραμμα πρέπει να έχει πλήρη δικαιώματα\n"
-#~ " (εγγραφή,ανάγνωση,εκτέλεση) μέσα στον κατάλογο\n"
-#~ " για να είναι σε θέση να λειτουργήσει κανονικά.\n"
-
-#~ msgid ""
-#~ "The path\n"
-#~ "  %s\n"
-#~ "exists but it is not a directory. Please delete\n"
-#~ "the file and start GnuCash again.\n"
-#~ msgstr ""
-#~ "Η διαδρομή\n"
-#~ "  %s\n"
-#~ "αλλά δεν είναι κατάλογος. Παρακαλώ διαγράψτε\n"
-#~ "το αρχείο και εκκινήστε ξανά το GnuCash.\n"
-
-#, fuzzy
-#~ msgid ""
-#~ "An unknown error occurred when validating that the\n"
-#~ "  %s\n"
-#~ "directory exists and is usable. Please correct the\n"
-#~ "problem and restart GnuCash. The reported error \n"
-#~ "was '%s' (errno %d)."
-#~ msgstr ""
-#~ "Συνέβει άγνωστο σφάλμα κατά την εξέταση εγκυρότητας του\n"
-#~ "  %s\n"
-#~ "καταλόγου Παρακαλώ διορθώστε το πρόβλημα\n"
-#~ "και επανεκκινησετε το GnuCash. Το αναφερόμενο σφάλμα\n"
-#~ "ήταν '%s' (errno %d)."
-
-#~ msgid ""
-#~ "The permissions are wrong on the directory\n"
-#~ "  %s\n"
-#~ "They must be at least 'rwx' for the user.\n"
-#~ msgstr ""
-#~ "Τα δικαιώματα σε αυτό τον κατάλογο δεν είναι σωστά\n"
-#~ "  %s\n"
-#~ "Πρέπει να είναι το ελάχιστο 'rwx' για τον χρήστη.\n"
-
-#~ msgid "_Price Editor"
-#~ msgstr "_Διορθωτής τιμών"
-
-#, fuzzy
-#~ msgid "General Ledger2"
-#~ msgstr "Γενικό Καθολικό"
-
-#~ msgid "General Ledger Report"
-#~ msgstr "Αναφορά Γενικού Καθολικού"
-
-#~ msgid "_General Ledger"
-#~ msgstr "_Γενικό Καθολικό"
-
-#~ msgid "<No information>"
-#~ msgstr "<Χωρίς πληροφορίες>"
-
-#~ msgid "Clear the entry"
-#~ msgstr "Εκκαθάριση της καταχώρησης"
-
-#~ msgid "Delete _last price for a stock"
-#~ msgstr "Διαγραφή _τελευταίας τιμής μετοχής"
-
-#~ msgid "Get _Quotes"
-#~ msgstr "Online τιμές _μετοχών"
-
-#~ msgid "set true"
-#~ msgstr "ορισμένη αληθής"
-
-#~ msgid "You must select a commodity. To create a new one, click \"New\""
-#~ msgstr ""
-#~ "Πρέπει να επιλέξετε μία αξία. Για να δημιουργήσετε μία νέα κάντε κλικ  "
-#~ "στο \"Νέο\""
-
-#~ msgid "_Delete Account"
-#~ msgstr "_Διαγραφή λογαριασμού"
-
-#~ msgid "_New Account"
-#~ msgstr "_Νέος λογαριασμός"
-
-#~ msgid ""
-#~ "The GnuCash personal finance manager. The GNU way to manage your money!"
-#~ msgstr ""
-#~ "GnuCash, o προσωπικός διαχειριστής οικονομικών. O GNU τρόπος διαχείρισης "
-#~ "των χρημάτων σας!"
-
-#, fuzzy
-#~ msgid "Version: GnuCash-%s %s (rev %s built %s)"
-#~ msgstr "Έκδοση: GnuCash-%s svn (r%s built %s)"
-
-#, fuzzy
-#~ msgid "Version: GnuCash-%s (rev %s built %s)"
-#~ msgstr "Έκδοση: GnuCash-%s (r%s built %s)"
-
-#, fuzzy
-#~ msgid "Owner Name"
-#~ msgstr "Όνομα κατόχου "
-
-#, fuzzy
-#~ msgid "Owner ID"
-#~ msgstr "ID Παραγγελίας"
-
-#~ msgid "Remember _PIN"
-#~ msgstr "Απομνημόνευση _PIN"
-
-#, fuzzy
-#~ msgid "Quotes"
-#~ msgstr "Λήψη τιμών"
-
-#, fuzzy
-#~ msgid "From Num."
-#~ msgstr "Από τώρα"
-
-#, fuzzy
-#~ msgid ""
-#~ "The rows displayed below had errors which are in the last column. You can "
-#~ "attempt to correct them by changing the configuration."
-#~ msgstr ""
-#~ "Οι παρακάτω εμφανιζόμενες γραμμές έχουν σφάλματα. Μπορείτε να "
-#~ "προσπαθήσετε να τα διορθώσετε με αλλαγή στη ρύθμιση."
-
-#, fuzzy
-#~ msgid "Transaction Import Assistant"
-#~ msgstr "Βοηθός εισαγωγής αρχείων δεδομένων GnuCash"
-
-#, fuzzy
-#~ msgid "Start import on row "
-#~ msgstr "Αρχή περιόδου αναφοράς"
-
-#~ msgid "Data type: "
-#~ msgstr "Τύπος δεδομένων:"
-
-#~ msgid "Separated"
-#~ msgstr "Διαχωρισμένο"
-
-#~ msgid "File opening failed."
-#~ msgstr "Απέτυχε το άνοιγμα του αρχείου."
-
-#~ msgid "Unknown encoding."
-#~ msgstr "Άγνωστη κωδικοποίηση."
-
-#~ msgid "Dates earlier than 1970 are not supported."
-#~ msgstr "Δεν υποστηρίζονται  ημερομηνίες πριν το 1970."
-
-#~ msgid "This report has no options."
-#~ msgstr "Αυτή η αναφορά δεν έχει επιλογές."
-
-#~ msgid "Compress prior/later periods"
-#~ msgstr "Συμπίεση προηγούμενων/επόμενων περιόδων"
-
-#~ msgid "Income Barchart"
-#~ msgstr "Ακιδωτό διάγραμμα εσόδων"
-
-#~ msgid "Expense Barchart"
-#~ msgstr "Ακιδωτό διάγραμμα εξόδων"
-
-#~ msgid "Liability Barchart"
-#~ msgstr "Ακιδωτό διάγραμμα παθητικού"
-
-#~ msgid "Style"
-#~ msgstr "Στυλ"
-
-#, fuzzy
-#~ msgid "Report style."
-#~ msgstr "Στυλ αναφοράς"
-
-#, fuzzy
-#~ msgid "Display N lines."
-#~ msgstr "Εμφάνιση Ν γραμμές"
-
-#, fuzzy
-#~ msgid "Display 1 line."
-#~ msgstr "Εμφάνιση 1 γραμμή"
-
-#~ msgid "Exact Time"
-#~ msgstr "Ακριβής ώρα"
-
-#, fuzzy
-#~ msgid "Sort by exact time."
-#~ msgstr "Ταξινόμηση βάσει ακριβούς ώρας"
-
-#, fuzzy
-#~ msgid "Retrieve the current online quote"
-#~ msgstr "Διαγραφή της τρέχουσας τιμής"
-
-#~ msgid "Set the prefix path for gconf queries"
-#~ msgstr "Ορισμός προεπιλεγμένου προθέματος διαδρομής για ερωτήματα gconf"
-
-#~ msgid "GCONFPATH"
-#~ msgstr "GCONFPATH"
-
-#~ msgid "Negative amounts are not allowed."
-#~ msgstr "Δεν επιτρέπονται αρνητικών ποσά."
-
-#~ msgid "Percentage amount must be between 0 and 100."
-#~ msgstr "Το μέγεθος του ποσοστού πρέπει να είναι ανάμεσα στο 0 και στο 100."
-
-#, fuzzy
-#~ msgid "Credit note"
-#~ msgstr "Πιστωτικά όρια"
-
-#, fuzzy
-#~ msgid ""
-#~ "You must enter the amount of the payment. The payment amount must not be "
-#~ "zero."
-#~ msgstr ""
-#~ "Πρέπει να εισάγετε το ποσό της πληρωμής. Το ποσό της πληρωμής πρέπει να "
-#~ "είναι μεγαλύτερο απο μηδέν."
-
-#, fuzzy
-#~ msgid "Customer Credit Note"
-#~ msgstr "Αναφορά πελάτη"
-
-#, fuzzy
-#~ msgid "Vendor Credit Note"
-#~ msgstr "Αναφορά προμηθευτή"
-
-#, fuzzy
-#~ msgid "Employee Credit Note"
-#~ msgstr "Αναφορά υπαλλήλου"
-
-#~ msgid "Remo_ve Transaction Splits"
-#~ msgstr "_Διαγραφή διαιρέσεων συναλλαγής"
-
-#, fuzzy
-#~ msgid "_Shift Transaction Forward"
-#~ msgstr "_Ημερολόγιο συναλλαγών"
-
-#~ msgid "Account Transaction Report"
-#~ msgstr "Αναφορά συναλλαγών λογαριασμού"
-
-#~ msgid "Order of columns in the dialog"
-#~ msgstr "Σειρά στηλών σε αυτό το διάλογο"
-
-#~ msgid "Show the Full Name column"
-#~ msgstr "Εμφάνιση στήλης με το πλήρες όνομα"
-
-#, fuzzy
-#~ msgid "Show the Print Name column"
-#~ msgstr "Εμφάνιση λογαριασμών εσόδων και εξόδων"
-
-#~ msgid "Show the Quote Source column"
-#~ msgstr "Εμφάνιση στήλης με την πηγή τιμών"
-
-#, fuzzy
-#~ msgid "Show the Quote Timezone column"
-#~ msgstr "Εμφάνιση λογαριασμών εσόδων και εξόδων"
-
-#, fuzzy
-#~ msgid "Show the Unique Name column"
-#~ msgstr "Εμφάνιση λογαριασμών εσόδων και εξόδων"
-
-#~ msgid "Show the name column"
-#~ msgstr "Εμφάνιση στήλης με το όνομα"
-
-#~ msgid "Show the symbol column"
-#~ msgstr "Εμφάνιση της στήλης συμβόλου"
-
-#~ msgid "Columns used for sorting"
-#~ msgstr "Στήλες που χρησιμοποιούνται στην ταξινόμηση"
-
-#~ msgid "The width and size of the window when it was last closed."
-#~ msgstr ""
-#~ "Το πλάτος και το μέγεθος του παραθύρου την τελευταία φορά που έκλεισε."
-
-#~ msgid "Window position"
-#~ msgstr "Θέση παραθύρου"
-
-#~ msgid "Show the Price column"
-#~ msgstr "Εμφάνιση στήλης τιμών"
-
-#~ msgid "Show the Source column"
-#~ msgstr "Εμφάνιση στήλης πηγής"
-
-#~ msgid "Show the Type column"
-#~ msgstr "Εμφάνιση στήλης τύπου"
-
-#~ msgid "Show the date column"
-#~ msgstr "Εμφάνιση της στήλης ημερομηνίας"
-
-#~ msgid "This setting enables the Price column."
-#~ msgstr "Αυτή η ρύθμιση ενεργοποιεί την στήλη Τιμής."
-
-#~ msgid "This setting enables the Source column."
-#~ msgstr "Αυτή η ρύθμιση ενεργοποιεί την στήλη Προέλευση τιμής."
-
-#~ msgid "This setting enables the Type column."
-#~ msgstr "Αυτή η ρύθμιση ενεργοποιεί την στήλη Τύπος"
-
-#~ msgid "This setting enables the commodity column."
-#~ msgstr "Αυτή η ρύθμιση ενεργοποιεί την στήλη Αξία."
-
-#~ msgid "This setting enables the currency column."
-#~ msgstr "Αυτή η ρύθμιση ενεργοποιεί την στήλη Νόμισμα."
-
-#~ msgid "Accounts to reverse the balance"
-#~ msgstr "Λογαριασμοί για αντιστροφή υπόλοιπου"
-
-#~ msgid "Default view style for new register"
-#~ msgstr "Προεπιλεγμένο στυλ εμφάνισης για νέο μητρώο"
-
-#~ msgid "Enables Euro support"
-#~ msgstr "Ενεργοποίηση υποστήριξης Ευρώ"
-
-#~ msgid "Enables additional support for the European Union EURO currency."
-#~ msgstr ""
-#~ "Ενεργοποίηση υποστήριξης για το ΕΥΡΩ το νόμισμα της Ευρωπαϊκής Ένωσης."
-
-#~ msgid "Labels on toolbar buttons"
-#~ msgstr "Ετικέτες στα κουμπιά της εργαλειοθήκης"
-
-#~ msgid "Position of the notebook tabs"
-#~ msgstr "θέση των καρτελών"
-
-#, fuzzy
-#~ msgid "Show the Calendar buttons"
-#~ msgstr "Εμφάνιση στήλης με το όνομα"
-
-#, fuzzy
-#~ msgid "Show the Date Entered"
-#~ msgstr "Εμφάνιση της στήλης ημερομηνίας"
-
-#, fuzzy
-#~ msgid "Source of default account currency"
-#~ msgstr "Διαγραφή της επιλεγμένης συναλλαγής"
-
-#, fuzzy
-#~ msgid "Source of default report currency"
-#~ msgstr "Εξ ορισμού Νόμισμα Αναφοράς"
-
-#, fuzzy
-#~ msgid "The number of Characters needed"
-#~ msgstr "Εμφάνιση αριθμού μετοχών"
-
-#, fuzzy
-#~ msgid "The number of transactions displayed"
-#~ msgstr "Αριθμός _συναλλαγών:"
-
-#~ msgid ""
-#~ "This setting controls how the labels on toolbar buttons are shown. If set "
-#~ "to \"system\" then GnuCash will use the desktop setting for how to draw "
-#~ "toolbar buttons. If set to \"icon\" then only icons will be show on "
-#~ "toolbar buttons.. If set to \"text\" only the labels will be shown. If "
-#~ "set to \"both\" then both icons and labels will be shown. If set to "
-#~ "\"both-horiz\" then icons will be shown for all buttons with labels added "
-#~ "on important buttons."
-#~ msgstr ""
-#~ "Αυτή η ρύθμιση ορίζει πως θα εμφανίζονται οι ετικέτες κειμένου στα "
-#~ "κουμπιά της εργαλειοθήκης. Αν οριστεί σε \"system\" τότε το GnuCash θα "
-#~ "χρησιμοποιήσει τις ρυθμίσεις συστήματος για το πως θα εμφανίζονται τα "
-#~ "κουμπιά. Αν οριστεί σε \"icon\" τότε θα εμφανίζονται μόνο εικονίδια στα "
-#~ "κουμπιά. Αν οριστεί σε  \"both\" τότε θα εμφανίζονται εικονίδια μαζί με "
-#~ "κείμενο. Αν οριστεί σε  \"both-horiz\" τότε θα εμφανίζονται εικονίδια σε "
-#~ "όλα τα κουμπιά και κείμενο μόνο στα σημαντικότερα."
-
-#~ msgid "Width of a column in the dialog"
-#~ msgstr "Πλάτος στήλης στον διάλογο"
-
-#~ msgid "New item"
-#~ msgstr "Νέο αντικείμενο"
-
-#~ msgid ""
-#~ "Error: Failure saving state file.\n"
-#~ "  %s"
-#~ msgstr ""
-#~ "Σφάλμα: Αδυναμία αποθήκευσης αρχείου κατάστασης.\n"
-#~ " %s"
-
-#, fuzzy
-#~ msgid ""
-#~ "When you click Apply, GnuCash will modify your ~/.gconf.path file and "
-#~ "restart the gconf backend. There will be a short delay before GnuCash is "
-#~ "loaded."
-#~ msgstr ""
-#~ "Όταν κάνετε κλικ στο Εφαρμογή, το GnuCash θα τροποποιήσει το  αρχείο σας  "
-#~ "~/.gconf.path και θα κάνει επανεκκίνηση στο gconf backend."
-
-#, fuzzy
-#~ msgid ""
-#~ "When you click Apply, GnuCash will install the gconf data into your local "
-#~ "~/.gconf file and restart the gconf backend. The %s script must be found "
-#~ "in your search path for this to work correctly."
-#~ msgstr ""
-#~ "Όταν κάνετε κλικ στο Εφαρμογή, το GnuCash θα τροποποιήσει το  αρχείο σας  "
-#~ "~/.gconf.path και θα κάνει επανεκκίνηση στο gconf backend."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to correct the problem by yourself. When you click Apply, "
-#~ "GnuCash will exit. Please correct the problem and restart the gconf "
-#~ "backend with the command 'gconftool-2 --shutdown' before restarting "
-#~ "GnuCash. If you have not already done so, you can click the Back button "
-#~ "and copy the necessary text from the dialog."
-#~ msgstr ""
-#~ "Επιλέξατε να διορθώσετε το πρόβλημα μόνος σας. Όταν πατήσετε Εφαρμογή το "
-#~ "GnuCash θα τερματιστεί. Παρακαλώ διορθώστε το πρόβλημα και επανεκκινήστε "
-#~ "την υποδομή gconf με την εντολή 'gconftool-2 --shutdown' πριν τρέξετε "
-#~ "ξανά το GnuCash. Αν δεν το έχετε κάνει ήδη, μπορείτε να πατήσετε το "
-#~ "κουμπί Πίσω και να αντιγράψετε το απαραίτητο κείμενο μέσα από το πλαίσιο "
-#~ "διαλόγου."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to correct the problem by yourself. When you click Apply, "
-#~ "GnuCash will exit. Please run the %s script which will install the "
-#~ "configuration data and restart the gconf backend."
-#~ msgstr ""
-#~ "Επιλέξατε να διορθώσετε το πρόβλημα μόνος σας. Όταν πατήσετε Εφαρμογή το "
-#~ "GnuCash θα τερματιστεί. Παρακαλώ εκτελέστε το σενάριο εντολών %s το οποίο "
-#~ "θα εγκαταστήσει τα δεδομένα ρυθμίσεων και θα επανεκκινήση την υποδομή "
-#~ "gconf."
-
-#, fuzzy
-#~ msgid "Withdrawl"
-#~ msgstr "Ανάληψη"
-
-#, fuzzy
-#~ msgid "Apply Changes"
-#~ msgstr "Διαφορά αξίας"
-
-#, fuzzy
-#~ msgid "Choose Method"
-#~ msgstr "Επιλογή μεθόδου"
-
-#~ msgid "GnuCash will install the data for you."
-#~ msgstr "Το Gnucash θα εγκαταστήσει τα δεδομένα για εσάς."
-
-#~ msgid "GnuCash will update the system path for you."
-#~ msgstr "Το GnuCash θα ενημερώσει για σας την διαδρομή συστήματος."
-
-#, fuzzy
-#~ msgid "Install Into Home Directory"
-#~ msgstr "Εγκατάσταση στον αρχικό σας κατάλογο"
-
-#~ msgid ""
-#~ "Please add the following lines at the end of your ~/.gconf.path file:"
-#~ msgstr ""
-#~ "Παρακαλώ προσθέστε τις παρακάτω γραμμές στο τέλος του αρχείου σας ~/."
-#~ "gconf.path"
-
-#~ msgid "Please run the following commands:"
-#~ msgstr "Παρακαλώ εκτελέστε τις ακόλουθες εντολές:"
-
-#~ msgid "S_kip"
-#~ msgstr "_Προσπέραση"
-
-#, fuzzy
-#~ msgid ""
-#~ "The configuration data is stored in a non-standard location. There are "
-#~ "two methods that can be used to make this data visible to GnuCash. The "
-#~ "first is to modify a system search path to include the data location. The "
-#~ "second is to copy the data into your home directory."
-#~ msgstr ""
-#~ "Τα δεδομένα ρύθμισης είναι αποθηκευμένα σε τοποθεσία που δεν είναι "
-#~ "τυπική. Υπάρχουν δυο μέθοδοι που μπορείτε να χρησιμοποιήσετε ώστε τα "
-#~ "δεδομένα να μπορούν να διαβαστούν από το GnuCash. Η πρώτη είναι να "
-#~ "τροποποιήσετε την διαδρομή αναζήτησης του συστήματος ώστε να αναγνωρίζει "
-#~ "την τοποθεσία δεδομένων. Η δεύτερη είναι να αντιγράψετε τα δεδομένα στον "
-#~ "δικός σας  κατάλογο χρήστη."
-
-#~ msgid ""
-#~ "The configuration data used by GnuCash to specify its default values "
-#~ "cannot be found in the default system locations. Without this data "
-#~ "GnuCash will still operate properly, but it may require some extra time "
-#~ "to set up."
-#~ msgstr ""
-#~ "Τα δεδομένα ρυθμίσεων που χρησιμοποιεί το GnuCash για να ορίσει τις "
-#~ "προεπιλεγμένες τιμές του δεν ήταν δυνατό να βρεθούν στις τυπικές "
-#~ "τοποθεσίες του συστήματος. Χωρίς αυτά τα δεδομένα το GnuCash θα συνεχίζει "
-#~ "να δουλεύει κανονικά, αλλά μπορεί να χρειαστεί περισσότερο χρόνο για να "
-#~ "γίνει η ρύθμιση του."
-
-#, fuzzy
-#~ msgid "The data has _already been installed in another window"
-#~ msgstr "Κλείσιμο αυτού του παράθυρου τιμολογίου"
-
-#, fuzzy
-#~ msgid "The search path has _already been updated in another window"
-#~ msgstr "Κλείσιμο αυτού του παράθυρου τιμολογίου"
-
-#, fuzzy
-#~ msgid "Update GnuCash Configuration Data"
-#~ msgstr "Ενημέρωση δεδομένων ρύθμισης του GnuCash"
-
-#~ msgid "Update GnuCash configuration data"
-#~ msgstr "Ενημέρωση δεδομένων ρύθμισης του GnuCash"
-
-#, fuzzy
-#~ msgid "Update Search Path"
-#~ msgstr "Ενημέρωση διαδρομής αναζήτησης"
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to install the configuration data used by GnuCash into "
-#~ "the ~/.gconf directory. GnuCash can do this for you, or tell you how to "
-#~ "do it yourself."
-#~ msgstr ""
-#~ "Επιλέξατε να εγκαταστήσετε τα δεδομένα ρυθμίσεων που χρησιμοποιεί το "
-#~ "GnuCash στον κατάλογο ~/.gconf. Το GnuCash μπορεί να το κάνει αυτό για "
-#~ "σας ή να σας δώσει οδηγίες για το πως θα το κάνετε μόνοι σας."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to update the system search path. GnuCash can do this for "
-#~ "you, or it can tell you how to do it yourself."
-#~ msgstr ""
-#~ "Έχετε επιλέξει να ενημερώσετε την διαδρομή αναζήτησης συστήματος. Το "
-#~ "GnuCash μπορεί να το κάνει αυτό για σας ή να σας δώσει οδηγίες για το πως "
-#~ "θα το κάνετε μόνοι σας."
-
-#, fuzzy
-#~ msgid ""
-#~ "You will then need to restart the gconf backend with the command "
-#~ "'gconftool-2 --shutdown'."
-#~ msgstr ""
-#~ "Θα χρειαστεί να επανεκκινήσετε το gconf backend με την\n"
-#~ "εντολή 'gconftool-2 --shutdown'."
-
-#~ msgid "_GnuCash installs the data"
-#~ msgstr "Το _GnuCash κάνει εγκατάσταση των δεδομένων"
-
-#~ msgid "_GnuCash updates the search path"
-#~ msgstr "Το _GnuCash ενημερώνει την διαδρομή αναζήτησης"
-
-#~ msgid "_Install into home directory"
-#~ msgstr "_Εγκατάσταση στον προσωπικό κατάλογο"
-
-#~ msgid "_Setup"
-#~ msgstr "_Ρύθμιση"
-
-#~ msgid "_Update search path"
-#~ msgstr "_Ενημέρωση διαδρομής αναζήτησης"
-
-#~ msgid "_You install the data yourself"
-#~ msgstr "_Εγκατάσταση δεδομένων από τον χρήστη"
-
-#~ msgid "_You update the search path yourself"
-#~ msgstr "Ο _χρήστης ενημερώνει την διαδρομή αναζήτησης"
-
-#~ msgid "<b>Toolbar Style</b>"
-#~ msgstr "<b>Στυλ εργαλειοθήκης</b>"
-
-#~ msgid "Display toolbar items as icons only."
-#~ msgstr "Εμφάνιση αντικειμένων εργαλειοθήκης μόνο ως εικονίδια."
-
-#~ msgid "Display toolbar items as text only."
-#~ msgstr "Εμφάνιση αντικειμένων εργαλειοθήκης μόνο ως κείμενο."
-
-#~ msgid ""
-#~ "Display toolbar items with the text label below the icon. Labels are show "
-#~ "for all items."
-#~ msgstr ""
-#~ "Εμφάνιση στοιχείων εργαλειοθήκης με ετικέτα κειμένου κάτω από το "
-#~ "εικονίδια. Ετικέτες προβάλλονται για όλα τα στοιχεία."
-
-#~ msgid ""
-#~ "Display toolbar items with the text label beside the icon. Labels are "
-#~ "only shown for the most important items."
-#~ msgstr ""
-#~ "Εμφάνιση στοιχείων εργαλειοθήκης με ετικέτα κειμένου δίπλα στο εικονίδιο. "
-#~ "Ετικέτες εμφανίζονται για τα πιο σημαντικά στοιχεία."
-
-#~ msgid "Priority text besi_de icons"
-#~ msgstr "Κείμενο _δίπλα στα πιο σημαντικά εικονίδια"
-
-#~ msgid "Text _below icons"
-#~ msgstr "Κείμενο _κάτω από τα εικονίδια"
-
-#~ msgid "Use s_ystem default"
-#~ msgstr "Χρήση _προεπιλογής συστήματος"
-
-#~ msgid "Use the date format common in continental Europe."
-#~ msgstr ""
-#~ "Χρήση της μορφής ημερομηνίας που συνηθίζεται στην ηπειρωτική Ευρώπη."
-
-#~ msgid "Use the date format common in the United Kingdom."
-#~ msgstr "Χρήση της μορφής ημερομηνίας που συνηθίζεται στην Μεγάλη Βρετανία."
-
-#~ msgid "Use the date format common in the United States."
-#~ msgstr "Χρήση της μορφής ημερομηνίας που συνηθίζεται στις ΗΠΑ."
-
-#~ msgid "Use the date format specified by the ISO-8601 standard."
-#~ msgstr "Χρήση μορφής ημερομηνίας σύμφωνα με το πρότυπο  ISO-8601."
-
-#~ msgid "Use the system setting for displaying toolbar items."
-#~ msgstr ""
-#~ "Χρήση ρυθμίσεων συστήματος για την προβολή των στοιχείων της "
-#~ "εργαλειοθήκης."
-
-#~ msgid "_Europe:"
-#~ msgstr "_Ευρώπη:"
-
-#~ msgid "_Icons only"
-#~ msgstr "Μόνο εικ_ονίδια"
-
-#~ msgid "_Text only"
-#~ msgstr "Μόνο _κείμενο"
-
-#~ msgid "_Use system theme colors"
-#~ msgstr "_Χρήση των χρωμάτων του θέματος συστήματος"
-
-#~ msgid "%s at %s (code %s)"
-#~ msgstr "%s σε %s (κωδικός %s)"
-
-#, fuzzy
-#~ msgid "%s at bank code %s"
-#~ msgstr "%s ως %s"
-
-#, fuzzy
-#~ msgid ""
-#~ "Do you really want to overwrite your changes with the contents of the "
-#~ "template \"%s\"?"
-#~ msgstr "Θέλετε σίγουρα να καταχωρήσετε το τιμολόγιο;"
-
-#, fuzzy
-#~ msgid "Comma Separated with Quotes"
-#~ msgstr "Διαχωρισμένο"
-
-#, fuzzy
-#~ msgid "Semicolon Separated with Quotes"
-#~ msgstr "Διαχωρισμένο"
-
-#~ msgid "Delete the currently selected report"
-#~ msgstr "Διαγραφή της τρέχουσας επιλεγμένης αναφοράς"
-
-#~ msgid "Run the currently selected report"
-#~ msgstr "Εκτέλεση της τρέχουσας επιλεγμένης αναφοράς"
-
-#~ msgid "_Run"
-#~ msgstr "_Εκτέλεση"
-
-#~ msgid "Add _Report"
-#~ msgstr "Προσθήκη α_ναφοράς"
-
-#, fuzzy
-#~ msgid "Net Price"
-#~ msgstr "Καθαρή αξία"
-
-#, fuzzy
-#~ msgid "Total Price"
-#~ msgstr "Τελική τιμή"
-
-#, fuzzy
-#~ msgid "Amount Due"
-#~ msgstr "Ποσό οφειλής"
-
-#, fuzzy
-#~ msgid "Invoice number: "
-#~ msgstr "Αριθμός τιμολογίου:"
-
-#, fuzzy
-#~ msgid "Job number: "
-#~ msgstr "Αριθμός εργασίας"
-
-#~ msgid "Custom Reports"
-#~ msgstr "Προσαρμοσμένες αναφορές"
-
-#~ msgid ""
-#~ "Your report \"%s\" has been saved into the configuration file \"%s\"."
-#~ msgstr "Η αναφορά \"%s\" έχει αποθηκευθεί στο αρχείο ρυθμίσεων \"%s\"."
-
-#~ msgid "and"
-#~ msgstr "και"
-
-#~ msgid "Most recent to report"
-#~ msgstr "Πιο πρόσφατα στην αναφορά"
-
-#, fuzzy
-#~ msgid "The most recent recorded price before report date"
-#~ msgstr "Η τιμή που καταχωρήθηκε πιο πρόσφατα"
-
-#~ msgid "FILO"
-#~ msgstr "FILO"
-
-#~ msgid "Use first-in last-out method for basis"
-#~ msgstr "Χρήση μεθόδου LIFO για τον υπολογισμό της τιμής βάσης"
-
-#~ msgid "Enable hyperlinks in reports"
-#~ msgstr "Ενεργοποίηση δεσμών στις αναφορές"
-
-#, fuzzy
-#~ msgid "Welcome to GnuCash 2.4!"
-#~ msgstr "Καλώς ήλθατε στο GnuCash 2.0!"
-
-#~ msgid "The last stable version was "
-#~ msgstr "Η προηγούμενη σταθερή έκδοση ήταν "
-
-#~ msgid "The next stable version will be "
-#~ msgstr "Η επόμενη σταθερή έκδοση θα είναι "
-
-#~ msgid "Built %s from r%s"
-#~ msgstr "Δημιουργήθηκε στις %s από r%s"
-
-#~ msgid "You may not post an invoice with a negative total value."
-#~ msgstr "Δεν μπορείτε να καταχωρήσετε τιμολόγιο με αρνητική συνολική αξία."
-
-#~ msgid ""
-#~ "You may not post an expense voucher with a negative total cash value."
-#~ msgstr ""
-#~ "Δεν επιτρέπεται να καταχωρίσετε παραστατικό εξόδου με αρνητική συνολική "
-#~ "αξία μετρητών."
-
-#~ msgid "Your selected post account, %s, does not exist"
-#~ msgstr "Ο λογαριασμός καταχώρησης  που επιλέξατε. %s, δεν υπάρχει"
-
-#, fuzzy
-#~ msgid ""
-#~ "Days\n"
-#~ "Proximo"
-#~ msgstr ""
-#~ "Ημέρες\n"
-#~ "Proximo"
-
-#~ msgid "What Tax Table should be applied to this customer?"
-#~ msgstr "Ποιός Πίνακας Φόρου πρέπει να εφαρμοστεί σε αυτόν τον πελάτη;"
-
-#~ msgid "What Tax Table should be applied to this vendor?"
-#~ msgstr "Ποιος πίνακας φόρου θα εφαρμόζεται με αυτόν τον προμηθευτή;"
-
-#~ msgid "Reload invoice report"
-#~ msgstr "Επαναφόρτωση αναφοράς τιμολογίου"
-
-#~ msgid "Reload invoice report scheme file"
-#~ msgstr "Επαναφόρτωση αρχείου scheme της αναφοράς"
-
-#~ msgid "Reload receivable report"
-#~ msgstr "Επαναφόρτωση αναφοράς εισπρακτέων"
-
-#~ msgid "Automatic Payment Forward"
-#~ msgstr "Προώθηση αυτόματης πληρωμής"
-
-#~ msgid "You must select a commodity."
-#~ msgstr "Πρέπει να επιλέξετε μία αξία."
-
-#~ msgid ""
-#~ "You must select closing date that is greater than the closing date of the "
-#~ "previous book."
-#~ msgstr ""
-#~ "Πρέπει να επιλέξετε μια ημερομηνία κλεισίματος μεγαλύτερη από αυτήν του "
-#~ "προηγούμενου κλεισίματος βιβλίων."
-
-#~ msgid "You must select closing date that is not in the future."
-#~ msgstr "Πρέπει να επιλέξετε μια μη μελλοντική ημερομηνία κλεισίματος."
-
-#~ msgid "Are you sure you want to cancel the Mortgage/Loan Setup Assistant?"
-#~ msgstr "Είστε σίγουρος για την ακύρωση του οδηγού ρύθμισης δανείου;"
-
-#~ msgid "Please select a valid \"from\" account."
-#~ msgstr "Παρακαλώ επιλέξτε ένα έγκυρο \"from\" λογαριασμό."
-
-#~ msgid "Please select a valid \"to\" account."
-#~ msgstr "Παρακαλώ επιλέξτε ένα έγκυρο \"to\" λογαριασμό."
-
-#~ msgid "Please select a valid \"interest\" account."
-#~ msgstr "Παρακαλώ επιλέξτε ένα έγκυρο \"interest\" λογαριασμό."
-
-#~ msgid "Payment: \"%s\""
-#~ msgstr "Πληρωμή: \"%s\""
-
-#~ msgid "You must enter a valid distribution amount."
-#~ msgstr "Πρέπει να εισάγετε ένα έγκυρο διανεμόμενο ποσό."
-
-#~ msgid "You must enter a distribution amount."
-#~ msgstr "Πρέπει να εισάγετε το μέγεθος διανομής."
-
-#~ msgid "You must either enter a valid price or leave it blank."
-#~ msgstr "Πρέπει να εισάγετε μια έγκυρη τιμή ή αφήστε το κενό;"
-
-#~ msgid "The price must be positive."
-#~ msgstr "Η τιμή πρέπει να είναι θετική."
-
-#~ msgid "You must either enter a valid cash amount or leave it blank."
-#~ msgstr "Πρέπει να εισάγετε ένα έγκυρο ποσό χρημάτων ή να το αφήσετε κενό."
-
-#~ msgid "The cash distribution must be positive."
-#~ msgstr "Η διανομή μετρητών πρέπει να είναι θετική."
-
-#~ msgid "You must select an income account for the cash distribution."
-#~ msgstr "Πρέπει να επιλέξετε ένα λογαριασμό εσόδων για την διανομή χρημάτων."
-
-#~ msgid "You must select an asset account for the cash distribution."
-#~ msgstr ""
-#~ "Πρέπει να επιλέξετε ένα λογαριασμό ενεργητικού για την διανομή χρημάτων."
-
-#~ msgid "New Account (not implemented)"
-#~ msgstr "Νέος λογαριασμός (δεν έχει υλοποιηθεί)"
-
-#~ msgid "Select or add a GnuCash account"
-#~ msgstr "Επιλογή ή προσθήκη λογαριασμού GnuCash"
-
-#~ msgid ""
-#~ "Use Commodity Value\n"
-#~ "1\n"
-#~ "1/10\n"
-#~ "1/100\n"
-#~ "1/1000\n"
-#~ "1/10000\n"
-#~ "1/100000\n"
-#~ "1/1000000"
-#~ msgstr ""
-#~ "Χρήση τιμής αξίας\n"
-#~ "1\n"
-#~ "1/10\n"
-#~ "1/100\n"
-#~ "1/1000\n"
-#~ "1/10000\n"
-#~ "1/100000\n"
-#~ "1/1000000"
-
-#~ msgid "Enter a title for this book."
-#~ msgstr "Εισάγετε ένα τίτλο για αυτό το βιβλίο"
-
-#~ msgid "Enter notes that describe this book."
-#~ msgstr "Εισάγετε σημειώσεις περιγραφής αυτού του βιβλίου "
-
-#~ msgid "Finish Closing Books"
-#~ msgstr "Ολοκλήρωση κλεισίματος βιβλίων"
-
-#~ msgid ""
-#~ "day(s)\n"
-#~ "week(s)\n"
-#~ "month(s)\n"
-#~ "year(s)"
-#~ msgstr ""
-#~ "ημέρα(ες)\n"
-#~ "εβδομάδα(ες)\n"
-#~ "μήνας(ες)\n"
-#~ "έτος(η)"
-
-#~ msgid "Account Information"
-#~ msgstr "Πληροφορίες Λογαριασμού"
-
-#~ msgid ""
-#~ "Annual\n"
-#~ "Semi-annual\n"
-#~ "Tri-annual\n"
-#~ "Quarterly\n"
-#~ "Bi-monthly\n"
-#~ "Monthly\n"
-#~ "Semi-monthly\n"
-#~ "Bi-weekly\n"
-#~ "Weekly\n"
-#~ "Daily (360)\n"
-#~ "Daily (365)"
-#~ msgstr ""
-#~ "Ετήσια\n"
-#~ "Εξάμηνο\n"
-#~ "Τετράμηνο\n"
-#~ "Τρίμηνο\n"
-#~ "Δίμηνο\n"
-#~ "Μηνιαία\n"
-#~ "Μισός μήνας\n"
-#~ "2 βδομάδες\n"
-#~ "Εβδομαδιαία\n"
-#~ "Καθημερινά (360)\n"
-#~ "Καθημερινά (365)"
-
-#~ msgid "Co_mpounding:"
-#~ msgstr "Ανα_τοκισμός:"
-
-#~ msgid "_Effective Date:"
-#~ msgstr "Ημερομηνία _ισχύος:"
-
-#~ msgid "_Initial Payment:"
-#~ msgstr "_Αρχική πληρωμή:"
-
-#~ msgid "_Payments:"
-#~ msgstr "_Πληρωμές:"
-
-#~ msgid "<b>_Mini-Viewer</b>"
-#~ msgstr "<b>_Μίνι προβολή</b>"
-
-#~ msgid "A summary of all of the transactions in the selected lot"
-#~ msgstr "Μια περίληψη όλων των συναλλαγών στο επιλεγμένο πακέτο"
-
-#, fuzzy
-#~ msgid ""
-#~ "Bid\n"
-#~ "Ask\n"
-#~ "Last\n"
-#~ "Net Asset Value\n"
-#~ "Unknown"
-#~ msgstr ""
-#~ "Bid\n"
-#~ "Ask\n"
-#~ "Last\n"
-#~ "Net Asset Value\n"
-#~ "Άγνωστο"
-
-#~ msgid ""
-#~ "Inches\n"
-#~ "Centimeters\n"
-#~ "Millimeters\n"
-#~ "Points"
-#~ msgstr ""
-#~ "Ίντσες\n"
-#~ "Εκατοστά\n"
-#~ "Χιλιοστά\n"
-#~ "Points"
-
-#~ msgid ""
-#~ "Quicken/QuickBooks (tm) US-Letter\n"
-#~ "Deluxe(tm) Personal Checks US-Letter\n"
-#~ "Quicken(tm) Wallet Checks w/ side stub\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Quicken/QuickBooks (tm) US-Letter\n"
-#~ "Deluxe(tm) Personal Checks US-Letter\n"
-#~ "Quicken(tm) Wallet Checks w/ side stub\n"
-#~ "Προσαρμοσμένο"
-
-#~ msgid ""
-#~ "Top\n"
-#~ "Middle\n"
-#~ "Bottom\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Πάνω\n"
-#~ "Μέση\n"
-#~ "Κάτω\n"
-#~ "Προσαρμογή"
-
-#~ msgid "Copy Transaction"
-#~ msgstr "Αντιγραφή συναλλαγής"
-
-#~ msgid "Copy the selected transaction"
-#~ msgstr "Αντιγραφή της επιλεγμένης συναλλαγής"
-
-#~ msgid "Cut Transaction"
-#~ msgstr "Αποκοπή συναλλαγής"
-
-#~ msgid "Dup_licate Transaction..."
-#~ msgstr "Αντί_γραφο συναλλαγής..."
-
-#~ msgid "Edit Exchange Rate"
-#~ msgstr "Διόρθωση Ισοτιμίας"
-
-#~ msgid "Jump"
-#~ msgstr "Μετάβαση"
-
-#~ msgid "Remove Transaction Splits"
-#~ msgstr "Διαγραφή Διαιρέσεων Συναλλαγής"
-
-#~ msgid "Schedule..."
-#~ msgstr "Πρόγραμμα..."
-
-#~ msgid "Sort by Amount"
-#~ msgstr "Ταξινόμηση κατά ποσό"
-
-#~ msgid "Sort by Date"
-#~ msgstr "Ταξινόμηση κατά ημερομηνία"
-
-#~ msgid "Sort by Description"
-#~ msgstr "Ταξινόμηση κατά περιγραφή"
-
-#~ msgid "Sort by Memo"
-#~ msgstr "Ταξινόμηση κατά υπόμνηση"
-
-#~ msgid "Sort by Number"
-#~ msgstr "Ταξινόμηση κατά αριθμό"
-
-#~ msgid "St_yle"
-#~ msgstr "Στ_υλ"
-
-#~ msgid "_Amount"
-#~ msgstr "_Ποσό"
-
-#~ msgid "_Number"
-#~ msgstr "_Αριθμός"
-
-#~ msgid "_Statement Date"
-#~ msgstr "Ημερομηνία αντίγραφου _κινήσεως"
-
-#~ msgid ""
-#~ "1st\n"
-#~ "2nd\n"
-#~ "3rd\n"
-#~ "4th\n"
-#~ "5th\n"
-#~ "6th\n"
-#~ "7th\n"
-#~ "8th\n"
-#~ "9th\n"
-#~ "10th\n"
-#~ "11th\n"
-#~ "12th\n"
-#~ "13th\n"
-#~ "14th\n"
-#~ "15th\n"
-#~ "16th\n"
-#~ "17th\n"
-#~ "18th\n"
-#~ "19th\n"
-#~ "20th\n"
-#~ "21st\n"
-#~ "22nd\n"
-#~ "23rd\n"
-#~ "24th\n"
-#~ "25th\n"
-#~ "26th\n"
-#~ "27th\n"
-#~ "28th\n"
-#~ "29th\n"
-#~ "30th\n"
-#~ "31st\n"
-#~ "Last day of month\n"
-#~ "Last Monday\n"
-#~ "Last Tuesday\n"
-#~ "Last Wednesday\n"
-#~ "Last Thursday\n"
-#~ "Last Friday\n"
-#~ "Last Saturday\n"
-#~ "Last Sunday"
-#~ msgstr ""
-#~ "1η\n"
-#~ "2η\n"
-#~ "3η\n"
-#~ "4η\n"
-#~ "5η\n"
-#~ "6η\n"
-#~ "7η\n"
-#~ "8η\n"
-#~ "9η\n"
-#~ "10η\n"
-#~ "11η\n"
-#~ "12η\n"
-#~ "13η\n"
-#~ "14η\n"
-#~ "15η\n"
-#~ "16η\n"
-#~ "17η\n"
-#~ "18η\n"
-#~ "19η\n"
-#~ "20η\n"
-#~ "21η\n"
-#~ "22η\n"
-#~ "23η\n"
-#~ "24η\n"
-#~ "25η\n"
-#~ "26η\n"
-#~ "27η\n"
-#~ "28η\n"
-#~ "29η\n"
-#~ "30η\n"
-#~ "31η\n"
-#~ "Τελευταία μέρα μήνα\n"
-#~ "Τελευταία Δευτέρα\n"
-#~ "Τελευταία Τρίτη\n"
-#~ "Τελευταία Τετάρτη\n"
-#~ "Τελευταία Πέμπτη\n"
-#~ "Τελευταία Παρασκευή\n"
-#~ "Τελευταίο Σάββατο\n"
-#~ "Τελευταία Κυριακή"
-
-#~ msgid "<b>End</b>"
-#~ msgstr "<b>Και</b>"
-
-#~ msgid "<b>Upcoming</b>"
-#~ msgstr "<b>Επερχόμενοι</b>"
-
-#~ msgid "Creation State"
-#~ msgstr "Κατάσταση δημιουργίας"
-
-#~ msgid ""
-#~ "Current Year\n"
-#~ "Now + 1 Year\n"
-#~ "Whole Loan\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Τρέχων έτος\n"
-#~ "Τώρα + 1 έτος\n"
-#~ "Όλο το δάνειο\n"
-#~ "προσαρμογή"
-
-#~ msgid "Do you..."
-#~ msgstr "Θα θέλατε να..."
-
-#~ msgid ""
-#~ "Fixed Rate\n"
-#~ "3/1 Year ARM\n"
-#~ "5/1 Year ARM\n"
-#~ "7/1 Year ARM\n"
-#~ "10/1 Year ARM"
-#~ msgstr ""
-#~ "Σταθερό επιτόκιο\n"
-#~ "3/1 Year ARM\n"
-#~ "5/1 Year ARM\n"
-#~ "7/1 Year ARM\n"
-#~ "10/1 Year ARM"
-
-#~ msgid "Loan Information"
-#~ msgstr "Πληροφορίες δανείου"
-
-#~ msgid ""
-#~ "No change\n"
-#~ "Use previous weekday\n"
-#~ "Use next weekday"
-#~ msgstr ""
-#~ "Καμμία αλλαγή\n"
-#~ "Προηγούμενη εργάσιμη\n"
-#~ "Επόμενη εργάσιμη"
-
-#~ msgid ""
-#~ "None\n"
-#~ "Once\n"
-#~ "Daily\n"
-#~ "Weekly\n"
-#~ "Semi-Monthly\n"
-#~ "Monthly"
-#~ msgstr ""
-#~ "Καμμία\n"
-#~ "Μια φορά\n"
-#~ "Καθημερινά\n"
-#~ "Εβδομαδιαία\n"
-#~ "2 φορές το μήνα\n"
-#~ "Μηνιαία"
-
-#~ msgid "Press apply to commit these changes."
-#~ msgstr "Πιέστε Εφαρμογή για να εφαρμοσθούν αυτές οι αλλαγές."
-
-#~ msgid "Repayment Type"
-#~ msgstr "Τύπος αποπληρωμής"
-
-#~ msgid "Start Date: "
-#~ msgstr "Ημ/νία Έναρξης: "
-
-#~ msgid ""
-#~ "months\n"
-#~ "years"
-#~ msgstr ""
-#~ "μήνες\n"
-#~ "έτη"
-
-#~ msgid "Set the budget options using this dialog."
-#~ msgstr "Ρύθμιση επιλογών προϋπολογισμού με αυτόν τον διάλογο."
-
-#~ msgid "Case Insensitive?"
-#~ msgstr "Διάκριση πεζών/κεφαλαίων;"
-
-#~ msgid "That GnuCash XML file is already loaded. Please select another file."
-#~ msgstr ""
-#~ "Το αρχείο GnuCash XML είναι ήδη φορτωμένο. Παρακαλώ επιλέξτε ένα άλλο "
-#~ "αρχείο."
-
-#~ msgid ""
-#~ "No files to merge. Please add ones by clicking on 'Load another file'."
-#~ msgstr ""
-#~ "Δεν υπάρχουν αρχεία προς συγχώνευση. Παρακαλώ προσθέστε κάποια κάνοντας "
-#~ "κλικ στο 'Φόρτωμα άλλου αρχείου'."
-
-#~ msgid "Finish changes"
-#~ msgstr "Ολοκλήρωση αλλαγών"
-
-#~ msgid "Update gconf settings - GnuCash"
-#~ msgstr "Ενημέρωση των ρυθμίσεων gconf - Gnucash"
-
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to import at this time. "
-#~ "Do this if you have saved your accounts to separate GnuCash files.\n"
-#~ "\n"
-#~ "Click \"Forward\" to finish loading files and move to the next step of "
-#~ "the GnuCash Datafile import process."
-#~ msgstr ""
-#~ "Κάντε κλικ στο \"Φόρτωμα ενός άλλου αρχείου \" αν έχετε αυτή την στιγμή "
-#~ "και άλλα δεδομένα για εισαγωγή. Κάντε το αυτό αν έχετε αποθηκεύσει τους "
-#~ "λογαριασμούς σας σε ξεχωριστά αρχεία GnuCash.\n"
-#~ "Κάντε κλικ \"Μπροστά\"  για να ολοκληρώσετε το φόρτωμα των αρχείων και "
-#~ "για να προχωρήσετε στο επόμενο βήμα της διαδικασίας εισαγωγής αρχείου "
-#~ "δεδομένων GnuCash."
-
-#~ msgid "Do not merge"
-#~ msgstr "Να μη γίνει συγχώνευση"
-
-#~ msgid "GnuCash data files you have loaded"
-#~ msgstr "Αρχεία δεδομένων GnuCash που έχετε φορτώσει"
-
-#~ msgid "Load another file"
-#~ msgstr "Φόρτωμα άλλου αρχείου"
-
-#~ msgid "Unload selected file"
-#~ msgstr "Αναίρεση φόρτωσης επιλεγμένου αρχείου"
-
-#~ msgid "<b>Current File List</b>"
-#~ msgstr "<b>Τρέχουσα λίστα αρχείου</b>"
-
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to load at this time.\n"
-#~ "\n"
-#~ "Click \"Next\" to finish loading files and move to the next step. "
-#~ msgstr ""
-#~ "Κάντε κλικ  στο \"Φόρτωμα άλλου αρχείου\" αν έχετε αυτή την στιγμή και "
-#~ "άλλα δεδομένα να φορτώσετε.\n"
-#~ "\n"
-#~ "Κάντε κλικ στο  \"Επόμενο\" για να ολοκληρώσετε το φόρτωμα αρχείων και να "
-#~ "προχωρήσετε στο επόμενο βήμα."
-
-#, fuzzy
-#~ msgid "<b>Exchange/Price Information</b>"
-#~ msgstr "Γενικές πληροφορίες"
-
-#~ msgid "To A_mount:"
-#~ msgstr "Στο ποσό:"
-
-#~ msgid "_Exchange Rate:"
-#~ msgstr "_Ισοτιμία:"
-
-#~ msgid "_From:"
-#~ msgstr "Α_πό:"
-
-#~ msgid "_To:"
-#~ msgstr "_Μέχρι:"
-
-#~ msgid ""
-#~ "US (12/31/2001)\n"
-#~ "UK (31/12/2001)\n"
-#~ "Europe (31.12.2001)\n"
-#~ "ISO (2001-12-31)\n"
-#~ "UTC\n"
-#~ "Locale\n"
-#~ "Custom\n"
-#~ msgstr ""
-#~ "US (12/31/2001)\n"
-#~ "UK (31/12/2001)\n"
-#~ "Ευρώπη (31.12.2001)\n"
-#~ "ISO (2001-12-31)\n"
-#~ "UTC\n"
-#~ "Σύστημα\n"
-#~ "Προσαρμογή\n"
-
-#~ msgid "Don't tell me again this session."
-#~ msgstr "Να μην αναφερθεί ξανά σε αυτή τη συνεδρία"
-
-#~ msgid "Don't tell me again."
-#~ msgstr "Να μην αναφερθεί ξανά"
-
-#~ msgid "Remember the answer and don't tell me again this session."
-#~ msgstr ""
-#~ "Απομνημόνευση της απάντησης και να μην αναφερθεί ξανά σε αυτή τη συνεδρία"
-
-#~ msgid "Remember the answer and don't tell me again."
-#~ msgstr "Απομνημόνευση της απάντησης και να μην αναφερθεί ξανά"
-
-#~ msgid "Failed to process file: %s"
-#~ msgstr "Απέτυχε η ανάλυση του αρχείου: %s"
-
-#~ msgid "Failed to open file: %s: %s"
-#~ msgstr "Αποτυχία ανοίγματος αρχείου: %s: %s"
-
-#~ msgid "Add a new transaction to the account"
-#~ msgstr "Προσθήκη νέας συναλλαγής στο λογαριασμό"
-
-#~ msgid "Select an CSV/Fixed-Width file to import"
-#~ msgstr "Επιλογή για εισαγωγή αρχείου CSV/σταθερού-πλάτους"
-
-#, fuzzy
-#~ msgid "Import CSV/Fixed-Width File"
-#~ msgstr "Εισαγωγή αρχείων QIF"
-
-#~ msgid "Import _CSV/Fixed-Width..."
-#~ msgstr "Εισαγωγή  _CSV/Σταθερού-πλάτους..."
-
-#, fuzzy
-#~ msgid " a CSV/Fixed-Width file"
-#~ msgstr "Εισαγωγή αρχείων QIF"
-
-#~ msgid "Other Account"
-#~ msgstr "Άλλος λογαριασμός"
-
-#~ msgid "Period-as-decimal (1,000.00)"
-#~ msgstr "Τελεία για δεκαδικούς (1,000.00)"
-
-#~ msgid "Comma-as-decimal (1.000,00)"
-#~ msgstr "Κόμμα για δεκαδικούς (1.000,00)"
-
-#~ msgid "y-d-m"
-#~ msgstr "y-d-m"
-
-#, fuzzy
-#~ msgid "(no)"
-#~ msgstr "(κάτοχος)"
-
-#~ msgid "You must enter an account name."
-#~ msgstr "Πρέπει να εισάγετε ένα όνομα για το λογαριασμό."
-
-#, fuzzy
-#~ msgid ""
-#~ "No valid customer selected. Click on the Options button to select a "
-#~ "customer."
-#~ msgstr ""
-#~ "Δεν επιλέχθηκε έγκυρο %s. Κάντε κλικ στο κουμπί Επιλογές και επιλέξτε μια "
-#~ "εταιρία."
-
-#, fuzzy
-#~ msgid ""
-#~ "No valid employee selected. Click on the Options button to select an "
-#~ "employee."
-#~ msgstr ""
-#~ "Δεν επιλέχθηκε έγκυρο %s. Κάντε κλικ στο κουμπί Επιλογές και επιλέξτε μια "
-#~ "εταιρία."
-
-#, fuzzy
-#~ msgid ""
-#~ "No valid company selected. Click on the Options button to select a "
-#~ "company."
-#~ msgstr ""
-#~ "Δεν επιλέχθηκε έγκυρο %s. Κάντε κλικ στο κουμπί Επιλογές και επιλέξτε μια "
-#~ "εταιρία."
-
-#~ msgid ""
-#~ "Blue items are exportable to a German Tax XML file. Press Export to "
-#~ "actually export them."
-#~ msgstr ""
-#~ "Τα μπλε στοιχεία μπορούν να εξαχθούν σε αρχείο German Tax XML. Πατήστε "
-#~ "Εξαγωγή για να εξαχθούν τα στοιχεία."
-
-#~ msgid ""
-#~ "No Tax Related accounts were found. Go to the Edit->Tax Options dialog to "
-#~ "set up tax-related accounts."
-#~ msgstr ""
-#~ "Δεν βρέθηκαν λογαριασμοί που σχετίζονται με την φορολογία. Πηγαίνετε στο "
-#~ "μενού Επεξεργασία->Επιλογές φόρου και ρυθμίσετε τους λογαριασμούς που "
-#~ "σχετίζονται με φόρους."
-
-#~ msgid "Asterisk"
-#~ msgstr "Αστερίσκος"
-
-#~ msgid "Set the search path for documentation files"
-#~ msgstr "Ορισμός διαδρομής αναζήτησης για αρχεία τεκμηρίωσης"
-
-#~ msgid "Invalid Entry:  You need to supply %s."
-#~ msgstr "Μη έγκυρη Καταχώρηση:  Πρέπει να δώσετε %s."
-
-#~ msgid "This SX has changed; are you sure you want to cancel?"
-#~ msgstr "Αυτή η ΠΣ έχει αλλάξει, είστε σίγουρος για την ακύρωση;"
-
-#~ msgid "Crea_te in advance, days:"
-#~ msgstr "_Δημιουργία νωρίτερα, ημέρες:"
-
-#~ msgid "R_emind in advance, days:"
-#~ msgstr "_Υπόμνηση πριν, ημέρες:"
-
-#~ msgid "New %s"
-#~ msgstr "Νέο %s"
-
-#~ msgid "item"
-#~ msgstr "τεμάχιο"
-
-#~ msgid ""
-#~ "The job was sent to the bank successfully, but the bank is refusing to "
-#~ "execute the job. Please check the log window for the exact error message "
-#~ "of the bank. The line with the error message contains a code number that "
-#~ "is greater than 9000.\n"
-#~ "\n"
-#~ "Do you want to enter the job again?"
-#~ msgstr ""
-#~ "Η αποστολή την εργασίας προς την τράπεζα έγινε επιτυχώς, αλλά η εκτέλεση "
-#~ "της δεν γίνεται αποδεκτή από την τράπεζα. Παρακαλώ ελέγξτε το παράθυρο "
-#~ "καταγραφών για να δείτε το ακριβές μήνυμα της τράπεζας. Η γραμμή με το "
-#~ "μήνυμα σφάλματος περιέχει ένα κωδικό αριθμό που είναι μεγαλύτερος του "
-#~ "9000.\n"
-#~ "Θέλετε να εισάγετε την εργασία ξανά"
-
-#~ msgid "The two passwords didn't match. Please try again."
-#~ msgstr "Οι δύο κωδικοί δεν ταιριάζουν. Παρακαλώ δοκιμάστε ξανά."
-
-#~ msgid "Choose AqBanking Backend"
-#~ msgstr "Επιλογή συστήματος υποστήριξης  AqBanking"
-
-#~ msgid "Please choose an AqBanking backend to be configured"
-#~ msgstr "Παρακαλώ επιλέξτε για ρύθμιση ένα σύστημα υποστήριξης AqBanking"
-
-#~ msgid "Co_nfigure"
-#~ msgstr "_Ρύθμιση"
-
-#~ msgid "The file %s does not exist. Would you like to create it now?"
-#~ msgstr "Το αρχείο %s δεν υπάρχει. Θέλετε να το δημιουργήσετε τώρα;"
-
-#~ msgid ""
-#~ "The directory for file %s does not exist. Please choose another place for "
-#~ "this file."
-#~ msgstr ""
-#~ "Δεν υπάρχει ο κατάλογος για το αρχείο %s. Παρακαλώ επιλέξτε μια άλλη "
-#~ "τοποθεσία για αυτό το αρχείο."
-
-#~ msgid "Online Banking Version"
-#~ msgstr "Έκδοση Online Banking"
-
-#~ msgid "Start AqBanking Setup Wizard"
-#~ msgstr "Έναρξη οδηγού ρύθμισης AqBanking"
-
-#~ msgid "Enter and confirm your new password"
-#~ msgstr "Εισάγετε και επιβεβαιώσετε τον νέο κωδικό πρόσβασης"
-
-#~ msgid "Enter new Password"
-#~ msgstr "Εισαγωγή νέου συνθηματικού"
-
-#~ msgid "Activate verbose debug messages for Online Banking."
-#~ msgstr ""
-#~ "Ενεργοποίηση αναλυτικών μηνυμάτων αποσφαλμάτωσης για το Online Banking."
-
-#~ msgid "Remember the Online Banking PIN in memory during a session."
-#~ msgstr ""
-#~ "Διατήρηση στην μνήμη  κατά την διάρκεια της συνεδρίας του PIN για το "
-#~ "Online Banking."
-
-#~ msgid ""
-#~ "The PIN you entered was wrong.\n"
-#~ "Do you want to try again?"
-#~ msgstr ""
-#~ "Το PIN που εισάγατε είναι λανθασμένο.\n"
-#~ "Θέλετε να προσπαθήσετε ξανά;"
-
-#~ msgid ""
-#~ "The PIN you entered was wrong.\n"
-#~ "ATTENTION: You have zero further wrong retries left!\n"
-#~ "Do you want to try again?"
-#~ msgstr ""
-#~ "Το PIN που εισάγατε είναι λανθασμένο.\n"
-#~ "ΠΡΟΣΟΧΗ: Δεν έχετε δικαίωμα άλλης λανθασμένης προσπάθειας!\n"
-#~ "Θέλετε να προσπαθήσετε ξανά;"
-
-#~ msgid ""
-#~ "Unfortunately you entered a wrong PIN for too many times. Your chip card "
-#~ "is therefore destroyed. Aborting."
-#~ msgstr ""
-#~ "Δυστυχώς εισάγατε λανθασμένο PIN πάρα πολλές φορές. Η κάρτα (chip "
-#~ "card )σας απενεργοποιήθηκε οριστικά. Εγκατάλειψη. "
-
-#~ msgid ""
-#~ "No chip card has been found in the chip card reader. Do you want to try "
-#~ "again?"
-#~ msgstr ""
-#~ "Δεν βρέθηκε κάρτα στην συσκευή ανάγνωσης καρτών. Θέλετε να προσπαθήσετε "
-#~ "ξανά;"
-
-#~ msgid ""
-#~ "Unfortunately this Online Banking job is not supported by your bank or "
-#~ "for your account. Aborting."
-#~ msgstr ""
-#~ "Δυστυχώς αυτή η Online Banking εργασία δεν υποστηρίζεται από την τράπεζας "
-#~ "σας για τον λογαριασμός σας. Εγκατάλειψη."
-
-#~ msgid ""
-#~ "The server of your bank refused the Online Banking connection. Please try "
-#~ "again later. Aborting."
-#~ msgstr ""
-#~ "Ο εξυπηρετητής της τράπεζας σας αρνήθηκε την σύνδεση Online Banking. "
-#~ "Παρακαλώ προσπαθήστε ξανά αργότερα. Εγκατάλειψη."
-
-#~ msgid ""
-#~ "One of the jobs was sent to the bank successfully, but the bank is "
-#~ "refusing to execute the job. Please check the log window for the exact "
-#~ "error message of the bank. The line with the error message contains a "
-#~ "code number that is greater than 9000.\n"
-#~ "\n"
-#~ "The job has been removed from the queue."
-#~ msgstr ""
-#~ "Μια εργασία εστάλη με επιτυχία στην τράπεζα, όμως η τράπεζα αρνήθηκε να "
-#~ "την εκτελέσει. Παρακαλώ ελέγξτε το παράθυρο καταγραφών για το ακριβές "
-#~ "μήνυμα της τράπεζας. Η γραμμή με το μήνυμα σφάλματος περιέχει ένα κωδικό "
-#~ "αριθμό ο οποίος είναι μεγαλύτερος από το 9000.\n"
-#~ "\n"
-#~ "Η εργασία απομακρύνθηκε από την ουρά."
-
-#~ msgid "Import a CSV file into GnuCash"
-#~ msgstr "Εισαγωγή αρχείου CSV στο GnuCash"
-
-#~ msgid "Import CSV and s_end..."
-#~ msgstr "Εισαγωγή CSV και _αποστολή..."
-
-#~ msgid ""
-#~ "The PIN needs to be at least %d characters long. Do you want to try again?"
-#~ msgstr ""
-#~ "Το PIN πρέπει να απαρτίζεται το λιγότερο από %d  χαρακτήρες. Θέλετε να "
-#~ "προσπαθήσετε ξανά;"
-
-#~ msgid ""
-#~ "You entered %ld characters, but the PIN must be no longer than %d "
-#~ "characters. Do you want to try again?"
-#~ msgstr ""
-#~ "Εισάγατε %ld χαρακτήρες, αλλά το PIN πρέπει να αποτελείται από "
-#~ "περισσότερους από %d χαρακτήρες. Θέλετε να δοκιμάσετε ξανά;"
-
-#~ msgid "CONFIGPATH"
-#~ msgstr "CONFIGPATH"
-
-#~ msgid "Set shared data file search path"
-#~ msgstr "Ορισμός διαδρομής αναζήτησης διαμοιραζομένου αρχείου δεδομένων"
-
-#~ msgid "SHAREPATH"
-#~ msgstr "SHAREPATH"
-
-#~ msgid "Default number of register rows to display in Invoices."
-#~ msgstr ""
-#~ "Προεπιλεγμένος αριθμός γραμμών μητρώου που θα εμφανίζεται στα τιμολόγια."
-
-#~ msgid "The number of rows in an invoice"
-#~ msgstr "Ο αριθμός των γραμμών σε ένα τιμολόγιο"
-
-#~ msgid ""
-#~ "This field sets the number of rows to show in an invoice. It does not "
-#~ "actually affect the display of the contents of the window. It is only "
-#~ "used to set the size of the window when first opened."
-#~ msgstr ""
-#~ "Αυτό το πεδίο ορίζει τον αριθμό των γραμμών που θα εμφανίζονται σε ένα "
-#~ "τιμολόγιο. Δεν περιορίζει την προβολή περιεχομένων του παραθύρου. "
-#~ "Χρησιμοποιείται μόνο για να ορίσει το μέγεθος του παραθύρου όταν αυτό "
-#~ "ανοίγει πρώτη φορά."
-
-#~ msgid "Display this many rows when a register is created."
-#~ msgstr "Εμφάνιση αυτού του αριθμού γραμμών όταν ανοίγει ένα μητρώο."
-
-#, fuzzy
-#~ msgid "Payment rec'd..."
-#~ msgstr "Συχνότητα πληρωμής"
-
-#~ msgid "Current Year Start"
-#~ msgstr "Αρχή τρέχοντος έτους"
-
-#~ msgid "Previous Year Start"
-#~ msgstr "Αρχή προηγούμενου έτους"
-
-#~ msgid "Previous Year End"
-#~ msgstr "Τέλος προηγούμενου έτους"
-
-#~ msgid "End of the Previous Year"
-#~ msgstr "Τέλος του προηγούμενου έτους"
-
-#~ msgid "Start of Financial Period"
-#~ msgstr "Αρχή οικονομικής περιόδου"
-
-#~ msgid "End of Financial Period"
-#~ msgstr "Τέλος οικονομικής περιόδου"
-
-#~ msgid "End of the accounting period, as set in the global preferences"
-#~ msgstr "Τέλος λογιστικής περιόδου, όπως ορίστηκε στις κεντρικές προτιμήσεις"
-
-#~ msgid "End of the current month"
-#~ msgstr "Τέλος τρέχοντος μήνα"
-
-#~ msgid "The beginning of the previous month"
-#~ msgstr "Η αρχή του προηγούμενου μήνα"
-
-#~ msgid "The end of the latest quarterly accounting period"
-#~ msgstr "Το τέλος του τελευταίου λογιστικού τριμήνου"
-
-#~ msgid "Accounts to include"
-#~ msgstr "Λογαριασμοί που θα περιληφθούν"
-
-#~ msgid "Filter Accounts"
-#~ msgstr "Φιλτράρισμα λογαριασμών"
-
-#~ msgid "DOCPATH"
-#~ msgstr "DOCPATH"
-
-#~ msgid "QSF _Invoice..."
-#~ msgstr "_Τιμολόγιο QSF..."
-
-#~ msgid "Export one or more invoices to QSF"
-#~ msgstr "Εξαγωγή ενός ή περισσοτέρων τιμολογίων σε QSF"
-
-#~ msgid "QSF _Customer..."
-#~ msgstr "_Πελάτης QSF..."
-
-#~ msgid "Export one or more customers to QSF"
-#~ msgstr "Εξαγωγή ενός ή περισσοτέρων πελατών σε QSF"
-
-#~ msgid "QSF _Vendor..."
-#~ msgstr "Π_ρομηθευτής QSF..."
-
-#~ msgid "Export one or more vendors to QSF"
-#~ msgstr "Εξαγωγή ενός ή περισσοτέρων προμηθευτών σε QSF"
-
-#~ msgid "QSF _Employee..."
-#~ msgstr "_Υπάλληλος QSF..."
-
-#~ msgid "Export one or more employees to QSF"
-#~ msgstr "Εξαγωγή ενός ή περισσοτέρων υπαλλήλων σε QSF"
-
-#~ msgid "Export Invoices to XML"
-#~ msgstr "Εξαγωγή τιμολογίων σε XML"
-
-#~ msgid "Export Vendors to XML"
-#~ msgstr "Εξαγωγή προμηθευτών σε XML"
-
-#~ msgid "Export Employees to XML"
-#~ msgstr "Εξαγωγή υπαλλήλων σε XML"
-
-#~ msgid "Export Chart of Accounts to QSF XML"
-#~ msgstr "Εξαγωγή του σχεδίου λογαριασμού σε QSF XML"
-
-#~ msgid ""
-#~ "Error: Please resolve all %d conflicts before trying to commit the data."
-#~ msgstr ""
-#~ "Σφάλμα: Παρακαλώ επιλύστε όλες τις %d συγκρούσεις πριν προσπαθήσετε να "
-#~ "καταγράψετε τα δεδομένα."
-
-#~ msgid "Error: the Commit operation failed, error code %d."
-#~ msgstr "Σφάλμα: η διαδικασία καταγραφής απέτυχε, κωδικός σφάλματος %d."
-
-#~ msgid "%i conflict needs to be resolved."
-#~ msgid_plural "%i conflicts need to be resolved."
-#~ msgstr[0] "%i σύγκρουση πρέπει να επιλυθεί."
-#~ msgstr[1] "%i συγκρούσεις πρέπει να επιλυθούν."
-
-#~ msgid "%i: Parameter name: %s "
-#~ msgstr "%i: Όνομα παραμέτρου: %s  "
-
-#~ msgid "Import data : %s "
-#~ msgstr "Εισαγωγή δεδομένων  : %s "
-
-#~ msgid "Original data : %s\n"
-#~ msgstr "Αρχικά δεδομένα : %s\n"
-
-#~ msgid "<b>Contained Accounts</b>"
-#~ msgstr "<b>Λογαριασμοί που περιέχονται</b>"
-
-#~ msgid "<b>Description</b>"
-#~ msgstr "<b>Περιγραφή</b>"
-
-#~ msgid "<b>New Account Currency</b>"
-#~ msgstr "<b>Νόμισμα Νέου Λογαριασμού</b>"
-
-#~ msgid ""
-#~ "If you would like an account to have an opening balance, click on the "
-#~ "account and enter the starting balance in the box on the right. All "
-#~ "accounts except Equity and placeholder accounts may have an opening "
-#~ "balance."
-#~ msgstr ""
-#~ "Αν θέλετε ένας λογαριασμός να έχει αρχικό υπόλοιπο, κάντε κλικ πάνω στον "
-#~ "λογαριασμό και εισάγετε το ποσό του αρχικού υπόλοιπου στο κουτί δεξιά. "
-#~ "Όλοι οι λογαριασμοί εκτός αυτών της καθαρής θέσης και των συγκεντρωτικών "
-#~ "μπορούν να έχουν αρχικό υπόλοιπο."
-
-#~ msgid "This is Sample2."
-#~ msgstr "Αυτό είναι δείγμα2."
-
-#~ msgid "Click to choose the filename and location."
-#~ msgstr "Κάντε κλικ για να επιλέξετε ένα όνομα αρχείου και μια τοποθεσία."
-
-#~ msgid "Export Chart of Accounts"
-#~ msgstr "Εξαγωγή σχεδίου λογαριασμών"
-
-#~ msgid ""
-#~ "Select the date to use and click Export to choose the filename and "
-#~ "location. Future dates are not supported."
-#~ msgstr ""
-#~ "Επιλέξτε την ημερομηνία που θα χρησιμοποιηθεί και κάντε κλικ στο Εξαγωγή "
-#~ "για να διαλέξετε όνομα αρχείου και τοποθεσία. Μελλοντικές ημερομηνίες δεν "
-#~ "υποστηρίζονται."
-
-#~ msgid ""
-#~ "The Chart of Accounts includes the balance for each account, on the date "
-#~ "specified. Note that future dates are not supported."
-#~ msgstr ""
-#~ "Το σχέδιο λογαριασμών περιέχει το υπόλοιπο κάθε λογαριασμού, για μια "
-#~ "ορισμένη ημερομηνία. Σημειώστε ότι δεν υποστηρίζονται μελλοντικές "
-#~ "ημερομηνίες."
-
-#~ msgid ""
-#~ "You can export the Chart of Accounts to a QSF XML file that can be "
-#~ "imported into another GnuCash file or used in other programs."
-#~ msgstr ""
-#~ "Μπορείτε να εξάγετε το σχέδιο λογαριασμών σε ένα αρχείο QSF XML το οποίο "
-#~ "μπορεί να εισαχθεί σε ένα άλλο αρχείο GnuCash ή να χρησιμοποιηθεί σε άλλα "
-#~ "προγράμματα."
-
-#~ msgid "Commit QSF Import Data to data file"
-#~ msgstr "Καταγραφή εισαγόμενων δεδομένων QSF σε αρχείο"
-
-#~ msgid "Please resolve any conflicts in the merge"
-#~ msgstr "Παρακαλώ επιλύστε της συγκρούσεις στην συγχώνευση"
-
-#, fuzzy
-#~ msgid ""
-#~ "Press `Apply' to merge your QSF data into the current GnuCash file.\n"
-#~ "\n"
-#~ "Press `Back' to review your selections.\n"
-#~ "\n"
-#~ "Press `Cancel' to close this dialog without changing your current data "
-#~ "file.\n"
-#~ "\n"
-#~ "REMEMBER: There is no way to undo this final operation! Make sure you "
-#~ "have a backup before clicking 'Apply'."
-#~ msgstr ""
-#~ "Πατήστε 'Τερματισμός' για να δημιουργηθούν οι νέοι λογαριασμοί σας\n"
-#~ "\n"
-#~ "Πατήστε 'Πίσω' για να αναθεωρήσετε τις επιλογές σας.\n"
-#~ "\n"
-#~ "Πατήστε 'Άκυρο' για να μη δημιουργηθούν οι νέοι λογαριασμοί."
-
-#~ msgid "QSF Data Import Setup"
-#~ msgstr "Ρύθμιση εισαγωγής δεδομένων QSF"
-
-#~ msgid "Shows how your QSF data conflicts with existing data in your file."
-#~ msgstr ""
-#~ "Εμφάνιση πως τα QSF δεδομένα σας συγκρούονται με τα υπάρχοντα δεδομένα "
-#~ "του αρχείου σας."
-
-#~ msgid ""
-#~ "This assistant will merge your QSF data into the currently open GnuCash "
-#~ "file.\n"
-#~ "\n"
-#~ "You will be asked how to proceed if some QSF data clashes with the your "
-#~ "existing GnuCash data file.\n"
-#~ "\n"
-#~ "There is NO way to undo this operation! Please ensure you have a backup "
-#~ "of your file BEFORE continuing! You will be given the option to cancel "
-#~ "the merge at all stages until the final merge operation. Once you click "
-#~ "Finish, the new QSF data will be committed to your current data file.\n"
-#~ "\n"
-#~ "There is currently no currency or price support in the merge operation, "
-#~ "the new data will inherit any default currency or you can change the "
-#~ "currency after the merge is complete.\n"
-#~ "\n"
-#~ "Your QSF data is ready to import\n"
-#~ "\n"
-#~ "Click 'Cancel'  if you do not wish to merge your QSF data now."
-#~ msgstr ""
-#~ "Αυτός ο οδηγός θα συγχωνεύσει τα QSF δεδομένα σας με το τρέχον ανοιγμένο "
-#~ "αρχείο GnuCash.\n"
-#~ "\n"
-#~ "Θα ερωτηθείτε για το πως θα χειριστούν κάποιες συγκρούσεις δεδομένων QSF "
-#~ "με τα υπάρχοντα δεδομένα που υπάρχουν στο αρχείο GnuCash.\n"
-#~ "\n"
-#~ "Δεν υπάρχει ΚΑΜΙΑ περίπτωση να αναιρέσετε αυτή την διαδικασία! Παρακαλώ "
-#~ "βεβαιωθείτε ότι διατηρείτε αντίγραφο ασφαλείας του αρχείου σας ΠΡΙΝ "
-#~ "συνεχίσετε! Θα σας δοθεί η επιλογή να ακυρώσετε την συγχώνευση σε όλα τα "
-#~ "βήματα της διαδικασίας. Όταν πατήσετε το Τερματισμός, τα δεδομένα QSF θα "
-#~ "εισαχθούν στο τρέχον αρχείο δεδομένων σας.\n"
-#~ "\n"
-#~ "Προς το παρόν δεν υπάρχει υποστήριξη επιλογής νομίσματος ή τιμών στην "
-#~ "διαδικασία συγχώνευσης, τα νέα δεδομένα θα εκφραστούν στο προεπιλεγμένο "
-#~ "νόμισμα ή μπορείτε να αλλάξετε νόμισμα μετά την ολοκλήρωση της "
-#~ "συγχώνευσης.\n"
-#~ "\n"
-#~ "Τα QSF δεδομένα σας είναι έτοιμα να εισαχθούν\n"
-#~ "\n"
-#~ "Πατήστε 'Ακύρωση' αν δεν θέλετε να συγχωνεύσετε τα QSF δεδομένα σας τώρα."
-
-#~ msgid "ignore the import, leave the original untouched"
-#~ msgstr "αγνοήστε την εισαγωγή, αφήστε τα αρχικά δεδομένα αναλλοίωτα"
-
-#~ msgid "overwrite the original with the import data"
-#~ msgstr "αντικατάσταση των αρχικών από τα εισαχθέντα δεδομένα"
-
-#~ msgid "Auto-Created Transactions Notification"
-#~ msgstr "Ειδοποίηση αυτόματα εκκαθαρισμένων συναλλαγών"
-
-#~ msgid "Create"
-#~ msgstr "Δημιουργία"
-
-#~ msgid "Create as scheduled"
-#~ msgstr "Δημιουργία ως προγραμματισμένης"
-
-#~ msgid "Created Transaction Review"
-#~ msgstr "Επιθεώρηση δημιουργηθείσας συναλλαγής"
-
-#~ msgid "Creating transactions..."
-#~ msgstr "Γίνεται δημιουργία συναλλαγών..."
-
-#~ msgid "Days Away"
-#~ msgstr "Ημέρες μακριά"
-
-#~ msgid "Disposition?"
-#~ msgstr "Προδιάθεση;"
-
-#~ msgid "Obsolete Scheduled Transactions"
-#~ msgstr "Παλιές προγραμματισμένες συναλλαγές"
-
-#~ msgid "Postpone"
-#~ msgstr "Αναβολή"
-
-#~ msgid "Scheduled Transaction"
-#~ msgstr "Προγραμματισμένη συναλλαγή"
-
-#~ msgid "Since Last Run"
-#~ msgstr "Από την Τελευταία Εκτέλεση"
-
-#~ msgid "State"
-#~ msgstr "Κατάσταση"
-
-#~ msgid "Template Transaction (Read-Only)"
-#~ msgstr "Πρότυπο συναλλαγής (Ανάγνωση-μόνο)"
-
-#~ msgid ""
-#~ "The following scheduled transactions have expired. Select those you wish "
-#~ "to delete."
-#~ msgstr ""
-#~ "Οι παρακάτω προγραμματισμένες συναλλαγές έχουν λήξει. Επιλέξτε αυτές που "
-#~ "θέλετε να διαγράψετε."
-
-#~ msgid ""
-#~ "This assistant will walk you through any scheduled transactions that "
-#~ "should be created."
-#~ msgstr ""
-#~ "Αυτός ο οδηγός θα σας βοηθήσει να δημιουργήσετε τις προγραμματισμένες "
-#~ "συναλλαγές που χρειάζονται."
-
-#~ msgid "To-Create Transaction Preparation"
-#~ msgstr "Προετοιμασία Δημιουργίας Συναλλαγής"
-
-#~ msgid "Transaction Reminders"
-#~ msgstr "Υπομνήσεις συναλλαγών"
-
-#~ msgid "Unselect All"
-#~ msgstr "Αποεπιλογή όλων"
-
-#~ msgid "Value:"
-#~ msgstr "Αξία:"
-
-#~ msgid "Variable"
-#~ msgstr "Μεταβλητή"
-
-#~ msgid "Variables"
-#~ msgstr "Μεταβλητές"
-
-#~ msgid "What to do, what to do?"
-#~ msgstr "Τι να κάνω, τι να κάνω;"
-
-#~ msgid "Import a QSF object file"
-#~ msgstr "Εισαγωγή αρχείων αρχείου QSF object"
-
-#~ msgid "Export the chart of accounts for a date with balances as QSF"
-#~ msgstr ""
-#~ "Εξαγωγή του σχεδίου λογαριασμών για μια ημερομηνία με τα υπόλοιπα τους ως "
-#~ "QSF"
-
-#~ msgid "Error: Loading failed, error code %d - %s."
-#~ msgstr "Σφάλμα: Η φόρτωση απέτυχε, κωδικός σφάλματος %d - %s."
-
-#~ msgid "Select the QSF file to import into GnuCash"
-#~ msgstr "Επιλογή του αρχείου QSF για εισαγωγή στο GnuCash"
-
-#~ msgid "Defaults"
-#~ msgstr "Προεπιλεγμένα"
-
-#~ msgid "Transaction _journal"
-#~ msgstr "_Ημερολόγιο συναλλαγών"
-
-#~ msgid "Start of this fiscal year"
-#~ msgstr "Αρχή αυτού του οικονομικού έτους"
-
-#~ msgid "Start of previous fiscal year"
-#~ msgstr "Αρχή του προηγούμενου οικονομικού έτους"
-
-#~ msgid "End of this fiscal year"
-#~ msgstr "Τέλος αυτού του οικονομικού έτους"
-
-#~ msgid "End of previous fiscal year"
-#~ msgstr "Τέλος του προηγούμενου οικονομικού έτους"
-
-#~ msgid "Level of compression to use: 0 for none, 9 for highest."
-#~ msgstr "Επίπεδο συμπίεσης που θα γίνει: 0 για καμμία, 9 για μέγιστη."
-
-#~ msgid "String encoding to use when writing the XML file."
-#~ msgstr "Κωδικοποίηση αλφαριθμητικού όταν γίνεται εγγραφή σε αρχείο XML."
-
-#~ msgid ""
-#~ "QSF defaults to UTF-8. Other encodings are supported by passing the "
-#~ "string encoding in this option."
-#~ msgstr ""
-#~ "Η προεπιλογή του QSF είναι σε UTF-8. Άλλες κωδικοποιήσεις υποστηρίζονται "
-#~ "με τον ορισμό του αλφαριθμητικού κωδικοποίησης σε αυτή την επιλογή."
-
-#~ msgid "Due date:"
-#~ msgstr "Ημερομηνία οφειλής:"
-
-#~ msgid "<h2>Tax Invoice</h2>"
-#~ msgstr "<b>Τιμολόγιο με φόρους</b>"
-
-#~ msgid "<p>This report is designed for customer (sales) invoices only.\n"
-#~ msgstr ""
-#~ "<p>Αυτή η αναφορά είναι σχεδιασμένη μόνο για τιμολόγια προς πελάτες "
-#~ "(πώλησεις).\n"
-
-#~ msgid "Total "
-#~ msgstr "Σύνολο"
-
-#~ msgid "Retained earnings"
-#~ msgstr "Κέρδη εις νέο"
-
-#~ msgid "Retained loss"
-#~ msgstr "Ζημιές εις νέο"
-
-#~ msgid "auto"
-#~ msgstr "αυτόματο"
-
-#~ msgid "one"
-#~ msgstr "ένα"
-
-#~ msgid "two"
-#~ msgstr "δυο"
-
-#~ msgid "sign"
-#~ msgstr "πρόσημο"
-
-#~ msgid "Imbalance-"
-#~ msgstr "Χωρίς ισοζύγιο-"
-
-#~ msgid "Orphan-"
-#~ msgstr "Ορφανό-"
-
-#~ msgid "CSS"
-#~ msgstr "CSS"
-
-#~ msgid "Default CSS"
-#~ msgstr "Προεπιλεγμένο CSS"
-
-#~ msgid "Could not open the file: "
-#~ msgstr "Αδυναμία ανοίγματος αρχείου: "
-
-#~ msgid ". The error is: "
-#~ msgstr ". Το σφάλμα είναι:"
-
-#, fuzzy
-#~ msgid "Transfer To/From Account(s)"
-#~ msgstr "Λογαριασμός μεταφοράς"
-
-#, fuzzy
-#~ msgid "(Converted "
-#~ msgstr "Μετατροπή του αρχείου"
-
-#, fuzzy
-#~ msgid " @ transaction split rate of "
-#~ msgstr "_Αυτή η συναλλαγή"
-
-#, fuzzy
-#~ msgid " on "
-#~ msgstr "είναι την"
-
-#, fuzzy
-#~ msgid " (Account Commodity: "
-#~ msgstr ""
-#~ "\n"
-#~ "Αξία:"
-
-#, fuzzy
-#~ msgid "Item "
-#~ msgstr "τεμάχιο"
-
-#, fuzzy
-#~ msgid "Balance on "
-#~ msgstr "Υπόλοιπο στις"
-
-#~ msgid ":"
-#~ msgstr ":"
-
-#~ msgid "Account: "
-#~ msgstr "Λογαριασμός: "
-
-#, fuzzy
-#~ msgid " For "
-#~ msgstr "Φόρμα"
-
-#~ msgid ": Parameters"
-#~ msgstr ": Παράμετροι"
-
-#, fuzzy
-#~ msgid "Line (Code): "
-#~ msgstr "Κωδικός Τράπεζας:"
-
-#~ msgid ": "
-#~ msgstr ": "
-
-#~ msgid " Line "
-#~ msgstr " Γραμμή"
-
-#, fuzzy
-#~ msgid ", TXF Format "
-#~ msgstr "Μορφή:"
-
-#~ msgid ", Multiple Copies "
-#~ msgstr ", Πολλαπλά αντίγραφα "
-
-#, fuzzy
-#~ msgid "None specified"
-#~ msgstr "Απροσδιόριστο"
-
-#~ msgid "Error Description"
-#~ msgstr "Περιγραφή σφάλματος"
-
-#~ msgid "Subset of accounts"
-#~ msgstr "Υποσύνολο από λογαριασμούς"
-
-#, fuzzy
-#~ msgid "No accounts (none = all accounts)"
-#~ msgstr "Επιλέξτε Λογαριασμούς (κανένας = όλοι)"
-
-#~ msgid "Display full account names"
-#~ msgstr "Εμφάνιση πλήρους ονόματος λογαριασμών"
-
-#~ msgid "Do not display full account names"
-#~ msgstr "Μη εμφάνιση πλήρους ονόματος λογαριασμών"
-
-#, fuzzy
-#~ msgid "Display all Transfer To/From Accounts"
-#~ msgstr "Λογαριασμός μεταφοράς"
-
-#~ msgid "Do not display all Transfer To/From Accounts"
-#~ msgstr "Να μην εμφανίζονται υπόλοιπα γονικών λογαριασμών"
-
-#, fuzzy
-#~ msgid "Display transactions for selected accounts"
-#~ msgstr "Προσθήκη νέας συναλλαγής στο λογαριασμό"
-
-#, fuzzy
-#~ msgid "Do not display transactions for selected accounts"
-#~ msgstr "Εμφάνιση υπολοίπων μητρικών λογαριασμών"
-
-#, fuzzy
-#~ msgid "Do not include transactions outside of selected dates"
-#~ msgstr "Εμφάνιση όλων των συναλλαγών του λογαριασμού"
-
-#, fuzzy
-#~ msgid "Include some transactions outside of selected dates"
-#~ msgstr "Συμπερίληψη υπολογαριασμών όλων των επιλεγμένων λογαριασμών"
-
-#, fuzzy
-#~ msgid "Do not shade alternate transactions"
-#~ msgstr "Αντιγραφή της επιλεγμένης συναλλαγής"
-
-#, fuzzy
-#~ msgid "PriceDB lookups nearest to transaction date"
-#~ msgstr "Εμφάνιση της ημ/νίας συναλλαγής;"
-
-#, fuzzy
-#~ msgid "PriceDB lookups nearest to report end date"
-#~ msgstr "Η τιμή που καταχωρήθηκε την πλησιέστερη στην αναφορά ημερομηνία"

@@ -29,20 +29,19 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr ""
+msgstr "Арабская"
 
 #: ../borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr ""
+msgstr "Балтийская"
 
 #: ../borrowed/goffice/go-charmap-sel.c:72
-#, fuzzy
 msgid "Central European"
-msgstr "Европейский"
+msgstr "Центральноевропейская"
 
 #: ../borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr ""
+msgstr "Китайская"
 
 #: ../borrowed/goffice/go-charmap-sel.c:74
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:242
@@ -50,29 +49,28 @@ msgid "Cyrillic"
 msgstr "Кириллица"
 
 #: ../borrowed/goffice/go-charmap-sel.c:75
-#, fuzzy
 msgid "Greek"
-msgstr "Зеленый"
+msgstr "Греческая"
 
 #: ../borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr ""
+msgstr "Иврит"
 
 #: ../borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
-msgstr ""
+msgstr "Индийская"
 
 #: ../borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr ""
+msgstr "Японская"
 
 #: ../borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr ""
+msgstr "Корейская"
 
 #: ../borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr ""
+msgstr "Турецкая"
 
 #: ../borrowed/goffice/go-charmap-sel.c:81
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:224
@@ -81,12 +79,11 @@ msgstr "Юникод"
 
 #: ../borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr ""
+msgstr "Вьетнамская"
 
 #: ../borrowed/goffice/go-charmap-sel.c:83
-#, fuzzy
 msgid "Western"
-msgstr "Журнал"
+msgstr "Западная"
 
 #: ../borrowed/goffice/go-charmap-sel.c:84
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:60
@@ -98,233 +95,227 @@ msgstr "Другое"
 
 #: ../borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "Арабская (IBM-864)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr ""
+msgstr "Арабская (IBM-864-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "Арабская (ISO-8859-6)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr ""
+msgstr "Арабская (ISO-8859-6-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr ""
+msgstr "Арабская (ISO-8859-6-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:121
 msgid "Arabic (MacArabic)"
-msgstr ""
+msgstr "Арабская (MacArabic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:122
 msgid "Arabic (Windows-1256)"
-msgstr ""
+msgstr "Арабская (Windows-1256)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
-msgstr ""
+msgstr "Армянская (ARMSCII-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:124
-#, fuzzy
 msgid "Baltic (ISO-8859-13)"
-msgstr "ISO-8859-13 (Балтийская)"
+msgstr "Балтийская (ISO-8859-13)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
-msgstr ""
+msgstr "Балтийская (ISO-8859-4)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:126
 msgid "Baltic (Windows-1257)"
-msgstr ""
+msgstr "Балтийская (Windows-1257)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:127
-#, fuzzy
 msgid "Celtic (ISO-8859-14)"
-msgstr "ISO-8859-14 (Кельтская)"
+msgstr "Кельтская (ISO-8859-14)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
-msgstr ""
+msgstr "Центральноевропейская (IBM-852)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:130
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "Центральноевропейская (ISO-8859-2)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:132
 msgid "Central European (MacCE)"
-msgstr ""
+msgstr "Центральноевропейская (MacCE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:134
 msgid "Central European (Windows-1250)"
-msgstr ""
+msgstr "Центральноевропейская (Windows-1250)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:136
 msgid "Chinese Simplified (GB18030)"
-msgstr ""
+msgstr "Китайская упрощённая (GB18030)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:137
 msgid "Chinese Simplified (GB2312)"
-msgstr ""
+msgstr "Китайская упрощённая (GB2312)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:138
 msgid "Chinese Simplified (GBK)"
-msgstr ""
+msgstr "Китайская упрощённая (GBK)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:139
 msgid "Chinese Simplified (HZ)"
-msgstr ""
+msgstr "Китайская упрощённая (HZ)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:140
 msgid "Chinese Simplified (Windows-936)"
-msgstr ""
+msgstr "Китайская упрощённая (Windows-936)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr ""
+msgstr "Китайская традиционная (Big5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr ""
+msgstr "Китайская традиционная (Big5-HKSCS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
-msgstr ""
+msgstr "Китайская традиционная (EUC-TW)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:147
 msgid "Croatian (MacCroatian)"
-msgstr ""
+msgstr "Хорватская (MacCroatian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:149
-#, fuzzy
 msgid "Cyrillic (IBM-855)"
-msgstr "Кириллица"
+msgstr "Кириллическая (IBM-855)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:150
 msgid "Cyrillic (ISO-8859-5)"
-msgstr ""
+msgstr "Кириллическая (ISO-8859-5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:152
 msgid "Cyrillic (ISO-IR-111)"
-msgstr ""
+msgstr "Кириллическая (ISO-IR-111)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:154
-#, fuzzy
 msgid "Cyrillic (KOI8-R)"
-msgstr "Кириллица"
+msgstr "Кириллическая (KOI8-R)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:155
 msgid "Cyrillic (MacCyrillic)"
-msgstr ""
+msgstr "Кириллическая (MacCyrillic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:157
 msgid "Cyrillic (Windows-1251)"
-msgstr ""
+msgstr "Кириллическая (Windows-1251)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
-msgstr ""
+msgstr "Русская (CP-866)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:160
 msgid "Ukrainian (KOI8-U)"
-msgstr ""
+msgstr "Украинская (KOI8-U)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:161
-#, fuzzy
 msgid "Ukrainian (MacUkrainian)"
-msgstr "KOI8-U (Украинская)"
+msgstr "Украинская (MacUkrainian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:163
 msgid "English (ASCII)"
-msgstr ""
+msgstr "Английская (ASCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
-msgstr ""
+msgstr "Фарси (MacFarsi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:166
 msgid "Georgian (GEOSTD8)"
-msgstr ""
+msgstr "Грузинская (GEOSTD8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:167
-#, fuzzy
 msgid "Greek (ISO-8859-7)"
-msgstr "ISO-8859-7 (Греческая)"
+msgstr "Греческая (ISO-8859-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:168
 msgid "Greek (MacGreek)"
-msgstr ""
+msgstr "Греческая (MacGreek)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:169
 msgid "Greek (Windows-1253)"
-msgstr ""
+msgstr "Греческая (Windows-1253)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:170
 msgid "Gujarati (MacGujarati)"
-msgstr ""
+msgstr "Гуджарати (MacGujarati)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:172
 msgid "Gurmukhi (MacGurmukhi)"
-msgstr ""
+msgstr "Гурмухи (MacGurmukhi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr ""
+msgstr "Иврит (IBM-862)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr ""
+msgstr "Иврит (ISO-8859-8-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr ""
+msgstr "Иврит (ISO-8859-8-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr ""
+msgstr "Иврит (MacHebrew)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
-msgstr ""
+msgstr "Иврит (Windows-1255)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
-msgstr ""
+msgstr "Хинди (MacDevanagari)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
-msgstr ""
+msgstr "Исландская (MacIcelandic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:186
 msgid "Japanese (EUC-JP)"
-msgstr ""
+msgstr "Японская (EUC-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:187
 msgid "Japanese (ISO-2022-JP)"
-msgstr ""
+msgstr "Японская (ISO-2022-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:189
 msgid "Japanese (Shift_JIS)"
-msgstr ""
+msgstr "Японская (Shift_JIS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:190
 msgid "Korean (EUC-KR)"
-msgstr ""
+msgstr "Корейская (EUC-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:191
 msgid "Korean (ISO-2022-KR)"
-msgstr ""
+msgstr "Корейская (ISO-2022-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:192
 msgid "Korean (JOHAB)"
-msgstr ""
+msgstr "Корейская (JOHAB)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:193
 msgid "Korean (UHC)"
-msgstr ""
+msgstr "Корейская (UHC)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:194
 #, fuzzy
@@ -333,129 +324,123 @@ msgstr "ISO-8859-10 (Скандинавская)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:195
 msgid "Romanian (MacRomanian)"
-msgstr ""
+msgstr "Румынская (MacRomanian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:197
 msgid "Romanian (ISO-8859-16)"
-msgstr ""
+msgstr "Румынская (ISO-8859-16)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:199
 msgid "South European (ISO-8859-3)"
-msgstr ""
+msgstr "Южноевропейская (ISO-8859-3)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:201
 msgid "Thai (TIS-620)"
-msgstr ""
+msgstr "Тайская (TIS-620)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:202
 msgid "Turkish (IBM-857)"
-msgstr ""
+msgstr "Турецкая (IBM-857)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:203
 msgid "Turkish (ISO-8859-9)"
-msgstr ""
+msgstr "Турецкая (ISO-8859-9)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:204
 msgid "Turkish (MacTurkish)"
-msgstr ""
+msgstr "Турецкая (MacTurkish)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:206
 msgid "Turkish (Windows-1254)"
-msgstr ""
+msgstr "Турецкая (Windows-1254)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:208
-#, fuzzy
 msgid "Unicode (UTF-7)"
-msgstr "Юникод"
+msgstr "Юникод (UTF-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:209
-#, fuzzy
 msgid "Unicode (UTF-8)"
-msgstr "Юникод"
+msgstr "Юникод (UTF-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:210
 msgid "Unicode (UTF-16BE)"
-msgstr ""
+msgstr "Юникод (UTF-16BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:211
 msgid "Unicode (UTF-16LE)"
-msgstr ""
+msgstr "Юникод (UTF-16LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:212
 msgid "Unicode (UTF-32BE)"
-msgstr ""
+msgstr "Юникод (UTF-32BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:213
 msgid "Unicode (UTF-32LE)"
-msgstr ""
+msgstr "Юникод (UTF-32LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:214
-#, fuzzy
 msgid "User Defined"
-msgstr "Имя пользователя"
+msgstr "Определённая пользователем"
 
 #: ../borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
-msgstr ""
+msgstr "Вьетнамская (TCVN)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:217
 msgid "Vietnamese (VISCII)"
-msgstr ""
+msgstr "Вьетнамская (VISCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:218
 msgid "Vietnamese (VPS)"
-msgstr ""
+msgstr "Вьетнамская (VPS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:219
 msgid "Vietnamese (Windows-1258)"
-msgstr ""
+msgstr "Вьетнамская (Windows-1258)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "Визуальный иврит (ISO-8859-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
-msgstr ""
+msgstr "Западная (IBM-850)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:224
 msgid "Western (ISO-8859-1)"
-msgstr ""
+msgstr "Западная (ISO-8859-1)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:225
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "Западная (ISO-8859-15)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:227
 msgid "Western (MacRoman)"
-msgstr ""
+msgstr "Западная (MacRoman)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:228
 msgid "Western (Windows-1252)"
-msgstr ""
+msgstr "Западная (Windows-1252)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:441
-#, fuzzy
 msgid "Locale: "
-msgstr "_Местный:"
+msgstr "Локаль: "
 
 #: ../borrowed/goffice/go-charmap-sel.c:476
-#, fuzzy
 msgid "Conversion Direction"
-msgstr "Преобразование завершено"
+msgstr "Направление преобразования"
 
 #: ../borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr ""
+msgstr "Это значение определяет какой тест iconv выполнить."
 
 #: ../borrowed/goffice/go-optionmenu.c:410
 msgid "Menu"
-msgstr ""
+msgstr "Меню"
 
 #: ../borrowed/goffice/go-optionmenu.c:410
-#, fuzzy
 msgid "The menu of options"
-msgstr "Числовой параметр: %s."
+msgstr "Параметры меню"
 
 #: ../gnucash/gnome/assistant-acct-period.c:190
 msgid "The book was closed successfully."
@@ -2887,9 +2872,8 @@ msgid "Path head does not exist, "
 msgstr ""
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:432
-#, fuzzy
 msgid "Relative"
-msgstr "_Относительно:"
+msgstr "Относительное"
 
 #: ../gnucash/gnome/dialog-vendor.c:214
 msgid ""
@@ -10995,9 +10979,8 @@ msgid "Pixels"
 msgstr ""
 
 #: ../gnucash/gnome-utils/dialog-options.c:3019
-#, fuzzy
 msgid "Percent"
-msgstr "Процент %"
+msgstr "В процентах"
 
 #. Translators: Both %s will be the account separator character; the
 #. resulting string is a demonstration how the account separator
@@ -20766,7 +20749,7 @@ msgstr "Электронная почта"
 
 #: ../gnucash/report/business-reports/aging.scm:789
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: ../gnucash/report/business-reports/aging.scm:789
 msgid "N"
@@ -28113,9 +28096,8 @@ msgid "Fancy Date Format"
 msgstr "Расширенный формат даты"
 
 #: ../libgnucash/app-utils/app-utils.scm:330
-#, fuzzy
 msgid "custom"
-msgstr "Настроенный"
+msgstr "другой"
 
 #: ../libgnucash/app-utils/business-prefs.scm:24
 msgid "Counters"
@@ -29476,1691 +29458,3 @@ msgstr ""
 "Чтобы визуально сравнить на экране содержимое двух вкладок, выберите в одной "
 "из вкладок \"Окно\" -> \"Новое окно со страницей\" из меню, чтобы "
 "продублировать эту вкладку в новом окне."
-
-#~ msgid "Enable debugging mode: increasing logging to provide deep detail."
-#~ msgstr "Включить режим отладки: увеличивает детализацию лога."
-
-#~ msgid ""
-#~ "Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,"
-#~ "error}\""
-#~ msgstr ""
-#~ "Изменение уровня детализации лога в форме: \"log.ger.path={debug,info,"
-#~ "warn,crit,error}\""
-
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from %s rev %s on %s."
-#~ msgstr ""
-#~ "%s\n"
-#~ "Эта копия собрана из %s, ревизия %s. \n"
-#~ "Дата сборки %s."
-
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from rev %s on %s."
-#~ msgstr ""
-#~ "%s\n"
-#~ "Эта копия была собрана из ревизии %s. Дата сборки %s."
-
-#~ msgid ""
-#~ "An error occurred while creating the directory:\n"
-#~ "  %s\n"
-#~ "Please correct the problem and restart GnuCash.\n"
-#~ "The reported error was '%s' (errno %d).\n"
-#~ msgstr ""
-#~ "Произошла ошибка при создании папки:\n"
-#~ "  %s\n"
-#~ "Пожалуйста, исправьте проблему и перезапустите GnuCash.\n"
-#~ "Ошибка: \"%s\" (errno %d).\n"
-
-#~ msgid ""
-#~ "Note: the directory\n"
-#~ "  %s\n"
-#~ "doesn't exist. This is however not fatal.\n"
-#~ msgstr ""
-#~ "Примечание: каталог\n"
-#~ "  %s\n"
-#~ "не существует. Это, однако, не смертельно.\n"
-
-#~ msgid ""
-#~ "The directory\n"
-#~ "  %s\n"
-#~ "exists but cannot be accessed. This program \n"
-#~ "must have full access (read/write/execute) to \n"
-#~ "the directory in order to function properly.\n"
-#~ msgstr ""
-#~ "Папка\n"
-#~ "  %s\n"
-#~ "существует, но недоступна. Данная программа должна \n"
-#~ "иметь к ней полный доступ (чтение/запись/исполнение) \n"
-#~ "для нормального функционирования.\n"
-
-#~ msgid ""
-#~ "The path\n"
-#~ "  %s\n"
-#~ "exists but it is not a directory. Please delete\n"
-#~ "the file and start GnuCash again.\n"
-#~ msgstr ""
-#~ "Путь\n"
-#~ "  %s\n"
-#~ "существует, но не является папкой. Пожалуйста удалите\n"
-#~ "файл и запустите GnuCash заново.\n"
-
-#~ msgid ""
-#~ "An unknown error occurred when validating that the\n"
-#~ "  %s\n"
-#~ "directory exists and is usable. Please correct the\n"
-#~ "problem and restart GnuCash. The reported error \n"
-#~ "was '%s' (errno %d)."
-#~ msgstr ""
-#~ "Возникла неизвестная ошибка при проверке, что папка\n"
-#~ "  %s\n"
-#~ "существует и может быть использована. Пожалуйста, решите\n"
-#~ "проблему и перезапустите GnuCash.\n"
-#~ "Ошибка: \"%s\" (errno %d)."
-
-#~ msgid ""
-#~ "The permissions are wrong on the directory\n"
-#~ "  %s\n"
-#~ "They must be at least 'rwx' for the user.\n"
-#~ msgstr ""
-#~ "Неверные разрешения на папку\n"
-#~ "  %s\n"
-#~ "Они должны быть 'rwx' для пользователя.\n"
-
-#~ msgid "_Price Editor"
-#~ msgstr "Редактор цен"
-
-#~ msgid "General Ledger2"
-#~ msgstr "Главная книга 2"
-
-#~ msgid "General Ledger Report"
-#~ msgstr "Отчёт по главной книге"
-
-#~ msgid "_General Ledger"
-#~ msgstr "_Главная Книга"
-
-#~ msgid "<No information>"
-#~ msgstr "<Нет информации>"
-
-#~ msgid ""
-#~ "If active, the register will be colored as specified by the system theme. "
-#~ "This can be overridden to provide custom colors by editing the gtkrc file "
-#~ "in the users home directory. Otherwise the standard register colors will "
-#~ "be used that GnuCash has always used."
-#~ msgstr ""
-#~ "Если включено, журнал раскрашивается в соответствие с системной темой "
-#~ "оформления. Можно настроить собственные цвета редактируя файл .gtkrc с "
-#~ "домашней папке пользователя. Если опция не включена, то используются "
-#~ "стандартные цвета GnuCash."
-
-#~ msgid ""
-#~ "If activated, delete manually entered stock prices dated earlier than the "
-#~ "specified date. Otherwise only stock prices added by Finance::Quote will "
-#~ "be deleted."
-#~ msgstr ""
-#~ "Если включено, удаляются введённые вручную цены пакетов датированные "
-#~ "ранее указанной даты. Иначе удалены будут только цены, добавленные "
-#~ "Finance::Quote."
-
-#~ msgid "Delete _last price for a stock"
-#~ msgstr "Удалить _последнюю цену пакета акций"
-
-#~ msgid ""
-#~ "If activated, delete all prices before the specified date. Otherwise the "
-#~ "last stock price dated before the date will be kept and all earlier "
-#~ "quotes deleted."
-#~ msgstr ""
-#~ "Если включено, удалять все цены до указанной даты. Иначе последняя цена "
-#~ "пакета, датированная ранее указанной даты, будет сохранена, а все более "
-#~ "ранние котировки удалены."
-
-#~ msgid "Get _Quotes"
-#~ msgstr "Получить _котировки"
-
-#~ msgid "_Delete Account"
-#~ msgstr "_Удалить счет"
-
-#~ msgid "_New Account"
-#~ msgstr "_Новый счет"
-
-# Последнее изменение в %a, %b %e, %Y %H:%M
-#~ msgid "Last modified on %x %X"
-#~ msgstr "Последнее изменение в %x %X"
-
-#~ msgid ""
-#~ "The GnuCash personal finance manager. The GNU way to manage your money!"
-#~ msgstr ""
-#~ "Персональный финансовый менеджер GnuCash. \n"
-#~ "GNU-способ распоряжения вашими деньгами!"
-
-#~ msgid "Version: GnuCash-%s %s (rev %s built %s)"
-#~ msgstr "Версия: Gnucash-%s %s (ревизия %s, дата сборки %s)"
-
-#~ msgid "Version: GnuCash-%s (rev %s built %s)"
-#~ msgstr "Версия: Gnucash-%s (ревизия %s, дата сборки %s)"
-
-#~ msgid "Remember _PIN"
-#~ msgstr "Запомнить _PIN-код"
-
-#~ msgid ""
-#~ "This assistant will help you export the Transactions to a file.\n"
-#~ "\n"
-#~ "Select the settings you require for the file and then click 'Forward' to "
-#~ "proceed or 'Cancel' to Abort Export.\n"
-#~ msgstr ""
-#~ "Этот мастер поможет вам экспортировать проводки в файл.\n"
-#~ "\n"
-#~ "Установите требуемые параметры экспорта и затем нажмите на кнопку \"Вперёд"
-#~ "\" или нажмите \"Отмена\", чтобы прервать экспорт.\n"
-
-#~ msgid "Quotes"
-#~ msgstr "Кавычки"
-
-#~ msgid "Category"
-#~ msgstr "Категория"
-
-#~ msgid "From With Sym"
-#~ msgstr "Списано (с симв. валюты)"
-
-#~ msgid "To Num."
-#~ msgstr "Получено (число)"
-
-#~ msgid "From Num."
-#~ msgstr "Списано (число)"
-
-#~ msgid "From Rate/Price"
-#~ msgstr "Коэффицент зачисления"
-
-#~ msgid ""
-#~ "The rows displayed below had errors which are in the last column. You can "
-#~ "attempt to correct them by changing the configuration."
-#~ msgstr ""
-#~ "Строки, указанные ниже, содержат ошибки, текст которых находится в "
-#~ "последней колонке. Вы можете попытаться исправить их путём изменения "
-#~ "конфигурации."
-
-#~ msgid ""
-#~ "There are problems with the import settings!\n"
-#~ "The date format could be wrong or there are not enough columns set..."
-#~ msgstr ""
-#~ "Настройки импорта заданы некорректно!\n"
-#~ "Это может быть связано с неверным форматом даны или с тем что не все "
-#~ "необходимые колонки заданы"
-
-#~ msgid ""
-#~ "To Change the account, double click on the required account, click "
-#~ "Forward to proceed."
-#~ msgstr ""
-#~ "Для изменения счетов, дважды щёлкните по нужному счету. Нажмите \"Вперед"
-#~ "\", чтобы продолжить"
-
-#~ msgid ""
-#~ "This assistant will help you import a delimited file containing a list of "
-#~ "transactions.\n"
-#~ "\n"
-#~ "All transactions imported will be associated to one account for each "
-#~ "import and if you select the account column, the account in the first row "
-#~ "will be used for all rows.\n"
-#~ "\n"
-#~ "Various options exist for specifying the delimiter as well as a fixed "
-#~ "width option. With the fixed width option, double click on the bar above "
-#~ "the displayed rows to set the column width.\n"
-#~ "\n"
-#~ "There is an option for specifying the start row, end row and an option to "
-#~ "skip alternate rows begining from the start row. These can be used if you "
-#~ "have some header text, a points collected status row or multiple accounts "
-#~ "in the same file."
-#~ msgstr ""
-#~ "Этот мастер поможет вам импортировать файл с разделителями, содержащий "
-#~ "список проводок.\n"
-#~ "\n"
-#~ "Все импортируемые проводки будут привязаны к одному счету для каждой "
-#~ "процедуры импорта  и если вы укажете колонку со счетами, счет, "
-#~ "находящийся в первой строке, будет использован для всех остальных строк.\n"
-#~ "\n"
-#~ "В качестве разделителя колонок вы можете указать различные значения, "
-#~ "включая задание фиксированной ширины колонок. Если вы выбрали режим с "
-#~ "фиксированной шириной, дважды щёлкните по панели над отображаемыми "
-#~ "строками для задания ширины.\n"
-#~ "\n"
-#~ "В настройках импорта также доступно задание начальной и конечной строки "
-#~ "для обработки. Эта возможность будет полезна, если в файле есть строки, "
-#~ "содержащие заголовки, или файл содержит проводки по нескольким счетам."
-
-#~ msgid "Transaction Import Assistant"
-#~ msgstr "Мастер импорта проводок"
-
-#~ msgid "Start import on row "
-#~ msgstr "Начать импорт со строки "
-
-#~ msgid " and stop on row "
-#~ msgstr " и закончить на строке "
-
-#~ msgid "Skip alternate rows from the start row"
-#~ msgstr "Пропустить альтернативные строки от стартовой строки"
-
-#~ msgid "Data type: "
-#~ msgstr "Тип данных: "
-
-#~ msgid "Separated"
-#~ msgstr "Разделенные"
-
-#~ msgid "Step over Account Page if Setup"
-#~ msgstr "Пропустить настройку счёта, если он определён"
-
-#~ msgid "File opening failed."
-#~ msgstr "Не удалось открыть файл."
-
-#~ msgid "Unknown encoding."
-#~ msgstr "Неизвестная кодировка."
-
-#~ msgid "This report has no options."
-#~ msgstr "Этот отчёт не требует настройки."
-
-#~ msgid "Compress prior/later periods"
-#~ msgstr "Сжать периоды до и после"
-
-#~ msgid ""
-#~ "Accumulate columns for periods before and after the current period to "
-#~ "allow focus on the current period."
-#~ msgstr ""
-#~ "Объединить колонки для периодов до и после текущего, чтобы заострить "
-#~ "внимание на последнем."
-
-#~ msgid "Income Barchart"
-#~ msgstr "Гистограмма доходов"
-
-#~ msgid "Expense Barchart"
-#~ msgstr "Гистограмма расходов"
-
-#~ msgid "Liability Barchart"
-#~ msgstr "Гистограмма обязательств"
-
-#~ msgid "Style"
-#~ msgstr "Стиль"
-
-#~ msgid "Report style."
-#~ msgstr "Стиль отчета."
-
-#~ msgid "Display N lines."
-#~ msgstr "Отображать N строк."
-
-#~ msgid "Display 1 line."
-#~ msgstr "Отображать 1 строку."
-
-#~ msgid "Account Substring"
-#~ msgstr "Подстрока счёта"
-
-#~ msgid "Exact Time"
-#~ msgstr "Точное время"
-
-#~ msgid "Sort by exact time."
-#~ msgstr "Сортировать по точному времени."
-
-#~ msgid "Dummy message"
-#~ msgstr "сообщение-заглушка"
-
-#~ msgid "postd"
-#~ msgstr "введено"
-
-#~ msgid "duedate"
-#~ msgstr "оплатить к"
-
-#~ msgid "acct"
-#~ msgstr "счет"
-
-#~ msgid "question"
-#~ msgstr "вопрос"
-
-#~ msgid "Clear the entry"
-#~ msgstr "Очистить запись"
-
-#~ msgid "set true"
-#~ msgstr "истинно"
-
-#~ msgid "You must select a commodity. To create a new one, click \"New\""
-#~ msgstr "Вы должны выбрать товар. Чтобы создать новый, нажмите \"Новый\""
-
-#~ msgid "Owner Name"
-#~ msgstr "Имя владельца"
-
-#~ msgid "Owner ID"
-#~ msgstr "ID владельца"
-
-#~ msgid "UTC"
-#~ msgstr "UTC"
-
-#~ msgid "Dates earlier than 1970 are not supported."
-#~ msgstr "Даты ранее 1970 года не поддерживаются."
-
-#~ msgid "Auto pay on post_ing"
-#~ msgstr "Автоматически оплачивать при вводе"
-
-#~ msgid "_Use system theme colors"
-#~ msgstr "Испол_ьзовать цвета темы оформления системы"
-
-#~ msgid ""
-#~ "If checked, the system color theme will be applied to register windows. "
-#~ "If clear, the original GnuCash register colors will be used."
-#~ msgstr ""
-#~ "Если включено, то журнал будет раскрашен в цвета системной темы. В "
-#~ "противном случае, будут использоваться стандартные цвета журнала GnuCash."
-
-#~ msgid "Retrieve the current online quote"
-#~ msgstr "Получить текущую цену по сети"
-
-#~ msgid "New item"
-#~ msgstr "Новый пункт"
-
-#~ msgid "%s at %s (code %s)"
-#~ msgstr "%s в %s (код %s)"
-
-#~ msgid "%s at bank code %s"
-#~ msgstr "%s в банке с кодом %s"
-
-#~ msgid "Semicolon Separated with Quotes"
-#~ msgstr "Точка с запятой, значения в кавычках"
-
-#~ msgid "Comma Separated with Quotes"
-#~ msgstr "Запятая, значения в кавычках"
-
-#~ msgid "Negative amounts are not allowed."
-#~ msgstr "Отрицательные суммы недопустимы."
-
-#~ msgid "Percentage amount must be between 0 and 100."
-#~ msgstr "Величина процентов должна быть между 0 и 100."
-
-#~ msgid "You must select at least one document or pre-payment to process."
-#~ msgstr ""
-#~ "Вы должны выбрать хотя бы один документ или предоплату для обработки."
-
-#~ msgid "Internal link between invoice and payment lots"
-#~ msgstr "Внутренняя ссылка между счётом-фактурой и платежом"
-
-#~ msgid "Net Price"
-#~ msgstr "Цена без налогов"
-
-#~ msgid "Total Price"
-#~ msgstr "Итоговая цена"
-
-#~ msgid "Amount Due"
-#~ msgstr "Сумма задолженности"
-
-#~ msgid "Invoice number: "
-#~ msgstr "Номер счёта-фактуры: "
-
-#~ msgid "Job number: "
-#~ msgstr "Номер операции: "
-
-#~ msgid "Job name: "
-#~ msgstr "Название операции: "
-
-#~ msgid "Set the prefix path for gconf queries"
-#~ msgstr "Установка префикса пути для поиска файлов gconf"
-
-#~ msgid "GCONFPATH"
-#~ msgstr "GCONFPATH"
-
-#, fuzzy
-#~ msgid "Credit note"
-#~ msgstr "Кредитные линии"
-
-#, fuzzy
-#~ msgid ""
-#~ "You must enter the amount of the payment. The payment amount must not be "
-#~ "zero."
-#~ msgstr "Вы должны ввести сумму платежа, которая должна быть больше нуля."
-
-#, fuzzy
-#~ msgid "Customer Credit Note"
-#~ msgstr "Отчёт клиента"
-
-#, fuzzy
-#~ msgid "Vendor Credit Note"
-#~ msgstr "Отчёт поставщика"
-
-#, fuzzy
-#~ msgid "Employee Credit Note"
-#~ msgstr "Отчёт работника"
-
-#~ msgid "Remo_ve Transaction Splits"
-#~ msgstr "_Удалить части проводки"
-
-#~ msgid "_Shift Transaction Forward"
-#~ msgstr "Сдвинуть проводку в_перёд"
-
-#~ msgid "Account Transaction Report"
-#~ msgstr "Отчёт о проводках по счёту"
-
-#~ msgid "Order of columns in the dialog"
-#~ msgstr "Порядок столбцов в диалоге"
-
-#~ msgid "Show the Full Name column"
-#~ msgstr "Показывать столбец полных названий"
-
-#~ msgid "Show the ISIN/CUSIP Code (Exchange Specific Data) column"
-#~ msgstr "Показывать столбец кодов ISIN/CUSIP (код на бирже)"
-
-#~ msgid "Show the Namespace column"
-#~ msgstr "Показать столбец видов"
-
-#~ msgid "Show the Print Name column"
-#~ msgstr "Показывать столбец выводимых имен"
-
-#~ msgid "Show the Quote Flag column"
-#~ msgstr "Показать столбец флагов котировки"
-
-#~ msgid "Show the Quote Source column"
-#~ msgstr "Показать столбец источников котировок"
-
-#~ msgid "Show the Quote Timezone column"
-#~ msgstr "Показать столбец часовых поясов квот"
-
-#~ msgid "Show the Unique Name column"
-#~ msgstr "Показать столбец уникальных имен"
-
-#~ msgid "Show the fraction column"
-#~ msgstr "Показать столбец долей"
-
-#~ msgid "Show the name column"
-#~ msgstr "Показать столбец имен"
-
-#~ msgid "Show the symbol column"
-#~ msgstr "Показать столбец символов"
-
-#~ msgid ""
-#~ "This setting contains a list of names which controls the order in which "
-#~ "the columns are listed in the dialog. Names may be reordered or removed "
-#~ "from this list to control which columns appear in the dialog and in what "
-#~ "order."
-#~ msgstr ""
-#~ "Этот параметр содержит список названий, определяющих порядок, в котором "
-#~ "столбцы отображаются в диалоге. Названия могут быть переставлены или "
-#~ "удалены, чтобы столбцы отображались в нужном порядке."
-
-#~ msgid "Columns used for sorting"
-#~ msgstr "Столбцы, используемые для сортировки"
-
-#~ msgid ""
-#~ "The X,Y coordinates of the top left corner of the window when it was last "
-#~ "closed."
-#~ msgstr ""
-#~ "Координаты X и Y левого верхнего угла диалога при последнем его закрытии."
-
-#~ msgid "The width and size of the window when it was last closed."
-#~ msgstr "Ширина и высота окна диалога при последнем его закрытии."
-
-#~ msgid ""
-#~ "This setting indicates how the key column is sorted. Possible values for "
-#~ "this setting are 'ascending' and 'descending'."
-#~ msgstr ""
-#~ "Эта настройка указывает, как упорядочен ключевой столбец. Возможные "
-#~ "значения - \"по возрастанию\" и \"по убыванию\". "
-
-#~ msgid ""
-#~ "This setting indicates which column in the tree is used for sorting. "
-#~ "Possible values for this setting are the name of any column in this "
-#~ "window (see the column_order key) or the keyword 'none'."
-#~ msgstr ""
-#~ "Этот параметр показывает, какой столбец в дереве используется для "
-#~ "сортировки. Возможные его значения - название любого столбца в диалоге "
-#~ "или \"ничего\"."
-
-#~ msgid "Window position"
-#~ msgstr "Расположение окна"
-
-#~ msgid "Show the Price column"
-#~ msgstr "Показать столбец цен"
-
-#~ msgid "Show the Source column"
-#~ msgstr "Показать столбец источников"
-
-#~ msgid "Show the Type column"
-#~ msgstr "Показать столбец типов"
-
-#~ msgid "Show the date column"
-#~ msgstr "Показать столбец дат"
-
-#~ msgid "This setting enables the Price column."
-#~ msgstr "Этот параметр включает отображение столбца цен."
-
-#~ msgid "This setting enables the Source column."
-#~ msgstr "Этот параметр включает отображение столбца источников."
-
-#~ msgid "This setting enables the Type column."
-#~ msgstr "Этот параметр включает отображение столбца типов."
-
-#~ msgid "This setting enables the commodity column."
-#~ msgstr "Этот параметр включает отображение столбца товаров."
-
-#~ msgid "This setting enables the currency column."
-#~ msgstr "Этот параметр включает отображение столбца валют."
-
-#~ msgid ""
-#~ "This value contains the Y coordinate for the bottom edge of the check. "
-#~ "This coordinate is from the bottom edge of the sheet of paper."
-#~ msgstr ""
-#~ "Это значения является координатой Y нижнего края чека. Она отсчитывается "
-#~ "от нижнего края листа бумаги."
-
-#~ msgid "Accounts to reverse the balance"
-#~ msgstr "Счета для обращения баланса"
-
-#~ msgid "Default view style for new register"
-#~ msgstr "Стиль отображения нового реестра по умолчанию"
-
-#~ msgid "Enables Euro support"
-#~ msgstr "Включить поддержку Евро"
-
-#~ msgid "Enables additional support for the European Union EURO currency."
-#~ msgstr "Включить поддержку Евро - валюты Европейского сообщества."
-
-#~ msgid "How to interpret dates without a year"
-#~ msgstr "Как воспринимать даты без года"
-
-#~ msgid "Labels on toolbar buttons"
-#~ msgstr "Подписи к кнопкам панели инструментов"
-
-#~ msgid "Position of the notebook tabs"
-#~ msgstr "Положение закладок блокнота"
-
-#, fuzzy
-#~ msgid "Show the Calendar buttons"
-#~ msgstr "Показать столбец имен"
-
-#, fuzzy
-#~ msgid "Show the Date Entered"
-#~ msgstr "Показать столбец дат"
-
-#~ msgid "Source of default account currency"
-#~ msgstr "Источник умолчальной валюты счета"
-
-#~ msgid "Source of default report currency"
-#~ msgstr "Источник умолчальной валюты отчета"
-
-#, fuzzy
-#~ msgid "The number of Characters needed"
-#~ msgstr "Показать количество акций"
-
-#, fuzzy
-#~ msgid "The number of transactions displayed"
-#~ msgstr "Числ_о проводок:"
-
-#~ msgid ""
-#~ "This setting controls how the labels on toolbar buttons are shown. If set "
-#~ "to \"system\" then GnuCash will use the desktop setting for how to draw "
-#~ "toolbar buttons. If set to \"icon\" then only icons will be show on "
-#~ "toolbar buttons.. If set to \"text\" only the labels will be shown. If "
-#~ "set to \"both\" then both icons and labels will be shown. If set to "
-#~ "\"both-horiz\" then icons will be shown for all buttons with labels added "
-#~ "on important buttons."
-#~ msgstr ""
-#~ "Этот параметр определяет способ отображения текста на кнопках панели "
-#~ "инструментов. Если выбрано \"системные установки\", то GnuCash будет "
-#~ "использовать настройки среды. Если выбрано \"текст под иконками\", то под "
-#~ "всеми иконками будет выводиться текст. Если выбрано \"текст слева для "
-#~ "важных кнопок\", то текст будет выводиться справа, но только для важных "
-#~ "кнопок.Если выбрано \"только иконки\", то текст не будет выводиться "
-#~ "вообще. Если выбрано \"только текст\", то иконки не будут отображаться "
-#~ "вообще."
-
-#~ msgid ""
-#~ "This setting specifies the default currency used for reports if the "
-#~ "currency_choice setting is set to \"other\". This field must contain the "
-#~ "three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
-#~ msgstr ""
-#~ "Этот параметр определяет валюту по умолчанию, используемую для отчетов, "
-#~ "если параметр \"Выбор валюты\" выставлен в значение \"другая\". Это поле "
-#~ "должно содержать три буквы кода валюты, соответствующие стандарту ISO "
-#~ "4217 (например: USD, GBP, RUB)."
-
-#~ msgid ""
-#~ "This setting contains the width of the named column in the most recently "
-#~ "closed register window. Changing these values will change the sizes of "
-#~ "the columns in the next opened register"
-#~ msgstr ""
-#~ "Этот параметр содержит ширину именованого столбца в последнем закрытом "
-#~ "окне журнала. Изменение этих значений изменит размеры столбцов в "
-#~ "следующем открытом журнале"
-
-#~ msgid "Width of a column in the dialog"
-#~ msgstr "Ширина столбца в диалоге"
-
-#~ msgid ""
-#~ "Error: Failure saving state file.\n"
-#~ "  %s"
-#~ msgstr ""
-#~ "Ошибка: Невозможно сохранить состояние в файл\n"
-#~ "  %s"
-
-#, fuzzy
-#~ msgid ""
-#~ "When you click Apply, GnuCash will modify your ~/.gconf.path file and "
-#~ "restart the gconf backend. There will be a short delay before GnuCash is "
-#~ "loaded."
-#~ msgstr ""
-#~ "После нажатия на \"Применить\", GnuCash изменить ваш файл ~/.gconf.path и "
-#~ "перезапустит gconf."
-
-#, fuzzy
-#~ msgid ""
-#~ "When you click Apply, GnuCash will install the gconf data into your local "
-#~ "~/.gconf file and restart the gconf backend. The %s script must be found "
-#~ "in your search path for this to work correctly."
-#~ msgstr ""
-#~ "Когда будет нажата кнопка \"Применить\", GnuCash установит данные gconf в "
-#~ "локальный файл ~/.gconf и перезапустить gconf. Скрипт %s должен "
-#~ "присутствовать в переменной окружения PATH, чтобы операция завершилась "
-#~ "успешно."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to correct the problem by yourself. When you click Apply, "
-#~ "GnuCash will exit. Please correct the problem and restart the gconf "
-#~ "backend with the command 'gconftool-2 --shutdown' before restarting "
-#~ "GnuCash. If you have not already done so, you can click the Back button "
-#~ "and copy the necessary text from the dialog."
-#~ msgstr ""
-#~ "Был выбран ручной способ решения проблемы. Когда будет нажата кнопка "
-#~ "\"Применить\", GnuCash завершит работу. После исправления проблемы до "
-#~ "запуска GnuCash нужно перезапустить gconf командой \"gconftool-2 --"
-#~ "shutdown\". Если это еще не сделано, то есть возможность нажать кнопку "
-#~ "\"Назад\" и скопировать необходимый текст."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to correct the problem by yourself. When you click Apply, "
-#~ "GnuCash will exit. Please run the %s script which will install the "
-#~ "configuration data and restart the gconf backend."
-#~ msgstr ""
-#~ "Был выбран ручной способ решения проблемы. Когда будет нажата кнопка "
-#~ "\"Применить\", GnuCash завершит работу. Необходимо запустить скрипт %s, "
-#~ "который установит конфигурационные данные и перезапустит gconf."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have already corrected the problem and restarted the gconf backend "
-#~ "with the command 'gconftool-2 --shutdown'. When you click Apply, there "
-#~ "will be a short delay before GnuCash is loaded."
-#~ msgstr ""
-#~ "Проблема уже решена и gconf перезапущен командой \"gconftool-2 --shutdown"
-#~ "\". После нажатия на \"Применить\" GnuCash продолжит загрузку."
-
-#, fuzzy
-#~ msgid "Withdrawl"
-#~ msgstr "Снято"
-
-#~ msgid ""
-#~ "<b>Cannot find default values</b>\n"
-#~ "\n"
-#~ "The configuration data used to specify default values for GnuCash cannot "
-#~ "be found in the default system locations. Without this data GnuCash will "
-#~ "still operate properly but it may require some extra time to setup. Do "
-#~ "you wish to setup the configuration data?"
-#~ msgstr ""
-#~ "<b>Невозможно найти умолчальные значения</b>\n"
-#~ "\n"
-#~ "Конфигурационные данные определяющие значения по умолчанию в GnuCash не "
-#~ "могут быть найдены в стандартном месте. Без этих данных GnuCash будет "
-#~ "работать правильно, но это может потребовать дополнительное время на "
-#~ "настройку. Настроить конфигурационные данные?"
-
-#, fuzzy
-#~ msgid "Apply Changes"
-#~ msgstr "Изменение значение"
-
-#, fuzzy
-#~ msgid "Choose Method"
-#~ msgstr "Способ выбора"
-
-#~ msgid "GnuCash will install the data for you."
-#~ msgstr "GnuCash установить данные."
-
-#~ msgid "GnuCash will update the system path for you."
-#~ msgstr "GnuCash обновит системные пути."
-
-#, fuzzy
-#~ msgid "Install Into Home Directory"
-#~ msgstr "Установить в домашний каталог"
-
-#~ msgid ""
-#~ "Please add the following lines at the end of your ~/.gconf.path file:"
-#~ msgstr "Пожалуйста, добавьте следующие строки в конец файла ~/.gconf.path:"
-
-#~ msgid "Please run the following commands:"
-#~ msgstr "Пожалуйста, выполните следующие команды:"
-
-#~ msgid "S_kip"
-#~ msgstr "Пропустить"
-
-#, fuzzy
-#~ msgid ""
-#~ "The configuration data is stored in a non-standard location. There are "
-#~ "two methods that can be used to make this data visible to GnuCash. The "
-#~ "first is to modify a system search path to include the data location. The "
-#~ "second is to copy the data into your home directory."
-#~ msgstr ""
-#~ "Конфигурационные данных размещены в нестандартном месте. Есть два способа "
-#~ "сделать их видимыми GnuCash. Первый - изменить системные пути поиска, "
-#~ "включив путь размещения данных. Второй - скопировать данный в домашнюю "
-#~ "директорию."
-
-#~ msgid ""
-#~ "The configuration data used by GnuCash to specify its default values "
-#~ "cannot be found in the default system locations. Without this data "
-#~ "GnuCash will still operate properly, but it may require some extra time "
-#~ "to set up."
-#~ msgstr ""
-#~ "Конфигурационные данные определяющие значения по умолчанию в GnuCash не "
-#~ "могут быть найдены в стандартном месте. Без этих данных GnuCash будет "
-#~ "работать правильно, но это может потребовать дополнительное время на "
-#~ "настройку."
-
-#~ msgid "The data has _already been installed in another window"
-#~ msgstr "Данные уже были установлены в другом окне"
-
-#~ msgid "The search path has _already been updated in another window"
-#~ msgstr "Пути поиска уже были обновлены в другом окне"
-
-#, fuzzy
-#~ msgid ""
-#~ "This method will install the GnuCash default settings and descriptions "
-#~ "into the .gconf directory within your home directory. The disadvantage to "
-#~ "this method is that future updates to GnuCash will not update your local "
-#~ "settings to add in new keys."
-#~ msgstr ""
-#~ "Этот метод установит умолчальные настройки и описания в директорию ."
-#~ "gconf, находящуюся в домашней директории. Недостаток этого метода - при "
-#~ "будущих обновлениях GnuCash не будут обновляться локальные настройки."
-
-#, fuzzy
-#~ msgid ""
-#~ "This method will modify the file .gconf.path in your home directory. It "
-#~ "will add the GnuCash install directory to this path so that GnuCash can "
-#~ "find its default settings and their descriptions."
-#~ msgstr ""
-#~ "Этот метод изменит файл .gconf.path в вашей домашней директории, добавит "
-#~ "в него путь установки GnuCash, что позволит GnuCash найти свои настройки "
-#~ "и описания."
-
-#, fuzzy
-#~ msgid "Update GnuCash Configuration Data"
-#~ msgstr "Обновить настройки GnuCash"
-
-#~ msgid "Update GnuCash configuration data"
-#~ msgstr "Обновить настройки GnuCash"
-
-#, fuzzy
-#~ msgid "Update Search Path"
-#~ msgstr "Обновить путь поиска"
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to install the configuration data used by GnuCash into "
-#~ "the ~/.gconf directory. GnuCash can do this for you, or tell you how to "
-#~ "do it yourself."
-#~ msgstr ""
-#~ "Была выбрана установка конфигурационных данных, используемых GnuCash, в "
-#~ "директорию ~/.gconf. GnuCash может сделать это сам или рассказать, как "
-#~ "это сделать вручную."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to update the system search path. GnuCash can do this for "
-#~ "you, or it can tell you how to do it yourself."
-#~ msgstr ""
-#~ "Вы выбрали обновление системных путей поиска. GnuCash может сделать это "
-#~ "самостоятельно или рассказать, как сделать вручную."
-
-#, fuzzy
-#~ msgid ""
-#~ "You will then need to restart the gconf backend with the command "
-#~ "'gconftool-2 --shutdown'."
-#~ msgstr ""
-#~ "Вам тогда потребуется перезапустить gconf командой\n"
-#~ "\"gconftool-2 --shutdown\"."
-
-#~ msgid "_GnuCash installs the data"
-#~ msgstr "GnuCash _устанавливает данные"
-
-#~ msgid "_GnuCash updates the search path"
-#~ msgstr "GnuCash о_бновляет путь поиска"
-
-#~ msgid "_Install into home directory"
-#~ msgstr "_Установить в домашний каталог"
-
-#~ msgid "_Setup"
-#~ msgstr "_Настроить"
-
-#~ msgid "_Update search path"
-#~ msgstr "_Обновить путь поиска"
-
-#~ msgid "_You install the data yourself"
-#~ msgstr "_Вы устанавливаете данные самостоятельно"
-
-#~ msgid "_You update the search path yourself"
-#~ msgstr "_Вы обновляете путь поиска самостоятельно"
-
-#~ msgid "<b>Toolbar Style</b>"
-#~ msgstr "<b>Стиль панели инструментов</b>"
-
-#~ msgid "Display toolbar items as icons only."
-#~ msgstr "Отображать только иконки в панели инструментов."
-
-#~ msgid "Display toolbar items as text only."
-#~ msgstr "Отображать только текст в панели инструментов."
-
-#~ msgid ""
-#~ "Display toolbar items with the text label below the icon. Labels are show "
-#~ "for all items."
-#~ msgstr ""
-#~ "Отображать элементы панели инструментов в виде иконок с подписью внизу. "
-#~ "Подписи показываются для всех элементов."
-
-#~ msgid ""
-#~ "Display toolbar items with the text label beside the icon. Labels are "
-#~ "only shown for the most important items."
-#~ msgstr ""
-#~ "Отображать элементы панели инструментов в виде иконок с подписью, "
-#~ "располагаемой рядом. Подписи показываются только для наиболее важных "
-#~ "элементов."
-
-#~ msgid "Priority text besi_de icons"
-#~ msgstr "Текст _рядом с важными иконками"
-
-#~ msgid "Text _below icons"
-#~ msgstr "Текст _под иконками"
-
-#~ msgid "Use s_ystem default"
-#~ msgstr "Использовать _системные установки по умолчанию"
-
-#~ msgid "Use the date format common in continental Europe."
-#~ msgstr "Использовать формат даты, принятый в континентальной Европе."
-
-#~ msgid "Use the date format common in the United Kingdom."
-#~ msgstr "Использовать формат даты, принятый в Соединенном Королевстве."
-
-#~ msgid "Use the date format common in the United States."
-#~ msgstr "Использовать формат даты, принятый в Соединенных Штатах Америки."
-
-#~ msgid "Use the date format specified by the ISO-8601 standard."
-#~ msgstr "Использовать формат даты, соответствующий стандарту ISO-8601."
-
-#~ msgid "Use the system setting for displaying toolbar items."
-#~ msgstr ""
-#~ "Использовать системные настройки для отображения элементов панели "
-#~ "инструментов."
-
-#~ msgid "_Europe:"
-#~ msgstr "_Европейский:"
-
-#~ msgid "_Icons only"
-#~ msgstr "Только _иконки"
-
-#~ msgid "_Text only"
-#~ msgstr "Только _текст"
-
-#~ msgid ""
-#~ "Do you really want to overwrite your changes with the contents of the "
-#~ "template \"%s\"?"
-#~ msgstr "Желаете перезаписать изменения содержимым шаблона \"%s\"?"
-
-#~ msgid "Delete the currently selected report"
-#~ msgstr "Удалить выбранный отчёт"
-
-#~ msgid "Run the currently selected report"
-#~ msgstr "Выполнить текущий отчёт"
-
-#~ msgid "_Run"
-#~ msgstr "_Выполнить"
-
-#~ msgid "Add _Report"
-#~ msgstr "Добавить _отчёт"
-
-#~ msgid "Custom Reports"
-#~ msgstr "Пользовательские отчёты"
-
-#~ msgid ""
-#~ "Your report \"%s\" has been saved into the configuration file \"%s\"."
-#~ msgstr "Отчёт \"%s\" был сохранён в конфигурационном файле \"%s\"."
-
-#~ msgid "and"
-#~ msgstr "и"
-
-#~ msgid "Most recent to report"
-#~ msgstr "Последняя перед отчетом"
-
-#~ msgid "The most recent recorded price before report date"
-#~ msgstr "Последняя цена, записанная перед датой отчёта"
-
-#~ msgid "FILO"
-#~ msgstr "FILO"
-
-#~ msgid "Use first-in last-out method for basis"
-#~ msgstr "Использовать метод \"Первым пришел - последним уйдешь\""
-
-#~ msgid "Enable hyperlinks in reports"
-#~ msgstr "Разрешить ссылки в отчётах"
-
-#~ msgid "Welcome to GnuCash 2.4!"
-#~ msgstr "Добро пожаловать в GnuCash 2.4!"
-
-#~ msgid "The last stable version was "
-#~ msgstr "Последняя стабильная версия была "
-
-#~ msgid "The next stable version will be "
-#~ msgstr "Следующая стабильная версия будет "
-
-#~ msgid "Built %s from r%s"
-#~ msgstr "Сборка %s (r%s)"
-
-#~ msgid "You may not post an invoice with a negative total value."
-#~ msgstr "Нельзя ввести счёт-фактуру с отрицательной суммой."
-
-#~ msgid ""
-#~ "You may not post an expense voucher with a negative total cash value."
-#~ msgstr "Вы не можете ввести товарный чек с отрицательной суммой."
-
-#~ msgid "Your selected post account, %s, does not exist"
-#~ msgstr "Выбранный счёт для зачисления %s не существует"
-
-#~ msgid ""
-#~ "Days\n"
-#~ "Proximo"
-#~ msgstr ""
-#~ "Дней\n"
-#~ "Следующего месяца"
-
-#~ msgid "What Tax Table should be applied to this customer?"
-#~ msgstr "Какая таблица налогов должна быть применена к этому клиенту?"
-
-#, fuzzy
-#~ msgid ""
-#~ "The invoice being paid.\n"
-#~ "\n"
-#~ "Note that is field is optional. If you leave it blank, GnuCash will "
-#~ "automatically assign the payment to the first unpaid invoice for this "
-#~ "company."
-#~ msgstr ""
-#~ "Оплаченный счёт-фактура.\n"
-#~ "\n"
-#~ "Это поле не обязательно к заполнению. Если оставить его пустым, GnuCash "
-#~ "автоматически присвоит его первому неоплаченному счёту этой компании."
-
-#~ msgid "What Tax Table should be applied to this vendor?"
-#~ msgstr "Какая таблица налогов используется для этого поставщика?"
-
-#~ msgid "Reload invoice report"
-#~ msgstr "Перезагрузить отчёт по счету-фактуре"
-
-#~ msgid "Reload invoice report scheme file"
-#~ msgstr "Перезагрузить схему отчета счета-фактуры"
-
-#~ msgid "Reload owner report"
-#~ msgstr "Перезагрузить отчёт владельца"
-
-#~ msgid "Reload owner report scheme file"
-#~ msgstr "Перезагрузить схему отчёта владельца"
-
-#~ msgid "Reload receivable report"
-#~ msgstr "Перезагрузить отчёт по суммам, подлежащим получению"
-
-#~ msgid "Reload receivable report scheme file"
-#~ msgstr "Перезагрузить схему отчёта сумм, подлежащих получению"
-
-#~ msgid "Automatic Payment Forward"
-#~ msgstr "Автоматический наложенный платёж"
-
-#~ msgid "You must select a commodity."
-#~ msgstr "Вы должны выбрать товар."
-
-#~ msgid ""
-#~ "You must select closing date that is greater than the closing date of the "
-#~ "previous book."
-#~ msgstr ""
-#~ "Вы должны выбрать дату закрытия после той, которой была закрыта "
-#~ "предыдущая книга."
-
-#~ msgid "You must select closing date that is not in the future."
-#~ msgstr "Вы должны выбрать дату закрытия (не в будущем)."
-
-#~ msgid "Are you sure you want to cancel the Mortgage/Loan Setup Assistant?"
-#~ msgstr "Желаете выйти из мастера настройки залогов и займов?"
-
-#~ msgid "Please select a valid \"from\" account."
-#~ msgstr "Выберите корректный счёт \"откуда\"."
-
-#~ msgid "Please select a valid \"to\" account."
-#~ msgstr "Выберите корректный счёт \"куда\"."
-
-#~ msgid "Please select a valid \"interest\" account."
-#~ msgstr "Выберите правильный \"процентный\" счёт."
-
-#~ msgid "Payment: \"%s\""
-#~ msgstr "Платёж за: \"%s\""
-
-#~ msgid "You must enter a valid distribution amount."
-#~ msgstr "Вы должны указать правильное распределяемое количество."
-
-#~ msgid "You must enter a distribution amount."
-#~ msgstr "Вы должны указать распределяемое количество."
-
-#~ msgid "You must either enter a valid price or leave it blank."
-#~ msgstr ""
-#~ "Вы должны либо указать правильную цену, или оставить это поле пустым."
-
-#~ msgid "The price must be positive."
-#~ msgstr "Цена должна быть положительной."
-
-#~ msgid "You must either enter a valid cash amount or leave it blank."
-#~ msgstr ""
-#~ "Вы должны либо указать правильную сумму денег, или оставить это поле "
-#~ "пустым."
-
-#~ msgid "The cash distribution must be positive."
-#~ msgstr "Распределение денег должно быть положительным."
-
-#~ msgid "You must select an income account for the cash distribution."
-#~ msgstr "Вы должны выбрать приходный счёт для распределения наличных."
-
-#~ msgid "You must select an asset account for the cash distribution."
-#~ msgstr "Вы должны выбрать активный счёт для распределения наличных."
-
-#~ msgid "New Account (not implemented)"
-#~ msgstr "Новый счёт (не реализовано)"
-
-#~ msgid "Select or add a GnuCash account"
-#~ msgstr "Выберите или добавьте счёт GnuCash"
-
-#~ msgid ""
-#~ "Use Commodity Value\n"
-#~ "1\n"
-#~ "1/10\n"
-#~ "1/100\n"
-#~ "1/1000\n"
-#~ "1/10000\n"
-#~ "1/100000\n"
-#~ "1/1000000"
-#~ msgstr ""
-#~ "Использовать значение предмета\n"
-#~ "1\n"
-#~ "1/10\n"
-#~ "1/100\n"
-#~ "1/1000\n"
-#~ "1/10000\n"
-#~ "1/100000\n"
-#~ "1/1000000"
-
-#~ msgid "Enter a title for this book."
-#~ msgstr "Введите название этой книги."
-
-#~ msgid "Enter notes that describe this book."
-#~ msgstr "Введите примечание, описывающее эту книгу."
-
-#~ msgid "Finish Closing Books"
-#~ msgstr "Завершение закрытия книг"
-
-#~ msgid ""
-#~ "day(s)\n"
-#~ "week(s)\n"
-#~ "month(s)\n"
-#~ "year(s)"
-#~ msgstr ""
-#~ "день(дни)\n"
-#~ "неделя(ли)\n"
-#~ "месяц(ы)\n"
-#~ "год(ы)"
-
-#~ msgid "Account Information"
-#~ msgstr "Информация о счете"
-
-#~ msgid ""
-#~ "Annual\n"
-#~ "Semi-annual\n"
-#~ "Tri-annual\n"
-#~ "Quarterly\n"
-#~ "Bi-monthly\n"
-#~ "Monthly\n"
-#~ "Semi-monthly\n"
-#~ "Bi-weekly\n"
-#~ "Weekly\n"
-#~ "Daily (360)\n"
-#~ "Daily (365)"
-#~ msgstr ""
-#~ "Ежегодно\n"
-#~ "Раз в пол года\n"
-#~ "Три раза в год\n"
-#~ "Ежеквартально\n"
-#~ "Раз в два месяца\n"
-#~ "Помесячно\n"
-#~ "Два раза в месяц\n"
-#~ "Раз в две недели\n"
-#~ "Еженедельно\n"
-#~ "Ежедневно (360)\n"
-#~ "Ежедневно (365)"
-
-#~ msgid "Co_mpounding:"
-#~ msgstr "Компаундинг:"
-
-#~ msgid "_Effective Date:"
-#~ msgstr "Дата вступления в силу:"
-
-#~ msgid "_Initial Payment:"
-#~ msgstr "Начальный платёж:"
-
-#~ msgid "_Payments:"
-#~ msgstr "Платежи:"
-
-#~ msgid "<b>_Mini-Viewer</b>"
-#~ msgstr "<b>Мини-просмотр</b>"
-
-#~ msgid "A summary of all of the transactions in the selected lot"
-#~ msgstr "Сводка всех проводок в выбранном наборе"
-
-#~ msgid ""
-#~ "Bid\n"
-#~ "Ask\n"
-#~ "Last\n"
-#~ "Net Asset Value\n"
-#~ "Unknown"
-#~ msgstr ""
-#~ "Заявка\n"
-#~ "Запрос\n"
-#~ "Последний\n"
-#~ "Чистые активы\n"
-#~ "Неизвестно"
-
-#~ msgid ""
-#~ "Inches\n"
-#~ "Centimeters\n"
-#~ "Millimeters\n"
-#~ "Points"
-#~ msgstr ""
-#~ "Дюймы\n"
-#~ "Сантиметры\n"
-#~ "Миллиметры\n"
-#~ "Точки"
-
-#~ msgid ""
-#~ "Quicken/QuickBooks (tm) US-Letter\n"
-#~ "Deluxe(tm) Personal Checks US-Letter\n"
-#~ "Quicken(tm) Wallet Checks w/ side stub\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Quicken/QuickBooks (tm) US-Letter\n"
-#~ "Deluxe(tm) Personal Checks US-Letter\n"
-#~ "Quicken(tm) Wallet Checks с корешком\n"
-#~ "Настроить"
-
-#~ msgid ""
-#~ "Top\n"
-#~ "Middle\n"
-#~ "Bottom\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Верх\n"
-#~ "Середина\n"
-#~ "Низ\n"
-#~ "Настроить"
-
-#~ msgid "Copy Transaction"
-#~ msgstr "Копировать проводку"
-
-#~ msgid "Copy the selected transaction"
-#~ msgstr "Копировать выбранную проводку"
-
-#~ msgid "Cut Transaction"
-#~ msgstr "Вырезать проводку"
-
-#~ msgid "Dup_licate Transaction..."
-#~ msgstr "Дублировать проводку..."
-
-#~ msgid "Edit Exchange Rate"
-#~ msgstr "Изменить обменный курс"
-
-#~ msgid "Edit the exchange rate for the current split"
-#~ msgstr "Изменить обменный курс для текущей части"
-
-#~ msgid "Erase all splits except the one for this account."
-#~ msgstr "Удалить все части кроме одной проведенной этим счетом."
-
-#~ msgid "Jump"
-#~ msgstr "Перейти"
-
-#~ msgid "Remove Transaction Splits"
-#~ msgstr "Удалить части проводки"
-
-#~ msgid "Schedule..."
-#~ msgstr "Запланировать..."
-
-#~ msgid "Sort by Amount"
-#~ msgstr "Упорядочить по сумме"
-
-#~ msgid "Sort by Date"
-#~ msgstr "Упорядочить по дате"
-
-#~ msgid "Sort by Description"
-#~ msgstr "Упорядочить по описанию"
-
-#~ msgid "Sort by Memo"
-#~ msgstr "Упорядочить по памятке"
-
-#~ msgid "Sort by Number"
-#~ msgstr "Упорядочить по номеру"
-
-#~ msgid "St_yle"
-#~ msgstr "Стил_ь"
-
-#~ msgid "_Amount"
-#~ msgstr "_Сумма"
-
-#~ msgid "_Number"
-#~ msgstr "_Номер"
-
-#~ msgid "_Statement Date"
-#~ msgstr "_Дата декларации"
-
-#~ msgid ""
-#~ "1st\n"
-#~ "2nd\n"
-#~ "3rd\n"
-#~ "4th\n"
-#~ "5th\n"
-#~ "6th\n"
-#~ "7th\n"
-#~ "8th\n"
-#~ "9th\n"
-#~ "10th\n"
-#~ "11th\n"
-#~ "12th\n"
-#~ "13th\n"
-#~ "14th\n"
-#~ "15th\n"
-#~ "16th\n"
-#~ "17th\n"
-#~ "18th\n"
-#~ "19th\n"
-#~ "20th\n"
-#~ "21st\n"
-#~ "22nd\n"
-#~ "23rd\n"
-#~ "24th\n"
-#~ "25th\n"
-#~ "26th\n"
-#~ "27th\n"
-#~ "28th\n"
-#~ "29th\n"
-#~ "30th\n"
-#~ "31st\n"
-#~ "Last day of month\n"
-#~ "Last Monday\n"
-#~ "Last Tuesday\n"
-#~ "Last Wednesday\n"
-#~ "Last Thursday\n"
-#~ "Last Friday\n"
-#~ "Last Saturday\n"
-#~ "Last Sunday"
-#~ msgstr ""
-#~ "1-е\n"
-#~ "2-е\n"
-#~ "3-е\n"
-#~ "4-е\n"
-#~ "5-е\n"
-#~ "6-е\n"
-#~ "7-е\n"
-#~ "8-е\n"
-#~ "9-е\n"
-#~ "10-е\n"
-#~ "11-е\n"
-#~ "12-е\n"
-#~ "13-е\n"
-#~ "14-е\n"
-#~ "15-е\n"
-#~ "16-е\n"
-#~ "17-е\n"
-#~ "18-е\n"
-#~ "19-е\n"
-#~ "20-е\n"
-#~ "21-е\n"
-#~ "22-е\n"
-#~ "23-е\n"
-#~ "24-е\n"
-#~ "25-е\n"
-#~ "26-е\n"
-#~ "27-е\n"
-#~ "28-е\n"
-#~ "29-е\n"
-#~ "30-е\n"
-#~ "31-е\n"
-#~ "Последний день месяца\n"
-#~ "Последний понедельник\n"
-#~ "Последний вторник\n"
-#~ "Последняя среда\n"
-#~ "Последний четверг\n"
-#~ "Последняя пятница\n"
-#~ "Последняя суббота\n"
-#~ "Последнее воскресенье"
-
-#~ msgid "<b>End</b>"
-#~ msgstr "<b>Конец</b>"
-
-#~ msgid "<b>Upcoming</b>"
-#~ msgstr "<b>Предстоящее</b>"
-
-#~ msgid "Creation State"
-#~ msgstr "Состояние создания"
-
-#~ msgid ""
-#~ "Current Year\n"
-#~ "Now + 1 Year\n"
-#~ "Whole Loan\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Текущий год\n"
-#~ "Через год\n"
-#~ "Целая ссуда\n"
-#~ "Настроить"
-
-#~ msgid ""
-#~ "Daily\n"
-#~ "Weekly\n"
-#~ "Bi-Weekly\n"
-#~ "Monthly\n"
-#~ "Quarterly\n"
-#~ "Yearly"
-#~ msgstr ""
-#~ "Ежедневно\n"
-#~ "Еженедельно\n"
-#~ "Каждые две недели\n"
-#~ "Ежемесячно\n"
-#~ "Ежеквартально\n"
-#~ "Ежегодно"
-
-#~ msgid "Do you..."
-#~ msgstr "Вы желаете..."
-
-#~ msgid ""
-#~ "Fixed Rate\n"
-#~ "3/1 Year ARM\n"
-#~ "5/1 Year ARM\n"
-#~ "7/1 Year ARM\n"
-#~ "10/1 Year ARM"
-#~ msgstr ""
-#~ "Постоянная ставка\n"
-#~ "3/1 годовой ARM\n"
-#~ "5/1 годовой ARM\n"
-#~ "7/1 годовой ARM\n"
-#~ "10/1 годовой ARM"
-
-#~ msgid "Loan Information"
-#~ msgstr "Информация о займах"
-
-#~ msgid ""
-#~ "No change\n"
-#~ "Use previous weekday\n"
-#~ "Use next weekday"
-#~ msgstr ""
-#~ "Нет изменений\n"
-#~ "Используется предыдущий день недели\n"
-#~ "Используется следующий день недели"
-
-#~ msgid ""
-#~ "None\n"
-#~ "Once\n"
-#~ "Daily\n"
-#~ "Weekly\n"
-#~ "Semi-Monthly\n"
-#~ "Monthly"
-#~ msgstr ""
-#~ "Никогда\n"
-#~ "Однократно\n"
-#~ "Ежедневно\n"
-#~ "Еженедельно\n"
-#~ "Два раза в месяц\n"
-#~ "Ежемесячно"
-
-#~ msgid "Press apply to commit these changes."
-#~ msgstr "Нажмите 'Применить' для внесения изменений."
-
-#~ msgid "Repayment Type"
-#~ msgstr "Тип возврата"
-
-#~ msgid "Start Date: "
-#~ msgstr "Начальная дата: "
-
-#~ msgid ""
-#~ "months\n"
-#~ "years"
-#~ msgstr ""
-#~ "месяцев\n"
-#~ "лет"
-
-#~ msgid "Set the budget options using this dialog."
-#~ msgstr "Установите параметры бюджета используя данный диалог."
-
-#~ msgid "Case Insensitive?"
-#~ msgstr "Нечувствительность к регистру?"
-
-#~ msgid "That GnuCash XML file is already loaded. Please select another file."
-#~ msgstr ""
-#~ "Это GnuCash XML файл уже загружен. Пожалуйста, выберите другой файл."
-
-#~ msgid ""
-#~ "No files to merge. Please add ones by clicking on 'Load another file'."
-#~ msgstr ""
-#~ "Нет файлов для объединения. Пожалуйста, добавьте их, щелкнув на "
-#~ "\"Загрузить другой файл\"."
-
-#~ msgid "Finish changes"
-#~ msgstr "Изменение окончания"
-
-#~ msgid "Update gconf settings - GnuCash"
-#~ msgstr "Обновить настройки gconf - GnuCash"
-
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to import at this time. "
-#~ "Do this if you have saved your accounts to separate GnuCash files.\n"
-#~ "\n"
-#~ "Click \"Forward\" to finish loading files and move to the next step of "
-#~ "the GnuCash Datafile import process."
-#~ msgstr ""
-#~ "Нажмите \"Загрузить другой файл\" если требуется импортировать еще "
-#~ "данные. Это может понадобиться в том случае, если счета были сохранены в "
-#~ "несколько отдельных файлов GnuCash.\n"
-#~ "\n"
-#~ "Нажмите \"Далее\", чтобы завершить загрузку файлов и перейти к следующему "
-#~ "шагу процесса импорта файлов."
-
-#~ msgid "Do not merge"
-#~ msgstr "Не объединять"
-
-#~ msgid "GnuCash data files you have loaded"
-#~ msgstr "Загруженные файлы данных GnuCash"
-
-#~ msgid "Load another file"
-#~ msgstr "Загрузить другой файл"
-
-#~ msgid "Unload selected file"
-#~ msgstr "Выгрузить выбранный файл"
-
-#~ msgid "<b>Current File List</b>"
-#~ msgstr "<b>Текущий список файлов</b>"
-
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to load at this time.\n"
-#~ "\n"
-#~ "Click \"Next\" to finish loading files and move to the next step. "
-#~ msgstr ""
-#~ "Нажмите \"Загрузить другой файл\" есть еще файл для загрузки.\n"
-#~ "\n"
-#~ "Нажмите \"Далее\", чтобы завершить загрузку файлов и перейти на следующий "
-#~ "этап. "
-
-#~ msgid "<b>Exchange/Price Information</b>"
-#~ msgstr "<b>Информация о цене или курсе</b>"
-
-#~ msgid "To A_mount:"
-#~ msgstr "К сумме:"
-
-#~ msgid "_Exchange Rate:"
-#~ msgstr "Курс обмена:"
-
-#~ msgid "_From:"
-#~ msgstr "Откуда:"
-
-#~ msgid "_To:"
-#~ msgstr "Куда:"
-
-#~ msgid ""
-#~ "US (12/31/2001)\n"
-#~ "UK (31/12/2001)\n"
-#~ "Europe (31.12.2001)\n"
-#~ "ISO (2001-12-31)\n"
-#~ "UTC\n"
-#~ "Locale\n"
-#~ "Custom\n"
-#~ msgstr ""
-#~ "США (12/31/2001)\n"
-#~ "Англия (31/12/2001)\n"
-#~ "Европа (31.12.2001)\n"
-#~ "ISO (2001-12-31)\n"
-#~ "UTC\n"
-#~ "Местный\n"
-#~ "Пользовательский\n"
-
-#~ msgid "Don't tell me again this session."
-#~ msgstr "Больше не повторять в течение этой сессии."
-
-#~ msgid "Don't tell me again."
-#~ msgstr "Больше не повторять."
-
-#~ msgid "Remember the answer and don't tell me again this session."
-#~ msgstr "Запомнить ответ и больше не повторять в течение этой сессии."
-
-#~ msgid "Remember the answer and don't tell me again."
-#~ msgstr "Запомнить ответ и больше не повторять."
-
-#~ msgid "Failed to process file: %s"
-#~ msgstr "Сбой разбора файла: %s"
-
-#~ msgid "Failed to open file: %s: %s"
-#~ msgstr "Невозможно открыть файл \"%s\": %s"
-
-#~ msgid "Add a new transaction to the account"
-#~ msgstr "Добавить новую проводку на счёт"
-
-#~ msgid "Select an CSV/Fixed-Width file to import"
-#~ msgstr "Выберите файл CSV для импорта"
-
-#~ msgid "Import CSV/Fixed-Width File"
-#~ msgstr "Импорт CSV файла"
-
-#~ msgid "Import _CSV/Fixed-Width..."
-#~ msgstr "Импорт CSV..."
-
-#~ msgid " a CSV/Fixed-Width file"
-#~ msgstr " файл CSV"
-
-#~ msgid ""
-#~ "Enable the SKIP action in the transaction matcher. If enabled, a "
-#~ "transaction whose best match's score is in the yellow zone (above the "
-#~ "Auto-ADD threshold but below the Auto-CLEAR threshold) will be SKIPed by "
-#~ "default."
-#~ msgstr ""
-#~ "Разрешить действие \"Пропуск\" сравнивателю проводок. Если включено, то "
-#~ "проводка, чей лучший соответствующий счёт находится в жёлтой зоне (выше "
-#~ "порога автодобавления, но ниже порога автоочистки) будет пропущена по "
-#~ "умолчанию."
-
-#~ msgid ""
-#~ "For a new transaction, click on the \"Other Account\" entry to choose the "
-#~ "other (destination) account of this transaction.\n"
-#~ "For a transaction that is a duplicate of an existing one, click on the "
-#~ "\"Other Account\" or \"Description\" entry to \n"
-#~ "check whether GnuCash chose the right existing transaction.\n"
-#~ "To switch transactions between both states, click on the checkmark in the "
-#~ "\"New\" column.\n"
-#~ "When all new transactions have the correct destination account and all "
-#~ "duplicates are matched with the right existing transaction, \n"
-#~ "click \"OK\"."
-#~ msgstr ""
-#~ "Для новой проводки нажмите \"Другой счёт\" для выбора другого (целевого) "
-#~ "счёта этой проводки.\n"
-#~ "Для проводки, являющейся дубликатом уже имеющейся, нажмите на \"Другой "
-#~ "счет\" или \"Описание\" для проверки, может ли GnuCash выбрать правильную "
-#~ "существующую проводку.\n"
-#~ "Для переключения состояний проводок, нажмите на \"квадратик\" столбца "
-#~ "\"Новый\".\n"
-#~ "Когда у всех новых проводок будет правильный целевой счёт, и все "
-#~ "дубликаты будут соответствовать подходящим проводкам, нажмите \"ОК\"."
-
-#~ msgid "Other Account"
-#~ msgstr "Другой счет"
-
-#~ msgid "Period-as-decimal (1,000.00)"
-#~ msgstr "Десятичная точка (1,000.00)"
-
-#~ msgid "Comma-as-decimal (1.000,00)"
-#~ msgstr "Десятичная запятая (1.000,00)"
-
-#~ msgid "y-d-m"
-#~ msgstr "г-д-м"
-
-#~ msgid "(no)"
-#~ msgstr "(нет)"
-
-#~ msgid "You must enter an account name."
-#~ msgstr "Вы должны указать название счёта."
-
-#~ msgid ""
-#~ "No valid customer selected. Click on the Options button to select a "
-#~ "customer."
-#~ msgstr ""
-#~ "Подходящий клиент не выбран. Нажмите кнопку \"Настройки\" и выберите "
-#~ "клиента."
-
-#~ msgid ""
-#~ "No valid employee selected. Click on the Options button to select an "
-#~ "employee."
-#~ msgstr ""
-#~ "Подходящий работник не выбран. Нажмите кнопку \"Настройки\" и выберите "
-#~ "работника."
-
-#~ msgid ""
-#~ "No valid company selected. Click on the Options button to select a "
-#~ "company."
-#~ msgstr ""
-#~ "Подходящая фирма не выбрана. Нажмите кнопку \"Настройки\" и выберите "
-#~ "фирму."
-
-#~ msgid ""
-#~ "Blue items are exportable to a German Tax XML file. Press Export to "
-#~ "actually export them."
-#~ msgstr ""
-#~ "Голубые поля выгружатся в Германские налоговые XML файлы. Нажмите "
-#~ "\"Экспорт\", чтобы выгрузить их."
-
-#~ msgid ""
-#~ "No Tax Related accounts were found. Go to the Edit->Tax Options dialog to "
-#~ "set up tax-related accounts."
-#~ msgstr ""
-#~ "Нет налогооблагаемых счетов. Настройте их в \"Правка\" - \"Параметры "
-#~ "налогов\"."
-
-#~ msgid "Asterisk"
-#~ msgstr "Звездочка"
-
-#~ msgid ""
-#~ "A list of directories (strings) indicating where to look for html and "
-#~ "parsed-html files. Each element must be a string representing a directory "
-#~ "or a symbol where 'default expands to the default path, and 'current "
-#~ "expands to the current value of the path."
-#~ msgstr ""
-#~ "Список директорий, указывающих где искать html и обработанные html файлы. "
-#~ "Каждый элемент должен быть строкой, представляющей собой директорию или "
-#~ "символ, где \"'default\" означает путь по умолчанию и \"'current\" - "
-#~ "текущей путь."
-
-#~ msgid "Set the search path for documentation files"
-#~ msgstr "Установка пути поиска файлов документации"

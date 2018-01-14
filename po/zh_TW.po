@@ -20,20 +20,19 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr ""
+msgstr "阿拉伯文"
 
 #: ../borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr ""
+msgstr "波羅的海語系"
 
 #: ../borrowed/goffice/go-charmap-sel.c:72
-#, fuzzy
 msgid "Central European"
-msgstr "歐洲"
+msgstr "中歐語系"
 
 #: ../borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr ""
+msgstr "中文"
 
 #: ../borrowed/goffice/go-charmap-sel.c:74
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:242
@@ -41,29 +40,28 @@ msgid "Cyrillic"
 msgstr "Cyrillic"
 
 #: ../borrowed/goffice/go-charmap-sel.c:75
-#, fuzzy
 msgid "Greek"
-msgstr "綠色"
+msgstr "希臘文"
 
 #: ../borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr ""
+msgstr "希伯來文"
 
 #: ../borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
-msgstr ""
+msgstr "印度語系"
 
 #: ../borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr ""
+msgstr "日文"
 
 #: ../borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr ""
+msgstr "韓文"
 
 #: ../borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr ""
+msgstr "土耳其文"
 
 #: ../borrowed/goffice/go-charmap-sel.c:81
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:224
@@ -72,12 +70,11 @@ msgstr "Unicode"
 
 #: ../borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr ""
+msgstr "越南文"
 
 #: ../borrowed/goffice/go-charmap-sel.c:83
-#, fuzzy
 msgid "Western"
-msgstr "登記簿"
+msgstr "西歐語系"
 
 #: ../borrowed/goffice/go-charmap-sel.c:84
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:60
@@ -89,364 +86,351 @@ msgstr "其他"
 
 #: ../borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "阿拉伯文 (IBM-864)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr ""
+msgstr "阿拉伯文 (IBM-864-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "阿拉伯文 (ISO-8859-6)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr ""
+msgstr "阿拉伯文 (ISO-8859-6-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr ""
+msgstr "阿拉伯文 (ISO-8859-6-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:121
 msgid "Arabic (MacArabic)"
-msgstr ""
+msgstr "阿拉伯文 (MacArabic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:122
 msgid "Arabic (Windows-1256)"
-msgstr ""
+msgstr "阿拉伯文 (Windows-1256)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
-msgstr ""
+msgstr "亞美尼亞文字 (ARMSCII-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:124
-#, fuzzy
 msgid "Baltic (ISO-8859-13)"
-msgstr "ISO-8859-13 (波羅的海語系)"
+msgstr "波羅的海語系 (ISO-8859-13)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
-msgstr ""
+msgstr "波羅的海語系 (ISO-8859-4)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:126
 msgid "Baltic (Windows-1257)"
-msgstr ""
+msgstr "波羅的海語系 (Windows-1257)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:127
-#, fuzzy
 msgid "Celtic (ISO-8859-14)"
-msgstr "ISO-8859-14 (塞爾特語)"
+msgstr "塞爾特語系 (ISO-8859-14)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
-msgstr ""
+msgstr "中歐語系 (IBM-852)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:130
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "中歐語系 (ISO-8859-2)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:132
 msgid "Central European (MacCE)"
-msgstr ""
+msgstr "中歐語系 (MacCE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:134
 msgid "Central European (Windows-1250)"
-msgstr ""
+msgstr "中歐語系 (Windows-1250)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:136
 msgid "Chinese Simplified (GB18030)"
-msgstr ""
+msgstr "簡體中文 (GB18030)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:137
 msgid "Chinese Simplified (GB2312)"
-msgstr ""
+msgstr "簡體中文 (GB2312)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:138
 msgid "Chinese Simplified (GBK)"
-msgstr ""
+msgstr "簡體中文 (GBK)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:139
 msgid "Chinese Simplified (HZ)"
-msgstr ""
+msgstr "簡體中文 (HZ)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:140
 msgid "Chinese Simplified (Windows-936)"
-msgstr ""
+msgstr "簡體中文 (Windows-936)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr ""
+msgstr "繁體中文 (Big5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr ""
+msgstr "繁體中文 (Big5-HKSCS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
-msgstr ""
+msgstr "繁體中文 (EUC-TW)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:147
 msgid "Croatian (MacCroatian)"
-msgstr ""
+msgstr "克羅地亞文字 (MacCroatian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:149
-#, fuzzy
 msgid "Cyrillic (IBM-855)"
-msgstr "Cyrillic"
+msgstr "西里爾文字 (IBM-855)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:150
 msgid "Cyrillic (ISO-8859-5)"
-msgstr ""
+msgstr "西里爾文字 (ISO-8859-5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:152
 msgid "Cyrillic (ISO-IR-111)"
-msgstr ""
+msgstr "西里爾文字 (ISO-IR-111)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:154
-#, fuzzy
 msgid "Cyrillic (KOI8-R)"
-msgstr "Cyrillic"
+msgstr "西里爾文字 (KOI8-R)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:155
 msgid "Cyrillic (MacCyrillic)"
-msgstr ""
+msgstr "西里爾文字 (MacCyrillic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:157
 msgid "Cyrillic (Windows-1251)"
-msgstr ""
+msgstr "西里爾文字 (Windows-1251)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
-msgstr ""
+msgstr "俄文 (CP-866)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:160
 msgid "Ukrainian (KOI8-U)"
-msgstr ""
+msgstr "烏克蘭文 (KOI8-U)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:161
-#, fuzzy
 msgid "Ukrainian (MacUkrainian)"
-msgstr "KOI8-U (烏克蘭)"
+msgstr "烏克蘭文 (MacUkrainian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:163
 msgid "English (ASCII)"
-msgstr ""
+msgstr "英文 (ASCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
-msgstr ""
+msgstr "波斯文字 (MacFarsi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:166
 msgid "Georgian (GEOSTD8)"
-msgstr ""
+msgstr "格魯吉亞文字 (GEOSTD8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:167
-#, fuzzy
 msgid "Greek (ISO-8859-7)"
-msgstr "ISO-8859-7 (希臘文)"
+msgstr "希臘文 (ISO-8859-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:168
 msgid "Greek (MacGreek)"
-msgstr ""
+msgstr "希臘文 (MacGreek)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:169
 msgid "Greek (Windows-1253)"
-msgstr ""
+msgstr "希臘文 (Windows-1253)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:170
 msgid "Gujarati (MacGujarati)"
-msgstr ""
+msgstr "古吉拉特文字 (MacGujarati)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:172
 msgid "Gurmukhi (MacGurmukhi)"
-msgstr ""
+msgstr "果魯穆奇文字 (MacGurmukhi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr ""
+msgstr "希伯來文[左至右] (IBM-862)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr ""
+msgstr "希伯來文[左至右] (ISO-8859-8-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr ""
+msgstr "希伯來文[左至右] (ISO-8859-8-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr ""
+msgstr "希伯來文[左至右] (MacHebrew)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
-msgstr ""
+msgstr "希伯來文 (Windows-1255)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
-msgstr ""
+msgstr "印度文 (MacDevanagari)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
-msgstr ""
+msgstr "冰島文字 (MacIcelandic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:186
 msgid "Japanese (EUC-JP)"
-msgstr ""
+msgstr "日文 (EUC-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:187
 msgid "Japanese (ISO-2022-JP)"
-msgstr ""
+msgstr "日文 (ISO-2022-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:189
 msgid "Japanese (Shift_JIS)"
-msgstr ""
+msgstr "日文 (Shift_JIS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:190
 msgid "Korean (EUC-KR)"
-msgstr ""
+msgstr "韓文 (EUC-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:191
 msgid "Korean (ISO-2022-KR)"
-msgstr ""
+msgstr "韓文 (ISO-2022-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:192
 msgid "Korean (JOHAB)"
-msgstr ""
+msgstr "韓文 (JOHAB)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:193
 msgid "Korean (UHC)"
-msgstr ""
+msgstr "韓文 (UHC)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:194
-#, fuzzy
 msgid "Nordic (ISO-8859-10)"
-msgstr "ISO-8859-10 (北日耳曼語支)"
+msgstr "北歐語系 (ISO-8859-10)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:195
 msgid "Romanian (MacRomanian)"
-msgstr ""
+msgstr "羅馬尼亞文 (MacRomanian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:197
 msgid "Romanian (ISO-8859-16)"
-msgstr ""
+msgstr "羅馬尼亞文 (ISO-8859-16)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:199
 msgid "South European (ISO-8859-3)"
-msgstr ""
+msgstr "南歐語系 (ISO-8859-3)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:201
 msgid "Thai (TIS-620)"
-msgstr ""
+msgstr "泰文 (TIS-620)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:202
 msgid "Turkish (IBM-857)"
-msgstr ""
+msgstr "土耳其文 (IBM-857)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:203
 msgid "Turkish (ISO-8859-9)"
-msgstr ""
+msgstr "土耳其文 (ISO-8859-9)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:204
 msgid "Turkish (MacTurkish)"
-msgstr ""
+msgstr "土耳其文 (MacTurkish)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:206
 msgid "Turkish (Windows-1254)"
-msgstr ""
+msgstr "土耳其文 (Windows-1254)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:208
-#, fuzzy
 msgid "Unicode (UTF-7)"
-msgstr "Unicode"
+msgstr "統一碼 (UTF-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:209
-#, fuzzy
 msgid "Unicode (UTF-8)"
-msgstr "Unicode"
+msgstr "統一碼 (UTF-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:210
 msgid "Unicode (UTF-16BE)"
-msgstr ""
+msgstr "統一碼 (UTF-16BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:211
 msgid "Unicode (UTF-16LE)"
-msgstr ""
+msgstr "統一碼 (UTF-16LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:212
 msgid "Unicode (UTF-32BE)"
-msgstr ""
+msgstr "統一碼 (UTF-32BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:213
 msgid "Unicode (UTF-32LE)"
-msgstr ""
+msgstr "統一碼 (UTF-32LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:214
-#, fuzzy
 msgid "User Defined"
-msgstr "使用者名稱"
+msgstr "自選"
 
 #: ../borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
-msgstr ""
+msgstr "越南文 (TCVN)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:217
 msgid "Vietnamese (VISCII)"
-msgstr ""
+msgstr "越南文 (VISCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:218
 msgid "Vietnamese (VPS)"
-msgstr ""
+msgstr "越南文 (VPS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:219
 msgid "Vietnamese (Windows-1258)"
-msgstr ""
+msgstr "越南文 (Windows-1258)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "希伯來文 (ISO-8859-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
-msgstr ""
+msgstr "西歐語系 (IBM-850)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:224
 msgid "Western (ISO-8859-1)"
-msgstr ""
+msgstr "西歐語系 (ISO-8859-1)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:225
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "西歐語系 (ISO-8859-15)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:227
 msgid "Western (MacRoman)"
-msgstr ""
+msgstr "西歐語系 (MacRoman)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:228
 msgid "Western (Windows-1252)"
-msgstr ""
+msgstr "西歐語系 (Windows-1252)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:441
-#, fuzzy
 msgid "Locale: "
-msgstr "本地(_A):"
+msgstr "地區設定："
 
 #: ../borrowed/goffice/go-charmap-sel.c:476
-#, fuzzy
 msgid "Conversion Direction"
-msgstr "轉換完成"
+msgstr "轉換方向："
 
 #: ../borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr ""
+msgstr "本數值決定 iconv 會進行甚麼測試。"
 
 #: ../borrowed/goffice/go-optionmenu.c:410
 msgid "Menu"
-msgstr ""
+msgstr "選單"
 
 #: ../borrowed/goffice/go-optionmenu.c:410
-#, fuzzy
 msgid "The menu of options"
-msgstr "數字選項是 %s。"
+msgstr "選單選項"
 
 #: ../gnucash/gnome/assistant-acct-period.c:190
 msgid "The book was closed successfully."
@@ -16848,9 +16832,8 @@ msgid "Select Separator Type"
 msgstr "2. 選擇匯入類別"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.glade.h:22
-#, fuzzy
 msgid "Preview"
-msgstr "4. 預覽"
+msgstr "預覽"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.glade.h:23
 msgid "Import Account Preview, first 10 rows only"
@@ -18987,9 +18970,8 @@ msgstr "保證金利率"
 
 #: ../gnucash/import-export/qif-imp/qif-file.scm:85
 #: ../gnucash/import-export/qif-imp/qif-file.scm:93
-#, fuzzy
 msgid "Line"
-msgstr "連線"
+msgstr "直線"
 
 #: ../gnucash/import-export/qif-imp/qif-file.scm:96
 msgid "Read aborted."
@@ -22928,7 +22910,7 @@ msgstr ""
 
 #: ../gnucash/report/report-system/options-utilities.scm:226
 msgid "Dash"
-msgstr ""
+msgstr "橫線"
 
 #: ../gnucash/report/report-system/options-utilities.scm:227
 msgid "Filled diamond"
@@ -27626,7 +27608,6 @@ msgid "Fancy Date Format"
 msgstr "精美的日期格式"
 
 #: ../libgnucash/app-utils/app-utils.scm:330
-#, fuzzy
 msgid "custom"
 msgstr "自訂"
 
@@ -28923,1286 +28904,3 @@ msgid ""
 "select Window -> New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
-
-#~ msgid "Enable debugging mode: increasing logging to provide deep detail."
-#~ msgstr "打開除錯模式：記錄更多以提供深入的細節。"
-
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from %s rev %s on %s."
-#~ msgstr ""
-#~ "%s\n"
-#~ "本份程式是從 %s rev %s 版本編譯製作, 日期 %s。"
-
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from rev %s on %s."
-#~ msgstr ""
-#~ "%s\n"
-#~ "本份程式是從 rev %s 版本編譯製作, 日期 %s。"
-
-#~ msgid "postd"
-#~ msgstr "張貼"
-
-#~ msgid "duedate"
-#~ msgstr "結束日期"
-
-#~ msgid "acct"
-#~ msgstr "科目"
-
-#~ msgid "question"
-#~ msgstr "問題"
-
-#~ msgid ""
-#~ "The directory\n"
-#~ "  %s\n"
-#~ "exists but cannot be accessed. This program \n"
-#~ "must have full access (read/write/execute) to \n"
-#~ "the directory in order to function properly.\n"
-#~ msgstr ""
-#~ "該目錄\n"
-#~ "  %s\n"
-#~ "存在但無法存取。本程式要有該目錄完整的權限(讀、寫、執行)才能正常運作。\n"
-
-#~ msgid ""
-#~ "The path\n"
-#~ "  %s\n"
-#~ "exists but it is not a directory. Please delete\n"
-#~ "the file and start GnuCash again.\n"
-#~ msgstr ""
-#~ "此路徑\n"
-#~ "  %s\n"
-#~ "存在但不是目錄。請刪除該檔案，再重新執行 GnuCash。\n"
-
-#~ msgid "_Price Editor"
-#~ msgstr "價格編輯器(_P)"
-
-#, fuzzy
-#~ msgid "General Ledger2"
-#~ msgstr "總分類帳"
-
-#~ msgid "General Ledger Report"
-#~ msgstr "總分類帳報表"
-
-#~ msgid "_General Ledger"
-#~ msgstr "總分類帳(_G)"
-
-#~ msgid "<No information>"
-#~ msgstr "<無資訊>"
-
-#~ msgid "Clear the entry"
-#~ msgstr "清除項目"
-
-#~ msgid "Delete _last price for a stock"
-#~ msgstr "刪除股票最後的價格(_L)"
-
-#~ msgid "Get _Quotes"
-#~ msgstr "取得報價(_Q)"
-
-#~ msgid "set true"
-#~ msgstr "設為 true"
-
-#~ msgid "You must select a commodity. To create a new one, click \"New\""
-#~ msgstr "您必須選定一個商品。要建立新的商品，請點選「新增」"
-
-#~ msgid "_Delete Account"
-#~ msgstr "刪除科目(_D)"
-
-#~ msgid "_New Account"
-#~ msgstr "新增科目(_N)"
-
-#~ msgid ""
-#~ "The GnuCash personal finance manager. The GNU way to manage your money!"
-#~ msgstr "GnuCash 個人財務管理員。管理您金錢的 GNU 解決方案！"
-
-#, fuzzy
-#~ msgid "Version: GnuCash-%s %s (rev %s built %s)"
-#~ msgstr "版本： GnuCash-%s svn (r%s built %s)"
-
-#, fuzzy
-#~ msgid "Version: GnuCash-%s (rev %s built %s)"
-#~ msgstr "版本： GnuCash-%s (r%s built %s)"
-
-#, fuzzy
-#~ msgid "Owner Name"
-#~ msgstr "所有人姓名"
-
-#, fuzzy
-#~ msgid "Owner ID"
-#~ msgstr "訂單 ID"
-
-#~ msgid "Remember _PIN"
-#~ msgstr "在記憶體中記住 _PIN 碼"
-
-#, fuzzy
-#~ msgid "Quotes"
-#~ msgstr "取得報價"
-
-#, fuzzy
-#~ msgid "From Num."
-#~ msgstr "從現在"
-
-#~ msgid "Transaction Import Assistant"
-#~ msgstr "交易匯入精靈"
-
-#, fuzzy
-#~ msgid "Start import on row "
-#~ msgstr "報表週期的起點"
-
-#~ msgid "Data type: "
-#~ msgstr "資料類別："
-
-#, fuzzy
-#~ msgid "Separated"
-#~ msgstr "開始日期"
-
-#~ msgid "File opening failed."
-#~ msgstr "檔案開啟失敗。"
-
-#~ msgid "Unknown encoding."
-#~ msgstr "未知編碼。"
-
-#~ msgid "Dates earlier than 1970 are not supported."
-#~ msgstr "不支援早於 1970 年的日期。"
-
-#~ msgid "This report has no options."
-#~ msgstr "這個報表沒有選項。"
-
-#, fuzzy
-#~ msgid "Compress prior/later periods"
-#~ msgstr "壓縮資料檔案"
-
-#~ msgid "Income Barchart"
-#~ msgstr "收入長條圖"
-
-#~ msgid "Expense Barchart"
-#~ msgstr "支出長條圖"
-
-#~ msgid "Liability Barchart"
-#~ msgstr "債務長條圖"
-
-#~ msgid "Style"
-#~ msgstr "樣式"
-
-#, fuzzy
-#~ msgid "Report style."
-#~ msgstr "報表樣式"
-
-#, fuzzy
-#~ msgid "Display N lines."
-#~ msgstr "顯示 N 行"
-
-#, fuzzy
-#~ msgid "Display 1 line."
-#~ msgstr "顯示 1 行"
-
-#~ msgid "Exact Time"
-#~ msgstr "精確的時間"
-
-#, fuzzy
-#~ msgid "Sort by exact time."
-#~ msgstr "以精確的時間排序"
-
-#, fuzzy
-#~ msgid "Retrieve the current online quote"
-#~ msgstr "移除目前的價格"
-
-#~ msgid "Set the prefix path for gconf queries"
-#~ msgstr "設定 gconf 查詢的路徑"
-
-#~ msgid "GCONFPATH"
-#~ msgstr "GCONFPATH"
-
-#~ msgid "Negative amounts are not allowed."
-#~ msgstr "負值的總額是不被允許的。"
-
-#~ msgid "Percentage amount must be between 0 and 100."
-#~ msgstr "百分比必須介於 0 和 100 之間。"
-
-#, fuzzy
-#~ msgid "Credit note"
-#~ msgstr "信用額度"
-
-#, fuzzy
-#~ msgid ""
-#~ "You must enter the amount of the payment. The payment amount must not be "
-#~ "zero."
-#~ msgstr "您必須輸入付款總額。付款總額必須大於零。"
-
-#, fuzzy
-#~ msgid "Customer Credit Note"
-#~ msgstr "客戶報表"
-
-#, fuzzy
-#~ msgid "Vendor Credit Note"
-#~ msgstr "廠商報表"
-
-#, fuzzy
-#~ msgid "Employee Credit Note"
-#~ msgstr "員工報表"
-
-#~ msgid "Remo_ve Transaction Splits"
-#~ msgstr "移除交易分割(_V)"
-
-#~ msgid "_Shift Transaction Forward"
-#~ msgstr "將交易向下移(_S)"
-
-#~ msgid "Account Transaction Report"
-#~ msgstr "科目交易明細報表"
-
-#~ msgid "Show the Full Name column"
-#~ msgstr "顯示科目全名欄位"
-
-#, fuzzy
-#~ msgid "Show the Print Name column"
-#~ msgstr "顯示收入與支出科目"
-
-#~ msgid "Show the Quote Source column"
-#~ msgstr "顯示報價來源欄位"
-
-#~ msgid "Show the Quote Timezone column"
-#~ msgstr "顯示報價時區欄位"
-
-#, fuzzy
-#~ msgid "Show the Unique Name column"
-#~ msgstr "顯示收入與支出科目"
-
-#~ msgid "Show the name column"
-#~ msgstr "顯示名稱欄位"
-
-#~ msgid "Show the symbol column"
-#~ msgstr "顯示符號欄位"
-
-#~ msgid "Window position"
-#~ msgstr "視窗位置"
-
-#~ msgid "Show the Price column"
-#~ msgstr "顯示價格欄位"
-
-#~ msgid "Show the Source column"
-#~ msgstr "指定來源欄位"
-
-#~ msgid "Show the Type column"
-#~ msgstr "顯示類型欄位"
-
-#~ msgid "Show the date column"
-#~ msgstr "顯示日期欄位"
-
-#, fuzzy
-#~ msgid "Accounts to reverse the balance"
-#~ msgstr "要提出報表的股票科目"
-
-#, fuzzy
-#~ msgid "Default view style for new register"
-#~ msgstr "登記簿視窗的預設樣式"
-
-#~ msgid "Enables Euro support"
-#~ msgstr "啟動歐元支援"
-
-#~ msgid "Enables additional support for the European Union EURO currency."
-#~ msgstr "啟動對歐盟歐元貨幣的額外支援。"
-
-#~ msgid "How to interpret dates without a year"
-#~ msgstr "如何解讀沒有標明年分的日期"
-
-#~ msgid "Labels on toolbar buttons"
-#~ msgstr "工具列按鈕的文字標示"
-
-#, fuzzy
-#~ msgid "Position of the notebook tabs"
-#~ msgstr "以支票/交易號碼排序"
-
-#, fuzzy
-#~ msgid "Show the Calendar buttons"
-#~ msgstr "顯示名稱欄位"
-
-#, fuzzy
-#~ msgid "Show the Date Entered"
-#~ msgstr "顯示日期欄位"
-
-#, fuzzy
-#~ msgid "Source of default account currency"
-#~ msgstr "設定預設 QIF 科目名稱"
-
-#, fuzzy
-#~ msgid "Source of default report currency"
-#~ msgstr "預設報表貨幣"
-
-#, fuzzy
-#~ msgid "The number of Characters needed"
-#~ msgstr "顯示股份數量"
-
-#, fuzzy
-#~ msgid "The number of transactions displayed"
-#~ msgstr "交易數量(_T):"
-
-#~ msgid "Width of a column in the dialog"
-#~ msgstr "對話盒中欄位的寬度"
-
-#~ msgid "New item"
-#~ msgstr "新增項目"
-
-#, fuzzy
-#~ msgid ""
-#~ "Error: Failure saving state file.\n"
-#~ "  %s"
-#~ msgstr ""
-#~ "當載入 OpenHBCI 設定檔時發生錯誤：\n"
-#~ "  %s\n"
-
-#, fuzzy
-#~ msgid "Withdrawl"
-#~ msgstr "提款"
-
-#, fuzzy
-#~ msgid "Apply Changes"
-#~ msgstr "淨變動"
-
-#, fuzzy
-#~ msgid "Choose Method"
-#~ msgstr "排序方式"
-
-#~ msgid "GnuCash will update the system path for you."
-#~ msgstr "GnuCash 將會替你更新系統路徑。"
-
-#, fuzzy
-#~ msgid "Install Into Home Directory"
-#~ msgstr "安裝到個人家(home)目錄(_I)"
-
-#~ msgid ""
-#~ "Please add the following lines at the end of your ~/.gconf.path file:"
-#~ msgstr "請將以下幾行加到 ~/.gconf.path 檔案的尾端："
-
-#~ msgid "Please run the following commands:"
-#~ msgstr "請執行以下指令："
-
-#~ msgid "S_kip"
-#~ msgstr "略過(_K)"
-
-#, fuzzy
-#~ msgid "The data has _already been installed in another window"
-#~ msgstr "關閉此發票視窗"
-
-#, fuzzy
-#~ msgid "The search path has _already been updated in another window"
-#~ msgstr "關閉此發票視窗"
-
-#, fuzzy
-#~ msgid "Update GnuCash Configuration Data"
-#~ msgstr "更新 GnuCash 設定選項"
-
-#~ msgid "Update GnuCash configuration data"
-#~ msgstr "更新 GnuCash 設定選項"
-
-#, fuzzy
-#~ msgid "Update Search Path"
-#~ msgstr "更新搜尋路徑"
-
-#, fuzzy
-#~ msgid ""
-#~ "You will then need to restart the gconf backend with the command "
-#~ "'gconftool-2 --shutdown'."
-#~ msgstr ""
-#~ "接下來你需要執行指令 'gconftool-2 --shutdown' 來重新啟動 gconf backend。"
-
-#~ msgid "_GnuCash updates the search path"
-#~ msgstr "_GnuCash 更新搜尋路徑"
-
-#~ msgid "_Install into home directory"
-#~ msgstr "安裝到個人家(home)目錄(_I)"
-
-#~ msgid "_Setup"
-#~ msgstr "設定(_S)"
-
-#~ msgid "_Update search path"
-#~ msgstr "更新搜尋路徑(_U)"
-
-#, fuzzy
-#~ msgid "_You update the search path yourself"
-#~ msgstr "設定分享資料檔案搜尋路徑"
-
-#~ msgid "<b>Toolbar Style</b>"
-#~ msgstr "<b>工具列樣式</b>"
-
-#~ msgid "Display toolbar items as icons only."
-#~ msgstr "工具列只顯示圖示。"
-
-#~ msgid "Display toolbar items as text only."
-#~ msgstr "工具列只顯示文字。"
-
-#~ msgid ""
-#~ "Display toolbar items with the text label below the icon. Labels are show "
-#~ "for all items."
-#~ msgstr "工具列顯示文字於圖示的下方，全都要顯示文字。"
-
-#~ msgid ""
-#~ "Display toolbar items with the text label beside the icon. Labels are "
-#~ "only shown for the most important items."
-#~ msgstr "工具列顯示文字於圖示旁，只有最重要的項目才顯示文字。"
-
-#~ msgid "Priority text besi_de icons"
-#~ msgstr "重要文字在圖示旁(_D)"
-
-#~ msgid "Text _below icons"
-#~ msgstr "文字於圖示下(_B)"
-
-#~ msgid "Use s_ystem default"
-#~ msgstr "使用 GNOME 預設值(_Y)"
-
-#~ msgid "Use the date format common in continental Europe."
-#~ msgstr "使用歐陸通用的日期格式。"
-
-#~ msgid "Use the date format common in the United Kingdom."
-#~ msgstr "使用英國通用的日期格式。"
-
-#~ msgid "Use the date format common in the United States."
-#~ msgstr "使用美國通用的日期格式。"
-
-#~ msgid "Use the date format specified by the ISO-8601 standard."
-#~ msgstr "使用 ISO-8601 標準的日期格式。"
-
-#~ msgid "_Europe:"
-#~ msgstr "歐式(_E):"
-
-#~ msgid "_Icons only"
-#~ msgstr "只有圖示(_I)"
-
-#~ msgid "_Text only"
-#~ msgstr "只有文字(_T)"
-
-#~ msgid "_Use system theme colors"
-#~ msgstr "使用系統主題配色(_U)"
-
-#, fuzzy
-#~ msgid "%s at %s (code %s)"
-#~ msgstr "%s - %s 到 %s"
-
-#, fuzzy
-#~ msgid "%s at bank code %s"
-#~ msgstr "%s - %s 到 %s"
-
-#, fuzzy
-#~ msgid "Comma Separated with Quotes"
-#~ msgstr "以逗號(,)分隔"
-
-#, fuzzy
-#~ msgid "Semicolon Separated with Quotes"
-#~ msgstr "以分號(;)分隔"
-
-#~ msgid "Delete the currently selected report"
-#~ msgstr "刪除目前選定的報表"
-
-#~ msgid "Run the currently selected report"
-#~ msgstr "執行目前選擇的報表"
-
-#~ msgid "_Run"
-#~ msgstr "執行(_R)"
-
-#~ msgid "Add _Report"
-#~ msgstr "新增報表(_R)"
-
-#, fuzzy
-#~ msgid "Net Price"
-#~ msgstr "新價格(_P)："
-
-#, fuzzy
-#~ msgid "Total Price"
-#~ msgstr ". (句點)"
-
-#, fuzzy
-#~ msgid "Amount Due"
-#~ msgstr "到期總數"
-
-#, fuzzy
-#~ msgid "Invoice number: "
-#~ msgstr "發票編號"
-
-#, fuzzy
-#~ msgid "Job number: "
-#~ msgstr "工作編號"
-
-#~ msgid "Custom Reports"
-#~ msgstr "自定義報表"
-
-#~ msgid ""
-#~ "Your report \"%s\" has been saved into the configuration file \"%s\"."
-#~ msgstr "您的報表「%s」已經存到設定檔「%s」。"
-
-#~ msgid "and"
-#~ msgstr "與"
-
-#, fuzzy
-#~ msgid "Most recent to report"
-#~ msgstr "很接近"
-
-#, fuzzy
-#~ msgid "The most recent recorded price before report date"
-#~ msgstr "很接近的記錄價格"
-
-#~ msgid "FILO"
-#~ msgstr "FILO"
-
-#~ msgid "Use first-in last-out method for basis"
-#~ msgstr "以先進後出方式計算成本"
-
-#~ msgid "Enable hyperlinks in reports"
-#~ msgstr "啟動報表中的超鏈結"
-
-#~ msgid "Welcome to GnuCash 2.4!"
-#~ msgstr "歡迎使用 GnuCash 2.4！"
-
-#~ msgid "The last stable version was "
-#~ msgstr "最新穩定版本為 "
-
-#~ msgid "The next stable version will be "
-#~ msgstr "下個穩定版本將會是 "
-
-#~ msgid "Built %s from r%s"
-#~ msgstr "編譯日期 %s 版本 r%s"
-
-#~ msgid "You may not post an invoice with a negative total value."
-#~ msgstr "您不能張貼總值為負數的發票。"
-
-#~ msgid "Your selected post account, %s, does not exist"
-#~ msgstr "您選擇的張貼科目 %s 並不存在"
-
-#, fuzzy
-#~ msgid ""
-#~ "Days\n"
-#~ "Proximo"
-#~ msgstr "下個月的"
-
-#~ msgid "What Tax Table should be applied to this customer?"
-#~ msgstr "要將哪一個稅金表格套用到這個客戶？"
-
-#~ msgid "What Tax Table should be applied to this vendor?"
-#~ msgstr "要將哪一個稅金表格套用到這個廠商？"
-
-#~ msgid "Reload invoice report"
-#~ msgstr "重新讀取發票報表"
-
-#~ msgid "Reload invoice report scheme file"
-#~ msgstr "重新讀取發票報表方案檔案"
-
-#~ msgid "Reload owner report"
-#~ msgstr "重新讀取所有人報表"
-
-#~ msgid "Reload owner report scheme file"
-#~ msgstr "重新讀取所有人報表方案檔案"
-
-#~ msgid "Reload receivable report"
-#~ msgstr "重新讀取應收報表"
-
-#~ msgid "Reload receivable report scheme file"
-#~ msgstr "重新讀取應收報表方案檔案"
-
-#~ msgid "Automatic Payment Forward"
-#~ msgstr "自動付款轉向"
-
-#~ msgid "You must select a commodity."
-#~ msgstr "您必須選擇一個商品。"
-
-#, fuzzy
-#~ msgid ""
-#~ "You must select closing date that is greater than the closing date of the "
-#~ "previous book."
-#~ msgstr "您必須從清單中選擇一個項目。"
-
-#, fuzzy
-#~ msgid "You must select closing date that is not in the future."
-#~ msgstr "您必須從清單中選擇一個項目。"
-
-#~ msgid "Are you sure you want to cancel the Mortgage/Loan Setup Assistant?"
-#~ msgstr "您確定要取消抵押/貸款設定精靈？"
-
-#~ msgid "Please select a valid \"from\" account."
-#~ msgstr "請選擇有效的「來自」科目。"
-
-#~ msgid "Please select a valid \"to\" account."
-#~ msgstr "請選擇有效的「到」科目。"
-
-#~ msgid "Please select a valid \"interest\" account."
-#~ msgstr "請選擇有效的「利息」科目。"
-
-#~ msgid "Payment: \"%s\""
-#~ msgstr "付款：「%s」"
-
-#~ msgid "You must enter a valid distribution amount."
-#~ msgstr "您必須輸入有效的分配量。"
-
-#~ msgid "You must enter a distribution amount."
-#~ msgstr "您必須輸入分配量。"
-
-#~ msgid "You must either enter a valid price or leave it blank."
-#~ msgstr "您必須輸入有效的價格或保持空白。"
-
-#~ msgid "The price must be positive."
-#~ msgstr "價格必須為正數。"
-
-#~ msgid "You must either enter a valid cash amount or leave it blank."
-#~ msgstr "您必須輸入有效的現金數量或保持空白。"
-
-#~ msgid "The cash distribution must be positive."
-#~ msgstr "現金分配必須為正數。"
-
-#~ msgid "You must select an income account for the cash distribution."
-#~ msgstr "您必須選擇現金分配用的收入科目。"
-
-#~ msgid "You must select an asset account for the cash distribution."
-#~ msgstr "您必須選擇現金分配用的資產科目。"
-
-#~ msgid "New Account (not implemented)"
-#~ msgstr "新增科目(尚未實作)"
-
-#~ msgid "Select or add a GnuCash account"
-#~ msgstr "選擇或新增 GnuCash 科目"
-
-#~ msgid ""
-#~ "Use Commodity Value\n"
-#~ "1\n"
-#~ "1/10\n"
-#~ "1/100\n"
-#~ "1/1000\n"
-#~ "1/10000\n"
-#~ "1/100000\n"
-#~ "1/1000000"
-#~ msgstr ""
-#~ "使用商品值\n"
-#~ "1\n"
-#~ "1/10\n"
-#~ "1/100\n"
-#~ "1/1000\n"
-#~ "1/10000\n"
-#~ "1/100000\n"
-#~ "1/1000000"
-
-#~ msgid "Enter a title for this book."
-#~ msgstr "輸入帳本標題。"
-
-#~ msgid "Enter notes that describe this book."
-#~ msgstr "輸入帳本描述。"
-
-#~ msgid "Finish Closing Books"
-#~ msgstr "結束關閉帳本"
-
-#~ msgid ""
-#~ "day(s)\n"
-#~ "week(s)\n"
-#~ "month(s)\n"
-#~ "year(s)"
-#~ msgstr ""
-#~ "日\n"
-#~ "週\n"
-#~ "月\n"
-#~ "年"
-
-#~ msgid "Account Information"
-#~ msgstr "科目資訊"
-
-#~ msgid ""
-#~ "Annual\n"
-#~ "Semi-annual\n"
-#~ "Tri-annual\n"
-#~ "Quarterly\n"
-#~ "Bi-monthly\n"
-#~ "Monthly\n"
-#~ "Semi-monthly\n"
-#~ "Bi-weekly\n"
-#~ "Weekly\n"
-#~ "Daily (360)\n"
-#~ "Daily (365)"
-#~ msgstr ""
-#~ "每年\n"
-#~ "每半年\n"
-#~ "每四個月\n"
-#~ "每季\n"
-#~ "每兩個月\n"
-#~ "每月\n"
-#~ "每半個月\n"
-#~ "每兩週\n"
-#~ "每週\n"
-#~ "每天 (360)\n"
-#~ "每天 (365)"
-
-#~ msgid "Co_mpounding:"
-#~ msgstr "複利(_M)："
-
-#~ msgid "_Effective Date:"
-#~ msgstr "有效日期(_E)："
-
-#~ msgid "_Initial Payment:"
-#~ msgstr "頭期款(_I)："
-
-#~ msgid "_Payments:"
-#~ msgstr "付款(_P)："
-
-#~ msgid "<b>_Mini-Viewer</b>"
-#~ msgstr "<b>迷你檢視器(_M)</b>"
-
-#~ msgid "A summary of all of the transactions in the selected lot"
-#~ msgstr "選中 Lot 中所有交易的摘要"
-
-#~ msgid ""
-#~ "Inches\n"
-#~ "Centimeters\n"
-#~ "Millimeters\n"
-#~ "Points"
-#~ msgstr ""
-#~ "英吋\n"
-#~ "公分\n"
-#~ "公釐\n"
-#~ "點(Points)"
-
-#~ msgid ""
-#~ "Quicken/QuickBooks (tm) US-Letter\n"
-#~ "Deluxe(tm) Personal Checks US-Letter\n"
-#~ "Quicken(tm) Wallet Checks w/ side stub\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Quicken/QuickBooks (tm) US-Letter\n"
-#~ "Deluxe(tm) Personal Checks US-Letter\n"
-#~ "Quicken(tm) Wallet Checks w/ side stub\n"
-#~ "自訂"
-
-#~ msgid ""
-#~ "Top\n"
-#~ "Middle\n"
-#~ "Bottom\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "頂端\n"
-#~ "中間\n"
-#~ "底端\n"
-#~ "自訂"
-
-#~ msgid "Copy Transaction"
-#~ msgstr "複製交易"
-
-#~ msgid "Copy the selected transaction"
-#~ msgstr "複製選定的交易"
-
-#~ msgid "Cut Transaction"
-#~ msgstr "剪下交易"
-
-#~ msgid "Dup_licate Transaction..."
-#~ msgstr "重複相同的交易(_L)..."
-
-#~ msgid "Edit Exchange Rate"
-#~ msgstr "編輯匯率"
-
-#~ msgid "Edit the exchange rate for the current split"
-#~ msgstr "編輯目前分割的匯率"
-
-#~ msgid "Erase all splits except the one for this account."
-#~ msgstr "清除用於這個科目以外的所有分割。"
-
-#~ msgid "Jump"
-#~ msgstr "跳至"
-
-#~ msgid "Remove Transaction Splits"
-#~ msgstr "移除交易分割"
-
-#~ msgid "Schedule..."
-#~ msgstr "排程..."
-
-#~ msgid "Sort by Amount"
-#~ msgstr "以總額排序"
-
-#~ msgid "Sort by Date"
-#~ msgstr "以日期排序"
-
-#~ msgid "Sort by Description"
-#~ msgstr "以敘述排序"
-
-#~ msgid "Sort by Memo"
-#~ msgstr "以備忘錄排序"
-
-#~ msgid "Sort by Number"
-#~ msgstr "以號碼排序"
-
-#~ msgid "St_yle"
-#~ msgstr "樣式(_Y)"
-
-#~ msgid "_Amount"
-#~ msgstr "總額(_A)"
-
-#~ msgid "_Number"
-#~ msgstr "號碼(_N)"
-
-#~ msgid "_Statement Date"
-#~ msgstr "結帳日期(_S)"
-
-#~ msgid ""
-#~ "1st\n"
-#~ "2nd\n"
-#~ "3rd\n"
-#~ "4th\n"
-#~ "5th\n"
-#~ "6th\n"
-#~ "7th\n"
-#~ "8th\n"
-#~ "9th\n"
-#~ "10th\n"
-#~ "11th\n"
-#~ "12th\n"
-#~ "13th\n"
-#~ "14th\n"
-#~ "15th\n"
-#~ "16th\n"
-#~ "17th\n"
-#~ "18th\n"
-#~ "19th\n"
-#~ "20th\n"
-#~ "21st\n"
-#~ "22nd\n"
-#~ "23rd\n"
-#~ "24th\n"
-#~ "25th\n"
-#~ "26th\n"
-#~ "27th\n"
-#~ "28th\n"
-#~ "29th\n"
-#~ "30th\n"
-#~ "31st\n"
-#~ "Last day of month\n"
-#~ "Last Monday\n"
-#~ "Last Tuesday\n"
-#~ "Last Wednesday\n"
-#~ "Last Thursday\n"
-#~ "Last Friday\n"
-#~ "Last Saturday\n"
-#~ "Last Sunday"
-#~ msgstr ""
-#~ "1 日\n"
-#~ "2 日\n"
-#~ "3 日\n"
-#~ "4 日\n"
-#~ "5 日\n"
-#~ "6 日\n"
-#~ "7 日\n"
-#~ "8 日\n"
-#~ "9 日\n"
-#~ "10 日\n"
-#~ "11 日\n"
-#~ "12 日\n"
-#~ "13 日\n"
-#~ "14 日\n"
-#~ "15 日\n"
-#~ "16 日\n"
-#~ "17 日\n"
-#~ "18 日\n"
-#~ "19 日\n"
-#~ "20 日\n"
-#~ "21 日\n"
-#~ "22 日\n"
-#~ "23 日\n"
-#~ "24 日\n"
-#~ "25 日\n"
-#~ "26 日\n"
-#~ "27 日\n"
-#~ "28 日\n"
-#~ "29 日\n"
-#~ "30 日\n"
-#~ "31 日\n"
-#~ "月底\n"
-#~ "最後一個星期一\n"
-#~ "最後一個星期二\n"
-#~ "最後一個星期三\n"
-#~ "最後一個星期四\n"
-#~ "最後一個星期五\n"
-#~ "最後一個星期六\n"
-#~ "最後一個星期日"
-
-#~ msgid "<b>End</b>"
-#~ msgstr "<b>結束</b>"
-
-#~ msgid "<b>Upcoming</b>"
-#~ msgstr "<b>接下來預定發生</b>"
-
-#~ msgid "Creation State"
-#~ msgstr "建立的狀態"
-
-#~ msgid ""
-#~ "Daily\n"
-#~ "Weekly\n"
-#~ "Bi-Weekly\n"
-#~ "Monthly\n"
-#~ "Quarterly\n"
-#~ "Yearly"
-#~ msgstr ""
-#~ "每天\n"
-#~ "每週\n"
-#~ "每兩週\n"
-#~ "每月\n"
-#~ "每季\n"
-#~ "每年"
-
-#~ msgid "Do you..."
-#~ msgstr "您是否要..."
-
-#~ msgid "Loan Information"
-#~ msgstr "貸款資訊"
-
-#~ msgid ""
-#~ "No change\n"
-#~ "Use previous weekday\n"
-#~ "Use next weekday"
-#~ msgstr ""
-#~ "不變\n"
-#~ "前移到週五\n"
-#~ "後移到週一"
-
-#~ msgid ""
-#~ "None\n"
-#~ "Once\n"
-#~ "Daily\n"
-#~ "Weekly\n"
-#~ "Semi-Monthly\n"
-#~ "Monthly"
-#~ msgstr ""
-#~ "無\n"
-#~ "一次\n"
-#~ "每天\n"
-#~ "每週\n"
-#~ "每半個月\n"
-#~ "每月"
-
-#~ msgid "Press apply to commit these changes."
-#~ msgstr "按下套用來提交這些變更。"
-
-#~ msgid "Repayment Type"
-#~ msgstr "償還類型"
-
-#~ msgid "Start Date: "
-#~ msgstr "開始日期: "
-
-#~ msgid ""
-#~ "months\n"
-#~ "years"
-#~ msgstr ""
-#~ "月\n"
-#~ "年"
-
-#~ msgid "Set the budget options using this dialog."
-#~ msgstr "使用這個對話盒設定您想要的預算選項。"
-
-#~ msgid "Case Insensitive?"
-#~ msgstr "大小寫視為相同？"
-
-#~ msgid "That GnuCash XML file is already loaded. Please select another file."
-#~ msgstr "這個 GnuCash XML 檔案已經載入。請選擇其他檔案。"
-
-#~ msgid "Finish changes"
-#~ msgstr "完成修改"
-
-#~ msgid "Update gconf settings - GnuCash"
-#~ msgstr "更新 gconf 設定 - GnuCash"
-
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to import at this time. "
-#~ "Do this if you have saved your accounts to separate GnuCash files.\n"
-#~ "\n"
-#~ "Click \"Forward\" to finish loading files and move to the next step of "
-#~ "the GnuCash Datafile import process."
-#~ msgstr ""
-#~ "如果您此時還有更多資料要匯入，點選「讀取其他檔案」。您可以在您的科目儲存於"
-#~ "不同 GnuCash 檔案時這麼做。\n"
-#~ "\n"
-#~ "點選「向前」以結束載入檔案並且移至 GnuCash 資料檔匯入程序的下一個步驟。"
-
-#~ msgid "Do not merge"
-#~ msgstr "不要合併"
-
-#~ msgid "GnuCash data files you have loaded"
-#~ msgstr "您已經載入的 GnuCash 檔案"
-
-#~ msgid "Load another file"
-#~ msgstr "載入其他檔案"
-
-#~ msgid "Unload selected file"
-#~ msgstr "卸載選定的檔案"
-
-#~ msgid "<b>Current File List</b>"
-#~ msgstr "<b>現在的檔案列表</b>"
-
-#, fuzzy
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to load at this time.\n"
-#~ "\n"
-#~ "Click \"Next\" to finish loading files and move to the next step. "
-#~ msgstr ""
-#~ "如果您此時還有更多資料要匯入，點選「讀取其他檔案」。\n"
-#~ "您可以在您的科目儲存於不同 QFX 檔案時這麼做。\n"
-#~ "\n"
-#~ "點選「向前」以結束載入檔案並且移至 OFX 匯入程序\n"
-#~ "的下一個步驟。"
-
-#~ msgid "<b>Exchange/Price Information</b>"
-#~ msgstr "<b>兌換/價格資訊</b>"
-
-#~ msgid "To A_mount:"
-#~ msgstr "總額(_M)："
-
-#~ msgid "_Exchange Rate:"
-#~ msgstr "匯率(_E)："
-
-#~ msgid "_From:"
-#~ msgstr "從(_F):"
-
-#~ msgid "_To:"
-#~ msgstr "到(_T):"
-
-#~ msgid ""
-#~ "US (12/31/2001)\n"
-#~ "UK (31/12/2001)\n"
-#~ "Europe (31.12.2001)\n"
-#~ "ISO (2001-12-31)\n"
-#~ "UTC\n"
-#~ "Locale\n"
-#~ "Custom\n"
-#~ msgstr ""
-#~ "美式 (12/31/2001)\n"
-#~ "英式 (31/12/2001)\n"
-#~ "歐洲 (31.12.2001)\n"
-#~ "ISO (2001-12-31)\n"
-#~ "UTC\n"
-#~ "本地格式\n"
-#~ "自訂\n"
-
-#~ msgid "Don't tell me again this session."
-#~ msgstr "在這個工作階段中別再告訴我。"
-
-#~ msgid "Don't tell me again."
-#~ msgstr "別再告訴我。"
-
-#~ msgid "Failed to process file: %s"
-#~ msgstr "處理檔案失敗: %s"
-
-#~ msgid "Failed to open file: %s: %s"
-#~ msgstr "無法開啟檔案: %s: %s"
-
-#~ msgid "Add a new transaction to the account"
-#~ msgstr "增加一筆新的交易至科目"
-
-#~ msgid "Select an CSV/Fixed-Width file to import"
-#~ msgstr "選擇 CSV/固定欄寬檔 匯入"
-
-#~ msgid "Import CSV/Fixed-Width File"
-#~ msgstr "匯入 CSV/固定寬度的檔案"
-
-#~ msgid "Import _CSV/Fixed-Width..."
-#~ msgstr "匯入 _CSV/固定欄寬檔..."
-
-#, fuzzy
-#~ msgid ""
-#~ "Enable the SKIP action in the transaction matcher. If enabled, a "
-#~ "transaction whose best match's score is in the yellow zone (above the "
-#~ "Auto-ADD threshold but below the Auto-CLEAR threshold) will be SKIPed by "
-#~ "default."
-#~ msgstr ""
-#~ "其最高比對分數在紅色區（高於顯示界限但低於或等於自動新增界限）的交易會預設"
-#~ "為已加入。"
-
-#, fuzzy
-#~ msgid ""
-#~ "For a new transaction, click on the \"Other Account\" entry to choose the "
-#~ "other (destination) account of this transaction.\n"
-#~ "For a transaction that is a duplicate of an existing one, click on the "
-#~ "\"Other Account\" or \"Description\" entry to \n"
-#~ "check whether GnuCash chose the right existing transaction.\n"
-#~ "To switch transactions between both states, click on the checkmark in the "
-#~ "\"New\" column.\n"
-#~ "When all new transactions have the correct destination account and all "
-#~ "duplicates are matched with the right existing transaction, \n"
-#~ "click \"OK\"."
-#~ msgstr ""
-#~ "對新的交易而言，按下「其他科目」可選擇這個交易的其他（目標）科目。\n"
-#~ "對和既存交易重複的交易來說，按下「其他科目」或「描述」項目可以\n"
-#~ "檢查 GnuCash 是否選擇了正確的既存交易。\n"
-#~ "要讓交易在兩種狀態間切換，按下「新增」欄位中的核取標記。\n"
-#~ "當所有的新交易都有正確的目標科目，而所有的重複也符合正確的既存交易後，\n"
-#~ "請按「確定」。"
-
-#~ msgid "Other Account"
-#~ msgstr "其他科目"
-
-#~ msgid "Period-as-decimal (1,000.00)"
-#~ msgstr "用點當小數點 (1,000.00)"
-
-#~ msgid "Comma-as-decimal (1.000,00)"
-#~ msgstr "用逗號當小數點 (1.000,00)"
-
-#~ msgid "y-d-m"
-#~ msgstr "y-d-m"
-
-#~ msgid "(no)"
-#~ msgstr "(無)"
-
-#~ msgid "You must enter an account name."
-#~ msgstr "您必須輸入科目名稱。"
-
-#~ msgid ""
-#~ "Blue items are exportable to a German Tax XML file. Press Export to "
-#~ "actually export them."
-#~ msgstr "藍色的項目可匯出成德國報稅用 XML 檔案。按「匯出」以進行匯出。"
-
-#~ msgid ""
-#~ "No Tax Related accounts were found. Go to the Edit->Tax Options dialog to "
-#~ "set up tax-related accounts."
-#~ msgstr "找不到含稅的科目。請至科目->稅務選項對話盒設定含稅科目。"
-
-#~ msgid "Asterisk"
-#~ msgstr "星號"
-
-#, fuzzy
-#~ msgid ""
-#~ "A list of directories (strings) indicating where to look for html and "
-#~ "parsed-html files. Each element must be a string representing a directory "
-#~ "or a symbol where 'default expands to the default path, and 'current "
-#~ "expands to the current value of the path."
-#~ msgstr ""
-#~ "指出哪裡可以找到 html 與已解析的 html 檔案的目錄清（字串值）單。每一個元素"
-#~ "必須是表示目錄的字串或是「預設擴展為預設路徑」與「目前擴展為目前路徑值」的"
-#~ "符號。"
-
-#~ msgid "Set the search path for documentation files"
-#~ msgstr "設定文件檔案的搜尋路徑"
-
-#~ msgid "Default number of register rows to display in Invoices."
-#~ msgstr "預設發票中顯示的登記簿列數。"
-
-#~ msgid "The two passwords didn't match. Please try again."
-#~ msgstr "兩個密碼不相符。請再試一次。"
-
-#~ msgid "Co_nfigure"
-#~ msgstr "組態檔案(_N)"
-
-#~ msgid "The file %s does not exist. Would you like to create it now?"
-#~ msgstr "檔案 %s 不存在。您想要現在建立它嗎？"
-
-#~ msgid ""
-#~ "The directory for file %s does not exist. Please choose another place for "
-#~ "this file."
-#~ msgstr "用於檔案 %s 的目錄不存在。請為這個檔案選擇別的位置。"
-
-#~ msgid "Set shared data file search path"
-#~ msgstr "設定分享資料檔案搜尋路徑"
-
-#~ msgid ""
-#~ "The listed Scheduled Transactions are to-be created soon. Select any "
-#~ "which you would like to create now, and click \"Forward\" to create them."
-#~ msgstr ""
-#~ "列出的排程交易都是可以馬上建立的。您現在可以選擇任何您想要建立的交易，並按"
-#~ "「向前」來建立它們。"
-
-#~ msgid "Show Full Account Name?"
-#~ msgstr "顯示完整的科目名稱？"
-
-#~ msgid "Click to choose the filename and location."
-#~ msgstr "點選以選擇檔名及位置。"
-
-#~ msgid "Export Chart of Accounts"
-#~ msgstr "匯出會計科目表"
-
-#~ msgid ""
-#~ "The Chart of Accounts includes the balance for each account, on the date "
-#~ "specified. Note that future dates are not supported."
-#~ msgstr "會計科目表包含了每個科目在指定日期的結餘。注意並不支援未來的日期。"
-
-#, fuzzy
-#~ msgid "Setup income tax information for relevant accounts"
-#~ msgstr "設定所有收入與支出科目的稅務資訊"
-
-#, fuzzy
-#~ msgid ""
-#~ "No Tax Related accounts were found with your account selection. Change "
-#~ "your selection or go to the Edit->Income Tax Options dialog to set up tax-"
-#~ "related accounts."
-#~ msgstr "找不到含稅的科目。請至科目->稅務選項對話盒設定含稅科目。"
-
-#, fuzzy
-#~ msgid "PriceDB lookups nearest to report end date"
-#~ msgstr "時間上最接近報表日期的記錄價格"
-
-#, fuzzy
-#~ msgid ""
-#~ "The current transaction has been changed. Would you like to record the "
-#~ "changes before closing this page, close the page without recording the "
-#~ "changes, or cancel the close?"
-#~ msgstr ""
-#~ "目前的範本交易已經變更。\n"
-#~ "您想要記錄它的變更嗎？"
-
-#~ msgid ""
-#~ "An error occurred while importing QIF transactions into GnuCash. Your "
-#~ "accounts are unchanged."
-#~ msgstr "匯入 QIF 交易至 GnuCash 時發生錯誤。您的科目並未變更。"
-
-#~ msgid "You must enter a Type for the commodity."
-#~ msgstr "您必須輸入此商品的類型。"
-
-#~ msgid "You must enter a name for the commodity."
-#~ msgstr "您必須輸入此商品的名稱。"
-
-#~ msgid "You must enter an abbreviation for the commodity."
-#~ msgstr "您必須輸入此商品的縮寫。"
-
-#~ msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
-#~ msgstr "挑選商品的兌換或列表(NASDAQ, NYSE, 其他)。"
-
-#~ msgid "Click \"Forward\" to check matchings for QIF categories. "
-#~ msgstr "點選「向前」以檢查 QIF 分類的比對。"
-
-#~ msgid ""
-#~ "Click \"Forward\" to enter information about stocks and mutual funds in "
-#~ "the imported data."
-#~ msgstr "點選「向前」以輸入匯入資料裡股票與共同基金的相關資訊。"
-
-#~ msgid ""
-#~ "Click \"Forward\" to enter information about the currency used in your "
-#~ "QIF files."
-#~ msgstr "點選「向前」以輸入您的 QIF 檔案中所使用貨幣的相關資訊。"
-
-#~ msgid "Enter the currency used for new accounts"
-#~ msgstr "輸入使用於新科目的貨幣"
-
-#~ msgid "Imported transactions with duplicates"
-#~ msgstr "匯入交易中具相同點者"
-
-#, fuzzy
-#~ msgid ""
-#~ "In the next pages, you will be asked to provide information about stocks, "
-#~ "mutual funds, and other tradable commodities that appear in the QIF "
-#~ "file(s) you are importing. GnuCash requires more information about "
-#~ "tradable commodities than the QIF format can represent. \n"
-#~ "\n"
-#~ "Each stock, mutual fund, or other commodity must have a type, which is "
-#~ "the exchange or listing that it is found on (NASDAQ, NYSE, US Mutual "
-#~ "Funds, etc), a full name, and an abbreviation.\n"
-#~ "\n"
-#~ "Check to see if there is an existing Type that is appropriate; if not, "
-#~ "you can enter a new Type name by hand in the box. Make sure that the "
-#~ "abbreviation you enter matches the ticker symbol used for the commodity "
-#~ "on the exchange or listing for its type."
-#~ msgstr ""
-#~ "下一頁中，您將被要求提供關於出現在您所匯入\n"
-#~ "的 QIF 檔案裡的股票、共同基金和其他有價商\n"
-#~ "品的資訊。GnuCash 要求的有價商品相關資訊\n"
-#~ "比 QIF 格式所能呈現還要多。\n"
-#~ "\n"
-#~ "每一個股票、共同基金或其他商品必須有類型─\n"
-#~ "用以表示其交易所或根據的列表(NASDAQ, NYSE,\n"
-#~ "US 共同基金,其他)、全名和縮寫。\n"
-#~ "\n"
-#~ "檢查看看是否有既存的合適類型；如果沒有，\n"
-#~ "您可以在方塊中手動輸入新類型。請確認您輸入\n"
-#~ "的縮寫符合此商品用於交易所或其列表類型的行\n"
-#~ "情指示器標記。"
-
-#~ msgid ""
-#~ "Enter the type of commodity. For stocks, this is often an exchange on "
-#~ "which the stock is traded. You can choose an existing type from the list "
-#~ "or enter a new type with the keyboard."
-#~ msgstr ""
-#~ "輸入商品類型。以股票為例，通常是股票買賣的交易所。您可以從列表中選擇既存的"
-#~ "類型或以鍵盤輸入新的類型。"

@@ -30,51 +30,48 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr ""
+msgstr "Arabe"
 
 #: ../borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr ""
+msgstr "Baltique"
 
 #: ../borrowed/goffice/go-charmap-sel.c:72
-#, fuzzy
 msgid "Central European"
-msgstr "Européen"
+msgstr "Europe centrale"
 
 #: ../borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr ""
+msgstr "Chinois"
 
 #: ../borrowed/goffice/go-charmap-sel.c:74
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:242
 msgid "Cyrillic"
 msgstr "Cyrillique"
 
-# messages-i18n.c:348 po/guile_strings.txt:57
 #: ../borrowed/goffice/go-charmap-sel.c:75
-#, fuzzy
 msgid "Greek"
-msgstr "Vert"
+msgstr "Grec"
 
 #: ../borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr ""
+msgstr "Hébreu"
 
 #: ../borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
-msgstr ""
+msgstr "Indien"
 
 #: ../borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr ""
+msgstr "Japonais"
 
 #: ../borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr ""
+msgstr "Coréen"
 
 #: ../borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr ""
+msgstr "Turc"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
@@ -85,13 +82,11 @@ msgstr "Unicode"
 
 #: ../borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr ""
+msgstr "Vietnamien"
 
-# messages-i18n.c:324 po/guile_strings.txt:181
 #: ../borrowed/goffice/go-charmap-sel.c:83
-#, fuzzy
 msgid "Western"
-msgstr "Grand Livre"
+msgstr "Occidental"
 
 #: ../borrowed/goffice/go-charmap-sel.c:84
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:60
@@ -103,370 +98,351 @@ msgstr "Autres"
 
 #: ../borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "Arabe (IBM-864)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr ""
+msgstr "Arabe (IBM-864-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "Arabe (ISO-8859-6)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr ""
+msgstr "Arabe (ISO-8859-6-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr ""
+msgstr "Arabe (ISO-8859-6-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:121
 msgid "Arabic (MacArabic)"
-msgstr ""
+msgstr "Arabe (MacArabic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:122
 msgid "Arabic (Windows-1256)"
-msgstr ""
+msgstr "Arabe (Windows-1256)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
-msgstr ""
+msgstr "Arménien (ARMSCII-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:124
-#, fuzzy
 msgid "Baltic (ISO-8859-13)"
-msgstr "ISO-8859-13 (Baltique)"
+msgstr "Baltique (ISO-8859-13)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
-msgstr ""
+msgstr "Baltique (ISO-8859-4)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:126
 msgid "Baltic (Windows-1257)"
-msgstr ""
+msgstr "Baltique (Windows-1257)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:127
-#, fuzzy
 msgid "Celtic (ISO-8859-14)"
-msgstr "ISO-8859-14 (Celtique)"
+msgstr "Celtique (ISO-8859-14)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
-msgstr ""
+msgstr "Europe centrale (IBM-852)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:130
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "Europe centrale (ISO-8859-2)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:132
 msgid "Central European (MacCE)"
-msgstr ""
+msgstr "Europe centrale (MacCE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:134
 msgid "Central European (Windows-1250)"
-msgstr ""
+msgstr "Europe centrale (Windows-1250)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:136
 msgid "Chinese Simplified (GB18030)"
-msgstr ""
+msgstr "Chinois simplifié (GB18030)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:137
 msgid "Chinese Simplified (GB2312)"
-msgstr ""
+msgstr "Chinois simplifié (GB2312)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:138
 msgid "Chinese Simplified (GBK)"
-msgstr ""
+msgstr "Chinois simplifié (GBK)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:139
 msgid "Chinese Simplified (HZ)"
-msgstr ""
+msgstr "Chinois simplifié (HZ)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:140
 msgid "Chinese Simplified (Windows-936)"
-msgstr ""
+msgstr "Chinois simplifié (Windows-936)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr ""
+msgstr "Chinois traditionnel (Big5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr ""
+msgstr "Chinois traditionnel (Big5-HKSCS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
-msgstr ""
+msgstr "Chinois traditionnel (EUC-TW)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:147
 msgid "Croatian (MacCroatian)"
-msgstr ""
+msgstr "Croate (MacCroatian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:149
-#, fuzzy
 msgid "Cyrillic (IBM-855)"
-msgstr "Cyrillique"
+msgstr "Cyrillique (IBM-855)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:150
 msgid "Cyrillic (ISO-8859-5)"
-msgstr ""
+msgstr "Cyrillique (ISO-8859-5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:152
 msgid "Cyrillic (ISO-IR-111)"
-msgstr ""
+msgstr "Cyrillique (ISO-IR-111)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:154
-#, fuzzy
 msgid "Cyrillic (KOI8-R)"
-msgstr "Cyrillique"
+msgstr "Cyrillique (KOI8-R)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:155
 msgid "Cyrillic (MacCyrillic)"
-msgstr ""
+msgstr "Cyrillique (MacCyrillic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:157
 msgid "Cyrillic (Windows-1251)"
-msgstr ""
+msgstr "Cyrillique (Windows-1251)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
-msgstr ""
+msgstr "Russe (CP-866)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:160
 msgid "Ukrainian (KOI8-U)"
-msgstr ""
+msgstr "Ukrainien (KOI8-U)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:161
-#, fuzzy
 msgid "Ukrainian (MacUkrainian)"
-msgstr "KOI8-U (Ukrainien)"
+msgstr "Ukrainien (MacUkrainian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:163
 msgid "English (ASCII)"
-msgstr ""
+msgstr "Anglais (ASCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
-msgstr ""
+msgstr "Farsi (MacFarsi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:166
 msgid "Georgian (GEOSTD8)"
-msgstr ""
+msgstr "Géorgien (GEOSTD8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:167
-#, fuzzy
 msgid "Greek (ISO-8859-7)"
-msgstr "ISO-8859-7 (Grecque)"
+msgstr "Grec (ISO-8859-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:168
 msgid "Greek (MacGreek)"
-msgstr ""
+msgstr "Grec (MacGreek)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:169
 msgid "Greek (Windows-1253)"
-msgstr ""
+msgstr "Grec (Windows-1253)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:170
 msgid "Gujarati (MacGujarati)"
-msgstr ""
+msgstr "Gujarati (MacGujarati)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:172
 msgid "Gurmukhi (MacGurmukhi)"
-msgstr ""
+msgstr "Gurmukhi (MacGurmukhi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr ""
+msgstr "Hébreu (IBM-862)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr ""
+msgstr "Hébreu (ISO-8859-8-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr ""
+msgstr "Hébreu (ISO-8859-8-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr ""
+msgstr "Hébreu (MacHebrew)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
-msgstr ""
+msgstr "Hébreu (Windows-1255)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
-msgstr ""
+msgstr "Hindi (MacDevanagari)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
-msgstr ""
+msgstr "Islandais (MacIcelandic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:186
 msgid "Japanese (EUC-JP)"
-msgstr ""
+msgstr "Japonais (EUC-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:187
 msgid "Japanese (ISO-2022-JP)"
-msgstr ""
+msgstr "Japonais (ISO-2022-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:189
 msgid "Japanese (Shift_JIS)"
-msgstr ""
+msgstr "Japonais (Shift_JIS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:190
 msgid "Korean (EUC-KR)"
-msgstr ""
+msgstr "Coréen (EUC-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:191
 msgid "Korean (ISO-2022-KR)"
-msgstr ""
+msgstr "Coréen (ISO-2022-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:192
 msgid "Korean (JOHAB)"
-msgstr ""
+msgstr "Coréen (JOHAB)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:193
 msgid "Korean (UHC)"
-msgstr ""
+msgstr "Coréen (UHC)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:194
-#, fuzzy
 msgid "Nordic (ISO-8859-10)"
-msgstr "ISO-8859-10 (Nordique)"
+msgstr "Nordique (ISO-8859-10)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:195
 msgid "Romanian (MacRomanian)"
-msgstr ""
+msgstr "Roumain (MacRomanian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:197
 msgid "Romanian (ISO-8859-16)"
-msgstr ""
+msgstr "Roumain (ISO-8859-16)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:199
 msgid "South European (ISO-8859-3)"
-msgstr ""
+msgstr "Europe du Sud (ISO-8859-3)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:201
 msgid "Thai (TIS-620)"
-msgstr ""
+msgstr "Thai (TIS-620)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:202
 msgid "Turkish (IBM-857)"
-msgstr ""
+msgstr "Turc (IBM-857)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:203
 msgid "Turkish (ISO-8859-9)"
-msgstr ""
+msgstr "Turc (ISO-8859-9)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:204
 msgid "Turkish (MacTurkish)"
-msgstr ""
+msgstr "Turc (MacTurkish)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:206
 msgid "Turkish (Windows-1254)"
-msgstr ""
+msgstr "Turc (Windows-1254)"
 
-# messages-i18n.c:294 po/guile_strings.txt:205
-# src/gnome/glade-gnc-dialogs.c:644
 #: ../borrowed/goffice/go-charmap-sel.c:208
-#, fuzzy
 msgid "Unicode (UTF-7)"
-msgstr "Unicode"
+msgstr "Unicode (UTF-7)"
 
-# messages-i18n.c:294 po/guile_strings.txt:205
-# src/gnome/glade-gnc-dialogs.c:644
 #: ../borrowed/goffice/go-charmap-sel.c:209
-#, fuzzy
 msgid "Unicode (UTF-8)"
-msgstr "Unicode"
+msgstr "Unicode (UTF-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:210
 msgid "Unicode (UTF-16BE)"
-msgstr ""
+msgstr "Unicode (UTF-16BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:211
 msgid "Unicode (UTF-16LE)"
-msgstr ""
+msgstr "Unicode (UTF-16LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:212
 msgid "Unicode (UTF-32BE)"
-msgstr ""
+msgstr "Unicode (UTF-32BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:213
 msgid "Unicode (UTF-32LE)"
-msgstr ""
+msgstr "Unicode (UTF-32LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:214
-#, fuzzy
 msgid "User Defined"
-msgstr "Identifiant"
+msgstr "Défini par l'utilisateur"
 
 #: ../borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
-msgstr ""
+msgstr "Vietnamien (TCVN)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:217
 msgid "Vietnamese (VISCII)"
-msgstr ""
+msgstr "Vietnamien (VISCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:218
 msgid "Vietnamese (VPS)"
-msgstr ""
+msgstr "Vietnamien (VPS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:219
 msgid "Vietnamese (Windows-1258)"
-msgstr ""
+msgstr "Vietnamien (Windows-1258)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "Hébreu visuel (ISO-8859-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
-msgstr ""
+msgstr "Occidental (IBM-850)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:224
 msgid "Western (ISO-8859-1)"
-msgstr ""
+msgstr "Occidental (ISO-8859-1)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:225
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "Occidental (ISO-8859-15)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:227
 msgid "Western (MacRoman)"
-msgstr ""
+msgstr "Occidental (MacRoman)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:228
 msgid "Western (Windows-1252)"
-msgstr ""
+msgstr "Occidental (Windows-1252)"
 
-# src/gnome/glade-gnc-dialogs.c:300
 #: ../borrowed/goffice/go-charmap-sel.c:441
-#, fuzzy
 msgid "Locale: "
-msgstr "Loc_ale :"
+msgstr "Locale :"
 
 #: ../borrowed/goffice/go-charmap-sel.c:476
-#, fuzzy
 msgid "Conversion Direction"
-msgstr "Conversion réussie"
+msgstr "Direction de conversion"
 
 #: ../borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr ""
+msgstr "Cette valeur indique quel test « iconv » réaliser."
 
 #: ../borrowed/goffice/go-optionmenu.c:410
 msgid "Menu"
-msgstr ""
+msgstr "Menu"
 
-# po/guile_strings.txt:177
 #: ../borrowed/goffice/go-optionmenu.c:410
-#, fuzzy
 msgid "The menu of options"
-msgstr "L'option de numérotation est %s."
+msgstr "Menu des options"
 
 #: ../gnucash/gnome/assistant-acct-period.c:190
 msgid "The book was closed successfully."
@@ -3137,11 +3113,10 @@ msgstr ""
 msgid "Path head does not exist, "
 msgstr ""
 
-# messages-i18n.c:320
+# Négatif ou Négative ?
 #: ../gnucash/gnome/dialog-trans-assoc.c:432
-#, fuzzy
 msgid "Relative"
-msgstr "_Relatif :"
+msgstr "Relative"
 
 #: ../gnucash/gnome/dialog-vendor.c:214
 msgid ""
@@ -12146,9 +12121,8 @@ msgid "Pixels"
 msgstr ""
 
 #: ../gnucash/gnome-utils/dialog-options.c:3019
-#, fuzzy
 msgid "Percent"
-msgstr "Pourcentage %"
+msgstr "Pourcentage"
 
 # po/guile_strings.txt:44
 #. Translators: Both %s will be the account separator character; the
@@ -20661,9 +20635,8 @@ msgstr "Actions en _ligne"
 
 #: ../gnucash/import-export/import-pending-matches.c:194
 #: ../libgnucash/engine/policy.c:61
-#, fuzzy
 msgid "Manual"
-msgstr "Annuel"
+msgstr "À la main"
 
 # messages-i18n.c:239
 #: ../gnucash/import-export/import-pending-matches.c:196
@@ -22745,7 +22718,7 @@ msgstr "Adresse électronique"
 
 #: ../gnucash/report/business-reports/aging.scm:789
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 # po/guile_strings.txt:243
 #: ../gnucash/report/business-reports/aging.scm:789
@@ -25953,7 +25926,7 @@ msgstr ""
 
 #: ../gnucash/report/report-system/options-utilities.scm:226
 msgid "Dash"
-msgstr ""
+msgstr "Tireté"
 
 #: ../gnucash/report/report-system/options-utilities.scm:227
 msgid "Filled diamond"
@@ -31223,12 +31196,9 @@ msgstr "Contact de la société"
 msgid "Fancy Date Format"
 msgstr "Format de date personnalisé"
 
-# src/gnome/glade-gnc-dialogs.c:1219 src/gnome/glade-gnc-dialogs.c:1240
-# src/gnome/glade-gnc-dialogs.c:1276
 #: ../libgnucash/app-utils/app-utils.scm:330
-#, fuzzy
 msgid "custom"
-msgstr "Personnaliser"
+msgstr "personnalisée"
 
 # src/gnome/glade-gnc-dialogs.c:1460
 #: ../libgnucash/app-utils/business-prefs.scm:24
@@ -32641,1792 +32611,3 @@ msgid ""
 "select Window -> New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
-
-#~ msgid "Enable debugging mode: increasing logging to provide deep detail."
-#~ msgstr ""
-#~ "Active le mode débogage : augmente la verbosité afin de fournir plus de "
-#~ "détails."
-
-#~ msgid ""
-#~ "Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,"
-#~ "error}\""
-#~ msgstr ""
-#~ "Surdéfini le niveau du journal, sous la forme \"log.ger.path={debug,info,"
-#~ "warn,crit,error}\""
-
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from %s rev %s on %s."
-#~ msgstr ""
-#~ "%s\n"
-#~ "Cette version a été compilée à partir de la révision %s du %s sur %s."
-
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from rev %s on %s."
-#~ msgstr ""
-#~ "%s\n"
-#~ "Cette version a été compilée à partir de la révision %s le %s."
-
-#~ msgid "Dummy message"
-#~ msgstr "Message bidon"
-
-# messages-i18n.c:273
-#~ msgid "postd"
-#~ msgstr "posté"
-
-# messages-i18n.c:180
-#~ msgid "duedate"
-#~ msgstr "date d'échéance"
-
-#~ msgid "acct"
-#~ msgstr "cpt"
-
-# po/guile_strings.txt:46
-#~ msgid "question"
-#~ msgstr "question"
-
-#~ msgid ""
-#~ "An error occurred while creating the directory:\n"
-#~ "  %s\n"
-#~ "Please correct the problem and restart GnuCash.\n"
-#~ "The reported error was '%s' (errno %d).\n"
-#~ msgstr ""
-#~ "Une erreur est survenue lors de la création du répertoire:\n"
-#~ " %s\n"
-#~ "Corrigez le problème et relancez GnuCash.\n"
-#~ "Le message d'erreur était \"%s\" (errno %d).\n"
-
-#~ msgid ""
-#~ "The directory\n"
-#~ "  %s\n"
-#~ "exists but cannot be accessed. This program \n"
-#~ "must have full access (read/write/execute) to \n"
-#~ "the directory in order to function properly.\n"
-#~ msgstr ""
-#~ "Le répertoire \n"
-#~ "   %s\n"
-#~ "existe mais ne peut pas être accédé. Ce programme\n"
-#~ "doit avoir un accès complet au répertoire\n"
-#~ "(lecture/écriture/exécution) pour fonctionner\n"
-#~ "correctement.\n"
-
-#~ msgid ""
-#~ "The path\n"
-#~ "  %s\n"
-#~ "exists but it is not a directory. Please delete\n"
-#~ "the file and start GnuCash again.\n"
-#~ msgstr ""
-#~ "Le chemin\n"
-#~ "   %s\n"
-#~ "existe mais il ne s'agit pas d'un répertoire. Effacez\n"
-#~ "ce fichier et redémarrez GnuCash.\n"
-
-#~ msgid ""
-#~ "An unknown error occurred when validating that the\n"
-#~ "  %s\n"
-#~ "directory exists and is usable. Please correct the\n"
-#~ "problem and restart GnuCash. The reported error \n"
-#~ "was '%s' (errno %d)."
-#~ msgstr ""
-#~ "Une erreur est survenue lors de la vérification que le répertoire\n"
-#~ "%s\n"
-#~ "existe et est utilisable. Corrigez le problème\n"
-#~ "et relancez GnuCash. Le message d'erreur était \n"
-#~ "\"%s\" (errno %d)."
-
-#~ msgid ""
-#~ "The permissions are wrong on the directory\n"
-#~ "  %s\n"
-#~ "They must be at least 'rwx' for the user.\n"
-#~ msgstr ""
-#~ "Les permissions sont mauvaises pour le répertoire\n"
-#~ " %s\n"
-#~ "Elles doivent êtres au minimum \"rwx\" pour l'utilisateur.\n"
-
-#~ msgid "_Price Editor"
-#~ msgstr "Éditeur de _cotation"
-
-# messages-i18n.c:183
-#, fuzzy
-#~ msgid "General Ledger2"
-#~ msgstr "Grand Livre"
-
-# messages-i18n.c:183
-#~ msgid "General Ledger Report"
-#~ msgstr "Rapport de Grand Livre"
-
-# messages-i18n.c:183
-#~ msgid "_General Ledger"
-#~ msgstr "_Grand Livre"
-
-# messages-i18n.c:231
-#~ msgid "<No information>"
-#~ msgstr "<pas d'information>"
-
-#~ msgid ""
-#~ "If active, the register will be colored as specified by the system theme. "
-#~ "This can be overridden to provide custom colors by editing the gtkrc file "
-#~ "in the users home directory. Otherwise the standard register colors will "
-#~ "be used that GnuCash has always used."
-#~ msgstr ""
-#~ "Si cette option est cochée, le registre sera colorié par le thème du "
-#~ "système. Ce choix peut être surdéfini en éditant le fichier gtkrc du "
-#~ "répertoire personnel de l'utilisateur, en indiquant des couleurs "
-#~ "personnalisées. Sinon, les couleurs de GnuCash seront celles que GnuCash "
-#~ "a toujours utilisées."
-
-#~ msgid "Clear the entry"
-#~ msgstr "Effacer l'entrée"
-
-#~ msgid ""
-#~ "If activated, delete manually entered stock prices dated earlier than the "
-#~ "specified date. Otherwise only stock prices added by Finance::Quote will "
-#~ "be deleted."
-#~ msgstr ""
-#~ "Si cette option est cochée, tous les cours saisis manuellement antérieurs "
-#~ "à la date indiquée seront supprimés. Sinon, seuls les cours saisis par "
-#~ "Finance::Quote seront supprimés."
-
-#~ msgid "Delete _last price for a stock"
-#~ msgstr "Supprimer _le dernier prix d'une action"
-
-#~ msgid ""
-#~ "If activated, delete all prices before the specified date. Otherwise the "
-#~ "last stock price dated before the date will be kept and all earlier "
-#~ "quotes deleted."
-#~ msgstr ""
-#~ "Si cette option est cochée, tous les cours antérieurs à la date indiquée "
-#~ "seront supprimés. Sinon, le dernier cours antérieur à cette date sera "
-#~ "conservé et les autres supprimés."
-
-#~ msgid "Get _Quotes"
-#~ msgstr "Télécharger les _cotations"
-
-# po/guile_strings.txt:202
-#~ msgid "set true"
-#~ msgstr "est vrai"
-
-#~ msgid "You must select a commodity. To create a new one, click \"New\""
-#~ msgstr ""
-#~ "Vous devez sélectionner une devise. Pour en créer une nouvelle, cliquez "
-#~ "sur \"Nouveau\"."
-
-# messages-i18n.c:136
-#~ msgid "_Delete Account"
-#~ msgstr "_Supprimer le compte"
-
-# messages-i18n.c:190
-#~ msgid "_New Account"
-#~ msgstr "_Nouveau compte"
-
-# messages-i18n.c:11
-#~ msgid ""
-#~ "The GnuCash personal finance manager. The GNU way to manage your money!"
-#~ msgstr ""
-#~ "Le gestionnaire de finances personnelles GnuCash. La façon GNU de gérer "
-#~ "votre argent !"
-
-#, fuzzy
-#~ msgid "© 1997-2015 Contributors"
-#~ msgstr "© 1997-2013 Contributeurs"
-
-#~ msgid "Version: GnuCash-%s %s (rev %s built %s)"
-#~ msgstr "Version : GnuCash-%s %s (rév. %s compilée le %s)"
-
-#~ msgid "Version: GnuCash-%s (rev %s built %s)"
-#~ msgstr "Version : GnuCash-%s (rév. %s compilée le %s)"
-
-# po/guile_strings.txt:188
-#~ msgid "Owner Name"
-#~ msgstr "Nom du destinataire ou de l’émetteur"
-
-#~ msgid "Owner ID"
-#~ msgstr "Identifiant du destinataire ou de l’émetteur"
-
-#~ msgid "UTC"
-#~ msgstr "Temps universel coordonné (UTC)"
-
-#~ msgid "Remember _PIN"
-#~ msgstr "Se souvenir du code _PIN"
-
-#~ msgid "Quotes"
-#~ msgstr "Cotations"
-
-# messages-i18n.c:290 po/guile_strings.txt:106
-#, fuzzy
-#~ msgid "From Num."
-#~ msgstr "Depuis maintenant"
-
-#~ msgid ""
-#~ "The rows displayed below had errors which are in the last column. You can "
-#~ "attempt to correct them by changing the configuration."
-#~ msgstr ""
-#~ "Les lignes affichées ci-dessous ont des erreurs dans leur dernière "
-#~ "colonne. Vous pouvez essayer de les corriger en modifiant la "
-#~ "configuration."
-
-#~ msgid "Transaction Import Assistant"
-#~ msgstr "Assistant d’importation de transaction"
-
-# po/guile_strings.txt:107
-#~ msgid "Start import on row "
-#~ msgstr "Débuter l’importation à la ligne "
-
-#~ msgid " and stop on row "
-#~ msgstr " et arrêter à la ligne "
-
-# src/gnome/glade-gnc-dialogs.c:1324
-#~ msgid "Data type: "
-#~ msgstr "Type de date : "
-
-# messages-i18n.c:227
-#~ msgid "Separated"
-#~ msgstr "Séparé"
-
-# messages-i18n.c:44
-#~ msgid "File opening failed."
-#~ msgstr "Échec à l'ouverture du fichier."
-
-#~ msgid "Unknown encoding."
-#~ msgstr "Encodage inconnu."
-
-#~ msgid "Dates earlier than 1970 are not supported."
-#~ msgstr "Les dates antérieures à 1970 ne sont pas supportées."
-
-# po/guile_strings.txt:127
-#~ msgid "This report has no options."
-#~ msgstr "Ce rapport n'a aucune option."
-
-# messages-i18n.c:93
-#~ msgid "Compress prior/later periods"
-#~ msgstr "Compresser les précédentes/prochaines périodes"
-
-# messages-i18n.c:190
-#~ msgid "Income Barchart"
-#~ msgstr "Histogramme des revenus"
-
-# messages-i18n.c:284 po/guile_strings.txt:274
-# src/gnome/glade-gnc-dialogs.c:647
-#~ msgid "Expense Barchart"
-#~ msgstr "Histogramme des dépenses"
-
-# messages-i18n.c:298 po/guile_strings.txt:165
-# src/gnome/glade-gnc-dialogs.c:632
-#~ msgid "Liability Barchart"
-#~ msgstr "Histogramme du passif"
-
-# messages-i18n.c:161
-#~ msgid "Style"
-#~ msgstr "Style"
-
-# messages-i18n.c:326
-#, fuzzy
-#~ msgid "Report style."
-#~ msgstr "Style de rapports"
-
-#, fuzzy
-#~ msgid "Display N lines."
-#~ msgstr "Afficher N lignes"
-
-#, fuzzy
-#~ msgid "Display 1 line."
-#~ msgstr "Afficher une ligne"
-
-#~ msgid "Exact Time"
-#~ msgstr "Heure exacte"
-
-# po/guile_strings.txt:108
-#, fuzzy
-#~ msgid "Sort by exact time."
-#~ msgstr "Trier par heure exacte"
-
-# messages-i18n.c:77
-#, fuzzy
-#~ msgid "Retrieve the current online quote"
-#~ msgstr "Supprime la répartition courante"
-
-# messages-i18n.c:96
-#~ msgid "Negative amounts are not allowed."
-#~ msgstr "Les montants bruts négatifs ne sont pas autorisés."
-
-#~ msgid "Percentage amount must be between 0 and 100."
-#~ msgstr "Le pourcentage brut doit être compris entre 0 et 100."
-
-#~ msgid ""
-#~ "You must enter the amount of the payment. The payment amount must not be "
-#~ "zero."
-#~ msgstr ""
-#~ "Vous devez saisir le montant du paiement. Il ne doit pas être égal à zéro."
-
-#~ msgid "Auto pay on post_ing"
-#~ msgstr "Paiement _automatique à la publication"
-
-#~ msgid "Internal link between invoice and payment lots"
-#~ msgstr "Lien interne entre la facture et les lots de paiement"
-
-# messages-i18n.c:303
-#~ msgid "New item"
-#~ msgstr "Nouvel onglet"
-
-#~ msgid "_Use system theme colors"
-#~ msgstr "_Utiliser les couleurs système"
-
-#~ msgid ""
-#~ "If checked, the system color theme will be applied to register windows. "
-#~ "If clear, the original GnuCash register colors will be used."
-#~ msgstr ""
-#~ "Si l'option est cochée, le thème de couleur système sera appliqué à la "
-#~ "fenêtre de registre. Sinon, les couleurs originales de GnuCash seront "
-#~ "utilisées."
-
-#~ msgid "%s at %s (code %s)"
-#~ msgstr "%s chez %s (code %s)"
-
-#~ msgid "%s at bank code %s"
-#~ msgstr "%s au code de banque %s"
-
-#~ msgid "Semicolon Separated with Quotes"
-#~ msgstr "Utilisant des guillemets et le point-virgule comme séparateur"
-
-#~ msgid "Comma Separated with Quotes"
-#~ msgstr "Utilisant des guillemets et la virgule comme séparateur"
-
-# messages-i18n.c:322
-#~ msgid "Run preconfigured report"
-#~ msgstr "Exécuter le rapport pré-configuré"
-
-# messages-i18n.c:322
-#~ msgid "Preconfigured Reports"
-#~ msgstr "Rapports pré-configurés"
-
-# messages-i18n.c:204
-#, fuzzy
-#~ msgid "Net Price"
-#~ msgstr "Prix net"
-
-# po/guile_strings.txt:186
-#, fuzzy
-#~ msgid "Total Price"
-#~ msgstr "Prix total"
-
-# messages-i18n.c:242 po/guile_strings.txt:50
-#~ msgid "Amount Due"
-#~ msgstr "Montant dû"
-
-# messages-i18n.c:294 po/guile_strings.txt:205
-# src/gnome/glade-gnc-dialogs.c:644
-#, fuzzy
-#~ msgid "Invoice number: "
-#~ msgstr "N° de facture"
-
-# po/guile_strings.txt:173
-#, fuzzy
-#~ msgid "Job number: "
-#~ msgstr "N° de la prestation"
-
-# po/guile_strings.txt:122
-#~ msgid "and"
-#~ msgstr "et"
-
-#~ msgid "Most recent to report"
-#~ msgstr "Le plus récent de la date du rapport"
-
-#, fuzzy
-#~ msgid "The most recent recorded price before report date."
-#~ msgstr "Prix le plus récent enregistré avant la date du rapport"
-
-#~ msgid "FILO"
-#~ msgstr "FILO"
-
-#, fuzzy
-#~ msgid "Use first-in last-out method for basis."
-#~ msgstr ""
-#~ "Utilise la méthode du premier acheté/dernier vendu pour le coût initial"
-
-#~ msgid ""
-#~ "Since you are creating a new file, you will next see a dialog for setting "
-#~ "book options. These can affect how GnuCash transactions are handled "
-#~ "later, during account setup. If you come back to this page without "
-#~ "cancelling and starting over, the dialog for setting book options will "
-#~ "not be shown a second time when you go forward. You can access it "
-#~ "directly from the menu via File->Properties."
-#~ msgstr ""
-#~ "Puisque vous êtes en train de créer un nouveau fichier, vous allez "
-#~ "ensuite voir une boite de dialogue pour configurer les options du livre. "
-#~ "Celles-ci peuvent affecter la façon dont les transactions de GnuCash "
-#~ "seront ensuite traitées, lors de la configuration des comptes. Si vous "
-#~ "revenez en arrière vers cette page sans annuler ou redémarrer depuis le "
-#~ "début, cette boite de dialogue pour configurer les options du livre ne "
-#~ "vous sera pas présentée une deuxième fois lorsque vous irez en avant. "
-#~ "Vous pouvez y accéder directement dans le menu via Fichier->Propriétés."
-
-# messages-i18n.c:324 po/guile_strings.txt:181
-#~ msgid "Custom Reports"
-#~ msgstr "Rapport personnalisé"
-
-#~ msgid "Welcome to GnuCash 2.4!"
-#~ msgstr "Bienvenue sur GnuCash 2.4 !"
-
-#~ msgid ""
-#~ "Do you really want to overwrite your changes with the contents of the "
-#~ "template \"%s\"?"
-#~ msgstr ""
-#~ "Souhaitez-vous vraiment écraser vos changements avec le contenu du modèle "
-#~ "\"%s\" ?"
-
-# po/guile_strings.txt:88
-#, fuzzy
-#~ msgid "Cross."
-#~ msgstr "Croix"
-
-#~ msgid "Set the prefix path for gconf queries"
-#~ msgstr "Définit le préfixe du chemin pour requêtes gconf"
-
-#~ msgid "GCONFPATH"
-#~ msgstr "REP_GCONF"
-
-# messages-i18n.c:173
-#, fuzzy
-#~ msgid "Credit note"
-#~ msgstr "Lignes de crédit"
-
-# messages-i18n.c:324 po/guile_strings.txt:181
-#, fuzzy
-#~ msgid "Customer Credit Note"
-#~ msgstr "Rapport client"
-
-# messages-i18n.c:183
-#, fuzzy
-#~ msgid "Vendor Credit Note"
-#~ msgstr "Rapport fournisseur"
-
-#, fuzzy
-#~ msgid "Employee Credit Note"
-#~ msgstr "Rapport employé"
-
-# messages-i18n.c:57
-#~ msgid "Remo_ve Transaction Splits"
-#~ msgstr "_Effacer les répartitions de la transaction"
-
-# messages-i18n.c:346
-#~ msgid "_Shift Transaction Forward"
-#~ msgstr "Naviguer en a_vant vers une transaction"
-
-# messages-i18n.c:346
-#~ msgid "Account Transaction Report"
-#~ msgstr "Rapport de transaction sur compte"
-
-#~ msgid "Order of columns in the dialog"
-#~ msgstr "Ordre des colonnes dans la boîte de dialogue"
-
-#~ msgid "Show the Full Name column"
-#~ msgstr "Afficher la colonne du nom complet"
-
-#~ msgid "Show the ISIN/CUSIP Code (Exchange Specific Data) column"
-#~ msgstr "Afficher la colonne du code CUSIP (données d'échanges spécifiques)"
-
-#~ msgid "Show the Namespace column"
-#~ msgstr "Afficher la colonne du domaine"
-
-# messages-i18n.c:53
-#~ msgid "Show the Print Name column"
-#~ msgstr "Afficher la colonne d'impression du nom"
-
-#~ msgid "Show the Quote Flag column"
-#~ msgstr "Afficher la colonne de statut du cours"
-
-# messages-i18n.c:202
-#~ msgid "Show the Quote Source column"
-#~ msgstr "Afficher la colonne de source de cours"
-
-# messages-i18n.c:53
-#~ msgid "Show the Quote Timezone column"
-#~ msgstr "Afficher la colonne de fuseau horaire"
-
-# messages-i18n.c:53
-#~ msgid "Show the Unique Name column"
-#~ msgstr "Afficher la colonne d'identifiant unique"
-
-#~ msgid "Show the fraction column"
-#~ msgstr "Afficher la colonne des fractions"
-
-#~ msgid "Show the name column"
-#~ msgstr "Afficher la colonne du nom"
-
-#~ msgid "Show the symbol column"
-#~ msgstr "Afficher la colonne du symbole"
-
-#~ msgid ""
-#~ "This setting contains a list of names which controls the order in which "
-#~ "the columns are listed in the dialog. Names may be reordered or removed "
-#~ "from this list to control which columns appear in the dialog and in what "
-#~ "order."
-#~ msgstr ""
-#~ "Ce champ contient une liste de noms qui contrôlent l'ordre d'affichage "
-#~ "des colonnes listées dans la boîte de dialogue. Les noms peuvent être "
-#~ "déplacés ou supprimés de la liste pour définir quelles colonnes sont "
-#~ "affichées et dans quel ordre."
-
-#~ msgid "Columns used for sorting"
-#~ msgstr "Colonnes utilisées pour le tri"
-
-#~ msgid ""
-#~ "The X,Y coordinates of the top left corner of the window when it was last "
-#~ "closed."
-#~ msgstr ""
-#~ " Les coordonnées X et Y du coin haut à gauche de la boîte de dialogue à "
-#~ "sa dernière fermeture."
-
-#~ msgid "The width and size of the window when it was last closed."
-#~ msgstr ""
-#~ "La largeur et la taille de boîte de dialogue à sa dernière fermeture."
-
-#~ msgid ""
-#~ "This setting indicates how the key column is sorted. Possible values for "
-#~ "this setting are 'ascending' and 'descending'."
-#~ msgstr ""
-#~ " Ce champ définit l'ordre de tri de la colonne principale. Les valeurs "
-#~ "possibles sont \"croissant\" ou \"décroissant\"."
-
-#~ msgid ""
-#~ "This setting indicates which column in the tree is used for sorting. "
-#~ "Possible values for this setting are the name of any column in this "
-#~ "window (see the column_order key) or the keyword 'none'."
-#~ msgstr ""
-#~ " Ce champ définit quelle colonne est utilisée pour le tri. Les valeurs "
-#~ "possibles sont n'importe quel nom d'une colonne ou le mot clé 'none'."
-
-# messages-i18n.c:273
-#~ msgid "Window position"
-#~ msgstr "Position de la fenêtre"
-
-#~ msgid "Show the Price column"
-#~ msgstr "Afficher la colonne du prix"
-
-# src/gnome/glade-gnc-dialogs.c:506
-#~ msgid "Show the Source column"
-#~ msgstr "Afficher la colonne source"
-
-#~ msgid "Show the Type column"
-#~ msgstr "Afficher la colonne type"
-
-# po/guile_strings.txt:230
-#~ msgid "Show the date column"
-#~ msgstr "Afficher la colonne date"
-
-#~ msgid "This setting enables the Price column."
-#~ msgstr "Ce paramètre autorise la colonne du prix."
-
-#~ msgid "This setting enables the Source column."
-#~ msgstr "Ce paramètre autorise la colonne source."
-
-#~ msgid "This setting enables the Type column."
-#~ msgstr "Ce paramètre autorise la colonne type."
-
-#~ msgid "This setting enables the commodity column."
-#~ msgstr "Ce paramètre autorise la colonne produit."
-
-#~ msgid "This setting enables the currency column."
-#~ msgstr "Ce paramètre autorise la colonne devise."
-
-#~ msgid ""
-#~ "This value contains the Y coordinate for the bottom edge of the check. "
-#~ "This coordinate is from the bottom edge of the sheet of paper."
-#~ msgstr ""
-#~ "Ce paramètre est la coordonnée Y du bas du chèque. C'est la "
-#~ "distancerelative au bas de la feuille de papier"
-
-# messages-i18n.c:206
-#~ msgid "Accounts to reverse the balance"
-#~ msgstr "Comptes dont le solde doit être inversé"
-
-# po/guile_strings.txt:240
-#~ msgid "Default view style for new register"
-#~ msgstr "Style par défaut pour les fenêtres du registre"
-
-#~ msgid "Enables Euro support"
-#~ msgstr "Activer la prise en charge de l'euro"
-
-#~ msgid "Enables additional support for the European Union EURO currency."
-#~ msgstr "Active le support pour l'euro, la devise de l'Union Européenne."
-
-#~ msgid "How to interpret dates without a year"
-#~ msgstr "Comment interpréter les dates sans année"
-
-# po/guile_strings.txt:135
-#~ msgid "Labels on toolbar buttons"
-#~ msgstr "Étiquettes sur les boutons de la barre d'outils"
-
-#~ msgid "Position of the notebook tabs"
-#~ msgstr "Position des onglets"
-
-#, fuzzy
-#~ msgid "Show the Calendar buttons"
-#~ msgstr "Afficher la colonne du nom"
-
-# po/guile_strings.txt:230
-#, fuzzy
-#~ msgid "Show the Date Entered"
-#~ msgstr "Afficher la colonne date"
-
-#~ msgid "Source of default account currency"
-#~ msgstr "Source de la devise par défaut pour les comptes"
-
-# po/guile_strings.txt:152
-#~ msgid "Source of default report currency"
-#~ msgstr "Source de la devise par défaut pour les rapports"
-
-# messages-i18n.c:127
-#, fuzzy
-#~ msgid "The number of Characters needed"
-#~ msgstr "Afficher le nombre de titres"
-
-# po/guile_strings.txt:144
-#, fuzzy
-#~ msgid "The number of transactions displayed"
-#~ msgstr "Nombre de _transactions :"
-
-#~ msgid ""
-#~ "This setting controls how the labels on toolbar buttons are shown. If set "
-#~ "to \"system\" then GnuCash will use the desktop setting for how to draw "
-#~ "toolbar buttons. If set to \"icon\" then only icons will be show on "
-#~ "toolbar buttons.. If set to \"text\" only the labels will be shown. If "
-#~ "set to \"both\" then both icons and labels will be shown. If set to "
-#~ "\"both-horiz\" then icons will be shown for all buttons with labels added "
-#~ "on important buttons."
-#~ msgstr ""
-#~ "Ce paramètre définit l'affichage des étiquettes sur les boutons de la "
-#~ "barre d'outils. Si défini à \"system\" alors GnuCash utilisera les "
-#~ "préférences du bureau pour dessiner les boutons de la barre d'outils. Si "
-#~ "défini à \"icon\" alors seuls les icônes seront afficher sur les boutons "
-#~ "de la barre d'outils. Si défini à \"text\" seulement les étiquettes "
-#~ "seront affichés. Si défini à \"both\" alors les icônes et les étiquettes "
-#~ "seront affichés. Si défini à \"both-horiz\" alors les icônes seront "
-#~ "affichés avec les étiquettes sur tous les boutons importants."
-
-#~ msgid ""
-#~ "This setting specifies the default currency used for reports if the "
-#~ "currency_choice setting is set to \"other\". This field must contain the "
-#~ "three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
-#~ msgstr ""
-#~ "Ce paramètre définit la devise par défaut pour les rapports si le choix "
-#~ "de la devise est \"other\". Ce champ doit contenir la devise selon le "
-#~ "code à trois lettres ISO 4217 (ex. EUR, USD, GBP)."
-
-#~ msgid ""
-#~ "This setting contains the width of the named column in the most recently "
-#~ "closed register window. Changing these values will change the sizes of "
-#~ "the columns in the next opened register"
-#~ msgstr ""
-#~ "Ce paramètre contient la largeur de la colonne choisie dans la fenêtre de "
-#~ "registre la plus récemment fermée. Modifier ces valeurs va changer les "
-#~ "tailles des colonnes à la prochaine ouverture d'un registre."
-
-#~ msgid "Width of a column in the dialog"
-#~ msgstr "Largeur d'une colonne dans la boîte de dialogue"
-
-#~ msgid ""
-#~ "Error: Failure saving state file.\n"
-#~ "  %s"
-#~ msgstr ""
-#~ "Erreur à l'enregistrement du fichier d'état :\n"
-#~ "  %s"
-
-#, fuzzy
-#~ msgid ""
-#~ "When you click Apply, GnuCash will modify your ~/.gconf.path file and "
-#~ "restart the gconf backend. There will be a short delay before GnuCash is "
-#~ "loaded."
-#~ msgstr ""
-#~ "Si vous cliquez sur \"Appliquer\", GnuCash modifiera votre fichier ~/."
-#~ "gconf.path et redémarrera le démon GConf."
-
-#, fuzzy
-#~ msgid ""
-#~ "When you click Apply, GnuCash will install the gconf data into your local "
-#~ "~/.gconf file and restart the gconf backend. The %s script must be found "
-#~ "in your search path for this to work correctly."
-#~ msgstr ""
-#~ "Quand vous cliquerez sur \"Appliquer\", GnuCash installera les données de "
-#~ "gconf dans le répertoire local ~/.gconf et redémarrera le démon GConf. Le "
-#~ "script %s doit se trouver dans votre chemin système pour fonctionner "
-#~ "correctement."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to correct the problem by yourself. When you click Apply, "
-#~ "GnuCash will exit. Please correct the problem and restart the gconf "
-#~ "backend with the command 'gconftool-2 --shutdown' before restarting "
-#~ "GnuCash. If you have not already done so, you can click the Back button "
-#~ "and copy the necessary text from the dialog."
-#~ msgstr ""
-#~ "Vous avez choisi de corriger le problème vous même. GnuCash se fermera "
-#~ "quand vous cliquerez sur \"Appliquer\". Corrigez le problème et "
-#~ "redémarrez le démon GConf par la commande \"gconftool-2 --shutdown\" "
-#~ "avant de redémarrer GnuCash. Si vous ne l'avez déjà fait, vous pouvez "
-#~ "cliquer sur le bouton \"Précédent\" et copier le texte nécessaire à "
-#~ "partir de la boîte de dialogue."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to correct the problem by yourself. When you click Apply, "
-#~ "GnuCash will exit. Please run the %s script which will install the "
-#~ "configuration data and restart the gconf backend."
-#~ msgstr ""
-#~ "Vous avez choisi de corriger le problème vous même. GnuCash se fermera "
-#~ "quand vous cliquerez sur \"Appliquer\". Lancez le script %s qui "
-#~ "installera les données de configuration et redémarrera le démon GConf."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have already corrected the problem and restarted the gconf backend "
-#~ "with the command 'gconftool-2 --shutdown'. When you click Apply, there "
-#~ "will be a short delay before GnuCash is loaded."
-#~ msgstr ""
-#~ "Vous avez déjà corrigé le problème et redémarré le démon GConf par la "
-#~ "commande \"gconftool-2 --shutdown\". Le démarrage de GnuCash se "
-#~ "poursuivra quand vous cliquerez sur \"Appliquer\"."
-
-# messages-i18n.c:351
-#, fuzzy
-#~ msgid "Withdrawl"
-#~ msgstr "Retrait"
-
-#~ msgid ""
-#~ "<b>Cannot find default values</b>\n"
-#~ "\n"
-#~ "The configuration data used to specify default values for GnuCash cannot "
-#~ "be found in the default system locations. Without this data GnuCash will "
-#~ "still operate properly but it may require some extra time to setup. Do "
-#~ "you wish to setup the configuration data?"
-#~ msgstr ""
-#~ "<b>Impossible de trouver les réglages par défaut</b>\n"
-#~ "\n"
-#~ "Les réglages par défaut pour GnuCash ne sont pas à l'emplacement attendu. "
-#~ "Sans ces données, GnuCash fonctionne parfaitement mais un temps "
-#~ "supplémentaire est requis pour sa configuration. Voulez-vous installer la "
-#~ "configuration par défaut ?"
-
-# messages-i18n.c:256
-#, fuzzy
-#~ msgid "Apply Changes"
-#~ msgstr "Changement de valeur"
-
-# messages-i18n.c:224
-#, fuzzy
-#~ msgid "Choose Method"
-#~ msgstr "Méthode de tri"
-
-#~ msgid "GnuCash will install the data for you."
-#~ msgstr "GnuCash mettra les données en place pour vous."
-
-#~ msgid "GnuCash will update the system path for you."
-#~ msgstr "GnuCash modifiera le chemin système pour vous."
-
-#, fuzzy
-#~ msgid "Install Into Home Directory"
-#~ msgstr "Installer dans le répertoire utilisateur"
-
-#~ msgid ""
-#~ "Please add the following lines at the end of your ~/.gconf.path file:"
-#~ msgstr ""
-#~ "Veuillez ajouter les lignes suivantes à votre fichier ~/.gconf.path :"
-
-#~ msgid "Please run the following commands:"
-#~ msgstr "Veuillez exécuter les commandes suivantes :"
-
-#~ msgid "S_kip"
-#~ msgstr "Ign_orer"
-
-#, fuzzy
-#~ msgid ""
-#~ "The configuration data is stored in a non-standard location. There are "
-#~ "two methods that can be used to make this data visible to GnuCash. The "
-#~ "first is to modify a system search path to include the data location. The "
-#~ "second is to copy the data into your home directory."
-#~ msgstr ""
-#~ "Les données de configurations sont enregistrées dans un répertoire non "
-#~ "standard. Il y a deux méthodes pour que GnuCash puisse les voir. La "
-#~ "première est de modifier le chemin de recherche pour inclure le chemin "
-#~ "des données. La seconde est de copier les données dans votre répertoire "
-#~ "personnel. "
-
-#~ msgid ""
-#~ "The configuration data used by GnuCash to specify its default values "
-#~ "cannot be found in the default system locations. Without this data "
-#~ "GnuCash will still operate properly, but it may require some extra time "
-#~ "to set up."
-#~ msgstr ""
-#~ "Les réglages par défaut pour GnuCash ne sont pas à l'emplacement attendu. "
-#~ "Sans ces données, GnuCash fonctionne parfaitement, mais demande plus de "
-#~ "temps au lancement."
-
-# messages-i18n.c:74
-#~ msgid "The data has _already been installed in another window"
-#~ msgstr "Les données ont _déjà été installées par une autre fenêtre"
-
-# messages-i18n.c:74
-#~ msgid "The search path has _already been updated in another window"
-#~ msgstr "Le chemin de recherche a _déjà été installé par une autre fenêtre"
-
-#, fuzzy
-#~ msgid ""
-#~ "This method will install the GnuCash default settings and descriptions "
-#~ "into the .gconf directory within your home directory. The disadvantage to "
-#~ "this method is that future updates to GnuCash will not update your local "
-#~ "settings to add in new keys."
-#~ msgstr ""
-#~ "Cette méthode installera les réglages et descriptions par défaut de "
-#~ "GnuCash dans le répertoire .gconf du répertoire utilisateur. "
-#~ "L'inconvénient de cette méthode est que les mises à jour de GnuCash ne "
-#~ "mettront pas à jour vos réglages personnels."
-
-#, fuzzy
-#~ msgid ""
-#~ "This method will modify the file .gconf.path in your home directory. It "
-#~ "will add the GnuCash install directory to this path so that GnuCash can "
-#~ "find its default settings and their descriptions."
-#~ msgstr ""
-#~ "Cette méthode va modifier le fichier .gconf.path dans votre répertoire "
-#~ "utilisateur. Il va ajouter le répertoire où est installé GnuCash à ce "
-#~ "chemin pour que GnuCash puisse trouver ses réglages par défaut et leurs "
-#~ "descriptions."
-
-#, fuzzy
-#~ msgid "Update GnuCash Configuration Data"
-#~ msgstr "Mettre à jour les préférences de GnuCash"
-
-#, fuzzy
-#~ msgid "Update Search Path"
-#~ msgstr "Mettre à jour le chemin de recherche"
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to install the configuration data used by GnuCash into "
-#~ "the ~/.gconf directory. GnuCash can do this for you, or tell you how to "
-#~ "do it yourself."
-#~ msgstr ""
-#~ "Vous avez choisi d'installer les données de configurations de GnuCash "
-#~ "dans le répertoire ~/.gconf. GnuCash peut le faire pour vous ou vous dire "
-#~ "comment le faire vous-même."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to update the system search path. GnuCash can do this for "
-#~ "you, or it can tell you how to do it yourself."
-#~ msgstr ""
-#~ "Vous avez choisi de mettre à jour le chemin de recherche système. GnuCash "
-#~ "peut le faire pour vous ou vous dire comment le faire vous-même."
-
-#, fuzzy
-#~ msgid ""
-#~ "You will then need to restart the gconf backend with the command "
-#~ "'gconftool-2 --shutdown'."
-#~ msgstr ""
-#~ "vous devrez alors redémarrer le démon gconf avec\n"
-#~ "la commande  \"gconftool-2 --shutdown\"."
-
-#~ msgid "_GnuCash installs the data"
-#~ msgstr "_GnuCash installe les données"
-
-#~ msgid "_GnuCash updates the search path"
-#~ msgstr "_GnuCash met à jour le chemin de recherche"
-
-#~ msgid "_Install into home directory"
-#~ msgstr "_Installer dans le répertoire utilisateur"
-
-# src/gnome/glade-gnc-dialogs.c:786
-#~ msgid "_Setup"
-#~ msgstr "_Installer"
-
-#~ msgid "_Update search path"
-#~ msgstr "_Mettre à jour le chemin de recherche"
-
-#~ msgid "_You install the data yourself"
-#~ msgstr "_Installer les données vous-même"
-
-#~ msgid "_You update the search path yourself"
-#~ msgstr "_Mettre à jour le chemin de recherche vous-même"
-
-#~ msgid "<b>Toolbar Style</b>"
-#~ msgstr "<b>Style de la barre d'outils</b>"
-
-#~ msgid "Display toolbar items as icons only."
-#~ msgstr "Afficher uniquement les icônes des éléments de la barre d'outils."
-
-#~ msgid "Display toolbar items as text only."
-#~ msgstr ""
-#~ "Afficher uniquement le nom de la commande pour les éléments de la barre "
-#~ "d'outils."
-
-#~ msgid ""
-#~ "Display toolbar items with the text label below the icon. Labels are show "
-#~ "for all items."
-#~ msgstr ""
-#~ "Afficher les éléments de la barre d'outils avec l'étiquette sous l'icône. "
-#~ "Les étiquettes sont affichés pour tous les éléments."
-
-#~ msgid ""
-#~ "Display toolbar items with the text label beside the icon. Labels are "
-#~ "only shown for the most important items."
-#~ msgstr ""
-#~ "Afficher les éléments de la barre d'outils avec l'étiquette à côté de "
-#~ "l'icône. Les étiquettes sont uniquement affichés sur les éléments les "
-#~ "plus importants."
-
-#~ msgid "Priority text besi_de icons"
-#~ msgstr "Texte à _côté des icônes"
-
-#~ msgid "Text _below icons"
-#~ msgstr "Texte _sous les icônes"
-
-# messages-i18n.c:213
-#~ msgid "Use s_ystem default"
-#~ msgstr "Utiliser les préférences s_ystème"
-
-#~ msgid "Use the date format common in continental Europe."
-#~ msgstr "Utiliser le format de date commun en Europe continentale."
-
-#~ msgid "Use the date format common in the United Kingdom."
-#~ msgstr "Utiliser le format de date commun au Royaume-Uni."
-
-#~ msgid "Use the date format common in the United States."
-#~ msgstr "Utiliser le format de date commun aux Etats Unis d'Amérique."
-
-#~ msgid "Use the date format specified by the ISO-8601 standard."
-#~ msgstr "Utiliser le format de date indiqué par le standard ISO-8601."
-
-#~ msgid "Use the system setting for displaying toolbar items."
-#~ msgstr ""
-#~ "Utiliser les préférences système pour afficher les éléments de la barre "
-#~ "d'outils."
-
-#~ msgid "_Europe:"
-#~ msgstr "_Europe :"
-
-# po/guile_strings.txt:256
-#~ msgid "_Icons only"
-#~ msgstr "_Icônes uniquement"
-
-# po/guile_strings.txt:134
-#~ msgid "_Text only"
-#~ msgstr "_Texte uniquement"
-
-# messages-i18n.c:105
-#~ msgid "Run the currently selected report"
-#~ msgstr "Exécuter le rapport actuellement sélectionné"
-
-#~ msgid "_Run"
-#~ msgstr "_Exécuter"
-
-# messages-i18n.c:326
-#~ msgid "Add _Report"
-#~ msgstr "Ajouter _rapport"
-
-#~ msgid ""
-#~ "Your report \"%s\" has been saved into the configuration file \"%s\"."
-#~ msgstr ""
-#~ "Votre rapport \"%s\" a été enregistré dans le fichier de configuration "
-#~ "\"%s\"."
-
-#~ msgid "Enable hyperlinks in reports"
-#~ msgstr "Autoriser les liens hypertextes dans le rapport"
-
-# po/guile_strings.txt:34
-#~ msgid "The last stable version was "
-#~ msgstr "La dernière version stable était "
-
-#~ msgid "The next stable version will be "
-#~ msgstr "La prochaine version stable sera "
-
-#~ msgid "Built %s from r%s"
-#~ msgstr "Compilé le %s depuis r%s"
-
-#~ msgid "You may not post an invoice with a negative total value."
-#~ msgstr "Vous ne pouvez pas publier une facture avec un total  négatif."
-
-#~ msgid ""
-#~ "You may not post an expense voucher with a negative total cash value."
-#~ msgstr "Vous ne pouvez pas publier un bon de dépense avec un total négatif."
-
-# po/guile_strings.txt:48
-#~ msgid "Your selected post account, %s, does not exist"
-#~ msgstr "Votre compte de publication sélectionné, %s, n'existe pas"
-
-# messages-i18n.c:313
-#~ msgid ""
-#~ "Days\n"
-#~ "Proximo"
-#~ msgstr ""
-#~ "Jours\n"
-#~ "Proximo"
-
-#~ msgid "What Tax Table should be applied to this customer?"
-#~ msgstr "Quelle table de taxes doit-elle être appliquée à ce client ?"
-
-#~ msgid ""
-#~ "The invoice being paid.\n"
-#~ "\n"
-#~ "Note that is field is optional. If you leave it blank, GnuCash will "
-#~ "automatically assign the payment to the first unpaid invoice for this "
-#~ "company."
-#~ msgstr ""
-#~ "La facture a été payée.\n"
-#~ "\n"
-#~ "Notez que ce champ est optionnel. Si vous le laissez vide, GnuCash va "
-#~ "automatiquement assigner un paiement à la prochaine facture non-payée "
-#~ "pour cette compagnie."
-
-#~ msgid "What Tax Table should be applied to this vendor?"
-#~ msgstr ""
-#~ "Quelle table de taxation doit-elle être appliquée à ce fournisseur ?"
-
-# messages-i18n.c:105
-#~ msgid "Reload invoice report"
-#~ msgstr "Recharger le rapport facture"
-
-#~ msgid "Reload invoice report scheme file"
-#~ msgstr "Recharge le fichier de schéma de rapport de facture"
-
-# messages-i18n.c:105
-#~ msgid "Reload owner report"
-#~ msgstr "Recharger le rapport du propriétaire"
-
-#~ msgid "Reload owner report scheme file"
-#~ msgstr "Recharge le fichier de schéma de rapport du propriétaire"
-
-# messages-i18n.c:105
-#~ msgid "Reload receivable report"
-#~ msgstr "Recharger le rapport recevable"
-
-#~ msgid "Reload receivable report scheme file"
-#~ msgstr "Recharge le fichier de schéma de rapport recevable"
-
-#~ msgid "Automatic Payment Forward"
-#~ msgstr "Paiement futur automatique"
-
-# messages-i18n.c:21
-#~ msgid "You must select a commodity."
-#~ msgstr "Vous devez choisir un bien."
-
-# messages-i18n.c:21
-#~ msgid ""
-#~ "You must select closing date that is greater than the closing date of the "
-#~ "previous book."
-#~ msgstr "La date de clôture doit être postérieure à la première transaction."
-
-# messages-i18n.c:21
-#~ msgid "You must select closing date that is not in the future."
-#~ msgstr "La date de clôture ne doit pas être dans le futur."
-
-# messages-i18n.c:56
-#~ msgid "Are you sure you want to cancel the Mortgage/Loan Setup Assistant?"
-#~ msgstr "Voulez-vous vraiment annuler l'assistant prêt/hypothèque ?"
-
-# src/gnome/dialog-qif-import.c:310
-#~ msgid "Please select a valid \"from\" account."
-#~ msgstr "Sélectionnez un compte \"source\" valide."
-
-# src/gnome/dialog-qif-import.c:310
-#~ msgid "Please select a valid \"to\" account."
-#~ msgstr "Sélectionnez un compte \"destination\" valide."
-
-# messages-i18n.c:13
-#~ msgid "Please select a valid \"interest\" account."
-#~ msgstr "Sélectionnez un compte valide pour les intérêts."
-
-# messages-i18n.c:312
-#~ msgid "Payment: \"%s\""
-#~ msgstr "Paiement : \"%s\""
-
-# messages-i18n.c:13
-#~ msgid "You must enter a valid distribution amount."
-#~ msgstr "Vous devez saisir un montant de répartition valide."
-
-# messages-i18n.c:21
-#~ msgid "You must enter a distribution amount."
-#~ msgstr "Vous devez saisir un montant brut de répartition."
-
-# messages-i18n.c:13
-#~ msgid "You must either enter a valid price or leave it blank."
-#~ msgstr "Vous devez saisir un prix valide ou laisser le champ vide."
-
-# messages-i18n.c:24
-#~ msgid "The price must be positive."
-#~ msgstr "Le montant doit être positif."
-
-#~ msgid "You must either enter a valid cash amount or leave it blank."
-#~ msgstr "Vous devez saisir un montant brut valide ou laisser le champ vide."
-
-#~ msgid "The cash distribution must be positive."
-#~ msgstr "La répartition du liquide doit être positive."
-
-# messages-i18n.c:20
-#~ msgid "You must select an income account for the cash distribution."
-#~ msgstr ""
-#~ "Vous devez sélectionner un compte de revenu pour la répartition des "
-#~ "espèce."
-
-# messages-i18n.c:20
-#~ msgid "You must select an asset account for the cash distribution."
-#~ msgstr ""
-#~ "Vous devez sélectionner un compte d'actif pour la répartition des espèces."
-
-#~ msgid "New Account (not implemented)"
-#~ msgstr "Nouveau compte (non implémenté)"
-
-#~ msgid "Select or add a GnuCash account"
-#~ msgstr "Sélectionner ou ajouter un compte GnuCash"
-
-#~ msgid ""
-#~ "Use Commodity Value\n"
-#~ "1\n"
-#~ "1/10\n"
-#~ "1/100\n"
-#~ "1/1000\n"
-#~ "1/10000\n"
-#~ "1/100000\n"
-#~ "1/1000000"
-#~ msgstr ""
-#~ "Utiliser la valeur du bien\n"
-#~ "1\n"
-#~ "1/10\n"
-#~ "1/100\n"
-#~ "1/1000\n"
-#~ "1/10000\n"
-#~ "1/100000\n"
-#~ "1/1000000"
-
-# messages-i18n.c:124
-#~ msgid "Enter a title for this book."
-#~ msgstr "Saisissez un titre pour ce livre"
-
-# messages-i18n.c:223
-#~ msgid "Enter notes that describe this book."
-#~ msgstr "Saisissez une note décrivant ce livre."
-
-#~ msgid "Finish Closing Books"
-#~ msgstr "Terminer les livres de clôture"
-
-#~ msgid ""
-#~ "day(s)\n"
-#~ "week(s)\n"
-#~ "month(s)\n"
-#~ "year(s)"
-#~ msgstr ""
-#~ "jour(s)\n"
-#~ "semaine(s)\n"
-#~ "mois\n"
-#~ "année(s)"
-
-# messages-i18n.c:238
-#~ msgid "Account Information"
-#~ msgstr "Informations du compte"
-
-#~ msgid ""
-#~ "Annual\n"
-#~ "Semi-annual\n"
-#~ "Tri-annual\n"
-#~ "Quarterly\n"
-#~ "Bi-monthly\n"
-#~ "Monthly\n"
-#~ "Semi-monthly\n"
-#~ "Bi-weekly\n"
-#~ "Weekly\n"
-#~ "Daily (360)\n"
-#~ "Daily (365)"
-#~ msgstr ""
-#~ "Annuel\n"
-#~ "Bisannuel\n"
-#~ "Trisannuel\n"
-#~ "Trimestriel\n"
-#~ "Bimestriel\n"
-#~ "Mensuel\n"
-#~ "Bimensuel\n"
-#~ "Toutes les deux semaines\n"
-#~ "Hebdomadaire\n"
-#~ "Quotidien (360)\n"
-#~ "Quotidien (365)"
-
-#~ msgid "Co_mpounding:"
-#~ msgstr "Co_mposé :"
-
-# messages-i18n.c:210
-#~ msgid "_Effective Date:"
-#~ msgstr "Date _effective :"
-
-# messages-i18n.c:312
-#~ msgid "_Initial Payment:"
-#~ msgstr "Paiement _initial :"
-
-# messages-i18n.c:312
-#~ msgid "_Payments:"
-#~ msgstr "_Paiements :"
-
-#~ msgid "<b>_Mini-Viewer</b>"
-#~ msgstr "<b>_Mini-visionneur</b>"
-
-#~ msgid "A summary of all of the transactions in the selected lot"
-#~ msgstr "Un résumé de toutes les transactions dans le lot sélectionné"
-
-#~ msgid ""
-#~ "Bid\n"
-#~ "Ask\n"
-#~ "Last\n"
-#~ "Net Asset Value\n"
-#~ "Unknown"
-#~ msgstr ""
-#~ "Offrir\n"
-#~ "Demander\n"
-#~ "Dernier\n"
-#~ "Valeur nette du bien\n"
-#~ "Inconnu"
-
-#~ msgid ""
-#~ "Inches\n"
-#~ "Centimeters\n"
-#~ "Millimeters\n"
-#~ "Points"
-#~ msgstr ""
-#~ "Pouces\n"
-#~ "Centimètres\n"
-#~ "Millimètres\n"
-#~ "Points"
-
-#~ msgid ""
-#~ "Quicken/QuickBooks (tm) US-Letter\n"
-#~ "Deluxe(tm) Personal Checks US-Letter\n"
-#~ "Quicken(tm) Wallet Checks w/ side stub\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Quicken/QuickBooks (tm) US-Letter\n"
-#~ "Deluxe(tm) Personal Checks US-Letter\n"
-#~ "Quicken(tm) Wallet Checks w/ side stub\n"
-#~ "Personnalisé"
-
-#~ msgid ""
-#~ "Top\n"
-#~ "Middle\n"
-#~ "Bottom\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Haut\n"
-#~ "Milieu\n"
-#~ "Bas\n"
-#~ "Personnalisé"
-
-# messages-i18n.c:346
-#~ msgid "Copy Transaction"
-#~ msgstr "Copier la transaction"
-
-# messages-i18n.c:95
-#~ msgid "Copy the selected transaction"
-#~ msgstr "Copie la transaction sélectionnée"
-
-# messages-i18n.c:346
-#~ msgid "Cut Transaction"
-#~ msgstr "Couper la transaction"
-
-# messages-i18n.c:176
-#~ msgid "Dup_licate Transaction..."
-#~ msgstr "Dup_liquer la transaction..."
-
-# messages-i18n.c:180
-#~ msgid "Edit Exchange Rate"
-#~ msgstr "Éditer le taux de change"
-
-# messages-i18n.c:81
-#~ msgid "Edit the exchange rate for the current split"
-#~ msgstr "Édite le taux de change pour la répartition actuelle"
-
-#~ msgid "Erase all splits except the one for this account."
-#~ msgstr ""
-#~ "Efface toutes les répartitions, exceptées celles associées au compte "
-#~ "courant."
-
-# messages-i18n.c:297
-#~ msgid "Jump"
-#~ msgstr "Sauter"
-
-# messages-i18n.c:57
-#~ msgid "Remove Transaction Splits"
-#~ msgstr "Efface toutes les répartitions de cette transaction"
-
-#~ msgid "Schedule..."
-#~ msgstr "Récurrence..."
-
-# messages-i18n.c:221
-#~ msgid "Sort by Amount"
-#~ msgstr "Trier par montant brut"
-
-# messages-i18n.c:222
-#~ msgid "Sort by Date"
-#~ msgstr "Trier par date"
-
-# messages-i18n.c:223
-#~ msgid "Sort by Description"
-#~ msgstr "Trier par description"
-
-# messages-i18n.c:224
-#~ msgid "Sort by Memo"
-#~ msgstr "Trier par mémo"
-
-# messages-i18n.c:225
-#~ msgid "Sort by Number"
-#~ msgstr "Trier par numéro"
-
-# messages-i18n.c:161
-#~ msgid "St_yle"
-#~ msgstr "St_yle"
-
-# messages-i18n.c:242 po/guile_strings.txt:50
-#~ msgid "_Amount"
-#~ msgstr "_Montant brut"
-
-# po/guile_strings.txt:173
-#~ msgid "_Number"
-#~ msgstr "_Numéro"
-
-# messages-i18n.c:210
-#~ msgid "_Statement Date"
-#~ msgstr "Date du _relevé"
-
-#~ msgid ""
-#~ "1st\n"
-#~ "2nd\n"
-#~ "3rd\n"
-#~ "4th\n"
-#~ "5th\n"
-#~ "6th\n"
-#~ "7th\n"
-#~ "8th\n"
-#~ "9th\n"
-#~ "10th\n"
-#~ "11th\n"
-#~ "12th\n"
-#~ "13th\n"
-#~ "14th\n"
-#~ "15th\n"
-#~ "16th\n"
-#~ "17th\n"
-#~ "18th\n"
-#~ "19th\n"
-#~ "20th\n"
-#~ "21st\n"
-#~ "22nd\n"
-#~ "23rd\n"
-#~ "24th\n"
-#~ "25th\n"
-#~ "26th\n"
-#~ "27th\n"
-#~ "28th\n"
-#~ "29th\n"
-#~ "30th\n"
-#~ "31st\n"
-#~ "Last day of month\n"
-#~ "Last Monday\n"
-#~ "Last Tuesday\n"
-#~ "Last Wednesday\n"
-#~ "Last Thursday\n"
-#~ "Last Friday\n"
-#~ "Last Saturday\n"
-#~ "Last Sunday"
-#~ msgstr ""
-#~ "1er\n"
-#~ "2e\n"
-#~ "3e\n"
-#~ "4e\n"
-#~ "5e\n"
-#~ "6e\n"
-#~ "7e\n"
-#~ "8e\n"
-#~ "9e\n"
-#~ "10e\n"
-#~ "11e\n"
-#~ "12e\n"
-#~ "13e\n"
-#~ "14e\n"
-#~ "15e\n"
-#~ "16e\n"
-#~ "17e\n"
-#~ "18e\n"
-#~ "19e\n"
-#~ "20e\n"
-#~ "21e\n"
-#~ "22e\n"
-#~ "23e\n"
-#~ "24e\n"
-#~ "25e\n"
-#~ "26e\n"
-#~ "27e\n"
-#~ "28e\n"
-#~ "29e\n"
-#~ "30e\n"
-#~ "31e\n"
-#~ "Dernier jour du mois\n"
-#~ "Dernier lundi\n"
-#~ "Dernier mardi\n"
-#~ "Dernier mercredi\n"
-#~ "Dernier jeudi\n"
-#~ "Dernier vendredi\n"
-#~ "Dernier samedi\n"
-#~ "Dernier dimanche"
-
-# messages-i18n.c:180
-#~ msgid "<b>End</b>"
-#~ msgstr "<b>Fin</b>"
-
-# messages-i18n.c:238
-#~ msgid "<b>Upcoming</b>"
-#~ msgstr "<b>À venir</b>"
-
-# messages-i18n.c:179
-#~ msgid "Creation State"
-#~ msgstr "État de création"
-
-#~ msgid ""
-#~ "Current Year\n"
-#~ "Now + 1 Year\n"
-#~ "Whole Loan\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Année actuelle\n"
-#~ "Dans un an\n"
-#~ "Emprunt complet\n"
-#~ "Personnalisé"
-
-#~ msgid ""
-#~ "Daily\n"
-#~ "Weekly\n"
-#~ "Bi-Weekly\n"
-#~ "Monthly\n"
-#~ "Quarterly\n"
-#~ "Yearly"
-#~ msgstr ""
-#~ "Quotidien\n"
-#~ "Hebdomadaire\n"
-#~ "Toutes les deux semaines\n"
-#~ "Mensuel\n"
-#~ "Trimestriel\n"
-#~ "Annuel"
-
-#~ msgid "Do you..."
-#~ msgstr "Est-ce que vous..."
-
-#~ msgid ""
-#~ "Fixed Rate\n"
-#~ "3/1 Year ARM\n"
-#~ "5/1 Year ARM\n"
-#~ "7/1 Year ARM\n"
-#~ "10/1 Year ARM"
-#~ msgstr ""
-#~ "Taux fixe\n"
-#~ "Taux variable sur 3 ans\n"
-#~ "Taux variable sur 5 ans\n"
-#~ "Taux variable sur 7 ans\n"
-#~ "Taux variable sur 10 ans"
-
-# messages-i18n.c:231
-#~ msgid "Loan Information"
-#~ msgstr "Informations sur l'emprunt"
-
-#~ msgid ""
-#~ "No change\n"
-#~ "Use previous weekday\n"
-#~ "Use next weekday"
-#~ msgstr ""
-#~ "Aucun changement\n"
-#~ "Utiliser le jour précédent\n"
-#~ "Utiliser le jour suivant"
-
-#~ msgid ""
-#~ "None\n"
-#~ "Once\n"
-#~ "Daily\n"
-#~ "Weekly\n"
-#~ "Semi-Monthly\n"
-#~ "Monthly"
-#~ msgstr ""
-#~ "Aucune\n"
-#~ "Une fois\n"
-#~ "Quotidien\n"
-#~ "Hebdomadaire\n"
-#~ "Bimensuel\n"
-#~ "Mensuel"
-
-#~ msgid "Press apply to commit these changes."
-#~ msgstr ""
-#~ "Appuyez sur «Appliquer\" pour créer les transactions récurentes "
-#~ "correspondantes."
-
-#~ msgid "Repayment Type"
-#~ msgstr "Type de remboursement"
-
-# messages-i18n.c:227
-#~ msgid "Start Date: "
-#~ msgstr "Date de début : "
-
-# po/guile_strings.txt:184
-#~ msgid ""
-#~ "months\n"
-#~ "years"
-#~ msgstr ""
-#~ "mois\n"
-#~ "années"
-
-#~ msgid "Set the budget options using this dialog."
-#~ msgstr "Ajustez les options du budget avec cette boîte de dialogue."
-
-#~ msgid "Case Insensitive?"
-#~ msgstr "Ignorer la casse?"
-
-#~ msgid "That GnuCash XML file is already loaded. Please select another file."
-#~ msgstr ""
-#~ "Ce fichier XML GnuCash est déjà chargé. Veuillez sélectionner un autre "
-#~ "fichier."
-
-#~ msgid ""
-#~ "No files to merge. Please add ones by clicking on 'Load another file'."
-#~ msgstr ""
-#~ "Aucun fichier à fusionner. Veuillez en ajouter en cliquant sur \"Charger "
-#~ "un autre fichier\"."
-
-# messages-i18n.c:182
-#~ msgid "Finish changes"
-#~ msgstr "Terminer les modifications"
-
-#~ msgid "Update gconf settings - GnuCash"
-#~ msgstr "Mettre à jour les réglages de GConf - GnuCash"
-
-# Les termes \"Importation\" et \"Exportation\" ne sont pas français
-# seuls export, exporter et import, importer doivent être utilisé.
-#
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to import at this time. "
-#~ "Do this if you have saved your accounts to separate GnuCash files.\n"
-#~ "\n"
-#~ "Click \"Forward\" to finish loading files and move to the next step of "
-#~ "the GnuCash Datafile import process."
-#~ msgstr ""
-#~ "Cliquez sur \"Charger un autre fichier\" si vous avez plus de données à "
-#~ "importer actuellement. À effectuer, si vous avez enregistré vos comptes "
-#~ "dans plusieurs fichiers GnuCash.\n"
-#~ "\n"
-#~ "Cliquez sur \"Suivant\" pour terminer le chargement des fichiers et aller "
-#~ "à la prochaine étape du processus d'import du fichier XML GnuCash. "
-
-#~ msgid "Do not merge"
-#~ msgstr "Ne pas fusionner"
-
-# messages-i18n.c:44
-#~ msgid "GnuCash data files you have loaded"
-#~ msgstr "Fichiers GnuCash que vous avez chargés"
-
-# src/gnome/glade-gnc-dialogs.c:300
-#~ msgid "Load another file"
-#~ msgstr "Charger un autre fichier"
-
-# src/gnome/glade-gnc-dialogs.c:293
-#~ msgid "Unload selected file"
-#~ msgstr "Décharger le fichier sélectionné"
-
-# src/gnome/glade-gnc-dialogs.c:1460
-#~ msgid "<b>Current File List</b>"
-#~ msgstr "<b>Liste de fichiers actuels</b>"
-
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to load at this time.\n"
-#~ "\n"
-#~ "Click \"Next\" to finish loading files and move to the next step. "
-#~ msgstr ""
-#~ "Cliquez sur \"Charger un autre fichier\" si vous avez plus de données à "
-#~ "importer pour l'instant.\n"
-#~ "Cliquez sur \"Suivant\" pour terminer le chargement des fichiers et aller "
-#~ "à la prochaine étape."
-
-# messages-i18n.c:231
-#~ msgid "<b>Exchange/Price Information</b>"
-#~ msgstr "<b>Informations sur le cours/marché</b>"
-
-# messages-i18n.c:242 po/guile_strings.txt:50
-#~ msgid "To A_mount:"
-#~ msgstr "_Montant Vers :"
-
-# messages-i18n.c:180
-#~ msgid "_Exchange Rate:"
-#~ msgstr "Taux de _change :"
-
-# messages-i18n.c:290 po/guile_strings.txt:106
-#~ msgid "_From:"
-#~ msgstr "_Depuis :"
-
-# messages-i18n.c:342 po/guile_strings.txt:252
-#~ msgid "_To:"
-#~ msgstr "_Vers :"
-
-#~ msgid ""
-#~ "US (12/31/2001)\n"
-#~ "UK (31/12/2001)\n"
-#~ "Europe (31.12.2001)\n"
-#~ "ISO (2001-12-31)\n"
-#~ "UTC\n"
-#~ "Locale\n"
-#~ "Custom\n"
-#~ msgstr ""
-#~ "US (12/31/2001)\n"
-#~ "GB (31/12/2001)\n"
-#~ "Europe (31.12.2001)\n"
-#~ "ISO (2001-12-31)\n"
-#~ "UTC\n"
-#~ "Locale\n"
-#~ "Personnalisé\n"
-
-#~ msgid "Don't tell me again this session."
-#~ msgstr ""
-#~ "Retenir la réponse et ne plus me poser la question pour cette session."
-
-#~ msgid "Don't tell me again."
-#~ msgstr "Ne plus me le rappeler."
-
-#~ msgid "Remember the answer and don't tell me again this session."
-#~ msgstr ""
-#~ "Retenir la réponse et ne plus me poser la question pour cette session."
-
-#~ msgid "Remember the answer and don't tell me again."
-#~ msgstr "Retenir la réponse et ne plus poser la question."
-
-# messages-i18n.c:44
-#~ msgid "Failed to process file: %s"
-#~ msgstr "Impossible de traiter le fichier : %s"
-
-# messages-i18n.c:35
-#~ msgid "Failed to open file: %s: %s"
-#~ msgstr "Impossible d'ouvrir le fichier : %s : %s"
-
-# messages-i18n.c:94
-#~ msgid "Add a new transaction to the account"
-#~ msgstr "Ajoute une nouvelle transaction au compte"
-
-# src/gnome/glade-gnc-dialogs.c:1178
-#~ msgid "Select an CSV/Fixed-Width file to import"
-#~ msgstr "Sélectionner un fichier CVS/à largeur fixe pour l'importation"
-
-#~ msgid "Import CSV/Fixed-Width File"
-#~ msgstr "Importer un fichier CSV avec largeur fixe"
-
-#~ msgid "Import _CSV/Fixed-Width..."
-#~ msgstr "Importer un  fichier -CSV avec largeur fixe..."
-
-#~ msgid " a CSV/Fixed-Width file"
-#~ msgstr "un fichier CSV avec largeur fixe"
-
-#, fuzzy
-#~ msgid ""
-#~ "Enable the SKIP action in the transaction matcher. If enabled, a "
-#~ "transaction whose best match's score is in the yellow zone (above the "
-#~ "Auto-ADD threshold but below the Auto-CLEAR threshold) will be SKIPed by "
-#~ "default."
-#~ msgstr ""
-#~ "Autoriser l'action PASSER dans l'outil d'association de transactions. Si "
-#~ "actif, la transaction dont le score de la meilleure similarité est dans "
-#~ "la zone jaune ( au dessus du seuil d'ajout automatique mais sous le seuil "
-#~ "de pointage automatique) sera non traitée par défaut."
-
-#~ msgid ""
-#~ "For a new transaction, click on the \"Other Account\" entry to choose the "
-#~ "other (destination) account of this transaction.\n"
-#~ "For a transaction that is a duplicate of an existing one, click on the "
-#~ "\"Other Account\" or \"Description\" entry to \n"
-#~ "check whether GnuCash chose the right existing transaction.\n"
-#~ "To switch transactions between both states, click on the checkmark in the "
-#~ "\"New\" column.\n"
-#~ "When all new transactions have the correct destination account and all "
-#~ "duplicates are matched with the right existing transaction, \n"
-#~ "click \"OK\"."
-#~ msgstr ""
-#~ "Pour une nouvelle transaction, cliquez sur l'entrée de \"Autre compte\" "
-#~ "pour choisir le compte de destination pour équilibrer la transaction.\n"
-#~ "Pour une transaction qui est un duplicata d'une transaction existante, "
-#~ "cliquez sur l'entrée de \"Autre compte\" ou \"Description\" pour vérifier "
-#~ "si GnuCash a choisi la bonne transaction.\n"
-#~ "Pour basculer des transactions entre les deux états, cliquez sur la case "
-#~ "de la colonne \"Nouveau\".\n"
-#~ "Quand toutes les transactions ont le bon compte de destination et tous "
-#~ "les duplicatas des transactions existantes sont identifiés, cliquez sur "
-#~ "\"Valider\"."
-
-# messages-i18n.c:194
-#~ msgid "Other Account"
-#~ msgstr "Autre compte"
-
-#~ msgid "Period-as-decimal (1,000.00)"
-#~ msgstr "Point pour les décimales (1,000.00)"
-
-#~ msgid "Comma-as-decimal (1.000,00)"
-#~ msgstr "Virgule pour les décimales (1.000,00)"
-
-#~ msgid "y-d-m"
-#~ msgstr "a-j-m"
-
-# messages-i18n.c:305 src/gnome/print-session.c:108
-# src/gnome/print-session.c:197
-#~ msgid "(no)"
-#~ msgstr "(non)"
-
-# messages-i18n.c:21
-#~ msgid "You must enter an account name."
-#~ msgstr "Vous devez saisir un nom de compte."
-
-#~ msgid ""
-#~ "No valid customer selected. Click on the Options button to select a "
-#~ "customer."
-#~ msgstr ""
-#~ "Aucun client valide sélectionné. Cliquez sur le bouton Options et "
-#~ "sélectionnez un client."
-
-#~ msgid ""
-#~ "No valid employee selected. Click on the Options button to select an "
-#~ "employee."
-#~ msgstr ""
-#~ "Aucun employé valide sélectionné. Cliquez sur le bouton Options et "
-#~ "sélectionnez un employé."
-
-#~ msgid ""
-#~ "No valid company selected. Click on the Options button to select a "
-#~ "company."
-#~ msgstr ""
-#~ "Aucun société valide sélectionnée. Cliquez sur le bouton Options et "
-#~ "sélectionnez un société"
-
-#~ msgid ""
-#~ "Blue items are exportable to a German Tax XML file. Press Export to "
-#~ "actually export them."
-#~ msgstr ""
-#~ "Les éléments en bleu sont exportables vers un fichier de taxes allemandes "
-#~ "en XML. Cliquez sur Exporter pour les exporter effectivement."
-
-#~ msgid ""
-#~ "No Tax Related accounts were found. Go to the Edit->Tax Options dialog to "
-#~ "set up tax-related accounts."
-#~ msgstr ""
-#~ "Il n'y a pas de comptes relatifs aux impôts. Allez dans la boîte de "
-#~ "dialogue\n"
-#~ "Comptes -> informations d'imposition pour définir les comptes imposés."
-
-#~ msgid "Asterisk"
-#~ msgstr "Astérisque"
-
-#~ msgid ""
-#~ "A list of directories (strings) indicating where to look for html and "
-#~ "parsed-html files. Each element must be a string representing a directory "
-#~ "or a symbol where 'default expands to the default path, and 'current "
-#~ "expands to the current value of the path."
-#~ msgstr ""
-#~ "Une liste de répertoires (chaînes de caractères) indiquant où chercher "
-#~ "les fichiers HTML. Chaque élément doit être une chaîne de caractères "
-#~ "représentant un répertoire ou un lien. \"Défaut\" se réfère au chemin par "
-#~ "défaut et \"Courant\" se réfère à la valeur courante du chemin"
-
-#~ msgid "Set the search path for documentation files"
-#~ msgstr "Définit le chemin pour les fichiers de documentation"

@@ -20,20 +20,19 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr ""
+msgstr "Арапски"
 
 #: ../borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr ""
+msgstr "Балтички"
 
 #: ../borrowed/goffice/go-charmap-sel.c:72
-#, fuzzy
 msgid "Central European"
-msgstr "Европски"
+msgstr "Централноевропски"
 
 #: ../borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr ""
+msgstr "Кинески"
 
 #: ../borrowed/goffice/go-charmap-sel.c:74
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:242
@@ -41,29 +40,28 @@ msgid "Cyrillic"
 msgstr "Ћирилични"
 
 #: ../borrowed/goffice/go-charmap-sel.c:75
-#, fuzzy
 msgid "Greek"
-msgstr "Зелена"
+msgstr "Грчки"
 
 #: ../borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr ""
+msgstr "Хебрејски"
 
 #: ../borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
-msgstr ""
+msgstr "Индијски"
 
 #: ../borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr ""
+msgstr "Јапански"
 
 #: ../borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr ""
+msgstr "Корејски"
 
 #: ../borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr ""
+msgstr "Турски"
 
 #: ../borrowed/goffice/go-charmap-sel.c:81
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:224
@@ -72,12 +70,11 @@ msgstr "Уникод"
 
 #: ../borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr ""
+msgstr "Вијетнамски"
 
 #: ../borrowed/goffice/go-charmap-sel.c:83
-#, fuzzy
 msgid "Western"
-msgstr "Регистар"
+msgstr "Западноевропски"
 
 #: ../borrowed/goffice/go-charmap-sel.c:84
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:60
@@ -89,364 +86,351 @@ msgstr "Друго"
 
 #: ../borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "Арапски (IBM-864)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr ""
+msgstr "Арапски (IBM-864-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "Арапски (ISO-8859-6)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr ""
+msgstr "Арапски (ISO-8859-6-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr ""
+msgstr "Арапски (ISO-8859-6-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:121
 msgid "Arabic (MacArabic)"
-msgstr ""
+msgstr "Арапски (MacArabic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:122
 msgid "Arabic (Windows-1256)"
-msgstr ""
+msgstr "Арапски (Windows-1256)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
-msgstr ""
+msgstr "Јерменски (ARMSCII-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:124
-#, fuzzy
 msgid "Baltic (ISO-8859-13)"
-msgstr "ИСО 8859-13 (балтички)"
+msgstr "Балтички (ISO-8859-13)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
-msgstr ""
+msgstr "Балтички (ISO-8859-4)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:126
 msgid "Baltic (Windows-1257)"
-msgstr ""
+msgstr "Балтички (Windows-1257)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:127
-#, fuzzy
 msgid "Celtic (ISO-8859-14)"
-msgstr "ИСО 8859-14 (келтски)"
+msgstr "Келтски (ISO-8859-14)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
-msgstr ""
+msgstr "Централноевропски (IBM-852)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:130
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "Централноевропски (ISO-8859-2)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:132
 msgid "Central European (MacCE)"
-msgstr ""
+msgstr "Централноевропски (MacCE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:134
 msgid "Central European (Windows-1250)"
-msgstr ""
+msgstr "Централноевропски (Windows-1250)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:136
 msgid "Chinese Simplified (GB18030)"
-msgstr ""
+msgstr "Кинески поједностављени (GB18030)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:137
 msgid "Chinese Simplified (GB2312)"
-msgstr ""
+msgstr "Кинески поједностављени (GB2312)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:138
 msgid "Chinese Simplified (GBK)"
-msgstr ""
+msgstr "Кинески поједностављени (GBK)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:139
 msgid "Chinese Simplified (HZ)"
-msgstr ""
+msgstr "Кинески поједностављени (HZ)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:140
 msgid "Chinese Simplified (Windows-936)"
-msgstr ""
+msgstr "Кинески поједностављени (Windows-936)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr ""
+msgstr "Кинески Традиционални (Big5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr ""
+msgstr "Кинески Традиционални (Big5-HKSCS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
-msgstr ""
+msgstr "Кинески Традиционални (EUC-TW)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:147
 msgid "Croatian (MacCroatian)"
-msgstr ""
+msgstr "Хрватски (MacCroatian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:149
-#, fuzzy
 msgid "Cyrillic (IBM-855)"
-msgstr "Ћирилични"
+msgstr "Чирилични (IBM-855)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:150
 msgid "Cyrillic (ISO-8859-5)"
-msgstr ""
+msgstr "Ћирилица (ISO-8859-5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:152
 msgid "Cyrillic (ISO-IR-111)"
-msgstr ""
+msgstr "Ћирилица (ISO-IR-111)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:154
-#, fuzzy
 msgid "Cyrillic (KOI8-R)"
-msgstr "Ћирилични"
+msgstr "Ћирилица (KOI8-R)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:155
 msgid "Cyrillic (MacCyrillic)"
-msgstr ""
+msgstr "Ћирилица (MacCyrillic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:157
 msgid "Cyrillic (Windows-1251)"
-msgstr ""
+msgstr "Ћирилица (Windows-1251)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
-msgstr ""
+msgstr "Руски (CP-866)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:160
 msgid "Ukrainian (KOI8-U)"
-msgstr ""
+msgstr "Украјински (KOI8-U)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:161
-#, fuzzy
 msgid "Ukrainian (MacUkrainian)"
-msgstr "КОИ8‑У (украјински)"
+msgstr "Украјински (MacUkrainian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:163
 msgid "English (ASCII)"
-msgstr ""
+msgstr "Енглески (ASCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
-msgstr ""
+msgstr "Фарси (MacFarsi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:166
 msgid "Georgian (GEOSTD8)"
-msgstr ""
+msgstr "Грузијски (GEOSTD8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:167
-#, fuzzy
 msgid "Greek (ISO-8859-7)"
-msgstr "ИСО 8859-7 (грчки)"
+msgstr "Грчки (ISO-8859-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:168
 msgid "Greek (MacGreek)"
-msgstr ""
+msgstr "Грчки (MacGreek)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:169
 msgid "Greek (Windows-1253)"
-msgstr ""
+msgstr "Грчки (Windows-1253)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:170
 msgid "Gujarati (MacGujarati)"
-msgstr ""
+msgstr "Гуџарати (MacGujarati)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:172
 msgid "Gurmukhi (MacGurmukhi)"
-msgstr ""
+msgstr "Гурмуки (MacGurmukhi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr ""
+msgstr "Хебрејски (IBM-862)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr ""
+msgstr "Хебрејски (ISO-8859-8-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr ""
+msgstr "Хебрејски (ISO-8859-8-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr ""
+msgstr "Хебрејски (MacHebrew)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
-msgstr ""
+msgstr "Хебрејски (Windows-1255)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
-msgstr ""
+msgstr "Хинду (MacDevanagari)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
-msgstr ""
+msgstr "Исландски (MacIcelandic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:186
 msgid "Japanese (EUC-JP)"
-msgstr ""
+msgstr "Јапански (EUC-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:187
 msgid "Japanese (ISO-2022-JP)"
-msgstr ""
+msgstr "Јапански (ISO-2022-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:189
 msgid "Japanese (Shift_JIS)"
-msgstr ""
+msgstr "Јапански (Shift_JIS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:190
 msgid "Korean (EUC-KR)"
-msgstr ""
+msgstr "Корејски (EUC-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:191
 msgid "Korean (ISO-2022-KR)"
-msgstr ""
+msgstr "Корејски (ISO-2022-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:192
 msgid "Korean (JOHAB)"
-msgstr ""
+msgstr "Корејски (JOHAB)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:193
 msgid "Korean (UHC)"
-msgstr ""
+msgstr "Корејски (UHC)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:194
-#, fuzzy
 msgid "Nordic (ISO-8859-10)"
-msgstr "ISO-8859-10 (скандинавски)"
+msgstr "Нордијски (ISO-8859-10)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:195
 msgid "Romanian (MacRomanian)"
-msgstr ""
+msgstr "Румунски (MacRomanian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:197
 msgid "Romanian (ISO-8859-16)"
-msgstr ""
+msgstr "Румунски (ISO-8859-16)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:199
 msgid "South European (ISO-8859-3)"
-msgstr ""
+msgstr "Јужноевропски (ISO-8859-3)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:201
 msgid "Thai (TIS-620)"
-msgstr ""
+msgstr "Тајландски (TIS-620)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:202
 msgid "Turkish (IBM-857)"
-msgstr ""
+msgstr "Турски (IBM-857)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:203
 msgid "Turkish (ISO-8859-9)"
-msgstr ""
+msgstr "Турски (ISO-8859-9)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:204
 msgid "Turkish (MacTurkish)"
-msgstr ""
+msgstr "Турски (MacTurkish)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:206
 msgid "Turkish (Windows-1254)"
-msgstr ""
+msgstr "Турски (Windows-1254)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:208
-#, fuzzy
 msgid "Unicode (UTF-7)"
-msgstr "Уникод"
+msgstr "Уникод (UTF-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:209
-#, fuzzy
 msgid "Unicode (UTF-8)"
-msgstr "Уникод"
+msgstr "Уникод (UTF-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:210
 msgid "Unicode (UTF-16BE)"
-msgstr ""
+msgstr "Уникод (UTF-16BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:211
 msgid "Unicode (UTF-16LE)"
-msgstr ""
+msgstr "Уникод (UTF-16LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:212
 msgid "Unicode (UTF-32BE)"
-msgstr ""
+msgstr "Уникод (UTF-32BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:213
 msgid "Unicode (UTF-32LE)"
-msgstr ""
+msgstr "Уникод (UTF-32LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:214
-#, fuzzy
 msgid "User Defined"
-msgstr "Корисник"
+msgstr "Кориснички дефинисан"
 
 #: ../borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
-msgstr ""
+msgstr "Вијетнамски (TCVN)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:217
 msgid "Vietnamese (VISCII)"
-msgstr ""
+msgstr "Вијетнамски (VISCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:218
 msgid "Vietnamese (VPS)"
-msgstr ""
+msgstr "Вијетнамски (VPS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:219
 msgid "Vietnamese (Windows-1258)"
-msgstr ""
+msgstr "Вијетнамски (Windows-1258)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "Визуелни Хебрејски (ISO-8859-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
-msgstr ""
+msgstr "Западни (IBM-850)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:224
 msgid "Western (ISO-8859-1)"
-msgstr ""
+msgstr "Западни (ISO-8859-1)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:225
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "Западни (ISO-8859-15)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:227
 msgid "Western (MacRoman)"
-msgstr ""
+msgstr "Западни (MacRoman)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:228
 msgid "Western (Windows-1252)"
-msgstr ""
+msgstr "Западни (Windows-1252)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:441
-#, fuzzy
 msgid "Locale: "
-msgstr "_Језик:"
+msgstr "Локалитет: "
 
 #: ../borrowed/goffice/go-charmap-sel.c:476
-#, fuzzy
 msgid "Conversion Direction"
-msgstr "Претварање је обављено"
+msgstr "Смер претварања"
 
 #: ../borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr ""
+msgstr "Ова вредност одлучује који iconv тест ће се извести."
 
 #: ../borrowed/goffice/go-optionmenu.c:410
 msgid "Menu"
-msgstr ""
+msgstr "Мени"
 
 #: ../borrowed/goffice/go-optionmenu.c:410
-#, fuzzy
 msgid "The menu of options"
-msgstr "Опција броја је %s."
+msgstr "Мени са опцијама"
 
 #: ../gnucash/gnome/assistant-acct-period.c:190
 msgid "The book was closed successfully."
@@ -28034,9 +28018,8 @@ msgid "Fancy Date Format"
 msgstr "Запис пуног датума"
 
 #: ../libgnucash/app-utils/app-utils.scm:330
-#, fuzzy
 msgid "custom"
-msgstr "Произвољно"
+msgstr "произвољно"
 
 #: ../libgnucash/app-utils/business-prefs.scm:24
 msgid "Counters"
@@ -29389,378 +29372,3 @@ msgstr ""
 "Да на екрану упоредите садржај 2 језичка, у једном језичку, изаберите "
 "„Прозор → Нови прозор са страницом“ из изборника да удвостручите тај језичак "
 "у новом прозору."
-
-#~ msgid "Enable debugging mode: increasing logging to provide deep detail."
-#~ msgstr ""
-#~ "Укључује режим прочишћавања: повећавајући писање у дневник зарад више "
-#~ "појединости."
-
-#~ msgid ""
-#~ "Log level overrides, of the form \"log.ger.path={debug,info,warn,crit,"
-#~ "error}\""
-#~ msgstr ""
-#~ "Преписивање нивоа дневника, у облику „log.ger.path={debug,info,warn,crit,"
-#~ "error}“"
-
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from %s rev %s on %s."
-#~ msgstr ""
-#~ "%s\n"
-#~ "Овај примерак је изграђен из %s рев %s %s."
-
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from rev %s on %s."
-#~ msgstr ""
-#~ "%s\n"
-#~ "Изграђен је из ревизије %s од %s."
-
-#~ msgid ""
-#~ "An error occurred while creating the directory:\n"
-#~ "  %s\n"
-#~ "Please correct the problem and restart GnuCash.\n"
-#~ "The reported error was '%s' (errno %d).\n"
-#~ msgstr ""
-#~ "Дошло је до грешке приликом стварања директоријума:\n"
-#~ "  %s\n"
-#~ "Отклоните проблем и поново покрените Гнуов новчић.\n"
-#~ "Пријављена грешка је „%s“ (бр. грешке %d).\n"
-
-#~ msgid ""
-#~ "Note: the directory\n"
-#~ "  %s\n"
-#~ "doesn't exist. This is however not fatal.\n"
-#~ msgstr ""
-#~ "Напомена: директоријум\n"
-#~ "  %s\n"
-#~ "не постоји. Ипак ово није кобно.\n"
-
-#~ msgid ""
-#~ "The directory\n"
-#~ "  %s\n"
-#~ "exists but cannot be accessed. This program \n"
-#~ "must have full access (read/write/execute) to \n"
-#~ "the directory in order to function properly.\n"
-#~ msgstr ""
-#~ "Директоријум\n"
-#~ "  %s\n"
-#~ "постоји али му се не може приступити. Овај програм\n"
-#~ "мора имати пун приступ (читање/писање/извршавање)\n"
-#~ "директоријуму како би исправно радио.\n"
-
-#~ msgid ""
-#~ "The path\n"
-#~ "  %s\n"
-#~ "exists but it is not a directory. Please delete\n"
-#~ "the file and start GnuCash again.\n"
-#~ msgstr ""
-#~ "Путања\n"
-#~ "  %s\n"
-#~ "постоји али није директоријум. Обришите датотеку\n"
-#~ "и поново покрените Гнуов новчић.\n"
-
-#~ msgid ""
-#~ "An unknown error occurred when validating that the\n"
-#~ "  %s\n"
-#~ "directory exists and is usable. Please correct the\n"
-#~ "problem and restart GnuCash. The reported error \n"
-#~ "was '%s' (errno %d)."
-#~ msgstr ""
-#~ "Дошло је до грешке приликом потврђивања да директоријум:\n"
-#~ "  %s\n"
-#~ "постоји и да је употребљив. Отклоните проблем и\n"
-#~ "поново покрените Гнуов новчић. Пријављена грешка\n"
-#~ "је „%s“ (бр. грешке %d)."
-
-#~ msgid ""
-#~ "The permissions are wrong on the directory\n"
-#~ "  %s\n"
-#~ "They must be at least 'rwx' for the user.\n"
-#~ msgstr ""
-#~ "Овлашћења диркторијума су погрешна\n"
-#~ "  %s\n"
-#~ "За корисника морају бити барем „rwx“.\n"
-
-#~ msgid "_Price Editor"
-#~ msgstr "Уређивач _цене"
-
-#~ msgid "General Ledger2"
-#~ msgstr "Општа књига2"
-
-#~ msgid "General Ledger Report"
-#~ msgstr "Извештај опште књиге"
-
-#~ msgid "_General Ledger"
-#~ msgstr "_Општа књига"
-
-#~ msgid "<No information>"
-#~ msgstr "<Нема податка>"
-
-#~ msgid ""
-#~ "If active, the register will be colored as specified by the system theme. "
-#~ "This can be overridden to provide custom colors by editing the gtkrc file "
-#~ "in the users home directory. Otherwise the standard register colors will "
-#~ "be used that GnuCash has always used."
-#~ msgstr ""
-#~ "Ако је изабрано, регистар ће бити обојен као што је наведено темом "
-#~ "система. Ово може бити превазиђено да би се обезбедиле произвољне боје "
-#~ "уређивањем гткрц датотеке у корисниковој личној фацикли. У супротном "
-#~ "стандардне боје регистра биће коришћене које је Гнуов новчић увек "
-#~ "користио."
-
-#~ msgid ""
-#~ "If activated, delete manually entered stock prices dated earlier than the "
-#~ "specified date. Otherwise only stock prices added by Finance::Quote will "
-#~ "be deleted."
-#~ msgstr ""
-#~ "Ако је изабрано, брише ручно унешене цене деоница са датумом ранијим од "
-#~ "наведеног датума. У супротном биће обрисане само цене деоница додате "
-#~ "финансијама::курсом."
-
-#~ msgid "Delete _last price for a stock"
-#~ msgstr "Обриши _последњу цену деонице"
-
-#~ msgid ""
-#~ "If activated, delete all prices before the specified date. Otherwise the "
-#~ "last stock price dated before the date will be kept and all earlier "
-#~ "quotes deleted."
-#~ msgstr ""
-#~ "Ако је изабрано, брише све цене пре наведеног датума. У супротном "
-#~ "последња цена деонице са датумом пре датума биће задржана а сви ранији "
-#~ "курсеви обрисани."
-
-#~ msgid "Get _Quotes"
-#~ msgstr "Набави _курсеве"
-
-#~ msgid "_Delete Account"
-#~ msgstr "О_бриши налог"
-
-#~ msgid "_New Account"
-#~ msgstr "_Нови налог"
-
-#~ msgid "Last modified on %x %X"
-#~ msgstr "Време последње измене: %x у %X"
-
-#~ msgid ""
-#~ "The GnuCash personal finance manager. The GNU way to manage your money!"
-#~ msgstr ""
-#~ "Гнуов новчић лични управник финансијама. Гнуов начин за управљање вашим "
-#~ "новцем!"
-
-#~ msgid "Version: GnuCash-%s %s (rev %s built %s)"
-#~ msgstr "Издање: Гнуов новчић-%s %s (рев %s изградња %s)"
-
-#~ msgid "Version: GnuCash-%s (rev %s built %s)"
-#~ msgstr "Издање: Гнуов новчић-%s (рев %s изградња %s)"
-
-#~ msgid "Remember _PIN"
-#~ msgstr "Запамти _ПИН"
-
-#~ msgid ""
-#~ "This assistant will help you export the Transactions to a file.\n"
-#~ "\n"
-#~ "Select the settings you require for the file and then click 'Forward' to "
-#~ "proceed or 'Cancel' to Abort Export.\n"
-#~ msgstr ""
-#~ "Овај помоћник ће вам помоћи да извезете трансакције у датотеку.\n"
-#~ "\n"
-#~ "Изаберите подешавања која захтевате за датотеку и затим притисните "
-#~ "„Напред“ да наставите или „Одустани“ да прекинете извоз.\n"
-
-#~ msgid "Quotes"
-#~ msgstr "Курсеви"
-
-#~ msgid "Category"
-#~ msgstr "Категорија"
-
-#~ msgid "From With Sym"
-#~ msgstr "Из „Са збиром“"
-
-#~ msgid "To Num."
-#~ msgstr "До броја"
-
-#~ msgid "From Num."
-#~ msgstr "Од броја"
-
-#~ msgid "From Rate/Price"
-#~ msgstr "Од стопе/цене"
-
-#~ msgid ""
-#~ "The rows displayed below had errors which are in the last column. You can "
-#~ "attempt to correct them by changing the configuration."
-#~ msgstr ""
-#~ "Редови приказани испод имају грешке које су у последњој колони. Можете "
-#~ "покушати да их исправите променивши подешавање."
-
-#~ msgid ""
-#~ "There are problems with the import settings!\n"
-#~ "The date format could be wrong or there are not enough columns set..."
-#~ msgstr ""
-#~ "Постоје проблеми са подешавањима увоза!\n"
-#~ "Можда је запис датума погрешан или нема довољно подешених колона..."
-
-#~ msgid ""
-#~ "To Change the account, double click on the required account, click "
-#~ "Forward to proceed."
-#~ msgstr ""
-#~ "Да промените налог, притисните два пута на потребном налогу, притисните "
-#~ "„Напред“ да наставите."
-
-#~ msgid ""
-#~ "This assistant will help you import a delimited file containing a list of "
-#~ "transactions.\n"
-#~ "\n"
-#~ "All transactions imported will be associated to one account for each "
-#~ "import and if you select the account column, the account in the first row "
-#~ "will be used for all rows.\n"
-#~ "\n"
-#~ "Various options exist for specifying the delimiter as well as a fixed "
-#~ "width option. With the fixed width option, double click on the bar above "
-#~ "the displayed rows to set the column width.\n"
-#~ "\n"
-#~ "There is an option for specifying the start row, end row and an option to "
-#~ "skip alternate rows begining from the start row. These can be used if you "
-#~ "have some header text, a points collected status row or multiple accounts "
-#~ "in the same file."
-#~ msgstr ""
-#~ "Овај помоћник ће вам помоћи да увезете ограничену датотеку која садржи "
-#~ "списак трансакција.\n"
-#~ "\n"
-#~ "Све увезене трансакције биће придружене једном налогу за сваки увоз и ако "
-#~ "изаберете колону налога, налог у првом реду ће се користити за све "
-#~ "редове.\n"
-#~ "\n"
-#~ "Различите опције постоје за одређивање граничника као и опција сталне "
-#~ "ширине. Са опцијом сталне ширине, два пута притисните на траку изнад "
-#~ "приказаних редова да подесите ширину колоне.\n"
-#~ "\n"
-#~ "Постоји опција за одређивање почетног реда, крајњег ред и опција за "
-#~ "прескакање наизменичних редова почевши од почетнок реда. Исте се могу "
-#~ "користити ако имате неки текст заглавља, ред стања сакупљен бодовима или "
-#~ "више налога у истој датотеци."
-
-#~ msgid "Transaction Import Assistant"
-#~ msgstr "Помоћник увоза трансакције"
-
-#~ msgid "Start import on row "
-#~ msgstr "Почни увоз у реду "
-
-#~ msgid " and stop on row "
-#~ msgstr " и заустави на реду "
-
-#~ msgid "Skip alternate rows from the start row"
-#~ msgstr "Прескочи сваки други ред од почетног реда"
-
-#~ msgid "Data type: "
-#~ msgstr "Врста података: "
-
-#~ msgid "Separated"
-#~ msgstr "Раздвојено"
-
-#~ msgid "Step over Account Page if Setup"
-#~ msgstr "Прескочи страницу налога ако је подешено"
-
-#~ msgid "File opening failed."
-#~ msgstr "Отварање датотеке није успело."
-
-#~ msgid "Unknown encoding."
-#~ msgstr "Непознато кодирање."
-
-#~ msgid "This report has no options."
-#~ msgstr "Овај извештај нема опције."
-
-#~ msgid "Compress prior/later periods"
-#~ msgstr "Сажми пре/после раздобља"
-
-#~ msgid ""
-#~ "Accumulate columns for periods before and after the current period to "
-#~ "allow focus on the current period."
-#~ msgstr ""
-#~ "Нагомилајте колоне за раздобља пре и после текућег раздобља да омогућите "
-#~ "усредсређивање на текуће раздобље."
-
-#~ msgid "Income Barchart"
-#~ msgstr "Тракасти график прихода"
-
-#~ msgid "Expense Barchart"
-#~ msgstr "Тракасти график расхода"
-
-#~ msgid "Liability Barchart"
-#~ msgstr "Тракасти график дуговања"
-
-#~ msgid "Style"
-#~ msgstr "Стил"
-
-#~ msgid "Report style."
-#~ msgstr "Датум извештаја."
-
-#~ msgid "Display N lines."
-#~ msgstr "Прикажите N редова."
-
-#~ msgid "Display 1 line."
-#~ msgstr "Прикажите 1 ред."
-
-#~ msgid "Account Substring"
-#~ msgstr "Подниска налога"
-
-#~ msgid "Exact Time"
-#~ msgstr "Тачно време"
-
-#~ msgid "Sort by exact time."
-#~ msgstr "Поређајте према тачном времену."
-
-#~ msgid "Clear the entry"
-#~ msgstr "Очистите унос"
-
-#~ msgid "CURRENCY"
-#~ msgstr "ВАЛУТА"
-
-#~ msgid "You must select a commodity. To create a new one, click \"New\""
-#~ msgstr "Морате изабрати робу. Да направите нову, притисните „Ново“"
-
-#~ msgid "UTC"
-#~ msgstr "КУВ"
-
-#~ msgid "Dates earlier than 1970 are not supported."
-#~ msgstr "Датуми пре 1970. године нису подржани."
-
-#~ msgid "set true"
-#~ msgstr "подешено"
-
-#~ msgid "Dummy message"
-#~ msgstr "Лажна порука"
-
-#~ msgid "postd"
-#~ msgstr "добјаве"
-
-#~ msgid "duedate"
-#~ msgstr "рок доспећа"
-
-#~ msgid "acct"
-#~ msgstr "прчт"
-
-#~ msgid "question"
-#~ msgstr "упитник"
-
-#~ msgid "Owner Name"
-#~ msgstr "Име власника"
-
-#~ msgid "Owner ID"
-#~ msgstr "ИБ власника"
-
-#~ msgid "Auto pay on post_ing"
-#~ msgstr "Сам плати при _објави"
-
-#~ msgid "Retrieve the current online quote"
-#~ msgstr "Довуци текући курс на мрежи"
-
-#~ msgid "_Use system theme colors"
-#~ msgstr "_Користи боје системске теме"
-
-#~ msgid ""
-#~ "If checked, the system color theme will be applied to register windows. "
-#~ "If clear, the original GnuCash register colors will be used."
-#~ msgstr ""
-#~ "Ако је изабрано, системска тема боја биће примењена на прозорима "
-#~ "регистра. Ако није, користиће се изворне боје регистра Гнуовог новчића."

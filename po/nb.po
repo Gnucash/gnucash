@@ -20,20 +20,19 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr ""
+msgstr "Arabisk"
 
 #: ../borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr ""
+msgstr "Baltisk"
 
 #: ../borrowed/goffice/go-charmap-sel.c:72
-#, fuzzy
 msgid "Central European"
-msgstr "Europeisk"
+msgstr "Sentral-europeisk"
 
 #: ../borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr ""
+msgstr "Kinesisk"
 
 #: ../borrowed/goffice/go-charmap-sel.c:74
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:242
@@ -41,29 +40,28 @@ msgid "Cyrillic"
 msgstr "Kyrillisk"
 
 #: ../borrowed/goffice/go-charmap-sel.c:75
-#, fuzzy
 msgid "Greek"
-msgstr "Grønn"
+msgstr "Gresk"
 
 #: ../borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr ""
+msgstr "Hebraisk"
 
 #: ../borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
-msgstr ""
+msgstr "Indisk"
 
 #: ../borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr ""
+msgstr "Japansk"
 
 #: ../borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr ""
+msgstr "Koreansk"
 
 #: ../borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr ""
+msgstr "Tyrkisk"
 
 #: ../borrowed/goffice/go-charmap-sel.c:81
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:224
@@ -72,12 +70,11 @@ msgstr "Unicode"
 
 #: ../borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr ""
+msgstr "Vietnamesisk"
 
 #: ../borrowed/goffice/go-charmap-sel.c:83
-#, fuzzy
 msgid "Western"
-msgstr "Register"
+msgstr "Vestlig"
 
 #: ../borrowed/goffice/go-charmap-sel.c:84
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:60
@@ -89,317 +86,307 @@ msgstr "Annet"
 
 #: ../borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "Arabisk (IBM-864)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr ""
+msgstr "Arabisk (IBM-864-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "Arabisk (ISO-8859-6)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr ""
+msgstr "Arabisk (ISO-8859-6-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr ""
+msgstr "Arabisk (ISO-8859-6-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:121
 msgid "Arabic (MacArabic)"
-msgstr ""
+msgstr "Arabisk (MacArabian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:122
 msgid "Arabic (Windows-1256)"
-msgstr ""
+msgstr "Arabisk (Windows-1256)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
-msgstr ""
+msgstr "Armensk (ARMSCII-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:124
-#, fuzzy
 msgid "Baltic (ISO-8859-13)"
-msgstr "ISO-8859-13 (Baltisk)"
+msgstr "Baltisk (ISO-8859-13)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
-msgstr ""
+msgstr "Baltisk (ISO-8859-4)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:126
 msgid "Baltic (Windows-1257)"
-msgstr ""
+msgstr "Baltisk (Windows-1257)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:127
-#, fuzzy
 msgid "Celtic (ISO-8859-14)"
-msgstr "ISO-8859-14 (Keltisk)"
+msgstr "Keltisk (ISO-8859-14)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
-msgstr ""
+msgstr "Sentraleuropeisk (IBM-852)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:130
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "Sentraleuropeisk (ISO-8859-2)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:132
 msgid "Central European (MacCE)"
-msgstr ""
+msgstr "Sentraleuropeisk (MacCE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:134
 msgid "Central European (Windows-1250)"
-msgstr ""
+msgstr "Sentraleuropeisk (Windows-1250)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:136
 msgid "Chinese Simplified (GB18030)"
-msgstr ""
+msgstr "Kinesisk, forenklet (GB18030)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:137
 msgid "Chinese Simplified (GB2312)"
-msgstr ""
+msgstr "Kinesisk, forenklet (GB2312)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:138
 msgid "Chinese Simplified (GBK)"
-msgstr ""
+msgstr "Kinesisk, forenklet (GBK)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:139
 msgid "Chinese Simplified (HZ)"
-msgstr ""
+msgstr "Kinesisk, forenklet (HZ)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:140
 msgid "Chinese Simplified (Windows-936)"
-msgstr ""
+msgstr "Kinesisk, forenklet (Windows-936)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr ""
+msgstr "Kinesisk, tradisjonell (Big5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr ""
+msgstr "Kinesisk, tradisjonell (Big5-HKSCS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
-msgstr ""
+msgstr "Kinesisk, tradisjonell (EUC-TW)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:147
 msgid "Croatian (MacCroatian)"
-msgstr ""
+msgstr "Kroatisk (MacCroatian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:149
-#, fuzzy
 msgid "Cyrillic (IBM-855)"
-msgstr "Kyrillisk"
+msgstr "Kyrillisk (IBM-855)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:150
 msgid "Cyrillic (ISO-8859-5)"
-msgstr ""
+msgstr "Kyrillisk (ISO-8859-5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:152
 msgid "Cyrillic (ISO-IR-111)"
-msgstr ""
+msgstr "Kyrillisk (ISO-IR-111)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:154
-#, fuzzy
 msgid "Cyrillic (KOI8-R)"
-msgstr "Kyrillisk"
+msgstr "Kyrillisk (KOI8-R)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:155
 msgid "Cyrillic (MacCyrillic)"
-msgstr ""
+msgstr "Kyrillisk (MacCyrillic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:157
 msgid "Cyrillic (Windows-1251)"
-msgstr ""
+msgstr "Kyrillisk (Windows-1251)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
-msgstr ""
+msgstr "Russisk (CP-866)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:160
 msgid "Ukrainian (KOI8-U)"
-msgstr ""
+msgstr "Ukrainsk (KOI8-U)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:161
-#, fuzzy
 msgid "Ukrainian (MacUkrainian)"
-msgstr "KOI8-U (Ukrainsk)"
+msgstr "Ukrainsk (MacUkrainian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:163
 msgid "English (ASCII)"
-msgstr ""
+msgstr "Engelsk (ASCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
-msgstr ""
+msgstr "Farsi (MacFarsi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:166
 msgid "Georgian (GEOSTD8)"
-msgstr ""
+msgstr "Georgisk (GEOSTD8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:167
-#, fuzzy
 msgid "Greek (ISO-8859-7)"
-msgstr "ISO-8859-7 (Gresk)"
+msgstr "Gresk (ISO-8859-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:168
 msgid "Greek (MacGreek)"
-msgstr ""
+msgstr "Gresk (MacGreek)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:169
 msgid "Greek (Windows-1253)"
-msgstr ""
+msgstr "Gresk (Windows-1253)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:170
 msgid "Gujarati (MacGujarati)"
-msgstr ""
+msgstr "Gujarati (MacGujarati)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:172
 msgid "Gurmukhi (MacGurmukhi)"
-msgstr ""
+msgstr "Gurmukhi (MacGurmukhi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr ""
+msgstr "Hebraisk (IBM-862)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr ""
+msgstr "Hebraisk (ISO-8859-8-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr ""
+msgstr "Hebraisk (ISO-8859-8-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr ""
+msgstr "Hebraisk (MacHebrew)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
-msgstr ""
+msgstr "Hebraisk (Windows-1255)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
-msgstr ""
+msgstr "Hindi (MacDevangari)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
-msgstr ""
+msgstr "Islandsk (MacIcelandic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:186
 msgid "Japanese (EUC-JP)"
-msgstr ""
+msgstr "Japansk (EUC-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:187
 msgid "Japanese (ISO-2022-JP)"
-msgstr ""
+msgstr "Japansk (ISO-2022-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:189
 msgid "Japanese (Shift_JIS)"
-msgstr ""
+msgstr "Japansk (Shift_JIS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:190
 msgid "Korean (EUC-KR)"
-msgstr ""
+msgstr "Koreansk (EUC-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:191
 msgid "Korean (ISO-2022-KR)"
-msgstr ""
+msgstr "Koreansk (ISO-2022-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:192
 msgid "Korean (JOHAB)"
-msgstr ""
+msgstr "Koreansk (JOHAB)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:193
 msgid "Korean (UHC)"
-msgstr ""
+msgstr "Koreansk (UHC)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:194
-#, fuzzy
 msgid "Nordic (ISO-8859-10)"
-msgstr "ISO-8859-10 (Nordisk)"
+msgstr "Nordisk (ISO-8859-10)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:195
 msgid "Romanian (MacRomanian)"
-msgstr ""
+msgstr "Rumensk (MacRomanian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:197
 msgid "Romanian (ISO-8859-16)"
-msgstr ""
+msgstr "Rumensk (ISO-8859-16)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:199
 msgid "South European (ISO-8859-3)"
-msgstr ""
+msgstr "Syd-europeisk (ISO-8859-3)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:201
 msgid "Thai (TIS-620)"
-msgstr ""
+msgstr "Thai (TIS-620)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:202
 msgid "Turkish (IBM-857)"
-msgstr ""
+msgstr "Tyrkisk (IBM-857)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:203
 msgid "Turkish (ISO-8859-9)"
-msgstr ""
+msgstr "Tyrkisk (ISO-8859-9)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:204
 msgid "Turkish (MacTurkish)"
-msgstr ""
+msgstr "Tyrkisk (MacTurkish)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:206
 msgid "Turkish (Windows-1254)"
-msgstr ""
+msgstr "Tyrkisk (Windows-1254)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:208
-#, fuzzy
 msgid "Unicode (UTF-7)"
-msgstr "Unicode"
+msgstr "Unicode (UTF-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:209
-#, fuzzy
 msgid "Unicode (UTF-8)"
-msgstr "Unicode"
+msgstr "Unicode (UTF-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:210
 msgid "Unicode (UTF-16BE)"
-msgstr ""
+msgstr "Unicode (UTF-16BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:211
 msgid "Unicode (UTF-16LE)"
-msgstr ""
+msgstr "Unicode (UTF-16LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:212
 msgid "Unicode (UTF-32BE)"
-msgstr ""
+msgstr "Unicode (UTF-32BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:213
 msgid "Unicode (UTF-32LE)"
-msgstr ""
+msgstr "Unicode (UTF-32LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:214
-#, fuzzy
 msgid "User Defined"
-msgstr "Brukernavn"
+msgstr "Brukerdefinert"
 
 #: ../borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
-msgstr ""
+msgstr "Vietnamesisk (TCVN)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:217
 msgid "Vietnamese (VISCII)"
-msgstr ""
+msgstr "Vietnamesisk (VISCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:218
 msgid "Vietnamese (VPS)"
-msgstr ""
+msgstr "Vietnamesisk (VPS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:219
 msgid "Vietnamese (Windows-1258)"
-msgstr ""
+msgstr "Vietnamesisk (Windows-1258)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
@@ -407,47 +394,43 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
-msgstr ""
+msgstr "Vestlig (IBM-850)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:224
 msgid "Western (ISO-8859-1)"
-msgstr ""
+msgstr "Vestlig (ISO-8859-1)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:225
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "Vestlig (ISO-8859-15)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:227
 msgid "Western (MacRoman)"
-msgstr ""
+msgstr "Vestlig (MacRoman)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:228
 msgid "Western (Windows-1252)"
-msgstr ""
+msgstr "Vestlig (Windows-1252)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:441
-#, fuzzy
 msgid "Locale: "
-msgstr "Lok_ale:"
+msgstr "Locale: "
 
 #: ../borrowed/goffice/go-charmap-sel.c:476
-#, fuzzy
 msgid "Conversion Direction"
-msgstr "Sortering"
+msgstr "Konverteringsretning"
 
 #: ../borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr ""
+msgstr "Denne verdien bestemmer hvilke iconv-tester som skal utføres."
 
 #: ../borrowed/goffice/go-optionmenu.c:410
-#, fuzzy
 msgid "Menu"
-msgstr "Typemeny"
+msgstr "Meny"
 
 #: ../borrowed/goffice/go-optionmenu.c:410
-#, fuzzy
 msgid "The menu of options"
-msgstr "Nummeralternativet er %s"
+msgstr "Meny med alternativer"
 
 #: ../gnucash/gnome/assistant-acct-period.c:190
 msgid "The book was closed successfully."
@@ -2543,9 +2526,8 @@ msgstr "Brukerdefinert"
 #: ../gnucash/gnome/dialog-print-check.c:2593
 #: ../gnucash/gnome/gtkbuilder/dialog-print-check.glade.h:9
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:214
-#, fuzzy
 msgid "Top"
-msgstr "Til"
+msgstr "Øverst"
 
 #: ../gnucash/gnome/dialog-progress.c:484
 #: ../gnucash/gnome/dialog-progress.c:533
@@ -2904,9 +2886,8 @@ msgid "Path head does not exist, "
 msgstr ""
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:432
-#, fuzzy
 msgid "Relative"
-msgstr "_Relativ:"
+msgstr "Relativ"
 
 #: ../gnucash/gnome/dialog-vendor.c:214
 #, fuzzy
@@ -9043,9 +9024,8 @@ msgstr ""
 
 #: ../gnucash/gnome/gtkbuilder/dialog-print-check.glade.h:11
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:216
-#, fuzzy
 msgid "Bottom"
-msgstr "_Rotasjon"
+msgstr "Nederst"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-print-check.glade.h:13
 msgid "Quicken/QuickBooks (tm) US-Letter"
@@ -9138,9 +9118,8 @@ msgid "The origin point is the lower left-hand corner of the page."
 msgstr ""
 
 #: ../gnucash/gnome/gtkbuilder/dialog-print-check.glade.h:40
-#, fuzzy
 msgid "Degrees"
-msgstr "Senk"
+msgstr "Grader"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-print-check.glade.h:41
 #, fuzzy
@@ -11057,9 +11036,8 @@ msgid "Pixels"
 msgstr ""
 
 #: ../gnucash/gnome-utils/dialog-options.c:3019
-#, fuzzy
 msgid "Percent"
-msgstr "Prosent (%)"
+msgstr "Prosent"
 
 #. Translators: Both %s will be the account separator character; the
 #. resulting string is a demonstration how the account separator
@@ -14881,7 +14859,7 @@ msgstr ""
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:221
 msgid "_Width:"
-msgstr ""
+msgstr "_Bredde:"
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:222
 msgid ""
@@ -17381,9 +17359,8 @@ msgid "description"
 msgstr "Beskrivelse"
 
 #: ../gnucash/import-export/csv-exp/csv-tree-export.c:156
-#, fuzzy
 msgid "color"
-msgstr "Farger"
+msgstr "farge"
 
 #: ../gnucash/import-export/csv-exp/csv-tree-export.c:157
 #, fuzzy
@@ -17568,9 +17545,8 @@ msgid "Select Separator Type"
 msgstr "Velg importhandling"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.glade.h:22
-#, fuzzy
 msgid "Preview"
-msgstr "Se gjennom"
+msgstr "Forhåndsvisning"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.glade.h:23
 msgid "Import Account Preview, first 10 rows only"
@@ -18939,9 +18915,8 @@ msgstr "_Online-handlinger"
 
 #: ../gnucash/import-export/import-pending-matches.c:194
 #: ../libgnucash/engine/policy.c:61
-#, fuzzy
 msgid "Manual"
-msgstr "Årlig"
+msgstr "Manuell"
 
 #: ../gnucash/import-export/import-pending-matches.c:196
 #: ../gnucash/report/business-reports/balsheet-eg.scm:323
@@ -19320,9 +19295,8 @@ msgstr ""
 "hvis dine data er lagret i flere filer. \n"
 
 #: ../gnucash/import-export/qif-imp/assistant-qif-import.glade.h:13
-#, fuzzy
 msgid "_Select..."
-msgstr "Velg..."
+msgstr "_Velg …"
 
 #: ../gnucash/import-export/qif-imp/assistant-qif-import.glade.h:14
 msgid "Select a QIF file to load"
@@ -19785,9 +19759,8 @@ msgstr "Rentemargin"
 
 #: ../gnucash/import-export/qif-imp/qif-file.scm:85
 #: ../gnucash/import-export/qif-imp/qif-file.scm:93
-#, fuzzy
 msgid "Line"
-msgstr "Ingen"
+msgstr "Linje"
 
 #: ../gnucash/import-export/qif-imp/qif-file.scm:96
 #, fuzzy
@@ -20926,7 +20899,7 @@ msgstr "Epost: "
 
 #: ../gnucash/report/business-reports/aging.scm:789
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: ../gnucash/report/business-reports/aging.scm:789
 #, fuzzy
@@ -23848,7 +23821,7 @@ msgstr ""
 
 #: ../gnucash/report/report-system/options-utilities.scm:226
 msgid "Dash"
-msgstr ""
+msgstr "Strek"
 
 #: ../gnucash/report/report-system/options-utilities.scm:227
 msgid "Filled diamond"
@@ -28650,9 +28623,8 @@ msgid "Fancy Date Format"
 msgstr "Fancy datoformat"
 
 #: ../libgnucash/app-utils/app-utils.scm:330
-#, fuzzy
 msgid "custom"
-msgstr "Brukerdefinert"
+msgstr "egendefinert"
 
 #: ../libgnucash/app-utils/business-prefs.scm:24
 #, fuzzy
@@ -30007,3126 +29979,3 @@ msgid ""
 "select Window -> New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
-
-#, fuzzy
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from %s rev %s on %s."
-#~ msgstr "%s  Denne kopien ble bygd fra svn r%s på %s."
-
-#, fuzzy
-#~ msgid ""
-#~ "%s\n"
-#~ "This copy was built from rev %s on %s."
-#~ msgstr "%s  Denne kopien ble bygd fra r%s på %s."
-
-#, fuzzy
-#~ msgid "Dummy message"
-#~ msgstr "Feilmelding"
-
-#~ msgid "postd"
-#~ msgstr "postert"
-
-#~ msgid "duedate"
-#~ msgstr "forfdt"
-
-#~ msgid "acct"
-#~ msgstr "konto"
-
-#~ msgid "question"
-#~ msgstr "spørsmål"
-
-#~ msgid ""
-#~ "An error occurred while creating the directory:\n"
-#~ "  %s\n"
-#~ "Please correct the problem and restart GnuCash.\n"
-#~ "The reported error was '%s' (errno %d).\n"
-#~ msgstr ""
-#~ "En feil oppstod under oppretting av mappen:\n"
-#~ "  %s\n"
-#~ "Vennligst korriger feilen og start GnuCash på nytt.\n"
-#~ "Den rapporterte feilen var '%s' (errno %d).\n"
-
-#~ msgid ""
-#~ "The directory\n"
-#~ "  %s\n"
-#~ "exists but cannot be accessed. This program \n"
-#~ "must have full access (read/write/execute) to \n"
-#~ "the directory in order to function properly.\n"
-#~ msgstr ""
-#~ "Mappen\n"
-#~ "  %s\n"
-#~ "eksisterer,men programmet har ikke tilgang.\n"
-#~ "Programmet må ha full tilgang (les/skriv/kjør) til \n"
-#~ "mappen for å fungere ordentlig.\n"
-
-#~ msgid ""
-#~ "The path\n"
-#~ "  %s\n"
-#~ "exists but it is not a directory. Please delete\n"
-#~ "the file and start GnuCash again.\n"
-#~ msgstr ""
-#~ "Stien\n"
-#~ "  %s\n"
-#~ "eksisterer, men er ikke en mappe. Vennligst\n"
-#~ "slett filen og start GnuCash igjen.\n"
-
-#~ msgid ""
-#~ "An unknown error occurred when validating that the\n"
-#~ "  %s\n"
-#~ "directory exists and is usable. Please correct the\n"
-#~ "problem and restart GnuCash. The reported error \n"
-#~ "was '%s' (errno %d)."
-#~ msgstr ""
-#~ "En ukjent feil oppstod ved sjekk av at mappen\n"
-#~ "  %s\n"
-#~ "eksisterer og er brukbar. Vennligst korriger \n"
-#~ "feilen og start GnuCash på nytt. Den rapporterte feilen \n"
-#~ "var '%s' (errno %d)."
-
-#~ msgid ""
-#~ "The permissions are wrong on the directory\n"
-#~ "  %s\n"
-#~ "They must be at least 'rwx' for the user.\n"
-#~ msgstr ""
-#~ "Rettighetene til mappen\n"
-#~ "%s\n"
-#~ "er feil. Minimum er 'rwx' for brukeren.\n"
-
-#~ msgid "_Price Editor"
-#~ msgstr "_Prisredigering"
-
-#, fuzzy
-#~ msgid "General Ledger2"
-#~ msgstr "Hovedbok"
-
-#~ msgid "General Ledger Report"
-#~ msgstr "Hovedbokrapport"
-
-#~ msgid "_General Ledger"
-#~ msgstr "_Hovedbok"
-
-#~ msgid "<No information>"
-#~ msgstr "<Ingen informasjon>"
-
-#~ msgid ""
-#~ "If active, the register will be colored as specified by the system theme. "
-#~ "This can be overridden to provide custom colors by editing the gtkrc file "
-#~ "in the users home directory. Otherwise the standard register colors will "
-#~ "be used that GnuCash has always used."
-#~ msgstr ""
-#~ "Hvis aktiv vil registeret farges i henhold til systemets tema. Dette kan "
-#~ "overstyres ved å angi egendefinerte farger i .gtkrc-filen i "
-#~ "hjemmekatalogen. Hvis ikke vil GnuCash' standard registerfarger brukes."
-
-#~ msgid "Clear the entry"
-#~ msgstr "Tøm oppføringen"
-
-#~ msgid ""
-#~ "If activated, delete manually entered stock prices dated earlier than the "
-#~ "specified date. Otherwise only stock prices added by Finance::Quote will "
-#~ "be deleted."
-#~ msgstr ""
-#~ "His aktiv, slett alle manuelt førte priser før den spesifiserte datoen. "
-#~ "Hvis ikke vil kun aksjekurser som er lagt til av Finance::Quote bli "
-#~ "slettet."
-
-#~ msgid "Delete _last price for a stock"
-#~ msgstr "S_lett siste pris for en aksje"
-
-#~ msgid ""
-#~ "If activated, delete all prices before the specified date. Otherwise the "
-#~ "last stock price dated before the date will be kept and all earlier "
-#~ "quotes deleted."
-#~ msgstr ""
-#~ "Hvis aktiv, slett alle priser før den spesifiserte datoen. Hvis ikke vil "
-#~ "den siste aksjekursen før denne datoen bli beholdt, og alle tidligere "
-#~ "priser bli slettet."
-
-#~ msgid "Get _Quotes"
-#~ msgstr "Hent _noteringer"
-
-#~ msgid "set true"
-#~ msgstr "satt sann"
-
-#~ msgid "You must select a commodity. To create a new one, click \"New\""
-#~ msgstr "Du må velge en vare. Trykk \"Ny\" for å opprette en ny vare."
-
-#~ msgid "_Delete Account"
-#~ msgstr "_Slett konto"
-
-#~ msgid "_New Account"
-#~ msgstr "_Ny konto"
-
-#~ msgid ""
-#~ "The GnuCash personal finance manager. The GNU way to manage your money!"
-#~ msgstr ""
-#~ "GnuCash personlig finansforvalter. GNU-måten å kontrollere dine penger!"
-
-#, fuzzy
-#~ msgid "Version: GnuCash-%s %s (rev %s built %s)"
-#~ msgstr "Versjon: GnuCash-%s svn (r%s bygd %s)"
-
-#, fuzzy
-#~ msgid "Version: GnuCash-%s (rev %s built %s)"
-#~ msgstr "Versjon: Gnucash-%s (r%s bygd %s)"
-
-#, fuzzy
-#~ msgid "Owner Name"
-#~ msgstr "Eiers navn "
-
-#, fuzzy
-#~ msgid "Owner ID"
-#~ msgstr "Ordre-ID"
-
-#~ msgid "Remember _PIN"
-#~ msgstr "Husk _PIN"
-
-#, fuzzy
-#~ msgid "Quotes"
-#~ msgstr "Hent noteringer"
-
-#, fuzzy
-#~ msgid "From Num."
-#~ msgstr "Fra nå"
-
-#, fuzzy
-#~ msgid "Transaction Import Assistant"
-#~ msgstr "Veiviser for import av GnuCash XML"
-
-#, fuzzy
-#~ msgid "Start import on row "
-#~ msgstr "Starten av rapportperioden"
-
-#, fuzzy
-#~ msgid "Data type: "
-#~ msgstr "Dato:"
-
-#, fuzzy
-#~ msgid "Separated"
-#~ msgstr "Startdato"
-
-#, fuzzy
-#~ msgid "File opening failed."
-#~ msgstr "Åpning av QIF mislyktes: %s"
-
-#, fuzzy
-#~ msgid "Dates earlier than 1970 are not supported."
-#~ msgstr "Datoer i fremtiden støttes ikke"
-
-#~ msgid "This report has no options."
-#~ msgstr "Denne rapporten har ingen valg."
-
-#, fuzzy
-#~ msgid "Compress prior/later periods"
-#~ msgstr "Kom_primer filer"
-
-#~ msgid "Income Barchart"
-#~ msgstr "Inntekter (stolpediagram)"
-
-#~ msgid "Expense Barchart"
-#~ msgstr "Kostnader (stolpediagram)"
-
-#~ msgid "Liability Barchart"
-#~ msgstr "Gjeld (stolpediagram)"
-
-#~ msgid "Style"
-#~ msgstr "Stil"
-
-#, fuzzy
-#~ msgid "Report style."
-#~ msgstr "Rapportstil"
-
-#, fuzzy
-#~ msgid "Display N lines."
-#~ msgstr "Vis N linjer"
-
-#, fuzzy
-#~ msgid "Display 1 line."
-#~ msgstr "Vis 1 linje"
-
-#~ msgid "Exact Time"
-#~ msgstr "Eksakt tid"
-
-#, fuzzy
-#~ msgid "Sort by exact time."
-#~ msgstr "Sorter etter eksakt tid"
-
-#, fuzzy
-#~ msgid "Retrieve the current online quote"
-#~ msgstr "Fjern den valgte prisen"
-
-#, fuzzy
-#~ msgid "Set the prefix path for gconf queries"
-#~ msgstr "Sett søkesti for dokumentasjonsfiler"
-
-#, fuzzy
-#~ msgid "GCONFPATH"
-#~ msgstr "KONFIGSTI"
-
-#~ msgid "Negative amounts are not allowed."
-#~ msgstr "Negative verdier er ikke gyldig."
-
-#~ msgid "Percentage amount must be between 0 and 100."
-#~ msgstr "Prosentverdi må være mellom 0 og 100."
-
-#, fuzzy
-#~ msgid "Credit note"
-#~ msgstr "Kredittlinjer"
-
-#, fuzzy
-#~ msgid ""
-#~ "You must enter the amount of the payment. The payment amount must not be "
-#~ "zero."
-#~ msgstr ""
-#~ "Du må føre inn et beløp for betalingen. Beløpet må være større enn null."
-
-#, fuzzy
-#~ msgid "Customer Credit Note"
-#~ msgstr "Kunderapport"
-
-#, fuzzy
-#~ msgid "Vendor Credit Note"
-#~ msgstr "Leverandørrapport"
-
-#, fuzzy
-#~ msgid "Employee Credit Note"
-#~ msgstr "Ansattrapport"
-
-#~ msgid "Remo_ve Transaction Splits"
-#~ msgstr "F_jern transaksjonssplitter"
-
-#, fuzzy
-#~ msgid "_Shift Transaction Forward"
-#~ msgstr "_Transaksjonsjournal"
-
-#~ msgid "Account Transaction Report"
-#~ msgstr "Kontotransaksjonsrapport"
-
-#~ msgid "Order of columns in the dialog"
-#~ msgstr "Kolonnenes rekkefølge i dialogen"
-
-#~ msgid "Show the Full Name column"
-#~ msgstr "Vis kolonnen 'Fullt navn'"
-
-#, fuzzy
-#~ msgid "Show the ISIN/CUSIP Code (Exchange Specific Data) column"
-#~ msgstr "Vis CUSIP-kode-kolonnen"
-
-#~ msgid "Show the Namespace column"
-#~ msgstr "Hvis domene-kolonnen"
-
-#~ msgid "Show the Print Name column"
-#~ msgstr "Vis kolonnen for visningsnavn"
-
-#~ msgid "Show the Quote Flag column"
-#~ msgstr "Vis kolonnen for hent kurs-flagget"
-
-#~ msgid "Show the Quote Source column"
-#~ msgstr "Vis kolonnen for kurskilde"
-
-#~ msgid "Show the Quote Timezone column"
-#~ msgstr "Vis kolonnen for noteringstidssone"
-
-#~ msgid "Show the Unique Name column"
-#~ msgstr "Vis kolonnen for unikt navn"
-
-#~ msgid "Show the fraction column"
-#~ msgstr "Hvis kolonnen for minste inndeling"
-
-#~ msgid "Show the name column"
-#~ msgstr "Vis navnekolonnen"
-
-#~ msgid "Show the symbol column"
-#~ msgstr "Vis symbolkolonnen"
-
-#, fuzzy
-#~ msgid ""
-#~ "This setting contains a list of names which controls the order in which "
-#~ "the columns are listed in the dialog. Names may be reordered or removed "
-#~ "from this list to control which columns appear in the dialog and in what "
-#~ "order."
-#~ msgstr ""
-#~ "Denne innstillingen inneholder en liste med navn som bestemmer "
-#~ "rekkefølgen som kolonnene er listet opp i dialogen. Navnene kan stokkes "
-#~ "om og fjernes fra denne listen for å stille inn hvilke kolonner som vises "
-#~ "i dialogen, og i hvilken rekkefølge."
-
-#~ msgid "Columns used for sorting"
-#~ msgstr "Kolonner som brukes til sortering"
-
-#, fuzzy
-#~ msgid ""
-#~ "The X,Y coordinates of the top left corner of the window when it was last "
-#~ "closed."
-#~ msgstr ""
-#~ "X og Y-koordinatene til øverste venstre hjørne i dialogen når den ble "
-#~ "lukket sist."
-
-#, fuzzy
-#~ msgid "The width and size of the window when it was last closed."
-#~ msgstr "Dialogens bredde og størrelse når den ble lukket sist."
-
-#~ msgid ""
-#~ "This setting indicates how the key column is sorted. Possible values for "
-#~ "this setting are 'ascending' and 'descending'."
-#~ msgstr ""
-#~ "Denne innstillingen bestemmer hvordan nøkkelkolonnen sorteres. Mulige "
-#~ "verdier er 'stigende' og 'synkende'."
-
-#, fuzzy
-#~ msgid ""
-#~ "This setting indicates which column in the tree is used for sorting. "
-#~ "Possible values for this setting are the name of any column in this "
-#~ "window (see the column_order key) or the keyword 'none'."
-#~ msgstr ""
-#~ "Denne innstillingen bestemmer hvilken kolonne i treet som brukes til "
-#~ "sortering. Mulige verdier for denne innstillingen er navnet på en kolonne "
-#~ "i dialogboksen (se column_order-nøkkelen) eller nøkkelordet 'none'."
-
-#~ msgid "Window position"
-#~ msgstr "Vinduets posisjon"
-
-#~ msgid "Show the Price column"
-#~ msgstr "Vis priskolonnen"
-
-#~ msgid "Show the Source column"
-#~ msgstr "Vis kildekolonnen"
-
-#~ msgid "Show the Type column"
-#~ msgstr "Vis typekolonnen"
-
-#~ msgid "Show the date column"
-#~ msgstr "Vis datokolonnen"
-
-#~ msgid "This setting enables the Price column."
-#~ msgstr "Denne instillingen slår på priskolonnen."
-
-#~ msgid "This setting enables the Source column."
-#~ msgstr "Denne innstillingen slår på kildekolonnen"
-
-#~ msgid "This setting enables the Type column."
-#~ msgstr "Denne instillingen slår på typekolonnen."
-
-#~ msgid "This setting enables the commodity column."
-#~ msgstr "Denne instillingen slår på varekolonnen."
-
-#~ msgid "This setting enables the currency column."
-#~ msgstr "Denne instillingen slår på valutakolonnen"
-
-#~ msgid ""
-#~ "This value contains the Y coordinate for the bottom edge of the check. "
-#~ "This coordinate is from the bottom edge of the sheet of paper."
-#~ msgstr ""
-#~ "Denne verdien inneholder Y-koordinaten for nedre kant for sjekken. Denne "
-#~ "koordinaten er fra nedre kant på arket."
-
-#~ msgid "Accounts to reverse the balance"
-#~ msgstr "Kontoer for balansereversering"
-
-#~ msgid "Default view style for new register"
-#~ msgstr "Forvalgt visningsstil for nye register"
-
-#~ msgid "Enables Euro support"
-#~ msgstr "Aktiver Euro-støtte"
-
-#~ msgid "Enables additional support for the European Union EURO currency."
-#~ msgstr "Aktiver støtte for Den europeisk unions valuta Euro."
-
-#~ msgid "Labels on toolbar buttons"
-#~ msgstr "Merkelapper på verktøylinjeknapper"
-
-#, fuzzy
-#~ msgid "Position of the notebook tabs"
-#~ msgstr "Posisjon for datolinje"
-
-#, fuzzy
-#~ msgid "Show the Calendar buttons"
-#~ msgstr "Vis navnekolonnen"
-
-#, fuzzy
-#~ msgid "Show the Date Entered"
-#~ msgstr "Vis datokolonnen"
-
-#~ msgid "Source of default account currency"
-#~ msgstr "Kilde for standard kontovaluta"
-
-#~ msgid "Source of default report currency"
-#~ msgstr "Kilde for standard rapportvaluta"
-
-#, fuzzy
-#~ msgid "The number of Characters needed"
-#~ msgstr "Vis antall aksjer"
-
-#, fuzzy
-#~ msgid "The number of transactions displayed"
-#~ msgstr "Antall _transaksjoner:"
-
-#~ msgid ""
-#~ "This setting controls how the labels on toolbar buttons are shown. If set "
-#~ "to \"system\" then GnuCash will use the desktop setting for how to draw "
-#~ "toolbar buttons. If set to \"icon\" then only icons will be show on "
-#~ "toolbar buttons.. If set to \"text\" only the labels will be shown. If "
-#~ "set to \"both\" then both icons and labels will be shown. If set to "
-#~ "\"both-horiz\" then icons will be shown for all buttons with labels added "
-#~ "on important buttons."
-#~ msgstr ""
-#~ "Denne innstillingen bestemmer hvordan merkelapper på verktøylinjeknapper "
-#~ "vises. Hvis satt til \"system\" bruker GnuCash skrivebordsinnstillingene. "
-#~ "Hvis satt til \"ikon\" vises bare ikoner på verktøylinjene. Hvis satt til "
-#~ "\"tekst\" vises bare merkelapper. Hvis satt til \"begge\" vises både "
-#~ "ikoner og merkelapper. Hvis satt til \"begge-horis\" vises ikoner for "
-#~ "alle knapper og merkelapper på viktige knapper."
-
-#~ msgid ""
-#~ "This setting specifies the default currency used for reports if the "
-#~ "currency_choice setting is set to \"other\". This field must contain the "
-#~ "three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
-#~ msgstr ""
-#~ "Denne innstillingen bestemmer hvilken forvalgt valuta som skal brukes for "
-#~ "rapporter hvis currency_choice-innstillingen er satt til \"annen\". "
-#~ "Feltet må inneholde valutaens tre-tegns ISO 4217-kode (f.eks. USD, GBP, "
-#~ "NOK)."
-
-#~ msgid ""
-#~ "This setting contains the width of the named column in the most recently "
-#~ "closed register window. Changing these values will change the sizes of "
-#~ "the columns in the next opened register"
-#~ msgstr ""
-#~ "Denne innstillingen inneholde bredden på den navngitte kolonnen i det "
-#~ "nyligst lukkede registervinduet. Hvis du endrer denne verdien vil "
-#~ "størrelsen på kolonnene endres neste gang du åpner et register."
-
-#~ msgid "Width of a column in the dialog"
-#~ msgstr "Kolonnebredde i dialogboks"
-
-#, fuzzy
-#~ msgid "New item"
-#~ msgstr "_Nytt element..."
-
-#~ msgid ""
-#~ "Error: Failure saving state file.\n"
-#~ "  %s"
-#~ msgstr ""
-#~ "Feil: Kunne ikke lagre statusfil.\n"
-#~ "  %s"
-
-#, fuzzy
-#~ msgid ""
-#~ "When you click Apply, GnuCash will modify your ~/.gconf.path file and "
-#~ "restart the gconf backend. There will be a short delay before GnuCash is "
-#~ "loaded."
-#~ msgstr ""
-#~ "Når du trykker Bruk, vil GnuCash endre din ~/.gconf.path-fil og starte "
-#~ "gconf-bakstykket på nytt."
-
-#, fuzzy
-#~ msgid ""
-#~ "When you click Apply, GnuCash will install the gconf data into your local "
-#~ "~/.gconf file and restart the gconf backend. The %s script must be found "
-#~ "in your search path for this to work correctly."
-#~ msgstr ""
-#~ "Når du trykker Bruk, vil GnuCash installere gconf-dataene i din lokale ~/."
-#~ "gconf-fil og starte gconf-bakstykket på nytt. Skriptet %s må finnes i din "
-#~ "søkesti for at dette skal fungere."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to correct the problem by yourself. When you click Apply, "
-#~ "GnuCash will exit. Please correct the problem and restart the gconf "
-#~ "backend with the command 'gconftool-2 --shutdown' before restarting "
-#~ "GnuCash. If you have not already done so, you can click the Back button "
-#~ "and copy the necessary text from the dialog."
-#~ msgstr ""
-#~ "Du har valgt å rette opp problemet selv. Når du trykker Bruk, vil GnuCash "
-#~ "avslutte. Vennligst rett opp problemet og start gconf-bakstykket på nytt "
-#~ "med kommandoen 'gconftool-2 --shutdown' før du starter GnuCash. Hvis du "
-#~ "ikke allerede har gjort det, kan du trykke Tilbake og kopiere den "
-#~ "nødvendige teksten fra dialogboksen."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to correct the problem by yourself. When you click Apply, "
-#~ "GnuCash will exit. Please run the %s script which will install the "
-#~ "configuration data and restart the gconf backend."
-#~ msgstr ""
-#~ "Du har valgt å rette opp problemet selv. Når du trykker Bruk, vil GnuCash "
-#~ "avsluttes. Vennligst kjør skriptet %s, som vil installere "
-#~ "konfigurasjonsdata og starte gconf-bakstykket på nytt."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have already corrected the problem and restarted the gconf backend "
-#~ "with the command 'gconftool-2 --shutdown'. When you click Apply, there "
-#~ "will be a short delay before GnuCash is loaded."
-#~ msgstr ""
-#~ "Du har allerede rettet opp problemet og startet gconf-bakstykket på nytt "
-#~ "med kommandoen 'gconftool-2 --shutdown'. Når du trykker Bruk, vil GnuCash "
-#~ "fortsette oppstartsprosedyrene."
-
-#, fuzzy
-#~ msgid "Withdrawl"
-#~ msgstr "Uttak"
-
-#~ msgid ""
-#~ "<b>Cannot find default values</b>\n"
-#~ "\n"
-#~ "The configuration data used to specify default values for GnuCash cannot "
-#~ "be found in the default system locations. Without this data GnuCash will "
-#~ "still operate properly but it may require some extra time to setup. Do "
-#~ "you wish to setup the configuration data?"
-#~ msgstr ""
-#~ "<b>Finner ikke standardverdier</b>\n"
-#~ "\n"
-#~ "Konfigurasjonsdataene som brukes for å spesifisere standardverdiene til "
-#~ "GnuCash finnes ikke i standard søkesti. Uten disse vil GnuCash fortsatt "
-#~ "virke, men det kan muligens ta litt lenger tid å sette opp. Ønsker du å "
-#~ "sette opp konfigurasjonsdataene?"
-
-#, fuzzy
-#~ msgid "Apply Changes"
-#~ msgstr "Verifiser endringer"
-
-#, fuzzy
-#~ msgid "Choose Method"
-#~ msgstr "Velg metode"
-
-#~ msgid "GnuCash will install the data for you."
-#~ msgstr "GnuCash vil installere dataene for deg."
-
-#~ msgid "GnuCash will update the system path for you."
-#~ msgstr "GnuCash vill oppdatere stien for deg."
-
-#, fuzzy
-#~ msgid "Install Into Home Directory"
-#~ msgstr "Installer i hjemmemappe"
-
-#~ msgid ""
-#~ "Please add the following lines at the end of your ~/.gconf.path file:"
-#~ msgstr "Vennligst legg til følgende i slutten av din ~/.gconf.path-fil:"
-
-#~ msgid "Please run the following commands:"
-#~ msgstr "Vennligst kjør følgende kommandoer:"
-
-#~ msgid "S_kip"
-#~ msgstr "H_opp over"
-
-#, fuzzy
-#~ msgid ""
-#~ "The configuration data is stored in a non-standard location. There are "
-#~ "two methods that can be used to make this data visible to GnuCash. The "
-#~ "first is to modify a system search path to include the data location. The "
-#~ "second is to copy the data into your home directory."
-#~ msgstr ""
-#~ "Konfigurasjonsdataene er lagret på et ikke-standardisert sted. Det er to "
-#~ "metoder som kan brukes for å få dataene synlig for GnuCash. Den første er "
-#~ "å modifisere systemets søkesti til å inkludere mappen med dataene. Den "
-#~ "andre er å kopiere dataene inn i din hjemmemappe."
-
-#~ msgid ""
-#~ "The configuration data used by GnuCash to specify its default values "
-#~ "cannot be found in the default system locations. Without this data "
-#~ "GnuCash will still operate properly, but it may require some extra time "
-#~ "to set up."
-#~ msgstr ""
-#~ "Konfigurasjonsdataene brukt av GnuCash for å sette standardverdier ble "
-#~ "ikke funnet på standard plassering. Uten disse dataene vil GnuCash "
-#~ "fortsatt virke, men kan trenge litt ekstra tid for å sette den opp."
-
-#~ msgid "The data has _already been installed in another window"
-#~ msgstr "Dataene har _allerede blitt installert i et annet vindu"
-
-#~ msgid "The search path has _already been updated in another window"
-#~ msgstr "Søkestien har _allerede blitt oppdatert i et annet vindu"
-
-#, fuzzy
-#~ msgid ""
-#~ "This method will install the GnuCash default settings and descriptions "
-#~ "into the .gconf directory within your home directory. The disadvantage to "
-#~ "this method is that future updates to GnuCash will not update your local "
-#~ "settings to add in new keys."
-#~ msgstr ""
-#~ "Denne metoden vil installere GnuCashs standardinstillinger og -"
-#~ "beskrivelser i .gconf-mappen i din hjemmemappe. Ulempen med denne metoden "
-#~ "er at kommende oppdateringer av GnuCash ikke vil oppdatere dine lokale "
-#~ "instillinger for å legge inn nye instillinger."
-
-#, fuzzy
-#~ msgid ""
-#~ "This method will modify the file .gconf.path in your home directory. It "
-#~ "will add the GnuCash install directory to this path so that GnuCash can "
-#~ "find its default settings and their descriptions."
-#~ msgstr ""
-#~ "Denne metoden vil modifisere .gconf-stien i din hjemmemappe. Den vil "
-#~ "legge til GnuCash-installasjonsmappen til denne stien slik at GnuCash kan "
-#~ "finne sine standardinstillinger og -beskrivelser."
-
-#, fuzzy
-#~ msgid "Update GnuCash Configuration Data"
-#~ msgstr "Oppdater GnuCash konfigurasjonsdata"
-
-#~ msgid "Update GnuCash configuration data"
-#~ msgstr "Oppdater GnuCash konfigurasjonsdata"
-
-#, fuzzy
-#~ msgid "Update Search Path"
-#~ msgstr "Oppdater søkesti"
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to install the configuration data used by GnuCash into "
-#~ "the ~/.gconf directory. GnuCash can do this for you, or tell you how to "
-#~ "do it yourself."
-#~ msgstr ""
-#~ "Du har valgt å installere konfigurasjonsdata brukt av GnuCash i ~/.gconf-"
-#~ "mappen. GnuCash kan gjøre dette for deg, eller den kan fortelle deg "
-#~ "hvordan du gjør det selv."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have chosen to update the system search path. GnuCash can do this for "
-#~ "you, or it can tell you how to do it yourself."
-#~ msgstr ""
-#~ "Du har valgt å oppdatere systemets søkesti. GnuCash kan gjøre dette for "
-#~ "deg, eller den kan fortelle deg hvordan du gjør det selv."
-
-#, fuzzy
-#~ msgid ""
-#~ "You will then need to restart the gconf backend with the command "
-#~ "'gconftool-2 --shutdown'."
-#~ msgstr ""
-#~ "Du må deretter starte gconf-bakstykket på nytt med\n"
-#~ "kommandoen 'gconftool-2 --shutdown'."
-
-#~ msgid "_GnuCash installs the data"
-#~ msgstr "_GnuCash installerer dataene"
-
-#~ msgid "_GnuCash updates the search path"
-#~ msgstr "_GnuCash oppdaterer søkestien"
-
-#~ msgid "_Install into home directory"
-#~ msgstr "_Installer i hjemmemappe"
-
-#~ msgid "_Setup"
-#~ msgstr "Opp_sett"
-
-#~ msgid "_Update search path"
-#~ msgstr "_Oppdater søkesti"
-
-#~ msgid "_You install the data yourself"
-#~ msgstr "_Du installerer dataene selv"
-
-#~ msgid "_You update the search path yourself"
-#~ msgstr "_Du oppdaterer søke stien selv"
-
-#~ msgid "<b>Toolbar Style</b>"
-#~ msgstr "<b>Verktøylinjestil</b>"
-
-#~ msgid "Display toolbar items as icons only."
-#~ msgstr "Vis verktøylinjeelementene kun som ikoner."
-
-#~ msgid "Display toolbar items as text only."
-#~ msgstr "Vis verktøylinjeelementene kun som tekst."
-
-#~ msgid ""
-#~ "Display toolbar items with the text label below the icon. Labels are show "
-#~ "for all items."
-#~ msgstr ""
-#~ "Vis verktøylinjeknapper med en tekstmerkelapp under ikonet. Merkelappen "
-#~ "vises for alle knapper."
-
-#, fuzzy
-#~ msgid ""
-#~ "Display toolbar items with the text label beside the icon. Labels are "
-#~ "only shown for the most important items."
-#~ msgstr ""
-#~ "Vis verktøylinjeknapper med tekstmerkelapp ved siden av ikonet. "
-#~ "Merkelapper vises bare for de mest brukte knappene."
-
-#~ msgid ""
-#~ "If checked, the system color theme will be applied to register windows. "
-#~ "If clear, the original GnuCash register colors will be used."
-#~ msgstr ""
-#~ "Hvis valgt vil systemets temafarger brukes på registervinduene. Hvis ikke "
-#~ "vil GnuCash' originale registerfarger benyttes."
-
-#, fuzzy
-#~ msgid "Priority text besi_de icons"
-#~ msgstr "Tekst ved siden av ikoner"
-
-#~ msgid "Text _below icons"
-#~ msgstr "Tekst _under ikoner"
-
-#, fuzzy
-#~ msgid "Use s_ystem default"
-#~ msgstr "Bruk s_ystemets forvalg"
-
-#, fuzzy
-#~ msgid "Use the date format common in continental Europe."
-#~ msgstr "Bruk europeisk standard datoformat."
-
-#, fuzzy
-#~ msgid "Use the date format common in the United Kingdom."
-#~ msgstr "Bruk britisk standard datoformat."
-
-#, fuzzy
-#~ msgid "Use the date format common in the United States."
-#~ msgstr "Bruk amerikansk standard datoformat."
-
-#~ msgid "Use the date format specified by the ISO-8601 standard."
-#~ msgstr "Bruk ISO-8601 datoformat."
-
-#~ msgid "Use the system setting for displaying toolbar items."
-#~ msgstr "Bruk systemets innstillinger for visning av verktøylinjeknapper."
-
-#~ msgid "_Europe:"
-#~ msgstr "_Europa:"
-
-#~ msgid "_Icons only"
-#~ msgstr "Kun _ikoner"
-
-#~ msgid "_Text only"
-#~ msgstr "Kun _tekst"
-
-#~ msgid "_Use system theme colors"
-#~ msgstr "Br_uk systemets temafarger"
-
-#~ msgid "%s at %s (code %s)"
-#~ msgstr "%s hos %s (kode %s)"
-
-#~ msgid "%s at bank code %s"
-#~ msgstr "%s hos bankkode %s"
-
-#, fuzzy
-#~ msgid "Comma Separated with Quotes"
-#~ msgstr "Startdato"
-
-#, fuzzy
-#~ msgid "Semicolon Separated with Quotes"
-#~ msgstr "Startdato"
-
-#, fuzzy
-#~ msgid "Delete the currently selected report"
-#~ msgstr "Slett valgte transaksjonsmal"
-
-#, fuzzy
-#~ msgid "Run the currently selected report"
-#~ msgstr "Skriv ut aktiv rapport"
-
-#~ msgid "Add _Report"
-#~ msgstr "Legg til _rapport"
-
-#, fuzzy
-#~ msgid "Net Price"
-#~ msgstr "Ny _pris:"
-
-#, fuzzy
-#~ msgid "Total Price"
-#~ msgstr "Totalt (periode)"
-
-#, fuzzy
-#~ msgid "Amount Due"
-#~ msgstr "Å betale"
-
-#, fuzzy
-#~ msgid "Invoice number: "
-#~ msgstr "Fakturanummer"
-
-#, fuzzy
-#~ msgid "Job number: "
-#~ msgstr "Jobbnummer"
-
-#, fuzzy
-#~ msgid "Custom Reports"
-#~ msgstr "Kunderapport"
-
-#~ msgid "and"
-#~ msgstr "og"
-
-#~ msgid "Most recent to report"
-#~ msgstr "Nærmest rapporttidspunktet"
-
-#~ msgid "The most recent recorded price before report date"
-#~ msgstr "Den nyeste registrerte prisen før rapportdatoen"
-
-#~ msgid "FILO"
-#~ msgstr "Først-inn-sist-ut"
-
-#~ msgid "Use first-in last-out method for basis"
-#~ msgstr "Bruk først-inn-sist-ut-metode som grunnlag"
-
-#~ msgid "Enable hyperlinks in reports"
-#~ msgstr "Aktiver hyperlenker i rapporter"
-
-#, fuzzy
-#~ msgid "Welcome to GnuCash 2.4!"
-#~ msgstr "Velkommen til GnuCash 2.0!"
-
-#~ msgid "The last stable version was "
-#~ msgstr "Den siste stabile versjonen var "
-
-#~ msgid "The next stable version will be "
-#~ msgstr "Neste stabile versjon vil være "
-
-#~ msgid "Built %s from r%s"
-#~ msgstr "Opprettet %s fra r%s"
-
-#~ msgid "You may not post an invoice with a negative total value."
-#~ msgstr "Du kan ikke postere en faktura med negativ totalsum."
-
-#~ msgid ""
-#~ "You may not post an expense voucher with a negative total cash value."
-#~ msgstr "Du kan ikke postere et utgiftsbilag med negativ totalsum."
-
-#~ msgid "Your selected post account, %s, does not exist"
-#~ msgstr "Din valgte konto for postering, %s, eksisterer ikke"
-
-#, fuzzy
-#~ msgid ""
-#~ "Days\n"
-#~ "Proximo"
-#~ msgstr "Neste mnd."
-
-#~ msgid "What Tax Table should be applied to this customer?"
-#~ msgstr "Hvilken MVA-kode skal brukes på denne kunden?"
-
-#~ msgid "What Tax Table should be applied to this vendor?"
-#~ msgstr "Hvilken MVA-kode skal brukes på denne leverandøren?"
-
-#~ msgid "Reload invoice report"
-#~ msgstr "Gjenles fakturarapport"
-
-#~ msgid "Reload invoice report scheme file"
-#~ msgstr "Gjenles skjemafil for fakturarapport"
-
-#~ msgid "Reload owner report"
-#~ msgstr "Gjenles eierrapport"
-
-#~ msgid "Reload owner report scheme file"
-#~ msgstr "Gjenles skjemafil for eierrapport"
-
-#~ msgid "Reload receivable report"
-#~ msgstr "Gjenles rapport for utestående fordringer"
-
-#~ msgid "Reload receivable report scheme file"
-#~ msgstr "Gjenles skjemafil for rapport for utestående fordringer"
-
-#, fuzzy
-#~ msgid ""
-#~ "Value $\n"
-#~ "Percent %"
-#~ msgstr "Prosent %"
-
-#~ msgid "Automatic Payment Forward"
-#~ msgstr "Automatisk opprettet betaling"
-
-#~ msgid "You must select a commodity."
-#~ msgstr "Du må velge en vare."
-
-#~ msgid ""
-#~ "You must select closing date that is greater than the closing date of the "
-#~ "previous book."
-#~ msgstr ""
-#~ "Du må velge en avslutningsdato som er større/senere enn avslutningsdatoen "
-#~ "for den forrige periodboken."
-
-#~ msgid "You must select closing date that is not in the future."
-#~ msgstr "Du må velge en avslutningsdato som ikke er i fremtiden."
-
-#, fuzzy
-#~ msgid "Are you sure you want to cancel the Mortgage/Loan Setup Assistant?"
-#~ msgstr "Er du sikker på at du vil avbryte veiviseren for oppsett av lån"
-
-#~ msgid "Please select a valid \"from\" account."
-#~ msgstr "Vennligst velg en gyldig \"fra\"-konto."
-
-#~ msgid "Please select a valid \"to\" account."
-#~ msgstr "Vennligst velg en gyldig \"til\"-konto."
-
-#~ msgid "Please select a valid \"interest\" account."
-#~ msgstr "Vennlist velg en gyldig rentekonto."
-
-#~ msgid "Payment: \"%s\""
-#~ msgstr "Betaling: \"%s\""
-
-#~ msgid "You must enter a valid distribution amount."
-#~ msgstr "Du må fylle inn et gyldig overføringsbeløp."
-
-#~ msgid "You must enter a distribution amount."
-#~ msgstr "Du må velge et distribusjonsbeløp."
-
-#~ msgid "You must either enter a valid price or leave it blank."
-#~ msgstr "Du må føre inn en gyldig pris eller la feltet være tomt."
-
-#~ msgid "The price must be positive."
-#~ msgstr "Prisen må være positiv."
-
-#~ msgid "You must either enter a valid cash amount or leave it blank."
-#~ msgstr ""
-#~ "Du må enten fylle inn et gyldig pengebeløp eller la feltet være blankt."
-
-#~ msgid "The cash distribution must be positive."
-#~ msgstr "Kontantoverføringen må være positiv."
-
-#~ msgid "You must select an income account for the cash distribution."
-#~ msgstr "Du må velge en inntektskonto for denne kontantoverføringen."
-
-#~ msgid "You must select an asset account for the cash distribution."
-#~ msgstr "Du må velge en formueskonto for denne kontantoverføringen."
-
-#~ msgid "New Account (not implemented)"
-#~ msgstr "Ny konto (ikke implementert)"
-
-#~ msgid "Select or add a GnuCash account"
-#~ msgstr "Velg eller legg til en GnuCash-konto"
-
-#~ msgid "Enter a title for this book."
-#~ msgstr "Skriv inn en tittel for denne boken."
-
-#~ msgid "Enter notes that describe this book."
-#~ msgstr "Skriv inn notater som beskriver denne boken."
-
-#~ msgid "Finish Closing Books"
-#~ msgstr "Fullfør periodeavslutning"
-
-#~ msgid ""
-#~ "day(s)\n"
-#~ "week(s)\n"
-#~ "month(s)\n"
-#~ "year(s)"
-#~ msgstr ""
-#~ "dag(er)\n"
-#~ "uke(r)\n"
-#~ "måned(er)\n"
-#~ "år"
-
-#~ msgid "Account Information"
-#~ msgstr "Kontoinformasjon"
-
-#~ msgid "Co_mpounding:"
-#~ msgstr "Re_ntesrente"
-
-#~ msgid "_Effective Date:"
-#~ msgstr "_Effektiv dato:"
-
-#~ msgid "_Initial Payment:"
-#~ msgstr "Første betal_ing:"
-
-#~ msgid "_Payments:"
-#~ msgstr "_Betalinger:"
-
-#~ msgid "<b>_Mini-Viewer</b>"
-#~ msgstr "<b>_Mini-visning</b>"
-
-#~ msgid "A summary of all of the transactions in the selected lot"
-#~ msgstr "En oppsummering av transaksjonene i det valgte partiet"
-
-#~ msgid ""
-#~ "Bid\n"
-#~ "Ask\n"
-#~ "Last\n"
-#~ "Net Asset Value\n"
-#~ "Unknown"
-#~ msgstr ""
-#~ "Kjøp\n"
-#~ "Selg\n"
-#~ "Siste\n"
-#~ "Nettoverdi\n"
-#~ "Ukjent"
-
-#~ msgid ""
-#~ "Inches\n"
-#~ "Centimeters\n"
-#~ "Millimeters\n"
-#~ "Points"
-#~ msgstr ""
-#~ "Tommer\n"
-#~ "Centimeter\n"
-#~ "Millimeter\n"
-#~ "Punkter"
-
-#~ msgid ""
-#~ "Quicken/QuickBooks (tm) US-Letter\n"
-#~ "Deluxe(tm) Personal Checks US-Letter\n"
-#~ "Quicken(tm) Wallet Checks w/ side stub\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Quicken/QuickBooks (tm) US-Letter\n"
-#~ "Deluxe(tm) Personal Checks US-Letter\n"
-#~ "Quicken(tm) Wallet Checks w/ side stub\n"
-#~ "Egendefinert"
-
-#~ msgid ""
-#~ "Top\n"
-#~ "Middle\n"
-#~ "Bottom\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Topp\n"
-#~ "Midt\n"
-#~ "Bunn\n"
-#~ "Egendefinert"
-
-#~ msgid "Copy Transaction"
-#~ msgstr "Kopier transaksjon"
-
-#~ msgid "Copy the selected transaction"
-#~ msgstr "Kopier valgt transaksjon"
-
-#~ msgid "Cut Transaction"
-#~ msgstr "Klipp ut transaksjon"
-
-#~ msgid "Dup_licate Transaction..."
-#~ msgstr "Dup_liser transaksjon"
-
-#~ msgid "Edit Exchange Rate"
-#~ msgstr "Rediger vekslingskurs"
-
-#~ msgid "Edit the exchange rate for the current split"
-#~ msgstr "Rediger vekslingskursen for gjeldende splitt"
-
-#~ msgid "Erase all splits except the one for this account."
-#~ msgstr "Fjern alle splitter untatt den for denne kontoen."
-
-#~ msgid "Jump"
-#~ msgstr "Hopp"
-
-#~ msgid "Remove Transaction Splits"
-#~ msgstr "Fjern transaksjonssplitter"
-
-#~ msgid "Schedule..."
-#~ msgstr "Planlegg..."
-
-#~ msgid "Sort by Amount"
-#~ msgstr "Sorter etter beløp"
-
-#~ msgid "Sort by Date"
-#~ msgstr "Sorter etter dato"
-
-#~ msgid "Sort by Description"
-#~ msgstr "Sorter etter beskrivelse"
-
-#~ msgid "Sort by Memo"
-#~ msgstr "Sorter etter notat"
-
-#~ msgid "Sort by Number"
-#~ msgstr "Sorter etter nummer"
-
-#~ msgid "St_yle"
-#~ msgstr "St_il"
-
-#~ msgid "_Amount"
-#~ msgstr "_Beløp"
-
-#~ msgid "_Number"
-#~ msgstr "_Nummer"
-
-#~ msgid "_Statement Date"
-#~ msgstr "Kontoutskriftsdato"
-
-#, fuzzy
-#~ msgid "<b>End</b>"
-#~ msgstr "<b>Sluttdato</b>"
-
-#~ msgid "<b>Upcoming</b>"
-#~ msgstr "<b>Kommende</b>"
-
-#~ msgid "Creation State"
-#~ msgstr "Opprettelsesstatus"
-
-#~ msgid "Do you..."
-#~ msgstr "Vil du..."
-
-#~ msgid "Loan Information"
-#~ msgstr "Informasjon om lånet"
-
-#~ msgid "Press apply to commit these changes."
-#~ msgstr "Trykk bruk for å lagre disse forandringene"
-
-#~ msgid "Repayment Type"
-#~ msgstr "Tilbakebetalingstype"
-
-#~ msgid "Start Date: "
-#~ msgstr "Startdato: "
-
-#, fuzzy
-#~ msgid ""
-#~ "months\n"
-#~ "years"
-#~ msgstr "måneder"
-
-#~ msgid "Set the budget options using this dialog."
-#~ msgstr "Fastsett budsjettinnstillinger med denne dialogen."
-
-#~ msgid "Case Insensitive?"
-#~ msgstr "Skill store/små bokstaver?"
-
-#~ msgid "That GnuCash XML file is already loaded. Please select another file."
-#~ msgstr ""
-#~ "Denne GnuCash XML-filen er allerede åpnet. Vennligst velg en annen fil."
-
-#~ msgid ""
-#~ "No files to merge. Please add ones by clicking on 'Load another file'."
-#~ msgstr ""
-#~ "Ingen filer å smelte sammen. Legg til noen ved å trykke på 'Last en annen "
-#~ "fil'."
-
-#~ msgid "Finish changes"
-#~ msgstr "Fullfør endringer"
-
-#~ msgid "Update gconf settings - GnuCash"
-#~ msgstr "Oppdatere gconf instillinger - GnuGash"
-
-#, fuzzy
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to import at this time. "
-#~ "Do this if you have saved your accounts to separate GnuCash files.\n"
-#~ "\n"
-#~ "Click \"Forward\" to finish loading files and move to the next step of "
-#~ "the GnuCash Datafile import process."
-#~ msgstr ""
-#~ "Trykk \"Last inn ny fil\" hvis du har mer data å importere nå. Gjør dette "
-#~ "hvis du har lagret dine kontoer til separate GnuCash-filer.\n"
-#~ "\n"
-#~ "Trykk \"Neste\" for å avslutte fillasting og gå videre til neste steg i "
-#~ "GnuCash-XML-prosessen."
-
-#~ msgid "Do not merge"
-#~ msgstr "Ikke smelt sammen"
-
-#, fuzzy
-#~ msgid "GnuCash data files you have loaded"
-#~ msgstr "GnuCash XML-filer som du har åpnet"
-
-#~ msgid "Load another file"
-#~ msgstr "Last en annen fil"
-
-#~ msgid "Unload selected file"
-#~ msgstr "Last ut valgt fil"
-
-#~ msgid "<b>Current File List</b>"
-#~ msgstr "<b>Liste over gjeldende filer</b>"
-
-#~ msgid ""
-#~ "Click \"Load another file\" if you have more data to load at this time.\n"
-#~ "\n"
-#~ "Click \"Next\" to finish loading files and move to the next step. "
-#~ msgstr ""
-#~ "Trykk \"Last ny fil\" hvis du har flere data å laste nå.\n"
-#~ "\n"
-#~ "Trykk \"Neste\" for å avslutte fillasting og fortsette til neste steg."
-
-#~ msgid "<b>Exchange/Price Information</b>"
-#~ msgstr "<b>Kurs-/prisinformasjon</b>"
-
-#~ msgid "To A_mount:"
-#~ msgstr "Til-b_eløp:"
-
-#~ msgid "_Exchange Rate:"
-#~ msgstr "_Kurs:"
-
-#~ msgid "_From:"
-#~ msgstr "_Fra:"
-
-#~ msgid "_To:"
-#~ msgstr "_Til:"
-
-#~ msgid ""
-#~ "US (12/31/2001)\n"
-#~ "UK (31/12/2001)\n"
-#~ "Europe (31.12.2001)\n"
-#~ "ISO (2001-12-31)\n"
-#~ "UTC\n"
-#~ "Locale\n"
-#~ "Custom\n"
-#~ msgstr ""
-#~ "USA (12/31/2001)\n"
-#~ "UK (31/12/2001)\n"
-#~ "Europa (31.12.2001)\n"
-#~ "ISO (2001-12-31)\n"
-#~ "UTC\n"
-#~ "Lokale\n"
-#~ "Egendefinert\n"
-
-#~ msgid "Don't tell me again this session."
-#~ msgstr "Ikke varsle meg igjen i denne kjøringen av programmet."
-
-#~ msgid "Don't tell me again."
-#~ msgstr "Ikke varsle meg igjen."
-
-#~ msgid "Remember the answer and don't tell me again this session."
-#~ msgstr ""
-#~ "Husk svaret og ikke varsle meg igjen i denne kjøringen av programmet."
-
-#~ msgid "Remember the answer and don't tell me again."
-#~ msgstr "Husk svaret og ikke varsle meg igjen."
-
-#~ msgid "Failed to process file: %s"
-#~ msgstr "Kunne ikke behandle filen: %s"
-
-#~ msgid "Failed to open file: %s: %s"
-#~ msgstr "Kunne ikke åpne filen: %s: %s"
-
-#~ msgid "Add a new transaction to the account"
-#~ msgstr "Legg til en ny transaksjon på kontoen"
-
-#, fuzzy
-#~ msgid "Select an CSV/Fixed-Width file to import"
-#~ msgstr "Velg en fil som skal importeres"
-
-#, fuzzy
-#~ msgid "Import _CSV/Fixed-Width..."
-#~ msgstr "Importer _QIF..."
-
-#~ msgid ""
-#~ "Enable the SKIP action in the transaction matcher. If enabled, a "
-#~ "transaction whose best match's score is in the yellow zone (above the "
-#~ "Auto-ADD threshold but below the Auto-CLEAR threshold) will be SKIPed by "
-#~ "default."
-#~ msgstr ""
-#~ "Skru på HOPP OVER-handlingen i transaksjonstreffalgoritmen. Hvis skrudd "
-#~ "på, vil transaksjoner med beste treffscore i den gule sonen (over auto-"
-#~ "innlegg men under auto-klarer) hoppes over."
-
-#, fuzzy
-#~ msgid ""
-#~ "For a new transaction, click on the \"Other Account\" entry to choose the "
-#~ "other (destination) account of this transaction.\n"
-#~ "For a transaction that is a duplicate of an existing one, click on the "
-#~ "\"Other Account\" or \"Description\" entry to \n"
-#~ "check whether GnuCash chose the right existing transaction.\n"
-#~ "To switch transactions between both states, click on the checkmark in the "
-#~ "\"New\" column.\n"
-#~ "When all new transactions have the correct destination account and all "
-#~ "duplicates are matched with the right existing transaction, \n"
-#~ "click \"OK\"."
-#~ msgstr ""
-#~ "For en ny transaksjon, trykk på \"Annen konto\"-oppføringen for å velge "
-#~ "en annen målkonto for denne transaksjonen.\n"
-#~ "For en transaksjon som er et duplikat av en eksisterende, klikk på "
-#~ "\"Annen konto\" og \"Beskrivelse\"-oppføringene for å \n"
-#~ "sjekke om GnuCash valgte den riktige eksisterende transaksjonen.\n"
-#~ "For å bytte transaksjoner mellom disse statusene, huk av sjekkboksen i "
-#~ "\"Ny\"-kolonnen.\n"
-#~ "Når alle nye transaksjoner har riktig målkonto og alle duplikater er satt "
-#~ "sammen med riktige eksisterende transaksjoner, kan du trykke \"OK\"."
-
-#~ msgid "Other Account"
-#~ msgstr "Annen konto"
-
-#~ msgid "Period-as-decimal (1,000.00)"
-#~ msgstr "Punktum som desimal (1,000.00)"
-
-#~ msgid "Comma-as-decimal (1.000,00)"
-#~ msgstr "Komma som desimal (1.000,00)"
-
-#~ msgid "y-d-m"
-#~ msgstr "å-d-m"
-
-#~ msgid "(no)"
-#~ msgstr "(nei)"
-
-#~ msgid "You must enter an account name."
-#~ msgstr "Du må oppgi et kontonavn."
-
-#, fuzzy
-#~ msgid ""
-#~ "No valid customer selected. Click on the Options button to select a "
-#~ "customer."
-#~ msgstr "Ingen gyldig %s valgt. Velg \"Alternativer\" for å velge et firma."
-
-#, fuzzy
-#~ msgid ""
-#~ "No valid employee selected. Click on the Options button to select an "
-#~ "employee."
-#~ msgstr "Ingen gyldig %s valgt. Velg \"Alternativer\" for å velge et firma."
-
-#, fuzzy
-#~ msgid ""
-#~ "No valid company selected. Click on the Options button to select a "
-#~ "company."
-#~ msgstr "Ingen gyldig %s valgt. Velg \"Alternativer\" for å velge et firma."
-
-#~ msgid ""
-#~ "Blue items are exportable to a German Tax XML file. Press Export to "
-#~ "actually export them."
-#~ msgstr ""
-#~ "Det er mulig å eksportere blå elementer til en XML-fil i tysk "
-#~ "skatteformat. Trykk Eksport for å eksportere dem."
-
-#~ msgid ""
-#~ "No Tax Related accounts were found. Go to the Edit->Tax Options dialog to "
-#~ "set up tax-related accounts."
-#~ msgstr ""
-#~ "Kan ikke finne noen kontoer merket \"skatterelatert\". Gå til Rediger-"
-#~ ">Skattealternativer for å sette opp skatterelaterte kontoer."
-
-#~ msgid "Asterisk"
-#~ msgstr "Stjerne"
-
-#~ msgid ""
-#~ "A list of directories (strings) indicating where to look for html and "
-#~ "parsed-html files. Each element must be a string representing a directory "
-#~ "or a symbol where 'default expands to the default path, and 'current "
-#~ "expands to the current value of the path."
-#~ msgstr ""
-#~ "En liste over kataloger (strenger) som indikerer hvor GnuCash skal se "
-#~ "etter html- og parsed-html-filer. Hvert element må være en streng som "
-#~ "representerer en katalog eller et symbol hvor 'default utvides til "
-#~ "forvalgt sti, og 'current utvides til gjeldende arbeidskatalog."
-
-#~ msgid "Set the search path for documentation files"
-#~ msgstr "Sett søkesti for dokumentasjonsfiler"
-
-#~ msgid "Default number of register rows to display in Invoices."
-#~ msgstr "Forvalgt antall fakturalinjer som vises i faktura."
-
-#~ msgid "The number of rows in an invoice"
-#~ msgstr "Forvalgt antall rader i føring av faktura"
-
-#~ msgid ""
-#~ "This field sets the number of rows to show in an invoice. It does not "
-#~ "actually affect the display of the contents of the window. It is only "
-#~ "used to set the size of the window when first opened."
-#~ msgstr ""
-#~ "Dette feltet bestemmer antallet rader som skal vises i en ny faktura. Det "
-#~ "endrer ikke visningen av innholdet i vinduet. Det brukes bare til å "
-#~ "bestemme størrelsen på vinduet når det åpnes."
-
-#~ msgid "Invalid Entry:  You need to supply %s."
-#~ msgstr "Ugyldig føring: du må angi %s."
-
-#~ msgid "This SX has changed; are you sure you want to cancel?"
-#~ msgstr ""
-#~ "Denne planlagte kommandoen er endret; er du sikker på at du vil avbryte?"
-
-#~ msgid "Crea_te in advance, days:"
-#~ msgstr "Oppre_tt på forhånd, dager:"
-
-#~ msgid "R_emind in advance, days:"
-#~ msgstr "Varsl_e på forhånd, dager:"
-
-#~ msgid ""
-#~ "This field sets the number of rows to show in a register. It does not "
-#~ "actually affect the display of the contents of the window. It is only "
-#~ "used to set the size of the window when first opened."
-#~ msgstr ""
-#~ "Dette feltet fastsetter antall rader som skal vises i et register. Det "
-#~ "påvirker ikke visningen av innhold i et vindu. Det brukes bare til å "
-#~ "fastsette størrelsen på vinduet når det først åpnes."
-
-#~ msgid "New %s"
-#~ msgstr "Ny %s"
-
-#~ msgid "item"
-#~ msgstr "element"
-
-#~ msgid "Display this many rows when a register is created."
-#~ msgstr "Vis dette antallet rader når et register opprettes."
-
-#~ msgid "Enable the EDIT action in the transaction matcher. NOT YET SUPPORTED"
-#~ msgstr ""
-#~ "Skru på REDIGER-handlingen i transaksjonstreffalgoritmen. STØTTES IKKE "
-#~ "ENDA"
-
-#~ msgid ""
-#~ "The job was sent to the bank successfully, but the bank is refusing to "
-#~ "execute the job. Please check the log window for the exact error message "
-#~ "of the bank. The line with the error message contains a code number that "
-#~ "is greater than 9000.\n"
-#~ "\n"
-#~ "Do you want to enter the job again?"
-#~ msgstr ""
-#~ "Denne overføringen ble sendt til banken, men banken nekter å utføre den. "
-#~ "Vennligst sjekk loggvinduet for den nøyaktige feilmeldingen fra banken. "
-#~ "Linjen med feilmeldingen inneholder et kodenummer som er større enn "
-#~ "9000.\n"
-#~ "\n"
-#~ "Vil du skrive inn overføringen på nytt?"
-
-#~ msgid "The two passwords didn't match. Please try again."
-#~ msgstr "Passordene stemmer ikke overens. Vennligst prøv igjen."
-
-#~ msgid "Choose AqBanking Backend"
-#~ msgstr "Velg AqBanking-bakstykke"
-
-#~ msgid "Please choose an AqBanking backend to be configured"
-#~ msgstr "Velg et AqBanking-bakstykke som skal konfigureres"
-
-#~ msgid "Co_nfigure"
-#~ msgstr "Ko_nfigurer"
-
-#~ msgid "The file %s does not exist. Would you like to create it now?"
-#~ msgstr "Filen %s eksisterer ikke. Vil du opprette den nå?"
-
-#~ msgid ""
-#~ "The directory for file %s does not exist. Please choose another place for "
-#~ "this file."
-#~ msgstr ""
-#~ "Mappen til filen %s ble ikke funnet. Vennligst velg en annen plassering "
-#~ "for denne filen."
-
-#, fuzzy
-#~ msgid "Choose an Online Banking Version to use with the selected bank:"
-#~ msgstr "Velg en HBCI-versjon som skal brukes med den valgte banken:"
-
-#, fuzzy
-#~ msgid "Online Banking Version"
-#~ msgstr "Onlinetransaksjon"
-
-#, fuzzy
-#~ msgid "Start AqBanking Setup Wizard"
-#~ msgstr "Start AqHBCI oppsettsveiviser"
-
-#~ msgid "Enter and confirm your new password"
-#~ msgstr "Skriv inn og bekreft ditt nye passord"
-
-#~ msgid "Enter new Password"
-#~ msgstr "Tast inn nytt passord"
-
-#, fuzzy
-#~ msgid "Activate verbose debug messages for Online Banking."
-#~ msgstr "Aktiver utfyllende avlusingsmeldinger for HBCI Online-bank."
-
-#, fuzzy
-#~ msgid "Remember the Online Banking PIN in memory during a session."
-#~ msgstr "Husk PIN-koden for HBCI i minne gjennom en økt."
-
-#~ msgid ""
-#~ "The PIN you entered was wrong.\n"
-#~ "Do you want to try again?"
-#~ msgstr ""
-#~ "PIN-koden du tastet inn var feil.\n"
-#~ "Vil du prøve igjen?"
-
-#~ msgid ""
-#~ "The PIN you entered was wrong.\n"
-#~ "ATTENTION: You have zero further wrong retries left!\n"
-#~ "Do you want to try again?"
-#~ msgstr ""
-#~ "PIN-koden du tastet inn var feil.\n"
-#~ "ADVARSEL: Du har kun ETT forsøk igjen!\n"
-#~ "Vil du prøve på nytt?"
-
-#~ msgid ""
-#~ "Unfortunately you entered a wrong PIN for too many times. Your chip card "
-#~ "is therefore destroyed. Aborting."
-#~ msgstr ""
-#~ "Uheldigvis har du tastet inn feil PIN-kode for mange ganger. Ditt "
-#~ "smartkort er ødelagt. Avbryter."
-
-#~ msgid ""
-#~ "No chip card has been found in the chip card reader. Do you want to try "
-#~ "again?"
-#~ msgstr "Fant ikke noe smartkort i smartkortleseren. Vil du prøve på nytt?"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unfortunately this Online Banking job is not supported by your bank or "
-#~ "for your account. Aborting."
-#~ msgstr ""
-#~ "Denne HBCI-jobben støttes dessverre ikke av din bank eller din konto. "
-#~ "Avbryter."
-
-#, fuzzy
-#~ msgid ""
-#~ "The server of your bank refused the Online Banking connection. Please try "
-#~ "again later. Aborting."
-#~ msgstr ""
-#~ "Bankens server avviste HBCI-tilkoblingen.Vennligst prøv igjen senere. "
-#~ "Avbryter."
-
-#, fuzzy
-#~ msgid ""
-#~ "One of the jobs was sent to the bank successfully, but the bank is "
-#~ "refusing to execute the job. Please check the log window for the exact "
-#~ "error message of the bank. The line with the error message contains a "
-#~ "code number that is greater than 9000.\n"
-#~ "\n"
-#~ "The job has been removed from the queue."
-#~ msgstr ""
-#~ "Denne overføringen ble sendt til banken, men banken nekter å utføre den. "
-#~ "Vennligst sjekk loggvinduet for den nøyaktige feilmeldingen fra banken. "
-#~ "Linjen med feilmeldingen inneholder et kodenummer som er større enn "
-#~ "9000.\n"
-#~ "\n"
-#~ "Vil du skrive inn overføringen på nytt?"
-
-#, fuzzy
-#~ msgid "Import a CSV file into GnuCash"
-#~ msgstr "Velg QSF-filen som skal importeres i GnuCash"
-
-#~ msgid ""
-#~ "The PIN needs to be at least %d characters long. Do you want to try again?"
-#~ msgstr "PIN må minst være på minst %d tegn. Vil du prøve igjen?"
-
-#~ msgid ""
-#~ "You entered %ld characters, but the PIN must be no longer than %d "
-#~ "characters. Do you want to try again?"
-#~ msgstr ""
-#~ "Du skrev inn %ld tegn, men PIN-koden kan ikke være lenger enn %d tegn. "
-#~ "Vil du forsøke på nytt?"
-
-#~ msgid ""
-#~ "This TAN needs to be at least %d characters long. Do you want to try "
-#~ "again?"
-#~ msgstr "Denne TAN må være minst %d tegn lang. Vil du prøve på nytt?"
-
-#~ msgid ""
-#~ "You entered %ld characters, but the TAN must be no longer than %d "
-#~ "characters. Do you want to try again?"
-#~ msgstr ""
-#~ "Du skrev inn %ld tegn, men TAN kan ikke være lenger enn %d tegn. Vil du "
-#~ "forsøke på nytt?"
-
-#~ msgid "Enable EDIT transaction action"
-#~ msgstr "Skru på transaksjonshandlingen REDIGER"
-
-#~ msgid ""
-#~ "Enable the EDIT action in the transaction matcher. NOT YET SUPPORTED."
-#~ msgstr ""
-#~ "Skru på REDIGER-handlingen i transaksjonskobleren. STØTTES IKKE ENDA."
-
-#, fuzzy
-#~ msgid ""
-#~ "Warning!! This is a DEVELOPMENT version of GnuCash. It probably has lots "
-#~ "of bugs and unstable features! If you are looking for a stable personal "
-#~ "finance application, you should use the latest release of GnuCash %s."
-#~ msgstr ""
-#~ "Advarsel!! Dette er en UTVIKLINGSVERSJON av GnuCash. Den har "
-#~ "sannsynligvis flere programfeil og ustabile funksjoner! Hvis du vil bruke "
-#~ "et stabilt personlig økonomiprogram, burde du bruke siste stabile "
-#~ "versjonen, som er GnuCash 1.8."
-
-#~ msgid "CONFIGPATH"
-#~ msgstr "KONFIGSTI"
-
-#~ msgid "Set shared data file search path"
-#~ msgstr "Sett søkesti for delte datafiler"
-
-#~ msgid "SHAREPATH"
-#~ msgstr "DELTSTI"
-
-#~ msgid "Transaction _journal"
-#~ msgstr "Transaksjons_journal"
-
-#, fuzzy
-#~ msgid "Payment rec'd..."
-#~ msgstr "Betalingsfrekvens"
-
-#~ msgid "<b>Contained Accounts</b>"
-#~ msgstr "<b>Inneholdende kontoer</b>"
-
-#~ msgid "<b>Description</b>"
-#~ msgstr "<b>Beskrivelse</b>"
-
-#~ msgid "<b>New Account Currency</b>"
-#~ msgstr "<b>Ny kontovaluta</b>"
-
-#~ msgid ""
-#~ "If you would like an account to have an opening balance, click on the "
-#~ "account and enter the starting balance in the box on the right. All "
-#~ "accounts except Equity and placeholder accounts may have an opening "
-#~ "balance."
-#~ msgstr ""
-#~ "Hvis du vil at en konto skal ha en inngående balanse, klikk på kontoen og "
-#~ "fyll inn den inngående balansen i feltet til høyre. Alle kontoer untatt "
-#~ "egenkapital- og plassholderkontoer kan ha en inngående balanse."
-
-#~ msgid "This is Sample2."
-#~ msgstr "Dette er eksempel2."
-
-#~ msgid "Auto-Created Transactions Notification"
-#~ msgstr "Auto-opprettet transaksjonsvarsel"
-
-#~ msgid "Create"
-#~ msgstr "Opprette"
-
-#~ msgid "Create as scheduled"
-#~ msgstr "Opprett som planlagt"
-
-#~ msgid "Created Transaction Review"
-#~ msgstr "Gjennomsyn av opprettede transaksjoner"
-
-#~ msgid "Creating transactions..."
-#~ msgstr "Oppretter transaksjoner..."
-
-#~ msgid "Days Away"
-#~ msgstr "Dager til"
-
-#~ msgid "Disposition?"
-#~ msgstr "Disposisjon?"
-
-#~ msgid "Obsolete Scheduled Transactions"
-#~ msgstr "Foreldede planlagte transaksjoner"
-
-#~ msgid "Postpone"
-#~ msgstr "Utsett"
-
-#~ msgid "Scheduled Transaction"
-#~ msgstr "Planlagte transaksjoner"
-
-#~ msgid "Since Last Run"
-#~ msgstr "Siden sist"
-
-#~ msgid "State"
-#~ msgstr "Status"
-
-#~ msgid "Template Transaction (Read-Only)"
-#~ msgstr "Maltransaksjon (skrivebeskyttet)"
-
-#~ msgid ""
-#~ "The following scheduled transactions have expired. Select those you wish "
-#~ "to delete."
-#~ msgstr "Følgende planlagte transaksjoner er utløpt. Velg de du vil slette."
-
-#~ msgid ""
-#~ "The listed Scheduled Transactions are to-be created soon. Select any "
-#~ "which you would like to create now, and click \"Forward\" to create them."
-#~ msgstr ""
-#~ "Viste planlagte transaksjoner skal snart opprettes. Velg de du vil "
-#~ "opprette nå, og trykk \"Neste\" for å opprette."
-
-#, fuzzy
-#~ msgid ""
-#~ "This assistant will walk you through any scheduled transactions that "
-#~ "should be created."
-#~ msgstr ""
-#~ "Denne veiviseren vil hjelpe deg gjennom opprettelse av planlagt "
-#~ "transaksjon."
-
-#~ msgid "To-Create Transaction Preparation"
-#~ msgstr "Forberedelse for transaksjonsopprettelse"
-
-#~ msgid "Transaction Reminders"
-#~ msgstr "Transaksjonspåminnelser"
-
-#~ msgid "Unselect All"
-#~ msgstr "Tøm alle"
-
-#~ msgid "Value:"
-#~ msgstr "Verdi:"
-
-#~ msgid "Variable"
-#~ msgstr "Variabel"
-
-#~ msgid "Variables"
-#~ msgstr "Variabler"
-
-#~ msgid "What to do, what to do?"
-#~ msgstr "Hva skal vi gjøre, hva skal vi gjøre?"
-
-#~ msgid "Defaults"
-#~ msgstr "Standard"
-
-#~ msgid "Start of this fiscal year"
-#~ msgstr "Dette regnskapsårets begynnelse"
-
-#~ msgid "Start of previous fiscal year"
-#~ msgstr "Forrige regnskapsårs begynnelse"
-
-#~ msgid "End of this fiscal year"
-#~ msgstr "Dette regnskapsårets slutt"
-
-#~ msgid "End of previous fiscal year"
-#~ msgstr "Forrige regnskapsårs slutt"
-
-#~ msgid "Current Year Start"
-#~ msgstr "Inneværende års begynnelse"
-
-#~ msgid "Current Year End"
-#~ msgstr "Inneværende års slutt"
-
-#~ msgid "Previous Year Start"
-#~ msgstr "Forrige års begynnelse"
-
-#~ msgid "Previous Year End"
-#~ msgstr "Forrige års slutt"
-
-#~ msgid "End of the Previous Year"
-#~ msgstr "Forrige års slutt"
-
-#~ msgid "Start of Financial Period"
-#~ msgstr "Starten på finansperioden"
-
-#~ msgid "End of Financial Period"
-#~ msgstr "Slutten på finansperioden"
-
-#~ msgid "End of the accounting period, as set in the global preferences"
-#~ msgstr "Slutten på regnskapsperioden, som satt i globale innstillinger"
-
-#~ msgid "End of the current month"
-#~ msgstr "Inneværende måneds slutt"
-
-#~ msgid "The beginning of the previous month"
-#~ msgstr "Forrige måneds begynnelse"
-
-#~ msgid "The end of the latest quarterly accounting period"
-#~ msgstr "Slutten på siste kvartalsvise regnskapsperiode"
-
-#~ msgid "Accounts to include"
-#~ msgstr "Inkluder følgende kontoer"
-
-#~ msgid "Show Full Account Name?"
-#~ msgstr "Vis fullt kontonavn?"
-
-#~ msgid "Filter Accounts"
-#~ msgstr "Filtrer kontoer"
-
-#, fuzzy
-#~ msgid "Flatten list to depth limit?"
-#~ msgstr "Flat ut liste til dybdegrensen"
-
-#~ msgid "DOCPATH"
-#~ msgstr "DOKSTI"
-
-#~ msgid "QSF _Invoice..."
-#~ msgstr "QSF _Faktura..."
-
-#~ msgid "Export one or more invoices to QSF"
-#~ msgstr "Eksporter en eller flere fakturaer til QSF"
-
-#~ msgid "QSF _Customer..."
-#~ msgstr "QSF _Kunde..."
-
-#~ msgid "Export one or more customers to QSF"
-#~ msgstr "Eksporter en eller flere kunder til QSF"
-
-#~ msgid "QSF _Vendor..."
-#~ msgstr "QSF _Leverandør..."
-
-#~ msgid "Export one or more vendors to QSF"
-#~ msgstr "Eksporter en eller flere leverandører til QSF"
-
-#~ msgid "QSF _Employee..."
-#~ msgstr "QSF _Ansatt..."
-
-#~ msgid "Export one or more employees to QSF"
-#~ msgstr "Eksporter en eller flere ansatte til QSF"
-
-#~ msgid "Export Invoices to XML"
-#~ msgstr "Eksporter fakturaer til XML"
-
-#~ msgid "Export Vendors to XML"
-#~ msgstr "Eksporter leverandører til XML"
-
-#~ msgid "Export Employees to XML"
-#~ msgstr "Eksporter ansatte til XML"
-
-#~ msgid "Export Chart of Accounts to QSF XML"
-#~ msgstr "Eksporter kontoplan til QSF XML"
-
-#~ msgid ""
-#~ "Error: Please resolve all %d conflicts before trying to commit the data."
-#~ msgstr "Feil: vennligst løs alle %d konflikter før du forsøker å lagre."
-
-#, fuzzy
-#~ msgid "Error: the Commit operation failed, error code %d."
-#~ msgstr "Feil: Lagringen mislyktes."
-
-#~ msgid "%i conflict needs to be resolved."
-#~ msgid_plural "%i conflicts need to be resolved."
-#~ msgstr[0] "%i konflikt må løses."
-#~ msgstr[1] "%i konflikter må løses."
-
-#~ msgid "%i parameter value for this \"%s\" object."
-#~ msgid_plural "%i parameter values for this \"%s\" object."
-#~ msgstr[0] "%i parameterverdi for dette \"%s\"-objektet."
-#~ msgstr[1] "%i parameterverdier for dette \"%s\"-objektet."
-
-#, fuzzy
-#~ msgid "%i: Parameter name: %s "
-#~ msgstr "%i: Parameternavn %s "
-
-#~ msgid "Import data : %s "
-#~ msgstr "Importer data : %s "
-
-#~ msgid "Original data : %s\n"
-#~ msgstr "Originale data : %s\n"
-
-#~ msgid "Click to choose the filename and location."
-#~ msgstr "Klikk for å velge filnavn og plassering."
-
-#~ msgid "Export Chart of Accounts"
-#~ msgstr "Eksporter kontoplan"
-
-#, fuzzy
-#~ msgid ""
-#~ "Select the date to use and click Export to choose the filename and "
-#~ "location. Future dates are not supported."
-#~ msgstr ""
-#~ "Velg datoen som skal brukes og klikk eksporter for å velge filnavn og "
-#~ "plassering."
-
-#~ msgid ""
-#~ "The Chart of Accounts includes the balance for each account, on the date "
-#~ "specified. Note that future dates are not supported."
-#~ msgstr ""
-#~ "Kontoplanen inkluderer balanse for hver konto fra datoen du spesifiserer. "
-#~ "Merk at du ikke kan velge dato i fremtiden."
-
-#~ msgid ""
-#~ "You can export the Chart of Accounts to a QSF XML file that can be "
-#~ "imported into another GnuCash file or used in other programs."
-#~ msgstr ""
-#~ "Du kan eksportere Kontoplanen til en QSF XML fil, som kan bli importert i "
-#~ "en annen GnuCash-fil eller et annet program."
-
-#~ msgid "1. Update your existing book with the import data"
-#~ msgstr "1. Oppdater din eksisterende regnskapsbok med importerte data"
-
-#~ msgid "2. Ignore the import data, leave original unchanged"
-#~ msgstr "2. Ignorer importerte data, la originalen være urørt"
-
-#~ msgid "3. Import the data as a NEW object"
-#~ msgstr "3. Importer dataene som et nytt objekt"
-
-#~ msgid "Add the import as a new object, leave original in place"
-#~ msgstr ""
-#~ "Legg til importerte data som et nytt objekt, og la originaldata være urørt"
-
-#~ msgid "Commit QSF Import Data to data file"
-#~ msgstr "Lagre QSF-importdata til datafilen"
-
-#~ msgid "Please resolve any conflicts in the merge"
-#~ msgstr "Vennligst løs enhver konflikt i sammenslåingen"
-
-#~ msgid ""
-#~ "Press `Apply' to merge your QSF data into the current GnuCash file.\n"
-#~ "\n"
-#~ "Press `Back' to review your selections.\n"
-#~ "\n"
-#~ "Press `Cancel' to close this dialog without changing your current data "
-#~ "file.\n"
-#~ "\n"
-#~ "REMEMBER: There is no way to undo this final operation! Make sure you "
-#~ "have a backup before clicking 'Apply'."
-#~ msgstr ""
-#~ "Velg `Bruk' for å slå sammen dine QSF-data i den nåværende GnuCash-"
-#~ "filen.\n"
-#~ "\n"
-#~ "Velg `Tilbake' for å se gjennom dine valg.\n"
-#~ "\n"
-#~ "Velg `Avbryt' for å lukke denne dialogen uten å endre din gjeldende "
-#~ "datafil.\n"
-#~ "\n"
-#~ "ADVARSEL: Du kan ikke gå tilbake på dette valget! Forsikre deg om at du "
-#~ "har en sikkerhetskopi før du velger 'Bruk'."
-
-#~ msgid "QSF Data Import Setup"
-#~ msgstr "Oppsett for QSF-dataimport"
-
-#~ msgid "Shows how your QSF data conflicts with existing data in your file."
-#~ msgstr ""
-#~ "Viser hvordan dine QSF-data er i konflikt med eksisterende data i filen "
-#~ "din."
-
-#, fuzzy
-#~ msgid ""
-#~ "This assistant will merge your QSF data into the currently open GnuCash "
-#~ "file.\n"
-#~ "\n"
-#~ "You will be asked how to proceed if some QSF data clashes with the your "
-#~ "existing GnuCash data file.\n"
-#~ "\n"
-#~ "There is NO way to undo this operation! Please ensure you have a backup "
-#~ "of your file BEFORE continuing! You will be given the option to cancel "
-#~ "the merge at all stages until the final merge operation. Once you click "
-#~ "Finish, the new QSF data will be committed to your current data file.\n"
-#~ "\n"
-#~ "There is currently no currency or price support in the merge operation, "
-#~ "the new data will inherit any default currency or you can change the "
-#~ "currency after the merge is complete.\n"
-#~ "\n"
-#~ "Your QSF data is ready to import\n"
-#~ "\n"
-#~ "Click 'Cancel'  if you do not wish to merge your QSF data now."
-#~ msgstr ""
-#~ "Denne veiviseren vil flette dine QSF-data sammen med din åpne GnuCash-"
-#~ "fil.\n"
-#~ "\n"
-#~ "Du vil bli spurt om hva du vil gjøre hvis noen QSF-data kolliderer med "
-#~ "data i din gjeldende fil.\n"
-#~ "\n"
-#~ "Det går IKKE an å anfre denne operasjonen! Vennligst forsikre deg om at "
-#~ "du har en sikkerhetskopi FØR du fortsetter! Du vil bli gitt muligheten "
-#~ "til å avbryte på alle stadier i prosessen frem til selve "
-#~ "fletteoperasjonen. Når du trykker 'Fullfør' vil dine QSF-data flettes inn "
-#~ "i den gjeldende datafilen.\n"
-#~ "\n"
-#~ "Import av valuta og priser støttes ikke av fletteoperasjonen, og de nye "
-#~ "dataene vil derfor arve forvalgt valuta, og du kan endre det etter at "
-#~ "flettingen er fullført.\n"
-#~ "\n"
-#~ "Dine QSF-data er klare til å bli importert.\n"
-#~ "\n"
-#~ "Trykk 'Avbryt' hvis du ikke ønsker å flette QSF-data nå."
-
-#~ msgid ""
-#~ "You have three choices for each collision: \n"
-#~ "1. The import object can be allowed to overwrite the target - use this to "
-#~ "update your existing book. \n"
-#~ "2. The import object can be ignored - use this if the import is a "
-#~ "duplicate of an object in the existing book. \n"
-#~ "3. The import object can be created as a new object in the existing book."
-#~ msgstr ""
-#~ "Du har tre alternativer for hver kollisjon: \n"
-#~ "1. Det importerte objektet kan overskrive målfilens objekt. Bruk dette "
-#~ "for å oppdatere ditt eksisterende regnskap. \n"
-#~ "2. Det importerte objektet kan overses. Bruk dette hvis importdata er "
-#~ "duplikater av gjeldende data.\n"
-#~ "3. Importobjektet kan lages som et nytt objekt i det gjeldende regnskapet."
-
-#~ msgid "ignore the import, leave the original untouched"
-#~ msgstr "ignorer importeringen, og la orginalen væe uforandret"
-
-#~ msgid "overwrite the original with the import data"
-#~ msgstr "overskriv originale data med importerte data"
-
-#~ msgid "Import a QSF object file"
-#~ msgstr "Importer en QSF objektfil"
-
-#~ msgid "Export the chart of accounts for a date with balances as QSF"
-#~ msgstr "Eksporter kontoplanen for en bestemt dato med balanser til QSF"
-
-#~ msgid "Select the QSF file to import into GnuCash"
-#~ msgstr "Velg QSF-filen som skal importeres i GnuCash"
-
-#~ msgid ""
-#~ "Invalid QSF Object file! The QSF object file %s failed to validate "
-#~ "against the QSF object schema. The XML structure of the file is either "
-#~ "not well-formed or contains illegal data."
-#~ msgstr ""
-#~ "Ugyldig QSF objektfil! QSF objektfilen %s er ikke gyldig i henhold til "
-#~ "skjemaet for QSF-objekter. XML-strukturen i filen er enten ikke "
-#~ "syntaktisk korrekt eller inneholder ulovlige data."
-
-#~ msgid ""
-#~ "Invalid QSF Map file! The QSF map file %s failed to validate against the "
-#~ "QSF map schema. The XML structure of the file is either not well-formed "
-#~ "or contains illegal data."
-#~ msgstr ""
-#~ "Ugyldig QSF mapping-fil. QSF mappingfilen %s er ikke gyldig i henhold til "
-#~ "skjemaet for QSF mappingfiler. XML-strukturen i filen er enten ikke "
-#~ "syntaktisk korrekt eller inneholder ulovlige data."
-
-#~ msgid ""
-#~ "The QSF Map file %s was written for a different version of QOF. It may "
-#~ "need to be modified to work with your current QOF installation."
-#~ msgstr ""
-#~ "QSF mappingfilen %s ble skrevet for en annen versjon av QOF. Det kan "
-#~ "hende den må endres for å virke med din gjeldende QOF-installasjon."
-
-#~ msgid ""
-#~ "The selected QSF map %s contains unusable data. This is usually because "
-#~ "not all the required parameters for the defined objects have calculations "
-#~ "described in the map."
-#~ msgstr ""
-#~ "Den valgte QSF-mappingen %s inneholder ubrukelige data. Dette skyldes "
-#~ "vanligvis at ikke alle de påkrevde parameterne for de definerte objektene "
-#~ "har beregninger beskrevet i mappingen."
-
-#~ msgid ""
-#~ "The selected QSF object file %s contains one or more invalid GUIDs. The "
-#~ "file cannot be processed - please check the source of the file and try "
-#~ "again."
-#~ msgstr ""
-#~ "Den valgte QSF-objektfilen %s inneholder en eller flere ugyldige GUIDer. "
-#~ "Filen kan ikke behandles - vennligst korriger kildekoden og prøv på nytt."
-
-#~ msgid ""
-#~ "The selected QSF Object file %s requires a map but it was not provided."
-#~ msgstr ""
-#~ "Den valgte QSF-objektfilen %s krever en mapping, men den ble ikke gitt."
-
-#~ msgid ""
-#~ "Wrong QSF map selected. The selected map %s validates but was written for "
-#~ "different QOF objects. The list of objects defined in this map does not "
-#~ "include all the objects described in the current QSF object file."
-#~ msgstr ""
-#~ "Feil QSF-mapping valgt. Den valgte mappingen %s er gyldig, men ble "
-#~ "skrevet for andre QOF-objekter. Listen med objekter i denne mappingen "
-#~ "inkluderer ikke alle objektene beskrevet i den gjeldende QSF-objektfilen."
-
-#~ msgid ""
-#~ "The selected file %s is a QSF map and cannot be opened as a QSF object."
-#~ msgstr ""
-#~ "Den valgte filen %s er en QSF map og kan ikke åpnes som et QSF object."
-
-#~ msgid ""
-#~ "When converting XML strings into numbers, an overflow has been detected. "
-#~ "The QSF object file %s contains invalid data in a field that is meant to "
-#~ "hold a number."
-#~ msgstr ""
-#~ "Under konvertering av XML-strenger til tall ble en overflytsfeil "
-#~ "oppdaget. QSF-objektfilen %s inneholder ugyldige data i et felt som "
-#~ "skulle inneholde et tall."
-
-#~ msgid ""
-#~ "The QSF object file %s is valid and contains GnuCash objects. However, "
-#~ "GnuCash cannot open the file directly because the data needs to be merged "
-#~ "into an existing GnuCash data book. Please open a GnuCash file or create "
-#~ "a new one, then import this QSF object file so that the data can be "
-#~ "merged into the main data book."
-#~ msgstr ""
-#~ "QSF-objektfilen %s er gyldig og inneholder GnuCash-objekter. Likevel kan "
-#~ "ikke GnuCash importere filen fordi den må smeltes sammen med en "
-#~ "eksisterende GnuCash-databok. Vennligst åpne en GnuCash-fil eller lag en "
-#~ "ny, og importer deretter QSF-objektfilen slik at data kan smeltes inn i "
-#~ "hoveddataboken."
-
-#~ msgid "Level of compression to use: 0 for none, 9 for highest."
-#~ msgstr "Kompresjonsnivå som skal brukes: 0 for ingen, 9 for høyeste."
-
-#~ msgid ""
-#~ "QOF can compress QSF XML files using gzip. Note that compression is not "
-#~ "used when outputting to STDOUT."
-#~ msgstr ""
-#~ "QOF kan komprimere QSF XML-filene med gzip. Merk at komprimeringen ikke "
-#~ "brukes når utdata går til STDOUT."
-
-#~ msgid "List of QSF map files to use for this session."
-#~ msgstr "Liste over QSF mappingfiler som brukes i denne økten."
-
-#~ msgid ""
-#~ "QOF can convert objects within QSF XML files using a map of the changes "
-#~ "required."
-#~ msgstr ""
-#~ "QOF kan konverterer objekter i QSF XML-filer med et kart over nødvendige "
-#~ "endringer."
-
-#, fuzzy
-#~ msgid "String encoding to use when writing the XML file."
-#~ msgstr "Tegnkoding som benyttes ved skriving av XML-filen."
-
-#, fuzzy
-#~ msgid ""
-#~ "QSF defaults to UTF-8. Other encodings are supported by passing the "
-#~ "string encoding in this option."
-#~ msgstr ""
-#~ "QSF bruker UTF-8 som forvalg. Andre tegnkodinger støttes ved å fylle inn "
-#~ "tegnkodingsstrengen i dette alternativet."
-
-#, fuzzy
-#~ msgid "Default CSS"
-#~ msgstr "Forvalg"
-
-#, fuzzy
-#~ msgid "Could not open the file: "
-#~ msgstr "Kan ikke åpne filen %s. Feilen er: %s"
-
-#, fuzzy
-#~ msgid "Due date:"
-#~ msgstr "Forfallsdato"
-
-#, fuzzy
-#~ msgid "<h2>Tax Invoice</h2>"
-#~ msgstr "<b>Fakturaer</b>"
-
-#~ msgid "Set the logging level from 0 (least) to 6 (most)"
-#~ msgstr "Sett loggingsnivå mellom 0 (minst) og 6 (mest)"
-
-#~ msgid "LOGLEVEL"
-#~ msgstr "LOGGINGSNIVÅ"
-
-#~ msgid "_Tax Table Editor"
-#~ msgstr "Redigering av _MVA-koder"
-
-#~ msgid ""
-#~ "If you would like an account to have an opening balance, click on the row "
-#~ "containing the account, click again in the opening balances column, and "
-#~ "then enter the starting balance. All accounts except Equity and "
-#~ "placeholder accounts may have an opening balance.\n"
-#~ "\n"
-#~ "If you would like an account to be a placeholder account, just click the "
-#~ "checkbox for that account.\n"
-#~ msgstr ""
-#~ "Hvis du vil at en konto skal ha en inngående balanse, klikk på kontoen og "
-#~ "fyll inn den inngående balansen i feltet til høyre. Alle kontoer untatt "
-#~ "egenkapital- og plassholderkontoer kan ha en inngående balanse.\n"
-#~ "\n"
-#~ "Hvis du vil at en av kontoene skal bli en plassholderkonto, kan du gjøre "
-#~ "dette ved å huke av sjekkboksen for den aktuelle kontoen.\n"
-
-#~ msgid "Setup new accounts"
-#~ msgstr "Opprett nye kontoer"
-
-#, fuzzy
-#~ msgid "Income Ta_x Options"
-#~ msgstr "Skattealternativer"
-
-#, fuzzy
-#~ msgid "Setup income tax information for relevant accounts"
-#~ msgstr "Sett opp skatteinformasjon for alle inntekts- og kostnadskontoer"
-
-#~ msgid "Print GnuCash Document"
-#~ msgstr "Skriv ut GnuCash-dokumentet"
-
-#, fuzzy
-#~ msgid "Transfer To/From Account(s)"
-#~ msgstr "Motkonto"
-
-#, fuzzy
-#~ msgid "(Converted "
-#~ msgstr "Konverter datafilen"
-
-#, fuzzy
-#~ msgid " @ transaction split rate of "
-#~ msgstr "Merk transaksjonssplitten som ikke-avstemt"
-
-#, fuzzy
-#~ msgid " on "
-#~ msgstr "er på den"
-
-#, fuzzy
-#~ msgid " (Account Commodity: "
-#~ msgstr ""
-#~ "\n"
-#~ "Vare: "
-
-#, fuzzy
-#~ msgid "Item "
-#~ msgstr "element"
-
-#, fuzzy
-#~ msgid " (TXF Parameter: "
-#~ msgstr "%i: Parameternavn %s "
-
-#, fuzzy
-#~ msgid "Balance on "
-#~ msgstr "Saldo"
-
-#, fuzzy
-#~ msgid "Account: "
-#~ msgstr "_Konto:"
-
-#, fuzzy
-#~ msgid " For "
-#~ msgstr "Blankett"
-
-#, fuzzy
-#~ msgid ": Parameters"
-#~ msgstr "%i: Parameternavn %s "
-
-#, fuzzy
-#~ msgid " Line "
-#~ msgstr "Ingen"
-
-#, fuzzy
-#~ msgid ": Payer Name Option "
-#~ msgstr "Bare et datovalg"
-
-#, fuzzy
-#~ msgid ", TXF Format "
-#~ msgstr "Format:"
-
-#, fuzzy
-#~ msgid "None specified"
-#~ msgstr "Uspesifisert"
-
-#, fuzzy
-#~ msgid "Error Description"
-#~ msgstr "Beskrivelse"
-
-#, fuzzy
-#~ msgid ""
-#~ "No Tax Related accounts were found with your account selection. Change "
-#~ "your selection or go to the Edit->Income Tax Options dialog to set up tax-"
-#~ "related accounts."
-#~ msgstr ""
-#~ "Kan ikke finne noen kontoer merket \"skatterelatert\". Gå til Rediger-"
-#~ ">Skattealternativer for å sette opp skatterelaterte kontoer."
-
-#, fuzzy
-#~ msgid "Selected Report Options:<BR>"
-#~ msgstr "<b>_Valgte rapporter</b>"
-
-#, fuzzy
-#~ msgid "Subset of accounts"
-#~ msgstr "Velg kontoer"
-
-#, fuzzy
-#~ msgid "No accounts (none = all accounts)"
-#~ msgstr "Velg kontoer (ingen = alle)"
-
-#, fuzzy
-#~ msgid "Suppress $0.00 valued Tax Codes"
-#~ msgstr "Overse kr 0,00-kontoer"
-
-#, fuzzy
-#~ msgid "Do not suppress $0.00 valued Tax Codes"
-#~ msgstr "Overse kr 0,00-kontoer"
-
-#, fuzzy
-#~ msgid "Display full account names"
-#~ msgstr "Vis fullt kontonavn"
-
-#, fuzzy
-#~ msgid "Do not display full account names"
-#~ msgstr "Vis fullt kontonavn"
-
-#, fuzzy
-#~ msgid "Display all Transfer To/From Accounts"
-#~ msgstr "Motkonto"
-
-#, fuzzy
-#~ msgid "Do not display all Transfer To/From Accounts"
-#~ msgstr "Ikke vis saldi for overordnede kontoer"
-
-#, fuzzy
-#~ msgid "Display transactions for selected accounts"
-#~ msgstr "Legg til en ny transaksjon på kontoen"
-
-#, fuzzy
-#~ msgid "Do not display transactions for selected accounts"
-#~ msgstr "Ikke vis delsummer for overordnede kontoer"
-
-#, fuzzy
-#~ msgid "Include some transactions outside of selected dates"
-#~ msgstr "Inkluder underkontoer av alle valgte kontoer"
-
-#, fuzzy
-#~ msgid "Do not shade alternate transactions"
-#~ msgstr "Farger i dobbellinje_modus varierer per transaksjon"
-
-#, fuzzy
-#~ msgid "PriceDB lookups nearest to transaction date"
-#~ msgstr "Vis transaksjonsdato?"
-
-#, fuzzy
-#~ msgid "PriceDB lookups nearest to report end date"
-#~ msgstr "Prisen ført nærmest i tid fra rapportdatoen"
-
-#~ msgid "The following bills are due"
-#~ msgstr "Følgende regninger er forfalt"
-
-#~ msgid "Escrow "
-#~ msgstr "Deponering "
-
-#, fuzzy
-#~ msgid "Show Hidden"
-#~ msgstr "Sk_jult"
-
-#, fuzzy
-#~ msgid "Show hidden accounts."
-#~ msgstr "Vis s_kjulte kontoer"
-
-#~ msgid "<no file>"
-#~ msgstr "<ingen fil>"
-
-#, fuzzy
-#~ msgid "A bug was detected while reading the QIF file."
-#~ msgstr "En feil oppstod under åpning av QIF-filen."
-
-#~ msgid "Int"
-#~ msgstr "Int"
-
-#~ msgid "Div"
-#~ msgstr "Utb"
-
-#, fuzzy
-#~ msgid "Compute unrealized gains and losses"
-#~ msgstr "Inkluder gevinster og tap"
-
-#~ msgid "ATM"
-#~ msgstr "Minibank"
-
-#~ msgid "Future dates are not supported"
-#~ msgstr "Datoer i fremtiden støttes ikke"
-
-#~ msgid "<br>Invoice&nbsp;in&nbsp;progress...."
-#~ msgstr "<br>Faktura&nbsp;under&nbsp;redigering...."
-
-#, fuzzy
-#~ msgid " Date"
-#~ msgstr "Dato"
-
-#~ msgid "Unknown database access mode '%s'. Using default mode: multi-user."
-#~ msgstr ""
-#~ "Ukjent databasetilgangsmodus '%s'. Bruker standardmodus: flerbruker."
-
-#~ msgid "From the Postgresql Server: %s"
-#~ msgstr "Fra Postgresql-tjeneren: %s"
-
-#~ msgid "Backend connection is not available"
-#~ msgstr "Backend-forbindelse er ikke tilgjengelig"
-
-#~ msgid "Query could not be executed"
-#~ msgstr "Forespørselen kan ikke utføres"
-
-#~ msgid ""
-#~ "The current transaction has been changed. Would you like to record the "
-#~ "changes before closing this page, close the page without recording the "
-#~ "changes, or cancel the close?"
-#~ msgstr ""
-#~ "Gjeldende transaksjon har blitt endret. Vil du lagre endringene før du "
-#~ "lukker denne siden, lukke uten å lagre endringene, eller avbryte "
-#~ "lukkingen?"
-
-#~ msgid "CUSIP code"
-#~ msgstr "CUSIP-kode"
-
-#~ msgid "do not translate"
-#~ msgstr "ikke oversett"
-
-#~ msgid "gnc-new-account"
-#~ msgstr "gnc-new-account"
-
-#~ msgid "QIF file load warning: %s"
-#~ msgstr "Advarsel under lasting av QIF-fil: %s"
-
-#~ msgid "QIF file load failed: %s"
-#~ msgstr "Åpning av QIF feilet: %s"
-
-#~ msgid ""
-#~ "An error occurred while importing QIF transactions into GnuCash. Your "
-#~ "accounts are unchanged."
-#~ msgstr ""
-#~ "En feil oppstod under import av QIF-transaksjoner til GnuCash. Dine "
-#~ "kontoer ble ikke forandret."
-
-#~ msgid "You must enter a Type for the commodity."
-#~ msgstr "Du må fylle inn en type for denne varen."
-
-#~ msgid "You must enter a name for the commodity."
-#~ msgstr "Du må fylle inn et navn på denne varen."
-
-#~ msgid "You must enter an abbreviation for the commodity."
-#~ msgstr "Du må fylle inn en forkortelse for varen"
-
-#~ msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
-#~ msgstr "Velg varens børs eller indeksliste (NASDAQ, NYSE osv.)"
-
-#~ msgid ""
-#~ "Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation "
-#~ "for the name."
-#~ msgstr ""
-#~ "Fyll inn tickersymbol (slik som \"RHAT\") eller en annen unik forkortelse "
-#~ "for navnet."
-
-#, fuzzy
-#~ msgid "Click \"Forward\" to accept the information and move on."
-#~ msgstr "Trykk \"Neste\" for å akseptere informasjonen og gå videre."
-
-#~ msgid "Dup?"
-#~ msgstr "Dup?"
-
-#~ msgid "Click \"Forward\" to check matchings for QIF categories. "
-#~ msgstr "Trykk \"Neste\" for å sjekke forbindelser for QIF-kategorier"
-
-#~ msgid ""
-#~ "Click \"Forward\" to enter information about stocks and mutual funds in "
-#~ "the imported data."
-#~ msgstr ""
-#~ "Trykk \"Neste\" for å fylle inn informasjon om aksjer og fond i de "
-#~ "importerte dataene."
-
-#~ msgid ""
-#~ "Click \"Forward\" to enter information about the currency used in your "
-#~ "QIF files."
-#~ msgstr ""
-#~ "Velg \"Neste\" for å føre inn informasjon om valutaen som er brukt i dine "
-#~ "QIF-filer."
-
-#~ msgid "Enter the currency used for new accounts"
-#~ msgstr "Fyll inn valuta som brukes til nye kontoer"
-
-#, fuzzy
-#~ msgid ""
-#~ "If you are importing a QIF file downloaded from a bank or other financial "
-#~ "institution, some of the information in the QIF file may duplicate "
-#~ "information already in your GnuCash accounts. GnuCash will try to detect "
-#~ "duplicates of existing transactions. \n"
-#~ "\n"
-#~ "On the next page, you will be asked to confirm that an existing "
-#~ "transaction matches an imported transaction. Imported transactions are "
-#~ "shown on the left side of the page, and possible matches for the selected "
-#~ "left-hand transaction are shown to the right. There may be several old "
-#~ "transactions that could match an imported transaction; you will be able "
-#~ "to select the correct one by double-clicking in the \"Dup?\" column of "
-#~ "the correct transaction.\n"
-#~ "\n"
-#~ "You can control the rules used by GnuCash to find duplicate transactions "
-#~ "in the \"QIF Import\" section of the GnuCash Preferences dialog.\n"
-#~ "\n"
-#~ "Click \"Forward\" to find duplicate transactions. "
-#~ msgstr ""
-#~ "Hvis du importerer QIF-filen fra en bank eller finansinstitusjon, kan det "
-#~ "hende at noe av informasjonen i QIF-filen er duplikater av informasjon du "
-#~ "allerede har i dine GnuCash-kontoer. GnuCash forsøker å oppdage "
-#~ "duplikater.\n"
-#~ "\n"
-#~ "På neste siden ber GnuCash deg om å bekrefte at en eksisterende "
-#~ "transaksjon er duplikat av en importert transaksjon. Importerte "
-#~ "transaksjoner vises på venstre side, og mulige overensstemmende "
-#~ "transaksjoner for den valgte transaksjonen til venstre vises på høyre "
-#~ "side. Det kan være flere gamle transaksjoner som er potensielt "
-#~ "overensstemmende med den importerte; du velger den riktige ved å huke av "
-#~ "i \"Dup?\"-kolonnen i den riktige transaksjonen.\n"
-#~ "\n"
-#~ "Du kan bestemme reglene GnuCash bruker for å finne overensstemmende "
-#~ "transaksjoner i \"QIF-import\"-delen av GnuCash-innstillingene.\n"
-#~ "\n"
-#~ "Trykk \"Neste\" for å finne duplikattransaksjoner."
-
-#~ msgid "Imported transactions with duplicates"
-#~ msgstr "Importerte transaksjoner med duplikater"
-
-#~ msgid ""
-#~ "In the next pages, you will be asked to provide information about stocks, "
-#~ "mutual funds, and other tradable commodities that appear in the QIF "
-#~ "file(s) you are importing. GnuCash requires more information about "
-#~ "tradable commodities than the QIF format can represent. \n"
-#~ "\n"
-#~ "Each stock, mutual fund, or other commodity must have a type, which is "
-#~ "the exchange or listing that it is found on (NASDAQ, NYSE, US Mutual "
-#~ "Funds, etc), a full name, and an abbreviation.\n"
-#~ "\n"
-#~ "Check to see if there is an existing Type that is appropriate; if not, "
-#~ "you can enter a new Type name by hand in the box. Make sure that the "
-#~ "abbreviation you enter matches the ticker symbol used for the commodity "
-#~ "on the exchange or listing for its type."
-#~ msgstr ""
-#~ "På de neste sidene vil du bli bedt om informasjon om aksjer, fond og "
-#~ "andre verdipapir som er med i QIF-filen(e) du importerer. GnuCash krever "
-#~ "mer informasjon om verdipapirer enn det QIF-formatet inneholder.\n"
-#~ "\n"
-#~ "Hver aksje, fond eller annen vare må ha en type, som er børsen eller "
-#~ "indekslisten den finnes på (NASDAQ, NYSE, US Mutual Funds, osv.), et "
-#~ "fullt navn og en forkortelse.\n"
-#~ "\n"
-#~ "Sjekk om det er en eksisterende type som passer. Hvis ikke kan du skrive "
-#~ "inn et nytt typenavn i boksen. Pass på at forkortelsen stemmer overens "
-#~ "med ticker-symbolet som varen bruker på børsen eller indekslisten."
-
-#~ msgid "Blue items are exportable to a .TXF file."
-#~ msgstr "Det er mulig å eksportere blå elementer til en TXF-fil."
-
-#~ msgid "TXF"
-#~ msgstr "TXF"
-
-#~ msgid "The file contains an unknown Action '%s'."
-#~ msgstr "Denne filen inneholder en ukjent handling '%s'."
-
-#~ msgid "INVOICE"
-#~ msgstr "FAKTURA"
-
-#~ msgid "Invoice&nbsp;#&nbsp;%d"
-#~ msgstr "Faktura&nbsp;nr.&nbsp;%d"
-
-#~ msgid "Invoice&nbsp;Date"
-#~ msgstr "Fakturadato"
-
-#~ msgid "%s - %s to %s for"
-#~ msgstr "%s - %s til %s for"
-
-#~ msgid "Once: %s"
-#~ msgstr "En gang: %s"
-
-#~ msgid "Daily (x%u)"
-#~ msgstr "Daglig (x%u)"
-
-#~ msgid "Weekdays: (x%u)"
-#~ msgstr "Ukedager: (x%u)"
-
-#~ msgid "Weekdays"
-#~ msgstr "Ukedager"
-
-#~ msgid "Weekly (x%d): %s"
-#~ msgstr "Ukentlig (x%d): %s"
-
-#~ msgid "Weekly: %s"
-#~ msgstr "Ukentlig: %s"
-
-#~ msgid "Bi-Weekly, %ss"
-#~ msgstr "Annenhver uke, %ser"
-
-#~ msgid "Semi-monthly (x%u): %s, %s"
-#~ msgstr "Halvmånedlig (x%u): %s, %s"
-
-#~ msgid "Semi-monthly: %s, %s"
-#~ msgstr "Halvmånedlig: %s, %s"
-
-#~ msgid "Monthly (x%u): %u"
-#~ msgstr "Månedlig (x%u): %u"
-
-#~ msgid "Monthly: %u"
-#~ msgstr "Månedlig: %u"
-
-#~ msgid "Quarterly (x%u): %u"
-#~ msgstr "Kvartalsvis (x%u): %u"
-
-#~ msgid "Quarterly: %u"
-#~ msgstr "Kvartalsvis: %u"
-
-#~ msgid "Tri-Yearly (x%u): %u"
-#~ msgstr "Tre gang i året (x%u): %u"
-
-#~ msgid "Tri-Yearly: %u"
-#~ msgstr "Tre gang i året: %u"
-
-#~ msgid "Semi-Yearly (x%u): %u"
-#~ msgstr "Halvårlig (x%u): %u"
-
-#~ msgid "Semi-Yearly: %u"
-#~ msgstr "Halvårlig: %u"
-
-#~ msgid "Yearly (x%u): %s/%u"
-#~ msgstr "Årlig (x%1$u): %3$u i måned %2$s"
-
-#~ msgid "Yearly: %s/%u"
-#~ msgstr "Årlig: %s %u"
-
-#~ msgid "button1"
-#~ msgstr "knapp1"
-
-#~ msgid "checkbutton1"
-#~ msgstr "avkrysningsboks1"
-
-#~ msgid "radiobutton1"
-#~ msgstr "flervalgsknapp1"
-
-#~ msgid "togglebutton1"
-#~ msgstr "av-på-knapp1"
-
-#~ msgid "account"
-#~ msgstr "konto"
-
-#~ msgid "The Date format is ambiguous. Please choose the correct format."
-#~ msgstr "Datoformatet er tvetydig. Vennligst velg korrekt datoformat."
-
-#~ msgid " Stylesheet"
-#~ msgstr " stilark"
-
-#~ msgid "Include splits with no shares for calculating money-in and money-out"
-#~ msgstr ""
-#~ "Inkluder splitter uten aksjer ved beregning av penger-inn og penger-ut."
-
-#~ msgid "Sub-"
-#~ msgstr "Under-"
-
-#~ msgid "Enables support for the European Union EURO currency."
-#~ msgstr "Aktiver støtte for Den europeiske unions valuta euro."
-
-#~ msgid "_Enable euro support"
-#~ msgstr "_Aktiver eurostøtte"
-
-#~ msgid " Variables are in the form 'name=value'"
-#~ msgstr " Variabler har formatet 'navn=verdi'"
-
-#, fuzzy
-#~ msgid "Save Check Description"
-#~ msgstr "Sorter etter beskrivelse"
-
-#, fuzzy
-#~ msgid "All Files"
-#~ msgstr "Alle filer"
-
-#, fuzzy
-#~ msgid "New Check Format Title"
-#~ msgstr "Du kan ikke lagre til den filen."
-
-#~ msgid "online book"
-#~ msgstr "nettboken"
-
-#, fuzzy
-#~ msgid "Custom Check"
-#~ msgstr "Kunde"
-
-#, fuzzy
-#~ msgid "Zero"
-#~ msgstr "null"
-
-#, fuzzy
-#~ msgid "Three"
-#~ msgstr "Nivå tre"
-
-#, fuzzy
-#~ msgid "Four"
-#~ msgstr "Blankett"
-
-#, fuzzy
-#~ msgid "Five"
-#~ msgstr "Fastforrentet"
-
-#, fuzzy
-#~ msgid "Seven"
-#~ msgstr "Lagre"
-
-#, fuzzy
-#~ msgid "Eight"
-#~ msgstr "Høyre"
-
-#, fuzzy
-#~ msgid "Ten"
-#~ msgstr "Testing"
-
-#, fuzzy
-#~ msgid "Twelve"
-#~ msgstr "Kassaapparat"
-
-#, fuzzy
-#~ msgid "Thirteen"
-#~ msgstr "Nivå tre"
-
-#, fuzzy
-#~ msgid "Fourteen"
-#~ msgstr "Nivå fire"
-
-#, fuzzy
-#~ msgid "Fifteen"
-#~ msgstr "Gebyr"
-
-#, fuzzy
-#~ msgid "Sixteen"
-#~ msgstr "Nivå seks"
-
-#, fuzzy
-#~ msgid "Eighteen"
-#~ msgstr "Høyre"
-
-#, fuzzy
-#~ msgid "Twenty"
-#~ msgstr "Tekst"
-
-#, fuzzy
-#~ msgid "Forty"
-#~ msgstr "Blankett"
-
-#, fuzzy
-#~ msgid "Sixty"
-#~ msgstr "Verdipapir"
-
-#, fuzzy
-#~ msgid "Seventy"
-#~ msgstr "Velg"
-
-#, fuzzy
-#~ msgid "Eighty"
-#~ msgstr "Høyre"
-
-#, fuzzy
-#~ msgid "Ninety"
-#~ msgstr "Ingen"
-
-#, fuzzy
-#~ msgid "Thousand"
-#~ msgstr "Torsdag"
-
-#, fuzzy
-#~ msgid "Million"
-#~ msgstr "Fakturering"
-
-#, fuzzy
-#~ msgid "Billion"
-#~ msgstr "Fakturering"
-
-#, fuzzy
-#~ msgid "Trillion"
-#~ msgstr "Fakturering"
-
-#, fuzzy
-#~ msgid "Quintillion"
-#~ msgstr "Spørsmål"
-
-#, fuzzy
-#~ msgid "%s and %"
-#~ msgstr "%s til %s"
-
-#, fuzzy
-#~ msgid "Root Account"
-#~ msgstr "Rapportkontoer"
-
-#, fuzzy
-#~ msgid "Semi-monthly "
-#~ msgstr "Halvmånedlig"
-
-#~ msgid "_Lot Viewer..."
-#~ msgstr "_Partifremviser..."
-
-#~ msgid "Enable debugging mode"
-#~ msgstr "Aktiver avlusingsmodus"
-
-#~ msgid "Absolute Day-of-the-month"
-#~ msgstr "Fast dag i måneden"
-
-#~ msgid "Choose the type of Billing Term"
-#~ msgstr "Velg type betalingsbetingelse"
-
-#~ msgid "Number of days from now"
-#~ msgstr "Antall dager fra nå"
-
-#~ msgid "*"
-#~ msgstr "*"
-
-#~ msgid "Value ($)"
-#~ msgstr "Verdi"
-
-#~ msgid ""
-#~ "The following transactions are presently being edited; are you sure you "
-#~ "want to delete them?"
-#~ msgstr ""
-#~ "Følgende transaksjoner er under redigering; er du sikker på at du vil "
-#~ "slette disse?"
-
-#~ msgid ""
-#~ "Canceling the Since-Last-Run dialog will revert all changes. Are you sure "
-#~ "you want to lose all Scheduled Transaction changes?"
-#~ msgstr ""
-#~ "Hvis du avbryter veiviseren for siden-sist-handlinger vil alle endringer "
-#~ "nullstilles. Er du sikker på at du vil miste alle endringer i planlagte "
-#~ "transaksjoner?"
-
-#~ msgid "Needs values for variables"
-#~ msgstr "Trenger verdier til variablene"
-
-#~ msgid "Obsolete"
-#~ msgstr "Foreldet"
-
-#~ msgid ""
-#~ "The following errors were encountered while creating the Scheduled "
-#~ "Transactions:\n"
-#~ msgstr ""
-#~ "Følgende feil oppstod under oppretting av planlagte transaksjoner:\n"
-
-#~ msgid "3/1 Year"
-#~ msgstr "3/1 år"
-
-#~ msgid "5/1 Year"
-#~ msgstr "5/1 år"
-
-#~ msgid "7/1 Year"
-#~ msgstr "7/1 år"
-
-#~ msgid "10/1 Year"
-#~ msgstr "10/1 år"
-
-#~ msgid "A list of all of the lots in this account."
-#~ msgstr "En liste over alle partiene i denne kontoen."
-
-#~ msgid "Open a register showing the transactions in this lot"
-#~ msgstr "Åpne en oversikt som viser transaksjonene i dette partiet"
-
-#~ msgid "<b>Recurrence Frequency</b>"
-#~ msgstr "<b>Gjentakelseshyppighet</b>"
-
-#~ msgid "Apr, Aug, Dec"
-#~ msgstr "Apr, jul, des"
-
-#~ msgid "Apr, Oct"
-#~ msgstr "Apr, okt"
-
-#~ msgid "April"
-#~ msgstr "April"
-
-#~ msgid "August"
-#~ msgstr "August"
-
-#~ msgid "Daily [M-F]"
-#~ msgstr "Daglig [M-F]"
-
-#~ msgid "December"
-#~ msgstr "Desember"
-
-#~ msgid "End "
-#~ msgstr "Avslutt "
-
-#~ msgid "Feb, Aug"
-#~ msgstr "Feb, aug"
-
-#~ msgid "Feb, Jun, Oct"
-#~ msgstr "Feb, jun, okt"
-
-#~ msgid "Feb, May, Aug, Nov"
-#~ msgstr "Feb, mai, aug, nov"
-
-#~ msgid "February"
-#~ msgstr "Februar"
-
-#~ msgid "Jan, Apr, Jul, Oct"
-#~ msgstr "Jan, apr, jul, okt"
-
-#~ msgid "Jan, Jul"
-#~ msgstr "Jan, jul"
-
-#~ msgid "Jan, May, Sep"
-#~ msgstr "Jan, mai, sep"
-
-#~ msgid "January"
-#~ msgstr "Januar"
-
-#~ msgid "July"
-#~ msgstr "Juli"
-
-#~ msgid "Jun, Dec"
-#~ msgstr "Jun, des"
-
-#~ msgid "June"
-#~ msgstr "Juni"
-
-#~ msgid "Mar, Jul, Nov"
-#~ msgstr "Mar, jul, nov"
-
-#~ msgid "Mar, Jun, Sep, Dec"
-#~ msgstr "Mar, jun, sep, des"
-
-#~ msgid "Mar, Sep"
-#~ msgstr "Mar, sep"
-
-#~ msgid "May"
-#~ msgstr "Mai"
-
-#~ msgid "May, Nov"
-#~ msgstr "Mai, nov"
-
-#~ msgid "November"
-#~ msgstr "November"
-
-#~ msgid "Occuring in"
-#~ msgstr "Inntreffer i"
-
-#~ msgid "October"
-#~ msgstr "Oktober"
-
-#~ msgid "Select initial date, above."
-#~ msgstr "Velg startdato over."
-
-#~ msgid "Semi-Yearly"
-#~ msgstr "Halvårlig"
-
-#~ msgid "September"
-#~ msgstr "September"
-
-#~ msgid "Tri-Yearly"
-#~ msgstr "Tre gang i året"
-
-#~ msgid "[29th/last]"
-#~ msgstr "[29./siste]"
-
-#~ msgid "[30th/last]"
-#~ msgstr "[30./siste]"
-
-#~ msgid "[31st/last]"
-#~ msgstr "[31./siste]"
-
-#~ msgid "years"
-#~ msgstr "år"
-
-#~ msgid "does not contain"
-#~ msgstr "inneholder ikke"
-
-#~ msgid "Select pixmap"
-#~ msgstr "Velg bilde"
-
-#~ msgid ""
-#~ "Enter the type of commodity. For stocks, this is often an exchange on "
-#~ "which the stock is traded. You can choose an existing type from the list "
-#~ "or enter a new type with the keyboard."
-#~ msgstr ""
-#~ "Fyll inn typen vare. For aksjer er dette vanligvis børsen som den "
-#~ "omsettes på. Du kan velge en eksisterende type fra listen, eller skriv "
-#~ "inn en ny type direkte i feltet."
-
-#~ msgid "There was an error loading the specified URL."
-#~ msgstr "Det oppstod en feil under lasting av den spesifiserte URLen."
-
-#~ msgid "Quit GnuCash?"
-#~ msgstr "Avslutt GnuCash?"
-
-#~ msgid ""
-#~ "You are attempting to close the last GnuCash window. Doing so will quit "
-#~ "the application. Are you sure that this is what you want to do?"
-#~ msgstr ""
-#~ "Du forsøker å stenge det siste GnuCash-vinduet. Ved å gjøre dette vil du "
-#~ "stenge ned programmet. Er du sikker på at du vil fortsette?"
-
-#~ msgid ""
-#~ "The GnuCash personal finance manager.\n"
-#~ "The GNU way to manage your money!\n"
-#~ "http://www.gnucash.org/"
-#~ msgstr ""
-#~ "GnuCash personlig finansforvalter.\n"
-#~ "GNU-måten å kontrollere dine penger!\n"
-#~ "http://www.gnucash.org/"
-
-#~ msgid "EDIT"
-#~ msgstr "REDIGER"
-
-#~ msgid "HBCI Version"
-#~ msgstr "HBCI-versjon"
-
-#~ msgid "HBCI account name"
-#~ msgstr "HBCI-kontonavn"
-
-#~ msgid "<b>HBCI</b>"
-#~ msgstr "<b>HBCI</b>"
-
-#~ msgid "Online HBCI Transaction"
-#~ msgstr "Online HBCI-transaksjon"
-
-#~ msgid "Initial setup of HBCI/AqBanking access"
-#~ msgstr "Innledende oppsett av HBCI/AqBanking-tilgang"
-
-#~ msgid "Process an MT940 response file"
-#~ msgstr "Behandle en MT940-responsfil"
-
-#~ msgid "Old Value"
-#~ msgstr "Gammel verdi"
-
-#~ msgid "The following changes must be made. Continue?"
-#~ msgstr "Følgende endringer må gjøres. Fortsett?"
-
-#~ msgid ""
-#~ "The file you tried to load does not specify an encoding, so GnuCash is "
-#~ "unable to unambiguously interpret it. This is typical for files created "
-#~ "with GnuCash prior to 2.0.\n"
-#~ "\n"
-#~ "On the next page you will be asked to select the best looking decoded "
-#~ "string for every ambiguous word GnuCash found while trying to open your "
-#~ "file. Therefore GnuCash has guessed what encodings you might have used. "
-#~ "So probably everything will look just fine and you can simply click "
-#~ "'Forward'.\n"
-#~ "\n"
-#~ "If it does not work for you, try to change the default encoding at the "
-#~ "top. Maybe you even have to edit the list of encodings by clicking on the "
-#~ "button in the top right corner.\n"
-#~ "\n"
-#~ "The page is not overly complicated, just take the time until you feel "
-#~ "comfortable with it. You can always come back and read this message again."
-#~ msgstr ""
-#~ "Filen du forsøkte å laste spesifiserte ingen tegnkoding, så GnuCash er "
-#~ "ikke stand til å tolke den entydig. Dette er typisk for filer som ble "
-#~ "laget med en tidligere GnuCash-versjon enn 2.0.\n"
-#~ "\n"
-#~ "På neste side vil du bli spurt om hva som er den beste tolkningen av alle "
-#~ "flertydige ord GnuCash fant under åpning av denne filen. GnuCash har "
-#~ "gjettet hvilken tegnkoding du kan ha brukt, så alt vil sannsynligvis se "
-#~ "fint ut og du kan enkelt og greit trykke \"Neste\".\n"
-#~ "\n"
-#~ "Hvis dette ikke virker for deg, kan du prøve å endre forvalgt tegnkoding "
-#~ "øverst i vinduet. Kanskje må du til og med endre listen over tegnkodinger "
-#~ "ved å trykke på knappen i øvre høyre hjørne.\n"
-#~ "\n"
-#~ "Siden er ikke alt for komplisert, bare ta deg den tiden du trenger for å "
-#~ "bli komfortabel med den. Du kan alltids komme tilbake hit og lese denne "
-#~ "meldingen på nytt."
-
-#~ msgid "Missing file encoding"
-#~ msgstr "Manglende tegnkoding for fil"
-
-#~ msgid ""
-#~ "The QIF file format does not specify which order the day, month, and year "
-#~ "components of a date are printed. In most cases, it is possible to "
-#~ "automatically determine which format is in use in a particular file. "
-#~ "However, in the file you have just imported there exist more than one "
-#~ "possible format that fits the data. \n"
-#~ "\n"
-#~ "Please select a date format for the file. QIF files created by European "
-#~ "software are likely  to be in \"d-m-y\" or day-month-year format, where "
-#~ "US QIF files are likely to be \"m-d-y\" or month-year-day.   \n"
-#~ msgstr ""
-#~ "Filformatet QIF spesifiserer ikke i hvilken rekkefølge dag-, måned- og år-"
-#~ "komponentene av en dato skrives. I de fleste tilfeller er det mulig å "
-#~ "automatisk avgjøre hvilket format som brukes i en bestemt fil. I filen du "
-#~ "har importert finnes det likevel mer enn ett format som stemmer overens "
-#~ "med data.\n"
-#~ "\n"
-#~ "Vennligst velg datoformat for filen. QIF-filer som er lagd med europeisk "
-#~ "programvare er sannsynligvis i \"d-m-å\" eller dag-måned-år-format, mens "
-#~ "amerikanske QIF-filer sannsynligvis er i \"m-d-å\" eller måned-dag-år.\n"
-
-#~ msgid ""
-#~ "AqHBCI \n"
-#~ "Setup"
-#~ msgstr ""
-#~ "AqHBCI \n"
-#~ "Oppsett"
-
-#~ msgid "HBCI Setup"
-#~ msgstr "HBCI-oppsett"
-
-#~ msgid ""
-#~ "Update \n"
-#~ "account list"
-#~ msgstr ""
-#~ "Oppdater \n"
-#~ "kontoliste"
-
-#~ msgid ""
-#~ "Click \"Finish\" to update your accounts to use the new information you "
-#~ "have entered.\n"
-#~ "\n"
-#~ "Click \"Cancel\" to cancel the file-loading process. \n"
-#~ "\n"
-#~ "Click \"Back\" to review your currency selections."
-#~ msgstr ""
-#~ "Trykk \"Ferdig\" for å oppdater dine kontoer i tråd med informasjonen du "
-#~ "har fylt inn.\n"
-#~ "\n"
-#~ "Trykk \"Avbryt\" for å avbryte filinnlastingsprosessen.\n"
-#~ "\n"
-#~ "Trykk \"Tilbake\" for å se gjennom dine valutavalg."
-
-#~ msgid "Import currency and stock information"
-#~ msgstr "Importer valuta- og aksjeinformasjon"
-
-#~ msgid ""
-#~ "The file you are loading is from an older version of GnuCash. Information "
-#~ "about currencies, stocks, and mutual funds needs to be updated for the "
-#~ "new version. \n"
-#~ "\n"
-#~ "This dialog will prompt you for some additional information about each "
-#~ "currency, stock, and mutual fund that appear in your accounts. After you "
-#~ "have entered this information, you can update your accounts for the new "
-#~ "version of GnuCash.\n"
-#~ "\n"
-#~ "Hit \"Cancel\" now to stop loading the file."
-#~ msgstr ""
-#~ "Filen du laster inn er fra en eldre versjon av GnuCash. Informasjon om "
-#~ "valuta, aksjer og fond må oppdateres til den nye versjonen.\n"
-#~ "\n"
-#~ "Denne dialogboksen vil be deg om ytterligere informasjon om valuta, "
-#~ "aksjer og fond som finnes i kontoene. Etter at du har fylt inn denne "
-#~ "informasjonen kan du oppdatere dine kontoer til den nye versjonen av "
-#~ "GnuCash.\n"
-#~ "\n"
-#~ "Trykk \"Avbryt\" nå for å stoppe fillastingen."
-
-#~ msgid "Update your accounts with the new information"
-#~ msgstr "Oppdater dine kontoer med den nye informasjonen"
-
-#~ msgid ""
-#~ "Pick the type of the currency or security. For national currencies, use "
-#~ "\"CURRENCY\". Enter a new type in the box if the ones in the pick list "
-#~ "are inappropriate."
-#~ msgstr ""
-#~ "Velg type valuta eller verdipapir. For nasjonale valutaer, bruk \"CURRENCY"
-#~ "\". Fyll inn en ny type i boksen hvis alternativene i listen ikke passer."
-
-#~ msgid ""
-#~ "Enter a descriptive name for the currency or stock, such as \"US Dollar\" "
-#~ "or \"Red Hat Stock\""
-#~ msgstr ""
-#~ "Fyll inn et beskrivende navn for valutaen eller aksjen, slik som \"US "
-#~ "Dollar\" eller \"Red Hat-aksje\""
-
-#~ msgid ""
-#~ "Enter the ticker symbol (such as \"RHAT\"), national currency symbol "
-#~ "(such as \"USD\"), or other unique abbreviation for the name."
-#~ msgstr ""
-#~ "Fyll inn tickersymbol (som \"RHAT\"), nasjonalt valutasymbol (som \"NOK"
-#~ "\"), eller en annen unik forkortelse for navnet."
-
-#~ msgid ""
-#~ "Click \"Next\" to accept the information and move to the next currency or "
-#~ "stock."
-#~ msgstr ""
-#~ "Velg \"Neste\" for å akseptere informasjonen og gå til neste valuta eller "
-#~ "aksje."
-
-#~ msgid ""
-#~ "You must put values for the type, name, and abbreviation of the currency/"
-#~ "stock."
-#~ msgstr ""
-#~ "Du må fylle inn verdier for type, navn, og forkortelse for valutaen/"
-#~ "aksjen."
