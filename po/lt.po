@@ -29620,10 +29620,6 @@ msgstr ""
 #~ msgid "Total Price"
 #~ msgstr "Iš viso"
 
-#, fuzzy
-#~ msgid "Amount Due"
-#~ msgstr "Priklausanti suma"
-
 #~ msgid "Invoice number: "
 #~ msgstr "Sąskaitos faktūros numeris: "
 

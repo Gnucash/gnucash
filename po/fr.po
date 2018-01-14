@@ -33044,11 +33044,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Utilise la méthode du premier acheté/dernier vendu pour le coût initial"
 
-# messages-i18n.c:242 po/guile_strings.txt:50
-#, fuzzy
-#~ msgid "Amount Due"
-#~ msgstr "Montant brut dû"
-
 #~ msgid ""
 #~ "Since you are creating a new file, you will next see a dialog for setting "
 #~ "book options. These can affect how GnuCash transactions are handled "
