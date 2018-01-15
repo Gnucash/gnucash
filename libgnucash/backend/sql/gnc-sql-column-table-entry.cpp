@@ -209,7 +209,7 @@ GncSqlColumnTableEntryImpl<CT_BOOLEAN>::load (const GncSqlBackend* sql_be,
     g_return_if_fail (m_gobj_param_name != NULL || get_setter(obj_name) != NULL);
 
     auto val = row.get_int_at_col (m_col_name);
-    set_parameter(pObject, val,
+    set_parameter(pObject, static_cast<int>(val),
                   reinterpret_cast<BooleanSetterFunc>(get_setter(obj_name)),
                   m_gobj_param_name);
 }

@@ -312,11 +312,11 @@ class GncNumeric(GnuCashCoreClass):
                 raise TypeError('Only two ints allowed: ' + str(args))
         elif len(args) == 3:
             if type(args[0]) == float \
-                and type(args[1]) == type(GNC_DENOM_AUTO) \
+                and type(args[1]) in (int, long) \
                 and type(args[2]) == type(GNC_HOW_DENOM_FIXED):
                 return double_to_gnc_numeric(*args)
             else:
-                raise TypeError('Only (float, GNC_HOW_RND_*, GNC_HOW_RND_*, GNC_HOW_RND_*) allowed: ' + str(args))
+                raise TypeError('Only (float, int/long, GNC_HOW_RND_*) allowed: ' + str(args))
         else:
             raise TypeError('Required single int/float/str or two ints: ' + str(args))
 
