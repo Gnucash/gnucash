@@ -8787,7 +8787,7 @@ msgstr "Einrichtung Hypothek/Darlehen-Tilgung"
 msgid ""
 "Enter the Loan Details, as a minimum enter a valid Loan Account and Amount.\n"
 msgstr ""
-"Geben Sie die Dahrlehensangaben ein. Es werden mindestens das Darlehenskonto "
+"Geben Sie die Darlehensangaben ein. Es werden mindestens das Darlehenskonto "
 "und der Betrag benötigt.\n"
 
 # Fixme: Source without Mnemonic in dialogs below: assistant-loan, dialog-sx (overview, frequency), budget...
