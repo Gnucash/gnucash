@@ -12564,7 +12564,7 @@ msgstr "Gebühr"
 
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2915
 msgid "ATM Withdraw"
-msgstr "Belastung"
+msgstr "Automatenabhebung"
 
 #: ../src/gnome-utils/gnc-tree-model-split-reg.c:2946
 #: ../src/register/ledger-core/split-register.c:2537
@@ -18031,7 +18031,7 @@ msgstr "Unbekanntes OFX Kreditlinien-Konto"
 #. Cash Management Account
 #: ../src/import-export/ofx/gnc-ofx-import.c:900
 msgid "Unknown OFX CMA account"
-msgstr "Unbekanntes OFX CMA Konto"
+msgstr "Unbekanntes OFX Cash-Management-Konto"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:904
 msgid "Unknown OFX credit card account"
@@ -19365,7 +19365,7 @@ msgstr "sample:Buchungstext-Feld irgendein Beispieltext"
 #. leave the rest ("Type:") as is.
 #: ../src/register/ledger-core/split-register-layout.c:829
 msgid "Type:T"
-msgstr "Typ:T"
+msgstr "Type:T"
 
 #: ../src/register/ledger-core/split-register-layout.c:837
 msgid "sample:Notes field sample text string"
@@ -19378,7 +19378,7 @@ msgstr "sample:Keinen besonderen Grund"
 #: ../src/register/ledger-core/split-register-layout.c:853
 #: ../src/register/ledger-core/split-register-layout.c:861
 msgid "sample:(x + 0.33 * y + (x+y) )"
-msgstr "Beispiel: (x + 0,33 * y + (x+y) )"
+msgstr "sample: (x + 0,33 * y + (x+y) )"
 
 #: ../src/register/ledger-core/split-register-load.c:277
 msgid ""
@@ -20273,11 +20273,11 @@ msgstr "Sortieren nach dem Betrag des Gewinns."
 #: ../src/report/business-reports/customer-summary.scm:463
 #: ../src/report/business-reports/customer-summary.scm:847
 msgid "Markup"
-msgstr "Bruttogewinn"
+msgstr "Umsatzrendite"
 
 #: ../src/report/business-reports/customer-summary.scm:464
 msgid "Sort by markup (which is profit amount divided by sales)."
-msgstr "Sortieren nach Bruttogewinn (Gewinn pro Umsatz)."
+msgstr "Sortieren nach Umsatzrendite (Gewinn pro Umsatz)."
 
 #: ../src/report/business-reports/customer-summary.scm:466
 #: ../src/report/business-reports/customer-summary.scm:847
@@ -20340,7 +20340,7 @@ msgstr ""
 # Fixme: Source Mnemonics missing in report options of e.g. customer-summary.scm
 #: ../src/report/business-reports/customer-summary.scm:1039
 msgid "Customer Summary"
-msgstr "Kundenüber_sicht"
+msgstr "Kundenübersicht"
 
 #: ../src/report/business-reports/easy-invoice.scm:114
 #: ../src/report/business-reports/easy-invoice.scm:259
