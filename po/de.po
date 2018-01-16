@@ -1258,7 +1258,7 @@ msgstr ""
 "werden, obwohl die Option »add-price-quotes« nicht gesetzt war.\n"
 "       Möglicherweise müssen Sie die Umgebungsvariable $DISPLAY setzen?"
 
-# Fixme: Source Accelerator missing in dialog-invoice?
+# Fixme: Source Mnemonic missing in dialog-invoice?
 #: ../src/business/business-gnome/business-gnome-utils.c:73
 #: ../src/business/business-gnome/business-gnome-utils.c:260
 #: ../src/business/business-gnome/dialog-invoice.c:1315
@@ -1472,7 +1472,7 @@ msgstr "Aufträge des Kunden"
 msgid "Customer's Invoices"
 msgstr "Rechnungen des Kunden"
 
-# Fixme: Source Accelerator(s) missing in dialog-invoice?
+# Fixme: Source Mnemonic(s) missing in dialog-invoice?
 #: ../src/business/business-gnome/dialog-customer.c:907
 #: ../src/business/business-gnome/dialog-employee.c:712
 #: ../src/business/business-gnome/dialog-invoice.c:2999
@@ -1814,7 +1814,7 @@ msgstr ""
 msgid "Do you really want to post these invoices?"
 msgstr "Wollen Sie diese Rechnungen wirklich buchen?"
 
-# Fixme: Source Accelerator missing
+# Fixme: Source Mnemonic missing
 #: ../src/business/business-gnome/dialog-invoice.c:2998
 msgid "View/Edit Invoice"
 msgstr "_Rechnung anzeigen/bearbeiten"
@@ -2349,7 +2349,7 @@ msgstr "_Zahlung verarbeiten..."
 msgid "Open the Process Payment dialog"
 msgstr "Den Dialog für das Eingeben von Zahlungen öffnen"
 
-# Fixme: Source Accelerator missing
+# Fixme: Source Mnemonic missing
 #: ../src/business/business-gnome/gnc-plugin-business.c:197
 msgid "Vendors Overview"
 msgstr "Lieferantenüber_sicht"
@@ -2398,7 +2398,7 @@ msgstr "Lieferanten_rechnung suchen..."
 msgid "Open the Find Bill dialog"
 msgstr "Den Dialog für die Suche nach Rechnungen öffnen"
 
-# Fixme: Source Accelerator missing
+# Fixme: Source Mnemonic missing
 #: ../src/business/business-gnome/gnc-plugin-business.c:240
 msgid "Employees Overview"
 msgstr "Mitarbeiterüber_sicht"
@@ -2483,7 +2483,7 @@ msgstr "Den Such-Dialog testen"
 msgid "Initialize Test Data"
 msgstr "Testdaten zurücksetzen"
 
-# Fixme: Source Accelerator missing
+# Fixme: Source Mnemonic missing
 #: ../src/business/business-gnome/gnc-plugin-business.c:311
 msgid "Assign as payment..."
 msgstr "Als _Zahlung zuweisen..."
@@ -3513,8 +3513,6 @@ msgstr "Rechnungsadresse"
 msgid "Notes"
 msgstr "Bemerkung"
 
-# Fixme: Source 1. Accelerator missing "assign payment"
-#   2. Comment misplaced
 #: ../src/business/business-gnome/gtkbuilder/dialog-customer.glade.h:14
 #: ../src/business/business-gnome/gtkbuilder/dialog-invoice.glade.h:24
 #: ../src/business/business-gnome/search-owner.c:238
@@ -4416,6 +4414,7 @@ msgstr ""
 "starten Sie GnuCash neu.\n"
 "Folgender Fehler wurde gemeldet: »%s« (errno %d)\n"
 
+# Fixme: Source: better "did not" as it was created before the message
 #: ../src/core-utils/gnc-filepath-utils.c:338
 #, c-format
 msgid ""
@@ -4427,6 +4426,7 @@ msgstr ""
 "  %s\n"
 "existiert nicht. Dies ist allerdings nicht schlimm.\n"
 
+# Fixme: Source Unify with gnc-filepath-utils.c:393?
 #: ../src/core-utils/gnc-filepath-utils.c:349
 #, c-format
 msgid ""
@@ -4442,7 +4442,7 @@ msgstr ""
 "Programm muss alle Zugriffrechte (Lesen/Schreiben/Ausführen) zu diesem\n"
 "Verzeichnis besitzen, um korrekt zu funktionieren.\n"
 
-# Fixme: Check source
+# Fixme: Source "or choose another path" missing
 #: ../src/core-utils/gnc-filepath-utils.c:359
 #: ../src/core-utils/gnc-filepath-utils.c:381
 #, c-format
@@ -4457,7 +4457,7 @@ msgstr ""
 "existiert, ist aber kein Verzeichnis. Bitte löschen Sie diese Datei\n"
 "oder wählen einen anderen Pfad. Starten Sie dann GnuCash neu.\n"
 
-# Fixme: Source
+# Fixme: Source remove "unknown" or replace it with "untreated". There are errmsg and errno.
 #: ../src/core-utils/gnc-filepath-utils.c:368
 #, c-format
 msgid ""
@@ -4473,6 +4473,7 @@ msgstr ""
 "Bitte beheben Sie das Problem und starten Sie GnuCash neu.\n"
 "Der gemeldete Fehler war: »%s« (errno %d)."
 
+# Fixme: Source Unify with gnc-filepath-utils.c:349?
 #: ../src/core-utils/gnc-filepath-utils.c:393
 #, c-format
 msgid ""
@@ -4580,7 +4581,7 @@ msgstr "ALLE NICHT-WÄHRUNGEN"
 msgid "Unnamed Budget"
 msgstr "Unbenanntes Budget"
 
-# Fixme: Source
+# Fixme: Source, low prio?
 #. Set memo.
 #: ../src/engine/gncInvoice.c:1574
 msgid "Extra to Charge Card"
@@ -5733,7 +5734,7 @@ msgstr "Konten für Steuerbericht (MwSt.) einrichten"
 msgid "_Scheduled Transactions"
 msgstr "Term_inierte Buchungen"
 
-# Fixme: Source should have HEllip?
+# Fixme: Source should have HEllip/"..." because a dialog follows?
 #: ../src/gnome/gnc-plugin-basic-commands.c:162
 msgid "_Scheduled Transaction Editor"
 msgstr "Terminierte Buchungen _Editor"
@@ -6508,7 +6509,7 @@ msgstr "_Alle Buchungssätze"
 msgid "_This transaction"
 msgstr "_Dieser Buchungssatz"
 
-# Fixme: Source Accelerator missing
+# Fixme: Source Mnemonic missing, low prio
 #: ../src/gnome/gnc-plugin-page-register2.c:387
 #: ../src/gnome/gnc-plugin-page-register.c:400
 msgid "Account Report"
@@ -7651,7 +7652,7 @@ msgstr ""
 "Die Anzahl Minuten, bis die Datei automatisch gespeichert wird (»Auto-"
 "Speichern«). Wenn Null gesetzt ist, wird nichts automatisch gespeichert."
 
-# Fixme: Source Accelerators missing
+# Fixme: Source Mnemonics missing in dialog, but not gschema
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:11
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:105
 msgid "Enable timeout on \"Save changes on closing\" question"
@@ -7738,7 +7739,7 @@ msgstr ""
 msgid "Do not create log/backup files."
 msgstr "Keine Backup- und Log-Dateien erstellen."
 
-# Fixme: Source readability can be improved by linebreaks
+# Fixme: Source readability can be improved by linebreaks, see msgstr
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:23
 msgid ""
 "This setting specifies what to do with old log/backups files. \"forever\" "
@@ -8333,7 +8334,7 @@ msgstr ""
 msgid "Use the system locale currency for all newly created reports."
 msgstr "Die systemweit voreingestellte Währung für neue Berichte benutzen."
 
-# Fixme: Source insert line breaks
+# Fixme: Source readability can be improved by linebreaks, see msgstr
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:108
 msgid ""
 "This setting controls the default currency used for reports. If set to "
@@ -8789,7 +8790,7 @@ msgstr ""
 "Geben Sie die Dahrlehensangaben ein. Es werden mindestens das Darlehenskonto "
 "und der Betrag benötigt.\n"
 
-# Fixme: Source without accelerator
+# Fixme: Source without Mnemonic in dialogs below: assistant-loan, dialog-sx (overview, frequency), budget...
 #: ../src/gnome/gtkbuilder/assistant-loan.glade.h:7
 msgid "Interest Rate:"
 msgstr "Zinssatz:"
@@ -10295,7 +10296,6 @@ msgstr "Sortierreihenfolge s_peichern"
 msgid "Save the sort order for this register."
 msgstr "Sortierreihenfolge für diese Liste speichern"
 
-# Fixme: Source Accelerator missing
 #: ../src/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:57
 msgid "_Reverse Order"
 msgstr "_Umgekehrte Reihenfolge"
@@ -12221,6 +12221,7 @@ msgstr ""
 msgid "© 1997-%s Contributors"
 msgstr "© 1997-%s Mitwirkende"
 
+# Fixme: Source replace '_' to get rid of msgfmt --check-accelerators="_" fatal error
 #. Translators: the following string will be shown in Help->About->Credits
 #. * Enter your name or that of your team and an email contact for feedback.
 #. * The string can have multiple rows, so you can also add a list of
@@ -13053,7 +13054,7 @@ msgstr "Bitte geben Sie einen Namen für den Kunden ein"
 msgid "Enter notes for the transaction"
 msgstr "Geben Sie Bemerkungen zum Buchungssatz ein"
 
-# FIXME: DON'T use the noun 'description' here.
+# Fixme: Source Shouldn't we use 'memo' instead of 'description' here?
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3297
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3306
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:3315
@@ -13895,7 +13896,7 @@ msgstr ""
 msgid "_Display symbol"
 msgstr "_Anzeigesymbol"
 
-# Fixme: Source
+# Fixme: Source dialog-file-access is missing most Mnemonics
 #: ../src/gnome-utils/gtkbuilder/dialog-file-access.glade.h:1
 msgid "<b>Data Format:</b>"
 msgstr "<b>Dateiformat:</b>"
@@ -14201,8 +14202,6 @@ msgstr "Das Datumsformat aus den Systemeinstellungen übernehmen."
 msgid "Date/Time"
 msgstr "Datum und Zeit"
 
-# Fixme: Der Assistent ist derzeit unter Aktion->Kontenhierarchie hinzufügen
-# erreichbar. Können wir das vereinheitlichen?
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:70
 msgid "Perform account list _setup on new file"
 msgstr "Konten_einrichtung bei neuer Datei"
@@ -15595,6 +15594,8 @@ msgstr ""
 "Programm namens »qt3-wizard« installiert ist. Bitte kontrollieren Sie Ihre "
 "Installation der Bibliothek AqBanking."
 
+# Fixme: Source URL should be qt.io or better rip that out along with all of
+# the Qt-4 code. It's been obsolete since 2.4.something when cstim made the Gtk2 code.
 #: ../src/import-export/aqb/assistant-ab-initial.c:529
 msgid ""
 "The external program \"AqBanking Setup Wizard\" failed to run successfully "
@@ -16182,7 +16183,7 @@ msgstr ""
 "Sie haben keinen Verwendungszweck eingegeben. Für einen Überweisungsauftrag "
 "ist die Eingabe eines Verwendungszwecks erforderlich.\n"
 
-# Fixme: aktuellen Stand prüfen.
+# Fixme: gelegentlich aktuellen Stand prüfen.
 #: ../src/import-export/aqb/dialog-ab-trans.c:718
 msgid ""
 "The text you entered contained at least one character that is invalid for a "
@@ -16933,7 +16934,7 @@ msgstr "Versteckt"
 msgid "tax"
 msgstr "Steuerrelevant"
 
-# Fixme: Source should be changed
+# Fixme: Source replace '_' to get rid of msgfmt --check-accelerators="_" fatal error
 #: ../src/import-export/csv-exp/csv-tree-export.c:158
 msgid "place_holder"
 msgstr "Platzhalter"
@@ -17610,7 +17611,7 @@ msgstr ""
 msgid "Select matching existing transaction"
 msgstr "Wählen Sie die zugeordnete, schon existierende Buchung"
 
-# Fixme: Source accelerator missing
+# Fixme: Source Mnemonic missing
 #. Dialog Select matching transactions
 #: ../src/import-export/dialog-import.glade.h:34
 msgid "Show Reconciled"
@@ -18407,8 +18408,11 @@ msgstr "Eine _weitere Datei öffnen"
 msgid "QIF files you have loaded"
 msgstr "QIF-Datein, die geladen wurden"
 
-# "(subaccounts of Retained Earnings, by default)" /
-# "(Unterkonten von Gewinnrücklagen)" macht keinen Sinn! Veraltet?
+# Fixme Source: "(subaccounts of Retained Earnings, by default)" /
+# is that part of the earnings which is not payed to  owners.
+# Is it really the counterpart of the opening balance? 
+# Confused ~Fell
+# de: "(Unterkonten von Gewinn*rücklagen*)" macht keinen Sinn! Veraltet?
 #: ../src/import-export/qif-imp/assistant-qif-import.glade.h:34
 msgid ""
 "On the next page, the accounts in your QIF files and any stocks or mutual "
@@ -19197,26 +19201,28 @@ msgstr ""
 "   %u %s neu angelegt\n"
 "   %u %s aktualisiert (gemäß ID)"
 
-# Fixme: Source
+# Fixme: Source Module has several issues, e.g. flying buttons
 #. Menu Items
 #: ../src/plugins/customer_import/gnc-plugin-customer_import.c:56
 msgid "I_mport"
 msgstr "I_mport"
 
-# Fixme: Source
+# Fixme: Source "Import Customers & Vendors from CSV..."
 #: ../src/plugins/customer_import/gnc-plugin-customer_import.c:57
 msgid "Import Customers and Vendors"
 msgstr "Importiert K_unden und Lieferanten"
 
-# Fixme: Source
+# Fixme: Source "Import customers or vendors from a CSV text file."
 #: ../src/plugins/customer_import/gnc-plugin-customer_import.c:57
 msgid "customer_import tooltip"
 msgstr ""
 
+# Fixme: Source "Customers & Vendors Import"
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:1
 msgid "Import customers or vendors from text file"
 msgstr "Importiert Kunden oder Lieferanten aus Textdatei"
 
+# Fixme: Source Can we reuse strings from other CSV imports?
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:2
 msgid "<b>1. Choose the file to import</b>"
 msgstr "<b>1. Wählen Sie die zu importierende Datei</b>"
@@ -19241,6 +19247,7 @@ msgstr "<b>3. Bestimmen Sie die Importoptionen</b>"
 msgid "<b>4. Preview</b>"
 msgstr "<b>4. Vorschau</b>"
 
+# Fixme: Source Is this plugin really used or should it be excluded from xgettext?
 #. Menu Items
 #: ../src/plugins/example/gnc-plugin.example.c:50
 msgid "example description..."
@@ -20330,7 +20337,7 @@ msgstr ""
 "Keine gültige %s gewählt. Klicken Sie auf »Optionen«, um eine Firma zu "
 "wählen."
 
-# Fixme: Source Accelerator missing
+# Fixme: Source Mnemonics missing in report options of e.g. customer-summary.scm
 #: ../src/report/business-reports/customer-summary.scm:1039
 msgid "Customer Summary"
 msgstr "Kundenüber_sicht"
@@ -26080,7 +26087,8 @@ msgstr "Finanzmanagement"
 msgid "Manage your finances, accounts, and investments"
 msgstr "Verwaltung der Finanzen von Privatanwendern und Kleinbetrieben."
 
-# Fixme: Source qofbookslots: All accelerators missing
+# Fixme: Source qofbookslots: All Mnemonics missing, but also used as keys in KVPs
+# Possible solution: clone  OPTION_NAME_xxx to OPTION_LABEL_xxx and insert them
 #: ../src/libqof/qof/qofbookslots.h:66
 msgid "Use Trading Accounts"
 msgstr "Devisenhandel-Konten benutzen"
@@ -26101,6 +26109,7 @@ msgstr "Budgets"
 msgid "Default Budget"
 msgstr "Standard-Budget"
 
+# Fixme: Source How to get rid of this comment? Seems from qofbookslots.h
 #. * @}
 #. For the grep-happy:
 #. * KVP-OPTION-PATH
