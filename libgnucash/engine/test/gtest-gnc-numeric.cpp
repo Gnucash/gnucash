@@ -293,7 +293,7 @@ TEST(gncnumeric_operators, double_conversion)
 {
     GncNumeric a(123456789, 9876);
     double b = static_cast<decltype(b)>(a);
-    EXPECT_EQ(12500.687424058324, b);
+    EXPECT_DOUBLE_EQ(12500.687424058324, b);
 }
 
 TEST(gncnumeric_operators, test_addition)
