@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <application>
- <id type="desktop">gnucash.desktop</id>
+ <id type="desktop">org.gnucash.Gnucash</id>
  <licence>CC0</licence>
  <description>
   <_p>
