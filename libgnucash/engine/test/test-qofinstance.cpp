@@ -230,35 +230,7 @@ test_instance_new_destroy( void )
 
     g_test_message( "Testing object destruction" );
     g_object_unref( inst );
-    /* test fields were deinitialized */
-    g_assert( inst );
-    g_assert( !QOF_IS_INSTANCE( inst ) );
-    /* set fatal handler */
-    g_test_log_set_fatal_handler ( ( GTestLogFatalFunc )fatal_handler, NULL );
-    auto hdlr = g_log_set_handler (log_domain, loglevel,
-                                   (GLogFunc)test_checked_handler, check);
-    g_assert( qof_instance_get_collection( inst ) == NULL );
-    g_assert( g_strrstr( error_message, "assertion 'QOF_IS_INSTANCE(ptr)' failed" ) != NULL );
     g_free( error_message );
-
-    g_free(check->msg);
-    check->msg = g_strdup(msg2);
-    g_assert_cmpint( qof_instance_get_editlevel( inst ), == , 0 );
-    g_assert( g_strrstr( error_message, "assertion 'QOF_IS_INSTANCE(ptr)' failed" ) != NULL );
-    g_free( error_message );
-
-    g_free(check->msg);
-    check->msg = g_strdup(msg3);
-    g_assert( !qof_instance_get_destroying( inst ) );
-    g_assert( g_strrstr( error_message, "assertion 'QOF_IS_INSTANCE(ptr)' failed" ) != NULL );
-    g_free( error_message );
-
-    g_free(check->msg);
-    check->msg = g_strdup(msg4);
-    g_assert( !qof_instance_get_dirty_flag( inst ) );
-    g_assert( g_strrstr( error_message, "assertion 'QOF_IS_INSTANCE(ptr)' failed" ) != NULL );
-    g_free( error_message );
-    g_log_remove_handler (log_domain, hdlr);
     test_error_struct_free(check);
 }
 

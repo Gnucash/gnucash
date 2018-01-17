@@ -1358,19 +1358,13 @@ test_xaccTransBeginEdit ()
     xaccTransRollbackEdit (txn);
     g_assert_cmpint (0, ==, qof_instance_get_editlevel (QOF_INSTANCE (txn)));
     g_assert (txn->orig == NULL);
-    qof_book_destroy (book);
-    xaccTransBeginEdit (txn);
-    g_assert_cmpint (1, ==, qof_instance_get_editlevel (QOF_INSTANCE (txn)));
-    g_assert (txn->orig == NULL);
-    g_assert_cmpint (1, ==, check1->hits);
-    g_assert_cmpint (2, ==, check2->hits);
 
     g_log_remove_handler (logdomain, hdlr);
     test_clear_error_list ();
     test_error_struct_free (check1);
     test_error_struct_free (check2);
-    /* qof_book_destroy has already removed enough of the innards that
-       trying to unref the txn and book crashes. */
+    xaccTransDestroy (txn);
+    qof_book_destroy (book);
 }
 /* xaccTransDestroy
 void
