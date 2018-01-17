@@ -362,7 +362,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
                              * needed only in countries that have one of
                              * aqbanking's Online Banking techniques
                              * available. This is 'OFX DirectConnect'
-                             * (U.S. and others), 'HBCI' (in Germany),
+                             * (U.S. and others), 'HBCI' (Germany),
                              * or 'YellowNet' (Switzerland). If none of
                              * these techniques are available in your
                              * country, you may safely ignore strings

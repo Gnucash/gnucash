@@ -154,7 +154,7 @@
     (list min-date max-date datepairs)))
 
 (define (category-report-dates-accumulate dates)
-  (let* ((min-date (gnc:secs->timepair 0))
+  (let* ((min-date (decdate (car (list-min-max dates gnc:timepair-lt)) DayDelta))
 	 (max-date (cdr (list-min-max dates gnc:timepair-lt)))
 	 (datepairs (reverse! (cdr (fold (lambda (next acc)
 					   (let ((prev (car acc))

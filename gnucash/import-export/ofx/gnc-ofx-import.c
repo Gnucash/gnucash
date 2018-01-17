@@ -896,6 +896,7 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
                 break;
             case OFX_CMA :
                 default_type = ACCT_TYPE_NONE;
+                /* Cash Management Account */
                 account_type_name = _("Unknown OFX CMA account");
                 break;
             case OFX_CREDITCARD :

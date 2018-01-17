@@ -443,7 +443,7 @@ AccountPickerDialog* gnc_import_account_assist_setup(GtkWidget *parent)
     picker->account_online_id_label = GTK_WIDGET(gtk_builder_get_object (builder, "online_id_label"));
 
     /* Add the New Account Button */
-    picker->new_button = gtk_button_new_with_mnemonic ("_New Account");
+    picker->new_button = gtk_button_new_with_mnemonic (_("_New Account"));
 
     h_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (h_box), TRUE);

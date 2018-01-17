@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.7.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-13 20:39+0100\n"
-"PO-Revision-Date: 2018-01.10 12:33+0100\n"
+"PO-Revision-Date: 2018-01.17 18:07+0100\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: de\n"
@@ -691,7 +691,7 @@ msgstr "Darlehensrechner-Option: \"%s\""
 #: ../gnucash/report/standard-reports/account-summary.scm:72
 #: ../gnucash/report/standard-reports/advanced-portfolio.scm:68
 #: ../gnucash/report/standard-reports/cashflow-barchart.scm:356
-#: ../gnucash/report/standard-reports/category-barchart.scm:733
+#: ../gnucash/report/standard-reports/category-barchart.scm:739
 #: ../gnucash/report/standard-reports/general-journal.scm:107
 #: ../gnucash/report/standard-reports/general-ledger.scm:76
 #: ../gnucash/report/standard-reports/general-ledger.scm:97
@@ -1655,6 +1655,7 @@ msgid "Bayesian"
 msgstr ""
 
 #. Description
+#: ../gnucash/gnome/dialog-imap-editor.c:518
 msgid "Description Field"
 msgstr "Beschreibungsfeld"
 
@@ -2393,8 +2394,8 @@ msgid ""
 "The selected transaction doesn't have splits that can be assigned as a "
 "payment"
 msgstr ""
-"Die ausgewählte Buchung hat keine Teile, die einer Zahlung zugewiesen "
-"werden kann."
+"Die ausgewählte Buchung hat keine Teile, die einer Zahlung zugewiesen werden "
+"kann."
 
 #: ../gnucash/gnome/dialog-payment.c:1514
 msgid ""
@@ -3164,8 +3165,9 @@ msgstr ""
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:212
 msgid "View and Delete Bayesian and Non Bayesian information"
 msgstr ""
-#, fuzzy
+
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:216
+#, fuzzy
 msgid "_Transaction Associations"
 msgstr "Buchungsinformationen"
 
@@ -6073,7 +6075,8 @@ msgstr ""
 "verschwindet."
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:17
-msgid "Time to wait for answer:"
+#, fuzzy
+msgid "Time to wait for answer"
 msgstr "Wartezeit auf eine Antwort:"
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:18
@@ -6487,12 +6490,12 @@ msgstr ""
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:76
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:75
-#, fuzzy 
+#, fuzzy
 msgid ""
 "Set book option on new files to use split \"action\" field for \"Num\" field "
 "on registers/reports"
-msgstr ""
-"Setzt die "
+msgstr "Setzt die "
+
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:77
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:76
 msgid ""
@@ -8919,7 +8922,6 @@ msgid "Keeping the last available price for option:"
 msgstr ""
 
 #: ../gnucash/gnome/gtkbuilder/dialog-price.glade.h:37
-
 msgid "Source:"
 msgstr "Quelle:"
 
@@ -15978,8 +15980,8 @@ msgid ""
 "matching."
 msgstr ""
 "Doppelklicken Sie auf die Zeile eines Online-Banking-Kontos, um diesem HBCI-"
-"Konto ein GnuCash-Konto zuzuordnen. Klicken Sie »Weiter«, wenn alle gewünschten "
-"Konten zugeordnet sind."
+"Konto ein GnuCash-Konto zuzuordnen. Klicken Sie »Weiter«, wenn alle "
+"gewünschten Konten zugeordnet sind."
 
 #: ../gnucash/import-export/aqb/assistant-ab-initial.glade.h:23
 msgid "Match Online accounts with GnuCash accounts"
@@ -17126,6 +17128,7 @@ msgstr "5. Danach"
 
 #. Translators: %s is the file name string.
 #: ../gnucash/import-export/csv-exp/assistant-csv-export.c:80
+#, c-format
 msgid ""
 "The account tree will be exported to the file '%s' when you click 'Apply'.\n"
 "\n"
@@ -17140,6 +17143,7 @@ msgstr ""
 
 #. Translators: %s is the file name string and %u the number of accounts.
 #: ../gnucash/import-export/csv-exp/assistant-csv-export.c:85
+#, c-format
 msgid ""
 "When you click 'Apply', the transactions will be exported to the file '%s' "
 "and the number of accounts exported will be %u.\n"
@@ -17155,6 +17159,7 @@ msgstr ""
 
 #. Translators: %s is the file name string.
 #: ../gnucash/import-export/csv-exp/assistant-csv-export.c:91
+#, fuzzy, c-format
 msgid ""
 "When you click 'Apply', the transactions will be exported to the file '%s.\n"
 "\n"
@@ -17201,13 +17206,15 @@ msgstr ""
 "angegebenen Trennzeichen zu exportieren.\n"
 "\n"
 "Es wird mehrere Zeilen für jede Transaktion geben, und es kann weitere "
-"Manipulationen erfordern, um sie in einem Format zu erhalten, das Sie verwenden können.\n"
+"Manipulationen erfordern, um sie in einem Format zu erhalten, das Sie "
+"verwenden können.\n"
 "\n"
-"Jede Transaktion erscheint einmalig im Export und wird in der "
-"Reihenfolge aufgelistet, in der die Konten bearbeitet wurden.\n"
+"Jede Transaktion erscheint einmalig im Export und wird in der Reihenfolge "
+"aufgelistet, in der die Konten bearbeitet wurden.\n"
 "\n"
-"Wählen Sie die gewünschten Einstellungen für die Datei aus und klicken Sie dann auf 'Weiter', um "
-"fortzufahren, oder auf 'Abbrechen', um den Export abzubrechen.\n"
+"Wählen Sie die gewünschten Einstellungen für die Datei aus und klicken Sie "
+"dann auf 'Weiter', um fortzufahren, oder auf 'Abbrechen', um den Export "
+"abzubrechen.\n"
 
 #: ../gnucash/import-export/csv-exp/assistant-csv-export.c:111
 msgid ""
@@ -17450,7 +17457,6 @@ msgid "Export _Active Register to CSV..."
 msgstr "Aktives Register nach CSV exportieren ..."
 
 #: ../gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:65
-
 msgid "Export the Active Register to a CSV file"
 msgstr "Exportiert das aktive Register in eine CSV Datei"
 
@@ -17463,6 +17469,7 @@ msgid "The position of paned window when it was last closed."
 msgstr "Position des gekachelt angeordneten Fensters beim letzten Schließen"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.c:70
+#, c-format
 msgid ""
 "The accounts will be imported from the file '%s' when you click 'Apply'.\n"
 "\n"
@@ -17519,6 +17526,7 @@ msgstr ""
 "Folgende Fehler traten auf:"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.c:473
+#, c-format
 msgid ""
 "Import completed successfully!\n"
 "\n"
@@ -17719,7 +17727,7 @@ msgstr "Duplizieren"
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1768
 msgid " replaced.</b></span>"
 msgstr ""
-#, fuzzy
+
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1801
 #, c-format
 msgid ""
@@ -17729,8 +17737,8 @@ msgid ""
 "Error message:\n"
 "%s"
 msgstr ""
-"Ein unerwarteter Fehler sit aufgetreten"
-"Bitte berichtichten Sie dies als fehhler.\n"
+"Ein unerwarteter Fehler sit aufgetretenBitte berichtichten Sie dies als "
+"fehhler.\n"
 "\n"
 "Fehlermeldung:\n"
 "%s"
@@ -18012,12 +18020,13 @@ msgid ""
 "settings name and press the Save Settings button. Note you can't save to "
 "built-in presets."
 msgstr ""
-"Dieser Assistent möchte Ihnen helfen, strukturierte Textdateien mit Buchungen zu "
-"importieren. Er unterstützt beides nämlich zeichenseparierte Dateien (durch Kommata "
-"oder Semikola getrennte Daten) und mit daten fester Breite.\n"
+"Dieser Assistent möchte Ihnen helfen, strukturierte Textdateien mit "
+"Buchungen zu importieren. Er unterstützt beides nämlich zeichenseparierte "
+"Dateien (durch Kommata oder Semikola getrennte Daten) und mit daten fester "
+"Breite.\n"
 "\n"
-"Für einen erfolgreichen Import müssen diese drei Spalten in der zu importierenden Datei vorhanden sein:"
-"• eine Datumsspalte\n"
+"Für einen erfolgreichen Import müssen diese drei Spalten in der zu "
+"importierenden Datei vorhanden sein:• eine Datumsspalte\n"
 "• eine Beschreibungsspalte\n"
 "• eine Spalte Einzahlung oder Auszahlung\n"
 "\n"
@@ -18035,6 +18044,7 @@ msgstr ""
 "Schließlich gibt es eine Option zur Bestimmung der ersten und letzten Zeile, "
 "welche benutzt werden kann, wenn sie einige Kopfzeilen oder mehrere Konten "
 "in einer Datei haben."
+
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:35
 #, fuzzy
 msgid "Multi-split"
@@ -18107,12 +18117,11 @@ msgstr ""
 "Auf der folgenden Seite haben Sie die Möglicjkeit, jeder Buchung eine "
 "Kategorie zuzuordnen.\n"
 "\n"
-"Wenn es Probleme mit den Import-Einstellungen gibt, bringt Sie der Klick auf Weiter "
-"zurück zur vorherigen Seite, um dies zu prüfen und zu korrigieren."
-"\n"
-"Wenn dies ihr erster Import ist, müssen Sie leider alle "
-"Zeilen manuell zuordnen. Bei späteren Importen wird das Import-Modul "
-"versuchen, die Zuordnung basierend auf den früheren Importen vorzunehmen.\n"
+"Wenn es Probleme mit den Import-Einstellungen gibt, bringt Sie der Klick auf "
+"Weiter zurück zur vorherigen Seite, um dies zu prüfen und zu korrigieren.\n"
+"Wenn dies ihr erster Import ist, müssen Sie leider alle Zeilen manuell "
+"zuordnen. Bei späteren Importen wird das Import-Modul versuchen, die "
+"Zuordnung basierend auf den früheren Importen vorzunehmen.\n"
 "\n"
 "Wenn dies Ihr erster Import in eine neue Datei ist, werden Sie zunächst "
 "einen Dialog zum Setzen der Buch-Eigenschaften sehen, da diese die Art und "
@@ -18413,7 +18422,8 @@ msgstr "Wählen Sie eine Kontoart"
 msgid ""
 "Please select an account column or set a base account in the Account field."
 msgstr ""
-"Bitte wählen Sie eine Kontenspalte oder setzen das Basiskonto in das Kontenfeld"
+"Bitte wählen Sie eine Kontenspalte oder setzen das Basiskonto in das "
+"Kontenfeld"
 
 #: ../gnucash/import-export/csv-imp/gnc-tx-import.cpp:478
 msgid "Please select a description column."
@@ -24234,20 +24244,20 @@ msgid "Yearly Average"
 msgstr "Durchschnitt pro Jahr"
 
 #: ../gnucash/report/standard-reports/account-piecharts.scm:455
-#: ../gnucash/report/standard-reports/category-barchart.scm:327
+#: ../gnucash/report/standard-reports/category-barchart.scm:336
 msgid "Monthly Average"
 msgstr "Durchschnitt pro Monat"
 
 #: ../gnucash/report/standard-reports/account-piecharts.scm:456
-#: ../gnucash/report/standard-reports/category-barchart.scm:328
+#: ../gnucash/report/standard-reports/category-barchart.scm:337
 msgid "Weekly Average"
 msgstr "Durchschnitt pro Woche"
 
 #: ../gnucash/report/standard-reports/account-piecharts.scm:569
 #: ../gnucash/report/standard-reports/cashflow-barchart.scm:313
 #: ../gnucash/report/standard-reports/cash-flow.scm:167
-#: ../gnucash/report/standard-reports/category-barchart.scm:531
-#: ../gnucash/report/standard-reports/category-barchart.scm:557
+#: ../gnucash/report/standard-reports/category-barchart.scm:537
+#: ../gnucash/report/standard-reports/category-barchart.scm:563
 #: ../gnucash/report/standard-reports/daily-reports.scm:484
 #: ../gnucash/report/standard-reports/equity-statement.scm:347
 #: ../gnucash/report/standard-reports/income-statement.scm:475
@@ -25670,16 +25680,16 @@ msgstr "Balkendiagram mit gestapelten Balken anzeigen?"
 msgid "Maximum number of stacks in the chart."
 msgstr "Die Maximale Anzahl Balken im Diagramm."
 
-#: ../gnucash/report/standard-reports/category-barchart.scm:329
+#: ../gnucash/report/standard-reports/category-barchart.scm:338
 msgid "Daily Average"
 msgstr "Durchschnitt pro Tag"
 
-#: ../gnucash/report/standard-reports/category-barchart.scm:532
-#: ../gnucash/report/standard-reports/category-barchart.scm:558
+#: ../gnucash/report/standard-reports/category-barchart.scm:538
+#: ../gnucash/report/standard-reports/category-barchart.scm:564
 msgid "Balances %s to %s"
 msgstr "Salden %s bis %s"
 
-#: ../gnucash/report/standard-reports/category-barchart.scm:742
+#: ../gnucash/report/standard-reports/category-barchart.scm:748
 #: ../gnucash/report/standard-reports/income-gst-statement.scm:331
 #: ../gnucash/report/standard-reports/income-gst-statement.scm:1170
 #: ../gnucash/report/standard-reports/transaction.scm:1392
@@ -29150,17 +29160,17 @@ msgstr "Tag-Monat"
 msgid "m-d"
 msgstr "Monat-Tag"
 
-#: ../libgnucash/engine/gnc-datetime.cpp:397
+#: ../libgnucash/engine/gnc-datetime.cpp:383
 #, fuzzy
 msgid "Unknown date format specifier passed as argument."
 msgstr "Das Datumsformat aus den Systemeinstellungen übernehmen."
 
 #. regex didn't find a match
-#: ../libgnucash/engine/gnc-datetime.cpp:402
+#: ../libgnucash/engine/gnc-datetime.cpp:388
 msgid "Value can't be parsed into a date using the selected date format."
 msgstr ""
 
-#: ../libgnucash/engine/gnc-datetime.cpp:407
+#: ../libgnucash/engine/gnc-datetime.cpp:393
 msgid "Value appears to contain a year while the selected format forbids this."
 msgstr ""
 
@@ -29734,8 +29744,8 @@ msgid ""
 msgstr ""
 "Wenn Sie GnuCash über Mitternacht hinaus arbeiten, sollten Sie nach "
 "Mitternacht die verwendeten Kontofenster einmal schließen und wieder öffnen, "
-"damit das neue Datum als voreingestelltes Buchungsdatum vorhanden ist. Es ist "
-"nicht notwendig, GnuCash neu zu starten."
+"damit das neue Datum als voreingestelltes Buchungsdatum vorhanden ist. Es "
+"ist nicht notwendig, GnuCash neu zu starten."
 
 #: ../doc/tip_of_the_day.list.in:91
 msgid ""

@@ -135,7 +135,7 @@
     <act:parent type="new">27356188a1963c1dbf943022441d095f</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>0565 Dahrlehn</act:name>
+    <act:name>0565 Darlehen</act:name>
     <act:id type="new">bd74fcb2d15fc7540ecc5ba8f27cbf48</act:id>
     <act:type>ASSET</act:type>
     <act:commodity>

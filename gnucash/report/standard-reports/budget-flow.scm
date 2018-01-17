@@ -35,7 +35,8 @@
 (gnc:module-load "gnucash/report/report-system" 0)
 (gnc:module-load "gnucash/gnome-utils" 0) ;for gnc-build-url
 
-(define reportname (N_ "Budget Flow"))
+(define reportname
+  (N_ "Budget Flow"))
 
 ;; define all option's names so that they are properly defined
 ;; in *one* place.

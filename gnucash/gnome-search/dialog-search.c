@@ -1496,7 +1496,9 @@ gnc_search_dialog_test (void)
         display = get_display_list (GNC_ID_SPLIT);
 
 /* FIXME: All this does is leak. */
-    gnc_search_dialog_create (NULL, GNC_ID_SPLIT, _("Find Transaction"),
+/*      (keep the line break below to avoid a translator comment) */
+    gnc_search_dialog_create (NULL, GNC_ID_SPLIT,
+                  _("Find Transaction"),
 			      params, display,
 			      NULL, NULL, buttons, NULL, NULL, NULL, NULL,
 			      NULL, NULL, NULL);
