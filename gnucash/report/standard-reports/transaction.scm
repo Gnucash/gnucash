@@ -1071,7 +1071,7 @@ tags within description, notes or memo. ")
           ((damount (lambda (s) (if (gnc:split-voided? s)
                                     (xaccSplitVoidFormerAmount s)
                                     (xaccSplitGetAmount s))))
-           (trans-date (lambda (s) (gnc-transaction-get-date-posted (xaccSplitGetTransaction s))))
+           (trans-date (lambda (s) (gnc-transaction-get-date-posted (xaccSplitGetParent s))))
            (currency (lambda (s) (xaccAccountGetCommodity (xaccSplitGetAccount s))))
            (report-currency (lambda (s) (if (column-uses? 'common-currency)
                                             (opt-val gnc:pagename-general optname-currency)
@@ -1095,7 +1095,7 @@ tags within description, notes or memo. ")
                        ;; Use midday as the transaction time so it matches a price
                        ;; on the same day.  Otherwise it uses midnight which will
                        ;; likely match a price on the previous day
-                       (timespecCanonicalDayTime trans-date))))
+                       (timespecCanonicalDayTime (trans-date s)))))
            (split-value (lambda (s) (convert s (damount s)))) ; used for correct debit/credit
            (amount (lambda (s) (split-value s)))
            (debit-amount (lambda (s) (and (positive? (gnc:gnc-monetary-amount (split-value s)))
@@ -1204,6 +1204,7 @@ tags within description, notes or memo. ")
         (for-each (lambda (cell) (addto! row-contents cell))
                   (gnc:html-make-empty-cells left-indent))
         (if (and (opt-val pagename-sorting optname-show-informal-headers)
+                 (column-uses? 'amount-double)
                  (member sortkey SORTKEY-INFORMAL-HEADERS))
             (begin
               (if export?
