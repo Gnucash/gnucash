@@ -39,5 +39,5 @@ INSTALL(TARGETS gncmod-qif
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 # No headers to install.
 
-SET_LOCAL_DIST(qif_DIST_local CMakeLists.txt Makefile.am ${qif_SOURCES} ${qif_noinst_HEADERS})
+SET_LOCAL_DIST(qif_DIST_local CMakeLists.txt ${qif_SOURCES} ${qif_noinst_HEADERS})
 SET(qif_DIST ${qif_DIST_local} ${test_qif_DIST} PARENT_SCOPE)

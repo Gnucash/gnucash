@@ -17,6 +17,6 @@ GNC_ADD_SCHEME_TARGETS(scm-utility-reports
   TRUE
 )
 
-SET_LOCAL_DIST(utility_reports_DIST_local CMakeLists.txt Makefile.am
+SET_LOCAL_DIST(utility_reports_DIST_local CMakeLists.txt 
         ${utility_reports_SCHEME})
 SET(utility_reports_DIST ${utility_reports_DIST_local} ${test_utility_reports_DIST} PARENT_SCOPE)

@@ -14,11 +14,6 @@ elif [[ "$BUILDTYPE" == "cmake-ninja" ]]; then
     cmake ../gnucash -DWITH_PYTHON=ON -DCMAKE_BUILD_TYPE=debug -G Ninja
     ninja
     ninja check || ../afterfailure;
-elif [[ "$BUILDTYPE" == "autotools" ]]; then
-    ../gnucash/autogen.sh;
-    ../gnucash/configure --enable-python
-    make;
-    make check || ../afterfailure
 else
     echo "Unknown buildtype: \"$BUILDTYPE\". Not building."
 fi

@@ -16,5 +16,5 @@ TARGET_INCLUDE_DIRECTORIES(gncmod-test-engine PRIVATE
   ${CMAKE_SOURCE_DIR}/common/test-core
 )
 
-SET_DIST_LIST(engine_test_core_DIST CMakeLists.txt Makefile.am ${libgncmod_test_engine_SOURCES}
+SET_DIST_LIST(engine_test_core_DIST CMakeLists.txt ${libgncmod_test_engine_SOURCES}
         test-engine-stuff.h test-engine-strings.h)

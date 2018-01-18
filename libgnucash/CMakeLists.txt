@@ -13,7 +13,7 @@ ADD_SUBDIRECTORY (tax)
 
 ADD_DEFINITIONS (-DHAVE_CONFIG_H)
 
-SET_LOCAL_DIST(libgnucash_DIST_local CMakeLists.txt Makefile.am ${libgnucash_EXTRA_DIST})
+SET_LOCAL_DIST(libgnucash_DIST_local CMakeLists.txt ${libgnucash_EXTRA_DIST})
 
 SET(libgnucash_DIST ${libgnucash_DIST_local} ${app_utils_DIST} ${backend_DIST}
              ${core_utils_DIST} ${doc_DIST} ${engine_DIST} ${gnc_module_DIST}

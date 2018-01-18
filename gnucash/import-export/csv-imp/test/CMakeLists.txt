@@ -32,6 +32,6 @@ IF (NOT WIN32)
     gtest_csv_imp_INCLUDES gtest_csv_imp_LIBS)
 ENDIF()
 
-SET_DIST_LIST(test_csv_import_DIST CMakeLists.txt Makefile.am
+SET_DIST_LIST(test_csv_import_DIST CMakeLists.txt 
     test-tx-import.cpp test-tokenizer.cpp
     sample1.csv ${test_csv_imp_SOURCES})

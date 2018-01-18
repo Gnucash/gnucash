@@ -209,6 +209,6 @@ ADD_CUSTOM_TARGET(scm-app-utils ALL DEPENDS scm-app-utils-3 scm-app-utils-2 scm-
 
 SET_LOCAL_DIST(app_utils_DIST_local
         ${app_utils_ALL_SOURCES} gettext.scm ${app_utils_SCHEME_1} ${app_utils_SCHEME_2} ${app_utils_SCHEME_3}
-        app-utils.i CMakeLists.txt gnc-help-utils.c Makefile.am
+        app-utils.i CMakeLists.txt gnc-help-utils.c 
         make-prefs-migration-script.xsl migratable-prefs.xml.in README)
 SET(app_utils_DIST ${app_utils_DIST_local} ${test_app_utils_DIST} PARENT_SCOPE)

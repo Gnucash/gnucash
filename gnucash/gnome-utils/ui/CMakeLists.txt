@@ -13,7 +13,7 @@ SET(gnome_utils_ui_DIST_local
         gnc-main-window-ui.xml
         gnc-windows-menu-ui-quartz.xml
         gnc-windows-menu-ui.xml
-        Makefile.am
+        
         osx_accel_map
         )
 

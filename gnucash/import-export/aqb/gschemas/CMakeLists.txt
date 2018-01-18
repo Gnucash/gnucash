@@ -5,4 +5,4 @@ IF (WITH_AQBANKING)
   add_gschema_targets("${aqb_GSCHEMA}")
 ENDIF(WITH_AQBANKING)
 
-SET_DIST_LIST(aqbanking_gschema_DIST CMakeLists.txt Makefile.am org.gnucash.dialogs.import.hbci.gschema.xml.in.in)
+SET_DIST_LIST(aqbanking_gschema_DIST CMakeLists.txt org.gnucash.dialogs.import.hbci.gschema.xml.in.in)

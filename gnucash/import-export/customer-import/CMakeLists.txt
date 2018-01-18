@@ -40,5 +40,5 @@ INSTALL(TARGETS gncmod-customer-import
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 # No headers to install.
 
-SET_LOCAL_DIST(customer_import_DIST_local CMakeLists.txt Makefile.am ${customer_import_SOURCES} ${customer_import_noinst_HEADERS})
+SET_LOCAL_DIST(customer_import_DIST_local CMakeLists.txt ${customer_import_SOURCES} ${customer_import_noinst_HEADERS})
 SET(customer_import_DIST ${customer_import_DIST_local} ${customer_import_glade_DIST} ${customer_import_ui_DIST} PARENT_SCOPE)

@@ -24,7 +24,7 @@ SET(test_dbi_backend_SOURCES
 
 SET(test_dbi_backend_HEADERS test-dbi-business-stuff.h test-dbi-stuff.h)
 
-SET_DIST_LIST(test_dbi_backend_DIST ${test_dbi_backend_SOURCES} ${test_dbi_backend_HEADERS} test-dbi.xml CMakeLists.txt Makefile.am)
+SET_DIST_LIST(test_dbi_backend_DIST ${test_dbi_backend_SOURCES} ${test_dbi_backend_HEADERS} test-dbi.xml CMakeLists.txt )
 
 # This test does not work on Win32
 IF (WITH_SQL AND NOT WIN32)

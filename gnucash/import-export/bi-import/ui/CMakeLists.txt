@@ -8,4 +8,4 @@ INSTALL(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     PATTERN Makefile.* EXCLUDE
     PATTERN CMakeLists.txt EXCLUDE)
 
-SET_DIST_LIST(bi_import_ui_DIST CMakeLists.txt Makefile.am gnc-plugin-bi-import-ui.xml)
+SET_DIST_LIST(bi_import_ui_DIST CMakeLists.txt gnc-plugin-bi-import-ui.xml)

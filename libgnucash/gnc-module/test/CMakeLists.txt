@@ -98,7 +98,7 @@ SET(test_gnc_module_EXTRA_DIST
   ${test_gnc_module_SCHEME}
 )
 
-SET_LOCAL_DIST(test_gnc_module_DIST_local CMakeLists.txt Makefile.am README ${test_gnc_module_SOURCE_DIST} ${test_gnc_module_EXTRA_DIST})
+SET_LOCAL_DIST(test_gnc_module_DIST_local CMakeLists.txt README ${test_gnc_module_SOURCE_DIST} ${test_gnc_module_EXTRA_DIST})
 
 SET(test_gnc_module_DIST ${test_gnc_module_DIST_local} ${misc_mods_DIST}
                          ${mod_bar_DIST} ${mod_baz_DIST} ${mod_foo_DIST} PARENT_SCOPE)

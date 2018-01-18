@@ -8,4 +8,4 @@ SET(valgrind_FILES
         valgrind-x11.supp
         )
 
-SET_DIST_LIST(valgrind_DIST CMakeLists.txt Makefile.am ${valgrind_FILES})
+SET_DIST_LIST(valgrind_DIST CMakeLists.txt ${valgrind_FILES})

@@ -12,7 +12,7 @@ SET(test_backend_sql_SOURCES test-sqlbe.cpp utest-gnc-backend-sql.cpp)
 SET(BACKEND_SQL_TEST_LIBS gnc-backend-sql gncmod-engine test-core)
 
 SET_DIST_LIST(test_backend_sql_DIST ${test_backend_sql_SOURCES} CMakeLists.txt
-  Makefile.am test-column-types.cpp)
+  test-column-types.cpp)
 
 IF(WITH_SQL)
   # This test does not actually do anything.

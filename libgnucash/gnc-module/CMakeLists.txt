@@ -59,6 +59,6 @@ GNC_ADD_SCHEME_TARGETS(scm-gnc-module
   FALSE
 )
 
-SET_LOCAL_DIST(gnc_module_DIST_local CMakeLists.txt Makefile.am ${gnc_module_SOURCES} ${gnc_module_HEADERS}
+SET_LOCAL_DIST(gnc_module_DIST_local CMakeLists.txt ${gnc_module_SOURCES} ${gnc_module_HEADERS}
         gnc-module.i gnc-module.scm README)
 SET(gnc_module_DIST ${gnc_module_DIST_local} ${test_gnc_module_DIST} ${example_DIST} PARENT_SCOPE)

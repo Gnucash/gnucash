@@ -26,6 +26,6 @@ ENDIF()
   FILE(COPY pycons DESTINATION ${CMAKE_BINARY_DIR}/share/gnucash/python)
 ENDIF(WITH_PYTHON)
 
-SET_LOCAL_DIST(python_DIST_local CMakeLists.txt Makefile.am gncmod-python.c init.py)
+SET_LOCAL_DIST(python_DIST_local CMakeLists.txt gncmod-python.c init.py)
 SET(python_DIST ${python_DIST_local} ${pycons_DIST} PARENT_SCOPE)
 

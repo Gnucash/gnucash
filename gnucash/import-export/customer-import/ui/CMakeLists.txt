@@ -8,4 +8,4 @@ INSTALL(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     PATTERN Makefile.* EXCLUDE
     PATTERN CMakeLists.txt EXCLUDE)
 
-SET_DIST_LIST(customer_import_ui_DIST CMakeLists.txt Makefile.am gnc-plugin-customer-import-ui.xml)
+SET_DIST_LIST(customer_import_ui_DIST CMakeLists.txt gnc-plugin-customer-import-ui.xml)

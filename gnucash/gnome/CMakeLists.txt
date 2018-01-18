@@ -201,6 +201,6 @@ ADD_CUSTOM_TARGET(gnucash-desktop ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucas
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop DESTINATION  ${CMAKE_INSTALL_DATADIR}/applications)
 
 SET_LOCAL_DIST(gnome_DIST_local
-        CMakeLists.txt Makefile.am gnome.i gnucash.appdata.xml.in gnucash.desktop.in.in
+        CMakeLists.txt gnome.i gnucash.appdata.xml.in gnucash.desktop.in.in
         ${gnc_gnome_noinst_HEADERS} ${gnc_gnome_SOURCES})
 SET(gnome_DIST ${gnome_DIST_local} ${gnome_ui_DIST} ${gnome_gschema_DIST} ${gnome_gtkbuilder_DIST} PARENT_SCOPE)

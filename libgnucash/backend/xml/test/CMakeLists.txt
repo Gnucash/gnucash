@@ -57,7 +57,7 @@ SET(test_backend_xml_module_SOURCES
 )
 
 SET_LOCAL_DIST(test_backend_xml_DIST_local CMakeLists.txt grab-types.pl
-  Makefile.am README test-date-converting.cpp test-dom-converters1.cpp
+  README test-date-converting.cpp test-dom-converters1.cpp
   test-dom-parser1.cpp test-file-stuff.cpp test-file-stuff.h test-kvp-frames.cpp
   test-load-backend.cpp test-load-example-account.cpp  test-load-xml2.cpp
   test-save-in-lang.cpp test-string-converters.cpp test-xml2-is-file.cpp
@@ -65,7 +65,7 @@ SET_LOCAL_DIST(test_backend_xml_DIST_local CMakeLists.txt grab-types.pl
   test-xml-pricedb.cpp test-xml-transaction.cpp)
 SET(test_backend_xml_DIST ${test_backend_xml_DIST_local} ${test_backend_xml_test_files_DIST} PARENT_SCOPE)
 
-# The test test-dom-parser1.c is not run by Makefile.am
+# The test test-dom-parser1.c is not run by 
 
 # This line for autotools
 CONFIGURE_FILE(test-real-data.sh.in test-real-data.sh)

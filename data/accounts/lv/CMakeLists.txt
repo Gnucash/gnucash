@@ -16,7 +16,7 @@ SET(account_DATA
   acctchrt_spouseinc.gnucash-xea
   acctchrt_spouseretire.gnucash-xea)
 
-SET_DIST_LIST(LV_DIST ${account_DATA} acctchrt_full.gnucash-xea Makefile.am CMakeLists.txt)
+SET_DIST_LIST(LV_DIST ${account_DATA} acctchrt_full.gnucash-xea CMakeLists.txt)
 
 INSTALL(FILES ${account_DATA} DESTINATION ${ACCOUNTS_INSTALL_DIR}/lv)
 FILE(COPY ${account_DATA} DESTINATION ${ACCOUNTS_BUILD_DIR}/lv)

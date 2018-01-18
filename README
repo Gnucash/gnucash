@@ -209,17 +209,18 @@ Building & Installing
 
 (For additional build system details, see doc/README.build-system.)
 
-GnuCash uses GNU Automake to handle the build process, so for most of
-the details, see the generic instructions in INSTALL.  (If you are
-building directly from Git, read the README.git file for more instructions.)
-Below we detail the GnuCash specific bits.
+GnuCash uses CMake to handle the build process. Details are available
+in cmake/README_CMAKE.txt (If you are building directly from Git, read
+the README.git file for more instructions.) 
 
 Prior to building GnuCash, you will have to obtain and install the
 following packages:
 
+  cmake: Available https://cmake.org.
 
-  autoconf, automake, and libtool: Available at ftp://ftp.gnu.org/gnu.
-    RPM's and debs are widely available with most distributions.
+  ninja: Optional, available at http://ninja-build.org. CMake can
+    generated build rules for Ninja, and generally using Ninja results
+    in faster builds that Makefile based ones.
 
   gnome development system: headers, libraries, etc.
 
@@ -240,44 +241,32 @@ you'll need for the systems we know about:
       guile
       libguile9-dev
 
+Generally, up-to-date build instructions for various Linux
+distributions can be found on the GnuCash wiki at
+https://wiki.gnucash.org/wiki/Building
 
-  SuSE:
-    see README.dependencies
+The options that the CMake build system understands are documented in
+cmake/README_CMAKE.txt and in the Building wiki page mentioned above.
 
-GnuCash understands a few non-standard ./configure options.  You
-should run ./configure --help for the most up to date summary of the
-supported options.
+Note that while you need the Gnome libraries installed, you don't need
+to have a Gnome desktop.
 
-If you only want a particular language installed, you can set the
-LINGUAS environment variable before you run configure. For example,
-to only install the French translations, run
-
-  $ export LINGUAS=fr
-  $ ./configure
-
-If you want to make sure that all languages get installed, run
-
-  $ unset LINGUAS
-  $ ./configure
-
-Note that while you need the Gnome libraries installed, you don't
-need to have a Gnome desktop.  
-
-Runtime and install destinations are separate.  The --prefix you
-specify to configure determines where the resulting binary will look
+Runtime and install destinations are separate.  The CMake option
+CMAKE_INSTALL_PREFIX determines where the resulting binary will look
 for things at runtime.  Normally this determines where a "make
-install" will put all the files.  However, automake also supports the
-variable.  DESTDIR is used during the `make install' step to relocate
-install objects into a staging area.  Each object and path is prefixed
-with the value of `DESTDIR' before being copied into the install area.
-Here is an example of typical DESTDIR usage:
+install" will put all the files.  However, cmake also supports the
+DESTDIR variable.  DESTDIR is used during the `make install' step to
+relocate install objects into a staging area.  Each object and path is
+prefixed with the value of `DESTDIR' before being copied into the
+install area.  Here is an example of typical DESTDIR usage:
 
      make DESTDIR=/tmp/staging install
 
-   This places install objects in a directory tree built under
+This places install objects in a directory tree built under
 `/tmp/staging'.  If `/gnu/bin/foo' and `/gnu/share/aclocal/foo.m4' are
 to be installed, the above command would install
-`/tmp/staging/gnu/bin/foo' and `/tmp/staging/gnu/share/aclocal/foo.m4'.
+`/tmp/staging/gnu/bin/foo' and
+`/tmp/staging/gnu/share/aclocal/foo.m4'.
 
 DESTDIR can be helpful when trying to build install images and
 packages.

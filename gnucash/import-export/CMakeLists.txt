@@ -81,7 +81,7 @@ FILE(COPY ${generic_import_GLADE} DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilde
 
 SET(generic_import_EXTRA_DIST generic-import-design.txt)
 
-SET_LOCAL_DIST(import_export_DIST_local CMakeLists.txt Makefile.am ${generic_import_SOURCES}
+SET_LOCAL_DIST(import_export_DIST_local CMakeLists.txt ${generic_import_SOURCES}
         ${generic_import_HEADERS} ${generic_import_GLADE} ${generic_import_noinst_HEADERS}
         ${generic_import_EXTRA_DIST})
 

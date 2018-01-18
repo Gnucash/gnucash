@@ -12,4 +12,4 @@ SET(doc_xml_FILES
         types.dtd
 )
 
-SET_DIST_LIST(doc_xml_DIST CMakeLists.txt Makefile.am ${doc_xml_FILES})
+SET_DIST_LIST(doc_xml_DIST CMakeLists.txt ${doc_xml_FILES})

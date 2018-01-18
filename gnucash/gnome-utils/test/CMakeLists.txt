@@ -45,4 +45,4 @@ GNC_ADD_SCHEME_TARGETS(scm-test-load-gnome-utils-module
 GNC_ADD_SCHEME_TESTS(test-load-gnome-utils-module.scm)
 
 
-SET_DIST_LIST(test_gnome_utils_DIST CMakeLists.txt Makefile.am test-gnc-recurrence.c test-link-module.c test-load-gnome-utils-module.scm)
+SET_DIST_LIST(test_gnome_utils_DIST CMakeLists.txt test-gnc-recurrence.c test-link-module.c test-load-gnome-utils-module.scm)

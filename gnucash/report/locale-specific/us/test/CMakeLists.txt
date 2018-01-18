@@ -21,4 +21,4 @@ GNC_ADD_TEST(test-link-module-report-locale-specific-us test-link-module.c
 #  )
 #GNC_ADD_SCHEME_TESTS(test-load-report-locale-specific-us-module.scm)
 
-SET_DIST_LIST(test_locale_specific_us_DIST CMakeLists.txt Makefile.am test-link-module.c test-load-report-locale-specific-module.scm)
+SET_DIST_LIST(test_locale_specific_us_DIST CMakeLists.txt test-link-module.c test-load-report-locale-specific-module.scm)

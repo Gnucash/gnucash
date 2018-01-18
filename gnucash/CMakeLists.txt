@@ -255,7 +255,7 @@ ENDFOREACH()
 
 SET_LOCAL_DIST(gnucash_DIST_local CMakeLists.txt environment.in generate-gnc-script
                gnucash-bin.c gnucash.rc.in gnucash-valgrind.in gnucash-gresources.xml ${gresource_files}
-               Makefile.am ${gnucash_EXTRA_DIST})
+               ${gnucash_EXTRA_DIST})
 
 SET(gnucash_DIST ${gnucash_DIST_local} ${gnome_DIST} ${gnome_search_DIST}
              ${gnome_utils_DIST} ${html_DIST} ${import_export_DIST} ${python_DIST} ${register_DIST} ${report_DIST}

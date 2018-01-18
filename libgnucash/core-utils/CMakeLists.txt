@@ -149,7 +149,7 @@ SET(core_utils_ALL_INCLUDES
   ${GUILE_INCLUDE_DIRS}
   ${GTK_MAC_INCLUDE_DIRS})
 
-SET_LOCAL_DIST(core_utils_DIST_local ${core_utils_ALL_SOURCES} CMakeLists.txt Makefile.am core-utils.i core-utils.scm gncla-dir.h.in)
+SET_LOCAL_DIST(core_utils_DIST_local ${core_utils_ALL_SOURCES} CMakeLists.txt core-utils.i core-utils.scm gncla-dir.h.in)
 SET(core_utils_DIST ${core_utils_DIST_local} ${test_core_utils_DIST} PARENT_SCOPE)
 
 IF (MAC_INTEGRATION)

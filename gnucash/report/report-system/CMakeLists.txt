@@ -111,7 +111,7 @@ GNC_ADD_SCHEME_TARGETS(scm-report-system-3
   FALSE
 )
 
-SET_LOCAL_DIST(report_system_DIST_local CMakeLists.txt Makefile.am
+SET_LOCAL_DIST(report_system_DIST_local CMakeLists.txt
   report-system.i
   ${report_system_HEADERS} ${report_system_SOURCES}
   ${report_system_SCHEME} ${report_system_SCHEME_1}

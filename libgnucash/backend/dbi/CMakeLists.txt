@@ -19,7 +19,7 @@ SET (backend_dbi_noinst_HEADERS
 )
 
 SET_LOCAL_DIST(backend_dbi_DIST_local
-        ${backend_dbi_SOURCES} ${backend_dbi_noinst_HEADERS} CMakeLists.txt Makefile.am)
+        ${backend_dbi_SOURCES} ${backend_dbi_noinst_HEADERS} CMakeLists.txt )
 SET(backend_dbi_DIST ${backend_dbi_DIST_local} ${test_dbi_backend_DIST} PARENT_SCOPE)
 
 # Add dependency on config.h

@@ -44,4 +44,4 @@ SET(gnome_GLADE
         window-reconcile.glade
 )
 
-SET_DIST_LIST(gnome_gtkbuilder_DIST CMakeLists.txt Makefile.am ${gnome_GLADE})
+SET_DIST_LIST(gnome_gtkbuilder_DIST CMakeLists.txt ${gnome_GLADE})

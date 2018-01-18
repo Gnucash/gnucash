@@ -37,7 +37,7 @@ SET (gwengui_gtk3_EXTRA_DIST
   w_spinbox.c
   )
 
-SET_DIST_LIST(gwengui_gtk3_DIST CMakeLists.txt Makefile.am
+SET_DIST_LIST(gwengui_gtk3_DIST CMakeLists.txt 
   ${gwengui_gtk3_SOURCES}
   ${gwengui_gtk3_noinst_HEADERS}
   ${gwengui_gtk3_EXTRA_DIST}

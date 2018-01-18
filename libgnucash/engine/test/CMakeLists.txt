@@ -302,5 +302,5 @@ SET(test_engine_EXTRA_DIST
         README
 )
 
-SET_DIST_LIST(test_engine_DIST CMakeLists.txt Makefile.am
+SET_DIST_LIST(test_engine_DIST CMakeLists.txt 
         ${test_engine_SOURCES_DIST} ${test_engine_SCHEME_DIST} ${test_engine_EXTRA_DIST})

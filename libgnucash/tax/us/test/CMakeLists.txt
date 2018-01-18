@@ -19,4 +19,4 @@ GNC_ADD_TEST(test-link-module-tax-us test-link-module.c
 #)
 #GNC_ADD_SCHEME_TEST(test-load-tax-us-module.scm)
 
-SET_DIST_LIST(test_tax_us_DIST CMakeLists.txt Makefile.am test-link-module.c test-load-tax-us-module.scm)
+SET_DIST_LIST(test_tax_us_DIST CMakeLists.txt test-link-module.c test-load-tax-us-module.scm)

@@ -106,7 +106,7 @@ SET(python_bindings_DATA ${PYEXEC_FILES}
   sqlite3test.c
   timespec.i)
 
-SET_LOCAL_DIST(python_bindings_DIST_local CMakeLists.txt Makefile.am
+SET_LOCAL_DIST(python_bindings_DIST_local CMakeLists.txt 
   ${python_bindings_DATA})
 
 SET(python_bindings_DIST ${python_bindings_DIST_local}

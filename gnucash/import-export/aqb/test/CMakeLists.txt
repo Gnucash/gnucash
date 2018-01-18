@@ -27,7 +27,7 @@ set(test_aqb_LIBS
 )
 
 SET_DIST_LIST(test_aqb_DIST ${test_aqb_SOURCES} file-book.gnucash
-  file-book-hbcislot.gnucash CMakeLists.txt Makefile.am)
+  file-book-hbcislot.gnucash CMakeLists.txt )
 IF(WITH_AQBANKING)
   GNC_ADD_TEST(test-aqb
     "${test_aqb_SOURCES}"
