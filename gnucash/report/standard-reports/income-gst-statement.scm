@@ -63,10 +63,10 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
   ;; split -> bool
   ;;
   ;; additional split filter - returns #t if split must be included
-  ;; we need to exclude Closing, Link and Payment transactions
+  ;; we need to exclude Link and Payment transactions
   (let ((trans (xaccSplitGetParent split)))
-    (and (member (xaccTransGetTxnType trans) (list TXN-TYPE-NONE TXN-TYPE-INVOICE))
-         (not (xaccTransGetIsClosingTxn trans)))))
+    (memv (xaccTransGetTxnType trans) (list TXN-TYPE-NONE TXN-TYPE-INVOICE))
+    ))
 
 (define (gst-statement-options-generator)
 
@@ -115,6 +115,9 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
   (gnc:option-make-internal! options gnc:pagename-accounts "Filter Type")
   (gnc:option-make-internal! options gnc:pagename-accounts "Filter By...")
   (gnc:option-make-internal! options gnc:pagename-general "Show original currency amount")
+  ;; Disallow closing transactions
+  (gnc:option-set-value (gnc:lookup-option options gnc:pagename-filter "Closing Transactions") #f)
+  (gnc:option-make-internal! options gnc:pagename-filter "Closing Transactions")
   ;; Disable display options not being used anymore
   (gnc:option-make-internal! options gnc:pagename-display "Shares")
   (gnc:option-make-internal! options gnc:pagename-display "Price")

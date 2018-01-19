@@ -17,6 +17,7 @@
 ;; - add support for indenting for better grouping
 ;; - add defaults suitable for a reconciliation report
 ;; - add subtotal summary grid
+;; - by default, exclude closing transactions from the report
 ;;
 ;; This program is free software; you can redistribute it and/or    
 ;; modify it under the terms of the GNU General Public License as   
@@ -98,6 +99,7 @@
 (define optname-transaction-matcher-regex (N_ "Use regular expressions for transaction filter"))
 (define optname-reconcile-status (N_ "Reconcile Status"))
 (define optname-void-transactions (N_ "Void Transactions"))
+(define optname-closing-transactions (N_ "Closing transactions"))
 
 ;;Styles
 (define def:grand-total-style "grand-total")
@@ -328,6 +330,23 @@ in the Options panel."))
                 (cons 'text (_ "Both"))
                 (cons 'tip (_ "Show both (and include void transactions in totals)."))))))
 
+(define show-closing-list
+  (list
+   (cons 'exclude (list
+                   (cons 'text (_ "Exclude closing transactions"))
+                   (cons 'tip (_ "Exclude closing transactions from report."))
+                   (cons 'closing-match #f)))
+
+   (cons 'both (list
+                (cons 'text (_ "Include both closing and regular transactions"))
+                (cons 'tip (_ "Show both (and include closing transactions in totals)."))
+                (cons 'closing-match 'both)))
+
+   (cons 'include (list
+                   (cons 'text (_ "Include closing transactions only"))
+                   (cons 'tip (_ "Include only closing transactions."))
+                   (cons 'closing-match #t)))))
+
 (define reconcile-status-list
   ;; 'filter-types must be either #f (i.e. disable reconcile filter)
   ;; or a value defined as defined in Query.c
@@ -406,7 +425,6 @@ Credit Card, and Income accounts."))
       (keylist-get-info keylist (car item) 'text)
       (keylist-get-info keylist (car item) 'tip)))
    keylist))
-
 
 ;;
 ;; Set defaults for reconcilation report
@@ -544,6 +562,16 @@ tags within description, notes or memo. ")
     "k" (N_ "How to handle void transactions.")
     'non-void-only
     (keylist->vectorlist show-void-list)))
+
+  (gnc:register-trep-option
+   (gnc:make-multichoice-option
+    pagename-filter optname-closing-transactions
+    "l" (_ "By default most users should not include closing transactions in \
+a transaction report. Closing transactions are usually transfers from INCOME \
+and EXPENSE accounts to/from equity, and must usually be excluded from \
+periodic reporting.")
+    'exclude
+    (keylist->vectorlist show-closing-list)))
 
   ;; Accounts options
 
@@ -1776,6 +1804,9 @@ tags within description, notes or memo. ")
          (secondary-order (opt-val pagename-sorting optname-sec-sortorder))
          (secondary-date-subtotal (opt-val pagename-sorting optname-sec-date-subtotal))
          (void-status (opt-val pagename-filter optname-void-transactions))
+         (closing-match (keylist-get-info show-closing-list
+                                          (opt-val pagename-filter optname-closing-transactions)
+                                          'closing-match))
          (splits '())
          (custom-sort? (or (and (member primary-key DATE-SORTING-TYPES)   ; this will remain
                                 (not (eq? primary-date-subtotal 'none)))  ; until qof-query
@@ -1873,6 +1904,8 @@ tags within description, notes or memo. ")
             (else #f))
           (if reconcile-status-filter
               (xaccQueryAddClearedMatch query reconcile-status-filter QOF-QUERY-AND))
+          (if (boolean? closing-match)
+              (xaccQueryAddClosingTransMatch query closing-match QOF-QUERY-AND))
           (if (not custom-sort?)
               (begin
                 (qof-query-set-sort-order query
