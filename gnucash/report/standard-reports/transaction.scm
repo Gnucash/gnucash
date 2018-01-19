@@ -16,6 +16,7 @@
 ;;   and enable multiple data columns
 ;; - add support for indenting for better grouping
 ;; - add defaults suitable for a reconciliation report
+;; - add subtotal summary grid
 ;;
 ;; This program is free software; you can redistribute it and/or    
 ;; modify it under the terms of the GNU General Public License as   
@@ -40,6 +41,7 @@
 
 (use-modules (gnucash utilities)) 
 (use-modules (srfi srfi-1))
+(use-modules (srfi srfi-11))
 (use-modules (srfi srfi-13))
 (use-modules (ice-9 regex))
 (use-modules (gnucash gnc-module))
@@ -60,6 +62,7 @@
 
 ;;Display
 (define optname-detail-level (N_ "Detail Level"))
+(define optname-grid (N_ "Subtotal Table"))
 
 ;;Sorting
 (define pagename-sorting (N_ "Sorting"))
@@ -773,6 +776,10 @@ tags within description, notes or memo. ")
        amount-is-single?)
 
       (gnc-option-db-set-option-selectable-by-name
+       options gnc:pagename-display optname-grid
+       amount-is-single?)
+
+      (gnc-option-db-set-option-selectable-by-name
        options gnc:pagename-display (N_ "Use Full Other Account Name")
        (and disp-other-accname? detail-is-single?))
 
@@ -808,6 +815,7 @@ tags within description, notes or memo. ")
       (list (N_ "Shares")                       "k"  (_ "Display the number of shares?") #f)
       (list (N_ "Price")                        "l"  (_ "Display the shares price?") #f)
       ;; note the "Amount" multichoice option in between here
+      (list optname-grid                        "m5" (_ "Display a subtotal summary table. This requires Display/Amount being 'single") #f)
       (list (N_ "Running Balance")              "n"  (_ "Display a running balance?") #f)
       (list (N_ "Totals")                       "o"  (_ "Display the totals?") #t)))
 
@@ -1240,11 +1248,12 @@ tags within description, notes or memo. ")
                                    "</b>")))
                         calculated-cells))
             (addto! row-contents (gnc:make-html-table-cell/size
-                                    1 (+ right-indent width-left-columns width-right-columns) data)))
+                                  1 (+ right-indent width-left-columns width-right-columns) data)))
+
         (if (not (column-uses? 'subtotals-only))
             (gnc:html-table-append-row/markup! table subheading-style (reverse row-contents)))))
 
-    (define (add-subtotal-row subtotal-string subtotal-collectors subtotal-style level)
+    (define (add-subtotal-row subtotal-string subtotal-collectors subtotal-style level row col)
       (let* ((row-contents '())
              (left-indent (case level
                             ((total) 0)
@@ -1318,6 +1327,10 @@ tags within description, notes or memo. ")
                                           (gnc:make-html-table-cell/markup "total-number-cell" mon))))))
                       columns
                       merge-list)))
+
+        ;; we only wish to add the first column into the grid.
+        (if (pair? columns)
+            (set! grid (grid-add grid row col (car columns))))
 
         ;;first row
         (for-each (lambda (cell) (addto! row-contents cell))
@@ -1512,7 +1525,7 @@ tags within description, notes or memo. ")
                    1 (+ indent-level width-left-columns width-right-columns)
                    (gnc:make-html-text (gnc:html-markup-hr)))))
 
-                (add-subtotal-row (render-grand-total) total-collectors def:grand-total-style 'total)))
+                (add-subtotal-row (render-grand-total) total-collectors def:grand-total-style 'total 'row-total 'col-total)))
 
           (let* ((current (car splits))
                  (rest (cdr splits))
@@ -1563,14 +1576,21 @@ tags within description, notes or memo. ")
                                            (render-summary current 'secondary #f))
                                           secondary-subtotal-collectors
                                           def:secondary-subtotal-style
-                                          'secondary)
+                                          'secondary
+                                          (cons (primary-subtotal-comparator current)
+                                                (render-summary current 'primary #f))
+                                          (cons (secondary-subtotal-comparator current)
+                                                (render-summary current 'secondary #f)))
                         (for-each (lambda (coll) (coll 'reset #f #f))
                                   secondary-subtotal-collectors)))
                   (add-subtotal-row (total-string
                                      (render-summary current 'primary #f))
                                     primary-subtotal-collectors
                                     def:primary-subtotal-style
-                                    'primary)
+                                    'primary
+                                    (cons (primary-subtotal-comparator current)
+                                          (render-summary current 'primary #f))
+                                    'col-total)
                   (for-each (lambda (coll) (coll 'reset #f #f))
                             primary-subtotal-collectors)
                   (if next
@@ -1590,7 +1610,13 @@ tags within description, notes or memo. ")
                                               (render-summary current 'secondary #f))
                                              secondary-subtotal-collectors
                                              def:secondary-subtotal-style
-                                             'secondary)
+                                             'secondary
+                                             (if primary-subtotal-comparator
+                                                 (cons (primary-subtotal-comparator current)
+                                                       (render-summary current 'primary #f))
+                                                 (cons #f ""))
+                                             (cons (secondary-subtotal-comparator current)
+                                                   (render-summary current 'secondary #f)))
                            (for-each (lambda (coll) (coll 'reset #f #f))
                                      secondary-subtotal-collectors)
                            (if next
@@ -1598,6 +1624,8 @@ tags within description, notes or memo. ")
                                                def:secondary-subtotal-style next 'secondary)))))
 
             (do-rows-with-subtotals rest (not odd-row?)))))
+
+    (define grid (make-grid))
 
     (gnc:html-table-set-col-headers! table (concatenate (list
                                                          (gnc:html-make-empty-cells indent-level)
@@ -1614,7 +1642,70 @@ tags within description, notes or memo. ")
 
     (do-rows-with-subtotals splits #t)
 
-    table))
+    (values table
+            grid)))
+
+
+;; grid data structure
+(define (make-grid)
+  '())
+(define (grid-get grid row col)    ; grid filter - get all row/col - if #f then retrieve whole row/col
+  (filter
+   (lambda (cell)
+     (and (or (not row) (equal? row (vector-ref cell 0)))
+          (or (not col) (equal? col (vector-ref cell 1)))))
+   grid))
+(define (grid-del grid row col)    ; grid filter - del all row/col - if #f then delete whole row/col - CAREFUL!
+  (filter
+   (lambda (cell)
+     (not (and (or (not row) (equal? row (vector-ref cell 0)))
+               (or (not col) (equal? col (vector-ref cell 1))))))
+   grid))
+(define (grid-rows grid)
+  (delete-duplicates (map (lambda (cell) (vector-ref cell 0)) grid)))
+(define (grid-cols grid)
+  (delete-duplicates (map (lambda (cell) (vector-ref cell 1)) grid)))
+(define (grid-add grid row col data)            ;-> misonomer - we don't 'add' to existing data,
+  (set! grid (grid-del grid row col))           ;we simply delete old data stored at row/col and 
+  (set! grid (cons (vector row col data) grid)) ;add again. this is fine because the grid should
+  grid)                                         ;never have duplicate data in the trep.
+(define (grid->html grid list-of-rows list-of-cols)
+  (define (cell->html cell)
+    (if (pair? cell)
+        (string-append "<td class=\"number-cell\">"
+                       (string-join (map gnc:monetary->string
+                                         (vector-ref (car cell) 2))
+                                    "<br/>\n")
+                       "</td>\n")
+        "<td></td>\n"))
+  (define (row->html row list-of-cols)
+    (string-append "<tr><td>"
+                   (if (eq? row 'row-total)
+                       (_ "Grand Total")
+                       (cdr row))
+                   "</td>\n"
+                   (string-join (map
+                                 (lambda (col) (cell->html (grid-get grid row col)))
+                                 list-of-cols) "")
+                   (cell->html (grid-get grid row 'col-total))
+                   "</tr>\n"))
+  (string-append "<table class=\"summary-table\"><caption>"
+                 optname-grid
+                 "</caption><thead><tr>"
+                 "<th></th>\n"
+                 (string-join (map (lambda (col)
+                                     (string-append "<th class=\"column-heading-right\">"
+                                                    (cdr col)
+                                                    "</th>\n")) list-of-cols) "")
+                 "<th class=\"column-heading-right\">"
+                 (_ "Total")
+                 "</th>\n</tr>\n</thead><tbody>"
+                 (string-join (map (lambda (row)
+                                     (row->html row list-of-cols))
+                                   list-of-rows) "")
+                 (row->html 'row-total list-of-cols)
+                 "</tbody></table>\n"))
+
 
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Here comes the renderer function for this report.
@@ -1843,7 +1934,7 @@ tags within description, notes or memo. ")
                      document
                      (gnc:render-options-changed options))))
 
-              (let ((table (make-split-table splits options custom-calculated-cells)))
+              (let-values (((table grid) (make-split-table splits options custom-calculated-cells)))
 
                 (gnc:html-document-set-title! document report-title)
 
@@ -1855,6 +1946,17 @@ tags within description, notes or memo. ")
                             (_ "From ~a to ~a")
                             (qof-print-date begindate)
                             (qof-print-date enddate)))))
+
+                (if (and (opt-val gnc:pagename-display optname-grid)
+                         (eq? (opt-val gnc:pagename-display (N_ "Amount")) 'single))
+                    (let* ((generic<? (lambda (a b)
+                                        (cond ((string? (car a)) (string<? (car a) (car b)))
+                                              ((number? (car a)) (< (car a) (car b)))
+                                              (else (gnc:error "unknown sortvalue")))))
+                           (list-of-rows (stable-sort! (delete 'row-total (grid-rows grid)) generic<?))
+                           (list-of-cols (stable-sort! (delete 'col-total (grid-cols grid)) generic<?)))
+                      (gnc:html-document-add-object!
+                       document (grid->html grid list-of-rows list-of-cols))))
 
                 (if (eq? infobox-display 'always)
                     (gnc:html-document-add-object!
