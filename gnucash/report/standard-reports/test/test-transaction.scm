@@ -184,6 +184,7 @@
         (list "Income" (list (cons 'type ACCT-TYPE-INCOME)))
         (list "Expenses" (list (cons 'type ACCT-TYPE-EXPENSE)))
         (list "Liabilities" (list (cons 'type ACCT-TYPE-LIABILITY)))
+        (list "Equity" (list (cons 'type ACCT-TYPE-EQUITY)))
         ))
 
 (define (null-test)
@@ -202,6 +203,7 @@
          (income (cdr (assoc "Income" account-alist)))
          (expense (cdr (assoc "Expenses" account-alist)))
          (liability (cdr (assoc "Liabilities" account-alist)))
+         (equity (cdr (assoc "Equity" account-alist)))
          (YEAR (gnc:time64-get-year (gnc:get-today)))
          (foreign1 (gnc-commodity-table-lookup
                     (gnc-commodity-table-get-table (gnc-account-get-book bank))
@@ -287,6 +289,10 @@
       (xaccSplitSetAmount split-3 20)
       (xaccTransSetNotes txn "multisplit")
       (xaccTransCommitEdit txn))
+
+    ;; A single closing transaction
+    (let ((closing-txn (env-transfer env 31 12 1999 expense equity 111 #:description "Closing")))
+      (xaccTransSetIsClosingTxn closing-txn #t))
 
     ;; A couple of transactions which involve foreign currency
     ;; conversions. We'll set the currencies to GBP and USD.
@@ -464,7 +470,31 @@
       (let ((sxml (options->sxml options "both void and non-void")))
         (test-equal "filter void-transactions only, sum = $11.00"
           '("$11.00")
-          (get-row-col sxml -1 -1))))
+          (get-row-col sxml -1 -1)))
+
+      ;; Test Closing-Txn Filters
+      (set! options (default-testing-options))
+      (set-option! options "Accounts" "Accounts" (list expense))
+      (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 01 01 1911)))
+      (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 31 12 2012)))      
+      (set-option! options "Filter" "Closing transactions" 'exclude-closing)
+      (let ((sxml (options->sxml options "filter closing - exclude closing txns ")))
+        (test-equal "filter exclude closing. bal = $111"
+          '("$111.00")
+          (get-row-col sxml -1 -1)))
+
+      (set-option! options "Filter" "Closing transactions" 'closing-only)
+      (let ((sxml (options->sxml options "filter closing - include closing only")))
+        (test-equal "filter closing only. bal = -$111"
+          '("-$111.00")
+          (get-row-col sxml -1 -1)))
+
+      (set-option! options "Filter" "Closing transactions" 'include-both)
+      (let ((sxml (options->sxml options "filter closing - include both")))
+        (test-equal "filter include both. bal = $0"
+          '("$0.00")
+          (get-row-col sxml -1 -1)))
+      )
 
     (test-end "accounts selectors and filtering")
 
