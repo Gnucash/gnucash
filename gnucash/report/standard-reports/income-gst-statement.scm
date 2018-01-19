@@ -37,6 +37,7 @@
 ;; Define the strings here to avoid typos and make changes easier.
 (define reportname (N_ "Income & GST Statement"))
 (define pagename-sorting (N_ "Sorting"))
+(define pagename-filter (N_ "Filter"))
 (define TAX-SETUP-DESC
   (string-append
    (_ "This report is useful to calculate periodic business tax payable/receivable from
@@ -63,10 +64,9 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
   ;; split -> bool
   ;;
   ;; additional split filter - returns #t if split must be included
-  ;; we need to exclude Closing, Link and Payment transactions
-  (let ((trans (xaccSplitGetParent split)))
-    (and (member (xaccTransGetTxnType trans) (list TXN-TYPE-NONE TXN-TYPE-INVOICE))
-         (not (xaccTransGetIsClosingTxn trans)))))
+  ;; we need to exclude Link and Payment transactions
+  (memv (xaccTransGetTxnType (xaccSplitGetParent split))
+        (list TXN-TYPE-NONE TXN-TYPE-INVOICE)))
 
 (define (gst-statement-options-generator)
 
@@ -115,6 +115,9 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
   (gnc:option-make-internal! options gnc:pagename-accounts "Filter Type")
   (gnc:option-make-internal! options gnc:pagename-accounts "Filter By...")
   (gnc:option-make-internal! options gnc:pagename-general "Show original currency amount")
+  ;; Disallow closing transactions
+  (gnc:option-set-value (gnc:lookup-option options pagename-filter "Closing transactions") 'exclude-closing)
+  (gnc:option-make-internal! options pagename-filter "Closing transactions")
   ;; Disable display options not being used anymore
   (gnc:option-make-internal! options gnc:pagename-display "Shares")
   (gnc:option-make-internal! options gnc:pagename-display "Price")
