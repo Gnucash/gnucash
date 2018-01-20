@@ -85,7 +85,7 @@
 #include "Scrub3.h"
 %}
 
-%include <timespec.i>
+%include <time64.i>
 
 %include <base-typemaps.i>
 

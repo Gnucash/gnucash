@@ -34,8 +34,8 @@ class TestAccount( AccountSession ):
         tx = Transaction(self.book)
         tx.BeginEdit()
         tx.SetCurrency(self.currency)
-        tx.SetDateEnteredTS(datetime.now())
-        tx.SetDatePostedTS(datetime.now())
+        tx.SetDateEnteredSecs(datetime.now())
+        tx.SetDatePostedSecs(datetime.now())
 
         s1a = Split(self.book)
         s1a.SetParent(tx)

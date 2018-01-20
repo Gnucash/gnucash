@@ -29,6 +29,7 @@
 
 #include <config.h>
 
+#include <stdint.h>
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <qofinstance-p.h>
@@ -136,6 +137,8 @@ G_DEFINE_TYPE(GncInvoice, gnc_invoice, QOF_TYPE_INSTANCE);
 static void
 gnc_invoice_init(GncInvoice* inv)
 {
+    inv->date_posted = INT64_MAX;
+    inv->date_opened = INT64_MAX;
 }
 
 static void
@@ -807,13 +810,13 @@ qofInvoiceGetBillTo (GncInvoice *invoice)
 
 time64 gncInvoiceGetDateOpened (const GncInvoice *invoice)
 {
-    if (!invoice) return 0;
+    if (!invoice) return INT64_MAX;
     return invoice->date_opened;
 }
 
 time64 gncInvoiceGetDatePosted (const GncInvoice *invoice)
 {
-    if (!invoice) return 0;
+    if (!invoice) return INT64_MAX;
     return invoice->date_posted;
 }
 
@@ -1718,7 +1721,7 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables)
     invoice->posted_acc = NULL;
     invoice->posted_txn = NULL;
     invoice->posted_lot = NULL;
-    invoice->date_posted = 0;
+    invoice->date_posted = INT64_MAX;
 
     /* if we've been asked to reset the tax tables, then do so */
     if (reset_tax_tables)
@@ -1855,7 +1858,7 @@ gncInvoiceApplyPayment (const GncInvoice *invoice, Transaction *txn,
 
 static gboolean gncInvoiceDateExists (time64 date)
 {
-    return date;
+    return date != INT64_MAX;
 }
 
 gboolean gncInvoiceIsPosted (const GncInvoice *invoice)
