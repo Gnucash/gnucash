@@ -142,8 +142,6 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
     GNCCurrencyAcc *non_curr_accum = NULL;
     GList *children, *node;
     gboolean non_currency = FALSE;
-    Timespec end_timespec;
-    Timespec start_timespec;
 
     if (parent == NULL) return;
 
@@ -190,12 +188,11 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
         case ACCT_TYPE_PAYABLE:
         case ACCT_TYPE_RECEIVABLE:
             end_amount = xaccAccountGetBalanceAsOfDate(account, options.end_date);
-            timespecFromTime64(&end_timespec, options.end_date);
             end_amount_default_currency =
                 gnc_pricedb_convert_balance_nearest_price (pricedb, end_amount,
                                                            account_currency,
                                                            to_curr,
-                                                           end_timespec);
+                                                           options.end_date);
 
             if (!non_currency || options.non_currency)
             {
@@ -226,20 +223,18 @@ gnc_ui_accounts_recurse (Account *parent, GList **currency_list,
         case ACCT_TYPE_INCOME:
         case ACCT_TYPE_EXPENSE:
             start_amount = xaccAccountGetBalanceAsOfDate(account, options.start_date);
-            timespecFromTime64(&start_timespec, options.start_date);
             start_amount_default_currency =
                 gnc_pricedb_convert_balance_nearest_price (pricedb,
                                                            start_amount,
                                                            account_currency,
                                                            to_curr,
-                                                           start_timespec);
+                                                           options.start_date);
             end_amount = xaccAccountGetBalanceAsOfDate(account, options.end_date);
-            timespecFromTime64(&end_timespec, options.end_date);
             end_amount_default_currency =
                 gnc_pricedb_convert_balance_nearest_price (pricedb, end_amount,
                                                            account_currency,
                                                            to_curr,
-                                                           end_timespec);
+                                                           options.end_date);
 
             if (!non_currency || options.non_currency)
             {
