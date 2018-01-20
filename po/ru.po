@@ -4645,12 +4645,11 @@ msgid "Yearly"
 msgstr "Ежегодно"
 
 #: ../src/engine/ScrubBusiness.c:522
-#, fuzzy
 msgid ""
 "Please delete this transaction. Explanation at https://wiki.gnucash.org/wiki/"
 "Business_Features_Issues#Double_posting"
 msgstr ""
-"Удалите эту проводку. Объяснение: http://wiki.gnucash.org/wiki/"
+"Пожалуйста удалите эту проводку. Объяснение: http://wiki.gnucash.org/wiki/"
 "Business_Features_Issues#Double_Posting"
 
 #: ../src/engine/ScrubBusiness.c:592
@@ -14738,7 +14737,7 @@ msgstr "дней."
 #, fuzzy
 msgctxt "Weekly"
 msgid "Every"
-msgstr "Каждый"
+msgstr "Каждые"
 
 #: ../src/gnome-utils/gtkbuilder/gnc-frequency.glade.h:11
 #, fuzzy
@@ -22201,7 +22200,7 @@ msgstr "Выберите стиль оформления отчёта."
 
 #: ../src/report/report-system/report.scm:257
 msgid "stylesheet."
-msgstr "лист cтилей."
+msgstr "таблица стилей."
 
 #: ../src/report/report-system/report.scm:860
 msgid ""
@@ -22383,7 +22382,7 @@ msgstr "Максимум кусков"
 #: ../src/report/standard-reports/net-linechart.scm:57
 #: ../src/report/standard-reports/price-scatter.scm:59
 msgid "Plot Width"
-msgstr "Ширина рисования"
+msgstr "Ширина графика"
 
 #: ../src/report/standard-reports/account-piecharts.scm:76
 #: ../src/report/standard-reports/average-balance.scm:130
@@ -22394,7 +22393,7 @@ msgstr "Ширина рисования"
 #: ../src/report/standard-reports/net-linechart.scm:58
 #: ../src/report/standard-reports/price-scatter.scm:60
 msgid "Plot Height"
-msgstr "Высота рисования"
+msgstr "Высота графика"
 
 #: ../src/report/standard-reports/account-piecharts.scm:77
 #: ../src/report/standard-reports/category-barchart.scm:89
@@ -25477,7 +25476,7 @@ msgid ""
 "You can learn more about writing scheme at &lt;http://www.scheme.com/tspl2d/"
 "&gt;."
 msgstr ""
-"О создании схем вы можете узнать больше здесь: &lt;http://www.scheme.com/"
+"О програмировании на Scheme вы можете узнать больше здесь: &lt;http://www.scheme.com/"
 "tspl2d/&gt;."
 
 #: ../src/report/utility-reports/hello-world.scm:363
