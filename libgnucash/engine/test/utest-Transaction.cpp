@@ -119,8 +119,8 @@ setup (Fixture *fixture, gconstpointer pData)
     QofBook *book = qof_book_new ();
     TransMockBackend *mbe = new TransMockBackend;
     Transaction *txn;
-    Timespec entered = gnc_dmy2timespec (20, 4, 2012);
-    Timespec posted = gnc_dmy2timespec (21, 4, 2012);
+    time64 entered = gnc_dmy2time64 (20, 4, 2012);
+    time64 posted = gnc_dmy2time64 (21, 4, 2012);
     auto frame = new KvpFrame ();
 
     qof_book_set_backend (book, mbe);
@@ -134,10 +134,8 @@ setup (Fixture *fixture, gconstpointer pData)
     fixture->acc2 = xaccMallocAccount (book);
     xaccAccountSetCommodity (fixture->acc1, fixture->comm);
     xaccAccountSetCommodity (fixture->acc2, fixture->curr);
-    txn->date_posted.tv_sec = posted.tv_sec;
-    txn->date_posted.tv_nsec = posted.tv_nsec;
-    txn->date_entered.tv_sec = entered.tv_sec;
-    txn->date_entered.tv_nsec = entered.tv_nsec;
+    txn->date_posted = posted;
+    txn->date_entered = entered;
     split1->memo = static_cast<char*>(CACHE_INSERT ("foo"));
     split1->action = static_cast<char*>(CACHE_INSERT ("bar"));
     split1->amount = gnc_numeric_create (100000, 1000);
@@ -343,10 +341,8 @@ test_gnc_transaction_init ()
     g_assert_cmpstr (txn->description, ==, "");
     g_assert (txn->common_currency == NULL);
     g_assert (txn->splits == NULL);
-    g_assert_cmpint (txn->date_entered.tv_sec, ==, 0);
-    g_assert_cmpint (txn->date_entered.tv_nsec, ==, 0);
-    g_assert_cmpint (txn->date_posted.tv_sec, ==, 0);
-    g_assert_cmpint (txn->date_posted.tv_nsec, ==, 0);
+    g_assert_cmpint (txn->date_entered, ==, 0);
+    g_assert_cmpint (txn->date_posted, ==, 0);
     g_assert_cmpint (txn->marker, ==, 0);
     g_assert (txn->orig == NULL);
 
@@ -416,10 +412,8 @@ test_gnc_transaction_set_get_property (Fixture *fixture, gconstpointer pData)
     g_assert_cmpstr (txn->num, ==, "");
     g_assert_cmpstr (txn->description, ==, "");
     g_assert (txn->common_currency == NULL);
-    g_assert_cmpint (txn->date_entered.tv_sec, ==, 0);
-    g_assert_cmpint (txn->date_entered.tv_nsec, ==, 0);
-    g_assert_cmpint (txn->date_posted.tv_sec, ==, 0);
-    g_assert_cmpint (txn->date_posted.tv_nsec, ==, 0);
+    g_assert_cmpint (txn->date_entered, ==, 0);
+    g_assert_cmpint (txn->date_posted, ==, 0);
     /* Kick up the edit counter to keep from committing */
     xaccTransBeginEdit (txn);
     g_object_set (G_OBJECT (txn),
@@ -433,8 +427,8 @@ test_gnc_transaction_set_get_property (Fixture *fixture, gconstpointer pData)
     g_assert_cmpstr (txn->num, ==, num);
     g_assert_cmpstr (txn->description, ==, desc);
     g_assert (txn->common_currency == curr);
-    g_assert (timespec_equal (&(txn->date_entered), &now));
-    g_assert (timespec_equal (&(txn->date_posted), &now));
+    g_assert (txn->date_entered == now.tv_sec);
+    g_assert (txn->date_posted == now.tv_sec);
 
     g_object_get (G_OBJECT (txn),
                   "num", &t_num,
@@ -447,13 +441,12 @@ test_gnc_transaction_set_get_property (Fixture *fixture, gconstpointer pData)
     g_assert_cmpstr (t_num, ==, num);
     g_assert_cmpstr (t_desc, ==, desc);
     g_assert (t_curr == curr);
-    g_assert (timespec_equal (t_entered, &now));
-    g_assert (timespec_equal (t_posted, &now));
+    g_assert (t_entered->tv_sec == now.tv_sec);
+    g_assert (t_posted->tv_sec == now.tv_sec);
     xaccTransRollbackEdit (txn);
     test_destroy (txn);
     test_destroy (curr);
     qof_book_destroy (book);
-    g_free (t_entered);
 }
 /* gnc_transaction_class_init
  * xaccInitTransaction
@@ -554,8 +547,8 @@ dupe_trans (const Transaction *from)// Local: 1:0:0
 static void
 test_dupe_trans (Fixture *fixture, gconstpointer pData)
 {
-    Timespec posted = gnc_dmy2timespec (12, 7, 2011);
-    Timespec entered = gnc_dmy2timespec (14, 7, 2011);
+    time64 posted = gnc_dmy2time64 (12, 7, 2011);
+    time64 entered = gnc_dmy2time64 (14, 7, 2011);
     Transaction *newtxn = NULL, *oldtxn = fixture->txn;
     QofBook *old_book = qof_instance_get_book (QOF_INSTANCE (oldtxn));
     GList *newnode, *oldnode = oldtxn->splits;
@@ -579,8 +572,8 @@ test_dupe_trans (Fixture *fixture, gconstpointer pData)
     }
     g_assert (newnode == NULL);
     g_assert (oldnode == NULL);
-    g_assert (timespec_equal (&(newtxn->date_posted), &posted));
-    g_assert (timespec_equal (&(newtxn->date_entered), &entered));
+    g_assert (newtxn->date_posted == posted);
+    g_assert (newtxn->date_entered == entered);
     g_assert (qof_instance_version_cmp (QOF_INSTANCE (newtxn),
                                         QOF_INSTANCE (oldtxn)) == 0);
     g_assert (newtxn->orig == NULL);
@@ -600,8 +593,8 @@ xaccTransClone (const Transaction *from)// C: 1  Local: 1:0:0
 static void
 test_xaccTransClone (Fixture *fixture, gconstpointer pData)
 {
-    Timespec posted = gnc_dmy2timespec (12, 7, 2011);
-    Timespec entered = gnc_dmy2timespec (14, 7, 2011);
+    time64 posted = gnc_dmy2time64 (12, 7, 2011);
+    time64 entered = gnc_dmy2time64 (14, 7, 2011);
     Transaction *newtxn = NULL, *oldtxn = fixture->txn;
     QofBook *old_book = qof_instance_get_book (QOF_INSTANCE (oldtxn));
     GList *newnode, *oldnode;
@@ -631,8 +624,8 @@ test_xaccTransClone (Fixture *fixture, gconstpointer pData)
     }
     g_assert (newnode == NULL);
     g_assert (oldnode == NULL);
-    g_assert (timespec_equal (&(newtxn->date_posted), &posted));
-    g_assert (timespec_equal (&(newtxn->date_entered), &entered));
+    g_assert (newtxn->date_posted == posted);
+    g_assert (newtxn->date_entered == entered);
     g_assert (qof_instance_version_cmp (QOF_INSTANCE (newtxn),
                                         QOF_INSTANCE (oldtxn)) == 0);
     g_assert_cmpint (qof_instance_get_version_check (newtxn), ==,
@@ -665,16 +658,16 @@ test_xaccTransCopyFromClipBoard (Fixture *fixture, gconstpointer pData)
     QofBook *book = qof_instance_get_book (QOF_INSTANCE (txn));
     Account *acc1 = xaccMallocAccount (book);
     Transaction *to_txn = xaccMallocTransaction (book);
-    Timespec now = timespec_now();
-    Timespec never = {0, 0};
+    time64 now = gnc_time (nullptr);
+    time64 never = 0;
     auto to_frame = to_txn->inst.kvp_data;
 
     xaccAccountSetCommodity (acc1, fixture->comm);
     xaccTransCopyFromClipBoard (txn, to_txn, fixture->acc1, acc1, FALSE);
     g_assert (gnc_commodity_equal (txn->common_currency,
                                    to_txn->common_currency));
-    g_assert (timespec_equal (&(to_txn->date_entered), &now));
-    g_assert (timespec_equal (&(to_txn->date_posted), &txn->date_posted));
+    g_assert (to_txn->date_entered == now);
+    g_assert (to_txn->date_posted == txn->date_posted);
     g_assert_cmpstr (txn->num, ==, to_txn->num);
     /* Notes also tests that KVP is copied */
     g_assert_cmpstr (xaccTransGetNotes (txn), ==, xaccTransGetNotes (to_txn));
@@ -692,15 +685,15 @@ test_xaccTransCopyFromClipBoard_no_start (Fixture *fixture, gconstpointer pData)
     QofBook *book = qof_instance_get_book (QOF_INSTANCE (txn));
     Account *acc1 = xaccMallocAccount (book);
     Transaction *to_txn = xaccMallocTransaction (book);
-    Timespec now = timespec_now();
-    Timespec never = {0, 0};
+    time64 now = gnc_time (nullptr);
+    time64 never = 0;
 
     xaccAccountSetCommodity (acc1, fixture->comm);
     xaccTransCopyFromClipBoard (txn, to_txn, fixture->acc1, acc1, TRUE);
     g_assert (gnc_commodity_equal (txn->common_currency,
                                    to_txn->common_currency));
-    g_assert (timespec_equal (&(to_txn->date_entered), &now));
-    g_assert (timespec_equal (&(to_txn->date_posted), &never));
+    g_assert (to_txn->date_entered == now);
+    g_assert (to_txn->date_posted == never);
     g_assert_cmpstr (to_txn->num, ==, txn->num);
     /* Notes also tests that KVP is copied */
     g_assert_cmpstr (xaccTransGetNotes (txn), ==, xaccTransGetNotes (to_txn));
@@ -736,10 +729,8 @@ test_xaccFreeTransaction (Fixture *fixture, gconstpointer pData)
     g_assert (txn->splits == NULL);
     g_assert_cmpint (GPOINTER_TO_INT(txn->num), ==, 1);
     g_assert (txn->description == NULL);
-    g_assert_cmpint (txn->date_entered.tv_sec, ==, 0);
-    g_assert_cmpint (txn->date_entered.tv_nsec, ==, 0);
-    g_assert_cmpint (txn->date_posted.tv_sec, ==, 0);
-    g_assert_cmpint (txn->date_posted.tv_nsec, ==, 0);
+    g_assert_cmpint (txn->date_entered, ==, 0);
+    g_assert_cmpint (txn->date_posted, ==, 0);
     g_assert_cmpint (GPOINTER_TO_INT(orig->num), ==, 1);
     g_assert (txn->orig == NULL);
     test_destroy (orig);
@@ -818,13 +809,13 @@ test_xaccTransEqual (Fixture *fixture, gconstpointer pData)
     g_assert (!xaccTransEqual (clone, txn0, TRUE, FALSE, TRUE, TRUE));
     g_assert_cmpint (check->hits, ==, 2);
 
-    gnc_timespec_to_iso8601_buff (clone->date_posted, posted);
-    gnc_timespec_to_iso8601_buff (clone->date_entered, entered);
+    gnc_time64_to_iso8601_buff (clone->date_posted, posted);
+    gnc_time64_to_iso8601_buff (clone->date_entered, entered);
     xaccTransBeginEdit (clone);
     cleanup->msg = g_strdup_printf (cleanup_fmt, clone->orig);
     /* This puts the value of the first split back, but leaves the amount changed */
     xaccTransSetCurrency (clone, fixture->curr);
-    clone->date_posted.tv_sec = txn0->date_entered.tv_sec;
+    clone->date_posted = txn0->date_entered;
     xaccTransCommitEdit (clone);
     g_free (cleanup->msg);
     g_free (check->msg);
@@ -834,8 +825,8 @@ test_xaccTransEqual (Fixture *fixture, gconstpointer pData)
 
     xaccTransBeginEdit (clone);
     cleanup->msg = g_strdup_printf (cleanup_fmt, clone->orig);
-    clone->date_posted.tv_sec = txn0->date_posted.tv_sec;
-    clone->date_entered.tv_sec = txn0->date_posted.tv_sec;
+    clone->date_posted = txn0->date_posted;
+    clone->date_entered = txn0->date_posted;
     xaccTransCommitEdit (clone);
     g_free (cleanup->msg);
     g_free (check->msg);
@@ -845,7 +836,7 @@ test_xaccTransEqual (Fixture *fixture, gconstpointer pData)
 
     xaccTransBeginEdit (clone);
     cleanup->msg = g_strdup_printf (cleanup_fmt, clone->orig);
-    clone->date_entered.tv_sec = txn0->date_entered.tv_sec;
+    clone->date_entered = txn0->date_entered;
     clone->num = g_strdup("123");
     xaccTransCommitEdit (clone);
     g_free (cleanup->msg);
@@ -1584,7 +1575,7 @@ test_xaccTransCommitEdit (void)
     gnc_commodity *comm = gnc_commodity_new (book, "Wildebeest Fund",
                           "FUND", "WBFXX", "", 1000);
 
-    Timespec posted = gnc_dmy2timespec (21, 4, 2012);
+    time64 posted = gnc_dmy2time64 (21, 4, 2012);
 
     auto sig_1_modify = test_signal_new (QOF_INSTANCE (split1),
                                QOF_EVENT_MODIFY, NULL);
@@ -1596,8 +1587,7 @@ test_xaccTransCommitEdit (void)
 
     xaccAccountSetCommodity (acc1, comm);
     xaccAccountSetCommodity (acc2, curr);
-    txn->date_posted.tv_sec = posted.tv_sec;
-    txn->date_posted.tv_nsec = posted.tv_nsec;
+    txn->date_posted = posted;
     split1->memo = static_cast<char*>(CACHE_INSERT ("foo"));
     split1->action = static_cast<char*>(CACHE_INSERT ("bar"));
     split1->amount = gnc_numeric_create (100000, 1000);
@@ -1620,7 +1610,7 @@ test_xaccTransCommitEdit (void)
     /* Setup's done, now test: */
     xaccTransCommitEdit (txn);
 
-    g_assert_cmpint (txn->date_entered.tv_sec, !=, 0);
+    g_assert_cmpint (txn->date_entered, !=, 0);
     /* Signals make sure that trans_cleanup_commit got called */
     g_assert_cmpint (test_signal_return_hits (sig_1_modify), ==, 1);
     g_assert_cmpint (test_signal_return_hits (sig_2_modify), ==, 1);
@@ -1653,13 +1643,13 @@ test_xaccTransRollbackEdit (Fixture *fixture, gconstpointer pData)
     Transaction *txn = fixture->txn;
     Transaction *orig = NULL;
     QofBook *book = qof_instance_get_book (txn);
-    Timespec new_post = timespec_now ();
-    Timespec new_entered = timespecCanonicalDayTime (timespec_now ());
-    Timespec orig_post = txn->date_posted;
-    Timespec orig_entered = txn->date_entered;
+    time64 new_post = gnc_time (nullptr);
+    time64 new_entered = time64CanonicalDayTime (new_post);
+    time64 orig_post = txn->date_posted;
+    time64 orig_entered = txn->date_entered;
     KvpFrame *base_frame = NULL;
     auto sig_account = test_signal_new (QOF_INSTANCE (fixture->acc1),
-                              GNC_EVENT_ITEM_CHANGED, NULL);
+            GNC_EVENT_ITEM_CHANGED, NULL);
     auto mbe = static_cast<TransMockBackend*>(qof_book_get_backend (book));
     auto split_00 = static_cast<Split*>(txn->splits->data);
     auto split_01 = static_cast<Split*>(txn->splits->next->data);
@@ -1699,8 +1689,8 @@ test_xaccTransRollbackEdit (Fixture *fixture, gconstpointer pData)
     g_assert_cmpstr (txn->description, ==, "Waldo Pepper");
     g_assert (txn->inst.kvp_data == base_frame);
     g_assert (txn->common_currency == fixture->curr);
-    g_assert (timespec_equal (&(txn->date_posted), &orig_post));
-    g_assert (timespec_equal (&(txn->date_entered), &orig_entered));
+    g_assert (txn->date_posted == orig_post);
+    g_assert (txn->date_entered == orig_entered);
     g_assert_cmpuint (test_signal_return_hits (sig_account), ==, 1);
     g_assert_cmpuint (g_list_length (txn->splits), ==, 2);
     g_assert_cmpint (GPOINTER_TO_INT(split_02->memo), ==, 1);
@@ -1765,14 +1755,14 @@ test_xaccTransOrder_num_action (Fixture *fixture, gconstpointer pData)
                      qof_instance_guid_compare (txnA, txnB));
     txnB->description = static_cast<char*>(CACHE_INSERT ("Salt Peanuts"));
     g_assert_cmpint (xaccTransOrder_num_action (txnA, NULL, txnB, NULL), >=, 1);
-    txnB->date_entered.tv_sec += 1;
+    txnB->date_entered += 1;
     g_assert_cmpint (xaccTransOrder_num_action (txnA, NULL, txnB, NULL), ==, -1);
     txnB->num = static_cast<char*>(CACHE_INSERT ("101"));
     g_assert_cmpint (xaccTransOrder_num_action (txnA, NULL, txnB, NULL), ==, 1);
     txnB->num = static_cast<char*>(CACHE_INSERT ("one-oh-one"));
     g_assert_cmpint (xaccTransOrder_num_action (txnA, NULL, txnB, NULL), ==, 1);
     g_assert_cmpint (xaccTransOrder_num_action (txnA, "24", txnB, "42"), ==, -1);
-    txnB->date_posted.tv_sec -= 1;
+    txnB->date_posted -= 1;
     g_assert_cmpint (xaccTransOrder_num_action (txnA, "24", txnB, "42"), ==, 1);
 
     fixture->func->xaccFreeTransaction (txnB);
@@ -1948,8 +1938,7 @@ test_xaccTransScrubGainsDate_no_dirty (GainsFixture *fixture,
 
     fixture->base.func->xaccTransScrubGainsDate (fixture->base.txn);
 
-    g_assert (!timespec_equal (&(fixture->base.txn->date_posted),
-                               &(fixture->gains_txn->date_posted)));
+    g_assert (fixture->base.txn->date_posted != fixture->gains_txn->date_posted);
     g_assert_cmphex (base_split->gains & GAINS_STATUS_DATE_DIRTY, ==, 0);
     g_assert_cmphex (base_split->gains_split->gains & GAINS_STATUS_DATE_DIRTY,
                      ==, 0);
@@ -1967,8 +1956,7 @@ test_xaccTransScrubGainsDate_base_dirty (GainsFixture *fixture,
 
     fixture->base.func->xaccTransScrubGainsDate (fixture->base.txn);
 
-    g_assert (timespec_equal (&(fixture->base.txn->date_posted),
-                              &(fixture->gains_txn->date_posted)));
+    g_assert (fixture->base.txn->date_posted == fixture->gains_txn->date_posted);
     g_assert_cmphex (base_split->gains & GAINS_STATUS_DATE_DIRTY, ==, 0);
     g_assert_cmphex (base_split->gains_split->gains & GAINS_STATUS_DATE_DIRTY,
                      ==, 0);
@@ -1986,8 +1974,7 @@ test_xaccTransScrubGainsDate_gains_dirty (GainsFixture *fixture,
 
     fixture->base.func->xaccTransScrubGainsDate (fixture->base.txn);
 
-    g_assert (timespec_equal (&(fixture->base.txn->date_posted),
-                              &(fixture->gains_txn->date_posted)));
+    g_assert (fixture->base.txn->date_posted == fixture->gains_txn->date_posted);
     g_assert_cmphex (base_split->gains & GAINS_STATUS_DATE_DIRTY, ==, 0);
     g_assert_cmphex (base_split->gains_split->gains & GAINS_STATUS_DATE_DIRTY,
                      ==, 0);

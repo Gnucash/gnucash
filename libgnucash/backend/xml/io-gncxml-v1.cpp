@@ -2350,7 +2350,7 @@ txn_rest_date_posted_end_handler (gpointer data_for_children,
                                   gpointer* result, const gchar* tag)
 {
     Transaction* t = (Transaction*) parent_data;
-    TimespecParseInfo* info = (TimespecParseInfo*) data_for_children;
+    Time64ParseInfo* info = (Time64ParseInfo*) data_for_children;
 
     g_return_val_if_fail (info, FALSE);
     if (!t || !timespec_parse_ok (info))
@@ -2359,7 +2359,7 @@ txn_rest_date_posted_end_handler (gpointer data_for_children,
         return (FALSE);
     }
 
-    xaccTransSetDatePostedTS (t, & (info->ts));
+    xaccTransSetDatePostedSecs (t, info->time);
     g_free (info);
     return (TRUE);
 }
@@ -2382,7 +2382,7 @@ txn_rest_date_entered_end_handler (gpointer data_for_children,
                                    gpointer* result, const gchar* tag)
 {
     Transaction* t = (Transaction*) parent_data;
-    TimespecParseInfo* info = (TimespecParseInfo*) data_for_children;
+    Time64ParseInfo* info = (Time64ParseInfo*) data_for_children;
 
     g_return_val_if_fail (info, FALSE);
     if (!t || !timespec_parse_ok (info))
@@ -2391,7 +2391,7 @@ txn_rest_date_entered_end_handler (gpointer data_for_children,
         return (FALSE);
     }
 
-    xaccTransSetDateEnteredTS (t, & (info->ts));
+    xaccTransSetDateEnteredSecs (t, info->time);
     g_free (info);
     return (TRUE);
 }
@@ -2713,7 +2713,7 @@ txn_restore_split_reconcile_date_end_handler (gpointer data_for_children,
                                               gpointer* result, const gchar* tag)
 {
     Split* s = (Split*) parent_data;
-    TimespecParseInfo* info = (TimespecParseInfo*) data_for_children;
+    Time64ParseInfo* info = (Time64ParseInfo*) data_for_children;
 
     g_return_val_if_fail (info, FALSE);
     if (!s || !timespec_parse_ok (info))
@@ -2722,7 +2722,7 @@ txn_restore_split_reconcile_date_end_handler (gpointer data_for_children,
         return (FALSE);
     }
 
-    xaccSplitSetDateReconciledTS (s, & (info->ts));
+    xaccSplitSetDateReconciledSecs (s, info->time);
     g_free (info);
     return (TRUE);
 }
@@ -2959,9 +2959,10 @@ price_parse_xml_sub_node (GNCPrice* p, xmlNodePtr sub_node, QofBook* book)
     }
     else if (g_strcmp0 ("price:time", (char*)sub_node->name) == 0)
     {
-        Timespec t = dom_tree_to_timespec (sub_node);
-        if (!dom_tree_valid_timespec (&t, sub_node->name)) return FALSE;
-        gnc_price_set_time (p, t);
+        time64 time = dom_tree_to_time64 (sub_node);
+        if (!dom_tree_valid_time64 (time, sub_node->name)) return FALSE;
+        Timespec ts = {time, 0};
+        gnc_price_set_time (p, ts);
     }
     else if (g_strcmp0 ("price:source", (char*)sub_node->name) == 0)
     {

@@ -1474,33 +1474,23 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
             show_extra_dates = TRUE;
 
         if (is_trow1) {
-            Timespec ts = {0,0};
-            xaccTransGetDatePostedTS (trans, &ts);
+            Timespec ts = {xaccTransRetDatePosted (trans),0};
             //If the time returned by xaccTransGetDatePostedTS is 0 then assume it
             //is a new transaction and set the time to current time to show current
             //date on new transactions
             if (ts.tv_sec == 0)
-            {
                 ts.tv_sec = gnc_time (NULL);
-                //xaccTransSetDatePostedSecs (trans, ts.tv_sec);
-            }//if
             s = gnc_print_date (ts);
             editable = TRUE;
         }
         else if (is_trow2 && show_extra_dates) {
-            Timespec ts = {0,0};
-
+            Timespec ts = {xaccTransRetDateEntered (trans),0};
             g_object_set (cell, "cell-background", YELLOWCELL, (gchar*)NULL);
-
-            xaccTransGetDateEnteredTS (trans, &ts);
             //If the time returned by xaccTransGetDateEnteredTS is 0 then assume it
             //is a new transaction and set the time to current time to show current
             //date on new transactions
             if (ts.tv_sec == 0)
-            {
                 ts.tv_sec = gnc_time (NULL);
-                //xaccTransSetDateEnteredSecs (trans, ts.tv_sec);
-            }//if
             s = gnc_print_date (ts);
             editable = FALSE;
         }
@@ -1559,12 +1549,10 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
             g_object_set (cell, "cell-background", "white", (gchar*)NULL);
 
         if (is_trow1) {
-            Timespec ts = {0,0};
-
             /* Only print the due date for invoice transactions */
             if (type == TXN_TYPE_INVOICE)
             {
-                xaccTransGetDateDueTS (trans, &ts);
+                Timespec ts = {xaccTransRetDateDue (trans), 0};
                 s = gnc_print_date (ts);
                 editable = FALSE;
             }
@@ -2518,21 +2506,18 @@ gtv_sr_begin_edit (GncTreeViewSplitReg *view, Transaction *trans)
 
     if (trans != view->priv->dirty_trans)
     {
-        Timespec ts = {0,0};
-        xaccTransGetDatePostedTS (trans, &ts);
-
+        time64 time = xaccTransRetDatePosted (trans);
         if (!xaccTransIsOpen (trans))
             xaccTransBeginEdit (trans);
         view->priv->dirty_trans = trans;
 
-        if (ts.tv_sec == 0)
+        if (!time)
         {
             //If the time returned by xaccTransGetDatePostedTS is 0 then assume it
             //is a new transaction and set the time to current time to show current
             //date on new transactions
-
-            ts.tv_sec = gnc_time (NULL);
-            xaccTransSetDatePostedSecs (trans, ts.tv_sec);
+            time = gnc_time (NULL);
+            xaccTransSetDatePostedSecs (trans, time);
         }
     }
     LEAVE(" ");

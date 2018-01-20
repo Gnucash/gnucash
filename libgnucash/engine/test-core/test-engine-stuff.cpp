@@ -227,6 +227,15 @@ get_random_glist_depth (gint depth)
 /* ========================================================== */
 /* Time/Date, GncGUID data stuff */
 
+time64
+get_random_time (void)
+{
+    time64 ret {0};
+    while (ret <= 0)
+        ret = rand();
+    return ret;
+}
+
 Timespec*
 get_random_timespec(void)
 {
@@ -1411,16 +1420,10 @@ set_tran_random_string_from_array(
         (func)(trn, tmp_str);
 }
 
-
 static void
-trn_add_ran_timespec(Transaction *trn, void (*func)(Transaction*,
-                     const Timespec*))
+trn_add_ran_time (Transaction *trn, void (*func)(Transaction*, time64))
 {
-    Timespec *to_set;
-
-    to_set = get_random_timespec();
-    func(trn, to_set);
-    g_free(to_set);
+    func(trn, get_random_time());
 }
 
 
@@ -1462,8 +1465,8 @@ get_random_transaction_with_currency(QofBook *book,
     xaccTransSetNum(trans, numstr);
     set_tran_random_string_from_array(trans, xaccTransSetDescription,
                                       sane_descriptions);
-    trn_add_ran_timespec(trans, xaccTransSetDatePostedTS);
-    trn_add_ran_timespec(trans, xaccTransSetDateEnteredTS);
+    trn_add_ran_time(trans, xaccTransSetDatePostedSecs);
+    trn_add_ran_time(trans, xaccTransSetDateEnteredSecs);
 
     f = get_random_kvp_frame();
     qof_instance_set_slots (QOF_INSTANCE (trans), f);
@@ -1522,8 +1525,8 @@ make_random_changes_to_transaction (QofBook *book, Transaction *trans)
 
     set_tran_random_string (trans, xaccTransSetNum);
 
-    trn_add_ran_timespec (trans, xaccTransSetDatePostedTS);
-    trn_add_ran_timespec (trans, xaccTransSetDateEnteredTS);
+    trn_add_ran_time (trans, xaccTransSetDatePostedSecs);
+    trn_add_ran_time (trans, xaccTransSetDateEnteredSecs);
 
     set_tran_random_string (trans, xaccTransSetDescription);
 
@@ -2046,10 +2049,8 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
         }
 
         {
-            Timespec ts;
-
-            xaccTransGetDatePostedTS (trans, &ts);
-            xaccQueryAddDateMatchTS (q, TRUE, ts, TRUE, ts, QOF_QUERY_AND);
+            time64 time = xaccTransRetDatePosted (trans);
+            xaccQueryAddDateMatchTT (q, TRUE, time, TRUE, time, QOF_QUERY_AND);
         }
 
         if (xaccSplitGetMemo(s) && *xaccSplitGetMemo(s) != '\0')

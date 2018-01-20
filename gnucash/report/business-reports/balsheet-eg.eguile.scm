@@ -128,7 +128,7 @@
 <html>
 <head>
 <meta http-equiv="content-type" content="text-html; charset=utf-8">
-<title><?scm:d coyname ?> <?scm:d reportname ?> <?scm:d (gnc-print-date opt-date-tp) ?></title>
+<title><?scm:d coyname ?> <?scm:d reportname ?> <?scm:d (qof-print-date opt-date) ?></title>
 
 <?scm (if css? (begin ?>
 <link rel="stylesheet" href="<?scm:d opt-css-file ?>" type="text/css">
@@ -157,7 +157,7 @@
   <table border="0" cellpadding="16"><tr><td> <!-- hack for GTKHTML -->
 <?scm )) ?>
 <h3><?scm:d coyname ?></h3>
-<h2><?scm:d reportname ?> <?scm:d (gnc-print-date opt-date-tp) ?></h2>
+<h2><?scm:d reportname ?> <?scm:d (qof-print-date opt-date) ?></h2>
 
 <?scm
   ;; This is where the work is done.

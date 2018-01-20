@@ -191,7 +191,7 @@
     (gnc:html-document-set-title!
      document (string-append
                report-title
-               (sprintf #f " %s" (gnc-print-date to-date))))
+               (sprintf #f " %s" (qof-print-date to-date))))
 
     ;(gnc:debug "accounts" accounts)
     (if (not (null? accounts))
@@ -235,7 +235,7 @@
                    (lambda (foreign date)
                      (let*  ((price
                              (gnc-pricedb-lookup-nearest-in-time-any-currency
-                              pricedb foreign (timespecCanonicalDayTime date)))
+                              pricedb foreign (time64CanonicalDayTime date)))
                             (fn (if (and price (> (length price) 0))
                                     (let* ((the_price
                                             (if (gnc-commodity-equiv

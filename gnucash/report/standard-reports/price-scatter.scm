@@ -142,14 +142,14 @@
      (gnc:make-gnc-monetary c n)))
 
 
-  (let* ((to-date-tp (gnc:timepair-end-day-time 
-                      (gnc:date-option-absolute-time
-                       (get-option gnc:pagename-general 
-                                   optname-to-date))))
-         (from-date-tp (gnc:timepair-start-day-time 
-                        (gnc:date-option-absolute-time
-                         (get-option gnc:pagename-general 
-                                     optname-from-date))))
+  (let* ((to-date (gnc:time64-end-day-time 
+                   (gnc:date-option-absolute-time
+                    (get-option gnc:pagename-general 
+                                optname-to-date))))
+         (from-date (gnc:time64-start-day-time 
+                     (gnc:date-option-absolute-time
+                      (get-option gnc:pagename-general 
+                                  optname-from-date))))
          (interval (get-option gnc:pagename-general optname-stepsize))
          (report-title (get-option gnc:pagename-general 
                                    gnc:optname-reportname))
@@ -170,9 +170,9 @@
                                    optname-price-source))
 
          (dates-list (gnc:make-date-list
-                      (gnc:timepair-end-day-time from-date-tp) 
-                      (gnc:timepair-end-day-time to-date-tp)
-		      (gnc:deltasym-to-delta interval)))
+                      (gnc:time64-end-day-time from-date) 
+                      (gnc:time64-end-day-time to-date)
+                      (gnc:deltasym-to-delta interval)))
          
          (document (gnc:make-html-document))
          (chart (gnc:make-html-scatter))
@@ -202,8 +202,8 @@
             " - "
             (sprintf #f
                      (_ "%s to %s")
-                     (gnc-print-date from-date-tp)
-                     (gnc-print-date to-date-tp))))
+                     (qof-print-date from-date)
+                     (qof-print-date to-date))))
     (gnc:html-scatter-set-width! chart width)
     (gnc:html-scatter-set-height! chart height)
     (gnc:html-scatter-set-marker! chart 
@@ -243,15 +243,15 @@
             (case price-source
               ((actual-transactions)
                (gnc:get-commodity-inst-prices
-                currency-accounts to-date-tp 
+                currency-accounts to-date 
                 price-commodity report-currency))
               ((weighted-average)
                (gnc:get-commodity-totalavg-prices
-                currency-accounts to-date-tp 
+                currency-accounts to-date 
                 price-commodity report-currency))
               ((pricedb)
                (map (lambda (p)
-                      (list (gnc-price-get-time p)
+                      (list (gnc-price-get-time64 p)
                             (gnc-price-get-value p)))
                     (gnc-pricedb-get-prices
                      (gnc-pricedb-get-db (gnc-get-current-book))
@@ -259,15 +259,15 @@
               )))
 
        (set! data (filter
-                   (lambda (x) 
+                   (lambda (x)
                      (and 
-                      (gnc:timepair-ge to-date-tp (first x))
-                      (gnc:timepair-ge (first x) from-date-tp)))
+                      (>= to-date (first x))
+                      (>= (first x) from-date)))
                    data))
 
        ;; some output
        ;;(warn "data" (map (lambda (x) (list
-       ;;			(gnc-print-date (car x))
+       ;;			(qof-print-date x)
        ;;		(gnc-numeric-to-double (second x))))
        ;; data))
        
@@ -287,8 +287,8 @@
        (set! data
              (map (lambda (x)
                     (list
-                     (/ (- (car (first x))
-                           (car from-date-tp))
+                     (/ (- (first x)
+                           from-date)
                         ;; FIXME: These hard-coded values are more
                         ;; or less totally bogus. OTOH this whole
                         ;; scaling thing is totally bogus as well,

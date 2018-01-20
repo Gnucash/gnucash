@@ -335,6 +335,8 @@ Timespec timespec_abs(const Timespec *t);
  * returning a Timespec. */
 Timespec timespecCanonicalDayTime(Timespec t);
 
+time64 time64CanonicalDayTime(time64 t);
+
 /** Returns the current clock time as a Timespec, taken from time(2). */
 Timespec timespec_now (void);
 
@@ -344,11 +346,23 @@ void timespecFromTime64 (Timespec *ts, time64 t );
 /** Turns a Timespec into a time64 */
 time64 timespecToTime64 (Timespec ts);
 
+GDate time64_to_gdate (time64 t);
+
 /** Turns a Timespec into a GDate */
 GDate timespec_to_gdate (Timespec ts);
 
 /** Turns a GDate into a Timespec, returning the first second of the day  */
 Timespec gdate_to_timespec (GDate d);
+
+/** Turns a GDate into a time64, returning the first second of the day */
+time64 gdate_to_time64 (GDate d);
+
+/** Convert a day, month, and year to a time64, returning the first second of the day */
+time64 gnc_dmy2time64 (gint day, gint month, gint year);
+
+time64 gnc_dmy2time64_neutral (gint day, gint month, gint year);
+
+time64 gnc_dmy2time64_end (gint day, gint month, gint year);
 
 /** Convert a day, month, and year to a Timespec, returning the first second of the day */
 Timespec gnc_dmy2timespec (gint day, gint month, gint year);
@@ -365,8 +379,8 @@ Timespec gnc_dmy2timespec_end (gint day, gint month, gint year);
  */
 Timespec gnc_dmy2timespec_neutral (gint day, gint month, gint year);
 
-/** The gnc_iso8601_to_timespec_gmt() routine converts an ISO-8601 style
- *    date/time string to Timespec.  Please note that ISO-8601 strings
+/** The gnc_iso8601_to_time64_gmt() routine converts an ISO-8601 style
+ *    date/time string to time64.  Please note that ISO-8601 strings
  *    are a representation of Universal Time (UTC), and as such, they
  *    'store' UTC.  To make them human readable, they show time zone
  *    information along with a local-time string.  But fundamentally,
@@ -381,7 +395,7 @@ Timespec gnc_dmy2timespec_neutral (gint day, gint month, gint year);
  * XXX Caution: this routine does not handle strings that specify
  * times before January 1 1970.
  */
-Timespec gnc_iso8601_to_timespec_gmt(const gchar *);
+time64 gnc_iso8601_to_time64_gmt(const gchar *);
 
 /** The gnc_timespec_to_iso8601_buff() routine takes the input
  *    UTC Timespec value and prints it as an ISO-8601 style string.
@@ -400,6 +414,7 @@ Timespec gnc_iso8601_to_timespec_gmt(const gchar *);
  *    on the machine on which it is executing to create the time string.
  */
 gchar * gnc_timespec_to_iso8601_buff (Timespec ts, gchar * buff);
+gchar * gnc_time64_to_iso8601_buff (time64, char * buff);
 
 /** Set the proleptic Gregorian day, month, and year from a Timespec
  * \param ts: input timespec

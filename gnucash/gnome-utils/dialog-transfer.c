@@ -1504,7 +1504,7 @@ create_transaction(XferDialog *xferData, Timespec *ts,
     xaccTransBeginEdit(trans);
 
     xaccTransSetCurrency(trans, xferData->from_commodity);
-    xaccTransSetDatePostedTS(trans, ts);
+    xaccTransSetDatePostedSecs(trans, ts->tv_sec);
 
     /* Trans-Num or Split-Action set with gnc_set_num_action below per book
      * option */

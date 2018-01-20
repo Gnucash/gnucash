@@ -2,6 +2,7 @@
  * guile-util.c -- utility functions for using guile for GnuCash    *
  * Copyright (C) 1999 Linas Vepstas                                 *
  * Copyright (C) 2000 Dave Peticolas                                *
+ * Copyright (C) 2017 Aaron Laws                                    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -707,19 +708,14 @@ gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
  * Returns: Nothing                                                 *
 \********************************************************************/
 void
-gnc_trans_scm_set_date(SCM trans_scm, Timespec *ts)
+gnc_trans_scm_set_date(SCM trans_scm, time64 time)
 {
     SCM arg;
-
+    Timespec ts = {time, 0};
     initialize_scm_functions();
-
     if (!gnc_is_trans_scm(trans_scm))
         return;
-    if (ts == NULL)
-        return;
-
-    arg = gnc_timespec2timepair(*ts);
-
+    arg = gnc_timespec2timepair(ts);
     scm_call_2(setters.trans_scm_date, trans_scm, arg);
 }
 

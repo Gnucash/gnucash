@@ -73,8 +73,8 @@
            (expense-account (cdr (assoc "Expenses" account-alist)))
            (income-account (cdr (assoc "Income" account-alist)))
            (date-0 (gnc:get-start-this-month))
-           (date-1 (gnc:timepair-next-day date-0))
-           (date-2 (gnc:timepair-next-day date-1)))
+           (date-1 (gnc:time64-next-day date-0))
+           (date-2 (gnc:time64-next-day date-1)))
       (env-create-transaction env
                               date-1
                               bank-account
@@ -93,8 +93,8 @@
         (set-option report gnc:pagename-general "Price Source" 'pricedb-nearest)
         (set-option report gnc:pagename-general "Report's currency"  (gnc-default-report-currency))
         (set-option report gnc:pagename-accounts "Accounts" (list wallet-account bank-account))
-        (format #t "Create first transaction on ~a~%" (gnc-ctime (gnc:timepair->secs date-1)))
-        (format #t "Create second transaction on ~a~%" (gnc-ctime (gnc:timepair->secs date-2)))
+        (format #t "Create first transaction on ~a~%" (gnc-ctime date-1))
+        (format #t "Create second transaction on ~a~%" (gnc-ctime date-2))
         (let ((doc (renderer report)))
           (gnc:html-document-set-style-sheet! doc (gnc:report-stylesheet report))
           (let* ((result (gnc:html-document-render doc #f))
@@ -147,8 +147,8 @@
            (expense-account (cdr (assoc "Expenses" account-alist)))
            (income-account (cdr (assoc "Income" account-alist)))
            (date-0 (gnc:get-start-this-month))
-           (date-1 (gnc:timepair-next-day date-0))
-           (date-2 (gnc:timepair-next-day date-1)))
+           (date-1 (gnc:time64-next-day date-0))
+           (date-2 (gnc:time64-next-day date-1)))
       (env-create-transaction env
                               date-1
                               bank-account
@@ -230,8 +230,8 @@
            (expense-account (cdr (assoc "Expenses" account-alist)))
            (income-account (cdr (assoc "Income" account-alist)))
            (date-0 (gnc:get-start-this-month))
-           (date-1 (gnc:timepair-next-day date-0))
-           (date-2 (gnc:timepair-next-day date-1)))
+           (date-1 (gnc:time64-next-day date-0))
+           (date-2 (gnc:time64-next-day date-1)))
       (env-create-transaction env
                               date-1
                               bank-account

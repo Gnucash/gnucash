@@ -2533,8 +2533,8 @@ test_gnc_set_budget_recurrence()
 
     for (i = 0; i < 12; ++i)
     {
-        period_start = timespec_to_gdate(gnc_budget_get_period_start_date(budget, i));
-        period_end = timespec_to_gdate(gnc_budget_get_period_end_date(budget, i));
+        period_start = time64_to_gdate(gnc_budget_get_period_start_date(budget, i));
+        period_end = time64_to_gdate(gnc_budget_get_period_end_date(budget, i));
 
         g_assert_cmpint(g_date_get_day(&period_start), ==, 1);
         g_assert_cmpint(g_date_get_day(&period_end), ==, period_info[i].end_day);

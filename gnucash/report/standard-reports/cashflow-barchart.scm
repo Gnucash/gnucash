@@ -163,18 +163,18 @@
                                       optname-report-currency))
          (price-source (get-option gnc:pagename-general
                                    optname-price-source))
-         (from-date-tp (gnc:timepair-start-day-time
-                        (gnc:date-option-absolute-time
-                         (get-option gnc:pagename-general
-                                     optname-from-date))))
-         (to-date-tp (gnc:timepair-end-day-time
-                      (gnc:date-option-absolute-time
-                       (get-option gnc:pagename-general
-                                   optname-to-date))))
+         (from-date-t64 (gnc:time64-start-day-time
+                         (gnc:date-option-absolute-time
+                          (get-option gnc:pagename-general
+                                      optname-from-date))))
+         (to-date-t64 (gnc:time64-end-day-time
+                       (gnc:date-option-absolute-time
+                        (get-option gnc:pagename-general
+                                    optname-to-date))))
 
          ;; calculate the exchange rates
          (exchange-fn (gnc:case-exchange-fn
-                       price-source report-currency to-date-tp))
+                       price-source report-currency to-date-t64))
 
          (interval (get-option gnc:pagename-general optname-stepsize))
          (show-in? (get-option gnc:pagename-display optname-show-in))
@@ -185,8 +185,8 @@
          (width (get-option gnc:pagename-display optname-plot-width))
 
          (dates-list (gnc:make-date-interval-list
-                      (gnc:timepair-start-day-time from-date-tp)
-                      (gnc:timepair-end-day-time to-date-tp)
+                      (gnc:time64-start-day-time from-date-t64)
+                      (gnc:time64-end-day-time to-date-t64)
                       (gnc:deltasym-to-delta interval)))
          (report-title (get-option gnc:pagename-general
                                    gnc:optname-reportname))
@@ -216,10 +216,10 @@
                ;; nearest available exchange rate if that is what is specified
                (time-exchange-fn (gnc:case-exchange-time-fn
                                   price-source report-currency
-                                  commodity-list to-date-tp
+                                  commodity-list to-date-t64
                                   0 0))
                (date-string-list (map (lambda (date-list-item)       ; date-list-item is (start . end)
-                                        (gnc-print-date (car date-list-item)))
+                                        (qof-print-date (car date-list-item)))
                                       dates-list))
                (results-by-date '())
                (in-list '())
@@ -270,8 +270,8 @@
              (set! work-done (+ 1 work-done))
              (gnc:report-percent-done (* 80 (/ work-done work-to-do)))
              (let* ((settings (list (cons 'accounts accounts)
-                                    (cons 'to-date-tp (second date-pair))
-                                    (cons 'from-date-tp (first date-pair))
+                                    (cons 'to-date-t64 (second date-pair))
+                                    (cons 'from-date-t64 (first date-pair))
                                     (cons 'report-currency report-currency)
                                     (cons 'include-trading-accounts include-trading-accounts)
                                     (cons 'to-report-currency to-report-currency)))
@@ -311,8 +311,8 @@
           (gnc:html-barchart-set-subtitle!
            chart (sprintf #f
                           (_ "%s to %s")
-                          (gnc-print-date from-date-tp)
-                          (gnc-print-date to-date-tp)))
+                          (qof-print-date from-date-t64)
+                          (qof-print-date to-date-t64)))
           (gnc:html-barchart-set-width! chart width)
           (gnc:html-barchart-set-height! chart height)
           (gnc:html-barchart-set-row-labels! chart date-string-list)
@@ -398,8 +398,8 @@
 ;; function to add inflow and outflow of money
 (define (cashflow-barchart-calc-money-in-out settings)
   (let* ((accounts (cdr (assq 'accounts settings)))
-         (to-date-tp (cdr (assq 'to-date-tp settings)))
-         (from-date-tp (cdr (assq 'from-date-tp settings)))
+         (to-date-t64 (cdr (assq 'to-date-t64 settings)))
+         (from-date-t64 (cdr (assq 'from-date-t64 settings)))
          (report-currency (cdr (assq 'report-currency settings)))
          (include-trading-accounts (cdr (assq 'include-trading-accounts settings)))
          (to-report-currency (cdr (assq 'to-report-currency settings)))
@@ -414,7 +414,7 @@
          (money-out-hash (make-hash-table))
          (money-out-collector (gnc:make-commodity-collector))
 
-         (all-splits (gnc:account-get-trans-type-splits-interval accounts '() from-date-tp to-date-tp))
+         (all-splits (gnc:account-get-trans-type-splits-interval accounts '() from-date-t64 to-date-t64))
          (splits-seen-table (make-hash-table)))
 
     (define (split-seen? split)
@@ -425,8 +425,8 @@
 
     (define (work-per-split split)
       (let ((parent (xaccSplitGetParent split)))
-        (if (and (gnc:timepair-le (gnc-transaction-get-date-posted parent) to-date-tp)
-                 (gnc:timepair-ge (gnc-transaction-get-date-posted parent) from-date-tp))
+        (if (and (<= (xaccTransGetDate parent) to-date-t64)
+                 (>= (xaccTransGetDate parent) from-date-t64))
             (let* ((parent-description (xaccTransGetDescription parent))
                    (parent-currency (xaccTransGetCurrency parent)))
                                         ;(gnc:debug parent-description
@@ -469,7 +469,7 @@
                                        )
                                    (let ((s-report-value (to-report-currency parent-currency
                                                                              (gnc-numeric-neg s-value)
-                                                                             (gnc-transaction-get-date-posted
+                                                                             (xaccTransGetDate
                                                                               parent))))
                                      (money-in-collector 'add report-currency s-report-value)
                                      (s-account-in-collector 'add report-currency s-report-value))
@@ -489,7 +489,7 @@
                                        )
                                    (let ((s-report-value (to-report-currency parent-currency
                                                                              s-value
-                                                                             (gnc-transaction-get-date-posted
+                                                                             (xaccTransGetDate
                                                                               parent))))
                                      (money-out-collector 'add report-currency s-report-value)
                                      (s-account-out-collector 'add report-currency s-report-value))

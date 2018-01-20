@@ -90,15 +90,15 @@
 
 (define (build-date-collector dates per-date-collector)
   (let* ((date-vector (list->vector dates))
-	 (slotset (make-slotset (lambda (split)
-				  (let* ((date (split->date split))
-					 (interval-index (binary-search-lt (lambda (pair date)
-									     (gnc:timepair-le (car pair) date))
-									   (cons date 0)
-									   date-vector))
-					 (interval (vector-ref date-vector interval-index)))
-				    interval))
-				dates)))
+         (slotset (make-slotset (lambda (split)
+                                  (let* ((date (split->date split))
+                                         (interval-index (binary-search-lt (lambda (pair date)
+                                                                             (<= (car pair) date))
+                                                                           date
+                                                                           date-vector))
+                                         (interval (vector-ref date-vector interval-index)))
+                                    interval))
+                                dates)))
     (collector-from-slotset slotset per-date-collector)))
 
 (define (build-category-by-account-collector account-destination-alist dates cell-accumulator result-collector)
@@ -131,16 +131,17 @@
 
 ;; Decide how to run the given report (but don't actually do any work)
 
-(define (category-by-account-report-work do-intervals? datepairs account-alist
-				    split-collector result-collector)
-  (let* ((dateinfo (if do-intervals? (category-report-dates-intervals datepairs)
-		       (category-report-dates-accumulate datepairs)))
-	 (processed-datepairs (third dateinfo))
-	 (splits-fn (lambda () (category-report-splits dateinfo account-alist)))
-	 (collector (collector-where (predicate-not split-closing?)
-				     (build-category-by-account-collector account-alist
-									  processed-datepairs split-collector
-									  result-collector))))
+(define (category-by-account-report-work do-intervals? dates account-alist
+                                         split-collector result-collector)
+  (let* ((dateinfo (if do-intervals? 
+                       (category-report-dates-intervals dates)
+                       (category-report-dates-accumulate dates)))
+         (processed-dates (third dateinfo))
+         (splits-fn (lambda () (category-report-splits dateinfo account-alist)))
+         (collector (collector-where (lambda (split) (not (split-closing? split)))
+                                     (build-category-by-account-collector account-alist
+                                                                          processed-dates split-collector
+                                                                          result-collector))))
     (cons splits-fn collector)))
 
 (define (category-report-splits dateinfo account-alist)
@@ -148,19 +149,19 @@
 	(max-date (second dateinfo)))
     (splits-up-to (map car account-alist) min-date max-date)))
 
-(define (category-report-dates-intervals datepairs)
-  (let* ((min-date (car (list-min-max (map first datepairs) gnc:timepair-lt)))
-	 (max-date (cdr (list-min-max (map second datepairs) gnc:timepair-lt))))
-    (list min-date max-date datepairs)))
+(define (category-report-dates-intervals dates)
+  (let* ((min-date (car (list-min-max (map first dates) <)))
+         (max-date (cdr (list-min-max (map second dates) <))))
+    (list min-date max-date dates)))
 
 (define (category-report-dates-accumulate dates)
-  (let* ((min-date (decdate (car (list-min-max dates gnc:timepair-lt)) DayDelta))
-	 (max-date (cdr (list-min-max dates gnc:timepair-lt)))
-	 (datepairs (reverse! (cdr (fold (lambda (next acc)
-					   (let ((prev (car acc))
-						 (pairs-so-far (cdr acc)))
-					     (cons next (cons (list prev next) pairs-so-far))))
-					 (cons min-date '()) dates)))))
+  (let* ((min-date (decdate (car (list-min-max dates <)) DayDelta))
+         (max-date (cdr (list-min-max dates <)))
+         (datepairs (reverse! (cdr (fold (lambda (next acc)
+                                           (let ((prev (car acc))
+                                                 (pairs-so-far (cdr acc)))
+                                             (cons next (cons (list prev next) pairs-so-far))))
+                                         (cons min-date '()) dates)))))
     (list min-date max-date datepairs)))
 
 

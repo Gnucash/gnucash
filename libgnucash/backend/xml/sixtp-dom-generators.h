@@ -40,9 +40,8 @@ xmlNodePtr int_to_dom_tree (const char* tag, gint64 val);
 xmlNodePtr boolean_to_dom_tree (const char* tag, gboolean val);
 xmlNodePtr guid_to_dom_tree (const char* tag, const GncGUID* gid);
 xmlNodePtr commodity_ref_to_dom_tree (const char* tag, const gnc_commodity* c);
-xmlNodePtr timespec_to_dom_tree (const char* tag, const Timespec* spec);
-gchar* timespec_nsec_to_string (const Timespec* ts);
-gchar* timespec_sec_to_string (const Timespec* ts);
+xmlNodePtr time64_to_dom_tree (const char* tag, time64);
+gchar* time64_to_string (time64);
 xmlNodePtr gdate_to_dom_tree (const char* tag, const GDate* spec);
 xmlNodePtr gnc_numeric_to_dom_tree (const char* tag, const gnc_numeric* num);
 xmlNodePtr qof_instance_slots_to_dom_tree (const char* tag,

@@ -367,11 +367,11 @@ balance at a given time"))
   (gnc:report-starting reportname)
 
   ;; Get all options
-  (let ((to-date-tp (gnc:timepair-end-day-time 
+  (let ((to-date (gnc:time64-end-day-time 
                      (gnc:date-option-absolute-time
                       (get-option gnc:pagename-general optname-to-date))))
-        (from-date-tp (if do-intervals?
-                          (gnc:timepair-start-day-time 
+        (from-date (if do-intervals?
+                          (gnc:time64-start-day-time 
                            (gnc:date-option-absolute-time 
                             (get-option gnc:pagename-general 
 					optname-from-date)))
@@ -421,13 +421,13 @@ balance at a given time"))
     (define (profit-fn account subaccts?)
       (if do-intervals?
           (gnc:account-get-comm-balance-interval
-           account from-date-tp to-date-tp subaccts?)
+           account from-date to-date subaccts?)
           (gnc:account-get-comm-balance-at-date
-           account to-date-tp subaccts?)))
+           account to-date subaccts?)))
 
     ;; Define more helper variables.
     (let* ((exchange-fn (gnc:case-exchange-fn 
-                         price-source report-currency to-date-tp))
+                         price-source report-currency to-date))
            (tree-depth (if (equal? account-levels 'all)
                            (gnc:get-current-account-tree-depth)
                            account-levels))
@@ -436,10 +436,9 @@ balance at a given time"))
             (if averaging-fraction-func
                 ;; Calculate the divisor of the amounts so that an
                 ;; average is shown
-                (let* ((start-frac (averaging-fraction-func (gnc:timepair->secs from-date-tp)))
-                       (end-frac (averaging-fraction-func (+ 1 (gnc:timepair->secs to-date-tp))))
-                       (diff (- end-frac start-frac))
-                       )
+                (let* ((start-frac (averaging-fraction-func from-date))
+                       (end-frac (averaging-fraction-func (+ 1 to-date)))
+                       (diff (- end-frac start-frac)))
                   ;; Extra sanity check to ensure a positive number
                   (if (> diff 0)
                       (/ 1 diff)
@@ -567,11 +566,11 @@ balance at a given time"))
                        (if do-intervals?
                            (sprintf #f
                                     (_ "%s to %s")
-                                    (gnc-print-date from-date-tp)
-                                    (gnc-print-date to-date-tp))
+                                    (qof-print-date from-date)
+                                    (qof-print-date to-date))
                            (sprintf #f
                                     (_ "Balance at %s")
-                                    (gnc-print-date to-date-tp)))
+                                    (qof-print-date to-date)))
                        (if show-total?
                            (let ((total (apply + (unzip1 combined))))
                              (sprintf

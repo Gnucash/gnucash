@@ -4,7 +4,7 @@ ADD_SUBDIRECTORY(tests)
 SET(PYEXEC_FILES  __init__.py function_class.py gnucash_business.py gnucash_core.py)
 
 IF (BUILDING_FROM_VCS)
-  SET(SWIG_FILES ${CMAKE_CURRENT_SOURCE_DIR}/gnucash_core.i ${CMAKE_CURRENT_SOURCE_DIR}/timespec.i)
+  SET(SWIG_FILES ${CMAKE_CURRENT_SOURCE_DIR}/gnucash_core.i ${CMAKE_CURRENT_SOURCE_DIR}/time64.i)
   SET(GNUCASH_CORE_C_INCLUDES
     ${CONFIG_H}
     ${CMAKE_SOURCE_DIR}/libgnucash/engine/qofsession.h
@@ -104,7 +104,7 @@ ENDIF()
 SET(python_bindings_DATA ${PYEXEC_FILES}
   gnucash_core.i
   sqlite3test.c
-  timespec.i)
+  time64.i)
 
 SET_LOCAL_DIST(python_bindings_DIST_local CMakeLists.txt 
   ${python_bindings_DATA})

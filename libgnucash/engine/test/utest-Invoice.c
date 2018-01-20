@@ -69,7 +69,8 @@ static void
 test_invoice_post ( Fixture *fixture, gconstpointer pData )
 {
     GncInvoice *invoice = gncInvoiceCreate(fixture->book);
-    Timespec ts1 = timespec_now(), ts2 = ts1;
+    time64 ts1 = gnc_time(NULL);
+    time64 ts2 = ts1;
     g_assert(invoice);
     g_assert(!gncInvoiceGetIsCreditNote(invoice));
     g_assert(gncInvoiceGetActive(invoice));
@@ -81,7 +82,7 @@ test_invoice_post ( Fixture *fixture, gconstpointer pData )
 
     g_test_message( "Will now post the invoice" );
     g_assert(!gncInvoiceIsPosted(invoice));
-    gncInvoicePostToAccount(invoice, fixture->account, &ts1, &ts2, "memo", TRUE, FALSE);
+    gncInvoicePostToAccount(invoice, fixture->account, ts1, ts2, "memo", TRUE, FALSE);
     g_assert(gncInvoiceIsPosted(invoice));
 
     gncInvoiceUnpost(invoice, TRUE);

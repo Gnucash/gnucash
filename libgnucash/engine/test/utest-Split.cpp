@@ -1125,7 +1125,7 @@ test_xaccSplitOrder (Fixture *fixture, gconstpointer pData)
      * split-action based on book option.
      */
     o_split->parent = o_txn;
-    split->parent->date_posted = timespec_now ();
+    split->parent->date_posted = gnc_time (NULL);
     o_split->parent->date_posted = split->parent->date_posted;
 
     /* The book_use_split_action_for_num_field book option hasn't been set so it
@@ -1249,13 +1249,13 @@ test_xaccSplitOrderDateOnly (Fixture *fixture, gconstpointer pData)
     g_assert_cmpint (xaccSplitOrderDateOnly (split, o_split), ==, 1);
     split->parent = txn;
 
-    txn->date_posted = timespec_now ();
-    o_txn->date_posted = timespec_now ();
-    o_txn->date_posted.tv_sec -= 50;
+    txn->date_posted = gnc_time (nullptr);
+    o_txn->date_posted = gnc_time (nullptr);
+    o_txn->date_posted -= 50;
     g_assert_cmpint (xaccSplitOrderDateOnly (split, o_split), ==, 1);
-    o_txn->date_posted.tv_sec += 100;
+    o_txn->date_posted += 100;
     g_assert_cmpint (xaccSplitOrderDateOnly (split, o_split), ==, -1);
-    o_txn->date_posted.tv_sec -= 50;
+    o_txn->date_posted -= 50;
     g_assert_cmpint (xaccSplitOrderDateOnly (split, o_split), ==, -1);
 
     test_destroy (o_split);

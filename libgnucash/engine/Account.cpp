@@ -3292,7 +3292,6 @@ xaccAccountGetBalanceAsOfDate (Account *acc, time64 date)
      */
     AccountPrivate *priv;
     GList   *lp;
-    Timespec ts, trans_ts;
     gboolean found = FALSE;
     gnc_numeric balance;
 
@@ -3316,15 +3315,12 @@ xaccAccountGetBalanceAsOfDate (Account *acc, time64 date)
      * xaccAccountGetPresentBalance gets this right, and its algorithm
      * should be used here.
      */
-    ts.tv_sec = date;
-    ts.tv_nsec = 0;
 
     lp = priv->splits;
     while ( lp && !found )
     {
-        xaccTransGetDatePostedTS( xaccSplitGetParent( (Split *)lp->data ),
-                                  &trans_ts );
-        if ( timespec_cmp( &trans_ts, &ts ) >= 0 )
+        time64 trans_time = xaccTransRetDatePosted( xaccSplitGetParent( (Split *)lp->data ));
+        if ( trans_time >= date )
             found = TRUE;
         else
             lp = lp->next;

@@ -566,7 +566,7 @@ void gnc_entry_ledger_set_default_invoice (GncEntryLedger *ledger,
      * to understand why.
      */
     if (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_VENDOR)
-        ledger->last_date_entered = timespec_to_gdate(gncInvoiceGetDateOpened (invoice));
+        ledger->last_date_entered = time64_to_gdate(gncInvoiceGetDateOpened (invoice));
 
     if (!ledger->query && invoice)
         create_invoice_query (ledger);
@@ -944,7 +944,7 @@ gnc_entry_ledger_duplicate_current_entry (GncEntryLedger *ledger)
 
         /* We also must set a new DateEntered on the new entry
          * because otherwise the ordering is not deterministic */
-        gncEntrySetDateEntered (new_entry, timespec_now());
+        gncEntrySetDateEntered (new_entry, gnc_time (NULL));
 
         /* Set the hint for where to display on the refresh */
         ledger->hint_entry = new_entry;
@@ -1017,7 +1017,7 @@ void gnc_entry_ledger_move_current_entry_updown (GncEntryLedger *ledger,
      * up the current sort ordering from here, so I cowardly refuse to
      * tweak the EntryDate in this case. */
     {
-        Timespec t1, t2;
+        time64 t1, t2;
         GDate d1 = gncEntryGetDateGDate(current),
               d2 = gncEntryGetDateGDate(target);
         if (g_date_compare(&d1, &d2) != 0)
@@ -1029,7 +1029,7 @@ void gnc_entry_ledger_move_current_entry_updown (GncEntryLedger *ledger,
         code used the timespec at the start of day. */
         t1 = gncEntryGetDate(current);
         t2 = gncEntryGetDate(target);
-        if (!timespec_equal(&t1, &t2))
+        if (t1 != t2)
         {
             /* Timespecs are not equal, even though the GDates were equal? Then
             we set the GDates again. This will force the timespecs to be equal
@@ -1048,12 +1048,12 @@ void gnc_entry_ledger_move_current_entry_updown (GncEntryLedger *ledger,
     /* Swap the date-entered of both entries. That's already
      * sufficient! */
     {
-        Timespec time_current = gncEntryGetDateEntered(current);
-        Timespec time_target = gncEntryGetDateEntered(target);
+        time64 time_current = gncEntryGetDateEntered(current);
+        time64 time_target = gncEntryGetDateEntered(target);
 
         /* Special treatment for identical times (potentially caused
          * by the "duplicate entry" command) */
-        if (timespec_equal(&time_current, &time_target))
+        if (time_current == time_target)
         {
             /*g_warning("Surprise - both DateEntered are equal.");*/
             /* We just increment the DateEntered of the previously
@@ -1061,9 +1061,9 @@ void gnc_entry_ledger_move_current_entry_updown (GncEntryLedger *ledger,
              * issues if multiple entries had this problem, but
              * whatever. */
             if (move_up)
-                time_current.tv_sec++;
+                ++time_current;
             else
-                time_target.tv_sec++;
+                ++time_target;
         }
 
         /* Write the new DateEntered. */

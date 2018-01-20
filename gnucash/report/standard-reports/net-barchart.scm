@@ -156,11 +156,11 @@
      (gnc:lookup-option (gnc:report-options report-obj) section name)))
 
   (gnc:report-starting reportname)
-  (let* ((to-date-tp (gnc:timepair-end-day-time
+  (let* ((to-date-t64 (gnc:time64-end-day-time
                       (gnc:date-option-absolute-time
                        (get-option gnc:pagename-general
 				   optname-to-date))))
-         (from-date-tp (gnc:timepair-start-day-time
+         (from-date-t64 (gnc:time64-start-day-time
                         (gnc:date-option-absolute-time
                          (get-option gnc:pagename-general
 				     optname-from-date))))
@@ -184,11 +184,14 @@
          (commodity-list #f)
          (exchange-fn #f)
 
-         (dates-list ((if inc-exp? gnc:make-date-interval-list
+         (dates-list ((if inc-exp?
+                          gnc:make-date-interval-list
                           gnc:make-date-list)
-                      ((if inc-exp? gnc:timepair-start-day-time
-                           gnc:timepair-end-day-time) from-date-tp)
-                      (gnc:timepair-end-day-time to-date-tp)
+                      ((if inc-exp?
+                           gnc:time64-start-day-time
+                           gnc:time64-end-day-time)
+                       from-date-t64)
+                      (gnc:time64-end-day-time to-date-t64)
                       (gnc:deltasym-to-delta interval)))
 	 (report-title (get-option gnc:pagename-general
                                   gnc:optname-reportname))
@@ -207,7 +210,7 @@
     ;; This exchanges the commodity-collector 'c' to one single
     ;; 'report-currency' according to the exchange-fn. Returns a gnc:monetary
     (define (collector->monetary c date)
-      (if (not (gnc:timepair? date))
+      (if (not (number? date))
 	  (throw 'wrong))
       (gnc:sum-collector-commodity
        c report-currency
@@ -261,7 +264,7 @@
     (gnc:report-percent-done 10)
     (set! exchange-fn (gnc:case-exchange-time-fn
                        price-source report-currency
-                       commodity-list to-date-tp
+                       commodity-list to-date-t64
 		       10 40))
     (gnc:report-percent-done 50)
 
@@ -274,9 +277,9 @@
             (date-string-list (map
                                (if inc-exp?
                                    (lambda (date-list-item)
-                                     (gnc-print-date
+                                     (qof-print-date
                                       (car date-list-item)))
-                                   gnc-print-date)
+                                   qof-print-date)
                                dates-list)))
        (let* ((the-acount-destination-alist
 	       (if inc-exp?
@@ -332,8 +335,8 @@
        (gnc:html-barchart-set-subtitle!
         chart (sprintf #f
                        (_ "%s to %s")
-                       (jqplot-escape-string (gnc-print-date from-date-tp))
-                       (jqplot-escape-string (gnc-print-date to-date-tp))))
+                       (jqplot-escape-string (qof-print-date from-date-t64))
+                       (jqplot-escape-string (qof-print-date to-date-t64))))
        (gnc:html-barchart-set-width! chart width)
        (gnc:html-barchart-set-height! chart height)
        (gnc:html-barchart-set-row-labels! chart date-string-list)

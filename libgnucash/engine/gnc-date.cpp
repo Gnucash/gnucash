@@ -486,6 +486,15 @@ timespecCanonicalDayTime(Timespec t)
     return retval;
 }
 
+time64
+time64CanonicalDayTime (time64 t)
+{
+    struct tm tm;
+    gnc_localtime_r(&t, &tm);
+    gnc_tm_set_day_middle(&tm);
+    return gnc_mktime (&tm);
+}
+
 /* NB: month is 1-12, year is 0001 - 9999. */
 int gnc_date_get_last_mday (int month, int year)
 {
@@ -1189,30 +1198,37 @@ gnc_date_timestamp (void)
  */
 
 #define ISO_DATE_FORMAT "%d-%d-%d %d:%d:%lf%s"
-Timespec
-gnc_iso8601_to_timespec_gmt(const char *cstr)
+time64
+gnc_iso8601_to_time64_gmt(const char *cstr)
 {
     time64 time;
-    if (!cstr) return {0, 0};
+    if (!cstr) return 0;
     try
     {
         GncDateTime gncdt(cstr);
-        return {static_cast<time64>(gncdt), 0};
+        return static_cast<time64>(gncdt);
     }
     catch(std::logic_error& err)
     {
         PWARN("Error processing %s: %s", cstr, err.what());
-        return {0, 0};
+        return 0;
     }
     catch(std::runtime_error& err)
     {
         PWARN("Error processing time64 %s: %s", cstr, err.what());
-        return {0, 0};
+        return 0;
     }
 }
 
 /********************************************************************\
 \********************************************************************/
+
+char *
+gnc_time64_to_iso8601_buff (time64 time, char * buff)
+{
+    Timespec ts = {time, 0};
+    return gnc_timespec_to_iso8601_buff (ts, buff);
+}
 
 char *
 gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
@@ -1278,6 +1294,24 @@ gnc_dmy2timespec_internal (int day, int month, int year, DayPart day_part)
     }
 }
 
+time64
+gnc_dmy2time64 (int day, int month, int year)
+{
+    return gnc_dmy2timespec_internal (day, month, year, DayPart::start).tv_sec;
+}
+
+time64
+gnc_dmy2time64_end (int day, int month, int year)
+{
+    return gnc_dmy2timespec_internal (day, month, year, DayPart::end).tv_sec;
+}
+
+time64
+gnc_dmy2time64_neutral (int day, int month, int year)
+{
+    return gnc_dmy2timespec_internal (day, month, year, DayPart::neutral).tv_sec;
+}
+
 Timespec
 gnc_dmy2timespec (int day, int month, int year)
 {
@@ -1337,6 +1371,20 @@ GDate timespec_to_gdate (Timespec ts)
     return result;
 }
 
+GDate time64_to_gdate (time64 t)
+{
+    GDate result;
+
+    g_date_clear (&result, 1);
+    GncDateTime time(t);
+    auto date = time.date().year_month_day();
+    g_date_set_dmy (&result, date.day, static_cast<GDateMonth>(date.month),
+                    date.year);
+    g_assert(g_date_valid (&result));
+
+    return result;
+}
+
 GDate* gnc_g_date_new_today ()
 {
     GncDate gncd;
@@ -1362,6 +1410,13 @@ gnc_gdate_set_time64 (GDate* gd, time64 time)
     g_date_set_dmy (gd, tm.tm_mday,
                     static_cast<GDateMonth>(tm.tm_mon + 1),
                     tm.tm_year + 1900);
+}
+
+time64 gdate_to_time64 (GDate d)
+{
+    return gnc_dmy2time64_neutral (g_date_get_day(&d),
+                                     g_date_get_month(&d),
+                                     g_date_get_year(&d));
 }
 
 Timespec gdate_to_timespec (GDate d)

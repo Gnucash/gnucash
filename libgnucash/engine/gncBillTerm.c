@@ -820,14 +820,14 @@ compute_time (const GncBillTerm *term, Timespec post_date, int days)
     return res;
 }
 
-Timespec
-gncBillTermComputeDueDate (const GncBillTerm *term, Timespec post_date)
+time64
+gncBillTermComputeDueDate (const GncBillTerm *term, time64 post_date)
 {
-    Timespec res = post_date;
-    if (!term) return res;
-
-    return compute_time (term, post_date, term->due_days);
+    Timespec pass = {post_date, 0};
+    if (!term) return post_date;
+    return compute_time (term, pass, term->due_days).tv_sec;
 }
+
 /* Package-Private functions */
 
 static void _gncBillTermCreate (QofBook *book)

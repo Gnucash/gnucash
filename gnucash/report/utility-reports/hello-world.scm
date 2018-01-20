@@ -102,7 +102,7 @@
      (gnc:make-date-option
       (N_ "Hello, World!") (N_ "Just a Date Option")
       "d" (N_ "This is a date option.")
-      (lambda () (cons 'absolute (cons (current-time) 0)))
+      (lambda () (cons 'absolute (current-time)))
       #f 'absolute #f ))
     
     ;; This is another date option, but the user can also select
@@ -111,7 +111,7 @@
      (gnc:make-date-option
       (N_ "Hello, World!") (N_ "Time and Date Option")
       "e" (N_ "This is a date option with time.")
-      (lambda () (cons 'absolute (cons (current-time) 0)))
+      (lambda () (cons 'absolute (current-time)))
       #t 'absolute #f ))
     
     (add-option
@@ -267,13 +267,13 @@ option like this.")
 
     ;; these are samples of different date options. for a simple
     ;; date with day, month, and year but no time you should use
-    ;; gnc-print-date
+    ;; qof-print-date
     (let ((time-string (strftime "%X" (gnc-localtime (current-time))))
-          (date-string (strftime "%x" (gnc-localtime (car date-val))))
-          (date-string2 (strftime "%x %X" (gnc-localtime (car date2-val))))
-          (rel-date-string (strftime "%x" (gnc-localtime (car rel-date-val))))
+          (date-string (strftime "%x" (gnc-localtime date-val)))
+          (date-string2 (strftime "%x %X" (gnc-localtime date2-val)))
+          (rel-date-string (strftime "%x" (gnc-localtime rel-date-val)))
           (combo-date-string
-           (strftime "%x" (gnc-localtime (car combo-date-val)))))
+           (strftime "%x" (gnc-localtime combo-date-val))))
 
       ;; Here's where we fill the report document with content.  We
       ;; do this by adding 'html objects' such as text, tables, and

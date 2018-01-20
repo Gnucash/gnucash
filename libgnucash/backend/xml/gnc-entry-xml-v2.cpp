@@ -111,7 +111,6 @@ static xmlNodePtr
 entry_dom_tree_create (GncEntry* entry)
 {
     xmlNodePtr ret;
-    Timespec ts;
     Account* acc;
     GncTaxTable* taxtable;
     GncOrder* order;
@@ -123,11 +122,11 @@ entry_dom_tree_create (GncEntry* entry)
     xmlAddChild (ret, guid_to_dom_tree (entry_guid_string,
                                         qof_instance_get_guid (QOF_INSTANCE (entry))));
 
-    ts = gncEntryGetDate (entry);
-    xmlAddChild (ret, timespec_to_dom_tree (entry_date_string, &ts));
+    auto time = gncEntryGetDate (entry);
+    xmlAddChild (ret, time64_to_dom_tree (entry_date_string, time));
 
-    ts = gncEntryGetDateEntered (entry);
-    xmlAddChild (ret, timespec_to_dom_tree (entry_dateentered_string, &ts));
+    time = gncEntryGetDateEntered (entry);
+    xmlAddChild (ret, time64_to_dom_tree (entry_dateentered_string, time));
 
     maybe_add_string (ret, entry_description_string,
                       gncEntryGetDescription (entry));
@@ -241,13 +240,12 @@ set_string (xmlNodePtr node, GncEntry* entry,
 }
 
 static inline gboolean
-set_timespec (xmlNodePtr node, GncEntry* entry,
-              void (*func) (GncEntry* entry, Timespec ts))
+set_time64 (xmlNodePtr node, GncEntry* entry,
+              void (*func) (GncEntry* entry, time64 ts))
 {
-    Timespec ts = dom_tree_to_timespec (node);
-    if (!dom_tree_valid_timespec (&ts, node->name)) return FALSE;
-
-    func (entry, ts);
+    time64 time = dom_tree_to_time64 (node);
+    if (!dom_tree_valid_time64 (time, node->name)) return FALSE;
+    func (entry, time);
     return TRUE;
 }
 
@@ -350,16 +348,14 @@ static gboolean
 entry_date_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
-
-    return set_timespec (node, pdata->entry, gncEntrySetDate);
+    return set_time64 (node, pdata->entry, gncEntrySetDate);
 }
 
 static gboolean
 entry_dateentered_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata* pdata = static_cast<decltype (pdata)> (entry_pdata);
-
-    return set_timespec (node, pdata->entry, gncEntrySetDateEntered);
+    return set_time64 (node, pdata->entry, gncEntrySetDateEntered);
 }
 
 static gboolean

@@ -350,7 +350,7 @@
            (if use-budget-period-range? (- user-budget-period-start 1) #f))
          (period-end
            (if use-budget-period-range? user-budget-period-end #f))
-         (date-tp
+         (date-t64
            (if budget-valid?
              (gnc-budget-get-period-start-date
                budget
@@ -416,7 +416,7 @@
 			 depth-limit))
          ;; exchange rates calculation parameters
 	 (exchange-fn
-	  (gnc:case-exchange-fn price-source report-commodity date-tp))
+	  (gnc:case-exchange-fn price-source report-commodity date-t64))
 	 )
     
     ;; Wrapper to call gnc:html-table-add-labeled-amount-line!

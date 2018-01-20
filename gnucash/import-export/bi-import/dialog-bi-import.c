@@ -524,7 +524,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     Account *acc = NULL;
     enum update {YES = GTK_RESPONSE_YES, NO = GTK_RESPONSE_NO} update;
     GtkWidget *dialog;
-    Timespec today;
+    time64 today;
     InvoiceWindow *iw;
     gchar *new_id = NULL;
     gint64 denom = 0;
@@ -612,14 +612,12 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                 // FIXME: Must check for the return value of qof_scan_date!
                 qof_scan_date (date_opened, &day, &month, &year);
                 gncInvoiceSetDateOpened (invoice,
-                                         gnc_dmy2timespec (day, month, year));
+                                         gnc_dmy2time64 (day, month, year));
             }
             else			// If no date in CSV
             {
                 time64 now = gnc_time (NULL);
-                Timespec now_timespec;
-                timespecFromTime64 (&now_timespec, now);
-                gncInvoiceSetDateOpened (invoice, now_timespec);
+                gncInvoiceSetDateOpened (invoice, now);
             }
             gncInvoiceSetBillingID (invoice, billing_id ? billing_id : "");
             notes = un_escape(notes);
@@ -697,17 +695,17 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             gncEntrySetDateGDate (entry, date);
             g_date_free (date);
         }
-        timespecFromTime64 (&today, gnc_time (NULL));	// set today to the current date
+        today = gnc_time (NULL);	// set today to the current date
         if (strlen (date) != 0)	// If a date is specified in CSV
         {
             GDate *date = g_date_new_dmy(day, month, year);
             gncEntrySetDateGDate(entry, date);
-            gncEntrySetDateEntered(entry, gnc_dmy2timespec (day, month, year));
+            gncEntrySetDateEntered(entry, gnc_dmy2time64 (day, month, year));
         }
         else
         {
             GDate *date = gnc_g_date_new_today();
-            gncEntrySetDateGDate(entry, date); // TODO: DEPRECATED - use gncEntrySetDateGDate() instead!
+            gncEntrySetDateGDate(entry, date);
             gncEntrySetDateEntered(entry, today);
         }
         // Remove escaped quotes
@@ -772,7 +770,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                 // autopost this invoice
                 GHashTable *foreign_currs;
                 gboolean auto_pay;
-                Timespec p_date, d_date;
+                time64 p_date, d_date;
                 guint curr_count;
                 gboolean scan_date_r;
                 scan_date_r = qof_scan_date (date_posted, &day, &month, &year);
@@ -789,11 +787,11 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                 // Only auto-post if there's a single currency involved
                 if(curr_count == 0)
                 {
-                    p_date = gnc_dmy2timespec (day, month, year);
+                    p_date = gnc_dmy2time64 (day, month, year);
                     // Check for the return value of qof_scan_date
                     if(qof_scan_date (due_date, &day, &month, &year)) // obtains the due date, or leaves it at date_posted
                     {	
-                        d_date = gnc_dmy2timespec (day, month, year);
+                        d_date = gnc_dmy2time64 (day, month, year);
                     }
                     else
                         d_date = p_date;
@@ -804,7 +802,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                         // Check if the currencies match
                         if(gncInvoiceGetCurrency(invoice) == gnc_account_get_currency_or_parent(acc))
                         {
-                            gncInvoicePostToAccount (invoice, acc, &p_date, &d_date,
+                            gncInvoicePostToAccount (invoice, acc, p_date, d_date,
                                                  memo_posted,
                                                  text2bool (accumulatesplits),
                                                  auto_pay);

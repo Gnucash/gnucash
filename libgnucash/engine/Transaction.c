@@ -275,16 +275,10 @@ gnc_transaction_init(Transaction* trans)
     /* Fill in some sane defaults */
     trans->num         = CACHE_INSERT("");
     trans->description = CACHE_INSERT("");
-
     trans->common_currency = NULL;
     trans->splits = NULL;
-
-    trans->date_entered.tv_sec  = 0;
-    trans->date_entered.tv_nsec = 0;
-
-    trans->date_posted.tv_sec  = 0;
-    trans->date_posted.tv_nsec = 0;
-
+    trans->date_entered  = 0;
+    trans->date_posted  = 0;
     trans->marker = 0;
     trans->orig = NULL;
     LEAVE (" ");
@@ -316,6 +310,7 @@ gnc_transaction_get_property(GObject* object,
 {
     Transaction* tx;
     gchar *key;
+    Timespec ts = {0,0};
 
     g_return_if_fail(GNC_IS_TRANSACTION(object));
 
@@ -332,10 +327,12 @@ gnc_transaction_get_property(GObject* object,
         g_value_take_object(value, tx->common_currency);
         break;
     case PROP_POST_DATE:
-        g_value_set_boxed(value, &tx->date_posted);
+        ts.tv_sec = tx->date_posted;
+        g_value_set_boxed(value, &ts);
         break;
     case PROP_ENTER_DATE:
-        g_value_set_boxed(value, &tx->date_entered);
+        ts.tv_sec = tx->date_entered;
+        g_value_set_boxed(value, &ts);
         break;
     case PROP_INVOICE:
         qof_instance_get_kvp (QOF_INSTANCE (tx), value, 2, GNC_INVOICE_ID, GNC_INVOICE_GUID);
@@ -378,10 +375,10 @@ gnc_transaction_set_property(GObject* object,
         xaccTransSetCurrency(tx, g_value_get_object(value));
         break;
     case PROP_POST_DATE:
-        xaccTransSetDatePostedTS(tx, g_value_get_boxed(value));
+        xaccTransSetDatePostedSecs(tx, ((Timespec*)g_value_get_boxed(value))->tv_sec);
         break;
     case PROP_ENTER_DATE:
-        xaccTransSetDateEnteredTS(tx, g_value_get_boxed(value));
+        xaccTransSetDateEnteredSecs(tx, ((Timespec*)g_value_get_boxed(value))->tv_sec);
         break;
     case PROP_INVOICE:
         qof_instance_set_kvp (QOF_INSTANCE (tx), value, 2, GNC_INVOICE_ID, GNC_INVOICE_GUID);
@@ -741,7 +738,6 @@ void
 xaccTransCopyFromClipBoard(const Transaction *from_trans, Transaction *to_trans,
                            const Account *from_acc, Account *to_acc, gboolean no_date)
 {
-    Timespec ts = {0,0};
     gboolean change_accounts = FALSE;
     GList *node;
 
@@ -764,8 +760,7 @@ xaccTransCopyFromClipBoard(const Transaction *from_trans, Transaction *to_trans,
     xaccTransSetNotes(to_trans, xaccTransGetNotes(from_trans));
     if(!no_date)
     {
-        xaccTransGetDatePostedTS(from_trans, &ts);
-        xaccTransSetDatePostedTS(to_trans, &ts);
+        xaccTransSetDatePostedSecs(to_trans, xaccTransRetDatePosted (from_trans));
     }
 
     /* Each new split will be parented to 'to' */
@@ -813,12 +808,8 @@ xaccFreeTransaction (Transaction *trans)
     /* Just in case someone looks up freed memory ... */
     trans->num         = (char *) 1;
     trans->description = NULL;
-
-    trans->date_entered.tv_sec = 0;
-    trans->date_entered.tv_nsec = 0;
-    trans->date_posted.tv_sec = 0;
-    trans->date_posted.tv_nsec = 0;
-
+    trans->date_entered = 0;
+    trans->date_posted = 0;
     if (trans->orig)
     {
         xaccFreeTransaction (trans->orig);
@@ -892,24 +883,24 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
         return FALSE;
     }
 
-    if (timespec_cmp(&(ta->date_entered), &(tb->date_entered)))
+    if (ta->date_entered != tb->date_entered)
     {
         char buf1[100];
         char buf2[100];
 
-        (void)gnc_timespec_to_iso8601_buff(ta->date_entered, buf1);
-        (void)gnc_timespec_to_iso8601_buff(tb->date_entered, buf2);
+        (void)gnc_time64_to_iso8601_buff(ta->date_entered, buf1);
+        (void)gnc_time64_to_iso8601_buff(tb->date_entered, buf2);
         PINFO ("date entered differs: '%s' vs '%s'", buf1, buf2);
         return FALSE;
     }
 
-    if (timespec_cmp(&(ta->date_posted), &(tb->date_posted)))
+    if (ta->date_posted != tb->date_posted)
     {
         char buf1[100];
         char buf2[100];
 
-        (void)gnc_timespec_to_iso8601_buff(ta->date_posted, buf1);
-        (void)gnc_timespec_to_iso8601_buff(tb->date_posted, buf2);
+        (void)gnc_time64_to_iso8601_buff(ta->date_posted, buf1);
+        (void)gnc_time64_to_iso8601_buff(tb->date_posted, buf2);
         PINFO ("date posted differs: '%s' vs '%s'", buf1, buf2);
         return FALSE;
     }
@@ -1683,9 +1674,9 @@ xaccTransCommitEdit (Transaction *trans)
     }
 
     /* Record the time of last modification */
-    if (0 == trans->date_entered.tv_sec)
+    if (0 == trans->date_entered)
     {
-	trans->date_entered.tv_sec = gnc_time(NULL);
+        trans->date_entered = gnc_time(NULL);
         qof_instance_set_dirty(QOF_INSTANCE(trans));
     }
 
@@ -1890,8 +1881,8 @@ xaccTransOrder_num_action (const Transaction *ta, const char *actna,
     if ( !ta && tb ) return +1;
     if ( !ta && !tb ) return 0;
 
-    /* if dates differ, return */
-    DATE_CMP(ta, tb, date_posted);
+    if (ta->date_posted != tb->date_posted)
+        return (ta->date_posted > tb->date_posted) - (ta->date_posted < tb->date_posted);
 
     /* otherwise, sort on number string */
     if (actna && actnb) /* split action string, if not NULL */
@@ -1907,8 +1898,8 @@ xaccTransOrder_num_action (const Transaction *ta, const char *actna,
     if (na < nb) return -1;
     if (na > nb) return +1;
 
-    /* if dates differ, return */
-    DATE_CMP(ta, tb, date_entered);
+    if (ta->date_entered != tb->date_entered)
+        return (ta->date_entered > tb->date_entered) - (ta->date_entered < tb->date_entered);
 
     /* otherwise, sort on description string */
     da = ta->description ? ta->description : "";
@@ -1925,7 +1916,7 @@ xaccTransOrder_num_action (const Transaction *ta, const char *actna,
 \********************************************************************/
 
 static inline void
-xaccTransSetDateInternal(Transaction *trans, Timespec *dadate, Timespec val)
+xaccTransSetDateInternal(Transaction *trans, time64 *dadate, time64 val)
 {
     xaccTransBeginEdit(trans);
 
@@ -1962,9 +1953,8 @@ set_gains_date_dirty (Transaction *trans)
 void
 xaccTransSetDatePostedSecs (Transaction *trans, time64 secs)
 {
-    Timespec ts = {secs, 0};
     if (!trans) return;
-    xaccTransSetDateInternal(trans, &trans->date_posted, ts);
+    xaccTransSetDateInternal(trans, &trans->date_posted, secs);
     set_gains_date_dirty (trans);
 }
 
@@ -1990,16 +1980,15 @@ xaccTransSetDatePostedGDate (Transaction *trans, GDate date)
     qof_instance_set_kvp (QOF_INSTANCE(trans), &v, 1, TRANS_DATE_POSTED);
     /* mark dirty and commit handled by SetDateInternal */
     xaccTransSetDateInternal(trans, &trans->date_posted,
-                             gdate_to_timespec(date));
+                             gdate_to_time64(date));
     set_gains_date_dirty (trans);
 }
 
 void
 xaccTransSetDateEnteredSecs (Transaction *trans, time64 secs)
 {
-    Timespec ts = {secs, 0};
     if (!trans) return;
-    xaccTransSetDateInternal(trans, &trans->date_entered, ts);
+    xaccTransSetDateInternal(trans, &trans->date_entered, secs);
 }
 
 static void
@@ -2008,34 +1997,21 @@ qofTransSetDatePosted (Transaction *trans, Timespec ts)
     if (!trans) return;
     if ((ts.tv_nsec == 0) && (ts.tv_sec == 0)) return;
     if (!qof_begin_edit(&trans->inst)) return;
-    xaccTransSetDateInternal(trans, &trans->date_posted, ts);
+    xaccTransSetDateInternal(trans, &trans->date_posted, ts.tv_sec);
     set_gains_date_dirty(trans);
     qof_commit_edit(&trans->inst);
-}
-
-void
-xaccTransSetDatePostedTS (Transaction *trans, const Timespec *ts)
-{
-    if (!trans || !ts) return;
-    xaccTransSetDateInternal(trans, &trans->date_posted, *ts);
-    set_gains_date_dirty (trans);
 }
 
 static void
 qofTransSetDateEntered (Transaction *trans, Timespec ts)
 {
+    /*This is called from the query framework, so we'll leave the timespec
+     * until the query framework is converted, too.*/
     if (!trans) return;
     if ((ts.tv_nsec == 0) && (ts.tv_sec == 0)) return;
     if (!qof_begin_edit(&trans->inst)) return;
-    xaccTransSetDateInternal(trans, &trans->date_entered, ts);
+    xaccTransSetDateInternal(trans, &trans->date_entered, ts.tv_sec);
     qof_commit_edit(&trans->inst);
-}
-
-void
-xaccTransSetDateEnteredTS (Transaction *trans, const Timespec *ts)
-{
-    if (!trans || !ts) return;
-    xaccTransSetDateInternal(trans, &trans->date_entered, *ts);
 }
 
 void
@@ -2056,12 +2032,13 @@ xaccTransSetDate (Transaction *trans, int day, int mon, int year)
 }
 
 void
-xaccTransSetDateDueTS (Transaction *trans, const Timespec *ts)
+xaccTransSetDateDue (Transaction * trans, time64 time)
 {
     GValue v = G_VALUE_INIT;
-    if (!trans || !ts) return;
+    Timespec send_ts = {time, 0};
+    if (!trans) return;
     g_value_init (&v, GNC_TYPE_TIMESPEC);
-    g_value_set_boxed (&v, ts);
+    g_value_set_boxed (&v, &send_ts);
     xaccTransBeginEdit(trans);
     qof_instance_set_kvp (QOF_INSTANCE (trans), &v, 1, TRANS_DATE_DUE_KVP);
     qof_instance_set_dirty(QOF_INSTANCE(trans));
@@ -2370,36 +2347,21 @@ xaccTransGetIsClosingTxn (const Transaction *trans)
 time64
 xaccTransGetDate (const Transaction *trans)
 {
-    return trans ? trans->date_posted.tv_sec : 0;
+    return trans ? trans->date_posted : 0;
 }
 
 /*################## Added for Reg2 #################*/
 time64
 xaccTransGetDateEntered (const Transaction *trans)
 {
-    return trans ? trans->date_entered.tv_sec : 0;
+    return trans ? trans->date_entered : 0;;
 }
 /*################## Added for Reg2 #################*/
 
-void
-xaccTransGetDatePostedTS (const Transaction *trans, Timespec *ts)
+time64
+xaccTransRetDatePosted (const Transaction *trans)
 {
-    if (trans && ts)
-        *ts = trans->date_posted;
-}
-
-void
-xaccTransGetDateEnteredTS (const Transaction *trans, Timespec *ts)
-{
-    if (trans && ts)
-        *ts = trans->date_entered;
-}
-
-Timespec
-xaccTransRetDatePostedTS (const Transaction *trans)
-{
-    Timespec ts = {0, 0};
-    return trans ? trans->date_posted : ts;
+    return trans ? trans->date_posted : 0;
 }
 
 GDate
@@ -2438,32 +2400,24 @@ xaccTransGetDatePostedGDate (const Transaction *trans)
     return result;
 }
 
-Timespec
-xaccTransRetDateEnteredTS (const Transaction *trans)
+time64
+xaccTransRetDateEntered (const Transaction *trans)
 {
-    Timespec ts = {0, 0};
-    return trans ? trans->date_entered : ts;
+    return trans ? trans->date_entered : 0;
 }
 
-void
-xaccTransGetDateDueTS (const Transaction *trans, Timespec *ts)
+time64
+xaccTransRetDateDue(const Transaction *trans)
 {
+    time64 ret = 0;
     GValue v = G_VALUE_INIT;
-    if (!trans || !ts) return;
-
+    if (!trans) return 0;
     qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, TRANS_DATE_DUE_KVP);
     if (G_VALUE_HOLDS_BOXED (&v))
-         *ts = *(Timespec*)g_value_get_boxed (&v);
-    if (ts->tv_sec == 0)
-        xaccTransGetDatePostedTS (trans, ts);
-}
-
-Timespec
-xaccTransRetDateDueTS (const Transaction *trans)
-{
-    Timespec ts = {0, 0};
-    if (trans) xaccTransGetDateDueTS (trans, &ts);
-    return ts;
+        ret = ((Timespec*)g_value_get_boxed (&v))->tv_sec;
+    if (!ret)
+        return xaccTransRetDatePosted (trans);
+    return ret;
 }
 
 char
@@ -2571,7 +2525,7 @@ gboolean xaccTransInFutureByPostedDate (const Transaction *trans)
 
     present = gnc_time64_get_today_end ();
 
-    if (trans->date_posted.tv_sec > present)
+    if (trans->date_posted > present)
         result = TRUE;
     else
         result = FALSE;
@@ -2736,19 +2690,19 @@ xaccTransGetVoidReason(const Transaction *trans)
     return NULL;
 }
 
-Timespec
+time64
 xaccTransGetVoidTime(const Transaction *tr)
 {
     GValue v = G_VALUE_INIT;
     const char *s = NULL;
-    Timespec void_time = {0, 0};
+    time64 void_time = 0;
 
     g_return_val_if_fail(tr, void_time);
     qof_instance_get_kvp (QOF_INSTANCE (tr), &v, 1, void_time_str);
     if (G_VALUE_HOLDS_STRING (&v))
         s = g_value_get_string (&v);
     if (s)
-        return gnc_iso8601_to_timespec_gmt (s);
+        return gnc_iso8601_to_time64_gmt (s);
     return void_time;
 }
 
@@ -2856,8 +2810,6 @@ static void
 xaccTransScrubGainsDate (Transaction *trans)
 {
     SplitList *node;
-    Timespec ts = {0, 0};
-//restart_search:
     for (node = trans->splits; node; node = node->next)
     {
         Split *s = node->data;
@@ -2871,13 +2823,10 @@ xaccTransScrubGainsDate (Transaction *trans)
              (s->gains & GAINS_STATUS_DATE_DIRTY)))
         {
             Transaction *source_trans = s->gains_split->parent;
-            ts = source_trans->date_posted;
             s->gains &= ~GAINS_STATUS_DATE_DIRTY;
             s->gains_split->gains &= ~GAINS_STATUS_DATE_DIRTY;
-
-            xaccTransSetDatePostedTS(trans, &ts);
+            xaccTransSetDatePostedSecs(trans, source_trans->date_posted);
             FOR_EACH_SPLIT(trans, s->gains &= ~GAINS_STATUS_DATE_DIRTY);
-            //goto restart_search;
         }
     }
 }
@@ -2990,6 +2939,39 @@ trans_is_balanced_p (const Transaction *trans)
     return trans ? xaccTransIsBalanced(trans) : FALSE;
 }
 
+static Timespec
+xaccTransRetDateEnteredTS (Transaction * trans)
+{
+    Timespec ret = {xaccTransRetDateEntered (trans), 0};
+    return ret;
+}
+
+static void
+qofTransSetDateEnteredTS (Transaction * trans, Timespec t)
+{
+    xaccTransSetDateEnteredSecs (trans, t.tv_sec);
+}
+
+static Timespec
+xaccTransRetDatePostedTS (Transaction * trans)
+{
+    Timespec ret = {xaccTransRetDatePosted (trans), 0};
+    return ret;
+}
+
+static void
+qofTransSetDatePostedTS (Transaction * trans, Timespec t)
+{
+    xaccTransSetDatePostedSecs (trans, t.tv_sec);
+}
+
+static Timespec
+xaccTransRetDateDueTS (Transaction * trans)
+{
+    Timespec ret = {xaccTransRetDateDue (trans), 0};
+    return ret;
+}
+
 gboolean xaccTransRegister (void)
 {
     static QofParam params[] =
@@ -3008,12 +2990,12 @@ gboolean xaccTransRegister (void)
             {
                 TRANS_DATE_ENTERED, QOF_TYPE_DATE,
                 (QofAccessFunc)xaccTransRetDateEnteredTS,
-                (QofSetterFunc)qofTransSetDateEntered
+                (QofSetterFunc)qofTransSetDateEnteredTS
             },
             {
                 TRANS_DATE_POSTED, QOF_TYPE_DATE,
                 (QofAccessFunc)xaccTransRetDatePostedTS,
-                (QofSetterFunc)qofTransSetDatePosted
+                (QofSetterFunc)qofTransSetDatePostedTS
             },
             {
                 TRANS_DATE_DUE, QOF_TYPE_DATE,

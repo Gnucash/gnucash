@@ -125,8 +125,8 @@
 	   (my-income-account (env-create-root-account env ACCT-TYPE-INCOME
 						       (gnc-default-report-currency)))
 	   (date-0 (gnc:get-start-this-month))
-	   (date-1 (gnc:timepair-next-day date-0))
-	   (date-2 (gnc:timepair-next-day date-1)))
+	   (date-1 (gnc:time64-next-day date-0))
+	   (date-2 (gnc:time64-next-day date-1)))
       (env-create-transaction env
 			       date-1
 			       my-income-account
@@ -185,8 +185,8 @@
 	   (my-income-account (env-create-root-account env ACCT-TYPE-INCOME
 						       (gnc-default-report-currency)))
 	   (date-0 (gnc:get-start-this-month))
-	   (date-1 (gnc:timepair-next-day date-0))
-	   (date-2 (gnc:timepair-next-day date-1)))
+	   (date-1 (gnc:time64-next-day date-0))
+	   (date-2 (gnc:time64-next-day date-1)))
       (env-create-transaction env date-1 my-income-account my-asset-account -1/1)
       (env-create-transaction env date-1 my-expense-account my-liability-account -1/1)
       (env-create-transaction env date-2 my-income-account my-asset-account -5/1)

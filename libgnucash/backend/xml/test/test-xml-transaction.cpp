@@ -287,14 +287,14 @@ node_and_transaction_equal (xmlNodePtr node, Transaction* trn)
         }
         else if (g_strcmp0 ((char*)mark->name, "trn:date-posted") == 0)
         {
-            if (!equals_node_val_vs_date (mark, xaccTransRetDatePostedTS (trn)))
+            if (!equals_node_val_vs_date (mark, xaccTransRetDatePosted (trn)))
             {
                 return "posted dates differ";
             }
         }
         else if (g_strcmp0 ((char*)mark->name, "trn:date-entered") == 0)
         {
-            if (!equals_node_val_vs_date (mark, xaccTransRetDateEnteredTS (trn)))
+            if (!equals_node_val_vs_date (mark, xaccTransRetDateEntered (trn)))
             {
                 return "entered dates differ";
             }

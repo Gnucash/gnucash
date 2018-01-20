@@ -192,7 +192,7 @@ gtu_sr_handle_exchange_rate (GncTreeViewSplitReg *view, gnc_numeric amount, Tran
 
         /* Get per book option */
         gnc_xfer_dialog_set_num (xfer, gnc_get_num_action (trans, split));
-        gnc_xfer_dialog_set_date (xfer, timespecToTime64 (xaccTransRetDatePostedTS (trans)));
+        gnc_xfer_dialog_set_date (xfer, xaccTransRetDatePosted (trans));
 
         value = amount;
         if (gnc_xfer_dialog_run_exchange_dialog (xfer, &rate_split, value, reg_acc, trans, xfer_comm, expanded))

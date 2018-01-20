@@ -2,6 +2,7 @@
  * option-util.h -- GNOME<->guile option interface                  *
  * Copyright (C) 1998,1999 Linas Vepstas                            *
  * Copyright (C) 2000 Dave Peticolas                                *
+ * Copyright (C) 2017 Aaron Laws                                    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -182,14 +183,6 @@ char * gnc_option_db_lookup_multichoice_option(GNCOptionDB *odb,
         const char *name,
         const char *default_value);
 
-time64 gnc_option_db_lookup_date_option(GNCOptionDB *odb,
-                                        const char *section,
-                                        const char *name,
-                                        gboolean *is_relative,
-                                        Timespec *set_ab_value,
-                                        char **set_rel_value,
-                                        Timespec *default_value);
-
 gdouble gnc_option_db_lookup_number_option(GNCOptionDB *odb,
         const char *section,
         const char *name,
@@ -248,7 +241,7 @@ gboolean gnc_option_db_set_string_option(GNCOptionDB *odb,
 char * gnc_option_date_option_get_subtype(GNCOption *option);
 
 char * gnc_date_option_value_get_type (SCM option_value);
-Timespec gnc_date_option_value_get_absolute (SCM option_value);
+time64 gnc_date_option_value_get_absolute (SCM option_value);
 SCM gnc_date_option_value_get_relative (SCM option_value);
 
 char * gnc_plot_size_option_value_get_type (SCM option_value);

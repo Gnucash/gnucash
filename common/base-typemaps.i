@@ -50,10 +50,7 @@ typedef char gchar;
 %typemap(in) gboolean "$1 = scm_is_true($input) ? TRUE : FALSE;"
 %typemap(out) gboolean "$result = $1 ? SCM_BOOL_T : SCM_BOOL_F;"
 
-%typemap(in) Timespec "$1 = gnc_timepair2timespec($input);"
-%typemap(out) Timespec "$result = gnc_timespec2timepair($1);"
-
-%typemap(in) GDate "$1 = gnc_timepair_to_GDate($input);"
+%typemap(in) GDate "$1 = gnc_time64_to_GDate($input);"
 
 %typemap(in) GncGUID "$1 = gnc_scm2guid($input);"
 %typemap(out) GncGUID "$result = gnc_guid2scm($1);"

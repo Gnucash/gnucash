@@ -1640,10 +1640,10 @@ tags within description, notes or memo. ")
                        c_account_0))
          (c_account_2 (opt-val gnc:pagename-accounts optname-filterby))
          (filter-mode (opt-val gnc:pagename-accounts optname-filtertype))
-         (begindate (gnc:timepair-start-day-time
+         (begindate (gnc:time64-start-day-time
                      (gnc:date-option-absolute-time
                       (opt-val gnc:pagename-general optname-startdate))))
-         (enddate (gnc:timepair-end-day-time
+         (enddate (gnc:time64-end-day-time
                    (gnc:date-option-absolute-time
                     (opt-val gnc:pagename-general optname-enddate))))
          (transaction-matcher (opt-val pagename-filter optname-transaction-matcher))
@@ -1822,7 +1822,7 @@ tags within description, notes or memo. ")
 
           (qof-query-set-book query (gnc-get-current-book))
           (xaccQueryAddAccountMatch query c_account_1 QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-          (xaccQueryAddDateMatchTS query #t begindate #t enddate QOF-QUERY-AND)
+          (xaccQueryAddDateMatchTT query #t begindate #t enddate QOF-QUERY-AND)
           (case void-status
             ((non-void-only) (gnc:query-set-match-non-voids-only! query (gnc-get-current-book)))
             ((void-only)     (gnc:query-set-match-voids-only! query (gnc-get-current-book)))
@@ -1895,8 +1895,8 @@ tags within description, notes or memo. ")
                   (gnc:html-markup-h3
                    (sprintf #f
                             (_ "From %s to %s")
-                            (gnc-print-date begindate)
-                            (gnc-print-date enddate)))))
+                            (qof-print-date begindate)
+                            (qof-print-date enddate)))))
 
                 (if (member 'match infobox-display)
                     (gnc:html-document-add-object!

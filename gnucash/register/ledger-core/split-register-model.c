@@ -830,7 +830,7 @@ gnc_split_register_get_due_date_entry (VirtualLocation virt_loc,
     SplitRegister *reg = user_data;
     Transaction *trans;
     Split *split;
-    Timespec ts;
+    Timespec ts = {0, 0};
     gboolean is_current;
     char type;
 
@@ -867,7 +867,7 @@ gnc_split_register_get_due_date_entry (VirtualLocation virt_loc,
         return NULL;
     }
 
-    xaccTransGetDateDueTS (trans, &ts);
+    ts.tv_sec = xaccTransRetDateDue (trans);
     //PWARN ("returning valid due_date entry");
 
     return gnc_print_date (ts);
@@ -882,14 +882,14 @@ gnc_split_register_get_date_entry (VirtualLocation virt_loc,
     SplitRegister *reg = user_data;
     Transaction *trans;
     Split *split;
-    Timespec ts;
+    Timespec ts = {0, 0};
 
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
     trans = xaccSplitGetParent (split);
     if (!trans)
         return NULL;
 
-    xaccTransGetDatePostedTS (trans, &ts);
+    ts.tv_sec = xaccTransRetDatePosted (trans);
 
     return gnc_print_date (ts);
 }

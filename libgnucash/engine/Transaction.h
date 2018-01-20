@@ -625,21 +625,12 @@ void          xaccTransSetDatePostedSecs (Transaction *trans, time64 time);
  * The posted date is the date when this transaction was posted at the bank. */
 void          xaccTransSetDatePostedSecsNormalized (Transaction *trans, time64 time);
 
-/**  The xaccTransSetDatePostedTS() method does the same thing as
-     xaccTransSetDatePostedSecs(), but takes a struct timespec64. */
-void          xaccTransSetDatePostedTS (Transaction *trans,
-                                        const Timespec *ts);
-
 /** Modify the date of when the transaction was entered. The entered
  * date is the date when the register entry was made. */
 void          xaccTransSetDateEnteredSecs (Transaction *trans, time64 time);
-/** Modify the date of when the transaction was entered. The entered
- * date is the date when the register entry was made. */
-void          xaccTransSetDateEnteredTS (Transaction *trans,
-        const Timespec *ts);
 
 /** Dates and txn-type for A/R and A/P "invoice" postings */
-void	      xaccTransSetDateDueTS (Transaction *trans, const Timespec *ts);
+void          xaccTransSetDateDue (Transaction * trans, time64 time);
 
 /** Retrieve the posted date of the transaction. The posted date is
     the date when this transaction was posted at the bank. (Although
@@ -650,12 +641,7 @@ time64        xaccTransGetDate (const Transaction *trans);
     the date when this transaction was posted at the bank. (Although
     having different function names, GetDate and GetDatePosted refer
     to the same single date.)*/
-void          xaccTransGetDatePostedTS (const Transaction *trans, Timespec *ts);
-/** Retrieve the posted date of the transaction. The posted date is
-    the date when this transaction was posted at the bank. (Although
-    having different function names, GetDate and GetDatePosted refer
-    to the same single date.)*/
-Timespec      xaccTransRetDatePostedTS (const Transaction *trans);
+time64        xaccTransRetDatePosted   (const Transaction *trans);
 /** Retrieve the posted date of the transaction. The posted date is
     the date when this transaction was posted at the bank. */
 GDate      xaccTransGetDatePostedGDate (const Transaction *trans);
@@ -667,15 +653,10 @@ time64        xaccTransGetDateEntered (const Transaction *trans);
 /*################## Added for Reg2 #################*/
 /** Retrieve the date of when the transaction was entered. The entered
  * date is the date when the register entry was made.*/
-void          xaccTransGetDateEnteredTS (const Transaction *trans, Timespec *ts);
-/** Retrieve the date of when the transaction was entered. The entered
- * date is the date when the register entry was made.*/
-Timespec      xaccTransRetDateEnteredTS (const Transaction *trans);
+time64        xaccTransRetDateEntered (const Transaction *trans);
 
 /** Dates and txn-type for A/R and A/P "invoice" postings */
-Timespec      xaccTransRetDateDueTS (const Transaction *trans);
-/** Dates and txn-type for A/R and A/P "invoice" postings */
-void	      xaccTransGetDateDueTS (const Transaction *trans, Timespec *ts);
+time64        xaccTransRetDateDue (const Transaction *trans);
 /** @} */
 
 
@@ -753,10 +734,10 @@ const char *xaccTransGetVoidReason(const Transaction *transaction);
  *
  *  @param tr The transaction in question.
  *
- *  @return A Timespec containing the time that this transaction was
+ *  @return A time64 containing the time that this transaction was
  *  voided. Returns a time of zero upon error.
  */
-Timespec xaccTransGetVoidTime(const Transaction *tr);
+time64 xaccTransGetVoidTime(const Transaction *tr);
 /** @} */
 
 /** @name Transaction Parameter names

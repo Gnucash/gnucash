@@ -165,7 +165,7 @@
 (define (make-row column-vector date due-date num type-str memo monetary)
   (let ((row-contents '()))
     (if (date-col column-vector)
-        (addto! row-contents (gnc-print-date date)))
+        (addto! row-contents (qof-print-date date)))
     (if (num-col column-vector)
         (addto! row-contents num))
     (if (type-col column-vector)
@@ -206,7 +206,7 @@
 (define (add-txn-row table txn acc column-vector odd-row? printed?
                      inv-str reverse? start-date total)
   (let* ((type (xaccTransGetTxnType txn))
-         (date (gnc-transaction-get-date-posted txn))
+         (date (xaccTransGetDate txn))
          (due-date #f)
          (value (xaccTransGetAccountValue txn acc))
          (split (xaccTransGetSplit txn 0))
@@ -234,7 +234,7 @@
     (if reverse?
         (set! value (gnc-numeric-neg value)))
 
-    (if (gnc:timepair-later start-date date)
+    (if (< start-date date)
         (begin
           
           ;; Adds 'balance' row if needed
@@ -242,7 +242,7 @@
           
           ;; Now print out the invoice row
           (if (not (null? invoice))
-              (set! due-date (gncInvoiceGetDateDue invoice)))
+              (set! due-date (gncInvoiceGetDateDueTT invoice)))
 
           (let ((row (make-row column-vector date due-date (gnc-get-num-action txn split)
                                type-str (xaccSplitGetMemo split)
@@ -545,7 +545,7 @@
 
 (define (query-toplevel-setup query account-list start-date end-date)
   (xaccQueryAddAccountMatch query account-list QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-  (xaccQueryAddDateMatchTS query #t start-date #t end-date QOF-QUERY-AND)
+  (xaccQueryAddDateMatchTT query #t start-date #t end-date QOF-QUERY-AND)
   (qof-query-set-book query (gnc-get-current-book))
   query)
 
@@ -605,7 +605,7 @@
    table
    (list
     (string-append label ":&nbsp;")
-    (string-expand (gnc-print-date date) #\space "&nbsp;"))))
+    (string-expand (qof-print-date date) #\space "&nbsp;"))))
 
 (define (make-date-table)
   (let ((table (gnc:make-html-table)))
@@ -640,7 +640,7 @@
     (gnc:html-table-append-row! table (list
                                        (strftime
                                         date-format
-                                        (localtime (car (gnc:get-today))))))
+                                        (localtime (gnc:get-today)))))
 
     (gnc:html-table-set-style!
      table-outer "table"
@@ -695,10 +695,10 @@
 
   (let* ((document (gnc:make-html-document))
          (report-title (opt-val gnc:pagename-general gnc:optname-reportname))
-         (start-date (gnc:timepair-start-day-time 
+         (start-date (gnc:time64-start-day-time 
                       (gnc:date-option-absolute-time
                        (opt-val gnc:pagename-general optname-from-date))))
-         (end-date (gnc:timepair-end-day-time 
+         (end-date (gnc:time64-end-day-time 
                     (gnc:date-option-absolute-time
                      (opt-val gnc:pagename-general optname-to-date))))
          (print-invoices? #t);;(opt-val gnc:pagename-general optname-invoicelines))
@@ -1003,8 +1003,8 @@
                (sprintf
                 #f (_ "%s %s - %s")
                 report-title
-                (gnc-print-date start-date)
-                (gnc-print-date end-date))))
+                (qof-print-date start-date)
+                (qof-print-date end-date))))
           (gnc:html-document-set-title!
            document headline)
 

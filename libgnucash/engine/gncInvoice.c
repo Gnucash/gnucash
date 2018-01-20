@@ -29,6 +29,7 @@
 
 #include <config.h>
 
+#include <stdint.h>
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <qofinstance-p.h>
@@ -61,8 +62,8 @@ struct _gncInvoice
     GncOwner      owner;
     GncOwner      billto;
     GncJob        *job;
-    Timespec      date_opened;
-    Timespec      date_posted;
+    time64      date_opened;
+    time64      date_posted;
 
     gnc_numeric   to_charge_amount;
 
@@ -136,6 +137,8 @@ G_DEFINE_TYPE(GncInvoice, gnc_invoice, QOF_TYPE_INSTANCE);
 static void
 gnc_invoice_init(GncInvoice* inv)
 {
+    inv->date_posted = INT64_MAX;
+    inv->date_opened = INT64_MAX;
 }
 
 static void
@@ -481,23 +484,23 @@ qofInvoiceSetBillTo (GncInvoice *invoice, QofInstance *ent)
 void gncInvoiceSetDateOpenedGDate (GncInvoice *invoice, const GDate *date)
 {
     g_assert (date);
-    gncInvoiceSetDateOpened(invoice, timespecCanonicalDayTime(gdate_to_timespec(*date)));
+    gncInvoiceSetDateOpened(invoice, time64CanonicalDayTime(gdate_to_time64 (*date)));
 }
 
-void gncInvoiceSetDateOpened (GncInvoice *invoice, Timespec date)
+void gncInvoiceSetDateOpened (GncInvoice *invoice, time64 date)
 {
     if (!invoice) return;
-    if (timespec_equal (&invoice->date_opened, &date)) return;
+    if (date == invoice->date_opened) return;
     gncInvoiceBeginEdit (invoice);
     invoice->date_opened = date;
     mark_invoice (invoice);
     gncInvoiceCommitEdit (invoice);
 }
 
-void gncInvoiceSetDatePosted (GncInvoice *invoice, Timespec date)
+void gncInvoiceSetDatePosted (GncInvoice *invoice, time64 date)
 {
     if (!invoice) return;
-    if (timespec_equal (&invoice->date_posted, &date)) return;
+    if (date == invoice->date_posted) return;
     gncInvoiceBeginEdit (invoice);
     invoice->date_posted = date;
     mark_invoice (invoice);
@@ -805,34 +808,25 @@ qofInvoiceGetBillTo (GncInvoice *invoice)
     return QOF_INSTANCE(billto);
 }
 
-Timespec gncInvoiceGetDateOpened (const GncInvoice *invoice)
+time64 gncInvoiceGetDateOpened (const GncInvoice *invoice)
 {
-    Timespec ts;
-    ts.tv_sec = 0;
-    ts.tv_nsec = 0;
-    if (!invoice) return ts;
+    if (!invoice) return INT64_MAX;
     return invoice->date_opened;
 }
 
-Timespec gncInvoiceGetDatePosted (const GncInvoice *invoice)
+time64 gncInvoiceGetDatePosted (const GncInvoice *invoice)
 {
-    Timespec ts;
-    ts.tv_sec = 0;
-    ts.tv_nsec = 0;
-    if (!invoice) return ts;
+    if (!invoice) return INT64_MAX;
     return invoice->date_posted;
 }
 
-Timespec gncInvoiceGetDateDue (const GncInvoice *invoice)
+time64 gncInvoiceGetDateDue (const GncInvoice *invoice)
 {
     Transaction *txn;
-    Timespec ts;
-    ts.tv_sec = 0;
-    ts.tv_nsec = 0;
-    if (!invoice) return ts;
+    if (!invoice) return 0;
     txn = gncInvoiceGetPostedTxn (invoice);
-    if (!txn) return ts;
-    return xaccTransRetDateDueTS (txn);
+    if (!txn) return 0;
+    return xaccTransRetDateDue (txn);
 }
 
 GncBillTerm * gncInvoiceGetTerms (const GncInvoice *invoice)
@@ -1366,7 +1360,7 @@ static gboolean gncInvoicePostAddSplit (QofBook *book,
 }
 
 Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
-                                       Timespec *post_date, Timespec *due_date,
+                                       time64 post_date, time64 due_date,
                                        const char * memo, gboolean accumulatesplits,
                                        gboolean autopay)
 {
@@ -1428,14 +1422,10 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
     /* Entered and Posted at date */
     xaccTransSetDateEnteredSecs (txn, gnc_time (NULL));
-    if (post_date)
-    {
-        xaccTransSetDatePostedTS (txn, post_date);
-        gncInvoiceSetDatePosted (invoice, *post_date);
-    }
+    xaccTransSetDatePostedSecs (txn, post_date);
+    gncInvoiceSetDatePosted (invoice, post_date);
 
-    if (due_date)
-        xaccTransSetDateDueTS (txn, due_date);
+    xaccTransSetDateDue (txn, due_date);
 
     /* Iterate through the entries; sum up everything for each account.
      * then create the appropriate splits in this txn.
@@ -1731,7 +1721,7 @@ gncInvoiceUnpost (GncInvoice *invoice, gboolean reset_tax_tables)
     invoice->posted_acc = NULL;
     invoice->posted_txn = NULL;
     invoice->posted_lot = NULL;
-    invoice->date_posted.tv_sec = invoice->date_posted.tv_nsec = 0;
+    invoice->date_posted = INT64_MAX;
 
     /* if we've been asked to reset the tax tables, then do so */
     if (reset_tax_tables)
@@ -1839,12 +1829,13 @@ void gncInvoiceAutoApplyPayments (GncInvoice *invoice)
 void
 gncInvoiceApplyPayment (const GncInvoice *invoice, Transaction *txn,
                         Account *xfer_acc, gnc_numeric amount,
-                        gnc_numeric exch, Timespec date,
+                        gnc_numeric exch, time64 date,
                         const char *memo, const char *num)
 {
     GNCLot *payment_lot;
     GList *selected_lots = NULL;
     const GncOwner *owner;
+    Timespec ts_pass = {date,0};
 
     /* Verify our arguments */
     if (!invoice || !gncInvoiceIsPosted (invoice) || !xfer_acc) return;
@@ -1854,7 +1845,7 @@ gncInvoiceApplyPayment (const GncInvoice *invoice, Transaction *txn,
 
     /* Create a lot for this payment */
     payment_lot = gncOwnerCreatePaymentLot (owner, &txn, invoice->posted_acc, xfer_acc,
-                                            amount, exch, date, memo, num);
+                                            amount, exch, ts_pass, memo, num);
 
     /* Select the invoice as only payment candidate */
     selected_lots = g_list_prepend (selected_lots, invoice->posted_lot);
@@ -1865,17 +1856,15 @@ gncInvoiceApplyPayment (const GncInvoice *invoice, Transaction *txn,
     gncOwnerAutoApplyPaymentsWithLots (owner, selected_lots);
 }
 
-static gboolean gncInvoiceDateExists (const Timespec *date)
+static gboolean gncInvoiceDateExists (time64 date)
 {
-    g_return_val_if_fail (date, FALSE);
-    if (date->tv_sec || date->tv_nsec) return TRUE;
-    return FALSE;
+    return date != INT64_MAX;
 }
 
 gboolean gncInvoiceIsPosted (const GncInvoice *invoice)
 {
     if (!invoice) return FALSE;
-    return gncInvoiceDateExists (&(invoice->date_posted));
+    return gncInvoiceDateExists (invoice->date_posted);
 }
 
 gboolean gncInvoiceIsPaid (const GncInvoice *invoice)
@@ -1923,13 +1912,8 @@ int gncInvoiceCompare (const GncInvoice *a, const GncInvoice *b)
 
     compare = g_strcmp0 (a->id, b->id);
     if (compare) return compare;
-
-    compare = timespec_cmp (&(a->date_opened), &(b->date_opened));
-    if (compare) return compare;
-
-    compare = timespec_cmp (&(a->date_posted), &(b->date_posted));
-    if (compare) return compare;
-
+    if (a->date_opened != b->date_opened) return a->date_opened - b->date_opened;
+    if (a->date_posted != b->date_posted) return a->date_posted - b->date_posted;
     return qof_instance_guid_compare(a, b);
 }
 
@@ -2015,8 +1999,8 @@ gboolean gncInvoiceEqual(const GncInvoice *a, const GncInvoice *b)
     GList       *prices;
     GncOwner    owner;
     GncOwner    billto;
-    Timespec    date_opened;
-    Timespec    date_posted;
+    time64    date_opened;
+    time64    date_posted;
 
     gnc_numeric	to_charge_amount;
 #endif

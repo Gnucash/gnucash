@@ -127,10 +127,10 @@
                                             QOF-GUID-MATCH-ANY QOF-QUERY-AND)
 
                   ;; The date should be close to the same.. +/- a week.
-                  (let ((date (gnc-transaction-get-date-posted xtn)))
-                    (xaccQueryAddDateMatchTS query #t
-                                             (decdate date WeekDelta) #t
-                                             (incdate date WeekDelta)
+                  (let ((date (xaccTransGetDate xtn)))
+                    (xaccQueryAddDateMatchTT query
+                                             #t (decdate date WeekDelta)
+                                             #t (incdate date WeekDelta)
                                              QOF-QUERY-AND))
 
                   ;; For each split in the new transaction, add a

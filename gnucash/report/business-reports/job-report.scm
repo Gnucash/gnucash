@@ -132,7 +132,7 @@
 	(table (gnc:make-html-table)))
 
     (define (in-interval this-date current-bucket)
-      (gnc:timepair-lt this-date current-bucket))
+      (< this-date current-bucket))
 
     (define (find-bucket current-bucket bucket-intervals date)
       (begin
@@ -189,12 +189,12 @@
 (define (make-row column-vector date due-date num type-str memo monetary)
   (let ((row-contents '()))
     (if (date-col column-vector)
-	(addto! row-contents (gnc-print-date date)))
+	(addto! row-contents (qof-print-date date)))
     (if (date-due-col column-vector)
 	(addto! row-contents 
 		(if (and due-date
-			 (not (equal? due-date (cons 0 0))))
-		    (gnc-print-date due-date)
+			 (not (zero? due-date)))
+		    (qof-print-date due-date)
 		    "")))
     (if (num-col column-vector)
 	(addto! row-contents num))
@@ -236,7 +236,7 @@
 (define (add-txn-row table txn acc column-vector odd-row? printed?
 		     inv-str reverse? start-date total)
   (let* ((type (xaccTransGetTxnType txn))
-	 (date (gnc-transaction-get-date-posted txn))
+	 (date (xaccTransGetDate txn))
 	 (due-date #f)
 	 (value (xaccTransGetAccountValue txn acc))
 	 (split (xaccTransGetSplit txn 0))
@@ -258,7 +258,7 @@
     (if reverse?
 	(set! value (gnc-numeric-neg value)))
 
-    (if (gnc:timepair-later start-date date)
+    (if (< start-date date)
 	(begin
 	  
 	  ; Adds 'balance' row if needed
@@ -465,7 +465,7 @@
      guid QOF-QUERY-OR)
 
     (xaccQueryAddSingleAccountMatch q account QOF-QUERY-AND)
-    (xaccQueryAddDateMatchTS q #f end-date #t end-date QOF-QUERY-AND)
+    (xaccQueryAddDateMatchTT q #f end-date #t end-date QOF-QUERY-AND)
     (qof-query-set-book q (gnc-get-current-book))
     q))
 
@@ -493,7 +493,7 @@
    table
    (list
     (string-append label ":&nbsp;")
-    (string-expand (gnc-print-date date) #\space "&nbsp;"))))
+    (string-expand (qof-print-date date) #\space "&nbsp;"))))
 
 (define (make-date-table)
   (let ((table (gnc:make-html-table)))
@@ -526,7 +526,7 @@
     (gnc:html-table-append-row! table (list
 				       (strftime
 					date-format
-					(gnc-localtime (car (gnc:get-today))))))
+					(gnc-localtime (current-time)))))
     table))
 
 (define (make-break! document)
@@ -546,10 +546,10 @@
 	 (query (qof-query-create-for-splits))
 	 (account (opt-val owner-page acct-string))
 	 (owner (opt-val owner-page owner-string))
-	 (start-date (gnc:timepair-start-day-time 
+	 (start-date (gnc:time64-start-day-time 
 		       (gnc:date-option-absolute-time
 			(opt-val gnc:pagename-general (N_ "From")))))
-	 (end-date (gnc:timepair-end-day-time 
+	 (end-date (gnc:time64-end-day-time 
 		       (gnc:date-option-absolute-time
 			(opt-val gnc:pagename-general (N_ "To")))))
 	 (book (gnc-account-get-book account))
@@ -620,9 +620,9 @@
 	    (string-append
 	     (_ "Date Range")
 	     ": "
-	     (gnc-print-date start-date)
+	     (qof-print-date start-date)
 	     " - "
-	     (gnc-print-date end-date))))
+	     (qof-print-date end-date))))
 
 	  (make-break! document)
 

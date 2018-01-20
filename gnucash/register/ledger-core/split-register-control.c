@@ -1,5 +1,6 @@
 /********************************************************************\
  * split-register-control.c -- split register control object        *
+ * Copyright (C) 2017 Aaron Laws                                    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -1285,9 +1286,9 @@ gnc_split_register_xfer_dialog(SplitRegister *reg, Transaction *txn,
     cell = gnc_cellblock_get_cell_by_name(cur, DATE_CELL, NULL, NULL);
     if (cell)
     {
-        Timespec ts;
-        gnc_date_cell_get_date((DateCell*) cell, &ts);
-        gnc_xfer_dialog_set_date(xfer, timespecToTime64(ts));
+        time64 time;
+        gnc_date_cell_get_date((DateCell*) cell, &time);
+        gnc_xfer_dialog_set_date(xfer, time);
     }
     else
         gnc_xfer_dialog_set_date(xfer, xaccTransGetDate(txn));

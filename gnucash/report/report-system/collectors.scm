@@ -59,10 +59,6 @@
 (export slotset-check)
 (export slotset-map-input)
 
-(export predicate-and)
-(export predicate-or)
-(export predicate-not)
-
 (export binary-search-lt)
 
 ;; Filters
@@ -333,25 +329,6 @@
 			(car final))
 		      (make-list-collector (cons collector other-collectors))))
 
-;;
-;; Predicates
-;;
-;; Was thinking about turning these into a real type (just to get a
-;; decent predicate-name function).  Probably not required.
-
-(define (predicate-not p)
-  (lambda (x) (not (p x))))
-
-(define (predicate-and p1 p2)
-  (lambda (x) (and (p1 x) (p2 x))))
-
-(define (predicate-or p1 p2)
-  (lambda (x) (or (p1 x) (p2 x))))
-
-(define (make-predicate fn) fn)
-
-(define (predicate-test p value)
-  (p value))
 
 ;; Binary search. Returns highest index with content less than or
 ;; equal to the supplied value.

@@ -237,14 +237,14 @@ developing over time"))
       (gnc:report-options report-obj) section name)))
   
   (gnc:report-starting reportname)
-  (let* ((to-date-tp (gnc:timepair-end-day-time
-                     (gnc:date-option-absolute-time
-                      (get-option gnc:pagename-general 
-                                  optname-to-date))))
-        (from-date-tp (gnc:timepair-start-day-time 
+  (let* ((to-date-t64 (gnc:time64-end-day-time
                        (gnc:date-option-absolute-time
                         (get-option gnc:pagename-general 
-                                    optname-from-date))))
+                                    optname-to-date))))
+        (from-date-t64 (gnc:time64-start-day-time 
+                        (gnc:date-option-absolute-time
+                         (get-option gnc:pagename-general 
+                                     optname-from-date))))
         (interval (get-option gnc:pagename-general optname-stepsize))
         (report-currency (get-option gnc:pagename-general
                                      optname-report-currency))
@@ -312,14 +312,14 @@ developing over time"))
                  (if averaging-fraction-func
                      ;; Calculate the divisor of the amounts so that an
                      ;; average is shown. Multiplier factor is a gnc-numeric
-                     (let* ((start-frac-avg (averaging-fraction-func (gnc:timepair->secs from-date-tp)))
-                             (end-frac-avg (averaging-fraction-func (+ 1 (gnc:timepair->secs to-date-tp))))
+                     (let* ((start-frac-avg (averaging-fraction-func from-date-t64))
+                             (end-frac-avg (averaging-fraction-func (+ 1 to-date-t64)))
                              (diff-avg (- end-frac-avg start-frac-avg))
                              (diff-avg-numeric (/
                                                 (inexact->exact (round (* diff-avg 1000000))) ; 6 decimals precision
                                                 1000000))
-                             (start-frac-int (interval-fraction-func (gnc:timepair->secs from-date-tp)))
-                             (end-frac-int (interval-fraction-func (+ 1 (gnc:timepair->secs to-date-tp))))
+                             (start-frac-int (interval-fraction-func from-date-t64))
+                             (end-frac-int (interval-fraction-func (+ 1 to-date-t64)))
                              (diff-int (- end-frac-int start-frac-int))
                              (diff-int-numeric (/
                                                 (inexact->exact diff-int) 1))
@@ -341,12 +341,12 @@ developing over time"))
                ;; This is the list of date intervals to calculate.
                (dates-list (if do-intervals?
                                (gnc:make-date-interval-list
-                                (gnc:timepair-start-day-time from-date-tp) 
-                                (gnc:timepair-end-day-time to-date-tp)
+                                (gnc:time64-start-day-time from-date-t64) 
+                                (gnc:time64-end-day-time to-date-t64)
                                 (gnc:deltasym-to-delta interval))
                                (gnc:make-date-list
-                                (gnc:timepair-end-day-time from-date-tp) 
-                                (gnc:timepair-end-day-time to-date-tp)
+                                (gnc:time64-end-day-time from-date-t64) 
+                                (gnc:time64-end-day-time to-date-t64)
                                 (gnc:deltasym-to-delta interval))))
                ;; Here the date strings for the x-axis labels are
                ;; created.
@@ -358,7 +358,7 @@ developing over time"))
 
           (define (datelist->stringlist dates-list)
             (map (lambda (date-list-item)
-                         (gnc-print-date
+                         (qof-print-date
                           (if do-intervals?
                               (car date-list-item)
                               date-list-item)))
@@ -370,7 +370,7 @@ developing over time"))
           ;; instead of division to avoid division-by-zero issues) in case
           ;; the user wants to see the amounts averaged over some value.
           (define (collector->monetary c date)
-            (if (not (gnc:timepair? date))
+            (if (not (number? date))
                 (throw 'wrong))
             (gnc:make-gnc-monetary
              report-currency
@@ -480,7 +480,7 @@ developing over time"))
                                 report-currency))
 	  (set! exchange-fn (gnc:case-exchange-time-fn 
                              price-source report-currency 
-                             commodity-list to-date-tp
+                             commodity-list to-date-t64
 			     5 15))
 
           ;; Sort the account list according to the account code field.
@@ -536,8 +536,8 @@ developing over time"))
                              (if do-intervals?
                                  (_ "%s to %s")
                                  (_ "Balances %s to %s"))
-                             (jqplot-escape-string (gnc-print-date from-date-tp))
-                             (jqplot-escape-string (gnc-print-date to-date-tp))))
+                             (jqplot-escape-string (qof-print-date from-date-t64))
+                             (jqplot-escape-string (qof-print-date to-date-t64))))
 
                  (gnc:html-barchart-set-width! chart width)
                  (gnc:html-barchart-set-height! chart height)
@@ -562,8 +562,8 @@ developing over time"))
                              (if do-intervals?
                                  (_ "%s to %s")
                                  (_ "Balances %s to %s"))
-                             (jqplot-escape-string (gnc-print-date from-date-tp))
-                             (jqplot-escape-string (gnc-print-date to-date-tp))))
+                             (jqplot-escape-string (qof-print-date from-date-t64))
+                             (jqplot-escape-string (qof-print-date to-date-t64))))
 
                  (gnc:html-linechart-set-width! chart width)
                  (gnc:html-linechart-set-height! chart height)

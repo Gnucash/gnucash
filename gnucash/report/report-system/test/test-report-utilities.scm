@@ -11,11 +11,10 @@
 (define (run-test)
   (test-account-get-trans-type-splits-interval))
 
-(define (NDayDelta tp n)
+(define (NDayDelta t64 n)
   (let* ((day-secs (* 60 60 24 n)) ; n days in seconds is n times 60 sec/min * 60 min/h * 24 h/day
-         (new-secs (- (car tp) day-secs))
-         (new-tp (cons new-secs 0)))
-    new-tp))
+         (new-secs (- t64 day-secs)))
+    new-secs))
 
 (define (test-account-get-trans-type-splits-interval)
   (let* ((env (create-test-env))
@@ -23,11 +22,11 @@
          (test-day (tm:mday ts-now))
          (test-month (+ 1 (tm:mon ts-now)))
          (test-year (+ 1900 (tm:year ts-now)))
-         (end-date-tp (gnc-dmy2timespec-neutral test-day test-month test-year))
-         (start-date-tp (NDayDelta end-date-tp 10))
-         (q-end-date-tp (gnc-dmy2timespec-end test-day test-month test-year))
-         (q-start-date-tp (gnc-dmy2timespec test-day test-month test-year))
-         (q-start-date-tp (NDayDelta q-start-date-tp 5)))
+         (end-date (gnc-dmy2time64-neutral test-day test-month test-year))
+         (start-date (NDayDelta end-date 10))
+         (q-end-date (gnc-dmy2time64-end test-day test-month test-year))
+         (q-start-date (gnc-dmy2time64 test-day test-month test-year))
+         (q-start-date (NDayDelta q-start-date 5)))
 
     (let* ((accounts (env-create-account-structure-alist env (list "Assets"
 								   (list (cons 'type ACCT-TYPE-ASSET))
@@ -36,10 +35,10 @@
 	   (bank-account (cdr (assoc "Bank Account" accounts)))
 	   (wallet (cdr (assoc "Wallet" accounts))))
 
-      (env-create-daily-transactions env start-date-tp end-date-tp bank-account wallet)
-      (format #t "Created transactions for each day from ~a to ~a~%" (gnc-ctime (gnc:timepair->secs start-date-tp)) (gnc-ctime (gnc:timepair->secs end-date-tp)))
+      (env-create-daily-transactions env start-date end-date bank-account wallet)
+      (format #t "Created transactions for each day from ~a to ~a~%" (gnc-ctime start-date) (gnc-ctime end-date))
       (let ((splits (gnc:account-get-trans-type-splits-interval (list bank-account wallet)
 							      ACCT-TYPE-ASSET
-							      q-start-date-tp q-end-date-tp)))
+							      q-start-date q-end-date)))
 	;; 10 is the right number (5 days, two splits per tx)
 	(or (equal? 10 (length splits)) (begin (format #t "Fail, ~d splits, expected 10~%" (length splits)) #f))))))

@@ -203,8 +203,8 @@
                 (if transaction-info?
                     (gnc:make-html-table-cell/markup
 					    "date-cell"
-                        (gnc-print-date
-                             (gnc-transaction-get-date-posted parent)))
+                        (qof-print-date
+                             (xaccTransGetDate parent)))
                         " ")))
     (if (num-col column-vector)
         (addto! row-contents
@@ -810,7 +810,7 @@
      (list
       (string-append
        (_ "Date") ":&nbsp;"
-       (string-expand (gnc-print-date (cons (current-time) 0))
+       (string-expand (qof-print-date (current-time))
                       #\space "&nbsp;"))
       (make-client-table address)))
     (set-last-row-style!

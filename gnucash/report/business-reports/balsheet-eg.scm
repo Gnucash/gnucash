@@ -381,10 +381,9 @@
          (opt-price-source     (get-option commodities-page optname-price-source))
          (opt-show-foreign?    (get-option commodities-page optname-show-foreign))
          (opt-report-title     (get-option general-page     optname-report-title))
-         (opt-date-tp          (gnc:timepair-end-day-time
+         (opt-date             (gnc:time64-end-day-time
                                  (gnc:date-option-absolute-time
                                    (get-option general-page optname-date))))
-         (opt-date-secs        (gnc:timepair->secs          opt-date-tp))
          (opt-columns          (get-option display-page     optname-columns))
          (opt-font-family      (get-option display-page     optname-font-family))
          (opt-font-size        (get-option display-page     optname-font-size))
@@ -424,7 +423,7 @@
 
          ;; exchange rates calculation parameters
          (exchange-fn
-           (gnc:case-exchange-fn opt-price-source opt-report-commodity opt-date-tp))
+           (gnc:case-exchange-fn opt-price-source opt-report-commodity opt-date))
          ; List of commodities (other than the local one) used
          ; so that exchange rate table can be displayed.
          ; xlist will become an association list of (comm . #t) pairs
@@ -527,7 +526,7 @@
                       (>= (gnc-account-get-current-depth (car account-list)) curr-depth))
                  (let* ((account (car account-list))
                         (comm    (xaccAccountGetCommodity account))
-                        (bal     (xaccAccountGetBalanceAsOfDate account opt-date-secs))
+                        (bal     (xaccAccountGetBalanceAsOfDate account opt-date))
                         (depth   (flattened-acc-depth account))
                         (treedepth 1)
                         ; Next account only qualifies as 'deeper' if we're not flattening

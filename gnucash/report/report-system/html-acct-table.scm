@@ -129,14 +129,14 @@
 ;;         sorting function.  #f means to preform no sorting.  the
 ;;         default sorting function is gnc:account-code-less-p.
 ;; 
-;;     start-date: timepair
+;;     start-date: time64
 ;; 
 ;;         the starting date of the reporting period over which to
 ;;         report balances for this account.  if start-date is #f,
 ;;         will be no limit on how early a counted transaction may
 ;;         ocurr.
 ;; 
-;;     end-date: timepair
+;;     end-date: time64
 ;; 
 ;;         the ending date of the reporting period over which to
 ;;         report balances for this account.  if end-date is #f, there
@@ -1164,8 +1164,7 @@
 	  )
 	 )))
     (gnc:html-table-set-style! table "table" 'attribute(list "style" "width:100%; max-width:20em") 'attribute (list "cellpadding" "0"))
-    table)
-  )
+    table))
 
 ;; 
 ;; This function adds all the lines from a gnc:html-acct-table to a

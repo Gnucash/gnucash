@@ -101,7 +101,7 @@
    (xaccSplitGetMemo split)
    (xaccSplitGetAction split)
    (xaccSplitGetReconcile split)
-   (gnc-split-get-date-reconciled split)
+   (xaccSplitGetDateReconciled split)
    (xaccSplitGetAmount split)
    (xaccSplitGetValue split)))
 
@@ -226,9 +226,9 @@
   (gnc:make-transaction-scm
    (gncTransGetGUID trans)
    (xaccTransGetCurrency trans)
-   (gnc-transaction-get-date-entered trans)
+   (xaccTransGetDateEntered trans)
    (if use-cut-semantics?
-       (gnc-transaction-get-date-posted trans)
+       (xaccTransGetDate trans)
        #f)
    (if use-cut-semantics?
        (xaccTransGetNum trans)
@@ -259,8 +259,7 @@
           (if description (xaccTransSetDescription trans description))
           (if num         (xaccTransSetNum trans num))
           (if notes       (xaccTransSetNotes trans notes))
-          (if date-posted (gnc-transaction-set-date
-                           trans date-posted)))
+          (if date-posted (xaccTransSetDatePostedSecs trans date-posted)))
 
         ;; strip off the old splits
         (for-each (lambda (split)

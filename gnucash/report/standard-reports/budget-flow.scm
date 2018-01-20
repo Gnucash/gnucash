@@ -320,7 +320,7 @@
         (gnc:html-document-set-title!
           doc (sprintf #f (_ "%s: %s - %s")
             report-name (gnc-budget-get-name budget)
-            (gnc-print-date (gnc-budget-get-period-start-date budget (- period 1)))))
+            (qof-print-date (gnc-budget-get-period-start-date budget (- period 1)))))
 
         ;; Display accounts and totals
         (set! accounts-totals (gnc:html-table-add-budget-types! html-table split-up-accounts budget period exchange-fn report-currency))

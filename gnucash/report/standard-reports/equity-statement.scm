@@ -207,9 +207,9 @@
          (start-date-printable (gnc:date-option-absolute-time
 				(get-option gnc:pagename-general
 					    optname-start-date)))
-         (start-date-tp (gnc:timepair-end-day-time
-			 (gnc:timepair-previous-day start-date-printable)))
-         (end-date-tp (gnc:timepair-end-day-time 
+         (start-date (gnc:time64-end-day-time
+			 (gnc:time64-previous-day start-date-printable)))
+         (end-date (gnc:time64-end-day-time 
 		       (gnc:date-option-absolute-time
 			(get-option gnc:pagename-general
 				    optname-end-date))))
@@ -270,10 +270,10 @@
          ;; exchange rates calculation parameters
 	 (start-exchange-fn
 	  (gnc:case-exchange-fn
-	   price-source report-commodity start-date-tp))
+	   price-source report-commodity start-date))
 	 (end-exchange-fn
 	  (gnc:case-exchange-fn
-	   price-source report-commodity end-date-tp))
+	   price-source report-commodity end-date))
 	 )
     
     (gnc:html-document-set-title! 
@@ -281,8 +281,8 @@
 		  (string-append "%s %s "
 				 (_ "For Period Covering %s to %s"))
 		  company-name report-title
-                  (gnc-print-date start-date-printable)
-                  (gnc-print-date end-date-tp)))
+                  (qof-print-date start-date-printable)
+                  (qof-print-date end-date)))
     
     (if (null? accounts)
 	
@@ -336,17 +336,17 @@
 	       (get-start-balance-fn
 		(lambda (account)
 		  (gnc:account-get-comm-balance-at-date 
-		   account start-date-tp #f)))
+		   account start-date #f)))
 	       (get-end-balance-fn
 		(lambda (account)
 		  (gnc:account-get-comm-balance-at-date 
-		   account end-date-tp #f)))
+		   account end-date #f)))
 	       (terse-period? #t)
 	       (period-for (if terse-period?
 			       (string-append " " (_ "for Period"))
 			       (sprintf #f (string-append ", " (_ "%s to %s"))
-					(gnc-print-date start-date-printable)
-					(gnc-print-date end-date-tp))
+					(qof-print-date start-date-printable)
+					(qof-print-date end-date))
 			       ))
 	       )
 	  
@@ -396,11 +396,11 @@
 	  ;; equity constitutes an unrealized loss.  I'm unsure about
 	  ;; that though....
 	  ;; 
-	  (define (unrealized-gains-at-date book-balance exchange-fn date-tp)
+	  (define (unrealized-gains-at-date book-balance exchange-fn date)
 	    (let* ((unrealized-gain-collector (gnc:make-commodity-collector))
 		   (weighted-fn
 		    (gnc:case-exchange-fn 'weighted-average
-					  report-commodity date-tp))
+					  report-commodity date))
 		   
 		   (value
 		    (gnc:gnc-monetary-amount
@@ -445,10 +445,10 @@
 	  ;; start and end retained earnings (income - expenses)
 	  (set! neg-pre-start-retained-earnings
 		(gnc:accountlist-get-comm-balance-at-date-with-closing
-		 income-expense-accounts start-date-tp)) ; OK
+		 income-expense-accounts start-date)) ; OK
 	  (set! neg-pre-end-retained-earnings
 		(gnc:accountlist-get-comm-balance-at-date-with-closing
-		 income-expense-accounts end-date-tp)) ; OK
+		 income-expense-accounts end-date)) ; OK
 	  ;; neg-pre-end-retained-earnings is not used to calculate
 	  ;; profit but is used to calculate unrealized gains
 	  
@@ -457,13 +457,13 @@
 	  (set! income-expense-closing
 		(gnc:account-get-trans-type-balance-interval-with-closing
 		 income-expense-accounts closing-pattern
-		 start-date-tp end-date-tp)
+		 start-date end-date)
 		)
 	  ;; find retained earnings for the period
 	  (set! neg-net-income
 		(gnc:accountlist-get-comm-balance-interval-with-closing
 		 income-expense-accounts
-		 start-date-tp end-date-tp)) ; OK
+		 start-date end-date)) ; OK
 	  ;; revert the income/expense to its pre-closing balance
 	  (neg-net-income 'minusmerge income-expense-closing #f)
 	  (set! net-income (gnc:make-commodity-collector))
@@ -502,7 +502,7 @@
 	  (set! start-unrealized-gains
 		(unrealized-gains-at-date start-book-balance
 					  start-exchange-fn
-					  start-date-tp)) ; OK
+					  start-date)) ; OK
 	  ;; I suspect that unrealized gains (since never realized)
 	  ;; must be counted from forever-ago....
 	  ;; ...yep, this appears to be correct.
@@ -510,7 +510,7 @@
 	  (set! end-unrealized-gains
 		(unrealized-gains-at-date end-book-balance
 					  end-exchange-fn
-					  end-date-tp)) ; OK
+					  end-date)) ; OK
 	  
 	  ;; unrealized gains accrued during the reporting period...
 	  (set! net-unrealized-gains (gnc:make-commodity-collector))
@@ -534,7 +534,7 @@
 	  (set! equity-closing 
 		(gnc:account-get-trans-type-balance-interval-with-closing
 		 equity-accounts closing-pattern
-		 start-date-tp end-date-tp)
+		 start-date end-date)
 		)
 	  (set! neg-pre-closing-equity (gnc:make-commodity-collector))
 	  (neg-pre-closing-equity 'merge neg-end-equity-balance #f)
@@ -544,7 +544,7 @@
 	  (net-investment 'minusmerge neg-pre-closing-equity #f);; > 0
 	  (net-investment 'merge neg-start-equity-balance #f)   ;; net increase
 
-	  (set! withdrawals (gnc:account-get-total-flow 'in  equity-accounts start-date-tp end-date-tp))
+	  (set! withdrawals (gnc:account-get-total-flow 'in  equity-accounts start-date end-date))
 
 	  (set! investments (gnc:make-commodity-collector))
 	  (investments 'merge net-investment #f)
@@ -584,7 +584,7 @@
 	  (report-line
 	   build-table
 	   (string-append (_ "Capital") ", "
-			  (gnc-print-date start-date-printable))
+			  (qof-print-date start-date-printable))
 	   #f start-total-equity
 	   1 start-exchange-fn #f "primary-subheading"
 	   )
@@ -628,7 +628,7 @@
 	  (report-line
 	   build-table 
 	   (string-append (_ "Capital") ", "
-			  (gnc-print-date end-date-tp))
+			  (qof-print-date end-date))
 	   #f
 	   end-total-equity
 	   1 end-exchange-fn #f "primary-subheading"
@@ -641,8 +641,8 @@
           (and show-rates?
 	       (let* ((curr-tbl (gnc:make-html-table))
 		      (headers (list
-				(gnc-print-date start-date-printable)
-				(gnc-print-date end-date-tp)
+				(qof-print-date start-date-printable)
+				(qof-print-date end-date)
 				)
 			       )
 		      (then (gnc:html-make-exchangerates

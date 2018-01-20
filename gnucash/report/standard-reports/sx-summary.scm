@@ -5,6 +5,7 @@
 ;; Copyright 2004 David Montenegro <sunrise2000@comcast.net>
 ;; Copyright 2001 Christian Stimming <stimming@tu-harburg.de>
 ;; Copyright 2000-2001 Bill Gribble <grib@gnumatic.com>
+;; Copyright 2017 Christopher Lam upgrade to time64
 ;;    
 ;; This program is free software; you can redistribute it and/or    
 ;; modify it under the terms of the GNU General Public License as   
@@ -40,7 +41,6 @@
 (use-modules (gnucash gettext))
 
 (gnc:module-load "gnucash/report/report-system" 0)
-
 
 (define reportname (N_ "Future Scheduled Transactions Summary"))
 
@@ -249,11 +249,11 @@
   (let* (
 	 (report-title (get-option gnc:pagename-general optname-report-title))
 	 (company-name (get-option gnc:pagename-general optname-party-name))
-         (from-date-tp (gnc:timepair-start-day-time 
+         (from-date (gnc:time64-start-day-time 
                         (gnc:date-option-absolute-time
                          (get-option gnc:pagename-general
                                      optname-from-date))))
-         (to-date-tp (gnc:timepair-end-day-time 
+         (to-date (gnc:time64-end-day-time 
                       (gnc:date-option-absolute-time
                        (get-option gnc:pagename-general
                                    optname-to-date))))
@@ -306,7 +306,7 @@
 			 depth-limit))
          ;; exchange rates calculation parameters
 	 (exchange-fn
-	  (gnc:case-exchange-fn price-source report-commodity to-date-tp))
+	  (gnc:case-exchange-fn price-source report-commodity to-date))
 	 )
     
     (gnc:html-document-set-title! 
@@ -314,8 +314,8 @@
 		  (string-append "%s %s "
 				 (_ "For Period Covering %s to %s"))
 		  company-name report-title
-                  (gnc-print-date from-date-tp)
-                  (gnc-print-date to-date-tp))
+                  (qof-print-date from-date)
+                  (qof-print-date to-date))
      )
     
     (if (null? accounts)
@@ -330,14 +330,14 @@
 	
 	;; otherwise, generate the report...
 	(let* (
-               (sx-value-hash (gnc-sx-all-instantiate-cashflow-all from-date-tp to-date-tp))
+               (sx-value-hash (gnc-sx-all-instantiate-cashflow-all from-date to-date))
 	       (chart-table #f)                    ;; gnc:html-acct-table
 	       (hold-table (gnc:make-html-table))  ;; temporary gnc:html-table
 	       (build-table (gnc:make-html-table)) ;; gnc:html-table reported
 	       (table-env                      ;; parameters for :make-
 		(list
-		 (list 'start-date from-date-tp)
-		 (list 'end-date to-date-tp)
+		 (list 'start-date from-date)
+		 (list 'end-date to-date)
 		 (list 'display-tree-depth tree-depth)
 		 (list 'depth-limit-behavior bottom-behavior)
 		 (list 'report-commodity report-commodity)
@@ -506,8 +506,7 @@
 	)
     
     (gnc:report-finished)
-    doc)
-  )
+    doc))
 
 (gnc:define-report 
  'version 1

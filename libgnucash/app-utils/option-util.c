@@ -1,6 +1,7 @@
 /********************************************************************\
  * option-util.c -- GNOME<->guile option interface                  *
  * Copyright (C) 2000 Dave Peticolas                                *
+ * Copyright (C) 2017 Aaron Laws                                    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -2085,112 +2086,6 @@ gnc_option_db_lookup_multichoice_option(GNCOptionDB *odb,
     return strdup(default_value);
 }
 
-
-/********************************************************************\
- * gnc_option_db_lookup_date_option                                 *
- *   looks up a date option. If present, returns the absolute date  *
- *   represented in the set_ab_value argument provided, otherwise   *
- *   copies the default_value argument (if non-NULL) to the         *
- *   set_ab_value argument. If the default_value argument is NULL,  *
- *   copies the current date to set_ab_value. Whatever value is     *
- *   stored in set_ab_value is returned as an approximate (no       *
- *   nanoseconds) time64 value.  set_ab_value may be NULL, in which *
- *   case only the return value can be used. If is_relative is      *
- *   non-NULL, it is set to whether the date option is currently    *
- *   storing a relative date.  If it is, and set_rel_value          *
- *   is non-NULL, it returns a newly allocated string               *
- *   representing the scheme symbol for that relative date          *
- *                                                                  *
- * Args: odb           - option database to search in               *
- *       section       - section name of option                     *
- *       name          - name of option                             *
- *       is_relative   - location to store boolean value            *
- *       set_ab_value  - location to store absolute option value    *
- *       set_rel_value - location to store relative option value    *
- *       default       - default value if not found                 *
- * Return: time64 approximation of set_value                        *
-\********************************************************************/
-time64
-gnc_option_db_lookup_date_option(GNCOptionDB *odb,
-                                 const char *section,
-                                 const char *name,
-                                 gboolean *is_relative,
-                                 Timespec *set_ab_value,
-                                 char **set_rel_value,
-                                 Timespec *default_value)
-{
-    GNCOption *option;
-    Timespec temp = {0, 0};
-    char *symbol;
-    SCM getter;
-    SCM value;
-
-    initialize_getters();
-
-    if (set_ab_value == NULL)
-    {
-        set_ab_value = &temp;
-    }
-
-    if (set_rel_value != NULL)
-    {
-        *set_rel_value = NULL;
-    }
-
-    if (is_relative != NULL)
-    {
-        *is_relative = FALSE;
-    }
-
-    option = gnc_option_db_get_option_by_name(odb, section, name);
-
-    if (option != NULL)
-    {
-        getter = gnc_option_getter(option);
-        if (getter != SCM_UNDEFINED)
-        {
-            value = scm_call_0(getter);
-
-            if (scm_is_pair(value))
-            {
-                Timespec absolute;
-
-                absolute = gnc_date_option_value_get_absolute (value);
-
-                *set_ab_value = absolute;
-
-                symbol = gnc_date_option_value_get_type (value);
-
-                if (g_strcmp0(symbol, "relative") == 0)
-                {
-                    SCM relative = gnc_date_option_value_get_relative (value);
-
-                    if (is_relative != NULL)
-                        *is_relative = TRUE;
-
-                    if (set_rel_value != NULL)
-                        *set_rel_value = gnc_scm_symbol_to_locale_string (relative);
-                }
-
-                g_free (symbol);
-            }
-        }
-    }
-    else
-    {
-        if (default_value == NULL)
-        {
-            set_ab_value->tv_sec = gnc_time (NULL);
-            set_ab_value->tv_nsec = 0;
-        }
-        else
-            *set_ab_value = *default_value;
-    }
-
-    return set_ab_value->tv_sec;
-}
-
-
 /********************************************************************\
  * gnc_option_db_lookup_number_option                               *
  *   looks up a number option. If present, returns its value        *
@@ -2609,18 +2504,15 @@ gnc_date_option_value_get_type (SCM option_value)
  *   get the absolute time of a date option value                  *
  *                                                                 *
  * Args: option_value - option value to get absolute time of       *
- * Return: Timespec value                                          *
+ * Return: time64 value                                            *
 \*******************************************************************/
-Timespec
+time64
 gnc_date_option_value_get_absolute (SCM option_value)
 {
     SCM value;
-
     initialize_getters();
-
     value = scm_call_1 (getters.date_option_value_absolute, option_value);
-
-    return gnc_timepair2timespec (value);
+    return scm_to_int64 (value);
 }
 
 /*******************************************************************\

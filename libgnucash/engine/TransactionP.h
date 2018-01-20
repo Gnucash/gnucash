@@ -75,8 +75,8 @@ struct transaction_s
 {
     QofInstance inst;     /* glbally unique id */
 
-    Timespec date_entered;     /* date register entry was made              */
-    Timespec date_posted;      /* date transaction was posted at bank       */
+    time64 date_entered;     /* date register entry was made              */
+    time64 date_posted;      /* date transaction was posted at bank       */
 
     /* The num field is a arbitrary user-assigned field.
      * It is intended to store a short id number, typically the check number,

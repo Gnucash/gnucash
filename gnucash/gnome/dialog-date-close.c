@@ -92,7 +92,7 @@ gnc_dialog_date_close_ok_cb (GtkWidget *widget, gpointer user_data)
     if (ddc->date)
     {
         if (ddc->terms)
-            *(ddc->ts) = gncBillTermComputeDueDate (ddc->terms, *(ddc->ts2));
+            ddc->ts->tv_sec = gncBillTermComputeDueDate (ddc->terms, ddc->ts2->tv_sec);
         else
             *(ddc->ts) = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (ddc->date));
     }
@@ -185,10 +185,10 @@ post_date_changed_cb (GNCDateEdit *gde, gpointer d)
 {
     DialogDateClose *ddc = d;
     Timespec post_date;
-    Timespec due_date;
+    Timespec due_date = {0,0};
 
     post_date = gnc_date_edit_get_date_ts (gde);
-    due_date = gncBillTermComputeDueDate (ddc->terms, post_date);
+    due_date.tv_sec = gncBillTermComputeDueDate (ddc->terms, post_date.tv_sec);
     gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->date), due_date);
 }
 

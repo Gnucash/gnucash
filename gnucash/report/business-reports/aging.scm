@@ -112,7 +112,7 @@
 
 (define (process-invoice company amount bucket-intervals date)
   (define (in-interval this-date current-bucket)
-    (gnc:timepair-lt this-date current-bucket))
+    (< this-date current-bucket))
 
   (define (find-bucket current-bucket bucket-intervals date)  
     (gnc:debug "looking for bucket for date: " date)
@@ -183,8 +183,8 @@
 ;; determine date function to use 
 (define (get-selected-date-from-txn transaction date-type)
   (if (eq? date-type 'postdate)
-      (gnc-transaction-get-date-posted transaction)
-      (xaccTransRetDateDueTS transaction)))		    
+      (xaccTransGetDate transaction)
+      (xaccTransRetDateDue transaction)))
   
 ;; deal with a transaction - figure out if we've seen the company before
 ;; if so, either process it as a bill or a payment, if not, create
@@ -315,16 +315,14 @@ more than one currency. This report is not designed to cope with this possibilit
 ;; set up the query to get the splits in the chosen account
 ;; XXX: FIXME: begindate is a hack -- we currently only go back a year
 (define (setup-query query account date)
-  (define (date-copy date)
-    (cons (car date) (cdr date)))
-  (let ((begindate (make-zdate))) ;Set begindate to the start of the Epoch
+  (let ((begindate (gnc-mktime (make-zdate)))) ;Set begindate to the start of the Epoch
 ;    (gnc:debug "Account: " account)
     (gnc:debug "begindate" begindate)
     (gnc:debug "date" date)
     (qof-query-set-book query (gnc-get-current-book))
     (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
     (xaccQueryAddSingleAccountMatch query account QOF-QUERY-AND)
-    (xaccQueryAddDateMatchTS query #t begindate #t date QOF-QUERY-AND)
+    (xaccQueryAddDateMatchTT query #t begindate #t date QOF-QUERY-AND)
     (qof-query-set-sort-order query
 			      (list SPLIT-TRANS TRANS-DATE-POSTED)
 			      '() '())
@@ -657,7 +655,7 @@ copying this report to a spreadsheet for use in a mail merge.")
   (let* ((companys (make-hash-table 23))
 	 (report-title (op-value gnc:pagename-general gnc:optname-reportname))
         ;; document will be the HTML document that we return.
-	(report-date (gnc:timepair-end-day-time 
+	(report-date (gnc:time64-end-day-time 
 		      (gnc:date-option-absolute-time
 		       (op-value gnc:pagename-general optname-to-date))))
 	(interval-vec (list->vector (make-extended-interval-list report-date)))

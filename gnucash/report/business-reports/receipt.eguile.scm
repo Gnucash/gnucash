@@ -68,8 +68,8 @@
                      (lambda (s1 s2)
                        (let ((t1 (xaccSplitGetParent s1))
                              (t2 (xaccSplitGetParent s2)))
-                         (< (car (gnc-transaction-get-date-posted t1))
-                            (car (gnc-transaction-get-date-posted t2))))))))
+                         (< (xaccTransGetDate t1)
+                            (xaccTransGetDate t2)))))))
 
       ; pre-scan invoice entries to look for discounts and taxes
       (for entry in entries do
@@ -142,7 +142,7 @@
   <!-- header texts -->
 
   <h1><?scm:d (nbsp (_ "Invoice No.")) ?> <?scm:d invoiceid ?></h1>
-  <h2><?scm:d (strftime	opt-date-format (localtime (car (gnc:get-today)))) ?></h2>
+  <h2><?scm:d (strftime	opt-date-format (localtime (gnc:get-today))) ?></h2>
   <p>&nbsp;</p>
   <?scm (if (not (string=? billcontact "")) (begin ?>
     <p>Attn: <?scm:d billcontact ?></p><br>
@@ -193,7 +193,7 @@
                   (dsc-total 'add currency rdiscval)
         ?>
         <tr valign="top">
-          <td align="left"><?scm:d (gnc-print-date (gncEntryGetDate entry)) ?></td>
+          <td align="left"><?scm:d (qof-print-date (gncEntryGetDate entry)) ?></td>
           <td align="left" ><?scm:d (gncEntryGetDescription entry) ?></td>
           <td align="right"><?scm:d (fmtnumeric qty) ?></td>
           <td align="right"><?scm:d (format #f "~4,2,,,'0f" (gnc-numeric-to-double each)) ?></td>
@@ -254,7 +254,7 @@
                       (inv-total 'add c a)
         ?>
         <tr valign="top">
-          <td align="center"><?scm:d (gnc-print-date (gnc-transaction-get-date-posted t)) ?></td>
+          <td align="center"><?scm:d (qof-print-date (xaccTransGetDate t)) ?></td>
           <td align="left" colspan="<?scm:d (- maxcols 3) ?>"><?scm:d opt-payment-recd-heading ?></td>
           <td align="right" colspan="2"><?scm:d (fmtmoney c a) ?></td>
         </tr>

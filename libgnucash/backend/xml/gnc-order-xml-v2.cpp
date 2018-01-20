@@ -90,11 +90,11 @@ order_dom_tree_create (GncOrder* order)
                                              gncOrderGetOwner (order)));
 
     ts = gncOrderGetDateOpened (order);
-    xmlAddChild (ret, timespec_to_dom_tree (order_opened_string, &ts));
+    xmlAddChild (ret, time64_to_dom_tree (order_opened_string, ts.tv_sec));
 
     ts = gncOrderGetDateClosed (order);
-    if (ts.tv_sec || ts.tv_nsec)
-        xmlAddChild (ret, timespec_to_dom_tree (order_closed_string, &ts));
+    if (ts.tv_sec)
+        xmlAddChild (ret, time64_to_dom_tree (order_closed_string, ts.tv_sec));
 
     maybe_add_string (ret, order_notes_string, gncOrderGetNotes (order));
     maybe_add_string (ret, order_reference_string, gncOrderGetReference (order));
@@ -134,9 +134,9 @@ static inline gboolean
 set_timespec (xmlNodePtr node, GncOrder* order,
               void (*func) (GncOrder* order, Timespec ts))
 {
-    Timespec ts = dom_tree_to_timespec (node);
-    if (!dom_tree_valid_timespec (&ts, node->name)) return FALSE;
-
+    time64 time = dom_tree_to_time64 (node);
+    if (!dom_tree_valid_time64 (time, node->name)) return FALSE;
+    Timespec ts {time, 0};
     func (order, ts);
     return TRUE;
 }

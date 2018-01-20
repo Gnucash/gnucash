@@ -554,7 +554,7 @@
                              (let* (
                                     (col-info (car col-list))
                                     (tc #f)
-                                    (period-to-date-string (lambda (p) (gnc-print-date (gnc-budget-get-period-start-date budget p))))
+                                    (period-to-date-string (lambda (p) (qof-print-date (gnc-budget-get-period-start-date budget p))))
                                    )
                                    (cond
                                     ((equal? col-info 'total)
@@ -632,8 +632,8 @@
             (let* ((now (current-time))
                   (total-periods (gnc-budget-get-num-periods budget) )
                   (last-period (- total-periods 1))
-                  (period-start (lambda (x) (car (gnc-budget-get-period-start-date budget x))))
-                  (period-end (lambda (x) (car (gnc-budget-get-period-end-date budget x))))
+                  (period-start (lambda (x) (gnc-budget-get-period-start-date budget x)))
+                  (period-end (lambda (x) (gnc-budget-get-period-end-date budget x)))
                  )
                 (cond ((< now (period-start 0)) 1)
                       ((> now (period-end last-period)) total-periods)
