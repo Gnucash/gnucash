@@ -485,6 +485,7 @@ msgstr ""
 msgid "Period %s - %s"
 msgstr "Zeitraum von %s bis %s"
 
+# TODO: check translation
 #: ../gnucash/gnome/assistant-acct-period.c:404
 #, c-format
 msgid ""
@@ -1370,7 +1371,7 @@ msgstr "Platzhalter"
 
 #: ../gnucash/gnome/dialog-find-account.c:321
 msgid "Hidden"
-msgstr "_Versteckt"
+msgstr "Versteckt"
 
 #: ../gnucash/gnome/dialog-find-account.c:332
 msgid "Not Used"
@@ -1378,7 +1379,7 @@ msgstr "Nicht genutzt"
 
 #: ../gnucash/gnome/dialog-find-account.c:343
 msgid "Balance Zero"
-msgstr "Bilanz (Periodenbezogen)"
+msgstr "Bilanz Null"
 
 #: ../gnucash/gnome/dialog-find-account.c:361
 msgid "Search from "
@@ -2863,7 +2864,7 @@ msgstr "Adresse gefunden"
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:217
 msgid "Address Not Found"
-msgstr "adresse nicht gefunden"
+msgstr "Adresse nicht gefunden"
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:276
 #: ../gnucash/gnome/gnc-split-reg.c:1143
@@ -2880,7 +2881,7 @@ msgstr ""
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:432
 msgid "Relative"
-msgstr "_Relativ:"
+msgstr "Relativ"
 
 #: ../gnucash/gnome/dialog-vendor.c:214
 msgid ""
@@ -3167,14 +3168,12 @@ msgid "View and Delete Bayesian and Non Bayesian information"
 msgstr ""
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:216
-#, fuzzy
 msgid "_Transaction Associations"
-msgstr "Buchungsinformationen"
+msgstr "_Buchungsverknüpfungen"
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:217
-#, fuzzy
 msgid "View all Transaction Associations"
-msgstr "Buchungsinformationen"
+msgstr "Alle Transaktionsverknüpfungen zeigen"
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:224
 msgid "_Tips Of The Day"
@@ -5057,7 +5056,6 @@ msgstr ""
 
 #: ../gnucash/gnome/gnc-plugin-register2.c:57
 #: ../gnucash/gnome/gnc-plugin-register.c:58
-#, fuzzy
 msgid "_General Journal"
 msgstr "Hauptbuch Journal"
 
@@ -8349,47 +8347,42 @@ msgid "<b>Period:</b>"
 msgstr "<b>Zeitintervall:</b>"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:1
-#, fuzzy
 msgid "Find Account Dialog"
-msgstr "Kontenlöschung"
+msgstr "Dialog Konto Suchen"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:2
-#, fuzzy
 msgid "Close on Jump"
-msgstr "Buch abschließen"
+msgstr "Schließen beim Springen"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:3
-#, fuzzy
 msgid "_Jump To"
-msgstr "_Gegenbuchung"
+msgstr "S_pringen zu"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:5
-#, fuzzy
 msgid "<b>Search the Account List</b>"
-msgstr "<b>Ha_uptkonto</b>"
+msgstr "<b>Kontenstruktur durchsuchen</b>"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:6
-#, fuzzy
 msgid "Search from Root"
-msgstr "Suchergebnisse"
+msgstr "Suchen von Hauptkonten"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:7
-#, fuzzy
 msgid "Search from Sub Account"
-msgstr "K_onto überprüfen"
+msgstr "Suchen von Unterkonten"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:8
-#, fuzzy
 msgid "Account Full Name"
-msgstr "Kontobezeichnung"
+msgstr "Vollständige Kontobezeichnung"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:9
 msgid "Case insensitive searching is available on 'Account Full Name'."
 msgstr ""
+"Im Feld 'Vollständige Kontobezeichnung' wird ohne Unterscheidung zwischen "
+"Groß- und Kleinschreibung gesucht."
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:10
 msgid "_Search"
-msgstr " Suchen "
+msgstr "_Suchen"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:11
 msgid ""
@@ -8397,6 +8390,10 @@ msgid ""
 "Tree,\n"
 "if account should not be shown, this will be temporarily overridden."
 msgstr ""
+"Wählen Sie eine Zeile aus und drücken Sie auf 'Springen zu', um zu einem "
+"Konto in der Kontenstruktur zu springen. \n"
+"Wenn das Konto nicht angezeigt werden soll, wird dies vorübergehend außer "
+"Kraft gesetzt."
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:1
 msgid "Import Map Editor"
@@ -9467,29 +9464,24 @@ msgid "<b>Copy Number</b>"
 msgstr "<b>Durchschlag-Nummer</b>"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-trans-assoc.glade.h:1
-#, fuzzy
 msgid "Transaction Association Dialog"
-msgstr "Buchungsinformationen"
+msgstr "Dialog Buchungsverknüpfungen"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-trans-assoc.glade.h:2
-#, fuzzy
 msgid "_Sort Association"
-msgstr "Sortieren nach Beschreibung"
+msgstr "Verknüpfungen _sortieren"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-trans-assoc.glade.h:3
-#, fuzzy
 msgid "_Locate Association"
-msgstr "Internetadresse zuordnen"
+msgstr "Verknüpfung _prüfen"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-trans-assoc.glade.h:4
-#, fuzzy
 msgid "All Transaction Associations"
-msgstr "Buchungsinformationen"
+msgstr "Alle Buchungsverknüpfungen"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-trans-assoc.glade.h:7
-#, fuzzy
 msgid "Association"
-msgstr "Internetadresse zuordnen"
+msgstr "Verknüpfung"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-trans-assoc.glade.h:8
 msgid "Available ?"
@@ -9500,6 +9492,8 @@ msgid ""
 "     To jump to the Transaction, double click on the entry in the\n"
 "Description column or Association column to open the Association"
 msgstr ""
+"Um zur Buchung zu springen, klicken Sie doppelt auf den Eintrag in der Spalte \n"
+"'Beschreibung' oder in der Spalte 'Verknüpfung' zum Öffnen der Verknüpfung."
 
 #: ../gnucash/gnome/gtkbuilder/dialog-vendor.glade.h:5
 msgid "Vendor Number: "
@@ -12089,16 +12083,16 @@ msgstr "Buch-Optionen"
 
 #. Translators: %s will be replaced with the current year
 #: ../gnucash/gnome-utils/gnc-main-window.c:4480
-#, fuzzy, c-format
+#, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
-msgstr "© 1997-%s Mitwirkende"
+msgstr "© 1997-%s GnuCash-Mitwirkende."
 
 #: ../gnucash/gnome-utils/gnc-main-window.c:4503
 #: ../gnucash/gnome-utils/gnc-main-window.c:4506
 #: ../gnucash/gnome-utils/gnc-splash.c:106
 #: ../gnucash/gnome-utils/gnc-splash.c:109
 msgid "Version"
-msgstr ""
+msgstr "Version"
 
 #: ../gnucash/gnome-utils/gnc-main-window.c:4504
 #: ../gnucash/gnome-utils/gnc-main-window.c:4507
@@ -12106,11 +12100,11 @@ msgstr ""
 #: ../gnucash/gnome-utils/gnc-splash.c:110 ../gnucash/gnucash-bin.c:460
 #: ../gnucash/gnucash-bin.c:463
 msgid "Build ID"
-msgstr ""
+msgstr "Build ID"
 
 #: ../gnucash/gnome-utils/gnc-main-window.c:4512
 msgid "Accounting for personal and small business finance."
-msgstr "- GnuCash, die Finanzverwaltung für Privatanwender und Kleinbetriebe"
+msgstr "Finanzverwaltung für Privatanwender und Kleinbetriebe."
 
 #. Translators: the following string will be shown in Help->About->Credits
 #. * Enter your name or that of your team and an email contact for feedback.
@@ -12122,7 +12116,7 @@ msgstr "Christian Stimming <christian@cstimming.de> et. al."
 
 #: ../gnucash/gnome-utils/gnc-main-window.c:4524
 msgid "Visit the GnuCash website."
-msgstr ""
+msgstr "Besuchen Sie die GnuCash-Website."
 
 #: ../gnucash/gnome-utils/gnc-period-select.c:71
 #: ../libgnucash/app-utils/date-utilities.scm:888
@@ -18495,7 +18489,7 @@ msgstr "I_mport"
 # Fixme: Source
 #: ../gnucash/import-export/customer-import/gnc-plugin-customer-import.c:57
 msgid "Import Customers and Vendors"
-msgstr "Importiert K_unden und Lieferanten"
+msgstr "K_unden und Lieferanten importieren"
 
 # Fixme: Source
 #: ../gnucash/import-export/customer-import/gnc-plugin-customer-import.c:57
