@@ -2676,9 +2676,12 @@ gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
         gnc_numeric balance,
         const gnc_commodity *balance_currency,
         const gnc_commodity *new_currency,
-        Timespec t)
+        time64 t64)
 {
+    Timespec t;
     gnc_numeric new_value;
+
+    t.tv_sec = t64;
 
     if (gnc_numeric_zero_p (balance) ||
         gnc_commodity_equiv (balance_currency, new_currency))
