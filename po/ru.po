@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.7.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-20 13:13+0100\n"
-"PO-Revision-Date: 2017-10-01 04:09+0500\n"
+"PO-Revision-Date: 2018-01-20 13:13+0100\n"
 "Last-Translator: Dmitriy Mangul <dimang.freetime@gmail.com>\n"
 "Language-Team: russian <gnucash-ru@googlegroups.com>\n"
 "Language: ru\n"
@@ -29,20 +29,19 @@ msgstr ""
 
 #: ../borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr ""
+msgstr "Арабский"
 
 #: ../borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
-msgstr ""
+msgstr "Прибалтийский"
 
 #: ../borrowed/goffice/go-charmap-sel.c:72
-#, fuzzy
 msgid "Central European"
-msgstr "Европейский"
+msgstr "Центральноевропейский"
 
 #: ../borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
-msgstr ""
+msgstr "Китайский"
 
 #: ../borrowed/goffice/go-charmap-sel.c:74
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:242
@@ -50,29 +49,28 @@ msgid "Cyrillic"
 msgstr "Кириллица"
 
 #: ../borrowed/goffice/go-charmap-sel.c:75
-#, fuzzy
 msgid "Greek"
-msgstr "Зеленый"
+msgstr "Греческий"
 
 #: ../borrowed/goffice/go-charmap-sel.c:76
 msgid "Hebrew"
-msgstr ""
+msgstr "Иврит"
 
 #: ../borrowed/goffice/go-charmap-sel.c:77
 msgid "Indian"
-msgstr ""
+msgstr "Индийский"
 
 #: ../borrowed/goffice/go-charmap-sel.c:78
 msgid "Japanese"
-msgstr ""
+msgstr "Японский"
 
 #: ../borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr ""
+msgstr "Корейский"
 
 #: ../borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
-msgstr ""
+msgstr "Турецкий"
 
 #: ../borrowed/goffice/go-charmap-sel.c:81
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:224
@@ -81,12 +79,11 @@ msgstr "Юникод"
 
 #: ../borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr ""
+msgstr "Вьетнамский"
 
 #: ../borrowed/goffice/go-charmap-sel.c:83
-#, fuzzy
 msgid "Western"
-msgstr "Журнал"
+msgstr "Западноевропейский"
 
 #: ../borrowed/goffice/go-charmap-sel.c:84
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:60
@@ -98,364 +95,354 @@ msgstr "Другое"
 
 #: ../borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "Арабский (IBM-864)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr ""
+msgstr "Арабский (IBM-864-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "Арабский (ISO-8859-6)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr ""
+msgstr "Арабский (ISO-8859-6-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr ""
+msgstr "Арабский (ISO-8859-6-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:121
 msgid "Arabic (MacArabic)"
-msgstr ""
+msgstr "Арабский (MacArabic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:122
 msgid "Arabic (Windows-1256)"
-msgstr ""
+msgstr "Арабский (Windows-1256)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
-msgstr ""
+msgstr "Армянский (ARMSCII-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:124
-#, fuzzy
 msgid "Baltic (ISO-8859-13)"
-msgstr "ISO-8859-13 (Балтийская)"
+msgstr "Прибалтийский (ISO-8859-13)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:125
 msgid "Baltic (ISO-8859-4)"
-msgstr ""
+msgstr "Прибалтийский (ISO-8859-4)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:126
 msgid "Baltic (Windows-1257)"
-msgstr ""
+msgstr "Прибалтийский (Windows-1257)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:127
-#, fuzzy
 msgid "Celtic (ISO-8859-14)"
-msgstr "ISO-8859-14 (Кельтская)"
+msgstr "Кельтский (ISO-8859-14)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
-msgstr ""
+msgstr "Центральноевропейский (IBM-852)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:130
 msgid "Central European (ISO-8859-2)"
-msgstr ""
+msgstr "Центральноевропейский (ISO-8859-2)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:132
 msgid "Central European (MacCE)"
-msgstr ""
+msgstr "Центральноевропейский (MacCE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:134
 msgid "Central European (Windows-1250)"
-msgstr ""
+msgstr "Центральноевропейский (Windows-1250)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:136
 msgid "Chinese Simplified (GB18030)"
-msgstr ""
+msgstr "Китайский упрощенный (GB18030)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:137
 msgid "Chinese Simplified (GB2312)"
-msgstr ""
+msgstr "Китайский упрощенный (GB2312)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:138
 msgid "Chinese Simplified (GBK)"
-msgstr ""
+msgstr "Китайский упрощенный (GBK)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:139
 msgid "Chinese Simplified (HZ)"
-msgstr ""
+msgstr "Китайский упрощенный (HZ)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:140
 msgid "Chinese Simplified (Windows-936)"
-msgstr ""
+msgstr "Китайский упрощенный (Windows-936)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr ""
+msgstr "Китайский традиционный (Big5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr ""
+msgstr "Китайский традиционный (Big5-HKSCS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
-msgstr ""
+msgstr "Китайский традиционный (EUC-TW)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:147
 msgid "Croatian (MacCroatian)"
-msgstr ""
+msgstr "Хорватский (MacCroatian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:149
-#, fuzzy
 msgid "Cyrillic (IBM-855)"
-msgstr "Кириллица"
+msgstr "Кириллица (IBM-855)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:150
 msgid "Cyrillic (ISO-8859-5)"
-msgstr ""
+msgstr "Кириллица (ISO-8859-5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:152
 msgid "Cyrillic (ISO-IR-111)"
-msgstr ""
+msgstr "Кириллица (ISO-IR-111)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:154
-#, fuzzy
 msgid "Cyrillic (KOI8-R)"
-msgstr "Кириллица"
+msgstr "Кириллица (KOI8-R)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:155
 msgid "Cyrillic (MacCyrillic)"
-msgstr ""
+msgstr "Кириллица (MacCyrillic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:157
 msgid "Cyrillic (Windows-1251)"
-msgstr ""
+msgstr "Кириллица (Windows-1251)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:159
 msgid "Russian (CP-866)"
-msgstr ""
+msgstr "Русский (CP-866)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:160
 msgid "Ukrainian (KOI8-U)"
-msgstr ""
+msgstr "Украинский (KOI8-U)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:161
-#, fuzzy
 msgid "Ukrainian (MacUkrainian)"
-msgstr "KOI8-U (Украинская)"
+msgstr "Украинский (MacUkrainian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:163
 msgid "English (ASCII)"
-msgstr ""
+msgstr "Английский (ASCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:165
 msgid "Farsi (MacFarsi)"
-msgstr ""
+msgstr "Фарси (MacFarsi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:166
 msgid "Georgian (GEOSTD8)"
-msgstr ""
+msgstr "Грузинский (GEOSTD8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:167
-#, fuzzy
 msgid "Greek (ISO-8859-7)"
-msgstr "ISO-8859-7 (Греческая)"
+msgstr "Греческий (ISO-8859-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:168
 msgid "Greek (MacGreek)"
-msgstr ""
+msgstr "Греческий (MacGreek)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:169
 msgid "Greek (Windows-1253)"
-msgstr ""
+msgstr "Греческий (Windows-1253)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:170
+#, fuzzy
 msgid "Gujarati (MacGujarati)"
-msgstr ""
+msgstr "Гуджарати (MacGujarati)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:172
+#, fuzzy
 msgid "Gurmukhi (MacGurmukhi)"
-msgstr ""
+msgstr "Гурмухи (MacGurmukhi)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr ""
+msgstr "Иврит (IBM-862)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
-msgstr ""
+msgstr "Иврит (ISO-8859-8-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:177
 msgid "Hebrew (ISO-8859-8-I)"
-msgstr ""
+msgstr "Иврит (ISO-8859-8-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:179
 msgid "Hebrew (MacHebrew)"
-msgstr ""
+msgstr "Иврит (MacHebrew)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:180
 msgid "Hebrew (Windows-1255)"
-msgstr ""
+msgstr "Иврит (Windows-1255)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:182
 msgid "Hindi (MacDevanagari)"
-msgstr ""
+msgstr "Хинди (MacDevanagari)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
-msgstr ""
+msgstr "Исландский (MacIcelandic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:186
 msgid "Japanese (EUC-JP)"
-msgstr ""
+msgstr "Японский (EUC-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:187
 msgid "Japanese (ISO-2022-JP)"
-msgstr ""
+msgstr "Японский (ISO-2022-JP)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:189
 msgid "Japanese (Shift_JIS)"
-msgstr ""
+msgstr "Японский (Shift_JIS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:190
 msgid "Korean (EUC-KR)"
-msgstr ""
+msgstr "Корейский (EUC-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:191
 msgid "Korean (ISO-2022-KR)"
-msgstr ""
+msgstr "Корейский (ISO-2022-KR)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:192
 msgid "Korean (JOHAB)"
-msgstr ""
+msgstr "Корейский (JOHAB)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:193
 msgid "Korean (UHC)"
-msgstr ""
+msgstr "Корейский (UHC)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:194
-#, fuzzy
 msgid "Nordic (ISO-8859-10)"
-msgstr "ISO-8859-10 (Скандинавская)"
+msgstr "Скандинавский (ISO-8859-10)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:195
 msgid "Romanian (MacRomanian)"
-msgstr ""
+msgstr "Румынский (MacRomanian)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:197
 msgid "Romanian (ISO-8859-16)"
-msgstr ""
+msgstr "Румынский (ISO-8859-16)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:199
 msgid "South European (ISO-8859-3)"
-msgstr ""
+msgstr "Южноевропейский (ISO-8859-3)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:201
 msgid "Thai (TIS-620)"
-msgstr ""
+msgstr "Тайский (TIS-620)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:202
 msgid "Turkish (IBM-857)"
-msgstr ""
+msgstr "Турецкий (IBM-857)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:203
 msgid "Turkish (ISO-8859-9)"
-msgstr ""
+msgstr "Турецкий (ISO-8859-9)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:204
 msgid "Turkish (MacTurkish)"
-msgstr ""
+msgstr "Турецкий (MacTurkish)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:206
 msgid "Turkish (Windows-1254)"
-msgstr ""
+msgstr "Турецкий (Windows-1254)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:208
-#, fuzzy
 msgid "Unicode (UTF-7)"
-msgstr "Юникод"
+msgstr "Юникод (UTF-7)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:209
-#, fuzzy
 msgid "Unicode (UTF-8)"
-msgstr "Юникод"
+msgstr "Юникод (UTF-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:210
 msgid "Unicode (UTF-16BE)"
-msgstr ""
+msgstr "Юникод (UTF-16BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:211
 msgid "Unicode (UTF-16LE)"
-msgstr ""
+msgstr "Юникод (UTF-16LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:212
 msgid "Unicode (UTF-32BE)"
-msgstr ""
+msgstr "Юникод (UTF-32BE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:213
 msgid "Unicode (UTF-32LE)"
-msgstr ""
+msgstr "Юникод (UTF-32LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:214
-#, fuzzy
 msgid "User Defined"
-msgstr "Имя пользователя"
+msgstr "Пользовательский"
 
 #: ../borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
-msgstr ""
+msgstr "Вьетнамский (TCVN)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:217
 msgid "Vietnamese (VISCII)"
-msgstr ""
+msgstr "Вьетнамский (VISCII)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:218
 msgid "Vietnamese (VPS)"
-msgstr ""
+msgstr "Вьетнамский (VPS)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:219
 msgid "Vietnamese (Windows-1258)"
-msgstr ""
+msgstr "Вьетнамский (Windows-1258)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:221
 msgid "Visual Hebrew (ISO-8859-8)"
-msgstr ""
+msgstr "Иврит визуальный (ISO-8859-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
-msgstr ""
+msgstr "Западноевропейский (IBM-850)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:224
 msgid "Western (ISO-8859-1)"
-msgstr ""
+msgstr "Западноевропейский (ISO-8859-1)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:225
 msgid "Western (ISO-8859-15)"
-msgstr ""
+msgstr "Западноевропейский (ISO-8859-15)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:227
 msgid "Western (MacRoman)"
-msgstr ""
+msgstr "Западноевропейский (MacRoman)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:228
 msgid "Western (Windows-1252)"
-msgstr ""
+msgstr "Западноевропейский (Windows-1252)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:441
 #, fuzzy
 msgid "Locale: "
-msgstr "_Местный:"
+msgstr "Местоположение:"
 
 #: ../borrowed/goffice/go-charmap-sel.c:476
-#, fuzzy
 msgid "Conversion Direction"
-msgstr "Преобразование завершено"
+msgstr "Направление преобразования"
 
 #: ../borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr ""
+msgstr "Это значение определяет, какой iconv-тест выполнить."
 
 #: ../borrowed/goffice/go-optionmenu.c:410
 msgid "Menu"
-msgstr ""
+msgstr "Меню"
 
 #: ../borrowed/goffice/go-optionmenu.c:410
-#, fuzzy
 msgid "The menu of options"
-msgstr "Числовой параметр: %s."
+msgstr "Меню опций"
 
 #: ../gnucash/gnome/assistant-acct-period.c:190
 msgid "The book was closed successfully."
@@ -477,12 +464,10 @@ msgstr[0] ""
 "ранее выборе, эта книга будет поделена на %d книгу."
 msgstr[1] ""
 "Самая ранняя проводка, найденная в книге, была %s. Основываясь на сделанном "
-"ранее выборе, эта книга будет поделена на %d книги. Нажмите \"Далее\" для "
-"запуска закрытия самой ранней книги."
+"ранее выборе, эта книга будет поделена на %d книги."
 msgstr[2] ""
 "Самая ранняя проводка, найденная в книге, была %s. Основываясь на сделанном "
-"ранее выборе, эта книга будет поделена на %d книг. Нажмите \"Далее\" для "
-"запуска закрытия самой ранней книги."
+"ранее выборе, эта книга будет поделена на %d книг."
 
 #: ../gnucash/gnome/assistant-acct-period.c:369
 #, c-format
@@ -1384,27 +1369,22 @@ msgid "The number of payments cannot be negative."
 msgstr "Число платежей не может быть отрицательным."
 
 #: ../gnucash/gnome/dialog-find-account.c:310
-#, fuzzy
 msgid "Place Holder"
 msgstr "Виртуальный"
 
 #: ../gnucash/gnome/dialog-find-account.c:321
-#, fuzzy
 msgid "Hidden"
-msgstr "С_крытый"
+msgstr "Скрытый"
 
 #: ../gnucash/gnome/dialog-find-account.c:332
-#, fuzzy
 msgid "Not Used"
-msgstr "Не запланировано"
+msgstr "Не используется"
 
 #: ../gnucash/gnome/dialog-find-account.c:343
-#, fuzzy
 msgid "Balance Zero"
-msgstr "Остатки (период)"
+msgstr "Нулевой баланс"
 
 #: ../gnucash/gnome/dialog-find-account.c:361
-#, fuzzy
 msgid "Search from "
 msgstr " Поиск "
 
@@ -2855,28 +2835,24 @@ msgstr "Форма"
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:203
 msgid "File Found"
-msgstr ""
+msgstr "Документ найден"
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:205
-#, fuzzy
 msgid "File Not Found"
-msgstr "Не найдено"
+msgstr "Документ не найден"
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:215
-#, fuzzy
 msgid "Address Found"
-msgstr "Телефон адреса"
+msgstr "Адрес найден"
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:217
-#, fuzzy
 msgid "Address Not Found"
-msgstr "Телефон адреса"
+msgstr "Адрес не найден"
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:276
 #: ../gnucash/gnome/gnc-split-reg.c:1143
-#, fuzzy
 msgid "This transaction is not associated with a valid URI."
-msgstr "С этой проводкой не связана ссылка."
+msgstr "Этой проводке не привязан действительный адрес URI."
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:418
 msgid "Path head for files is, "
@@ -2887,9 +2863,8 @@ msgid "Path head does not exist, "
 msgstr ""
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:432
-#, fuzzy
 msgid "Relative"
-msgstr "_Относительно:"
+msgstr "Относительно"
 
 #: ../gnucash/gnome/dialog-vendor.c:214
 msgid ""
@@ -3135,7 +3110,6 @@ msgid "Archive old data using accounting periods"
 msgstr "Архивировать старые данные используя отчетные периоды"
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:191
-#, fuzzy
 msgid "_Price Database"
 msgstr "База данных цен"
 
@@ -3177,14 +3151,12 @@ msgid "View and Delete Bayesian and Non Bayesian information"
 msgstr ""
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:216
-#, fuzzy
 msgid "_Transaction Associations"
-msgstr "Информация о проводке"
+msgstr "_Документы проводок"
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:217
-#, fuzzy
 msgid "View all Transaction Associations"
-msgstr "Информация о проводке"
+msgstr "Просмотр всех документов проводок"
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:224
 msgid "_Tips Of The Day"
@@ -3625,9 +3597,8 @@ msgstr "Удалить выбранный счёт"
 #: ../gnucash/gnome/gnc-plugin-page-account-tree.c:233
 #: ../gnucash/gnome/gnc-plugin-page-register2.c:248
 #: ../gnucash/gnome/gnc-plugin-page-register.c:256
-#, fuzzy
 msgid "F_ind Account"
-msgstr "_Изменить счет"
+msgstr "_Найти счёт"
 
 #: ../gnucash/gnome/gnc-plugin-page-account-tree.c:229
 #: ../gnucash/gnome/gnc-plugin-page-account-tree.c:234
@@ -5042,7 +5013,6 @@ msgstr "Вы действительно хотите удалить эту за�
 
 #: ../gnucash/gnome/gnc-plugin-register2.c:57
 #: ../gnucash/gnome/gnc-plugin-register.c:58
-#, fuzzy
 msgid "_General Journal"
 msgstr "Основной журнал"
 
@@ -7681,7 +7651,7 @@ msgstr "Извещать о счетах-платежах к оплате"
 
 #: ../gnucash/gnome/gtkbuilder/business-prefs.glade.h:12
 msgid "Whether to display the list of Bills Due at startup."
-msgstr "Показывать ли список счетов-платежей к оплате при запуске."
+msgstr "Показывать список счетов-платежей к оплате при запуске."
 
 #: ../gnucash/gnome/gtkbuilder/business-prefs.glade.h:13
 msgid "<b>Bills</b>"
@@ -7750,14 +7720,12 @@ msgid "Pro_cess payments on posting"
 msgstr "Автоматически _оплачивать при вводе"
 
 #: ../gnucash/gnome/gtkbuilder/business-prefs.glade.h:31
-#, fuzzy
 msgid "Not_ify when due"
-msgstr "Извещать о счетах-платежах к оплате"
+msgstr "Извещать о счетах-фактурах к оплате"
 
 #: ../gnucash/gnome/gtkbuilder/business-prefs.glade.h:32
-#, fuzzy
 msgid "Whether to display the list of Invoices Due at startup."
-msgstr "Показывать ли список счетов-платежей к оплате при запуске."
+msgstr "Показывать ли список счетов-фактурах к оплате при запуске."
 
 #: ../gnucash/gnome/gtkbuilder/dialog-billterms.glade.h:1
 msgid "Due Days: "
@@ -8313,48 +8281,41 @@ msgid "<b>Period:</b>"
 msgstr "<b>Период:</b>"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:1
-#, fuzzy
 msgid "Find Account Dialog"
-msgstr "Удаление счета"
+msgstr "Диалог поиска счетов"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:2
-#, fuzzy
 msgid "Close on Jump"
-msgstr "Закрыть книгу"
+msgstr "Закрыть при переходе"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:3
-#, fuzzy
 msgid "_Jump To"
 msgstr "П_ерейти"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:5
-#, fuzzy
 msgid "<b>Search the Account List</b>"
-msgstr "<b>Родительский счет</b>"
+msgstr "<b>Поиск в списке счетов</b>"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:6
-#, fuzzy
 msgid "Search from Root"
-msgstr "Результаты поиска"
+msgstr "Поиск с родительских счетов"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:7
-#, fuzzy
 msgid "Search from Sub Account"
-msgstr "Аннулировать _счет"
+msgstr "Поиск с субсчетов"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:8
-#, fuzzy
 msgid "Account Full Name"
-msgstr "Название счёта"
+msgstr "Полное название счёта"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:9
 msgid "Case insensitive searching is available on 'Account Full Name'."
 msgstr ""
+"Поиск в поле 'Полное название счёта' не чувствителен к регистру букв."
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:10
-#, fuzzy
 msgid "_Search"
-msgstr " Поиск "
+msgstr "_Поиск"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:11
 msgid ""
@@ -8362,10 +8323,12 @@ msgid ""
 "Tree,\n"
 "if account should not be shown, this will be temporarily overridden."
 msgstr ""
+"Выберите строку, а затем нажмите 'Перейти', чтобы перейти к счёту в дереве \n"
+"счетов. Если счёт является скрытым, то это будет временно отменено."
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:1
 msgid "Import Map Editor"
-msgstr ""
+msgstr "Редактор карты-импорта"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:4
 msgid "<b>What type of information to display?</b>"
@@ -8376,9 +8339,8 @@ msgid "Non-Bayesian"
 msgstr ""
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:7
-#, fuzzy
 msgid "Online ID"
-msgstr "Онлайн"
+msgstr "Онлайн ID"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:8
 #, fuzzy
@@ -8416,12 +8378,12 @@ msgstr "_Файл"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:15
 msgid "_Expand All"
-msgstr ""
+msgstr "Развернуть всё"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:16
 #, fuzzy
 msgid "_Collapse All"
-msgstr "Очистить все"
+msgstr "Свернуть всё"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:17
 msgid ""
@@ -9442,40 +9404,36 @@ msgid "<b>Copy Number</b>"
 msgstr "<b>Номер копии</b>"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-trans-assoc.glade.h:1
-#, fuzzy
 msgid "Transaction Association Dialog"
-msgstr "Информация о проводке"
+msgstr "Диалог 'Документы проводок'"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-trans-assoc.glade.h:2
-#, fuzzy
 msgid "_Sort Association"
-msgstr "Упорядочить по описанию"
+msgstr "Отсортировать документы"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-trans-assoc.glade.h:3
-#, fuzzy
 msgid "_Locate Association"
-msgstr "Привязать ссылку"
+msgstr "Проверить документ"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-trans-assoc.glade.h:4
-#, fuzzy
 msgid "All Transaction Associations"
-msgstr "Информация о проводке"
+msgstr "Все документы проводок"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-trans-assoc.glade.h:7
-#, fuzzy
 msgid "Association"
-msgstr "Привязать ссылку"
+msgstr "Документ"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-trans-assoc.glade.h:8
-#, fuzzy
 msgid "Available ?"
-msgstr "Оплачиваемо?"
+msgstr "Доступен ?"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-trans-assoc.glade.h:9
 msgid ""
 "     To jump to the Transaction, double click on the entry in the\n"
 "Description column or Association column to open the Association"
 msgstr ""
+"Для перехода к проводке, дважды щелкните по полю 'Описание' или по полю "
+"'Документ', чтобы открыть Документ."
 
 #: ../gnucash/gnome/gtkbuilder/dialog-vendor.glade.h:5
 msgid "Vendor Number: "
@@ -11639,7 +11597,7 @@ msgstr ""
 
 #: ../gnucash/gnome-utils/gnc-file.c:789
 msgid "_Open Read-Only"
-msgstr "Открыть только для _чтения"
+msgstr "Открыть для _чтения"
 
 #: ../gnucash/gnome-utils/gnc-file.c:791
 msgid "_Create New File"
@@ -11989,7 +11947,6 @@ msgid "Unsaved Book"
 msgstr "Несохранённая книга"
 
 #: ../gnucash/gnome-utils/gnc-main-window.c:1658
-#, fuzzy
 msgid "Last modified on %a, %b %d, %Y at %I:%M %p"
 msgstr "Последнее изменение в %a, %b %e, %Y %I:%M%P"
 
@@ -12014,16 +11971,16 @@ msgstr "Настройки книги"
 
 #. Translators: %s will be replaced with the current year
 #: ../gnucash/gnome-utils/gnc-main-window.c:4480
-#, fuzzy, c-format
+#, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
-msgstr "© 1997-%s Участники"
+msgstr "© 1997-%s GnuCash-разработчики."
 
 #: ../gnucash/gnome-utils/gnc-main-window.c:4503
 #: ../gnucash/gnome-utils/gnc-main-window.c:4506
 #: ../gnucash/gnome-utils/gnc-splash.c:106
 #: ../gnucash/gnome-utils/gnc-splash.c:109
 msgid "Version"
-msgstr ""
+msgstr "Версия"
 
 #: ../gnucash/gnome-utils/gnc-main-window.c:4504
 #: ../gnucash/gnome-utils/gnc-main-window.c:4507
@@ -12031,12 +11988,11 @@ msgstr ""
 #: ../gnucash/gnome-utils/gnc-splash.c:110 ../gnucash/gnucash-bin.c:460
 #: ../gnucash/gnucash-bin.c:463
 msgid "Build ID"
-msgstr ""
+msgstr "ID сборки"
 
 #: ../gnucash/gnome-utils/gnc-main-window.c:4512
-#, fuzzy
 msgid "Accounting for personal and small business finance."
-msgstr "- GnuCash управление финансами для частных лиц и малого бизнеса"
+msgstr "Управление финансами для частных лиц и малого бизнеса."
 
 #. Translators: the following string will be shown in Help->About->Credits
 #. * Enter your name or that of your team and an email contact for feedback.
@@ -12055,7 +12011,7 @@ msgstr ""
 
 #: ../gnucash/gnome-utils/gnc-main-window.c:4524
 msgid "Visit the GnuCash website."
-msgstr ""
+msgstr "Перейти на веб-страницу GnuCash."
 
 #: ../gnucash/gnome-utils/gnc-period-select.c:71
 #: ../libgnucash/app-utils/date-utilities.scm:888
