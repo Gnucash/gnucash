@@ -26,6 +26,7 @@
 
 #include <glib.h>
 #include <string.h>
+#include <stdint.h>
 #include "gnc-date.h"
 #include "gnc-pricedb-p.h"
 #include <qofinstance-p.h>
@@ -2501,7 +2502,7 @@ gnc_pricedb_lookup_latest_before (GNCPriceDB *db,
 static gnc_numeric
 direct_balance_conversion (GNCPriceDB *db, gnc_numeric bal,
                            const gnc_commodity *from, const gnc_commodity *to,
-                           Timespec *t)
+                           time64 t)
 {
     GNCPrice *price;
     gnc_numeric retval = gnc_numeric_zero();
@@ -2509,8 +2510,8 @@ direct_balance_conversion (GNCPriceDB *db, gnc_numeric bal,
         return retval;
     if (gnc_numeric_zero_p(bal))
         return retval;
-    if (t != NULL)
-        price = gnc_pricedb_lookup_nearest_in_time(db, from, to, *t);
+    if (t != INT64_MAX)
+        price = gnc_pricedb_lookup_nearest_in_time64(db, from, to, t);
     else
         price = gnc_pricedb_lookup_latest(db, from, to);
     if (price == NULL)
@@ -2606,7 +2607,7 @@ convert_balance(gnc_numeric bal, const gnc_commodity *from,
 static gnc_numeric
 indirect_balance_conversion (GNCPriceDB *db, gnc_numeric bal,
                              const gnc_commodity *from, const gnc_commodity *to,
-                             Timespec *t )
+                             time64 t )
 {
     GList *from_prices = NULL, *to_prices = NULL;
     PriceTuple tuple;
@@ -2615,7 +2616,7 @@ indirect_balance_conversion (GNCPriceDB *db, gnc_numeric bal,
         return zero;
     if (gnc_numeric_zero_p(bal))
         return zero;
-    if (t == NULL)
+    if (t == INT64_MAX)
     {
         from_prices = gnc_pricedb_lookup_latest_any_currency(db, from);
         /* "to" is often the book currency which may have lots of prices,
@@ -2625,11 +2626,11 @@ indirect_balance_conversion (GNCPriceDB *db, gnc_numeric bal,
     }
     else
     {
-        from_prices = gnc_pricedb_lookup_nearest_in_time_any_currency(db,
-                                                                      from, *t);
+        from_prices = gnc_pricedb_lookup_nearest_in_time_any_currency_t64(db,
+                                                                      from, t);
         if (from_prices)
-            to_prices = gnc_pricedb_lookup_nearest_in_time_any_currency(db,
-                                                                    to, *t);
+            to_prices = gnc_pricedb_lookup_nearest_in_time_any_currency_t64(db,
+                                                                    to, t);
     }
     if (from_prices == NULL || to_prices == NULL)
         return zero;
@@ -2659,7 +2660,7 @@ gnc_pricedb_convert_balance_latest_price(GNCPriceDB *pdb,
 
     /* Look for a direct price. */
     new_value = direct_balance_conversion(pdb, balance, balance_currency,
-                                          new_currency, NULL);
+                                          new_currency, INT64_MAX);
     if (!gnc_numeric_zero_p(new_value))
         return new_value;
 
@@ -2668,7 +2669,7 @@ gnc_pricedb_convert_balance_latest_price(GNCPriceDB *pdb,
      * and convert in two stages
      */
     return indirect_balance_conversion(pdb, balance, balance_currency,
-                                       new_currency, NULL);
+                                       new_currency, INT64_MAX);
 }
 
 gnc_numeric
@@ -2676,7 +2677,7 @@ gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
         gnc_numeric balance,
         const gnc_commodity *balance_currency,
         const gnc_commodity *new_currency,
-        Timespec t)
+        time64 t)
 {
     gnc_numeric new_value;
 
@@ -2686,7 +2687,7 @@ gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
 
     /* Look for a direct price. */
     new_value = direct_balance_conversion(pdb, balance, balance_currency,
-                                          new_currency, &t);
+                                          new_currency, t);
     if (!gnc_numeric_zero_p(new_value))
         return new_value;
 
@@ -2695,7 +2696,7 @@ gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
      * and convert in two stages
      */
     return indirect_balance_conversion(pdb, balance, balance_currency,
-                                       new_currency, &t);
+                                       new_currency, t);
 }
 
 

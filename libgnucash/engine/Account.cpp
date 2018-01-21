@@ -3433,11 +3433,8 @@ xaccAccountConvertBalanceToCurrencyAsOfDate(const Account *acc, /* for book */
     book = gnc_account_get_book (acc);
     pdb = gnc_pricedb_get_db (book);
 
-    ts.tv_sec = date;
-    ts.tv_nsec = 0;
-
     balance = gnc_pricedb_convert_balance_nearest_price(
-                  pdb, balance, balance_currency, new_currency, ts);
+                  pdb, balance, balance_currency, new_currency, date);
 
     return balance;
 }

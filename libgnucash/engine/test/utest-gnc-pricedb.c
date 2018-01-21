@@ -1206,7 +1206,7 @@ gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,// C: 1  Local: 0:0:0
 static void
 test_gnc_pricedb_convert_balance_nearest_price (PriceDBFixture *fixture, gconstpointer pData)
 {
-    Timespec t = gnc_dmy2timespec(15, 8, 2011);
+    time64 t = gnc_dmy2time64(15, 8, 2011);
     gnc_numeric from = gnc_numeric_create(10000, 100);
     gnc_numeric result =
         gnc_pricedb_convert_balance_nearest_price(fixture->pricedb, from,

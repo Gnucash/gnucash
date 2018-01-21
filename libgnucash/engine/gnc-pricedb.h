@@ -604,7 +604,7 @@ gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
                                           gnc_numeric balance,
                                           const gnc_commodity *balance_currency,
                                           const gnc_commodity *new_currency,
-                                          Timespec t);
+                                          time64 t);
 
 typedef gboolean (*GncPriceForeachFunc)(GNCPrice *p, gpointer user_data);
 
