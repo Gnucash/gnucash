@@ -10,6 +10,7 @@
 # Rolf Leggewie, 2008.
 # Mechtilde Stehmann <ooo@mechtilde.de>, 2014-2018.
 # quazgar <quazgar@posteo.de> 2017.
+# Dmitriy Mangul <dimang.freetime@gmail.com>, 2017, 2018
 #
 msgid ""
 msgstr ""
