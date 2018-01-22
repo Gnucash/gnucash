@@ -15298,28 +15298,24 @@ msgid "Select occurrence date above."
 msgstr "Выберите дату события выше."
 
 #: ../gnucash/gnome-utils/gtkbuilder/gnc-frequency.glade.h:81
-#, fuzzy
 msgctxt "Daily"
 msgid "Every"
 msgstr "Каждый"
 
 #: ../gnucash/gnome-utils/gtkbuilder/gnc-frequency.glade.h:82
-#, fuzzy
 msgctxt "Daily"
 msgid "days."
-msgstr "дней."
+msgstr "день."
 
 #: ../gnucash/gnome-utils/gtkbuilder/gnc-frequency.glade.h:83
-#, fuzzy
 msgctxt "Weekly"
 msgid "Every"
-msgstr "Каждый"
+msgstr "Каждую"
 
 #: ../gnucash/gnome-utils/gtkbuilder/gnc-frequency.glade.h:84
-#, fuzzy
 msgctxt "Weekly"
 msgid "weeks."
-msgstr "недель."
+msgstr "неделю."
 
 #: ../gnucash/gnome-utils/gtkbuilder/gnc-frequency.glade.h:85
 #: ../gnucash/report/standard-reports/daily-reports.scm:355
@@ -15363,16 +15359,14 @@ msgid "Tuesday"
 msgstr "Вторник"
 
 #: ../gnucash/gnome-utils/gtkbuilder/gnc-frequency.glade.h:93
-#, fuzzy
 msgctxt "Semimonthly"
 msgid "Every"
 msgstr "Каждый"
 
 #: ../gnucash/gnome-utils/gtkbuilder/gnc-frequency.glade.h:94
-#, fuzzy
 msgctxt "Semimonthly"
 msgid "months."
-msgstr "месяцев."
+msgstr "месяц."
 
 #: ../gnucash/gnome-utils/gtkbuilder/gnc-frequency.glade.h:95
 msgid "First on the:"
@@ -15387,16 +15381,14 @@ msgid "then on the:"
 msgstr "затем на:"
 
 #: ../gnucash/gnome-utils/gtkbuilder/gnc-frequency.glade.h:98
-#, fuzzy
 msgctxt "Monthly"
 msgid "Every"
 msgstr "Каждый"
 
 #: ../gnucash/gnome-utils/gtkbuilder/gnc-frequency.glade.h:99
-#, fuzzy
 msgctxt "Monthly"
 msgid "months."
-msgstr "месяцев."
+msgstr "месяц."
 
 #: ../gnucash/gnome-utils/gtkbuilder/gnc-frequency.glade.h:100
 msgid "On the"
