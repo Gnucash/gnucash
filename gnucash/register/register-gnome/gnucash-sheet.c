@@ -1568,7 +1568,7 @@ gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event)
     {
     case GDK_KEY_C:
     case GDK_KEY_c:
-        if (event->state & GDK_CONTROL_MASK)
+        if (event->state & GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR)
         {
             gnc_item_edit_copy_clipboard(item_edit);
             handled = TRUE;
@@ -1576,7 +1576,7 @@ gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event)
         break;
     case GDK_KEY_X:
     case GDK_KEY_x:
-        if (event->state & GDK_CONTROL_MASK)
+        if (event->state & GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR)
         {
             gnc_item_edit_cut_clipboard(item_edit);
             handled = TRUE;
@@ -1584,7 +1584,7 @@ gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event)
         break;
     case GDK_KEY_V:
     case GDK_KEY_v:
-        if (event->state & GDK_CONTROL_MASK)
+        if (event->state & GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR)
         {
             gnc_item_edit_paste_clipboard (item_edit);
             handled = TRUE;
@@ -1596,7 +1596,7 @@ gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event)
             gnc_item_edit_paste_clipboard (item_edit);
             handled = TRUE;
         }
-        else if (event->state & GDK_CONTROL_MASK)
+        else if (event->state & GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR)
         {
             gnc_item_edit_copy_clipboard(item_edit);
             handled = TRUE;
@@ -1706,8 +1706,7 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
     /* Don't process any keystrokes where a modifier key (Alt,
      * Meta, etc.) is being held down.  This should't include
          * MOD2, aka NUM LOCK. */
-    if (event->state & (GDK_MOD1_MASK | GDK_MOD3_MASK |
-                        GDK_MOD4_MASK | GDK_MOD5_MASK))
+    if (event->state & (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK))
         pass_on = TRUE;
 
     /* Calculate tentative physical values */
@@ -1772,7 +1771,7 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
         case GDK_KEY_Down:
         case GDK_KEY_Menu:
             if (event->keyval == GDK_KEY_Menu ||
-                    (event->state & GDK_CONTROL_MASK))
+                    (event->state & GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR))
             {
                 GncItemEdit *item_edit;
 

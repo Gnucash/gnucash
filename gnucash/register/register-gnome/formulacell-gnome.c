@@ -80,7 +80,7 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
     {
     case GDK_KEY_Return:
         if (!(event->state &
-                (GDK_CONTROL_MASK | GDK_MOD1_MASK | GDK_SHIFT_MASK)))
+                (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK)))
             is_return = TRUE;
         /* FALL THROUGH */
 

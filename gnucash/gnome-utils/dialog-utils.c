@@ -415,7 +415,7 @@ gnc_handle_date_accelerator (GdkEventKey *event,
      * prevents weird behavior of the menu accelerators (i.e. work in
      * some widgets but not others.)
      */
-    if (event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK))
+    if (event->state & (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK))
         return FALSE;
 
     /* Now check for the remaining keystrokes. */
