@@ -66,14 +66,14 @@ glib2			2.40.0
 gtk+3			3.14.0
 guile			2.2.0 or 2.0.0
 libxml2			2.5.10
-libxslt
+libxslt, including xsltproc
 ICU                                             International Compnents for
                                                 Unicode
 boost			1.50.0                  locale and regex libs must be
                                                 built with ICU support.
 swig			2.0.10			Only required to build from git
 						or SVN.
-webkit			webkitgtk-3.0 (Windows)
+webkit			webkitgtk-3.0 (Windows, Mac)
                         webkit2gtk-3.0 (Everything Else)
 
   optional
@@ -89,6 +89,14 @@ libofx			0.9.0			 OFX/QFX import
 
 python			2.4.0			 python bindings; headers
 						 required, not just binaries.
+
+makeinfo                                         Not really needed, it
+                                                 just builds the
+                                                 mostly obsolete
+                                                 design documentation
+                                                 (superceded for the
+                                                 most part in Doxygen
+                                                 docs).
 
   at runtime, required
   ---------------------
