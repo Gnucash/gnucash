@@ -35,7 +35,7 @@ SET(doc_FILES
         user-prefs-howto.txt
         )
 
-SET_LOCAL_DIST(doc_DIST_local CMakeLists.txt Makefile.am ${doc_FILES})
+SET_LOCAL_DIST(doc_DIST_local CMakeLists.txt ${doc_FILES})
 SET(doc_DIST ${doc_DIST_local} ${doc_design_DIST} ${doc_xml_DIST} PARENT_SCOPE)
 
 find_program(DOXYGEN doxygen)
