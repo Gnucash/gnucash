@@ -139,12 +139,20 @@ typedef enum
 } QuoteSourceType;
 
 /** This function indicates whether or not the Finance::Quote module
- *  is installed on a users computer.  This includes any other related
+ *  is installed on a user's computer.  This includes any other related
  *  modules that gnucash need to process F::Q information.
  *
  *  @return TRUE is F::Q is installed properly.
  */
 gboolean gnc_quote_source_fq_installed (void);
+
+/** This function returns the version of the Finance::Quote module
+ *  installed on a user's computer. If no proper installation is found
+ *  it will return NULL.
+ *
+ *  @return a version string or NULL
+ */
+const char* gnc_quote_source_fq_version (void);
 
 /** Update gnucash internal tables based on what Finance::Quote
  *  sources are installed.  Sources that have been explicitly coded
@@ -155,7 +163,8 @@ gboolean gnc_quote_source_fq_installed (void);
  *  @param sources_list A list of strings containing the source names
  *  as they are known to F::Q.
  */
-void gnc_quote_source_set_fq_installed (const GList *sources_list);
+void gnc_quote_source_set_fq_installed (const char* version_string,
+                                        const GList *sources_list);
 
 /** Return the number of entries for a given type of quote source.
  *

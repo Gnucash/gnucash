@@ -142,7 +142,7 @@ struct gnc_new_iso_code
 #define GNC_NEW_ISO_CODES \
         (sizeof(gnc_new_iso_codes) / sizeof(struct gnc_new_iso_code))
 
-static gboolean fq_is_installed = FALSE;
+static char *fq_version = NULL;
 
 struct gnc_quote_source_s
 {
@@ -259,7 +259,20 @@ static GList *new_quote_sources = NULL;
 gboolean
 gnc_quote_source_fq_installed (void)
 {
-    return fq_is_installed;
+    return (fq_version != NULL);
+}
+
+
+/********************************************************************
+ * gnc_quote_source_fq_version
+ *
+ * This function the version of the Finance::Quote module installed
+ * on a user's computer or NULL if no installation is found.
+ ********************************************************************/
+const char*
+gnc_quote_source_fq_version (void)
+{
+    return fq_version;
 }
 
 /********************************************************************
@@ -510,6 +523,7 @@ gnc_quote_source_get_internal_name (const gnc_quote_source *source)
     return source->internal_name;
 }
 
+
 /********************************************************************
  * gnc_quote_source_set_fq_installed
  *
@@ -517,17 +531,26 @@ gnc_quote_source_get_internal_name (const gnc_quote_source *source)
  * installed.
  ********************************************************************/
 void
-gnc_quote_source_set_fq_installed (const GList *sources_list)
+gnc_quote_source_set_fq_installed (const char* version_string,
+                                   const GList *sources_list)
 {
     gnc_quote_source *source;
     char *source_name;
     const GList *node;
 
     ENTER(" ");
-    fq_is_installed = TRUE;
 
     if (!sources_list)
         return;
+
+    if (fq_version)
+    {
+        g_free (fq_version);
+        fq_version = NULL;
+    }
+
+    if (version_string)
+        fq_version = g_strdup (version_string);
 
     for (node = sources_list; node; node = node->next)
     {

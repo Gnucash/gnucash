@@ -4374,7 +4374,7 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 	gchar **authors = get_file_strsplit("AUTHORS");
 	gchar **documenters = get_file_strsplit("DOCUMENTERS");
 	gchar *license = get_file("LICENSE");
-	gchar *message;
+	gchar *message, *tmp_msg;
 	GdkPixbuf *logo = gnc_gnome_get_gdkpixbuf ("gnucash-icon-48x48.png");
 
 #ifdef GNUCASH_SCM
@@ -4383,17 +4383,20 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
                     2nd %s is the scm type (svn/svk/git/bzr);
                     3rd %s is the scm revision number;
                     4th %s is the build date */
-	message = g_strdup_printf(_("%s\nThis copy was built from %s rev %s on %s."),
+	tmp_msg = g_strdup_printf(_("%s\nThis copy was built from %s rev %s on %s."),
 				  fixed_message, GNUCASH_SCM, GNUCASH_SCM_REV,
 				  GNUCASH_BUILD_DATE);
 #else
     /* Translators: 1st %s is a fixed message, which is translated independently;
                     2nd %s is the scm (svn/svk/git/bzr) revision number;
                     3rd %s is the build date */
-	message = g_strdup_printf(_("%s\nThis copy was built from rev %s on %s."),
+	tmp_msg = g_strdup_printf(_("%s\nThis copy was built from rev %s on %s."),
 				  fixed_message, GNUCASH_SCM_REV,
 				  GNUCASH_BUILD_DATE);
 #endif
+        message = g_strdup_printf ("%s\n\nFinance::Quote: %s", tmp_msg,
+                                   gnc_quote_source_fq_version () ? gnc_quote_source_fq_version () : "-");
+        g_free (tmp_msg);
 	priv->about_dialog = gtk_about_dialog_new ();
 	g_object_set (priv->about_dialog,
 		      "authors", authors,

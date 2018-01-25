@@ -237,7 +237,8 @@ Timespec timespecCanonicalDayTime(Timespec t);
   $1 = g_list_reverse (path);
 }
 
-void gnc_quote_source_set_fq_installed (GList *sources_list);
+void gnc_quote_source_set_fq_installed (const char* version_string,
+                                        GList *sources_list);
 %clear GList *;
 %ignore gnc_quote_source_set_fq_installed;
 %ignore gnc_commodity_table_get_quotable_commodities;
