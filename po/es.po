@@ -4,13 +4,12 @@
 # Juan Manuel García Molina <juanmagm@mail.com>, 2000.
 # Raúl Miró <cotin@geocities.com>, 2001.
 # Eneko Lacunza <enlar@enlar.net>, 2003, 2004, 2006, 2008.
-# Francisco Javier Serrador <fserrador@gmail.com>, 2016.
-# Francisco Serrador <serrador@tecknolabs.com>, 2017.
+# Francisco Javier Serrador <fserrador@gmail.com>, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-13 20:39+0100\n"
+"POT-Creation-Date: 2017-12-30 15:52-0800\n"
 "PO-Revision-Date: 2018-01-17 20:12+0100\n"
 "Last-Translator: Francisco Javier Serrador <fserrador@gmail.com>\n"
 "Language-Team: Spanish <es@tp.org.es>\n"
@@ -78,10 +77,9 @@ msgstr ""
 # (Editar)
 # Comentarios extraídos:
 # Business options
-
 #: ../borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
-msgstr "Árabe"
+msgstr "Arábico"
 
 #: ../borrowed/goffice/go-charmap-sel.c:71
 msgid "Baltic"
@@ -89,7 +87,7 @@ msgstr "Báltico"
 
 #: ../borrowed/goffice/go-charmap-sel.c:72
 msgid "Central European"
-msgstr "Centroeuropeo"
+msgstr "Central Europeo"
 
 #: ../borrowed/goffice/go-charmap-sel.c:73
 msgid "Chinese"
@@ -135,43 +133,43 @@ msgstr "Vietnamita"
 
 #: ../borrowed/goffice/go-charmap-sel.c:83
 msgid "Western"
-msgstr "Occidental"
+msgstr "Occidente"
 
 #: ../borrowed/goffice/go-charmap-sel.c:84
 #: ../gnucash/gnome/gtkbuilder/assistant-loan.glade.h:60
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-account.glade.h:27
 #: ../gnucash/report/standard-reports/account-piecharts.scm:533
-#: ../gnucash/report/standard-reports/category-barchart.scm:597
+#: ../gnucash/report/standard-reports/category-barchart.scm:591
 msgid "Other"
 msgstr "Otros"
 
 #: ../borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr "Árabe (IBM-864)"
+msgstr "Arábico (IBM-864)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr "Árabe (IBM-864-I)"
+msgstr "Arábico (IBM-864-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr "Árabe (ISO-8859-6)"
+msgstr "Arábico (ISO-8859-6)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr "Árabe (ISO-8859-6-E)"
+msgstr "Arábico (ISO-8859-6-E)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr "Árabe (ISO-8859-6-I)"
+msgstr "Arábico (ISO-8859-6-I)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:121
 msgid "Arabic (MacArabic)"
-msgstr "Árabe (MacArabic)"
+msgstr "Arábico (MacArabic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:122
 msgid "Arabic (Windows-1256)"
-msgstr "Árabe (Windows-1256)"
+msgstr "Arábico (Windows-1256)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
@@ -195,19 +193,19 @@ msgstr "Celta (ISO-8859-14)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:128
 msgid "Central European (IBM-852)"
-msgstr "Centroeuropeo (IBM-852)"
+msgstr "Central europeo (IBM-852)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:130
 msgid "Central European (ISO-8859-2)"
-msgstr "Centroeuropeo (ISO-8859-2)"
+msgstr "Central europeo (ISO-8859-2)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:132
 msgid "Central European (MacCE)"
-msgstr "Centroeuropeo (MacCE)"
+msgstr "Central europeo (MacCE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:134
 msgid "Central European (Windows-1250)"
-msgstr "Centroeuropeo (Windows-1250)"
+msgstr "Central europeo (Windows-1250)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:136
 msgid "Chinese Simplified (GB18030)"
@@ -231,7 +229,7 @@ msgstr "Chino simplificado (Windows-936)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr "Chino tradicional (Big 5)"
+msgstr "Chino tradicional (Big5)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
@@ -339,7 +337,7 @@ msgstr "Hindi (MacDevanagari)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:184
 msgid "Icelandic (MacIcelandic)"
-msgstr "Islandés (MacIcelandic)"
+msgstr "Islandia (MacIcelandic)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:186
 msgid "Japanese (EUC-JP)"
@@ -383,7 +381,7 @@ msgstr "Rumano (ISO-8859-16)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:199
 msgid "South European (ISO-8859-3)"
-msgstr "Sur de Europa (ISO-8859-3)"
+msgstr "Sur europeo (ISO-8859-3)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:201
 msgid "Thai (TIS-620)"
@@ -431,7 +429,7 @@ msgstr "Unicode (UTF-32LE)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:214
 msgid "User Defined"
-msgstr "Definido por el usuario"
+msgstr "Usuario Definido"
 
 #: ../borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
@@ -455,35 +453,35 @@ msgstr "Hebreo visual (ISO-8859-8)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:223
 msgid "Western (IBM-850)"
-msgstr "Occidental (IBM-850)"
+msgstr "Occidente (IBM-850)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:224
 msgid "Western (ISO-8859-1)"
-msgstr "Occidental (ISO-8859-1)"
+msgstr "Occidente (ISO-8859-1)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:225
 msgid "Western (ISO-8859-15)"
-msgstr "Occidental (ISO-8859-15)"
+msgstr "Occidente (ISO-8859-15)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:227
 msgid "Western (MacRoman)"
-msgstr "Occidental (MacRoman)"
+msgstr "Occidente (MacRoman)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:228
 msgid "Western (Windows-1252)"
-msgstr "Occidental (Windows-1252)"
+msgstr "Occidente (Windows-1252)"
 
 #: ../borrowed/goffice/go-charmap-sel.c:441
 msgid "Locale: "
-msgstr "Localización: "
+msgstr "Local: "
 
 #: ../borrowed/goffice/go-charmap-sel.c:476
 msgid "Conversion Direction"
-msgstr "Dirección de conversión"
+msgstr "Conversión de Dirección"
 
 #: ../borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr "Esta variable determina qué test de iconv realizar."
+msgstr "Este valor determina cual prueba iconv a realizar. "
 
 #: ../borrowed/goffice/go-optionmenu.c:410
 msgid "Menu"
