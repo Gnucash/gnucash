@@ -41,18 +41,14 @@ in relation to existing code.
 - \ref druidframework
 - \ref guid
 - \ref gnome2
-- \ref networkoverview
-- \ref backenderrors
 - \ref loanhandling
 - \ref kvpvalues
 - \ref lotsoverview
 - \ref multicurrency
-- \ref plugindesign
 - \ref pricedocs
 - \ref gnucashextension
 - \ref python_bindings_page
 - \ref qif
-- \ref backendapi
 - \ref budgetplan
 - \ref taxnotes
 - \ref todo
@@ -68,6 +64,17 @@ source files using Doxygen but some topics need updating.
 - \ref stylediscussion
 
 */
+/* The following section links were removed from the overview section
+ * because there are no corresponding sections anywhere in
+ * source. Aside from networkoverview, whose intent is obscure, it
+ * would be good to have them at some point.
+
+- networkoverview
+- backenderrors
+- plugindesign
+- backendapi
+*/
+
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
