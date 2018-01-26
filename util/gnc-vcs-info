@@ -64,9 +64,9 @@ srcdir=$2
 # Find the real srcdir.
 # This handles the case of a symlink (lndir) tree
 # $real_srcdir will hold the actual source dir
-if test -h "$srcdir"/Makefile.am
+if test -h "$srcdir"/CMakeLists.txt
 then 
-  tmp_srcdir=`readlink "$srcdir"/Makefile.am`
+  tmp_srcdir=`readlink "$srcdir"/CMakeLists.txt`
   real_srcdir="$srcdir/`dirname ${tmp_srcdir}`"
 else
   real_srcdir="$srcdir"

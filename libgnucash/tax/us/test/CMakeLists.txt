@@ -5,7 +5,7 @@ GNC_ADD_TEST(test-link-module-tax-us test-link-module.c
   TAX_US_TEST_INCLUDE_DIRS TAX_US_TEST_LIBS
 )
 
-# This test not run in autotools build.
+# FIXME why is this test not run ?
 #SET(GUILE_DEPENDS
 #  gnc-core-utils
 #  gnc-module

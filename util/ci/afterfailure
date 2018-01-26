@@ -5,17 +5,6 @@ if [[ "$BUILDTYPE" == "cmake-make" ]] || [[ "$BUILDTYPE" == "cmake-ninja" ]]; th
     echo "##### LastTest.log #####";
     echo "########################";
     cat /build/Testing/Temporary/LastTest.log;
-elif [[ "$BUILDTYPE" == "autotools" ]]; then
-    find . -name 'test*.log' -print0 |
-        while IFS= read -r -d '' logfile; do
-            SIZE=$((${#logfile} + 12));
-            HRULE=$(head -c "$SIZE" < /dev/zero | tr '\0' '#');
-            echo $HRULE;
-            echo "##### ${logfile} #####";
-            echo $HRULE;
-            cat -- "$logfile";
-            echo $'\n'$'\n';
-        done;
 else
     echo "Unknown BUILDTYPE: \"$BUILDTYPE\", cannot create failure information.";
 fi

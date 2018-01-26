@@ -147,8 +147,6 @@ SET(MIGRATABLE_PREFS_XML ${DATADIR_BUILD}/gnucash/migratable-prefs.xml)
 FILE(COPY make-prefs-migration-script.xsl DESTINATION ${DATADIR_BUILD}/gnucash)
 
 CONFIGURE_FILE(migratable-prefs.xml.in ${MIGRATABLE_PREFS_XML})
-# This configure_file is to generate the file for autotools
-CONFIGURE_FILE(migratable-prefs.xml.in migratable-prefs.xml)
 
 INSTALL(FILES ${MIGRATABLE_PREFS_XML} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash)
 INSTALL(FILES make-prefs-migration-script.xsl DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash)

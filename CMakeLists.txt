@@ -765,8 +765,8 @@ ADD_SUBDIRECTORY(cmake)
 SET(PACKAGE_PREFIX "${PACKAGE}-${PACKAGE_VERSION}")
 SET(DIST_FILE "${PACKAGE_PREFIX}.tar")
 
-SET(toplvl_DIST_local ${gnucash_DOCS} ChangeLog.2015 ChangeLog.2016
-  CMakeLists.txt make-gnucash-potfiles.in README)
+SET(toplvl_DIST_local ${gnucash_DOCS}
+  CMakeLists.txt README)
 
 
 SET_LOCAL_DIST(toplvl_DIST ${toplvl_DIST_local})
@@ -809,7 +809,6 @@ ADD_CUSTOM_COMMAND(OUTPUT ${DIST_FILE}.gz ${DIST_FILE}.bz2
            -D BUILD_SOURCE_DIR=${BUILD_SOURCE_DIR}
            -D BUILDING_FROM_VCS=${BUILDING_FROM_VCS}
            -D SHELL=${SHELL}
-           -D AUTOTOOLS_IN_DIST=${AUTOTOOLS_IN_DIST}
            -D WITH_GNUCASH=${WITH_GNUCASH}
            -P ${CMAKE_SOURCE_DIR}/common/cmake_modules/MakeDist.cmake
 

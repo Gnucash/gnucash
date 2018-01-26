@@ -50,7 +50,7 @@
 (export gnc:debug)
 (export gnc:safe-strcmp) ;; only used by aging.scm atm...
 
-;; Get the Makefile.am/configure.in generated variables.
+;; Get the cmake generated variables.
 (load-from-path "build-config")
 
 ;; Do this stuff very early -- but other than that, don't add any

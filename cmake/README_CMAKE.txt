@@ -13,7 +13,7 @@ Some advantages of using CMake:
 
  * The build time on Windows drops from around an hour to just a few
    minutes.
-   
+
  * CMake supports the generation of build files for several IDEs
    such as Xcode, Eclipse, KDevelop and others. The open source Qt
    Creator and the commercial CLion C/C++ IDE from JetBrains can use
@@ -25,7 +25,7 @@ Some advantages of using CMake:
 This setup also uses the http://www.ninja-build.org[Ninja] build
 system to enable fast and parallel builds on Windows. (On POSIX
 systems [OS X, Linux, FreeBSD, etc.] Ninja does not seem significantly
-faster that using the default Makefile generator to me.)
+faster than using the default Makefile generator to me.)
 
 == Scope
 
@@ -62,8 +62,7 @@ Limitations include:
 
 The CMake setup does not support building and installing dependencies
 (although it probably could some day). So you need to have the
-dependencies available, most likely by having run the existing
-Autotools build at least once. Various resources on the GnuCash wiki
+dependencies available. Various resources on the GnuCash wiki
 will have advice on how to do this.
 
 You will need to have CMake and optionally Ninja installed, either

@@ -41,7 +41,6 @@ ENDFUNCTION()
 SET(COPY_FROM_BUILD
   ChangeLog
   doc/gnucash.1
-  libgnucash/app-utils/migratable-prefs.xml
   libgnucash/app-utils/swig-app-utils-guile.c
   libgnucash/app-utils/swig-app-utils-python.c
   libgnucash/backend/xml/test/test-real-data.sh

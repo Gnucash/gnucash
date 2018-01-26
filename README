@@ -207,8 +207,6 @@ http://wiki.gnucash.org/wiki/Locale_Settings
 Building & Installing
 ---------------------
 
-(For additional build system details, see doc/README.build-system.)
-
 GnuCash uses CMake to handle the build process. Details are available
 in cmake/README_CMAKE.txt (If you are building directly from Git, read
 the README.git file for more instructions.) 

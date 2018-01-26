@@ -20,7 +20,7 @@ ENDMACRO()
 ADD_APP_UTILS_TEST(test-exp-parser test-exp-parser.c)
 GNC_ADD_TEST_WITH_GUILE(test-link-module-app-utils test-link-module APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
 ADD_APP_UTILS_TEST(test-print-parse-amount test-print-parse-amount.cpp)
-# This test not run in autotools build.
+# FIXME Why is this test not run ?
 #GNC_ADD_TEST_WITH_GUILE(test-print-queries test-print-queries.cpp APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
 GNC_ADD_TEST_WITH_GUILE(test-scm-query-string test-scm-query-string.cpp
   APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS

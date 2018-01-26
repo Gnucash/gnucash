@@ -14,7 +14,7 @@ SET(scm_test_report_system_SOURCES
   test-collectors.scm
   test-list-extras.scm
   test-report-utilities.scm
-# test-test-extras.scm ;;Not run in autotools
+# test-test-extras.scm ;;FIXME why is this not run
   )
 
 GNC_ADD_SCHEME_TESTS(${scm_test_report_system_SOURCES})
