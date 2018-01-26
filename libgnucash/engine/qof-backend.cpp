@@ -83,44 +83,6 @@ QofBackend::get_message ()
     return std::move(m_error_msg);
 }
 
-/* Helper function that returns a directory from which the requested module
- * can be loaded. This is needed because the location of the modules
- * depends on
- * - whether we're running in an installed environment or the build environment
- * - the operating system
- * - (in the build environment) which build system is used
- *
- * Note parameter rel_path is only used when invoked in the build environment
- * and even then only for autotools builds because each backend module is likely
- * to reside in its own directory in that configuration. At install time or in a
- * cmake build it is assumed all backend modules reside in one single directory.
- */
-static char* get_default_module_dir(const char* rel_path)
-{
-    gchar *pkglibdir;
-    const gchar *builddir = g_getenv ("GNC_BUILDDIR");
-    gboolean uninstalled = (g_getenv ("GNC_UNINSTALLED") != NULL
-                            && builddir != NULL);
-
-    if (uninstalled)
-    {
-#ifdef CMAKE_BUILD
-        pkglibdir = gnc_path_get_pkglibdir ();
-#else
-        if (rel_path)
-            pkglibdir = g_build_path (G_DIR_SEPARATOR_S, builddir,
-                                      "libgnucash", "backend", rel_path, ".libs", NULL);
-        else
-            pkglibdir = g_build_path (G_DIR_SEPARATOR_S, builddir,
-                                      "libgnucash", "backend", ".libs", NULL);
-#endif
-    }
-    else
-        pkglibdir = gnc_path_get_pkglibdir ();
-
-    return pkglibdir;
-}
-
 bool
 QofBackend::register_backend(const char* directory, const char* module_name)
 {
@@ -130,9 +92,9 @@ QofBackend::register_backend(const char* directory, const char* module_name)
         return false;
     }
 
-    auto absdir = g_strdup(directory);
+    auto absdir = directory;
     if (!absdir || !g_path_is_absolute(absdir))
-        absdir = get_default_module_dir(directory);
+        absdir = gnc_path_get_pkglibdir ();
     auto fullpath = g_module_build_path (absdir, module_name);
 /* Darwin modules can have either .so or .dylib for a suffix */
     if (!g_file_test (fullpath, G_FILE_TEST_EXISTS) &&
@@ -143,7 +105,6 @@ QofBackend::register_backend(const char* directory, const char* module_name)
         fullpath = g_build_filename (absdir, modname, NULL);
         g_free (modname);
     }
-    g_free (absdir);
     auto backend = g_module_open (fullpath, G_MODULE_BIND_LAZY);
     g_free (fullpath);
     if (!backend)
