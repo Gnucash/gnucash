@@ -1611,6 +1611,76 @@ tags within description, notes or memo. ")
 
     table))
 
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; trep-renderer multistage helper functions
+;;
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(export renderer:splits->filteredsplits)
+(define (renderer:splits->filteredsplits options splits custom-split-filter)
+  ;; options, list-of-splits, function -> list of splits
+  ;;
+  ;; options: options-database
+  ;;
+  ;;  filter/transaction matcher - string
+  ;;  filter/transaction matcher regex - boolean
+  ;;  filter/reconcile status - list
+  ;;  accounts/filtermode - symbol
+  ;;  accounts/filterby - list of accounts
+  ;;
+  ;; (custom-split-filter split) returns #f if split must be included
+  (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
+  (let* ((transaction-matcher (opt-val pagename-filter optname-transaction-matcher))
+         (transaction-matcher-regexp (and (opt-val pagename-filter optname-transaction-matcher-regex)
+                                          (make-regexp transaction-matcher)))
+         (reconcile-status-filter (opt-val pagename-filter optname-reconcile-status))
+         (filter-mode (opt-val gnc:pagename-accounts optname-filtertype))
+         (c_account_2 (opt-val gnc:pagename-accounts optname-filterby)))
+    (define (is-filter-member split account-list)
+      (let* ((txn (xaccSplitGetParent split))
+             (splitcount (xaccTransCountSplits txn))
+             (other-account (xaccSplitGetAccount (xaccSplitGetOtherSplit split)))
+             (splits-equal? (lambda (s1 s2) (xaccSplitEqual s1 s2 #t #f #f)))
+             (other-splits (delete split (xaccTransGetSplitList txn) splits-equal?))
+             (other-accounts (map xaccSplitGetAccount other-splits))
+             (is-in-account-list? (lambda (acc) (member acc account-list))))
+        (cond
+         ;; A 2-split transaction - test separately so it can be optimized
+         ;; to significantly reduce the number of splits to traverse
+         ;; in guile code
+         ((= splitcount 2) (is-in-account-list? other-account))
+         ;; A multi-split transaction - run over all splits
+         ((> splitcount 2) (or-map is-in-account-list? other-accounts))
+         ;; Single transaction splits
+         (else #f))))
+    ;; Combined Filter:
+    ;; - include/exclude splits to/from selected accounts
+    ;; - substring/regex matcher for Transaction Description/Notes/Memo
+    ;; - by reconcile status
+    (filter
+     (lambda (split)
+       (let* ((trans (xaccSplitGetParent split))
+              (match? (lambda (str)
+                        (if transaction-matcher-regexp
+                            (regexp-exec transaction-matcher-regexp str)
+                            (string-contains str transaction-matcher)))))
+         (and (case filter-mode
+                ((none) #t)
+                ((include) (is-filter-member split c_account_2))
+                ((exclude) (not (is-filter-member split c_account_2))))
+              (or (string-null? transaction-matcher) ; null-string = ignore filters
+                  (match? (xaccTransGetDescription trans))
+                  (match? (xaccTransGetNotes trans))
+                  (match? (xaccSplitGetMemo split)))
+              (or (not custom-split-filter)     ; #f = ignore custom-split-filter
+                  (custom-split-filter split))
+              (or (not reconcile-status-filter) ; #f = ignore next filter
+                  (member (xaccSplitGetReconcile split) reconcile-status-filter)))))
+     splits)))
+
+
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Here comes the renderer function for this report.
 
@@ -1627,23 +1697,7 @@ tags within description, notes or memo. ")
   (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
   (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
 
-  (define (is-filter-member split account-list)
-    (let* ((txn (xaccSplitGetParent split))
-           (splitcount (xaccTransCountSplits txn))
-           (other-account (xaccSplitGetAccount (xaccSplitGetOtherSplit split)))
-           (splits-equal? (lambda (s1 s2) (xaccSplitEqual s1 s2 #t #f #f)))
-           (other-splits (delete split (xaccTransGetSplitList txn) splits-equal?))
-           (other-accounts (map xaccSplitGetAccount other-splits))
-           (is-in-account-list? (lambda (acc) (member acc account-list))))
-      (cond
-        ;; A 2-split transaction - test separately so it can be optimized
-        ;; to significantly reduce the number of splits to traverse
-        ;; in guile code
-        ((= splitcount 2) (is-in-account-list? other-account))
-        ;; A multi-split transaction - run over all splits
-        ((> splitcount 2) (or-map is-in-account-list? other-accounts))
-        ;; Single transaction splits
-        (else #f))))
+  
 
   (gnc:report-starting reportname)
 
@@ -1658,18 +1712,12 @@ tags within description, notes or memo. ")
                              (regexp-exec account-matcher-regexp (gnc-account-get-full-name acc))
                              (string-contains (gnc-account-get-full-name acc) account-matcher)))
                        c_account_0))
-         (c_account_2 (opt-val gnc:pagename-accounts optname-filterby))
-         (filter-mode (opt-val gnc:pagename-accounts optname-filtertype))
          (begindate (gnc:time64-start-day-time
                      (gnc:date-option-absolute-time
                       (opt-val gnc:pagename-general optname-startdate))))
          (enddate (gnc:time64-end-day-time
                    (gnc:date-option-absolute-time
                     (opt-val gnc:pagename-general optname-enddate))))
-         (transaction-matcher (opt-val pagename-filter optname-transaction-matcher))
-         (transaction-matcher-regexp (and (opt-val pagename-filter optname-transaction-matcher-regex)
-                                          (make-regexp transaction-matcher)))
-         (reconcile-status-filter (opt-val pagename-filter optname-reconcile-status))
          (report-title (opt-val gnc:pagename-general gnc:optname-reportname))
          (primary-key (opt-val pagename-sorting optname-prime-sortkey))
          (primary-order (opt-val pagename-sorting optname-prime-sortorder))
@@ -1795,31 +1843,7 @@ tags within description, notes or memo. ")
                 (set! splits (stable-sort! splits secondary-comparator?))
                 (set! splits (stable-sort! splits primary-comparator?))))
 
-          ;; Combined Filter:
-          ;; - include/exclude splits to/from selected accounts
-          ;; - substring/regex matcher for Transaction Description/Notes/Memo
-          ;; - custom-split-filter, a split->bool function for derived reports
-          ;; - by reconcile status
-          (set! splits (filter
-                        (lambda (split)
-                          (let* ((trans (xaccSplitGetParent split))
-                                 (match? (lambda (str)
-                                           (if transaction-matcher-regexp
-                                               (regexp-exec transaction-matcher-regexp str)
-                                               (string-contains str transaction-matcher)))))
-                            (and (case filter-mode
-                                   ((none) #t)
-                                   ((include) (is-filter-member split c_account_2))
-                                   ((exclude) (not (is-filter-member split c_account_2))))
-                                 (or (string-null? transaction-matcher) ; null-string = ignore filters
-                                     (match? (xaccTransGetDescription trans))
-                                     (match? (xaccTransGetNotes trans))
-                                     (match? (xaccSplitGetMemo split)))
-                                 (or (not custom-split-filter)     ; #f = ignore custom-split-filter
-                                     (custom-split-filter split))
-                                 (or (not reconcile-status-filter) ; #f = ignore next filter
-                                     (member (xaccSplitGetReconcile split) reconcile-status-filter)))))
-                        splits))
+          (set! splits (renderer:splits->filteredsplits options splits custom-split-filter))
 
           (if (null? splits)
 
