@@ -1918,7 +1918,8 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
 
     /* Allow resize */
     gtk_window_set_resizable(GTK_WINDOW(recnData->window), TRUE);
-
+    gtk_window_set_transient_for(GTK_WINDOW(recnData->window),
+                                 GTK_WINDOW (parent));
     gtk_widget_show_all(recnData->window);
 
     gnc_reconcile_window_set_titles(recnData);
