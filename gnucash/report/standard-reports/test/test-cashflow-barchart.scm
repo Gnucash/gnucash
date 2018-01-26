@@ -35,6 +35,8 @@
 (use-modules (ice-9 streams))
 (use-modules (srfi srfi-1))
 
+;; Explicitly set locale to make the report output predictable
+(setlocale LC_ALL "C")
 
 (define (run-test)
   (logging-and (test-in-txn)

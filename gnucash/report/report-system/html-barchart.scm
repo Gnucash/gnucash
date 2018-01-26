@@ -452,7 +452,7 @@
                    },
                    series: series,
                    axesDefaults: {
-                   },        
+                   },
                    grid: {
                    },
                    axes: {
