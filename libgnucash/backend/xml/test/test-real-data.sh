@@ -1,4 +1,4 @@
-#!@SHELL@
+#!/bin/bash
 
 #set -e
 

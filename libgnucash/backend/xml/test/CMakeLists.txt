@@ -61,14 +61,9 @@ SET_LOCAL_DIST(test_backend_xml_DIST_local CMakeLists.txt grab-types.pl
   test-dom-parser1.cpp test-file-stuff.cpp test-file-stuff.h test-kvp-frames.cpp
   test-load-backend.cpp test-load-example-account.cpp  test-load-xml2.cpp
   test-save-in-lang.cpp test-string-converters.cpp test-xml2-is-file.cpp
-  test-xml-account.cpp test-real-data.sh.in test-xml-commodity.cpp
+  test-xml-account.cpp test-real-data.sh test-xml-commodity.cpp
   test-xml-pricedb.cpp test-xml-transaction.cpp)
 SET(test_backend_xml_DIST ${test_backend_xml_DIST_local} ${test_backend_xml_test_files_DIST} PARENT_SCOPE)
-
-# The test test-dom-parser1.c is not run by 
-
-# This line for autotools
-CONFIGURE_FILE(test-real-data.sh.in test-real-data.sh)
 
 ADD_XML_TEST(test-date-converting "${test_backend_xml_base_SOURCES};test-date-converting.cpp")
 ADD_XML_TEST(test-dom-converters1 "${test_backend_xml_base_SOURCES};test-dom-converters1.cpp")
@@ -77,7 +72,7 @@ ADD_XML_TEST(test-load-backend  test-load-backend.cpp)
 ADD_XML_TEST(test-load-xml2 test-load-xml2.cpp
   GNC_TEST_FILES=${CMAKE_CURRENT_SOURCE_DIR}/test-files/xml2
 )
-# Not run in autotools.
+# FIXME Why is this test not run/running ?
 #ADD_XML_TEST(test-save-in-lang test-save-in-lang.cpp
 #  GNC_TEST_FILES=${CMAKE_CURRENT_SOURCE_DIR}/test-files/xml2
 #)
@@ -108,6 +103,6 @@ SET(test-real-data-env
 )
 ADD_TEST(NAME test-real-data
    COMMAND ${CMAKE_COMMAND_TMP}
-    ${SHELL} ${CMAKE_CURRENT_SOURCE_DIR}/test-real-data.sh.in
+    ${SHELL} ${CMAKE_CURRENT_SOURCE_DIR}/test-real-data.sh
 )
 SET_TESTS_PROPERTIES(test-real-data PROPERTIES ENVIRONMENT "${test-real-data-env}")

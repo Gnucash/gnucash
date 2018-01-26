@@ -43,7 +43,6 @@ SET(COPY_FROM_BUILD
   doc/gnucash.1
   libgnucash/app-utils/swig-app-utils-guile.c
   libgnucash/app-utils/swig-app-utils-python.c
-  libgnucash/backend/xml/test/test-real-data.sh
   gnucash/gnucash.rc
   libgnucash/core-utils/gnc-vcs-info.h
   libgnucash/core-utils/swig-core-utils-guile.c
