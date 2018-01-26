@@ -1,6 +1,5 @@
 # These are files that we don't want to translate, because they are
 # not distributed.
-libgnucash/backend/dbi/gncmod-backend-dbi.c
 libgnucash/backend/xml/gncmod-backend-xml.c
 libgnucash/backend/xml/gncmod-backend-xml.cpp
 gnucash/gnome-utils/gnc-tree-model-selection.c

@@ -2,8 +2,6 @@
 
 ADD_SUBDIRECTORY(test)
 
-# Source file gncmod-backend-dbi.c does not appear to be use in Makefile.in, so not included here.
-
 SET (backend_dbi_SOURCES
   gnc-backend-dbi.cpp
   gnc-dbisqlresult.cpp
