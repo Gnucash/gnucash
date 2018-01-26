@@ -58,6 +58,9 @@
 #include "guile-util.h"
 #include "reconcile-view.h"
 #include "window-reconcile.h"
+#ifdef MAC_INTEGRATION
+#include <gtkmacintegration/gtkosxapplication.h>
+#endif
 
 #define WINDOW_RECONCILE_CM_CLASS "window-reconcile"
 #define GNC_PREF_AUTO_INTEREST_TRANSFER "auto-interest-transfer"
@@ -1920,6 +1923,19 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
 
     gnc_reconcile_window_set_titles(recnData);
 
+#ifdef MAC_INTEGRATION
+    {
+        GtkWidget *menubar = gtk_ui_manager_get_widget (recnData->ui_merge,
+                                                        "/menubar");
+        GtkosxApplication *theApp = g_object_new (GTKOSX_TYPE_APPLICATION,
+                                                  NULL);
+        if (GTK_IS_MENU_ITEM (menubar))
+            menubar = gtk_menu_item_get_submenu (GTK_MENU_ITEM (menubar));
+        gtk_widget_hide (menubar);
+        gtkosx_application_set_menu_bar (theApp, GTK_MENU_SHELL (menubar));
+        g_object_unref (theApp);
+    }
+#endif
     recnRecalculateBalance(recnData);
 
     gnc_window_adjust_for_screen(GTK_WINDOW(recnData->window));
