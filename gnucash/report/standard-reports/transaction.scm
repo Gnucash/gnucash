@@ -108,10 +108,6 @@
 (define NO-MATCHING-TRANS-TEXT (_ "No transactions were found that \
 match the time interval and account selection specified \
 in the Options panel."))
-(define NO-MATCHING-ACCT-HEADER (_ "No matching accounts found"))
-(define NO-MATCHING-ACCT-TEXT (_ "No account were found that match the \
-options specified in the Options panels."))
-
 
 (define DATE-SORTING-TYPES (list 'date 'reconciled-date))
 
@@ -1711,25 +1707,17 @@ tags within description, notes or memo. ")
 
     (if (or (null? c_account_1) (and-map not c_account_1))
 
-        (if (null? c_account_0)
+        ;; error condition: no accounts specified or obtained after filtering
+        (begin
 
-            ;; error condition: no accounts specified
-            (gnc:html-document-add-object!
-             document
-             (gnc:html-make-no-account-warning report-title (gnc:report-id report-obj)))
+          (gnc:html-document-add-object!
+           document
+           (gnc:html-make-no-account-warning report-title (gnc:report-id report-obj)))
 
-            ;; error condition: accounts were specified but none matched string/regex
-            (begin
+          (if (member 'no-match infobox-display)
               (gnc:html-document-add-object!
                document
-               (gnc:make-html-text
-                (gnc:html-markup-h2 NO-MATCHING-ACCT-HEADER)
-                (gnc:html-markup-p NO-MATCHING-ACCT-TEXT)))
-
-              (if (member 'no-match infobox-display)
-                  (gnc:html-document-add-object!
-                   document
-                   (gnc:render-options-changed options)))))
+               (gnc:render-options-changed options))))
 
         (begin
 
