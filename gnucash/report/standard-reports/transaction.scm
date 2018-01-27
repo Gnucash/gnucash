@@ -1618,6 +1618,111 @@ tags within description, notes or memo. ")
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+(export renderer:accountlist->splits)
+(define (renderer:accountlist->splits options accountlist)
+  ;; list of accounts -> list of splits
+  ;;
+  ;; options used:
+  ;;  general/begindate, enddate - time64 dates
+  ;;  filter/void status - bool
+  ;;  sorting/prime & sec keys - symbol
+  ;;                      sortorder - 'ascend / 'descend
+  ;;                      subtotal - symbol
+  (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
+  (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
+  (define (generic-less? X Y key date-subtotal ascend?)
+    (define comparator-function
+      (if (member key DATE-SORTING-TYPES)
+          (let ((date (lambda (s)
+                        (case key
+                          ((date) (xaccTransGetDate (xaccSplitGetParent s)))
+                          ((reconciled-date) (xaccSplitGetDateReconciled s))))))
+            (case date-subtotal
+              ((yearly)    (lambda (s) (time64-year (date s))))
+              ((monthly)   (lambda (s) (time64-month (date s))))
+              ((quarterly) (lambda (s) (time64-quarter (date s))))
+              ((weekly)    (lambda (s) (time64-week (date s))))
+              ((daily)     (lambda (s) (time64-day (date s))))
+              ((none)      (lambda (s) (date s)))))
+          (case key
+            ((account-name) (lambda (s) (gnc-account-get-full-name (xaccSplitGetAccount s))))
+            ((account-code) (lambda (s) (xaccAccountGetCode (xaccSplitGetAccount s))))
+            ((corresponding-acc-name) (lambda (s) (xaccSplitGetCorrAccountFullName s)))
+            ((corresponding-acc-code) (lambda (s) (xaccSplitGetCorrAccountCode s)))
+            ((reconciled-status) (lambda (s) (length (memq (xaccSplitGetReconcile s)
+                                                           '(#\n #\c #\y #\f #\v)))))
+            ((amount) (lambda (s) (gnc-numeric-to-scm (xaccSplitGetValue s))))
+            ((description) (lambda (s) (xaccTransGetDescription (xaccSplitGetParent s))))
+            ((number) (lambda (s)
+                        (if BOOK-SPLIT-ACTION
+                            (xaccSplitGetAction s)
+                            (xaccTransGetNum (xaccSplitGetParent s)))))
+            ((t-number) (lambda (s) (xaccTransGetNum (xaccSplitGetParent s))))
+            ((register-order) (lambda (s) #f))
+            ((memo) (lambda (s) (xaccSplitGetMemo s)))
+            ((none) (lambda (s) #f)))))
+    (cond
+     ((string? (comparator-function X)) ((if ascend? string<? string>?) (comparator-function X) (comparator-function Y)))
+     ((comparator-function X)           ((if ascend? < >)               (comparator-function X) (comparator-function Y)))
+     (else                              #f)))
+  (define (date-comparator? X Y)
+    (generic-less? X Y 'date 'none #t))
+  (let* ((begindate (gnc:time64-start-day-time
+                     (gnc:date-option-absolute-time
+                      (opt-val gnc:pagename-general optname-startdate))))
+         (enddate (gnc:time64-end-day-time
+                   (gnc:date-option-absolute-time
+                    (opt-val gnc:pagename-general optname-enddate))))
+         (primary-key (opt-val pagename-sorting optname-prime-sortkey))
+         (primary-order (opt-val pagename-sorting optname-prime-sortorder))
+         (primary-date-subtotal (opt-val pagename-sorting optname-prime-date-subtotal))
+         (secondary-key (opt-val pagename-sorting optname-sec-sortkey))
+         (secondary-order (opt-val pagename-sorting optname-sec-sortorder))
+         (secondary-date-subtotal (opt-val pagename-sorting optname-sec-date-subtotal))
+         (void-status (opt-val pagename-filter optname-void-transactions))
+         (splits '())
+         (custom-sort? (or (and (member primary-key DATE-SORTING-TYPES)   ; this will remain
+                                (not (eq? primary-date-subtotal 'none)))  ; until qof-query
+                           (and (member secondary-key DATE-SORTING-TYPES) ; is upgraded
+                                (not (eq? secondary-date-subtotal 'none)))
+                           (or (member primary-key CUSTOM-SORTING)
+                               (member secondary-key CUSTOM-SORTING))))
+         (query (qof-query-create-for-splits))
+         (primary-comparator? (lambda (X Y)
+                                (generic-less? X Y primary-key
+                                               primary-date-subtotal
+                                               (eq? primary-order 'ascend))))
+         (secondary-comparator? (lambda (X Y)
+                                  (generic-less? X Y secondary-key
+                                                 secondary-date-subtotal
+                                                 (eq? secondary-order 'ascend)))))
+
+    (qof-query-set-book query (gnc-get-current-book))
+    (xaccQueryAddAccountMatch query accountlist QOF-GUID-MATCH-ANY QOF-QUERY-AND)
+    (xaccQueryAddDateMatchTT query #t begindate #t enddate QOF-QUERY-AND)
+    (case void-status
+      ((non-void-only) (gnc:query-set-match-non-voids-only! query (gnc-get-current-book)))
+      ((void-only)     (gnc:query-set-match-voids-only! query (gnc-get-current-book)))
+      (else #f))
+    (if (not custom-sort?)
+        (begin
+          (qof-query-set-sort-order query
+                                    (keylist-get-info sortkey-list primary-key 'sortkey)
+                                    (keylist-get-info sortkey-list secondary-key 'sortkey)
+                                    '())
+          (qof-query-set-sort-increasing query
+                                         (eq? primary-order 'ascend)
+                                         (eq? secondary-order 'ascend)
+                                         #t)))
+    (set! splits (qof-query-run query))
+    (qof-query-destroy query)
+    (if custom-sort?
+        (begin
+          (set! splits (stable-sort! splits date-comparator?))
+          (set! splits (stable-sort! splits secondary-comparator?))
+          (set! splits (stable-sort! splits primary-comparator?))))
+    splits))
+
 (export renderer:splits->filteredsplits)
 (define (renderer:splits->filteredsplits options splits custom-split-filter)
   ;; options, list-of-splits, function -> list of splits
@@ -1695,9 +1800,6 @@ tags within description, notes or memo. ")
 
   (define options (gnc:report-options report-obj))
   (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
-  (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
-
-  
 
   (gnc:report-starting reportname)
 
@@ -1719,73 +1821,8 @@ tags within description, notes or memo. ")
                    (gnc:date-option-absolute-time
                     (opt-val gnc:pagename-general optname-enddate))))
          (report-title (opt-val gnc:pagename-general gnc:optname-reportname))
-         (primary-key (opt-val pagename-sorting optname-prime-sortkey))
-         (primary-order (opt-val pagename-sorting optname-prime-sortorder))
-         (primary-date-subtotal (opt-val pagename-sorting optname-prime-date-subtotal))
-         (secondary-key (opt-val pagename-sorting optname-sec-sortkey))
-         (secondary-order (opt-val pagename-sorting optname-sec-sortorder))
-         (secondary-date-subtotal (opt-val pagename-sorting optname-sec-date-subtotal))
-         (void-status (opt-val pagename-filter optname-void-transactions))
-         (splits '())
-         (custom-sort? (or (and (member primary-key DATE-SORTING-TYPES)   ; this will remain
-                                (not (eq? primary-date-subtotal 'none)))  ; until qof-query
-                           (and (member secondary-key DATE-SORTING-TYPES) ; is upgraded
-                                (not (eq? secondary-date-subtotal 'none)))
-                           (or (member primary-key CUSTOM-SORTING)
-                               (member secondary-key CUSTOM-SORTING))))
          (infobox-display (opt-val gnc:pagename-general optname-infobox-display))
-         (query (qof-query-create-for-splits)))
-
-    (define (generic-less? X Y key date-subtotal ascend?)
-      (define comparator-function
-        (if (member key DATE-SORTING-TYPES)
-            (let ((date (lambda (s)
-                          (case key
-                            ((date) (xaccTransGetDate (xaccSplitGetParent s)))
-                            ((reconciled-date) (xaccSplitGetDateReconciled s))))))
-              (case date-subtotal
-                ((yearly)    (lambda (s) (time64-year (date s))))
-                ((monthly)   (lambda (s) (time64-month (date s))))
-                ((quarterly) (lambda (s) (time64-quarter (date s))))
-                ((weekly)    (lambda (s) (time64-week (date s))))
-                ((daily)     (lambda (s) (time64-day (date s))))
-                ((none)      (lambda (s) (date s)))))
-            (case key
-              ((account-name) (lambda (s) (gnc-account-get-full-name (xaccSplitGetAccount s))))
-              ((account-code) (lambda (s) (xaccAccountGetCode (xaccSplitGetAccount s))))
-              ((corresponding-acc-name) (lambda (s) (xaccSplitGetCorrAccountFullName s)))
-              ((corresponding-acc-code) (lambda (s) (xaccSplitGetCorrAccountCode s)))
-              ((reconciled-status) (lambda (s) (length (memq (xaccSplitGetReconcile s)
-                                                             '(#\n #\c #\y #\f #\v)))))
-              ((amount) (lambda (s) (gnc-numeric-to-scm (xaccSplitGetValue s))))
-              ((description) (lambda (s) (xaccTransGetDescription (xaccSplitGetParent s))))
-              ((number) (lambda (s)
-                          (if BOOK-SPLIT-ACTION
-                              (xaccSplitGetAction s)
-                              (xaccTransGetNum (xaccSplitGetParent s)))))
-              ((t-number) (lambda (s) (xaccTransGetNum (xaccSplitGetParent s))))
-              ((register-order) (lambda (s) #f))
-              ((memo) (lambda (s) (xaccSplitGetMemo s)))
-              ((none) (lambda (s) #f)))))
-      (cond
-       ((string? (comparator-function X)) ((if ascend? string<? string>?) (comparator-function X) (comparator-function Y)))
-       ((comparator-function X)           ((if ascend? < >)               (comparator-function X) (comparator-function Y)))
-       (else                              #f)))
-
-    (define (primary-comparator? X Y)
-      (generic-less? X Y primary-key
-                     primary-date-subtotal
-                     (eq? primary-order 'ascend)))
-
-    (define (secondary-comparator? X Y)
-      (generic-less? X Y secondary-key
-                     secondary-date-subtotal
-                     (eq? secondary-order 'ascend)))
-
-    ;; This will, by default, sort the split list by ascending posted-date.
-    (define (date-comparator? X Y)
-      (generic-less? X Y 'date 'none #t))
-
+         (splits '()))
 
     (if (or (null? c_account_1) (and-map not c_account_1))
 
@@ -1813,35 +1850,7 @@ tags within description, notes or memo. ")
 
         (begin
 
-          (qof-query-set-book query (gnc-get-current-book))
-          (xaccQueryAddAccountMatch query c_account_1 QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-          (xaccQueryAddDateMatchTT query #t begindate #t enddate QOF-QUERY-AND)
-          (case void-status
-            ((non-void-only) (gnc:query-set-match-non-voids-only! query (gnc-get-current-book)))
-            ((void-only)     (gnc:query-set-match-voids-only! query (gnc-get-current-book)))
-            (else #f))
-          (if (not custom-sort?)
-              (begin
-                (qof-query-set-sort-order query
-                                          (keylist-get-info sortkey-list primary-key 'sortkey)
-                                          (keylist-get-info sortkey-list secondary-key 'sortkey)
-                                          '())
-                (qof-query-set-sort-increasing query
-                                               (eq? primary-order 'ascend)
-                                               (eq? secondary-order 'ascend)
-                                               #t)))
-
-          (if (opt-val "__trep" "unique-transactions")
-              (set! splits (xaccQueryGetSplitsUniqueTrans query))
-              (set! splits (qof-query-run query)))
-
-          (qof-query-destroy query)
-
-          (if custom-sort?
-              (begin
-                (set! splits (stable-sort! splits date-comparator?))
-                (set! splits (stable-sort! splits secondary-comparator?))
-                (set! splits (stable-sort! splits primary-comparator?))))
+          (set! splits (renderer:accountlist->splits options c_account_1))
 
           (set! splits (renderer:splits->filteredsplits options splits custom-split-filter))
 
