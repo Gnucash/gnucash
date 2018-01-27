@@ -687,7 +687,7 @@ void CsvImpTransAssist::preview_populate_settings_combo()
          * For now this is safe, because the shared pointers in this case are
          * long-lived, but this may need refactoring.
          */
-        gtk_list_store_set (GTK_LIST_STORE(model), &iter, SET_GROUP, preset.get(), SET_NAME, preset->m_name.c_str(), -1);
+        gtk_list_store_set (GTK_LIST_STORE(model), &iter, SET_GROUP, preset.get(), SET_NAME, _(preset->m_name.c_str()), -1);
     }
 }
 
