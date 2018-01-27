@@ -501,7 +501,7 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
     file_chooser = gtk_file_chooser_widget_new (GTK_FILE_CHOOSER_ACTION_OPEN);
     g_signal_connect (G_OBJECT(file_chooser), "file-activated",
                       G_CALLBACK(csv_price_imp_file_confirm_cb), this);
-    auto button = gtk_button_new_with_label (_("OK"));
+    auto button = gtk_button_new_with_mnemonic (_("_OK"));
     gtk_widget_set_size_request (button, 100, -1);
     gtk_widget_show (button);
     auto h_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -1761,11 +1761,34 @@ void
 CsvImpPriceAssist::assist_summary_page_prepare ()
 {
     auto text = std::string("<span size=\"medium\"><b>");
-    text += _("The prices were imported from the file '") + m_file_name + "'.";
-    text += _("\n\nThere were ") + std::to_string(price_imp->m_prices_added);
-    text += _(" Prices added, ") + std::to_string(price_imp->m_prices_duplicated);
-    text += _(" duplicated and ") + std::to_string(price_imp->m_prices_replaced);
-    text += _(" replaced.</b></span>");
+    /* Translators: This is a ngettext(3) message, %d is the number of prices added */
+    auto added_str = g_strdup_printf (ngettext ("%d added price",
+                                                "%d added prices",
+                                                price_imp->m_prices_added),
+                                      price_imp->m_prices_added);
+    /* Translators: This is a ngettext(3) message, %d is the number of duplicate prices */
+    auto dupl_str = g_strdup_printf (ngettext ("%d duplicate price",
+                                               "%d duplicate prices",
+                                               price_imp->m_prices_duplicated),
+                                     price_imp->m_prices_duplicated);
+    /* Translators: This is a ngettext(3) message, %d is the number of replaced prices */
+    auto repl_str = g_strdup_printf (ngettext ("%d replaced price",
+                                               "%d replaced prices",
+                                               price_imp->m_prices_replaced),
+                                     price_imp->m_prices_replaced);
+    auto msg = g_strdup_printf (
+        _("The prices were imported from file '%s'.\n\n"
+          "Import summary:\n"
+          "- %s\n"
+          "- %s\n"
+          "- %s"),
+          m_file_name.c_str(), added_str, dupl_str,repl_str);
+    text += msg;
+    text += "</b></span>";
+
+    g_free (added_str);
+    g_free (dupl_str);
+    g_free (repl_str);
 
     gtk_label_set_markup (GTK_LABEL(summary_label), text.c_str());
 }

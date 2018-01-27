@@ -1174,7 +1174,7 @@ More information can be displayed by using the help button.</property>
           <object class="GtkLabel" id="summary_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">label</property>
+            <property name="label">label</property>
             <property name="use_markup">True</property>
             <property name="wrap">True</property>
           </object>
@@ -1196,6 +1196,9 @@ More information can be displayed by using the help button.</property>
       <object class="GtkBox" id="assistant-action_area2">
         <property name="can_focus">False</property>
       </object>
+      <packing>
+        <property name="has_padding">False</property>
+      </packing>
     </child>
   </object>
 </interface>

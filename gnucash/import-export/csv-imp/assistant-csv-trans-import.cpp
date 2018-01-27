@@ -423,7 +423,7 @@ CsvImpTransAssist::CsvImpTransAssist ()
     file_chooser = gtk_file_chooser_widget_new (GTK_FILE_CHOOSER_ACTION_OPEN);
     g_signal_connect (G_OBJECT(file_chooser), "file-activated",
                       G_CALLBACK(csv_tximp_file_confirm_cb), this);
-    auto button = gtk_button_new_with_label (_("OK"));
+    auto button = gtk_button_new_with_mnemonic (_("_OK"));
     gtk_widget_set_size_request (button, 100, -1);
     gtk_widget_show (button);
     auto h_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);

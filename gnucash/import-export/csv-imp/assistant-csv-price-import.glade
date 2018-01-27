@@ -73,6 +73,7 @@ Click on 'Forward' to proceed or 'Cancel' to Abort Import.</property>
       <packing>
         <property name="page_type">intro</property>
         <property name="complete">True</property>
+        <property name="has_padding">False</property>
       </packing>
     </child>
     <child>
@@ -99,6 +100,7 @@ Select location and file name for the Import, then click 'OK'...
       </object>
       <packing>
         <property name="title" translatable="yes">Select File for Import</property>
+        <property name="has_padding">False</property>
       </packing>
     </child>
     <child>
@@ -1048,6 +1050,7 @@ For example
       <packing>
         <property name="page_type">intro</property>
         <property name="complete">True</property>
+        <property name="has_padding">False</property>
       </packing>
     </child>
     <child>
@@ -1082,6 +1085,7 @@ Cancel to abort.&lt;/b&gt;</property>
       <packing>
         <property name="page_type">confirm</property>
         <property name="title" translatable="yes">Import Prices Now</property>
+        <property name="has_padding">False</property>
       </packing>
     </child>
     <child>
@@ -1094,7 +1098,7 @@ Cancel to abort.&lt;/b&gt;</property>
           <object class="GtkLabel" id="summary_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">label</property>
+            <property name="label">label</property>
             <property name="use_markup">True</property>
             <property name="wrap">True</property>
           </object>
@@ -1109,6 +1113,7 @@ Cancel to abort.&lt;/b&gt;</property>
         <property name="page_type">summary</property>
         <property name="title" translatable="yes">Import Summary</property>
         <property name="complete">True</property>
+        <property name="has_padding">False</property>
       </packing>
     </child>
     <child internal-child="action_area">
@@ -1116,6 +1121,7 @@ Cancel to abort.&lt;/b&gt;</property>
         <property name="can_focus">False</property>
       </object>
       <packing>
+        <property name="has_padding">False</property>
       </packing>
     </child>
   </object>
