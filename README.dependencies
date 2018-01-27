@@ -75,6 +75,10 @@ swig			2.0.10			Only required to build from git
 						or SVN.
 webkit			webkitgtk-3.0 (Windows, Mac)
                         webkit2gtk-3.0 (Everything Else)
+googletest              1.7.0                   Some distros call it gtest.
+                                                Some distros also separate out
+                                                googlemock or gmock; both are
+                                                required.
 
   optional
   --------
