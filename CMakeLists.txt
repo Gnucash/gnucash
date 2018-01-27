@@ -766,7 +766,7 @@ SET(PACKAGE_PREFIX "${PACKAGE}-${PACKAGE_VERSION}")
 SET(DIST_FILE "${PACKAGE_PREFIX}.tar")
 
 SET(toplvl_DIST_local ${gnucash_DOCS}
-  CMakeLists.txt README)
+  CMakeLists.txt make-gnucash-potfiles.in README)
 
 
 SET_LOCAL_DIST(toplvl_DIST ${toplvl_DIST_local})
