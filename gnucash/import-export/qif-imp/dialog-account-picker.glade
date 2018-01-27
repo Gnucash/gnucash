@@ -155,7 +155,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="newbutton">
-                <property name="label">gnc-new-account</property>
+                <property name="label">gnc-account-new</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>

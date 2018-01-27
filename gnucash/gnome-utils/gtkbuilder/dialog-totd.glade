@@ -52,20 +52,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="cancel-button">
-                <property name="label" translatable="yes">_Cancel</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkButton" id="close-button">
                 <property name="label" translatable="yes">_Close</property>
                 <property name="visible">True</property>
@@ -77,7 +63,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">3</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
@@ -192,7 +178,6 @@
     <action-widgets>
       <action-widget response="2">back-button</action-widget>
       <action-widget response="1">forward-button</action-widget>
-      <action-widget response="-6">cancel-button</action-widget>
       <action-widget response="-7">close-button</action-widget>
     </action-widgets>
   </object>

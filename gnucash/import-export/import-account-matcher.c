@@ -293,6 +293,7 @@ Account * gnc_import_select_account(GtkWidget *parent,
     {
         /* load the interface */
         builder = gtk_builder_new();
+        gnc_builder_add_from_file (builder, "dialog-import.glade", "account_new_icon");
         gnc_builder_add_from_file (builder, "dialog-import.glade", "account_picker_dialog");
         gnc_builder_add_from_file (builder, "dialog-import.glade", "account_picker_content");
         /* connect the signals in the interface */

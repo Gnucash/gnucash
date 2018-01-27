@@ -1675,7 +1675,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
           ; - include/exclude splits to/from selected accounts
           ; - include only Invoices & Regular Transactions (i.e. remove Link & Payments)
           ; - disallow Closing Transactions, and
-          ; - substring/regex matcher for Description/Notes/Memo 
+          ; - substring/regex matcher for Description/Notes/Memo
           (set! splits (filter
                         (lambda (split)
                           (let* ((trans (xaccSplitGetParent split))
@@ -1782,24 +1782,26 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                  document
                  (gnc:html-make-no-account-warning
                   report-title (gnc:report-id report-obj)))
-                
+
                 (gnc:html-document-add-object!
                  document
                  (gnc:make-html-text
                   (gnc:html-markup-p
-                   "This report is useful to calculate periodic business tax payable/receivable from"
-                   " authorities. From <i>Edit report options</i> above, choose your Business Income and Business Expense accounts."
-                   " Each transaction may contain, in addition to the accounts payable/receivable or bank accounts,"
-                   " a split to a tax account, e.g. Income:Sales -$1000, Liability:GST on Sales -$100, Asset:Bank $1100.")
+                   (_
+                   "This report is useful to calculate periodic business tax payable/receivable from
+ authorities. From <i>Edit report options</i> above, choose your Business Income and Business Expense accounts.
+ Each transaction may contain, in addition to the accounts payable/receivable or bank accounts,
+ a split to a tax account, e.g. Income:Sales -$1000, Liability:GST on Sales -$100, Asset:Bank $1100."))
                   (gnc:html-markup-p
-                   " These tax accounts can either be populated using the standard register, or from Business Invoices and Bills "
-                   " which will require Business > Sales Tax Tables to be set up correctly. Please see the documentation.")))
-                
+                   (_
+                   "These tax accounts can either be populated using the standard register, or from Business Invoices and Bills
+ which will require Business > Sales Tax Tables to be set up correctly. Please see the documentation."))))
+
                 (gnc:html-document-add-object!
                  document
                  (gnc:make-html-text
                   (gnc:html-markup-p TAX-SETUP-DESC))))
-            
+
               (begin
                 (gnc:html-document-add-object!
                  document

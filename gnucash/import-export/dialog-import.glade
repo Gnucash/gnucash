@@ -2,6 +2,104 @@
 <!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
+  <object class="GtkImage" id="account_new_icon">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">gnc-account-new</property>
+  </object>
+  <object class="GtkDialog" id="account_picker_dialog">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Select Account</property>
+    <property name="default_width">800</property>
+    <property name="default_height">600</property>
+    <property name="type_hint">dialog</property>
+    <signal name="map" handler="gnc_ui_generic_account_picker_map_cb" swapped="no"/>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="account_picker_vbox">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="dialog-action_area8">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="newbutton">
+                <property name="label">New _Account...</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="image">account_new_icon</property>
+                <property name="use_underline">True</property>
+                <property name="always_show_image">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="cancelbutton">
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="okbutton">
+                <property name="label" translatable="yes">_OK</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="1">newbutton</action-widget>
+      <action-widget response="-6">cancelbutton</action-widget>
+      <action-widget response="-5">okbutton</action-widget>
+    </action-widgets>
+  </object>
   <object class="GtkBox" id="account_picker_content">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -47,97 +145,6 @@
       </packing>
     </child>
   </object>
-  <object class="GtkDialog" id="account_picker_dialog">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="title" translatable="yes">Select Account</property>
-    <property name="default_width">800</property>
-    <property name="default_height">600</property>
-    <property name="type_hint">dialog</property>
-    <signal name="map" handler="gnc_ui_generic_account_picker_map_cb" swapped="no"/>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="account_picker_vbox">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area8">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="newbutton">
-                <property name="label">gnc-new-account</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="cancelbutton">
-                <property name="label">_Cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="okbutton">
-                <property name="label">_OK</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-      </object>
-    </child>
-    <action-widgets>
-      <action-widget response="1">newbutton</action-widget>
-      <action-widget response="-6">cancelbutton</action-widget>
-      <action-widget response="-5">okbutton</action-widget>
-    </action-widgets>
-  </object>
   <object class="GtkAdjustment" id="atm_fee_adj">
     <property name="upper">1000</property>
     <property name="value">2</property>
@@ -179,7 +186,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="okbutton1">
-                <property name="label">_OK</property>
+                <property name="label" translatable="yes">_OK</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -301,7 +308,7 @@
         <property name="can_focus">False</property>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.import.generic/enable-skip">
-            <property name="label" translatable="yes" comments="Preferences->Online Banking:Generic">Enable skip transaction action</property>
+            <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Enable skip transaction action</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -321,7 +328,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.import.generic/enable-update">
-            <property name="label" translatable="yes" comments="Preferences->Online Banking:Generic">Enable update match action</property>
+            <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Enable update match action</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -437,9 +444,10 @@
         <child>
           <object class="GtkLabel" id="label847789">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="margin_left">12</property>
-            <property name="label" translatable="yes" comments="Preferences->Online Banking:Generic">Commercial ATM _fees threshold</property>
+            <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Commercial ATM _fees threshold</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">pref/dialogs.import.generic/atm-fee-threshold</property>
           </object>
@@ -451,9 +459,10 @@
         <child>
           <object class="GtkLabel" id="label847788">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="margin_left">12</property>
-            <property name="label" translatable="yes" comments="Preferences->Online Banking:Generic">Auto-c_lear threshold</property>
+            <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Auto-c_lear threshold</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">pref/dialogs.import.generic/auto-clear-threshold</property>
           </object>
@@ -465,9 +474,10 @@
         <child>
           <object class="GtkLabel" id="label847787">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="margin_left">12</property>
-            <property name="label" translatable="yes" comments="Preferences->Online Banking:Generic">Auto-_add threshold</property>
+            <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Auto-_add threshold</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">pref/dialogs.import.generic/auto-add-threshold</property>
           </object>
@@ -479,9 +489,10 @@
         <child>
           <object class="GtkLabel" id="label847786">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="margin_left">12</property>
-            <property name="label" translatable="yes" comments="Preferences->Online Banking:Generic">Match _display threshold</property>
+            <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Match _display threshold</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">pref/dialogs.import.generic/match-threshold</property>
           </object>
@@ -492,7 +503,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.import.generic/use-bayes">
-            <property name="label" translatable="yes" comments="Preferences->Online Banking:Generic">Use _bayesian matching</property>
+            <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Use _bayesian matching</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -512,7 +523,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="pref/dialogs.import.generic/auto-create-commodity">
-            <property name="label" translatable="yes" comments="Preferences->Online Banking:Generic">Automatically create new commodities</property>
+            <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Automatically create new commodities</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -572,7 +583,7 @@
             </child>
             <child>
               <object class="GtkButton" id="cancel_button1">
-                <property name="label">_Cancel</property>
+                <property name="label" translatable="yes">_Cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -587,7 +598,7 @@
             </child>
             <child>
               <object class="GtkButton" id="ok_button1">
-                <property name="label">_OK</property>
+                <property name="label" translatable="yes">_OK</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -616,6 +627,7 @@
             <child>
               <object class="GtkLabel" id="label847772">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="label" translatable="yes" comments="Dialog Select matching transactions">Imported transaction's first split:</property>
                 <property name="justify">center</property>
               </object>
@@ -650,6 +662,7 @@
             <child>
               <object class="GtkLabel" id="label847766">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="label" translatable="yes" comments="Dialog Select matching transactions">Potential splits matching the selected transaction: </property>
                 <property name="justify">center</property>
               </object>
@@ -727,7 +740,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="matcher_help_close">
-                <property name="label">_Close</property>
+                <property name="label" translatable="yes">_Close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -1131,7 +1144,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="matcher_cancel">
-                <property name="label">_Cancel</property>
+                <property name="label" translatable="yes">_Cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -1147,7 +1160,7 @@
             </child>
             <child>
               <object class="GtkButton" id="matcher_ok">
-                <property name="label">_OK</property>
+                <property name="label" translatable="yes">_OK</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -1164,7 +1177,7 @@
             </child>
             <child>
               <object class="GtkButton" id="matcher__help">
-                <property name="label">_Help</property>
+                <property name="label" translatable="yes">_Help</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>

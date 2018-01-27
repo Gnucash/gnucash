@@ -158,9 +158,9 @@ balance at a given time"))
      (gnc:make-simple-boolean-option
       gnc:pagename-display optname-fullname
       "a"
-      (N_ (if depth-based?
-              "Show the full account name in legend?"
-              "Show the full security name in the legend?"))
+      (if depth-based?
+        (N_ "Show the full account name in legend?")
+        (N_ "Show the full security name in the legend?"))
       #f))
 
     (add-option
