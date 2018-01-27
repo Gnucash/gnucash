@@ -1113,50 +1113,43 @@ tags within description, notes or memo. ")
          ;;         calculator-function                          ;; (calculator-function split) to obtain amount
          ;;         reverse-column?                              ;; to optionally reverse signs
          ;;         subtotal?                                    ;; subtotal? to allow subtotals (ie irrelevant for running balance)
-         ;;         (vector start-dual-column?                   ;; #t for the left side of a dual column (i.e. debit/credit)
-         ;;                 merging-function))                   ;; function to apply to dual-subtotal (+ / -)
+         ;;         start-dual-column?                           ;; #t for the left side of a dual column (i.e. debit/credit)
+         ;;                                                      ;; which means the next column will be the right side
          ;;         friendly-heading-fn                          ;; retrieve friendly heading name for account debit/credit
          (if (column-uses? 'amount-single)
              (list (vector (header-commodity (_ "Amount"))
-                           amount #t #t
-                           (vector #f #f)
+                           amount #t #t #f
                            (lambda (a) "")))
              '())
          (if (column-uses? 'amount-double)
              (list (vector (header-commodity (_ "Debit"))
-                           debit-amount #f #t
-                           (vector #t +)
+                           debit-amount #f #t #t
                            friendly-debit)
                    (vector (header-commodity (_ "Credit"))
-                           credit-amount #f #t
-                           (vector #f -)
+                           credit-amount #f #t #f
                            friendly-credit))
              '())
 
          (if (and (column-uses? 'amount-original-currency)
                   (column-uses? 'amount-single))
              (list (vector (_ "Amount")
-                           original-amount #t #t
-                           (vector #f #f)
+                           original-amount #t #t #f
                            (lambda (a) "")))
              '())
 
          (if (and (column-uses? 'amount-original-currency)
                   (column-uses? 'amount-double))
              (list (vector (_ "Debit")
-                           original-debit-amount #f #t
-                           (vector #t +)
+                           original-debit-amount #f #t #t
                            friendly-debit)
                    (vector (_ "Credit")
-                           original-credit-amount #f #t
-                           (vector #f -)
+                           original-credit-amount #f #t #f
                            friendly-credit))
              '())
 
          (if (column-uses? 'running-balance)
              (list (vector (_ "Running Balance")
-                           running-balance #t #f
-                           (vector #f #f)
+                           running-balance #t #f #f
                            (lambda (a) "")))
              '()))))
 
@@ -1252,44 +1245,45 @@ tags within description, notes or memo. ")
 
         (define (add-columns commodity)
           (let ((start-dual-column? #f)
-                (dual-subtotal 0))
+                (dual-subtotal #f))
             (for-each (lambda (column merge-entry)
                         (let* ((mon (retrieve-commodity column commodity))
                                (column-amount (and mon (gnc:gnc-monetary-amount mon)))
-                               (merge? (vector-ref merge-entry 0))
-                               (merge-fn (vector-ref merge-entry 1)))
+                               (merge? merge-entry))
                           (if merge?
-                              ;; We're merging. Run merge-fn (usu + or -)
-                              ;; and store total in dual-subtotal. Do NOT add column.
+                              ;; We're merging. If a subtotal exists, store
+                              ;; it in dual-subtotal. Do NOT add column to row.
                               (begin
-                                (if column-amount
-                                    (set! dual-subtotal
-                                          (merge-fn dual-subtotal column-amount)))
+                                (set! dual-subtotal column-amount)
                                 (set! start-dual-column? #t))
                               (if start-dual-column?
                                   (begin
-                                    ;; We've completed merging. Add this column amount
-                                    ;; and add the columns.
+                                    ;; We've completed merging. Add the negated
+                                    ;; column amount and add the columns to row.
                                     (if column-amount
                                         (set! dual-subtotal
-                                              (merge-fn dual-subtotal column-amount)))
-                                    (if (positive? dual-subtotal)
-                                        (begin
-                                          (addto! row-contents
-                                                  (gnc:make-html-table-cell/markup
-                                                   "total-number-cell"
-                                                   (gnc:make-gnc-monetary commodity dual-subtotal)))
-                                          (addto! row-contents ""))
-                                        (begin
-                                          (addto! row-contents "")
-                                          (addto! row-contents
-                                                  (gnc:make-html-table-cell/markup
-                                                   "total-number-cell"
-                                                   (gnc:make-gnc-monetary
-                                                    commodity
-                                                    (- dual-subtotal))))))
+                                          (- (or dual-subtotal 0) column-amount)))
+                                    (cond ((not dual-subtotal)
+                                           (addto! row-contents "")
+                                           (addto! row-contents ""))
+                                          ((positive? dual-subtotal)
+                                           (addto! row-contents
+                                                   (gnc:make-html-table-cell/markup
+                                                    "total-number-cell"
+                                                    (gnc:make-gnc-monetary
+                                                     commodity
+                                                     dual-subtotal)))
+                                           (addto! row-contents ""))
+                                          (else
+                                           (addto! row-contents "")
+                                           (addto! row-contents
+                                                   (gnc:make-html-table-cell/markup
+                                                    "total-number-cell"
+                                                    (gnc:make-gnc-monetary
+                                                     commodity
+                                                     (- dual-subtotal))))))
                                     (set! start-dual-column? #f)
-                                    (set! dual-subtotal 0))
+                                    (set! dual-subtotal #f))
                                   ;; Default; not merging/completed merge. Just
                                   ;; display monetary amount
                                   (addto! row-contents
