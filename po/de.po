@@ -1654,7 +1654,7 @@ msgstr "Kontonummer"
 #: ../gnucash/gnome/dialog-imap-editor.c:503
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:5
 msgid "Bayesian"
-msgstr ""
+msgstr "Bayessche"
 
 #. Description
 #: ../gnucash/gnome/dialog-imap-editor.c:518
@@ -2118,11 +2118,10 @@ msgstr "Betrag"
 #. Translators: %d is the number of bills/credit notes due. This is a
 #. ngettext(3) message.
 #: ../gnucash/gnome/dialog-invoice.c:3435
-#, fuzzy, c-format
 msgid "The following vendor document is due:"
 msgid_plural "The following %d vendor documents are due:"
-msgstr[0] "Die folgende Rechnung ist fällig:"
-msgstr[1] "Die folgenden %d Rechnungen sind fällig:"
+msgstr[0] "Der folgende Lieferantenbeleg ist fällig:"
+msgstr[1] "Die folgenden %d Lieferantenbelege sind fällig:"
 
 #: ../gnucash/gnome/dialog-invoice.c:3439
 msgid "Due Bills Reminder"
@@ -2131,11 +2130,10 @@ msgstr "Erinnerung an fällige Rechnungen"
 #. Translators: %d is the number of invoices/credit notes due. This is a
 #. ngettext(3) message.
 #: ../gnucash/gnome/dialog-invoice.c:3446
-#, fuzzy, c-format
 msgid "The following customer document is due:"
 msgid_plural "The following %d customer documents are due:"
-msgstr[0] "Die folgende Rechnung ist fällig:"
-msgstr[1] "Die folgenden %d Rechnungen sind fällig:"
+msgstr[0] "Der folgende Kundenbeleg ist fällig:"
+msgstr[1] "Die folgenden %d Kundenbelege sind fällig:"
 
 #: ../gnucash/gnome/dialog-invoice.c:3450
 msgid "Due Invoices Reminder"
@@ -5376,19 +5374,17 @@ msgstr ""
 "Gegendokumente zu betrachten."
 
 #: ../gnucash/gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:9
-#, fuzzy
 msgid "Show invoices due reminder at startup"
 msgstr "Erinnerung an fällige Rechnungen beim Programmstart anzeigen"
 
 #: ../gnucash/gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:10
-#, fuzzy
 msgid ""
 "If active, at startup GnuCash will check to see whether any invoices will "
 "become due soon. If so, it will present the user with a reminder dialog. The "
 "definition of \"soon\" is controlled by the \"Days in Advance\" setting. "
 "Otherwise GnuCash does not check for due invoices."
 msgstr ""
-"Wenn aktiviert wird GnuCash beim Programmstart prüfen, ob Rechnungen "
+"Wenn aktiviert, wird GnuCash beim Programmstart prüfen, ob Rechnungen "
 "demnächst fällig werden. Wenn dies der Fall ist, wird eine Erinnerung "
 "angezeigt. Die Anzahl der Tage im Voraus wird mit der Einstellung »Tage im "
 "Voraus« festgelegt. Andernfalls wird GnuCash nicht nach fälligen Rechnungen "
@@ -5400,7 +5396,6 @@ msgid "Show invoices due within this many days"
 msgstr "Erinnerung an fällige Rechnungen für diese Anzahl von Tagen im Voraus"
 
 #: ../gnucash/gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:12
-#, fuzzy
 msgid ""
 "This field defines the number of days in advance that GnuCash will check for "
 "due invoices. Its value is only used if the \"Notify when due\" setting is "
@@ -6074,7 +6069,6 @@ msgstr ""
 "verschwindet."
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:17
-#, fuzzy
 msgid "Time to wait for answer"
 msgstr "Wartezeit auf eine Antwort:"
 
