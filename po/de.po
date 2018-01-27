@@ -3127,7 +3127,7 @@ msgstr "Alte Daten abschließen und in vorigen Buchführungsperioden speichern."
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:191
 msgid "_Price Database"
-msgstr "Kurs-Datenbank"
+msgstr "Kurs-Datenbank..."
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:192
 msgid "View and edit the prices for stocks and mutual funds"
@@ -3135,7 +3135,7 @@ msgstr "Kurse für Währungen/Wertpapiere anzeigen und bearbeiten"
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:196
 msgid "_Security Editor"
-msgstr "_Wertpapier-Editor"
+msgstr "_Wertpapier-Editor..."
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:197
 msgid "View and edit the commodities for stocks and mutual funds"
@@ -3144,7 +3144,7 @@ msgstr ""
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:201
 msgid "_Loan Repayment Calculator"
-msgstr "_Darlehensrechner"
+msgstr "_Darlehensrechner..."
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:202
 msgid "Use the loan/mortgage repayment calculator"
@@ -3152,7 +3152,7 @@ msgstr "Den Darlehensrechner benutzen"
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:206
 msgid "_Close Book"
-msgstr "_Buchabschluss"
+msgstr "_Buchabschluss..."
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:207
 msgid "Close the Book at the end of the Period"
@@ -3168,7 +3168,7 @@ msgstr ""
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:216
 msgid "_Transaction Associations"
-msgstr "_Buchungsverknüpfungen"
+msgstr "_Buchungsverknüpfungen..."
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:217
 msgid "View all Transaction Associations"
@@ -18777,8 +18777,7 @@ msgstr "Grün"
 
 #: ../gnucash/import-export/dialog-import.glade.h:57
 msgid "List of downloaded transactions (source split shown):"
-msgstr ""
-"Liste der importierten Buchungen (angezeigt wird die Herkunftsbuchung):"
+msgstr "Liste der importierten Buchungen (angezeigt wird die Herkunftsbuchung):"
 
 #: ../gnucash/import-export/dialog-import.glade.h:58
 msgid "Generic import transaction matcher"
