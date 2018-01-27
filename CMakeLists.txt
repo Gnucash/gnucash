@@ -800,7 +800,7 @@ ENDIF()
 STRING(REPLACE ";" "\n" ALL_DIST_LINES "${ALL_DIST}")
 FILE(WRITE ${CMAKE_BINARY_DIR}/dist_manifest.txt ${ALL_DIST_LINES})
 
-SET(DIST_GENERATED_FILES "")
+SET(DIST_GENERATED_FILES2 "")
 FOREACH(file ${COPY_FROM_BUILD})
   LIST(APPEND DIST_GENERATED_FILES2 ${BUILD_SOURCE_DIR}/${file})
 ENDFOREACH()
@@ -818,7 +818,7 @@ ADD_CUSTOM_COMMAND(OUTPUT ${DIST_FILE}.gz ${DIST_FILE}.bz2
            -P ${CMAKE_SOURCE_DIR}/common/cmake_modules/MakeDist.cmake
 
         DEPENDS
-          ${ALL_DIST} ${DIST_GENERATED_FILES2} gnc-vcs-info iso-4217-c gnc-warnings-c gnucash-design-info ChangeLog
+          ${ALL_DIST} ${DIST_GENERATED_FILES2} gnc-vcs-info iso-4217-c gnc-warnings-c gnucash-design-info ChangeLog gnucash-pot
         )
 
 ADD_CUSTOM_TARGET(dist DEPENDS ${DIST_FILE}.gz ${DIST_FILE}.bz2)

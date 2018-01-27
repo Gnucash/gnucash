@@ -23,7 +23,7 @@ FOREACH(lingua ${ALL_LINGUAS})
 ENDFOREACH()
 
 SET_LOCAL_DIST(po_DIST_local ${po_SOURCES} CMakeLists.txt ChangeLog Makevars
-  POTFILES.ignore POTFILES.in POTFILES.skip README check-po.cmake)
+  POTFILES.ignore POTFILES.in POTFILES.skip README check-po.cmake gnucash-pot.cmake)
 SET(po_DIST ${po_DIST_local} ${po_glossary_DIST} PARENT_SCOPE)
 
 FOREACH(lingua ${ALL_LINGUAS})
@@ -159,31 +159,22 @@ IF(BUILDING_FROM_VCS)
     MESSAGE(FATAL_ERROR "Can't find the 'xgettext' program.")
   ENDIF ()
 
-  IF (${CMAKE_VERSION} VERSION_GREATER 3.1 AND NOT WIN32)
-    EXECUTE_PROCESS(
-            COMMAND ${CMAKE_COMMAND_TMP} INTLTOOL_EXTRACT=${INTLTOOL_EXTRACT} XGETTEXT=${XGETTEXT} srcdir=${CMAKE_CURRENT_SOURCE_DIR} ${INTLTOOL_UPDATE} --gettext-package ${PACKAGE} --pot
-            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-            RESULT_VARIABLE GNUCASH_POT_RESULT
-    )
-    IF(NOT ${GNUCASH_POT_RESULT} STREQUAL "0")
-      MESSAGE(FATAL_ERROR "Error when creating gnucash.pot: ${GNUCASH_POT_RESULT}")
-    ENDIF()
-  ELSE()
-    CONFIGURE_FILE(make-gnucash-pot.sh.in make-gnucash-pot.sh)
-    EXECUTE_PROCESS(
-            COMMAND ${SHELL} ${CMAKE_CURRENT_BINARY_DIR}/make-gnucash-pot.sh
-            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-            RESULT_VARIABLE GNUCASH_POT_RESULT_SHELL
-    )
-    IF(NOT ${GNUCASH_POT_RESULT_SHELL} STREQUAL "0")
-      MESSAGE(FATAL_ERROR "Error when creating gnucash.pot from shell script: ${GNUCASH_POT_RESULT_SHELL}")
-    ENDIF()
-  ENDIF()
+  add_custom_target(gnucash-pot
+        COMMAND ${CMAKE_COMMAND}
+           -D INTLTOOL_EXTRACT=${INTLTOOL_EXTRACT}
+           -D INTLTOOL_UPDATE=${INTLTOOL_UPDATE}
+           -D PO_SRC_DIR=${CMAKE_CURRENT_SOURCE_DIR}
+           -D PO_BIN_DIR=${CMAKE_CURRENT_BINARY_DIR}
+           -D PACKAGE=${PACKAGE}
+           -D PERL=${PERL_EXECUTABLE}
+           -D XGETTEXT=${XGETTEXT}
+           -P ${CMAKE_CURRENT_SOURCE_DIR}/gnucash-pot.cmake
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  )
 
-  IF (NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.pot)
-    MESSAGE(FATAL_ERROR "POT file '${CMAKE_CURRENT_SOURCE_DIR}/gnucash.pot' was not successfully created.")
-  ENDIF()
-
+ELSE()
+    add_custom_target(gnucash-pot
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.pot)
 ENDIF()
 
 ADD_CUSTOM_TARGET(check-po
