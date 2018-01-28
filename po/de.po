@@ -8400,20 +8400,19 @@ msgstr "<b>Welche Informationen sollen angezeigt werden?</b>"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:6
 msgid "Non-Bayesian"
-msgstr ""
+msgstr "Nicht-Bayesisch"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:7
 msgid "Online ID"
 msgstr "Online ID"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:8
-#, fuzzy
 msgid "Source Account Name"
-msgstr "Lange Kontobezeichnung anzeigen"
+msgstr "Lange Kontobezeichnung"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:9
 msgid "Based On"
-msgstr ""
+msgstr "Basierend auf"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:10
 #, fuzzy
@@ -8436,9 +8435,8 @@ msgid ""
 msgstr ""
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:14
-#, fuzzy
 msgid "_Filter"
-msgstr "_Datei"
+msgstr "_Filtern"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:15
 msgid "_Expand All"
@@ -10027,8 +10025,7 @@ msgstr ""
 #: ../gnucash/gnome/window-reconcile2.c:2127
 #: ../gnucash/gnome/window-reconcile.c:2166
 msgid "Do you want to postpone this reconciliation and finish it later?"
-msgstr ""
-"Möchten Sie dieses Abgleichen jetzt unterbrechen und später fertigstellen?"
+msgstr "Möchten Sie dieses Abgleichen jetzt unterbrechen und später fertigstellen?"
 
 #. Toplevel
 #: ../gnucash/gnome/window-reconcile2.c:2165
@@ -14080,16 +14077,15 @@ msgstr "GnuCash Optionen"
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-options.glade.h:4
 msgid "Close dialog and make no changes."
-msgstr ""
+msgstr "Beendet one Änderungen den Dialog"
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-options.glade.h:6
 msgid "Apply changes but do not close dialog."
-msgstr ""
+msgstr "Übernimmten die Änderungen und schließt nicht den Dialog."
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-options.glade.h:8
-#, fuzzy
 msgid "Apply changes and close dialog."
-msgstr "Den Dialog für die Suche nach Mitarbeitern öffnen"
+msgstr "Übernimmten die Änderungen und schließt den Dialog."
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:1
 msgid "US"
@@ -24054,9 +24050,8 @@ msgid "Asset Piechart"
 msgstr "Aktiva Tortendiagramm"
 
 #: ../gnucash/report/standard-reports/account-piecharts.scm:41
-#, fuzzy
 msgid "Security Piechart"
-msgstr "Aktiva Tortendiagramm"
+msgstr "Wertpapiere Tortendiagramm"
 
 #: ../gnucash/report/standard-reports/account-piecharts.scm:42
 msgid "Liability Piechart"
@@ -24131,7 +24126,6 @@ msgid "Show Accounts until level"
 msgstr "Verschachtelungstiefe der angezeigten Konten"
 
 #: ../gnucash/report/standard-reports/account-piecharts.scm:75
-#, fuzzy
 msgid "Show long names"
 msgstr "Lange Kontennamen anzeigen"
 
@@ -25481,9 +25475,8 @@ msgid "%s: %s"
 msgstr "%s: %s"
 
 #: ../gnucash/report/standard-reports/cashflow-barchart.scm:44
-#, fuzzy
 msgid "Cash Flow Barchart"
-msgstr "Kapitalfluss"
+msgstr "Kapitalfluss-Diagramm"
 
 #: ../gnucash/report/standard-reports/cashflow-barchart.scm:50
 #: ../gnucash/report/standard-reports/cash-flow.scm:57
@@ -25491,23 +25484,19 @@ msgid "Include Trading Accounts in report"
 msgstr "Handelskonten in den Bericht einschließen"
 
 #. Display
-#: ../gnucash/report/standard-reports/cashflow-barchart.scm:52
-#, fuzzy
+#: ../gnucash/report/standard-reports/cashflow-barchart.scm:5
 msgid "Show Money In"
-msgstr "Einzahlung"
+msgstr "Einzahlung anzeigen"
 
 #: ../gnucash/report/standard-reports/cashflow-barchart.scm:53
-#, fuzzy
 msgid "Show Money Out"
-msgstr "Auszahlung"
+msgstr "Auszahlung anzeigen"
 
 #: ../gnucash/report/standard-reports/cashflow-barchart.scm:54
-#, fuzzy
 msgid "Show Net Flow"
-msgstr "Reinvermögen anzeigen"
+msgstr "Nettofluss anzeigen"
 
 #: ../gnucash/report/standard-reports/cashflow-barchart.scm:55
-#, fuzzy
 msgid "Show Table"
 msgstr "Tabelle anzeigen"
 
@@ -25517,35 +25506,30 @@ msgid "Include transfers to and from Trading Accounts in the report."
 msgstr "Buchungen von und nach Handelskonten in den Bericht einschließen."
 
 #: ../gnucash/report/standard-reports/cashflow-barchart.scm:111
-#, fuzzy
+
 msgid "Show money in?"
-msgstr "Nur offene Posten anzeigen"
+msgstr "Einzahlunge anzeigen?"
 
 #: ../gnucash/report/standard-reports/cashflow-barchart.scm:117
-#, fuzzy
 msgid "Show money out?"
-msgstr "Nur offene Posten anzeigen"
+msgstr "Auszahlungen anzeigen?"
 
 #: ../gnucash/report/standard-reports/cashflow-barchart.scm:123
-#, fuzzy
 msgid "Show net money flow?"
-msgstr "Nur offene Posten anzeigen"
+msgstr "Nettogeldfluss anzeigen?"
 
 #: ../gnucash/report/standard-reports/cashflow-barchart.scm:334
 #: ../gnucash/report/standard-reports/cashflow-barchart.scm:359
-#, fuzzy
 msgid "Net Flow"
-msgstr "Netto-Verlust"
+msgstr "Nettogeldfluss"
 
 #: ../gnucash/report/standard-reports/cashflow-barchart.scm:363
-#, fuzzy
 msgid "Overview:"
 msgstr "Übersicht"
 
 #: ../gnucash/report/standard-reports/cashflow-barchart.scm:526
-#, fuzzy
 msgid "Shows a barchart with cash flow over time"
-msgstr "Balkendiagramm der Aktiva pro Zeit anzeigen"
+msgstr "Balkendiagramm des Kapitalflusses pro Zeit anzeigen"
 
 #: ../gnucash/report/standard-reports/cash-flow.scm:42
 msgid "Cash Flow"
@@ -25956,7 +25940,7 @@ msgstr "Vorzeichenumkehr"
 #: ../gnucash/report/standard-reports/general-ledger.scm:121
 #: ../gnucash/report/standard-reports/transaction.scm:65
 msgid "Detail Level"
-msgstr ""
+msgstr "Detailebene"
 
 #: ../gnucash/report/standard-reports/general-ledger.scm:134
 #: ../gnucash/report/standard-reports/income-gst-statement.scm:53
@@ -26700,9 +26684,8 @@ msgid "Net Worth Barchart"
 msgstr "Reinvermögen-Balkendiagramm"
 
 #: ../gnucash/report/standard-reports/net-barchart.scm:491
-#, fuzzy
 msgid "Income & Expense Barchart"
-msgstr "Aufwand & Ertrags-Diagramm"
+msgstr "Aufwand & Ertrags-Säulendiagramm"
 
 #: ../gnucash/report/standard-reports/net-linechart.scm:54
 msgid "Show Asset & Liability"
@@ -26744,7 +26727,7 @@ msgstr "Reinvermögen Liniendiagramm"
 #: ../gnucash/report/standard-reports/net-linechart.scm:546
 #, fuzzy
 msgid "Income & Expense Linechart"
-msgstr "Aufwand & Ertrags-Diagramm"
+msgstr "Aufwand & Ertrags-Liniendiagramm"
 
 #: ../gnucash/report/standard-reports/portfolio.scm:35
 msgid "Investment Portfolio"
@@ -26969,126 +26952,107 @@ msgstr "Zukünftige Terminierte Buchungen"
 
 #: ../gnucash/report/standard-reports/transaction.scm:75
 #: ../gnucash/report/standard-reports/transaction.scm:926
-#, fuzzy
 msgid "Show Account Description"
-msgstr "Kontenbeschreibung"
+msgstr "Kontenbeschreibung anzeigen"
 
 #: ../gnucash/report/standard-reports/transaction.scm:76
 msgid "Show Informal Debit/Credit Headers"
-msgstr ""
+msgstr "Informelle Soll/Haben-Köpfe einblenden"
 
 #: ../gnucash/report/standard-reports/transaction.scm:77
-#, fuzzy
 msgid "Show subtotals only (hide transactional data)"
-msgstr "Nur stornierte Buchungssätze anzeigen."
+msgstr "Nur Zwischensummen anzeigen (Bewegungsdaten ausblenden)."
 
 #: ../gnucash/report/standard-reports/transaction.scm:78
-#, fuzzy
 msgid "Add indenting columns"
-msgstr "Spalte ver_größern"
+msgstr "Hinzufügen von Einrückungsspalten"
 
 #: ../gnucash/report/standard-reports/transaction.scm:89
-#, fuzzy
 msgid "Show original currency amount"
-msgstr "Wertpapiere/Edelmetalle (ohne Währungen) anzeigen"
+msgstr "Originalwährungsbeträge anzeigen"
 
 #: ../gnucash/report/standard-reports/transaction.scm:91
 msgid "Add options summary"
-msgstr ""
+msgstr "Zusammenfassung der Optionen hinzufügen"
 
 #. Filtering
 #: ../gnucash/report/standard-reports/transaction.scm:94
-#, fuzzy
 msgid "Filter"
 msgstr "Filtertyp"
 
 #: ../gnucash/report/standard-reports/transaction.scm:95
-#, fuzzy
 msgid "Account Name Filter"
-msgstr "Kontobezeichnung"
+msgstr "Filter der Kontobezeichnung"
 
 #: ../gnucash/report/standard-reports/transaction.scm:96
-#, fuzzy
 msgid "Use regular expressions for account name filter"
-msgstr "Regulären Ausdruck für Import anpassen"
+msgstr "Regulären Ausdruck für Import nutzen"
 
 #: ../gnucash/report/standard-reports/transaction.scm:97
-#, fuzzy
 msgid "Transaction Filter"
-msgstr "Buchungsdatum"
+msgstr "Buchungsfilter"
 
 #: ../gnucash/report/standard-reports/transaction.scm:98
-#, fuzzy
 msgid "Use regular expressions for transaction filter"
-msgstr "Regulären Ausdruck für Import anpassen"
+msgstr "Regulären Ausdruck für Import nutzen"
 
 #: ../gnucash/report/standard-reports/transaction.scm:99
-#, fuzzy
 msgid "Reconcile Status"
-msgstr "Datum des Abgleichs"
+msgstr "Status des Abgleichs"
 
 #: ../gnucash/report/standard-reports/transaction.scm:113
-#, fuzzy
 msgid "No matching accounts found"
-msgstr "Keine passenden Buchungssätze gefunden"
+msgstr "Keine passende Konten gefunden"
 
 #: ../gnucash/report/standard-reports/transaction.scm:114
-#, fuzzy
-msgid ""
-"No account were found that match the options specified in the Options panels."
+
+msgid "No account were found that match the options specified in the Options panels."
 msgstr ""
-"Keine Buchungssätze gefunden, die in den gewählten Zeitraum fallen und die "
-"gewählten Konten betreffen. Klicken Sie »Optionen«, um die Auswahl zu ändern."
+"Es wurde kein Konto gefunden, das mit den Optionen übereinstimmt, "
+"die in den Optionenfeldern angegeben sind."
 
 #: ../gnucash/report/standard-reports/transaction.scm:173
-#, fuzzy
 msgid "Reconciled Status"
-msgstr "Datum des Abgleichs"
+msgstr "Status des Abgleichs"
 
 #: ../gnucash/report/standard-reports/transaction.scm:174
-#, fuzzy
 msgid "Sort by the Reconciled Status"
-msgstr "Sortiere nach Abgleich-Datum."
+msgstr "Sortiert nach Abgleichstatus."
 
 #: ../gnucash/report/standard-reports/transaction.scm:178
 #: ../gnucash/report/standard-reports/transaction.scm:337
-#, fuzzy
 msgid "Unreconciled"
-msgstr "_Nicht abgeglichen"
+msgstr "Nicht abgeglichene"
 
 #: ../gnucash/report/standard-reports/transaction.scm:272
-#, fuzzy
 msgid "Daily."
 msgstr "Täglich"
 
 #: ../gnucash/report/standard-reports/transaction.scm:334
-#, fuzzy
 msgid "Show All Transactions"
-msgstr "_Alle Buchungssätze"
+msgstr "_Alle Buchungssätze anzeigen"
 
 #: ../gnucash/report/standard-reports/transaction.scm:338
-#, fuzzy
 msgid "Unreconciled only"
-msgstr "_Nicht abgeglichen"
+msgstr "Nur _nicht abgeglichene"
 
 #: ../gnucash/report/standard-reports/transaction.scm:342
-#, fuzzy
 msgid "Cleared only"
-msgstr "Bestätigt"
+msgstr "Nur bestätigte"
 
 #: ../gnucash/report/standard-reports/transaction.scm:346
-#, fuzzy
 msgid "Reconciled only"
-msgstr "Abgeglichen"
+msgstr "Nur abgeglichene"
 
 #: ../gnucash/report/standard-reports/transaction.scm:362
-#, fuzzy
 msgid "Use Global Preference"
-msgstr "GnuCash Einstellungen"
+msgstr "GnuCash Einstellungen verwenden"
 
 #: ../gnucash/report/standard-reports/transaction.scm:363
 msgid "Use reversing option specified in global preference."
 msgstr ""
+"Verwenden Sie die in den GnuCash Einstellungen angegebenen "
+"Umkehrung der Vorzeichen."
 
 #: ../gnucash/report/standard-reports/transaction.scm:368
 msgid "Don't change any displayed amounts."
@@ -27115,18 +27079,16 @@ msgstr ""
 "umgekehrten Vorzeichen darstellen."
 
 #: ../gnucash/report/standard-reports/transaction.scm:448
-#, fuzzy
 msgid "Also show original currency amounts"
-msgstr "Kontostände zusätzlich in Fremdwährung anzeigen?"
+msgstr "Auch Originalwährungsbeträge anzeigen"
 
 #: ../gnucash/report/standard-reports/transaction.scm:458
 msgid "Add summary of options."
-msgstr ""
+msgstr "Zusammenfassung der Optionen hinzufügen"
 
 #: ../gnucash/report/standard-reports/transaction.scm:464
-#, fuzzy
 msgid "If no transactions matched"
-msgstr "Buchungszuordnung für Allgemeinen Import"
+msgstr "Wenn keine Buchungen passen"
 
 #: ../gnucash/report/standard-reports/transaction.scm:465
 #, fuzzy
@@ -27135,7 +27097,7 @@ msgstr "Anzeigen der Buchungsreferenz?"
 
 #: ../gnucash/report/standard-reports/transaction.scm:467
 msgid "Always"
-msgstr ""
+msgstr "Immer"
 
 #: ../gnucash/report/standard-reports/transaction.scm:468
 msgid "Always display summary."
@@ -27152,6 +27114,9 @@ msgid ""
 "match Expenses:Travel:Holiday and Expenses:Business:Travel. It can be left "
 "blank, which will disable the filter."
 msgstr ""
+"Zeige nur Konten, deren vollständiger Name mit diesem Filter übereinstimmt, "
+"z.B. ':Reise' stimmt mit 'Aufwendungen:Unterhaltung:Reise' und 'Aufwendungen:Geschäft:Reise' "
+"überein. Es kann leer bleiben, wodurch der Filter deaktiviert wird."
 
 #: ../gnucash/report/standard-reports/transaction.scm:487
 msgid ""
@@ -27160,6 +27125,10 @@ msgid ""
 "match both Expenses:Car and Expenses:Flights. Use a period (.) to match a "
 "single character e.g. '20../.' will match 'Travel 2017/1 London'. "
 msgstr ""
+"Standardmäßig sucht der Kontenfilter nur nach Teilstrings. Setzen Sie diese Einstellung auf true "
+"um die vollen POSIX-Funktionen für reguläre Ausdrücke zu aktivieren. 'Auto|Flüge' wird "
+"sowohl 'Aufwendungen:Auto' and Aufwendungen:Flüge. anzeigen.Verwenden Sie einen Punkt (.), "
+" um ein Einzelzeichen anzuzeigen, z.B. '20../.' wird mit'Reise 2017/1 London' übereinstimmen. "
 
 #: ../gnucash/report/standard-reports/transaction.scm:496
 msgid ""
@@ -27168,6 +27137,10 @@ msgid ""
 "e.g. '#gift' will find all transactions with #gift in description, notes or "
 "memo. It can be left blank, which will disable the filter."
 msgstr ""
+"Nur Transaktionen anzeigen, bei denen die Beschreibung, Notizen oder Vermerk "
+"mit diesem Filter übereinstimmen.\n"
+"z.B.'#gift' findet alle Transaktionen mit #gift in der Beschreibung, Notizen oder "
+"Vermerk. Es kann leer gelassen werden, wodurch der Filter deaktiviert wird."
 
 #: ../gnucash/report/standard-reports/transaction.scm:505
 msgid ""
@@ -27175,46 +27148,41 @@ msgid ""
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
 "will match both tags within description, notes or memo. "
 msgstr ""
+"Standardmäßig sucht der Transaktionsfilter nur nach Teilstrings. Setzen Sie dies auf "
+"true, um volle POSIX-Funktionen für reguläre Ausdrücke zu ermöglichen. '#Arbeit|#Familie' "
+"passt auf beide Tags innerhalb der Beschreibung, Notizen oder Vermerke."
 
 #: ../gnucash/report/standard-reports/transaction.scm:513
-#, fuzzy
 msgid "Filter by reconcile status."
-msgstr "Abgleich-Typ eingeben"
+msgstr "Nach Abgleich-Status filtern"
 
 #: ../gnucash/report/standard-reports/transaction.scm:649
-#, fuzzy
 msgid "Show the full account name for subtotals and subheadings?"
-msgstr ""
-"Lange Kontenbezeichung in den Zwischensummen und -überschriften anzeigen?"
+msgstr "Lange Kontenbezeichung in den Zwischensummen und -überschriften anzeigen?"
 
 #: ../gnucash/report/standard-reports/transaction.scm:656
-#, fuzzy
 msgid "Show the account code for subtotals and subheadings?"
 msgstr "Kontonummer für Zwischensummen und -überschriften anzeigen?"
 
 #: ../gnucash/report/standard-reports/transaction.scm:663
-#, fuzzy
 msgid "Show the account description for subheadings?"
-msgstr "Kontonummer für Zwischensummen und -überschriften anzeigen?"
+msgstr "Kontenbeschreibung für Zwischensummen und -überschriften anzeigen?"
 
 #: ../gnucash/report/standard-reports/transaction.scm:670
-#, fuzzy
 msgid "Show the informal headers for debit/credit accounts?"
-msgstr "Anzeige der Ertrags- und Aufwand-Konten"
+msgstr "Die informellen Überschriften für Soll/Haben-Konten anzeigen?"
 
 #: ../gnucash/report/standard-reports/transaction.scm:677
 msgid "Add indenting columns with grouping and subtotals?"
-msgstr ""
+msgstr "Hinzufügen von Einrückspalten mit Gruppierung und Zwischensummen?"
 
 #: ../gnucash/report/standard-reports/transaction.scm:684
-#, fuzzy
 msgid "Show subtotals only, hiding transactional detail?"
-msgstr "Keine Buchungsdetails darstellen"
+msgstr "Nur Zwischensummen anzeigen, Transaktionsdetails ausblenden?"
 
 #: ../gnucash/report/standard-reports/transaction.scm:847
-#, fuzzy
 msgid "Amount of detail to display per transaction."
-msgstr "Alle Buchungsteile bei mehrteiligen Buchungen ausgeben"
+msgstr "Detaillierungsgrad, der pro Transaktion angezeigt werden soll."
 
 #: ../gnucash/report/standard-reports/transaction.scm:850
 msgid "Multi-Line"
@@ -27229,6 +27197,8 @@ msgstr "Anzeigen der Buchungsreferenz?"
 msgid ""
 "Display one line per transaction, merging multiple splits where required."
 msgstr ""
+"Zeigen Sie eine Zeile pro Transaktion an und führen Sie ggf. "
+"mehrere Splits zusammen."
 
 #: ../gnucash/report/standard-reports/transaction.scm:866
 msgid "No amount display."
@@ -27255,14 +27225,12 @@ msgid "Accounts produced"
 msgstr "Kontonummer"
 
 #: ../gnucash/report/standard-reports/transaction.scm:1896
-#, fuzzy
 msgid "From %s to %s"
 msgstr "Von %s bis %s"
 
 #: ../gnucash/report/standard-reports/transaction.scm:1914
-#, fuzzy
 msgid "Reconciliation Report"
-msgstr "Abgleichungszustand"
+msgstr "Abgleichungsbericht"
 
 #: ../gnucash/report/standard-reports/trial-balance.scm:61
 #: ../gnucash/report/standard-reports/trial-balance.scm:615
