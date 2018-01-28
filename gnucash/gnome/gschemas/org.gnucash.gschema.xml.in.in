@@ -173,7 +173,7 @@
     <key name="grid-lines-horizontal" type="b">
       <default>false</default>
       <summary>Show Horizontal Grid Lines</summary>
-      <description>If active, horzontal grid lines will be shown on table displays. Otherwise no horizontal grid lines will be shown.</description>
+      <description>If active, horizontal grid lines will be shown on table displays. Otherwise no horizontal grid lines will be shown.</description>
     </key>
     <key name="grid-lines-vertical" type="b">
       <default>false</default>
