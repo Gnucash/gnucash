@@ -3089,7 +3089,7 @@ msgstr "Term_inierte Buchungen"
 # Fixme: Source should have HEllip?
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:166
 msgid "_Scheduled Transaction Editor"
-msgstr "Terminierte Buchungen _Editor"
+msgstr "Terminierte Buchungen _Editor..."
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:167
 msgid "The list of Scheduled Transactions"
@@ -8396,7 +8396,7 @@ msgstr ""
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:4
 msgid "<b>What type of information to display?</b>"
-msgstr ""
+msgstr "<b>Welche Informationen sollen angezeigt werden?</b>"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:6
 msgid "Non-Bayesian"
@@ -16745,7 +16745,7 @@ msgstr "Einrichtung des Online Banking Zugangs: HBCI oder OFX DirectConnect"
 
 #: ../gnucash/import-export/aqb/gnc-plugin-aqbanking.c:103
 msgid "Get _Balance"
-msgstr "_Saldenabfrage"
+msgstr "_Saldenabfrage..."
 
 #: ../gnucash/import-export/aqb/gnc-plugin-aqbanking.c:104
 msgid "Get the account balance online through Online Banking"
@@ -17865,13 +17865,12 @@ msgstr "Führende Zeilen überspringen"
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.glade.h:43
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:45
 msgid "Trailing Lines to Skip"
-msgstr ""
+msgstr "Nachstehende Leerzeilen auslassen"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.glade.h:44
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:46
-#, fuzzy
 msgid "Skip alternate lines"
-msgstr "Schattiere Buchungen alternierend"
+msgstr "Jede 2. Zeile überspringen"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.glade.h:45
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:47
@@ -17885,6 +17884,14 @@ msgid ""
 "* if 'Leading Lines to Skip' is set to 4, the first line to import will be "
 "line 5. Lines 6, 8, 10,... will be skipped."
 msgstr ""
+"Ausgehend von der ersten Zeile, die tatsächlichimportiert wird, wird jede 2. Zeile "
+"übersprungen. Diese Option nimmt anch die führenden Zeilen, um in das Konto "
+"zu springen.\n"
+"Zum Beispiel\n"
+"* Wenn 'Führende Zeilen überspringen' auf 3 gesetzt ist, ist die erste Zeile, die importiert werden soll, "
+"Zeile 4. Zeilen 5, 7, 9,... werden übersprungen.\n"
+"* Wenn 'Führende Zeilen überspringen' auf 4 gesetzt ist, ist die erste Zeile, die importiert werden soll, "
+"Zeile 5. Die Zeilen 6, 8, 10,... werden übersprungen."
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.glade.h:49
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:51
@@ -18035,9 +18042,8 @@ msgstr ""
 "in einer Datei haben."
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:35
-#, fuzzy
 msgid "Multi-split"
-msgstr "Multizeilen"
+msgstr "Mehrzeilie Buchungen"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:36
 msgid ""
@@ -18054,6 +18060,18 @@ msgid ""
 "information is empty or the same as the first transaction line the importer "
 "will consider this line part of the same transaction."
 msgstr ""
+"Normalerweise geht die Importfunktion davon aus, dass jede Zeile der Eingabedatei "
+"einer Transaktion entspricht. Jede Zeile kann Informationen für eine Transaktion "
+"und für ein oder zwei Splits enthalten.\n"
+"\n"
+"Wenn Multi-Split aktiviert ist, geht die Importfunktion von mehreren aufeinanderfolgenden "
+"Zeilenaus, die zusammen die Informationen für eine Transaktion enthalten. Jede Zeile enthält "
+"Informationen für genau eine Splitbuchung. In der ersten Zeile sollte auch die Informationen für die Transaktion "
+"stehen.\n"
+"Um zu erfahren, welche Zeilen zum selben Vorgang gehören, wird die Importfunktion"
+"die bereitgestellten Transaktionsinformationen in jeder Zeile vergleichen. Wenn diese "
+"Information leer oder gleich der ersten Transaktionszeile der Importfunktion ist, "
+"wird diese Zeile als Teil derselben Transaktion betrachten."
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:52
 msgid "<b>Account</b>"
@@ -18103,7 +18121,7 @@ msgid ""
 "\n"
 "More information can be displayed by using the help button."
 msgstr ""
-"Auf der folgenden Seite haben Sie die Möglicjkeit, jeder Buchung eine "
+"Auf der folgenden Seite haben Sie die Möglichkeit, jeder Buchung eine "
 "Kategorie zuzuordnen.\n"
 "\n"
 "Wenn es Probleme mit den Import-Einstellungen gibt, bringt Sie der Klick auf "
@@ -29433,8 +29451,7 @@ msgstr "Präzise Berichte ind Grafiken ihrer Finanzdaten erzeugen"
 
 #: ../gnucash/gnome/gnucash.appdata.xml.in.h:8
 msgid "Set up scheduled transactions to avoid repeated data entry"
-msgstr ""
-"Terminierte Buchungen einrichten, um wiederholte Dateneingabe zu vermeiden"
+msgstr "Terminierte Buchungen einrichten, um wiederholte Dateneingabe zu vermeiden"
 
 # Fixme: expand Source
 #: ../gnucash/gnome/gnucash.appdata.xml.in.h:9
