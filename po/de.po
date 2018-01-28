@@ -6361,26 +6361,24 @@ msgid "Show Horizontal Grid Lines"
 msgstr "Horizontale Gitterlinien anzeigen"
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:61
-#, fuzzy
 msgid ""
 "If active, horzontal grid lines will be shown on table displays. Otherwise "
 "no horizontal grid lines will be shown."
 msgstr ""
-"Wenn gewählt, wird der Begrüßungsbildschirm (Splash Screen) angezeigt. "
-"Andernfalls wird er nicht angezeigt."
+"Wenn aktiv, werden horizontale Gitterlinien in der Tabellendarstellung angezeigt. Andernfalls "
+"werden keine horizontalen Gitterlinien angezeigt."
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:62
 msgid "Show Vertical Grid Lines"
 msgstr "Vertikale Gitterlinien anzeigen"
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:63
-#, fuzzy
 msgid ""
 "If active, vertical grid lines will be shown on table displays. Otherwise no "
 "vertical grid lines will be shown."
 msgstr ""
-"Wenn gewählt wird der Begrüßungsbildschirm (Splash Screen) angezeigt. "
-"Andernfalls wird er nicht angezeigt."
+"Wenn aktiv, werden vertikale Gitterlinien in der Tabellendarstellung angezeigt. Andernfalls "
+"werden keine vertikalen Gitterlinien angezeigt."
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:64
 msgid "Show splash screen"
