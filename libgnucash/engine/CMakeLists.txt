@@ -134,6 +134,7 @@ ADD_CUSTOM_COMMAND (
     ${LIBXSLT_XSLTPROC_EXECUTABLE} -o ${ISO_4217_C} "${CMAKE_CURRENT_SOURCE_DIR}/iso-currencies-to-c.xsl" "${CMAKE_CURRENT_SOURCE_DIR}/iso-4217-currencies.xml"
     )
 ADD_CUSTOM_TARGET(iso-4217-c DEPENDS ${ISO_4217_C})
+dist_add_generated(iso-4217-c iso-4217-currencies.c)
 
 SET (engine_SOURCES
   Account.cpp

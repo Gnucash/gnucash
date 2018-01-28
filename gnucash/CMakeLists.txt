@@ -110,7 +110,8 @@ SET(GNUCASH_BIN_INSTALL_NAME "gnucash")
 
 SET(VALGRIND_OUTDIR ${BINDIR_BUILD})
 
-CONFIGURE_FILE(gnucash.rc.in gnucash.rc @ONLY NEWLINE_STYLE WIN32)
+configure_file(gnucash.rc.in gnucash.rc @ONLY NEWLINE_STYLE WIN32)
+dist_add_configured(gnucash.rc)
 configure_file(gnucash-valgrind.in ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/gnucash-valgrind @ONLY)
 
 FILE(COPY ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/gnucash-valgrind

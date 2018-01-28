@@ -184,7 +184,8 @@ INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml DESTINATION  ${CMA
 
 #=======
 
-CONFIGURE_FILE(gnucash.desktop.in.in gnucash.desktop.in)
+configure_file(gnucash.desktop.in.in gnucash.desktop.in)
+dist_add_configured(gnucash.desktop.in)
 
 
 ADD_CUSTOM_COMMAND(

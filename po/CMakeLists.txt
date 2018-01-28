@@ -176,6 +176,7 @@ ELSE()
     add_custom_target(gnucash-pot
         DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.pot)
 ENDIF()
+dist_add_generated(gnucash-pot gnucash.pot)
 
 ADD_CUSTOM_TARGET(check-po
         COMMAND ${CMAKE_COMMAND}

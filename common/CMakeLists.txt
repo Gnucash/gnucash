@@ -17,7 +17,7 @@ IF (BUILDING_FROM_VCS)
 ELSE()
   SET (SWIG_RUNTIME_H ${CMAKE_CURRENT_SOURCE_DIR}/swig-runtime.h PARENT_SCOPE)
 ENDIF()
-
+dist_add_generated(swig-runtime-h swig-runtime.h)
 
 SET_LOCAL_DIST(common_DIST_local CMakeLists.txt ${common_EXTRA_DIST})
 

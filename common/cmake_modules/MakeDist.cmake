@@ -1,15 +1,13 @@
 # This file implements the process of making source distribution tarballs. It expects to find list in
 # 'dist_manifest.txt' of all of the files to be included in the distribution, EXCEPT those
-# files that are generated. The list of generated files is specified in MakeDistFiles.cmake in the
-# COPY_FROM_BUILD and COPY_FROM_BUILD_2 variables.
+# files that are generated. The list of generated files handled via the 'dist_generated' cmake cache variable
 #
 # Given all of these files, the procedure is to:
 # 1. Remove any existing dist directory and make a new one.
-# 2. Copy of all the files in dist_manifest.text, COPY_FROM_BUILD and COPY_FROM_BUILD_2
+# 2. Copy of all the files in dist_manifest.text and ${dist_generated}
 #    into the dist directory.
-# 3. Run autogen.sh if build a dist from Git.
-# 4. Create the tarball and compress it with gzip and bzip2.
-# 5. Then remove the dist directory.
+# 3. Create the tarball and compress it with gzip and bzip2.
+# 4. Then remove the dist directory.
 
 include(${CMAKE_MODULE_PATH}/MakeDistFiles.cmake)
 
@@ -48,7 +46,7 @@ FUNCTION(MAKE_DIST PACKAGE_PREFIX GNUCASH_SOURCE_DIR BUILD_SOURCE_DIR BUILDING_F
 
     # -- Copy in build products that are distributed.
 
-    FOREACH(file ${COPY_FROM_BUILD} ${COPY_FROM_BUILD_2})
+    FOREACH(file ${dist_generated})
         EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy ${BUILD_SOURCE_DIR}/${file} ${PACKAGE_PREFIX}/${file})
         IF (NOT EXISTS ${PACKAGE_PREFIX}/${file})
             MESSAGE(FATAL_ERROR "Copy of ${BUILD_SOURCE_DIR}/${file} to dist dir '${PACKAGE_PREFIX}' failed.")

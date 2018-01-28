@@ -8,6 +8,7 @@ SET (scm_SCHEME_4
 )
 
 configure_file(build-config.scm.in ${BUILD_CONFIG_SCM})
+dist_add_configured(build-config.scm)
 
 SET(GUILE_DEPENDS      scm-core-utils scm-gnc-module)
 

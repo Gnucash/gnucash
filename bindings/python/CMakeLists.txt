@@ -46,6 +46,8 @@ IF (BUILDING_FROM_VCS)
     ${CMAKE_SOURCE_DIR}/libgnucash/engine/engine-common.i
     ${GNUCASH_CORE_C_INCLUDES}
   )
+  add_custom_target(swig-gnucash-core-c-py DEPENDS swig-gnucash-core)
+  dist_add_generated(swig-gnucash-core-c-py gnucash_core_c.py)
 ELSE()
   SET (SWIG_GNUCASH_CORE_C gnucash_core.c)
   SET (SWIG_GNUCASH_CORE_C_PY ${CMAKE_CURRENT_SOURCE_DIR}/gnucash_core_c.py)

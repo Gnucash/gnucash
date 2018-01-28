@@ -28,6 +28,8 @@ SET(VERSION_TEXI_IN
 
 FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/version.texi ${VERSION_TEXI_IN})
 FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/stamp-vti ${VERSION_TEXI_IN})
+dist_add_configured(version.texi)
+dist_add_configured(stamp-vti)
 
 FILE(TO_NATIVE_PATH "${CMAKE_CURRENT_BINARY_DIR}" TEXI_BINARY_DIR)
 FILE(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/gnucash-design.texi" TEXI_SOURCE_FILE)
@@ -47,5 +49,6 @@ if (NOT ${MAKEINFO} STREQUAL "MAKEINFO-NOTFOUND")
       )
   ENDIF()
 endif (NOT ${MAKEINFO} STREQUAL "MAKEINFO-NOTFOUND")
+dist_add_generated(gnucash-design-info gnucash-design.info)
 
 SET_DIST_LIST(doc_design_DIST CMakeLists.txt gnucash-design.texi ${gnucash_design_TEXINFOS})

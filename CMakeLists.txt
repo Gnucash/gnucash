@@ -33,6 +33,10 @@ SET (GNUCASH_RESAVE_VERSION "19920")
 
 SET(GETTEXT_PACKAGE "gnucash")
 
+# Clear cache variables that will be filled later during the cmake run
+unset(dist_generated CACHE)
+unset(dist_generated_depends CACHE)
+
 # Extra cmake macros
 SET (CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/common/cmake_modules;${CMAKE_MODULE_PATH}")
 # CMake does a non-recursive build that puts the final build product directories in the build root. Some code needs to know this.
@@ -763,9 +767,24 @@ ADD_SUBDIRECTORY (util)
 # it contains post-install actions to execute.
 ADD_SUBDIRECTORY(cmake)
 
+# Generate the ChangeLog
+
+if (BUILDING_FROM_VCS)
+    add_custom_target(ChangeLog ALL
+        COMMAND ${GIT_EXECUTABLE} log --format=\"%ad %aN %n%n%x09* %s%d%n\" --date=short --since=2018-01-01 > ${CMAKE_BINARY_DIR}/ChangeLog
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    )
+    dist_add_generated(ChangeLog ChangeLog)
+    install(FILES ${CMAKE_BINARY_DIR}/ChangeLog DESTINATION ${CMAKE_INSTALL_DOCDIR})
+else()
+    install(FILES ${CMAKE_SOURCE_DIR}/ChangeLog DESTINATION ${CMAKE_INSTALL_DOCDIR})
+endif()
+
 ############################ BEGIN MAKE DIST #################
-
-
+# For now only enable the dist target when building from git
+# the generation of dist_generated should be improved to work
+# also when running from a tarball before that can be generalized.
+IF (BUILDING_FROM_VCS)
 
 SET(PACKAGE_PREFIX "${PACKAGE}-${PACKAGE_VERSION}")
 SET(DIST_FILE "${PACKAGE_PREFIX}.tar")
@@ -800,12 +819,6 @@ ENDIF()
 STRING(REPLACE ";" "\n" ALL_DIST_LINES "${ALL_DIST}")
 FILE(WRITE ${CMAKE_BINARY_DIR}/dist_manifest.txt ${ALL_DIST_LINES})
 
-SET(DIST_GENERATED_FILES2 "")
-FOREACH(file ${COPY_FROM_BUILD})
-  LIST(APPEND DIST_GENERATED_FILES2 ${BUILD_SOURCE_DIR}/${file})
-ENDFOREACH()
-
-
 ADD_CUSTOM_COMMAND(OUTPUT ${DIST_FILE}.gz ${DIST_FILE}.bz2
         COMMAND ${CMAKE_COMMAND}
            -D CMAKE_MODULE_PATH=${CMAKE_SOURCE_DIR}/common/cmake_modules
@@ -815,10 +828,11 @@ ADD_CUSTOM_COMMAND(OUTPUT ${DIST_FILE}.gz ${DIST_FILE}.bz2
            -D BUILDING_FROM_VCS=${BUILDING_FROM_VCS}
            -D SHELL=${SHELL}
            -D WITH_GNUCASH=${WITH_GNUCASH}
+           "-Ddist_generated=\"${dist_generated}\""
            -P ${CMAKE_SOURCE_DIR}/common/cmake_modules/MakeDist.cmake
 
         DEPENDS
-          ${ALL_DIST} ${DIST_GENERATED_FILES2} gnc-vcs-info iso-4217-c gnc-warnings-c gnucash-design-info ChangeLog gnucash-pot
+          ${ALL_DIST} ${dist_generated_depends}
         )
 
 ADD_CUSTOM_TARGET(dist DEPENDS ${DIST_FILE}.gz ${DIST_FILE}.bz2)
@@ -835,6 +849,7 @@ ADD_CUSTOM_TARGET(distcheck DEPENDS dist
 
 
 
+ENDIF()
 ############################# END MAKE DIST #################
 
 # uninstall target
@@ -874,18 +889,6 @@ IF (WIN32)
   SET_TARGET_PROPERTIES(gncmod-backend-xml gncmod-stylesheets PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
   )
-ENDIF()
-
-# Generate the ChangeLog
-
-IF (BUILDING_FROM_VCS)
-  ADD_CUSTOM_TARGET(ChangeLog ALL
-    COMMAND ${GIT_EXECUTABLE} log --format=\"%ad %aN %n%n%x09* %s%d%n\" --date=short --since=2018-01-01 > ${CMAKE_BINARY_DIR}/ChangeLog
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  )
-  INSTALL(FILES ${CMAKE_BINARY_DIR}/ChangeLog DESTINATION ${CMAKE_INSTALL_DOCDIR})
-ELSE()
-  INSTALL(FILES ${CMAKE_SOURCE_DIR}/ChangeLog DESTINATION ${CMAKE_INSTALL_DOCDIR})
 ENDIF()
 
 #Link LICENSE to COPYING so that people expecting to find it,

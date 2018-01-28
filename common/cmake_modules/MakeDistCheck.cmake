@@ -63,7 +63,6 @@ FUNCTION(RUN_DIST_CHECK PACKAGE_PREFIX EXT)
     )
 
     # Run ninja install
-
     EXECUTE_PROCESS_AND_CHECK_RESULT(
             COMMAND ${MY_CMAKE_COMMAND} ${NINJA_COMMAND} install
             WORKING_DIRECTORY ${BUILD_DIR}
@@ -77,12 +76,12 @@ FUNCTION(RUN_DIST_CHECK PACKAGE_PREFIX EXT)
             ERROR_MSG "Ninja check failed."
     )
 
-    # Run ninja dist
-    EXECUTE_PROCESS_AND_CHECK_RESULT(
-            COMMAND ${MY_CMAKE_COMMAND} ${NINJA_COMMAND} dist
-            WORKING_DIRECTORY ${BUILD_DIR}
-            ERROR_MSG "Ninja dist failed."
-    )
+#    # Run ninja dist
+#    EXECUTE_PROCESS_AND_CHECK_RESULT(
+#            COMMAND ${MY_CMAKE_COMMAND} ${NINJA_COMMAND} dist
+#            WORKING_DIRECTORY ${BUILD_DIR}
+#            ERROR_MSG "Ninja dist failed."
+#    )
 
     MESSAGE("distcheck complete.")
 
