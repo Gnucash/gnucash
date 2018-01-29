@@ -8,7 +8,7 @@ SET (scm_SCHEME_4
 )
 
 configure_file(build-config.scm.in ${BUILD_CONFIG_SCM})
-dist_add_configured(build-config.scm)
+add_custom_target(build-config-scm DEPENDS ${BUILD_CONFIG_SCM})
 
 SET(GUILE_DEPENDS      scm-core-utils scm-gnc-module)
 
@@ -27,7 +27,7 @@ GNC_ADD_SCHEME_TARGETS(scm-scm-1 "printf.scm" gnucash "" FALSE)
 GNC_ADD_SCHEME_TARGETS(scm-scm-2
   main.scm
   gnucash
-  "scm-scm-1;${GUILE_DEPENDS}"  # requires printf.scm from scm-scm-1 and modules from GUILE_DEPENDS
+  "scm-scm-1;${GUILE_DEPENDS};build-config-scm"  # requires printf.scm from scm-scm-1 and modules from GUILE_DEPENDS
   FALSE
 )
 

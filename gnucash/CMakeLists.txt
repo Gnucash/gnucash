@@ -32,8 +32,9 @@ ADD_DEFINITIONS (-DHAVE_CONFIG_H)
 
 # Some settings are platform dependent. Let's define them per platform.
 IF (WIN32)
-  # Windows specific settings go here:
-  SET (GNUCASH_RESOURCE_FILE gnucash.rc)
+    # Windows specific settings go here:
+    set (GNUCASH_RESOURCE_FILE gnucash.rc)
+    configure_file(gnucash.rc.in gnucash.rc @ONLY NEWLINE_STYLE WIN32)
 
 ELSE (WIN32)
   # All other platforms use these settings:
@@ -110,8 +111,6 @@ SET(GNUCASH_BIN_INSTALL_NAME "gnucash")
 
 SET(VALGRIND_OUTDIR ${BINDIR_BUILD})
 
-configure_file(gnucash.rc.in gnucash.rc @ONLY NEWLINE_STYLE WIN32)
-dist_add_configured(gnucash.rc)
 configure_file(gnucash-valgrind.in ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/gnucash-valgrind @ONLY)
 
 FILE(COPY ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/gnucash-valgrind

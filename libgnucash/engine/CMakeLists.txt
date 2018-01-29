@@ -134,7 +134,6 @@ ADD_CUSTOM_COMMAND (
     ${LIBXSLT_XSLTPROC_EXECUTABLE} -o ${ISO_4217_C} "${CMAKE_CURRENT_SOURCE_DIR}/iso-currencies-to-c.xsl" "${CMAKE_CURRENT_SOURCE_DIR}/iso-4217-currencies.xml"
     )
 ADD_CUSTOM_TARGET(iso-4217-c DEPENDS ${ISO_4217_C})
-dist_add_generated(iso-4217-currencies.c)
 
 SET (engine_SOURCES
   Account.cpp
@@ -230,8 +229,8 @@ ADD_LIBRARY (gncmod-engine
   ${engine_noinst_HEADERS}
 )
 
-# Add dependency on swig-runtime.h
-add_dependencies (gncmod-engine swig-runtime-h)
+# Add dependency on swig-runtime.h and iso-4217-currencies.c
+add_dependencies (gncmod-engine swig-runtime-h iso-4217-c)
 
 TARGET_LINK_LIBRARIES(gncmod-engine gnc-core-utils gnc-module ${Boost_DATE_TIME_LIBRARIES}  ${Boost_REGEX_LIBRARIES} ${REGEX_LDFLAGS} ${GMODULE_LDFLAGS} ${GLIB2_LDFLAGS} ${GOBJECT_LDFLAGS} ${GUILE_LDFLAGS})
 

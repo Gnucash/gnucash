@@ -175,7 +175,7 @@ ADD_CUSTOM_COMMAND(
       LC_ALL=C
       ${PERL_EXECUTABLE} ${INTLTOOL_MERGE} -x -u -c ${CMAKE_SOURCE_DIR}/po/.intltool-merge-cache ${CMAKE_SOURCE_DIR}/po
         ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in gnucash.appdata.xml
-    MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in
 )
 
 ADD_CUSTOM_TARGET(gnucash-appdata ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml)
@@ -185,8 +185,6 @@ INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml DESTINATION  ${CMA
 #=======
 
 configure_file(gnucash.desktop.in.in gnucash.desktop.in)
-dist_add_configured(gnucash.desktop.in)
-
 
 ADD_CUSTOM_COMMAND(
     OUTPUT gnucash.desktop
@@ -194,7 +192,7 @@ ADD_CUSTOM_COMMAND(
       LC_ALL=C
       ${PERL_EXECUTABLE} ${INTLTOOL_MERGE} -d -u -c ${CMAKE_SOURCE_DIR}/po/.intltool-merge-cache ${CMAKE_SOURCE_DIR}/po
         gnucash.desktop.in gnucash.desktop
-    MAIN_DEPENDENCY gnucash.desktop.in
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop.in
 )
 
 ADD_CUSTOM_TARGET(gnucash-desktop ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop)
