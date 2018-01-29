@@ -781,10 +781,6 @@ endif()
 dist_add_generated(ChangeLog)
 
 ############################ BEGIN MAKE DIST #################
-# For now only enable the dist target when building from git
-# the generation of dist_generated should be improved to work
-# also when running from a tarball before that can be generalized.
-IF (BUILDING_FROM_VCS)
 
 SET(PACKAGE_PREFIX "${PACKAGE}-${PACKAGE_VERSION}")
 SET(DIST_FILE "${PACKAGE_PREFIX}.tar")
@@ -847,9 +843,6 @@ ADD_CUSTOM_TARGET(distcheck DEPENDS dist
             -P ${CMAKE_SOURCE_DIR}/common/cmake_modules/MakeDistCheck.cmake
         )
 
-
-
-ENDIF()
 ############################# END MAKE DIST #################
 
 # uninstall target
