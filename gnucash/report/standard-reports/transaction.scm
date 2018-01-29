@@ -1617,6 +1617,25 @@ tags within description, notes or memo. ")
 ;;
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(export renderer:options->accountlist)
+(define (renderer:options->accountlist options)
+  ;; options -> list of accounts
+  ;;
+  ;; options used:
+  ;;  accounts/accounts - list of accounts
+  ;;  filter/account matcher - string
+  ;;  filter/account matcher regex - boolean
+  (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
+  (let* ((account-matcher (opt-val pagename-filter optname-account-matcher))
+         (account-matcher-regexp (and (opt-val pagename-filter optname-account-matcher-regex)
+                                      (make-regexp account-matcher)))
+         (selected-accounts (opt-val gnc:pagename-accounts optname-accounts)))
+    (filter
+     (lambda (acc)
+       (if account-matcher-regexp
+           (regexp-exec account-matcher-regexp (gnc-account-get-full-name acc))
+           (string-contains (gnc-account-get-full-name acc) account-matcher)))
+     selected-accounts)))
 
 (export renderer:accountlist->splits)
 (define (renderer:accountlist->splits options accountlist)
@@ -1804,16 +1823,8 @@ tags within description, notes or memo. ")
   (gnc:report-starting reportname)
 
   (let* ((document (gnc:make-html-document))
-         (account-matcher (opt-val pagename-filter optname-account-matcher))
-         (account-matcher-regexp (and (opt-val pagename-filter optname-account-matcher-regex)
-                                      (make-regexp account-matcher)))
          (c_account_0 (opt-val gnc:pagename-accounts optname-accounts))
-         (c_account_1 (filter
-                       (lambda (acc)
-                         (if account-matcher-regexp
-                             (regexp-exec account-matcher-regexp (gnc-account-get-full-name acc))
-                             (string-contains (gnc-account-get-full-name acc) account-matcher)))
-                       c_account_0))
+         (c_account_1 (renderer:options->accountlist options))
          (begindate (gnc:time64-start-day-time
                      (gnc:date-option-absolute-time
                       (opt-val gnc:pagename-general optname-startdate))))
