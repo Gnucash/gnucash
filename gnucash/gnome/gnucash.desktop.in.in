@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 MimeType=application/x-gnucash;
-Version=0.9.4
+Version=@VERSION@
 _Name=GnuCash
 _GenericName=Finance Management
 _Comment=Manage your finances, accounts, and investments
