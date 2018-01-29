@@ -32,9 +32,11 @@ IF (BUILDING_FROM_VCS)
   GNC_ADD_SWIG_COMMAND (swig-unittest-support-guile-c ${SWIG_UNITTEST_SUPPORT_GUILE_C}
       ${CMAKE_CURRENT_SOURCE_DIR}/unittest-support.i ${test_core_HEADERS})
   SET (SWIG_UNITTEST_SUPPORT_PYTHON_C ${CMAKE_CURRENT_BINARY_DIR}/swig-unittest-support-python.c)
-  GNC_ADD_SWIG_PYTHON_COMMAND (swig-unittest-support-python ${SWIG_UNITTEST_SUPPORT_PYTHON_C} ${CMAKE_CURRENT_SOURCE_DIR}/unittest-support.i)
-  add_custom_target(unittest-support-py DEPENDS swig-unittest-support-python)
-  dist_add_generated(unittest-support-py unittest_support.py)
+  SET (SWIG_UNITTEST_SUPPORT_PYTHON_PY ${CMAKE_CURRENT_BINARY_DIR}/unittest_support.py)
+  GNC_ADD_SWIG_PYTHON_COMMAND (swig-unittest-support-python
+        ${SWIG_UNITTEST_SUPPORT_PYTHON_C}
+        ${SWIG_UNITTEST_SUPPORT_PYTHON_PY}
+        ${CMAKE_CURRENT_SOURCE_DIR}/unittest-support.i)
 ELSE()
   SET (SWIG_UNITTEST_SUPPORT_GUILE_C  swig-unittest-support-guile.c)
   SET (SWIG_UNITTEST_SUPPORT_PYTHON_C swig-unittest-support-python.c)

@@ -128,7 +128,6 @@ SET (gnc_gnome_SOURCES
 )  
 
 SET_SOURCE_FILES_PROPERTIES (${gnc_gnome_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
-SET_SOURCE_FILES_PROPERTIES (business-options-gnome.c PROPERTIES OBJECT_DEPENDS ${SWIG_RUNTIME_H})
 
 IF (WIN32)
   SET (gnc_gnome_SOURCES ${gnc_gnome_SOURCES} ${CMAKE_SOURCE_DIR}/borrowed/libc/strfmon.c)
@@ -148,6 +147,7 @@ TARGET_INCLUDE_DIRECTORIES(gnc-gnome
     ${GTK_MAC_INCLUDE_DIRS}
 )
 
+add_dependencies (gnc-gnome swig-runtime-h)
 
 IF (MAC_INTEGRATION)
   TARGET_COMPILE_OPTIONS(gnc-gnome PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})

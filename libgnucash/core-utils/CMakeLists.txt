@@ -6,7 +6,11 @@ IF (BUILDING_FROM_VCS)
   SET (SWIG_CORE_UTILS_GUILE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-core-utils-guile.c)
   GNC_ADD_SWIG_COMMAND (swig-core-utils-guile-c ${SWIG_CORE_UTILS_GUILE_C} ${CMAKE_CURRENT_SOURCE_DIR}/core-utils.i)
   SET (SWIG_CORE_UTILS_PYTHON_C ${CMAKE_CURRENT_BINARY_DIR}/swig-core-utils-python.c)
-  GNC_ADD_SWIG_PYTHON_COMMAND (swig-core-utils-python ${SWIG_CORE_UTILS_PYTHON_C} ${CMAKE_CURRENT_SOURCE_DIR}/core-utils.i)
+  SET (SWIG_CORE_UTILS_PYTHON_PY ${CMAKE_CURRENT_BINARY_DIR}/sw_core_utils.py)
+  GNC_ADD_SWIG_PYTHON_COMMAND (swig-core-utils-python
+        ${SWIG_CORE_UTILS_PYTHON_C}
+        ${SWIG_CORE_UTILS_PYTHON_PY}
+        ${CMAKE_CURRENT_SOURCE_DIR}/core-utils.i)
 ELSE()
   SET(SWIG_CORE_UTILS_GUILE_C swig-core-utils-guile.c)
   SET(SWIG_CORE_UTILS_PYTHON_C swig-core-utils-python.c)
@@ -27,20 +31,6 @@ SET (core_utils_SOURCES
 
 # Add dependency on config.h
 SET_SOURCE_FILES_PROPERTIES (${core_utils_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
-
-IF (BUILDING_FROM_VCS)
-  # Command to generate the swig-runtime.h header
-  ADD_CUSTOM_COMMAND (
-    OUTPUT ${SWIG_RUNTIME_H}
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
-    COMMAND ${SWIG_EXECUTABLE} -guile -external-runtime ${SWIG_RUNTIME_H}
-  )
-ENDIF()
-
-ADD_CUSTOM_TARGET(swig-runtime-h DEPENDS ${SWIG_RUNTIME_H})
-
-# Add dependency on swig-runtime.h
-SET_SOURCE_FILES_PROPERTIES (gnc-guile-utils.c PROPERTIES OBJECT_DEPENDS ${SWIG_RUNTIME_H})
 
 SET(prefix ${CMAKE_INSTALL_PREFIX})
 if(ENABLE_BINRELOC)
@@ -122,7 +112,7 @@ ENDIF()
 ELSE(BUILDING_FROM_VCS)
   ADD_CUSTOM_TARGET(gnc-vcs-info DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnc-vcs-info.h)
 ENDIF(BUILDING_FROM_VCS)
-dist_add_generated(gnc-vcs-info gnc-vcs-info.h)
+dist_add_generated(gnc-vcs-info.h)
 ### Compile library
 
 SET(core_utils_noinst_HEADERS
@@ -157,8 +147,8 @@ IF (MAC_INTEGRATION)
   LIST(APPEND core_utils_ALL_LIBRARIES ${OSX_EXTRA_LIBRARIES})
 ENDIF()
 
-ADD_LIBRARY	(gnc-core-utils ${core_utils_ALL_SOURCES} ${SWIG_CORE_UTILS_GUILE_C})
-ADD_DEPENDENCIES(gnc-core-utils gnc-vcs-info)
+ADD_LIBRARY(gnc-core-utils ${core_utils_ALL_SOURCES} ${SWIG_CORE_UTILS_GUILE_C})
+add_dependencies(gnc-core-utils gnc-vcs-info swig-runtime-h)
 
 TARGET_LINK_LIBRARIES(gnc-core-utils ${core_utils_ALL_LIBRARIES})
 

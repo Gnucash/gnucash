@@ -33,7 +33,7 @@ ADD_CUSTOM_COMMAND(
 )
 
 ADD_CUSTOM_TARGET(gnc-warnings-c DEPENDS ${GNC_WARNINGS_C})
-dist_add_generated(gnc-warnings-c gnc-warnings.c)
+dist_add_generated(gnc-warnings.c)
 # FIXME why is gnc-warnings.c added to dist and gnc-warnings.h not ? I think neither is necessary...
 
 #GTK before 3.14 didn't have GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK

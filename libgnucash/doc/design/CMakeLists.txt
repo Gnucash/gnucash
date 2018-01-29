@@ -28,8 +28,7 @@ SET(VERSION_TEXI_IN
 
 FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/version.texi ${VERSION_TEXI_IN})
 FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/stamp-vti ${VERSION_TEXI_IN})
-dist_add_configured(version.texi)
-dist_add_configured(stamp-vti)
+dist_add_configured(version.texi stamp-vti)
 
 FILE(TO_NATIVE_PATH "${CMAKE_CURRENT_BINARY_DIR}" TEXI_BINARY_DIR)
 FILE(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/gnucash-design.texi" TEXI_SOURCE_FILE)
@@ -37,18 +36,19 @@ find_program(MAKEINFO makeinfo)
 if (NOT ${MAKEINFO} STREQUAL "MAKEINFO-NOTFOUND")
 
   IF(${CMAKE_VERSION} VERSION_GREATER 3.1)
-    ADD_CUSTOM_TARGET(gnucash-design-info ALL
+    add_custom_command(
+      OUTPUT gnucash-design.info
       COMMAND ${MAKEINFO} -I ${TEXI_BINARY_DIR} ${TEXI_SOURCE_FILE}
-      BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/gnucash-design.info
       DEPENDS ${gnucash_design_TEXINFOS}
       )
   ELSE()
-    ADD_CUSTOM_TARGET(gnucash-design-info ALL
+    add_custom_command(
+      OUTPUT gnucash-design.info
       COMMAND ${MAKEINFO} -I ${TEXI_BINARY_DIR} ${TEXI_SOURCE_FILE}
       DEPENDS ${gnucash_design_TEXINFOS}
       )
   ENDIF()
 endif (NOT ${MAKEINFO} STREQUAL "MAKEINFO-NOTFOUND")
-dist_add_generated(gnucash-design-info gnucash-design.info)
+dist_add_generated(gnucash-design.info)
 
 SET_DIST_LIST(doc_design_DIST CMakeLists.txt gnucash-design.texi ${gnucash_design_TEXINFOS})

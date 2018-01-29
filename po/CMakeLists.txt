@@ -159,7 +159,7 @@ IF(BUILDING_FROM_VCS)
     MESSAGE(FATAL_ERROR "Can't find the 'xgettext' program.")
   ENDIF ()
 
-  add_custom_target(gnucash-pot
+  add_custom_command(OUTPUT gnucash.pot
         COMMAND ${CMAKE_COMMAND}
            -D INTLTOOL_EXTRACT=${INTLTOOL_EXTRACT}
            -D INTLTOOL_UPDATE=${INTLTOOL_UPDATE}
@@ -171,12 +171,8 @@ IF(BUILDING_FROM_VCS)
            -P ${CMAKE_CURRENT_SOURCE_DIR}/gnucash-pot.cmake
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   )
-
-ELSE()
-    add_custom_target(gnucash-pot
-        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.pot)
 ENDIF()
-dist_add_generated(gnucash-pot gnucash.pot)
+dist_add_generated(gnucash.pot)
 
 ADD_CUSTOM_TARGET(check-po
         COMMAND ${CMAKE_COMMAND}

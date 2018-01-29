@@ -12,12 +12,21 @@ SET(common_EXTRA_DIST
         guile-mappings.h
         platform.h)
 
-IF (BUILDING_FROM_VCS)
-  SET (SWIG_RUNTIME_H ${CMAKE_CURRENT_BINARY_DIR}/swig-runtime.h PARENT_SCOPE)
-ELSE()
-  SET (SWIG_RUNTIME_H ${CMAKE_CURRENT_SOURCE_DIR}/swig-runtime.h PARENT_SCOPE)
-ENDIF()
-dist_add_generated(swig-runtime-h swig-runtime.h)
+
+if (BUILDING_FROM_VCS)
+    set (SWIG_RUNTIME_H ${CMAKE_CURRENT_BINARY_DIR}/swig-runtime.h)
+    # Command to generate the swig-runtime.h header
+    add_custom_command (
+        OUTPUT ${SWIG_RUNTIME_H}
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
+        COMMAND ${SWIG_EXECUTABLE} -guile -external-runtime ${SWIG_RUNTIME_H}
+    )
+else()
+    set (SWIG_RUNTIME_H ${CMAKE_CURRENT_SOURCE_DIR}/swig-runtime.h)
+endif()
+dist_add_generated(swig-runtime.h)
+
+add_custom_target (swig-runtime-h DEPENDS ${SWIG_RUNTIME_H})
 
 SET_LOCAL_DIST(common_DIST_local CMakeLists.txt ${common_EXTRA_DIST})
 
