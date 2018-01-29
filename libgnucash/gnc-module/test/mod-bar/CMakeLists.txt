@@ -1,10 +1,8 @@
 
-IF (BUILDING_FROM_VCS)
-  SET (SWIG_BAR_C ${CMAKE_CURRENT_BINARY_DIR}/swig-bar.c)
-  GNC_ADD_SWIG_COMMAND (swig-bar-c ${SWIG_BAR_C} ${CMAKE_CURRENT_SOURCE_DIR}/bar.i bar.h)
-ELSE()
-  SET (SWIG_BAR_C ${CMAKE_CURRENT_SOURCE_DIR}/swig-bar.c)
-ENDIF()
+gnc_add_swig_guile_command (swig-bar-c
+    SWIG_BAR_C swig-bar.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/bar.i bar.h
+)
 
 ADD_LIBRARY(bar EXCLUDE_FROM_ALL bar.c bar.h)
 ADD_LIBRARY(gncmodbar EXCLUDE_FROM_ALL gnc-mod-bar.c)

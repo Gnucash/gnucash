@@ -1,10 +1,8 @@
 
-IF (BUILDING_FROM_VCS)
-  SET (SWIG_BAZ_C ${CMAKE_CURRENT_BINARY_DIR}/swig-baz.c)
-  GNC_ADD_SWIG_COMMAND (swig-baz-c ${SWIG_BAZ_C} ${CMAKE_CURRENT_SOURCE_DIR}/baz.i baz.h)
-ELSE()
-  SET (SWIG_BAZ_C ${CMAKE_CURRENT_SOURCE_DIR}/swig-baz.c)
-ENDIF()
+gnc_add_swig_guile_command (swig-baz-c
+    SWIG_BAZ_C swig-baz.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/baz.i baz.h
+)
 
 ADD_LIBRARY(baz EXCLUDE_FROM_ALL baz.c baz.h)
 TARGET_INCLUDE_DIRECTORIES(baz PRIVATE

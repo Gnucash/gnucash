@@ -2,13 +2,11 @@
 ADD_SUBDIRECTORY(test)
 ADD_SUBDIRECTORY(example)
 
-IF (BUILDING_FROM_VCS)
-  # Command to generate the swig-gnc-module.c wrapper file
-  SET (SWIG_GNC_MODULE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-gnc-module.c)
-  GNC_ADD_SWIG_COMMAND (swig-gnc-module-c ${SWIG_GNC_MODULE_C} ${CMAKE_CURRENT_SOURCE_DIR}/gnc-module.i)
-ELSE()
-  SET (SWIG_GNC_MODULE_C swig-gnc-module.c)
-ENDIF()
+# Command to generate the swig-gnc-module.c wrapper file
+gnc_add_swig_guile_command (swig-gnc-module-c
+    SWIG_GNC_MODULE_C swig-gnc-module.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/gnc-module.i
+)
 
 SET (gnc_module_SOURCES gnc-module.c)
 

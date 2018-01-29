@@ -27,14 +27,13 @@ IF (UNIX)
   TARGET_COMPILE_OPTIONS(test-core PRIVATE -fPIC)
 ENDIF()
 
-IF (BUILDING_FROM_VCS)
-  SET (SWIG_UNITTEST_SUPPORT_GUILE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-unittest-support-guile.c)
-  GNC_ADD_SWIG_COMMAND (swig-unittest-support-guile-c ${SWIG_UNITTEST_SUPPORT_GUILE_C}
-      ${CMAKE_CURRENT_SOURCE_DIR}/unittest-support.i ${test_core_HEADERS})
-ELSE()
-  SET (SWIG_UNITTEST_SUPPORT_GUILE_C  swig-unittest-support-guile.c)
-ENDIF()
+# Command to generate the swig-unittest-support-guile.c wrapper file
+gnc_add_swig_guile_command (swig-unittest-support-guile-c
+    SWIG_UNITTEST_SUPPORT_GUILE_C swig-unittest-support-guile.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/unittest-support.i ${test_core_HEADERS}
+)
 
+# Command to generate the swig-unittest-support-python.c wrapper file
 gnc_add_swig_python_command (swig-unittest-support-python
     SWIG_UNITTEST_SUPPORT_PYTHON_C SWIG_UNITTEST_SUPPORT_PYTHON_PY
     swig-unittest-support-python.c unittest_support.py

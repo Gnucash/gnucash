@@ -33,18 +33,15 @@ SET (app_utils_HEADERS
   gnc-ui-balances.h
   guile-util.h
   option-util.h
-
 )
 
+# Command to generate the swig-app-utils-guile.c wrapper file
+gnc_add_swig_guile_command (swig-apputils-guile-c
+    SWIG_APP_UTILS_GUILE_C swig-app-utils-guile.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i
+)
 
-IF (BUILDING_FROM_VCS)
-  # Command to generate the swig-app-utils.c wrapper file
-  SET (SWIG_APP_UTILS_GUILE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-app-utils-guile.c)
-  GNC_ADD_SWIG_COMMAND (swig-apputils-guile-c ${SWIG_APP_UTILS_GUILE_C} ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i)
-ELSE()
-  SET (SWIG_APP_UTILS_GUILE_C swig-app-utils-guile.c)
-ENDIF()
-
+# Command to generate the swig-app-utils-python.c wrapper file
 gnc_add_swig_python_command (swig-app-utils-python
     SWIG_APP_UTILS_PYTHON_C SWIG_APP_UTILS_PYTHON_PY
     swig-app-utils-python.c sw_app_utils.py

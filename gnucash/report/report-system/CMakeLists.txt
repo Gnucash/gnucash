@@ -2,15 +2,13 @@ ADD_SUBDIRECTORY(test)
 
 SET (report_system_HEADERS
   gnc-report.h
-)  
+)
 
-IF (BUILDING_FROM_VCS)
-  SET (SWIG_REPORT_SYSTEM_C ${CMAKE_CURRENT_BINARY_DIR}/swig-report-system.c)
-  GNC_ADD_SWIG_COMMAND (swig-report-system-c ${SWIG_REPORT_SYSTEM_C} ${CMAKE_CURRENT_SOURCE_DIR}/report-system.i ${report_system_HEADERS})
-ELSE()
-  SET (SWIG_REPORT_SYSTEM_C swig-report-system.c)
-ENDIF()
-
+# Command to generate the swig-report-system.c wrapper file
+gnc_add_swig_guile_command (swig-report-system-c
+    SWIG_REPORT_SYSTEM_C swig-report-system.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/report-system.i ${report_system_HEADERS}
+)
 
 SET (report_system_SOURCES
   gncmod-report-system.c

@@ -117,13 +117,11 @@ SET (engine_HEADERS
   qof-string-cache.h
 )
 
-IF (BUILDING_FROM_VCS)
-  # Command to generate the swig-engine.c wrapper file
-  SET (SWIG_ENGINE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-engine.c)
-  GNC_ADD_SWIG_COMMAND (swig-engine-c ${SWIG_ENGINE_C} ${CMAKE_CURRENT_SOURCE_DIR}/engine.i ${engine_HEADERS})
-ELSE()
-  SET (SWIG_ENGINE_C swig-engine.c)
-ENDIF()
+# Command to generate the swig-engine.c wrapper file
+gnc_add_swig_guile_command (swig-engine-c
+    SWIG_ENGINE_C swig-engine.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/engine.i ${engine_HEADERS}
+)
 
 # Command to generate the iso-4217-currencies.c file
 SET (ISO_4217_C ${CMAKE_CURRENT_BINARY_DIR}/iso-4217-currencies.c)

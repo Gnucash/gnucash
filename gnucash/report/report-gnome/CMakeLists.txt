@@ -8,12 +8,11 @@ SET (report_gnome_HEADERS
   window-report.h
 )
 
-IF (BUILDING_FROM_VCS)
-  SET (SWIG_REPORT_GNOME_C ${CMAKE_CURRENT_BINARY_DIR}/swig-report-gnome.c)
-  GNC_ADD_SWIG_COMMAND (swig-report-gnome-c ${SWIG_REPORT_GNOME_C} ${CMAKE_CURRENT_SOURCE_DIR}/report-gnome.i ${report_gnome_HEADERS})
-ELSE()
-  SET (SWIG_REPORT_GNOME_C swig-report-gnome.c)
-ENDIF()
+# Command to generate the swig-report-gnome.c wrapper file
+gnc_add_swig_guile_command (swig-report-gnome-c
+    SWIG_REPORT_GNOME_C swig-report-gnome.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/report-gnome.i ${report_gnome_HEADERS}
+)
 
 SET (report_gnome_SOURCES
   dialog-report-column-view.c

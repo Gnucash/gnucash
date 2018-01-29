@@ -4,26 +4,43 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-macro (GNC_ADD_SWIG_COMMAND _target _output _input)
-
-    add_custom_command (
-        OUTPUT ${_output}
-        DEPENDS ${_input} ${CMAKE_SOURCE_DIR}/common/base-typemaps.i ${ARGN}
-        COMMAND ${SWIG_EXECUTABLE} -guile ${SWIG_ARGS} -Linkage module -I${CMAKE_SOURCE_DIR}/libgnucash/engine -I${CMAKE_SOURCE_DIR}/common  -o ${_output} ${_input}
-    )
-
-    add_custom_target(${_target} DEPENDS ${_output})
+# gnc_add_swig_guile_command is used to generate guile swig wrappers
+# it will only really generate the wrappers when building from git
+# when building from tarball it will set up everything so the version of the wrapper
+# from the tarball will be used instead
+# - _target is the name of a global target that will be set for this wrapper file,
+#    this can be used elsewhere to create a depencency on this wrapper
+# - _out_var will be set to the full path to the generated wrapper file
+#   when building from git, it points to the actually generated file
+#   however when building from a tarball, it will point to the version from the tarball instead
+# - _output is the name of the wrapper file to generate (or to look up in the tarball)
+# - input it the swig interface file (*.i) to generate this wrapper from
+# Any additional parameters will be used as dependencies for this wrapper target
+macro (gnc_add_swig_guile_command _target _out_var _output _input)
 
     if (BUILDING_FROM_VCS)
-        set(BUILD_SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR})
+        set(SW_CURR_BUILD_SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR})
+        set(SW_BUILD_SOURCE_DIR ${CMAKE_BINARY_DIR})
     else()
-        set(BUILD_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+        set(SW_CURR_BUILD_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+        set(SW_BUILD_SOURCE_DIR ${CMAKE_SOURCE_DIR})
     endif()
 
-    # Add the output file _output to the dist tarball
-    file(RELATIVE_PATH generated ${BUILD_SOURCE_DIR} ${_output})
-    dist_add_generated(${generated})
-endmacro (GNC_ADD_SWIG_COMMAND)
+    set(outfile ${SW_CURR_BUILD_SOURCE_DIR}/${_output})
+    set(${_out_var} ${outfile}) # This variable is set for convenience to use in the calling CMakeLists.txt
+
+    if (BUILDING_FROM_VCS)
+        add_custom_command (
+            OUTPUT ${outfile}
+            DEPENDS ${_input} ${CMAKE_SOURCE_DIR}/common/base-typemaps.i ${ARGN}
+            COMMAND ${SWIG_EXECUTABLE} -guile ${SWIG_ARGS} -Linkage module -I${CMAKE_SOURCE_DIR}/libgnucash/engine -I${CMAKE_SOURCE_DIR}/common  -o ${outfile} ${_input}
+        )
+        add_custom_target(${_target} DEPENDS ${outfile})
+    endif()
+
+    # Add the output file outfile to the dist tarball
+    dist_add_generated(${_output})
+endmacro (gnc_add_swig_guile_command)
 
 
 # gnc_add_swig_python_command is used to generate python swig wrappers

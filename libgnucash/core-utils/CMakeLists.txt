@@ -2,13 +2,13 @@
 
 ADD_SUBDIRECTORY(test)
 
-IF (BUILDING_FROM_VCS)
-  SET (SWIG_CORE_UTILS_GUILE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-core-utils-guile.c)
-  GNC_ADD_SWIG_COMMAND (swig-core-utils-guile-c ${SWIG_CORE_UTILS_GUILE_C} ${CMAKE_CURRENT_SOURCE_DIR}/core-utils.i)
-ELSE()
-  SET(SWIG_CORE_UTILS_GUILE_C swig-core-utils-guile.c)
-ENDIF()
+# Command to generate the swig-core-utils-guile.c wrapper file
+gnc_add_swig_guile_command (swig-core-utils-guile-c
+    SWIG_CORE_UTILS_GUILE_C swig-core-utils-guile.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/core-utils.i
+)
 
+# Command to generate the swig-core-utils-python.c wrapper file
 gnc_add_swig_python_command (swig-core-utils-python
     SWIG_CORE_UTILS_PYTHON_C SWIG_CORE_UTILS_PYTHON_PY
     swig-core-utils-python.c sw_core_utils.py
