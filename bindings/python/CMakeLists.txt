@@ -3,9 +3,8 @@ ADD_SUBDIRECTORY(tests)
 
 SET(PYEXEC_FILES  __init__.py function_class.py gnucash_business.py gnucash_core.py)
 
-IF (BUILDING_FROM_VCS)
-  SET(SWIG_FILES ${CMAKE_CURRENT_SOURCE_DIR}/gnucash_core.i ${CMAKE_CURRENT_SOURCE_DIR}/time64.i)
-  SET(GNUCASH_CORE_C_INCLUDES
+set(SWIG_FILES ${CMAKE_CURRENT_SOURCE_DIR}/gnucash_core.i ${CMAKE_CURRENT_SOURCE_DIR}/time64.i)
+set(GNUCASH_CORE_C_INCLUDES
     ${CONFIG_H}
     ${CMAKE_SOURCE_DIR}/libgnucash/engine/qofsession.h
     ${CMAKE_SOURCE_DIR}/libgnucash/engine/qofbook.h
@@ -35,22 +34,16 @@ IF (BUILDING_FROM_VCS)
     ${CMAKE_SOURCE_DIR}/libgnucash/engine/gncIDSearch.h
     ${CMAKE_SOURCE_DIR}/libgnucash/engine/gnc-pricedb.h
     ${CMAKE_SOURCE_DIR}/libgnucash/app-utils/gnc-prefs-utils.h
-  )
+)
 
-  SET (SWIG_GNUCASH_CORE_C ${CMAKE_CURRENT_BINARY_DIR}/gnucash_core.c)
-  SET (SWIG_GNUCASH_CORE_PY ${CMAKE_CURRENT_BINARY_DIR}/gnucash_core_c.py)
-
-  GNC_ADD_SWIG_PYTHON_COMMAND (swig-gnucash-core ${SWIG_GNUCASH_CORE_C}
-    ${SWIG_GNUCASH_CORE_PY}
+gnc_add_swig_python_command (swig-gnucash-core
+    SWIG_GNUCASH_CORE_C SWIG_GNUCASH_CORE_PY
+    gnucash_core.c gnucash_core_c.py
     ${SWIG_FILES}
     ${CMAKE_SOURCE_DIR}/common/base-typemaps.i
     ${CMAKE_SOURCE_DIR}/libgnucash/engine/engine-common.i
     ${GNUCASH_CORE_C_INCLUDES}
-  )
-ELSE()
-  SET (SWIG_GNUCASH_CORE_C gnucash_core.c)
-  SET (SWIG_GNUCASH_CORE_PY ${CMAKE_CURRENT_SOURCE_DIR}/gnucash_core_c.py)
-ENDIF()
+)
 
 IF(WITH_PYTHON)
 

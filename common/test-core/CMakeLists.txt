@@ -31,18 +31,15 @@ IF (BUILDING_FROM_VCS)
   SET (SWIG_UNITTEST_SUPPORT_GUILE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-unittest-support-guile.c)
   GNC_ADD_SWIG_COMMAND (swig-unittest-support-guile-c ${SWIG_UNITTEST_SUPPORT_GUILE_C}
       ${CMAKE_CURRENT_SOURCE_DIR}/unittest-support.i ${test_core_HEADERS})
-  SET (SWIG_UNITTEST_SUPPORT_PYTHON_C ${CMAKE_CURRENT_BINARY_DIR}/swig-unittest-support-python.c)
-  SET (SWIG_UNITTEST_SUPPORT_PYTHON_PY ${CMAKE_CURRENT_BINARY_DIR}/unittest_support.py)
-  GNC_ADD_SWIG_PYTHON_COMMAND (swig-unittest-support-python
-        ${SWIG_UNITTEST_SUPPORT_PYTHON_C}
-        ${SWIG_UNITTEST_SUPPORT_PYTHON_PY}
-        ${CMAKE_CURRENT_SOURCE_DIR}/unittest-support.i)
 ELSE()
   SET (SWIG_UNITTEST_SUPPORT_GUILE_C  swig-unittest-support-guile.c)
-  SET (SWIG_UNITTEST_SUPPORT_PYTHON_C swig-unittest-support-python.c)
-  FILE(COPY unittest_support.py DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 ENDIF()
 
+gnc_add_swig_python_command (swig-unittest-support-python
+    SWIG_UNITTEST_SUPPORT_PYTHON_C SWIG_UNITTEST_SUPPORT_PYTHON_PY
+    swig-unittest-support-python.c unittest_support.py
+    ${CMAKE_CURRENT_SOURCE_DIR}/unittest-support.i
+)
 
 ADD_LIBRARY(test-core-guile ${SWIG_UNITTEST_SUPPORT_GUILE_C})
 TARGET_LINK_LIBRARIES(test-core-guile test-core ${GUILE_LDFLAGS} ${GLIB2_LDFLAGS})

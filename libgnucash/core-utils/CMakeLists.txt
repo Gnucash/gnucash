@@ -5,16 +5,15 @@ ADD_SUBDIRECTORY(test)
 IF (BUILDING_FROM_VCS)
   SET (SWIG_CORE_UTILS_GUILE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-core-utils-guile.c)
   GNC_ADD_SWIG_COMMAND (swig-core-utils-guile-c ${SWIG_CORE_UTILS_GUILE_C} ${CMAKE_CURRENT_SOURCE_DIR}/core-utils.i)
-  SET (SWIG_CORE_UTILS_PYTHON_C ${CMAKE_CURRENT_BINARY_DIR}/swig-core-utils-python.c)
-  SET (SWIG_CORE_UTILS_PYTHON_PY ${CMAKE_CURRENT_BINARY_DIR}/sw_core_utils.py)
-  GNC_ADD_SWIG_PYTHON_COMMAND (swig-core-utils-python
-        ${SWIG_CORE_UTILS_PYTHON_C}
-        ${SWIG_CORE_UTILS_PYTHON_PY}
-        ${CMAKE_CURRENT_SOURCE_DIR}/core-utils.i)
 ELSE()
   SET(SWIG_CORE_UTILS_GUILE_C swig-core-utils-guile.c)
-  SET(SWIG_CORE_UTILS_PYTHON_C swig-core-utils-python.c)
 ENDIF()
+
+gnc_add_swig_python_command (swig-core-utils-python
+    SWIG_CORE_UTILS_PYTHON_C SWIG_CORE_UTILS_PYTHON_PY
+    swig-core-utils-python.c sw_core_utils.py
+    ${CMAKE_CURRENT_SOURCE_DIR}/core-utils.i
+)
 
 SET (core_utils_SOURCES
   binreloc.c

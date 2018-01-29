@@ -41,16 +41,15 @@ IF (BUILDING_FROM_VCS)
   # Command to generate the swig-app-utils.c wrapper file
   SET (SWIG_APP_UTILS_GUILE_C ${CMAKE_CURRENT_BINARY_DIR}/swig-app-utils-guile.c)
   GNC_ADD_SWIG_COMMAND (swig-apputils-guile-c ${SWIG_APP_UTILS_GUILE_C} ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i)
-  SET (SWIG_APP_UTILS_PYTHON_C ${CMAKE_CURRENT_BINARY_DIR}/swig-app-utils-python.c)
-  SET (SWIG_APP_UTILS_PYTHON_PY ${CMAKE_CURRENT_BINARY_DIR}/sw_app_utils.py)
-  GNC_ADD_SWIG_PYTHON_COMMAND (swig-app-utils-python
-        ${SWIG_APP_UTILS_PYTHON_C}
-        ${SWIG_APP_UTILS_PYTHON_PY}
-        ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i)
 ELSE()
   SET (SWIG_APP_UTILS_GUILE_C swig-app-utils-guile.c)
-  SET (SWIG_APP_UTILS_PYTHON_C swig-app-utils-python.c)
 ENDIF()
+
+gnc_add_swig_python_command (swig-app-utils-python
+    SWIG_APP_UTILS_PYTHON_C SWIG_APP_UTILS_PYTHON_PY
+    swig-app-utils-python.c sw_app_utils.py
+    ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i
+)
 
 SET (app_utils_SOURCES
   calculation/expression_parser.c
