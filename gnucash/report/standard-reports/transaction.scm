@@ -893,8 +893,40 @@ tags within description, notes or memo. ")
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Here comes the big function that builds the whole table.
 
+(export make-split-table)
 (define (make-split-table splits options custom-calculated-cells)
-
+  ;; list of splits -> string
+  ;;
+  ;; options used:
+  ;;  display/date
+  ;;  display/reconciled date
+  ;;  display/num or num/action
+  ;;  display/description
+  ;;  display/accname
+  ;;  display/acc-fullname
+  ;;  display/other-accname
+  ;;  display/other-accfullname
+  ;;  display/shares
+  ;;  display/price
+  ;;  display/memo
+  ;;  display/notes
+  ;;  display/detail
+  ;;  display/amount
+  ;;  display/running balance
+  ;;  display/sign reverses
+  ;;  display/totals
+  ;;  general/common-currency
+  ;;  general/report-currency
+  ;;  general/orig-currency
+  ;;  general/export?
+  ;;  sorting/indenting
+  ;;  sorting/subtotals-only
+  ;;  sorting/acc-code
+  ;;  sorting/acc-fullname
+  ;;  sorting/acc-description
+  ;;  sorting/show-informal-headers
+  ;;  sorting/prime & sec - sortkey & subtotal & date-subtotal
+  
   (define (opt-val section name)
     (let ((option (gnc:lookup-option options section name)))
       (if option
