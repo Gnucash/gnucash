@@ -2292,6 +2292,7 @@ int
 xaccTransCountSplits (const Transaction *trans)
 {
     gint i = 0;
+    g_return_val_if_fail (trans != NULL, 0);
     FOR_EACH_SPLIT(trans, i++);
     return i;
 }

@@ -923,7 +923,7 @@ gnc_plugin_business_update_menus (GncPluginPage *plugin_page)
     if (is_txn_register)
     {
         Transaction *trans = gnc_plugin_page_register_get_current_txn (GNC_PLUGIN_PAGE_REGISTER(plugin_page));
-        if (xaccTransCountSplits(trans) > 0)
+        if (trans && xaccTransCountSplits(trans) > 0)
             is_bus_txn = (xaccTransGetFirstAPARAcctSplit(trans, TRUE) != NULL);
         is_bus_doc = (xaccTransGetTxnType (trans) == TXN_TYPE_INVOICE);
     }
