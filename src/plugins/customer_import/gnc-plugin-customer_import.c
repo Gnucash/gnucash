@@ -53,8 +53,9 @@ static void gnc_plugin_customer_import_cmd_test (GtkAction *action, GncMainWindo
 static GtkActionEntry gnc_plugin_actions [] =
 {
     /* Menu Items */
-    { "ImportMenuAction", NULL, N_("I_mport"), NULL, NULL, NULL },
-    { "customer_importAction", NULL, N_("Import Customers and Vendors"), NULL, N_("customer_import tooltip"),  G_CALLBACK(gnc_plugin_customer_import_cmd_test) },
+    { "ImportMenuAction", NULL, N_("_Import"), NULL, NULL, NULL },
+    /* Menu entry with label and tooltip */
+    { "customer_importAction", GTK_STOCK_CONVERT, N_("Import _Customers & Vendors..."), NULL, N_("Import Customers and Vendors from a CSV text file."),  G_CALLBACK(gnc_plugin_customer_import_cmd_test) },
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
 

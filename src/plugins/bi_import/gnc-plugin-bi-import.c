@@ -54,7 +54,7 @@ static GtkActionEntry gnc_plugin_actions [] =
 {
     /* Menu Items */
     { "ImportMenuAction", NULL, N_("_Import"), NULL, NULL, NULL },
-    { "bi_importAction", NULL, N_("Import Bills & Invoices..."), NULL, N_("Import bills and invoices from a CSV text file"),  G_CALLBACK(gnc_plugin_bi_import_cmd_test) },
+    { "bi_importAction", GTK_STOCK_CONVERT, N_("Import Bills & _Invoices..."), NULL, N_("Import bills and invoices from a CSV text file"),  G_CALLBACK(gnc_plugin_bi_import_cmd_test) },
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
 
