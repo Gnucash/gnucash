@@ -134,16 +134,17 @@ EXECUTE_PROCESS(
   OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 
-SET(BUILDING_FROM_VCS "NO")
-IF (GNC_VCS_INFO_RESULT EQUAL 0)
-  SET(BUILDING_FROM_VCS "YES")
-  # IF building from VCS, we need git
-  find_package(Git)
-  IF (NOT GIT_FOUND)
-    MESSAGE(SEND_ERROR "Looks like we're building from version control, but can't find git executable. Please set GIT_EXECUTABLE.")
-  ENDIF()
-ENDIF()
-
+if (NOT DEFINED BUILDING_FROM_VCS)
+    set (BUILDING_FROM_VCS "NO")
+    if (GNC_VCS_INFO_RESULT EQUAL 0)
+        set (BUILDING_FROM_VCS "YES")
+        # IF building from VCS, we need git
+        find_package (Git)
+        if (NOT GIT_FOUND)
+            message (SEND_ERROR "Looks like we're building from version control, but can't find git executable. Please set GIT_EXECUTABLE.")
+        endif()
+    endif()
+endif()
 
 
 IF (WIN32)
