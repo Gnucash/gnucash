@@ -4,6 +4,9 @@ libgnucash/backend/xml/gncmod-backend-xml.c
 libgnucash/backend/xml/gncmod-backend-xml.cpp
 gnucash/gnome-utils/gnc-tree-model-selection.c
 
+# This file is only an example for programmers and never called:
+libgnucash/gnc-module/example/gnc-plugin.example.c
+
 # Skip softlinks to scm files. These softlinks are created in builddir
 # for testing purposes, intltool-extract isn't smart enough to ignore
 # them when bulddir and srcdir are the same, and both intltool-extract
