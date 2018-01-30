@@ -37,6 +37,11 @@
 @define-color register_secondary_bg_color #F6FFDA;
 @define-color register_split_bg_color #EDE7D3;
 @define-color register_cursor_bg_color #FFEF98;
+@define-color register_fg_color black;
+
+*.register-foreground {
+  color: @register_fg_color;
+}
 
 *.register-header {
   background-color: @register_header_bg_color;
@@ -72,6 +77,15 @@
 
 *.register-cursor:insensitive {
   background-color: mix (@register_cursor_bg_color, grey, 0.2);
+}
+
+/* Change font color by mixing with grey */
+.lighter-grey-mix {
+  color: mix (currentColor, grey, 0.8);
+}
+
+.darker-grey-mix {
+  color: mix (currentColor, grey, 0.2);
 }
 
 /* Some tweaks for the about dialog */

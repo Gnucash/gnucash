@@ -2451,6 +2451,8 @@ gnucash_get_style_classes (GnucashSheet *sheet, GtkStyleContext *stylectxt,
         gtk_style_context_add_class (stylectxt, "negative-numbers");
         field_type -= COLOR_NEGATIVE;
     }
+    else
+        gtk_style_context_add_class (stylectxt, "register-foreground");
 
     switch (field_type)
     {

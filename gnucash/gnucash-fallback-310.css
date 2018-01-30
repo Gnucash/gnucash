@@ -36,15 +36,6 @@
 @define-color default-color currentColor;
 @define-color negative-numbers rgb(75%, 0%, 0%);
 
-/* Change font color by mixing with grey */
-.lighter-grey-mix {
-  color: mix (currentColor, grey, 0.8);
-}
-
-.darker-grey-mix {
-  color: mix (currentColor, grey, 0.2);
-}
-
 /* Register2 grid lines color */
 .register2_grid_lines {
   border-color: black;
