@@ -19,6 +19,9 @@ src/libqof/qof/qofquery-deserial.c
 src/libqof/qof/qofquery-serialize.c
 src/libqof/qof/qofsql.c
 
+# This file is only an example for programmers and never called:
+src/plugins/example/gnc-plugin.example.c
+
 # Skip softlinks to scm files. These softlinks are created in builddir
 # for testing purposes, intltool-extract isn't smart enough to ignore
 # them when bulddir and srcdir are the same, and both intltool-extract
