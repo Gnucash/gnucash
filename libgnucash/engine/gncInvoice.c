@@ -1856,7 +1856,7 @@ gncInvoiceApplyPayment (const GncInvoice *invoice, Transaction *txn,
     gncOwnerAutoApplyPaymentsWithLots (owner, selected_lots);
 }
 
-static gboolean gncInvoiceDateExists (time64 date)
+gboolean gncInvoiceDateExists (time64 date)
 {
     return date != INT64_MAX;
 }

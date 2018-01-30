@@ -708,22 +708,18 @@
 	   document
 	   (make-myname-table book date-format))
 
-	  (let ((date-table #f)
-		(post-date (gncInvoiceGetDatePosted invoice))
-		(due-date (gncInvoiceGetDateDue invoice)))
-
-	    (if (not (zero? post-date))
-		(begin
-		  (set! date-table (make-date-table))
-		  (make-date-row! date-table (string-append title " " (_ "Date")) post-date date-format)
-		  (make-date-row! date-table (_ "Due Date") due-date date-format)
-		  (gnc:html-document-add-object! document date-table))
-		(gnc:html-document-add-object!
-		 document
-		 (gnc:make-html-text
-		  (_ "Invoice in progress...")))))
-      
-    
+          (if (gncInvoiceIsPosted invoice)
+              (let ((date-table #f)
+                    (post-date (gncInvoiceGetDatePosted invoice))
+                    (due-date (gncInvoiceGetDateDue invoice)))
+                (set! date-table (make-date-table))
+                (make-date-row! date-table (string-append title " " (_ "Date")) post-date date-format)
+                (make-date-row! date-table (_ "Due Date") due-date date-format)
+                (gnc:html-document-add-object! document date-table))
+              (gnc:html-document-add-object!
+               document
+               (gnc:make-html-text
+                (_ "Invoice in progress..."))))
 
 	  (make-break! document)
 	  (make-break! document)
