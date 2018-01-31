@@ -267,7 +267,7 @@ gnucash_register_goto_next_matching_row (GnucashRegister *reg,
 static gboolean
 gnucash_register_sheet_resize (GnucashRegister *reg)
 {
-    // Sometimes the space left by the horzontal scrollbar does
+    // Sometimes the space left by the horizontal scrollbar does
     // not get filled on load, this makes sure it does
     if (!reg->hscrollbar_visible)
         gtk_widget_queue_resize (GTK_WIDGET (reg->sheet));
