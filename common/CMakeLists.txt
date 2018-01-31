@@ -13,7 +13,7 @@ SET(common_EXTRA_DIST
         platform.h)
 
 
-if (BUILDING_FROM_VCS)
+if (GENERATE_SWIG_WRAPPERS)
     set (SWIG_RUNTIME_H ${CMAKE_CURRENT_BINARY_DIR}/swig-runtime.h)
     # Command to generate the swig-runtime.h header
     add_custom_command (
@@ -24,7 +24,7 @@ if (BUILDING_FROM_VCS)
 else()
     set (SWIG_RUNTIME_H ${CMAKE_CURRENT_SOURCE_DIR}/swig-runtime.h)
 endif()
-dist_add_generated(swig-runtime.h)
+dist_add_generated (${GENERATE_SWIG_WRAPPERS} swig-runtime.h)
 
 add_custom_target (swig-runtime-h DEPENDS ${SWIG_RUNTIME_H})
 

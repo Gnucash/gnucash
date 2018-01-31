@@ -111,7 +111,7 @@ ENDIF()
 ELSE(BUILDING_FROM_VCS)
   ADD_CUSTOM_TARGET(gnc-vcs-info DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnc-vcs-info.h)
 ENDIF(BUILDING_FROM_VCS)
-dist_add_generated(gnc-vcs-info.h)
+dist_add_generated (${BUILDING_FROM_VCS} gnc-vcs-info.h)
 ### Compile library
 
 SET(core_utils_noinst_HEADERS

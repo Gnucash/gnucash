@@ -71,6 +71,7 @@ OPTION (DISABLE_DEPRECATED_GNOME "don't use deprecated gnome functions" OFF)
 # These are also settable from the command line in a similar way.
 
 SET(GNUCASH_BUILD_ID "" CACHE STRING "Overrides the GnuCash build identification (Build ID) which defaults to a description of the vcs commit from which gnucash is built. Distributions may want to insert a package management based version number instead")
+# GENERATE_SWIG_WRAPPERS - Controls whether to generate the swig wrappers for guile and python. If not set the wrappers will only be generated when building from a git worktree, commented out here, but will be evaluated later on in this file
 
 # Check that all of the absolute install paths are inside
 # ${CMAKE_INSTALL_PREFIX}. If they're not, disable binreloc as it
@@ -144,7 +145,9 @@ IF (GNC_VCS_INFO_RESULT EQUAL 0)
   ENDIF()
 ENDIF()
 
-
+# Determine whether to generate the swig wrappers.
+# By default they will only be generated when building from a git worktree
+set(GENERATE_SWIG_WRAPPERS ${BUILDING_FROM_VCS} CACHE BOOL "Controls whether to generate the swig wrappers for guile and python. If not set the wrappers will only be generated when building from a git worktree")
 
 IF (WIN32)
   # Help Windows find the various dependencies. We assume here that the standard advice for building
@@ -273,7 +276,7 @@ ENDIF (WIN32)
 # ############################################################
 
 # SWIG
-IF(BUILDING_FROM_VCS)
+IF(GENERATE_SWIG_WRAPPERS)
   FIND_PACKAGE (SWIG REQUIRED)
   INCLUDE (${SWIG_USE_FILE})
 ENDIF()
@@ -778,7 +781,7 @@ if (BUILDING_FROM_VCS)
 else()
     install(FILES ${CMAKE_SOURCE_DIR}/ChangeLog DESTINATION ${CMAKE_INSTALL_DOCDIR})
 endif()
-dist_add_generated(ChangeLog)
+dist_add_generated (${BUILDING_FROM_VCS} ChangeLog)
 
 ############################ BEGIN MAKE DIST #################
 

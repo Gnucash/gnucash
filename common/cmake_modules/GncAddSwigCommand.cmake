@@ -18,7 +18,7 @@
 # Any additional parameters will be used as dependencies for this wrapper target
 macro (gnc_add_swig_guile_command _target _out_var _output _input)
 
-    if (BUILDING_FROM_VCS)
+    if (GENERATE_SWIG_WRAPPERS)
         set(SW_CURR_BUILD_SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR})
         set(SW_BUILD_SOURCE_DIR ${CMAKE_BINARY_DIR})
     else()
@@ -29,7 +29,7 @@ macro (gnc_add_swig_guile_command _target _out_var _output _input)
     set(outfile ${SW_CURR_BUILD_SOURCE_DIR}/${_output})
     set(${_out_var} ${outfile}) # This variable is set for convenience to use in the calling CMakeLists.txt
 
-    if (BUILDING_FROM_VCS)
+    if (GENERATE_SWIG_WRAPPERS)
         add_custom_command (
             OUTPUT ${outfile}
             DEPENDS ${_input} ${CMAKE_SOURCE_DIR}/common/base-typemaps.i ${ARGN}
@@ -39,7 +39,7 @@ macro (gnc_add_swig_guile_command _target _out_var _output _input)
     endif()
 
     # Add the output file outfile to the dist tarball
-    dist_add_generated(${_output})
+    dist_add_generated (${GENERATE_SWIG_WRAPPERS} ${_output})
 endmacro (gnc_add_swig_guile_command)
 
 
@@ -59,7 +59,7 @@ endmacro (gnc_add_swig_guile_command)
 # Any additional parameters will be used as dependencies for this wrapper target
 macro (gnc_add_swig_python_command _target _out_var _py_out_var _output _py_output _input)
 
-    if (BUILDING_FROM_VCS)
+    if (GENERATE_SWIG_WRAPPERS)
         set(SW_CURR_BUILD_SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR})
         set(SW_BUILD_SOURCE_DIR ${CMAKE_BINARY_DIR})
     else()
@@ -73,7 +73,7 @@ macro (gnc_add_swig_python_command _target _out_var _py_out_var _output _py_outp
     set(py_outfile ${SW_CURR_BUILD_SOURCE_DIR}/${_py_output})
     set(${_py_out_var} ${py_outfile}) # This variable is set for convenience to use in the calling CMakeLists.txt
 
-    if (BUILDING_FROM_VCS)
+    if (GENERATE_SWIG_WRAPPERS)
         set (DEFAULT_SWIG_PYTHON_FLAGS
             -python
             -Wall -Werror
@@ -98,5 +98,5 @@ macro (gnc_add_swig_python_command _target _out_var _py_out_var _output _py_outp
     endif()
 
     # Add the output files _output and _py_output to the dist tarball
-    dist_add_generated(${_output} ${_py_output})
+    dist_add_generated (${GENERATE_SWIG_WRAPPERS} ${_output} ${_py_output})
 endmacro()

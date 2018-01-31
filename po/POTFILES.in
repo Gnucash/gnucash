@@ -690,7 +690,6 @@ libgnucash/engine/SX-ttinfo.c
 libgnucash/engine/Transaction.c
 libgnucash/engine/TransLog.c
 libgnucash/gnc-module/example/gncmod-example.c
-libgnucash/gnc-module/example/gnc-plugin.example.c
 libgnucash/gnc-module/gnc-module.c
 libgnucash/gnc-module/gnc-module.scm
 libgnucash/scm/fin.scm

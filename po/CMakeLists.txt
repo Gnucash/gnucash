@@ -179,7 +179,7 @@ IF(BUILDING_FROM_VCS)
   )
   add_custom_target (pot DEPENDS gnucash.pot)
 ENDIF()
-dist_add_generated(gnucash.pot)
+dist_add_generated (${BUILDING_FROM_VCS} gnucash.pot)
 
 ADD_CUSTOM_TARGET(check-po
         COMMAND ${CMAKE_COMMAND}

@@ -84,6 +84,6 @@ ADD_CUSTOM_COMMAND(OUTPUT gnucash.1
                            -P ${CMAKE_CURRENT_BINARY_DIR}/manpage.cmake
   )
 ADD_CUSTOM_TARGET(gnucash-manpage DEPENDS gnucash.1)
-dist_add_generated(gnucash.1)
+dist_add_generated (${BUILDING_FROM_VCS} gnucash.1)
 
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.1 DESTINATION  ${CMAKE_INSTALL_MANDIR}/man1)

@@ -48,6 +48,6 @@ if (NOT ${MAKEINFO} STREQUAL "MAKEINFO-NOTFOUND")
       )
   ENDIF()
 endif (NOT ${MAKEINFO} STREQUAL "MAKEINFO-NOTFOUND")
-dist_add_generated(gnucash-design.info)
+dist_add_generated (${BUILDING_FROM_VCS} gnucash-design.info)
 
 SET_DIST_LIST(doc_design_DIST CMakeLists.txt gnucash-design.texi ${gnucash_design_TEXINFOS})
