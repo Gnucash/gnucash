@@ -857,19 +857,17 @@
 	   'attribute (list "cellpadding" 0)
 	   'attribute (list "width" "100%"))
 
-	  (set! date-object (let ((date-table #f)
-		(post-date (gncInvoiceGetDatePosted invoice))
-		(due-date (gncInvoiceGetDateDue invoice)))
-
-	    (if (not (zero? post-date))
-		(begin
+          (set! date-object
+            (if (gncInvoiceIsPosted invoice)
+                (let ((date-table #f)
+                      (post-date (gncInvoiceGetDatePosted invoice))
+                      (due-date (gncInvoiceGetDateDue invoice)))
 		  (set! date-table (make-date-table))
-		  ;; oli-custom - moved invoice number here
 		  (gnc:html-table-append-row!
                   ;; Translators: %s below is "Invoice" or "Bill" or even the
                   ;; custom title from the options. The next column contains
                   ;; the number of the document.
-		   date-table (list (sprintf #f (_ "%s&nbsp;#") title) (gncInvoiceGetID invoice)))
+                  date-table (list (sprintf #f (_ "%s&nbsp;#") title) (gncInvoiceGetID invoice)))
                   ;; Translators: The first %s below is "Invoice" or
                   ;; "Bill" or even the custom title from the
                   ;; options. This string sucks for i18n, but I don't
@@ -879,10 +877,8 @@
 		  (make-date-row! date-table (_ "Due&nbsp;Date") due-date date-format)
 		  date-table)
 		(gnc:make-html-text
-		  ;; oli-custom - FIXME: I have a feeling I broke a
-          ;; translation by not using string-expand for &nbsp;
-		  (string-append title "<br>"
-            (_ "Invoice in progress..."))))))
+                 (string-append title "<br>"
+                                (_ "Invoice in progress...")))))
 
 	  (gnc:html-table-append-row!
 	  	helper-table

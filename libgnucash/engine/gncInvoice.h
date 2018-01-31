@@ -275,6 +275,7 @@ static inline GncInvoice * gncInvoiceLookup (const QofBook *book, const GncGUID 
 void gncInvoiceBeginEdit (GncInvoice *invoice);
 void gncInvoiceCommitEdit (GncInvoice *invoice);
 int gncInvoiceCompare (const GncInvoice *a, const GncInvoice *b);
+gboolean gncInvoiceDateExists (time64 date);
 gboolean gncInvoiceIsPosted (const GncInvoice *invoice);
 gboolean gncInvoiceIsPaid (const GncInvoice *invoice);
 

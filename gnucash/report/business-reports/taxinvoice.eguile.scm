@@ -246,7 +246,7 @@
         <td align="right" class="invnum"><big><strong><?scm:d invoiceid ?></strong></big></td>
       </tr>
       <?scm )) ?>
-      <?scm (if (zero? postdate) (begin ?>
+      <?scm (if (not (gncInvoiceDateExists postdate)) (begin ?>
         <tr>
            <td colspan="2" align="right"><?scm:d (_ "Invoice in progress...") ?></td>
         </tr>

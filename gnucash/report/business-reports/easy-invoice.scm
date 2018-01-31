@@ -776,12 +776,11 @@
           (add-html! document "</tr></table>")
         )
 
-        ; add the date
-        (let ((date-table #f)
-              (post-date (gncInvoiceGetDatePosted invoice))
-              (due-date (gncInvoiceGetDateDue invoice)))
-          (if (not (zero? post-date))
-            (begin
+        ;; add the date
+        (if (gncInvoiceIsPosted invoice)
+            (let ((date-table #f)
+                  (post-date (gncInvoiceGetDatePosted invoice))
+                  (due-date (gncInvoiceGetDateDue invoice)))
               (set! date-table (make-date-table))
               (make-date-row! date-table (_ "Date") post-date date-format)
               (if (opt-val "Display" "Due Date")
@@ -790,7 +789,7 @@
             (add-html! document
 		       (string-append "<font color='red'>"
 				      (_ "INVOICE NOT POSTED")
-				      "</font>"))))
+				      "</font>")))
 
         (make-break! document)
 

@@ -291,7 +291,7 @@
     (if (date-due-col column-vector)
         (addto! row-contents 
          (if (and due-date
-              (not (zero? due-date)))
+                  (gncInvoiceDateExists due-date))
              (qof-print-date due-date)
              "")))
     (if (num-col column-vector)
