@@ -788,8 +788,10 @@ main(int argc, char ** argv)
     gnc_parse_command_line(&argc, &argv);
     gnc_print_unstable_message();
 
-    /* Make sure gnucash' user data directory is properly set up */
-    userdata_migrated = gnc_filepath_init(TRUE);
+    /* Make sure gnucash' user data directory is properly set up
+       This must be done before any guile code is called as that would
+       fail the migration message */
+    userdata_migrated = gnc_filepath_init();
     /* Translators: the message below will be completed with two directory names. */
     userdata_migration_msg = g_strdup_printf (
         _("Notice\n\nYour gnucash metadata has been migrated.\n\n"

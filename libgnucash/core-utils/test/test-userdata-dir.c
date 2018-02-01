@@ -87,6 +87,8 @@ main(int argc, char **argv)
     char *tmp_dir = NULL;
     char *userdata_dir = NULL;
     char *gnc_data_home_dir = NULL;
+    const char *builddir = g_getenv("GNC_BUILDDIR");
+    const char *uninstalled = g_getenv("GNC_UNINSTALLED");
 
     if (argc > 1)
     {
@@ -96,60 +98,67 @@ main(int argc, char **argv)
          * test error messages should then show the system's temporary
          * directory to be used instead */
         home_dir = g_strdup(argv[1]);
-        tmp_dir = g_strdup(g_get_tmp_dir());
     }
     else
     {
         /* Set up a fake home directory to play with */
 #ifdef MAC_INTEGRATION
         home_dir = test_get_userdatadir();
-        tmp_dir = g_strdup(home_dir);
 #else
         home_dir = g_dir_make_tmp("gnucashXXXXXX", NULL);
-        tmp_dir = g_strdup(g_get_tmp_dir());
 #endif
     }
-    /* Run usr conf dir tests with a valid and writable homedir */
+    /* Run usr conf dir tests with a valid and writable fake homedir */
     g_setenv("HOME", home_dir, TRUE);
 
-    /* First run, before calling gnc_filepath_init */
-    for (i = 0; strs2[i].funcname != NULL; i++)
+    /* First run, assuming GNC_BUILDDIR and GNC_UNINSTALLED are set */
+    if (builddir && uninstalled)
     {
-        char *daout;
-        char *wantout;
+        for (i = 0; strs2[i].funcname != NULL; i++)
+        {
+            char *daout;
+            char *wantout;
 
-        if (strs2[i].func_num == 0)
-        {
-            wantout = g_build_filename(tmp_dir, PACKAGE_NAME, "foo",
-                                       (gchar *)NULL);
-            daout = gnc_build_userdata_path("foo");
-        }
-        else if (strs2[i].func_num == 1)
-        {
-            wantout = g_build_filename(tmp_dir, PACKAGE_NAME, strs2[i].output, "foo",
-                                       (gchar *)NULL);
-            daout = gnc_build_book_path("foo");
-        }
-        else if (strs2[i].func_num == 2)
-        {
-            wantout = g_build_filename(tmp_dir, PACKAGE_NAME, strs2[i].output, "foo",
-                                       (gchar *)NULL);
-            daout = gnc_build_translog_path("foo");
-        }
-        else // if (strs2[i].prefix_home == 3)
-        {
-            wantout = g_build_filename(tmp_dir, PACKAGE_NAME, strs2[i].output, "foo",
-                                       (gchar *)NULL);
-            daout = gnc_build_data_path("foo");
-        }
+            if (strs2[i].func_num == 0)
+            {
+                wantout = g_build_filename(builddir, "gnc_data_home", "foo",
+                                        (gchar *)NULL);
+                daout = gnc_build_userdata_path("foo");
+            }
+            else if (strs2[i].func_num == 1)
+            {
+                wantout = g_build_filename(builddir, "gnc_data_home", strs2[i].output, "foo",
+                                        (gchar *)NULL);
+                daout = gnc_build_book_path("foo");
+            }
+            else if (strs2[i].func_num == 2)
+            {
+                wantout = g_build_filename(builddir, "gnc_data_home", strs2[i].output, "foo",
+                                        (gchar *)NULL);
+                daout = gnc_build_translog_path("foo");
+            }
+            else // if (strs2[i].prefix_home == 3)
+            {
+                wantout = g_build_filename(builddir, "gnc_data_home", strs2[i].output, "foo",
+                                        (gchar *)NULL);
+                daout = gnc_build_data_path("foo");
+            }
 
-        do_test_args(g_strcmp0(daout, wantout) == 0,
-                     "gnc_build_x_path",
-                     __FILE__, __LINE__,
-                     "%s (%s) vs %s", daout, strs2[i].funcname, wantout);
-        g_free(wantout);
-        g_free(daout);
+            do_test_args(g_strcmp0(daout, wantout) == 0,
+                        "gnc_build_x_path",
+                        __FILE__, __LINE__,
+                        "%s (%s) vs %s", daout, strs2[i].funcname, wantout);
+            g_free(wantout);
+            g_free(daout);
+        }
     }
+
+    /* Further tests should be run assuming we're not in a build environment to test
+     * the function's actual behaviour in a real world use case, but still using
+     * the fake, writable homedir. */
+    g_unsetenv("GNC_BUILDDIR");
+    g_unsetenv("GNC_UNINSTALLED");
+
 
     /* Second run, with existing userdata_dir, but without the GnuCash subdir
        This test can not be run on OS X or Windows, as our code is not using
@@ -159,7 +168,7 @@ main(int argc, char **argv)
     userdata_dir = g_build_filename(home_dir, ".local", "share", (gchar *)NULL);
     g_mkdir_with_parents(userdata_dir, 0750);
     g_setenv("XDG_DATA_HOME", userdata_dir, TRUE);
-    gnc_filepath_init(FALSE);
+    gnc_filepath_init();
     for (i = 0; strs2[i].funcname != NULL; i++)
     {
         char *daout;
@@ -167,25 +176,25 @@ main(int argc, char **argv)
 
         if (strs2[i].func_num == 0)
         {
-            wantout = g_build_filename(userdata_dir, PACKAGE_NAME, "foo",
+            wantout = g_build_filename(userdata_dir, PACKAGE, "foo",
                                        (gchar *)NULL);
             daout = gnc_build_userdata_path("foo");
         }
         else if (strs2[i].func_num == 1)
         {
-            wantout = g_build_filename(userdata_dir, PACKAGE_NAME, strs2[i].output, "foo",
+            wantout = g_build_filename(userdata_dir, PACKAGE, strs2[i].output, "foo",
                                        (gchar *)NULL);
             daout = gnc_build_book_path("foo");
         }
         else if (strs2[i].func_num == 2)
         {
-            wantout = g_build_filename(userdata_dir, PACKAGE_NAME, strs2[i].output, "foo",
+            wantout = g_build_filename(userdata_dir, PACKAGE, strs2[i].output, "foo",
                                        (gchar *)NULL);
             daout = gnc_build_translog_path("foo");
         }
         else // if (strs2[i].prefix_home == 3)
         {
-            wantout = g_build_filename(userdata_dir, PACKAGE_NAME, strs2[i].output, "foo",
+            wantout = g_build_filename(userdata_dir, PACKAGE, strs2[i].output, "foo",
                                        (gchar *)NULL);
             daout = gnc_build_data_path("foo");
         }
@@ -197,20 +206,32 @@ main(int argc, char **argv)
         g_free(wantout);
         g_free(daout);
     }
-    /* Remove intermediate directories again in order to test their automatic
-     * creation in the next test run */
+    g_unsetenv("XDG_DATA_HOME");
+    /* Remove intermediate directories again */
+    tmp_dir = g_build_filename(userdata_dir, PACKAGE, "data", (gchar *)NULL);
+    g_rmdir (tmp_dir);
+    g_free (tmp_dir);
+    tmp_dir = g_build_filename(userdata_dir, PACKAGE, "translog", (gchar *)NULL);
+    g_rmdir (tmp_dir);
+    g_free (tmp_dir);
+    tmp_dir = g_build_filename(userdata_dir, PACKAGE, "books", (gchar *)NULL);
+    g_rmdir (tmp_dir);
+    g_free (tmp_dir);
+    tmp_dir = g_build_filename(userdata_dir, PACKAGE, (gchar *)NULL);
+    g_rmdir (tmp_dir);
+    g_free (tmp_dir);
     g_rmdir(userdata_dir);
-    g_free(userdata_dir);
-    userdata_dir = g_build_filename(home_dir, ".local", (gchar *)NULL);
-    g_rmdir(userdata_dir);
+    tmp_dir = g_path_get_dirname(userdata_dir);
+    g_rmdir(tmp_dir);
+    g_free (tmp_dir);
     g_free(userdata_dir);
 #endif
 #endif
 
-    /* Third run, with GNC_DATA_HOME not set and having run gnc_filepath_init */
+    /* Third run, with neither XDG_DATA_HOME nor GNC_DATA_HOME set */
     g_unsetenv("GNC_DATA_HOME");
-    gnc_filepath_init(TRUE);
     userdata_dir = test_get_userdatadir();
+    gnc_filepath_init();
     for (i = 0; strs2[i].funcname != NULL; i++)
     {
         char *daout;
@@ -218,25 +239,25 @@ main(int argc, char **argv)
 
         if (strs2[i].func_num == 0)
         {
-            wantout = g_build_filename(userdata_dir, PACKAGE_NAME, "foo",
+            wantout = g_build_filename(userdata_dir, PACKAGE, "foo",
                                        (gchar *)NULL);
             daout = gnc_build_userdata_path("foo");
         }
         else if (strs2[i].func_num == 1)
         {
-            wantout = g_build_filename(userdata_dir, PACKAGE_NAME, strs2[i].output, "foo",
+            wantout = g_build_filename(userdata_dir, PACKAGE, strs2[i].output, "foo",
                                        (gchar *)NULL);
             daout = gnc_build_book_path("foo");
         }
         else if (strs2[i].func_num == 2)
         {
-            wantout = g_build_filename(userdata_dir, PACKAGE_NAME, strs2[i].output, "foo",
+            wantout = g_build_filename(userdata_dir, PACKAGE, strs2[i].output, "foo",
                                        (gchar *)NULL);
             daout = gnc_build_translog_path("foo");
         }
         else // if (strs2[i].prefix_home == 3)
         {
-            wantout = g_build_filename(userdata_dir, PACKAGE_NAME, strs2[i].output, "foo",
+            wantout = g_build_filename(userdata_dir, PACKAGE, strs2[i].output, "foo",
                                        (gchar *)NULL);
             daout = gnc_build_data_path("foo");
         }
@@ -248,12 +269,34 @@ main(int argc, char **argv)
         g_free(wantout);
         g_free(daout);
     }
+    /* Remove intermediate directories again */
+    tmp_dir = g_build_filename(userdata_dir, PACKAGE, "data", (gchar *)NULL);
+    g_rmdir (tmp_dir);
+    g_free (tmp_dir);
+    tmp_dir = g_build_filename(userdata_dir, PACKAGE, "translog", (gchar *)NULL);
+    g_rmdir (tmp_dir);
+    g_free (tmp_dir);
+    tmp_dir = g_build_filename(userdata_dir, PACKAGE, "books", (gchar *)NULL);
+    g_rmdir (tmp_dir);
+    g_free (tmp_dir);
+#ifndef MAC_INTEGRATION
+#ifndef G_OS_WIN32
+    /* Don't delete these on OS X or Windows. They may point at real user directories */
+    tmp_dir = g_build_filename(userdata_dir, PACKAGE, (gchar *)NULL);
+    g_rmdir (tmp_dir);
+    g_free (tmp_dir);
+    g_rmdir(userdata_dir);
+    tmp_dir = g_path_get_dirname(userdata_dir);
+    g_rmdir(tmp_dir);
+    g_free (tmp_dir);
+#endif
+#endif
     g_free(userdata_dir);
 
-    /* Fourth run, with GNC_DATA_HOME set and having run gnc_filepath_init */
+    /* Fourth run, with GNC_DATA_HOME */
     gnc_data_home_dir = g_build_filename(home_dir, "Test", NULL);
     g_setenv("GNC_DATA_HOME", gnc_data_home_dir, TRUE);
-    gnc_filepath_init(TRUE);
+    gnc_filepath_init();
     for (i = 0; strs2[i].funcname != NULL; i++)
     {
         char *daout;

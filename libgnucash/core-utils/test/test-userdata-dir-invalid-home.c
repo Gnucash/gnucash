@@ -42,19 +42,19 @@ usr_confpath_strings strs2[] =
 {
     {
         0, "gnc_build_userdata_path",
-        PACKAGE_NAME
+        PACKAGE
     },
     {
         1, "gnc_build_book_path",
-        PACKAGE_NAME G_DIR_SEPARATOR_S "books"
+        PACKAGE G_DIR_SEPARATOR_S "books"
     },
     {
         2, "gnc_build_translog_path",
-        PACKAGE_NAME G_DIR_SEPARATOR_S "translog"
+        PACKAGE G_DIR_SEPARATOR_S "translog"
     },
     {
         3, "gnc_build_data_path",
-        PACKAGE_NAME G_DIR_SEPARATOR_S "data"
+        PACKAGE G_DIR_SEPARATOR_S "data"
     },
     { 0, NULL, NULL },
 };
@@ -62,8 +62,20 @@ usr_confpath_strings strs2[] =
 int
 main(G_GNUC_UNUSED int argc, G_GNUC_UNUSED char **argv)
 {
+/* Don't run this test on Windows or OS X. This
+   test attempts to fool the code into using a non-existent
+   home directory, but the way this is done only works on linux
+   */
+#ifndef MAC_INTEGRATION
+#ifndef G_OS_WIN32
     int i;
     const char *tmp_dir = g_get_tmp_dir();
+
+    /* Assume we're not in a build environment to test
+     * the function's actual behaviour in a real world use case, using
+     * a non-existent homedir. */
+    g_unsetenv("GNC_BUILDDIR");
+    g_unsetenv("GNC_UNINSTALLED");
 
     /* Run usr conf dir tests with an invalid homedir
      * The code should fall back to using the temporary
@@ -76,25 +88,25 @@ main(G_GNUC_UNUSED int argc, G_GNUC_UNUSED char **argv)
 
         if (strs2[i].func_num == 0)
         {
-            wantout = g_build_filename(tmp_dir, strs2[i].output, "foo",
+            wantout = g_build_filename(tmp_dir, g_get_user_name (), strs2[i].output, "foo",
                                        (gchar *)NULL);
             daout = gnc_build_userdata_path("foo");
         }
         else if (strs2[i].func_num == 1)
         {
-            wantout = g_build_filename(tmp_dir, strs2[i].output, "foo",
+            wantout = g_build_filename(tmp_dir, g_get_user_name (), strs2[i].output, "foo",
                                        (gchar *)NULL);
             daout = gnc_build_book_path("foo");
         }
         else if (strs2[i].func_num == 2)
         {
-            wantout = g_build_filename(tmp_dir, strs2[i].output, "foo",
+            wantout = g_build_filename(tmp_dir, g_get_user_name (), strs2[i].output, "foo",
                                        (gchar *)NULL);
             daout = gnc_build_translog_path("foo");
         }
         else // if (strs2[i].prefix_home == 3)
         {
-            wantout = g_build_filename(tmp_dir, strs2[i].output, "foo",
+            wantout = g_build_filename(tmp_dir, g_get_user_name (), strs2[i].output, "foo",
                                        (gchar *)NULL);
             daout = gnc_build_data_path("foo");
         }
@@ -109,4 +121,6 @@ main(G_GNUC_UNUSED int argc, G_GNUC_UNUSED char **argv)
 
     print_test_results();
     return get_rv();
+#endif
+#endif
 }

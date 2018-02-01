@@ -87,22 +87,13 @@ gchar *gnc_path_find_localized_html_file (const gchar *file_name);
  * This function should be called very early at startup (before any
  * other of the user data directory related function gets called).
  *
- * @param create If true the function will attempt to create the
- * gnucash user data directory its subdirectories and parent directories
- * if they don't exist yet. Note it won't attempt to create a home directory
- * if that is missing. In that case the system's default temporary
- * directory will be used instead. If false it will not attempt to create
- * any directories at all unless they are in the temporary directory. This
- * is a fallback measure to allow the calling application to more or less
- * function even if gnc_filepath_init was never called.
- *
  * @note If the necessary directories did get created this
  * function will also try to copy files from $HOME/.gnucash
  * to there if that old location exists.
  *
  * @return whether files got copied from the old location.
  */
-gboolean gnc_filepath_init(gboolean create);
+gboolean gnc_filepath_init (void);
 
 const gchar *gnc_userdata_dir (void);
 gchar *gnc_build_userdata_path (const gchar *filename);
