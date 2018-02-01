@@ -103,6 +103,8 @@ gchar *gnc_build_data_path (const gchar *filename);
 gchar *gnc_build_report_path (const gchar *filename);
 gchar *gnc_build_stdreports_path (const gchar *filename);
 
+const gchar *gnc_userconfig_dir (void);
+
 /** Given a pixmap/pixbuf file name, find the file in the pixmap
  *  directory associated with this application.  This routine will
  *  display an error message if it can't find the file.
