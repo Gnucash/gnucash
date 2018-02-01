@@ -21,6 +21,6 @@ SET(examples_DATA
   web.qif
 )
 
-INSTALL(FILES ${examples_DATA} DESTINATION  ${CMAKE_INSTALL_DATADIR}/doc/gnucash)
+INSTALL(FILES ${examples_DATA} DESTINATION  ${CMAKE_INSTALL_DOCDIR})
 
 SET_DIST_LIST(examples_DIST ${examples_DATA} CMakeLists.txt )

@@ -21,7 +21,7 @@ SET(doc_noinst_DATA
         misc-notes.txt README.HBCI README.OFX README.translator.txt tip_of_the_day.list.in
         TRANSLATION_HOWTO)
 
-INSTALL(FILES ${doc_DATA} DESTINATION  ${CMAKE_INSTALL_DATADIR}/doc/gnucash)
+INSTALL(FILES ${doc_DATA} DESTINATION  ${CMAKE_INSTALL_DOCDIR})
 
 SET_LOCAL_DIST(doc_DIST_local ${doc_DATA} ${doc_noinst_DATA})
 SET(doc_DIST ${doc_DIST_local} ${examples_DIST} PARENT_SCOPE)
