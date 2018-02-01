@@ -17,7 +17,7 @@ MACRO(ADD_CORE_UTILS_TEST _TARGET _SOURCE_FILES)
 ENDMACRO()
 
 ADD_CORE_UTILS_TEST(test-gnc-glib-utils test-gnc-glib-utils.c)
-ADD_CORE_UTILS_TEST(test-resolve-file-path test-resolve-file-path.c)
+#ADD_CORE_UTILS_TEST(test-resolve-file-path test-resolve-file-path.c)
 ADD_CORE_UTILS_TEST(test-userdata-dir test-userdata-dir.c)
 IF (NOT MAC_INTEGRATION AND NOT WIN32)
   ADD_CORE_UTILS_TEST(test-userdata-dir-invalid-home test-userdata-dir-invalid-home.c)
