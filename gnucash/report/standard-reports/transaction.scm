@@ -974,10 +974,9 @@ tags within description, notes or memo. ")
                                (lambda (split transaction-row?)
                                  (gnc:make-html-table-cell/markup
                                   "date-cell"
-                                  (let ((date (xaccSplitGetDateReconciled split)))
-                                    (if (zero? date)
-                                        ""
-                                        (qof-print-date date)))))))
+                                  (if (eq? (xaccSplitGetReconcile split) #\y)
+                                      (qof-print-date (xaccSplitGetDateReconciled split))
+                                      "")))))
 
                (add-if (column-uses? 'num)
                        (vector (if (and BOOK-SPLIT-ACTION
