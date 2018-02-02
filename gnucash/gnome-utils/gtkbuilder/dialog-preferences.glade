@@ -1125,6 +1125,7 @@ many months before the current month:</property>
                 <child>
                   <object class="GtkLabel" id="label50">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="label" translatable="yes" comments="Preferences Dialog, General Tab">&lt;b&gt;General&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
@@ -1613,6 +1614,7 @@ many months before the current month:</property>
                 <child>
                   <object class="GtkLabel" id="label15">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="margin_left">12</property>
                     <property name="label" translatable="yes">Time to _wait for answer:</property>
@@ -2520,6 +2522,7 @@ many months before the current month:</property>
                 <child>
                   <object class="GtkLabel" id="label14">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="margin_left">12</property>
                     <property name="label" translatable="yes" comments="Register2 feature">Number of _characters for auto complete:</property>
@@ -3250,6 +3253,52 @@ many months before the current month:</property>
               </object>
               <packing>
                 <property name="position">8</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="grid9">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="border_width">6</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">6</property>
+                <child>
+                  <object class="GtkLabel" id="apilabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Alpha Vantage API key</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="pref/general.finance-quote/alphavantage-api-key">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="tooltip_text" translatable="yes">To retrieve online quotes from Alphavantage, this key needs to be set. A key can be retrieved from the Alpha Vantage website.</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="position">9</property>
+              </packing>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Online Quotes</property>
+              </object>
+              <packing>
+                <property name="position">9</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>

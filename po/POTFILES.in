@@ -91,6 +91,7 @@ gnucash/gnome/gnc-split-reg.c
 [type: gettext/gsettings]gnucash/gnome/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in.in
 [type: gettext/gsettings]gnucash/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in
 [type: gettext/gsettings]gnucash/gnome/gschemas/org.gnucash.dialogs.totd.gschema.xml.in.in
+[type: gettext/gsettings]gnucash/gnome/gschemas/org.gnucash.general.finance-quote.gschema.xml.in.in
 [type: gettext/gsettings]gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in
 [type: gettext/gsettings]gnucash/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in
 [type: gettext/gsettings]gnucash/gnome/gschemas/org.gnucash.window.pages.gschema.xml.in.in

@@ -419,9 +419,9 @@
           (string-append
            currency-str ":" (gnc-commodity-get-mnemonic commodity))
           (begin
-            (set! saved-price (gnc-pricedb-lookup-day64 pricedb
-							commodity currency
-							gnc-time))
+            (set! saved-price (gnc-pricedb-lookup-day-t64 pricedb
+                                                          commodity currency
+                                                          gnc-time))
             (if (not (null? saved-price))
                 (begin
                   (if (gnc-commodity-equiv (gnc-price-get-currency saved-price)
@@ -464,6 +464,13 @@
                (gnc-price-unref price)
                #f)))
        prices)))
+
+  ;; Add the alphavantage api key to the environment. This value is taken from
+  ;; the Online Quotes preference tab
+  (let* ((alphavantage-api-key (gnc-prefs-get-string "general.finance-quote" "alphavantage-api-key")))
+        (gnc:debug (string-concatenate (list "ALPHAVANTAGE_API_KEY=" alphavantage-api-key)))
+        (if (not (string-null? alphavantage-api-key))
+            (setenv "ALPHAVANTAGE_API_KEY" alphavantage-api-key)))
 
   ;; FIXME: uses of gnc:warn in here need to be cleaned up.  Right
   ;; now, they'll result in funny formatting.

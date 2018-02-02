@@ -1,0 +1,9 @@
+<schemalist gettext-domain="@GETTEXT_PACKAGE@">
+  <schema id="org.gnucash.general.finance-quote" path="/org/gnucash/general/finance-quote/">
+    <key name="alphavantage-api-key" type="s">
+      <default>''</default>
+      <summary>Alpha Vantage API key</summary>
+      <description>To retrieve online quotes from Alphavantage, this key needs to be set. A key can be retrieved from the Alpha Vantage website.</description>
+    </key>
+  </schema>
+</schemalist>
