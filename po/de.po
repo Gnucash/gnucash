@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.6.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-16 11:42+0100\n"
+"POT-Creation-Date: 2018-02-02 23:20+0100\n"
 "PO-Revision-Date: 2018-01-03 03:27+0100\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
@@ -3518,7 +3518,7 @@ msgstr "Bemerkung"
 #: ../src/business/business-gnome/search-owner.c:238
 #: ../src/gnome-search/dialog-search.c:1057
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2883
-#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:3
+#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:4
 #: ../src/register/ledger-core/split-register-model.c:283
 #: ../src/report/business-reports/customer-summary.scm:735
 #: ../src/report/business-reports/customer-summary.scm:845
@@ -3941,7 +3941,7 @@ msgstr ""
 #: ../src/business/business-gnome/search-owner.c:239
 #: ../src/gnome-search/dialog-search.c:1089
 #: ../src/gnome-utils/gnc-tree-view-split-reg.c:2894
-#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:5
+#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:6
 #: ../src/register/ledger-core/split-register-model.c:285
 #: ../src/report/business-reports/customer-summary.scm:737
 #: ../src/report/business-reports/job-report.scm:579
@@ -7589,6 +7589,17 @@ msgid ""
 msgstr ""
 "Die Anzeige des »Tipp des Tages« beim Programmstart einschalten. Wenn "
 "aktiviert, wird der Tipp gezeigt. Andernfalls wird er nicht gezeigt."
+
+#: ../src/gnome/gschemas/org.gnucash.general.finance-quote.gschema.xml.in.in.h:1
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:217
+msgid "Alpha Vantage API key"
+msgstr ""
+
+#: ../src/gnome/gschemas/org.gnucash.general.finance-quote.gschema.xml.in.in.h:2
+msgid ""
+"To retrieve online quotes from Alphavantage, this key needs to be set. A key "
+"can be retrieved from the Alpha Vantage website."
+msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:1
 msgid "Save window sizes and locations"
@@ -11438,6 +11449,7 @@ msgstr "(unbenannt)"
 #. Menu Items
 #: ../src/gnome-utils/gnc-file.c:105 ../src/gnome-utils/gnc-main-window.c:272
 #: ../src/plugins/bi_import/gnc-plugin-bi-import.c:56
+#: ../src/plugins/customer_import/gnc-plugin-customer_import.c:56
 msgid "_Import"
 msgstr "_Importieren"
 
@@ -12226,7 +12238,7 @@ msgstr "© 1997-%s Mitwirkende"
 #. * Enter your name or that of your team and an email contact for feedback.
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
-#: ../src/gnome-utils/gnc-main-window.c:4410
+#: ../src/gnome-utils/gnc-main-window.c:4413
 msgid "translator_credits"
 msgstr "Christian Stimming <christian@cstimming.de> et. al."
 
@@ -14674,6 +14686,10 @@ msgstr "Zeichen"
 #: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:216
 msgid "Windows"
 msgstr "Fenster"
+
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:218
+msgid "Online Quotes"
+msgstr "Online Kurse"
 
 #: ../src/gnome-utils/gtkbuilder/dialog-reset-warnings.glade.h:1
 msgid "Reset Warnings"
@@ -19091,7 +19107,7 @@ msgid "These lines were ignored during import"
 msgstr "Diese Zeilen wurden beim Importieren ignoriert"
 
 #: ../src/plugins/bi_import/gnc-plugin-bi-import.c:57
-msgid "Import Bills & Invoices..."
+msgid "Import Bills & _Invoices..."
 msgstr "_Rechnungen importieren..."
 
 #: ../src/plugins/bi_import/gnc-plugin-bi-import.c:57
@@ -19119,27 +19135,27 @@ msgid "2. Select import type"
 msgstr "2. Wählen Sie die Import-Art"
 
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:8
-#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:8
+#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:9
 msgid "Semicolon separated"
 msgstr "Semikolon-getrennt"
 
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:9
-#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:9
+#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:10
 msgid "Comma separated"
 msgstr "Komma-getrennt"
 
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:10
-#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:10
+#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:11
 msgid "Semicolon separated with quotes"
 msgstr "Semikolon-getrennt mit Anführungszeichen"
 
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:11
-#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:11
+#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:12
 msgid "Comma separated with quotes"
 msgstr "Komma-getrennt mit Anführungszeichen"
 
 #: ../src/plugins/bi_import/gtkbuilder/dialog-bi-import-gui.glade.h:12
-#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:12
+#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:13
 msgid "Custom regular expression"
 msgstr "Benutzerdefinierter Regulärer Ausdruck"
 
@@ -19201,61 +19217,44 @@ msgstr ""
 "   %u %s neu angelegt\n"
 "   %u %s aktualisiert (gemäß ID)"
 
-# Fixme: Source Module has several issues, e.g. flying buttons
-#. Menu Items
-#: ../src/plugins/customer_import/gnc-plugin-customer_import.c:56
-msgid "I_mport"
-msgstr "I_mport"
+#. Menu entry with label and tooltip
+#: ../src/plugins/customer_import/gnc-plugin-customer_import.c:58
+msgid "Import _Customers & Vendors..."
+msgstr "Importiert K_unden und Lieferanten..."
 
-# Fixme: Source "Import Customers & Vendors from CSV..."
-#: ../src/plugins/customer_import/gnc-plugin-customer_import.c:57
-msgid "Import Customers and Vendors"
-msgstr "Importiert K_unden und Lieferanten"
+#: ../src/plugins/customer_import/gnc-plugin-customer_import.c:58
+msgid "Import Customers and Vendors from a CSV text file"
+msgstr "Importiert Kunden und Lieferanten aus einer CSV-Textdatei"
 
-# Fixme: Source "Import customers or vendors from a CSV text file."
-#: ../src/plugins/customer_import/gnc-plugin-customer_import.c:57
-msgid "customer_import tooltip"
-msgstr ""
-
-# Fixme: Source "Customers & Vendors Import"
-#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:1
+#. Title of dialog
+#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:2
 msgid "Import customers or vendors from text file"
-msgstr "Importiert Kunden oder Lieferanten aus Textdatei"
+msgstr "Import von Kunden oder Lieferanten aus Textdatei"
 
 # Fixme: Source Can we reuse strings from other CSV imports?
-#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:2
+#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:3
 msgid "<b>1. Choose the file to import</b>"
 msgstr "<b>1. Wählen Sie die zu importierende Datei</b>"
 
-#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:4
+#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:5
 msgid "For importing customer lists."
 msgstr "Zum Import von Kunden-Listen"
 
-#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:6
+#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:7
 msgid "For importing vendor lists."
 msgstr "Zum Import von Lieferanten-Listen"
 
-#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:7
+#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:8
 msgid "<b>2. Select Import Type</b>"
 msgstr "<b>2. Wählen Sie die Import-Art</b>"
 
-#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:13
+#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:14
 msgid "<b>3. Select import options</b>"
 msgstr "<b>3. Bestimmen Sie die Importoptionen</b>"
 
-#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:14
+#: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:15
 msgid "<b>4. Preview</b>"
 msgstr "<b>4. Vorschau</b>"
-
-# Fixme: Source Is this plugin really used or should it be excluded from xgettext?
-#. Menu Items
-#: ../src/plugins/example/gnc-plugin.example.c:50
-msgid "example description..."
-msgstr "Beispiel-Beschreibung"
-
-#: ../src/plugins/example/gnc-plugin.example.c:51
-msgid "example tooltip"
-msgstr "Beispiel Tooltip"
 
 #: ../src/register/ledger-core/split-register.c:185
 msgid ""
@@ -20683,8 +20682,6 @@ msgstr "Betrag dankend erhalten"
 msgid "Net Price"
 msgstr "Nettobetrag"
 
-# strange, had fuzzy translation Saldo (Periodenbezogen)
-# Ja, der Kundenbericht hat einen solchen
 #: ../src/report/business-reports/easy-invoice.scm:481
 #: ../src/report/business-reports/fancy-invoice.scm:520
 #: ../src/report/business-reports/invoice.scm:457
@@ -25953,18 +25950,18 @@ msgstr "Willkommen bei GnuCash ~a"
 msgid "GnuCash ~a has lots of nice features. Here are a few."
 msgstr "GnuCash ~a hat viele neue Funktionen. Hier sind einige Beispiele."
 
-#: ../src/scm/price-quotes.scm:490 ../src/scm/price-quotes.scm:491
+#: ../src/scm/price-quotes.scm:497 ../src/scm/price-quotes.scm:498
 msgid "No commodities marked for quote retrieval."
 msgstr "Keine Devisen/Wertpapiere zum Börsenkurs-Abruf markiert."
 
-#: ../src/scm/price-quotes.scm:495 ../src/scm/price-quotes.scm:496
-#: ../src/scm/price-quotes.scm:519 ../src/scm/price-quotes.scm:522
+#: ../src/scm/price-quotes.scm:502 ../src/scm/price-quotes.scm:503
+#: ../src/scm/price-quotes.scm:526 ../src/scm/price-quotes.scm:529
 msgid "Unable to get quotes or diagnose the problem."
 msgstr ""
 "Abrufen der Börsenkurse fehlgeschlagen. Genauere Diagnose ebenfalls "
 "fehlgeschlagen."
 
-#: ../src/scm/price-quotes.scm:501 ../src/scm/price-quotes.scm:503
+#: ../src/scm/price-quotes.scm:508 ../src/scm/price-quotes.scm:510
 msgid ""
 "You are missing some needed Perl libraries.\n"
 "Run 'gnc-fq-update' as root to install them."
@@ -25972,37 +25969,37 @@ msgstr ""
 "Ihnen fehlen einige benötigte Perl Bibliotheken.\n"
 "Führen Sie 'gnc-fq-update' als root aus, um diese zu installieren."
 
-#: ../src/scm/price-quotes.scm:509 ../src/scm/price-quotes.scm:510
+#: ../src/scm/price-quotes.scm:516 ../src/scm/price-quotes.scm:517
 msgid "There was a system error while retrieving the price quotes."
 msgstr "Beim Herunterladen der Börsenkurse ist ein Systemfehler aufgetreten."
 
-#: ../src/scm/price-quotes.scm:515 ../src/scm/price-quotes.scm:516
+#: ../src/scm/price-quotes.scm:522 ../src/scm/price-quotes.scm:523
 msgid "There was an unknown error while retrieving the price quotes."
 msgstr ""
 "Beim Herunterladen der Börsenkurse ist ein unbekannter Fehler aufgetreten."
 
-#: ../src/scm/price-quotes.scm:532 ../src/scm/price-quotes.scm:543
-#: ../src/scm/price-quotes.scm:551
+#: ../src/scm/price-quotes.scm:539 ../src/scm/price-quotes.scm:550
+#: ../src/scm/price-quotes.scm:558
 msgid "Unable to retrieve quotes for these items:"
 msgstr "Abrufen von Börsenkursen für diese Werte fehlgeschlagen:"
 
-#: ../src/scm/price-quotes.scm:537
+#: ../src/scm/price-quotes.scm:544
 msgid "Continue using only the good quotes?"
 msgstr "Mit den benutzbaren Kursen fortsetzen?"
 
-#: ../src/scm/price-quotes.scm:556
+#: ../src/scm/price-quotes.scm:563
 msgid "Continuing with good quotes."
 msgstr "Es wird mit den benutzbaren Kursen fortgesetzt."
 
-#: ../src/scm/price-quotes.scm:571 ../src/scm/price-quotes.scm:580
+#: ../src/scm/price-quotes.scm:578 ../src/scm/price-quotes.scm:587
 msgid "Unable to create prices for these items:"
 msgstr "Preis-Eintrag für folgende Werte fehlgeschlagen:"
 
-#: ../src/scm/price-quotes.scm:576
+#: ../src/scm/price-quotes.scm:583
 msgid "Add remaining good quotes?"
 msgstr "Übrige benutzbare Kurse eintragen?"
 
-#: ../src/scm/price-quotes.scm:585
+#: ../src/scm/price-quotes.scm:592
 msgid "Adding remaining good quotes."
 msgstr "Benutzbare Kurse werden eingetragen."
 
@@ -26390,176 +26387,3 @@ msgstr ""
 "Banking-Zugangs. Nachdem ein Online-Banking-Zugang eingerichtet wurde, "
 "können die Menüpunkte im Kontofenster unter Aktionen -> Online Aktionen "
 "verwendet werden."
-
-#~ msgid "(dummy)"
-#~ msgstr "(dummy)"
-
-#~ msgid "Remember _PIN"
-#~ msgstr "_PIN merken"
-
-#~ msgid "CURRENCY"
-#~ msgstr "WÄHRUNG"
-
-#~ msgid ""
-#~ "On high-resolution displays the reports will be unreadable by default. "
-#~ "Setting a zoom factor to a number bigger than 1.0 can help improve this "
-#~ "situation."
-#~ msgstr ""
-#~ "Auf hochauflösenden Monitoren können Berichte in der Standardeinstellung "
-#~ "schwer lesbar sein. Das Setzen eines Vergrößerungsfaktors größer 1 kann "
-#~ "dann eine ABhilfe sein."
-
-#~ msgid "Clear the entry"
-#~ msgstr "Löschen des Eintrages"
-
-#~ msgid "You must select a commodity. To create a new one, click \"New\""
-#~ msgstr ""
-#~ "Sie müssen eine Devise/Wertpapier auswählen. Wenn Sie eine neue anlegen "
-#~ "möchten, klicken Sie auf »Neu«."
-
-#~ msgid "set true"
-#~ msgstr "auf wahr setzen"
-
-#~ msgid "UTC"
-#~ msgstr "UTC"
-
-#~ msgid "Dates earlier than 1970 are not supported."
-#~ msgstr "Ein Datum vor 1970 wird nicht unterstützt"
-
-#~ msgid "Owner Name"
-#~ msgstr "Inhabername"
-
-#~ msgid "Owner ID"
-#~ msgstr "Inhaber ID"
-
-#~ msgid "Dummy message"
-#~ msgstr "Beispiel-Nachricht"
-
-#~ msgid "postd"
-#~ msgstr "Gebucht"
-
-#~ msgid "duedate"
-#~ msgstr "Fällig"
-
-#~ msgid "acct"
-#~ msgstr "Konto"
-
-#~ msgid "question"
-#~ msgstr "Frage"
-
-#~ msgid "(USD)"
-#~ msgstr "(USD)"
-
-#~ msgid "Retrieve the current online quote"
-#~ msgstr "Aktuellen Kurs online abrufen"
-
-#~ msgid "Auto pay on post_ing"
-#~ msgstr "Automatisch durchbuchen"
-
-#~ msgid "_Use system theme colors"
-#~ msgstr "Farben der _systemweiten Einstellungen verwenden"
-
-#~ msgid ""
-#~ "If checked, the system color theme will be applied to register windows. "
-#~ "If clear, the original GnuCash register colors will be used."
-#~ msgstr ""
-#~ "Wenn aktiviert, werden die systemweiten Farbeinstellungen in den "
-#~ "Kontofenstern verwendet. Wenn nicht aktiviert, werden GnuCash-spezifische "
-#~ "Farben in den Kontofenstern verwendet."
-
-#~ msgid "Negative amounts are not allowed."
-#~ msgstr "Negative Beträge sind hier nicht möglich."
-
-#~ msgid "Percentage amount must be between 0 and 100."
-#~ msgstr "Die Prozentzahl muss zwischen 0 und 100 liegen."
-
-#~ msgid ""
-#~ "You must enter the amount of the payment. The payment amount must not be "
-#~ "zero."
-#~ msgstr ""
-#~ "Sie müssen den Zahlungsbetrag angeben. Der Betrag muss größer als Null "
-#~ "sein."
-
-#~ msgid "Internal link between invoice and payment lots"
-#~ msgstr "Interne Verknüpfung zwischen Rechnungs- und Zahlungsposten"
-
-#~ msgid ""
-#~ "Since you are creating a new file, you will next see a dialog for setting "
-#~ "book options. These can affect how GnuCash transactions are handled "
-#~ "later, during account setup. If you come back to this page without "
-#~ "cancelling and starting over, the dialog for setting book options will "
-#~ "not be shown a second time when you go forward. You can access it "
-#~ "directly from the menu via File->Properties."
-#~ msgstr ""
-#~ "Da gerade eine neue Datei erstellt werden soll, wird als nächstes ein "
-#~ "Fenster für die »Buch-Eigenschaften« geöffnet. Die Einstellungen dieser "
-#~ "Eigenschaften sind wichtig für die Eröffnungsbuchungen, die mit den neuen "
-#~ "Konten im darauf folgenden Schritt erzeugt werden.\n"
-#~ "\n"
-#~ "Die Buch-Eigenschaften können später jederzeit geändert werden über den "
-#~ "Menüeintrag Datei->Eigenschaften."
-
-#~ msgid "New item"
-#~ msgstr "Neuer Eintrag"
-
-#~ msgid "%s at %s (code %s)"
-#~ msgstr "%s bei %s (BLZ %s)"
-
-#~ msgid "%s at bank code %s"
-#~ msgstr "%s bei %s"
-
-#~ msgid "Semicolon Separated with Quotes"
-#~ msgstr "Semikolon-getrennt mit Anführungszeichen"
-
-#~ msgid "Comma Separated with Quotes"
-#~ msgstr "Komma-getrennt mit Anführungszeichen"
-
-#~ msgid "Run preconfigured report"
-#~ msgstr "Konfigurierten Bericht öffnen"
-
-#~ msgid "Preconfigured Reports"
-#~ msgstr "Konfigurierte Berichte"
-
-#~ msgid "Net Price"
-#~ msgstr "Nettobetrag"
-
-#~ msgid "Total Price"
-#~ msgstr "Gesamtbetrag"
-
-#~ msgid "Amount Due"
-#~ msgstr "Fälliger_Betrag"
-
-#~ msgid "Invoice number: "
-#~ msgstr "Rechnungsnummer: "
-
-#~ msgid "Job number: "
-#~ msgstr "Auftragsnummer: "
-
-#~ msgid "Job name: "
-#~ msgstr "Auftragsname: "
-
-#~ msgid "Custom Reports"
-#~ msgstr "_Benutzerdefinierte Berichte"
-
-#~ msgid "and"
-#~ msgstr "und"
-
-#~ msgid "Ignore brokerage fees when calculating returns"
-#~ msgstr "Ignoriere Vermittlungsgebühren bei der Ermittlung der Erträge"
-
-#~ msgid "Most recent to report"
-#~ msgstr "Neuester vor Berichtsdatum"
-
-#~ msgid "The most recent recorded price before report date."
-#~ msgstr "Der aktuellste aufgezeichnete Preis vor dem Datum des Berichts."
-
-#~ msgid "FILO"
-#~ msgstr "FILO"
-
-#~ msgid "Use first-in last-out method for basis."
-#~ msgstr ""
-#~ "Verwende die First-In Last-Out-Zuordnung (zuerst erworbene werden zuletzt "
-#~ "verkauft) zur Ermittlung der Basis."
-
-#~ msgid "Welcome to GnuCash 2.4!"
-#~ msgstr "Willkommen zu GnuCash 2.4!"
