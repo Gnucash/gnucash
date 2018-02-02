@@ -1585,6 +1585,7 @@ AC_CONFIG_FILES(
   src/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in
   src/gnome/gschemas/org.gnucash.dialogs.totd.gschema.xml.in
   src/gnome/gschemas/org.gnucash.gschema.xml.in
+  src/gnome/gschemas/org.gnucash.general.finance-quote.gschema.xml.in
   src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in
   src/gnome/gschemas/org.gnucash.window.pages.gschema.xml.in
   src/gnome-utils/gschemas/org.gnucash.history.gschema.xml.in

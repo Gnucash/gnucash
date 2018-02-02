@@ -453,6 +453,13 @@
                #f)))
        prices)))
 
+  ;; Add the alphavantage api key to the environment. This value is taken from
+  ;; the Online Quotes preference tab
+  (let* ((alphavantage-api-key (gnc-prefs-get-string "general.finance-quote" "alphavantage-api-key")))
+        (gnc:debug (string-concatenate (list "ALPHAVANTAGE_API_KEY=" alphavantage-api-key)))
+        (if (not (string-null? alphavantage-api-key))
+            (setenv "ALPHAVANTAGE_API_KEY" alphavantage-api-key)))
+
   ;; FIXME: uses of gnc:warn in here need to be cleaned up.  Right
   ;; now, they'll result in funny formatting.
 

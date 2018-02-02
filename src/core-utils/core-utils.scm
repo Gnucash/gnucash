@@ -60,5 +60,6 @@
 (re-export gnc-prefs-set-float)
 (re-export gnc-prefs-set-string)
 (re-export gnc-prefs-set-coords)
+(re-export gnc-prefs-get-string)
 
 (define-public gnc:version (gnc-version))

@@ -7,6 +7,7 @@ SET(gnome_GSCHEMA
   org.gnucash.dialogs.sxs.gschema.xml
   org.gnucash.dialogs.totd.gschema.xml
   org.gnucash.gschema.xml
+  org.gnucash.general.finance-quote.gschema.xml
   org.gnucash.window.pages.account.tree.gschema.xml
   org.gnucash.window.pages.gschema.xml
 )

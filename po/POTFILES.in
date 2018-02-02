@@ -238,6 +238,7 @@ src/gnome/gnc-split-reg.c
 [type: gettext/gsettings]src/gnome/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in.in
 [type: gettext/gsettings]src/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in
 [type: gettext/gsettings]src/gnome/gschemas/org.gnucash.dialogs.totd.gschema.xml.in.in
+[type: gettext/gsettings]src/gnome/gschemas/org.gnucash.general.finance-quote.gschema.xml.in.in
 [type: gettext/gsettings]src/gnome/gschemas/org.gnucash.gschema.xml.in.in
 [type: gettext/gsettings]src/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in
 [type: gettext/gsettings]src/gnome/gschemas/org.gnucash.window.pages.gschema.xml.in.in
@@ -494,7 +495,6 @@ src/plugins/customer_import/gnc-plugin-customer_import.c
 src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade
 src/plugins/customer_import/libgncmod-customer_import.c
 src/plugins/example/gncmod-example.c
-src/plugins/example/gnc-plugin.example.c
 src/python/gncmod-python.c
 src/register/ledger-core/gnc-ledger-display2.c
 src/register/ledger-core/gnc-ledger-display.c
