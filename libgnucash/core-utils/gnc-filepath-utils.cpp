@@ -318,6 +318,27 @@ gnc_path_find_localized_html_file (const gchar *file_name)
 }
 
 /* ====================================================================== */
+static auto gnc_userdata_home = bfs::path();
+static auto build_dir = bfs::path();
+
+static bool dir_is_descendant (const bfs::path& path, const bfs::path& base)
+{
+    auto test_path = path;
+    if (bfs::exists (path))
+        test_path = bfs::canonical (path);
+    auto test_base = base;
+    if (bfs::exists (base))
+        test_base = bfs::canonical (base);
+
+    auto is_descendant = (test_path.string() == test_base.string());
+    while (!test_path.empty() && !is_descendant)
+    {
+        test_path = test_path.parent_path();
+        is_descendant = (test_path.string() == test_base.string());
+    }
+    return is_descendant;
+}
+
 /** @brief Check that the supplied directory path exists, is a directory, and
  * that the user has adequate permissions to use it.
  *
@@ -329,13 +350,39 @@ gnc_validate_directory (const bfs::path &dirname)
     if (dirname.empty())
         return false;
 
-    /* Create directories if they don't exist yet
+    auto create_dirs = true;
+    if (build_dir.empty() || !dir_is_descendant (dirname, build_dir))
+    {
+        /* Gnucash won't create a home directory
+         * if it doesn't exist yet. So if the directory to create
+         * is a descendant of the homedir, we can't create it either.
+         * This check is conditioned on do_homedir_check because
+         * we need to overrule it during build (when guile interferes)
+         * and testing.
+         */
+        auto home_dir = bfs::path (g_get_home_dir ());
+        auto homedir_exists = bfs::exists(home_dir);
+        auto is_descendant = dir_is_descendant (dirname, home_dir);
+        if (!homedir_exists && is_descendant)
+            create_dirs = false;
+    }
+
+    /* Create directories if they don't exist yet and we can
+     *
      * Note this will do nothing if the directory and its
      * parents already exist, but will fail if the path
      * points to a file or a softlink. So it serves as a test
      * for that as well.
      */
-    bfs::create_directories(dirname);
+    if (create_dirs)
+        bfs::create_directories(dirname);
+    else
+        throw (bfs::filesystem_error (
+            std::string (dirname.string() +
+                         " is a descendant of a non-existing home directory. As " +
+                         PACKAGE_NAME +
+                         " will never create a home directory this path can't be used"),
+            dirname, bst::error_code(bst::errc::permission_denied, bst::generic_category())));
 
     auto d = bfs::directory_entry (dirname);
     auto perms = d.status().permissions();
@@ -356,8 +403,6 @@ gnc_validate_directory (const bfs::path &dirname)
 
     return true;
 }
-
-static auto gnc_userdata_home = bfs::path();
 
 /* Will attempt to copy all files and directories from src to dest
  * Returns true if successful or false if not */
@@ -508,16 +553,15 @@ gnc_filepath_init (void)
      * in the base of the build directory. This is to deal with all kinds of
      * issues when the build environment is not a complete environment (like
      * it could be missing a valid home directory). */
-    auto builddir = g_getenv ("GNC_BUILDDIR");
+    auto env_build_dir = g_getenv ("GNC_BUILDDIR");
+    build_dir = bfs::path(env_build_dir ? env_build_dir : "");
     auto running_uninstalled = (g_getenv ("GNC_UNINSTALLED") != NULL);
-    if (running_uninstalled && builddir)
+    if (running_uninstalled && !build_dir.empty())
     {
-        auto build_home = g_build_filename (builddir, "gnc_data_home", NULL);
-        gnc_userdata_home = bfs::path(build_home);
-        g_free (build_home);
+        gnc_userdata_home = build_dir / "gnc_data_home";
         try
         {
-            gnc_validate_directory(gnc_userdata_home); // May throw
+            gnc_validate_directory (gnc_userdata_home); // May throw
             have_valid_userdata_home = true;
             gnc_userdata_home_exists = true; // To prevent possible migration further down
         }
@@ -530,19 +574,18 @@ gnc_filepath_init (void)
         }
     }
 
-
     if (!have_valid_userdata_home)
     {
         /* If environment variable GNC_DATA_HOME is set, try whether
          * it points at a valid directory. */
-        auto gnc_userdata_home_env = g_getenv("GNC_DATA_HOME");
+        auto gnc_userdata_home_env = g_getenv ("GNC_DATA_HOME");
         if (gnc_userdata_home_env)
         {
-            gnc_userdata_home = bfs::path(gnc_userdata_home_env);
+            gnc_userdata_home = bfs::path (gnc_userdata_home_env);
             try
             {
-                gnc_userdata_home_exists = bfs::exists(gnc_userdata_home);
-                gnc_validate_directory(gnc_userdata_home); // May throw
+                gnc_userdata_home_exists = bfs::exists (gnc_userdata_home);
+                gnc_validate_directory (gnc_userdata_home); // May throw
                 have_valid_userdata_home = true;
             }
             catch (const bfs::filesystem_error& ex)
@@ -563,31 +606,31 @@ gnc_filepath_init (void)
         gnc_userdata_home = userdata_home / PACKAGE;
         try
         {
-            gnc_userdata_home_exists = bfs::exists(gnc_userdata_home);
-            gnc_validate_directory(gnc_userdata_home);
+            gnc_userdata_home_exists = bfs::exists (gnc_userdata_home);
+            gnc_validate_directory (gnc_userdata_home);
         }
         catch (const bfs::filesystem_error& ex)
         {
-            g_warning("User data directory doesn't exist, yet could not be created. Proceed with caution.\n"
+            g_warning ("User data directory doesn't exist, yet could not be created. Proceed with caution.\n"
             "(Error: %s)", ex.what());
         }
     }
 
     auto migrated = FALSE;
     if (!gnc_userdata_home_exists)
-        migrated = copy_recursive(bfs::path (g_get_home_dir()) / ".gnucash",
-                                  gnc_userdata_home);
+        migrated = copy_recursive (bfs::path (g_get_home_dir()) / ".gnucash",
+                                   gnc_userdata_home);
 
     /* Try to create the standard subdirectories for gnucash' user data */
     try
     {
-        gnc_validate_directory(gnc_userdata_home / "books");
-        gnc_validate_directory(gnc_userdata_home / "checks");
-        gnc_validate_directory(gnc_userdata_home / "translog");
+        gnc_validate_directory (gnc_userdata_home / "books");
+        gnc_validate_directory (gnc_userdata_home / "checks");
+        gnc_validate_directory (gnc_userdata_home / "translog");
     }
     catch (const bfs::filesystem_error& ex)
     {
-        g_warning("Default user data subdirectories don't exist, yet could not be created. Proceed with caution.\n"
+        g_warning ("Default user data subdirectories don't exist, yet could not be created. Proceed with caution.\n"
         "(Error: %s)", ex.what());
     }
 

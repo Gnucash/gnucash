@@ -160,13 +160,14 @@ main(int argc, char **argv)
     g_unsetenv("GNC_UNINSTALLED");
 
 
-    /* Second run, with existing userdata_dir, but without the GnuCash subdir
+    /* Second run, with XDG_DATA_HOME set and with existing home_dir, but
+     * without the XDG_DATA_HOME subdirectories.
        This test can not be run on OS X or Windows, as our code is not using
        XDG_DATA_HOME on these platforms */
 #ifndef MAC_INTEGRATION
 #ifndef G_OS_WIN32
+    g_mkdir_with_parents(home_dir, 0750);
     userdata_dir = g_build_filename(home_dir, ".local", "share", (gchar *)NULL);
-    g_mkdir_with_parents(userdata_dir, 0750);
     g_setenv("XDG_DATA_HOME", userdata_dir, TRUE);
     gnc_filepath_init();
     for (i = 0; strs2[i].funcname != NULL; i++)

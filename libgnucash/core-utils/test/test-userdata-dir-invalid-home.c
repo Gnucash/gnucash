@@ -70,6 +70,8 @@ main(G_GNUC_UNUSED int argc, G_GNUC_UNUSED char **argv)
 #ifndef G_OS_WIN32
     int i;
     const char *tmp_dir = g_get_tmp_dir();
+    const char *builddir = g_getenv ("GNC_BUILDDIR");
+    char *homedir = g_build_filename (builddir, "notexist", NULL);
 
     /* Assume we're not in a build environment to test
      * the function's actual behaviour in a real world use case, using
@@ -80,7 +82,7 @@ main(G_GNUC_UNUSED int argc, G_GNUC_UNUSED char **argv)
     /* Run usr conf dir tests with an invalid homedir
      * The code should fall back to using the temporary
      * directory in that case. */
-    g_setenv("HOME", "/notexist", TRUE);
+    g_setenv("HOME", homedir, TRUE);
     for (i = 0; strs2[i].funcname != NULL; i++)
     {
         char *daout;
