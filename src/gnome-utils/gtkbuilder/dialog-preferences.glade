@@ -3810,6 +3810,7 @@ many months before the current month:</property>
                   <object class="GtkLabel" id="label23">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">To retrieve online quotes from Alphavantage, this key needs to be set. A key can be retrieved from the Alpha Vantage website.</property>
                     <property name="label" translatable="yes">Alpha Vantage API key</property>
                   </object>
                   <packing>
@@ -3821,6 +3822,7 @@ many months before the current month:</property>
                   <object class="GtkEntry" id="pref/general.finance-quote/alphavantage-api-key">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="tooltip_text" translatable="yes">To retrieve online quotes from Alphavantage, this key needs to be set. A key can be retrieved from the Alpha Vantage website.</property>
                     <property name="invisible_char">●</property>
                     <property name="primary_icon_activatable">False</property>
                     <property name="secondary_icon_activatable">False</property>
