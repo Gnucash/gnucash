@@ -14,10 +14,11 @@ SET(doc_DATA
   README.win32-bin.txt
   guile-hackers.txt
   projects.html
+  gtk-3.0.css
 )
 
 SET(doc_noinst_DATA
-        build-aix.txt build-solaris.txt CMakeLists.txt gnc-fq-dump.1 gnc-fq-helper.1 gnucash.1.in gtkrc-2.0.gnucash
+        build-aix.txt build-solaris.txt CMakeLists.txt gnc-fq-dump.1 gnc-fq-helper.1 gnucash.1.in
         misc-notes.txt README.HBCI README.OFX README.translator.txt tip_of_the_day.list.in
         TRANSLATION_HOWTO)
 
