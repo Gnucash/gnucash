@@ -520,10 +520,23 @@ ENDIF (Boost_FOUND)
 
 # Compiler flags
 
-IF (APPLE)
-  ADD_DEFINITIONS(-Wno-unknown-attributes -Wno-typedef-redefinition)
+if (APPLE)
+  include (CheckCCompilerFlag)
+  include (CheckCxxCompilerFlag)
+  Check_CXX_Compiler_Flag(-Wno-unused-local-typedef, have_wno_ult)
+  if (have_wno_ult)
+    SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-local-typedef -Wmissing-prototypes")
+  else()
+    SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wmissing-prototypes")
+  endif()
+  Check_C_Compiler_Flag(-Wno-unknown-attributes have_no_unkatt)
+  if (have_no_unkatt)
+    ADD_DEFINITIONS(-Wno-unknown-attributes -Wno-typedef-redefinition)
+  else()
+    ADD_DEFINITIONS(-Wno-typedef-redefinition)
+  endif()
   #  SET (CMAKE_OSX_ARCHITECTURES "i386")
-ENDIF (APPLE)
+endif (APPLE)
 
 
 # Also, set the C++ version to c++11
@@ -533,9 +546,6 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")  # FIXME: should be -std=
 IF (UNIX)
   SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wno-pointer-sign -Wall -Wmissing-prototypes -Wmissing-declarations -Wno-unused")
   SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -Wall -Wmissing-declarations -Wno-unused")
-  IF (APPLE)
-      SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wmissing-prototypes")
-    ENDIF()
   SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-deprecated-declarations -std=gnu11")
   SET( CMAKE_C_FLAGS_RELEASE "-O3 ${CMAKE_C_FLAGS} -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2")
 ENDIF (UNIX)
@@ -543,9 +553,7 @@ IF (MINGW)
   SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wno-pointer-sign -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused -Wno-error=deprecated-declarations -std=gnu11")
   SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWINVER=0x0500 -D_EMULATE_GLIBC=0") # Workaround for bug in gtest on mingw, see https://github.com/google/googletest/issues/893 and https://github.com/google/googletest/issues/920
 ENDIF (MINGW)
-IF (APPLE)
-  SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-local-typedef")
-ENDIF(APPLE)
+
 SET( CMAKE_C_FLAGS_DEBUG "-O0 -g ${CMAKE_C_FLAGS}")
 SET( CMAKE_CXX_FLAGS_DEBUG "-O0 -g ${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations")
 
