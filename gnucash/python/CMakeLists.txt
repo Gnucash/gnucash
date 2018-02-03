@@ -19,11 +19,19 @@ ENDIF()
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   )
 
-  INSTALL(DIRECTORY pycons DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/python)
+  INSTALL(DIRECTORY pycons DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/python
+    PATTERN Makefile.* EXCLUDE
+    PATTERN CMake* EXCLUDE
+    PATTERN CTest* EXCLUDE
+    PATTERN cmake* EXCLUDE)
   INSTALL(FILES init.py DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/python)
 
+  FILE(COPY pycons DESTINATION ${CMAKE_BINARY_DIR}/share/gnucash/python
+    PATTERN Makefile.* EXCLUDE
+    PATTERN CMake* EXCLUDE
+    PATTERN CTest* EXCLUDE
+    PATTERN cmake* EXCLUDE)
   FILE(COPY init.py DESTINATION ${CMAKE_BINARY_DIR}/share/gnucash/python)
-  FILE(COPY pycons DESTINATION ${CMAKE_BINARY_DIR}/share/gnucash/python)
 ENDIF(WITH_PYTHON)
 
 SET_LOCAL_DIST(python_DIST_local CMakeLists.txt gncmod-python.c init.py)
