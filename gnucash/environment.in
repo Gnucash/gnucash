@@ -34,15 +34,15 @@
 # GNC_HOME the directory where GnuCash was installed. This is the base
 #          directory of all the other directories below
 # GNC_BIN  the directory where the GnuCash executable resides. This is
-#          equivalent to {GNUCASH_HOME}/bin
+#          equivalent to {GNC_HOME}/bin
 # GNC_LIB  the directory where the GnuCash private libraries reside. This is
-#          equivalent to {GNUCASH_HOME}/lib/gnucash
+#          equivalent to {GNC_HOME}/lib/gnucash
 # GNC_DATA the directory where GnuCash specific additional data is stored,
-#          equivalent to {GNUCASH_HOME}/share/gnucash
+#          equivalent to {GNC_HOME}/share/gnucash
 # GNC_CONF the directory where GnuCash configuration files are stored,
-#          equivalent to {GNUCASH_HOME}/etc/gnucash
+#          equivalent to {GNC_HOME}/etc/gnucash
 # SYS_LIB  the directory where the GnuCash public libraries reside. This is
-#          equivalent to {GNUCASH_HOME}/lib
+#          equivalent to {GNC_HOME}/lib
 
 [Variables]
 # PATH is used to find the finance::quote utility functions
