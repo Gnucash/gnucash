@@ -60,7 +60,7 @@ GUILE_WARN_DEPRECATED=no
 # modules.
 # GUILE_LIBS=
 # GUILE_COMPILED_LIBS=
-GUILE_LOAD_PATH={GNC_DATA}/scm;{GUILE_LIBS};{GUILE_LOAD_PATH}
+GUILE_LOAD_PATH={GNC_DATA}/scm;{GNC_HOME}/share/guile//@GUILE_EFFECTIVE_VERSION@;{GUILE_LIBS};{GUILE_LOAD_PATH}
 
 # On Windows {GNC_LIB} points to {GNC_HOME}/bin because that's where the DLLs
 # are. It's not where the compiled scheme files are so we use {SYS_LIB} here.
