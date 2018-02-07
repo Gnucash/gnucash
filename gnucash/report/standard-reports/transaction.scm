@@ -397,6 +397,8 @@ Credit Card, and Income accounts."))
   (gnc:option-set-value (gnc:lookup-option options pagename-sorting optname-prime-sortkey) 'reconciled-status)
   (gnc:option-set-value (gnc:lookup-option options pagename-sorting optname-sec-sortkey)   'date)
   (gnc:option-set-value (gnc:lookup-option options pagename-sorting optname-sec-date-subtotal) 'none)
+  ;; the start date should really be the last-reconcile-date but this information is not
+  ;; easily accessible from scheme:
   (gnc:option-set-value (gnc:lookup-option options gnc:pagename-general optname-startdate) (cons 'relative 'start-prev-quarter))
   (gnc:option-set-value (gnc:lookup-option options gnc:pagename-general optname-enddate)   (cons 'relative 'today))
   (gnc:option-set-value (gnc:lookup-option options gnc:pagename-display (N_ "Reconciled Date")) #t)
@@ -413,6 +415,15 @@ Credit Card, and Income accounts."))
   (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
   (define (gnc:register-trep-option new-option)
     (gnc:register-option options new-option))
+
+  ;; (Feb 2018) Note to future hackers - this trep-options-generator
+  ;; defines a long set of options to be assigned as an object in
+  ;; the report. This long list (52 at Feb 2018 count) of options
+  ;; may be modified in a derived report (see income-gst-statement.scm)
+  ;; via gnc:make-internal! and gnc-unregister-option to hide
+  ;; and remove options, respectively. If an option is unregistered,
+  ;; don't forget to re-register them via gnc:register-option, unless
+  ;; your derived report truly does not require them.
 
   ;; General options
 
@@ -550,8 +561,6 @@ tags within description, notes or memo. ")
       (gnc-option-db-set-option-selectable-by-name
        options gnc:pagename-accounts optname-filterby
        (not (eq? x 'none))))))
-  ;;
-
 
   ;; Sorting options
 
@@ -870,10 +879,14 @@ tags within description, notes or memo. ")
       gnc:pagename-display (N_ "Sign Reverses")
       "m1" (_ "Reverse amount display for certain account types.")
       'global
-      (keylist->vectorlist sign-reverse-list)))
+      (keylist->vectorlist sign-reverse-list))))
 
-    (gnc:register-trep-option
-     (gnc:make-internal-option "__trep" "unique-transactions" #f)))
+  ;; this hidden option will toggle whether the default
+  ;; qof-query is run, or a different query which ensures
+  ;; no transaction is duplicated. It can be enabled in
+  ;; a derived report (eg income-gst-statement.scm)
+  (gnc:register-trep-option
+   (gnc:make-internal-option "__trep" "unique-transactions" #f))
 
   (gnc:options-set-default-section options gnc:pagename-general)
   options)
@@ -887,7 +900,7 @@ tags within description, notes or memo. ")
     (let ((option (gnc:lookup-option options section name)))
       (if option
           (gnc:option-value option)
-          (error (format #f "cannot find ~a ~a" section name)))))
+          (gnc:error "gnc:lookup-option error: " section "/" name))))
   (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
 
   (define (build-columns-used)
@@ -1114,11 +1127,11 @@ tags within description, notes or memo. ")
          ;; each column will be a vector
          ;; (vector heading
          ;;         calculator-function                          ;; (calculator-function split) to obtain amount
-         ;;         reverse-column?                              ;; to optionally reverse signs
-         ;;         subtotal?                                    ;; subtotal? to allow subtotals (ie irrelevant for running balance)
-         ;;         start-dual-column?                           ;; #t for the left side of a dual column (i.e. debit/credit)
-         ;;                                                      ;; which means the next column will be the right side
-         ;;         friendly-heading-fn                          ;; retrieve friendly heading name for account debit/credit
+         ;;         reverse-column?                              ;; #t to allow reverse signs
+         ;;         subtotal?                                    ;; #t to allow subtotals (ie must be #f for running balance)
+         ;;         start-dual-column?                           ;; #t for the debit side of a dual column (i.e. debit/credit)
+         ;;                                                      ;; which means the next column must be the credit side
+         ;;         friendly-heading-fn                          ;; (friendly-heading-fn account) to retrieve friendly name for account debit/credit
          (if (column-uses? 'amount-single)
              (list (vector (header-commodity (_ "Amount"))
                            amount #t #t #f
@@ -1604,6 +1617,13 @@ tags within description, notes or memo. ")
 
 
 (define* (trep-renderer report-obj #:key custom-calculated-cells empty-report-message custom-split-filter)
+  ;; the trep-renderer is a define* function which, at minimum, takes the report object
+  ;;
+  ;; the optional arguments are:
+  ;; #:custom-calculated-cells - a list of vectors to define customized data columns
+  ;; #:empty-report-message - a str which is displayed at the initial report opening
+  ;; #:custom-split-filter - a split->bool function to add to the split filter
+
   (define options (gnc:report-options report-obj))
   (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
   (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
@@ -1732,10 +1752,12 @@ tags within description, notes or memo. ")
                document
                (gnc:html-make-no-account-warning report-title (gnc:report-id report-obj)))
 
-              (and empty-report-message
-                   (gnc:html-document-add-object!
-                    document
-                    empty-report-message)))
+              ;; if an empty-report-message is passed by a derived report to
+              ;; the renderer, display it here.
+              (if empty-report-message
+                  (gnc:html-document-add-object!
+                   document
+                   empty-report-message)))
 
           (if (member 'no-match infobox-display)
               (gnc:html-document-add-object!
@@ -1777,6 +1799,7 @@ tags within description, notes or memo. ")
           ;; Combined Filter:
           ;; - include/exclude splits to/from selected accounts
           ;; - substring/regex matcher for Transaction Description/Notes/Memo
+          ;; - custom-split-filter, a split->bool function for derived reports
           ;; - by reconcile status
           (set! splits (filter
                         (lambda (split)

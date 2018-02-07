@@ -58,11 +58,14 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
          (not (xaccTransGetIsClosingTxn trans)))))
 
 (define (gst-statement-options-generator)
+
   ;; Retrieve the list of options specified within the transaction report
   (define options (trep-options-generator))
 
-  ;; Delete Accounts selector and recreate with limited account types
+  ;; Delete Accounts selector
   (gnc:unregister-option options gnc:pagename-accounts (N_ "Accounts"))
+
+  ;;  and recreate with limited account types
   (gnc:register-option
    options
    (gnc:make-account-list-limited-option
@@ -125,8 +128,8 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                               (amount (+ (gnc:gnc-monetary-amount a) (gnc:gnc-monetary-amount b))))
                           (if same-currency?
                               (gnc:make-gnc-monetary (gnc:gnc-monetary-commodity a) amount)
-                              (warn "incompatible currencies in monetary+: " a b)))
-                        (warn "wrong arguments for monetary+: " a b))))
+                              (gnc:error "incompatible currencies in monetary+: " a b)))
+                        (gnc:error "wrong arguments for monetary+: " a b))))
        (myadd (lambda (X Y) (if X (if Y (monetary+ X Y) X) Y)))               ; custom adder which understands #f values
        (myneg (lambda (X) (and X (gnc:monetary-neg X))))                      ; custom monetary negator which understands #f
        (accounts (opt-val gnc:pagename-accounts "Accounts"))
@@ -140,14 +143,22 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
        (split-date (lambda (s) (xaccTransGetDate (xaccSplitGetParent s))))
        (split-currency (lambda (s) (xaccAccountGetCommodity (xaccSplitGetAccount s))))
        (split-adder (lambda (split accountlist)
-                      (let* ((transaction (xaccSplitGetParent split))
+                      (let* (;; 1. from split, get the trans
+                             (transaction (xaccSplitGetParent split))
+                             ;; 2. from trans, get all splits
                              (splits-in-transaction (xaccTransGetSplitList transaction))
+                             ;; 3. but only from accounts specified
+                             (include-split? (lambda (s) (member (xaccSplitGetAccount s) accountlist)))
+                             (filtered-splits (filter include-split? splits-in-transaction))
+                             ;; 4. get the filtered split amount
                              (split-get-monetary (lambda (s)
                                                    (gnc:make-gnc-monetary
                                                     (split-currency s)
                                                     (if (xaccTransGetVoidStatus transaction)
                                                         (xaccSplitVoidFormerAmount s)
                                                         (xaccSplitGetAmount s)))))
+                             ;; 5. amount - always convert to
+                             ;; either report currency or the original split currency
                              (split-monetary-converted (lambda (s)
                                                          (gnc:exchange-by-pricedb-nearest
                                                           (split-get-monetary s)
@@ -155,8 +166,6 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                                                               (split-currency split))
                                                           (time64CanonicalDayTime
                                                            (split-date s)))))
-                             (include-split? (lambda (s) (member (xaccSplitGetAccount s) accountlist)))
-                             (filtered-splits (filter include-split? splits-in-transaction))
                              (list-of-values (map split-monetary-converted filtered-splits)))
                         (fold myadd #f list-of-values))))
        (account-adder (lambda (acc) (lambda (s) (split-adder s (list acc)))))
@@ -177,10 +186,10 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
      ;; each column will be a vector
      ;; (vector heading
      ;;         calculator-function                          ;; (calculator-function split) to obtain amount
-     ;;         reverse-column?                              ;; to optionally reverse signs
-     ;;         subtotal?                                    ;; subtotal? to allow subtotals (ie irrelevant for running balance)
-     ;;         start-dual-column?                           ;; #t for the left side of a dual column (i.e. debit/credit)
-     ;;         friendly-heading-fn                          ;; retrieve friendly heading name for account debit/credit
+     ;;         reverse-column?                              ;; unused in GST report
+     ;;         subtotal?                                    ;; #t - all columns need subtotals
+     ;;         start-dual-column?                           ;; unused in GST report
+     ;;         friendly-heading-fn                          ;; unused in GST report
      (list (vector "TOTAL SALES"
                    total-sales
                    #t #t #f
