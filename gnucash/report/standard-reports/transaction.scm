@@ -1603,7 +1603,7 @@ tags within description, notes or memo. ")
 ;; Here comes the renderer function for this report.
 
 
-(define* (trep-renderer report-obj #:key custom-calculated-cells empty-report-message)
+(define* (trep-renderer report-obj #:key custom-calculated-cells empty-report-message custom-split-filter)
   (define options (gnc:report-options report-obj))
   (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
   (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
@@ -1793,6 +1793,8 @@ tags within description, notes or memo. ")
                                      (match? (xaccTransGetDescription trans))
                                      (match? (xaccTransGetNotes trans))
                                      (match? (xaccSplitGetMemo split)))
+                                 (or (not custom-split-filter)     ; #f = ignore custom-split-filter
+                                     (custom-split-filter split))
                                  (or (not reconcile-status-filter) ; #f = ignore next filter
                                      (member (xaccSplitGetReconcile split) reconcile-status-filter)))))
                         splits))

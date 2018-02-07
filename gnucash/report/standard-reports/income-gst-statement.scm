@@ -45,7 +45,17 @@ accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY fo
 (define (income-gst-statement-renderer rpt)
   (trep-renderer rpt
                  #:custom-calculated-cells gst-calculated-cells
-                 #:empty-report-message TAX-SETUP-DESC))
+                 #:empty-report-message TAX-SETUP-DESC
+                 #:custom-split-filter gst-custom-split-filter))
+
+(define (gst-custom-split-filter split)
+  ;; split -> bool
+  ;;
+  ;; additional split filter - returns #t if split must be included
+  ;; we need to exclude Closing, Link and Payment transactions
+  (let ((trans (xaccSplitGetParent split)))
+    (and (member (xaccTransGetTxnType trans) (list TXN-TYPE-NONE TXN-TYPE-INVOICE))
+         (not (xaccTransGetIsClosingTxn trans)))))
 
 (define (gst-statement-options-generator)
   ;; Retrieve the list of options specified within the transaction report
