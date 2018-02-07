@@ -1722,12 +1722,6 @@
                                         "Void Transactions?" (cons "Filter" "Void Transactions")
                                         "Void Transactions" (cons "Filter" "Void Transactions")
                                         "Account Substring" (cons "Filter" "Account Name Filter")
-                                        "Account Matcher" (cons "Filter" "Account Name Filter")
-                                        "Transaction Matcher" (cons "Filter" "Transaction Filter")
-                                        "Account Matcher uses regular expressions for extended matching"
-                                        (cons "Filter" "Use regular expressions for account name filter")
-                                        "Transaction Matcher uses regular expressions for extended matching"
-                                        (cons "Filter" "Use regular expressions for transaction filter")
                                         ))
                        (name-match (member name new-names-list)))
 
@@ -2130,4 +2124,4 @@
   (let ((opt (gnc:lookup-option options section name)))
     (if opt
         (vector-set! opt 3 'internal)
-        (error "gnc:option-make-internal! cannot find section / name"))))
+        (gnc:error "gnc:option-make-internal! cannot find " section " / " name))))
