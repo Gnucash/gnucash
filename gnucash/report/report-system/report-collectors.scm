@@ -93,7 +93,8 @@
          (slotset (make-slotset (lambda (split)
                                   (let* ((date (split->date split))
                                          (interval-index (binary-search-lt (lambda (pair date)
-                                                                             (<= (car pair) date))
+                                                                             (or (not (car pair))
+                                                                                 (<= (car pair) date)))
                                                                            date
                                                                            date-vector))
                                          (interval (vector-ref date-vector interval-index)))
@@ -155,7 +156,7 @@
     (list min-date max-date dates)))
 
 (define (category-report-dates-accumulate dates)
-  (let* ((min-date (decdate (car (list-min-max dates <)) DayDelta))
+  (let* ((min-date #f)
          (max-date (cdr (list-min-max dates <)))
          (datepairs (reverse! (cdr (fold (lambda (next acc)
                                            (let ((prev (car acc))

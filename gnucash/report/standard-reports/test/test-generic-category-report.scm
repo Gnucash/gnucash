@@ -65,6 +65,7 @@
   (and (null-test asset-report-uuid)
        (null-test liability-report-uuid)
        (asset-test asset-report-uuid)
+       (liability-test liability-report-uuid)
        #t))
 
 ;; No real test here, just confirm that no exceptions are thrown
@@ -242,3 +243,51 @@
 			 (= (/ (* row-count (+ row-count 1)) 2)
 			    (string->number (car (tbl-ref tbl (- row-count 1) 1))))
 			 #t)))))))
+
+(define (liability-test uuid)
+  ;; this test is tailored for bug 793278
+  ;; except we can't use $10,000 because the string->number
+  ;; function cannot handle thousand separators. Use $100.
+  (let* ((liability-template (gnc:find-report-template uuid))
+         (liability-options (gnc:make-report-options uuid))
+         (liability-report (constructor uuid "bar" liability-options
+                                        #t #t #f #f ""))
+         (liability-renderer (gnc:report-template-renderer liability-template)))
+    (let* ((env (create-test-env))
+           (asset--acc (env-create-root-account env ACCT-TYPE-ASSET (gnc-default-report-currency)))
+           (liabil-acc (env-create-root-account env ACCT-TYPE-CREDIT (gnc-default-report-currency)))
+           (income-acc (env-create-root-account env ACCT-TYPE-INCOME (gnc-default-report-currency))))
+      (env-create-transaction env (gnc-dmy2time64 01 10 2016) asset--acc liabil-acc 100) ;loan
+      (env-create-transaction env (gnc-dmy2time64 01 01 2017) asset--acc income-acc 10)  ;salary#1
+      (env-create-transaction env (gnc-dmy2time64 02 01 2017) liabil-acc asset--acc 9)   ;repay#1
+      (env-create-transaction env (gnc-dmy2time64 01 02 2017) asset--acc income-acc 10)  ;salary#2
+      (env-create-transaction env (gnc-dmy2time64 02 02 2017) liabil-acc asset--acc 9)   ;repay#2
+      (env-create-transaction env (gnc-dmy2time64 01 03 2017) asset--acc income-acc 10)  ;salary#3
+      (env-create-transaction env (gnc-dmy2time64 02 03 2017) liabil-acc asset--acc 9)   ;repay#3
+      (env-create-transaction env (gnc-dmy2time64 01 04 2017) asset--acc income-acc 10)  ;salary#4
+      (env-create-transaction env (gnc-dmy2time64 02 04 2017) liabil-acc asset--acc 9)   ;repay#4
+      (env-create-transaction env (gnc-dmy2time64 01 05 2017) asset--acc income-acc 10)  ;salary#5
+      (env-create-transaction env (gnc-dmy2time64 02 05 2017) liabil-acc asset--acc 9)   ;repay#5
+      (begin
+        (set-option liability-report gnc:pagename-display "Show table" #t)
+        (set-option liability-report gnc:pagename-general "Start Date" (cons 'absolute (gnc-dmy2time64 01 01 2017)))
+        (set-option liability-report gnc:pagename-general "End Date" (cons 'absolute (gnc-dmy2time64 31 12 2018)))
+        (set-option liability-report gnc:pagename-general "Step Size" 'MonthDelta)
+        (set-option liability-report gnc:pagename-general "Price Source" 'pricedb-nearest)
+        (set-option liability-report gnc:pagename-general "Report's currency"  (gnc-default-report-currency))
+        (set-option liability-report gnc:pagename-accounts "Accounts" (list liabil-acc))
+        (set-option liability-report gnc:pagename-accounts "Show Accounts until level"  'all)
+        (let ((doc (liability-renderer liability-report)))
+          (gnc:html-document-set-style-sheet! doc (gnc:report-stylesheet liability-report))
+          (let* ((html-document (gnc:html-document-render doc #f))
+                 (columns (columns-from-report-document html-document))
+                 (tbl (stream->list
+                       (pattern-streamer "<tr>"
+                                         (list (list "<td>([0-9][0-9])/([0-9][0-9])/([0-9][0-9])</td>" 1 2 3)
+                                               (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1))
+                                         html-document)))
+                 (row-count (tbl-row-count tbl)))
+            (and (= 2 (length columns))
+                 (= 100 (string->number (car (tbl-ref tbl 0 1))))
+                 (= 55 (string->number (car (tbl-ref tbl (- row-count 1) 1))))
+                 #t)))))))
