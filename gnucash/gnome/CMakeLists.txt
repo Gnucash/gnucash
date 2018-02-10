@@ -1,5 +1,4 @@
 
-ADD_SUBDIRECTORY(gschemas)
 ADD_SUBDIRECTORY(gtkbuilder)
 ADD_SUBDIRECTORY(ui)
 
@@ -201,4 +200,4 @@ INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop DESTINATION  ${CMAKE_I
 SET_LOCAL_DIST(gnome_DIST_local
         CMakeLists.txt gnome.i gnucash.appdata.xml.in gnucash.desktop.in.in
         ${gnc_gnome_noinst_HEADERS} ${gnc_gnome_SOURCES})
-SET(gnome_DIST ${gnome_DIST_local} ${gnome_ui_DIST} ${gnome_gschema_DIST} ${gnome_gtkbuilder_DIST} PARENT_SCOPE)
+SET(gnome_DIST ${gnome_DIST_local} ${gnome_ui_DIST} ${gnome_gtkbuilder_DIST} PARENT_SCOPE)

@@ -84,17 +84,6 @@ gnucash/gnome/gnc-plugin-register2.c
 gnucash/gnome/gnc-plugin-register.c
 gnucash/gnome/gnc-split-reg2.c
 gnucash/gnome/gnc-split-reg.c
-[type: gettext/gsettings]gnucash/gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in
-[type: gettext/gsettings]gnucash/gnome/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in
-[type: gettext/gsettings]gnucash/gnome/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in.in
-[type: gettext/gsettings]gnucash/gnome/gschemas/org.gnucash.dialogs.gschema.xml.in.in
-[type: gettext/gsettings]gnucash/gnome/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in.in
-[type: gettext/gsettings]gnucash/gnome/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in
-[type: gettext/gsettings]gnucash/gnome/gschemas/org.gnucash.dialogs.totd.gschema.xml.in.in
-[type: gettext/gsettings]gnucash/gnome/gschemas/org.gnucash.general.finance-quote.gschema.xml.in.in
-[type: gettext/gsettings]gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in
-[type: gettext/gsettings]gnucash/gnome/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in
-[type: gettext/gsettings]gnucash/gnome/gschemas/org.gnucash.window.pages.gschema.xml.in.in
 gnucash/gnome/gtkbuilder/assistant-acct-period.glade
 gnucash/gnome/gtkbuilder/assistant-hierarchy.glade
 gnucash/gnome/gtkbuilder/assistant-loan.glade
@@ -225,8 +214,6 @@ gnucash/gnome-utils/gnc-tree-view-split-reg.c
 gnucash/gnome-utils/gnc-tree-view-sx-list.c
 gnucash/gnome-utils/gnc-window.c
 gnucash/gnome-utils/gnome-utils.scm
-[type: gettext/gsettings]gnucash/gnome-utils/gschemas/org.gnucash.history.gschema.xml.in.in
-[type: gettext/gsettings]gnucash/gnome-utils/gschemas/org.gnucash.warnings.gschema.xml.in.in
 gnucash/gnome-utils/gtkbuilder/assistant-xml-encoding.glade
 gnucash/gnome-utils/gtkbuilder/dialog-account.glade
 gnucash/gnome-utils/gtkbuilder/dialog-book-close.glade
@@ -251,6 +238,19 @@ gnucash/gnome-utils/search-param.c
 gnucash/gnome-utils/tree-view-utils.c
 gnucash/gnome-utils/window-main-summarybar.c
 gnucash/gnucash-bin.c
+[type: gettext/gsettings]gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in
+[type: gettext/gsettings]gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in
+[type: gettext/gsettings]gnucash/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in.in
+[type: gettext/gsettings]gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in.in
+[type: gettext/gsettings]gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in.in
+[type: gettext/gsettings]gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in
+[type: gettext/gsettings]gnucash/gschemas/org.gnucash.dialogs.totd.gschema.xml.in.in
+[type: gettext/gsettings]gnucash/gschemas/org.gnucash.general.finance-quote.gschema.xml.in.in
+[type: gettext/gsettings]gnucash/gschemas/org.gnucash.gschema.xml.in.in
+[type: gettext/gsettings]gnucash/gschemas/org.gnucash.history.gschema.xml.in.in
+[type: gettext/gsettings]gnucash/gschemas/org.gnucash.warnings.gschema.xml.in.in
+[type: gettext/gsettings]gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in
+[type: gettext/gsettings]gnucash/gschemas/org.gnucash.window.pages.gschema.xml.in.in
 gnucash/html/gnc-html.c
 gnucash/html/gnc-html-factory.c
 gnucash/html/gnc-html-history.c

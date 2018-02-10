@@ -1,6 +1,5 @@
 # Note that gnucash/gnome-utils CANNOT depend on gnucash/gnome!
 
-ADD_SUBDIRECTORY(gschemas)
 ADD_SUBDIRECTORY(gtkbuilder)
 ADD_SUBDIRECTORY(ui)
 ADD_SUBDIRECTORY(test)
@@ -11,10 +10,7 @@ gnc_add_swig_guile_command (swig-gnome-utils-c
     ${CMAKE_CURRENT_SOURCE_DIR}/gnome-utils.i
 )
 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/gschemas/org.gnucash.warnings.gschema.xml.in.in
-               ${CMAKE_CURRENT_BINARY_DIR}/gschemas/org.gnucash.warnings.gschema.xml.in)
-
-SET (WARNINGS_SCHEMA gschemas/org.gnucash.warnings.gschema.xml.in)
+SET (WARNINGS_SCHEMA ../gschemas/org.gnucash.warnings.gschema.xml.in)
 SET (GNC_WARNINGS_C ${CMAKE_CURRENT_BINARY_DIR}/gnc-warnings.c)
 SET (GNC_WARNINGS_H ${CMAKE_CURRENT_BINARY_DIR}/gnc-warnings.h)
 
@@ -274,5 +270,5 @@ ADD_CUSTOM_TARGET(scm-gnome-utils ALL DEPENDS scm-gnome-utils-2 scm-gnome-utils-
 SET_LOCAL_DIST(gnome_utils_DIST_local CMakeLists.txt ${gnome_utils_SOURCES} ${gnome_utils_HEADERS}
         ${gnome_utils_noinst_HEADERS} gnome-utils.scm gnome-utils.i gnc-menu-extensions.scm
         make-gnc-warnings-c.xsl make-gnc-warnings-h.xsl)
-SET(gnome_utils_DIST ${gnome_utils_DIST_local} ${gnome_utils_gschema_DIST} ${test_gnome_utils_DIST}
+SET(gnome_utils_DIST ${gnome_utils_DIST_local} ${test_gnome_utils_DIST}
         ${gnome_utils_ui_DIST} ${gnome_utils_gtkbuilder_DIST} PARENT_SCOPE)

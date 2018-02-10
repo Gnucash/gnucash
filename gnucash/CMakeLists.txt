@@ -27,6 +27,7 @@ ADD_SUBDIRECTORY (import-export)
 ADD_SUBDIRECTORY (python)
 ADD_SUBDIRECTORY (register)
 ADD_SUBDIRECTORY (report)
+ADD_SUBDIRECTORY (gschemas)
 
 ADD_DEFINITIONS (-DHAVE_CONFIG_H)
 
@@ -242,24 +243,6 @@ IF (WIN32)
   INSTALL(PROGRAMS ${CMD_FILE} DESTINATION  ${CMAKE_INSTALL_BINDIR})
 ENDIF(WIN32)
 
-
-# Handle gschemas.compiled
-set(CMAKE_COMMAND_TMP "")
-if (${CMAKE_VERSION} VERSION_GREATER 3.1)
-    set(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
-endif()
-
-add_custom_command(
-    OUTPUT ${SCHEMADIR_BUILD}/gschemas.compiled
-    COMMAND ${CMAKE_COMMAND_TMP} ${GLIB_COMPILE_SCHEMAS} ${SCHEMADIR_BUILD}
-    DEPENDS ${gschema_depends}
-)
-
-add_custom_target(compiled-schemas ALL DEPENDS ${SCHEMADIR_BUILD}/gschemas.compiled)
-
-install(FILES ${SCHEMADIR_BUILD}/gschemas.compiled DESTINATION ${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas)
-
-
 # The GResource Files are absolute paths but SET_LOCAL_DIST requires
 # relative paths.
 FOREACH(gres_file ${gresource_files})
@@ -272,6 +255,6 @@ SET_LOCAL_DIST(gnucash_DIST_local CMakeLists.txt environment.in generate-gnc-scr
                gnucash-bin.c gnucash.rc.in gnucash-valgrind.in gnucash-gresources.xml ${gresource_files}
                ${gnucash_EXTRA_DIST})
 
-SET(gnucash_DIST ${gnucash_DIST_local} ${gnome_DIST} ${gnome_search_DIST}
+SET(gnucash_DIST ${gnucash_DIST_local} ${gschemas_DIST} ${gnome_DIST} ${gnome_search_DIST}
              ${gnome_utils_DIST} ${html_DIST} ${import_export_DIST} ${python_DIST} ${register_DIST} ${report_DIST}
              ${overrides_DIST} ${test_bin_DIST} PARENT_SCOPE)
