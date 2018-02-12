@@ -8884,7 +8884,7 @@
     <act:parent type="new">984e3a4bbeb1a32db7dd6df9437e6ee1</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Rückstellungen für Abschluß- und Prüfungskosten</act:name>
+    <act:name>Rückstellungen für Abschluss- und Prüfungskosten</act:name>
     <act:id type="new">9dd399dbda29584d1bf898838ecf2eac</act:id>
     <act:type>LIABILITY</act:type>
     <act:commodity>
@@ -21392,7 +21392,7 @@
     <act:parent type="new">34be7b6c3246314364ef3ad2c6aead4c</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>Abschluß- und Prüfungskosten</act:name>
+    <act:name>Abschluss- und Prüfungskosten</act:name>
     <act:id type="new">0a45ddd44e05c5daa293526d57a82346</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
