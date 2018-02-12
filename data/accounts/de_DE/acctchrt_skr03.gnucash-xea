@@ -1145,7 +1145,7 @@
     <act:parent type="new">d0c00095e4b00f9f25253307be05e885</act:parent>
   </gnc:account>
   <gnc:account version="2.0.0">
-    <act:name>4957 Abschluß- u. Prüfungskosten</act:name>
+    <act:name>4957 Abschluss- u. Prüfungskosten</act:name>
     <act:id type="new">bf093094a55c036a193357ebcafcab67</act:id>
     <act:type>EXPENSE</act:type>
     <act:commodity>
