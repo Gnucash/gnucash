@@ -487,21 +487,6 @@ GNC_PKG_CHECK_MODULES (ICU4C REQUIRED icu-uc)
 GNC_PKG_CHECK_MODULES (ICU4C_I18N REQUIRED icu-i18n)
 
 #BOOST
-IF (APPLE)
-  # I suppose I would rather use the shared Boost libraries here, but the Boost install procedure
-  # does not set RPATH for it's shared library correctly. It uses a 'naked' RPATH, which requires
-  # that DYLD_FALLBACK_LIBRARY_PATH be set. There is supposedly a dll-path option to set RPATH, but
-  # I can't get it to work (http://www.boost.org/build/doc/html/bbv2/faq/dll-path.html) and neither
-  # can some other random person on the internet:
-  # http://stackoverflow.com/questions/33667795/dll-path-has-no-effect-when-building-boost
-  # Using static libs simplifies things.
-  SET (Boost_USE_STATIC_LIBS ON)
-  SET (Boost_USE_STATIC_RUNTIME ON)
-ELSE()
-  SET (Boost_USE_STATIC_LIBS OFF)
-  SET (Boost_USE_STATIC_RUNTIME OFF)
-ENDIF()
-
 SET (Boost_USE_MULTITHREADED ON)
 SET (Boost_FIND_QUIETLY ON)
 
