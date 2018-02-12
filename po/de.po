@@ -14,7 +14,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 2.7.3\n"
+"Project-Id-Version: GnuCash 2.7.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-02-03 08:50-0800\n"
 "PO-Revision-Date: 2018-01.17 18:07+0100\n"
@@ -17664,9 +17664,8 @@ msgstr ""
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:892
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:833
-#, fuzzy
 msgid "The settings have been saved."
-msgstr "Einige Zeichen sind verworfen worden."
+msgstr "die einstellungen wurden gespeichert."
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:917
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:858
@@ -18043,7 +18042,7 @@ msgid ""
 msgstr ""
 "Dieser Assistent möchte Ihnen helfen, strukturierte Textdateien mit "
 "Buchungen zu importieren. Er unterstützt beides nämlich zeichenseparierte "
-"Dateien (durch Kommata oder Semikola getrennte Daten) und mit daten fester "
+"Dateien (durch Kommata oder Semikola getrennte Daten) und mit Daten fester "
 "Breite.\n"
 "\n"
 "Für einen erfolgreichen Import müssen diese drei Spalten in der zu "
@@ -18052,10 +18051,10 @@ msgstr ""
 "• eine Spalte Einzahlung oder Auszahlung\n"
 "\n"
 "Wenn keine Kontoangabe verfügbar ist, kann ein Basiskonto ausgewählt werden, "
-"auf das alle DDaten importiert werden.\n"
+"auf das alle Daten importiert werden.\n"
 "\n"
 "Alle importierten Buchungen eines Imports werden mit einem bestimmten Konto "
-"pro Import assiziiert. Wenn Sie eine Kontospalte wählen wird das Konto aus "
+"pro Import assoziiert. Wenn Sie eine Kontospalte wählen, wird das Konto aus "
 "der ersten Zeile für den gesamten Import verwendet.\n"
 "\n"
 "Es gibt verschiedene Optionen, Trennzeichen zu bestimmen, ebenso, wie eine "
