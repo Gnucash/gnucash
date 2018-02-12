@@ -18010,12 +18010,13 @@ msgid ""
 "built-in presets."
 msgstr ""
 "Dieser Assistent möchte Ihnen helfen, strukturierte Textdateien mit "
-"Buchungen zu importieren. Er unterstützt beides nämlich zeichenseparierte "
+"Buchungen zu importieren. Er unterstützt beides, nämlich zeichenseparierte "
 "Dateien (durch Kommata oder Semikola getrennte Daten) und mit Daten fester "
 "Breite.\n"
 "\n"
 "Für einen erfolgreichen Import müssen diese drei Spalten in der zu "
-"importierenden Datei vorhanden sein:• eine Datumsspalte\n"
+"importierenden Datei vorhanden sein:\n"
+"• eine Datumsspalte\n"
 "• eine Beschreibungsspalte\n"
 "• eine Spalte Einzahlung oder Auszahlung\n"
 "\n"
@@ -18121,7 +18122,7 @@ msgstr ""
 "\n"
 "Wenn es Probleme mit den Import-Einstellungen gibt, bringt Sie der Klick auf "
 "Weiter zurück zur vorherigen Seite, um dies zu prüfen und zu korrigieren.\n"
-"Wenn dies ihr erster Import ist, müssen Sie leider alle Zeilen manuell "
+"Wenn dies Ihr erster Import ist, müssen Sie leider alle Zeilen manuell "
 "zuordnen. Bei späteren Importen wird das Import-Modul versuchen, die "
 "Zuordnung basierend auf den früheren Importen vorzunehmen.\n"
 "\n"
@@ -18213,9 +18214,8 @@ msgid "Please select a date column."
 msgstr "Bitte wählen Sie die Datumsspalte."
 
 #: ../gnucash/import-export/csv-imp/gnc-price-import.cpp:433
-#, fuzzy
 msgid "Please select an amount column."
-msgstr "Sie müssen eine Datei angeben, die geladen werden soll."
+msgstr "Bitte wählen sie eine Betragsspalte."
 
 #: ../gnucash/import-export/csv-imp/gnc-price-import.cpp:440
 msgid ""
@@ -18325,9 +18325,8 @@ msgstr ""
 #: ../gnucash/import-export/csv-imp/gnc-trans-props.cpp:262
 #: ../gnucash/import-export/csv-imp/gnc-trans-props.cpp:473
 #: ../gnucash/import-export/csv-imp/gnc-trans-props.cpp:481
-#, fuzzy
 msgid " could not be understood.\n"
-msgstr "Spalte %s konnte nicht verarbeitet werden."
+msgstr "konnte nicht verstanden werden.\n"
 
 #: ../gnucash/import-export/csv-imp/gnc-price-props.cpp:229
 #: ../gnucash/import-export/csv-imp/gnc-trans-props.cpp:288
@@ -18335,9 +18334,8 @@ msgid "No date column."
 msgstr "Keine Datumsspalte."
 
 #: ../gnucash/import-export/csv-imp/gnc-price-props.cpp:231
-#, fuzzy
 msgid "No amount column."
-msgstr "Keine Datumsspalte."
+msgstr "Keine Betragsspalte."
 
 #: ../gnucash/import-export/csv-imp/gnc-price-props.cpp:233
 #, fuzzy
@@ -18419,9 +18417,8 @@ msgid ""
 msgstr ""
 
 #: ../gnucash/import-export/csv-imp/gnc-tx-import.cpp:470
-#, fuzzy
 msgid "Please select an account column."
-msgstr "Wählen Sie eine Kontoart"
+msgstr "Wählen Sie eine Kontenspalte."
 
 #: ../gnucash/import-export/csv-imp/gnc-tx-import.cpp:472
 msgid ""
@@ -18494,14 +18491,12 @@ msgstr ""
 # Fixme: Source
 #. Menu entry with label and tooltip
 #: ../gnucash/import-export/customer-import/gnc-plugin-customer-import.c:58
-#, fuzzy
 msgid "Import _Customers & Vendors..."
 msgstr "K_unden und Lieferanten importieren"
 
 #: ../gnucash/import-export/customer-import/gnc-plugin-customer-import.c:58
-#, fuzzy
 msgid "Import Customers and Vendors from a CSV text file."
-msgstr "Importiert Kunden oder Lieferanten aus Textdatei"
+msgstr "Importiert Kunden oder Lieferanten aus CSV-Datei"
 
 #. Title of dialog
 #: ../gnucash/import-export/customer-import/gtkbuilder/dialog-customer-import-gui.glade.h:2
@@ -22017,9 +22012,8 @@ msgid "%s&nbsp;Date"
 msgstr "%ssdatum"
 
 #: ../gnucash/report/business-reports/fancy-invoice.scm:877
-#, fuzzy
 msgid "Due&nbsp;Date"
-msgstr "%ssdatum"
+msgstr "Fälligkeitsdatum"
 
 #: ../gnucash/report/business-reports/fancy-invoice.scm:881
 #: ../gnucash/report/business-reports/invoice.scm:722
@@ -22096,9 +22090,8 @@ msgid "Job Report"
 msgstr "Auftragsbericht"
 
 #: ../gnucash/report/business-reports/owner-report.scm:56
-#, fuzzy
 msgid "Sale"
-msgstr "Umsatz"
+msgstr "Verkauf"
 
 #: ../gnucash/report/business-reports/owner-report.scm:81
 msgid "No valid customer selected."
@@ -22146,9 +22139,9 @@ msgid "Display the sale amount column?"
 msgstr "Betrag anzeigen?"
 
 #: ../gnucash/report/business-reports/owner-report.scm:599
-#, fuzzy
+
 msgid "Display the tax column?"
-msgstr "Konto anzeigen?"
+msgstr "Steuer-Spalte anzeigen?"
 
 #: ../gnucash/report/business-reports/owner-report.scm:604
 msgid "Display the period credits column?"
@@ -22175,9 +22168,8 @@ msgid "Payable Aging"
 msgstr "Entwicklung Verbindlichkeiten"
 
 #: ../gnucash/report/business-reports/receipt.eguile.scm:144
-#, fuzzy
 msgid "Invoice No."
-msgstr "Bemerkungen Rechnung"
+msgstr "Rechnungsnummer"
 
 #: ../gnucash/report/business-reports/receipt.eguile.scm:164
 msgid "Descr."
@@ -22673,35 +22665,29 @@ msgstr "Kundenrechnung mit Spalten für Steuerangaben (mit »eguile«-Vorlage)"
 
 #. (gnc:warn "title: " (gnc:option-value title-op))
 #: ../gnucash/report/business-reports/taxinvoice.scm:347
-#, fuzzy
 msgid "Unit"
 msgstr "Einheiten"
 
 #. (gnc:warn "unitprice: " (gnc:option-value unit-price-op))
 #: ../gnucash/report/business-reports/taxinvoice.scm:349
-#, fuzzy
 msgid "GST Rate"
 msgstr "Steuersatz"
 
 #: ../gnucash/report/business-reports/taxinvoice.scm:350
-#, fuzzy
 msgid "GST Amount"
-msgstr "Zum Betrag:"
+msgstr "Steuerbetrag"
 
 #: ../gnucash/report/business-reports/taxinvoice.scm:351
-#, fuzzy
 msgid "Amount Due (inc GST)"
 msgstr "Noch zu zahlen"
 
 #: ../gnucash/report/business-reports/taxinvoice.scm:352
-#, fuzzy
 msgid "Invoice #: "
-msgstr "Rechnung"
+msgstr "Rechnung #:"
 
 #: ../gnucash/report/business-reports/taxinvoice.scm:353
-#, fuzzy
 msgid "Reference: "
-msgstr "Referenz"
+msgstr "Referenz: "
 
 #: ../gnucash/report/business-reports/taxinvoice.scm:354
 #, fuzzy
