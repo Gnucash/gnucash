@@ -970,7 +970,7 @@ _get_template_split_account(const SchedXaction* sx,
         char guid_str[GUID_ENCODING_LENGTH+1];
         gchar* err;
         guid_to_string_buff((const GncGUID*)acct_guid, guid_str);
-        err = g_strdup_printf ("Unknown account for guid [%s], cancelling SX [%s] creation.",
+        err = g_strdup_printf (_("Unknown account for guid [%s], cancelling SX [%s] creation."),
                         guid_str, xaccSchedXactionGetName(sx));
         g_critical("%s", err);
         if (creation_errors != NULL)
