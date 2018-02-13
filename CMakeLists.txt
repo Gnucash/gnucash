@@ -510,9 +510,9 @@ if (APPLE)
   include (CheckCxxCompilerFlag)
   Check_CXX_Compiler_Flag(-Wno-unused-local-typedef, have_wno_ult)
   if (have_wno_ult)
-    SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-local-typedef -Wmissing-prototypes")
+    SET( CMAKE_CXX_FLAGS "-Wno-unused-local-typedef -Wmissing-prototypes ${CMAKE_CXX_FLAGS}")
   else()
-    SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wmissing-prototypes")
+    SET( CMAKE_CXX_FLAGS "-Wmissing-prototypes ${CMAKE_CXX_FLAGS}")
   endif()
   Check_C_Compiler_Flag(-Wno-unknown-attributes have_no_unkatt)
   if (have_no_unkatt)
@@ -525,22 +525,22 @@ endif (APPLE)
 
 
 # Also, set the C++ version to c++11
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")  # FIXME: should be -std=c++11
+SET(CMAKE_CXX_FLAGS "-std=gnu++11 ${CMAKE_CXX_FLAGS}")  # FIXME: should be -std=c++11
 
 
 IF (UNIX)
-  SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wno-pointer-sign -Wall -Wmissing-prototypes -Wmissing-declarations -Wno-unused")
-  SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -Wall -Wmissing-declarations -Wno-unused")
-  SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-deprecated-declarations -std=gnu11")
-  SET( CMAKE_C_FLAGS_RELEASE "-O3 ${CMAKE_C_FLAGS} -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2")
+  SET( CMAKE_C_FLAGS "-Werror -Wdeclaration-after-statement -Wno-pointer-sign -Wall -Wmissing-prototypes -Wmissing-declarations -Wno-unused ${CMAKE_C_FLAGS}")
+  SET( CMAKE_CXX_FLAGS "-Werror -Wall -Wmissing-declarations -Wno-unused ${CMAKE_CXX_FLAGS}")
+  SET( CMAKE_C_FLAGS "-Wno-deprecated-declarations -std=gnu11 ${CMAKE_C_FLAGS}")
+  SET( CMAKE_C_FLAGS_RELEASE "-O3 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 ${CMAKE_C_FLAGS}")
 ENDIF (UNIX)
 IF (MINGW)
-  SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wdeclaration-after-statement -Wno-pointer-sign -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused -Wno-error=deprecated-declarations -std=gnu11")
-  SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWINVER=0x0500 -D_EMULATE_GLIBC=0") # Workaround for bug in gtest on mingw, see https://github.com/google/googletest/issues/893 and https://github.com/google/googletest/issues/920
+  SET( CMAKE_C_FLAGS "-Werror -Wdeclaration-after-statement -Wno-pointer-sign -Wall -Wunused -Wmissing-prototypes -Wmissing-declarations  -Wno-unused -Wno-error=deprecated-declarations -std=gnu11 ${CMAKE_C_FLAGS}")
+  SET( CMAKE_CXX_FLAGS "-DWINVER=0x0500 -D_EMULATE_GLIBC=0 ${CMAKE_CXX_FLAGS}") # Workaround for bug in gtest on mingw, see https://github.com/google/googletest/issues/893 and https://github.com/google/googletest/issues/920
 ENDIF (MINGW)
 
 SET( CMAKE_C_FLAGS_DEBUG "-O0 -g ${CMAKE_C_FLAGS}")
-SET( CMAKE_CXX_FLAGS_DEBUG "-O0 -g ${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations")
+SET( CMAKE_CXX_FLAGS_DEBUG "-O0 -g -Wno-deprecated-declarations ${CMAKE_CXX_FLAGS}")
 
 IF (APPLE AND WITH_GNUCASH)
   SET(CMAKE_MACOSX_RPATH ON)
