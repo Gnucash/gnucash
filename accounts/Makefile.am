@@ -9,6 +9,7 @@ SUBDIRS = \
 	de_DE \
 	el_GR \
 	en_GB \
+	en_IN \
 	es_ES \
 	es_MX \
 	fi_FI \

@@ -8,6 +8,7 @@ SET(accounts_SUBDIRS
   de_DE
   el_GR
   en_GB
+  en_IN
   es_ES
   es_MX
   fi_FI
@@ -50,6 +51,7 @@ ADD_SUBDIRECTORY(de_CH)
 ADD_SUBDIRECTORY(de_DE)
 ADD_SUBDIRECTORY(el_GR)
 ADD_SUBDIRECTORY(en_GB)
+ADD_SUBDIRECTORY(en_IN)
 ADD_SUBDIRECTORY(es_ES)
 ADD_SUBDIRECTORY(es_MX)
 ADD_SUBDIRECTORY(fi_FI)
@@ -80,7 +82,7 @@ ADD_SUBDIRECTORY(zh_TW)
 SET_LOCAL_DIST(dist_list CMakeLists.txt Makefile.am)
 
 SET(accounts_DIST ${C_DIST} ${CA_DIST} ${CS_DIST} ${DA_DIST} ${DE_AT_DIST} ${DE_CH_DIST} ${DE_DE_DIST} ${EL_GR_DIST}
-                  ${EN_GB_DIST} ${ES_ES_DIST} ${ES_MX_DIST} ${FI_FI_DIST} ${FR_CA_DIST} ${FR_CH_DIST}
+                  ${EN_GB_DIST} ${EN_IN_DIST} ${ES_ES_DIST} ${ES_MX_DIST} ${FI_FI_DIST} ${FR_CA_DIST} ${FR_CH_DIST}
                   ${FR_FR_DIST} ${HU_HU_DIST} ${IT_DIST} ${JA_DIST} ${KO_DIST} ${LT_DIST} ${LV_DIST}
                   ${NB_DIST} ${NL_DIST} ${PL_DIST} ${PT_BR_DIST} ${PT_PT_DIST} ${RU_DIST} ${SK_DIST}
                   ${SV_AX_DIST} ${SV_FI_DIST} ${SV_SE_DIST} ${TR_TR_DIST} ${ZH_CN_DIST}
