@@ -392,6 +392,8 @@ Investment Transactions
 !Account
 NAssets:Investments:Mutual Fund
 TInvst
+^
+!Type:Invst
 D10/30/2006
 Q0.9
 T500
@@ -400,6 +402,7 @@ NBuyX
 L[Assets:Investments:Mutual Fund:Cash]
 YFOO
 ^
+!Type:Invst
 D11/28/2006
 Q0.897
 T100
