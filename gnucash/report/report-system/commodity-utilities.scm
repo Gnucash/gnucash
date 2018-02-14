@@ -531,8 +531,8 @@
 
 (define (create-commodity-list inner-comm outer-comm value-amount share-amount)
   (let ((pair (list inner-comm
-                    (cons (gnc:make-numeric-collector)
-                          (gnc:make-numeric-collector)))))
+                    (cons (gnc:make-number-collector)
+                          (gnc:make-number-collector)))))
     ((caadr pair) 'add value-amount)
     ((cdadr pair) 'add share-amount)
     (set comm-list (list outer-comm (list pair)))))
