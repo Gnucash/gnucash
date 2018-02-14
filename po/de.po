@@ -6,7 +6,7 @@
 # Christian Stimming <stimming@tuhh.de>, 2001-2014.
 # Christian Meyer <chrisime@gnome.org>, 2000, 2001.
 # Herbert Thoma <tma@iis.fhg.de>, 2001.
-# Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2007, 2009-2017.
+# Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2007, 2009-2018.
 # Rolf Leggewie, 2008.
 # Mechtilde Stehmann <ooo@mechtilde.de>, 2014-2018.
 # quazgar <quazgar@posteo.de> 2017.
@@ -2396,12 +2396,9 @@ msgid ""
 "Please select one, the others will be ignored.\n"
 "\n"
 msgstr ""
-
-"Während diese Transaktion mehrere Splits hat, die man als 'Zahlungssplit "
-"'bezeichnet, weiß GnuCash nur, wie man mit einem umgeht.\n"
-"Während diese Transaktion mehrere Splits hat, die man als 'Zahlungssplit '"
+"Während diese Transaktion mehrere Splits hat, die man als 'Zahlungssplit' "
 "bezeichnet, Weiß GnuCash nur, wie man mit einem umgeht.\n" 
-"Bitte wählen Sie eine aus, die anderen werden ignoriert.\n"
+"Bitte wählen Sie einen aus, die anderen werden ignoriert.\n"
 "\n"
 
 #: ../gnucash/gnome/dialog-payment.c:1515
@@ -2874,11 +2871,11 @@ msgstr "Diesem Buchungssatz ist keine gültige URI zugeordnet."
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:417
 msgid "Path head for files is, "
-msgstr "Pfadkopf für Dateien ist, "
+msgstr "Anfang des Pfades für Dateien ist, "
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:419
 msgid "Path head does not exist, "
-msgstr "Pfadkopf existiert nicht, "
+msgstr "Anfang des Pfades existiert nicht, "
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:431
 msgid "Relative"
@@ -3102,7 +3099,7 @@ msgstr "Seit _letztem Aufruf..."
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:172
 msgid "Create Scheduled Transactions since the last time run"
-msgstr "Alle terminierten Buchungen seit dem letzten Aufruf von GnuCash erstellen."
+msgstr "Alle terminierten Buchungen seit dem letzten Aufruf erstellen."
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:176
 msgid "_Mortgage & Loan Repayment..."
@@ -3163,7 +3160,7 @@ msgstr ""
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:212
 msgid "View and Delete Bayesian and Non Bayesian information"
-msgstr "Anzeigen und Löschen von Bayessche und Nicht-Bayessche Informationen"
+msgstr "Anzeigen und Löschen von Bayesschen und Nicht-Bayesschen Informationen"
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:216
 msgid "_Transaction Associations"
@@ -4963,7 +4960,7 @@ msgstr "Buchungsbericht"
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
 msgstr ""
-"Diese Buchung ist als Schreibgeschützt markiert, mit folgenden Kommentar: "
+"Diese Buchung ist mit folgendem Kommentar als schreibgeschützt markiert: "
 "'%s'"
 
 #: ../gnucash/gnome/gnc-plugin-page-register.c:3149
@@ -5206,13 +5203,14 @@ msgstr "Bestehende Zuordnung ist "
 msgid "Associate Location with Transaction"
 msgstr "_Internetadresse zuordnen"
 
+# Fixme I18N: ambiguous, append or correct?
 #: ../gnucash/gnome/gnc-split-reg.c:999
 msgid "Amend URL:"
-msgstr "URL ergänzen"
+msgstr "URL ergänzen:"
 
 #: ../gnucash/gnome/gnc-split-reg.c:1003
 msgid "Enter URL:"
-msgstr "URL Eingeben:"
+msgstr "URL eingeben:"
 
 #: ../gnucash/gnome/gnc-split-reg.c:1117
 msgid "This transaction is not associated with a URI."
@@ -5378,7 +5376,7 @@ msgstr ""
 
 #: ../gnucash/gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:11
 msgid "Show invoices due within this many days"
-msgstr "Zeigen Sie Rechnungen, die innerhalb dieser Tage fällig sind."
+msgstr "Zeige Rechnungen, die innerhalb dieser Tage fällig sind."
 
 #: ../gnucash/gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:12
 msgid ""
@@ -8401,7 +8399,7 @@ msgstr "Online ID"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:8
 msgid "Source Account Name"
-msgstr "Lange Kontobezeichnung"
+msgstr "Name des Herkunftskontos"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:9
 msgid "Based On"
@@ -14071,15 +14069,15 @@ msgstr "GnuCash Optionen"
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-options.glade.h:4
 msgid "Close dialog and make no changes."
-msgstr "Beendet one Änderungen den Dialog"
+msgstr "Beendet den Dialog ohne Änderungen."
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-options.glade.h:6
 msgid "Apply changes but do not close dialog."
-msgstr "Übernimmten die Änderungen und schließt nicht den Dialog."
+msgstr "Übernimmt die Änderungen ohne den Dialog zu schliessen."
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-options.glade.h:8
 msgid "Apply changes and close dialog."
-msgstr "Übernimmten die Änderungen und schließt den Dialog."
+msgstr "Übernimmt die Änderungen und schließt den Dialog."
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:1
 msgid "US"
@@ -17634,13 +17632,13 @@ msgstr ""
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:892
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:833
 msgid "The settings have been saved."
-msgstr "die einstellungen wurden gespeichert."
+msgstr "die Einstellungen wurden gespeichert."
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:917
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:858
-#, fuzzy
 msgid "There was a problem saving the settings, please try again."
-msgstr "Es ist während des Importes ein Problem aufgetreten."
+msgstr "Es gab ein Problem beim Speicherns der Einstellungen. "
+"Versuchen Sie es bitte noch einmal."
 
 #. If it fails, change back to the old encoding.
 #: ../gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1083
@@ -18037,7 +18035,7 @@ msgstr ""
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:35
 msgid "Multi-split"
-msgstr "Mehrzeilie Buchungen"
+msgstr "Mehrzeilige Buchungen"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-trans-import.glade.h:36
 msgid ""
@@ -18061,7 +18059,7 @@ msgstr ""
 "Wenn Multi-Split aktiviert ist, geht die Importfunktion von mehreren "
 "aufeinanderfolgenden Zeilen aus, die zusammen die Informationen für eine "
 "Transaktion enthalten. Jede Zeile enthält Informationen für genau eine "
-"Splitbuchung. In der ersten Zeile sollte auch die Informationen für die "
+"Splitbuchung. In der ersten Zeile sollten auch die Informationen für die "
 "Transaktion stehen.\n"
 "Um zu erfahren, welche Zeilen zum selben Vorgang gehören, wird die "
 "Importfunktion die bereitgestellten Transaktionsinformationen in jeder Zeile "
@@ -22139,7 +22137,6 @@ msgid "Display the sale amount column?"
 msgstr "Betrag anzeigen?"
 
 #: ../gnucash/report/business-reports/owner-report.scm:599
-
 msgid "Display the tax column?"
 msgstr "Steuer-Spalte anzeigen?"
 
@@ -22666,7 +22663,7 @@ msgstr "Kundenrechnung mit Spalten für Steuerangaben (mit »eguile«-Vorlage)"
 #. (gnc:warn "title: " (gnc:option-value title-op))
 #: ../gnucash/report/business-reports/taxinvoice.scm:347
 msgid "Unit"
-msgstr "Einheiten"
+msgstr "Einheit"
 
 #. (gnc:warn "unitprice: " (gnc:option-value unit-price-op))
 #: ../gnucash/report/business-reports/taxinvoice.scm:349
@@ -22679,11 +22676,12 @@ msgstr "Steuerbetrag"
 
 #: ../gnucash/report/business-reports/taxinvoice.scm:351
 msgid "Amount Due (inc GST)"
-msgstr "Noch zu zahlen"
+msgstr "Fälliger Bruttobetrag"
 
+# Im deutschsprachigen Raum ist # nicht üblich als Zeichen für Nr.
 #: ../gnucash/report/business-reports/taxinvoice.scm:352
 msgid "Invoice #: "
-msgstr "Rechnung #:"
+msgstr "Rechnungsnr.:"
 
 #: ../gnucash/report/business-reports/taxinvoice.scm:353
 msgid "Reference: "
@@ -22707,9 +22705,10 @@ msgid ""
 "template)"
 msgstr "Kundenrechnung mit Spalten für Steuerangaben (mit »eguile«-Vorlage)"
 
+# TXF (US) entspricht von der Bedeutung ElStEr (DE)
 #: ../gnucash/report/locale-specific/us/taxtxf-de_DE.scm:81
 msgid "Tax Report / TXF Export"
-msgstr "Steuer-Bericht / TXF Export"
+msgstr "Steuer-Bericht / ElStEr-Export"
 
 #: ../gnucash/report/locale-specific/us/taxtxf-de_DE.scm:153
 #: ../gnucash/report/locale-specific/us/taxtxf.scm:174
@@ -25469,11 +25468,11 @@ msgstr "Handelskonten in den Bericht einschließen"
 #. Display
 #: ../gnucash/report/standard-reports/cashflow-barchart.scm:52
 msgid "Show Money In"
-msgstr "Einzahlung anzeigen"
+msgstr "Geldzufluß anzeigen"
 
 #: ../gnucash/report/standard-reports/cashflow-barchart.scm:53
 msgid "Show Money Out"
-msgstr "Auszahlung anzeigen"
+msgstr "Geldabfluß anzeigen"
 
 #: ../gnucash/report/standard-reports/cashflow-barchart.scm:54
 msgid "Show Net Flow"
@@ -25490,11 +25489,11 @@ msgstr "Buchungen von und nach Handelskonten in den Bericht einschließen."
 
 #: ../gnucash/report/standard-reports/cashflow-barchart.scm:111
 msgid "Show money in?"
-msgstr "Einzahlunge anzeigen?"
+msgstr "Geldzufluß anzeigen?"
 
 #: ../gnucash/report/standard-reports/cashflow-barchart.scm:117
 msgid "Show money out?"
-msgstr "Auszahlungen anzeigen?"
+msgstr "Geldabfluß anzeigen?"
 
 #: ../gnucash/report/standard-reports/cashflow-barchart.scm:123
 msgid "Show net money flow?"
@@ -25507,7 +25506,7 @@ msgstr "Nettogeldfluss"
 
 #: ../gnucash/report/standard-reports/cashflow-barchart.scm:363
 msgid "Overview:"
-msgstr "Übersicht"
+msgstr "Übersicht:"
 
 #: ../gnucash/report/standard-reports/cashflow-barchart.scm:526
 msgid "Shows a barchart with cash flow over time"
@@ -26953,7 +26952,7 @@ msgstr "Kontenbeschreibung anzeigen"
 
 #: ../gnucash/report/standard-reports/transaction.scm:76
 msgid "Show Informal Debit/Credit Headers"
-msgstr "Informelle Soll/Haben-Köpfe einblenden"
+msgstr "Informelle Soll/Haben-Köpfe anzeigen"
 
 #: ../gnucash/report/standard-reports/transaction.scm:77
 msgid "Show subtotals only (hide transactional data)"
@@ -26974,7 +26973,7 @@ msgstr "Zusammenfassung der Optionen hinzufügen"
 #. Filtering
 #: ../gnucash/report/standard-reports/transaction.scm:94
 msgid "Filter"
-msgstr "Filtertyp"
+msgstr "Filter"
 
 #: ../gnucash/report/standard-reports/transaction.scm:95
 msgid "Account Name Filter"
@@ -27047,7 +27046,7 @@ msgstr "GnuCash Einstellungen verwenden"
 #: ../gnucash/report/standard-reports/transaction.scm:363
 msgid "Use reversing option specified in global preference."
 msgstr ""
-"Verwenden Sie die in den GnuCash Einstellungen angegebenen Umkehrung der "
+"Verwenden Sie die in den GnuCash Einstellungen angegebene Umkehrung der "
 "Vorzeichen."
 
 #: ../gnucash/report/standard-reports/transaction.scm:368
@@ -27076,7 +27075,7 @@ msgstr ""
 
 #: ../gnucash/report/standard-reports/transaction.scm:448
 msgid "Also show original currency amounts"
-msgstr "Auch Originalwährungsbeträge anzeigen"
+msgstr "Beträge auch in Originalwährung anzeigen"
 
 #: ../gnucash/report/standard-reports/transaction.scm:458
 msgid "Add summary of options."
