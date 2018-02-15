@@ -338,7 +338,6 @@ main(int argc, char **argv)
 
     /* Clean up the temporaries that were created for the GNC_DATA_HOME test run */
     g_free (home_dir);
-    g_free (tmp_dir);
     tmp_dir = g_build_filename(gnc_data_home_dir, "data", (gchar *)NULL);
     g_rmdir (tmp_dir);
     g_free (tmp_dir);
