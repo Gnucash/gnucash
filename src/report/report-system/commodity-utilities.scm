@@ -543,7 +543,7 @@
                           (gnc:make-numeric-collector)))))
     ((caadr pair) 'add value-amount)
     ((cdadr pair) 'add share-amount)
-    (set comm-list (list outer-comm (list pair)))))
+    (list outer-comm (list pair))))
 
 (define (create-foreign-list comm-list transaction-comm account-comm
                              share-amount value-amount)
@@ -616,7 +616,7 @@
                  (begin
                    (set! comm-list (create-commodity-list
                                     account-comm transaction-comm
-                                    share-amount value-amount))
+                                    value-amount share-amount))
                    (set! sumlist (cons comm-list sumlist)))
 
                  ;;yes, check for second commodity
