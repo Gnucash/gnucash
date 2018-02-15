@@ -559,8 +559,8 @@
     ;; no pair already, create one
     (if (not pair)
         (set! pair (list (car foreignlist)
-                         (cons (gnc:make-numeric-collector)
-                               (gnc:make-numeric-collector)))))
+                         (cons (gnc:make-number-collector)
+                               (gnc:make-number-collector)))))
     pair))
 
 ;; sumlist: a multilevel alist. Each element has a commodity as key, and another
@@ -639,11 +639,13 @@
   (map
    (lambda (e)
      (list (car e)
-           (gnc-numeric-abs
+           (if (zero? ((caadr e) 'total #f)) #f
+            (gnc-numeric-abs
             (gnc-numeric-div ((cdadr e) 'total #f)
                              ((caadr e) 'total #f)
                              GNC-DENOM-AUTO
-                             (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND)))))
+                             (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND)))
+            )))
    (gnc:get-exchange-totals report-commodity end-date cost)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

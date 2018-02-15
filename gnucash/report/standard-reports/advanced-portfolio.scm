@@ -316,8 +316,10 @@
      ((and (gnc-numeric-zero-p b-value)
 	   (not (gnc-numeric-zero-p b-units)))
 	(let* ((current-units (units-basis b-list))
-	       (units-ratio (gnc-numeric-div (gnc-numeric-add b-units current-units GNC-DENOM-AUTO GNC-DENOM-REDUCE)
-					     current-units GNC-DENOM-AUTO GNC-DENOM-REDUCE))
+               ;; If current-units is zero then so should be everything else.
+	       (units-ratio (if (zero? current-units) (gnc-numeric-zero)
+                                (gnc-numeric-div (gnc-numeric-add b-units current-units GNC-DENOM-AUTO GNC-DENOM-REDUCE)
+                                                 current-units GNC-DENOM-AUTO GNC-DENOM-REDUCE)))
                ;; If the units ratio is zero the stock is worthless and the value should be zero too
 	       (value-ratio (if (gnc-numeric-zero-p units-ratio)
 	                        (gnc-numeric-zero)
