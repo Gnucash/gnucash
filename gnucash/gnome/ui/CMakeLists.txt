@@ -24,6 +24,6 @@ SET(gnome_UI
 
 FILE(COPY ${gnome_UI} DESTINATION ${DATADIR_BUILD}/gnucash/ui)
 
-INSTALL(FILES ${gnome_UI} DESTINATION share/gnucash)
+INSTALL(FILES ${gnome_UI} DESTINATION share/gnucash/ui)
 
 SET_DIST_LIST(gnome_ui_DIST CMakeLists.txt ${gnome_UI})

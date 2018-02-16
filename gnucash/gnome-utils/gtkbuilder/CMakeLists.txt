@@ -21,6 +21,6 @@ SET(gnome_utils_GLADE
 
 FILE(COPY ${gnome_utils_GLADE} DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder)
 
-INSTALL(FILES ${gnome_utils_GLADE} DESTINATION share/gnucash)
+INSTALL(FILES ${gnome_utils_GLADE} DESTINATION share/gnucash/gtkbuilder)
 
 SET_DIST_LIST(gnome_utils_gtkbuilder_DIST CMakeLists.txt ${gnome_utils_GLADE})
