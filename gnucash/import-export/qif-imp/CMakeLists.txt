@@ -54,7 +54,7 @@ SET(qif_import_SCHEME_2
   qif-import.scm
 )
 
-SET(GUILE_DEPENDS      gncmod-qif-import scm-core-utils scm-gnc-module scm-scm)
+SET(GUILE_DEPENDS      gncmod-qif-import scm-core-utils scm-gnc-module scm-scm scm-app-utils-3)
 
 GNC_ADD_SCHEME_TARGETS(scm-qif-import-2
   "${qif_import_SCHEME_2}"

@@ -17,12 +17,22 @@ SET(scm_test_report_system_SOURCES
 # test-test-extras.scm ;;FIXME why is this not run
   )
 
+set(GUILE_DEPENDS
+  scm-gnc-module
+  scm-app-utils
+  scm-core-utils
+  scm-gettext
+  scm-engine
+  scm-test-engine
+  scm-scm
+  scm-report-system-3
+  )
 GNC_ADD_SCHEME_TESTS(${scm_test_report_system_SOURCES})
 
 GNC_ADD_SCHEME_TARGETS(scm-test-report-system
   "test-extras.scm"
   gnucash/report/report-system/test
-  "scm-gnc-module;scm-test-engine;scm-report-system-3"
+  "${GUILE_DEPENDS}"
   FALSE
   )
 

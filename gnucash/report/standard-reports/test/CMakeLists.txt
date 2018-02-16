@@ -12,13 +12,23 @@ SET(scm_test_report_SUPPORT
   test-generic-net-linechart.scm
   )
 
-
+set(GUILE_DEPENDS
+  scm-gnc-module
+  scm-app-utils
+  scm-engine
+  scm-test-engine
+  scm-gettext
+  scm-scm
+  scm-test-report-system
+  scm-standard-reports
+  scm-report-stylesheets-2
+  )
 GNC_ADD_SCHEME_TESTS("${scm_test_standard_reports_SOURCES}")
 
 GNC_ADD_SCHEME_TARGETS(scm-test-standard-support
   "${scm_test_report_SUPPORT}"
   "gnucash/report/standard-reports/test"
-  "scm-gnc-module;scm-test-report-system;scm-standard-reports;scm-report-stylesheets-2"
+  "${GUILE_DEPENDS}"
   FALSE
   )
 GNC_ADD_SCHEME_TARGETS(scm-test-standard-reports

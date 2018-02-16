@@ -30,7 +30,16 @@ SET(gncmod_local_reports_us_SCHEME_1 taxtxf.scm taxtxf-de_DE.scm)
 SET(gncmod_local_reports_us_SCHEME_2 us.scm de_DE.scm)
 
 
-SET(GUILE_DEPENDS   gncmod-html scm-tax-us-1 scm-tax-us-2 scm-report-system-3)
+SET(GUILE_DEPENDS
+  scm-core-utils
+  scm-gettext
+  scm-gnc-module
+  scm-scm
+  scm-test-core
+  gncmod-html
+  scm-tax-us-1
+  scm-tax-us-2
+  scm-report-system-3)
 
 GNC_ADD_SCHEME_TARGETS(scm-report-locale-specific-1
   "${gncmod_local_reports_us_SCHEME_1}"

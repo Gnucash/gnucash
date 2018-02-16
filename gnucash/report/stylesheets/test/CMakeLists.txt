@@ -1,10 +1,10 @@
 SET(GUILE_DEPENDS
-  test-core
-  gncmod-app-utils
-  gnc-core-utils
-  gnc-module
+  scm-test-core
+  scm-gettext
+  scm-core-utils
+  scm-gnc-module
+  scm-scm
   gncmod-engine
-  gncmod-backend-xml
   gncmod-backend-xml
   gncmod-gnome-utils
   gncmod-html

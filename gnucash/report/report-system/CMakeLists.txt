@@ -79,7 +79,14 @@ SET (report_system_SCHEME_3
     report.scm
 )
 
-SET(GUILE_DEPENDS      gncmod-html gncmod-gnome-utils gncmod-report-system scm-app-utils scm-gnome-utils)
+SET(GUILE_DEPENDS
+  gncmod-html
+  gncmod-gnome-utils
+  gncmod-report-system
+  scm-app-utils
+  scm-scm
+  scm-gnc-module
+  )
 
 GNC_ADD_SCHEME_TARGETS(scm-report-system
   "${report_system_SCHEME}"

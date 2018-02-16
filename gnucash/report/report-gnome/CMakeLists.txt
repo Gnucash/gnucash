@@ -53,7 +53,17 @@ SET(report_gnome_SCHEME
 )
 
 SET(GUILE_OUTPUT_DIR   gnucash/report)
-SET(GUILE_DEPENDS      gncmod-report-gnome gncmod-engine scm-app-utils scm-gnome-utils scm-core-utils scm-gnc-module scm-scm scm-standard-reports scm-business-reports scm-utility-reports)
+SET(GUILE_DEPENDS
+  gncmod-report-gnome
+  gncmod-engine
+  scm-gettext
+  scm-gnome-utils
+  scm-gnc-module
+  scm-scm
+  scm-standard-reports
+  scm-business-reports
+  scm-utility-reports
+  )
 
 GNC_ADD_SCHEME_TARGETS(scm-report-gnome
     "${report_gnome_SCHEME}"

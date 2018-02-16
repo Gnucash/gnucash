@@ -8,7 +8,7 @@ GNC_ADD_TEST(test-link-module-tax-us test-link-module.c
 # FIXME why is this test not run ?
 #SET(GUILE_DEPENDS
 #  gnc-core-utils
-#  gnc-module
+#  scm-gnc-module
 #)
 #
 #GNC_ADD_SCHEME_TARGETS(scm-test-load-tax-us-module

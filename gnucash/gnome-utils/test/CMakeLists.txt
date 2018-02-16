@@ -28,6 +28,7 @@ SET(GNOME_UTILS_GUI_TEST_LIBS
 #  GNOME_UTILS_GUI_TEST_LIBS
 #
 SET(GUILE_DEPENDS
+  scm-gnc-module
   test-core
   gncmod-test-engine
   gncmod-app-utils

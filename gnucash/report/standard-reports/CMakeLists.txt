@@ -33,7 +33,16 @@ SET (standard_reports_SCHEME_2
     trial-balance.scm
     )
 
-SET(GUILE_DEPENDS      gncmod-html scm-app-utils scm-gnome-utils scm-report-system scm-report-system-3)
+SET(GUILE_DEPENDS
+  gncmod-html
+  scm-core-utils
+  scm-engine
+  scm-gettext
+  scm-scm
+  scm-gnome-utils
+  scm-report-system
+  scm-report-system-3
+  )
 
 GNC_ADD_SCHEME_TARGETS(scm-standard-reports-1
   "${standard_reports_SCHEME}"

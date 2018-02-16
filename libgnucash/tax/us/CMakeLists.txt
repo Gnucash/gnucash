@@ -26,7 +26,7 @@ INSTALL(TARGETS gncmod-tax-us
 SET(gncmod_tax_us_SCHEME_1 txf.scm txf-help.scm txf-de_DE.scm txf-help-de_DE.scm)
 SET(gncmod_tax_us_SCHEME_2 de_DE.scm us.scm)
 
-SET(GUILE_DEPENDS      scm-app-utils)
+SET(GUILE_DEPENDS      scm-app-utils scm-gnc-module)
 
 GNC_ADD_SCHEME_TARGETS(scm-tax-us-1
   "${gncmod_tax_us_SCHEME_1}"

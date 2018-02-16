@@ -30,10 +30,11 @@ ADD_APP_UTILS_TEST(test-sx test-sx.cpp)
 SET(GUILE_DEPENDS
   scm-test-engine
   scm-app-utils
-  gnc-core-utils
-  gnc-module
-  gncmod-engine
-  gncmod-backend-xml
+  scm-core-utils
+  scm-gnc-module
+  scm-engine
+  scm-scm
+  scm-gettext
   gncmod-backend-xml
 )
 

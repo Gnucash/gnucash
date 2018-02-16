@@ -25,7 +25,14 @@ SET(business_reports_DATA
 )
 
 SET(GUILE_OUTPUT_DIR   gnucash/report)
-SET(GUILE_DEPENDS      scm-business-reports-links scm-standard-reports)
+SET(GUILE_DEPENDS
+  scm-app-utils
+  scm-gettext
+  scm-gnc-module
+  scm-scm
+  scm-business-reports-links
+  scm-standard-reports
+  )
 
 GNC_ADD_SCHEME_TARGETS(scm-business-reports
   "${business_reports_SCHEME}"

@@ -48,7 +48,14 @@ SET(stylesheets_SCHEME_2
 )
 
 SET(GUILE_OUTPUT_DIR gnucash/report)
-SET(GUILE_DEPENDS gncmod-html scm-app-utils scm-report-system-3)
+SET(GUILE_DEPENDS
+  scm-gnc-module
+  scm-core-utils
+  scm-gettext
+  scm-scm
+  gncmod-html
+  scm-report-system-3
+  )
 
 GNC_ADD_SCHEME_TARGETS(scm-report-stylesheets-1
   "${stylesheets_SCHEME_1}"
