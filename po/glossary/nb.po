@@ -42,7 +42,7 @@ msgstr "kontonavn"
 
 #. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
 msgid "account type: Active"
-msgstr "kontotype: Aktiv"
+msgstr "kontotype: Aktiva"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 msgid "account type: Asset"
