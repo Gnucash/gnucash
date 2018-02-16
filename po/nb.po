@@ -1172,7 +1172,7 @@ msgstr "<Uten navn>"
 
 #: ../gnucash/gnome/dialog-customer.c:439
 msgid "Edit Customer"
-msgstr "Endre Kunde"
+msgstr "Rediger kunde"
 
 #: ../gnucash/gnome/dialog-customer.c:441
 #: ../gnucash/gnome/gtkbuilder/dialog-customer.glade.h:1
@@ -1271,7 +1271,7 @@ msgstr "Du må fylle inn en adresse."
 
 #: ../gnucash/gnome/dialog-employee.c:294
 msgid "Edit Employee"
-msgstr "Endre ansatt"
+msgstr "Rediger ansatt"
 
 #: ../gnucash/gnome/dialog-employee.c:296
 #: ../gnucash/gnome/gtkbuilder/dialog-employee.glade.h:1
@@ -4196,7 +4196,7 @@ msgstr "Rediger valgt konto"
 #: ../gnucash/gnome/gnc-plugin-page-owner-tree.c:146
 #, fuzzy
 msgid "E_dit Customer"
-msgstr "Endre kunde"
+msgstr "Rediger kunde"
 
 #: ../gnucash/gnome/gnc-plugin-page-owner-tree.c:147
 #, fuzzy
