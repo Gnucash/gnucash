@@ -1,17 +1,3 @@
-FILE(COPY .
-    DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder
-    PATTERN Makefile.* EXCLUDE
-    PATTERN CMake* EXCLUDE
-    PATTERN CTest* EXCLUDE
-    PATTERN cmake* EXCLUDE)
-
-INSTALL(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    DESTINATION share/gnucash
-    PATTERN Makefile.* EXCLUDE
-    PATTERN CMake* EXCLUDE
-    PATTERN CTest* EXCLUDE
-    PATTERN cmake* EXCLUDE)
-
 SET(gnome_GLADE
         assistant-acct-period.glade
         assistant-hierarchy.glade
@@ -47,5 +33,9 @@ SET(gnome_GLADE
         window-autoclear.glade
         window-reconcile.glade
 )
+
+FILE(COPY ${gnome_GLADE} DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder)
+
+INSTALL(FILES ${gnome_GLADE} DESTINATION share/gnucash/gtkbuilder)
 
 SET_DIST_LIST(gnome_gtkbuilder_DIST CMakeLists.txt ${gnome_GLADE})

@@ -1,15 +1,6 @@
-FILE(COPY .
-    DESTINATION ${DATADIR_BUILD}/gnucash/ui
-    PATTERN Makefile.* EXCLUDE
-    PATTERN CMake* EXCLUDE
-    PATTERN CTest* EXCLUDE
-    PATTERN cmake* EXCLUDE)
+set(customer_import_UI gnc-plugin-customer-import-ui.xml)
+FILE(COPY ${customer_import_UI} DESTINATION ${DATADIR_BUILD}/gnucash/ui)
 
-INSTALL(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    DESTINATION share/gnucash
-    PATTERN Makefile.* EXCLUDE
-    PATTERN CMake* EXCLUDE
-    PATTERN CTest* EXCLUDE
-    PATTERN cmake* EXCLUDE)
+INSTALL(FILES ${customer_import_UI} DESTINATION share/gnucash)
 
-SET_DIST_LIST(customer_import_ui_DIST CMakeLists.txt gnc-plugin-customer-import-ui.xml)
+SET_DIST_LIST(customer_import_ui_DIST CMakeLists.txt ${customer_import_UI})

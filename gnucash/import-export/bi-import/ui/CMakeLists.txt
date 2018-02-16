@@ -1,15 +1,7 @@
-FILE(COPY .
-    DESTINATION ${DATADIR_BUILD}/gnucash/ui
-    PATTERN Makefile.* EXCLUDE
-    PATTERN CMake* EXCLUDE
-    PATTERN CTest* EXCLUDE
-    PATTERN cmake* EXCLUDE)
+set(bi_import_UI gnc-plugin-bi-import-ui.xml)
 
-INSTALL(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    DESTINATION share/gnucash
-    PATTERN Makefile.* EXCLUDE
-    PATTERN CMake* EXCLUDE
-    PATTERN CTest* EXCLUDE
-    PATTERN cmake* EXCLUDE)
+FILE(COPY ${bi_import_UI} DESTINATION ${DATADIR_BUILD}/gnucash/ui)
+
+INSTALL(FILES ${bi_import_UI} DESTINATION share/gnucash)
 
 SET_DIST_LIST(bi_import_ui_DIST CMakeLists.txt gnc-plugin-bi-import-ui.xml)

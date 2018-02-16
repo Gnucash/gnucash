@@ -1,17 +1,3 @@
-FILE(COPY .
-    DESTINATION ${DATADIR_BUILD}/gnucash/ui
-    PATTERN Makefile.* EXCLUDE
-    PATTERN CMake* EXCLUDE
-    PATTERN CTest* EXCLUDE
-    PATTERN cmake* EXCLUDE)
-
-INSTALL(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    DESTINATION share/gnucash
-    PATTERN Makefile.* EXCLUDE
-    PATTERN CMake* EXCLUDE
-    PATTERN CTest* EXCLUDE
-    PATTERN cmake* EXCLUDE)
-
 SET(gnome_UI
       gnc-plugin-account-tree-ui.xml
       gnc-plugin-basic-commands-ui.xml
@@ -36,6 +22,8 @@ SET(gnome_UI
       gnc-sxed-window-ui-full.xml
       gnc-sxed-window-ui.xml)
 
+FILE(COPY ${gnome_UI} DESTINATION ${DATADIR_BUILD}/gnucash/ui)
+
+INSTALL(FILES ${gnome_UI} DESTINATION share/gnucash)
+
 SET_DIST_LIST(gnome_ui_DIST CMakeLists.txt ${gnome_UI})
-
-
