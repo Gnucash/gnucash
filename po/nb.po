@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-13 20:39+0100\n"
-"PO-Revision-Date: 2007-08-12 21:11+0200\n"
+"PO-Revision-Date: 2018-02-16 13:42+0100\n"
 "Last-Translator: sigvei <sigve.indregard@gmail.com>\n"
 "Language-Team: Norwegian <>\n"
 "Language: no\n"
@@ -17,6 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 2.0.4\n"
 
 #: ../borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -440,7 +441,7 @@ msgstr "Periodeboken ble lukket."
 #. * that will be created. This is a ngettext(3) message (but
 #. * only for the %d part).
 #: ../gnucash/gnome/assistant-acct-period.c:315
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The earliest transaction date found in this book is %s. Based on the "
 "selection made above, this book will be split into %d book."
@@ -449,15 +450,13 @@ msgid_plural ""
 "selection made above, this book will be split into %d books."
 msgstr[0] ""
 "Den tidligste transaksjonsdatoen som ble funnet i denne periodeboken er %s. "
-"Basert på valget over, vil dette regnskapet bli delt i %d periodebøker. Velg "
-"'Neste' for å starte avslutningen av den første boken."
+"Basert på valget over, vil dette regnskapet bli delt i %d periodebok."
 msgstr[1] ""
 "Den tidligste transaksjonsdatoen som ble funnet i denne periodeboken er %s. "
-"Basert på valget over, vil dette regnskapet bli delt i %d periodebøker. Velg "
-"'Neste' for å starte avslutningen av den første boken."
+"Basert på valget over, vil dette regnskapet bli delt i %d periodebøker."
 
 #: ../gnucash/gnome/assistant-acct-period.c:369
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You have asked for a book to be created. This book will contain all "
 "transactions up to midnight %s (for a total of %d transactions spread over "
@@ -467,9 +466,11 @@ msgid ""
 " Click on 'Back' to adjust the dates or 'Cancel'."
 msgstr ""
 "Du har bedt om å opprette en periodebok. Denne boken vil inneholde alle "
-"transaksjoner frem til midnatt %s (innholdet er totalt %d transaksjoner "
-"fordelt på %d kontoer). Trykk 'Neste' for å opprette denne boken. Trykk "
-"'Tilbake' for å endre datoene."
+"transaksjoner frem til midnatt %s (for totalt %d transaksjoner fordelt på %d "
+"kontoer).\n"
+"\n"
+"Legg til tittel ognotat, eller trykk «Neste» for å fortsette.\n"
+"Trykk «Tilbake» for å endre datoene eller «Avbryt»."
 
 #: ../gnucash/gnome/assistant-acct-period.c:386
 #, c-format
@@ -482,19 +483,22 @@ msgid ""
 "The book will be created with the title %s when you click on 'Apply'. Click "
 "on 'Back' to adjust, or 'Cancel' to not create any book."
 msgstr ""
+"Periodeboken vil bli opprettet med tittelen %s når du trykker på «Utfør». "
+"Trykk på «Tilbake» for å endre, eller «Avbryt» for å ikke opprette noen "
+"periodebok."
 
 #. Translation FIXME: Can this %s-containing message please be
 #. replaced by one single message? Either this closing went
 #. successfully ("success", "congratulations") or something else
 #. should be displayed anyway.
 #: ../gnucash/gnome/assistant-acct-period.c:526
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s\n"
 "Congratulations! You are done closing books!\n"
 msgstr ""
 "%s\n"
-"Gratulerer! Du har fullført periode avsluttningen(e)!"
+"Gratulerer! Du har avsluttet bøkene!\n"
 
 #. Change the text so that its more mainingful for this assistant
 #: ../gnucash/gnome/assistant-acct-period.c:592
@@ -517,19 +521,17 @@ msgstr "Kontotyper"
 
 #. Translators: '%s' is the name of the selected account hierarchy template.
 #: ../gnucash/gnome/assistant-hierarchy.c:557
-#, fuzzy, c-format
+#, c-format
 msgid "Accounts in '%s'"
-msgstr "<b>Kontoer i '%s'</b>"
+msgstr "Kontoer i «%s»"
 
 #: ../gnucash/gnome/assistant-hierarchy.c:565
-#, fuzzy
 msgid "No description provided."
-msgstr "(ingen beskrivelse)"
+msgstr "Ingen beskrivelse gitt."
 
 #: ../gnucash/gnome/assistant-hierarchy.c:580
-#, fuzzy
 msgid "Accounts in Category"
-msgstr "<b>Kontoer i kategori</b>"
+msgstr "Kontoer i kategori"
 
 #: ../gnucash/gnome/assistant-hierarchy.c:792
 msgid "zero"
@@ -572,60 +574,54 @@ msgid ""
 "new accounts. Accounts in other currencies must be\n"
 "added manually."
 msgstr ""
+"Du valgte en valuta for periodeboken og den vil bli\n"
+"brukt for nye kontoer. Kontoer i andre valutaer må\n"
+"legges til manuelt."
 
 #: ../gnucash/gnome/assistant-hierarchy.c:1145
-#, fuzzy
 msgid "Please choose the currency to use for new accounts."
-msgstr "Vennligst velg valuta som skal brukes for nye kontoer."
+msgstr "Vennligst velg valuta som brukes for nye kontoer."
 
 #. The options dialog gets added to the notebook so it doesn't need a parent.
 #: ../gnucash/gnome/assistant-hierarchy.c:1190
 #: ../gnucash/gnome/assistant-hierarchy.c:1209
 #: ../gnucash/gnome-utils/dialog-utils.c:679
-#, fuzzy
 msgid "New Book Options"
-msgstr "Bokalternativer"
+msgstr "Alternativer for nye bøker"
 
 #. { name, default txn memo, throughEscrowP, specSrcAcctP }
 #: ../gnucash/gnome/assistant-loan.c:114
-#, fuzzy
 msgid "Taxes"
-msgstr "_Skatt"
+msgstr "Skatter"
 
 #: ../gnucash/gnome/assistant-loan.c:114
-#, fuzzy
 msgid "Tax Payment"
-msgstr "Innbetaling"
+msgstr "Innbetaling skatt"
 
 #: ../gnucash/gnome/assistant-loan.c:115
-#, fuzzy
 msgid "Insurance"
-msgstr "Grensesnitt"
+msgstr "Forsikring"
 
 #: ../gnucash/gnome/assistant-loan.c:115
-#, fuzzy
 msgid "Insurance Payment"
-msgstr "Rentebetaling"
+msgstr "Innbetaling forsikring"
 
 #. Translators: PMI stands for Private Mortgage Insurance.
 #: ../gnucash/gnome/assistant-loan.c:117
 msgid "PMI"
-msgstr ""
+msgstr "Privat låneforsikring"
 
 #: ../gnucash/gnome/assistant-loan.c:117
-#, fuzzy
 msgid "PMI Payment"
-msgstr "Innbetaling"
+msgstr "Innbetaling privat låneforsikring"
 
 #: ../gnucash/gnome/assistant-loan.c:118
-#, fuzzy
 msgid "Other Expense"
-msgstr "Kostnad"
+msgstr "Annen kostnad"
 
 #: ../gnucash/gnome/assistant-loan.c:118
-#, fuzzy
 msgid "Miscellaneous Payment"
-msgstr "Utfør betaling"
+msgstr "Diverse betaling"
 
 #. Add payment checkbox.
 #. Translators: %s is "Taxes",
@@ -637,7 +633,7 @@ msgstr "... betal \"%s\"?"
 
 #: ../gnucash/gnome/assistant-loan.c:765
 msgid "via Escrow account?"
-msgstr "via en deponeringskonto?"
+msgstr "via deponeringskonto?"
 
 #: ../gnucash/gnome/assistant-loan.c:916
 #: ../gnucash/gnome-utils/gnc-tree-model-split-reg.c:2903
@@ -647,9 +643,9 @@ msgstr "Lån"
 
 #. Translators: %s is "Taxes", or "Insurance", or similar
 #: ../gnucash/gnome/assistant-loan.c:1447
-#, fuzzy, c-format
+#, c-format
 msgid "Loan Repayment Option: \"%s\""
-msgstr "Finanskalkulator"
+msgstr "Valg for tilbakebetaling av lån: \"%s\""
 
 #. Translators: The following symbols will build the *
 #. * header line of exported CSV files:
@@ -763,9 +759,8 @@ msgid "Interest"
 msgstr "Rente"
 
 #: ../gnucash/gnome/assistant-loan.c:2749
-#, fuzzy
 msgid "Escrow Payment"
-msgstr "Ekstra betalinger"
+msgstr "Deponert betaling"
 
 #. Set split-action with gnc_set_num_action which is the same as
 #. * xaccSplitSetAction with these arguments
@@ -773,9 +768,8 @@ msgstr "Ekstra betalinger"
 #: ../gnucash/gnome/assistant-stock-split.c:382
 #: ../gnucash/gnome-utils/gnc-tree-model-split-reg.c:2956
 #: ../gnucash/register/ledger-core/split-register.c:2583
-#, fuzzy
 msgid "Action Column|Split"
-msgstr "Automatisk splitt"
+msgstr "Handlingskolonne|Splitt"
 
 #: ../gnucash/gnome/assistant-stock-split.c:413
 msgid "Error adding price."
@@ -828,7 +822,7 @@ msgstr "Symbol"
 #: ../gnucash/report/standard-reports/transaction.scm:904
 #: ../gnucash/report/standard-reports/transaction.scm:1041
 msgid "Shares"
-msgstr "Aksjer"
+msgstr "Andeler"
 
 #: ../gnucash/gnome/assistant-stock-split.c:781
 msgid "You don't have any stock accounts with balances!"
@@ -869,7 +863,7 @@ msgstr "Regning"
 #: ../gnucash/gnome/dialog-invoice.c:2577
 #: ../gnucash/gnome/dialog-invoice.c:2578
 msgid "Voucher"
-msgstr "Kupong"
+msgstr "Bilag"
 
 #. page / name / orderkey / tooltip / default
 #: ../gnucash/gnome/business-gnome-utils.c:225
@@ -937,18 +931,18 @@ msgstr "Ugyldig URL: %s"
 #: ../gnucash/gnome/business-urls.c:82
 #, c-format
 msgid "No such entity: %s"
-msgstr "Ingen slik enhet: %s"
+msgstr "Ingen slik entitet: %s"
 
 #. =================================================================
 #: ../gnucash/gnome/business-urls.c:170
 #, c-format
 msgid "No such owner entity: %s"
-msgstr "Finner ikke eier: %s"
+msgstr "Finner ikke eier-entitet: %s"
 
 #: ../gnucash/gnome/business-urls.c:279
 #, c-format
 msgid "Entity type does not match %s: %s"
-msgstr "Enhetstype stemmer ikke overens med %s: %s"
+msgstr "Entitetsstype stemmer ikke med %s: %s"
 
 #: ../gnucash/gnome/business-urls.c:289
 #, c-format
@@ -958,11 +952,11 @@ msgstr "Ugyldig URL %s"
 #: ../gnucash/gnome/business-urls.c:302
 #, c-format
 msgid "No such Account entity: %s"
-msgstr "Ingen slik kontoenhet: %s"
+msgstr "Ingen slik kontoentitet: %s"
 
 #: ../gnucash/gnome/dialog-billterms.c:267
 msgid "Discount days cannot be more than due days."
-msgstr ""
+msgstr "Rabatt dager kan ikke være mer enn forfallsdagene."
 
 #: ../gnucash/gnome/dialog-billterms.c:326
 msgid "You must provide a name for this Billing Term."
@@ -1041,8 +1035,8 @@ msgid ""
 "This commodity has price quotes. Are you sure you want to delete the "
 "selected commodity and its price quotes?"
 msgstr ""
-"Denne varen har tilknyttede priser. Er du sikker på at du vil slette den "
-"valgte varen og dens priser?"
+"Denne varen har prisopplysninger. Er du sikker på at du vil slette den "
+"valgte varen og dens prisopplysninger?"
 
 #: ../gnucash/gnome/dialog-commodities.c:177
 msgid "Are you sure you want to delete the selected commodity?"
@@ -1146,7 +1140,6 @@ msgid "_Delete"
 msgstr "S_lett"
 
 #: ../gnucash/gnome/dialog-customer.c:329
-#, fuzzy
 msgid ""
 "You must enter a company name. If this customer is an individual (and not a "
 "company) you should enter the same value for:\n"
@@ -1154,7 +1147,9 @@ msgid ""
 "Payment Address - Name."
 msgstr ""
 "Du må fylle inn et firmanavn. Hvis kunden er en person (og ikke et firma) "
-"bør \"firmanavn\" og \"kontaktnavn\" være like."
+"bør du bruke samme verdi for:\n"
+"Identifisering – firmanavn, og\n"
+"Betalingsadresse – kontaktnavn."
 
 #: ../gnucash/gnome/dialog-customer.c:341
 msgid "You must enter a billing address."
@@ -1259,9 +1254,8 @@ msgid "No Account selected. Please try again."
 msgstr "Konto er ikke valgt. Vennligst forsøk igjen."
 
 #: ../gnucash/gnome/dialog-date-close.c:82
-#, fuzzy
 msgid "Placeholder account selected. Please try again."
-msgstr "Konto er ikke valgt. Vennligst forsøk igjen."
+msgstr "Plassholder-konto er valgt. Vennligst forsøk igjen."
 
 #: ../gnucash/gnome/dialog-employee.c:199
 msgid "You must enter a username."
@@ -1277,7 +1271,7 @@ msgstr "Du må fylle inn en adresse."
 
 #: ../gnucash/gnome/dialog-employee.c:294
 msgid "Edit Employee"
-msgstr "Rediger ansatt"
+msgstr "Endre ansatt"
 
 #: ../gnucash/gnome/dialog-employee.c:296
 #: ../gnucash/gnome/gtkbuilder/dialog-employee.glade.h:1
@@ -1343,12 +1337,12 @@ msgid ""
 "GnuCash cannot determine the value in one of the fields. You must enter a "
 "valid expression."
 msgstr ""
-"GnuCash kan ikke gjenkjenne verdien i et av feltene. Du må fylle inn en "
-"gyldig verdi."
+"GnuCash kan ikke gjenkjenne verdien i et av feltene. Du må fylle inn et "
+"gyldig uttrykk."
 
 #: ../gnucash/gnome/dialog-fincalc.c:353
 msgid "The interest rate cannot be zero."
-msgstr "Rentefoten kan ikke være null."
+msgstr "Rentesatsen kan ikke være null."
 
 #: ../gnucash/gnome/dialog-fincalc.c:372
 msgid "The number of payments cannot be zero."
@@ -1356,22 +1350,19 @@ msgstr "Antall betalinger kan ikke være null."
 
 #: ../gnucash/gnome/dialog-fincalc.c:377
 msgid "The number of payments cannot be negative."
-msgstr "Antall betalinger kan ikke være et negativt tall."
+msgstr "Antall betalinger kan ikke være negativt."
 
 #: ../gnucash/gnome/dialog-find-account.c:310
-#, fuzzy
 msgid "Place Holder"
 msgstr "Plassholder"
 
 #: ../gnucash/gnome/dialog-find-account.c:321
-#, fuzzy
 msgid "Hidden"
 msgstr "Sk_jult"
 
 #: ../gnucash/gnome/dialog-find-account.c:332
-#, fuzzy
 msgid "Not Used"
-msgstr "Ikke planlagt"
+msgstr "Ikke brukt"
 
 #: ../gnucash/gnome/dialog-find-account.c:343
 #, fuzzy
@@ -1379,9 +1370,8 @@ msgid "Balance Zero"
 msgstr "Saldo (periode)"
 
 #: ../gnucash/gnome/dialog-find-account.c:361
-#, fuzzy
 msgid "Search from "
-msgstr " Søk "
+msgstr "Søk fra"
 
 #: ../gnucash/gnome/dialog-find-transactions2.c:107
 #: ../gnucash/gnome/dialog-find-transactions.c:106
@@ -1455,9 +1445,8 @@ msgstr "Posteringsdato"
 #: ../gnucash/import-export/csv-exp/csv-transactions-export.c:624
 #: ../gnucash/report/standard-reports/income-gst-statement.scm:847
 #: ../gnucash/report/standard-reports/transaction.scm:217
-#, fuzzy
 msgid "Number/Action"
-msgstr "Nummervalg"
+msgstr "Nummer/handling"
 
 #: ../gnucash/gnome/dialog-find-transactions2.c:133
 #: ../gnucash/gnome/dialog-find-transactions2.c:170
@@ -1495,9 +1484,8 @@ msgstr "Handling"
 #: ../gnucash/import-export/csv-exp/csv-transactions-export.c:621
 #: ../gnucash/report/standard-reports/income-gst-statement.scm:851
 #: ../gnucash/report/standard-reports/transaction.scm:229
-#, fuzzy
 msgid "Transaction Number"
-msgstr "Transaksjonsjournal"
+msgstr "Transaksjonsnummer"
 
 #: ../gnucash/gnome/dialog-find-transactions2.c:137
 #: ../gnucash/gnome/dialog-find-transactions2.c:172
@@ -1516,12 +1504,12 @@ msgstr "Transaksjonsjournal"
 #: ../gnucash/report/standard-reports/income-gst-statement.scm:898
 #: ../gnucash/report/standard-reports/transaction.scm:223
 msgid "Number"
-msgstr "Tall"
+msgstr "Nummer"
 
 #: ../gnucash/gnome/dialog-find-transactions2.c:149
 #: ../gnucash/gnome/dialog-find-transactions.c:148
 msgid "Description, Notes, or Memo"
-msgstr ""
+msgstr "Beskrivelser, merknader, eller notater"
 
 #: ../gnucash/gnome/dialog-find-transactions2.c:153
 #: ../gnucash/gnome/dialog-find-transactions.c:152
@@ -1642,42 +1630,36 @@ msgid "Find Transaction"
 msgstr "Finn transaksjoner"
 
 #: ../gnucash/gnome/dialog-imap-editor.c:119
-#, fuzzy
 msgid "Are you sure you want to delete the entries ?"
-msgstr "Er du sikker på at du ønsker å slette oppføringen?"
+msgstr "Er du sikker på at du ønsker å slette oppføringene?"
 
 #: ../gnucash/gnome/dialog-imap-editor.c:412
-#, fuzzy
 msgid "Map Account NOT found"
-msgstr "Kontokode"
+msgstr "Kontotilordning IKKE funnet"
 
 #: ../gnucash/gnome/dialog-imap-editor.c:503
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:5
 msgid "Bayesian"
-msgstr ""
+msgstr "Bayesisk"
 
 #. Description
 #: ../gnucash/gnome/dialog-imap-editor.c:518
-#, fuzzy
 msgid "Description Field"
 msgstr "Beskrivelse"
 
 #. Memo
 #: ../gnucash/gnome/dialog-imap-editor.c:521
-#, fuzzy
 msgid "Memo Field"
-msgstr "Felt"
+msgstr "Notat"
 
 #. CSV Account Map
 #: ../gnucash/gnome/dialog-imap-editor.c:524
-#, fuzzy
 msgid "CSV Account Map"
-msgstr "Kontonavn"
+msgstr "CSV kontotilordning"
 
 #: ../gnucash/gnome/dialog-imap-editor.c:561
-#, fuzzy
 msgid "Online Id"
-msgstr "Online"
+msgstr "Online-ID"
 
 #. Translators: In this context,
 #. * 'Billing information' maps to the
@@ -1686,17 +1668,17 @@ msgstr "Online"
 #. * invoiced.
 #: ../gnucash/gnome/dialog-invoice.c:405 ../gnucash/gnome/dialog-order.c:182
 msgid "You need to supply Billing Information."
-msgstr "Du må fylle inn faktureringsinformasjon."
+msgstr "Du må fylle inn fakturainformasjon."
 
 #: ../gnucash/gnome/dialog-invoice.c:592
 msgid "Are you sure you want to delete the selected entry?"
-msgstr "Er du sikker på at du ønsker å slette valgte linje?"
+msgstr "Er du sikker på at du ønsker å slette den valgte oppføringen?"
 
 #: ../gnucash/gnome/dialog-invoice.c:594
 msgid ""
 "This entry is attached to an order and will be deleted from that as well!"
 msgstr ""
-"Fakturalinjen er koplet til en ordre, og vil bli slettet fra denne også!"
+"Fakturalinjen er koplet til en ordre, og vil også bli slettet fra denne!"
 
 #: ../gnucash/gnome/dialog-invoice.c:703 ../gnucash/gnome/dialog-invoice.c:3110
 #: ../gnucash/gnome/dialog-invoice.c:3144
@@ -1742,10 +1724,12 @@ msgid ""
 "One or more of the entries are for accounts different from the invoice/bill "
 "currency. You will be asked a conversion rate for each."
 msgstr ""
+"En eller flere av linjene er for kontoer forskjellig fra faktura-/"
+"regningsvalutaen. Du vil bli spurt om vekslingskurs for hver enkelt."
 
 #: ../gnucash/gnome/dialog-invoice.c:971
 msgid "The post action was canceled because not all exchange rates were given."
-msgstr ""
+msgstr "Posthandlingen ble kansellert fordi ikke alle valutakurser ble gitt."
 
 #: ../gnucash/gnome/dialog-invoice.c:1242
 #: ../gnucash/gnome/window-reconcile2.c:1149
@@ -1783,16 +1767,14 @@ msgstr "Sum fakturerbart:"
 #: ../gnucash/report/business-reports/invoice.scm:682
 #: ../gnucash/report/business-reports/invoice.scm:686
 #: ../libgnucash/engine/gncInvoice.c:996
-#, fuzzy
 msgid "Credit Note"
-msgstr "Kreditkonto"
+msgstr "Kreditnota"
 
 #: ../gnucash/gnome/dialog-invoice.c:1942
 #: ../gnucash/gnome/dialog-invoice.c:1961
 #: ../gnucash/gnome/dialog-invoice.c:1980
-#, fuzzy
 msgid "New Credit Note"
-msgstr "Kreditkonto"
+msgstr "Ny kreditnota"
 
 #: ../gnucash/gnome/dialog-invoice.c:1943
 #: ../gnucash/gnome/gnc-plugin-page-owner-tree.c:275
@@ -1804,9 +1786,8 @@ msgstr "Ny faktura"
 #: ../gnucash/gnome/dialog-invoice.c:1948
 #: ../gnucash/gnome/dialog-invoice.c:1967
 #: ../gnucash/gnome/dialog-invoice.c:1986
-#, fuzzy
 msgid "Edit Credit Note"
-msgstr "Rediger rapportoppsett"
+msgstr "Rediger kredittnota"
 
 #: ../gnucash/gnome/dialog-invoice.c:1949
 msgid "Edit Invoice"
@@ -1815,9 +1796,8 @@ msgstr "Rediger faktura"
 #: ../gnucash/gnome/dialog-invoice.c:1952
 #: ../gnucash/gnome/dialog-invoice.c:1971
 #: ../gnucash/gnome/dialog-invoice.c:1990
-#, fuzzy
 msgid "View Credit Note"
-msgstr "Vis/rediger jobb"
+msgstr "Vis kredittnota"
 
 #: ../gnucash/gnome/dialog-invoice.c:1953
 msgid "View Invoice"
@@ -1852,9 +1832,8 @@ msgstr "Vis utgiftsbilag"
 
 #: ../gnucash/gnome/dialog-invoice.c:2390
 #: ../gnucash/gnome/dialog-invoice.c:2569
-#, fuzzy
 msgid "Bill Information"
-msgstr "Fakturainformasjon"
+msgstr "Regningsinformasjon"
 
 #: ../gnucash/gnome/dialog-invoice.c:2392
 #: ../gnucash/gnome/dialog-invoice.c:2572
@@ -1864,9 +1843,8 @@ msgstr "Regnings-ID"
 
 #: ../gnucash/gnome/dialog-invoice.c:2395
 #: ../gnucash/gnome/dialog-invoice.c:2576
-#, fuzzy
 msgid "Voucher Information"
-msgstr "Fakturainformasjon"
+msgstr "Bilagsinformasjon"
 
 #: ../gnucash/gnome/dialog-invoice.c:2397
 #: ../gnucash/gnome/dialog-invoice.c:2579
@@ -1875,20 +1853,20 @@ msgid "Voucher ID"
 msgstr "Bilags-ID"
 
 #: ../gnucash/gnome/dialog-invoice.c:2918
-#, fuzzy
 msgid "Date of duplicated entries"
-msgstr "Finn duplikattransaksjoner"
+msgstr "Dato for duplikattransaksjoner"
 
 #: ../gnucash/gnome/dialog-invoice.c:2973
 msgid ""
 "One or more selected invoices have already been posted.\n"
 "Re-check your selection."
 msgstr ""
+"En eller flere av valgte fakturaene har allerede blitt postert.\n"
+"Kontroller ditt utvalg på nytt."
 
 #: ../gnucash/gnome/dialog-invoice.c:2977
-#, fuzzy
 msgid "Do you really want to post these invoices?"
-msgstr "Vil du virkelig postere fakturaen?"
+msgstr "Vil du virkelig postere disse fakturaene?"
 
 #: ../gnucash/gnome/dialog-invoice.c:3055
 #: ../gnucash/gnome/dialog-invoice.c:3337
@@ -1914,9 +1892,8 @@ msgstr "Poster"
 #: ../gnucash/gnome/dialog-invoice.c:3059
 #: ../gnucash/gnome/dialog-invoice.c:3068
 #: ../gnucash/gnome/dialog-invoice.c:3079
-#, fuzzy
 msgid "Printable Report"
-msgstr "Enkel rapport"
+msgstr "Utskrivbar rapport"
 
 #: ../gnucash/gnome/dialog-invoice.c:3064
 #: ../gnucash/gnome/dialog-invoice.c:3331
@@ -1927,7 +1904,7 @@ msgstr "Vis/rediger regning"
 #. interchangeably in gnucash and mean the same thing.
 #: ../gnucash/gnome/dialog-invoice.c:3075
 msgid "View/Edit Voucher"
-msgstr "Vis/rediger utgiftsbilag"
+msgstr "Vis/rediger bilag"
 
 #: ../gnucash/gnome/dialog-invoice.c:3089
 msgid "Invoice Owner"
@@ -2083,7 +2060,7 @@ msgstr "Finn faktura"
 #. the condition "Is this invoice a Credit Note?"
 #: ../gnucash/gnome/dialog-invoice.c:3347
 msgid "CN?"
-msgstr ""
+msgstr "KN?"
 
 #. note the "Amount" multichoice option here
 #: ../gnucash/gnome/dialog-invoice.c:3349
@@ -2120,29 +2097,28 @@ msgstr "Beløp"
 #. Translators: %d is the number of bills/credit notes due. This is a
 #. ngettext(3) message.
 #: ../gnucash/gnome/dialog-invoice.c:3435
-#, fuzzy, c-format
+#, c-format
 msgid "The following vendor document is due:"
 msgid_plural "The following %d vendor documents are due:"
-msgstr[0] "Følgende regning er forfalt"
-msgstr[1] "Følgende regning er forfalt"
+msgstr[0] "Følgende regning er forfalt:"
+msgstr[1] "Følgende %d regninger er forfalt:"
 
 #: ../gnucash/gnome/dialog-invoice.c:3439
 msgid "Due Bills Reminder"
-msgstr "Påminner for forfalte regninger"
+msgstr "Påminning for forfalte regninger"
 
 #. Translators: %d is the number of invoices/credit notes due. This is a
 #. ngettext(3) message.
 #: ../gnucash/gnome/dialog-invoice.c:3446
-#, fuzzy, c-format
+#, c-format
 msgid "The following customer document is due:"
 msgid_plural "The following %d customer documents are due:"
-msgstr[0] "Følgende regning er forfalt"
-msgstr[1] "Følgende regning er forfalt"
+msgstr[0] "Følgende kundefordring er forfalt:"
+msgstr[1] "Følgende %d kundefordringer er forfalt"
 
 #: ../gnucash/gnome/dialog-invoice.c:3450
-#, fuzzy
 msgid "Due Invoices Reminder"
-msgstr "Påminner for forfalte regninger"
+msgstr "Påminning for forfalte fakturaer"
 
 #: ../gnucash/gnome/dialog-job.c:139
 msgid "The Job must be given a name."
@@ -2237,6 +2213,7 @@ msgstr "Tittel"
 #: ../gnucash/report/standard-reports/account-summary.scm:460
 #: ../gnucash/report/standard-reports/register.scm:174
 #: ../gnucash/report/standard-reports/sx-summary.scm:465
+#, fuzzy
 msgid "Balance"
 msgstr "Saldo"
 
@@ -2313,9 +2290,8 @@ msgid "Find Order"
 msgstr "Finn ordre"
 
 #: ../gnucash/gnome/dialog-payment.c:228
-#, fuzzy
 msgid "You must enter a valid account name for posting."
-msgstr "Du må fylle inn et kontonavn for postering."
+msgstr "Du må fylle inn et gyldig kontonavn for postering."
 
 #: ../gnucash/gnome/dialog-payment.c:236
 msgid "You must select a company for payment processing."
@@ -2334,6 +2310,8 @@ msgid ""
 "The transfer and post accounts are associated with different currencies. "
 "Please specify the conversion rate."
 msgstr ""
+"Konto og motkonto er forbundet med forskjellige valutaer. Vennligst angi "
+"vekslingskurs."
 
 #. Translators: "Markup" is profit amount divided by sales amount
 #: ../gnucash/gnome/dialog-payment.c:1200
@@ -2388,7 +2366,7 @@ msgid ""
 "an Invoice or Bill first?"
 msgstr ""
 "Du har ingen gyldig \"postér til\"-konto. Vennligst lag en konto av typen "
-"\"%s\" før du fortsetter å behandle denne betalinger. Kanskje du vil "
+"\"%s\" før du fortsetter å behandle denne betalingen. Kanskje du vil "
 "opprettet en faktura eller regning først?"
 
 #: ../gnucash/gnome/dialog-payment.c:1500
@@ -2396,6 +2374,7 @@ msgid ""
 "The selected transaction doesn't have splits that can be assigned as a "
 "payment"
 msgstr ""
+"Den valgte overføringen har ikke splitter som kan tilordnes som en betaling"
 
 #: ../gnucash/gnome/dialog-payment.c:1514
 msgid ""
@@ -2404,17 +2383,19 @@ msgid ""
 "Please select one, the others will be ignored.\n"
 "\n"
 msgstr ""
+"Selv om denne overføringen har flere splitter som kan anses\n"
+"som «betalingssplitten», så vet gnucash kun hvordan én skal håndteres.\n"
+"Vennligst velg en, de andre vil bli ignorert.\n"
+"\n"
 
 #: ../gnucash/gnome/dialog-payment.c:1517
-#, fuzzy
 msgid "Warning"
-msgstr "Nullstill advarsler"
+msgstr "Advarsler"
 
 #: ../gnucash/gnome/dialog-payment.c:1520
 #: ../gnucash/gnome/dialog-payment.c:1638
-#, fuzzy
 msgid "Continue"
-msgstr "Kontinuerlig"
+msgstr "Fortsett"
 
 #: ../gnucash/gnome/dialog-payment.c:1521
 #: ../gnucash/gnome/gnc-plugin-page-invoice.c:260
@@ -2434,14 +2415,20 @@ msgid ""
 "%s\n"
 "Do you wish to continue and ignore these splits ?"
 msgstr ""
+"Overføringen har minst en splitt i en firmakonto som ikke er del av en "
+"forretningsoverføring.\n"
+"Hvis du fortsetter vil disse splittene bli ignorert:\n"
+"\n"
+"%s\n"
+"Vil du fortsette og ignorere disse splittene?"
 
 #. Translators: %d is the number of prices. This is a ngettext(3) message.
 #: ../gnucash/gnome/dialog-price-edit-db.c:189
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete the selected price?"
 msgid_plural "Are you sure you want to delete the %d selected prices?"
 msgstr[0] "Er du sikker på at du vil slette den valgte prisen?"
-msgstr[1] "Er du sikker på at du vil slette %d valgte priser?"
+msgstr[1] "Er du sikker på at du vil slette de %d valgte prisene?"
 
 #: ../gnucash/gnome/dialog-price-edit-db.c:197
 msgid "Delete prices?"
@@ -2456,17 +2443,14 @@ msgid "Entries"
 msgstr "Oppføringer"
 
 #: ../gnucash/gnome/dialog-price-edit-db.c:451
-#, fuzzy
 msgid "Are you sure you want to delete these prices ?"
-msgstr "Er du sikker på at du vil slette den valgte prisen?"
+msgstr "Er du sikker på at du vil slette disse valgte prisene?"
 
 #: ../gnucash/gnome/dialog-price-editor.c:213
-#, fuzzy
 msgid "You must select a Security."
-msgstr "Du må velge en valuta."
+msgstr "Du må velge et verdipapir."
 
 #: ../gnucash/gnome/dialog-price-editor.c:218
-#, fuzzy
 msgid "You must select a Currency."
 msgstr "Du må velge en valuta."
 
@@ -2478,11 +2462,12 @@ msgstr "Du må oppgi et gyldig beløp."
 #: ../gnucash/gnome/dialog-print-check.c:819
 #, fuzzy
 msgid "Cannot save check format file."
-msgstr "Du kan ikke lagre til den filen."
+msgstr "Du kan ikke lagre kontrollformatfil."
 
 #: ../gnucash/gnome/dialog-print-check.c:1507
+#, fuzzy
 msgid "There is a duplicate check format file."
-msgstr ""
+msgstr "Det finnes en duplisert kontrollformatfil."
 
 #. Translators: %1$s is the type of the first check
 #. * format (user defined or application defined); %2$s
@@ -2490,27 +2475,27 @@ msgstr ""
 #. * the other check format; and %4$s the filename of
 #. * that other format.
 #: ../gnucash/gnome/dialog-print-check.c:1515
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The GUIDs in the %s check format file '%s' and the %s check format file '%s' "
 "match."
 msgstr ""
+"GUID i %s kontrollformatfilen «%s» og %s kontrollformatfilen «%s» stemmer "
+"overens."
 
 #. Translators: This is a directory name. It may be presented to
 #. * the user to indicate that some data file was defined by the
 #. * gnucash application.
 #: ../gnucash/gnome/dialog-print-check.c:1556
-#, fuzzy
 msgid "application"
-msgstr "Avslutt programmet"
+msgstr "program"
 
 #. Translators: This is a directory name. It may be presented to
 #. * the user to indicate that some data file was defined by a
 #. * user herself.
 #: ../gnucash/gnome/dialog-print-check.c:1564
-#, fuzzy
 msgid "user"
-msgstr "Kunde"
+msgstr "bruker"
 
 #: ../gnucash/gnome/dialog-print-check.c:1588
 #: ../gnucash/gnome/dialog-print-check.c:2601
@@ -2531,9 +2516,8 @@ msgstr "Øverst"
 
 #: ../gnucash/gnome/dialog-progress.c:484
 #: ../gnucash/gnome/dialog-progress.c:533
-#, fuzzy
 msgid "(paused)"
-msgstr " (postert)"
+msgstr " (pauset)"
 
 #: ../gnucash/gnome/dialog-progress.c:768
 #: ../gnucash/gnome/dialog-progress.c:771
@@ -2576,11 +2560,10 @@ msgstr "Komm_andoer"
 
 #: ../gnucash/gnome/dialog-sx-editor2.c:199
 #: ../gnucash/gnome/dialog-sx-editor.c:201
-#, fuzzy
 msgid ""
 "This Scheduled Transaction has changed; are you sure you want to cancel?"
 msgstr ""
-"Denne planlagte kommandoen er endret; er du sikker på at du vil avbryte?"
+"Denne planlagte transaksjonen er endret; er du sikker på at du vil avbryte?"
 
 #: ../gnucash/gnome/dialog-sx-editor2.c:636
 #, c-format
@@ -2662,6 +2645,8 @@ msgid ""
 "Note: If you have already accepted changes to the Template, Cancel will not "
 "revoke them."
 msgstr ""
+"Merk: Hvis du allerede har akseptert endring av malen, så vil ikke «avbryt» "
+"endre disse."
 
 #: ../gnucash/gnome/dialog-sx-editor2.c:1346
 #: ../gnucash/gnome/dialog-sx-editor.c:1382
@@ -3148,7 +3133,7 @@ msgstr "_Verdipapir-redigering"
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:197
 msgid "View and edit the commodities for stocks and mutual funds"
-msgstr "Vis og endre varene for aksjer og fond"
+msgstr "Vis og rediger varene for aksjer og fond"
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:201
 #, fuzzy
@@ -3311,9 +3296,8 @@ msgid "_Customer"
 msgstr "_Kunde"
 
 #: ../gnucash/gnome/gnc-plugin-business.c:157
-#, fuzzy
 msgid "Customers Overview"
-msgstr "Kundens fakturaer"
+msgstr "Kundeoversikt"
 
 #: ../gnucash/gnome/gnc-plugin-business.c:158
 #, fuzzy
@@ -4212,7 +4196,7 @@ msgstr "Rediger valgt konto"
 #: ../gnucash/gnome/gnc-plugin-page-owner-tree.c:146
 #, fuzzy
 msgid "E_dit Customer"
-msgstr "Endre Kunde"
+msgstr "Endre kunde"
 
 #: ../gnucash/gnome/gnc-plugin-page-owner-tree.c:147
 #, fuzzy
@@ -4331,7 +4315,7 @@ msgstr "Ansattrapport"
 #: ../gnucash/gnome/gnc-plugin-page-owner-tree.c:276
 #, fuzzy
 msgid "New Voucher"
-msgstr "Kupong"
+msgstr "Nytt bilag"
 
 #: ../gnucash/gnome/gnc-plugin-page-owner-tree.c:477
 #, fuzzy
@@ -5032,7 +5016,7 @@ msgstr "Transaksjonsjournal"
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
 msgstr ""
-"Denne transaksjonen er satt som skrivebeskyttet med følgende kommentar: '%s'"
+"Denne transaksjonen er satt som skrivebeskyttet med følgende kommentar: «%s»"
 
 #: ../gnucash/gnome/gnc-plugin-page-register.c:3149
 #: ../gnucash/gnome/gnc-split-reg.c:766
@@ -5297,7 +5281,7 @@ msgstr "Den gjeldende transaksjonen er ikke i balanse."
 #: ../gnucash/gnome-utils/gnc-tree-control-split-reg.c:963
 #, c-format
 msgid "Delete the split '%s' from the transaction '%s'?"
-msgstr "Slett splitt '%s' fra transaksjon '%s'?"
+msgstr "Slett splitt «%s» fra transaksjon «%s»?"
 
 #: ../gnucash/gnome/gnc-split-reg.c:1193
 #: ../gnucash/gnome-utils/gnc-tree-control-split-reg.c:964
@@ -5398,7 +5382,7 @@ msgid ""
 "If active, only the 'active' items in the current class will be searched. "
 "Otherwise all items in the current class will be searched."
 msgstr ""
-"Hvis aktiv søkes det bare etter 'aktive' oppføringer i gjeldende kategori. "
+"Hvis aktiv søkes det bare etter «aktive» oppføringer i gjeldende kategori. "
 "Ellers vil det søkes etter alle oppføringer."
 
 #: ../gnucash/gnome/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in.h:5
@@ -5605,7 +5589,7 @@ msgid ""
 "any valid strftime string; for more information about this format, read the "
 "manual page of strftime by \"man 3 strftime\"."
 msgstr ""
-"Hvis 'date_format' settes til et egendefinert datoformat, vil denne verdien "
+"Hvis «date_format» settes til et egendefinert datoformat, vil denne verdien "
 "brukes som et argument til strftime for å omgjøre datoen til tekst. Dette "
 "kan være en hvilken som helst gyldig strftime-streng; for mer informasjon "
 "les manualen til strftime, tilgjengelig ved kommandoen \"man 3 strftime\"."
@@ -5830,7 +5814,7 @@ msgid ""
 "or only in 'active' items in the current class."
 msgstr ""
 "Denne innstillingen bestemmer om det skal søkes blant alle enheter i den "
-"gjeldende klassen, eller bare i enheter merket 'aktive' i den gjeldende "
+"gjeldende klassen, eller bare i enheter merket «aktive» i den gjeldende "
 "klassen."
 
 #: ../gnucash/gnome/gschemas/org.gnucash.dialogs.gschema.xml.in.in.h:6
@@ -6654,7 +6638,7 @@ msgid ""
 "transactions in expanded form."
 msgstr ""
 "Dette feltet spesifiserer forvalgt visningsstil når et nytt register åpnes. "
-"Mulige verdier er 'hovedbok', 'auto-hovedbok' og 'journal'. \"Hovedbok\" "
+"Mulige verdier er «hovedbok», «auto-hovedbok» og «journal». \"Hovedbok\" "
 "viser hver transaksjon på en eller to linjer. \"Auto-hovedbok\" gjør det "
 "samme, men utvider også gjeldende transaksjon for å vise alle splitter. "
 "\"Journal\"-innstillingen viser alle transaksjoner i utvidet form."
@@ -7099,7 +7083,7 @@ msgstr ""
 "aktiva (som f.eks. investeringer, sjekk eller sparekontoer), gjeld (som f."
 "eks lån) og andre typer inntekter og utgifter som du har.\n"
 "\n"
-"Trykk 'Avbryt' hvis du ikke vil opprette nye kontoer nå."
+"Trykk «Avbryt» hvis du ikke vil opprette nye kontoer nå."
 
 #: ../gnucash/gnome/gtkbuilder/assistant-hierarchy.glade.h:6
 msgid "New Account Hierarchy Setup"
@@ -7583,7 +7567,7 @@ msgid ""
 "the details of that payment here. Otherwise, just click `Forward'."
 msgstr ""
 "Hvis du mottok penger som en følge av aksjesplitten (Cash in lieu), skriv "
-"inn detaljene for den betalingen her. Hvis ikke, trykk 'Neste'."
+"inn detaljene for den betalingen her. Hvis ikke, trykk «Neste»."
 
 #: ../gnucash/gnome/gtkbuilder/assistant-stock-split.glade.h:16
 msgid "_Amount:"
@@ -7618,8 +7602,8 @@ msgid ""
 "making any changes."
 msgstr ""
 "Hvis du er ferdig med opprettelsen av aksjesplitten eller -fusjonen, trykk "
-"'Bruk'. Du kan også velge 'Tilbake' for å se gjennom dine endringer, eller "
-"'Avbryt' for å avslutte uten å registrere endringene."
+"«Bruk». Du kan også velge «Tilbake» for å se gjennom dine endringer, eller "
+"«Avbryt» for å avslutte uten å registrere endringene."
 
 #: ../gnucash/gnome/gtkbuilder/assistant-stock-split.glade.h:23
 #, fuzzy
@@ -9253,7 +9237,7 @@ msgstr "_Auto-opprett nye transaksjoner"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-sx.glade.h:29
 msgid "Set the 'auto-create' flag on newly created scheduled transactions."
-msgstr "Aktiver 'auto-opprett' på nyopprettede planlagte transaksjoner."
+msgstr "Aktiver «auto-opprett» på nyopprettede planlagte transaksjoner."
 
 #: ../gnucash/gnome/gtkbuilder/dialog-sx.glade.h:30
 #, fuzzy
@@ -9284,7 +9268,7 @@ msgstr "_Varsle før transaksjoner blir opprettet "
 
 #: ../gnucash/gnome/gtkbuilder/dialog-sx.glade.h:36
 msgid "Set the 'notify' flag on newly created scheduled transactions."
-msgstr "Aktiver 'varsle' på nyopprettede planlagte transaksjoner."
+msgstr "Aktiver «varsle» på nyopprettede planlagte transaksjoner."
 
 #: ../gnucash/gnome/gtkbuilder/dialog-sx.glade.h:37
 msgid "Edit Scheduled Transaction"
@@ -9829,7 +9813,7 @@ msgstr "Sorteringsrekkefølge"
 #: ../gnucash/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:52
 #, fuzzy
 msgid "Save the sort order for this register."
-msgstr "Rediger hovedkontoen for dette registeret"
+msgstr "Lagre sorteringsorden for dette registeret."
 
 #: ../gnucash/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:53
 #, fuzzy
@@ -9839,7 +9823,7 @@ msgstr "Registerrekkefølge"
 #: ../gnucash/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:54
 #, fuzzy
 msgid "Sort in descending order."
-msgstr "Sorter kolonnen stigende eller synkende"
+msgstr "Sorter kolonnen stigende eller synkende."
 
 #: ../gnucash/gnome/gtkbuilder/gnc-plugin-page-register.glade.h:60
 #, fuzzy
@@ -10457,7 +10441,7 @@ msgid ""
 "Error in regular expression '%s':\n"
 "%s"
 msgstr ""
-"Feil i regulært uttrykk '%s':\n"
+"Feil i regulært uttrykk «%s»:\n"
 "%s"
 
 #: ../gnucash/gnome-search/search-string.c:264
@@ -10513,11 +10497,11 @@ msgid ""
 "\n"
 "You can also go back and verify your selections by clicking on 'Back'."
 msgstr ""
-"Filen har blitt lastet. Hvis du trykker 'Bruk' vil den bli lagret og "
+"Filen har blitt lastet. Hvis du trykker «Bruk» vil den bli lagret og "
 "omlastet inn i hovedprogrammet. På den måten vil du ha en fungerende fil som "
 "sikkerhetskopi i samme katalog.\n"
 "\n"
-"Du kan også gå tilbake og se gjennom dine valg ved å trykke 'Tilbake'."
+"Du kan også gå tilbake og se gjennom dine valg ved å trykke «Tilbake»."
 
 #: ../gnucash/gnome-utils/assistant-xml-encoding.c:226
 msgid "European"
@@ -13507,7 +13491,7 @@ msgstr "Avslutt GnuCash XML-import"
 
 #: ../gnucash/gnome-utils/gtkbuilder/assistant-xml-encoding.glade.h:8
 msgid "Edit the list of encodings"
-msgstr "Vis og rediger listen over tegnkodinger"
+msgstr "Rediger listen over tegnkodinger"
 
 #: ../gnucash/gnome-utils/gtkbuilder/assistant-xml-encoding.glade.h:11
 msgid "<b>S_ystem input encodings</b>"
@@ -13839,7 +13823,7 @@ msgstr "_Saldo:"
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-account.glade.h:62
 msgid "_Use equity 'Opening Balances' account"
-msgstr "Bruk egenkapitalskontoen 'Inngående balanse'"
+msgstr "Bruk egenkapitalskontoen «Inngående balanse»"
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-account.glade.h:63
 msgid "_Select transfer account"
@@ -14225,7 +14209,7 @@ msgstr "Bruk debet og kredit som merkelapper"
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:32
 #, fuzzy
 msgid "Use only 'debit' and 'credit' instead of informal synonyms."
-msgstr "Bruk bare 'debet' og 'kredit' i stedet for informative synonymer"
+msgstr "Bruk bare «debet» og «kredit» i stedet for informative synonymer"
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:33
 msgid "<b>Labels</b>"
@@ -14553,7 +14537,7 @@ msgstr "<b>Handlinger</b>"
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:129
 msgid "'_Enter' moves to blank transaction"
-msgstr "'Linj_eskift' flytter til ny transaksjon"
+msgstr "«Linj_eskift» flytter til ny transaksjon"
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:130
 #, fuzzy
@@ -14562,8 +14546,8 @@ msgid ""
 "transaction in the register. If clear, pressing the 'Enter' key will move "
 "down one row."
 msgstr ""
-"Hvis valgt vil 'linjeskift' flytte til en ny transaksjon i slutten av "
-"registeret. Hvis ikke vil 'linjeskift' flytte til neste transaksjon."
+"Hvis valgt vil «linjeskift» flytte til en ny transaksjon i slutten av "
+"registeret. Hvis ikke vil «linjeskift» flytte til neste transaksjon."
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:131
 msgid "_Auto-raise lists"
@@ -14627,7 +14611,7 @@ msgstr "<b>_Kontoer</b>"
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:145
 #, fuzzy
 msgid "_Future transactions after blank transaction"
-msgstr "'Linj_eskift' flytter til ny transaksjon"
+msgstr "«Linj_eskift» flytter til ny transaksjon"
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:146
 msgid ""
@@ -14855,7 +14839,7 @@ msgid ""
 "'Close' menu item."
 msgstr ""
 "Vis en lukk-knapp på hver notisblokk-fane. Denne funksjonen er identisk med "
-"menyalternativet 'Lukk'."
+"menyalternativet «Lukk»."
 
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:221
 msgid "_Width:"
@@ -16346,8 +16330,8 @@ msgid ""
 "The internal check of the destination IBAN '%s' failed. This means the "
 "account number might contain an error."
 msgstr ""
-"Den interne kontrollen av målkontonummeret '%s' hos den valgte banken med "
-"bankkode '%s' mislyktes. Dette betyr at kontonummeret kan inneholde en feil. "
+"Den interne kontrollen av målkontonummeret «%s» hos den valgte banken med "
+"bankkode «%s» mislyktes. Dette betyr at kontonummeret kan inneholde en feil. "
 "Skal onlineoverføringen sendes med dette kontonummeret likevel?"
 
 #: ../gnucash/import-export/aqb/dialog-ab-trans.c:537
@@ -16357,8 +16341,8 @@ msgid ""
 "bank with bank code '%s' failed. This means the account number might contain "
 "an error."
 msgstr ""
-"Den interne kontrollen av målkontonummeret '%s' hos den valgte banken med "
-"bankkode '%s' mislyktes. Dette betyr at kontonummeret kan inneholde en feil. "
+"Den interne kontrollen av målkontonummeret «%s» hos den valgte banken med "
+"bankkode «%s» mislyktes. Dette betyr at kontonummeret kan inneholde en feil. "
 "Skal onlineoverføringen sendes med dette kontonummeret likevel?"
 
 #: ../gnucash/import-export/aqb/dialog-ab-trans.c:610
@@ -17075,7 +17059,7 @@ msgstr ""
 #, fuzzy
 msgid "Custom regular expression"
 msgstr ""
-"Feil i regulært uttrykk '%s':\n"
+"Feil i regulært uttrykk «%s»:\n"
 "%s"
 
 #: ../gnucash/import-export/bi-import/gtkbuilder/dialog-bi-import-gui.glade.h:16
@@ -17531,7 +17515,7 @@ msgstr "Startdato"
 #, fuzzy
 msgid "Custom regular Expression"
 msgstr ""
-"Feil i regulært uttrykk '%s':\n"
+"Feil i regulært uttrykk «%s»:\n"
 "%s"
 
 #: ../gnucash/import-export/csv-imp/assistant-csv-account-import.glade.h:20
@@ -19495,7 +19479,7 @@ msgstr ""
 "\n"
 "På den neste siden vil du se teksten i betalingsmottaker- og notatfeltene "
 "for transaksjoner uten QIF-konto eller -kategori. SSom standard vil disse "
-"transaksjonene legges inn i kontoen 'Uspesifisert' i GnuCash. Hvis du velger "
+"transaksjonene legges inn i kontoen «Uspesifisert» i GnuCash. Hvis du velger "
 "en annen konto, vil den huskes for fremtidige QIF-filer."
 
 #: ../gnucash/import-export/qif-imp/assistant-qif-import.glade.h:54
@@ -20568,12 +20552,12 @@ msgid ""
 "Cannot modify or delete this transaction. This transaction is marked read-"
 "only because:\n"
 "\n"
-"'%s'"
+"«%s»"
 msgstr ""
 "Kan ikke modifisere eller slette denne transaksjonen. Denne transaksjonen er "
 "skrivebeskyttet grunnet:\n"
 "\n"
-"'%s'"
+"«%s»"
 
 #: ../gnucash/register/ledger-core/split-register-model.c:2062
 #, fuzzy
@@ -24074,11 +24058,11 @@ msgstr "Kredittlinjer"
 
 #: ../gnucash/report/report-system/report-utilities.scm:690
 msgid "Building '%s' report ..."
-msgstr "Bygger '%s' rapport ..."
+msgstr "Bygger «%s» rapport ..."
 
 #: ../gnucash/report/report-system/report-utilities.scm:696
 msgid "Rendering '%s' report ..."
-msgstr "Gjengir '%s' rapport ..."
+msgstr "Gjengir «%s» rapport ..."
 
 #: ../gnucash/report/standard-reports/account-piecharts.scm:38
 msgid "Income Piechart"
@@ -29667,23 +29651,20 @@ msgid "Perform financial calculations, such as a loan repayment"
 msgstr ""
 
 #: ../gnucash/gnome/gnucash.desktop.in.in.h:1
-#, fuzzy
 msgid "GnuCash"
-msgstr "GnuCash %s"
+msgstr "GnuCash"
 
 #: ../gnucash/gnome/gnucash.desktop.in.in.h:2
-#, fuzzy
 msgid "Finance Management"
-msgstr "GnuCash finansforvaltning"
+msgstr "Finansforvaltning"
 
 #: ../gnucash/gnome/gnucash.desktop.in.in.h:3
 msgid "Manage your finances, accounts, and investments"
 msgstr "Forvalt dine finanser, kontoer og investeringer"
 
 #: ../libgnucash/engine/qofbookslots.h:66
-#, fuzzy
 msgid "Use Trading Accounts"
-msgstr "eksisterende konto"
+msgstr "Bruk handelskonto"
 
 #: ../libgnucash/engine/qofbookslots.h:67
 #, fuzzy
@@ -29710,12 +29691,11 @@ msgstr ""
 
 #: ../libgnucash/engine/qofbookslots.h:72
 msgid "Use Split Action Field for Number"
-msgstr ""
+msgstr "Bruk splitthandlingsfeltet for nummer"
 
 #: ../libgnucash/engine/qofbookslots.h:74
-#, fuzzy
 msgid "Budgeting"
-msgstr "Budsjett"
+msgstr "Budsjettering"
 
 #: ../libgnucash/engine/qofbookslots.h:75
 #, fuzzy
@@ -29737,15 +29717,12 @@ msgstr "_Slett budsjett"
 #. * OPTION-NAME-DEFAULT-BUDGET
 #.
 #: ../doc/tip_of_the_day.list.in:1
-#, fuzzy
 msgid ""
 "The GnuCash online manual has lots of helpful information. You can access "
 "the manual under the Help menu."
 msgstr ""
-"Onlineversjonen av GnuCash manualen har mye nyttig informasjon. Hvis du "
-"oppgraderer fra en tidligere versjon av GnuCash, er kapitlet \"Hva er nytt i "
-"GnuCash 2.0\" mest sannsynlig av interesse. Tilgang til manualen får du i "
-"Hjelp-menyen."
+"Onlineversjonen av GnuCash manualen har mye nyttig informasjon. Du kan nå "
+"manualen under Hjelp-menyen."
 
 #: ../doc/tip_of_the_day.list.in:4
 msgid ""
@@ -29756,8 +29733,8 @@ msgid ""
 msgstr ""
 "Du kan enkelt importere eksisterende data fra Quicken, MS Money eller andre "
 "programmer som kan eksportere QIF- eller OFX-filer. I Fil-menyen finner du "
-"undermenyen Importer, velg deretter QIF- eller OFX-fil. Følg instruksjonene "
-"for å importere."
+"undermenyen Importer, velg deretter QIF- eller OFX-fil. Følg deretter de "
+"angitte instruksjonene."
 
 #: ../doc/tip_of_the_day.list.in:9
 msgid ""
@@ -29817,7 +29794,7 @@ msgid ""
 msgstr ""
 "Ved inntasting av beløp under registreringen kan du bruke GnuCash-"
 "kalkulatoren til å addere, subtrahere, multiplisere og dividere. Dette "
-"gjøres ved å skrive inn første verdi, så bruk '+', '-', '*' eller '/', fyll "
+"gjøres ved å skrive inn første verdi, så bruk «+», «-», «*» eller «/», fyll "
 "så inn neste verdi, og trykk enter for å fylle inn kalkulert verdi."
 
 #: ../doc/tip_of_the_day.list.in:35
@@ -29844,7 +29821,7 @@ msgstr ""
 "Skriv inn de første bokstavene av et eksisterende kontonavn i kolonnen for "
 "Motkonto, og GnuCash vil fullføre navnet fra kontoplanen. For underkontoer, "
 "skriv inn de(n) første bokstaven(e) av den overordnede kontoen, deretter "
-"':', og til slutt de(n) første bokstaven(e) i underkontoen (f.eks. I:L for "
+"«:», og til slutt de(n) første bokstaven(e) i underkontoen (f.eks. I:L for "
 "Inntekter:Lønn)."
 
 #: ../doc/tip_of_the_day.list.in:46
@@ -29863,8 +29840,8 @@ msgid ""
 "selected date. You can use '+' and '-' to increment and decrement check "
 "numbers as well."
 msgstr ""
-"Ved inntasting av datoer kan du bruke '+' eller '-' før å gå frem eller "
-"tilbake en dag. Du kan bruke '+' og '-' til å endre kvitteringsnummer også."
+"Ved inntasting av datoer kan du bruke «+» eller «-» før å gå frem eller "
+"tilbake en dag. Du kan bruke «+» og «-» til å endre kvitteringsnummer også."
 
 #: ../doc/tip_of_the_day.list.in:54
 msgid ""
@@ -29951,7 +29928,6 @@ msgstr ""
 "irc.gnome.org"
 
 #: ../doc/tip_of_the_day.list.in:95
-#, fuzzy
 msgid ""
 "There is a theory that if ever anyone discovers what the Universe is for and "
 "why it is here, it will instantly disappear and be replaced with something "
@@ -29962,9 +29938,10 @@ msgid ""
 msgstr ""
 "Det finnes en teori som sier at dersom noen oppdager hva universet er til "
 "for og hvorfor det er her, vil det umiddelbart forsvinne og erstattes med "
-"noe enda mer bisart og uforståelig. Det finnes også en teori som sier at "
-"dette allerede har skjedd. Douglas Adams, \"Restauranten ved universets slutt"
-"\""
+"noe enda mer bisart og uforståelig.\n"
+"Det finnes også en teori som sier at dette allerede har skjedd.\n"
+"\n"
+"Douglas Adams, «Restauranten ved universets slutt»"
 
 #: ../doc/tip_of_the_day.list.in:102
 msgid ""
@@ -29974,8 +29951,12 @@ msgid ""
 msgstr ""
 
 #: ../doc/tip_of_the_day.list.in:106
+#, fuzzy
 msgid ""
 "To visually compare on screen the contents of 2 tabs, in one of the tabs, "
 "select Window -> New Window with Page from the menu to duplicate that tab in "
 "a new window."
 msgstr ""
+"For å visuelt sammenligne på skjermen innholdet i to arkfaner, i en av "
+"arkfanene velg Vindu -> Nytt vindu med side fra menyen for å duplisere den "
+"arkfanen i et nytt vindu."
