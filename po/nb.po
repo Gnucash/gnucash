@@ -3,6 +3,7 @@
 # Kjartan Maraas <kmaraas@gnome.org>, 2000.
 # Tor Harald Thorland <linux@strigen.com>, 2005-2006.
 # Sigve Indregard <sigve.indregard@gmail.com>, 2006.
+# John Erling Blad <jeblad@gmail.com>, 2018
 #
 msgid ""
 msgstr ""
@@ -10,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-13 20:39+0100\n"
 "PO-Revision-Date: 2018-02-16 13:42+0100\n"
-"Last-Translator: sigvei <sigve.indregard@gmail.com>\n"
+"Last-Translator: John Erling Blad <jeblad@gmail.com>\n"
 "Language-Team: Norwegian <>\n"
 "Language: no\n"
 "MIME-Version: 1.0\n"
