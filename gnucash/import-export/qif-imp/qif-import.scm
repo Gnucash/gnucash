@@ -25,7 +25,7 @@
 
 
 (define-module (gnucash import-export qif-import))
-(use-modules (gnucash main)) 
+(use-modules (gnucash utilities)) 
 (use-modules (gnucash app-utils))
 
 ;; We do this initialization here because src/gnome isn't a real module.

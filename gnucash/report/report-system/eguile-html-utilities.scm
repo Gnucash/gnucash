@@ -26,7 +26,7 @@
 
 ; using all of these seems like overkill --
 ; not sure which are really required
-(use-modules (gnucash main))
+(use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash app-utils))
 (gnc:module-load "gnucash/report/report-system" 0)

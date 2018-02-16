@@ -25,7 +25,7 @@
 
 
 (define-module (gnucash report report-gnome))
-(use-modules (gnucash main)) 
+(use-modules (gnucash utilities)) 
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gnome-utils))
 (use-modules (gnucash gettext))

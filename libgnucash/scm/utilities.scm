@@ -15,7 +15,7 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
-(define-module (gnucash main))
+(define-module (gnucash utilities))
 
 ;; Turn off the scheme compiler's "possibly unbound variable" warnings.
 ;; In guile 2.0 we get nearly 7500 of them loading the scheme files.
@@ -34,15 +34,10 @@
 
 (use-modules (gnucash gnc-module))
 
-;; files we can load from the top-level because they're "well behaved"
-;; (these should probably be in modules eventually)
-(load-from-path "string")
-(load-from-path "fin")
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Exports
 
-;; from main.scm
+;; from utilities.scm
 (export gnc:warn)
 (export gnc:error)
 (export gnc:msg)

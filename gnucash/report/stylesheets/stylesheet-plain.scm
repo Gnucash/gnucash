@@ -24,7 +24,7 @@
 
 (define-module (gnucash report stylesheet-plain))
 
-(use-modules (gnucash main)) 
+(use-modules (gnucash utilities)) 
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash core-utils))
 (use-modules (gnucash gettext))

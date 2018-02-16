@@ -1,5 +1,5 @@
 SET(GUILE_DEPENDS      scm-core-utils scm-gnc-module)
-SET(scm_scm_1_SCHEME   printf.scm string.scm main.scm)
+SET(scm_scm_1_SCHEME   printf.scm string.scm utilities.scm)
 
 
 GNC_ADD_SCHEME_TARGETS(scm-scm-1

@@ -29,7 +29,7 @@
 
 (define-module (gnucash report stylesheet-easy))
 
-(use-modules (gnucash main)) 
+(use-modules (gnucash utilities)) 
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 

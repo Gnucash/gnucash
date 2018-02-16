@@ -95,7 +95,7 @@
 ;;
 
 ;(use-modules (gnucash engine))
-;(use-modules (gnucash main)) 
+;(use-modules (gnucash utilities)) 
 ;(use-modules (gnucash printf))
 ;(use-modules (gnucash report report-system))
 ;(use-modules (gnucash app-utils))

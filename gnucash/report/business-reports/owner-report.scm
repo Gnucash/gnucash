@@ -29,7 +29,7 @@
 
 (use-modules (srfi srfi-1))
 (use-modules (gnucash gnc-module))
-(use-modules (gnucash main))        ; for gnc:debug
+(use-modules (gnucash utilities))        ; for gnc:debug
 (use-modules (gnucash gettext))
 
 (gnc:module-load "gnucash/report/report-system" 0)

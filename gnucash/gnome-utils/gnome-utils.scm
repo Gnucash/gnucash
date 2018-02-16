@@ -19,7 +19,7 @@
 
 (define-module (gnucash gnome-utils))
 
-(use-modules (gnucash main)) 
+(use-modules (gnucash utilities)) 
 (use-modules (gnucash gnc-module))
 
 (eval-when

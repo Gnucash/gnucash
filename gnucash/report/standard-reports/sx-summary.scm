@@ -35,7 +35,7 @@
 (define-module (gnucash report standard-reports sx-summary))
 
 (use-modules (srfi srfi-1))
-(use-modules (gnucash main))
+(use-modules (gnucash utilities))
 (use-modules (gnucash printf))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))

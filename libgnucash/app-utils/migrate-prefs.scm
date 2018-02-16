@@ -29,7 +29,7 @@
 
 (define-module (migrate-prefs))
 
-(use-modules (gnucash main))
+(use-modules (gnucash utilities))
 
 (define gconf-dir "")
 (define prefix-length 0)

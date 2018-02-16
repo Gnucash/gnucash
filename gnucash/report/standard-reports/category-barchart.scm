@@ -27,7 +27,7 @@
 (use-modules (gnucash report report-system report-collectors))
 (use-modules (gnucash report report-system collectors))
 (use-modules (srfi srfi-1))
-(use-modules (gnucash main)) 
+(use-modules (gnucash utilities)) 
 (use-modules (ice-9 regex))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))

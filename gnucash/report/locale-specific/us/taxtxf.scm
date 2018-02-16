@@ -92,7 +92,7 @@
 
 
 (define-module (gnucash report taxtxf))
-(use-modules (gnucash main)) 
+(use-modules (gnucash utilities)) 
 (use-modules (srfi srfi-1))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))

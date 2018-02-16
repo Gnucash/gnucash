@@ -26,7 +26,7 @@
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/report/report-system" 0)
 
-(use-modules (gnucash main)) 
+(use-modules (gnucash utilities)) 
 (use-modules (gnucash printf))
 (use-modules (gnucash report report-system))
 (use-modules (gnucash app-utils))

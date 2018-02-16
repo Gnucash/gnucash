@@ -26,7 +26,7 @@
 
 (define-module (gnucash report standard-reports))
 (use-modules (srfi srfi-13))
-(use-modules (gnucash main)) 
+(use-modules (gnucash utilities)) 
 (use-modules (gnucash core-utils))
 
 (export gnc:register-report-create)

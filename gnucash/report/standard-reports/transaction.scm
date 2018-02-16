@@ -40,7 +40,7 @@
 
 (define-module (gnucash report standard-reports transaction))
 
-(use-modules (gnucash main)) 
+(use-modules (gnucash utilities)) 
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-13))
 (use-modules (ice-9 regex))

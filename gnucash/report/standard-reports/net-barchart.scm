@@ -27,7 +27,7 @@
 (define-module (gnucash report standard-reports net-barchart))
 
 (use-modules (srfi srfi-1))
-(use-modules (gnucash main)) 
+(use-modules (gnucash utilities)) 
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
