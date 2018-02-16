@@ -15,8 +15,7 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
-(define-module (gnucash main)
-  #:use-module (gnucash printf))
+(define-module (gnucash main))
 
 ;; Turn off the scheme compiler's "possibly unbound variable" warnings.
 ;; In guile 2.0 we get nearly 7500 of them loading the scheme files.
@@ -49,9 +48,6 @@
 (export gnc:msg)
 (export gnc:debug)
 (export gnc:safe-strcmp) ;; only used by aging.scm atm...
-
-;; Get the cmake generated variables.
-(load-from-path "build-config")
 
 ;; Do this stuff very early -- but other than that, don't add any
 ;; executable code until the end of the file if you can help it.
