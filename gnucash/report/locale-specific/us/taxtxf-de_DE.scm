@@ -67,7 +67,7 @@
 ;; depends must be outside module scope -- and should eventually go away.
 
 (define-module (gnucash report taxtxf-de_DE))
-(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) 
 (use-modules (srfi srfi-1))
 (use-modules (gnucash printf))
 (use-modules (gnucash core-utils)) ; for gnc:version

@@ -26,7 +26,7 @@
 
 (define-module (gnucash report utility-reports))
 
-(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) 
 (use-modules (gnucash report hello-world))
 (use-modules (gnucash report view-column))
 (use-modules (gnucash report welcome-to-gnucash))

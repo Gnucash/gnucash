@@ -34,7 +34,7 @@
 
 (define-module (gnucash report standard-reports income-gst-statement))
 
-(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) 
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-13))
 (use-modules (ice-9 regex))

@@ -42,7 +42,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash report standard-reports income-statement))
-(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) 
 (use-modules (gnucash printf))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))

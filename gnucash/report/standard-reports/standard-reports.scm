@@ -26,7 +26,7 @@
 
 (define-module (gnucash report standard-reports))
 (use-modules (srfi srfi-13))
-(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) 
 (use-modules (gnucash core-utils))
 
 (export gnc:register-report-create)

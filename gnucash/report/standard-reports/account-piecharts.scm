@@ -25,7 +25,7 @@
 
 (define-module (gnucash report standard-reports account-piecharts))
 
-(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) 
 (use-modules (srfi srfi-1))
 (use-modules (ice-9 regex))
 (use-modules (gnucash gnc-module))

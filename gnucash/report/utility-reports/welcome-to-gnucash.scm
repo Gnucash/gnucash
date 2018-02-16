@@ -23,7 +23,7 @@
 (define-module (gnucash report welcome-to-gnucash))
 (export gnc:make-welcome-report)
 
-(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) 
 (use-modules (gnucash core-utils)) ; for gnc:version
 (use-modules (gnucash gettext))
 (use-modules (gnucash gnc-module))

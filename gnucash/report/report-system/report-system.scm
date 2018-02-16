@@ -25,7 +25,7 @@
 
 
 (define-module (gnucash report report-system))
-(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) 
 (use-modules (ice-9 regex))
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-19))

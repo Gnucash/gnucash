@@ -28,7 +28,7 @@
 
 (define-module (gnucash report standard-reports general-journal))
 (export gnc:make-general-journal-report)
-(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) 
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 

@@ -35,7 +35,7 @@
 
 (define-module (gnucash report stylesheet-head-or-tail))
 
-(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) 
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash core-utils)) ; for gnc:version
 (use-modules (gnucash gettext))
