@@ -18,8 +18,6 @@ GNC_ADD_SCHEME_TARGETS(scm-scm-2
 
 ADD_CUSTOM_TARGET(scm-scm ALL DEPENDS scm-scm-1 scm-scm-2)
 
-INSTALL(FILES config DESTINATION ${CMAKE_INSTALL_FULL_SYSCONFDIR}/gnucash)
-
 SET_LOCAL_DIST(scm_DIST_local CMakeLists.txt ${scm_scm_1_SCHEME} price-quotes.scm)
 SET(scm_DIST ${scm_DIST_local} ${scm_gnumeric_DIST} PARENT_SCOPE)
 
