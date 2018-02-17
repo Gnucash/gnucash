@@ -5,19 +5,69 @@
 (use-modules (gnucash report stylesheets))
 (use-modules (gnucash report report-system))
 (use-modules (gnucash report report-system test test-extras))
+(use-modules (srfi srfi-64))
 (use-modules (sxml simple))
+(use-modules (sxml xpath))
 
 ;; copied from transaction.scm
 (define trep-uuid "2fe3b9833af044abb929a88d5a59620f")
 
-(define (run-test)
-  (and
-   (test null-test)
-   (test trep-test-accountlist-generator)
-   (test trep-test-split-generator)
-   (test trep-test-filtering-splits)
-   (test trep-test-table-generator)
-   ))
+(define num-passed 0)
+(define num-failed 0)
+(define (my-runner)
+  (let ((runner (test-runner-null)))
+    (test-runner-on-test-end! runner
+      (lambda (runner)
+        (format #t "[~a] line:~a, test: ~a\n"
+                (test-result-ref runner 'result-kind)
+                (test-result-ref runner 'source-line)
+                (test-runner-test-name runner))
+        (case (test-result-kind runner)
+          ((pass xpass) (set! num-passed (+ num-passed 1)))
+          ((fail xfail) (set! num-failed (+ num-failed 1)))
+          (else #t))))
+    (test-runner-on-final! runner
+      (lambda (runner)
+        (format #t "Source:~a\npass = ~a, fail = ~a\n"
+                (test-result-ref runner 'source-file) num-passed num-failed)))
+    runner))
+
+(define (run-test)  
+  (test-runner-factory my-runner)
+  (test-begin "test-transaction")
+  (null-test)
+  (trep-test-accountlist-generator)
+  (trep-test-split-generator)
+  (trep-test-filtering-splits)
+  (trep-test-table-generator)
+  (test-end)
+  (zero? num-failed))
+
+;;
+;; CANDIDATES FOR INCLUSION IN TEST-EXTRAS.SCM
+;;
+(define (str->sxml str elem)
+  (let ((start (string-contains str (format #f "<~a" elem))))
+    (and start
+         (xml->sxml (substring str start)))))
+
+(define (get-row-col sxml row col)
+  ;; sxml (SXML tree), row & col (numbers or #f)
+  ;; -> list-of-str
+  ;;
+  ;; from an SXML table tree, with tr/th/td elements retrieve row/col
+  ;; if col=#f retrieve whole <tr> row specified
+  ;; if row=#f retrieve whole <td> col specified (excludes <th>)
+  (let ((xpath (cond
+                ((not (and row col)) '(// *text*))
+                ((not col)  `(// (tr ,row) // *text*))
+                ((not row)  `(// (td ,col) // *text*))
+                ((= row 1)  `(// (tr ,row) // (th ,col) // *text*))
+                (else       `(// (tr ,row) // (td ,col) // *text*)))))
+    ((sxpath xpath) sxml)))
+;;
+;; END CANDIDATES
+;;
 
 (define constructor (record-constructor <report>))
 
@@ -43,7 +93,7 @@
     (let ((doc (renderer report)))
       (gnc:html-document-set-style-sheet! doc (gnc:report-stylesheet report))
       (let ((result (gnc:html-document-render doc #f)))
-        (not (equal? result #f))))))
+        (test-assert "null-test" result)))))
 
 (define (trep-test-accountlist-generator)
   ;; This test will create an environment, add the account structure
@@ -68,7 +118,7 @@
        (set-option! report "Filter" "Account Name Filter" "As.et")
        (set-option! report "Filter" "Use regular expressions for account name filter" #t)
        (set! result (renderer:options->accountlist options))
-       (equal? result (list asset bank wallet)))
+       (test-equal "account name regex filter on" result (list asset bank wallet)))
      (let* ((options (gnc:make-report-options trep-uuid))
             (report (constructor trep-uuid "bar" options #t #t #f #f "")))
        (set-option! report "Accounts" "Accounts"
@@ -76,7 +126,7 @@
        (set-option! report "Filter" "Account Name Filter" "As.et")
        (set-option! report "Filter" "Use regular expressions for account name filter" #f)
        (set! result (renderer:options->accountlist options))
-       (equal? result '())))
+       (test-equal "account name regex filter off" result '())))
     ))
 
 (define (trep-test-split-generator)
@@ -114,21 +164,24 @@
           (set! result (renderer:accountlist->splits options account-list))
           (and
            (not (= (length result) 1))
-           (sorted? (map (lambda (s) (xaccTransGetDate (xaccSplitGetParent s)))
-                         result) >)))
+           (test-assert "descending date sort"
+             (sorted? (map (lambda (s) (xaccTransGetDate (xaccSplitGetParent s)))
+                           result) >))))
         (begin
           (set-option! report "Sorting" "Secondary Sort Order" 'ascend)
           (set-option! report "Filter" "Void Transactions" 'non-void-only)
           (set! result (renderer:accountlist->splits options account-list))
-          (and
-           (sorted? (map (lambda (s) (xaccTransGetDate (xaccSplitGetParent s)))
-                         result) <)))
+          (test-assert "ascending date sort"
+            (sorted? (map (lambda (s) (xaccTransGetDate (xaccSplitGetParent s)))
+                          result) <)))
         (begin
           (set-option! report "Filter" "Void Transactions" 'void-only)
           (set! result (renderer:accountlist->splits options account-list))
-          (and (= (length result) 1)
-               (string=? (xaccTransGetVoidReason (xaccSplitGetParent (car result))) "test-voiding")
-               )))))))
+          (test-assert "void-txn filter test"
+            (and
+             (= (length result) 1)
+             (string=? (xaccTransGetVoidReason (xaccSplitGetParent (car result))) "test-voiding")
+             ))))))))
 
 (define (trep-test-filtering-splits)
   (let* ((env (create-test-env))
@@ -153,13 +206,13 @@
        (set-option! report "Filter" "Use regular expressions for transaction filter" #t)
        (set! result (renderer:accountlist->splits options account-list))
        (set! result (renderer:splits->filteredsplits options result #f))
-       (not (equal? '() result)))
+       (test-assert "txn filter regex on" (not (equal? '() result))))
      (begin
        ;; this tests pon.es regex filter disabled, should return empty list
        (set-option! report "Filter" "Use regular expressions for transaction filter" #f)
        (set! result (renderer:accountlist->splits options account-list))
        (set! result (renderer:splits->filteredsplits options result #f))
-       (equal? '() result)))))
+       (test-equal "txn filter regex off" '() result)))))
 
 (define (trep-test-table-generator)
   (let* ((env (create-test-env))
@@ -174,8 +227,10 @@
          (report (constructor trep-uuid "bar" options #t #t #f #f ""))
          (splits #f)
          (table #f)
-         (render #f))
-    (env-create-daily-transactions env begin-month end-month bank expense)
+         (render #f)
+         )
+    ;;(env-create-daily-transactions env begin-month end-month bank expense)
+    (env-create-transaction env begin-month expense bank 50)
     (set-option! report "Accounts" "Accounts" account-list)
     (set-option! report "General" "Start Date" (cons 'relative 'start-this-month))
     (set-option! report "General" "End Date" (cons 'relative 'end-this-month))
@@ -201,14 +256,14 @@
        (gnc:html-document-add-object! document table)
        (gnc:html-document-set-style-sheet! document (gnc:report-stylesheet report))
        (set! render (gnc:html-document-render document))
-       (and
-        (and-map
+        (for-each
          (lambda (str)
-           (not (string-contains render str)))
+           (test-assert
+               (string-append str " header disabled")
+             (not (string-contains render str))))
          (list "Date" "Reconciled Date" "Num" "Description" "Memo"
                "Notes" "Grand Total" "Account" "Transfer from/to"
                "Shares" "Price" "Running Balance" "Amount")))
-       #t)
      (let ((document (gnc:make-html-document)))
        ;; switch on all display options, and test the headings do appear in render
        (set-option! report "Display" "Date" #t)
@@ -228,14 +283,16 @@
        (gnc:html-document-add-object! document table)
        (gnc:html-document-set-style-sheet! document (gnc:report-stylesheet report))
        (set! render (gnc:html-document-render document))
-       (and
-        (and-map
-         (lambda (str)
-           (string-contains render str))
-         (list "Date" "Reconciled Date" "Num" "Description" "Memo"
-               "Notes" "Grand Total" "Account" "Transfer from/to"
-               "Shares" "Price" "Running Balance" "Amount"))
-        #t))
+       (let* ((render-sxml (str->sxml render "table"))
+              (sxml-headers ((sxpath '(// tr th *text*)) render-sxml)))
+         (for-each (lambda (title)
+                     (test-assert
+                         (string-append title " header enabled")
+                       (member title sxml-headers)))
+                   (list "Date" "Reconciled Date" "Num" "Description"
+                         "Memo/Notes" "Account"
+                         "Transfer from/to" "Shares" "Price"
+                         "Running Balance" "Amount"))))
      (let ((document (gnc:make-html-document)))
        ;; test dual-columns debit/credit headings appear
        (set-option! report "Display" "Amount" 'double)
@@ -243,8 +300,11 @@
        (gnc:html-document-add-object! document table)
        (gnc:html-document-set-style-sheet! document (gnc:report-stylesheet report))
        (set! render (gnc:html-document-render document))
-       (and
-        (string-contains render "Debit")
-        (string-contains render "Credit")
-        #t))
+       (let* ((render-sxml (str->sxml render "table"))
+              (sxml-headers ((sxpath '(// tr th *text*)) render-sxml)))
+         (and
+          (test-assert "dual-col Debit header" (member "Debit" sxml-headers))
+          (test-assert "dual-col Credit header" (member "Credit" sxml-headers))
+          (test-assert "dual-col no Amount header" (not (member "Amount" sxml-headers)))
+          #t)))
      )))
