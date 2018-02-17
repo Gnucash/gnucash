@@ -32,13 +32,9 @@ add_custom_command(
 add_custom_target(compiled-schemas ALL DEPENDS ${SCHEMADIR_BUILD}/gschemas.compiled)
 
 
-file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/compile_schemas.sh
-"set -e
-echo \"Compiling gschema files in $DESTDIR${CMAKE_INSTALL_FULL_DATADIR}/glib-2.0/schemas\"
-${GLIB_COMPILE_SCHEMAS} $DESTDIR${CMAKE_INSTALL_FULL_DATADIR}/glib-2.0/schemas")
-
-
-install(CODE "execute_process(COMMAND ${SHELL} ${CMAKE_CURRENT_BINARY_DIR}/compile_schemas.sh)")
+install(CODE "execute_process(
+    COMMAND ${SHELL} -c \"echo Compiling gschema files in $DESTDIR${CMAKE_INSTALL_FULL_DATADIR}/glib-2.0/schemas ;
+                          ${GLIB_COMPILE_SCHEMAS} $DESTDIR${CMAKE_INSTALL_FULL_DATADIR}/glib-2.0/schemas\")")
 
 SET(gschemas_DIST_local "")
 FOREACH(file ${gschema_SOURCES})
