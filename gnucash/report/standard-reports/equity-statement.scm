@@ -50,8 +50,6 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
-(use-modules (gnucash printf))
-
 (gnc:module-load "gnucash/report/report-system" 0)
 
 (define reportname (N_ "Equity Statement"))
@@ -277,9 +275,9 @@
 	 )
     
     (gnc:html-document-set-title! 
-     doc (sprintf #f
-		  (string-append "%s %s "
-				 (_ "For Period Covering %s to %s"))
+     doc (format #f
+		  (string-append "~a ~a "
+				 (_ "For Period Covering ~a to ~a"))
 		  company-name report-title
                   (qof-print-date start-date-printable)
                   (qof-print-date end-date)))
@@ -344,7 +342,7 @@
 	       (terse-period? #t)
 	       (period-for (if terse-period?
 			       (string-append " " (_ "for Period"))
-			       (sprintf #f (string-append ", " (_ "%s to %s"))
+			       (format #f (string-append ", " (_ "~a to ~a"))
 					(qof-print-date start-date-printable)
 					(qof-print-date end-date))
 			       ))

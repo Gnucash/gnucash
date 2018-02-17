@@ -694,7 +694,6 @@ libgnucash/gnc-module/example/gncmod-example.c
 libgnucash/gnc-module/gnc-module.c
 libgnucash/gnc-module/gnc-module.scm
 libgnucash/scm/price-quotes.scm
-libgnucash/scm/printf.scm
 libgnucash/scm/string.scm
 libgnucash/scm/utilities.scm
 libgnucash/tax/us/de_DE.scm

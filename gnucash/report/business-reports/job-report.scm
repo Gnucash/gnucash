@@ -27,7 +27,6 @@
 (define-module (gnucash report job-report))
 
 (use-modules (srfi srfi-1))
-(use-modules (gnucash printf))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash utilities))		; for gnc:debug
 (use-modules (gnucash gettext))
@@ -632,9 +631,9 @@
 	(gnc:html-document-add-object!
 	 document
 	 (gnc:make-html-text
-	  (sprintf #f 
-		   (_ "No valid %s selected. Click on the Options button to select a company.")
-		   (_ type-str))))) ;; FIXME because of translations: Please change this string into full sentences instead of sprintf, because in non-english languages the "no valid" has different forms depending on the grammatical gender of the "%s".
+	  (format #f 
+		   (_ "No valid ~a selected. Click on the Options button to select a company.")
+		   (_ type-str))))) ;; FIXME because of translations: Please change this string into full sentences instead of format, because in non-english languages the "no valid" has different forms depending on the grammatical gender of the "%s".
 
     (qof-query-destroy query)
     document))

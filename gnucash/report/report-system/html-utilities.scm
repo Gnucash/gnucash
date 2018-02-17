@@ -22,8 +22,6 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-modules (gnucash printf))
-
 ;; returns a list with n #f (empty cell) values 
 (define (gnc:html-make-empty-cell) #f)
 (define (gnc:html-make-empty-cells n)
@@ -808,7 +806,7 @@
     (gnc:html-markup-p
      (gnc:html-markup-anchor
       (gnc-build-url URL-TYPE-OPTIONS
-       (string-append "report-id=" (sprintf #f "%a" report-id))
+       (string-append "report-id=" (format #f "~a" report-id))
        "")
       (_ "Edit report options")))))
 

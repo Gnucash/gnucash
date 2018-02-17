@@ -31,8 +31,6 @@
 (use-modules (gnucash gettext))
 (use-modules (gnucash report utility-reports))
 
-(use-modules (gnucash printf))
-
 (eval-when
       (compile load eval expand)
       (load-extension "libgncmod-gnome-utils" "scm_init_sw_gnome_utils_module")
@@ -67,7 +65,7 @@
 
           (if (not menu-tip)
               (set! menu-tip
-                    (sprintf #f (_ "Display the %s report") (_ name))))
+                    (format #f (_ "Display the ~a report") (_ name))))
 
           (set! item
                 (gnc:make-menu-item

@@ -32,7 +32,6 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 (use-modules (gnucash engine))
-(use-modules (gnucash printf))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 (gnc:module-load "gnucash/gnome-utils" 0) ;for gnc-build-url
@@ -164,7 +163,7 @@
      doc (string-append
           (get-option gnc:pagename-general gnc:optname-reportname)
           " - "
-          (sprintf #f (_ "%s to %s")
+          (format #f (_ "~a to ~a")
                    (qof-print-date from-date-t64) (qof-print-date to-date-t64))))
 
 
@@ -238,9 +237,9 @@
 				     (if (and (= (gnc-account-get-current-depth account) tree-depth)
 					      (not (eq? (gnc-account-get-children account) '())))
 					 (if show-subaccts?
-					     (_ "%s and subaccounts")
-					     (_ "%s and selected subaccounts"))
-					 "%s")
+					     (_ "~a and subaccounts")
+					     (_ "~a and selected subaccounts"))
+					 "~a")
 				     (gnc:html-markup-anchor
 				      (gnc:account-anchor-text account)
 				      (if show-full-names?

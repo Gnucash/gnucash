@@ -69,7 +69,6 @@
 (define-module (gnucash report taxtxf-de_DE))
 (use-modules (gnucash utilities)) 
 (use-modules (srfi srfi-1))
-(use-modules (gnucash printf))
 (use-modules (gnucash core-utils)) ; for gnc:version
 (use-modules (gnucash gettext))
 
@@ -845,7 +844,7 @@
                    "center"
                    (gnc:html-markup-p
                     (gnc:html-markup/format
-                     (_ "Period from %s to %s") from-date to-date)))))
+                     (_ "Period from ~a to ~a") from-date to-date)))))
             
             (gnc:html-document-add-object!
              doc (gnc:make-html-text

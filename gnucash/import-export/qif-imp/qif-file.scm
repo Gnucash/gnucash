@@ -26,7 +26,6 @@
 
 
 (use-modules (gnucash core-utils))
-(use-modules (gnucash printf))
 (use-modules (ice-9 regex))
 (use-modules (srfi srfi-13))
 (use-modules (ice-9 rdelim))
@@ -1028,7 +1027,7 @@
                                         (gnc:list-display-to-string (list
                               (_ "Parse ambiguity between formats") " "
                               formats "\n"
-                              (sprintf #f (_ "Value '%s' could be %s or %s.")
+                              (format #f (_ "Value '~a' could be ~a or ~a.")
                                        parsed
                                        (printer parsed)
                                        (printer this-parsed))))))))))

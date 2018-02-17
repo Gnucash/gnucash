@@ -31,7 +31,6 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
-(use-modules (gnucash printf))
 (use-modules (gnucash engine))
 
 (use-modules (srfi srfi-1))
@@ -876,7 +875,7 @@
                )
 
           (gnc:html-document-set-title!
-           doc (sprintf #f (_ "%s: %s")
+           doc (format #f (_ "~a: ~a")
                         report-name (gnc-budget-get-name budget)))
 
           (set! accounts (sort accounts account-full-name<?))

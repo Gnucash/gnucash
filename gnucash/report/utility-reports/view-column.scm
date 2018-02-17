@@ -36,8 +36,6 @@
       (load-extension "libgncmod-report-system" "scm_init_sw_report_system_module"))
 (use-modules (sw_report_system))
 
-(use-modules (gnucash printf))
-
 (gnc:module-load "gnucash/report/report-system" 0)
 (gnc:module-load "gnucash/html" 0) ;for gnc-build-url
 
@@ -172,7 +170,7 @@
 		  (gnc-build-url
 		   URL-TYPE-OPTIONS
 		   (string-append "report-id=" 
-				  (sprintf #f "%a" (car report-info)))
+				  (format #f "~a" (car report-info)))
 		   "")
 		  (_ "Edit Options"))
 		 "&nbsp;"
@@ -180,7 +178,7 @@
 		  (gnc-build-url
 		   URL-TYPE-REPORT
 		   (string-append "id=" 
-				  (sprintf #f "%a" (car report-info)))
+				  (format #f "~a" (car report-info)))
 		   "")
 		  (_ "Single Report")))))
 

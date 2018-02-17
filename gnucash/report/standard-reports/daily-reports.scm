@@ -35,8 +35,6 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
-(use-modules (gnucash printf))
-
 (gnc:module-load "gnucash/report/report-system" 0)
 
 (define menuname-income (N_ "Income vs. Day of Week"))
@@ -475,14 +473,14 @@
                   
                   (gnc:html-piechart-set-subtitle!
                    chart (string-append
-                          (sprintf #f
-                                   (_ "%s to %s")
+                          (format #f
+                                   (_ "~a to ~a")
                                    (qof-print-date from-date)
                                    (qof-print-date to-date))
                           (if show-total?
                               (let ((total (apply + daily-totals)))
-                                (sprintf
-                                 #f ": %s"
+                                (format
+                                 #f ": ~a"
                                  (xaccPrintAmount
                                   (double-to-gnc-numeric
                                    total

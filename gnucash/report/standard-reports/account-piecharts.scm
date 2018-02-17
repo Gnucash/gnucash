@@ -31,8 +31,6 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
-(use-modules (gnucash printf))
-
 (gnc:module-load "gnucash/report/report-system" 0)
 
 (define menuname-income (N_ "Income Piechart"))
@@ -564,17 +562,17 @@ balance at a given time"))
                (gnc:html-piechart-set-subtitle!
                 chart (string-append
                        (if do-intervals?
-                           (sprintf #f
-                                    (_ "%s to %s")
+                           (format #f
+                                    (_ "~a to ~a")
                                     (qof-print-date from-date)
                                     (qof-print-date to-date))
-                           (sprintf #f
-                                    (_ "Balance at %s")
+                           (format #f
+                                    (_ "Balance at ~a")
                                     (qof-print-date to-date)))
                        (if show-total?
                            (let ((total (apply + (unzip1 combined))))
-                             (sprintf
-                              #f ": %s"
+                             (format
+                              #f ": ~a"
                               (xaccPrintAmount
                                (double-to-gnc-numeric
                                 total
@@ -602,8 +600,8 @@ balance at a given time"))
  				 )
  			       "")
  			   (if show-percent?
- 				(sprintf
- 				 #f "   (%2.2f %%)"
+ 				(format
+ 				 #f "   (~2,2f %)"
  				 (* 100.0 (/ (car pair) (apply + (unzip1 combined)))))
  			       "")
  			       ))

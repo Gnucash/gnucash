@@ -22,7 +22,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (gnc:module-load "gnucash/html" 0)
-(use-modules (gnucash printf))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  <html-document> class
@@ -238,7 +237,7 @@
        (if (not style-info)
            (gnc:make-html-data-style-info
             (lambda (datum parms)
-              (sprintf #f "%a %a" markup datum))
+              (format #f "~a ~a" markup datum))
             #f)
            style-info)))
 

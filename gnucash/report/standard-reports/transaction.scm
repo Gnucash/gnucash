@@ -44,7 +44,6 @@
 (use-modules (ice-9 regex))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
-(use-modules (gnucash printf))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
@@ -1845,8 +1844,8 @@ tags within description, notes or memo. ")
                  document
                  (gnc:make-html-text
                   (gnc:html-markup-h3
-                   (sprintf #f
-                            (_ "From %s to %s")
+                   (format #f
+                            (_ "From ~a to ~a")
                             (qof-print-date begindate)
                             (qof-print-date enddate)))))
 

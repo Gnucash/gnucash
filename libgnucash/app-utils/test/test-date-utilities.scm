@@ -3,9 +3,10 @@
 (use-modules (gnucash engine test test-extras))
 
 (define (run-test)
-  (and (test test-weeknum-calculator)))
+  (and (test test-weeknum-calculator)
+       (test test-date-get-quarter-string)))
 
-(define (create-time64 l)
+(define (create-datevec l)
   (let ((now (gnc-localtime (current-time))))
     (set-tm:sec now (list-ref l 5))
     (set-tm:min now (list-ref l 4))
@@ -14,6 +15,10 @@
     (set-tm:mon now (list-ref l 1))
     (set-tm:year now (list-ref l 0))
     (set-tm:isdst now -1)
+    now))
+
+(define (create-time64 l)
+  (let ((now (create-datevec l)))
     (gnc-mktime now)))
 
 (define (weeknums-equal? pair-of-dates)
@@ -36,3 +41,15 @@
        (not (weeknums-equal? (cons '(1969 12 28 0 0 1)
                                    '(1970 1 5 0 0 1))))
        ))
+
+(define (test-date-get-quarter-string)
+  (and (or (string=? "Q1" (gnc:date-get-quarter-string (create-datevec '(2001 2 14 11 42 23))))
+           (begin (format #t "Expected Q1, got ~a~%" (gnc:date-get-quarter-string (creaete-datevec '(2001 2 14 11 42 23))))
+                  #f))
+       (or (string=? "Q2" (gnc:date-get-quarter-string (create-datevec '(2013 4 23 18 11 49))))
+           (begin (format #t "Expected Q1, got ~a~%" (gnc:date-get-quarter-string (create-datevec '(2001 2 14 11 42 23))))
+                  #f))
+       (or (string=? "Q3" (gnc:date-get-quarter-string (create-datevec '(1997 9 11 08 14 21))))
+           (begin (format #t "Expected Q1, got ~a~%" (gnc:date-get-quarter-string (create-datevec '(2001 2 14 11 42 23)))))
+           #f)))
+       

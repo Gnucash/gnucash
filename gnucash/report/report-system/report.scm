@@ -22,7 +22,6 @@
 
 (use-modules (gnucash utilities))
 (use-modules (gnucash app-utils))
-(use-modules (gnucash printf))
 (use-modules (gnucash gettext))
 (eval-when
       (compile load eval expand)

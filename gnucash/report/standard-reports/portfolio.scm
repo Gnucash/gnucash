@@ -28,8 +28,6 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
-(use-modules (gnucash printf))
-
 (gnc:module-load "gnucash/report/report-system" 0)
 
 (define reportname (N_ "Investment Portfolio"))
@@ -156,7 +154,7 @@
                                (gnc:html-price-anchor price price-monetary))
 			      (gnc:make-html-table-header-cell/markup
 			       "number-cell" value)))
-		       ;;(display (sprintf #f "Shares: %6.6d  " (gnc-numeric-to-double units)))
+		       ;;(display (format #f "Shares: ~6d  " (gnc-numeric-to-double units)))
 		       ;;(display units) (newline)
 		       (if price (gnc-price-unref price))
 		       (table-add-stock-rows-internal rest (not odd-row?)))
@@ -191,7 +189,7 @@
     (gnc:html-document-set-title!
      document (string-append
                report-title
-               (sprintf #f " %s" (qof-print-date to-date))))
+               (format #f " ~a" (qof-print-date to-date))))
 
     ;(gnc:debug "accounts" accounts)
     (if (not (null? accounts))

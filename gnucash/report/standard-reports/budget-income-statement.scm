@@ -42,7 +42,6 @@
 
 (define-module (gnucash report standard-reports budget-income-statement))
 (use-modules (gnucash utilities)) 
-(use-modules (gnucash printf))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
@@ -503,20 +502,20 @@
                (period-for
                  (if use-budget-period-range?
                    (if (equal? user-budget-period-start user-budget-period-end)
-                     (sprintf
+                     (format
                        #f
-                       (_ "for Budget %s Period %u")
+                       (_ "for Budget ~a Period ~d")
                        budget-name
                        user-budget-period-start)
-                     (sprintf
+                     (format
                        #f
-                       (_ "for Budget %s Periods %u - %u")
+                       (_ "for Budget ~a Periods ~d - ~d")
                        budget-name
                        user-budget-period-start
                        user-budget-period-end))
-                   (sprintf
+                   (format
                      #f
-                     (_ "for Budget %s")
+                     (_ "for Budget ~a")
                      budget-name)))
 	       )
 
@@ -615,7 +614,7 @@
 
           (gnc:html-document-set-title! 
             doc
-            (sprintf #f "%s %s %s" company-name report-title period-for))
+            (format #f "~a ~a ~a" company-name report-title period-for))
 
 	  (set! table-env
 		(list

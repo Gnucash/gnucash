@@ -32,8 +32,6 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
-(use-modules (gnucash printf))
-
 (gnc:module-load "gnucash/report/report-system" 0)
 
 (define reportname (N_ "Advanced Portfolio"))
@@ -945,7 +943,7 @@
                                              )
 					      (if (= 0.0 moneyinvalue)
 						  ""
-						  (sprintf #f "%.2f%%" (* 100 (/ bothgainvalue moneyinvalue)))))
+						  (format #f "~0,2f%" (* 100 (/ bothgainvalue moneyinvalue)))))
 					)
 					(gnc:make-html-table-header-cell/markup "number-cell" income)))
 	      (if (not (eq? handle-brokerage-fees 'ignore-brokerage))
@@ -959,7 +957,7 @@
                                              )
 					      (if (= 0.0 moneyinvalue)
 						  ""
-						  (sprintf #f "%.2f%%" (* 100 (/ totalreturnvalue moneyinvalue))))))
+						  (format #f "~0,2f%" (* 100 (/ totalreturnvalue moneyinvalue))))))
 					 )
 			)
 
@@ -1027,7 +1025,7 @@
     (gnc:html-document-set-title!
      document (string-append
                report-title
-               (sprintf #f " %s" (qof-print-date to-date))))
+               (format #f " ~a" (qof-print-date to-date))))
 
     (if (not (null? accounts))
         ; at least 1 account selected
@@ -1145,7 +1143,7 @@
 				       )
 				  (if (= 0.0 totalinvalue)
 				      ""
-				      (sprintf #f "%.2f%%" (* 100 (/ totalgainvalue totalinvalue))))))
+				      (format #f "~0,2f%" (* 100 (/ totalgainvalue totalinvalue))))))
 			       (gnc:make-html-table-cell/markup
 				"total-number-cell" sum-total-income)))
 	  (if (not (eq? handle-brokerage-fees 'ignore-brokerage))
@@ -1164,7 +1162,7 @@
 				 )
 				  (if (= 0.0 totalinvalue)
 				      ""
-				      (sprintf #f "%.2f%%" (* 100 (/ totalreturnvalue totalinvalue))))))
+				      (format #f "~0,2f%" (* 100 (/ totalreturnvalue totalinvalue))))))
 			       ))
 
 

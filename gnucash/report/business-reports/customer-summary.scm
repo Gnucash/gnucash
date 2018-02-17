@@ -30,7 +30,6 @@
 
 (use-modules (srfi srfi-1))
 (use-modules (gnucash gnc-module))
-(use-modules (gnucash printf))
 (use-modules (gnucash utilities))                ; for gnc:debug
 (use-modules (gnucash gettext))
 
@@ -904,8 +903,8 @@
                              (list
                               (gncOwnerGetName owner)
                               (gnc:make-gnc-monetary currency profit)
-                              ;;(sprintf #f (if (< (abs markupfloat) 10) "%2.1f%%" "%2.0f%%") markupfloat)
-                              (sprintf #f  "%2.0f%%" markupfloat)
+                              ;;(format #f (if (< (abs markupfloat) 10) "~2.1f%%" "%2.0f%%") markupfloat)
+                              (format #f  "~2,0f%" markupfloat)
                               (gnc:make-gnc-monetary currency sales))))
                         (if show-column-expense?
                             (set!
@@ -928,7 +927,7 @@
                     (list
                      (_ "No Customer")
                      (gnc:make-gnc-monetary currency other-profit)
-                     (sprintf #f  "%2.0f%%" markupfloat)
+                     (format #f  "~2,0f%" markupfloat)
                      (gnc:make-gnc-monetary currency other-sales))))
               (if show-column-expense?
                   (set!
@@ -959,8 +958,8 @@
                     (list
                      (_ "Total")
                      (gnc:make-gnc-monetary currency total-profit)
-                     ;;(sprintf #f (if (< (abs markupfloat) 10) "%2.1f%%" "%2.0f%%") markupfloat)
-                     (sprintf #f  "%2.0f%%" markupfloat)
+                     ;;(format #f (if (< (abs markupfloat) 10) "~2,1f%" "~2,0f%") markupfloat)
+                     (format #f  "~2,0f%" markupfloat)
                      (gnc:make-gnc-monetary currency toplevel-total-income))))
               (if show-column-expense?
                   (set!
@@ -1000,8 +999,8 @@
     (if any-valid-owner?
         ;; Report contains valid data
         (let ((headline 
-               (sprintf
-                #f (_ "%s %s - %s")
+               (format
+                #f (_ "~a ~a - ~a")
                 report-title
                 (qof-print-date start-date)
                 (qof-print-date end-date))))
@@ -1020,9 +1019,9 @@
         (gnc:html-document-add-object!
          document
          (gnc:make-html-text
-          (sprintf #f 
-                   (_ "No valid %s selected. Click on the Options button to select a company.")
-                   (_ type-str))))) ;; FIXME because of translations: Please change this string into full sentences instead of sprintf, because in non-english languages the "no valid" has different forms depending on the grammatical gender of the "%s".
+          (format #f 
+                   (_ "No valid ~a selected. Click on the Options button to select a company.")
+                   (_ type-str))))) ;; FIXME because of translations: Please change this string into full sentences instead of format, because in non-english languages the "no valid" has different forms depending on the grammatical gender of the "%s".
 
     (qof-query-destroy owner-query)
     (qof-query-destroy toplevel-income-query)

@@ -30,8 +30,6 @@
 ;;  doc as arg to get the string out. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-modules (gnucash printf))
-
 (define <html-text> 
   (make-record-type "<html-text>"
                     '(body style)))
@@ -125,12 +123,12 @@
 ;; I'm not entirely pleased about the way this works, but I can't
 ;; really see a way around it.  It still works within the style
 ;; system, but it flattens out its children's lists prematurely.  Has
-;; to, to pass them as args to sprintf.
+;; to, to pass them as args to format.
 
 (define (gnc:html-markup/format format . entities)
   (lambda (doc)
     (apply 
-     sprintf #f format 
+     format #f format 
      (map 
       (lambda (elt)
         (let ((rendered-elt 

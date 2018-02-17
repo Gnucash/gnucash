@@ -22,7 +22,6 @@
 
 
 (use-modules (gnucash core-utils)
-             (gnucash printf)
              (gnucash gettext))
 
 (define gnc:reldate-list '())
@@ -72,7 +71,7 @@
   (gnc-locale-to-utf8 (strftime "%Y" datevec)))
 
 (define (gnc:date-get-quarter-string datevec)
-  (sprintf #f "Q%d" (gnc:date-get-quarter datevec)))
+  (format #f "Q~d" (gnc:date-get-quarter datevec)))
 
 (define (gnc:date-get-quarter-year-string datevec)
   (string-append 
@@ -92,7 +91,7 @@
                           604800))
          (begin-string (qof-print-date (+ beginweekt64 345600)))
          (end-string (qof-print-date (+ beginweekt64 864000))))
-    (sprintf #f (_ "%s to %s") begin-string end-string)))
+    (format #f (_ "~s to ~s") begin-string end-string)))
     
 ;  (let ((begin-string (qof-print-date
 ;                       (+ (* (gnc:date-get-week
@@ -104,7 +103,7 @@
 ;                            (gnc:time64-start-day-time
 ;                             (gnc-mktime datevec)))
 ;                           604800) 864000))))
-;    (sprintf #f (_ "%s to %s") begin-string end-string)))
+;    (format #f (_ "~s to ~s") begin-string end-string)))
 
 ;; is leap year?
 (define (gnc:leap-year? year)

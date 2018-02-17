@@ -31,7 +31,6 @@
 (define-module (gnucash report easy-invoice))
 
 (use-modules (srfi srfi-1))
-(use-modules (gnucash printf))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
@@ -714,7 +713,7 @@
 	       (begin
 	        (set! credit-note? #t)
 	        (set! default-title (_ "Credit Note"))))))
-	  (set! title (sprintf #f (_"%s #%d") (title-string default-title custom-title)
+	  (set! title (format #f (_"~a #~d") (title-string default-title custom-title)
 			       (gncInvoiceGetID invoice)))))
 
 ;    (gnc:html-document-set-title! document title)
@@ -735,7 +734,7 @@
         (add-html! document "<td align='left'>")
         (add-html! document "<b><u>")
 	(add-html! document title)
-;;	(add-html! document (sprintf #f (_ "Invoice #%d")
+;;	(add-html! document (format #f (_ "Invoice #~d")
 ;;				     (gncInvoiceGetID invoice)))
         (add-html! document "</u></b></td>")
         (add-html! document "<td align='right'>")

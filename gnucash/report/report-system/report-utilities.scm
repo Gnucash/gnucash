@@ -18,7 +18,6 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
 (use-modules (srfi srfi-13))
-(use-modules (gnucash printf))
 
 (define (list-ref-safe list elt)
   (if (> (length list) elt)
@@ -686,14 +685,14 @@
     (xaccTransGetVoidStatus trans)))
 
 (define (gnc:report-starting report-name)
-  (gnc-window-show-progress (sprintf #f
-				     (_ "Building '%s' report ...")
+  (gnc-window-show-progress (format #f
+				     (_ "Building '~a' report ...")
 				     (gnc:gettext report-name))
 			    0))
 
 (define (gnc:report-render-starting report-name)
-  (gnc-window-show-progress (sprintf #f
-				     (_ "Rendering '%s' report ...")
+  (gnc-window-show-progress (format #f
+				     (_ "Rendering '~a' report ...")
 				     (if (string-null? report-name)
 					 (gnc:gettext "Untitled")
 					 (gnc:gettext report-name)))

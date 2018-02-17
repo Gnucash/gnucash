@@ -346,7 +346,7 @@ or extending existing reports.")))
         (gnc:html-markup-p
          (gnc:html-markup/format
           (_ "For help on writing reports, or to contribute your brand \
-new, totally cool report, consult the mailing list %s.")
+new, totally cool report, consult the mailing list ~a.")
           (gnc:html-markup-anchor 
            "mailto:gnucash-devel@gnucash.org"
            (gnc:html-markup-tt "gnucash-devel@gnucash.org")))
@@ -355,47 +355,47 @@ new, totally cool report, consult the mailing list %s.")
 
         (gnc:html-markup-p
          (gnc:html-markup/format
-          (_ "The current time is %s.") 
+          (_ "The current time is ~a.") 
           (gnc:html-markup-b time-string)))
 
         (gnc:html-markup-p
          (gnc:html-markup/format
-          (_ "The boolean option is %s.")
+          (_ "The boolean option is ~a.")
           (gnc:html-markup-b (if bool-val (_ "true") (_ "false")))))
 
         (gnc:html-markup-p
          (gnc:html-markup/format
-          (_ "The multi-choice option is %s.")
+          (_ "The multi-choice option is ~a.")
           (gnc:html-markup-b (symbol->string mult-val))))
 
         (gnc:html-markup-p
          (gnc:html-markup/format
-          (_ "The string option is %s.") 
+          (_ "The string option is ~a.") 
           (gnc:html-markup-b string-val)))
 
         (gnc:html-markup-p
          (gnc:html-markup/format
-          (_ "The date option is %s.") 
+          (_ "The date option is ~a.") 
           (gnc:html-markup-b date-string)))
 
         (gnc:html-markup-p
          (gnc:html-markup/format
-          (_ "The date and time option is %s.") 
+          (_ "The date and time option is ~a.") 
           (gnc:html-markup-b date-string2)))
 
         (gnc:html-markup-p
          (gnc:html-markup/format 
-          (_ "The relative date option is %s.")
+          (_ "The relative date option is ~a.")
           (gnc:html-markup-b rel-date-string)))
 
         (gnc:html-markup-p
          (gnc:html-markup/format 
-          (_ "The combination date option is %s.")
+          (_ "The combination date option is ~a.")
           (gnc:html-markup-b combo-date-string)))
 
         (gnc:html-markup-p
          (gnc:html-markup/format 
-          (_ "The number option is %s.")
+          (_ "The number option is ~a.")
           (gnc:html-markup-b (number->string num-val))))
 
         ;; Here we print the value of the number option formatted as
@@ -406,7 +406,7 @@ new, totally cool report, consult the mailing list %s.")
         ;; it yourself -- it will be wrong in other locales.
         (gnc:html-markup-p 
          (gnc:html-markup/format
-          (_ "The number option formatted as currency is %s.")
+          (_ "The number option formatted as currency is ~a.")
           (gnc:html-markup-b
            (xaccPrintAmount
             (inexact->exact num-val)

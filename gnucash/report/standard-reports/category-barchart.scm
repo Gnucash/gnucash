@@ -32,8 +32,6 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
-(use-modules (gnucash printf))
-
 (gnc:module-load "gnucash/report/report-system" 0)
 
 ;; included since Bug726449
@@ -532,10 +530,10 @@ developing over time"))
                (begin
                  (gnc:html-barchart-set-title! chart report-title)
                  (gnc:html-barchart-set-subtitle!
-                   chart (sprintf #f
+                   chart (format #f
                              (if do-intervals?
-                                 (_ "%s to %s")
-                                 (_ "Balances %s to %s"))
+                                 (_ "~a to ~a")
+                                 (_ "Balances ~a to ~a"))
                              (jqplot-escape-string (qof-print-date from-date-t64))
                              (jqplot-escape-string (qof-print-date to-date-t64))))
 
@@ -558,10 +556,10 @@ developing over time"))
                (begin
                  (gnc:html-linechart-set-title! chart report-title)
                  (gnc:html-linechart-set-subtitle!
-                   chart (sprintf #f
+                   chart (format #f
                              (if do-intervals?
-                                 (_ "%s to %s")
-                                 (_ "Balances %s to %s"))
+                                 (_ "~a to ~a")
+                                 (_ "Balances ~a to ~a"))
                              (jqplot-escape-string (qof-print-date from-date-t64))
                              (jqplot-escape-string (qof-print-date to-date-t64))))
 

@@ -58,7 +58,7 @@ GNC_ADD_SCHEME_TARGETS(scm-test-c-interface
   FALSE
 )
 
-GNC_ADD_SCHEME_TESTS(${test_app_utils_scheme_SOURCES})
+GNC_ADD_SCHEME_TESTS("${test_app_utils_scheme_SOURCES}")
 # Doesn't work yet:
 GNC_ADD_TEST_WITH_GUILE(test-app-utils "${test_app_utils_SOURCES}" APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
 

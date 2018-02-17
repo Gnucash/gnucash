@@ -23,9 +23,6 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-(use-modules (gnucash printf))
-
 (define qif-category-compiled-rexp
   (make-regexp "^ *(\\[)?([^]/|]*)(]?)(/?)([^|]*)(\\|(\\[)?([^]/]*)(]?)(/?)(.*))? *$"))
 
@@ -188,7 +185,7 @@
       (list GNC-BANK-TYPE))
      (#t
       (errorproc errortype
-                 (sprintf #f (_ "Unrecognized account type '%s'. Defaulting to Bank.")
+                 (format #f (_ "Unrecognized account type '~s'. Defaulting to Bank.")
                           read-value))
       (list GNC-BANK-TYPE)))))
 
@@ -295,7 +292,7 @@
 ;           'vest)
           (else
            (errorproc errortype
-                      (sprintf #f (_ "Unrecognized action '%s'.") read-value))
+                      (format #f (_ "Unrecognized action '~a'.") read-value))
            #f)))
       #f))
 
@@ -320,7 +317,7 @@
            'budgeted)
           (else
             (errorproc errortype
-                       (sprintf #f (_ "Unrecognized status '%s'. Defaulting to uncleared.")
+                       (format #f (_ "Unrecognized status '~a'. Defaulting to uncleared.")
                                 read-value))
             #f)))
       #f))

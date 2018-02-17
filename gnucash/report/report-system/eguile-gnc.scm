@@ -86,7 +86,6 @@
 (use-modules (ice-9 regex))       ; for regular expressions
 (use-modules (ice-9 rdelim))      ; for read-line
 (use-modules (ice-9 local-eval))  ; for the-environment
-(use-modules (gnucash printf))
 (use-modules (gnucash app-utils)) ; for _
 
 ;; This is needed for displaying error messages -- note that it assumes that
@@ -244,7 +243,7 @@
 ;; Process a template file and return the result as a string
 (define (eguile-file-to-string infile environment)
   (if (not (access? infile R_OK))  
-    (sprintf #f (_ "Template file \"%s\" can not be read") infile)
+    (format #f (_ "Template file \"~a\" can not be read") infile)
     (let ((script (with-input-from-file
                     infile
                     (lambda () (with-output-to-string template->script)))))

@@ -102,7 +102,6 @@
       (load-extension "libgncmod-gnome-utils" "scm_init_sw_gnome_utils_module"))
 (use-modules (sw_gnome_utils)) ;; to get to gnc-error-dialog
 
-(use-modules (gnucash printf))
 (use-modules (gnucash core-utils)) ; for gnc:version
 
 (gnc:module-load "gnucash/html" 0)   ; added for 'gnc-html-engine-supports-css'
@@ -594,7 +593,7 @@
                (value (string-append "$"  ; in txf output, income is positive; expense negative
                                           ; liabilities are positive, assets are negative;
                                           ; essentially, just reverse signs on dr's & cr's
-                                     (sprintf #f "%.2f" (gnc-numeric-to-double
+                                     (format #f "!0,2f" (gnc-numeric-to-double
                                                           (gnc-numeric-neg
                                                             account-value)))))
           )
@@ -3180,8 +3179,8 @@
                                               (not (string=? ""
                                               (gnc-get-current-book-tax-name))))
                                          "Tax Name: %s<BR>"
-                                         "%s")
-                      "Period from %s to %s<BR>Tax Year %s<BR>Tax Entity Type: %s<BR>All amounts in USD unless otherwise noted")
+                                         "~a")
+                      "Period from ~a to ~s<BR>Tax Year ~a<BR>Tax Entity Type: %s<BR>All amounts in USD unless otherwise noted")
                            (gnc-get-current-book-tax-name)
                            from-date
                            to-date
@@ -3456,27 +3455,27 @@
                           (string-append
                              "Selected Report Options:<BR>"
                              ;; selected accounts
-                             "&nbsp; &nbsp; &nbsp; %s <BR>"
+                             "&nbsp; &nbsp; &nbsp; ~a <BR>"
                              ;; suppress 0.00 values
-                             "&nbsp; &nbsp; &nbsp; %s <BR>"
+                             "&nbsp; &nbsp; &nbsp; ~a <BR>"
                              ;; full acct names
-                             "&nbsp; &nbsp; &nbsp; %s <BR>"
+                             "&nbsp; &nbsp; &nbsp; ~a <BR>"
                              ;; transfer detail
-                             "&nbsp; &nbsp; &nbsp; %s <BR>"
+                             "&nbsp; &nbsp; &nbsp; ~a <BR>"
                              ;; TXF detail
-                             "&nbsp; &nbsp; &nbsp; %s <BR>"
+                             "&nbsp; &nbsp; &nbsp; ~a <BR>"
                              ;; action:memo detail
-                             "&nbsp; &nbsp; &nbsp; %s <BR>"
+                             "&nbsp; &nbsp; &nbsp; ~a <BR>"
                              ;; transaction detail
-                             "&nbsp; &nbsp; &nbsp; %s <BR>"
+                             "&nbsp; &nbsp; &nbsp; ~a <BR>"
                              ;; special dates
-                             "&nbsp; &nbsp; &nbsp; %s <BR>"
+                             "&nbsp; &nbsp; &nbsp; ~a <BR>"
                              ;; currency conversion date
-                             "&nbsp; &nbsp; &nbsp; %s <BR>"
+                             "&nbsp; &nbsp; &nbsp; ~a <BR>"
                              ;; alternate transaction shading
                              (if (gnc-html-engine-supports-css)
                                  ""
-                                 "&nbsp; &nbsp; &nbsp; %s <BR>"
+                                 "&nbsp; &nbsp; &nbsp; ~a <BR>"
                              ))
                              (if (not (null? user-sel-accnts))
                                  "Subset of accounts"

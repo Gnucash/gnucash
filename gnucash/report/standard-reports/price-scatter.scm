@@ -30,8 +30,6 @@
 (use-modules (gnucash core-utils))
 (use-modules (gnucash gettext))
 
-(use-modules (gnucash printf))
-
 (gnc:module-load "gnucash/report/report-system" 0)
 
 (define optname-from-date (N_ "Start Date"))
@@ -200,8 +198,8 @@
 		(gnc-commodity-get-mnemonic report-currency)
 		(gnc-commodity-get-mnemonic price-commodity))
             " - "
-            (sprintf #f
-                     (_ "%s to %s")
+            (format #f
+                     (_ "~a to ~a")
                      (qof-print-date from-date)
                      (qof-print-date to-date))))
     (gnc:html-scatter-set-width! chart width)

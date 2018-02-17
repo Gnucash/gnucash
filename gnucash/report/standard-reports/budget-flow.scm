@@ -30,8 +30,6 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
-(use-modules (gnucash printf))
-
 (gnc:module-load "gnucash/report/report-system" 0)
 (gnc:module-load "gnucash/gnome-utils" 0) ;for gnc-build-url
 
@@ -318,7 +316,7 @@
 
         ;; Display Title Name - Budget - Period
         (gnc:html-document-set-title!
-          doc (sprintf #f (_ "%s: %s - %s")
+          doc (format #f (_ "~a: ~a - ~a")
             report-name (gnc-budget-get-name budget)
             (qof-print-date (gnc-budget-get-period-start-date budget (- period 1)))))
 

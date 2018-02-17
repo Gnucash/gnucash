@@ -33,8 +33,6 @@
 ;; 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-modules (gnucash printf))
-
 (define <html-table>
   (make-record-type "<html-table>"
                     '(col-headers
@@ -147,8 +145,8 @@
     (gnc:html-document-push-style doc style)
     (push (gnc:html-document-markup-start 
            doc (gnc:html-table-cell-tag cell)  #t
-           (sprintf #f "rowspan=\"%a\"" (gnc:html-table-cell-rowspan cell))
-           (sprintf #f "colspan=\"%a\"" (gnc:html-table-cell-colspan cell))))
+           (format #f "rowspan=\"~a\"" (gnc:html-table-cell-rowspan cell))
+           (format #f "colspan=\"~a\"" (gnc:html-table-cell-colspan cell))))
     (for-each 
      (lambda (child) 
        (push (gnc:html-object-render child doc)))

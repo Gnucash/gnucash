@@ -27,7 +27,6 @@
 (define-module (gnucash report aging))
 
 (use-modules (gnucash utilities))
-(use-modules (gnucash printf))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
@@ -222,8 +221,8 @@
 					 "\nClient Currency" (gnc-ommodity-get-mnemonic(company-get-currency company-info)))))
 		     (gnc-error-dialog '() error-str)
 		     (gnc:error error-str)
-		     (cons #f (sprintf
-			       (_ "Transactions relating to '%s' contain \
+		     (cons #f (format
+			       (_ "Transactions relating to '~a' contain \
 more than one currency. This report is not designed to cope with this possibility.")  (gncOwnerGetName owner))))
 		   (begin
 		     (gnc:debug "it's an old company")

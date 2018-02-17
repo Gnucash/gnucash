@@ -33,7 +33,6 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 (use-modules (gnucash engine))
-(use-modules (gnucash printf))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
@@ -309,8 +308,8 @@
 
           (gnc:html-barchart-set-title! chart report-title)
           (gnc:html-barchart-set-subtitle!
-           chart (sprintf #f
-                          (_ "%s to %s")
+           chart (format #f
+                          (_ "~a to ~a")
                           (qof-print-date from-date-t64)
                           (qof-print-date to-date-t64)))
           (gnc:html-barchart-set-width! chart width)

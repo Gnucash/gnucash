@@ -49,7 +49,6 @@
 (define-module (gnucash report fancy-invoice))
 
 (use-modules (srfi srfi-1))
-(use-modules (gnucash printf))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
@@ -867,13 +866,13 @@
                   ;; Translators: %s below is "Invoice" or "Bill" or even the
                   ;; custom title from the options. The next column contains
                   ;; the number of the document.
-                  date-table (list (sprintf #f (_ "%s&nbsp;#") title) (gncInvoiceGetID invoice)))
+                  date-table (list (format #f (_ "~s&nbsp;#") title) (gncInvoiceGetID invoice)))
                   ;; Translators: The first %s below is "Invoice" or
                   ;; "Bill" or even the custom title from the
                   ;; options. This string sucks for i18n, but I don't
                   ;; have a better solution right now without breaking
                   ;; other people's invoices.
-		  (make-date-row! date-table (sprintf #f (_ "%s&nbsp;Date") title) post-date date-format)
+		  (make-date-row! date-table (format #f (_ "~s&nbsp;Date") title) post-date date-format)
 		  (make-date-row! date-table (_ "Due&nbsp;Date") due-date date-format)
 		  date-table)
 		(gnc:make-html-text

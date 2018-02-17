@@ -25,7 +25,6 @@
 (define-module (gnucash report invoice))
 
 (use-modules (srfi srfi-1))
-(use-modules (gnucash printf))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
@@ -687,7 +686,7 @@
 
     (set! title (title-string default-title custom-title))))
 
-    (gnc:html-document-set-title! document (sprintf #f (_"%s #%d") title
+    (gnc:html-document-set-title! document (format #f (_"~a #~d") title
 						    (gncInvoiceGetID invoice)))
 
     (if (not (null? invoice))

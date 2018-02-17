@@ -26,8 +26,6 @@
 
 
 (use-modules (srfi srfi-13))
-(use-modules (gnucash printf))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-import:find-or-make-acct
@@ -65,12 +63,12 @@
       (if (not (null? (gnc-account-lookup-by-full-name old-root long-name)))
           (let loop ((count 2))
             (let* ((test-name
-                    (string-append long-name (sprintf #f " %a" count)))
+                    (string-append long-name (format #f " ~a" count)))
                    (test-acct
                     (gnc-account-lookup-by-full-name old-root test-name)))
               (if (and (not (null? test-acct)) (not (compatible? test-acct)))
                   (loop (+ 1 count))
-                  (string-append short-name (sprintf #f " %a" count)))))
+                  (string-append short-name (format #f " ~a" count)))))
           short-name))
 
     ;; If a GnuCash account already exists in the old root with the same

@@ -43,7 +43,6 @@
 
 (define-module (gnucash report standard-reports income-statement))
 (use-modules (gnucash utilities)) 
-(use-modules (gnucash printf))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
@@ -430,8 +429,8 @@
 	  (if (equal? tabbing 'canonically-tabbed) 1 0))))
     
     (gnc:html-document-set-title! 
-     doc (sprintf #f
-		  (string-append "%s %s "
+     doc (format #f
+		  (string-append "~a ~a "
 				 (_ "For Period Covering %s to %s"))
 		  company-name report-title
                   (qof-print-date start-date-printable)
@@ -472,7 +471,7 @@
 	       (terse-period? #t)
 	       (period-for (if terse-period?
 			       (string-append " " (_ "for Period"))
-			       (sprintf #f (string-append ", " (_ "%s to %s"))
+			       (format #f (string-append ", " (_ "~a to ~a"))
 					(qof-print-date start-date-printable)
 					(qof-print-date end-date))
 			       )

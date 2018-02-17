@@ -36,7 +36,6 @@
 
 (use-modules (srfi srfi-1))
 (use-modules (gnucash utilities))
-(use-modules (gnucash printf))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
@@ -310,9 +309,9 @@
 	 )
     
     (gnc:html-document-set-title! 
-     doc (sprintf #f
-		  (string-append "%s %s "
-				 (_ "For Period Covering %s to %s"))
+     doc (format #f
+		  (string-append "~a ~a "
+				 (_ "For Period Covering ~a to ~a"))
 		  company-name report-title
                   (qof-print-date from-date)
                   (qof-print-date to-date))
