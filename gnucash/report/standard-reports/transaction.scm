@@ -14,8 +14,6 @@
 ;; - add custom sorter in scheme
 ;; - common currency - optionally show original currency amount
 ;;   and enable multiple data columns
-;; - add informational box, summarising options used, useful
-;;   to troubleshoot reports
 ;; - add support for indenting for better grouping
 ;; - add defaults suitable for a reconciliation report
 ;;
@@ -110,10 +108,6 @@
 (define NO-MATCHING-TRANS-TEXT (_ "No transactions were found that \
 match the time interval and account selection specified \
 in the Options panel."))
-(define NO-MATCHING-ACCT-HEADER (_ "No matching accounts found"))
-(define NO-MATCHING-ACCT-TEXT (_ "No account were found that match the \
-options specified in the Options panels."))
-
 
 (define DATE-SORTING-TYPES (list 'date 'reconciled-date))
 
@@ -403,6 +397,8 @@ Credit Card, and Income accounts."))
   (gnc:option-set-value (gnc:lookup-option options pagename-sorting optname-prime-sortkey) 'reconciled-status)
   (gnc:option-set-value (gnc:lookup-option options pagename-sorting optname-sec-sortkey)   'date)
   (gnc:option-set-value (gnc:lookup-option options pagename-sorting optname-sec-date-subtotal) 'none)
+  ;; the start date should really be the last-reconcile-date but this information is not
+  ;; easily accessible from scheme:
   (gnc:option-set-value (gnc:lookup-option options gnc:pagename-general optname-startdate) (cons 'relative 'start-prev-quarter))
   (gnc:option-set-value (gnc:lookup-option options gnc:pagename-general optname-enddate)   (cons 'relative 'today))
   (gnc:option-set-value (gnc:lookup-option options gnc:pagename-display (N_ "Reconciled Date")) #t)
@@ -419,6 +415,15 @@ Credit Card, and Income accounts."))
   (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
   (define (gnc:register-trep-option new-option)
     (gnc:register-option options new-option))
+
+  ;; (Feb 2018) Note to future hackers - this trep-options-generator
+  ;; defines a long set of options to be assigned as an object in
+  ;; the report. This long list (52 at Feb 2018 count) of options
+  ;; may be modified in a derived report (see income-gst-statement.scm)
+  ;; via gnc:make-internal! and gnc-unregister-option to hide
+  ;; and remove options, respectively. If an option is unregistered,
+  ;; don't forget to re-register them via gnc:register-option, unless
+  ;; your derived report truly does not require them.
 
   ;; General options
 
@@ -556,8 +561,6 @@ tags within description, notes or memo. ")
       (gnc-option-db-set-option-selectable-by-name
        options gnc:pagename-accounts optname-filterby
        (not (eq? x 'none))))))
-  ;;
-
 
   ;; Sorting options
 
@@ -878,15 +881,26 @@ tags within description, notes or memo. ")
       'global
       (keylist->vectorlist sign-reverse-list))))
 
+  ;; this hidden option will toggle whether the default
+  ;; qof-query is run, or a different query which ensures
+  ;; no transaction is duplicated. It can be enabled in
+  ;; a derived report (eg income-gst-statement.scm)
+  (gnc:register-trep-option
+   (gnc:make-internal-option "__trep" "unique-transactions" #f))
+
   (gnc:options-set-default-section options gnc:pagename-general)
   options)
 
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Here comes the big function that builds the whole table.
 
-(define (make-split-table splits options)
+(define (make-split-table splits options custom-calculated-cells)
 
-  (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
+  (define (opt-val section name)
+    (let ((option (gnc:lookup-option options section name)))
+      (if option
+          (gnc:option-value option)
+          (gnc:error "gnc:lookup-option error: " section "/" name))))
   (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
 
   (define (build-columns-used)
@@ -974,10 +988,9 @@ tags within description, notes or memo. ")
                                (lambda (split transaction-row?)
                                  (gnc:make-html-table-cell/markup
                                   "date-cell"
-                                  (let ((date (xaccSplitGetDateReconciled split)))
-                                    (if (zero? date)
-                                        ""
-                                        (qof-print-date date)))))))
+                                  (if (eq? (xaccSplitGetReconcile split) #\y)
+                                      (qof-print-date (xaccSplitGetDateReconciled split))
+                                      "")))))
 
                (add-if (column-uses? 'num)
                        (vector (if (and BOOK-SPLIT-ACTION
@@ -1066,7 +1079,7 @@ tags within description, notes or memo. ")
     ;;
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    (define calculated-cells
+    (define default-calculated-cells
       (letrec
           ((damount (lambda (s) (if (gnc:split-voided? s)
                                     (xaccSplitVoidFormerAmount s)
@@ -1114,54 +1127,55 @@ tags within description, notes or memo. ")
          ;; each column will be a vector
          ;; (vector heading
          ;;         calculator-function                          ;; (calculator-function split) to obtain amount
-         ;;         reverse-column?                              ;; to optionally reverse signs
-         ;;         subtotal?                                    ;; subtotal? to allow subtotals (ie irrelevant for running balance)
-         ;;         (vector start-dual-column?                   ;; #t for the left side of a dual column (i.e. debit/credit)
-         ;;                 merging-function))                   ;; function to apply to dual-subtotal (+ / -)
-         ;;         friendly-heading-fn                          ;; retrieve friendly heading name for account debit/credit
+         ;;         reverse-column?                              ;; #t to allow reverse signs
+         ;;         subtotal?                                    ;; #t to allow subtotals (ie must be #f for running balance)
+         ;;         start-dual-column?                           ;; #t for the debit side of a dual column (i.e. debit/credit)
+         ;;                                                      ;; which means the next column must be the credit side
+         ;;         friendly-heading-fn                          ;; (friendly-heading-fn account) to retrieve friendly name for account debit/credit
          (if (column-uses? 'amount-single)
              (list (vector (header-commodity (_ "Amount"))
-                           amount #t #t
-                           (vector #f #f)
+                           amount #t #t #f
                            (lambda (a) "")))
              '())
          (if (column-uses? 'amount-double)
              (list (vector (header-commodity (_ "Debit"))
-                           debit-amount #f #t
-                           (vector #t +)
+                           debit-amount #f #t #t
                            friendly-debit)
                    (vector (header-commodity (_ "Credit"))
-                           credit-amount #f #t
-                           (vector #f -)
+                           credit-amount #f #t #f
                            friendly-credit))
              '())
 
          (if (and (column-uses? 'amount-original-currency)
                   (column-uses? 'amount-single))
              (list (vector (_ "Amount")
-                           original-amount #t #t
-                           (vector #f #f)
+                           original-amount #t #t #f
                            (lambda (a) "")))
              '())
 
          (if (and (column-uses? 'amount-original-currency)
                   (column-uses? 'amount-double))
              (list (vector (_ "Debit")
-                           original-debit-amount #f #t
-                           (vector #t +)
+                           original-debit-amount #f #t #t
                            friendly-debit)
                    (vector (_ "Credit")
-                           original-credit-amount #f #t
-                           (vector #f -)
+                           original-credit-amount #f #t #f
                            friendly-credit))
              '())
 
          (if (column-uses? 'running-balance)
              (list (vector (_ "Running Balance")
-                           running-balance #t #f
-                           (vector #f #f)
+                           running-balance #t #f #f
                            (lambda (a) "")))
              '()))))
+
+    (define calculated-cells
+      ;; this part will check whether custom-calculated-cells were specified. this
+      ;; describes a custom function which consumes an options list, and generates
+      ;; a vectorlist similar to default-calculated-cells as above.
+      (if custom-calculated-cells
+          (custom-calculated-cells options)
+          default-calculated-cells))
 
     (define headings-left-columns
       (map (lambda (column)
@@ -1255,44 +1269,45 @@ tags within description, notes or memo. ")
 
         (define (add-columns commodity)
           (let ((start-dual-column? #f)
-                (dual-subtotal 0))
+                (dual-subtotal #f))
             (for-each (lambda (column merge-entry)
                         (let* ((mon (retrieve-commodity column commodity))
                                (column-amount (and mon (gnc:gnc-monetary-amount mon)))
-                               (merge? (vector-ref merge-entry 0))
-                               (merge-fn (vector-ref merge-entry 1)))
+                               (merge? merge-entry))
                           (if merge?
-                              ;; We're merging. Run merge-fn (usu + or -)
-                              ;; and store total in dual-subtotal. Do NOT add column.
+                              ;; We're merging. If a subtotal exists, store
+                              ;; it in dual-subtotal. Do NOT add column to row.
                               (begin
-                                (if column-amount
-                                    (set! dual-subtotal
-                                          (merge-fn dual-subtotal column-amount)))
+                                (set! dual-subtotal column-amount)
                                 (set! start-dual-column? #t))
                               (if start-dual-column?
                                   (begin
-                                    ;; We've completed merging. Add this column amount
-                                    ;; and add the columns.
+                                    ;; We've completed merging. Add the negated
+                                    ;; column amount and add the columns to row.
                                     (if column-amount
                                         (set! dual-subtotal
-                                              (merge-fn dual-subtotal column-amount)))
-                                    (if (positive? dual-subtotal)
-                                        (begin
-                                          (addto! row-contents
-                                                  (gnc:make-html-table-cell/markup
-                                                   "total-number-cell"
-                                                   (gnc:make-gnc-monetary commodity dual-subtotal)))
-                                          (addto! row-contents ""))
-                                        (begin
-                                          (addto! row-contents "")
-                                          (addto! row-contents
-                                                  (gnc:make-html-table-cell/markup
-                                                   "total-number-cell"
-                                                   (gnc:make-gnc-monetary
-                                                    commodity
-                                                    (- dual-subtotal))))))
+                                          (- (or dual-subtotal 0) column-amount)))
+                                    (cond ((not dual-subtotal)
+                                           (addto! row-contents "")
+                                           (addto! row-contents ""))
+                                          ((positive? dual-subtotal)
+                                           (addto! row-contents
+                                                   (gnc:make-html-table-cell/markup
+                                                    "total-number-cell"
+                                                    (gnc:make-gnc-monetary
+                                                     commodity
+                                                     dual-subtotal)))
+                                           (addto! row-contents ""))
+                                          (else
+                                           (addto! row-contents "")
+                                           (addto! row-contents
+                                                   (gnc:make-html-table-cell/markup
+                                                    "total-number-cell"
+                                                    (gnc:make-gnc-monetary
+                                                     commodity
+                                                     (- dual-subtotal))))))
                                     (set! start-dual-column? #f)
-                                    (set! dual-subtotal 0))
+                                    (set! dual-subtotal #f))
                                   ;; Default; not merging/completed merge. Just
                                   ;; display monetary amount
                                   (addto! row-contents
@@ -1601,7 +1616,14 @@ tags within description, notes or memo. ")
 ;; Here comes the renderer function for this report.
 
 
-(define (trep-renderer report-obj)
+(define* (trep-renderer report-obj #:key custom-calculated-cells empty-report-message custom-split-filter)
+  ;; the trep-renderer is a define* function which, at minimum, takes the report object
+  ;;
+  ;; the optional arguments are:
+  ;; #:custom-calculated-cells - a list of vectors to define customized data columns
+  ;; #:empty-report-message - a str which is displayed at the initial report opening
+  ;; #:custom-split-filter - a split->bool function to add to the split filter
+
   (define options (gnc:report-options report-obj))
   (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
   (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
@@ -1718,104 +1740,29 @@ tags within description, notes or memo. ")
       (generic-less? X Y 'date 'none #t))
 
 
-    ;; infobox
-    (define (infobox)
-      (define (highlight title . data)
-        (string-append "<b>" title "</b>: " (string-join data " ") "<br>"))
-      (define (bool->string tf)
-        (if tf
-            (_ "Enabled")
-            (_ "Disabled")))
-      (gnc:make-html-text
-       (if (string-null? account-matcher)
-           ""
-           (string-append
-            (highlight
-             (string-append optname-account-matcher
-                            (if (opt-val pagename-filter optname-account-matcher-regex)
-                                (_ " regex")
-                                ""))
-             account-matcher)
-            (highlight
-             (_ "Accounts produced")
-             (string-join (map xaccAccountGetName c_account_1) ", "))))
-       (if (eq? filter-mode 'none)
-           ""
-           (highlight
-            (keylist-get-info filter-list filter-mode 'text)
-            (string-join (map xaccAccountGetName c_account_2) ", ")))
-       (if (string-null? transaction-matcher)
-           ""
-           (string-append
-            (highlight
-             (string-append optname-transaction-matcher
-                            (if (opt-val pagename-filter optname-transaction-matcher-regex)
-                                (_ " regex")
-                                ""))
-             transaction-matcher)))
-       (if reconcile-status-filter
-           (highlight
-            optname-reconcile-status
-            (keylist-get-info reconcile-status-list reconcile-status-filter 'text))
-           "")
-       (if (eq? void-status 'non-void-only)
-           ""
-           (highlight
-            optname-void-transactions
-            (keylist-get-info show-void-list void-status 'text)))
-       (if (eq? primary-key 'none)
-           ""
-           (highlight
-            optname-prime-sortkey
-            (keylist-get-info sortkey-list primary-key 'text)
-            (keylist-get-info ascending-list primary-order 'text)))
-       (if (eq? primary-key 'none)
-           ""
-           (if (member primary-key DATE-SORTING-TYPES)
-               (highlight
-                optname-prime-date-subtotal
-                (keylist-get-info date-subtotal-list primary-date-subtotal 'text))
-               (highlight
-                optname-prime-subtotal
-                (bool->string (opt-val pagename-sorting optname-prime-subtotal)))))
-       (if (eq? secondary-key 'none)
-           ""
-           (highlight
-            optname-sec-sortkey
-            (keylist-get-info sortkey-list secondary-key 'text)
-            (keylist-get-info ascending-list secondary-order 'text)))
-       (if (eq? secondary-key 'none)
-           ""
-           (if (member secondary-key DATE-SORTING-TYPES)
-               (highlight
-                optname-sec-date-subtotal
-                (keylist-get-info date-subtotal-list secondary-date-subtotal 'text))
-               (highlight
-                optname-sec-subtotal
-                (bool->string (opt-val pagename-sorting optname-sec-subtotal)))))
-       "<br>"))
-
     (if (or (null? c_account_1) (and-map not c_account_1))
 
-        (if (null? c_account_0)
+        ;; error condition: no accounts specified or obtained after filtering
+        (begin
 
             ;; error condition: no accounts specified
-            (gnc:html-document-add-object!
-             document
-             (gnc:html-make-no-account-warning report-title (gnc:report-id report-obj)))
-
-            ;; error condition: accounts were specified but none matched string/regex
             (begin
+
               (gnc:html-document-add-object!
                document
-               (gnc:make-html-text
-                (gnc:html-markup-h2 NO-MATCHING-ACCT-HEADER)
-                (gnc:html-markup-p NO-MATCHING-ACCT-TEXT)))
+               (gnc:html-make-no-account-warning report-title (gnc:report-id report-obj)))
 
-              (if (member 'no-match infobox-display)
+              ;; if an empty-report-message is passed by a derived report to
+              ;; the renderer, display it here.
+              (if empty-report-message
                   (gnc:html-document-add-object!
                    document
-                   (infobox)))))
+                   empty-report-message)))
+
+          (if (member 'no-match infobox-display)
+              (gnc:html-document-add-object!
+               document
+               (gnc:render-options-changed options))))
 
         (begin
 
@@ -1836,7 +1783,10 @@ tags within description, notes or memo. ")
                                                (eq? primary-order 'ascend)
                                                (eq? secondary-order 'ascend)
                                                #t)))
-          (set! splits (qof-query-run query))
+
+          (if (opt-val "__trep" "unique-transactions")
+              (set! splits (xaccQueryGetSplitsUniqueTrans query))
+              (set! splits (qof-query-run query)))
 
           (qof-query-destroy query)
 
@@ -1849,6 +1799,7 @@ tags within description, notes or memo. ")
           ;; Combined Filter:
           ;; - include/exclude splits to/from selected accounts
           ;; - substring/regex matcher for Transaction Description/Notes/Memo
+          ;; - custom-split-filter, a split->bool function for derived reports
           ;; - by reconcile status
           (set! splits (filter
                         (lambda (split)
@@ -1865,6 +1816,8 @@ tags within description, notes or memo. ")
                                      (match? (xaccTransGetDescription trans))
                                      (match? (xaccTransGetNotes trans))
                                      (match? (xaccSplitGetMemo split)))
+                                 (or (not custom-split-filter)     ; #f = ignore custom-split-filter
+                                     (custom-split-filter split))
                                  (or (not reconcile-status-filter) ; #f = ignore next filter
                                      (member (xaccSplitGetReconcile split) reconcile-status-filter)))))
                         splits))
@@ -1882,9 +1835,9 @@ tags within description, notes or memo. ")
                 (if (member 'no-match infobox-display)
                     (gnc:html-document-add-object!
                      document
-                     (infobox))))
+                     (gnc:render-options-changed options))))
 
-              (let ((table (make-split-table splits options)))
+              (let ((table (make-split-table splits options custom-calculated-cells)))
 
                 (gnc:html-document-set-title! document report-title)
 
@@ -1900,13 +1853,18 @@ tags within description, notes or memo. ")
                 (if (member 'match infobox-display)
                     (gnc:html-document-add-object!
                      document
-                     (infobox)))
+                     (gnc:render-options-changed options)))
 
                 (gnc:html-document-add-object! document table)))))
 
     (gnc:report-finished)
 
     document))
+
+(define trep-guid "2fe3b9833af044abb929a88d5a59620f")
+(export trep-guid)
+(export trep-renderer)
+(export trep-options-generator)
 
 ;; Define the report.
 (gnc:define-report
@@ -1920,6 +1878,6 @@ tags within description, notes or memo. ")
 (gnc:define-report
  'version 1
  'name reportname
- 'report-guid "2fe3b9833af044abb929a88d5a59620f"
+ 'report-guid trep-guid
  'options-generator trep-options-generator
  'renderer trep-renderer)
