@@ -34,6 +34,8 @@
 
 (use-modules (gnucash gnc-module))
 
+(load-from-path "gnucash/string")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Exports
 

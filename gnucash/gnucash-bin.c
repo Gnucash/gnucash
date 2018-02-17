@@ -610,7 +610,7 @@ inner_main (void *closure, int argc, char **argv)
 
     scm_c_eval_string("(debug-set! stack 200000)");
 
-    main_mod = scm_c_resolve_module("gnucash main");
+    main_mod = scm_c_resolve_module("gnucash utilities");
     scm_set_current_module(main_mod);
 
     /* Check whether the settings need a version update */
