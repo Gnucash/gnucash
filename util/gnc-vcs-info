@@ -95,7 +95,7 @@ fi
 
 # Maybe it's git?
 real_gitdir="${real_srcdir}"/.git
-if test -d "${real_gitdir}"
+if test -d "${real_gitdir}" || test -e "${real_gitdir}"
 then
   # If we're only interested in the vcs type, then we're done here
   if [ "$request" = "type" ]
