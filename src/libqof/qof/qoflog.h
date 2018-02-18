@@ -172,6 +172,11 @@ void qof_log_set_default(QofLogLevel log_level);
 /* Microsoft Visual Studio: MSVC compiler has a different syntax for
  * macros with variadic argument list. */
 
+/* TODO: After the C++2a feature __VA_OPT__ gets implemented in both
+ * flavors, it should be inserted before __VA_ARGS__ and the else branch
+ * gets obsolete and should be removed.
+ */
+
 /** Log a fatal error */
 #define FATAL(format, ...) do { \
     g_log (log_module, G_LOG_LEVEL_ERROR, \
