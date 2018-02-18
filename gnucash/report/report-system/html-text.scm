@@ -125,10 +125,10 @@
 ;; system, but it flattens out its children's lists prematurely.  Has
 ;; to, to pass them as args to format.
 
-(define (gnc:html-markup/format format . entities)
+(define (gnc:html-markup/format fstr . entities)
   (lambda (doc)
     (apply 
-     format #f format 
+     format #f fstr 
      (map 
       (lambda (elt)
         (let ((rendered-elt 
