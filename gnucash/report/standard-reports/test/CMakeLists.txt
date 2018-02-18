@@ -21,7 +21,7 @@ set(GUILE_DEPENDS
   scm-scm
   scm-test-report-system
   scm-standard-reports
-  scm-report-stylesheets-2
+  scm-report-stylesheets
   )
 GNC_ADD_SCHEME_TESTS("${scm_test_standard_reports_SOURCES}")
 

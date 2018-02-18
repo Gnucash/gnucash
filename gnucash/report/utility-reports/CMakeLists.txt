@@ -9,13 +9,16 @@ SET(utility_reports_SCHEME
 
 SET(GUILE_OUTPUT_DIR     gnucash/report)
 SET(GUILE_DEPENDS
+  gncmod-html
   scm-app-utils
   scm-core-utils
   scm-gettext
   scm-gnc-module
   scm-scm
   scm-utility-reports-links
-  scm-report-system-3)
+  scm-gnome-utils
+  scm-report-system
+  )
 
 GNC_ADD_SCHEME_TARGETS(scm-utility-reports
   "${utility_reports_SCHEME}"

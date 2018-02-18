@@ -173,7 +173,13 @@ SET(app_utils_SCHEME_3
     business-prefs.scm
 )
 
-SET(GUILE_DEPENDS      gncmod-app-utils scm-core-utils scm-engine scm-scm scm-gnc-module)
+SET(GUILE_DEPENDS
+  gncmod-app-utils
+  scm-core-utils
+  scm-engine
+  scm-scm
+  scm-gnc-module
+  )
 
 GNC_ADD_SCHEME_TARGETS(scm-gettext
   gettext.scm

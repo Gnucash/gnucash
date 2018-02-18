@@ -11,10 +11,10 @@ GNC_ADD_TEST_WITH_GUILE(test-link-module-report-gnome test-link-module.c
 
 SET(GUILE_DEPENDS
   scm-app-utils
-  gncmod-gnome-utils
+  scm-gnome-utils
   gnc-module
-  gncmod-engine
-  gncmod-report-gnome
+  scm-engine
+  scm-report-gnome
 )
 
 GNC_ADD_SCHEME_TARGETS(scm-test-load-report-gnome-module

@@ -55,11 +55,12 @@ SET(report_gnome_SCHEME
 SET(GUILE_OUTPUT_DIR   gnucash/report)
 SET(GUILE_DEPENDS
   gncmod-report-gnome
-  gncmod-engine
+  scm-engine
   scm-gettext
   scm-gnome-utils
   scm-gnc-module
   scm-scm
+  scm-report-system
   scm-standard-reports
   scm-business-reports
   scm-utility-reports

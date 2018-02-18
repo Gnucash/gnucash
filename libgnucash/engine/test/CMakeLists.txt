@@ -218,7 +218,7 @@ SET(engine_test_SCHEME
 
 #LIST(APPEND engine_test_SCHEME  test-scm-query-import.scm) Fails
 
-SET(GUILE_DEPENDS      scm-gnc-module scm-app-utils scm-scm)
+SET(GUILE_DEPENDS      scm-gnc-module scm-app-utils scm-scm scm-engine)
 
 GNC_ADD_SCHEME_TARGETS(scm-test-engine-extras
   "test-extras.scm"

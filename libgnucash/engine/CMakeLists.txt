@@ -277,7 +277,10 @@ IF (WITH_SQL)
     LIST(APPEND BACKEND_DEPENDS gncmod-backend-dbi)
 ENDIF(WITH_SQL)
 
-SET(GUILE_DEPENDS      ${BACKEND_DEPENDS} gnc-module gncmod-engine scm-gnc-module)
+SET(GUILE_DEPENDS
+  ${BACKEND_DEPENDS}
+  gncmod-engine
+  scm-gnc-module)
 
 
 GNC_ADD_SCHEME_TARGETS(scm-engine-0

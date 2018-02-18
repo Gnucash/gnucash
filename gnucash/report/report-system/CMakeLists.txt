@@ -81,14 +81,14 @@ SET (report_system_SCHEME_3
 
 SET(GUILE_DEPENDS
   gncmod-html
-  gncmod-gnome-utils
+  scm-gnome-utils
   gncmod-report-system
   scm-app-utils
   scm-scm
   scm-gnc-module
   )
 
-GNC_ADD_SCHEME_TARGETS(scm-report-system
+GNC_ADD_SCHEME_TARGETS(scm-report-system-1
   "${report_system_SCHEME}"
   "gnucash/report"
   "${GUILE_DEPENDS}"
@@ -98,7 +98,7 @@ GNC_ADD_SCHEME_TARGETS(scm-report-system
 GNC_ADD_SCHEME_TARGETS(scm-report-system-2a
   "${report_system_SCHEME_2a}"
   "gnucash/report/report-system"
-  scm-report-system
+  scm-report-system-1
   FALSE
 )
 
@@ -115,6 +115,8 @@ GNC_ADD_SCHEME_TARGETS(scm-report-system-3
   scm-report-system-2b
   FALSE
 )
+
+add_custom_target(scm-report-system ALL DEPENDS scm-report-system-3)
 
 SET_LOCAL_DIST(report_system_DIST_local CMakeLists.txt
   report-system.i

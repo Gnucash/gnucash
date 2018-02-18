@@ -4,12 +4,13 @@ SET(GUILE_DEPENDS
   scm-core-utils
   scm-gnc-module
   scm-scm
-  gncmod-engine
+  scm-engine
   gncmod-backend-xml
-  gncmod-gnome-utils
+  scm-gnome-utils
   gncmod-html
-  gncmod-report-system
-  gncmod-report-gnome
+  scm-report-system
+  scm-report-gnome
+  scm-report-stylesheets
 )
 
 GNC_ADD_SCHEME_TARGETS(scm-test-load-report-stylesheets-module

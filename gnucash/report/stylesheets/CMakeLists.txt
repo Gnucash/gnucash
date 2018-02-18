@@ -54,7 +54,7 @@ SET(GUILE_DEPENDS
   scm-gettext
   scm-scm
   gncmod-html
-  scm-report-system-3
+  scm-report-system
   )
 
 GNC_ADD_SCHEME_TARGETS(scm-report-stylesheets-1

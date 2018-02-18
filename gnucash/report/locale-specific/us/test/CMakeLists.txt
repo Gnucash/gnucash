@@ -6,8 +6,9 @@ GNC_ADD_TEST(test-link-module-report-locale-specific-us test-link-module.c
 )
 
 # FIXME why is this not run/running?
+# Answer: Bitrot. The test needs to be rewritten.
 #SET(GUILE_DEPENDS
-#  gncmod-app-utils
+#  scm-app-utils
 #  gnc-core-utils
 #  gnc-module
 #  gncmod-engine

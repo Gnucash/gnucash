@@ -41,6 +41,8 @@ GNC_ADD_SCHEME_TARGETS(scm-tax-us-2
   FALSE
   )
 
+add_custom_target(scm-tax-us ALL DEPENDS scm-tax-us-1 scm-tax-us-2)
+
 SET_LOCAL_DIST(tax_us_DIST_local CMakeLists.txt ${tax_us_SOURCES} ${gncmod_tax_us_SCHEME_1} ${gncmod_tax_us_SCHEME_2})
 SET(tax_us_DIST ${tax_us_DIST_local} ${test_tax_us_DIST} PARENT_SCOPE)
 

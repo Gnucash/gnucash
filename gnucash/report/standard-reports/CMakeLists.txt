@@ -41,7 +41,6 @@ SET(GUILE_DEPENDS
   scm-scm
   scm-gnome-utils
   scm-report-system
-  scm-report-system-3
   )
 
 GNC_ADD_SCHEME_TARGETS(scm-standard-reports-1
