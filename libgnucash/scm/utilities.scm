@@ -57,21 +57,6 @@
 ;; invalid characters
 (setlocale LC_ALL "")
 
-;;(use-modules (ice-9 statprof))
-
-;; various utilities
-
-(define (gnc:safe-strcmp a b)
-  (if (and a b)
-      (cond
-       ((string<? a b) -1)
-       ((string>? a b) 1)
-       (else 0))
-      (cond
-       (a 1)
-       (b -1)
-       (else 0))))
-
 ;;;; Status output functions.
 
 (define (strify items)
@@ -88,35 +73,3 @@
 
 (define (gnc:debug . items)
   (gnc-scm-log-debug (strify items)))
-
-;; Set up timing functions
-
-(define gnc:*last-time* (gettimeofday))
-
-(define (gnc:timestamp . stuff)
-  (let* ((now (gettimeofday))
-         (delta (+ (- (car now) (car gnc:*last-time*))
-                   (/ (- (cdr now) (cdr gnc:*last-time*)) 1000000))))
-    (gnc:msg stuff "-- Elapsed time: " delta "seconds.")
-    (set! gnc:*last-time* now)))
-
-(define (gnc:shutdown exit-status)
-  (gnc:debug "Shutdown -- exit-status: " exit-status)
-  (exit exit-status)) ;; Temporary Stub until command-line.scm dies
-
-(define (gnc:strip-path path)
-  (let* ((parts-in (string-split path #\/))
-	 (parts-out '()))
-
-    ;; Strip out "." and ".." components
-    ;; Strip out // components
-    (for-each
-     (lambda (part)
-       (cond ((string=? part ".") #f)
-	     ((string=? part "..") (set! parts-out (cdr parts-out)))
-	     ((and (string-null? part) (not (= (length parts-out) 0))) #f)
-	     (else (set! parts-out (cons part parts-out)))))
-     parts-in)
-
-    ;; Put it back together
-    (string-join (reverse parts-out) "/")))

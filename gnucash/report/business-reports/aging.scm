@@ -270,6 +270,16 @@ more than one currency. This report is not designed to cope with this possibilit
 
 
 ;; compare by the total in the buckets
+(define (safe-strcmp a b)
+  (if (and a b)
+      (cond
+       ((string<? a b) -1)
+       ((string>? a b) 1)
+       (else 0))
+      (cond
+       (a 1)
+       (b -1)
+       (else 0))))
 
 (define (compare-total litem-a litem-b)
   (let*  ((company-a (cdr litem-a))
@@ -281,7 +291,7 @@ more than one currency. This report is not designed to cope with this possibilit
 	 (difference-sign (gnc-numeric-compare (gnc-numeric-sub-fixed total-a total-b) (gnc-numeric-zero))))
 	 ;; if same totals, compare by name
 	 (if (= difference-sign 0)
-	     (gnc:safe-strcmp (car litem-a) (car litem-b))
+	     (safe-strcmp (car litem-a) (car litem-b))
 	     difference-sign)))
 
 ;; compare by buckets, oldest first.
@@ -307,7 +317,7 @@ more than one currency. This report is not designed to cope with this possibilit
 	 (difference (driver bucket-a bucket-b)))
 	 ;; if same totals, compare by name
 	 (if (= difference 0)
-	     (gnc:safe-strcmp (car litem-a) (car litem-b))
+	     (safe-strcmp (car litem-a) (car litem-b))
 	     difference)))
 
 
