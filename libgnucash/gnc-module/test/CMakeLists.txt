@@ -12,7 +12,16 @@ SET(GNC_MODULE_TEST_INCLUDE_DIRS
   ${GUILE_INCLUDE_DIRS}
 )
 
-SET(GNC_MODULE_TEST_LIBS gnc-module test-core)
+SET(GNC_MODULE_TEST_LIBS
+  gnc-module
+  test-core
+  gncmod-foo
+  gncmod-bar
+  gncmod-baz
+  gncmod-agedver
+  gncmod-futuremodsys
+  gncmod-incompatdep
+  )
 
 MACRO(ADD_GNC_MODULE_TEST _TARGET _SOURCE_FILES)
   GNC_ADD_TEST(${_TARGET} "${_SOURCE_FILES}" GNC_MODULE_TEST_INCLUDE_DIRS GNC_MODULE_TEST_LIBS)
@@ -43,7 +52,7 @@ GNC_ADD_TEST_WITH_GUILE(test-incompatdep test-incompatdep.c
 GNC_ADD_TEST_WITH_GUILE(test-agedver test-agedver.c
   GNC_MODULE_TEST_INCLUDE_DIRS GNC_MODULE_TEST_LIBS
   "GNC_MODULE_PATH=${LIBDIR_BUILD}/gnucash/test"
-)
+  )
 
 SET(_LIBDIR ${LIBDIR_BUILD})
 IF (WIN32)
@@ -64,7 +73,16 @@ SET(test_gnc_module_SCHEME
   test-gnc-module-scm-multi.scm
   )
 
-SET(GUILE_DEPENDS gnc-module scm-test-core scm-mod-foo scm-mod-baz)
+SET(GUILE_DEPENDS
+  gnc-module
+  scm-test-core
+  scm-mod-foo
+  gncmod-bar
+  scm-mod-baz
+  gncmod-agedver
+  gncmod-incompatdep
+  gncmod-futuremodsys
+  )
 
 GNC_ADD_SCHEME_TARGETS(test-gnc-modules-scm
   "${test_gnc_module_SCHEME}"
@@ -76,7 +94,7 @@ GNC_ADD_SCHEME_TARGETS(test-gnc-modules-scm
 GNC_ADD_SCHEME_TESTS("${test_gnc_module_SCHEME}")
 IF(NOT WIN32)
   # This little dance is needed because gnc_module_init will assert if
-  # it finds libgncmod_futuremod.so outside of a test that expects it.
+  # it finds libgncmod-futuremod.so outside of a test that expects it.
   GET_GUILE_ENV()
   SET(_GNC_MODULE_PATH "${LIBDIR_BUILD}:${LIBDIR_BUILD}/gnucash:${LIBDIR_BUILD}/gnucash/test")
   FOREACH(test_file ${test_gnc_module_SCHEME})

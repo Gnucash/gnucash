@@ -30,7 +30,7 @@ static void
 guile_main(void *closure, int argc, char ** argv)
 {
     GNCModule foo;
-    gchar *msg = "Module '../../../libgnucash/gnc-module/test/misc-mods/.libs/libgncmod_futuremodsys.so' requires newer module system\n";
+    gchar *msg = "Module '../../../libgnucash/gnc-module/test/misc-mods/.libs/libgncmod-futuremodsys.so' requires newer module system\n";
     gchar *logdomain = "gnc.module";
     guint loglevel = G_LOG_LEVEL_WARNING;
     TestErrorStruct check = { loglevel, logdomain, msg };

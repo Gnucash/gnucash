@@ -29,28 +29,28 @@
 #include "gnc-module-api.h"
 #include "swig-foo.c"
 
-GNC_MODULE_API_DECL(libgncmodfoo)
+GNC_MODULE_API_DECL(libgncmod_foo)
 
-int libgncmodfoo_gnc_module_system_interface = 0;
+int libgncmod_foo_gnc_module_system_interface = 0;
 
-int libgncmodfoo_gnc_module_current = 0;
-int libgncmodfoo_gnc_module_age = 0;
-int libgncmodfoo_gnc_module_revision = 0;
+int libgncmod_foo_gnc_module_current = 0;
+int libgncmod_foo_gnc_module_age = 0;
+int libgncmod_foo_gnc_module_revision = 0;
 
 char *
-libgncmodfoo_gnc_module_path(void)
+libgncmod_foo_gnc_module_path(void)
 {
     return g_strdup("gnucash/foo");
 }
 
 char *
-libgncmodfoo_gnc_module_description(void)
+libgncmod_foo_gnc_module_description(void)
 {
     return g_strdup("this is a foo module");
 }
 
 int
-libgncmodfoo_gnc_module_init(int refcount)
+libgncmod_foo_gnc_module_init(int refcount)
 {
     /* publish the wrapped Scheme bindings for libfoo */
     scm_init_sw_foo_module();

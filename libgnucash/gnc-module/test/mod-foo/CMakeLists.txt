@@ -5,11 +5,11 @@ gnc_add_swig_guile_command (swig-foo-c
 )
 
 ADD_LIBRARY(foo EXCLUDE_FROM_ALL foo.c foo.h)
-ADD_LIBRARY(gncmodfoo EXCLUDE_FROM_ALL gnc-mod-foo.c)
+ADD_LIBRARY(gncmod-foo EXCLUDE_FROM_ALL gnc-mod-foo.c)
 SET_SOURCE_FILES_PROPERTIES (gnc-mod-foo.c PROPERTY OBJECT_DEPENDS ${SWIG_FOO_C})
 
-TARGET_LINK_LIBRARIES(gncmodfoo foo gnc-module)
-TARGET_INCLUDE_DIRECTORIES(gncmodfoo PRIVATE
+TARGET_LINK_LIBRARIES(gncmod-foo foo gnc-module)
+TARGET_INCLUDE_DIRECTORIES(gncmod-foo PRIVATE
   ${CMAKE_BINARY_DIR}/common
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}
@@ -22,11 +22,11 @@ TARGET_INCLUDE_DIRECTORIES(gncmodfoo PRIVATE
 GNC_ADD_SCHEME_TARGETS(scm-mod-foo
   gnucash/foo.scm
   "gnucash"
-  gncmodfoo
+  gncmod-foo
   TRUE
   )
 
-SET_TARGET_PROPERTIES(foo gncmodfoo PROPERTIES
+SET_TARGET_PROPERTIES(foo gncmod-foo PROPERTIES
 LIBRARY_OUTPUT_DIRECTORY ${LIBDIR_BUILD}/gnucash/test
 ARCHIVE_OUTPUT_DIRECTORY ${LIBDIR_BUILD}/gnucash/test
 RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
