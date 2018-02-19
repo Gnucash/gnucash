@@ -219,11 +219,11 @@ gnc_add_css_file (void)
 #endif
     gtk_css_provider_load_from_resource (provider_fallback,  "/org/gnucash/gnucash-fallback-310.css");
 
-    var = g_get_home_dir ();
+    var = gnc_userconfig_dir ();
     if (var)
     {
         gchar *str;
-        str = g_build_filename (var, ".gtk-3.0-gnucash.css", (char *)NULL);
+        str = g_build_filename (var, "gtk-3.0.css", (char *)NULL);
         gtk_css_provider_load_from_path (provider_user, str, &error);
         g_free (str);
     }

@@ -543,6 +543,33 @@ get_userdata_home(void)
     return userdata_home;
 }
 
+static bfs::path
+get_userconfig_home(void)
+{
+    gchar *config_dir = NULL;
+    auto userconfig_home = bfs::path();
+
+#ifdef G_OS_WIN32
+    config_dir = win32_get_userdata_home ();
+#elif defined MAC_INTEGRATION
+    config_dir = quarz_get_userdata_home ();
+#endif
+
+    /* On Windows and Macs the data directory is used, for Linux
+       $HOME/.config is used */
+    if (config_dir)
+    {
+        userconfig_home = config_dir;
+        g_free(config_dir);
+    }
+    else
+        userconfig_home = g_get_user_config_dir();
+
+    userconfig_home = userconfig_home / PACKAGE;
+
+    return userconfig_home;
+}
+
 gboolean
 gnc_filepath_init (void)
 {
@@ -682,6 +709,24 @@ gnc_userdata_dir (void)
         gnc_filepath_init();
 
     return gnc_userdata_home.string().c_str();
+}
+
+/** @fn const gchar * gnc_userconfig_dir ()
+ *  @brief Return the config directory
+ *
+ *  Note that the default path depends on the platform.
+ *  - Windows: CSIDL_APPDATA/Gnucash
+ *  - OS X: $HOME/Application Support/Gnucash
+ *  - Linux: $XDG_CONFIG_HOME/Gnucash (or the default $HOME/.config/Gnucash)
+ *
+ *  @return An absolute path to the configuration directory. This string is
+ *  owned by the gnc_filepath_utils code and should not be freed by the user.
+ */
+const gchar *
+gnc_userconfig_dir (void)
+{
+    auto path_string = get_userconfig_home();
+    return g_strdup(path_string.string().c_str());
 }
 
 static const bfs::path&

@@ -947,6 +947,9 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
           marker_color_class = g_strconcat ("markers", class_extension, NULL);
     }
 
+    /* lets confirm text height size */
+    pango_layout_set_text(layout, "S", -1);
+    pango_layout_get_pixel_size(layout, NULL, &dcal->dayLabelHeight);
 
     /* Fill in alternating month colors. */
     {
@@ -1037,9 +1040,6 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
         gint j;
 
         cairo_save (cr);
-        pango_layout_set_text(layout, "S", -1);
-        pango_layout_get_pixel_size(layout, NULL, &dcal->dayLabelHeight);
-
         gdk_rgba_parse (&color, "black");
 
         x = dcal->leftPadding

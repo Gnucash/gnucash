@@ -1,0 +1,96 @@
+/* This is an example GTK CSS file that can be used with Gnucash.
+   Simply copy this file to the loaction specified below according
+   to your platform and then restart gnucash.
+
+  - Windows: CSIDL_APPDATA/GnuCash
+    (or the default is users\%USERNAME%\AppData\Roaming\GnuCash)
+
+  - OS X: $HOME/Application Support/GnuCash
+
+  - Linux: $XDG_CONFIG_HOME/gnucash
+    (or the default is $HOME/.config/gnucash)
+
+  These settings are mainly to do with register colors and can be seen
+  when the preference setting 'Register\Use GnuCash built-in color theme'
+  is unset.
+
+  Note: Widgets obtained from Glade files will not be addressable
+  directly by name as these are not brought in when loaded, only
+  the widget type can be configured unless they are named in code.
+*/
+
+/* Register sheet font setting */
+sheet {
+  font: 18px arial, sans-serif;
+}
+
+sheet calendar {
+  font: 12px arial, sans-serif;
+}
+
+
+/* Register User Colors */
+.header-color {
+  background-color: seagreen;
+  color: white;
+}
+
+.primary-color {
+  background-color: pink;
+}
+
+.primary-color:disabled {
+  background-color: plum;
+}
+
+.secondary-color {
+  background-color: lightgreen;
+}
+
+.secondary-color:disabled {
+  background-color: plum;
+}
+
+.split-color {
+  background-color: lightblue;
+}
+
+.split-color:disabled {
+  background-color: plum;
+}
+
+.cursor-color {
+  background-color: #00BFFF;
+  color: white;
+}
+
+cursor entry {
+  background-color: #00BFFF;
+  color: white;
+}
+
+
+/* Dense Calendar Settings */
+.calendar {
+  border-color: white;
+}
+
+.calendar.header {
+ background-color: lightgreen;
+}
+
+.calendar.primary {
+  background-color: darksalmon;
+}
+
+.calendar.secondary {
+  background-color: darkseagreen;
+}
+
+.calendar.markers {
+  background-color: indianred;
+}
+
+#dense-cal-popup treeview {
+  background-color: lightcoral;
+}

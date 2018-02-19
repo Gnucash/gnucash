@@ -837,8 +837,8 @@ void gnc_gsettings_version_upgrade (void)
     if (!gnc_gsettings_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_MIGRATE_PREFS_DONE))
         gnc_gsettings_migrate_from_gconf ();
 
-    /* Convert settings to 2.8 compatibility level */
-    if (old_maj_min < 208)
+    /* Convert settings to 3.0 compatibility level */
+    if (old_maj_min < 207)
     {
         /* 'use-theme-colors' has been replaced with 'use-gnucash-color-theme'
          * which inverts the meaning of the setting */
