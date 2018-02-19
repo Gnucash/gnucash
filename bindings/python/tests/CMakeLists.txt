@@ -1,5 +1,7 @@
 
 IF (WITH_PYTHON)
+  add_custom_target(test-python-bindings ALL DEPENDS unittest_support gnucash-core-c-build gnucash-core-c-py)
+  add_dependencies(check test-python-bindings)
   ADD_TEST(python-bindings ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/runTests.py.in)
   SET_PROPERTY(TEST python-bindings PROPERTY ENVIRONMENT
     GNC_BUILDDIR=${CMAKE_BINARY_DIR}
