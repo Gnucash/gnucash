@@ -1,9 +1,8 @@
 SET(GUILE_DEPENDS      scm-core-utils scm-gnc-module)
-SET(scm_SCHEME   string.scm utilities.scm)
 
 
 GNC_ADD_SCHEME_TARGETS(scm-scm
-  "${scm_SCHEME}"
+  "utilities.scm"
   gnucash
   "${GUILE_DEPENDS}"
   FALSE
@@ -17,7 +16,7 @@ GNC_ADD_SCHEME_TARGETS(price-quotes
   FALSE)
 
 
-SET_LOCAL_DIST(scm_DIST_local CMakeLists.txt ${scm_SCHEME} price-quotes.scm)
+SET_LOCAL_DIST(scm_DIST_local CMakeLists.txt utilities.scm price-quotes.scm)
 SET(scm_DIST ${scm_DIST_local} ${scm_gnumeric_DIST} PARENT_SCOPE)
 
 

@@ -354,6 +354,7 @@ gnucash/import-export/qif-imp/qif-objects.scm
 gnucash/import-export/qif-imp/qif-parse.scm
 gnucash/import-export/qif-imp/qif-to-gnc.scm
 gnucash/import-export/qif-imp/qif-utils.scm
+gnucash/import-export/qif-imp/string.scm
 gnucash/python/gncmod-python.c
 gnucash/register/ledger-core/gncEntryLedger.c
 gnucash/register/ledger-core/gncEntryLedgerControl.c
@@ -695,7 +696,6 @@ libgnucash/gnc-module/example/gncmod-example.c
 libgnucash/gnc-module/gnc-module.c
 libgnucash/gnc-module/gnc-module.scm
 libgnucash/scm/price-quotes.scm
-libgnucash/scm/string.scm
 libgnucash/scm/utilities.scm
 libgnucash/tax/us/de_DE.scm
 libgnucash/tax/us/gncmod-tax-us.c

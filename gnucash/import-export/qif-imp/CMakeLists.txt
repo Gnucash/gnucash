@@ -38,6 +38,10 @@ INSTALL(TARGETS gncmod-qif-import
 
 # Scheme
 
+SET (qif_import_SCHEME_0
+  string.scm
+  )
+
 SET (qif_import_SCHEME
   qif-dialog-utils.scm
   qif-file.scm
@@ -65,6 +69,13 @@ SET(GUILE_DEPENDS
   scm-gnome-utils
   )
 
+GNC_ADD_SCHEME_TARGETS(scm-qif-import-0
+  "${qif_import_SCHEME_0}"
+  "gnucash/import-export"
+  "${GUILE_DEPENDS}"
+  FALSE
+)
+
 GNC_ADD_SCHEME_TARGETS(scm-qif-import-2
   "${qif_import_SCHEME_2}"
   "gnucash/import-export"
@@ -75,7 +86,7 @@ GNC_ADD_SCHEME_TARGETS(scm-qif-import-2
 GNC_ADD_SCHEME_TARGETS(scm-qif-import
   "${qif_import_SCHEME}"
   "qif-import"
-  "${GUILE_DEPENDS}"
+  "${GUILE_DEPENDS};scm-qif-import-0"
   FALSE
 )
 

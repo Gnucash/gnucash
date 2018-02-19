@@ -34,8 +34,6 @@
 
 (use-modules (gnucash gnc-module))
 
-(load-from-path "gnucash/string")
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Exports
 
@@ -44,7 +42,6 @@
 (export gnc:error)
 (export gnc:msg)
 (export gnc:debug)
-(export gnc:safe-strcmp) ;; only used by aging.scm atm...
 
 ;; Do this stuff very early -- but other than that, don't add any
 ;; executable code until the end of the file if you can help it.
