@@ -1095,7 +1095,7 @@ tags within description, notes or memo. ")
                                 str
                                 (if (column-uses? 'common-currency)
                                     (string-append
-                                     "<br>"
+                                     "<br />"
                                      (gnc-commodity-get-mnemonic
                                       (opt-val gnc:pagename-general optname-currency)))
                                     ""))))
