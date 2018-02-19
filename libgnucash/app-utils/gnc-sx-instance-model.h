@@ -258,4 +258,5 @@ GHashTable* gnc_sx_all_instantiate_cashflow_all(GDate range_start, GDate range_e
 
 G_END_DECLS
 
+
 #endif // _GNC_SX_INSTANCE_MODEL_H
