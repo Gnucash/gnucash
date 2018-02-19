@@ -7,7 +7,7 @@ set(ENV{INTLTOOL_EXTRACT} ${INTLTOOL_EXTRACT})
 set(ENV{XGETTEXT} ${XGETTEXT})
 set(ENV{srcdir} ${PO_SRC_DIR})
 execute_process(
-  COMMAND ${PERL} ${INTLTOOL_UPDATE} --gettext-package ${PACKAGE} --pot
+  COMMAND ${PERL} ${INTLTOOL_UPDATE} -x --gettext-package ${PACKAGE} --pot
   WORKING_DIRECTORY ${PO_BIN_DIR}
   RESULT_VARIABLE GNUCASH_POT_RESULT
 )

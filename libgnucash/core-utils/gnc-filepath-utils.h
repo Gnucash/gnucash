@@ -91,9 +91,9 @@ gchar *gnc_path_find_localized_html_file (const gchar *file_name);
  * function will also try to copy files from $HOME/.gnucash
  * to there if that old location exists.
  *
- * @return whether files got copied from the old location.
+ * @return a migration message when files got copied from the old location, NULL otherwise
  */
-gboolean gnc_filepath_init (void);
+char * gnc_filepath_init (void);
 
 const gchar *gnc_userdata_dir (void);
 gchar *gnc_build_userdata_path (const gchar *filename);

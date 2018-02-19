@@ -155,6 +155,8 @@ IF(BUILDING_FROM_VCS)
 
   find_program(INTLTOOL_EXTRACT NAMES intltool-extract)
   find_program(XGETTEXT xgettext)
+  configure_file (${CMAKE_CURRENT_SOURCE_DIR}/Makevars
+    ${CMAKE_CURRENT_BINARY_DIR}/Makevars COPYONLY)
 
   IF (${INTLTOOL_EXTRACT} STREQUAL "INTLTOOL_EXTRACT-NOTFOUND")
     MESSAGE(FATAL_ERROR "Can't find the 'intltool-extract' program.")

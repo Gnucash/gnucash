@@ -148,7 +148,6 @@ static GOptionEntry options[] =
     { NULL }
 };
 
-static gboolean userdata_migrated = FALSE;
 static gchar *userdata_migration_msg = NULL;
 
 static void
@@ -387,11 +386,6 @@ load_user_config(void)
 {
     /* Don't continue adding to this list. When 2.0 rolls around bump
        the 1.4 (unnumbered) files off the list. */
-    static const gchar *user_config_files[] =
-    {
-        "config-2.0.user", "config-1.8.user", "config-1.6.user",
-        "config.user", NULL
-    };
     static const gchar *saved_report_files[] =
     {
         SAVED_REPORTS_FILE, SAVED_REPORTS_FILE_OLD_REV, NULL
@@ -404,7 +398,14 @@ load_user_config(void)
     else is_user_config_loaded = TRUE;
 
     update_message("loading user configuration");
-    try_load_config_array(user_config_files);
+    {
+        gchar *config_filename;
+        config_filename = g_build_filename (gnc_userconfig_dir (),
+                                                "config-user.scm", (char *)NULL);
+        gfec_try_load(config_filename);
+        g_free(config_filename);
+    }
+
     update_message("loading saved reports");
     try_load_config_array(saved_report_files);
     update_message("loading stylesheets");
@@ -647,7 +648,7 @@ inner_main (void *closure, int argc, char **argv)
         gnc_ui_new_user_dialog();
     }
 
-    if (userdata_migrated)
+    if (userdata_migration_msg)
     {
         GtkWidget *dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
                                                    GTK_MESSAGE_INFO,
@@ -657,6 +658,7 @@ inner_main (void *closure, int argc, char **argv)
         gnc_destroy_splash_screen();
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy (dialog);
+        g_free (userdata_migration_msg);
     }
     /* Ensure temporary preferences are temporary */
     gnc_prefs_reset_group (GNC_PREFS_GROUP_WARNINGS_TEMP);
@@ -703,7 +705,8 @@ gnc_log_init()
 
     {
         gchar *log_config_filename;
-        log_config_filename = gnc_build_userdata_path("log.conf");
+        log_config_filename = g_build_filename (gnc_userconfig_dir (),
+                                                "log.conf", (char *)NULL);
         if (g_file_test(log_config_filename, G_FILE_TEST_EXISTS))
             qof_log_parse_log_config(log_config_filename);
         g_free(log_config_filename);
@@ -784,15 +787,8 @@ main(int argc, char ** argv)
     /* Make sure gnucash' user data directory is properly set up
        This must be done before any guile code is called as that would
        fail the migration message */
-    userdata_migrated = gnc_filepath_init();
-    /* Translators: the message below will be completed with two directory names. */
-    userdata_migration_msg = g_strdup_printf (
-        _("Notice\n\nYour gnucash metadata has been migrated.\n\n"
-          "Old location: %s%s\n"
-          "New location: %s\n\n"
-          "If you no longer intend to run " PACKAGE_NAME " 2.6.x or older on this system you can safely remove the old directory."),
-        g_get_home_dir(), G_DIR_SEPARATOR_S ".gnucash", gnc_userdata_dir());
-    if (userdata_migrated)
+    userdata_migration_msg = gnc_filepath_init();
+    if (userdata_migration_msg)
         g_print("\n\n%s\n", userdata_migration_msg);
 
     gnc_log_init();

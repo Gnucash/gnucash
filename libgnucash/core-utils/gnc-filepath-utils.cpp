@@ -65,6 +65,10 @@ extern "C" {
 }
 
 #include <boost/filesystem.hpp>
+#include <boost/locale.hpp>
+#include <iostream>
+
+
 
 #if PLATFORM(WINDOWS)
 #include <codecvt>
@@ -73,6 +77,8 @@ extern "C" {
 
 namespace bfs = boost::filesystem;
 namespace bst = boost::system;
+namespace bl = boost::locale;
+using namespace boost::locale;
 
 /**
  * Scrubs a filename by changing "strange" chars (e.g. those that are not
@@ -319,6 +325,7 @@ gnc_path_find_localized_html_file (const gchar *file_name)
 
 /* ====================================================================== */
 static auto gnc_userdata_home = bfs::path();
+static auto gnc_userconfig_home = bfs::path();
 static auto build_dir = bfs::path();
 
 static bool dir_is_descendant (const bfs::path& path, const bfs::path& base)
@@ -580,6 +587,141 @@ get_userconfig_home(void)
     return userconfig_home;
 }
 
+static std::string migrate_gnc_datahome()
+{
+    auto success = false;
+    // Specify location of dictionaries
+    auto old_dir = bfs::path(g_get_home_dir()) / ".gnucash";
+
+    bl::generator gen;
+    gen.add_messages_path(gnc_path_get_datadir());
+    gen.add_messages_domain(PACKAGE);
+
+//    std::locale::global(gen(""));
+    auto migration_msg = std::stringstream ();
+    migration_msg.imbue(gen(""));
+
+    if (copy_recursive (old_dir,
+                        gnc_userdata_home))
+    {
+        /* Step 1: copy directory $HOME/.gnucash to $GNC_DATA_HOME */
+
+        /* Translators: the message below will be completed with two directory names. */
+        migration_msg
+            << translate ("Notice") << std::endl << std::endl
+            << translate ("Your gnucash metadata has been migrated.") << std::endl << std::endl
+            << translate ("Old location:") << " " << old_dir.string() << std::endl
+            << translate ("New location:") << " " << gnc_userdata_home.string() << std::endl << std::endl
+            // Translators {1} will be replaced with the package name (typically Gnucash) at runtime
+            << bl::format (translate ("If you no longer intend to run {1} 2.6.x or older on this system you can safely remove the old directory."))
+                % PACKAGE_NAME;
+
+        /* Step 2: move user editable config files from $GNC_DATA_HOME to GNC_CONFIG_HOME
+                   These files are:
+                   - log.conf
+                   - the most recent of "config-2.0.user", "config-1.8.user", "config-1.6.user",
+                     "config.user"
+                     Note: we'll also  rename config.user to config-user.scm to make it more clear what
+                     this file is expecting custom scm code to load at run time
+
+           This is only done if not Windows or OS X, because on those platforms
+           gnc_userconfig_home and gnc_userdata_home are the same.*/
+#if !defined G_OS_WIN32 && !defined MAC_INTEGRATION
+        auto failed = std::vector<std::string>{};
+        auto succeeded = std::vector<std::string>{};
+
+        auto oldlogpath = gnc_userdata_home / "log.conf";
+        auto newlogpath = gnc_userconfig_home / "log.conf";
+        try
+        {
+            if (bfs::exists (oldlogpath) && gnc_validate_directory (gnc_userconfig_home))
+            {
+                bfs::rename (oldlogpath, newlogpath);
+                succeeded.emplace_back ("log.conf");
+            }
+        }
+        catch (const bfs::filesystem_error& ex)
+        {
+            failed.emplace_back ("log.conf");
+        }
+
+        auto user_config_files = std::vector<std::string>
+        {
+            "config.user", "config-1.6.user",
+            "config-1.8.user", "config-2.0.user"
+        };
+        auto newconfpath = gnc_userconfig_home / "config-user.scm";
+        auto conf_exist_vec = std::vector<std::string> {};
+        auto final_rename = std::string();
+        for (auto conf_file : user_config_files)
+        {
+            auto oldconfpath = gnc_userdata_home / conf_file;
+            try
+            {
+                if (bfs::exists (oldconfpath) && gnc_validate_directory (gnc_userconfig_home))
+                {
+                    bfs::rename (oldconfpath, newconfpath);
+                    /* Translators: this string refers to a file name that gets renamed */
+                    final_rename = conf_file + " (" + _("Renamed to:") + " config-user.scm)";
+                    conf_exist_vec.emplace_back (conf_file);
+                }
+            }
+            catch (const bfs::filesystem_error& ex)
+            {
+                failed.emplace_back (conf_file);
+            }
+        }
+        if (!final_rename.empty())
+            succeeded.emplace_back (final_rename);
+        /* The last element in conf_exist_vec would be the same as final_rename.
+         * This will be reported in the succeeded vector, so don't
+         * report it again as removed */
+        if (!conf_exist_vec.empty())
+            conf_exist_vec.pop_back();
+
+        /* Step 3: inform the user of additional changes */
+        if (!succeeded.empty() || !conf_exist_vec.empty() || !failed.empty())
+            migration_msg << std::endl << std::endl
+                          << translate ("In addition:");
+
+        if (!succeeded.empty())
+        {
+            migration_msg << std::endl << std::endl
+                          << bl::format (translate ("The following file has been moved to {1} instead:",
+                                                        "The following files have been moved to {1} instead:",
+                                                        succeeded.size())) % gnc_userconfig_home.string().c_str()
+                          << std::endl;
+            for (auto success_file : succeeded)
+                migration_msg << "- " << success_file << std::endl;
+        }
+        if (!conf_exist_vec.empty())
+        {
+            migration_msg << std::endl << std::endl
+                          << translate ("The following file has been removed instead:",
+                                            "The following files have been removed instead:",
+                                            conf_exist_vec.size())
+                          << std::endl;
+            for (auto rem_file : conf_exist_vec)
+                migration_msg << "- " << rem_file << std::endl;
+        }
+        if (!failed.empty())
+        {
+            migration_msg << std::endl << std::endl
+                          << bl::format (translate ("The following file could not be moved to {1}:",
+                                                        "The following files could not be moved to {1}:",
+                                                        failed.size())) % gnc_userconfig_home.string().c_str()
+                          << std::endl;
+            for (auto failed_file : failed)
+                migration_msg << "- " << failed_file << std::endl;
+        }
+#endif
+
+    }
+
+    return migration_msg.str ();
+}
+
+
 #if defined G_OS_WIN32 ||defined MAC_INTEGRATION
 constexpr auto path_package = PACKAGE_NAME;
 #else
@@ -587,9 +729,14 @@ constexpr auto path_package = PACKAGE;
 #endif
 
 
-gboolean
+char *
 gnc_filepath_init (void)
 {
+    // Initialize the user's config directory for gnucash
+    gnc_userconfig_home = get_userconfig_home() / path_package;
+
+
+    // Initialize the user's data directory for gnucash
     auto gnc_userdata_home_exists = false;
     auto have_valid_userdata_home = false;
 
@@ -660,10 +807,11 @@ gnc_filepath_init (void)
         }
     }
 
-    auto migrated = FALSE;
+    /* Run migration code before creating the default directories
+       If migrating, these default directories are copied instead of created. */
+    auto migration_notice = std::string ();
     if (!gnc_userdata_home_exists)
-        migrated = copy_recursive (bfs::path (g_get_home_dir()) / ".gnucash",
-                                   gnc_userdata_home);
+        migration_notice = migrate_gnc_datahome();
 
     /* Try to create the standard subdirectories for gnucash' user data */
     try
@@ -678,7 +826,7 @@ gnc_filepath_init (void)
         "(Error: %s)", ex.what());
     }
 
-    return migrated;
+    return migration_notice.empty() ? NULL : g_strdup (migration_notice.c_str());
 }
 
 /** @fn const gchar * gnc_userdata_dir ()
@@ -744,8 +892,10 @@ gnc_userdata_dir (void)
 const gchar *
 gnc_userconfig_dir (void)
 {
-    auto config_path = get_userconfig_home() / path_package;
-    return g_strdup(config_path.string().c_str());
+    if (gnc_userdata_home.empty())
+        gnc_filepath_init();
+
+    return gnc_userconfig_home.string().c_str();
 }
 
 static const bfs::path&
