@@ -300,7 +300,7 @@ gnc_module_get_info(const char * fullpath)
     gmodule = g_module_open(fullpath, G_MODULE_BIND_LAZY);
     if (gmodule == NULL)
     {
-        g_warning("Failed to dlopen() '%s': %s\n", fullpath, g_module_error());
+        g_debug("Failed to dlopen() '%s': %s\n", fullpath, g_module_error());
         return NULL;
     }
 
