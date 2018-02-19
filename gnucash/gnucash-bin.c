@@ -392,11 +392,6 @@ load_user_config(void)
         "config-2.0.user", "config-1.8.user", "config-1.6.user",
         "config.user", NULL
     };
-    static const gchar *auto_config_files[] =
-    {
-        "config-2.0.auto", "config-1.8.auto", "config-1.6.auto",
-        "config.auto", NULL
-    };
     static const gchar *saved_report_files[] =
     {
         SAVED_REPORTS_FILE, SAVED_REPORTS_FILE_OLD_REV, NULL
@@ -410,8 +405,6 @@ load_user_config(void)
 
     update_message("loading user configuration");
     try_load_config_array(user_config_files);
-    update_message("loading auto configuration");
-    try_load_config_array(auto_config_files);
     update_message("loading saved reports");
     try_load_config_array(saved_report_files);
     update_message("loading stylesheets");
