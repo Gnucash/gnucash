@@ -21,7 +21,7 @@
       (load-extension "libgncmod-app-utils" "scm_init_sw_app_utils_module"))
 (use-modules (sw_app_utils))
 (use-modules (srfi srfi-1))
-(use-modules (gnucash utilities)) 
+(use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 

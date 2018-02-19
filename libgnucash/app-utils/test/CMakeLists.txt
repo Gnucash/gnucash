@@ -17,7 +17,9 @@ MACRO(ADD_APP_UTILS_TEST _TARGET _SOURCE_FILES)
   GNC_ADD_TEST(${_TARGET} "${_SOURCE_FILES}" APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
 ENDMACRO()
 
-ADD_APP_UTILS_TEST(test-exp-parser test-exp-parser.c)
+GNC_ADD_TEST_WITH_GUILE(test-exp-parser test-exp-parser.c
+  APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS
+ )
 GNC_ADD_TEST_WITH_GUILE(test-link-module-app-utils test-link-module APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
 ADD_APP_UTILS_TEST(test-print-parse-amount test-print-parse-amount.cpp)
 # FIXME Why is this test not run ?

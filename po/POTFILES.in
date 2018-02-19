@@ -512,6 +512,7 @@ libgnucash/app-utils/c-interface.scm
 libgnucash/app-utils/config-var.scm
 libgnucash/app-utils/date-utilities.scm
 libgnucash/app-utils/file-utils.c
+libgnucash/app-utils/fin.scm
 libgnucash/app-utils/gettext.scm
 libgnucash/app-utils/gfec.c
 libgnucash/app-utils/gnc-accounting-period.c

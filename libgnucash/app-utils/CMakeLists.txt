@@ -167,6 +167,7 @@ SET (app_utils_SCHEME_1
     options.scm
     prefs.scm
     simple-obj.scm
+    fin.scm
 )
 
 SET(app_utils_SCHEME_3
@@ -198,14 +199,14 @@ GNC_ADD_SCHEME_TARGETS(scm-app-utils-1
 GNC_ADD_SCHEME_TARGETS(scm-app-utils-2
   "${app_utils_SCHEME_2}"
   "gnucash"
-  scm-app-utils-1
+  "scm-app-utils-1"
   FALSE
 )
 
 GNC_ADD_SCHEME_TARGETS(scm-app-utils-3
   "${app_utils_SCHEME_3}"
   ""
-  scm-app-utils-2
+  "scm-app-utils-2"
   FALSE
 )
 

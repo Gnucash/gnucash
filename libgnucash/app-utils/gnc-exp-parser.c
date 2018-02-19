@@ -80,6 +80,8 @@ gnc_exp_parser_real_init ( gboolean addPredefined )
     if (parser_inited)
         gnc_exp_parser_shutdown ();
 
+    /* The parser uses fin.scm for financial functions, so load it here. */
+    scm_primitive_load_path(scm_from_utf8_string("fin"));
     variable_bindings = g_hash_table_new (g_str_hash, g_str_equal);
 
     /* This comes after the statics have been initialized. Not at the end! */
