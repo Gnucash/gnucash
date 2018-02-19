@@ -258,4 +258,15 @@ GHashTable* gnc_sx_all_instantiate_cashflow_all(GDate range_start, GDate range_e
 
 G_END_DECLS
 
+
+/** Report errors bilingual:
+ *  in g_critical untranslated and
+ *  in g_list_append translated.
+ */
+#define REPORT_ERROR(list, format, ...) do { \
+    g_critical(format, __VA_ARGS__); \
+    if (list != NULL) \
+        *list = g_list_append(*list, g_strdup_printf(_(format), __VA_ARGS__)); \
+} while (0)
+
 #endif // _GNC_SX_INSTANCE_MODEL_H
