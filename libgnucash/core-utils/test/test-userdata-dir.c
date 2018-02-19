@@ -59,6 +59,13 @@ usr_confpath_strings strs2[] =
     { 0, NULL, NULL },
 };
 
+#if defined G_OS_WIN32 ||defined MAC_INTEGRATION
+const char *path_package = PACKAGE_NAME;
+#else
+const char *path_package = PACKAGE;
+#endif
+
+
 static char*
 test_get_userdatadir ()
 {
@@ -177,25 +184,25 @@ main(int argc, char **argv)
 
         if (strs2[i].func_num == 0)
         {
-            wantout = g_build_filename(userdata_dir, PACKAGE, "foo",
+            wantout = g_build_filename(userdata_dir, path_package, "foo",
                                        (gchar *)NULL);
             daout = gnc_build_userdata_path("foo");
         }
         else if (strs2[i].func_num == 1)
         {
-            wantout = g_build_filename(userdata_dir, PACKAGE, strs2[i].output, "foo",
+            wantout = g_build_filename(userdata_dir, path_package, strs2[i].output, "foo",
                                        (gchar *)NULL);
             daout = gnc_build_book_path("foo");
         }
         else if (strs2[i].func_num == 2)
         {
-            wantout = g_build_filename(userdata_dir, PACKAGE, strs2[i].output, "foo",
+            wantout = g_build_filename(userdata_dir, path_package, strs2[i].output, "foo",
                                        (gchar *)NULL);
             daout = gnc_build_translog_path("foo");
         }
         else // if (strs2[i].prefix_home == 3)
         {
-            wantout = g_build_filename(userdata_dir, PACKAGE, strs2[i].output, "foo",
+            wantout = g_build_filename(userdata_dir, path_package, strs2[i].output, "foo",
                                        (gchar *)NULL);
             daout = gnc_build_data_path("foo");
         }
@@ -209,16 +216,16 @@ main(int argc, char **argv)
     }
     g_unsetenv("XDG_DATA_HOME");
     /* Remove intermediate directories again */
-    tmp_dir = g_build_filename(userdata_dir, PACKAGE, "data", (gchar *)NULL);
+    tmp_dir = g_build_filename(userdata_dir, path_package, "data", (gchar *)NULL);
     g_rmdir (tmp_dir);
     g_free (tmp_dir);
-    tmp_dir = g_build_filename(userdata_dir, PACKAGE, "translog", (gchar *)NULL);
+    tmp_dir = g_build_filename(userdata_dir, path_package, "translog", (gchar *)NULL);
     g_rmdir (tmp_dir);
     g_free (tmp_dir);
-    tmp_dir = g_build_filename(userdata_dir, PACKAGE, "books", (gchar *)NULL);
+    tmp_dir = g_build_filename(userdata_dir, path_package, "books", (gchar *)NULL);
     g_rmdir (tmp_dir);
     g_free (tmp_dir);
-    tmp_dir = g_build_filename(userdata_dir, PACKAGE, (gchar *)NULL);
+    tmp_dir = g_build_filename(userdata_dir, path_package, (gchar *)NULL);
     g_rmdir (tmp_dir);
     g_free (tmp_dir);
     g_rmdir(userdata_dir);
@@ -240,25 +247,25 @@ main(int argc, char **argv)
 
         if (strs2[i].func_num == 0)
         {
-            wantout = g_build_filename(userdata_dir, PACKAGE, "foo",
+            wantout = g_build_filename(userdata_dir, path_package, "foo",
                                        (gchar *)NULL);
             daout = gnc_build_userdata_path("foo");
         }
         else if (strs2[i].func_num == 1)
         {
-            wantout = g_build_filename(userdata_dir, PACKAGE, strs2[i].output, "foo",
+            wantout = g_build_filename(userdata_dir, path_package, strs2[i].output, "foo",
                                        (gchar *)NULL);
             daout = gnc_build_book_path("foo");
         }
         else if (strs2[i].func_num == 2)
         {
-            wantout = g_build_filename(userdata_dir, PACKAGE, strs2[i].output, "foo",
+            wantout = g_build_filename(userdata_dir, path_package, strs2[i].output, "foo",
                                        (gchar *)NULL);
             daout = gnc_build_translog_path("foo");
         }
         else // if (strs2[i].prefix_home == 3)
         {
-            wantout = g_build_filename(userdata_dir, PACKAGE, strs2[i].output, "foo",
+            wantout = g_build_filename(userdata_dir, path_package, strs2[i].output, "foo",
                                        (gchar *)NULL);
             daout = gnc_build_data_path("foo");
         }
@@ -271,19 +278,19 @@ main(int argc, char **argv)
         g_free(daout);
     }
     /* Remove intermediate directories again */
-    tmp_dir = g_build_filename(userdata_dir, PACKAGE, "data", (gchar *)NULL);
+    tmp_dir = g_build_filename(userdata_dir, path_package, "data", (gchar *)NULL);
     g_rmdir (tmp_dir);
     g_free (tmp_dir);
-    tmp_dir = g_build_filename(userdata_dir, PACKAGE, "translog", (gchar *)NULL);
+    tmp_dir = g_build_filename(userdata_dir, path_package, "translog", (gchar *)NULL);
     g_rmdir (tmp_dir);
     g_free (tmp_dir);
-    tmp_dir = g_build_filename(userdata_dir, PACKAGE, "books", (gchar *)NULL);
+    tmp_dir = g_build_filename(userdata_dir, path_package, "books", (gchar *)NULL);
     g_rmdir (tmp_dir);
     g_free (tmp_dir);
 #ifndef MAC_INTEGRATION
 #ifndef G_OS_WIN32
     /* Don't delete these on OS X or Windows. They may point at real user directories */
-    tmp_dir = g_build_filename(userdata_dir, PACKAGE, (gchar *)NULL);
+    tmp_dir = g_build_filename(userdata_dir, path_package, (gchar *)NULL);
     g_rmdir (tmp_dir);
     g_free (tmp_dir);
     g_rmdir(userdata_dir);

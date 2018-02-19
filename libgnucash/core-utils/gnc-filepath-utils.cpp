@@ -580,6 +580,13 @@ get_userconfig_home(void)
     return userconfig_home;
 }
 
+#if defined G_OS_WIN32 ||defined MAC_INTEGRATION
+constexpr auto path_package = PACKAGE_NAME;
+#else
+constexpr auto path_package = PACKAGE;
+#endif
+
+
 gboolean
 gnc_filepath_init (void)
 {
@@ -640,7 +647,7 @@ gnc_filepath_init (void)
         /* Determine platform dependent default userdata_home_path
          * and check whether it's valid */
         auto userdata_home = get_userdata_home();
-        gnc_userdata_home = userdata_home / PACKAGE;
+        gnc_userdata_home = userdata_home / path_package;
         try
         {
             gnc_userdata_home_exists = bfs::exists (gnc_userdata_home);
@@ -737,8 +744,8 @@ gnc_userdata_dir (void)
 const gchar *
 gnc_userconfig_dir (void)
 {
-    auto path_string = get_userconfig_home() / PACKAGE;
-    return g_strdup(path_string.string().c_str());
+    auto config_path = get_userconfig_home() / path_package;
+    return g_strdup(config_path.string().c_str());
 }
 
 static const bfs::path&
