@@ -987,7 +987,7 @@ tags within description, notes or memo. ")
                                (lambda (split transaction-row?)
                                  (gnc:make-html-table-cell/markup
                                   "date-cell"
-                                  (if (eq? (xaccSplitGetReconcile split) #\y)
+                                  (if (eqv? (xaccSplitGetReconcile split) #\y)
                                       (qof-print-date (xaccSplitGetDateReconciled split))
                                       "")))))
 
