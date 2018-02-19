@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.6.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-02 23:20+0100\n"
-"PO-Revision-Date: 2018-01-03 03:27+0100\n"
+"POT-Creation-Date: 2018-02-19 11:54+0100\n"
+"PO-Revision-Date: 2018-02-19 10:50+0100\n"
 "Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: de\n"
@@ -681,6 +681,42 @@ msgstr "Kein Speicher mehr verfügbar"
 #: ../src/app-utils/gnc-exp-parser.c:634
 msgid "Numeric error"
 msgstr "Numerischer Fehler"
+
+#. Translators: A list of error messages from the Scheduled Transactions (SX).
+#. * They might appear in their editor or in "Since last run".
+#: ../src/app-utils/gnc-sx-instance-model.c:996
+#, c-format
+msgid "Null account kvp value for SX [%s], cancelling creation."
+msgstr ""
+"Kein Konto im Schlüssel-Wert-Paar für terminierte Buchung [%s], Erstellung "
+"abgebrochen."
+
+#: ../src/app-utils/gnc-sx-instance-model.c:1005
+#, c-format
+msgid "Unknown account for guid [%s], cancelling SX [%s] creation."
+msgstr ""
+"Unbekanntes Konto für GUID [%s], Erstellung der terminierte Buchung [%s] "
+"abgebrochen."
+
+#: ../src/app-utils/gnc-sx-instance-model.c:1058
+#, c-format
+msgid "Error parsing SX [%s] key [%s]=formula [%s] at [%s]: %s."
+msgstr ""
+
+#: ../src/app-utils/gnc-sx-instance-model.c:1112
+#: ../src/app-utils/gnc-sx-instance-model.c:1738
+#, c-format
+msgid "Error %d in SX [%s] final gnc_numeric value, using 0 instead."
+msgstr ""
+"Fehler %d im letzten numerischen Wert der terminierten Buchung [%s]. "
+"Verwende stattdessen 0."
+
+#: ../src/app-utils/gnc-sx-instance-model.c:1747
+#, c-format
+msgid "No exchange rate available in SX [%s] for %s -> %s, value is zero."
+msgstr ""
+"Kein Wechselkurs verfügbar in terminierten Buchung [%s] für %s -> %s. Wert "
+"ist 0."
 
 #. Translators: This and the following strings appear on
 #. * the account tab if the Tax Info column is displayed,
@@ -7591,11 +7627,12 @@ msgstr ""
 "aktiviert, wird der Tipp gezeigt. Andernfalls wird er nicht gezeigt."
 
 #: ../src/gnome/gschemas/org.gnucash.general.finance-quote.gschema.xml.in.in.h:1
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:217
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:218
 msgid "Alpha Vantage API key"
 msgstr ""
 
 #: ../src/gnome/gschemas/org.gnucash.general.finance-quote.gschema.xml.in.in.h:2
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:217
 msgid ""
 "To retrieve online quotes from Alphavantage, this key needs to be set. A key "
 "can be retrieved from the Alpha Vantage website."
@@ -14687,7 +14724,7 @@ msgstr "Zeichen"
 msgid "Windows"
 msgstr "Fenster"
 
-#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:218
+#: ../src/gnome-utils/gtkbuilder/dialog-preferences.glade.h:219
 msgid "Online Quotes"
 msgstr "Online Kurse"
 
@@ -19223,8 +19260,8 @@ msgid "Import _Customers & Vendors..."
 msgstr "Importiert K_unden und Lieferanten..."
 
 #: ../src/plugins/customer_import/gnc-plugin-customer_import.c:58
-msgid "Import Customers and Vendors from a CSV text file"
-msgstr "Importiert Kunden und Lieferanten aus einer CSV-Textdatei"
+msgid "Import Customers and Vendors from a CSV text file."
+msgstr "Importiert Kunden und Lieferanten aus einer CSV-Textdatei."
 
 #. Title of dialog
 #: ../src/plugins/customer_import/gtkbuilder/dialog-customer-import-gui.glade.h:2
