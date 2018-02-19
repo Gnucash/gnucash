@@ -53,6 +53,16 @@
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.app-utils.sx"
 
+/** Report errors bilingual:
+ *  in g_critical untranslated and
+ *  in g_list_append translated.
+ */
+#define REPORT_ERROR(list, format, ...) do { \
+    g_critical(format, __VA_ARGS__); \
+    if (list != NULL) \
+        *list = g_list_append(*list, g_strdup_printf(_(format), __VA_ARGS__)); \
+} while (0)
+
 static GObjectClass *parent_class = NULL;
 
 static void gnc_sx_instance_model_class_init (GncSxInstanceModelClass *klass);
