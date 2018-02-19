@@ -63,6 +63,8 @@ GNC_ADD_SCHEME_TARGETS(scm-test-core
   FALSE
   )
 
+add_dependencies(check scm-test-core)
+
 IF(NOT GTEST_SHARED_LIB)
   SET (lib_gtest_SOURCES ${GTEST_SRC_DIR}/src/gtest-all.cc)
   ADD_LIBRARY(gtest STATIC  ${lib_gtest_SOURCES})

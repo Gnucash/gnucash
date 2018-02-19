@@ -234,6 +234,7 @@ GNC_ADD_SCHEME_TARGETS(scm-test-engine
   FALSE
   )
 
+add_dependencies(check scm-test-engine)
 GNC_ADD_SCHEME_TESTS("${engine_test_SCHEME}")
 
 SET(test_engine_SOURCES_DIST

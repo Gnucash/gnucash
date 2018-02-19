@@ -23,7 +23,6 @@ set(GUILE_DEPENDS
   scm-standard-reports
   scm-report-stylesheets
   )
-GNC_ADD_SCHEME_TESTS("${scm_test_standard_reports_SOURCES}")
 
 GNC_ADD_SCHEME_TARGETS(scm-test-standard-support
   "${scm_test_report_SUPPORT}"
@@ -34,9 +33,10 @@ GNC_ADD_SCHEME_TARGETS(scm-test-standard-support
 GNC_ADD_SCHEME_TARGETS(scm-test-standard-reports
   "${scm_test_standard_reports_SOURCES}"
   gnucash/report/standard-reports/test
-  scm-test-standard-support
+  "scm-test-standard-support"
   FALSE
 )
 
+add_dependencies(check scm-test-standard-reports)
 SET_DIST_LIST(test_standard_reports_DIST CMakeLists.txt 
   ${scm_test_standard_reports_SOURCES} ${scm_test_report_SUPPORT})

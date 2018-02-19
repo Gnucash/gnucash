@@ -579,12 +579,6 @@ GNC_GTEST_CONFIGURE()
 # There are targets that need to build before tests will run
 ADD_CUSTOM_TARGET(check
   COMMAND ${CMAKE_CTEST_COMMAND}
-  DEPENDS gnucash scm-app-utils scm-gnome-utils scm-report-gnome
-     scm-engine scm-gnc-module scm-test-engine scm-report-system-3
-     scm-test-core scm-test-report-system scm-standard-reports-2
-     scm-test-standard-reports foo gncmodfoo baz gncmodbaz
-     bar gncmodbar gncmod_agedver gncmod_incompatdep
-     gncmod_futuremodsys check-po test-core-guile gncmod-backend-xml
 )
 
 SET(gnucash_DOCS

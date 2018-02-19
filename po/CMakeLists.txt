@@ -188,3 +188,5 @@ ADD_CUSTOM_TARGET(check-po
            -P check-po.cmake
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
+
+add_dependencies(check check-po)

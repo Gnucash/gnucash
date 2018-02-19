@@ -43,7 +43,7 @@ GNC_ADD_SCHEME_TARGETS(scm-test-report-system-2
   FALSE
 )
 
-
+add_dependencies(check scm-test-report-system)
 SET_DIST_LIST(test_report_system_DIST
   CMakeLists.txt
   
