@@ -24,7 +24,12 @@
                 (test-runner-test-name runner))
         (case (test-result-kind runner)
           ((pass xpass) (set! num-passed (+ num-passed 1)))
-          ((fail xfail) (set! num-failed (+ num-failed 1)))
+          ((fail xfail)
+           (if (test-result-ref runner 'expected-value)
+               (format #t " -> expected: ~s\n -> obtained: ~s\n"
+                       (test-result-ref runner 'expected-value)
+                       (test-result-ref runner 'actual-value)))
+           (set! num-failed (+ num-failed 1)))
           (else #t))))
     (test-runner-on-final! runner
       (lambda (runner)
@@ -55,11 +60,15 @@
   ;; sxml (SXML tree), row & col (numbers or #f)
   ;; -> list-of-str
   ;;
-  ;; from an SXML table tree, with tr/th/td elements retrieve row/col
+  ;; from an SXML table tree with tr/th/td elements, retrieve row/col
   ;; if col=#f retrieve whole <tr> row specified
   ;; if row=#f retrieve whole <td> col specified (excludes <th>)
+  ;; if both #f retrieve all text elements (useless!)
   (let ((xpath (cond
-                ((not (and row col)) '(// *text*))
+                ((not (or row col)) '(// *text*))
+                ((and (eqv? row 1)
+                      (not col))
+                 '(// (tr 1) // th // *text*))
                 ((not col)  `(// (tr ,row) // *text*))
                 ((not row)  `(// (td ,col) // *text*))
                 ((= row 1)  `(// (tr ,row) // (th ,col) // *text*))
@@ -256,14 +265,11 @@
        (gnc:html-document-add-object! document table)
        (gnc:html-document-set-style-sheet! document (gnc:report-stylesheet report))
        (set! render (gnc:html-document-render document))
-        (for-each
-         (lambda (str)
-           (test-assert
-               (string-append str " header disabled")
-             (not (string-contains render str))))
-         (list "Date" "Reconciled Date" "Num" "Description" "Memo"
-               "Notes" "Grand Total" "Account" "Transfer from/to"
-               "Shares" "Price" "Running Balance" "Amount")))
+       (let* ((render-sxml (str->sxml render "table"))
+              (sxml-headers (get-row-col render-sxml 1 #f)))
+         (test-equal "Display headers disabled"
+           (list " ")
+           sxml-headers)))
      (let ((document (gnc:make-html-document)))
        ;; switch on all display options, and test the headings do appear in render
        (set-option! report "Display" "Date" #t)
@@ -284,15 +290,14 @@
        (gnc:html-document-set-style-sheet! document (gnc:report-stylesheet report))
        (set! render (gnc:html-document-render document))
        (let* ((render-sxml (str->sxml render "table"))
-              (sxml-headers ((sxpath '(// tr th *text*)) render-sxml)))
-         (for-each (lambda (title)
-                     (test-assert
-                         (string-append title " header enabled")
-                       (member title sxml-headers)))
-                   (list "Date" "Reconciled Date" "Num" "Description"
-                         "Memo/Notes" "Account"
-                         "Transfer from/to" "Shares" "Price"
-                         "Running Balance" "Amount"))))
+              (sxml-headers (get-row-col render-sxml 1 #f)))
+         (test-equal "Display headers enabled"
+           (list " " "Date" "Reconciled Date" "Num"
+                 "Description" "Memo/Notes" "Account"
+                 "Transfer from/to" "Shares" "Price"
+                 "Amount" "Running Balance")
+           sxml-headers
+           )))
      (let ((document (gnc:make-html-document)))
        ;; test dual-columns debit/credit headings appear
        (set-option! report "Display" "Amount" 'double)
@@ -301,7 +306,7 @@
        (gnc:html-document-set-style-sheet! document (gnc:report-stylesheet report))
        (set! render (gnc:html-document-render document))
        (let* ((render-sxml (str->sxml render "table"))
-              (sxml-headers ((sxpath '(// tr th *text*)) render-sxml)))
+              (sxml-headers (get-row-col render-sxml 1 #f)))
          (and
           (test-assert "dual-col Debit header" (member "Debit" sxml-headers))
           (test-assert "dual-col Credit header" (member "Credit" sxml-headers))
