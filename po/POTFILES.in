@@ -338,6 +338,7 @@ gnucash/import-export/ofx/gnc-plugin-ofx.c
 gnucash/import-export/qif/qif-context.c
 gnucash/import-export/qif/qif-file.c
 gnucash/import-export/qif/qif-objects.c
+gnucash/import-export/qif-imp/.#string.scm
 gnucash/import-export/qif-imp/assistant-qif-import.c
 gnucash/import-export/qif-imp/assistant-qif-import.glade
 gnucash/import-export/qif-imp/dialog-account-picker.c
