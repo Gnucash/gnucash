@@ -492,6 +492,12 @@ quarz_get_userdata_home(void)
 }
 #endif
 
+/* Returns an absolute path to the user's data directory.
+ * Note the default path depends on the platform.
+ *  - Windows: CSIDL_APPDATA
+ *  - OS X: $HOME/Application Support
+ *  - Linux: $XDG_DATA_HOME (or the default $HOME/.local/share)
+ */
 static bfs::path
 get_userdata_home(void)
 {
@@ -543,6 +549,12 @@ get_userdata_home(void)
     return userdata_home;
 }
 
+/* Returns an absolute path to the user's config directory.
+ * Note the default path depends on the platform.
+ *  - Windows: CSIDL_APPDATA
+ *  - OS X: $HOME/Application Support
+ *  - Linux: $XDG_CONFIG_HOME (or the default $HOME/.config)
+ */
 static bfs::path
 get_userconfig_home(void)
 {
@@ -564,8 +576,6 @@ get_userconfig_home(void)
     }
     else
         userconfig_home = g_get_user_config_dir();
-
-    userconfig_home = userconfig_home / PACKAGE;
 
     return userconfig_home;
 }
@@ -670,12 +680,12 @@ gnc_filepath_init (void)
  *  Note that the default path depends on the platform.
  *  - Windows: CSIDL_APPDATA/Gnucash
  *  - OS X: $HOME/Application Support/Gnucash
- *  - Linux: $XDG_DATA_HOME/Gnucash (or the default $HOME/.local/share/Gnucash)
+ *  - Linux: $XDG_DATA_HOME/gnucash (or the default $HOME/.local/share/gnucash)
  *
- *  If any of these paths doesn't exist and can't be created the function will
+ *  If any of these paths don't exist and can't be created the function will
  *  fall back to
  *  - $HOME/.gnucash
- *  - <TMP_DIR>/Gnucash
+ *  - <TMP_DIR>/gnucash
  *  (in that order)
  *
  *  @return An absolute path to the configuration directory. This string is
@@ -712,12 +722,14 @@ gnc_userdata_dir (void)
 }
 
 /** @fn const gchar * gnc_userconfig_dir ()
- *  @brief Return the config directory
+ *  @brief Return the user's config directory for gnucash
  *
- *  Note that the default path depends on the platform.
+ *  @note the default path depends on the platform.
  *  - Windows: CSIDL_APPDATA/Gnucash
  *  - OS X: $HOME/Application Support/Gnucash
- *  - Linux: $XDG_CONFIG_HOME/Gnucash (or the default $HOME/.config/Gnucash)
+ *  - Linux: $XDG_CONFIG_HOME/gnucash (or the default $HOME/.config/gnucash)
+ *
+ *  @note gnucash will not create this directory if it doesn't exist
  *
  *  @return An absolute path to the configuration directory. This string is
  *  owned by the gnc_filepath_utils code and should not be freed by the user.
@@ -725,7 +737,7 @@ gnc_userdata_dir (void)
 const gchar *
 gnc_userconfig_dir (void)
 {
-    auto path_string = get_userconfig_home();
+    auto path_string = get_userconfig_home() / PACKAGE;
     return g_strdup(path_string.string().c_str());
 }
 
