@@ -75,7 +75,7 @@
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/tax/de_DE" 0)
 (gnc:module-load "gnucash/report/report-system" 0)
-
+(gnc:module-load "gnucash/engine" 0)
 
 (define reportname (N_ "Tax Report / TXF Export"))
 
@@ -505,7 +505,11 @@
                                 (validate (reverse 
                                            (gnc-account-get-children-sorted
                                             (gnc-get-current-root-account))))))
-         (book (gnc:account-get-book (car selected-accounts)))
+         (book (if selected-accounts
+                   (gnc-account-get-book (if (pair? selected-accounts)
+                                             (car selected-accounts)
+                                             selected-accounts))
+                   #f))
          (generations (if (pair? selected-accounts)
                           (apply max (map (lambda (x) (num-generations x 1))
                                           selected-accounts))
@@ -770,9 +774,11 @@
                                 (gnc-localtime 
                                  (time64CanonicalDayTime
                                        (current-time)))))
-	  (tax-nr (or
-                   (gnc:option-get-value book gnc:*tax-label* gnc:*tax-nr-label*)
-		   ""))
+	  (tax-nr (unless book
+                      (or
+                       (gnc:option-get-value book gnc:*tax-label* gnc:*tax-nr-label*)
+                       "")
+                      ""))
 	  )
 
       ;; Now, the main body
