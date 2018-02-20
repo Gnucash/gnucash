@@ -53,26 +53,23 @@
 ;;
 (define (str->sxml str elem)
   (let ((start (string-contains str (format #f "<~a" elem))))
-    (and start
-         (xml->sxml (substring str start)))))
+    (and start (xml->sxml (substring str start)))))
 
 (define (get-row-col sxml row col)
   ;; sxml (SXML tree), row & col (numbers or #f)
-  ;; -> list-of-str
+  ;; -> list-of-string
   ;;
   ;; from an SXML table tree with tr/th/td elements, retrieve row/col
-  ;; if col=#f retrieve whole <tr> row specified
-  ;; if row=#f retrieve whole <td> col specified (excludes <th>)
-  ;; if both #f retrieve all text elements (useless!)
+  ;; if col  = #f retrieve whole <tr> row specified
+  ;; if row  = #f retrieve whole <td> col specified (excludes <th>)
+  ;; if both = #f retrieve all text elements
   (let ((xpath (cond
-                ((not (or row col)) '(// *text*))
-                ((and (eqv? row 1)
-                      (not col))
-                 '(// (tr 1) // th // *text*))
-                ((not col)  `(// (tr ,row) // *text*))
-                ((not row)  `(// (td ,col) // *text*))
-                ((= row 1)  `(// (tr ,row) // (th ,col) // *text*))
-                (else       `(// (tr ,row) // (td ,col) // *text*)))))
+                ((not (or row col))        '(// *text*))
+                ((and (= row 1) (not col)) '(// tr // th // *text*))
+                ((not col)                 `(// (tr ,row) // td // *text*))
+                ((not row)                 `(// tr // (td ,col) // *text*))
+                ((= row 1)                 `(// (tr ,row) // (th ,col) // *text*))
+                (else                      `(// (tr ,row) // (td ,col) // *text*)))))
     ((sxpath xpath) sxml)))
 ;;
 ;; END CANDIDATES
