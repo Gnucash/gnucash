@@ -457,7 +457,7 @@ IF (WITH_PYTHON)
 
   # Determine where to install the python libraries.
   EXECUTE_PROCESS(
-    COMMAND ${PYTHON_EXECUTABLE} -c "from distutils import sysconfig; print sysconfig.get_python_lib(prefix='${CMAKE_INSTALL_PREFIX}', plat_specific=True)"
+    COMMAND ${PYTHON_EXECUTABLE} -c "from distutils import sysconfig; print(sysconfig.get_python_lib(prefix='${CMAKE_INSTALL_PREFIX}', plat_specific=True))"
     RESULT_VARIABLE PYTHON_SYSCONFIG_RESULT
     OUTPUT_VARIABLE PYTHON_SYSCONFIG_OUTPUT
     ERROR_VARIABLE PYTHON_SYSCONFIG_ERROR
