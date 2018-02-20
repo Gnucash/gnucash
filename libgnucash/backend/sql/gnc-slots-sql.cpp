@@ -203,7 +203,7 @@ get_key_from_path (std::string path)
     auto idx = get_final_delim(path);
     if (idx == std::string::npos)
         return path;
-    return path.substr(idx);
+    return path.substr(idx + 1);
 }
 
 static std::string
