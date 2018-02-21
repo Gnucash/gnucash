@@ -19,6 +19,7 @@ INCLUDE_DIRECTORIES(
 )
 
 SET_DIST_LIST(test_core_DIST ${test_core_SOURCES} ${test_core_noinst_HEADERS} CMakeLists.txt
+        testing.scm
         unittest-support.i unittest-support.scm)
 
 ADD_LIBRARY(test-core STATIC ${test_core_SOURCES} ${test_core_noinst_HEADERS})

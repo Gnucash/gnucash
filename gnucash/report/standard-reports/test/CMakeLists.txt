@@ -4,6 +4,7 @@ SET(scm_test_standard_reports_SOURCES
   test-standard-category-report.scm
   test-standard-net-barchart.scm
   test-standard-net-linechart.scm
+  test-transaction.scm
 )
 
 SET(scm_test_report_SUPPORT

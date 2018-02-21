@@ -893,8 +893,40 @@ tags within description, notes or memo. ")
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Here comes the big function that builds the whole table.
 
+(export make-split-table)
 (define (make-split-table splits options custom-calculated-cells)
-
+  ;; list of splits -> string
+  ;;
+  ;; options used:
+  ;;  display/date
+  ;;  display/reconciled date
+  ;;  display/num or num/action
+  ;;  display/description
+  ;;  display/accname
+  ;;  display/acc-fullname
+  ;;  display/other-accname
+  ;;  display/other-accfullname
+  ;;  display/shares
+  ;;  display/price
+  ;;  display/memo
+  ;;  display/notes
+  ;;  display/detail
+  ;;  display/amount
+  ;;  display/running balance
+  ;;  display/sign reverses
+  ;;  display/totals
+  ;;  general/common-currency
+  ;;  general/report-currency
+  ;;  general/orig-currency
+  ;;  general/export?
+  ;;  sorting/indenting
+  ;;  sorting/subtotals-only
+  ;;  sorting/acc-code
+  ;;  sorting/acc-fullname
+  ;;  sorting/acc-description
+  ;;  sorting/show-informal-headers
+  ;;  sorting/prime & sec - sortkey & subtotal & date-subtotal
+  
   (define (opt-val section name)
     (let ((option (gnc:lookup-option options section name)))
       (if option
@@ -987,7 +1019,7 @@ tags within description, notes or memo. ")
                                (lambda (split transaction-row?)
                                  (gnc:make-html-table-cell/markup
                                   "date-cell"
-                                  (if (eq? (xaccSplitGetReconcile split) #\y)
+                                  (if (eqv? (xaccSplitGetReconcile split) #\y)
                                       (qof-print-date (xaccSplitGetDateReconciled split))
                                       "")))))
 
@@ -1095,7 +1127,7 @@ tags within description, notes or memo. ")
                                 str
                                 (if (column-uses? 'common-currency)
                                     (string-append
-                                     "<br>"
+                                     "<br />"
                                      (gnc-commodity-get-mnemonic
                                       (opt-val gnc:pagename-general optname-currency)))
                                     ""))))
@@ -1611,66 +1643,87 @@ tags within description, notes or memo. ")
 
     table))
 
-;; ;;;;;;;;;;;;;;;;;;;;
-;; Here comes the renderer function for this report.
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; trep-renderer multistage helper functions
+;;
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-(define* (trep-renderer report-obj #:key custom-calculated-cells empty-report-message custom-split-filter)
-  ;; the trep-renderer is a define* function which, at minimum, takes the report object
+(export renderer:options->accountlist)
+(define (renderer:options->accountlist options)
+  ;; options -> list of accounts
   ;;
-  ;; the optional arguments are:
-  ;; #:custom-calculated-cells - a list of vectors to define customized data columns
-  ;; #:empty-report-message - a str which is displayed at the initial report opening
-  ;; #:custom-split-filter - a split->bool function to add to the split filter
-
-  (define options (gnc:report-options report-obj))
+  ;; options used:
+  ;;  accounts/accounts - list of accounts
+  ;;  filter/account matcher - string
+  ;;  filter/account matcher regex - boolean
   (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
-  (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
-
-  (define (is-filter-member split account-list)
-    (let* ((txn (xaccSplitGetParent split))
-           (splitcount (xaccTransCountSplits txn))
-           (other-account (xaccSplitGetAccount (xaccSplitGetOtherSplit split)))
-           (splits-equal? (lambda (s1 s2) (xaccSplitEqual s1 s2 #t #f #f)))
-           (other-splits (delete split (xaccTransGetSplitList txn) splits-equal?))
-           (other-accounts (map xaccSplitGetAccount other-splits))
-           (is-in-account-list? (lambda (acc) (member acc account-list))))
-      (cond
-        ;; A 2-split transaction - test separately so it can be optimized
-        ;; to significantly reduce the number of splits to traverse
-        ;; in guile code
-        ((= splitcount 2) (is-in-account-list? other-account))
-        ;; A multi-split transaction - run over all splits
-        ((> splitcount 2) (or-map is-in-account-list? other-accounts))
-        ;; Single transaction splits
-        (else #f))))
-
-  (gnc:report-starting reportname)
-
-  (let* ((document (gnc:make-html-document))
-         (account-matcher (opt-val pagename-filter optname-account-matcher))
+  (let* ((account-matcher (opt-val pagename-filter optname-account-matcher))
          (account-matcher-regexp (and (opt-val pagename-filter optname-account-matcher-regex)
                                       (make-regexp account-matcher)))
-         (c_account_0 (opt-val gnc:pagename-accounts optname-accounts))
-         (c_account_1 (filter
-                       (lambda (acc)
-                         (if account-matcher-regexp
-                             (regexp-exec account-matcher-regexp (gnc-account-get-full-name acc))
-                             (string-contains (gnc-account-get-full-name acc) account-matcher)))
-                       c_account_0))
-         (c_account_2 (opt-val gnc:pagename-accounts optname-filterby))
-         (filter-mode (opt-val gnc:pagename-accounts optname-filtertype))
-         (begindate (gnc:time64-start-day-time
+         (selected-accounts (opt-val gnc:pagename-accounts optname-accounts)))
+    (filter
+     (lambda (acc)
+       (if account-matcher-regexp
+           (regexp-exec account-matcher-regexp (gnc-account-get-full-name acc))
+           (string-contains (gnc-account-get-full-name acc) account-matcher)))
+     selected-accounts)))
+
+(export renderer:accountlist->splits)
+(define (renderer:accountlist->splits options accountlist)
+  ;; list of accounts -> list of splits
+  ;;
+  ;; options used:
+  ;;  general/begindate, enddate - time64 dates
+  ;;  filter/void status - bool
+  ;;  sorting/prime & sec keys - symbol
+  ;;                      sortorder - 'ascend / 'descend
+  ;;                      subtotal - symbol
+  (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
+  (define BOOK-SPLIT-ACTION (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
+  (define (generic-less? X Y key date-subtotal ascend?)
+    (define comparator-function
+      (if (member key DATE-SORTING-TYPES)
+          (let ((date (lambda (s)
+                        (case key
+                          ((date) (xaccTransGetDate (xaccSplitGetParent s)))
+                          ((reconciled-date) (xaccSplitGetDateReconciled s))))))
+            (case date-subtotal
+              ((yearly)    (lambda (s) (time64-year (date s))))
+              ((monthly)   (lambda (s) (time64-month (date s))))
+              ((quarterly) (lambda (s) (time64-quarter (date s))))
+              ((weekly)    (lambda (s) (time64-week (date s))))
+              ((daily)     (lambda (s) (time64-day (date s))))
+              ((none)      (lambda (s) (date s)))))
+          (case key
+            ((account-name) (lambda (s) (gnc-account-get-full-name (xaccSplitGetAccount s))))
+            ((account-code) (lambda (s) (xaccAccountGetCode (xaccSplitGetAccount s))))
+            ((corresponding-acc-name) (lambda (s) (xaccSplitGetCorrAccountFullName s)))
+            ((corresponding-acc-code) (lambda (s) (xaccSplitGetCorrAccountCode s)))
+            ((reconciled-status) (lambda (s) (length (memq (xaccSplitGetReconcile s)
+                                                           '(#\n #\c #\y #\f #\v)))))
+            ((amount) (lambda (s) (gnc-numeric-to-scm (xaccSplitGetValue s))))
+            ((description) (lambda (s) (xaccTransGetDescription (xaccSplitGetParent s))))
+            ((number) (lambda (s)
+                        (if BOOK-SPLIT-ACTION
+                            (xaccSplitGetAction s)
+                            (xaccTransGetNum (xaccSplitGetParent s)))))
+            ((t-number) (lambda (s) (xaccTransGetNum (xaccSplitGetParent s))))
+            ((register-order) (lambda (s) #f))
+            ((memo) (lambda (s) (xaccSplitGetMemo s)))
+            ((none) (lambda (s) #f)))))
+    (cond
+     ((string? (comparator-function X)) ((if ascend? string<? string>?) (comparator-function X) (comparator-function Y)))
+     ((comparator-function X)           ((if ascend? < >)               (comparator-function X) (comparator-function Y)))
+     (else                              #f)))
+  (define (date-comparator? X Y)
+    (generic-less? X Y 'date 'none #t))
+  (let* ((begindate (gnc:time64-start-day-time
                      (gnc:date-option-absolute-time
                       (opt-val gnc:pagename-general optname-startdate))))
          (enddate (gnc:time64-end-day-time
                    (gnc:date-option-absolute-time
                     (opt-val gnc:pagename-general optname-enddate))))
-         (transaction-matcher (opt-val pagename-filter optname-transaction-matcher))
-         (transaction-matcher-regexp (and (opt-val pagename-filter optname-transaction-matcher-regex)
-                                          (make-regexp transaction-matcher)))
-         (reconcile-status-filter (opt-val pagename-filter optname-reconcile-status))
-         (report-title (opt-val gnc:pagename-general gnc:optname-reportname))
          (primary-key (opt-val pagename-sorting optname-prime-sortkey))
          (primary-order (opt-val pagename-sorting optname-prime-sortorder))
          (primary-date-subtotal (opt-val pagename-sorting optname-prime-date-subtotal))
@@ -1685,59 +1738,134 @@ tags within description, notes or memo. ")
                                 (not (eq? secondary-date-subtotal 'none)))
                            (or (member primary-key CUSTOM-SORTING)
                                (member secondary-key CUSTOM-SORTING))))
+         (query (qof-query-create-for-splits))
+         (primary-comparator? (lambda (X Y)
+                                (generic-less? X Y primary-key
+                                               primary-date-subtotal
+                                               (eq? primary-order 'ascend))))
+         (secondary-comparator? (lambda (X Y)
+                                  (generic-less? X Y secondary-key
+                                                 secondary-date-subtotal
+                                                 (eq? secondary-order 'ascend)))))
+
+    (qof-query-set-book query (gnc-get-current-book))
+    (xaccQueryAddAccountMatch query accountlist QOF-GUID-MATCH-ANY QOF-QUERY-AND)
+    (xaccQueryAddDateMatchTT query #t begindate #t enddate QOF-QUERY-AND)
+    (case void-status
+      ((non-void-only) (gnc:query-set-match-non-voids-only! query (gnc-get-current-book)))
+      ((void-only)     (gnc:query-set-match-voids-only! query (gnc-get-current-book)))
+      (else #f))
+    (if (not custom-sort?)
+        (begin
+          (qof-query-set-sort-order query
+                                    (keylist-get-info sortkey-list primary-key 'sortkey)
+                                    (keylist-get-info sortkey-list secondary-key 'sortkey)
+                                    '())
+          (qof-query-set-sort-increasing query
+                                         (eq? primary-order 'ascend)
+                                         (eq? secondary-order 'ascend)
+                                         #t)))
+    (set! splits (qof-query-run query))
+    (qof-query-destroy query)
+    (if custom-sort?
+        (begin
+          (set! splits (stable-sort! splits date-comparator?))
+          (set! splits (stable-sort! splits secondary-comparator?))
+          (set! splits (stable-sort! splits primary-comparator?))))
+    splits))
+
+(export renderer:splits->filteredsplits)
+(define (renderer:splits->filteredsplits options splits custom-split-filter)
+  ;; options, list-of-splits, function -> list of splits
+  ;;
+  ;; options: options-database
+  ;;
+  ;;  filter/transaction matcher - string
+  ;;  filter/transaction matcher regex - boolean
+  ;;  filter/reconcile status - list
+  ;;  accounts/filtermode - symbol
+  ;;  accounts/filterby - list of accounts
+  ;;
+  ;; (custom-split-filter split) returns #f if split must be included
+  (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
+  (let* ((transaction-matcher (opt-val pagename-filter optname-transaction-matcher))
+         (transaction-matcher-regexp (and (opt-val pagename-filter optname-transaction-matcher-regex)
+                                          (make-regexp transaction-matcher)))
+         (reconcile-status-filter (opt-val pagename-filter optname-reconcile-status))
+         (filter-mode (opt-val gnc:pagename-accounts optname-filtertype))
+         (c_account_2 (opt-val gnc:pagename-accounts optname-filterby)))
+    (define (is-filter-member split account-list)
+      (let* ((txn (xaccSplitGetParent split))
+             (splitcount (xaccTransCountSplits txn))
+             (other-account (xaccSplitGetAccount (xaccSplitGetOtherSplit split)))
+             (splits-equal? (lambda (s1 s2) (xaccSplitEqual s1 s2 #t #f #f)))
+             (other-splits (delete split (xaccTransGetSplitList txn) splits-equal?))
+             (other-accounts (map xaccSplitGetAccount other-splits))
+             (is-in-account-list? (lambda (acc) (member acc account-list))))
+        (cond
+         ;; A 2-split transaction - test separately so it can be optimized
+         ;; to significantly reduce the number of splits to traverse
+         ;; in guile code
+         ((= splitcount 2) (is-in-account-list? other-account))
+         ;; A multi-split transaction - run over all splits
+         ((> splitcount 2) (or-map is-in-account-list? other-accounts))
+         ;; Single transaction splits
+         (else #f))))
+    ;; Combined Filter:
+    ;; - include/exclude splits to/from selected accounts
+    ;; - substring/regex matcher for Transaction Description/Notes/Memo
+    ;; - by reconcile status
+    (filter
+     (lambda (split)
+       (let* ((trans (xaccSplitGetParent split))
+              (match? (lambda (str)
+                        (if transaction-matcher-regexp
+                            (regexp-exec transaction-matcher-regexp str)
+                            (string-contains str transaction-matcher)))))
+         (and (case filter-mode
+                ((none) #t)
+                ((include) (is-filter-member split c_account_2))
+                ((exclude) (not (is-filter-member split c_account_2))))
+              (or (string-null? transaction-matcher) ; null-string = ignore filters
+                  (match? (xaccTransGetDescription trans))
+                  (match? (xaccTransGetNotes trans))
+                  (match? (xaccSplitGetMemo split)))
+              (or (not custom-split-filter)     ; #f = ignore custom-split-filter
+                  (custom-split-filter split))
+              (or (not reconcile-status-filter) ; #f = ignore next filter
+                  (member (xaccSplitGetReconcile split) reconcile-status-filter)))))
+     splits)))
+
+
+;; ;;;;;;;;;;;;;;;;;;;;
+;; Here comes the renderer function for this report.
+
+
+(define* (trep-renderer report-obj #:key custom-calculated-cells empty-report-message custom-split-filter)
+  ;; the trep-renderer is a define* function which, at minimum, takes the report object
+  ;;
+  ;; the optional arguments are:
+  ;; #:custom-calculated-cells - a list of vectors to define customized data columns
+  ;; #:empty-report-message - a str which is displayed at the initial report opening
+  ;; #:custom-split-filter - a split->bool function to add to the split filter
+
+  (define options (gnc:report-options report-obj))
+  (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
+
+  (gnc:report-starting reportname)
+
+  (let* ((document (gnc:make-html-document))
+         (c_account_0 (opt-val gnc:pagename-accounts optname-accounts))
+         (c_account_1 (renderer:options->accountlist options))
+         (begindate (gnc:time64-start-day-time
+                     (gnc:date-option-absolute-time
+                      (opt-val gnc:pagename-general optname-startdate))))
+         (enddate (gnc:time64-end-day-time
+                   (gnc:date-option-absolute-time
+                    (opt-val gnc:pagename-general optname-enddate))))
+         (report-title (opt-val gnc:pagename-general gnc:optname-reportname))
          (infobox-display (opt-val gnc:pagename-general optname-infobox-display))
-         (query (qof-query-create-for-splits)))
-
-    (define (generic-less? X Y key date-subtotal ascend?)
-      (define comparator-function
-        (if (member key DATE-SORTING-TYPES)
-            (let ((date (lambda (s)
-                          (case key
-                            ((date) (xaccTransGetDate (xaccSplitGetParent s)))
-                            ((reconciled-date) (xaccSplitGetDateReconciled s))))))
-              (case date-subtotal
-                ((yearly)    (lambda (s) (time64-year (date s))))
-                ((monthly)   (lambda (s) (time64-month (date s))))
-                ((quarterly) (lambda (s) (time64-quarter (date s))))
-                ((weekly)    (lambda (s) (time64-week (date s))))
-                ((daily)     (lambda (s) (time64-day (date s))))
-                ((none)      (lambda (s) (date s)))))
-            (case key
-              ((account-name) (lambda (s) (gnc-account-get-full-name (xaccSplitGetAccount s))))
-              ((account-code) (lambda (s) (xaccAccountGetCode (xaccSplitGetAccount s))))
-              ((corresponding-acc-name) (lambda (s) (xaccSplitGetCorrAccountFullName s)))
-              ((corresponding-acc-code) (lambda (s) (xaccSplitGetCorrAccountCode s)))
-              ((reconciled-status) (lambda (s) (length (memq (xaccSplitGetReconcile s)
-                                                             '(#\n #\c #\y #\f #\v)))))
-              ((amount) (lambda (s) (gnc-numeric-to-scm (xaccSplitGetValue s))))
-              ((description) (lambda (s) (xaccTransGetDescription (xaccSplitGetParent s))))
-              ((number) (lambda (s)
-                          (if BOOK-SPLIT-ACTION
-                              (xaccSplitGetAction s)
-                              (xaccTransGetNum (xaccSplitGetParent s)))))
-              ((t-number) (lambda (s) (xaccTransGetNum (xaccSplitGetParent s))))
-              ((register-order) (lambda (s) #f))
-              ((memo) (lambda (s) (xaccSplitGetMemo s)))
-              ((none) (lambda (s) #f)))))
-      (cond
-       ((string? (comparator-function X)) ((if ascend? string<? string>?) (comparator-function X) (comparator-function Y)))
-       ((comparator-function X)           ((if ascend? < >)               (comparator-function X) (comparator-function Y)))
-       (else                              #f)))
-
-    (define (primary-comparator? X Y)
-      (generic-less? X Y primary-key
-                     primary-date-subtotal
-                     (eq? primary-order 'ascend)))
-
-    (define (secondary-comparator? X Y)
-      (generic-less? X Y secondary-key
-                     secondary-date-subtotal
-                     (eq? secondary-order 'ascend)))
-
-    ;; This will, by default, sort the split list by ascending posted-date.
-    (define (date-comparator? X Y)
-      (generic-less? X Y 'date 'none #t))
-
+         (splits '()))
 
     (if (or (null? c_account_1) (and-map not c_account_1))
 
@@ -1765,61 +1893,9 @@ tags within description, notes or memo. ")
 
         (begin
 
-          (qof-query-set-book query (gnc-get-current-book))
-          (xaccQueryAddAccountMatch query c_account_1 QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-          (xaccQueryAddDateMatchTT query #t begindate #t enddate QOF-QUERY-AND)
-          (case void-status
-            ((non-void-only) (gnc:query-set-match-non-voids-only! query (gnc-get-current-book)))
-            ((void-only)     (gnc:query-set-match-voids-only! query (gnc-get-current-book)))
-            (else #f))
-          (if (not custom-sort?)
-              (begin
-                (qof-query-set-sort-order query
-                                          (keylist-get-info sortkey-list primary-key 'sortkey)
-                                          (keylist-get-info sortkey-list secondary-key 'sortkey)
-                                          '())
-                (qof-query-set-sort-increasing query
-                                               (eq? primary-order 'ascend)
-                                               (eq? secondary-order 'ascend)
-                                               #t)))
+          (set! splits (renderer:accountlist->splits options c_account_1))
 
-          (if (opt-val "__trep" "unique-transactions")
-              (set! splits (xaccQueryGetSplitsUniqueTrans query))
-              (set! splits (qof-query-run query)))
-
-          (qof-query-destroy query)
-
-          (if custom-sort?
-              (begin
-                (set! splits (stable-sort! splits date-comparator?))
-                (set! splits (stable-sort! splits secondary-comparator?))
-                (set! splits (stable-sort! splits primary-comparator?))))
-
-          ;; Combined Filter:
-          ;; - include/exclude splits to/from selected accounts
-          ;; - substring/regex matcher for Transaction Description/Notes/Memo
-          ;; - custom-split-filter, a split->bool function for derived reports
-          ;; - by reconcile status
-          (set! splits (filter
-                        (lambda (split)
-                          (let* ((trans (xaccSplitGetParent split))
-                                 (match? (lambda (str)
-                                           (if transaction-matcher-regexp
-                                               (regexp-exec transaction-matcher-regexp str)
-                                               (string-contains str transaction-matcher)))))
-                            (and (case filter-mode
-                                   ((none) #t)
-                                   ((include) (is-filter-member split c_account_2))
-                                   ((exclude) (not (is-filter-member split c_account_2))))
-                                 (or (string-null? transaction-matcher) ; null-string = ignore filters
-                                     (match? (xaccTransGetDescription trans))
-                                     (match? (xaccTransGetNotes trans))
-                                     (match? (xaccSplitGetMemo split)))
-                                 (or (not custom-split-filter)     ; #f = ignore custom-split-filter
-                                     (custom-split-filter split))
-                                 (or (not reconcile-status-filter) ; #f = ignore next filter
-                                     (member (xaccSplitGetReconcile split) reconcile-status-filter)))))
-                        splits))
+          (set! splits (renderer:splits->filteredsplits options splits custom-split-filter))
 
           (if (null? splits)
 
