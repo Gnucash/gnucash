@@ -811,6 +811,8 @@ GncSqlBackend::object_in_db (const char* table_name, QofIdTypeConst obj_name,
 
     /* WHERE */
     PairVec values{get_object_values(obj_name, pObject, table)};
+    /* We want only the first item in the table, which should be the PK. */
+    values.resize(1);
     stmt->add_where_cond(obj_name, values);
     auto result = execute_select_statement (stmt);
     return (result != nullptr && result->size() > 0);

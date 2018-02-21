@@ -217,8 +217,8 @@ GncSqlCommodityBackend::commit (GncSqlBackend* sql_be, QofInstance* inst)
     g_return_val_if_fail (sql_be != NULL, FALSE);
     g_return_val_if_fail (inst != NULL, FALSE);
     g_return_val_if_fail (GNC_IS_COMMODITY (inst), FALSE);
-
-    return do_commit_commodity (sql_be, inst, FALSE);
+    auto in_be = instance_in_db(sql_be, inst);
+    return do_commit_commodity (sql_be, inst, !in_be);
 }
 
 /* ----------------------------------------------------------------- */
