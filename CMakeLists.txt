@@ -323,6 +323,17 @@ IF (NOT GUILE_EXECUTABLE)
   MESSAGE (SEND_ERROR "The guile executable was not found, but is required. Please set GUILE_EXECUTABLE.")
 ENDIF (NOT GUILE_EXECUTABLE)
 
+# Test that guile has SRFI-64. This is required for some unit tests.
+execute_process (COMMAND ${GUILE_EXECUTABLE} -c "(use-modules (srfi srfi-64))"
+  RESULT_VARIABLE GNC_SRFI64_RESULT
+  ERROR_QUIET
+)
+
+if (GNC_SRFI64_RESULT EQUAL 0)
+  message (STATUS "Using guile SRFI-64")
+  set (HAVE_SRFI64 TRUE)
+endif ()
+
 # ############################################################
 IF (WITH_AQBANKING)
   GNC_PKG_CHECK_MODULES (GWENHYWFAR REQUIRED gwenhywfar)
