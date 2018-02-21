@@ -573,7 +573,6 @@ gnc_split_register_get_cell_color_internal (VirtualLocation virt_loc,
     const char *cursor_name;
     VirtualCell *vcell;
     gboolean is_current;
-    gboolean double_alternate_virt;
     guint32 colorbase = 0;
 
      /* a bit of enum arithmetic */
@@ -617,11 +616,9 @@ gnc_split_register_get_cell_color_internal (VirtualLocation virt_loc,
             g_strcmp0 (cursor_name, CURSOR_DOUBLE_LEDGER) == 0 ||
             g_strcmp0 (cursor_name, CURSOR_DOUBLE_LEDGER_NUM_ACTN) == 0)
     {
-        double_alternate_virt = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL_REGISTER,
-                                                    GNC_PREF_ALT_COLOR_BY_TRANS);
         if (is_current)
         {
-            if (double_alternate_virt)
+            if (reg->double_alt_color)
                 return vcell->start_primary_color ?
                         (colorbase + COLOR_PRIMARY_ACTIVE) :
                         (colorbase + COLOR_SECONDARY_ACTIVE);
@@ -631,7 +628,7 @@ gnc_split_register_get_cell_color_internal (VirtualLocation virt_loc,
                     (colorbase + COLOR_SECONDARY_ACTIVE);
         }
 
-        if (double_alternate_virt)
+        if (reg->double_alt_color)
             return vcell->start_primary_color ?
                     (colorbase + COLOR_PRIMARY) :
                     (colorbase + COLOR_SECONDARY);
@@ -1383,7 +1380,8 @@ gnc_split_register_get_xfrm_entry (VirtualLocation virt_loc,
 
     g_free (name);
 
-    name = gnc_get_account_name_for_register (xaccSplitGetAccount (split));
+    name = gnc_get_account_name_for_split_register (xaccSplitGetAccount (split),
+               reg->show_leaf_accounts);
 
     return name;
 }
@@ -1424,7 +1422,8 @@ gnc_split_register_get_mxfrm_entry (VirtualLocation virt_loc,
     g_free (name);
 
     if (s)
-        name = gnc_get_account_name_for_register (xaccSplitGetAccount (s));
+        name = gnc_get_account_name_for_split_register (xaccSplitGetAccount (s),
+                   reg->show_leaf_accounts);
     else
     {
         /* For multi-split transactions and stock splits,
@@ -2164,8 +2163,8 @@ gnc_template_register_get_xfrm_entry (VirtualLocation virt_loc,
               "sx-account", &guid,
               NULL);
     account = xaccAccountLookup (guid, gnc_get_current_book ());
-    name = account ? gnc_get_account_name_for_register (account) : NULL;
-
+    name = account ? gnc_get_account_name_for_split_register (account,
+                         reg->show_leaf_accounts) : NULL;
     return name;
 }
 

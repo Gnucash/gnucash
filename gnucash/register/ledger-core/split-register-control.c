@@ -1019,7 +1019,8 @@ gnc_split_register_auto_completion (SplitRegister *reg,
         /* auto-complete the account name */
         cell = gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL);
 
-        account_name = gnc_get_account_name_for_register (xaccSplitGetAccount (auto_split));
+        account_name = gnc_get_account_name_for_split_register (xaccSplitGetAccount (auto_split),
+                           reg->show_leaf_accounts);
         gnc_combo_cell_set_value ((ComboCell *) cell, account_name);
         g_free(account_name);
 

@@ -140,6 +140,17 @@ gchar *gnc_get_account_name_for_register(const Account *account);
 Account *gnc_account_lookup_for_register(const Account *base_account, const
         gchar *name);
 
+/**
+ * Get either the full name of the account or the simple name, depending on the
+ * show_leaf_accounts.
+ *
+ * @param account The account to retrieve the name for.
+ * @param show_leaf_accounts Whether the full name will be returned.
+ * @return A newly allocated string.
+*/
+gchar *gnc_get_account_name_for_split_register(const Account *account,
+        gboolean show_leaf_accounts);
+
 /*
  * This is a wrapper routine around an xaccGetBalanceInCurrency
  * function that handles additional needs of the gui.

@@ -412,16 +412,22 @@ gnc_get_current_commodities (void)
 }
 
 gchar *
+gnc_get_account_name_for_split_register(const Account *account, gboolean show_leaf_accounts)
+{
+    if (show_leaf_accounts)
+        return g_strdup (xaccAccountGetName (account));
+    else
+        return gnc_account_get_full_name (account);
+}
+
+gchar *
 gnc_get_account_name_for_register(const Account *account)
 {
     gboolean show_leaf_accounts;
     show_leaf_accounts = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER,
                                             GNC_PREF_SHOW_LEAF_ACCT_NAMES);
 
-    if (show_leaf_accounts)
-        return g_strdup (xaccAccountGetName (account));
-    else
-        return gnc_account_get_full_name (account);
+    return gnc_get_account_name_for_split_register(account, show_leaf_accounts);
 }
 
 Account *

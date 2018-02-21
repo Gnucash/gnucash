@@ -249,6 +249,9 @@ struct split_register
     gboolean use_tran_num_for_num_field;  /**< whether to use transaction number
                                                 or split action for number
                                                 field in register */
+    gboolean show_leaf_accounts; /**< whether to show full account names */
+    gboolean double_alt_color;   /**< whether transaction use alternate colors */
+
     gboolean is_template;
     gboolean do_auto_complete; /**< whether to use auto-completion */
 
