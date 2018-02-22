@@ -121,6 +121,8 @@ KvpFrame::set_impl (std::string const & key, KvpValue * value) noexcept
 KvpValue *
 KvpFrameImpl::set (Path path, KvpValue* value) noexcept
 {
+    if (path.empty())
+        return nullptr;
     auto key = path.back ();
     path.pop_back ();
     auto target = get_child_frame_or_nullptr (path);
