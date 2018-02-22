@@ -1876,7 +1876,7 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
     }
 
     /* Now have the account. */
-    account_name = gnc_get_account_name_for_register (account);
+    account_name = gnc_get_account_name_for_split_register (account, reg->show_leaf_accounts);
     if (g_strcmp0(account_name, gnc_basic_cell_get_value(bcell)))
     {
         /* The name has changed. Update the cell. */
@@ -2691,6 +2691,14 @@ split_register_pref_changed (gpointer prefs, gchar *pref, gpointer user_data)
     {
         info->separator_changed = TRUE;
     }
+    else if (g_str_has_suffix(pref, GNC_PREF_SHOW_LEAF_ACCT_NAMES))
+    {
+        reg->show_leaf_accounts = !reg->show_leaf_accounts;
+    }
+    else if (g_str_has_suffix(pref, GNC_PREF_ALT_COLOR_BY_TRANS))
+    {
+        reg->double_alt_color = !reg->double_alt_color;
+    }
     else
     {
         g_warning("split_register_pref_changed: Unknown preference %s", pref);
@@ -2730,6 +2738,14 @@ gnc_split_register_init (SplitRegister *reg,
                            GNC_PREF_ACCOUNT_SEPARATOR,
                            split_register_pref_changed,
                            reg);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                           GNC_PREF_SHOW_LEAF_ACCT_NAMES,
+                           split_register_pref_changed,
+                           reg);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                           GNC_PREF_ALT_COLOR_BY_TRANS,
+                           split_register_pref_changed,
+                           reg);
     gnc_book_option_register_cb(OPTION_NAME_NUM_FIELD_SOURCE,
                                 split_register_book_option_changed,
                                 reg);
@@ -2737,6 +2753,11 @@ gnc_split_register_init (SplitRegister *reg,
     reg->sr_info = NULL;
 
     reg->unrecn_splits = NULL;
+
+    reg->show_leaf_accounts = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                            GNC_PREF_SHOW_LEAF_ACCT_NAMES);
+    reg->double_alt_color = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                            GNC_PREF_ALT_COLOR_BY_TRANS);
 
     reg->type = type;
     reg->style = style;
@@ -3001,9 +3022,18 @@ gnc_split_register_destroy (SplitRegister *reg)
                                  GNC_PREF_ACCOUNT_SEPARATOR,
                                  split_register_pref_changed,
                                  reg);
-    gnc_book_option_remove_cb(OPTION_NAME_NUM_FIELD_SOURCE,
-                                split_register_book_option_changed,
-                                reg);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                 GNC_PREF_SHOW_LEAF_ACCT_NAMES,
+                                 split_register_pref_changed,
+                                 reg);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                 GNC_PREF_ALT_COLOR_BY_TRANS,
+                                 split_register_pref_changed,
+                                 reg);
+    gnc_book_option_remove_cb (OPTION_NAME_NUM_FIELD_SOURCE,
+                                 split_register_book_option_changed,
+                                 reg);
+
     gnc_split_register_cleanup (reg);
 
     gnc_table_destroy (reg->table);
