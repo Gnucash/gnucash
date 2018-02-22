@@ -154,6 +154,14 @@ TEST(gnc_timezone_constructors, test_IANA_Perth_tz)
         }
         else if (year < 1916)
 #else
+        if (year < 1902)
+        {
+            // Earliest timestamp which can be represented on a 32-bit
+            // system is "1901-12-13 20:45:52" -- so skip tests until we
+            // reach a year >1901 to be safe
+            continue;
+        }
+
         if (year < 1916)
 #endif
         {
@@ -216,6 +224,14 @@ TEST(gnc_timezone_constructors, test_IANA_Minsk_tz)
         }
         else if (year < 1924)
 #else
+        if (year < 1902)
+        {
+            // Earliest timestamp which can be represented on a 32-bit
+            // system is "1901-12-13 20:45:52" -- so skip tests until we
+            // reach a year >1901 to be safe
+            continue;
+        }
+
         if (year < 1924)
 #endif
         {
