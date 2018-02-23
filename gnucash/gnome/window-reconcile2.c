@@ -2096,7 +2096,7 @@ recnFinishCB (GtkAction *action, RecnWindow2 *recnData)
         Account *payment_account;
         XferDialog *xfer;
 
-        xfer = gnc_xfer_dialog (NULL, account);
+        xfer = gnc_xfer_dialog (GTK_WIDGET (recnData->window), account);
 
         gnc_xfer_dialog_set_amount (xfer, gnc_numeric_neg (recnData->new_ending));
 

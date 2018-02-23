@@ -1250,7 +1250,7 @@ gnc_split_register_xfer_dialog(SplitRegister *reg, Transaction *txn,
     cur = reg->table->current_cursor;
 
     /* Create the exchange rate dialog. */
-    xfer = gnc_xfer_dialog(NULL, NULL);
+    xfer = gnc_xfer_dialog(GTK_WIDGET (reg), NULL);
     g_return_val_if_fail(xfer, NULL);
 
     /* Set the description. */

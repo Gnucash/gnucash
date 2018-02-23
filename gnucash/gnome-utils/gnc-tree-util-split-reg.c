@@ -182,7 +182,8 @@ gtu_sr_handle_exchange_rate (GncTreeViewSplitReg *view, gnc_numeric amount, Tran
             rate_split = gtu_sr_get_rate_from_db (reg_comm, xfer_comm);
 
         /* create the exchange-rate dialog */
-        xfer = gnc_xfer_dialog (NULL, NULL);
+
+        xfer = gnc_xfer_dialog (GTK_WIDGET (view), NULL);
 
         gnc_xfer_dialog_is_exchange_dialog (xfer, &rate_split);
 
