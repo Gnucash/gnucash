@@ -1349,7 +1349,7 @@ gnc_recn_edit_account_cb (GtkAction *action, gpointer data)
     if (account == NULL)
         return;
 
-    gnc_ui_edit_account_window (account);
+    gnc_ui_edit_account_window (GTK_WINDOW (recnData->window), account);
 }
 
 

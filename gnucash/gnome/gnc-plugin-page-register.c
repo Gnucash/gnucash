@@ -2951,13 +2951,13 @@ gnc_plugin_page_register_cmd_edit_account (GtkAction *action,
         GncPluginPageRegister *page)
 {
     Account *account;
-
+    GtkWindow *parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
 
     ENTER("(action %p, page %p)", action, page);
     account = gnc_plugin_page_register_get_account (page);
     if (account)
-        gnc_ui_edit_account_window (account);
+        gnc_ui_edit_account_window (parent, account);
     LEAVE(" ");
 }
 

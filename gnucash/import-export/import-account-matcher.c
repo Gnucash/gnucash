@@ -143,6 +143,8 @@ gnc_import_add_account(GtkWidget *button, AccountPickerDialog *picker)
 {
     Account *selected_account, *new_account;
     GList * valid_types = NULL;
+    GtkWindow *parent = GTK_WINDOW (gtk_widget_get_toplevel (button));
+
     /*DEBUG("Begin");  */
     if (picker->new_account_default_type != ACCT_TYPE_NONE)
     {
@@ -150,10 +152,11 @@ gnc_import_add_account(GtkWidget *button, AccountPickerDialog *picker)
         valid_types = g_list_prepend(valid_types, GINT_TO_POINTER(picker->new_account_default_type));
     }
     selected_account = gnc_tree_view_account_get_selected_account(picker->account_tree);
-    new_account = gnc_ui_new_accounts_from_name_with_defaults ( picker->account_human_description,
-                  valid_types,
-                  picker->new_account_default_commodity,
-                  selected_account);
+    new_account = gnc_ui_new_accounts_from_name_with_defaults (parent,
+                                          picker->account_human_description,
+                                          valid_types,
+                                          picker->new_account_default_commodity,
+                                          selected_account);
     g_list_free(valid_types);
     gnc_tree_view_account_set_selected_account(picker->account_tree, new_account);
 }

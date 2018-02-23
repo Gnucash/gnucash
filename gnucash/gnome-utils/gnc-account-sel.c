@@ -480,11 +480,13 @@ static void
 gas_new_account_click( GtkButton *b, gpointer ud )
 {
     GNCAccountSel *gas = (GNCAccountSel*)ud;
+    GtkWindow *parent = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (gas)));
     if (gas->isModal)
-        gnc_ui_new_accounts_from_name_window_with_types ( NULL,
-                gas->acctTypeFilters );
+        gnc_ui_new_accounts_from_name_window_with_types (parent, NULL,
+                                                         gas->acctTypeFilters );
     else
-        gnc_ui_new_account_with_types( gnc_get_current_book(), gas->acctTypeFilters );
+        gnc_ui_new_account_with_types (parent, gnc_get_current_book(),
+                                       gas->acctTypeFilters );
 }
 
 gint

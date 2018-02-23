@@ -1973,7 +1973,7 @@ gnc_tree_control_split_reg_get_account_by_name (GncTreeViewSplitReg *view, const
             return NULL;
 
         /* User said yes, they want to create a new account. */
-        account = gnc_ui_new_accounts_from_name_window (name);
+        account = gnc_ui_new_accounts_from_name_window (window, name);
         if (!account)
             return NULL;
     }

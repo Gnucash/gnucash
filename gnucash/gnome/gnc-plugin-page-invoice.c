@@ -726,10 +726,11 @@ static void
 gnc_plugin_page_invoice_cmd_new_account (GtkAction *action,
         GncPluginPageInvoice *plugin_page)
 {
+    GtkWindow *parent = NULL;
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
-
+    parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (plugin_page)));
     ENTER("(action %p, plugin_page %p)", action, plugin_page);
-    gnc_ui_new_account_window (gnc_get_current_book(), NULL);
+    gnc_ui_new_account_window (parent, gnc_get_current_book(), NULL);
     LEAVE(" ");
 }
 

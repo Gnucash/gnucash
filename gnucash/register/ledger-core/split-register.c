@@ -1852,6 +1852,7 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
     ComboCell *cell = (ComboCell *) bcell;
     Account *account;
     static gboolean creating_account = FALSE;
+    GtkWindow *parent = GTK_WINDOW (gnc_split_register_get_parent (reg));
 
     if (!name || (strlen(name) == 0))
         return NULL;
@@ -1864,12 +1865,11 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
     if (!account && !creating_account)
     {
         /* Ask if they want to create a new one. */
-        if (!gnc_verify_dialog (GTK_WINDOW (gnc_split_register_get_parent (reg)),
-                                TRUE, missing, name))
+        if (!gnc_verify_dialog (parent, TRUE, missing, name))
             return NULL;
         creating_account = TRUE;
         /* User said yes, they want to create a new account. */
-        account = gnc_ui_new_accounts_from_name_window (name);
+        account = gnc_ui_new_accounts_from_name_window (parent, name);
         creating_account = FALSE;
         if (!account)
             return NULL;

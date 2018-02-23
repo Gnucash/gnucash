@@ -1072,8 +1072,9 @@ static void
 gnc_plugin_page_account_tree_cmd_new_account (GtkAction *action, GncPluginPageAccountTree *page)
 {
     Account *account = gnc_plugin_page_account_tree_get_current_account (page);
-
-    gnc_ui_new_account_window (gnc_get_current_book(), account);
+    GtkWindow *parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
+    gnc_ui_new_account_window (parent, gnc_get_current_book(),
+                               account);
 }
 
 static void
@@ -1134,13 +1135,13 @@ static void
 gnc_plugin_page_account_tree_cmd_edit_account (GtkAction *action, GncPluginPageAccountTree *page)
 {
     Account *account;
-
+    GtkWindow *parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
     ENTER("action %p, page %p", action, page);
 
     account = gnc_plugin_page_account_tree_get_current_account (page);
     g_return_if_fail (account != NULL);
 
-    gnc_ui_edit_account_window (account);
+    gnc_ui_edit_account_window (parent, account);
     LEAVE(" ");
 }
 

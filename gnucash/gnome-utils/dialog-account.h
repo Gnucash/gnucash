@@ -45,10 +45,12 @@
 
 /** Disply a window for editing the attributes of an existing account.
  *
+ *  @param parent The widget on which to parent the dialog.
+ *
  *  @param account This parameter specifies the account whose data
  *  will be edited.
  */
-void gnc_ui_edit_account_window (Account *account);
+void gnc_ui_edit_account_window (GtkWindow *parent, Account *account);
 
 
 /** Disply a window for creating a new account.  This function will
@@ -56,19 +58,24 @@ void gnc_ui_edit_account_window (Account *account);
  *  the caller specified.  The user is free, however, to choose any
  *  parent account they wish.
  *
+ *  @param parent The widget on which to parent the dialog.
+ *
  *  @param book The book in which the new account should be created.
  *  This is a required argument.
  *
- *  @param parent The initially selected parent account.  This
+ *  @param parent_acct The initially selected parent account.  This
  *  argument is optional, but if supplied must be an account contained
  *  in the specified book.
  */
-void gnc_ui_new_account_window (QofBook *book, Account *parent);
+void gnc_ui_new_account_window (GtkWindow *parent,
+                                QofBook *book, Account *parent_acct);
 
 
 /** Disply a window for creating a new account.  This function will
  *  restrict the available account type values to the list specified
  *  by the caller.
+ *
+ *  @param parent The widget on which to parent the dialog.
  *
  *  @param book The book in which the new account should be created.
  *  This is a required argument.
@@ -77,7 +84,7 @@ void gnc_ui_new_account_window (QofBook *book, Account *parent);
  *  which are allowed to be created.  The calling function is
  *  responsible for freeing this list.
  */
-void gnc_ui_new_account_with_types (QofBook *book,
+void gnc_ui_new_account_with_types (GtkWindow *parent, QofBook *book,
                                     GList *valid_types);
 /** @} */
 
@@ -88,14 +95,19 @@ void gnc_ui_new_account_with_types (QofBook *book,
 
 /** Disply a modal window for creating a new account
  *
+ *  @param parent The widget on which to parent the dialog.
+ *
  *  @param name The account name/path to be created.  This parameter
  *  is not used for determining the initially selected parent account.
  */
-Account * gnc_ui_new_accounts_from_name_window (const char *name);
+Account * gnc_ui_new_accounts_from_name_window (GtkWindow *parent,
+                                                const char *name);
 
 /** Disply a modal window for creating a new account.  This function
  *  will restrict the available account type values to the list
  *  specified by the caller.
+ *
+ *  @param parent The widget on which to parent the dialog.
  *
  *  @param name The account name/path to be created.  This parameter
  *  is not used for determining the initially selected parent account.
@@ -107,13 +119,16 @@ Account * gnc_ui_new_accounts_from_name_window (const char *name);
  *  @return A pointer to the newly created account.
  */
 /* Note that the caller owns the valid_types list */
-Account * gnc_ui_new_accounts_from_name_window_with_types (const char *name,
+Account * gnc_ui_new_accounts_from_name_window_with_types (GtkWindow *parent,
+                                                           const char *name,
         GList *valid_types);
 
 
 /** Display a modal window for creating a new account.  This function
  *  will restrict the available account type values to the list
  *  specified by the caller.
+ *
+ *  @param parent The widget on which to parent the dialog.
  *
  *  @param name The account name/path to be created.  This parameter
  *  is not used for determining the initially selected parent account.
@@ -125,14 +140,15 @@ Account * gnc_ui_new_accounts_from_name_window_with_types (const char *name,
  *  @param default_commodity The commodity to initially select when
  *  the dialog is presented.
  *
- *  @param parent The initially selected parent account.
+ *  @param parent_acct The initially selected parent account.
  *
  *  @return A pointer to the newly created account.
  */
-Account * gnc_ui_new_accounts_from_name_with_defaults (const char *name,
-        GList *valid_types,
-        const gnc_commodity * default_commodity,
-        Account * parent);
+Account * gnc_ui_new_accounts_from_name_with_defaults (GtkWindow *parent,
+                                        const char *name,
+                                        GList *valid_types,
+                                        const gnc_commodity * default_commodity,
+                                        Account * parent_acct);
 
 /*
  * register a callback that get's called when the account has changed

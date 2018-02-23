@@ -79,7 +79,7 @@ int ofx_proc_status_cb(struct OfxStatusData data)
 */
 
 int ofx_proc_security_cb(const struct OfxSecurityData data, void * security_user_data);
-int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_user_data);
+int ofx_proc_transaction_cb (struct OfxTransactionData data, void *user_data);
 int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data);
 static double ofx_get_investment_amount(const struct OfxTransactionData* data);
 
@@ -292,7 +292,8 @@ static gnc_numeric gnc_ofx_numeric_from_double_txn(double value, const Transacti
 
 /* Opens the dialog to create a new account with given name, commodity, parent, type.
  * Returns the new account, or NULL if it couldn't be created.. */
-static Account *gnc_ofx_new_account(const char* name,
+static Account *gnc_ofx_new_account(GtkWindow* parent,
+                                    const char* name,
                                     const gnc_commodity * account_commodity,
                                     Account *parent_account,
                                     GNCAccountType new_account_default_type)
@@ -318,10 +319,10 @@ static Account *gnc_ofx_new_account(const char* name,
                                GINT_TO_POINTER(xaccAccountGetType(parent_account)));
         }
     }
-    result = gnc_ui_new_accounts_from_name_with_defaults (name,
-             valid_types,
-             account_commodity,
-             parent_account);
+    result = gnc_ui_new_accounts_from_name_with_defaults (parent, name,
+                                                          valid_types,
+                                                          account_commodity,
+                                                          parent_account);
     g_list_free(valid_types);
     return result;
 }
@@ -343,7 +344,7 @@ fix_ofx_bug_39 (time64 t)
     return t;
 }
 
-int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_user_data)
+int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
 {
     char dest_string[255];
     time64 current_time = gnc_time (NULL);
@@ -358,6 +359,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
     Transaction *transaction;
     Split *split;
     gchar *notes, *tmp;
+    GtkWindow *parent = GTK_WINDOW (user_data);
 
     g_assert(gnc_ofx_importer_gui);
 
@@ -637,7 +639,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
                             // commodity.
                             Account *parent_account = investment_account;
                             investment_account =
-                                gnc_ofx_new_account(investment_account_text,
+                                gnc_ofx_new_account(parent,
+                                                    investment_account_text,
                                                     investment_commodity,
                                                     parent_account,
                                                     ACCT_TYPE_STOCK);
@@ -1020,7 +1023,7 @@ void gnc_file_ofx_import (GtkWindow *parent)
 
         /*ofx_set_statement_cb(libofx_context, ofx_proc_statement_cb, 0);*/
         ofx_set_account_cb(libofx_context, ofx_proc_account_cb, 0);
-        ofx_set_transaction_cb(libofx_context, ofx_proc_transaction_cb, 0);
+        ofx_set_transaction_cb(libofx_context, ofx_proc_transaction_cb, parent);
         ofx_set_security_cb(libofx_context, ofx_proc_security_cb, 0);
         /*ofx_set_status_cb(libofx_context, ofx_proc_status_cb, 0);*/
 

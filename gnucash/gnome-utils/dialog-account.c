@@ -1568,7 +1568,8 @@ refresh_handler (GHashTable *changes, gpointer user_data)
 
 
 static AccountWindow *
-gnc_ui_new_account_window_internal (QofBook *book,
+gnc_ui_new_account_window_internal (GtkWindow *parent,
+                                    QofBook *book,
                                     Account *base_account,
                                     gchar **subaccount_names,
                                     GList *valid_types,
@@ -1616,6 +1617,8 @@ gnc_ui_new_account_window_internal (QofBook *book,
     }
 
     gnc_account_window_create (aw);
+    gtk_window_set_transient_for (GTK_WINDOW (aw->dialog), parent);
+    
     gnc_account_to_ui (aw);
 
     gnc_resume_gui_refresh ();
@@ -1722,23 +1725,27 @@ gnc_split_account_name (QofBook *book, const char *in_name, Account **base_accou
  ************************************************************/
 
 Account *
-gnc_ui_new_accounts_from_name_window (const char *name)
+gnc_ui_new_accounts_from_name_window (GtkWindow *parent, const char *name)
 {
-    return  gnc_ui_new_accounts_from_name_with_defaults (name, NULL, NULL, NULL);
+    return  gnc_ui_new_accounts_from_name_with_defaults (parent, name, NULL,
+                                                         NULL, NULL);
 }
 
 Account *
-gnc_ui_new_accounts_from_name_window_with_types (const char *name,
-        GList *valid_types)
+gnc_ui_new_accounts_from_name_window_with_types (GtkWindow *parent,
+                                                 const char *name,
+                                                 GList *valid_types)
 {
-    return gnc_ui_new_accounts_from_name_with_defaults(name, valid_types, NULL, NULL);
+    return gnc_ui_new_accounts_from_name_with_defaults(parent, name,
+                                                       valid_types, NULL, NULL);
 }
 
 Account *
-gnc_ui_new_accounts_from_name_with_defaults (const char *name,
-        GList *valid_types,
-        const gnc_commodity * default_commodity,
-        Account * parent)
+gnc_ui_new_accounts_from_name_with_defaults (GtkWindow *parent,
+                                             const char *name,
+                                             GList *valid_types,
+                                             const gnc_commodity * default_commodity,
+                                             Account * parent_acct)
 {
     QofBook *book;
     AccountWindow *aw;
@@ -1749,7 +1756,7 @@ gnc_ui_new_accounts_from_name_with_defaults (const char *name,
     gboolean done = FALSE;
 
     ENTER("name %s, valid %p, commodity %p, account %p",
-          name, valid_types, default_commodity, parent);
+          name, valid_types, default_commodity, parent_acct);
     book = gnc_get_current_book();
     if (!name || *name == '\0')
     {
@@ -1759,11 +1766,12 @@ gnc_ui_new_accounts_from_name_with_defaults (const char *name,
     else
         subaccount_names = gnc_split_account_name (book, name, &base_account);
 
-    if (parent != NULL)
+    if (parent_acct != NULL)
     {
-        base_account = parent;
+        base_account = parent_acct;
     }
-    aw = gnc_ui_new_account_window_internal (book, base_account, subaccount_names,
+    aw = gnc_ui_new_account_window_internal (parent, book, base_account,
+                                             subaccount_names,
             valid_types, default_commodity,
             TRUE);
 
@@ -1819,10 +1827,10 @@ find_by_account (gpointer find_data, gpointer user_data)
  * Return: EditAccountWindow object
  */
 void
-gnc_ui_edit_account_window(Account *account)
+gnc_ui_edit_account_window(GtkWindow *parent, Account *account)
 {
     AccountWindow * aw;
-    Account *parent;
+    Account *parent_acct;
 
     if (account == NULL)
         return;
@@ -1847,6 +1855,7 @@ gnc_ui_edit_account_window(Account *account)
     gnc_suspend_gui_refresh ();
 
     gnc_account_window_create (aw);
+    gtk_window_set_transient_for (GTK_WINDOW (aw->dialog), parent);
     gnc_account_to_ui (aw);
 
     gnc_resume_gui_refresh ();
@@ -1854,13 +1863,13 @@ gnc_ui_edit_account_window(Account *account)
     gtk_widget_show_all (aw->dialog);
     gtk_widget_hide (aw->opening_balance_page);
 
-    parent = gnc_account_get_parent (account);
-    if (parent == NULL)
-        parent = account;		/* must be at the root */
+    parent_acct = gnc_account_get_parent (account);
+    if (parent_acct == NULL)
+        parent_acct = account;		/* must be at the root */
 
     gtk_tree_view_collapse_all (aw->parent_tree);
     gnc_tree_view_account_set_selected_account (
-        GNC_TREE_VIEW_ACCOUNT(aw->parent_tree), parent);
+        GNC_TREE_VIEW_ACCOUNT(aw->parent_tree), parent_acct);
 
     gnc_account_window_set_name (aw);
 
@@ -1886,20 +1895,23 @@ gnc_ui_edit_account_window(Account *account)
  *        parent - The initial parent for the new account (optional)
  */
 void
-gnc_ui_new_account_window(QofBook *book, Account *parent)
+gnc_ui_new_account_window (GtkWindow *parent, QofBook *book,
+                           Account *parent_acct)
 {
     g_return_if_fail(book != NULL);
     if (parent && book)
-        g_return_if_fail(gnc_account_get_book(parent) == book);
+        g_return_if_fail(gnc_account_get_book(parent_acct) == book);
 
-    gnc_ui_new_account_window_internal (book, parent, NULL, NULL, NULL, FALSE);
+    gnc_ui_new_account_window_internal (parent, book, parent_acct, NULL, NULL,
+                                        NULL, FALSE);
 }
 
 void
-gnc_ui_new_account_with_types( QofBook *book,
-                               GList *valid_types )
+gnc_ui_new_account_with_types (GtkWindow *parent, QofBook *book,
+                               GList *valid_types)
 {
-    gnc_ui_new_account_window_internal( book, NULL, NULL, valid_types, NULL, FALSE );
+    gnc_ui_new_account_window_internal (parent, book, NULL, NULL,
+                                        valid_types, NULL, FALSE);
 }
 
 /************************************************************
