@@ -987,7 +987,7 @@ tags within description, notes or memo. ")
                                (lambda (split transaction-row?)
                                  (gnc:make-html-table-cell/markup
                                   "date-cell"
-                                  (if (eq? (xaccSplitGetReconcile split) #\y)
+                                  (if (eqv? (xaccSplitGetReconcile split) #\y)
                                       (qof-print-date (xaccSplitGetDateReconciled split))
                                       "")))))
 
@@ -1095,7 +1095,7 @@ tags within description, notes or memo. ")
                                 str
                                 (if (column-uses? 'common-currency)
                                     (string-append
-                                     "<br>"
+                                     "<br />"
                                      (gnc-commodity-get-mnemonic
                                       (opt-val gnc:pagename-general optname-currency)))
                                     ""))))

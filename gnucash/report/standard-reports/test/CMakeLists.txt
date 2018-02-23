@@ -6,6 +6,9 @@ SET(scm_test_standard_reports_SOURCES
   test-standard-net-linechart.scm
 )
 
+set(scm_test_with_srfi64_SOURCES
+)
+
 SET(scm_test_report_SUPPORT
   test-generic-category-report.scm
   test-generic-net-barchart.scm
@@ -23,6 +26,11 @@ set(GUILE_DEPENDS
   scm-standard-reports
   scm-report-stylesheets
   )
+
+if (HAVE_SRFI64)
+  gnc_add_scheme_tests("${scm_test_with_srfi64_SOURCES}")
+endif (HAVE_SRFI64)
+
 GNC_ADD_SCHEME_TESTS("${scm_test_standard_reports_SOURCES}")
 
 GNC_ADD_SCHEME_TARGETS(scm-test-standard-support
@@ -41,4 +49,5 @@ GNC_ADD_SCHEME_TARGETS(scm-test-standard-reports
 add_dependencies(check scm-test-standard-reports)
 
 SET_DIST_LIST(test_standard_reports_DIST CMakeLists.txt 
+  ${scm_test_with_srfi64_SOURCES}
   ${scm_test_standard_reports_SOURCES} ${scm_test_report_SUPPORT})
