@@ -1,5 +1,245 @@
 Version history:
 ------- -------
+2.7.5 - 25 February 2018
+
+    The Gnucash Development Team is pleased to release Gnucash 2.7.5,
+    the sixth release of an unstable series leading to Gnucash 3.0.
+
+    Notice that we've decided that beginning with the upcoming major
+    release we will use two-digit release numbers and that the next
+    stable release will be 3.0. Mainenance releases will be 3.1, 3.2,
+    etc. The next unstable release will be 3.900 and will lead to 4.0.
+
+    This release is UNSTABLE and SHOULD NOT BE USED in production.
+    See the KNOWN PROBLEMS list at the bottom of the announcement.
+
+    This release changes file locations, binding APIs, report options,
+    and can make your data file no longer compatible with previous
+    versions. See https://wiki.gnucash.org/wiki/UpdateNotes for
+    details.
+
+New Features For Users:
+
+    Locate all user data and configuration files to platform-dependent
+    standard locations:
+    - Windows: CSIDL_APPDATA/Gnucash
+    - OS X: $HOME/Application Support/Gnucash
+    - Linux: $XDG_CONFIG_HOME/gnucash (or the default $HOME/.config/gnucash)
+
+    Further improvements to the Transaction and Income-GST-statement reports.
+
+    Transaction Report: omit display of $0 in subtotals in other currencies.
+    Previously in dual-subtotal columns, the dual-subtotal would
+    attempt to print all commodities in the row. This meant if user
+    chose common-currency thereby triggering additional commodities,
+    the dual-subtotal would attempt to add amounts in other
+    commodities which would be 0, and display the 0 amount.
+
+For Developers and Distro packagers:
+
+    Some cruft removal in libgnucash/scm plus moving some code to its
+    only use location. "main.scm" is renamed to "utilities.scm".
+
+    The "printf" family of Scheme custom functions is replaced with
+    the built-in "format" facility.
+
+    Change a generally unnecessary warning about being unable to open
+    a module (usually because the file is still being created) to a
+    debug message. It appears mostly during highly parallel builds and
+    was distracting.
+
+    Added dependency information to all CMake targets, replacing a
+    dependency on build order that was carried over from
+    autotools. Highly parallel builds in ninja now complete without
+    interuption.
+
+    Ensure that all GtkBuilder and GtkUIManager files are correctly
+    installed and that no configuration of build products in those
+    directories are..
+
+    Appstream configuration is updated to the latest spec.
+
+    Fix installation of a gnucash-only gschemas.compiled overwriting
+    the system one. Note that if you install to a DESTDIR you'll need
+    to re-run glib-compile-scemas after moving the contents of
+    $DESTDIR$PREFIX/share/glib-2.0/schemas to $PREFIX.
+
+    Added two functions to the Scheme option API:
+    * gnc:option-make-internal! will hide an existing option. e.g.  a
+      derived report can set the value for a Display/* option and hide
+      it from the user.
+    * gnc:unregister-option will unregister option. This is primarily
+      useful for derived options e.g. another report copies from
+      transaction.scm and removes some options and recreates them with
+      different parameters.
+    For example, unregister existing option from section "Accounts"
+    name "Accounts", and recreate with different parameters
+    e.g. limited account types.
+
+
+
+
+The following bugs are fixed only in unstable/master:
+    Bug 787095 - Gnucash Crashes when opening old XML file.
+    Bug 792157 - Cannot create account with different currency
+
+    Bug 792809 - Register text difficult to read with GTK 3.0 dark themes
+    Bug 792833 - User specifies source of 'num' field'; either transaction
+                 number or split action (requires at least GnuCash
+                 2.5.0) Strip leading delimiters from KVP keys when
+                 reading them from the database. Leading delimiters
+                 are incorrectly included in databases created with
+                 GnuCash 2.6.x.
+    Bug 792883 - cmake: no way to turn off -Werror
+                 Prepend settings to CMAKE_C_FLAGS and CMAKE_CXX_FLAGS
+                 so that values supplied on the command line can
+                 override the fixed settings.
+
+    Bug 792884 - cmake: gschemas.compiled missing
+    Bug 793122 - 2.7.3: ninja build fails.
+    Bug 793155 - Gnucash 2.7.4 crashes on launch MacOS 10.13.4 PB1
+    Bug 793278 - wrong data in charts with accumulated values (like
+                 "net-linechart", "net-barchart" and "liabilities barchart")
+    Bug 793568 - "Cash Flow" report crashes
+
+Other repairs not marked as bugs in git:
+
+    An optimization in the GncDateTime string constructor provides
+    substantial speed up of loading SQL databases, and one in
+    Scheduled Transaction creation will speed up creation of large
+    numbers of scheduled transactions.
+
+    More dialogs have transient-for set so that they pop up over the
+    window instead of in the upper left-hand corner of the monitor.
+
+Updated Translations: German, Greek, Slovak, Spanish
+
+    A new set of business account templates for India's new GST; use
+    locale en_IN to enable them.
+
+KNOWN PROBLEMS:
+
+    Bug 789594 - Unable to overwrite splite3 database file
+    Bug 791823 - There is no Gtk3 theme-setting tool for Windows.
+    Bug 791825 - Accounting period dates off-by-1
+
+2.7.3 - 31 December 2017
+    The Gnucash Development Team is pleased to release Gnucash 2.7.3,
+    the fourth release of an unstable series leading to Gnucash 3.0.
+
+    Notice that we've decided that beginning with the upcoming major
+    release we will use two-digit release numbers and that the next
+    stable release will be 3.0. Mainenance releases will be 3.1, 3.2,
+    etc. The next unstable release will be 3.900 and will lead to 4.0.
+
+    This release is UNSTABLE and SHOULD NOT BE USED in production.
+    See the KNOWN PROBLEMS list at the bottom of the announcement.
+
+    This release changes file locations, binding APIs, report options,
+    and can make your data file no longer compatible with previous
+    versions. See https://wiki.gnucash.org/wiki/UpdateNotes for
+    details.
+
+New Features For Users:
+    A greatly enhanced Transaction report with many new options and features
+         including a reconciliation report thanks to Chris Lam.
+    Removed 6-figure rounding from price calculations, allowing prices to
+         have up to 18 digit precision.
+     A flatter storage scheme for Bayes account-matching scores, thanks
+           to Aaron Laws. This is a compatibility change guarded by a feature.
+     GnuCash no longer supports Guile-1.8 and now does support Guile-2.2
+     A CSV Price importer, thanks to Bob Fewell.
+     Enhanced python bindings exposing more GnuCash API thanks to Guy Taylor
+
+The following bugs are fixed only in unstable/master:
+    Bug 616709 - Pressing delete key while editing account name offers to
+         delete account.
+    Bug 771667 - Change reconciled splits warning
+         This patch displays two distinct warnings when changing
+         protected fields of a transaction that contains reconciled
+         splits. If the fields date, num and description are changed,
+         then the warning list the accounts that have reconciled
+         splits and also advises that they will be unreconciled after
+         editing the transaction. If the fields account, transfer,
+         debit or credit are changed then the warning advises that the
+         split will be unreconciled after editing the transaction.
+         There is still just one warning preference as it is all to do
+         with fields protected by reconciliation.
+    Bug 787497 - Disabling options cripples dist package PARTIAL FIX:
+          WITH_OFX, WITH_SQL and WITH_AQBANKING handling is fixed. The
+          dist files for these features are always included in the
+          dist tarball.
+    Bug 790526 - Mathematical bug
+    Bug 791848 - GC 2.6.x does not handle ISO dates introduced with GC 2.7.
+         Set a feature to prevent versions older that 2.6.20 from
+         loading a database from which they cannot read the
+         dates. Ideally we would do this only if the database is
+         written to, but the current persistence design includes
+         committing back to the database during the load so the net
+         effect is that the flag would be set anyway.
+         This is a compatibility change guarded by a feature.
+
+
+Other repairs not marked as bugs in git:
+    Tests now pass in all timezones.
+    More dialogs are made "transient for" so that they pop up centered on
+         the main Gnucash window instead of somewhere on the left edge of the
+         screen.
+    A lot of Gtk3 issues and errors are fixed, thanks to Bob Fewell.
+    Test struct tm* returns from gnc_gmtime and gnc_localtime to ensure that
+         we don't crash for dereffing a nullptr.
+    Removed the gnc:numeric type from Scheme code in favor of Scheme's own
+          rational numbers. This allows direct conversion between
+          Scheme numbers and gnc_numeric without the performance or
+          accuracy penalties arising from using doubles as an
+          intermediary.
+     Pass KVP paths as a collection of elements instead of a delimited string.
+           This allows keys to contain '/'. Thanks to Aaron Laws.
+     Added a frameowrk for migrating preferences.
+     Made separate functions for finding a widget's parent window:
+          gnc_ui_get_gtk_window tries to find the immediate parent and
+          gnc_ui_get_main_window tries to find the widget's parent
+          toplevel, returning the first-mapped window.
+     Make the splash/lock screen the transient parent for dialog boxes if the
+          main window is not yet mapped.
+     Rework directory determination in CMake builds.
+          Sets paths for finding componenents depending on the state
+          of ENABLE_BINRELOC, GNC_UNINSTALLED, GNC_BUILDDIR and
+          whether any install paths have been set outside of
+          CMAKE_INSTALL_PREFIX.  GNUInstallDirs changes the name of
+          CMAKE_INSTALL_LIBDIR depending on the operating system and
+          distro. When CMAKE_INSTALL_PREFIX is /usr, /usr/local, or
+          any subdirectory of /opt it also changes
+          CMAKE_INSTALL_FULL_SYSCONFDIR to /etc. An earlier commit by
+          Aaron Laws mirrors the name of CMAKE_INSTALL_LIBDIR to the
+          build library directory.  It's possible for builders to set
+          any of the install directories anywhere they please.
+          Setting any directory outside of CMAKE_INSTALL_PREFIX breaks
+          Binreloc so the toplevel CMakeLists.txt now detects that and
+          disables Binreloc.  If Binreloc is enabled then all path
+          queries use it to find paths. This works in the build
+          directory because the gnucash executable and all of the test
+          programs are in build_directory/bin and LIBDIR, DATADIR, and
+          SYSCONFDIR can be found in the same root path.  If Binreloc
+          is disabled then in order to build or run programs from the
+          build directory one must set GNC_UNINSTALLED and set
+          GNC_BUILDDIR to the absolute path of the build
+          directory. When those are set GNC_BUILDDIR replaces
+          CMAKE_INSTALL_PREFIX in all paths that are subdirectories of
+          CMAKE_INSTALL_PREFIX; paths that are not in
+          CMAKE_INSTALL_PREFIX are appended whole to
+          GNC_BUILDDIR. This process is constent between CMake and
+          gnc_path_get_foo. GnuCash is unlikely to run from a DESTDIR
+          without Binreloc.
+
+KNOWN PROBLEMS:
+
+    On Microsoft Windows starting the AQBanking Setup Wizard crashes GnuCash.
+
+    Bug 789594 - Unable to overwrite splite3 database file
+    Bug 791823 - There is no Gtk3 theme-setting tool for Windows.
+    Bug 791825 - Accounting period dates off-by-1
+
 2.7.4 - 3 February 2018
 
     The Gnucash Development Team is pleased to release Gnucash 2.7.4,
@@ -208,7 +448,8 @@ KNOWN PROBLEMS:
 
     Bug 789594 - Unable to overwrite splite3 database file
     Bug 791823 - There is no Gtk3 theme-setting tool for Windows.
-    Bug 791825 - Accounting period dates off-by-1 
+    Bug 791825 - Accounting period dates off-by-1
+
 2.6.19 - 16 December 2017
 
 The following bugs are fixed:
