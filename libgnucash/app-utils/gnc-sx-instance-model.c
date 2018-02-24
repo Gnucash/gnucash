@@ -1282,10 +1282,14 @@ create_transactions_for_instance(GncSxInstance *instance, GList **created_txn_gu
     creation_data.instance = instance;
     creation_data.created_txn_guids = created_txn_guids;
     creation_data.creation_errors = creation_errors;
-
+    /* Don't update the GUI for every transaction, it can really slow things
+     * down.
+     */
+    qof_event_suspend();
     xaccAccountForEachTransaction(sx_template_account,
                                   create_each_transaction_helper,
                                   &creation_data);
+    qof_event_resume();
 }
 
 void
