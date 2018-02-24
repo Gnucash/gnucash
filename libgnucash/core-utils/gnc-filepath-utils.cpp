@@ -598,7 +598,7 @@ static std::string migrate_gnc_datahome()
     gen.add_messages_domain(PACKAGE);
 
 //    std::locale::global(gen(""));
-    auto migration_msg = std::stringstream ();
+    std::stringstream migration_msg;
     migration_msg.imbue(gen(""));
 
     if (copy_recursive (old_dir,
