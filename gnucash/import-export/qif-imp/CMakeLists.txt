@@ -104,5 +104,5 @@ FILE(COPY ${qif_import_GLADE}
   DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder)
 
 SET_LOCAL_DIST(qif_import_DIST_local CMakeLists.txt file-format.txt ${qif_import_SOURCES} ${qif_import_noinst_HEADERS}
-        ${qif_import_SCHEME} ${qif_import_SCHEME_2} ${qif_import_GLADE} ${qif_import_UI})
+        ${qif_import_SCHEME_0} ${qif_import_SCHEME} ${qif_import_SCHEME_2} ${qif_import_GLADE} ${qif_import_UI})
 SET(qif_import_DIST ${qif_import_DIST_local} ${test_qif_import_DIST} ${qif_import_gschema_DIST} PARENT_SCOPE)
