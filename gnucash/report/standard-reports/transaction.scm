@@ -318,25 +318,30 @@ in the Options panel."))
                 (cons 'tip (_ "Show both (and include void transactions in totals)."))))))
 
 (define reconcile-status-list
-  ;; value will be either #f to disable reconciled-status filter
-  ;; or a list of xaccSplitGetReconcile values. e.g. value can
-  ;; be '(#\c #\y) to retrieve list of cleared and reconciled splits.
   (list
-   (cons  #f (list
-              (cons 'text (_ "All"))
-              (cons 'tip (_ "Show All Transactions"))))
+   (cons 'all
+         (list
+          (cons 'text (_ "All"))
+          (cons 'tip (_ "Show All Transactions"))
+          (cons 'filter-types #f)))
 
-   (cons '(#\n) (list
-                 (cons 'text (_ "Unreconciled"))
-                 (cons 'tip (_ "Unreconciled only"))))
+   (cons 'unreconciled
+         (list
+          (cons 'text (_ "Unreconciled"))
+          (cons 'tip (_ "Unreconciled only"))
+          (cons 'filter-types (list #\n))))
 
-   (cons '(#\c) (list
-                 (cons 'text (_ "Cleared"))
-                 (cons 'tip (_ "Cleared only"))))
+   (cons 'cleared
+         (list
+          (cons 'text (_ "Cleared"))
+          (cons 'tip (_ "Cleared only"))
+          (cons 'filter-types (list #\c))))
 
-   (cons '(#\y) (list
-                 (cons 'text (_ "Reconciled"))
-                 (cons 'tip (_ "Reconciled only"))))))
+   (cons 'reconciled
+         (list
+          (cons 'text (_ "Reconciled"))
+          (cons 'tip (_ "Reconciled only"))
+          (cons 'filter-types (list #\y))))))
 
 
 (define ascending-list
@@ -460,17 +465,17 @@ Credit Card, and Income accounts."))
    (gnc:make-multichoice-option
     gnc:pagename-general optname-infobox-display
     "h" (_ "Add summary of options.")
-    '(no-match)
+    'no-match
     ;; This is an alist of conditions for displaying the infobox
     ;; 'no-match for empty-report
     ;; 'match for generated report
-    (list (vector '(no-match)
+    (list (vector 'no-match
                   (_ "If no transactions matched")
                   (_ "Display summary if no transactions were matched."))
-          (vector '(no-match match)
+          (vector 'always
                   (_ "Always")
                   (_ "Always display summary."))
-          (vector '()
+          (vector 'never
                   (_ "Never")
                   (_ "Disable report summary.")))))
 
@@ -515,7 +520,7 @@ tags within description, notes or memo. ")
    (gnc:make-multichoice-option
     pagename-filter optname-reconcile-status
     "j1" (_ "Filter by reconcile status.")
-    #f
+    'all
     (keylist->vectorlist reconcile-status-list)))
 
   (gnc:register-trep-option
@@ -1669,7 +1674,9 @@ tags within description, notes or memo. ")
          (transaction-matcher (opt-val pagename-filter optname-transaction-matcher))
          (transaction-matcher-regexp (and (opt-val pagename-filter optname-transaction-matcher-regex)
                                           (make-regexp transaction-matcher)))
-         (reconcile-status-filter (opt-val pagename-filter optname-reconcile-status))
+         (reconcile-status-filter (keylist-get-info reconcile-status-list
+                                                    (opt-val pagename-filter optname-reconcile-status)
+                                                    'filter-types))
          (report-title (opt-val gnc:pagename-general gnc:optname-reportname))
          (primary-key (opt-val pagename-sorting optname-prime-sortkey))
          (primary-order (opt-val pagename-sorting optname-prime-sortorder))
@@ -1756,7 +1763,7 @@ tags within description, notes or memo. ")
                document
                empty-report-message))
 
-          (if (member 'no-match infobox-display)
+          (if (memq infobox-display '(always no-match))
               (gnc:html-document-add-object!
                document
                (gnc:render-options-changed options))))
@@ -1815,8 +1822,9 @@ tags within description, notes or memo. ")
                                      (match? (xaccSplitGetMemo split)))
                                  (or (not custom-split-filter)     ; #f = ignore custom-split-filter
                                      (custom-split-filter split))
-                                 (or (not reconcile-status-filter) ; #f = ignore next filter
-                                     (member (xaccSplitGetReconcile split) reconcile-status-filter)))))
+                                 (or (not reconcile-status-filter) ; #f = ignore reconcile-status-filter
+                                     (memv (xaccSplitGetReconcile split)
+                                           reconcile-status-filter)))))
                         splits))
 
           (if (null? splits)
@@ -1830,7 +1838,7 @@ tags within description, notes or memo. ")
                   report-title (gnc:report-id report-obj)
                   NO-MATCHING-TRANS-HEADER NO-MATCHING-TRANS-TEXT))
 
-                (if (member 'no-match infobox-display)
+                (if (memq infobox-display '(always no-match))
                     (gnc:html-document-add-object!
                      document
                      (gnc:render-options-changed options))))
@@ -1848,7 +1856,7 @@ tags within description, notes or memo. ")
                             (qof-print-date begindate)
                             (qof-print-date enddate)))))
 
-                (if (member 'match infobox-display)
+                (if (eq? infobox-display 'always)
                     (gnc:html-document-add-object!
                      document
                      (gnc:render-options-changed options)))
