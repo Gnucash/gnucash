@@ -105,7 +105,7 @@ public:
  * default is UTC, not the local one.
  * @exception std::invalid_argument if the year is outside the constraints.
  */
-    GncDateTime(const std::string str);
+    GncDateTime(std::string str);
     ~GncDateTime();
 /** Set the GncDateTime to the date and time indicated in the computer's clock.
  */

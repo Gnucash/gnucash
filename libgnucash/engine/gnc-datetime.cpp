@@ -190,7 +190,7 @@ public:
     GncDateTimeImpl(const time64 time) : m_time(LDT_from_unix_local(time)) {}
     GncDateTimeImpl(const struct tm tm) : m_time(LDT_from_struct_tm(tm)) {}
     GncDateTimeImpl(const GncDateImpl& date, DayPart part = DayPart::neutral);
-    GncDateTimeImpl(const std::string str);
+    GncDateTimeImpl(std::string str);
     GncDateTimeImpl(PTime&& pt) : m_time(pt, tzp.get(pt.date().year())) {}
     GncDateTimeImpl(LDT&& ldt) : m_time(ldt) {}
 
@@ -278,7 +278,7 @@ tz_from_string(std::string str)
     return TZ_Ptr(new PTZ(tzstr));
 }
 
-GncDateTimeImpl::GncDateTimeImpl(const std::string str) :
+GncDateTimeImpl::GncDateTimeImpl(std::string str) :
     m_time(unix_epoch, utc_zone)
 {
     if (str.empty()) return;
@@ -289,17 +289,12 @@ GncDateTimeImpl::GncDateTimeImpl(const std::string str) :
 
     try
     {
-        using Facet = boost::posix_time::time_input_facet;
-        //The stream destructor frees the facet, so it must be heap-allocated.
-        auto input_facet(new Facet());
-        std::istringstream ss(str.substr(0, tzpos));
-        ss.imbue(std::locale(std::locale(), input_facet));
-        if (str.find("-") == 4)
-            input_facet->set_iso_extended_format();
-        else /* Not in iso format, try squashed format. */
-            input_facet->format("%Y%m%d%H%M%S");
-        PTime pdt(not_a_date_time);
-        ss >> pdt;
+        bool delimited = str.find("-") == 4;
+        if (!delimited)
+            str.insert(8, "T");
+        auto pdt = delimited ?
+            boost::posix_time::time_from_string(str.substr(0, tzpos)) :
+            boost::posix_time::from_iso_string(str.substr(0,tzpos));
         m_time = LDT(pdt.date(), pdt.time_of_day(), tzptr,
                          LDTBase::NOT_DATE_TIME_ON_ERROR);
     }
@@ -446,7 +441,7 @@ GncDateTime::GncDateTime(const time64 time) :
     m_impl(new GncDateTimeImpl(time)) {}
 GncDateTime::GncDateTime(const struct tm tm) :
     m_impl(new GncDateTimeImpl(tm)) {}
-GncDateTime::GncDateTime(const std::string str) :
+GncDateTime::GncDateTime(std::string str) :
     m_impl(new GncDateTimeImpl(str)) {}
 GncDateTime::~GncDateTime() = default;
 
