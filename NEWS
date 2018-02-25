@@ -76,14 +76,9 @@ For Developers and Distro packagers:
     name "Accounts", and recreate with different parameters
     e.g. limited account types.
 
-
-
-
 The following bugs are fixed only in unstable/master:
     Bug 787095 - Gnucash Crashes when opening old XML file.
     Bug 792157 - Cannot create account with different currency
-
-    Bug 792809 - Register text difficult to read with GTK 3.0 dark themes
     Bug 792833 - User specifies source of 'num' field'; either transaction
                  number or split action (requires at least GnuCash
                  2.5.0) Strip leading delimiters from KVP keys when
