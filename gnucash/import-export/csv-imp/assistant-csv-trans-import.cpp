@@ -38,6 +38,7 @@ extern "C"
 #include <glib/gi18n.h>
 #include <stdlib.h>
 
+#include "gnc-path.h"
 #include "gnc-ui.h"
 #include "gnc-uri-utils.h"
 #include "gnc-ui-util.h"
@@ -62,6 +63,11 @@ extern "C"
 #include "gnc-tx-import.hpp"
 #include "gnc-fw-tokenizer.hpp"
 #include "gnc-csv-tokenizer.hpp"
+
+#include <boost/locale.hpp>
+
+namespace bl = boost::locale;
+using namespace boost::locale;
 
 #define MIN_COL_WIDTH 70
 #define GNC_PREFS_GROUP "dialogs.import.csv"
@@ -1937,8 +1943,13 @@ CsvImpTransAssist::assist_summary_page_prepare ()
     gtk_assistant_remove_action_widget (csv_imp_asst, help_button);
     gtk_assistant_remove_action_widget (csv_imp_asst, cancel_button);
 
+    bl::generator gen;
+    gen.add_messages_path(gnc_path_get_datadir());
+    gen.add_messages_domain(PACKAGE);
+
     auto text = std::string("<span size=\"medium\"><b>");
-    text += _("The transactions were imported from the file '") + m_file_name + "'.";
+    // FIXME Rather than passing a locale generator below we probably should set std::locale::global appropriately somewhere.
+    text += (bl::format (translate ("The transactions were imported from the file '{1}'.")) % m_file_name).str(gen(""));
     text += "</b></span>";
     gtk_label_set_markup (GTK_LABEL(summary_label), text.c_str());
 }
