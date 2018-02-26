@@ -384,8 +384,8 @@ load_system_config(void)
 static void
 load_user_config(void)
 {
-    /* Don't continue adding to this list. When 2.0 rolls around bump
-       the 1.4 (unnumbered) files off the list. */
+    /* Don't continue adding to this list. When 3.0 rolls around bump
+       the 2.4 files off the list. */
     static const gchar *saved_report_files[] =
     {
         SAVED_REPORTS_FILE, SAVED_REPORTS_FILE_OLD_REV, NULL
