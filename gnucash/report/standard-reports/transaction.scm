@@ -1823,11 +1823,12 @@ tags within description, notes or memo. ")
 
               ;; error condition: no splits found
               (begin
+
                 (gnc:html-document-add-object!
                  document
-                 (gnc:make-html-text
-                  (gnc:html-markup-h2 NO-MATCHING-TRANS-HEADER)
-                  (gnc:html-markup-p NO-MATCHING-TRANS-TEXT)))
+                 (gnc:html-make-generic-warning
+                  report-title (gnc:report-id report-obj)
+                  NO-MATCHING-TRANS-HEADER NO-MATCHING-TRANS-TEXT))
 
                 (if (member 'no-match infobox-display)
                     (gnc:html-document-add-object!
