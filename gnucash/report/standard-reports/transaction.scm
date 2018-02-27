@@ -1744,19 +1744,17 @@ tags within description, notes or memo. ")
         ;; error condition: no accounts specified or obtained after filtering
         (begin
 
-            ;; error condition: no accounts specified
-            (begin
+          (gnc:html-document-add-object!
+           document
+           (gnc:html-make-no-account-warning
+            report-title (gnc:report-id report-obj)))
 
+          ;; if an empty-report-message is passed by a derived report to
+          ;; the renderer, display it here.
+          (if empty-report-message
               (gnc:html-document-add-object!
                document
-               (gnc:html-make-no-account-warning report-title (gnc:report-id report-obj)))
-
-              ;; if an empty-report-message is passed by a derived report to
-              ;; the renderer, display it here.
-              (if empty-report-message
-                  (gnc:html-document-add-object!
-                   document
-                   empty-report-message)))
+               empty-report-message))
 
           (if (member 'no-match infobox-display)
               (gnc:html-document-add-object!
