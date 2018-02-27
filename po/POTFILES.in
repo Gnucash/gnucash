@@ -238,19 +238,19 @@ gnucash/gnome-utils/search-param.c
 gnucash/gnome-utils/tree-view-utils.c
 gnucash/gnome-utils/window-main-summarybar.c
 gnucash/gnucash-bin.c
-[type: gettext/gsettings]gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in.in
-[type: gettext/gsettings]gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in.in
-[type: gettext/gsettings]gnucash/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in.in
-[type: gettext/gsettings]gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in.in
-[type: gettext/gsettings]gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in.in
-[type: gettext/gsettings]gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in.in
-[type: gettext/gsettings]gnucash/gschemas/org.gnucash.dialogs.totd.gschema.xml.in.in
-[type: gettext/gsettings]gnucash/gschemas/org.gnucash.general.finance-quote.gschema.xml.in.in
-[type: gettext/gsettings]gnucash/gschemas/org.gnucash.gschema.xml.in.in
-[type: gettext/gsettings]gnucash/gschemas/org.gnucash.history.gschema.xml.in.in
-[type: gettext/gsettings]gnucash/gschemas/org.gnucash.warnings.gschema.xml.in.in
-[type: gettext/gsettings]gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in.in
-[type: gettext/gsettings]gnucash/gschemas/org.gnucash.window.pages.gschema.xml.in.in
+gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in
+gnucash/gschemas/org.gnucash.dialogs.checkprinting.gschema.xml.in
+gnucash/gschemas/org.gnucash.dialogs.commodities.gschema.xml.in
+gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in
+gnucash/gschemas/org.gnucash.dialogs.reconcile.gschema.xml.in
+gnucash/gschemas/org.gnucash.dialogs.sxs.gschema.xml.in
+gnucash/gschemas/org.gnucash.dialogs.totd.gschema.xml.in
+gnucash/gschemas/org.gnucash.general.finance-quote.gschema.xml.in
+gnucash/gschemas/org.gnucash.gschema.xml.in
+gnucash/gschemas/org.gnucash.history.gschema.xml.in
+gnucash/gschemas/org.gnucash.warnings.gschema.xml.in
+gnucash/gschemas/org.gnucash.window.pages.account.tree.gschema.xml.in
+gnucash/gschemas/org.gnucash.window.pages.gschema.xml.in
 gnucash/html/gnc-html.c
 gnucash/html/gnc-html-factory.c
 gnucash/html/gnc-html-history.c
@@ -272,7 +272,7 @@ gnucash/import-export/aqb/gnc-file-aqb-import.c
 gnucash/import-export/aqb/gnc-gwen-gui.c
 gnucash/import-export/aqb/gncmod-aqbanking.c
 gnucash/import-export/aqb/gnc-plugin-aqbanking.c
-[type: gettext/gsettings]gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in.in
+gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in
 gnucash/import-export/bi-import/dialog-bi-import.c
 gnucash/import-export/bi-import/dialog-bi-import-gui.c
 gnucash/import-export/bi-import/dialog-bi-import-helper.c
@@ -285,7 +285,7 @@ gnucash/import-export/csv-exp/csv-transactions-export.c
 gnucash/import-export/csv-exp/csv-tree-export.c
 gnucash/import-export/csv-exp/gncmod-csv-export.c
 gnucash/import-export/csv-exp/gnc-plugin-csv-export.c
-[type: gettext/gsettings]gnucash/import-export/csv-exp/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in.in
+gnucash/import-export/csv-exp/gschemas/org.gnucash.dialogs.export.csv.gschema.xml.in
 gnucash/import-export/csv-imp/assistant-csv-account-import.c
 gnucash/import-export/csv-imp/assistant-csv-account-import.glade
 gnucash/import-export/csv-imp/assistant-csv-price-import.cpp
@@ -308,7 +308,7 @@ gnucash/import-export/csv-imp/gnc-price-props.cpp
 gnucash/import-export/csv-imp/gnc-tokenizer.cpp
 gnucash/import-export/csv-imp/gnc-trans-props.cpp
 gnucash/import-export/csv-imp/gnc-tx-import.cpp
-[type: gettext/gsettings]gnucash/import-export/csv-imp/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in.in
+gnucash/import-export/csv-imp/gschemas/org.gnucash.dialogs.import.csv.gschema.xml.in
 gnucash/import-export/customer-import/dialog-customer-import.c
 gnucash/import-export/customer-import/dialog-customer-import-gui.c
 gnucash/import-export/customer-import/gncmod-customer-import.c
@@ -316,7 +316,7 @@ gnucash/import-export/customer-import/gnc-plugin-customer-import.c
 gnucash/import-export/customer-import/gtkbuilder/dialog-customer-import-gui.glade
 gnucash/import-export/dialog-import.glade
 gnucash/import-export/gncmod-generic-import.c
-[type: gettext/gsettings]gnucash/import-export/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in.in
+gnucash/import-export/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in
 gnucash/import-export/import-account-matcher.c
 gnucash/import-export/import-backend.c
 gnucash/import-export/import-commodity-matcher.c
@@ -334,7 +334,7 @@ gnucash/import-export/ofx/gncmod-ofx-import.c
 gnucash/import-export/ofx/gnc-ofx-import.c
 gnucash/import-export/ofx/gnc-ofx-kvp.c
 gnucash/import-export/ofx/gnc-plugin-ofx.c
-[type: gettext/gsettings]gnucash/import-export/ofx/gschemas/org.gnucash.dialogs.import.ofx.gschema.xml.in.in
+gnucash/import-export/ofx/gschemas/org.gnucash.dialogs.import.ofx.gschema.xml.in
 gnucash/import-export/qif/qif-context.c
 gnucash/import-export/qif/qif-file.c
 gnucash/import-export/qif/qif-objects.c
@@ -344,7 +344,7 @@ gnucash/import-export/qif-imp/dialog-account-picker.c
 gnucash/import-export/qif-imp/dialog-account-picker.glade
 gnucash/import-export/qif-imp/gncmod-qif-import.c
 gnucash/import-export/qif-imp/gnc-plugin-qif-import.c
-[type: gettext/gsettings]gnucash/import-export/qif-imp/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in.in
+gnucash/import-export/qif-imp/gschemas/org.gnucash.dialogs.import.qif.gschema.xml.in
 gnucash/import-export/qif-imp/qif-dialog-utils.scm
 gnucash/import-export/qif-imp/qif-file.scm
 gnucash/import-export/qif-imp/qif-guess-map.scm
@@ -707,4 +707,4 @@ libgnucash/tax/us/us.scm
 gnucash/gnome/gnucash.appdata.xml.in
 gnucash/gnome/gnucash.desktop.in.in
 libgnucash/engine/qofbookslots.h
-doc/tip_of_the_day.list.in
+doc/tip_of_the_day.list.c

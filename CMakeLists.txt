@@ -172,8 +172,6 @@ IF (WIN32)
   SET(REGEX_LDFLAGS "-L${REGEX_LIB_PATH} -lregex")
   #SET(LIBXSLT_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/libxslt/include)
   #SET(LIBXSLT_XSLTPROC_EXECUTABLE ${CMAKE_PREFIX_PATH}/libxslt/bin/xsltproc)
-  # I have not yet debugged the intltool-merge file generation process on Windows.
-  SET(NO_INTLTOOL TRUE)
 #Prevent creating a console window on startup.
   SET(CMAKE_EXE_LINKER_FLAGS -mwindows)
 ENDIF(WIN32)
@@ -249,12 +247,8 @@ ENDIF()
 
 
 
-FIND_PROGRAM(INTLTOOL_MERGE NAMES intltool-merge HINTS ${CMAKE_PREFIX_PATH}/gnome/bin)
 FIND_PROGRAM(GLIB_COMPILE_SCHEMAS glib-compile-schemas HINTS ${CMAKE_PREFIX_PATH}/gnome/bin)
 FIND_PROGRAM(MSGFMT msgfmt)
-IF(NOT INTLTOOL_MERGE)
-  MESSAGE(SEND_ERROR "Can't find intltool-merge program. Please set INTLTOOL_MERGE.")
-ENDIF(NOT INTLTOOL_MERGE)
 
 IF (NOT GLIB_COMPILE_SCHEMAS)
   MESSAGE(SEND_ERROR "Can't find glib-compile-schemas program. Please set GLIB_COMPILE_SCHEMAS.")

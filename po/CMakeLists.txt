@@ -9,6 +9,8 @@ SET (NEW_LINGUAS as brx doi es_NI kok kok@latin ks mai mni mni@bengali)
 
 SET (ALL_LINGUAS ${TP_LINGUAS} ${GC_LINGUAS} ${NEW_LINGUAS})
 
+file (WRITE LINGUAS "${ALL_LINGUAS}")
+
 SET (CATALOGS "")
 SET (BUILD_CATALOGS "")
 
@@ -18,12 +20,14 @@ IF (${CMAKE_VERSION} VERSION_GREATER 3.1)
 ENDIF()
 
 SET(po_SOURCES "")
+file (WRITE LINGUAS "")
 FOREACH(lingua ${ALL_LINGUAS})
   LIST(APPEND po_SOURCES ${lingua}.po)
+  file (APPEND LINGUAS "${lingua} ")
 ENDFOREACH()
 
 SET_LOCAL_DIST(po_DIST_local ${po_SOURCES} CMakeLists.txt ChangeLog Makevars
-  POTFILES.ignore POTFILES.in POTFILES.skip README check-po.cmake gnucash-pot.cmake)
+  POTFILES.ignore POTFILES.in POTFILES.skip README gnucash-pot.cmake)
 SET(po_DIST ${po_DIST_local} ${po_glossary_DIST} PARENT_SCOPE)
 
 FOREACH(lingua ${ALL_LINGUAS})
@@ -71,7 +75,7 @@ FUNCTION(MAKE_GNUCASH_POTFILES)
   # Create a list of candidate translation files
   FILE(GLOB_RECURSE FILES_IN RELATIVE ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/*.c ${CMAKE_SOURCE_DIR}/*.cpp ${CMAKE_SOURCE_DIR}/*.glade ${CMAKE_SOURCE_DIR}/*.desktop.in
-    ${CMAKE_SOURCE_DIR}/*.keys.in  ${CMAKE_SOURCE_DIR}/*.gschema.xml.in.in ${CMAKE_SOURCE_DIR}/*.scm)
+    ${CMAKE_SOURCE_DIR}/*.keys.in  ${CMAKE_SOURCE_DIR}/*.gschema.xml.in ${CMAKE_SOURCE_DIR}/*.scm)
 
   # Only consider files in the common, libgnucash, and gnucash/ directories. Also check against list of ignore patterns
   SET(FILES "")
@@ -119,7 +123,7 @@ FUNCTION(MAKE_GNUCASH_POTFILES)
     "gnucash/gnome/gnucash.appdata.xml.in"
     "gnucash/gnome/gnucash.desktop.in.in"
     "libgnucash/engine/qofbookslots.h"
-    "doc/tip_of_the_day.list.in")
+    "doc/tip_of_the_day.list.c")
 
   # Write out the final list.
   # intltool-update insists that this file be in the source directory. :-(
@@ -131,11 +135,6 @@ FUNCTION(MAKE_GNUCASH_POTFILES)
   set(POTFILE_DEPS "")
   FOREACH(path ${POTFILES})
     list(APPEND POTFILE_DEPS ${CMAKE_SOURCE_DIR}/${path})
-    STRING(REGEX MATCH gschema.xml.in.in IS_GSCHEMA ${path})
-    IF(IS_GSCHEMA)
-      # Force parse type for gsettings files
-      SET(path "[type: gettext/gsettings]${path}")
-    ENDIF()
     FILE(APPEND ${POTFILES_IN_PATH} "${path}\n")
   ENDFOREACH()
 
@@ -144,23 +143,13 @@ FUNCTION(MAKE_GNUCASH_POTFILES)
   set(gnucash_pot_depends ${POTFILE_DEPS}  CACHE INTERNAL "List of files with translatable strings. If any of these change, gnucash.pot should be regenerated")
 ENDFUNCTION()
 
-find_program(INTLTOOL_UPDATE NAMES intltool-update)
-IF (${INTLTOOL_UPDATE} STREQUAL "INTLTOOL_UPDATE-NOTFOUND")
-  MESSAGE(FATAL_ERROR "Can't find the 'intltool-update' program.")
-ENDIF ()
-
 IF(BUILDING_FROM_VCS)
 
   MAKE_GNUCASH_POTFILES()
 
-  find_program(INTLTOOL_EXTRACT NAMES intltool-extract)
   find_program(XGETTEXT xgettext)
   configure_file (${CMAKE_CURRENT_SOURCE_DIR}/Makevars
     ${CMAKE_CURRENT_BINARY_DIR}/Makevars COPYONLY)
-
-  IF (${INTLTOOL_EXTRACT} STREQUAL "INTLTOOL_EXTRACT-NOTFOUND")
-    MESSAGE(FATAL_ERROR "Can't find the 'intltool-extract' program.")
-  ENDIF ()
 
   IF (${XGETTEXT} STREQUAL "XGETTEXT-NOTFOUND")
     MESSAGE(FATAL_ERROR "Can't find the 'xgettext' program.")
@@ -168,12 +157,10 @@ IF(BUILDING_FROM_VCS)
 
   add_custom_command(OUTPUT gnucash.pot
         COMMAND ${CMAKE_COMMAND}
-           -D INTLTOOL_EXTRACT=${INTLTOOL_EXTRACT}
-           -D INTLTOOL_UPDATE=${INTLTOOL_UPDATE}
+           -D TOP_SRC_DIR=${CMAKE_SOURCE_DIR}
            -D PO_SRC_DIR=${CMAKE_CURRENT_SOURCE_DIR}
            -D PO_BIN_DIR=${CMAKE_CURRENT_BINARY_DIR}
            -D PACKAGE=${PACKAGE}
-           -D PERL=${PERL_EXECUTABLE}
            -D XGETTEXT=${XGETTEXT}
            -P ${CMAKE_CURRENT_SOURCE_DIR}/gnucash-pot.cmake
         DEPENDS ${gnucash_pot_depends}
@@ -182,13 +169,3 @@ IF(BUILDING_FROM_VCS)
   add_custom_target (pot DEPENDS gnucash.pot)
 ENDIF()
 dist_add_generated (${BUILDING_FROM_VCS} gnucash.pot)
-
-ADD_CUSTOM_TARGET(check-po
-        COMMAND ${CMAKE_COMMAND}
-           -D INTLTOOL_UPDATE=${INTLTOOL_UPDATE}
-           -D PO_DIR=${CMAKE_CURRENT_SOURCE_DIR}
-           -P check-po.cmake
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
-add_dependencies(check check-po)

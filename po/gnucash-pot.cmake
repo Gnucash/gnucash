@@ -1,13 +1,32 @@
-# Note: the set commands below can be integrated in the execute process
-#       the day we require cmake > 3.1
-# The command would then become
-# COMMAND {CMAKE_COMMAND} -E env INTLTOOL_EXTRACT=${INTLTOOL_EXTRACT} .... ${PERL} ${INTLTOOL_UPDATE} ....
-
-set(ENV{INTLTOOL_EXTRACT} ${INTLTOOL_EXTRACT})
-set(ENV{XGETTEXT} ${XGETTEXT})
-set(ENV{srcdir} ${PO_SRC_DIR})
 execute_process(
-  COMMAND ${PERL} ${INTLTOOL_UPDATE} -x --gettext-package ${PACKAGE} --pot
+    COMMAND ${XGETTEXT} --add-comments
+                        --directory=${TOP_SRC_DIR}
+                        --default-domain=${PACKAGE}
+                        --output=${PACKAGE}.pot
+                        --files-from=${PO_SRC_DIR}/POTFILES.in
+                        --from-code=UTF-8
+                        --flag=g_strdup_printf:1:c-format
+                        --flag=g_string_printf:2:c-format
+                        --flag=g_string_append_printf:2:c-format
+                        --flag=g_error_new:3:c-format
+                        --flag=g_set_error:4:c-format
+                        --flag=g_markup_printf_escaped:1:c-format
+                        --flag=g_log:3:c-format
+                        --flag=g_print:1:c-format
+                        --flag=g_printerr:1:c-format
+                        --flag=g_printf:1:c-format
+                        --flag=g_fprintf:2:c-format
+                        --flag=g_sprintf:2:c-format
+                        --flag=g_snprintf:3:c-format
+                        --flag=g_scanner_error:2:c-format
+                        --flag=g_scanner_warn:2:c-format
+                        --keyword=_
+                        --keyword=N_
+                        --keyword=Q_
+                        --keyword=translate:1,1t
+                        --keyword=translate:1c,2,2t
+                        --keyword=translate:1,2,3t
+                        --keyword=translate:1c,2,3,4t
   WORKING_DIRECTORY ${PO_BIN_DIR}
   RESULT_VARIABLE GNUCASH_POT_RESULT
 )

@@ -66,6 +66,7 @@ make-gnucash-potfiles
 missing
 mkinstalldirs
 po/.intltool-merge-cache
+po/LINGUAS
 po/Makefile.in.in
 po/POTFILES
 po/POTFILES.in

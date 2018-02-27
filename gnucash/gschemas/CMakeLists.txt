@@ -38,6 +38,6 @@ install(CODE "execute_process(
 
 SET(gschemas_DIST_local "")
 FOREACH(file ${gschema_SOURCES})
-    LIST(APPEND gschemas_DIST_local ${file}.in.in)
+    LIST(APPEND gschemas_DIST_local ${file}.in)
 ENDFOREACH()
 SET_DIST_LIST(gschemas_DIST CMakeLists.txt ${gschemas_DIST_local})

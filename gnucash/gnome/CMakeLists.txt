@@ -171,8 +171,9 @@ ADD_CUSTOM_COMMAND(
     OUTPUT gnucash.appdata.xml
     COMMAND ${CMAKE_COMMAND_TMP}
       LC_ALL=C
-      ${PERL_EXECUTABLE} ${INTLTOOL_MERGE} -x -u -c ${CMAKE_SOURCE_DIR}/po/.intltool-merge-cache ${CMAKE_SOURCE_DIR}/po
-        ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in gnucash.appdata.xml
+      ${MSGFMT} --xml --template ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in
+                -d ${CMAKE_SOURCE_DIR}/po
+                -o gnucash.appdata.xml
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in
 )
 
@@ -188,8 +189,9 @@ ADD_CUSTOM_COMMAND(
     OUTPUT gnucash.desktop
     COMMAND ${CMAKE_COMMAND_TMP}
       LC_ALL=C
-      ${PERL_EXECUTABLE} ${INTLTOOL_MERGE} -d -u -c ${CMAKE_SOURCE_DIR}/po/.intltool-merge-cache ${CMAKE_SOURCE_DIR}/po
-        gnucash.desktop.in gnucash.desktop
+      ${MSGFMT} --desktop --template gnucash.desktop.in
+                -d ${CMAKE_SOURCE_DIR}/po
+                -o gnucash.desktop
     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop.in
 )
 
