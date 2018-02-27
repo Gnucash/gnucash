@@ -4,5 +4,7 @@
 #  exit immediately.
 
 export GTEST_ROOT=/gtest/googletest GMOCK_ROOT=/gtest/googlemock
+export PLATFORM_CMAKE_OPTS="-DALLOW_OLD_GETTEXT=ON"
+echo PLATFORM_CMAKE_OPTS= "$PLATFORM_CMAKE_OPTS"
 
 ../commonbuild

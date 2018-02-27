@@ -167,15 +167,24 @@ IF (${CMAKE_VERSION} VERSION_GREATER 3.1)
   SET(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
 ENDIF()
 
-ADD_CUSTOM_COMMAND(
-    OUTPUT gnucash.appdata.xml
-    COMMAND ${CMAKE_COMMAND_TMP}
-      LC_ALL=C
-      ${MSGFMT} --xml --template ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in
+
+if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.19.6)
+    # Gettext is too old to be able to merge an appdata file.
+    # Fall back to providing an unmerged (and hence untranslated) appdata file.
+    configure_file (${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in
+                    ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml COPYONLY)
+else()
+    add_custom_command (
+        OUTPUT gnucash.appdata.xml
+        COMMAND ${CMAKE_COMMAND_TMP}
+            LC_ALL=C
+            ${GETTEXT_MSGFMT_EXECUTABLE}
+                --xml --template ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in
                 -d ${CMAKE_SOURCE_DIR}/po
                 -o gnucash.appdata.xml
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in
-)
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in
+    )
+endif()
 
 ADD_CUSTOM_TARGET(gnucash-appdata ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml)
 
@@ -185,15 +194,23 @@ INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml DESTINATION  ${CMA
 
 configure_file(gnucash.desktop.in.in gnucash.desktop.in)
 
-ADD_CUSTOM_COMMAND(
-    OUTPUT gnucash.desktop
-    COMMAND ${CMAKE_COMMAND_TMP}
-      LC_ALL=C
-      ${MSGFMT} --desktop --template gnucash.desktop.in
+if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.19)
+    # Gettext is too old to be able to merge a desktop file.
+    # Fall back to providing an unmerged (and hence untranslated) desktop file.
+    configure_file (${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop.in
+                    ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop COPYONLY)
+else()
+    add_custom_command (
+        OUTPUT gnucash.desktop
+        COMMAND ${CMAKE_COMMAND_TMP}
+            LC_ALL=C
+            ${GETTEXT_MSGFMT_EXECUTABLE}
+                --desktop --template gnucash.desktop.in
                 -d ${CMAKE_SOURCE_DIR}/po
                 -o gnucash.desktop
-    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop.in
-)
+        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop.in
+    )
+endif()
 
 ADD_CUSTOM_TARGET(gnucash-desktop ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop)
 

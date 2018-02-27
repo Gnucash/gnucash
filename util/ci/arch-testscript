@@ -12,7 +12,9 @@
 mkdir ourpython_bin
 ln -s /usr/bin/python2 ourpython_bin/python
 export PATH=/ourpython_bin:"$PATH"
+export PLATFORM_CMAKE_OPTS=
 echo path is "$PATH"
 echo python version is "$(python --version)"
+echo PLATFORM_CMAKE_OPTS= "$PLATFORM_CMAKE_OPTS"
 
 ../commonbuild
