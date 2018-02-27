@@ -2,7 +2,6 @@
 ;; daily-reports.scm: reports based on the day of the week
 ;;
 ;; Copyright (C) 2003, Andy Wingo <wingo at pobox dot com>
-;; Christopher Lam upgrade to time64 (2017)
 ;;
 ;; based on account-piecharts.scm by Robert Merkel (rgmerk@mira.net)
 ;; and Christian Stimming <stimming@tu-harburg.de> with
