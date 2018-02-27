@@ -1,11 +1,6 @@
 macro(add_gschema_targets _gschema_INPUTS)
   SET(_gschema_OUTPUTS "")
   set(local_depends ${gschema_depends})
-  # FIXME: I have no idea of I'm using the right options here for intltool-merge for Windows.
-  SET(INITTOOL_OPTIONS "--no-translations")
-  IF(WIN32)
-    SET(INITTOOL_OPTIONS "/tmp")
-  ENDIF(WIN32)
   SET(CMAKE_COMMAND_TMP "")
   IF (${CMAKE_VERSION} VERSION_GREATER 3.1)
     SET(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
