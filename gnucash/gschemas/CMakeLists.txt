@@ -1,14 +1,18 @@
 
 SET(gschema_SOURCES
-  org.gnucash.dialogs.gschema.xml
   org.gnucash.dialogs.business.gschema.xml
-  org.gnucash.dialogs.commodities.gschema.xml
   org.gnucash.dialogs.checkprinting.gschema.xml
+  org.gnucash.dialogs.commodities.gschema.xml
+  org.gnucash.dialogs.export.csv.gschema.xml
+  org.gnucash.dialogs.gschema.xml
+  org.gnucash.dialogs.import.csv.gschema.xml
+  org.gnucash.dialogs.import.generic.gschema.xml
+  org.gnucash.dialogs.import.qif.gschema.xml
   org.gnucash.dialogs.reconcile.gschema.xml
   org.gnucash.dialogs.sxs.gschema.xml
   org.gnucash.dialogs.totd.gschema.xml
-  org.gnucash.gschema.xml
   org.gnucash.general.finance-quote.gschema.xml
+  org.gnucash.gschema.xml
   org.gnucash.history.gschema.xml
   org.gnucash.warnings.gschema.xml
   org.gnucash.window.pages.account.tree.gschema.xml

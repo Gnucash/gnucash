@@ -1,5 +1,3 @@
-ADD_SUBDIRECTORY(gschemas)
-
 SET(csv_export_SOURCES
   gncmod-csv-export.c
   gnc-plugin-csv-export.c
@@ -35,21 +33,5 @@ INSTALL(TARGETS gncmod-csv-export
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 # No headers to install.
 
-SET(csv_export_GLADE assistant-csv-export.glade)
-
-INSTALL(FILES ${csv_export_GLADE} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/gtkbuilder)
-
-SET(csv_export_UI gnc-plugin-csv-export-ui.xml)
-
-INSTALL(FILES ${csv_export_UI} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/ui)
-
-FILE(COPY ${csv_export_UI}
-  DESTINATION ${DATADIR_BUILD}/gnucash/ui)
-FILE(COPY ${csv_export_GLADE}
-  DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder)
-
-SET_LOCAL_DIST(csv_export_DIST_local CMakeLists.txt 
-        ${csv_export_SOURCES} ${csv_export_noinst_HEADERS}
-        ${csv_export_GLADE} ${csv_export_UI})
-SET(csv_export_DIST ${csv_export_DIST_local} ${csv_exp_gschema_DIST} PARENT_SCOPE)
-
+SET_DIST_LIST (csv_export_DIST CMakeLists.txt
+        ${csv_export_SOURCES} ${csv_export_noinst_HEADERS})

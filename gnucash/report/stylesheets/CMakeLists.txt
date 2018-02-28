@@ -73,15 +73,8 @@ GNC_ADD_SCHEME_TARGETS(scm-report-stylesheets-2
 
 ADD_CUSTOM_TARGET(scm-report-stylesheets ALL DEPENDS scm-report-stylesheets-1 scm-report-stylesheets-2)
 
-SET(stylesheets_UI gnc-plugin-stylesheets-ui.xml)
-
-INSTALL(FILES ${stylesheets_UI} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/ui)
-
-FILE(COPY ${stylesheets_UI}
-  DESTINATION ${DATADIR_BUILD}/gnucash/ui)
-
 SET_LOCAL_DIST(stylesheets_DIST_local CMakeLists.txt 
         ${stylesheets_SOURCES} ${stylesheets_noinst_HEADERS}
-        ${stylesheets_SCHEME_1} ${stylesheets_SCHEME_2}  ${stylesheets_UI})
+        ${stylesheets_SCHEME_1} ${stylesheets_SCHEME_2})
 
 SET(stylesheets_DIST ${stylesheets_DIST_local} ${test_stylesheets_DIST} PARENT_SCOPE)

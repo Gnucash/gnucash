@@ -1,6 +1,5 @@
 # CMakeLists.txt for gnucash/import_export/qif-imp
 
-ADD_SUBDIRECTORY(gschemas)
 ADD_SUBDIRECTORY(test)
 
 SET (qif_import_SOURCES
@@ -90,19 +89,6 @@ GNC_ADD_SCHEME_TARGETS(scm-qif-import
   FALSE
 )
 
-SET(qif_import_GLADE assistant-qif-import.glade dialog-account-picker.glade)
-
-INSTALL(FILES ${qif_import_GLADE} DESTINATION ${CMAKE_INSTALL_DATADIR}/gnucash/gtkbuilder)
-
-SET(qif_import_UI gnc-plugin-qif-import-ui.xml)
-
-INSTALL(FILES ${qif_import_UI} DESTINATION ${CMAKE_INSTALL_DATADIR}/gnucash/ui)
-
-FILE(COPY ${qif_import_UI}
-  DESTINATION ${DATADIR_BUILD}/gnucash/ui)
-FILE(COPY ${qif_import_GLADE}
-  DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder)
-
 SET_LOCAL_DIST(qif_import_DIST_local CMakeLists.txt file-format.txt ${qif_import_SOURCES} ${qif_import_noinst_HEADERS}
-        ${qif_import_SCHEME_0} ${qif_import_SCHEME} ${qif_import_SCHEME_2} ${qif_import_GLADE} ${qif_import_UI})
-SET(qif_import_DIST ${qif_import_DIST_local} ${test_qif_import_DIST} ${qif_import_gschema_DIST} PARENT_SCOPE)
+        ${qif_import_SCHEME_0} ${qif_import_SCHEME} ${qif_import_SCHEME_2})
+SET(qif_import_DIST ${qif_import_DIST_local} ${test_qif_import_DIST} PARENT_SCOPE)

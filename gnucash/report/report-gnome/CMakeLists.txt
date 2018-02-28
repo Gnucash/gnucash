@@ -73,17 +73,6 @@ GNC_ADD_SCHEME_TARGETS(scm-report-gnome
     FALSE
 )
 
-SET(report_gnome_GLADE dialog-custom-report.glade dialog-report.glade)
-
-INSTALL(FILES ${report_gnome_GLADE} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/gtkbuilder)
-
-SET(report_gnome_UI gnc-plugin-page-report-ui.xml)
-
-INSTALL(FILES ${report_gnome_UI} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/ui)
-
-FILE(COPY ${report_gnome_UI} DESTINATION ${DATADIR_BUILD}/gnucash/ui)
-FILE(COPY ${report_gnome_GLADE} DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder)
-
-SET_LOCAL_DIST(report_gnome_DIST_local CMakeLists.txt report-gnome.i ${report_gnome_HEADERS} ${report_gnome_SOURCES}
-        ${report_gnome_SCHEME} ${report_gnome_GLADE} ${report_gnome_UI})
+SET_LOCAL_DIST(report_gnome_DIST_local CMakeLists.txt report-gnome.i ${report_gnome_HEADERS}
+    ${report_gnome_SOURCES} ${report_gnome_SCHEME})
 SET(report_gnome_DIST ${report_gnome_DIST_local} ${test_report_gnome_DIST} PARENT_SCOPE)

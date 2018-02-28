@@ -1,4 +1,3 @@
-ADD_SUBDIRECTORY(gschemas)
 ADD_SUBDIRECTORY(test)
 
 SET(csv_import_remote_SOURCES
@@ -93,21 +92,6 @@ INSTALL(TARGETS gncmod-csv-import
 
 # No headers to install
 
-SET(csv_import_GLADE assistant-csv-account-import.glade
-      assistant-csv-price-import.glade assistant-csv-trans-import.glade)
-
-INSTALL(FILES ${csv_import_GLADE} DESTINATION ${CMAKE_INSTALL_DATADIR}/gnucash/gtkbuilder)
-
-SET(csv_import_UI gnc-plugin-csv-import-ui.xml)
-
-INSTALL(FILES ${csv_import_UI} DESTINATION ${CMAKE_INSTALL_DATADIR}/gnucash/ui)
-
-FILE(COPY ${csv_import_UI}
-  DESTINATION ${DATADIR_BUILD}/gnucash/ui)
-FILE(COPY ${csv_import_GLADE}
-  DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder)
-
 SET_LOCAL_DIST(csv_import_DIST_local CMakeLists.txt 
-        ${csv_import_SOURCES} ${csv_import_noinst_HEADERS}
-        ${csv_import_GLADE} ${csv_import_UI})
-SET(csv_import_DIST ${csv_import_DIST_local} ${test_csv_import_DIST} ${csv_import_gschema_DIST} PARENT_SCOPE)
+        ${csv_import_SOURCES} ${csv_import_noinst_HEADERS})
+SET(csv_import_DIST ${csv_import_DIST_local} ${test_csv_import_DIST} PARENT_SCOPE)

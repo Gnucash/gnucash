@@ -30,12 +30,5 @@ INSTALL(TARGETS gncmod-log-replay
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 # No headers to install.
 
-SET(log_replay_UI gnc-plugin-log-replay-ui.xml)
-
-INSTALL(FILES ${log_replay_UI} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/ui)
-
-FILE(COPY ${log_replay_UI}
-  DESTINATION ${DATADIR_BUILD}/gnucash/ui)
-
 SET_DIST_LIST(log_report_DIST CMakeLists.txt 
-        ${log_replay_SOURCES} ${log_replay_noinst_HEADERS} ${log_replay_UI})
+        ${log_replay_SOURCES} ${log_replay_noinst_HEADERS})

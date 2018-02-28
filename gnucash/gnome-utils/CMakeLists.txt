@@ -1,7 +1,5 @@
 # Note that gnucash/gnome-utils CANNOT depend on gnucash/gnome!
 
-ADD_SUBDIRECTORY(gtkbuilder)
-ADD_SUBDIRECTORY(ui)
 ADD_SUBDIRECTORY(test)
 
 # Command to generate the swig-gnome-utils.c wrapper file
@@ -270,5 +268,4 @@ ADD_CUSTOM_TARGET(scm-gnome-utils ALL DEPENDS scm-gnome-utils-2 scm-gnome-utils-
 SET_LOCAL_DIST(gnome_utils_DIST_local CMakeLists.txt ${gnome_utils_SOURCES} ${gnome_utils_HEADERS}
         ${gnome_utils_noinst_HEADERS} gnome-utils.scm gnome-utils.i gnc-menu-extensions.scm
         make-gnc-warnings-c.xsl make-gnc-warnings-h.xsl)
-SET(gnome_utils_DIST ${gnome_utils_DIST_local} ${test_gnome_utils_DIST}
-        ${gnome_utils_ui_DIST} ${gnome_utils_gtkbuilder_DIST} PARENT_SCOPE)
+SET(gnome_utils_DIST ${gnome_utils_DIST_local} ${test_gnome_utils_DIST} PARENT_SCOPE)

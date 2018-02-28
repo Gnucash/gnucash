@@ -1,7 +1,4 @@
 
-ADD_SUBDIRECTORY(gtkbuilder)
-ADD_SUBDIRECTORY(ui)
-
 SET (gnc_gnome_noinst_HEADERS
   assistant-acct-period.h
   assistant-hierarchy.h
@@ -216,7 +213,6 @@ ADD_CUSTOM_TARGET(gnucash-desktop ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucas
 
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop DESTINATION  ${CMAKE_INSTALL_DATADIR}/applications)
 
-SET_LOCAL_DIST(gnome_DIST_local
+SET_DIST_LIST(gnome_DIST
         CMakeLists.txt gnome.i gnucash.appdata.xml.in gnucash.desktop.in.in
         ${gnc_gnome_noinst_HEADERS} ${gnc_gnome_SOURCES})
-SET(gnome_DIST ${gnome_DIST_local} ${gnome_ui_DIST} ${gnome_gtkbuilder_DIST} PARENT_SCOPE)
