@@ -33,6 +33,7 @@ borrowed/libc/libc-missing-noop.c
 borrowed/libc/setenv.c
 borrowed/libc/strfmon.c
 borrowed/libc/strptime.c
+doc/tip_of_the_day.list.c
 gnucash/gnome/assistant-acct-period.c
 gnucash/gnome/assistant-hierarchy.c
 gnucash/gnome/assistant-loan.c
@@ -84,6 +85,8 @@ gnucash/gnome/gnc-plugin-register2.c
 gnucash/gnome/gnc-plugin-register.c
 gnucash/gnome/gnc-split-reg2.c
 gnucash/gnome/gnc-split-reg.c
+gnucash/gnome/gnucash.appdata.xml.in
+gnucash/gnome/gnucash.desktop.in.in
 gnucash/gnome/gtkbuilder/assistant-acct-period.glade
 gnucash/gnome/gtkbuilder/assistant-hierarchy.glade
 gnucash/gnome/gtkbuilder/assistant-loan.glade
@@ -667,6 +670,7 @@ libgnucash/engine/kvp-value.cpp
 libgnucash/engine/policy.c
 libgnucash/engine/qof-backend.cpp
 libgnucash/engine/qofbook.cpp
+libgnucash/engine/qofbookslots.h
 libgnucash/engine/qofchoice.cpp
 libgnucash/engine/qofclass.cpp
 libgnucash/engine/qofevent.cpp
@@ -704,7 +708,3 @@ libgnucash/tax/us/txf-help-de_DE.scm
 libgnucash/tax/us/txf-help.scm
 libgnucash/tax/us/txf.scm
 libgnucash/tax/us/us.scm
-gnucash/gnome/gnucash.appdata.xml.in
-gnucash/gnome/gnucash.desktop.in.in
-libgnucash/engine/qofbookslots.h
-doc/tip_of_the_day.list.c

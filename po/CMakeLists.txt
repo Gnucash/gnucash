@@ -27,7 +27,7 @@ FOREACH(lingua ${ALL_LINGUAS})
 ENDFOREACH()
 
 SET_LOCAL_DIST(po_DIST_local ${po_SOURCES} CMakeLists.txt ChangeLog Makevars
-  POTFILES.ignore POTFILES.in POTFILES.skip README gnucash-pot.cmake)
+  POTFILES.in POTFILES.skip README gnucash-pot.cmake)
 SET(po_DIST ${po_DIST_local} ${po_glossary_DIST} PARENT_SCOPE)
 
 FOREACH(lingua ${ALL_LINGUAS})
@@ -71,46 +71,37 @@ ENDFUNCTION()
 
 
 FUNCTION(MAKE_GNUCASH_POTFILES)
-
-  SET(IGNORE_PATTERNS "gw-" "test" "experimental" "python-bindings" "swig-.*\\.c")
-
   # Create a list of candidate translation files
-  FILE(GLOB_RECURSE FILES_IN RELATIVE ${CMAKE_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/*.c ${CMAKE_SOURCE_DIR}/*.cpp ${CMAKE_SOURCE_DIR}/*.glade ${CMAKE_SOURCE_DIR}/*.desktop.in
-    ${CMAKE_SOURCE_DIR}/*.keys.in  ${CMAKE_SOURCE_DIR}/*.gschema.xml.in ${CMAKE_SOURCE_DIR}/*.scm)
+  file (GLOB_RECURSE FILES_IN RELATIVE ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/*.c ${CMAKE_SOURCE_DIR}/*.cpp
+    ${CMAKE_SOURCE_DIR}/*.glade ${CMAKE_SOURCE_DIR}/*.desktop.in.in
+    ${CMAKE_SOURCE_DIR}/*.gschema.xml.in ${CMAKE_SOURCE_DIR}/*.appdata.xml.in
+    ${CMAKE_SOURCE_DIR}/*.keys.in ${CMAKE_SOURCE_DIR}/*.scm
+    ${CMAKE_SOURCE_DIR}/*/qofbookslots.h
+  )
 
-  # Only consider files in the common, libgnucash, and gnucash/ directories. Also check against list of ignore patterns
-  SET(FILES "")
-  FOREACH(path ${FILES_IN})
-    STRING(REGEX MATCH "^(bindings/|common/|borrowed/|libgnucash/|gnucash/)" IS_SRC ${path})
-    IF (IS_SRC)
-      SET(IS_IGNORED FALSE)
-      FOREACH(pattern ${IGNORE_PATTERNS})
-        STRING(REGEX MATCH ${pattern} YES_IGNORE ${path})
-        IF (YES_IGNORE)
-	  SET(IS_IGNORED TRUE)
-        ENDIF()
-      ENDFOREACH(pattern)
-      IF (NOT IS_IGNORED)
-        LIST(APPEND FILES ${path})
-      ENDIF(NOT IS_IGNORED)
-    ENDIF(IS_SRC)
-  ENDFOREACH(path)
+  # Only consider files in a selection of the source directories and
+  # additionally check against list of ignore patterns
+  set (GOOD_FILES "")
+  foreach (path ${FILES_IN})
+    if (${path} MATCHES "^(bindings/|borrowed/|common/|doc/|libgnucash/|gnucash/)"
+        AND
+        NOT ${path} MATCHES "gw-|test|experimental|python-bindings|swig-.*\\.c")
+        list (APPEND GOOD_FILES ${path})
+    endif ()
+  endforeach (path)
 
-  # Read in list of paths to skip from POTFILES.{skip,ignore}
+  # Remove the paths that we have marked as explicitly skipped
   READ_FILE_REMOVING_COMMENTS(SKIP_LINES POTFILES.skip)
-  READ_FILE_REMOVING_COMMENTS(IGNORE_LINES POTFILES.ignore)
-
-  # Remove the paths that are skipped or ignored
-  FOREACH(path ${SKIP_LINES} ${IGNORE_LINES})
-    list(REMOVE_ITEM FILES ${path})
-  ENDFOREACH()
+  foreach (path ${SKIP_LINES})
+      list(REMOVE_ITEM GOOD_FILES ${path})
+  endforeach ()
 
 
   # CMake sorting is different from UNIX sorting. Use perl to
   # sort POTFILES.in universally. This may no longer be needed
   # now we have dropped autotools support.
-  STRING(REPLACE ";" "\n" SORT_IN "${FILES}")
+  STRING(REPLACE ";" "\n" SORT_IN "${GOOD_FILES}")
   SET(SORT_IN "${SORT_IN}\n")
   FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/POTFILES.in.in "${SORT_IN}")
 
@@ -119,13 +110,6 @@ FUNCTION(MAKE_GNUCASH_POTFILES)
     OUTPUT_VARIABLE POTFILES_IN
   )
   STRING(REPLACE "\n" ";" POTFILES "${POTFILES_IN}")
-
-  # These are manually added, because they're not picked up by the generation script
-  list(APPEND POTFILES
-    "gnucash/gnome/gnucash.appdata.xml.in"
-    "gnucash/gnome/gnucash.desktop.in.in"
-    "libgnucash/engine/qofbookslots.h"
-    "doc/tip_of_the_day.list.c")
 
   # Write out the final list.
   # intltool-update insists that this file be in the source directory. :-(
