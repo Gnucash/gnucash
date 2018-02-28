@@ -258,7 +258,7 @@ if (ALLOW_OLD_GETTEXT)
 else (ALLOW_OLD_GETTEXT)
     find_package (Gettext 0.19.6)
     if (NOT GETTEXT_FOUND)
-        message (FATAL_ERROR "Note the build can be configured with an older version of gnucash by setting ALLOW_OLD_GETTEXT=ON but then some files will not be translated:
+        message (FATAL_ERROR "Note the build can be configured with an older version of gettext by setting ALLOW_OLD_GETTEXT=ON but then some files will not be translated:
         - gnucash.desktop (requires at least gettext 0.19)
         - gnucash.appdata.xml (requires at least gettext 0.19.6)")
     endif (NOT GETTEXT_FOUND)
