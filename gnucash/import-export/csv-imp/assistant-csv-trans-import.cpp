@@ -67,7 +67,6 @@ extern "C"
 #include <boost/locale.hpp>
 
 namespace bl = boost::locale;
-using namespace boost::locale;
 
 #define MIN_COL_WIDTH 70
 #define GNC_PREFS_GROUP "dialogs.import.csv"
@@ -1947,9 +1946,10 @@ CsvImpTransAssist::assist_summary_page_prepare ()
     gen.add_messages_path(gnc_path_get_datadir());
     gen.add_messages_domain(PACKAGE);
 
-    auto text = std::string("<span size=\"medium\"><b>");
     // FIXME Rather than passing a locale generator below we probably should set std::locale::global appropriately somewhere.
-    text += (bl::format (translate ("The transactions were imported from the file '{1}'.")) % m_file_name).str(gen(""));
+    auto text = std::string("<span size=\"medium\"><b>");
+    /* Translators: {1} will be replaced with a filename */
+    text += (bl::format (bl::translate ("The transactions were imported from file '{1}'.")) % m_file_name).str(gen(""));
     text += "</b></span>";
     gtk_label_set_markup (GTK_LABEL(summary_label), text.c_str());
 }

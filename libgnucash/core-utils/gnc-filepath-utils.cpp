@@ -78,7 +78,6 @@ extern "C" {
 namespace bfs = boost::filesystem;
 namespace bst = boost::system;
 namespace bl = boost::locale;
-using namespace boost::locale;
 
 /**
  * Scrubs a filename by changing "strange" chars (e.g. those that are not
@@ -678,35 +677,35 @@ static std::string migrate_gnc_datahome()
 
     /* Step 3: inform the user of additional changes */
     if (full_copy || !succeeded.empty() || !conf_exist_vec.empty() || !failed.empty())
-        migration_msg << translate ("Notice") << std::endl << std::endl;
+        migration_msg << bl::translate ("Notice") << std::endl << std::endl;
 
     if (full_copy)
     {
         migration_msg
-        << translate ("Your gnucash metadata has been migrated.") << std::endl << std::endl
+        << bl::translate ("Your gnucash metadata has been migrated .") << std::endl << std::endl
         /* Translators: this refers to a directory name. */
-        << translate ("Old location:") << " " << old_dir.string() << std::endl
+        << bl::translate ("Old location:") << " " << old_dir.string() << std::endl
         /* Translators: this refers to a directory name. */
-        << translate ("New location:") << " " << gnc_userdata_home.string() << std::endl << std::endl
+        << bl::translate ("New location:") << " " << gnc_userdata_home.string() << std::endl << std::endl
         // Translators {1} will be replaced with the package name (typically Gnucash) at runtime
-        << bl::format (translate ("If you no longer intend to run {1} 2.6.x or older on this system you can safely remove the old directory."))
+        << bl::format (bl::translate ("If you no longer intend to run {1} 2.6.x or older on this system you can safely remove the old directory."))
         % PACKAGE_NAME;
     }
 
     if (full_copy &&
         (!succeeded.empty() || !conf_exist_vec.empty() || !failed.empty()))
         migration_msg << std::endl << std::endl
-                        << translate ("In addition:");
+                        << bl::translate ("In addition:");
 
     if (!succeeded.empty())
     {
         migration_msg << std::endl << std::endl;
         if (full_copy)
-            migration_msg << bl::format (translate ("The following file has been copied to {1} instead:",
-                                                    "The following files have been copied to {1} instead:",
-                                                    succeeded.size())) % gnc_userconfig_home.string().c_str();
+            migration_msg << bl::format (bl::translate ("The following file has been copied to {1} instead:",
+                                                        "The following files have been copied to {1} instead:",
+                                                        succeeded.size())) % gnc_userconfig_home.string().c_str();
         else
-            migration_msg << bl::format (translate ("The following file in {1} has been renamed:"))
+            migration_msg << bl::format (bl::translate ("The following file in {1} has been renamed:"))
                                          % gnc_userconfig_home.string().c_str();
 
         migration_msg << std::endl;
@@ -716,9 +715,9 @@ static std::string migrate_gnc_datahome()
     if (!conf_exist_vec.empty())
     {
         migration_msg << std::endl << std::endl
-                      << translate ("The following file has become obsolete and will be ignored:",
-                                    "The following files have become obsolete and will be ignored:",
-                                    conf_exist_vec.size())
+                      << bl::translate ("The following file has become obsolete and will be ignored:",
+                                        "The following files have become obsolete and will be ignored:",
+                                        conf_exist_vec.size())
                       << std::endl;
         for (auto obs_file : conf_exist_vec)
             migration_msg << "- " << obs_file << std::endl;
@@ -726,9 +725,9 @@ static std::string migrate_gnc_datahome()
     if (!failed.empty())
     {
         migration_msg << std::endl << std::endl
-                      << bl::format (translate ("The following file could not be moved to {1}:",
-                                                "The following files could not be moved to {1}:",
-                                                failed.size())) % gnc_userconfig_home.string().c_str()
+                      << bl::format (bl::translate ("The following file could not be moved to {1}:",
+                                                    "The following files could not be moved to {1}:",
+                                                    failed.size())) % gnc_userconfig_home.string().c_str()
                       << std::endl;
         for (auto failed_file : failed)
             migration_msg << "- " << failed_file << std::endl;
