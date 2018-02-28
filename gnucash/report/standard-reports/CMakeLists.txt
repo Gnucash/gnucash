@@ -59,14 +59,5 @@ GNC_ADD_SCHEME_TARGETS(scm-standard-reports-2
 
 ADD_CUSTOM_TARGET(scm-standard-reports ALL DEPENDS scm-standard-reports-2 scm-standard-reports-1)
 
-# FIXME: This is a hack since core-utils assumes an autotools build environment.
-
-SET(STD_RPT_DIR ${CMAKE_CURRENT_BINARY_DIR}/gnucash/report)
-FILE(MAKE_DIRECTORY ${STD_RPT_DIR})
-FILE(COPY standard-reports.scm DESTINATION ${STD_RPT_DIR})
-
-FILE(MAKE_DIRECTORY ${STD_RPT_DIR}/standard-reports)
-FILE(COPY ${standard_reports_SCHEME_2} DESTINATION ${STD_RPT_DIR}/standard-reports)
-
 SET_LOCAL_DIST(standard_reports_DIST_local CMakeLists.txt ${standard_reports_SCHEME} ${standard_reports_SCHEME_2})
 SET(standard_reports_DIST ${standard_reports_DIST_local} ${test_standard_reports_DIST} PARENT_SCOPE)

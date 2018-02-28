@@ -169,30 +169,21 @@ gchar *gnc_path_get_accountsdir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_reportdir()
 {
-    gchar *result;
-    const gchar *builddir = g_getenv ("GNC_BUILDDIR");
-    if (g_getenv ("GNC_UNINSTALLED") && builddir)
-    {
-        result = g_build_filename (builddir, "gnucash", "report", NULL);
-    }
-    else
-    {
-        /* Careful: if the autoconf macro GNC_SCM_INSTALL_DIR gets changed
-         * in configure.ac, this path should probably change as well.
-         * Currently this code assumes GNC_SCM_INSTALL_DIR is set to
-         * pkgdatadir/scm
-         * We can't use the AC_MACRO GNC_SCM_INSTALL_DIR here directly
-         * because that's expanded at build time. On Windows and OS X
-         * the final path may get installed in a different location
-         * than assumed during build, invalidating the build path at
-         * runtime.
-         */
-        gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
-        result = g_build_filename (pkgdatadir, "scm",
-                                   "gnucash", "report", (char*)NULL);
-        g_free (pkgdatadir);
-    }
-    //printf("Returning stdreportsdir %s\n", result);
+    /* Careful: if the cmake variable SCHEME_INSTALLED_SOURCE_DIR gets changed
+     * in toplevel CMakeLists.txt, this path should probably change as well.
+     * Currently this code assumes SCHEME_INSTALLED_SOURCE_DIR is set to
+     * pkgdatadir/scm
+     * We can't use GNC_SCM_INSTALL_DIR directly at build time to
+     * get this information, because on Windows and OS X
+     * the final path may get installed in a different location
+     * than assumed during build, invalidating the build path at
+     * runtime.
+     */
+    gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
+    gchar *result = g_build_filename (pkgdatadir, "scm",
+                                      "gnucash", "report", (char*)NULL);
+    g_free (pkgdatadir);
+
     return result;
 }
 
@@ -203,17 +194,8 @@ gchar *gnc_path_get_reportdir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_stdreportsdir()
 {
-    gchar *result;
     gchar *reportdir = gnc_path_get_reportdir ();
-    if (g_getenv ("GNC_UNINSTALLED"))
-    {
-        result = g_build_filename (reportdir, "standard-reports", "gnucash",
-                                   "report", "standard-reports", NULL);
-    }
-    else
-    {
-        result = g_build_filename (reportdir, "standard-reports", NULL);
-    }
+    gchar *result = g_build_filename (reportdir, "standard-reports", NULL);
     g_free (reportdir);
     //printf("Returning stdreportsdir %s\n", result);
     return result;
