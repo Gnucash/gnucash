@@ -409,6 +409,7 @@ gnc_account_get_property (GObject         *object,
         break;
     case PROP_SORT_REVERSED:
         g_value_set_boolean(value, xaccAccountGetSortReversed(account));
+        break;
     case PROP_LOT_NEXT_ID:
         /* Pre-set the value in case the frame is empty */
         g_value_set_int64 (value, 0);
@@ -533,6 +534,7 @@ gnc_account_set_property (GObject         *object,
         break;
     case PROP_SORT_REVERSED:
         xaccAccountSetSortReversed(account, g_value_get_boolean(value));
+        break;
     case PROP_LOT_NEXT_ID:
         qof_instance_set_path_kvp (QOF_INSTANCE (account), value, {"lot-mgmt", "next-id"});
         break;
