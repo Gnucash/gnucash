@@ -5,7 +5,6 @@
 ;; Copyright 2004 David Montenegro <sunrise2000@comcast.net>
 ;; Copyright 2001 Christian Stimming <stimming@tu-harburg.de>
 ;; Copyright 2000-2001 Bill Gribble <grib@gnumatic.com>
-;; Copyright 2017 Christopher Lam upgrade to time64
 ;;    
 ;; This program is free software; you can redistribute it and/or    
 ;; modify it under the terms of the GNU General Public License as   

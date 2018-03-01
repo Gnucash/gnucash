@@ -2056,8 +2056,8 @@
             (set! row-contents (cons return-string row-contents)))))
     (gnc:options-for-each disp-option-if-changed options)
     (string-append (string-join (reverse row-contents)
-                                (if plaintext? "\n" "<br />"))
-                   (if plaintext? "\n\n" "<br /><br />"))))
+                                (if plaintext? "\n" "<br />\n"))
+                   (if plaintext? "\n\n" "<br />\n<br />\n"))))
 
 (define (gnc:send-options db_handle options)
   (gnc:options-for-each
