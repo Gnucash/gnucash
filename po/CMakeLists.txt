@@ -147,6 +147,8 @@ IF(BUILDING_FROM_VCS)
            -D PO_SRC_DIR=${CMAKE_CURRENT_SOURCE_DIR}
            -D PO_BIN_DIR=${CMAKE_CURRENT_BINARY_DIR}
            -D PACKAGE=${PACKAGE}
+           -D PACKAGE_NAME=${PACKAGE_NAME}
+           -D PACKAGE_VERSION=${PACKAGE_VERSION}
            -D XGETTEXT=${XGETTEXT}
            -P ${CMAKE_CURRENT_SOURCE_DIR}/gnucash-pot.cmake
         DEPENDS ${gnucash_pot_depends}
