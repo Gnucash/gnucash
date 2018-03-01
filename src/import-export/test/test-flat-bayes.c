@@ -171,7 +171,7 @@ group_account_name_and_guid_in_mixed_case (Fixture * fixture, gconstpointer pDat
      * If the grouping by account name and guid is *not* working properly, this test will fail.
      */
     chosen = gnc_imap_find_account_bayes (fixture->map1, fixture->tokens1);
-    g_assert_true (chosen == fixture->account1);
+    g_assert (chosen == fixture->account1);
 }
 
 /*
@@ -191,7 +191,7 @@ read_flat_bayes (Fixture * fixture, gconstpointer pData)
     kvp_frame_set_slot (frame, path, count_value);
     kvp_value_delete (count_value);
     chosen = gnc_imap_find_account_bayes (fixture->map1, fixture->tokens1);
-    g_assert_true (chosen == fixture->account1);
+    g_assert (chosen == fixture->account1);
 }
 
 static void
@@ -208,7 +208,7 @@ write_flat_bayes (Fixture * fixture, gconstpointer pData)
     frame = qof_instance_get_slots (QOF_INSTANCE (fixture->account1));
     count_value = kvp_frame_get_slot (frame, path);
     count = kvp_value_get_gint64 (count_value);
-    g_assert_true (count == 2);
+    g_assert (count == 2);
 }
 
 /*
@@ -223,7 +223,7 @@ find_normal_bayes_account (Fixture * fixture, gconstpointer pData)
     gnc_imap_add_account_bayes (fixture->map1, fixture->tokens1, fixture->account1);
     gnc_imap_add_account_bayes (fixture->map1, fixture->tokens1, fixture->account1);
     acc = gnc_imap_find_account_bayes (fixture->map1, fixture->tokens1);
-    g_assert_true (acc == fixture->account1);
+    g_assert (acc == fixture->account1);
 }
 
 static void
@@ -239,7 +239,7 @@ find_flat_bayes_account (Fixture * fixture, gconstpointer pData)
     gnc_imap_add_account_bayes (fixture->map1, fixture->tokens1, fixture->account1);
     gnc_imap_add_account_bayes (fixture->map1, fixture->tokens1, fixture->account2);
     acc = gnc_imap_find_account_bayes (fixture->map1, fixture->tokens1);
-    g_assert_true (acc == fixture->account1);
+    g_assert (acc == fixture->account1);
 }
 
 static void
@@ -255,7 +255,7 @@ find_guid_bayes_account (Fixture * fixture, gconstpointer pData)
     gnc_imap_add_account_bayes (fixture->map1, fixture->tokens1, fixture->account1);
     gnc_imap_add_account_bayes (fixture->map1, fixture->tokens1, fixture->account2);
     acc = gnc_imap_find_account_bayes (fixture->map1, fixture->tokens1);
-    g_assert_true (acc == fixture->account1);
+    g_assert (acc == fixture->account1);
 }
 
 static void
@@ -264,7 +264,7 @@ find_normal_bayes_when_non_exists (Fixture * fixture, gconstpointer pData)
     KvpFrame * frame;
     Account * acc;
     acc = gnc_imap_find_account_bayes (fixture->map1, fixture->tokens1);
-    g_assert_true (acc == NULL);
+    g_assert (acc == NULL);
 }
 
 static gchar const * suitename = "/import-export/test-flat-bayes";
