@@ -713,7 +713,7 @@
 	       (begin
 	        (set! credit-note? #t)
 	        (set! default-title (_ "Credit Note"))))))
-	  (set! title (format #f (_"~a #~d") (title-string default-title custom-title)
+	  (set! title (format #f (_"~a #~a") (title-string default-title custom-title)
 			       (gncInvoiceGetID invoice)))))
 
 ;    (gnc:html-document-set-title! document title)
@@ -734,7 +734,7 @@
         (add-html! document "<td align='left'>")
         (add-html! document "<b><u>")
 	(add-html! document title)
-;;	(add-html! document (format #f (_ "Invoice #~d")
+;;	(add-html! document (format #f (_ "Invoice #~a")
 ;;				     (gncInvoiceGetID invoice)))
         (add-html! document "</u></b></td>")
         (add-html! document "<td align='right'>")
