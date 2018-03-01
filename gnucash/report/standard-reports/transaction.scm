@@ -1703,7 +1703,9 @@ tags within description, notes or memo. ")
                  (string-join (map (lambda (row)
                                      (row->html row list-of-cols))
                                    list-of-rows) "")
-                 (row->html 'row-total list-of-cols)
+                 (if (memq 'row-total (grid-rows grid))
+                     (row->html 'row-total list-of-cols)
+                     "")
                  "</tbody></table>\n"))
 
 
