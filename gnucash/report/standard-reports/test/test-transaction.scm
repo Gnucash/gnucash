@@ -661,8 +661,21 @@
       ;; test debit/credit dual columns
       (set! options (default-testing-options))
       (set-option! options "Display" "Amount" 'double)
+      (set-option! options "General" "Common Currency" #t)
+      (set-option! options "General" "Show original currency amount" #t)
+      (set-option! options "Sorting" "Primary Key" 'date)
+      (set-option! options "Sorting" "Primary Subtotal for Date Key" 'none)
       (let* ((sxml (options->sxml options "dual columns"))) ;out-29.html
-        #f)
+        (test-equal "dual amount column, with original currency headers"
+          (list "Date" "Num" "Description" "Memo/Notes" "Account"
+                "Debit" "USD" "Credit" "USD" "Debit" "Credit")
+          (get-row-col sxml 0 #f))
+        (test-equal "dual amount column, grand totals available"
+          (list "Grand Total" " " " " " " " " "$2,280.00" "$2,280.00")
+          (get-row-col sxml -1 #f))
+        (test-equal "dual amount column, first transaction correct"
+          (list "01/03/18" "$103 income" "Root.Asset.Bank" "\n" "$103.00" " " "\n" "$103.00" " ")
+          (get-row-col sxml 1 #f)))
       )
 
     (test-end "display options")
