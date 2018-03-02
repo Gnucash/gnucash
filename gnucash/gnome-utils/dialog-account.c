@@ -1892,14 +1892,14 @@ gnc_ui_edit_account_window(GtkWindow *parent, Account *account)
  * opens up a window to create a new account
  *
  * Args:    book - containing book for the new account
- *        parent - The initial parent for the new account (optional)
+ *   parent_acct - The initial parent for the new account (optional)
  */
 void
 gnc_ui_new_account_window (GtkWindow *parent, QofBook *book,
                            Account *parent_acct)
 {
     g_return_if_fail(book != NULL);
-    if (parent && book)
+    if (parent_acct && book)
         g_return_if_fail(gnc_account_get_book(parent_acct) == book);
 
     gnc_ui_new_account_window_internal (parent, book, parent_acct, NULL, NULL,
