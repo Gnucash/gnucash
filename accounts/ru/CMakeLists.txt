@@ -1,7 +1,11 @@
 SET(account_DATA
+  acctchrt_auto.gnucash-xea
+  acctchrt_autoloan.gnucash-xea
   acctchrt_common.gnucash-xea
   acctchrt_homeloan.gnucash-xea
   acctchrt_homeown.gnucash-xea
+  acctchrt_kids.gnucash-xea
+  acctchrt_otherloan.gnucash-xea
   acctchrt_renter.gnucash-xea)
 
 SET_DIST_LIST(RU_DIST ${account_DATA} Makefile.am CMakeLists.txt)
