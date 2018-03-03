@@ -321,6 +321,10 @@ in the Options panel."))
                 (cons 'tip (_ "Show both (and include void transactions in totals)."))))))
 
 (define reconcile-status-list
+  ;; 'filter-types must be either #f (i.e. disable reconcile filter)
+  ;; or a value defined as defined in Query.c
+  ;; e.g. CLEARED-NO for unreconciled
+  ;;      (logior CLEARED-NO CLEARED-CLEARED) for unreconciled & cleared
   (list
    (cons 'all
          (list
@@ -332,19 +336,19 @@ in the Options panel."))
          (list
           (cons 'text (_ "Unreconciled"))
           (cons 'tip (_ "Unreconciled only"))
-          (cons 'filter-types (list #\n))))
+          (cons 'filter-types CLEARED-NO)))
 
    (cons 'cleared
          (list
           (cons 'text (_ "Cleared"))
           (cons 'tip (_ "Cleared only"))
-          (cons 'filter-types (list #\c))))
+          (cons 'filter-types CLEARED-CLEARED)))
 
    (cons 'reconciled
          (list
           (cons 'text (_ "Reconciled"))
           (cons 'tip (_ "Reconciled only"))
-          (cons 'filter-types (list #\y))))))
+          (cons 'filter-types CLEARED-RECONCILED)))))
 
 
 (define ascending-list
@@ -1865,6 +1869,8 @@ tags within description, notes or memo. ")
             ((non-void-only) (gnc:query-set-match-non-voids-only! query (gnc-get-current-book)))
             ((void-only)     (gnc:query-set-match-voids-only! query (gnc-get-current-book)))
             (else #f))
+          (if reconcile-status-filter
+              (xaccQueryAddClearedMatch query reconcile-status-filter QOF-QUERY-AND))
           (if (not custom-sort?)
               (begin
                 (qof-query-set-sort-order query
@@ -1892,7 +1898,6 @@ tags within description, notes or memo. ")
           ;; - include/exclude splits to/from selected accounts
           ;; - substring/regex matcher for Transaction Description/Notes/Memo
           ;; - custom-split-filter, a split->bool function for derived reports
-          ;; - by reconcile status
           (set! splits (filter
                         (lambda (split)
                           (let* ((trans (xaccSplitGetParent split))
@@ -1910,9 +1915,7 @@ tags within description, notes or memo. ")
                                      (match? (xaccSplitGetMemo split)))
                                  (or (not custom-split-filter)     ; #f = ignore custom-split-filter
                                      (custom-split-filter split))
-                                 (or (not reconcile-status-filter) ; #f = ignore reconcile-status-filter
-                                     (memv (xaccSplitGetReconcile split)
-                                           reconcile-status-filter)))))
+                                 )))
                         splits))
 
           (if (null? splits)
