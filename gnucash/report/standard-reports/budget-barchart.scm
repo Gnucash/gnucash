@@ -156,7 +156,7 @@
         (gnc:html-barchart-set-col-labels!
           chart (list (_ "Budget") (_ "Actual")))
         (gnc:html-barchart-set-col-colors!
-          chart '("blue" "red"))
+          chart '("#0074D9" "#FF4136"))
       )
       ;; else
       (begin
@@ -169,7 +169,7 @@
         (gnc:html-linechart-set-col-labels!
           chart (list (_ "Budget") (_ "Actual")))
         (gnc:html-linechart-set-col-colors!
-          chart '("blue" "red"))
+          chart '("#0074D9" "#FF4136"))
       )
     )
 

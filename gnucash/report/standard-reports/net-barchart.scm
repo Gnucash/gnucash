@@ -375,9 +375,9 @@
        (gnc:html-barchart-set-col-colors!
         chart (append
                (if show-sep?
-                   '("blue" "red") '())
+                   '("#0074D9" "#FF4136") '())
                (if show-net?
-                   '("green") '())))
+                   '("#2ECC40") '())))
 
        ;; URLs for income/expense or asset/liabilities bars.
 ;;       (if show-sep?
