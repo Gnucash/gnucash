@@ -3184,12 +3184,9 @@
                            from-date
                            to-date
                            tax-year
-                           (if (gnc:txf-get-tax-entity-type-description
-                                       (string->symbol tax-entity-type))
-                               (gnc:txf-get-tax-entity-type-description
-                                       (string->symbol tax-entity-type))
-                               "None specified"
-                           )
+                           (or (gnc:txf-get-tax-entity-type-description
+                                (string->symbol tax-entity-type))
+                               "None specified")
                      )))))
 
              (if (not (null? txf-invalid-alist))
