@@ -478,10 +478,10 @@
     (gnc:html-table-append-row!
      table
      (list
-      (string-expand (gnc:owner-get-name-and-address-dep owner) #\newline "<br>")))
+      (string-expand (gnc:owner-get-name-and-address-dep owner) #\newline "<br/>")))
     (gnc:html-table-append-row!
      table
-     (list "<br>"))
+     (list "<br/>"))
     (set-last-row-style!
      table "td"
      'attribute (list "valign" "top"))
@@ -521,7 +521,7 @@
     (gnc:html-table-append-row! table (list (if name name "")))
     (gnc:html-table-append-row! table (list (string-expand
 					     (if addy addy "")
-					     #\newline "<br>")))
+					     #\newline "<br/>")))
     (gnc:html-table-append-row! table (list
 				       (strftime
 					date-format

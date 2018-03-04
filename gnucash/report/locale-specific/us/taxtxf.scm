@@ -3176,11 +3176,10 @@
                      "center"
                      (gnc:html-markup/format
                       (string-append (if (and (gnc-get-current-book-tax-name)
-                                              (not (string=? ""
-                                              (gnc-get-current-book-tax-name))))
-                                         "Tax Name: %s<BR>"
+                                              (not (string-null? (gnc-get-current-book-tax-name))))
+                                         "Tax Name: ~a<br/>"
                                          "~a")
-                      "Period from ~a to ~s<BR>Tax Year ~a<BR>Tax Entity Type: %s<BR>All amounts in USD unless otherwise noted")
+                      "Period from ~a to ~a<br/>Tax Year ~a<br/>Tax Entity Type: ~a<br/>All amounts in USD unless otherwise noted")
                            (gnc-get-current-book-tax-name)
                            from-date
                            to-date
@@ -3199,7 +3198,7 @@
                     doc (gnc:make-html-text
                           (gnc:html-markup-p
                            (gnc:html-markup/format
-                      "<BR>The following Account(s) have errors with their Income Tax code assignments (use 'Edit->Tax Report Options' to correct):"))))
+                      "<br/>The following Account(s) have errors with their Income Tax code assignments (use 'Edit->Tax Report Options' to correct):"))))
                    (gnc:html-document-add-object! doc error-table)
                     (gnc:html-table-append-row!
                       error-table
@@ -3262,7 +3261,7 @@
                     doc (gnc:make-html-text
                           (gnc:html-markup-p
                            (gnc:html-markup/format
-                      " <BR> "))))
+                      " <br/> "))))
                  )
              )
 
@@ -3453,29 +3452,29 @@
                         (gnc:html-markup-p
                          (gnc:html-markup/format
                           (string-append
-                             "Selected Report Options:<BR>"
+                             "Selected Report Options:<br/>"
                              ;; selected accounts
-                             "&nbsp; &nbsp; &nbsp; ~a <BR>"
+                             "&nbsp; &nbsp; &nbsp; ~a <br/>"
                              ;; suppress 0.00 values
-                             "&nbsp; &nbsp; &nbsp; ~a <BR>"
+                             "&nbsp; &nbsp; &nbsp; ~a <br/>"
                              ;; full acct names
-                             "&nbsp; &nbsp; &nbsp; ~a <BR>"
+                             "&nbsp; &nbsp; &nbsp; ~a <br/>"
                              ;; transfer detail
-                             "&nbsp; &nbsp; &nbsp; ~a <BR>"
+                             "&nbsp; &nbsp; &nbsp; ~a <br/>"
                              ;; TXF detail
-                             "&nbsp; &nbsp; &nbsp; ~a <BR>"
+                             "&nbsp; &nbsp; &nbsp; ~a <br/>"
                              ;; action:memo detail
-                             "&nbsp; &nbsp; &nbsp; ~a <BR>"
+                             "&nbsp; &nbsp; &nbsp; ~a <br/>"
                              ;; transaction detail
-                             "&nbsp; &nbsp; &nbsp; ~a <BR>"
+                             "&nbsp; &nbsp; &nbsp; ~a <br/>"
                              ;; special dates
-                             "&nbsp; &nbsp; &nbsp; ~a <BR>"
+                             "&nbsp; &nbsp; &nbsp; ~a <br/>"
                              ;; currency conversion date
-                             "&nbsp; &nbsp; &nbsp; ~a <BR>"
+                             "&nbsp; &nbsp; &nbsp; ~a <br/>"
                              ;; alternate transaction shading
                              (if (gnc-html-engine-supports-css)
                                  ""
-                                 "&nbsp; &nbsp; &nbsp; ~a <BR>"
+                                 "&nbsp; &nbsp; &nbsp; ~a <br/>"
                              ))
                              (if (not (null? user-sel-accnts))
                                  "Subset of accounts"
