@@ -264,15 +264,25 @@ developing over time"))
     (define (show-acct? a)
       (member a accounts))
 
+    (define tree-depth (if (equal? account-levels 'all)
+                           (gnc:get-current-account-tree-depth)
+                           account-levels))
+
+    (define the-acount-destination-alist
+      (account-destination-alist accounts account-types tree-depth))
+
     ;;(gnc:debug accounts)
     (if (not (null? accounts))
-        
+
+        (if (null? the-acount-destination-alist)
+            (gnc:html-document-add-object!
+             document
+             (gnc:html-make-empty-data-warning
+              report-title (gnc:report-id report-obj)))
+
         ;; Define more helper variables.
         (let* ((commodity-list #f)
                (exchange-fn #f)
-               (tree-depth (if (equal? account-levels 'all)
-                               (gnc:get-current-account-tree-depth)
-                               account-levels))
                (averaging-fraction-func (gnc:date-get-fraction-func averaging-selection))
                (interval-fraction-func (gnc:date-get-fraction-func interval))
                (averaging-multiplier
@@ -368,10 +378,7 @@ developing over time"))
 	  (define (apply-sign account x)
 	    (if (reverse-balance? account) (- x) x))
           (define (calculate-report accounts progress-range)
-	    (let* ((the-acount-destination-alist (account-destination-alist accounts
-									    account-types
-									    tree-depth))
-		   (account-reformat
+	    (let* ((account-reformat
 		    (if do-intervals?
 			(lambda (account result)
 			  (map (lambda (collector datepair)
@@ -644,7 +651,7 @@ developing over time"))
            (gnc:html-document-add-object!
             document
             (gnc:html-make-empty-data-warning
-	     report-title (gnc:report-id report-obj)))))
+	     report-title (gnc:report-id report-obj))))))
         
 	;; else if no accounts selected
         (gnc:html-document-add-object! 
