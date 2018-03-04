@@ -2,10 +2,10 @@
  * jqPlot
  * Pure JavaScript plotting plugin using jQuery
  *
- * Version: 1.0.6
- * Revision: 1138
+ * Version: 1.0.9
+ * Revision: d96a669
  *
- * Copyright (c) 2009-2013 Chris Leonello
+ * Copyright (c) 2009-2016 Chris Leonello
  * jqPlot is currently available for use in all personal or commercial projects 
  * under both the MIT (http://www.opensource.org/licenses/mit-license.php) and GPL 
  * version 2.0 (http://www.gnu.org/licenses/gpl-2.0.html) licenses. This means that you can 
@@ -54,7 +54,7 @@
     $.jqplot.ciParser = function (data, plot) {
         var ret = [],
             line,
-			temp,
+            temp,
             i, j, k, kk;
     
          if (typeof(data) == "string") {

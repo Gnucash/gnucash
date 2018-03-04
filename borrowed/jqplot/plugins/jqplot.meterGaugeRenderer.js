@@ -2,10 +2,10 @@
  * jqPlot
  * Pure JavaScript plotting plugin using jQuery
  *
- * Version: 1.0.6
- * Revision: 1138
+ * Version: 1.0.9
+ * Revision: d96a669
  *
- * Copyright (c) 2009-2013 Chris Leonello
+ * Copyright (c) 2009-2016 Chris Leonello
  * jqPlot is currently available for use in all personal or commercial projects 
  * under both the MIT (http://www.opensource.org/licenses/mit-license.php) and GPL 
  * version 2.0 (http://www.gnu.org/licenses/gpl-2.0.html) licenses. This means that you can 
@@ -358,7 +358,7 @@
         
         
             
-        // pre-draw so can get it's dimensions.
+        // pre-draw so can get its dimensions.
         if (this.label) {
             this._labelElem = $('<div class="jqplot-meterGauge-label" style="position:absolute;">'+this.label+'</div>');
             this.canvas._elem.after(this._labelElem);
@@ -413,13 +413,12 @@
                 // will be center of hub.
                 this._center = [(cw-trans*offx)/2 + trans * offx, (ch-trans*offy)/2 + trans * offy];
             }
+            if (this._labelElem && this.labelPosition == 'bottom') {
+                this._center[1] -= this._labelElem.outerHeight(true);
+            }
+            
         }
 
-        
-        if (this._labelElem && this.labelPosition == 'bottom') {
-            this._center[1] -= this._labelElem.outerHeight(true);
-        }
-        
         this._radius = this.diameter/2;
         
         this.tickSpacing = 6000/this.diameter;
@@ -739,7 +738,7 @@
             
             else if (this.label && this.labelPosition == 'bottom') {
                 var l = this._center[0] + this.canvas._offsets.left - this._labelElem.outerWidth(true)/2;
-                var t = this._center[1] + this.canvas._offsets.top + this.innerPad + + this.ringWidth + this.padding + this.labelHeightAdjust;
+                var t = this._center[1] + this.canvas._offsets.top + this.innerPad + this.ringWidth + this.padding + this.labelHeightAdjust;
                 this._labelElem.css({left:l, top:t});
                 
             }

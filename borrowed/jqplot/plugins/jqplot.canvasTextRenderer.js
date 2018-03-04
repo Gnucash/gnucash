@@ -2,10 +2,10 @@
  * jqPlot
  * Pure JavaScript plotting plugin using jQuery
  *
- * Version: 1.0.6
- * Revision: 1138
+ * Version: 1.0.9
+ * Revision: d96a669
  *
- * Copyright (c) 2009-2013 Chris Leonello
+ * Copyright (c) 2009-2016 Chris Leonello
  * jqPlot is currently available for use in all personal or commercial projects 
  * under both the MIT (http://www.opensource.org/licenses/mit-license.php) and GPL 
  * version 2.0 (http://www.gnu.org/licenses/gpl-2.0.html) licenses. This means that you can 
@@ -29,7 +29,7 @@
  *
  * included jsDate library by Chris Leonello:
  *
- * Copyright (c) 2010-2013 Chris Leonello
+ * Copyright (c) 2010-2015 Chris Leonello
  *
  * jsDate is currently available for use in all personal or commercial projects 
  * under both the MIT and GPL version 2.0 licenses. This means that you can 
@@ -38,7 +38,7 @@
  * jsDate borrows many concepts and ideas from the Date Instance 
  * Methods by Ken Snyder along with some parts of Ken's actual code.
  * 
- * Ken's origianl Date Instance Methods and copyright notice:
+ * Ken's original Date Instance Methods and copyright notice:
  * 
  * Ken Snyder (ken d snyder at gmail dot com)
  * 2008-09-10

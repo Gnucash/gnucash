@@ -2,10 +2,10 @@
  * jqPlot
  * Pure JavaScript plotting plugin using jQuery
  *
- * Version: 1.0.6
- * Revision: 1138
+ * Version: 1.0.9
+ * Revision: d96a669
  *
- * Copyright (c) 2009-2013 Chris Leonello
+ * Copyright (c) 2009-2016 Chris Leonello
  * jqPlot is currently available for use in all personal or commercial projects 
  * under both the MIT (http://www.opensource.org/licenses/mit-license.php) and GPL 
  * version 2.0 (http://www.gnu.org/licenses/gpl-2.0.html) licenses. This means that you can 
@@ -161,10 +161,10 @@
             
             // perform some checks
             if (this.min != null && this.min <= 0) {
-                throw('log axis minimum must be greater than 0');
+                throw new Error("Log axis minimum must be greater than 0");
             }
             if (this.max != null && this.max <= 0) {
-                throw('log axis maximum must be greater than 0');
+                throw new Error("Log axis maximum must be greater than 0");
             }
 
             function findCeil (val) {
@@ -191,6 +191,11 @@
             //     rmin = rmin*(1-adj);
             //     rmax = rmax*(1+adj);
             // }
+
+            // Handle case where a data value was zero
+            if (rmin === 0) {
+              rmin = 1;
+            }
 
             var order = Math.round(Math.log(rmin)/Math.LN10);
 

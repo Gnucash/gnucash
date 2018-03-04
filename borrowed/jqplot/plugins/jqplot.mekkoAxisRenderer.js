@@ -2,10 +2,10 @@
  * jqPlot
  * Pure JavaScript plotting plugin using jQuery
  *
- * Version: 1.0.6
- * Revision: 1138
+ * Version: 1.0.9
+ * Revision: d96a669
  *
- * Copyright (c) 2009-2013 Chris Leonello
+ * Copyright (c) 2009-2016 Chris Leonello
  * jqPlot is currently available for use in all personal or commercial projects 
  * under both the MIT (http://www.opensource.org/licenses/mit-license.php) and GPL 
  * version 2.0 (http://www.gnu.org/licenses/gpl-2.0.html) licenses. This means that you can 
@@ -91,7 +91,7 @@
             // call it within the scope of the axis.
             this.renderer.createTicks.call(this);
             // fill a div with axes labels in the right direction.
-            // Need to pregenerate each axis to get it's bounds and
+            // Need to pregenerate each axis to get its bounds and
             // position it and the labels correctly on the plot.
             var dim=0;
             var temp;

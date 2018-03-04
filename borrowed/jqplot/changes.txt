@@ -1,5 +1,64 @@
 Title: Change Log
 
+1.0.9:
+* Convert toolchain to grunt
+* Add "step" chart style
+* Refactor code according to JSLint rules (johanbove)
+* Add enhancedPieLegendRenderer
+* Pull request #17: Fix infinite loop
+* Pull request #22: Update jqplot.pointLabels.js
+* Pull request #23 Update jqplot.pieRenderer.js
+* Pull request #25: barRenderer resizing fix
+* Pull request #26: Error resizing horizontal bar charts
+
+1.0.8:
+* Issue #375: sortMergedLabels does not sort string labels
+* Issue #279: Groups > 3 Causes Alignment Issues
+* Issue #439: IE can't display a customized legend in Quirks mode
+* Issue #482: "Undefined" error message when plotting a chart with no data
+* Issue #116: Don't mix spaces and tabs for indentation
+* Issue #564: Metergauge renderer not resizable when replotting
+* Issue #409: MeterGaugeRenderer replot/redraw offsets center
+* Issue #523: Adding rectangles to Canvas Overlay plugin
+* Issue #756: jqplot.min files contain non-UTF-8 characters
+* Issue #223: fillToZero does not color negative values when crossover point is 0
+* Pull Request #23: Adding rectangles to Canvas Overlay plugin
+* Pull Request #28: Cross-over points of 0 will actually change colors 
+* Pull Request #35: Don't highlight hidden bars or show tooltips for them 
+* Pull Request #41: Add dutch(nl) and svenska(sv) translations for dates
+* Add tooltip support for Pie Charts
+* Update to latest YUI compressor
+
+1.0.7:
+* Issue #726: Bug in sprintf %p, sometimes it outputs exponential form rather than decimal
+* Issue #717: Plot's preDrawHooks not called
+* Issue #707: Browser hangs with LogAxisRenderer when value is 0
+* Issue #695: Horizontal Bar Chart Negative Series Colors Not Working
+* Issue #670: Examples IE7, IE8 and IE9 multipleBarColors.html failure and fix
+* Issue #636: X Axis Date Renderer Single Day Not plotting
+* Issue #607: Integration issue
+* Issue #571: Decimal numbers not properly formatted
+* Issue #552: jqPlot crashes when interval too small
+* Issue #536: DateAxisRenderer invalid scaling
+* Issue #534: "decimalMark" in the "jqplot.sprintf.js"
+* Issue #529: Scientific notation on label values ending in 0
+* Issue #521: invalid JS in meterGaugeRenderer.js
+* Issue #516: Including BezierCurveRenderer plugin and initializing jqplot with no options give error
+* Issue #500: DateAxisRenderer has timezone related issues
+* Issue #452: Including ALL jqPlot plugins causes an Error
+* Issue #494: No point when use LogAxisRenderer and a point has a zero value
+* Issue #430: getIsoWeek: invalid method call
+* Issue #280: jqplot Options
+* Issue #179: Spelling/grammar
+* Pull Request #18: Implement getTop in CanvasAxisTickRenderer
+* Pull Request #21: Performance issue when drawing pointlabels with zeros/null values
+* Pull Request #24: Added suggested fix in comment #8 for issue #536
+* Pull Request #29: Removed unbalanced addition of UTC offset
+* Pull Request #33: Documentation fixes (issue #179, other changes)
+* Pull Request #34: Start of updating jqPlotOptions.txt
+* Pull Request #37: Example and suggested fix for issues #552 and issue #536
+* Pull Request #39: Fixed trailing comma which caused issues with IE7
+
 1.0.6:
 * Add left sidebar navigation to examples
 * Update examples for jquery 1.9.1 and jquery ui 1.10.0
@@ -158,7 +217,7 @@ Title: Change Log
 * Enhanced bar plots so you can now color each bar of a series 
   independently with the "varyBarColor" option.
 * Re-factored series drawing so that each series and series shadow drawn
-  on it's own canvas.  Allows series to be redrawn independently of each other.
+  on its own canvas.  Allows series to be redrawn independently of each other.
 * Added additional default series colors.
 * Added useNegativeColors option to turn off negative color array and use 
   only seriesColors array to define all bar/filled line colors.

@@ -7,11 +7,11 @@ see <jqPlot Options> in the jqPlotOptions.txt file.
 
 The key to effectively using jqPlot is understanding jqPlot's
 options.  The online documentation is API documentation.  While
-it explains what attributes and methods various objects posses,
+it explains what attributes and methods various objects possess,
 it doesn't explain how to use or set those attributes through 
 options.  This tutorial will help explain that.
 
-Lets assume you are creating a plot 
+Let's assume you are creating a plot 
 like this:
 
 > chart = $.jqplot('chart', dataSeries, optionsObj);
@@ -21,7 +21,7 @@ First, note that you shouldn't try to directly set attributes on the
 At best this won't do anything **(see below). You should pass options in via
 the "optionsObj".
 
-the optionsObj really represents the plot object (jqPlot object, not
+The optionsObj really represents the plot object (jqPlot object, not
 to be confused with the $.jqplot function which will create a jqPlot
 object).  Attributes you specify on that object will be merged with
 attributes in the jqPlot object.  The axes, legend, series, etc. are
@@ -80,7 +80,7 @@ moment).  So generally, when you see something like
 optionsObj.grid.drawGridLines.  Do likewise with the other objects in
 the plot, replacing "this", with the respective attribute on the plot
 like "legend" or "title".  Series and Axes are handled a little
-different, because series is an array and axes has 4 distinct children
+differently, because series is an array and axes has 4 distinct children
 "xaxis", "yaxis", "x2axis" and "y2axis".
 
 So, to remove the shadow from the grid and change the grid border size
@@ -127,18 +127,19 @@ and
 
 > optionsObj = {title:"My Plot"}
 
-Where things need more explaination is with renderers, plugins and
-their options.  Briefly, what's  renderer, what's a plugin.
+Where things need more explanation is with renderers, plugins and
+their options.  Briefly, what's the difference between a renderer and
+a plugin.
 
 A renderer is an object that is used to draw something and gets
 attached to an existing object in the plot in order to draw it.  A
 plugin does more than just provide drawing functionality to an
-object.  It will do more like calculate a trend line, change the
+object; it can calculate a trend line, change the
 cursor, provide event driven functionality, etc.  I consider renderers
 plugins, but plugins don't have to be renderers.
 
-So, how do you use renderers, plugins, and specify their options?
-Some common renderes are for bar charts and category axes.  If you
+So, how do you use renderers and plugins, and specify their options?
+Some common renderers are for bar charts and category axes.  If you
 want to render your series as a bar chart with each set of bars
 showing up in a category on the x axis, you do:
 
@@ -172,7 +173,7 @@ options to all series in the plot.  You could do the same on any
 particular series in the plot through the "series" options array.
 
 Plugins are free to add their own options.  For example, the
-highlighter plugin has it's own set of options that are unique to it.
+highlighter plugin has its own set of options that are unique to it.
 As a result, it responds to options placed in the "highlighter"
 attribute of your options object.  So, if I wanted to change the
 highlighter tooltip to fade in and out slowly and be positioned
@@ -183,9 +184,11 @@ directly above the point I'm highlighting:
 > }
 
 Other plugins, like dragable and trendlines, add their options in with
-the series.  This is because both of those plugins can have different
+the series.   (Yes, that's the correct name for the dragable plugin; it
+doesn't use the correct spelling of "draggable".)
+This is because both of those plugins can have different
 options for different series in the plot.  So, if you wanted to specify the
-color of the dragable and constrain it to drag only on the x axis as well
+color for the dragable plugin and constrain it to drag only on the x axis as well
 as specify the color of the trend line you could do:
 
 > series:[{
@@ -216,7 +219,7 @@ and wanted to turn off dragging and trend lines on the second series, you could 
 >    }
 > }]
 
-Note, series dragability is turned off with the "isDragable" option directly on 
+Note, series draggability is turned off with the "isDragable" option directly on 
 the series itself, not with a suboption of "dragable".  This may be improved 
 in the future.
 

@@ -2,10 +2,10 @@
  * jqPlot
  * Pure JavaScript plotting plugin using jQuery
  *
- * Version: 1.0.6
- * Revision: 1138
+ * Version: 1.0.9
+ * Revision: d96a669
  *
- * Copyright (c) 2009-2013 Chris Leonello
+ * Copyright (c) 2009-2016 Chris Leonello
  * jqPlot is currently available for use in all personal or commercial projects 
  * under both the MIT (http://www.opensource.org/licenses/mit-license.php) and GPL 
  * version 2.0 (http://www.gnu.org/licenses/gpl-2.0.html) licenses. This means that you can 
@@ -66,6 +66,9 @@
                         case 'dashedVerticalLine':
                             this.addDashedVerticalLine(obj[n]);
                             break;
+                        case 'rectangle':
+                            this.addRectangle(obj[n]);
+                            break;
                         default:
                             break;
                     }
@@ -107,7 +110,7 @@
             // color of the line
             color: '#666666',
             // prop: shadow
-            // wether or not to draw a shadow on the line
+            // whether or not to draw a shadow on the line
             shadow: true,
             // prop: shadowAngle
             // Shadow angle in degrees
@@ -153,7 +156,41 @@
             tooltipFormatString: '%d, %d'
         };
     }
+    
+    
+    function Rectangle(options) {
+        LineBase.call(this);
+        this.type = 'rectangle';
+        var opts = {
+         // prop: xmin
+                // x value for the start of the line, null to scale to axis min.
+                xmin: null,
+                // prop: xmax
+                // x value for the end of the line, null to scale to axis max.
+                xmax: null,
+                // prop xOffset
+                // offset ends of the line inside the grid. Number
+                xOffset: '6px', // number or string. Number interpreted as units, string as pixels.
+                xminOffset: null,
+                xmaxOffset: null,
+                
+                ymin: null,
+                ymax: null,
+                yOffset: '6px', // number or string. Number interpreted as units, string as pixels.
+                yminOffset: null,
+                ymaxOffset: null
+        };
+        $.extend(true, this.options, opts, options);
 
+        if (this.options.showTooltipPrecision < 0.01) {
+            this.options.showTooltipPrecision = 0.01;
+        }
+    }
+
+    Rectangle.prototype = new LineBase();
+    Rectangle.prototype.constructor = Rectangle;
+
+    
     /**
      * Class: Line
      * A straight line.
@@ -333,6 +370,13 @@
     
     $.jqplot.CanvasOverlay.prototype.addDashedVerticalLine = function(opts) {
         var line = new DashedVerticalLine(opts);
+        line.uid = objCounter++;
+        this.objects.push(line);
+        this.objectNames.push(line.options.name);
+    };
+    
+    $.jqplot.CanvasOverlay.prototype.addRectangle = function(opts) {
+        var line = new Rectangle(opts);
         line.uid = objCounter++;
         this.objects.push(line);
         this.objectNames.push(line.options.name);
@@ -621,6 +665,80 @@
                                 }
                             }
                             break;
+                            
+                        case 'rectangle':
+                            // style and shadow properties should be set before
+                            // every draw of marker renderer.
+                            mr.style = 'line';
+                            opts.closePath = true;
+                            
+                            var xaxis = plot.axes[obj.options.xaxis],
+                                    xstart,
+                                    xstop,
+                                    y = plot.axes[obj.options.yaxis].series_u2p(obj.options.y),
+                                    xminoff = obj.options.xminOffset || obj.options.xOffset,
+                                    xmaxoff = obj.options.xmaxOffset || obj.options.xOffset;
+                            if (obj.options.xmin != null) {
+                                xstart = xaxis.series_u2p(obj.options.xmin);
+                            }
+                            else if (xminoff != null) {
+                                if ($.type(xminoff) == "number") {
+                                    xstart = xaxis.series_u2p(xaxis.min + xminoff);
+                                }
+                                else if ($.type(xminoff) == "string") {
+                                    xstart = xaxis.series_u2p(xaxis.min) + parseFloat(xminoff);
+                                }
+                            }
+                            if (obj.options.xmax != null) {
+                                xstop = xaxis.series_u2p(obj.options.xmax);
+                            }
+                            else if (xmaxoff != null) {
+                                if ($.type(xmaxoff) == "number") {
+                                    xstop = xaxis.series_u2p(xaxis.max - xmaxoff);
+                                }
+                                else if ($.type(xmaxoff) == "string") {
+                                    xstop = xaxis.series_u2p(xaxis.max) - parseFloat(xmaxoff);
+                                }
+                            }
+                            
+                            var yaxis = plot.axes[obj.options.yaxis],
+                                ystart,
+                                ystop,
+                                x = plot.axes[obj.options.xaxis].series_u2p(obj.options.x),
+                                yminoff = obj.options.yminOffset || obj.options.yOffset,
+                                ymaxoff = obj.options.ymaxOffset || obj.options.yOffset;
+                            if (obj.options.ymin != null) {
+                                ystart = yaxis.series_u2p(obj.options.ymin);
+                            }
+                            else if (yminoff != null) {
+                                if ($.type(yminoff) == "number") {
+                                    ystart = yaxis.series_u2p(yaxis.min - yminoff);
+                                }
+                                else if ($.type(yminoff) == "string") {
+                                    ystart = yaxis.series_u2p(yaxis.min) - parseFloat(yminoff);
+                                }
+                            }
+                            if (obj.options.ymax != null) {
+                                ystop = yaxis.series_u2p(obj.options.ymax);
+                            }
+                            else if (ymaxoff != null) {
+                                if ($.type(ymaxoff) == "number") {
+                                    ystop = yaxis.series_u2p(yaxis.max + ymaxoff);
+                                }
+                                else if ($.type(ymaxoff) == "string") {
+                                    ystop = yaxis.series_u2p(yaxis.max) + parseFloat(ymaxoff);
+                                }
+                            }
+                            
+
+                            if (xstop != null && xstart != null && ystop != null && ystart != null) {
+                                obj.gridStart = [xstart, ystart];
+                                obj.gridStop = [xstop, ystop];
+                                
+                                this.canvas._ctx.fillStyle = obj.options.color;
+                                this.canvas._ctx.fillRect(xstart, ystart, xstop - xstart, ystop - ystart);
+                            }
+                            break;
 
                         default:
                             break;
@@ -738,6 +856,24 @@
         var ret = (res < eps) ? true : false;
         return ret;
     }
+    
+    function isNearRectangle(point, lstart, lstop, width) {
+        // r is point to test, p and q are end points.
+        var rx = point[0];
+        var ry = point[1];
+        var px = Math.round(lstop[0]);
+        var py = Math.round(lstop[1]);
+        var qx = Math.round(lstart[0]);
+        var qy = Math.round(lstart[1]);
+        
+        var temp;
+        if (px > qx) { temp = px; px = qx; qx = temp; }
+        if (py > qy) { temp = py; py = qy; qy = temp; }
+        
+        var ret = (rx >= px && rx <= qx && ry >= py && ry <= qy);
+        
+        return ret;
+    }
 
 
     function handleMove(ev, gridpos, datapos, neighbor, plot) {
@@ -749,7 +885,12 @@
         for (var i=0; i<l; i++) {
             obj = objs[i];
             if (obj.options.showTooltip) {
-                var n = isNearLine([gridpos.x, gridpos.y], obj.gridStart, obj.gridStop, obj.tooltipWidthFactor);
+            	var n;
+                if (obj.type === 'rectangle') {
+                 n = isNearRectangle([gridpos.x, gridpos.y], obj.gridStart, obj.gridStop, obj.tooltipWidthFactor);
+                } else {
+                 n = isNearLine([gridpos.x, gridpos.y], obj.gridStart, obj.gridStop, obj.tooltipWidthFactor);
+                }
                 datapos = [plot.axes[obj.options.xaxis].series_p2u(gridpos.x), plot.axes[obj.options.yaxis].series_p2u(gridpos.y)];
 
                 // cases:
@@ -775,6 +916,11 @@
                         case 'dashedVerticalLine':
                             showTooltip(plot, obj, [obj.gridStart[0], gridpos.y], [obj.options.x, datapos[1]]);
                             break;
+                            
+                        case 'rectangle':
+                            showTooltip(plot, obj, [obj.gridStart[0], gridpos.y], [obj.options.x, datapos[1]]);
+                            break;
+                            
                         default:
                             break;
                     } 
@@ -809,6 +955,11 @@
                         case 'dashedVerticalLine':
                             showTooltip(plot, obj, [obj.gridStart[0], gridpos.y], [obj.options.x, datapos[1]]);
                             break;
+                            
+                        case 'rectangle':
+                            showTooltip(plot, obj, [obj.gridStart[0], gridpos.y], [obj.options.x, datapos[1]]);
+                            break;
+                            
                         default:
                             break;
                     }
@@ -834,6 +985,11 @@
                         case 'dashedVerticalLine':
                             showTooltip(plot, obj, [obj.gridStart[0], gridpos.y], [obj.options.x, datapos[1]]);
                             break;
+                            
+                        case 'rectangle':
+                            showTooltip(plot, obj, [obj.gridStart[0], gridpos.y], [obj.options.x, datapos[1]]);
+                            break;
+                            
                         default:
                             break;
                     }

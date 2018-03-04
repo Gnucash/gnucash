@@ -17,6 +17,7 @@ SET(gncjqplot_DATA
   plugins/jqplot.donutRenderer.js
   plugins/jqplot.dragable.js
   plugins/jqplot.enhancedLegendRenderer.js
+  plugins/jqplot.enhancedPieLegendRenderer.js
   plugins/jqplot.funnelRenderer.js
   plugins/jqplot.highlighter.js
   plugins/jqplot.json2.js
