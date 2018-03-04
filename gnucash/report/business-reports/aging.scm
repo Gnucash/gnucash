@@ -322,21 +322,15 @@ more than one currency. This report is not designed to cope with this possibilit
 
 
 ;; set up the query to get the splits in the chosen account
-;; XXX: FIXME: begindate is a hack -- we currently only go back a year
 (define (setup-query query account date)
-  (let ((begindate (gnc-mktime (make-zdate)))) ;Set begindate to the start of the Epoch
-;    (gnc:debug "Account: " account)
-    (gnc:debug "begindate" begindate)
-    (gnc:debug "date" date)
-    (qof-query-set-book query (gnc-get-current-book))
-    (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
-    (xaccQueryAddSingleAccountMatch query account QOF-QUERY-AND)
-    (xaccQueryAddDateMatchTT query #t begindate #t date QOF-QUERY-AND)
-    (qof-query-set-sort-order query
-			      (list SPLIT-TRANS TRANS-DATE-POSTED)
-			      '() '())
-    (qof-query-set-sort-increasing query #t #t #t)))
-
+  (qof-query-set-book query (gnc-get-current-book))
+  (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
+  (xaccQueryAddSingleAccountMatch query account QOF-QUERY-AND)
+  (xaccQueryAddDateMatchTT query #f 0 #t date QOF-QUERY-AND)
+  (qof-query-set-sort-order query
+                            (list SPLIT-TRANS TRANS-DATE-POSTED)
+                            '() '())
+  (qof-query-set-sort-increasing query #t #t #t))
 
 (define (aging-options-generator options)
   (let* ((add-option 
