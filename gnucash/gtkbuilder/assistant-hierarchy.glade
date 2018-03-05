@@ -14,6 +14,8 @@
       <object class="GtkLabel" id="intro_page_label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">5</property>
+        <property name="margin_right">5</property>
         <property name="label" translatable="yes">This assistant will help you create a set of GnuCash accounts for your assets (such as investments, checking or savings accounts), liabilities (such as loans) and different kinds of income and expenses you might have.
 
 You can pick a set of accounts here that seem close to your needs. After the assistant completes you will be able to add, rename, modify, and remove accounts, at any time later on. You will also be able to add sub-accounts, as well as move accounts (along with their sub-accounts) from one parent to another.
@@ -111,6 +113,8 @@ Please choose the currency to use for new accounts.</property>
           <object class="GtkLabel" id="pickAccountsDescriptionLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_left">5</property>
+            <property name="margin_right">5</property>
             <property name="label" translatable="yes">
 Select categories that correspond to the ways that you foresee you will use GnuCash. Each category you select will cause several accounts to be created.
 
@@ -346,6 +350,8 @@ Select categories that correspond to the ways that you foresee you will use GnuC
           <object class="GtkLabel" id="finalAccountLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_left">5</property>
+            <property name="margin_right">5</property>
             <property name="label" translatable="yes">
 If you would like to change an account's name, click on the row containing the account, then click on the account name and change it.
 
@@ -392,6 +398,8 @@ If you would like an account to have an opening balance, click on the row contai
       <object class="GtkLabel" id="finish_page_label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">5</property>
+        <property name="margin_right">5</property>
         <property name="label" translatable="yes">Press `Apply' to create your new accounts. You will then be able to save them to a file or database.
 
 Press `Back' to review your selections.
