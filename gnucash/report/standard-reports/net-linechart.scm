@@ -418,9 +418,9 @@
        (gnc:html-linechart-set-col-colors!
         chart (append
                (if show-sep?
-                   '("blue" "red") '())
+                   '("#0074D9" "#FF4136") '())
                (if show-net?
-                   '("green") '())))
+                   '("#2ECC40") '())))
 
         ;; Set the line width and markers
         (gnc:html-linechart-set-line-width!

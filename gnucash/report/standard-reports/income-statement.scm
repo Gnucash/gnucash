@@ -431,7 +431,7 @@
     (gnc:html-document-set-title! 
      doc (format #f
 		  (string-append "~a ~a "
-				 (_ "For Period Covering %s to %s"))
+				 (_ "For Period Covering ~a to ~a"))
 		  company-name report-title
                   (qof-print-date start-date-printable)
                   (qof-print-date end-date)))

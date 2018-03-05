@@ -479,7 +479,7 @@
                                   (append col-labels 
                                           (list (list-ref columns 2))))
                             (set! col-colors
-                                  (append col-colors (list "blue")))
+                                  (append col-colors (list "#0074D9")))
                             (set! all-zeros? #f)))))
                 
                 
@@ -495,7 +495,7 @@
                                   (append col-labels 
                                           (list (list-ref columns 7))))
                             (set! col-colors
-                                  (append col-colors (list "green")))
+                                  (append col-colors (list "#2ECC40")))
                             (set! all-zeros? #f)))))
 
                 (if (memq 'GLPlot plot-type)
@@ -515,7 +515,7 @@
                                   (append col-labels 
                                           (list (list-ref columns 5))))
                             (set! col-colors
-                                  (append col-colors (list "black")))
+                                  (append col-colors (list "#111111")))
                             
                             ;; credit
                             (gnc:html-barchart-append-column! 
@@ -525,7 +525,7 @@
                                   (append col-labels 
                                           (list (list-ref columns 6))))
                             (set! col-colors
-                                  (append col-colors (list "red")))
+                                  (append col-colors (list "#FF4136")))
                             (set! all-zeros? #f)))))
                 
                 (if (not all-zeros?)
