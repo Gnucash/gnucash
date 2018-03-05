@@ -35,10 +35,7 @@ add_custom_command(
 
 add_custom_target(compiled-schemas ALL DEPENDS ${SCHEMADIR_BUILD}/gschemas.compiled)
 
-
-install(CODE "execute_process(
-    COMMAND ${SHELL} -c \"echo Compiling gschema files in $DESTDIR${CMAKE_INSTALL_FULL_DATADIR}/glib-2.0/schemas ;
-                          ${GLIB_COMPILE_SCHEMAS} $DESTDIR${CMAKE_INSTALL_FULL_DATADIR}/glib-2.0/schemas\")")
+INSTALL(FILES ${SCHEMADIR_BUILD}/gschemas.compiled DESTINATION ${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas)
 
 SET(gschemas_DIST_local "")
 FOREACH(file ${gschema_SOURCES})

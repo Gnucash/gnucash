@@ -33,6 +33,6 @@ macro(add_gschema_targets _gschema_INPUTS)
 
   set(gschema_depends ${local_depends} CACHE INTERNAL "gschemas.compiled dependencies")
 
-  INSTALL(FILES ${_gschema_OUTPUTS} DESTINATION share/glib-2.0/schemas)
+  INSTALL(FILES ${_gschema_OUTPUTS} DESTINATION ${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas)
 
 endmacro()

@@ -29,7 +29,7 @@ ADD_SUBDIRECTORY (python)
 ADD_SUBDIRECTORY (register)
 ADD_SUBDIRECTORY (report)
 ADD_SUBDIRECTORY (ui)
-ADD_SUBDIRECTORY (gschemas)
+ADD_SUBDIRECTORY (gschemas) # required to be after all other uses of "add_gschema_targets" (ie. import-export)
 
 ADD_DEFINITIONS (-DHAVE_CONFIG_H)
 
