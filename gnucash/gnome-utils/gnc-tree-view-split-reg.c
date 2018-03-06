@@ -3812,13 +3812,11 @@ gtv_sr_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
     GncTreeViewSplitReg *view = GNC_TREE_VIEW_SPLIT_REG (widget);
     GncTreeModelSplitReg *model;
     GtkTreeViewColumn *col;
-    GtkTreePath *spath, *start_spath;
+    GtkTreePath *spath;
     GtkTreePath *start_path, *end_path;
     gboolean editing = FALSE;
     gboolean step_off = FALSE;
     gboolean trans_changed = FALSE;
-    gint *start_indices;
-    gint *next_indices;
     Transaction *btrans, *ctrans, *hetrans;
     gboolean goto_blank = FALSE;
     gboolean next_trans = TRUE;
@@ -4029,8 +4027,9 @@ gtv_sr_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
         while (!editing && !step_off) // lets step over non editable columns
         {
             // Create a copy of the path we started with.
-            start_spath = gtk_tree_path_copy (spath);
-            start_indices = gtk_tree_path_get_indices (start_spath);
+            GtkTreePath *start_spath = gtk_tree_path_copy (spath);
+            gint *start_indices = gtk_tree_path_get_indices (start_spath);
+            gint *next_indices;
 
             {
                 gchar *string = gtk_tree_path_to_string (start_spath);
@@ -4077,6 +4076,7 @@ gtv_sr_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
                 // Test for transaction changed.
                 if (gtv_sr_transaction_changed (view))
                 {
+                    gtk_tree_path_free (start_spath);
                     gtk_tree_path_free (spath);
                     return TRUE;
                 }
@@ -4090,8 +4090,8 @@ gtv_sr_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
             }
             // Is this an editable cell ?
             editing = gtv_sr_get_editing (col);
+            gtk_tree_path_free (start_spath);
         }
-        gtk_tree_path_free (start_spath);
         gtk_tree_path_free (spath);
         return TRUE;
         break;
