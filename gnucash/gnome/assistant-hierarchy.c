@@ -887,6 +887,34 @@ placeholder_cell_data_func (GtkTreeViewColumn *tree_column,
     gtk_cell_renderer_toggle_set_active(GTK_CELL_RENDERER_TOGGLE(cell), willbe_placeholder);
 }
 
+static void
+placeholder_cell_toggled (GtkCellRendererToggle *cell_renderer,
+                          gchar *path, gpointer user_data)
+{
+    gboolean state;
+    Account *account;
+    GtkTreePath  *treepath;
+    hierarchy_data *data = (hierarchy_data *)user_data;
+
+    g_return_if_fail(data != NULL);
+
+    treepath = gtk_tree_path_new_from_string (path);
+
+    account = gnc_tree_view_account_get_account_from_path (data->final_account_tree, treepath);
+
+    state = gtk_cell_renderer_toggle_get_active (cell_renderer);
+
+    if (account)
+        xaccAccountSetPlaceholder (account, !state);
+
+    // if placeholder set, set balance to zero
+    if (!state)
+    {
+        set_final_balance (data->balance_hash, account, gnc_numeric_zero());
+        qof_event_gen (QOF_INSTANCE(account), QOF_EVENT_MODIFY, NULL);
+    }
+    gtk_tree_path_free (treepath);
+}
 
 static void
 use_existing_account_data_func(GtkTreeViewColumn *tree_column,
@@ -985,9 +1013,14 @@ on_final_account_prepare (hierarchy_data  *data)
     {
         renderer = gtk_cell_renderer_toggle_new();
         g_object_set(G_OBJECT (renderer),
-                     "activatable", FALSE,
-                     "sensitive", FALSE,
+                     "activatable", TRUE,
+                     "sensitive", TRUE,
                      NULL);
+
+        g_signal_connect (G_OBJECT (renderer), "toggled",
+                          G_CALLBACK (placeholder_cell_toggled),
+                          data);
+
         column = gtk_tree_view_column_new_with_attributes(_("Placeholder"),
                  renderer, NULL);
         gtk_tree_view_column_set_cell_data_func (column, renderer,
