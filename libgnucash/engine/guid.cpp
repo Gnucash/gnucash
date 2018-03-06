@@ -412,9 +412,7 @@ GUID::operator < (GUID const & other) noexcept
 
 bool operator == (GUID const & lhs, GncGUID const & rhs) noexcept
 {
-    auto ret = std::mismatch (lhs.begin (), lhs.end (), rhs.reserved);
-    return ret.first == lhs.end ();
-
+    return lhs.implementation == GUID(rhs).implementation;
 }
 
 bool
