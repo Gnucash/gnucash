@@ -296,6 +296,7 @@ gnc_plugin_page_report_main_window_page_changed (GncMainWindow *window,
 
         // The page changed signal is emitted multiple times so we need
         // to use an idle_add to change the focus to the webkit widget
+        g_idle_remove_by_data (widget);
         g_idle_add ((GSourceFunc)gnc_plugin_page_report_focus, widget);
     }
 }
@@ -797,11 +798,17 @@ static void
 gnc_plugin_page_report_destroy_widget(GncPluginPage *plugin_page)
 {
     GncPluginPageReportPrivate *priv;
+    GtkWidget *widget;
 
     // FIXME: cleanup other resources.
 
     PINFO("destroy widget");
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(plugin_page);
+
+    widget = gnc_html_get_widget(priv->html);
+
+    // Remove the page focus idle function if present
+    g_idle_remove_by_data (widget);
 
     if (priv->component_manager_id)
     {

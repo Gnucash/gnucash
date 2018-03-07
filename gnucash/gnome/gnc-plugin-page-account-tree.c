@@ -776,6 +776,9 @@ gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page)
     // Destroy the filter override hash table
     g_hash_table_destroy(priv->fd.filter_override);
 
+    // Remove the page focus idle function if present
+    g_idle_remove_by_data (GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page));
+
     if (priv->widget)
     {
         g_object_unref(G_OBJECT(priv->widget));

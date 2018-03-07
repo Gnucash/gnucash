@@ -474,6 +474,9 @@ gnc_plugin_page_budget_destroy_widget (GncPluginPage *plugin_page)
     ENTER("page %p", plugin_page);
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(plugin_page);
 
+    // Remove the page focus idle function if present
+    g_idle_remove_by_data (GNC_PLUGIN_PAGE_BUDGET (plugin_page));
+
     if (priv->budget_view)
     {
         if (priv->delete_budget)

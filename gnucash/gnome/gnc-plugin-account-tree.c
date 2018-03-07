@@ -142,6 +142,7 @@ gnc_plugin_account_tree_main_window_page_changed (GncMainWindow *window,
 
         // The page changed signal is emitted multiple times so we need
         // to use an idle_add to change the focus to the tree view
+        g_idle_remove_by_data (GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page));
         g_idle_add ((GSourceFunc)gnc_plugin_page_account_tree_focus,
                       GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page));
     }
