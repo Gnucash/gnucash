@@ -1,14 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<gnc-account-example>
-    <gnc-act:title>
-      Fixed Assets
-    </gnc-act:title>
-    <gnc-act:short-description>
-      Accounts for tracking large fixed assets
-    </gnc-act:short-description>
-    <gnc-act:long-description>
-    You would want to select this set of accounts if you have large fixed assets (house, vehicle, vacation home, other assets).
-  </gnc-act:long-description>    
+<gnc-account-example 
+  xmlns="http://www.gnucash.org/XML/"
+  xmlns:act="http://www.gnucash.org/XML/act"
+  xmlns:addr="http://www.gnucash.org/XML/addr"
+  xmlns:bgt="http://www.gnucash.org/XML/bgt"
+  xmlns:billterm="http://www.gnucash.org/XML/billterm"
+  xmlns:book="http://www.gnucash.org/XML/book"
+  xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+  xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+  xmlns:cd="http://www.gnucash.org/XML/cd"
+  xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+  xmlns:cust="http://www.gnucash.org/XML/cust"
+  xmlns:employee="http://www.gnucash.org/XML/employee"
+  xmlns:entry="http://www.gnucash.org/XML/entry"
+  xmlns:fs="http://www.gnucash.org/XML/fs"
+  xmlns:gnc="http://www.gnucash.org/XML/gnc"
+  xmlns:gnc-act="http://www.gnucash.org/XML/gnc-act"
+  xmlns:invoice="http://www.gnucash.org/XML/invoice"
+  xmlns:job="http://www.gnucash.org/XML/job"
+  xmlns:lot="http://www.gnucash.org/XML/lot"
+  xmlns:order="http://www.gnucash.org/XML/order"
+  xmlns:owner="http://www.gnucash.org/XML/owner"
+  xmlns:price="http://www.gnucash.org/XML/price"
+  xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+  xmlns:slot="http://www.gnucash.org/XML/slot"
+  xmlns:split="http://www.gnucash.org/XML/split"
+  xmlns:sx="http://www.gnucash.org/XML/sx"
+  xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+  xmlns:trn="http://www.gnucash.org/XML/trn"
+  xmlns:ts="http://www.gnucash.org/XML/ts"
+  xmlns:tte="http://www.gnucash.org/XML/tte"
+  xmlns:vendor="http://www.gnucash.org/XML/vendor">
+
+<gnc-act:title>
+  Fixed Assets
+</gnc-act:title>
+<gnc-act:short-description>
+  Accounts for tracking large fixed assets
+</gnc-act:short-description>
+<gnc-act:long-description>
+  You would want to select this set of accounts if you have large fixed assets (house, vehicle, vacation home, other assets).
+</gnc-act:long-description>
+
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
   <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
@@ -82,8 +115,5 @@
   <act:description>Vehicle</act:description>
   <act:parent type="new">9b171f77000bf68dd1ebbaf58336656d</act:parent>
 </gnc:account>
-</gnc-account-example>
 
-<!-- Local variables: -->
-<!-- mode: xml        -->
-<!-- End:             -->
+</gnc-account-example>
