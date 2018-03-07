@@ -35,7 +35,8 @@ add_custom_command(
 
 add_custom_target(compiled-schemas ALL DEPENDS ${SCHEMADIR_BUILD}/gschemas.compiled)
 
-
+# Schemas must be recompile at installation time as other schemas may be present that need to be included.
+# https://bugzilla.gnome.org/show_bug.cgi?id=792884
 install(CODE "execute_process(
     COMMAND ${SHELL} -c \"echo Compiling gschema files in $DESTDIR${CMAKE_INSTALL_FULL_DATADIR}/glib-2.0/schemas ;
                           ${GLIB_COMPILE_SCHEMAS} $DESTDIR${CMAKE_INSTALL_FULL_DATADIR}/glib-2.0/schemas\")")
