@@ -31,6 +31,7 @@
   xmlns:tte="http://www.gnucash.org/XML/tte"
   xmlns:entry="http://www.gnucash.org/XML/entry"
   xmlns:vendor="http://www.gnucash.org/XML/vendor">
+
   <gnc-act:title>
     Kontenrahmen SKR03
   </gnc-act:title>
@@ -41,6 +42,7 @@
     Beta Version des Kontenrahmes SKR03 zum Erweitern und Umstrukturieren. Der Kontenrahmen sollte den eigenen Bedürfnissen angepasst werden was Struktur und Kontenbezeichnungen angeht. WICHTIG!: Die Privatkonten fließen nicht in die Berechnung des Berichtes Bilanz, sind jedoch im Bericht Bilanz aufgeführt. Die im Bericht Bilanz aufgeführte Passiva "Gewinnrücklagen" gibt den Saldo der GuV aus. Die Anlage dieses Kontenrahmens wurde von der Firma LiHAS - Linuxhaus Stuttgart - unterstützt.
   </gnc-act:long-description>
   <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
+
   <gnc:account version="2.0.0">
     <act:name>Root Account</act:name>
     <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
@@ -1398,8 +1400,5 @@
     <act:code>1890</act:code>
     <act:parent type="new">b9ae1b059749ea81c757a9adad39db1b</act:parent>
   </gnc:account>
-</gnc-account-example>
 
-<!-- Local variables: -->
-<!-- mode: xml        -->
-<!-- End:             -->
+</gnc-account-example>
