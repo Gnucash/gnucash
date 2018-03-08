@@ -28,6 +28,6 @@
 #include "dialog-search.h"
 
 GNCSearchWindow *
-gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * ledger);
+gnc_ui_find_transactions_dialog_create (GtkWindow *parent, GNCLedgerDisplay * ledger);
 
 #endif

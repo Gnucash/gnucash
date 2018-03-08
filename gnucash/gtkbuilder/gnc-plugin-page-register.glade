@@ -3,7 +3,6 @@
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkDialog" id="filter_by_dialog">
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" comments="Filter register by... Dialog">Filter register by...</property>
@@ -518,7 +517,6 @@
     <property name="page_increment">10</property>
   </object>
   <object class="GtkDialog" id="sort_by_dialog">
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" comments="Sort register by Dialog">Sort register by...</property>
@@ -873,7 +871,6 @@
     <property name="page_increment">10</property>
   </object>
   <object class="GtkDialog" id="duplicate_transaction_dialog">
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" comments="Duplicate Transaction Dialog">Duplicate Transaction</property>
@@ -1058,7 +1055,6 @@
     </action-widgets>
   </object>
   <object class="GtkDialog" id="void_transaction_dialog">
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Void Transaction</property>
