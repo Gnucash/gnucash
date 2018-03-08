@@ -79,45 +79,60 @@ static QofLogModule log_module = GNC_MOD_ASSISTANT;
 /* A note on memory management
  *
  * This source file is mixture of several completely different memory models
- * - it defines a c++ class, which is managed the c++ way
- * - the c++ class encapsulates a gtk based dialog, which is managed in
- *   a GObject memory management way.
- * - gnucash manages gui objects via its "Component Manager". Dialogs/windows are
+ * - it defines a c++ class which is managed the c++ way
+ * - the c++ class encapsulates a gtk based assistant which is managed according to
+ *   the GObject/Gtk memory model.
+ * - gnucash manages gui objects via its "Component Manager". Dialogs and windows are
  *   registered with this component manager when they are opened and the component
- *   manager handles the dialog's and window's lifecycle. When the dialog is closed
+ *   manager handles the lifecycle of toplevel widgets. When a dialog is closed
  *   the component manager invokes a close handler which is responsible for cleaning up.
  *
- * Care must be taken in places where these objects intersect. Here is how it is
+ * Care must be taken in places where these models intersect. Here is how it is
  * handled for this source file:
- * - There is only one entry point to start this assistant: gnc_file_csv_trans_import
- * - This function will create the C++ class using the c++ "new" method and will register the
- *   created class pointer in the component manager. This works because the component
- *   manager just stores the pointer, it doesn't act on it directly in any way.
- * - When the assistant finishes or is closed, the component manager will invoke a
+ * - First in the context of the import assistant the gnucash component manager is
+ *   merely a wrapper to keep track of which gui objects exist so they can be cleanly
+ *   destroyed. But the component manager itself doesn't do any memory management
+ *   on the objects it tracks. Instead it delegates this back to the objects themselves
+ *   via callbacks which the objects have to supply. It merely helps in the coordination.
+ *   So we can further ignore it in the memory management discussion.
+ *
+ * - Next there is only one entry point to start this assistant: gnc_file_csv_trans_import
+ * - The full assistant functionality is wrapped in a C++ class using RAII.
+ * - The entry point function will create one instance of this class using the c++
+ *   "new" method. This in turn will create several objects like a (GObject managed)
+ *   GtkAssistant, and a few C++ member objects.
+ * - The entry point function will also register the created object in the
+ *   component manager. This works because the (plain C) component manager just stores
+ *   the (C++) pointer to the object, it doesn't act on it directly in any way.
+ * - When the assistant is closed the component manager will invoke a
  *   close handler on the class pointer. We supply this close handler ourselves
- *   in csv_tximp_close_handler. That function will initiate the gtk dialog (more on that below)
- *   destruction, which in turn will trigger a c++ "delete" on the c++ class. It only
- *   happens after the widget destruction because it may still be used at that point.
- * - Note the component's manager only benefit in this context is that at gnucash shutdown
+ *   in csv_tximp_close_handler. Aside from some component management administration
+ *   the essential action of this function is to (c++) "delete"
+ *   the class object again. As the C++ class implements RAII this destruction will take care
+ *   of freeing all the member objects it manages.
+ * - Note the component manager's only benefit in this context is that at gnucash shutdown
  *   all still open dialogs can be closed cleanly. Whether this benefit is enough to
  *   justify the added complexity is debatable. However currently the calling code is not
- *   c++ yet, so an RAII based alternative using unique_ptr is currently not possible yet.
+ *   c++ yet so we can't use RAII in the calling object to better handle this right now.
  *
- * - Next the c++ class constructor will create widgets in a gobject way. The main widget
- *   is a GtkDialog. All other widgets are configured as children of this dialog widget, making
- *   the dialog responsible for the lifecycle of the widgets.
- * - When this dialog is closed, the component manager will call our "close"
- *   callback function. As mentioned before this close handler will trigger the dialog
- *   widget's destruction using gtk_widget_destroy (matching its gtk_widget_create called by
- *   gtkbuilder). This will free all memory used by the dialog and its child widgets.
- *   It will also will trigger the c++ based destruction of the c++ assistant object as written above.
+ * - Let's zoom in on the c++ member objects and in particular the GtkAssistant and related objects.
+ *   These are created the gtk way in the c++ class constructor. That means the main GtkAssistant widget
+ *   will be responsible for the lifecycle of its child widgets.
+ * - Thanks to the RAII implementation the destruction of this widget is commanded in the c++ class
+ *   destructor. This gets activated when the user clicks the assistant's close button via the component
+ *   manager callback mechanism as mentioned above.
  *
  * - There is one case that needs some additional attention. At some point the csv importer assistant hands
- *   over control to a generic importer (created via gnc_gen_trans_assist_new). This generic importer does
- *   its own memory management. gnc_gen_trans_assist_new creates the generic importer object via g_new0,
- *   so it should be freed at some point with g_free. This is done in the function gnc_gen_trans_list_delete.
- *   If the generic importer is allowed to take over that function will eventually be called internally,
- *   otherwise our own code will run it in CsvImpTransAssist::assist_finish.
+ *   over control to a generic import matcher (created via gnc_gen_trans_assist_new). This generic import
+ *   matcher unfortunately destroys itself when run. However it is not run in all our possible user scenarios.
+ *   This means we sometimes have to free it and sometimes we don't. This could have been
+ *   avoided if we didn't have to track the object across several gtk callback functions and
+ *   instead just create it only right before using it. To handle this we start with RAII:
+ *   the c++ class object assumes ownership of the generic import matcher object and the class destructor will
+ *   attempt to free it. This is safe both if the object is effectively allocated or when it's nullified.
+ *   Then to handle the case were the generic import matcher will free the matcher object, the c++ class object
+ *   will release ownership of the generic pointer object right before starting the generic import matcher.
+ *
  *   TODO this is pretty confusing and should be cleaned up when we rewrite the generic importer.
  */
 
@@ -125,7 +140,7 @@ class  CsvImpTransAssist
 {
 public:
     CsvImpTransAssist ();
-    ~CsvImpTransAssist () = default;
+    ~CsvImpTransAssist ();
 
     /* Delete copy and move constructor/assignments
      * We don't want gui elements to be moved around or copied at all */
@@ -141,7 +156,7 @@ public:
     void assist_doc_page_prepare ();
     void assist_match_page_prepare ();
     void assist_summary_page_prepare ();
-    void assist_finish (bool canceled);
+    void assist_finish ();
     void assist_compmgr_close ();
 
     void file_confirm_cb ();
@@ -252,8 +267,6 @@ private:
 extern "C"
 {
 void csv_tximp_assist_prepare_cb (GtkAssistant  *assistant, GtkWidget *page, CsvImpTransAssist* info);
-void csv_tximp_assist_destroy_cb (GtkWidget *object, CsvImpTransAssist* info);
-void csv_tximp_assist_cancel_cb (GtkAssistant *gtkassistant, CsvImpTransAssist* info);
 void csv_tximp_assist_close_cb (GtkAssistant *gtkassistant, CsvImpTransAssist* info);
 void csv_tximp_assist_finish_cb (GtkAssistant *gtkassistant, CsvImpTransAssist* info);
 void csv_tximp_file_confirm_cb (GtkWidget *button, CsvImpTransAssist *info);
@@ -285,20 +298,6 @@ csv_tximp_assist_prepare_cb (GtkAssistant *assistant, GtkWidget *page,
 }
 
 void
-csv_tximp_assist_destroy_cb (GtkWidget *object, CsvImpTransAssist* info)
-{
-    gnc_unregister_gui_component_by_data (ASSISTANT_CSV_IMPORT_TRANS_CM_CLASS, info);
-    delete info;
-}
-
-void
-csv_tximp_assist_cancel_cb (GtkAssistant *assistant, CsvImpTransAssist* info)
-{
-    info->assist_finish (true);
-    gnc_close_gui_component_by_data (ASSISTANT_CSV_IMPORT_TRANS_CM_CLASS, info);
-}
-
-void
 csv_tximp_assist_close_cb (GtkAssistant *assistant, CsvImpTransAssist* info)
 {
     gnc_close_gui_component_by_data (ASSISTANT_CSV_IMPORT_TRANS_CM_CLASS, info);
@@ -307,7 +306,7 @@ csv_tximp_assist_close_cb (GtkAssistant *assistant, CsvImpTransAssist* info)
 void
 csv_tximp_assist_finish_cb (GtkAssistant *assistant, CsvImpTransAssist* info)
 {
-    info->assist_finish (false);
+    info->assist_finish ();
 }
 
 
@@ -660,6 +659,21 @@ CsvImpTransAssist::CsvImpTransAssist ()
      * we need to detect when we are dealing with a new book. */
     new_book = gnc_is_new_book();
 }
+
+
+/*******************************************************
+ * Assistant Destructor
+ *******************************************************/
+CsvImpTransAssist::~CsvImpTransAssist ()
+{
+    /* This function is safe to call on a null pointer */
+    gnc_gen_trans_list_delete (gnc_csv_importer_gui);
+    /* The call above frees gnc_csv_importer_gui but can't nullify it.
+     * Do it here so noone accidentally can access it still */
+    gnc_csv_importer_gui = nullptr;
+    gtk_widget_destroy (GTK_WIDGET(csv_imp_asst));
+}
+
 
 /**************************************************
  * Code related to the file chooser page
@@ -1940,7 +1954,7 @@ CsvImpTransAssist::assist_doc_page_prepare ()
     cancel_button = gtk_button_new_with_mnemonic (_("_Cancel"));
     gtk_assistant_add_action_widget (csv_imp_asst, cancel_button);
     g_signal_connect (cancel_button, "clicked",
-                     G_CALLBACK(csv_tximp_assist_cancel_cb), this);
+                     G_CALLBACK(csv_tximp_assist_close_cb), this);
     gtk_widget_show (GTK_WIDGET(cancel_button));
 }
 
@@ -2031,18 +2045,21 @@ CsvImpTransAssist::assist_prepare_cb (GtkWidget *page)
 
 
 void
-CsvImpTransAssist::assist_finish (bool canceled)
+CsvImpTransAssist::assist_finish ()
 {
     /* Start the import */
-    if (canceled || tx_imp->m_transactions.empty())
+    if (!tx_imp->m_transactions.empty())
     {
-        gnc_gen_trans_list_delete (gnc_csv_importer_gui);
-        /* The call above frees gnc_csv_importer_gui. NULL it here
-         * so noone accidentally can use access it still */
-        gnc_csv_importer_gui = NULL;
+        /* The call to gnc_gen_trans_assist_start below will free the
+         * object passed into it. To avoid our c++ destructor from
+         * attempting a second free on that object, we'll release
+         * our own reference to it here  before passing it to
+         * gnc_gen_trans_assist_start.
+         */
+        auto local_csv_imp_gui = gnc_csv_importer_gui;
+        gnc_csv_importer_gui = nullptr;
+        gnc_gen_trans_assist_start (local_csv_imp_gui);
     }
-    else
-        gnc_gen_trans_assist_start (gnc_csv_importer_gui);
 }
 
 
@@ -2050,7 +2067,6 @@ void
 CsvImpTransAssist::assist_compmgr_close ()
 {
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(csv_imp_asst));
-    gtk_widget_destroy (GTK_WIDGET(csv_imp_asst));
 }
 
 
@@ -2058,7 +2074,9 @@ static void
 csv_tximp_close_handler (gpointer user_data)
 {
     auto info = (CsvImpTransAssist*)user_data;
+    gnc_unregister_gui_component_by_data (ASSISTANT_CSV_IMPORT_TRANS_CM_CLASS, info);
     info->assist_compmgr_close();
+    delete info;
 }
 
 /********************************************************************\

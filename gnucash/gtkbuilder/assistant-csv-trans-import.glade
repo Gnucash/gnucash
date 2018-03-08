@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.20.2 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkListStore" id="account_match_store">
@@ -29,9 +29,9 @@
     <property name="default_width">400</property>
     <property name="default_height">500</property>
     <signal name="apply" handler="csv_tximp_assist_finish_cb" swapped="no"/>
-    <signal name="cancel" handler="csv_tximp_assist_cancel_cb" swapped="no"/>
+    <signal name="cancel" handler="csv_tximp_assist_close_cb" swapped="no"/>
     <signal name="close" handler="csv_tximp_assist_close_cb" swapped="no"/>
-    <signal name="destroy" handler="csv_tximp_assist_destroy_cb" swapped="no"/>
+    <signal name="destroy" handler="csv_tximp_assist_close_cb" swapped="no"/>
     <signal name="prepare" handler="csv_tximp_assist_prepare_cb" swapped="no"/>
     <child>
       <object class="GtkLabel" id="start_page">
