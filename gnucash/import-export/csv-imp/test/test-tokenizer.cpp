@@ -138,6 +138,17 @@ TEST_F (GncTokenizerTest, tokenize_from_csv_file)
  * independently.
  */
 
+/* First test whether we're properly catching boost::tokenizer throws
+ * This happens when the input data has invalid escape sequences */
+TEST_F (GncTokenizerTest, tokenize_binary_data)
+{
+    GncCsvTokenizer *csvtok = dynamic_cast<GncCsvTokenizer*>(csv_tok.get());
+    csvtok->set_separators (",");
+
+    set_utf8_contents (csv_tok, R"(\764Test,Something)");
+    EXPECT_THROW (csv_tok->tokenize(), std::range_error);
+}
+
 /* This helper function will run the parse step on the given data
  * with the parser as configured by the calling test function.
  * This allows the same code to be used with different csv test strings

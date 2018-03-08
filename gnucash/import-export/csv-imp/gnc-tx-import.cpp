@@ -404,7 +404,7 @@ void GncTxImport::tokenize (bool guessColTypes)
     /* If it failed, generate an error. */
     if (m_parsed_lines.size() == 0)
     {
-        throw (std::range_error ("Tokenizing failed."));
+        throw (std::range_error (N_("There was an error parsing the file.")));
         return;
     }
 

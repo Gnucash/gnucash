@@ -723,7 +723,7 @@ CsvImpTransAssist::file_confirm_cb ()
     catch (std::range_error &e)
     {
         /* Parsing failed ... */
-        gnc_error_dialog (GTK_WINDOW (csv_imp_asst), "%s", e.what());
+        gnc_error_dialog (GTK_WINDOW (csv_imp_asst), "%s", _(e.what()));
         return;
     }
 

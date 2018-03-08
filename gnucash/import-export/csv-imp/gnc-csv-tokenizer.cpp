@@ -11,6 +11,10 @@
 #include <boost/locale.hpp>
 #include <boost/algorithm/string.hpp>
 
+extern "C" {
+    #include <glib/gi18n.h>
+}
+
 void
 GncCsvTokenizer::set_separators(const std::string& separators)
 {
@@ -34,33 +38,40 @@ int GncCsvTokenizer::tokenize()
     m_tokenized_contents.clear();
     std::istringstream in_stream(m_utf8_contents);
 
-    while (std::getline (in_stream, buffer))
+    try
     {
-        // --- deal with line breaks in quoted strings
-        buffer = boost::trim_copy (buffer); // Removes trailing newline and spaces
-        last_quote = buffer.find_first_of('"');
-        while (last_quote != std::string::npos)
+        while (std::getline (in_stream, buffer))
         {
-            if (last_quote == 0) // Test separately because last_quote - 1 would be out of range
-                inside_quotes = !inside_quotes;
-            else if (buffer[ last_quote - 1 ] != '\\')
-                inside_quotes = !inside_quotes;
+            // --- deal with line breaks in quoted strings
+            buffer = boost::trim_copy (buffer); // Removes trailing newline and spaces
+            last_quote = buffer.find_first_of('"');
+            while (last_quote != std::string::npos)
+            {
+                if (last_quote == 0) // Test separately because last_quote - 1 would be out of range
+                    inside_quotes = !inside_quotes;
+                else if (buffer[ last_quote - 1 ] != '\\')
+                    inside_quotes = !inside_quotes;
 
-            last_quote = buffer.find_first_of('"',last_quote+1);
+                last_quote = buffer.find_first_of('"',last_quote+1);
+            }
+
+            line.append(buffer);
+            if (inside_quotes)
+            {
+                line.append(" ");
+                continue;
+            }
+            // ---
+
+            Tokenizer tok(line, sep);
+            vec.assign(tok.begin(),tok.end());
+            m_tokenized_contents.push_back(vec);
+            line.clear();
         }
-
-        line.append(buffer);
-        if (inside_quotes)
-        {
-            line.append(" ");
-            continue;
-        }
-        // ---
-
-        Tokenizer tok(line, sep);
-        vec.assign(tok.begin(),tok.end());
-        m_tokenized_contents.push_back(vec);
-        line.clear();
+    }
+    catch (boost::escaped_list_error &e)
+    {
+        throw (std::range_error N_("There was an error parsing the file."));
     }
 
     return 0;
