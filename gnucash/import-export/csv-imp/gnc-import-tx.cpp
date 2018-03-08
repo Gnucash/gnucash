@@ -907,9 +907,13 @@ GncTxImport::accounts ()
             continue;
 
         auto col_strs = std::get<PL_INPUT>(parsed_line);
-        if ((acct_col_it != m_settings.m_column_types.end()) && !col_strs[acct_col].empty())
+        if ((acct_col_it != m_settings.m_column_types.end()) &&
+            (acct_col < col_strs.size()) &&
+            !col_strs[acct_col].empty())
             accts.insert(col_strs[acct_col]);
-        if ((tacct_col_it != m_settings.m_column_types.end()) && !col_strs[tacct_col].empty())
+        if ((tacct_col_it != m_settings.m_column_types.end()) &&
+            (tacct_col < col_strs.size()) &&
+            !col_strs[tacct_col].empty())
             accts.insert(col_strs[tacct_col]);
     }
 
