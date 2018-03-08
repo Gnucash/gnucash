@@ -147,7 +147,7 @@ static void
 gnc_plugin_stylesheets_cmd_edit_style_sheet (GtkAction *action,
         GncMainWindowActionData *data)
 {
-    gnc_style_sheet_dialog_open();
+    gnc_style_sheet_dialog_open(GTK_WINDOW (data->window));
 }
 
 /************************************************************

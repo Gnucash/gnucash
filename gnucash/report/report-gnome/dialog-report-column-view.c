@@ -36,6 +36,7 @@
 #include "guile-mappings.h"
 #include "gnc-guile-utils.h"
 #include "gnc-report.h"
+#include "gnc-ui.h"
 
 enum available_cols
 {
@@ -309,7 +310,7 @@ gnc_column_view_edit_options(SCM options, SCM view)
         gnc_column_view_edit * r = g_new0(gnc_column_view_edit, 1);
         GtkBuilder *builder;
 
-        r->optwin = gnc_options_dialog_new(NULL, NULL);
+        r->optwin = gnc_options_dialog_new (NULL, GTK_WINDOW(gnc_ui_get_main_window (NULL)));
 
         /* Hide the generic dialog page list. */
         gtk_widget_hide(gnc_options_page_list(r->optwin));
@@ -600,6 +601,9 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data)
     gnc_builder_add_from_file (builder, "dialog-report.glade", "row_adjustment");
     gnc_builder_add_from_file (builder, "dialog-report.glade", "edit_report_size");
     dlg = GTK_WIDGET(gtk_builder_get_object (builder, "edit_report_size"));
+
+    gtk_window_set_transient_for (GTK_WINDOW(dlg),
+                         GTK_WINDOW(gtk_widget_get_toplevel (GTK_WIDGET(button))));
 
     /* get the spinner widgets */
     rowspin = GTK_WIDGET(gtk_builder_get_object (builder, "row_spin"));
