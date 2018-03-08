@@ -84,16 +84,15 @@ std::string GncTokenizerTest::get_filepath(const std::string& filename)
         return std::string(srcdir) + "/" + filename;
 }
 
-//TEST_F (GncTokenizerTest, load_file_nonexisting)
-//{
-//
-//    auto file1 = get_filepath ("notexist.csv");
-//
-//    /* Test loading of a non-existing file */
-//    // FIXME determine what is actually thrown as I can't find it by trial and error
-//    EXPECT_THROW (fw_tok->load_file (file1), std::ios_base::failure);
-//    EXPECT_THROW (csv_tok->load_file (file1), std::ios_base::failure);
-//}
+TEST_F (GncTokenizerTest, load_file_nonexisting)
+{
+
+    auto file1 = get_filepath ("notexist.csv");
+
+    /* Test loading of a non-existing file */
+    EXPECT_THROW (fw_tok->load_file (file1), std::ios_base::failure);
+    EXPECT_THROW (csv_tok->load_file (file1), std::ios_base::failure);
+}
 
 TEST_F (GncTokenizerTest, load_file_existing)
 {

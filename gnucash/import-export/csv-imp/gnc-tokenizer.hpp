@@ -73,7 +73,7 @@ public:
     const std::string& encoding();
     virtual int  tokenize() = 0;
     const std::vector<StrVec>& get_tokens();
-    
+
 protected:
     std::string m_utf8_contents;
     std::vector<StrVec> m_tokenized_contents;
