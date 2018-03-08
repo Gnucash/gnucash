@@ -1,6 +1,6 @@
 /********************************************************************\
- * gnc-trans-props.hpp - encapsulate transaction properties for use *
- *                       in the csv importer                        *
+ * gnc-imp-props-tx.hpp - encapsulate transaction properties for    *
+ *                        use in the csv importer                   *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *

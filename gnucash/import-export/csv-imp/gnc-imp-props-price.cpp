@@ -1,6 +1,6 @@
 /********************************************************************\
- * gnc-price-props.cpp - encapsulate price properties for use       *
- *                       in the csv importer                        *
+ * gnc-imp-props-price.cpp - encapsulate price properties for use   *
+ *                           in the csv importer                    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -37,7 +37,7 @@ extern "C" {
 #include <string>
 #include <boost/regex.hpp>
 #include <boost/regex/icu.hpp>
-#include "gnc-price-props.hpp"
+#include "gnc-imp-props-price.hpp"
 
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 

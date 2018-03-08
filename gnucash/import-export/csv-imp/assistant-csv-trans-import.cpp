@@ -59,10 +59,10 @@ extern "C"
 #include "go-charmap-sel.h"
 }
 
-#include "gnc-csv-trans-import-settings.hpp"
-#include "gnc-tx-import.hpp"
-#include "gnc-fw-tokenizer.hpp"
-#include "gnc-csv-tokenizer.hpp"
+#include "gnc-imp-settings-csv-tx.hpp"
+#include "gnc-import-tx.hpp"
+#include "gnc-tokenizer-fw.hpp"
+#include "gnc-tokenizer-csv.hpp"
 
 #include <boost/locale.hpp>
 

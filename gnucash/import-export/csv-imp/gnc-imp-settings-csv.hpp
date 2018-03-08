@@ -1,5 +1,5 @@
 /*******************************************************************\
- * gnc-csv-import-settings.hpp -- Save and Load CSV Import Settings *
+ * gnc-imp-settings-csv.hpp -- Save and Load CSV Import Settings *
  *                                                                  *
  * Copyright (C) 2014 Robert Fewell                                 *
  *                                                                  *
@@ -20,7 +20,7 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/** @file gnc-csv-import-settings.hpp
+/** @file gnc-imp-settings-csv.hpp
     @brief CSV Import Settings
     @author Copyright (c) 2014 Robert Fewell
     @author Copyright (c) 2016 Geert Janssens

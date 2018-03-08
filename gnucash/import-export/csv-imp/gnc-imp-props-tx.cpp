@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-csv-imp-trans.cpp - import transactions from csv files       *
+ * gnc-imp-props-tx.cpp - import transactions from csv files        *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -41,7 +41,7 @@ extern "C" {
 #include <string>
 #include <boost/regex.hpp>
 #include <boost/regex/icu.hpp>
-#include "gnc-trans-props.hpp"
+#include "gnc-imp-props-tx.hpp"
 
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 

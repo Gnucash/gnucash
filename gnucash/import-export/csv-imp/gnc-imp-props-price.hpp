@@ -1,6 +1,6 @@
 /********************************************************************\
- * gnc-price-props.hpp - encapsulate price properties for use       *
- *                       in the csv importer                        *
+ * gnc-imp-props-price.hpp - encapsulate price properties for use   *
+ *                           in the csv importer                    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -58,7 +58,7 @@ enum class GncPricePropType {
 enum Result { FAILED, ADDED, DUPLICATED, REPLACED };
 
 /** Maps all column types to a string representation.
- *  The actual definition is in gnc-price-props.cpp.
+ *  The actual definition is in gnc-imp-props-price.cpp.
  *  Attention: that definition should be adjusted for any
  *  changes to enum class GncPricePropType ! */
 extern std::map<GncPricePropType, const char*> gnc_price_col_type_strs;

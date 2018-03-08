@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-price-import.hpp - import prices from csv files              *
+ * gnc-import-price.hpp - import prices from csv files              *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -22,7 +22,7 @@
 /** @file
      @brief Class to import prices from CSV or fixed width files
      *
-     gnc-price-import.hpp
+     gnc-import-price.hpp
      @author Copyright (c) 2015 Geert Janssens <geert@kobaltwit.be>
      @author Copyright (c) 2017 Robert Fewell
  */
@@ -41,8 +41,8 @@ extern "C" {
 #include <memory>
 
 #include "gnc-tokenizer.hpp"
-#include "gnc-price-props.hpp"
-#include "gnc-csv-price-import-settings.hpp"
+#include "gnc-imp-props-price.hpp"
+#include "gnc-imp-settings-csv-price.hpp"
 #include <boost/optional.hpp>
 
 /* A set of currency formats that the user sees. */

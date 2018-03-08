@@ -1,5 +1,5 @@
 /*******************************************************************\
- * gnc-csv-trans-import-settings.hpp  -- Trans CSV Import Settings  *
+ * gnc-imp-settings-csv-tx.hpp  -- Trans CSV Import Settings  *
  *                                                                  *
  * Copyright (C) 2017 Robert Fewell                                 *
  *                                                                  *
@@ -20,7 +20,7 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/** @file gnc-csv-trans-import-settings.hpp
+/** @file gnc-imp-settings-csv-tx.hpp
     @brief CSV Import Settings
     @author Copyright (c) 2014 Robert Fewell
     @author Copyright (c) 2016 Geert Janssens
@@ -36,9 +36,9 @@ extern "C" {
 
 #include <string>
 #include <vector>
-#include "gnc-trans-props.hpp"
+#include "gnc-imp-props-tx.hpp"
 #include "gnc-tokenizer.hpp"
-#include "gnc-csv-import-settings.hpp"
+#include "gnc-imp-settings-csv.hpp"
 
 struct CsvTransImpSettings : public CsvImportSettings
 {

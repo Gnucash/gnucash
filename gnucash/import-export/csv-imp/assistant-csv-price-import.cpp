@@ -1,5 +1,5 @@
 /*******************************************************************\
- * assistant-csv-price-import.c -- An assistant for importing       *
+ * assistant-csv-price-import.cpp -- An assistant for importing     *
  *                                     Prices from a file.          *
  *                                                                  *
  * Copyright (C) 2017 Robert Fewell                                 *
@@ -52,10 +52,10 @@ extern "C"
 #include "go-charmap-sel.h"
 }
 
-#include "gnc-csv-price-import-settings.hpp"
-#include "gnc-price-import.hpp"
-#include "gnc-fw-tokenizer.hpp"
-#include "gnc-csv-tokenizer.hpp"
+#include "gnc-imp-settings-csv-price.hpp"
+#include "gnc-import-price.hpp"
+#include "gnc-tokenizer-fw.hpp"
+#include "gnc-tokenizer-csv.hpp"
 
 #define MIN_COL_WIDTH 70
 #define GNC_PREFS_GROUP "dialogs.import.csv"

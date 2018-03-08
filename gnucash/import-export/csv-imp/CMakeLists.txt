@@ -15,17 +15,17 @@ SET(csv_import_SOURCES
   csv-account-import.c
   gnc-csv-account-map.c
   gnc-csv-gnumeric-popup.c
-  gnc-csv-tokenizer.cpp
-  gnc-csv-import-settings.cpp
-  gnc-csv-price-import-settings.cpp
-  gnc-csv-trans-import-settings.cpp
-  gnc-dummy-tokenizer.cpp
-  gnc-fw-tokenizer.cpp
-  gnc-price-import.cpp
-  gnc-price-props.cpp
+  gnc-imp-props-price.cpp
+  gnc-imp-props-tx.cpp
+  gnc-imp-settings-csv.cpp
+  gnc-imp-settings-csv-price.cpp
+  gnc-imp-settings-csv-tx.cpp
+  gnc-import-price.cpp
+  gnc-import-tx.cpp
   gnc-tokenizer.cpp
-  gnc-trans-props.cpp
-  gnc-tx-import.cpp
+  gnc-tokenizer-csv.cpp
+  gnc-tokenizer-dummy.cpp
+  gnc-tokenizer-fw.cpp
 )
 
 # Add dependency on config.h
@@ -45,17 +45,17 @@ SET(csv_import_noinst_HEADERS
   csv-account-import.h
   gnc-csv-account-map.h
   gnc-csv-gnumeric-popup.h
-  gnc-csv-tokenizer.hpp
-  gnc-csv-import-settings.hpp
-  gnc-csv-price-import-settings.hpp
-  gnc-csv-trans-import-settings.hpp
-  gnc-dummy-tokenizer.hpp
-  gnc-fw-tokenizer.hpp
-  gnc-price-import.hpp
-  gnc-price-props.hpp
+  gnc-imp-props-price.hpp
+  gnc-imp-props-tx.hpp
+  gnc-imp-settings-csv.hpp
+  gnc-imp-settings-csv-price.hpp
+  gnc-imp-settings-csv-tx.hpp
+  gnc-import-price.hpp
+  gnc-import-tx.hpp
   gnc-tokenizer.hpp
-  gnc-trans-props.hpp
-  gnc-tx-import.hpp
+  gnc-tokenizer-csv.hpp
+  gnc-tokenizer-dummy.hpp
+  gnc-tokenizer-fw.hpp
 )
 
 ADD_LIBRARY(gncmod-csv-import ${csv_import_noinst_HEADERS}

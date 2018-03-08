@@ -1,7 +1,7 @@
 #include "gnc-tokenizer.hpp"
-#include "gnc-csv-tokenizer.hpp"
-#include "gnc-dummy-tokenizer.hpp"
-#include "gnc-fw-tokenizer.hpp"
+#include "gnc-tokenizer-csv.hpp"
+#include "gnc-tokenizer-dummy.hpp"
+#include "gnc-tokenizer-fw.hpp"
 
 #include <iostream>
 #include <fstream>      // fstream

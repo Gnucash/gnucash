@@ -1,4 +1,4 @@
-#include "gnc-dummy-tokenizer.hpp"
+#include "gnc-tokenizer-dummy.hpp"
 
 #include <iostream>
 #include <fstream>      // fstream

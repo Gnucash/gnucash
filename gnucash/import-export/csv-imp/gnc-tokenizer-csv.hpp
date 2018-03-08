@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-csv-tokenizer.hpp - takes a csv file and converts it into a  *
+ * gnc-tokenizer-csv.hpp - takes a csv file and converts it into a  *
  *                         two-dimensional vector of strings (table)*
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -27,7 +27,7 @@
      However, no gnucash specific interpretation is done yet, that's up
      to the code using this class.
      *
-     gnc-csv-tokenizer.hpp
+     gnc-tokenizer-csv.hpp
      @author Copyright (c) 2015 Geert Janssens <geert@kobaltwit.be>
  */
 

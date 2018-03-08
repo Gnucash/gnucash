@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-tx-import.cpp - import transactions from csv or fixed-width  *
+ * gnc-import-tx.cpp - import transactions from csv or fixed-width  *
  *                     files                                        *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -35,11 +35,11 @@ extern "C" {
 #include <boost/regex.hpp>
 #include <boost/regex/icu.hpp>
 
-#include "gnc-tx-import.hpp"
-#include "gnc-trans-props.hpp"
-#include "gnc-csv-tokenizer.hpp"
-#include "gnc-fw-tokenizer.hpp"
-#include "gnc-csv-trans-import-settings.hpp"
+#include "gnc-import-tx.hpp"
+#include "gnc-imp-props-tx.hpp"
+#include "gnc-tokenizer-csv.hpp"
+#include "gnc-tokenizer-fw.hpp"
+#include "gnc-imp-settings-csv-tx.hpp"
 
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 

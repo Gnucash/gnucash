@@ -1,8 +1,7 @@
 /********************************************************************\
- * gnc-dummy-tokenizer.hpp - takes a file and converts it into a       *
+ * gnc-tokenizer-dummy.hpp - takes a file and converts it into a    *
  *                        two-dimensional vector of strings (table) *
- *                        splitting the contents on fixed width     *
- *                        positions                                 *
+ *                        each row will only have one single column *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -29,7 +28,7 @@
      This is just a dummy that can be used as long as the file format isn't
      specified yet by the user.
      *
-     gnc-dummy-tokenizer.hpp
+     gnc-tokenizer-dummy.hpp
      @author Copyright (c) 2016 Geert Janssens <geert@kobaltwit.be>
  */
 

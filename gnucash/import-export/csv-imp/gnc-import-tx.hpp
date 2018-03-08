@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-tx-import.hpp - import transactions from csv files       *
+ * gnc-import-tx.hpp - import transactions from csv files           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -22,7 +22,7 @@
 /** @file
      @brief Class to import transactions from CSV or fixed width files
      *
-     gnc-tx-import.hpp
+     gnc-import-tx.hpp
      @author Copyright (c) 2015 Geert Janssens <geert@kobaltwit.be>
  */
 
@@ -42,8 +42,8 @@ extern "C" {
 #include <memory>
 
 #include "gnc-tokenizer.hpp"
-#include "gnc-trans-props.hpp"
-#include "gnc-csv-trans-import-settings.hpp"
+#include "gnc-imp-props-tx.hpp"
+#include "gnc-imp-settings-csv-tx.hpp"
 #include <boost/optional.hpp>
 
 

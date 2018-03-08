@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-fw-tokenizer.hpp - takes a file and converts it into a       *
+ * gnc-tokenizer-fw.hpp - takes a file and converts it into a       *
  *                        two-dimensional vector of strings (table) *
  *                        splitting the contents on fixed width     *
  *                        positions                                 *
@@ -30,7 +30,7 @@
      However, no gnucash specific interpretation is done yet, that's up
      to the code using this class.
      *
-     gnc-fw-tokenizer.hpp
+     gnc-tokenizer-fw.hpp
      @author Copyright (c) 2015 Geert Janssens <geert@kobaltwit.be>
  */
 
