@@ -741,7 +741,7 @@ find_handler (gpointer find_data, gpointer user_data)
 
 /* Create a billterms window */
 BillTermsWindow *
-gnc_ui_billterms_window_new (QofBook *book)
+gnc_ui_billterms_window_new (GtkWindow *parent, QofBook *book)
 {
     BillTermsWindow *btw;
     GtkBuilder *builder;
@@ -782,6 +782,8 @@ gnc_ui_billterms_window_new (QofBook *book)
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(btw->dialog), "GncBillTermsDialog");
+
+    gtk_window_set_transient_for (GTK_WINDOW (btw->dialog), parent);
 
     /* Initialize the view */
     view = GTK_TREE_VIEW(btw->terms_view);
@@ -842,13 +844,13 @@ gnc_ui_billterms_window_destroy (BillTermsWindow *btw)
 #if 0
 /* Create a new billterms by name */
 GncBillTerm *
-gnc_ui_billterms_new_from_name (QofBook *book, const char *name)
+gnc_ui_billterms_new_from_name (GtkWindow *parent, QofBook *book, const char *name)
 {
     BillTermsWindow *btw;
 
     if (!book) return NULL;
 
-    btw = gnc_ui_billterms_window_new (book);
+    btw = gnc_ui_billterms_window_new (parent, book);
     if (!btw) return NULL;
 
     return new_billterm_dialog (btw, NULL, name);

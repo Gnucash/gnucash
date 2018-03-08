@@ -779,7 +779,7 @@ gnc_plugin_business_cmd_tax_tables (GtkAction *action,
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
-    gnc_ui_tax_table_window_new (gnc_get_current_book());
+    gnc_ui_tax_table_window_new (GTK_WINDOW (mw->window), gnc_get_current_book());
 }
 
 static void
@@ -789,7 +789,7 @@ gnc_plugin_business_cmd_billing_terms (GtkAction *action,
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
-    gnc_ui_billterms_window_new (gnc_get_current_book());
+    gnc_ui_billterms_window_new (GTK_WINDOW (mw->window), gnc_get_current_book());
 }
 
 

@@ -766,7 +766,7 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
 
         ledger->full_refresh = FALSE;
 
-        table = gnc_ui_tax_table_new_from_name (ledger->book, name);
+        table = gnc_ui_tax_table_new_from_name (GTK_WINDOW (ledger->parent), ledger->book, name);
         if (!table)
             break;
 
