@@ -110,7 +110,7 @@ gnc_plugin_customer_import_cmd_test (GtkAction *action, GncMainWindowActionData 
     ENTER ("action %p, main window data %p", action, data);
     g_message ("customer_import");
 
-    gnc_plugin_customer_import_showGUI();
+    gnc_plugin_customer_import_showGUI (GTK_WINDOW(data->window));
 
     LEAVE (" ");
 }

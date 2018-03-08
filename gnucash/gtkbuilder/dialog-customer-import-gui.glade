@@ -5,7 +5,6 @@
   <object class="GtkDialog" id="customer_import_dialog">
     <property name="width_request">500</property>
     <property name="height_request">500</property>
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes" comments="Title of dialog">Import customers or vendors from text file</property>
     <property name="type_hint">dialog</property>

@@ -143,7 +143,12 @@ gnc_import_add_account(GtkWidget *button, AccountPickerDialog *picker)
 {
     Account *selected_account, *new_account;
     GList * valid_types = NULL;
-    GtkWindow *parent = GTK_WINDOW (gtk_widget_get_toplevel (button));
+    GtkWindow *parent = NULL;
+
+    if (picker->dialog != NULL)
+        parent = GTK_WINDOW (picker->dialog);
+    else
+        parent = GTK_WINDOW (picker->assistant);
 
     /*DEBUG("Begin");  */
     if (picker->new_account_default_type != ACCT_TYPE_NONE)
