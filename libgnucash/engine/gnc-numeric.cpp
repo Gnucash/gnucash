@@ -1303,6 +1303,18 @@ main(int argc, char ** argv)
 }
 #endif
 
+
+std::ostream&
+operator<<(std::ostream& s, GncNumeric n)
+{
+    std::basic_ostringstream<wchar_t> ss;
+    ss.imbue(s.getloc());
+    ss << n;
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> make_utf8;
+    s << make_utf8.to_bytes(ss.str());
+    return s;
+}
+
 const char* gnc_numeric_errorCode_to_string(GNCNumericErrorCode error_code)
 {
     switch (error_code)

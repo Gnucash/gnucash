@@ -213,10 +213,15 @@ TEST(gncnumeric_stream, output_stream)
     EXPECT_EQ("123/456", output.str());
     try
     {
-        output.imbue(std::locale("fr_FR.utf8"));
+        auto loc = std::locale("fr_FR.utf8");
+        auto thou_sep = std::use_facet<std::numpunct<wchar_t>>(loc).thousands_sep();
+        output.imbue(loc);
         output.str("");
         output << simple_int;
-        EXPECT_EQ("123 456", output.str());
+        if (thou_sep == L' ')
+            EXPECT_EQ("123 456", output.str());
+        else
+            EXPECT_EQ("123\xe2\x80\xaf""456", output.str());
     }
     catch (std::runtime_error)
     {
