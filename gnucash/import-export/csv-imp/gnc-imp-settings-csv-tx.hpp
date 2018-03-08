@@ -64,6 +64,9 @@ void remove (void);
 Account      *m_base_account;                 // Base account
 bool          m_multi_split;                  // Assume multiple lines per transaction
 std::vector<GncTransPropType> m_column_types; // The Column types in order
+
+protected:
+    const char* get_group_prefix (void) override;
 };
 
 using preset_vec_trans = std::vector<std::shared_ptr<CsvTransImpSettings>>;

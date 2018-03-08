@@ -72,8 +72,6 @@ bool load (void);
  */
 void remove (void);
 
-std::string   m_settings_type;                // Settings Type, TRANS, PRICE etc.
-
 // Common Settings
 std::string   m_name;                         // Name given to this preset by the user
 GncImpFileFormat m_file_format;               // CSV import Format
@@ -86,11 +84,13 @@ bool          m_skip_alt_lines;               // Skip alternate rows
 std::string   m_separators;                   // Separators for csv format
 bool          m_load_error;                   // Was there an error while parsing the state file ?
 std::vector<uint32_t> m_column_widths;        // The Column widths
+
+protected:
+    virtual const char* get_group_prefix (void) = 0;
 };
 
 std::string get_no_settings (void);
 std::string get_gnc_exp (void);
-std::string get_prefix (void);
 
 /** Check whether name can be used as a preset name.
  *  The names of the internal presets are considered reserved.

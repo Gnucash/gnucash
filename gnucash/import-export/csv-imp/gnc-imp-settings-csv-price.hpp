@@ -64,6 +64,9 @@ void remove (void);
 gnc_commodity *m_from_commodity;                    //  Price From Commodity
 gnc_commodity *m_to_currency;                       //  Price To Currency
 std::vector<GncPricePropType> m_column_types_price; // The Price Column types in order
+
+protected:
+    const char* get_group_prefix (void) override;
 };
 
 using preset_vec_price = std::vector<std::shared_ptr<CsvPriceImpSettings>>;

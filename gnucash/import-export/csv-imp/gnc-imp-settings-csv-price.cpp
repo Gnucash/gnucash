@@ -42,7 +42,7 @@ extern "C"
 #include "gnc-ui-util.h"
 }
 
-const std::string settings_type{"PRICE"};
+constexpr auto group_prefix = "Import csv,price - ";
 
 #define CSV_COL_TYPES    "ColumnTypes"
 
@@ -57,7 +57,6 @@ static std::shared_ptr<CsvPriceImpSettings> create_int_no_preset(void)
 {
     auto preset = std::make_shared<CsvPriceImpSettings>();
     preset->m_name = get_no_settings();
-    preset->m_settings_type = settings_type;
 
     return preset;
 }
@@ -101,7 +100,7 @@ const preset_vec_price& get_import_presets_price (void)
     for (gsize i=0; i < grouplength; i++)
     {
         auto group = std::string(groups[i]);
-        auto gp = get_prefix() + settings_type + " - ";
+        auto gp = std::string {group_prefix};
         auto pos = group.find(gp);
         if (pos == std::string::npos)
             continue;
@@ -125,7 +124,6 @@ const preset_vec_price& get_import_presets_price (void)
     for (auto preset_name : preset_names)
     {
         auto preset = std::make_shared<CsvPriceImpSettings>();
-        preset->m_settings_type = settings_type;
         preset->m_name = preset_name;
         preset->load();
         presets_price.push_back(preset);
@@ -147,7 +145,7 @@ CsvPriceImpSettings::load (void)
     GError *key_error = nullptr;
     m_load_error = false;
     auto keyfile = gnc_state_get_current ();
-    auto group = get_prefix() + m_settings_type + " - " + m_name;
+    auto group = get_group_prefix() + m_name;
 
     // Start Loading the settings
     m_load_error = CsvImportSettings::load(); // load the common settings
@@ -210,7 +208,7 @@ CsvPriceImpSettings::save (void)
     }
 
     auto keyfile = gnc_state_get_current ();
-    auto group = get_prefix() + m_settings_type + " - " + m_name;
+    auto group = get_group_prefix() + m_name;
 
     // Drop previous saved settings with this name
     g_key_file_remove_group (keyfile, group.c_str(), nullptr);
@@ -255,4 +253,10 @@ CsvPriceImpSettings::remove (void)
         return;
 
     CsvImportSettings::remove();
+}
+
+const char*
+CsvPriceImpSettings::get_group_prefix (void)
+{
+    return group_prefix;
 }

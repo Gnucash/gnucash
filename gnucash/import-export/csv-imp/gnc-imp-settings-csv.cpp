@@ -106,11 +106,6 @@ std::string get_gnc_exp (void)
     return gnc_exp;
 }
 
-std::string get_prefix (void)
-{
-    return csv_group_prefix;
-}
-
 /**************************************************
  * load_common
  *
@@ -121,7 +116,7 @@ CsvImportSettings::load (void)
 {
     GError *key_error = nullptr;
     m_load_error = false;
-    auto group = csv_group_prefix + m_settings_type + " - " + m_name;
+    auto group = get_group_prefix() + m_name;
     auto keyfile = gnc_state_get_current ();
 
     m_skip_start_lines = g_key_file_get_integer (keyfile, group.c_str(), CSV_SKIP_START, &key_error);
@@ -189,7 +184,7 @@ bool
 CsvImportSettings::save (void)
 {
     auto keyfile = gnc_state_get_current ();
-    auto group = csv_group_prefix + m_settings_type + " - " + m_name;
+    auto group = get_group_prefix() + m_name;
 
     // Start Saving the Common settings
     g_key_file_set_string (keyfile, group.c_str(), CSV_NAME, m_name.c_str());
@@ -243,6 +238,6 @@ void
 CsvImportSettings::remove (void)
 {
     auto keyfile = gnc_state_get_current ();
-    auto group = csv_group_prefix + m_settings_type + " - " + m_name;
+    auto group = get_group_prefix() + m_name;
     g_key_file_remove_group (keyfile, group.c_str(), nullptr);
 }
