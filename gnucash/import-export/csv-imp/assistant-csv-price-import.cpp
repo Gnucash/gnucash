@@ -64,10 +64,26 @@ extern "C"
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
+/* Note on memory management
+ *
+ * The same notes as for assistant-csv-trans-import.cpp appy to
+ * this assistant as well. Please read the note at the top of that
+ * file to understand important details about the use of several
+ * memory management models in one file.
+ */
+
 class  CsvImpPriceAssist
 {
 public:
     CsvImpPriceAssist ();
+    ~CsvImpPriceAssist () = default;
+
+    /* Delete copy and move constructor/assignments
+     * We don't want gui elements to be moved around or copied at all */
+    CsvImpPriceAssist(const CsvImpPriceAssist&) = delete;            // copy constructor
+    CsvImpPriceAssist& operator=(const CsvImpPriceAssist&) = delete; // copy assignment
+    CsvImpPriceAssist(CsvImpPriceAssist&&) = delete;                 // move constructor
+    CsvImpPriceAssist& operator=(CsvImpPriceAssist&&) = delete;      // move assignment
 
     void assist_prepare_cb (GtkWidget *page);
     void assist_file_page_prepare ();
