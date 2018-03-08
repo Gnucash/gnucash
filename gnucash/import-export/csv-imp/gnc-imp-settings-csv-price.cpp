@@ -150,7 +150,7 @@ CsvPriceImpSettings::load (void)
     auto group = get_prefix() + m_settings_type + " - " + m_name;
 
     // Start Loading the settings
-    m_load_error = load_common(); // load the common settings
+    m_load_error = CsvImportSettings::load(); // load the common settings
 
     gchar *key_char = g_key_file_get_string (keyfile, group.c_str(), CSV_TO_CURR, &key_error);
     if (key_char && *key_char != '\0')
@@ -216,7 +216,7 @@ CsvPriceImpSettings::save (void)
     g_key_file_remove_group (keyfile, group.c_str(), nullptr);
 
     // Start Saving the settings
-    bool error = save_common(); // save the common settings
+    bool error = CsvImportSettings::save(); // save the common settings
 
     if (error)
         return error;
@@ -254,5 +254,5 @@ CsvPriceImpSettings::remove (void)
     if (preset_is_reserved_name (m_name))
         return;
 
-    remove_common();
+    CsvImportSettings::remove();
 }

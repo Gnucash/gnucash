@@ -117,7 +117,7 @@ std::string get_prefix (void)
  * load the settings from a state key file
  **************************************************/
 bool
-CsvImportSettings::load_common (void)
+CsvImportSettings::load (void)
 {
     GError *key_error = nullptr;
     m_load_error = false;
@@ -186,7 +186,7 @@ CsvImportSettings::load_common (void)
  * save settings to a key file
  **************************************************/
 bool
-CsvImportSettings::save_common (void)
+CsvImportSettings::save (void)
 {
     auto keyfile = gnc_state_get_current ();
     auto group = csv_group_prefix + m_settings_type + " - " + m_name;
@@ -240,7 +240,7 @@ CsvImportSettings::save_common (void)
 }
 
 void
-CsvImportSettings::remove_common (void)
+CsvImportSettings::remove (void)
 {
     auto keyfile = gnc_state_get_current ();
     auto group = csv_group_prefix + m_settings_type + " - " + m_name;

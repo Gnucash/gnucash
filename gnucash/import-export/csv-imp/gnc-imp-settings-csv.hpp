@@ -60,17 +60,17 @@ struct CsvImportSettings
  *
  *  @return true if there was a problem in saving.
  */
-bool save_common (void);
+bool save (void);
 
 /** Load the widget properties from a key File.
  *
  *  @return true if there was a problem.
  */
-bool load_common (void);
+bool load (void);
 
 /** Remove the preset from the state file.
  */
-void remove_common (void);
+void remove (void);
 
 std::string   m_settings_type;                // Settings Type, TRANS, PRICE etc.
 
