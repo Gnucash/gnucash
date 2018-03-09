@@ -1,11 +1,12 @@
 
 IF (WITH_PYTHON)
+  find_path(test_core_dir "unittest_support.py" PATHS ${CMAKE_BINARY_DIR}/common/test-core ${CMAKE_SOURCE_DIR}/common/test-core)
   add_custom_target(test-python-bindings ALL DEPENDS unittest_support gnucash-core-c-build gnucash-core-c-py)
   add_dependencies(check test-python-bindings)
   ADD_TEST(python-bindings ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/runTests.py.in)
   SET_PROPERTY(TEST python-bindings PROPERTY ENVIRONMENT
     GNC_BUILDDIR=${CMAKE_BINARY_DIR}
-    PYTHONPATH=${PYTHON_SYSCONFIG_BUILD}:${LIBDIR_BUILD}/gnucash:${CMAKE_BINARY_DIR}/common/test-core
+    PYTHONPATH=${PYTHON_SYSCONFIG_BUILD}:${LIBDIR_BUILD}/gnucash:${test_core_dir}
   )
 ENDIF()
 
