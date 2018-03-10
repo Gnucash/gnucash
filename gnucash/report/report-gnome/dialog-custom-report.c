@@ -503,6 +503,8 @@ static CustomReportDialog *gnc_ui_custom_report_internal(GncMainWindow * window)
     set_reports_view_and_model(crd);
     crd->window = window;
 
+    gtk_window_set_transient_for (GTK_WINDOW (crd->dialog), GTK_WINDOW(window));
+
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(crd->dialog), "GncCustomReportDialog");
 

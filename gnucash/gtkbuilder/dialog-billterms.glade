@@ -440,7 +440,6 @@
     </child>
   </object>
   <object class="GtkDialog" id="terms_dialog">
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Terms</property>
     <property name="type_hint">dialog</property>
@@ -798,7 +797,6 @@
     </data>
   </object>
   <object class="GtkDialog" id="edit_term_dialog">
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
@@ -990,7 +988,6 @@
     </action-widgets>
   </object>
   <object class="GtkDialog" id="new_term_dialog">
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>

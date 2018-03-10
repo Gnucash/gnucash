@@ -78,4 +78,4 @@ void gnc_window_show_progress (const char *message, double percentage);
 
 gboolean gnucash_ui_is_running(void);
 
-TaxTableWindow * gnc_ui_tax_table_window_new (QofBook *book);
+TaxTableWindow * gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book);

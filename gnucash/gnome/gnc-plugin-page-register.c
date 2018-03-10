@@ -2981,12 +2981,14 @@ gnc_plugin_page_register_cmd_find_transactions (GtkAction *action,
         GncPluginPageRegister *page)
 {
     GncPluginPageRegisterPrivate *priv;
+    GtkWindow *window;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
 
     ENTER("(action %p, page %p)", action, page);
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
-    gnc_ui_find_transactions_dialog_create(priv->ledger);
+    window = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
+    gnc_ui_find_transactions_dialog_create (window, priv->ledger);
     LEAVE(" ");
 }
 
@@ -3086,6 +3088,8 @@ gnc_plugin_page_register_cmd_void_transaction (GtkAction *action,
     gnc_builder_add_from_file  (builder , "gnc-plugin-page-register.glade", "void_transaction_dialog");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "void_transaction_dialog"));
     entry = GTK_WIDGET(gtk_builder_get_object (builder, "reason"));
+
+    gtk_window_set_transient_for (GTK_WINDOW (dialog), window);
 
     result = gtk_dialog_run(GTK_DIALOG(dialog));
     if (result == GTK_RESPONSE_OK)

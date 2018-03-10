@@ -120,6 +120,8 @@ gnc_plugin_bi_import_showGUI (GtkWindow *parent)
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(gui->dialog), "GncBillImportDialog");
 
+    gtk_window_set_transient_for (GTK_WINDOW (gui->dialog), parent);
+
     gui->book = gnc_get_current_book();
 
     gui->regexp = g_string_new ( "^(?<id>[^;]*);(?<date_opened>[^;]*);(?<owner_id>[^;]*);(?<billing_id>[^;]*);?(?<notes>[^;]*);?(?<date>[^;]*);?(?<desc>[^;]*);?(?<action>[^;]*);?(?<account>[^;]*);?(?<quantity>[^;]*);?(?<price>[^;]*);?(?<disc_type>[^;]*);?(?<disc_how>[^;]*);?(?<discount>[^;]*);?(?<taxable>[^;]*);?(?<taxincluded>[^;]*);?(?<tax_table>[^;]*);(?<date_posted>[^;]*);(?<due_date>[^;]*);(?<account_posted>[^;]*);(?<memo_posted>[^;]*);(?<accu_splits>[^;]*)$");

@@ -74,7 +74,7 @@ static void gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar
 
 
 CustomerImportGui *
-gnc_plugin_customer_import_showGUI(void)
+gnc_plugin_customer_import_showGUI(GtkWindow *parent)
 {
     CustomerImportGui *gui;
     //gktbuilderXML *xml;
@@ -106,6 +106,8 @@ gnc_plugin_customer_import_showGUI(void)
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(gui->dialog), "GncCustomerImportDialog");
+
+    gtk_window_set_transient_for (GTK_WINDOW (gui->dialog), parent);
 
     gui->regexp = g_string_new ( "^(?<id>[^;]+);(?<company>[^;]*);(?<name>[^;]+);(?<addr1>[^;]+);?(?<addr2>[^;]*);?(?<addr3>[^;]*);?(?<addr4>[^;]*);?(?<phone>[^;]*);?(?<fax>[^;]*);?(?<email>[^;]*);?(?<shipname>[^;]*);?(?<shipaddr1>[^;]*);?(?<shipaddr2>[^;]*);?(?<shipaddr3>[^;]*);?(?<shipaddr4>[^;]*);?(?<shipphone>[^;]*);?(?<shipfax>[^;]*);?(?<shipemail>[^;]*)");
     gui->book = gnc_get_current_book();

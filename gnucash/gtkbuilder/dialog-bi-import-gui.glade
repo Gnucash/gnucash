@@ -3,7 +3,6 @@
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkDialog" id="bi_import_dialog">
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Import transactions from text file</property>
     <property name="type_hint">dialog</property>

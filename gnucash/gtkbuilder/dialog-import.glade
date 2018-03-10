@@ -8,7 +8,6 @@
     <property name="icon_name">gnc-account-new</property>
   </object>
   <object class="GtkDialog" id="account_picker_dialog">
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Select Account</property>
     <property name="default_width">800</property>
@@ -721,7 +720,6 @@
     <property name="text" translatable="yes">Double click on the transaction to change the matching transaction to reconcile, or the destination account of the auto-balance split (if required).</property>
   </object>
   <object class="GtkDialog" id="matcher_help_dialog">
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">12</property>
     <property name="title" translatable="yes">Transaction List Help</property>
