@@ -37,6 +37,7 @@ extern "C"
 
 #include <stdint.h>
 #include <boost/regex.hpp>
+#include <boost/locale/encoding_utf.hpp>
 #include <sstream>
 #include <cstdlib>
 
@@ -1307,11 +1308,11 @@ main(int argc, char ** argv)
 std::ostream&
 operator<<(std::ostream& s, GncNumeric n)
 {
+    using boost::locale::conv::utf_to_utf;
     std::basic_ostringstream<wchar_t> ss;
     ss.imbue(s.getloc());
     ss << n;
-    std::wstring_convert<std::codecvt_utf8<wchar_t>> make_utf8;
-    s << make_utf8.to_bytes(ss.str());
+    s << utf_to_utf<char>(ss.str());
     return s;
 }
 
