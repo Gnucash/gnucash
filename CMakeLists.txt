@@ -511,7 +511,7 @@ SET (Boost_FIND_QUIETLY ON)
 IF (NOT DEFINED ${BOOST_ROOT})
   SET(BOOST_ROOT $ENV{BOOST_ROOT})
 ENDIF()
-FIND_PACKAGE (Boost 1.54.0 REQUIRED COMPONENTS date_time regex locale filesystem)
+FIND_PACKAGE (Boost 1.54.0 REQUIRED COMPONENTS date_time regex locale filesystem system)
 
 IF (Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIRS})
