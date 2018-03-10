@@ -5809,11 +5809,14 @@ msgstr "_Buchabschluss"
 msgid "Archive old data using accounting periods"
 msgstr "Alte Daten abschließen und in vorigen Buchführungsperioden speichern."
 
+# Fell: Wie oft muß ich hier noch Editor durch Datenbank ersetzen? S. u.
+# Der Kurs-Editor ist das Fenster, welches danach aufgerufen wird.
+#
 #. Translators: This entry opens the Price Database window
 #. * and will be renamed to "_Price Database" in v.2.8
 #: ../src/gnome/gnc-plugin-basic-commands.c:190
 msgid "_Price Editor"
-msgstr "_Kurs-Editor"
+msgstr "_Kurs-Datenbank"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:191
 msgid "View and edit the prices for stocks and mutual funds"
