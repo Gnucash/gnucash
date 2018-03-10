@@ -418,7 +418,7 @@ gnc_tree_view_commodity_new (QofBook *book,
     col = gnc_tree_view_add_text_column (
               /* Translators: Again replace CUSIP by the name of your
                  National Securities Identifying Number. */
-              view, _("ISIN/CUSIP"), "cusip_code", NULL, "QWERTYUIOP",
+              view, _("ISIN/CUSIP"), "cusip_code", NULL, "US1234567890",
               GNC_TREE_MODEL_COMMODITY_COL_CUSIP,
               GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
               sort_by_commodity_string);
@@ -440,7 +440,7 @@ gnc_tree_view_commodity_new (QofBook *book,
               sort_by_quote_flag,
               NULL);
     col = gnc_tree_view_add_text_column (
-              view, _("Source"), "quote_source", NULL, "yahoo",
+              view, _("Source"), "quote_source", NULL, "alphavantage",
               GNC_TREE_MODEL_COMMODITY_COL_QUOTE_SOURCE,
               GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
               sort_by_commodity_string);

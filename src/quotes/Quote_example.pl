@@ -22,12 +22,12 @@ my $quoter = Finance::Quote->new();
 
 # -----------------------------------
 # get quotes for two stocks ...
-%quotes = $quoter->fetch("yahoo","IBM", "SGI"); 
+%quotes = $quoter->fetch("alphavantage","IBM", "SGI"); 
 
 # print some selected values 
-print "NYSE by Yahoo: ", $quotes {"IBM", "name"},  
+print "NYSE by Alphavantage: ", $quotes {"IBM", "name"},  
        " last price: ", $quotes {"IBM", "last"},  "\n";
-print "NYSE by Yahoo: ", $quotes {"SGI", "name"},   
+print "NYSE by Alphavantage: ", $quotes {"SGI", "name"},   
        " last price: ", $quotes {"SGI", "last"},  "\n";
        
 # loop over and print all values.

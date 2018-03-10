@@ -51,7 +51,7 @@
   <cmdty:xcode>12345</cmdty:xcode>
   <cmdty:fraction>10000</cmdty:fraction>
   <cmdty:get_quotes/>
-  <cmdty:quote_source>yahoo</cmdty:quote_source>
+  <cmdty:quote_source>alphavantage</cmdty:quote_source>
 </gnc:commodity>
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
