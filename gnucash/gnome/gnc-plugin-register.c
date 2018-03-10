@@ -161,6 +161,7 @@ gnc_plugin_register_main_window_page_changed(GncMainWindow *window,
 
         // The page changed signal is emitted multiple times so we need
         // to use an idle_add to change the focus to the register
+        g_idle_remove_by_data (GNC_PLUGIN_PAGE_REGISTER (plugin_page));
         g_idle_add ((GSourceFunc)gnc_plugin_page_register_focus,
                       GNC_PLUGIN_PAGE_REGISTER (plugin_page));
     }

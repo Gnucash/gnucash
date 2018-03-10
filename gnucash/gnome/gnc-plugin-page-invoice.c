@@ -452,7 +452,7 @@ gnc_plugin_page_invoice_focus (InvoiceWindow *iw)
 
     if (!GNUCASH_IS_REGISTER(regWidget))
         return FALSE;
-    
+
     sheet = gnucash_register_get_sheet (GNUCASH_REGISTER(regWidget));
 
     // Test for the sheet being read only
@@ -495,6 +495,7 @@ gnc_plugin_page_invoice_main_window_page_changed (GncMainWindow *window,
 
         // The page changed signal is emitted multiple times so we need
         // to use an idle_add to change the focus to the sheet
+        g_idle_remove_by_data (priv->iw);
         g_idle_add ((GSourceFunc)gnc_plugin_page_invoice_focus, priv->iw);
     }
 }
@@ -582,6 +583,9 @@ gnc_plugin_page_invoice_destroy_widget (GncPluginPage *plugin_page)
                                  GNC_PREF_SUMMARYBAR_POSITION_BOTTOM,
                                  gnc_plugin_page_invoice_summarybar_position_changed,
                                  page);
+
+    // Remove the page focus idle function if present
+    g_idle_remove_by_data (priv->iw);
 
     if (priv->widget == NULL)
     {

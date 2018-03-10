@@ -425,6 +425,7 @@ gnc_plugin_page_owner_main_window_page_changed (GncMainWindow *window,
 
         // The page changed signal is emitted multiple times so we need
         // to use an idle_add to change the focus to the tree view
+        g_idle_remove_by_data (GTK_TREE_VIEW (priv->tree_view));
         g_idle_add ((GSourceFunc)gnc_plugin_page_owner_focus,
                       GTK_TREE_VIEW (priv->tree_view));
     }
@@ -731,6 +732,9 @@ gnc_plugin_page_owner_tree_destroy_widget (GncPluginPage *plugin_page)
     ENTER("page %p", plugin_page);
     page = GNC_PLUGIN_PAGE_OWNER_TREE (plugin_page);
     priv = GNC_PLUGIN_PAGE_OWNER_TREE_GET_PRIVATE(page);
+
+    // Remove the page focus idle function if present
+    g_idle_remove_by_data (GTK_TREE_VIEW (priv->tree_view));
 
     if (priv->widget)
     {

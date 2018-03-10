@@ -1262,6 +1262,10 @@ gnc_plugin_page_register_destroy_widget (GncPluginPage *plugin_page)
                                  GNC_PREF_SUMMARYBAR_POSITION_BOTTOM,
                                  gnc_plugin_page_register_summarybar_position_changed,
                                  page);
+
+    // Remove the page focus idle function if present
+    g_idle_remove_by_data (GNC_PLUGIN_PAGE_REGISTER (plugin_page));
+
     if (priv->widget == NULL)
         return;
 
