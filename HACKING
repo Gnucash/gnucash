@@ -126,7 +126,7 @@ Using Electric Fence with GnuCash
 There are currently no rules in our build system to build and run gnucash
 or unit tests with Electric Fence.
 
-I should probably be relatively straightforward to add this as all it
+It should probably be relatively straightforward to add this as all it
 needs is to link with libefence.so (-lefence).
 
 Fedora 27 ships an ElectricFence package containing that libary and also
