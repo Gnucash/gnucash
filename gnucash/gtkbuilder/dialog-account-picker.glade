@@ -258,5 +258,10 @@
         </child>
       </object>
     </child>
+    <action-widgets>
+      <action-widget response="1">newbutton</action-widget>
+      <action-widget response="-6">cancelbutton</action-widget>
+      <action-widget response="-5">okbutton</action-widget>
+    </action-widgets>
   </object>
 </interface>
