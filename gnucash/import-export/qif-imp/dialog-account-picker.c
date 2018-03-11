@@ -324,7 +324,7 @@ gnc_ui_qif_account_picker_map_cb(GtkWidget * w, gpointer user_data)
  * If the clicks Cancel instead, FALSE is returned. Modal.
  ****************************************************************/
 gboolean
-qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
+qif_account_picker_dialog(GtkWindow *parent, QIFImportWindow * qif_wind, SCM map_entry)
 {
     QIFAccountPickerDialog * wind;
     SCM gnc_name     = scm_c_eval_string("qif-map-entry:gnc-name");
@@ -352,6 +352,8 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
     wind->dialog     = GTK_WIDGET(gtk_builder_get_object (builder, "qif_import_account_picker_dialog"));
     wind->treeview   = GTK_TREE_VIEW(gtk_builder_get_object (builder, "account_tree"));
     wind->qif_wind   = qif_wind;
+
+    gtk_window_set_transient_for (GTK_WINDOW (wind->dialog), parent);
 
     {
         GtkTreeStore *store;

@@ -28,7 +28,7 @@
 
 #include "assistant-qif-import.h"
 
-gboolean qif_account_picker_dialog(QIFImportWindow * wind, SCM initial_sel);
+gboolean qif_account_picker_dialog (GtkWindow *parent, QIFImportWindow * wind, SCM initial_sel);
 
 typedef struct _accountpickerdialog QIFAccountPickerDialog;
 
