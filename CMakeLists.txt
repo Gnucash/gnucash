@@ -847,6 +847,8 @@ ADD_CUSTOM_TARGET(distcheck DEPENDS dist
             -D PACKAGE_PREFIX=${PACKAGE_PREFIX}
             -D CMAKE_C_FLAGS=${CMAKE_C_FLAGS}
             -D CMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
+            -D GTEST_ROOT=${GTEST_ROOT}
+            -D GMOCK_ROOT=${GMOCK_ROOT}
             -P ${CMAKE_SOURCE_DIR}/common/cmake_modules/MakeDistCheck.cmake
         )
 
