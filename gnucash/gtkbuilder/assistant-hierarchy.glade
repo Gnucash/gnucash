@@ -3,9 +3,10 @@
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkAssistant" id="hierarchy_assistant">
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">12</property>
+    <property name="modal">True</property>
+    <property name="default_width">400</property>
     <property name="default_height">550</property>
     <signal name="cancel" handler="on_cancel" swapped="no"/>
     <signal name="close" handler="on_finish" swapped="no"/>
@@ -133,7 +134,7 @@ Select categories that correspond to the ways that you foresee you will use GnuC
           <object class="GtkPaned" id="hpaned100">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="position">650</property>
+            <property name="position">300</property>
             <property name="position_set">True</property>
             <child>
               <object class="GtkPaned" id="vpaned100">
