@@ -90,7 +90,7 @@ free_ftd_cb (gpointer user_data)
 }
 
 GNCSearchWindow *
-gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
+gnc_ui_find_transactions_dialog_create(GtkWindow *parent, GNCLedgerDisplay * orig_ledg)
 {
     QofIdType type = GNC_ID_SPLIT;
     struct _ftd_data *ftd;
@@ -98,7 +98,6 @@ gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
     QofQuery *start_q, *show_q = NULL;
     gboolean num_action =
                 qof_book_use_split_action_for_num_field(gnc_get_current_book());
-    GtkWindow *parent = GTK_WINDOW(gnc_ledger_display_get_parent(orig_ledg));
 
     /* Build parameter list in reverse order */
     if (params == NULL)

@@ -2,9 +2,9 @@
 Type=Application
 MimeType=application/x-gnucash;
 Version=0.9.4
-_Name=GnuCash
-_GenericName=Finance Management
-_Comment=Manage your finances, accounts, and investments
+Name=GnuCash
+GenericName=Finance Management
+Comment=Manage your finances, accounts, and investments
 Exec=gnucash %f
 Icon=gnucash-icon
 StartupNotify=true

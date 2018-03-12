@@ -354,6 +354,7 @@ gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
 
     if (auto_check)
     {
+        time64 statement_date_day_end = gnc_time64_get_day_end(statement_date);
         for (splits = qof_query_run (query); splits; splits = splits->next)
         {
             Split *split = splits->data;
@@ -364,7 +365,7 @@ gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
             g_assert (recn == NREC || recn == CREC);
 
             if (recn == CREC &&
-		gnc_difftime (trans_date, statement_date) <= 0)
+		gnc_difftime (trans_date, statement_date_day_end) <= 0)
 		g_hash_table_insert (view->reconciled, split, split);
         }
     }

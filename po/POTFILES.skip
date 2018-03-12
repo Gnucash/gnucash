@@ -1,106 +1,15 @@
 # These are files that we don't want to translate, because they are
 # not distributed.
-libgnucash/backend/xml/gncmod-backend-xml.c
 libgnucash/backend/xml/gncmod-backend-xml.cpp
 gnucash/gnome-utils/gnc-tree-model-selection.c
 
 # This file is only an example for programmers and never called:
 libgnucash/gnc-module/example/gnc-plugin.example.c
 
-# Skip softlinks to scm files. These softlinks are created in builddir
-# for testing purposes, intltool-extract isn't smart enough to ignore
-# them when bulddir and srcdir are the same, and both intltool-extract
-# and intltool-update use absolute paths to the srcdir when it's not
-# the same as builddir which messes up the file names in gnucash.pot.
+# The features in import-export/qif are still unused.
+gnucash/import-export/qif/qif-defaults.c
+gnucash/import-export/qif/qif-parse.c
 
-libgnucash/app-utils/gnucash/app-utils.scm
-libgnucash/app-utils/gnucash/gettext.scm
-libgnucash/app-utils/test/test-load-app-utils-module.scm
-libgnucash/core-utils/gnucash/core-utils.scm
-libgnucash/engine/gnucash/business-core.scm
-libgnucash/engine/gnucash/engine.scm
-libgnucash/gnc-module/gnucash/gnc-module.scm
-gnucash/gnome-utils/gnucash/gnome-utils.scm
-gnucash/import-export/qif-imp/gnucash/import-export/qif-import.scm
-gnucash/import-export/qif-imp/qif-import/qif-dialog-utils.scm
-gnucash/import-export/qif-imp/qif-import/qif-file.scm
-gnucash/import-export/qif-imp/qif-import/qif-guess-map.scm
-gnucash/import-export/qif-imp/qif-import/qif-import.scm
-gnucash/import-export/qif-imp/qif-import/qif-merge-groups.scm
-gnucash/import-export/qif-imp/qif-import/qif-objects.scm
-gnucash/import-export/qif-imp/qif-import/qif-parse.scm
-gnucash/import-export/qif-imp/qif-import/qif-to-gnc.scm
-gnucash/import-export/qif-imp/qif-import/qif-utils.scm
-gnucash/report/business-reports/gnucash/report/aging.scm
-gnucash/report/business-reports/gnucash/report/balsheet-eg.eguile.scm
-gnucash/report/business-reports/gnucash/report/balsheet-eg.scm
-gnucash/report/business-reports/gnucash/report/business-reports.scm
-gnucash/report/business-reports/gnucash/report/customer-summary.scm
-gnucash/report/business-reports/gnucash/report/easy-invoice.scm
-gnucash/report/business-reports/gnucash/report/fancy-invoice.scm
-gnucash/report/business-reports/gnucash/report/invoice.scm
-gnucash/report/business-reports/gnucash/report/job-report.scm
-gnucash/report/business-reports/gnucash/report/owner-report.scm
-gnucash/report/business-reports/gnucash/report/payables.scm
-gnucash/report/business-reports/gnucash/report/receipt.eguile.scm
-gnucash/report/business-reports/gnucash/report/receipt.scm
-gnucash/report/business-reports/gnucash/report/receivables.scm
-gnucash/report/business-reports/gnucash/report/taxinvoice.eguile.scm
-gnucash/report/business-reports/gnucash/report/taxinvoice.scm
-gnucash/report/locale-specific/us/gnucash/report/locale-specific/de_DE.scm
-gnucash/report/locale-specific/us/gnucash/report/locale-specific/us.scm
-gnucash/report/locale-specific/us/gnucash/report/taxtxf-de_DE.scm
-gnucash/report/locale-specific/us/gnucash/report/taxtxf.scm
-gnucash/report/report-gnome/gnucash/report/report-gnome.scm
-gnucash/report/report-system/gnucash/report/eguile-gnc.scm
-gnucash/report/report-system/gnucash/report/eguile-html-utilities.scm
-gnucash/report/report-system/gnucash/report/eguile-utilities.scm
-gnucash/report/report-system/gnucash/report/report-system.scm
-gnucash/report/report-system/gnucash/report/report-system/collectors.scm
-gnucash/report/report-system/gnucash/report/report-system/list-extras.scm
-gnucash/report/report-system/gnucash/report/report-system/report-collectors.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/account-piecharts.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/account-summary.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/advanced-portfolio.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/average-balance.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/balance-sheet.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/budget-balance-sheet.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/budget-barchart.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/budget-flow.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/budget-income-statement.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/budget.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/cash-flow.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/cashflow-barchart.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/category-barchart.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/daily-reports.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/equity-statement.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/general-journal.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/general-ledger.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/income-gst-statement.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/income-statement.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/net-barchart.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/net-linechart.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/portfolio.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/price-scatter.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/register.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/sx-summary.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/transaction.scm
-gnucash/report/standard-reports/gnucash/report/standard-reports/trial-balance.scm
-gnucash/report/stylesheets/gnucash/report/stylesheet-easy.scm
-gnucash/report/stylesheets/gnucash/report/stylesheet-fancy.scm
-gnucash/report/stylesheets/gnucash/report/stylesheet-footer.scm
-gnucash/report/stylesheets/gnucash/report/stylesheet-head-or-tail.scm
-gnucash/report/stylesheets/gnucash/report/stylesheet-plain.scm
-gnucash/report/stylesheets/gnucash/report/stylesheets.scm
-gnucash/report/utility-reports/gnucash/report/hello-world.scm
-gnucash/report/utility-reports/gnucash/report/utility-reports.scm
-gnucash/report/utility-reports/gnucash/report/view-column.scm
-gnucash/report/utility-reports/gnucash/report/welcome-to-gnucash.scm
-libgnucash/scm/build-config.scm
-libgnucash/scm/build-config.scm.in
-libgnucash/scm/gnucash/main.scm
-libgnucash/scm/gnucash/price-quotes.scm
-libgnucash/scm/gnucash/printf.scm
-libgnucash/tax/us/gnucash/tax/de_DE.scm
-libgnucash/tax/us/gnucash/tax/us.scm
+# These files are autogenerated, and hence not distributed
+gnucash/gnome-utils/gnc-warnings.c
+libgnucash/engine/iso-4217-currencies.c

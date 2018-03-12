@@ -91,19 +91,7 @@
                           604800))
          (begin-string (qof-print-date (+ beginweekt64 345600)))
          (end-string (qof-print-date (+ beginweekt64 864000))))
-    (format #f (_ "~s to ~s") begin-string end-string)))
-    
-;  (let ((begin-string (qof-print-date
-;                       (+ (* (gnc:date-get-week
-;                              (gnc:time64-start-day-time
-;                               (gnc-mktime datevec)))
-;                             604800) 345600)))
-;        (end-string (qof-print-date
-;                     (+ (* (gnc:date-get-week
-;                            (gnc:time64-start-day-time
-;                             (gnc-mktime datevec)))
-;                           604800) 864000))))
-;    (format #f (_ "~s to ~s") begin-string end-string)))
+    (format #f (_ "~a to ~a") begin-string end-string)))
 
 ;; is leap year?
 (define (gnc:leap-year? year)

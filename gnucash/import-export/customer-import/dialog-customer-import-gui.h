@@ -39,7 +39,7 @@ typedef struct _customer_import_gui CustomerImportGui;
 /**
  * File chooser
  */
-CustomerImportGui *gnc_plugin_customer_import_showGUI(void);
+CustomerImportGui *gnc_plugin_customer_import_showGUI (GtkWindow *parent);
 
 G_END_DECLS
 

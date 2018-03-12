@@ -1,7 +1,5 @@
 # Note that gnucash/gnome-utils CANNOT depend on gnucash/gnome!
 
-ADD_SUBDIRECTORY(gtkbuilder)
-ADD_SUBDIRECTORY(ui)
 ADD_SUBDIRECTORY(test)
 
 # Command to generate the swig-gnome-utils.c wrapper file
@@ -10,21 +8,21 @@ gnc_add_swig_guile_command (swig-gnome-utils-c
     ${CMAKE_CURRENT_SOURCE_DIR}/gnome-utils.i
 )
 
-SET (WARNINGS_SCHEMA ../gschemas/org.gnucash.warnings.gschema.xml.in)
+SET (WARNINGS_SCHEMA ${DATADIR_BUILD}/glib-2.0/schemas/org.gnucash.warnings.gschema.xml)
 SET (GNC_WARNINGS_C ${CMAKE_CURRENT_BINARY_DIR}/gnc-warnings.c)
 SET (GNC_WARNINGS_H ${CMAKE_CURRENT_BINARY_DIR}/gnc-warnings.h)
 
 ADD_CUSTOM_COMMAND(
   OUTPUT ${GNC_WARNINGS_C}
-  DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${WARNINGS_SCHEMA} make-gnc-warnings-c.xsl
+  DEPENDS ${WARNINGS_SCHEMA} make-gnc-warnings-c.xsl
   COMMAND
-    ${LIBXSLT_XSLTPROC_EXECUTABLE} -o ${GNC_WARNINGS_C} ${CMAKE_CURRENT_SOURCE_DIR}/make-gnc-warnings-c.xsl ${CMAKE_CURRENT_BINARY_DIR}/${WARNINGS_SCHEMA}
+    ${LIBXSLT_XSLTPROC_EXECUTABLE} -o ${GNC_WARNINGS_C} ${CMAKE_CURRENT_SOURCE_DIR}/make-gnc-warnings-c.xsl ${WARNINGS_SCHEMA}
 )
 ADD_CUSTOM_COMMAND(
   OUTPUT ${GNC_WARNINGS_H}
-  DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${WARNINGS_SCHEMA} make-gnc-warnings-h.xsl
+  DEPENDS ${WARNINGS_SCHEMA} make-gnc-warnings-h.xsl
   COMMAND
-    ${LIBXSLT_XSLTPROC_EXECUTABLE} -o ${GNC_WARNINGS_H} ${CMAKE_CURRENT_SOURCE_DIR}/make-gnc-warnings-h.xsl ${CMAKE_CURRENT_BINARY_DIR}/${WARNINGS_SCHEMA}
+    ${LIBXSLT_XSLTPROC_EXECUTABLE} -o ${GNC_WARNINGS_H} ${CMAKE_CURRENT_SOURCE_DIR}/make-gnc-warnings-h.xsl ${WARNINGS_SCHEMA}
 )
 
 #GTK before 3.14 didn't have GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK
@@ -270,5 +268,4 @@ ADD_CUSTOM_TARGET(scm-gnome-utils ALL DEPENDS scm-gnome-utils-2 scm-gnome-utils-
 SET_LOCAL_DIST(gnome_utils_DIST_local CMakeLists.txt ${gnome_utils_SOURCES} ${gnome_utils_HEADERS}
         ${gnome_utils_noinst_HEADERS} gnome-utils.scm gnome-utils.i gnc-menu-extensions.scm
         make-gnc-warnings-c.xsl make-gnc-warnings-h.xsl)
-SET(gnome_utils_DIST ${gnome_utils_DIST_local} ${test_gnome_utils_DIST}
-        ${gnome_utils_ui_DIST} ${gnome_utils_gtkbuilder_DIST} PARENT_SCOPE)
+SET(gnome_utils_DIST ${gnome_utils_DIST_local} ${test_gnome_utils_DIST} PARENT_SCOPE)

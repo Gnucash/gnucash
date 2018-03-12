@@ -1,0 +1,1204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.2 -->
+<interface>
+  <requires lib="gtk+" version="3.10"/>
+  <object class="GtkListStore" id="account_match_store">
+    <columns>
+      <!-- column-name import_string -->
+      <column type="gchararray"/>
+      <!-- column-name full_name -->
+      <column type="gchararray"/>
+      <!-- column-name account -->
+      <column type="gpointer"/>
+    </columns>
+  </object>
+  <object class="GtkAdjustment" id="end_row_adj">
+    <property name="upper">1000</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="start_row_adj">
+    <property name="upper">1000</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAssistant" id="csv_transaction_assistant">
+    <property name="can_focus">False</property>
+    <property name="border_width">12</property>
+    <property name="title" translatable="yes">CSV Transaction Import</property>
+    <property name="default_width">400</property>
+    <property name="default_height">500</property>
+    <signal name="apply" handler="csv_tximp_assist_finish_cb" swapped="no"/>
+    <signal name="cancel" handler="csv_tximp_assist_close_cb" swapped="no"/>
+    <signal name="close" handler="csv_tximp_assist_close_cb" swapped="no"/>
+    <signal name="destroy" handler="csv_tximp_assist_close_cb" swapped="no"/>
+    <signal name="prepare" handler="csv_tximp_assist_prepare_cb" swapped="no"/>
+    <child>
+      <object class="GtkLabel" id="start_page">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="valign">start</property>
+        <property name="label" translatable="yes">This assistant will help you import a delimited file containing a list of transactions. It supports both token separated files (such as comma separated or semi-colon separated) and fixed width data.
+
+For a successful import three columns have to be available in the import data:
+• a Date column
+• a Description column
+• a Deposit or Withdrawal column
+
+If there is no Account data available, a base account can be selected to which all data will be imported.
+
+Apart from a choice of delimiter, there are several options to tweak the importer. For example a number of lines can be skipped at the start or the end of the data, as well as odd rows. Several date and number formats are supported. The file encoding can be defined.
+
+The importer can handle files where transactions are split over multiple lines, with each line representing one split.
+
+Lastly, for repeated imports the preview page has buttons to Load and Save the settings. To save the settings, tweak the settings to your preferences (optionally starting from an existing preset), then (optionally change the settings name and press the Save Settings button. Note you can't save to built-in presets.</property>
+        <property name="wrap">True</property>
+      </object>
+      <packing>
+        <property name="page_type">intro</property>
+        <property name="complete">True</property>
+        <property name="has_padding">False</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="file_page">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="border_width">12</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkLabel" id="label7">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">
+Select location and file name for the Import, then click 'OK'...
+</property>
+            <property name="wrap">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="title" translatable="yes">Select File for Import</property>
+        <property name="has_padding">False</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="preview_page">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+        <property name="border_width">12</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child>
+          <object class="GtkGrid" id="table1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="row_spacing">5</property>
+            <property name="column_spacing">5</property>
+            <child>
+              <object class="GtkFrame" id="frame6">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label_xalign">0</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkAlignment" id="alignment4">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="bottom_padding">5</property>
+                    <property name="left_padding">5</property>
+                    <property name="right_padding">5</property>
+                    <child>
+                      <object class="GtkBox" id="combo_hbox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkButton" id="delete_settings">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="tooltip_text" translatable="yes">Delete Settings</property>
+                            <signal name="clicked" handler="csv_tximp_preview_del_settings_cb" swapped="no"/>
+                            <child>
+                              <object class="GtkImage" id="image2">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="icon_name">edit-delete</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="pack_type">end</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="save_settings">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="tooltip_text" translatable="yes">Save Settings</property>
+                            <signal name="clicked" handler="csv_tximp_preview_save_settings_cb" swapped="no"/>
+                            <child>
+                              <object class="GtkImage" id="image1">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="icon_name">document-save</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="pack_type">end</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="label12">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes"> &lt;b&gt;Load and Save Settings&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                    <property name="track_visited_links">False</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFrame" id="frame10">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="label_xalign">0</property>
+                <property name="shadow_type">none</property>
+                <child>
+                  <object class="GtkAlignment" id="alignment6">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="left_padding">5</property>
+                    <property name="right_padding">5</property>
+                    <child>
+                      <object class="GtkBox" id="vbox1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkGrid" id="table4">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child>
+                              <object class="GtkRadioButton" id="csv_button">
+                                <property name="label" translatable="yes">Separators</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="halign">start</property>
+                                <property name="active">True</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="csv_tximp_preview_sep_fixed_sel_cb" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkRadioButton" id="fixed_button">
+                                <property name="label" translatable="yes">Fixed-Width</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="halign">start</property>
+                                <property name="draw_indicator">True</property>
+                                <property name="group">csv_button</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSeparator" id="hseparator1">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="hexpand">True</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">1</property>
+                                <property name="width">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkGrid" id="separator_table">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="column_spacing">3</property>
+                            <child>
+                              <object class="GtkCheckButton" id="space_cbutton">
+                                <property name="label" translatable="yes">Space</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="halign">start</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="tab_cbutton">
+                                <property name="label" translatable="yes">Tab</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="halign">start</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="comma_cbutton">
+                                <property name="label" translatable="yes">Comma (,)</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="halign">start</property>
+                                <property name="active">True</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">2</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="colon_cbutton">
+                                <property name="label" translatable="yes">Colon (:)</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="halign">start</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="semicolon_cbutton">
+                                <property name="label" translatable="yes">Semicolon (;)</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="halign">start</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="hyphen_cbutton">
+                                <property name="label" translatable="yes">Hyphen (-)</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="halign">start</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">2</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="custom_cbutton">
+                                <property name="label" translatable="yes">Custom</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="halign">start</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="custom_entry">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="invisible_char">●</property>
+                                <property name="primary_icon_activatable">False</property>
+                                <property name="secondary_icon_activatable">False</property>
+                                <signal name="changed" handler="csv_tximp_preview_sep_button_cb" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="fw_instructions_hbox">
+                            <property name="can_focus">False</property>
+                            <property name="no_show_all">True</property>
+                            <child>
+                              <object class="GtkImage" id="instructions_image1">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="halign">start</property>
+                                <property name="valign">start</property>
+                                <property name="icon_name">dialog-information</property>
+                                <property name="icon_size">3</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="padding">2</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkGrid" id="table2">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <object class="GtkLabel" id="label2">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">•</property>
+                                    <property name="use_markup">True</property>
+                                    <property name="wrap">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">0</property>
+                                    <property name="top_attach">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label3">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
+                                    <property name="label" translatable="yes">Double-click anywhere on the table below to insert a column break</property>
+                                    <property name="use_markup">True</property>
+                                    <property name="wrap">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="top_attach">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label4">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">•</property>
+                                    <property name="use_markup">True</property>
+                                    <property name="wrap">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">0</property>
+                                    <property name="top_attach">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label5">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
+                                    <property name="label" translatable="yes">Right-click anywhere in a column to modify it (widen, narrow, merge)</property>
+                                    <property name="use_markup">True</property>
+                                    <property name="wrap">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="top_attach">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkGrid" id="table5">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child>
+                              <object class="GtkSeparator" id="hseparator4">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="hexpand">True</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                                <property name="width">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="multi_split_button">
+                                <property name="label" translatable="yes">Multi-split</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="tooltip_text" translatable="yes">Normally the importer will assume each line in the input file will correspond to one transaction. Each line can have information for one transaction and one or two splits.
+
+When Multi-split is enabled the importer will assume multiple consecutive lines together hold the information for one transaction. Each line provides information for exactly one split. The first line should also provide the information for the transaction.
+To know which lines belong to the same transaction, the importer will compare the provided transaction information in each line. If that information is empty or the same as the first transaction line the importer will consider this line part of the same transaction.</property>
+                                <property name="halign">start</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="csv_tximp_preview_multisplit_cb" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="label19">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="label" translatable="yes">&lt;b&gt;File Format&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFrame" id="frame8">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label_xalign">0</property>
+                <property name="shadow_type">none</property>
+                <child>
+                  <object class="GtkAlignment" id="alignment8">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="left_padding">5</property>
+                    <property name="right_padding">5</property>
+                    <child>
+                      <object class="GtkBox" id="vbox6">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkGrid" id="table3">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="row_spacing">5</property>
+                            <property name="column_spacing">5</property>
+                            <child>
+                              <object class="GtkAlignment" id="date_format_container">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="xalign">0</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label20">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Date Format</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkAlignment" id="currency_format_container">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">0</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label21">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Currency Format</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label16">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Encoding</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkAlignment" id="encoding_container">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">0</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label17">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Leading Lines to Skip</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">4</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label18">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Trailing Lines to Skip</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">5</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkBox" id="hbox2">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <object class="GtkSpinButton" id="start_row">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="invisible_char">●</property>
+                                    <property name="primary_icon_activatable">False</property>
+                                    <property name="secondary_icon_activatable">False</property>
+                                    <property name="adjustment">start_row_adj</property>
+                                    <property name="numeric">True</property>
+                                    <signal name="value-changed" handler="csv_tximp_preview_srow_cb" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">4</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkBox" id="hbox3">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <object class="GtkSpinButton" id="end_row">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="invisible_char">●</property>
+                                    <property name="primary_icon_activatable">False</property>
+                                    <property name="secondary_icon_activatable">False</property>
+                                    <property name="adjustment">end_row_adj</property>
+                                    <property name="numeric">True</property>
+                                    <signal name="value-changed" handler="csv_tximp_preview_erow_cb" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">5</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSeparator" id="hseparator2">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">3</property>
+                                <property name="width">2</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="skip_rows">
+                            <property name="label" translatable="yes">Skip alternate lines</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="tooltip_text" translatable="yes">Starting from the first line that is actually imported every second line will be skipped. This option will take the leading lines to skip into account as well.
+For example
+* if 'Leading Lines to Skip' is set to 3, the first line to import will be line 4. Lines 5, 7, 9,... will be skipped.
+* if 'Leading Lines to Skip' is set to 4, the first line to import will be line 5. Lines 6, 8, 10,... will be skipped.</property>
+                            <property name="halign">start</property>
+                            <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="csv_tximp_preview_skiprows_cb" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="label13">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Miscellaneous&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFrame" id="frame1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label_xalign">0</property>
+                <property name="shadow_type">none</property>
+                <child>
+                  <object class="GtkAlignment" id="alignment1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="bottom_padding">5</property>
+                    <property name="left_padding">5</property>
+                    <property name="right_padding">5</property>
+                    <child>
+                      <object class="GtkBox" id="account_hbox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="label1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Account&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="scrolledwindow2">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <child>
+              <object class="GtkViewport" id="viewport2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkBox" id="vbox8">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkTreeView" id="ctreeview">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="headers_visible">False</property>
+                        <property name="enable_grid_lines">both</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection" id="treeview-selection1"/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkTreeView" id="treeview">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="enable_grid_lines">both</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection" id="treeview-selection2"/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="hbox13">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <child>
+              <object class="GtkImage" id="instructions_image">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="halign">start</property>
+                <property name="valign">start</property>
+                <property name="icon_name">dialog-information</property>
+                <property name="icon_size">3</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="padding">2</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="instructions_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Select the type of each column to import.</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="padding">5</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="hbox14">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkCheckButton" id="skip_errors_button">
+                <property name="label" translatable="yes">Skip Errors</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="image_position">right</property>
+                <property name="draw_indicator">True</property>
+                <signal name="toggled" handler="csv_tximp_preview_skiperrors_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="pack_type">end</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="page_type">intro</property>
+        <property name="complete">True</property>
+        <property name="has_padding">False</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="account_match_page">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="border_width">12</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkLabel" id="label7609">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Select a row to change the mappings:</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="padding">5</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="account_match_swindow">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkTreeView" id="account_match_view">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="model">account_match_store</property>
+                <property name="rules_hint">True</property>
+                <property name="enable_search">False</property>
+                <property name="enable_tree_lines">True</property>
+                <signal name="button-press-event" handler="csv_tximp_acct_match_view_clicked_cb" swapped="no"/>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection" id="treeview-selection3"/>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                    <property name="resizable">True</property>
+                    <property name="title" translatable="yes">Account ID</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                    <property name="resizable">True</property>
+                    <property name="title" translatable="yes">Account Name</property>
+                    <property name="expand">True</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                      <attributes>
+                        <attribute name="text">1</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="hbox7609">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkLabel" id="account_match_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Error text.</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="account_match_change">
+                <property name="label" translatable="yes">Change GnuCash _Account...</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+                <signal name="clicked" handler="csv_tximp_acct_match_button_clicked_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="pack_type">end</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="title" translatable="yes">Match Import accounts with GnuCash accounts</property>
+        <property name="has_padding">False</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="doc_page">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkLabel" id="label8">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">On the following page you will be able to associate each transaction to a category.
+
+If there were problems with the import settings, pressing forward will take you back to the preview page to try and correct.
+
+If this is the first time importing, you will find that all lines may need to be associated. On subsequent imports, the importer will try to associate the transactions based on previous imports.
+
+If this is your initial import into a new file, you will first see a dialog for setting book options, since these can affect how imported data are converted to GnuCash transactions. If this is an existing file, the dialog will not be shown.
+
+The confidence of a correct association is displayed as a colored bar.
+
+More information can be displayed by using the help button.</property>
+            <property name="wrap">True</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="page_type">progress</property>
+        <property name="title" translatable="yes">Transaction Information</property>
+        <property name="complete">True</property>
+        <property name="has_padding">False</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="match_page">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="border_width">12</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkLabel" id="match_label">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">label</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="page_type">confirm</property>
+        <property name="title" translatable="yes">Match Transactions</property>
+        <property name="has_padding">False</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="summary_page">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="border_width">12</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkLabel" id="summary_label">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label">label</property>
+            <property name="use_markup">True</property>
+            <property name="wrap">True</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="page_type">summary</property>
+        <property name="title" translatable="yes">Import Summary</property>
+        <property name="complete">True</property>
+        <property name="has_padding">False</property>
+      </packing>
+    </child>
+    <child internal-child="action_area">
+      <object class="GtkBox" id="assistant-action_area2">
+        <property name="can_focus">False</property>
+      </object>
+      <packing>
+        <property name="has_padding">False</property>
+      </packing>
+    </child>
+  </object>
+</interface>

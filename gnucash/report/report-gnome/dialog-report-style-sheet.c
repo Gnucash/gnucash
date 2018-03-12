@@ -417,7 +417,7 @@ gnc_style_sheet_select_dialog_event_cb (GtkWidget *widget,
 
 
 static StyleSheetDialog *
-gnc_style_sheet_select_dialog_create(void)
+gnc_style_sheet_select_dialog_create(GtkWindow *parent)
 {
     StyleSheetDialog  * ss = g_new0(StyleSheetDialog, 1);
     GtkBuilder        * builder;
@@ -428,6 +428,8 @@ gnc_style_sheet_select_dialog_create(void)
     gnc_builder_add_from_file (builder, "dialog-report.glade", "select_style_sheet_dialog");
 
     ss->toplevel   = GTK_WIDGET(gtk_builder_get_object (builder, "select_style_sheet_dialog"));
+
+    gtk_window_set_transient_for (GTK_WINDOW (ss->toplevel), GTK_WINDOW(parent));
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(ss->toplevel), "GncStyleSheetDialog");
@@ -461,7 +463,7 @@ gnc_style_sheet_select_dialog_create(void)
 
 
 void
-gnc_style_sheet_dialog_open(void)
+gnc_style_sheet_dialog_open(GtkWindow *parent)
 {
     if (gnc_style_sheet_dialog)
     {
@@ -470,7 +472,7 @@ gnc_style_sheet_dialog_open(void)
     else
     {
         gnc_style_sheet_dialog =
-            gnc_style_sheet_select_dialog_create();
+            gnc_style_sheet_select_dialog_create(parent);
     }
 }
 

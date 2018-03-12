@@ -47,6 +47,8 @@
 (export env-string)
 (export env-select-price-source)
 (export env-any-date)
+(export env-transfer)
+(export env-transfer-foreign)
 (export env-create-transaction)
 (export env-create-account)
 (export env-create-root-account)
@@ -154,12 +156,82 @@
 			(xaccSplitSetAmount split-2 (gnc-numeric-neg aaa))
 			(xaccSplitSetValue split-1 aaa)
 			(xaccSplitSetValue split-2 (gnc-numeric-neg aaa))
-
 			))
     ;(format #t "tx ~a\n" (map xaccSplitGetAmount (list split-1 split-2)))
     ;(format #t "tx ~a\n" (map xaccSplitGetValue (list split-1 split-2)))
     txn))
 
+(define* (env-transfer-foreign
+          env
+          DD MM YY         ; day/month/year
+          debit            ; account-from
+          credit           ; account-to
+          amount1          ; amount-from
+          amount2          ; amount-to
+          #:key            ; - the following are optional -
+          description      ; string: description (def = "ponies")
+          void-reason      ; string: void-reason (def = not-voided)
+          reconcile        ; pair  : (cons reconciled reconciled-date)
+          num              ; string: num field   (def = null)
+          notes            ; string: notes       (def = null)
+          memo             ; string: memo        (def = null)
+          )
+  (let ((txn (xaccMallocTransaction (gnc-get-current-book)))
+	(split-1 (xaccMallocSplit  (gnc-get-current-book)))
+	(split-2 (xaccMallocSplit  (gnc-get-current-book))))
+    (xaccTransBeginEdit txn)
+    (xaccTransSetDescription txn (or description "ponies"))
+    (xaccTransSetCurrency txn (xaccAccountGetCommodity debit))
+    (xaccTransSetDate txn DD MM YY)
+    (xaccSplitSetParent split-1 txn)
+    (xaccSplitSetParent split-2 txn)
+    (xaccSplitSetAccount split-1 debit)
+    (xaccSplitSetAccount split-2 credit)
+    (xaccSplitSetValue split-1 (- amount1))
+    (xaccSplitSetValue split-2 amount1)
+    (xaccSplitSetAmount split-1 (- amount1))
+    (xaccSplitSetAmount split-2 amount2)
+    (if reconcile
+        (begin
+          (xaccSplitSetReconcile split-1 (car reconcile))
+          (xaccSplitSetReconcile split-2 (car reconcile))
+          (xaccSplitSetDateReconciledSecs split-1 (cdr reconcile))
+          (xaccSplitSetDateReconciledSecs split-2 (cdr reconcile))))
+    (if num
+        (begin
+          (gnc-set-num-action txn split-1 num num)
+          (gnc-set-num-action txn split-2 num num)))
+    (if void-reason (xaccTransVoid txn void-reason))
+    (if notes (xaccTransSetNotes txn notes))
+    (if memo
+        (begin
+          (xaccSplitSetMemo split-1 memo)
+          (xaccSplitSetMemo split-2 memo)))
+    (xaccTransCommitEdit txn)
+    txn))
+
+(define* (env-transfer
+          env
+          DD MM YY         ; day/month/year
+          debit            ; account-from
+          credit           ; account-to
+          amount           ; amount
+          #:key            ; - the following are optional -
+          description      ; string: description (def = "ponies")
+          void-reason      ; string: void-reason (def = not-voided)
+          reconcile        ; char  : reconciled  (default = n)
+          num              ; string: num field   (def = null)
+          notes            ; string: notes       (def = null)
+          memo             ; string: memo        (def = null)
+          )
+  (env-transfer-foreign
+   env DD MM YY debit credit amount amount
+   #:description description
+   #:void-reason void-reason
+   #:reconcile reconcile
+   #:num num
+   #:memo memo
+   #:notes notes))
 
 (define (env-create-root-account env type commodity)
   (env-create-account env type commodity (gnc-get-current-root-account)))

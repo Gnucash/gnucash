@@ -55,6 +55,7 @@ struct GUID
     auto begin () const noexcept -> decltype (implementation.begin ());
     auto end () const noexcept -> decltype (implementation.end ());
     bool operator < (GUID const &) noexcept;
+    friend bool operator == (GUID const &, GncGUID const &) noexcept;
     friend bool operator != (GUID const &, GUID const &) noexcept;
 };
 

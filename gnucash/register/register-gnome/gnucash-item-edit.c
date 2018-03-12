@@ -502,6 +502,7 @@ draw_text_cursor_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
     GncItemEdit *item_edit = GNC_ITEM_EDIT(user_data);
     GtkEditable *editable = GTK_EDITABLE(widget);
     GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(widget));
+    GtkStateFlags flags = gtk_widget_get_state_flags (GTK_WIDGET(widget));
     gint height = gtk_widget_get_allocated_height (widget);
     const gchar *text;
     GdkRGBA *fg_color;
@@ -514,7 +515,7 @@ draw_text_cursor_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
 
     // Get the foreground color
     gdk_rgba_parse (&color, "black");
-    gtk_style_context_get_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
+    gtk_style_context_get_color (stylectxt, flags, &color);
     fg_color = &color;
 
     text = gtk_entry_get_text (GTK_ENTRY (widget));

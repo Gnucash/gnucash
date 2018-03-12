@@ -1291,11 +1291,12 @@ opening_equity_cb (GtkWidget *w, gpointer data)
  * gnc_account_window_create                                        *
  *   creates a window to create a new account.                      *
  *                                                                  *
+ * Args:   parent - the parent window dialog                        *
  * Args:   aw - the information structure for this window           *
  * Return: the created window                                       *
  \*******************************************************************/
 static void
-gnc_account_window_create(AccountWindow *aw)
+gnc_account_window_create(GtkWindow *parent, AccountWindow *aw)
 {
     GtkWidget *amount;
     GtkWidget *date_edit;
@@ -1314,6 +1315,9 @@ gnc_account_window_create(AccountWindow *aw)
 
     aw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "account_dialog"));
     awo = G_OBJECT (aw->dialog);
+
+    if (parent)
+        gtk_window_set_transient_for (GTK_WINDOW (aw->dialog), parent);
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(aw->dialog), "GncAccountDialog");
@@ -1616,9 +1620,7 @@ gnc_ui_new_account_window_internal (GtkWindow *parent,
         aw->next_name = subaccount_names + 1;
     }
 
-    gnc_account_window_create (aw);
-    gtk_window_set_transient_for (GTK_WINDOW (aw->dialog), parent);
-    
+    gnc_account_window_create (parent, aw);
     gnc_account_to_ui (aw);
 
     gnc_resume_gui_refresh ();
@@ -1854,8 +1856,7 @@ gnc_ui_edit_account_window(GtkWindow *parent, Account *account)
 
     gnc_suspend_gui_refresh ();
 
-    gnc_account_window_create (aw);
-    gtk_window_set_transient_for (GTK_WINDOW (aw->dialog), parent);
+    gnc_account_window_create (parent, aw);
     gnc_account_to_ui (aw);
 
     gnc_resume_gui_refresh ();
@@ -1892,14 +1893,14 @@ gnc_ui_edit_account_window(GtkWindow *parent, Account *account)
  * opens up a window to create a new account
  *
  * Args:    book - containing book for the new account
- *        parent - The initial parent for the new account (optional)
+ *   parent_acct - The initial parent for the new account (optional)
  */
 void
 gnc_ui_new_account_window (GtkWindow *parent, QofBook *book,
                            Account *parent_acct)
 {
     g_return_if_fail(book != NULL);
-    if (parent && book)
+    if (parent_acct && book)
         g_return_if_fail(gnc_account_get_book(parent_acct) == book);
 
     gnc_ui_new_account_window_internal (parent, book, parent_acct, NULL, NULL,

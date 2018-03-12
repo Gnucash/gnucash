@@ -26,6 +26,6 @@
 
 typedef struct _stylesheetdialog StyleSheetDialog;
 
-void gnc_style_sheet_dialog_open(void);
+void gnc_style_sheet_dialog_open(GtkWindow *parent);
 
 #endif

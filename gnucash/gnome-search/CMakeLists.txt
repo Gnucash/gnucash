@@ -36,7 +36,7 @@ SET (gnome_search_noinst_HEADERS
 # Add dependency on config.h
 SET_SOURCE_FILES_PROPERTIES (${gnome_search_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
-SET_LOCAL_DIST(gnome_search_DIST_local CMakeLists.txt  dialog-search.glade ${gnome_search_SOURCES} ${gnome_search_HEADERS}
+SET_LOCAL_DIST(gnome_search_DIST_local CMakeLists.txt ${gnome_search_SOURCES} ${gnome_search_HEADERS}
         ${gnome_search_noinst_HEADERS})
 SET(gnome_search_DIST ${gnome_search_DIST_local} PARENT_SCOPE)
 
@@ -62,13 +62,3 @@ INSTALL(TARGETS gncmod-gnome-search
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 INSTALL(FILES ${gnome_search_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
-
-SET(gnome_search_GLADE dialog-search.glade)
-
-INSTALL(FILES ${gnome_search_GLADE} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/gtkbuilder)
-
-FILE(COPY .
-    DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder
-    PATTERN Makefile.* EXCLUDE
-    PATTERN CMakeLists.txt EXCLUDE)
-

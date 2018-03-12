@@ -31,6 +31,7 @@
   xmlns:tte="http://www.gnucash.org/XML/tte"
   xmlns:entry="http://www.gnucash.org/XML/entry"
   xmlns:vendor="http://www.gnucash.org/XML/vendor">
+
   <gnc-act:title>
     Kontenrahmen für Wohnungswirtschaft
   </gnc-act:title>
@@ -41,12 +42,13 @@
     BETA-Version eines allgemeinen Kontenrahmes für Wohnungswirtschaft, bearbeitet von Christoph Franzen. Fehlermeldungen an ChristophFranzen@gmx.net .
   </gnc-act:long-description>
   <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
-  <gnc:account version="2.0.0">
-    <act:name>Root Account</act:name>
-    <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
-    <act:type>ROOT</act:type>
-    <act:commodity-scu>0</act:commodity-scu>
-  </gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
 <gnc:account version="2.0.0">
   <act:name>0 Anlagevermögen</act:name>
   <act:id type="new">5dfd1f9eb05cbb673ebfe7cb3a9fdda9</act:id>
@@ -9612,8 +9614,5 @@
   </act:slots>
   <act:parent type="new">6d7edd606e6f0aa8e56c5694161e64c7</act:parent>
 </gnc:account>
-</gnc-account-example>
 
-<!-- Local variables: -->
-<!-- mode: xml        -->
-<!-- End:             -->
+</gnc-account-example>

@@ -37,6 +37,7 @@ extern "C"
 
 #include <stdint.h>
 #include <boost/regex.hpp>
+#include <boost/locale/encoding_utf.hpp>
 #include <sstream>
 #include <cstdlib>
 
@@ -1302,6 +1303,18 @@ main(int argc, char ** argv)
     return 0;
 }
 #endif
+
+
+std::ostream&
+operator<<(std::ostream& s, GncNumeric n)
+{
+    using boost::locale::conv::utf_to_utf;
+    std::basic_ostringstream<wchar_t> ss;
+    ss.imbue(s.getloc());
+    ss << n;
+    s << utf_to_utf<char>(ss.str());
+    return s;
+}
 
 const char* gnc_numeric_errorCode_to_string(GNCNumericErrorCode error_code)
 {

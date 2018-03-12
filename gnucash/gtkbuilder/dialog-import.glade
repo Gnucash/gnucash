@@ -1,0 +1,1211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.0 -->
+<interface>
+  <requires lib="gtk+" version="3.10"/>
+  <object class="GtkImage" id="account_new_icon">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">gnc-account-new</property>
+  </object>
+  <object class="GtkDialog" id="account_picker_dialog">
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Select Account</property>
+    <property name="default_width">800</property>
+    <property name="default_height">600</property>
+    <property name="type_hint">dialog</property>
+    <signal name="map" handler="gnc_ui_generic_account_picker_map_cb" swapped="no"/>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="account_picker_vbox">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="dialog-action_area8">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="newbutton">
+                <property name="label">New _Account...</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="image">account_new_icon</property>
+                <property name="use_underline">True</property>
+                <property name="always_show_image">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="cancelbutton">
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="okbutton">
+                <property name="label" translatable="yes">_OK</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="1">newbutton</action-widget>
+      <action-widget response="-6">cancelbutton</action-widget>
+      <action-widget response="-5">okbutton</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkBox" id="account_picker_content">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkLabel" id="label847715">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Please select or create an appropriate GnuCash account for:</property>
+        <property name="justify">center</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="online_id_label">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Online account ID here...</property>
+        <property name="justify">center</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkScrolledWindow" id="account_tree_sw">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+  </object>
+  <object class="GtkAdjustment" id="atm_fee_adj">
+    <property name="upper">1000</property>
+    <property name="value">2</property>
+    <property name="step_increment">0.01</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="auto_add_adj">
+    <property name="lower">1</property>
+    <property name="upper">6</property>
+    <property name="value">1</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="auto_clear_adj">
+    <property name="lower">6</property>
+    <property name="upper">12</property>
+    <property name="value">6</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkDialog" id="format_picker_dialog">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Choose a format</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="default_width">600</property>
+    <property name="default_height">400</property>
+    <property name="type_hint">dialog</property>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="dialog-vbox16">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="dialog-action_area16">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="okbutton1">
+                <property name="label" translatable="yes">_OK</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkFrame" id="frame2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label_xalign">0</property>
+            <child>
+              <object class="GtkBox" id="vbox8">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="spacing">15</property>
+                <child>
+                  <object class="GtkLabel" id="msg_label">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label">do not translate</property>
+                    <property name="justify">center</property>
+                    <property name="wrap">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="hbox1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="spacing">3</property>
+                    <child>
+                      <object class="GtkLabel" id="label847775">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Format:</property>
+                        <property name="justify">right</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="menu_box">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="label847773">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Choose a format</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-5">okbutton1</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkAdjustment" id="match_adj">
+    <property name="upper">6</property>
+    <property name="value">1</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkWindow" id="Preferences">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Preferences</property>
+    <child>
+      <object class="GtkGrid" id="matcher_prefs">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkCheckButton" id="pref/dialogs.import.generic/enable-skip">
+            <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Enable skip transaction action</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">Enable the SKIP action in the transaction matcher. If enabled, a transaction whose best match&amp;apos;s score is in the yellow zone (above the Auto-ADD threshold but below the Auto-CLEAR threshold) will be skipped by default.</property>
+            <property name="tooltip_text" translatable="yes">Enable the SKIP action in the transaction matcher. If enabled, a transaction whose best match's score is in the yellow zone (above the Auto-ADD threshold but below the Auto-CLEAR threshold) will be skipped by default.</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
+            <property name="use_underline">True</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="pref/dialogs.import.generic/enable-update">
+            <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Enable update match action</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">Enable the UPDATE AND RECONCILE action in the transaction matcher. If enabled, a transaction whose best match&amp;apos;s score is above the Auto-CLEAR threshold and has a different date or amount than the matching existing transaction will cause the existing transaction to be updated and cleared by default.</property>
+            <property name="tooltip_text" translatable="yes">Enable the UPDATE AND RECONCILE action in the transaction matcher. If enabled, a transaction whose best match's score is above the Auto-CLEAR threshold and has a different date or amount than the matching existing transaction will cause the existing transaction to be updated and cleared by default.</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
+            <property name="use_underline">True</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">2</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label847785">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">&lt;b&gt;Generic Importer&lt;/b&gt;</property>
+            <property name="use_markup">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="pref/dialogs.import.generic/atm-fee-threshold">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores. These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees. For example, you withdraw $100, and you are charged $101,50 plus Interac fees. If you manually entered that $100, the amounts won&amp;apos;t match. You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match.</property>
+            <property name="tooltip_text" translatable="yes">In some places commercial ATMs (not belonging to a financial institution) are installed in places like convenience stores. These ATMs add their fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees. For example, you withdraw $100, and you are charged $101,50 plus Interac fees. If you manually entered that $100, the amounts won't match. You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match.</property>
+            <property name="invisible_char">●</property>
+            <property name="primary_icon_activatable">False</property>
+            <property name="secondary_icon_activatable">False</property>
+            <property name="adjustment">atm_fee_adj</property>
+            <property name="climb_rate">1</property>
+            <property name="digits">2</property>
+            <property name="snap_to_ticks">True</property>
+            <property name="numeric">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">7</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="pref/dialogs.import.generic/auto-clear-threshold">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">A transaction whose best match&amp;apos;s score is in the green zone (above or equal to the Auto-CLEAR threshold) will be CLEARed by default.</property>
+            <property name="tooltip_text" translatable="yes">A transaction whose best match's score is in the green zone (above or equal to the Auto-CLEAR threshold) will be CLEARed by default.</property>
+            <property name="invisible_char">●</property>
+            <property name="primary_icon_activatable">False</property>
+            <property name="secondary_icon_activatable">False</property>
+            <property name="adjustment">auto_clear_adj</property>
+            <property name="climb_rate">1</property>
+            <property name="snap_to_ticks">True</property>
+            <property name="numeric">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">6</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="pref/dialogs.import.generic/auto-add-threshold">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">A transaction whose best match&amp;apos;s score is in the red zone (above the display threshold but below or equal to the Auto-ADD threshold) will be ADDed by default.</property>
+            <property name="tooltip_text" translatable="yes">A transaction whose best match's score is in the red zone (above the display threshold but below or equal to the Auto-ADD threshold) will be ADDed by default.</property>
+            <property name="invisible_char">●</property>
+            <property name="primary_icon_activatable">False</property>
+            <property name="secondary_icon_activatable">False</property>
+            <property name="adjustment">auto_add_adj</property>
+            <property name="climb_rate">1</property>
+            <property name="snap_to_ticks">True</property>
+            <property name="numeric">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">5</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="pref/dialogs.import.generic/match-threshold">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">The minimum score a potential match must have to be displayed in the match list.</property>
+            <property name="tooltip_text" translatable="yes">The minimum score a potential match must have to be displayed in the match list.</property>
+            <property name="invisible_char">●</property>
+            <property name="primary_icon_activatable">False</property>
+            <property name="secondary_icon_activatable">False</property>
+            <property name="adjustment">match_adj</property>
+            <property name="climb_rate">1</property>
+            <property name="snap_to_ticks">True</property>
+            <property name="numeric">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label847789">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
+            <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Commercial ATM _fees threshold</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">pref/dialogs.import.generic/atm-fee-threshold</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">7</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label847788">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
+            <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Auto-c_lear threshold</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">pref/dialogs.import.generic/auto-clear-threshold</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">6</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label847787">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
+            <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Auto-_add threshold</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">pref/dialogs.import.generic/auto-add-threshold</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">5</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label847786">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
+            <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Match _display threshold</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">pref/dialogs.import.generic/match-threshold</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="pref/dialogs.import.generic/use-bayes">
+            <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Use _bayesian matching</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">Use bayesian algorithms to match new transactions with existing accounts.</property>
+            <property name="tooltip_text" translatable="yes">Use bayesian algorithms to match new transactions with existing accounts.</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
+            <property name="use_underline">True</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">3</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="pref/dialogs.import.generic/auto-create-commodity">
+            <property name="label" translatable="yes" comments="Preferences-&gt;Online Banking:Generic">Automatically create new commodities</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">Enables the automatic creation of new commodities if any unknown commodity is encountered during import. Otherwise the user will be asked what to do with each unknown commodity.</property>
+            <property name="tooltip_text" translatable="yes">Enables the automatic creation of new commodities if any unknown commodity is encountered during import. Otherwise the user will be asked what to do with each unknown commodity.</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">9</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkDialog" id="match_picker_dialog">
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Select matching existing transaction</property>
+    <property name="default_width">600</property>
+    <property name="default_height">400</property>
+    <property name="type_hint">dialog</property>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="dialog-vbox14">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">8</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="dialog-action_area14">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkCheckButton" id="hide_reconciled_check1">
+                <property name="label" translatable="yes" comments="Dialog Select matching transactions">Show Reconciled</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="active">True</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="cancel_button1">
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="ok_button1">
+                <property name="label" translatable="yes">_OK</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="vbox7">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkLabel" id="label847772">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" comments="Dialog Select matching transactions">Imported transaction's first split:</property>
+                <property name="justify">center</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="scrolledwindow30">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="download_view">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="rules_hint">True</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="treeview-selection1"/>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label847766">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes" comments="Dialog Select matching transactions">Potential splits matching the selected transaction: </property>
+                <property name="justify">center</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="scrolledwindow29">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="matched_view">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="rules_hint">True</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="treeview-selection2"/>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-6">cancel_button1</action-widget>
+      <action-widget response="-5">ok_button1</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkTextBuffer" id="textbuffer2">
+    <property name="text" translatable="yes">This transaction probably requires your intervention or it will be imported unbalanced.</property>
+  </object>
+  <object class="GtkTextBuffer" id="textbuffer3">
+    <property name="text" translatable="yes">This transaction will be imported balanced (you may still want to double check the match or destination account).</property>
+  </object>
+  <object class="GtkTextBuffer" id="textbuffer4">
+    <property name="text" translatable="yes">This transaction requires your intervention or it will NOT be imported.</property>
+  </object>
+  <object class="GtkTextBuffer" id="textbuffer5">
+    <property name="text" translatable="yes">Double click on the transaction to change the matching transaction to reconcile, or the destination account of the auto-balance split (if required).</property>
+  </object>
+  <object class="GtkDialog" id="matcher_help_dialog">
+    <property name="can_focus">False</property>
+    <property name="border_width">12</property>
+    <property name="title" translatable="yes">Transaction List Help</property>
+    <property name="resizable">False</property>
+    <property name="type_hint">dialog</property>
+    <signal name="close" handler="on_matcher_help_close_clicked" swapped="no"/>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="dialog-vbox18">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="dialog-action_area18">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="matcher_help_close">
+                <property name="label" translatable="yes">_Close</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+                <signal name="clicked" handler="on_matcher_help_close_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid" id="table1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="row_spacing">6</property>
+            <property name="column_spacing">12</property>
+            <child>
+              <object class="GtkLabel" id="label847790">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">&lt;b&gt;Colors&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="scrolledwindow33">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hscrollbar_policy">never</property>
+                <property name="vscrollbar_policy">never</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTextView" id="textview3">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="pixels_above_lines">5</property>
+                    <property name="pixels_below_lines">5</property>
+                    <property name="editable">False</property>
+                    <property name="wrap_mode">word</property>
+                    <property name="left_margin">5</property>
+                    <property name="right_margin">5</property>
+                    <property name="cursor_visible">False</property>
+                    <property name="buffer">textbuffer3</property>
+                    <property name="accepts_tab">False</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="scrolledwindow34">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hscrollbar_policy">never</property>
+                <property name="vscrollbar_policy">never</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTextView" id="textview4">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="pixels_above_lines">5</property>
+                    <property name="pixels_below_lines">5</property>
+                    <property name="editable">False</property>
+                    <property name="wrap_mode">word</property>
+                    <property name="left_margin">5</property>
+                    <property name="right_margin">5</property>
+                    <property name="cursor_visible">False</property>
+                    <property name="buffer">textbuffer4</property>
+                    <property name="accepts_tab">False</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="scrolledwindow32">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hscrollbar_policy">never</property>
+                <property name="vscrollbar_policy">never</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTextView" id="textview2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="pixels_above_lines">5</property>
+                    <property name="pixels_below_lines">5</property>
+                    <property name="editable">False</property>
+                    <property name="wrap_mode">word</property>
+                    <property name="left_margin">5</property>
+                    <property name="right_margin">5</property>
+                    <property name="cursor_visible">False</property>
+                    <property name="buffer">textbuffer2</property>
+                    <property name="accepts_tab">False</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label847794">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label847795">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">&lt;b&gt;Actions&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label847796">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">"A"</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">6</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label847797">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">"U+R"</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">7</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label847798">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">"R"</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">8</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label847799">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Select "A" to add the transaction as new.</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">6</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label847780">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Select "U+R" to update and reconcile a matching transaction.</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">7</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label847781">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Select "R" to reconcile a matching transaction.</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">8</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label847800">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Select neither to skip the transaction (it won't be imported at all).</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">9</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label847801">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">(none)</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">9</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="scrolledwindow35">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="vexpand">True</property>
+                <property name="hscrollbar_policy">never</property>
+                <property name="vscrollbar_policy">never</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTextView" id="textview5">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="pixels_above_lines">5</property>
+                    <property name="pixels_below_lines">5</property>
+                    <property name="editable">False</property>
+                    <property name="wrap_mode">word</property>
+                    <property name="left_margin">5</property>
+                    <property name="right_margin">5</property>
+                    <property name="cursor_visible">False</property>
+                    <property name="buffer">textbuffer5</property>
+                    <property name="accepts_tab">False</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">10</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEventBox" id="intervention_required_box">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkLabel" id="label847802">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Red</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEventBox" id="intervention_probably_required_box">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkLabel" id="label847803">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Yellow</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEventBox" id="intervention_not_required_box">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkLabel" id="label847804">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Green</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-7">matcher_help_close</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkBox" id="transaction_matcher_content">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkLabel" id="heading_label">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">List of downloaded transactions (source split shown):</property>
+        <property name="justify">center</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkScrolledWindow" id="scrolledwindow25">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="shadow_type">in</property>
+        <child>
+          <object class="GtkTreeView" id="downloaded_view">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="reorderable">True</property>
+            <property name="rules_hint">True</property>
+            <property name="enable_search">False</property>
+            <child internal-child="selection">
+              <object class="GtkTreeSelection" id="treeview-selection3"/>
+            </child>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+  </object>
+  <object class="GtkDialog" id="transaction_matcher_dialog">
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Generic import transaction matcher</property>
+    <property name="default_width">600</property>
+    <property name="default_height">400</property>
+    <property name="type_hint">dialog</property>
+    <signal name="close" handler="on_matcher_cancel_clicked" swapped="no"/>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="transaction_matcher_vbox">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="dialog-action_area10">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="matcher_cancel">
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+                <signal name="clicked" handler="on_matcher_cancel_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="matcher_ok">
+                <property name="label" translatable="yes">_OK</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+                <signal name="clicked" handler="on_matcher_ok_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="matcher__help">
+                <property name="label" translatable="yes">_Help</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+                <signal name="clicked" handler="on_matcher_help_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-6">matcher_cancel</action-widget>
+      <action-widget response="-5">matcher_ok</action-widget>
+      <action-widget response="-11">matcher__help</action-widget>
+    </action-widgets>
+  </object>
+</interface>

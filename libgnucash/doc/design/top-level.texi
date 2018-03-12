@@ -118,7 +118,7 @@ fetch stock price data off the Internet and insert it into the GnuCash
 Engine. This module requires the functionality of the Finance::Quote
 module available from CPAN. The Finance::Quote module can fetch
 price quotes from many different sources including Alphavantage
-and several international exchanges.
+and several international exchanges and fund companies.
 
 The Finance::Quote module also supports fetching currency exchange
 rates. GnuCash will be extended to allow the fetching and use of

@@ -26,8 +26,8 @@
 
 #include <guid.hpp>
 #include "../gnc-tokenizer.hpp"
-#include "../gnc-csv-tokenizer.hpp"
-#include "../gnc-fw-tokenizer.hpp"
+#include "../gnc-tokenizer-csv.hpp"
+#include "../gnc-tokenizer-fw.hpp"
 #include <gtest/gtest.h>
 #include <iostream>
 #include <fstream>      // fstream
@@ -84,16 +84,15 @@ std::string GncTokenizerTest::get_filepath(const std::string& filename)
         return std::string(srcdir) + "/" + filename;
 }
 
-//TEST_F (GncTokenizerTest, load_file_nonexisting)
-//{
-//
-//    auto file1 = get_filepath ("notexist.csv");
-//
-//    /* Test loading of a non-existing file */
-//    // FIXME determine what is actually thrown as I can't find it by trial and error
-//    EXPECT_THROW (fw_tok->load_file (file1), std::ios_base::failure);
-//    EXPECT_THROW (csv_tok->load_file (file1), std::ios_base::failure);
-//}
+TEST_F (GncTokenizerTest, load_file_nonexisting)
+{
+
+    auto file1 = get_filepath ("notexist.csv");
+
+    /* Test loading of a non-existing file */
+    EXPECT_THROW (fw_tok->load_file (file1), std::ios_base::failure);
+    EXPECT_THROW (csv_tok->load_file (file1), std::ios_base::failure);
+}
 
 TEST_F (GncTokenizerTest, load_file_existing)
 {
@@ -138,6 +137,17 @@ TEST_F (GncTokenizerTest, tokenize_from_csv_file)
  * Note this bypasses encoding configuration, which should be tested
  * independently.
  */
+
+/* First test whether we're properly catching boost::tokenizer throws
+ * This happens when the input data has invalid escape sequences */
+TEST_F (GncTokenizerTest, tokenize_binary_data)
+{
+    GncCsvTokenizer *csvtok = dynamic_cast<GncCsvTokenizer*>(csv_tok.get());
+    csvtok->set_separators (",");
+
+    set_utf8_contents (csv_tok, R"(\764Test,Something)");
+    EXPECT_THROW (csv_tok->tokenize(), std::range_error);
+}
 
 /* This helper function will run the parse step on the given data
  * with the parser as configured by the calling test function.

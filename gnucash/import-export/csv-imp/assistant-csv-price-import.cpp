@@ -1,5 +1,5 @@
 /*******************************************************************\
- * assistant-csv-price-import.c -- An assistant for importing       *
+ * assistant-csv-price-import.cpp -- An assistant for importing     *
  *                                     Prices from a file.          *
  *                                                                  *
  * Copyright (C) 2017 Robert Fewell                                 *
@@ -52,10 +52,10 @@ extern "C"
 #include "go-charmap-sel.h"
 }
 
-#include "gnc-csv-price-import-settings.hpp"
-#include "gnc-price-import.hpp"
-#include "gnc-fw-tokenizer.hpp"
-#include "gnc-csv-tokenizer.hpp"
+#include "gnc-imp-settings-csv-price.hpp"
+#include "gnc-import-price.hpp"
+#include "gnc-tokenizer-fw.hpp"
+#include "gnc-tokenizer-csv.hpp"
 
 #define MIN_COL_WIDTH 70
 #define GNC_PREFS_GROUP "dialogs.import.csv"
@@ -64,10 +64,26 @@ extern "C"
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
+/* Note on memory management
+ *
+ * The same notes as for assistant-csv-trans-import.cpp appy to
+ * this assistant as well. Please read the note at the top of that
+ * file to understand important details about the use of several
+ * memory management models in one file.
+ */
+
 class  CsvImpPriceAssist
 {
 public:
     CsvImpPriceAssist ();
+    ~CsvImpPriceAssist ();
+
+    /* Delete copy and move constructor/assignments
+     * We don't want gui elements to be moved around or copied at all */
+    CsvImpPriceAssist(const CsvImpPriceAssist&) = delete;            // copy constructor
+    CsvImpPriceAssist& operator=(const CsvImpPriceAssist&) = delete; // copy assignment
+    CsvImpPriceAssist(CsvImpPriceAssist&&) = delete;                 // move constructor
+    CsvImpPriceAssist& operator=(CsvImpPriceAssist&&) = delete;      // move assignment
 
     void assist_prepare_cb (GtkWidget *page);
     void assist_file_page_prepare ();
@@ -172,8 +188,6 @@ private:
 extern "C"
 {
 void csv_price_imp_assist_prepare_cb (GtkAssistant  *assistant, GtkWidget *page, CsvImpPriceAssist* info);
-void csv_price_imp_assist_destroy_cb (GtkWidget *object, CsvImpPriceAssist* info);
-void csv_price_imp_assist_cancel_cb (GtkAssistant *gtkassistant, CsvImpPriceAssist* info);
 void csv_price_imp_assist_close_cb (GtkAssistant *gtkassistant, CsvImpPriceAssist* info);
 void csv_price_imp_assist_finish_cb (GtkAssistant *gtkassistant, CsvImpPriceAssist* info);
 void csv_price_imp_file_confirm_cb (GtkWidget *button, CsvImpPriceAssist *info);
@@ -200,19 +214,6 @@ csv_price_imp_assist_prepare_cb (GtkAssistant *assistant, GtkWidget *page,
         CsvImpPriceAssist* info)
 {
     info->assist_prepare_cb(page);
-}
-
-void
-csv_price_imp_assist_destroy_cb (GtkWidget *object, CsvImpPriceAssist* info)
-{
-    gnc_unregister_gui_component_by_data (ASSISTANT_CSV_IMPORT_PRICE_CM_CLASS, info);
-    delete info;
-}
-
-void
-csv_price_imp_assist_cancel_cb (GtkAssistant *assistant, CsvImpPriceAssist* info)
-{
-    gnc_close_gui_component_by_data (ASSISTANT_CSV_IMPORT_PRICE_CM_CLASS, info);
 }
 
 void
@@ -662,6 +663,14 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
     gnc_window_adjust_for_screen (GTK_WINDOW(csv_imp_asst));
 }
 
+/*******************************************************
+ * Assistant Destructor
+ *******************************************************/
+CsvImpPriceAssist::~CsvImpPriceAssist ()
+{
+    gtk_widget_destroy (GTK_WIDGET(csv_imp_asst));
+}
+
 /**************************************************
  * Code related to the file chooser page
  **************************************************/
@@ -708,7 +717,7 @@ CsvImpPriceAssist::file_confirm_cb ()
     catch (std::range_error &e)
     {
         /* Parsing failed ... */
-        gnc_error_dialog (GTK_WINDOW(csv_imp_asst), "%s", e.what());
+        gnc_error_dialog (GTK_WINDOW(csv_imp_asst), "%s", _(e.what()));
         return;
     }
     /* Get settings store and populate */
@@ -1831,14 +1840,15 @@ void
 CsvImpPriceAssist::assist_compmgr_close ()
 {
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(csv_imp_asst));
-    gtk_widget_destroy (GTK_WIDGET(csv_imp_asst));
 }
 
 static void
 csv_price_imp_close_handler (gpointer user_data)
 {
     auto info = (CsvImpPriceAssist*)user_data;
+    gnc_unregister_gui_component_by_data (ASSISTANT_CSV_IMPORT_PRICE_CM_CLASS, info);
     info->assist_compmgr_close();
+    delete info;
 }
 
 /********************************************************************\

@@ -31,6 +31,7 @@
   xmlns:ts="http://www.gnucash.org/XML/ts"
   xmlns:tte="http://www.gnucash.org/XML/tte"
   xmlns:vendor="http://www.gnucash.org/XML/vendor">
+
 <gnc-act:title>
   Kontenrahmen SKR49
 </gnc-act:title>
@@ -48,6 +49,7 @@
   Formalia für GnuCash-Vorlagen: Frank H. Ellenberger 2009
 </gnc-act:long-description>
 <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
+
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
   <act:id type="new">e24772da4864456b196be5a6301c6756</act:id>
@@ -16893,8 +16895,5 @@
   <act:description>Umgebuchte Ausgaben bisheriger Zweckbetriebe </act:description>
   <act:parent type="new">8268da381a30e25c7c483162066858d4</act:parent>
 </gnc:account>
-</gnc-account-example>
 
-<!-- Local variables: -->
-<!-- mode: xml        -->
-<!-- End:             -->
+</gnc-account-example>

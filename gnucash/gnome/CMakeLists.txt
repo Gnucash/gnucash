@@ -1,7 +1,4 @@
 
-ADD_SUBDIRECTORY(gtkbuilder)
-ADD_SUBDIRECTORY(ui)
-
 SET (gnc_gnome_noinst_HEADERS
   assistant-acct-period.h
   assistant-hierarchy.h
@@ -167,14 +164,24 @@ IF (${CMAKE_VERSION} VERSION_GREATER 3.1)
   SET(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
 ENDIF()
 
-ADD_CUSTOM_COMMAND(
-    OUTPUT gnucash.appdata.xml
-    COMMAND ${CMAKE_COMMAND_TMP}
-      LC_ALL=C
-      ${PERL_EXECUTABLE} ${INTLTOOL_MERGE} -x -u -c ${CMAKE_SOURCE_DIR}/po/.intltool-merge-cache ${CMAKE_SOURCE_DIR}/po
-        ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in gnucash.appdata.xml
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in
-)
+
+if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.19.6)
+    # Gettext is too old to be able to merge an appdata file.
+    # Fall back to providing an unmerged (and hence untranslated) appdata file.
+    configure_file (${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in
+                    ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml COPYONLY)
+else()
+    add_custom_command (
+        OUTPUT gnucash.appdata.xml
+        COMMAND ${CMAKE_COMMAND_TMP}
+            LC_ALL=C
+            ${GETTEXT_MSGFMT_EXECUTABLE}
+                --xml --template ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in
+                -d ${CMAKE_SOURCE_DIR}/po
+                -o gnucash.appdata.xml
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gnucash.appdata.xml.in
+    )
+endif()
 
 ADD_CUSTOM_TARGET(gnucash-appdata ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml)
 
@@ -184,20 +191,28 @@ INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml DESTINATION  ${CMA
 
 configure_file(gnucash.desktop.in.in gnucash.desktop.in)
 
-ADD_CUSTOM_COMMAND(
-    OUTPUT gnucash.desktop
-    COMMAND ${CMAKE_COMMAND_TMP}
-      LC_ALL=C
-      ${PERL_EXECUTABLE} ${INTLTOOL_MERGE} -d -u -c ${CMAKE_SOURCE_DIR}/po/.intltool-merge-cache ${CMAKE_SOURCE_DIR}/po
-        gnucash.desktop.in gnucash.desktop
-    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop.in
-)
+if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.19)
+    # Gettext is too old to be able to merge a desktop file.
+    # Fall back to providing an unmerged (and hence untranslated) desktop file.
+    configure_file (${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop.in
+                    ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop COPYONLY)
+else()
+    add_custom_command (
+        OUTPUT gnucash.desktop
+        COMMAND ${CMAKE_COMMAND_TMP}
+            LC_ALL=C
+            ${GETTEXT_MSGFMT_EXECUTABLE}
+                --desktop --template gnucash.desktop.in
+                -d ${CMAKE_SOURCE_DIR}/po
+                -o gnucash.desktop
+        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop.in
+    )
+endif()
 
 ADD_CUSTOM_TARGET(gnucash-desktop ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop)
 
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop DESTINATION  ${CMAKE_INSTALL_DATADIR}/applications)
 
-SET_LOCAL_DIST(gnome_DIST_local
+SET_DIST_LIST(gnome_DIST
         CMakeLists.txt gnome.i gnucash.appdata.xml.in gnucash.desktop.in.in
         ${gnc_gnome_noinst_HEADERS} ${gnc_gnome_SOURCES})
-SET(gnome_DIST ${gnome_DIST_local} ${gnome_ui_DIST} ${gnome_gtkbuilder_DIST} PARENT_SCOPE)

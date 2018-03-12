@@ -339,6 +339,7 @@ inline GncNumeric operator/(int64_t a, GncNumeric b)
  * decimal if the denominator is a multiple of 10, otherwise as
  * "numerator/denominator".
  */
+std::ostream& operator<<(std::ostream&, GncNumeric);
 
 /* Implementation adapted from "The C++ Standard Library, Second Edition" by
  * Nicolai M. Josuttis, Addison-Wesley, 2012, ISBN 978-0-321-62321-8.
@@ -349,10 +350,10 @@ std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>&
     std::basic_ostringstream<charT, traits> ss;
     std::locale loc = s.getloc();
     ss.imbue(loc);
-    char dec_pt = '.';
+    auto dec_pt = static_cast<charT>('.');
     try
     {
-        dec_pt = std::use_facet<std::numpunct<char>>(loc).decimal_point();
+        dec_pt = std::use_facet<std::numpunct<charT>>(loc).decimal_point();
     }
     catch(const std::bad_cast& err) {} //Don't do anything, num_sep is already set.
 
@@ -368,7 +369,6 @@ std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>&
     s << ss.str();
     return s;
 }
-
 
 /**
  * std::stream input operator.
@@ -386,7 +386,7 @@ std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>&
 template <typename charT, typename traits>
 std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, traits>& s, GncNumeric& n)
 {
-    std::string instr;
+    std::basic_string<charT, traits> instr;
     s >> instr;
     if (s)
         n = GncNumeric(instr, true);

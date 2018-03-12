@@ -586,7 +586,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
                 investment_account_onlineid = g_strdup_printf( "%s%s",
 							       data.account_id,
 							       data.unique_id);
-                investment_account = gnc_import_select_account(NULL,
+                investment_account = gnc_import_select_account(
+                                     gnc_gen_trans_list_widget(gnc_ofx_importer_gui),
                                      investment_account_onlineid,
                                      1,
                                      investment_account_text,
@@ -934,7 +935,8 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
                                   "%s \"%s\"",
                                   account_type_name,
                                   data.account_name);
-        gnc_import_select_account(NULL, data.account_id, 1,
+        gnc_import_select_account(gnc_gen_trans_list_widget(gnc_ofx_importer_gui),
+                                  data.account_id, 1,
                                   account_description, default_commodity,
                                   default_type, NULL, NULL);
         g_free(account_description);
@@ -1013,7 +1015,7 @@ void gnc_file_ofx_import (GtkWindow *parent)
         DEBUG("Filename found: %s", selected_filename);
 
         /* Create the Generic transaction importer GUI. */
-        gnc_ofx_importer_gui = gnc_gen_trans_list_new(NULL, NULL, FALSE, 42);
+        gnc_ofx_importer_gui = gnc_gen_trans_list_new (GTK_WIDGET(parent), NULL, FALSE, 42);
 
         /* Look up the needed preferences */
         auto_create_commodity =

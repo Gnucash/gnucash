@@ -106,12 +106,20 @@
                           value)))
 
 (define (gnc:assign-colors num-colors)
-  (define base-colors '("red" "orange" "yellow" "green"
-                        "cyan" "blue" "purple" "magenta" 
-			"orchid" "khaki" "gold" "orange"
-			"red3" "orange3" "yellow3" "green3"
-                        "cyan3" "blue3" "purple3" "magenta3" 
-  			"orchid3" "khaki3" "gold3" "orange3"))
+  ;; default CSS colours
+  ;; (define base-colors '("red" "orange" "yellow" "green"
+  ;;                       "cyan" "blue" "purple" "magenta"
+  ;;                       "orchid" "khaki" "gold" "orange"
+  ;;                       "red3" "orange3" "yellow3" "green3"
+  ;;                       "cyan3" "blue3" "purple3" "magenta3"
+  ;;                       "orchid3" "khaki3" "gold3" "orange3"))
+
+  ;; new base-colors from http://clrs.cc/ and flatuicolors.com
+  (define base-colors (list "#FF4136" "#FF851B" "#FFDC00" "#2ECC40"
+                            "#0074D9" "#001f3f" "#85144b" "#7FDBFF"
+                            "#F012BE" "#3D9970" "#39CCCC" "#f39c12"
+                            "#e74c3c" "#e67e22" "#9b59b6" "#8e44ad"
+                            "#16a085" "#d35400"))
   (define (assign-colors i)
     (if (<= num-colors i)
         '()

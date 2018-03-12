@@ -2693,11 +2693,13 @@ split_register_pref_changed (gpointer prefs, gchar *pref, gpointer user_data)
     }
     else if (g_str_has_suffix(pref, GNC_PREF_SHOW_LEAF_ACCT_NAMES))
     {
-        reg->show_leaf_accounts = !reg->show_leaf_accounts;
+        reg->show_leaf_accounts = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                            GNC_PREF_SHOW_LEAF_ACCT_NAMES);
     }
     else if (g_str_has_suffix(pref, GNC_PREF_ALT_COLOR_BY_TRANS))
     {
-        reg->double_alt_color = !reg->double_alt_color;
+        reg->double_alt_color = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER,
+                                            GNC_PREF_ALT_COLOR_BY_TRANS);
     }
     else
     {

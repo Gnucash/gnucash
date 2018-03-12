@@ -686,7 +686,7 @@
 
     (set! title (title-string default-title custom-title))))
 
-    (gnc:html-document-set-title! document (format #f (_"~a #~d") title
+    (gnc:html-document-set-title! document (format #f (_"~a #~a") title
 						    (gncInvoiceGetID invoice)))
 
     (if (not (null? invoice))

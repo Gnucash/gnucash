@@ -680,7 +680,7 @@ find_handler (gpointer find_data, gpointer user_data)
 
 /* Create a tax-table window */
 TaxTableWindow *
-gnc_ui_tax_table_window_new (QofBook *book)
+gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
 {
     TaxTableWindow *ttw;
     GtkBuilder *builder;
@@ -715,6 +715,8 @@ gnc_ui_tax_table_window_new (QofBook *book)
     ttw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "tax_table_window_dialog"));
     ttw->names_view = GTK_WIDGET(gtk_builder_get_object (builder, "tax_tables_view"));
     ttw->entries_view = GTK_WIDGET(gtk_builder_get_object (builder, "tax_table_entries"));
+
+    gtk_window_set_transient_for (GTK_WINDOW (ttw->dialog), parent);
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(ttw->dialog), "GncTaxTableDialog");
@@ -786,13 +788,13 @@ gnc_ui_tax_table_window_destroy (TaxTableWindow *ttw)
 
 /* Create a new tax-table by name */
 GncTaxTable *
-gnc_ui_tax_table_new_from_name (QofBook *book, const char *name)
+gnc_ui_tax_table_new_from_name (GtkWindow *parent, QofBook *book, const char *name)
 {
     TaxTableWindow *ttw;
 
     if (!book) return NULL;
 
-    ttw = gnc_ui_tax_table_window_new (book);
+    ttw = gnc_ui_tax_table_window_new (parent, book);
     if (!ttw) return NULL;
 
     return new_tax_table_dialog (ttw, TRUE, NULL, name);

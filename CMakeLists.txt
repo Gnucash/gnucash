@@ -13,14 +13,14 @@ ENABLE_TESTING()
 # Version number of gnucash
 SET (GNUCASH_MAJOR_VERSION 2)
 SET (GNUCASH_MINOR_VERSION 7)
-SET (GNUCASH_MICRO_VERSION 5)
+SET (GNUCASH_MICRO_VERSION 6)
 SET (GNUCASH_NANO_VERSION 0)
 SET (VERSION "${GNUCASH_MAJOR_VERSION}.${GNUCASH_MINOR_VERSION}.${GNUCASH_MICRO_VERSION}")
 SET (GNUCASH_LATEST_STABLE_SERIES 2.6)
 
 SET (PACKAGE gnucash)
 SET (PACKAGE_NAME GnuCash)
-SET (PACKAGE_VERSION 2.7.5)
+SET (PACKAGE_VERSION 2.7.6)
 SET (PACKAGE_BUGREPORT gnucash-devel@gnucash.org)
 SET (PACKAGE_TARNAME ${PACKAGE})
 SET (PACKAGE_STRING "${PACKAGE_NAME} ${PACKAGE_VERSION}")
@@ -66,6 +66,7 @@ OPTION (DISABLE_NLS "do not use Native Language Support" OFF)
 OPTION (DISABLE_DEPRECATED_GLIB "don't use deprecated glib functions" OFF)
 OPTION (DISABLE_DEPRECATED_GTK "don't use deprecated gtk, gdk or gdk-pixbuf functions" OFF)
 OPTION (DISABLE_DEPRECATED_GNOME "don't use deprecated gnome functions" OFF)
+OPTION (ALLOW_OLD_GETTEXT "allow to configure build with a gettext version older than 0.19.6. Some files will not be translated!" OFF)
 # ############################################################
 
 # These are also settable from the command line in a similar way.
@@ -172,8 +173,6 @@ IF (WIN32)
   SET(REGEX_LDFLAGS "-L${REGEX_LIB_PATH} -lregex")
   #SET(LIBXSLT_INCLUDE_DIR ${CMAKE_PREFIX_PATH}/libxslt/include)
   #SET(LIBXSLT_XSLTPROC_EXECUTABLE ${CMAKE_PREFIX_PATH}/libxslt/bin/xsltproc)
-  # I have not yet debugged the intltool-merge file generation process on Windows.
-  SET(NO_INTLTOOL TRUE)
 #Prevent creating a console window on startup.
   SET(CMAKE_EXE_LINKER_FLAGS -mwindows)
 ENDIF(WIN32)
@@ -249,20 +248,28 @@ ENDIF()
 
 
 
-FIND_PROGRAM(INTLTOOL_MERGE NAMES intltool-merge HINTS ${CMAKE_PREFIX_PATH}/gnome/bin)
 FIND_PROGRAM(GLIB_COMPILE_SCHEMAS glib-compile-schemas HINTS ${CMAKE_PREFIX_PATH}/gnome/bin)
-FIND_PROGRAM(MSGFMT msgfmt)
-IF(NOT INTLTOOL_MERGE)
-  MESSAGE(SEND_ERROR "Can't find intltool-merge program. Please set INTLTOOL_MERGE.")
-ENDIF(NOT INTLTOOL_MERGE)
-
 IF (NOT GLIB_COMPILE_SCHEMAS)
   MESSAGE(SEND_ERROR "Can't find glib-compile-schemas program. Please set GLIB_COMPILE_SCHEMAS.")
 ENDIF(NOT GLIB_COMPILE_SCHEMAS)
 
-IF (NOT MSGFMT)
-  MESSAGE(SEND_ERROR "Can't find msgfmt program. Please set MSGFMT.")
-ENDIF(NOT MSGFMT)
+if (ALLOW_OLD_GETTEXT)
+    find_package (Gettext REQUIRED)
+else (ALLOW_OLD_GETTEXT)
+    find_package (Gettext 0.19.6)
+    if (NOT GETTEXT_FOUND)
+        message (FATAL_ERROR "Note the build can be configured with an older version of gettext by setting ALLOW_OLD_GETTEXT=ON but then some files will not be translated:
+        - gnucash.desktop (requires at least gettext 0.19)
+        - gnucash.appdata.xml (requires at least gettext 0.19.6)")
+    endif (NOT GETTEXT_FOUND)
+endif (ALLOW_OLD_GETTEXT)
+
+if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.19)
+    message (WARNING "Got gettext version ${GETTEXT_VERSION_STRING}, however you need at least gettext version 0.19 in order to handle translation of the gnucash.desktop file. The build will be configured with an untranslated gnucash.desktop file.")
+endif ()
+if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.19.6)
+    message (WARNING "Got gettext version ${GETTEXT_VERSION_STRING}, however you need at least gettext version 0.19.6 in order to handle translation of the gnucash.appdata file. The build will be configured with an untranslated gnucash.appdata file.")
+endif ()
 
 FIND_PATH (REGEX_INCLUDE_PATH NAMES regex.h
 		  PATHS /usr/include /opt/gnome/include)
@@ -504,7 +511,7 @@ SET (Boost_FIND_QUIETLY ON)
 IF (NOT DEFINED ${BOOST_ROOT})
   SET(BOOST_ROOT $ENV{BOOST_ROOT})
 ENDIF()
-FIND_PACKAGE (Boost 1.54.0 REQUIRED COMPONENTS date_time regex locale filesystem)
+FIND_PACKAGE (Boost 1.54.0 REQUIRED COMPONENTS date_time regex locale filesystem system)
 
 IF (Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIRS})
@@ -840,6 +847,8 @@ ADD_CUSTOM_TARGET(distcheck DEPENDS dist
             -D PACKAGE_PREFIX=${PACKAGE_PREFIX}
             -D CMAKE_C_FLAGS=${CMAKE_C_FLAGS}
             -D CMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
+            -D GTEST_ROOT=${GTEST_ROOT}
+            -D GMOCK_ROOT=${GMOCK_ROOT}
             -P ${CMAKE_SOURCE_DIR}/common/cmake_modules/MakeDistCheck.cmake
         )
 
@@ -913,6 +922,11 @@ IF (WIN32)
 ENDIF()
 # ############################################################
 # Package creation rules
+
+SET(CPACK_PACKAGE_VERSION_MAJOR "${GNUCASH_MAJOR_VERSION}")
+SET(CPACK_PACKAGE_VERSION_MINOR "${GNUCASH_MINOR_VERSION}")
+SET(CPACK_PACKAGE_VERSION_PATCH "${GNUCASH_MICRO_VERSION}")
+SET(CPACK_PACKAGE_VERSION "${VERSION}")
 
 IF(UNIX)
   SET(CPACK_GENERATOR "TGZ")

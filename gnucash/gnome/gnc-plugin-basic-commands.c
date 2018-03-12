@@ -665,7 +665,7 @@ gnc_main_window_cmd_tools_find_transactions (GtkAction *action, GncMainWindowAct
     gnc_ui_find_transactions_dialog_create2 (NULL);
     /*################## Added for Reg2 #################*/
 #else
-    gnc_ui_find_transactions_dialog_create (NULL);
+    gnc_ui_find_transactions_dialog_create (GTK_WINDOW(data->window), NULL);
 #endif
 }
 

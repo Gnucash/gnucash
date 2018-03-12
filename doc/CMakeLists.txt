@@ -19,7 +19,7 @@ SET(doc_DATA
 
 SET(doc_noinst_DATA
         build-aix.txt build-solaris.txt CMakeLists.txt gnc-fq-dump.1 gnc-fq-helper.1 gnucash.1.in
-        misc-notes.txt README.HBCI README.OFX README.translator.txt tip_of_the_day.list.in
+        misc-notes.txt README.HBCI README.OFX README.translator.txt tip_of_the_day.list.c
         TRANSLATION_HOWTO)
 
 INSTALL(FILES ${doc_DATA} DESTINATION  ${CMAKE_INSTALL_DOCDIR})
@@ -32,7 +32,7 @@ FILE(COPY ${doc_DATA} DESTINATION ${DATADIR_BUILD}/doc/gnucash)
 # Generate the tip of the day file.
 
 EXECUTE_PROCESS(
-    COMMAND ${CMAKE_C_COMPILER} -E -P -x c -DN_\(x\)=x -o ${CMAKE_CURRENT_BINARY_DIR}/tip_of_the_day.list.tmp ${CMAKE_CURRENT_SOURCE_DIR}/tip_of_the_day.list.in
+    COMMAND ${CMAKE_C_COMPILER} -E -P -x c -DN_\(x\)=x -o ${CMAKE_CURRENT_BINARY_DIR}/tip_of_the_day.list.tmp ${CMAKE_CURRENT_SOURCE_DIR}/tip_of_the_day.list.c
 )
 
 FILE(STRINGS ${CMAKE_CURRENT_BINARY_DIR}/tip_of_the_day.list.tmp TIP_OF_THE_DAY_LINES)

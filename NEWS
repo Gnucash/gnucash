@@ -1,5 +1,129 @@
 Version history:
 ------- -------
+2.7.6 - 12 March 2018
+
+    The Gnucash Development Team is pleased to release Gnucash 2.7.6,
+    the seventh release of an unstable series leading to Gnucash 3.0.
+
+    Notice that we've decided that beginning with the upcoming major
+    release we will use two-digit release numbers and that the next
+    stable release will be 3.0. Mainenance releases will be 3.1, 3.2,
+    etc. The next unstable release will be 3.900 and will lead to 4.0.
+
+    This release is UNSTABLE and SHOULD NOT BE USED in production.
+    See the KNOWN PROBLEMS list at the bottom of the announcement.
+
+    This release changes file locations, binding APIs, report options,
+    and can make your data file no longer compatible with previous
+    versions. See https://wiki.gnucash.org/wiki/UpdateNotes for
+    details.
+
+New Features For Users:
+    Modernise chart colours from the dated CSS defaults to
+        modern colours as suggested by http://clrs.cc/.
+    Add "Subtotal Summary Grid" to the Transaction Report.
+        The subtotal summary-grid will tabulate subtotals - prime-sortkey
+        vertically, sec-sortkey horizontally. This will be useful, for
+        example, with prime-sortkey = accounts, sec-sortkey = date,
+        sec-subtotal = monthly... will produce a monthly time series
+        spreadsheet.
+
+For Developers and Distro packagers:
+    Rework source directory structure for gschema, gtkbuilder and ui files.
+        There is now a directory for each respective file type directly in
+        <srcdir>/gnucash as was already the case for gschema files.
+        In principle all files of each type should go into these global
+        directories. The only exception is if such a file belongs
+        to an optional module. In that case the file remains located inside
+        that module's directory. Currently we have ui, glade and gschema file
+        exceptions in aqb and ofx importers.
+    Drop intltool in favour or using modern gettext.
+        By default we require gettext 0.19.6 as this is needed to generate a
+        translated version of gnucash.desktop and gnucash.appdata.xml.
+        For platforms where this isn't available, setting ALLOW_OLD_GETTEXT=ON
+        will allow building but some strings will not be extracted to
+        gnucash.pot
+    Pass GTEST_ROOT and GMOCK_ROOT through to distcheck.
+        So that they don't have to be exported in the environment if they're
+        needed.
+The following bugs are fixed only in unstable/master:
+    Bug 764245 - multi-column reports include incorrect sub-reports
+    Bug 793460 - gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1941
+                 is impossible to translate.
+    Bug 793467 - GnuCash crashes when trying to open a binary file
+                 instead of a CSV.
+    Bug 793699 - start_spath could be used uninitialised.
+    Bug 793900 - 2.7.5: test failure: 105 - python-bindings.
+    Bug 793941 - 2.7.4: test failure on i686: 59 - test-gnc-timezone
+                 Don't test before 1916, that's not a common GnuCash use-case.
+    Bug 793947 - Impossible to render printable invoice
+    Bug 794031 - The checkbox "Placeholder" cann't be changed in dialog
+                 "Setup selected accounts". Enable placeholder toggle and
+                 provide callback. The text for this account tree view
+                 specifies "If you would like an account to be a placeholder
+                  account, click the checkbox for that account." but they were
+                  not enabled and no call back was defined so enabled the
+                  toggle button and provide callback.
+    Bug 794083 - gnucash-2.7.5: cmake+make build installs Makefile.
+    Bug 794137 - 2.7.5: test failure: 60 - test-gnc-numeric.
+                 Fixed by overloading operator<<(std::ostream&, GncNumeric) to
+                 call operator<<(std::wostream&, GncNumeric) and convert the
+                 result to utf8.
+Other repairs not marked as bugs in git:
+    Csv imp settings - internalize prefix handling
+        This information is not relevant outside of the settings code.
+        The way it's implemented now each settings module defines its
+        own unique prefix and the generic code can just use it when
+        needed.
+    Csv import - improve memory handling in the assistant class.
+        Make it more RAII, in that whatever the class allocates, it should
+        also deallocate. This simplifies a couple of memory handling cases.
+        The only exception is the generic import matcher that for some reason
+        has chosen to deallocate itself. To be fixed when more importers are
+        converted to c++
+    Add some background info on memory management in CSV importers.
+        As the assistant code combines multiple memory management models care
+        should be taken not to mix them up. The notes should give some
+        insights in how to do this.
+        Also fix a few minor issues
+        - delete default copy and move constructor/assignment for the
+          assistant gui class
+        - nullify a freed pointer
+    Lots of transient parent warnings fixed.
+    Fix Segmentation fault when going to File->New.
+        When selecting the File->New with existing register pages open a crash
+        can happen as the register pages get closed forcing a page-changed
+        signal to queue the page focus function when there is no page. Add a
+        call to remove the page focus function in the ..destroy_widget function.
+        Also with the addition of g_idle_remove before the add when page-changed
+        is emitted the page focus function only gets run once.
+    Speed up GUID equality comparison.
+    Fix CPack package version number.
+        Currently running "ninja-build package" produces a file with an
+        incorrect version number. This patch passes the CMake version
+        variables into CPack to get the correct filename. Note, however, that
+        there's more work to do to get CPack to actually be useful and the
+        current CPack settings may be removed unless that other work is done.
+    Add spacing between border and text in dialog "New Accounts Hierarchy
+        Setup".
+    With register obscured the sheet kept being redrawn
+        When the register is obscured by another window, the sheet would get
+        lot of draw events. This was tracked down to getting the foreground
+        colour for the item-edit widget for the state GTK_STATE_FLAG_NORMAL.
+        Changed this to use the value obtained from gtk_widget_get_state_flags.
+    Use the gnc_prefs_get_bool values to update cache values.
+        This way is a safer way to update the cache values in case the settings
+        changed signal fails to trigger or there is a double trigger and the
+        cached value gets out of sync with the preference value.
+
+Updated Translations: German, Norwegian, Spanish
+
+KNOWN PROBLEMS:
+
+    Bug 789594 - Unable to overwrite splite3 database file
+    Bug 791823 - There is no Gtk3 theme-setting tool for Windows.
+    Bug 791825 - Accounting period dates off-by-1
+
 2.7.5 - 25 February 2018
 
     The Gnucash Development Team is pleased to release Gnucash 2.7.5,

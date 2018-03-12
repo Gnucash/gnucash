@@ -567,9 +567,8 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     heading_label = GTK_WIDGET(gtk_builder_get_object (builder, "heading_label"));
     g_assert (heading_label != NULL);
 
-    /* if (parent)
-      gtk_window_set_transient_for (GTK_WINDOW (info->dialog),
-                  GTK_WINDOW (parent));*/
+    if (parent)
+        gtk_window_set_transient_for (GTK_WINDOW (info->dialog), GTK_WINDOW (parent));
 
     if (heading)
         gtk_label_set_text (GTK_LABEL (heading_label), heading);

@@ -334,9 +334,9 @@
                   ))
           (gnc:html-barchart-set-col-colors!
            chart (append
-                  (if show-in? '("blue") '())
-                  (if show-out? '("red") '())
-                  (if show-net? '("green") '())
+                  (if show-in? '("#0074D9") '())
+                  (if show-out? '("#FF4136") '())
+                  (if show-net? '("#2ECC40") '())
                   ))
           (gnc:report-percent-done 95)
 

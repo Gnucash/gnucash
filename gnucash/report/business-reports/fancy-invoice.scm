@@ -635,10 +635,10 @@
     (gnc:html-table-append-row!
      table
      (list
-      (string-expand (gnc:owner-get-address-dep owner) #\newline "<br>")))
+      (string-expand (gnc:owner-get-address-dep owner) #\newline "<br/>")))
     (gnc:html-table-append-row!
      table
-     (list "<br>"))
+     (list "<br/>"))
     (for-each
      (lambda (order)
        (let* ((reference (gncOrderGetReference order)))
@@ -722,7 +722,7 @@
 	'attribute (list "align" "right")
 	'attribute (list "width" "33%"))
     (gnc:html-table-append-row!
-     table (list (string-expand (string-append (if addy addy "") (if id (string-append "\n" id) "")) #\newline "<br>")
+     table (list (string-expand (string-append (if addy addy "") (if id (string-append "\n" id) "")) #\newline "<br/>")
 		 (string-expand
 		  (string-append (if phone
 				     (string-append (_ "Phone:") " " phone)
@@ -730,7 +730,7 @@
 				 (if fax (string-append (if phone "\n" "")
 							(_ "Fax:") " " fax)
 				     ""))
-		  #\newline "<br>" )
+		  #\newline "<br/>" )
 		 (if url (string-append (_ "Web:") " " url) "")))
 
 ;; oli-custom - I didn't want today's date on the invoice.
@@ -863,20 +863,20 @@
                       (due-date (gncInvoiceGetDateDue invoice)))
 		  (set! date-table (make-date-table))
 		  (gnc:html-table-append-row!
-                  ;; Translators: %s below is "Invoice" or "Bill" or even the
+                  ;; Translators: ~a below is "Invoice" or "Bill" or even the
                   ;; custom title from the options. The next column contains
                   ;; the number of the document.
-                  date-table (list (format #f (_ "~s&nbsp;#") title) (gncInvoiceGetID invoice)))
-                  ;; Translators: The first %s below is "Invoice" or
+                  date-table (list (format #f (_ "~a&nbsp;#") title) (gncInvoiceGetID invoice)))
+                  ;; Translators: The first ~a below is "Invoice" or
                   ;; "Bill" or even the custom title from the
                   ;; options. This string sucks for i18n, but I don't
                   ;; have a better solution right now without breaking
                   ;; other people's invoices.
-		  (make-date-row! date-table (format #f (_ "~s&nbsp;Date") title) post-date date-format)
-		  (make-date-row! date-table (_ "Due&nbsp;Date") due-date date-format)
+		  (make-date-row! date-table (format #f (_ "~a&nbsp;Date") title) post-date date-format)
+		  (make-date-row! date-table (_ "Due Date") due-date date-format)
 		  date-table)
 		(gnc:make-html-text
-                 (string-append title "<br>"
+                 (string-append title "<br/>"
                                 (_ "Invoice in progress...")))))
 
 	  (gnc:html-table-append-row!
@@ -910,7 +910,7 @@
 		       (gnc:make-html-text
 			(string-append
 			 (_ "Reference") ":&nbsp;"
-			 (string-expand billing-id #\newline "<br>"))))
+			 (string-expand billing-id #\newline "<br/>"))))
 		      (make-break! document)))))
 
 	  (if (opt-val "Display" "Billing Terms")
@@ -922,7 +922,7 @@
 		     (gnc:make-html-text
 		      (string-append
 		       (_ "Terms") ":&nbsp;"
-		       (string-expand terms #\newline "<br>")))))))
+		       (string-expand terms #\newline "<br/>")))))))
 
 	  (make-break! document)
 
@@ -948,7 +948,7 @@
 		 document
 		 (gnc:make-html-text
 		  (string-append name-str  ":&nbsp;"
-		  (string-expand name #\newline "<br>")))))))
+		  (string-expand name #\newline "<br/>")))))))
 
 	  (make-break! document)
 
@@ -960,13 +960,13 @@
 		 document
 		 (gnc:make-html-text
 		  (string-append contact-str  ":&nbsp;"
-		  (string-expand contact #\newline "<br>")))))))
+		  (string-expand contact #\newline "<br/>")))))))
 
 	  (gnc:html-document-add-object!
 	   document
 	   (gnc:make-html-text
 	    (gnc:html-markup-br)
-	    (string-expand (opt-val "Display" "Extra Notes") #\newline "<br>")
+	    (string-expand (opt-val "Display" "Extra Notes") #\newline "<br/>")
 	    (gnc:html-markup-br))))
 
 	; else
