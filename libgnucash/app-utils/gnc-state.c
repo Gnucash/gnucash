@@ -193,7 +193,8 @@ gnc_state_set_base (const QofSession *session)
     DEBUG("Clean up");
     g_free(sf_extension);
     g_free(original);
-    g_key_file_free (key_file);
+    if (key_file != NULL)
+        g_key_file_free (key_file);
 
     LEAVE ();
 }
