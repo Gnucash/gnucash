@@ -1,0 +1,62 @@
+
+* Version 0.6.0 (Jan 16, 2017)
+
+  - Deprecate json macro in favor of scheme data types.
+
+
+* Version 0.5.0 (Feb 21, 2015)
+
+  - Allow converting simple alists to json
+      e.g.: (scm->json-string '((a . 1) (b . 2))))
+    (thanks to Jan Nieuwenhuizen)
+
+
+* Version 0.4.0 (Aug 17, 2014)
+
+  - Add unquote-splicing support to json form.
+    (thanks to David Thompson)
+
+
+* Version 0.3.1 (Jul 6, 2013)
+
+  - Use pure sh script syntax in env.in.
+    (thanks to Andrew Gaylard)
+
+
+* Version 0.3.0 (May 13, 2013)
+
+  - Re-licensed under LGPLv3.
+
+  - Use new guile.m4 macro.
+
+  - Convert rationals to floats to comply with JSON spec.
+    (closes github #3, patch from Doug Woos)
+
+
+* Version 0.2.0 (Apr 2, 2013)
+
+  - Improve parser errors by providing an additional parser argument to
+    the json-invalid exception.
+
+
+* Version 0.1.3 (Feb 10, 2013)
+
+  - Automatically update pkg-list.scm version.
+
+
+* Version 0.1.2 (Feb 7, 2013)
+
+  - Fix pretty printing.
+
+  - Use (display) instead of (simple-format) when possible.
+
+
+* Version 0.1.1 (Feb 2, 2013)
+
+  - Use (car)/(cdr) instead of (drop-right)/(last). This should be more
+    efficient.
+
+
+* Version 0.1.0 (Jan 30, 2013)
+
+  Initial release.
