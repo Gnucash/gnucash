@@ -2708,7 +2708,3 @@
         <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
     </gnc:account>
 </gnc-account-example>
-
-        <!-- Local variables: -->
-        <!-- mode: xml        -->
-        <!-- End:             -->
