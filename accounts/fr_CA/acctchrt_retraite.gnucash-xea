@@ -143,7 +143,3 @@
 			  <act:parent type="new">4da3426bfefc086f7922e263e8de98f7</act:parent>
 		  </gnc:account>
 </gnc-account-example>
-
-<!-- Local variables: -->
-<!-- mode: xml        -->
-<!-- End:             -->
