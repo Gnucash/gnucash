@@ -459,7 +459,7 @@ ENDIF (WITH_SQL)
 # ############################################################
 
 IF (WITH_PYTHON)
-  FIND_PACKAGE(PythonInterp)
+  FIND_PACKAGE(PythonInterp 3)
   IF (NOT PYTHONINTERP_FOUND)
     MESSAGE(SEND_ERROR "Python support enabled, but Python interpreter not found.")
   ENDIF()
@@ -468,14 +468,14 @@ IF (WITH_PYTHON)
     MESSAGE(SEND_ERROR "Found python version ${PYTHON_VERSION_STRING}, but it's too old. Need python >= 2.4.0")
   ENDIF()
 
-  FIND_PACKAGE(PythonLibs)
+  FIND_PACKAGE(PythonLibs 3)
   IF (NOT PYTHONLIBS_FOUND)
     MESSAGE(SEND_ERROR "Python support enabled, but Python libraries not found.")
   ENDIF()
 
   # Determine where to install the python libraries.
   EXECUTE_PROCESS(
-    COMMAND ${PYTHON_EXECUTABLE} -c "from distutils import sysconfig; print sysconfig.get_python_lib(prefix='${CMAKE_INSTALL_PREFIX}', plat_specific=True)"
+    COMMAND ${PYTHON_EXECUTABLE} -c "from distutils import sysconfig; print(sysconfig.get_python_lib(prefix='${CMAKE_INSTALL_PREFIX}', plat_specific=True))"
     RESULT_VARIABLE PYTHON_SYSCONFIG_RESULT
     OUTPUT_VARIABLE PYTHON_SYSCONFIG_OUTPUT
     ERROR_VARIABLE PYTHON_SYSCONFIG_ERROR

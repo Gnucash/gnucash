@@ -3,7 +3,7 @@
 # >>> from gnucash import thingy
 # instead of
 # >>> from gnucash.gnucash_core import thingy
-from gnucash_core import *
+from gnucash.gnucash_core import *
 ##  @file
 #   @brief helper file for the importing of gnucash
 #   @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>

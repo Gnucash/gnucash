@@ -13,9 +13,9 @@ class AccountSession( BookSession ):
 class TestAccount( AccountSession ):
     def test_name(self):
         NAME = "Money"
-        self.assertEquals( '', self.account.GetName() )
+        self.assertEqual( '', self.account.GetName() )
         self.account.SetName(NAME)
-        self.assertEquals( NAME, self.account.GetName() )
+        self.assertEqual( NAME, self.account.GetName() )
 
     def test_split(self):
         SPLIT = Split(self.book)
