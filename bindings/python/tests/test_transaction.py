@@ -73,13 +73,13 @@ class TestTransaction( TransactionSession ):
         self.assertFalse( self.trans.IsOpen() )
 
     def test_rollback(self):
-        self.assertEquals( '', self.trans.GetDescription() )
+        self.assertEqual( '', self.trans.GetDescription() )
         self.trans.BeginEdit()
         DESC = 'Food'
         self.trans.SetDescription(DESC)
-        self.assertEquals( DESC, self.trans.GetDescription() )
-        self.trans.RollbackEdit() 
-        self.assertEquals( '', self.trans.GetDescription() )
+        self.assertEqual( DESC, self.trans.GetDescription() )
+        self.trans.RollbackEdit()
+        self.assertEqual( '', self.trans.GetDescription() )
 
     def test_findsplit(self):
         ACCT = Account(self.book)
@@ -87,51 +87,51 @@ class TestTransaction( TransactionSession ):
         self.split.SetAccount( ACCT )
         SPLIT = self.trans.FindSplitByAccount( ACCT )
         self.assertTrue( SPLIT.Equal(self.split, True, False, False) )
-    
+
     def test_getsplit(self):
         SPLIT = self.trans.GetSplit(0)
         self.assertTrue( SPLIT.Equal(self.split, True, False, False) )
-        
+
     def test_getsplitindex(self):
-        self.assertEquals( 0, self.trans.GetSplitIndex(self.split) )
+        self.assertEqual( 0, self.trans.GetSplitIndex(self.split) )
 
     def test_countsplits(self):
-        self.assertEquals( 1, self.trans.CountSplits() )
+        self.assertEqual( 1, self.trans.CountSplits() )
 
     def test_readonly(self):
-        self.assertEquals( None, self.trans.GetReadOnly() )
+        self.assertEqual( None, self.trans.GetReadOnly() )
         REASON = 'none'
         self.trans.SetReadOnly(REASON)
-        self.assertEquals( REASON, self.trans.GetReadOnly() )
+        self.assertEqual( REASON, self.trans.GetReadOnly() )
         self.trans.ClearReadOnly()
-        self.assertEquals( None, self.trans.GetReadOnly() )
+        self.assertEqual( None, self.trans.GetReadOnly() )
 
     def test_txntype(self):
-        self.assertEquals( '\x00', self.trans.GetTxnType() )
+        self.assertEqual( '\x00', self.trans.GetTxnType() )
         TYPE = 'I'
         self.trans.SetTxnType(TYPE)
-        self.assertEquals( TYPE, self.trans.GetTxnType() )
+        self.assertEqual( TYPE, self.trans.GetTxnType() )
         TYPE = 'P'
         self.trans.SetTxnType(TYPE)
-        self.assertEquals( TYPE, self.trans.GetTxnType() )
+        self.assertEqual( TYPE, self.trans.GetTxnType() )
 
     def test_num(self):
         NUM = '5'
-        self.assertEquals( '', self.trans.GetNum() )
+        self.assertEqual( '', self.trans.GetNum() )
         self.trans.SetNum(NUM)
-        self.assertEquals( NUM, self.trans.GetNum() )
+        self.assertEqual( NUM, self.trans.GetNum() )
 
     def test_description(self):
         DESCR = 'Groceries'
-        self.assertEquals( '', self.trans.GetDescription() )
+        self.assertEqual( '', self.trans.GetDescription() )
         self.trans.SetDescription(DESCR)
-        self.assertEquals( DESCR, self.trans.GetDescription() )
+        self.assertEqual( DESCR, self.trans.GetDescription() )
 
     def test_notes(self):
         NOTE = 'For dinner party'
-        self.assertEquals( None, self.trans.GetNotes() )
+        self.assertEqual( None, self.trans.GetNotes() )
         self.trans.SetNotes(NOTE)
-        self.assertEquals( NOTE, self.trans.GetNotes() )
+        self.assertEqual( NOTE, self.trans.GetNotes() )
 
 if __name__ == '__main__':
     main()

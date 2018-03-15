@@ -17,9 +17,9 @@ class SplitSession( BookSession ):
 class TestSplit( SplitSession ):
     def test_memo(self):
         MEMO = "cookie monster"
-        self.assertEquals( '', self.split.GetMemo() )
+        self.assertEqual( '', self.split.GetMemo() )
         self.split.SetMemo(MEMO)
-        self.assertEquals( MEMO, self.split.GetMemo() )
+        self.assertEqual( MEMO, self.split.GetMemo() )
 
     def test_account(self):
         ACCT = Account(self.book)
@@ -49,7 +49,7 @@ class TestSplit( SplitSession ):
         self.split.SetParent(TRANS)
         TRANS.SetCurrency(self.currency)
         TRANS.SetDescription("Foo")
-        self.assertEquals( TRANS.GetDescription(), self.split.GetParent().GetDescription() )
+        self.assertEqual( TRANS.GetDescription(), self.split.GetParent().GetDescription() )
 
         g_log_remove_handler(domain2, hdlr2)
         g_log_remove_handler(domain1, hdlr1)

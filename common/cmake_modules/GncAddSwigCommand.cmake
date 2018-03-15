@@ -75,7 +75,7 @@ macro (gnc_add_swig_python_command _target _out_var _py_out_var _output _py_outp
 
     if (GENERATE_SWIG_WRAPPERS)
         set (DEFAULT_SWIG_PYTHON_FLAGS
-            -python
+            -python -py3
             -Wall -Werror
             ${SWIG_ARGS}
         )

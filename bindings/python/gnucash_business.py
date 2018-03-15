@@ -26,18 +26,18 @@
 #   @author Jeff Green,   ParIT Worker Co-operative <jeff@parit.ca>
 #   @ingroup python_bindings
 
-import gnucash_core_c
+import gnucash.gnucash_core_c as gnucash_core_c
 
-from function_class import \
+from gnucash.function_class import \
      ClassFromFunctions, extract_attributes_with_prefix, \
      default_arguments_decorator, method_function_returns_instance, \
      methods_return_instance, methods_return_instance_lists
 
-from gnucash_core import \
+from gnucash.gnucash_core import \
      GnuCashCoreClass, GncNumeric, GncCommodity, Transaction, \
      Split, Book, GncLot, Account, GUID
 
-from gnucash_core_c import GNC_OWNER_CUSTOMER, GNC_OWNER_JOB, \
+from gnucash.gnucash_core_c import GNC_OWNER_CUSTOMER, GNC_OWNER_JOB, \
     GNC_OWNER_EMPLOYEE, GNC_OWNER_VENDOR, \
     GNC_PAYMENT_CASH, GNC_PAYMENT_CARD, \
     GNC_DISC_PRETAX, GNC_DISC_SAMETIME, GNC_DISC_POSTTAX, \
@@ -66,7 +66,7 @@ class GnuCashBusinessEntity(GnuCashCoreClass):
             GnuCashCoreClass.__init__(self, instance=instance)
 
 class Customer(GnuCashBusinessEntity): pass
-                         
+
 class Employee(GnuCashBusinessEntity): pass
 
 class Vendor(GnuCashBusinessEntity): pass
@@ -88,10 +88,10 @@ class Job(GnuCashBusinessEntity):
             if name != None:
                 self.SetName(name)
         else:
-            GnuCashCoreClass.__init__(self, instance=instance)    
+            GnuCashCoreClass.__init__(self, instance=instance)
 
 class Address(GnuCashCoreClass): pass
-    
+
 class BillTerm(GnuCashCoreClass): pass
 
 class TaxTable(GnuCashCoreClass):
@@ -111,14 +111,14 @@ class TaxTable(GnuCashCoreClass):
 class TaxTableEntry(GnuCashCoreClass):
     def __init__(self, account=None, percent=True, amount=None, instance=None):
         """TaxTableEntry constructor
-        
+
         You must provide an account, or be initizing this with an existing
         swig proxy object via the instance keyword argument.
-        
+
         You may also optionally set the percent keyword argument to False to get
         a fixed value instead of percentage based tax (which is the default, or
         when percent=True).
-        
+
         The tax will be zero percent or zero unless you set the amount keyword
         argument to a GncNumeric value as well.
         """
@@ -138,7 +138,7 @@ class TaxTableEntry(GnuCashCoreClass):
             if amount != None:
                 self.SetAmount(amount)
         else:
-            GnuCashCoreClass.__init__(self, instance=instance)        
+            GnuCashCoreClass.__init__(self, instance=instance)
 
 class Invoice(GnuCashCoreClass):
     def __init__(self, book=None, id=None, currency=None, owner=None,
@@ -191,7 +191,7 @@ def decorate_to_return_instance_instead_of_owner(dec_function):
 class Entry(GnuCashCoreClass):
     def __init__(self, book=None, invoice=None, date=None, instance=None):
         """Invoice Entry constructor
-        
+
         You must provide a book or be initizing this with an existing
         swig proxy object via the instance keyword argument.
 
@@ -217,7 +217,7 @@ class Entry(GnuCashCoreClass):
             if invoice != None:
                 invoice.AddEntry(self)
         else:
-            GnuCashCoreClass.__init__(self, instance=instance)    
+            GnuCashCoreClass.__init__(self, instance=instance)
 
     def test_type(self, invoice):
         if invoice.GetTypeString() == "Invoice" and self.GetInvoice() == None:
@@ -370,7 +370,7 @@ entry_dict = {
                  'GetInvoice': Invoice,
                  'GetBill': Invoice
              }
-methods_return_instance(Entry, entry_dict)             
+methods_return_instance(Entry, entry_dict)
 Entry.decorate_functions(
     decorate_to_return_instance_instead_of_owner,
     'GetBillTo' )
