@@ -429,7 +429,7 @@ GncSqlColumnTableEntryImpl<CT_TIMESPEC>::add_to_query(QofIdTypeConst obj_name,
  */
     g_return_if_fail (obj_name != NULL);
     g_return_if_fail (pObject != NULL);
-
+    
     if (m_gobj_param_name != NULL)
     {
         Timespec* pts;
@@ -442,10 +442,17 @@ GncSqlColumnTableEntryImpl<CT_TIMESPEC>::add_to_query(QofIdTypeConst obj_name,
         g_return_if_fail (ts_getter != NULL);
         ts = (*ts_getter) (pObject);
     }
-
-    GncDateTime time(ts.tv_sec);
-    vec.emplace_back (std::make_pair (std::string{m_col_name},
-                                      time.format_zulu ("'%Y-%m-%d %H:%M:%S'")));
+    if (ts.tv_sec > MINTIME && ts.tv_sec < MAXTIME)
+    {
+        GncDateTime time(ts.tv_sec);
+        vec.emplace_back (std::make_pair (std::string{m_col_name},
+                                          time.format_zulu ("'%Y-%m-%d %H:%M:%S'")));
+    }
+    else
+    {
+        vec.emplace_back (std::make_pair (std::string{m_col_name},
+                                          "NULL"));
+    }
 }
 
 /* ----------------------------------------------------------------- */
