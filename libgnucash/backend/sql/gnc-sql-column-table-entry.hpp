@@ -70,6 +70,7 @@ enum GncSqlObjectType
     CT_INT,
     CT_INT64,
     CT_TIMESPEC,
+    CT_TIME64,
     CT_GDATE,
     CT_NUMERIC,
     CT_DOUBLE,
