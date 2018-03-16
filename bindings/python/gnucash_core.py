@@ -356,7 +356,7 @@ class GncPrice(GnuCashCoreClass):
 
       See also http://code.gnucash.org/docs/head/group__Price.html
     '''
-    pass
+    _new_instance = 'gnc_price_create'
 GncPrice.add_methods_with_prefix('gnc_price_')
 
 
