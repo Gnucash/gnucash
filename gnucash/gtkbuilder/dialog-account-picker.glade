@@ -136,7 +136,6 @@
     </child>
   </object>
   <object class="GtkDialog" id="qif_import_account_picker_dialog">
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Select Account</property>
     <property name="default_width">300</property>
@@ -258,5 +257,10 @@
         </child>
       </object>
     </child>
+    <action-widgets>
+      <action-widget response="1">newbutton</action-widget>
+      <action-widget response="-6">cancelbutton</action-widget>
+      <action-widget response="-5">okbutton</action-widget>
+    </action-widgets>
   </object>
 </interface>

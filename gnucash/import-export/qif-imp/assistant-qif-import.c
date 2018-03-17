@@ -616,7 +616,7 @@ rematch_line(QIFImportWindow *wind, GtkTreeSelection *selection,
     map_entry = scm_list_ref(display_info, scm_from_int (row));
 
     /* Call the account picker to update it. */
-    if (!qif_account_picker_dialog(wind, map_entry))
+    if (!qif_account_picker_dialog(GTK_WINDOW(wind->window), wind, map_entry))
         return;
     gnc_name = scm_call_1(get_gnc_name, map_entry);
 

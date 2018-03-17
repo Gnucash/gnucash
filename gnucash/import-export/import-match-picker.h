@@ -48,10 +48,13 @@ typedef struct _transpickerdialog GNCImportMatchPicker;
  *
  * This function is used from the gnc-gen-transaction code.
  *
+ * @param parent The parent widget
  * @param transaction_info The TransInfo for which the user is supposed to
- * pick a matching transaction. */
+ * pick a matching transaction.
+ * @param pending_matches List of transactions */
 void
-gnc_import_match_picker_run_and_close (GNCImportTransInfo *transaction_info,
+gnc_import_match_picker_run_and_close (GtkWidget *parent,
+                                       GNCImportTransInfo *transaction_info,
                                        GNCImportPendingMatches *pending_matches);
 /**@}*/
 

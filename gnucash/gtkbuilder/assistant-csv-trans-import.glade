@@ -1196,9 +1196,6 @@ More information can be displayed by using the help button.</property>
       <object class="GtkBox" id="assistant-action_area2">
         <property name="can_focus">False</property>
       </object>
-      <packing>
-        <property name="has_padding">False</property>
-      </packing>
     </child>
   </object>
 </interface>

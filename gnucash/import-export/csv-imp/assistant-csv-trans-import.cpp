@@ -641,7 +641,8 @@ CsvImpTransAssist::CsvImpTransAssist ()
        Note, this will call g_new0 internally. The returned object is g_freed again
        either directly by the main matcher or in our assistant_finish code of the matcher
        is never reached. */
-    gnc_csv_importer_gui = gnc_gen_trans_assist_new (match_page, nullptr, false, 42);
+    gnc_csv_importer_gui = gnc_gen_trans_assist_new (GTK_WIDGET(csv_imp_asst),
+                                                     match_page, nullptr, false, 42);
 
     /* Summary Page */
     summary_page  = GTK_WIDGET(gtk_builder_get_object (builder, "summary_page"));
@@ -1786,7 +1787,7 @@ CsvImpTransAssist::acct_match_select(GtkTreeModel *model, GtkTreeIter* iter)
                                      MAPPING_ACCOUNT, &account, -1);
 
     auto acct_name = csv_tximp_acct_match_text_parse (text);
-    auto gnc_acc = gnc_import_select_account (nullptr, nullptr, true,
+    auto gnc_acc = gnc_import_select_account (GTK_WIDGET(csv_imp_asst), nullptr, true,
             acct_name.c_str(), nullptr, ACCT_TYPE_NONE, account, nullptr);
 
     if (gnc_acc) // We may have canceled

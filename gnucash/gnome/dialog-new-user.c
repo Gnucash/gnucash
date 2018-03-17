@@ -45,7 +45,18 @@ static QofLogModule log_module = GNC_MOD_GUI;
 /* function to open a qif import assistant */
 static void (*qifImportAssistantFcn)(void) = NULL;
 
-static void gnc_ui_new_user_cancel_dialog (void);
+struct _GNCNewUserDialog
+{
+    GtkWidget *window;
+
+    GtkWidget *new_accounts_button;
+    GtkWidget *import_qif_button;
+    GtkWidget *tutorial_button;
+    gboolean   ok_pressed;
+};
+
+static void
+gnc_ui_new_user_cancel_dialog (GtkWindow *parent);
 
 void
 gnc_new_user_dialog_register_qif_assistant (void (*cb_fcn)(void))
@@ -70,71 +81,106 @@ after_hierarchy_assistant(void)
     gnc_ui_file_access_for_save_as (gnc_ui_get_main_window (NULL));
 }
 
-void
-gnc_ui_new_user_dialog (void)
+static void
+gnc_ui_new_user_cancel_cb (GtkWidget * widget, gpointer data)
 {
-    GtkWidget *dialog;
-    GtkWidget *new_accounts_button;
-    GtkWidget *import_qif_button;
-    GtkWidget *tutorial_button;
-    GtkBuilder  *builder;
+    GNCNewUserDialog *new_user = data;
+
+    g_return_if_fail(new_user);
+    gtk_widget_destroy (new_user->window);
+}
+
+static void
+gnc_ui_new_user_destroy_cb (GtkWidget * widget, gpointer data)
+{
+    GNCNewUserDialog *new_user = data;
+
+    g_return_if_fail(new_user);
+    if (new_user->ok_pressed == FALSE)
+        gnc_ui_new_user_cancel_dialog (GTK_WINDOW(new_user->window));
+
+    g_free (new_user);
+}
+
+static void
+gnc_ui_new_user_ok_cb (GtkWidget * widget, gpointer data)
+{
+    GNCNewUserDialog *new_user = data;
+
+    g_return_if_fail(new_user);
+    new_user->ok_pressed = TRUE;
+
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (new_user->new_accounts_button)))
+    {
+        gnc_ui_hierarchy_assistant_with_callback(TRUE, after_hierarchy_assistant);
+    }
+    else if ((qifImportAssistantFcn != NULL)
+             && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (new_user->import_qif_button)))
+    {
+        qifImportAssistantFcn();
+        gncp_new_user_finish ();
+    }
+    else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (new_user->tutorial_button)))
+    {
+        gnc_gnome_help (HF_GUIDE, NULL);
+        gncp_new_user_finish ();
+    }
+    gtk_widget_destroy (new_user->window);
+}
+
+static gboolean
+gnc_ui_new_user_window_present (GtkWindow *window)
+{
+    gtk_window_present (GTK_WINDOW(window));
+    return FALSE;
+}
+
+static void
+gnc_ui_new_user_dialog_create (GNCNewUserDialog *new_user)
+{
+    GtkWidget  *window;
+    GtkBuilder *builder;
+    GtkWidget  *button;
     gint result;
 
     ENTER(" ");
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-new-user.glade", "new_user_dialog");
+    gnc_builder_add_from_file (builder, "dialog-new-user.glade", "new_user_window");
+    new_user->window = GTK_WIDGET(gtk_builder_get_object (builder, "new_user_window"));
 
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "new_user_dialog"));
+    gtk_window_set_keep_above (GTK_WINDOW(new_user->window), TRUE);
 
     // Set the style context for this dialog so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncNewUserDialog");
+    gnc_widget_set_style_context (GTK_WIDGET(new_user->window), "GncNewUserDialog");
 
-    new_accounts_button = GTK_WIDGET(gtk_builder_get_object (builder, "new_accounts_button"));
-    import_qif_button = GTK_WIDGET(gtk_builder_get_object (builder, "import_qif_button"));
-    tutorial_button = GTK_WIDGET(gtk_builder_get_object (builder, "tutorial_button"));
+    new_user->new_accounts_button = GTK_WIDGET(gtk_builder_get_object (builder, "new_accounts_button"));
+    new_user->import_qif_button = GTK_WIDGET(gtk_builder_get_object (builder, "import_qif_button"));
+    new_user->tutorial_button = GTK_WIDGET(gtk_builder_get_object (builder, "tutorial_button"));
 
     /* Set the sensitivity of the qif-import button based on the availability
      * of the qif-import assistant.
      */
-    gtk_widget_set_sensitive (import_qif_button, (qifImportAssistantFcn != NULL));
+    gtk_widget_set_sensitive (new_user->import_qif_button, (qifImportAssistantFcn != NULL));
 
-    result = gtk_dialog_run (GTK_DIALOG (dialog));
-    switch (result)
-    {
-    case GTK_RESPONSE_CANCEL:
-    case GTK_RESPONSE_DELETE_EVENT:
-        gnc_ui_new_user_cancel_dialog ();
-        break;
-    case GTK_RESPONSE_OK:
-        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (new_accounts_button)))
-        {
-            gnc_ui_hierarchy_assistant_with_callback(TRUE, after_hierarchy_assistant);
-        }
-        else if ((qifImportAssistantFcn != NULL)
-                 && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (import_qif_button)))
-        {
-            qifImportAssistantFcn();
-            gncp_new_user_finish ();
-        }
-        else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (tutorial_button)))
-        {
-            gnc_gnome_help (HF_GUIDE, NULL);
-            gncp_new_user_finish ();
-        }
-        break;
-    default:
-        g_print ("DEBUG: Response: %d", result);
-        g_assert_not_reached ();
-        break;
-    }
+    g_signal_connect(G_OBJECT(new_user->window), "destroy",
+            G_CALLBACK(gnc_ui_new_user_destroy_cb), new_user);
+
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "ok_but"));
+    g_signal_connect(button, "clicked", G_CALLBACK(gnc_ui_new_user_ok_cb), new_user);
+
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "cancel_but"));
+    g_signal_connect(button, "clicked", G_CALLBACK(gnc_ui_new_user_cancel_cb), new_user);
+
+    new_user->ok_pressed = FALSE;
+
+    g_idle_add ((GSourceFunc)gnc_ui_new_user_window_present, GTK_WINDOW(new_user->window));
 
     g_object_unref(G_OBJECT(builder));
-    gtk_widget_destroy (dialog);
     LEAVE(" ");
 }
 
 static void
-gnc_ui_new_user_cancel_dialog (void)
+gnc_ui_new_user_cancel_dialog (GtkWindow *parent)
 {
     GtkWidget *dialog;
     GtkBuilder  *builder;
@@ -145,6 +191,8 @@ gnc_ui_new_user_cancel_dialog (void)
     gnc_builder_add_from_file (builder, "dialog-new-user.glade", "new_user_cancel_dialog");
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "new_user_cancel_dialog"));
+
+    gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
 
     result = gtk_dialog_run (GTK_DIALOG (dialog));
     keepshowing = (result == GTK_RESPONSE_YES);
@@ -161,3 +209,14 @@ gncp_new_user_finish (void)
 {
     gnc_hook_run(HOOK_BOOK_OPENED, gnc_get_current_session());
 }
+
+void
+gnc_ui_new_user_dialog (void)
+{
+    GNCNewUserDialog *new_user;
+
+    new_user = g_new0(GNCNewUserDialog, 1);
+    gnc_ui_new_user_dialog_create (new_user);
+    gtk_widget_show (new_user->window);
+}
+
