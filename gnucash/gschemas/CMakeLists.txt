@@ -22,25 +22,23 @@ SET(gschema_SOURCES
 add_gschema_targets("${gschema_SOURCES}")
 
 # Handle gschemas.compiled
-if (COMPILE_SCHEMA)
-    set(CMAKE_COMMAND_TMP "")
-    if (${CMAKE_VERSION} VERSION_GREATER 3.1)
-        set(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
-    endif()
+set(CMAKE_COMMAND_TMP "")
+if (${CMAKE_VERSION} VERSION_GREATER 3.1)
+    set(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
+endif()
 
-    add_custom_command(
-        OUTPUT ${SCHEMADIR_BUILD}/gschemas.compiled
-        COMMAND ${CMAKE_COMMAND_TMP} ${GLIB_COMPILE_SCHEMAS} ${SCHEMADIR_BUILD}
-        DEPENDS ${gschema_depends}
-    )
+add_custom_command(
+    OUTPUT ${SCHEMADIR_BUILD}/gschemas.compiled
+    COMMAND ${CMAKE_COMMAND_TMP} ${GLIB_COMPILE_SCHEMAS} ${SCHEMADIR_BUILD}
+    DEPENDS ${gschema_depends}
+)
 
-    add_custom_target(compiled-schemas ALL DEPENDS ${SCHEMADIR_BUILD}/gschemas.compiled)
+add_custom_target(compiled-schemas ALL DEPENDS ${SCHEMADIR_BUILD}/gschemas.compiled)
 
 
-    install(CODE "execute_process(
-        COMMAND ${SHELL} -c \"echo Compiling gschema files in $DESTDIR${CMAKE_INSTALL_FULL_DATADIR}/glib-2.0/schemas ;
-                              ${GLIB_COMPILE_SCHEMAS} $DESTDIR${CMAKE_INSTALL_FULL_DATADIR}/glib-2.0/schemas\")")
-endif ()
+install(CODE "execute_process(
+    COMMAND ${SHELL} -c \"echo Compiling gschema files in $DESTDIR${CMAKE_INSTALL_FULL_DATADIR}/glib-2.0/schemas ;
+                          ${GLIB_COMPILE_SCHEMAS} $DESTDIR${CMAKE_INSTALL_FULL_DATADIR}/glib-2.0/schemas\")")
 
 SET(gschemas_DIST_local "")
 FOREACH(file ${gschema_SOURCES})
