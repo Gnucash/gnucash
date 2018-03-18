@@ -48,6 +48,9 @@ gnc_add_swig_python_command (swig-app-utils-python
     ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i
 )
 
+# Short notice: When designing a unit test for gnc-gsettings,
+# don't forget to consider the COMPILE_GSCHEMAS option for
+# conditional run of the test.
 SET (app_utils_SOURCES
   calculation/expression_parser.c
   calculation/fin.c
