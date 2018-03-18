@@ -9,7 +9,7 @@ import os
 sys.path.append(os.path.dirname(__file__))
 noisy = gnc_prefs_is_extra_enabled()
 if noisy:
-    print "woop", os.path.dirname(__file__)
+    print("woop", os.path.dirname(__file__))
 # Importing the console class causes SIGTTOU to be thrown if GnuCash is
 # started in the background.  This causes a hang if it is not handled, 
 # so ignore it for the duration
@@ -22,22 +22,22 @@ import pycons.console as cons
 signal.signal(signal.SIGTTOU, old_sigttou)
 
 if noisy:
-    print "Hello from python!"
-    print "test", sys.modules.keys()
-    print "test2", dir(_sw_app_utils)
+    print("Hello from python!")
+    print("test", sys.modules.keys())
+    print("test2", dir(_sw_app_utils))
 
    #root = _sw_app_utils.gnc_get_current_root_account()
 
-   #print "test", dir(root), root.__class__
-    print "test3", dir(gnucash_core_c)
+   #print("test", dir(root), root.__class__)
+    print("test3", dir(gnucash_core_c))
 
    #acct = Account(instance = root)
 
-   #print "test3", dir(acct)
-   #print acct.GetName()
-   #print acct.GetBalance()
-   #print acct.GetSplitList()
-   #print "test2", dir(gnucash.gnucash_core_c)
+   #print("test3", dir(acct))
+   #print(acct.GetName())
+   #print(acct.GetBalance())
+   #print(acct.GetSplitList())
+   #print("test2", dir(gnucash.gnucash_core_c))
 
 class Console (cons.Console):
     """ GTK python console """
