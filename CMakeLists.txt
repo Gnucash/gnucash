@@ -71,6 +71,9 @@ OPTION (ALLOW_OLD_GETTEXT "allow to configure build with a gettext version older
 
 # These are also settable from the command line in a similar way.
 
+# Use gsettings-desktop-schemas for a better integration with GNOME
+SET(COMPILE_GSCHEMAS ON CACHE BOOL "Compile the GSettings schema")
+
 SET(GNUCASH_BUILD_ID "" CACHE STRING "Overrides the GnuCash build identification (Build ID) which defaults to a description of the vcs commit from which gnucash is built. Distributions may want to insert a package management based version number instead")
 # GENERATE_SWIG_WRAPPERS - Controls whether to generate the swig wrappers for guile and python. If not set the wrappers will only be generated when building from a git worktree, commented out here, but will be evaluated later on in this file
 

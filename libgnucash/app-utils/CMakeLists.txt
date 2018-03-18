@@ -1,3 +1,4 @@
+# NB: Unit tests which require GSchemas should be made conditional on COMPILE_GSCHEMAS.
 ADD_SUBDIRECTORY(test)
 # Build the library
 
