@@ -45,7 +45,6 @@
       <separator name="ToolbarSep67"/>
       <toolitem name="ToolbarBlankTransaction"     action="BlankTransactionAction"/>
       <separator name="ToolbarSep68"/>
-      <toolitem name="ToolbarTransfer"             action="ActionsTransferAction"/>
     </placeholder>
   </toolbar>
 
