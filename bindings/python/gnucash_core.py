@@ -28,15 +28,15 @@
 #  @author Jeff Green,   ParIT Worker Co-operative <jeff@parit.ca>
 #  @ingroup python_bindings
 
-import gnucash_core_c
+import gnucash.gnucash_core_c as gnucash_core_c
 
-from function_class import \
+from gnucash.function_class import \
      ClassFromFunctions, extract_attributes_with_prefix, \
      default_arguments_decorator, method_function_returns_instance, \
      methods_return_instance, process_list_convert_to_instance, \
      method_function_returns_instance_list, methods_return_instance_lists
 
-from gnucash_core_c import gncInvoiceLookup, gncInvoiceGetInvoiceFromTxn, \
+from gnucash.gnucash_core_c import gncInvoiceLookup, gncInvoiceGetInvoiceFromTxn, \
     gncInvoiceGetInvoiceFromLot, gncEntryLookup, gncInvoiceLookup, \
     gncCustomerLookup, gncVendorLookup, gncJobLookup, gncEmployeeLookup, \
     gncTaxTableLookup, gncTaxTableLookupByName, gnc_search_invoice_on_id, \
@@ -112,7 +112,7 @@ class Session(GnuCashCoreClass):
                 # More background: https://bugzilla.gnome.org/show_bug.cgi?id=726891
                 if book_uri[:3] != "xml" or not is_new:
                     self.load()
-            except GnuCashBackendException, backend_exception:
+            except GnuCashBackendException as backend_exception:
                 self.end()
                 self.destroy()
                 raise
@@ -174,75 +174,75 @@ class Book(GnuCashCoreClass):
     get_table -- Returns a commodity lookup table, of type GncCommodityTable
     """
     def InvoiceLookup(self, guid):
-        from gnucash_business import Invoice
+        from gnucash.gnucash_business import Invoice
         return self.do_lookup_create_oo_instance(
             gncInvoiceLookup, Invoice, guid.get_instance() )
 
     def EntryLookup(self, guid):
-        from gnucash_business import Entry
+        from gnucash.gnucash_business import Entry
         return self.do_lookup_create_oo_instance(
             gncEntryLookup, Entry, guid.get_instance() )
 
     def CustomerLookup(self, guid):
-        from gnucash_business import Customer
+        from gnucash.gnucash_business import Customer
         return self.do_lookup_create_oo_instance(
             gncCustomerLookup, Customer, guid.get_instance())
 
     def JobLookup(self, guid):
-        from gnucash_business import Job
+        from gnucash.gnucash_business import Job
         return self.do_lookup_create_oo_instance(
             gncJobLookup, Job, guid.get_instance() )
 
     def VendorLookup(self, guid):
-        from gnucash_business import Vendor
+        from gnucash.gnucash_business import Vendor
         return self.do_lookup_create_oo_instance(
             gncVendorLookup, Vendor, guid.get_instance() )
 
     def EmployeeLookup(self, guid):
-        from gnucash_business import Employee
+        from gnucash.gnucash_business import Employee
         return self.do_lookup_create_oo_instance(
             gncEmployeeLookup, Employee, guid.get_instance() )
 
     def TaxTableLookup(self, guid):
-        from gnucash_business import TaxTable
+        from gnucash.gnucash_business import TaxTable
         return self.do_lookup_create_oo_instance(
             gncTaxTableLookup, TaxTable, guid.get_instance() )
 
     def TaxTableLookupByName(self, name):
-        from gnucash_business import TaxTable
+        from gnucash.gnucash_business import TaxTable
         return self.do_lookup_create_oo_instance(
             gncTaxTableLookupByName, TaxTable, name)
 
     def TaxTableGetTables(self):
-        from gnucash_business import TaxTable
+        from gnucash.gnucash_business import TaxTable
         return [ TaxTable(instance=item) for item in gncTaxTableGetTables(self.instance) ]
 
     def BillLookupByID(self, id):
-        from gnucash_business import Bill
+        from gnucash.gnucash_business import Bill
         return self.do_lookup_create_oo_instance(
             gnc_search_bill_on_id, Bill, id)
 
     def InvoiceLookupByID(self, id):
-        from gnucash_business import Invoice
+        from gnucash.gnucash_business import Invoice
         return self.do_lookup_create_oo_instance(
             gnc_search_invoice_on_id, Invoice, id)
 
     def CustomerLookupByID(self, id):
-        from gnucash_business import Customer
+        from gnucash.gnucash_business import Customer
         return self.do_lookup_create_oo_instance(
             gnc_search_customer_on_id, Customer, id)
 
     def VendorLookupByID(self, id):
-        from gnucash_business import Vendor
+        from gnucash.gnucash_business import Vendor
         return self.do_lookup_create_oo_instance(
             gnc_search_vendor_on_id, Vendor, id)
-            
+
     def InvoiceNextID(self, customer):
-      ''' Return the next invoice ID. 
+      ''' Return the next invoice ID.
       This works but I'm not entirely happy with it.  FIX ME'''
       from gnucash.gnucash_core_c import gncInvoiceNextID
       return gncInvoiceNextID(self.get_instance(),customer.GetEndOwner().get_instance()[1])
-      
+
     def BillNextID(self, vendor):
       ''' Return the next Bill ID. '''
       from gnucash.gnucash_core_c import gncInvoiceNextID
@@ -294,11 +294,11 @@ class GncNumeric(GnuCashCoreClass):
             return gnc_numeric_zero()
         elif len(args) == 1:
             arg = args[0]
-            if type(arg) in (int, long):
+            if isinstance(arg, int):
                 return gnc_numeric_create(arg ,1)
-            elif type(arg) == float:
+            elif isinstance(arg, float):
                 return double_to_gnc_numeric(arg, GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED | GNC_HOW_RND_NEVER)
-            elif type(arg) == str:
+            elif isinstance(arg, str):
                 instance = gnc_numeric_zero()
                 if not string_to_gnc_numeric(arg, instance):
                     raise TypeError('Failed to convert to GncNumeric: ' + str(args))
@@ -306,17 +306,17 @@ class GncNumeric(GnuCashCoreClass):
             else:
                 raise TypeError('Only single int/float/str allowed: ' + str(args))
         elif len(args) == 2:
-            if type(args[0]) == int and type(args[1]) == int:
+            if isinstance(args[0], int) and isinstance(args[1], int):
                 return gnc_numeric_create(*args)
             else:
                 raise TypeError('Only two ints allowed: ' + str(args))
         elif len(args) == 3:
-            if type(args[0]) == float \
-                and type(args[1]) in (int, long) \
+            if isinstance(args[0], float) \
+                and isinstance(args[1], int) \
                 and type(args[2]) == type(GNC_HOW_DENOM_FIXED):
                 return double_to_gnc_numeric(*args)
             else:
-                raise TypeError('Only (float, int/long, GNC_HOW_RND_*) allowed: ' + str(args))
+                raise TypeError('Only (float, int, GNC_HOW_RND_*) allowed: ' + str(args))
         else:
             raise TypeError('Required single int/float/str or two ints: ' + str(args))
 
@@ -324,13 +324,9 @@ class GncNumeric(GnuCashCoreClass):
         from fractions import Fraction
         return Fraction(self.num(), self.denom())
 
-    def __unicode__(self):
+    def __str__(self):
         """Returns a human readable numeric value string as UTF8."""
         return gnc_numeric_to_string(self.instance)
-
-    def __str__(self):
-        """returns a human readable numeric value string as bytes."""
-        return unicode(self).encode('utf-8')
 
 class GncPrice(GnuCashCoreClass):
     '''
@@ -356,7 +352,7 @@ class GncPrice(GnuCashCoreClass):
 
       See also http://code.gnucash.org/docs/head/group__Price.html
     '''
-    pass
+    _new_instance = 'gnc_price_create'
 GncPrice.add_methods_with_prefix('gnc_price_')
 
 
@@ -411,7 +407,7 @@ class GncCommodityNamespace(GnuCashCoreClass):
 
 class GncLot(GnuCashCoreClass):
     def GetInvoiceFromLot(self):
-        from gnucash_business import Invoice
+        from gnucash.gnucash_business import Invoice
         return self.do_lookup_create_oo_instance(
             gncInvoiceGetInvoiceFromLot, Invoice )
 
@@ -434,7 +430,7 @@ class Transaction(GnuCashCoreClass):
         return self.GetSplitList().pop(n)
 
     def GetInvoiceFromTxn(self):
-        from gnucash_business import Transaction
+        from gnucash.gnucash_business import Transaction
         return self.do_lookup_create_oo_instance(
             gncInvoiceGetInvoiceFromTxn, Transaction )
 
@@ -587,7 +583,7 @@ methods_return_instance_lists(
     GncCommodityTable, { 'get_namespaces_list': GncCommodityNamespace,
                          'get_commodities': GncCommodity,
                          'get_quotable_commodities': GncCommodity,
-                         
+
                        } )
 setattr(GncCommodityTable, 'get_namespaces', getattr(GncCommodityTable, '_get_namespaces_py'))
 
@@ -632,7 +628,7 @@ trans_dict =    {
                     'GetCurrency': GncCommodity,
                     'GetGUID': GUID
                 }
- 
+
 methods_return_instance(Transaction, trans_dict)
 methods_return_instance_lists(
     Transaction, { 'GetSplitList': Split,
@@ -738,18 +734,18 @@ class GUIDString(GnuCashCoreClass):
 GUIDString.add_constructor_and_methods_with_prefix('string_', 'to_guid')
 
 #Query
-from gnucash_core_c import \
+from gnucash.gnucash_core_c import \
     QOF_QUERY_AND, \
     QOF_QUERY_OR, \
     QOF_QUERY_NAND, \
     QOF_QUERY_NOR, \
     QOF_QUERY_XOR
 
-from gnucash_core_c import \
+from gnucash.gnucash_core_c import \
     QOF_STRING_MATCH_NORMAL, \
     QOF_STRING_MATCH_CASEINSENSITIVE
 
-from gnucash_core_c import \
+from gnucash.gnucash_core_c import \
     QOF_COMPARE_LT, \
     QOF_COMPARE_LTE, \
     QOF_COMPARE_EQUAL, \
@@ -757,10 +753,10 @@ from gnucash_core_c import \
     QOF_COMPARE_GTE, \
     QOF_COMPARE_NEQ
 
-from gnucash_core_c import \
+from gnucash.gnucash_core_c import \
     INVOICE_TYPE
 
-from gnucash_core_c import \
+from gnucash.gnucash_core_c import \
     INVOICE_IS_PAID
 
 class Query(GnuCashCoreClass):

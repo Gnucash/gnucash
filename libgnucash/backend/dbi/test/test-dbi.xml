@@ -104,6 +104,65 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Checking Account</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>hbci</slot:key>
+      <slot:value type="frame">
+        <slot>
+          <slot:key>account-id</slot:key>
+          <slot:value type="string">998877665544</slot:value>
+        </slot>
+        <slot>
+          <slot:key>account-uid</slot:key>
+          <slot:value type="integer">4</slot:value>
+        </slot>
+        <slot>
+          <slot:key>bank-code</slot:key>
+          <slot:value type="string">123456789</slot:value>
+        </slot>
+        <slot>
+          <slot:key>trans-retrieval</slot:key>
+          <slot:value type="timespec">
+            <ts:date>2014-07-29 13:53:22 -0700</ts:date>
+          </slot:value>
+        </slot>
+      </slot:value>
+    </slot>
+    <slot>
+      <slot:key>import-map-bayes/JOE'S/2fb5eba53d140bc237d8bae2fca3ddee</slot:key>
+      <slot:value type="integer">2</slot:value>
+    </slot>
+    <slot>
+      <slot:key>import-map-bayes/KAISER/2fb5eba53d140bc237d8bae2fca3ddee</slot:key>
+      <slot:value type="integer">4</slot:value>
+    </slot>
+    <slot>
+      <slot:key>reconcile-info</slot:key>
+      <slot:value type="frame">
+        <slot>
+          <slot:key>include-children</slot:key>
+          <slot:value type="integer">0</slot:value>
+        </slot>
+        <slot>
+          <slot:key>last-date</slot:key>
+          <slot:value type="integer">1412924399</slot:value>
+        </slot>
+        <slot>
+          <slot:key>last-interval</slot:key>
+          <slot:value type="frame">
+            <slot>
+              <slot:key>days</slot:key>
+              <slot:value type="integer">26</slot:value>
+            </slot>
+            <slot>
+              <slot:key>months</slot:key>
+              <slot:value type="integer">0</slot:value>
+            </slot>
+          </slot:value>
+        </slot>
+      </slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="guid">b9e822465cc7e808797aaa51fd6f8d23</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -231,6 +290,37 @@
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Expenses</act:description>
   <act:parent type="guid">aa435e75fdee71adc1c51e53ea390638</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Liabilities</act:name>
+  <act:id type="guid">334baa3103961830eeccf42fe5a0d5de</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>CAD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Liabilities</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">aa435e75fdee71adc1c51e53ea390638</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>CapOne</act:name>
+  <act:id type="guid">fece54740af23814b1ba6f89fb64307d</act:id>
+  <act:type>CREDIT</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>CAD</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:code>1801</act:code>
+  <act:description>Capital One Visa</act:description>
+    <act:parent type="guid">334baa3103961830eeccf42fe5a0d5de</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Equity</act:name>
@@ -613,6 +703,77 @@
     </gnc:recurrence>
   </sx:schedule>
 </gnc:schedxaction>
+<gnc:GncEntry version="2.0.0">
+  <entry:guid type="guid">86fa5bb1ff0fa546674458823e5920bf</entry:guid>
+  <entry:date>
+    <ts:date>2010-12-07 00:00:00 -0800</ts:date>
+  </entry:date>
+  <entry:entered>
+    <ts:date>2010-12-07 17:10:43 -0800</ts:date>
+  </entry:entered>
+  <entry:bill type="guid">2c2889c46f3d813ede18cd1a642c48b0</entry:bill>
+  <entry:billable>0</entry:billable>
+  <entry:b-taxable>1</entry:b-taxable>
+  <entry:b-taxincluded>0</entry:b-taxincluded>
+  <entry:b-pay>CASH</entry:b-pay>
+</gnc:GncEntry>
+<gnc:GncInvoice version="2.0.0">
+  <invoice:guid type="guid">2c2889c46f3d813ede18cd1a642c48b0</invoice:guid>
+  <invoice:id>1</invoice:id>
+  <invoice:owner version="2.0.0">
+    <owner:type>gncJob</owner:type>
+    <owner:id type="guid">bf58b11a019e7fdb5860af876ed0a870</owner:id>
+  </invoice:owner>
+  <invoice:opened>
+    <ts:date>2010-12-07 00:00:00 -0800</ts:date>
+  </invoice:opened>
+  <invoice:active>1</invoice:active>
+  <invoice:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </invoice:currency>
+</gnc:GncInvoice>
+<gnc:GncJob version="2.0.0">
+  <job:guid type="guid">bf58b11a019e7fdb5860af876ed0a870</job:guid>
+  <job:id>1</job:id>
+  <job:name>Quality</job:name>
+  <job:owner version="2.0.0">
+    <owner:type>gncVendor</owner:type>
+    <owner:id type="guid">aa9051c0623c97b80cbdc14171e532ab</owner:id>
+  </job:owner>
+  <job:active>1</job:active>
+</gnc:GncJob>
+<gnc:GncTaxTable version="2.0.0">
+  <taxtable:guid type="guid">b6ab3c8f52b8b716415b07aa6c69e8e6</taxtable:guid>
+  <taxtable:name>Alameda, California</taxtable:name>
+  <taxtable:refcount>0</taxtable:refcount>
+  <taxtable:invisible>0</taxtable:invisible>
+  <taxtable:entries>
+    <gnc:GncTaxTableEntry>
+      <tte:acct type="guid">aa435e75fdee71adc1c51e53ea390638</tte:acct>
+      <tte:amount>975000/100000</tte:amount>
+      <tte:type>PERCENT</tte:type>
+    </gnc:GncTaxTableEntry>
+  </taxtable:entries>
+</gnc:GncTaxTable>
+<gnc:GncVendor version="2.0.0">
+  <vendor:guid type="guid">aa9051c0623c97b80cbdc14171e532ab</vendor:guid>
+  <vendor:name>YoYoDyne, Inc.</vendor:name>
+  <vendor:id>1</vendor:id>
+  <vendor:addr version="2.0.0">
+    <addr:name>YpYoDyne Inc.</addr:name>
+    <addr:addr1>42 Mobius Strip</addr:addr1>
+    <addr:addr2>Fremont, CA 94539</addr:addr2>
+    <addr:phone>510-555-1212</addr:phone>
+  </vendor:addr>
+  <vendor:taxincluded>USEGLOBAL</vendor:taxincluded>
+  <vendor:active>1</vendor:active>
+  <vendor:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </vendor:currency>
+  <vendor:use-tt>0</vendor:use-tt>
+</gnc:GncVendor>
 <gnc:budget version="2.0.0">
   <bgt:id type="guid">367c685aeaef6244170a1f0984665c38</bgt:id>
   <bgt:name>Unnamed Budget</bgt:name>

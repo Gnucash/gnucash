@@ -56,8 +56,7 @@
 
 struct _main_matcher_info
 {
-    GtkWidget *dialog;
-    GtkWidget *assistant;
+    GtkWidget *main_widget;
     GtkTreeView *view;
     GNCImportSettings *user_settings;
     int selected_row;
@@ -130,12 +129,11 @@ void gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
         while (gtk_tree_model_iter_next (model, &iter));
     }
 
-
-    if (!(info->dialog == NULL))
+    if (GTK_IS_DIALOG(info->main_widget))
     {
-        gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(info->dialog));
+        gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(info->main_widget));
         gnc_import_Settings_delete (info->user_settings);
-        gtk_widget_destroy (GTK_WIDGET (info->dialog));
+        gtk_widget_destroy (GTK_WIDGET (info->main_widget));
     }
     else
         gnc_import_Settings_delete (info->user_settings);
@@ -236,7 +234,7 @@ on_matcher_help_clicked (GtkButton *button, gpointer user_data)
 
     help_dialog = GTK_WIDGET(gtk_builder_get_object (builder, "matcher_help_dialog"));
     gtk_window_set_transient_for(GTK_WINDOW(help_dialog),
-                                 GTK_WINDOW(info->dialog));
+                                 GTK_WINDOW(info->main_widget));
 
     /* Connect the signals */
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, help_dialog);
@@ -260,7 +258,8 @@ run_account_picker_dialog (GNCImportMainMatcher *info,
     gboolean ok_pressed;
     g_assert (trans_info);
     old_acc = gnc_import_TransInfo_get_destacc (trans_info);
-    new_acc = gnc_import_select_account(info->dialog,
+
+    new_acc = gnc_import_select_account(info->main_widget,
                                         NULL,
                                         TRUE,
                                         _("Destination account for the auto-balance split."),
@@ -276,7 +275,8 @@ static void
 run_match_dialog (GNCImportMainMatcher *info,
                   GNCImportTransInfo *trans_info)
 {
-    gnc_import_match_picker_run_and_close (trans_info, info->pending_matches);
+    gnc_import_match_picker_run_and_close (info->main_widget,
+                                           trans_info, info->pending_matches);
 }
 
 static void
@@ -472,7 +472,7 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
     /* Add the columns *
      * (keep the line break below to avoid a translator comment) */
     add_text_column(view,
-    		        _("Date"), DOWNLOADED_COL_DATE);
+                    _("Date"), DOWNLOADED_COL_DATE);
     column = add_text_column(view, _("Account"), DOWNLOADED_COL_ACCOUNT);
     gtk_tree_view_column_set_visible(column, show_account);
     add_text_column(view, _("Amount"), DOWNLOADED_COL_AMOUNT);
@@ -550,8 +550,8 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-import.glade", "transaction_matcher_dialog");
     gnc_builder_add_from_file (builder, "dialog-import.glade", "transaction_matcher_content");
-    info->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher_dialog"));
-    g_assert (info->dialog != NULL);
+    info->main_widget = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher_dialog"));
+    g_assert (info->main_widget != NULL);
 
     /* Pack the content into the dialog vbox */
     pbox = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher_vbox"));
@@ -568,13 +568,13 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     g_assert (heading_label != NULL);
 
     if (parent)
-        gtk_window_set_transient_for (GTK_WINDOW (info->dialog), GTK_WINDOW (parent));
+        gtk_window_set_transient_for (GTK_WINDOW (info->main_widget), GTK_WINDOW (parent));
 
     if (heading)
         gtk_label_set_text (GTK_LABEL (heading_label), heading);
 
-    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(info->dialog));
-    gtk_widget_show_all (GTK_WIDGET (info->dialog));
+    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(info->main_widget));
+    gtk_widget_show_all (GTK_WIDGET (info->main_widget));
 
     info->transaction_processed_cb = NULL;
 
@@ -591,9 +591,8 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
  *****************************************************************/
 
 GNCImportMainMatcher * gnc_gen_trans_assist_new (GtkWidget *parent,
-        const gchar* heading,
-        gboolean all_from_same_account,
-        gint match_date_hardlimit)
+        GtkWidget *assistant_page, const gchar* heading,
+        gboolean all_from_same_account, gint match_date_hardlimit)
 {
     GNCImportMainMatcher *info;
     GtkBuilder *builder;
@@ -605,6 +604,7 @@ GNCImportMainMatcher * gnc_gen_trans_assist_new (GtkWidget *parent,
 
     info = g_new0 (GNCImportMainMatcher, 1);
     info->pending_matches = gnc_import_PendingMatches_new();
+    info->main_widget = GTK_WIDGET(parent);
 
     /* Initialize user Settings. */
     info->user_settings = gnc_import_Settings_new ();
@@ -623,7 +623,7 @@ GNCImportMainMatcher * gnc_gen_trans_assist_new (GtkWidget *parent,
     }
     /* Pack content into Assistant page widget */
     box = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher_content"));
-    gtk_box_pack_start( GTK_BOX(parent), box, TRUE, TRUE, 6);
+    gtk_box_pack_start (GTK_BOX(assistant_page), box, TRUE, TRUE, 6);
 
     /* Get the view */
     info->view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "downloaded_view"));
@@ -669,7 +669,7 @@ gboolean gnc_gen_trans_list_run (GNCImportMainMatcher *info)
     gboolean result;
 
     /* DEBUG("Begin"); */
-    result = gtk_dialog_run (GTK_DIALOG (info->dialog));
+    result = gtk_dialog_run (GTK_DIALOG (info->main_widget));
     /* DEBUG("Result was %d", result); */
 
     /* No destroying here since the dialog was already destroyed through
@@ -962,7 +962,7 @@ void gnc_gen_trans_list_add_trans_with_ref_id(GNCImportMainMatcher *gui, Transac
 GtkWidget *gnc_gen_trans_list_widget (GNCImportMainMatcher *info)
 {
     g_assert(info);
-    return info->dialog;
+    return info->main_widget;
 }
 
 /** @} */

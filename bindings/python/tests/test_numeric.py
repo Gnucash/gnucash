@@ -22,12 +22,6 @@ class TestGncNumeric( TestCase ):
         self.assertEqual(num.num(), 3)
         self.assertEqual(num.denom(), 1)
 
-    def test_from_long(self):
-        num = GncNumeric(3L)
-        self.assertEqual(str(num), "3/1")
-        self.assertEqual(num.num(), 3)
-        self.assertEqual(num.denom(), 1)
-
         with self.assertRaises(Exception) as context:
             GncNumeric((2**64)+1)
 

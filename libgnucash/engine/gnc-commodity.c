@@ -155,12 +155,21 @@ struct gnc_quote_source_s
     char *internal_name;	/* Name used internally and by finance::quote. */
 };
 
-/* To update the following lists search the FQ modules for their 'method's
- * because most of them have more than one.
+/* To update the following lists scan
+ * from github.com/finance-quote/finance-quote
+ * in lib/Finance/Quote/ all *.pm for "methods"
+ * because many of them have more than one -
+ * ideally after each release of them.
+ *
+ * Apply changes here also to the FQ appendix of help.
  */
 static gnc_quote_source currency_quote_source =
 { TRUE, 0, 0, "Currency", "CURRENCY", "currency" };
 
+/* The single quote method is usually the module name, but
+ * sometimes it get's the suffix "_direct"
+ * and the failover method is without suffix.
+ */
 static gnc_quote_source single_quote_sources[] =
 {
     { FALSE, 0, 0, "Alphavantage, US", "ALPHAVANTAGE", "alphavantage" },
@@ -225,6 +234,7 @@ static gnc_quote_source single_quote_sources[] =
     { FALSE, 0, 0, "Yahoo as JSON", "YAHOO_JSON", "yahoo_json" },
     { FALSE, 0, 0, "Yahoo as YQL", "YAHOO_YQL", "yahoo_yql" },
 };
+
 static gnc_quote_source multiple_quote_sources[] =
 {
     { FALSE, 0, 0, "Australia (ASX, ...)", "AUSTRALIA", "australia" },

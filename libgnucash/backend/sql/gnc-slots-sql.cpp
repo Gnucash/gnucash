@@ -225,8 +225,7 @@ set_slot_from_value (slot_info_t* pInfo, KvpValue* pValue)
     {
     case FRAME:
     {
-        auto key = get_key_from_path (pInfo->path);
-        pInfo->pKvpFrame->set ({key.c_str()}, pValue);
+        pInfo->pKvpFrame->set ({pInfo->path}, pValue);
         break;
     }
     case LIST:
@@ -242,10 +241,10 @@ set_slot_from_value (slot_info_t* pInfo, KvpValue* pValue)
         auto frame = pInfo->pKvpFrame;
         if (!path.empty())
         {
-            frame->set_path ({path.c_str(), key.c_str()}, pValue);
+            frame->set_path ({path, key}, pValue);
         }
         else
-            frame->set ({key.c_str()}, pValue);
+            frame->set ({key}, pValue);
         break;
     }
     }

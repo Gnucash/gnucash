@@ -1,5 +1,5 @@
 # function_class.py -- Library for making python classes from a set
-#                      of functions. 
+#                      of functions.
 #
 # Copyright (C) 2008 ParIT Worker Co-operative <paritinfo@parit.ca>
 # This program is free software; you can redistribute it and/or
@@ -53,7 +53,7 @@ class ClassFromFunctions(object):
         # already exist with the same __instance value, or equivalent __instance
         # values, where this is desirable...
         return super(ClassFromFunctions, cls).__new__(cls)
-    
+
     def __init__(self, *args, **kargs):
         """Construct a new instance, using either the function
         self._module[self._new_instance] or using existing instance
@@ -89,7 +89,7 @@ class ClassFromFunctions(object):
             return getattr(self._module, function_name)(
                 self.instance,
                 *process_list_convert_to_instance(meth_func_args) )
-        
+
         setattr(cls, method_name, method_function)
         setattr(method_function, "__name__", method_name)
         return method_function
@@ -97,41 +97,41 @@ class ClassFromFunctions(object):
     @classmethod
     def ya_add_classmethod(cls, function_name, method_name):
         """Add the function, method_name to this class as a classmethod named name
-        
+
         Taken from function_class and slightly modified.
         """
         def method_function(self, *meth_func_args):
             return getattr(self._module, function_name)(
                 self,
                 *process_list_convert_to_instance(meth_func_args) )
-        
+
         setattr(cls, method_name, classmethod(method_function))
         setattr(method_function, "__name__", method_name)
-        return method_function    
+        return method_function
 
     @classmethod
     def ya_add_method(cls, function_name, method_name):
         """Add the function, method_name to this class as a method named name
-        
+
         Taken from function_class and slightly modified.
         """
         def method_function(self, *meth_func_args):
             return getattr(self._module, function_name)(
                 self,
                 *process_list_convert_to_instance(meth_func_args) )
-        
+
         setattr(cls, method_name, method_function)
         setattr(method_function, "__name__", method_name)
         return method_function
 
     @classmethod
     def add_methods_with_prefix(cls, prefix):
-        """Add a group of functions with the same prefix 
+        """Add a group of functions with the same prefix
         """
         for function_name, function_value, after_prefix in \
             extract_attributes_with_prefix(cls._module, prefix):
                 cls.add_method(function_name, after_prefix)
-    
+
     @classmethod
     def add_constructor_and_methods_with_prefix(cls, prefix, constructor):
         """Add a group of functions with the same prefix, and set the
@@ -160,7 +160,7 @@ def method_function_returns_instance(method_function, cls):
             return None
         else:
             return cls( **kargs )
-    
+
     return new_function
 
 def method_function_returns_instance_list(method_function, cls):
@@ -170,7 +170,7 @@ def method_function_returns_instance_list(method_function, cls):
     return new_function
 
 def methods_return_instance_lists(cls, function_dict):
-    for func_name, instance_name in function_dict.iteritems():
+    for func_name, instance_name in iter(function_dict.items()):
         setattr(cls, func_name,
                 method_function_returns_instance_list(
                 getattr(cls, func_name), instance_name))
@@ -186,7 +186,7 @@ def default_arguments_decorator(function, *args):
         new_argset.extend( args[ len(function_args): ] )
         return function( *new_argset )
     return new_function
-    
+
 def return_instance_if_value_has_it(value):
     """Return value.instance if value is an instance of ClassFromFunctions,
     else return value
@@ -212,16 +212,16 @@ def extract_attributes_with_prefix(obj, prefix):
     the attribute name, the attribute value, and the text that appears
     after the prefix in the name
     """
-    for attr_name, attr_value in obj.__dict__.iteritems():
+    for attr_name, attr_value in iter(obj.__dict__.items()):
         if attr_name.startswith(prefix):
             after_prefix = attr_name[ len(prefix): ]
             yield attr_name, attr_value, after_prefix
 
 def methods_return_instance(cls, function_dict):
     """Iterates through a dictionary of function name strings and instance names
-    and sets the function to return the associated instance 
+    and sets the function to return the associated instance
     """
-    for func_name, instance_name in function_dict.iteritems():
-        setattr(cls, func_name, 
+    for func_name, instance_name in iter(function_dict.items()):
+        setattr(cls, func_name,
             method_function_returns_instance( getattr(cls, func_name), instance_name))
 

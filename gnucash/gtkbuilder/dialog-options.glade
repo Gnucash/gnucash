@@ -5,8 +5,8 @@
   <object class="GtkDialog" id="gnucash_options_dialog">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">GnuCash Options</property>
-    <property name="default_width">400</property>
-    <property name="default_height">400</property>
+    <property name="default_width">640</property>
+    <property name="default_height">480</property>
     <property name="type_hint">dialog</property>
     <signal name="response" handler="gnc_options_dialog_response_cb" swapped="no"/>
     <child internal-child="vbox">

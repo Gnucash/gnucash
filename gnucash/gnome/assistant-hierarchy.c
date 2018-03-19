@@ -1271,10 +1271,6 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
     // Set the style context for this assistant so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncAssistAccountHierarchy");
 
-    /* If we have a callback, make this window stay on top */
-    if (when_completed != NULL)
-        gtk_window_set_keep_above (GTK_WINDOW(data->dialog), TRUE);
-
     /* Enable buttons on first and last page. */
     gtk_assistant_set_page_complete (GTK_ASSISTANT (dialog),
                                      GTK_WIDGET(gtk_builder_get_object(builder, "intro_page_label")),
@@ -1331,6 +1327,7 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
 
     data->when_completed = when_completed;
     data->use_defaults = use_defaults;
+    gtk_widget_show_all (dialog);
     return dialog;
 }
 

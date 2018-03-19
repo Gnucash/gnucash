@@ -76,8 +76,10 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
  *   transaction matcher will be packed into. The data structure
  *   GNCImportMainMatcher is returned.
  *
- * @param parent The parent widget. This is the place the transaction
- * matcher will be packed into.
+ * @param parent The parent widget
+ *
+ * @param assistant_page The parent widget. This is the place the
+ * transaction matcher will be packed into.
  *
  * @param heading The heading label in the Importer window. May be NULL.
  *
@@ -98,9 +100,8 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
  * @return A pointer to the GNCImportMainMatcher which has been setup.
 */
 GNCImportMainMatcher * gnc_gen_trans_assist_new (GtkWidget *parent,
-        const gchar* heading,
-        gboolean all_from_same_account,
-        gint match_date_hardlimit);
+        GtkWidget *assistant_page, const gchar* heading,
+        gboolean all_from_same_account, gint match_date_hardlimit);
 
 
 /**  This starts the import process for transaction from an assistant.

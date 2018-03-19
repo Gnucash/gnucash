@@ -1,3 +1,4 @@
+# NB: Unit tests which require GSchemas should be made conditional on COMPILE_GSCHEMAS.
 ADD_SUBDIRECTORY(test)
 # Build the library
 
@@ -110,25 +111,35 @@ INSTALL(TARGETS gncmod-app-utils
 )
 
 IF (WITH_PYTHON)
-  ADD_LIBRARY (gncmod-app-utils-python ${SWIG_APP_UTILS_PYTHON_C})
+  SET(PYEXEC_FILES sw_app_utils.py)
+  ADD_LIBRARY (sw_app_utils MODULE ${SWIG_APP_UTILS_PYTHON_C})
 
-  TARGET_LINK_LIBRARIES(gncmod-app-utils-python gncmod-app-utils ${app_utils_ALL_LIBRARIES} ${PYTHON_LIBRARIES})
+  TARGET_LINK_LIBRARIES(sw_app_utils gncmod-app-utils ${app_utils_ALL_LIBRARIES} ${PYTHON_LIBRARIES})
+  SET_TARGET_PROPERTIES(sw_app_utils PROPERTIES PREFIX "_")
 
-  TARGET_INCLUDE_DIRECTORIES (gncmod-app-utils-python
+  TARGET_INCLUDE_DIRECTORIES (sw_app_utils
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
     PRIVATE ${app_utils_ALL_INCLUDES} ${PYTHON_INCLUDE_DIRS}
   )
-  TARGET_COMPILE_DEFINITIONS (gncmod-app-utils-python PRIVATE -DG_LOG_DOMAIN=\"gnc.app-utils\")
+  TARGET_COMPILE_DEFINITIONS (sw_app_utils PRIVATE -DG_LOG_DOMAIN=\"gnc.app-utils\")
 
   IF (APPLE)
-    SET_TARGET_PROPERTIES (gncmod-app-utils-python PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+    SET_TARGET_PROPERTIES (sw_app_utils PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
   ENDIF()
 
-  INSTALL(TARGETS gncmod-app-utils-python
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  INSTALL(TARGETS sw_app_utils
+    LIBRARY DESTINATION ${PYTHON_SYSCONFIG_OUTPUT}/gnucash
+    ARCHIVE DESTINATION ${PYTHON_SYSCONFIG_OUTPUT}/gnucash
   )
+
+  ADD_CUSTOM_TARGET(sw-app-utils-py ALL
+    COMMAND ${CMAKE_COMMAND} -E copy ${SWIG_APP_UTILS_PYTHON_PY} ${PYTHON_SYSCONFIG_BUILD}/gnucash
+    DEPENDS ${SWIG_APP_UTILS_PYTHON_C})
+
+  ADD_CUSTOM_TARGET(sw-app-utils-build ALL
+    COMMAND ${CMAKE_COMMAND} -E copy ${LIBDIR_BUILD}/gnucash/_sw_app_utils${CMAKE_SHARED_MODULE_SUFFIX} ${PYTHON_SYSCONFIG_BUILD}/gnucash
+    DEPENDS sw_app_utils)
+    
 ENDIF()
 
 

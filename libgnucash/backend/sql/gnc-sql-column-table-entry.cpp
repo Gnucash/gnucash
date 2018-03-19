@@ -429,7 +429,7 @@ GncSqlColumnTableEntryImpl<CT_TIMESPEC>::add_to_query(QofIdTypeConst obj_name,
  */
     g_return_if_fail (obj_name != NULL);
     g_return_if_fail (pObject != NULL);
-
+    
     if (m_gobj_param_name != NULL)
     {
         Timespec* pts;
@@ -442,10 +442,78 @@ GncSqlColumnTableEntryImpl<CT_TIMESPEC>::add_to_query(QofIdTypeConst obj_name,
         g_return_if_fail (ts_getter != NULL);
         ts = (*ts_getter) (pObject);
     }
+    if (ts.tv_sec > MINTIME && ts.tv_sec < MAXTIME)
+    {
+        GncDateTime time(ts.tv_sec);
+        vec.emplace_back (std::make_pair (std::string{m_col_name},
+                                          time.format_zulu ("'%Y-%m-%d %H:%M:%S'")));
+    }
+    else
+    {
+        vec.emplace_back (std::make_pair (std::string{m_col_name},
+                                          "NULL"));
+    }
+}
+/* ----------------------------------------------------------------- */
+typedef time64 (*Time64AccessFunc) (const gpointer);
+typedef void (*Time64SetterFunc) (const gpointer, time64);
 
-    GncDateTime time(ts.tv_sec);
-    vec.emplace_back (std::make_pair (std::string{m_col_name},
-                                      time.format_zulu ("'%Y-%m-%d %H:%M:%S'")));
+template<> void
+GncSqlColumnTableEntryImpl<CT_TIME64>::load (const GncSqlBackend* sql_be,
+                                            GncSqlRow& row,
+                                            QofIdTypeConst obj_name,
+                                            gpointer pObject)
+    const noexcept
+{
+    time64 t;
+    g_return_if_fail (m_gobj_param_name != nullptr || get_setter(obj_name) != nullptr);
+    try
+    {
+        t = row.get_time64_at_col (m_col_name);
+    }
+    catch (std::invalid_argument)
+    {
+        try
+        {
+            auto val = row.get_string_at_col(m_col_name);
+            GncDateTime time(val);
+            t = static_cast<time64>(time);
+        }
+        catch (std::invalid_argument)
+        {
+            return;
+        }
+    }
+    set_parameter(pObject, t,
+                  reinterpret_cast<Time64SetterFunc>(get_setter(obj_name)),
+                  m_gobj_param_name);
+}
+
+template<> void
+GncSqlColumnTableEntryImpl<CT_TIME64>::add_to_table(ColVec& vec) const noexcept
+{
+
+    GncSqlColumnInfo info{*this, BCT_DATETIME, TIMESPEC_COL_SIZE, FALSE};
+    vec.emplace_back(std::move(info));
+}
+
+template<> void
+GncSqlColumnTableEntryImpl<CT_TIME64>::add_to_query(QofIdTypeConst obj_name,
+                                                   const gpointer pObject,
+                                                   PairVec& vec) const noexcept
+{
+    auto t = get_row_value_from_object<time64>(obj_name, pObject);
+    if (t > MINTIME && t < MAXTIME)
+    {
+        GncDateTime time(t);
+        vec.emplace_back (std::make_pair (std::string{m_col_name},
+                                          time.format_zulu ("'%Y-%m-%d %H:%M:%S'")));
+    }
+    else
+    {
+        vec.emplace_back (std::make_pair (std::string{m_col_name},
+                                          "NULL"));
+    }
 }
 
 /* ----------------------------------------------------------------- */

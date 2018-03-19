@@ -13,14 +13,14 @@ ENABLE_TESTING()
 # Version number of gnucash
 SET (GNUCASH_MAJOR_VERSION 2)
 SET (GNUCASH_MINOR_VERSION 7)
-SET (GNUCASH_MICRO_VERSION 6)
+SET (GNUCASH_MICRO_VERSION 7)
 SET (GNUCASH_NANO_VERSION 0)
 SET (VERSION "${GNUCASH_MAJOR_VERSION}.${GNUCASH_MINOR_VERSION}.${GNUCASH_MICRO_VERSION}")
 SET (GNUCASH_LATEST_STABLE_SERIES 2.6)
 
 SET (PACKAGE gnucash)
 SET (PACKAGE_NAME GnuCash)
-SET (PACKAGE_VERSION 2.7.6)
+SET (PACKAGE_VERSION 2.7.7)
 SET (PACKAGE_BUGREPORT gnucash-devel@gnucash.org)
 SET (PACKAGE_TARNAME ${PACKAGE})
 SET (PACKAGE_STRING "${PACKAGE_NAME} ${PACKAGE_VERSION}")
@@ -70,6 +70,9 @@ OPTION (ALLOW_OLD_GETTEXT "allow to configure build with a gettext version older
 # ############################################################
 
 # These are also settable from the command line in a similar way.
+
+# Use gsettings-desktop-schemas for a better integration with GNOME
+SET(COMPILE_GSCHEMAS ON CACHE BOOL "Compile the GSettings schema")
 
 SET(GNUCASH_BUILD_ID "" CACHE STRING "Overrides the GnuCash build identification (Build ID) which defaults to a description of the vcs commit from which gnucash is built. Distributions may want to insert a package management based version number instead")
 # GENERATE_SWIG_WRAPPERS - Controls whether to generate the swig wrappers for guile and python. If not set the wrappers will only be generated when building from a git worktree, commented out here, but will be evaluated later on in this file
@@ -459,7 +462,7 @@ ENDIF (WITH_SQL)
 # ############################################################
 
 IF (WITH_PYTHON)
-  FIND_PACKAGE(PythonInterp)
+  FIND_PACKAGE(PythonInterp 3)
   IF (NOT PYTHONINTERP_FOUND)
     MESSAGE(SEND_ERROR "Python support enabled, but Python interpreter not found.")
   ENDIF()
@@ -468,14 +471,14 @@ IF (WITH_PYTHON)
     MESSAGE(SEND_ERROR "Found python version ${PYTHON_VERSION_STRING}, but it's too old. Need python >= 2.4.0")
   ENDIF()
 
-  FIND_PACKAGE(PythonLibs)
+  FIND_PACKAGE(PythonLibs 3)
   IF (NOT PYTHONLIBS_FOUND)
     MESSAGE(SEND_ERROR "Python support enabled, but Python libraries not found.")
   ENDIF()
 
   # Determine where to install the python libraries.
   EXECUTE_PROCESS(
-    COMMAND ${PYTHON_EXECUTABLE} -c "from distutils import sysconfig; print sysconfig.get_python_lib(prefix='${CMAKE_INSTALL_PREFIX}', plat_specific=True)"
+    COMMAND ${PYTHON_EXECUTABLE} -c "from distutils import sysconfig; print(sysconfig.get_python_lib(prefix='${CMAKE_INSTALL_PREFIX}', plat_specific=True))"
     RESULT_VARIABLE PYTHON_SYSCONFIG_RESULT
     OUTPUT_VARIABLE PYTHON_SYSCONFIG_OUTPUT
     ERROR_VARIABLE PYTHON_SYSCONFIG_ERROR

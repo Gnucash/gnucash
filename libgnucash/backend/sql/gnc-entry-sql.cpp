@@ -70,9 +70,9 @@ static void entry_set_bill (gpointer pObject, gpointer val);
 static EntryVec col_table
 ({
     gnc_sql_make_table_entry<CT_GUID>("guid", 0, COL_NNUL | COL_PKEY, "guid"),
-    gnc_sql_make_table_entry<CT_TIMESPEC>("date", 0, COL_NNUL, ENTRY_DATE,
+    gnc_sql_make_table_entry<CT_TIME64>("date", 0, COL_NNUL, ENTRY_DATE,
                                           true),
-    gnc_sql_make_table_entry<CT_TIMESPEC>("date_entered", 0, 0,
+    gnc_sql_make_table_entry<CT_TIME64>("date_entered", 0, 0,
                                           ENTRY_DATE_ENTERED, true),
     gnc_sql_make_table_entry<CT_STRING>(
         "description", MAX_DESCRIPTION_LEN, 0, "description"),

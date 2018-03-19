@@ -384,11 +384,13 @@ static void  process_trans_record(  FILE *log_file)
     while ( record_ended == FALSE)
     {
         read_retval = fgets(read_buf, sizeof(read_buf), log_file);
-        if (read_retval != NULL && strncmp(record_end_str, read_buf, strlen(record_end_str)) != 0) /* If we are not at the end of the record */
+        if (read_retval != NULL &&
+            strncmp(record_end_str, read_buf, strlen(record_end_str)) != 0) /* If we are not at the end of the record */
         {
             split_num++;
             /*DEBUG("process_trans_record(): Line read: %s%s",read_buf ,"\n");*/
-            record = interpret_split_record( read_buf);
+
+            record = interpret_split_record(g_strchomp(read_buf));
             dump_split_record( record);
             if (record.log_action_present)
             {

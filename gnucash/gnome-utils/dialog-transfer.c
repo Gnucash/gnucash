@@ -302,7 +302,8 @@ gnc_xfer_dialog_update_price (XferDialog *xferData)
     gnc_numeric price_value;
 
     if (!xferData) return;
-    if (!xferData->from_commodity || ! xferData->to_commodity) return;
+    if (!GNC_IS_COMMODITY (xferData->from_commodity) ||
+        !GNC_IS_COMMODITY (xferData->to_commodity)) return;
     if (gnc_commodity_equal (xferData->from_commodity, xferData->to_commodity))
         return;
     if (!xferData->pricedb) return;
@@ -1128,6 +1129,7 @@ gnc_xfer_dialog_select_from_currency(XferDialog *xferData, gnc_commodity *cur)
 void
 gnc_xfer_dialog_select_to_currency(XferDialog *xferData, gnc_commodity *cur)
 {
+    g_return_if_fail (cur && GNC_IS_COMMODITY (cur));
     gtk_label_set_text(GTK_LABEL(xferData->to_currency_label),
                        gnc_commodity_get_printname(cur));
 
@@ -2052,8 +2054,8 @@ close_handler (gpointer user_data)
 
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW (dialog));
     gtk_widget_hide (dialog);
-    gnc_xfer_dialog_close_cb(GTK_DIALOG(dialog), xferData);
     gtk_widget_destroy (dialog);
+    gnc_xfer_dialog_close_cb(GTK_DIALOG(dialog), xferData);
     g_free (to_info);
     to_info = NULL;
     g_free (from_info);
@@ -2403,7 +2405,8 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
     gnc_commodity *txn_cur = xaccTransGetCurrency(txn);
     gnc_commodity *reg_com = xaccAccountGetCommodity(reg_acc);
 
-    g_return_val_if_fail(txn_cur, TRUE);
+    g_return_val_if_fail(txn_cur && GNC_IS_COMMODITY (txn_cur), TRUE);
+    g_return_val_if_fail(xfer_com && GNC_IS_COMMODITY (xfer_com), TRUE);
 
     if (xaccTransUseTradingAccounts (txn))
     {

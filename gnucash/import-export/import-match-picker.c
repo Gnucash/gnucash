@@ -449,7 +449,7 @@ gnc_import_match_picker_init_match_view (GNCImportMatchPicker * matcher)
  * -- GUI initialization for the Match_Picker Dialog
 \********************************************************************/
 static void
-init_match_picker_gui(GNCImportMatchPicker * matcher)
+init_match_picker_gui(GtkWidget *parent, GNCImportMatchPicker * matcher)
 {
     GtkBuilder *builder;
 
@@ -467,7 +467,9 @@ init_match_picker_gui(GNCImportMatchPicker * matcher)
     matcher->downloaded_view = (GtkTreeView *)GTK_WIDGET(gtk_builder_get_object (builder, "download_view"));
     matcher->match_view = (GtkTreeView *)GTK_WIDGET(gtk_builder_get_object (builder, "matched_view"));
     matcher->reconciled_chk = (GtkCheckButton *)GTK_WIDGET(gtk_builder_get_object(builder, "hide_reconciled_check1"));
-    
+
+    gtk_window_set_transient_for (GTK_WINDOW (matcher->transaction_matcher), GTK_WINDOW(parent));
+
     gnc_prefs_bind (GNC_PREFS_GROUP, GNC_PREF_DISPLAY_RECONCILED,
                     matcher->reconciled_chk, "active");
 
@@ -503,7 +505,7 @@ init_match_picker_gui(GNCImportMatchPicker * matcher)
  * return after the user clicked Ok, Cancel, or Window-Close.
  */
 void
-gnc_import_match_picker_run_and_close (GNCImportTransInfo *transaction_info,
+gnc_import_match_picker_run_and_close (GtkWidget *parent, GNCImportTransInfo *transaction_info,
                                        GNCImportPendingMatches *pending_matches)
 {
     GNCImportMatchPicker *matcher;
@@ -519,7 +521,7 @@ gnc_import_match_picker_run_and_close (GNCImportTransInfo *transaction_info,
     matcher->pending_matches = pending_matches;
     
     /* DEBUG("Init match_picker"); */
-    init_match_picker_gui(matcher);
+    init_match_picker_gui(parent, matcher);
 
     /* Append this single transaction to the view and select it */
     downloaded_transaction_append(matcher, transaction_info);
