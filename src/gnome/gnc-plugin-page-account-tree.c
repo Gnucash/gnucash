@@ -1162,9 +1162,9 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
     list = qof_instance_get_referring_object_list(QOF_INSTANCE(account));
     if (list != NULL)
     {
-#define EXPLANATION "The list below shows objects which make use of the account which you want to delete.\nBefore you can delete it, you must either delete those objects or else modify them so they make use\nof another account"
+#define EXPLANATION _("The list below shows objects which make use of the account which you want to delete.\nBefore you can delete it, you must either delete those objects or else modify them so they make use\nof another account")
 
-        gnc_ui_object_references_show( _(EXPLANATION), list);
+        gnc_ui_object_references_show (EXPLANATION, list);
         g_list_free(list);
         return;
     }
