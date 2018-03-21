@@ -450,12 +450,12 @@
 			(not (is-report-account? s-account)))
 		       (if (not (split-seen? s))
 			   (begin
-			     (if (gnc-numeric-negative-p s-value)
+			     (if (negative? s-value)
 				 (let ((s-account-in-collector (account-hashtable-ref money-in-hash s-account)))
                                         ;(gnc:debug "in:" (gnc-commodity-get-printname s-commodity)
-					;	     (gnc-numeric-to-double s-amount)
+					;	     s-amount
 					;	     (gnc-commodity-get-printname parent-currency)
-					;	     (gnc-numeric-to-double s-value))
+					;	     s-value)
 				   (if (not s-account-in-collector)
 				       (begin
 					 (set! s-account-in-collector (gnc:make-commodity-collector))
@@ -465,7 +465,7 @@
 					 )
 				       )
 				   (let ((s-report-value (to-report-currency parent-currency
-									     (gnc-numeric-neg s-value)
+									     (- s-value)
 									     (xaccTransGetDate
 									      parent))))
 				     (money-in-collector 'add report-currency s-report-value)
@@ -473,9 +473,9 @@
 				   )
 				 (let ((s-account-out-collector (account-hashtable-ref money-out-hash s-account)))
 					;(gnc:debug "out:" (gnc-commodity-get-printname s-commodity)
-					;	     (gnc-numeric-to-double s-amount)
+					;	     s-amount
 					;	     (gnc-commodity-get-printname parent-currency)
-					;	     (gnc-numeric-to-double s-value))
+					;	     s-value)
 				   (if (not s-account-out-collector)
 				       (begin
 					 (set! s-account-out-collector (gnc:make-commodity-collector))
