@@ -396,7 +396,7 @@
       (define allow-same-column-totals #t)
       (let* ((neg? (and signed-balance
 			neg-label
-			(gnc-numeric-negative-p
+			(negative?
 			 (gnc:gnc-monetary-amount
 			  (gnc:sum-collector-commodity
 			   signed-balance report-commodity exchange-fn)))))
@@ -484,7 +484,7 @@
 		   exchange-fn rule? row-style)
 	    (let* ((neg? (and amount
 			      neg-label
-			      (gnc-numeric-negative-p
+			      (negative?
 			       (gnc:gnc-monetary-amount
 				(gnc:sum-collector-commodity
 				 amount report-commodity exchange-fn)))))
