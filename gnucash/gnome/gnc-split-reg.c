@@ -786,7 +786,7 @@ gnc_split_reg_reverse_trans_cb (GtkWidget *w, gpointer data)
 
 
 static gboolean
-is_trans_readonly_and_warn (const Transaction *trans)
+is_trans_readonly_and_warn (GtkWindow *parent, const Transaction *trans)
 {
     GtkWidget *dialog;
     const gchar *reason;
@@ -798,7 +798,7 @@ is_trans_readonly_and_warn (const Transaction *trans)
 
     if (xaccTransIsReadonlyByPostedDate (trans))
     {
-        dialog = gtk_message_dialog_new(NULL,
+        dialog = gtk_message_dialog_new(parent,
                                         0,
                                         GTK_MESSAGE_ERROR,
                                         GTK_BUTTONS_OK,
@@ -814,7 +814,7 @@ is_trans_readonly_and_warn (const Transaction *trans)
     reason = xaccTransGetReadOnly (trans);
     if (reason)
     {
-        dialog = gtk_message_dialog_new(NULL,
+        dialog = gtk_message_dialog_new(parent,
                                         0,
                                         GTK_MESSAGE_ERROR,
                                         GTK_BUTTONS_OK,
@@ -848,7 +848,7 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
     reg = gnc_ledger_display_get_split_register( gsr->ledger );
 
     trans = gnc_split_register_get_current_trans (reg);
-    if (is_trans_readonly_and_warn(trans))
+    if (is_trans_readonly_and_warn(GTK_WINDOW(gsr->window), trans))
         return;
     dialog = gtk_message_dialog_new(GTK_WINDOW(gsr->window),
                                     GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -1056,7 +1056,7 @@ gsr_default_associate_handler (GNCSplitReg *gsr, gboolean uri_is_file)
     if (cursor_class == CURSOR_CLASS_NONE)
         return;
 
-    if (is_trans_readonly_and_warn (trans))
+    if (is_trans_readonly_and_warn (GTK_WINDOW(gsr->window), trans))
         return;
 
     // get the existing uri
@@ -1183,7 +1183,7 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
     if (cursor_class == CURSOR_CLASS_NONE)
         return;
 
-    if (is_trans_readonly_and_warn(trans))
+    if (is_trans_readonly_and_warn(GTK_WINDOW(gsr->window), trans))
         return;
 
     /* On a split cursor, just delete the one split. */
