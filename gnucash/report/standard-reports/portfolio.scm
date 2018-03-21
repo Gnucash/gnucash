@@ -138,7 +138,7 @@
 
 	    (set! work-done (+ 1 work-done))
 	    (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
-	    (if (or include-empty (not (gnc-numeric-zero-p units)))
+	    (if (or include-empty (not (zero? units)))
 		(begin (collector 'add currency (gnc:gnc-monetary-amount value))
 		       (gnc:html-table-append-row/markup!
 			table
@@ -154,7 +154,7 @@
                                (gnc:html-price-anchor price price-monetary))
 			      (gnc:make-html-table-header-cell/markup
 			       "number-cell" value)))
-		       ;;(display (format #f "Shares: ~6d  " (gnc-numeric-to-double units)))
+		       ;;(display (format #f "Shares: ~6d  " units))
 		       ;;(display units) (newline)
 		       (if price (gnc-price-unref price))
 		       (table-add-stock-rows-internal rest (not odd-row?)))
@@ -203,14 +203,13 @@
                 (case price-source
                   ((weighted-average average-cost)
                    (lambda (foreign date)
-                    (cons #f (gnc-numeric-div
+                    (cons #f (/
                                (gnc:gnc-monetary-amount
                                   (exchange-fn (gnc:make-gnc-monetary foreign
-                                                  (gnc-numeric-create 10000 1))
+                                                  10000)
                                                   currency))
-                               (gnc-numeric-create 10000 1)
-                               GNC-DENOM-AUTO
-                               (logior (GNC-DENOM-SIGFIGS 5) GNC-RND-ROUND)))))
+                               10000
+                               ))))
                   ((pricedb-latest)
                    (lambda (foreign date)
                      (let* ((price
@@ -226,7 +225,7 @@
                                            (v (gnc-price-get-value the_price)))
                                           (gnc-price-ref (car price))
                                           (cons (car price) v))
-                                        (cons #f (gnc-numeric-zero)))))
+                                        (cons #f 0))))
                        (if price (gnc-price-list-destroy price))
                        fn)))
                   ((pricedb-nearest)
@@ -244,7 +243,7 @@
                                            (v (gnc-price-get-value (car price))))
                                            (gnc-price-ref (car price))
                                            (cons (car price) v))
-                                         (cons #f (gnc-numeric-zero)))))
+                                         (cons #f 0))))
                        (if price (gnc-price-list-destroy price))
                        fn))))))
 
