@@ -61,9 +61,11 @@ split3.SetAccount(savings_acct)
 split3.SetParent(trans2)
 
 trans1.SetCurrency(cad)
+trans1.SetDate(14, 3, 2006)
 trans1.SetDescription("Groceries")
 
 trans2.SetCurrency(cad)
+trans2.SetDate(7, 11, 1995)
 trans2.SetDescription("Opening Savings Balance")
 
 split2 = Split(book)
