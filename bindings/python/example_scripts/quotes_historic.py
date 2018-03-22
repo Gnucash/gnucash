@@ -60,14 +60,14 @@ stock = ac.GetCommodity()
 # Add the prices
 pdb = book.get_price_db()
 if len(ac.GetSplitList())<1:
-  print 'Need at least one Split to get currency info ... '
+  print('Need at least one Split to get currency info ... ')
   raise SystemExit
 cur = ac.GetSplitList()[0].GetParent().GetCurrency()
 
 # Get stock data
 pl = pdb.get_prices(stock,cur)
 if len(pl)<1:
-  print 'Need at least one database entry to clone ...'
+  print('Need at least one database entry to clone ...')
   raise SystemExit
 
 pl0 = pl[0]
@@ -77,7 +77,7 @@ for i in range(1,len(pl)):
 for i in range(0,len(stock_date)):
   p_new = pl0.clone(book)
   p_new = gnucash.GncPrice(instance=p_new)
-  print 'Adding',i,stock_date[i],stock_price[i]
+  print('Adding',i,stock_date[i],stock_price[i])
   p_new.set_time(stock_date[i])
   v = p_new.get_value()
   v.num = int(Fraction.from_float(stock_price[i]).limit_denominator(100000).numerator)

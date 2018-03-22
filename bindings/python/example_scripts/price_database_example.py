@@ -57,12 +57,12 @@ for namespace in namespaces:
 
   if len(commodities) == 0 :
 
-    print "No commodity in namespace "+namespace_name+"."
+    print("No commodity in namespace "+namespace_name+".")
   else:
     if commodity_fullname:
-      print "Searching commodity '"+commodity_fullname+"' in namespace "+namespace_name
+      print("Searching commodity '"+commodity_fullname+"' in namespace "+namespace_name)
     else:
-      print "Commoditys in namespace "+namespace_name+":"
+      print("Commoditys in namespace "+namespace_name+":")
 
 
     for i, c in enumerate(commodities):
@@ -70,12 +70,12 @@ for namespace in namespaces:
       c_fullname = c.get_fullname()
 
       if not(commodity_fullname) or (commodity_fullname == c_fullname):
-        print "["+str(i)+"] Full Name :", c.get_fullname()
+        print("["+str(i)+"] Full Name :", c.get_fullname())
         if show_prices:
           pl = pdb.get_prices(c,cur)
 
           if len(pl) > 0 :
-            print "{0} {1:20}{2:>10} {3}".format("Time      ","Source","Price","Currency")
+            print("{0} {1:20}{2:>10} {3}".format("Time      ","Source","Price","Currency"))
             for pr in pl:
 
                source = pr.get_source()
@@ -83,7 +83,7 @@ for namespace in namespaces:
                v=pr.get_value()
                price = float(v.num)/v.denom
 
-               print "{0} {1:20}{2:10.4f} {3}".format(time,source,price,cur_name)
+               print("{0} {1:20}{2:10.4f} {3}".format(time,source,price,cur_name))
                # I didn't find out how to format the time option...
 
 session.end()

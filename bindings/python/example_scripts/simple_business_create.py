@@ -62,10 +62,10 @@ from gnucash.gnucash_core_c import \
     GNC_OWNER_CUSTOMER, ACCT_TYPE_LIABILITY
 
 if len(argv) < 2:
-    print 'not enough parameters'
-    print 'usage: simple_business_create.py {new_book_url}'
-    print 'example:'
-    print "gnucash-env python simple_business_create.py sqlite3:///home/blah/blah.gnucash"
+    print('not enough parameters')
+    print('usage: simple_business_create.py {new_book_url}')
+    print('example:')
+    print("gnucash-env python simple_business_create.py sqlite3:///home/blah/blah.gnucash")
     exit()
     
 

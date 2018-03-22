@@ -39,8 +39,8 @@ try:
     import jinja2
     from gncinvoicefkt import *
 except ImportError as import_error:
-    print "Problem importing modules."
-    print import_error
+    print("Problem importing modules.")
+    print(import_error)
     sys.exit(2)
 
 class Usage(Exception):
@@ -68,26 +68,26 @@ def main(argv=None):
 
         for opt in opts:
             if opt[0] in ["-f"]:
-                print "ignoring lock"
+                print("ignoring lock")
                 ignore_lock = True
             if opt[0] in ["-h","--help"]:
                 raise Usage("Help:")
             if opt[0] in ["-I"]:
                 invoice_id = opt[1]
-                print "using invoice ID '" + str(invoice_id) + "'."
+                print("using invoice ID '" + str(invoice_id) + "'.")
             if opt[0] in ["-o"]:
                 filename_output = opt[1]
-                print "using output file", filename_output
+                print("using output file", filename_output)
             if opt[0] in ["-t"]:
                 filename_template = opt[1]
-                print "using template file", filename_template
+                print("using template file", filename_template)
             if opt[0] in ["-l"]:
                 list_invoices = True
-                print "listing invoices"
+                print("listing invoices")
 
         # Check for correct input
         if len(args)>1:
-            print "opts:",opts,"args:",args
+            print("opts:",opts,"args:",args)
             raise Usage("Only one input possible !")
         if len(args)==0:
             raise Usage("No input given !")
@@ -103,41 +103,41 @@ def main(argv=None):
         if not filename_output:
             if filename_template:
                 filename_output = filename_template + ".out"
-                print "no output filename given, will be:", filename_output
+                print("no output filename given, will be:", filename_output)
 
     except Usage, err:
         if err.msg == "Help:":
             retcode=0
         else:
-            print >>sys.stderr, "Error:",err.msg
-            print >>sys.stderr, "for help use --help"
+            print(>>sys.stderr, "Error:",err.msg)
+            print(>>sys.stderr, "for help use --help")
             retcode=2
 
-        print
-        print "Usage:"
-        print
-        print "Invoke with",prog_name,"gnucash_url."
-        print "where input is"
-        print "   filename"
-        print "or file://filename"
-        print "or mysql://user:password@host/databasename"
-        print
-        print "-f             force open = ignore lock"
-        print "-l             list all invoices"
-        print "-h or --help   for this help"
-        print "-I ID          use invoice ID"
-        print "-t filename    use filename as template file"
-        print "-o filename    use filename as output file"
+        print()
+        print("Usage:")
+        print()
+        print("Invoke with",prog_name,"gnucash_url.")
+        print("where input is")
+        print("   filename")
+        print("or file://filename")
+        print("or mysql://user:password@host/databasename")
+        print()
+        print("-f             force open = ignore lock")
+        print("-l             list all invoices")
+        print("-h or --help   for this help")
+        print("-I ID          use invoice ID")
+        print("-t filename    use filename as template file")
+        print("-o filename    use filename as output file")
 
         return retcode
 
     # Try to open the given input
     try:
-        print "Opening", input_url, "."
+        print("Opening", input_url, ".")
         session = gnucash.Session(input_url, ignore_lock=ignore_lock)
     except Exception as exception:
-        print "Problem opening input."
-        print exception
+        print("Problem opening input.")
+        print(exception)
         return 2
 
     book = session.book
@@ -149,22 +149,22 @@ def main(argv=None):
 
     if list_invoices:
        for number,invoice in enumerate(invoice_list):
-           print str(number)+")"
-           print invoice
+           print(str(number)+")")
+           print(invoice)
 
     if not (no_output):
 
         if invoice_id:
             invoice = book.InvoiceLookupByID(invoice_id)
             if not invoice:
-                print "ID not found."
+                print("ID not found.")
                 return 2
 
         if invoice_number:
             invoice = invoice_list[invoice_number]
 
-        print "Using the following invoice:"
-        print invoice
+        print("Using the following invoice:")
+        print(invoice)
 
         loader = jinja2.FileSystemLoader('.')
         env = jinja2.Environment(loader=loader)
@@ -174,7 +174,7 @@ def main(argv=None):
         #IPython.embed()
         output = template.render(invoice=invoice, locale=locale)
 
-        print "Writing output", filename_output, "."
+        print("Writing output", filename_output, ".")
         with open(filename_output, 'w') as f:
             f.write(output.encode('utf-8'))
 

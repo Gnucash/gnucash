@@ -153,7 +153,7 @@ class Shell:
                             console.write (buf, 'output')
                             if len(buf) < 256: break
                     # Command output
-                    print `r`
+                    print(`r`)
             except SyntaxError:
                 exec self.command in self.globals
         except:
@@ -166,8 +166,8 @@ class Shell:
                     tb = sys.exc_traceback
                     if tb:
                         tb=tb.tb_next
-                    traceback.print_exception (sys.exc_type, sys.exc_value, tb)
+                    traceback.print(_exception (sys.exc_type, sys.exc_value, tb))
                 except:
                     sys.stderr, console.stderr = console.stderr, sys.stderr
-                    traceback.print_exc()
+                    traceback.print(_exc())
 

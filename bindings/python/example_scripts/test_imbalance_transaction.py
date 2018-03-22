@@ -42,10 +42,10 @@ from gnucash import Session, Transaction, Split, Account, GncNumeric, \
 # and trading accounts disabled
 
 if len(argv) < 2:    
-    print 'not enough parameters'
-    print 'usage: test_imbalance_transaction.py {book_url}'
-    print 'examples:'
-    print "gnucash-env python test_imbalance_transaction.py '/home/username/test.gnucash'"
+    print('not enough parameters')
+    print('usage: test_imbalance_transaction.py {book_url}')
+    print('examples:')
+    print("gnucash-env python test_imbalance_transaction.py '/home/username/test.gnucash'")
     exit()
 
 
@@ -86,12 +86,12 @@ try:
     s2.SetAccount(account2)
     s2.SetValue(GncNumeric(4))
     s2.SetAmount(GncNumeric(4))
-    print 'overall imbalance', a.GetImbalanceValue().to_string()
+    print('overall imbalance', a.GetImbalanceValue().to_string())
 
-    print 'per-currency imbalances'
+    print('per-currency imbalances')
     imbalance_list = a.GetImbalance()
     for (commod, value) in imbalance_list:
-        print value.to_string(), commod.get_mnemonic()
+        print(value.to_string(), commod.get_mnemonic())
 
     a.CommitEdit()
 

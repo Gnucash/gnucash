@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 ##@file
 # @brief some help for working with invoices, used in \ref py_invoice_export
@@ -22,8 +22,8 @@ try:
             GNC_DISC_PRETAX
     import str_methods
 except ImportError as import_error:
-    print "Problem importing modules."
-    print import_error
+    print("Problem importing modules.")
+    print(import_error)
     sys.exit(2)
 
 def get_all_lots(account):
