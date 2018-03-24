@@ -510,19 +510,19 @@ GncSqlBackend::sync(QofBook* book)
 void
 GncSqlBackend::begin(QofInstance* inst)
 {
-    g_return_if_fail (inst != NULL);
+    //g_return_if_fail (inst != NULL);
 
-    ENTER (" ");
-    LEAVE ("");
+    //ENTER (" ");
+    //LEAVE ("");
 }
 
 void
 GncSqlBackend::rollback(QofInstance* inst)
 {
-    g_return_if_fail (inst != NULL);
+    //g_return_if_fail (inst != NULL);
 
-    ENTER (" ");
-    LEAVE ("");
+    //ENTER (" ");
+    //LEAVE ("");
 }
 
 void

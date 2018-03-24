@@ -821,44 +821,6 @@ load_slot_for_list_item (GncSqlBackend* sql_be, GncSqlRow& row,
 
 }
 
-void
-gnc_sql_slots_load_for_instancevec (GncSqlBackend* sql_be, InstanceVec& instances)
-{
-    QofCollection* coll;
-    std::stringstream sql;
-
-    g_return_if_fail (sql_be != NULL);
-
-    // Ignore empty list
-    if (instances.empty()) return;
-
-    coll = qof_instance_get_collection (instances[0]);
-
-    // Create the query for all slots for all items on the list
-
-    sql << "SELECT * FROM " << TABLE_NAME << " WHERE " <<
-                            obj_guid_col_table[0]->name();
-    if (instances.size() != 1)
-        sql << " IN (";
-    else
-        sql << " = ";
-
-    gnc_sql_append_guids_to_sql (sql, instances);
-    if (instances.size() > 1)
-        sql << ")";
-
-    // Execute the query and load the slots
-    auto stmt = sql_be->create_statement_from_sql(sql.str());
-    if (stmt == nullptr)
-    {
-        PERR ("stmt == NULL, SQL = '%s'\n", sql.str().c_str());
-        return;
-    }
-    auto result = sql_be->execute_select_statement (stmt);
-    for (auto row : *result)
-        load_slot_for_list_item (sql_be, row, coll);
-}
-
 static void
 load_slot_for_book_object (GncSqlBackend* sql_be, GncSqlRow& row,
                            BookLookupFn lookup_fn)

@@ -76,17 +76,6 @@ gboolean gnc_sql_slots_delete (GncSqlBackend* sql_be, const GncGUID* guid);
  */
 void gnc_sql_slots_load (GncSqlBackend* sql_be, QofInstance* inst);
 
-/**
- * gnc_sql_slots_load_for_instancevec - Loads slots for a set of QofInstance*
- * from the db.  Loading slots for a set is faster than loading for one object
- * at a time because fewer SQL queries are used.
- *
- * @param sql_be SQL backend
- * @param list List of objects
- */
-void gnc_sql_slots_load_for_instancevec (GncSqlBackend* sql_be,
-                                         InstanceVec& instances);
-
 typedef QofInstance* (*BookLookupFn) (const GncGUID* guid,
                                       const QofBook* book);
 
