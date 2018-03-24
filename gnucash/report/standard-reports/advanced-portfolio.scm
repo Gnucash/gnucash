@@ -243,22 +243,16 @@
           ((average-basis)
            (if (not (eqv? b-list '()))
                (list (cons (+ b-units
-                              (caar b-list) )
-                           (/
-                            (+ b-value
-                               (* (caar b-list)
-                                  (cdar b-list)
-                                  )
-                               )
-                            (+ b-units
-                               (caar b-list))
-                            )))
+                              (caar b-list))
+                           (/ (+ b-value
+                                 (* (caar b-list)
+                                    (cdar b-list)))
+                              (+ b-units
+                                 (caar b-list)))))
                (append b-list
-                       (list (cons b-units (/
-                                            b-value b-units ))))))
+                       (list (cons b-units (/ b-value b-units))))))
           (else (append b-list
-                        (list (cons b-units (/
-                                             b-value b-units )))))))
+                        (list (cons b-units (/ b-value b-units )))))))
 
        ;; we have value and negative units, remove units from basis
        ((and (not (zero? b-value))
@@ -269,7 +263,7 @@
                (case (compare (abs b-units) (caar b-list))
                  ((-1)
                   ;; Sold less than the first lot, create a new first lot from the remainder
-                  (let ((new-units (+ b-units (caar b-list) )))
+                  (let ((new-units (+ b-units (caar b-list))))
                     (cons (cons new-units (cdar b-list)) (cdr b-list))))
                  ((0)
                   ;; Sold all of the first lot
@@ -288,16 +282,15 @@
                       (reverse (cons (cons new-units (cdar rev-b-list)) (cdr rev-b-list)))))
                    ((0)
                     ;; Sold all of the last lot
-                    (reverse (cdr rev-b-list))
-                    )
+                    (reverse (cdr rev-b-list)))
                    ((1)
                     ;; Sold more than the last lot
                     (basis-builder (reverse (cdr rev-b-list)) (+ b-units (caar rev-b-list) )
                                    b-value b-method currency-frac)
                     ))))
               ((average-basis)
-               (list (cons (+
-                            (caar b-list) b-units )
+               (list (cons (+ (caar b-list)
+                              b-units)
                            (cdar b-list)))))
             '()
             ))
@@ -327,9 +320,9 @@
        ;; with a ratio of 1
        ((and (zero? b-units)
              (not (zero? b-value)))
-        (let* ((current-value (sum-basis b-list ))
+        (let* ((current-value (sum-basis b-list))
                (value-ratio (/ (+ b-value current-value )
-                               current-value )))
+                               current-value)))
 
           (gnc:debug "this is a spinoff")
           (gnc:debug "blist is " b-list " value ratio is " (number->string value-ratio))
@@ -394,7 +387,8 @@
                                           optname-shares-digits)))))
 
         (define (table-add-stock-rows-internal accounts odd-row?)
-          (if (null? accounts) total-value
+          (if (null? accounts)
+              total-value
               (let* ((row-style (if odd-row? "normal-row" "alternate-row"))
                      (current (car accounts))
                      (rest (cdr accounts))
