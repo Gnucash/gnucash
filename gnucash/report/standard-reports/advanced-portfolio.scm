@@ -206,34 +206,23 @@
     (define (same-account? a1 a2)
       (equal? (gncAccountGetGUID a1) (gncAccountGetGUID a2)))
 
+    (define (pair->product pair)
+      (* (car pair) (cdr pair)))
+
     ;; sum up the contents of the b-list built by basis-builder below
     (define (sum-basis b-list)
-      (if (not (eqv? b-list '()))
-          (+ (* (caar b-list) (cdar b-list) )
-             (sum-basis (cdr b-list) ) )
-          0
-          )
-      )
+      (fold + 0 (map pair->product b-list)))
 
     ;; sum up the total number of units in the b-list built by basis-builder below
     (define (units-basis b-list)
-      (if (not (eqv? b-list '()))
-          (+ (caar b-list) (units-basis (cdr b-list))
-             )
-          0
-          )
-      )
+      (fold + 0 (map car b-list)))
 
     ;; apply a ratio to an existing basis-list, useful for splits/mergers and spinoffs
-    ;; I need to get a brain and use (map) for this.
     (define (apply-basis-ratio b-list units-ratio value-ratio)
-      (if (not (eqv? b-list '()))
-          (cons (cons (* units-ratio (caar b-list) )
-                      (* value-ratio (cdar b-list) ))
-                (apply-basis-ratio (cdr b-list) units-ratio value-ratio))
-          '()
-          )
-      )
+      (map (lambda (a)
+             (cons (* units-ratio (car a))
+                   (* value-ratio (cdr a))))
+           b-list))
 
     ;; this builds a list for basis calculation and handles average, fifo and lifo methods
     ;; the list is cons cells of (units-of-stock . price-per-unit)... average method produces only one
