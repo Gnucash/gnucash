@@ -241,23 +241,23 @@
              (positive? b-units))
         (case b-method
           ((average-basis)
-           (if (not (eqv? b-list '()))
+           (if (eqv? b-list '())
+               (list (cons b-units (/ b-value b-units)))
                (list (cons (+ b-units
                               (car (car b-list)))
                            (/ (+ b-value
                                  (* (car (car b-list))
                                     (cdr (car b-list))))
                               (+ b-units
-                                 (car (car b-list))))))
-               (append b-list
-                       (list (cons b-units (/ b-value b-units))))))
+                                 (car (car b-list))))))))
           (else (append b-list
                         (list (cons b-units (/ b-value b-units )))))))
 
        ;; we have value and negative units, remove units from basis
        ((and (not (zero? b-value))
              (negative? b-units))
-        (if (not (eqv? b-list '()))
+        (if (eqv? b-list '())
+            '()
             (case b-method
               ((fifo-basis)
                (case (compare (abs b-units) (car (car b-list)))
@@ -292,7 +292,6 @@
                (list (cons (+ (car (car b-list))
                               b-units)
                            (cdr (car b-list))))))
-            '()
             ))
 
        ;; no value, just units, this is a split/merge...
