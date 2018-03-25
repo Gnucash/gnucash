@@ -243,12 +243,12 @@
           ((average-basis)
            (if (not (eqv? b-list '()))
                (list (cons (+ b-units
-                              (caar b-list))
+                              (car (car b-list)))
                            (/ (+ b-value
-                                 (* (caar b-list)
-                                    (cdar b-list)))
+                                 (* (car (car b-list))
+                                    (cdr (car b-list))))
                               (+ b-units
-                                 (caar b-list)))))
+                                 (car (car b-list))))))
                (append b-list
                        (list (cons b-units (/ b-value b-units))))))
           (else (append b-list
@@ -260,38 +260,38 @@
         (if (not (eqv? b-list '()))
             (case b-method
               ((fifo-basis)
-               (case (compare (abs b-units) (caar b-list))
+               (case (compare (abs b-units) (car (car b-list)))
                  ((-1)
                   ;; Sold less than the first lot, create a new first lot from the remainder
-                  (let ((new-units (+ b-units (caar b-list))))
-                    (cons (cons new-units (cdar b-list)) (cdr b-list))))
+                  (let ((new-units (+ b-units (car (car b-list)))))
+                    (cons (cons new-units (cdr (car b-list))) (cdr b-list))))
                  ((0)
                   ;; Sold all of the first lot
                   (cdr b-list))
                  ((1)
                   ;; Sold more than the first lot, delete it and recurse
-                  (basis-builder (cdr b-list) (+ b-units (caar b-list) )
+                  (basis-builder (cdr b-list) (+ b-units (car (car b-list)))
                                  b-value  ;; Only the sign of b-value matters since the new b-units is negative
                                  b-method currency-frac))))
               ((filo-basis)
                (let ((rev-b-list (reverse b-list)))
-                 (case (compare (abs b-units) (caar rev-b-list))
+                 (case (compare (abs b-units) (car (car rev-b-list)))
                    ((-1)
                     ;; Sold less than the last lot
-                    (let ((new-units (+ b-units (caar rev-b-list) )))
-                      (reverse (cons (cons new-units (cdar rev-b-list)) (cdr rev-b-list)))))
+                    (let ((new-units (+ b-units (car (car rev-b-list)) )))
+                      (reverse (cons (cons new-units (cdr (car rev-b-list))) (cdr rev-b-list)))))
                    ((0)
                     ;; Sold all of the last lot
                     (reverse (cdr rev-b-list)))
                    ((1)
                     ;; Sold more than the last lot
-                    (basis-builder (reverse (cdr rev-b-list)) (+ b-units (caar rev-b-list) )
+                    (basis-builder (reverse (cdr rev-b-list)) (+ b-units (car (car rev-b-list)) )
                                    b-value b-method currency-frac)
                     ))))
               ((average-basis)
-               (list (cons (+ (caar b-list)
+               (list (cons (+ (car (car b-list))
                               b-units)
-                           (cdar b-list)))))
+                           (cdr (car b-list))))))
             '()
             ))
 
