@@ -228,7 +228,7 @@
     ;; the list is cons cells of (units-of-stock . price-per-unit)... average method produces only one
     ;; cell that mutates to the new average. Need to add a date checker so that we allow for prices
     ;; coming in out of order, such as a transfer with a price adjusted to carryover the basis.
-    (define (basis-builder b-list b-units b-value b-method currency-frac)
+    (define (basis-builder b-list b-units b-value b-method)
       (gnc:debug "actually in basis-builder")
       (gnc:debug "b-list is " b-list " b-units is " (number->string b-units)
                  " b-value is " (number->string b-value) " b-method is " b-method)
@@ -272,7 +272,7 @@
                   ;; Sold more than the first lot, delete it and recurse
                   (basis-builder (cdr b-list) (+ b-units (car (car b-list)))
                                  b-value  ;; Only the sign of b-value matters since the new b-units is negative
-                                 b-method currency-frac))))
+                                 b-method))))
               ((filo-basis)
                (let ((rev-b-list (reverse b-list)))
                  (case (compare (abs b-units) (car (car rev-b-list)))
@@ -286,7 +286,7 @@
                    ((1)
                     ;; Sold more than the last lot
                     (basis-builder (reverse (cdr rev-b-list)) (+ b-units (car (car rev-b-list)) )
-                                   b-value b-method currency-frac)
+                                   b-value b-method)
                     ))))
               ((average-basis)
                (list (cons (+ (car (car b-list))
@@ -733,7 +733,7 @@
 
                                     ;; adjust the basis
                                     (set! basis-list (basis-builder basis-list split-units split-value-with-fees
-                                                                    basis-method currency-frac))
+                                                                    basis-method))
                                     (gnc:debug  "coming out of basis list " basis-list)
 
                                     ;; If it's a sale or the stock is worthless, calculate the gain
@@ -766,7 +766,7 @@
                                                                                                            commod-currency split-value)
                                                                                                           currency))
                                                                   basis-method
-                                                                  currency-frac))
+                                                                  ))
                                   (gnc:debug "after spin-off basis list "  basis-list))
                                  )
                                 ))
