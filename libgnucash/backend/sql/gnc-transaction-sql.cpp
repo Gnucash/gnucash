@@ -264,17 +264,13 @@ load_splits_for_tx_list (GncSqlBackend* sql_be, InstanceVec& transactions)
     // Execute the query and load the splits
     auto stmt = sql_be->create_statement_from_sql(sql.str());
     auto result = sql_be->execute_select_statement (stmt);
-    InstanceVec instances;
 
     for (auto row : *result)
-    {
         Split* s = load_single_split (sql_be, row);
-        if (s != nullptr)
-            instances.push_back(QOF_INSTANCE(s));
-    }
-
-    if (!instances.empty())
-        gnc_sql_slots_load_for_instancevec (sql_be, instances);
+    sql = "SELECT DISTINCT ";
+    sql += spkey + " FROM " SPLIT_TABLE " WHERE " + sskey + " IN " + selector;
+    gnc_sql_slots_load_for_sql_subquery(sql_be, sql,
+					(BookLookupFn)xaccSplitLookup);
 }
 
 static  Transaction*

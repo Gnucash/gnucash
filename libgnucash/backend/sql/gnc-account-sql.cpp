@@ -220,16 +220,14 @@ GncSqlAccountBackend::load_all (GncSqlBackend* sql_be)
 
     pBook = sql_be->book();
 
-    std::stringstream sql;
-    sql << "SELECT * FROM " << TABLE_NAME;
-    auto stmt = sql_be->create_statement_from_sql(sql.str());
+    std::string sql("SELECT * FROM " TABLE_NAME);
+    auto stmt = sql_be->create_statement_from_sql(sql);
     auto result = sql_be->execute_select_statement(stmt);
     for (auto row : *result)
         load_single_account (sql_be, row, l_accounts_needing_parents);
 
-    sql.str("");
-    sql << "SELECT DISTINCT guid FROM " << TABLE_NAME;
-    gnc_sql_slots_load_for_sql_subquery (sql_be, sql.str().c_str(),
+    sql = "SELECT DISTINCT guid FROM " TABLE_NAME;
+    gnc_sql_slots_load_for_sql_subquery (sql_be, sql,
                                          (BookLookupFn)xaccAccountLookup);
 
     /* While there are items on the list of accounts needing parents,

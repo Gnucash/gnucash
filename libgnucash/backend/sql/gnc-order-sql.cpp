@@ -98,26 +98,30 @@ load_single_order (GncSqlBackend* sql_be, GncSqlRow& row)
     return pOrder;
 }
 
+/* Because gncOrderLookup has the arguments backwards: */
+static inline GncOrder*
+gnc_order_lookup (const GncGUID *guid, const QofBook *book)
+{
+     QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_ORDER, GncOrder);
+}
+
 void
 GncSqlOrderBackend::load_all (GncSqlBackend* sql_be)
 {
     g_return_if_fail (sql_be != NULL);
 
-    std::stringstream sql;
-    sql << "SELECT * FROM " << TABLE_NAME;
-    auto stmt = sql_be->create_statement_from_sql(sql.str());
+    std::string sql("SELECT * FROM " TABLE_NAME);
+    auto stmt = sql_be->create_statement_from_sql(sql);
     auto result = sql_be->execute_select_statement(stmt);
-    InstanceVec instances;
 
     for (auto row : *result)
-    {
         GncOrder* pOrder = load_single_order (sql_be, row);
-        if (pOrder != nullptr)
-            instances.push_back(QOF_INSTANCE(pOrder));
-    }
 
-    if (!instances.empty())
-        gnc_sql_slots_load_for_instancevec (sql_be, instances);
+    std::string pkey(col_table[0]->name());
+    sql = "SELECT DISTINCT ";
+    sql += pkey + " FROM " TABLE_NAME;
+    gnc_sql_slots_load_for_sql_subquery (sql_be, sql,
+					 (BookLookupFn)gnc_order_lookup);
 }
 
 /* ================================================================= */

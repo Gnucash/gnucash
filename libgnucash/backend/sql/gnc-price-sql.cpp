@@ -102,9 +102,8 @@ GncSqlPriceBackend::load_all (GncSqlBackend* sql_be)
 
     pBook = sql_be->book();
     pPriceDB = gnc_pricedb_get_db (pBook);
-    std::stringstream sql;
-    sql << "SELECT * FROM " << TABLE_NAME;
-    auto stmt = sql_be->create_statement_from_sql(sql.str());
+    std::string sql("SELECT * FROM " TABLE_NAME);
+    auto stmt = sql_be->create_statement_from_sql(sql);
     if (stmt != nullptr)
     {
         auto result = sql_be->execute_select_statement(stmt);
@@ -112,7 +111,6 @@ GncSqlPriceBackend::load_all (GncSqlBackend* sql_be)
             return;
 
         GNCPrice* pPrice;
-        gchar* sql;
 
         gnc_pricedb_set_bulk_update (pPriceDB, TRUE);
         for (auto row : *result)
@@ -126,10 +124,11 @@ GncSqlPriceBackend::load_all (GncSqlBackend* sql_be)
             }
         }
         gnc_pricedb_set_bulk_update (pPriceDB, FALSE);
-
-        sql = g_strdup_printf ("SELECT DISTINCT guid FROM %s", TABLE_NAME);
-        gnc_sql_slots_load_for_sql_subquery (sql_be, sql, (BookLookupFn)gnc_price_lookup);
-        g_free (sql);
+	std::string pkey(col_table[0]->name());
+        sql = "SELECT DISTINCT ";
+	sql += pkey + " FROM " TABLE_NAME;
+        gnc_sql_slots_load_for_sql_subquery (sql_be, sql,
+					     (BookLookupFn)gnc_price_lookup);
     }
 }
 

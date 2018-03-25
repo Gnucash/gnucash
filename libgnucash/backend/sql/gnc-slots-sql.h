@@ -100,7 +100,7 @@ typedef QofInstance* (*BookLookupFn) (const GncGUID* guid,
  * @param lookup_fn Lookup function to get the right object from the book
  */
 void gnc_sql_slots_load_for_sql_subquery (GncSqlBackend* sql_be,
-                                          const gchar* subquery,
+                                          const std::string subquery,
                                           BookLookupFn lookup_fn);
 
 void gnc_sql_init_slots_handler (void);

@@ -124,26 +124,30 @@ load_single_invoice (GncSqlBackend* sql_be, GncSqlRow& row)
     return pInvoice;
 }
 
+/* Because gncInvoiceLookup has the arguments backwards: */
+static inline GncInvoice*
+gnc_invoice_lookup (const GncGUID *guid, const QofBook *book)
+{
+     QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_INVOICE, GncInvoice);
+}
+
 void
 GncSqlInvoiceBackend::load_all (GncSqlBackend* sql_be)
 {
     g_return_if_fail (sql_be != NULL);
 
-    std::stringstream sql;
-    sql << "SELECT * FROM " << TABLE_NAME;
-    auto stmt = sql_be->create_statement_from_sql(sql.str());
+    std::string sql("SELECT * FROM " TABLE_NAME);
+    auto stmt = sql_be->create_statement_from_sql(sql);
     auto result = sql_be->execute_select_statement(stmt);
-    InstanceVec instances;
 
     for (auto row : *result)
-    {
         GncInvoice* pInvoice = load_single_invoice (sql_be, row);
-        if (pInvoice != nullptr)
-            instances.push_back(QOF_INSTANCE(pInvoice));
-    }
 
-    if (!instances.empty())
-        gnc_sql_slots_load_for_instancevec (sql_be, instances);
+    std::string pkey(col_table[0]->name());
+    sql = "SELECT DISTINCT ";
+    sql += pkey + " FROM " TABLE_NAME;
+    gnc_sql_slots_load_for_sql_subquery (sql_be, sql,
+					 (BookLookupFn)gnc_invoice_lookup);
 }
 
 /* ================================================================= */

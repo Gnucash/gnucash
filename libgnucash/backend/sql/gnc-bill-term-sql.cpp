@@ -224,30 +224,35 @@ load_single_billterm (GncSqlBackend* sql_be, GncSqlRow& row,
     return pBillTerm;
 }
 
+/* Because gncBillTermLookup has the arguments backwards: */
+static inline GncBillTerm*
+gnc_billterm_lookup (const GncGUID *guid, const QofBook *book)
+{
+     QOF_BOOK_RETURN_ENTITY(book, guid, GNC_ID_BILLTERM, GncBillTerm);
+}
+
 void
 GncSqlBillTermBackend::load_all (GncSqlBackend* sql_be)
 {
 
     g_return_if_fail (sql_be != NULL);
 
-    std::stringstream sql;
-    sql << "SELECT * FROM " << TABLE_NAME;
-    auto stmt = sql_be->create_statement_from_sql(sql.str());
+    std::string sql("SELECT * FROM " TABLE_NAME);
+    auto stmt = sql_be->create_statement_from_sql(sql);
     auto result = sql_be->execute_select_statement(stmt);
-    InstanceVec instances;
     BillTermParentGuidVec l_billterms_needing_parents;
 
     for (auto row : *result)
     {
         auto pBillTerm =
             load_single_billterm (sql_be, row, l_billterms_needing_parents);
-        if (pBillTerm != nullptr)
-            instances.push_back(QOF_INSTANCE(pBillTerm));
     }
     delete result;
-
-    if (!instances.empty())
-        gnc_sql_slots_load_for_instancevec (sql_be, instances);
+    std::string pkey(col_table[0]->name());
+    sql = "SELECT DISTINCT ";
+    sql += pkey + " FROM " TABLE_NAME;
+    gnc_sql_slots_load_for_sql_subquery (sql_be, sql,
+					 (BookLookupFn)gnc_billterm_lookup);
 
     /* While there are items on the list of billterms needing parents,
        try to see if the parent has now been loaded.  Theory says that if
