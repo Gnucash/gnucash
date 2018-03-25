@@ -47,6 +47,13 @@
 (define optname-prefer-pricelist (N_ "Set preference for price list data"))
 (define optname-brokerage-fees (N_ "How to report brokerage fees"))
 
+(define DIV/0-ERROR "<h3>Error</h3>There is an error
+processing the transaction list. This may to be caused by:<br/><br/> A
+sell transaction caused the number of shares in a stock account to
+become negative, and a subsequent buy transaction caused the stoack
+balance to become zero. This can be fixed by changing the order of
+transactions in the stock account.<br/>")
+
 (define (compare a b)
   (let ((comp (- a b)))
     (cond
@@ -243,15 +250,19 @@
           ((average-basis)
            (if (eqv? b-list '())
                (list (cons b-units (/ b-value b-units)))
-               (list (cons (+ b-units
-                              (car (car b-list)))
-                           (/ (+ b-value
-                                 (* (car (car b-list))
-                                    (cdr (car b-list))))
-                              (+ b-units
-                                 (car (car b-list))))))))
-          (else (append b-list
-                        (list (cons b-units (/ b-value b-units )))))))
+               (if (zero? (+ b-units (car (car b-list))))
+                   (throw 'div/0)
+                   (list (cons (+ b-units
+                                  (car (car b-list)))
+                               (/ (+ b-value
+                                     (* (car (car b-list))
+                                        (cdr (car b-list))))
+                                  (+ b-units
+                                     (car (car b-list)))))))))
+          (else (if (zero? b-units)
+                    (throw 'div/0)
+                    (append b-list
+                            (list (cons b-units (/ b-value b-units))))))))
 
        ;; we have value and negative units, remove units from basis
        ((and (not (zero? b-value))
@@ -299,9 +310,10 @@
              (not (zero? b-units)))
 	(let* ((current-units (units-basis b-list))
                ;; If current-units is zero then so should be everything else.
-	       (units-ratio (if (zero? current-units) 0
-                                (/ (+ b-units current-units )
-                                   current-units )))
+	       (units-ratio (if (zero? current-units)
+                                0
+                                (/ (+ b-units current-units)
+                                   current-units)))
                ;; If the units ratio is zero the stock is worthless and the value should be zero too
 	       (value-ratio (if (zero? units-ratio)
 	                        0
@@ -320,8 +332,10 @@
        ((and (zero? b-units)
              (not (zero? b-value)))
         (let* ((current-value (sum-basis b-list))
-               (value-ratio (/ (+ b-value current-value )
-                               current-value)))
+               (value-ratio (if (zero? current-value)
+                                (throw 'div/0)
+                                (/ (+ b-value current-value )
+                                   current-value))))
 
           (gnc:debug "this is a spinoff")
           (gnc:debug "blist is " b-list " value ratio is " (number->string value-ratio))
@@ -1072,13 +1086,17 @@
              table
              headercols)
 
-            (table-add-stock-rows
-             table accounts to-date currency price-fn exchange-fn price-source
-             include-empty show-symbol show-listing show-shares show-price basis-method
-             prefer-pricelist handle-brokerage-fees
-             total-basis total-value total-moneyin total-moneyout
-             total-income total-gain total-ugain total-brokerage)
-
+            (catch 'div/0
+              (lambda ()
+                (table-add-stock-rows
+                 table accounts to-date currency price-fn exchange-fn price-source
+                 include-empty show-symbol show-listing show-shares show-price basis-method
+                 prefer-pricelist handle-brokerage-fees
+                 total-basis total-value total-moneyin total-moneyout
+                 total-income total-gain total-ugain total-brokerage))
+              (lambda (k . args)
+                (gnc:html-document-add-object!
+                 document DIV/0-ERROR)))
 
             (set! sum-total-moneyin (gnc:sum-collector-commodity total-moneyin currency exchange-fn))
             (set! sum-total-income (gnc:sum-collector-commodity total-income currency exchange-fn))
