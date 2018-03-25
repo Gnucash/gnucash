@@ -273,27 +273,6 @@ GncSqlAccountBackend::load_all (GncSqlBackend* sql_be)
 			     });
     }
 
-#if LOAD_TRANSACTIONS_AS_NEEDED
-    /* Load starting balances */
-    auto bal_slist = gnc_sql_get_account_balances_slist (sql_be);
-    for (auto bal = bal_slist; bal != NULL; bal = bal->next)
-    {
-        acct_balances_t* balances = (acct_balances_t*)bal->data;
-
-        qof_instance_increase_editlevel (balances->acct);
-        g_object_set (balances->acct,
-                      "start-balance", &balances->balance,
-                      "start-cleared-balance", &balances->cleared_balance,
-                      "start-reconciled-balance", &balances->reconciled_balance,
-                      NULL);
-
-        qof_instance_decrease_editlevel (balances->acct);
-    }
-    if (bal_slist != NULL)
-    {
-        g_slist_free (bal_slist);
-    }
-#endif
     LEAVE ("");
 }
 
