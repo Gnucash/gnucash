@@ -1957,7 +1957,7 @@ gnc_split_register_get_security_io_flags (VirtualLocation virt_loc,
 }
 
 static gboolean
-xaccTransWarnReadOnly (const Transaction *trans)
+xaccTransWarnReadOnly (GtkWidget *parent, const Transaction *trans)
 {
     GtkWidget *dialog;
     const gchar *reason;
@@ -1970,7 +1970,7 @@ xaccTransWarnReadOnly (const Transaction *trans)
     reason = xaccTransGetReadOnly (trans);
     if (reason)
     {
-        dialog = gtk_message_dialog_new(NULL,
+        dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
                                         0,
                                         GTK_MESSAGE_ERROR,
                                         GTK_BUTTONS_OK,
@@ -2007,7 +2007,7 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
         return TRUE;
 
     trans = xaccSplitGetParent (split);
-    if (xaccTransWarnReadOnly(trans))
+    if (xaccTransWarnReadOnly(gnc_split_register_get_parent(reg), trans))
         return FALSE;
 
     if (!xaccTransHasReconciledSplits (trans))

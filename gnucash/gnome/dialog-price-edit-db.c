@@ -387,6 +387,7 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
 {
     PricesDialog *pdb_dialog = data;
     GtkBuilder *builder;
+    GtkTreeModel *model;
     GtkWidget *date, *label, *box;
     GtkWidget *button;
     GtkTreeSelection *selection;
@@ -459,6 +460,11 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
             PriceRemoveSourceFlags source = PRICE_REMOVE_SOURCE_FQ;
             PriceRemoveKeepOptions keep = PRICE_REMOVE_KEEP_NONE;
 
+            // disconnect the model to the price treeview
+            model = gtk_tree_view_get_model (GTK_TREE_VIEW(pdb_dialog->price_tree));
+            g_object_ref (G_OBJECT(model));
+            gtk_tree_view_set_model (GTK_TREE_VIEW(pdb_dialog->price_tree), NULL);
+
             DEBUG("deleting prices");
             last_ts.tv_sec = gnc_date_edit_get_date (GNC_DATE_EDIT (date));
             last_ts.tv_nsec = 0;
@@ -498,6 +504,9 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
                 gnc_pricedb_remove_old_prices (pdb_dialog->price_db, comm_list, &fiscal_end_date, tmp_ts,
                                                pdb_dialog->remove_source, PRICE_REMOVE_KEEP_LAST_MONTHLY);
             }
+            // reconnect the model to the price treeview
+            gtk_tree_view_set_model (GTK_TREE_VIEW(pdb_dialog->price_tree), model);
+            g_object_unref(G_OBJECT(model));
         }
         g_list_free (comm_list);
     }

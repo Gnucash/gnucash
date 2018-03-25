@@ -690,6 +690,8 @@ gnc_gui_refresh_internal (gboolean force)
 #endif
 
     list = find_component_ids_by_class (NULL);
+    // reverse the list so class GncPluginPageRegister is before register-single
+    list = g_list_reverse (list);
 
     for (node = list; node; node = node->next)
     {
