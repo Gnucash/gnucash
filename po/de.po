@@ -18,8 +18,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2018-03-26 21:02+0200\n"
-"PO-Revision-Date: 2018-01.17 18:07+0100\n"
-"Last-Translator: Mechtilde <ooo@mechtilde.de>\n"
+"PO-Revision-Date: 2018-03-26 21:20+0200\n"
+"Last-Translator: Dmitriy Mangul <dimang.freetime@gmail.com>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -7226,6 +7226,9 @@ msgid ""
 "\n"
 "The file is in the history list, do you want to remove it?"
 msgstr ""
+"Die Datei %s konnte nicht gefunden werden.\n"
+"\n"
+"Die Datei befindet sich in der Chronik. Möchten Sie diesen Eintrag entfernen?"
 
 #: gnucash/gnome-utils/gnc-file.c:386
 #, c-format
@@ -12270,7 +12273,6 @@ msgid "Choose Currency"
 msgstr "Währung wählen"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:119
-#, fuzzy
 msgid ""
 "\n"
 "Select categories that correspond to the ways that you foresee you will use "
@@ -12282,9 +12284,13 @@ msgid ""
 "deleted by hand later at any time."
 msgstr ""
 "\n"
-"Wählen Sie die Kategorien aus, für die Sie GnuCash benutzen möchten. Die "
-"Auswahl der gewählten Kategorie wird zur Erstellung entsprechender Konten "
-"führen. Sie können jederzeit manuell noch neue Konten anlegen. "
+"Wählen Sie die Kategorien aus, für die Sie GnuCash benutzen möchten. Jede "
+"ausgewählte Kategorie wird zur Erstellung entsprechender Konten führen.\n"
+"\n"
+"<b>Anmerkung:</b> Die Auswahl, die Sie hier treffen, ist nur ein "
+"Ausgangspunkt für Ihre personalisierte Kontohierarchie. Die Konten können zu "
+"einem späteren Zeitpunkt jederzeit manuell hinzugefügt, umbenannt, "
+"verschoben oder gelöscht werden."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:158
 msgid "<b>Categories</b>"
@@ -12310,7 +12316,6 @@ msgid "Choose accounts to create"
 msgstr "Zu erstellende Konten wählen"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:356
-#, fuzzy
 msgid ""
 "\n"
 "If you would like to change an account's name, click on the row containing "
@@ -12341,7 +12346,7 @@ msgstr ""
 "zunächst auf die Zeile, welche das Konto enthält, dann auf das Feld für die "
 "Eröffnungsbilanz und geben den Wert ein.\n"
 "\n"
-"Anmerkung: Alle Konten außer Eigenkapital und Platzhaltern können "
+"<b>Anmerkung:</b> Alle Konten außer Eigenkapital und Platzhaltern können "
 "Anfangsbestände enthalten.\n"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:394
