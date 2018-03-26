@@ -354,7 +354,7 @@
 		   exchange-fn rule? row-style)
 	    (let* ((neg? (and amount
 			      neg-label
-			      (gnc-numeric-negative-p
+			      (negative?
 			       (gnc:gnc-monetary-amount
 				(gnc:sum-collector-commodity
 				 amount report-commodity exchange-fn)))))
@@ -412,7 +412,7 @@
 						  report-commodity
 						  weighted-fn)))
 		   
-		   (unrealized-gain (gnc-numeric-sub-fixed value cost)))
+		   (unrealized-gain (- value cost)))
 	      
 	      (unrealized-gain-collector 'add report-commodity unrealized-gain)
 	      unrealized-gain-collector

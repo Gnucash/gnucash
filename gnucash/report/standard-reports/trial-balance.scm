@@ -486,7 +486,7 @@
 	  (define (tot-abs-amt-cell amt)
 	    (let* ((neg-amt (gnc:make-commodity-collector))
 		   (rv (report-val amt))
-		   (neg? (gnc-numeric-negative-p
+		   (neg? (negative?
 			  (gnc:gnc-monetary-amount rv)))
 		   (cell #f)
 		   )
@@ -551,7 +551,7 @@
                  ;; Get the unrealized gain or loss (value minus cost).
                  (unrealized-gain-collector 'add
                                             report-commodity
-                                            (gnc-numeric-sub-fixed value cost))
+                                            (- value cost))
                  unrealized-gain-collector)))
 
 
