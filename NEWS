@@ -1,5 +1,40 @@
 Version history:
 ------- -------
+2.7.8 - 25 March 2018
+
+    The Gnucash Development Team is pleased to release Gnucash 2.7.8,
+    the ninth release of an unstable series leading to Gnucash 3.0. This
+    release is a Release Candidate: If no bugs requiring major work are
+    reported the next release will be 3.0.
+
+    This release changes file locations, binding APIs, report options,
+    and can make your data file no longer compatible with previous
+    versions. See https://wiki.gnucash.org/wiki/UpdateNotes for
+    details.
+
+The following bugs are fixed only in unstable/master:
+    Bug 787439 - Segmentation Fault in Transfer dialog after clearing
+                 Date field and pressing escape.
+    Bug 794242 - Remove keep above setting for assistant hierarchy
+
+Other repairs not marked as bugs in git:
+    When doing a file save from the a new start we have no key file
+        Test for Key_file not being NULL before trying to free it.
+    Stop critical error due to testing null filename
+       g_filename_from_uri returns NULL if it is not a file uri so test
+       for the file:// prefix before doing g_file_test
+    More transient-parent fixes.
+    Add missing response section to the account picker dialog.
+    Glade 3.20 adds surplus padding option to action area
+        When glade files are saved which have GtkAssistants defined a packing
+        section is added to the assistant action area which then causes a
+        warning so remove them.
+    Add XML namespaces for all Account Hierarchy Templates.
+    Increase default options dialog size: The old 400x400 was woefully
+        inadequate for most options especially options involving account trees.
+
+Updated Translations: None.
+
 2.7.7 - 18 March 2018
 
     The Gnucash Development Team is pleased to release Gnucash 2.7.7,

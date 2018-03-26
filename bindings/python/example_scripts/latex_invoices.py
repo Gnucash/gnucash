@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 ##@file
 # @brief Exports an invoice to lco-file for use with LaTeX, see \ref py_invoice_export
@@ -66,8 +66,8 @@ try:
             GNC_DISC_PRETAX
     import locale
 except ImportError as import_error:
-    print "Problem importing modules."
-    print import_error
+    print("Problem importing modules.")
+    print(import_error)
     sys.exit(2)
 
 class Usage(Exception):
@@ -157,7 +157,7 @@ def invoice_to_lco(invoice):
       line_str += uprice
       line_str += u"}"
 
-      #print line_str
+      #print(line_str)
       ent_str += line_str
 
   lco_out += write_variable("entries",ent_str)
@@ -184,25 +184,25 @@ def main(argv=None):
 
         for opt in opts:
             if opt[0] in ["-f"]:
-                print "ignoring lock"
+                print("ignoring lock")
                 ignore_lock = True
             if opt[0] in ["-h","--help"]:
                 raise Usage("Help:")
             if opt[0] in ["-i"]:
-                print "Using ipshell"
+                print("Using ipshell")
                 with_ipshell = True
             if opt[0] in ["-l"]:
-                print "listing all invoices"
+                print("listing all invoices")
                 list_invoices=True
             if opt[0] in ["-n"]:
                 invoice_number = int(opt[1])
-                print "using invoice number", invoice_number
+                print("using invoice number", invoice_number)
                 no_latex_output = False
             if opt[0] in ["-o"]:
                 output_file_name = opt[1]
-                print "using output file", output_file_name
+                print("using output file", output_file_name)
         if len(args)>1:
-            print "opts:",opts,"args:",args
+            print("opts:",opts,"args:",args)
             raise Usage("Only one input can be accepted !")
         if len(args)==0:
             raise Usage("No input given !")
@@ -211,26 +211,26 @@ def main(argv=None):
         if err.msg == "Help:":
             retcode=0
         else:
-            print >>sys.stderr, "Error:",err.msg
-            print >>sys.stderr, "for help use --help"
+            print(>>sys.stderr, "Error:",err.msg)
+            print(>>sys.stderr, "for help use --help")
             retcode=2
 
-        print "Generate a LaTeX invoice or print out all invoices."
-        print
-        print "Usage:"
-        print
-        print "Invoke with",prog_name,"input."
-        print "where input is"
-        print "   filename"
-        print "or file://filename"
-        print "or mysql://user:password@host/databasename"
-        print
-        print "-f             force open = ignore lock"
-        print "-h or --help   for this help"
-        print "-i             for ipython shell"
-        print "-l             list all invoices"
-        print "-n number      use invoice number (no. from previous run with -l)"
-        print "-o name        use name as outputfile. default: data.lco"
+        print("Generate a LaTeX invoice or print out all invoices.")
+        print()
+        print("Usage:")
+        print()
+        print("Invoke with",prog_name,"input.")
+        print("where input is")
+        print("   filename")
+        print("or file://filename")
+        print("or mysql://user:password@host/databasename")
+        print()
+        print("-f             force open = ignore lock")
+        print("-h or --help   for this help")
+        print("-i             for ipython shell")
+        print("-l             list all invoices")
+        print("-n number      use invoice number (no. from previous run with -l)")
+        print("-o name        use name as outputfile. default: data.lco")
 
         return retcode
 
@@ -238,8 +238,8 @@ def main(argv=None):
     try:
         session = gnucash.Session(input_url,ignore_lock=ignore_lock)
     except Exception as exception:
-        print "Problem opening input."
-        print exception
+        print("Problem opening input.")
+        print(exception)
         return 2
 
     book = session.book
@@ -251,18 +251,18 @@ def main(argv=None):
 
     if list_invoices:
         for number,invoice in enumerate(invoice_list):
-            print str(number)+")"
-            print invoice
+            print(str(number)+")")
+            print(invoice)
 
     if not (no_latex_output):
 
         if invoice_number == None:
-            print "Using the first invoice:"
+            print("Using the first invoice:")
             invoice_number=0
 
         invoice=invoice_list[invoice_number]
-        print "Using the following invoice:"
-        print invoice
+        print("Using the following invoice:")
+        print(invoice)
 
         lco_str=invoice_to_lco(invoice)
 

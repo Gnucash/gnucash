@@ -594,6 +594,7 @@ close_handler (gpointer user_data)
         return;
 
     gnc_unregister_gui_component (ld->component_id);
+    ld->component_id = NO_COMPONENT;
 
     if (ld->destroy)
         ld->destroy (ld);

@@ -82,6 +82,8 @@ static QofLogModule log_module = GNC_MOD_GUI;
 #define DELETE_DIALOG_TRANS_MAS    "trans_mas"
 #define DELETE_DIALOG_SA_MAS       "sa_mas"
 #define DELETE_DIALOG_SA_TRANS_MAS "sa_trans_mas"
+#define DELETE_DIALOG_SA_TRANS     "sa_trans"
+#define DELETE_DIALOG_SA_SPLITS    "sa_has_split"
 #define DELETE_DIALOG_OK_BUTTON    "deletebutton"
 
 enum
@@ -1286,8 +1288,36 @@ gppat_populate_trans_mas_list(GtkToggleButton *sa_mrb,
 void
 gppat_set_insensitive_iff_rb_active(GtkWidget *widget, GtkToggleButton *b)
 {
+    GtkWidget *dialog = gtk_widget_get_toplevel(widget);
+    GtkWidget *subaccount_trans = g_object_get_data(G_OBJECT(dialog), DELETE_DIALOG_SA_TRANS);
+    GtkWidget *sa_mas = g_object_get_data(G_OBJECT(dialog), DELETE_DIALOG_SA_MAS);
+    gboolean have_splits = GPOINTER_TO_INT (g_object_get_data(G_OBJECT(dialog), DELETE_DIALOG_SA_SPLITS));
+
     gtk_widget_set_sensitive(widget, !gtk_toggle_button_get_active(b));
-    set_ok_sensitivity(gtk_widget_get_toplevel(widget));
+
+    // If we have subaccount splits & delete subaccounts, enable subaccount_trans
+    if ((have_splits) && !gtk_widget_is_sensitive(sa_mas))
+        gtk_widget_set_sensitive(subaccount_trans, TRUE);
+    else
+        gtk_widget_set_sensitive(subaccount_trans, FALSE);
+
+    set_ok_sensitivity(dialog);
+}
+
+static GtkWidget *
+gppat_setup_account_selector (GtkBuilder *builder, GtkWidget *dialog,
+                              const gchar *hbox, const gchar *sel_name)
+{
+    GtkWidget *selector = gnc_account_sel_new();
+    GtkWidget *box = GTK_WIDGET(gtk_builder_get_object (builder, hbox));
+
+    gtk_box_pack_start (GTK_BOX(box), selector, TRUE, TRUE, 0);
+    g_object_set_data(G_OBJECT(dialog), sel_name, selector);
+
+    gppat_populate_gas_list(dialog, GNC_ACCOUNT_SEL(selector), TRUE);
+    gtk_widget_show_all(box);
+
+    return selector;
 }
 
 static void
@@ -1315,9 +1345,9 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
     list = qof_instance_get_referring_object_list(QOF_INSTANCE(account));
     if (list != NULL)
     {
-#define EXPLANATION "The list below shows objects which make use of the account which you want to delete.\nBefore you can delete it, you must either delete those objects or else modify them so they make use\nof another account"
+#define EXPLANATION _("The list below shows objects which make use of the account which you want to delete.\nBefore you can delete it, you must either delete those objects or else modify them so they make use\nof another account")
 
-        gnc_ui_object_references_show( _(EXPLANATION), list);
+        gnc_ui_object_references_show(EXPLANATION, list);
         g_list_free(list);
         return;
     }
@@ -1332,7 +1362,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
     splits = xaccAccountGetSplitList(account);
 
     /*
-     * If the account has transactions or child accounts then conduct a
+     * If the account has transactions or child accounts then present a
      * dialog to allow the user to specify what should be done with them.
      */
     if ((NULL != splits) || (gnc_account_n_children(account) > 0))
@@ -1340,7 +1370,6 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
         GList *filter = NULL;
         GtkBuilder *builder = NULL;
         GtkWidget *dialog = NULL;
-        GtkWidget *box = NULL;
         GtkWidget *widget = NULL;
         gchar *title = NULL;
 
@@ -1366,78 +1395,70 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
         g_object_set_data(G_OBJECT(dialog), DELETE_DIALOG_FILTER, filter);
         g_object_set_data(G_OBJECT(dialog), DELETE_DIALOG_ACCOUNT, account);
 
-        /*
-         * Adjust the dialog based on whether the account has
-         * transactions.
-         */
+        // Add the account selectors and enable sections as appropiate
+        // setup transactions selector
+        trans_mas = gppat_setup_account_selector (builder, dialog, "trans_mas_hbox", DELETE_DIALOG_TRANS_MAS);
+
+        // Does the selected account have splits
         if (splits)
         {
             delete_helper_t delete_res2 = { FALSE, FALSE };
 
-            trans_mas = gnc_account_sel_new();
-            box = GTK_WIDGET(gtk_builder_get_object (builder, "trans_mas_hbox"));
-            gtk_box_pack_start (GTK_BOX(box), trans_mas, TRUE, TRUE, 0);
-            g_object_set_data(G_OBJECT(dialog), DELETE_DIALOG_TRANS_MAS, trans_mas);
-            gppat_populate_gas_list(dialog, GNC_ACCOUNT_SEL(trans_mas), FALSE);
-
             delete_account_helper(account, &delete_res2);
             if (delete_res2.has_ro_splits)
             {
-                gtk_widget_destroy(GTK_WIDGET(gtk_builder_get_object (builder, "trans_rw")));
+                gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "trans_rw")));
                 widget = GTK_WIDGET(gtk_builder_get_object (builder, "trans_drb"));
                 gtk_widget_set_sensitive(widget, FALSE);
             }
             else
-            {
-                gtk_widget_destroy(GTK_WIDGET(gtk_builder_get_object (builder, "trans_ro")));
-            }
+                gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "trans_ro")));
         }
         else
         {
-            gtk_widget_destroy(GTK_WIDGET(gtk_builder_get_object (builder, "transactions")));
+            gtk_widget_set_sensitive (GTK_WIDGET(gtk_builder_get_object (builder, "transactions")), FALSE);
+            gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "trans_ro")));
         }
 
-        /*
-         * Adjust the dialog based on whether the account has children.
-         */
+        // setup subaccount account selector
+        sa_mas = gppat_setup_account_selector (builder, dialog, "sa_mas_hbox", DELETE_DIALOG_SA_MAS);
+
+        // setup subaccount transaction selector
+        sa_trans_mas = gppat_setup_account_selector (builder, dialog, "sa_trans_mas_hbox", DELETE_DIALOG_SA_TRANS_MAS);
+        g_object_set_data(G_OBJECT(dialog), DELETE_DIALOG_SA_TRANS,
+                          GTK_WIDGET(gtk_builder_get_object (builder, "subaccount_trans")));
+
+        // Does the selected account have sub accounts
         if (gnc_account_n_children(account) > 0)
         {
-            /*
-             * Check for RO txns in descendants
-             */
+            // Check for RO txns in descendants
             gnc_account_foreach_descendant_until(account, delete_account_helper,
                                                  &delete_res);
-            if (delete_res.has_ro_splits)
+            if (delete_res.has_splits)
             {
-                gtk_widget_destroy(GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_rw")));
-                widget = GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_drb"));
-                gtk_widget_set_sensitive(widget, FALSE);
-            }
-            else if (delete_res.has_splits)
-            {
-                gtk_widget_destroy(GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_ro")));
+                if (delete_res.has_ro_splits)
+                {
+                    gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_rw")));
+                    widget = GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_drb"));
+                    gtk_widget_set_sensitive(widget, FALSE);
+                }
+                else
+                    gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_ro")));
+
+                g_object_set_data(G_OBJECT(dialog), DELETE_DIALOG_SA_SPLITS, GINT_TO_POINTER(1));
             }
             else
             {
-                gtk_widget_destroy(GTK_WIDGET(gtk_builder_get_object (builder, "subaccount_trans")));
+                g_object_set_data(G_OBJECT(dialog), DELETE_DIALOG_SA_SPLITS, GINT_TO_POINTER(0));
+                gtk_widget_set_sensitive (GTK_WIDGET(gtk_builder_get_object (builder, "subaccount_trans")), FALSE);
+                gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_ro")));
             }
-
-            sa_mas = gnc_account_sel_new();
-            box = GTK_WIDGET(gtk_builder_get_object (builder, "sa_mas_hbox"));
-            gtk_box_pack_start (GTK_BOX(box), sa_mas, TRUE, TRUE, 0);
-            g_object_set_data(G_OBJECT(dialog), DELETE_DIALOG_SA_MAS, sa_mas);
-            gppat_populate_gas_list(dialog, GNC_ACCOUNT_SEL(sa_mas), TRUE);
-
-            sa_trans_mas = gnc_account_sel_new();
-            box = GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_mas_hbox"));
-            gtk_box_pack_start (GTK_BOX(box), sa_trans_mas, TRUE, TRUE, 0);
-            g_object_set_data(G_OBJECT(dialog), DELETE_DIALOG_SA_TRANS_MAS, sa_trans_mas);
-            gppat_populate_gas_list(dialog, GNC_ACCOUNT_SEL(sa_trans_mas), TRUE);
         }
         else
         {
-            gtk_widget_destroy(GTK_WIDGET(gtk_builder_get_object (builder, "subaccounts")));
-            gtk_widget_destroy(GTK_WIDGET(gtk_builder_get_object (builder, "subaccount_trans")));
+            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object (builder, "subaccounts")), FALSE);
+            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object (builder, "subaccount_trans")), FALSE);
+            gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_ro")));
         }
 
         /* default to cancel */
@@ -1450,7 +1471,6 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
          * Note that one effect of the modal dialog is preventing
          * the account selectors from being repopulated.
          */
-        gtk_widget_show_all(dialog);
         response = gtk_dialog_run(GTK_DIALOG(dialog));
         if (GTK_RESPONSE_ACCEPT != response)
         {

@@ -290,11 +290,11 @@ def create_opening_balance_transaction(commodtable, namespace, mnemonic,
 def main():
 
     if len(argv) < 3:
-        print 'not enough parameters'
-        print 'usage: new_book_with_opening_balances.py {source_book_url} {destination_book_url}'
-        print 'examples:'
-        print "gnucash-env python new_book_with_opening_balances.py '/home/username/test.gnucash' 'sqlite3:///home/username/new_test.gnucash'"
-        print "gnucash-env python new_book_with_opening_balances.py '/home/username/test.gnucash' 'xml:///crypthome/username/finances/new_test.gnucash'"
+        print('not enough parameters')
+        print('usage: new_book_with_opening_balances.py {source_book_url} {destination_book_url}')
+        print('examples:')
+        print("gnucash-env python new_book_with_opening_balances.py '/home/username/test.gnucash' 'sqlite3:///home/username/new_test.gnucash'")
+        print("gnucash-env python new_book_with_opening_balances.py '/home/username/test.gnucash' 'xml:///crypthome/username/finances/new_test.gnucash'")
         return
 
     #have everything in a try block to unable us to release our hold on stuff to the extent possible

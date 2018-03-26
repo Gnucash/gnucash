@@ -835,7 +835,7 @@ def getAccountsFlat(book):
     for n, account in enumerate(flat_accounts):
         if account['type_id'] in type_ids:
             filtered_flat_account.append(account)
-            print account['name'] + ' ' + str(account['type_id'])
+            print(account['name'] + ' ' + str(account['type_id']))
 
     return filtered_flat_account
 
@@ -1846,7 +1846,7 @@ def shutdown():
     session.save()
     session.end()
     session.destroy()
-    print 'Shutdown'
+    print('Shutdown')
 
 class Error(Exception):
     """Base class for exceptions in this module."""
@@ -1858,12 +1858,12 @@ class Error(Exception):
 try:
     options, arguments = getopt.getopt(sys.argv[1:], 'nh:', ['host=', 'new='])
 except getopt.GetoptError as err:
-    print str(err) # will print something like "option -a not recognized"
-    print 'Usage: python-rest.py <connection string>'
+    print(str(err) # will print something like "option -a not recognized")
+    print('Usage: python-rest.py <connection string>')
     sys.exit(2)
 
 if len(arguments) == 0:
-    print 'Usage: python-rest.py <connection string>'
+    print('Usage: python-rest.py <connection string>')
     sys.exit(2)
 
 #set default host for Flask

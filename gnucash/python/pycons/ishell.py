@@ -125,10 +125,10 @@ class Shell:
 
     def shell(self, cmd,verbose=0,debug=0,header=''):
         stat = 0
-        if verbose or debug: print header+cmd
+        if verbose or debug: print(header+cmd)
         if not debug:
             input, output = os.popen4(cmd)
-            print output.read()
+            print(output.read())
             output.close()
             input.close()
 

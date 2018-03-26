@@ -152,13 +152,13 @@ def account_from_path(top_account, account_path, original_path=None):
 def main():
 
     if len(argv) < 10:
-        print 'not enough parameters'
-        print 'usage: account_analysis.py {book url} {start year} {start month, numeric} {period type: monthly, quarterly, or yearly} {number of periods to show, from start year and month} {whether to show debits: debits-show for true, all other values false} {whether to show credits: credits-show for true, all other values false} {space separated account path, as many nested levels as desired} '
-        print 'examples:\n'
-        print "The following example analyzes 12 months of 'Assets:Test Account' from /home/username/test.gnucash, starting in January of 2010, and shows both credits and debits"
-        print "gnucash-env python account_analysis.py '/home/username/test.gnucash' 2010 1 monthly 12 debits-show credits-show Assets 'Test Account'\n"
-        print "The following example analyzes 2 quarters of 'Liabilities:First Level:Second Level' from /home/username/test.gnucash, starting March 2011, and shows credits but not debits"
-        print "gnucash-env python account_analysis.py '/home/username/test.gnucash' 2011 3 quarterly 2 debits-noshow credits-show Liabilities 'First Level' 'Second Level"
+        print('not enough parameters')
+        print('usage: account_analysis.py {book url} {start year} {start month, numeric} {period type: monthly, quarterly, or yearly} {number of periods to show, from start year and month} {whether to show debits: debits-show for true, all other values false} {whether to show credits: credits-show for true, all other values false} {space separated account path, as many nested levels as desired} ')
+        print('examples:\n')
+        print("The following example analyzes 12 months of 'Assets:Test Account' from /home/username/test.gnucash, starting in January of 2010, and shows both credits and debits")
+        print("gnucash-env python account_analysis.py '/home/username/test.gnucash' 2010 1 monthly 12 debits-show credits-show Assets 'Test Account'\n")
+        print("The following example analyzes 2 quarters of 'Liabilities:First Level:Second Level' from /home/username/test.gnucash, starting March 2011, and shows credits but not debits")
+        print("gnucash-env python account_analysis.py '/home/username/test.gnucash' 2011 3 quarterly 2 debits-noshow credits-show Liabilities 'First Level' 'Second Level")
         return
 
     try:
