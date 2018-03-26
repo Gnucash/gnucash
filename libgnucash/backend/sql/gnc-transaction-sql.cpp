@@ -249,6 +249,25 @@ load_single_split (GncSqlBackend* sql_be, GncSqlRow& row)
 }
 
 static void
+load_splits_for_sql_subquery (GncSqlBackend* sql_be, std::string subquery)
+{
+    g_return_if_fail (sql_be != NULL);
+    const std::string sskey(tx_guid_col_table[0]->name());
+    std::string sql("SELECT * FROM " SPLIT_TABLE " WHERE ");
+    sql += sskey + " IN (" + subquery + ")";
+    auto stmt = sql_be->create_statement_from_sql(sql);
+    auto result = sql_be->execute_select_statement(stmt);
+    for (auto row : *result)
+        load_single_split (sql_be, row);
+    const std::string spkey(split_col_table[0]->name());
+    std::string sub_subquery("SELECT DISTINCT ");
+    sub_subquery += spkey + " FROM " SPLIT_TABLE " WHERE " + sskey +
+        " IN (" + subquery + ")";
+    gnc_sql_slots_load_for_sql_subquery(sql_be, sub_subquery,
+                                        (BookLookupFn)xaccSplitLookup);
+}
+
+static void
 load_splits_for_tx_list (GncSqlBackend* sql_be, InstanceVec& transactions)
 {
     g_return_if_fail (sql_be != NULL);
@@ -695,12 +714,42 @@ GncSqlTransBackend::load_all (GncSqlBackend* sql_be)
 {
     g_return_if_fail (sql_be != NULL);
 
-    auto query_sql = g_strdup_printf ("SELECT * FROM %s", TRANSACTION_TABLE);
+    std::string query_sql("SELECT * FROM " TRANSACTION_TABLE);
     auto stmt = sql_be->create_statement_from_sql(query_sql);
-    g_free (query_sql);
+
     if (stmt != nullptr)
     {
-        query_transactions (sql_be, stmt);
+        auto result = sql_be->execute_select_statement(stmt);
+        if (result->begin() == result->end())
+            return;
+
+        Transaction* tx;
+
+        // Load the transactions
+        InstanceVec instances;
+        instances.reserve(result->size());
+        for (auto row : *result)
+        {
+            tx = load_single_tx (sql_be, row);
+            if (tx != nullptr)
+            {
+                xaccTransScrubPostedDate (tx);
+                instances.push_back(QOF_INSTANCE(tx));
+            }
+        }
+        if (instances.empty())
+            return;
+        const std::string tpkey(tx_col_table[0]->name());
+        std::string subquery("SELECT DISTINCT ");
+        subquery += tpkey + " FROM " TRANSACTION_TABLE;
+        gnc_sql_slots_load_for_sql_subquery (sql_be, subquery,
+                                             (BookLookupFn)xaccTransLookup);
+        load_splits_for_sql_subquery (sql_be, subquery);
+
+        // Commit all of the transactions
+        for (auto instance : instances)
+            xaccTransCommitEdit(GNC_TRANSACTION(instance));
+
     }
 }
 
