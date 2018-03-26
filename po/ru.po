@@ -5124,7 +5124,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register.c:2688
 #: gnucash/report/standard-reports/transaction.scm:56
 msgid "Transaction Report"
-msgstr "Отчёт о проводке"
+msgstr "Отчёт о проводках"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3084
 #: gnucash/gnome/gnc-split-reg.c:795
@@ -19213,9 +19213,8 @@ msgid "Export the Transactions to a CSV file"
 msgstr "Экспортировать проводки в CSV файл"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:64
-#, fuzzy
 msgid "Export _Active Register to CSV..."
-msgstr "Экспорт _иерархии счетов в CSV..."
+msgstr "Экспорт текущего журнала в CSV..."
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:65
 #, fuzzy
@@ -19785,9 +19784,8 @@ msgstr ""
 
 #. Menu entry with label and tooltip
 #: gnucash/import-export/customer-import/gnc-plugin-customer-import.c:58
-#, fuzzy
 msgid "Import _Customers & Vendors..."
-msgstr "Импорт клиентов и поставщиков"
+msgstr "Импорт клиентов и поставщиков..."
 
 #: gnucash/import-export/customer-import/gnc-plugin-customer-import.c:58
 #, fuzzy
