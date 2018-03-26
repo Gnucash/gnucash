@@ -61,6 +61,19 @@ transactions in the stock account.<br/>")
      ((< comp 0) -1)
      (else 1))))
 
+(define (apr-round val)
+  ;; this function will 'round' the gnc-monetary val to the default
+  ;; SCU specified for the commodity. e.g. $2.2578 --> $2.26, assuming
+  ;; the SCU for $ is 100
+  (if (gnc:gnc-monetary? val)
+      (let* ((comm (gnc:gnc-monetary-commodity val))
+             (amt (gnc:gnc-monetary-amount val))
+             (scu (gnc-commodity-get-fraction comm))
+             (new-amt (gnc-numeric-convert amt scu GNC-HOW-RND-ROUND)))
+        (gnc:make-gnc-monetary comm new-amt))
+      ;; val is not a gnc-monetary, just return it unchanged
+      val))
+
 (define (options-generator)
   (let* ((options (gnc:new-options))
          ;; This is just a helper function for making options.
@@ -914,38 +927,32 @@ transactions in the stock account.<br/>")
                                                                     (if pricing-txn
                                                                         (gnc:html-transaction-anchor
                                                                          pricing-txn
-                                                                         price
-                                                                         )
-                                                                        price
-                                                                        )
+                                                                         price)
+                                                                        price)
                                                                     (gnc:html-price-anchor
                                                                      price
                                                                      (gnc:make-gnc-monetary
                                                                       (gnc-price-get-currency price)
-                                                                      (gnc-price-get-value price)))
-                                                                    )))))
+                                                                      (gnc-price-get-value price))))))))
                       (append! activecols (list (if use-txn (if pricing-txn "*" "**") " ")
                                                 (gnc:make-html-table-header-cell/markup
-                                                 "number-cell" (gnc:make-gnc-monetary currency (sum-basis basis-list
-                                                                                                          )))
-                                                (gnc:make-html-table-header-cell/markup "number-cell" value)
-                                                (gnc:make-html-table-header-cell/markup "number-cell" moneyin)
-                                                (gnc:make-html-table-header-cell/markup "number-cell" moneyout)
-                                                (gnc:make-html-table-header-cell/markup "number-cell" gain)
-                                                (gnc:make-html-table-header-cell/markup "number-cell" ugain)
-                                                (gnc:make-html-table-header-cell/markup "number-cell" bothgain)
+                                                 "number-cell" (apr-round (gnc:make-gnc-monetary currency (sum-basis basis-list))))
+                                                (gnc:make-html-table-header-cell/markup "number-cell" (apr-round value))
+                                                (gnc:make-html-table-header-cell/markup "number-cell" (apr-round moneyin))
+                                                (gnc:make-html-table-header-cell/markup "number-cell" (apr-round moneyout))
+                                                (gnc:make-html-table-header-cell/markup "number-cell" (apr-round gain))
+                                                (gnc:make-html-table-header-cell/markup "number-cell" (apr-round ugain))
+                                                (gnc:make-html-table-header-cell/markup "number-cell" (apr-round bothgain))
                                                 (gnc:make-html-table-header-cell/markup "number-cell"
                                                                                         (let* ((moneyinvalue (gnc:gnc-monetary-amount moneyin))
-                                                                                               (bothgainvalue (gnc:gnc-monetary-amount bothgain))
-                                                                                               )
+                                                                                               (bothgainvalue (gnc:gnc-monetary-amount bothgain)))
                                                                                           (if (zero? moneyinvalue)
                                                                                               ""
-                                                                                              (format #f "~0,2f%" (* 100 (/ bothgainvalue moneyinvalue)))))
-                                                                                        )
-                                                (gnc:make-html-table-header-cell/markup "number-cell" income)))
+                                                                                              (format #f "~0,2f%" (* 100 (/ bothgainvalue moneyinvalue))))))
+                                                (gnc:make-html-table-header-cell/markup "number-cell" (apr-round income))))
                       (if (not (eq? handle-brokerage-fees 'ignore-brokerage))
-                          (append! activecols (list (gnc:make-html-table-header-cell/markup "number-cell" brokerage))))
-                      (append! activecols (list (gnc:make-html-table-header-cell/markup "number-cell" totalreturn)
+                          (append! activecols (list (gnc:make-html-table-header-cell/markup "number-cell" (apr-round brokerage)))))
+                      (append! activecols (list (gnc:make-html-table-header-cell/markup "number-cell" (apr-round totalreturn))
                                                 (gnc:make-html-table-header-cell/markup "number-cell"
                                                                                         (let* ((moneyinvalue (gnc:gnc-monetary-amount moneyin))
                                                                                                (totalreturnvalue (gnc:gnc-monetary-amount totalreturn))
