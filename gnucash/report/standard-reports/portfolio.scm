@@ -232,7 +232,7 @@
                   ((pricedb-nearest)
                    (lambda (foreign date)
                      (let*  ((price
-                             (gnc-pricedb-lookup-nearest-in-time-any-currency
+                             (gnc-pricedb-lookup-nearest-in-time-any-currency-t64
                               pricedb foreign (time64CanonicalDayTime date)))
                             (fn (if (and price (> (length price) 0))
                                     (let* ((the_price
