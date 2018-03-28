@@ -20,10 +20,10 @@
           <menuitem name="ABGetBalance"         action="ABGetBalanceAction"/>
           <menuitem name="ABGetTrans"           action="ABGetTransAction"/>
           <separator name="OnlineActionsSep1"/>
-          <menuitem name="ABIssueTrans"         action="ABIssueTransAction"/>
+          <!--menuitem name="ABIssueTrans"         action="ABIssueTransAction"/-- the non-SEPA version is no longer in use -->
           <menuitem name="ABIssueSepaTrans"         action="ABIssueSepaTransAction"/>
           <menuitem name="ABIssueIntTrans"      action="ABIssueIntTransAction"/>
-          <menuitem name="ABIssueDirectDebit"   action="ABIssueDirectDebitAction"/>
+          <!--menuitem name="ABIssueDirectDebit"   action="ABIssueDirectDebitAction"/-- the non-SEPA version is no longer in use -->
           <!--menuitem name="ABIssueSepaDirectDebit"         action="ABIssueSepaDirectDebitAction"/-->
           <separator name="OnlineActionsSep2"/>
           <menuitem name="ABViewLogwindow"   action="ABViewLogwindowAction"/>
