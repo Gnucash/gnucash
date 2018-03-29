@@ -2054,8 +2054,8 @@ close_handler (gpointer user_data)
 
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW (dialog));
     gtk_widget_hide (dialog);
-    gtk_widget_destroy (dialog);
     gnc_xfer_dialog_close_cb(GTK_DIALOG(dialog), xferData);
+    gtk_widget_destroy (dialog);
     g_free (to_info);
     to_info = NULL;
     g_free (from_info);
