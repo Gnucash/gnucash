@@ -386,9 +386,8 @@ TEST_F (ImapBayesTest, get_bayes_info)
     EXPECT_EQ (info->source_account, t_bank_account);
     EXPECT_EQ (info->map_account, t_expense_account1);
     auto acct1_guid = guid_to_string (xaccAccountGetGUID(t_expense_account1)); //Food
-    EXPECT_STREQ (info->full_category, (std::string {IMAP_FRAME_BAYES} + "/one/two/three/" + acct1_guid).c_str ());
+    EXPECT_STREQ (info->head, (std::string {IMAP_FRAME_BAYES} + "/one/two/three/" + acct1_guid).c_str ());
     EXPECT_STREQ (info->match_string, "one/two/three");
-    EXPECT_STREQ (info->category_head, (std::string {IMAP_FRAME_BAYES} + "/one/two/three").c_str ());
     EXPECT_STREQ (info->count, "1");
 }
 
