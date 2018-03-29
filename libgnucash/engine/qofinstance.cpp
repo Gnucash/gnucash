@@ -1359,11 +1359,14 @@ wrap_gvalue_function (const char* key, KvpValue *val, wrap_param & param)
 }
 
 void
-qof_instance_foreach_slot (const QofInstance *inst, const char* path,
-                           void (*proc)(const char*, const GValue*, void*),
-                           void* data)
+qof_instance_foreach_slot (const QofInstance *inst, const char* head, const char* category,
+                           void (*proc)(const char*, const GValue*, void*), void* data)
 {
-    auto slot = inst->kvp_data->get_slot({path});
+    std::vector<std::string> path {head};
+    if (category)
+        path.emplace_back (category);
+
+    auto slot = inst->kvp_data->get_slot(path);
     if (slot == nullptr || slot->get_type() != KvpValue::Type::FRAME)
         return;
     auto frame = slot->get<KvpFrame*>();

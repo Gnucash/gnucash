@@ -5544,7 +5544,6 @@ build_non_bayes (const char *key, const GValue *value, gpointer user_data)
         return;
     QofBook     *book;
     GncGUID     *guid = NULL;
-    gchar       *kvp_path;
     gchar       *guid_string = NULL;
     auto imapInfo = (GncImapInfo*)user_data;
     // Get the book
@@ -5553,25 +5552,20 @@ build_non_bayes (const char *key, const GValue *value, gpointer user_data)
     guid = (GncGUID*)g_value_get_boxed (value);
     guid_string = guid_to_string (guid);
 
-    PINFO("build_non_bayes: account '%s', match account guid: '%s'",
+    PINFO("build_non_bayes: match string '%s', match account guid: '%s'",
                             (char*)key, guid_string);
-
-    kvp_path = g_strconcat (imapInfo->category_head, "/", key, NULL);
-
-    PINFO("build_non_bayes: kvp_path is '%s'", kvp_path);
 
     auto imapInfo_node = static_cast <GncImapInfo*> (g_malloc(sizeof(GncImapInfo)));
 
     imapInfo_node->source_account = imapInfo->source_account;
     imapInfo_node->map_account    = xaccAccountLookup (guid, book);
-    imapInfo_node->full_category  = g_strdup (kvp_path);
+    imapInfo_node->head           = g_strdup (imapInfo->head);
     imapInfo_node->match_string   = g_strdup (key);
-    imapInfo_node->category_head  = g_strdup (imapInfo->category_head);
+    imapInfo_node->category       = g_strdup (imapInfo->category);
     imapInfo_node->count          = g_strdup (" ");
 
     imapInfo->list = g_list_append (imapInfo->list, imapInfo_node);
 
-    g_free (kvp_path);
     g_free (guid_string);
 }
 
@@ -5589,25 +5583,19 @@ parse_bayes_imap_info (std::string const & imap_bayes_entry)
 static void
 build_bayes (const char *key, KvpValue * value, GncImapInfo & imapInfo)
 {
-    auto slots = qof_instance_get_slots_prefix (QOF_INSTANCE (imapInfo.source_account), IMAP_FRAME_BAYES);
-    if (!slots.size()) return;
-    for (auto const & entry : slots)
-    {
-        auto parsed_key = parse_bayes_imap_info (entry.first);
-        auto temp_guid = gnc::GUID::from_string (std::get <2> (parsed_key));
-        GncGUID guid = temp_guid;
-        auto map_account = xaccAccountLookup (&guid, gnc_account_get_book (imapInfo.source_account));
-        std::string category_head {std::get <0> (parsed_key) + "/" + std::get <1> (parsed_key)};
-        auto imap_node = static_cast <GncImapInfo*> (g_malloc (sizeof (GncImapInfo)));
-        auto count = entry.second->get <int64_t> ();
-        imap_node->source_account = imapInfo.source_account;
-        imap_node->map_account = map_account;
-        imap_node->full_category = g_strdup (key);
-        imap_node->match_string = g_strdup (std::get <1> (parsed_key).c_str ());
-        imap_node->category_head = g_strdup (category_head.c_str ());
-        imap_node->count = g_strdup_printf ("%" G_GINT64_FORMAT, count);
-        imapInfo.list = g_list_append (imapInfo.list, imap_node);
-    };
+    auto parsed_key = parse_bayes_imap_info (key);
+    auto temp_guid = gnc::GUID::from_string (std::get <2> (parsed_key));
+    GncGUID guid = temp_guid;
+    auto map_account = xaccAccountLookup (&guid, gnc_account_get_book (imapInfo.source_account));
+    auto imap_node = static_cast <GncImapInfo*> (g_malloc (sizeof (GncImapInfo)));
+    auto count = value->get <int64_t> ();
+    imap_node->source_account = imapInfo.source_account;
+    imap_node->map_account = map_account;
+    imap_node->head = g_strdup (key);
+    imap_node->match_string = g_strdup (std::get <1> (parsed_key).c_str ());
+    imap_node->category = g_strdup(" ");
+    imap_node->count = g_strdup_printf ("%" G_GINT64_FORMAT, count);
+    imapInfo.list = g_list_append (imapInfo.list, imap_node);
 }
 
 GList *
@@ -5625,22 +5613,24 @@ GList *
 gnc_account_imap_get_info (Account *acc, const char *category)
 {
     GList *list = NULL;
-    gchar *category_head = NULL;
 
     GncImapInfo imapInfo;
+
+    std::vector<std::string> path {IMAP_FRAME};
+    if (category)
+        path.emplace_back (category);
 
     imapInfo.source_account = acc;
     imapInfo.list = list;
 
-    category_head = g_strdup_printf (IMAP_FRAME "/%s", category);
-    imapInfo.category_head = category_head;
+    imapInfo.head = g_strdup (IMAP_FRAME);
+    imapInfo.category = g_strdup (category);
 
-    if (qof_instance_has_slot (QOF_INSTANCE(acc), category_head))
-        qof_instance_foreach_slot (QOF_INSTANCE(acc), category_head,
+    if (qof_instance_has_path_slot (QOF_INSTANCE (acc), path))
+    {
+        qof_instance_foreach_slot (QOF_INSTANCE(acc), IMAP_FRAME, category,
                                    build_non_bayes, &imapInfo);
-
-    g_free (category_head);
-
+    }
     return imapInfo.list;
 }
 
@@ -5667,22 +5657,44 @@ gnc_account_get_map_entry (Account *acc, const char *full_category)
 
 
 void
-gnc_account_delete_map_entry (Account *acc, char *full_category, gboolean empty)
+gnc_account_delete_map_entry (Account *acc, char *head, char *category,
+                              char *match_string, gboolean empty)
 {
-    gchar *kvp_path = g_strdup (full_category);
-    if ((acc != NULL) && qof_instance_has_slot (QOF_INSTANCE(acc), kvp_path))
+    if (acc != NULL)
     {
-        xaccAccountBeginEdit (acc);
-        if (empty)
-            qof_instance_slot_path_delete_if_empty (QOF_INSTANCE(acc), {kvp_path});
-        else
-            qof_instance_slot_path_delete (QOF_INSTANCE(acc), {kvp_path});
-        PINFO("Account is '%s', path is '%s'", xaccAccountGetName (acc), kvp_path);
-        qof_instance_set_dirty (QOF_INSTANCE(acc));
-        xaccAccountCommitEdit (acc);
+        std::vector<std::string> path {head};
+        if (category)
+            path.emplace_back (category);
+        if (match_string)
+            path.emplace_back (match_string);
+
+        if (qof_instance_has_path_slot (QOF_INSTANCE (acc), path))
+        {
+            xaccAccountBeginEdit (acc);
+            if (empty)
+                qof_instance_slot_path_delete_if_empty (QOF_INSTANCE(acc), path);
+            else
+                qof_instance_slot_path_delete (QOF_INSTANCE(acc), path);
+            PINFO("Account is '%s', head is '%s', category is '%s', match_string is'%s'",
+                   xaccAccountGetName (acc), head, category, match_string);
+            qof_instance_set_dirty (QOF_INSTANCE(acc));
+            xaccAccountCommitEdit (acc);
+        }
     }
-    g_free (kvp_path);
-    g_free (full_category);
+}
+
+void
+gnc_account_delete_all_bayes_maps (Account *acc)
+{
+    if (acc != NULL)
+    {
+        auto slots = qof_instance_get_slots_prefix (QOF_INSTANCE (acc), IMAP_FRAME_BAYES);
+        if (!slots.size()) return;
+        for (auto const & entry : slots)
+        {
+             qof_instance_slot_path_delete (QOF_INSTANCE (acc), {entry.first});
+        }
+    }
 }
 
 /* ================================================================ */
