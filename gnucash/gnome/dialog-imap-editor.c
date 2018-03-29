@@ -602,6 +602,10 @@ get_account_info (ImapDialog *imap_dialog)
 
     model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER(filter));
 
+    // Disconnect the filter model from the treeview
+    g_object_ref (G_OBJECT(model));
+    gtk_tree_view_set_model (GTK_TREE_VIEW(imap_dialog->view), NULL);
+
     // Clear the tree store
     gtk_tree_store_clear (GTK_TREE_STORE(model));
 
@@ -629,6 +633,14 @@ get_account_info (ImapDialog *imap_dialog)
         show_filter_option (imap_dialog, FALSE);
         get_account_info_online (accts, model);
     }
+    // create a new filter model and reconnect to treeview
+    filter = gtk_tree_model_filter_new (GTK_TREE_MODEL(model), NULL);
+    gtk_tree_model_filter_set_visible_column (GTK_TREE_MODEL_FILTER(filter), FILTER);
+    g_object_unref (G_OBJECT(model));
+
+    gtk_tree_view_set_model (GTK_TREE_VIEW(imap_dialog->view), filter);
+    g_object_unref (G_OBJECT(filter));
+
     // if there are any entries, show first row
     show_first_row (imap_dialog);
 
