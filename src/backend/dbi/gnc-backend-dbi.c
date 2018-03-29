@@ -3326,7 +3326,8 @@ conn_test_dbi_library( dbi_conn conn )
     GncDbiTestResult retval = GNC_DBI_PASS;
     memset( doublestr, 0, sizeof(doublestr));
 
-    result = dbi_conn_query( conn, "CREATE TEMPORARY TABLE numtest "
+    result = dbi_conn_query( conn, "DROP TABLE IF EXISTS numtest;"
+                             "CREATE TEMPORARY TABLE numtest "
                              "( test_int BIGINT, test_unsigned BIGINT,"
                              " test_double FLOAT8 )" );
     if ( result == NULL )
@@ -3344,6 +3345,7 @@ conn_test_dbi_library( dbi_conn conn )
     if ( result == NULL )
     {
         PWARN("Test_DBI_Library: Failed to insert test row into table" );
+        result = dbi_conn_query( conn, "DROP TABLE numtest" );
         return GNC_DBI_FAIL_SETUP;
     }
     dbi_result_free( result );
