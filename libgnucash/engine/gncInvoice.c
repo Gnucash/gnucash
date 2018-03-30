@@ -1858,13 +1858,16 @@ gncInvoiceApplyPayment (const GncInvoice *invoice, Transaction *txn,
 
 gboolean gncInvoiceDateExists (time64 date)
 {
-    return date != INT64_MAX;
+/* Going forward we want to use INT64_MAX to indicate "no date", but for
+ * backward compatibility we need to treat 0 as no date as well.
+ */
+    return (date != INT64_MAX && date !=0);
 }
 
 gboolean gncInvoiceIsPosted (const GncInvoice *invoice)
 {
     if (!invoice) return FALSE;
-    return gncInvoiceDateExists (invoice->date_posted);
+    return GNC_IS_ACCOUNT(gncInvoiceGetPostedAcc(invoice));
 }
 
 gboolean gncInvoiceIsPaid (const GncInvoice *invoice)
