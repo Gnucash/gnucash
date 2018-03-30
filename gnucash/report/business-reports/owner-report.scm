@@ -290,8 +290,7 @@
         (addto! row-contents (qof-print-date date)))
     (if (date-due-col column-vector)
         (addto! row-contents 
-         (if (and due-date
-                  (gncInvoiceDateExists due-date))
+         (if due-date
              (qof-print-date due-date)
              "")))
     (if (num-col column-vector)
@@ -382,7 +381,8 @@
       ; Now print out the invoice row
       (if (not (null? invoice))
         (begin
-          (set! due-date (gncInvoiceGetDateDue invoice))
+          (set! due-date (and (gncInvoiceIsPosted invoice)
+                              (gncInvoiceGetDateDue invoice)))
           (set! sale (gncInvoiceGetTotalSubtotal invoice))
           (set! tax (gncInvoiceGetTotalTax invoice))))
 

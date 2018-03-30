@@ -1856,7 +1856,7 @@ gncInvoiceApplyPayment (const GncInvoice *invoice, Transaction *txn,
     gncOwnerAutoApplyPaymentsWithLots (owner, selected_lots);
 }
 
-gboolean gncInvoiceDateExists (time64 date)
+static gboolean gncInvoiceDateExists (time64 date)
 {
 /* Going forward we want to use INT64_MAX to indicate "no date", but for
  * backward compatibility we need to treat 0 as no date as well.
