@@ -139,19 +139,7 @@
 
 (define (monetary-or-percent numeric currency entry-type)
   (if (gnc:entry-type-percent-p entry-type)
-      (let ((table (gnc:make-html-table)))
-	(gnc:html-table-set-style!
-	 table "table"
-	 'attribute (list "border" 0)
-	 'attribute (list "cellspacing" 1)
-	 'attribute (list "cellpadding" 0))
-	(gnc:html-table-append-row!
-	 table
-	 (list numeric (_ "%")))
-	(set-last-row-style!
-	 table "td"
-	 'attribute (list "valign" "top"))
-	table)
+      (string-append (gnc:default-html-gnc-numeric-renderer numeric #f) " " (_ "%"))
       (gnc:make-gnc-monetary currency numeric)))
 
 (define (add-entry-row table currency entry column-vector row-style cust-doc? credit-note?)
