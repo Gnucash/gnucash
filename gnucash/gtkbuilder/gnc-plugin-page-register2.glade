@@ -8,7 +8,7 @@
     <property name="page_increment">10</property>
   </object>
   <object class="GtkDialog" id="duplicate_transaction_dialog">
-    <property name="visible">True</property>
+    <property name="visible">False</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Duplicate Transaction</property>
@@ -164,7 +164,7 @@
     </action-widgets>
   </object>
   <object class="GtkDialog" id="filter_by_dialog">
-    <property name="visible">True</property>
+    <property name="visible">False</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Filter register by...</property>
@@ -677,7 +677,7 @@
     </action-widgets>
   </object>
   <object class="GtkDialog" id="void_transaction_dialog">
-    <property name="visible">True</property>
+    <property name="visible">False</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Void Transaction</property>
