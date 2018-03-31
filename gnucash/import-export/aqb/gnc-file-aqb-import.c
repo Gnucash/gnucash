@@ -236,7 +236,7 @@ gnc_file_aqbanking_import(GtkWindow *parent,
     ieci = gnc_ab_import_context(context, AWAIT_TRANSACTIONS,
                                  execute_transactions,
                                  execute_transactions ? api : NULL,
-                                 NULL);
+                                 GTK_WIDGET(parent));
 
     if (execute_transactions)
     {

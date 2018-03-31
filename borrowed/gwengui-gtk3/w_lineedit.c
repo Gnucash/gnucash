@@ -97,7 +97,8 @@ int Gtk3Gui_WLineEdit_SetCharProperty(GWEN_WIDGET *w,
 
   switch(prop) {
   case GWEN_DialogProperty_Value:
-    gtk_entry_set_text(GTK_ENTRY(g), value);
+    if (value && *value)
+        gtk_entry_set_text(GTK_ENTRY(g), value);
     return 0;
   default:
     break;

@@ -203,6 +203,7 @@ static int Gtk3Gui_WTextBrowser_Setup(GWEN_WIDGET *w) {
   /* create widget */
   gs=gtk_scrolled_window_new(NULL, NULL);
   g=gtk_text_view_new();
+  gtk_container_add(GTK_CONTAINER(gs), GTK_WIDGET(g));
 
   if (s && *s) {
     GWEN_BUFFER *tbuf;

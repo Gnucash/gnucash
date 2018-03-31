@@ -60,9 +60,9 @@ static AB_BANKING *gnc_AB_BANKING = NULL;
 static gint gnc_AB_BANKING_refcount = 0;
 
 static gpointer join_ab_strings_cb(const gchar *str, gpointer user_data);
-static Account *gnc_ab_accinfo_to_gnc_acc(
+static Account *gnc_ab_accinfo_to_gnc_acc(GtkWidget *parent,
     AB_IMEXPORTER_ACCOUNTINFO *account_info);
-static Account *gnc_ab_txn_to_gnc_acc(
+static Account *gnc_ab_txn_to_gnc_acc(GtkWidget *parent,
     const AB_TRANSACTION *transaction);
 static const AB_TRANSACTION *txn_transaction_cb(
     const AB_TRANSACTION *element, gpointer user_data);
@@ -590,11 +590,12 @@ gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_acc)
  * Call gnc_import_select_account() on the online id constructed using
  * the information in @a acc_info.
  *
+ * @param parent Parent Widget
  * @param acc_info AB_IMEXPORTER_ACCOUNTINFO
  * @return A GnuCash account, or NULL otherwise
  */
 static Account *
-gnc_ab_accinfo_to_gnc_acc(AB_IMEXPORTER_ACCOUNTINFO *acc_info)
+gnc_ab_accinfo_to_gnc_acc(GtkWidget *parent, AB_IMEXPORTER_ACCOUNTINFO *acc_info)
 {
     const gchar *bankcode, *accountnumber;
     gchar *online_id;
@@ -608,7 +609,7 @@ gnc_ab_accinfo_to_gnc_acc(AB_IMEXPORTER_ACCOUNTINFO *acc_info)
                             accountnumber ? accountnumber : "",
                             (gchar*)NULL);
     gnc_acc = gnc_import_select_account(
-                  NULL, online_id, 1, AB_ImExporterAccountInfo_GetAccountName(acc_info),
+                  parent, online_id, 1, AB_ImExporterAccountInfo_GetAccountName(acc_info),
                   NULL, ACCT_TYPE_NONE, NULL, NULL);
     if (!gnc_acc)
     {
@@ -625,11 +626,12 @@ gnc_ab_accinfo_to_gnc_acc(AB_IMEXPORTER_ACCOUNTINFO *acc_info)
  * Call gnc_import_select_account() on the online id constructed using
  * the local information in @a transaction.
  *
+ * @param parent Parent Widget
  * @param transaction AB_TRANSACTION
  * @return A GnuCash account, or NULL otherwise
  */
 static Account *
-gnc_ab_txn_to_gnc_acc(const AB_TRANSACTION *transaction)
+gnc_ab_txn_to_gnc_acc(GtkWidget *parent, const AB_TRANSACTION *transaction)
 {
     const gchar *bankcode, *accountnumber;
     gchar *online_id;
@@ -648,7 +650,7 @@ gnc_ab_txn_to_gnc_acc(const AB_TRANSACTION *transaction)
                             accountnumber ? accountnumber : "",
                             (gchar*)NULL);
     gnc_acc = gnc_import_select_account(
-                  NULL, online_id, 1, AB_Transaction_GetLocalName(transaction),
+                  parent, online_id, 1, AB_Transaction_GetLocalName(transaction),
                   NULL, ACCT_TYPE_NONE, NULL, NULL);
     if (!gnc_acc)
     {
@@ -671,7 +673,7 @@ txn_transaction_cb(const AB_TRANSACTION *element, gpointer user_data)
     g_return_val_if_fail(element && data, NULL);
 
     /* Create a GnuCash transaction from ab_trans */
-    txnacc = gnc_ab_txn_to_gnc_acc(element);
+    txnacc = gnc_ab_txn_to_gnc_acc(GTK_WIDGET(data->parent), element);
     gnc_trans = gnc_ab_trans_to_gnc(element, txnacc ? txnacc : data->gnc_acc);
 
     if (data->execute_txns && data->ab_acc)
@@ -824,7 +826,7 @@ txn_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
     }
 
     /* Lookup the corresponding gnucash account */
-    gnc_acc = gnc_ab_accinfo_to_gnc_acc(element);
+    gnc_acc = gnc_ab_accinfo_to_gnc_acc(GTK_WIDGET(data->parent), element);
     if (!gnc_acc) return NULL;
     data->gnc_acc = gnc_acc;
 
@@ -928,7 +930,7 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
     }
 
     /* Lookup the corresponding gnucash account */
-    gnc_acc = gnc_ab_accinfo_to_gnc_acc(element);
+    gnc_acc = gnc_ab_accinfo_to_gnc_acc(GTK_WIDGET (data->parent), element);
     if (!gnc_acc) return NULL;
     data->gnc_acc = gnc_acc;
 
