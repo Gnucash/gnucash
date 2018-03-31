@@ -1,5 +1,47 @@
 Version history:
 ------- -------
+2.6.20 - 1 April 2018
+This is the final release in the 2.6 stable series.
+The following bugs are fixed:
+    Bug 765846 - Expense Over Time for subaccounts: An error occurred while
+                 running the report: Fix crash if acc-depth too low.
+    Bug 791848 - GC 2.6.x does not handle ISO dates introduced with GC 2.7
+                 Enable reading ISO-formatted dates, recognize
+                 GNC_FEATURE_SQLITE3_ISO_DATES.
+    Bug 792008 - gnucash 2.6.19 fails to build
+                 Replace g_assert_true with g_assert for now
+    Bug 793278 - wrong data in charts with accumulated values (like
+                 "net-linechart", "net-barchart" and "liabilities barchart")
+    Bug 794030 - relative date functions compute wrong day of month
+    Bug 790526 - Mathematical bug
+                 This change will fix 'num-of-weeks-since-1/jan/1970' which
+                 formerly used quotient to remove the fractional part of the
+                 division. For negative values of num-of-weeks, the number is
+                 truncated in the wrong direction (i.e. towards 0). This
+                 change uses floor instead to ensure the num-of-weeks found
+                 is the nearest integer LESS than the fractional number.
+
+Other repairs or enhancements not marked as bugs:
+    Online HBCI actions: Remove outdated non-SEPA menu items.
+    Add XML namespaces for all Account Hierarchy Templates.
+    General cleanup of Account Hierarchy Templates.
+    Fix auto-selection of splits in reconcile
+        Really use all splits of any given day. Up to now usually the splits
+        of the given date were not or not all included, as the time comparison
+        didn't correctly ignore any given time-of-day of the splits. Instead,
+        all possible time-of-days should be included.
+    Properly detect git in case of linked worktree
+    Account Hierarchy for India: Set LANGUAGE=hi and LANG=en_IN to access it.
+    Improve Import menu entries Customer & vendors...
+        use same menu label as others, replace template by tooltip, add ellipsis
+        to entry, add comments to distinguish "Import" as verb and substantive.
+    Provide preference panel to set the Alpha Vantage API key needed for
+        Finance::Quote.
+    Correct the appstream definition to match the current spec.
+    Fix collectors and min-date handling in reports.
+
+Updated Translations: Dutch, German, Spanish, Russian
+
 2.6.19 - 16 December 2017
 
 The following bugs are fixed:
@@ -19,7 +61,7 @@ Other repairs not marked as bugs in git:
      Add translator hint comments to C and glade files.
      Improve type of bank accounts in SKR03
      Stop testing GObject's handling of invalid parameters
-     
+
 Updated Translations: Dutch, German, Russian, Serbian
 
 2.6.18 - 24 September 2017
