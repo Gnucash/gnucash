@@ -1037,10 +1037,23 @@ GDate* qof_book_get_autoreadonly_gdate (const QofBook *book)
     return result;
 }
 
+/* Note: this will fail if the book slots we're looking for here are flattened at some point !
+ * When that happens, this function can be removed. */
+static Path opt_name_to_path (const char* opt_name)
+{
+    Path result;
+    g_return_val_if_fail (opt_name, result);
+    auto opt_name_list = g_strsplit(opt_name, "/", -1);
+    for (int i=0; opt_name_list[i]; i++)
+        result.push_back (opt_name_list[i]);
+    g_strfreev (opt_name_list);
+    return result;
+}
+
 const char*
 qof_book_get_string_option(const QofBook* book, const char* opt_name)
 {
-    auto slot = qof_instance_get_slots(QOF_INSTANCE (book))->get_slot({opt_name});
+    auto slot = qof_instance_get_slots(QOF_INSTANCE (book))->get_slot(opt_name_to_path(opt_name));
     if (slot == nullptr)
         return nullptr;
     return slot->get<const char*>();
@@ -1051,10 +1064,11 @@ qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_
 {
     qof_book_begin_edit(book);
     auto frame = qof_instance_get_slots(QOF_INSTANCE(book));
+    auto opt_path = opt_name_to_path(opt_name);
     if (opt_val && (*opt_val != '\0'))
-        delete frame->set({opt_name}, new KvpValue(g_strdup(opt_val)));
+        delete frame->set(opt_path, new KvpValue(g_strdup(opt_val)));
     else
-        delete frame->set({opt_name}, nullptr);
+        delete frame->set(opt_path, nullptr);
     qof_instance_set_dirty (QOF_INSTANCE (book));
     qof_book_commit_edit(book);
 }
@@ -1143,15 +1157,29 @@ qof_book_commit_edit(QofBook *book)
     qof_commit_edit_part2 (&book->inst, commit_err, noop, noop/*lot_free*/);
 }
 
+/* Deal with the fact that some options are not in the "options" tree but rather
+ * in the "counters" tree */
+static Path gslist_to_option_path (GSList *gspath)
+{
+    Path tmp_path;
+    if (!gspath) return tmp_path;
+
+    Path path_v {KVP_OPTION_PATH};
+    for (auto item = gspath; item != nullptr; item = g_slist_next(item))
+        tmp_path.push_back(static_cast<const char*>(item->data));
+    if (tmp_path.front() == "counters")
+        return tmp_path;
+
+    path_v.insert(path_v.end(), tmp_path.begin(), tmp_path.end());
+    return path_v;
+}
+
 void
 qof_book_set_option (QofBook *book, KvpValue *value, GSList *path)
 {
     KvpFrame *root = qof_instance_get_slots (QOF_INSTANCE (book));
-    Path path_v {KVP_OPTION_PATH};
-    for (auto item = path; item != nullptr; item = g_slist_next(item))
-        path_v.push_back(static_cast<const char*>(item->data));
     qof_book_begin_edit (book);
-    delete root->set_path(path_v, value);
+    delete root->set_path(gslist_to_option_path(path), value);
     qof_instance_set_dirty (QOF_INSTANCE (book));
     qof_book_commit_edit (book);
 }
@@ -1160,10 +1188,7 @@ KvpValue*
 qof_book_get_option (QofBook *book, GSList *path)
 {
     KvpFrame *root = qof_instance_get_slots(QOF_INSTANCE (book));
-    Path path_v {KVP_OPTION_PATH};
-    for (auto item = path; item != nullptr; item = g_slist_next(item))
-        path_v.push_back(static_cast<const char*>(item->data));
-    return root->get_slot(path_v);
+    return root->get_slot(gslist_to_option_path(path));
 }
 
 void
@@ -1173,9 +1198,10 @@ qof_book_options_delete (QofBook *book, GSList *path)
     if (path != nullptr)
     {
         Path path_v {KVP_OPTION_PATH};
+        Path tmp_path;
         for (auto item = path; item != nullptr; item = g_slist_next(item))
-            path_v.push_back(static_cast<const char*>(item->data));
-        delete root->set_path(path_v, nullptr);
+            tmp_path.push_back(static_cast<const char*>(item->data));
+        delete root->set_path(gslist_to_option_path(path), nullptr);
     }
     else
         delete root->set_path({KVP_OPTION_PATH}, nullptr);
