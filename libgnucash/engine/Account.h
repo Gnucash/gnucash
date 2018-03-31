@@ -1423,8 +1423,8 @@ typedef struct imap_info
     Account        *source_account;
     Account        *map_account;
     GList          *list;
-    char           *category_head;
-    char           *full_category;
+    char           *head;
+    char           *category;
     char           *match_string;
     char           *count;
 }GncImapInfo;
@@ -1444,10 +1444,15 @@ GList *gnc_account_imap_get_info (Account *acc, const char *category);
  */
 gchar *gnc_account_get_map_entry (Account *acc, const char *full_category);
 
-/** Delete the entry for Account pointed to by full_category, if empty is TRUE then use
- *  delete if empty, full_category is freed
+/** Delete the entry for Account pointed to by head,category and match_string,
+ *  if empty is TRUE then use delete if empty
  */
-void gnc_account_delete_map_entry (Account *acc, char *full_category, gboolean empty);
+void gnc_account_delete_map_entry (Account *acc, char *head, char *category,
+                                   char *match_string, gboolean empty);
+
+/** Delete all bayes entries for Account
+ */
+void gnc_account_delete_all_bayes_maps (Account *acc);
 
 /** @} */
 

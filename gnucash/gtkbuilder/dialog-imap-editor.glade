@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.20.2 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkTreeStore" id="tree-store">
@@ -16,7 +16,9 @@
       <column type="gchararray"/>
       <!-- column-name map_account -->
       <column type="gpointer"/>
-      <!-- column-name full_category -->
+      <!-- column-name head -->
+      <column type="gchararray"/>
+      <!-- column-name category -->
       <column type="gchararray"/>
       <!-- column-name count -->
       <column type="gchararray"/>
@@ -235,7 +237,7 @@
                         <property name="alignment">center</property>
                       </object>
                       <attributes>
-                        <attribute name="text">7</attribute>
+                        <attribute name="text">8</attribute>
                       </attributes>
                     </child>
                   </object>
@@ -372,5 +374,8 @@
       <action-widget response="-10">delete_button</action-widget>
       <action-widget response="-6">close_button</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
 </interface>
