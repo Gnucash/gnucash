@@ -50,4 +50,4 @@ INSTALL(FILES ${_MAN_FILES} DESTINATION share/man/man1)
 INSTALL(PROGRAMS ${_BIN_FILES} DESTINATION bin)
 
 SET_DIST_LIST(quotes_DIST CMakeLists.txt gnc-fq-check.in gnc-fq-dump gnc-fq-helper.in gnc-fq-update.in
-        gnc-value-portfolio Makefile.am Quote_example.pl README)
+        Makefile.am Quote_example.pl README)
