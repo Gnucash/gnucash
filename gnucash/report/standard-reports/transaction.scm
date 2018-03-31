@@ -1290,52 +1290,38 @@ tags within description, notes or memo. ")
               (addto! row-contents (gnc:make-html-table-cell/size/markup 1 (+ right-indent width-left-columns) "total-label-cell" string))))
 
         (define (add-columns commodity)
-          (let ((start-dual-column? #f)
-                (dual-subtotal #f))
-            (for-each (lambda (column merge-entry)
-                        (let* ((mon (retrieve-commodity column commodity))
-                               (column-amount (and mon (gnc:gnc-monetary-amount mon)))
-                               (merge? merge-entry))
-                          (if merge?
-                              ;; We're merging. If a subtotal exists, store
-                              ;; it in dual-subtotal. Do NOT add column to row.
-                              (begin
-                                (set! dual-subtotal column-amount)
-                                (set! start-dual-column? #t))
-                              (if start-dual-column?
-                                  (begin
-                                    ;; We've completed merging. Add the negated
-                                    ;; column amount and add the columns to row.
-                                    (if column-amount
-                                        (set! dual-subtotal
-                                          (- (or dual-subtotal 0) column-amount)))
-                                    (cond ((not dual-subtotal)
-                                           (addto! row-contents "")
-                                           (addto! row-contents ""))
-                                          ((positive? dual-subtotal)
-                                           (addto! row-contents
-                                                   (gnc:make-html-table-cell/markup
-                                                    "total-number-cell"
-                                                    (gnc:make-gnc-monetary
-                                                     commodity
-                                                     dual-subtotal)))
-                                           (addto! row-contents ""))
-                                          (else
-                                           (addto! row-contents "")
-                                           (addto! row-contents
-                                                   (gnc:make-html-table-cell/markup
-                                                    "total-number-cell"
-                                                    (gnc:make-gnc-monetary
-                                                     commodity
-                                                     (- dual-subtotal))))))
-                                    (set! start-dual-column? #f)
-                                    (set! dual-subtotal #f))
-                                  ;; Default; not merging/completed merge. Just
-                                  ;; display monetary amount
-                                  (addto! row-contents
-                                          (gnc:make-html-table-cell/markup "total-number-cell" mon))))))
-                      columns
-                      merge-list)))
+          (let loop ((merging? #f)
+                     (last-column #f)
+                     (columns columns)
+                     (merge-list merge-list))
+            (if (not (null? columns))
+                (let* ((mon (retrieve-commodity (car columns) commodity))
+                       (this-column (and mon (gnc:gnc-monetary-amount mon))))
+                  (if (car merge-list)
+                      ;; We're merging. If a subtotal exists, send to next loop iteration.
+                      (loop #t
+                            this-column
+                            (cdr columns)
+                            (cdr merge-list))
+                      (begin
+                        (if merging?
+                            ;; We're completing merge. Display debit-credit in correct column.
+                            (let* ((sum (and (or last-column this-column)
+                                             (- (or last-column 0) (or this-column 0))))
+                                   (sum-table-cell (and sum (gnc:make-html-table-cell/markup
+                                                             "total-number-cell"
+                                                             (gnc:make-gnc-monetary
+                                                              commodity (abs sum)))))
+                                   (debit-col (and sum (positive? sum) sum-table-cell))
+                                   (credit-col (and sum (not (positive? sum)) sum-table-cell)))
+                              (addto! row-contents (or debit-col ""))
+                              (addto! row-contents (or credit-col "")))
+                            ;; Default; not merging nor completed merge. Display monetary amount
+                            (addto! row-contents (gnc:make-html-table-cell/markup "total-number-cell" mon)))
+                        (loop #f
+                              #f
+                              (cdr columns)
+                              (cdr merge-list))))))))
 
         ;; we only wish to add the first column into the grid.
         (if (pair? columns)
