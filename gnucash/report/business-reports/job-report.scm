@@ -191,10 +191,9 @@
 	(addto! row-contents (qof-print-date date)))
     (if (date-due-col column-vector)
 	(addto! row-contents 
-		(if (and due-date
-			 (gncInvoiceDateExists due-date))
-		    (qof-print-date due-date)
-		    "")))
+                (if due-date
+                    (qof-print-date due-date)
+                    "")))
     (if (num-col column-vector)
 	(addto! row-contents num))
     (if (type-col column-vector)
@@ -264,8 +263,9 @@
 	  (set! printed? (add-balance-row table column-vector txn odd-row? printed? start-date total))
 	  
 	  ; Now print out the invoice row
-	  (if (not (null? invoice))
-	      (set! due-date (gncInvoiceGetDateDue invoice)))
+          (if (and (not (null? invoice))
+                   (gncInvoiceIsPosted invoice))
+              (set! due-date (gncInvoiceGetDateDue invoice)))
 
 	  (let ((row (make-row column-vector date due-date (gnc-get-num-action txn split)
 			       type-str (xaccSplitGetMemo split)

@@ -74,6 +74,7 @@ struct slot_info_t
     context_t context;
     KvpValue* pKvpValue;
     std::string path;
+    std::string parent_path;
 };
 
 
@@ -198,21 +199,13 @@ get_final_delim(std::string& path)
 }
 
 static std::string
-get_key_from_path (std::string path)
+get_key (slot_info_t* pInfo)
 {
-    auto idx = get_final_delim(path);
-    if (idx == std::string::npos)
-        return path;
-    return path.substr(idx + 1);
-}
+    if (!pInfo) return "";
 
-static std::string
-get_path_from_path (std::string path)
-{
-    auto idx = get_final_delim(path);
-    if (idx == std::string::npos)
-        return "";
-    return path.substr(0, idx);
+    auto path = pInfo->path;
+    path.erase (0, pInfo->parent_path.size());
+    return path;
 }
 
 static void
@@ -225,7 +218,8 @@ set_slot_from_value (slot_info_t* pInfo, KvpValue* pValue)
     {
     case FRAME:
     {
-        pInfo->pKvpFrame->set ({pInfo->path}, pValue);
+        auto key = get_key (pInfo);
+        pInfo->pKvpFrame->set ({key}, pValue);
         break;
     }
     case LIST:
@@ -236,8 +230,8 @@ set_slot_from_value (slot_info_t* pInfo, KvpValue* pValue)
     case NONE:
     default:
     {
-        auto key = get_key_from_path (pInfo->path);
-        auto path = get_path_from_path (pInfo->path);
+        auto key = get_key (pInfo);
+        auto path = pInfo->parent_path;
         auto frame = pInfo->pKvpFrame;
         if (!path.empty())
         {
@@ -281,6 +275,8 @@ set_path (gpointer pObject,  gpointer pValue)
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
     pInfo->path = static_cast<char*>(pValue);
+    if (pInfo->path.find (pInfo->parent_path) != 0)
+        pInfo->parent_path.clear();
 }
 
 static KvpValue::Type
@@ -457,7 +453,7 @@ set_guid_val (gpointer pObject,  gpointer pValue)
     {
         slot_info_t* newInfo = slot_info_copy (pInfo, (GncGUID*)pValue);
         KvpValue* pValue = NULL;
-        auto key = get_key_from_path (pInfo->path);
+        auto key = get_key (pInfo);
 
         newInfo->context = LIST;
 
@@ -478,14 +474,14 @@ set_guid_val (gpointer pObject,  gpointer pValue)
         case LIST:
         {
             auto value = new KvpValue {newFrame};
-            newInfo->path = get_key_from_path (pInfo->path);
+            newInfo->path = get_key (pInfo);
             pInfo->pList = g_list_append (pInfo->pList, value);
             break;
         }
         case FRAME:
         default:
         {
-            auto key = get_key_from_path (pInfo->path);
+            auto key = get_key (pInfo);
             pInfo->pKvpFrame->set ({key.c_str()}, new KvpValue {newFrame});
             break;
         }
@@ -575,7 +571,10 @@ slot_info_copy (slot_info_t* pInfo, GncGUID* guid)
     newSlot->pList = pInfo->pList;
     newSlot->context = pInfo->context;
     newSlot->pKvpValue = pInfo->pKvpValue;
-    newSlot->path.clear();
+    if (!pInfo->path.empty())
+        newSlot->parent_path = pInfo->path + "/";
+    else
+        newSlot->parent_path = pInfo->parent_path;
     return newSlot;
 }
 
@@ -589,12 +588,8 @@ save_slot (const char* key, KvpValue* value, slot_info_t & slot_info)
     {
         return;
     }
-    auto curlen = slot_info.path.length();
     slot_info.pKvpValue = value;
-    if (curlen != 0)
-        slot_info.path += "/";
-
-    slot_info.path += key;
+    slot_info.path = slot_info.parent_path + key;
     slot_info.value_type = value->get_type ();
 
     switch (slot_info.value_type)
@@ -650,8 +645,6 @@ save_slot (const char* key, KvpValue* value, slot_info_t & slot_info)
     }
     break;
     }
-
-    slot_info.path.erase(curlen);
 }
 
 gboolean

@@ -2261,7 +2261,8 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
                 pango_layout_set_text (layout, text, strlen (text));
                 pango_layout_get_pixel_size (layout, &width, NULL);
 
-                width += gnc_item_edit_get_margin (item_edit, left_right);
+                width += (gnc_item_edit_get_margin (item_edit, left_right) +
+                          gnc_item_edit_get_padding_border (item_edit, left_right));
 
                 max = MAX (max, width);
             }
@@ -2269,7 +2270,7 @@ gnucash_sheet_col_max_width (GnucashSheet *sheet, gint virt_col, gint cell_col)
 
     g_object_unref (layout);
 
-    return max;
+    return max + 1; // add 1 for the border
 }
 
 void

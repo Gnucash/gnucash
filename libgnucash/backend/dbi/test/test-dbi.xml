@@ -32,6 +32,17 @@
 <gnc:count-data cd:type="book">1</gnc:count-data>
 <gnc:book version="2.0.0">
 <book:id type="guid">b3166809e9731aec1f040d1c9fc19e84</book:id>
+<book:slots>
+  <slot>
+    <slot:key>features</slot:key>
+    <slot:value type="frame">
+      <slot>
+        <slot:key>Account GUID based bayesian with flat KVP</slot:key>
+        <slot:value type="string">Use account GUID as key for bayesian data and store KVP flat (requires at least Gnucash 2.6.19)</slot:value>
+      </slot>
+    </slot:value>
+  </slot>
+</book:slots>
 <gnc:count-data cd:type="commodity">1</gnc:count-data>
 <gnc:count-data cd:type="account">12</gnc:count-data>
 <gnc:count-data cd:type="transaction">5</gnc:count-data>

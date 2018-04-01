@@ -1072,11 +1072,20 @@ tags within description, notes or memo. ")
                (add-if (column-uses? 'price)
                        (vector (_ "Price")
                                (lambda (split transaction-row?)
-                                 (define trans (xaccSplitGetParent split))
-                                 (gnc:make-html-table-cell/markup
-                                  "number-cell"
-                                  (gnc:make-gnc-monetary (xaccTransGetCurrency trans)
-                                                         (xaccSplitGetSharePrice split)))))))))
+                                 ;; share price is retrieved as an exact rational; convert for
+                                 ;; presentation to decimal, rounded to the currency SCU, optionally
+                                 ;; increasing precision by 2 significant digits.
+                                 (let* ((currency (xaccTransGetCurrency (xaccSplitGetParent split)))
+                                        (scu (gnc-commodity-get-fraction currency))
+                                        (price (xaccSplitGetSharePrice split))
+                                        (price-decimal (gnc-numeric-convert price
+                                                                            (if (< scu 10000)
+                                                                                (* scu 100)
+                                                                                scu)
+                                                                            GNC-HOW-RND-ROUND)))
+                                   (gnc:make-html-table-cell/markup
+                                    "number-cell"
+                                    (gnc:make-gnc-monetary currency price-decimal)))))))))
 
         (if (and (null? left-cols-list)
                  (or (opt-val gnc:pagename-display "Totals")

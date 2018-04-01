@@ -1799,9 +1799,10 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
         }
 
         /*
-         * Next, figure out if we've been posted, and if so set the
-         * appropriate bits of information.. Then work on hiding or
-         * showing as necessary.
+         * Next, figure out if we've been posted, and if so set the appropriate
+         * bits of information.. Then work on hiding or showing as
+         * necessary. This duplicates the logic in gncInvoiceIsPosted, but we
+         * need the accout pointer.
          */
 
         acct = gncInvoiceGetPostedAcc (invoice);

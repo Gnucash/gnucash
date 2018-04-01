@@ -1856,15 +1856,10 @@ gncInvoiceApplyPayment (const GncInvoice *invoice, Transaction *txn,
     gncOwnerAutoApplyPaymentsWithLots (owner, selected_lots);
 }
 
-gboolean gncInvoiceDateExists (time64 date)
-{
-    return date != INT64_MAX;
-}
-
 gboolean gncInvoiceIsPosted (const GncInvoice *invoice)
 {
     if (!invoice) return FALSE;
-    return gncInvoiceDateExists (invoice->date_posted);
+    return GNC_IS_ACCOUNT(gncInvoiceGetPostedAcc(invoice));
 }
 
 gboolean gncInvoiceIsPaid (const GncInvoice *invoice)

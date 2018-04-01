@@ -47,6 +47,12 @@
 (define optname-prefer-pricelist (N_ "Set preference for price list data"))
 (define optname-brokerage-fees (N_ "How to report brokerage fees"))
 
+(define OVERFLOW-ERROR "<h3>Error</h3>There is an error processing the
+transaction '~a'. This may to be caused by a sell transaction causing
+a negative stock balance, and a subsequent buy transaction causing a
+zero balance. This leads to a division-by-zero error. It can be fixed
+by preventing negative stock balances.<br/>")
+
 ;; To avoid overflows in our calculations, define a denominator for prices and unit values
 (define price-denom 100000000)
 (define units-denom 100000000)
@@ -258,15 +264,18 @@
 							    (cdar b-list)
 							    GNC-DENOM-AUTO GNC-DENOM-REDUCE)
 					   GNC-DENOM-AUTO GNC-DENOM-REDUCE)
-			  (gnc-numeric-add b-units
-					   (caar b-list) GNC-DENOM-AUTO GNC-DENOM-REDUCE)
+			  (let ((denom (gnc-numeric-add b-units
+                                                        (caar b-list) GNC-DENOM-AUTO GNC-DENOM-REDUCE)))
+                            (if (zero? denom)
+                                (throw 'div/0 (format #f "buying ~0,4f share units" b-units))
+                                denom))
 			  price-denom GNC-RND-ROUND)))
 	     (append b-list
-		     (list (cons b-units (gnc-numeric-div
-					  b-value b-units price-denom GNC-RND-ROUND))))))
+                     (list (cons b-units (gnc-numeric-div
+                                          b-value b-units price-denom GNC-RND-ROUND))))))
 	(else (append b-list
-		      (list (cons b-units (gnc-numeric-div
-					   b-value b-units price-denom GNC-RND-ROUND)))))))
+                      (list (cons b-units (gnc-numeric-div
+                                           b-value b-units price-denom GNC-RND-ROUND)))))))
 
      ;; we have value and negative units, remove units from basis
      ((and (not (gnc-numeric-zero-p b-value))
@@ -336,8 +345,10 @@
      ((and (gnc-numeric-zero-p b-units)
 	   (not (gnc-numeric-zero-p b-value)))
       (let* ((current-value (sum-basis b-list GNC-DENOM-AUTO))
-	     (value-ratio (gnc-numeric-div (gnc-numeric-add b-value current-value GNC-DENOM-AUTO GNC-DENOM-REDUCE)
-					   current-value GNC-DENOM-AUTO GNC-DENOM-REDUCE)))
+            (value-ratio (if (zero? current-value)
+                             (throw 'div/0 (format #f "spinoff of ~0,2f currency units" current-value))
+                             (gnc-numeric-div (gnc-numeric-add b-value current-value GNC-DENOM-AUTO GNC-DENOM-REDUCE)
+                                              current-value GNC-DENOM-AUTO GNC-DENOM-REDUCE))))
 
 	(gnc:debug "this is a spinoff")
 	(gnc:debug "blist is " b-list " value ratio is " (gnc-numeric-to-string value-ratio))
@@ -1091,12 +1102,17 @@
            table
 	   headercols)
 
-          (table-add-stock-rows
-           table accounts to-date currency price-fn exchange-fn price-source
-           include-empty show-symbol show-listing show-shares show-price basis-method
-	   prefer-pricelist handle-brokerage-fees
-           total-basis total-value total-moneyin total-moneyout
-           total-income total-gain total-ugain total-brokerage)
+          (catch 'div/0
+            (lambda ()
+              (table-add-stock-rows
+               table accounts to-date currency price-fn exchange-fn price-source
+               include-empty show-symbol show-listing show-shares show-price basis-method
+               prefer-pricelist handle-brokerage-fees
+               total-basis total-value total-moneyin total-moneyout
+               total-income total-gain total-ugain total-brokerage))
+            (lambda (k reason)
+              (gnc:html-document-add-object!
+               document (format #f OVERFLOW-ERROR reason))))
 
 
 	  (set! sum-total-moneyin (gnc:sum-collector-commodity total-moneyin currency exchange-fn))

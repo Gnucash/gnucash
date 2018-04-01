@@ -258,10 +258,13 @@ int Gtk3Gui_WComboBox_Setup(GWEN_WIDGET *w) {
   /* create widget */
   store=gtk_list_store_new(1, G_TYPE_STRING);
   if (flags & GWEN_WIDGET_FLAGS_READONLY)
-    g=gtk_combo_box_new_with_model_and_entry(GTK_TREE_MODEL(store));
+    g=gtk_combo_box_new_with_model(GTK_TREE_MODEL(store));
   else
+  {
     /* TODO: why the heck does *this* combo box have two columns in the list?? */
     g=gtk_combo_box_new_with_model_and_entry(GTK_TREE_MODEL(store));
+    gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX(g), 0);
+  }
   g_object_unref(store);
 
   cr=gtk_cell_renderer_text_new();

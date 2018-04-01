@@ -165,7 +165,7 @@
     <property name="page_increment">10</property>
   </object>
   <object class="GtkDialog" id="format_picker_dialog">
-    <property name="visible">True</property>
+    <property name="visible">False</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Choose a format</property>
     <property name="resizable">False</property>

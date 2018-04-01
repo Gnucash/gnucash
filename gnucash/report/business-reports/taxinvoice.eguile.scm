@@ -36,6 +36,7 @@
            (invoiceid    (gncInvoiceGetID         opt-invoice))
            (credit-note? (gncInvoiceGetIsCreditNote opt-invoice))
            (book         (gncInvoiceGetBook       opt-invoice))
+           (isposted     (gncInvoiceIsPosted      opt-invoice))
            (postdate     (gncInvoiceGetDatePosted opt-invoice))
            (duedate      (gncInvoiceGetDateDue    opt-invoice))
            (billingid    (gncInvoiceGetBillingID  opt-invoice))
@@ -246,7 +247,7 @@
         <td align="right" class="invnum"><big><strong><?scm:d invoiceid ?></strong></big></td>
       </tr>
       <?scm )) ?>
-      <?scm (if (not (gncInvoiceDateExists postdate)) (begin ?>
+      <?scm (if (not isposted) (begin ?>
         <tr>
            <td colspan="2" align="right"><?scm:d (_ "Invoice in progress...") ?></td>
         </tr>

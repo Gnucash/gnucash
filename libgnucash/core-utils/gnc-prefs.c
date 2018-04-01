@@ -116,10 +116,7 @@ gnc_prefs_set_file_retention_days(gint days)
 guint
 gnc_prefs_get_long_version()
 {
-    return GNUCASH_MAJOR_VERSION * 1000000 +
-           GNUCASH_MINOR_VERSION * 10000 +
-           GNUCASH_MICRO_VERSION * 100 +
-           GNUCASH_NANO_VERSION;
+     return GNUCASH_MAJOR_VERSION * 1000000 + GNUCASH_MINOR_VERSION;
 }
 
 gulong gnc_prefs_register_cb (const char *group,

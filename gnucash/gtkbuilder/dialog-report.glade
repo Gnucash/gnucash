@@ -243,7 +243,7 @@
     </child>
   </object>
   <object class="GtkDialog" id="html_style_sheet_dialog">
-    <property name="visible">True</property>
+    <property name="visible">False</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">HTML Style Sheets</property>
     <property name="type_hint">dialog</property>

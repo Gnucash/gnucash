@@ -155,9 +155,9 @@ void qof_instance_kvp_merge_guids (const QofInstance *target,
 gboolean qof_instance_has_slot (const QofInstance *inst, const char *path);
 void qof_instance_slot_delete (const QofInstance *, const char * path);
 void qof_instance_slot_delete_if_empty (const QofInstance *, const char * path);
-void qof_instance_foreach_slot (const QofInstance *inst, const char *path,
-                                void(*proc)(const char*, const GValue*, void*),
-                                void* data);
+void qof_instance_foreach_slot (const QofInstance *inst, const char *head,
+                                const char *category, void(*proc)(const char*,
+                                const GValue*, void*), void* data);
 #ifdef __cplusplus
 } /* extern "C" */
 

@@ -36,6 +36,10 @@ int Gtk3Gui_WGroupBox_SetIntProperty(GWEN_WIDGET *w,
     /* just ignore these for now */
     return 0;
 
+  case GWEN_DialogProperty_Visibility:
+    gtk_widget_set_visible (GTK_WIDGET(g), (value==0)?FALSE:TRUE);
+    return 0;
+
   default:
     break;
   }
@@ -71,6 +75,9 @@ int Gtk3Gui_WGroupBox_GetIntProperty(GWEN_WIDGET *w,
   case GWEN_DialogProperty_Height:
     /* just ignore these for now */
     return 0;
+
+  case  GWEN_DialogProperty_Visibility:
+    return (gtk_widget_get_visible(GTK_WIDGET(g))==TRUE)?1:0;
 
   default:
     break;
