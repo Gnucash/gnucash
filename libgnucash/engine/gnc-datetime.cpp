@@ -149,7 +149,7 @@ LDT_from_unix_local(const time64 time)
         auto tz = tzp.get(temp.date().year());
         return LDT(temp, tz);
     }
-    catch(boost::gregorian::bad_year)
+    catch(boost::gregorian::bad_year&)
     {
         throw(std::invalid_argument("Time value is outside the supported year range."));
     }
@@ -167,15 +167,15 @@ LDT_from_struct_tm(const struct tm tm)
         LDT ldt(tdate, tdur, tz, LDTBase::EXCEPTION_ON_ERROR);
         return ldt;
     }
-    catch(boost::gregorian::bad_year)
+    catch(boost::gregorian::bad_year&)
     {
         throw(std::invalid_argument("Time value is outside the supported year range."));
     }
-    catch(boost::local_time::time_label_invalid)
+    catch(boost::local_time::time_label_invalid&)
     {
         throw(std::invalid_argument("Struct tm does not resolve to a valid time."));
     }
-    catch(boost::local_time::ambiguous_result)
+    catch(boost::local_time::ambiguous_result&)
     {
         throw(std::invalid_argument("Struct tm can resolve to more than one time."));
     }
@@ -256,7 +256,7 @@ GncDateTimeImpl::GncDateTimeImpl(const GncDateImpl& date, DayPart part) :
                 m_time -= hours(offset.hours() - 11);
         }
     }
-    catch(boost::gregorian::bad_year)
+    catch(boost::gregorian::bad_year&)
     {
         throw(std::invalid_argument("Time value is outside the supported year range."));
     }
@@ -298,7 +298,7 @@ GncDateTimeImpl::GncDateTimeImpl(std::string str) :
         m_time = LDT(pdt.date(), pdt.time_of_day(), tzptr,
                          LDTBase::NOT_DATE_TIME_ON_ERROR);
     }
-    catch(boost::gregorian::bad_year)
+    catch(boost::gregorian::bad_year&)
     {
         throw(std::invalid_argument("The date string was outside of the supported year range."));
     }

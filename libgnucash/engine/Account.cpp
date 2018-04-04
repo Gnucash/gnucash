@@ -5442,7 +5442,7 @@ gnc_account_imap_find_account_bayes (GncImportMatchMap *imap, GList *tokens)
     gnc::GUID guid;
     try {
         guid = gnc::GUID::from_string(best.account_guid);
-    } catch (gnc::guid_syntax_exception) {
+    } catch (gnc::guid_syntax_exception&) {
         return nullptr;
     }
     auto account = xaccAccountLookup (reinterpret_cast<GncGUID*>(&guid), imap->book);

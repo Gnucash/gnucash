@@ -130,7 +130,7 @@ GncSqlColumnTableEntryImpl<CT_STRING>::load (const GncSqlBackend* sql_be,
         auto s = row.get_string_at_col (m_col_name);
         set_parameter(pObject, s.c_str(), get_setter(obj_name), m_gobj_param_name);
     }
-    catch (std::invalid_argument) {}
+    catch (std::invalid_argument&) {}
 }
 
 template<> void
@@ -279,19 +279,19 @@ GncSqlColumnTableEntryImpl<CT_DOUBLE>::load (const GncSqlBackend* sql_be,
     {
         val = static_cast<double>(row.get_int_at_col(m_col_name));
     }
-    catch (std::invalid_argument)
+    catch (std::invalid_argument&)
     {
         try
         {
             val = static_cast<double>(row.get_float_at_col(m_col_name));
         }
-        catch (std::invalid_argument)
+        catch (std::invalid_argument&)
         {
             try
             {
                 val = row.get_double_at_col(m_col_name);
             }
-            catch (std::invalid_argument)
+            catch (std::invalid_argument&)
             {
                 val = 0.0;
             }
@@ -336,7 +336,7 @@ GncSqlColumnTableEntryImpl<CT_GUID>::load (const GncSqlBackend* sql_be,
     {
         str = row.get_string_at_col(m_col_name);
     }
-    catch (std::invalid_argument)
+    catch (std::invalid_argument&)
     {
         return;
     }
@@ -391,7 +391,7 @@ GncSqlColumnTableEntryImpl<CT_TIMESPEC>::load (const GncSqlBackend* sql_be,
         auto val = row.get_time64_at_col(m_col_name);
         timespecFromTime64 (&ts, val);
     }
-    catch (std::invalid_argument)
+    catch (std::invalid_argument&)
     {
         try
         {
@@ -399,7 +399,7 @@ GncSqlColumnTableEntryImpl<CT_TIMESPEC>::load (const GncSqlBackend* sql_be,
             GncDateTime time(val);
             ts.tv_sec = static_cast<time64>(time);
         }
-        catch (std::invalid_argument)
+        catch (std::invalid_argument&)
         {
             return;
         }
@@ -471,7 +471,7 @@ GncSqlColumnTableEntryImpl<CT_TIME64>::load (const GncSqlBackend* sql_be,
     {
         t = row.get_time64_at_col (m_col_name);
     }
-    catch (std::invalid_argument)
+    catch (std::invalid_argument&)
     {
         try
         {
@@ -479,7 +479,7 @@ GncSqlColumnTableEntryImpl<CT_TIME64>::load (const GncSqlBackend* sql_be,
             GncDateTime time(val);
             t = static_cast<time64>(time);
         }
-        catch (std::invalid_argument)
+        catch (std::invalid_argument&)
         {
             return;
         }
@@ -543,7 +543,7 @@ GncSqlColumnTableEntryImpl<CT_GDATE>::load (const GncSqlBackend* sql_be,
                        tm->tm_year + 1900);
         free(tm);
     }
-    catch (std::invalid_argument)
+    catch (std::invalid_argument&)
     {
         try
         {
@@ -557,7 +557,7 @@ GncSqlColumnTableEntryImpl<CT_GDATE>::load (const GncSqlBackend* sql_be,
                 g_date_set_dmy(&date, day, month, year);
 
         }
-        catch (std::invalid_argument)
+        catch (std::invalid_argument&)
         {
             return;
         }
@@ -622,7 +622,7 @@ GncSqlColumnTableEntryImpl<CT_NUMERIC>::load (const GncSqlBackend* sql_be,
         n = gnc_numeric_create (num, denom);
         g_free (buf);
     }
-    catch (std::invalid_argument)
+    catch (std::invalid_argument&)
     {
         return;
     }
