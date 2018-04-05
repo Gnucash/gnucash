@@ -71,10 +71,11 @@ from distro package repositories or by hand. You need at least version
 
 === Running CMake
 
-The next step is to invoke CMake to generate the build system. Before
-running CMake, you need to create a build directory:
+CMake works a lot better if you use a separate build directory, so the first
+step is to make one. We recommend that you set the build directory outside of
+the source tree, but it will work in the build tree if you want:
 
-  $ cd ..   # back to workdir
+  $ cd # Change to your home directory
   $ mkdir gnucash-build
   $ cd gnucash-build
 
@@ -96,9 +97,26 @@ Then decide what cmake command line options you will need:
 
  * If you don't specify a generator, Makefiles will be generated.
 
- * Finally, put the path to your source directory last.
-   Here, that is ../gnucash
-
+ * Finally, put the path to your source directory last. To avoid confusing
+   yourself later with weird cmake or build errors, we suggest that you use the
+   absolute path, for example if you cloned gnucash into your home directory,
+   $HOME/gnucash. If you've cloned or untarred gnucash somewhere else you can
+     $ export SRCROOT=/absolute/path/to/source/parent
+     $ cmake <parameters> $SRCROOT/gnucash
+   Getting into this habit will make sure that you always get the source
+   directory right no matter where you put the build dir. (It's a good habit for
+   `rm -rf`, too: `rm -rf *` can have very frustrating consequences if done from
+   the wrong place!) Be especially careful if you decide to use an in-tree build
+   directory and a relative path: It's easy to
+     $ mkdir build && cd build
+     $ cmake ../gnucash
+   from the source directory. That will fail, because there's a "gnucash"
+   subdirectory with its own CMakeLists.txt, one that doesn't know how to
+   configure the build and can't see the the cmake modules that it needs to run.
+   If you must do this, you want to invoke CMake like
+     $ cmake ..
+   to get the right CMakeLists.txt.
+   
  * There are other options available; look in the `OPTIONS` section of
    the top-level `CMakeLists.txt` file.  For example, you can disable
    SQL using these options.
@@ -112,24 +130,24 @@ Some examples:
 
  * Build on Linux, don't want to install, use the Makefile generator:
 
-   $ cmake ../gnucash
+   $ cmake $SRCROOT/gnucash
 
  * Build on Linux, install to /tmp/gnucash, use Ninja generator:
 
-   $ cmake -D CMAKE_INSTALL_PREFIX=/tmp/gnucash -G Ninja ../gnucash
+   $ cmake -D CMAKE_INSTALL_PREFIX=/tmp/gnucash -G Ninja $SRCROOT/gnucash
 
  * Build on OS X, install to /tmp/gnucash, use Ninja generator:
 
-   $ cmake -D CMAKE_INSTALL_PREFIX=/tmp/gnucash -D CMAKE_PREFIX_PATH=$HOME/gnucash-unstable -G Ninja ../gnucash
+   $ cmake -D CMAKE_INSTALL_PREFIX=/tmp/gnucash -D CMAKE_PREFIX_PATH=$HOME/gnucash-unstable -G Ninja $SRCROOT/gnucash
 
  * The same, but use the Xcode generator:
 
-   $ cmake -D CMAKE_INSTALL_PREFIX=/tmp/gnucash -D CMAKE_PREFIX_PATH=$HOME/gnucash-unstable -G Xcode ../gnucash
+   $ cmake -D CMAKE_INSTALL_PREFIX=/tmp/gnucash -D CMAKE_PREFIX_PATH=$HOME/gnucash-unstable -G Xcode $SRCROOT/gnucash
 
   * Again, this time pointing to a gmock-1.7.0 source directory:
 
    $ cmake -D CMAKE_INSTALL_PREFIX=/tmp/gnucash -D
-   CMAKE_PREFIX_PATH=$HOME/gnucash-unstable -D GMOCK_ROOT=$HOME/gmock-1.7.0 -D GTEST_ROOT=$HOME/gmock-1.7.0/gtest -G Xcode ../gnucash
+   CMAKE_PREFIX_PATH=$HOME/gnucash-unstable -D GMOCK_ROOT=$SRCROOT/gmock-1.7.0 -D GTEST_ROOT=$SRCROOT/gmock-1.7.0/gtest -G Xcode $SRCROOT/gnucash
 
 === Building
 
