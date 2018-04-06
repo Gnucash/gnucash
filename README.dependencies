@@ -66,6 +66,7 @@ Libraries/Deps
   gtk+3			3.14.0
   guile			2.2.0 or 2.0.0
   libxml2		2.5.10
+  gettext		0.19.6
   libxslt, including xsltproc
   ICU                                           International Compnents for
                                                 Unicode
@@ -100,6 +101,8 @@ Libraries/Deps
                                                  (superceded for the
                                                  most part in Doxygen
                                                  docs).
+  doxygen                                        For building the Doxygen API
+                                                 documentation.
 
   at runtime, required
   ---------------------
