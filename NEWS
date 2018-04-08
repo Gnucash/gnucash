@@ -1,5 +1,238 @@
 Version history:
 ------- -------
+3.0    - 1 April 2018
+The first release of the 3.0 stable series.
+New Features for Users:
+    The headline item for this release is that GnuCash now uses the
+        Gtk+-3.0 Toolkit and the WebKit2Gtk API. This change was forced
+        on us by some major Linux distributions dropping support for
+        the WebKit1 API. Unfortunately the Webkit project doesn't
+        support Microsoft Windows so that platform will continue to use
+        the WebKit1 API, though with Gtk3. We've selected Gtk+-3.14.0
+        as the minimum version because it fully supports CSS
+        theming.
+    New editors to remove outdated or incorrect match data from the
+        import maps, a new user interfacs for managing files associated with
+        transactions, an improved facility for removing old prices from the
+        price database, and a way to remove deleted files from the history
+        list in the file menu.
+    New Reports: A Reconciliation Report based on the Transaction Report,a
+        Income GST Report, and a Cashflow Barchart report.
+    A new CSV importer largely rewritten in C++, adding new
+        features including the ability to re-import CSV files exported
+        from GnuCash, along with a separate CSV price importer.
+    A new preference panel for the Alphavantage API key so that Finance::Quote
+       users need not edit /etc/gnucash/environment. We've removed all
+       references to the various Yahoo! quote sources and made Alphavantage
+       the default.
+    Data file directories are now located appropriately to the
+        operating system's conventions by default:
+        - Windows: CSIDL_APPDATA/Gnucash
+        - OS X: $HOME/Application Support/Gnucash
+        - Linux: $XDG_CONFIG_HOME/gnucash (or the default $HOME/.config/gnucash)
+         It's still possible to overried with the environment variable
+         GNC_DOC_PATH, which replaces GNC_DOT_DIR in earlier versions of
+         GnuCash.
+    Accounts in the Bayes import map are now linked by GUID instead
+        of names so that the matcher won't have to be retrained if you
+        rename an account.  The Bayesian import maps are also stored in a
+        flatter structure to allow faster access, especially in SQL. These
+        changes mean that if you have Bayesian mapping data, once converted
+        your database will be loadable only by GnuCash 2.6.20 and later.
+    MySQL and SQLite3 date storage has changed a bit. Once converted, MySQL
+        and SQLite3 database will be loadable only by GnuCash 2.6.19 and later.
+    Numerics are rewritten to allow for more significant digits. The old
+        6-digit-maximum fraction is now 9-digits, and prices may have up
+        to 18 digit precision.
+    Chart Reports appearance is improved, including more modern chart colours
+        as suggested by http://clrs.cc/.
+    Transaction Report improvements, including regular expression filtering
+        and many more options and features including a "Subtotal Summary Grid"
+        The subtotal summary-grid will tabulate subtotals - prime-sortkey
+        vertically, sec-sortkey horizontally. For example, with
+        prime-sortkey = accounts, sec-sortkey = date, sec-subtotal = monthly
+        will produce a monthly time series table.
+    The About dialog box layout is improved and now includes the detected
+        Finance::Quote version.
+    GnuCash will always build the locale-specific tax modules. This
+        was optional when building with autotools and never enabled when
+        building with cmake. Note that the only supported tax locales are
+        en_US and de_DE.
+    On Macs the Reconcile Window's menu moved to the menubar.
+    GnuCash no longer supports Guile-1.8 and now does support Guile-2.2
+
+
+New Features for Developers:
+    Several parts of the engine and the SQL backend are rewritten
+        in C++, an effort that will continue in the next development
+        cycle. KVP is now private to libgncmod-engine and accessible
+        outside via qof_instance_set and qof_instance_get. KVP and GUID are
+        reimplemnted in C++ using boost::variant and boost::UUID respectively.
+    C++ unit tests require GoogleTest. While it's possible to use prebuilt
+        libgtest and libgmock on some distros, building static libraries for
+        GnuCash is preferred. It may be necessary to provide the paths to
+        the googletest and googlemock source with CMake parameters
+        GTEST_ROOT and GMOCK_ROOT respectively.
+    The date implementation is migrated to boost::date-time,
+        replacing a Glib GDateTime implementation. This makes the
+        earliest date recordable 1 January 1400CE instead of 1 January 1CE.
+        We doubt any users will be affected.
+    Distribution tarballs can now be built with CMake as well as
+        Autotools. (Rob Gowin)
+    We've reorganized the code into a core library directory, libgnucash, and
+        application-specific directory, gnucash. The python bindings are now
+        in a top-level directory, bindings; code pinched from other projects
+        is in borrowed, the account templates, check templates, and pixmaps
+        are consolidated in data, and common holds the cmake modules and test
+        framework code. The bin directory's contents have moved to the top
+        level gnucash directory and bin is removed.
+        There are now directories for gschema, gtkbuilder and ui files directly
+        in gnucash. In principle all files of each type should go into these
+        global directories. The only exception is if such a file belongs
+        to an optional module. In that case the file remains located inside
+        that module's directory. Currently we have ui, glade and gschema file
+        exceptions in aqb and ofx importers.
+    The build system is changed from Autotools to CMake. All options except
+        python bindings and the python console demo are enabled by default.
+        Highly parallel builds with Ninja are possible and recommended,
+        except on Microsoft Windows.
+    The Windows build system is rewritten to use MSYS2, Mingw-w64, Powershell,
+       and jhbuild.
+    Add a "pot" target to the build system so that translators can easily
+       generate a new gnucash.pot from a git repository.
+    Detect presence or absence of libxml2 and makeinfo during configuration;
+        abort if the first is missing and don't build the (mostly
+        obsolete) texinfo documentation if the latter is. Document
+        both in README.dependencies.
+    Replaced Timespec with time64 in the Scheme and Python bindings,
+       introducing many new C time64 functions to accomodate the
+       replacement. Timespec will eventually be removed from the C API
+       as well.
+    Some cruft removal in libgnucash/scm plus moving some code to its
+        only use location. "main.scm" is renamed to "utilities.scm".
+    The "printf" family of Scheme custom functions is replaced with
+        the built-in "format" facility.
+    Change a generally unnecessary warning about being unable to open
+        a module (usually because the file is still being created) to a
+        debug message. It appears mostly during highly parallel builds and
+        was distracting.
+    Appstream configuration is updated to the latest spec.
+    Added two functions to the Scheme option API:
+        * gnc:option-make-internal! will hide an existing option. e.g. a
+          derived report can set the value for a Display/* option and hide
+          it from the user.
+        * gnc:unregister-option will unregister option. This is primarily
+          useful for derived options e.g. another report copies from
+          transaction.scm and removes some options and recreates them with
+          different parameters.
+        For example, unregister existing option from section "Accounts"
+        name "Accounts", and recreate with different parameters
+        e.g. limited account types.
+    Drop intltool in favour or using modern gettext.
+        By default we require gettext 0.19.6 as this is needed to generate a
+        translated version of gnucash.desktop and gnucash.appdata.xml.
+        For platforms where this isn't available, setting ALLOW_OLD_GETTEXT=ON
+        will allow building but some strings will not be extracted to
+        gnucash.pot
+    Pass GTEST_ROOT and GMOCK_ROOT through to distcheck.
+        So that they don't have to be exported in the environment if they're
+        needed.
+    The Python Bindings and Console are now for Python 3, and enahanced to
+        expose more GnuCash API.
+        Compilation of GLib Schemas during build and installation can be
+        disabled by setting -DCOMPILE_GSCHEMAS=OFF. This is intended
+        *only* for distribution packaging scripts that run
+        glib-compile-schemas themselves. Otherwise note that if you install
+        to a DESTDIR you'll need to re-run glib-compile-scemas after moving
+        the contents of $DESTDIR$PREFIX/share/glib-2.0/schemas to $PREFIX.
+    The CuteCash front end has been removed. The code we need from
+        GOffice has been brought into the GnuCash code base so GOffice
+        is no longer a dependency. The register drawing code has been
+        upgraded to draw directly on a cairo surface, removing the dependency
+        on libgnomecanvas.
+    GnuCash 3.0 adds the following dependencies: Boost, ICU, Googletest.
+
+Known Problems:
+    It is not possible to overwrite SQL Databases from within GnuCash, even
+        though GnuCash will ask if you want to. Bug 789594
+    There is no theming tool for Windows or Macs so users of those platforms
+        must apply theming by hand. Bug 791823
+    Accounting Period dates are subject to change with time zone and
+        daylight-time changes. Bug 791825
+    Opening a large SQL database on Windows is very slow on some machines,
+        merely slow on others. Bugs 792105, 794482.
+    Some HBCI information is not loaded correctly so the first transaction
+        download will re-retrieve transactions unless the beginning date is
+        set explicitly. Bug 792397.
+    The new CSV importer's Price of Shares column doesn't work. Bug 793306
+    Importing an OFX file on Windows fails with an empty matcher window.
+        Bug 793461.
+    The Bayes account matcher can take a long time to convert the accounts
+        from name string to guids. This is a one-off, happening only the
+        first time one imports into an account on GnuCash 3.0. Bug 794334.
+    The new CSV importer's numeric parser can't parse numbers of the form
+        x + y/z. Bug 793556.
+    Python bindings may not work in some installations because the bindings
+        are unable to find the backend modules (libgncmod-backend-dbi and
+        libgncmod-backend-xml). Bug 794526
+    Get Quotes can be slow if one has a large number of saved prices.
+        Bug 794644.
+    Some users see 1 January 1970 instead of the default date in the New
+        Invoice or New Bill dialog and on the unposted bill and invoice.
+        Bug 794767.
+    The Mac localization code can set the wrong encoding for strftime causing
+        the register's date picker to label months "Null" in some locales.
+        Bug 794807
+    On Mac, the File Open dialog will crash if one types anything. Bug 794809
+    An open register is not immediately updated when the Since Last Run
+        dialog creates transaction splits in the register's account. Bug 794854
+    GnuCash asks if one wants to save changes when quitting or opening a file
+        even if there's no book open. Bug 794870
+    The Online Actions menu includes some obsolete and non-functional
+        selections. Bug 794880.
+
+2.6.20 - 1 April 2018
+This is the final release in the 2.6 stable series.
+The following bugs are fixed:
+    Bug 765846 - Expense Over Time for subaccounts: An error occurred while
+                 running the report: Fix crash if acc-depth too low.
+    Bug 791848 - GC 2.6.x does not handle ISO dates introduced with GC 2.7
+                 Enable reading ISO-formatted dates, recognize
+                 GNC_FEATURE_SQLITE3_ISO_DATES.
+    Bug 792008 - gnucash 2.6.19 fails to build
+                 Replace g_assert_true with g_assert for now
+    Bug 793278 - wrong data in charts with accumulated values (like
+                 "net-linechart", "net-barchart" and "liabilities barchart")
+    Bug 794030 - relative date functions compute wrong day of month
+    Bug 790526 - Mathematical bug
+                 This change will fix 'num-of-weeks-since-1/jan/1970' which
+                 formerly used quotient to remove the fractional part of the
+                 division. For negative values of num-of-weeks, the number is
+                 truncated in the wrong direction (i.e. towards 0). This
+                 change uses floor instead to ensure the num-of-weeks found
+                 is the nearest integer LESS than the fractional number.
+
+Other repairs or enhancements not marked as bugs:
+    Online HBCI actions: Remove outdated non-SEPA menu items.
+    Add XML namespaces for all Account Hierarchy Templates.
+    General cleanup of Account Hierarchy Templates.
+    Fix auto-selection of splits in reconcile
+        Really use all splits of any given day. Up to now usually the splits
+        of the given date were not or not all included, as the time comparison
+        didn't correctly ignore any given time-of-day of the splits. Instead,
+        all possible time-of-days should be included.
+    Properly detect git in case of linked worktree
+    Account Hierarchy for India: Set LANGUAGE=hi and LANG=en_IN to access it.
+    Improve Import menu entries Customer & vendors...
+        use same menu label as others, replace template by tooltip, add ellipsis
+        to entry, add comments to distinguish "Import" as verb and substantive.
+    Provide preference panel to set the Alpha Vantage API key needed for
+        Finance::Quote.
+    Correct the appstream definition to match the current spec.
+    Fix collectors and min-date handling in reports.
+
+Updated Translations: Dutch, German, Spanish, Russian
+
 2.7.8 - 25 March 2018
 
     The Gnucash Development Team is pleased to release Gnucash 2.7.8,
@@ -1002,6 +1235,7 @@ KNOWN PROBLEMS:
 
     test-import-bayes built with autotools intermittently fails at
     line 381, where the returned value is 1 instead of the expected 6.
+
 2.6.18 - 24 September 2017
 
 The following bugs are fixed:

@@ -5584,8 +5584,16 @@ static void
 build_bayes (const char *key, KvpValue * value, GncImapInfo & imapInfo)
 {
     auto parsed_key = parse_bayes_imap_info (key);
-    auto temp_guid = gnc::GUID::from_string (std::get <2> (parsed_key));
-    GncGUID guid = temp_guid;
+    GncGUID guid;
+    try
+    {
+        auto temp_guid = gnc::GUID::from_string (std::get <2> (parsed_key));
+        guid = temp_guid;
+    }
+    catch (const gnc::guid_syntax_exception& err)
+    {
+        PWARN("Invalid GUID string from %s", key);
+    }
     auto map_account = xaccAccountLookup (&guid, gnc_account_get_book (imapInfo.source_account));
     auto imap_node = static_cast <GncImapInfo*> (g_malloc (sizeof (GncImapInfo)));
     auto count = value->get <int64_t> ();
