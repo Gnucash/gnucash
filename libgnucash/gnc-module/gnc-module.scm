@@ -30,7 +30,7 @@
 ;; Guile 2 needs to find the symbols from the extension at compile time already
 (eval-when
       (compile load eval expand)
-      (load-extension "libgnc-module" "scm_init_sw_gnc_module_module"))
+      (load-extension "libgnc-module.so" "scm_init_sw_gnc_module_module"))
 
 (use-modules (sw_gnc_module))
 
