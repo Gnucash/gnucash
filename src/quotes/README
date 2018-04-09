@@ -25,9 +25,3 @@ gnc-fq-update.in:
   Source file for gnc-fq-update which is a perl script that updates
   Finance::Quote from CPAN.
 
-gnc-value-portfolio:
-
-  A stand-alone perl script for updating and printing the value of a
-  portfolio.  To use this script, edit the first few lines at the top
-  of the file to indicate your portfolio and purchase price.
-  (from Christopher B. Browne, cbbrowne@hex.net)
