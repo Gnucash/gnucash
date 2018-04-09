@@ -282,19 +282,31 @@ GncDateTimeImpl::GncDateTimeImpl(std::string str) :
     m_time(unix_epoch, utc_zone)
 {
     if (str.empty()) return;
-
-    auto tzpos = str.find_first_of("+-", str.find(":"));
-    auto tzptr = tz_from_string(tzpos != str.npos ? str.substr(tzpos) : "");
-    if (tzpos != str.npos && str[tzpos - 1] == ' ') --tzpos;
-
+    TZ_Ptr tzptr;
     try
     {
-        bool delimited = str.find("-") == 4;
-        if (!delimited)
-            str.insert(8, "T");
-        auto pdt = delimited ?
-            boost::posix_time::time_from_string(str.substr(0, tzpos)) :
-            boost::posix_time::from_iso_string(str.substr(0,tzpos));
+        static const boost::regex delim_iso("^(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}(?:\\.\\d{0,9})?)\\s*([+-]\\d{2}(?::?\\d{2})?)?$");
+        static const boost::regex non_delim("^(\\d{14}(?:\\.\\d{0,9})?)\\s*([+-]\\d{2}\\s*(:?\\d{2})?)?$");
+        PTime pdt;
+        boost::smatch sm;
+        if (regex_match(str, sm, non_delim))
+        {
+            std::string time_str(sm[1]);
+            time_str.insert(8, "T");
+            pdt = boost::posix_time::from_iso_string(time_str);
+        }
+        else if (regex_match(str, sm, delim_iso))
+        {
+            pdt = boost::posix_time::time_from_string(sm[1]);
+        }
+        else
+        {
+            throw(std::invalid_argument("The date string was not formatted in a way that GncDateTime(std::string) knows how to parse."));
+        }
+        std::string tzstr("");
+        if (sm[2].matched)
+            tzstr += sm[2];
+        tzptr = tz_from_string(tzstr);
         m_time = LDT(pdt.date(), pdt.time_of_day(), tzptr,
                          LDTBase::NOT_DATE_TIME_ON_ERROR);
     }
