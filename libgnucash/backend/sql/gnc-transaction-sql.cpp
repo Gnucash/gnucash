@@ -1326,7 +1326,7 @@ GncSqlColumnTableEntryImpl<CT_TXREF>::load (const GncSqlBackend* sql_be,
         if (tx != nullptr)
             set_parameter (pObject, tx, get_setter(obj_name), m_gobj_param_name);
     }
-    catch (std::invalid_argument) {}
+    catch (std::invalid_argument&) {}
 }
 
 template<> void

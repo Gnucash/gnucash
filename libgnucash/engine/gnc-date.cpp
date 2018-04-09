@@ -120,7 +120,7 @@ gnc_localtime_r (const time64 *secs, struct tm* time)
         *time = static_cast<struct tm>(GncDateTime(*secs));
         return time;
     }
-    catch(std::invalid_argument)
+    catch(std::invalid_argument&)
     {
         return NULL;
     }
@@ -194,7 +194,7 @@ gnc_gmtime (const time64 *secs)
         *time = gncdt.utc_tm();
         return time;
     }
-    catch(std::invalid_argument)
+    catch(std::invalid_argument&)
     {
         return NULL;
     }
@@ -211,7 +211,7 @@ gnc_mktime (struct tm* time)
         *time = static_cast<struct tm>(gncdt);
         return static_cast<time64>(gncdt);
     }
-    catch(std::invalid_argument)
+    catch(std::invalid_argument&)
     {
         return 0;
     }
@@ -232,7 +232,7 @@ gnc_timegm (struct tm* time)
 #endif
         return static_cast<time64>(gncdt) - gncdt.offset();
     }
-    catch(std::invalid_argument)
+    catch(std::invalid_argument&)
     {
         return 0;
     }

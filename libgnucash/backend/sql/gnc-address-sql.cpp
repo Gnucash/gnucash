@@ -98,7 +98,7 @@ GncSqlColumnTableEntryImpl<CT_ADDRESS>::load (const GncSqlBackend* sql_be,
             set_parameter (addr, val.c_str(), sub_setter,
                            subtable_row->m_gobj_param_name);
         }
-        catch (std::invalid_argument)
+        catch (std::invalid_argument&)
         {
             return;
         }
