@@ -1,7 +1,9 @@
 ADD_SUBDIRECTORY(example_scripts)
 ADD_SUBDIRECTORY(tests)
 
-IF (BUILDING_FROM_VCS)
+  SET(PYEXEC_FILES  __init__.py function_class.py gnucash_business.py gnucash_core.py)
+
+  IF (BUILDING_FROM_VCS)
   SET(SWIG_FILES ${CMAKE_CURRENT_SOURCE_DIR}/gnucash_core.i ${CMAKE_CURRENT_SOURCE_DIR}/timespec.i)
   SET(GNUCASH_CORE_C_INCLUDES
     ${CMAKE_BINARY_DIR}/src/config.h
@@ -62,8 +64,6 @@ IF(WITH_PYTHON)
     ${GLIB_INCLUDE_DIRS}
     ${PYTHON_INCLUDE_DIRS}
   )
-
-  SET(PYEXEC_FILES  __init__.py function_class.py gnucash_business.py gnucash_core.py)
 
   ADD_LIBRARY(gnucash_core_c MODULE ${SWIG_GNUCASH_CORE_C})
   TARGET_INCLUDE_DIRECTORIES(gnucash_core_c PRIVATE ${gnucash_core_c_INCLUDE_DIRS})
