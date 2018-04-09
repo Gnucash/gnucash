@@ -272,6 +272,16 @@ lookup_price(PriceReq *pr, PriceDate pd)
             prc = gnc_pricedb_lookup_latest (pr->pricedb, pr->from, pr->to);
             break;
     }
+
+    if (!prc) //no price found
+    {
+        PINFO("No price Found for %s, %s",
+              gnc_commodity_get_mnemonic(pr->from),
+              gnc_commodity_get_mnemonic(pr->to));
+        pr->price = NULL;
+        return FALSE;
+    }
+
     if (gnc_commodity_equiv(gnc_price_get_currency(prc), pr->from))
     {
         pr->reverse = TRUE;
@@ -279,7 +289,6 @@ lookup_price(PriceReq *pr, PriceDate pd)
               gnc_commodity_get_mnemonic(pr->to),
               gnc_numeric_to_double(gnc_price_get_value(prc)),
               gnc_commodity_get_mnemonic(pr->from));
-
     }
     else
     {
@@ -288,8 +297,6 @@ lookup_price(PriceReq *pr, PriceDate pd)
               gnc_numeric_to_double(gnc_price_get_value(prc)),
               gnc_commodity_get_mnemonic(pr->to));
     }
-    if (!prc)
-        return FALSE;
     pr->price = prc;
     return TRUE;
 }
@@ -1639,7 +1646,7 @@ new_price(XferDialog *xferData, Timespec ts)
     PINFO("Created price: 1 %s = %f %s", gnc_commodity_get_mnemonic(from),
           gnc_numeric_to_double(value), gnc_commodity_get_mnemonic(to));
     gnc_price_unref (price);
-}    
+}
 
 static void
 create_price(XferDialog *xferData, Timespec ts)
