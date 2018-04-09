@@ -1,5 +1,15 @@
 Version history:
 ------- -------
+2.6.21 - 10 April 2018
+This is the final, final release in the 2.6. stable series. After 2.6.20's release astute users quickly reported two significant bugs:
+    Bug 795049 - GnuCash 2.6.20-1 (Fedora Linux package) is unable to open
+                 MariaDB database.
+    Bug 795068 - src/optional/python-bindings missing several files.
+
+We also noticed that src/quotes/README had a note about the
+gnc-value-portfolio script that was removed because it required Yahoo!
+quotes. That note has also been removed.
+
 2.6.20 - 1 April 2018
 This is the final release in the 2.6 stable series.
 The following bugs are fixed:
