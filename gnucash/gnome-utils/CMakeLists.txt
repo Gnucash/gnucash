@@ -215,7 +215,11 @@ TARGET_LINK_LIBRARIES(gncmod-gnome-utils gncmod-app-utils gncmod-engine gnc-back
      ${CMAKE_DL_LIBS} ${GTK3_LDFLAGS} ${GTK_MAC_LDFLAGS})
 
 TARGET_COMPILE_DEFINITIONS(gncmod-gnome-utils PUBLIC ${GTK_MAC_CFLAGS_OTHER}
-    PRIVATE -DG_LOG_DOMAIN=\"gnc.gui\")
+  PRIVATE -DG_LOG_DOMAIN=\"gnc.gui\")
+
+if (BUILDING_FROM_VCS)
+  TARGET_COMPILE_DEFINITIONS(gncmod-gnome-utils PRIVATE -DGNC_VCS=\"git\")
+endif (BUILDING_FROM_VCS)
 
 IF (MAC_INTEGRATION)
   TARGET_COMPILE_OPTIONS(gncmod-gnome-utils PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
