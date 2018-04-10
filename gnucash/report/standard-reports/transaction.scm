@@ -1747,11 +1747,13 @@ tags within description, notes or memo. ")
   (let* ((document (gnc:make-html-document))
          (account-matcher (opt-val pagename-filter optname-account-matcher))
          (account-matcher-regexp (and (opt-val pagename-filter optname-account-matcher-regex)
-                                      (make-regexp account-matcher)))
+                                      (catch 'regular-expression-syntax
+                                        (lambda () (make-regexp account-matcher))
+                                        (const 'invalid-regex))))
          (c_account_0 (opt-val gnc:pagename-accounts optname-accounts))
          (c_account_1 (filter
                        (lambda (acc)
-                         (if account-matcher-regexp
+                         (if (regexp? account-matcher-regexp)
                              (regexp-exec account-matcher-regexp (gnc-account-get-full-name acc))
                              (string-contains (gnc-account-get-full-name acc) account-matcher)))
                        c_account_0))
@@ -1765,7 +1767,9 @@ tags within description, notes or memo. ")
                     (opt-val gnc:pagename-general optname-enddate))))
          (transaction-matcher (opt-val pagename-filter optname-transaction-matcher))
          (transaction-matcher-regexp (and (opt-val pagename-filter optname-transaction-matcher-regex)
-                                          (make-regexp transaction-matcher)))
+                                          (catch 'regular-expression-syntax
+                                            (lambda () (make-regexp transaction-matcher))
+                                            (const 'invalid-regex))))
          (reconcile-status-filter (keylist-get-info reconcile-status-list
                                                     (opt-val pagename-filter optname-reconcile-status)
                                                     'filter-types))
@@ -1838,7 +1842,9 @@ tags within description, notes or memo. ")
       (generic-less? X Y 'date 'none #t))
 
 
-    (if (or (null? c_account_1) (and-map not c_account_1))
+    (if (or (or (null? c_account_1) (and-map not c_account_1))
+            (eq? account-matcher-regexp 'invalid-regex)
+            (eq? transaction-matcher-regexp 'invalid-regex))
 
         ;; error condition: no accounts specified or obtained after filtering
         (begin
