@@ -666,15 +666,15 @@ test_suite_gnc_backend_dbi (void)
     }
     if (g_list_find_custom (drivers, "sqlite3", (GCompareFunc)g_strcmp0))
         create_dbi_test_suite ("sqlite3", "sqlite3");
+    if (strlen (TEST_MYSQL_URL) > 0 &&
+            g_list_find_custom (drivers, "mysql", (GCompareFunc)g_strcmp0))
+        create_dbi_test_suite ("mysql", TEST_MYSQL_URL);
     if (strlen (TEST_PGSQL_URL) > 0 &&
             g_list_find_custom (drivers, "pgsql", (GCompareFunc)g_strcmp0))
     {
         g_setenv ("PGOPTIONS", "-c client_min_messages=WARNING", FALSE);
         create_dbi_test_suite ("postgres", TEST_PGSQL_URL);
     }
-    if (strlen (TEST_MYSQL_URL) > 0 &&
-            g_list_find_custom (drivers, "mysql", (GCompareFunc)g_strcmp0))
-        create_dbi_test_suite ("mysql", TEST_MYSQL_URL);
 
     GNC_TEST_ADD_FUNC( suitename, "adjust sql options string localtime", 
         test_adjust_sql_options_string );
