@@ -2028,11 +2028,46 @@ gnc_main_window_update_tab_color (gpointer gsettings, gchar *pref, gpointer user
 }
 
 
+/** Set the tab label ellipsize value. The special check for a zero
+ *  value handles the case where a user hasn't set a tab width and
+ *  the preference default isn't detected.
+ *
+ *  @internal
+ *
+ *  @param label GtkLabel for the tab.
+ *
+ *  @param tab_width Tab width the user has set in preferences.
+ *
+ */
+static void
+gnc_main_window_set_tab_ellipsize (GtkWidget *label, gint tab_width)
+{
+    const gchar *lab_text = gtk_label_get_text (GTK_LABEL(label));
+
+    if (tab_width != 0)
+    {
+        if (g_utf8_strlen (lab_text, -1) < tab_width)
+        {
+            gtk_label_set_width_chars (GTK_LABEL(label), strlen (lab_text));
+            gtk_label_set_ellipsize (GTK_LABEL(label), PANGO_ELLIPSIZE_NONE);
+        }
+        else
+        {
+            gtk_label_set_width_chars (GTK_LABEL(label), tab_width);
+            gtk_label_set_ellipsize (GTK_LABEL(label), PANGO_ELLIPSIZE_MIDDLE);
+        }
+    }
+    else
+    {
+        gtk_label_set_width_chars (GTK_LABEL(label), 15);
+        gtk_label_set_ellipsize (GTK_LABEL(label), PANGO_ELLIPSIZE_NONE);
+    }
+}
+
+
 /** Update the width of the label in the tab of a notebook page.  This
- *  function adjusts both the width and the ellipsize mode so that the tab
- *  label looks correct.  The special check for a zero value handles the
- *  case where a user hasn't set a tab width and the preference default isn't
- *  detected.
+ *  function adjusts both the width and the ellipsize mode so that the
+ *  tab label looks correct.
  *
  *  @internal
  *
@@ -2046,7 +2081,6 @@ gnc_main_window_update_tab_width_one_page (GncPluginPage *page,
 {
     gint *new_value = user_data;
     GtkWidget *label;
-    const gchar *lab_text;
 
     ENTER("page %p, visible %d", page, *new_value);
     label = g_object_get_data(G_OBJECT (page), PLUGIN_PAGE_TAB_LABEL);
@@ -2055,23 +2089,7 @@ gnc_main_window_update_tab_width_one_page (GncPluginPage *page,
         LEAVE("no label");
         return;
     }
-
-    lab_text = gtk_label_get_text (GTK_LABEL(label));
-
-    if (*new_value != 0)
-    {
-        if (g_utf8_strlen (lab_text, -1) < *new_value)
-            gtk_label_set_width_chars (GTK_LABEL(label), strlen (lab_text));
-        else
-            gtk_label_set_width_chars (GTK_LABEL(label), *new_value);
-
-        gtk_label_set_ellipsize(GTK_LABEL(label), PANGO_ELLIPSIZE_MIDDLE);
-    }
-    else
-    {
-        gtk_label_set_width_chars (GTK_LABEL(label), 15);
-        gtk_label_set_ellipsize(GTK_LABEL(label), PANGO_ELLIPSIZE_NONE);
-    }
+    gnc_main_window_set_tab_ellipsize (label, *new_value);
     LEAVE(" ");
 }
 
@@ -2940,15 +2958,8 @@ gnc_main_window_open_page (GncMainWindow *window,
     label = gtk_label_new (lab_text);
     g_object_set_data (G_OBJECT (page), PLUGIN_PAGE_TAB_LABEL, label);
 
-    if (width != 0)
-    {
-        if (g_utf8_strlen (lab_text, -1) < width)
-            gtk_label_set_width_chars (GTK_LABEL(label), strlen (lab_text));
-        else
-            gtk_label_set_width_chars (GTK_LABEL(label), width);
+    gnc_main_window_set_tab_ellipsize (label, width);
 
-        gtk_label_set_ellipsize(GTK_LABEL(label), PANGO_ELLIPSIZE_MIDDLE);
-    }
     gtk_widget_show (label);
 
     tab_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
