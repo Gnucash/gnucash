@@ -3326,10 +3326,10 @@ conn_test_dbi_library( dbi_conn conn )
     GncDbiTestResult retval = GNC_DBI_PASS;
     memset( doublestr, 0, sizeof(doublestr));
 
-    result = dbi_conn_query( conn, "DROP TABLE IF EXISTS numtest;"
-                             "CREATE TEMPORARY TABLE numtest "
+    result = dbi_conn_query (conn, "DROP TABLE IF EXISTS numtest;");
+    result = dbi_conn_query (con, "CREATE TEMPORARY TABLE numtest "
                              "( test_int BIGINT, test_unsigned BIGINT,"
-                             " test_double FLOAT8 )" );
+                             " test_double FLOAT8 )");
     if ( result == NULL )
     {
         PWARN("Test_DBI_Library: Create table failed");
