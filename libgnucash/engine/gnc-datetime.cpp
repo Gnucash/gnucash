@@ -158,12 +158,12 @@ LDT_from_unix_local(const time64 time)
 static LDT
 LDT_from_struct_tm(const struct tm tm)
 {
+    auto tdate = boost::gregorian::date_from_tm(tm);
+    auto tdur = boost::posix_time::time_duration(tm.tm_hour, tm.tm_min,
+                                                 tm.tm_sec, 0);
+    auto tz = tzp.get(tdate.year());
     try
     {
-        auto tdate = boost::gregorian::date_from_tm(tm);
-        auto tdur = boost::posix_time::time_duration(tm.tm_hour, tm.tm_min,
-                                                     tm.tm_sec, 0);
-        auto tz = tzp.get(tdate.year());
         LDT ldt(tdate, tdur, tz, LDTBase::EXCEPTION_ON_ERROR);
         return ldt;
     }
@@ -177,7 +177,18 @@ LDT_from_struct_tm(const struct tm tm)
     }
     catch(boost::local_time::ambiguous_result&)
     {
-        throw(std::invalid_argument("Struct tm can resolve to more than one time."));
+        /* We plunked down in the middle of a DST change. Try constructing the
+         * LDT three hours later to get a valid result then back up those three
+         * hours to have the time we want.
+         */
+        using boost::posix_time::hours;
+        auto hour = tm.tm_hour;
+        tdur += hours(3);
+        LDT ldt(tdate, tdur, tz, LDTBase::NOT_DATE_TIME_ON_ERROR);
+        if (ldt.is_special())
+            throw(std::invalid_argument("Couldn't create a valid datetime."));
+        ldt -= hours(3);
+        return ldt;
     }
 }
 
