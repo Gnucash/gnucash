@@ -2348,6 +2348,7 @@ lookup_nearest_in_time(GNCPriceDB *db,
     GList *item = NULL;
 
     if (!db || !c || !currency) return NULL;
+    if (t.tv_sec == INT64_MAX) return NULL;
     ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
     price_list = pricedb_get_prices_internal (db, c, currency, TRUE);
     if (!price_list) return NULL;
