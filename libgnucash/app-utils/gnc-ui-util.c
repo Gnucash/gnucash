@@ -590,13 +590,13 @@ gnc_ui_account_get_tax_info_string (const Account *account)
             {
                 gchar *form = NULL;
 
-                /* Note: using scm_to_utf8_string directly here instead
+                /* Note: using scm_to_utf8_stringn directly here instead
                    of our wrapper gnc_scm_to_utf8_string. 'form' should
                    be freed with 'free' instead of 'g_free'. This will
                    be taken care of automatically during scm_dynwind_end,
                    because we inform guile of this memory allocation via
                    scm_dynwind_free a little further. */
-                form = scm_to_utf8_string (form_scm);
+                form = scm_to_utf8_stringn (form_scm, NULL);
                 if (!form)
                 {
                     if (tax_related)

@@ -43,7 +43,7 @@ gchar *gnc_scm_to_utf8_string(SCM scm_string)
         gchar* s;
         char * str;
 
-        str = scm_to_utf8_string(scm_string);
+        str = scm_to_utf8_stringn(scm_string, NULL);
         s = g_strdup(str);
         free (str);
         return s;
