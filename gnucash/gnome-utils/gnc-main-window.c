@@ -2046,9 +2046,10 @@ gnc_main_window_set_tab_ellipsize (GtkWidget *label, gint tab_width)
 
     if (tab_width != 0)
     {
-        if (g_utf8_strlen (lab_text, -1) < tab_width)
+        gint text_length = g_utf8_strlen (lab_text, -1);
+        if (text_length < tab_width)
         {
-            gtk_label_set_width_chars (GTK_LABEL(label), strlen (lab_text));
+            gtk_label_set_width_chars (GTK_LABEL(label), text_length);
             gtk_label_set_ellipsize (GTK_LABEL(label), PANGO_ELLIPSIZE_NONE);
         }
         else
