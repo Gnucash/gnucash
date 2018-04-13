@@ -1668,45 +1668,30 @@ tags within description, notes or memo. ")
   (set! grid (grid-del grid row col))           ;we simply delete old data stored at row/col and 
   (set! grid (cons (vector row col data) grid)) ;add again. this is fine because the grid should
   grid)                                         ;never have duplicate data in the trep.
-(define (grid->html grid list-of-rows list-of-cols)
-  (define (cell->html cell)
-    (if (pair? cell)
-        (string-append "<td class=\"number-cell\">"
-                       (string-join (map gnc:monetary->string
-                                         (vector-ref (car cell) 2))
-                                    "<br/>\n")
-                       "</td>\n")
-        "<td></td>\n"))
-  (define (row->html row list-of-cols)
-    (string-append "<tr><td>"
-                   (if (eq? row 'row-total)
-                       (_ "Grand Total")
-                       (cdr row))
-                   "</td>\n"
-                   (string-join (map
-                                 (lambda (col) (cell->html (grid-get grid row col)))
-                                 list-of-cols) "")
-                   (cell->html (grid-get grid row 'col-total))
-                   "</tr>\n"))
-  (string-append "<table class=\"summary-table\"><caption>"
-                 optname-grid
-                 "</caption><thead><tr>"
-                 "<th></th>\n"
-                 (string-join (map (lambda (col)
-                                     (string-append "<th class=\"column-heading-right\">"
-                                                    (cdr col)
-                                                    "</th>\n")) list-of-cols) "")
-                 "<th class=\"column-heading-right\">"
-                 (_ "Total")
-                 "</th>\n</tr>\n</thead><tbody>"
-                 (string-join (map (lambda (row)
-                                     (row->html row list-of-cols))
-                                   list-of-rows) "")
-                 (if (memq 'row-total (grid-rows grid))
-                     (row->html 'row-total list-of-cols)
-                     "")
-                 "</tbody></table>\n"))
-
+(define (grid->html-table grid list-of-rows list-of-cols)
+  (define (make-table-cell row col)
+    (let ((cell (grid-get grid row col)))
+      (if (pair? cell)
+          (gnc:make-html-table-cell/markup "number-cell" (car (vector-ref (car cell) 2)))
+          "")))
+  (define (make-row row)
+    (append
+     (list (if (eq? row 'row-total) (_ "Grand Total") (cdr row)))
+     (map (lambda (col) (make-table-cell row col))
+          list-of-cols)
+     (list (make-table-cell row 'col-total))))
+  (let ((table (gnc:make-html-table)))
+    (gnc:html-table-set-caption! table optname-grid)
+    (gnc:html-table-set-col-headers! table (append (list "") (map cdr list-of-cols) (list (_ "Total"))))
+    (gnc:html-table-set-style! table "th"
+                               'attribute (list "class" "column-heading-right"))
+    (for-each
+     (lambda (row)
+       (gnc:html-table-append-row! table (make-row row)))
+     list-of-rows)
+    (if (memq 'row-total (grid-rows grid))
+        (gnc:html-table-append-row! table (make-row 'row-total)))
+    table))
 
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Here comes the renderer function for this report.
@@ -1962,7 +1947,7 @@ tags within description, notes or memo. ")
                            (list-of-rows (stable-sort! (delete 'row-total (grid-rows grid)) generic<?))
                            (list-of-cols (stable-sort! (delete 'col-total (grid-cols grid)) generic<?)))
                       (gnc:html-document-add-object!
-                       document (grid->html grid list-of-rows list-of-cols))))
+                       document (grid->html-table grid list-of-rows list-of-cols))))
 
                 (if (eq? infobox-display 'always)
                     (gnc:html-document-add-object!
