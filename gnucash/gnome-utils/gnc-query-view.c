@@ -350,6 +350,9 @@ gnc_query_view_init_view (GNCQueryView *qview)
         else if (((GNCSearchParam *) param)->justify == GTK_JUSTIFY_RIGHT)
             algn = 1.0;
 
+        /* Set the column title alignment to that of the column */
+        gtk_tree_view_column_set_alignment (col, algn);
+
         /* Set column resizable */
         if (((GNCSearchParam *) param)->non_resizeable)
         {
