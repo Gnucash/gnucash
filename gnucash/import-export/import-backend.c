@@ -982,6 +982,10 @@ gnc_import_process_trans_item (GncImportMatchMap *matchmap,
                                     xaccTransGetDescription(
                                         gnc_import_TransInfo_get_trans(trans_info)));
 
+            xaccTransSetNotes(selected_match->trans,
+                                    xaccTransGetNotes(
+                                        gnc_import_TransInfo_get_trans(trans_info)));
+
             if (xaccSplitGetReconcile(selected_match->split) == NREC)
             {
                 xaccSplitSetReconcile(selected_match->split, CREC);
