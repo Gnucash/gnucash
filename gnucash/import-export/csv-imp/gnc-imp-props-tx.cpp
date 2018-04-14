@@ -624,7 +624,7 @@ void GncPreSplit::create_split (Transaction* trans)
     if (m_withdrawal)
         withdrawal = *m_withdrawal;
 
-    amount = deposit + withdrawal;
+    amount = deposit - withdrawal;
 
     /* Add a split with the cumulative amount value. */
     trans_add_split (trans, account, amount, m_action, m_memo, m_rec_state, m_rec_date, m_price);
