@@ -68,7 +68,7 @@
 		))))
 	(set! font-family font-name)
 	(set! result (string-append
-		"font-family: " font-family "; "
+		"font-family: " font-family ", Sans-Serif; "
 		"font-size: " font-size "pt; "
 		(if font-style (string-append "font-style: " font-style "; ") "")
 		(if font-weight (string-append "font-weight: " font-weight "; ") "")))

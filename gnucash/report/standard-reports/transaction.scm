@@ -321,6 +321,10 @@ in the Options panel."))
                 (cons 'tip (_ "Show both (and include void transactions in totals)."))))))
 
 (define reconcile-status-list
+  ;; 'filter-types must be either #f (i.e. disable reconcile filter)
+  ;; or a value defined as defined in Query.c
+  ;; e.g. CLEARED-NO for unreconciled
+  ;;      (logior CLEARED-NO CLEARED-CLEARED) for unreconciled & cleared
   (list
    (cons 'all
          (list
@@ -332,19 +336,19 @@ in the Options panel."))
          (list
           (cons 'text (_ "Unreconciled"))
           (cons 'tip (_ "Unreconciled only"))
-          (cons 'filter-types (list #\n))))
+          (cons 'filter-types CLEARED-NO)))
 
    (cons 'cleared
          (list
           (cons 'text (_ "Cleared"))
           (cons 'tip (_ "Cleared only"))
-          (cons 'filter-types (list #\c))))
+          (cons 'filter-types CLEARED-CLEARED)))
 
    (cons 'reconciled
          (list
           (cons 'text (_ "Reconciled"))
           (cons 'tip (_ "Reconciled only"))
-          (cons 'filter-types (list #\y))))))
+          (cons 'filter-types CLEARED-RECONCILED)))))
 
 
 (define ascending-list
@@ -1290,52 +1294,38 @@ tags within description, notes or memo. ")
               (addto! row-contents (gnc:make-html-table-cell/size/markup 1 (+ right-indent width-left-columns) "total-label-cell" string))))
 
         (define (add-columns commodity)
-          (let ((start-dual-column? #f)
-                (dual-subtotal #f))
-            (for-each (lambda (column merge-entry)
-                        (let* ((mon (retrieve-commodity column commodity))
-                               (column-amount (and mon (gnc:gnc-monetary-amount mon)))
-                               (merge? merge-entry))
-                          (if merge?
-                              ;; We're merging. If a subtotal exists, store
-                              ;; it in dual-subtotal. Do NOT add column to row.
-                              (begin
-                                (set! dual-subtotal column-amount)
-                                (set! start-dual-column? #t))
-                              (if start-dual-column?
-                                  (begin
-                                    ;; We've completed merging. Add the negated
-                                    ;; column amount and add the columns to row.
-                                    (if column-amount
-                                        (set! dual-subtotal
-                                          (- (or dual-subtotal 0) column-amount)))
-                                    (cond ((not dual-subtotal)
-                                           (addto! row-contents "")
-                                           (addto! row-contents ""))
-                                          ((positive? dual-subtotal)
-                                           (addto! row-contents
-                                                   (gnc:make-html-table-cell/markup
-                                                    "total-number-cell"
-                                                    (gnc:make-gnc-monetary
-                                                     commodity
-                                                     dual-subtotal)))
-                                           (addto! row-contents ""))
-                                          (else
-                                           (addto! row-contents "")
-                                           (addto! row-contents
-                                                   (gnc:make-html-table-cell/markup
-                                                    "total-number-cell"
-                                                    (gnc:make-gnc-monetary
-                                                     commodity
-                                                     (- dual-subtotal))))))
-                                    (set! start-dual-column? #f)
-                                    (set! dual-subtotal #f))
-                                  ;; Default; not merging/completed merge. Just
-                                  ;; display monetary amount
-                                  (addto! row-contents
-                                          (gnc:make-html-table-cell/markup "total-number-cell" mon))))))
-                      columns
-                      merge-list)))
+          (let loop ((merging? #f)
+                     (last-column #f)
+                     (columns columns)
+                     (merge-list merge-list))
+            (if (not (null? columns))
+                (let* ((mon (retrieve-commodity (car columns) commodity))
+                       (this-column (and mon (gnc:gnc-monetary-amount mon))))
+                  (if (car merge-list)
+                      ;; We're merging. If a subtotal exists, send to next loop iteration.
+                      (loop #t
+                            this-column
+                            (cdr columns)
+                            (cdr merge-list))
+                      (begin
+                        (if merging?
+                            ;; We're completing merge. Display debit-credit in correct column.
+                            (let* ((sum (and (or last-column this-column)
+                                             (- (or last-column 0) (or this-column 0))))
+                                   (sum-table-cell (and sum (gnc:make-html-table-cell/markup
+                                                             "total-number-cell"
+                                                             (gnc:make-gnc-monetary
+                                                              commodity (abs sum)))))
+                                   (debit-col (and sum (positive? sum) sum-table-cell))
+                                   (credit-col (and sum (not (positive? sum)) sum-table-cell)))
+                              (addto! row-contents (or debit-col ""))
+                              (addto! row-contents (or credit-col "")))
+                            ;; Default; not merging nor completed merge. Display monetary amount
+                            (addto! row-contents (gnc:make-html-table-cell/markup "total-number-cell" mon)))
+                        (loop #f
+                              #f
+                              (cdr columns)
+                              (cdr merge-list))))))))
 
         ;; we only wish to add the first column into the grid.
         (if (pair? columns)
@@ -1678,45 +1668,30 @@ tags within description, notes or memo. ")
   (set! grid (grid-del grid row col))           ;we simply delete old data stored at row/col and 
   (set! grid (cons (vector row col data) grid)) ;add again. this is fine because the grid should
   grid)                                         ;never have duplicate data in the trep.
-(define (grid->html grid list-of-rows list-of-cols)
-  (define (cell->html cell)
-    (if (pair? cell)
-        (string-append "<td class=\"number-cell\">"
-                       (string-join (map gnc:monetary->string
-                                         (vector-ref (car cell) 2))
-                                    "<br/>\n")
-                       "</td>\n")
-        "<td></td>\n"))
-  (define (row->html row list-of-cols)
-    (string-append "<tr><td>"
-                   (if (eq? row 'row-total)
-                       (_ "Grand Total")
-                       (cdr row))
-                   "</td>\n"
-                   (string-join (map
-                                 (lambda (col) (cell->html (grid-get grid row col)))
-                                 list-of-cols) "")
-                   (cell->html (grid-get grid row 'col-total))
-                   "</tr>\n"))
-  (string-append "<table class=\"summary-table\"><caption>"
-                 optname-grid
-                 "</caption><thead><tr>"
-                 "<th></th>\n"
-                 (string-join (map (lambda (col)
-                                     (string-append "<th class=\"column-heading-right\">"
-                                                    (cdr col)
-                                                    "</th>\n")) list-of-cols) "")
-                 "<th class=\"column-heading-right\">"
-                 (_ "Total")
-                 "</th>\n</tr>\n</thead><tbody>"
-                 (string-join (map (lambda (row)
-                                     (row->html row list-of-cols))
-                                   list-of-rows) "")
-                 (if (memq 'row-total (grid-rows grid))
-                     (row->html 'row-total list-of-cols)
-                     "")
-                 "</tbody></table>\n"))
-
+(define (grid->html-table grid list-of-rows list-of-cols)
+  (define (make-table-cell row col)
+    (let ((cell (grid-get grid row col)))
+      (if (pair? cell)
+          (gnc:make-html-table-cell/markup "number-cell" (car (vector-ref (car cell) 2)))
+          "")))
+  (define (make-row row)
+    (append
+     (list (if (eq? row 'row-total) (_ "Grand Total") (cdr row)))
+     (map (lambda (col) (make-table-cell row col))
+          list-of-cols)
+     (list (make-table-cell row 'col-total))))
+  (let ((table (gnc:make-html-table)))
+    (gnc:html-table-set-caption! table optname-grid)
+    (gnc:html-table-set-col-headers! table (append (list "") (map cdr list-of-cols) (list (_ "Total"))))
+    (gnc:html-table-set-style! table "th"
+                               'attribute (list "class" "column-heading-right"))
+    (for-each
+     (lambda (row)
+       (gnc:html-table-append-row! table (make-row row)))
+     list-of-rows)
+    (if (memq 'row-total (grid-rows grid))
+        (gnc:html-table-append-row! table (make-row 'row-total)))
+    table))
 
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Here comes the renderer function for this report.
@@ -1757,11 +1732,13 @@ tags within description, notes or memo. ")
   (let* ((document (gnc:make-html-document))
          (account-matcher (opt-val pagename-filter optname-account-matcher))
          (account-matcher-regexp (and (opt-val pagename-filter optname-account-matcher-regex)
-                                      (make-regexp account-matcher)))
+                                      (catch 'regular-expression-syntax
+                                        (lambda () (make-regexp account-matcher))
+                                        (const 'invalid-regex))))
          (c_account_0 (opt-val gnc:pagename-accounts optname-accounts))
          (c_account_1 (filter
                        (lambda (acc)
-                         (if account-matcher-regexp
+                         (if (regexp? account-matcher-regexp)
                              (regexp-exec account-matcher-regexp (gnc-account-get-full-name acc))
                              (string-contains (gnc-account-get-full-name acc) account-matcher)))
                        c_account_0))
@@ -1775,7 +1752,9 @@ tags within description, notes or memo. ")
                     (opt-val gnc:pagename-general optname-enddate))))
          (transaction-matcher (opt-val pagename-filter optname-transaction-matcher))
          (transaction-matcher-regexp (and (opt-val pagename-filter optname-transaction-matcher-regex)
-                                          (make-regexp transaction-matcher)))
+                                          (catch 'regular-expression-syntax
+                                            (lambda () (make-regexp transaction-matcher))
+                                            (const 'invalid-regex))))
          (reconcile-status-filter (keylist-get-info reconcile-status-list
                                                     (opt-val pagename-filter optname-reconcile-status)
                                                     'filter-types))
@@ -1848,7 +1827,9 @@ tags within description, notes or memo. ")
       (generic-less? X Y 'date 'none #t))
 
 
-    (if (or (null? c_account_1) (and-map not c_account_1))
+    (if (or (or (null? c_account_1) (and-map not c_account_1))
+            (eq? account-matcher-regexp 'invalid-regex)
+            (eq? transaction-matcher-regexp 'invalid-regex))
 
         ;; error condition: no accounts specified or obtained after filtering
         (begin
@@ -1879,6 +1860,8 @@ tags within description, notes or memo. ")
             ((non-void-only) (gnc:query-set-match-non-voids-only! query (gnc-get-current-book)))
             ((void-only)     (gnc:query-set-match-voids-only! query (gnc-get-current-book)))
             (else #f))
+          (if reconcile-status-filter
+              (xaccQueryAddClearedMatch query reconcile-status-filter QOF-QUERY-AND))
           (if (not custom-sort?)
               (begin
                 (qof-query-set-sort-order query
@@ -1906,7 +1889,6 @@ tags within description, notes or memo. ")
           ;; - include/exclude splits to/from selected accounts
           ;; - substring/regex matcher for Transaction Description/Notes/Memo
           ;; - custom-split-filter, a split->bool function for derived reports
-          ;; - by reconcile status
           (set! splits (filter
                         (lambda (split)
                           (let* ((trans (xaccSplitGetParent split))
@@ -1924,9 +1906,7 @@ tags within description, notes or memo. ")
                                      (match? (xaccSplitGetMemo split)))
                                  (or (not custom-split-filter)     ; #f = ignore custom-split-filter
                                      (custom-split-filter split))
-                                 (or (not reconcile-status-filter) ; #f = ignore reconcile-status-filter
-                                     (memv (xaccSplitGetReconcile split)
-                                           reconcile-status-filter)))))
+                                 )))
                         splits))
 
           (if (null? splits)
@@ -1967,7 +1947,7 @@ tags within description, notes or memo. ")
                            (list-of-rows (stable-sort! (delete 'row-total (grid-rows grid)) generic<?))
                            (list-of-cols (stable-sort! (delete 'col-total (grid-cols grid)) generic<?)))
                       (gnc:html-document-add-object!
-                       document (grid->html grid list-of-rows list-of-cols))))
+                       document (grid->html-table grid list-of-rows list-of-cols))))
 
                 (if (eq? infobox-display 'always)
                     (gnc:html-document-add-object!
