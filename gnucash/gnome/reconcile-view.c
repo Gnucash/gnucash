@@ -1,7 +1,7 @@
 /********************************************************************\
  * reconcile-view.c -- A view of accounts to be reconciled for      *
  *                     GnuCash.                                     *
- * Copyright (C) 1998,1999 Jeremy Collins	                    *
+ * Copyright (C) 1998,1999 Jeremy Collins                           *
  * Copyright (C) 1998-2000 Linas Vepstas                            *
  * Copyright (C) 2012 Robert Fewell                                 *
  *                                                                  *
@@ -65,7 +65,7 @@ static void gnc_reconcile_view_double_click_entry (GNCQueryView *qview, gpointer
 static void gnc_reconcile_view_row_selected (GNCQueryView *qview, gpointer item, gpointer user_data);
 static gboolean gnc_reconcile_view_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 static gboolean gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y, gboolean keyboard_mode,
-					 GtkTooltip* tooltip, gpointer* user_data);
+                     GtkTooltip* tooltip, gpointer* user_data);
 
 GType
 gnc_reconcile_view_get_type (void)
@@ -97,7 +97,7 @@ gnc_reconcile_view_get_type (void)
 
 static gboolean
 gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
-	gboolean keyboard_mode, GtkTooltip *tooltip, gpointer *user_data)
+    gboolean keyboard_mode, GtkTooltip *tooltip, gpointer *user_data)
 {
     GtkTreeModel* model;
     GtkTreeIter iter;
@@ -108,7 +108,7 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
         GtkTreeViewColumn *col;
         GList *cols;
         gint col_pos, col_width;
-	gchar* desc_text = NULL;
+        gchar* desc_text = NULL;
 
         /* Are we in keyboard tooltip mode, displays tooltip below/above treeview CTRL+F1 */
         if (keyboard_mode == FALSE)
@@ -170,7 +170,6 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
                 device_manager = gdk_display_get_device_manager (gdk_window_get_display (parent_window));
                 pointer = gdk_device_manager_get_client_pointer (device_manager);
 #endif
-
                 gdk_window_get_device_position (parent_window, pointer, &cur_x, &cur_y, NULL);
 
                 gdk_window_get_origin (parent_window, &root_x, &root_y);
@@ -189,7 +188,7 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
                 }
                 g_list_free (win_list);
 
-	        gtk_tooltip_set_text (tooltip, desc_text);
+                gtk_tooltip_set_text (tooltip, desc_text);
 
                 if (GTK_IS_WINDOW (tip_win))
                 {
@@ -214,7 +213,6 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
                     monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
                     gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
 #endif
-
                     if (x + requisition.width > monitor.x + monitor.width)
                         x -= x - (monitor.x + monitor.width) + requisition.width;
                     else if (x < monitor.x)
@@ -226,9 +224,9 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
                     gtk_window_move (tip_win, x, y);
                 }
             }
-	    gtk_tooltip_set_text (tooltip, desc_text);
+            gtk_tooltip_set_text (tooltip, desc_text);
             g_free (desc_text);
-	    return TRUE;
+            return TRUE;
         }
     }
     return FALSE;
@@ -365,8 +363,8 @@ gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
             g_assert (recn == NREC || recn == CREC);
 
             if (recn == CREC &&
-		gnc_difftime (trans_date, statement_date_day_end) <= 0)
-		g_hash_table_insert (view->reconciled, split, split);
+        gnc_difftime (trans_date, statement_date_day_end) <= 0)
+        g_hash_table_insert (view->reconciled, split, split);
         }
     }
 
@@ -675,7 +673,7 @@ gnc_reconcile_view_set_list ( GNCReconcileView  *view, gboolean reconcile)
 }
 
 
-gint 
+gint
 gnc_reconcile_view_num_selected (GNCReconcileView  *view )
 {
     GNCQueryView      *qview = GNC_QUERY_VIEW(view);
@@ -950,7 +948,7 @@ gnc_reconcile_view_postpone (GNCReconcileView *view)
         // Don't change splits past reconciliation date that haven't been
         // set to be reconciled
         if (gnc_difftime (view->statement_date,
-			  xaccTransGetDate (xaccSplitGetParent (entry))) >= 0 ||
+              xaccTransGetDate (xaccSplitGetParent (entry))) >= 0 ||
                 g_hash_table_lookup (view->reconciled, entry))
         {
             recn = g_hash_table_lookup (view->reconciled, entry) ? CREC : NREC;
@@ -994,4 +992,3 @@ gnc_reconcile_view_changed (GNCReconcileView *view)
 
     return g_hash_table_size (view->reconciled) != 0;
 }
-

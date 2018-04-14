@@ -131,12 +131,12 @@ typedef struct _startRecnWindowData
  */
 #define account_type_has_auto_interest_charge(type)  (((type) == ACCT_TYPE_CREDIT) || \
                                                       ((type) == ACCT_TYPE_LIABILITY) ||\
-						      ((type) == ACCT_TYPE_PAYABLE))
+                              ((type) == ACCT_TYPE_PAYABLE))
 
 #define account_type_has_auto_interest_payment(type) (((type) == ACCT_TYPE_BANK)  || \
                                                       ((type) == ACCT_TYPE_ASSET) || \
                                                       ((type) == ACCT_TYPE_MUTUAL) || \
-						      ((type) == ACCT_TYPE_RECEIVABLE))
+                              ((type) == ACCT_TYPE_RECEIVABLE))
 
 #define account_type_has_auto_interest_xfer(type) \
   (  account_type_has_auto_interest_charge(type) || \
@@ -480,7 +480,8 @@ recnInterestXferWindow( startRecnWindowData *data)
 {
     gchar *title;
 
-    if ( !account_type_has_auto_interest_xfer( data->account_type ) ) return;
+    if ( !account_type_has_auto_interest_xfer( data->account_type ) )
+        return;
 
     /* get a normal transfer dialog... */
     data->xferData = gnc_xfer_dialog( GTK_WIDGET(data->startRecnWindow),
