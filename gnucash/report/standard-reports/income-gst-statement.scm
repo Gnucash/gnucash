@@ -216,7 +216,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                        (lambda (a) ""))))
      (if (opt-val gnc:pagename-display (N_ "Individual tax columns"))
          (map (lambda (acc) (vector (xaccAccountGetName acc)
-                                    (account-adder acc)
+                                    (account-adder-neg acc)
                                     #t #t #f
                                     (lambda (a) "")))
               accounts-tax-collected)
