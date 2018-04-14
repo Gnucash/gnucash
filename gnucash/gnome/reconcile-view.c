@@ -262,7 +262,7 @@ gnc_reconcile_view_construct (GNCReconcileView *view, Query *query)
     gnc_query_view_set_numerics (qview, TRUE, inv_sort);
 
     /* Set the description field to have spare space */
-    col = gtk_tree_view_get_column (GTK_TREE_VIEW (qview), 2);
+    col = gtk_tree_view_get_column (GTK_TREE_VIEW (qview), 3);
     gtk_tree_view_column_set_expand (col, TRUE);
 
     /* Get the renderer of the description column and set ellipsize value */
@@ -310,8 +310,8 @@ gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
 
     /* Create the list store with 6 columns and add to treeview,
        column 0 will be a pointer to the entry */
-    liststore = gtk_list_store_new (6, G_TYPE_POINTER, G_TYPE_STRING, 
-                G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN );
+    liststore = gtk_list_store_new (6, G_TYPE_POINTER, G_TYPE_BOOLEAN,
+                G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING );
     gtk_tree_view_set_model (GTK_TREE_VIEW (view), GTK_TREE_MODEL (liststore));
     g_object_unref (liststore);
 
@@ -389,14 +389,6 @@ gnc_reconcile_view_init (GNCReconcileView *view)
     view->account = NULL;
     view->sibling = NULL;
 
-    param = gnc_search_param_simple_new();
-    gnc_search_param_set_param_fcn (param, QOF_TYPE_BOOLEAN,
-                                    gnc_reconcile_view_is_reconciled, view);
-    gnc_search_param_set_title ((GNCSearchParam *) param, _("Reconciled:R") + 11);
-    gnc_search_param_set_justify ((GNCSearchParam *) param, GTK_JUSTIFY_CENTER);
-    gnc_search_param_set_passive ((GNCSearchParam *) param, TRUE);
-    gnc_search_param_set_non_resizeable ((GNCSearchParam *) param, TRUE);
-    columns = g_list_prepend (columns, param);
     columns = gnc_search_param_prepend_with_justify (columns, _("Amount"),
               GTK_JUSTIFY_RIGHT,
               NULL, GNC_ID_SPLIT,
@@ -415,6 +407,15 @@ gnc_reconcile_view_init (GNCReconcileView *view)
               SPLIT_TRANS, TRANS_NUM, NULL);
     columns = gnc_search_param_prepend (columns, _("Date"), NULL, GNC_ID_SPLIT,
                                         SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
+
+    param = gnc_search_param_simple_new();
+    gnc_search_param_set_param_fcn (param, QOF_TYPE_BOOLEAN,
+                                    gnc_reconcile_view_is_reconciled, view);
+    gnc_search_param_set_title ((GNCSearchParam *) param, _("Reconciled:R") + 11);
+    gnc_search_param_set_justify ((GNCSearchParam *) param, GTK_JUSTIFY_CENTER);
+    gnc_search_param_set_passive ((GNCSearchParam *) param, TRUE);
+    gnc_search_param_set_non_resizeable ((GNCSearchParam *) param, TRUE);
+    columns = g_list_prepend (columns, param);
 
     view->column_list = columns;
 }
@@ -546,8 +547,8 @@ gnc_reconcile_view_toggle_children (Account *account, GNCReconcileView *view, Sp
             if(pointer == other_split)
             {
                 gboolean toggled;
-                gtk_tree_model_get (model, &iter, 5, &toggled, -1);
-                gtk_list_store_set (GTK_LIST_STORE (model), &iter, 5, !toggled, -1);
+                gtk_tree_model_get (model, &iter, 1, &toggled, -1);
+                gtk_list_store_set (GTK_LIST_STORE (model), &iter, 1, !toggled, -1);
                 break;
             }
 
@@ -661,9 +662,9 @@ gnc_reconcile_view_set_list ( GNCReconcileView  *view, gboolean reconcile)
         {
             /* now iter is a valid row iterator */
             gtk_tree_model_get (model, &iter, 0, &entry, -1);
-            gtk_tree_model_get (model, &iter, 5, &toggled, -1);
+            gtk_tree_model_get (model, &iter, 1, &toggled, -1);
 
-            gtk_list_store_set (GTK_LIST_STORE (model), &iter, 5, reconcile, -1);
+            gtk_list_store_set (GTK_LIST_STORE (model), &iter, 1, reconcile, -1);
 
             if(reconcile != toggled)
                 gnc_reconcile_view_toggle (view, entry);
@@ -710,7 +711,7 @@ gnc_reconcile_view_set_toggle (GNCReconcileView  *view)
         if(gtk_tree_model_get_iter(model, &iter, node->data))
         {
             /* now iter is a valid row iterator */
-            gtk_tree_model_get (model, &iter, 5, &toggled, -1);
+            gtk_tree_model_get (model, &iter, 1, &toggled, -1);
 
             if(toggled)
                 num_toggled++;
