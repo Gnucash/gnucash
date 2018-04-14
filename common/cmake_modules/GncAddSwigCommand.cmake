@@ -14,7 +14,7 @@
 #   when building from git, it points to the actually generated file
 #   however when building from a tarball, it will point to the version from the tarball instead
 # - _output is the name of the wrapper file to generate (or to look up in the tarball)
-# - input it the swig interface file (*.i) to generate this wrapper from
+# - _input is the swig interface file (*.i) to generate this wrapper from
 # Any additional parameters will be used as dependencies for this wrapper target
 macro (gnc_add_swig_guile_command _target _out_var _output _input)
 
@@ -55,7 +55,7 @@ endmacro (gnc_add_swig_guile_command)
 # - _py_out_var is the same but for the python module that's generated together with the wrapper
 # - _output is the name of the wrapper file to generate (or to look up in the tarball)
 # - _py_output is the name of the python module associated with this wrapper
-# - input it the swig interface file (*.i) to generate this wrapper from
+# - _input is the swig interface file (*.i) to generate this wrapper from
 # Any additional parameters will be used as dependencies for this wrapper target
 macro (gnc_add_swig_python_command _target _out_var _py_out_var _output _py_output _input)
 
