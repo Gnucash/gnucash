@@ -630,7 +630,9 @@ tags within description, notes or memo. ")
         (gnc-option-db-set-option-selectable-by-name
          options pagename-sorting optname-show-subtotals-only
          (or (and prime-sortkey-subtotal-enabled prime-sortkey-subtotal-true)
-             (and sec-sortkey-subtotal-enabled sec-sortkey-subtotal-true)))
+             (and sec-sortkey-subtotal-enabled sec-sortkey-subtotal-true)
+             prime-date-sortingtype-enabled
+             sec-date-sortingtype-enabled))
 
         (gnc-option-db-set-option-selectable-by-name
          options pagename-sorting optname-show-informal-headers
