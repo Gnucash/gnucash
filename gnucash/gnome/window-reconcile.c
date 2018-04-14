@@ -1662,7 +1662,7 @@ recnWindow (GtkWidget *parent, Account *account)
             enable_subaccounts))
         return NULL;
 
-    return recnWindowWithBalance (parent, account, new_ending, statement_date);
+    return recnWindowWithBalance (account, new_ending, statement_date);
 }
 
 
@@ -1682,15 +1682,14 @@ recnWindow_add_widget (GtkUIManager *merge,
  *   Opens up the window to reconcile an account, but with ending
  *   balance and statement date already given.
  *
- * Args:   parent         - The parent widget of the new window
- *         account        - The account to reconcile
+ * Args:   account        - The account to reconcile
  *         new_ending     - The amount for ending balance
  *         statement_date - The date of the statement
  * Return: recnData - the instance of this RecnWindow
 \********************************************************************/
 RecnWindow *
-recnWindowWithBalance (GtkWidget *parent, Account *account,
-                       gnc_numeric new_ending, time64 statement_date)
+recnWindowWithBalance (Account *account, gnc_numeric new_ending,
+                       time64 statement_date)
 {
     RecnWindow *recnData;
     GtkWidget *statusbar;
@@ -1924,8 +1923,6 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
 
     /* Allow resize */
     gtk_window_set_resizable(GTK_WINDOW(recnData->window), TRUE);
-    gtk_window_set_transient_for(GTK_WINDOW(recnData->window),
-                                 GTK_WINDOW (parent));
     gtk_widget_show_all(recnData->window);
 
     gnc_reconcile_window_set_titles(recnData);
