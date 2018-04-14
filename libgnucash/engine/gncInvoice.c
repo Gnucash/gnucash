@@ -1859,7 +1859,7 @@ gncInvoiceApplyPayment (const GncInvoice *invoice, Transaction *txn,
 gboolean gncInvoiceIsPosted (const GncInvoice *invoice)
 {
     if (!invoice) return FALSE;
-    return GNC_IS_ACCOUNT(gncInvoiceGetPostedAcc(invoice));
+    return GNC_IS_TRANSACTION(gncInvoiceGetPostedTxn(invoice));
 }
 
 gboolean gncInvoiceIsPaid (const GncInvoice *invoice)

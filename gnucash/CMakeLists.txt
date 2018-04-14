@@ -59,6 +59,10 @@ ADD_DEPENDENCIES (gnucash gnucash-manpage)
 
 TARGET_COMPILE_DEFINITIONS(gnucash PRIVATE -DG_LOG_DOMAIN=\"gnc.bin\")
 
+if (BUILDING_FROM_VCS)
+  TARGET_COMPILE_DEFINITIONS(gncmod-gnome-utils PRIVATE -DGNC_VCS=\"git\")
+endif (BUILDING_FROM_VCS)
+
 TARGET_LINK_LIBRARIES (gnucash
    gncmod-ledger-core gncmod-report-gnome gnc-gnome gncmod-gnome-utils gncmod-app-utils
    gncmod-engine gnc-module gnc-core-utils gncmod-report-system

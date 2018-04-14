@@ -102,7 +102,11 @@ GncTransPropType sanitize_trans_prop (GncTransPropType prop, bool multi_split)
  */
 GncNumeric parse_amount (const std::string &str, int currency_format)
 {
-    /* If a cell is empty or just spaces return invalid amount */
+    /* An empty field is treated as zero */
+    if (str.empty())
+        return GncNumeric{};
+
+    /* Strings otherwise containing not digits will be considered invalid */
     if(!boost::regex_search(str, boost::regex("[0-9]")))
         throw std::invalid_argument (_("Value doesn't appear to contain a valid number."));
 
@@ -620,7 +624,7 @@ void GncPreSplit::create_split (Transaction* trans)
     if (m_withdrawal)
         withdrawal = *m_withdrawal;
 
-    amount = deposit + withdrawal;
+    amount = deposit - withdrawal;
 
     /* Add a split with the cumulative amount value. */
     trans_add_split (trans, account, amount, m_action, m_memo, m_rec_state, m_rec_date, m_price);

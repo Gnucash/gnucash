@@ -790,17 +790,14 @@ void GncTxImport::update_pre_split_props (uint32_t row, uint32_t col, GncTransPr
         return; /* Only deal with split related properties. */
 
     auto split_props = std::get<PL_PRESPLIT>(m_parsed_lines[row]);
-    auto value = std::string();
 
-    if (col < std::get<PL_INPUT>(m_parsed_lines[row]).size())
-        value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col);
-
-    if (value.empty())
+    if (col == std::get<PL_INPUT>(m_parsed_lines[row]).size())
         split_props->reset (prop_type);
     else
     {
         try
         {
+            auto value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col);
             split_props->set(prop_type, value);
         }
         catch (const std::exception& e)

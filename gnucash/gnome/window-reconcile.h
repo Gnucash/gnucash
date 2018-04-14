@@ -52,14 +52,12 @@ RecnWindow *recnWindow (GtkWidget *parent, Account *account);
  *   Opens up the window to reconcile an account, but with ending
  *   balance and statement date already given.
  *
- * Args:   parent         - The parent widget of the new window
- *         account        - The account to reconcile
+ * Args:   account        - The account to reconcile
  *         new_ending     - The amount for ending balance
  *         statement_date - The date of the statement
  * Return: recnData - the instance of this RecnWindow
 \********************************************************************/
-RecnWindow *recnWindowWithBalance (GtkWidget *parent,
-                                   Account *account,
+RecnWindow *recnWindowWithBalance (Account *account,
                                    gnc_numeric new_ending,
                                    time64 statement_date);
 

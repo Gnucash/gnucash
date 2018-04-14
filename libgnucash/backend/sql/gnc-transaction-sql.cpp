@@ -64,7 +64,6 @@ extern "C"
 #include "gnc-slots-sql.h"
 
 #define SIMPLE_QUERY_COMPILATION 1
-#define LOAD_TRANSACTIONS_AS_NEEDED 0
 
 static QofLogModule log_module = G_LOG_DOMAIN;
 
@@ -248,33 +247,36 @@ load_single_split (GncSqlBackend* sql_be, GncSqlRow& row)
     }
     return pSplit;
 }
-
 static void
-load_splits_for_tx_list (GncSqlBackend* sql_be, InstanceVec& transactions)
+load_splits_for_transactions (GncSqlBackend* sql_be, std::string selector)
 {
     g_return_if_fail (sql_be != NULL);
 
-    std::stringstream sql;
+    const std::string spkey(split_col_table[0]->name());
+    const std::string sskey(tx_guid_col_table[0]->name());
+    const std::string tpkey(tx_col_table[0]->name());
 
-    sql << "SELECT * FROM " << SPLIT_TABLE << " WHERE " <<
-        tx_guid_col_table[0]->name() << " IN (";
-    gnc_sql_append_guids_to_sql (sql, transactions);
-    sql << ")";
+    std::string sql("SELECT ");
+    if (selector.empty())
+    {
+	sql += SPLIT_TABLE ".* FROM " SPLIT_TABLE " INNER JOIN "
+	    TRANSACTION_TABLE " WHERE " SPLIT_TABLE "." + sskey + " = "
+	    TRANSACTION_TABLE "." + tpkey;
+	selector = "(SELECT DISTINCT " + tpkey + " FROM " TRANSACTION_TABLE ")";
+    }
+    else
+	sql += " * FROM " SPLIT_TABLE " WHERE " + sskey + " IN " + selector;
 
     // Execute the query and load the splits
-    auto stmt = sql_be->create_statement_from_sql(sql.str());
+    auto stmt = sql_be->create_statement_from_sql(sql);
     auto result = sql_be->execute_select_statement (stmt);
-    InstanceVec instances;
 
     for (auto row : *result)
-    {
         Split* s = load_single_split (sql_be, row);
-        if (s != nullptr)
-            instances.push_back(QOF_INSTANCE(s));
-    }
-
-    if (!instances.empty())
-        gnc_sql_slots_load_for_instancevec (sql_be, instances);
+    sql = "SELECT DISTINCT ";
+    sql += spkey + " FROM " SPLIT_TABLE " WHERE " + sskey + " IN " + selector;
+    gnc_sql_slots_load_for_sql_subquery(sql_be, sql,
+					(BookLookupFn)xaccSplitLookup);
 }
 
 static  Transaction*
@@ -338,32 +340,30 @@ typedef struct
  * @param stmt SQL statement
  */
 static void
-query_transactions (GncSqlBackend* sql_be, const GncSqlStatementPtr& stmt)
+query_transactions (GncSqlBackend* sql_be, std::string selector)
 {
     g_return_if_fail (sql_be != NULL);
-    g_return_if_fail (stmt != NULL);
 
+    const std::string tpkey(tx_col_table[0]->name());
+    std::string sql("SELECT * FROM " TRANSACTION_TABLE);
+
+    if (!selector.empty() && selector[0] == '(')
+	sql += " WHERE " + tpkey + " IN " + selector;
+    else if (!selector.empty()) // plain condition
+	sql += " WHERE " + selector;
+    auto stmt = sql_be->create_statement_from_sql(sql);
     auto result = sql_be->execute_select_statement(stmt);
     if (result->begin() == result->end())
+    {
+	PINFO("Query %s returned no results", sql.c_str());
         return;
-
+    }
+    
     Transaction* tx;
-#if LOAD_TRANSACTIONS_AS_NEEDED
-    GSList* bal_list = NULL;
-    Account* root = gnc_book_get_root_account (sql_be->book());
-
-    qof_event_suspend ();
-    xaccAccountBeginEdit (root);
-
-    // Save the start/ending balances (balance, cleared and reconciled) for
-    // every account.
-    gnc_account_foreach_descendant (gnc_book_get_root_account (sql_be->primary_book),
-                                    save_account_balances,
-                                    &bal_list);
-#endif
 
     // Load the transactions
     InstanceVec instances;
+    instances.reserve(result->size());
     for (auto row : *result)
     {
         tx = load_single_tx (sql_be, row);
@@ -377,78 +377,23 @@ query_transactions (GncSqlBackend* sql_be, const GncSqlStatementPtr& stmt)
     // Load all splits and slots for the transactions
     if (!instances.empty())
     {
-        gnc_sql_slots_load_for_instancevec (sql_be, instances);
-        load_splits_for_tx_list (sql_be, instances);
+	const std::string tpkey(tx_col_table[0]->name());
+	if (selector.empty())
+	{
+	    selector = "(SELECT DISTINCT ";
+	    selector += tpkey + " FROM " TRANSACTION_TABLE +")";
+	}
+        load_splits_for_transactions (sql_be, selector);
+        gnc_sql_slots_load_for_sql_subquery (sql_be, selector,
+					     (BookLookupFn)xaccTransLookup);
     }
 
     // Commit all of the transactions
     for (auto instance : instances)
          xaccTransCommitEdit(GNC_TRANSACTION(instance));
 
-#if LOAD_TRANSACTIONS_AS_NEEDED
-    // Update the account balances based on the loaded splits.  If the end
-    // balance has changed, update the start balance so that the end
-    // balance is the same as it was before the splits were loaded.
-    // Repeat for cleared and reconciled balances.
-    for (auto nextbal = bal_list; nextbal != NULL; nextbal = nextbal->next)
-    {
-        full_acct_balances_t* balns = (full_acct_balances_t*)nextbal->data;
-        gnc_numeric* pnew_end_bal;
-        gnc_numeric* pnew_end_c_bal;
-        gnc_numeric* pnew_end_r_bal;
-        gnc_numeric adj;
-
-        g_object_get (balns->acc,
-                      "end-balance", &pnew_end_bal,
-                      "end-cleared-balance", &pnew_end_c_bal,
-                      "end-reconciled-balance", &pnew_end_r_bal,
-                      NULL);
-
-        qof_instance_increase_editlevel (balns - acc);
-        if (!gnc_numeric_eq (*pnew_end_bal, balns->end_bal))
-        {
-            adj = gnc_numeric_sub (balns->end_bal, *pnew_end_bal,
-                                   GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-            balns->start_bal = gnc_numeric_add (balns->start_bal, adj,
-                                                GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-            g_object_set (balns->acc, "start-balance", &balns->start_bal, NULL);
-            qof_instance_decrease_editlevel (balns - acc);
-        }
-        if (!gnc_numeric_eq (*pnew_end_c_bal, balns->end_cleared_bal))
-        {
-            adj = gnc_numeric_sub (balns->end_cleared_bal, *pnew_end_c_bal,
-                                   GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-            balns->start_cleared_bal = gnc_numeric_add (balns->start_cleared_bal, adj,
-                                                        GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-            g_object_set (balns->acc, "start-cleared-balance", &balns->start_cleared_bal,
-                          NULL);
-        }
-        if (!gnc_numeric_eq (*pnew_end_r_bal, balns->end_reconciled_bal))
-        {
-            adj = gnc_numeric_sub (balns->end_reconciled_bal, *pnew_end_r_bal,
-                                   GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-            balns->start_reconciled_bal = gnc_numeric_add (balns->start_reconciled_bal,
-                                                           adj,
-                                                           GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-            g_object_set (balns->acc, "start-reconciled-balance",
-                          &balns->start_reconciled_bal, NULL);
-        }
-        qof_instance_decrease_editlevel (balns - acc);
-        xaccAccountRecomputeBalance (balns->acc);
-        g_free (pnew_end_bal);
-        g_free (pnew_end_c_bal);
-        g_free (pnew_end_r_bal);
-        g_free (balns);
-    }
-    if (bal_list != NULL)
-    {
-        g_slist_free (bal_list);
-    }
-
-    xaccAccountCommitEdit (root);
-    qof_event_resume ();
-#endif
 }
+
 
 /* ================================================================= */
 /**
@@ -748,16 +693,15 @@ void gnc_sql_transaction_load_tx_for_account (GncSqlBackend* sql_be,
     g_return_if_fail (account != NULL);
 
     guid = qof_instance_get_guid (QOF_INSTANCE (account));
-    (void)guid_to_string_buff (guid, guid_buf);
-    query_sql = g_strdup_printf (
-                    "SELECT DISTINCT t.* FROM %s AS t, %s AS s WHERE s.tx_guid=t.guid AND s.account_guid ='%s'",
-                    TRANSACTION_TABLE, SPLIT_TABLE, guid_buf);
-    auto stmt = sql_be->create_statement_from_sql(query_sql);
-    g_free (query_sql);
-    if (stmt != nullptr)
-    {
-        query_transactions (sql_be, stmt);
-    }
+
+    const std::string tpkey(tx_col_table[0]->name());    //guid
+    const std::string spkey(split_col_table[0]->name()); //guid
+    const std::string stkey(split_col_table[1]->name()); //txn_guid
+    const std::string sakey(split_col_table[2]->name()); //account_guid
+    std::string sql("(SELECT DISTINCT ");
+    sql += stkey + " FROM " SPLIT_TABLE " WHERE " + sakey + " = '";
+    sql += gnc::GUID(*guid).to_string() + "')";
+    query_transactions (sql_be, sql);
 }
 
 /**
@@ -770,14 +714,7 @@ void
 GncSqlTransBackend::load_all (GncSqlBackend* sql_be)
 {
     g_return_if_fail (sql_be != NULL);
-
-    auto query_sql = g_strdup_printf ("SELECT * FROM %s", TRANSACTION_TABLE);
-    auto stmt = sql_be->create_statement_from_sql(query_sql);
-    g_free (query_sql);
-    if (stmt != nullptr)
-    {
-        query_transactions (sql_be, stmt);
-    }
+    query_transactions (sql_be, "");
 }
 
 static void
@@ -948,199 +885,6 @@ typedef struct
     gboolean has_been_run;
 } split_query_info_t;
 
-#define TX_GUID_CHECK 0
-
-G_GNUC_UNUSED static  gpointer
-compile_split_query (GncSqlBackend* sql_be, QofQuery* query)
-{
-    split_query_info_t* query_info = NULL;
-    gchar* query_sql;
-
-    g_return_val_if_fail (sql_be != NULL, NULL);
-    g_return_val_if_fail (query != NULL, NULL);
-
-    query_info = static_cast<decltype (query_info)> (
-                     g_malloc (sizeof (split_query_info_t)));
-    g_assert (query_info != NULL);
-    query_info->has_been_run = FALSE;
-
-    if (qof_query_has_terms (query))
-    {
-        GList* orterms = qof_query_get_terms (query);
-        GList* orTerm;
-        std::stringstream sql;
-        gboolean need_OR = FALSE;
-
-        for (orTerm = orterms; orTerm != NULL; orTerm = orTerm->next)
-        {
-            GList* andterms = (GList*)orTerm->data;
-            GList* andTerm;
-            gboolean need_AND = FALSE;
-#if TX_GUID_CHECK
-            gboolean has_tx_guid_check = FALSE;
-#endif
-            if (need_OR)
-            {
-                sql << " OR ";
-            }
-            sql << "(";
-            for (andTerm = andterms; andTerm != NULL; andTerm = andTerm->next)
-            {
-                QofQueryTerm* term;
-                GSList* paramPath;
-                gboolean unknownPath = FALSE;
-
-                term = (QofQueryTerm*)andTerm->data;
-                paramPath = qof_query_term_get_param_path (term);
-                const char* path = static_cast<decltype (path)> (paramPath->data);
-                const char* next_path =
-                    static_cast<decltype (next_path)> (paramPath->next->data);
-                if (strcmp (path, QOF_PARAM_BOOK) == 0) continue;
-
-#if SIMPLE_QUERY_COMPILATION
-                if (strcmp (path, SPLIT_ACCOUNT) != 0 ||
-                    strcmp (next_path, QOF_PARAM_GUID) != 0) continue;
-#endif
-
-                if (need_AND) sql<< " AND ";
-
-                if (strcmp (path, SPLIT_ACCOUNT) == 0 &&
-                    strcmp (next_path, QOF_PARAM_GUID) == 0)
-                {
-                    convert_query_term_to_sql (sql_be, "s.account_guid", term,
-                                               sql);
-#if SIMPLE_QUERY_COMPILATION
-                    goto done_compiling_query;
-#endif
-
-                }
-                else if (strcmp (path, SPLIT_RECONCILE) == 0)
-                {
-                    convert_query_term_to_sql (sql_be, "s.reconcile_state",
-                                               term, sql);
-
-                }
-                else if (strcmp (path, SPLIT_TRANS) == 0)
-                {
-#if TX_GUID_CHECK
-                    if (!has_tx_guid_check)
-                    {
-                        sql << "(splits.tx_guid = transactions.guid) AND ");
-                        has_tx_guid_check = TRUE;
-                    }
-#endif
-                    if (strcmp (next_path, TRANS_DATE_POSTED) == 0)
-                    {
-                        convert_query_term_to_sql (sql_be, "t.post_date", term,
-                                                   sql);
-                    }
-                    else if (strcmp (next_path, TRANS_DESCRIPTION) == 0)
-                    {
-                        convert_query_term_to_sql (sql_be, "t.description",
-                                                   term, sql);
-                    }
-                    else
-                    {
-                        unknownPath = TRUE;
-                    }
-
-                }
-                else if (strcmp (path, SPLIT_VALUE) == 0)
-                {
-                    convert_query_term_to_sql (sql_be,
-                                               "s.value_num/s.value_denom",
-                                               term, sql);
-                }
-                else
-                {
-                    unknownPath = TRUE;
-                }
-
-                if (unknownPath)
-                {
-                    std::stringstream name;
-                    name << static_cast<char*>(paramPath->data);
-                    for (;paramPath->next != NULL; paramPath = paramPath->next)
-                    {
-                        next_path =
-                            static_cast<decltype (next_path)>(paramPath->next->data);
-                        name << "." << next_path;
-                    }
-                    PERR ("Unknown SPLIT query field: %s\n",
-                          name.str().c_str());
-                }
-                need_AND = TRUE;
-            }
-
-            /* If the last char in the string is a '(', then for some reason, there were
-               no terms added to the SQL.  If so, remove it and ignore the OR term. */
-        if (!sql.str().empty() && sql.str().back() == '(')
-            {
-                sql.str().erase(sql.str().back());
-                need_OR = FALSE;
-            }
-            else
-            {
-                sql << ")";
-                need_OR = TRUE;
-            }
-        }
-
-#if SIMPLE_QUERY_COMPILATION
-done_compiling_query:
-#endif
-    if (!sql.str().empty())
-        {
-#if SIMPLE_QUERY_COMPILATION
-            sql<< ")";
-#endif
-            query_sql = g_strdup_printf (
-                            "SELECT DISTINCT t.* FROM %s AS t, %s AS s WHERE s.tx_guid=t.guid AND %s",
-                            TRANSACTION_TABLE, SPLIT_TABLE, sql.str().c_str());
-        }
-        else
-        {
-            query_sql = g_strdup_printf ("SELECT * FROM %s", TRANSACTION_TABLE);
-        }
-        query_info->stmt = sql_be->create_statement_from_sql(query_sql);
-        g_free (query_sql);
-
-    }
-    else
-    {
-        query_sql = g_strdup_printf ("SELECT * FROM %s", TRANSACTION_TABLE);
-        query_info->stmt = sql_be->create_statement_from_sql(query_sql);
-        g_free (query_sql);
-    }
-
-    return query_info;
-}
-
-G_GNUC_UNUSED static void
-run_split_query (GncSqlBackend* sql_be, gpointer pQuery)
-{
-    split_query_info_t* query_info = (split_query_info_t*)pQuery;
-
-    g_return_if_fail (sql_be != NULL);
-    g_return_if_fail (pQuery != NULL);
-
-    if (!query_info->has_been_run)
-    {
-        query_transactions (sql_be, query_info->stmt);
-        query_info->has_been_run = TRUE;
-        query_info->stmt = nullptr;
-    }
-}
-
-G_GNUC_UNUSED static void
-free_split_query (GncSqlBackend* sql_be, gpointer pQuery)
-{
-    g_return_if_fail (sql_be != NULL);
-    g_return_if_fail (pQuery != NULL);
-
-    g_free (pQuery);
-}
-
 /* ----------------------------------------------------------------- */
 typedef struct
 {
@@ -1194,105 +938,6 @@ static const EntryVec acct_balances_col_table
                                          (QofSetterFunc)set_acct_bal_balance),
 };
 
-G_GNUC_UNUSED static  single_acct_balance_t*
-load_single_acct_balances (const GncSqlBackend* sql_be, GncSqlRow& row)
-{
-    single_acct_balance_t* bal = NULL;
-
-    g_return_val_if_fail (sql_be != NULL, NULL);
-
-    bal = static_cast<decltype (bal)> (g_malloc (sizeof (single_acct_balance_t)));
-    g_assert (bal != NULL);
-
-    bal->sql_be = sql_be;
-    gnc_sql_load_object (sql_be, row, NULL, bal, acct_balances_col_table);
-
-    return bal;
-}
-
-GSList*
-gnc_sql_get_account_balances_slist (GncSqlBackend* sql_be)
-{
-#if LOAD_TRANSACTIONS_AS_NEEDED
-    gchar* buf;
-    GSList* bal_slist = NULL;
-
-    g_return_val_if_fail (sql_be != NULL, NULL);
-
-    buf = g_strdup_printf ("SELECT account_guid, reconcile_state, sum(quantity_num) as quantity_num, quantity_denom FROM %s GROUP BY account_guid, reconcile_state, quantity_denom ORDER BY account_guid, reconcile_state",
-                           SPLIT_TABLE);
-    auto stmt = sql_be->create_statement_from_sql(buf);
-    g_assert (stmt != nullptr);
-    g_free (buf);
-    auto result = sql_be->execute_select_statement(stmt);
-    acct_balances_t* bal = NULL;
-
-    for (auto row : *result)
-    {
-        single_acct_balance_t* single_bal;
-
-        // Get the next reconcile state balance and merge with other balances
-        single_bal = load_single_acct_balances (sql_be, row);
-        if (single_bal != NULL)
-        {
-            if (bal != NULL && bal->acct != single_bal->acct)
-            {
-                bal->cleared_balance = gnc_numeric_add (bal->cleared_balance,
-                                                        bal->reconciled_balance,
-                                                        GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-                bal->balance = gnc_numeric_add (bal->balance, bal->cleared_balance,
-                                                GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-                bal_slist = g_slist_append (bal_slist, bal);
-                bal = NULL;
-            }
-            if (bal == NULL)
-            {
-                bal = g_malloc ((gsize)sizeof (acct_balances_t));
-                g_assert (bal != NULL);
-
-                bal->acct = single_bal->acct;
-                bal->balance = gnc_numeric_zero ();
-                bal->cleared_balance = gnc_numeric_zero ();
-                bal->reconciled_balance = gnc_numeric_zero ();
-            }
-            if (single_bal->reconcile_state == 'n')
-            {
-                bal->balance = gnc_numeric_add (bal->balance, single_bal->balance,
-                                                GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-            }
-            else if (single_bal->reconcile_state == 'c')
-            {
-                bal->cleared_balance = gnc_numeric_add (bal->cleared_balance,
-                                                        single_bal->balance,
-                                                        GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-            }
-            else if (single_bal->reconcile_state == 'y')
-            {
-                bal->reconciled_balance = gnc_numeric_add (bal->reconciled_balance,
-                                                           single_bal->balance,
-                                                           GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-            }
-            g_free (single_bal);
-        }
-    }
-
-    // Add the final balance
-    if (bal != NULL)
-    {
-        bal->cleared_balance = gnc_numeric_add (bal->cleared_balance,
-                                                bal->reconciled_balance,
-                                                GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-        bal->balance = gnc_numeric_add (bal->balance, bal->cleared_balance,
-                                        GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-        bal_slist = g_slist_append (bal_slist, bal);
-    }
-
-    return bal_slist;
-#else
-    return NULL;
-#endif
-}
-
 /* ----------------------------------------------------------------- */
 template<> void
 GncSqlColumnTableEntryImpl<CT_TXREF>::load (const GncSqlBackend* sql_be,
@@ -1314,19 +959,18 @@ GncSqlColumnTableEntryImpl<CT_TXREF>::load (const GncSqlBackend* sql_be,
             tx = xaccTransLookup (&guid, sql_be->book());
 
         // If the transaction is not found, try loading it
+	std::string tpkey(tx_col_table[0]->name());
         if (tx == nullptr)
         {
-            auto buf = std::string{"SELECT * FROM "} + TRANSACTION_TABLE +
-                                       " WHERE guid='" + val + "'";
-            auto stmt = sql_be->create_statement_from_sql (buf);
-            query_transactions ((GncSqlBackend*)sql_be, stmt);
+	    std::string sql = tpkey + " = '" + val + "'";
+            query_transactions ((GncSqlBackend*)sql_be, sql);
             tx = xaccTransLookup (&guid, sql_be->book());
         }
 
         if (tx != nullptr)
             set_parameter (pObject, tx, get_setter(obj_name), m_gobj_param_name);
     }
-    catch (std::invalid_argument) {}
+    catch (std::invalid_argument&) {}
 }
 
 template<> void

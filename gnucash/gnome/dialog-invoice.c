@@ -1764,7 +1764,7 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
                                           gncInvoiceGetActive (invoice));
 
         time = gncInvoiceGetDateOpened (invoice);
-        if (!time)
+        if (time == INT64_MAX)
         {
             gnc_date_edit_set_time (GNC_DATE_EDIT (iw->opened_date),
                                     gnc_time (NULL));

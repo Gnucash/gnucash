@@ -199,7 +199,7 @@ public:
                                        m_gobj_param_name);
                 }
             }
-            catch (std::invalid_argument) {}
+            catch (std::invalid_argument&) {}
         }
 
 

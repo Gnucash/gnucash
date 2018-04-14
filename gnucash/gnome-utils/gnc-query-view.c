@@ -46,7 +46,7 @@ typedef struct _GNCQueryViewPriv GNCQueryViewPriv;
 struct _GNCQueryViewPriv
 {
     const QofParam *get_guid;
-    gint	    component_id;
+    gint        component_id;
 };
 
 #define GNC_QUERY_VIEW_GET_PRIVATE(o)  \
@@ -82,14 +82,14 @@ gnc_query_view_get_type (void)
     {
         GTypeInfo type_info =
         {
-            sizeof(GNCQueryViewClass),          /* class_size */
-            NULL,   				/* base_init */
-            NULL,				/* base_finalize */
+            sizeof(GNCQueryViewClass), /* class_size */
+            NULL,                      /* base_init */
+            NULL,                      /* base_finalize */
             (GClassInitFunc)gnc_query_view_class_init,
-            NULL,				/* class_finalize */
-            NULL,				/* class_data */
-            sizeof (GNCQueryView),		/* */
-            0,				        /* n_preallocs */
+            NULL,                      /* class_finalize */
+            NULL,                      /* class_data */
+            sizeof (GNCQueryView),     /* */
+            0,                         /* n_preallocs */
             (GInstanceInitFunc)gnc_query_view_init,
         };
 
@@ -350,6 +350,9 @@ gnc_query_view_init_view (GNCQueryView *qview)
         else if (((GNCSearchParam *) param)->justify == GTK_JUSTIFY_RIGHT)
             algn = 1.0;
 
+        /* Set the column title alignment to that of the column */
+        gtk_tree_view_column_set_alignment (col, algn);
+
         /* Set column resizable */
         if (((GNCSearchParam *) param)->non_resizeable)
         {
@@ -363,13 +366,13 @@ gnc_query_view_init_view (GNCQueryView *qview)
         if (((GNCSearchParam *) param)->passive)
             gtk_tree_view_column_set_clickable (col, FALSE);
         else
-	{
+        {
             gtk_tree_view_column_set_clickable (col, TRUE);
             /* Add sortable columns */
             gtk_tree_view_column_set_sort_column_id (col, i+1);
             gtk_tree_sortable_set_sort_func (sortable, i+1, sort_iter_compare_func,
                                     GINT_TO_POINTER (i+1), NULL);
-	}
+        }
 
         type = gnc_search_param_get_param_type (((GNCSearchParam *) param));
 
@@ -522,7 +525,7 @@ gnc_query_view_double_click_cb (GtkTreeView       *view,
 
     model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
 
-    if (gtk_tree_model_get_iter (model, &iter, path)) 
+    if (gtk_tree_model_get_iter (model, &iter, path))
         gtk_tree_model_get (model, &iter, 0, &entry, -1);
 
     qview->selected_entry = entry;
@@ -554,7 +557,7 @@ gnc_query_view_toggled_cb (GtkCellRendererToggle *cell_renderer,
 
     treepath = gtk_tree_path_new_from_string (path);
 
-    if (gtk_tree_model_get_iter(model, &iter, treepath)) 
+    if (gtk_tree_model_get_iter(model, &iter, treepath))
     {
         gtk_tree_model_get (model, &iter, 0, &entry, -1);
         indices = gtk_tree_path_get_indices (treepath);
@@ -708,7 +711,7 @@ gnc_query_view_refresh (GNCQueryView *qview)
  *   sets the sorting order of entries in the view                  *
  *                                                                  *
  * Args: qview      - view to change the sort order for             *
- *	 new_column - is this a new column (so should we set the    *
+ *   new_column - is this a new column (so should we set the    *
  *                    query sort order or just set the 'increasing' *
  * Returns: nothing                                                 *
 \********************************************************************/
@@ -830,7 +833,8 @@ gnc_query_view_fill (GNCQueryView *qview)
 
                 if (qview->numeric_abs)
                     value = gnc_numeric_abs (value);
-                gtk_list_store_set (GTK_LIST_STORE (model), &iter, i + 1, xaccPrintAmount (value, gnc_default_print_info (FALSE)), -1);
+                gtk_list_store_set (GTK_LIST_STORE (model), &iter, i + 1,
+                     xaccPrintAmount (value, gnc_default_print_info (FALSE)), -1);
             }
             else
             {

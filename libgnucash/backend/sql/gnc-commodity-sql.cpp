@@ -142,9 +142,8 @@ GncSqlCommodityBackend::load_all (GncSqlBackend* sql_be)
     gnc_commodity_table* pTable;
 
     pTable = gnc_commodity_table_get_table (sql_be->book());
-    std::stringstream sql;
-    sql << "SELECT * FROM " << COMMODITIES_TABLE;
-    auto stmt = sql_be->create_statement_from_sql(sql.str());
+    std::string sql("SELECT * FROM " COMMODITIES_TABLE);
+    auto stmt = sql_be->create_statement_from_sql(sql);
     auto result = sql_be->execute_select_statement(stmt);
 
     for (auto row : *result)
@@ -162,11 +161,12 @@ GncSqlCommodityBackend::load_all (GncSqlBackend* sql_be)
             qof_instance_set_guid (QOF_INSTANCE (pCommodity), &guid);
         }
 
-        auto sql = g_strdup_printf ("SELECT DISTINCT guid FROM %s", COMMODITIES_TABLE);
-        gnc_sql_slots_load_for_sql_subquery (sql_be, sql,
-                                             (BookLookupFn)gnc_commodity_find_commodity_by_guid);
-        g_free (sql);
     }
+    std::string pkey(col_table[0]->name());
+    sql = "SELECT DISTINCT ";
+    sql += pkey + " FROM " COMMODITIES_TABLE;
+    gnc_sql_slots_load_for_sql_subquery (sql_be, sql,
+					 (BookLookupFn)gnc_commodity_find_commodity_by_guid);
 }
 /* ================================================================= */
 static gboolean

@@ -327,22 +327,19 @@ load_single_budget (GncSqlBackend* sql_be, GncSqlRow& row)
 void
 GncSqlBudgetBackend::load_all (GncSqlBackend* sql_be)
 {
-    InstanceVec instances;
     g_return_if_fail (sql_be != NULL);
 
-    std::stringstream sql;
-    sql << "SELECT * FROM " << BUDGET_TABLE;
-    auto stmt = sql_be->create_statement_from_sql(sql.str());
+    std::string sql("SELECT * FROM " BUDGET_TABLE);
+    auto stmt = sql_be->create_statement_from_sql(sql);
     auto result = sql_be->execute_select_statement(stmt);
     for (auto row : *result)
-    {
         auto b = load_single_budget (sql_be, row);
-        if (b != nullptr)
-            instances.push_back(QOF_INSTANCE(b));
-    }
 
-    if (!instances.empty())
-        gnc_sql_slots_load_for_instancevec (sql_be, instances);
+    std::string pkey(col_table[0]->name());
+    sql = "SELECT DISTINCT ";
+    sql += pkey + " FROM " BUDGET_TABLE;
+    gnc_sql_slots_load_for_sql_subquery (sql_be, sql,
+					 (BookLookupFn)gnc_budget_lookup);
 }
 
 /* ================================================================= */

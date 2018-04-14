@@ -223,7 +223,7 @@ TEST(gncnumeric_stream, output_stream)
         else
             EXPECT_EQ("123\xe2\x80\xaf""456", output.str());
     }
-    catch (std::runtime_error)
+    catch (std::runtime_error& err)
     {
         output.imbue(std::locale("fr_FR"));
         output.str("");

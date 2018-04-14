@@ -73,7 +73,7 @@ GncSqlColumnTableEntryImpl<CT_OWNERREF>::load (const GncSqlBackend* sql_be,
         if (string_to_guid (val.c_str(), &guid))
             pGuid = &guid;
     }
-    catch (std::invalid_argument)
+    catch (std::invalid_argument&)
     {
         return;
     }

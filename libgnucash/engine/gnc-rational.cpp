@@ -69,7 +69,7 @@ GncRational::operator gnc_numeric () const noexcept
     {
         return {static_cast<int64_t>(m_num), static_cast<int64_t>(m_den)};
     }
-    catch (std::overflow_error)
+    catch (std::overflow_error&)
     {
         return gnc_numeric_error (GNC_ERROR_OVERFLOW);
     }

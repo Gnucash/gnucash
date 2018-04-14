@@ -3,8 +3,9 @@ Using CMake to build GnuCash
 
 == Intro
 
-As part of his CuteCash work, Christian Stimming added support for
-using http://www.cmake.org[CMake] to build the part of GnuCash that
+As part of his CuteCash experiment (now removed from the repository),
+Christian Stimming added support for using
+http://www.cmake.org[CMake] to build the part of GnuCash that
 went into CuteCash. This work extends the use of CMake to cover all of
 GnuCash proper such that GnuCash itself can be fully compiled with
 CMake.
@@ -123,8 +124,7 @@ Then decide what cmake command line options you will need:
 
  * Google Test will work without setting options in most Linux distros, but if
    it doesn't you may need to set GMOCK_ROOT or GTEST_ROOT to the root of the
-   respective sources. Set GTEST_DISABLE to prevent Google Test based tests from
-   running.
+   respective sources.
 
 Some examples:
 

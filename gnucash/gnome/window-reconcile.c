@@ -131,12 +131,12 @@ typedef struct _startRecnWindowData
  */
 #define account_type_has_auto_interest_charge(type)  (((type) == ACCT_TYPE_CREDIT) || \
                                                       ((type) == ACCT_TYPE_LIABILITY) ||\
-						      ((type) == ACCT_TYPE_PAYABLE))
+                              ((type) == ACCT_TYPE_PAYABLE))
 
 #define account_type_has_auto_interest_payment(type) (((type) == ACCT_TYPE_BANK)  || \
                                                       ((type) == ACCT_TYPE_ASSET) || \
                                                       ((type) == ACCT_TYPE_MUTUAL) || \
-						      ((type) == ACCT_TYPE_RECEIVABLE))
+                              ((type) == ACCT_TYPE_RECEIVABLE))
 
 #define account_type_has_auto_interest_xfer(type) \
   (  account_type_has_auto_interest_charge(type) || \
@@ -480,7 +480,8 @@ recnInterestXferWindow( startRecnWindowData *data)
 {
     gchar *title;
 
-    if ( !account_type_has_auto_interest_xfer( data->account_type ) ) return;
+    if ( !account_type_has_auto_interest_xfer( data->account_type ) )
+        return;
 
     /* get a normal transfer dialog... */
     data->xferData = gnc_xfer_dialog( GTK_WIDGET(data->startRecnWindow),
@@ -1185,6 +1186,12 @@ gnc_reconcile_window_create_view_box(Account *account,
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
     gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 
+#if GTK_CHECK_VERSION(3,12,0)
+    gtk_widget_set_margin_end (GTK_WIDGET(hbox), 10);
+#else
+    gtk_widget_set_margin_right (GTK_WIDGET(hbox), 10);
+#endif
+
     label = gtk_label_new(_("Total:"));
     gnc_label_set_alignment(label, 1.0, 0.5);
     gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
@@ -1656,7 +1663,7 @@ recnWindow (GtkWidget *parent, Account *account)
             enable_subaccounts))
         return NULL;
 
-    return recnWindowWithBalance (parent, account, new_ending, statement_date);
+    return recnWindowWithBalance (account, new_ending, statement_date);
 }
 
 
@@ -1676,15 +1683,14 @@ recnWindow_add_widget (GtkUIManager *merge,
  *   Opens up the window to reconcile an account, but with ending
  *   balance and statement date already given.
  *
- * Args:   parent         - The parent widget of the new window
- *         account        - The account to reconcile
+ * Args:   account        - The account to reconcile
  *         new_ending     - The amount for ending balance
  *         statement_date - The date of the statement
  * Return: recnData - the instance of this RecnWindow
 \********************************************************************/
 RecnWindow *
-recnWindowWithBalance (GtkWidget *parent, Account *account,
-                       gnc_numeric new_ending, time64 statement_date)
+recnWindowWithBalance (Account *account, gnc_numeric new_ending,
+                       time64 statement_date)
 {
     RecnWindow *recnData;
     GtkWidget *statusbar;
@@ -1918,8 +1924,6 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
 
     /* Allow resize */
     gtk_window_set_resizable(GTK_WINDOW(recnData->window), TRUE);
-    gtk_window_set_transient_for(GTK_WINDOW(recnData->window),
-                                 GTK_WINDOW (parent));
     gtk_widget_show_all(recnData->window);
 
     gnc_reconcile_window_set_titles(recnData);

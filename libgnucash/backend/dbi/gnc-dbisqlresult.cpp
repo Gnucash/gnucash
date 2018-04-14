@@ -144,15 +144,12 @@ GncDbiSqlResult::IteratorImpl::get_string_at_col(const char* col) const
     auto attrs = dbi_result_get_field_attribs (m_inst->m_dbi_result, col);
     if(type != DBI_TYPE_STRING)
         throw (std::invalid_argument{"Requested string from non-string column."});
-    gnc_push_locale (LC_NUMERIC, "C");
     auto strval = dbi_result_get_string(m_inst->m_dbi_result, col);
     if (strval == nullptr)
     {
-        gnc_pop_locale (LC_NUMERIC);
         throw (std::invalid_argument{"Column empty."});
     }
     auto retval =  std::string{strval};
-    gnc_pop_locale (LC_NUMERIC);
     return retval;
 }
 time64

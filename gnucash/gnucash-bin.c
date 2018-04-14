@@ -775,7 +775,9 @@ main(int argc, char ** argv)
     {
         gchar *localedir = gnc_path_get_localedir();
         bindtextdomain(GETTEXT_PACKAGE, localedir);
-        textdomain(GETTEXT_PACKAGE);
+	bindtextdomain("iso_4217", localedir); // For win32 to find currency name translations
+	bind_textdomain_codeset("iso_4217", "UTF-8");
+	textdomain(GETTEXT_PACKAGE);
         bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
         g_free(localedir);
     }

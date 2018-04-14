@@ -69,13 +69,5 @@ typedef struct
     gnc_numeric reconciled_balance;
 } acct_balances_t;
 
-/**
- * Returns a list of acct_balances_t structures, one for each account which
- * has splits.
- *
- * @param sql_be SQL backend
- * @return GSList of acct_balances_t structures
- */
-GSList* gnc_sql_get_account_balances_slist (GncSqlBackend* sql_be);
 
 #endif /* GNC_TRANSACTION_SQL_H */

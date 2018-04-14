@@ -54,7 +54,6 @@ SET (GNC_VERSION_H_IN
 #ifndef GNC_VERSION_H
 #define GNC_VERSION_H
 
-#define GNC_VCS \"git\"
 #include \"gnc-vcs-info.h\"
 #endif
 ")

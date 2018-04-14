@@ -1060,7 +1060,7 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
 
     /* Show reconciliation window */
     if (show_recn_window)
-        recnWindowWithBalance(data->parent, gnc_acc, value, booked_tt);
+        recnWindowWithBalance(gnc_acc, value, booked_tt);
 
     return NULL;
 }

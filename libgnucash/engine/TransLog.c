@@ -230,7 +230,7 @@ xaccTransWriteLog (Transaction *trans, char flag)
 
     if (!gen_logs)
     {
-	 PINFO ("Attempt to write disabled transaction log");
+         PINFO ("Attempt to write disabled transaction log");
 	 return;
     }
     if (!trans_log) return;
