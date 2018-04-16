@@ -567,9 +567,43 @@ gnc_gbr_find_etc_dir (const gchar *default_etc_dir)
             return NULL;
     }
 
-    sysconfdir = gnc_file_path_relative_part(PREFIX, SYSCONFDIR);
-    dir = g_build_filename (prefix, sysconfdir, NULL);
-    g_free (sysconfdir);
+    if (g_path_is_absolute (SYSCONFDIR))
+    {
+        sysconfdir = gnc_file_path_relative_part("/", SYSCONFDIR);
+        dir = g_build_filename (prefix, sysconfdir, NULL);
+        g_free (sysconfdir);
+    }
+    else if ((g_strcmp0 (PREFIX, "/opt") == 0) ||
+             (g_str_has_prefix (PREFIX, "/opt/")))
+    {
+        /* If the prefix is "/opt/..." the etc stuff will be installed in
+         * "SYSCONFDIR/opt/...", while the rest will be in "/opt/..."
+         * If this gets relocated after (make install), there will be another
+         * prefix prepended to all of that:
+         * "prefix2/opt/..."
+         * "prefix2/SYSCONFDIR/opt/..."
+         * Note: this most likely won't work on Windows. Don't try a /opt
+         * prefix on that platform...
+         */
+        gchar *std_etc_dir = g_build_filename ("/", SYSCONFDIR, PREFIX, NULL);
+
+        gchar *base_prefix_pos = g_strstr_len (prefix, -1, PREFIX);
+        if (!base_prefix_pos || base_prefix_pos == prefix)
+            dir = g_build_filename ("/", std_etc_dir, NULL);
+        else
+        {
+            gchar *prefix2 = g_strndup (prefix, base_prefix_pos - prefix);
+            dir = g_build_filename (prefix2, std_etc_dir, NULL);
+        }
+        g_free (std_etc_dir);
+
+    }
+    else
+    {
+        sysconfdir = gnc_file_path_relative_part(PREFIX, SYSCONFDIR);
+        dir = g_build_filename (prefix, sysconfdir, NULL);
+        g_free (sysconfdir);
+    }
     g_free (prefix);
     return dir;
 }
