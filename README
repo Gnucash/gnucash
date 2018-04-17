@@ -55,8 +55,8 @@ Features include:
     similar previously-imported transactions.
 
   - HBCI/FinTX Support: GnuCash also supports the German FinTS (formerly
-   Home Banking Computer Interface protocol which includes statement download,
-   initiate bank transfers and direct debits.
+    Home Banking Computer Interface protocol) which includes statement download,
+    initiate bank transfers and direct debits.
 
   - Quicken File Import: Import Quicken QIF style files.  QIF files
     are automatically merged to eliminate duplicate transactions.
