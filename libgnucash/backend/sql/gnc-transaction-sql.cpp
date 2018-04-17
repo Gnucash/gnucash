@@ -260,7 +260,7 @@ load_splits_for_transactions (GncSqlBackend* sql_be, std::string selector)
     if (selector.empty())
     {
 	sql += SPLIT_TABLE ".* FROM " SPLIT_TABLE " INNER JOIN "
-	    TRANSACTION_TABLE " WHERE " SPLIT_TABLE "." + sskey + " = "
+	    TRANSACTION_TABLE " ON " SPLIT_TABLE "." + sskey + " = "
 	    TRANSACTION_TABLE "." + tpkey;
 	selector = "(SELECT DISTINCT " + tpkey + " FROM " TRANSACTION_TABLE ")";
     }
@@ -378,12 +378,20 @@ query_transactions (GncSqlBackend* sql_be, std::string selector)
     if (!instances.empty())
     {
 	const std::string tpkey(tx_col_table[0]->name());
-	if (selector.empty())
-	{
-	    selector = "(SELECT DISTINCT ";
-	    selector += tpkey + " FROM " TRANSACTION_TABLE +")";
-	}
+        if (!selector.empty() && (selector[0] != '('))
+        {
+            auto tselector = std::string ("(SELECT DISTINCT ");
+            tselector += tpkey + " FROM " TRANSACTION_TABLE " WHERE " + selector + ")";
+            selector = tselector;
+        }
+
         load_splits_for_transactions (sql_be, selector);
+
+        if (selector.empty())
+        {
+            selector = "(SELECT DISTINCT ";
+            selector += tpkey + " FROM " TRANSACTION_TABLE ")";
+        }
         gnc_sql_slots_load_for_sql_subquery (sql_be, selector,
 					     (BookLookupFn)xaccTransLookup);
     }
