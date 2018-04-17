@@ -293,9 +293,11 @@ load_single_tx (GncSqlBackend* sql_be, GncSqlRow& row)
     tx_guid = *guid;
 
     // Don't overwrite the transaction if it's already been loaded (and possibly modified).
+    // However increase the edit level, it may be modified while loading its splits
     pTx = xaccTransLookup (&tx_guid, sql_be->book());
     if (pTx != NULL)
     {
+        xaccTransBeginEdit (pTx);
         return NULL;
     }
 
