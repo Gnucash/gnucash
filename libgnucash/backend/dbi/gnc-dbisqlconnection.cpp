@@ -252,7 +252,7 @@ GncDbiSqlConnection::execute_select_statement (const GncSqlStatementPtr& stmt)
     dbi_result result;
 
     DEBUG ("SQL: %s\n", stmt->to_sql());
-    gnc_push_locale (LC_NUMERIC, "C");
+    auto locale = gnc_push_locale (LC_NUMERIC, "C");
     do
     {
         init_error ();
@@ -261,7 +261,7 @@ GncDbiSqlConnection::execute_select_statement (const GncSqlStatementPtr& stmt)
     while (m_retry);
     if (result == nullptr)
         PERR ("Error executing SQL %s\n", stmt->to_sql());
-    gnc_pop_locale (LC_NUMERIC);
+    gnc_pop_locale (LC_NUMERIC, locale);
     return GncSqlResultPtr(new GncDbiSqlResult (this, result));
 }
 

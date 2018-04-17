@@ -37,26 +37,4 @@ const char * gnc_locale_default_iso_currency_code (void);
 /* Returns the number of decimal place to print in the current locale */
 int gnc_locale_decimal_places (void);
 
-/** Temporarily change locale, pushing the old one onto a stack
- * Currently, this has no effect on gnc_localeconv.  i.e., after the
- * first call to gnc_localeconv, subsequent calls will return the same
- * information.
- *
- * WARNING: Be careful to maintain the correct nesting order of pushes
- * or pops; otherwise, the localization results might be
- * interesting. Note that the stack does not keep track of which
- * category a locale was pushed from, so careless use will alse
- * produce interesting results.
- *
- * @param category: The locale category (e.g. LC_ALL, LC_NUMERIC) to push onto
- * @param locale: The new locale to set
- */
-void gnc_push_locale (int category, const char *locale);
-
-/** Restore the last-pushed locale.
- * @param category: The locale category to restore the locale to.
- */
-void gnc_pop_locale (int category);
-
-
 #endif /* GNC_LOCALE_UTILS_H */

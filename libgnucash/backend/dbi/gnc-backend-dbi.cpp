@@ -1177,7 +1177,7 @@ dbi_library_test (dbi_conn conn)
         return GNC_DBI_FAIL_SETUP;
     }
     dbi_result_free (result);
-    gnc_push_locale (LC_NUMERIC, "C");
+    auto locale = gnc_push_locale (LC_NUMERIC, "C");
     result = dbi_conn_query (conn, "SELECT * FROM numtest");
     if (result == nullptr)
     {
@@ -1186,7 +1186,7 @@ dbi_library_test (dbi_conn conn)
         PWARN ("Test_DBI_Library: Failed to retrieve test row into table: %s",
                errmsg);
         dbi_conn_query (conn, "DROP TABLE numtest");
-        gnc_pop_locale (LC_NUMERIC);
+        gnc_pop_locale (LC_NUMERIC, locale);
         return GNC_DBI_FAIL_SETUP;
     }
     while (dbi_result_next_row (result))
@@ -1196,7 +1196,7 @@ dbi_library_test (dbi_conn conn)
         resultdouble = dbi_result_get_double (result, "test_double");
     }
     dbi_conn_query (conn, "DROP TABLE numtest");
-    gnc_pop_locale (LC_NUMERIC);
+    gnc_pop_locale (LC_NUMERIC, locale);
     if (testlonglong != resultlonglong)
     {
         PWARN ("Test_DBI_Library: LongLong Failed %" PRId64 " != % " PRId64,
