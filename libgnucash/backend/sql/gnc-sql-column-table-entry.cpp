@@ -593,12 +593,22 @@ GncSqlColumnTableEntryImpl<CT_GDATE>::add_to_query(QofIdTypeConst obj_name,
 
 /* ----------------------------------------------------------------- */
 typedef gnc_numeric (*NumericGetterFunc) (const gpointer);
-typedef void (*NumericSetterFunc) (gpointer, gnc_numeric*);
+typedef void (*NumericSetterFunc) (gpointer, gnc_numeric);
 
 static const EntryVec numeric_col_table =
 {
     gnc_sql_make_table_entry<CT_INT64>("num", 0, COL_NNUL, "guid"),
     gnc_sql_make_table_entry<CT_INT64>("denom", 0, COL_NNUL, "guid")
+};
+
+template <>
+void set_parameter<gpointer, gnc_numeric>(gpointer object,
+                                          gnc_numeric item,
+                                          const char* property)
+{
+    qof_instance_increase_editlevel(object);
+    g_object_set(object, property, &item, nullptr);
+    qof_instance_decrease_editlevel(object);
 };
 
 template<> void
@@ -626,7 +636,7 @@ GncSqlColumnTableEntryImpl<CT_NUMERIC>::load (const GncSqlBackend* sql_be,
     {
         return;
     }
-    set_parameter(pObject, &n,
+    set_parameter(pObject, n,
                   reinterpret_cast<NumericSetterFunc>(get_setter(obj_name)),
                   m_gobj_param_name);
 }
