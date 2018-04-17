@@ -259,13 +259,13 @@ load_splits_for_transactions (GncSqlBackend* sql_be, std::string selector)
     std::string sql("SELECT ");
     if (selector.empty())
     {
-	sql += SPLIT_TABLE ".* FROM " SPLIT_TABLE " INNER JOIN "
-	    TRANSACTION_TABLE " ON " SPLIT_TABLE "." + sskey + " = "
-	    TRANSACTION_TABLE "." + tpkey;
-	selector = "(SELECT DISTINCT " + tpkey + " FROM " TRANSACTION_TABLE ")";
+        sql += SPLIT_TABLE ".* FROM " SPLIT_TABLE " INNER JOIN "
+            TRANSACTION_TABLE " ON " SPLIT_TABLE "." + sskey + " = "
+            TRANSACTION_TABLE "." + tpkey;
+        selector = "(SELECT DISTINCT " + tpkey + " FROM " TRANSACTION_TABLE ")";
     }
     else
-	sql += " * FROM " SPLIT_TABLE " WHERE " + sskey + " IN " + selector;
+        sql += " * FROM " SPLIT_TABLE " WHERE " + sskey + " IN " + selector;
 
     // Execute the query and load the splits
     auto stmt = sql_be->create_statement_from_sql(sql);
@@ -276,7 +276,7 @@ load_splits_for_transactions (GncSqlBackend* sql_be, std::string selector)
     sql = "SELECT DISTINCT ";
     sql += spkey + " FROM " SPLIT_TABLE " WHERE " + sskey + " IN " + selector;
     gnc_sql_slots_load_for_sql_subquery(sql_be, sql,
-					(BookLookupFn)xaccSplitLookup);
+                                        (BookLookupFn)xaccSplitLookup);
 }
 
 static  Transaction*
@@ -350,17 +350,17 @@ query_transactions (GncSqlBackend* sql_be, std::string selector)
     std::string sql("SELECT * FROM " TRANSACTION_TABLE);
 
     if (!selector.empty() && selector[0] == '(')
-	sql += " WHERE " + tpkey + " IN " + selector;
+        sql += " WHERE " + tpkey + " IN " + selector;
     else if (!selector.empty()) // plain condition
-	sql += " WHERE " + selector;
+        sql += " WHERE " + selector;
     auto stmt = sql_be->create_statement_from_sql(sql);
     auto result = sql_be->execute_select_statement(stmt);
     if (result->begin() == result->end())
     {
-	PINFO("Query %s returned no results", sql.c_str());
+        PINFO("Query %s returned no results", sql.c_str());
         return;
     }
-    
+
     Transaction* tx;
 
     // Load the transactions
@@ -379,7 +379,7 @@ query_transactions (GncSqlBackend* sql_be, std::string selector)
     // Load all splits and slots for the transactions
     if (!instances.empty())
     {
-	const std::string tpkey(tx_col_table[0]->name());
+        const std::string tpkey(tx_col_table[0]->name());
         if (!selector.empty() && (selector[0] != '('))
         {
             auto tselector = std::string ("(SELECT DISTINCT ");
