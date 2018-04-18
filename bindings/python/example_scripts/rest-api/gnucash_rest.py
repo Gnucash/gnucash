@@ -1858,7 +1858,7 @@ class Error(Exception):
 try:
     options, arguments = getopt.getopt(sys.argv[1:], 'nh:', ['host=', 'new='])
 except getopt.GetoptError as err:
-    print(str(err) # will print something like "option -a not recognized")
+    print(str(err)) # will print something like "option -a not recognized"
     print('Usage: python-rest.py <connection string>')
     sys.exit(2)
 
