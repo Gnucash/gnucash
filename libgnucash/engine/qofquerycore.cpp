@@ -454,7 +454,7 @@ date_to_string (gpointer object, QofParam *getter)
 {
     Timespec ts = ((query_date_getter)getter->param_getfcn)(object, getter);
 
-    if (ts.tv_sec || ts.tv_nsec)
+    if (ts.tv_sec != INT64_MAX)
         return g_strdup (gnc_print_date (ts));
 
     return NULL;
