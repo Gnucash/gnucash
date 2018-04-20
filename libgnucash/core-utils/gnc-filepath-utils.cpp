@@ -66,14 +66,19 @@ extern "C" {
 
 #include <boost/filesystem.hpp>
 #include <boost/locale.hpp>
+#include <codecvt>
 #include <iostream>
 
 
-
 #if PLATFORM(WINDOWS)
-#include <codecvt>
-#include <locale>
+using codecvt = std::codecvt_utf8<wchar_t, 0x10FFFF, std::little_endian>;
+using string = std::wstring;
+#else
+using codecvt = std::codecvt;
+using string = std::string;
 #endif
+static codecvt cvt;
+static std::locale bfs_locale(std::locale(), new codecvt);
 
 namespace bfs = boost::filesystem;
 namespace bst = boost::system;
@@ -366,7 +371,8 @@ gnc_validate_directory (const bfs::path &dirname)
          * we need to overrule it during build (when guile interferes)
          * and testing.
          */
-        auto home_dir = bfs::path (g_get_home_dir ());
+	bfs::path home_dir(g_get_home_dir(), cvt);
+	home_dir.imbue(bfs_locale);
         auto homedir_exists = bfs::exists(home_dir);
         auto is_descendant = dir_is_descendant (dirname, home_dir);
         if (!homedir_exists && is_descendant)
@@ -432,11 +438,16 @@ copy_recursive(const bfs::path& src, const bfs::path& dest)
         for(auto direntry = bfs::recursive_directory_iterator(src);
             direntry != bfs::recursive_directory_iterator(); ++direntry)
         {
-            auto cur_str = direntry->path().string();
+#ifdef G_OS_WIN32
+            string cur_str = direntry->path().wstring();
+#else
+            string cur_str = direntry->path().string();
+#endif
             auto cur_len = cur_str.size();
-            auto rel_str = std::string(cur_str, old_len, cur_len - old_len);
-            auto relpath = bfs::path(rel_str).relative_path();
-            auto newpath = bfs::absolute (relpath, dest);
+	    string rel_str(cur_str, old_len, cur_len - old_len);
+	    bfs::path relpath(rel_str, cvt);
+            auto newpath = bfs::absolute (relpath.relative_path(), dest);
+	    newpath.imbue(bfs_locale);
             bfs::copy(direntry->path(), newpath);
         }
     }
@@ -458,31 +469,27 @@ copy_recursive(const bfs::path& src, const bfs::path& dest)
  * So this function is a copy of glib's internal get_special_folder
  * and minimally adjusted to fetch CSIDL_APPDATA
  */
-static char *
-win32_get_userdata_home (void)
+static bfs::path
+get_user_data_dir ()
 {
     wchar_t path[MAX_PATH+1];
     HRESULT hr;
     LPITEMIDLIST pidl = NULL;
     BOOL b;
-    char *retval = NULL;
 
     hr = SHGetSpecialFolderLocation (NULL, CSIDL_APPDATA, &pidl);
     if (hr == S_OK)
     {
         b = SHGetPathFromIDListW (pidl, path);
-        if (b)
-        {
-            std::wstring_convert<std::codecvt_utf8<wchar_t>> utf8_conv;
-            retval = g_strdup(utf8_conv.to_bytes(path).c_str());
-        }
         CoTaskMemFree (pidl);
     }
+    bfs::path retval(path, cvt);
+    retval.imbue(bfs_locale);
     return retval;
 }
 #elif defined MAC_INTEGRATION
-static char*
-quarz_get_userdata_home(void)
+static bfs::path
+get_user_data_dir()
 {
     char *retval = NULL;
     NSFileManager*fm = [NSFileManager defaultManager];
@@ -492,9 +499,14 @@ quarz_get_userdata_home(void)
     {
         NSURL* dirUrl = [appSupportDir objectAtIndex:0];
         NSString* dirPath = [dirUrl path];
-        retval = g_strdup([dirPath UTF8String]);
     }
-    return retval;
+    return [dirPath UTF8String];
+}
+#else
+static bfs::path
+get_user_data_dir()
+{
+    return g_get_user_data_dir();
 }
 #endif
 
@@ -508,22 +520,8 @@ static bfs::path
 get_userdata_home(void)
 {
     auto try_tmp_dir = true;
-    gchar *data_dir = NULL;
-    auto userdata_home = bfs::path();
+    auto userdata_home = get_user_data_dir();
 
-#ifdef G_OS_WIN32
-    data_dir = win32_get_userdata_home ();
-#elif defined MAC_INTEGRATION
-    data_dir = quarz_get_userdata_home ();
-#endif
-
-    if (data_dir)
-    {
-        userdata_home = data_dir;
-        g_free(data_dir);
-    }
-    else
-        userdata_home = g_get_user_data_dir();
 
     /* g_get_user_data_dir doesn't check whether the path exists nor attempts to
      * create it. So while it may return an actual path we may not be able to use it.
@@ -548,7 +546,9 @@ get_userdata_home(void)
        Hopefully we can always write there. */
     if (try_tmp_dir)
     {
-        userdata_home = bfs::path (g_get_tmp_dir ()) / g_get_user_name ();
+	bfs::path newpath(g_get_tmp_dir (), cvt);
+	newpath.imbue(bfs_locale);
+        userdata_home = std::move(newpath);
     }
     g_assert(!userdata_home.empty());
 
@@ -564,33 +564,21 @@ get_userdata_home(void)
 static bfs::path
 get_userconfig_home(void)
 {
-    gchar *config_dir = NULL;
-    auto userconfig_home = bfs::path();
-
-#ifdef G_OS_WIN32
-    config_dir = win32_get_userdata_home ();
-#elif defined MAC_INTEGRATION
-    config_dir = quarz_get_userdata_home ();
-#endif
-
     /* On Windows and Macs the data directory is used, for Linux
        $HOME/.config is used */
-    if (config_dir)
-    {
-        userconfig_home = config_dir;
-        g_free(config_dir);
-    }
-    else
-        userconfig_home = g_get_user_config_dir();
-
-    return userconfig_home;
+#if defined (G_OS_WIN32) || defined (MAC_INTEGRATION)
+    return get_user_data_dir();
+#else
+    return g_get_user_config_dir();
+#endif
 }
 
 static std::string migrate_gnc_datahome()
 {
     auto success = false;
     // Specify location of dictionaries
-    auto old_dir = bfs::path(g_get_home_dir()) / ".gnucash";
+    bfs::path old_dir(g_get_home_dir(), cvt);
+    old_dir += ".gnucash";
 
     bl::generator gen;
     gen.add_messages_path(gnc_path_get_datadir());
@@ -760,7 +748,9 @@ gnc_filepath_init (void)
      * issues when the build environment is not a complete environment (like
      * it could be missing a valid home directory). */
     auto env_build_dir = g_getenv ("GNC_BUILDDIR");
-    build_dir = bfs::path(env_build_dir ? env_build_dir : "");
+    bfs::path new_dir(env_build_dir ? env_build_dir : "", cvt);
+    new_dir.imbue(bfs_locale);
+    build_dir = std::move(new_dir);
     auto running_uninstalled = (g_getenv ("GNC_UNINSTALLED") != NULL);
     if (running_uninstalled && !build_dir.empty())
     {
@@ -787,7 +777,9 @@ gnc_filepath_init (void)
         auto gnc_userdata_home_env = g_getenv ("GNC_DATA_HOME");
         if (gnc_userdata_home_env)
         {
-            gnc_userdata_home = bfs::path (gnc_userdata_home_env);
+	    bfs::path newdir(gnc_userdata_home_env, cvt);
+	    newdir.imbue(bfs_locale);
+            gnc_userdata_home = std::move(newdir);
             try
             {
                 gnc_userdata_home_exists = bfs::exists (gnc_userdata_home);
