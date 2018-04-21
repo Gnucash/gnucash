@@ -180,6 +180,7 @@ static void gnc_plugin_page_register_cmd_associate_location_transaction (GtkActi
 static void gnc_plugin_page_register_cmd_execassociated_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
 
 static void gnc_plugin_page_help_changed_cb( GNCSplitReg *gsr, GncPluginPageRegister *register_page );
+static void gnc_plugin_page_popup_menu_cb( GNCSplitReg *gsr, GncPluginPageRegister *register_page );
 static void gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer user_data);
 static void gnc_plugin_page_register_close_cb (gpointer user_data);
 
@@ -1127,6 +1128,10 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 
     g_signal_connect (G_OBJECT (gsr), "help-changed",
                       G_CALLBACK ( gnc_plugin_page_help_changed_cb ),
+                      page );
+
+    g_signal_connect (G_OBJECT (gsr), "show-popup-menu",
+                      G_CALLBACK ( gnc_plugin_page_popup_menu_cb ),
                       page );
 
     reg = gnc_ledger_display_get_split_register(priv->ledger);
@@ -4052,6 +4057,23 @@ gnc_plugin_page_help_changed_cb (GNCSplitReg *gsr, GncPluginPageRegister *regist
     help = gnc_table_get_help(reg->table);
     gnc_window_set_status(window, GNC_PLUGIN_PAGE(register_page), help);
     g_free(help);
+}
+
+static void
+gnc_plugin_page_popup_menu_cb (GNCSplitReg *gsr, GncPluginPageRegister *register_page)
+{
+    GncWindow *window;
+
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(register_page));
+
+    window = GNC_WINDOW(GNC_PLUGIN_PAGE(register_page)->window);
+    if (!window)
+    {
+        // This routine can be called before the page is added to a
+        // window.
+        return;
+    }
+    gnc_main_window_popup_menu_cb (GTK_WIDGET(window), GNC_PLUGIN_PAGE(register_page));
 }
 
 static void
