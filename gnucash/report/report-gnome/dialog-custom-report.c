@@ -86,12 +86,12 @@ void custom_report_list_view_row_activated_cb(GtkTreeView *view, GtkTreePath *pa
         GtkTreeViewColumn *column, gpointer data);
 gboolean custom_report_list_view_clicked_cb(GtkTreeView *view, GdkEventButton *event, gpointer data);
 void custom_report_name_edited_cb(GtkCellRendererText *renderer, gchar *path, gchar *new_text, gpointer data);
-void custom_report_query_tooltip_cb (GtkTreeView  *view,
-                                     gint        x,
-                                     gint        y,
-                                     gboolean    keyboard_mode,
-                                     GtkTooltip *tooltip,
-                                     gpointer    data);
+gboolean custom_report_query_tooltip_cb (GtkTreeView  *view,
+                                         gint        x,
+                                         gint        y,
+                                         gboolean    keyboard_mode,
+                                         GtkTooltip *tooltip,
+                                         gpointer    data);
 
 void
 custom_report_dialog_close_cb(GtkWidget* widget, gpointer data)
@@ -458,7 +458,8 @@ void custom_report_name_edited_cb(GtkCellRendererText *renderer, gchar *path, gc
 
 
 }
-void custom_report_query_tooltip_cb (GtkTreeView  *view,
+
+gboolean custom_report_query_tooltip_cb (GtkTreeView  *view,
                                      gint        x,
                                      gint        y,
                                      gboolean    keyboard_mode,
@@ -470,23 +471,27 @@ void custom_report_query_tooltip_cb (GtkTreeView  *view,
     GtkTreeViewColumn *column = NULL;
     gint cellx, celly;
 
-    g_return_if_fail ( view != NULL );
+    g_return_val_if_fail ( view != NULL, FALSE );
 
     if (gtk_tree_view_get_path_at_pos (view, x, y,
                                        &path, &column,
                                        &cellx, &celly))
     {
-        gtk_tree_view_set_tooltip_cell (view, tooltip, path, column, NULL);
-        if (column == crd->runcol)
-            gtk_tooltip_set_text (tooltip, _("Load report configuration"));
-        else if (column == crd->editcol)
-            gtk_tooltip_set_text (tooltip, _("Edit report configuration name"));
-        else if (column == crd->delcol)
-            gtk_tooltip_set_text (tooltip, _("Delete report configuration"));
+        if (column != crd->namecol)
+        {
+            gtk_tree_view_set_tooltip_cell (view, tooltip, path, column, NULL);
+            if (column == crd->runcol)
+                gtk_tooltip_set_text (tooltip, _("Load report configuration"));
+            else if (column == crd->editcol)
+                gtk_tooltip_set_text (tooltip, _("Edit report configuration name"));
+            else if (column == crd->delcol)
+                gtk_tooltip_set_text (tooltip, _("Delete report configuration"));
+            return TRUE;
+        }
         else
             gtk_tooltip_set_text (tooltip, NULL);
     }
-
+    return FALSE;
 }
 
 /* Internal function that builds the dialog */
