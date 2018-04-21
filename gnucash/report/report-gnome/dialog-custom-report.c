@@ -84,7 +84,7 @@ void custom_report_help_cb(GtkWidget* widget, gpointer data);
 void close_custom_report_clicked_cb(GtkWidget* widget, gpointer data);
 void custom_report_list_view_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
         GtkTreeViewColumn *column, gpointer data);
-void custom_report_list_view_clicked_cb(GtkTreeView *view, GdkEventButton *event, gpointer data);
+gboolean custom_report_list_view_clicked_cb(GtkTreeView *view, GdkEventButton *event, gpointer data);
 void custom_report_name_edited_cb(GtkCellRendererText *renderer, gchar *path, gchar *new_text, gpointer data);
 void custom_report_query_tooltip_cb (GtkTreeView  *view,
                                      gint        x,
@@ -379,14 +379,17 @@ custom_report_list_view_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
 
     if (gtk_tree_model_get_iter(model, &iter, path))
     {
-        GncGUID *guid = guid_malloc ();
-        gchar *guid_str;
+        if (column == crd->namecol)
+        {
+            GncGUID *guid = guid_malloc ();
+            gchar *guid_str;
 
-        gtk_tree_model_get(model, &iter, COL_NUM, &guid, -1);
-        guid_str = g_new0 (gchar, GUID_ENCODING_LENGTH+1 );
-        guid_to_string_buff (guid, guid_str);
+            gtk_tree_model_get(model, &iter, COL_NUM, &guid, -1);
+            guid_str = g_new0 (gchar, GUID_ENCODING_LENGTH+1 );
+            guid_to_string_buff (guid, guid_str);
 
-        custom_report_run_report(scm_from_utf8_string (guid_str), crd);
+            custom_report_run_report(scm_from_utf8_string (guid_str), crd);
+        }
     }
 }
 
@@ -399,7 +402,7 @@ custom_report_list_view_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
  * pictogram, the corresponding action will be executed on the
  * selected row.
  **************************************************************/
-void
+gboolean
 custom_report_list_view_clicked_cb(GtkTreeView *view, GdkEventButton *event, gpointer data)
 {
     CustomReportDialog *crd = data;
@@ -407,7 +410,7 @@ custom_report_list_view_clicked_cb(GtkTreeView *view, GdkEventButton *event, gpo
     GtkTreeViewColumn *column = NULL;
     gint cellx, celly;
 
-    g_return_if_fail ( view != NULL );
+    g_return_val_if_fail ( view != NULL, FALSE );
 
     if (gtk_tree_view_get_path_at_pos (view, event->x, event->y,
                                        &path, &column,
@@ -417,19 +420,23 @@ custom_report_list_view_clicked_cb(GtkTreeView *view, GdkEventButton *event, gpo
         {
             SCM guid = get_custom_report_selection(crd, _("You must select a report configuration to load."));
             custom_report_run_report (guid, crd);
+            return TRUE;
         }
         else if (column == crd->editcol)
         {
             g_object_set(G_OBJECT(crd->namerenderer), "editable", TRUE, NULL);
             gtk_tree_view_set_cursor_on_cell (view, path, crd->namecol,
                                               crd->namerenderer, TRUE);
+            return TRUE;
         }
         else if (column == crd->delcol)
         {
             SCM guid = get_custom_report_selection(crd, _("You must select a report configuration to delete."));
             custom_report_delete (guid, crd);
+            return TRUE;
         }
     }
+    return FALSE;
 }
 
 void custom_report_name_edited_cb(GtkCellRendererText *renderer, gchar *path, gchar *new_text, gpointer data)
