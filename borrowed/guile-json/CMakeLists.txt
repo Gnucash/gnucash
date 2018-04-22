@@ -1,9 +1,18 @@
-
-GNC_ADD_SCHEME_TARGETS(guile-json
+set (guile-json_SCHEME
   json.scm
   json/builder.scm
   json/parser.scm
   json/syntax.scm
-)
+  )
 
-SET_DIST_LIST(guile-json_DIST CMakeLists.txt ${guile-json_DATA})
+gnc_add_scheme_targets (guile-json
+  "${guile-json_SCHEME}"
+  ""
+  ""
+  FALSE
+  )
+
+set_dist_list (guile-json_DIST
+  CMakeLists.txt
+  ${guile-json_SCHEME}
+  )
