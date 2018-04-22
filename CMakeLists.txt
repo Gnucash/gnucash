@@ -343,16 +343,16 @@ if (GNC_SRFI64_RESULT EQUAL 0)
 endif ()
 
 # Test that guile has guile-json.
-execute_process (COMMAND ${GUILE_EXECUTABLE} -c "(use-modules (json builder) (json parser) (json syntax))"
+execute_process (COMMAND ${GUILE_EXECUTABLE} -c "(load-from-path \"json.scm\") (use-modules (json builder))"
   RESULT_VARIABLE GNC_GUILE_JSON
-  ERROR_QUIET
+#  ERROR_QUIET
 )
 
 if (GNC_GUILE_JSON EQUAL 0)
   message (STATUS "guile-json is present.")
   set (HAVE_GUILE_JSON TRUE)
 else ()
-  message (FATAL_ERROR "guile-json cannot be imported. Abort.")
+  message (STATUS "guile-json cannot be imported. Abort.")
 endif ()
 
 # ############################################################
