@@ -21,6 +21,10 @@
 
 /* Convenience macros */
 
+#if defined(scm_to_utf8_string) && SCM_MAJOR_VERSION >= 2
+#undef scm_to_utf8_string
+#undef scm_from_utf8_string
+#endif
 #define scm_is_equal(obj1,obj2)	scm_is_true(scm_equal_p(obj1,obj2))
 #define scm_is_exact(obj)	scm_is_true(scm_exact_p(obj))
 #define scm_is_list(obj)	scm_is_true(scm_list_p(obj))
