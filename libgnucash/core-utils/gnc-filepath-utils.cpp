@@ -74,7 +74,13 @@ extern "C" {
 using codecvt = std::codecvt_utf8<wchar_t, 0x10FFFF, std::little_endian>;
 using string = std::wstring;
 #else
-using codecvt = std::codecvt;
+/* See https://stackoverflow.com/questions/41744559/is-this-a-bug-of-gcc */
+template<class I, class E, class S>
+struct codecvt_r : std::codecvt<I, E, S>
+{
+    ~codecvt_r() {}
+};
+using codecvt = codecvt_r<wchar_t, char, std::mbstate_t>;
 using string = std::string;
 #endif
 static codecvt cvt;
@@ -495,10 +501,11 @@ get_user_data_dir()
     NSFileManager*fm = [NSFileManager defaultManager];
     NSArray* appSupportDir = [fm URLsForDirectory:NSApplicationSupportDirectory
     inDomains:NSUserDomainMask];
+    NSString *dirPath = nullptr;
     if ([appSupportDir count] > 0)
     {
         NSURL* dirUrl = [appSupportDir objectAtIndex:0];
-        NSString* dirPath = [dirUrl path];
+        dirPath = [dirUrl path];
     }
     return [dirPath UTF8String];
 }
