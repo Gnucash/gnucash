@@ -66,11 +66,11 @@ extern "C" {
 
 #include <boost/filesystem.hpp>
 #include <boost/locale.hpp>
-#include <codecvt>
 #include <iostream>
 
 
 #if PLATFORM(WINDOWS)
+#include <codecvt>
 using codecvt = std::codecvt_utf8<wchar_t, 0x10FFFF, std::little_endian>;
 using string = std::wstring;
 #else
@@ -554,8 +554,8 @@ get_userdata_home(void)
     if (try_tmp_dir)
     {
 	bfs::path newpath(g_get_tmp_dir (), cvt);
-	newpath.imbue(bfs_locale);
-        userdata_home = std::move(newpath);
+        userdata_home = newpath / g_get_user_name ();
+	userdata_home.imbue(bfs_locale);
     }
     g_assert(!userdata_home.empty());
 
