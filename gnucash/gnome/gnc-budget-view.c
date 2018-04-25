@@ -133,6 +133,8 @@ static gnc_numeric gbv_get_accumulated_budget_amount(GncBudget* budget,
     This structure defines the different elements required for a budget view - the actual display of how a budget looks when you open it.
         @param tree_view Pointer to the widget to display the detailed budget.
         @param totals_tree_view Pointer to the widget to display the totals tree at the bottom of the budget screen.
+        @param the main scrolled window horizonatl adjustment
+        @param saved value for the horizontal adjustment
         @param budget Contains much of the data required to implement a budget.
         @param key Each budget struct has its own GUID.
         @param period_col_list List of columns in the tree_view widget (this list varies depending on the number of periods)
@@ -144,6 +146,9 @@ struct GncBudgetViewPrivate
 {
     GtkTreeView *tree_view;
     GtkTreeView *totals_tree_view;
+
+    GtkAdjustment *hadj;
+    gfloat hadj_value;
 
     GncBudget* budget;
     GncGUID key;
@@ -312,6 +317,32 @@ gnc_budget_view_get_selected_accounts(GncBudgetView* view)
     return gnc_tree_view_account_get_selected_accounts(GNC_TREE_VIEW_ACCOUNT(priv->tree_view));
 }
 
+static void
+gbv_container_set_focus_child_cb(GtkContainer *container, GtkWidget *widget,
+                               GncBudgetView* view)
+{
+    GncBudgetViewPrivate *priv;
+    g_return_if_fail(GNC_IS_BUDGET_VIEW(view));
+
+    priv = GNC_BUDGET_VIEW_GET_PRIVATE(view);
+
+    PINFO("set-focus-child container is %p, widget is %p", container, widget);
+
+    /* There seems to be an underlying gtk issue in this configuration when
+     * the main scroll window is scrolled to reveal the cells on the right
+     * and once selected/focused the window snapps back to the left so
+     * you can no longer see the cell. By saving the horizontal adjustment
+     * value from when this callback is called for inner_scrolled_window
+     * and using it when the main scrolled windows calls this call back
+     * visualy stops the error.
+     */
+
+    if (widget == GTK_WIDGET(priv->tree_view)) // we are looking at the inner scrolled window
+        priv->hadj_value = gtk_adjustment_get_value(priv->hadj);
+    else // we are looking at the scrolled window
+        gtk_adjustment_set_value(priv->hadj, priv->hadj_value);
+}
+
 /****************************
  * GncPluginPage Functions  *
  ***************************/
@@ -350,6 +381,9 @@ gbv_create_widget(GncBudgetView *view)
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window),
                                    GTK_POLICY_AUTOMATIC,
                                    GTK_POLICY_NEVER);
+    // save the main scrolled window horizontal adjustment
+    priv->hadj = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(scrolled_window));
+
     gtk_widget_show(scrolled_window);
     gtk_box_pack_start(GTK_BOX(vbox), scrolled_window, /*expand*/TRUE, /*fill*/TRUE, 0);
 
@@ -358,6 +392,10 @@ gbv_create_widget(GncBudgetView *view)
     gtk_container_add (GTK_CONTAINER(scrolled_window), GTK_WIDGET(inner_vbox));
     gtk_widget_show(GTK_WIDGET(inner_vbox));
 
+    // This is used to keep the selected cell in view
+    g_signal_connect(G_OBJECT(scrolled_window), "set-focus-child",
+                     G_CALLBACK(gbv_container_set_focus_child_cb), view);
+
     inner_scrolled_window = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(inner_scrolled_window),
                                    GTK_POLICY_NEVER,
@@ -365,6 +403,10 @@ gbv_create_widget(GncBudgetView *view)
     gtk_widget_show(inner_scrolled_window);
     tree_view = gnc_tree_view_account_new(FALSE);
     gtk_container_add(GTK_CONTAINER(inner_scrolled_window), GTK_WIDGET(tree_view));
+
+    // This is used to keep the selected cell in view
+    g_signal_connect(G_OBJECT(inner_scrolled_window), "set-focus-child",
+                     G_CALLBACK(gbv_container_set_focus_child_cb), view);
 
     guid_to_string_buff(&priv->key, guidstr);
     state_section = g_strjoin(" ", STATE_SECTION_PREFIX, guidstr, NULL);
