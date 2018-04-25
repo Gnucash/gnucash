@@ -15,6 +15,10 @@ SET(scm_test_report_system_SOURCES
   test-list-extras.scm
   test-report-utilities.scm
 # test-test-extras.scm ;;FIXME why is this not run
+)
+
+set (scm_test_report_system_with_srfi64_SOURCES
+  test-html-utilities-srfi64.scm
   )
 
 set(GUILE_DEPENDS
@@ -28,6 +32,10 @@ set(GUILE_DEPENDS
   scm-report-system-3
   )
 GNC_ADD_SCHEME_TESTS(${scm_test_report_system_SOURCES})
+
+if (HAVE_SRFI64)
+  gnc_add_scheme_tests ("${scm_test_report_system_with_srfi64_SOURCES}")
+endif (HAVE_SRFI64)
 
 GNC_ADD_SCHEME_TARGETS(scm-test-report-system
   "test-extras.scm"
@@ -46,7 +54,7 @@ GNC_ADD_SCHEME_TARGETS(scm-test-report-system-2
 add_dependencies(check scm-test-report-system)
 SET_DIST_LIST(test_report_system_DIST
   CMakeLists.txt
-  
+  ${scm_test_report_system_with_srfi64_SOURCES}
   ${scm_test_report_system_SOURCES}
   test-extras.scm
   test-link-module.c

@@ -853,3 +853,17 @@
     report-id
     (_ "No data")
     (_ "The selected accounts contain no data/transactions (or only zeroes) for the selected time period")))
+
+;; function to sanitize strings prior to sending to html
+(define (gnc:html-string-sanitize str)
+  (with-output-to-string
+    (lambda ()
+      (string-for-each
+       (lambda (c)
+         (display
+          (case c
+            ((#\&) "&amp;")
+            ((#\<) "&lt;")
+            ((#\>) "&gt;")
+            (else c))))
+       str))))
