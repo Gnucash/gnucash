@@ -3,7 +3,8 @@
  * @addtogroup budget Budgets
  * @{
  * @file gnc-budget-view.c
- * @brief File to define budget views for gnucash (the actual display of the budget, along with some calculations and event handlers).
+ * @brief File to define budget views for gnucash (the actual display 
+          of the budget, along with some calculations and event handlers).
  * @author Phil Longstaff Copyright (C) 2013 phil.longstaff@yahoo.ca
  *
  * This program is free software; you can redistribute it and/or    *
@@ -70,7 +71,7 @@
 #include "gnc-tree-model-account-types.h"
 
 
-/* This static indicates the debugging module that this .o belongs to.  */
+/* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = GNC_MOD_BUDGET;
 
 #define PLUGIN_PAGE_BUDGET_CM_CLASS "budget-view"
@@ -97,7 +98,9 @@ enum
 };
 /**< \brief ENUM for different budget totals types.
 
-This enum is used to specify the specific type of account that the selected account belongs to. This is important to ensure that the sum of the different types of accounts can be calculated.
+This enum is used to specify the specific type of account that the
+ selected account belongs to. This is important to ensure that the sum 
+ of the different types of accounts can be calculated.
 */
 
 
@@ -131,7 +134,8 @@ static gnc_numeric gbv_get_accumulated_budget_amount(GncBudget* budget,
 
 /** \brief the private budget view structure
 
-    This structure defines the different elements required for a budget view - the actual display of how a budget looks when you open it.
+    This structure defines the different elements required for a budget view - 
+    the actual display of how a budget looks when you open it.
         @param tree_view Pointer to the widget to display the detailed budget.
         @param totals_tree_view Pointer to the widget to display the totals tree at the bottom of the budget screen.
         @param the main scrolled window horizonatl adjustment
@@ -227,7 +231,7 @@ gnc_budget_view_init(GncBudgetView *budget_view)
     /* Keep track of the root and top level asset, liability, income and expense accounts */
     root = gnc_book_get_root_account(gnc_get_current_book());
     num_top_accounts = gnc_account_n_children(root);
-    
+
     priv->rootAcct = root;
 
     for (i = 0; i < num_top_accounts; ++i)
@@ -272,7 +276,8 @@ gnc_budget_view_finalize(GObject *object)
 
 /** \brief returns the current selection in the gnc budget view.
 
-    Returns the current selection in the gnc budget view by using the macro GNC_BUDGET_VIEW_GET_PRIVATE.
+    Returns the current selection in the gnc budget view by using the 
+    macro GNC_BUDGET_VIEW_GET_PRIVATE.
 */
 GtkTreeSelection*
 gnc_budget_view_get_selection(GncBudgetView* view)
@@ -300,9 +305,9 @@ GtkWidget*
 gnc_budget_view_get_account_tree_view (GncBudgetView* view)
 {
     GncBudgetViewPrivate *priv;
-    
+
     g_return_val_if_fail(GNC_IS_BUDGET_VIEW(view), NULL);
-        
+
     priv =  GNC_BUDGET_VIEW_GET_PRIVATE(view);
     return GTK_WIDGET(priv->fd->tree_view);
 }
@@ -795,19 +800,16 @@ gbv_get_accumulated_budget_amount(GncBudget* budget, Account* account, guint per
     info.total = gnc_numeric_zero();
     info.budget = budget;
     info.period_num = period_num;
-    
 
-    
     if (!gnc_budget_is_account_period_value_set(budget, account, period_num))
     {
-    	gnc_account_foreach_child(account, budget_accum_helper, &info);
+        gnc_account_foreach_child(account, budget_accum_helper, &info);
     }
     else
     {
-    	info.total = gnc_budget_get_account_period_value(budget, account, period_num);
+        info.total = gnc_budget_get_account_period_value(budget, account, period_num);
     }
-    	return info.total;
-    
+    return info.total;
 }
 
 /** \brief Calculates and displays budget amount for a period in a defined account.
@@ -871,7 +873,8 @@ budget_col_source(Account *account, GtkTreeViewColumn *col,
     return g_strdup(amtbuff);
 }
 
-/** \brief Function to find the total for an account for display in the totals column to the right.
+/** \brief Function to find the total for an account for display in the
+ totals column to the right.
 */
 static gnc_numeric
 bgv_get_total_for_account(Account* account, GncBudget* budget)
@@ -901,7 +904,6 @@ bgv_get_total_for_account(Account* account, GncBudget* budget)
             }
         }
     }
-
     return total;
 }
 
@@ -922,9 +924,12 @@ budget_total_col_source(Account *account, GtkTreeViewColumn *col,
     return g_strdup(amtbuff);
 }
 
-/** \brief Function to perform actions if an account has been edited (e.g. when removing or adding data values).
+/** \brief Function to perform actions if an account has been edited
+     (e.g. when removing or adding data values).
 
-Primarily this function is here to check to see if a cell has been updated to be zero so that the values in the children of that account can then be tallied for the value.
+ Primarily this function is here to check to see if a cell has been
+ updated to be zero so that the values in the children of that account
+ can then be tallied for the value.
 */
 static void
 budget_col_edited(Account *account, GtkTreeViewColumn *col,
@@ -950,12 +955,17 @@ budget_col_edited(Account *account, GtkTreeViewColumn *col,
                                             numeric);
 }
 
-/** \brief Function to find the total in a column of budget provided and display the info in the totals tree widget.
+/** \brief Function to find the total in a column of budget provided and
+ display the info in the totals tree widget.
 
-This function is called on each row within the totals tree (i.e. assets, expenses, transfers, and totals) in order to 
-update the total values in the totals tree (grand totals at the bottom of the budget page). It looks at which type of account is currently being examined, and then calls the function
-\ref gbv_get_accumulated_budget_amount on all of the relevant children accounts of the root. It then sets the value and color of the cell based on this information in the totals tree widget.
-
+This function is called on each row within the totals tree
+ (i.e. assets, expenses, transfers, and totals) in order to
+ update the total values in the totals tree (grand totals at the bottom
+ of the budget page). It looks at which type of account is currently being
+ examined, and then calls the function
+\ref gbv_get_accumulated_budget_amount on all of the relevant children
+ accounts of the root. It then sets the value and color of the cell based
+ on this information in the totals tree widget.
 */
 static void
 totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
@@ -986,74 +996,68 @@ totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
     period_num = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(col),
                                  "period_num"));
 
-
     num_top_accounts = gnc_account_n_children(priv->rootAcct);
-    
+
     // step through each child account of the root, find the total income, expenses, liabilities, and assets.
-    
+
     for (i = 0; i < num_top_accounts; ++i)
-  	{
-    	account = gnc_account_nth_child(priv->rootAcct, i);
-    	
-    	// find the total for this account
-    	
-    	if (period_num < 0)
-    	{
-    		value = bgv_get_total_for_account(account, budget);
-    	}
-    	else
-    	{
-    		value = gbv_get_accumulated_budget_amount(budget, account, period_num);
-    	}
+    {
+        account = gnc_account_nth_child(priv->rootAcct, i);
 
-		// test for what account type, and add 'value' to the appopriate total
-    	
-    	if (xaccAccountGetType(account) == ACCT_TYPE_INCOME)
-    	{
-    		totalincome = gnc_numeric_add(totalincome, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-    	}
-    	else if (xaccAccountGetType(account) == ACCT_TYPE_EXPENSE)
-    	{
-    		totalexpenses = gnc_numeric_add(totalexpenses, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-    	}
-    	else if (xaccAccountGetType(account) == ACCT_TYPE_ASSET)
-    	{
-    		totalassets = gnc_numeric_add(totalassets, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-    	}
-    	else if (xaccAccountGetType(account) == ACCT_TYPE_LIABILITY)
-    	{
-    		totalliabilities = gnc_numeric_add(totalliabilities, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-    	}
-    	else
-    	{
-    		// Do nothing because this account is not of interest
-    	}
-    	
-   	}
+        // find the total for this account
 
-   
-    
+        if (period_num < 0)
+        {
+            value = bgv_get_total_for_account(account, budget);
+        }
+        else
+        {
+            value = gbv_get_accumulated_budget_amount(budget, account, period_num);
+        }
+
+        // test for what account type, and add 'value' to the appopriate total
+
+        if (xaccAccountGetType(account) == ACCT_TYPE_INCOME)
+        {
+            totalincome = gnc_numeric_add(totalincome, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+        }
+        else if (xaccAccountGetType(account) == ACCT_TYPE_EXPENSE)
+        {
+            totalexpenses = gnc_numeric_add(totalexpenses, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+        }
+        else if (xaccAccountGetType(account) == ACCT_TYPE_ASSET)
+        {
+            totalassets = gnc_numeric_add(totalassets, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+        }
+        else if (xaccAccountGetType(account) == ACCT_TYPE_LIABILITY)
+        {
+            totalliabilities = gnc_numeric_add(totalliabilities, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+        }
+        else
+        {
+            // Do nothing because this account is not of interest
+        }
+    }
+
     // at this point we should have variables holding the values for assets, liabilities, expenses and incomes.
-    
-    // Set the text to display, depending on which of the totals rows we are currently looking at	
-    	
+
+    // Set the text to display, depending on which of the totals rows we are currently looking at
+
     if (row_type == TOTALS_TYPE_INCOME)
     {
-    	// FIXME: There must be a better way to get the GncAccountPrintInfo object than this. Would prefer to depreciate the tracking of top level accounts.
+        // FIXME: There must be a better way to get the GncAccountPrintInfo object than this. Would prefer to depreciate the tracking of top level accounts.
         xaccSPrintAmount(amtbuff, totalincome,
                          gnc_account_print_info(priv->income, FALSE));
         g_object_set(cell, "foreground", NULL, NULL);
     }
     else if (row_type == TOTALS_TYPE_EXPENSES)
     {
-       
         xaccSPrintAmount(amtbuff, totalexpenses,
                          gnc_account_print_info(priv->expenses, FALSE));
         g_object_set(cell, "foreground", NULL, NULL);
     }
     else if (row_type == TOTALS_TYPE_TRANSFERS)
     {
-    	
         xaccSPrintAmount(amtbuff, gnc_numeric_sub(totalassets, totalliabilities, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD),
                          gnc_account_print_info(priv->assets, FALSE));
         g_object_set(cell, "foreground", NULL, NULL);
@@ -1076,13 +1080,11 @@ totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
     }
     else
     {
-    	// if it reaches here then the row type was not set correctly
+        // if it reaches here then the row type was not set correctly
         g_strlcpy(amtbuff, "error", sizeof(amtbuff));
     }
-
     g_object_set(G_OBJECT(cell), "text", amtbuff, "xalign", 1.0, NULL);
 }
-
 
 /**
  \brief Function to refresh the titles of each column.
@@ -1163,10 +1165,10 @@ gbv_col_edited_cb(GtkCellRendererText* cell, gchar* path_string, gchar* new_text
     gtk_widget_queue_draw(GTK_WIDGET(priv->totals_tree_view));
 }
 
-
 /** \brief refreshes the current budget view
 
-The function will step through to only display the columns that are set as visible, and will add any needed columns (e.g. the totals column).
+The function will step through to only display the columns that are set
+ as visible, and will add any needed columns (e.g. the totals column).
 */
 void
 gnc_budget_view_refresh(GncBudgetView *view)
@@ -1263,7 +1265,6 @@ gnc_budget_view_refresh(GncBudgetView *view)
             gtk_tree_view_append_column(priv->totals_tree_view, col);
         }
     }
-
     gbv_refresh_col_titles(view);
     LEAVE(" ");
 }
