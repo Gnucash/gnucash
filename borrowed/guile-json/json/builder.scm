@@ -72,6 +72,14 @@
                          (u8v-2->unicode bv)
                          (u8v-3->unicode bv))))
         (unicode->string unicode)))
+     ;; A 4 byte UTF-8 needs to output as \uHHHH\uHHHH
+     ((eq? len 4)
+      (let ((bv4 (string->utf16 (string c))))
+        (string-append
+         (unicode->string (+ (ash (bytevector-u8-ref bv4 0) 8)
+                             (bytevector-u8-ref bv4 1)))
+         (unicode->string (+ (ash (bytevector-u8-ref bv4 2) 8)
+                             (bytevector-u8-ref bv4 3))))))
      ;; Anything else should wrong, hopefully.
      (else (throw 'json-invalid)))))
 
