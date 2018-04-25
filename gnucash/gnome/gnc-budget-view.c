@@ -51,6 +51,7 @@
 #include "dialog-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
+#include "gnc-gtk-utils.h"
 #include "gnc-icons.h"
 
 #include "gnc-session.h"
@@ -811,21 +812,23 @@ gbv_get_accumulated_budget_amount(GncBudget* budget, Account* account, guint per
 
 /** \brief Calculates and displays budget amount for a period in a defined account.
 
-Displays budget amount for a period for an account.  If a budget
-   amount is set, it is displayed in black.  If no budget amount is
-   set and the account has children, the total of the children's
+   Displays budget amount for a period for an account.  If a budget
+   amount is set, it is displayed in the default color.  If no budget
+   amount is set and the account has children, the total of the children's
    budget amounts (if any) is displayed in dark grey.
 */
 static gchar *
 budget_col_source(Account *account, GtkTreeViewColumn *col,
                   GtkCellRenderer *cell)
 {
+    GtkTreeView *bview;
     GncBudget *budget;
     guint period_num;
     gnc_numeric numeric;
     gchar amtbuff[100]; //FIXME: overkill, where's the #define?
 
     budget = GNC_BUDGET(g_object_get_data(G_OBJECT(col), "budget"));
+    bview = GTK_TREE_VIEW(g_object_get_data(G_OBJECT(col), "budget_view"));
     period_num = GPOINTER_TO_UINT(g_object_get_data(G_OBJECT(col),
                                   "period_num"));
 
@@ -837,10 +840,17 @@ budget_col_source(Account *account, GtkTreeViewColumn *col,
         }
         else
         {
+            GdkRGBA color;
+            GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(bview));
+            gtk_style_context_get_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
+
             numeric = gbv_get_accumulated_budget_amount(budget, account, period_num);
             xaccSPrintAmount(amtbuff, numeric,
                              gnc_account_print_info(account, FALSE));
-            g_object_set(cell, "foreground", "dark gray", NULL);
+            if (gnc_is_dark_theme (&color))
+                g_object_set(cell, "foreground", "darkgray", NULL);
+            else
+                g_object_set(cell, "foreground", "dimgray", NULL);
         }
     }
     else
@@ -855,7 +865,7 @@ budget_col_source(Account *account, GtkTreeViewColumn *col,
         {
             xaccSPrintAmount(amtbuff, numeric,
                              gnc_account_print_info(account, FALSE));
-            g_object_set(cell, "foreground", "black", NULL);
+            g_object_set(cell, "foreground", NULL, NULL);
         }
     }
     return g_strdup(amtbuff);
@@ -1032,21 +1042,21 @@ totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
     	// FIXME: There must be a better way to get the GncAccountPrintInfo object than this. Would prefer to depreciate the tracking of top level accounts.
         xaccSPrintAmount(amtbuff, totalincome,
                          gnc_account_print_info(priv->income, FALSE));
-        g_object_set(cell, "foreground", "black", NULL);
+        g_object_set(cell, "foreground", NULL, NULL);
     }
     else if (row_type == TOTALS_TYPE_EXPENSES)
     {
        
         xaccSPrintAmount(amtbuff, totalexpenses,
                          gnc_account_print_info(priv->expenses, FALSE));
-        g_object_set(cell, "foreground", "black", NULL);
+        g_object_set(cell, "foreground", NULL, NULL);
     }
     else if (row_type == TOTALS_TYPE_TRANSFERS)
     {
     	
         xaccSPrintAmount(amtbuff, gnc_numeric_sub(totalassets, totalliabilities, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD),
                          gnc_account_print_info(priv->assets, FALSE));
-        g_object_set(cell, "foreground", "black", NULL);
+        g_object_set(cell, "foreground", NULL, NULL);
     }
     else if (row_type == TOTALS_TYPE_TOTAL)
     {
@@ -1061,7 +1071,7 @@ totals_col_source(GtkTreeViewColumn *col, GtkCellRenderer *cell,
         }
         else
         {
-            g_object_set(cell, "foreground", "black", NULL);
+            g_object_set(cell, "foreground", NULL, NULL);
         }
     }
     else
@@ -1215,6 +1225,7 @@ gnc_budget_view_refresh(GncBudgetView *view)
                   GNC_TREE_VIEW_ACCOUNT(priv->tree_view), "",
                   budget_col_source, budget_col_edited);
         g_object_set_data(G_OBJECT(col), "budget", priv->budget);
+        g_object_set_data(G_OBJECT(col), "budget_view", priv->tree_view);
         g_object_set_data(G_OBJECT(col), "period_num",
                           GUINT_TO_POINTER(num_periods_visible));
         col_list = g_list_append(col_list, col);
