@@ -24,6 +24,11 @@
 #if defined(scm_to_utf8_string) && SCM_MAJOR_VERSION >= 2
 #undef scm_to_utf8_string
 #undef scm_from_utf8_string
+#undef SWIG_scm2str
+#define SWIG_scm2str(s) scm_to_utf8_string(s)
+#undef SWIG_str02scm
+#define SWIG_str02scm(str) \
+  str ? scm_from_utf8_string(str) : SCM_BOOL_F
 #endif
 #define scm_is_equal(obj1,obj2)	scm_is_true(scm_equal_p(obj1,obj2))
 #define scm_is_exact(obj)	scm_is_true(scm_exact_p(obj))
