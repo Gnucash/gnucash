@@ -2990,17 +2990,17 @@ gboolean xaccTransRegister (void)
             },
             {
                 TRANS_DATE_ENTERED, QOF_TYPE_DATE,
-                (QofAccessFunc)xaccTransRetDateEnteredTS,
-                (QofSetterFunc)qofTransSetDateEnteredTS
+                (QofAccessFunc)xaccTransRetDateEntered,
+                (QofSetterFunc)xaccTransSetDateEnteredSecs
             },
             {
                 TRANS_DATE_POSTED, QOF_TYPE_DATE,
-                (QofAccessFunc)xaccTransRetDatePostedTS,
-                (QofSetterFunc)qofTransSetDatePostedTS
+                (QofAccessFunc)xaccTransRetDatePosted,
+                (QofSetterFunc)xaccTransSetDatePostedSecs
             },
             {
                 TRANS_DATE_DUE, QOF_TYPE_DATE,
-                (QofAccessFunc)xaccTransRetDateDueTS, NULL
+                (QofAccessFunc)xaccTransRetDateDue, NULL
             },
             {
                 TRANS_IMBALANCE, QOF_TYPE_NUMERIC,

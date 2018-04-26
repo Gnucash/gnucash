@@ -2246,8 +2246,8 @@ gboolean xaccSplitRegister (void)
         {
             {
                 SPLIT_DATE_RECONCILED, QOF_TYPE_DATE,
-                (QofAccessFunc)xaccSplitRetDateReconciledTS,
-                (QofSetterFunc)xaccSplitSetDateReconciledTS
+                (QofAccessFunc)xaccSplitGetDateReconciled,
+                (QofSetterFunc)xaccSplitSetDateReconciledSecs
             },
 
             /* d-* are deprecated query params, should not be used in new

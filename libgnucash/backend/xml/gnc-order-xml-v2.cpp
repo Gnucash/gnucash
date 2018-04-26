@@ -75,7 +75,7 @@ static xmlNodePtr
 order_dom_tree_create (GncOrder* order)
 {
     xmlNodePtr ret;
-    Timespec ts;
+    time64 tt;
 
     ret = xmlNewNode (NULL, BAD_CAST gnc_order_string);
     xmlSetProp (ret, BAD_CAST "version", BAD_CAST order_version_string);
@@ -89,12 +89,12 @@ order_dom_tree_create (GncOrder* order)
     xmlAddChild (ret, gnc_owner_to_dom_tree (order_owner_string,
                                              gncOrderGetOwner (order)));
 
-    ts = gncOrderGetDateOpened (order);
-    xmlAddChild (ret, time64_to_dom_tree (order_opened_string, ts.tv_sec));
+    tt = gncOrderGetDateOpened (order);
+    xmlAddChild (ret, time64_to_dom_tree (order_opened_string, tt));
 
-    ts = gncOrderGetDateClosed (order);
-    if (ts.tv_sec)
-        xmlAddChild (ret, time64_to_dom_tree (order_closed_string, ts.tv_sec));
+    tt = gncOrderGetDateClosed (order);
+    if (tt != INT64_MAX)
+        xmlAddChild (ret, time64_to_dom_tree (order_closed_string, tt));
 
     maybe_add_string (ret, order_notes_string, gncOrderGetNotes (order));
     maybe_add_string (ret, order_reference_string, gncOrderGetReference (order));
@@ -131,13 +131,12 @@ set_string (xmlNodePtr node, GncOrder* order,
 }
 
 static inline gboolean
-set_timespec (xmlNodePtr node, GncOrder* order,
-              void (*func) (GncOrder* order, Timespec ts))
+set_time64 (xmlNodePtr node, GncOrder* order,
+              void (*func) (GncOrder* order, time64 tt))
 {
     time64 time = dom_tree_to_time64 (node);
     if (!dom_tree_valid_time64 (time, node->name)) return FALSE;
-    Timespec ts {time, 0};
-    func (order, ts);
+    func (order, time);
     return TRUE;
 }
 
@@ -194,7 +193,7 @@ order_opened_handler (xmlNodePtr node, gpointer order_pdata)
 {
     struct order_pdata* pdata = static_cast<decltype (pdata)> (order_pdata);
 
-    return set_timespec (node, pdata->order, gncOrderSetDateOpened);
+    return set_time64 (node, pdata->order, gncOrderSetDateOpened);
 }
 
 static gboolean
@@ -202,7 +201,7 @@ order_closed_handler (xmlNodePtr node, gpointer order_pdata)
 {
     struct order_pdata* pdata = static_cast<decltype (pdata)> (order_pdata);
 
-    return set_timespec (node, pdata->order, gncOrderSetDateClosed);
+    return set_time64 (node, pdata->order, gncOrderSetDateClosed);
 }
 
 static gboolean

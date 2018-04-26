@@ -1829,7 +1829,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
         query_date_t pdata = (query_date_t) pd;
         g_string_append_printf (gs, " Match type %s",
                                 qof_query_printDateMatch (pdata->options));
-        g_string_append_printf (gs, " query_date: %s", gnc_print_date (pdata->date));
+        g_string_append_printf (gs, " query_date: %s", gnc_print_date ({pdata->date, 0}));
         return;
     }
     if (!g_strcmp0 (pd->type_name, QOF_TYPE_CHAR))

@@ -161,7 +161,9 @@ gchar *xaccSchedXactionGetName( const SchedXaction *sx );
 void xaccSchedXactionSetName( SchedXaction *sx, const gchar *newName );
 
 const GDate* xaccSchedXactionGetStartDate(const SchedXaction *sx );
+time64 xaccSchedXactionGetStartDateTT(const SchedXaction *sx );
 void xaccSchedXactionSetStartDate( SchedXaction *sx, const GDate* newStart );
+void xaccSchedXactionSetStartDateTT( SchedXaction *sx, const time64 newStart );
 
 int xaccSchedXactionHasEndDate( const SchedXaction *sx );
 /**
@@ -174,7 +176,9 @@ const GDate* xaccSchedXactionGetEndDate(const SchedXaction *sx );
 void xaccSchedXactionSetEndDate( SchedXaction *sx, const GDate* newEnd );
 
 const GDate* xaccSchedXactionGetLastOccurDate(const SchedXaction *sx );
+time64 xaccSchedXactionGetLastOccurDateTT(const SchedXaction *sx );
 void xaccSchedXactionSetLastOccurDate( SchedXaction *sx, const GDate* newLastOccur );
+void xaccSchedXactionSetLastOccurDateTT( SchedXaction *sx, const time64 newLastOccur );
 
 /**
  * Returns true if the scheduled transaction has a defined number of

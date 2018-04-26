@@ -25,6 +25,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <stdint.h>
 
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
@@ -125,7 +126,7 @@ static void gnc_ui_to_order (OrderWindow *ow, GncOrder *order)
     GtkTextBuffer* text_buffer;
     GtkTextIter start, end;
     gchar *text;
-    Timespec ts;
+    time64 tt;
 
     /* Do nothing if this is view only */
     if (ow->dialog_type == VIEW_ORDER)
@@ -145,8 +146,8 @@ static void gnc_ui_to_order (OrderWindow *ow, GncOrder *order)
     gncOrderSetReference (order, gtk_editable_get_chars
                           (GTK_EDITABLE (ow->ref_entry), 0, -1));
 
-    ts = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (ow->opened_date));
-    gncOrderSetDateOpened (order, ts);
+    tt = gnc_date_edit_get_date (GNC_DATE_EDIT (ow->opened_date));
+    gncOrderSetDateOpened (order, tt);
 
     if (ow->active_check)
         gncOrderSetActive (order, gtk_toggle_button_get_active
@@ -260,7 +261,7 @@ gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
     GList *entries;
     char *message, *label;
     gboolean non_inv = FALSE;
-    Timespec ts;
+    Timespec ts = {gnc_time (NULL), 0};
 
     /* Make sure the order is ok */
     if (!gnc_order_window_verify_ok (ow))
@@ -309,11 +310,10 @@ gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
     message = _("Do you really want to close the order?");
     label = _("Close Date");
 
-    timespecFromTime64 (&ts, gnc_time (NULL));
     if (!gnc_dialog_date_close_parented (ow->dialog, message, label, TRUE, &ts))
         return;
 
-    gncOrderSetDateClosed (order, ts);
+    gncOrderSetDateClosed (order, ts.tv_nsec);
 
     /* save it off */
     gnc_order_window_ok_save (ow);
@@ -461,7 +461,7 @@ gnc_order_update_window (OrderWindow *ow)
     {
         GtkTextBuffer* text_buffer;
         const char *string;
-        Timespec ts, ts_zero = {0, 0};
+        time64 tt;
 
         gtk_entry_set_text (GTK_ENTRY (ow->ref_entry),
                             gncOrderGetReference (order));
@@ -470,23 +470,23 @@ gnc_order_update_window (OrderWindow *ow)
         text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->notes_text));
         gtk_text_buffer_set_text (text_buffer, string, -1);
 
-        ts = gncOrderGetDateOpened (order);
-        if (timespec_equal (&ts, &ts_zero))
+        tt = gncOrderGetDateOpened (order);
+        if (tt == INT64_MAX)
         {
             gnc_date_edit_set_time (GNC_DATE_EDIT (ow->opened_date),
                                     gnc_time (NULL));
         }
         else
         {
-            gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ow->opened_date), ts);
+            gnc_date_edit_set_time (GNC_DATE_EDIT (ow->opened_date), tt);
         }
 
         /* If this is a "New Order Window" we can stop here! */
         if (ow->dialog_type == NEW_ORDER)
             return;
 
-        ts = gncOrderGetDateClosed (order);
-        if (timespec_equal (&ts, &ts_zero))
+        tt = gncOrderGetDateClosed (order);
+        if (tt == INT64_MAX)
         {
             gnc_date_edit_set_time (GNC_DATE_EDIT (ow->closed_date),
                                     gnc_time (NULL));
@@ -494,7 +494,7 @@ gnc_order_update_window (OrderWindow *ow)
         }
         else
         {
-            gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ow->closed_date), ts);
+            gnc_date_edit_set_time (GNC_DATE_EDIT (ow->closed_date), tt);
         }
 
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ow->active_check),
@@ -770,11 +770,8 @@ gnc_ui_order_edit (GtkWindow *parent, GncOrder *order)
     if (!order) return NULL;
 
     type = EDIT_ORDER;
-    {
-        Timespec ts = gncOrderGetDateClosed (order);
-        if (ts.tv_sec || ts.tv_nsec)
-            type = VIEW_ORDER;
-    }
+    if (gncOrderGetDateClosed (order) == INT64_MAX)
+        type = VIEW_ORDER;
 
     ow = gnc_order_new_window (parent, gncOrderGetBook(order), type, order,
                                gncOrderGetOwner (order));

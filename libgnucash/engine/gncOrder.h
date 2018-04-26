@@ -66,8 +66,8 @@ void gncOrderDestroy (GncOrder *order);
 
 void gncOrderSetID (GncOrder *order, const char *id);
 void gncOrderSetOwner (GncOrder *order, GncOwner *owner);
-void gncOrderSetDateOpened (GncOrder *order, Timespec date);
-void gncOrderSetDateClosed (GncOrder *order, Timespec date);
+void gncOrderSetDateOpened (GncOrder *order, time64 date);
+void gncOrderSetDateClosed (GncOrder *order, time64 date);
 void gncOrderSetNotes (GncOrder *order, const char *notes);
 void gncOrderSetReference (GncOrder *order, const char *reference);
 void gncOrderSetActive (GncOrder *order, gboolean active);
@@ -80,8 +80,8 @@ void gncOrderRemoveEntry (GncOrder *order, GncEntry *entry);
 
 const char * gncOrderGetID (const GncOrder *order);
 GncOwner * gncOrderGetOwner (GncOrder *order);
-Timespec gncOrderGetDateOpened (const GncOrder *order);
-Timespec gncOrderGetDateClosed (const GncOrder *order);
+time64 gncOrderGetDateOpened (const GncOrder *order);
+time64 gncOrderGetDateClosed (const GncOrder *order);
 const char * gncOrderGetNotes (const GncOrder *order);
 const char * gncOrderGetReference (const GncOrder *order);
 gboolean gncOrderGetActive (const GncOrder *order);

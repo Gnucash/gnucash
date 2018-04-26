@@ -159,7 +159,7 @@ QofQueryPredData *qof_query_string_predicate (QofQueryCompare how,
 
 QofQueryPredData *qof_query_date_predicate (QofQueryCompare how,
         QofDateMatch options,
-        Timespec date);
+        time64 date);
 
 QofQueryPredData *qof_query_numeric_predicate (QofQueryCompare how,
         QofNumericMatch options,
@@ -183,7 +183,7 @@ QofQueryPredData *qof_query_core_predicate_copy (const QofQueryPredData *pdata);
 void qof_query_core_predicate_free (QofQueryPredData *pdata);
 
 /** Retrieve a predicate. */
-gboolean qof_query_date_predicate_get_date (const QofQueryPredData *pd, Timespec *date);
+gboolean qof_query_date_predicate_get_date (const QofQueryPredData *pd, time64 *date);
 /** Return a printable string for a core data object.  Caller needs
  *  to g_free() the returned string.
  */

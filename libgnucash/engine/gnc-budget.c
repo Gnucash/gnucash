@@ -720,9 +720,9 @@ static guint gnc_budget_get_rec_mult(const GncBudget *bgt)
 {
     return recurrenceGetMultiplier(&(GET_PRIVATE(bgt)->recurrence));
 }
-static GDate gnc_budget_get_rec_date(const GncBudget *bgt)
+static time64 gnc_budget_get_rec_time(const GncBudget *bgt)
 {
-    return recurrenceGetDate(&(GET_PRIVATE(bgt)->recurrence));
+    return recurrenceGetTime(&(GET_PRIVATE(bgt)->recurrence));
 }
 
 /* Register ourselves with the engine. */
@@ -754,7 +754,7 @@ gboolean gnc_budget_register (void)
            this is wrong. */
         {
             "recurrence_date", QOF_TYPE_DATE,
-            (QofAccessFunc) gnc_budget_get_rec_date, NULL
+            (QofAccessFunc) gnc_budget_get_rec_time, NULL
         },
         /* Signedness problem: Should be unsigned. */
         {

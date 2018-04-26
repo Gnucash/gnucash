@@ -75,7 +75,7 @@ typedef struct
 {
     QofQueryPredData	pd;
     QofDateMatch	options;
-    Timespec	date;
+    time64	date;
 } query_date_def, *query_date_t;
 
 typedef struct
