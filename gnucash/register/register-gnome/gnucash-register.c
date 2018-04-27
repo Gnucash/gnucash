@@ -53,6 +53,7 @@ enum
     ACTIVATE_CURSOR,
     REDRAW_ALL,
     REDRAW_HELP,
+    SHOW_POPUP_MENU,
     LAST_SIGNAL
 };
 
@@ -82,6 +83,7 @@ struct _GnucashRegisterClass
     void (*activate_cursor) (GnucashRegister *reg);
     void (*redraw_all)      (GnucashRegister *reg);
     void (*redraw_help)     (GnucashRegister *reg);
+    void (*show_popup_menu) (GnucashRegister *reg);
 };
 
 /** Implementation *****************************************************/
@@ -351,9 +353,20 @@ gnucash_register_class_init (GnucashRegisterClass *klass)
                      g_cclosure_marshal_VOID__VOID,
                      G_TYPE_NONE, 0);
 
+    register_signals[SHOW_POPUP_MENU] =
+        g_signal_new("show_popup_menu",
+                     G_TYPE_FROM_CLASS(gobject_class),
+                     G_SIGNAL_RUN_LAST,
+                     G_STRUCT_OFFSET(GnucashRegisterClass,
+                                     show_popup_menu),
+                     NULL, NULL,
+                     g_cclosure_marshal_VOID__VOID,
+                     G_TYPE_NONE, 0);
+
     klass->activate_cursor = NULL;
     klass->redraw_all = NULL;
     klass->redraw_help = NULL;
+    klass->show_popup_menu = NULL;
 }
 
 

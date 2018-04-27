@@ -322,6 +322,24 @@ gboolean gnc_main_window_button_press_cb (GtkWidget *whatever,
         GdkEventButton *event,
         GncPluginPage *page);
 
+
+/** Callback function invoked when the user requests that Gnucash
+ *  popup the contextual menu via the keyboard context-menu request
+ *  key combination (Shift-F10 by default).
+ *
+ *  @param page This is the GncPluginPage corresponding to the visible
+ *  page.
+ *
+ *  @param widget Whatever widget had focus when the user issued the
+ *  keyboard context-menu request.
+ *
+ *  @return Always returns TRUE to indicate that the menu request was
+ *  handled.
+ */
+gboolean gnc_main_window_popup_menu_cb (GtkWidget *widget,
+        GncPluginPage *page);
+
+
 /** Restore the persistent state of all windows.
  *
  *  @param keyfile The GKeyFile containing persistent window state.

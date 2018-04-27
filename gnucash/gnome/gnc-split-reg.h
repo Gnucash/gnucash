@@ -92,26 +92,27 @@ struct _GNCSplitRegClass
     GtkBoxClass parent_class;
 
     /* Signal defaults */
-    void (*enter_ent_cb)    ( GNCSplitReg *w, gpointer user_data );
-    void (*cancel_ent_cb)   ( GNCSplitReg *w, gpointer user_data );
-    void (*delete_ent_cb)   ( GNCSplitReg *w, gpointer user_data );
-    void (*reinit_ent_cb)   ( GNCSplitReg *w, gpointer user_data );
-    void (*dup_ent_cb)      ( GNCSplitReg *w, gpointer user_data );
-    void (*schedule_ent_cb) ( GNCSplitReg *w, gpointer user_data );
-    void (*expand_ent_cb)   ( GNCSplitReg *w, gpointer user_data );
-    void (*blank_cb)        ( GNCSplitReg *w, gpointer user_data );
-    void (*jump_cb)         ( GNCSplitReg *w, gpointer user_data );
-    void (*cut_cb)          ( GNCSplitReg *w, gpointer user_data );
-    void (*cut_txn_cb)      ( GNCSplitReg *w, gpointer user_data );
-    void (*copy_cb)         ( GNCSplitReg *w, gpointer user_data );
-    void (*copy_txn_cb)     ( GNCSplitReg *w, gpointer user_data );
-    void (*paste_cb)        ( GNCSplitReg *w, gpointer user_data );
-    void (*paste_txn_cb)    ( GNCSplitReg *w, gpointer user_data );
-    void (*void_txn_cb)     ( GNCSplitReg *w, gpointer user_data );
-    void (*unvoid_txn_cb)   ( GNCSplitReg *w, gpointer user_data );
-    void (*reverse_txn_cb)  ( GNCSplitReg *w, gpointer user_data );
-    void (*help_changed_cb) ( GNCSplitReg *w, gpointer user_data );
-    void (*include_date_cb) ( GNCSplitReg *w, time64 date, gpointer user_data );
+    void (*enter_ent_cb)       ( GNCSplitReg *w, gpointer user_data );
+    void (*cancel_ent_cb)      ( GNCSplitReg *w, gpointer user_data );
+    void (*delete_ent_cb)      ( GNCSplitReg *w, gpointer user_data );
+    void (*reinit_ent_cb)      ( GNCSplitReg *w, gpointer user_data );
+    void (*dup_ent_cb)         ( GNCSplitReg *w, gpointer user_data );
+    void (*schedule_ent_cb)    ( GNCSplitReg *w, gpointer user_data );
+    void (*expand_ent_cb)      ( GNCSplitReg *w, gpointer user_data );
+    void (*blank_cb)           ( GNCSplitReg *w, gpointer user_data );
+    void (*jump_cb)            ( GNCSplitReg *w, gpointer user_data );
+    void (*cut_cb)             ( GNCSplitReg *w, gpointer user_data );
+    void (*cut_txn_cb)         ( GNCSplitReg *w, gpointer user_data );
+    void (*copy_cb)            ( GNCSplitReg *w, gpointer user_data );
+    void (*copy_txn_cb)        ( GNCSplitReg *w, gpointer user_data );
+    void (*paste_cb)           ( GNCSplitReg *w, gpointer user_data );
+    void (*paste_txn_cb)       ( GNCSplitReg *w, gpointer user_data );
+    void (*void_txn_cb)        ( GNCSplitReg *w, gpointer user_data );
+    void (*unvoid_txn_cb)      ( GNCSplitReg *w, gpointer user_data );
+    void (*reverse_txn_cb)     ( GNCSplitReg *w, gpointer user_data );
+    void (*help_changed_cb)    ( GNCSplitReg *w, gpointer user_data );
+    void (*show_popup_menu_cb) ( GNCSplitReg *w, gpointer user_data );
+    void (*include_date_cb)    ( GNCSplitReg *w, time64 date, gpointer user_data );
 };
 /* Something somewhere sets these to silly values and causes problems */
 #undef DELETE
