@@ -33,9 +33,6 @@
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
-;; included since Bug726449
-(use-modules (ice-9 regex)) ;; for regexp-substitute/global, used by jpqplot
-
 (define reportname
   (N_ "Budget Chart"))
 
