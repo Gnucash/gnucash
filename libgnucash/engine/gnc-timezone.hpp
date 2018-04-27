@@ -60,7 +60,7 @@ public:
 private:
     void parse_file(const std::string& tzname);
     bool construct(const std::string& tzname);
-    TZ_Vector zone_vector;
+    TZ_Vector m_zone_vector;
 #if PLATFORM(WINDOWS)
     void load_windows_dynamic_tz(HKEY, time_zone_names);
     void load_windows_classic_tz(HKEY, time_zone_names);
