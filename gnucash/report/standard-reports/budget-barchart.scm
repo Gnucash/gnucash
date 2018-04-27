@@ -237,14 +237,8 @@
           (gnc:html-barchart-append-column! chart act-vals)
           (gnc:html-barchart-set-row-labels! chart date-iso-string-list)
           (if running-sum
-            (gnc:html-barchart-set-subtitle! chart
-              (string-append "Bgt:"
-                         (gnc:html-string-sanitize (number->string bgt-sum))
-                         "<br /> Act:"
-                         (gnc:html-string-sanitize (number->string act-sum))
-              )
-            )
-          )
+              (gnc:html-barchart-set-subtitle!
+               chart (format #f "Bgt: ~a Act: ~a" bgt-sum act-sum)))
         )
         ;; else
         (begin
@@ -253,14 +247,9 @@
           (gnc:html-linechart-append-column! chart act-vals)
           (gnc:html-linechart-set-row-labels! chart date-iso-string-list)
           (if running-sum
-            (gnc:html-linechart-set-subtitle! chart
-              (string-append "Bgt:"
-                         (gnc:html-string-sanitize (number->string bgt-sum))
-                         "<br /> Act:"
-                         (gnc:html-string-sanitize (number->string act-sum))
-              )
-            )
-          )
+              (gnc:html-linechart-set-subtitle!
+               chart
+               (format #f "Bgt: ~a Act: ~a" bgt-sum act-sum)))
         )
       )
     )

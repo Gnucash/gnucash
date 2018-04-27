@@ -205,14 +205,12 @@
                 };\n")
 
             (if title
-              (begin
-                (push "  options.title = \"")
-                (push title) (push "\";\n")))
+                (push (format #f "  options.title = ~s;\n"
+                              (gnc:html-string-sanitize title))))
 
             (if subtitle
-              (begin
-                (push "  options.title += \" (")
-                (push subtitle) (push ")\";\n")))
+                (push (format #f "  options.title += ' (' + ~s + ')';\n"
+                              (gnc:html-string-sanitize subtitle))))
 
             (if (and (string? x-label) (> (string-length x-label) 0))
               (begin

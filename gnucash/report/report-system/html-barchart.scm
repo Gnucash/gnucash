@@ -135,24 +135,6 @@
 (define gnc:html-barchart-subtitle
   (record-accessor <html-barchart> 'subtitle))
 
-;; Note: Due to Bug726449 the input string's non-printable control
-;;       characters must translated to HTML format tags BEFORE
-;;       or WHEN calling this function.
-;;       AND:
-;;       To ensure that the generated subtitle doesn't contain any
-;;       unescaped quotes or backslashes, all strings must be freed
-;;       from those by calling gnc:html-string-sanitize.
-;;       Otherwise we're opening the gates again for bug 721768.
-;;
-;;       Example: "\n" must be translated to "<br /> to introduce
-;;                a line break into the chart subtitle.
-;;
-;;       Example call:
-;;         (gnc:html-barchart-set-subtitle! chart
-;;           (string-append "Bgt:"
-;;                          (gnc:html-string-sanitize (number->string bgt-sum))
-;;                          "<br /> Act:" ;; line break in the chart sub-title
-;;                          (gnc:html-string-sanitize (number->string act-sum))))
 (define gnc:html-barchart-set-subtitle!
   (record-modifier <html-barchart> 'subtitle))
 
