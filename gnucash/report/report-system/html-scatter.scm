@@ -24,7 +24,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(load-from-path "html-jqplot")
+(use-modules (gnucash report report-system))
 
 (define <html-scatter>
   (make-record-type "<html-scatter>"
@@ -205,14 +205,12 @@
                 };\n")
 
             (if title
-              (begin
-                (push "  options.title = \"")
-                (push title) (push "\";\n")))
+                (push (format #f "  options.title = ~s;\n"
+                              (gnc:html-string-sanitize title))))
 
             (if subtitle
-              (begin
-                (push "  options.title += \" (")
-                (push subtitle) (push ")\";\n")))
+                (push (format #f "  options.title += ' (' + ~s + ')';\n"
+                              (gnc:html-string-sanitize subtitle))))
 
             (if (and (string? x-label) (> (string-length x-label) 0))
               (begin

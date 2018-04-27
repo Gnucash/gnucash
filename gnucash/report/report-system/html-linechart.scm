@@ -24,6 +24,8 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (gnucash report report-system))
+
 (define <html-linechart>
   (make-record-type "<html-linechart>"
                     '(width
@@ -408,9 +410,8 @@
                          (push "data.push(d")
                          (push series-index)
                          (push ");\n")
-                         (push "series.push({ label: \"")
-                         (push (jqplot-escape-string label))
-                         (push "\"});\n\n")))
+                         (push (format #f "series.push({ label: ~s });\n\n"
+                                       (gnc:html-string-sanitize label)))))
          ; Use a unique chart-id for each chart. This prevents chart
          ; clashed on multi-column reports
          (chart-id (string-append "chart-" (number->string (random 999999)))))
@@ -526,16 +527,12 @@
                 "false;\n"))
 
             (if title
-              (begin 
-                (push "  options.title = \"")
-                (push (jqplot-escape-string title))
-                (push "\";\n")))
+                (push (format #f "  options.title = ~s;\n"
+                              (gnc:html-string-sanitize title))))
 
             (if subtitle
-              (begin 
-                (push "  options.title += \" <br />")
-                (push subtitle)
-                (push "\";\n")))
+                (push (format #f "  options.title += ' <br />' + ~s;\n"
+                              (gnc:html-string-sanitize subtitle))))
 
             (if (and (string? x-label) (> (string-length x-label) 0))
               (begin 

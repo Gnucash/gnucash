@@ -21,7 +21,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(load-from-path "html-jqplot")
+(use-modules (gnucash report report-system))
 
 (define <html-piechart>
   (make-record-type "<html-piechart>"
@@ -231,11 +231,9 @@
               (begin 
                 (for-each 
                  (lambda (datum label)
-                   (push "  data.push(['")
-                   (push (jqplot-escape-string label))
-                   (push "',")
-                   (push datum)
-                   (push "]);\n"))
+                   (push (format #f "  data.push([~s,~a]);\n"
+                                 (gnc:html-string-sanitize label)
+                                 datum)))
                  data (gnc:html-piechart-labels piechart))))
 
             (push "var options = {
@@ -253,15 +251,12 @@
                    };\n")
 
             (if title
-              (begin 
-                (push "  options.title = \"")
-                (push (jqplot-escape-string title))
-                (push "\";\n")))
+                (push (format #f "  options.title = ~s;\n"
+                              (gnc:html-string-sanitize title))))
             (if subtitle
-              (begin 
-                (push "  options.title += \" (")
-                (push (jqplot-escape-string subtitle))
-                (push ")\";\n")))
+                (push (format #f "  options.title += ' (' + ~s + ')';\n"
+                              (gnc:html-string-sanitize subtitle))))
+
             (if (not (equal? colors-str ""))
                 (begin            ; example: options.seriesColors= ["blue", "red"];
                   (push "options.seriesColors = [")

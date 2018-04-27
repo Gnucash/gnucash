@@ -49,7 +49,7 @@
   (let ((chart (gnc:make-html-barchart))
         (text (gnc:make-html-text (gnc:html-markup-p "[bar goes here]"))))
     (gnc:html-barchart-set-title! chart "Bar Chart Title")
-    (gnc:html-barchart-set-subtitle! chart (jqplot-escape-string "Bar Chart SubTitle"))
+    (gnc:html-barchart-set-subtitle! chart (gnc:html-string-sanitize "Bar Chart SubTitle"))
     (gnc:html-barchart-append-row! chart '(25 45 30))
     (gnc:html-barchart-append-row! chart '(75 55 70))
     (gnc:html-barchart-set-width! chart 320)

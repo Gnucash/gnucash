@@ -21,7 +21,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(load-from-path "html-jqplot")
+(use-modules (gnucash report report-system))
 
 (define <html-barchart>
   (make-record-type "<html-barchart>"
@@ -135,24 +135,6 @@
 (define gnc:html-barchart-subtitle
   (record-accessor <html-barchart> 'subtitle))
 
-;; Note: Due to Bug726449 the input string's non-printable control
-;;       characters must translated to HTML format tags BEFORE
-;;       or WHEN calling this function.
-;;       AND:
-;;       To ensure that the generated subtitle doesn't contain any
-;;       unescaped quotes or backslashes, all strings must be freed
-;;       from those by calling jqplot-escape-string.
-;;       Otherwise we're opening the gates again for bug 721768.
-;;
-;;       Example: "\n" must be translated to "<br /> to introduce
-;;                a line break into the chart subtitle.
-;;
-;;       Example call:
-;;         (gnc:html-barchart-set-subtitle! chart
-;;           (string-append "Bgt:"
-;;                          (jqplot-escape-string (number->string bgt-sum))
-;;                          "<br /> Act:" ;; line break in the chart sub-title
-;;                          (jqplot-escape-string (number->string act-sum))))
 (define gnc:html-barchart-set-subtitle!
   (record-modifier <html-barchart> 'subtitle))
 
@@ -372,9 +354,9 @@
                          (push "data.push(d")
                          (push series-index)
                          (push ");\n")
-                         (push "series.push({ label: \"")
-                         (push (jqplot-escape-string label))
-                         (push "\"});\n\n")))
+                         (push (format #f "series.push({ label: ~s });\n\n"
+                                       (gnc:html-string-sanitize label)))
+                         ))
          ; Use a unique chart-id for each chart. This prevents chart
          ; clashed on multi-column reports
          (chart-id (string-append "chart-" (number->string (random 999999)))))
@@ -485,16 +467,13 @@
                 "false;\n"))
 
             (if title
-              (begin 
-                (push "  options.title = \"")
-                (push (jqplot-escape-string title))
-                (push "\";\n")))
+                (push (format #f "  options.title = ~s;\n"
+                              (gnc:html-string-sanitize title))))
 
             (if subtitle
-              (begin 
-                (push "  options.title += \" <br />")
-                (push subtitle)
-                (push "\";\n")))
+                (push (format #f "  options.title += ' <br />' + ~s;\n"
+                               (gnc:html-string-sanitize subtitle))))
+
 
             (if (and (string? x-label) (> (string-length x-label) 0))
               (begin 
