@@ -739,3 +739,10 @@ TimeZoneProvider::get(int year) const noexcept
             return m_zone_vector.front().second;
     return iter->second;
 }
+
+void
+TimeZoneProvider::dump() const noexcept
+{
+    for (auto zone : m_zone_vector)
+	std::cout << zone.first << ": " << zone.second->to_posix_string() << "\n";
+}

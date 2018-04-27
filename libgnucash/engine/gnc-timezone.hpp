@@ -55,6 +55,7 @@ public:
     TimeZoneProvider operator=(const TimeZoneProvider&) = delete;
     TimeZoneProvider operator=(const TimeZoneProvider&&) = delete;
     TZ_Ptr get (int year) const noexcept;
+    void dump() const noexcept;
     static const unsigned int min_year; //1400
     static const unsigned int max_year; //9999
 private:
