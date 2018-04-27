@@ -854,6 +854,16 @@
     (_ "No data")
     (_ "The selected accounts contain no data/transactions (or only zeroes) for the selected time period")))
 
+(define (gnc:html-js-include file)
+  (format #f
+          "<script language=\"javascript\" type=\"text/javascript\" src=\"file:///~a\"></script>\n"
+          (gnc-path-find-localized-html-file file)))
+
+(define (gnc:html-css-include file)
+  (format #f
+          "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///~a\" />\n"
+          (gnc-path-find-localized-html-file file)))
+
 ;; function to sanitize strings prior to sending to html
 (define (gnc:html-string-sanitize str)
   (with-output-to-string

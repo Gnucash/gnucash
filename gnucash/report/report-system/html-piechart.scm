@@ -21,7 +21,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(load-from-path "html-jqplot")
+(use-modules (gnucash report report-system))
 
 (define <html-piechart>
   (make-record-type "<html-piechart>"

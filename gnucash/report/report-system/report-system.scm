@@ -119,6 +119,8 @@
 (export gnc:html-make-generic-simple-warning)
 (export gnc:html-make-empty-data-warning)
 (export gnc:html-make-options-link)
+(export gnc:html-js-include)
+(export gnc:html-css-include)
 (export gnc:html-string-sanitize)
 
 ;; report.scm
