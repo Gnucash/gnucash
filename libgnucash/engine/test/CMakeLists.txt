@@ -251,6 +251,7 @@ SET(test_engine_SOURCES_DIST
         gtest-gnc-timezone.cpp
         gtest-gnc-datetime.cpp
         gtest-import-map.cpp
+        gtest-qofquerycore.cpp
         test-account-object.cpp
         test-address.c
         test-business.c
