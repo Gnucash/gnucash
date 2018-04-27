@@ -35,7 +35,6 @@
 
 ;; included since Bug726449
 (use-modules (ice-9 regex)) ;; for regexp-substitute/global, used by jpqplot
-(load-from-path "html-jqplot") ;; for jqplot-escape-string
 
 (define reportname
   (N_ "Budget Chart"))
@@ -240,9 +239,9 @@
           (if running-sum
             (gnc:html-barchart-set-subtitle! chart
               (string-append "Bgt:"
-                         (jqplot-escape-string (number->string bgt-sum))
+                         (gnc:html-string-sanitize (number->string bgt-sum))
                          "<br /> Act:"
-                         (jqplot-escape-string (number->string act-sum))
+                         (gnc:html-string-sanitize (number->string act-sum))
               )
             )
           )
@@ -256,9 +255,9 @@
           (if running-sum
             (gnc:html-linechart-set-subtitle! chart
               (string-append "Bgt:"
-                         (jqplot-escape-string (number->string bgt-sum))
+                         (gnc:html-string-sanitize (number->string bgt-sum))
                          "<br /> Act:"
-                         (jqplot-escape-string (number->string act-sum))
+                         (gnc:html-string-sanitize (number->string act-sum))
               )
             )
           )

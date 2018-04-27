@@ -28,15 +28,10 @@
 (use-modules (gnucash report report-system collectors))
 (use-modules (srfi srfi-1))
 (use-modules (gnucash utilities)) 
-(use-modules (ice-9 regex))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
 (gnc:module-load "gnucash/report/report-system" 0)
-
-;; included since Bug726449
-(use-modules (ice-9 regex)) ;; for regexp-substitute/global, used by jpqplot
-(load-from-path "html-jqplot") ;; for jqplot-escape-string
 
 ;; The option names are defined here to 1. save typing and 2. avoid
 ;; spelling errors. The *reportnames* are defined here (and not only
@@ -534,8 +529,8 @@ developing over time"))
                              (if do-intervals?
                                  (_ "~a to ~a")
                                  (_ "Balances ~a to ~a"))
-                             (jqplot-escape-string (qof-print-date from-date-t64))
-                             (jqplot-escape-string (qof-print-date to-date-t64))))
+                             (gnc:html-string-sanitize (qof-print-date from-date-t64))
+                             (gnc:html-string-sanitize (qof-print-date to-date-t64))))
 
                  (gnc:html-barchart-set-width! chart width)
                  (gnc:html-barchart-set-height! chart height)
@@ -560,8 +555,8 @@ developing over time"))
                              (if do-intervals?
                                  (_ "~a to ~a")
                                  (_ "Balances ~a to ~a"))
-                             (jqplot-escape-string (qof-print-date from-date-t64))
-                             (jqplot-escape-string (qof-print-date to-date-t64))))
+                             (gnc:html-string-sanitize (qof-print-date from-date-t64))
+                             (gnc:html-string-sanitize (qof-print-date to-date-t64))))
 
                  (gnc:html-linechart-set-width! chart width)
                  (gnc:html-linechart-set-height! chart height)

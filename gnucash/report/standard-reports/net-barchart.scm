@@ -39,7 +39,6 @@
 
 ;; included since Bug726449
 (use-modules (ice-9 regex)) ;; for regexp-substitute/global, used by jpqplot
-(load-from-path "html-jqplot") ;; for jqplot-escape-string
 
 (define reportname (N_ "Income/Expense Chart"))
 
@@ -334,8 +333,8 @@
        (gnc:html-barchart-set-subtitle!
         chart (format #f
                        (_ "~a to ~a")
-                       (jqplot-escape-string (qof-print-date from-date-t64))
-                       (jqplot-escape-string (qof-print-date to-date-t64))))
+                       (gnc:html-string-sanitize (qof-print-date from-date-t64))
+                       (gnc:html-string-sanitize (qof-print-date to-date-t64))))
        (gnc:html-barchart-set-width! chart width)
        (gnc:html-barchart-set-height! chart height)
        (gnc:html-barchart-set-row-labels! chart date-string-list)
