@@ -150,9 +150,15 @@ zone_from_regtzi (const RegTZI& regtzi, time_zone_names names)
 {
     using ndate = boost::gregorian::nth_day_of_the_week_in_month;
     using nth_day_rule = boost::local_time::nth_day_of_the_week_in_month_dst_rule;
-
+    /* Note that Windows runs its biases backwards from POSIX and
+     * boost::date_time: It's the value added to the local time to get
+     * GMT rather than the value added to GMT to get local time; for
+     * the same reason the DaylightBias is negative as one generally
+     * adds an hour less to the local time to get GMT. Biases are in
+     * minutes.
+     */
     duration std_off (0, regtzi.StandardBias - regtzi.Bias, 0);
-    duration dlt_off (0, regtzi.DaylightBias, 0);
+    duration dlt_off (0, -regtzi.DaylightBias, 0);
     duration start_time (regtzi.StandardDate.wHour, regtzi.StandardDate.wMinute,
 			 regtzi.StandardDate.wSecond);
     duration end_time (regtzi.DaylightDate.wHour, regtzi.DaylightDate.wMinute,
@@ -165,10 +171,10 @@ zone_from_regtzi (const RegTZI& regtzi, time_zone_names names)
     {
 	try
 	{
-	    ndate start (std_week_num, regtzi.StandardDate.wDayOfWeek,
-			 regtzi.StandardDate.wMonth);
-	    ndate end(dlt_week_num, regtzi.DaylightDate.wDayOfWeek,
-		      regtzi.DaylightDate.wMonth);
+	    ndate start (dlt_week_num, regtzi.DaylightDate.wDayOfWeek,
+			 regtzi.DaylightDate.wMonth);
+	    ndate end(std_week_num, regtzi.StandardDate.wDayOfWeek,
+		      regtzi.StandardDate.wMonth);
 	    dates.reset(new nth_day_rule (start, end));
 	}
 	catch (boost::gregorian::bad_month& err)
