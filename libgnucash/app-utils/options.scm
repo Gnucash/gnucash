@@ -2001,64 +2001,6 @@
                                   (gnc:option-value src-option)))))
     src-options)))
 
-(define* (gnc:render-options-changed options #:optional plaintext?)
-  ;;
-  ;; options -> string
-  ;;
-  ;; this function will generate an string of options that were changed by the user.
-  ;; by default, it produces an html string.
-  ;; the optional plaintext? = #t will ensure the output is suitable for console output
-  ;; omitting all html elements, and is expected to be used for unit tests only.
-  ;;
-  (let ((row-contents '()))
-    (define (disp d)
-      ;; this function will intelligently display the option value. the option-value is subject to various tests
-      ;; the or clause below will test for boolean, null, list, and pairs. each will trigger a custom function
-      ;; returning a string. the pair option is handled differently because its car will define the data type
-      ;; for its cdr which is either a symbol, time64 number, percent or pixels. if the option does not satisfy
-      ;; any of the above, the function attempts to pass it as a parameter to gnc-commodity-get-mnemonic, or
-      ;; xaccAccountGetName, or gnc-budget-get-name; success leads to application of these functions, failure
-      ;; then leads to a generic stringify function which will handle symbol/string/other types.
-      (define (try thunk arg)
-        ;; this helper function will attempt to run thunk with arg as a parameter. we will catch any 
-        ;; 'wrong-type-arg exception, and return the #f value to the or evaluator below.
-        (catch 'wrong-type-arg
-          (lambda () (thunk arg))
-          (lambda (k . args) #f)))
-      (or (and (boolean? d) (if d (_ "Enabled") (_ "Disabled")))
-          (and (null? d) "null")
-          (and (list? d) (string-join (map disp d) ", "))
-          (and (pair? d) (string-append
-                          (disp (car d)) " . "
-                          (case (car d)
-                            ((relative) (symbol->string (cdr d)))
-                            ((absolute) (qof-print-date (cdr d)))
-                            ((pixels percent) (number->string (cdr d)))
-                            (else (format #f "unknown car of pair, cannot determine format for ~A" (cdr d))))))
-          (try gnc-commodity-get-mnemonic d)
-          (try xaccAccountGetName d)
-          (try gnc-budget-get-name d)
-          (format #f "~A" d)))
-    (define (disp-option-if-changed option)
-      ;; this function is called by gnc:options-for-each on each option, and will test whether default value
-      ;; has been changed and the option is not hidden, and display it using (disp val) as above.
-      (let* ((section (gnc:option-section option))
-             (name (gnc:option-name option))
-             (default-value (gnc:option-default-value option))
-             (value (gnc:option-value option))
-             (return-string (string-append (if plaintext? "" "<b>")
-                                           section " / " name
-                                           (if plaintext? "" "</b>")
-                                           ": "
-                                           (disp value))))
-        (if (not (or (equal? default-value value)
-                     (char=? (string-ref section 0) #\_)))
-            (set! row-contents (cons return-string row-contents)))))
-    (gnc:options-for-each disp-option-if-changed options)
-    (string-append (string-join (reverse row-contents)
-                                (if plaintext? "\n" "<br />\n"))
-                   (if plaintext? "\n\n" "<br />\n<br />\n"))))
-
 (define (gnc:send-options db_handle options)
   (gnc:options-for-each
    (lambda (option)

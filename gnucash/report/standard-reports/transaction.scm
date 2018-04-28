@@ -1880,7 +1880,7 @@ be excluded from periodic reporting.")
           (if (memq infobox-display '(always no-match))
               (gnc:html-document-add-object!
                document
-               (gnc:render-options-changed options))))
+               (gnc:html-render-options-changed options))))
 
         (begin
 
@@ -1956,7 +1956,7 @@ be excluded from periodic reporting.")
                 (if (memq infobox-display '(always no-match))
                     (gnc:html-document-add-object!
                      document
-                     (gnc:render-options-changed options))))
+                     (gnc:html-render-options-changed options))))
 
               (let-values (((table grid) (make-split-table splits options custom-calculated-cells)))
 
@@ -1985,7 +1985,7 @@ be excluded from periodic reporting.")
                 (if (eq? infobox-display 'always)
                     (gnc:html-document-add-object!
                      document
-                     (gnc:render-options-changed options)))
+                     (gnc:html-render-options-changed options)))
 
                 (gnc:html-document-add-object! document table)))))
 

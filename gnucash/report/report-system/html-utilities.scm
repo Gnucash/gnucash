@@ -818,6 +818,65 @@
        "")
       (_ "Edit report options")))))
 
+(define* (gnc:html-render-options-changed options #:optional plaintext?)
+  ;; options -> html-object or string, depending on plaintext?.  This
+  ;; summarises options that were changed by the user. Set plaintext?
+  ;; to #t for unit-tests only.
+  (define (disp d)
+    ;; option-value -> string.  The option is passed to various
+    ;; scm->string converters; ultimately a generic stringify
+    ;; function handles symbol/string/other types.
+    (define (try proc)
+      ;; Try proc with d as a parameter, catching 'wrong-type-arg
+      ;; exceptions to return #f to the or evaluator.
+      (catch 'wrong-type-arg
+        (lambda () (proc d))
+        (const #f)))
+    (or (and (boolean? d) (if d (_ "Enabled") (_ "Disabled")))
+        (and (null? d) "null")
+        (and (list? d) (string-join (map disp d) ", "))
+        (and (pair? d) (format #f "~a . ~a"
+                               (car d)
+                               (if (eq? (car d) 'absolute)
+                                   (qof-print-date (cdr d))
+                                   (disp (cdr d)))))
+        (try gnc-commodity-get-mnemonic)
+        (try xaccAccountGetName)
+        (try gnc-budget-get-name)
+        (format #f "~a" d)))
+  (let ((render-list '()))
+    (define (add-option-if-changed option)
+      (let* ((section (gnc:option-section option))
+             (name (gnc:option-name option))
+             (default-value (gnc:option-default-value option))
+             (value (gnc:option-value option))
+             (retval (cons (format #f "~a / ~a" section name)
+                           (disp value))))
+        (if (not (or (equal? default-value value)
+                     (char=? (string-ref section 0) #\_)))
+            (set! render-list (cons retval render-list)))))
+    (gnc:options-for-each add-option-if-changed options)
+    (if plaintext?
+        (string-append
+         (string-join
+          (map (lambda (item)
+                 (format #f "~a: ~a\n" (car item) (cdr item)))
+               render-list)
+          "")
+         "\n")
+        (apply
+         gnc:make-html-text
+         (apply
+          append
+          (map
+           (lambda (item)
+             (list
+              (gnc:html-markup-b (car item))
+              ": "
+              (cdr item)
+              (gnc:html-markup-br)))
+           render-list))))))
+
 (define (gnc:html-make-generic-warning
          report-title-string report-id
          warning-title-string warning-string)
@@ -877,3 +936,5 @@
             ((#\>) "&gt;")
             (else c))))
        str))))
+
+
