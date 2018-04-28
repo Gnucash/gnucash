@@ -112,6 +112,7 @@
 (export gnc:html-build-acct-table)
 (export gnc:first-html-build-acct-table)
 (export gnc:html-make-exchangerates)
+(export gnc:render-options-changed)
 (export gnc:html-make-generic-warning)
 (export gnc:html-make-no-account-warning)
 (export gnc:html-make-generic-budget-warning)
