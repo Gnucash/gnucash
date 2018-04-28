@@ -1202,7 +1202,7 @@ time64
 gnc_iso8601_to_time64_gmt(const char *cstr)
 {
     time64 time;
-    if (!cstr) return 0;
+    if (!cstr) return INT64_MAX;
     try
     {
         GncDateTime gncdt(cstr);
@@ -1211,12 +1211,12 @@ gnc_iso8601_to_time64_gmt(const char *cstr)
     catch(std::logic_error& err)
     {
         PWARN("Error processing %s: %s", cstr, err.what());
-        return 0;
+        return INT64_MAX;
     }
     catch(std::runtime_error& err)
     {
         PWARN("Error processing time64 %s: %s", cstr, err.what());
-        return 0;
+        return INT64_MAX;
     }
 }
 
