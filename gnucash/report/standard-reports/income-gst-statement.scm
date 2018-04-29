@@ -38,20 +38,23 @@
 (define reportname (N_ "Income & GST Statement"))
 (define pagename-sorting (N_ "Sorting"))
 (define TAX-SETUP-DESC
-  (string-append
+  (gnc:make-html-text
    (_ "This report is useful to calculate periodic business tax payable/receivable from
  authorities. From <i>Edit report options</i> above, choose your Business Income and Business Expense accounts.
  Each transaction may contain, in addition to the accounts payable/receivable or bank accounts,
  a split to a tax account, e.g. Income:Sales -$1000, Liability:GST on Sales -$100, Asset:Bank $1100.")
-   "<br/><br/>"
+   (gnc:html-markup-br)
+   (gnc:html-markup-br)
    (_ "These tax accounts can either be populated using the standard register, or from Business Invoices and Bills
  which will require Business > Sales Tax Tables to be set up correctly. Please see the documentation.")
-   "<br/><br/>"
+   (gnc:html-markup-br)
+   (gnc:html-markup-br)
    (_ "From the Report Options, you will need to select the accounts which will \
 hold the GST/VAT taxes collected or paid. These accounts must contain splits which document the \
 monies which are wholly sent or claimed from tax authorities during periodic GST/VAT returns. These \
 accounts must be of type ASSET for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
-   "<br/><br/>"))
+   (gnc:html-markup-br)
+   (gnc:html-markup-br)))
 
 (define (income-gst-statement-renderer rpt)
   (trep-renderer rpt
