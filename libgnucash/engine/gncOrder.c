@@ -30,6 +30,7 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <qofinstance-p.h>
+#include <stdint.h>
 
 #include "gncEntry.h"
 #include "gncEntryP.h"
@@ -50,8 +51,8 @@ struct _gncOrder
     char *	printname;
     GncOwner	owner;
     GList *	entries;
-    Timespec 	opened;
-    Timespec 	closed;
+    time64 	opened;
+    time64 	closed;
 };
 
 struct _gncOrderClass
@@ -101,6 +102,7 @@ G_DEFINE_TYPE(GncOrder, gnc_order, QOF_TYPE_INSTANCE);
 static void
 gnc_order_init(GncOrder* order)
 {
+    order->closed = INT64_MAX;
 }
 
 static void
@@ -177,10 +179,10 @@ gnc_order_set_property (GObject         *object,
         gncOrderSetActive(order, g_value_get_boolean(value));
         break;
     case PROP_DATE_OPENED:
-        gncOrderSetDateOpened(order, *(Timespec*)g_value_get_boxed(value));
+        gncOrderSetDateOpened(order, g_value_get_int64(value));
         break;
     case PROP_DATE_CLOSED:
-        gncOrderSetDateClosed(order, *(Timespec*)g_value_get_boxed(value));
+        gncOrderSetDateClosed(order, g_value_get_int64(value));
         break;
     case PROP_REFERENCE:
         gncOrderSetReference(order, g_value_get_string(value));
@@ -346,20 +348,20 @@ void gncOrderSetOwner (GncOrder *order, GncOwner *owner)
     gncOrderCommitEdit (order);
 }
 
-void gncOrderSetDateOpened (GncOrder *order, Timespec date)
+void gncOrderSetDateOpened (GncOrder *order, time64 date)
 {
     if (!order) return;
-    if (timespec_equal (&order->opened, &date)) return;
+    if (order->opened == date) return;
     gncOrderBeginEdit (order);
     order->opened = date;
     mark_order (order);
     gncOrderCommitEdit (order);
 }
 
-void gncOrderSetDateClosed (GncOrder *order, Timespec date)
+void gncOrderSetDateClosed (GncOrder *order, time64 date)
 {
     if (!order) return;
-    if (timespec_equal (&order->closed, &date)) return;
+    if (order->closed == date) return;
     gncOrderBeginEdit (order);
     order->closed = date;
     mark_order (order);
@@ -439,21 +441,15 @@ GncOwner * gncOrderGetOwner (GncOrder *order)
     return &order->owner;
 }
 
-Timespec gncOrderGetDateOpened (const GncOrder *order)
+time64 gncOrderGetDateOpened (const GncOrder *order)
 {
-    Timespec ts;
-    ts.tv_sec = 0;
-    ts.tv_nsec = 0;
-    if (!order) return ts;
+    if (!order) return INT64_MAX;
     return order->opened;
 }
 
-Timespec gncOrderGetDateClosed (const GncOrder *order)
+time64 gncOrderGetDateClosed (const GncOrder *order)
 {
-    Timespec ts;
-    ts.tv_sec = 0;
-    ts.tv_nsec = 0;
-    if (!order) return ts;
+    if (!order) return INT64_MAX;
     return order->closed;
 }
 
@@ -485,7 +481,7 @@ GList * gncOrderGetEntries (GncOrder *order)
 gboolean gncOrderIsClosed (const GncOrder *order)
 {
     if (!order) return FALSE;
-    if (order->closed.tv_sec || order->closed.tv_nsec) return TRUE;
+    if (order->closed != INT64_MAX) return TRUE;
     return FALSE;
 }
 
@@ -528,11 +524,8 @@ int gncOrderCompare (const GncOrder *a, const GncOrder *b)
     compare = g_strcmp0 (a->id, b->id);
     if (compare) return compare;
 
-    compare = timespec_cmp (&(a->opened), &(b->opened));
-    if (compare) return compare;
-
-    compare = timespec_cmp (&(a->closed), &(b->closed));
-    if (compare) return compare;
+    if (a->opened != b->opened) return a->opened - b->opened;
+    if (a->closed != b->closed) return a->closed - b->closed;
 
     return qof_instance_guid_compare(a, b);
 }

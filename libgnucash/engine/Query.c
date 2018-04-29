@@ -380,9 +380,9 @@ xaccQueryAddNumericMatch (QofQuery *q, gnc_numeric amount, QofNumericMatch sign,
  */
 
 void
-xaccQueryAddDateMatchTS (QofQuery * q,
-                         gboolean use_start, Timespec sts,
-                         gboolean use_end, Timespec ets,
+xaccQueryAddDateMatchTT (QofQuery * q,
+                         gboolean use_start, time64 stt,
+                         gboolean use_end, time64 ett,
                          QofQueryOp op)
 {
     QofQuery *tmp_q = NULL;
@@ -396,7 +396,7 @@ xaccQueryAddDateMatchTS (QofQuery * q,
 
     if (use_start)
     {
-        pred_data = qof_query_date_predicate (QOF_COMPARE_GTE, QOF_DATE_MATCH_NORMAL, sts);
+        pred_data = qof_query_date_predicate (QOF_COMPARE_GTE, QOF_DATE_MATCH_NORMAL, stt);
         if (!pred_data)
         {
             qof_query_destroy (tmp_q);
@@ -409,7 +409,7 @@ xaccQueryAddDateMatchTS (QofQuery * q,
 
     if (use_end)
     {
-        pred_data = qof_query_date_predicate (QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, ets);
+        pred_data = qof_query_date_predicate (QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, ett);
         if (!pred_data)
         {
             qof_query_destroy (tmp_q);
@@ -425,16 +425,16 @@ xaccQueryAddDateMatchTS (QofQuery * q,
 }
 
 void
-xaccQueryGetDateMatchTS (QofQuery * q,
-                         Timespec * sts,
-                         Timespec * ets)
+xaccQueryGetDateMatchTT (QofQuery * q,
+                         time64 * stt,
+                         time64 * ett)
 {
     QofQueryPredData *term_data;
     GSList *param_list;
     GSList *terms, *tmp;
 
-    sts->tv_sec = sts->tv_nsec = 0;
-    ets->tv_sec = ets->tv_nsec = 0;
+    *stt = 0;
+    *ett = 0;
 
     param_list = qof_query_build_param_list (SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
     terms = qof_query_get_term_type (q, param_list);
@@ -444,9 +444,9 @@ xaccQueryGetDateMatchTS (QofQuery * q,
     {
         term_data = tmp->data;
         if (term_data->how == QOF_COMPARE_GTE)
-            qof_query_date_predicate_get_date(term_data, sts);
+            qof_query_date_predicate_get_date(term_data, stt);
         if (term_data->how == QOF_COMPARE_LTE)
-            qof_query_date_predicate_get_date(term_data, ets);
+            qof_query_date_predicate_get_date(term_data, ett);
     }
     g_slist_free(terms);
 }
@@ -463,53 +463,11 @@ xaccQueryAddDateMatch(QofQuery * q,
                       QofQueryOp op)
 {
     /* gcc -O3 will auto-inline this function, avoiding a call overhead */
-    xaccQueryAddDateMatchTS (q, use_start,
-                             gnc_dmy2timespec(sday, smonth, syear),
+    xaccQueryAddDateMatchTT (q, use_start,
+                             gnc_dmy2time64(sday, smonth, syear),
                              use_end,
-                             gnc_dmy2timespec_end(eday, emonth, eyear),
+                             gnc_dmy2time64_end(eday, emonth, eyear),
                              op);
-}
-
-/********************************************************************
- * xaccQueryAddDateMatchTT
- * Add a date filter to an existing query.
- ********************************************************************/
-
-void
-xaccQueryAddDateMatchTT(QofQuery * q,
-                        gboolean use_start,
-                        time64 stt,
-                        gboolean use_end,
-                        time64 ett,
-                        QofQueryOp op)
-{
-    Timespec   sts;
-    Timespec   ets;
-
-    sts.tv_sec  = stt;
-    sts.tv_nsec = 0;
-
-    ets.tv_sec  = ett;
-    ets.tv_nsec = 0;
-
-    /* gcc -O3 will auto-inline this function, avoiding a call overhead */
-    xaccQueryAddDateMatchTS (q, use_start, sts,
-                             use_end, ets, op);
-
-}
-
-void
-xaccQueryGetDateMatchTT (QofQuery * q,
-                         time64 * stt,
-                         time64 * ett)
-{
-    Timespec   sts;
-    Timespec   ets;
-
-    xaccQueryGetDateMatchTS (q, &sts, &ets);
-
-    *stt = sts.tv_sec;
-    *ett = ets.tv_sec;
 }
 
 void

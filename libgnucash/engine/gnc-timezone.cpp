@@ -150,9 +150,15 @@ zone_from_regtzi (const RegTZI& regtzi, time_zone_names names)
 {
     using ndate = boost::gregorian::nth_day_of_the_week_in_month;
     using nth_day_rule = boost::local_time::nth_day_of_the_week_in_month_dst_rule;
-
+    /* Note that Windows runs its biases backwards from POSIX and
+     * boost::date_time: It's the value added to the local time to get
+     * GMT rather than the value added to GMT to get local time; for
+     * the same reason the DaylightBias is negative as one generally
+     * adds an hour less to the local time to get GMT. Biases are in
+     * minutes.
+     */
     duration std_off (0, regtzi.StandardBias - regtzi.Bias, 0);
-    duration dlt_off (0, regtzi.DaylightBias, 0);
+    duration dlt_off (0, -regtzi.DaylightBias, 0);
     duration start_time (regtzi.StandardDate.wHour, regtzi.StandardDate.wMinute,
 			 regtzi.StandardDate.wSecond);
     duration end_time (regtzi.DaylightDate.wHour, regtzi.DaylightDate.wMinute,
@@ -165,10 +171,10 @@ zone_from_regtzi (const RegTZI& regtzi, time_zone_names names)
     {
 	try
 	{
-	    ndate start (std_week_num, regtzi.StandardDate.wDayOfWeek,
-			 regtzi.StandardDate.wMonth);
-	    ndate end(dlt_week_num, regtzi.DaylightDate.wDayOfWeek,
-		      regtzi.DaylightDate.wMonth);
+	    ndate start (dlt_week_num, regtzi.DaylightDate.wDayOfWeek,
+			 regtzi.DaylightDate.wMonth);
+	    ndate end(std_week_num, regtzi.StandardDate.wDayOfWeek,
+		      regtzi.StandardDate.wMonth);
 	    dates.reset(new nth_day_rule (start, end));
 	}
 	catch (boost::gregorian::bad_month& err)
@@ -214,10 +220,10 @@ TimeZoneProvider::load_windows_dynamic_tz (HKEY key, time_zone_names names)
 	    }
 	    tz = zone_from_regtzi (regtzi, names);
 	    if (year == first)
-		zone_vector.push_back (std::make_pair(0, tz));
-	    zone_vector.push_back (std::make_pair(year, tz));
+		m_zone_vector.push_back (std::make_pair(0, tz));
+	    m_zone_vector.push_back (std::make_pair(year, tz));
 	}
-	zone_vector.push_back (std::make_pair(max_year, tz));
+	m_zone_vector.push_back (std::make_pair(max_year, tz));
    }
     catch (std::invalid_argument)
     {
@@ -242,7 +248,7 @@ TimeZoneProvider::load_windows_classic_tz (HKEY key, time_zone_names names)
 	if (RegQueryValueExA (key, "TZI", NULL, NULL,
 			      (LPBYTE) &regtzi, &size) == ERROR_SUCCESS)
 	{
-	    zone_vector.push_back(
+	    m_zone_vector.push_back(
 		std::make_pair(max_year, zone_from_regtzi (regtzi, names)));
 	}
     }
@@ -267,11 +273,11 @@ TimeZoneProvider::load_windows_default_tz()
     auto dlt_name = utf_to_utf<char>(tzi.DaylightName,
 				tzi.DaylightName + sizeof(tzi.DaylightName));
     time_zone_names names (std_name, std_name, dlt_name, dlt_name);
-    zone_vector.push_back(std::make_pair(max_year, zone_from_regtzi(regtzi, names)));
+    m_zone_vector.push_back(std::make_pair(max_year, zone_from_regtzi(regtzi, names)));
 }
 
 TimeZoneProvider::TimeZoneProvider (const std::string& identifier) :
-    zone_vector ()
+    m_zone_vector ()
 {
     HKEY key;
     const std::string reg_key =
@@ -632,13 +638,13 @@ TimeZoneProvider::parse_file(const std::string& tzname)
             //Initial case
             if (last_time.is_not_a_date_time())
             {
-                zone_vector.push_back(zone_no_dst(this_year - 1, last_info));
-                zone_vector.push_back(zone_no_dst(this_year, this_info));
+                m_zone_vector.push_back(zone_no_dst(this_year - 1, last_info));
+                m_zone_vector.push_back(zone_no_dst(this_year, this_info));
             }
             // No change in is_dst means a permanent zone change.
             else if (last_info->info.isdst == this_info->info.isdst)
             {
-                zone_vector.push_back(zone_no_dst(this_year, this_info));
+                m_zone_vector.push_back(zone_no_dst(this_year, this_info));
             }
             /* If there have been no transitions in at least a year
              * then we need to create a no-DST rule with last_info to
@@ -647,9 +653,9 @@ TimeZoneProvider::parse_file(const std::string& tzname)
             else if (this_time - last_time > one_year)
             {
                 auto year = last_time.date().year();
-                if (zone_vector.back().first == year)
+                if (m_zone_vector.back().first == year)
                     year = year + 1; // no operator ++ or +=, sigh.
-                zone_vector.push_back(zone_no_dst(year, last_info));
+                m_zone_vector.push_back(zone_no_dst(year, last_info));
             }
             /* It's been less than a year, so it's probably a DST
              * cycle. This consumes two transitions so we want only
@@ -663,7 +669,7 @@ TimeZoneProvider::parse_file(const std::string& tzname)
                 {
                     last_rule = new_rule;
                     auto year = last_time.date().year();
-                    zone_vector.push_back(zone_from_rule(year, new_rule));
+                    m_zone_vector.push_back(zone_from_rule(year, new_rule));
                 }
             }
         }
@@ -678,9 +684,9 @@ TimeZoneProvider::parse_file(const std::string& tzname)
  * period then the zone rescinded DST and we need a final no-dstzone.
  */
     if (last_time.is_not_a_date_time())
-        zone_vector.push_back(zone_no_dst(max_year, last_info));
+        m_zone_vector.push_back(zone_no_dst(max_year, last_info));
     else if (last_time.date().year() < parser.last_year)
-        zone_vector.push_back(zone_no_dst(last_time.date().year(), last_info));
+        m_zone_vector.push_back(zone_no_dst(last_time.date().year(), last_info));
 }
 
 bool
@@ -695,7 +701,7 @@ TimeZoneProvider::construct(const std::string& tzname)
         try
         {
             TZ_Ptr zone(new PTZ(tzname));
-            zone_vector.push_back(std::make_pair(max_year, zone));
+            m_zone_vector.push_back(std::make_pair(max_year, zone));
         }
         catch(std::exception& err)
         {
@@ -705,7 +711,7 @@ TimeZoneProvider::construct(const std::string& tzname)
     return true;
 }
 
-TimeZoneProvider::TimeZoneProvider(const std::string& tzname) :  zone_vector {}
+TimeZoneProvider::TimeZoneProvider(const std::string& tzname) :  m_zone_vector {}
 {
     if(construct(tzname))
         return;
@@ -722,7 +728,7 @@ TimeZoneProvider::TimeZoneProvider(const std::string& tzname) :  zone_vector {}
     {
         DEBUG("/etc/localtime invalid, resorting to GMT.");
         TZ_Ptr zone(new PTZ("UTC0"));
-        zone_vector.push_back(std::make_pair(max_year, zone));
+        m_zone_vector.push_back(std::make_pair(max_year, zone));
     }
 }
 #endif
@@ -731,11 +737,18 @@ TimeZoneProvider::TimeZoneProvider(const std::string& tzname) :  zone_vector {}
 TZ_Ptr
 TimeZoneProvider::get(int year) const noexcept
 {
-    if (zone_vector.empty())
+    if (m_zone_vector.empty())
         return TZ_Ptr(new PTZ("UTC0"));
-    auto iter = find_if(zone_vector.rbegin(), zone_vector.rend(),
+    auto iter = find_if(m_zone_vector.rbegin(), m_zone_vector.rend(),
 			[=](TZ_Entry e) { return e.first <= year; });
-    if (iter == zone_vector.rend())
-            return zone_vector.front().second;
+    if (iter == m_zone_vector.rend())
+            return m_zone_vector.front().second;
     return iter->second;
+}
+
+void
+TimeZoneProvider::dump() const noexcept
+{
+    for (auto zone : m_zone_vector)
+	std::cout << zone.first << ": " << zone.second->to_posix_string() << "\n";
 }

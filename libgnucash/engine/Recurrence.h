@@ -108,6 +108,7 @@ void recurrenceSet(Recurrence *r, guint16 mult, PeriodType pt,
 PeriodType recurrenceGetPeriodType(const Recurrence *r);
 guint recurrenceGetMultiplier(const Recurrence *r);
 GDate recurrenceGetDate(const Recurrence *r);
+time64 recurrenceGetTime(const Recurrence *r);
 WeekendAdjust recurrenceGetWeekendAdjust(const Recurrence *r);
 
 /* Get the occurrence immediately after refDate.

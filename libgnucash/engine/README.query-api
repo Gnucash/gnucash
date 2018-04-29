@@ -150,7 +150,6 @@ the union is.  The values of type are:
 PD_DATE : match a date range.  Specify a start date and an end date. 
 
 Used in: xaccQueryAddDateMatch
-         xaccQueryAddDateMatchTS
          xaccQueryAddDateMatchTT
 
 -----------------------------------------------------------------

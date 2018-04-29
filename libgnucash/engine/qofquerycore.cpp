@@ -57,7 +57,7 @@ static QueryPredDataFree qof_query_predicate_free (QofType type);
 typedef const char * (*query_string_getter) (gpointer, QofParam *);
 static const char * query_string_type = QOF_TYPE_STRING;
 
-typedef Timespec (*query_date_getter) (gpointer, QofParam *);
+typedef time64 (*query_date_getter) (gpointer, QofParam *);
 static const char * query_date_type = QOF_TYPE_DATE;
 
 typedef gnc_numeric (*query_numeric_getter) (gpointer, QofParam *);
@@ -326,23 +326,18 @@ string_to_string (gpointer object, QofParam *getter)
 /* QOF_TYPE_DATE =================================================== */
 
 static int
-date_compare (Timespec ta, Timespec tb, QofDateMatch options)
+date_compare (time64 ta, time64 tb, QofDateMatch options)
 {
 
     if (options == QOF_DATE_MATCH_DAY)
     {
-        ta = timespecCanonicalDayTime (ta);
-        tb = timespecCanonicalDayTime (tb);
+        ta = time64CanonicalDayTime (ta);
+        tb = time64CanonicalDayTime (tb);
     }
 
-    if (ta.tv_sec < tb.tv_sec)
+    if (ta < tb)
         return -1;
-    if (ta.tv_sec > tb.tv_sec)
-        return 1;
-
-    if (ta.tv_nsec < tb.tv_nsec)
-        return -1;
-    if (ta.tv_nsec > tb.tv_nsec)
+    if (ta > tb)
         return 1;
 
     return 0;
@@ -353,7 +348,7 @@ date_match_predicate (gpointer object, QofParam *getter,
                       QofQueryPredData *pd)
 {
     query_date_t pdata = (query_date_t)pd;
-    Timespec objtime;
+    time64 objtime;
     int compare;
 
     VERIFY_PREDICATE (query_date_type);
@@ -384,7 +379,7 @@ date_match_predicate (gpointer object, QofParam *getter,
 static int
 date_compare_func (gpointer a, gpointer b, gint options, QofParam *getter)
 {
-    Timespec ta, tb;
+    time64 ta, tb;
 
     g_return_val_if_fail (a && b && getter && getter->param_getfcn, COMPARE_ERROR);
 
@@ -421,12 +416,12 @@ date_predicate_equal (const QofQueryPredData *p1, const QofQueryPredData *p2)
     const query_date_t pd2 = (const query_date_t) p2;
 
     if (pd1->options != pd2->options) return FALSE;
-    return timespec_equal (&(pd1->date), &(pd2->date));
+    return (pd1->date == pd2->date);
 }
 
 QofQueryPredData *
 qof_query_date_predicate (QofQueryCompare how,
-                          QofDateMatch options, Timespec date)
+                          QofDateMatch options, time64 date)
 {
     query_date_t pdata;
 
@@ -439,7 +434,7 @@ qof_query_date_predicate (QofQueryCompare how,
 }
 
 gboolean
-qof_query_date_predicate_get_date (const QofQueryPredData *pd, Timespec *date)
+qof_query_date_predicate_get_date (const QofQueryPredData *pd, time64 *date)
 {
     const query_date_t pdata = (const query_date_t)pd;
 
@@ -452,10 +447,10 @@ qof_query_date_predicate_get_date (const QofQueryPredData *pd, Timespec *date)
 static char *
 date_to_string (gpointer object, QofParam *getter)
 {
-    Timespec ts = ((query_date_getter)getter->param_getfcn)(object, getter);
+    time64 tt = ((query_date_getter)getter->param_getfcn)(object, getter);
 
-    if (ts.tv_sec || ts.tv_nsec)
-        return g_strdup (gnc_print_date (ts));
+    if (tt != INT64_MAX)
+        return g_strdup (gnc_print_date ({tt, 0}));
 
     return NULL;
 }

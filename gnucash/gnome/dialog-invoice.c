@@ -3323,7 +3323,6 @@ gnc_invoice_show_docs_due (GtkWindow *parent, QofBook *book, double days_in_adva
     gchar *message, *title;
     DialogQueryView *dialog;
     gint len;
-    Timespec ts;
     static GList *param_list = NULL;
     static GNCDisplayViewButton vendorbuttons[] =
     {
@@ -3413,9 +3412,7 @@ gnc_invoice_show_docs_due (GtkWindow *parent, QofBook *book, double days_in_adva
         days_in_advance = 0;
     end_date += days_in_advance * 60 * 60 * 24;
 
-    ts.tv_sec = (gint64) end_date;
-    ts.tv_nsec = 0;
-    pred_data = qof_query_date_predicate (QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, ts);
+    pred_data = qof_query_date_predicate (QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, end_date);
     qof_query_add_term (q, g_slist_prepend(NULL, INVOICE_DUE), pred_data, QOF_QUERY_AND);
 
     res = qof_query_run(q);

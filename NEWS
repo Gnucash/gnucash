@@ -1,5 +1,158 @@
 Version history:
 ------- -------
+3.1    - 29 April 2018
+The second release of the 3.0 stable series.
+
+The following bugs have been fixed:
+    Bug 118391 - Long currency names untranslated
+    Bug 769686 - Notes not imported when using update and reconcile in
+                 import transactions from CSV
+    Bug 772776 - VERY large queries (over 11000 fields in IN clause) slow
+                 down GnuCash
+    Bug 782144 - git-master - Save Corrupts Data File / Not Open Data File
+    Bug 792105 - Startup takes several minutes
+    Bug 793461 - Transaction matcher window blank when importing QFX
+    Bug 794767 - Dates default to 01/01/1970
+    Bug 794916 - Fails to find environment file at startup when installation
+                 prefix is '/opt'
+    Bug 794936 - 3.0 does not open previously saved sqlite3 files properly
+                 - corrupted business data
+    Bug 794941 - Both print icons export to pdf
+    Bug 794953 - Ellipsize on short tab labels
+                 Correct error on when to ellipsize tab labels. Also as this
+                 is used in two places separate out this to new function so
+                 it is not duplicated.
+    Bug 794990 - Double click does not work on saved reports
+                 When you double click on the saved report description nothing
+                 happens. This was down to a conflict on a couple of call
+                 backs and one of them was incorrectly setup.
+    Bug 794994 - Display Alphavantage key in full
+                 Set the entry to expand so all the space is used to display.
+    Bug 795031 - 3.0 Crashes on loading when opening 2.6.19 file
+    Bug 795039 - Crash on startup using Technicolor Style sheet in report
+    Bug 795040 - GnuCash crashes when searching for a newly created bill
+    Bug 795049 - GnuCash 2.6.20-1 (Fedora Linux package) is unable to open
+                 MariaDB.
+    Bug 795064 - Enable subtotal-only if either sortkeys are dates
+                 This will allow 'show subtotals only' if sortkeys are
+                 date-types. This allows, for example, prime-sortkey=date,
+                 yearly. sec-sortkey=date, monthly.
+    Bug 795068 - src/optional/python-bindings missing several files
+    Bug 795080 - Some dates reset to 01/01/1970
+                 An odd corner case: BST apparently came off of DST at 23:00
+                 26 Oct 2014, so midnight that day was ambiguous about being
+                 DST or not; that causes the local_date_time constructor to
+                 throw in spite of the tm.is_dst element being 0 (meaning pick
+                 standard time). Instead of just failing in that case, try
+                 constructing a local_date_time three hours later then adjust
+                 it back three hours. If *that* doesn't work then throw a
+                 std::invalid argument.
+    Bug 795082 - CSV import crashes if a transaction's 'Account' field is
+                 empty and no default Account set
+    Bug 795101 - Scrollbar floats and covers toggle buttons
+                 When the scrollbar appears for the reconcile windows it can
+                 float above the reconcile toggle button which make it
+                 difficult to toggle. Move this column to the start which has
+                 the advantage of aligning the amount column above the Total
+                 value.
+    Bug 795142 - Unable to enter account codes in business sheets
+                 In Bills, Invoices and Expense vouchers you can not enter an
+                 account code in an account field like you can on a normal
+                 register, enable this.
+    Bug 795155 - CSV import does not distinguish between deposit and withdrawal
+    Bug 795347 - Australian (GMT+10) OFX transactions imported have previous
+                 days date
+    Bug 795377 - Reads and saves Gnucash 2.6.19 XML file, then can't reread
+                 it, due to bad date in old file
+    Bug 795389 - Hard to see figures in the budget window
+                 The budget view had hard coded black for normal values and
+                 dark grey for other values. Changed this so normal values
+                 are reset to default color and adjusted the grey based on
+                 default color for theme.
+    Bug 795405 - All Dates in Price Database Off-By-One After 3.0 Upgrade
+    Bug 795446 - On Windows there is a blank tip of the day
+                 When the tip_of_the_day.list is created a new line is
+                 appended to the list file and on Windows this causes a blank
+                 tip so remove the adding of the extra line.
+    Bug 795471 - Budget window scrolls edited cell out of site
+                  When editing cells that have been revealed on the right by
+                  scrolling the window snaps back to the left hiding the cell
+                  being edited. This may be due to an underlying gtk issue
+                  but these changes fix the issue visually.
+
+Other repairs or enhancements not marked as bugs:
+    On Windows the tooltip for saved reports was incorrect
+        When the mouse was placed over a saved report description on Windows an
+        empty tooltip was displayed. Setup the query tooltip callback so it does
+        not display a tooltip for description column.
+    Fix crash when loading sql book with posted transactions
+    Add ability to recognize and use a pre-compiled libgmock.so.
+    html-font: add default font family
+        Windows ships with GTK2 in which the default font styles are named
+        "Sans" "Sans Bold" "Sans Normal" etc. There is no "Sans" font in
+        Windows; I vote to add a default "Sans-Serif" font-family which is
+        valid CSS. This ensures exported reports are shown as intended.
+    Several improvements to the Transaction and GST reports.
+    csv-impport - Allow empty amount fields
+        Treat empty amount fields as 0. This is necessary for example in
+        the case the csv import file has both a deposit and a withdrawal
+        column.
+    Remove the set transient parent setting for Reconcile window
+        The Reconcile option is already a window so it is not necessary to set
+        this value which allows the jump to transaction to work properly.
+    Date Format dialog flashes up when file/properties used
+        When you select the File/Properties dialog, in the construction of that
+        a 'Date Format' dialog flashes up while the date component is moved to
+        the properties dialog. Can mainly be seen on Windows so remove the
+        visible setting in glade file.
+    Prevent throw in gnc-pricedb.
+        If a price lookup is given an invalid time64/timespec (i.e. INT64_MAX)
+        then just return NULL instead of trying to find the nearest price.
+    Set GNC_VCS at build time instead of when making the tarball.
+        Because the tarball is always made from a VCS repo.
+    If there are no prices in the db, critical errors are flagged
+        When dialog transfer is used between two commodities and there are no
+        prices in the db a critical error is logged. Test for price object
+        being NULL before retrieving the price for the error message.
+
+The following translations are updated: Slovak, Spanish
+
+Known Problems:
+    It is not possible to overwrite SQL Databases from within GnuCash, even
+        though GnuCash will ask if you want to. Bug 789594
+    Several dates, including Accounting Period, are subject to change with
+        time zone and daylight-time changes. Bug 791825
+    Some HBCI information is not loaded correctly so the first transaction
+        download will re-retrieve transactions unless the beginning date is
+        set explicitly. Bug 792397.
+    The new CSV importer's Price of Shares column doesn't work. Bug 793306
+    The new CSV importer's numeric parser can't parse numbers of the form
+        x + y/z. Bug 793556.
+    Python bindings may not work in some installations because the bindings
+        are unable to find the backend modules (libgncmod-backend-dbi and
+        libgncmod-backend-xml). Bug 794526
+    Get Quotes can be slow if one has a large number of saved prices.
+        Bug 794644.
+    The Mac localization code can set the wrong encoding for strftime causing
+        the register's date picker to label months "Null" in some locales.
+        Bug 794807
+    On Mac, the File Open dialog will crash if one types anything.
+        (This is a Gtk+ bug). Bug 794809
+    An open register is not immediately updated when the Since Last Run
+        dialog creates transaction splits in the register's account. Bug 794854
+    GnuCash asks if one wants to save changes when quitting or opening a file
+        even if there's no book open. Bug 794870
+    Windows Defender falsly identifies the GnuCash installer as a Trojan.
+        Bug 794967
+    Some Windows users have trouble using Chinese input methods on the
+        Register; other controls work. Bug 795253
+    On Microsoft Windows the Tab key does not work in the register if the
+        caps-lock key is on. Bug 795294
+    GnuCash will crash if one attempts to import a CSV file with more than
+        1400 transactions. Bug 795383
+    Invalid input into a formula (Debit/Credit) field is inconsistent
+        depending on the input. Bug 795614.
+
 3.0    - 1 April 2018
 The first release of the 3.0 stable series.
 New Features for Users:

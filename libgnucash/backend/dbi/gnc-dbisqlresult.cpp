@@ -117,9 +117,9 @@ GncDbiSqlResult::IteratorImpl::get_float_at_col(const char* col) const
     if(type != DBI_TYPE_DECIMAL ||
        (attrs & DBI_DECIMAL_SIZEMASK) != DBI_DECIMAL_SIZE4)
         throw (std::invalid_argument{"Requested float from non-float column."});
-    gnc_push_locale (LC_NUMERIC, "C");
+    auto locale = gnc_push_locale (LC_NUMERIC, "C");
     auto retval =  dbi_result_get_float(m_inst->m_dbi_result, col);
-    gnc_pop_locale (LC_NUMERIC);
+    gnc_pop_locale (LC_NUMERIC, locale);
     return retval;
 }
 
@@ -131,9 +131,9 @@ GncDbiSqlResult::IteratorImpl::get_double_at_col(const char* col) const
     if(type != DBI_TYPE_DECIMAL ||
        (attrs & DBI_DECIMAL_SIZEMASK) != DBI_DECIMAL_SIZE8)
         throw (std::invalid_argument{"Requested double from non-double column."});
-    gnc_push_locale (LC_NUMERIC, "C");
+    auto locale = gnc_push_locale (LC_NUMERIC, "C");
     auto retval =  dbi_result_get_double(m_inst->m_dbi_result, col);
-    gnc_pop_locale (LC_NUMERIC);
+    gnc_pop_locale (LC_NUMERIC, locale);
     return retval;
 }
 
@@ -160,7 +160,6 @@ GncDbiSqlResult::IteratorImpl::get_time64_at_col (const char* col) const
     auto attrs = dbi_result_get_field_attribs (result, col);
     if (type != DBI_TYPE_DATETIME)
         throw (std::invalid_argument{"Requested time64 from non-time64 column."});
-    gnc_push_locale (LC_NUMERIC, "C");
 #if HAVE_LIBDBI_TO_LONGLONG
     /* A less evil hack than the one required by libdbi-0.8, but
      * still necessary to work around the same bug.
@@ -179,7 +178,6 @@ GncDbiSqlResult::IteratorImpl::get_time64_at_col (const char* col) const
 #endif //HAVE_LIBDBI_TO_LONGLONG
     if (retval < MINTIME || retval > MAXTIME)
         retval = 0;
-    gnc_pop_locale (LC_NUMERIC);
     return retval;
 }
 

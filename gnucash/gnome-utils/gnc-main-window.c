@@ -172,7 +172,6 @@ static void gnc_main_window_cmd_help_contents (GtkAction *action, GncMainWindow 
 static void gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window);
 
 static void do_popup_menu(GncPluginPage *page, GdkEventButton *event);
-static gboolean gnc_main_window_popup_menu_cb (GtkWidget *widget, GncPluginPage *page);
 static GtkWidget *gnc_main_window_get_statusbar (GncWindow *window_in);
 static void statusbar_notification_lastmodified(void);
 
@@ -4797,7 +4796,7 @@ do_popup_menu(GncPluginPage *page, GdkEventButton *event)
  *  @return Always returns TRUE to indicate that the menu request was
  *  handled.
  */
-static gboolean
+gboolean
 gnc_main_window_popup_menu_cb (GtkWidget *widget,
                                GncPluginPage *page)
 {

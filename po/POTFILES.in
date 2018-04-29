@@ -449,7 +449,6 @@ gnucash/report/report-system/html-acct-table.scm
 gnucash/report/report-system/html-barchart.scm
 gnucash/report/report-system/html-document.scm
 gnucash/report/report-system/html-fonts.scm
-gnucash/report/report-system/html-jqplot.scm
 gnucash/report/report-system/html-linechart.scm
 gnucash/report/report-system/html-piechart.scm
 gnucash/report/report-system/html-scatter.scm

@@ -166,7 +166,7 @@ qof_log_init_filename(const gchar* log_filename)
 #if PLATFORM(WINDOWS)
             /* MSVC compiler: Somehow the OS thinks file descriptor from above
              * still isn't open. So we open normally with the file name and that's it. */
-            fout = fopen(fname, "wb");
+            fout = g_fopen(fname, "wb");
 #else
             /* We must not overwrite /dev/null */
             g_assert(g_strcmp0(log_filename, "/dev/null") != 0);

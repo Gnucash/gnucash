@@ -259,13 +259,13 @@ load_splits_for_transactions (GncSqlBackend* sql_be, std::string selector)
     std::string sql("SELECT ");
     if (selector.empty())
     {
-	sql += SPLIT_TABLE ".* FROM " SPLIT_TABLE " INNER JOIN "
-	    TRANSACTION_TABLE " WHERE " SPLIT_TABLE "." + sskey + " = "
-	    TRANSACTION_TABLE "." + tpkey;
-	selector = "(SELECT DISTINCT " + tpkey + " FROM " TRANSACTION_TABLE ")";
+        sql += SPLIT_TABLE ".* FROM " SPLIT_TABLE " INNER JOIN "
+            TRANSACTION_TABLE " ON " SPLIT_TABLE "." + sskey + " = "
+            TRANSACTION_TABLE "." + tpkey;
+        selector = "(SELECT DISTINCT " + tpkey + " FROM " TRANSACTION_TABLE ")";
     }
     else
-	sql += " * FROM " SPLIT_TABLE " WHERE " + sskey + " IN " + selector;
+        sql += " * FROM " SPLIT_TABLE " WHERE " + sskey + " IN " + selector;
 
     // Execute the query and load the splits
     auto stmt = sql_be->create_statement_from_sql(sql);
@@ -276,7 +276,7 @@ load_splits_for_transactions (GncSqlBackend* sql_be, std::string selector)
     sql = "SELECT DISTINCT ";
     sql += spkey + " FROM " SPLIT_TABLE " WHERE " + sskey + " IN " + selector;
     gnc_sql_slots_load_for_sql_subquery(sql_be, sql,
-					(BookLookupFn)xaccSplitLookup);
+                                        (BookLookupFn)xaccSplitLookup);
 }
 
 static  Transaction*
@@ -293,9 +293,11 @@ load_single_tx (GncSqlBackend* sql_be, GncSqlRow& row)
     tx_guid = *guid;
 
     // Don't overwrite the transaction if it's already been loaded (and possibly modified).
+    // However increase the edit level, it may be modified while loading its splits
     pTx = xaccTransLookup (&tx_guid, sql_be->book());
     if (pTx != NULL)
     {
+        xaccTransBeginEdit (pTx);
         return NULL;
     }
 
@@ -348,17 +350,17 @@ query_transactions (GncSqlBackend* sql_be, std::string selector)
     std::string sql("SELECT * FROM " TRANSACTION_TABLE);
 
     if (!selector.empty() && selector[0] == '(')
-	sql += " WHERE " + tpkey + " IN " + selector;
+        sql += " WHERE " + tpkey + " IN " + selector;
     else if (!selector.empty()) // plain condition
-	sql += " WHERE " + selector;
+        sql += " WHERE " + selector;
     auto stmt = sql_be->create_statement_from_sql(sql);
     auto result = sql_be->execute_select_statement(stmt);
     if (result->begin() == result->end())
     {
-	PINFO("Query %s returned no results", sql.c_str());
+        PINFO("Query %s returned no results", sql.c_str());
         return;
     }
-    
+
     Transaction* tx;
 
     // Load the transactions
@@ -377,13 +379,21 @@ query_transactions (GncSqlBackend* sql_be, std::string selector)
     // Load all splits and slots for the transactions
     if (!instances.empty())
     {
-	const std::string tpkey(tx_col_table[0]->name());
-	if (selector.empty())
-	{
-	    selector = "(SELECT DISTINCT ";
-	    selector += tpkey + " FROM " TRANSACTION_TABLE +")";
-	}
+        const std::string tpkey(tx_col_table[0]->name());
+        if (!selector.empty() && (selector[0] != '('))
+        {
+            auto tselector = std::string ("(SELECT DISTINCT ");
+            tselector += tpkey + " FROM " TRANSACTION_TABLE " WHERE " + selector + ")";
+            selector = tselector;
+        }
+
         load_splits_for_transactions (sql_be, selector);
+
+        if (selector.empty())
+        {
+            selector = "(SELECT DISTINCT ";
+            selector += tpkey + " FROM " TRANSACTION_TABLE ")";
+        }
         gnc_sql_slots_load_for_sql_subquery (sql_be, selector,
 					     (BookLookupFn)xaccTransLookup);
     }
@@ -847,7 +857,7 @@ convert_query_term_to_sql (const GncSqlBackend* sql_be, const gchar* fieldName,
         {
             query_date_t date_data = (query_date_t)pPredData;
 
-            GncDateTime time(date_data->date.tv_sec);
+            GncDateTime time(date_data->date);
             sql << time.format_zulu ("%Y-%m-%d %H:%M:%S");
         }
         else if (strcmp (pPredData->type_name, QOF_TYPE_INT32) == 0)

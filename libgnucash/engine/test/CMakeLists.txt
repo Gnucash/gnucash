@@ -202,6 +202,12 @@ SET(test_import_map_SOURCES
 GNC_ADD_TEST(test-import-map "${test_import_map_SOURCES}"
   gtest_engine_INCLUDES gtest_old_engine_LIBS)
 
+set(test_qofquerycore_SOURCES
+gtest-qofquerycore.cpp
+${GTEST_SRC})
+gnc_add_test(test-qofquerycore "${test_qofquerycore_SOURCES}"
+  gtest_engine_INCLUDES gtest_old_engine_LIBS)
+
 ############################
 # This is a C test that needs GUILE environment variables set.
 # It does not pass on Win32.
@@ -245,6 +251,7 @@ SET(test_engine_SOURCES_DIST
         gtest-gnc-timezone.cpp
         gtest-gnc-datetime.cpp
         gtest-import-map.cpp
+        gtest-qofquerycore.cpp
         test-account-object.cpp
         test-address.c
         test-business.c

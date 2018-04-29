@@ -154,17 +154,10 @@ void xaccQueryAddDateMatch(QofQuery * q, gboolean use_start,
                            int sday, int smonth, int syear,
                            gboolean use_end, int eday, int emonth, int eyear,
                            QofQueryOp op);
-void xaccQueryAddDateMatchTS(QofQuery * q,
-                             gboolean use_start, Timespec sts,
-                             gboolean use_end, Timespec ets,
-                             QofQueryOp op);
 void xaccQueryAddDateMatchTT(QofQuery * q,
                              gboolean use_start, time64 stt,
                              gboolean use_end, time64 ett,
                              QofQueryOp op);
-void xaccQueryGetDateMatchTS (QofQuery * q,
-                              Timespec * sts,
-                              Timespec * ets);
 void xaccQueryGetDateMatchTT (QofQuery * q,
                               time64 * stt,
                               time64 * ett);

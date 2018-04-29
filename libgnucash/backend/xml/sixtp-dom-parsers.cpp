@@ -526,7 +526,7 @@ dom_tree_to_gnc_numeric (xmlNodePtr node)
 static time64
 time_parse_failure ()
 {
-    return 0;
+    return INT64_MAX;
 }
 
 
@@ -544,7 +544,7 @@ dom_tree_to_time64 (xmlNodePtr node)
        undefined.  The XML is valid if it has at least one of <s> or <ns>
        and no more than one of each.  Order is irrelevant. */
 
-    time64 ret {0};
+    time64 ret {INT64_MAX};
     gboolean seen_s = FALSE;
     gboolean seen_ns = FALSE;
     xmlNodePtr n;
@@ -865,9 +865,9 @@ dom_tree_generic_parse (xmlNodePtr node, struct dom_tree_handler* handlers,
 gboolean
 dom_tree_valid_time64 (time64 val, const xmlChar * name)
 {
-    if (val)
+    if (val != INT64_MAX)
         return TRUE;
     g_warning ("Invalid timestamp in data file. Look for a '%s' entry "
-            "with a date of 1969-12-31 or 1970-01-01.", name);
+            "with a year outside of the valie range: 1400..10000", name);
     return FALSE;
 }

@@ -23,12 +23,16 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <string.h>
+#include <stdint.h>
 #include "Recurrence.h"
 #include "gnc-date.h"
 #include "qof.h"
 #include "gnc-engine.h"
 #include "gnc-date.h"
 #include "Account.h"
+#include <stdint.h>
+#include <stdint.h>
+#include <stdint.h>
 
 #define LOG_MOD "gnc.engine.recurrence"
 static QofLogModule log_module = LOG_MOD;
@@ -67,6 +71,12 @@ GDate
 recurrenceGetDate(const Recurrence *r)
 {
     return r ? r->start : invalid_gdate;
+}
+
+time64
+recurrenceGetTime(const Recurrence *r)
+{
+    return r ? gdate_to_time64(r->start) : INT64_MAX;
 }
 
 WeekendAdjust

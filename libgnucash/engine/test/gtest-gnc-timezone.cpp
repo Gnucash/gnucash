@@ -46,17 +46,21 @@ TEST(gnc_timezone_constructors, test_pacific_time_constructor)
     TimeZoneProvider tzp (timezone);
     EXPECT_NO_THROW (tzp.get(2012));
     TZ_Ptr tz = tzp.get (2012);
-
     EXPECT_FALSE(tz->std_zone_abbrev().empty());
 #if PLATFORM(WINDOWS)
     EXPECT_TRUE(tz->std_zone_abbrev() == timezone);
+    EXPECT_TRUE(tz->dst_zone_abbrev() == "Pacific Daylight Time");
 #else
     EXPECT_TRUE(tz->std_zone_abbrev() == "PST");
     EXPECT_TRUE(tz->dst_zone_abbrev() == "PDT");
 #endif
     EXPECT_EQ(-8, tz->base_utc_offset().hours());
-
+    auto dst_offset = tz->base_utc_offset() + tz->dst_offset();
+    EXPECT_EQ(-7, dst_offset.hours());
     EXPECT_EQ(12, tz->dst_local_start_time (2017).date().day());
+    EXPECT_EQ(3, tz->dst_local_start_time (2017).date().month());
+    EXPECT_EQ(5, tz->dst_local_end_time (2017).date().day());
+    EXPECT_EQ(11, tz->dst_local_end_time (2017).date().month());
 }
 
 #if !PLATFORM(WINDOWS)
@@ -284,8 +288,13 @@ TEST(gnc_timezone_constructors, test_IANA_Minsk_tz)
 
 TEST(gnc_timezone_constructors, test_bogus_time_constructor)
 {
+#if PLATFORM(WINDOWS)
+    EXPECT_THROW(TimeZoneProvider tzp ("New York Standard Time"),
+		 std::invalid_argument);
+#else
     TimeZoneProvider tzp ("New York Standard Time");
     TimeZoneProvider machine ("");
     EXPECT_EQ(machine.get(2006)->std_zone_abbrev(),
 	      tzp.get(2006)->std_zone_abbrev());
+#endif
 }

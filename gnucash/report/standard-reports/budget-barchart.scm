@@ -33,10 +33,6 @@
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
-;; included since Bug726449
-(use-modules (ice-9 regex)) ;; for regexp-substitute/global, used by jpqplot
-(load-from-path "html-jqplot") ;; for jqplot-escape-string
-
 (define reportname
   (N_ "Budget Chart"))
 
@@ -238,14 +234,8 @@
           (gnc:html-barchart-append-column! chart act-vals)
           (gnc:html-barchart-set-row-labels! chart date-iso-string-list)
           (if running-sum
-            (gnc:html-barchart-set-subtitle! chart
-              (string-append "Bgt:"
-                         (jqplot-escape-string (number->string bgt-sum))
-                         "<br /> Act:"
-                         (jqplot-escape-string (number->string act-sum))
-              )
-            )
-          )
+              (gnc:html-barchart-set-subtitle!
+               chart (format #f "Bgt: ~a Act: ~a" bgt-sum act-sum)))
         )
         ;; else
         (begin
@@ -254,14 +244,9 @@
           (gnc:html-linechart-append-column! chart act-vals)
           (gnc:html-linechart-set-row-labels! chart date-iso-string-list)
           (if running-sum
-            (gnc:html-linechart-set-subtitle! chart
-              (string-append "Bgt:"
-                         (jqplot-escape-string (number->string bgt-sum))
-                         "<br /> Act:"
-                         (jqplot-escape-string (number->string act-sum))
-              )
-            )
-          )
+              (gnc:html-linechart-set-subtitle!
+               chart
+               (format #f "Bgt: ~a Act: ~a" bgt-sum act-sum)))
         )
       )
     )

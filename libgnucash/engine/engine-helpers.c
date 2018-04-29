@@ -709,7 +709,7 @@ gnc_queryterm2scm (const QofQueryTerm *qt)
         query_date_t pdata = (query_date_t) pd;
 
         qt_scm = scm_cons (scm_from_long  (pdata->options), qt_scm);
-        qt_scm = scm_cons (gnc_timespec2timepair (pdata->date), qt_scm);
+        qt_scm = scm_cons (scm_from_int64 (pdata->date), qt_scm);
 
     }
     else if (!g_strcmp0 (pd->type_name, QOF_TYPE_NUMERIC))
@@ -841,7 +841,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
         else if (!g_strcmp0 (type, QOF_TYPE_DATE))
         {
             QofDateMatch options;
-            Timespec date;
+            time64 date;
 
             scm = SCM_CAR (qt_scm);
             qt_scm = SCM_CDR (qt_scm);
@@ -853,7 +853,7 @@ gnc_scm2query_term_query_v2 (SCM qt_scm)
             qt_scm = SCM_CDR (qt_scm);
             if (scm_is_null (scm))
                 break;
-            date = gnc_timepair2timespec (scm);
+            date = scm_to_int64 (scm);
 
             pd = qof_query_date_predicate (compare_how, options, date);
 
@@ -1039,8 +1039,8 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
         {
             gboolean use_start;
             gboolean use_end;
-            Timespec start;
-            Timespec end;
+            time64 start;
+            time64 end;
 
             /* use_start */
             if (scm_is_null (query_term_scm))
@@ -1059,7 +1059,7 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
 
             scm = SCM_CAR (query_term_scm);
             query_term_scm = SCM_CDR (query_term_scm);
-            start = gnc_timepair2timespec (scm);
+            start = scm_to_int64 (scm);
 
             /* use_end */
             if (scm_is_null (query_term_scm))
@@ -1075,9 +1075,9 @@ gnc_scm2query_term_query_v1 (SCM query_term_scm)
 
             scm = SCM_CAR (query_term_scm);
             query_term_scm = SCM_CDR (query_term_scm);
-            end = gnc_timepair2timespec (scm);
+            end = scm_to_int64 (scm);
 
-            xaccQueryAddDateMatchTS (q, use_start, start, use_end, end, QOF_QUERY_OR);
+            xaccQueryAddDateMatchTT (q, use_start, start, use_end, end, QOF_QUERY_OR);
 
             ok = TRUE;
 

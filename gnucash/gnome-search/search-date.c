@@ -113,7 +113,7 @@ gnc_search_date_class_init (GNCSearchDateClass *klass)
 static void
 gnc_search_date_init (GNCSearchDate *o)
 {
-    o->ts.tv_sec = gnc_time (NULL);
+    o->tt = gnc_time (NULL);
     o->how = QOF_COMPARE_LT;
 }
 
@@ -148,12 +148,12 @@ gnc_search_date_new (void)
 }
 
 void
-gnc_search_date_set_date (GNCSearchDate *fi, Timespec ts)
+gnc_search_date_set_date (GNCSearchDate *fi, time64 tt)
 {
     g_return_if_fail (fi);
     g_return_if_fail (IS_GNCSEARCH_DATE (fi));
 
-    fi->ts = ts;
+    fi->tt = tt;
 }
 
 void
@@ -181,7 +181,7 @@ gncs_validate (GNCSearchCoreType *fe)
 static void
 date_changed (GNCDateEdit *date_edit, GNCSearchDate *fe)
 {
-    fe->ts = gnc_date_edit_get_date_ts (date_edit);
+    fe->tt = gnc_date_edit_get_date (date_edit);
 }
 
 static GtkWidget *
@@ -251,7 +251,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
     gtk_box_pack_start (GTK_BOX (box), menu, FALSE, FALSE, 3);
 
     /* Build and connect the date entry window */
-    entry = gnc_date_edit_new_ts (fi->ts, FALSE, FALSE);
+    entry = gnc_date_edit_new (fi->tt, FALSE, FALSE);
     g_signal_connect (G_OBJECT (entry), "date_changed", G_CALLBACK (date_changed), fe);
     gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
     g_object_ref (entry);
@@ -272,9 +272,9 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
     /* Make sure we actually use the currently-entered date */
     priv = _PRIVATE(fi);
     if (priv->entry)
-        fi->ts = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (priv->entry));
+        fi->tt = gnc_date_edit_get_date (GNC_DATE_EDIT (priv->entry));
 
-    return qof_query_date_predicate (fi->how, QOF_DATE_MATCH_NORMAL, fi->ts);
+    return qof_query_date_predicate (fi->how, QOF_DATE_MATCH_NORMAL, fi->tt);
 }
 
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
@@ -285,7 +285,7 @@ static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
     g_return_val_if_fail (IS_GNCSEARCH_DATE (fse), NULL);
 
     se = gnc_search_date_new ();
-    gnc_search_date_set_date (se, fse->ts);
+    gnc_search_date_set_date (se, fse->tt);
     gnc_search_date_set_how (se, fse->how);
 
     return (GNCSearchCoreType *)se;

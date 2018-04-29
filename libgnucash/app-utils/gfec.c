@@ -18,6 +18,36 @@
 # define strdup _strdup
 #endif
 
+static SCM
+gfec_string_from_utf8(void *data)
+{
+    char *str = (char*)data;
+    return scm_from_utf8_string(str);
+}
+
+static SCM
+gfec_string_from_locale(void *data)
+{
+    char *str = (char*)data;
+    return scm_from_locale_string(str);
+}
+
+static SCM
+gfec_string_outer_handler(void *data, SCM key, SCM args)
+{
+    return SCM_UNDEFINED;
+}
+
+static SCM
+gfec_string_inner_handler(void *data, SCM key, SCM args)
+{
+    char *str = (char*)data;
+    SCM scm_string =  scm_internal_catch(SCM_BOOL_T,
+					 gfec_string_from_locale, (void*)str,
+					 gfec_string_inner_handler,
+					 (void*)str);
+    return scm_string;
+}
 
 SCM
 gfec_eval_string(const char *str, gfec_error_handler error_handler)
@@ -28,7 +58,20 @@ gfec_eval_string(const char *str, gfec_error_handler error_handler)
     {
         char *err_msg = NULL;
         SCM call_result, error = SCM_UNDEFINED;
-        call_result = scm_call_1 (func, scm_from_utf8_string (str));
+	/* Deal with the possibility that scm_from_utf8_string will
+	 * throw, falling back to scm_from_locale_string. If that fails, log a
+	 * warning and punt.
+	 */
+	SCM scm_string = scm_internal_catch(SCM_BOOL_T,
+					    gfec_string_from_utf8, (void*)str,
+					    gfec_string_inner_handler,
+					    (void*)str);
+	if (!scm_string)
+	{
+	    error_handler("Contents could not be interpreted as UTF-8 or the current locale/codepage.");
+	    return result;
+	}
+        call_result = scm_call_1 (func, scm_string);
 
         error = scm_list_ref (call_result, scm_from_uint (1));
         if (scm_is_true (error))
@@ -68,6 +111,14 @@ gfec_eval_file(const char *file, gfec_error_handler error_handler)
 
     result = gfec_eval_string (contents, error_handler);
     g_free (contents);
+
+    if (!result)
+    {
+        gchar *full_msg = g_strdup_printf ("Couldn't read contents of %s", file);
+        error_handler(full_msg);
+
+        g_free(full_msg);
+    }
 
     return result;
 }

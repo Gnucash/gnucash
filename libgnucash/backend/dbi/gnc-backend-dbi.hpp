@@ -118,6 +118,21 @@ private:
     bool m_exists;         // Does the database exist?
 };
 
+/* locale-stack */
+inline std::string
+gnc_push_locale(const int category, const std::string locale)
+{
+    std::string retval(setlocale(category, nullptr));
+    setlocale(category, locale.c_str());
+    return retval;
+}
+
+inline void
+gnc_pop_locale(const int category, std::string locale)
+{
+    setlocale(category, locale.c_str());
+}
+
 /* external access required for tests */
 std::string adjust_sql_options_string(const std::string&);
 

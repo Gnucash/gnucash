@@ -127,7 +127,7 @@ test_dom_tree_to_text (void)
 
 
 static void
-test_dom_tree_to_timespec (void)
+test_dom_tree_to_time64 (void)
 {
     int i;
     for (i = 0; i < 20; i++)
@@ -146,11 +146,11 @@ test_dom_tree_to_timespec (void)
         }
         else if (test_spec1 == test_spec2)
         {
-            success ("dom_tree_to_timespec");
+            success ("dom_tree_to_time64");
         }
         else
         {
-            failure ("dom_tree_to_timespec");
+            failure ("dom_tree_to_time64");
             printf ("Node looks like:\n");
             xmlElemDump (stdout, NULL, test_node);
             printf ("\n");
@@ -266,7 +266,7 @@ main (int argc, char** argv)
     fflush (stdout);
     test_dom_tree_to_text ();
     fflush (stdout);
-    test_dom_tree_to_timespec ();
+    test_dom_tree_to_time64 ();
     fflush (stdout);
     test_dom_tree_to_gnc_numeric ();
     fflush (stdout);

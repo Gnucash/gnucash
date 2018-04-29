@@ -55,12 +55,13 @@ public:
     TimeZoneProvider operator=(const TimeZoneProvider&) = delete;
     TimeZoneProvider operator=(const TimeZoneProvider&&) = delete;
     TZ_Ptr get (int year) const noexcept;
+    void dump() const noexcept;
     static const unsigned int min_year; //1400
     static const unsigned int max_year; //9999
 private:
     void parse_file(const std::string& tzname);
     bool construct(const std::string& tzname);
-    TZ_Vector zone_vector;
+    TZ_Vector m_zone_vector;
 #if PLATFORM(WINDOWS)
     void load_windows_dynamic_tz(HKEY, time_zone_names);
     void load_windows_classic_tz(HKEY, time_zone_names);

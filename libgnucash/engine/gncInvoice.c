@@ -823,9 +823,9 @@ time64 gncInvoiceGetDatePosted (const GncInvoice *invoice)
 time64 gncInvoiceGetDateDue (const GncInvoice *invoice)
 {
     Transaction *txn;
-    if (!invoice) return 0;
+    if (!invoice) return INT64_MAX;
     txn = gncInvoiceGetPostedTxn (invoice);
-    if (!txn) return 0;
+    if (!txn) return INT64_MAX;
     return xaccTransRetDateDue (txn);
 }
 

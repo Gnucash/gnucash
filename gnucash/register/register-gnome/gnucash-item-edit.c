@@ -801,6 +801,22 @@ gnc_item_edit_get_padding_border (GncItemEdit *item_edit, Sides side)
     }
 }
 
+static gboolean
+button_press_cb (GtkWidget *widget, GdkEventButton *event, gpointer *pointer)
+{
+    GnucashSheet *sheet = GNUCASH_SHEET(pointer);
+
+    /* Ignore double-clicks and triple-clicks */
+    if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
+    {
+        // This is a right click event so over ride entry menu and
+        // display main register popup menu.
+        g_signal_emit_by_name (sheet->reg, "show_popup_menu");
+        return TRUE;
+    }
+    return FALSE;
+}
+
 GtkWidget *
 gnc_item_edit_new (GnucashSheet *sheet)
 {
@@ -866,6 +882,11 @@ gnc_item_edit_new (GnucashSheet *sheet)
     // Fill in the background so the underlying sheet cell can not be seen
     g_signal_connect (item_edit, "draw",
                             G_CALLBACK (draw_background_cb), item_edit);
+
+    // This call back intercepts the mouse button event so the main
+    // register popup menu can be displayed instead of the entry one.
+    g_signal_connect (item_edit->editor, "button-press-event",
+                            G_CALLBACK (button_press_cb), sheet);
 
     /* Create the popup button
        It will only be displayed when the cell being edited provides

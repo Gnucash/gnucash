@@ -149,7 +149,6 @@ get_num_xactions_before_date(QofBook *book, time64 close_date)
     QofQuery *q;
     GSList *param;
     QofQueryPredData *pred;
-    Timespec ts;
     GList *res, *n;
     int cnt = 0;
 
@@ -159,8 +158,7 @@ get_num_xactions_before_date(QofBook *book, time64 close_date)
 
     /* Look for transactions earlier than the closing date */
     param = g_slist_prepend (NULL, TRANS_DATE_POSTED);
-    timespecFromTime64 (&ts, close_date);
-    pred = qof_query_date_predicate (QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, ts);
+    pred = qof_query_date_predicate (QOF_COMPARE_LTE, QOF_DATE_MATCH_NORMAL, close_date);
     qof_query_add_term (q,  param, pred, QOF_QUERY_FIRST_TERM);
 
     /* Run the query, find how many transactions there are */

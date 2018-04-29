@@ -26,6 +26,7 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <string.h>
+#include <stdint.h>
 
 #include "qof.h"
 
@@ -599,6 +600,13 @@ xaccSchedXactionGetStartDate(const SchedXaction *sx )
     return &sx->start_date;
 }
 
+time64
+xaccSchedXactionGetStartDateTT(const SchedXaction *sx )
+{
+    g_assert (sx);
+    return gdate_to_time64(sx->start_date);
+}
+
 void
 xaccSchedXactionSetStartDate( SchedXaction *sx, const GDate* newStart )
 {
@@ -614,6 +622,25 @@ xaccSchedXactionSetStartDate( SchedXaction *sx, const GDate* newStart )
     }
     gnc_sx_begin_edit(sx);
     sx->start_date = *newStart;
+    qof_instance_set_dirty(&sx->inst);
+    gnc_sx_commit_edit(sx);
+}
+
+void
+xaccSchedXactionSetStartDateTT( SchedXaction *sx, const time64 newStart )
+{
+    if ( newStart == INT64_MAX )
+    {
+        /* XXX: I reject the bad data - is this the right
+         * thing to do <rgmerk>.
+         * This warning is only human readable - the caller
+         * doesn't know the call failed.  This is bad
+         */
+        g_critical("Invalid Start Date");
+        return;
+    }
+    gnc_sx_begin_edit(sx);
+    gnc_gdate_set_time64(&sx->start_date, newStart);
     qof_instance_set_dirty(&sx->inst);
     gnc_sx_commit_edit(sx);
 }
@@ -662,6 +689,12 @@ xaccSchedXactionGetLastOccurDate(const SchedXaction *sx )
     return &sx->last_date;
 }
 
+time64
+xaccSchedXactionGetLastOccurDateTT(const SchedXaction *sx )
+{
+    return gdate_to_time64(sx->last_date);
+}
+
 void
 xaccSchedXactionSetLastOccurDate(SchedXaction *sx, const GDate* new_last_occur)
 {
@@ -671,6 +704,21 @@ xaccSchedXactionSetLastOccurDate(SchedXaction *sx, const GDate* new_last_occur)
         return;
     gnc_sx_begin_edit(sx);
     sx->last_date = *new_last_occur;
+    qof_instance_set_dirty(&sx->inst);
+    gnc_sx_commit_edit(sx);
+}
+
+void
+xaccSchedXactionSetLastOccurDateTT(SchedXaction *sx, time64 new_last_occur)
+{
+    GDate last_occur;
+    g_return_if_fail (new_last_occur != INT64_MAX);
+    gnc_gdate_set_time64(&last_occur, new_last_occur);
+    if (g_date_valid(&sx->last_date)
+        && g_date_compare(&sx->last_date, &last_occur) == 0)
+        return;
+    gnc_sx_begin_edit(sx);
+    sx->last_date = last_occur;
     qof_instance_set_dirty(&sx->inst);
     gnc_sx_commit_edit(sx);
 }
@@ -1196,12 +1244,12 @@ SXRegister(void)
             (QofSetterFunc)xaccSchedXactionSetName
         },
         {
-            GNC_SX_START_DATE, QOF_TYPE_DATE, (QofAccessFunc)xaccSchedXactionGetStartDate,
-            (QofSetterFunc)xaccSchedXactionSetStartDate
+            GNC_SX_START_DATE, QOF_TYPE_DATE, (QofAccessFunc)xaccSchedXactionGetStartDateTT,
+            (QofSetterFunc)xaccSchedXactionSetStartDateTT
         },
         {
-            GNC_SX_LAST_DATE, QOF_TYPE_DATE, (QofAccessFunc)xaccSchedXactionGetLastOccurDate,
-            (QofSetterFunc)xaccSchedXactionSetLastOccurDate
+            GNC_SX_LAST_DATE, QOF_TYPE_DATE, (QofAccessFunc)xaccSchedXactionGetLastOccurDateTT,
+            (QofSetterFunc)xaccSchedXactionSetLastOccurDateTT
         },
         {
             GNC_SX_NUM_OCCUR, QOF_TYPE_INT64, (QofAccessFunc)xaccSchedXactionGetNumOccur,

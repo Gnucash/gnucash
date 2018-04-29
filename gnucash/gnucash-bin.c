@@ -81,7 +81,11 @@ static int          gnucash_show_version = 0;
 static int          debugging        = 0;
 static int          extra            = 0;
 static gchar      **log_flags        = NULL;
-static gchar       *log_to_filename  = NULL;
+#ifdef __MINGW64__
+static wchar_t     *log_to_filename  = NULL;
+#else
+static char        *log_to_filename  = NULL;
+#endif
 static int          nofile           = 0;
 static const gchar *gsettings_prefix = NULL;
 static const char  *add_quotes_file  = NULL;
@@ -679,7 +683,12 @@ gnc_log_init()
 {
     if (log_to_filename != NULL)
     {
-        qof_log_init_filename_special(log_to_filename);
+#ifdef __MINGW64__
+	char* filename = g_utf16_to_utf8(log_to_filename, -1, NULL, NULL, NULL);
+#else
+	char* filename = log_to_filename;
+#endif
+        qof_log_init_filename_special(filename);
     }
     else
     {

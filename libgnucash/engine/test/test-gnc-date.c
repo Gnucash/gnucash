@@ -1633,40 +1633,28 @@ get_nanoseconds (GDateTime *gdt)
 }
 
 static void
-test_gnc_iso8601_to_timespec_gmt (FixtureA *f, gconstpointer pData)
+test_gnc_iso8601_to_time64_gmt (FixtureA *f, gconstpointer pData)
 {
-    Timespec t = {gnc_iso8601_to_time64_gmt (NULL), 0};
-    g_assert_cmpint (t.tv_sec, ==, 0);
-    g_assert_cmpint (t.tv_nsec, ==, 0);
+    time64 t = gnc_iso8601_to_time64_gmt (NULL);
+    g_assert_cmpint (t, ==, INT64_MAX);
 
-    t.tv_sec = gnc_iso8601_to_time64_gmt ("");
-    g_assert_cmpint (t.tv_sec, ==, 0);
-    g_assert_cmpint (t.tv_nsec, ==, 0);
+    t = gnc_iso8601_to_time64_gmt ("");
+    g_assert_cmpint (t, ==, 0);
 
-    t.tv_sec = gnc_iso8601_to_time64_gmt ("1989-03-27 13:43:27");
-    g_assert_cmpint (t.tv_sec, ==, f->ts1.tv_sec);
-    /* MinGW has some precision issues in the last microsecond digit */
-#ifdef G_OS_WIN32
-    g_assert_cmpint (t.tv_nsec - 2000, <=, f->ts1.tv_nsec);
-    g_assert_cmpint (t.tv_nsec + 2000, >=, f->ts1.tv_nsec);
-#else
-    g_assert_cmpint (t.tv_nsec, ==, f->ts1.tv_nsec);
-#endif
-    t.tv_sec = gnc_iso8601_to_time64_gmt ("2020-11-07 06:21:19 -05");
-    g_assert_cmpint (t.tv_sec, ==, f->ts2.tv_sec);
-    g_assert_cmpint (t.tv_nsec, ==, f->ts2.tv_nsec);
+    t = gnc_iso8601_to_time64_gmt ("1989-03-27 13:43:27");
+    g_assert_cmpint (t, ==, f->ts1.tv_sec);
 
-    t.tv_sec = gnc_iso8601_to_time64_gmt ("2012-07-04 19:27:44.0+08:40");
-    g_assert_cmpint (t.tv_sec, ==, f->ts3.tv_sec);
-    g_assert_cmpint (t.tv_nsec, ==, f->ts3.tv_nsec);
+    t = gnc_iso8601_to_time64_gmt ("2020-11-07 06:21:19 -05");
+    g_assert_cmpint (t, ==, f->ts2.tv_sec);
 
-    t.tv_sec = gnc_iso8601_to_time64_gmt ("1961-09-22 17:53:19 -05");
-    g_assert_cmpint (t.tv_sec, ==, f->ts4.tv_sec);
-    g_assert_cmpint (t.tv_nsec, ==, f->ts4.tv_nsec);
+    t = gnc_iso8601_to_time64_gmt ("2012-07-04 19:27:44.0+08:40");
+    g_assert_cmpint (t, ==, f->ts3.tv_sec);
 
-    t.tv_sec = gnc_iso8601_to_time64_gmt ("2061-01-25 23:21:19.0 -05:00");
-    g_assert_cmpint (t.tv_sec, ==, f->ts5.tv_sec);
-    g_assert_cmpint (t.tv_nsec, ==, f->ts5.tv_nsec);
+    t = gnc_iso8601_to_time64_gmt ("1961-09-22 17:53:19 -05");
+    g_assert_cmpint (t, ==, f->ts4.tv_sec);
+
+    t = gnc_iso8601_to_time64_gmt ("2061-01-25 23:21:19.0 -05:00");
+    g_assert_cmpint (t, ==, f->ts5.tv_sec);
 }
 /* gnc_timespec_to_iso8601_buff
 char *
@@ -2269,7 +2257,7 @@ test_suite_gnc_date (void)
 // GNC_TEST_ADD_FUNC (suitename, "qof format time", test_qof_format_time);
 // GNC_TEST_ADD_FUNC (suitename, "qof strftime", test_qof_strftime);
     GNC_TEST_ADD_FUNC (suitename, "gnc_date_timestamp", test_gnc_date_timestamp);
-    GNC_TEST_ADD (suitename, "gnc iso8601 to timespec gmt", FixtureA, NULL, setup, test_gnc_iso8601_to_timespec_gmt, NULL);
+    GNC_TEST_ADD (suitename, "gnc iso8601 to time64 gmt", FixtureA, NULL, setup, test_gnc_iso8601_to_time64_gmt, NULL);
     GNC_TEST_ADD (suitename, "gnc timespec to iso8601 buff", FixtureA, NULL, setup, test_gnc_timespec_to_iso8601_buff, NULL);
     GNC_TEST_ADD (suitename, "gnc timespec2dmy", FixtureA, NULL, setup, test_gnc_timespec2dmy, NULL);
 // GNC_TEST_ADD_FUNC (suitename, "gnc dmy2timespec internal", test_gnc_dmy2timespec_internal);

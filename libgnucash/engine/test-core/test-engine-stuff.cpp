@@ -1738,8 +1738,8 @@ get_random_query(void)
     {
         gint pr_type;
         KvpValue *value;
-        Timespec *start;
-        Timespec *end;
+        time64 start;
+        time64 end;
         GList *guids;
         GSList *path;
         char *string;
@@ -1791,16 +1791,14 @@ get_random_query(void)
             break;
 
         case 5: /* PR_DATE */
-            start = get_random_timespec ();
-            end = get_random_timespec ();
-            xaccQueryAddDateMatchTS (q,
+            start = get_random_time ();
+            end = get_random_time ();
+            xaccQueryAddDateMatchTT (q,
                                      get_random_boolean (),
-                                     *start,
+                                     start,
                                      get_random_boolean (),
-                                     *end,
+                                     end,
                                      get_random_queryop ());
-            g_free (start);
-            g_free (end);
             break;
 
         case 6: /* PR_DESC */
