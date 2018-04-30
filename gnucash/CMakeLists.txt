@@ -187,6 +187,7 @@ IF (MAC_INTEGRATION)
   file(APPEND ${ENV_FILE_OUT} "GDK_PIXBUF_MODULE_FILE={SYS_LIB}/gdk-pixbuf-2.0/2.10.0/loaders.cache\n")
   file(APPEND ${ENV_FILE_OUT} "FONTCONFIG_FILE={GNC_HOME}/etc/fonts/fonts.conf\n")
   file(APPEND ${ENV_FILE_OUT} "OFX_DTD_PATH={GNC_HOME}/share/libofx/dtd\n")
+  file(APPEND ${ENV_FILE_OUT} "GNC_DBD_DIR={SYS_LIB}/dbd\n")
 ENDIF()
 
 FILE(COPY ${BUILD_ENV_FILE_OUT}
