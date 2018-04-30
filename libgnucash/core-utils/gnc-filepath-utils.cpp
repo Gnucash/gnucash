@@ -585,7 +585,7 @@ static std::string migrate_gnc_datahome()
     auto success = false;
     // Specify location of dictionaries
     bfs::path old_dir(g_get_home_dir(), cvt);
-    old_dir += ".gnucash";
+    old_dir /= ".gnucash";
 
     bl::generator gen;
     gen.add_messages_path(gnc_path_get_datadir());
