@@ -145,13 +145,13 @@ in the Options panel."))
                                   (cons 'renderer-fn (lambda (a) (xaccSplitGetAccount a)))))
 
         (cons 'date         (list (cons 'sortkey (list SPLIT-TRANS TRANS-DATE-POSTED))
-                                  (cons 'split-sortvalue #f)
+                                  (cons 'split-sortvalue (lambda (s) (xaccTransGetDate (xaccSplitGetParent s))))
                                   (cons 'text (_ "Date"))
                                   (cons 'tip (_ "Sort by date."))
                                   (cons 'renderer-fn #f)))
 
         (cons 'reconciled-date (list (cons 'sortkey (list SPLIT-DATE-RECONCILED))
-                                     (cons 'split-sortvalue #f)
+                                     (cons 'split-sortvalue (lambda (s) (xaccSplitGetDateReconciled s)))
                                      (cons 'text (_ "Reconciled Date"))
                                      (cons 'tip (_ "Sort by the Reconciled Date."))
                                      (cons 'renderer-fn #f)))
@@ -188,7 +188,7 @@ in the Options panel."))
                                             (cons 'renderer-fn (lambda (a) (xaccSplitGetAccount (xaccSplitGetOtherSplit a))))))
 
         (cons 'amount        (list (cons 'sortkey (list SPLIT-VALUE))
-                                   (cons 'split-sortvalue #f)
+                                   (cons 'split-sortvalue (lambda (a) (gnc-numeric-to-scm (xaccSplitGetValue a))))
                                    (cons 'text (_ "Amount"))
                                    (cons 'tip (_ "Sort by amount."))
                                    (cons 'renderer-fn #f)))
@@ -202,19 +202,19 @@ in the Options panel."))
         (if (and (gnc-current-session-exist)
                  (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
             (cons 'number    (list (cons 'sortkey (list SPLIT-ACTION))
-                                   (cons 'split-sortvalue #f)
+                                   (cons 'split-sortvalue (lambda (a) (xaccSplitGetAction a)))
                                    (cons 'text (_ "Number/Action"))
                                    (cons 'tip (_ "Sort by check number/action."))
                                    (cons 'renderer-fn #f)))
 
             (cons 'number    (list (cons 'sortkey (list SPLIT-TRANS TRANS-NUM))
-                                   (cons 'split-sortvalue #f)
+                                   (cons 'split-sortvalue (lambda (a) (xaccTransGetNum (xaccSplitGetParent a))))
                                    (cons 'text (_ "Number"))
                                    (cons 'tip (_ "Sort by check/transaction number."))
                                    (cons 'renderer-fn #f))))
 
         (cons 't-number      (list (cons 'sortkey (list SPLIT-TRANS TRANS-NUM))
-                                   (cons 'split-sortvalue #f)
+                                   (cons 'split-sortvalue (lambda (a) (xaccTransGetNum (xaccSplitGetParent a))))
                                    (cons 'text (_ "Transaction Number"))
                                    (cons 'tip (_ "Sort by transaction number."))
                                    (cons 'renderer-fn #f)))
@@ -251,36 +251,42 @@ in the Options panel."))
   (list
    (cons 'none (list
                 (cons 'split-sortvalue #f)
+                (cons 'date-sortvalue #f)
                 (cons 'text (_ "None"))
                 (cons 'tip (_ "None."))
                 (cons 'renderer-fn #f)))
 
    (cons 'daily (list
                   (cons 'split-sortvalue (lambda (s) (time64-day (split->time64 s))))
+                  (cons 'date-sortvalue time64-day)
                   (cons 'text (_ "Daily"))
                   (cons 'tip (_ "Daily."))
                   (cons 'renderer-fn (lambda (s) (time64->daily-string (split->time64 s))))))
 
    (cons 'weekly (list
                   (cons 'split-sortvalue (lambda (s) (time64-week (split->time64 s))))
+                  (cons 'date-sortvalue time64-week)
                   (cons 'text (_ "Weekly"))
                   (cons 'tip (_ "Weekly."))
                   (cons 'renderer-fn (lambda (s) (gnc:date-get-week-year-string (gnc-localtime (split->time64 s)))))))
 
    (cons 'monthly (list
                    (cons 'split-sortvalue (lambda (s) (time64-month (split->time64 s))))
+                   (cons 'date-sortvalue time64-month)
                    (cons 'text (_ "Monthly"))
                    (cons 'tip (_ "Monthly."))
                    (cons 'renderer-fn (lambda (s) (gnc:date-get-month-year-string (gnc-localtime (split->time64 s)))))))
 
    (cons 'quarterly (list
                      (cons 'split-sortvalue (lambda (s) (time64-quarter (split->time64 s))))
+                     (cons 'date-sortvalue time64-quarter)
                      (cons 'text (_ "Quarterly"))
                      (cons 'tip (_ "Quarterly."))
                      (cons 'renderer-fn (lambda (s) (gnc:date-get-quarter-year-string (gnc-localtime (split->time64 s)))))))
 
    (cons 'yearly (list
                   (cons 'split-sortvalue (lambda (s) (time64-year (split->time64 s))))
+                  (cons 'date-sortvalue time64-year)
                   (cons 'text (_ "Yearly"))
                   (cons 'tip (_ "Yearly."))
                   (cons 'renderer-fn (lambda (s) (gnc:date-get-year-string (gnc-localtime (split->time64 s)))))))))
@@ -1424,7 +1430,7 @@ tags within description, notes or memo. ")
           (render-date date-subtotal-key split))
          ((member sortkey ACCOUNT-SORTING-TYPES)
           (render-account sortkey split anchor?))
-         ((eq? sortkey 'reconciled-status)
+         (else
           (render-generic sortkey split)))))
 
     (define (render-grand-total)
@@ -1784,41 +1790,25 @@ tags within description, notes or memo. ")
          (infobox-display (opt-val gnc:pagename-general optname-infobox-display))
          (query (qof-query-create-for-splits)))
 
-    (define (generic-less? X Y key date-subtotal ascend?)
-      (define comparator-function
-        (if (member key DATE-SORTING-TYPES)
-            (let ((date (lambda (s)
-                          (case key
-                            ((date) (xaccTransGetDate (xaccSplitGetParent s)))
-                            ((reconciled-date) (xaccSplitGetDateReconciled s))))))
-              (case date-subtotal
-                ((yearly)    (lambda (s) (time64-year (date s))))
-                ((monthly)   (lambda (s) (time64-month (date s))))
-                ((quarterly) (lambda (s) (time64-quarter (date s))))
-                ((weekly)    (lambda (s) (time64-week (date s))))
-                ((daily)     (lambda (s) (time64-day (date s))))
-                ((none)      (lambda (s) (date s)))))
-            (case key
-              ((account-name) (lambda (s) (gnc-account-get-full-name (xaccSplitGetAccount s))))
-              ((account-code) (lambda (s) (xaccAccountGetCode (xaccSplitGetAccount s))))
-              ((corresponding-acc-name) (lambda (s) (xaccSplitGetCorrAccountFullName s)))
-              ((corresponding-acc-code) (lambda (s) (xaccSplitGetCorrAccountCode s)))
-              ((reconciled-status) (lambda (s) (length (memq (xaccSplitGetReconcile s)
-                                                             '(#\n #\c #\y #\f #\v)))))
-              ((amount) (lambda (s) (gnc-numeric-to-scm (xaccSplitGetValue s))))
-              ((description) (lambda (s) (xaccTransGetDescription (xaccSplitGetParent s))))
-              ((number) (lambda (s)
-                          (if BOOK-SPLIT-ACTION
-                              (xaccSplitGetAction s)
-                              (xaccTransGetNum (xaccSplitGetParent s)))))
-              ((t-number) (lambda (s) (xaccTransGetNum (xaccSplitGetParent s))))
-              ((register-order) (lambda (s) #f))
-              ((memo) (lambda (s) (xaccSplitGetMemo s)))
-              ((none) (lambda (s) #f)))))
-      (cond
-       ((string? (comparator-function X)) ((if ascend? string<? string>?) (comparator-function X) (comparator-function Y)))
-       ((comparator-function X)           ((if ascend? < >)               (comparator-function X) (comparator-function Y)))
-       (else                              #f)))
+    (define (generic-less? split-X split-Y sortkey date-subtotal-key ascend?)
+      ;; compare splits X and Y, whereby
+      ;; sortkey and date-subtotal-key specify the options used
+      ;; ascend? specifies whether ascending or descending
+      (let* ((comparator-function
+              (if (memq sortkey DATE-SORTING-TYPES)
+                  (let ((date (keylist-get-info sortkey-list sortkey 'split-sortvalue))
+                        (date-comparator (keylist-get-info date-subtotal-list date-subtotal-key 'date-sortvalue)))
+                    (lambda (s)
+                      (and date-comparator
+                           (date-comparator (date s)))))
+                  (or (keylist-get-info sortkey-list sortkey 'split-sortvalue)
+                      (lambda (s) #f))))
+             (value-of-X (comparator-function split-X))
+             (value-of-Y (comparator-function split-Y))
+             (op (if (string? value-of-X)
+                     (if ascend? string<? string>?)
+                     (if ascend? < >))))
+        (and value-of-X (op value-of-X value-of-Y))))
 
     (define (primary-comparator? X Y)
       (generic-less? X Y primary-key
@@ -1833,7 +1823,6 @@ tags within description, notes or memo. ")
     ;; This will, by default, sort the split list by ascending posted-date.
     (define (date-comparator? X Y)
       (generic-less? X Y 'date 'none #t))
-
 
     (if (or (or (null? c_account_1) (and-map not c_account_1))
             (eq? account-matcher-regexp 'invalid-regex)
