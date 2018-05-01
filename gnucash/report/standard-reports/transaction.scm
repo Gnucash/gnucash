@@ -118,8 +118,6 @@ in the Options panel."))
 (define ACCOUNT-SORTING-TYPES (list 'account-name 'corresponding-acc-name
                                     'account-code 'corresponding-acc-code))
 
-(define CUSTOM-SORTING (list 'reconciled-status))
-
 (define SORTKEY-INFORMAL-HEADERS (list 'account-name 'account-code))
 
 (define sortkey-list
@@ -399,6 +397,16 @@ Credit Card, and Income accounts."))
   ;; this returns whether sortkey *can* be subtotalled/grouped.
   ;; it checks whether a renderer-fn is defined.
   (keylist-get-info sortkey-list sortkey 'renderer-fn))
+
+(define (CUSTOM-SORTING? sortkey)
+  ;; sortkey -> bool
+  ;;
+  ;; this returns which sortkeys which *must* use the custom sorter.
+  ;; it filters whereby a split-sortvalue is defined (i.e. the splits
+  ;; can be compared according to their 'sortvalue) but the QofQuery
+  ;; sortkey is not defined (i.e. their 'sortkey is #f).
+  (and (keylist-get-info sortkey-list sortkey 'split-sortvalue)
+       (not (keylist-get-info sortkey-list sortkey 'sortkey))))
 
 ;;
 ;; Set defaults for reconcilation report
@@ -1773,8 +1781,8 @@ tags within description, notes or memo. ")
                                 (not (eq? primary-date-subtotal 'none)))  ; until qof-query
                            (and (member secondary-key DATE-SORTING-TYPES) ; is upgraded
                                 (not (eq? secondary-date-subtotal 'none)))
-                           (or (member primary-key CUSTOM-SORTING)
-                               (member secondary-key CUSTOM-SORTING))))
+                           (or (CUSTOM-SORTING? primary-key)
+                               (CUSTOM-SORTING? secondary-key))))
          (infobox-display (opt-val gnc:pagename-general optname-infobox-display))
          (query (qof-query-create-for-splits)))
 
