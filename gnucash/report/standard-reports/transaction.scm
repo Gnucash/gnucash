@@ -196,10 +196,10 @@ in the Options panel."))
                                    (cons 'renderer-fn #f)))
 
         (cons 'description   (list (cons 'sortkey (list SPLIT-TRANS TRANS-DESCRIPTION))
-                                   (cons 'split-sortvalue #f)
+                                   (cons 'split-sortvalue (lambda (s) (xaccTransGetDescription (xaccSplitGetParent s))))
                                    (cons 'text (_ "Description"))
                                    (cons 'tip (_ "Sort by description."))
-                                   (cons 'renderer-fn #f)))
+                                   (cons 'renderer-fn (lambda (s) (xaccTransGetDescription (xaccSplitGetParent s))))))
 
         (if (and (gnc-current-session-exist)
                  (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
