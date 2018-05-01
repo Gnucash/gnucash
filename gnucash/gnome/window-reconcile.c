@@ -1946,8 +1946,8 @@ recnWindowWithBalance (Account *account, gnc_numeric new_ending,
     gnc_window_adjust_for_screen(GTK_WINDOW(recnData->window));
 
     /* Set the sort orders of the debit and credit tree views */
-    gnc_query_sort_order(GNC_QUERY_VIEW(recnData->debit), 1, GTK_SORT_ASCENDING);
-    gnc_query_sort_order(GNC_QUERY_VIEW(recnData->credit), 1, GTK_SORT_ASCENDING);
+    gnc_query_sort_order(GNC_QUERY_VIEW(recnData->debit), REC_DATE, GTK_SORT_ASCENDING);
+    gnc_query_sort_order(GNC_QUERY_VIEW(recnData->credit), REC_DATE, GTK_SORT_ASCENDING);
 
     gtk_widget_grab_focus (recnData->debit);
 
