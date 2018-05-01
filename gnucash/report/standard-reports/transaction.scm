@@ -225,6 +225,12 @@ in the Options panel."))
                                    (cons 'tip (_ "Sort by memo."))
                                    (cons 'renderer-fn #f)))
 
+        (cons 'notes         (list (cons 'sortkey #f)
+                                   (cons 'split-sortvalue (lambda (s) (xaccTransGetNotes (xaccSplitGetParent s))))
+                                   (cons 'text (_ "Notes"))
+                                   (cons 'tip (_ "Sort by transaction notes."))
+                                   (cons 'renderer-fn (lambda (s) (xaccTransGetNotes (xaccSplitGetParent s))))))
+
         (cons 'none          (list (cons 'sortkey '())
                                    (cons 'split-sortvalue #f)
                                    (cons 'text (_ "None"))

@@ -725,6 +725,12 @@
           '("Expenses" "Expenses" "Income" "Income" "Liabilities")
           (get-row-col sxml #f 6)))
 
+      (set-option! options "Sorting" "Primary Key" 'notes)
+      (let* ((sxml (options->sxml options "sorting=trans-notes")))
+        (test-equal "sort by transaction notes"
+          '("memo-3" "memo-2" "memo-1" "notes3")
+          (get-row-col sxml #f 4)))
+
       (set-option! options "Sorting" "Primary Key" 'amount)
       (let* ((sxml (options->sxml options "sorting=amount")))
         (test-equal "sort by amount"
