@@ -220,10 +220,10 @@ in the Options panel."))
                                    (cons 'renderer-fn #f)))
 
         (cons 'memo          (list (cons 'sortkey (list SPLIT-MEMO))
-                                   (cons 'split-sortvalue #f)
+                                   (cons 'split-sortvalue (lambda (s) (xaccSplitGetMemo s)))
                                    (cons 'text (_ "Memo"))
                                    (cons 'tip (_ "Sort by memo."))
-                                   (cons 'renderer-fn #f)))
+                                   (cons 'renderer-fn (lambda (s) (xaccSplitGetMemo s)))))
 
         (cons 'notes         (list (cons 'sortkey #f)
                                    (cons 'split-sortvalue (lambda (s) (xaccTransGetNotes (xaccSplitGetParent s))))
