@@ -113,14 +113,9 @@ in the Options panel."))
 
 (define DATE-SORTING-TYPES (list 'date 'reconciled-date))
 
-;; The option-values of the sorting key multichoice option, for
-;; which a subtotal should be enabled.
-(define SUBTOTAL-ENABLED (list 'account-name 'corresponding-acc-name
-                               'account-code 'corresponding-acc-code
-                               'reconciled-status))
-
 (define ACCOUNT-SORTING-TYPES (list 'account-name 'corresponding-acc-name
                                     'account-code 'corresponding-acc-code))
+
 (define CUSTOM-SORTING (list 'reconciled-status))
 
 (define SORTKEY-INFORMAL-HEADERS (list 'account-name 'account-code))
@@ -386,7 +381,6 @@ Credit Card, and Income accounts."))
                                   ACCT-TYPE-EQUITY ACCT-TYPE-CREDIT
                                   ACCT-TYPE-INCOME))))))
 
-
 (define (keylist-get-info keylist key info)
   (cdr (assq info (cdr (assq key keylist)))))
 
@@ -399,6 +393,10 @@ Credit Card, and Income accounts."))
       (keylist-get-info keylist (car item) 'tip)))
    keylist))
 
+(define (SUBTOTAL-ENABLED? sortkey)
+  ;; this returns whether sortkey *can* be subtotalled/grouped.
+  ;; it checks whether a renderer-fn is defined.
+  (keylist-get-info sortkey-list sortkey 'renderer-fn))
 
 ;;
 ;; Set defaults for reconcilation report
@@ -585,10 +583,10 @@ tags within description, notes or memo. ")
 
     (define (apply-selectable-by-name-sorting-options)
       (let* ((prime-sortkey-enabled (not (eq? prime-sortkey 'none)))
-             (prime-sortkey-subtotal-enabled (member prime-sortkey SUBTOTAL-ENABLED))
+             (prime-sortkey-subtotal-enabled (SUBTOTAL-ENABLED? prime-sortkey))
              (prime-date-sortingtype-enabled (member prime-sortkey DATE-SORTING-TYPES))
              (sec-sortkey-enabled (not (eq? sec-sortkey 'none)))
-             (sec-sortkey-subtotal-enabled (member sec-sortkey SUBTOTAL-ENABLED))
+             (sec-sortkey-subtotal-enabled (SUBTOTAL-ENABLED? sec-sortkey))
              (sec-date-sortingtype-enabled (member sec-sortkey DATE-SORTING-TYPES)))
 
         (gnc-option-db-set-option-selectable-by-name
@@ -962,17 +960,17 @@ tags within description, notes or memo. ")
     (let ((sortkey (opt-val pagename-sorting optname-prime-sortkey)))
       (if (member sortkey DATE-SORTING-TYPES)
           (keylist-get-info date-subtotal-list (opt-val pagename-sorting optname-prime-date-subtotal) info)
-          (and (member sortkey SUBTOTAL-ENABLED)
-               (and (opt-val pagename-sorting optname-prime-subtotal)
-                    (keylist-get-info sortkey-list sortkey info))))))
+          (and (SUBTOTAL-ENABLED? sortkey)
+               (opt-val pagename-sorting optname-prime-subtotal)
+               (keylist-get-info sortkey-list sortkey info)))))
 
   (define (secondary-get-info info)
     (let ((sortkey (opt-val pagename-sorting optname-sec-sortkey)))
       (if (member sortkey DATE-SORTING-TYPES)
           (keylist-get-info date-subtotal-list (opt-val pagename-sorting optname-sec-date-subtotal) info)
-          (and (member sortkey SUBTOTAL-ENABLED)
-               (and (opt-val pagename-sorting optname-sec-subtotal)
-                    (keylist-get-info sortkey-list sortkey info))))))
+          (and (SUBTOTAL-ENABLED? sortkey)
+               (opt-val pagename-sorting optname-sec-subtotal)
+               (keylist-get-info sortkey-list sortkey info)))))
 
   (let* ((work-to-do (length splits))
          (work-done 0)
