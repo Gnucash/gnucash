@@ -2999,7 +2999,7 @@ static void
 multi_print_invoice_one (gpointer data, gpointer user_data)
 {
     struct multi_edit_invoice_data *meid = user_data;
-    print_one_invoice_cb (meid->parent, data, meid->user_data);
+    print_one_invoice_cb (gnc_ui_get_main_window (GTK_WIDGET(meid->parent)), data, meid->user_data);
 }
 
 static void
