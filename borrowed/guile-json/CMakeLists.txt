@@ -1,18 +1,19 @@
-set (guile-json_SCHEME
-  json.scm
-  json/builder.scm
-  json/parser.scm
-  json/syntax.scm
-  )
+add_subdirectory(json)
 
 gnc_add_scheme_targets (guile-json
-  "${guile-json_SCHEME}"
-  ""
+  json.scm
+  gnucash
   ""
   FALSE
-  )
+)
 
-set_dist_list (guile-json_DIST
+set_local_dist(guile-json_DIST_LOCAL
+  AUTHORS
   CMakeLists.txt
-  ${guile-json_SCHEME}
-  )
+  COPYING.LESSER
+  json.scm
+  NEWS
+  README
+)
+
+SET(guile-json_DIST ${guile-json_DIST_LOCAL} ${guile-json-details_DIST} PARENT_SCOPE)
