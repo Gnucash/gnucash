@@ -348,7 +348,7 @@
       (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'monthly)
       (let ((sxml (options->sxml options "test basic column headers, and original currency")))
         (test-equal "default headers, indented, includes common-currency"
-          '(" " " " "Date" "Num" "Description" "Memo/Notes" "Account" "Amount" "USD" "Amount")
+          '(" " " " "Date" "Num" "Description" "Memo/Notes" "Account" "Amount (USD)" "Amount")
           (get-row-col sxml 0 #f))
         (test-equal "grand total present, no blank cells, and is $2,280 in both common-currency and original-currency"
           '("Grand Total" "$2,280.00" "$2,280.00")
@@ -584,7 +584,7 @@
       (let* ((sxml (options->sxml options "single column, with original currency headers")))
         (test-equal "single amount column, with original currency headers"
           (list "Date" "Num" "Description" "Memo/Notes" "Account"
-                "Amount" "USD" "Amount")
+                "Amount (USD)" "Amount")
           (get-row-col sxml 0 #f)))
 
       (set-option! options "Display" "Amount" 'double)
@@ -601,7 +601,7 @@
         ;; output here too.
         (test-equal "dual amount headers"
           (list "Date" "Num" "Description" "Memo/Notes" "Account" "Transfer from/to"
-                "Debit" "USD" "Credit" "USD" "Debit" "Credit")
+                "Debit (USD)" "Credit (USD)" "Debit" "Credit")
           (get-row-col sxml 0 #f))
         (test-equal "Account Name and Code displayed"
           (list "01-GBP Root.Asset.GBP Bank")
@@ -663,7 +663,7 @@
       (let* ((sxml (options->sxml options "dual columns")))
         (test-equal "dual amount column, with original currency headers"
           (list "Date" "Num" "Description" "Memo/Notes" "Account"
-                "Debit" "USD" "Credit" "USD" "Debit" "Credit")
+                "Debit (USD)" "Credit (USD)" "Debit" "Credit")
           (get-row-col sxml 0 #f))
         (test-equal "dual amount column, grand totals available"
           (list "Grand Total" " " " " " " " " "$2,280.00" "$2,280.00")
