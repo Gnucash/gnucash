@@ -22,6 +22,8 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (gnucash utilities))
+
 ;; returns a list with n #f (empty cell) values 
 (define (gnc:html-make-empty-cell) #f)
 (define (gnc:html-make-empty-cells n)
@@ -854,7 +856,7 @@
                            (disp value))))
         (if (not (or (equal? default-value value)
                      (char=? (string-ref section 0) #\_)))
-            (set! render-list (cons retval render-list)))))
+            (addto! render-list retval))))
     (gnc:options-for-each add-option-if-changed options)
     (if plaintext?
         (string-append

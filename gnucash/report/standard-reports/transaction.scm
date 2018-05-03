@@ -40,7 +40,7 @@
 
 (define-module (gnucash report standard-reports transaction))
 
-(use-modules (gnucash utilities)) 
+(use-modules (gnucash utilities))
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-11))
 (use-modules (srfi srfi-13))
@@ -49,9 +49,6 @@
 (use-modules (gnucash gettext))
 
 (gnc:module-load "gnucash/report/report-system" 0)
-
-(define-macro (addto! alist element)
-  `(set! ,alist (cons ,element ,alist)))
 
 ;; Define the strings here to avoid typos and make changes easier.
 (define reportname (N_ "Transaction Report"))
