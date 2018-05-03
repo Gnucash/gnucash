@@ -1113,10 +1113,11 @@ tags within description, notes or memo. ")
                                     "number-cell"
                                     (gnc:make-gnc-monetary currency price-decimal)))))))))
 
-        (if (and (null? left-cols-list)
-                 (or (opt-val gnc:pagename-display "Totals")
-                     (primary-get-info 'renderer-fn)
-                     (secondary-get-info 'renderer-fn)))
+        (if (or (column-uses? 'subtotals-only)
+                (and (null? left-cols-list)
+                     (or (opt-val gnc:pagename-display "Totals")
+                         (primary-get-info 'renderer-fn)
+                         (secondary-get-info 'renderer-fn))))
             (list (vector "" (lambda (s t) #f)))
             left-cols-list)))
 
