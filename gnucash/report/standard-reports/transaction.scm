@@ -1276,11 +1276,10 @@ tags within description, notes or memo. ")
                                         1 (+ right-indent width-left-columns) data)))
               (for-each (lambda (cell)
                           (addto! row-contents
-                                  (gnc:make-html-table-cell
-                                   "<b>"
-                                   ((vector-ref cell 5)
-                                    ((keylist-get-info sortkey-list sortkey 'renderer-fn) split))
-                                   "</b>")))
+                                  (gnc:make-html-text
+                                   (gnc:html-markup-b
+                                    ((vector-ref cell 5)
+                                     ((keylist-get-info sortkey-list sortkey 'renderer-fn) split))))))
                         calculated-cells))
             (addto! row-contents (gnc:make-html-table-cell/size
                                   1 (+ right-indent width-left-columns width-right-columns) data)))
