@@ -1156,48 +1156,42 @@ be excluded from periodic reporting.")
 
     (define default-calculated-cells
       (letrec
-          ((damount (lambda (s) (if (gnc:split-voided? s)
-                                    (xaccSplitVoidFormerAmount s)
-                                    (xaccSplitGetAmount s))))
-           (trans-date (lambda (s) (xaccTransGetDate (xaccSplitGetParent s))))
-           (currency (lambda (s) (xaccAccountGetCommodity (xaccSplitGetAccount s))))
-           (report-currency (lambda (s) (if (column-uses? 'common-currency)
-                                            (opt-val gnc:pagename-general optname-currency)
-                                            (currency s))))
+          ((split-amount (lambda (s) (if (gnc:split-voided? s)
+                                         (xaccSplitVoidFormerAmount s)
+                                         (xaccSplitGetAmount s))))
+           (split-currency (lambda (s) (xaccAccountGetCommodity (xaccSplitGetAccount s))))
+           (row-currency (lambda (s) (if (column-uses? 'common-currency)
+                                         (opt-val gnc:pagename-general optname-currency)
+                                         (split-currency s))))
            (friendly-debit (lambda (a) (gnc:get-debit-string (xaccAccountGetType a))))
            (friendly-credit (lambda (a) (gnc:get-credit-string (xaccAccountGetType a))))
            (header-commodity (lambda (str)
                                (string-append
                                 str
                                 (if (column-uses? 'common-currency)
-                                    (string-append
-                                     "<br />"
-                                     (gnc-commodity-get-mnemonic
-                                      (opt-val gnc:pagename-general optname-currency)))
+                                    (format #f " (~a)"
+                                            (gnc-commodity-get-mnemonic
+                                             (opt-val gnc:pagename-general optname-currency)))
                                     ""))))
-           (convert (lambda (s num)
-                      (gnc:exchange-by-pricedb-nearest
-                       (gnc:make-gnc-monetary (currency s) num)
-                       (report-currency s)
-                       ;; Use midday as the transaction time so it matches a price
-                       ;; on the same day.  Otherwise it uses midnight which will
-                       ;; likely match a price on the previous day
-                       (time64CanonicalDayTime (trans-date s)))))
-           (split-value (lambda (s) (convert s (damount s)))) ; used for correct debit/credit
-           (amount (lambda (s) (split-value s)))
-           (debit-amount (lambda (s) (and (positive? (gnc:gnc-monetary-amount (split-value s)))
-                                          (split-value s))))
-           (credit-amount (lambda (s) (if (positive? (gnc:gnc-monetary-amount (split-value s)))
-                                          #f
-                                          (gnc:monetary-neg (split-value s)))))
-           (original-amount (lambda (s) (gnc:make-gnc-monetary (currency s) (damount s))))
-           (original-debit-amount (lambda (s) (if (positive? (damount s))
-                                                  (original-amount s)
-                                                  #f)))
-           (original-credit-amount (lambda (s) (if (positive? (damount s))
-                                                   #f
-                                                   (gnc:monetary-neg (original-amount s)))))
-           (running-balance (lambda (s) (gnc:make-gnc-monetary (currency s) (xaccSplitGetBalance s)))))
+           ;; For conversion to row-currency. Use midday as the
+           ;; transaction time so it matches a price on the same day.
+           ;; Otherwise it uses midnight which will likely match a
+           ;; price on the previous day
+           (converted-amount (lambda (s) (gnc:exchange-by-pricedb-nearest
+                                          (gnc:make-gnc-monetary (split-currency s) (split-amount s))
+                                          (row-currency s)
+                                          (time64CanonicalDayTime
+                                           (xaccTransGetDate (xaccSplitGetParent s))))))
+           (converted-debit-amount (lambda (s) (and (positive? (split-amount s))
+                                                    (converted-amount s))))
+           (converted-credit-amount (lambda (s) (and (not (positive? (split-amount s)))
+                                                     (gnc:monetary-neg (converted-amount s)))))
+           (original-amount (lambda (s) (gnc:make-gnc-monetary (split-currency s) (split-amount s))))
+           (original-debit-amount (lambda (s) (and (positive? (split-amount s))
+                                                   (original-amount s))))
+           (original-credit-amount (lambda (s) (and (not (positive? (split-amount s)))
+                                                    (gnc:monetary-neg (original-amount s)))))
+           (running-balance (lambda (s) (gnc:make-gnc-monetary (split-currency s) (xaccSplitGetBalance s)))))
         (append
          ;; each column will be a vector
          ;; (vector heading
@@ -1207,17 +1201,19 @@ be excluded from periodic reporting.")
          ;;         start-dual-column?                           ;; #t for the debit side of a dual column (i.e. debit/credit)
          ;;                                                      ;; which means the next column must be the credit side
          ;;         friendly-heading-fn                          ;; (friendly-heading-fn account) to retrieve friendly name for account debit/credit
+
          (if (column-uses? 'amount-single)
              (list (vector (header-commodity (_ "Amount"))
-                           amount #t #t #f
+                           converted-amount #t #t #f
                            (lambda (a) "")))
              '())
+
          (if (column-uses? 'amount-double)
              (list (vector (header-commodity (_ "Debit"))
-                           debit-amount #f #t #t
+                           converted-debit-amount #f #t #t
                            friendly-debit)
                    (vector (header-commodity (_ "Credit"))
-                           credit-amount #f #t #f
+                           converted-credit-amount #f #t #f
                            friendly-credit))
              '())
 
