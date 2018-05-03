@@ -391,6 +391,34 @@ gnc_item_edit_paste_clipboard (GncItemEdit *item_edit)
 }
 
 
+static void
+clipboard_text_check (GtkClipboard *clipboard, const gchar *text, gpointer user_data)
+{
+    GncItemEdit *item_edit = GNC_ITEM_EDIT (user_data);
+
+    if (text != NULL)
+    {
+        gint pos;
+        gtk_editable_set_editable (GTK_EDITABLE(item_edit->editor), TRUE);
+        pos = gtk_editable_get_position (GTK_EDITABLE(item_edit->editor));
+        gtk_editable_insert_text (GTK_EDITABLE(item_edit->editor), text, -1, &pos);
+        gtk_editable_set_editable (GTK_EDITABLE(item_edit->editor), FALSE);
+        gtk_editable_set_position (GTK_EDITABLE(item_edit->editor), pos);
+    }
+}
+
+
+void
+gnc_item_edit_middle_paste_clipboard (GncItemEdit *item_edit)
+{
+    GtkClipboard *cbp = gtk_clipboard_get(GDK_SELECTION_PRIMARY);
+
+    gtk_clipboard_request_text (cbp,
+                            (GtkClipboardTextReceivedFunc) clipboard_text_check,
+                            item_edit);
+}
+
+
 static gboolean
 key_press_popup_cb (GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
@@ -814,6 +842,27 @@ button_press_cb (GtkWidget *widget, GdkEventButton *event, gpointer *pointer)
         g_signal_emit_by_name (sheet->reg, "show_popup_menu");
         return TRUE;
     }
+
+    // Middle mouse button, paste
+    if (event->button == 2 && event->type == GDK_BUTTON_PRESS)
+    {
+        PangoLayout *layout = gtk_entry_get_layout (GTK_ENTRY(widget));
+        GtkEditable *editable = GTK_EDITABLE(widget);
+        gint index, trailing;
+        gboolean result;
+
+        result = pango_layout_xy_to_index (layout,
+                          PANGO_SCALE * (event->x),
+                          1,
+                          &index,
+                          &trailing);
+
+        gtk_editable_set_position (editable, index + trailing);
+
+        gnc_item_edit_middle_paste_clipboard (GNC_ITEM_EDIT(sheet->item_editor));
+        return TRUE;
+    }
+
     return FALSE;
 }
 
