@@ -797,10 +797,10 @@
       (set-option! options "Sorting" "Show Account Description" #t)
       (let* ((sxml (options->sxml options "sorting=date")))
         (test-equal "expense acc friendly headers"
-          '("\n" "Expenses" "Expense" "Rebate")
+          '("\n" "Expenses" "\n" "Expense" "\n" "Rebate")
           (get-row-col sxml 47 #f))
         (test-equal "income acc friendly headers"
-          '("\n" "Income" "Charge" "Income")
+          '("\n" "Income" "\n" "Charge" "\n" "Income")
           (get-row-col sxml 69 #f)))
 
       (set-option! options "Accounts" "Accounts" (list bank))
