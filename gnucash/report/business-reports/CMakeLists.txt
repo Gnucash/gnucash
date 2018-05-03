@@ -1,5 +1,5 @@
 
-SET (business_reports_SCHEME
+set (business_reports_SCHEME
   aging.scm
   customer-summary.scm
   easy-invoice.scm
@@ -15,7 +15,7 @@ SET (business_reports_SCHEME
   business-reports.scm
 )
 
-SET(business_reports_DATA
+set(business_reports_DATA
   taxinvoice.eguile.scm
   taxinvoice.css
   receipt.eguile.scm
@@ -24,8 +24,8 @@ SET(business_reports_DATA
   balsheet-eg.eguile.scm
 )
 
-SET(GUILE_OUTPUT_DIR   gnucash/report)
-SET(GUILE_DEPENDS
+set(GUILE_OUTPUT_DIR   gnucash/report)
+set(GUILE_DEPENDS
   gncmod-html
   scm-app-utils
   scm-gettext
@@ -37,13 +37,13 @@ SET(GUILE_DEPENDS
   scm-report-system
   )
 
-GNC_ADD_SCHEME_TARGETS(scm-business-reports
+gnc_add_scheme_targets(scm-business-reports
   "${business_reports_SCHEME}"
   ${GUILE_OUTPUT_DIR}
   "${GUILE_DEPENDS}"
   TRUE
 )
 
-INSTALL(FILES ${business_reports_DATA} DESTINATION ${SCHEME_INSTALLED_SOURCE_DIR}/gnucash/report)
+install(FILES ${business_reports_DATA} DESTINATION ${SCHEME_INSTALLED_SOURCE_DIR}/gnucash/report)
 
-SET_DIST_LIST(business_reports_DIST CMakeLists.txt ${business_reports_SCHEME} ${business_reports_DATA})
+set_dist_list(business_reports_DIST CMakeLists.txt ${business_reports_SCHEME} ${business_reports_DATA})

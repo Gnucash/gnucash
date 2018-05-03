@@ -1,4 +1,4 @@
-SET(pycons_DATA
+set(pycons_DATA
   pycons/__init__.py
   pycons/console.py
   pycons/ishell.py
@@ -8,15 +8,15 @@ SET(pycons_DATA
   pycons/simple_plot.py
 )
 
-IF (WITH_PYTHON)
-  INSTALL(FILES ${pycons_DATA} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/python/pycons)
-  INSTALL(FILES init.py DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/python)
+if (WITH_PYTHON)
+  install(FILES ${pycons_DATA} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/python/pycons)
+  install(FILES init.py DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/python)
 
-  FILE(COPY ${pycons_DATA} DESTINATION ${CMAKE_BINARY_DIR}/share/gnucash/python/pycons)
-  FILE(COPY init.py DESTINATION ${CMAKE_BINARY_DIR}/share/gnucash/python)
-ENDIF(WITH_PYTHON)
+  file(COPY ${pycons_DATA} DESTINATION ${CMAKE_BINARY_DIR}/share/gnucash/python/pycons)
+  file(COPY init.py DESTINATION ${CMAKE_BINARY_DIR}/share/gnucash/python)
+endif(WITH_PYTHON)
 
-SET_LOCAL_DIST(pycons_DIST ${pycons_DATA})
-SET_LOCAL_DIST(python_DIST_local CMakeLists.txt init.py)
-SET(python_DIST ${python_DIST_local} ${pycons_DIST} PARENT_SCOPE)
+set_local_dist(pycons_DIST ${pycons_DATA})
+set_local_dist(python_DIST_local CMakeLists.txt init.py)
+set(python_DIST ${python_DIST_local} ${pycons_DIST} PARENT_SCOPE)
 

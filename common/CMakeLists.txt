@@ -1,11 +1,11 @@
 # CMakeLists.txt for common/
 
 # The subdirectories
-ADD_SUBDIRECTORY (cmake_modules)
-ADD_SUBDIRECTORY (debug)
-ADD_SUBDIRECTORY (test-core)
+add_subdirectory (cmake_modules)
+add_subdirectory (debug)
+add_subdirectory (test-core)
 
-SET(common_EXTRA_DIST
+set(common_EXTRA_DIST
         base-typemaps.i
         config.h.cmake.in
         gnc-test-env.pl
@@ -28,6 +28,6 @@ dist_add_generated (${GENERATE_SWIG_WRAPPERS} swig-runtime.h)
 
 add_custom_target (swig-runtime-h DEPENDS ${SWIG_RUNTIME_H})
 
-SET_LOCAL_DIST(common_DIST_local CMakeLists.txt ${common_EXTRA_DIST})
+set_local_dist(common_DIST_local CMakeLists.txt ${common_EXTRA_DIST})
 
-SET(common_DIST ${common_DIST_local} ${cmake_modules_DIST} ${debug_DIST} ${test_core_DIST} PARENT_SCOPE)
+set(common_DIST ${common_DIST_local} ${cmake_modules_DIST} ${debug_DIST} ${test_core_DIST} PARENT_SCOPE)

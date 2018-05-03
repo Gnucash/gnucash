@@ -38,4 +38,4 @@ file (COPY ${ui_SOURCES} DESTINATION ${DATADIR_BUILD}/gnucash/ui)
 
 install (FILES ${ui_SOURCES} DESTINATION share/gnucash/ui)
 
-SET_DIST_LIST(ui_DIST CMakeLists.txt ${ui_SOURCES})
+set_dist_list(ui_DIST CMakeLists.txt ${ui_SOURCES})

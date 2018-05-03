@@ -1,7 +1,7 @@
-ADD_SUBDIRECTORY(example_scripts)
-ADD_SUBDIRECTORY(tests)
+add_subdirectory(example_scripts)
+add_subdirectory(tests)
 
-SET(PYEXEC_FILES  __init__.py function_class.py gnucash_business.py gnucash_core.py)
+set(PYEXEC_FILES  __init__.py function_class.py gnucash_business.py gnucash_core.py)
 
 set(SWIG_FILES ${CMAKE_CURRENT_SOURCE_DIR}/gnucash_core.i ${CMAKE_CURRENT_SOURCE_DIR}/time64.i)
 set(GNUCASH_CORE_C_INCLUDES
@@ -45,9 +45,9 @@ gnc_add_swig_python_command (swig-gnucash-core
     ${GNUCASH_CORE_C_INCLUDES}
 )
 
-IF(WITH_PYTHON)
+if(WITH_PYTHON)
 
-  SET(gnucash_core_c_INCLUDE_DIRS
+  set(gnucash_core_c_INCLUDE_DIRS
     ${CMAKE_SOURCE_DIR}/libgnucash
     ${CMAKE_SOURCE_DIR}/libgnucash/engine
     ${CMAKE_SOURCE_DIR}/gnucash/gnome-utils
@@ -60,48 +60,48 @@ IF(WITH_PYTHON)
     ${PYTHON_INCLUDE_DIRS}
   )
 
-  ADD_LIBRARY(gnucash_core_c MODULE ${SWIG_GNUCASH_CORE_C})
-  TARGET_INCLUDE_DIRECTORIES(gnucash_core_c PRIVATE ${gnucash_core_c_INCLUDE_DIRS})
+  add_library(gnucash_core_c MODULE ${SWIG_GNUCASH_CORE_C})
+  target_include_directories(gnucash_core_c PRIVATE ${gnucash_core_c_INCLUDE_DIRS})
 
-  TARGET_LINK_LIBRARIES(gnucash_core_c gncmod-app-utils gncmod-engine gnc-module ${GLIB_LIBS} ${PYTHON_LIBRARIES})
-  SET_TARGET_PROPERTIES(gnucash_core_c PROPERTIES PREFIX "_")
-  TARGET_COMPILE_OPTIONS(gnucash_core_c PRIVATE -Wno-implicit -Wno-missing-prototypes -Wno-declaration-after-statement -Wno-missing-declarations)
+  target_link_libraries(gnucash_core_c gncmod-app-utils gncmod-engine gnc-module ${GLIB_LIBS} ${PYTHON_LIBRARIES})
+  set_target_properties(gnucash_core_c PROPERTIES PREFIX "_")
+  target_compile_options(gnucash_core_c PRIVATE -Wno-implicit -Wno-missing-prototypes -Wno-declaration-after-statement -Wno-missing-declarations)
 
-  ADD_EXECUTABLE(sqlite3test EXCLUDE_FROM_ALL sqlite3test.c ${SWIG_GNUCASH_CORE_C})
-  TARGET_LINK_LIBRARIES(sqlite3test gncmod-app-utils gncmod-engine gnc-module ${GLIB_LIBS} ${PYTHON_LIBRARIES})
-  TARGET_INCLUDE_DIRECTORIES(sqlite3test PRIVATE ${gnucash_core_c_INCLUDE_DIRS})
-  TARGET_COMPILE_OPTIONS(sqlite3test PRIVATE -Wno-implicit -Wno-missing-prototypes -Wno-declaration-after-statement -Wno-missing-declarations)
+  add_executable(sqlite3test EXCLUDE_FROM_ALL sqlite3test.c ${SWIG_GNUCASH_CORE_C})
+  target_link_libraries(sqlite3test gncmod-app-utils gncmod-engine gnc-module ${GLIB_LIBS} ${PYTHON_LIBRARIES})
+  target_include_directories(sqlite3test PRIVATE ${gnucash_core_c_INCLUDE_DIRS})
+  target_compile_options(sqlite3test PRIVATE -Wno-implicit -Wno-missing-prototypes -Wno-declaration-after-statement -Wno-missing-declarations)
 
-  ADD_TEST(NAME sqlite3test COMMAND sqlite3test)
-  ADD_DEPENDENCIES(check sqlite3test)
+  add_test(NAME sqlite3test COMMAND sqlite3test)
+  add_dependencies(check sqlite3test)
 
-  INSTALL(TARGETS gnucash_core_c
+  install(TARGETS gnucash_core_c
     LIBRARY DESTINATION ${PYTHON_SYSCONFIG_OUTPUT}/gnucash
     ARCHIVE DESTINATION ${PYTHON_SYSCONFIG_OUTPUT}/gnucash
   )
-  INSTALL(FILES ${PYEXEC_FILES} ${SWIG_GNUCASH_CORE_PY}
+  install(FILES ${PYEXEC_FILES} ${SWIG_GNUCASH_CORE_PY}
     DESTINATION ${PYTHON_SYSCONFIG_OUTPUT}/gnucash
   )
 
-  FILE(COPY ${PYEXEC_FILES} DESTINATION ${PYTHON_SYSCONFIG_BUILD}/gnucash)
+  file(COPY ${PYEXEC_FILES} DESTINATION ${PYTHON_SYSCONFIG_BUILD}/gnucash)
 
-  ADD_CUSTOM_TARGET(gnucash-core-c-py ALL
+  add_custom_target(gnucash-core-c-py ALL
     COMMAND ${CMAKE_COMMAND} -E copy ${SWIG_GNUCASH_CORE_PY} ${PYTHON_SYSCONFIG_BUILD}/gnucash
     DEPENDS ${SWIG_GNUCASH_CORE_C})
 
-  ADD_CUSTOM_TARGET(gnucash-core-c-build ALL
+  add_custom_target(gnucash-core-c-build ALL
     COMMAND ${CMAKE_COMMAND} -E copy ${LIBDIR_BUILD}/gnucash/_gnucash_core_c${CMAKE_SHARED_MODULE_SUFFIX} ${PYTHON_SYSCONFIG_BUILD}/gnucash
     DEPENDS gnucash_core_c)
-    
-ENDIF()
 
-SET(python_bindings_DATA ${PYEXEC_FILES}
+endif()
+
+set(python_bindings_DATA ${PYEXEC_FILES}
   gnucash_core.i
   sqlite3test.c
   time64.i)
 
-SET_LOCAL_DIST(python_bindings_DIST_local CMakeLists.txt 
+set_local_dist(python_bindings_DIST_local CMakeLists.txt
   ${python_bindings_DATA})
 
-SET(python_bindings_DIST ${python_bindings_DIST_local}
+set(python_bindings_DIST ${python_bindings_DIST_local}
   ${test_python_bindings_DIST} ${example_scripts_DIST} PARENT_SCOPE)

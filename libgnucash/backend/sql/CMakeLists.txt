@@ -1,8 +1,8 @@
 # CMakeLists.txt for libgnucash/backend/dbi
 
-ADD_SUBDIRECTORY(test)
+add_subdirectory(test)
 
-SET (backend_sql_SOURCES
+set (backend_sql_SOURCES
   gnc-account-sql.cpp
   gnc-address-sql.cpp
   gnc-bill-term-sql.cpp
@@ -30,7 +30,7 @@ SET (backend_sql_SOURCES
   gnc-sql-object-backend.cpp
   escape.cpp
 )
-SET (backend_sql_noinst_HEADERS
+set (backend_sql_noinst_HEADERS
   gnc-account-sql.h
   gnc-bill-term-sql.h
   gnc-book-sql.h
@@ -58,27 +58,27 @@ SET (backend_sql_noinst_HEADERS
   escape.h
 )
 
-SET_LOCAL_DIST(backend_sql_DIST_local ${backend_sql_SOURCES} ${backend_sql_noinst_HEADERS} CMakeLists.txt )
-SET(backend_sql_DIST ${backend_sql_DIST_local} ${test_backend_sql_DIST} PARENT_SCOPE)
+set_local_dist(backend_sql_DIST_local ${backend_sql_SOURCES} ${backend_sql_noinst_HEADERS} CMakeLists.txt )
+set(backend_sql_DIST ${backend_sql_DIST_local} ${test_backend_sql_DIST} PARENT_SCOPE)
 
 # Add dependency on config.h
-SET_SOURCE_FILES_PROPERTIES (${gnc_backend_sql_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
-IF(WITH_SQL)
-  ADD_LIBRARY (gnc-backend-sql
+set_source_files_properties (${gnc_backend_sql_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+if(WITH_SQL)
+  add_library (gnc-backend-sql
     ${backend_sql_SOURCES}
     ${backend_sql_noinst_HEADERS}
     )
 
-  TARGET_LINK_LIBRARIES(gnc-backend-sql gncmod-engine)
+  target_link_libraries(gnc-backend-sql gncmod-engine)
 
-  TARGET_COMPILE_DEFINITIONS (gnc-backend-sql PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.sql\")
+  target_compile_definitions (gnc-backend-sql PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.sql\")
 
-  TARGET_INCLUDE_DIRECTORIES(gnc-backend-sql PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+  target_include_directories(gnc-backend-sql PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-  INSTALL(TARGETS gnc-backend-sql
+  install(TARGETS gnc-backend-sql
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
   # No headers to install
-ENDIF(WITH_SQL)
+endif(WITH_SQL)

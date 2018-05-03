@@ -1,5 +1,5 @@
 
-SET(APP_UTILS_TEST_INCLUDE_DIRS
+set(APP_UTILS_TEST_INCLUDE_DIRS
   ${CMAKE_BINARY_DIR}/common # for config.h
   ${CMAKE_SOURCE_DIR}/common/test-core
   ${CMAKE_SOURCE_DIR}/libgnucash/app-utils
@@ -9,27 +9,27 @@ SET(APP_UTILS_TEST_INCLUDE_DIRS
   ${GUILE_INCLUDE_DIRS}
 )
 
-SET(APP_UTILS_TEST_LIBS gncmod-app-utils gncmod-test-engine test-core ${GIO_LDFLAGS} ${GUILE_LDFLAGS})
+set(APP_UTILS_TEST_LIBS gncmod-app-utils gncmod-test-engine test-core ${GIO_LDFLAGS} ${GUILE_LDFLAGS})
 
-SET(test_app_utils_SOURCES test-app-utils.c test-option-util.cpp test-gnc-ui-util.c)
+set(test_app_utils_SOURCES test-app-utils.c test-option-util.cpp test-gnc-ui-util.c)
 
-MACRO(ADD_APP_UTILS_TEST _TARGET _SOURCE_FILES)
-  GNC_ADD_TEST(${_TARGET} "${_SOURCE_FILES}" APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
-ENDMACRO()
+macro(add_app_utils_test _TARGET _SOURCE_FILES)
+  gnc_add_test(${_TARGET} "${_SOURCE_FILES}" APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
+endmacro()
 
-GNC_ADD_TEST_WITH_GUILE(test-exp-parser test-exp-parser.c
+gnc_add_test_with_guile(test-exp-parser test-exp-parser.c
   APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS
  )
-GNC_ADD_TEST_WITH_GUILE(test-link-module-app-utils test-link-module APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
-ADD_APP_UTILS_TEST(test-print-parse-amount test-print-parse-amount.cpp)
+gnc_add_test_with_guile(test-link-module-app-utils test-link-module APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
+add_app_utils_test(test-print-parse-amount test-print-parse-amount.cpp)
 # FIXME Why is this test not run ?
-#GNC_ADD_TEST_WITH_GUILE(test-print-queries test-print-queries.cpp APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
-GNC_ADD_TEST_WITH_GUILE(test-scm-query-string test-scm-query-string.cpp
+#gnc_add_test_with_guile(test-print-queries test-print-queries.cpp APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
+gnc_add_test_with_guile(test-scm-query-string test-scm-query-string.cpp
   APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS
 )
-ADD_APP_UTILS_TEST(test-sx test-sx.cpp)
+add_app_utils_test(test-sx test-sx.cpp)
 
-SET(GUILE_DEPENDS
+set(GUILE_DEPENDS
   scm-test-engine
   scm-app-utils
   scm-core-utils
@@ -46,25 +46,25 @@ set(test_app_utils_scheme_SOURCES
   test-date-utilities.scm
 )
 
-GNC_ADD_SCHEME_TARGETS(scm-test-load-app-utils-module
+gnc_add_scheme_targets(scm-test-load-app-utils-module
   "test-load-app-utils-module.scm"
   "gnucash/reports"
   "${GUILE_DEPENDS}"
   FALSE
 )
 
-GNC_ADD_SCHEME_TARGETS(scm-test-c-interface
+gnc_add_scheme_targets(scm-test-c-interface
   "test-c-interface.scm"
   ""
   "${GUILE_DEPENDS}"
   FALSE
 )
 
-GNC_ADD_SCHEME_TESTS("${test_app_utils_scheme_SOURCES}")
+gnc_add_scheme_tests("${test_app_utils_scheme_SOURCES}")
 # Doesn't work yet:
-GNC_ADD_TEST_WITH_GUILE(test-app-utils "${test_app_utils_SOURCES}" APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
+gnc_add_test_with_guile(test-app-utils "${test_app_utils_SOURCES}" APP_UTILS_TEST_INCLUDE_DIRS APP_UTILS_TEST_LIBS)
 
-SET_DIST_LIST(test_app_utils_DIST
+set_dist_list(test_app_utils_DIST
   CMakeLists.txt
   
   test-exp-parser.c

@@ -13,71 +13,71 @@ include(${CMAKE_MODULE_PATH}/MakeDistFiles.cmake)
 
 
 
-FUNCTION(MAKE_DIST PACKAGE_PREFIX GNUCASH_SOURCE_DIR BUILD_SOURCE_DIR BUILDING_FROM_VCS)
+function(make_dist PACKAGE_PREFIX GNUCASH_SOURCE_DIR BUILD_SOURCE_DIR BUILDING_FROM_VCS)
 
-    SET(CMAKE_COMMAND_TMP "")
-    IF (${CMAKE_VERSION} VERSION_GREATER 3.1)
-        SET(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
-    ENDIF()
+    set(CMAKE_COMMAND_TMP "")
+    if (${CMAKE_VERSION} VERSION_GREATER 3.1)
+        set(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
+    endif()
 
     # -- Remove any existing packaging directory.
-    FILE(REMOVE_RECURSE ${PACKAGE_PREFIX})
+    file(REMOVE_RECURSE ${PACKAGE_PREFIX})
 
-    IF (EXISTS ${PACKAGE_PREFIX})
-        MESSAGE(FATAL_ERROR "Unable to remove existing dist directory \"${PACKAGE_PREFIX}\". Cannot continue.")
-    ENDIF()
+    if (EXISTS ${PACKAGE_PREFIX})
+        message(FATAL_ERROR "Unable to remove existing dist directory \"${PACKAGE_PREFIX}\". Cannot continue.")
+    endif()
 
 
     # -- Copy in distributed files
-    IF(NOT EXISTS dist_manifest.txt)
+    if(NOT EXISTS dist_manifest.txt)
         message(FATAL_ERROR "Cannot find dist manifest: dist_manifest.txt")
-    ENDIF()
+    endif()
 
     file(STRINGS dist_manifest.txt ALL_DIST)
 
-    FOREACH(file ${ALL_DIST})
-        IF(NOT EXISTS ${GNUCASH_SOURCE_DIR}/${file})
-            MESSAGE(FATAL_ERROR "Can't find dist file ${GNUCASH_SOURCE_DIR}/${file}")
-        ENDIF()
-        GET_FILENAME_COMPONENT(dir ${file} DIRECTORY)
-        FILE(MAKE_DIRECTORY ${PACKAGE_PREFIX}/${dir})
-        FILE(COPY ${GNUCASH_SOURCE_DIR}/${file} DESTINATION ${PACKAGE_PREFIX}/${dir})
-    ENDFOREACH()
+    foreach(file ${ALL_DIST})
+        if(NOT EXISTS ${GNUCASH_SOURCE_DIR}/${file})
+            message(FATAL_ERROR "Can't find dist file ${GNUCASH_SOURCE_DIR}/${file}")
+        endif()
+        get_filename_component(dir ${file} DIRECTORY)
+        file(MAKE_DIRECTORY ${PACKAGE_PREFIX}/${dir})
+        file(COPY ${GNUCASH_SOURCE_DIR}/${file} DESTINATION ${PACKAGE_PREFIX}/${dir})
+    endforeach()
 
     # -- Copy in build products that are distributed.
 
-    FOREACH(file ${dist_generated})
-        EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy ${BUILD_SOURCE_DIR}/${file} ${PACKAGE_PREFIX}/${file})
-        IF (NOT EXISTS ${PACKAGE_PREFIX}/${file})
-            MESSAGE(FATAL_ERROR "Copy of ${BUILD_SOURCE_DIR}/${file} to dist dir '${PACKAGE_PREFIX}' failed.")
-        ENDIF()
-    ENDFOREACH()
+    foreach(file ${dist_generated})
+        execute_process(COMMAND ${CMAKE_COMMAND} -E copy ${BUILD_SOURCE_DIR}/${file} ${PACKAGE_PREFIX}/${file})
+        if (NOT EXISTS ${PACKAGE_PREFIX}/${file})
+            message(FATAL_ERROR "Copy of ${BUILD_SOURCE_DIR}/${file} to dist dir '${PACKAGE_PREFIX}' failed.")
+        endif()
+    endforeach()
 
-    CMAKE_POLICY(SET CMP0012 NEW)
+    cmake_policy(SET CMP0012 NEW)
 
     # -- Create the tarball.
 
-    EXECUTE_PROCESS_AND_CHECK_RESULT(
+    execute_process_and_check_result(
             COMMAND ${CMAKE_COMMAND} -E tar cf ${PACKAGE_PREFIX}.tar ${PACKAGE_PREFIX}
             WORKING_DIRECTORY .
             ERROR_MSG "tar command to create ${PACKAGE_PREFIX}.tar failed."
     )
 
     # -- Compress the tarball with gzip
-    EXECUTE_PROCESS(
+    execute_process(
         COMMAND ${CMAKE_COMMAND} -E copy ${PACKAGE_PREFIX}.tar ${PACKAGE_PREFIX}.tar.save
     )
-    EXECUTE_PROCESS_AND_CHECK_RESULT(
+    execute_process_and_check_result(
             COMMAND ${CMAKE_COMMAND_TMP} gzip -f ${PACKAGE_PREFIX}.tar
             WORKING_DIRECTORY .
             ERROR_MSG "gzip command to create ${PACKAGE_PREFIX}.tar.gz failed."
     )
 
     # -- Compress the tarball with bzip2
-    EXECUTE_PROCESS(
+    execute_process(
         COMMAND ${CMAKE_COMMAND} -E rename ${PACKAGE_PREFIX}.tar.save ${PACKAGE_PREFIX}.tar
     )
-    EXECUTE_PROCESS_AND_CHECK_RESULT(
+    execute_process_and_check_result(
             COMMAND ${CMAKE_COMMAND_TMP} bzip2 -f ${PACKAGE_PREFIX}.tar
             WORKING_DIRECTORY .
             ERROR_MSG "bzip2 command to create ${PACKAGE_PREFIX}.tar.bz2 failed."
@@ -85,19 +85,19 @@ FUNCTION(MAKE_DIST PACKAGE_PREFIX GNUCASH_SOURCE_DIR BUILD_SOURCE_DIR BUILDING_F
 
     # -- Clean up packaging directory.
 
-    FILE(REMOVE_RECURSE ${PACKAGE_PREFIX})
+    file(REMOVE_RECURSE ${PACKAGE_PREFIX})
 
-    IF(EXISTS ${PACKAGE_PREFIX})
-        MESSAGE(WARNING "Could not remove packaging directory '${PACKAGE_PREFIX}'")
-    ENDIF()
+    if(EXISTS ${PACKAGE_PREFIX})
+        message(WARNING "Could not remove packaging directory '${PACKAGE_PREFIX}'")
+    endif()
 
     # -- All done.
 
-    MESSAGE("\n\nDistributions ${PACKAGE_PREFIX}.tar.gz and ${PACKAGE_PREFIX}.tar.bz2 created.\n\n")
-ENDFUNCTION()
+    message("\n\nDistributions ${PACKAGE_PREFIX}.tar.gz and ${PACKAGE_PREFIX}.tar.bz2 created.\n\n")
+endfunction()
 
-IF (NOT WITH_GNUCASH)
-    MESSAGE(SEND_ERROR "Creation of dist tarballs not support when WITH_GNUCASH=OFF.")
-ENDIF()
+if (NOT WITH_GNUCASH)
+    message(SEND_ERROR "Creation of dist tarballs not support when WITH_GNUCASH=OFF.")
+endif()
 
- MAKE_DIST(${PACKAGE_PREFIX} ${GNUCASH_SOURCE_DIR} ${BUILD_SOURCE_DIR} ${BUILDING_FROM_VCS})
+ make_dist(${PACKAGE_PREFIX} ${GNUCASH_SOURCE_DIR} ${BUILD_SOURCE_DIR} ${BUILDING_FROM_VCS})

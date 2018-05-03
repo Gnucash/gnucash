@@ -68,4 +68,4 @@ file (COPY ${gtkbuilder_SOURCES} DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder
 
 install (FILES ${gtkbuilder_SOURCES} DESTINATION share/gnucash/gtkbuilder)
 
-SET_DIST_LIST(gtkbuilder_DIST CMakeLists.txt ${gtkbuilder_SOURCES})
+set_dist_list(gtkbuilder_DIST CMakeLists.txt ${gtkbuilder_SOURCES})

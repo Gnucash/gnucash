@@ -1,5 +1,5 @@
 
-SET (gnome_search_SOURCES
+set (gnome_search_SOURCES
   gncmod-gnome-search.c
   gnc-general-search.c
   dialog-search.c
@@ -15,12 +15,12 @@ SET (gnome_search_SOURCES
   search-string.c
 )
 
-SET (gnome_search_HEADERS
+set (gnome_search_HEADERS
   dialog-search.h
   gnc-general-search.h
 )
 
-SET (gnome_search_noinst_HEADERS
+set (gnome_search_noinst_HEADERS
   search-account.h
   search-boolean.h
   search-core-type.h
@@ -34,31 +34,31 @@ SET (gnome_search_noinst_HEADERS
 )  
 
 # Add dependency on config.h
-SET_SOURCE_FILES_PROPERTIES (${gnome_search_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+set_source_files_properties (${gnome_search_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
-SET_LOCAL_DIST(gnome_search_DIST_local CMakeLists.txt ${gnome_search_SOURCES} ${gnome_search_HEADERS}
+set_local_dist(gnome_search_DIST_local CMakeLists.txt ${gnome_search_SOURCES} ${gnome_search_HEADERS}
         ${gnome_search_noinst_HEADERS})
-SET(gnome_search_DIST ${gnome_search_DIST_local} PARENT_SCOPE)
+set(gnome_search_DIST ${gnome_search_DIST_local} PARENT_SCOPE)
 
-ADD_LIBRARY (gncmod-gnome-search
+add_library (gncmod-gnome-search
     ${gnome_search_SOURCES}
     ${gnome_search_HEADERS}
     ${gnome_search_noinst_HEADERS}
 )
 
-TARGET_LINK_LIBRARIES(gncmod-gnome-search gncmod-gnome-utils ${GTK3_LDFLAGS})
+target_link_libraries(gncmod-gnome-search gncmod-gnome-utils ${GTK3_LDFLAGS})
 
-TARGET_COMPILE_DEFINITIONS(gncmod-gnome-search PRIVATE -DG_LOG_DOMAIN=\"gnc.gui.search\")
+target_compile_definitions(gncmod-gnome-search PRIVATE -DG_LOG_DOMAIN=\"gnc.gui.search\")
 
-TARGET_INCLUDE_DIRECTORIES(gncmod-gnome-search PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(gncmod-gnome-search PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-IF (APPLE)
-  SET_TARGET_PROPERTIES (gncmod-gnome-search PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
-ENDIF()
+if (APPLE)
+  set_target_properties (gncmod-gnome-search PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+endif()
 
-INSTALL(TARGETS gncmod-gnome-search
+install(TARGETS gncmod-gnome-search
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-INSTALL(FILES ${gnome_search_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
+install(FILES ${gnome_search_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)

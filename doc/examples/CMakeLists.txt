@@ -1,6 +1,6 @@
 
 
-SET(examples_DATA
+set(examples_DATA
   Money95bank_fr.qif
   Money95invst_fr.qif
   Money95mfunds_fr.qif
@@ -21,6 +21,6 @@ SET(examples_DATA
   web.qif
 )
 
-INSTALL(FILES ${examples_DATA} DESTINATION  ${CMAKE_INSTALL_DOCDIR})
+install(FILES ${examples_DATA} DESTINATION  ${CMAKE_INSTALL_DOCDIR})
 
-SET_DIST_LIST(examples_DIST ${examples_DATA} CMakeLists.txt )
+set_dist_list(examples_DIST ${examples_DATA} CMakeLists.txt )

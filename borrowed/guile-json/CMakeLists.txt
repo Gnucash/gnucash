@@ -16,4 +16,4 @@ set_local_dist(guile-json_DIST_LOCAL
   README
 )
 
-SET(guile-json_DIST ${guile-json_DIST_LOCAL} ${guile-json-details_DIST} PARENT_SCOPE)
+set(guile-json_DIST ${guile-json_DIST_LOCAL} ${guile-json-details_DIST} PARENT_SCOPE)

@@ -1,9 +1,9 @@
 
-ADD_SUBDIRECTORY(test)
+add_subdirectory(test)
 
-SET (standard_reports_SCHEME standard-reports.scm)
+set (standard_reports_SCHEME standard-reports.scm)
 
-SET (standard_reports_SCHEME_2
+set (standard_reports_SCHEME_2
     account-piecharts.scm
     account-summary.scm
     advanced-portfolio.scm
@@ -33,7 +33,7 @@ SET (standard_reports_SCHEME_2
     trial-balance.scm
     )
 
-SET(GUILE_DEPENDS
+set(GUILE_DEPENDS
   gncmod-html
   scm-core-utils
   scm-engine
@@ -43,21 +43,21 @@ SET(GUILE_DEPENDS
   scm-report-system
   )
 
-GNC_ADD_SCHEME_TARGETS(scm-standard-reports-1
+gnc_add_scheme_targets(scm-standard-reports-1
   "${standard_reports_SCHEME}"
   "gnucash/report"
   "scm-standard-reports-2;${GUILE_DEPENDS}"
   TRUE
 )
 
-GNC_ADD_SCHEME_TARGETS(scm-standard-reports-2
+gnc_add_scheme_targets(scm-standard-reports-2
   "${standard_reports_SCHEME_2}"
   "gnucash/report/standard-reports"
   "scm-standard-reports-2-links;${GUILE_DEPENDS}"
   TRUE
 )
 
-ADD_CUSTOM_TARGET(scm-standard-reports ALL DEPENDS scm-standard-reports-2 scm-standard-reports-1)
+add_custom_target(scm-standard-reports ALL DEPENDS scm-standard-reports-2 scm-standard-reports-1)
 
-SET_LOCAL_DIST(standard_reports_DIST_local CMakeLists.txt ${standard_reports_SCHEME} ${standard_reports_SCHEME_2})
-SET(standard_reports_DIST ${standard_reports_DIST_local} ${test_standard_reports_DIST} PARENT_SCOPE)
+set_local_dist(standard_reports_DIST_local CMakeLists.txt ${standard_reports_SCHEME} ${standard_reports_SCHEME_2})
+set(standard_reports_DIST ${standard_reports_DIST_local} ${test_standard_reports_DIST} PARENT_SCOPE)

@@ -1,4 +1,4 @@
-SET(account_DATA
+set(account_DATA
   acctchrt_brokerage.gnucash-xea
   acctchrt_business.gnucash-xea
   acctchrt_carloan.gnucash-xea
@@ -17,7 +17,7 @@ SET(account_DATA
   acctchrt_spouseretire.gnucash-xea
   uk-vat.gnucash-xea)
 
-SET_DIST_LIST(EN_GB_DIST ${account_DATA} acctchrt_full.gnucash-xea CMakeLists.txt)
+set_dist_list(EN_GB_DIST ${account_DATA} acctchrt_full.gnucash-xea CMakeLists.txt)
 
-INSTALL(FILES ${account_DATA} DESTINATION ${ACCOUNTS_INSTALL_DIR}/en_GB)
-FILE(COPY ${account_DATA} DESTINATION ${ACCOUNTS_BUILD_DIR}/en_GB)
+install(FILES ${account_DATA} DESTINATION ${ACCOUNTS_INSTALL_DIR}/en_GB)
+file(COPY ${account_DATA} DESTINATION ${ACCOUNTS_BUILD_DIR}/en_GB)

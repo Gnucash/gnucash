@@ -1,9 +1,9 @@
 # CMakeLists.txt for libgnucash/engine
 
-ADD_SUBDIRECTORY(test-core)
-ADD_SUBDIRECTORY(test)
+add_subdirectory(test-core)
+add_subdirectory(test)
 
-SET(engine_noinst_HEADERS
+set(engine_noinst_HEADERS
   AccountP.h
   ScrubP.h
   SplitP.h
@@ -26,7 +26,7 @@ SET(engine_noinst_HEADERS
   qofquerycore-p.h
 )
 
-SET (engine_HEADERS
+set (engine_HEADERS
   Account.h
   FreqSpec.h
   Recurrence.h
@@ -124,16 +124,16 @@ gnc_add_swig_guile_command (swig-engine-c
 )
 
 # Command to generate the iso-4217-currencies.c file
-SET (ISO_4217_C ${CMAKE_CURRENT_BINARY_DIR}/iso-4217-currencies.c)
-ADD_CUSTOM_COMMAND (
+set (ISO_4217_C ${CMAKE_CURRENT_BINARY_DIR}/iso-4217-currencies.c)
+add_custom_command (
   OUTPUT ${ISO_4217_C}
   DEPENDS iso-4217-currencies.xml iso-currencies-to-c.xsl
   COMMAND
     ${LIBXSLT_XSLTPROC_EXECUTABLE} -o ${ISO_4217_C} "${CMAKE_CURRENT_SOURCE_DIR}/iso-currencies-to-c.xsl" "${CMAKE_CURRENT_SOURCE_DIR}/iso-4217-currencies.xml"
     )
-ADD_CUSTOM_TARGET(iso-4217-c DEPENDS ${ISO_4217_C})
+add_custom_target(iso-4217-c DEPENDS ${ISO_4217_C})
 
-SET (engine_SOURCES
+set (engine_SOURCES
   Account.cpp
   Recurrence.c
   Query.c
@@ -204,23 +204,23 @@ SET (engine_SOURCES
   qof-string-cache.cpp
 )
 
-IF (WIN32)
-  ADD_DEFINITIONS (-DOS_WIN32)
-  SET (engine_SOURCES ${engine_SOURCES}
+if (WIN32)
+  add_definitions (-DOS_WIN32)
+  set (engine_SOURCES ${engine_SOURCES}
   qof-win32.cpp
   ../../borrowed/libc/strptime.c
   )
-ENDIF (WIN32)
+endif (WIN32)
 
 # Add dependency on config.h
-SET_SOURCE_FILES_PROPERTIES (${engine_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+set_source_files_properties (${engine_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
 # Add dependency on iso-4217-currencies.c
-SET_SOURCE_FILES_PROPERTIES (gnc-commodity.c PROPERTIES OBJECT_DEPENDS "${ISO_4217_C};${CONFIG_H}")
+set_source_files_properties (gnc-commodity.c PROPERTIES OBJECT_DEPENDS "${ISO_4217_C};${CONFIG_H}")
 
 
 
-ADD_LIBRARY (gncmod-engine
+add_library (gncmod-engine
   ${engine_SOURCES}
   ${engine_HEADERS}
   ${SWIG_ENGINE_C}
@@ -230,12 +230,12 @@ ADD_LIBRARY (gncmod-engine
 # Add dependency on swig-runtime.h and iso-4217-currencies.c
 add_dependencies (gncmod-engine swig-runtime-h iso-4217-c)
 
-TARGET_LINK_LIBRARIES(gncmod-engine gnc-core-utils gnc-module ${Boost_DATE_TIME_LIBRARIES}  ${Boost_REGEX_LIBRARIES} ${REGEX_LDFLAGS} ${GMODULE_LDFLAGS} ${GLIB2_LDFLAGS} ${GOBJECT_LDFLAGS} ${GUILE_LDFLAGS})
+target_link_libraries(gncmod-engine gnc-core-utils gnc-module ${Boost_DATE_TIME_LIBRARIES}  ${Boost_REGEX_LIBRARIES} ${REGEX_LDFLAGS} ${GMODULE_LDFLAGS} ${GLIB2_LDFLAGS} ${GOBJECT_LDFLAGS} ${GUILE_LDFLAGS})
 
-TARGET_COMPILE_DEFINITIONS (gncmod-engine PRIVATE -DG_LOG_DOMAIN=\"gnc.engine\")
-TARGET_COMPILE_OPTIONS (gncmod-engine PRIVATE -Wno-deprecated-register)
+target_compile_definitions (gncmod-engine PRIVATE -DG_LOG_DOMAIN=\"gnc.engine\")
+target_compile_options (gncmod-engine PRIVATE -Wno-deprecated-register)
 
-TARGET_INCLUDE_DIRECTORIES (gncmod-engine
+target_include_directories (gncmod-engine
     PRIVATE ${CMAKE_CURRENT_BINARY_DIR} # for iso-4217-currencies.c
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
@@ -247,59 +247,59 @@ TARGET_INCLUDE_DIRECTORIES (gncmod-engine
         ${CMAKE_SOURCE_DIR}/borrowed/libc # for strptime.h
 )
 
-IF (APPLE)
-  SET_TARGET_PROPERTIES (gncmod-engine PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
-ENDIF()
+if (APPLE)
+  set_target_properties (gncmod-engine PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+endif()
 
-INSTALL(TARGETS gncmod-engine
+install(TARGETS gncmod-engine
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-INSTALL(FILES ${engine_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
+install(FILES ${engine_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
 
 # Scheme
 
-SET (engine_SCHEME_0
+set (engine_SCHEME_0
     engine.scm
     business-core.scm
 )
 
-SET (engine_SCHEME_1
+set (engine_SCHEME_1
     commodity-table.scm
     engine-interface.scm
     engine-utilities.scm
     gnc-numeric.scm
 )
 
-SET(BACKEND_DEPENDS gncmod-backend-xml)
-IF (WITH_SQL)
-    LIST(APPEND BACKEND_DEPENDS gncmod-backend-dbi)
-ENDIF(WITH_SQL)
+set(BACKEND_DEPENDS gncmod-backend-xml)
+if (WITH_SQL)
+    list(APPEND BACKEND_DEPENDS gncmod-backend-dbi)
+endif(WITH_SQL)
 
-SET(GUILE_DEPENDS
+set(GUILE_DEPENDS
   ${BACKEND_DEPENDS}
   gncmod-engine
   scm-gnc-module)
 
 
-GNC_ADD_SCHEME_TARGETS(scm-engine-0
+gnc_add_scheme_targets(scm-engine-0
   "${engine_SCHEME_0}"
   gnucash
   "${GUILE_DEPENDS}"
   FALSE
 )
 
-GNC_ADD_SCHEME_TARGETS(scm-engine-1
+gnc_add_scheme_targets(scm-engine-1
   "${engine_SCHEME_1}"
   ""
   "scm-engine-0;${GUILE_DEPENDS}"
   FALSE
 )
 
-ADD_CUSTOM_TARGET(scm-engine ALL DEPENDS scm-engine-1 scm-engine-0)
+add_custom_target(scm-engine ALL DEPENDS scm-engine-1 scm-engine-0)
 
-SET(engine_EXTRA_DIST
+set(engine_EXTRA_DIST
         business-core.i
         design.txt
         engine.i
@@ -313,9 +313,9 @@ SET(engine_EXTRA_DIST
         SX-book-p.h
         )
 
-IF (NOT WIN32)
-  LIST(APPEND engine_EXTRA_DIST qof-win32.cpp)
-ENDIF (NOT WIN32)
-SET_LOCAL_DIST(engine_DIST_local CMakeLists.txt ${engine_SOURCES} ${engine_HEADERS}
+if (NOT WIN32)
+  list(APPEND engine_EXTRA_DIST qof-win32.cpp)
+endif (NOT WIN32)
+set_local_dist(engine_DIST_local CMakeLists.txt ${engine_SOURCES} ${engine_HEADERS}
                      ${engine_noinst_HEADERS} ${engine_SCHEME_0} ${engine_SCHEME_1} ${engine_EXTRA_DIST})
-SET(engine_DIST ${engine_DIST_local} ${engine_test_core_DIST} ${test_engine_DIST} PARENT_SCOPE)
+set(engine_DIST ${engine_DIST_local} ${engine_test_core_DIST} ${test_engine_DIST} PARENT_SCOPE)

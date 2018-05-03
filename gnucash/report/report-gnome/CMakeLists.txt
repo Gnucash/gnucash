@@ -1,6 +1,6 @@
-ADD_SUBDIRECTORY(test)
+add_subdirectory(test)
 
-SET (report_gnome_HEADERS
+set (report_gnome_HEADERS
   dialog-report-column-view.h
   dialog-custom-report.h
   dialog-report-style-sheet.h
@@ -14,7 +14,7 @@ gnc_add_swig_guile_command (swig-report-gnome-c
     ${CMAKE_CURRENT_SOURCE_DIR}/report-gnome.i ${report_gnome_HEADERS}
 )
 
-SET (report_gnome_SOURCES
+set (report_gnome_SOURCES
   dialog-report-column-view.c
   dialog-custom-report.c
   dialog-report-style-sheet.c
@@ -23,37 +23,37 @@ SET (report_gnome_SOURCES
   window-report.c
 )
 
-ADD_LIBRARY (gncmod-report-gnome
+add_library (gncmod-report-gnome
   ${report_gnome_SOURCES}
   ${report_gnome_HEADERS}
   ${SWIG_REPORT_GNOME_C}
 )
-TARGET_LINK_LIBRARIES(gncmod-report-gnome gncmod-report-system gncmod-html gncmod-gnome-utils
+target_link_libraries(gncmod-report-gnome gncmod-report-system gncmod-html gncmod-gnome-utils
       ${GUILE_LDFLAGS} ${GTK3_LDFLAGS})
 
-TARGET_COMPILE_DEFINITIONS (gncmod-report-gnome PRIVATE -DG_LOG_DOMAIN=\"gnc.report.gui\")
+target_compile_definitions (gncmod-report-gnome PRIVATE -DG_LOG_DOMAIN=\"gnc.report.gui\")
 
-TARGET_INCLUDE_DIRECTORIES(gncmod-report-gnome PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(gncmod-report-gnome PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-IF (APPLE)
-  SET_TARGET_PROPERTIES (gncmod-report-gnome PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
-ENDIF()
+if (APPLE)
+  set_target_properties (gncmod-report-gnome PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+endif()
 
-INSTALL(TARGETS gncmod-report-gnome
+install(TARGETS gncmod-report-gnome
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-INSTALL(FILES ${report_gnome_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
+install(FILES ${report_gnome_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
 
 # Scheme
 
-SET(report_gnome_SCHEME
+set(report_gnome_SCHEME
     report-gnome.scm
 )
 
-SET(GUILE_OUTPUT_DIR   gnucash/report)
-SET(GUILE_DEPENDS
+set(GUILE_OUTPUT_DIR   gnucash/report)
+set(GUILE_DEPENDS
   gncmod-report-gnome
   scm-engine
   scm-gettext
@@ -66,13 +66,13 @@ SET(GUILE_DEPENDS
   scm-utility-reports
   )
 
-GNC_ADD_SCHEME_TARGETS(scm-report-gnome
+gnc_add_scheme_targets(scm-report-gnome
     "${report_gnome_SCHEME}"
     ${GUILE_OUTPUT_DIR}
     "${GUILE_DEPENDS}"
     FALSE
 )
 
-SET_LOCAL_DIST(report_gnome_DIST_local CMakeLists.txt report-gnome.i ${report_gnome_HEADERS}
+set_local_dist(report_gnome_DIST_local CMakeLists.txt report-gnome.i ${report_gnome_HEADERS}
     ${report_gnome_SOURCES} ${report_gnome_SCHEME})
-SET(report_gnome_DIST ${report_gnome_DIST_local} ${test_report_gnome_DIST} PARENT_SCOPE)
+set(report_gnome_DIST ${report_gnome_DIST_local} ${test_report_gnome_DIST} PARENT_SCOPE)

@@ -1,6 +1,6 @@
 # Note that gnucash/gnome-utils CANNOT depend on gnucash/gnome!
 
-ADD_SUBDIRECTORY(test)
+add_subdirectory(test)
 
 # Command to generate the swig-gnome-utils.c wrapper file
 gnc_add_swig_guile_command (swig-gnome-utils-c
@@ -8,17 +8,17 @@ gnc_add_swig_guile_command (swig-gnome-utils-c
     ${CMAKE_CURRENT_SOURCE_DIR}/gnome-utils.i
 )
 
-SET (WARNINGS_SCHEMA ${DATADIR_BUILD}/glib-2.0/schemas/org.gnucash.warnings.gschema.xml)
-SET (GNC_WARNINGS_C ${CMAKE_CURRENT_BINARY_DIR}/gnc-warnings.c)
-SET (GNC_WARNINGS_H ${CMAKE_CURRENT_BINARY_DIR}/gnc-warnings.h)
+set (WARNINGS_SCHEMA ${DATADIR_BUILD}/glib-2.0/schemas/org.gnucash.warnings.gschema.xml)
+set (GNC_WARNINGS_C ${CMAKE_CURRENT_BINARY_DIR}/gnc-warnings.c)
+set (GNC_WARNINGS_H ${CMAKE_CURRENT_BINARY_DIR}/gnc-warnings.h)
 
-ADD_CUSTOM_COMMAND(
+add_custom_command(
   OUTPUT ${GNC_WARNINGS_C}
   DEPENDS ${WARNINGS_SCHEMA} make-gnc-warnings-c.xsl
   COMMAND
     ${LIBXSLT_XSLTPROC_EXECUTABLE} -o ${GNC_WARNINGS_C} ${CMAKE_CURRENT_SOURCE_DIR}/make-gnc-warnings-c.xsl ${WARNINGS_SCHEMA}
 )
-ADD_CUSTOM_COMMAND(
+add_custom_command(
   OUTPUT ${GNC_WARNINGS_H}
   DEPENDS ${WARNINGS_SCHEMA} make-gnc-warnings-h.xsl
   COMMAND
@@ -34,7 +34,7 @@ else (MAC_INTEGRATION)
 endif (MAC_INTEGRATION)
 endif (NOT have_mod_mask)
 
-SET (gnome_utils_SOURCES
+set (gnome_utils_SOURCES
   account-quickfill.c
   assistant-xml-encoding.c
   cursors.c
@@ -117,7 +117,7 @@ SET (gnome_utils_SOURCES
   window-main-summarybar.c
 )
 
-SET(gnome_utils_noinst_HEADERS
+set(gnome_utils_noinst_HEADERS
   dialog-tax-table.h
   gnc-autosave.h
   gnc-gobject-utils.h
@@ -125,7 +125,7 @@ SET(gnome_utils_noinst_HEADERS
   search-param.h
 )
 
-SET (gnome_utils_HEADERS
+set (gnome_utils_HEADERS
   account-quickfill.h
   assistant-xml-encoding.h
   dialog-account.h
@@ -203,7 +203,7 @@ SET (gnome_utils_HEADERS
 
 
 
-ADD_LIBRARY (gncmod-gnome-utils
+add_library (gncmod-gnome-utils
   ${gnome_utils_SOURCES}
   ${gnome_utils_HEADERS}
   ${GNC_WARNINGS_C} ${GNC_WARNINGS_H}
@@ -211,22 +211,22 @@ ADD_LIBRARY (gncmod-gnome-utils
   ${gnome_utils_noinst_HEADERS}
 )
 
-TARGET_LINK_LIBRARIES(gncmod-gnome-utils gncmod-app-utils gncmod-engine gnc-backend-xml-utils
+target_link_libraries(gncmod-gnome-utils gncmod-app-utils gncmod-engine gnc-backend-xml-utils
      ${CMAKE_DL_LIBS} ${GTK3_LDFLAGS} ${GTK_MAC_LDFLAGS})
 
-TARGET_COMPILE_DEFINITIONS(gncmod-gnome-utils PUBLIC ${GTK_MAC_CFLAGS_OTHER}
+target_compile_definitions(gncmod-gnome-utils PUBLIC ${GTK_MAC_CFLAGS_OTHER}
   PRIVATE -DG_LOG_DOMAIN=\"gnc.gui\")
 
 if (BUILDING_FROM_VCS)
-  TARGET_COMPILE_DEFINITIONS(gncmod-gnome-utils PRIVATE -DGNC_VCS=\"git\")
+  target_compile_definitions(gncmod-gnome-utils PRIVATE -DGNC_VCS=\"git\")
 endif (BUILDING_FROM_VCS)
 
-IF (MAC_INTEGRATION)
-  TARGET_COMPILE_OPTIONS(gncmod-gnome-utils PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
-  TARGET_LINK_LIBRARIES(gncmod-gnome-utils ${OSX_EXTRA_LIBRARIES})
-ENDIF(MAC_INTEGRATION)
+if (MAC_INTEGRATION)
+  target_compile_options(gncmod-gnome-utils PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
+  target_link_libraries(gncmod-gnome-utils ${OSX_EXTRA_LIBRARIES})
+endif(MAC_INTEGRATION)
 
-TARGET_INCLUDE_DIRECTORIES(gncmod-gnome-utils
+target_include_directories(gncmod-gnome-utils
     PUBLIC
       ${GTK3_INCLUDE_DIRS}
       ${CMAKE_CURRENT_SOURCE_DIR}
@@ -236,23 +236,23 @@ TARGET_INCLUDE_DIRECTORIES(gncmod-gnome-utils
 )
 
 
-IF (APPLE)
-  SET_TARGET_PROPERTIES (gncmod-gnome-utils PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
-ENDIF()
+if (APPLE)
+  set_target_properties (gncmod-gnome-utils PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+endif()
 
-INSTALL(TARGETS gncmod-gnome-utils
+install(TARGETS gncmod-gnome-utils
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-INSTALL(FILES ${gnome_utils_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
+install(FILES ${gnome_utils_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
 
 
 # Scheme
 
-SET(GUILE_DEPENDS      gncmod-gnome-utils scm-gnc-module scm-scm scm-app-utils)
+set(GUILE_DEPENDS      gncmod-gnome-utils scm-gnc-module scm-scm scm-app-utils)
 
-GNC_ADD_SCHEME_TARGETS(scm-gnome-utils-1
+gnc_add_scheme_targets(scm-gnome-utils-1
   gnome-utils.scm
   gnucash
   "${GUILE_DEPENDS}"
@@ -260,16 +260,16 @@ GNC_ADD_SCHEME_TARGETS(scm-gnome-utils-1
 )
 
 
-GNC_ADD_SCHEME_TARGETS(scm-gnome-utils-2
+gnc_add_scheme_targets(scm-gnome-utils-2
   gnc-menu-extensions.scm
   ""
   "${GUILE_DEPENDS}"
   FALSE
 )
 
-ADD_CUSTOM_TARGET(scm-gnome-utils ALL DEPENDS scm-gnome-utils-2 scm-gnome-utils-1)
+add_custom_target(scm-gnome-utils ALL DEPENDS scm-gnome-utils-2 scm-gnome-utils-1)
 
-SET_LOCAL_DIST(gnome_utils_DIST_local CMakeLists.txt ${gnome_utils_SOURCES} ${gnome_utils_HEADERS}
+set_local_dist(gnome_utils_DIST_local CMakeLists.txt ${gnome_utils_SOURCES} ${gnome_utils_HEADERS}
         ${gnome_utils_noinst_HEADERS} gnome-utils.scm gnome-utils.i gnc-menu-extensions.scm
         make-gnc-warnings-c.xsl make-gnc-warnings-h.xsl)
-SET(gnome_utils_DIST ${gnome_utils_DIST_local} ${test_gnome_utils_DIST} PARENT_SCOPE)
+set(gnome_utils_DIST ${gnome_utils_DIST_local} ${test_gnome_utils_DIST} PARENT_SCOPE)

@@ -1,4 +1,4 @@
-SET(account_DATA
+set(account_DATA
   acctchrt_auto.gnucash-xea
   acctchrt_autoloan.gnucash-xea
   acctchrt_common.gnucash-xea
@@ -8,8 +8,8 @@ SET(account_DATA
   acctchrt_otherloan.gnucash-xea
   acctchrt_renter.gnucash-xea)
 
-SET_DIST_LIST(RU_DIST ${account_DATA} CMakeLists.txt)
+set_dist_list(RU_DIST ${account_DATA} CMakeLists.txt)
 
-INSTALL(FILES ${account_DATA} DESTINATION ${ACCOUNTS_INSTALL_DIR}/ru)
-FILE(COPY ${account_DATA} DESTINATION ${ACCOUNTS_BUILD_DIR}/ru)
+install(FILES ${account_DATA} DESTINATION ${ACCOUNTS_INSTALL_DIR}/ru)
+file(COPY ${account_DATA} DESTINATION ${ACCOUNTS_BUILD_DIR}/ru)
 

@@ -1,6 +1,6 @@
 
 
-SET(GENERIC_IMPORT_TEST_INCLUDE_DIRS
+set(GENERIC_IMPORT_TEST_INCLUDE_DIRS
   ${CMAKE_BINARY_DIR}/common # for config.h
   ${CMAKE_SOURCE_DIR}/libgnucash/gnc-module
   ${CMAKE_SOURCE_DIR}/gnucash/import-export
@@ -11,16 +11,16 @@ SET(GENERIC_IMPORT_TEST_INCLUDE_DIRS
   ${GUILE_INCLUDE_DIRS}
 )
 
-SET(GENERIC_IMPORT_TEST_LIBS gncmod-generic-import gncmod-test-engine test-core)
+set(GENERIC_IMPORT_TEST_LIBS gncmod-generic-import gncmod-test-engine test-core)
 
-GNC_ADD_TEST_WITH_GUILE(test-import-parse test-import-parse.c
+gnc_add_test_with_guile(test-import-parse test-import-parse.c
   GENERIC_IMPORT_TEST_INCLUDE_DIRS GENERIC_IMPORT_TEST_LIBS
 )
-GNC_ADD_TEST(test-link-generic-import test-link.c
+gnc_add_test(test-link-generic-import test-link.c
   GENERIC_IMPORT_TEST_INCLUDE_DIRS GENERIC_IMPORT_TEST_LIBS
 )
-GNC_ADD_TEST(test-import-pending-matches test-import-pending-matches.cpp
+gnc_add_test(test-import-pending-matches test-import-pending-matches.cpp
   GENERIC_IMPORT_TEST_INCLUDE_DIRS GENERIC_IMPORT_TEST_LIBS
 )
-SET_DIST_LIST(test_generic_import_DIST CMakeLists.txt 
+set_dist_list(test_generic_import_DIST CMakeLists.txt
         test-link.c test-import-parse.c test-import-pending-matches.cpp)

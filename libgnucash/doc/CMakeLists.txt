@@ -1,9 +1,9 @@
 if (NOT WIN32)
-  ADD_SUBDIRECTORY(design)
+  add_subdirectory(design)
 endif()
-ADD_SUBDIRECTORY(xml)
+add_subdirectory(xml)
 
-SET(doc_FILES
+set(doc_FILES
         backup.txt
         books.txt
         budget.txt
@@ -35,8 +35,8 @@ SET(doc_FILES
         user-prefs-howto.txt
         )
 
-SET_LOCAL_DIST(doc_DIST_local CMakeLists.txt ${doc_FILES})
-SET(doc_DIST ${doc_DIST_local} ${doc_design_DIST} ${doc_xml_DIST} PARENT_SCOPE)
+set_local_dist(doc_DIST_local CMakeLists.txt ${doc_FILES})
+set(doc_DIST ${doc_DIST_local} ${doc_design_DIST} ${doc_xml_DIST} PARENT_SCOPE)
 
 find_program(DOXYGEN doxygen)
 if (NOT ${DOXYGEN} STREQUAL "DOXYGEN-NOTFOUND")

@@ -1,9 +1,9 @@
 # CMakeLists.txt for gnucash/import-export/aqbanking
 
-ADD_SUBDIRECTORY(gschemas)
-ADD_SUBDIRECTORY(test)
+add_subdirectory(gschemas)
+add_subdirectory(test)
 
-SET (aqbanking_SOURCES
+set (aqbanking_SOURCES
   dialog-ab-trans.c
   dialog-ab-daterange.c
   assistant-ab-initial.c
@@ -19,9 +19,9 @@ SET (aqbanking_SOURCES
 )
 
 # Add dependency on config.h
-SET_SOURCE_FILES_PROPERTIES (${aqbanking_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+set_source_files_properties (${aqbanking_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
-SET (aqbanking_noinst_HEADERS
+set (aqbanking_noinst_HEADERS
   dialog-ab-trans.h
   dialog-ab-daterange.h
   assistant-ab-initial.h
@@ -35,45 +35,45 @@ SET (aqbanking_noinst_HEADERS
   gnc-plugin-aqbanking.h
 )
 
-SET(aqbanking_GLADE assistant-ab-initial.glade dialog-ab.glade dialog-ab-pref.glade)
+set(aqbanking_GLADE assistant-ab-initial.glade dialog-ab.glade dialog-ab-pref.glade)
 
-SET(aqbanking_UI gnc-plugin-aqbanking-ui.xml)
+set(aqbanking_UI gnc-plugin-aqbanking-ui.xml)
 
-IF(WITH_AQBANKING)
-  ADD_LIBRARY (gncmod-aqbanking
+if(WITH_AQBANKING)
+  add_library (gncmod-aqbanking
     ${aqbanking_SOURCES}
     ${aqbanking_noinst_HEADERS}
   )
 
-  SET(AQB_EXPORT_SYMBOLS "")
-  IF (WIN32)
-    SET(AQB_EXPORT_SYMBOLS "-Wl,--export-all-symbols")
-  ENDIF()
-  SET(AQB_LIBSTDCXX "")
-  IF (MINGW)
-    SET(AQB_LIBSTDCXX "-lstdc++")
-  ENDIF()
+  set(AQB_EXPORT_SYMBOLS "")
+  if (WIN32)
+    set(AQB_EXPORT_SYMBOLS "-Wl,--export-all-symbols")
+  endif()
+  set(AQB_LIBSTDCXX "")
+  if (MINGW)
+    set(AQB_LIBSTDCXX "-lstdc++")
+  endif()
 
-  TARGET_LINK_LIBRARIES(gncmod-aqbanking gnc-gnome gncmod-gnome-utils
+  target_link_libraries(gncmod-aqbanking gnc-gnome gncmod-gnome-utils
          gncmod-generic-import gncmod-register-core
          gncmod-register-gnome gncmod-ledger-core gncmod-engine gwengui-gtk3
          ${AQB_EXPORT_SYMBOLS} ${AQBANKING_LDFLAGS}
          ${GWENHYWFAR_LDFLAGS} 
          ${GNOME_LDFLAGS} ${KTOBLZCHECK_LDFLAGS} ${AQB_LIBSTDCXX})
 
-  TARGET_COMPILE_DEFINITIONS(gncmod-aqbanking PRIVATE -DG_LOG_DOMAIN=\"gnc.import.aqbanking\")
+  target_compile_definitions(gncmod-aqbanking PRIVATE -DG_LOG_DOMAIN=\"gnc.import.aqbanking\")
 
-  TARGET_INCLUDE_DIRECTORIES(gncmod-aqbanking PRIVATE
+  target_include_directories(gncmod-aqbanking PRIVATE
     ${CMAKE_SOURCE_DIR}/borrowed/gwengui-gtk3
     ${AQBANKING_INCLUDE_DIRS}
     ${GWENHYWFAR_INCLUDE_DIRS}
     ${KTOBLZCHECK_INCLUDE_DIRS})
 
-IF (APPLE)
-  SET_TARGET_PROPERTIES (gncmod-aqbanking PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
-ENDIF()
+if (APPLE)
+  set_target_properties (gncmod-aqbanking PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+endif()
 
-  INSTALL(TARGETS gncmod-aqbanking
+  install(TARGETS gncmod-aqbanking
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
@@ -81,18 +81,18 @@ ENDIF()
 # No headers to install
 
 
-  INSTALL(FILES ${aqbanking_GLADE} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/gtkbuilder)
+  install(FILES ${aqbanking_GLADE} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/gtkbuilder)
 
-  INSTALL(FILES ${aqbanking_UI} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/ui)
+  install(FILES ${aqbanking_UI} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/ui)
 
-  FILE(COPY ${aqbanking_UI}
+  file(COPY ${aqbanking_UI}
     DESTINATION ${DATADIR_BUILD}/gnucash/ui)
-  FILE(COPY ${aqbanking_GLADE}
+  file(COPY ${aqbanking_GLADE}
     DESTINATION ${DATADIR_BUILD}/gnucash/gtkbuilder)
-ENDIF(WITH_AQBANKING)
+endif(WITH_AQBANKING)
 
-SET_LOCAL_DIST(aqbanking_DIST_local CMakeLists.txt migratable-prefs-aqbanking.xml
+set_local_dist(aqbanking_DIST_local CMakeLists.txt migratable-prefs-aqbanking.xml
         ${aqbanking_SOURCES} ${aqbanking_noinst_HEADERS} ${aqbanking_EXTRA_DIST}
         ${aqbanking_GLADE} ${aqbanking_UI})
 
-SET(aqbanking_DIST ${aqbanking_DIST_local} ${aqbanking_gschema_DIST} ${test_aqb_DIST} PARENT_SCOPE)
+set(aqbanking_DIST ${aqbanking_DIST_local} ${aqbanking_gschema_DIST} ${test_aqb_DIST} PARENT_SCOPE)

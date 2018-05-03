@@ -1,5 +1,5 @@
 
-ADD_SUBDIRECTORY(us)
+add_subdirectory(us)
 
-SET_LOCAL_DIST(tax_DIST_local CMakeLists.txt )
-SET(tax_DIST ${tax_DIST_local} ${tax_us_DIST} PARENT_SCOPE)
+set_local_dist(tax_DIST_local CMakeLists.txt )
+set(tax_DIST ${tax_DIST_local} ${tax_us_DIST} PARENT_SCOPE)

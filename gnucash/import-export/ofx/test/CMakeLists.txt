@@ -1,10 +1,10 @@
 
 
-IF(WITH_OFX)
-  SET(OFX_TEST_INCLUDE_DIRS ${LIBOFX_INCLUDE_DIRS})
-  SET(OFX_TEST_LIBS)
+if(WITH_OFX)
+  set(OFX_TEST_INCLUDE_DIRS ${LIBOFX_INCLUDE_DIRS})
+  set(OFX_TEST_LIBS)
 
-  GNC_ADD_TEST(test-link-ofx test-link.c OFX_TEST_INCLUDE_DIRS OFX_TEST_LIBS)
-ENDIF(WITH_OFX)
+  gnc_add_test(test-link-ofx test-link.c OFX_TEST_INCLUDE_DIRS OFX_TEST_LIBS)
+endif(WITH_OFX)
 
-SET_DIST_LIST(test_ofx_DIST CMakeLists.txt test-link.c)
+set_dist_list(test_ofx_DIST CMakeLists.txt test-link.c)

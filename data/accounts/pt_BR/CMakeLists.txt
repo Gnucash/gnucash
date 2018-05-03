@@ -1,4 +1,4 @@
-SET(account_DATA
+set(account_DATA
   acctchrt_brokerage.gnucash-xea
   acctchrt_carloan.gnucash-xea
   acctchrt_cdmoneymkt.gnucash-xea
@@ -15,8 +15,8 @@ SET(account_DATA
   acctchrt_spouseinc.gnucash-xea
   acctchrt_spouseretire.gnucash-xea)
 
-SET_DIST_LIST(PT_BR_DIST ${account_DATA} CMakeLists.txt)
+set_dist_list(PT_BR_DIST ${account_DATA} CMakeLists.txt)
 
-INSTALL(FILES ${account_DATA} DESTINATION ${ACCOUNTS_INSTALL_DIR}/pt_BR)
-FILE(COPY ${account_DATA} DESTINATION ${ACCOUNTS_BUILD_DIR}/pt_BR)
+install(FILES ${account_DATA} DESTINATION ${ACCOUNTS_INSTALL_DIR}/pt_BR)
+file(COPY ${account_DATA} DESTINATION ${ACCOUNTS_BUILD_DIR}/pt_BR)
 

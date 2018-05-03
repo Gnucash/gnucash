@@ -1,4 +1,4 @@
-SET(doc_xml_FILES
+set(doc_xml_FILES
         account-v2.dtd
         commodity-v2.dtd
         defaults-v1.dtd
@@ -12,4 +12,4 @@ SET(doc_xml_FILES
         types.dtd
 )
 
-SET_DIST_LIST(doc_xml_DIST CMakeLists.txt ${doc_xml_FILES})
+set_dist_list(doc_xml_DIST CMakeLists.txt ${doc_xml_FILES})

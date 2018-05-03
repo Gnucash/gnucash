@@ -1,11 +1,11 @@
 # Post install actions go here.
 
-IF (APPLE)
-  INSTALL(CODE "EXECUTE_PROCESS(
+if (APPLE)
+  install(CODE "execute_process(
                 COMMAND /usr/bin/install_name_tool -add_rpath ${CMAKE_INSTALL_LIBDIR}
                                                    -add_rpath ${PKGLIBDIR}
                                                    ${CMAKE_INSTALL_BINDIR}/gnucash)")
-ENDIF(APPLE)
+endif(APPLE)
 
 
-SET_DIST_LIST(cmake_DIST CMakeLists.txt README_CMAKE.txt cmake_uninstall.cmake.in)
+set_dist_list(cmake_DIST CMakeLists.txt README_CMAKE.txt cmake_uninstall.cmake.in)

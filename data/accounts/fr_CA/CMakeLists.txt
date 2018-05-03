@@ -1,4 +1,4 @@
-SET(account_DATA
+set(account_DATA
  acctchrt_actifsfixes.gnucash-xea
  acctchrt_automobile.gnucash-xea
  acctchrt_basecommune.gnucash-xea
@@ -14,8 +14,8 @@ SET(account_DATA
  acctchrt_retraite.gnucash-xea
  acctchrt_revenus.gnucash-xea)
 
-SET_DIST_LIST(FR_CA_DIST ${account_DATA} CMakeLists.txt)
+set_dist_list(FR_CA_DIST ${account_DATA} CMakeLists.txt)
 
-INSTALL(FILES ${account_DATA} DESTINATION ${ACCOUNTS_INSTALL_DIR}/fr_CA)
-FILE(COPY ${account_DATA} DESTINATION ${ACCOUNTS_BUILD_DIR}/fr_CA)
+install(FILES ${account_DATA} DESTINATION ${ACCOUNTS_INSTALL_DIR}/fr_CA)
+file(COPY ${account_DATA} DESTINATION ${ACCOUNTS_BUILD_DIR}/fr_CA)
 

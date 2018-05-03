@@ -1,34 +1,34 @@
 
-IF (${CMAKE_VERSION} VERSION_LESS 3.3)
-    INCLUDE(CMakeParseArguments)
-ENDIF()
+if (${CMAKE_VERSION} VERSION_LESS 3.3)
+    include(CMakeParseArguments)
+endif()
 
 
-FUNCTION(SET_LOCAL_DIST output)
-    SET(dist_files "")
-    FOREACH(file ${ARGN})
-        FILE(RELATIVE_PATH relative ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/${file})
-        LIST(APPEND dist_files ${relative})
-    ENDFOREACH()
-    SET (${output} ${dist_files} PARENT_SCOPE)
-ENDFUNCTION()
+function(set_local_dist output)
+    set(dist_files "")
+    foreach(file ${ARGN})
+        file(RELATIVE_PATH relative ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/${file})
+        list(APPEND dist_files ${relative})
+    endforeach()
+    set (${output} ${dist_files} PARENT_SCOPE)
+endfunction()
 
-MACRO(SET_DIST_LIST output)
-    SET_LOCAL_DIST(${output}_TMP ${ARGN})
-    SET(${output} ${${output}_TMP} PARENT_SCOPE)
-ENDMACRO()
+macro(set_dist_list output)
+    set_local_dist(${output}_TMP ${ARGN})
+    set(${output} ${${output}_TMP} PARENT_SCOPE)
+endmacro()
 
-FUNCTION(EXECUTE_PROCESS_AND_CHECK_RESULT)
+function(execute_process_and_check_result)
     cmake_parse_arguments(VARS "" "WORKING_DIRECTORY;ERROR_MSG" "COMMAND" ${ARGN})
-    EXECUTE_PROCESS(
+    execute_process(
             COMMAND ${VARS_COMMAND}
             WORKING_DIRECTORY ${VARS_WORKING_DIRECTORY}
             RESULT_VARIABLE RESULT
     )
-    IF (NOT "${RESULT}" STREQUAL "0")
-        MESSAGE(FATAL_ERROR ${VARS_ERROR_MSG})
-    ENDIF()
-ENDFUNCTION()
+    if (NOT "${RESULT}" STREQUAL "0")
+        message(FATAL_ERROR ${VARS_ERROR_MSG})
+    endif()
+endfunction()
 
 # These functions can be called to add generated files (as opposed to source files)
 # to the distribution tarball

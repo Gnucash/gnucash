@@ -1,5 +1,5 @@
 
-SET(gschema_SOURCES
+set(gschema_SOURCES
   org.gnucash.dialogs.business.gschema.xml
   org.gnucash.dialogs.checkprinting.gschema.xml
   org.gnucash.dialogs.commodities.gschema.xml
@@ -42,8 +42,8 @@ if (COMPILE_GSCHEMAS)
                               ${GLIB_COMPILE_SCHEMAS} $DESTDIR${CMAKE_INSTALL_FULL_DATADIR}/glib-2.0/schemas\")")
 endif ()
 
-SET(gschemas_DIST_local "")
-FOREACH(file ${gschema_SOURCES})
-    LIST(APPEND gschemas_DIST_local ${file}.in)
-ENDFOREACH()
-SET_DIST_LIST(gschemas_DIST CMakeLists.txt ${gschemas_DIST_local})
+set(gschemas_DIST_local "")
+foreach(file ${gschema_SOURCES})
+    list(APPEND gschemas_DIST_local ${file}.in)
+endforeach()
+set_dist_list(gschemas_DIST CMakeLists.txt ${gschemas_DIST_local})

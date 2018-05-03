@@ -1,4 +1,4 @@
-SET(valgrind_FILES
+set(valgrind_FILES
         valgrind-gdk.supp
         valgrind-glib.supp
         valgrind-gnucash.supp
@@ -8,4 +8,4 @@ SET(valgrind_FILES
         valgrind-x11.supp
         )
 
-SET_DIST_LIST(valgrind_DIST CMakeLists.txt ${valgrind_FILES})
+set_dist_list(valgrind_DIST CMakeLists.txt ${valgrind_FILES})

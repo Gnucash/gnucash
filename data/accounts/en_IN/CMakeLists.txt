@@ -1,6 +1,6 @@
 
 
-SET(account_DATA
+set(account_DATA
   acctchrt_gstindia.gnucash-xea)
 # Fixme: do we want to copy this files, too?
 #  acctchrt_brokerage.gnucash-xea
@@ -20,10 +20,10 @@ SET(account_DATA
 #  acctchrt_spouseinc.gnucash-xea
 #  acctchrt_spouseretire.gnucash-xea)
 
-SET_DIST_LIST(EN_IN_DIST ${account_DATA}
+set_dist_list(EN_IN_DIST ${account_DATA}
 #  acctchrt_full.gnucash-xea
   CMakeLists.txt)
 
-INSTALL(FILES ${account_DATA} DESTINATION ${ACCOUNTS_INSTALL_DIR}/en_IN)
-FILE(COPY ${account_DATA} DESTINATION ${ACCOUNTS_BUILD_DIR}/en_IN)
+install(FILES ${account_DATA} DESTINATION ${ACCOUNTS_INSTALL_DIR}/en_IN)
+file(COPY ${account_DATA} DESTINATION ${ACCOUNTS_BUILD_DIR}/en_IN)
 

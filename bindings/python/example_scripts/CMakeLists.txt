@@ -1,5 +1,5 @@
 
-SET(example_scripts_DATA
+set(example_scripts_DATA
         account_analysis.py
         change_tax_code.py
         Invoice.tex
@@ -17,5 +17,5 @@ SET(example_scripts_DATA
         rest-api/README
         )
 
-SET_LOCAL_DIST(example_scripts_DIST_local CMakeLists.txt ${example_scripts_DATA})
-SET(example_scripts_DIST ${example_scripts_DIST_local} PARENT_SCOPE)
+set_local_dist(example_scripts_DIST_local CMakeLists.txt ${example_scripts_DATA})
+set(example_scripts_DIST ${example_scripts_DIST_local} PARENT_SCOPE)
