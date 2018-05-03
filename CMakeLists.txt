@@ -342,6 +342,19 @@ if (GNC_SRFI64_RESULT EQUAL 0)
   set (HAVE_SRFI64 TRUE)
 endif ()
 
+# Test that guile has guile-json.
+execute_process (COMMAND ${GUILE_EXECUTABLE} -c "(load-from-path \"json.scm\") (use-modules (json builder))"
+  RESULT_VARIABLE GNC_GUILE_JSON
+#  ERROR_QUIET
+)
+
+if (GNC_GUILE_JSON EQUAL 0)
+  message (STATUS "guile-json is present.")
+  set (HAVE_GUILE_JSON TRUE)
+else ()
+  message (STATUS "guile-json cannot be imported. Abort.")
+endif ()
+
 # ############################################################
 IF (WITH_AQBANKING)
   GNC_PKG_CHECK_MODULES (GWENHYWFAR REQUIRED gwenhywfar)
