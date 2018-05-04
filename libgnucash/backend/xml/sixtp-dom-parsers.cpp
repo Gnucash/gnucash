@@ -868,6 +868,6 @@ dom_tree_valid_time64 (time64 val, const xmlChar * name)
     if (val != INT64_MAX)
         return TRUE;
     g_warning ("Invalid timestamp in data file. Look for a '%s' entry "
-            "with a year outside of the valie range: 1400..10000", name);
+            "with a year outside of the valid range: 1400..10000", name);
     return FALSE;
 }
