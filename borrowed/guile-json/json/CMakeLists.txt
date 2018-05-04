@@ -6,7 +6,7 @@ set (scm-guile-json-details
 
 gnc_add_scheme_targets (guile-json-details
   "${scm-guile-json-details}"
-  gnucash/json
+  json
   ""
   FALSE
 )

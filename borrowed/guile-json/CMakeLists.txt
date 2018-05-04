@@ -2,7 +2,7 @@ add_subdirectory(json)
 
 gnc_add_scheme_targets (guile-json
   json.scm
-  gnucash
+  ""
   ""
   FALSE
 )
