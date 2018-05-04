@@ -1,4 +1,4 @@
-SET(checks_DATA
+set(checks_DATA
   deluxe.chk
   liberty.chk
   quicken.chk
@@ -8,8 +8,8 @@ SET(checks_DATA
   quicken_3part.chk
 )
 
-INSTALL(FILES ${checks_DATA} DESTINATION ${CMAKE_INSTALL_DATADIR}/gnucash/checks)
+install(FILES ${checks_DATA} DESTINATION ${CMAKE_INSTALL_DATADIR}/gnucash/checks)
 
-FILE(COPY ${checks_DATA} DESTINATION ${DATADIR_BUILD}/gnucash/checks)
+file(COPY ${checks_DATA} DESTINATION ${DATADIR_BUILD}/gnucash/checks)
 
-SET_DIST_LIST(checks_DIST CMakeLists.txt ${checks_DATA})
+set_dist_list(checks_DIST CMakeLists.txt ${checks_DATA})

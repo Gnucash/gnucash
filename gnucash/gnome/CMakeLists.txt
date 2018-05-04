@@ -1,5 +1,5 @@
 
-SET (gnc_gnome_noinst_HEADERS
+set (gnc_gnome_noinst_HEADERS
   assistant-acct-period.h
   assistant-hierarchy.h
   assistant-loan.h
@@ -61,8 +61,7 @@ gnc_add_swig_guile_command (swig-gnome-c
     ${CMAKE_CURRENT_SOURCE_DIR}/gnome.i ${gnc_gnome_HEADERS}
 )
 
-SET (gnc_gnome_SOURCES 
-
+set (gnc_gnome_SOURCES
   assistant-acct-period.c
   assistant-hierarchy.c
   assistant-loan.c
@@ -120,21 +119,21 @@ SET (gnc_gnome_SOURCES
   window-reconcile.c
   window-reconcile2.c
   window-autoclear.c
-)  
+)
 
-SET_SOURCE_FILES_PROPERTIES (${gnc_gnome_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+set_source_files_properties (${gnc_gnome_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
-IF (WIN32)
-  SET (gnc_gnome_SOURCES ${gnc_gnome_SOURCES} ${CMAKE_SOURCE_DIR}/borrowed/libc/strfmon.c)
-ENDIF(WIN32)
+if (WIN32)
+  set (gnc_gnome_SOURCES ${gnc_gnome_SOURCES} ${CMAKE_SOURCE_DIR}/borrowed/libc/strfmon.c)
+endif(WIN32)
 
-ADD_LIBRARY (gnc-gnome ${gnc_gnome_SOURCES} ${gnc_gnome_noinst_HEADERS} ${SWIG_GNOME_C})
-TARGET_LINK_LIBRARIES(gnc-gnome gncmod-gnome-search gncmod-ledger-core gncmod-report-gnome gncmod-report-system
+add_library (gnc-gnome ${gnc_gnome_SOURCES} ${gnc_gnome_noinst_HEADERS} ${SWIG_GNOME_C})
+target_link_libraries(gnc-gnome gncmod-gnome-search gncmod-ledger-core gncmod-report-gnome gncmod-report-system
     gncmod-register-gnome gncmod-register-core gncmod-gnome-utils gncmod-engine ${GTK3_LDFLAGS} ${GTK_MAC_LDFLAGS})
 
-TARGET_COMPILE_DEFINITIONS (gnc-gnome PRIVATE -DG_LOG_DOMAIN=\"gnc.gui\" ${GTK_MAC_CFLAGS_OTHER})
+target_compile_definitions (gnc-gnome PRIVATE -DG_LOG_DOMAIN=\"gnc.gui\" ${GTK_MAC_CFLAGS_OTHER})
 
-TARGET_INCLUDE_DIRECTORIES(gnc-gnome
+target_include_directories(gnc-gnome
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
   PRIVATE
     ${CMAKE_SOURCE_DIR}/libgnucash/app-utils/calculation
@@ -144,13 +143,13 @@ TARGET_INCLUDE_DIRECTORIES(gnc-gnome
 
 add_dependencies (gnc-gnome swig-runtime-h)
 
-IF (MAC_INTEGRATION)
-  TARGET_COMPILE_OPTIONS(gnc-gnome PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
-  TARGET_LINK_LIBRARIES(gnc-gnome ${OSX_EXTRA_LIBRARIES})
-ENDIF(MAC_INTEGRATION)
+if (MAC_INTEGRATION)
+  target_compile_options(gnc-gnome PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
+  target_link_libraries(gnc-gnome ${OSX_EXTRA_LIBRARIES})
+endif(MAC_INTEGRATION)
 
 
-INSTALL(TARGETS gnc-gnome
+install(TARGETS gnc-gnome
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
@@ -159,10 +158,10 @@ INSTALL(TARGETS gnc-gnome
 
 # FIXME: where does LC_ALL=C come from?
 
-SET(CMAKE_COMMAND_TMP "")
-IF (${CMAKE_VERSION} VERSION_GREATER 3.1)
-  SET(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
-ENDIF()
+set(CMAKE_COMMAND_TMP "")
+if (${CMAKE_VERSION} VERSION_GREATER 3.1)
+  set(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
+endif()
 
 
 if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.19.6)
@@ -183,9 +182,9 @@ else()
     )
 endif()
 
-ADD_CUSTOM_TARGET(gnucash-appdata ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml)
+add_custom_target(gnucash-appdata ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml)
 
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml DESTINATION  ${CMAKE_INSTALL_DATADIR}/appdata)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml DESTINATION  ${CMAKE_INSTALL_DATADIR}/appdata)
 
 #=======
 
@@ -209,10 +208,10 @@ else()
     )
 endif()
 
-ADD_CUSTOM_TARGET(gnucash-desktop ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop)
+add_custom_target(gnucash-desktop ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop)
 
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop DESTINATION  ${CMAKE_INSTALL_DATADIR}/applications)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gnucash.desktop DESTINATION  ${CMAKE_INSTALL_DATADIR}/applications)
 
-SET_DIST_LIST(gnome_DIST
+set_dist_list(gnome_DIST
         CMakeLists.txt gnome.i gnucash.appdata.xml.in gnucash.desktop.in.in
         ${gnc_gnome_noinst_HEADERS} ${gnc_gnome_SOURCES})

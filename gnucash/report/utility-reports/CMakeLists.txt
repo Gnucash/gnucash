@@ -1,14 +1,14 @@
 # Scheme
 
-SET(utility_reports_SCHEME
+set(utility_reports_SCHEME
   hello-world.scm
   utility-reports.scm
   view-column.scm
   welcome-to-gnucash.scm
 )
 
-SET(GUILE_OUTPUT_DIR     gnucash/report)
-SET(GUILE_DEPENDS
+set(GUILE_OUTPUT_DIR     gnucash/report)
+set(GUILE_DEPENDS
   gncmod-html
   scm-app-utils
   scm-core-utils
@@ -20,13 +20,13 @@ SET(GUILE_DEPENDS
   scm-report-system
   )
 
-GNC_ADD_SCHEME_TARGETS(scm-utility-reports
+gnc_add_scheme_targets(scm-utility-reports
   "${utility_reports_SCHEME}"
   ${GUILE_OUTPUT_DIR}
   "${GUILE_DEPENDS}"
   TRUE
 )
 
-SET_LOCAL_DIST(utility_reports_DIST_local CMakeLists.txt 
+set_local_dist(utility_reports_DIST_local CMakeLists.txt
         ${utility_reports_SCHEME})
-SET(utility_reports_DIST ${utility_reports_DIST_local} ${test_utility_reports_DIST} PARENT_SCOPE)
+set(utility_reports_DIST ${utility_reports_DIST_local} ${test_utility_reports_DIST} PARENT_SCOPE)

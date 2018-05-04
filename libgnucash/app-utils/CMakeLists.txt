@@ -1,15 +1,15 @@
 # NB: Unit tests which require GSchemas should be made conditional on COMPILE_GSCHEMAS.
-ADD_SUBDIRECTORY(test)
+add_subdirectory(test)
 # Build the library
 
-SET (app_utils_noinst_HEADERS
+set (app_utils_noinst_HEADERS
   calculation/finvar.h
   calculation/finproto.h
   calculation/fin_spl_protos.h
   calculation/fin_static_proto.h
 )
 
-SET (app_utils_HEADERS
+set (app_utils_HEADERS
   QuickFill.h
   business-helpers.h
   business-options.h
@@ -49,7 +49,7 @@ gnc_add_swig_python_command (swig-app-utils-python
     ${CMAKE_CURRENT_SOURCE_DIR}/app-utils.i
 )
 
-SET (app_utils_SOURCES
+set (app_utils_SOURCES
   calculation/expression_parser.c
   calculation/fin.c
   business-helpers.c
@@ -77,98 +77,98 @@ SET (app_utils_SOURCES
   option-util.c
 )
 
-SET_SOURCE_FILES_PROPERTIES (${app_utils_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+set_source_files_properties (${app_utils_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
-SET(app_utils_ALL_SOURCES ${app_utils_SOURCES} ${app_utils_HEADERS} ${app_utils_noinst_HEADERS})
-SET(app_utils_ALL_LIBRARIES gncmod-engine gnc-module ${GIO_LDFLAGS} ${LIBXML2_LDFLAGS} ${LIBXSLT_LDFLAGS})
-SET(app_utils_ALL_INCLUDES  ${CMAKE_CURRENT_SOURCE_DIR}/calculation ${GIO_INCLUDE_DIRS} ${LIBXML2_INCLUDE_DIRS}
+set(app_utils_ALL_SOURCES ${app_utils_SOURCES} ${app_utils_HEADERS} ${app_utils_noinst_HEADERS})
+set(app_utils_ALL_LIBRARIES gncmod-engine gnc-module ${GIO_LDFLAGS} ${LIBXML2_LDFLAGS} ${LIBXSLT_LDFLAGS})
+set(app_utils_ALL_INCLUDES  ${CMAKE_CURRENT_SOURCE_DIR}/calculation ${GIO_INCLUDE_DIRS} ${LIBXML2_INCLUDE_DIRS}
     ${LIBXSLT_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/libgnucash/backend ${CMAKE_SOURCE_DIR}/libgnucash/engine)
 
-IF (WIN32)
-  LIST(APPEND app_utils_ALL_SOURCES gnc-help-utils.c)
-  LIST(APPEND app_utils_ALL_LIBRARIES ${HTMLHELP_LIBRARY})
-  LIST(APPEND app_utils_ALL_INCLUDES ${HTMLHELP_INCLUDE_PATH})
-ENDIF()
+if (WIN32)
+  list(APPEND app_utils_ALL_SOURCES gnc-help-utils.c)
+  list(APPEND app_utils_ALL_LIBRARIES ${HTMLHELP_LIBRARY})
+  list(APPEND app_utils_ALL_INCLUDES ${HTMLHELP_INCLUDE_PATH})
+endif()
 
 
-ADD_LIBRARY (gncmod-app-utils ${app_utils_ALL_SOURCES} ${SWIG_APP_UTILS_GUILE_C})
-TARGET_LINK_LIBRARIES(gncmod-app-utils ${app_utils_ALL_LIBRARIES})
+add_library (gncmod-app-utils ${app_utils_ALL_SOURCES} ${SWIG_APP_UTILS_GUILE_C})
+target_link_libraries(gncmod-app-utils ${app_utils_ALL_LIBRARIES})
 
-TARGET_INCLUDE_DIRECTORIES (gncmod-app-utils
+target_include_directories (gncmod-app-utils
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
     PRIVATE ${app_utils_ALL_INCLUDES}
 )
-TARGET_COMPILE_DEFINITIONS (gncmod-app-utils PRIVATE -DG_LOG_DOMAIN=\"gnc.app-utils\")
+target_compile_definitions (gncmod-app-utils PRIVATE -DG_LOG_DOMAIN=\"gnc.app-utils\")
 
-IF (APPLE)
-  SET_TARGET_PROPERTIES (gncmod-app-utils PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
-ENDIF()
+if (APPLE)
+  set_target_properties (gncmod-app-utils PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+endif()
 
-INSTALL(TARGETS gncmod-app-utils
+install(TARGETS gncmod-app-utils
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-IF (WITH_PYTHON)
-  SET(PYEXEC_FILES sw_app_utils.py)
-  ADD_LIBRARY (sw_app_utils MODULE ${SWIG_APP_UTILS_PYTHON_C})
+if (WITH_PYTHON)
+  set(PYEXEC_FILES sw_app_utils.py)
+  add_library (sw_app_utils MODULE ${SWIG_APP_UTILS_PYTHON_C})
 
-  TARGET_LINK_LIBRARIES(sw_app_utils gncmod-app-utils ${app_utils_ALL_LIBRARIES} ${PYTHON_LIBRARIES})
-  SET_TARGET_PROPERTIES(sw_app_utils PROPERTIES PREFIX "_")
+  target_link_libraries(sw_app_utils gncmod-app-utils ${app_utils_ALL_LIBRARIES} ${PYTHON_LIBRARIES})
+  set_target_properties(sw_app_utils PROPERTIES PREFIX "_")
 
-  TARGET_INCLUDE_DIRECTORIES (sw_app_utils
+  target_include_directories (sw_app_utils
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
     PRIVATE ${app_utils_ALL_INCLUDES} ${PYTHON_INCLUDE_DIRS}
   )
-  TARGET_COMPILE_DEFINITIONS (sw_app_utils PRIVATE -DG_LOG_DOMAIN=\"gnc.app-utils\")
+  target_compile_definitions (sw_app_utils PRIVATE -DG_LOG_DOMAIN=\"gnc.app-utils\")
 
-  IF (APPLE)
-    SET_TARGET_PROPERTIES (sw_app_utils PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
-  ENDIF()
+  if (APPLE)
+    set_target_properties (sw_app_utils PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+  endif()
 
-  INSTALL(TARGETS sw_app_utils
+  install(TARGETS sw_app_utils
     LIBRARY DESTINATION ${PYTHON_SYSCONFIG_OUTPUT}/gnucash
     ARCHIVE DESTINATION ${PYTHON_SYSCONFIG_OUTPUT}/gnucash
   )
 
-  ADD_CUSTOM_TARGET(sw-app-utils-py ALL
+  add_custom_target(sw-app-utils-py ALL
     COMMAND ${CMAKE_COMMAND} -E copy ${SWIG_APP_UTILS_PYTHON_PY} ${PYTHON_SYSCONFIG_BUILD}/gnucash
     DEPENDS ${SWIG_APP_UTILS_PYTHON_C})
 
-  ADD_CUSTOM_TARGET(sw-app-utils-build ALL
+  add_custom_target(sw-app-utils-build ALL
     COMMAND ${CMAKE_COMMAND} -E copy ${LIBDIR_BUILD}/gnucash/_sw_app_utils${CMAKE_SHARED_MODULE_SUFFIX} ${PYTHON_SYSCONFIG_BUILD}/gnucash
     DEPENDS sw_app_utils)
-    
-ENDIF()
+
+endif()
 
 
 
-INSTALL(FILES ${app_utils_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
+install(FILES ${app_utils_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
 
-IF (WITH_OFX)
-  FILE(READ ${CMAKE_SOURCE_DIR}/gnucash/import-export/ofx/migratable-prefs-ofx.xml MIGRATABLE_PREFS_OFX)
-ENDIF()
+if (WITH_OFX)
+  file(READ ${CMAKE_SOURCE_DIR}/gnucash/import-export/ofx/migratable-prefs-ofx.xml MIGRATABLE_PREFS_OFX)
+endif()
 
-IF (WITH_AQBANKING)
-  FILE(READ ${CMAKE_SOURCE_DIR}/gnucash/import-export/aqb/migratable-prefs-aqbanking.xml MIGRATABLE_PREFS_AQBANKING)
-ENDIF()
+if (WITH_AQBANKING)
+  file(READ ${CMAKE_SOURCE_DIR}/gnucash/import-export/aqb/migratable-prefs-aqbanking.xml MIGRATABLE_PREFS_AQBANKING)
+endif()
 
-SET(MIGRATABLE_PREFS_XML ${DATADIR_BUILD}/gnucash/migratable-prefs.xml)
-FILE(COPY make-prefs-migration-script.xsl DESTINATION ${DATADIR_BUILD}/gnucash)
+set(MIGRATABLE_PREFS_XML ${DATADIR_BUILD}/gnucash/migratable-prefs.xml)
+file(COPY make-prefs-migration-script.xsl DESTINATION ${DATADIR_BUILD}/gnucash)
 
-CONFIGURE_FILE(migratable-prefs.xml.in ${MIGRATABLE_PREFS_XML})
+configure_file(migratable-prefs.xml.in ${MIGRATABLE_PREFS_XML})
 
-INSTALL(FILES ${MIGRATABLE_PREFS_XML} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash)
-INSTALL(FILES make-prefs-migration-script.xsl DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash)
+install(FILES ${MIGRATABLE_PREFS_XML} DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash)
+install(FILES make-prefs-migration-script.xsl DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash)
 
 # And now handle scheme files
 
-SET (app_utils_SCHEME_2
+set (app_utils_SCHEME_2
     app-utils.scm
 )
 
-SET (app_utils_SCHEME_1
+set (app_utils_SCHEME_1
     hooks.scm
     business-options.scm
     c-interface.scm
@@ -181,11 +181,11 @@ SET (app_utils_SCHEME_1
     fin.scm
 )
 
-SET(app_utils_SCHEME_3
+set(app_utils_SCHEME_3
     business-prefs.scm
 )
 
-SET(GUILE_DEPENDS
+set(GUILE_DEPENDS
   gncmod-app-utils
   scm-core-utils
   scm-engine
@@ -193,38 +193,38 @@ SET(GUILE_DEPENDS
   scm-gnc-module
   )
 
-GNC_ADD_SCHEME_TARGETS(scm-gettext
+gnc_add_scheme_targets(scm-gettext
   gettext.scm
   gnucash
   gncmod-app-utils
   FALSE
 )
 
-GNC_ADD_SCHEME_TARGETS(scm-app-utils-1
+gnc_add_scheme_targets(scm-app-utils-1
   "${app_utils_SCHEME_1}"
   ""
   "scm-gettext;${GUILE_DEPENDS}"
   FALSE
 )
 
-GNC_ADD_SCHEME_TARGETS(scm-app-utils-2
+gnc_add_scheme_targets(scm-app-utils-2
   "${app_utils_SCHEME_2}"
   "gnucash"
   "scm-app-utils-1"
   FALSE
 )
 
-GNC_ADD_SCHEME_TARGETS(scm-app-utils-3
+gnc_add_scheme_targets(scm-app-utils-3
   "${app_utils_SCHEME_3}"
   ""
   "scm-app-utils-2"
   FALSE
 )
 
-ADD_CUSTOM_TARGET(scm-app-utils ALL DEPENDS scm-app-utils-3 scm-app-utils-2 scm-app-utils-1 scm-gettext)
+add_custom_target(scm-app-utils ALL DEPENDS scm-app-utils-3 scm-app-utils-2 scm-app-utils-1 scm-gettext)
 
-SET_LOCAL_DIST(app_utils_DIST_local
+set_local_dist(app_utils_DIST_local
         ${app_utils_ALL_SOURCES} gettext.scm ${app_utils_SCHEME_1} ${app_utils_SCHEME_2} ${app_utils_SCHEME_3}
         app-utils.i CMakeLists.txt gnc-help-utils.c 
         make-prefs-migration-script.xsl migratable-prefs.xml.in README)
-SET(app_utils_DIST ${app_utils_DIST_local} ${test_app_utils_DIST} PARENT_SCOPE)
+set(app_utils_DIST ${app_utils_DIST_local} ${test_app_utils_DIST} PARENT_SCOPE)

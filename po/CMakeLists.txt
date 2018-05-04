@@ -1,76 +1,76 @@
-ADD_SUBDIRECTORY(glossary)
+add_subdirectory(glossary)
 
 # Set of available languages.
-SET (TP_LINGUAS az ca cs da eu fa ja nl rw sk sr sv tr uk zh_CN)
+set (TP_LINGUAS az ca cs da eu fa ja nl rw sk sr sv tr uk zh_CN)
 # already marked as external at TP:
-SET (GC_LINGUAS ar bg de el en_GB es fi fr gu he hi hu it kn ko lt lv mr nb ne pl pt pt_BR ro ru ta te ur vi zh_TW)
+set (GC_LINGUAS ar bg de el en_GB es fi fr gu he hi hu it kn ko lt lv mr nb ne pl pt pt_BR ro ru ta te ur vi zh_TW)
 # not marked or no TP team:
-SET (NEW_LINGUAS as brx doi es_NI kok kok@latin ks mai mni mni@bengali)
+set (NEW_LINGUAS as brx doi es_NI kok kok@latin ks mai mni mni@bengali)
 
-SET (ALL_LINGUAS ${TP_LINGUAS} ${GC_LINGUAS} ${NEW_LINGUAS})
+set (ALL_LINGUAS ${TP_LINGUAS} ${GC_LINGUAS} ${NEW_LINGUAS})
 
 file (WRITE LINGUAS "${ALL_LINGUAS}")
 
-SET (CATALOGS "")
-SET (BUILD_CATALOGS "")
+set (CATALOGS "")
+set (BUILD_CATALOGS "")
 
-SET(CMAKE_COMMAND_TMP "")
-IF (${CMAKE_VERSION} VERSION_GREATER 3.1)
-  SET(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
-ENDIF()
+set(CMAKE_COMMAND_TMP "")
+if (${CMAKE_VERSION} VERSION_GREATER 3.1)
+  set(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
+endif()
 
-SET(po_SOURCES "")
+set(po_SOURCES "")
 file (WRITE LINGUAS "")
-FOREACH(lingua ${ALL_LINGUAS})
-  LIST(APPEND po_SOURCES ${lingua}.po)
+foreach(lingua ${ALL_LINGUAS})
+  list(APPEND po_SOURCES ${lingua}.po)
   file (APPEND LINGUAS "${lingua} ")
-ENDFOREACH()
+endforeach()
 
-SET_LOCAL_DIST(po_DIST_local ${po_SOURCES} CMakeLists.txt ChangeLog Makevars
+set_local_dist(po_DIST_local ${po_SOURCES} CMakeLists.txt ChangeLog Makevars
   POTFILES.in POTFILES.skip README gnucash-pot.cmake)
-SET(po_DIST ${po_DIST_local} ${po_glossary_DIST} PARENT_SCOPE)
+set(po_DIST ${po_DIST_local} ${po_glossary_DIST} PARENT_SCOPE)
 
-FOREACH(lingua ${ALL_LINGUAS})
-  SET(_OUTPUT_FILE ${lingua}.mo)
-  LIST(APPEND CATALOGS ${_OUTPUT_FILE})
-  ADD_CUSTOM_COMMAND(
+foreach(lingua ${ALL_LINGUAS})
+  set(_OUTPUT_FILE ${lingua}.mo)
+  list(APPEND CATALOGS ${_OUTPUT_FILE})
+  add_custom_command(
       OUTPUT ${_OUTPUT_FILE}
       COMMAND ${CMAKE_COMMAND_TMP}
         ${GETTEXT_MSGFMT_EXECUTABLE}
             -o ${_OUTPUT_FILE} ${CMAKE_CURRENT_SOURCE_DIR}/${lingua}.po
   )
-  SET(_BUILD_FILE_DIR ${DATADIR_BUILD}/locale/${lingua}/LC_MESSAGES)
-  MAKE_DIRECTORY(${_BUILD_FILE_DIR})
-  SET(_BUILD_FILE ${_BUILD_FILE_DIR}/gnucash.mo)
-  LIST(APPEND BUILD_CATALOGS ${_BUILD_FILE})
-  ADD_CUSTOM_COMMAND(
+  set(_BUILD_FILE_DIR ${DATADIR_BUILD}/locale/${lingua}/LC_MESSAGES)
+  make_directory(${_BUILD_FILE_DIR})
+  set(_BUILD_FILE ${_BUILD_FILE_DIR}/gnucash.mo)
+  list(APPEND BUILD_CATALOGS ${_BUILD_FILE})
+  add_custom_command(
     OUTPUT ${_BUILD_FILE}
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/${lingua}.mo ${_BUILD_FILE}
     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${_OUTPUT_FILE}
     #APPEND
     )
-ENDFOREACH(lingua)
+endforeach(lingua)
 
-ADD_CUSTOM_TARGET(po-gmo ALL DEPENDS ${CATALOGS})
-ADD_CUSTOM_TARGET(po-gmo-build ALL DEPENDS ${BUILD_CATALOGS})
-
-
-FOREACH(lingua ${ALL_LINGUAS})
-  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/${lingua}.mo RENAME gnucash.mo DESTINATION ${CMAKE_INSTALL_DATADIR}/locale/${lingua}/LC_MESSAGES)
-ENDFOREACH(lingua)
-
-FUNCTION(READ_FILE_REMOVING_COMMENTS OUTPUT PATH)
-  SET(RESULT "")
-  FILE(STRINGS "${PATH}" LINES_IN)
-  FOREACH(line ${LINES_IN})
-    STRING(REGEX REPLACE "#.*" "" line2 ${line})
-    LIST(APPEND RESULT ${line2})
-  ENDFOREACH()
-  SET(${OUTPUT} ${RESULT} PARENT_SCOPE)
-ENDFUNCTION()
+add_custom_target(po-gmo ALL DEPENDS ${CATALOGS})
+add_custom_target(po-gmo-build ALL DEPENDS ${BUILD_CATALOGS})
 
 
-FUNCTION(MAKE_GNUCASH_POTFILES)
+foreach(lingua ${ALL_LINGUAS})
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${lingua}.mo RENAME gnucash.mo DESTINATION ${CMAKE_INSTALL_DATADIR}/locale/${lingua}/LC_MESSAGES)
+endforeach(lingua)
+
+function(read_file_removing_comments OUTPUT PATH)
+  set(RESULT "")
+  file(STRINGS "${PATH}" LINES_IN)
+  foreach(line ${LINES_IN})
+    string(REGEX REPLACE "#.*" "" line2 ${line})
+    list(APPEND RESULT ${line2})
+  endforeach()
+  set(${OUTPUT} ${RESULT} PARENT_SCOPE)
+endfunction()
+
+
+function(make_gnucash_potfiles)
   # Create a list of candidate translation files
   file (GLOB_RECURSE FILES_IN RELATIVE ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/*.c ${CMAKE_SOURCE_DIR}/*.cpp
@@ -92,7 +92,7 @@ FUNCTION(MAKE_GNUCASH_POTFILES)
   endforeach (path)
 
   # Remove the paths that we have marked as explicitly skipped
-  READ_FILE_REMOVING_COMMENTS(SKIP_LINES POTFILES.skip)
+  read_file_removing_comments(SKIP_LINES POTFILES.skip)
   foreach (path ${SKIP_LINES})
       list(REMOVE_ITEM GOOD_FILES ${path})
   endforeach ()
@@ -101,45 +101,45 @@ FUNCTION(MAKE_GNUCASH_POTFILES)
   # CMake sorting is different from UNIX sorting. Use perl to
   # sort POTFILES.in universally. This may no longer be needed
   # now we have dropped autotools support.
-  STRING(REPLACE ";" "\n" SORT_IN "${GOOD_FILES}")
-  SET(SORT_IN "${SORT_IN}\n")
-  FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/POTFILES.in.in "${SORT_IN}")
+  string(REPLACE ";" "\n" SORT_IN "${GOOD_FILES}")
+  set(SORT_IN "${SORT_IN}\n")
+  file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/POTFILES.in.in "${SORT_IN}")
 
-  EXECUTE_PROCESS(COMMAND "${PERL_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/util/elegant-sort.pl"
+  execute_process(COMMAND "${PERL_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/util/elegant-sort.pl"
     INPUT_FILE ${CMAKE_CURRENT_BINARY_DIR}/POTFILES.in.in
     OUTPUT_VARIABLE POTFILES_IN
   )
-  STRING(REPLACE "\n" ";" POTFILES "${POTFILES_IN}")
+  string(REPLACE "\n" ";" POTFILES "${POTFILES_IN}")
 
   # Write out the final list.
   # intltool-update insists that this file be in the source directory. :-(
-  SET(POTFILES_IN_PATH ${CMAKE_CURRENT_BINARY_DIR}/POTFILES.in)
-  FILE(WRITE ${POTFILES_IN_PATH} "# This is a list of files which contain translatable strings.
+  set(POTFILES_IN_PATH ${CMAKE_CURRENT_BINARY_DIR}/POTFILES.in)
+  file(WRITE ${POTFILES_IN_PATH} "# This is a list of files which contain translatable strings.
 # This file was autogenerated by cmake.
 ")
 
   set(POTFILE_DEPS "")
-  FOREACH(path ${POTFILES})
+  foreach(path ${POTFILES})
     list(APPEND POTFILE_DEPS ${CMAKE_SOURCE_DIR}/${path})
-    FILE(APPEND ${POTFILES_IN_PATH} "${path}\n")
-  ENDFOREACH()
+    file(APPEND ${POTFILES_IN_PATH} "${path}\n")
+  endforeach()
 
-  CONFIGURE_FILE(${POTFILES_IN_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/POTFILES.in NEWLINE_STYLE LF)
+  configure_file(${POTFILES_IN_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/POTFILES.in NEWLINE_STYLE LF)
 
   set(gnucash_pot_depends ${POTFILE_DEPS}  CACHE INTERNAL "List of files with translatable strings. If any of these change, gnucash.pot should be regenerated")
-ENDFUNCTION()
+endfunction()
 
-IF(BUILDING_FROM_VCS)
+if(BUILDING_FROM_VCS)
 
-  MAKE_GNUCASH_POTFILES()
+  make_gnucash_potfiles()
 
   find_program(XGETTEXT xgettext)
   configure_file (${CMAKE_CURRENT_SOURCE_DIR}/Makevars
     ${CMAKE_CURRENT_BINARY_DIR}/Makevars COPYONLY)
 
-  IF (${XGETTEXT} STREQUAL "XGETTEXT-NOTFOUND")
-    MESSAGE(FATAL_ERROR "Can't find the 'xgettext' program.")
-  ENDIF ()
+  if (${XGETTEXT} STREQUAL "XGETTEXT-NOTFOUND")
+    message(FATAL_ERROR "Can't find the 'xgettext' program.")
+  endif ()
 
   add_custom_command(OUTPUT gnucash.pot
         COMMAND ${CMAKE_COMMAND}
@@ -155,5 +155,5 @@ IF(BUILDING_FROM_VCS)
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   )
   add_custom_target (pot DEPENDS gnucash.pot)
-ENDIF()
+endif()
 dist_add_generated (${BUILDING_FROM_VCS} gnucash.pot)

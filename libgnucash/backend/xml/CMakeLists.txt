@@ -1,8 +1,8 @@
 # CMakeLists.txt for libgnucash/backend/xml
 
-ADD_SUBDIRECTORY(test)
+add_subdirectory(test)
 
-SET (backend_xml_utils_noinst_HEADERS
+set (backend_xml_utils_noinst_HEADERS
   gnc-backend-xml.h
   gnc-xml.h
   gnc-address-xml-v2.h
@@ -32,7 +32,7 @@ SET (backend_xml_utils_noinst_HEADERS
   xml-helpers.h
 )
 
-SET (backend_xml_utils_SOURCES
+set (backend_xml_utils_SOURCES
   gnc-account-xml-v2.cpp
   gnc-address-xml-v2.cpp
   gnc-bill-term-xml-v2.cpp
@@ -69,29 +69,29 @@ SET (backend_xml_utils_SOURCES
   sixtp.cpp
 )
 
-SET_LOCAL_DIST(backend_xml_DIST_local ${backend_xml_utils_SOURCES}
+set_local_dist(backend_xml_DIST_local ${backend_xml_utils_SOURCES}
   ${backend_xml_utils_noinst_HEADERS} gnc-backend-xml.cpp CMakeLists.txt
   )
-SET(backend_xml_DIST ${backend_xml_DIST_local} ${test_backend_xml_DIST} PARENT_SCOPE)
+set(backend_xml_DIST ${backend_xml_DIST_local} ${test_backend_xml_DIST} PARENT_SCOPE)
 
 # Add dependency on config.h
-SET_SOURCE_FILES_PROPERTIES (${backend_xml_utils_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+set_source_files_properties (${backend_xml_utils_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
-ADD_LIBRARY	(gnc-backend-xml-utils
+add_library	(gnc-backend-xml-utils
   ${backend_xml_utils_SOURCES}
   ${backend_xml_utils_noinst_HEADERS}
 )
 
-TARGET_LINK_LIBRARIES(gnc-backend-xml-utils gncmod-engine ${LIBXML2_LDFLAGS} ${ZLIB_LDFLAGS})
+target_link_libraries(gnc-backend-xml-utils gncmod-engine ${LIBXML2_LDFLAGS} ${ZLIB_LDFLAGS})
 
-TARGET_INCLUDE_DIRECTORIES (gnc-backend-xml-utils
+target_include_directories (gnc-backend-xml-utils
   PUBLIC  ${LIBXML2_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
   PRIVATE ${ZLIB_INCLUDE_DIRS}
 )
 
-TARGET_COMPILE_DEFINITIONS (gnc-backend-xml-utils PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.xml\" -DU_SHOW_CPLUSPLUS_API=0)
+target_compile_definitions (gnc-backend-xml-utils PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.xml\" -DU_SHOW_CPLUSPLUS_API=0)
 
-INSTALL(TARGETS gnc-backend-xml-utils
+install(TARGETS gnc-backend-xml-utils
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
@@ -99,27 +99,27 @@ INSTALL(TARGETS gnc-backend-xml-utils
 
 # ----
 
-SET(libgncmod_backend_xml_SOURCES gnc-backend-xml.cpp)
+set(libgncmod_backend_xml_SOURCES gnc-backend-xml.cpp)
 
-SET_SOURCE_FILES_PROPERTIES (${libgncmod_backend_xml_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+set_source_files_properties (${libgncmod_backend_xml_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
-ADD_LIBRARY(gncmod-backend-xml MODULE ${libgncmod_backend_xml_SOURCES})
-TARGET_LINK_LIBRARIES(gncmod-backend-xml gnc-backend-xml-utils gncmod-engine
+add_library(gncmod-backend-xml MODULE ${libgncmod_backend_xml_SOURCES})
+target_link_libraries(gncmod-backend-xml gnc-backend-xml-utils gncmod-engine
                         gnc-core-utils ${LIBXML2_LDFLAGS} ${GLIB2_LDFLAGS} ${ZLIB_LIBRARY})
 
-TARGET_COMPILE_DEFINITIONS (gncmod-backend-xml PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.xml\" -DU_SHOW_CPLUSPLUS_API=0)
+target_compile_definitions (gncmod-backend-xml PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.xml\" -DU_SHOW_CPLUSPLUS_API=0)
 
-SET(LIB_DIR ${CMAKE_INSTALL_LIBDIR}/gnucash)
-IF (WIN32)
-  SET(LIB_DIR ${CMAKE_INSTALL_BINDIR})
-ENDIF(WIN32)
+set(LIB_DIR ${CMAKE_INSTALL_LIBDIR}/gnucash)
+if (WIN32)
+  set(LIB_DIR ${CMAKE_INSTALL_BINDIR})
+endif(WIN32)
 
 
-IF (APPLE)
-  SET_TARGET_PROPERTIES (gncmod-backend-xml PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}")
-ENDIF()
+if (APPLE)
+  set_target_properties (gncmod-backend-xml PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}")
+endif()
 
-INSTALL(TARGETS gncmod-backend-xml
+install(TARGETS gncmod-backend-xml
   LIBRARY DESTINATION ${LIB_DIR}
   ARCHIVE DESTINATION ${LIB_DIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
@@ -127,7 +127,7 @@ INSTALL(TARGETS gncmod-backend-xml
 # ----
 
 # Special normal (non-MODULE) library for cutecash only
-ADD_LIBRARY(gncmod-backend-xml-utils ${libgncmod_backend_xml_SOURCES})
-TARGET_LINK_LIBRARIES(gncmod-backend-xml-utils gnc-backend-xml-utils gncmod-engine
+add_library(gncmod-backend-xml-utils ${libgncmod_backend_xml_SOURCES})
+target_link_libraries(gncmod-backend-xml-utils gnc-backend-xml-utils gncmod-engine
                         gnc-core-utils ${LIBXML2_LDFLAGS} ${GLIB2_LDFLAGS} ${ZLIB_LIBRARY})
-TARGET_COMPILE_DEFINITIONS (gncmod-backend-xml-utils PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.xml\" -DU_SHOW_CPLUSPLUS_API=0)
+target_compile_definitions (gncmod-backend-xml-utils PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.xml\" -DU_SHOW_CPLUSPLUS_API=0)

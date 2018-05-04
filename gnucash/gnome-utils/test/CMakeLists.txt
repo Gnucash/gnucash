@@ -1,33 +1,33 @@
 
-SET(GNOME_UTILS_TEST_INCLUDE_DIRS
+set(GNOME_UTILS_TEST_INCLUDE_DIRS
   ${CMAKE_SOURCE_DIR}/libgnucash/gnc-module
   ${GLIB2_INCLUDE_DIRS}
   ${GUILE_INCLUDE_DIRS}
 )
-SET(GNOME_UTILS_TEST_LIBS gnc-module test-core)
+set(GNOME_UTILS_TEST_LIBS gnc-module test-core)
 
-GNC_ADD_TEST_WITH_GUILE(test-link-module-gnome-utils test-link-module.c
+gnc_add_test_with_guile(test-link-module-gnome-utils test-link-module.c
   GNOME_UTILS_TEST_INCLUDE_DIRS GNOME_UTILS_TEST_LIBS
 )
 
 
-SET(GNOME_UTILS_GUI_TEST_INCLUDE_DIRS
+set(GNOME_UTILS_GUI_TEST_INCLUDE_DIRS
   ${GNOME_UTILS_TEST_INCLUDE_DIRS}
   ${CMAKE_BINARY_DIR}/common
   ${CMAKE_SOURCE_DIR}/gnucash/gnome-utils
   ${CMAKE_SOURCE_DIR}/libgnucash/engine
   ${GTK3_INCLUDE_DIRS}
 )
-SET(GNOME_UTILS_GUI_TEST_LIBS
+set(GNOME_UTILS_GUI_TEST_LIBS
   ${GNOME_UTILS_TEST_LIBS}
   gncmod-gnome-utils
 )
 #This is a GUI test
-#GNC_ADD_TEST(test-gnc-recurrence test-gnc-recurrence.c
+#gnc_add_test(test-gnc-recurrence test-gnc-recurrence.c
 #  GNOME_UTILS_GUI_TEST_INCLUDE_DIRS
 #  GNOME_UTILS_GUI_TEST_LIBS
 #
-SET(GUILE_DEPENDS
+set(GUILE_DEPENDS
   scm-gnc-module
   scm-gnome-utils
   test-core
@@ -37,14 +37,14 @@ SET(GUILE_DEPENDS
   gncmod-engine
 )
 
-GNC_ADD_SCHEME_TARGETS(scm-test-load-gnome-utils-module
+gnc_add_scheme_targets(scm-test-load-gnome-utils-module
   "test-load-gnome-utils-module.scm"
   "gnucash/reports"
   "${GUILE_DEPENDS}"
   FALSE
 )
 
-GNC_ADD_SCHEME_TESTS(test-load-gnome-utils-module.scm)
+gnc_add_scheme_tests(test-load-gnome-utils-module.scm)
 
 
-SET_DIST_LIST(test_gnome_utils_DIST CMakeLists.txt test-gnc-recurrence.c test-link-module.c test-load-gnome-utils-module.scm)
+set_dist_list(test_gnome_utils_DIST CMakeLists.txt test-gnc-recurrence.c test-link-module.c test-load-gnome-utils-module.scm)

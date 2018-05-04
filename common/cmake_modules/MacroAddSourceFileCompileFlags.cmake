@@ -1,4 +1,4 @@
-# - MACRO_ADD_SOURCE_FILE_COMPILE_FLAGS(<_target> "flags...")
+# - macro_add_source_file_compile_flags(<_target> "flags...")
 
 # Copyright (c) 2006, Oswald Buddenhagen, <ossi@kde.org>
 #
@@ -6,14 +6,14 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 
-MACRO (MACRO_ADD_SOURCE_FILE_COMPILE_FLAGS _sourcefile _additionalflags)
+macro (macro_add_source_file_compile_flags _sourcefile _additionalflags)
 
-   GET_SOURCE_FILE_PROPERTY (_flags ${_sourcefile} COMPILE_FLAGS)
+   get_source_file_property (_flags ${_sourcefile} COMPILE_FLAGS)
    if (_flags)
       set(_flags "${_flags} ${_additionalflags}")
    else (_flags)
       set(_flags "${_additionalflags}")
    endif (_flags)
-   SET_SOURCE_FILES_PROPERTIES (${_sourcefile} PROPERTIES COMPILE_FLAGS "${_flags}")
+   set_source_files_properties (${_sourcefile} PROPERTIES COMPILE_FLAGS "${_flags}")
 
-ENDMACRO (MACRO_ADD_SOURCE_FILE_COMPILE_FLAGS)
+endmacro (macro_add_source_file_compile_flags)

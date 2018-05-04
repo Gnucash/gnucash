@@ -1,25 +1,25 @@
-SET(LOCALE_SPECIFIC_US_TEST_INCLUDE_DIRS "")
-SET(LOCALE_SPECIFIC_US_TEST_LIBS)
+set(LOCALE_SPECIFIC_US_TEST_INCLUDE_DIRS "")
+set(LOCALE_SPECIFIC_US_TEST_LIBS)
 
-GNC_ADD_TEST(test-link-module-report-locale-specific-us test-link-module.c
+gnc_add_test(test-link-module-report-locale-specific-us test-link-module.c
   LOCALE_SPECIFIC_US_TEST_INCLUDE_DIRS LOCALE_SPECIFIC_US_TEST_LIBS
 )
 
 # FIXME why is this not run/running?
 # Answer: Bitrot. The test needs to be rewritten.
-#SET(GUILE_DEPENDS
+#set(GUILE_DEPENDS
 #  scm-app-utils
 #  gnc-core-utils
 #  gnc-module
 #  gncmod-engine
 #)
 #
-#GNC_ADD_SCHEME_TARGETS(test-load-report-locale-specific-module
+#gnc_add_scheme_targets(test-load-report-locale-specific-module
 #  "test-load-report-locale-specific-module.scm"
 #  "gnucash/report"
 #  "${GUILE_DEPENDS}"
 #  FALSE
 #  )
-#GNC_ADD_SCHEME_TESTS(test-load-report-locale-specific-us-module.scm)
+#gnc_add_scheme_tests(test-load-report-locale-specific-us-module.scm)
 
-SET_DIST_LIST(test_locale_specific_us_DIST CMakeLists.txt test-link-module.c test-load-report-locale-specific-module.scm)
+set_dist_list(test_locale_specific_us_DIST CMakeLists.txt test-link-module.c test-load-report-locale-specific-module.scm)

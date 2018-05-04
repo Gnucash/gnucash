@@ -1,6 +1,6 @@
-ADD_SUBDIRECTORY(ledger-core)
-ADD_SUBDIRECTORY(register-core)
-ADD_SUBDIRECTORY(register-gnome)
+add_subdirectory(ledger-core)
+add_subdirectory(register-core)
+add_subdirectory(register-gnome)
 
-SET_LOCAL_DIST(register_DIST_local CMakeLists.txt )
-SET(register_DIST ${register_DIST_local} ${ledger_core_DIST} ${register_core_DIST} ${register_gnome_DIST} PARENT_SCOPE)
+set_local_dist(register_DIST_local CMakeLists.txt )
+set(register_DIST ${register_DIST_local} ${ledger_core_DIST} ${register_core_DIST} ${register_gnome_DIST} PARENT_SCOPE)

@@ -1,35 +1,35 @@
 
-SET(_BIN_FILES "")
-FOREACH(file gnc-fq-check.in gnc-fq-helper.in gnc-fq-update.in gnc-fq-dump)
-  STRING(REPLACE ".in" "" _OUTPUT_FILE_NAME ${file})
-  SET(_ABS_OUTPUT_FILE ${BINDIR_BUILD}/${_OUTPUT_FILE_NAME})
+set(_BIN_FILES "")
+foreach(file gnc-fq-check.in gnc-fq-helper.in gnc-fq-update.in gnc-fq-dump)
+  string(REPLACE ".in" "" _OUTPUT_FILE_NAME ${file})
+  set(_ABS_OUTPUT_FILE ${BINDIR_BUILD}/${_OUTPUT_FILE_NAME})
   configure_file( ${file} ${_ABS_OUTPUT_FILE} @ONLY)
-  LIST(APPEND _BIN_FILES ${_ABS_OUTPUT_FILE})
-ENDFOREACH(file)
+  list(APPEND _BIN_FILES ${_ABS_OUTPUT_FILE})
+endforeach(file)
 
-SET(CMAKE_COMMAND_TMP "")
-IF (${CMAKE_VERSION} VERSION_GREATER 3.1)
-  SET(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
-ENDIF()
+set(CMAKE_COMMAND_TMP "")
+if (${CMAKE_VERSION} VERSION_GREATER 3.1)
+  set(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
+endif()
 
 
-SET(_MAN_FILES "")
-FOREACH(file gnc-fq-dump gnc-fq-helper)
-  SET(_POD_INPUT ${BINDIR_BUILD}/${file})
-  SET(_MAN_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${file}.1)
-  LIST(APPEND _MAN_FILES ${_MAN_OUTPUT})
-  ADD_CUSTOM_COMMAND(
+set(_MAN_FILES "")
+foreach(file gnc-fq-dump gnc-fq-helper)
+  set(_POD_INPUT ${BINDIR_BUILD}/${file})
+  set(_MAN_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${file}.1)
+  list(APPEND _MAN_FILES ${_MAN_OUTPUT})
+  add_custom_command(
       OUTPUT ${_MAN_OUTPUT}
       COMMAND
         ${CMAKE_COMMAND_TMP} ${PERL_EXECUTABLE} ${POD2MAN_EXECUTABLE} ${_POD_INPUT} ${_MAN_OUTPUT}
       DEPENDS ${_POD_INPUT}
   )
-ENDFOREACH(file)
+endforeach(file)
 
 
-ADD_CUSTOM_TARGET(quotes-man ALL DEPENDS ${_MAN_FILES})
-ADD_CUSTOM_TARGET(quotes-bin ALL DEPENDS ${_BIN_FILES})
-INSTALL(FILES ${_MAN_FILES} DESTINATION  ${CMAKE_INSTALL_MANDIR}/man1)
-INSTALL(PROGRAMS ${_BIN_FILES} DESTINATION ${CMAKE_INSTALL_BINDIR})
+add_custom_target(quotes-man ALL DEPENDS ${_MAN_FILES})
+add_custom_target(quotes-bin ALL DEPENDS ${_BIN_FILES})
+install(FILES ${_MAN_FILES} DESTINATION  ${CMAKE_INSTALL_MANDIR}/man1)
+install(PROGRAMS ${_BIN_FILES} DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-SET_DIST_LIST(quotes_DIST CMakeLists.txt gnc-fq-check.in gnc-fq-dump gnc-fq-helper.in gnc-fq-update.in Quote_example.pl README)
+set_dist_list(quotes_DIST CMakeLists.txt gnc-fq-check.in gnc-fq-dump gnc-fq-helper.in gnc-fq-update.in Quote_example.pl README)

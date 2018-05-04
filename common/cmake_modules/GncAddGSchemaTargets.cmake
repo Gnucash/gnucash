@@ -1,11 +1,11 @@
 macro(add_gschema_targets _gschema_INPUTS)
-  SET(_gschema_OUTPUTS "")
+  set(_gschema_OUTPUTS "")
   set(local_depends ${gschema_depends})
-  SET(CMAKE_COMMAND_TMP "")
-  IF (${CMAKE_VERSION} VERSION_GREATER 3.1)
-    SET(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
-  ENDIF()
-  FOREACH(file ${_gschema_INPUTS})
+  set(CMAKE_COMMAND_TMP "")
+  if (${CMAKE_VERSION} VERSION_GREATER 3.1)
+    set(CMAKE_COMMAND_TMP ${CMAKE_COMMAND} -E env)
+  endif()
+  foreach(file ${_gschema_INPUTS})
 
     set(_OUTPUT_FILE ${DATADIR_BUILD}/glib-2.0/schemas/${file})
     configure_file(${file}.in ${_OUTPUT_FILE} @ONLY)
@@ -14,7 +14,7 @@ macro(add_gschema_targets _gschema_INPUTS)
     string(REPLACE ".xml" ".valid" file_no_xml ${file})
     set(_VALID_FILE ${CMAKE_CURRENT_BINARY_DIR}/${file_no_xml})
     list(APPEND _gschema_VALIDS ${_VALID_FILE})
-    ADD_CUSTOM_COMMAND(
+    add_custom_command(
         OUTPUT ${_VALID_FILE}
         COMMAND ${CMAKE_COMMAND_TMP}
           ${GLIB_COMPILE_SCHEMAS} --strict --dry-run --schema-file=${_OUTPUT_FILE}
@@ -29,10 +29,10 @@ macro(add_gschema_targets _gschema_INPUTS)
     # The file level one is to ensure gschemas.compiled will be rebuilt if any of the
     # dependencies changes.
     list(APPEND local_depends ${file_no_xml}-target ${_VALID_FILE})
-  ENDFOREACH(file)
+  endforeach(file)
 
   set(gschema_depends ${local_depends} CACHE INTERNAL "gschemas.compiled dependencies")
 
-  INSTALL(FILES ${_gschema_OUTPUTS} DESTINATION share/glib-2.0/schemas)
+  install(FILES ${_gschema_OUTPUTS} DESTINATION share/glib-2.0/schemas)
 
 endmacro()

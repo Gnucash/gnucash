@@ -1,31 +1,31 @@
 set(MODULEPATH ${CMAKE_SOURCE_DIR}/libgnucash/core-utils)
 
-SET(CORE_UTILS_TEST_INCLUDE_DIRS
+set(CORE_UTILS_TEST_INCLUDE_DIRS
   ${CMAKE_BINARY_DIR}/common # for config.h
   ${MODULEPATH}
   ${CMAKE_SOURCE_DIR}/common/test-core
   ${GLIB2_INCLUDE_DIRS}
   ${GTK_MAC_INCLUDE_DIRS}
 )
-SET(CORE_UTILS_TEST_LIBS gnc-core-utils test-core)
-IF (MAC_INTEGRATION)
-  LIST(APPEND CORE_UTILS_TEST_LIBS ${OSX_EXTRA_LIBRARIES})
-ENDIF()
+set(CORE_UTILS_TEST_LIBS gnc-core-utils test-core)
+if (MAC_INTEGRATION)
+  list(APPEND CORE_UTILS_TEST_LIBS ${OSX_EXTRA_LIBRARIES})
+endif()
 
-MACRO(ADD_CORE_UTILS_TEST _TARGET _SOURCE_FILES)
-  GNC_ADD_TEST(${_TARGET} "${_SOURCE_FILES}" CORE_UTILS_TEST_INCLUDE_DIRS CORE_UTILS_TEST_LIBS)
-ENDMACRO()
+macro(add_core_utils_test _TARGET _SOURCE_FILES)
+  gnc_add_test(${_TARGET} "${_SOURCE_FILES}" CORE_UTILS_TEST_INCLUDE_DIRS CORE_UTILS_TEST_LIBS)
+endmacro()
 
-ADD_CORE_UTILS_TEST(test-gnc-glib-utils test-gnc-glib-utils.c)
-ADD_CORE_UTILS_TEST(test-resolve-file-path test-resolve-file-path.c)
-ADD_CORE_UTILS_TEST(test-userdata-dir test-userdata-dir.c)
-IF (NOT MAC_INTEGRATION AND NOT WIN32)
-  ADD_CORE_UTILS_TEST(test-userdata-dir-invalid-home test-userdata-dir-invalid-home.c)
-ENDIF()
-IF (MAC_INTEGRATION)
-  TARGET_COMPILE_OPTIONS(test-userdata-dir PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
-  TARGET_COMPILE_DEFINITIONS(test-userdata-dir PRIVATE ${GTK_MAC_CFLAGS_OTHER})
-ENDIF(MAC_INTEGRATION)
+add_core_utils_test(test-gnc-glib-utils test-gnc-glib-utils.c)
+add_core_utils_test(test-resolve-file-path test-resolve-file-path.c)
+add_core_utils_test(test-userdata-dir test-userdata-dir.c)
+if (NOT MAC_INTEGRATION AND NOT WIN32)
+  add_core_utils_test(test-userdata-dir-invalid-home test-userdata-dir-invalid-home.c)
+endif()
+if (MAC_INTEGRATION)
+  target_compile_options(test-userdata-dir PRIVATE ${OSX_EXTRA_COMPILE_FLAGS})
+  target_compile_definitions(test-userdata-dir PRIVATE ${GTK_MAC_CFLAGS_OTHER})
+endif(MAC_INTEGRATION)
 
 set(gtest_core_utils_INCLUDES
   ${MODULEPATH}
@@ -36,7 +36,7 @@ set(gtest_core_utils_INCLUDES
   ${GTEST_INCLUDE_DIR}
   )
 
-SET(gtest_core_utils_LIBS
+set(gtest_core_utils_LIBS
   ${GLIB2_LDFLAGS}
   ${Boost_LIBRARIES}
   ${GTHREAD_LDFLAGS}
@@ -52,6 +52,6 @@ set(test_gnc_path_util_SOURCES
 gnc_add_test(test-gnc-path-util "${test_gnc_path_util_SOURCES}"
   gtest_core_utils_INCLUDES gtest_core_utils_LIBS "GNC_UNINSTALLED=yes")
 
-SET_DIST_LIST(test_core_utils_DIST CMakeLists.txt
+set_dist_list(test_core_utils_DIST CMakeLists.txt
   test-gnc-glib-utils.c test-resolve-file-path.c test-userdata-dir.c
   test-userdata-dir-invalid-home.c gtest-path-utilities.cpp)

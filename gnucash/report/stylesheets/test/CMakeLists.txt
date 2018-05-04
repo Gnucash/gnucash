@@ -1,4 +1,4 @@
-SET(GUILE_DEPENDS
+set(GUILE_DEPENDS
   scm-test-core
   scm-gettext
   scm-core-utils
@@ -13,13 +13,13 @@ SET(GUILE_DEPENDS
   scm-report-stylesheets
 )
 
-GNC_ADD_SCHEME_TARGETS(scm-test-load-report-stylesheets-module
+gnc_add_scheme_targets(scm-test-load-report-stylesheets-module
   "test-load-report-stylesheets-module.scm"
   "gnucash/report"
   "${GUILE_DEPENDS}"
   FALSE
   )
 
-GNC_ADD_SCHEME_TESTS("test-load-report-stylesheets-module.scm")
+gnc_add_scheme_tests("test-load-report-stylesheets-module.scm")
 
-SET_DIST_LIST(test_stylesheets_DIST CMakeLists.txt test-load-report-stylesheets-module.scm)
+set_dist_list(test_stylesheets_DIST CMakeLists.txt test-load-report-stylesheets-module.scm)

@@ -1,12 +1,12 @@
-ADD_SUBDIRECTORY(test)
+add_subdirectory(test)
 
-SET(csv_import_remote_SOURCES
+set(csv_import_remote_SOURCES
   ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-charmap-sel.c
   ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-optionmenu.c
   ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-glib-extras.c
 )
 
-SET(csv_import_SOURCES
+set(csv_import_SOURCES
   gncmod-csv-import.c
   assistant-csv-account-import.c
   assistant-csv-price-import.cpp
@@ -29,15 +29,15 @@ SET(csv_import_SOURCES
 )
 
 # Add dependency on config.h
-SET_SOURCE_FILES_PROPERTIES (${csv_import_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+set_source_files_properties (${csv_import_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
-SET(csv_import_remote_HEADERS
+set(csv_import_remote_HEADERS
   ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-charmap-sel.h
   ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-optionmenu.h
   ${CMAKE_SOURCE_DIR}/borrowed/goffice/go-glib-extras.h
 )
 
-SET(csv_import_noinst_HEADERS
+set(csv_import_noinst_HEADERS
   assistant-csv-account-import.h
   assistant-csv-price-import.h
   assistant-csv-trans-import.h
@@ -58,11 +58,11 @@ SET(csv_import_noinst_HEADERS
   gnc-tokenizer-fw.hpp
 )
 
-ADD_LIBRARY(gncmod-csv-import ${csv_import_noinst_HEADERS}
+add_library(gncmod-csv-import ${csv_import_noinst_HEADERS}
   ${csv_import_remote_HEADERS} ${csv_import_remote_SOURCES} ${csv_import_SOURCES}
 )
 
-TARGET_LINK_LIBRARIES(
+target_link_libraries(
   gncmod-csv-import
   ${Boost_LIBRARIES}
   ${ICU4C_I18N_LDFLAGS}
@@ -74,24 +74,24 @@ TARGET_LINK_LIBRARIES(
   gnc-module)
 
 
-TARGET_COMPILE_DEFINITIONS(gncmod-csv-import PRIVATE -DG_LOG_DOMAIN=\"gnc.import.csv\")
+target_compile_definitions(gncmod-csv-import PRIVATE -DG_LOG_DOMAIN=\"gnc.import.csv\")
 
-TARGET_INCLUDE_DIRECTORIES(gncmod-csv-import PRIVATE
+target_include_directories(gncmod-csv-import PRIVATE
      ${ICU4C_I18N_INCLUDE_DIRS}
      ${CMAKE_SOURCE_DIR}/borrowed/goffice
 )
 
-IF (APPLE)
-  SET_TARGET_PROPERTIES (gncmod-csv-import PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
-ENDIF()
+if (APPLE)
+  set_target_properties (gncmod-csv-import PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+endif()
 
-INSTALL(TARGETS gncmod-csv-import
+install(TARGETS gncmod-csv-import
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 # No headers to install
 
-SET_LOCAL_DIST(csv_import_DIST_local CMakeLists.txt 
+set_local_dist(csv_import_DIST_local CMakeLists.txt
         ${csv_import_SOURCES} ${csv_import_noinst_HEADERS})
-SET(csv_import_DIST ${csv_import_DIST_local} ${test_csv_import_DIST} PARENT_SCOPE)
+set(csv_import_DIST ${csv_import_DIST_local} ${test_csv_import_DIST} PARENT_SCOPE)

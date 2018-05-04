@@ -1,12 +1,12 @@
 
-INSTALL(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION ${CMAKE_INSTALL_DATADIR}/gnucash
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION ${CMAKE_INSTALL_DATADIR}/gnucash
     PATTERN Makefile* EXCLUDE
     PATTERN CMake* EXCLUDE
     PATTERN CTest* EXCLUDE
     PATTERN cmake* EXCLUDE
     PATTERN hicolor EXCLUDE
 )
-FILE(COPY ${CMAKE_CURRENT_SOURCE_DIR}
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}
     DESTINATION ${DATADIR_BUILD}/gnucash
     PATTERN Makefile* EXCLUDE
     PATTERN CMake* EXCLUDE
@@ -14,27 +14,27 @@ FILE(COPY ${CMAKE_CURRENT_SOURCE_DIR}
     PATTERN cmake* EXCLUDE
     PATTERN hicolor EXCLUDE
 )
-INSTALL(
+install(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/hicolor DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/icons
     REGEX ".*/apps.*" EXCLUDE
 )
-FILE(
+file(
     COPY ${CMAKE_CURRENT_SOURCE_DIR}/hicolor
     DESTINATION ${DATADIR_BUILD}/gnucash/icons
     REGEX ".*/apps.*" EXCLUDE
 )
 
-INSTALL(
+install(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/hicolor DESTINATION  ${CMAKE_INSTALL_DATADIR}/icons
     REGEX ".*/actions.*" EXCLUDE
 )
-FILE(
+file(
     COPY ${CMAKE_CURRENT_SOURCE_DIR}/hicolor
     DESTINATION ${DATADIR_BUILD}/icons
     REGEX ".*/actions.*" EXCLUDE
 )
 
-SET(gncpixmap_DATA
+set(gncpixmap_DATA
     hicolor/16x16/actions/gnc-account.png
     hicolor/24x24/actions/gnc-account.png
     hicolor/16x16/actions/gnc-account-delete.png
@@ -76,7 +76,7 @@ SET(gncpixmap_DATA
     gnucash_splash.png
 )
 
-SET(gncicon_DATA
+set(gncicon_DATA
     hicolor/16x16/apps/gnucash-icon.png
     hicolor/22x22/apps/gnucash-icon.png
     hicolor/24x24/apps/gnucash-icon.png
@@ -88,10 +88,10 @@ SET(gncicon_DATA
     hicolor/256x256/apps/gnucash-icon.png
 )
 
-SET(gncscalableicon_DATA
+set(gncscalableicon_DATA
     hicolor/scalable/apps/gnucash-icon.svg
 )
 
-SET_LOCAL_DIST(pixmaps_DIST_local CMakeLists.txt ${gncpixmap_DATA}
+set_local_dist(pixmaps_DIST_local CMakeLists.txt ${gncpixmap_DATA}
     ${gncicon_DATA} ${gncscalableicon_DATA})
-SET(pixmaps_DIST ${pixmaps_DIST_local} PARENT_SCOPE)
+set(pixmaps_DIST ${pixmaps_DIST_local} PARENT_SCOPE)

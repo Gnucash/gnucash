@@ -1,8 +1,8 @@
 # CMakeLists.txt for gnucash/import_export/qif-imp
 
-ADD_SUBDIRECTORY(test)
+add_subdirectory(test)
 
-SET (qif_import_SOURCES
+set (qif_import_SOURCES
     dialog-account-picker.c
     assistant-qif-import.c
     gnc-plugin-qif-import.c
@@ -10,25 +10,25 @@ SET (qif_import_SOURCES
 )
 
 # Add dependency on config.h
-SET_SOURCE_FILES_PROPERTIES (${qif_import_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+set_source_files_properties (${qif_import_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
-SET (qif_import_noinst_HEADERS
+set (qif_import_noinst_HEADERS
     dialog-account-picker.h
     assistant-qif-import.h
     gnc-plugin-qif-import.h
 )
 
-ADD_LIBRARY	(gncmod-qif-import ${qif_import_SOURCES} ${qif_import_noinst_HEADERS})
+add_library	(gncmod-qif-import ${qif_import_SOURCES} ${qif_import_noinst_HEADERS})
 
-TARGET_LINK_LIBRARIES(gncmod-qif-import gncmod-app-utils gncmod-gnome-utils gnc-gnome)
+target_link_libraries(gncmod-qif-import gncmod-app-utils gncmod-gnome-utils gnc-gnome)
 
-TARGET_COMPILE_DEFINITIONS(gncmod-qif-import PRIVATE -DG_LOG_DOMAIN=\"gnc.import.qif.import\")
+target_compile_definitions(gncmod-qif-import PRIVATE -DG_LOG_DOMAIN=\"gnc.import.qif.import\")
 
-IF (APPLE)
-  SET_TARGET_PROPERTIES (gncmod-qif-import PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
-ENDIF()
+if (APPLE)
+  set_target_properties (gncmod-qif-import PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+endif()
 
-INSTALL(TARGETS gncmod-qif-import
+install(TARGETS gncmod-qif-import
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
@@ -37,11 +37,11 @@ INSTALL(TARGETS gncmod-qif-import
 
 # Scheme
 
-SET (qif_import_SCHEME_0
+set (qif_import_SCHEME_0
   string.scm
   )
 
-SET (qif_import_SCHEME
+set (qif_import_SCHEME
   qif-dialog-utils.scm
   qif-file.scm
   qif-guess-map.scm
@@ -53,11 +53,11 @@ SET (qif_import_SCHEME
   qif-import.scm # yes, included in both SETs
 )
 
-SET(qif_import_SCHEME_2
+set(qif_import_SCHEME_2
   qif-import.scm
 )
 
-SET(GUILE_DEPENDS
+set(GUILE_DEPENDS
   gncmod-qif-import
   gnc-gnome
   scm-core-utils
@@ -68,27 +68,27 @@ SET(GUILE_DEPENDS
   scm-gnome-utils
   )
 
-GNC_ADD_SCHEME_TARGETS(scm-qif-import-0
+gnc_add_scheme_targets(scm-qif-import-0
   "${qif_import_SCHEME_0}"
   "gnucash/import-export"
   "${GUILE_DEPENDS}"
   FALSE
 )
 
-GNC_ADD_SCHEME_TARGETS(scm-qif-import-2
+gnc_add_scheme_targets(scm-qif-import-2
   "${qif_import_SCHEME_2}"
   "gnucash/import-export"
   "${GUILE_DEPENDS}"
   FALSE
 )
 
-GNC_ADD_SCHEME_TARGETS(scm-qif-import
+gnc_add_scheme_targets(scm-qif-import
   "${qif_import_SCHEME}"
   "qif-import"
   "${GUILE_DEPENDS};scm-qif-import-0"
   FALSE
 )
 
-SET_LOCAL_DIST(qif_import_DIST_local CMakeLists.txt file-format.txt ${qif_import_SOURCES} ${qif_import_noinst_HEADERS}
+set_local_dist(qif_import_DIST_local CMakeLists.txt file-format.txt ${qif_import_SOURCES} ${qif_import_noinst_HEADERS}
         ${qif_import_SCHEME_0} ${qif_import_SCHEME} ${qif_import_SCHEME_2})
-SET(qif_import_DIST ${qif_import_DIST_local} ${test_qif_import_DIST} PARENT_SCOPE)
+set(qif_import_DIST ${qif_import_DIST_local} ${test_qif_import_DIST} PARENT_SCOPE)

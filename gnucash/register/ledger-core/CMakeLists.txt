@@ -1,7 +1,7 @@
 
-ADD_SUBDIRECTORY(test)
+add_subdirectory(test)
 
-SET (ledger_core_SOURCES
+set (ledger_core_SOURCES
   gnc-ledger-display.c
   gnc-ledger-display2.c
   gncmod-ledger-core.c
@@ -21,7 +21,7 @@ SET (ledger_core_SOURCES
 )
 
 
-SET (ledger_core_HEADERS
+set (ledger_core_HEADERS
   gnc-ledger-display.h
   gnc-ledger-display2.h
   split-register.h
@@ -38,32 +38,32 @@ SET (ledger_core_HEADERS
 )
 
 # Add dependency on config.h
-SET_SOURCE_FILES_PROPERTIES (${ledger_core_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+set_source_files_properties (${ledger_core_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
-ADD_LIBRARY (gncmod-ledger-core ${ledger_core_SOURCES} ${ledger_core_HEADERS})
+add_library (gncmod-ledger-core ${ledger_core_SOURCES} ${ledger_core_HEADERS})
 
-TARGET_LINK_LIBRARIES(gncmod-ledger-core gncmod-register-gnome gncmod-register-core gncmod-gnome-utils
+target_link_libraries(gncmod-ledger-core gncmod-register-gnome gncmod-register-core gncmod-gnome-utils
         gncmod-engine gnc-core-utils ${GTK3_LDFLAGS})
 
-TARGET_COMPILE_DEFINITIONS (gncmod-ledger-core PRIVATE -DG_LOG_DOMAIN=\"gnc.register.ledger\")
+target_compile_definitions (gncmod-ledger-core PRIVATE -DG_LOG_DOMAIN=\"gnc.register.ledger\")
 
-TARGET_INCLUDE_DIRECTORIES(gncmod-ledger-core
+target_include_directories(gncmod-ledger-core
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_BINARY_DIR}/gnucash/gnome-utils # for gnc-warnings.h
 )
 
-IF (APPLE)
-  SET_TARGET_PROPERTIES (gncmod-ledger-core PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
-ENDIF()
+if (APPLE)
+  set_target_properties (gncmod-ledger-core PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+endif()
 
-INSTALL(TARGETS gncmod-ledger-core
+install(TARGETS gncmod-ledger-core
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 # No headers to install
 
 
-SET_LOCAL_DIST(ledger_core_DIST_local CMakeLists.txt ${ledger_core_SOURCES} ${ledger_core_HEADERS})
-SET(ledger_core_DIST ${ledger_core_DIST_local} ${test_ledger_core_DIST} PARENT_SCOPE)
+set_local_dist(ledger_core_DIST_local CMakeLists.txt ${ledger_core_SOURCES} ${ledger_core_HEADERS})
+set(ledger_core_DIST ${ledger_core_DIST_local} ${test_ledger_core_DIST} PARENT_SCOPE)
 

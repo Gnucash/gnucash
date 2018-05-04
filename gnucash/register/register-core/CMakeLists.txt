@@ -1,6 +1,6 @@
-ADD_SUBDIRECTORY(test)
+add_subdirectory(test)
 
-SET (register_core_SOURCES
+set (register_core_SOURCES
   gncmod-register-core.c
   basiccell.c
   cell-factory.c
@@ -17,10 +17,10 @@ SET (register_core_SOURCES
   table-control.c
   table-layout.c
   table-model.c
-)  
+)
 
 
-SET (register_core_HEADERS
+set (register_core_HEADERS
   basiccell.h
   cell-factory.h
   cellblock.h
@@ -41,27 +41,27 @@ SET (register_core_HEADERS
 )
 
 # Add dependency on config.h
-SET_SOURCE_FILES_PROPERTIES (${register_core_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
+set_source_files_properties (${register_core_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
 
-ADD_LIBRARY (gncmod-register-core ${register_core_SOURCES} ${register_core_HEADERS})
+add_library (gncmod-register-core ${register_core_SOURCES} ${register_core_HEADERS})
 
-TARGET_LINK_LIBRARIES(gncmod-register-core gncmod-gnome-utils gncmod-app-utils ${GMODULE_LDFLAGS})
+target_link_libraries(gncmod-register-core gncmod-gnome-utils gncmod-app-utils ${GMODULE_LDFLAGS})
 
-TARGET_COMPILE_DEFINITIONS (gncmod-register-core PRIVATE -DG_LOG_DOMAIN=\"gnc.register.core\")
+target_compile_definitions (gncmod-register-core PRIVATE -DG_LOG_DOMAIN=\"gnc.register.core\")
 
-TARGET_INCLUDE_DIRECTORIES(gncmod-register-core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(gncmod-register-core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-IF (APPLE)
-  SET_TARGET_PROPERTIES (gncmod-register-core PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
-ENDIF()
+if (APPLE)
+  set_target_properties (gncmod-register-core PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
+endif()
 
-INSTALL(TARGETS gncmod-register-core
+install(TARGETS gncmod-register-core
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-INSTALL(FILES ${register_core_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
+install(FILES ${register_core_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
 
-SET_LOCAL_DIST(register_core_DIST_local CMakeLists.txt README ${register_core_SOURCES} ${register_core_HEADERS})
+set_local_dist(register_core_DIST_local CMakeLists.txt README ${register_core_SOURCES} ${register_core_HEADERS})
 
-SET(register_core_DIST ${register_core_DIST_local} ${test_register_core_DIST} PARENT_SCOPE)
+set(register_core_DIST ${register_core_DIST_local} ${test_register_core_DIST} PARENT_SCOPE)

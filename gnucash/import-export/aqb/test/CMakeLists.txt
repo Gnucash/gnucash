@@ -26,11 +26,11 @@ set(test_aqb_LIBS
   ${GLIB2_LDFLAGS}
 )
 
-SET_DIST_LIST(test_aqb_DIST ${test_aqb_SOURCES} file-book.gnucash
+set_dist_list(test_aqb_DIST ${test_aqb_SOURCES} file-book.gnucash
   file-book-hbcislot.gnucash CMakeLists.txt )
-IF(WITH_AQBANKING)
-  GNC_ADD_TEST(test-aqb
+if(WITH_AQBANKING)
+  gnc_add_test(test-aqb
     "${test_aqb_SOURCES}"
     test_aqb_INCLUDE_DIRS
     test_aqb_LIBS SRCDIR=${CMAKE_CURRENT_SOURCE_DIR})
- ENDIF()
+ endif()
