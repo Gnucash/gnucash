@@ -134,7 +134,7 @@
         (lambda () (xml->sxml render))
         (lambda (k . args)
           (test-assert k #f)            ; XML parse error doesn't cause a crash but logs as a failure
-          (format #t "see render output at ~a\n~a" filename (gnc:render-options-changed options #t)))))))
+          (format #t "see render output at ~a\n~a" filename (gnc:html-render-options-changed options #t)))))))
 
 (define (get-row-col sxml row col)
   ;; sxml, row & col (numbers or #f) -> list-of-string

@@ -1850,7 +1850,7 @@ tags within description, notes or memo. ")
           (if (memq infobox-display '(always no-match))
               (gnc:html-document-add-object!
                document
-               (gnc:render-options-changed options))))
+               (gnc:html-render-options-changed options))))
 
         (begin
 
@@ -1924,7 +1924,7 @@ tags within description, notes or memo. ")
                 (if (memq infobox-display '(always no-match))
                     (gnc:html-document-add-object!
                      document
-                     (gnc:render-options-changed options))))
+                     (gnc:html-render-options-changed options))))
 
               (let-values (((table grid) (make-split-table splits options custom-calculated-cells)))
 
@@ -1953,7 +1953,7 @@ tags within description, notes or memo. ")
                 (if (eq? infobox-display 'always)
                     (gnc:html-document-add-object!
                      document
-                     (gnc:render-options-changed options)))
+                     (gnc:html-render-options-changed options)))
 
                 (gnc:html-document-add-object! document table)))))
 

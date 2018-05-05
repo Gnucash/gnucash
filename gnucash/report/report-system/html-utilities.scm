@@ -818,7 +818,7 @@
        "")
       (_ "Edit report options")))))
 
-(define* (gnc:render-options-changed options #:optional plaintext?)
+(define* (gnc:html-render-options-changed options #:optional plaintext?)
   ;; options -> html-object or string, depending on plaintext?.  This
   ;; summarises options that were changed by the user. Set plaintext?
   ;; to #t for unit-tests only.
