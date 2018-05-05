@@ -76,6 +76,16 @@ int GncCsvTokenizer::tokenize()
                 bs_pos = line.find ('\\', bs_pos);
             }
 
+            // Deal with repeated " ("") in strings.
+            // This is commonly used as escape mechanism for double quotes in csv files.
+            // However boost just eats them.
+            bs_pos = line.find ("\"\"");
+            while (bs_pos != std::string::npos)
+            {
+                line.replace (bs_pos, 2, "\\\"");
+                bs_pos = line.find ("\"\"");
+            }
+
             Tokenizer tok(line, sep);
             vec.assign(tok.begin(),tok.end());
             m_tokenized_contents.push_back(vec);
