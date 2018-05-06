@@ -26,19 +26,12 @@
 
 (export pattern-streamer)
 
-(export create-option-set)
-(export option-set-setter)
-(export option-set-getter)
-
 (export tbl-column-count)
 (export tbl-row-count)
 (export tbl-ref)
 (export tbl-ref->number)
 
 (export gnc:options->sxml)
-;;
-;; Random report test related syntax and the like
-;;
 
 ;;
 ;; Table parsing
@@ -91,71 +84,6 @@
 (define (tbl-ref->number tbl row-index column-index)
   (string->number (car (tbl-ref tbl row-index column-index))))
 
-;;
-;; Test sinks
-;;
-
-(define (make-test-sink) (list 'sink 0 '()))
-
-(define (test-sink-count sink)
-  (second sink))
-
-(define (test-sink-count! sink value)
-  (set-car! (cdr sink) value))
-
-(define (test-sink-messages sink)
-  (third sink))
-
-(define (test-sink-messages! sink messages)
-  (set-car! (cdr (cdr sink)) messages))
-
-(define (test-sink-check sink message flag)
-  (test-sink-count! sink (+ (test-sink-count sink) 1))
-  (if flag #t
-      (test-sink-messages! sink (cons message (test-sink-messages sink)))))
-
-(define (test-sink-report sink)
-  (format #t "Completed ~a tests ~a\n"
-	  (test-sink-count sink)
-	  (if (null? (test-sink-messages sink)) "PASS" "FAIL"))
-  (if (null? (test-sink-messages sink)) #t
-      (begin (for-each (lambda (delayed-message)
-			 (delayed-format-render #t delayed-message))
-		       (test-sink-messages sink))
-	     #f)))
-
-(define (delayed-format . x) x)
-
-(define (delayed-format-render stream msg)
-  (apply format stream msg))
-
-;;
-;; options
-;;
-
-
-(define (create-option-set)
-  (make-hash-table) )
-
-(define (option-set-setter option-set)
-  (lambda (category name value)
-    (hash-set! option-set (list category name) value)))
-
-(define (option-set-getter option-set)
-  (lambda (category name)
-    (hash-ref option-set (list category name))))
-
-;;
-;;
-;;
-
-(define (report-show-options stream expense-options)
-  (gnc:options-for-each (lambda (option)
-			  (format stream "Option: ~a.~a Value ~a\n"
-				  (gnc:option-section option)
-				  (gnc:option-name option)
-				  (gnc:option-value option)))
-			expense-options))
 
 (define (gnc:options->sxml uuid options prefix test-title)
   ;; uuid - str to locate report uuid
