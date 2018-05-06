@@ -1,3 +1,4 @@
+add_subdirectory (test)
 
 set (business_reports_SCHEME
   aging.scm
