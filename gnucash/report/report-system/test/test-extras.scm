@@ -21,6 +21,8 @@
 
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash engine test test-extras))
+(use-modules (gnucash report report-system))
+(use-modules (sxml simple))
 
 (export pattern-streamer)
 
@@ -33,6 +35,7 @@
 (export tbl-ref)
 (export tbl-ref->number)
 
+(export gnc:options->sxml)
 ;;
 ;; Random report test related syntax and the like
 ;;
@@ -154,3 +157,38 @@
 				  (gnc:option-value option)))
 			expense-options))
 
+(define (gnc:options->sxml uuid options prefix test-title)
+  ;; uuid - str to locate report uuid
+  ;; options object -> sxml tree
+  ;; prefix - str describing tests e.g. "test-trep"
+  ;; test-title: str describing each unit test e.g. "test disable filter"
+  ;;
+  ;; This function abstracts the report renderer. It also catches XML
+  ;; parsing errors, dumping the options changed.
+  ;;
+  ;; It also dumps the render into /tmp/XX-YY.html where XX is the
+  ;; test prefix and YY is the test title.
+
+  (let* ((template (gnc:find-report-template uuid))
+         (constructor (record-constructor <report>))
+         (report (constructor uuid "bar" options #t #t #f #f ""))
+         (renderer (gnc:report-template-renderer template))
+         (document (renderer report))
+         (sanitize-char (lambda (c)
+                          (if (char-alphabetic? c) c #\-)))
+         (fileprefix (string-map sanitize-char prefix))
+         (filename (string-map sanitize-char test-title)))
+    (gnc:html-document-set-style-sheet! document (gnc:report-stylesheet report))
+    (if test-title
+        (gnc:html-document-set-title! document test-title))
+    (let* ((filename (format #f "/tmp/~a-~a.html" fileprefix filename))
+           (render (gnc:html-document-render document)))
+      (with-output-to-file filename
+        (lambda ()
+          (display render)))
+      (catch 'parser-error
+        (lambda () (xml->sxml render))
+        (lambda (k . args)
+          (format #t "*** XML error. see render output at ~a\n~a"
+                  filename (gnc:html-render-options-changed options #t))
+          (throw k args))))))
