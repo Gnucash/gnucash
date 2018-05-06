@@ -6,6 +6,7 @@
 (use-modules (gnucash report report-system))
 (use-modules (gnucash report report-system test test-extras))
 (use-modules (srfi srfi-64))
+(use-modules (gnucash engine test srfi64-extras))
 (use-modules (sxml simple))
 (use-modules (sxml xpath))
 (use-modules (system vm coverage))
@@ -42,33 +43,6 @@
 ;; Explicitly set locale to make the report output predictable
 (setlocale LC_ALL "C")
 
-(define (test-runner)
-  (let ((runner (test-runner-null))
-        (num-passed 0)
-        (num-failed 0))
-    (test-runner-on-test-end! runner
-      (lambda (runner)
-        (format #t "[~a] line:~a, test: ~a\n"
-                (test-result-ref runner 'result-kind)
-                (test-result-ref runner 'source-line)
-                (test-runner-test-name runner))
-        (case (test-result-kind runner)
-          ((pass xpass) (set! num-passed (1+ num-passed)))
-          ((fail xfail)
-           (if (test-result-ref runner 'expected-value)
-               (format #t "~a\n -> expected: ~s\n -> obtained: ~s\n"
-                       (string-join (test-runner-group-path runner) "/")
-                       (test-result-ref runner 'expected-value)
-                       (test-result-ref runner 'actual-value)))
-           (set! num-failed (1+ num-failed)))
-          (else #t))))
-    (test-runner-on-final! runner
-      (lambda (runner)
-        (format #t "Source:~a\npass = ~a, fail = ~a\n"
-                (test-result-ref runner 'source-file) num-passed num-failed)
-        (zero? num-failed)))
-    runner))
-
 (define (run-test)
   (if #f
       (coverage-test)
@@ -86,7 +60,7 @@
         (close port)))))
 
 (define (run-test-proper)
-  (test-runner-factory test-runner)
+  (test-runner-factory gnc:test-runner)
   (test-begin "transaction.scm")
   (null-test)
   (trep-tests)
