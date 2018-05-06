@@ -601,6 +601,7 @@
 (export gnc:html-table-set-col-headers-style!)
 (export gnc:html-table-row-headers-style)
 (export gnc:html-table-set-row-headers-style!)
+(export gnc:html-table-set-last-row-style!)
 (export gnc:html-table-set-style!)
 (export gnc:html-table-set-col-style!)
 (export gnc:html-table-set-row-style!)

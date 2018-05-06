@@ -756,3 +756,10 @@
     (push (gnc:html-document-markup-end doc "table"))
     (gnc:html-document-pop-style doc)
     retval))
+
+(define (gnc:html-table-set-last-row-style! table tag . rest)
+  (let ((arg-list
+         (cons table
+               (cons (1- (gnc:html-table-num-rows table))
+                     (cons tag rest)))))
+    (apply gnc:html-table-set-row-style! arg-list)))
