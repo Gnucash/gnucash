@@ -91,24 +91,7 @@
   ;; It also catches XML parsing errors, dumping the options changed.
   ;;
   ;; It also dumps the render into /tmp/test-trep-XX.html where XX is the test title
-  (let* ((template (gnc:find-report-template trep-uuid))
-         (report (constructor trep-uuid "bar" options #t #t #f #f ""))
-         (renderer (gnc:report-template-renderer template))
-         (document (renderer report))
-         (filename (string-map (lambda (c) (if (char-alphabetic? c) c #\-)) test-title)))
-    (gnc:html-document-set-style-sheet! document (gnc:report-stylesheet report))
-    (if test-title
-        (gnc:html-document-set-title! document test-title))
-    (let* ((filename (format #f "/tmp/test-trep-~a.html" filename))
-           (render (gnc:html-document-render document))
-           (outfile (open-file filename "w")))
-      (display render outfile)
-      (close-output-port outfile)
-      (catch 'parser-error
-        (lambda () (xml->sxml render))
-        (lambda (k . args)
-          (test-assert k #f)            ; XML parse error doesn't cause a crash but logs as a failure
-          (format #t "see render output at ~a\n~a" filename (gnc:html-render-options-changed options #t)))))))
+  (gnc:options->sxml options test-title trep-uuid "test-trep"))
 
 (define (get-row-col sxml row col)
   ;; sxml, row & col (numbers or #f) -> list-of-string
@@ -134,8 +117,6 @@
 ;;
 ;; END CANDIDATES
 ;;
-
-(define constructor (record-constructor <report>))
 
 (define (set-option! options section name value)
   (let ((option (gnc:lookup-option options section name)))
