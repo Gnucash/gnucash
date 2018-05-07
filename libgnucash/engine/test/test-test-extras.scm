@@ -26,10 +26,7 @@
 (use-modules (sw_engine))
 
 (define (run-test)
-  (and (logging-and #t)
-       (logging-and)
-       (not (logging-and #t #f))
-       (test-create-account-structure)))
+ (test-create-account-structure))
 
 (define (test-create-account-structure)
   (let ((env (create-test-env)))
