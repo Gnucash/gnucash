@@ -27,15 +27,7 @@
 (use-modules (sw_app_utils))
 (use-modules (sw_engine))
 
-(export logging-and)
 (export test)
-(export make-test-sink)
-(export env-test-sink)
-(export test-sink-report)
-(export test-sink-check)
-
-(export delayed-format)
-(export delayed-format-render)
 
 (export with-account)
 (export with-transaction)
@@ -62,15 +54,6 @@
 ;; Random test related syntax and the like
 ;;
 
-;; logging-and is mostly for debugging tests
-(define-macro (logging-and . args)
-  (cons 'and (map (lambda (arg)
-		    (list 'begin
-			  (list 'format #t "Test: ~a\n" (list 'quote arg))
-			  arg))
-		  args)))
-
-;; ..and 'test' gives nicer output
 (define (test the-test)
   (format #t "(Running ~a " the-test)
   (let ((result (the-test)))
@@ -113,7 +96,7 @@
 (define (create-test-env)
   (list (cons 'random (seed->random-state (random 1000)))
 	(cons 'counter (make-counter))
-	(cons 'sink (make-test-sink))))
+        ))
 
 (define (env-random-amount env n)
   (/ (env-random env n) 1))
@@ -129,9 +112,6 @@
 
 (define (env-select-price-source env)
   'pricedb-nearest)
-
-(define (env-test-sink env)
-  (assoc-ref env 'sink))
 
 (define (env-any-date env) (gnc:get-today))
 
@@ -324,69 +304,5 @@
 					    (list "Other")
 					    (list "Expenses"
 						  (list (cons 'type ACCT-TYPE-EXPENSE))))))
-;;
-;; Test sinks
-;;
 
-(define (make-test-sink) (list 'sink 0 '()))
-
-(define (test-sink-count sink)
-  (second sink))
-
-(define (test-sink-count! sink value)
-  (set-car! (cdr sink) value))
-
-(define (test-sink-messages sink)
-  (third sink))
-
-(define (test-sink-messages! sink messages)
-  (set-car! (cdr (cdr sink)) messages))
-
-(define (test-sink-check sink message flag)
-  (test-sink-count! sink (+ (test-sink-count sink) 1))
-  (if flag #t
-      (test-sink-messages! sink (cons message (test-sink-messages sink)))))
-
-(define (test-sink-report sink)
-  (format #t "Completed ~a tests ~a\n"
-	  (test-sink-count sink)
-	  (if (null? (test-sink-messages sink)) "PASS" "FAIL"))
-  (if (null? (test-sink-messages sink)) #t
-      (begin (for-each (lambda (delayed-message)
-			 (delayed-format-render #t delayed-message))
-		       (test-sink-messages sink))
-	     #f)))
-
-(define (delayed-format . x) x)
-
-(define (delayed-format-render stream msg)
-  (apply format stream msg))
-
-;;
-;; options
-;;
-
-
-(define (create-option-set)
-  (make-hash-table) )
-
-(define (option-set-setter option-set)
-  (lambda (category name value)
-    (hash-set! option-set (list category name) value)))
-
-(define (option-set-getter option-set)
-  (lambda (category name)
-    (hash-ref option-set (list category name))))
-
-;;
-;;
-;;
-
-(define (report-show-options stream expense-options)
-  (gnc:options-for-each (lambda (option)
-			  (format stream "Option: ~a.~a Value ~a\n"
-				  (gnc:option-section option)
-				  (gnc:option-name option)
-				  (gnc:option-value option)))
-			expense-options))
 

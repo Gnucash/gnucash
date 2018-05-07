@@ -21,21 +21,17 @@
 
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash engine test test-extras))
+(use-modules (gnucash report report-system))
+(use-modules (sxml simple))
 
 (export pattern-streamer)
-
-(export create-option-set)
-(export option-set-setter)
-(export option-set-getter)
 
 (export tbl-column-count)
 (export tbl-row-count)
 (export tbl-ref)
 (export tbl-ref->number)
 
-;;
-;; Random report test related syntax and the like
-;;
+(export gnc:options->sxml)
 
 ;;
 ;; Table parsing
@@ -88,69 +84,37 @@
 (define (tbl-ref->number tbl row-index column-index)
   (string->number (car (tbl-ref tbl row-index column-index))))
 
-;;
-;; Test sinks
-;;
+(define (gnc:options->sxml options test-title uuid prefix)
+  ;; options object -> sxml tree
+  ;; test-title: str describing tests e.g. "test-trep"
+  ;; uuid - str to locate report uuid
+  ;; prefix - str describing each unit test e.g. "test disable filter"
+  ;;
+  ;; This function abstracts the report renderer. It also catches XML
+  ;; parsing errors, dumping the options changed.
+  ;;
+  ;; It also dumps the render into /tmp/XX-YY.html where XX is the
+  ;; test prefix and YY is the test title.
 
-(define (make-test-sink) (list 'sink 0 '()))
-
-(define (test-sink-count sink)
-  (second sink))
-
-(define (test-sink-count! sink value)
-  (set-car! (cdr sink) value))
-
-(define (test-sink-messages sink)
-  (third sink))
-
-(define (test-sink-messages! sink messages)
-  (set-car! (cdr (cdr sink)) messages))
-
-(define (test-sink-check sink message flag)
-  (test-sink-count! sink (+ (test-sink-count sink) 1))
-  (if flag #t
-      (test-sink-messages! sink (cons message (test-sink-messages sink)))))
-
-(define (test-sink-report sink)
-  (format #t "Completed ~a tests ~a\n"
-	  (test-sink-count sink)
-	  (if (null? (test-sink-messages sink)) "PASS" "FAIL"))
-  (if (null? (test-sink-messages sink)) #t
-      (begin (for-each (lambda (delayed-message)
-			 (delayed-format-render #t delayed-message))
-		       (test-sink-messages sink))
-	     #f)))
-
-(define (delayed-format . x) x)
-
-(define (delayed-format-render stream msg)
-  (apply format stream msg))
-
-;;
-;; options
-;;
-
-
-(define (create-option-set)
-  (make-hash-table) )
-
-(define (option-set-setter option-set)
-  (lambda (category name value)
-    (hash-set! option-set (list category name) value)))
-
-(define (option-set-getter option-set)
-  (lambda (category name)
-    (hash-ref option-set (list category name))))
-
-;;
-;;
-;;
-
-(define (report-show-options stream expense-options)
-  (gnc:options-for-each (lambda (option)
-			  (format stream "Option: ~a.~a Value ~a\n"
-				  (gnc:option-section option)
-				  (gnc:option-name option)
-				  (gnc:option-value option)))
-			expense-options))
-
+  (let* ((template (gnc:find-report-template uuid))
+         (constructor (record-constructor <report>))
+         (report (constructor uuid "bar" options #t #t #f #f ""))
+         (renderer (gnc:report-template-renderer template))
+         (document (renderer report))
+         (sanitize-char (lambda (c)
+                          (if (char-alphabetic? c) c #\-)))
+         (fileprefix (string-map sanitize-char prefix))
+         (filename (string-map sanitize-char test-title)))
+    (gnc:html-document-set-style-sheet! document (gnc:report-stylesheet report))
+    (if test-title
+        (gnc:html-document-set-title! document test-title))
+    (let* ((filename (format #f "/tmp/~a-~a.html" fileprefix filename))
+           (render (gnc:html-document-render document))
+           (outfile (open-file filename "w")))
+      (display render outfile)
+      (close-output-port outfile)
+      (catch 'parser-error
+        (lambda () (xml->sxml render))
+        (lambda (k . args)
+          (test-assert k #f)            ; XML parse error doesn't cause a crash but logs as a failure
+          (format #t "see render output at ~a\n~a" filename (gnc:html-render-options-changed options #t)))))))

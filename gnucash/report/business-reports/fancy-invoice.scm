@@ -51,20 +51,11 @@
 (use-modules (srfi srfi-1))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
+(use-modules (gnucash utilities))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 (use-modules (gnucash report standard-reports))
 (use-modules (gnucash report business-reports))
-
-(define-macro (addto! alist element)
-  `(set! ,alist (cons ,element ,alist)))
-
-(define (set-last-row-style! table tag . rest)
-  (let ((arg-list
-         (cons table
-               (cons (- (gnc:html-table-num-rows table) 1)
-                     (cons tag rest)))))
-    (apply gnc:html-table-set-row-style! arg-list)))
 
 (define (date-col columns-used)
   (vector-ref columns-used 0))
@@ -648,7 +639,7 @@
 	      (list
 	       (string-append (_ "REF") ":&nbsp;" reference))))))
      orders)
-    (set-last-row-style!
+    (gnc:html-table-set-last-row-style!
      table "td"
      'attribute (list "valign" "top"))
     table))
@@ -673,7 +664,7 @@
      table "table"
      'attribute (list "border" 0)
      'attribute (list "cellpadding" 0))
-    (set-last-row-style!
+    (gnc:html-table-set-last-row-style!
      table "td"
      'attribute (list "valign" "top"))
     table))
