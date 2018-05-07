@@ -46,11 +46,6 @@
 (define desc-header (N_ "Description"))
 (define amount-header (N_ "Amount"))
 
-(define-syntax addto!
-  (syntax-rules ()
-    ((addto! alist element)
-     (set! alist (cons element alist)))))
-
 (define (set-last-row-style! table tag . rest)
   (let ((arg-list 
          (cons table 

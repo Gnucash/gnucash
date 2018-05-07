@@ -29,11 +29,6 @@
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
-(define-syntax addto!
-  (syntax-rules ()
-    ((addto! alist element)
-     (set! alist (cons element alist)))))
-
 (define (set-last-row-style! table tag . rest)
   (let ((arg-list 
          (cons table 

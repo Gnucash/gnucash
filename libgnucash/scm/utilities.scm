@@ -42,6 +42,7 @@
 (export gnc:error)
 (export gnc:msg)
 (export gnc:debug)
+(export addto!)
 
 ;; Do this stuff very early -- but other than that, don't add any
 ;; executable code until the end of the file if you can help it.
@@ -71,6 +72,10 @@
 (define (gnc:debug . items)
   (gnc-scm-log-debug (strify items)))
 
+(define-syntax addto!
+  (syntax-rules ()
+    ((addto! alist element)
+     (set! alist (cons element alist)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  gnc:substring-replace

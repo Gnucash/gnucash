@@ -27,15 +27,11 @@
 (use-modules (srfi srfi-1))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
+(use-modules (gnucash utilities))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 (use-modules (gnucash report standard-reports))
 (use-modules (gnucash report business-reports))
-
-(define-syntax addto!
-  (syntax-rules ()
-    ((addto! alist element)
-     (set! alist (cons element alist)))))
 
 (define (set-last-row-style! table tag . rest)
   (let ((arg-list
