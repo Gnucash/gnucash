@@ -40,7 +40,7 @@
 (define constructor (record-constructor <report>))
 
 (define (run-net-asset-income-test asset-report-uuid income-report-uuid)
-  (logging-and  (two-txn-test asset-report-uuid)
+  (and          (two-txn-test asset-report-uuid)
 		(two-txn-test-2 asset-report-uuid)
 		(two-txn-test-income income-report-uuid)
 

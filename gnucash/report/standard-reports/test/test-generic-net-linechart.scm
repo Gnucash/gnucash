@@ -40,7 +40,7 @@
 (define constructor (record-constructor <report>))
 
 (define (run-net-asset-test asset-report-uuid)
-  (logging-and  (two-txn-test asset-report-uuid)
+  (and          (two-txn-test asset-report-uuid)
 		(two-txn-test-2 asset-report-uuid)
 
 		(null-test asset-report-uuid)

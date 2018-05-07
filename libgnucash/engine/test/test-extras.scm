@@ -27,7 +27,6 @@
 (use-modules (sw_app_utils))
 (use-modules (sw_engine))
 
-(export logging-and)
 (export test)
 
 (export with-account)
@@ -55,15 +54,6 @@
 ;; Random test related syntax and the like
 ;;
 
-;; logging-and is mostly for debugging tests
-(define-macro (logging-and . args)
-  (cons 'and (map (lambda (arg)
-		    (list 'begin
-			  (list 'format #t "Test: ~a\n" (list 'quote arg))
-			  arg))
-		  args)))
-
-;; ..and 'test' gives nicer output
 (define (test the-test)
   (format #t "(Running ~a " the-test)
   (let ((result (the-test)))
