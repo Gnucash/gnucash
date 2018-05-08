@@ -27,9 +27,7 @@
 ;; returns a list with n #f (empty cell) values 
 (define (gnc:html-make-empty-cell) #f)
 (define (gnc:html-make-empty-cells n)
-  (if (> n 0)
-      (cons #f (gnc:html-make-empty-cells (- n 1)))
-      (list)))
+  (make-list n #f))
 
 (define (gnc:register-guid type guid)
   (gnc-build-url URL-TYPE-REGISTER (string-append type guid) ""))
@@ -816,8 +814,8 @@
     (gnc:html-markup-p
      (gnc:html-markup-anchor
       (gnc-build-url URL-TYPE-OPTIONS
-       (string-append "report-id=" (format #f "~a" report-id))
-       "")
+                     (format #f "report-id=~a" report-id)
+                     "")
       (_ "Edit report options")))))
 
 (define* (gnc:html-render-options-changed options #:optional plaintext?)
