@@ -23,6 +23,7 @@
 (use-modules (gnucash engine test test-extras))
 (use-modules (gnucash report report-system))
 (use-modules (sxml simple))
+(use-modules (sxml xpath))
 
 (export pattern-streamer)
 
@@ -120,3 +121,19 @@
           (format #t "*** XML error. see render output at ~a\n~a"
                   filename (gnc:html-render-options-changed options #t))
           (throw k args))))))
+
+(export sxml->table-row-col)
+(define (sxml->table-row-col sxml tbl row col)
+  ;; sxml - sxml input tree
+  ;; tbl - table number (e.g. 2 = second table in tree)
+  ;; row - row number (negative counts from bottom) or #f (all rows)
+  ;;       or zero (retrieves <th> headers)
+  ;; col - col number (negative counts from right) or all cols
+  ;;
+  ;; output: list-of-string
+  (let* ((tbl-path `(table ,tbl))
+         (row-path (if (and row (not (zero? row))) `(tr ,row) 'tr))
+         (col-tag  (if (and row (zero? row)) 'th 'td))
+         (col-path (if col `(,col-tag ,col) col-tag))
+         (xpath `(// ,tbl-path // ,row-path // ,col-path // *text*)))
+    ((sxpath xpath) sxml)))

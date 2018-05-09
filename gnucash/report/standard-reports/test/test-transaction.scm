@@ -94,29 +94,7 @@
   (gnc:options->sxml trep-uuid options "test-trep" test-title))
 
 (define (get-row-col sxml row col)
-  ;; sxml, row & col (numbers or #f) -> list-of-string
-  ;;
-  ;; from an SXML table tree with tr/th/td elements, retrieve row/col
-  ;; if row  =  0 retrieve <tr><th> elements
-  ;; if row  = #f retrieve whole <td> col, excludes <th> cols
-  ;; if col  = #f retrieve whole <tr> row
-  ;; if both = #f retrieve all text elements
-  ;;
-  ;; NOTE: This will retrieve cells from the first table in the tree.
-  ;; If there are multiple tables, I recommend that the tree is first
-  ;; pruned to the desired table via e.g. '(// (table 2)) then sent as
-  ;; argument to this function.
-  (let ((xpath (cond
-                ((not (or row col))             '(// (table 1) // tr // *text*))
-                ((not row)                      `(// (table 1) // tr // (td ,col) // *text*))
-                ((and (equal? row 0) (not col)) '(// (table 1) // tr // th // *text*))
-                ((not col)                      `(// (table 1) // (tr ,row) // td // *text*))
-                ((equal? row 0)                 `(// (table 1) // tr // (th ,col) // *text*))
-                (else                           `(// (table 1) // (tr ,row) // (td ,col) // *text*)))))
-    ((sxpath xpath) sxml)))
-;;
-;; END CANDIDATES
-;;
+  (sxml->table-row-col sxml 1 row col))
 
 (define (set-option! options section name value)
   (let ((option (gnc:lookup-option options section name)))
