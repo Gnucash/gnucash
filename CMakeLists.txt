@@ -524,8 +524,13 @@ endif (Boost_FOUND)
 
 # Compiler flags
 
+include (CheckCCompilerFlag)
+check_c_compiler_flag(-Wstringop-truncation have_stringop_truncation)
+if (have_stringop_truncation)
+    set(HAVE_STRINGOP_TRUNCATION TRUE)
+endif()
+
 if (APPLE)
-  include (CheckCCompilerFlag)
   include (CheckCxxCompilerFlag)
   check_cxx_compiler_flag(-Wno-unused-local-typedef, have_wno_ult)
   if (have_wno_ult)

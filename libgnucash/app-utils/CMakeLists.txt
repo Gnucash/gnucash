@@ -116,6 +116,9 @@ if (WITH_PYTHON)
 
   target_link_libraries(sw_app_utils gncmod-app-utils ${app_utils_ALL_LIBRARIES} ${PYTHON_LIBRARIES})
   set_target_properties(sw_app_utils PROPERTIES PREFIX "_")
+  if (HAVE_STRINGOP_TRUNCATION)
+    target_compile_options(sw_app_utils PRIVATE -Wno-error=stringop-truncation)
+  endif()
 
   target_include_directories (sw_app_utils
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
