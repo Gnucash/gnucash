@@ -564,10 +564,10 @@
     (gnc:html-table-append-row!
      table
      (list
-      (string-expand (gnc:owner-get-name-and-address-dep owner) #\newline "<br>")))
+      (string-expand (gnc:owner-get-name-and-address-dep owner) #\newline "<br/>")))
     (gnc:html-table-append-row!
      table
-     (list "<br>"))
+     (list "<br/>"))
     (for-each
      (lambda (order)
        (let* ((reference (gncOrderGetReference order)))
@@ -780,7 +780,7 @@
                   (gnc:make-html-text
                     (string-append
                       (_ "Billing ID") ":&nbsp;"
-                      (string-expand billing-id #\newline "<br>"))))
+                      (string-expand billing-id #\newline "<br/>"))))
                 (make-break! document)))))
 
         (if (opt-val "Display" "Billing Terms")
@@ -792,7 +792,7 @@
                 (gnc:make-html-text
                   (string-append
                     (_ "Terms") ":&nbsp;"
-                    (string-expand terms #\newline "<br>")))))))
+                    (string-expand terms #\newline "<br/>")))))))
 
         (make-break! document)
 
@@ -814,14 +814,14 @@
               (gnc:html-document-add-object!
                document
                (gnc:make-html-text
-               (string-expand notes #\newline "<br>"))))
+               (string-expand notes #\newline "<br/>"))))
             (make-break! document)
             (make-break! document)))
 
         (gnc:html-document-add-object!
           document
           (gnc:make-html-text
-            (string-expand (opt-val "Text" "Extra Notes") #\newline "<br>")
+            (string-expand (opt-val "Text" "Extra Notes") #\newline "<br/>")
              ))
 
         ; close the framing table

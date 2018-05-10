@@ -622,7 +622,7 @@
     (gnc:html-table-cell-set-style!
      name-cell "td"
      'font-size "+2")
-    (gnc:html-table-append-row! table (list name-cell "" "")) ;;Bert: had a newline and a "<br>"
+    (gnc:html-table-append-row! table (list name-cell "" "")) ;;Bert: had a newline and a "<br/>"
     (gnc:html-table-append-row!
      table
      (list
@@ -927,7 +927,7 @@
 		(gnc:html-document-add-object!
 		 document
 		 (gnc:make-html-text
-		  (string-expand notes #\newline "<br>")))))
+		  (string-expand notes #\newline "<br/>")))))
 
 	  (make-break! document)
 

@@ -541,10 +541,10 @@
     (gnc:html-table-append-row!
      table
      (list
-      (string-expand (gnc:owner-get-name-and-address-dep owner) #\newline "<br>")))
+      (string-expand (gnc:owner-get-name-and-address-dep owner) #\newline "<br/>")))
     (gnc:html-table-append-row!
      table
-     (list "<br>"))
+     (list "<br/>"))
     (for-each
      (lambda (order)
        (let* ((reference (gncOrderGetReference order)))
@@ -595,7 +595,7 @@
     (gnc:html-table-append-row! table (list (if name name "")))
     (gnc:html-table-append-row! table (list (string-expand
 					     (if addy addy "")
-					     #\newline "<br>")))
+					     #\newline "<br/>")))
     (gnc:html-table-append-row! table (list
 				       (strftime
 					date-format
@@ -718,7 +718,7 @@
 		       (gnc:make-html-text
 			(string-append
 			 (_ "Reference") ":&nbsp;"
-			 (string-expand billing-id #\newline "<br>"))))
+			 (string-expand billing-id #\newline "<br/>"))))
 		      (make-break! document)))))
 
 	  (if (opt-val "Display" "Billing Terms")
@@ -731,7 +731,7 @@
 		       (gnc:make-html-text
 			(string-append
 			  (_ "Terms") ":&nbsp;"
-			  (string-expand terms #\newline "<br>"))))
+			  (string-expand terms #\newline "<br/>"))))
 		      (make-break! document))
 		)))
 
@@ -746,14 +746,14 @@
 		       (gnc:make-html-text
 			(string-append
 			 (_ "Job number") ":&nbsp;"
-			 (string-expand jobnumber #\newline "<br>"))))
+			 (string-expand jobnumber #\newline "<br/>"))))
        (make-break! document)
        (gnc:html-document-add-object!
 		       document
 		       (gnc:make-html-text
 			(string-append
 			 (_ "Job name") ":&nbsp;"
-			 (string-expand jobname #\newline "<br>"))))
+			 (string-expand jobname #\newline "<br/>"))))
        (make-break! document)
        (make-break! document)
     )))
@@ -768,7 +768,7 @@
 		(gnc:html-document-add-object!
 		 document
 		 (gnc:make-html-text
-		  (string-expand notes #\newline "<br>")))))
+		  (string-expand notes #\newline "<br/>")))))
 
 	  (make-break! document)
 
@@ -776,7 +776,7 @@
 	   document
 	   (gnc:make-html-text
 	    (gnc:html-markup-br)
-	    (string-expand (opt-val "Display" "Extra Notes") #\newline "<br>")
+	    (string-expand (opt-val "Display" "Extra Notes") #\newline "<br/>")
 	    (gnc:html-markup-br))))
 
 	; else
