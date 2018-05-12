@@ -39,9 +39,9 @@
 (setlocale LC_ALL "C")
 
 (define (run-test)
-  (logging-and (test-in-txn)
-               (test-out-txn)
-               (test-null-txn)))
+  (and (test-in-txn)
+       (test-out-txn)
+       (test-null-txn)))
 
 
 (define (set-option report page tag value)

@@ -524,8 +524,13 @@ endif (Boost_FOUND)
 
 # Compiler flags
 
+include (CheckCCompilerFlag)
+check_c_compiler_flag(-Wstringop-truncation have_stringop_truncation)
+if (have_stringop_truncation)
+    set(HAVE_STRINGOP_TRUNCATION TRUE)
+endif()
+
 if (APPLE)
-  include (CheckCCompilerFlag)
   include (CheckCxxCompilerFlag)
   check_cxx_compiler_flag(-Wno-unused-local-typedef, have_wno_ult)
   if (have_wno_ult)
@@ -551,8 +556,8 @@ set(CMAKE_CXX_FLAGS "-std=gnu++11 ${CMAKE_CXX_FLAGS}")  # FIXME: should be -std=
 
 if (UNIX)
   set( CMAKE_C_FLAGS "-Werror -Wdeclaration-after-statement -Wno-pointer-sign -Wall -Wmissing-prototypes -Wmissing-declarations -Wno-unused ${CMAKE_C_FLAGS}")
-  set( CMAKE_CXX_FLAGS "-Werror -Wall -Wmissing-declarations -Wno-unused ${CMAKE_CXX_FLAGS}")
-  set( CMAKE_C_FLAGS "-Wno-deprecated-declarations -std=gnu11 ${CMAKE_C_FLAGS}")
+  set( CMAKE_CXX_FLAGS "-Werror -Wall -Wmissing-declarations -Wno-unused -Wno-error=parentheses ${CMAKE_CXX_FLAGS}")
+  set( CMAKE_C_FLAGS "-Wno-deprecated-declarations -std=gnu11 -Wno-error=parentheses ${CMAKE_C_FLAGS}")
   set( CMAKE_C_FLAGS_RELEASE "-O3 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 ${CMAKE_C_FLAGS}")
 endif (UNIX)
 if (MINGW)
