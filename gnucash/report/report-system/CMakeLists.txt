@@ -52,7 +52,6 @@ set (report_system_SCHEME
 
 set (report_system_SCHEME_2a
     collectors.scm
-    list-extras.scm
 )
 
 set (report_system_SCHEME_2b

@@ -30,7 +30,6 @@
 (use-modules (gnucash app-utils))
 (use-modules (gnucash engine))
 (use-modules (gnucash report report-system collectors))
-(use-modules (gnucash report report-system list-extras))
 
 (export account-destination-alist)
 (export category-by-account-report)
@@ -150,13 +149,13 @@
     (splits-up-to (map car account-alist) min-date max-date)))
 
 (define (category-report-dates-intervals dates)
-  (let* ((min-date (car (list-min-max (map first dates) <)))
-         (max-date (cdr (list-min-max (map second dates) <))))
+  (let* ((min-date (apply min (map first dates)))
+         (max-date (apply max (map second dates))))
     (list min-date max-date dates)))
 
 (define (category-report-dates-accumulate dates)
   (let* ((min-date #f)
-         (max-date (cdr (list-min-max dates <)))
+         (max-date (apply max dates))
          (datepairs (reverse! (cdr (fold (lambda (next acc)
                                            (let ((prev (car acc))
                                                  (pairs-so-far (cdr acc)))

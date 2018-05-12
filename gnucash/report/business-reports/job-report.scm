@@ -46,16 +46,6 @@
 (define desc-header (N_ "Description"))
 (define amount-header (N_ "Amount"))
 
-(define-macro (addto! alist element)
-  `(set! ,alist (cons ,element ,alist)))
-
-(define (set-last-row-style! table tag . rest)
-  (let ((arg-list 
-         (cons table 
-               (cons (- (gnc:html-table-num-rows table) 1)
-                     (cons tag rest)))))
-    (apply gnc:html-table-set-row-style! arg-list)))
-
 (define (date-col columns-used)
   (vector-ref columns-used 0))
 (define (date-due-col columns-used)
@@ -482,7 +472,7 @@
     (gnc:html-table-append-row!
      table
      (list "<br/>"))
-    (set-last-row-style!
+    (gnc:html-table-set-last-row-style!
      table "td"
      'attribute (list "valign" "top"))
     table))
@@ -500,7 +490,7 @@
      table "table"
      'attribute (list "border" 0)
      'attribute (list "cellpadding" 0))
-    (set-last-row-style!
+    (gnc:html-table-set-last-row-style!
      table "td"
      'attribute (list "valign" "top"))
     table))

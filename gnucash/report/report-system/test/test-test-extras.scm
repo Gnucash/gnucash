@@ -24,10 +24,7 @@
 (use-modules (ice-9 streams))
 
 (define (run-test)
-  (and (logging-and #t)
-       (logging-and)
-       (not (logging-and #t #f))
-       (test-pattern-streamer)
+  (and (test-pattern-streamer)
        (test-create-account-structure)))
 
 (define (test-pattern-streamer)

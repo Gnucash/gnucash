@@ -237,7 +237,7 @@
                 notespage optname-extra-notes "a"
                 (_ "Notes added at end of invoice -- may contain HTML markup.") 
                 (_ "Thank you for your patronage!")))
-                ;(N_ "(Development version -- don't rely on the numbers on this report without double-checking them.<br>Change the 'Extra Notes' option to get rid of this message)")))
+                ;(N_ "(Development version -- don't rely on the numbers on this report without double-checking them.<br/>Change the 'Extra Notes' option to get rid of this message)")))
 
   (add-option (gnc:make-text-option	notespage optname-extra-css "b"
                 (N_ "Embedded CSS.")	"h1.coyname { text-align: left; }"))

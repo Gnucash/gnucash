@@ -22,12 +22,12 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (gnucash utilities))
+
 ;; returns a list with n #f (empty cell) values 
 (define (gnc:html-make-empty-cell) #f)
 (define (gnc:html-make-empty-cells n)
-  (if (> n 0)
-      (cons #f (gnc:html-make-empty-cells (- n 1)))
-      (list)))
+  (make-list n #f))
 
 (define (gnc:register-guid type guid)
   (gnc-build-url URL-TYPE-REGISTER (string-append type guid) ""))
@@ -814,9 +814,68 @@
     (gnc:html-markup-p
      (gnc:html-markup-anchor
       (gnc-build-url URL-TYPE-OPTIONS
-       (string-append "report-id=" (format #f "~a" report-id))
-       "")
+                     (format #f "report-id=~a" report-id)
+                     "")
       (_ "Edit report options")))))
+
+(define* (gnc:html-render-options-changed options #:optional plaintext?)
+  ;; options -> html-object or string, depending on plaintext?.  This
+  ;; summarises options that were changed by the user. Set plaintext?
+  ;; to #t for unit-tests only.
+  (define (disp d)
+    ;; option-value -> string.  The option is passed to various
+    ;; scm->string converters; ultimately a generic stringify
+    ;; function handles symbol/string/other types.
+    (define (try proc)
+      ;; Try proc with d as a parameter, catching 'wrong-type-arg
+      ;; exceptions to return #f to the or evaluator.
+      (catch 'wrong-type-arg
+        (lambda () (proc d))
+        (const #f)))
+    (or (and (boolean? d) (if d (_ "Enabled") (_ "Disabled")))
+        (and (null? d) "null")
+        (and (list? d) (string-join (map disp d) ", "))
+        (and (pair? d) (format #f "~a . ~a"
+                               (car d)
+                               (if (eq? (car d) 'absolute)
+                                   (qof-print-date (cdr d))
+                                   (disp (cdr d)))))
+        (try gnc-commodity-get-mnemonic)
+        (try xaccAccountGetName)
+        (try gnc-budget-get-name)
+        (format #f "~a" d)))
+  (let ((render-list '()))
+    (define (add-option-if-changed option)
+      (let* ((section (gnc:option-section option))
+             (name (gnc:option-name option))
+             (default-value (gnc:option-default-value option))
+             (value (gnc:option-value option))
+             (retval (cons (format #f "~a / ~a" section name)
+                           (disp value))))
+        (if (not (or (equal? default-value value)
+                     (char=? (string-ref section 0) #\_)))
+            (addto! render-list retval))))
+    (gnc:options-for-each add-option-if-changed options)
+    (if plaintext?
+        (string-append
+         (string-join
+          (map (lambda (item)
+                 (format #f "~a: ~a\n" (car item) (cdr item)))
+               render-list)
+          "")
+         "\n")
+        (apply
+         gnc:make-html-text
+         (apply
+          append
+          (map
+           (lambda (item)
+             (list
+              (gnc:html-markup-b (car item))
+              ": "
+              (cdr item)
+              (gnc:html-markup-br)))
+           render-list))))))
 
 (define (gnc:html-make-generic-warning
          report-title-string report-id
@@ -877,3 +936,5 @@
             ((#\>) "&gt;")
             (else c))))
        str))))
+
+

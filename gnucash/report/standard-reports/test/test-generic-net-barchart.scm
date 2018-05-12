@@ -40,15 +40,15 @@
 (define constructor (record-constructor <report>))
 
 (define (run-net-asset-income-test asset-report-uuid income-report-uuid)
-  (logging-and  (two-txn-test asset-report-uuid)
-		(two-txn-test-2 asset-report-uuid)
-		(two-txn-test-income income-report-uuid)
+  (and (two-txn-test asset-report-uuid)
+       (two-txn-test-2 asset-report-uuid)
+       (two-txn-test-income income-report-uuid)
 
-		(null-test asset-report-uuid)
-		(null-test income-report-uuid)
-		(single-txn-test asset-report-uuid)
-		(closing-test income-report-uuid)
-		#t))
+       (null-test asset-report-uuid)
+       (null-test income-report-uuid)
+       (single-txn-test asset-report-uuid)
+       (closing-test income-report-uuid)
+       #t))
 
 ;; Just prove that the report exists.
 (define (null-test uuid)

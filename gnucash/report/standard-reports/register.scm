@@ -29,16 +29,6 @@
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
-(define-macro (addto! alist element)
-  `(set! ,alist (cons ,element ,alist)))
-
-(define (set-last-row-style! table tag . rest)
-  (let ((arg-list 
-         (cons table 
-               (cons (- (gnc:html-table-num-rows table) 1)
-                     (cons tag rest)))))
-    (apply gnc:html-table-set-row-style! arg-list)))
-
 (define (date-col columns-used)
   (vector-ref columns-used 0))
 (define (num-col columns-used)
@@ -793,7 +783,7 @@
      (list
       (string-append (_ "Client") ":&nbsp;")
       (string-expand address #\newline "<br>")))
-    (set-last-row-style!
+    (gnc:html-table-set-last-row-style!
      table "td"
      'attribute (list "valign" "top"))
     table))
@@ -813,7 +803,7 @@
        (string-expand (qof-print-date (current-time))
                       #\space "&nbsp;"))
       (make-client-table address)))
-    (set-last-row-style!
+    (gnc:html-table-set-last-row-style!
      table "td"
      'attribute (list "valign" "top"))
     table))

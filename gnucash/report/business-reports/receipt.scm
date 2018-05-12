@@ -191,7 +191,7 @@
                 notespage optname-extra-notes "a"
                 (N_ "Notes added at end of invoice -- may contain HTML markup")
                 ""))
-                ;(N_ "(Development version -- don't rely on the numbers on this report without double-checking them.<br>Change the 'Extra Notes' option to get rid of this message)")))
+                ;(N_ "(Development version -- don't rely on the numbers on this report without double-checking them.<br/>Change the 'Extra Notes' option to get rid of this message)")))
 
   (gnc:options-set-default-section
     report-options generalpage)
