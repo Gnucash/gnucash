@@ -576,7 +576,7 @@ tags within description, notes or memo. ")
     pagename-filter optname-closing-transactions
     "l" (_ "By default most users should not include closing \
 transactions in a transaction report. Closing transactions are \
-transfers from INCOME and EXPENSE accounts to equity, and must usually \
+transfers from income and expense accounts to equity, and must usually \
 be excluded from periodic reporting.")
     'exclude-closing
     (keylist->vectorlist show-closing-list)))

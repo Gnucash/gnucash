@@ -461,7 +461,6 @@ gnucash/report/report-system/html-style-sheet.scm
 gnucash/report/report-system/html-table.scm
 gnucash/report/report-system/html-text.scm
 gnucash/report/report-system/html-utilities.scm
-gnucash/report/report-system/list-extras.scm
 gnucash/report/report-system/options-utilities.scm
 gnucash/report/report-system/report-collectors.scm
 gnucash/report/report-system/report.scm
