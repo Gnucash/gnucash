@@ -973,7 +973,7 @@
                                              (list (gnc:make-html-table-cell/markup
                                                     "text-cell-center"
                                                   (strftime "%Y-%b-%d" (gnc-localtime
-                                                            (car trans-date)))))
+                                                            trans-date))))
                                              (list (gnc:make-html-table-cell/markup
                                                     "number-cell-bot"
                                                     (xaccPrintAmount
