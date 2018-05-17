@@ -129,8 +129,7 @@ gnc_configure_date_format (void)
     /* Only a subset of the qof date formats is currently
      * supported for date entry.
      */
-    if ((df > QOF_DATE_FORMAT_LOCALE)
-            || (df > QOF_DATE_FORMAT_LOCALE))
+    if (df > QOF_DATE_FORMAT_LOCALE)
     {
         PERR("Incorrect date format");
         return;
