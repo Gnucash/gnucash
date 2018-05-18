@@ -269,7 +269,10 @@ developing over time"))
                            account-levels))
 
     (define the-acount-destination-alist
-      (account-destination-alist accounts account-types tree-depth))
+      (account-destination-alist accounts account-types
+                                 (if (equal? account-levels 'all)
+                                     (gnc:get-current-account-tree-depth)
+                                     account-levels)))
 
     ;;(gnc:debug accounts)
     (if (not (null? accounts))
