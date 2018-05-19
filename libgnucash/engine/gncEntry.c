@@ -1110,7 +1110,7 @@ static void gncEntryComputeValueInt (gnc_numeric qty, gnc_numeric price,
 
     /* Step 1: compute the aggregate price */
 
-    aggregate = gnc_numeric_mul (qty, price, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+    aggregate = gnc_numeric_mul (qty, price, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD | GNC_HOW_RND_ROUND);
 
     /* Step 2: compute the pre-tax aggregate */
 
@@ -1137,7 +1137,7 @@ static void gncEntryComputeValueInt (gnc_numeric qty, gnc_numeric price,
     }
     /* now we need to convert from 5% -> .05 */
     tpercent = gnc_numeric_div (tpercent, percent, GNC_DENOM_AUTO,
-                                GNC_HOW_DENOM_LCD);
+                                GNC_HOW_DENOM_EXACT | GNC_HOW_RND_NEVER);
 
     /* Next, actually compute the pre-tax aggregate value based on the
      * taxincluded flag.
@@ -1193,7 +1193,7 @@ static void gncEntryComputeValueInt (gnc_numeric qty, gnc_numeric price,
         if (discount_type == GNC_AMT_TYPE_PERCENT)
         {
             discount = gnc_numeric_div (discount, percent, GNC_DENOM_AUTO,
-                                        GNC_HOW_DENOM_LCD);
+                                        GNC_HOW_DENOM_EXACT | GNC_HOW_RND_NEVER);
             discount = gnc_numeric_mul (pretax, discount, GNC_DENOM_AUTO,
                                         GNC_HOW_DENOM_LCD);
         }
@@ -1217,7 +1217,7 @@ static void gncEntryComputeValueInt (gnc_numeric qty, gnc_numeric price,
             after_tax = gnc_numeric_add (after_tax, tvalue, GNC_DENOM_AUTO,
                                          GNC_HOW_DENOM_LCD);
             discount = gnc_numeric_div (discount, percent, GNC_DENOM_AUTO,
-                                        GNC_HOW_DENOM_LCD);
+                                        GNC_HOW_DENOM_EXACT | GNC_HOW_RND_NEVER);
             discount = gnc_numeric_mul (after_tax, discount, GNC_DENOM_AUTO,
                                         GNC_HOW_DENOM_LCD);
         }
@@ -1271,7 +1271,7 @@ static void gncEntryComputeValueInt (gnc_numeric qty, gnc_numeric price,
                 break;
             case GNC_AMT_TYPE_PERCENT:
                 amount = gnc_numeric_div (amount, percent, GNC_DENOM_AUTO,
-                                          GNC_HOW_DENOM_LCD);
+                                          GNC_HOW_DENOM_EXACT | GNC_HOW_RND_NEVER);
                 tax = gnc_numeric_mul (pretax, amount, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
                 if (SCU) tax = gnc_numeric_convert(tax, SCU, GNC_HOW_RND_ROUND_HALF_UP);
                 taxes = gncAccountValueAdd (taxes, acc, tax);
