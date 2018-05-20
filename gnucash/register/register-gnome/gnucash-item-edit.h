@@ -154,6 +154,7 @@ void gnc_item_edit_hide_popup (GncItemEdit *item_edit);
 void gnc_item_edit_cut_clipboard (GncItemEdit *item_edit);
 void gnc_item_edit_copy_clipboard (GncItemEdit *item_edit);
 void gnc_item_edit_paste_clipboard (GncItemEdit *item_edit);
+void gnc_item_edit_middle_paste_clipboard (GncItemEdit *item_edit);
 
 gboolean gnc_item_edit_get_has_selection (GncItemEdit *item_edit);
 void gnc_item_edit_focus_in (GncItemEdit *item_edit);

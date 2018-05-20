@@ -393,9 +393,9 @@ gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
         gnucash_sheet_im_context_reset(sheet);
         gnucash_sheet_start_editing_at_cursor (sheet);
 
-        // Came here by keyboard, select text, otherwise text cursor to
-        // mouse position
-        if (sheet->button != 1)
+        // Came here by keyboard, select text, otherwise
+        // text cursor to mouse position
+        if (sheet->button == 0)
         {
             gtk_editable_set_position (editable, cursor_pos);
             gtk_editable_select_region (editable, start_sel, end_sel);
@@ -1331,13 +1331,10 @@ gnucash_sheet_button_release_event (GtkWidget *widget, GdkEventButton *event)
 
     sheet = GNUCASH_SHEET (widget);
 
-    if (sheet->button != event->button)
+    if ((event->button != 1) && (event->button != 2))
         return FALSE;
 
     sheet->button = 0;
-
-    if (event->button != 1)
-        return FALSE;
 
     gtk_grab_remove (widget);
     sheet->grabbed = FALSE;
@@ -1436,8 +1433,9 @@ gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
     Table *table;
     gboolean abort_move;
-    gboolean button_1;
-    gboolean do_popup;
+    gboolean button_1 = FALSE;
+    gboolean button_2 = FALSE;
+    gboolean button_3 = FALSE;
 
     g_return_val_if_fail(widget != NULL, TRUE);
     g_return_val_if_fail(GNUCASH_IS_SHEET(widget), TRUE);
@@ -1446,18 +1444,11 @@ gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event)
     sheet = GNUCASH_SHEET (widget);
     table = sheet->table;
 
-    if (sheet->button && (sheet->button != event->button))
+    if (event->type != GDK_BUTTON_PRESS)
         return FALSE;
-
-    sheet->button = event->button;
-    if (sheet->button == 3)
-        sheet->button = 0;
 
     if (!gtk_widget_has_focus(widget))
         gtk_widget_grab_focus(widget);
-
-    button_1 = FALSE;
-    do_popup = FALSE;
 
     switch (event->button)
     {
@@ -1465,16 +1456,16 @@ gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event)
         button_1 = TRUE;
         break;
     case 2:
-        if (event->type != GDK_BUTTON_PRESS)
-            return FALSE;
-        gnc_item_edit_paste_clipboard (GNC_ITEM_EDIT(sheet->item_editor));
-        return TRUE;
+        button_2 = TRUE;
+        break;
     case 3:
-        do_popup = (sheet->popup != NULL);
+        button_3 = FALSE;
         break;
     default:
         return FALSE;
     }
+
+    sheet->button = event->button;
 
     gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &cur_virt_loc);
 
@@ -1492,26 +1483,10 @@ gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event)
     if (vcell == NULL)
         return TRUE;
 
-    if (event->type != GDK_BUTTON_PRESS)
-        return FALSE;
-
-    if (button_1)
+    if (button_1 || button_2)
     {
         gtk_grab_add(widget);
         sheet->grabbed = TRUE;
-    }
-
-    if (virt_loc_equal (new_virt_loc, cur_virt_loc) &&
-        sheet->editing && do_popup)
-    {
-#if GTK_CHECK_VERSION(3,22,0)
-        gtk_menu_popup_at_pointer (GTK_MENU(sheet->popup), (GdkEvent *) event);
-#else
-        gtk_menu_popup(GTK_MENU(sheet->popup), NULL, NULL, NULL,
-                       sheet->popup_data, event->button, event->time);
-#endif
-
-        return TRUE;
     }
 
     /* and finally...process this as a POINTER_TRAVERSE */
@@ -1520,7 +1495,7 @@ gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event)
                                             GNC_TABLE_TRAVERSE_POINTER,
                                             &new_virt_loc);
 
-    if (button_1)
+    if (button_1 || button_2)
         gnucash_sheet_check_grab (sheet);
 
     if (abort_move)
@@ -1529,17 +1504,22 @@ gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event)
 //FIXME does something need to be done if changed_cells is true or false ?
     changed_cells = gnucash_sheet_cursor_move (sheet, new_virt_loc);
 
-    if (button_1)
+    if (sheet->button == 3) // context menu, right mouse
+        sheet->button = 0;
+
+    if (button_1 || button_2)
         gnucash_sheet_check_grab (sheet);
 
-    if (do_popup)
-#if GTK_CHECK_VERSION(3,22,0)
-        gtk_menu_popup_at_pointer (GTK_MENU(sheet->popup), (GdkEvent *) event);
-#else
-        gtk_menu_popup(GTK_MENU(sheet->popup), NULL, NULL, NULL,
-                       sheet->popup_data, event->button, event->time);
-#endif
-    return button_1 || do_popup;
+    if (button_2)
+    {
+        GncItemEdit *item_edit = GNC_ITEM_EDIT (sheet->item_editor);
+        gint pos = gnucash_sheet_get_text_cursor_position (sheet, new_virt_loc);
+
+        gtk_editable_set_position (GTK_EDITABLE(item_edit->editor), pos);
+        gnc_item_edit_middle_paste_clipboard (item_edit);
+    }
+
+    return button_1 || button_2 || button_3;
 }
 
 void
