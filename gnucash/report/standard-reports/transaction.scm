@@ -1309,8 +1309,7 @@ be excluded from periodic reporting.")
             (gnc:html-table-append-row/markup! table subheading-style (reverse row-contents)))))
 
     (define (add-subtotal-row subtotal-string subtotal-collectors subtotal-style level row col)
-      (let* ((row-contents '())
-             (left-indent (case level
+      (let* ((left-indent (case level
                             ((total) 0)
                             ((primary) primary-indent)
                             ((secondary) (+ primary-indent secondary-indent))))
@@ -1321,26 +1320,26 @@ be excluded from periodic reporting.")
                                                      gnc-commodity-equal)))
 
         (define (retrieve-commodity list-of-monetary commodity)
-          (if (null? list-of-monetary)
-              #f
-              (if (gnc-commodity-equal (gnc:gnc-monetary-commodity (car list-of-monetary)) commodity)
-                  (car list-of-monetary)
-                  (retrieve-commodity (cdr list-of-monetary) commodity))))
+          (find (lambda (mon) (gnc-commodity-equal commodity (gnc:gnc-monetary-commodity mon)))
+                list-of-monetary))
 
-        (define (add-first-column string)
+        (define (first-column string)
           (if export?
-              (begin
-                (addto! row-contents (gnc:make-html-table-cell/markup "total-label-cell" string))
-                (for-each (lambda (cell) (addto! row-contents cell))
-                          (gnc:html-make-empty-cells (+ right-indent width-left-columns -1))))
-              (addto! row-contents (gnc:make-html-table-cell/size/markup 1 (+ right-indent width-left-columns) "total-label-cell" string))))
+              (cons
+               (gnc:make-html-table-cell/markup "total-label-cell" string)
+               (gnc:html-make-empty-cells (+ right-indent width-left-columns -1)))
+              (list
+               (gnc:make-html-table-cell/size/markup 1 (+ right-indent width-left-columns) "total-label-cell" string))))
 
-        (define (add-columns commodity)
+        (define (data-columns commodity)
           (let loop ((merging? #f)
                      (last-column #f)
                      (columns columns)
-                     (merge-list merge-list))
-            (if (not (null? columns))
+                     (merge-list merge-list)
+                     (result '()))
+            (if (null? columns)
+                ;; we've processed all columns. return the (reversed) list of html-table-cells.
+                (reverse result)
                 (let* ((mon (retrieve-commodity (car columns) commodity))
                        (this-column (and mon (gnc:gnc-monetary-amount mon))))
                   (if (car merge-list)
@@ -1348,7 +1347,8 @@ be excluded from periodic reporting.")
                       (loop #t
                             this-column
                             (cdr columns)
-                            (cdr merge-list))
+                            (cdr merge-list)
+                            result)
                       (begin
                         (if merging?
                             ;; We're completing merge. Display debit-credit in correct column.
@@ -1360,38 +1360,37 @@ be excluded from periodic reporting.")
                                                               commodity (abs sum)))))
                                    (debit-col (and sum (positive? sum) sum-table-cell))
                                    (credit-col (and sum (not (positive? sum)) sum-table-cell)))
-                              (addto! row-contents (or debit-col ""))
-                              (addto! row-contents (or credit-col "")))
-                            ;; Default; not merging nor completed merge. Display monetary amount
-                            (addto! row-contents (gnc:make-html-table-cell/markup "total-number-cell" mon)))
-                        (loop #f
-                              #f
-                              (cdr columns)
-                              (cdr merge-list))))))))
+                              (loop #f
+                                    #f
+                                    (cdr columns)
+                                    (cdr merge-list)
+                                    (cons* (or credit-col "")
+                                           (or debit-col "")
+                                           result)))
+                            ;; Default; not merging nor completed merge. Just add amount to result.
+                            (loop #f
+                                  #f
+                                  (cdr columns)
+                                  (cdr merge-list)
+                                  (cons (gnc:make-html-table-cell/markup "total-number-cell" mon)
+                                        result)))))))))
 
         ;; we only wish to add the first column into the grid.
         (if (pair? columns)
             (set! grid (grid-add grid row col (car columns))))
 
-        ;;first row
-        (for-each (lambda (cell) (addto! row-contents cell))
-                  (gnc:html-make-empty-cells left-indent))
-        (add-first-column subtotal-string)
-        (add-columns (if (pair? list-of-commodities)
-                         (car list-of-commodities)
-                         #f)) ;to account for empty-row subtotals
-        (gnc:html-table-append-row/markup! table subtotal-style (reverse row-contents))
-
-        ;;subsequent rows
-        (if (pair? list-of-commodities)
-            (for-each (lambda (commodity)
-                        (set! row-contents '())
-                        (for-each (lambda (cell) (addto! row-contents cell))
-                                  (gnc:html-make-empty-cells left-indent))
-                        (add-first-column "")
-                        (add-columns commodity)
-                        (gnc:html-table-append-row/markup! table subtotal-style (reverse row-contents)))
-                      (cdr list-of-commodities)))))
+        ;; each commodity subtotal gets a separate line in the html-table
+        ;; each line comprises: indenting, first-column, data-columns
+        (let loop ((first-column-string subtotal-string)
+                   (list-of-commodities list-of-commodities))
+          (unless (null? list-of-commodities)
+            (gnc:html-table-append-row/markup!
+             table subtotal-style
+             (append
+              (gnc:html-make-empty-cells left-indent)
+              (first-column first-column-string)
+              (data-columns (car list-of-commodities))))
+            (loop "" (cdr list-of-commodities))))))
 
     (define (total-string str) (string-append (_ "Total For ") str))
 
