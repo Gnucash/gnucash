@@ -1375,9 +1375,11 @@ be excluded from periodic reporting.")
                                   (cons (gnc:make-html-table-cell/markup "total-number-cell" mon)
                                         result)))))))))
 
-        ;; we only wish to add the first column into the grid.
-        (if (pair? columns)
-            (set! grid (grid-add grid row col (car columns))))
+        ;; take the first column of each commodity, add onto the subtotal grid
+        (set! grid (grid-add grid row col
+                             (map (lambda (commodity)
+                                    (retrieve-commodity (car columns) commodity))
+                                  list-of-commodities)))
 
         ;; each commodity subtotal gets a separate line in the html-table
         ;; each line comprises: indenting, first-column, data-columns
@@ -1689,17 +1691,17 @@ be excluded from periodic reporting.")
 ;; grid data structure
 (define (make-grid)
   '())
+(define (cell-match? cell row col)
+  (and (or (not row) (equal? row (vector-ref cell 0)))
+       (or (not col) (equal? col (vector-ref cell 1)))))
 (define (grid-get grid row col)    ; grid filter - get all row/col - if #f then retrieve whole row/col
   (filter
-   (lambda (cell)
-     (and (or (not row) (equal? row (vector-ref cell 0)))
-          (or (not col) (equal? col (vector-ref cell 1)))))
+   (lambda (cell) (cell-match? cell row col))
    grid))
 (define (grid-del grid row col)    ; grid filter - del all row/col - if #f then delete whole row/col - CAREFUL!
   (filter
    (lambda (cell)
-     (not (and (or (not row) (equal? row (vector-ref cell 0)))
-               (or (not col) (equal? col (vector-ref cell 1))))))
+     (not (cell-match? cell row col)))
    grid))
 (define (grid-rows grid)
   (delete-duplicates (map (lambda (cell) (vector-ref cell 0)) grid)))
@@ -1710,17 +1712,27 @@ be excluded from periodic reporting.")
   (set! grid (cons (vector row col data) grid)) ;add again. this is fine because the grid should
   grid)                                         ;never have duplicate data in the trep.
 (define (grid->html-table grid list-of-rows list-of-cols)
-  (define (make-table-cell row col)
+  (define (row->num-of-commodities row)
+    ;; for a row, find the maximum number of commodities being stored
+    (apply max
+           (map (lambda (col)
+                  (let ((cell (grid-get grid row col)))
+                    (if (null? cell) 0
+                        (length (vector-ref (car cell) 2)))))
+                (cons 'col-total list-of-cols))))
+  (define (make-table-cell row col commodity-idx)
     (let ((cell (grid-get grid row col)))
-      (if (pair? cell)
-          (gnc:make-html-table-cell/markup "number-cell" (car (vector-ref (car cell) 2)))
-          "")))
-  (define (make-row row)
+      (if (null? cell) ""
+          (gnc:make-html-table-cell/markup "number-cell" (list-ref-safe (vector-ref (car cell) 2) commodity-idx)))))
+  (define (make-row row commodity-idx)
     (append
-     (list (if (eq? row 'row-total) (_ "Grand Total") (cdr row)))
-     (map (lambda (col) (make-table-cell row col))
+     (list (cond
+            ((positive? commodity-idx) "")
+            ((eq? row 'row-total) (_ "Grand Total"))
+            (else (cdr row))))
+     (map (lambda (col) (make-table-cell row col commodity-idx))
           list-of-cols)
-     (list (make-table-cell row 'col-total))))
+     (list (make-table-cell row 'col-total commodity-idx))))
   (let ((table (gnc:make-html-table)))
     (gnc:html-table-set-caption! table optname-grid)
     (gnc:html-table-set-col-headers! table (append (list "") (map cdr list-of-cols) (list (_ "Total"))))
@@ -1728,10 +1740,12 @@ be excluded from periodic reporting.")
                                'attribute (list "class" "column-heading-right"))
     (for-each
      (lambda (row)
-       (gnc:html-table-append-row! table (make-row row)))
-     list-of-rows)
-    (if (memq 'row-total (grid-rows grid))
-        (gnc:html-table-append-row! table (make-row 'row-total)))
+       (for-each (lambda (commodity-idx)
+                   (gnc:html-table-append-row! table (make-row row commodity-idx)))
+                 (iota (row->num-of-commodities row))))
+     (if (memq 'row-total (grid-rows grid))
+         (append list-of-rows '(row-total))
+         list-of-rows))
     table))
 
 ;; ;;;;;;;;;;;;;;;;;;;;

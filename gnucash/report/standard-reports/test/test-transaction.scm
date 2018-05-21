@@ -115,6 +115,7 @@
               (list "USD Bank")
               (list "Wallet"))
         (list "Income" (list (cons 'type ACCT-TYPE-INCOME)))
+        (list "Income-GBP" (list (cons 'type ACCT-TYPE-INCOME)))
         (list "Expenses" (list (cons 'type ACCT-TYPE-EXPENSE)))
         (list "Liabilities" (list (cons 'type ACCT-TYPE-LIABILITY)))
         (list "Equity" (list (cons 'type ACCT-TYPE-EQUITY)))
@@ -134,6 +135,7 @@
          (usd-bank (cdr (assoc "USD Bank" account-alist)))
          (wallet (cdr (assoc "Wallet" account-alist)))
          (income (cdr (assoc "Income" account-alist)))
+         (gbp-income (cdr (assoc "Income-GBP" account-alist)))
          (expense (cdr (assoc "Expenses" account-alist)))
          (liability (cdr (assoc "Liabilities" account-alist)))
          (equity (cdr (assoc "Equity" account-alist)))
@@ -168,12 +170,21 @@
        (xaccAccountSetCommodity (cdr pair) (gnc-default-report-currency)))
      account-alist)
 
-    ;; Here we set foreign banks' currencies
+    ;; Here we set foreign currencies
+
+    (gnc-commodity-set-user-symbol foreign2 "£")
+
     (with-account
      gbp-bank
      (lambda ()
        (xaccAccountSetCode gbp-bank "01-GBP")
        (xaccAccountSetCommodity gbp-bank foreign2)))
+
+    (with-account
+     gbp-income
+     (lambda ()
+       (xaccAccountSetCode gbp-income "01-GBP")
+       (xaccAccountSetCommodity gbp-income foreign2)))
 
     (with-account
      usd-bank
@@ -239,7 +250,9 @@
     ;; run in modern times, otherwise these transactions will be mixed
     ;; up with the old transactions above. The year end net bank balance
     ;; should be (* 12 (+ 103 109 -22)) = $2280.
+    ;; there will also be a £51 income monthly, tested at end of file
     (for-each (lambda (m)
+                (env-transfer env 08 (1+ m) YEAR gbp-income gbp-bank 51 #:description "£51 income")
                 (env-transfer env 03 (1+ m) YEAR income bank  103 #:description "$103 income")
                 (env-transfer env 15 (1+ m) YEAR bank expense  22 #:description "$22 expense")
                 (env-transfer env 09 (1+ m) YEAR income bank  109 #:description "$109 income"))
@@ -728,13 +741,13 @@
       (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'quarterly)
       (set-option! options "Sorting" "Show Informal Debit/Credit Headers" #t)
       (set-option! options "Sorting" "Show Account Description" #t)
-      (let* ((sxml (options->sxml options "sorting=date")))
+      (let* ((sxml (options->sxml options "sorting=date, friendly headers")))
         (test-equal "expense acc friendly headers"
           '("\n" "Expenses" "\n" "Expense" "\n" "Rebate")
-          (get-row-col sxml 47 #f))
+          (get-row-col sxml 69 #f))
         (test-equal "income acc friendly headers"
           '("\n" "Income" "\n" "Charge" "\n" "Income")
-          (get-row-col sxml 69 #f)))
+          (get-row-col sxml 91 #f)))
 
       (set-option! options "Accounts" "Accounts" (list bank))
       (set-option! options "Display" "Totals" #f)
@@ -781,7 +794,7 @@
     (test-begin "subtotal table")
 
     (let ((options (default-testing-options)))
-      (set-option! options "Accounts" "Accounts" (list bank income expense))
+      (set-option! options "Accounts" "Accounts" (list bank gbp-bank gbp-income income expense))
       (set-option! options "General" "Start Date" (cons 'relative 'start-cal-year))
       (set-option! options "General" "End Date" (cons 'relative 'end-cal-year))
       (set-option! options "Display" "Subtotal Table" #t)
@@ -794,18 +807,29 @@
           (list "Bank" "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$190.00"
                 "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$2,280.00")
           (get-row-col sxml 1 #f))
+        (test-equal "summary gbp bank-row is correct"
+          (list "GBP Bank" "£51.00" "£51.00" "£51.00" "£51.00" "£51.00" "£51.00"
+                "£51.00" "£51.00" "£51.00" "£51.00" "£51.00" "£51.00" "£612.00")
+          (get-row-col sxml 2 #f))
         (test-equal "summary expense-row is correct"
           (list "Expenses" "$22.00" "$22.00" "$22.00" "$22.00" "$22.00" "$22.00"
                 "$22.00" "$22.00" "$22.00" "$22.00" "$22.00" "$22.00" "$264.00")
-          (get-row-col sxml 2 #f))
+          (get-row-col sxml 3 #f))
         (test-equal "summary income-row is correct"
           (list "Income" "-$212.00" "-$212.00" "-$212.00" "-$212.00" "-$212.00"
                 "-$212.00" "-$212.00" "-$212.00" "-$212.00" "-$212.00" "-$212.00"
                 "-$212.00" "-$2,544.00")
-          (get-row-col sxml 3 #f))
+          (get-row-col sxml 4 #f))
+        (test-equal "summary gbp income-row is correct"
+          (list "Income-GBP" "-£51.00" "-£51.00" "-£51.00" "-£51.00" "-£51.00" "-£51.00"
+                "-£51.00" "-£51.00" "-£51.00" "-£51.00" "-£51.00" "-£51.00" "-£612.00")
+          (get-row-col sxml 5 #f))
+        (test-equal "summary gbp total-row is correct"
+          (list "Grand Total" "£0.00")
+          (get-row-col sxml 6 #f))
         (test-equal "summary total-row is correct"
-          (list "Grand Total" "$0.00")
-          (get-row-col sxml 4 #f)))
+          (list "$0.00")
+          (get-row-col sxml 7 #f)))
 
       (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 01 01 1969)))
       (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 31 12 1970)))
