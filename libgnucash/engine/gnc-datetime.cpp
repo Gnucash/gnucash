@@ -289,6 +289,30 @@ tz_from_string(std::string str)
     return TZ_Ptr(new PTZ(tzstr));
 }
 
+/* The 'O', 'E', and '-' format modifiers are not supported by
+ * boost's output facets. Remove them.
+ */
+static char *
+normalize_format (const char *format)
+{
+    int counter = 0, n_counter = 0;
+    char *normalized;
+
+    normalized = strdup(format);
+    while (format[counter] != '\0')
+    {
+        normalized[n_counter] = format[counter];
+        if ((format[counter] == '%') && \
+            (format[counter+1] == '-' || format[counter+1] == 'E' || format[counter+1] == 'O'))
+            counter++;  // skip format modifier
+
+        counter++;
+        n_counter++;
+    }
+    normalized[n_counter] = '\0';
+    return normalized;
+}
+
 GncDateTimeImpl::GncDateTimeImpl(std::string str) :
     m_time(unix_epoch, utc_zone)
 {
@@ -371,9 +395,11 @@ GncDateTimeImpl::format(const char* format) const
 {
     using Facet = boost::local_time::local_time_facet;
     std::stringstream ss;
+    char *normalized_format = normalize_format(format);
     //The stream destructor frees the facet, so it must be heap-allocated.
-    auto output_facet(new Facet(format));
+    auto output_facet(new Facet(normalized_format));
     ss.imbue(std::locale(std::locale(), output_facet));
+    free(normalized_format);
     ss << m_time;
     return ss.str();
 }
@@ -383,9 +409,11 @@ GncDateTimeImpl::format_zulu(const char* format) const
 {
     using Facet = boost::posix_time::time_facet;
     std::stringstream ss;
+    char *normalized_format = normalize_format(format);
     //The stream destructor frees the facet, so it must be heap-allocated.
-    auto output_facet(new Facet(format));
+    auto output_facet(new Facet(normalized_format));
     ss.imbue(std::locale(std::locale(), output_facet));
+    free(normalized_format);
     ss << m_time.utc_time();
     return ss.str();
 }
@@ -442,9 +470,11 @@ GncDateImpl::format(const char* format) const
 {
     using Facet = boost::gregorian::date_facet;
     std::stringstream ss;
+    char *normalized_format = normalize_format(format);
     //The stream destructor frees the facet, so it must be heap-allocated.
-    auto output_facet(new Facet(format));
+    auto output_facet(new Facet(normalized_format));
     ss.imbue(std::locale(std::locale(), output_facet));
+    free(normalized_format);
     ss << m_greg;
     return ss.str();
 }

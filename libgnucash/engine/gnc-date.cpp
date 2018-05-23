@@ -728,6 +728,32 @@ floordiv(int a, int b)
     }
 }
 
+/* Normalize the localized date format to avoid date scanning issues.
+ *
+ *   The 'O' and 'E' format modifiers are for localized input/output
+ *   characters. Remove them as we are always using Arabic numbers.
+ */
+static char *
+normalize_format (const char *format)
+{
+    gint counter = 0, n_counter = 0;
+    gchar *normalized;
+
+    normalized = g_strdup(format);
+    while (format[counter] != '\0')
+    {
+        normalized[n_counter] = format[counter];
+        if ((format[counter] == '%') && \
+            (format[counter+1] == 'E' || format[counter+1] == 'O'))
+            counter++;  // skip format modifier
+
+        counter++;
+        n_counter++;
+    }
+    normalized[n_counter] = '\0';
+    return normalized;
+}
+
 /* Convert a string into  day, month and year integers
 
     Convert a string into  day / month / year integers according to
@@ -820,30 +846,12 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
         if (buff[0] != '\0')
         {
             struct tm thetime;
-            gchar *format = g_strdup (GNC_D_FMT);
-            gchar *stripped_format = g_strdup (GNC_D_FMT);
-            gint counter = 0, stripped_counter = 0;
-
-            /* strptime can't handle the - format modifier
-             * let's strip it out of the format before using it
-             */
-            while (format[counter] != '\0')
-            {
-                stripped_format[stripped_counter] = format[counter];
-                if ((format[counter] == '%') && (format[counter+1] == '-'))
-                    counter++;  // skip - format modifier
-
-                counter++;
-                stripped_counter++;
-            }
-            stripped_format[stripped_counter] = '\0';
-            g_free (format);
-
+            gchar *normalized_format = normalize_format(GNC_D_FMT);
 
             /* Parse time string. */
             memset(&thetime, -1, sizeof(struct tm));
-            strptime (buff, stripped_format, &thetime);
-            g_free (stripped_format);
+            strptime (buff, normalized_format, &thetime);
+            g_free (normalized_format);
 
             if (third_field)
             {
@@ -1037,10 +1045,13 @@ char dateSeparator (void)
             struct tm tm;
             time64 secs;
             gchar *s;
+            gchar *normalized_fmt;
 
             secs = gnc_time (NULL);
             gnc_localtime_r(&secs, &tm);
-            qof_strftime(string, sizeof(string), GNC_D_FMT, &tm);
+            normalized_fmt = normalize_format(qof_date_format_get_string(dateFormat));
+            qof_strftime(string, sizeof(string), normalized_fmt, &tm);
+            g_free(normalized_fmt);
 
             for (s = string; *s != '\0'; s++)
                 if (!isdigit(*s))
