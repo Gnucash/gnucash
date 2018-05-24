@@ -1712,6 +1712,14 @@ be excluded from periodic reporting.")
   (set! grid (cons (vector row col data) grid)) ;add again. this is fine because the grid should
   grid)                                         ;never have duplicate data in the trep.
 (define (grid->html-table grid list-of-rows list-of-cols)
+  (define row-average-enabled? (> (length list-of-cols) 1))
+  (define (monetary-div monetary divisor)
+    (and monetary
+         (let* ((amount (gnc:gnc-monetary-amount monetary))
+                (currency (gnc:gnc-monetary-commodity monetary))
+                (scu (gnc-commodity-get-fraction currency)))
+           (gnc:make-gnc-monetary
+            currency (gnc-numeric-convert (/ amount divisor) scu GNC-HOW-RND-ROUND)))))
   (define (row->num-of-commodities row)
     ;; for a row, find the maximum number of commodities being stored
     (apply max
@@ -1720,22 +1728,27 @@ be excluded from periodic reporting.")
                     (if (null? cell) 0
                         (length (vector-ref (car cell) 2)))))
                 (cons 'col-total list-of-cols))))
-  (define (make-table-cell row col commodity-idx)
+  (define (make-table-cell row col commodity-idx divisor)
     (let ((cell (grid-get grid row col)))
       (if (null? cell) ""
-          (gnc:make-html-table-cell/markup "number-cell" (list-ref-safe (vector-ref (car cell) 2) commodity-idx)))))
+          (gnc:make-html-table-cell/markup "number-cell"
+                                           (monetary-div (list-ref-safe (vector-ref (car cell) 2) commodity-idx) divisor)))))
   (define (make-row row commodity-idx)
     (append
      (list (cond
             ((positive? commodity-idx) "")
             ((eq? row 'row-total) (_ "Grand Total"))
             (else (cdr row))))
-     (map (lambda (col) (make-table-cell row col commodity-idx))
+     (map (lambda (col) (make-table-cell row col commodity-idx 1))
           list-of-cols)
-     (list (make-table-cell row 'col-total commodity-idx))))
+     (list (make-table-cell row 'col-total commodity-idx 1))
+     (if row-average-enabled?
+         (list (make-table-cell row 'col-total commodity-idx (length list-of-cols)))
+         '())))
   (let ((table (gnc:make-html-table)))
     (gnc:html-table-set-caption! table optname-grid)
-    (gnc:html-table-set-col-headers! table (append (list "") (map cdr list-of-cols) (list (_ "Total"))))
+    (gnc:html-table-set-col-headers! table (append (list "") (map cdr list-of-cols) (list (_ "Total"))
+                                                   (if row-average-enabled? (list (_ "Average")) '())))
     (gnc:html-table-set-style! table "th"
                                'attribute (list "class" "column-heading-right"))
     (for-each

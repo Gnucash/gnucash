@@ -805,46 +805,46 @@
       (let ((sxml (options->sxml options "subtotal table")))
         (test-equal "summary bank-row is correct"
           (list "Bank" "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$190.00"
-                "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$2,280.00")
+                "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$2,280.00" "$190.00")
           (get-row-col sxml 1 #f))
         (test-equal "summary gbp bank-row is correct"
           (list "GBP Bank" "£51.00" "£51.00" "£51.00" "£51.00" "£51.00" "£51.00"
-                "£51.00" "£51.00" "£51.00" "£51.00" "£51.00" "£51.00" "£612.00")
+                "£51.00" "£51.00" "£51.00" "£51.00" "£51.00" "£51.00" "£612.00" "£51.00")
           (get-row-col sxml 2 #f))
         (test-equal "summary expense-row is correct"
           (list "Expenses" "$22.00" "$22.00" "$22.00" "$22.00" "$22.00" "$22.00"
-                "$22.00" "$22.00" "$22.00" "$22.00" "$22.00" "$22.00" "$264.00")
+                "$22.00" "$22.00" "$22.00" "$22.00" "$22.00" "$22.00" "$264.00" "$22.00")
           (get-row-col sxml 3 #f))
         (test-equal "summary income-row is correct"
           (list "Income" "-$212.00" "-$212.00" "-$212.00" "-$212.00" "-$212.00"
                 "-$212.00" "-$212.00" "-$212.00" "-$212.00" "-$212.00" "-$212.00"
-                "-$212.00" "-$2,544.00")
+                "-$212.00" "-$2,544.00" "-$212.00")
           (get-row-col sxml 4 #f))
         (test-equal "summary gbp income-row is correct"
           (list "Income-GBP" "-£51.00" "-£51.00" "-£51.00" "-£51.00" "-£51.00" "-£51.00"
-                "-£51.00" "-£51.00" "-£51.00" "-£51.00" "-£51.00" "-£51.00" "-£612.00")
+                "-£51.00" "-£51.00" "-£51.00" "-£51.00" "-£51.00" "-£51.00" "-£612.00" "-£51.00")
           (get-row-col sxml 5 #f))
         (test-equal "summary gbp total-row is correct"
-          (list "Grand Total" "£0.00")
+          (list "Grand Total" "£0.00" "£0.00")
           (get-row-col sxml 6 #f))
         (test-equal "summary total-row is correct"
-          (list "$0.00")
+          (list "$0.00" "$0.00")
           (get-row-col sxml 7 #f)))
 
       (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 01 01 1969)))
       (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 31 12 1970)))
       (let ((sxml (options->sxml options "sparse subtotal table")))
         (test-equal "sparse summary-table - row 1"
-          (list "Bank" "$29.00" "-$5.00" "-$23.00" "$1.00")
+          (list "Bank" "$29.00" "-$5.00" "-$23.00" "$1.00" "$0.33")
           (get-row-col sxml 1 #f))
         (test-equal "sparse summary-table - row 2"
-          (list "Expenses" "$16.00" "$15.00" "$31.00")
+          (list "Expenses" "$16.00" "$15.00" "$31.00" "$10.33")
           (get-row-col sxml 2 #f))
         (test-equal "sparse summary-table - row 3"
-          (list "Income" "-$29.00" "-$29.00")
+          (list "Income" "-$29.00" "-$29.00" "-$9.67")
           (get-row-col sxml 3 #f))
         (test-equal "sparse summary-table - row 4"
-          (list "Grand Total" "$3.00")
+          (list "Grand Total" "$3.00" "$1.00")
           (get-row-col sxml 4 #f))
         (test-equal "sparse summary-table - col 1"
           (list "Bank" "Expenses" "Income" "Grand Total")
@@ -860,6 +860,9 @@
           (get-row-col sxml #f 4))
         (test-equal "sparse summary-table - col 5"
           (list "$1.00" "$31.00" "-$29.00" "$3.00")
-          (get-row-col sxml #f 5))))
+          (get-row-col sxml #f 5))
+        (test-equal "sparse summary-table - col 6 average"
+          (list "$0.33" "$10.33" "-$9.67" "$1.00")
+          (get-row-col sxml #f 6))))
     (test-end "subtotal table")
     ))
