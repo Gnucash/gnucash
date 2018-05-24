@@ -350,7 +350,7 @@ gnc_vendor_class_init (GncVendorClass *klass)
      g_param_spec_object ("terms",
                           "Terms",
                           "The billing terms used by this vendor.",
-                          GNC_TYPE_COMMODITY,
+                          GNC_TYPE_BILLTERM,
                           G_PARAM_READWRITE));
 
     g_object_class_install_property
@@ -359,7 +359,7 @@ gnc_vendor_class_init (GncVendorClass *klass)
      g_param_spec_object ("tax-table",
                           "Tax table",
                           "The tax table which applies to this vendor.",
-                          GNC_TYPE_COMMODITY,
+                          GNC_TYPE_TAXTABLE,
                           G_PARAM_READWRITE));
 
     g_object_class_install_property
