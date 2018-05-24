@@ -857,21 +857,46 @@ GncOwnerType gncInvoiceGetOwnerType (const GncInvoice *invoice)
 }
 
 static gnc_numeric
-gncInvoiceGetTotalInternal (GncInvoice *invoice, gboolean use_value,
-                            gboolean use_tax,
-                            gboolean use_payment_type, GncEntryPaymentType type)
+gncInvoiceSumTaxesInternal (AccountValueList *taxes)
+{
+    gnc_numeric tt = gnc_numeric_zero();
+
+    if (taxes)
+    {
+        GList *node;
+        // Note we can use GNC_DENOM_AUTO below for rounding because
+        // the values passed to this function should already have been rounded
+        // to the desired denom and addition will just preserve it in that case.
+        for (node = taxes; node; node=node->next)
+        {
+            GncAccountValue *acc_val = node->data;
+            tt = gnc_numeric_add (tt, acc_val->value, GNC_DENOM_AUTO,
+                                  GNC_HOW_DENOM_EXACT | GNC_HOW_RND_ROUND_HALF_UP);
+        }
+    }
+    return tt;
+}
+
+static gnc_numeric
+gncInvoiceGetNetAndTaxesInternal (GncInvoice *invoice, gboolean use_value,
+                            AccountValueList **taxes,
+                            gboolean use_payment_type, GncEntryPaymentType type
+                           )
 {
     GList *node;
-    gnc_numeric total = gnc_numeric_zero();
+    gnc_numeric net_total = gnc_numeric_zero();
     gboolean is_cust_doc, is_cn;
+    AccountValueList *tv_list = NULL;
+    int denom = gnc_commodity_get_fraction(gncInvoiceGetCurrency(invoice));
 
-    g_return_val_if_fail (invoice, total);
+    g_return_val_if_fail (invoice, net_total);
 
     /* Is the current document an invoice/credit note related to a customer or a vendor/employee ?
      * The GncEntry code needs to know to return the proper entry amounts
      */
     is_cust_doc = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
     is_cn = gncInvoiceGetIsCreditNote (invoice);
+
 
     for (node = gncInvoiceGetEntries(invoice); node; node = node->next)
     {
@@ -881,23 +906,64 @@ gncInvoiceGetTotalInternal (GncInvoice *invoice, gboolean use_value,
         if (use_payment_type && gncEntryGetBillPayment (entry) != type)
             continue;
 
-        value = gncEntryGetDocValue (entry, FALSE, is_cust_doc, is_cn);
-        if (gnc_numeric_check (value) == GNC_ERROR_OK)
+        if (use_value)
         {
-            if (use_value)
-                total = gnc_numeric_add (total, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-        }
-        else
-            g_warning ("bad value in our entry");
-
-        if (use_tax)
-        {
-            tax = gncEntryGetDocTaxValue (entry, FALSE, is_cust_doc, is_cn);
-            if (gnc_numeric_check (tax) == GNC_ERROR_OK)
-                total = gnc_numeric_add (total, tax, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+            // Always use rounded net values to prevent creating imbalanced transactions on posting
+            // https://bugzilla.gnome.org/show_bug.cgi?id=628903
+            value = gncEntryGetDocValue (entry, TRUE, is_cust_doc, is_cn);
+            if (gnc_numeric_check (value) == GNC_ERROR_OK)
+                net_total = gnc_numeric_add (net_total, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
             else
-                g_warning ("bad tax-value in our entry");
+                g_warning ("bad value in our entry");
         }
+
+        if (taxes)
+        {
+            AccountValueList *entrytaxes = gncEntryGetDocTaxValues (entry, is_cust_doc, is_cn);
+            tv_list = gncAccountValueAddList (tv_list, entrytaxes);
+            gncAccountValueDestroy (entrytaxes);
+        }
+    }
+
+    if (taxes)
+    {
+        GList *node;
+        // Round tax totals (accumulated per tax account) to prevent creating imbalanced transactions on posting
+        // which could otherwise happen when using a tax table with multiple tax rates
+        for (node = tv_list; node; node=node->next)
+        {
+            GncAccountValue *acc_val = node->data;
+            acc_val->value = gnc_numeric_convert (acc_val->value,
+                                  denom, GNC_HOW_DENOM_EXACT | GNC_HOW_RND_ROUND_HALF_UP);
+        }
+        *taxes = tv_list;
+    }
+
+    return net_total;
+}
+
+static gnc_numeric
+gncInvoiceGetTotalInternal(GncInvoice *invoice, gboolean use_value,
+                           gboolean use_tax,
+                           gboolean use_payment_type, GncEntryPaymentType type)
+{
+    AccountValueList *taxes;
+    gnc_numeric total;
+    int denom;
+
+    if (!invoice) return gnc_numeric_zero();
+
+    denom = gnc_commodity_get_fraction(gncInvoiceGetCurrency(invoice));
+    total = gncInvoiceGetNetAndTaxesInternal(invoice, use_value, use_tax? &taxes : NULL, use_payment_type, type);
+
+    if (use_tax)
+    {
+        // Note we can use GNC_DENOM_AUTO below for rounding because
+        // the values passed to this function should already have been rounded
+        // to the desired denom and addition will just preserve it in that case.
+        total = gnc_numeric_add (total, gncInvoiceSumTaxesInternal (taxes),
+                                 GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT | GNC_HOW_RND_ROUND_HALF_UP);
+        gncAccountValueDestroy (taxes);
     }
     return total;
 }
@@ -924,6 +990,16 @@ gnc_numeric gncInvoiceGetTotalOf (GncInvoice *invoice, GncEntryPaymentType type)
 {
     if (!invoice) return gnc_numeric_zero();
     return gncInvoiceGetTotalInternal(invoice, TRUE, TRUE, TRUE, type);
+}
+
+AccountValueList *gncInvoiceGetTotalTaxList (GncInvoice *invoice)
+{
+    gnc_numeric unused;
+    AccountValueList *taxes;
+    if (!invoice) return NULL;
+
+    unused = gncInvoiceGetNetAndTaxesInternal(invoice, FALSE, &taxes, FALSE, 0);
+    return taxes;
 }
 
 GList * gncInvoiceGetTypeListForOwnerType (GncOwnerType type)
@@ -1376,6 +1452,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     char *lot_title;
     Account *ccard_acct = NULL;
     const GncOwner *owner;
+    int denom = xaccAccountGetCommoditySCU(acc);
+    AccountValueList *taxes;
 
     if (!invoice || !acc) return NULL;
     if (gncInvoiceIsPosted (invoice)) return NULL;
@@ -1427,14 +1505,29 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
     xaccTransSetDateDue (txn, due_date);
 
+    /* Get invoice total and taxes. */
+    total = gncInvoiceGetTotal (invoice);
+    taxes = gncInvoiceGetTotalTaxList (invoice);
+    /* The two functions above return signs relative to the document
+     * We need to convert them to balance values before we can use them here */
+    if (is_cust_doc)
+    {
+        GList *node;
+        total = gnc_numeric_neg (total);
+        for (node = taxes; node; node = node->next)
+        {
+            GncAccountValue *acc_val = node->data;
+            acc_val->value = gnc_numeric_neg (acc_val->value);
+        }
+    }
+
     /* Iterate through the entries; sum up everything for each account.
      * then create the appropriate splits in this txn.
      */
-    total = gnc_numeric_zero();
+
     for (iter = gncInvoiceGetEntries(invoice); iter; iter = iter->next)
     {
         gnc_numeric value, tax;
-        GList *taxes;
         GncEntry * entry = iter->data;
         Account *this_acc;
 
@@ -1458,10 +1551,10 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
         }
         gncEntryCommitEdit (entry);
 
-        /* Obtain the Entry's Value and TaxValues */
-        value = gncEntryGetBalValue (entry, FALSE, is_cust_doc);
-        tax   = gncEntryGetBalTaxValue (entry, FALSE, is_cust_doc);
-        taxes = gncEntryGetBalTaxValues (entry, is_cust_doc);
+        /* Obtain the Entry's Value and TaxValues
+           Note we use rounded values here and below to prevent creating an imbalanced transaction */
+        value = gncEntryGetBalValue (entry, TRUE, is_cust_doc);
+        tax   = gncEntryGetBalTaxValue (entry, TRUE, is_cust_doc);
 
         /* add the value for the account split */
         this_acc = (is_cust_doc ? gncEntryGetInvAccount (entry) :
@@ -1472,6 +1565,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
             {
                 if (accumulatesplits)
                     splitinfo = gncAccountValueAdd (splitinfo, this_acc, value);
+                    /* Adding to total in case of accumulatesplits will be deferred to later when each split is effectively added */
                 else if (!gncInvoicePostAddSplit (book, this_acc, txn, value,
                                                   gncEntryGetDescription (entry),
                                                   type, invoice))
@@ -1484,7 +1578,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
                 }
 
                 /* If there is a credit-card account, and this is a CCard
-                 * payment type, the don't add it to the total, and instead
+                 * payment type, subtract it from the total, and instead
                  * create a split to the CC Acct with a memo of the entry
                  * description instead of the provided memo.  Note that the
                  * value reversal is the same as the post account.
@@ -1495,6 +1589,9 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
                 if (ccard_acct && gncEntryGetBillPayment (entry) == GNC_PAYMENT_CARD)
                 {
                     Split *split;
+
+                    total = gnc_numeric_sub (total, value, denom,
+                                             GNC_HOW_DENOM_EXACT | GNC_HOW_RND_ROUND_HALF_UP);
 
                     split = xaccMallocSplit (book);
                     xaccSplitSetMemo (split, gncEntryGetDescription (entry));
@@ -1508,30 +1605,30 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
                                            invoice->currency);
 
                 }
-                else
-                    total = gnc_numeric_add (total, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
 
             }
             else
                 g_warning ("bad value in our entry");
         }
 
-        /* now merge in the TaxValues */
-        splitinfo = gncAccountValueAddList (splitinfo, taxes);
-
-        /* ... and add the tax total */
-        if (gnc_numeric_check (tax) == GNC_ERROR_OK)
-            total = gnc_numeric_add (total, tax, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
-        else
+        /* check the taxes */
+        if (gnc_numeric_check (tax) != GNC_ERROR_OK)
             g_warning ("bad tax in our entry");
 
-        gncAccountValueDestroy (taxes);
     } /* for */
+
+
+    /* now merge in the TaxValues */
+    splitinfo = gncAccountValueAddList (splitinfo, taxes);
+    gncAccountValueDestroy (taxes);
 
     /* Iterate through the splitinfo list and generate the splits */
     for (iter = splitinfo; iter; iter = iter->next)
     {
         GncAccountValue *acc_val = iter->data;
+
+        //gnc_numeric amt_rounded = gnc_numeric_convert(acc_val->value,
+        //    denom, GNC_HOW_DENOM_EXACT | GNC_HOW_RND_ROUND_HALF_UP);
         if (!gncInvoicePostAddSplit (book, acc_val->account, txn, acc_val->value,
                                      memo, type, invoice))
         {
@@ -1567,8 +1664,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
         xaccSplitSetBaseValue (split, gnc_numeric_neg (to_charge_bal_amount),
                                invoice->currency);
 
-        total = gnc_numeric_sub (total, to_charge_bal_amount,
-                                 GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+        total = gnc_numeric_sub (total, to_charge_bal_amount, denom,
+                                 GNC_HOW_DENOM_EXACT | GNC_HOW_RND_ROUND_HALF_UP);
     }
 
     /* Now create the Posted split (which is the opposite sign of the above splits) */

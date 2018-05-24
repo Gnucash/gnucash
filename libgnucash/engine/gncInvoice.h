@@ -164,6 +164,9 @@ gnc_numeric gncInvoiceGetTotal (GncInvoice *invoice);
 gnc_numeric gncInvoiceGetTotalOf (GncInvoice *invoice, GncEntryPaymentType type);
 gnc_numeric gncInvoiceGetTotalSubtotal (GncInvoice *invoice);
 gnc_numeric gncInvoiceGetTotalTax (GncInvoice *invoice);
+/** Return a list of tax totals accumulated per tax account.
+ */
+AccountValueList *gncInvoiceGetTotalTaxList (GncInvoice *invoice);
 
 typedef GList EntryList;
 EntryList * gncInvoiceGetEntries (GncInvoice *invoice);
