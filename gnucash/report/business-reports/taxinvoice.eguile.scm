@@ -324,10 +324,12 @@
 
   <tbody> <!-- display invoice entry lines, keeping running totals -->
     <?scm
-      (let ((tax-total (gnc:make-commodity-collector))
-            (sub-total (gnc:make-commodity-collector))
-            (dsc-total (gnc:make-commodity-collector))
-            (inv-total (gnc:make-commodity-collector)))
+      (let* ((inv-total (gncInvoiceGetTotal opt-invoice))
+             (tax-total (gncInvoiceGetTotalTax opt-invoice))
+             (sub-total (gncInvoiceGetTotalSubtotal opt-invoice))
+             (dsc-total (- inv-total tax-total sub-total))
+             (total-col (gnc:make-commodity-collector)))
+        (total-col 'add currency inv-total)
         (for entry in entries do
             (let ((qty       (gncEntryGetDocQuantity entry credit-note?))
                   (each      (gncEntryGetPrice entry cust-doc? opt-netprice))
@@ -340,11 +342,6 @@
                   (acc       (if cust-doc? (gncEntryGetInvAccount entry)(gncEntryGetBillAccount entry)))
                   (taxable   (if cust-doc? (gncEntryGetInvTaxable entry)(gncEntryGetBillTaxable entry)))
                   (taxtable  (if cust-doc? (gncEntryGetInvTaxTable entry)(gncEntryGetBillTaxTable entry))))
-              (inv-total 'add currency rval)
-              (inv-total 'add currency rtaxval)
-              (tax-total 'add currency rtaxval)
-              (sub-total 'add currency rval)
-              (dsc-total 'add currency rdiscval) ;'
     ?>
     <tr valign="top">
       <?scm (if opt-col-date (begin ?>
@@ -392,16 +389,16 @@
                     (if (and discount?) 1 0)
         ) ?>"><strong><?scm:d opt-subtotal-heading ?></strong></td>
         <?scm (if discount? (begin ?>
-          <td align="right" class="subtotal"><strong><?scm (display-comm-coll-total dsc-total #f) ?></strong></td>
+        <td align="right" class="subtotal"><strong><?scm:d (fmtmoney currency dsc-total) ?></strong></td>
         <?scm )) ?>
         <?scm (if (and tax? taxtables?) (begin ?>
-          <td align="right" class="subtotal"><strong><?scm (display-comm-coll-total sub-total #f) ?></strong></td>
+          <td align="right" class="subtotal"><strong><?scm:d (fmtmoney currency sub-total) ?></strong></td>
           <?scm (if opt-col-taxrate (begin ?>
           <td>&nbsp;</td>
           <?scm )) ?>
-          <td align="right" class="subtotal"><strong><?scm (display-comm-coll-total tax-total #f) ?></strong></td>
+          <td align="right" class="subtotal"><strong><?scm:d (fmtmoney currency tax-total) ?></strong></td>
         <?scm )) ?>
-        <td align="right" class="subtotal"><strong><?scm (display-comm-coll-total inv-total #f) ?></strong></td>
+        <td align="right" class="subtotal"><strong><?scm:d (fmtmoney currency inv-total) ?></strong></td>
       </tr>
     <?scm )) ?>
 
@@ -416,7 +413,7 @@
                     (gnc-numeric-neg(xaccSplitGetValue split))
                     (xaccSplitGetValue split)))
                 )
-                  (inv-total 'add c a) ;'
+                  (total-col 'add c a) ;'
     ?>
     <tr valign="top">
       <?scm (if opt-col-date (begin ?>
@@ -432,7 +429,7 @@
       <td align="left" class="total" colspan="<?scm:d (+ tbl_cols 1) ?>"><strong>
         <?scm:d opt-amount-due-heading ?><?scm (if (not (string=? (gnc-commodity-get-mnemonic opt-report-currency) "")) (begin ?>,
         <?scm:d (gnc-commodity-get-mnemonic opt-report-currency) ?><?scm )) ?></strong></td>
-      <td align="right" class="total"><strong><?scm (display-comm-coll-total inv-total #f) ?></strong></td>
+      <td align="right" class="total"><strong><?scm (display-comm-coll-total total-col #f) ?></strong></td>
     </tr>
 
   </tbody>

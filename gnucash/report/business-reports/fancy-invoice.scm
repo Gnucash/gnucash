@@ -134,18 +134,6 @@
 	(addto! heading-list (_ "Total")))
     (reverse heading-list)))
 
-(define (make-account-hash) (make-hash-table 23))
-
-(define (update-account-hash hash values)
-  (for-each
-   (lambda (item)
-     (let* ((acct (car item))
-	    (val (cdr item))
-	    (ref (hash-ref hash acct)))
-
-       (hash-set! hash acct (if ref (gnc-numeric-add-fixed ref val) val))))
-   values))
-
 
 (define (monetary-or-percent numeric currency entry-type)
   (if (gnc:entry-type-percent-p entry-type)
@@ -406,25 +394,19 @@
       )
 
     (define (add-subtotal-row table used-columns
-			      subtotal-collector subtotal-style subtotal-label)
-      (let ((currency-totals (subtotal-collector
-			      'format gnc:make-gnc-monetary #f)))
+                              subtotal subtotal-style subtotal-label)
+      (let ((subtotal-mon (gnc:make-gnc-monetary currency subtotal)))
 
-	(for-each (lambda (currency)
-		    (gnc:html-table-append-row/markup!
-		     table
-		     subtotal-style
-		     ;; oli-custom modified to colspan the subtotal labels
-		     ;; instead of the data fields
-		     (append (cons (gnc:make-html-table-cell/size/markup
-				    1 (colspan currency used-columns)
-				    "total-label-cell" subtotal-label)
-				   '())
-			     (list (gnc:make-html-table-cell/markup
-				    ;; 1 (colspan currency used-columns)
-				    "total-number-cell"
-				    (display-subtotal currency used-columns))))))
-		  currency-totals)))
+        (gnc:html-table-append-row/markup!
+            table
+            subtotal-style
+            (append (cons (gnc:make-html-table-cell/markup
+                        "total-label-cell" subtotal-label)
+                        '())
+                    (list (gnc:make-html-table-cell/size/markup
+                        1 (colspan subtotal-mon used-columns)
+                        "total-number-cell"
+                        (display-subtotal subtotal-mon used-columns)))))))
 
     (define (add-payment-row table used-columns split total-collector reverse-payments?)
       (let* ((t (xaccSplitGetParent split))
@@ -463,16 +445,13 @@
 				    table
 				    used-columns
 				    width
-				    odd-row?
-				    value-collector
-				    tax-collector
-				    total-collector
-				    acct-hash)
+				    odd-row?)
       (if (null? entries)
-	  (begin
-	    ;; oli-custom - modified to have a minimum of entries per table,
-	    ;; currently defaults to 24
-	    ;; also, doesn't count payment rows and stuff
+        (let ((total-collector (gnc:make-commodity-collector)))
+
+            ;; oli-custom - modified to have a minimum of entries per table,
+            ;; currently defaults to 24
+            ;; also, doesn't count payment rows and stuff
             (do ((entries-added entries-added (+ entries-added 1))
                  (odd-row? odd-row? (not odd-row?)))
               ((> entries-added (opt-val "Display" "Minimum # of entries" )))
@@ -480,29 +459,31 @@
                table (if odd-row? "normal-row" "alternate-row")
                (get-empty-row (num-columns-required used-columns)))
               )
-	    (add-subtotal-row table used-columns value-collector
-			      "grand-total" (_ "Net Price"))
 
-	    (if display-all-taxes
-		(hash-for-each
-		 (lambda (acct value)
-		   (let ((collector (gnc:make-commodity-collector))
-			 (commodity (xaccAccountGetCommodity acct))
-			 (name (xaccAccountGetName acct)))
-		     (collector 'add commodity value)
-		     (add-subtotal-row table used-columns collector
-				       "grand-total" (string-expand
-						      name #\space "&nbsp;"))))
-		 acct-hash)
+            (add-subtotal-row table used-columns (gncInvoiceGetTotalSubtotal invoice)
+                              "grand-total" (_ "Net Price"))
 
-		; nope, just show the total tax.
-		(add-subtotal-row table used-columns tax-collector
-				  "grand-total" (_ "Tax")))
+            (if display-all-taxes
+              (let ((acct-val-list (gncInvoiceGetTotalTaxList invoice)))
+                (for-each
+                  (lambda (parm)
+                    (let* ((value (cdr parm))
+                           (acct (car parm))
+                           (name (xaccAccountGetName acct)))
+                      (add-subtotal-row table used-columns value
+                                        "grand-total" (string-expand
+                                                       name #\space "&nbsp;"))))
+                    acct-val-list))
 
-	    (add-subtotal-row table used-columns total-collector
-			      "grand-total" (string-expand (_ "Total Price")
-							   #\space "&nbsp;"))
+              ; nope, just show the total tax.
+              (add-subtotal-row table used-columns (gncInvoiceGetTotalTax invoice)
+                                "grand-total" (_ "Tax")))
 
+            (add-subtotal-row table used-columns (gncInvoiceGetTotal invoice)
+                              "grand-total" (string-expand (_ "Total Price")
+                                                            #\space "&nbsp;"))
+
+            (total-collector 'add currency (gncInvoiceGetTotal invoice))
 	    (if (and show-payments (not (null? lot)))
 		(let ((splits (sort-list!
 			       (gnc-lot-get-split-list lot)
@@ -518,9 +499,9 @@
 					  reverse-payments?)))
 		   splits)))
 
-	    (add-subtotal-row table used-columns total-collector
+	    (add-subtotal-row table used-columns (cadr (total-collector 'getpair currency #f))
 			      "grand-total" (string-expand (_ "Amount Due")
-							   #\space "&nbsp;")))
+                                                            #\space "&nbsp;")))
 
 	  ;;
 	  ;; End of BEGIN -- now here's the code to handle all the entries!
@@ -537,24 +518,6 @@
 					      current-row-style
 					      cust-doc? credit-note?)))
 
-	    (if display-all-taxes
-		(let ((tax-list (gncEntryGetDocTaxValues current cust-doc? credit-note?)))
-		  (update-account-hash acct-hash tax-list))
-		(tax-collector 'add
-			       (gnc:gnc-monetary-commodity (cdr entry-values))
-			       (gnc:gnc-monetary-amount (cdr entry-values))))
-
-	    (value-collector 'add
-			     (gnc:gnc-monetary-commodity (car entry-values))
-			     (gnc:gnc-monetary-amount (car entry-values)))
-
-	    (total-collector 'add
-			     (gnc:gnc-monetary-commodity (car entry-values))
-			     (gnc:gnc-monetary-amount (car entry-values)))
-	    (total-collector 'add
-			     (gnc:gnc-monetary-commodity (cdr entry-values))
-			     (gnc:gnc-monetary-amount (cdr entry-values)))
-
 	    (let ((order (gncEntryGetOrder current)))
 	      (if (not (null? order)) (add-order order)))
 
@@ -564,17 +527,12 @@
 				    table
 				    used-columns
 				    width
-				    (not odd-row?)
-				    value-collector
-				    tax-collector
-				    total-collector
-				    acct-hash))))
+				    (not odd-row?)))))
 
     (let* ((table (gnc:make-html-table))
 	   (used-columns (build-column-used options))
 	   (width (num-columns-required used-columns))
-	   (entries (gncInvoiceGetEntries invoice))
-	   (totals (gnc:make-commodity-collector)))
+	   (entries (gncInvoiceGetEntries invoice)))
 
       (gnc:html-table-set-col-headers!
        table
@@ -584,11 +542,7 @@
 			      table
 			      used-columns
 			      width
-			      #t
-			      (gnc:make-commodity-collector)
-			      (gnc:make-commodity-collector)
-			      totals
-			      (make-account-hash))
+			      #t)
       table)))
 
 (define (string-expand string character replace-string)
