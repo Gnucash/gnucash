@@ -198,7 +198,7 @@ load_single_billterm( GncSqlBackend* be, GncSqlRow* row,
 
         s->billterm = pBillTerm;
         s->have_guid = FALSE;
-        gnc_sql_load_object( be, row, GNC_ID_TAXTABLE, s, billterm_parent_col_table );
+        gnc_sql_load_object( be, row, GNC_ID_BILLTERM, s, billterm_parent_col_table );
         if ( s->have_guid )
         {
             *l_billterms_needing_parents = g_list_prepend( *l_billterms_needing_parents, s );
