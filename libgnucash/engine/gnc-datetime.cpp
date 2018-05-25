@@ -158,12 +158,16 @@ LDT_from_unix_local(const time64 time)
 static LDT
 LDT_from_struct_tm(const struct tm tm)
 {
-    auto tdate = boost::gregorian::date_from_tm(tm);
-    auto tdur = boost::posix_time::time_duration(tm.tm_hour, tm.tm_min,
-                                                 tm.tm_sec, 0);
-    auto tz = tzp.get(tdate.year());
+    Date tdate;
+    Duration tdur;
+    TZ_Ptr tz;
+
     try
     {
+        tdate = boost::gregorian::date_from_tm(tm);
+        tdur = boost::posix_time::time_duration(tm.tm_hour, tm.tm_min,
+                                                 tm.tm_sec, 0);
+        tz = tzp.get(tdate.year());
         LDT ldt(tdate, tdur, tz, LDTBase::EXCEPTION_ON_ERROR);
         return ldt;
     }
