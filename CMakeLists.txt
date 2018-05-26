@@ -531,7 +531,7 @@ if (have_stringop_truncation)
 endif()
 
 if (APPLE)
-  include (CheckCxxCompilerFlag)
+  include (CheckCXXCompilerFlag)
   check_cxx_compiler_flag(-Wno-unused-local-typedef, have_wno_ult)
   if (have_wno_ult)
     set( CMAKE_CXX_FLAGS "-Wno-unused-local-typedef -Wmissing-prototypes ${CMAKE_CXX_FLAGS}")
