@@ -188,15 +188,15 @@
       (set-option! options "Sorting" "Secondary Subtotal" 'account-name)
       (let ((sxml (options->sxml options "initial setup")))
         (test-equal "totals are as expected"
-          '("Grand Total" " " " " "$1,055.00" "$1,000.00" "$55.00" "$248.00" "$230.00" "$18.00")
+          '("Grand Total" "$1,055.00" "$1,000.00" "$55.00" "$248.00" "$230.00" "$18.00")
           (sxml->table-row-col sxml 1 -1 #f))
 
         (test-equal "tax on sales as expected"
-          '(" " "\n" "$20.00" "$20.00" " " " " "\n" "$20.00" "$20.00" "\n" "$15.00" "$15.00" "$55.00")
+          '("$20.00" "$20.00" "$20.00" "$20.00" "$15.00" "$15.00" "$55.00")
           (sxml->table-row-col sxml 1 #f 6))
 
         (test-equal "tax on purchases as expected"
-          '(" " " " " " " " "\n" "$8.00" "\n" "$10.00" "$18.00" " " " " "$18.00")
+          '("$8.00" "$10.00" "$18.00" "$18.00")
           (sxml->table-row-col sxml 1 #f 9)))
 
       (set-option! options "Display" "Individual tax columns" #t)
@@ -207,7 +207,7 @@
       (set-option! options "Display" "Tax payable" #t)
       (let ((sxml (options->sxml options "display options enabled")))
         (test-equal "all display columns enabled"
-          '("Grand Total" " " " " "$1,055.00" "$1,000.00" "$20.00" "$35.00" "$248.00" "$230.00" "$18.00" "$807.00" "$770.00" "$37.00")
+          '("Grand Total" "$1,055.00" "$1,000.00" "$20.00" "$35.00" "$248.00" "$230.00" "$18.00" "$807.00" "$770.00" "$37.00")
           (sxml->table-row-col sxml 1 -1 #f))))
 
     (test-end "display options")))
