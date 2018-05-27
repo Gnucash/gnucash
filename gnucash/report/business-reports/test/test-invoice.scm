@@ -40,7 +40,7 @@
   (test-begin "test-invoice.scm")
   (inv-tests 'invoice)
   (inv-tests 'easy-invoice)
-  ;; (inv-tests 'fancy-invoice)
+  (inv-tests 'fancy-invoice)
   (test-end "test-invoice.scm"))
 
 (define (sxml-main-get-row-col sxml row col)
@@ -234,16 +234,16 @@
       (test-equal "inv-1 simple entry details are correct"
         '("entry-1-desc" "entry-1-action" "2.00" "$3.00" "0.00 %" "T" "$0.00" "$6.00")
         (cdr (sxml-main-get-row-col sxml 1 #f)))
-      (test-equal "inv-1 cust-name is correct"
-        '("cust-1-name")
-        ((sxpath '(// (table 2) // tbody // tr // td // *text*))
-         sxml))
+      (unless (eq? variant 'fancy-invoice)
+        (test-equal "inv-1 cust-name is correct"
+          '("cust-1-name")
+          ((sxpath '(// (table 2) // tbody // tr // td // *text*))
+           sxml)))
       (test-assert "inv-1-billing-id is in invoice body"
         (member
          (case variant
-           ((invoice) "Reference:\xa0inv-1-billing-id")
-           ((easy-invoice) "Billing ID:\xa0inv-1-billing-id")
-           (else ""))
+           ((invoice fancy-invoice) "Reference:\xa0inv-1-billing-id")
+           ((easy-invoice) "Billing ID:\xa0inv-1-billing-id"))
          ((sxpath '(// body // *text*)) sxml)))
       (test-assert "inv-1 inv-notes is in invoice body"
         (member
@@ -257,12 +257,13 @@
       (test-equal "inv-1 sparse simple entry headers are correct"
         (case variant
           ((invoice) '("Net Price" "Tax" "Total Price" "Amount Due"))
-          (else '("Tax" "Total Price" "Amount Due")))
+          ((fancy-invoice) '("Net Price" "Tax" "Total\xa0Price" "Amount\xa0Due"))
+          ((easy-invoice) '("Tax" "Total Price" "Amount Due")))
         (sxml-main-get-row-col sxml #f 1))
       (test-equal "inv-1 sparse simple entry amounts are correct"
         (case variant
-          ((invoice) '("$6.00" "$0.00" "$6.00" "$6.00"))
-          (else '("$0.00" "$6.00" "$6.00")))
+          ((invoice fancy-invoice) '("$6.00" "$0.00" "$6.00" "$6.00"))
+          ((easy-invoice) '("$0.00" "$6.00" "$6.00")))
         (sxml-main-get-row-col sxml #f -1)))
     (test-end "inv-1 simple entry, sparse options")
 
@@ -296,10 +297,11 @@
       (test-equal "inv-2 simple entry details are correct"
         '("entry-inv-2-desc" "entry-inv-2-action" "2.00" "$3.00" "0.00 %" "T" "$0.00" "$6.00")
         (cdr (sxml-main-get-row-col sxml 1 #f)))
-      (test-equal "inv-2 cust-name is correct"
-        '("cust-1-name")
-        ((sxpath '(// (table 2) // tbody // tr // td // *text*))
-         sxml))
+      (unless (eq? variant 'fancy-invoice)
+        (test-equal "inv-2 cust-name is correct"
+          '("cust-1-name")
+          ((sxpath '(// (table 2) // tbody // tr // td // *text*))
+           sxml)))
       (test-assert "inv-2 inv-notes is in invoice body"
         (member
          "inv-2-notes"
@@ -335,10 +337,11 @@
       (test-equal "inv-3 simple entry details are correct"
         '("entry-inv-3-desc" "entry-inv-3-action" "2.00" "$3.00" "T" "$0.00" "$6.00")
         (cdr (sxml-main-get-row-col sxml 1 #f)))
-      (test-equal "inv-3 vend-name is correct"
-        '("vend-1-name")
-        ((sxpath '(// (table 2) // tbody // tr // td // *text*))
-         sxml))
+      (unless (eq? variant 'fancy-invoice)
+        (test-equal "inv-3 vend-name is correct"
+          '("vend-1-name")
+          ((sxpath '(// (table 2) // tbody // tr // td // *text*))
+           sxml)))
       (test-assert "inv-3 inv-notes is in invoice body"
         (member
          "inv-3-notes"
@@ -365,10 +368,11 @@
       (test-equal "inv-4 simple entry details are correct"
         '("entry-inv-4-desc" "entry-inv-4-action" "2.00" "$3.00" "T" "$0.00" "$6.00")
         (cdr (sxml->table-row-col sxml 3 1 #f)))
-      (test-equal "inv-4 vend-name is correct"
-        '("emp-1-name" "emp-1-name")    ;FIXME: why is this duplicated????
-        ((sxpath '(// (table 2) // tbody // tr // td // *text*))
-         sxml))
+      (unless (eq? variant 'fancy-invoice)
+        (test-equal "inv-4 vend-name is correct"
+          '("emp-1-name" "emp-1-name")    ;FIXME: why is this duplicated????
+          ((sxpath '(// (table 2) // tbody // tr // td // *text*))
+           sxml)))
       (test-assert "inv-4 inv-notes is in invoice body"
         (member
          "inv-4-notes"
@@ -394,10 +398,11 @@
       (test-equal "inv-5 simple entry details are correct"
         '("entry-5-desc" "entry-5-action" "2.00" "$3.00" "0.00 %" "T" "$0.00" "$6.00")
         (cdr (sxml-main-get-row-col sxml 1 #f)))
-      (test-equal "inv-5 cust-name is correct"
-        '("cust-1-name")
-        ((sxpath '(// (table 2) // tbody // tr // td // *text*))
-         sxml)))
+      (unless (eq? variant 'fancy-invoice)
+        (test-equal "inv-5 cust-name is correct"
+          '("cust-1-name")
+          ((sxpath '(// (table 2) // tbody // tr // td // *text*))
+           sxml))))
     (test-end "inv-5 simple entry")
 
     (test-begin "inv-6")
@@ -418,10 +423,11 @@
       (test-equal "inv-6 simple entry details are correct"
         '("entry-inv-6-desc" "entry-inv-6-action" "2.00" "$3.00" "T" "$0.00" "$6.00")
         (cdr (sxml-main-get-row-col sxml 1 #f)))
-      (test-equal "inv-6 vend-name is correct"
-        '("vend-1-name")
-        ((sxpath '(// (table 2) // tbody // tr // td // *text*))
-         sxml))
+      (unless (eq? variant 'fancy-invoice)
+        (test-equal "inv-6 vend-name is correct"
+          '("vend-1-name")
+          ((sxpath '(// (table 2) // tbody // tr // td // *text*))
+           sxml)))
       (test-assert "inv-6 inv-3-notes is in invoice body"
         (member
          "inv-3-notes"
@@ -447,10 +453,11 @@
       (test-equal "inv-7 simple entry details are correct"
         '("entry-inv-7-desc" "entry-inv-7-action" "2.00" "$3.00" "T" "$0.00" "$6.00")
         (cdr (sxml-main-get-row-col sxml 1 #f)))
-      (test-equal "inv-7 vend-name is correct"
-        '("emp-1-name" "emp-1-name")    ;FIXME: why is this duplicated????
-        ((sxpath '(// (table 2) // tbody // tr // td // *text*))
-         sxml))
+      (unless (eq? variant 'fancy-invoice)
+        (test-equal "inv-7 vend-name is correct"
+          '("emp-1-name" "emp-1-name")    ;FIXME: why is this duplicated????
+          ((sxpath '(// (table 2) // tbody // tr // td // *text*))
+           sxml)))
       (test-assert "inv-7 inv-4-notes is in invoice body"
         (member
          "inv-4-notes"
@@ -546,14 +553,14 @@
            "Terms:\xa0billterm-desc"
            ((sxpath '(// body // *text*)) sxml)))
         (case variant
-          ((invoice fancy-invoice)
+          ((invoice)
            (test-equal "inv-8 invoice date is in invoice body"
              '("Invoice Date:\xa0")
              (sxml->table-row-col sxml 2 1 1))
            (test-equal "inv-8 due date is in invoice body"
              '("Due Date:\xa0")
              (sxml->table-row-col sxml 2 2 1)))
-          (else
+          ((easy-invoice)
            (test-equal "inv-8 invoice date is in invoice body"
              '("Date:\xa0")
              (sxml->table-row-col sxml 3 1 1))
@@ -564,7 +571,9 @@
           '("$2,133.25" "$2,061.96" "$2,133.25" "$2,061.96" "$2,133.25" "$2,133.25"
             "$1,851.95" "$1,859.30" "$16,368.17" "$1,111.01" "$17,479.18"
             "-$17,479.18" "$0.00")
-          (sxml->table-row-col sxml 4 #f -1))
+          (if (eq? variant 'fancy-invoice)
+              (sxml->table-row-col sxml 3 #f -1)
+              (sxml->table-row-col sxml 4 #f -1)))
         (test-assert "inv-8 is fully paid up!"
           (gncInvoiceIsPaid inv-8))))
     (test-end "combinations of gncEntry options")))
