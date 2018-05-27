@@ -493,6 +493,19 @@
            (gncEntrySetInvTaxable each-entry taxable?)
            (gncEntrySetInvTaxIncluded each-entry tax-included?)
            (gncEntrySetInvTaxTable each-entry combo-vat-sales-tt)
+           ;; FIXME: Note: The following function hides a subtle
+           ;; bug. It aims to retrieve & dump the entry description
+           ;; and amount. Unfortunately the (gncEntryGetDocValue)
+           ;; function will subtly modify the entry amounts by a
+           ;; fraction; this means that the subsequent invoice payment
+           ;; will not make the invoice amount completely zero. If the
+           ;; following statement is uncommented, the invoice
+           ;; generated will not change, however, the test will fail
+           ;; because the (gncInvoiceIsPaid) final test will fail.
+
+           ;; (format #t "inv-8: adding ~a to invoice, entry amount is ~a\n"
+           ;;         desc
+           ;;         (exact->inexact (gncEntryGetDocValue each-entry #f #t #f)))
            (gncInvoiceAddEntry inv-8 each-entry)))
        (list
         ;; the following list specifies combinations to test gncEntry options
@@ -531,6 +544,6 @@
             "$1,851.95" "$1,859.30" "$16,368.17" "$1,111.01" "$17,479.18"
             "-$17,479.18" "$0.00")
           (sxml->table-row-col sxml 4 #f -1))
-        ))
-    (test-end "combinations of gncEntry options")
-    ))
+        (test-assert "inv-8 is fully paid up!"
+          (gncInvoiceIsPaid inv-8))))
+    (test-end "combinations of gncEntry options")))
