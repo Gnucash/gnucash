@@ -39,7 +39,7 @@
   (test-runner-factory gnc:test-runner)
   (test-begin "test-invoice.scm")
   (inv-tests 'invoice)
-  ;; (inv-tests 'easy-invoice)
+  (inv-tests 'easy-invoice)
   ;; (inv-tests 'fancy-invoice)
   (test-end "test-invoice.scm"))
 
@@ -184,19 +184,34 @@
                                         (gncTaxTableAddEntry tt entry))
                                       tt)))
 
-    (define (default-testing-options inv)
+    (define* (default-testing-options inv #:optional (setting #t))
       (let ((options (gnc:make-report-options uuid)))
         (set-option! options "General" "Invoice Number" inv)
         (for-each
          (lambda (disp-col-name)
-           (set-option! options "Display Columns" disp-col-name #t))
-         '("Date" "Description" "Action" "Quantity" "Price" "Discount"
-           "Taxable" "Tax Amount" "Total"))
+           (set-option! options "Display Columns" disp-col-name setting))
+         (case variant
+           ((invoice fancy-invoice)
+            '("Date" "Description" "Action" "Quantity" "Price" "Discount"
+              "Taxable" "Tax Amount" "Total"))
+           ((easy-invoice)
+            '("Date" "Description" "Charge Type" "Quantity"
+              "Price" "Discount" "Taxable" "Tax Amount" "Total"))))
         (for-each
          (lambda (disp-col-name)
-           (set-option! options "Display" disp-col-name #t))
-         '("Individual Taxes" "Totals" "References" "Billing Terms"
-           "Billing ID" "Invoice Notes" "Payments" "Job Details"))
+           (set-option! options "Display" disp-col-name setting))
+         (case variant
+           ((invoice)
+            '("Individual Taxes" "Totals" "References" "Billing Terms"
+              "Billing ID" "Invoice Notes" "Payments" "Job Details"))
+           ((fancy-invoice)
+            '("Individual Taxes" "Totals" "References" "Billing Terms"
+              "Billing ID" "Invoice Notes" "Payments"))
+           ((easy-invoice)
+            '("My Company" "My Company ID" "Due Date"
+              "Individual Taxes" "Totals" "Subtotal" "References"
+              "Billing Terms" "Billing ID" "Invoice Notes"
+              "Payments"))))
         options))
 
     ;; entry-1  2 widgets of $3 = $6
@@ -225,7 +240,10 @@
          sxml))
       (test-assert "inv-1-billing-id is in invoice body"
         (member
-         "Reference:\xa0inv-1-billing-id"
+         (case variant
+           ((invoice) "Reference:\xa0inv-1-billing-id")
+           ((easy-invoice) "Billing ID:\xa0inv-1-billing-id")
+           (else ""))
          ((sxpath '(// body // *text*)) sxml)))
       (test-assert "inv-1 inv-notes is in invoice body"
         (member
@@ -234,24 +252,17 @@
     (test-end "inv-1 simple entry")
 
     (test-begin "inv-1 simple entry, sparse options")
-    (let* ((options (let ((options (default-testing-options inv-1)))
-                      (for-each
-                       (lambda (disp-col-name)
-                         (set-option! options "Display Columns" disp-col-name #f))
-                       '("Date" "Description" "Action" "Quantity" "Price" "Discount"
-                         "Taxable" "Tax Amount" "Total"))
-                      (for-each
-                       (lambda (disp-col-name)
-                         (set-option! options "Display" disp-col-name #f))
-                       '("Individual Taxes" "Totals" "References" "Billing Terms"
-                         "Billing ID" "Invoice Notes" "Payments" "Job Details"))
-                      options))
+    (let* ((options (default-testing-options inv-1 #f))
            (sxml (options->sxml options "inv-1 simple entry sparse")))
       (test-equal "inv-1 sparse simple entry headers are correct"
-        '("Net Price" "Tax" "Total Price" "Amount Due")
+        (case variant
+          ((invoice) '("Net Price" "Tax" "Total Price" "Amount Due"))
+          (else '("Tax" "Total Price" "Amount Due")))
         (sxml-main-get-row-col sxml #f 1))
       (test-equal "inv-1 sparse simple entry amounts are correct"
-        '("$6.00" "$0.00" "$6.00" "$6.00")
+        (case variant
+          ((invoice) '("$6.00" "$0.00" "$6.00" "$6.00"))
+          (else '("$0.00" "$6.00" "$6.00")))
         (sxml-main-get-row-col sxml #f -1)))
     (test-end "inv-1 simple entry, sparse options")
 
@@ -293,14 +304,15 @@
         (member
          "inv-2-notes"
          ((sxpath '(// body // *text*)) sxml)))
-      (test-assert "inv-2 jobnumber is in invoice body"
-        (member
-         "Job number:\xa0job-1-id"
-         ((sxpath '(// body // *text*)) sxml)))
-      (test-assert "inv-2 jobname is in invoice body"
-        (member
-         "Job name:\xa0job-1-name"
-         ((sxpath '(// body // *text*)) sxml)))
+      (when (eq? variant 'invoice)
+        (test-assert "inv-2 jobnumber is in invoice body"
+          (member
+           "Job number:\xa0job-1-id"
+           ((sxpath '(// body // *text*)) sxml)))
+        (test-assert "inv-2 jobname is in invoice body"
+          (member
+           "Job name:\xa0job-1-name"
+           ((sxpath '(// body // *text*)) sxml))))
       )
     (test-end "inv-2")
 
@@ -533,12 +545,21 @@
           (member
            "Terms:\xa0billterm-desc"
            ((sxpath '(// body // *text*)) sxml)))
-        (test-equal "inv-8 invoice date is in invoice body"
-          '("Invoice Date:\xa0")
-          (sxml->table-row-col sxml 2 1 1))
-        (test-equal "inv-8 due date is in invoice body"
-          '("Due Date:\xa0")
-          (sxml->table-row-col sxml 2 2 1))
+        (case variant
+          ((invoice fancy-invoice)
+           (test-equal "inv-8 invoice date is in invoice body"
+             '("Invoice Date:\xa0")
+             (sxml->table-row-col sxml 2 1 1))
+           (test-equal "inv-8 due date is in invoice body"
+             '("Due Date:\xa0")
+             (sxml->table-row-col sxml 2 2 1)))
+          (else
+           (test-equal "inv-8 invoice date is in invoice body"
+             '("Date:\xa0")
+             (sxml->table-row-col sxml 3 1 1))
+           (test-equal "inv-8 invoice date is in invoice body"
+             '("Due:\xa0")
+             (sxml->table-row-col sxml 3 2 1))))
         (test-equal "inv-8 combo amounts are correct"
           '("$2,133.25" "$2,061.96" "$2,133.25" "$2,061.96" "$2,133.25" "$2,133.25"
             "$1,851.95" "$1,859.30" "$16,368.17" "$1,111.01" "$17,479.18"
