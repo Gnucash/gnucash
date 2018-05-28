@@ -733,24 +733,18 @@ floordiv(int a, int b)
  *   The 'O' and 'E' format modifiers are for localized input/output
  *   characters. Remove them as we are always using Arabic numbers.
  */
-static char *
-normalize_format (const char *format)
+static inline std::string
+normalize_format (const std::string& format)
 {
-    gint counter = 0, n_counter = 0;
-    gchar *normalized;
-
-    normalized = g_strdup(format);
-    while (format[counter] != '\0')
-    {
-        normalized[n_counter] = format[counter];
-        if ((format[counter] == '%') && \
-            (format[counter+1] == 'E' || format[counter+1] == 'O'))
-            counter++;  // skip format modifier
-
-        counter++;
-        n_counter++;
-    }
-    normalized[n_counter] = '\0';
+    bool is_pct = false;
+    std::string normalized;
+    std::remove_copy_if(
+        format.begin(), format.end(), back_inserter(normalized),
+        [&is_pct](char e){
+            bool r = (is_pct && (e == 'E' || e == 'O' || e == '-'));
+            is_pct = e == '%';
+            return r;
+        });
     return normalized;
 }
 
@@ -846,12 +840,9 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
         if (buff[0] != '\0')
         {
             struct tm thetime;
-            gchar *normalized_format = normalize_format(GNC_D_FMT);
-
             /* Parse time string. */
             memset(&thetime, -1, sizeof(struct tm));
-            strptime (buff, normalized_format, &thetime);
-            g_free (normalized_format);
+            strptime (buff, normalize_format(GNC_D_FMT).c_str(), &thetime);
 
             if (third_field)
             {
@@ -1045,13 +1036,12 @@ char dateSeparator (void)
             struct tm tm;
             time64 secs;
             gchar *s;
-            gchar *normalized_fmt;
 
             secs = gnc_time (NULL);
             gnc_localtime_r(&secs, &tm);
-            normalized_fmt = normalize_format(qof_date_format_get_string(dateFormat));
-            qof_strftime(string, sizeof(string), normalized_fmt, &tm);
-            g_free(normalized_fmt);
+            auto normalized_fmt =
+                normalize_format(qof_date_format_get_string(dateFormat));
+            qof_strftime(string, sizeof(string), normalized_fmt.c_str(), &tm);
 
             for (s = string; *s != '\0'; s++)
                 if (!isdigit(*s))
