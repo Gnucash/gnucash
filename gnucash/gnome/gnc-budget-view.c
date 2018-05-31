@@ -1248,6 +1248,9 @@ gnc_budget_view_refresh(GncBudgetView *view)
         priv->total_col = gnc_tree_view_account_add_custom_column(
                               GNC_TREE_VIEW_ACCOUNT(priv->tree_view), _("Total"),
                               budget_total_col_source, NULL);
+
+        // set column title alignment to right to match column data
+        gtk_tree_view_column_set_alignment (priv->total_col, 1.0);
         g_object_set_data(G_OBJECT(priv->total_col), "budget", priv->budget);
 
         col = gbv_create_totals_column(view, -1);
