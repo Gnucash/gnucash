@@ -3,7 +3,7 @@
  * @addtogroup budget Budgets
  * @{
  * @file gnc-budget-view.c
- * @brief File to define budget views for gnucash (the actual display 
+ * @brief File to define budget views for gnucash (the actual display
           of the budget, along with some calculations and event handlers).
  * @author Phil Longstaff Copyright (C) 2013 phil.longstaff@yahoo.ca
  *
@@ -99,7 +99,7 @@ enum
 /**< \brief ENUM for different budget totals types.
 
 This enum is used to specify the specific type of account that the
- selected account belongs to. This is important to ensure that the sum 
+ selected account belongs to. This is important to ensure that the sum
  of the different types of accounts can be calculated.
 */
 
@@ -278,7 +278,7 @@ gnc_budget_view_finalize(GObject *object)
 
 /** \brief returns the current selection in the gnc budget view.
 
-    Returns the current selection in the gnc budget view by using the 
+    Returns the current selection in the gnc budget view by using the
     macro GNC_BUDGET_VIEW_GET_PRIVATE.
 */
 GtkTreeSelection*
@@ -341,7 +341,10 @@ gbv_totals_scrollbar_value_changed_cb (GtkAdjustment *adj, GncBudgetView* view)
  ***************************/
 /** \brief Creates necessary widgets for display of gnc budget.
 
-    This function steps through and performs the necessary actions for creating the widgets associated with a budget view. For example, creating the trees for the accounts, creating the graphics objects, creating the links between actions and events etc.
+    This function steps through and performs the necessary actions for
+    creating the widgets associated with a budget view. For example,
+    creating the trees for the accounts, creating the graphics objects,
+    creating the links between actions and events etc.
 */
 static void
 gbv_create_widget(GncBudgetView *view)
