@@ -1245,12 +1245,31 @@ gnc_budget_view_refresh(GncBudgetView *view)
 
     if (priv->total_col == NULL)
     {
+        gchar title[MAX_DATE_LENGTH];
+        guint titlelen;
+        GDate *date;
+
         priv->total_col = gnc_tree_view_account_add_custom_column(
                               GNC_TREE_VIEW_ACCOUNT(priv->tree_view), _("Total"),
                               budget_total_col_source, NULL);
 
         // set column title alignment to right to match column data
         gtk_tree_view_column_set_alignment (priv->total_col, 1.0);
+
+        // set a minimum column size based on the date length, adds some space to the column
+        date = g_date_new_dmy (31, 12, 2018);
+        titlelen = qof_print_gdate (title, MAX_DATE_LENGTH, date);
+        if (titlelen > 0)
+        {
+            PangoLayout *layout = gtk_widget_create_pango_layout (GTK_WIDGET (view), title);
+            PangoRectangle logical_rect;
+            pango_layout_set_width (layout, -1);
+            pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+            g_object_unref (layout);
+
+            gtk_tree_view_column_set_min_width (priv->total_col, logical_rect.width);
+        }
+        g_date_free (date);
         g_object_set_data(G_OBJECT(priv->total_col), "budget", priv->budget);
 
         col = gbv_create_totals_column(view, -1);
