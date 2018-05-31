@@ -670,6 +670,9 @@ gnc_reconcile_view_set_list ( GNCReconcileView  *view, gboolean reconcile)
         }
         gtk_tree_path_free(node->data);
     }
+    // Out of site toggles on selected rows may not appear correctly drawn so
+    // queue a draw for the treeview widget
+    gtk_widget_queue_draw (GTK_WIDGET(qview));
     g_list_free(list_of_rows);
 }
 
