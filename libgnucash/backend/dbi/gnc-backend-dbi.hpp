@@ -51,9 +51,7 @@ class GncSqlRow;
  */
 enum TableOpType
 {
-    drop = 0,
-    empty,
-    backup,
+    backup = 0,
     rollback,
     drop_backup
 };

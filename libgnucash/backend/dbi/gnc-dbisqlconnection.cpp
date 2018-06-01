@@ -672,13 +672,6 @@ GncDbiSqlConnection::table_operation(TableOpType op) noexcept
             case drop_backup:
                 result = table_manage_backup (table, op);
                 break;
-            case empty:
-                result = dbi_conn_queryf (m_conn, "DELETE FROM TABLE %s",
-                                          table.c_str());
-                break;
-            case drop:
-            default:
-                result = dbi_conn_queryf (m_conn, "DROP TABLE %s", table.c_str());
                 break;
             }
         }
