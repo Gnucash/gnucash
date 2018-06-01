@@ -80,7 +80,7 @@ public:
      */
     bool verify() noexcept override;
     bool retry_connection(const char* msg) noexcept override;
-    dbi_result table_manage_backup(const std::string& table_name, TableOpType op);
+
     bool table_operation (TableOpType op) noexcept;
     std::string add_columns_ddl(const std::string& table_name,
                                 const ColVec& info_vec) const noexcept;
@@ -110,8 +110,9 @@ private:
     unsigned int m_sql_savepoint;
     bool lock_database(bool ignore_lock);
     void unlock_database();
+    bool rename_table(const std::string& old_name, const std::string& new_name);
+    bool drop_table(const std::string& table);
     bool check_and_rollback_failed_save();
-
 };
 
 #endif //_GNC_DBISQLCONNECTION_HPP_
