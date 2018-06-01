@@ -118,7 +118,7 @@ public:
     virtual std::string quote_string (const std::string& str)
         const noexcept override { return std::string{str}; }
     int dberror() const noexcept override { return 0; }
-    void set_error(int error, unsigned int repeat, bool retry) noexcept override { return; }
+    void set_error(QofBackendError error, unsigned int repeat, bool retry) noexcept override { return; }
     bool verify() noexcept override { return true; }
     bool retry_connection(const char* msg) noexcept override { return true; }
 private:

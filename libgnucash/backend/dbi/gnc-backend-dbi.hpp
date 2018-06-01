@@ -97,7 +97,8 @@ public:
     void safe_sync(QofBook*) override;
     bool connected() const noexcept { return m_conn != nullptr; }
     /** FIXME: Just a pass-through to m_conn: */
-    void set_dbi_error(int error, unsigned int repeat,  bool retry) noexcept
+    void set_dbi_error(QofBackendError error, unsigned int repeat,
+                       bool retry) noexcept
     {
         m_conn->set_error(error, repeat, retry);
     }

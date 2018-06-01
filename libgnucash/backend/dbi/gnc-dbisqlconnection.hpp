@@ -64,7 +64,7 @@ public:
         return dbi_conn_error(m_conn, nullptr); }
     QofBackend* qbe () const noexcept { return m_qbe; }
     dbi_conn conn() const noexcept { return m_conn; }
-    inline void set_error(int error, unsigned int repeat,
+    inline void set_error(QofBackendError error, unsigned int repeat,
                           bool retry) noexcept override
     {
         m_last_error = error;
@@ -96,7 +96,7 @@ private:
     /** Code of the last error that occurred. This is set in the error callback
      * function.
      */
-    int m_last_error;
+    QofBackendError m_last_error;
     /** Used in case of transient errors. After such error, another attempt at
      * the original call is allowed. error_repeat tracks the number of attempts
      * and can be used to prevent infinite loops.
