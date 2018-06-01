@@ -260,7 +260,13 @@ GncDbiSqlConnection::execute_select_statement (const GncSqlStatementPtr& stmt)
     }
     while (m_retry);
     if (result == nullptr)
+    {
         PERR ("Error executing SQL %s\n", stmt->to_sql());
+        if(m_last_error)
+            m_qbe->set_error(m_last_error);
+        else
+            m_qbe->set_error(ERR_BACKEND_SERVER_ERR);
+    }
     gnc_pop_locale (LC_NUMERIC, locale);
     return GncSqlResultPtr(new GncDbiSqlResult (this, result));
 }
@@ -281,6 +287,10 @@ GncDbiSqlConnection::execute_nonselect_statement (const GncSqlStatementPtr& stmt
     if (result == nullptr && m_last_error)
     {
         PERR ("Error executing SQL %s\n", stmt->to_sql());
+        if(m_last_error)
+            m_qbe->set_error(m_last_error);
+        else
+            m_qbe->set_error(ERR_BACKEND_SERVER_ERR);
         return -1;
     }
     if (!result)
@@ -290,7 +300,10 @@ GncDbiSqlConnection::execute_nonselect_statement (const GncSqlStatementPtr& stmt
     if (status < 0)
     {
         PERR ("Error in dbi_result_free() result\n");
-        qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
+        if(m_last_error)
+            m_qbe->set_error(m_last_error);
+        else
+            m_qbe->set_error(ERR_BACKEND_SERVER_ERR);
     }
     return num_rows;
 }
