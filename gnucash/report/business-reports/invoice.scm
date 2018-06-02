@@ -287,7 +287,7 @@
 
   gnc:*report-options*)
 
-(define (make-entry-table invoice options add-order cust-doc? credit-note?)
+(define (make-entry-table invoice options cust-doc? credit-note?)
   (define (opt-val section name)
     (gnc:option-value
      (gnc:lookup-option options section name)))
@@ -419,9 +419,6 @@
 					      current-row-style
 					      cust-doc? credit-note?)))
 
-	    (let ((order (gncEntryGetOrder current)))
-	      (if (not (null? order)) (add-order order)))
-
 	    (do-rows-with-subtotals rest
 				    table
 				    used-columns
@@ -539,17 +536,12 @@
 	title))
 
   (let* ((document (gnc:make-html-document))
-	 (orders '())
 	 (invoice (opt-val gnc:pagename-general gnc:optname-invoice-number))
 	 (references? (opt-val "Display" "References"))
          (job? (opt-val "Display" "Job Details"))
          (jobnumber  (gncJobGetID (gncOwnerGetJob (gncInvoiceGetOwner  invoice))))
          (jobname    (gncJobGetName (gncOwnerGetJob (gncInvoiceGetOwner  invoice))))
 	 (custom-title (opt-val gnc:pagename-general "Custom Title")))
-
-    (define (add-order o)
-      (if (and references? (not (member o orders)))
-	  (addto! orders o)))
 
     (if (null? invoice)
 
@@ -565,7 +557,6 @@
                (cust-doc? (memq type (list GNC-INVOICE-CUST-INVOICE GNC-INVOICE-CUST-CREDIT-NOTE)))
                (credit-note? (memq type (list GNC-INVOICE-CUST-CREDIT-NOTE GNC-INVOICE-VEND-CREDIT-NOTE
                                               GNC-INVOICE-EMPL-CREDIT-NOTE)))
-
                (default-title (case type
                                 ((GNC-INVOICE-VEND-INVOICE)
                                  (_ "Bill"))
@@ -578,7 +569,7 @@
                (title (title-string default-title custom-title))
                (table (make-entry-table invoice
                                         (gnc:report-options report-obj)
-                                        add-order cust-doc? credit-note?)))
+                                        cust-doc? credit-note?)))
           
           (gnc:html-document-set-title! document (format #f (_"~a #~a") title
                                                    (gncInvoiceGetID invoice)))
@@ -607,6 +598,7 @@
 
           (gnc:html-document-add-object! document
                                          (make-client-table owner orders))
+
           (make-break! document)
           (make-break! document)
 
