@@ -363,11 +363,9 @@ set_string_val (gpointer pObject,  gpointer pValue)
 static  gpointer
 get_double_val (gpointer pObject)
 {
-    slot_info_t* pInfo = (slot_info_t*)pObject;
-    static double d_val;
-
+    static double d_val; /* static so that we can return it. */
     g_return_val_if_fail (pObject != NULL, NULL);
-
+    auto pInfo = static_cast<slot_info_t*>(pObject);
     if (pInfo->pKvpValue->get_type () == KvpValue::Type::DOUBLE)
     {
         d_val = pInfo->pKvpValue->get<double> ();
