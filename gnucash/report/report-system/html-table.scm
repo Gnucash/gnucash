@@ -339,16 +339,12 @@
     
 
 (define (gnc:html-table-append-row! table newrow)
-  (let* ((dd (gnc:html-table-data table))
-	 (current-num-rows (gnc:html-table-num-rows table))
-	 (new-num-rows (+ current-num-rows 1)))
-    (if (list? newrow)
-        (set! dd (cons newrow dd))
-        (set! dd (cons (list newrow) dd)))
-    (gnc:html-table-set-num-rows-internal! 
-     table 
-     new-num-rows)
-    (gnc:html-table-set-data! table dd)
+  (let* ((current-num-rows (gnc:html-table-num-rows table))
+	 (new-num-rows (1+ current-num-rows)))
+    (gnc:html-table-set-num-rows-internal! table new-num-rows)
+    (gnc:html-table-set-data! table
+                              (cons (if (list? newrow) newrow (list newrow))
+                                    (gnc:html-table-data table)))
     new-num-rows))
 
 (define (gnc:html-table-remove-last-row! table)
