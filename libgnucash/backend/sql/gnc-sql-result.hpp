@@ -52,7 +52,7 @@ protected:
         virtual GncSqlRow& operator++() = 0;
         virtual GncSqlResult* operator*() = 0;
         virtual int64_t get_int_at_col (const char* col) const = 0;
-        virtual float get_float_at_col (const char* col) const = 0;
+        virtual double get_float_at_col (const char* col) const = 0;
         virtual double get_double_at_col (const char* col) const = 0;
         virtual std::string get_string_at_col (const char* col) const = 0;
         virtual time64 get_time64_at_col (const char* col) const = 0;
@@ -88,7 +88,7 @@ public:
     friend bool operator!=(const GncSqlRow&, const GncSqlRow&);
     int64_t get_int_at_col (const char* col) const {
         return m_iter->get_int_at_col (col); }
-    float get_float_at_col (const char* col) const {
+    double get_float_at_col (const char* col) const {
         return m_iter->get_float_at_col (col); }
     double get_double_at_col (const char* col) const {
         return m_iter->get_double_at_col (col); }

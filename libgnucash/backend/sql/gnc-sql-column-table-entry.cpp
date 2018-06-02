@@ -283,7 +283,7 @@ GncSqlColumnTableEntryImpl<CT_DOUBLE>::load (const GncSqlBackend* sql_be,
     {
         try
         {
-            val = static_cast<double>(row.get_float_at_col(m_col_name));
+            val = row.get_float_at_col(m_col_name);
         }
         catch (std::invalid_argument&)
         {

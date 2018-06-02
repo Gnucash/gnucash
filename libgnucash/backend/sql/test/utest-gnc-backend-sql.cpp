@@ -66,7 +66,7 @@ protected:
             virtual GncSqlResult* operator*() { return m_inst; }
             virtual int64_t get_int_at_col (const char* col) const
             { return 1LL; }
-            virtual float get_float_at_col (const char* col) const
+            virtual double get_float_at_col (const char* col) const
             { return 1.0; }
             virtual double get_double_at_col (const char* col) const
             { return 1.0; }
