@@ -1028,38 +1028,42 @@ gnc_tree_view_set_state_section (GncTreeView *view,
                 gboolean known = FALSE;
                 gchar *column_name = g_strdup (key);
                 gchar *type_name = g_strrstr (column_name, "_");
-                *type_name++ = '\0';
 
-                if (g_strcmp0 (type_name, STATE_KEY_SUFF_VISIBLE) == 0)
+                if (type_name != NULL) //guard against not finding '_'
                 {
-                    GtkTreeViewColumn *column = gnc_tree_view_find_column_by_name (view, column_name);
-                    if (column)
+                    *type_name++ = '\0';
+
+                    if (g_strcmp0 (type_name, STATE_KEY_SUFF_VISIBLE) == 0)
                     {
-                        known = TRUE;
-                        if (!g_object_get_data (G_OBJECT (column), ALWAYS_VISIBLE))
+                        GtkTreeViewColumn *column = gnc_tree_view_find_column_by_name (view, column_name);
+                        if (column)
                         {
-                            gtk_tree_view_column_set_visible (column,
-                                                              g_key_file_get_boolean (state_file, priv->state_section, key, NULL));
+                            known = TRUE;
+                            if (!g_object_get_data (G_OBJECT (column), ALWAYS_VISIBLE))
+                            {
+                                gtk_tree_view_column_set_visible (column,
+                                                                  g_key_file_get_boolean (state_file, priv->state_section, key, NULL));
+                            }
                         }
                     }
-                }
-                else if (g_strcmp0 (type_name, STATE_KEY_SUFF_WIDTH) == 0)
-                {
-                    gint width = g_key_file_get_integer (state_file, priv->state_section, key, NULL);
-                    GtkTreeViewColumn *column = gnc_tree_view_find_column_by_name (view, column_name);
-                    if (column)
+                    else if (g_strcmp0 (type_name, STATE_KEY_SUFF_WIDTH) == 0)
                     {
-                        known = TRUE;
-                        if (width && (width != gtk_tree_view_column_get_width (column)))
+                        gint width = g_key_file_get_integer (state_file, priv->state_section, key, NULL);
+                        GtkTreeViewColumn *column = gnc_tree_view_find_column_by_name (view, column_name);
+                        if (column)
                         {
-                            gtk_tree_view_column_set_fixed_width (column, width);
+                            known = TRUE;
+                            if (width && (width != gtk_tree_view_column_get_width (column)))
+                            {
+                                gtk_tree_view_column_set_fixed_width (column, width);
+                            }
                         }
                     }
-                }
-                if (!known)
-                    DEBUG ("Ignored key %s", key);
+                    if (!known)
+                        DEBUG ("Ignored key %s", key);
 
-                g_free (column_name);
+                    g_free (column_name);
+                }
             }
         }
         g_strfreev(keys);
