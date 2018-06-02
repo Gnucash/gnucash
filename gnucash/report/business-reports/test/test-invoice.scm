@@ -479,6 +479,12 @@
                                    (gncTaxTableEntrySetAmount entry taxrate)
                                    (gncTaxTableAddEntry tt entry))
                                  tt))
+           (order (let ((order (gncOrderCreate (gnc-get-current-book))))
+                    (gncOrderSetID order "order-id")
+                    (gncOrderSetOwner order owner-1)
+                    (gncOrderSetReference order "order-ref")
+                    (gncOrderSetActive order #t)
+                    order))
            (billterm (let ((term (gncBillTermCreate (gnc-get-current-book))))
                        (gncBillTermSetName term "billterm-name")
                        (gncBillTermSetDescription term "billterm-desc")
@@ -525,6 +531,7 @@
            ;; (format #t "inv-8: adding ~a to invoice, entry amount is ~a\n"
            ;;         desc
            ;;         (exact->inexact (gncEntryGetDocValue each-entry #f #t #f)))
+           (gncOrderAddEntry order each-entry)
            (gncInvoiceAddEntry inv-8 each-entry)))
        (list
         ;; the following list specifies combinations to test gncEntry options
@@ -551,6 +558,10 @@
         (test-assert "inv-8 billterm-desc is in invoice body"
           (member
            "Terms:\xa0billterm-desc"
+           ((sxpath '(// body // *text*)) sxml)))
+        (test-assert "inv-8 gncOrder reference is in invoice body"
+          (member
+           "REF:\xa0order-ref"
            ((sxpath '(// body // *text*)) sxml)))
         (case variant
           ((invoice)
