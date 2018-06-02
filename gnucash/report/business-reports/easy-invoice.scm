@@ -154,7 +154,7 @@
 		 "number-cell"
 		 (gnc:make-gnc-monetary
 		  currency (if cust-doc? (gncEntryGetInvPrice entry)
-					 (gncEntryGetBillPrice entry))))))
+                               (gncEntryGetBillPrice entry))))))
 
     (if (discount-col column-vector)
 	(addto! row-contents
@@ -319,8 +319,8 @@
   (gnc:register-inv-option
    (gnc:make-text-option
     (N_ "Text") (N_ "Extra Notes")
-     "v" (N_ "Extra notes to put on the invoice (simple HTML is accepted).")
-     (_ "Thank you for your patronage!")))
+    "v" (N_ "Extra notes to put on the invoice (simple HTML is accepted).")
+    (_ "Thank you for your patronage!")))
 
   (gnc:options-set-default-section gnc:*report-options* "General")
 
@@ -360,12 +360,12 @@
       (let ((subtotal-mon (gnc:make-gnc-monetary currency subtotal)))
 
         (gnc:html-table-append-row/markup!
-            table
-            subtotal-style
-            (append (cons (gnc:make-html-table-cell/markup
+         table
+         subtotal-style
+         (append (cons (gnc:make-html-table-cell/markup
                         "total-label-cell" subtotal-label)
-                        '())
-                    (list (gnc:make-html-table-cell/size/markup
+                       '())
+                 (list (gnc:make-html-table-cell/size/markup
                         1 (colspan subtotal-mon used-columns)
                         "total-number-cell"
                         (display-subtotal subtotal-mon used-columns)))))))
@@ -375,15 +375,15 @@
 	     (currency (xaccTransGetCurrency t))
 	     ;; Depending on the document type, the payments may need to be sign-reversed
 	     (amt (gnc:make-gnc-monetary currency
-		    (if reverse-payments?
-			(gnc-numeric-neg(xaccSplitGetValue split))
-			(xaccSplitGetValue split))))
+                                         (if reverse-payments?
+                                             (gnc-numeric-neg(xaccSplitGetValue split))
+                                             (xaccSplitGetValue split))))
 	     (payment-style "grand-total")
 	     (row '()))
 
 	(total-collector 'add
-	    (gnc:gnc-monetary-commodity amt)
-	    (gnc:gnc-monetary-amount amt))
+                         (gnc:gnc-monetary-commodity amt)
+                         (gnc:gnc-monetary-amount amt))
 
 	(if (date-col used-columns)
 	    (addto! row
@@ -409,25 +409,25 @@
       (if (null? entries)
           (let ((total-collector (gnc:make-commodity-collector)))
 
-            ; jamie
+                                        ; jamie
             (if (opt-val "Display" "Subtotal")
                 (add-subtotal-row table used-columns (gncInvoiceGetTotalSubtotal invoice)
                                   "grand-total" (_ "Net Price")))
 
             (if display-all-taxes
-              (let ((acct-val-list (gncInvoiceGetTotalTaxList invoice)))
-                (for-each
-                  (lambda (parm)
-                    (let* ((value (cdr parm))
-                           (acct (car parm))
-                           (name (xaccAccountGetName acct)))
-                      (add-subtotal-row table used-columns value
-                                        "grand-total" name)))
-                    acct-val-list))
+                (let ((acct-val-list (gncInvoiceGetTotalTaxList invoice)))
+                  (for-each
+                   (lambda (parm)
+                     (let* ((value (cdr parm))
+                            (acct (car parm))
+                            (name (xaccAccountGetName acct)))
+                       (add-subtotal-row table used-columns value
+                                         "grand-total" name)))
+                   acct-val-list))
 
-              ; nope, just show the total tax.
-              (add-subtotal-row table used-columns (gncInvoiceGetTotalTax invoice)
-                                "grand-total" (_ "Tax")))
+                                        ; nope, just show the total tax.
+                (add-subtotal-row table used-columns (gncInvoiceGetTotalTax invoice)
+                                  "grand-total" (_ "Tax")))
 
             (add-subtotal-row table used-columns (gncInvoiceGetTotal invoice)
                               "grand-total" (_ "Total Price"))
@@ -545,7 +545,7 @@
     (string-append label ":&nbsp;")
     (string-expand (strftime date-format
                              (localtime date))
-                             #\space "&nbsp;"))))
+                   #\space "&nbsp;"))))
 
 (define (make-date-table)
   (let ((table (gnc:make-html-table)))
@@ -572,23 +572,23 @@
      'attribute (list "cellspacing" 0)
      'attribute (list "cellpadding" 0))
     (gnc:html-table-append-row! table
-      (list (if name (string-append "<div align='right'>" name "</div>") "")))
+                                (list (if name (string-append "<div align='right'>" name "</div>") "")))
 
-    ; this is pretty strange.  If addy is set, then make caddy <div>addy</div>,
-    ; then when adding the row to the table, we actually add several rows by expanding
-    ; caddy (the <div> is already set for the first in list and </dev> for last because
-    ; of addy)
+                                        ; this is pretty strange.  If addy is set, then make caddy <div>addy</div>,
+                                        ; then when adding the row to the table, we actually add several rows by expanding
+                                        ; caddy (the <div> is already set for the first in list and </dev> for last because
+                                        ; of addy)
     (if (and addy (> (string-length addy) 0))
-     (let ((caddy (string-append "<div align='right'>" addy "</div>")))
-      (gnc:html-table-append-row! table (list (string-expand caddy
-        #\newline "</td></tr><tr><td><div align='right'>")))))
+        (let ((caddy (string-append "<div align='right'>" addy "</div>")))
+          (gnc:html-table-append-row! table (list (string-expand caddy
+                                                                 #\newline "</td></tr><tr><td><div align='right'>")))))
     table))
 
 (define (add-html! document htmlstring)
   (gnc:html-document-add-object!
    document
-    (gnc:make-html-text
-     (N_ htmlstring))))
+   (gnc:make-html-text
+    (N_ htmlstring))))
 
 (define (make-break! document)
   (gnc:html-document-add-object!
@@ -628,31 +628,31 @@
 	  (set! owner (gncInvoiceGetOwner invoice))
 	  (let ((type (gncInvoiceGetType invoice)))
 	    (cond
-	      ((eqv? type GNC-INVOICE-CUST-INVOICE)
-	       (set! cust-doc? #t))
-	      ((eqv? type GNC-INVOICE-VEND-INVOICE)
-	       (set! default-title (_ "Bill")))
-	      ((eqv? type GNC-INVOICE-EMPL-INVOICE)
-	       (set! default-title (_ "Expense Voucher")))
-	      ((eqv? type GNC-INVOICE-CUST-CREDIT-NOTE)
-	       (begin
+             ((eqv? type GNC-INVOICE-CUST-INVOICE)
+              (set! cust-doc? #t))
+             ((eqv? type GNC-INVOICE-VEND-INVOICE)
+              (set! default-title (_ "Bill")))
+             ((eqv? type GNC-INVOICE-EMPL-INVOICE)
+              (set! default-title (_ "Expense Voucher")))
+             ((eqv? type GNC-INVOICE-CUST-CREDIT-NOTE)
+              (begin
 	        (set! cust-doc? #t)
 	        (set! credit-note? #t)
 	        (set! default-title (_ "Credit Note"))))
-	      ((eqv? type GNC-INVOICE-VEND-CREDIT-NOTE)
-	       (begin
+             ((eqv? type GNC-INVOICE-VEND-CREDIT-NOTE)
+              (begin
 	        (set! credit-note? #t)
 	        (set! default-title (_ "Credit Note"))))
-	      ((eqv? type GNC-INVOICE-EMPL-CREDIT-NOTE)
-	       (begin
+             ((eqv? type GNC-INVOICE-EMPL-CREDIT-NOTE)
+              (begin
 	        (set! credit-note? #t)
 	        (set! default-title (_ "Credit Note"))))))
 	  (set! title (format #f (_"~a #~a") (title-string default-title custom-title)
-			       (gncInvoiceGetID invoice)))))
+                              (gncInvoiceGetID invoice)))))
 
-;    (gnc:html-document-set-title! document title)
+                                        ;    (gnc:html-document-set-title! document title)
 
-    ; framing table
+                                        ; framing table
     (add-html! document "<center><table width='")
     (add-html! document (opt-val "Display" "Invoice Width"))
     (add-html! document "' cellpadding='0' cellspacing='0'>")
@@ -660,133 +660,133 @@
     (add-html! document "<tr><td align='left'>")
 
     (if (not (null? invoice))
-      (let* ((book (gncInvoiceGetBook invoice))
-             (date-format (gnc:options-fancy-date book)))
+        (let* ((book (gncInvoiceGetBook invoice))
+               (date-format (gnc:options-fancy-date book)))
 
-        ; invoice number and ID String table
-        (add-html! document "<table width='100%'><tr>")
-        (add-html! document "<td align='left'>")
-        (add-html! document "<b><u>")
-	(add-html! document title)
-;;	(add-html! document (format #f (_ "Invoice #~a")
-;;				     (gncInvoiceGetID invoice)))
-        (add-html! document "</u></b></td>")
-        (add-html! document "<td align='right'>")
-
-        (if (opt-val "Display" "My Company ID")
-          (let* ((taxid (gnc:company-info book gnc:*company-id*)))
-                 (if (and taxid (> (string-length taxid) 0))
-                   (begin
-                     (add-html! document taxid)
-                     (add-html! document "&nbsp;")))
-          )
-        )
-        (add-html! document "</td>")
-        (add-html! document "</tr></table>")
-
-        (make-break! document)
-        (make-break! document)
-
-        ; add the client and company name table
-	(let ((book (gncInvoiceGetBook invoice)))
-	  (set! table (make-entry-table invoice
-					(gnc:report-options report-obj)
-					add-order cust-doc? credit-note?))
-
+                                        ; invoice number and ID String table
           (add-html! document "<table width='100%'><tr>")
-          (add-html! document "<td align='left' valign='top'>")
-	  (gnc:html-document-add-object!
-	   document
-	   (make-client-table owner orders))
+          (add-html! document "<td align='left'>")
+          (add-html! document "<b><u>")
+          (add-html! document title)
+          ;;	(add-html! document (format #f (_ "Invoice #~a")
+          ;;				     (gncInvoiceGetID invoice)))
+          (add-html! document "</u></b></td>")
+          (add-html! document "<td align='right'>")
+
+          (if (opt-val "Display" "My Company ID")
+              (let* ((taxid (gnc:company-info book gnc:*company-id*)))
+                (if (and taxid (> (string-length taxid) 0))
+                    (begin
+                      (add-html! document taxid)
+                      (add-html! document "&nbsp;")))
+                )
+              )
           (add-html! document "</td>")
-          (if (opt-val "Display" "My Company")
-            (begin
-              (add-html! document "<td align='right' valign='top'>")
-              (gnc:html-document-add-object!
-               document
-               (make-myname-table book))
-              (add-html! document "</td>")))
           (add-html! document "</tr></table>")
-        )
 
-        ;; add the date
-        (if (gncInvoiceIsPosted invoice)
-            (let ((date-table #f)
-                  (post-date (gncInvoiceGetDatePosted invoice))
-                  (due-date (gncInvoiceGetDateDue invoice)))
-              (set! date-table (make-date-table))
-              (make-date-row! date-table (_ "Date") post-date date-format)
-              (if (opt-val "Display" "Due Date")
-                  (make-date-row! date-table (_ "Due") due-date date-format))
-              (gnc:html-document-add-object! document date-table))
-            (add-html! document
-		       (string-append "<font color='red'>"
-				      (_ "INVOICE NOT POSTED")
-				      "</font>")))
+          (make-break! document)
+          (make-break! document)
 
-        (make-break! document)
+                                        ; add the client and company name table
+          (let ((book (gncInvoiceGetBook invoice)))
+            (set! table (make-entry-table invoice
+                                          (gnc:report-options report-obj)
+                                          add-order cust-doc? credit-note?))
 
-        (if (opt-val "Display" "Billing ID")
-          (let ((billing-id (gncInvoiceGetBillingID invoice)))
-            (if (and billing-id (> (string-length billing-id) 0))
+            (add-html! document "<table width='100%'><tr>")
+            (add-html! document "<td align='left' valign='top'>")
+            (gnc:html-document-add-object!
+             document
+             (make-client-table owner orders))
+            (add-html! document "</td>")
+            (if (opt-val "Display" "My Company")
+                (begin
+                  (add-html! document "<td align='right' valign='top'>")
+                  (gnc:html-document-add-object!
+                   document
+                   (make-myname-table book))
+                  (add-html! document "</td>")))
+            (add-html! document "</tr></table>")
+            )
+
+          ;; add the date
+          (if (gncInvoiceIsPosted invoice)
+              (let ((date-table #f)
+                    (post-date (gncInvoiceGetDatePosted invoice))
+                    (due-date (gncInvoiceGetDateDue invoice)))
+                (set! date-table (make-date-table))
+                (make-date-row! date-table (_ "Date") post-date date-format)
+                (if (opt-val "Display" "Due Date")
+                    (make-date-row! date-table (_ "Due") due-date date-format))
+                (gnc:html-document-add-object! document date-table))
+              (add-html! document
+                         (string-append "<font color='red'>"
+                                        (_ "INVOICE NOT POSTED")
+                                        "</font>")))
+
+          (make-break! document)
+
+          (if (opt-val "Display" "Billing ID")
+              (let ((billing-id (gncInvoiceGetBillingID invoice)))
+                (if (and billing-id (> (string-length billing-id) 0))
+                    (begin
+                      (gnc:html-document-add-object!
+                       document
+                       (gnc:make-html-text
+                        (string-append
+                         (_ "Billing ID") ":&nbsp;"
+                         (string-expand billing-id #\newline "<br/>"))))
+                      (make-break! document)))))
+
+          (if (opt-val "Display" "Billing Terms")
+              (let* ((term (gncInvoiceGetTerms invoice))
+                     (terms (gncBillTermGetDescription term)))
+                (if (and terms (> (string-length terms) 0))
+                    (gnc:html-document-add-object!
+                     document
+                     (gnc:make-html-text
+                      (string-append
+                       (_ "Terms") ":&nbsp;"
+                       (string-expand terms #\newline "<br/>")))))))
+
+          (make-break! document)
+
+                                        ; add the main table
+          (gnc:html-table-set-style!
+           table "table"
+           'attribute (list "width" "100%")
+           'attribute (list "border" 1)
+           'attribute (list "cellspacing" 0)
+           'attribute (list "cellpadding" 4))
+          (gnc:html-document-add-object! document table)
+
+          (make-break! document)
+          (make-break! document)
+
+          (if (opt-val "Display" "Invoice Notes")
               (begin
-                (gnc:html-document-add-object!
-                  document
-                  (gnc:make-html-text
-                    (string-append
-                      (_ "Billing ID") ":&nbsp;"
-                      (string-expand billing-id #\newline "<br/>"))))
-                (make-break! document)))))
+                (let ((notes (gncInvoiceGetNotes invoice)))
+                  (gnc:html-document-add-object!
+                   document
+                   (gnc:make-html-text
+                    (string-expand notes #\newline "<br/>"))))
+                (make-break! document)
+                (make-break! document)))
 
-        (if (opt-val "Display" "Billing Terms")
-          (let* ((term (gncInvoiceGetTerms invoice))
-            (terms (gncBillTermGetDescription term)))
-            (if (and terms (> (string-length terms) 0))
-              (gnc:html-document-add-object!
-                document
-                (gnc:make-html-text
-                  (string-append
-                    (_ "Terms") ":&nbsp;"
-                    (string-expand terms #\newline "<br/>")))))))
-
-        (make-break! document)
-
-        ; add the main table
-        (gnc:html-table-set-style!
-          table "table"
-          'attribute (list "width" "100%")
-          'attribute (list "border" 1)
-          'attribute (list "cellspacing" 0)
-          'attribute (list "cellpadding" 4))
-        (gnc:html-document-add-object! document table)
-
-        (make-break! document)
-        (make-break! document)
-
-	(if (opt-val "Display" "Invoice Notes")
-          (begin
-            (let ((notes (gncInvoiceGetNotes invoice)))
-              (gnc:html-document-add-object!
-               document
-               (gnc:make-html-text
-               (string-expand notes #\newline "<br/>"))))
-            (make-break! document)
-            (make-break! document)))
-
-        (gnc:html-document-add-object!
-          document
-          (gnc:make-html-text
+          (gnc:html-document-add-object!
+           document
+           (gnc:make-html-text
             (string-expand (opt-val "Text" "Extra Notes") #\newline "<br/>")
-             ))
+            ))
 
-        ; close the framing table
-        (add-html! document "</td></tr></table></center>"))
+                                        ; close the framing table
+          (add-html! document "</td></tr></table></center>"))
 
-    ; else (if invoice
-    (gnc:html-document-add-object!
-      document
-      (gnc:make-html-text
-       (_ "No valid invoice selected. Click on the Options button and select the invoice to use."))))
+                                        ; else (if invoice
+        (gnc:html-document-add-object!
+         document
+         (gnc:make-html-text
+          (_ "No valid invoice selected. Click on the Options button and select the invoice to use."))))
 
     document))
 
