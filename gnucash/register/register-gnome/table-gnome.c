@@ -61,6 +61,8 @@
 
 #define UNUSED_VAR     __attribute__ ((unused))
 
+#define KEY_ACCOUNT_NAME        "account_name"
+
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule UNUSED_VAR log_module = GNC_MOD_REGISTER;
 
@@ -68,14 +70,14 @@ static QofLogModule UNUSED_VAR log_module = GNC_MOD_REGISTER;
 /** Implementation *****************************************************/
 
 void
-gnc_table_save_state (Table *table, gchar * state_section)
+gnc_table_save_state (Table *table, gchar * state_section, gchar * account_fullname)
 {
     GnucashSheet *sheet;
     GNCHeaderWidths widths;
     GList *node;
     gchar *key;
     GKeyFile *state_file = gnc_state_get_current();
-    
+
     if (!table)
         return;
 
@@ -109,7 +111,7 @@ gnc_table_save_state (Table *table, gchar * state_section)
             g_key_file_remove_key (state_file, state_section, key, NULL);
         g_free (key);
     }
-
+    g_key_file_set_string (state_file, state_section, KEY_ACCOUNT_NAME, account_fullname);
     gnc_header_widths_destroy (widths);
 }
 
