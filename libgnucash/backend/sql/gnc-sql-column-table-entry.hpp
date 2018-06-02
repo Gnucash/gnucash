@@ -31,6 +31,8 @@ extern "C"
 #include <memory>
 #include <vector>
 #include <iostream>
+#include <iomanip>
+
 #include "gnc-sql-result.hpp"
 
 struct GncSqlColumnInfo;
@@ -384,6 +386,22 @@ GncSqlColumnTableEntry::add_value_to_vec(QofIdTypeConst obj_name,
     }
 }
 
+template <> inline  void
+GncSqlColumnTableEntry::add_value_to_vec<double*>(QofIdTypeConst obj_name,
+                                         const void* pObject,
+                                         PairVec& vec, std::true_type) const
+{
+    double* s = get_row_value_from_object<double*>(obj_name, pObject);
+
+    if (s != nullptr)
+    {
+        std::ostringstream stream;
+        stream << std::setprecision(12) << std::fixed << *s;
+        vec.emplace_back(std::make_pair(std::string{m_col_name}, stream.str()));
+        return;
+    }
+}
+
 template <typename T> void
 GncSqlColumnTableEntry::add_value_to_vec(QofIdTypeConst obj_name,
                                          const void* pObject,
@@ -393,6 +411,19 @@ GncSqlColumnTableEntry::add_value_to_vec(QofIdTypeConst obj_name,
 
     std::ostringstream stream;
     stream << s;
+    vec.emplace_back(std::make_pair(std::string{m_col_name}, stream.str()));
+    return;
+}
+
+template <> inline void
+GncSqlColumnTableEntry::add_value_to_vec<double>(QofIdTypeConst obj_name,
+                                         const void* pObject,
+                                         PairVec& vec, std::false_type) const
+{
+    double s = *get_row_value_from_object<double*>(obj_name, pObject);
+
+    std::ostringstream stream;
+    stream << std::setprecision(12) << std::fixed << s;
     vec.emplace_back(std::make_pair(std::string{m_col_name}, stream.str()));
     return;
 }
