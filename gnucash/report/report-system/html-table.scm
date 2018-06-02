@@ -613,18 +613,6 @@
 ;; Feel free to contribute! :-)
 ;; 
 
-;; This function was moved here from balance-sheet.scm.
-;; This function "stacks" the two tables vertically.
-(define (gnc:html-table-merge t1 t2)
-  (begin 
-    (gnc:html-table-set-data! t1
-			      (append
-			       (gnc:html-table-data t2)
-			       (gnc:html-table-data t1)))
-    (gnc:html-table-set-num-rows-internal!
-     t1 (+ (gnc:html-table-num-rows t1)
-           (gnc:html-table-num-rows t2)))))
-
 (define (gnc:html-table-render table doc)
   (let* ((retval '())
          (push (lambda (l) (set! retval (cons l retval)))))

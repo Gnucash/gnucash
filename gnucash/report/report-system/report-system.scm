@@ -620,7 +620,6 @@
 (export gnc:html-table-set-cell/tag!)
 (export gnc:html-table-append-column!)
 (export gnc:html-table-prepend-column!)
-(export gnc:html-table-merge)
 (export gnc:html-table-render)
 
 ;; html-text.scm
