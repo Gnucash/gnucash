@@ -53,7 +53,8 @@ enum TableOpType
 {
     backup = 0,
     rollback,
-    drop_backup
+    drop_backup,
+    recover
 };
 
 /**

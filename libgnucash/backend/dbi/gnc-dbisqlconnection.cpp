@@ -232,7 +232,16 @@ GncDbiSqlConnection::check_and_rollback_failed_save()
     auto backup_tables = m_provider->get_table_list(m_conn, "%back");
     if (backup_tables.empty())
         return true;
-    return table_operation(rollback);
+    auto merge_tables{m_provider->get_table_list(m_conn, "%_merge")};
+    if (!merge_tables.empty())
+    {
+        PERR("Merge tables exist in the database indicating a previous"
+             "attempt to recover from a failed safe-save. Automatic"
+             "recovery is beyond GnuCash's ability, you must recover"
+             "by hand or restore from a good backup.");
+        return false;
+    }
+    return table_operation(recover);
 }
 
 GncDbiSqlConnection::~GncDbiSqlConnection()
@@ -610,6 +619,23 @@ GncDbiSqlConnection::drop_table(const std::string& table)
     return execute_nonselect_statement(stmt) >= 0;
 }
 
+bool
+GncDbiSqlConnection::merge_tables(const std::string& table,
+                                  const std::string& other)
+{
+    auto merge_table = table + "_merge";
+    std::string sql = "CREATE TABLE " + merge_table + " AS SELECT * FROM " +
+        table + " UNION SELECT * FROM " + other;
+    auto stmt = create_statement_from_sql(sql);
+    if (execute_nonselect_statement(stmt) < 0)
+        return false;
+    if (!drop_table(table))
+        return false;
+    if (!rename_table(merge_table, table))
+        return false;
+    return drop_table(other);
+}
+
 /**
  * Perform a specified SQL operation on every table in a
  * database. Possible operations are:
@@ -662,15 +688,15 @@ GncDbiSqlConnection::table_operation(TableOpType op) noexcept
                 return false; /* Error, trigger rollback. */
         break;
     case drop_backup:
-            for (auto table : backup_tables)
-            {
-                auto data_table = table.substr(0, table.find("_back"));
-                if (std::find(data_tables.begin(), data_tables.end(),
-                             data_table) != data_tables.end())
-                    drop_table(table); /* Other table exists, OK. */
-                else /* No data table, restore the backup */
-                    rename_table(table, data_table);
-            }
+        for (auto table : backup_tables)
+        {
+            auto data_table = table.substr(0, table.find("_back"));
+            if (std::find(data_tables.begin(), data_tables.end(),
+                          data_table) != data_tables.end())
+                drop_table(table); /* Other table exists, OK. */
+            else /* No data table, restore the backup */
+                rename_table(table, data_table);
+        }
         break;
     case rollback:
         for (auto table : backup_tables)
@@ -680,6 +706,23 @@ GncDbiSqlConnection::table_operation(TableOpType op) noexcept
                           data_table) != data_tables.end())
                 drop_table(data_table); /* Other table exists, OK. */
             rename_table(table, data_table);
+        }
+        break;
+    case recover:
+        for (auto table : backup_tables)
+        {
+            auto data_table = table.substr(0, table.find("_back"));
+            if (std::find(data_tables.begin(), data_tables.end(),
+                          data_table) != data_tables.end())
+            {
+                if (!merge_tables(data_table, table))
+                    return false;
+            }
+            else
+            {
+                if (!rename_table(table, data_table))
+                    return false;
+            }
         }
         break;
     }

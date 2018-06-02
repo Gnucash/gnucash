@@ -112,6 +112,7 @@ private:
     void unlock_database();
     bool rename_table(const std::string& old_name, const std::string& new_name);
     bool drop_table(const std::string& table);
+    bool merge_tables(const std::string& table, const std::string& other);
     bool check_and_rollback_failed_save();
 };
 
