@@ -232,7 +232,7 @@ GncDbiSqlConnection::check_and_rollback_failed_save()
     auto backup_tables = m_provider->get_table_list(m_conn, "%back");
     if (backup_tables.empty())
         return true;
-    auto merge_tables{m_provider->get_table_list(m_conn, "%_merge")};
+    auto merge_tables = m_provider->get_table_list(m_conn, "%_merge");
     if (!merge_tables.empty())
     {
         PERR("Merge tables exist in the database indicating a previous"
@@ -664,8 +664,8 @@ GncDbiSqlConnection::merge_tables(const std::string& table,
 bool
 GncDbiSqlConnection::table_operation(TableOpType op) noexcept
 {
-    auto backup_tables{m_provider->get_table_list(m_conn, "%_back")};
-    auto all_tables{m_provider->get_table_list(m_conn, "")};
+    auto backup_tables = m_provider->get_table_list(m_conn, "%_back");
+    auto all_tables = m_provider->get_table_list(m_conn, "");
     /* No operations on the lock table */
     auto new_end = std::remove(all_tables.begin(), all_tables.end(), lock_table);
     all_tables.erase(new_end, all_tables.end());
