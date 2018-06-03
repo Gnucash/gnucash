@@ -40,13 +40,13 @@
   <gnc-act:long-description>
     A basic set of accounts for tracking VAT in the UK.
   </gnc-act:long-description>
+  <gnc-act:start-selected>0</gnc-act:start-selected>
   <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
   <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
   <act:type>ROOT</act:type>
   <act:commodity-scu>0</act:commodity-scu>
 </gnc:account>
-  <gnc-act:start-selected>0</gnc-act:start-selected>
 <gnc:account version="2.0.0">
   <act:name>Bank Accounts</act:name>
   <act:id type="new">48a242bf9a2d8c947cb41d96493d91da</act:id>
