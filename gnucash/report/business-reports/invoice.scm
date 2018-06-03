@@ -409,17 +409,16 @@
 	  ;;
 	  ;; End of BEGIN -- now here's the code to handle all the entries!
 	  ;;
-	  (let* ((current (car entries))
-		 (current-row-style (if odd-row? "normal-row" "alternate-row"))
-		 (rest (cdr entries))
-		 (entry-values (add-entry-row table
-					      currency
-					      current
-					      used-columns
-					      current-row-style
-					      cust-doc? credit-note?)))
+	  (begin
 
-	    (do-rows-with-subtotals rest
+            (add-entry-row table
+                           currency
+                           (car entries)
+                           used-columns
+                           (if odd-row? "normal-row" "alternate-row")
+                           cust-doc? credit-note?)
+
+	    (do-rows-with-subtotals (cdr entries)
 				    table
 				    used-columns
 				    width
