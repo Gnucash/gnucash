@@ -57,11 +57,11 @@
 (define columns-used-size 9)
 
 (define (num-columns-required columns-used)
-  (do ((i 0 (1+ i))
-       (col-req 0 col-req))
-      ((>= i columns-used-size) col-req)
-    (if (vector-ref columns-used i)
-        (set! col-req (1+ col-req)))))
+  ;; count number of columns where (vector-ref columns-used col) is #t
+  (count identity
+         (map (lambda (col)
+                (vector-ref columns-used col))
+              (iota columns-used-size))))
 
 (define (build-column-used options)
   (define (opt-val section name)
