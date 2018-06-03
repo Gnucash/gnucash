@@ -439,16 +439,16 @@
                               #t)
       table)))
 
-(define (string-expand string character replace-string)
-  (with-output-to-string
-    (lambda ()
-      (string-for-each
-       (lambda (c)
-         (display
-          (if (eqv? c character)
-              replace-string
-              c)))
-       string))))
+(define (multiline-to-html-text str)
+;; simple function - splits string containing #\newline into
+;; substrings, and convert to a gnc:make-html-text construct which
+;; adds gnc:html-markup-br after each substring.
+  (let loop ((list-of-substrings (string-split str #\newline))
+             (result '()))
+    (if (null? list-of-substrings)
+        (apply gnc:make-html-text (if (null? result) '() (reverse (cdr result))))
+        (loop (cdr list-of-substrings)
+              (cons* (gnc:html-markup-br) (car list-of-substrings) result)))))
 
 (define (make-client-table owner orders)
   (let ((table (gnc:make-html-table)))
@@ -459,7 +459,7 @@
 
     (gnc:html-table-append-row! table
                                 (list
-                                 (string-expand (gnc:owner-get-name-and-address-dep owner) #\newline "<br/>")))
+                                 (multiline-to-html-text (gnc:owner-get-name-and-address-dep owner))))
 
     (gnc:html-table-append-row! table
                                 (list
@@ -483,9 +483,8 @@
   (gnc:html-table-append-row! table
                               (list
                                (string-append label ":&nbsp;")
-                               (string-expand (strftime date-format
-                                                        (localtime date))
-                                              #\space "&nbsp;"))))
+                                (strftime date-format
+                                          (localtime date)))))
 
 (define (make-date-table)
   (let ((table (gnc:make-html-table)))
@@ -512,8 +511,8 @@
 
     (gnc:html-table-append-row! table (list (or name "")))
 
-    (gnc:html-table-append-row! table (list (string-expand (or addy "")
-                                                           #\newline "<br/>")))
+    (gnc:html-table-append-row! table (list (multiline-to-html-text (or addy ""))))
+
     (gnc:html-table-append-row! table (list (qof-print-date (current-time))))
 
     table))
@@ -530,8 +529,7 @@
 
   (define (title-string title custom-title)
     (if (not (string-null? custom-title))
-        (string-expand custom-title
-                       #\space "&nbsp;")
+        custom-title
         title))
 
   (let* ((document (gnc:make-html-document))
@@ -606,10 +604,10 @@
                 (if (and billing-id (not (string-null? billing-id)))
                     (begin
                       (gnc:html-document-add-object! document
-                                                     (gnc:make-html-text
+                                                     (multiline-to-html-text
                                                       (string-append
                                                        (_ "Reference") ":&nbsp;"
-                                                       (string-expand billing-id #\newline "<br/>"))))
+                                                       billing-id)))
                       (make-break! document)))))
 
           (if (opt-val "Display" "Billing Terms")
@@ -618,10 +616,10 @@
                 (if (and terms (not (string-null? terms)))
                     (begin
                       (gnc:html-document-add-object! document
-                                                     (gnc:make-html-text
+                                                     (multiline-to-html-text
                                                       (string-append
                                                        (_ "Terms") ":&nbsp;"
-                                                       (string-expand terms #\newline "<br/>"))))
+                                                       terms)))
                       (make-break! document)))))
 
           ;; Add job number and name to invoice if requested and if it exists
@@ -629,16 +627,16 @@
                    (not (string-null? jobnumber)))
               (begin
                 (gnc:html-document-add-object! document
-                                               (gnc:make-html-text
+                                               (multiline-to-html-text
                                                 (string-append
                                                  (_ "Job number") ":&nbsp;"
-                                                 (string-expand jobnumber #\newline "<br/>"))))
+                                                 jobnumber)))
                 (make-break! document)
                 (gnc:html-document-add-object! document
-                                               (gnc:make-html-text
+                                               (multiline-to-html-text
                                                 (string-append
                                                  (_ "Job name") ":&nbsp;"
-                                                 (string-expand jobname #\newline "<br/>"))))
+                                                 jobname)))
                 (make-break! document)
                 (make-break! document)))
 
@@ -650,16 +648,13 @@
           (if (opt-val "Display" "Invoice Notes")
               (let ((notes (gncInvoiceGetNotes invoice)))
                 (gnc:html-document-add-object! document
-                                               (gnc:make-html-text
-                                                (string-expand notes #\newline "<br/>")))))
+                                               (multiline-to-html-text notes))))
 
           (make-break! document)
 
           (gnc:html-document-add-object! document
-                                         (gnc:make-html-text
-                                          (gnc:html-markup-br)
-                                          (string-expand (opt-val "Display" "Extra Notes") #\newline "<br/>")
-                                          (gnc:html-markup-br)))))
+                                         (multiline-to-html-text
+                                          (opt-val "Display" "Extra Notes")))))
 
     document))
 
