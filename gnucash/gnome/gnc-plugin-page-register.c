@@ -1329,6 +1329,7 @@ static const gchar *style_names[] =
 
 #define KEY_REGISTER_TYPE       "RegisterType"
 #define KEY_ACCOUNT_NAME        "AccountName"
+#define KEY_ACCOUNT_GUID        "AccountGuid"
 #define KEY_REGISTER_STYLE      "RegisterStyle"
 #define KEY_DOUBLE_LINE         "DoubleLineMode"
 
@@ -1379,12 +1380,15 @@ gnc_plugin_page_register_save_page (GncPluginPage *plugin_page,
     {
         const gchar *label;
         gchar* name;
+        gchar acct_guid[GUID_ENCODING_LENGTH + 1];
         label = (ledger_type == LD_SINGLE) ? LABEL_ACCOUNT : LABEL_SUBACCOUNT;
         leader = gnc_ledger_display_leader(priv->ledger);
         g_key_file_set_string(key_file, group_name, KEY_REGISTER_TYPE, label);
         name = gnc_account_get_full_name(leader);
         g_key_file_set_string(key_file, group_name, KEY_ACCOUNT_NAME, name);
         g_free(name);
+        guid_to_string_buff (xaccAccountGetGUID (leader), acct_guid);
+        g_key_file_set_string(key_file, group_name, KEY_ACCOUNT_GUID, acct_guid);
     }
     else if (reg->type == GENERAL_JOURNAL)
     {
@@ -1484,8 +1488,9 @@ gnc_plugin_page_register_recreate_page (GtkWidget *window,
 {
     GncPluginPage *page;
     GError *error = NULL;
-    gchar *reg_type, *acct_name;
-    Account *account;
+    gchar *reg_type, *acct_guid;
+    GncGUID guid;
+    Account *account = NULL;
     QofBook *book;
     gboolean include_subs;
 
@@ -1502,12 +1507,22 @@ gnc_plugin_page_register_recreate_page (GtkWidget *window,
     {
         include_subs = (g_ascii_strcasecmp(reg_type, LABEL_SUBACCOUNT) == 0);
         DEBUG("Include subs: %d", include_subs);
-        acct_name = g_key_file_get_string(key_file, group_name,
-                                          KEY_ACCOUNT_NAME, &error);
         book = qof_session_get_book(gnc_get_current_session());
-        account = gnc_account_lookup_by_full_name(gnc_book_get_root_account(book),
-                  acct_name);
-        g_free(acct_name);
+        acct_guid = g_key_file_get_string(key_file, group_name,
+                                          KEY_ACCOUNT_GUID, &error);
+        if (string_to_guid (acct_guid, &guid)) //find account by guid
+        {
+            account = xaccAccountLookup (&guid, book);
+            g_free(acct_guid);
+        }
+        if (account == NULL) //find account by full name
+        {
+            gchar *acct_name = g_key_file_get_string(key_file, group_name,
+                                              KEY_ACCOUNT_NAME, &error);
+            account = gnc_account_lookup_by_full_name(gnc_book_get_root_account(book),
+                      acct_name);
+            g_free(acct_name);
+        }
         if (account == NULL)
         {
             LEAVE("Bad account name");

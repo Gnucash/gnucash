@@ -224,7 +224,8 @@ typedef struct GncMainWindowPrivate
     GncPluginPage *current_page;
     /** The identifier for this window's engine event handler. */
     gint event_handler_id;
-
+    /** Array for window position. */
+    gint pos[2];
     /** A hash table of all action groups that have been installed
      *  into this window. The keys are the name of an action
      *  group, the values are structures of type
@@ -773,6 +774,8 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     else
     {
         gtk_window_move(GTK_WINDOW(window), pos[0], pos[1]);
+        priv->pos[0] = pos[0];
+        priv->pos[1] = pos[1];
         DEBUG("window (%p) position %dx%d", window, pos[0], pos[1]);
     }
     if (geom)
@@ -1004,7 +1007,7 @@ gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
     GncMainWindowPrivate *priv;
     GtkAction *action;
     gint i, num_pages, coords[4], *order;
-    gboolean maximized, visible;
+    gboolean maximized, minimized, visible;
     gchar *window_group;
 
     /* Setup */
@@ -1045,8 +1048,19 @@ gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
     gtk_window_get_size(GTK_WINDOW(window), &coords[2], &coords[3]);
     maximized = (gdk_window_get_state(gtk_widget_get_window ((GTK_WIDGET(window))))
                  & GDK_WINDOW_STATE_MAXIMIZED) != 0;
-    g_key_file_set_integer_list(data->key_file, window_group,
-                                WINDOW_POSITION, &coords[0], 2);
+    minimized = (gdk_window_get_state(gtk_widget_get_window ((GTK_WIDGET(window))))
+                 & GDK_WINDOW_STATE_ICONIFIED) != 0;
+
+    if (minimized)
+    {
+        gint *pos = priv->pos;
+        g_key_file_set_integer_list(data->key_file, window_group,
+                                    WINDOW_POSITION, &pos[0], 2);
+        DEBUG("window minimized (%p) position %dx%d", window, pos[0], pos[1]);
+    }
+    else
+        g_key_file_set_integer_list(data->key_file, window_group,
+                                    WINDOW_POSITION, &coords[0], 2);
     g_key_file_set_integer_list(data->key_file, window_group,
                                 WINDOW_GEOMETRY, &coords[2], 2);
     g_key_file_set_boolean(data->key_file, window_group,
