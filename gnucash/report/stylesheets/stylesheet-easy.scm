@@ -344,7 +344,7 @@
       (if (and logopixmap (> (string-length logopixmap) 0))
         (set! headcolumn 1))
 
-      (add-css-information-to-doc options ssdoc)
+      (add-css-information-to-doc options ssdoc doc)
 
       (let* ((title (gnc:html-document-title doc))
              (doc-headline (gnc:html-document-headline doc))

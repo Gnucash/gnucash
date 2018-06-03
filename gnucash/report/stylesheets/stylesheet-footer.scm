@@ -343,7 +343,7 @@
     (if (not links?)
 	  (gnc:html-document-set-style! ssdoc "a" 'tag ""))
     
-    (add-css-information-to-doc options ssdoc)
+    (add-css-information-to-doc options ssdoc doc)
 
     (let ((t (gnc:make-html-table)))
       ;; we don't want a bevel for this table, but we don't want 
