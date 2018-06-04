@@ -153,9 +153,6 @@
 
 </head>
 <body>
-<?scm (if (not css?) (begin ?>
-  <table border="0" cellpadding="16"><tr><td> <!-- hack for GTKHTML -->
-<?scm )) ?>
 <h3><?scm:d coyname ?></h3>
 <h2><?scm:d reportname ?> <?scm:d (qof-print-date opt-date) ?></h2>
 
@@ -313,10 +310,6 @@
 
 <br clear="both">
 <p><?scm:d opt-extra-notes ?>
-
-<?scm (if (not css?) (begin ?>
-  </table> <!-- hack for GTKHTML -->
-<?scm )) ?>
 
 </body>
 </html>
