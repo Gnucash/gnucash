@@ -35,6 +35,9 @@
 
 (define (addif pred . data) (if pred data '()))
 
+(define base-css ".align-right { float: right; text-align: right }
+.entries-table > table { width: 100% }")
+
 (define (date-col columns-used)
   (vector-ref columns-used 0))
 (define (description-col columns-used)
@@ -570,6 +573,8 @@
 
           (gnc:html-document-set-title! document (format #f (_"~a #~a") title
                                                    (gncInvoiceGetID invoice)))
+
+          (gnc:html-document-set-style-text! document invoice-css)
 
           (gnc:html-table-set-style! table "table"
                                      'attribute (list "border" 1)
