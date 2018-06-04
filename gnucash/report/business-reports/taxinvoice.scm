@@ -306,22 +306,14 @@
          (opt-jobname-text          (opt-value headingpage2 optname-jobname-text))
          (opt-extra-css             (opt-value notespage    optname-extra-css)) 
          (opt-extra-notes           (opt-value notespage    optname-extra-notes)) 
-         (css? #t) ;(and (defined? 'gnc-html-engine-supports-css) (gnc-html-engine-supports-css)))
-         (html #f))
-
-    (set! html (eguile-file-to-string 
+         (css? #t)
+         (html (eguile-file-to-string
                  opt-template-file
-                 (the-environment)))
+                 (the-environment))))
 
-    (gnc:debug "taxinvoice.scm: css? is " css?)
-    (gnc:debug "taxinvoice.scm: defined is " (defined? 'gnc-html-engine-supports-css))
     (gnc:debug "taxinvoice.scm - generated html:") (gnc:debug html)
 
-    (if css? ; return report as document or html, depending on version 
-      html 
-      (let ((document (gnc:make-html-document)))
-        (gnc:html-document-add-object! document html)
-        document))))
+    html))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Define the report
