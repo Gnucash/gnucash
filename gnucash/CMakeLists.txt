@@ -188,6 +188,7 @@ if (MAC_INTEGRATION)
   file(APPEND ${ENV_FILE_OUT} "FONTCONFIG_FILE={GNC_HOME}/etc/fonts/fonts.conf\n")
   file(APPEND ${ENV_FILE_OUT} "OFX_DTD_PATH={GNC_HOME}/share/libofx/dtd\n")
   file(APPEND ${ENV_FILE_OUT} "GNC_DBD_DIR={SYS_LIB}/dbd\n")
+  file(APPEND ${ENV_FILE_OUT} "GTK_IM_MODULE_FILE={GNC_HOME}/lib/gtk-3.0/3.0.0/immodules.cache\n")
 endif()
 
 file(COPY ${BUILD_ENV_FILE_OUT}

@@ -1810,13 +1810,11 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
     if (pass_on)
     {
         gboolean result = FALSE;
-        gtk_editable_set_editable(GTK_EDITABLE(sheet->entry), TRUE);
 
         // If sheet is readonly, entry is not realized
         if (gtk_widget_get_realized (GTK_WIDGET(sheet->entry)))
             result = gtk_widget_event (sheet->entry, (GdkEvent *) event);
 
-        gtk_editable_set_editable(GTK_EDITABLE(sheet->entry), FALSE);
         return result;
     }
 
