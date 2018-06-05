@@ -16,8 +16,8 @@
     (test-assert "Missing GUID detection" (test-check2))
     (test-assert "Detect double GUID" (test-check3))
     (test-assert "Report with Full Argument Set" (test-check4))
-    (test-end "Testing/Temporary/test-report-system")
     (set! test-report-system-flag #f)
+    (test-end "Testing/Temporary/test-report-system")
 )
 
 ;; -----------------------------------------------------------------------
@@ -29,10 +29,7 @@
 ;; -----------------------------------------------------------------------
 
 (define (test-check2)
-  (if (not (gnc:define-report 'version "1" 'name "Test Report Template"))
-    #t
-    #f
-  )
+  (not (gnc:define-report 'version "1" 'name "Test Report Template"))
 )
 
 ;; -----------------------------------------------------------------------
@@ -48,7 +45,21 @@
 
 (define (test-check4)
   (and
-    (gnc:define-report 'version "1" 'name "Test Report Template" 'report-guid "54c2fc051af64a08ba2334c2e9179e24" 'parent-type "Parent Type" 'options-generator "Options Generator" 'renderer "Renderer" 'options-cleanup-cb "Options Clean-Up" 'options-changed-cb "Options Changed" 'in-menu? #f 'menu-path "Menu Path" 'menu-name "Menu Name" 'menu-tip "Menu Tip" 'export-types "Export Types" 'export-thunk "Export Thunk")
+    (gnc:define-report 'version "1"
+                       'name "Test Report Template"
+                       'report-guid "54c2fc051af64a08ba2334c2e9179e24"
+                       'parent-type "Parent Type"
+                       'options-generator "Options Generator"
+                       'renderer "Renderer"
+                       'options-cleanup-cb "Options Clean-Up"
+                       'options-changed-cb "Options Changed"
+                       'in-menu? #f
+                       'menu-path "Menu Path"
+                       'menu-name "Menu Name"
+                       'menu-tip "Menu Tip"
+                       'export-types "Export Types"
+                       'export-thunk "Export Thunk"
+    )
     (string=? (gnc:report-template-version (gnc:find-report-template "54c2fc051af64a08ba2334c2e9179e24")) "1")
     (string=? (gnc:report-template-name (gnc:find-report-template "54c2fc051af64a08ba2334c2e9179e24")) "Test Report Template")
     (string=? (gnc:report-template-report-guid
@@ -56,13 +67,13 @@
     ;; parent type is not exported -> it is used in gnc:make-report
     (string=? (gnc:report-template-options-generator (gnc:find-report-template "54c2fc051af64a08ba2334c2e9179e24")) "Options Generator")
     (string=? (gnc:report-template-renderer (gnc:find-report-template "54c2fc051af64a08ba2334c2e9179e24")) "Renderer")
-    (string=? (gnc:report-template-options-cleanup-cb (gnc:find-report-template "54c2fc051af64a08ba2334c2e9179e24"))"Options Clean-Up")
-    (string=? (gnc:report-template-options-changed-cb (gnc:find-report-template "54c2fc051af64a08ba2334c2e9179e24"))"Options Changed")
+    (string=? (gnc:report-template-options-cleanup-cb (gnc:find-report-template "54c2fc051af64a08ba2334c2e9179e24")) "Options Clean-Up")
+    (string=? (gnc:report-template-options-changed-cb (gnc:find-report-template "54c2fc051af64a08ba2334c2e9179e24")) "Options Changed")
     (not (gnc:report-template-in-menu? (gnc:find-report-template "54c2fc051af64a08ba2334c2e9179e24")))
-    (string=? (gnc:report-template-menu-path (gnc:find-report-template "54c2fc051af64a08ba2334c2e9179e24"))"Menu Path")
-    (string=? (gnc:report-template-menu-name (gnc:find-report-template "54c2fc051af64a08ba2334c2e9179e24"))"Menu Name")
-    (string=? (gnc:report-template-menu-tip (gnc:find-report-template "54c2fc051af64a08ba2334c2e9179e24"))"Menu Tip")
-    (string=? (gnc:report-template-export-types (gnc:find-report-template "54c2fc051af64a08ba2334c2e9179e24"))"Export Types")
-    (string=? (gnc:report-template-export-thunk (gnc:find-report-template "54c2fc051af64a08ba2334c2e9179e24"))"Export Thunk")
+    (string=? (gnc:report-template-menu-path (gnc:find-report-template "54c2fc051af64a08ba2334c2e9179e24")) "Menu Path")
+    (string=? (gnc:report-template-menu-name (gnc:find-report-template "54c2fc051af64a08ba2334c2e9179e24")) "Menu Name")
+    (string=? (gnc:report-template-menu-tip (gnc:find-report-template "54c2fc051af64a08ba2334c2e9179e24")) "Menu Tip")
+    (string=? (gnc:report-template-export-types (gnc:find-report-template "54c2fc051af64a08ba2334c2e9179e24")) "Export Types")
+    (string=? (gnc:report-template-export-thunk (gnc:find-report-template "54c2fc051af64a08ba2334c2e9179e24")) "Export Thunk")
   )
 )
