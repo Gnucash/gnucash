@@ -399,6 +399,9 @@
          ((gnc:html-table? obj)
           (set! o (gnc:make-html-object-internal
                    gnc:html-table-render obj)))
+         ((gnc:html-anytag? obj)
+          (set! o (gnc:make-html-object-internal
+                   gnc:html-anytag-render obj)))
          ((gnc:html-table-cell? obj)
           (set! o (gnc:make-html-object-internal
                    gnc:html-table-cell-render obj)))
