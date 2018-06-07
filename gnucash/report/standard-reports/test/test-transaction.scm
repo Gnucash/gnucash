@@ -172,7 +172,7 @@
 
     ;; Here we set foreign currencies
 
-    (gnc-commodity-set-user-symbol foreign2 "£")
+    (gnc-commodity-set-user-symbol foreign2 "#")
 
     (with-account
      gbp-bank
@@ -250,9 +250,9 @@
     ;; run in modern times, otherwise these transactions will be mixed
     ;; up with the old transactions above. The year end net bank balance
     ;; should be (* 12 (+ 103 109 -22)) = $2280.
-    ;; there will also be a £51 income monthly, tested at end of file
+    ;; there will also be a #51 income monthly, tested at end of file
     (for-each (lambda (m)
-                (env-transfer env 08 (1+ m) YEAR gbp-income gbp-bank 51 #:description "£51 income")
+                (env-transfer env 08 (1+ m) YEAR gbp-income gbp-bank 51 #:description "#51 income")
                 (env-transfer env 03 (1+ m) YEAR income bank  103 #:description "$103 income")
                 (env-transfer env 15 (1+ m) YEAR bank expense  22 #:description "$22 expense")
                 (env-transfer env 09 (1+ m) YEAR income bank  109 #:description "$109 income"))
@@ -585,7 +585,7 @@
         (test-equal "Other Account Name and Code displayed"
           (list "01-GBP GBP Bank")
           (get-row-col sxml 7 6))
-        (test-equal "GBP original currency totals = £4"
+        (test-equal "GBP original currency totals = #4"
           (list 4.0)
           (map str->num (get-row-col sxml 5 10)))
         (test-assert "USD original currency totals = $5"
@@ -808,8 +808,8 @@
                 "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$2,280.00" "$190.00")
           (get-row-col sxml 1 #f))
         (test-equal "summary gbp bank-row is correct"
-          (list "GBP Bank" "£51.00" "£51.00" "£51.00" "£51.00" "£51.00" "£51.00"
-                "£51.00" "£51.00" "£51.00" "£51.00" "£51.00" "£51.00" "£612.00" "£51.00")
+          (list "GBP Bank" "#51.00" "#51.00" "#51.00" "#51.00" "#51.00" "#51.00"
+                "#51.00" "#51.00" "#51.00" "#51.00" "#51.00" "#51.00" "#612.00" "#51.00")
           (get-row-col sxml 2 #f))
         (test-equal "summary expense-row is correct"
           (list "Expenses" "$22.00" "$22.00" "$22.00" "$22.00" "$22.00" "$22.00"
@@ -821,11 +821,11 @@
                 "-$212.00" "-$2,544.00" "-$212.00")
           (get-row-col sxml 4 #f))
         (test-equal "summary gbp income-row is correct"
-          (list "Income-GBP" "-£51.00" "-£51.00" "-£51.00" "-£51.00" "-£51.00" "-£51.00"
-                "-£51.00" "-£51.00" "-£51.00" "-£51.00" "-£51.00" "-£51.00" "-£612.00" "-£51.00")
+          (list "Income-GBP" "-#51.00" "-#51.00" "-#51.00" "-#51.00" "-#51.00" "-#51.00"
+                "-#51.00" "-#51.00" "-#51.00" "-#51.00" "-#51.00" "-#51.00" "-#612.00" "-#51.00")
           (get-row-col sxml 5 #f))
         (test-equal "summary gbp total-row is correct"
-          (list "Grand Total" "£0.00" "£0.00")
+          (list "Grand Total" "#0.00" "#0.00")
           (get-row-col sxml 6 #f))
         (test-equal "summary total-row is correct"
           (list "$0.00" "$0.00")
