@@ -72,6 +72,9 @@
 (define gnc:optname-stylesheet (N_ "Stylesheet"))
 (define gnc:menuname-business-reports (N_ "_Business"))
 (define gnc:optname-invoice-number (N_ "Invoice Number"))
+(define test-report-system-flag #f)
+
+(export test-report-system-flag)
 
 ;; We want to warn users if they've got an old-style, non-guid custom
 ;; report-template, but only once
@@ -118,7 +121,7 @@
                           in-report-rec
                           (blank-report))))
       (if (null? args)
-          in-report-rec
+          report-rec
           (let ((id (car args))
                (value (cadr args))
                (remainder (cddr args)))
@@ -139,9 +142,11 @@
 		;; FIXME: We should pass the top-level window
 		;; instead of the '() to gnc-error-dialog, but I
 		;; have no idea where to get it from.
-		(gnc-error-dialog '() (string-append
+                (if (not test-report-system-flag)
+		  (gnc-error-dialog '() (string-append
           (_ "One of your reports has a report-guid that is a duplicate. Please check the report system, especially your saved reports, for a report with this report-guid: ")
           report-guid))
+                #f)
 		)))
 	(begin
 	  (if (gnc:report-template-name report-rec)
@@ -157,27 +162,39 @@
 				    (gnc:report-template-renderer report-rec))
 			    (not (gnc:report-template-parent-type rec)))
 		       (begin
-			 (gnc:debug "gnc:define-report: setting parent-type of " (gnc:report-template-name report-rec) " to " (gnc:report-template-report-guid rec))
+			 (gnc:warn "gnc:define-report: setting parent-type of " (gnc:report-template-name report-rec) " to " (gnc:report-template-report-guid rec))
 			 (gnc:report-template-set-parent-type! report-rec (gnc:report-template-report-guid rec))
 			 (gnc:debug "done setting, is now " (gnc:report-template-parent-type report-rec))))) 
 		 *gnc:_report-templates_*)
 
+                (if (gnc:report-template-parent-type report-rec)
+                  (begin
+		    ;; re-save this old-style report in the new format
+		    (gnc:report-template-save-to-savefile report-rec)
+		    (gnc:debug "complete saving " (gnc:report-template-name report-rec) " in new format")
+                    (if (not gnc:old-style-report-warned)
+	              (begin
+		        (set! gnc:old-style-report-warned #t)
+                        (if (not test-report-system-flag) ;; do not call this during "make test"
+		          (gnc-error-dialog '() (string-append (_ "The GnuCash report system has been upgraded. Your old saved reports have been transferred into a new format. If you experience trouble with saved reports, please contact the GnuCash development team."))))
+	                (hash-set! *gnc:_report-templates_* (gnc:report-template-report-guid report-rec) report-rec)
+                      )
+                    )
+                  )
+                  ;;there is no parent -> this is an inital faulty report definition
+                  (if (not test-report-system-flag) ;; do not call this during "make test"
+                    (gnc-error-dialog '() (string-append (_ "Wrong report definition: ")
+                                                            (gnc:report-template-name report-rec)
+                                                         (_ " Report is missing a GUID.")))
+                  )
+                )
+              )
+            )
+          #f ;; report definition is faulty: does not include name
 
-		;; re-save this old-style report in the new format
-		(gnc:report-template-save-to-savefile report-rec)
-		(gnc:debug "complete saving " (gnc:report-template-name report-rec) " in new format")
-		))
+	  ;;(gnc:warn "gnc:define-report: old-style report. setting guid for " (gnc:report-template-name report-rec) " to " (gnc:report-template-report-guid report-rec)) ;; obsolete
 
-
-	  
-	  (if (not gnc:old-style-report-warned)
-	      (begin
-		(set! gnc:old-style-report-warned #t)
-		(gnc-error-dialog '() (string-append (_ "The GnuCash report system has been upgraded. Your old saved reports have been transferred into a new format. If you experience trouble with saved reports, please contact the GnuCash development team.")))))
-	  (hash-set! *gnc:_report-templates_*
-		     (gnc:report-template-report-guid report-rec) report-rec)
-	  (gnc:warn "gnc:define-report: old-style report. setting guid for " (gnc:report-template-name report-rec) " to " (gnc:report-template-report-guid report-rec)))
-	)))
+	))))
 
 (define gnc:report-template-version
   (record-accessor <report-template> 'version))
