@@ -450,6 +450,7 @@ gnucash/report/report-system/eguile-utilities.scm
 gnucash/report/report-system/gncmod-report-system.c
 gnucash/report/report-system/gnc-report.c
 gnucash/report/report-system/html-acct-table.scm
+gnucash/report/report-system/html-anytag.scm
 gnucash/report/report-system/html-barchart.scm
 gnucash/report/report-system/html-document.scm
 gnucash/report/report-system/html-fonts.scm
