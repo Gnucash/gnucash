@@ -100,7 +100,7 @@
    (addif (description-col column-vector)
           (_ "Description"))
    (addif (action-col column-vector)
-          (_ "Charge Type"))
+          (_ "Action"))
    (addif (quantity-col column-vector)
           (_ "Quantity"))
    (addif (price-col column-vector)

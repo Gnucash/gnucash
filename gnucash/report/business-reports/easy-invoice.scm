@@ -84,7 +84,7 @@
          (set-col (make-set-col col-vector)))
     (set-col (opt-val "Display Columns" "Date") 0)
     (set-col (opt-val "Display Columns" "Description") 1)
-    (set-col (opt-val "Display Columns" "Charge Type") 2)
+    (set-col (opt-val "Display Columns" "Action") 2)
     (set-col (opt-val "Display Columns" "Quantity") 3)
     (set-col (opt-val "Display Columns" "Price") 4)
     (set-col (opt-val "Display Columns" "Discount") 5)
@@ -101,7 +101,7 @@
     (if (description-col column-vector)
         (addto! heading-list (_ "Description")))
     (if (action-col column-vector)
-	(addto! heading-list (_ "Charge Type")))
+	(addto! heading-list (_ "Action")))
     (if (quantity-col column-vector)
 	(addto! heading-list (_ "Quantity")))
     (if (price-col column-vector)
@@ -222,8 +222,8 @@
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display Columns") (N_ "Charge Type")
-    "g" (N_ "Display the charge type?") #t))
+    (N_ "Display Columns") (N_ "Action")
+    "g" (N_ "Display the action?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option

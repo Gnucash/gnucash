@@ -1717,6 +1717,7 @@
                                         "Show zero balance items?" (cons #f "Show zero balance items")
                                         "Sign Reverses?" (cons #f "Sign Reverses")
                                         "To" (cons #f "End Date")
+                                        "Charge Type" (cons #f "Action") ;easy-invoice.scm, renamed June 2018
                                         "Use Full Account Name?" (cons #f "Use Full Account Name")
                                         "Use Full Other Account Name?" (cons #f "Use Full Other Account Name")
                                         "Void Transactions?" (cons "Filter" "Void Transactions")

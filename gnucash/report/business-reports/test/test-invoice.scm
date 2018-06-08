@@ -193,12 +193,10 @@
          (lambda (disp-col-name)
            (set-option! options "Display Columns" disp-col-name setting))
          (case variant
-           ((invoice fancy-invoice)
+           ((invoice fancy-invoice easy-invoice)
             '("Date" "Description" "Action" "Quantity" "Price" "Discount"
               "Taxable" "Tax Amount" "Total"))
-           ((easy-invoice)
-            '("Date" "Description" "Charge Type" "Quantity"
-              "Price" "Discount" "Taxable" "Tax Amount" "Total"))))
+           (else '())))
         (for-each
          (lambda (disp-col-name)
            (set-option! options "Display" disp-col-name setting))
