@@ -328,9 +328,13 @@ gnc_sx_get_variables(SchedXaction *sx, GHashTable *var_hash)
 static void
 _set_var_to_random_value(gchar *key, GncSxVariable *var, gpointer unused_user_data)
 {
-    var->value = double_to_gnc_numeric(g_random_int() + 2, 1,
-                                       GNC_NUMERIC_RND_MASK
-                                       | GNC_HOW_RND_FLOOR);
+    /* This is used by dialog-sx-editor to plug in values as a simplistic way to
+     * check balances. One possible variable is the number of periods in a
+     * interest or future value calculation where the variable is used as an
+     * exponent, so we want the numbers to be monotonically > 0 and not so large
+     * that they'll cause overflows.
+     */
+    var->value = gnc_numeric_create(g_random_int_range(1, 1000), 1);
 }
 
 void
