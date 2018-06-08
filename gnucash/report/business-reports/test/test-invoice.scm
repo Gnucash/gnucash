@@ -202,7 +202,8 @@
            (set-option! options "Display" disp-col-name setting))
          (case variant
            ((invoice)
-            '("Individual Taxes" "Totals" "References" "Billing Terms"
+            '("My Company" "My Company ID" "Due Date"
+              "Individual Taxes" "Totals" "Subtotal" "References" "Billing Terms"
               "Billing ID" "Invoice Notes" "Payments" "Job Details"))
            ((fancy-invoice)
             '("Individual Taxes" "Totals" "References" "Billing Terms"

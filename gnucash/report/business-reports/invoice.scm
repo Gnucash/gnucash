@@ -190,7 +190,7 @@
         (loop (cdr list-of-substrings)
               (cons* (gnc:html-markup-br) (car list-of-substrings) result)))))
 
-(define (options-generator)
+(define (options-generator css-default)
 
   (define gnc:*report-options* (gnc:new-options))
 
@@ -206,6 +206,11 @@
     gnc:pagename-general (N_ "Custom Title")
     "z" (N_ "A custom string to replace Invoice, Bill or Expense Voucher.")
     ""))
+
+  (gnc:register-inv-option
+   (gnc:make-internal-option
+    "General" "CSS"
+    css-default))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
@@ -251,6 +256,26 @@
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") (N_ "Total")
     "n" (N_ "Display the entry's value?") #t))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display") (N_ "My Company")
+    "a" (N_ "Display my company name and address?") #f))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display") (N_ "My Company ID")
+    "b" (N_ "Display my company ID?") #f))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display") (N_ "Due Date")
+    "c" (N_ "Display due date?") #t))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display") (N_ "Subtotal")
+    "d" (N_ "Display the subtotals?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
@@ -310,6 +335,7 @@
 
   (let ((show-payments (opt-val "Display" "Payments"))
         (display-all-taxes (opt-val "Display" "Individual Taxes"))
+        (display-subtotal? (opt-val "Display" "Subtotal"))
         (lot (gncInvoiceGetPostedLot invoice))
         (txn (gncInvoiceGetPostedTxn invoice))
         (currency (gncInvoiceGetCurrency invoice))
@@ -382,8 +408,9 @@
           ;; all entries done, add subtotals
           (let ((total-collector (gnc:make-commodity-collector)))
 
-            (add-subtotal-row table used-columns (gncInvoiceGetTotalSubtotal invoice)
-                              "grand-total" (_ "Net Price"))
+            (if display-subtotal?
+                (add-subtotal-row table used-columns (gncInvoiceGetTotalSubtotal invoice)
+                                  "grand-total" (_ "Net Price")))
 
             (if display-all-taxes
                 (for-each
@@ -459,7 +486,7 @@
                               #t)
       table)))
 
-(define (make-invoice-details-table invoice options)
+(define (make-invoice-details-table invoice options display-due-date?)
   ;; dual-column. invoice date/due, billingID, terms, job name/number
   (define (opt-val section name)
     (gnc:option-value
@@ -483,9 +510,10 @@
            invoice-details-table
            (make-date-row (_ "Date") post-date date-format))
 
-          (gnc:html-table-append-row!
-           invoice-details-table
-           (make-date-row (_ "Due Date") due-date date-format)))
+          (if display-due-date?
+              (gnc:html-table-append-row!
+               invoice-details-table
+               (make-date-row (_ "Due Date") due-date date-format))))
 
         (gnc:html-table-append-row! invoice-details-table
                                     (gnc:make-html-table-cell/size
@@ -556,11 +584,12 @@
    (strftime date-format
              (localtime date))))
 
-(define (make-myname-table book date-format)
+(define (make-myname-table book date-format display-tax-id?)
   ;; single-column table. my name, address, and printdate
   (let* ((table (gnc:make-html-table))
          (name (gnc:company-info book gnc:*company-name*))
-         (addy (gnc:company-info book gnc:*company-addy*)))
+         (addy (gnc:company-info book gnc:*company-addy*))
+         (taxid (gnc:company-info book gnc:*company-id*)))
 
     (gnc:html-table-set-style! table "table"
                                'attribute (list "border" 0)
@@ -575,6 +604,9 @@
     (if (and addy (not (string-null? addy)))
         (gnc:html-table-append-row! table (list (multiline-to-html-text addy))))
 
+    (if (and display-tax-id? taxid (not (string-null? taxid)))
+        (gnc:html-table-append-row! table (list (multiline-to-html-text taxid))))
+
     (gnc:html-table-append-row! table (list (qof-print-date (current-time))))
 
     table))
@@ -586,6 +618,9 @@
          (invoice (opt-val gnc:pagename-general gnc:optname-invoice-number))
          (references? (opt-val "Display" "References"))
          (custom-title (opt-val gnc:pagename-general "Custom Title"))
+         (company-table? (opt-val "Display" "My Company"))
+         (display-tax-id? (opt-val "Display" "My Company ID"))
+         (display-due-date? (opt-val "Display" "Due Date"))
          (title-string (lambda (title custom-title) (if (string-null? custom-title) title custom-title))))
 
     (if (null? invoice)
@@ -609,30 +644,36 @@
                                 (else
                                  (_ "Invoice"))))
                (title (title-string default-title custom-title))
+               (invoice-title (format #f (_"~a #~a") title (gncInvoiceGetID invoice)))
                (entry-table (make-entry-table invoice
                                               (gnc:report-options report-obj)
                                               cust-doc? credit-note?)))
 
-          (gnc:html-document-set-title! document (format #f (_"~a #~a") title
-                                                   (gncInvoiceGetID invoice)))
+          (gnc:html-document-set-title! document invoice-title)
 
-          (gnc:html-document-set-style-text! document invoice-css)
+          (gnc:html-document-set-style-text! document (opt-val "General" "CSS"))
 
           (let ((main-table (gnc:make-html-table)))
+
+            (gnc:html-table-append-row! main-table
+                                        (gnc:make-html-table-cell/size
+                                         1 2 (gnc:make-html-div/markup
+                                              "invoice-title" invoice-title)))
 
             (gnc:html-table-append-row! main-table
                                         (list #f
                                               (gnc:make-html-div/markup
                                                "invoice-details-table"
-                                               (make-invoice-details-table invoice options))))
+                                               (make-invoice-details-table invoice options display-due-date?))))
 
             (gnc:html-table-append-row! main-table
                                         (list (gnc:make-html-div/markup
                                                "client-table"
                                                (make-client-table owner orders))
 
-                                              (gnc:make-html-div/markup
-                                               "company-table" (make-myname-table book date-format))))
+                                              (and company-table?
+                                                   (gnc:make-html-div/markup
+                                                    "company-table" (make-myname-table book date-format display-tax-id?)))))
 
             (gnc:html-table-append-row! main-table
                                         (gnc:make-html-table-cell/size
@@ -660,12 +701,32 @@
     document))
 
 (define invoice-report-guid "5123a759ceb9483abf2182d01c140e8d")
+(define easy-invoice-guid "67112f318bef4fc496bdc27d106bbda4")
 
 (gnc:define-report
  'version 1
  'name (N_ "Printable Invoice")
  'report-guid invoice-report-guid
  'menu-path (list gnc:menuname-business-reports)
- 'options-generator options-generator
+ 'options-generator (lambda () (options-generator easy-invoice-css))
  'renderer reg-renderer
  'in-menu? #t)
+
+#;
+(gnc:define-report
+ 'version 1
+ 'name (N_ "Easy Invoice")
+ 'report-guid easy-invoice-guid
+ 'menu-path (list gnc:menuname-business-reports)
+ 'options-generator (lambda () (options-generator easy-invoice-css))
+ 'renderer reg-renderer
+ 'in-menu? #t)
+
+(define (gnc:easy-invoice-report-create-internal invoice)
+  (let* ((options (gnc:make-report-options easy-invoice-guid))
+         (invoice-op (gnc:lookup-option options gnc:pagename-general gnc:optname-invoice-number)))
+
+    (gnc:option-set-value invoice-op invoice)
+    (gnc:make-report easy-invoice-guid options)))
+
+(export gnc:easy-invoice-report-create-internal)
