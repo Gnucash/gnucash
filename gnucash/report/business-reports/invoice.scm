@@ -489,8 +489,10 @@
 
         (gnc:html-table-append-row! invoice-details-table
                                     (gnc:make-html-table-cell/size
-                                     1 2 (gnc:make-html-text
-                                          (_ "Invoice in progress...")))))
+                                     1 2 (gnc:make-html-span/markup
+                                          "invoice-in-progress"
+                                          (gnc:make-html-text
+                                           (_ "Invoice in progress..."))))))
 
     (if (opt-val "Display" "Billing ID")
         (let ((billing-id (gncInvoiceGetBillingID invoice)))
