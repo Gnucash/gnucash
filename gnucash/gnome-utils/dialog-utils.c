@@ -325,6 +325,29 @@ gnc_draw_arrow_cb (GtkWidget *widget, cairo_t *cr, gpointer direction)
 }
 
 
+static gboolean
+gnc_gdate_in_valid_range (GDate *test_date)
+{
+    gboolean use_autoreadonly = qof_book_uses_autoreadonly(gnc_get_current_book());
+    GDate *max_date = g_date_new_dmy (1,1,10000);
+    GDate *min_date;
+    gboolean ret = FALSE;
+
+    if (use_autoreadonly)
+        min_date = qof_book_get_autoreadonly_gdate(gnc_get_current_book());
+    else
+        min_date = g_date_new_dmy (1,1,1400);
+
+    if ((g_date_compare (max_date, test_date) > 0) &&
+        (g_date_compare (min_date, test_date) <= 0))
+        ret = TRUE;
+
+    g_date_free (max_date);
+    g_date_free (min_date);
+    return ret;
+}
+
+
 gboolean
 gnc_handle_date_accelerator (GdkEventKey *event,
                              struct tm *tm,
@@ -368,7 +391,9 @@ gnc_handle_date_accelerator (GdkEventKey *event,
             g_date_add_years (&gdate, 1);
         else
             g_date_add_days (&gdate, 1);
-        g_date_to_struct_tm (&gdate, tm);
+
+        if (gnc_gdate_in_valid_range (&gdate))
+            g_date_to_struct_tm (&gdate, tm);
         return TRUE;
 
     case GDK_KEY_minus:
@@ -402,7 +427,9 @@ gnc_handle_date_accelerator (GdkEventKey *event,
             g_date_subtract_years (&gdate, 1);
         else
             g_date_subtract_days (&gdate, 1);
-        g_date_to_struct_tm (&gdate, tm);
+
+        if (gnc_gdate_in_valid_range (&gdate))
+            g_date_to_struct_tm (&gdate, tm);
         return TRUE;
 
     default:
@@ -472,8 +499,8 @@ gnc_handle_date_accelerator (GdkEventKey *event,
     default:
         return FALSE;
     }
-
-    g_date_to_struct_tm (&gdate, tm);
+    if (gnc_gdate_in_valid_range (&gdate))
+        g_date_to_struct_tm (&gdate, tm);
 
     return TRUE;
 }
