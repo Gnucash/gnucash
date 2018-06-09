@@ -278,6 +278,12 @@
     "d" (N_ "Display the subtotals?") #t))
 
   (gnc:register-inv-option
+   (gnc:make-number-range-option
+    (N_ "Display") (N_ "Minimum # of entries")
+    "zz" (N_ "The minimum number of invoice entries to display.") 0
+    4 23 0 1))
+
+  (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display") (N_ "Individual Taxes")
     "o" (N_ "Display all the individual taxes?") #f))
@@ -402,11 +408,22 @@
                                     table
                                     used-columns
                                     width
-                                    odd-row?)
+                                    odd-row?
+                                    num-entries)
       (if (null? entries)
 
           ;; all entries done, add subtotals
           (let ((total-collector (gnc:make-commodity-collector)))
+
+            ;; minimum number of entries- replicating fancy-invoice option
+            (let loop ((num-entries-left (- (opt-val "Display" "Minimum # of entries" ) num-entries))
+                       (odd-row? odd-row?))
+              (when (positive? num-entries-left)
+                (gnc:html-table-append-row/markup!
+                 table (if odd-row? "normal-row" "alternate-row")
+                 (gnc:html-make-empty-cells (num-columns-required used-columns)))
+                (loop (1- num-entries-left)
+                      (not odd-row?))))
 
             (if display-subtotal?
                 (add-subtotal-row table used-columns (gncInvoiceGetTotalSubtotal invoice)
@@ -464,7 +481,8 @@
                                     table
                                     used-columns
                                     width
-                                    (not odd-row?)))))
+                                    (not odd-row?)
+                                    (1+ num-entries)))))
 
     (let* ((table (gnc:make-html-table))
            (used-columns (build-column-used options))
@@ -483,7 +501,8 @@
                               table
                               used-columns
                               width
-                              #t)
+                              #t
+                              0)
       table)))
 
 (define (make-invoice-details-table invoice options display-due-date?)
