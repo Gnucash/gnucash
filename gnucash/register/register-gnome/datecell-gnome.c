@@ -139,7 +139,7 @@ gnc_parse_date (struct tm *parsed, const char * datestr)
         // Couldn't parse date, use today
         struct tm tm_today;
 
-    memset (&tm_today, 0, sizeof (struct tm));
+        memset (&tm_today, 0, sizeof (struct tm));
         gnc_tm_get_today_start (&tm_today);
         day = tm_today.tm_mday;
         month = tm_today.tm_mon + 1;
@@ -151,13 +151,13 @@ gnc_parse_date (struct tm *parsed, const char * datestr)
     if (use_autoreadonly)
     {
         GDate *d = g_date_new_dmy(day, month, year);
-    if (check_readonly_threshold (datestr, d))
-    {
-        day = g_date_get_day (d);
-        month = g_date_get_month (d);
-        year = g_date_get_year (d);
-    }
-    g_date_free (d);
+        if (check_readonly_threshold (datestr, d))
+        {
+            day = g_date_get_day (d);
+            month = g_date_get_month (d);
+            year = g_date_get_year (d);
+        }
+        g_date_free (d);
     }
 
     parsed->tm_mday = day;
