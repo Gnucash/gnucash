@@ -936,6 +936,9 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
 
     g_free (dupe);
 
+    if ((imonth == 0) || (iday == 0))
+        return FALSE;
+
     if ((12 < imonth) || (31 < iday))
     {
         /*
