@@ -189,6 +189,9 @@
         (cons 'today (list (cons 'text "Today's date")
                            (cons 'tip "Today's date")))
 
+        (cons 'picture (list (cons 'text "Picture")
+                             (cons 'tip "Picture")))
+
         (cons 'none (list (cons 'text "(empty)")
                           (cons 'tip "Empty space")))))
 
@@ -271,6 +274,11 @@
     (N_ "Layout") (N_ "CSS") "zz" "CSS code. This field specifies the CSS code
 for styling the invoice. Please see the exported report for the CSS class names."
     (keylist-get-info variant-list variant 'css)))
+
+  (gnc:register-inv-option
+   (gnc:make-pixmap-option
+    (N_ "Layout") (N_ "Picture Location") "zy" "Location for Picture"
+    ""))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
@@ -680,6 +688,11 @@ for styling the invoice. Please see the exported report for the CSS class names.
                                             jobname))))
     invoice-details-table))
 
+(define (make-img img-url)
+  ;; just an image
+  (gnc:make-html-text
+   (gnc:html-markup-img img-url)))
+
 (define (make-client-table owner orders)
   ;; this is a single-column table.
   (let ((table (gnc:make-html-table)))
@@ -797,6 +810,9 @@ for styling the invoice. Please see the exported report for the CSS class names.
                (title (title-string default-title custom-title))
                (invoice-title (format #f (_"~a #~a") title (gncInvoiceGetID invoice)))
                (layout-lookup-table (list (cons 'none #f)
+                                          (cons 'picture (gnc:make-html-div/markup
+                                                          "picture"
+                                                          (make-img (opt-val "Layout" "Picture Location"))))
                                           (cons 'invoice (gnc:make-html-div/markup
                                                           "invoice-details-table"
                                                           (make-invoice-details-table
