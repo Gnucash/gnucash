@@ -333,15 +333,26 @@ gnc_gdate_in_valid_range (GDate *test_date, gboolean warn)
     GDate *max_date = g_date_new_dmy (1,1,10000);
     GDate *min_date;
     gboolean ret = FALSE;
+    gboolean max_date_ok = FALSE;
+    gboolean min_date_ok = FALSE;
 
     if (use_autoreadonly)
         min_date = qof_book_get_autoreadonly_gdate (gnc_get_current_book());
     else
         min_date = g_date_new_dmy (1,1,1400);
 
-    if ((g_date_compare (max_date, test_date) > 0) &&
-        (g_date_compare (min_date, test_date) <= 0))
-        ret = TRUE;
+    // max date
+    if (g_date_compare (max_date, test_date) > 0)
+        max_date_ok = TRUE;
+
+    // min date
+    if (g_date_compare (min_date, test_date) <= 0)
+        min_date_ok = TRUE;
+
+    if (use_autoreadonly && warn)
+        ret = max_date_ok;
+    else
+        ret = min_date_ok & max_date_ok;
 
     if (warn && !ret)
     {
