@@ -526,86 +526,6 @@ for styling the invoice. Please see the exported report for the CSS class names.
                  "total-number-cell"
                  (display-subtotal amt used-columns)))))))
 
-    (define (do-rows-with-subtotals entries
-                                    table
-                                    used-columns
-                                    width
-                                    odd-row?
-                                    num-entries)
-      (if (null? entries)
-
-          ;; all entries done, add subtotals
-          (let ((total-collector (gnc:make-commodity-collector)))
-
-            ;; minimum number of entries- replicating fancy-invoice option
-            (let loop ((num-entries-left (- (opt-val "Display" "Minimum # of entries" ) num-entries))
-                       (odd-row? odd-row?))
-              (when (positive? num-entries-left)
-                (gnc:html-table-append-row/markup!
-                 table (if odd-row? "normal-row" "alternate-row")
-                 (gnc:html-make-empty-cells (num-columns-required used-columns)))
-                (loop (1- num-entries-left)
-                      (not odd-row?))))
-
-            (if display-subtotal?
-                (add-subtotal-row table used-columns (gncInvoiceGetTotalSubtotal invoice)
-                                  "grand-total" (_ "Net Price")))
-
-            (if display-all-taxes
-                (for-each
-                 (lambda (parm)
-                   (let ((value (cdr parm))
-                         (acct (car parm)))
-                     (add-subtotal-row table used-columns value
-                                       "grand-total" (xaccAccountGetName acct))))
-                 (gncInvoiceGetTotalTaxList invoice))
-
-                ;; nope, just show the total tax.
-                (add-subtotal-row table used-columns (gncInvoiceGetTotalTax invoice)
-                                  "grand-total" (_ "Tax")))
-
-            (add-subtotal-row table used-columns (gncInvoiceGetTotal invoice)
-                              "grand-total" (_ "Total Price"))
-
-            (total-collector 'add currency (gncInvoiceGetTotal invoice))
-
-            (if (and show-payments (not (null? lot)))
-                (let ((splits (sort-list!
-                               (gnc-lot-get-split-list lot)
-                               (lambda (s1 s2)
-                                 (let ((t1 (xaccSplitGetParent s1))
-                                       (t2 (xaccSplitGetParent s2)))
-                                   (< (xaccTransOrder t1 t2) 0))))))
-                  (for-each
-                   (lambda (split)
-                     (if (not (equal? (xaccSplitGetParent split) txn))
-                         (add-payment-row table used-columns
-                                          split total-collector
-                                          reverse-payments?)))
-                   splits)))
-
-            (add-subtotal-row table used-columns (cadr (total-collector 'getpair currency #f))
-                              "grand-total" (_ "Amount Due")))
-
-          ;;
-          ;; End of BEGIN -- now here's the code to handle all the entries!
-          ;;
-          (begin
-
-            (add-entry-row table
-                           currency
-                           (car entries)
-                           used-columns
-                           (if odd-row? "normal-row" "alternate-row")
-                           cust-doc? credit-note?)
-
-            (do-rows-with-subtotals (cdr entries)
-                                    table
-                                    used-columns
-                                    width
-                                    (not odd-row?)
-                                    (1+ num-entries)))))
-
     (let* ((table (gnc:make-html-table))
            (used-columns (build-column-used options))
            (entries (gncInvoiceGetEntries invoice)))
@@ -618,12 +538,80 @@ for styling the invoice. Please see the exported report for the CSS class names.
                                  'attribute (list "cellspacing" 0)
                                  'attribute (list "cellpadding" 4))
 
-      (do-rows-with-subtotals entries
-                              table
-                              used-columns
-                              width
-                              #t
-                              0)
+      (let do-rows-with-subtotals ((entries entries)
+                                   (odd-row? #t)
+                                   (num-entries 0))
+        (if (null? entries)
+
+            ;; all entries done, add subtotals
+            (let ((total-collector (gnc:make-commodity-collector)))
+
+              ;; minimum number of entries- replicating fancy-invoice option
+              (let loop ((num-entries-left (- (opt-val "Display" "Minimum # of entries" ) num-entries))
+                         (odd-row? odd-row?))
+                (when (positive? num-entries-left)
+                  (gnc:html-table-append-row/markup!
+                   table (if odd-row? "normal-row" "alternate-row")
+                   (gnc:html-make-empty-cells (num-columns-required used-columns)))
+                  (loop (1- num-entries-left)
+                        (not odd-row?))))
+
+              (if display-subtotal?
+                  (add-subtotal-row table used-columns (gncInvoiceGetTotalSubtotal invoice)
+                                    "grand-total" (_ "Net Price")))
+
+              (if display-all-taxes
+                  (for-each
+                   (lambda (parm)
+                     (let ((value (cdr parm))
+                           (acct (car parm)))
+                       (add-subtotal-row table used-columns value
+                                         "grand-total" (xaccAccountGetName acct))))
+                   (gncInvoiceGetTotalTaxList invoice))
+
+                  ;; nope, just show the total tax.
+                  (add-subtotal-row table used-columns (gncInvoiceGetTotalTax invoice)
+                                    "grand-total" (_ "Tax")))
+
+              (add-subtotal-row table used-columns (gncInvoiceGetTotal invoice)
+                                "grand-total" (_ "Total Price"))
+
+              (total-collector 'add currency (gncInvoiceGetTotal invoice))
+
+              (if (and show-payments (not (null? lot)))
+                  (let ((splits (sort-list!
+                                 (gnc-lot-get-split-list lot)
+                                 (lambda (s1 s2)
+                                   (let ((t1 (xaccSplitGetParent s1))
+                                         (t2 (xaccSplitGetParent s2)))
+                                     (< (xaccTransOrder t1 t2) 0))))))
+                    (for-each
+                     (lambda (split)
+                       (if (not (equal? (xaccSplitGetParent split) txn))
+                           (add-payment-row table used-columns
+                                            split total-collector
+                                            reverse-payments?)))
+                     splits)))
+
+              (add-subtotal-row table used-columns (cadr (total-collector 'getpair currency #f))
+                                "grand-total" (_ "Amount Due")))
+
+            ;;
+            ;; End of BEGIN -- now here's the code to handle all the entries!
+            ;;
+            (begin
+
+              (add-entry-row table
+                             currency
+                             (car entries)
+                             used-columns
+                             (if odd-row? "normal-row" "alternate-row")
+                             cust-doc? credit-note?)
+
+              (do-rows-with-subtotals (cdr entries)
+                                      (not odd-row?)
+                                      (1+ num-entries)))))
+
       table)))
 
 (define (make-invoice-details-table invoice options)
