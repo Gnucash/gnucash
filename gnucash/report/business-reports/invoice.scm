@@ -174,9 +174,7 @@
       (addif (value-col column-vector)
              (gnc:make-html-table-cell/markup
               "number-cell"
-              entry-value))))
-
-    (cons entry-value entry-tax-value)))
+              entry-value))))))
 
 (define layout-key-list
   (list (cons 'client (list (cons 'text "Client details")
@@ -319,15 +317,10 @@ for styling the invoice. Please see the exported report for the CSS class names.
     (N_ "Display Columns") (N_ "Total")
     "n" (N_ "Display the entry's value?") #t))
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
-    (N_ "Display") (N_ "My Company")
-    "a" (N_ "Display my company name and address?") #f))
-
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
-    (N_ "Display") (N_ "My Company ID")
-    "b" (N_ "Display my company ID?") #f))
+  ;; company details can now be toggled via Layout tab
+  ;; and IMHO company-tax-id should be rendered if present
+  (gnc:register-inv-option (gnc:make-internal-option "Display" "My Company" #f))
+  (gnc:register-inv-option (gnc:make-internal-option "Display" "My Company ID" #f))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
@@ -476,8 +469,6 @@ for styling the invoice. Please see the exported report for the CSS class names.
         (lot (gncInvoiceGetPostedLot invoice))
         (txn (gncInvoiceGetPostedTxn invoice))
         (currency (gncInvoiceGetCurrency invoice))
-        (jobnumber  (gncJobGetID (gncOwnerGetJob (gncInvoiceGetOwner  invoice))))
-        (jobname    (gncJobGetName (gncOwnerGetJob (gncInvoiceGetOwner  invoice))))
         (reverse-payments? (not (gncInvoiceAmountPositive invoice))))
 
     (define (colspan monetary used-columns)
@@ -617,7 +608,6 @@ for styling the invoice. Please see the exported report for the CSS class names.
 
     (let* ((table (gnc:make-html-table))
            (used-columns (build-column-used options))
-           (width (num-columns-required used-columns))
            (entries (gncInvoiceGetEntries invoice)))
 
       (gnc:html-table-set-col-headers! table
@@ -636,7 +626,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
                               0)
       table)))
 
-(define (make-invoice-details-table invoice options display-due-date?)
+(define (make-invoice-details-table invoice options)
   ;; dual-column. invoice date/due, billingID, terms, job name/number
   (define (opt-val section name)
     (gnc:option-value
@@ -654,16 +644,15 @@ for styling the invoice. Please see the exported report for the CSS class names.
 
     (if (gncInvoiceIsPosted invoice)
 
-        (let ((post-date (gncInvoiceGetDatePosted invoice))
-              (due-date (gncInvoiceGetDateDue invoice)))
+        (begin
           (gnc:html-table-append-row!
            invoice-details-table
-           (make-date-row (_ "Date") post-date date-format))
+           (make-date-row (_ "Date") (gncInvoiceGetDatePosted invoice) date-format))
 
-          (if display-due-date?
+          (if (opt-val "Display" "Due Date")
               (gnc:html-table-append-row!
                invoice-details-table
-               (make-date-row (_ "Due Date") due-date date-format))))
+               (make-date-row (_ "Due Date") (gncInvoiceGetDateDue invoice) date-format))))
 
         (gnc:html-table-append-row! invoice-details-table
                                     (gnc:make-html-table-cell/size
@@ -742,11 +731,15 @@ for styling the invoice. Please see the exported report for the CSS class names.
    (strftime date-format
              (localtime date))))
 
-(define (make-company-table book date-format display-tax-id?)
+(define (make-company-table book)
   ;; single-column table. my name, address, and printdate
   (let* ((table (gnc:make-html-table))
          (name (gnc:company-info book gnc:*company-name*))
          (addy (gnc:company-info book gnc:*company-addy*))
+         (phone (gnc:company-info book gnc:*company-phone*))
+         (fax (gnc:company-info book gnc:*company-fax*))
+         (email (gnc:company-info book gnc:*company-email*))
+         (url (gnc:company-info book gnc:*company-url*))
          (taxid (gnc:company-info book gnc:*company-id*)))
 
     (gnc:html-table-set-style! table "table"
@@ -756,13 +749,32 @@ for styling the invoice. Please see the exported report for the CSS class names.
                                'attribute (list "cellpadding" 0))
 
     (if (and name (not (string-null? name)))
-        (gnc:html-table-append-row! table (list (gnc:make-html-div/markup "company-name" name))))
+        (gnc:html-table-append-row! table (gnc:make-html-div/markup
+                                           "align-right company-name" name)))
 
     (if (and addy (not (string-null? addy)))
-        (gnc:html-table-append-row! table (list (gnc:make-html-div/markup "company-address" (multiline-to-html-text addy)))))
+        (gnc:html-table-append-row! table (gnc:make-html-div/markup
+                                           "align-right company-address" (multiline-to-html-text addy))))
 
-    (if (and display-tax-id? taxid (not (string-null? taxid)))
-        (gnc:html-table-append-row! table (list (gnc:make-html-div/markup "company-tax-id" taxid))))
+    (if (and phone (not (string-null? phone)))
+        (gnc:html-table-append-row! table (gnc:make-html-div/markup
+                                           "align-right company-phone" phone)))
+
+    (if (and fax (not (string-null? fax)))
+        (gnc:html-table-append-row! table (gnc:make-html-div/markup
+                                           "align-right company-fax" fax)))
+
+    (if (and email (not (string-null? email)))
+        (gnc:html-table-append-row! table (gnc:make-html-div/markup
+                                           "align-right company-email" email)))
+
+    (if (and url (not (string-null? url)))
+        (gnc:html-table-append-row! table (gnc:make-html-div/markup
+                                           "align-right company-url" url)))
+
+    (if (and taxid (not (string-null? taxid)))
+        (gnc:html-table-append-row! table (gnc:make-html-div/markup
+                                           "align-right company-tax-id" taxid)))
 
     table))
 
@@ -773,9 +785,6 @@ for styling the invoice. Please see the exported report for the CSS class names.
          (invoice (opt-val gnc:pagename-general gnc:optname-invoice-number))
          (references? (opt-val "Display" "References"))
          (custom-title (opt-val gnc:pagename-general "Custom Title"))
-         (company-table? (opt-val "Display" "My Company"))
-         (display-tax-id? (opt-val "Display" "My Company ID"))
-         (display-due-date? (opt-val "Display" "Due Date"))
          (title-string (lambda (title custom-title) (if (string-null? custom-title) title custom-title))))
 
     (if (null? invoice)
@@ -783,7 +792,6 @@ for styling the invoice. Please see the exported report for the CSS class names.
                                        (gnc:make-html-text
                                         (_ "No valid invoice selected. Click on the Options button and select the invoice to use.")))
         (let* ((book (gncInvoiceGetBook invoice))
-               (date-format (gnc:options-fancy-date book))
                (owner (gncInvoiceGetOwner invoice))
                (type (gncInvoiceGetType invoice))
                (orders (if references? (delete-duplicates (map gncEntryGetOrder (gncInvoiceGetEntries invoice))) '()))
@@ -800,21 +808,17 @@ for styling the invoice. Please see the exported report for the CSS class names.
                                  (_ "Invoice"))))
                (title (title-string default-title custom-title))
                (invoice-title (format #f (_"~a #~a") title (gncInvoiceGetID invoice)))
-               (entry-table (make-entry-table invoice
-                                              (gnc:report-options report-obj)
-                                              cust-doc? credit-note?))
-
                (layout-lookup-table (list (cons 'none #f)
                                           (cons 'invoice (gnc:make-html-div/markup
                                                           "invoice-details-table"
                                                           (make-invoice-details-table
-                                                           invoice options display-due-date?)))
+                                                           invoice options)))
                                           (cons 'client (gnc:make-html-div/markup
                                                          "client-table"
                                                          (make-client-table owner orders)))
                                           (cons 'company (gnc:make-html-div/markup
                                                           "company-table"
-                                                          (make-company-table book date-format display-tax-id?)))
+                                                          (make-company-table book)))
                                           (cons 'today (gnc:make-html-div/markup
                                                         "invoice-print-date"
                                                         (qof-print-date (current-time))))))
@@ -852,7 +856,9 @@ for styling the invoice. Please see the exported report for the CSS class names.
             (gnc:html-table-append-row! main-table
                                         (gnc:make-html-table-cell/size
                                          1 2 (gnc:make-html-div/markup
-                                              "entries-table" entry-table)))
+                                              "entries-table"
+                                              (make-entry-table invoice options
+                                                                cust-doc? credit-note?))))
 
             (if (opt-val "Display" "Invoice Notes")
                 (let ((notes (gncInvoiceGetNotes invoice)))
@@ -930,17 +936,13 @@ for styling the invoice. Please see the exported report for the CSS class names.
 (define (gnc:easy-invoice-report-create-internal invoice)
   (let* ((options (gnc:make-report-options easy-invoice-guid))
          (invoice-op (gnc:lookup-option options gnc:pagename-general gnc:optname-invoice-number)))
-
     (gnc:option-set-value invoice-op invoice)
     (gnc:make-report easy-invoice-guid options)))
-
 (export gnc:easy-invoice-report-create-internal)
 
 (define (gnc:fancy-invoice-report-create-internal invoice)
   (let* ((options (gnc:make-report-options fancy-invoice-guid))
          (invoice-op (gnc:lookup-option options gnc:pagename-general gnc:optname-invoice-number)))
-
     (gnc:option-set-value invoice-op invoice)
     (gnc:make-report fancy-invoice-guid options)))
-
 (export gnc:fancy-invoice-report-create-internal)
