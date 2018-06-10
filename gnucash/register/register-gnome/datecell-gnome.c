@@ -126,10 +126,11 @@ check_readonly_threshold (const gchar *datestr, GDate *d)
 }
 
 static void
-gnc_parse_date (struct tm *parsed, const char * datestr)
+gnc_parse_date (struct tm *parsed, const char * datestr, gboolean warn)
 {
     int day, month, year;
     gboolean use_autoreadonly = qof_book_uses_autoreadonly(gnc_get_current_book());
+    GDate *test_date;
 
     if (!parsed) return;
     if (!datestr) return;
@@ -146,6 +147,16 @@ gnc_parse_date (struct tm *parsed, const char * datestr)
         year = tm_today.tm_year + 1900;
     }
 
+    test_date = g_date_new_dmy (day, month, year);
+
+    if (!gnc_gdate_in_valid_range (test_date, warn))
+    {
+        struct tm tm_today;
+        memset (&tm_today, 0, sizeof (struct tm));
+        gnc_tm_get_today_start (&tm_today);
+        year = tm_today.tm_year + 1900;
+    }
+
     // If we have an auto-read-only threshold, do not accept a date that is
     // older than the threshold.
     if (use_autoreadonly)
@@ -159,6 +170,7 @@ gnc_parse_date (struct tm *parsed, const char * datestr)
         }
         g_date_free (d);
     }
+    g_date_free (test_date);
 
     parsed->tm_mday = day;
     parsed->tm_mon  = month - 1;
@@ -452,7 +464,7 @@ gnc_date_cell_commit (DateCell *cell)
     if (!cell)
         return;
 
-    gnc_parse_date (&(box->date), cell->cell.value);
+    gnc_parse_date (&(box->date), cell->cell.value, FALSE);
 
     qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH,
                              box->date.tm_mday,
@@ -581,9 +593,8 @@ gnc_date_cell_modify_verify (BasicCell *_cell,
     /* keep a copy of the new value */
     if (accept)
     {
-
         gnc_basic_cell_set_value_internal (&cell->cell, newval);
-        gnc_parse_date (&(box->date), newval);
+        gnc_parse_date (&(box->date), newval, FALSE);
 
         if (!box->date_picker)
             return;
@@ -710,7 +721,7 @@ gnc_date_cell_get_date_gdate (DateCell *cell, GDate *date)
     if (!cell || !date)
         return;
 
-    gnc_parse_date (&(box->date), cell->cell.value);
+    gnc_parse_date (&(box->date), cell->cell.value, FALSE);
 
     g_date_set_dmy(date,
                    box->date.tm_mday,
@@ -724,7 +735,8 @@ gnc_date_cell_get_date (DateCell *cell, time64 *time)
     PopBox *box = cell->cell.gui_private;
     if (!cell || !time)
         return;
-    gnc_parse_date (&(box->date), cell->cell.value);
+
+    gnc_parse_date (&(box->date), cell->cell.value, TRUE);
     *time = gnc_mktime (&box->date);
 }
 
@@ -735,7 +747,7 @@ gnc_date_cell_set_value_internal (BasicCell *_cell, const char *str)
     PopBox *box = cell->cell.gui_private;
     char buff[DATE_BUF];
 
-    gnc_parse_date (&(box->date), str);
+    gnc_parse_date (&(box->date), str, FALSE);
 
     qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH,
                              box->date.tm_mday,
