@@ -35,8 +35,15 @@
 
 (define (addif pred . data) (if pred data '()))
 
-(define base-css ".align-right { float: right; text-align: right }
-.entries-table > table { width: 100% }")
+(define base-css "/* advanced users only */
+.div-align-right { float: right; }
+.div-align-right .maybe-align-right { text-align: right }
+.entries-table * { border-width: 1px; border-style:solid; border-collapse: collapse}
+.entries-table > table { width: 100% }
+.company-table > table * { padding: 0px; }
+.client-table > table * { padding: 0px; }
+.invoice-details-table > table * { padding: 0px; }
+")
 
 (define (date-col columns-used)
   (vector-ref columns-used 0))
@@ -546,11 +553,6 @@ for styling the invoice. Please see the exported report for the CSS class names.
       (gnc:html-table-set-col-headers! table
                                        (make-heading-list used-columns))
 
-      (gnc:html-table-set-style! table "table"
-                                 'attribute (list "border" 1)
-                                 'attribute (list "cellspacing" 0)
-                                 'attribute (list "cellpadding" 4))
-
       (let do-rows-with-subtotals ((entries entries)
                                    (odd-row? #t)
                                    (num-entries 0))
@@ -638,11 +640,6 @@ for styling the invoice. Please see the exported report for the CSS class names.
          (jobnumber (gncJobGetID (gncOwnerGetJob (gncInvoiceGetOwner invoice))))
          (jobname (gncJobGetName (gncOwnerGetJob (gncInvoiceGetOwner invoice)))))
 
-    (gnc:html-table-set-style! invoice-details-table "table"
-                               'attribute (list "align" "right")
-                               'attribute (list "cellspacing" 0)
-                               'attribute (list "cellpadding" 1))
-
     (if (gncInvoiceIsPosted invoice)
 
         (begin
@@ -669,7 +666,9 @@ for styling the invoice. Please see the exported report for the CSS class names.
                 (gnc:html-table-append-row! invoice-details-table
                                             (list
                                              (_ "Reference")
-                                             (multiline-to-html-text billing-id)))
+                                             (gnc:make-html-div/markup
+                                              "div-align-right"
+                                              (multiline-to-html-text billing-id))))
                 (gnc:html-table-append-row! invoice-details-table '())))))
 
     (if (opt-val "Display" "Billing Terms")
@@ -679,7 +678,9 @@ for styling the invoice. Please see the exported report for the CSS class names.
               (gnc:html-table-append-row! invoice-details-table
                                           (list
                                            (_ "Terms")
-                                           (multiline-to-html-text terms))))))
+                                           (gnc:make-html-div/markup
+                                            "div-align-right"
+                                            (multiline-to-html-text terms)))))))
 
     ;; Add job number and name to invoice if requested and if it exists
     (if (and (opt-val "Display" "Job Details")
@@ -687,10 +688,14 @@ for styling the invoice. Please see the exported report for the CSS class names.
         (begin
           (gnc:html-table-append-row! invoice-details-table
                                       (list (_ "Job number")
-                                            jobnumber))
+                                            (gnc:make-html-div/markup
+                                             "div-align-right"
+                                             jobnumber)))
           (gnc:html-table-append-row! invoice-details-table
                                       (list (_ "Job name")
-                                            jobname))))
+                                            (gnc:make-html-div/markup
+                                             "div-align-right"
+                                             jobname)))))
     invoice-details-table))
 
 (define (make-img img-url)
@@ -701,21 +706,17 @@ for styling the invoice. Please see the exported report for the CSS class names.
 (define (make-client-table owner orders)
   ;; this is a single-column table.
   (let ((table (gnc:make-html-table)))
-    (gnc:html-table-set-style! table "table"
-                               'attribute (list "border" 0)
-                               'attribute (list "cellspacing" 0)
-                               'attribute (list "cellpadding" 0))
 
     (gnc:html-table-append-row! table
                                 (list
-                                 (gnc:make-html-span/markup
-                                  "client-name"
+                                 (gnc:make-html-div/markup
+                                  "maybe-align-right client-name"
                                   (gnc:owner-get-name-dep owner))))
 
     (gnc:html-table-append-row! table
                                 (list
-                                 (gnc:make-html-span/markup
-                                  "client-address"
+                                 (gnc:make-html-div/markup
+                                  "maybe-align-right client-address"
                                   (multiline-to-html-text
                                    (gnc:owner-get-address-dep owner)))))
 
@@ -734,8 +735,10 @@ for styling the invoice. Please see the exported report for the CSS class names.
 (define (make-date-row label date date-format)
   (list
    (string-append label ":")
-   (strftime date-format
-             (localtime date))))
+   (gnc:make-html-div/markup
+    "div-align-right"
+    (strftime date-format
+              (localtime date)))))
 
 (define (make-company-table book)
   ;; single-column table. my name, address, and printdate
@@ -748,39 +751,40 @@ for styling the invoice. Please see the exported report for the CSS class names.
          (url (gnc:company-info book gnc:*company-url*))
          (taxid (gnc:company-info book gnc:*company-id*)))
 
-    (gnc:html-table-set-style! table "table"
-                               'attribute (list "border" 0)
-                               'attribute (list "valign" "top")
-                               'attribute (list "cellspacing" 0)
-                               'attribute (list "cellpadding" 0))
-
     (if (and name (not (string-null? name)))
-        (gnc:html-table-append-row! table (gnc:make-html-div/markup
-                                           "align-right company-name" name)))
+        (gnc:html-table-append-row! table (list
+                                           (gnc:make-html-div/markup
+                                            "maybe-align-right company-name" name))))
 
     (if (and addy (not (string-null? addy)))
-        (gnc:html-table-append-row! table (gnc:make-html-div/markup
-                                           "align-right company-address" (multiline-to-html-text addy))))
+        (gnc:html-table-append-row! table (list
+                                           (gnc:make-html-div/markup
+                                            "maybe-align-right company-address" (multiline-to-html-text addy)))))
 
     (if (and phone (not (string-null? phone)))
-        (gnc:html-table-append-row! table (gnc:make-html-div/markup
-                                           "align-right company-phone" phone)))
+        (gnc:html-table-append-row! table (list
+                                           (gnc:make-html-div/markup
+                                           "maybe-align-right company-phone" phone))))
 
     (if (and fax (not (string-null? fax)))
-        (gnc:html-table-append-row! table (gnc:make-html-div/markup
-                                           "align-right company-fax" fax)))
+        (gnc:html-table-append-row! table (list
+                                           (gnc:make-html-div/markup
+                                            "maybe-align-right company-fax" fax))))
 
     (if (and email (not (string-null? email)))
-        (gnc:html-table-append-row! table (gnc:make-html-div/markup
-                                           "align-right company-email" email)))
+        (gnc:html-table-append-row! table (list
+                                           (gnc:make-html-div/markup
+                                            "maybe-align-right company-email" email))))
 
     (if (and url (not (string-null? url)))
-        (gnc:html-table-append-row! table (gnc:make-html-div/markup
-                                           "align-right company-url" url)))
+        (gnc:html-table-append-row! table (list
+                                           (gnc:make-html-div/markup
+                                            "maybe-align-right company-url" url))))
 
     (if (and taxid (not (string-null? taxid)))
-        (gnc:html-table-append-row! table (gnc:make-html-div/markup
-                                           "align-right company-tax-id" taxid)))
+        (gnc:html-table-append-row! table (list
+                                           (gnc:make-html-div/markup
+                                            "maybe-align-right company-tax-id" taxid))))
 
     table))
 
@@ -848,19 +852,19 @@ for styling the invoice. Please see the exported report for the CSS class names.
             (gnc:html-table-append-row! main-table
                                         (list (layout-lookup "Row 1 Left")
                                               (gnc:make-html-div/markup
-                                               "align-right"
+                                               "div-align-right"
                                                (layout-lookup "Row 1 Right"))))
 
             (gnc:html-table-append-row! main-table
                                         (list (layout-lookup "Row 2 Left")
                                               (gnc:make-html-div/markup
-                                               "align-right"
+                                               "div-align-right"
                                                (layout-lookup "Row 2 Right"))))
 
             (gnc:html-table-append-row! main-table
                                         (list (layout-lookup "Row 3 Left")
                                               (gnc:make-html-div/markup
-                                               "align-right"
+                                               "div-align-right"
                                                (layout-lookup "Row 3 Right"))))
 
             (gnc:html-table-append-row! main-table
