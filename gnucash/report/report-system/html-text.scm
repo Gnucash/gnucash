@@ -200,7 +200,7 @@
      (lambda ()
        (for-each 
         (lambda (kvp)
-          (format #f "~a=~s " (car kvp) (cadr kvp)))
+          (format #t "~a=~s " (car kvp) (cadr kvp)))
         (cons (list 'src src)
               rest))))))
 
