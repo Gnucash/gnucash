@@ -117,7 +117,7 @@ in the Options panel."))
 
 (define SORTKEY-INFORMAL-HEADERS (list 'account-name 'account-code))
 
-(define sortkey-list
+(define (sortkey-list split-action?)
   ;;
   ;; Defines the different sorting keys, as an association-list
   ;; together with the subtotal functions. Each entry:
@@ -198,8 +198,7 @@ in the Options panel."))
                                    (cons 'tip (_ "Sort by description."))
                                    (cons 'renderer-fn (lambda (s) (xaccTransGetDescription (xaccSplitGetParent s))))))
 
-        (if (and (gnc-current-session-exist)
-                 (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
+        (if split-action?
             (cons 'number    (list (cons 'sortkey (list SPLIT-ACTION))
                                    (cons 'split-sortvalue (lambda (a) (xaccSplitGetAction a)))
                                    (cons 'text (_ "Number/Action"))
@@ -419,20 +418,20 @@ Credit Card, and Income accounts."))
       (keylist-get-info keylist (car item) 'tip)))
    keylist))
 
-(define (SUBTOTAL-ENABLED? sortkey)
+(define (SUBTOTAL-ENABLED? sortkey split-action?)
   ;; this returns whether sortkey *can* be subtotalled/grouped.
   ;; it checks whether a renderer-fn is defined.
-  (keylist-get-info sortkey-list sortkey 'renderer-fn))
+  (keylist-get-info (sortkey-list split-action?) sortkey 'renderer-fn))
 
-(define (CUSTOM-SORTING? sortkey)
+(define (CUSTOM-SORTING? sortkey split-action?)
   ;; sortkey -> bool
   ;;
   ;; this returns which sortkeys which *must* use the custom sorter.
   ;; it filters whereby a split-sortvalue is defined (i.e. the splits
   ;; can be compared according to their 'sortvalue) but the QofQuery
   ;; sortkey is not defined (i.e. their 'sortkey is #f).
-  (and (keylist-get-info sortkey-list sortkey 'split-sortvalue)
-       (not (keylist-get-info sortkey-list sortkey 'sortkey))))
+  (and (keylist-get-info (sortkey-list split-action?) sortkey 'split-sortvalue)
+       (not (keylist-get-info (sortkey-list split-action?) sortkey 'sortkey))))
 
 ;;
 ;; Set defaults for reconcilation report
@@ -620,7 +619,7 @@ be excluded from periodic reporting.")
   ;; Sorting options
 
   (let ((ascending-choice-list (keylist->vectorlist ascending-list))
-        (key-choice-list (keylist->vectorlist sortkey-list))
+        (key-choice-list (keylist->vectorlist (sortkey-list BOOK-SPLIT-ACTION)))
         (date-subtotal-choice-list (keylist->vectorlist date-subtotal-list))
         (prime-sortkey 'account-name)
         (prime-sortkey-subtotal-true #t)
@@ -629,10 +628,10 @@ be excluded from periodic reporting.")
 
     (define (apply-selectable-by-name-sorting-options)
       (let* ((prime-sortkey-enabled (not (eq? prime-sortkey 'none)))
-             (prime-sortkey-subtotal-enabled (SUBTOTAL-ENABLED? prime-sortkey))
+             (prime-sortkey-subtotal-enabled (SUBTOTAL-ENABLED? prime-sortkey BOOK-SPLIT-ACTION))
              (prime-date-sortingtype-enabled (member prime-sortkey DATE-SORTING-TYPES))
              (sec-sortkey-enabled (not (eq? sec-sortkey 'none)))
-             (sec-sortkey-subtotal-enabled (SUBTOTAL-ENABLED? sec-sortkey))
+             (sec-sortkey-subtotal-enabled (SUBTOTAL-ENABLED? sec-sortkey BOOK-SPLIT-ACTION))
              (sec-date-sortingtype-enabled (member sec-sortkey DATE-SORTING-TYPES)))
 
         (gnc-option-db-set-option-selectable-by-name
@@ -1006,17 +1005,17 @@ be excluded from periodic reporting.")
     (let ((sortkey (opt-val pagename-sorting optname-prime-sortkey)))
       (if (member sortkey DATE-SORTING-TYPES)
           (keylist-get-info date-subtotal-list (opt-val pagename-sorting optname-prime-date-subtotal) info)
-          (and (SUBTOTAL-ENABLED? sortkey)
+          (and (SUBTOTAL-ENABLED? sortkey BOOK-SPLIT-ACTION)
                (opt-val pagename-sorting optname-prime-subtotal)
-               (keylist-get-info sortkey-list sortkey info)))))
+               (keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) sortkey info)))))
 
   (define (secondary-get-info info)
     (let ((sortkey (opt-val pagename-sorting optname-sec-sortkey)))
       (if (member sortkey DATE-SORTING-TYPES)
           (keylist-get-info date-subtotal-list (opt-val pagename-sorting optname-sec-date-subtotal) info)
-          (and (SUBTOTAL-ENABLED? sortkey)
+          (and (SUBTOTAL-ENABLED? sortkey BOOK-SPLIT-ACTION)
                (opt-val pagename-sorting optname-sec-subtotal)
-               (keylist-get-info sortkey-list sortkey info)))))
+               (keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) sortkey info)))))
 
   (let* ((work-to-do (length splits))
          (work-done 0)
@@ -1300,7 +1299,7 @@ be excluded from periodic reporting.")
                                   (gnc:make-html-text
                                    (gnc:html-markup-b
                                     ((vector-ref cell 5)
-                                     ((keylist-get-info sortkey-list sortkey 'renderer-fn) split))))))
+                                     ((keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) sortkey 'renderer-fn) split))))))
                         calculated-cells))
             (addto! row-contents (gnc:make-html-table-cell/size
                                   1 (+ right-indent width-left-columns width-right-columns) data)))
@@ -1426,7 +1425,7 @@ be excluded from periodic reporting.")
 
     ;; generate account name, optionally with anchor to account register
     (define (render-account sortkey split anchor?)
-      (let* ((account ((keylist-get-info sortkey-list sortkey 'renderer-fn) split))
+      (let* ((account ((keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) sortkey 'renderer-fn) split))
              (name (account-namestring account
                                        (column-uses? 'sort-account-code)
                                        #t
@@ -1443,7 +1442,7 @@ be excluded from periodic reporting.")
 
     ;; generic renderer. retrieve renderer-fn which should return a str
     (define (render-generic sortkey split)
-      ((keylist-get-info sortkey-list sortkey 'renderer-fn) split))
+      ((keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) sortkey 'renderer-fn) split))
 
     (define (render-summary split level anchor?)
       (let ((sortkey (opt-val pagename-sorting
@@ -1842,8 +1841,8 @@ be excluded from periodic reporting.")
                                 (not (eq? primary-date-subtotal 'none)))  ; until qof-query
                            (and (member secondary-key DATE-SORTING-TYPES) ; is upgraded
                                 (not (eq? secondary-date-subtotal 'none)))
-                           (or (CUSTOM-SORTING? primary-key)
-                               (CUSTOM-SORTING? secondary-key))))
+                           (or (CUSTOM-SORTING? primary-key BOOK-SPLIT-ACTION)
+                               (CUSTOM-SORTING? secondary-key BOOK-SPLIT-ACTION))))
          (infobox-display (opt-val gnc:pagename-general optname-infobox-display))
          (query (qof-query-create-for-splits)))
 
@@ -1853,12 +1852,12 @@ be excluded from periodic reporting.")
       ;; ascend? specifies whether ascending or descending
       (let* ((comparator-function
               (if (memq sortkey DATE-SORTING-TYPES)
-                  (let ((date (keylist-get-info sortkey-list sortkey 'split-sortvalue))
+                  (let ((date (keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) sortkey 'split-sortvalue))
                         (date-comparator (keylist-get-info date-subtotal-list date-subtotal-key 'date-sortvalue)))
                     (lambda (s)
                       (and date-comparator
                            (date-comparator (date s)))))
-                  (or (keylist-get-info sortkey-list sortkey 'split-sortvalue)
+                  (or (keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) sortkey 'split-sortvalue)
                       (lambda (s) #f))))
              (value-of-X (comparator-function split-X))
              (value-of-Y (comparator-function split-Y))
@@ -1921,8 +1920,8 @@ be excluded from periodic reporting.")
           (if (not custom-sort?)
               (begin
                 (qof-query-set-sort-order query
-                                          (keylist-get-info sortkey-list primary-key 'sortkey)
-                                          (keylist-get-info sortkey-list secondary-key 'sortkey)
+                                          (keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) primary-key 'sortkey)
+                                          (keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) secondary-key 'sortkey)
                                           '())
                 (qof-query-set-sort-increasing query
                                                (eq? primary-order 'ascend)
