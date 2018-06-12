@@ -655,7 +655,7 @@
     ; framing table
     (add-html! document "<center><table width='")
     (add-html! document (opt-val "Display" "Invoice Width"))
-    (add-html! document "' cellpadding=0 cellspacing=0>")
+    (add-html! document "' cellpadding='0' cellspacing='0'>")
 
     (add-html! document "<tr><td align='left'>")
 

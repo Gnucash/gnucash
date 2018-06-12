@@ -277,9 +277,6 @@
       (test-equal "default headers"
         default-headers
         (get-row-col sxml 0 #f))
-      (test-equal "last row has same number of cols as header"
-        (length default-headers)
-        (length (get-row-col sxml -1 #f)))
       (test-equal "grand total present"
         '("Grand Total")
         (get-row-col sxml -1 1))
@@ -300,7 +297,7 @@
       (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'monthly)
       (let ((sxml (options->sxml options "test basic column headers, and original currency")))
         (test-equal "default headers, indented, includes common-currency"
-          '(" " " " "Date" "Num" "Description" "Memo/Notes" "Account" "Amount (USD)" "Amount")
+          '("Date" "Num" "Description" "Memo/Notes" "Account" "Amount (USD)" "Amount")
           (get-row-col sxml 0 #f))
         (test-equal "grand total present, no blank cells, and is $2,280 in both common-currency and original-currency"
           '("Grand Total" "$2,280.00" "$2,280.00")
@@ -515,7 +512,7 @@
                  (string-null? (string-trim-both reconcile-date-string))))
            (get-row-col sxml #f 2)))
         (test-equal "reconciled status subtotal"
-          (list "Total For Unreconciled" " " " " " " " " " " " " " " " " "$0.00" " ")
+          (list "Total For Unreconciled" "$0.00")
           (get-row-col sxml -3 #f))
         )
 
@@ -642,10 +639,10 @@
                 "Debit (USD)" "Credit (USD)" "Debit" "Credit")
           (get-row-col sxml 0 #f))
         (test-equal "dual amount column, grand totals available"
-          (list "Grand Total" " " " " " " " " "$2,280.00" "$2,280.00")
+          (list "Grand Total" "$2,280.00" "$2,280.00")
           (get-row-col sxml -1 #f))
         (test-equal "dual amount column, first transaction correct"
-          (list "01/03/18" "$103 income" "Root.Asset.Bank" "\n" "$103.00" " " "\n" "$103.00" " ")
+          (list "01/03/18" "$103 income" "Root.Asset.Bank" "$103.00" "$103.00")
           (get-row-col sxml 1 #f)))
       )
 
@@ -743,10 +740,10 @@
       (set-option! options "Sorting" "Show Account Description" #t)
       (let* ((sxml (options->sxml options "sorting=date, friendly headers")))
         (test-equal "expense acc friendly headers"
-          '("\n" "Expenses" "\n" "Expense" "\n" "Rebate")
+          '("Expenses" "Expense" "Rebate")
           (get-row-col sxml 69 #f))
         (test-equal "income acc friendly headers"
-          '("\n" "Income" "\n" "Charge" "\n" "Income")
+          '("Income" "Charge" "Income")
           (get-row-col sxml 91 #f)))
 
       (set-option! options "Accounts" "Accounts" (list bank))

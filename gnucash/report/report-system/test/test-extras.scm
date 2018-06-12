@@ -117,7 +117,9 @@
         (lambda ()
           (display render)))
       (catch 'parser-error
-        (lambda () (xml->sxml render))
+        (lambda () (xml->sxml render
+                              #:trim-whitespace? #t
+                              #:entities '((nbsp . "\xa0"))))
         (lambda (k . args)
           (format #t "*** XML error. see render output at ~a\n~a"
                   filename (gnc:html-render-options-changed options #t))
