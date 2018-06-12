@@ -575,6 +575,7 @@ libgnucash/backend/sql/gnc-sql-result.cpp
 libgnucash/backend/sql/gnc-tax-table-sql.cpp
 libgnucash/backend/sql/gnc-transaction-sql.cpp
 libgnucash/backend/sql/gnc-vendor-sql.cpp
+libgnucash/backend/xml/.#gnc-invoice-xml-v2.cpp
 libgnucash/backend/xml/gnc-account-xml-v2.cpp
 libgnucash/backend/xml/gnc-address-xml-v2.cpp
 libgnucash/backend/xml/gnc-backend-xml.cpp
