@@ -384,7 +384,7 @@
             (if (eq? 'pixels (car (gnc:html-barchart-height barchart)))
                  (push "px;\"></div>\n")
                  (push "%;\"></div>\n"))
-            (push "<script id=\"source\">\n$(function () {")
+            (push "<script id=\"source\"><![CDATA[\n$(function () {")
 
             (push "var data = [];")
             (push "var series = [];\n")
@@ -570,7 +570,7 @@ function getVisualTicks() {
     return visual_ticks;
 }\n")
 
-            (push "});\n</script>")
+            (push "});\n]]></script>")
 
             (gnc:msg (string-join (reverse (map (lambda (e) (if (number? e) (number->string e) e)) retval)) ""))
  

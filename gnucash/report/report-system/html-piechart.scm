@@ -223,7 +223,7 @@
             (if (eq? 'pixels (car (gnc:html-piechart-height piechart)))
                  (push "px;\"></div>\n")
                  (push "%;\"></div>\n"))
-            (push "<script id=\"source\">\n$(function () {")
+            (push "<script id=\"source\"><![CDATA[\n$(function () {")
 
             (push "var data = [];\n")
 
@@ -288,7 +288,7 @@ $(window).resize(function () {
     });
 });\n")
 
-            (push "});\n</script>"))
+            (push "});\n]]></script>"))
         (begin (gnc:warn "null-data, not rendering piechart")
                " "))
     retval))

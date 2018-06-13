@@ -438,7 +438,7 @@
             (if (eq? 'pixels (car (gnc:html-linechart-height linechart)))
                  (push "px;\"></div>\n")
                  (push "%;\"></div>\n"))
-            (push "<script id=\"source\">\n$(function () {")
+            (push "<script id=\"source\"><![CDATA[\n$(function () {")
 
             (push "var data = [];")
             (push "var series = [];\n")
@@ -601,7 +601,7 @@ function formatTooltip(str, seriesIndex, pointIndex) {
     return options.series[seriesIndex].label + ' ' + x + '<br><b>' + y + '</b>';
 }\n")
 
-            (push "});\n</script>")
+            (push "});\n]]></script>")
 
             (gnc:msg (string-join (reverse (map (lambda (e) (if (number? e) (number->string e) e)) retval)) ""))
             
