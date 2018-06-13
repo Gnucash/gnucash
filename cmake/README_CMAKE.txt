@@ -45,9 +45,8 @@ Limitations include:
   * Not all options available in `./configure` have been ported to
     this CMake system.
 
-  * Password management is included for OS X, but not
-    tested. Gnome-keyring and libsecret support has not
-    been ported over.
+  * Password management is included for OS X and libsecret, but not
+    tested. Gnome-keyring support has not been ported over.
 
   * The Xcode build only supports the Debug configuration. Others such
     as Release are not supported yet.
