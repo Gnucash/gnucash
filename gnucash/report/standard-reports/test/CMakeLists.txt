@@ -7,6 +7,7 @@ set(scm_test_standard_reports_SOURCES
 )
 
 set(scm_test_with_srfi64_SOURCES
+  test-net-charts.scm
   test-transaction.scm
   test-income-gst.scm
 )
