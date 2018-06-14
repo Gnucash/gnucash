@@ -35,7 +35,7 @@
 (use-modules (gnucash app-utils))
 (use-modules (gnucash engine))
 (use-modules (sw_engine))
-(use-modules (gnucash report standard-reports net-barchart))
+(use-modules (gnucash report standard-reports net-charts))
 
 (use-modules (gnucash report report-system test test-extras))
 

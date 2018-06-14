@@ -23,8 +23,7 @@ set (standard_reports_SCHEME_2
     general-ledger.scm
     income-gst-statement.scm
     income-statement.scm
-    net-barchart.scm
-    net-linechart.scm
+    net-charts.scm
     portfolio.scm
     price-scatter.scm
     register.scm
