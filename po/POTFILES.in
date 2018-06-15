@@ -347,7 +347,6 @@ gnucash/import-export/ofx/gnc-ofx-import.c
 gnucash/import-export/ofx/gnc-ofx-kvp.c
 gnucash/import-export/ofx/gnc-plugin-ofx.c
 gnucash/import-export/ofx/gschemas/org.gnucash.dialogs.import.ofx.gschema.xml.in
-gnucash/import-export/qif-imp/.#assistant-qif-import.c
 gnucash/import-export/qif-imp/assistant-qif-import.c
 gnucash/import-export/qif-imp/dialog-account-picker.c
 gnucash/import-export/qif-imp/gncmod-qif-import.c
