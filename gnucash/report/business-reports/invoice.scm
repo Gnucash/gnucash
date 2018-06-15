@@ -64,41 +64,24 @@
 (define (value-col columns-used)
   (vector-ref columns-used 8))
 
-(define columns-used-size 9)
-
 (define (num-columns-required columns-used)
   ;; count number of columns where (vector-ref columns-used col) is #t
-  (count identity
-         (map (lambda (col)
-                (vector-ref columns-used col))
-              (iota columns-used-size))))
+  (count identity (vector->list columns-used)))
 
 (define (build-column-used options)
   (define (opt-val section name)
     (gnc:option-value
      (gnc:lookup-option options section name)))
-
-  (define (make-set-col col-vector)
-    (let ((col 0))
-      (lambda (used? index)
-        (if used?
-            (begin
-              (vector-set! col-vector index col)
-              (set! col (1+ col)))
-            (vector-set! col-vector index #f)))))
-
-  (let* ((col-vector (make-vector columns-used-size #f))
-         (set-col (make-set-col col-vector)))
-    (set-col (opt-val "Display Columns" "Date") 0)
-    (set-col (opt-val "Display Columns" "Description") 1)
-    (set-col (opt-val "Display Columns" "Action") 2)
-    (set-col (opt-val "Display Columns" "Quantity") 3)
-    (set-col (opt-val "Display Columns" "Price") 4)
-    (set-col (opt-val "Display Columns" "Discount") 5)
-    (set-col (opt-val "Display Columns" "Taxable") 6)
-    (set-col (opt-val "Display Columns" "Tax Amount") 7)
-    (set-col (opt-val "Display Columns" "Total") 8)
-    col-vector))
+  (vector
+   (opt-val "Display Columns" "Date")
+   (opt-val "Display Columns" "Description")
+   (opt-val "Display Columns" "Action")
+   (opt-val "Display Columns" "Quantity")
+   (opt-val "Display Columns" "Price")
+   (opt-val "Display Columns" "Discount")
+   (opt-val "Display Columns" "Taxable")
+   (opt-val "Display Columns" "Tax Amount")
+   (opt-val "Display Columns" "Total")))
 
 (define (make-heading-list column-vector)
   (append
@@ -390,10 +373,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
     (N_ "Display") (N_ "Individual Taxes")
     "o" (N_ "Display all the individual taxes?") #f))
 
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
-    (N_ "Display") (N_ "Totals")
-    "p" (N_ "Display the totals?") #t))
+  (gnc:register-inv-option (gnc:make-internal-option "Display" "Totals" #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
@@ -491,11 +471,6 @@ for styling the invoice. Please see the exported report for the CSS class names.
         (currency (gncInvoiceGetCurrency invoice))
         (reverse-payments? (not (gncInvoiceAmountPositive invoice))))
 
-    (define (colspan monetary used-columns)
-      (or (value-col used-columns)
-          (taxvalue-col used-columns)
-          (price-col used-columns)))
-
     (define (display-subtotal monetary used-columns)
       (if (value-col used-columns)
           monetary
@@ -515,7 +490,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
          (list (gnc:make-html-table-cell/markup
                 "total-label-cell" subtotal-label)
                (gnc:make-html-table-cell/size/markup
-                1 (colspan subtotal-mon used-columns)
+                1 (max 3 (num-columns-required used-columns))
                 "total-number-cell"
                 (display-subtotal subtotal-mon used-columns))))))
 
@@ -542,7 +517,9 @@ for styling the invoice. Please see the exported report for the CSS class names.
                  (_ "Payment, thank you"))
 
           (list (gnc:make-html-table-cell/size/markup
-                 1 (colspan currency used-columns)
+                 1 (- (max 3 (num-columns-required used-columns))
+                      (if (date-col used-columns) 1 0)
+                      (if (description-col used-columns) 1 0))
                  "total-number-cell"
                  (display-subtotal amt used-columns)))))))
 
