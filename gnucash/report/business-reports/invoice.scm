@@ -109,63 +109,6 @@
       (string-append (gnc:default-html-gnc-numeric-renderer numeric #f) " " (_ "%"))
       (gnc:make-gnc-monetary currency numeric)))
 
-(define (add-entry-row table currency entry column-vector row-style cust-doc? credit-note?)
-  (let* ((entry-value (gnc:make-gnc-monetary
-                       currency (gncEntryGetDocValue entry #t cust-doc? credit-note?)))
-         (entry-tax-value (gnc:make-gnc-monetary
-                           currency (gncEntryGetDocTaxValue entry #t cust-doc? credit-note?))))
-
-    (gnc:html-table-append-row/markup!
-     table row-style
-     (append
-      (addif (date-col column-vector)
-             (qof-print-date (gncEntryGetDate entry)))
-
-      (addif (description-col column-vector)
-             (gncEntryGetDescription entry))
-
-      (addif (action-col column-vector)
-             (gncEntryGetAction entry))
-
-      (addif (quantity-col column-vector)
-             (gnc:make-html-table-cell/markup "number-cell"
-                                              (gncEntryGetDocQuantity entry credit-note?)))
-
-      (addif (price-col column-vector)
-             (gnc:make-html-table-cell/markup "number-cell"
-                                              (gnc:make-gnc-monetary
-                                               currency (if cust-doc?
-                                                            (gncEntryGetInvPrice entry)
-                                                            (gncEntryGetBillPrice entry)))))
-
-      (addif (discount-col column-vector)
-             (if cust-doc?
-                 (gnc:make-html-table-cell/markup
-                  "number-cell"
-                  (monetary-or-percent (gncEntryGetInvDiscount entry)
-                                       currency
-                                       (gncEntryGetInvDiscountType entry)))
-                 ""))
-
-      (addif (tax-col column-vector)
-             (if (if cust-doc?
-                     (and (gncEntryGetInvTaxable entry)
-                          (gncEntryGetInvTaxTable entry))
-                     (and (gncEntryGetBillTaxable entry)
-                          (gncEntryGetBillTaxTable entry)))
-                 ;; Translators: This "T" is displayed in the taxable column, if this entry contains tax
-                 (_ "T") ""))
-
-      (addif (taxvalue-col column-vector)
-             (gnc:make-html-table-cell/markup
-              "number-cell"
-              entry-tax-value))
-
-      (addif (value-col column-vector)
-             (gnc:make-html-table-cell/markup
-              "number-cell"
-              entry-value))))))
-
 (define layout-key-list
   (list (cons 'client (list (cons 'text "Client details")
                             (cons 'tip "Client name and address")))
@@ -527,6 +470,62 @@ for styling the invoice. Please see the exported report for the CSS class names.
            (used-columns (build-column-used options))
            (entries (gncInvoiceGetEntries invoice)))
 
+      (define (add-entry-row entry row-style)
+        (gnc:html-table-append-row/markup!
+         table row-style
+         (append
+          (addif (date-col used-columns)
+                 (qof-print-date (gncEntryGetDate entry)))
+
+          (addif (description-col used-columns)
+                 (gncEntryGetDescription entry))
+
+          (addif (action-col used-columns)
+                 (gncEntryGetAction entry))
+
+          (addif (quantity-col used-columns)
+                 (gnc:make-html-table-cell/markup
+                  "number-cell"
+                  (gncEntryGetDocQuantity entry credit-note?)))
+
+          (addif (price-col used-columns)
+                 (gnc:make-html-table-cell/markup
+                  "number-cell"
+                  (gnc:make-gnc-monetary
+                   currency (if cust-doc?
+                                (gncEntryGetInvPrice entry)
+                                (gncEntryGetBillPrice entry)))))
+
+          (addif (discount-col used-columns)
+                 (if cust-doc?
+                     (gnc:make-html-table-cell/markup
+                      "number-cell"
+                      (monetary-or-percent (gncEntryGetInvDiscount entry)
+                                           currency
+                                           (gncEntryGetInvDiscountType entry)))
+                     ""))
+
+          (addif (tax-col used-columns)
+                 (if (if cust-doc?
+                         (and (gncEntryGetInvTaxable entry)
+                              (gncEntryGetInvTaxTable entry))
+                         (and (gncEntryGetBillTaxable entry)
+                              (gncEntryGetBillTaxTable entry)))
+                     ;; Translators: This "T" is displayed in the taxable column, if this entry contains tax
+                     (_ "T") ""))
+
+          (addif (taxvalue-col used-columns)
+                 (gnc:make-html-table-cell/markup
+                  "number-cell"
+                  (gnc:make-gnc-monetary
+                   currency (gncEntryGetDocTaxValue entry #t cust-doc? credit-note?))))
+
+          (addif (value-col used-columns)
+                 (gnc:make-html-table-cell/markup
+                  "number-cell"
+                  (gnc:make-gnc-monetary
+                   currency (gncEntryGetDocValue entry #t cust-doc? credit-note?)))))))
+
       (gnc:html-table-set-col-headers! table
                                        (make-heading-list used-columns))
 
@@ -590,12 +589,8 @@ for styling the invoice. Please see the exported report for the CSS class names.
 
             (begin
 
-              (add-entry-row table
-                             currency
-                             (car entries)
-                             used-columns
-                             (if odd-row? "normal-row" "alternate-row")
-                             cust-doc? credit-note?)
+              (add-entry-row (car entries)
+                             (if odd-row? "normal-row" "alternate-row"))
 
               (do-rows-with-subtotals (cdr entries)
                                       (not odd-row?)
