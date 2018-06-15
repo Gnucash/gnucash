@@ -611,9 +611,6 @@ for styling the invoice. Please see the exported report for the CSS class names.
               (add-subtotal-row table used-columns (cadr (total-collector 'getpair currency #f))
                                 "grand-total" (_ "Amount Due")))
 
-            ;;
-            ;; End of BEGIN -- now here's the code to handle all the entries!
-            ;;
             (begin
 
               (add-entry-row table
@@ -665,7 +662,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
               (begin
                 (gnc:html-table-append-row! invoice-details-table
                                             (list
-                                             (_ "Reference")
+                                             (_ "Reference:")
                                              (gnc:make-html-div/markup
                                               "div-align-right"
                                               (multiline-to-html-text billing-id))))
@@ -677,7 +674,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
           (if (and terms (not (string-null? terms)))
               (gnc:html-table-append-row! invoice-details-table
                                           (list
-                                           (_ "Terms")
+                                           (_ "Terms:")
                                            (gnc:make-html-div/markup
                                             "div-align-right"
                                             (multiline-to-html-text terms)))))))
@@ -687,12 +684,12 @@ for styling the invoice. Please see the exported report for the CSS class names.
              (not (string-null? jobnumber)))
         (begin
           (gnc:html-table-append-row! invoice-details-table
-                                      (list (_ "Job number")
+                                      (list (_ "Job number:")
                                             (gnc:make-html-div/markup
                                              "div-align-right"
                                              jobnumber)))
           (gnc:html-table-append-row! invoice-details-table
-                                      (list (_ "Job name")
+                                      (list (_ "Job name:")
                                             (gnc:make-html-div/markup
                                              "div-align-right"
                                              jobname)))))
@@ -794,8 +791,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
          (opt-val (lambda (section name) (gnc:option-value (gnc:lookup-option options section name))))
          (invoice (opt-val gnc:pagename-general gnc:optname-invoice-number))
          (references? (opt-val "Display" "References"))
-         (custom-title (opt-val gnc:pagename-general "Custom Title"))
-         (title-string (lambda (title custom-title) (if (string-null? custom-title) title custom-title))))
+         (custom-title (opt-val gnc:pagename-general "Custom Title")))
 
     (if (null? invoice)
         (gnc:html-document-add-object! document
@@ -805,8 +801,8 @@ for styling the invoice. Please see the exported report for the CSS class names.
                (owner (gncInvoiceGetOwner invoice))
                (type (gncInvoiceGetType invoice))
                (orders (if references? (delete-duplicates (map gncEntryGetOrder (gncInvoiceGetEntries invoice))) '()))
-               (cust-doc? (memq type (list GNC-INVOICE-CUST-INVOICE GNC-INVOICE-CUST-CREDIT-NOTE)))
-               (credit-note? (memq type (list GNC-INVOICE-CUST-CREDIT-NOTE GNC-INVOICE-VEND-CREDIT-NOTE GNC-INVOICE-EMPL-CREDIT-NOTE)))
+               (cust-doc? (memv type (list GNC-INVOICE-CUST-INVOICE GNC-INVOICE-CUST-CREDIT-NOTE)))
+               (credit-note? (memv type (list GNC-INVOICE-CUST-CREDIT-NOTE GNC-INVOICE-VEND-CREDIT-NOTE GNC-INVOICE-EMPL-CREDIT-NOTE)))
                (default-title (case type
                                 ((GNC-INVOICE-VEND-INVOICE)
                                  (_ "Bill"))
@@ -816,7 +812,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
                                  (_ "Credit Note"))
                                 (else
                                  (_ "Invoice"))))
-               (title (title-string default-title custom-title))
+               (title (if (string-null? custom-title) default-title custom-title))
                (invoice-title (format #f (_"~a #~a") title (gncInvoiceGetID invoice)))
                (layout-lookup-table (list (cons 'none #f)
                                           (cons 'picture (gnc:make-html-div/markup
