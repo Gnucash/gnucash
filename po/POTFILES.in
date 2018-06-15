@@ -347,9 +347,7 @@ gnucash/import-export/ofx/gnc-ofx-import.c
 gnucash/import-export/ofx/gnc-ofx-kvp.c
 gnucash/import-export/ofx/gnc-plugin-ofx.c
 gnucash/import-export/ofx/gschemas/org.gnucash.dialogs.import.ofx.gschema.xml.in
-gnucash/import-export/qif/qif-context.c
-gnucash/import-export/qif/qif-file.c
-gnucash/import-export/qif/qif-objects.c
+gnucash/import-export/qif-imp/.#assistant-qif-import.c
 gnucash/import-export/qif-imp/assistant-qif-import.c
 gnucash/import-export/qif-imp/dialog-account-picker.c
 gnucash/import-export/qif-imp/gncmod-qif-import.c
@@ -486,8 +484,7 @@ gnucash/report/standard-reports/general-journal.scm
 gnucash/report/standard-reports/general-ledger.scm
 gnucash/report/standard-reports/income-gst-statement.scm
 gnucash/report/standard-reports/income-statement.scm
-gnucash/report/standard-reports/net-barchart.scm
-gnucash/report/standard-reports/net-linechart.scm
+gnucash/report/standard-reports/net-charts.scm
 gnucash/report/standard-reports/portfolio.scm
 gnucash/report/standard-reports/price-scatter.scm
 gnucash/report/standard-reports/register.scm
@@ -575,7 +572,6 @@ libgnucash/backend/sql/gnc-sql-result.cpp
 libgnucash/backend/sql/gnc-tax-table-sql.cpp
 libgnucash/backend/sql/gnc-transaction-sql.cpp
 libgnucash/backend/sql/gnc-vendor-sql.cpp
-libgnucash/backend/xml/.#gnc-invoice-xml-v2.cpp
 libgnucash/backend/xml/gnc-account-xml-v2.cpp
 libgnucash/backend/xml/gnc-address-xml-v2.cpp
 libgnucash/backend/xml/gnc-backend-xml.cpp
