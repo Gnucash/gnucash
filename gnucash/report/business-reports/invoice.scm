@@ -424,19 +424,6 @@ for styling the invoice. Please see the exported report for the CSS class names.
                     monetary)
                 monetary))))
 
-    (define (add-subtotal-row table used-columns
-                              subtotal subtotal-style subtotal-label)
-      (let ((subtotal-mon (gnc:make-gnc-monetary currency subtotal)))
-
-        (gnc:html-table-append-row/markup!
-         table subtotal-style
-         (list (gnc:make-html-table-cell/markup
-                "total-label-cell" subtotal-label)
-               (gnc:make-html-table-cell/size/markup
-                1 (max 3 (num-columns-required used-columns))
-                "total-number-cell"
-                (display-subtotal subtotal-mon used-columns))))))
-
     (define (add-payment-row table used-columns split total-collector reverse-payments?)
       (let* ((t (xaccSplitGetParent split))
              (currency (xaccTransGetCurrency t))
@@ -526,6 +513,16 @@ for styling the invoice. Please see the exported report for the CSS class names.
                   (gnc:make-gnc-monetary
                    currency (gncEntryGetDocValue entry #t cust-doc? credit-note?)))))))
 
+      (define (add-subtotal-row subtotal subtotal-style subtotal-label)
+        (gnc:html-table-append-row/markup!
+         table subtotal-style
+         (list (gnc:make-html-table-cell/markup
+                "total-label-cell" subtotal-label)
+               (gnc:make-html-table-cell/size/markup
+                1 (max 3 (num-columns-required used-columns))
+                "total-number-cell"
+                (display-subtotal (gnc:make-gnc-monetary currency subtotal) used-columns)))))
+
       (gnc:html-table-set-col-headers! table
                                        (make-heading-list used-columns))
 
@@ -548,7 +545,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
                         (not odd-row?))))
 
               (if display-subtotal?
-                  (add-subtotal-row table used-columns (gncInvoiceGetTotalSubtotal invoice)
+                  (add-subtotal-row (gncInvoiceGetTotalSubtotal invoice)
                                     "grand-total" (_ "Net Price")))
 
               (if display-all-taxes
@@ -556,15 +553,15 @@ for styling the invoice. Please see the exported report for the CSS class names.
                    (lambda (parm)
                      (let ((value (cdr parm))
                            (acct (car parm)))
-                       (add-subtotal-row table used-columns value
+                       (add-subtotal-row value
                                          "grand-total" (xaccAccountGetName acct))))
                    (gncInvoiceGetTotalTaxList invoice))
 
                   ;; nope, just show the total tax.
-                  (add-subtotal-row table used-columns (gncInvoiceGetTotalTax invoice)
+                  (add-subtotal-row (gncInvoiceGetTotalTax invoice)
                                     "grand-total" (_ "Tax")))
 
-              (add-subtotal-row table used-columns (gncInvoiceGetTotal invoice)
+              (add-subtotal-row (gncInvoiceGetTotal invoice)
                                 "grand-total" (_ "Total Price"))
 
               (total-collector 'add currency (gncInvoiceGetTotal invoice))
@@ -584,7 +581,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
                                             reverse-payments?)))
                      splits)))
 
-              (add-subtotal-row table used-columns (cadr (total-collector 'getpair currency #f))
+              (add-subtotal-row (cadr (total-collector 'getpair currency #f))
                                 "grand-total" (_ "Amount Due")))
 
             (begin
