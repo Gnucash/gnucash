@@ -10,6 +10,7 @@ add_subdirectory(csv-imp)
 add_subdirectory(customer-import)
 add_subdirectory(log-replay)
 add_subdirectory(ofx)
+add_subdirectory(qif)
 add_subdirectory(qif-imp)
 
 
