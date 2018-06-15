@@ -59,6 +59,7 @@
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "guile-mappings.h"
+#include <gfec.h>
 
 #include "swig-runtime.h"
 
@@ -1067,6 +1068,11 @@ gnc_ui_qif_import_commodity_update(QIFImportWindow * wind)
     }
 }
 
+static void
+_gfec_error_handler(const char *message)
+{
+    PERR("qif-import:qif-to-gnc-undo encountered an error: %s", message);
+}
 
 /****************************************************************
  * gnc_ui_qif_import_convert_undo
@@ -1082,7 +1088,7 @@ gnc_ui_qif_import_convert_undo(QIFImportWindow * wind)
     gnc_set_busy_cursor(NULL, TRUE);
 
     /* Undo the conversion. */
-    scm_call_1(undo, wind->imported_account_tree);
+    gfec_apply(undo, wind->imported_account_tree, _gfec_error_handler);
 
     /* There's no imported account tree any more. */
     scm_gc_unprotect_object(wind->imported_account_tree);
@@ -1916,6 +1922,7 @@ gnc_ui_qif_import_load_progress_start_cb(GtkButton * button,
 
                 wind->ask_date_format = TRUE;
             }
+            wind->load_stop = TRUE;
         }
         else
         {
@@ -1937,21 +1944,26 @@ gnc_ui_qif_import_load_progress_start_cb(GtkButton * button,
     gtk_widget_set_sensitive(wind->load_pause, FALSE);
     gtk_widget_set_sensitive(wind->load_start, FALSE);
 
+    /* The file was loaded successfully. */
+    gnc_progress_dialog_set_sub(wind->load_progress, _("Loading completed"));
+    gnc_progress_dialog_set_value(wind->load_progress, 1);
+
+    scm_gc_unprotect_object(wind->imported_files);
+    wind->imported_files = imported_files;
+    scm_gc_protect_object(wind->imported_files);
+
+    gtk_widget_set_sensitive(wind->load_pause, FALSE);
+    wind->busy = FALSE;
+
     if (wind->load_stop == FALSE)
     {
-        /* The file was loaded successfully. */
-        gnc_progress_dialog_set_sub(wind->load_progress, _("Loading completed"));
-        gnc_progress_dialog_set_value(wind->load_progress, 1);
-
-        scm_gc_unprotect_object(wind->imported_files);
-        wind->imported_files = imported_files;
-        scm_gc_protect_object(wind->imported_files);
-
-        gtk_widget_set_sensitive(wind->load_pause, FALSE);
-        wind->busy = FALSE;
 
         /* Auto step to next page */
         gtk_assistant_set_current_page (assistant, num + 1);
+    }
+    else
+    {
+        wind->load_stop = FALSE;
     }
 }
 
@@ -2934,58 +2946,59 @@ gnc_ui_qif_import_convert_progress_start_cb(GtkButton * button,
         wind->busy = FALSE;
         wind->load_stop = TRUE;
     }
-
-    /* Save the imported account tree. */
-    scm_gc_unprotect_object(wind->imported_account_tree);
-    wind->imported_account_tree = retval;
-    scm_gc_protect_object(wind->imported_account_tree);
-
-    /*
-     * Detect potentially duplicated transactions.
-     */
-
-    /* This step will fill the remainder of the bar. */
-    gnc_progress_dialog_push(wind->convert_progress, 1);
-    retval = scm_call_3(find_duplicates,
-                        scm_c_eval_string("(gnc-get-current-root-account)"),
-                        wind->imported_account_tree, progress);
-    gnc_progress_dialog_pop(wind->convert_progress);
-
-    /* Save the results. */
-    scm_gc_unprotect_object(wind->match_transactions);
-    wind->match_transactions = retval;
-    scm_gc_protect_object(wind->match_transactions);
-
-    if (retval == SCM_BOOL_T)
+    if (wind->load_stop == FALSE)
     {
-        /* Canceled by the user. */
-        gtk_widget_set_sensitive(wind->convert_pause, FALSE);
-        gnc_progress_dialog_set_sub(wind->convert_progress, _("Canceling"));
-        wind->busy = FALSE;
-        wind->load_stop = TRUE;
+        /* Save the imported account tree. */
+        scm_gc_unprotect_object(wind->imported_account_tree);
+        wind->imported_account_tree = retval;
+        scm_gc_protect_object(wind->imported_account_tree);
+
+        /*
+         * Detect potentially duplicated transactions.
+         */
+
+        /* This step will fill the remainder of the bar. */
+        gnc_progress_dialog_push(wind->convert_progress, 1);
+        retval = scm_call_3(find_duplicates,
+                            scm_c_eval_string("(gnc-get-current-root-account)"),
+                            wind->imported_account_tree, progress);
+        gnc_progress_dialog_pop(wind->convert_progress);
+
+        /* Save the results. */
+        scm_gc_unprotect_object(wind->match_transactions);
+        wind->match_transactions = retval;
+        scm_gc_protect_object(wind->match_transactions);
+
+        if (retval == SCM_BOOL_T)
+        {
+            /* Canceled by the user. */
+            gtk_widget_set_sensitive(wind->convert_pause, FALSE);
+            gnc_progress_dialog_set_sub(wind->convert_progress, _("Canceling"));
+            wind->busy = FALSE;
+            wind->load_stop = TRUE;
+        }
+        else if (retval == SCM_BOOL_F)
+        {
+            /* An error occurred during duplicate checking. */
+
+            /* Remove any converted data. */
+            gnc_progress_dialog_set_sub(wind->convert_progress, _("Cleaning up"));
+            gnc_ui_qif_import_convert_undo(wind);
+
+            /* Inform the user. */
+            gnc_progress_dialog_append_log(wind->convert_progress,
+                                           _( "A bug was detected while detecting duplicates."));
+            gnc_progress_dialog_set_sub(wind->convert_progress, _("Failed"));
+            gnc_progress_dialog_reset_value(wind->convert_progress);
+            gnc_error_dialog (GTK_WINDOW (assistant), "%s",
+                              _( "A bug was detected while detecting duplicates."));
+            /* FIXME: How should we request that the user report this problem? */
+
+            gtk_widget_set_sensitive(wind->convert_pause, FALSE);
+            wind->busy = FALSE;
+            wind->load_stop = TRUE;
+        }
     }
-    else if (retval == SCM_BOOL_F)
-    {
-        /* An error occurred during duplicate checking. */
-
-        /* Remove any converted data. */
-        gnc_progress_dialog_set_sub(wind->convert_progress, _("Cleaning up"));
-        gnc_ui_qif_import_convert_undo(wind);
-
-        /* Inform the user. */
-        gnc_progress_dialog_append_log(wind->convert_progress,
-                                       _( "A bug was detected while detecting duplicates."));
-        gnc_progress_dialog_set_sub(wind->convert_progress, _("Failed"));
-        gnc_progress_dialog_reset_value(wind->convert_progress);
-        gnc_error_dialog (GTK_WINDOW (assistant), "%s",
-                          _( "A bug was detected while detecting duplicates."));
-        /* FIXME: How should we request that the user report this problem? */
-
-        gtk_widget_set_sensitive(wind->convert_pause, FALSE);
-        wind->busy = FALSE;
-        wind->load_stop = TRUE;
-    }
-
     /* Enable the Assistant Forward Button */
     gtk_assistant_set_page_complete (assistant, page, TRUE);
 

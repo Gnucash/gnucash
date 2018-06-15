@@ -255,7 +255,11 @@
                                              (length (qif-file:xtns b))))))
            (work-to-do 0)
            (work-done 0))
-
+      ;; Log any errors
+      (define (errorproc message)
+        (if (string? message)
+              (qif-import:log progress-dialog "qif-import:qif-to-gnc"
+                            message)))
       ;; This procedure handles progress reporting, pause, and cancel.
       (define (update-progress)
         (set! work-done (+ 1 work-done))
@@ -379,7 +383,7 @@
             (update-progress)
 
             (if (not (qif-xtn:mark xtn))
-                (qif-import:mark-matching-xtns xtn rest))
+                (qif-import:mark-matching-xtns xtn rest errorproc))
             (if (not (null? (cdr rest)))
                 (xloop (car rest) (cdr rest)))))
 
@@ -431,7 +435,7 @@
     (lambda ()
       (catch 'cancel
              (lambda ()
-               (catch 'bad-date private-convert (lambda (key . args) key)))
+               (catch #t private-convert (lambda (key . args) key)))
              (lambda (key . args) #t)))))
 
 
@@ -810,7 +814,7 @@
 ;;  mark them so they won't be imported.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-import:mark-matching-xtns xtn candidate-xtns)
+(define (qif-import:mark-matching-xtns xtn candidate-xtns errorproc)
   (let splitloop ((splits-left (qif-xtn:splits xtn)))
 
     ;; splits-left starts out as all the splits of this transaction.
@@ -822,7 +826,7 @@
                  (qif-split:category-is-account? (car splits-left)))
             (set! splits-left
                   (qif-import:mark-some-splits
-                   splits-left xtn candidate-xtns))
+                   splits-left xtn candidate-xtns errorproc))
             (set! splits-left (cdr splits-left))))
 
     (if (not (null? splits-left))
@@ -835,7 +839,7 @@
 ;; don't get imported.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-import:mark-some-splits splits xtn candidate-xtns)
+(define (qif-import:mark-some-splits splits xtn candidate-xtns errorproc)
   (let* ((n- (lambda (n) (gnc-numeric-neg n)))
          (nsub (lambda (a b) (gnc-numeric-sub a b 0 GNC-DENOM-LCD)))
          (n+ (lambda (a b) (gnc-numeric-add a b 0 GNC-DENOM-LCD)))
@@ -910,17 +914,20 @@
     ;; this is the grind loop.  Go over every unmarked transaction in
     ;; the candidate-xtns list.
     (let xtn-loop ((xtns candidate-xtns))
-      (if (and (not (qif-xtn:mark (car xtns)))
-               (string=? (qif-xtn:from-acct (car xtns)) far-acct-name))
-          (begin
-            (set! how
-                  (qif-import:xtn-has-matches? (car xtns) near-acct-name
-                                               date amount group-amount))
-            (if how
-                (begin
-                  (qif-import:merge-and-mark-xtns xtn same-acct-splits
-                                                  (car xtns) how)
-                  (set! done #t)))))
+      (if (not (and far-acct-name near-acct-name))
+          (if errorproc
+              (errorproc "Transaction with no or only one associated account."))
+          (if (and (not (qif-xtn:mark (car xtns))))
+              (string=? (qif-xtn:from-acct (car xtns)) far-acct-name)
+              (begin
+                (set! how
+                      (qif-import:xtn-has-matches? (car xtns) near-acct-name
+                                                   date amount group-amount))
+                (if how
+                    (begin
+                      (qif-import:merge-and-mark-xtns xtn same-acct-splits
+                                                      (car xtns) how)
+                      (set! done #t))))))
       ;; iterate with the next transaction
       (if (and (not done)
                (not (null? (cdr xtns))))
