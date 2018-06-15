@@ -910,7 +910,9 @@
     ;; this is the grind loop.  Go over every unmarked transaction in
     ;; the candidate-xtns list.
     (let xtn-loop ((xtns candidate-xtns))
-      (if (and (not (qif-xtn:mark (car xtns)))
+      (if (and (and
+                (and far-acct-name near acct-name)
+                (not (qif-xtn:mark (car xtns))))
                (string=? (qif-xtn:from-acct (car xtns)) far-acct-name))
           (begin
             (set! how

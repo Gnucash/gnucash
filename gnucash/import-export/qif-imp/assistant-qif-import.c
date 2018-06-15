@@ -59,6 +59,7 @@
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
 #include "guile-mappings.h"
+#include <gfec.h>
 
 #include "swig-runtime.h"
 
@@ -1067,6 +1068,12 @@ gnc_ui_qif_import_commodity_update(QIFImportWindow * wind)
     }
 }
 
+static void
+_gfec_error_handler(const char *message)
+{
+    PERR("qif-import:qif-to-gnc-undo encountered an error: %s", message);
+}
+
 
 /****************************************************************
  * gnc_ui_qif_import_convert_undo
@@ -1082,7 +1089,7 @@ gnc_ui_qif_import_convert_undo(QIFImportWindow * wind)
     gnc_set_busy_cursor(NULL, TRUE);
 
     /* Undo the conversion. */
-    scm_call_1(undo, wind->imported_account_tree);
+    gfec_apply(undo, wind->imported_account_tree, _gfec_error_handler);
 
     /* There's no imported account tree any more. */
     scm_gc_unprotect_object(wind->imported_account_tree);
