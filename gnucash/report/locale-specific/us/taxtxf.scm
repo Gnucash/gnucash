@@ -3049,8 +3049,6 @@
               #f) ;;end of if
           #f) ;;end of if
           (begin  ; else do tax report
-             (if #t                     ;does gcn-html-engine-support-css? #t!
-                 (begin ;; this is for webkit
                   (gnc:html-document-set-style!
                    doc "header-just-top"
                    'tag "th"
@@ -3092,7 +3090,6 @@
                    'tag "td"
                    'attribute (list "class" "number-cell neg")
                    'attribute (list "valign" "bottom"))
-                 ))
 
              (gnc:html-document-set-style!
               doc "just-bot"

@@ -130,7 +130,6 @@
 <meta http-equiv="content-type" content="text-html; charset=utf-8">
 <title><?scm:d coyname ?> <?scm:d reportname ?> <?scm:d (qof-print-date opt-date) ?></title>
 
-<?scm (if css? (begin ?>
 <link rel="stylesheet" href="<?scm:d opt-css-file ?>" type="text/css">
 <!-- Note that the stylesheet file is overridden by some options, i.e.
      opt-font-family and opt-font-size                                 -->
@@ -149,7 +148,6 @@
     <?scm )) ?>
   }
 </style>
-<?scm )) ?>
 
 </head>
 <body>
