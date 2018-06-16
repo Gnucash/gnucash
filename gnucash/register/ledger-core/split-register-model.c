@@ -508,6 +508,72 @@ gnc_split_register_get_default_tooltip (VirtualLocation virt_loc,
     return g_strdup (tooltip);
 }
 
+static char *
+gnc_split_register_get_recn_tooltip (VirtualLocation virt_loc,
+                                     gpointer user_data)
+{
+    SplitRegister *reg = user_data;
+    Split *split;
+
+    split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
+    if (!split)
+        return NULL;
+
+    if (xaccSplitGetReconcile (split) == YREC)
+    {
+        Timespec     ts = {0,0};
+        const char *str_rec_date;
+        xaccSplitGetDateReconciledTS (split, &ts);
+        str_rec_date = gnc_print_date (ts);
+        return g_strdup_printf (_("Reconciled on %s"), str_rec_date);
+    }
+    else if (xaccSplitGetReconcile (split) == VREC)
+    {
+        Transaction *trans = xaccSplitGetParent (split);
+        return g_strdup (xaccTransGetVoidReason (trans));
+    }
+    else
+        return NULL;
+}
+
+static char *
+gnc_split_register_get_associate_tooltip (VirtualLocation virt_loc,
+                                          gpointer user_data)
+{
+    SplitRegister *reg = user_data;
+    Transaction *trans;
+    const char *uri;
+
+    trans = gnc_split_register_get_trans (reg, virt_loc.vcell_loc);
+    if (!trans)
+        return NULL;
+
+    // get the existing uri
+    uri = xaccTransGetAssociation (trans);
+
+    // Check for uri is empty or NULL
+    if (g_strcmp0 (uri, "") != 0 && g_strcmp0 (uri, NULL) != 0)
+    {
+        gboolean valid_path_head = FALSE;
+        gchar *path_head = gnc_prefs_get_string (GNC_PREFS_GROUP_GENERAL, "assoc-head");
+
+        if ((path_head != NULL) && (g_strcmp0 (path_head, "") != 0)) // not default entry
+            valid_path_head = TRUE;
+
+        if (valid_path_head && g_str_has_prefix (uri,"file:/") && !g_str_has_prefix (uri,"file://"))
+        {
+            const gchar *part = uri + strlen ("file:");
+            gchar *new_uri = g_strconcat (path_head, part, NULL);
+            g_free (path_head);
+            return g_strdup (new_uri);
+        }
+        else
+            return g_strdup (uri);
+    }
+    else
+        return NULL;
+}
+
 static gnc_numeric
 get_trans_total_amount (SplitRegister *reg, Transaction *trans)
 {
@@ -2564,6 +2630,13 @@ gnc_split_register_model_new (void)
 //    gnc_table_model_set_default_tooltip_handler(
 //        model, gnc_split_register_get_default_tooltip);
 
+    gnc_table_model_set_tooltip_handler (model,
+                                       gnc_split_register_get_recn_tooltip,
+                                       RECN_CELL);
+
+    gnc_table_model_set_tooltip_handler (model,
+                                       gnc_split_register_get_associate_tooltip,
+                                       ASSOC_CELL);
 
 
     // help handlers
