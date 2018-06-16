@@ -9,6 +9,7 @@ set(scm_test_standard_reports_SOURCES
 set(scm_test_with_srfi64_SOURCES
   test-charts.scm
   test-transaction.scm
+  test-balance-sheet.scm
   test-income-gst.scm
 )
 
