@@ -497,6 +497,17 @@ gnc_split_register_get_fcredit_label (VirtualLocation virt_loc,
     return _("Credit Formula");
 }
 
+
+static char *
+gnc_split_register_get_default_tooltip (VirtualLocation virt_loc,
+                                     gpointer user_data)
+{
+    SplitRegister *reg = user_data;
+    const char *tooltip = gnc_table_get_entry(reg->table, virt_loc);
+
+    return g_strdup (tooltip);
+}
+
 static gnc_numeric
 get_trans_total_amount (SplitRegister *reg, Transaction *trans)
 {
@@ -2343,6 +2354,7 @@ gnc_split_register_model_new (void)
 
     model = gnc_table_model_new ();
 
+    // entry handlers
     gnc_table_model_set_entry_handler (model,
                                        gnc_split_register_get_date_entry,
                                        DATE_CELL);
@@ -2443,7 +2455,7 @@ gnc_split_register_model_new (void)
                                        gnc_split_register_get_rbaln_entry,
                                        RBALN_CELL);
 
-
+    // label handlers
     gnc_table_model_set_label_handler (model,
                                        gnc_split_register_get_date_label,
                                        DATE_CELL);
@@ -2548,7 +2560,13 @@ gnc_split_register_model_new (void)
                                        gnc_split_register_get_tbalance_label,
                                        RBALN_CELL);
 
+    // tooltip handlers
+//    gnc_table_model_set_default_tooltip_handler(
+//        model, gnc_split_register_get_default_tooltip);
 
+
+
+    // help handlers
     gnc_table_model_set_default_help_handler(
         model, gnc_split_register_get_default_help);
 
@@ -2612,7 +2630,7 @@ gnc_split_register_model_new (void)
                                       gnc_split_register_get_fdebt_help,
                                       FDEBT_CELL);
 
-
+    // io flag handlers
     gnc_table_model_set_io_flags_handler(
         model, gnc_split_register_get_standard_io_flags, DATE_CELL);
 

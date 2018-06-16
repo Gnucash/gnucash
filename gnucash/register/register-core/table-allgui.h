@@ -238,6 +238,8 @@ VirtualCell *  gnc_table_get_virtual_cell (Table *table,
 
 const char *   gnc_table_get_entry (Table *table, VirtualLocation virt_loc);
 
+char *         gnc_table_get_tooltip (Table *table, VirtualLocation virt_loc);
+
 const char *   gnc_table_get_label (Table *table, VirtualLocation virt_loc);
 
 CellIOFlags    gnc_table_get_io_flags (Table *table, VirtualLocation virt_loc);
