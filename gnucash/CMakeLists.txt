@@ -36,7 +36,7 @@ add_definitions (-DHAVE_CONFIG_H)
 # Some settings are platform dependent. Let's define them per platform.
 if (WIN32)
     # Windows specific settings go here:
-    set (GNUCASH_RESOURCE_FILE gnucash.rc)
+    set (GNUCASH_RESOURCE_FILE ${CMAKE_CURRENT_BINARY_DIR}/gnucash.rc)
     configure_file(gnucash.rc.in gnucash.rc @ONLY NEWLINE_STYLE WIN32)
 
 else (WIN32)
