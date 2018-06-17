@@ -566,12 +566,6 @@
       (set-option! options "Display" "Other Account Name" #t)
       (set-option! options "Display" "Other Account Code" #t)
       (let* ((sxml (options->sxml options "dual column")))
-        ;; Note. It's difficult to test converted monetary
-        ;; amounts. Although I've set transfers from USD/GBP, the
-        ;; transfers do not update the pricedb automatically,
-        ;; therefore converted amounts are displayed as $0. We are not
-        ;; testing the pricedb so it does not seem fair to test its
-        ;; output here too.
         (test-equal "dual amount headers"
           (list "Date" "Num" "Description" "Memo/Notes" "Account" "Transfer from/to"
                 "Debit (USD)" "Credit (USD)" "Debit" "Credit")
@@ -585,12 +579,15 @@
         (test-equal "GBP original currency totals = #4"
           (list 4.0)
           (map str->num (get-row-col sxml 5 10)))
-        (test-assert "USD original currency totals = $5"
+        (test-assert "USD original currency totals = $5 (tests pricedb)"
           (equal?
            (list 5.0)
+           (map str->num (get-row-col sxml 4 8))
            (map str->num (get-row-col sxml 9 7))
            (map str->num (get-row-col sxml 9 9))))
-        )
+        (test-equal "USD grand totals are correct (tests pricedb)"
+          (list "Grand Total" "$0.00" "$5.00")
+          (get-row-col sxml 11 #f)))
 
       ;; This test group will test sign reversal strategy. We will
       ;; display all transactions in the 1969-1970 series, sorted by

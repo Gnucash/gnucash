@@ -240,7 +240,6 @@
          (opt-amount-due-heading    (opt-value headingpage2 optname-amount-due))
          (opt-payment-recd-heading  (opt-value headingpage2 optname-payment-recd))
          (opt-extra-notes           (opt-value notespage    optname-extra-notes))
-         (css? #t)
          (html (eguile-file-to-string
                  opt-template-file
                  (the-environment))))

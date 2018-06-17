@@ -108,7 +108,6 @@
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
 <title><?scm:d (_ "Invoice") ?> <?scm:d invoiceid ?></title>
 
-<?scm (if css? (begin ?>
 <link rel="stylesheet" href="<?scm:d opt-css-file ?>" type="text/css">
 <!-- Note that the external stylesheet file is overridden by this following: -->
 <style type="text/css">
@@ -122,7 +121,6 @@
     <?scm:d opt-heading-font ?>
   }
 </style>
-<?scm )) ?>
 
 </head>
 <body>

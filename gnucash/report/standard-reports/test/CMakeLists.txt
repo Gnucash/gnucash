@@ -7,16 +7,11 @@ set(scm_test_standard_reports_SOURCES
 )
 
 set(scm_test_with_srfi64_SOURCES
-  test-net-charts.scm
+  test-charts.scm
   test-transaction.scm
+  test-balance-sheet.scm
   test-income-gst.scm
 )
-
-set(scm_test_report_SUPPORT
-  test-generic-category-report.scm
-  test-generic-net-barchart.scm
-  test-generic-net-linechart.scm
-  )
 
 set(GUILE_DEPENDS
   scm-gnc-module
@@ -36,16 +31,10 @@ endif (HAVE_SRFI64)
 
 gnc_add_scheme_tests("${scm_test_standard_reports_SOURCES}")
 
-gnc_add_scheme_targets(scm-test-standard-support
-  "${scm_test_report_SUPPORT}"
-  "gnucash/report/standard-reports/test"
-  "${GUILE_DEPENDS}"
-  FALSE
-  )
 gnc_add_scheme_targets(scm-test-standard-reports
   "${scm_test_standard_reports_SOURCES}"
   gnucash/report/standard-reports/test
-  "scm-test-standard-support"
+  "${GUILE_DEPENDS}"
   FALSE
 )
 
@@ -53,4 +42,4 @@ add_dependencies(check scm-test-standard-reports)
 
 set_dist_list(test_standard_reports_DIST CMakeLists.txt
   ${scm_test_with_srfi64_SOURCES}
-  ${scm_test_standard_reports_SOURCES} ${scm_test_report_SUPPORT})
+  ${scm_test_standard_reports_SOURCES})

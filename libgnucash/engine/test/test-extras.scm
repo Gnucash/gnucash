@@ -140,6 +140,22 @@
     ;(format #t "tx ~a\n" (map xaccSplitGetValue (list split-1 split-2)))
     txn))
 
+(define (gnc-pricedb-create currency commodity time64 value)
+  ;; I think adding pricedb for a DMY date will clobber any existing
+  ;; pricedb entry for that date.
+  (let ((price (gnc-price-create (gnc-get-current-book)))
+        (pricedb (gnc-pricedb-get-db (gnc-get-current-book))))
+    (gnc-price-begin-edit price)
+    (gnc-price-set-commodity price commodity)
+    (gnc-price-set-currency price currency)
+    (gnc-price-set-time64 price time64)
+    (gnc-price-set-source price PRICE-SOURCE-XFER-DLG-VAL)
+    (gnc-price-set-source-string price "test-price")
+    (gnc-price-set-typestr price "test")
+    (gnc-price-set-value price value)
+    (gnc-price-commit-edit price)
+    (gnc-pricedb-add-price pricedb price)))
+
 (define* (env-transfer-foreign
           env
           DD MM YY         ; day/month/year
@@ -186,6 +202,10 @@
         (begin
           (xaccSplitSetMemo split-1 memo)
           (xaccSplitSetMemo split-2 memo)))
+    (gnc-pricedb-create (xaccAccountGetCommodity debit)
+                        (xaccAccountGetCommodity credit)
+                        (gnc-dmy2time64 DD MM YY)
+                        (/ amount1 amount2))
     (xaccTransCommitEdit txn)
     txn))
 

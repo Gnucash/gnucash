@@ -306,7 +306,6 @@
          (opt-jobname-text          (opt-value headingpage2 optname-jobname-text))
          (opt-extra-css             (opt-value notespage    optname-extra-css)) 
          (opt-extra-notes           (opt-value notespage    optname-extra-notes)) 
-         (css? #t)
          (html (eguile-file-to-string
                  opt-template-file
                  (the-environment))))
