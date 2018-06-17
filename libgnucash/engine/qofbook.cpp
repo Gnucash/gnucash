@@ -128,6 +128,12 @@ qof_book_init (QofBook *book)
     book->version = 0;
 }
 
+static const std::string str_KVP_OPTION_PATH(KVP_OPTION_PATH);
+static const std::string str_OPTION_SECTION_ACCOUNTS(OPTION_SECTION_ACCOUNTS);
+static const std::string str_OPTION_NAME_TRADING_ACCOUNTS(OPTION_NAME_TRADING_ACCOUNTS);
+static const std::string str_OPTION_NAME_AUTO_READONLY_DAYS(OPTION_NAME_AUTO_READONLY_DAYS);
+static const std::string str_OPTION_NAME_NUM_FIELD_SOURCE(OPTION_NAME_NUM_FIELD_SOURCE);
+
 static void
 qof_book_get_property (GObject* object,
 		       guint prop_id,
@@ -142,32 +148,32 @@ qof_book_get_property (GObject* object,
     switch (prop_id)
     {
     case PROP_OPT_TRADING_ACCOUNTS:
-        qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
-                OPTION_SECTION_ACCOUNTS, OPTION_NAME_TRADING_ACCOUNTS});
+        qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {str_KVP_OPTION_PATH,
+                str_OPTION_SECTION_ACCOUNTS, str_OPTION_NAME_TRADING_ACCOUNTS});
         break;
     case PROP_OPT_BOOK_CURRENCY:
-        qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
-                OPTION_SECTION_ACCOUNTS, OPTION_NAME_BOOK_CURRENCY});
+        qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {str_KVP_OPTION_PATH,
+                str_OPTION_SECTION_ACCOUNTS, OPTION_NAME_BOOK_CURRENCY});
         break;
     case PROP_OPT_DEFAULT_GAINS_POLICY:
-        qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
-                OPTION_SECTION_ACCOUNTS, OPTION_NAME_DEFAULT_GAINS_POLICY});
+        qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {str_KVP_OPTION_PATH,
+                str_OPTION_SECTION_ACCOUNTS, OPTION_NAME_DEFAULT_GAINS_POLICY});
         break;
     case PROP_OPT_DEFAULT_GAINS_ACCOUNT_GUID:
-        qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
-                OPTION_SECTION_ACCOUNTS, OPTION_NAME_DEFAULT_GAINS_LOSS_ACCT_GUID});
+        qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {str_KVP_OPTION_PATH,
+                str_OPTION_SECTION_ACCOUNTS, OPTION_NAME_DEFAULT_GAINS_LOSS_ACCT_GUID});
         break;
     case PROP_OPT_AUTO_READONLY_DAYS:
-        qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
-                OPTION_SECTION_ACCOUNTS, OPTION_NAME_AUTO_READONLY_DAYS});
+        qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {str_KVP_OPTION_PATH,
+                str_OPTION_SECTION_ACCOUNTS, str_OPTION_NAME_AUTO_READONLY_DAYS});
         break;
     case PROP_OPT_NUM_FIELD_SOURCE:
-        qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
-                OPTION_SECTION_ACCOUNTS, OPTION_NAME_NUM_FIELD_SOURCE});
+        qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {str_KVP_OPTION_PATH,
+                str_OPTION_SECTION_ACCOUNTS, str_OPTION_NAME_NUM_FIELD_SOURCE});
         break;
     case PROP_OPT_DEFAULT_BUDGET:
-        qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
-                OPTION_SECTION_ACCOUNTS, OPTION_NAME_DEFAULT_BUDGET});
+        qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {str_KVP_OPTION_PATH,
+                str_OPTION_SECTION_ACCOUNTS, OPTION_NAME_DEFAULT_BUDGET});
         break;
     case PROP_OPT_FY_END:
         qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {"fy_end"});
@@ -198,32 +204,32 @@ qof_book_set_property (GObject      *object,
     switch (prop_id)
     {
     case PROP_OPT_TRADING_ACCOUNTS:
-        qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
-                OPTION_SECTION_ACCOUNTS, OPTION_NAME_TRADING_ACCOUNTS});
+        qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {str_KVP_OPTION_PATH,
+                str_OPTION_SECTION_ACCOUNTS, str_OPTION_NAME_TRADING_ACCOUNTS});
         break;
     case PROP_OPT_BOOK_CURRENCY:
-        qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
-                OPTION_SECTION_ACCOUNTS, OPTION_NAME_BOOK_CURRENCY});
+        qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {str_KVP_OPTION_PATH,
+                str_OPTION_SECTION_ACCOUNTS, OPTION_NAME_BOOK_CURRENCY});
         break;
     case PROP_OPT_DEFAULT_GAINS_POLICY:
-        qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
-                OPTION_SECTION_ACCOUNTS, OPTION_NAME_DEFAULT_GAINS_POLICY});
+        qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {str_KVP_OPTION_PATH,
+                str_OPTION_SECTION_ACCOUNTS, OPTION_NAME_DEFAULT_GAINS_POLICY});
         break;
     case PROP_OPT_DEFAULT_GAINS_ACCOUNT_GUID:
-        qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
-                OPTION_SECTION_ACCOUNTS, OPTION_NAME_DEFAULT_GAINS_LOSS_ACCT_GUID});
+        qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {str_KVP_OPTION_PATH,
+                str_OPTION_SECTION_ACCOUNTS, OPTION_NAME_DEFAULT_GAINS_LOSS_ACCT_GUID});
         break;
     case PROP_OPT_AUTO_READONLY_DAYS:
-        qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
-                OPTION_SECTION_ACCOUNTS, OPTION_NAME_AUTO_READONLY_DAYS});
+        qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {str_KVP_OPTION_PATH,
+                str_OPTION_SECTION_ACCOUNTS, str_OPTION_NAME_AUTO_READONLY_DAYS});
         break;
     case PROP_OPT_NUM_FIELD_SOURCE:
-        qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
-                OPTION_SECTION_ACCOUNTS, OPTION_NAME_NUM_FIELD_SOURCE});
+        qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {str_KVP_OPTION_PATH,
+                str_OPTION_SECTION_ACCOUNTS, str_OPTION_NAME_NUM_FIELD_SOURCE});
         break;
     case PROP_OPT_DEFAULT_BUDGET:
-        qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {KVP_OPTION_PATH,
-                OPTION_SECTION_ACCOUNTS, OPTION_NAME_DEFAULT_BUDGET});
+        qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {str_KVP_OPTION_PATH,
+                str_OPTION_SECTION_ACCOUNTS, OPTION_NAME_DEFAULT_BUDGET});
         break;
     case PROP_OPT_FY_END:
         qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {"fy_end"});
@@ -1164,7 +1170,7 @@ static Path gslist_to_option_path (GSList *gspath)
     Path tmp_path;
     if (!gspath) return tmp_path;
 
-    Path path_v {KVP_OPTION_PATH};
+    Path path_v {str_KVP_OPTION_PATH};
     for (auto item = gspath; item != nullptr; item = g_slist_next(item))
         tmp_path.push_back(static_cast<const char*>(item->data));
     if (tmp_path.front() == "counters")
@@ -1197,14 +1203,14 @@ qof_book_options_delete (QofBook *book, GSList *path)
     KvpFrame *root = qof_instance_get_slots(QOF_INSTANCE (book));
     if (path != nullptr)
     {
-        Path path_v {KVP_OPTION_PATH};
+        Path path_v {str_KVP_OPTION_PATH};
         Path tmp_path;
         for (auto item = path; item != nullptr; item = g_slist_next(item))
             tmp_path.push_back(static_cast<const char*>(item->data));
         delete root->set_path(gslist_to_option_path(path), nullptr);
     }
     else
-        delete root->set_path({KVP_OPTION_PATH}, nullptr);
+        delete root->set_path({str_KVP_OPTION_PATH}, nullptr);
 }
 
 /* QofObject function implementation and registration */
