@@ -65,7 +65,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 /***** PROTOTYPES ***************************************************/
 void gnc_split_reg_raise( GNCSplitReg *gsr );
 
-static GtkWidget* add_summary_label( GtkWidget *summarybar,
+static GtkWidget* add_summary_label( GtkWidget *summarybar, gboolean pack_start,
                                      const char *label_str );
 
 static void gnc_split_reg_determine_read_only( GNCSplitReg *gsr );
@@ -2003,14 +2003,17 @@ gnc_split_reg_size_allocate (GtkWidget *widget,
 
 static
 GtkWidget*
-add_summary_label (GtkWidget *summarybar, const char *label_str)
+add_summary_label (GtkWidget *summarybar, gboolean pack_start, const char *label_str)
 {
     GtkWidget *hbox;
     GtkWidget *label;
 
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
-    gtk_box_pack_start( GTK_BOX(summarybar), hbox, FALSE, FALSE, 5 );
+    if (pack_start)
+        gtk_box_pack_start( GTK_BOX(summarybar), hbox, FALSE, FALSE, 5 );
+    else
+        gtk_box_pack_end( GTK_BOX(summarybar), hbox, FALSE, FALSE, 5 );
 
     label = gtk_label_new( label_str );
     gnc_label_set_alignment(label, 1.0, 0.5 );
@@ -2047,16 +2050,16 @@ gsr_create_summary_bar( GNCSplitReg *gsr )
 
     if (!xaccAccountIsPriced(gnc_ledger_display_leader(gsr->ledger)))
     {
-        gsr->balance_label    = add_summary_label (summarybar, _("Present:"));
-        gsr->future_label     = add_summary_label (summarybar, _("Future:"));
-        gsr->cleared_label    = add_summary_label (summarybar, _("Cleared:"));
-        gsr->reconciled_label = add_summary_label (summarybar, _("Reconciled:"));
-        gsr->projectedminimum_label  = add_summary_label (summarybar, _("Projected Minimum:"));
+        gsr->balance_label    = add_summary_label (summarybar, TRUE, _("Present:"));
+        gsr->future_label     = add_summary_label (summarybar, TRUE, _("Future:"));
+        gsr->cleared_label    = add_summary_label (summarybar, TRUE, _("Cleared:"));
+        gsr->reconciled_label = add_summary_label (summarybar, TRUE, _("Reconciled:"));
+        gsr->projectedminimum_label  = add_summary_label (summarybar, TRUE, _("Projected Minimum:"));
     }
     else
     {
-        gsr->shares_label     = add_summary_label (summarybar, _("Shares:"));
-        gsr->value_label      = add_summary_label (summarybar, _("Current Value:"));
+        gsr->shares_label     = add_summary_label (summarybar, TRUE, _("Shares:"));
+        gsr->value_label      = add_summary_label (summarybar, TRUE, _("Current Value:"));
     }
 
     gsr->summarybar = summarybar;
