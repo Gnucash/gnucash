@@ -25,8 +25,7 @@
 (define (run-test)
   (setenv "GNC_UNINSTALLED" "1")
 
-  (let* ((session (qof-session-new))
-         (book (qof-session-get-book session))
+  (let* ((book (qof-book-new))
          (root (xaccMallocAccount book))
          (acct (xaccMallocAccount book)))
     (xaccAccountBeginEdit acct)

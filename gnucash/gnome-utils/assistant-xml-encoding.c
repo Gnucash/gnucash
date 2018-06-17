@@ -1080,7 +1080,7 @@ gxi_parse_file (GncXmlImportData *data)
 
     /* create a temporary QofSession */
     gxi_session_destroy (data);
-    session = qof_session_new ();
+    session = qof_session_new (NULL);
     data->session = session;
     qof_session_begin (session, data->filename, TRUE, FALSE, FALSE);
     io_err = qof_session_get_error (session);

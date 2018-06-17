@@ -224,4 +224,5 @@ char * no_args[1] = { NULL };
 gnc_engine_init(0, no_args);
 gnc_prefs_init();
 %}
-
+//We must explicitly declare this or it gets left out and we can't create books.
+QofBook* qof_book_new (void);

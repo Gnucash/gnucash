@@ -1875,12 +1875,8 @@ get_random_book (void)
 QofSession *
 get_random_session (void)
 {
-    QofSession *session;
-    QofBook *book;
-
-    session = qof_session_new ();
-
-    book = qof_session_get_book (session);
+    auto book = qof_book_new ();
+    auto session = qof_session_new (book);
 
     get_random_account_tree (book);
     get_random_pricedb (book);

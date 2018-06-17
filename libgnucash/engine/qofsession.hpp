@@ -36,7 +36,7 @@
 
 struct QofSessionImpl
 {
-    QofSessionImpl () noexcept;
+    QofSessionImpl (QofBook* book = nullptr) noexcept;
     /* Ends the current session, destroys the backend, and destroys the book.  */
     ~QofSessionImpl () noexcept;
 
@@ -85,10 +85,13 @@ private:
 
     void load_backend (std::string access_method) noexcept;
 
+    /* The backend. We store this during startup to avoid having to create a
+     * book just to hold it.
+     */
+    QofBackend* m_backend;
     /* A book holds pointers to the various types of datasets.
      * A session has exactly one book. */
     QofBook * m_book;
-
     /* The requested book id, in the form or a URI, such as
      * file:/some/where, or sql:server.host.com:555
      */

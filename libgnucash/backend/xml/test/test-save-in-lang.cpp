@@ -97,9 +97,8 @@ test_file (const char* filename)
         QofSession* session;
         char* cmd;
         char* new_file = gen_new_file_name (filename, possible_envs[i]);
-        QofSession* new_session;
 
-        session = qof_session_new ();
+        auto session = qof_session_new (nullptr);
 
         qof_session_begin (session, filename, TRUE, FALSE, FALSE);
         err = qof_session_pop_error (session);
@@ -120,7 +119,7 @@ test_file (const char* filename)
         if (!g_setenv ("LANG", possible_envs[i], TRUE))
             return g_strdup ("setenv for LANG");
 
-        new_session = qof_session_new ();
+        auto new_session = qof_session_new (nullptr);
 
         qof_session_begin (new_session, new_file, FALSE, FALSE, FALSE);
         err = qof_session_pop_error (new_session);

@@ -103,7 +103,7 @@ class Session(GnuCashCoreClass):
         you don't need to cleanup and call end() and destroy(), that is handled
         for you, and the exception is raised.
         """
-        GnuCashCoreClass.__init__(self, instance=instance)
+        GnuCashCoreClass.__init__(self, Book())
         if book_uri is not None:
             try:
                 self.begin(book_uri, ignore_lock, is_new, force_new)

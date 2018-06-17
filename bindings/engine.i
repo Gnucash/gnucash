@@ -181,7 +181,7 @@ functions. */
 %include <policy.h>
 %include <gnc-pricedb.h>
 
-QofSession * qof_session_new (void);
+QofSession * qof_session_new (QofBook* book);
 QofBook * qof_session_get_book (QofSession *session);
 // TODO: Unroll/remove
 const char *qof_session_get_url (QofSession *session);
@@ -271,6 +271,7 @@ Account * gnc_book_get_template_root(QofBook *book);
 %typemap(out) KvpValue * " $result = gnc_kvp_value_ptr_to_scm($1); "
 %typemap(in) GSList *key_path " $1 = gnc_scm_to_gslist_string($input);"
 
+QofBook* qof_book_new (void);
 void qof_book_options_delete (QofBook *book, GSList *key_path);
 void qof_book_set_option (QofBook *book, KvpValue *new_value, GSList *key_path);
 KvpValue* qof_book_get_option (QofBook *book, GSList *key_path);

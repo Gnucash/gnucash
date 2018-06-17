@@ -114,7 +114,7 @@ extern "C"
 
 typedef struct QofSessionImpl QofSession;
 
-QofSession * qof_session_new (void);
+QofSession * qof_session_new (QofBook* book);
 void         qof_session_destroy (QofSession *session);
 
 /** The qof_session_swap_data () method swaps the book of

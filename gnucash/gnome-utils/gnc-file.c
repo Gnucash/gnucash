@@ -735,7 +735,7 @@ RESTART:
 
     /* load the accounts from the users datafile */
     /* but first, check to make sure we've got a session going. */
-    new_session = qof_session_new ();
+    new_session = qof_session_new (NULL);
 
     // Begin the new session. If we are in read-only mode, ignore the locks.
     qof_session_begin (new_session, newfile, is_readonly, FALSE, FALSE);
@@ -752,6 +752,8 @@ RESTART:
 
         filename = gnc_file_dialog (parent, NULL, NULL, directory,
                                     GNC_FILE_DIALOG_OPEN);
+        /* Suppress trying to save the empty session. */
+        qof_book_mark_session_saved (qof_session_get_book (new_session));
         qof_session_destroy (new_session);
         new_session = NULL;
         g_free (directory);
@@ -1231,7 +1233,7 @@ gnc_file_do_export(GtkWindow *parent, const char * filename)
 
     /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */
 
-    new_session = qof_session_new ();
+    new_session = qof_session_new (NULL);
     qof_session_begin (new_session, newfile, FALSE, TRUE, FALSE);
 
     io_err = qof_session_get_error (new_session);
@@ -1468,7 +1470,7 @@ gnc_file_do_save_as (GtkWindow *parent, const char* filename)
 
     save_in_progress++;
 
-    new_session = qof_session_new ();
+    new_session = qof_session_new (NULL);
     qof_session_begin (new_session, newfile, FALSE, TRUE, FALSE);
 
     io_err = qof_session_get_error (new_session);

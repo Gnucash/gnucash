@@ -38,19 +38,12 @@ extern "C"
 static void
 run_test (void)
 {
-    Account *act1;
-    Account *act2;
-    //Split *spl;
-    QofSession *session;
-    QofBook *book;
+    auto book = qof_book_new ();
 
-    session = qof_session_new ();
-    book = qof_session_get_book (session);
-
-    act1 = get_random_account(book);
+    auto act1 = get_random_account(book);
     do_test(act1 != NULL, "random account created");
 
-    act2 = get_random_account(book);
+    auto act2 = get_random_account(book);
     do_test(act2 != NULL, "random account created");
 #if 0
     spl = get_random_split(book, act1, NULL);

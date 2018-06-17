@@ -24,12 +24,15 @@
 int main()
 {
     const char* testurl = "sqlite3://" TESTFILE;
+    char * no_args[1] = { NULL };
+    QofSession* s = NULL;
+    
     qof_log_init();
     qof_init();
     char * no_args[1] = { NULL };
     gnc_engine_init(0, no_args);
 
-    QofSession * s = qof_session_new();
+    s = qof_session_new(NULL);
     qof_session_begin(s, testurl, 0, 1, 0);
     qof_session_load(s, NULL);
     qof_session_save(s, NULL);

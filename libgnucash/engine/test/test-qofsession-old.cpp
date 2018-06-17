@@ -70,7 +70,7 @@ percentage_fn ( const char* message, double percent )
 static void
 setup( Fixture *fixture, gconstpointer pData )
 {
-    fixture->session = qof_session_new();
+    fixture->session = qof_session_new (qof_book_new ());
     init_static_qofsession_pointers ();
     g_assert (p_qof_session_clear_error && p_qof_session_destroy_backend && p_qof_session_load_backend);
 }
@@ -87,14 +87,11 @@ teardown( Fixture *fixture, gconstpointer pData )
 static void
 test_qof_session_new_destroy (void)
 {
-    QofSession *session = NULL;
-    QofBook *book = NULL;
-
     g_test_message ("Test session initialization");
-    session = qof_session_new ();
+    auto session = qof_session_new (qof_book_new ());
     g_assert (session);
     g_assert (qof_session_get_book (session));
-    book = (QofBook*) qof_session_get_book (session);
+    auto book = qof_session_get_book (session);
     g_assert (book);
     g_assert (QOF_IS_BOOK (book));
     g_assert (!strlen (qof_session_get_url (session)));
@@ -584,11 +581,9 @@ mock_export (QofBackend *be, QofBook *book)
 static void
 test_qof_session_export (Fixture *fixture, gconstpointer pData)
 {
-    QofSession *real_session = NULL;
-    QofBook *tmp_book = NULL, *real_book = NULL;
     QofBackend *be = NULL;
 
-    real_session = qof_session_new ();
+    auto real_session = qof_session_new (qof_book_new ());
     g_assert (real_session);
 
     g_test_message ("Test null checks");
@@ -596,9 +591,9 @@ test_qof_session_export (Fixture *fixture, gconstpointer pData)
     g_assert (!qof_session_export (fixture->session, NULL, percentage_fn));
 
     g_test_message ("Test with backend not set");
-    tmp_book = qof_session_get_book (fixture->session);
+    auto tmp_book = qof_session_get_book (fixture->session);
     g_assert (tmp_book);
-    be = qof_book_get_backend (tmp_book);
+    auto be = qof_book_get_backend (tmp_book);
     g_assert (!be);
     g_assert (!qof_session_export (fixture->session, real_session, percentage_fn));
 
@@ -616,7 +611,7 @@ test_qof_session_export (Fixture *fixture, gconstpointer pData)
     qof_backend_set_error (be, ERR_BACKEND_DATA_CORRUPT);
     qof_backend_set_message (be, "push any error");
     session_export_struct.called = FALSE;
-    real_book = qof_session_get_book (real_session);
+    auto real_book = qof_session_get_book (real_session);
     g_assert (real_book);
     session_export_struct.be = be;
     session_export_struct.book = real_book;
@@ -641,7 +636,7 @@ test_qof_session_swap_data (Fixture *fixture, gconstpointer pData)
 
     /* init */
     g_assert (fixture->session);
-    session2 = qof_session_new ();
+    auto session2 = qof_session_new (qof_book_new ());
     g_assert (session2);
     g_assert (fixture->session != session2);
     be1 = g_new0 (QofBackend, 1);

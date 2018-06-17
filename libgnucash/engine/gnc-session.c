@@ -35,8 +35,9 @@ gnc_get_current_session (void)
 {
     if (!current_session)
     {
+        QofBook* book = qof_book_new ();
         qof_event_suspend();
-        current_session = qof_session_new ();
+        current_session = qof_session_new (book);
         qof_event_resume();
     }
 

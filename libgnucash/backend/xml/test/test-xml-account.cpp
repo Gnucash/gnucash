@@ -386,12 +386,11 @@ test_real_account (const char* tag, gpointer global_data, gpointer data)
 int
 main (int argc, char** argv)
 {
-    QofSession* session;
 
     qof_init ();
     cashobjects_register ();
-    session = qof_session_new ();
-    sixbook = qof_session_get_book (session);
+    sixbook = qof_book_new ();
+    auto session = qof_session_new (sixbook);
     if (argc > 1)
     {
         test_files_in_dir (argc, argv, test_real_account,
