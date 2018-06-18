@@ -2139,7 +2139,9 @@ gsr_summarybar_set_arrow_draw (GNCSplitReg *gsr)
 GtkWidget *
 gsr_create_summary_bar( GNCSplitReg *gsr )
 {
-    GtkWidget *summarybar;
+    GtkWidget *summarybar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
+    gtk_box_set_homogeneous (GTK_BOX (summarybar), FALSE);
+    gtk_widget_set_name (summarybar, "gnc-id-summarybar");
 
     gsr->cleared_label    = NULL;
     gsr->balance_label    = NULL;
@@ -2152,28 +2154,21 @@ gsr_create_summary_bar( GNCSplitReg *gsr )
     gsr->shares_label     = NULL;
     gsr->value_label      = NULL;
 
-    if ( gnc_ledger_display_type(gsr->ledger) >= LD_SUBACCOUNT )
+    if (gnc_ledger_display_type(gsr->ledger) == LD_SINGLE)
     {
-        gsr->summarybar = NULL;
-        return NULL;
-    }
-
-    summarybar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-    gtk_box_set_homogeneous (GTK_BOX (summarybar), FALSE);
-    gtk_widget_set_name (summarybar, "gnc-id-summarybar");
-
-    if (!xaccAccountIsPriced(gnc_ledger_display_leader(gsr->ledger)))
-    {
-        gsr->balance_label    = add_summary_label (summarybar, TRUE, _("Present:"), NULL);
-        gsr->future_label     = add_summary_label (summarybar, TRUE, _("Future:"), NULL);
-        gsr->cleared_label    = add_summary_label (summarybar, TRUE, _("Cleared:"), NULL);
-        gsr->reconciled_label = add_summary_label (summarybar, TRUE, _("Reconciled:"), NULL);
-        gsr->projectedminimum_label  = add_summary_label (summarybar, TRUE, _("Projected Minimum:"), NULL);
-    }
-    else
-    {
-        gsr->shares_label     = add_summary_label (summarybar, TRUE, _("Shares:"), NULL);
-        gsr->value_label      = add_summary_label (summarybar, TRUE, _("Current Value:"), NULL);
+        if (!xaccAccountIsPriced(gnc_ledger_display_leader(gsr->ledger)))
+        {
+            gsr->balance_label    = add_summary_label (summarybar, TRUE, _("Present:"), NULL);
+            gsr->future_label     = add_summary_label (summarybar, TRUE, _("Future:"), NULL);
+            gsr->cleared_label    = add_summary_label (summarybar, TRUE, _("Cleared:"), NULL);
+            gsr->reconciled_label = add_summary_label (summarybar, TRUE, _("Reconciled:"), NULL);
+            gsr->projectedminimum_label  = add_summary_label (summarybar, TRUE, _("Projected Minimum:"), NULL);
+        }
+        else
+        {
+            gsr->shares_label     = add_summary_label (summarybar, TRUE, _("Shares:"), NULL);
+            gsr->value_label      = add_summary_label (summarybar, TRUE, _("Current Value:"), NULL);
+        }
     }
 
     gsr->filter_label = add_summary_label (summarybar, FALSE, "", NULL);
