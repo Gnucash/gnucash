@@ -1208,6 +1208,17 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
         gnc_ppr_update_status_query (page);
         gnc_ppr_update_date_query(page);
     }
+    else // LD_GL
+    {
+        time64 start_time, end_time;
+        Query *query = gnc_ledger_display_get_query (priv->ledger);
+
+        xaccQueryGetDateMatchTT(query, &start_time, &end_time);
+        priv->fd.original_start_time = start_time;
+        priv->fd.start_time = start_time;
+        priv->fd.original_end_time = end_time;
+        priv->fd.end_time = end_time;
+    }
 
     // Set filter tooltip for summary bar
     gnc_plugin_page_register_set_filter_tooltip (page);
