@@ -133,6 +133,7 @@ static time64 gnc_plugin_page_register_filter_dmy2time (char *date_string);
 static gchar *gnc_plugin_page_register_filter_time2dmy (time64 raw_time);
 static gchar *gnc_plugin_page_register_get_filter (GncPluginPage *plugin_page);
 void gnc_plugin_page_register_set_filter (GncPluginPage *plugin_page, const gchar *filter);
+static void gnc_plugin_page_register_set_filter_tooltip (GncPluginPageRegister *page);
 
 static void gnc_ppr_update_status_query (GncPluginPageRegister *page);
 static void gnc_ppr_update_date_query (GncPluginPageRegister *page);
@@ -1208,6 +1209,9 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
         gnc_ppr_update_date_query(page);
     }
 
+    // Set filter tooltip for summary bar
+    gnc_plugin_page_register_set_filter_tooltip (page);
+
     plugin_page->summarybar = gsr_create_summary_bar(priv->gsr);
     if (plugin_page->summarybar)
     {
@@ -2159,6 +2163,9 @@ gnc_ppr_update_status_query (GncPluginPageRegister *page)
     if (priv->fd.cleared_match != CLEARED_ALL)
         xaccQueryAddClearedMatch(query, priv->fd.cleared_match, QOF_QUERY_AND);
 
+    // Set filter tooltip for summary bar
+    gnc_plugin_page_register_set_filter_tooltip (page);
+
     gnc_ledger_display_refresh (priv->ledger);
     LEAVE(" ");
 }
@@ -2214,6 +2221,9 @@ gnc_ppr_update_date_query (GncPluginPageRegister *page)
                                 priv->fd.end_time != 0,   priv->fd.end_time,
                                 QOF_QUERY_AND);
     }
+
+    // Set filter tooltip for summary bar
+    gnc_plugin_page_register_set_filter_tooltip (page);
 
     gnc_ledger_display_refresh (priv->ledger);
     LEAVE(" ");
@@ -2659,6 +2669,148 @@ gnc_plugin_page_register_filter_response_cb (GtkDialog *dialog,
     LEAVE(" ");
 }
 
+static gchar*
+gpp_get_cleared_match_filter_text (gchar *text_in, gboolean *first, const gchar *text)
+{
+    gchar *result;
+    gchar *temp = g_strdup (text_in);
+    g_free (text_in);
+
+    if (*first)
+    {
+        result = g_strconcat (temp, text, NULL);
+        *first = FALSE;
+    }
+    else
+        result = g_strconcat (temp, ", ", text, NULL);
+    g_free (temp);
+
+    return result;
+}
+
+static void
+gnc_plugin_page_register_set_filter_tooltip (GncPluginPageRegister *page)
+{
+    GncPluginPageRegisterPrivate *priv;
+    GncPluginPage *plugin_page;
+    gchar *text = NULL;
+    gchar *text_header = g_strdup_printf ("%s", _("Filter By:"));
+    gchar *text_start = NULL;
+    gchar *text_end = NULL;
+    gchar *text_cleared = NULL;
+
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
+
+    ENTER(" ");
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+    plugin_page = GNC_PLUGIN_PAGE(page);
+
+    // filtered start time
+    if (priv->fd.start_time != 0)
+    {
+        gchar *sdate = qof_print_date (priv->fd.start_time);
+        text_start = g_strdup_printf ("%s %s", _("Start Date:"), sdate);
+        g_free (sdate);
+    }
+    // filtered end time
+    if (priv->fd.end_time != 0)
+    {
+        gchar *edate = qof_print_date (priv->fd.end_time);
+        text_end = g_strdup_printf ("%s %s", _("End Date:"), edate);
+        g_free (edate);
+    }
+    // filtered match items
+    if (priv->fd.cleared_match != 31)
+    {
+        gchar *show = g_strdup ("");
+        gchar *hide = g_strdup ("");
+
+        gboolean first_show = TRUE, first_hide = TRUE;
+
+        if ((priv->fd.cleared_match & 0x01) == 0x01)
+            show = gpp_get_cleared_match_filter_text (show, &first_show, _("Unreconciled"));
+        else
+            hide = gpp_get_cleared_match_filter_text (hide, &first_hide, _("Unreconciled"));
+
+        if ((priv->fd.cleared_match & 0x02) == 0x02)
+            show = gpp_get_cleared_match_filter_text (show, &first_show, _("Cleared"));
+        else
+            hide = gpp_get_cleared_match_filter_text (hide, &first_hide, _("Cleared"));
+
+        if ((priv->fd.cleared_match & 0x04) == 0x04)
+            show = gpp_get_cleared_match_filter_text (show, &first_show, _("Reconciled"));
+        else
+            hide = gpp_get_cleared_match_filter_text (hide, &first_hide, _("Reconciled"));
+
+        if ((priv->fd.cleared_match & 0x08) == 0x08)
+            show = gpp_get_cleared_match_filter_text (show, &first_show, _("Frozen"));
+        else
+            hide = gpp_get_cleared_match_filter_text (hide, &first_hide, _("Frozen"));
+
+        if ((priv->fd.cleared_match & 0x10) == 0x10)
+            show = gpp_get_cleared_match_filter_text (show, &first_show, _("Voided"));
+        else
+            hide = gpp_get_cleared_match_filter_text (hide, &first_hide, _("Voided"));
+
+        if (g_strcmp0 (show, "") == 0)
+            text_cleared = g_strconcat (_("Hide:"), " ", hide, NULL);
+        else
+            text_cleared = g_strconcat (_("Show:"), " ", show, "\n", _("Hide:"), " ", hide, NULL);
+
+        g_free (show);
+        g_free (hide);
+
+    }
+    // create the tooltip based on created text variables
+    if ((text_start != NULL) || (text_end != NULL) || (text_cleared != NULL))
+    {
+        if (text_start != NULL)
+            text = g_strconcat (text_header, "\n", text_start, NULL);
+
+        if (text_end != NULL)
+        {
+            if (text == NULL)
+                text = g_strconcat (text_header, "\n", text_end, NULL);
+            else
+            {
+                gchar *temp = g_strdup (text);
+                g_free (text);
+                text = g_strconcat (temp, "\n", text_end, NULL);
+                g_free (temp);
+            }
+        }
+
+        if (text_cleared != NULL)
+        {
+            if (text == NULL)
+                text = g_strconcat (text_header, "\n", text_cleared, NULL);
+            else
+            {
+                gchar *temp = g_strdup (text);
+                g_free (text);
+                text = g_strconcat (temp, "\n", text_cleared, NULL);
+                g_free (temp);
+            }
+        }
+    }
+    // free the existing text if present
+    if (priv->gsr->filter_text != NULL)
+        g_free (priv->gsr->filter_text);
+
+    // set the tooltip text variable in the gsr
+    priv->gsr->filter_text = g_strdup (text);
+
+    if (text_start)
+        g_free (text_start);
+    if (text_end)
+        g_free (text_end);
+    if (text_cleared)
+        g_free (text_cleared);
+    g_free (text_header);
+    g_free (text);
+
+    LEAVE(" ");
+}
 
 /************************************************************/
 /*                  Report Helper Functions                 */

@@ -351,6 +351,7 @@ gnc_split_reg_init( GNCSplitReg *gsr )
     gsr->sort_type = BY_STANDARD;
     gsr->sort_rev = FALSE;
     gsr->sort_arrow_handler_id = 0;
+    gsr->filter_text = NULL;
     gsr->width = -1;
     gsr->height = -1;
     gsr->numRows = 10;
@@ -447,6 +448,10 @@ gsr_setup_status_widgets( GNCSplitReg *gsr )
 void
 gnc_split_reg_destroy_cb(GtkWidget *widget, gpointer data)
 {
+    GNCSplitReg *gsr = data;
+
+    if (gsr->filter_text)
+        g_free (gsr->filter_text);
 }
 
 /**
@@ -613,6 +618,26 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
             g_free (new_tt_text);
 
         gtk_label_set_text (GTK_LABEL(gsr->sort_label), text);
+    }
+
+    // Filter label
+    if (gsr->filter_label != NULL)
+    {
+        gchar *old_tt_text = gtk_widget_get_tooltip_text (GTK_WIDGET(gsr->filter_label));
+
+        // check for a change in text
+        if (g_strcmp0 (old_tt_text, gsr->filter_text) != 0)
+        {
+            if (gsr->filter_text != NULL)
+                gtk_label_set_text (GTK_LABEL(gsr->filter_label), _("Filtered"));
+            else
+                gtk_label_set_text (GTK_LABEL(gsr->filter_label), "");
+
+            gtk_widget_set_tooltip_text (GTK_WIDGET(gsr->filter_label), gsr->filter_text);
+
+            if (old_tt_text)
+                g_free (old_tt_text);
+        }
     }
 
     if (gsr->shares_label == NULL && gsr->value_label == NULL)
@@ -2092,7 +2117,7 @@ add_summary_label (GtkWidget *summarybar, gboolean pack_start, const char *label
     label = gtk_label_new( "" );
     gnc_label_set_alignment(label, 1.0, 0.5 );
     gtk_box_pack_start( GTK_BOX(hbox), label, FALSE, FALSE, 0 );
-    
+
     if (extra != NULL)
         gtk_box_pack_start( GTK_BOX(hbox), extra, FALSE, FALSE, 0 );
 
@@ -2123,6 +2148,7 @@ gsr_create_summary_bar( GNCSplitReg *gsr )
     gsr->projectedminimum_label  = NULL;
     gsr->sort_label       = NULL;
     gsr->sort_arrow       = NULL;
+    gsr->filter_label     = NULL;
     gsr->shares_label     = NULL;
     gsr->value_label      = NULL;
 
@@ -2150,8 +2176,11 @@ gsr_create_summary_bar( GNCSplitReg *gsr )
         gsr->value_label      = add_summary_label (summarybar, TRUE, _("Current Value:"), NULL);
     }
 
+    gsr->filter_label = add_summary_label (summarybar, FALSE, "", NULL);
     gsr->sort_arrow = gtk_image_new_from_icon_name ("image-missing", GTK_ICON_SIZE_SMALL_TOOLBAR);
     gsr->sort_label = add_summary_label (summarybar, FALSE, _("Sort By: "), gsr->sort_arrow);
+
+    gnc_widget_set_style_context (GTK_WIDGET(gsr->filter_label), "gnc-class-highlight");
     gnc_widget_set_style_context (GTK_WIDGET(gsr->sort_arrow), "gnc-class-highlight");
 
     gsr->summarybar = summarybar;

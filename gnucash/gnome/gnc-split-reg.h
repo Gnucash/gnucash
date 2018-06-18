@@ -76,6 +76,7 @@ struct _GNCSplitReg
     GtkWidget *value_label;
     GtkWidget *sort_label;
     GtkWidget *sort_arrow;
+    GtkWidget *filter_label;
 
     /** The current ledger display. **/
     GNCLedgerDisplay *ledger;
@@ -87,6 +88,7 @@ struct _GNCSplitReg
     guint    sort_type;
     gboolean sort_rev;
     gulong   sort_arrow_handler_id;
+    gchar   *filter_text;
 
     gboolean read_only;
 };
