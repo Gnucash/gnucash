@@ -1977,12 +1977,6 @@ be excluded from periodic reporting.")
 
           (qof-query-destroy query)
 
-          (if custom-sort?
-              (begin
-                (set! splits (stable-sort! splits date-comparator?))
-                (set! splits (stable-sort! splits secondary-comparator?))
-                (set! splits (stable-sort! splits primary-comparator?))))
-
           ;; Combined Filter:
           ;; - include/exclude using split->date according to date options
           ;; - include/exclude splits to/from selected accounts
@@ -2012,6 +2006,11 @@ be excluded from periodic reporting.")
                                      (custom-split-filter split))
                                  )))
                         splits))
+
+          (when custom-sort?
+            (set! splits (stable-sort! splits date-comparator?))
+            (set! splits (stable-sort! splits secondary-comparator?))
+            (set! splits (stable-sort! splits primary-comparator?)))
 
           (if (null? splits)
 
