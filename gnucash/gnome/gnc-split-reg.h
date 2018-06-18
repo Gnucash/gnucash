@@ -74,6 +74,8 @@ struct _GNCSplitReg
     GtkWidget *projectedminimum_label;
     GtkWidget *shares_label;
     GtkWidget *value_label;
+    GtkWidget *sort_label;
+    GtkWidget *sort_arrow;
 
     /** The current ledger display. **/
     GNCLedgerDisplay *ledger;
@@ -82,7 +84,9 @@ struct _GNCSplitReg
 
     gint numRows;
 
-    guint sort_type;
+    guint    sort_type;
+    gboolean sort_rev;
+    gulong   sort_arrow_handler_id;
 
     gboolean read_only;
 };
@@ -197,7 +201,7 @@ void gnc_split_reg_set_sort_type_force( GNCSplitReg *gsr, SortType t, gboolean f
 
 /**
  * Set/get sort order of register
- **/ 
+ **/
 void gnc_split_reg_set_sort_reversed(GNCSplitReg *gsr, gboolean rev);
 
 

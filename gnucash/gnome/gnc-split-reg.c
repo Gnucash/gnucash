@@ -66,7 +66,9 @@ static QofLogModule log_module = GNC_MOD_GUI;
 void gnc_split_reg_raise( GNCSplitReg *gsr );
 
 static GtkWidget* add_summary_label( GtkWidget *summarybar, gboolean pack_start,
-                                     const char *label_str );
+                                     const char *label_str, GtkWidget *extra );
+
+static void gsr_summarybar_set_arrow_draw (GNCSplitReg *gsr);
 
 static void gnc_split_reg_determine_read_only( GNCSplitReg *gsr );
 
@@ -347,6 +349,8 @@ gnc_split_reg_init( GNCSplitReg *gsr )
     gtk_orientable_set_orientation (GTK_ORIENTABLE(gsr), GTK_ORIENTATION_VERTICAL);
 
     gsr->sort_type = BY_STANDARD;
+    gsr->sort_rev = FALSE;
+    gsr->sort_arrow_handler_id = 0;
     gsr->width = -1;
     gsr->height = -1;
     gsr->numRows = 10;
@@ -546,6 +550,71 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     gsr_update_summary_label( gsr->projectedminimum_label,
                               xaccAccountGetProjectedMinimumBalance,
                               leader, print_info, commodity, reverse, euro );
+
+    // Sort label
+    if (gsr->sort_label != NULL)
+    {
+        gchar *old_tt_text = gtk_widget_get_tooltip_text (GTK_WIDGET(gsr->sort_label));
+        gchar *new_tt_text;
+        gchar *text = NULL;
+
+        switch (gsr->sort_type)
+        {
+        case (0):
+            text =  _("None");
+            break;
+        case (1):
+            text = _("Standard Order");
+            break;
+        case (2):
+            text = _("Date");
+            break;
+        case (3):
+            text = _("Date of Entry");
+            break;
+        case (4):
+            text = _("Statement Date");
+            break;
+        case (5):
+            text = _("Number");
+            break;
+        case (6):
+            text = _("Amount");
+            break;
+        case (7):
+            text = _("Memo");
+            break;
+        case (8):
+            text = _("Description");
+            break;
+        case (9):
+            text = _("Action");
+            break;
+        case (10):
+            text = _("Notes");
+            break;
+        }
+
+        if (gsr->sort_rev)
+            gtk_widget_set_tooltip_text (GTK_WIDGET(gsr->sort_label), _("Descending"));
+        else
+            gtk_widget_set_tooltip_text (GTK_WIDGET(gsr->sort_label), _("Ascending"));
+
+        new_tt_text = gtk_widget_get_tooltip_text (GTK_WIDGET(gsr->sort_label));
+
+        // does the arrow need changing
+        if (g_strcmp0 (old_tt_text, new_tt_text) != 0)
+            gsr_summarybar_set_arrow_draw (gsr);
+
+        if (old_tt_text)
+            g_free (old_tt_text);
+
+        if (new_tt_text)
+            g_free (new_tt_text);
+
+        gtk_label_set_text (GTK_LABEL(gsr->sort_label), text);
+    }
+
     if (gsr->shares_label == NULL && gsr->value_label == NULL)
         return;
     amount = xaccAccountGetBalance( leader );
@@ -1868,14 +1937,15 @@ gnc_split_reg_sort_notes_cb(GtkWidget *w, gpointer data)
 void
 gnc_split_reg_set_sort_reversed(GNCSplitReg *gsr, gboolean rev)
 {
-  /* Note: sort_reversed is the boolean opposite of sort_increasing
-   *       so when rev == true, we're sorting decreasing
-   *       In other words, qof_query_set_sort_increasing should
-   *       always use the inverse of rev.
-   */
-  Query *query = gnc_ledger_display_get_query( gsr->ledger );
-  qof_query_set_sort_increasing (query, !rev, !rev, !rev);
-  gnc_ledger_display_refresh( gsr->ledger );
+    /* Note: sort_reversed is the boolean opposite of sort_increasing
+     *       so when rev == true, we're sorting decreasing
+     *       In other words, qof_query_set_sort_increasing should
+     *       always use the inverse of rev.
+     */
+    Query *query = gnc_ledger_display_get_query( gsr->ledger );
+    qof_query_set_sort_increasing (query, !rev, !rev, !rev);
+    gsr->sort_rev = rev;
+    gnc_ledger_display_refresh( gsr->ledger );
 }
 
 static void
@@ -2003,7 +2073,7 @@ gnc_split_reg_size_allocate (GtkWidget *widget,
 
 static
 GtkWidget*
-add_summary_label (GtkWidget *summarybar, gboolean pack_start, const char *label_str)
+add_summary_label (GtkWidget *summarybar, gboolean pack_start, const char *label_str, GtkWidget *extra)
 {
     GtkWidget *hbox;
     GtkWidget *label;
@@ -2022,8 +2092,23 @@ add_summary_label (GtkWidget *summarybar, gboolean pack_start, const char *label
     label = gtk_label_new( "" );
     gnc_label_set_alignment(label, 1.0, 0.5 );
     gtk_box_pack_start( GTK_BOX(hbox), label, FALSE, FALSE, 0 );
+    
+    if (extra != NULL)
+        gtk_box_pack_start( GTK_BOX(hbox), extra, FALSE, FALSE, 0 );
 
     return label;
+}
+
+static void
+gsr_summarybar_set_arrow_draw (GNCSplitReg *gsr)
+{
+    if (gsr->sort_arrow_handler_id > 0)
+       g_signal_handler_disconnect (G_OBJECT(gsr->sort_arrow), gsr->sort_arrow_handler_id);
+
+    gsr->sort_arrow_handler_id = g_signal_connect (G_OBJECT (gsr->sort_arrow), "draw",
+                                                   G_CALLBACK (gnc_draw_arrow_cb), GINT_TO_POINTER(gsr->sort_rev));
+
+    gtk_widget_queue_draw (gsr->sort_arrow);
 }
 
 GtkWidget *
@@ -2036,6 +2121,8 @@ gsr_create_summary_bar( GNCSplitReg *gsr )
     gsr->reconciled_label = NULL;
     gsr->future_label     = NULL;
     gsr->projectedminimum_label  = NULL;
+    gsr->sort_label       = NULL;
+    gsr->sort_arrow       = NULL;
     gsr->shares_label     = NULL;
     gsr->value_label      = NULL;
 
@@ -2047,20 +2134,25 @@ gsr_create_summary_bar( GNCSplitReg *gsr )
 
     summarybar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
     gtk_box_set_homogeneous (GTK_BOX (summarybar), FALSE);
+    gtk_widget_set_name (summarybar, "gnc-id-summarybar");
 
     if (!xaccAccountIsPriced(gnc_ledger_display_leader(gsr->ledger)))
     {
-        gsr->balance_label    = add_summary_label (summarybar, TRUE, _("Present:"));
-        gsr->future_label     = add_summary_label (summarybar, TRUE, _("Future:"));
-        gsr->cleared_label    = add_summary_label (summarybar, TRUE, _("Cleared:"));
-        gsr->reconciled_label = add_summary_label (summarybar, TRUE, _("Reconciled:"));
-        gsr->projectedminimum_label  = add_summary_label (summarybar, TRUE, _("Projected Minimum:"));
+        gsr->balance_label    = add_summary_label (summarybar, TRUE, _("Present:"), NULL);
+        gsr->future_label     = add_summary_label (summarybar, TRUE, _("Future:"), NULL);
+        gsr->cleared_label    = add_summary_label (summarybar, TRUE, _("Cleared:"), NULL);
+        gsr->reconciled_label = add_summary_label (summarybar, TRUE, _("Reconciled:"), NULL);
+        gsr->projectedminimum_label  = add_summary_label (summarybar, TRUE, _("Projected Minimum:"), NULL);
     }
     else
     {
-        gsr->shares_label     = add_summary_label (summarybar, TRUE, _("Shares:"));
-        gsr->value_label      = add_summary_label (summarybar, TRUE, _("Current Value:"));
+        gsr->shares_label     = add_summary_label (summarybar, TRUE, _("Shares:"), NULL);
+        gsr->value_label      = add_summary_label (summarybar, TRUE, _("Current Value:"), NULL);
     }
+
+    gsr->sort_arrow = gtk_image_new_from_icon_name ("image-missing", GTK_ICON_SIZE_SMALL_TOOLBAR);
+    gsr->sort_label = add_summary_label (summarybar, FALSE, _("Sort By: "), gsr->sort_arrow);
+    gnc_widget_set_style_context (GTK_WIDGET(gsr->sort_arrow), "gnc-class-highlight");
 
     gsr->summarybar = summarybar;
 
