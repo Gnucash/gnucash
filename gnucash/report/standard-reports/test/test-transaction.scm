@@ -901,13 +901,13 @@
       (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 31 03 1970)))
       (let ((sxml (options->sxml options "filter reconcile date")))
         (test-equal "test reconciled amounts = $8"
-          (list "Total For Reconciled" "-$8.00")
+          (list "Total For Reconciled" "$8.00")
           (get-row-col sxml 3 #f))
         (test-equal "test cleared amounts = $29"
           (list "Total For Cleared" "$29.00")
           (get-row-col sxml 6 #f))
-        (test-equal "test unreconciled amounts = -$31"
-          (list "Total For Unreconciled" "-$31.00")
+        (test-equal "test unreconciled amounts = $31"
+          (list "Total For Unreconciled" "$31.00")
           (get-row-col sxml 11 #f))
         sxml)
       )))

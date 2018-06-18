@@ -16,6 +16,7 @@
 ;;   and enable multiple data columns
 ;; - add support for indenting for better grouping
 ;; - add defaults suitable for a reconciliation report
+;;   including alternative date filtering strategy
 ;; - add subtotal summary grid
 ;; - by default, exclude closing transactions from the report
 ;;
@@ -446,10 +447,44 @@ Credit Card, and Income accounts."))
   (gnc:option-set-value (gnc:lookup-option options gnc:pagename-general optname-startdate) (cons 'relative 'start-prev-quarter))
   (gnc:option-set-value (gnc:lookup-option options gnc:pagename-general optname-enddate)   (cons 'relative 'today))
   (gnc:option-set-value (gnc:lookup-option options gnc:pagename-display (N_ "Reconciled Date")) #t)
-  (gnc:option-set-value (gnc:lookup-option options gnc:pagename-display (N_ "Running Balance")) #t)
+  (gnc:option-set-value (gnc:lookup-option options gnc:pagename-display (N_ "Running Balance")) #f)
   (gnc:option-set-value (gnc:lookup-option options gnc:pagename-display (N_ "Memo")) #f)
+  (gnc:option-make-internal! options gnc:pagename-display "Running Balance")
   options)
 
+(define reconcile-report-instructions
+  (gnc:make-html-text
+   (_ "The reconcile report is designed to be similar to the formal reconciliation tool.
+Please select the account from Report Options. Please note the dates specified in the options
+will apply to the Reconciliation Date.")
+   (gnc:html-markup-br)
+   (gnc:html-markup-br)))
+
+;; if split is reconciled, retrieve its reconciled date; if not yet reconciled, return #f
+(define (split->reconcile-date split)
+  (and (char=? (xaccSplitGetReconcile split) #\y)
+       (xaccSplitGetDateReconciled split)))
+
+(define (reconcile-report-calculated-cells options)
+  (define (opt-val section name)
+    (gnc:option-value (gnc:lookup-option options section name)))
+  (letrec
+      ((split-amount (lambda (s) (if (gnc:split-voided? s)
+                                     (xaccSplitVoidFormerAmount s)
+                                     (xaccSplitGetAmount s))))
+       (split-currency (lambda (s) (xaccAccountGetCommodity (xaccSplitGetAccount s))))
+       (amount (lambda (s) (gnc:make-gnc-monetary (split-currency s) (split-amount s))))
+       (debit-amount (lambda (s) (and (positive? (split-amount s))
+                                      (amount s))))
+       (credit-amount (lambda (s) (and (not (positive? (split-amount s)))
+                                       (gnc:monetary-neg (amount s))))))
+    ;; similar to default-calculated-cells but disable dual-subtotals.
+    (list (vector (_ "Funds In")
+                  debit-amount #f #t #f
+                  (const ""))
+          (vector (_ "Funds Out")
+                  credit-amount #f #t #f
+                  (const "")))))
 ;;
 ;; Default Transaction Report
 ;;
@@ -1047,11 +1082,11 @@ be excluded from periodic reporting.")
                (add-if (column-uses? 'reconciled-date)
                        (vector (_ "Reconciled Date")
                                (lambda (split transaction-row?)
-                                 (gnc:make-html-table-cell/markup
-                                  "date-cell"
-                                  (if (eqv? (xaccSplitGetReconcile split) #\y)
-                                      (qof-print-date (xaccSplitGetDateReconciled split))
-                                      "")))))
+                                 (let ((reconcile-date (split->reconcile-date split)))
+                                   (and reconcile-date
+                                        (gnc:make-html-table-cell/markup
+                                         "date-cell"
+                                         (qof-print-date reconcile-date)))))))
 
                (add-if (column-uses? 'num)
                        (vector (if (and BOOK-SPLIT-ACTION
@@ -1764,13 +1799,20 @@ be excluded from periodic reporting.")
 ;; Here comes the renderer function for this report.
 
 
-(define* (trep-renderer report-obj #:key custom-calculated-cells empty-report-message custom-split-filter)
+(define* (trep-renderer report-obj #:key custom-calculated-cells empty-report-message
+                        custom-split-filter split->date split->date-include-false?)
   ;; the trep-renderer is a define* function which, at minimum, takes the report object
   ;;
   ;; the optional arguments are:
   ;; #:custom-calculated-cells - a list of vectors to define customized data columns
-  ;; #:empty-report-message - a str which is displayed at the initial report opening
+  ;; #:empty-report-message - a str or html-object which is displayed at the initial report opening
   ;; #:custom-split-filter - a split->bool function to add to the split filter
+  ;; #:split->date - a split->time64 which overrides the default posted date filter
+  ;;     (see reconcile report)
+  ;; #:split->date-include-false? - addendum to above, specifies filter behaviour if
+  ;;     split->date returns #f. useful to include unreconciled splits in reconcile
+  ;;     report. it can be useful for alternative date filtering, e.g. filter by
+  ;;     transaction->invoice->payment date.
 
   (define options (gnc:report-options report-obj))
   (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
@@ -1908,7 +1950,8 @@ be excluded from periodic reporting.")
 
           (qof-query-set-book query (gnc-get-current-book))
           (xaccQueryAddAccountMatch query c_account_1 QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-          (xaccQueryAddDateMatchTT query #t begindate #t enddate QOF-QUERY-AND)
+          (if (not split->date)
+              (xaccQueryAddDateMatchTT query #t begindate #t enddate QOF-QUERY-AND))
           (case void-status
             ((non-void-only) (gnc:query-set-match-non-voids-only! query (gnc-get-current-book)))
             ((void-only)     (gnc:query-set-match-voids-only! query (gnc-get-current-book)))
@@ -1941,6 +1984,7 @@ be excluded from periodic reporting.")
                 (set! splits (stable-sort! splits primary-comparator?))))
 
           ;; Combined Filter:
+          ;; - include/exclude using split->date according to date options
           ;; - include/exclude splits to/from selected accounts
           ;; - substring/regex matcher for Transaction Description/Notes/Memo
           ;; - custom-split-filter, a split->bool function for derived reports
@@ -1951,7 +1995,12 @@ be excluded from periodic reporting.")
                                            (if transaction-matcher-regexp
                                                (regexp-exec transaction-matcher-regexp str)
                                                (string-contains str transaction-matcher)))))
-                            (and (case filter-mode
+                            (and (or (not split->date)                  ; #f = ignore custom date filter
+                                     (let ((date (split->date split)))  ; cache split->date time64 or #f.
+                                       (if date                         ; if a split->date exists,
+                                           (<= begindate date enddate)  ; then check for inclusion;
+                                           split->date-include-false?))); else behave according to parameter
+                                 (case filter-mode
                                    ((none) #t)
                                    ((include) (is-filter-member split c_account_2))
                                    ((exclude) (not (is-filter-member split c_account_2))))
@@ -2029,7 +2078,13 @@ be excluded from periodic reporting.")
  'name (_ "Reconciliation Report")
  'report-guid "e45218c6d76f11e7b5ef0800277ef320"
  'options-generator reconcile-report-options-generator
- 'renderer trep-renderer)
+ ;; the renderer is the same as trep, however we're using a different split-date strategy.
+ ;; we're comparing reconcile date for inclusion, and if split is unreconciled, include it anyway.
+ 'renderer (lambda (rpt) (trep-renderer rpt
+                                        #:custom-calculated-cells reconcile-report-calculated-cells
+                                        #:split->date split->reconcile-date
+                                        #:split->date-include-false? #t
+                                        #:empty-report-message reconcile-report-instructions)))
 
 ;; Define the report.
 (gnc:define-report
