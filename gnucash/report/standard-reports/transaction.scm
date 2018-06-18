@@ -2041,6 +2041,11 @@ be excluded from periodic reporting.")
                             (qof-print-date begindate)
                             (qof-print-date enddate)))))
 
+                (if (eq? infobox-display 'always)
+                    (gnc:html-document-add-object!
+                     document
+                     (gnc:html-render-options-changed options)))
+
                 (if (and (opt-val gnc:pagename-display optname-grid)
                          (if (memq primary-key DATE-SORTING-TYPES)
                              (keylist-get-info date-subtotal-list primary-date-subtotal 'renderer-fn)
@@ -2054,11 +2059,6 @@ be excluded from periodic reporting.")
                            (list-of-cols (stable-sort! (delete 'col-total (grid-cols grid)) generic<?)))
                       (gnc:html-document-add-object!
                        document (grid->html-table grid list-of-rows list-of-cols))))
-
-                (if (eq? infobox-display 'always)
-                    (gnc:html-document-add-object!
-                     document
-                     (gnc:html-render-options-changed options)))
 
                 (gnc:html-document-add-object! document table)))))
 
