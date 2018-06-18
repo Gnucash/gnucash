@@ -540,21 +540,24 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     print_info = gnc_account_print_info( leader, TRUE );
     reverse = gnc_reverse_balance( leader );
 
-    gsr_update_summary_label( gsr->balance_label,
-                              xaccAccountGetPresentBalance,
-                              leader, print_info, commodity, reverse, euro );
-    gsr_update_summary_label( gsr->cleared_label,
-                              xaccAccountGetClearedBalance,
-                              leader, print_info, commodity, reverse, euro );
-    gsr_update_summary_label( gsr->reconciled_label,
-                              xaccAccountGetReconciledBalance,
-                              leader, print_info, commodity, reverse, euro );
-    gsr_update_summary_label( gsr->future_label,
-                              xaccAccountGetBalance,
-                              leader, print_info, commodity, reverse, euro );
-    gsr_update_summary_label( gsr->projectedminimum_label,
-                              xaccAccountGetProjectedMinimumBalance,
-                              leader, print_info, commodity, reverse, euro );
+    if (gsr->balance_label != NULL) // only test the first as they are a group
+    {
+        gsr_update_summary_label( gsr->balance_label,
+                                  xaccAccountGetPresentBalance,
+                                  leader, print_info, commodity, reverse, euro );
+        gsr_update_summary_label( gsr->cleared_label,
+                                  xaccAccountGetClearedBalance,
+                                  leader, print_info, commodity, reverse, euro );
+        gsr_update_summary_label( gsr->reconciled_label,
+                                  xaccAccountGetReconciledBalance,
+                                  leader, print_info, commodity, reverse, euro );
+        gsr_update_summary_label( gsr->future_label,
+                                  xaccAccountGetBalance,
+                                  leader, print_info, commodity, reverse, euro );
+        gsr_update_summary_label( gsr->projectedminimum_label,
+                                  xaccAccountGetProjectedMinimumBalance,
+                                  leader, print_info, commodity, reverse, euro );
+    }
 
     // Sort label
     if (gsr->sort_label != NULL)
