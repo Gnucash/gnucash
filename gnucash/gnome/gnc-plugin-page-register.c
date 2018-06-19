@@ -1151,7 +1151,6 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 
     ledger_type = gnc_ledger_display_type (priv->ledger);
 
-    if (ledger_type == LD_SINGLE || ledger_type == LD_SUBACCOUNT)
     {
         /* Set the sort order for the split register and status of save order button */
         priv->sd.save_order = FALSE;
@@ -1218,15 +1217,32 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
         priv->fd.original_save_filter = priv->fd.save_filter;
         g_strfreev(filter);
     }
-    else // LD_GL
+
+    if (ledger_type == LD_GL)
     {
         time64 start_time = 0, end_time = 0;
 
-        if ((priv->fd.days == 0) && (reg->type == GENERAL_JOURNAL))
+        if (reg->type == GENERAL_JOURNAL)
         {
-            priv->fd.days = 30; // default number of days for gl
-            priv->fd.original_days = priv->fd.days;
+            if ((priv->fd.days == 0) && (priv->fd.start_time == 0) && (priv->fd.end_time == 0))
+                priv->fd.days = 30; // default number of days for gl
+            else
+            {
+                start_time = priv->fd.start_time;
+                end_time = priv->fd.end_time;
+            }
         }
+        else // search ledger and the like
+        {
+            priv->fd.days = 0;
+            priv->fd.cleared_match = (gint)g_ascii_strtoll (DEFAULT_FILTER, NULL, 16);
+            gnc_split_reg_set_sort_type (priv->gsr, SortTypefromString (DEFAULT_SORT_ORDER));
+            priv->sd.reverse_order = FALSE;
+            priv->fd.save_filter = FALSE;
+            priv->sd.save_order = FALSE;
+        }
+
+        priv->fd.original_days = priv->fd.days;
 
         priv->fd.original_start_time = start_time;
         priv->fd.start_time = start_time;
