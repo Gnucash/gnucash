@@ -1187,15 +1187,15 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
             priv->fd.start_time = gnc_plugin_page_register_filter_dmy2time (filter[1] );
             priv->fd.start_time = gnc_time64_get_day_start(priv->fd.start_time);
             filter_changed = filter_changed + 1;
+        }
 
-            if (filter[2] && (g_strcmp0 (filter[2], "0") != 0 ))
-            {
-                PINFO("Loaded Filter End Date is %s", filter[2]);
+        if (filter[2] && (g_strcmp0 (filter[2], "0") != 0 ))
+        {
+            PINFO("Loaded Filter End Date is %s", filter[2]);
 
-                priv->fd.end_time = gnc_plugin_page_register_filter_dmy2time (filter[2] );
-                priv->fd.end_time = gnc_time64_get_day_end(priv->fd.end_time);
-                filter_changed = filter_changed + 1;
-            }
+            priv->fd.end_time = gnc_plugin_page_register_filter_dmy2time (filter[2] );
+            priv->fd.end_time = gnc_time64_get_day_end(priv->fd.end_time);
+            filter_changed = filter_changed + 1;
         }
 
         if (filter_changed != 0)
