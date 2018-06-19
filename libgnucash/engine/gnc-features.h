@@ -52,6 +52,7 @@ extern "C" {
 #define GNC_FEATURE_GUID_BAYESIAN "Account GUID based Bayesian data"
 #define GNC_FEATURE_GUID_FLAT_BAYESIAN "Account GUID based bayesian with flat KVP"
 #define GNC_FEATURE_SQLITE3_ISO_DATES "ISO-8601 formatted date strings in SQLite3 databases."
+#define GNC_FEATURE_REG_SORT_FILTER "Register sort and filter settings stored in .gcm file"
 
 /** @} */
 
