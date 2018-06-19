@@ -36,6 +36,8 @@
 #define GNC_SPLIT_REG_CLASS(klass) G_TYPE_CHECK_CLASS_CAST( klass, gnc_split_reg_get_type(), GNCSplitRegClass )
 #define IS_GNC_SPLIT_REG(obj)      G_TYPE_CHECK_INSTANCE_TYPE( obj, gnc_split_reg_get_type() )
 
+#define STATE_SECTION_REG_PREFIX "Register"
+
 typedef struct _GNCSplitReg GNCSplitReg;
 typedef struct _GNCSplitRegClass GNCSplitRegClass;
 

@@ -67,6 +67,7 @@
 #include "gnc-gui-query.h"
 #include "gnc-icons.h"
 #include "gnc-split-reg.h"
+#include "gnc-state.h"
 #include "gnc-prefs.h"
 #include "gnc-ui-util.h"
 #include "gnc-window.h"
@@ -1365,6 +1366,10 @@ static const gchar *style_names[] =
 #define KEY_REGISTER_STYLE      "RegisterStyle"
 #define KEY_DOUBLE_LINE         "DoubleLineMode"
 
+#define KEY_PAGE_SORT           "register_order"
+#define KEY_PAGE_SORT_REV       "register_reversed"
+#define KEY_PAGE_FILTER         "register_filter"
+
 #define LABEL_ACCOUNT       "Account"
 #define LABEL_SUBACCOUNT    "SubAccount"
 #define LABEL_GL            "GL"
@@ -1779,7 +1784,12 @@ gnc_plugin_page_register_set_filter (GncPluginPage *plugin_page, const gchar *fi
     GncPluginPageRegisterPrivate *priv;
     GNCLedgerDisplay *ld;
     Account *leader;
-    gchar *default_filter;
+    gchar *default_filter = g_strdup_printf("%s,%s,%s,%s", DEFAULT_FILTER, "0", "0", "0");
+
+    GKeyFile *state_file = gnc_state_get_current();
+    gchar *state_section;
+    gchar *filter_text;
+    gchar acct_guid[GUID_ENCODING_LENGTH + 1];
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
     ld = priv->ledger;
@@ -1787,16 +1797,28 @@ gnc_plugin_page_register_set_filter (GncPluginPage *plugin_page, const gchar *fi
 
     if (leader != NULL)
     {
-        default_filter = g_strdup_printf("%s,%s,%s,%s", DEFAULT_FILTER, "0", "0", "0");
-
         if (!filter || (g_strcmp0 (filter, default_filter) == 0))
             xaccAccountSetFilter (leader, NULL);
         else
             xaccAccountSetFilter (leader, filter);
-
-        g_free (default_filter);
     }
 
+    // save the filter to the .gcm file also
+    guid_to_string_buff (xaccAccountGetGUID (leader), acct_guid);
+    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", acct_guid, NULL);
+    if (!filter || (g_strcmp0 (filter, default_filter) == 0))
+    {
+        if (g_key_file_has_key (state_file, state_section, KEY_PAGE_FILTER, NULL))
+            g_key_file_remove_key (state_file, state_section, KEY_PAGE_FILTER, NULL);
+    }
+    else
+    {
+        filter_text = g_strdup (filter);
+        filter_text = g_strdelimit (filter_text, ",", ';'); // make it conform to .gcm file list
+        g_key_file_set_string (state_file, state_section, KEY_PAGE_FILTER, filter_text);
+        g_free (filter_text);
+    }
+    g_free (default_filter);
     return;
 }
 
@@ -1830,6 +1852,10 @@ gnc_plugin_page_register_set_sort_order (GncPluginPage *plugin_page, const gchar
     GNCLedgerDisplay *ld;
     Account *leader;
 
+    GKeyFile *state_file = gnc_state_get_current();
+    gchar *state_section;
+    gchar acct_guid[GUID_ENCODING_LENGTH + 1];
+
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
     ld = priv->ledger;
     leader = gnc_ledger_display_leader (ld);
@@ -1841,6 +1867,17 @@ gnc_plugin_page_register_set_sort_order (GncPluginPage *plugin_page, const gchar
         else
             xaccAccountSetSortOrder (leader, sort_order);
     }
+
+    // save sort_order to the .gcm file also
+    guid_to_string_buff (xaccAccountGetGUID (leader), acct_guid);
+    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", acct_guid, NULL);
+    if (!sort_order || (g_strcmp0 (sort_order, DEFAULT_SORT_ORDER) == 0))
+    {
+        if (g_key_file_has_key (state_file, state_section, KEY_PAGE_SORT, NULL))
+            g_key_file_remove_key (state_file, state_section, KEY_PAGE_SORT, NULL);
+    }
+    else
+        g_key_file_set_string (state_file, state_section, KEY_PAGE_SORT, sort_order);
 
     return;
 }
@@ -1874,12 +1911,27 @@ gnc_plugin_page_register_set_sort_reversed (GncPluginPage *plugin_page, gboolean
     GNCLedgerDisplay *ld;
     Account *leader;
 
+    GKeyFile *state_file = gnc_state_get_current();
+    gchar *state_section;
+    gchar acct_guid[GUID_ENCODING_LENGTH + 1];
+
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
     ld = priv->ledger;
     leader = gnc_ledger_display_leader (ld);
 
     if (leader != NULL)
         xaccAccountSetSortReversed (leader, reverse_order);
+
+    // save reverse_order to the .gcm file also
+    guid_to_string_buff (xaccAccountGetGUID (leader), acct_guid);
+    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", acct_guid, NULL);
+    if (!reverse_order)
+    {
+        if (g_key_file_has_key (state_file, state_section, KEY_PAGE_SORT_REV, NULL))
+            g_key_file_remove_key (state_file, state_section, KEY_PAGE_SORT_REV, NULL);
+    }
+    else
+        g_key_file_set_boolean (state_file, state_section, KEY_PAGE_SORT_REV, reverse_order);
 
     return;
 }
