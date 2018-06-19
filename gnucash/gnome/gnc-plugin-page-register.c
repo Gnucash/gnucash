@@ -3446,6 +3446,33 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction *action,
     LEAVE(" ");
 }
 
+static gboolean
+gnc_plugin_page_register_show_fs_save (GncPluginPageRegister *page)
+{
+    GncPluginPageRegisterPrivate *priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+    GNCLedgerDisplayType ledger_type = gnc_ledger_display_type (priv->ledger);
+    SplitRegister *reg = gnc_ledger_display_get_split_register (priv->ledger);
+
+    if (ledger_type == LD_SINGLE || ledger_type == LD_SUBACCOUNT)
+        return TRUE;
+    else
+    {
+        switch (reg->type)
+        {
+        case GENERAL_JOURNAL:
+            return TRUE;
+            break;
+
+        case INCOME_LEDGER:
+        case PORTFOLIO_LEDGER:
+        case SEARCH_LEDGER:
+        default:
+            return FALSE;
+            break;
+        }
+    }
+}
+
 static void
 gnc_plugin_page_register_cmd_view_sort_by (GtkAction *action,
         GncPluginPageRegister *page)
@@ -3494,6 +3521,10 @@ gnc_plugin_page_register_cmd_view_sort_by (GtkAction *action,
     button = GTK_WIDGET(gtk_builder_get_object (builder, "sort_save"));
     if (priv->sd.save_order == TRUE)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
+
+    // hide the save button if appropiate
+    gtk_widget_set_visible (GTK_WIDGET(button),
+        gnc_plugin_page_register_show_fs_save (page));
 
     /* Set the button for the current reverse_order order */
     button = GTK_WIDGET(gtk_builder_get_object (builder, "sort_reverse"));
@@ -3575,6 +3606,10 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
     button = GTK_WIDGET(gtk_builder_get_object (builder, "filter_save"));
     if (priv->fd.save_filter == TRUE)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
+
+    // hide the save button if appropiate
+    gtk_widget_set_visible (GTK_WIDGET(button),
+        gnc_plugin_page_register_show_fs_save (page));
 
     /* Set up number of days */
     priv->fd.num_days = GTK_WIDGET(gtk_builder_get_object (builder, "filter_show_num_days"));
@@ -3694,7 +3729,7 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, page);
 
     /* Show it */
-    gtk_widget_show_all(dialog);
+    gtk_widget_show(dialog);
     g_object_unref(G_OBJECT(builder));
     LEAVE(" ");
 }
