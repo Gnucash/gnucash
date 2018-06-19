@@ -128,6 +128,7 @@ void gnc_plugin_page_register_filter_response_cb(GtkDialog *dialog, gint respons
 void gnc_plugin_page_register_filter_status_all_cb(GtkButton *button, GncPluginPageRegister *plugin_page);
 void gnc_plugin_page_register_filter_status_one_cb(GtkToggleButton *button, GncPluginPageRegister *page);
 void gnc_plugin_page_register_filter_save_cb(GtkToggleButton *button, GncPluginPageRegister *page);
+void gnc_plugin_page_register_filter_days_changed_cb (GtkSpinButton *button, GncPluginPageRegister *page);
 
 static time64 gnc_plugin_page_register_filter_dmy2time (char *date_string);
 static gchar *gnc_plugin_page_register_filter_time2dmy (time64 raw_time);
@@ -567,12 +568,15 @@ typedef struct GncPluginPageRegisterPrivate
         GtkWidget *end_date_choose;
         GtkWidget *end_date_today;
         GtkWidget *end_date;
+        GtkWidget *num_days;
         cleared_match_t original_cleared_match;
         cleared_match_t cleared_match;
         time64 original_start_time;
         time64 original_end_time;
         time64 start_time;
         time64 end_time;
+        gint days;
+        gint original_days;
         gboolean original_save_filter;
         gboolean save_filter;
     } fd;
@@ -798,6 +802,7 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
     priv->lines_default     = DEFAULT_LINES_AMOUNT;
     priv->read_only         = FALSE;
     priv->fd.cleared_match  = CLEARED_ALL;
+    priv->fd.days           = 0;
 }
 
 static void
@@ -1198,27 +1203,39 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
             filter_changed = filter_changed + 1;
         }
 
+        if (filter[3] && (g_strcmp0 (filter[3], "0") != 0 ))
+        {
+            PINFO("Loaded Filter Days is %s", filter[3]);
+
+            priv->fd.days = (gint)g_ascii_strtoll(filter[3], NULL, 10);
+            filter_changed = filter_changed + 1;
+        }
+
         if (filter_changed != 0)
             priv->fd.save_filter = TRUE;
 
         priv->fd.original_save_filter = priv->fd.save_filter;
         g_strfreev(filter);
-
-        /* Update Query with Filter Status and Dates */
-        gnc_ppr_update_status_query (page);
-        gnc_ppr_update_date_query(page);
     }
     else // LD_GL
     {
-        time64 start_time, end_time;
-        Query *query = gnc_ledger_display_get_query (priv->ledger);
+        time64 start_time = 0, end_time = 0;
 
-        xaccQueryGetDateMatchTT(query, &start_time, &end_time);
+        if ((priv->fd.days == 0) && (reg->type == GENERAL_JOURNAL))
+        {
+            priv->fd.days = 30; // default number of days for gl
+            priv->fd.original_days = priv->fd.days;
+        }
+
         priv->fd.original_start_time = start_time;
         priv->fd.start_time = start_time;
         priv->fd.original_end_time = end_time;
         priv->fd.end_time = end_time;
     }
+
+    /* Update Query with Filter Status and Dates */
+    gnc_ppr_update_status_query (page);
+    gnc_ppr_update_date_query(page);
 
     // Set filter tooltip for summary bar
     gnc_plugin_page_register_set_filter_tooltip (page);
@@ -1753,7 +1770,7 @@ gnc_plugin_page_register_get_filter (GncPluginPage *plugin_page)
     if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT))
         filter = xaccAccountGetFilter (leader);
 
-    return filter ? g_strdup(filter) : g_strdup_printf("%s,%s,%s", DEFAULT_FILTER, "0", "0");
+    return filter ? g_strdup(filter) : g_strdup_printf("%s,%s,%s,%s", DEFAULT_FILTER, "0", "0", "0");
 }
 
 void
@@ -1770,7 +1787,7 @@ gnc_plugin_page_register_set_filter (GncPluginPage *plugin_page, const gchar *fi
 
     if (leader != NULL)
     {
-        default_filter = g_strdup_printf("%s,%s,%s", DEFAULT_FILTER, "0", "0");
+        default_filter = g_strdup_printf("%s,%s,%s,%s", DEFAULT_FILTER, "0", "0", "0");
 
         if (!filter || (g_strcmp0 (filter, default_filter) == 0))
             xaccAccountSetFilter (leader, NULL);
@@ -2233,6 +2250,18 @@ gnc_ppr_update_date_query (GncPluginPageRegister *page)
                                 QOF_QUERY_AND);
     }
 
+    if (priv->fd.days > 0)
+    {
+        time64 start;
+        struct tm tm;
+
+        gnc_tm_get_today_start(&tm);
+
+        tm.tm_mday = tm.tm_mday - priv->fd.days;
+        start = gnc_mktime (&tm);
+        xaccQueryAddDateMatchTT (query, TRUE, start, FALSE, 0, QOF_QUERY_AND);
+    }
+
     // Set filter tooltip for summary bar
     gnc_plugin_page_register_set_filter_tooltip (page);
 
@@ -2417,15 +2446,11 @@ get_filter_times(GncPluginPageRegister *page)
 }
 
 
-/** This function is called when the "select range" radio button
- *  changes state.  Since there are only two choices in this radio
- *  group, this one signal can be used to handle all cases.  This
- *  function is responsible for setting the sensitivity of the table
- *  of widgets underneath the "select range" choice, and updating the
- *  time limitation on the register query.  This is handled by a
- *  helper function when the radio button is selected (as potentially
- *  all the widgets in the table need to be inspected), and is trivial
- *  for the other case.
+/** This function is called when the radio buttons changes state. This
+ *  function is responsible for setting the sensitivity of the widgets
+ *  controlled by each radio button choice and updating the time
+ *  limitation on the register query. This is handled by a helper
+ *  function as potentialy all widgets will need to be examined.
  *
  *  @param button A pointer to the "select range" radio button.
  *
@@ -2438,23 +2463,64 @@ gnc_plugin_page_register_filter_select_range_cb (GtkRadioButton *button,
 {
     GncPluginPageRegisterPrivate *priv;
     gboolean active;
+    const gchar *name;
 
     g_return_if_fail(GTK_IS_RADIO_BUTTON(button));
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
 
     ENTER("(button %p, page %p)", button, page);
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+    name = gtk_buildable_get_name(GTK_BUILDABLE(button));
     active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
-    gtk_widget_set_sensitive(priv->fd.table, active);
-    if (active)
+
+    if (active && g_strcmp0(name, "filter_show_range") == 0)
     {
+        gtk_widget_set_sensitive(priv->fd.table, active);
+        gtk_widget_set_sensitive(priv->fd.num_days, !active);
         get_filter_times(page);
+    }
+    else if (active && g_strcmp0(name, "filter_show_days") == 0)
+    {
+        gtk_widget_set_sensitive(priv->fd.table, !active);
+        gtk_widget_set_sensitive(priv->fd.num_days, active);
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(priv->fd.num_days), priv->fd.days);
     }
     else
     {
+        gtk_widget_set_sensitive(priv->fd.table, FALSE);
+        gtk_widget_set_sensitive(priv->fd.num_days, FALSE);
+        priv->fd.days = 0;
         priv->fd.start_time = 0;
         priv->fd.end_time = 0;
     }
+    gnc_ppr_update_date_query(page);
+    LEAVE(" ");
+}
+
+
+/** This function is called when the "number of days" spin button is
+ *  changed which is then saved and updates the time limitation on
+ *  the register query. This is handled by a helper function as
+ *  potentialy all widgets will need to be examined.
+ *
+ *  @param button A pointer to the "number of days" spin button.
+ *
+ *  @param page A pointer to the GncPluginPageRegister that is
+ *  associated with this filter dialog.
+ */
+void
+gnc_plugin_page_register_filter_days_changed_cb (GtkSpinButton *button,
+        GncPluginPageRegister *page)
+{
+    GncPluginPageRegisterPrivate *priv;
+
+    g_return_if_fail(GTK_IS_SPIN_BUTTON(button));
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
+
+    ENTER("(button %p, page %p)", button, page);
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+
+    priv->fd.days = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button));
     gnc_ppr_update_date_query(page);
     LEAVE(" ");
 }
@@ -2639,6 +2705,7 @@ gnc_plugin_page_register_filter_response_cb (GtkDialog *dialog,
         gnc_ppr_update_status_query(page);
         priv->fd.start_time = priv->fd.original_start_time;
         priv->fd.end_time = priv->fd.original_end_time;
+        priv->fd.days = priv->fd.original_days;
         priv->fd.save_filter = priv->fd.original_save_filter;
         gnc_ppr_update_date_query(page);
     }
@@ -2672,6 +2739,16 @@ gnc_plugin_page_register_filter_response_cb (GtkDialog *dialog,
                 filter = g_strconcat (tmp, ",", timeval, NULL);
                 g_free (timeval);
             }
+            else
+                filter = g_strconcat (tmp, ",0", NULL);
+
+            g_free (tmp);
+            tmp = g_strdup (filter);
+            g_free (filter);
+
+            // number of days
+            if (priv->fd.days > 0)
+                filter = g_strdup_printf ("%s,%d", tmp, priv->fd.days);
             else
                 filter = g_strconcat (tmp, ",0", NULL);
 
@@ -2730,6 +2807,11 @@ gnc_plugin_page_register_set_filter_tooltip (GncPluginPageRegister *page)
         text_start = g_strdup_printf ("%s %s", _("Start Date:"), sdate);
         g_free (sdate);
     }
+
+    // filtered number of days
+    if (priv->fd.days > 0)
+        text_start = g_strdup_printf ("%s %d", _("Show previous number of days:"), priv->fd.days);
+
     // filtered end time
     if (priv->fd.end_time != 0)
     {
@@ -2737,6 +2819,7 @@ gnc_plugin_page_register_set_filter_tooltip (GncPluginPageRegister *page)
         text_end = g_strdup_printf ("%s %s", _("End Date:"), edate);
         g_free (edate);
     }
+
     // filtered match items
     if (priv->fd.cleared_match != 31)
     {
@@ -3466,6 +3549,7 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
 
     /* Create the dialog */
     builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "days_adjustment");
     gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "filter_by_dialog");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "filter_by_dialog"));
     priv->fd.dialog = dialog;
@@ -3492,16 +3576,40 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
     if (priv->fd.save_filter == TRUE)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
 
+    /* Set up number of days */
+    priv->fd.num_days = GTK_WIDGET(gtk_builder_get_object (builder, "filter_show_num_days"));
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "filter_show_days"));
+
+    query = gnc_ledger_display_get_query (priv->ledger);
+
+    if (priv->fd.days > 0) // using number of days
+    {
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
+        gtk_widget_set_sensitive(GTK_WIDGET(priv->fd.num_days), TRUE);
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(priv->fd.num_days), priv->fd.days);
+        priv->fd.original_days = priv->fd.days;
+
+        /* Set the start_time and end_time to 0 */
+        start_time = 0;
+        end_time = 0;
+    }
+    else
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(priv->fd.num_days), FALSE);
+        priv->fd.original_days = 0;
+        priv->fd.days = 0;
+
+        /* Get the start and end times */
+        xaccQueryGetDateMatchTT(query, &start_time, &end_time);
+    }
 
     /* Set the date info */
-    button = GTK_WIDGET(gtk_builder_get_object (builder, "filter_show_range"));
-    query = gnc_ledger_display_get_query (priv->ledger);
-    xaccQueryGetDateMatchTT(query, &start_time, &end_time);
     priv->fd.original_start_time = start_time;
     priv->fd.start_time = start_time;
     priv->fd.original_end_time = end_time;
     priv->fd.end_time = end_time;
 
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "filter_show_range"));
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), start_time || end_time);
     table = GTK_WIDGET(gtk_builder_get_object (builder, "select_range_table"));
     priv->fd.table = table;
