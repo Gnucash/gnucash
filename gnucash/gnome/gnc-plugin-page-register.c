@@ -1762,7 +1762,13 @@ gnc_plugin_page_register_get_filter (GncPluginPage *plugin_page)
     GNCLedgerDisplayType ledger_type;
     GNCLedgerDisplay *ld;
     Account *leader;
-    const char* filter;
+    const char* filter = NULL;
+
+    GKeyFile *state_file = gnc_state_get_current();
+    gchar *state_section;
+    gchar *filter_text;
+    gchar acct_guid[GUID_ENCODING_LENGTH + 1];
+    GError *error = NULL;
 
     g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page), _("unknown"));
 
@@ -1770,11 +1776,24 @@ gnc_plugin_page_register_get_filter (GncPluginPage *plugin_page)
     ld = priv->ledger;
     ledger_type = gnc_ledger_display_type (ld);
     leader = gnc_ledger_display_leader (ld);
-    filter = NULL;
 
-    if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT))
-        filter = xaccAccountGetFilter (leader);
+    // get the filter from the .gcm file
+    guid_to_string_buff (xaccAccountGetGUID (leader), acct_guid);
+    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", acct_guid, NULL);
+    filter_text = g_key_file_get_string (state_file, state_section, KEY_PAGE_FILTER, &error);
 
+    if (error)
+    {
+        if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT))
+            filter = xaccAccountGetFilter (leader);
+        g_clear_error (&error);
+    }
+    else
+    {
+        filter_text = g_strdelimit (filter_text, ";", ',');
+        filter = g_strdup (filter_text);
+        g_free (filter_text);
+    }
     return filter ? g_strdup(filter) : g_strdup_printf("%s,%s,%s,%s", DEFAULT_FILTER, "0", "0", "0");
 }
 
@@ -1829,7 +1848,13 @@ gnc_plugin_page_register_get_sort_order (GncPluginPage *plugin_page)
     GNCLedgerDisplayType ledger_type;
     GNCLedgerDisplay *ld;
     Account *leader;
-    const char* sort_order;
+    const char* sort_order = NULL;
+
+    GKeyFile *state_file = gnc_state_get_current();
+    gchar *state_section;
+    gchar *sort_text;
+    gchar acct_guid[GUID_ENCODING_LENGTH + 1];
+    GError *error = NULL;
 
     g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page), _("unknown"));
 
@@ -1837,11 +1862,23 @@ gnc_plugin_page_register_get_sort_order (GncPluginPage *plugin_page)
     ld = priv->ledger;
     ledger_type = gnc_ledger_display_type (ld);
     leader = gnc_ledger_display_leader (ld);
-    sort_order = NULL;
 
-    if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT))
-        sort_order = xaccAccountGetSortOrder (leader);
+    // get the sort_order from the .gcm file
+    guid_to_string_buff (xaccAccountGetGUID (leader), acct_guid);
+    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", acct_guid, NULL);
+    sort_text = g_key_file_get_string (state_file, state_section, KEY_PAGE_SORT, &error);
 
+    if (error)
+    {
+        if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT))
+            sort_order = xaccAccountGetSortOrder (leader);
+        g_clear_error (&error);
+    }
+    else
+    {
+        sort_order = g_strdup (sort_text);
+        g_free (sort_text);
+    }
     return g_strdup(sort_order ? sort_order : DEFAULT_SORT_ORDER);
 }
 
@@ -1891,6 +1928,11 @@ gnc_plugin_page_register_get_sort_reversed (GncPluginPage *plugin_page)
     Account *leader;
     gboolean sort_reversed = FALSE;
 
+    GKeyFile *state_file = gnc_state_get_current();
+    gchar *state_section;
+    gchar acct_guid[GUID_ENCODING_LENGTH + 1];
+    GError *error = NULL;
+
     g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page), FALSE);
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
@@ -1898,9 +1940,17 @@ gnc_plugin_page_register_get_sort_reversed (GncPluginPage *plugin_page)
     ledger_type = gnc_ledger_display_type (ld);
     leader = gnc_ledger_display_leader (ld);
 
-    if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT))
-        sort_reversed = xaccAccountGetSortReversed (leader);
+    // get the sort_reversed from the .gcm file
+    guid_to_string_buff (xaccAccountGetGUID (leader), acct_guid);
+    state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", acct_guid, NULL);
+    sort_reversed = g_key_file_get_boolean (state_file, state_section, KEY_PAGE_SORT_REV, &error);
 
+    if (error)
+    {
+        if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT))
+            sort_reversed = xaccAccountGetSortReversed (leader);
+        g_clear_error (&error);
+    }
     return sort_reversed;
 }
 
