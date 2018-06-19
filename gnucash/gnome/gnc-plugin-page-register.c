@@ -2648,29 +2648,36 @@ gnc_plugin_page_register_filter_response_cb (GtkDialog *dialog,
 
         if (priv->fd.save_filter)
         {
-            gchar* filter;
-            filter = g_strdup_printf("0x%04x", priv->fd.cleared_match);
+            gchar* filter = g_strdup_printf("0x%04x", priv->fd.cleared_match); // cleared match
+            gchar *tmp = g_strdup (filter);
 
+            // start time
             if ( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->fd.start_date_choose)) && priv->fd.start_time != 0 )
             {
                 gchar *timeval = gnc_plugin_page_register_filter_time2dmy(priv->fd.start_time);
-                filter = g_strconcat ( filter, ",", timeval, NULL);
+                filter = g_strconcat (tmp, ",", timeval, NULL);
                 g_free (timeval);
             }
             else
-                filter = g_strconcat ( filter, ",0", NULL);
+                filter = g_strconcat (tmp, ",0", NULL);
 
+            g_free (tmp);
+            tmp = g_strdup (filter);
+            g_free (filter);
+
+            // end time
             if ( gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(priv->fd.end_date_choose)) && priv->fd.end_time != 0 )
             {
                 gchar *timeval = gnc_plugin_page_register_filter_time2dmy(priv->fd.end_time);
-                filter = g_strconcat ( filter, ",", timeval, NULL);
+                filter = g_strconcat (tmp, ",", timeval, NULL);
                 g_free (timeval);
             }
             else
-                filter = g_strconcat ( filter, ",0", NULL);
+                filter = g_strconcat (tmp, ",0", NULL);
+
+            g_free (tmp);
 
             PINFO("The filter to save is %s", filter);
-
             gnc_plugin_page_register_set_filter (plugin_page, filter);
             g_free (filter);
         }
