@@ -2041,6 +2041,12 @@ gnc_plugin_page_register_sort_response_cb (GtkDialog *dialog,
     }
     else
     {
+        // clear the sort when unticking the save option
+        if ((priv->sd.save_order == FALSE) && (priv->sd.original_save_order == TRUE))
+        {
+            gnc_plugin_page_register_set_sort_order (plugin_page, DEFAULT_SORT_ORDER);
+            gnc_plugin_page_register_set_sort_reversed (plugin_page, FALSE);
+        }
         priv->sd.original_save_order = priv->sd.save_order;
 
         if (priv->sd.save_order)
@@ -2711,6 +2717,10 @@ gnc_plugin_page_register_filter_response_cb (GtkDialog *dialog,
     }
     else
     {
+        // clear the filter when unticking the save option
+        if ((priv->fd.save_filter == FALSE) && (priv->fd.original_save_filter == TRUE))
+            gnc_plugin_page_register_set_filter (plugin_page, NULL);
+
         priv->fd.original_save_filter = priv->fd.save_filter;
 
         if (priv->fd.save_filter)
