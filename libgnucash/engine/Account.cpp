@@ -51,12 +51,17 @@ static QofLogModule log_module = GNC_MOD_ACCOUNT;
 static gchar account_separator[8] = ".";
 static gunichar account_uc_separator = ':';
 /* Predefined KVP paths */
-static const char *KEY_ASSOC_INCOME_ACCOUNT = "ofx/associated-income-account";
-#define AB_KEY "hbci"
-#define AB_ACCOUNT_ID "account-id"
-#define AB_ACCOUNT_UID "account-uid"
-#define AB_BANK_CODE "bank-code"
-#define AB_TRANS_RETRIEVAL "trans-retrieval"
+static const std::string KEY_ASSOC_INCOME_ACCOUNT("ofx/associated-income-account");
+static const std::string KEY_RECONCILE_INFO("reconcile-info");
+static const std::string KEY_INCLUDE_CHILDREN("include-children");
+static const std::string KEY_POSTPONE("postpone");
+static const std::string KEY_LOT_MGMT("lot-mgmt");
+static const std::string KEY_ONLINE_ID("online_id");
+static const std::string AB_KEY("hbci");
+static const std::string AB_ACCOUNT_ID("account-id");
+static const std::string AB_ACCOUNT_UID("account-uid");
+static const std::string AB_BANK_CODE("bank-code");
+static const std::string AB_TRANS_RETRIEVAL("trans-retrieval");
 
 using FinalProbabilityVec=std::vector<std::pair<std::string, int32_t>>;
 using ProbabilityVec=std::vector<std::pair<std::string, struct AccountProbability>>;
@@ -413,10 +418,10 @@ gnc_account_get_property (GObject         *object,
     case PROP_LOT_NEXT_ID:
         /* Pre-set the value in case the frame is empty */
         g_value_set_int64 (value, 0);
-        qof_instance_get_path_kvp (QOF_INSTANCE (account), value, {"lot-mgmt", "next-id"});
+        qof_instance_get_path_kvp (QOF_INSTANCE (account), value, {KEY_LOT_MGMT, "next-id"});
         break;
     case PROP_ONLINE_ACCOUNT:
-        qof_instance_get_path_kvp (QOF_INSTANCE (account), value, {"online_id"});
+        qof_instance_get_path_kvp (QOF_INSTANCE (account), value, {KEY_ONLINE_ID});
         break;
     case PROP_OFX_INCOME_ACCOUNT:
         qof_instance_get_path_kvp (QOF_INSTANCE (account), value, {KEY_ASSOC_INCOME_ACCOUNT});
@@ -536,10 +541,10 @@ gnc_account_set_property (GObject         *object,
         xaccAccountSetSortReversed(account, g_value_get_boolean(value));
         break;
     case PROP_LOT_NEXT_ID:
-        qof_instance_set_path_kvp (QOF_INSTANCE (account), value, {"lot-mgmt", "next-id"});
+        qof_instance_set_path_kvp (QOF_INSTANCE (account), value, {KEY_LOT_MGMT, "next-id"});
         break;
     case PROP_ONLINE_ACCOUNT:
-        qof_instance_set_path_kvp (QOF_INSTANCE (account), value, {"online_id"});
+        qof_instance_set_path_kvp (QOF_INSTANCE (account), value, {KEY_ONLINE_ID});
         break;
     case PROP_OFX_INCOME_ACCOUNT:
         qof_instance_set_path_kvp (QOF_INSTANCE (account), value, {KEY_ASSOC_INCOME_ACCOUNT});
@@ -4295,7 +4300,7 @@ xaccAccountGetReconcileLastDate (const Account *acc, time64 *last_date)
     gint64 date = 0;
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {"reconcile-info", "last-date"});
+    qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {KEY_RECONCILE_INFO, "last-date"});
     if (G_VALUE_HOLDS_INT64 (&v))
         date = g_value_get_int64 (&v);
 
@@ -4320,7 +4325,7 @@ xaccAccountSetReconcileLastDate (Account *acc, time64 last_date)
     g_value_init (&v, G_TYPE_INT64);
     g_value_set_int64 (&v, last_date);
     xaccAccountBeginEdit (acc);
-    qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {"reconcile-info", "last-date"});
+    qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, {KEY_RECONCILE_INFO, "last-date"});
     mark_account (acc);
     xaccAccountCommitEdit (acc);
 }
@@ -4338,9 +4343,9 @@ xaccAccountGetReconcileLastInterval (const Account *acc,
     if (!acc) return FALSE;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
     qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v1,
-            {"reconcile-info", "last-interval", "months"});
+            {KEY_RECONCILE_INFO, "last-interval", "months"});
     qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v2,
-            {"reconcile-info", "last-interval", "days"});
+            {KEY_RECONCILE_INFO, "last-interval", "days"});
     if (G_VALUE_HOLDS_INT64 (&v1))
         m = g_value_get_int64 (&v1);
     if (G_VALUE_HOLDS_INT64 (&v2))
@@ -4371,9 +4376,9 @@ xaccAccountSetReconcileLastInterval (Account *acc, int months, int days)
     g_value_set_int64 (&v2, days);
     xaccAccountBeginEdit (acc);
     qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v1,
-            {"reconcile-info", "last-interval", "months"});
+            {KEY_RECONCILE_INFO, "last-interval", "months"});
     qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v2,
-            {"reconcile-info", "last-interval", "days"});
+            {KEY_RECONCILE_INFO, "last-interval", "days"});
     mark_account (acc);
     xaccAccountCommitEdit (acc);
 }
@@ -4388,7 +4393,7 @@ xaccAccountGetReconcilePostponeDate (const Account *acc, time64 *postpone_date)
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
     qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v,
-            {"reconcile-info", "postpone", "date"});
+            {KEY_RECONCILE_INFO, KEY_POSTPONE, "date"});
     if (G_VALUE_HOLDS_INT64 (&v))
         date = g_value_get_int64 (&v);
 
@@ -4414,7 +4419,7 @@ xaccAccountSetReconcilePostponeDate (Account *acc, time64 postpone_date)
     g_value_set_int64 (&v, postpone_date);
     xaccAccountBeginEdit (acc);
     qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v,
-            {"reconcile-info", "postpone", "date"});
+            {KEY_RECONCILE_INFO, KEY_POSTPONE, "date"});
     mark_account (acc);
     xaccAccountCommitEdit (acc);
 }
@@ -4430,7 +4435,7 @@ xaccAccountGetReconcilePostponeBalance (const Account *acc,
     GValue v = G_VALUE_INIT;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
     qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v,
-            {"reconcile-info", "postpone", "balance"});
+            {KEY_RECONCILE_INFO, KEY_POSTPONE, "balance"});
     if (!G_VALUE_HOLDS_INT64 (&v))
         return FALSE;
 
@@ -4457,7 +4462,7 @@ xaccAccountSetReconcilePostponeBalance (Account *acc, gnc_numeric balance)
     g_value_set_boxed (&v, &balance);
     xaccAccountBeginEdit (acc);
     qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v,
-            {"reconcile-info", "postpone", "balance"});
+            {KEY_RECONCILE_INFO, KEY_POSTPONE, "balance"});
     mark_account (acc);
     xaccAccountCommitEdit (acc);
 }
@@ -4472,7 +4477,7 @@ xaccAccountClearReconcilePostpone (Account *acc)
     if (!acc) return;
 
     xaccAccountBeginEdit (acc);
-    qof_instance_set_path_kvp (QOF_INSTANCE(acc), nullptr, {"reconcile-info", "postpone"});
+    qof_instance_set_path_kvp (QOF_INSTANCE(acc), nullptr, {KEY_RECONCILE_INFO, KEY_POSTPONE});
     mark_account (acc);
     xaccAccountCommitEdit (acc);
 }
@@ -4487,7 +4492,7 @@ xaccAccountClearReconcilePostpone (Account *acc)
 gboolean
 xaccAccountGetAutoInterestXfer (const Account *acc, gboolean default_value)
 {
-    return boolean_from_key (acc, {"reconcile-info", "auto-interest-transfer"});
+    return boolean_from_key (acc, {KEY_RECONCILE_INFO, "auto-interest-transfer"});
 }
 
 /********************************************************************\
@@ -4496,7 +4501,7 @@ xaccAccountGetAutoInterestXfer (const Account *acc, gboolean default_value)
 void
 xaccAccountSetAutoInterestXfer (Account *acc, gboolean option)
 {
-    set_boolean_key (acc, {"reconcile-info", "auto-interest-transfer"}, option);
+    set_boolean_key (acc, {KEY_RECONCILE_INFO, "auto-interest-transfer"}, option);
 }
 
 /********************************************************************\
@@ -4577,7 +4582,7 @@ Account *
 xaccAccountGainsAccount (Account *acc, gnc_commodity *curr)
 {
     GValue v = G_VALUE_INIT;
-    std::vector<std::string> path {"lot-mgmt", "gains-acct",
+    std::vector<std::string> path {KEY_LOT_MGMT, "gains-acct",
         gnc_commodity_get_unique_name (curr)};
     GncGUID *guid = NULL;
     Account *gains_account;
@@ -4696,7 +4701,7 @@ xaccAccountSetReconcileChildrenStatus(Account *acc, gboolean status)
     g_value_init (&v, G_TYPE_INT64);
     g_value_set_int64 (&v, status);
     qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v,
-            {"reconcile-info", "include-children"});
+            {KEY_RECONCILE_INFO, KEY_INCLUDE_CHILDREN});
     mark_account(acc);
     xaccAccountCommitEdit (acc);
 }
@@ -4714,7 +4719,7 @@ xaccAccountGetReconcileChildrenStatus(const Account *acc)
     GValue v = G_VALUE_INIT;
     if (!acc) return FALSE;
     qof_instance_get_path_kvp (QOF_INSTANCE (acc), &v,
-            {"reconcile-info", "include-children"});
+            {KEY_RECONCILE_INFO, KEY_INCLUDE_CHILDREN});
     return G_VALUE_HOLDS_INT64 (&v) ? g_value_get_int64 (&v) : FALSE;
 }
 
