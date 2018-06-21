@@ -1125,6 +1125,16 @@ gbv_refresh_col_titles(GncBudgetView *view)
     }
 }
 
+static void
+gbv_renderer_add_padding (GtkCellRenderer *renderer)
+{
+    gint xpad, ypad;
+
+    gtk_cell_renderer_get_padding (renderer, &xpad, &ypad);
+    if (xpad < 5)
+        gtk_cell_renderer_set_padding (renderer, 5, ypad);
+}
+
 /** \brief Function to create the totals column to the right of the view.
 */
 static GtkTreeViewColumn*
@@ -1139,6 +1149,9 @@ gbv_create_totals_column(GncBudgetView* view, gint period_num)
 
     renderer = gtk_cell_renderer_text_new();
     col = gtk_tree_view_column_new_with_attributes("", renderer, NULL);
+
+    // add some padding to the right of the numbers
+    gbv_renderer_add_padding (renderer);
 
     gtk_tree_view_column_set_cell_data_func(col, renderer, totals_col_source, view, NULL);
     g_object_set_data(G_OBJECT(col), "budget", priv->budget);
@@ -1233,6 +1246,9 @@ gnc_budget_view_refresh(GncBudgetView *view)
         // as we only have one renderer/column, use this function to get it
         renderer = gnc_tree_view_column_get_renderer (col);
 
+        // add some padding to the right of the numbers
+        gbv_renderer_add_padding (renderer);
+
         g_signal_connect(G_OBJECT(renderer), "edited", (GCallback)gbv_col_edited_cb, view);
 
         col = gbv_create_totals_column(view, num_periods_visible);
@@ -1252,6 +1268,7 @@ gnc_budget_view_refresh(GncBudgetView *view)
         gchar title[MAX_DATE_LENGTH];
         guint titlelen;
         GDate *date;
+        GtkCellRenderer* renderer;
 
         priv->total_col = gnc_tree_view_account_add_custom_column(
                               GNC_TREE_VIEW_ACCOUNT(priv->tree_view), _("Total"),
@@ -1275,6 +1292,12 @@ gnc_budget_view_refresh(GncBudgetView *view)
         }
         g_date_free (date);
         g_object_set_data(G_OBJECT(priv->total_col), "budget", priv->budget);
+
+        // as we only have one renderer/column, use this function to get it
+        renderer = gnc_tree_view_column_get_renderer (priv->total_col);
+
+        // add some padding to the right of the numbers
+        gbv_renderer_add_padding (renderer);
 
         col = gbv_create_totals_column(view, -1);
         if (col != NULL)
