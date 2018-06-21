@@ -762,15 +762,15 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
         g_warning("invalid number of values for group %s key %s",
                   window_group, WINDOW_POSITION);
     }
-// This does not do any thing ?
-//    else if ((pos[0] + (geom ? geom[0] : 0) < 0) ||
-//             (pos[0] > gdk_screen_width()) ||
-//             (pos[1] + (geom ? geom[1] : 0) < 0) ||
-//             (pos[1] > gdk_screen_height()))
-//    {
-//    g_debug("position %dx%d, size%dx%d is offscreen; will not move",
-//	    pos[0], pos[1], geom[0], geom[1]);
-//    }
+    /* Prevent restoring coordinates if this would move the window off-screen */
+    else if ((pos[0] + (geom ? geom[0] : 0) < 0) ||
+             (pos[0] > gdk_screen_width()) ||
+             (pos[1] + (geom ? geom[1] : 0) < 0) ||
+             (pos[1] > gdk_screen_height()))
+    {
+        g_debug("position %dx%d, size%dx%d is offscreen; will not move",
+                pos[0], pos[1], geom[0], geom[1]);
+    }
     else
     {
         gtk_window_move(GTK_WINDOW(window), pos[0], pos[1]);
