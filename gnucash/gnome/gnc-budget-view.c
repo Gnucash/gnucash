@@ -389,6 +389,9 @@ gbv_create_widget(GncBudgetView *view)
     selection = gtk_tree_view_get_selection(tree_view);
     gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
 
+    // make sure the account column is the expand column
+    gnc_tree_view_expand_columns (GNC_TREE_VIEW(tree_view), "name", NULL);
+
     // Accounts filter
     priv->fd->tree_view = GNC_TREE_VIEW_ACCOUNT(priv->tree_view);
     gnc_tree_view_account_set_filter(
@@ -696,6 +699,8 @@ gbv_treeview_resized_cb(GtkWidget* widget, GtkAllocation* allocation, GncBudgetV
             j++;
         }
     }
+    // make sure the account column is the expand column
+    gnc_tree_view_expand_columns (GNC_TREE_VIEW(priv->tree_view), "name", NULL);
     LEAVE("");
 }
 
