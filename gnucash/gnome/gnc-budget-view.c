@@ -1219,8 +1219,7 @@ gnc_budget_view_refresh(GncBudgetView *view)
     /* Create any needed columns */
     while (num_periods_visible < num_periods)
     {
-        GList* renderer_list;
-        GList* renderer_node;
+        GtkCellRenderer* renderer;
 
         col = gnc_tree_view_account_add_custom_column(
                   GNC_TREE_VIEW_ACCOUNT(priv->tree_view), "",
@@ -1231,13 +1230,10 @@ gnc_budget_view_refresh(GncBudgetView *view)
                           GUINT_TO_POINTER(num_periods_visible));
         col_list = g_list_append(col_list, col);
 
-        renderer_list = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(col));
-        for (renderer_node = renderer_list; renderer_node != NULL; renderer_node = g_list_next(renderer_node))
-        {
-            GtkCellRenderer* renderer = GTK_CELL_RENDERER(renderer_node->data);
-            g_signal_connect(G_OBJECT(renderer), "edited", (GCallback)gbv_col_edited_cb, view);
-        }
-        g_list_free(renderer_list);
+        // as we only have one renderer/column, use this function to get it
+        renderer = gnc_tree_view_column_get_renderer (col);
+
+        g_signal_connect(G_OBJECT(renderer), "edited", (GCallback)gbv_col_edited_cb, view);
 
         col = gbv_create_totals_column(view, num_periods_visible);
         if (col != NULL)
