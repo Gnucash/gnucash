@@ -61,8 +61,6 @@
 
 #define UNUSED_VAR     __attribute__ ((unused))
 
-#define KEY_ACCOUNT_NAME        "account_name"
-
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule UNUSED_VAR log_module = GNC_MOD_REGISTER;
 
@@ -86,6 +84,10 @@ gnc_table_save_state (Table *table, gchar * state_section, gchar * account_fulln
 
     if (!gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
         return;
+
+    key = g_strdup_printf ("Register state for \"%s\"", account_fullname);
+    g_key_file_set_comment (state_file, state_section, NULL, key, NULL);
+    g_free (key);
 
     sheet = GNUCASH_SHEET (table->ui_data);
 
@@ -111,7 +113,6 @@ gnc_table_save_state (Table *table, gchar * state_section, gchar * account_fulln
             g_key_file_remove_key (state_file, state_section, key, NULL);
         g_free (key);
     }
-    g_key_file_set_string (state_file, state_section, KEY_ACCOUNT_NAME, account_fullname);
     gnc_header_widths_destroy (widths);
 }
 
