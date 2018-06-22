@@ -92,6 +92,13 @@ enum
     N_PROPERTIES		/* Just a counter */
 };
 
+static void
+qof_book_option_num_field_source_changed_cb (GObject *gobject,
+                                             GParamSpec *pspec,
+                                             gpointer    user_data);
+// Use a #define for the GParam name to avoid typos
+#define PARAM_NAME_NUM_FIELD_SOURCE "split-action-num-field"
+
 QOF_GOBJECT_GET_TYPE(QofBook, qof_book, QOF_TYPE_INSTANCE, {});
 QOF_GOBJECT_DISPOSE(qof_book);
 QOF_GOBJECT_FINALIZE(qof_book);
@@ -126,6 +133,15 @@ qof_book_init (QofBook *book)
     book->read_only = FALSE;
     book->session_dirty = FALSE;
     book->version = 0;
+    book->cached_num_field_source_isvalid = FALSE;
+
+    // Register a callback on this NUM_FIELD_SOURCE property of that object
+    // because it gets called quite a lot, so that its value must be stored in
+    // a bool member variable instead of a KVP lookup on each getter call.
+    g_signal_connect (G_OBJECT(book),
+                      "notify::" PARAM_NAME_NUM_FIELD_SOURCE,
+                      G_CALLBACK (qof_book_option_num_field_source_changed_cb),
+                      book);
 }
 
 static const std::string str_KVP_OPTION_PATH(KVP_OPTION_PATH);
@@ -301,7 +317,7 @@ qof_book_class_init (QofBookClass *klass)
     g_object_class_install_property
     (gobject_class,
      PROP_OPT_NUM_FIELD_SOURCE,
-     g_param_spec_string("split-action-num-field",
+     g_param_spec_string(PARAM_NAME_NUM_FIELD_SOURCE,
                          "Use Split-Action in the Num Field",
 			 "Scheme true ('t') or NULL. If 't', then the book "
 			 "will put the split action value in the Num field.",
@@ -1002,14 +1018,42 @@ qof_book_use_trading_accounts (const QofBook *book)
 gboolean
 qof_book_use_split_action_for_num_field (const QofBook *book)
 {
-    const char *opt = NULL;
-    qof_instance_get (QOF_INSTANCE (book),
-		      "split-action-num-field", &opt,
-		      NULL);
+    g_assert(book);
+    if (!book->cached_num_field_source_isvalid)
+    {
+        // No cached value? Then do the expensive KVP lookup
+        gboolean result;
+        const char *opt = NULL;
+        qof_instance_get (QOF_INSTANCE (book),
+                          PARAM_NAME_NUM_FIELD_SOURCE, &opt,
+                          NULL);
 
-    if (opt && opt[0] == 't' && opt[1] == 0)
-        return TRUE;
-    return FALSE;
+        if (opt && opt[0] == 't' && opt[1] == 0)
+            result = TRUE;
+        else
+            result = FALSE;
+
+        // We need to const_cast the "book" argument into a non-const pointer,
+        // but as we are dealing only with cache variables, I think this is
+        // understandable enough.
+        const_cast<QofBook*>(book)->cached_num_field_source = result;
+        const_cast<QofBook*>(book)->cached_num_field_source_isvalid = TRUE;
+    }
+    // Value is cached now. Use the cheap variable returning.
+    return book->cached_num_field_source;
+}
+
+// The callback that is called when the KVP option value of
+// "split-action-num-field" changes, so that we mark the cached value as
+// invalid.
+static void
+qof_book_option_num_field_source_changed_cb (GObject *gobject,
+                                             GParamSpec *pspec,
+                                             gpointer    user_data)
+{
+    QofBook *book = reinterpret_cast<QofBook*>(user_data);
+    g_return_if_fail(QOF_IS_BOOK(book));
+    book->cached_num_field_source_isvalid = FALSE;
 }
 
 gboolean qof_book_uses_autoreadonly (const QofBook *book)
@@ -1188,6 +1232,9 @@ qof_book_set_option (QofBook *book, KvpValue *value, GSList *path)
     delete root->set_path(gslist_to_option_path(path), value);
     qof_instance_set_dirty (QOF_INSTANCE (book));
     qof_book_commit_edit (book);
+
+    // Also, mark any cached value as invalid
+    book->cached_num_field_source_isvalid = FALSE;
 }
 
 KvpValue*

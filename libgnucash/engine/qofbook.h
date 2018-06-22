@@ -147,6 +147,13 @@ struct _QofBook
      * except that it provides a nice convenience, avoiding a lookup
      * from the session.  Better solutions welcome ... */
     QofBackend *backend;
+
+    /* A cached value of the OPTION_NAME_NUM_FIELD_SOURCE option value because
+     * it is queried quite a lot, so we want to avoid a KVP lookup on each query
+     */
+    gboolean cached_num_field_source;
+    /* Whether the above cached value is valid. */
+    gboolean cached_num_field_source_isvalid;
 };
 
 struct _QofBookClass
