@@ -39,6 +39,7 @@
 
 ;; copied from transaction.scm
 (define trep-uuid "2fe3b9833af044abb929a88d5a59620f")
+(define reconcile-uuid "e45218c6d76f11e7b5ef0800277ef320")
 
 ;; Explicitly set locale to make the report output predictable
 (setlocale LC_ALL "C")
@@ -64,6 +65,7 @@
   (test-begin "transaction.scm")
   (null-test)
   (trep-tests)
+  (reconcile-tests)
   ;; (test-end) must be run as the last function, it will
   ;; return #f if any of the tests have failed.
   (test-end "transaction.scm"))
@@ -860,3 +862,52 @@
           (get-row-col sxml #f 6))))
     (test-end "subtotal table")
     ))
+
+(define (reconcile-tests)
+  (let* ((env (create-test-env))
+         (account-alist (env-create-account-structure-alist env structure))
+         (bank (cdr (assoc "Bank" account-alist)))
+         (income (cdr (assoc "Income" account-alist)))
+         (liability (cdr (assoc "Liabilities" account-alist)))
+         (expense (cdr (assoc "Expenses" account-alist)))
+         (YEAR (gnc:time64-get-year (gnc:get-today)))
+         )
+
+    (define (options->sxml options test-title)
+      (gnc:options->sxml reconcile-uuid options "test-reconcile" test-title))
+
+    (define (default-testing-options)
+      (let ((options (gnc:make-report-options reconcile-uuid)))
+        (set-option! options "Accounts" "Accounts" (list bank liability))
+        options))
+
+    ;; old transactions for testing reconcile date options
+    (env-transfer env 01 01 1970 bank expense       5   #:description "desc-1" #:num "trn1" #:memo "memo-3")
+    (env-transfer env 31 12 1969 income bank       10   #:description "desc-2" #:num "trn2" #:void-reason "void" #:notes "notes3")
+    (env-transfer env 31 12 1969 income bank       29   #:description "desc-3" #:num "trn3"
+                  #:reconcile (cons #\c (gnc-dmy2time64 01 03 1970)))
+    (env-transfer env 01 02 1970 bank expense      15   #:description "desc-4" #:num "trn4" #:notes "notes2" #:memo "memo-1")
+    (env-transfer env 10 01 1970 liability expense 10   #:description "desc-5" #:num "trn5" #:void-reason "any")
+    (env-transfer env 10 01 1970 liability expense 11   #:description "desc-6" #:num "trn6" #:notes "notes1")
+    (env-transfer env 10 02 1970 bank expense       8   #:description "desc-7" #:num "trn7" #:notes "notes1" #:memo "memo-2"
+                  #:reconcile (cons #\y (gnc-dmy2time64 01 03 1970)))
+
+
+    (let* ((options (default-testing-options)))
+      (let ((sxml (options->sxml options "null test")))
+        (test-assert "sxml"
+          sxml))
+      (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 01 03 1970)))
+      (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 31 03 1970)))
+      (let ((sxml (options->sxml options "filter reconcile date")))
+        (test-equal "test reconciled amounts = $8"
+          (list "Total For Reconciled" "-$8.00")
+          (get-row-col sxml 3 #f))
+        (test-equal "test cleared amounts = $29"
+          (list "Total For Cleared" "$29.00")
+          (get-row-col sxml 6 #f))
+        (test-equal "test unreconciled amounts = -$31"
+          (list "Total For Unreconciled" "-$31.00")
+          (get-row-col sxml 11 #f))
+        sxml)
+      )))
