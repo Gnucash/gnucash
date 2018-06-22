@@ -140,6 +140,7 @@ public:
         m_flags{static_cast<ColumnFlags>(f)},
         m_gobj_param_name{gobj_name}, m_qof_param_name{qof_name}, m_getter{get},
         m_setter{set} {}
+    virtual ~GncSqlColumnTableEntry() = default;
 
     /**
      * Load a value into an object from the database row.
@@ -254,7 +255,7 @@ private:
 };
 
 template <GncSqlObjectType Type>
-class GncSqlColumnTableEntryImpl : public GncSqlColumnTableEntry
+class GncSqlColumnTableEntryImpl final : public GncSqlColumnTableEntry
 {
 public:
     GncSqlColumnTableEntryImpl (const char* name, const GncSqlObjectType type,
@@ -265,6 +266,7 @@ public:
                                 QofSetterFunc set = nullptr) :
         GncSqlColumnTableEntry (name, type, s, f, gobj_name,qof_name, get, set)
         {}
+
     void load(const GncSqlBackend* sql_be, GncSqlRow& row,  QofIdTypeConst obj_name,
               void* pObject) const noexcept override;
     void add_to_table(ColVec& vec) const noexcept override;
