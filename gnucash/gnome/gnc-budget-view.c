@@ -389,6 +389,9 @@ gbv_create_widget(GncBudgetView *view)
     selection = gtk_tree_view_get_selection(tree_view);
     gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
 
+    // make sure the account column is the expand column
+    gnc_tree_view_expand_columns (GNC_TREE_VIEW(tree_view), "name", NULL);
+
     // Accounts filter
     priv->fd->tree_view = GNC_TREE_VIEW_ACCOUNT(priv->tree_view);
     gnc_tree_view_account_set_filter(
@@ -696,6 +699,8 @@ gbv_treeview_resized_cb(GtkWidget* widget, GtkAllocation* allocation, GncBudgetV
             j++;
         }
     }
+    // make sure the account column is the expand column
+    gnc_tree_view_expand_columns (GNC_TREE_VIEW(priv->tree_view), "name", NULL);
     LEAVE("");
 }
 
@@ -1120,6 +1125,16 @@ gbv_refresh_col_titles(GncBudgetView *view)
     }
 }
 
+static void
+gbv_renderer_add_padding (GtkCellRenderer *renderer)
+{
+    gint xpad, ypad;
+
+    gtk_cell_renderer_get_padding (renderer, &xpad, &ypad);
+    if (xpad < 5)
+        gtk_cell_renderer_set_padding (renderer, 5, ypad);
+}
+
 /** \brief Function to create the totals column to the right of the view.
 */
 static GtkTreeViewColumn*
@@ -1134,6 +1149,9 @@ gbv_create_totals_column(GncBudgetView* view, gint period_num)
 
     renderer = gtk_cell_renderer_text_new();
     col = gtk_tree_view_column_new_with_attributes("", renderer, NULL);
+
+    // add some padding to the right of the numbers
+    gbv_renderer_add_padding (renderer);
 
     gtk_tree_view_column_set_cell_data_func(col, renderer, totals_col_source, view, NULL);
     g_object_set_data(G_OBJECT(col), "budget", priv->budget);
@@ -1214,8 +1232,7 @@ gnc_budget_view_refresh(GncBudgetView *view)
     /* Create any needed columns */
     while (num_periods_visible < num_periods)
     {
-        GList* renderer_list;
-        GList* renderer_node;
+        GtkCellRenderer* renderer;
 
         col = gnc_tree_view_account_add_custom_column(
                   GNC_TREE_VIEW_ACCOUNT(priv->tree_view), "",
@@ -1226,13 +1243,13 @@ gnc_budget_view_refresh(GncBudgetView *view)
                           GUINT_TO_POINTER(num_periods_visible));
         col_list = g_list_append(col_list, col);
 
-        renderer_list = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(col));
-        for (renderer_node = renderer_list; renderer_node != NULL; renderer_node = g_list_next(renderer_node))
-        {
-            GtkCellRenderer* renderer = GTK_CELL_RENDERER(renderer_node->data);
-            g_signal_connect(G_OBJECT(renderer), "edited", (GCallback)gbv_col_edited_cb, view);
-        }
-        g_list_free(renderer_list);
+        // as we only have one renderer/column, use this function to get it
+        renderer = gnc_tree_view_column_get_renderer (col);
+
+        // add some padding to the right of the numbers
+        gbv_renderer_add_padding (renderer);
+
+        g_signal_connect(G_OBJECT(renderer), "edited", (GCallback)gbv_col_edited_cb, view);
 
         col = gbv_create_totals_column(view, num_periods_visible);
         if (col != NULL)
@@ -1251,6 +1268,7 @@ gnc_budget_view_refresh(GncBudgetView *view)
         gchar title[MAX_DATE_LENGTH];
         guint titlelen;
         GDate *date;
+        GtkCellRenderer* renderer;
 
         priv->total_col = gnc_tree_view_account_add_custom_column(
                               GNC_TREE_VIEW_ACCOUNT(priv->tree_view), _("Total"),
@@ -1274,6 +1292,12 @@ gnc_budget_view_refresh(GncBudgetView *view)
         }
         g_date_free (date);
         g_object_set_data(G_OBJECT(priv->total_col), "budget", priv->budget);
+
+        // as we only have one renderer/column, use this function to get it
+        renderer = gnc_tree_view_column_get_renderer (priv->total_col);
+
+        // add some padding to the right of the numbers
+        gbv_renderer_add_padding (renderer);
 
         col = gbv_create_totals_column(view, -1);
         if (col != NULL)
