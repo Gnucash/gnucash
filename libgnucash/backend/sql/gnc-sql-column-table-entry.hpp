@@ -544,9 +544,19 @@ void set_parameter(T object, P item, QofSetterFunc setter)
 template <typename T, typename P>
 void set_parameter(T object, P item, const char* property)
 {
-    qof_instance_increase_editlevel(object);
+    // Properly use qof_begin_edit and qof_commit_edit{_part2}
+    // here. This is needed to reset the infant state of objects
+    // when loading them initially from sql. Failing to do so
+    // could prevent future editing of these objects
+    // Example of this is https://bugzilla.gnome.org/show_bug.cgi?id=795944
+    qof_begin_edit(QOF_INSTANCE(object));
     g_object_set(object, property, item, nullptr);
-    qof_instance_decrease_editlevel(object);
+    if (!qof_commit_edit(QOF_INSTANCE(object))) return;
+    // FIXME I can't use object specific callbacks in generic code
+    // so for now these will silently fail. As the GObject based method
+    // of setting qof objects should go away eventually I won't bother
+    // finding a proper solution for this.
+    qof_commit_edit_part2(QOF_INSTANCE(object), nullptr, nullptr, nullptr);
 };
 
 /**
