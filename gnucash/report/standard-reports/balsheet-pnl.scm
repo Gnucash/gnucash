@@ -265,11 +265,13 @@
       (gnc:html-table-cell-set-style! narrow "text-cell" 'attribute '("style" "width:1px"))
       narrow))
 
-  (define (add-indented-row indent label rest)
+  (define (add-indented-row indent label label-markup rest)
     (gnc:html-table-append-row!
      table
      (append (if disable-indenting? '() (make-list-thunk indent make-narrow-cell))
-             (list (gnc:make-html-table-cell/size 1 (if disable-indenting? 1 (- maxindent indent)) label))
+             (list (if label-markup
+                       (gnc:make-html-table-cell/size/markup 1 (if disable-indenting? 1 (- maxindent indent)) label-markup label)
+                       (gnc:make-html-table-cell/size 1 (if disable-indenting? 1 (- maxindent indent)) label)))
              rest)))
 
   (define (monetary+ . monetaries)
@@ -311,10 +313,11 @@
 
   ;; header ASSET/LIABILITY etc
   (add-indented-row 0
-                    (gnc:make-html-text (gnc:html-markup-b title))
+                    title
+                    "total-label-cell"
                     (map
                      (lambda (header)
-                       (gnc:make-html-text (gnc:html-markup-b header)))
+                       (gnc:make-html-table-cell/markup "total-number-cell" header))
                      list-of-headers))
 
   (let loop ((accountlist accountlist))
@@ -340,6 +343,7 @@
                    (or (not depth-limit) (<= lvl-curr depth-limit)))
               (add-indented-row lvl-curr
                                 (string-append curr-label (if (null? curr-descendants-list) "" "+"))
+                                "text-cell"
                                 (map
                                  (lambda (col-idx)
                                    (gnc:make-html-table-cell/markup
@@ -385,10 +389,10 @@
                                    (or (not depth-limit) (<= lvl depth-limit))
                                    (list-ref labels lvl)))
                           (add-indented-row lvl
-                                            (gnc:make-html-text
-                                             (gnc:html-markup-b
-                                              "Total for "
-                                              (list-ref labels lvl)))
+                                            (string-append
+                                             "Total for "
+                                             (list-ref labels lvl))
+                                            "total-label-cell"
                                             (map
                                              (lambda (level-subtotal)
                                                (gnc:make-html-table-cell/markup
