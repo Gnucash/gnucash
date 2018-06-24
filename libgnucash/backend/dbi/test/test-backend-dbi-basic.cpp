@@ -53,6 +53,7 @@ extern "C"
 }
 /* For test_conn_index_functions */
 #include "../gnc-backend-dbi.hpp"
+#include "../gnc-backend-dbi.h"
 extern "C"
 {
 #include <unittest-support.h>
@@ -89,6 +90,7 @@ static void
 setup (Fixture* fixture, gconstpointer pData)
 {
     gchar* url = (gchar*)pData;
+    gnc_module_init_backend_dbi();
     fixture->session = qof_session_new ();
     /* When running distcheck the source directory is read-only, which
      * prevents creating the lock file. Force the session to get
@@ -109,7 +111,7 @@ setup (Fixture* fixture, gconstpointer pData)
 static void
 setup_memory (Fixture* fixture, gconstpointer pData)
 {
-    QofSession* session = qof_session_new ();
+    QofSession* session = nullptr;
     gchar* url = (gchar*)pData;
     QofBook* book;
     Account* root, *acct1, *acct2;
@@ -118,6 +120,7 @@ setup_memory (Fixture* fixture, gconstpointer pData)
     gnc_commodity_table* table;
     gnc_commodity* currency;
 
+    gnc_module_init_backend_dbi();
     session = qof_session_new ();
     book = qof_session_get_book (session);
     root = gnc_book_get_root_account (book);
@@ -166,6 +169,7 @@ setup_memory (Fixture* fixture, gconstpointer pData)
 static void
 setup_business (Fixture* fixture, gconstpointer pData)
 {
+    gnc_module_init_backend_dbi ();
     QofSession* session = qof_session_new ();
     gchar* url = (gchar*)pData;
     QofBook* book = qof_session_get_book (session);
@@ -349,6 +353,7 @@ teardown (Fixture* fixture, gconstpointer pData)
     g_free (lockfile);
     g_slist_free_full (fixture->hdlrs, test_free_log_handler);
     test_clear_error_list ();
+    gnc_module_finalize_backend_dbi();
 }
 
 #if 0 //temporarily disable test pending refactor.
