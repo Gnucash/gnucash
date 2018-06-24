@@ -1,7 +1,151 @@
 Version history:
 ------- -------
-3.1    - 29 April 2018
-The second release of the 3.0 stable series.
+3.2 - 25 June 2018
+The third release of the 3.x stable series.
+
+The following bugs have been fixed:
+    Bug 787401 - Test Report System - Report Definition.
+    Bug 794617 - Can't compile with -DWITH_GNUCASH=NO due to scm-gnome-utils.
+    Bug 795101 - Scroll Bar in Reconcile Window Floats in and covers the check
+        boxes.
+    Bug 795247 - datepicker broken in Persian.
+             GnuCash passes dates as integer y/m/d without using locale-specific
+             formats, so we need to strip out 'E' and 'O' from the format when
+             scanning dates or determining separators in gnc-date. None of '-',
+             'E', or 'O' are supported by boost (and '-' causes errors), so
+             strip them out from formatters in gnc-datetime as well.
+    Bug 795253 - Have problems input Chinese.
+    Bug 795272 - QIF importer causes application crash if action is invalid.
+    Bug 795276 - Invalid date on price stops file from being parsed.
+    Bug 795362 - Special variable "i" not parsed in function calls.
+             Due to balance tests with insane random values.
+    Bug 795471 - Impossible to Edit Budget Unless Maximized.
+    Bug 795519 - Credit card payment after reconciliation.
+    Bug 795666 - Backslash '\' in Description field spoils CSV Import without
+        helpful error message.
+    Bug 795831 - When read only threshold set, dates are silently changed.
+             Display a message box informing the user of the change.
+    Bug 795944 - Cannot store change to Business Suppliers data.
+    Bug 796079 - Repeatable Crash in Tax Report Options.
+    Bug 796081 - Tax Schedule Report - An error occurred while running the report.
+    Bug 796083 - Reconcile Selection Doesn't Work Anymore.
+    Bug 796117 - Connecting 3.1 to an existing mysql db drops all data
+             Provide a backup recovery function that instead of dropping
+             primaries and restoring backups merges the primaries and
+             backups. This should handle a worst-case safe-save failure where
+             the backup tables don't have a complete set of rows for some
+             reason.
+    Bug 796256 - Main Window stays hidden when starting after closing main
+        window while minimized.
+    Bug 796369 - Notes lost or perhaps just not displaying when using SQLite
+        backend.
+             This bug caused data loss if you saved your SQLite3 database to a
+             different file or database.  The problem is that in SQLite3 (though
+             not in MySQL or PgSQL) the subquery ((SELECT DISTINCT guid FROM
+             transactions)) (note the double parentheses) returns only the first
+             guid in the subquery's results.  Some transactions are loaded by
+             special queries and those queries are also used to retrieve the
+             transaction's slots so they weren't affected.
+    Bug 796398 - Restrict accelerator keys to valid date range.
+    Bug 796409 - Incorrect Current Value for Stocks.
+             Missed calculating the value in the register summary bar.
+    Bug 796423 - Cannot Input Chinese, seems does not work with other IME too.
+             Toggles not in view with all rows selected weren't being redrawn.
+    Bug 796484 - csv import: iostream error
+             Unfortunately it turns out that we can't use filestreams because
+             they can't take path arguments containing Unicode on Windows.
+    Bug 796527 - invalid currency on scheduled transactions.
+             * Don't even check for price/exchange rate on template
+               transactions, there's no point.
+             * Check all split commodities are valid, abort transaction
+               creation if not.
+             * If the template transaction's currency isn't used by any of the
+               splits set the new transaction's currency to the first-found
+               currency if there is one, otherwise to the first-found commodity.
+    Bug 796537 - Transaction Report cannot sort by "num".
+    Bug 796586 - QIF import incorrectly converts unicode characters from UTF8
+        encoded file.
+    Bug 796595 - QIF Import Select Account button to add a new account is
+        labled gnc-account-new but should be New.
+    Bug 796600 - stock split cash-in-lieu income/asset labels backwards.
+    Bug 796614 - Reconciliation report contains incorrect transactions.
+    Bug 796638 - configuration not properly saved for CSV transactions import
+        form.
+
+
+Other repairs or enhancements not marked as bugs:
+    Transaction report improvements:
+      * Performance: Do all filtering ops before sorting.
+      * Move the options summary before the subtotals table.
+      * New unit tests
+      * Enable computing averages in subtotal grid.
+      * Generate the subtotal grid only if the primary sort key enables
+        subtotals.
+      * Fix subtotal grid to support multiple commodities.
+      * New filters.
+      * Much cleaning and refactoring of the internals.
+    Cache the num-split-action book option to avoid thousands of KVP queries
+      for the same value when loading a register.
+    Create a static string for book option KVPs to save an extra malloc/free
+      on old compilers without small-string optimization.
+    Add tooltip support for register cells.
+    New unit tests for the balance sheet report and invoices.
+    Consolidate charting code into a single module.
+    Removed an incomplete and abandoned C implementation of QIF import.
+    Restored libsecret support that had been left out of CMake.
+    Replace old-style html style attributes with css.
+    Modify emitted html to be parseable by the Guile SXML module for testing.
+    Remove support for long-gone gtkhtml renderer.
+    Clean up code generating html tables.
+    Ensure full precision of doubles is saved to SQL.
+      std::iostream's operator<<(double) uses only 6 digits of precision by
+      default.
+    Make float database operations more consistent, working around dbd-sqlite3's
+      failure to support doubles (dbd-sqlite3, not sqlite3 itself).
+    Prevent crash in gnc-tree-view.c: When getting information from the state
+      file, protect against the key not having a '_' which is used to split the
+      string.
+    Add the full account name to the saved register settings
+      If you need to delete the layout for a register in the settings file,
+      the only thing identifying it is the account guid. To make it easier
+      for humans, add the full account name also.
+    When register pages are restored it uses the full account name.
+      When register pages are restored, the account is found from the full
+      name so if the separator changes it will fail. Instead, also save the
+      account guid and use that as default to find the account falling back
+      to the full name.
+    Fix misplaced try block that caused unhandled exception if year out of
+      range.
+    Fix permanent storage of vendor details: Since the data types did not match
+      for the billterms and taxtable, those references/guids were not saved to
+      the database.
+    Update invoice reports to use totals calculate by gncInvoice. This should
+      give a consistent representation of invoice data across the application.
+    Ensure gncEntry rounding is consistent. Internally calculated values in the
+      entry are never rounded. Consumers of gncEntry's calculated values can
+      request them either rounded or not. Next use a pragmatical approach for
+      calculating values on invoices based on the entry values: do the rounding
+      such that we never create an unbalanced transaction while posting.
+      That means:
+      * round each entry's net value before summing them in net total
+      * accumulate all tax totals on invoice level per tax account before
+        rounding
+      and round before before summing them in a global tax total
+      Hopefully this will catch a few more rounding issues in this area.
+      A complete solution can only offered if we allow users to manually correct
+      tax entries. This requires changes to user interface and data format so
+      that's not going to happen in gnucash 3.x.
+    Use Scheme SRFI-64 test framework for new Scheme unit tests.
+    New compilers (gcc-8.0 and Xcode 9) bring new warnings, so several fixups to
+      mollify them.
+    Lowercase all cmake commands for better readability.
+    Metadate migration (2.6.x->3.x) fixes for Windows.
+    Ensure timezone is set correctly in FreeBSD.
+
+Updated Translations: Dutch
+
+3.1 - 29 April 2018
+The second release of the 3.x stable series.
 
 The following bugs have been fixed:
     Bug 118391 - Long currency names untranslated
@@ -153,8 +297,8 @@ Known Problems:
     Invalid input into a formula (Debit/Credit) field is inconsistent
         depending on the input. Bug 795614.
 
-3.0    - 1 April 2018
-The first release of the 3.0 stable series.
+3.0 - 1 April 2018
+The first release of the 3.x stable series.
 New Features for Users:
     The headline item for this release is that GnuCash now uses the
         Gtk+-3.0 Toolkit and the WebKit2Gtk API. This change was forced
