@@ -71,9 +71,7 @@
 
 (define-public (foreignstyle item) 
   ;; apply styling for amount in foreign currency
-  (if css?
-    (string-append "<span class=\"foreign\">" item "</span>"))
-    (string-append "<small><i>" item "</i></small>"))
+  (string-append "<span class=\"foreign\">" item "</span>"))
 
 ;; Convert any x into something printable as HTML
 (define-public (dump x) (escape-html (object->string x)))

@@ -1614,21 +1614,30 @@ void CsvImpTransAssist::preview_refresh_table ()
 void
 CsvImpTransAssist::preview_refresh ()
 {
+    // Cache skip settings. Updating the widgets one by one
+    // triggers a callback the transfers all skip widgets'
+    // values to settings. So by the time the next widget value
+    // is to be set, that widget's 'new' setting has already been replaced by
+    // its old setting preventing us from using it here sensibly.
+    // Another solution might have been to delay callbacks from running
+    // until after all values are set.
+    auto skip_start_lines = tx_imp->skip_start_lines();
+    auto skip_end_lines = tx_imp->skip_end_lines();
+    auto skip_alt_lines = tx_imp->skip_alt_lines();
+
     // Set start row
     auto adj = gtk_spin_button_get_adjustment (start_row_spin);
     gtk_adjustment_set_upper (adj, tx_imp->m_parsed_lines.size());
-    gtk_spin_button_set_value (start_row_spin,
-            tx_imp->skip_start_lines());
+    gtk_spin_button_set_value (start_row_spin, skip_start_lines);
 
     // Set end row
     adj = gtk_spin_button_get_adjustment (end_row_spin);
     gtk_adjustment_set_upper (adj, tx_imp->m_parsed_lines.size());
-    gtk_spin_button_set_value (end_row_spin,
-            tx_imp->skip_end_lines());
+    gtk_spin_button_set_value (end_row_spin, skip_end_lines);
 
     // Set Alternate rows
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(skip_alt_rows_button),
-            tx_imp->skip_alt_lines());
+            skip_alt_lines);
 
     // Set multi-split indicator
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(multi_split_cbutton),

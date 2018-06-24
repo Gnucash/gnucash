@@ -69,6 +69,7 @@ set (report_system_SCHEME_3
     html-linechart.scm
     html-style-info.scm
     html-style-sheet.scm
+    html-anytag.scm
     html-table.scm
     html-text.scm
     html-utilities.scm

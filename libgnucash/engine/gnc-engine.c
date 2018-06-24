@@ -74,9 +74,9 @@ gnc_engine_init_part2()
     } libs[] =
     {
 #if defined( HAVE_DBI_DBI_H )
-        { "dbi", "gncmod-backend-dbi", TRUE },
+        { "", "gncmod-backend-dbi", TRUE },
 #endif
-        { "xml", "gncmod-backend-xml", TRUE },
+        { "", "gncmod-backend-xml", TRUE },
         { NULL, NULL, FALSE }
     }, *lib;
 

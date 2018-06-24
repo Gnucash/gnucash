@@ -1156,7 +1156,10 @@
 	   ;; add the account balance in the respective commodity
 	   (gnc:make-html-table-cell/markup
 	    "number-cell" bal)
-	   "&nbsp;"
+           (let ((spacer (gnc:make-html-table-cell)))
+             (gnc:html-table-cell-set-style!
+              spacer "td" 'attribute (list "style" "min-width: 1em"))
+             spacer)
 	   ;; add the account balance in the report commodity
 	   (gnc:make-html-table-cell/markup
 	    "number-cell" (exchange-fn bal report-commodity))

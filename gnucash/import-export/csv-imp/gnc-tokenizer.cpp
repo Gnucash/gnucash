@@ -15,6 +15,8 @@
 
 extern "C" {
 #include <go-glib-extras.h>
+#include <glib.h>
+#include <glib/gstdio.h>
 }
 
 std::unique_ptr<GncTokenizer> gnc_tokenizer_factory(GncImpFileFormat fmt)
@@ -43,18 +45,16 @@ GncTokenizer::load_file(const std::string& path)
         return;
 
     m_imp_file_str = path;
+    char *raw_contents;
+    size_t raw_length;
+    GError *error = nullptr;
 
-    std::ifstream in;
-    in.exceptions ( std::ifstream::failbit | std::ifstream::badbit );
-    in.open (m_imp_file_str.c_str(), std::ios::in | std::ios::binary);
+    if (!g_file_get_contents(path.c_str(), &raw_contents, &raw_length, &error))
+      throw std::ifstream::failure(error->message);
 
-    m_raw_contents.clear();
-    in.seekg(0, std::ios::end);
-    m_raw_contents.resize(in.tellg());
-    in.seekg(0, std::ios::beg);
-    in.read(&m_raw_contents[0], m_raw_contents.size());
-    in.close();
-
+    m_raw_contents = raw_contents;
+    g_free(raw_contents);
+    
     // Guess encoding, user can override if needed later on.
     const char *guessed_enc = NULL;
     guessed_enc = go_guess_encoding (m_raw_contents.c_str(),

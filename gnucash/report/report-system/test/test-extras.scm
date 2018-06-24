@@ -32,8 +32,6 @@
 (export tbl-ref)
 (export tbl-ref->number)
 
-(export gnc:options->sxml)
-
 ;;
 ;; Table parsing
 ;;
@@ -85,15 +83,17 @@
 (define (tbl-ref->number tbl row-index column-index)
   (string->number (car (tbl-ref tbl row-index column-index))))
 
-
-(define (gnc:options->sxml uuid options prefix test-title)
+(export gnc:options->render)
+(define (gnc:options->render uuid options prefix test-title)
   ;; uuid - str to locate report uuid
-  ;; options object -> sxml tree
+  ;; options - gnc:options object
   ;; prefix - str describing tests e.g. "test-trep"
   ;; test-title: str describing each unit test e.g. "test disable filter"
   ;;
-  ;; This function abstracts the report renderer. It also catches XML
-  ;; parsing errors, dumping the options changed.
+  ;; outputs: string
+  ;;
+  ;; This function abstracts the report renderer, producing a string. It
+  ;; can be useful for reports which may not valid XML.
   ;;
   ;; It also dumps the render into /tmp/XX-YY.html where XX is the
   ;; test prefix and YY is the test title.
@@ -105,23 +105,33 @@
          (document (renderer report))
          (sanitize-char (lambda (c)
                           (if (or (char-alphabetic? c)
-                                  (char-numeric? c)) c #\-)))
-         (fileprefix (string-map sanitize-char prefix))
-         (filename (string-map sanitize-char test-title)))
+                                  (char-numeric? c)) c #\-))))
     (gnc:html-document-set-style-sheet! document (gnc:report-stylesheet report))
     (if test-title
         (gnc:html-document-set-title! document test-title))
-    (let* ((filename (format #f "/tmp/~a-~a.html" fileprefix filename))
-           (render (gnc:html-document-render document)))
-      (with-output-to-file filename
+    (let ((render (gnc:html-document-render document)))
+      (with-output-to-file (format #f "/tmp/~a-~a.html"
+                                   (string-map sanitize-char prefix)
+                                   (string-map sanitize-char test-title))
         (lambda ()
           (display render)))
-      (catch 'parser-error
-        (lambda () (xml->sxml render))
-        (lambda (k . args)
-          (format #t "*** XML error. see render output at ~a\n~a"
-                  filename (gnc:html-render-options-changed options #t))
-          (throw k args))))))
+      render)))
+
+(export gnc:options->sxml)
+(define (gnc:options->sxml uuid options prefix test-title)
+  ;; This functions calls the above gnc:options->render to render
+  ;; report.  Then report is converted to SXML.  It catches XML
+  ;; parsing errors, dumping the options changed.
+  (let ((render (gnc:options->render uuid options prefix test-title)))
+    (catch 'parser-error
+      (lambda () (xml->sxml render
+                            #:trim-whitespace? #t
+                            #:entities '((nbsp . "\xa0"))))
+      (lambda (k . args)
+        (format #t "*** XML error: ~a ~a\n~a"
+                prefix test-title
+                (gnc:html-render-options-changed options #t))
+        (throw k args)))))
 
 (export sxml->table-row-col)
 (define (sxml->table-row-col sxml tbl row col)

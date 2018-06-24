@@ -98,6 +98,8 @@ void gnc_widget_set_style_context (GtkWidget *widget, const char *gnc_class);
 \********************************************************************/
 gboolean gnc_draw_arrow_cb (GtkWidget *widget, cairo_t *cr, gpointer direction);
 
+gboolean gnc_gdate_in_valid_range (GDate *test_date, gboolean warn);
+
 gboolean gnc_handle_date_accelerator (GdkEventKey *event,
                                       struct tm *tm,
                                       const char *date_str);

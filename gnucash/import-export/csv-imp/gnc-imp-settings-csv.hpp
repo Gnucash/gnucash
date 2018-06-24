@@ -55,6 +55,7 @@ struct CsvImportSettings
             m_date_format {0}, m_currency_format {0},
             m_skip_start_lines{0}, m_skip_end_lines{0}, m_skip_alt_lines (false),
             m_separators {","}, m_load_error {false} { }
+    virtual ~CsvImportSettings() = default;
 
 /** Save the gathered widget properties to a key File.
  *

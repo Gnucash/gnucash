@@ -39,6 +39,7 @@
 
 ;; copied from transaction.scm
 (define trep-uuid "2fe3b9833af044abb929a88d5a59620f")
+(define reconcile-uuid "e45218c6d76f11e7b5ef0800277ef320")
 
 ;; Explicitly set locale to make the report output predictable
 (setlocale LC_ALL "C")
@@ -64,6 +65,7 @@
   (test-begin "transaction.scm")
   (null-test)
   (trep-tests)
+  (reconcile-tests)
   ;; (test-end) must be run as the last function, it will
   ;; return #f if any of the tests have failed.
   (test-end "transaction.scm"))
@@ -115,6 +117,7 @@
               (list "USD Bank")
               (list "Wallet"))
         (list "Income" (list (cons 'type ACCT-TYPE-INCOME)))
+        (list "Income-GBP" (list (cons 'type ACCT-TYPE-INCOME)))
         (list "Expenses" (list (cons 'type ACCT-TYPE-EXPENSE)))
         (list "Liabilities" (list (cons 'type ACCT-TYPE-LIABILITY)))
         (list "Equity" (list (cons 'type ACCT-TYPE-EQUITY)))
@@ -134,6 +137,7 @@
          (usd-bank (cdr (assoc "USD Bank" account-alist)))
          (wallet (cdr (assoc "Wallet" account-alist)))
          (income (cdr (assoc "Income" account-alist)))
+         (gbp-income (cdr (assoc "Income-GBP" account-alist)))
          (expense (cdr (assoc "Expenses" account-alist)))
          (liability (cdr (assoc "Liabilities" account-alist)))
          (equity (cdr (assoc "Equity" account-alist)))
@@ -168,12 +172,21 @@
        (xaccAccountSetCommodity (cdr pair) (gnc-default-report-currency)))
      account-alist)
 
-    ;; Here we set foreign banks' currencies
+    ;; Here we set foreign currencies
+
+    (gnc-commodity-set-user-symbol foreign2 "#")
+
     (with-account
      gbp-bank
      (lambda ()
        (xaccAccountSetCode gbp-bank "01-GBP")
        (xaccAccountSetCommodity gbp-bank foreign2)))
+
+    (with-account
+     gbp-income
+     (lambda ()
+       (xaccAccountSetCode gbp-income "01-GBP")
+       (xaccAccountSetCommodity gbp-income foreign2)))
 
     (with-account
      usd-bank
@@ -239,7 +252,9 @@
     ;; run in modern times, otherwise these transactions will be mixed
     ;; up with the old transactions above. The year end net bank balance
     ;; should be (* 12 (+ 103 109 -22)) = $2280.
+    ;; there will also be a #51 income monthly, tested at end of file
     (for-each (lambda (m)
+                (env-transfer env 08 (1+ m) YEAR gbp-income gbp-bank 51 #:description "#51 income")
                 (env-transfer env 03 (1+ m) YEAR income bank  103 #:description "$103 income")
                 (env-transfer env 15 (1+ m) YEAR bank expense  22 #:description "$22 expense")
                 (env-transfer env 09 (1+ m) YEAR income bank  109 #:description "$109 income"))
@@ -264,9 +279,6 @@
       (test-equal "default headers"
         default-headers
         (get-row-col sxml 0 #f))
-      (test-equal "last row has same number of cols as header"
-        (length default-headers)
-        (length (get-row-col sxml -1 #f)))
       (test-equal "grand total present"
         '("Grand Total")
         (get-row-col sxml -1 1))
@@ -287,7 +299,7 @@
       (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'monthly)
       (let ((sxml (options->sxml options "test basic column headers, and original currency")))
         (test-equal "default headers, indented, includes common-currency"
-          '(" " " " "Date" "Num" "Description" "Memo/Notes" "Account" "Amount (USD)" "Amount")
+          '("Date" "Num" "Description" "Memo/Notes" "Account" "Amount (USD)" "Amount")
           (get-row-col sxml 0 #f))
         (test-equal "grand total present, no blank cells, and is $2,280 in both common-currency and original-currency"
           '("Grand Total" "$2,280.00" "$2,280.00")
@@ -502,7 +514,7 @@
                  (string-null? (string-trim-both reconcile-date-string))))
            (get-row-col sxml #f 2)))
         (test-equal "reconciled status subtotal"
-          (list "Total For Unreconciled" " " " " " " " " " " " " " " " " "$0.00" " ")
+          (list "Total For Unreconciled" "$0.00")
           (get-row-col sxml -3 #f))
         )
 
@@ -556,12 +568,6 @@
       (set-option! options "Display" "Other Account Name" #t)
       (set-option! options "Display" "Other Account Code" #t)
       (let* ((sxml (options->sxml options "dual column")))
-        ;; Note. It's difficult to test converted monetary
-        ;; amounts. Although I've set transfers from USD/GBP, the
-        ;; transfers do not update the pricedb automatically,
-        ;; therefore converted amounts are displayed as $0. We are not
-        ;; testing the pricedb so it does not seem fair to test its
-        ;; output here too.
         (test-equal "dual amount headers"
           (list "Date" "Num" "Description" "Memo/Notes" "Account" "Transfer from/to"
                 "Debit (USD)" "Credit (USD)" "Debit" "Credit")
@@ -572,15 +578,18 @@
         (test-equal "Other Account Name and Code displayed"
           (list "01-GBP GBP Bank")
           (get-row-col sxml 7 6))
-        (test-equal "GBP original currency totals = £4"
+        (test-equal "GBP original currency totals = #4"
           (list 4.0)
           (map str->num (get-row-col sxml 5 10)))
-        (test-assert "USD original currency totals = $5"
+        (test-assert "USD original currency totals = $5 (tests pricedb)"
           (equal?
            (list 5.0)
+           (map str->num (get-row-col sxml 4 8))
            (map str->num (get-row-col sxml 9 7))
            (map str->num (get-row-col sxml 9 9))))
-        )
+        (test-equal "USD grand totals are correct (tests pricedb)"
+          (list "Grand Total" "$0.00" "$5.00")
+          (get-row-col sxml 11 #f)))
 
       ;; This test group will test sign reversal strategy. We will
       ;; display all transactions in the 1969-1970 series, sorted by
@@ -629,10 +638,10 @@
                 "Debit (USD)" "Credit (USD)" "Debit" "Credit")
           (get-row-col sxml 0 #f))
         (test-equal "dual amount column, grand totals available"
-          (list "Grand Total" " " " " " " " " "$2,280.00" "$2,280.00")
+          (list "Grand Total" "$2,280.00" "$2,280.00")
           (get-row-col sxml -1 #f))
         (test-equal "dual amount column, first transaction correct"
-          (list "01/03/18" "$103 income" "Root.Asset.Bank" "\n" "$103.00" " " "\n" "$103.00" " ")
+          (list "01/03/18" "$103 income" "Root.Asset.Bank" "$103.00" "$103.00")
           (get-row-col sxml 1 #f)))
       )
 
@@ -728,13 +737,13 @@
       (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'quarterly)
       (set-option! options "Sorting" "Show Informal Debit/Credit Headers" #t)
       (set-option! options "Sorting" "Show Account Description" #t)
-      (let* ((sxml (options->sxml options "sorting=date")))
+      (let* ((sxml (options->sxml options "sorting=date, friendly headers")))
         (test-equal "expense acc friendly headers"
-          '("\n" "Expenses" "\n" "Expense" "\n" "Rebate")
-          (get-row-col sxml 47 #f))
+          '("Expenses" "Expense" "Rebate")
+          (get-row-col sxml 69 #f))
         (test-equal "income acc friendly headers"
-          '("\n" "Income" "\n" "Charge" "\n" "Income")
-          (get-row-col sxml 69 #f)))
+          '("Income" "Charge" "Income")
+          (get-row-col sxml 91 #f)))
 
       (set-option! options "Accounts" "Accounts" (list bank))
       (set-option! options "Display" "Totals" #f)
@@ -781,7 +790,7 @@
     (test-begin "subtotal table")
 
     (let ((options (default-testing-options)))
-      (set-option! options "Accounts" "Accounts" (list bank income expense))
+      (set-option! options "Accounts" "Accounts" (list bank gbp-bank gbp-income income expense))
       (set-option! options "General" "Start Date" (cons 'relative 'start-cal-year))
       (set-option! options "General" "End Date" (cons 'relative 'end-cal-year))
       (set-option! options "Display" "Subtotal Table" #t)
@@ -792,35 +801,46 @@
       (let ((sxml (options->sxml options "subtotal table")))
         (test-equal "summary bank-row is correct"
           (list "Bank" "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$190.00"
-                "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$2,280.00")
+                "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$2,280.00" "$190.00")
           (get-row-col sxml 1 #f))
+        (test-equal "summary gbp bank-row is correct"
+          (list "GBP Bank" "#51.00" "#51.00" "#51.00" "#51.00" "#51.00" "#51.00"
+                "#51.00" "#51.00" "#51.00" "#51.00" "#51.00" "#51.00" "#612.00" "#51.00")
+          (get-row-col sxml 2 #f))
         (test-equal "summary expense-row is correct"
           (list "Expenses" "$22.00" "$22.00" "$22.00" "$22.00" "$22.00" "$22.00"
-                "$22.00" "$22.00" "$22.00" "$22.00" "$22.00" "$22.00" "$264.00")
-          (get-row-col sxml 2 #f))
+                "$22.00" "$22.00" "$22.00" "$22.00" "$22.00" "$22.00" "$264.00" "$22.00")
+          (get-row-col sxml 3 #f))
         (test-equal "summary income-row is correct"
           (list "Income" "-$212.00" "-$212.00" "-$212.00" "-$212.00" "-$212.00"
                 "-$212.00" "-$212.00" "-$212.00" "-$212.00" "-$212.00" "-$212.00"
-                "-$212.00" "-$2,544.00")
-          (get-row-col sxml 3 #f))
+                "-$212.00" "-$2,544.00" "-$212.00")
+          (get-row-col sxml 4 #f))
+        (test-equal "summary gbp income-row is correct"
+          (list "Income-GBP" "-#51.00" "-#51.00" "-#51.00" "-#51.00" "-#51.00" "-#51.00"
+                "-#51.00" "-#51.00" "-#51.00" "-#51.00" "-#51.00" "-#51.00" "-#612.00" "-#51.00")
+          (get-row-col sxml 5 #f))
+        (test-equal "summary gbp total-row is correct"
+          (list "Grand Total" "#0.00" "#0.00")
+          (get-row-col sxml 6 #f))
         (test-equal "summary total-row is correct"
-          (list "Grand Total" "$0.00")
-          (get-row-col sxml 4 #f)))
+          (list "$0.00" "$0.00")
+          (get-row-col sxml 7 #f)))
 
       (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 01 01 1969)))
       (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 31 12 1970)))
       (let ((sxml (options->sxml options "sparse subtotal table")))
         (test-equal "sparse summary-table - row 1"
-          (list "Bank" "$29.00" "-$5.00" "-$23.00" "$1.00")
+          (list "Bank" "$29.00" "-$5.00" "-$23.00" "$1.00" "$0.33")
           (get-row-col sxml 1 #f))
         (test-equal "sparse summary-table - row 2"
-          (list "Expenses" "$16.00" "$15.00" "$31.00")
+          (list "Expenses" "$16.00" "$15.00" "$31.00" "$10.33")
           (get-row-col sxml 2 #f))
         (test-equal "sparse summary-table - row 3"
-          (list "Income" "-$29.00" "-$29.00")
+          (list "Income" "-$29.00" "-$29.00" "-$9.67")
           (get-row-col sxml 3 #f))
         (test-equal "sparse summary-table - row 4"
-          (list "Grand Total" "$3.00")
+          (list "Grand Total" "$3.00" "$1.00")
           (get-row-col sxml 4 #f))
         (test-equal "sparse summary-table - col 1"
           (list "Bank" "Expenses" "Income" "Grand Total")
@@ -836,6 +856,58 @@
           (get-row-col sxml #f 4))
         (test-equal "sparse summary-table - col 5"
           (list "$1.00" "$31.00" "-$29.00" "$3.00")
-          (get-row-col sxml #f 5))))
+          (get-row-col sxml #f 5))
+        (test-equal "sparse summary-table - col 6 average"
+          (list "$0.33" "$10.33" "-$9.67" "$1.00")
+          (get-row-col sxml #f 6))))
     (test-end "subtotal table")
     ))
+
+(define (reconcile-tests)
+  (let* ((env (create-test-env))
+         (account-alist (env-create-account-structure-alist env structure))
+         (bank (cdr (assoc "Bank" account-alist)))
+         (income (cdr (assoc "Income" account-alist)))
+         (liability (cdr (assoc "Liabilities" account-alist)))
+         (expense (cdr (assoc "Expenses" account-alist)))
+         (YEAR (gnc:time64-get-year (gnc:get-today)))
+         )
+
+    (define (options->sxml options test-title)
+      (gnc:options->sxml reconcile-uuid options "test-reconcile" test-title))
+
+    (define (default-testing-options)
+      (let ((options (gnc:make-report-options reconcile-uuid)))
+        (set-option! options "Accounts" "Accounts" (list bank liability))
+        options))
+
+    ;; old transactions for testing reconcile date options
+    (env-transfer env 01 01 1970 bank expense       5   #:description "desc-1" #:num "trn1" #:memo "memo-3")
+    (env-transfer env 31 12 1969 income bank       10   #:description "desc-2" #:num "trn2" #:void-reason "void" #:notes "notes3")
+    (env-transfer env 31 12 1969 income bank       29   #:description "desc-3" #:num "trn3"
+                  #:reconcile (cons #\c (gnc-dmy2time64 01 03 1970)))
+    (env-transfer env 01 02 1970 bank expense      15   #:description "desc-4" #:num "trn4" #:notes "notes2" #:memo "memo-1")
+    (env-transfer env 10 01 1970 liability expense 10   #:description "desc-5" #:num "trn5" #:void-reason "any")
+    (env-transfer env 10 01 1970 liability expense 11   #:description "desc-6" #:num "trn6" #:notes "notes1")
+    (env-transfer env 10 02 1970 bank expense       8   #:description "desc-7" #:num "trn7" #:notes "notes1" #:memo "memo-2"
+                  #:reconcile (cons #\y (gnc-dmy2time64 01 03 1970)))
+
+
+    (let* ((options (default-testing-options)))
+      (let ((sxml (options->sxml options "null test")))
+        (test-assert "sxml"
+          sxml))
+      (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 01 03 1970)))
+      (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 31 03 1970)))
+      (let ((sxml (options->sxml options "filter reconcile date")))
+        (test-equal "test reconciled amounts = $8"
+          (list "Total For Reconciled" "$8.00")
+          (get-row-col sxml 3 #f))
+        (test-equal "test cleared amounts = $29"
+          (list "Total For Cleared" "$29.00")
+          (get-row-col sxml 6 #f))
+        (test-equal "test unreconciled amounts = $31"
+          (list "Total For Unreconciled" "$31.00")
+          (get-row-col sxml 11 #f))
+        sxml)
+      )))

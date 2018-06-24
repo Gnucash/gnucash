@@ -135,7 +135,7 @@ set_time64 (xmlNodePtr node, GncOrder* order,
               void (*func) (GncOrder* order, time64 tt))
 {
     time64 time = dom_tree_to_time64 (node);
-    if (!dom_tree_valid_time64 (time, node->name)) return FALSE;
+    if (!dom_tree_valid_time64 (time, node->name)) time = 0;
     func (order, time);
     return TRUE;
 }

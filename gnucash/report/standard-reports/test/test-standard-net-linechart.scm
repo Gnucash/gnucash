@@ -18,29 +18,213 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (debug-set! stack 50000)
-;(use-modules (gnucash report new-reports reports-2))
 
 (use-modules (gnucash gnc-module))
-
-;; Guile 2 needs to load external modules at compile time
-;; otherwise the N_ syntax-rule won't be found at compile time
-;; causing the test to fail
-;; That's what the wrapper below is meant for:
-(define-syntax-rule (begin-for-syntax form ...)
-      (eval-when (load compile eval expand) (begin form ...)))
-
-(begin-for-syntax (gnc:module-load "gnucash/report/report-system" 0))
+(gnc:module-begin-syntax (gnc:module-load "gnucash/report/report-system" 0))
 (use-modules (gnucash engine))
 (use-modules (sw_engine))
-
+(use-modules (ice-9 format))
+(use-modules (ice-9 streams))
+(use-modules (srfi srfi-1))
+(use-modules (gnucash report stylesheets))
+(use-modules (gnucash engine test test-extras))
 (use-modules (gnucash report report-system test test-extras))
-
-(use-modules (gnucash report standard-reports test test-generic-net-linechart))
-(use-modules (gnucash report standard-reports net-linechart))
+(use-modules (gnucash report standard-reports net-charts))
 
 ;; Explicitly set locale to make the report output predictable
 (setlocale LC_ALL "C")
 
 (define (run-test)
   (run-net-asset-test net-worth-linechart-uuid))
+
+(define (set-option report page tag value)
+  ((gnc:option-setter (gnc:lookup-option (gnc:report-options report)
+					 page tag)) value))
+
+
+(define constructor (record-constructor <report>))
+
+(define (run-net-asset-test asset-report-uuid)
+  (and (two-txn-test asset-report-uuid)
+       (two-txn-test-2 asset-report-uuid)
+
+       (null-test asset-report-uuid)
+       (single-txn-test asset-report-uuid)))
+
+;; Just prove that the report exists.
+(define (null-test uuid)
+  (let* ((template (gnc:find-report-template uuid))
+	 (options (gnc:make-report-options uuid))
+	 (report (constructor uuid "bar" options
+				     #t #t #f #f ""))
+	 (renderer (gnc:report-template-renderer template)))
+
+    (let ((doc (renderer report)))
+      (gnc:html-document-set-style-sheet! doc
+					  (gnc:report-stylesheet report))
+      ;;(format #t "render: ~a\n" (gnc:html-document-render doc #f))
+      #t
+      )))
+
+(define (single-txn-test uuid)
+  (let* ((template (gnc:find-report-template uuid))
+	 (options (gnc:make-report-options uuid))
+	 (report (constructor uuid "bar" options
+				     #t #t #f #f ""))
+	 (renderer (gnc:report-template-renderer template)))
+    (let* ((env (create-test-env))
+	   (my-asset-account (env-create-root-account env ACCT-TYPE-ASSET
+						      (gnc-default-report-currency)))
+	   (my-expense-account (env-create-root-account env ACCT-TYPE-EXPENSE
+							(gnc-default-report-currency)))
+	   (my-income-account (env-create-root-account env ACCT-TYPE-INCOME
+						       (gnc-default-report-currency))))
+      (env-create-transaction env
+			       (gnc:get-start-this-month)
+			       my-income-account
+			       my-asset-account
+			       -1/1)
+      (begin
+	(set-option report gnc:pagename-display "Show table" #t)
+	(set-option report gnc:pagename-general "Start Date"
+		    (cons 'absolute (gnc:get-start-this-month)))
+	(set-option report gnc:pagename-general "End Date"
+		    (cons 'absolute (gnc:get-start-this-month)))
+	(set-option report gnc:pagename-general "Step Size" 'DayDelta)
+	(set-option report gnc:pagename-general "Price Source" 'pricedb-nearest)
+	(set-option report gnc:pagename-general "Report's currency"  (gnc-default-report-currency))
+	(set-option report gnc:pagename-accounts "Accounts" (list my-asset-account))
+
+	(let ((doc (renderer report)))
+	  (gnc:html-document-set-style-sheet! doc
+					      (gnc:report-stylesheet report))
+	  (let* ((result (gnc:html-document-render doc #f))
+		 (tbl (stream->list
+		       (pattern-streamer "<tr>"
+					 (list (list "<td>([0-9][0-9])/([0-9][0-9])/([0-9][0-9])</td>"
+						     1 2 3)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1))
+					 result))))
+	    (and (= 1 (tbl-ref->number tbl 0 1))
+			 (= 0 (tbl-ref->number tbl 0 2))
+			 (= 1 (tbl-ref->number tbl 0 3))
+			 (= 1 (tbl-row-count tbl))
+			 (= 4 (tbl-column-count tbl)))))))))
+
+
+(define (two-txn-test uuid)
+  (let* ((template (gnc:find-report-template uuid))
+	 (options (gnc:make-report-options uuid))
+	 (report (constructor uuid "bar" options
+				     #t #t #f #f ""))
+	 (renderer (gnc:report-template-renderer template)))
+    (let* ((env (create-test-env))
+	   (my-asset-account (env-create-root-account env ACCT-TYPE-ASSET
+						      (gnc-default-report-currency)))
+	   (my-expense-account (env-create-root-account env ACCT-TYPE-EXPENSE
+							(gnc-default-report-currency)))
+	   (my-income-account (env-create-root-account env ACCT-TYPE-INCOME
+						       (gnc-default-report-currency)))
+	   (date-0 (gnc:get-start-this-month))
+	   (date-1 (gnc:time64-next-day date-0))
+	   (date-2 (gnc:time64-next-day date-1)))
+      (env-create-transaction env
+			       date-1
+			       my-income-account
+			       my-asset-account
+			       -1/1)
+      (env-create-transaction env
+			       date-2
+			       my-income-account
+			       my-asset-account
+			       -5/1)
+      (begin
+	(set-option report gnc:pagename-display "Show table" #t)
+	(set-option report gnc:pagename-general "Start Date" (cons 'absolute date-0))
+	(set-option report gnc:pagename-general "End Date" (cons 'absolute date-2))
+	(set-option report gnc:pagename-general "Step Size" 'DayDelta)
+	(set-option report gnc:pagename-general "Price Source" 'pricedb-nearest)
+	(set-option report gnc:pagename-general "Report's currency"  (gnc-default-report-currency))
+	(set-option report gnc:pagename-accounts "Accounts" (list my-asset-account))
+
+	(let ((doc (renderer report)))
+	  (gnc:html-document-set-style-sheet! doc
+					      (gnc:report-stylesheet report))
+	  (let* ((result (gnc:html-document-render doc #f))
+		 (tbl (stream->list
+		       (pattern-streamer "<tr>"
+					 (list (list "<td>([0-9][0-9])/([0-9][0-9])/([0-9][0-9])</td>"
+						     1 2 3)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1))
+					 result))))
+	    (and (every (lambda (row)
+				  (and (equal? (second row) (fourth row))
+				       (= 0 (string->number (car (third row))))))
+				tbl)
+			 (= 0 (tbl-ref->number tbl 0 1))
+			 (= 1 (tbl-ref->number tbl 1 1))
+			 (= 6 (tbl-ref->number tbl 2 1))
+			 (= 3 (tbl-row-count tbl))
+			 (= 4 (tbl-column-count tbl)))))))))
+
+
+(define (two-txn-test-2 uuid)
+  (let* ((template (gnc:find-report-template uuid))
+	 (options (gnc:make-report-options uuid))
+	 (report (constructor uuid "bar" options
+				     #t #t #f #f ""))
+	 (renderer (gnc:report-template-renderer template)))
+    (let* ((env (create-test-env))
+	   (my-asset-account (env-create-root-account env ACCT-TYPE-ASSET
+						      (gnc-default-report-currency)))
+	   (my-liability-account (env-create-root-account env ACCT-TYPE-LIABILITY
+						      (gnc-default-report-currency)))
+	   (my-expense-account (env-create-root-account env ACCT-TYPE-EXPENSE
+							(gnc-default-report-currency)))
+	   (my-income-account (env-create-root-account env ACCT-TYPE-INCOME
+						       (gnc-default-report-currency)))
+	   (date-0 (gnc:get-start-this-month))
+	   (date-1 (gnc:time64-next-day date-0))
+	   (date-2 (gnc:time64-next-day date-1)))
+      (env-create-transaction env date-1 my-income-account my-asset-account -1/1)
+      (env-create-transaction env date-1 my-expense-account my-liability-account -1/1)
+      (env-create-transaction env date-2 my-income-account my-asset-account -5/1)
+      (env-create-transaction env date-2 my-expense-account my-liability-account -5/1)
+      (begin
+	(set-option report gnc:pagename-display "Show table" #t)
+	(set-option report gnc:pagename-general "Start Date" (cons 'absolute date-0))
+	(set-option report gnc:pagename-general "End Date" (cons 'absolute date-2))
+	(set-option report gnc:pagename-general "Step Size" 'DayDelta)
+	(set-option report gnc:pagename-general "Price Source" 'pricedb-nearest)
+	(set-option report gnc:pagename-general "Report's currency"  (gnc-default-report-currency))
+	(set-option report gnc:pagename-accounts "Accounts" (list my-asset-account my-liability-account))
+
+	(let ((doc (renderer report)))
+	  (gnc:html-document-set-style-sheet! doc
+					      (gnc:report-stylesheet report))
+	  (let* ((result (gnc:html-document-render doc #f))
+		 (tbl (stream->list
+		       (pattern-streamer "<tr>"
+					 (list (list "<td>([0-9][0-9])/([0-9][0-9])/([0-9][0-9])</td>"
+						     1 2 3)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
+					       (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1))
+					 result))))
+	    (and (every (lambda (row)
+				  (and (= (string->number (car (fourth row)))
+					  (+ (string->number (car (second row)))
+					     (string->number (car (third row)))))
+				       ;; txns added in pairs, so assets = liability
+				       (equal? (second row) (third row))))
+				tbl)
+			 (= 0 (tbl-ref->number tbl 0 1))
+			 (= 1 (tbl-ref->number tbl 1 1))
+			 (= 6 (tbl-ref->number tbl 2 1))
+			 (= 3 (tbl-row-count tbl))
+			 (= 4 (tbl-column-count tbl)))))))))
 

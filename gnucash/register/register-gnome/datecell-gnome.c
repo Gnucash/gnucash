@@ -41,6 +41,7 @@
 
 #include "datecell.h"
 #include "dialog-utils.h"
+#include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnucash-date-picker.h"
 #include "gnucash-item-edit.h"
@@ -92,44 +93,46 @@ static gboolean gnc_date_cell_enter (BasicCell *bcell,
 static void gnc_date_cell_leave (BasicCell *bcell);
 
 static gboolean
-check_readonly_threshold (const gchar *datestr, GDate *d)
+check_readonly_threshold (const gchar *datestr, GDate *d, gboolean warn)
 {
     GDate *readonly_threshold = qof_book_get_autoreadonly_gdate(gnc_get_current_book());
     if (g_date_compare(d, readonly_threshold) < 0)
     {
-#if 0
-    gchar *dialog_msg = _("The entered date of the new transaction is "
-                  "older than the \"Read-Only Threshold\" set for "
-                  "this book. This setting can be changed in "
-                  "File -> Properties -> Accounts.");
-    gchar *dialog_title = _("Cannot store a transaction at this date");
-    GtkWidget *dialog = gtk_message_dialog_new(NULL,
-                           0,
-                           GTK_MESSAGE_ERROR,
-                           GTK_BUTTONS_OK,
-                           "%s", dialog_title);
-    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-                         "%s", dialog_msg);
-    gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy(dialog);
-#endif
-    g_warning("Entered date %s is before the \"auto-read-only threshold\";"
-          " resetting to the threshold.", datestr);
+        if (warn)
+        {
+            gchar *dialog_msg = _("The entered date of the transaction is "
+                          "older than the \"Read-Only Threshold\" set for "
+                          "this book. This setting can be changed in "
+                          "File -> Properties -> Accounts, resetting to the threshold.");
+            gchar *dialog_title = _("Cannot store a transaction at this date");
+            GtkWidget *dialog = gtk_message_dialog_new(gnc_ui_get_main_window (NULL),
+                                   0,
+                                   GTK_MESSAGE_ERROR,
+                                   GTK_BUTTONS_OK,
+                                   "%s", dialog_title);
+            gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
+                                 "%s", dialog_msg);
+            gtk_dialog_run (GTK_DIALOG(dialog));
+            gtk_widget_destroy (dialog);
 
-    // Reset the date to the threshold date
-    g_date_set_julian (d, g_date_get_julian (readonly_threshold));
-    g_date_free (readonly_threshold);
-    return TRUE;
+//        g_warning("Entered date %s is before the \"auto-read-only threshold\";"
+//              " resetting to the threshold.", datestr);
+        }
+        // Reset the date to the threshold date
+        g_date_set_julian (d, g_date_get_julian (readonly_threshold));
+        g_date_free (readonly_threshold);
+        return TRUE;
     }
     g_date_free (readonly_threshold);
     return FALSE;
 }
 
 static void
-gnc_parse_date (struct tm *parsed, const char * datestr)
+gnc_parse_date (struct tm *parsed, const char * datestr, gboolean warn)
 {
     int day, month, year;
     gboolean use_autoreadonly = qof_book_uses_autoreadonly(gnc_get_current_book());
+    GDate *test_date;
 
     if (!parsed) return;
     if (!datestr) return;
@@ -139,10 +142,20 @@ gnc_parse_date (struct tm *parsed, const char * datestr)
         // Couldn't parse date, use today
         struct tm tm_today;
 
-    memset (&tm_today, 0, sizeof (struct tm));
+        memset (&tm_today, 0, sizeof (struct tm));
         gnc_tm_get_today_start (&tm_today);
         day = tm_today.tm_mday;
         month = tm_today.tm_mon + 1;
+        year = tm_today.tm_year + 1900;
+    }
+
+    test_date = g_date_new_dmy (day, month, year);
+
+    if (!gnc_gdate_in_valid_range (test_date, warn))
+    {
+        struct tm tm_today;
+        memset (&tm_today, 0, sizeof (struct tm));
+        gnc_tm_get_today_start (&tm_today);
         year = tm_today.tm_year + 1900;
     }
 
@@ -150,15 +163,15 @@ gnc_parse_date (struct tm *parsed, const char * datestr)
     // older than the threshold.
     if (use_autoreadonly)
     {
-        GDate *d = g_date_new_dmy(day, month, year);
-    if (check_readonly_threshold (datestr, d))
-    {
-        day = g_date_get_day (d);
-        month = g_date_get_month (d);
-        year = g_date_get_year (d);
+        g_date_set_dmy (test_date, day, month, year);
+        if (check_readonly_threshold (datestr, test_date, warn))
+        {
+            day = g_date_get_day (test_date);
+            month = g_date_get_month (test_date);
+            year = g_date_get_year (test_date);
+        }
     }
-    g_date_free (d);
-    }
+    g_date_free (test_date);
 
     parsed->tm_mday = day;
     parsed->tm_mon  = month - 1;
@@ -452,7 +465,7 @@ gnc_date_cell_commit (DateCell *cell)
     if (!cell)
         return;
 
-    gnc_parse_date (&(box->date), cell->cell.value);
+    gnc_parse_date (&(box->date), cell->cell.value, FALSE);
 
     qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH,
                              box->date.tm_mday,
@@ -581,9 +594,8 @@ gnc_date_cell_modify_verify (BasicCell *_cell,
     /* keep a copy of the new value */
     if (accept)
     {
-
         gnc_basic_cell_set_value_internal (&cell->cell, newval);
-        gnc_parse_date (&(box->date), newval);
+        gnc_parse_date (&(box->date), newval, FALSE);
 
         if (!box->date_picker)
             return;
@@ -710,7 +722,7 @@ gnc_date_cell_get_date_gdate (DateCell *cell, GDate *date)
     if (!cell || !date)
         return;
 
-    gnc_parse_date (&(box->date), cell->cell.value);
+    gnc_parse_date (&(box->date), cell->cell.value, FALSE);
 
     g_date_set_dmy(date,
                    box->date.tm_mday,
@@ -724,7 +736,8 @@ gnc_date_cell_get_date (DateCell *cell, time64 *time)
     PopBox *box = cell->cell.gui_private;
     if (!cell || !time)
         return;
-    gnc_parse_date (&(box->date), cell->cell.value);
+
+    gnc_parse_date (&(box->date), cell->cell.value, TRUE);
     *time = gnc_mktime (&box->date);
 }
 
@@ -735,7 +748,7 @@ gnc_date_cell_set_value_internal (BasicCell *_cell, const char *str)
     PopBox *box = cell->cell.gui_private;
     char buff[DATE_BUF];
 
-    gnc_parse_date (&(box->date), str);
+    gnc_parse_date (&(box->date), str, FALSE);
 
     qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH,
                              box->date.tm_mday,

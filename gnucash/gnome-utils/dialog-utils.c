@@ -39,6 +39,7 @@
 #include "gnc-path.h"
 #include "gnc-engine.h"
 #include "gnc-euro.h"
+#include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-prefs.h"
 #include "gnc-combott.h"
@@ -326,6 +327,55 @@ gnc_draw_arrow_cb (GtkWidget *widget, cairo_t *cr, gpointer direction)
 
 
 gboolean
+gnc_gdate_in_valid_range (GDate *test_date, gboolean warn)
+{
+    gboolean use_autoreadonly = qof_book_uses_autoreadonly (gnc_get_current_book());
+    GDate *max_date = g_date_new_dmy (1,1,10000);
+    GDate *min_date;
+    gboolean ret = FALSE;
+    gboolean max_date_ok = FALSE;
+    gboolean min_date_ok = FALSE;
+
+    if (use_autoreadonly)
+        min_date = qof_book_get_autoreadonly_gdate (gnc_get_current_book());
+    else
+        min_date = g_date_new_dmy (1,1,1400);
+
+    // max date
+    if (g_date_compare (max_date, test_date) > 0)
+        max_date_ok = TRUE;
+
+    // min date
+    if (g_date_compare (min_date, test_date) <= 0)
+        min_date_ok = TRUE;
+
+    if (use_autoreadonly && warn)
+        ret = max_date_ok;
+    else
+        ret = min_date_ok & max_date_ok;
+
+    if (warn && !ret)
+    {
+        gchar *dialog_msg = _("The entered date is out of the range "
+                  "01/01/1400 - 31/12/9999, resetting to this year");
+        gchar *dialog_title = _("Date out of range");
+        GtkWidget *dialog = gtk_message_dialog_new (gnc_ui_get_main_window (NULL),
+                               0,
+                               GTK_MESSAGE_ERROR,
+                               GTK_BUTTONS_OK,
+                               "%s", dialog_title);
+        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
+                             "%s", dialog_msg);
+        gtk_dialog_run (GTK_DIALOG(dialog));
+        gtk_widget_destroy (dialog);
+    }
+    g_date_free (max_date);
+    g_date_free (min_date);
+    return ret;
+}
+
+
+gboolean
 gnc_handle_date_accelerator (GdkEventKey *event,
                              struct tm *tm,
                              const char *date_str)
@@ -368,7 +418,9 @@ gnc_handle_date_accelerator (GdkEventKey *event,
             g_date_add_years (&gdate, 1);
         else
             g_date_add_days (&gdate, 1);
-        g_date_to_struct_tm (&gdate, tm);
+
+        if (gnc_gdate_in_valid_range (&gdate, FALSE))
+            g_date_to_struct_tm (&gdate, tm);
         return TRUE;
 
     case GDK_KEY_minus:
@@ -402,7 +454,9 @@ gnc_handle_date_accelerator (GdkEventKey *event,
             g_date_subtract_years (&gdate, 1);
         else
             g_date_subtract_days (&gdate, 1);
-        g_date_to_struct_tm (&gdate, tm);
+
+        if (gnc_gdate_in_valid_range (&gdate, FALSE))
+            g_date_to_struct_tm (&gdate, tm);
         return TRUE;
 
     default:
@@ -472,8 +526,8 @@ gnc_handle_date_accelerator (GdkEventKey *event,
     default:
         return FALSE;
     }
-
-    g_date_to_struct_tm (&gdate, tm);
+    if (gnc_gdate_in_valid_range (&gdate, FALSE))
+        g_date_to_struct_tm (&gdate, tm);
 
     return TRUE;
 }

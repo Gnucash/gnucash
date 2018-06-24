@@ -132,7 +132,7 @@
 )
 
 ;; Adds CSS style information to an html document
-(define (add-css-information-to-doc options ssdoc)
+(define (add-css-information-to-doc options ssdoc doc)
     (let*
         ((opt-val 
             (lambda (section name)
@@ -173,6 +173,7 @@
                 "td.total-number-cell { " total-number-cell-font-info " }\n"
                 "td.total-label-cell { " total-label-cell-font-info " }\n"
                 "td.centered-label-cell { text-align: center; " centered-label-cell-font-info " }\n"
+                (or (gnc:html-document-style-text doc) "")
             )
         )
     )

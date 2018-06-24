@@ -1615,6 +1615,8 @@ gnc_file_quit (void)
 {
     QofSession *session;
 
+    if (!gnc_current_session_exist ())
+        return;
     gnc_set_busy_cursor (NULL, TRUE);
     session = gnc_get_current_session ();
 
@@ -1640,6 +1642,10 @@ gnc_file_set_shutdown_callback (GNCShutdownCB cb)
 gboolean
 gnc_file_save_in_progress (void)
 {
-    QofSession *session = gnc_get_current_session();
-    return (qof_session_save_in_progress(session) || save_in_progress > 0);
+    if (gnc_current_session_exist())
+    {
+        QofSession *session = gnc_get_current_session();
+        return (qof_session_save_in_progress(session) || save_in_progress > 0);
+    }
+    return FALSE;
 }

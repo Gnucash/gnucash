@@ -16,6 +16,7 @@
 ;;   and enable multiple data columns
 ;; - add support for indenting for better grouping
 ;; - add defaults suitable for a reconciliation report
+;;   including alternative date filtering strategy
 ;; - add subtotal summary grid
 ;; - by default, exclude closing transactions from the report
 ;;
@@ -117,7 +118,7 @@ in the Options panel."))
 
 (define SORTKEY-INFORMAL-HEADERS (list 'account-name 'account-code))
 
-(define sortkey-list
+(define (sortkey-list split-action?)
   ;;
   ;; Defines the different sorting keys, as an association-list
   ;; together with the subtotal functions. Each entry:
@@ -198,8 +199,7 @@ in the Options panel."))
                                    (cons 'tip (_ "Sort by description."))
                                    (cons 'renderer-fn (lambda (s) (xaccTransGetDescription (xaccSplitGetParent s))))))
 
-        (if (and (gnc-current-session-exist)
-                 (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
+        (if split-action?
             (cons 'number    (list (cons 'sortkey (list SPLIT-ACTION))
                                    (cons 'split-sortvalue (lambda (a) (xaccSplitGetAction a)))
                                    (cons 'text (_ "Number/Action"))
@@ -419,20 +419,20 @@ Credit Card, and Income accounts."))
       (keylist-get-info keylist (car item) 'tip)))
    keylist))
 
-(define (SUBTOTAL-ENABLED? sortkey)
+(define (SUBTOTAL-ENABLED? sortkey split-action?)
   ;; this returns whether sortkey *can* be subtotalled/grouped.
   ;; it checks whether a renderer-fn is defined.
-  (keylist-get-info sortkey-list sortkey 'renderer-fn))
+  (keylist-get-info (sortkey-list split-action?) sortkey 'renderer-fn))
 
-(define (CUSTOM-SORTING? sortkey)
+(define (CUSTOM-SORTING? sortkey split-action?)
   ;; sortkey -> bool
   ;;
   ;; this returns which sortkeys which *must* use the custom sorter.
   ;; it filters whereby a split-sortvalue is defined (i.e. the splits
   ;; can be compared according to their 'sortvalue) but the QofQuery
   ;; sortkey is not defined (i.e. their 'sortkey is #f).
-  (and (keylist-get-info sortkey-list sortkey 'split-sortvalue)
-       (not (keylist-get-info sortkey-list sortkey 'sortkey))))
+  (and (keylist-get-info (sortkey-list split-action?) sortkey 'split-sortvalue)
+       (not (keylist-get-info (sortkey-list split-action?) sortkey 'sortkey))))
 
 ;;
 ;; Set defaults for reconcilation report
@@ -447,10 +447,44 @@ Credit Card, and Income accounts."))
   (gnc:option-set-value (gnc:lookup-option options gnc:pagename-general optname-startdate) (cons 'relative 'start-prev-quarter))
   (gnc:option-set-value (gnc:lookup-option options gnc:pagename-general optname-enddate)   (cons 'relative 'today))
   (gnc:option-set-value (gnc:lookup-option options gnc:pagename-display (N_ "Reconciled Date")) #t)
-  (gnc:option-set-value (gnc:lookup-option options gnc:pagename-display (N_ "Running Balance")) #t)
+  (gnc:option-set-value (gnc:lookup-option options gnc:pagename-display (N_ "Running Balance")) #f)
   (gnc:option-set-value (gnc:lookup-option options gnc:pagename-display (N_ "Memo")) #f)
+  (gnc:option-make-internal! options gnc:pagename-display "Running Balance")
   options)
 
+(define reconcile-report-instructions
+  (gnc:make-html-text
+   (_ "The reconcile report is designed to be similar to the formal reconciliation tool.
+Please select the account from Report Options. Please note the dates specified in the options
+will apply to the Reconciliation Date.")
+   (gnc:html-markup-br)
+   (gnc:html-markup-br)))
+
+;; if split is reconciled, retrieve its reconciled date; if not yet reconciled, return #f
+(define (split->reconcile-date split)
+  (and (char=? (xaccSplitGetReconcile split) #\y)
+       (xaccSplitGetDateReconciled split)))
+
+(define (reconcile-report-calculated-cells options)
+  (define (opt-val section name)
+    (gnc:option-value (gnc:lookup-option options section name)))
+  (letrec
+      ((split-amount (lambda (s) (if (gnc:split-voided? s)
+                                     (xaccSplitVoidFormerAmount s)
+                                     (xaccSplitGetAmount s))))
+       (split-currency (lambda (s) (xaccAccountGetCommodity (xaccSplitGetAccount s))))
+       (amount (lambda (s) (gnc:make-gnc-monetary (split-currency s) (split-amount s))))
+       (debit-amount (lambda (s) (and (positive? (split-amount s))
+                                      (amount s))))
+       (credit-amount (lambda (s) (and (not (positive? (split-amount s)))
+                                       (gnc:monetary-neg (amount s))))))
+    ;; similar to default-calculated-cells but disable dual-subtotals.
+    (list (vector (_ "Funds In")
+                  debit-amount #f #t #f
+                  (const ""))
+          (vector (_ "Funds Out")
+                  credit-amount #f #t #f
+                  (const "")))))
 ;;
 ;; Default Transaction Report
 ;;
@@ -620,7 +654,7 @@ be excluded from periodic reporting.")
   ;; Sorting options
 
   (let ((ascending-choice-list (keylist->vectorlist ascending-list))
-        (key-choice-list (keylist->vectorlist sortkey-list))
+        (key-choice-list (keylist->vectorlist (sortkey-list BOOK-SPLIT-ACTION)))
         (date-subtotal-choice-list (keylist->vectorlist date-subtotal-list))
         (prime-sortkey 'account-name)
         (prime-sortkey-subtotal-true #t)
@@ -629,10 +663,10 @@ be excluded from periodic reporting.")
 
     (define (apply-selectable-by-name-sorting-options)
       (let* ((prime-sortkey-enabled (not (eq? prime-sortkey 'none)))
-             (prime-sortkey-subtotal-enabled (SUBTOTAL-ENABLED? prime-sortkey))
+             (prime-sortkey-subtotal-enabled (SUBTOTAL-ENABLED? prime-sortkey BOOK-SPLIT-ACTION))
              (prime-date-sortingtype-enabled (member prime-sortkey DATE-SORTING-TYPES))
              (sec-sortkey-enabled (not (eq? sec-sortkey 'none)))
-             (sec-sortkey-subtotal-enabled (SUBTOTAL-ENABLED? sec-sortkey))
+             (sec-sortkey-subtotal-enabled (SUBTOTAL-ENABLED? sec-sortkey BOOK-SPLIT-ACTION))
              (sec-date-sortingtype-enabled (member sec-sortkey DATE-SORTING-TYPES)))
 
         (gnc-option-db-set-option-selectable-by-name
@@ -1006,17 +1040,17 @@ be excluded from periodic reporting.")
     (let ((sortkey (opt-val pagename-sorting optname-prime-sortkey)))
       (if (member sortkey DATE-SORTING-TYPES)
           (keylist-get-info date-subtotal-list (opt-val pagename-sorting optname-prime-date-subtotal) info)
-          (and (SUBTOTAL-ENABLED? sortkey)
+          (and (SUBTOTAL-ENABLED? sortkey BOOK-SPLIT-ACTION)
                (opt-val pagename-sorting optname-prime-subtotal)
-               (keylist-get-info sortkey-list sortkey info)))))
+               (keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) sortkey info)))))
 
   (define (secondary-get-info info)
     (let ((sortkey (opt-val pagename-sorting optname-sec-sortkey)))
       (if (member sortkey DATE-SORTING-TYPES)
           (keylist-get-info date-subtotal-list (opt-val pagename-sorting optname-sec-date-subtotal) info)
-          (and (SUBTOTAL-ENABLED? sortkey)
+          (and (SUBTOTAL-ENABLED? sortkey BOOK-SPLIT-ACTION)
                (opt-val pagename-sorting optname-sec-subtotal)
-               (keylist-get-info sortkey-list sortkey info)))))
+               (keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) sortkey info)))))
 
   (let* ((work-to-do (length splits))
          (work-done 0)
@@ -1048,11 +1082,11 @@ be excluded from periodic reporting.")
                (add-if (column-uses? 'reconciled-date)
                        (vector (_ "Reconciled Date")
                                (lambda (split transaction-row?)
-                                 (gnc:make-html-table-cell/markup
-                                  "date-cell"
-                                  (if (eqv? (xaccSplitGetReconcile split) #\y)
-                                      (qof-print-date (xaccSplitGetDateReconciled split))
-                                      "")))))
+                                 (let ((reconcile-date (split->reconcile-date split)))
+                                   (and reconcile-date
+                                        (gnc:make-html-table-cell/markup
+                                         "date-cell"
+                                         (qof-print-date reconcile-date)))))))
 
                (add-if (column-uses? 'num)
                        (vector (if (and BOOK-SPLIT-ACTION
@@ -1300,7 +1334,7 @@ be excluded from periodic reporting.")
                                   (gnc:make-html-text
                                    (gnc:html-markup-b
                                     ((vector-ref cell 5)
-                                     ((keylist-get-info sortkey-list sortkey 'renderer-fn) split))))))
+                                     ((keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) sortkey 'renderer-fn) split))))))
                         calculated-cells))
             (addto! row-contents (gnc:make-html-table-cell/size
                                   1 (+ right-indent width-left-columns width-right-columns) data)))
@@ -1309,8 +1343,7 @@ be excluded from periodic reporting.")
             (gnc:html-table-append-row/markup! table subheading-style (reverse row-contents)))))
 
     (define (add-subtotal-row subtotal-string subtotal-collectors subtotal-style level row col)
-      (let* ((row-contents '())
-             (left-indent (case level
+      (let* ((left-indent (case level
                             ((total) 0)
                             ((primary) primary-indent)
                             ((secondary) (+ primary-indent secondary-indent))))
@@ -1321,26 +1354,26 @@ be excluded from periodic reporting.")
                                                      gnc-commodity-equal)))
 
         (define (retrieve-commodity list-of-monetary commodity)
-          (if (null? list-of-monetary)
-              #f
-              (if (gnc-commodity-equal (gnc:gnc-monetary-commodity (car list-of-monetary)) commodity)
-                  (car list-of-monetary)
-                  (retrieve-commodity (cdr list-of-monetary) commodity))))
+          (find (lambda (mon) (gnc-commodity-equal commodity (gnc:gnc-monetary-commodity mon)))
+                list-of-monetary))
 
-        (define (add-first-column string)
+        (define (first-column string)
           (if export?
-              (begin
-                (addto! row-contents (gnc:make-html-table-cell/markup "total-label-cell" string))
-                (for-each (lambda (cell) (addto! row-contents cell))
-                          (gnc:html-make-empty-cells (+ right-indent width-left-columns -1))))
-              (addto! row-contents (gnc:make-html-table-cell/size/markup 1 (+ right-indent width-left-columns) "total-label-cell" string))))
+              (cons
+               (gnc:make-html-table-cell/markup "total-label-cell" string)
+               (gnc:html-make-empty-cells (+ right-indent width-left-columns -1)))
+              (list
+               (gnc:make-html-table-cell/size/markup 1 (+ right-indent width-left-columns) "total-label-cell" string))))
 
-        (define (add-columns commodity)
+        (define (data-columns commodity)
           (let loop ((merging? #f)
                      (last-column #f)
                      (columns columns)
-                     (merge-list merge-list))
-            (if (not (null? columns))
+                     (merge-list merge-list)
+                     (result '()))
+            (if (null? columns)
+                ;; we've processed all columns. return the (reversed) list of html-table-cells.
+                (reverse result)
                 (let* ((mon (retrieve-commodity (car columns) commodity))
                        (this-column (and mon (gnc:gnc-monetary-amount mon))))
                   (if (car merge-list)
@@ -1348,7 +1381,8 @@ be excluded from periodic reporting.")
                       (loop #t
                             this-column
                             (cdr columns)
-                            (cdr merge-list))
+                            (cdr merge-list)
+                            result)
                       (begin
                         (if merging?
                             ;; We're completing merge. Display debit-credit in correct column.
@@ -1360,38 +1394,39 @@ be excluded from periodic reporting.")
                                                               commodity (abs sum)))))
                                    (debit-col (and sum (positive? sum) sum-table-cell))
                                    (credit-col (and sum (not (positive? sum)) sum-table-cell)))
-                              (addto! row-contents (or debit-col ""))
-                              (addto! row-contents (or credit-col "")))
-                            ;; Default; not merging nor completed merge. Display monetary amount
-                            (addto! row-contents (gnc:make-html-table-cell/markup "total-number-cell" mon)))
-                        (loop #f
-                              #f
-                              (cdr columns)
-                              (cdr merge-list))))))))
+                              (loop #f
+                                    #f
+                                    (cdr columns)
+                                    (cdr merge-list)
+                                    (cons* (or credit-col "")
+                                           (or debit-col "")
+                                           result)))
+                            ;; Default; not merging nor completed merge. Just add amount to result.
+                            (loop #f
+                                  #f
+                                  (cdr columns)
+                                  (cdr merge-list)
+                                  (cons (gnc:make-html-table-cell/markup "total-number-cell" mon)
+                                        result)))))))))
 
-        ;; we only wish to add the first column into the grid.
-        (if (pair? columns)
-            (set! grid (grid-add grid row col (car columns))))
+        ;; take the first column of each commodity, add onto the subtotal grid
+        (set! grid (grid-add grid row col
+                             (map (lambda (commodity)
+                                    (retrieve-commodity (car columns) commodity))
+                                  list-of-commodities)))
 
-        ;;first row
-        (for-each (lambda (cell) (addto! row-contents cell))
-                  (gnc:html-make-empty-cells left-indent))
-        (add-first-column subtotal-string)
-        (add-columns (if (pair? list-of-commodities)
-                         (car list-of-commodities)
-                         #f)) ;to account for empty-row subtotals
-        (gnc:html-table-append-row/markup! table subtotal-style (reverse row-contents))
-
-        ;;subsequent rows
-        (if (pair? list-of-commodities)
-            (for-each (lambda (commodity)
-                        (set! row-contents '())
-                        (for-each (lambda (cell) (addto! row-contents cell))
-                                  (gnc:html-make-empty-cells left-indent))
-                        (add-first-column "")
-                        (add-columns commodity)
-                        (gnc:html-table-append-row/markup! table subtotal-style (reverse row-contents)))
-                      (cdr list-of-commodities)))))
+        ;; each commodity subtotal gets a separate line in the html-table
+        ;; each line comprises: indenting, first-column, data-columns
+        (let loop ((first-column-string subtotal-string)
+                   (list-of-commodities list-of-commodities))
+          (unless (null? list-of-commodities)
+            (gnc:html-table-append-row/markup!
+             table subtotal-style
+             (append
+              (gnc:html-make-empty-cells left-indent)
+              (first-column first-column-string)
+              (data-columns (car list-of-commodities))))
+            (loop "" (cdr list-of-commodities))))))
 
     (define (total-string str) (string-append (_ "Total For ") str))
 
@@ -1425,7 +1460,7 @@ be excluded from periodic reporting.")
 
     ;; generate account name, optionally with anchor to account register
     (define (render-account sortkey split anchor?)
-      (let* ((account ((keylist-get-info sortkey-list sortkey 'renderer-fn) split))
+      (let* ((account ((keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) sortkey 'renderer-fn) split))
              (name (account-namestring account
                                        (column-uses? 'sort-account-code)
                                        #t
@@ -1442,7 +1477,7 @@ be excluded from periodic reporting.")
 
     ;; generic renderer. retrieve renderer-fn which should return a str
     (define (render-generic sortkey split)
-      ((keylist-get-info sortkey-list sortkey 'renderer-fn) split))
+      ((keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) sortkey 'renderer-fn) split))
 
     (define (render-summary split level anchor?)
       (let ((sortkey (opt-val pagename-sorting
@@ -1690,17 +1725,17 @@ be excluded from periodic reporting.")
 ;; grid data structure
 (define (make-grid)
   '())
+(define (cell-match? cell row col)
+  (and (or (not row) (equal? row (vector-ref cell 0)))
+       (or (not col) (equal? col (vector-ref cell 1)))))
 (define (grid-get grid row col)    ; grid filter - get all row/col - if #f then retrieve whole row/col
   (filter
-   (lambda (cell)
-     (and (or (not row) (equal? row (vector-ref cell 0)))
-          (or (not col) (equal? col (vector-ref cell 1)))))
+   (lambda (cell) (cell-match? cell row col))
    grid))
 (define (grid-del grid row col)    ; grid filter - del all row/col - if #f then delete whole row/col - CAREFUL!
   (filter
    (lambda (cell)
-     (not (and (or (not row) (equal? row (vector-ref cell 0)))
-               (or (not col) (equal? col (vector-ref cell 1))))))
+     (not (cell-match? cell row col)))
    grid))
 (define (grid-rows grid)
   (delete-duplicates (map (lambda (cell) (vector-ref cell 0)) grid)))
@@ -1711,41 +1746,73 @@ be excluded from periodic reporting.")
   (set! grid (cons (vector row col data) grid)) ;add again. this is fine because the grid should
   grid)                                         ;never have duplicate data in the trep.
 (define (grid->html-table grid list-of-rows list-of-cols)
-  (define (make-table-cell row col)
+  (define row-average-enabled? (> (length list-of-cols) 1))
+  (define (monetary-div monetary divisor)
+    (and monetary
+         (let* ((amount (gnc:gnc-monetary-amount monetary))
+                (currency (gnc:gnc-monetary-commodity monetary))
+                (scu (gnc-commodity-get-fraction currency)))
+           (gnc:make-gnc-monetary
+            currency (gnc-numeric-convert (/ amount divisor) scu GNC-HOW-RND-ROUND)))))
+  (define (row->num-of-commodities row)
+    ;; for a row, find the maximum number of commodities being stored
+    (apply max
+           (map (lambda (col)
+                  (let ((cell (grid-get grid row col)))
+                    (if (null? cell) 0
+                        (length (vector-ref (car cell) 2)))))
+                (cons 'col-total list-of-cols))))
+  (define (make-table-cell row col commodity-idx divisor)
     (let ((cell (grid-get grid row col)))
-      (if (pair? cell)
-          (gnc:make-html-table-cell/markup "number-cell" (car (vector-ref (car cell) 2)))
-          "")))
-  (define (make-row row)
+      (if (null? cell) ""
+          (gnc:make-html-table-cell/markup "number-cell"
+                                           (monetary-div (list-ref-safe (vector-ref (car cell) 2) commodity-idx) divisor)))))
+  (define (make-row row commodity-idx)
     (append
-     (list (if (eq? row 'row-total) (_ "Grand Total") (cdr row)))
-     (map (lambda (col) (make-table-cell row col))
+     (list (cond
+            ((positive? commodity-idx) "")
+            ((eq? row 'row-total) (_ "Grand Total"))
+            (else (cdr row))))
+     (map (lambda (col) (make-table-cell row col commodity-idx 1))
           list-of-cols)
-     (list (make-table-cell row 'col-total))))
+     (list (make-table-cell row 'col-total commodity-idx 1))
+     (if row-average-enabled?
+         (list (make-table-cell row 'col-total commodity-idx (length list-of-cols)))
+         '())))
   (let ((table (gnc:make-html-table)))
     (gnc:html-table-set-caption! table optname-grid)
-    (gnc:html-table-set-col-headers! table (append (list "") (map cdr list-of-cols) (list (_ "Total"))))
+    (gnc:html-table-set-col-headers! table (append (list "") (map cdr list-of-cols) (list (_ "Total"))
+                                                   (if row-average-enabled? (list (_ "Average")) '())))
     (gnc:html-table-set-style! table "th"
                                'attribute (list "class" "column-heading-right"))
     (for-each
      (lambda (row)
-       (gnc:html-table-append-row! table (make-row row)))
-     list-of-rows)
-    (if (memq 'row-total (grid-rows grid))
-        (gnc:html-table-append-row! table (make-row 'row-total)))
+       (for-each (lambda (commodity-idx)
+                   (gnc:html-table-append-row! table (make-row row commodity-idx)))
+                 (iota (row->num-of-commodities row))))
+     (if (memq 'row-total (grid-rows grid))
+         (append list-of-rows '(row-total))
+         list-of-rows))
     table))
 
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Here comes the renderer function for this report.
 
 
-(define* (trep-renderer report-obj #:key custom-calculated-cells empty-report-message custom-split-filter)
+(define* (trep-renderer report-obj #:key custom-calculated-cells empty-report-message
+                        custom-split-filter split->date split->date-include-false?)
   ;; the trep-renderer is a define* function which, at minimum, takes the report object
   ;;
   ;; the optional arguments are:
   ;; #:custom-calculated-cells - a list of vectors to define customized data columns
-  ;; #:empty-report-message - a str which is displayed at the initial report opening
+  ;; #:empty-report-message - a str or html-object which is displayed at the initial report opening
   ;; #:custom-split-filter - a split->bool function to add to the split filter
+  ;; #:split->date - a split->time64 which overrides the default posted date filter
+  ;;     (see reconcile report)
+  ;; #:split->date-include-false? - addendum to above, specifies filter behaviour if
+  ;;     split->date returns #f. useful to include unreconciled splits in reconcile
+  ;;     report. it can be useful for alternative date filtering, e.g. filter by
+  ;;     transaction->invoice->payment date.
 
   (define options (gnc:report-options report-obj))
   (define (opt-val section name) (gnc:option-value (gnc:lookup-option options section name)))
@@ -1816,8 +1883,8 @@ be excluded from periodic reporting.")
                                 (not (eq? primary-date-subtotal 'none)))  ; until qof-query
                            (and (member secondary-key DATE-SORTING-TYPES) ; is upgraded
                                 (not (eq? secondary-date-subtotal 'none)))
-                           (or (CUSTOM-SORTING? primary-key)
-                               (CUSTOM-SORTING? secondary-key))))
+                           (or (CUSTOM-SORTING? primary-key BOOK-SPLIT-ACTION)
+                               (CUSTOM-SORTING? secondary-key BOOK-SPLIT-ACTION))))
          (infobox-display (opt-val gnc:pagename-general optname-infobox-display))
          (query (qof-query-create-for-splits)))
 
@@ -1827,12 +1894,12 @@ be excluded from periodic reporting.")
       ;; ascend? specifies whether ascending or descending
       (let* ((comparator-function
               (if (memq sortkey DATE-SORTING-TYPES)
-                  (let ((date (keylist-get-info sortkey-list sortkey 'split-sortvalue))
+                  (let ((date (keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) sortkey 'split-sortvalue))
                         (date-comparator (keylist-get-info date-subtotal-list date-subtotal-key 'date-sortvalue)))
                     (lambda (s)
                       (and date-comparator
                            (date-comparator (date s)))))
-                  (or (keylist-get-info sortkey-list sortkey 'split-sortvalue)
+                  (or (keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) sortkey 'split-sortvalue)
                       (lambda (s) #f))))
              (value-of-X (comparator-function split-X))
              (value-of-Y (comparator-function split-Y))
@@ -1883,7 +1950,8 @@ be excluded from periodic reporting.")
 
           (qof-query-set-book query (gnc-get-current-book))
           (xaccQueryAddAccountMatch query c_account_1 QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-          (xaccQueryAddDateMatchTT query #t begindate #t enddate QOF-QUERY-AND)
+          (if (not split->date)
+              (xaccQueryAddDateMatchTT query #t begindate #t enddate QOF-QUERY-AND))
           (case void-status
             ((non-void-only) (gnc:query-set-match-non-voids-only! query (gnc-get-current-book)))
             ((void-only)     (gnc:query-set-match-voids-only! query (gnc-get-current-book)))
@@ -1895,8 +1963,8 @@ be excluded from periodic reporting.")
           (if (not custom-sort?)
               (begin
                 (qof-query-set-sort-order query
-                                          (keylist-get-info sortkey-list primary-key 'sortkey)
-                                          (keylist-get-info sortkey-list secondary-key 'sortkey)
+                                          (keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) primary-key 'sortkey)
+                                          (keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) secondary-key 'sortkey)
                                           '())
                 (qof-query-set-sort-increasing query
                                                (eq? primary-order 'ascend)
@@ -1909,13 +1977,8 @@ be excluded from periodic reporting.")
 
           (qof-query-destroy query)
 
-          (if custom-sort?
-              (begin
-                (set! splits (stable-sort! splits date-comparator?))
-                (set! splits (stable-sort! splits secondary-comparator?))
-                (set! splits (stable-sort! splits primary-comparator?))))
-
           ;; Combined Filter:
+          ;; - include/exclude using split->date according to date options
           ;; - include/exclude splits to/from selected accounts
           ;; - substring/regex matcher for Transaction Description/Notes/Memo
           ;; - custom-split-filter, a split->bool function for derived reports
@@ -1926,7 +1989,12 @@ be excluded from periodic reporting.")
                                            (if transaction-matcher-regexp
                                                (regexp-exec transaction-matcher-regexp str)
                                                (string-contains str transaction-matcher)))))
-                            (and (case filter-mode
+                            (and (or (not split->date)                  ; #f = ignore custom date filter
+                                     (let ((date (split->date split)))  ; cache split->date time64 or #f.
+                                       (if date                         ; if a split->date exists,
+                                           (<= begindate date enddate)  ; then check for inclusion;
+                                           split->date-include-false?))); else behave according to parameter
+                                 (case filter-mode
                                    ((none) #t)
                                    ((include) (is-filter-member split c_account_2))
                                    ((exclude) (not (is-filter-member split c_account_2))))
@@ -1938,6 +2006,11 @@ be excluded from periodic reporting.")
                                      (custom-split-filter split))
                                  )))
                         splits))
+
+          (when custom-sort?
+            (set! splits (stable-sort! splits date-comparator?))
+            (set! splits (stable-sort! splits secondary-comparator?))
+            (set! splits (stable-sort! splits primary-comparator?)))
 
           (if (null? splits)
 
@@ -1968,7 +2041,15 @@ be excluded from periodic reporting.")
                             (qof-print-date begindate)
                             (qof-print-date enddate)))))
 
+                (if (eq? infobox-display 'always)
+                    (gnc:html-document-add-object!
+                     document
+                     (gnc:html-render-options-changed options)))
+
                 (if (and (opt-val gnc:pagename-display optname-grid)
+                         (if (memq primary-key DATE-SORTING-TYPES)
+                             (keylist-get-info date-subtotal-list primary-date-subtotal 'renderer-fn)
+                             (opt-val pagename-sorting optname-prime-subtotal))
                          (eq? (opt-val gnc:pagename-display (N_ "Amount")) 'single))
                     (let* ((generic<? (lambda (a b)
                                         (cond ((string? (car a)) (string<? (car a) (car b)))
@@ -1978,11 +2059,6 @@ be excluded from periodic reporting.")
                            (list-of-cols (stable-sort! (delete 'col-total (grid-cols grid)) generic<?)))
                       (gnc:html-document-add-object!
                        document (grid->html-table grid list-of-rows list-of-cols))))
-
-                (if (eq? infobox-display 'always)
-                    (gnc:html-document-add-object!
-                     document
-                     (gnc:html-render-options-changed options)))
 
                 (gnc:html-document-add-object! document table)))))
 
@@ -2001,7 +2077,13 @@ be excluded from periodic reporting.")
  'name (_ "Reconciliation Report")
  'report-guid "e45218c6d76f11e7b5ef0800277ef320"
  'options-generator reconcile-report-options-generator
- 'renderer trep-renderer)
+ ;; the renderer is the same as trep, however we're using a different split-date strategy.
+ ;; we're comparing reconcile date for inclusion, and if split is unreconciled, include it anyway.
+ 'renderer (lambda (rpt) (trep-renderer rpt
+                                        #:custom-calculated-cells reconcile-report-calculated-cells
+                                        #:split->date split->reconcile-date
+                                        #:split->date-include-false? #t
+                                        #:empty-report-message reconcile-report-instructions)))
 
 ;; Define the report.
 (gnc:define-report

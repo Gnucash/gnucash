@@ -36,7 +36,7 @@ add_definitions (-DHAVE_CONFIG_H)
 # Some settings are platform dependent. Let's define them per platform.
 if (WIN32)
     # Windows specific settings go here:
-    set (GNUCASH_RESOURCE_FILE gnucash.rc)
+    set (GNUCASH_RESOURCE_FILE ${CMAKE_CURRENT_BINARY_DIR}/gnucash.rc)
     configure_file(gnucash.rc.in gnucash.rc @ONLY NEWLINE_STYLE WIN32)
 
 else (WIN32)
@@ -188,6 +188,7 @@ if (MAC_INTEGRATION)
   file(APPEND ${ENV_FILE_OUT} "FONTCONFIG_FILE={GNC_HOME}/etc/fonts/fonts.conf\n")
   file(APPEND ${ENV_FILE_OUT} "OFX_DTD_PATH={GNC_HOME}/share/libofx/dtd\n")
   file(APPEND ${ENV_FILE_OUT} "GNC_DBD_DIR={SYS_LIB}/dbd\n")
+  file(APPEND ${ENV_FILE_OUT} "GTK_IM_MODULE_FILE={GNC_HOME}/lib/gtk-3.0/3.0.0/immodules.cache\n")
 endif()
 
 file(COPY ${BUILD_ENV_FILE_OUT}

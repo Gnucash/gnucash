@@ -130,7 +130,6 @@
 <meta http-equiv="content-type" content="text-html; charset=utf-8">
 <title><?scm:d coyname ?> <?scm:d reportname ?> <?scm:d (qof-print-date opt-date) ?></title>
 
-<?scm (if css? (begin ?>
 <link rel="stylesheet" href="<?scm:d opt-css-file ?>" type="text/css">
 <!-- Note that the stylesheet file is overridden by some options, i.e.
      opt-font-family and opt-font-size                                 -->
@@ -149,13 +148,9 @@
     <?scm )) ?>
   }
 </style>
-<?scm )) ?>
 
 </head>
 <body>
-<?scm (if (not css?) (begin ?>
-  <table border="0" cellpadding="16"><tr><td> <!-- hack for GTKHTML -->
-<?scm )) ?>
 <h3><?scm:d coyname ?></h3>
 <h2><?scm:d reportname ?> <?scm:d (qof-print-date opt-date) ?></h2>
 
@@ -313,10 +308,6 @@
 
 <br clear="both">
 <p><?scm:d opt-extra-notes ?>
-
-<?scm (if (not css?) (begin ?>
-  </table> <!-- hack for GTKHTML -->
-<?scm )) ?>
 
 </body>
 </html>

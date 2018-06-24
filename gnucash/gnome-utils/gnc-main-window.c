@@ -762,15 +762,15 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
         g_warning("invalid number of values for group %s key %s",
                   window_group, WINDOW_POSITION);
     }
-// This does not do any thing ?
-//    else if ((pos[0] + (geom ? geom[0] : 0) < 0) ||
-//             (pos[0] > gdk_screen_width()) ||
-//             (pos[1] + (geom ? geom[1] : 0) < 0) ||
-//             (pos[1] > gdk_screen_height()))
-//    {
-//    g_debug("position %dx%d, size%dx%d is offscreen; will not move",
-//	    pos[0], pos[1], geom[0], geom[1]);
-//    }
+    /* Prevent restoring coordinates if this would move the window off-screen */
+    else if ((pos[0] + (geom ? geom[0] : 0) < 0) ||
+             (pos[0] > gdk_screen_width()) ||
+             (pos[1] + (geom ? geom[1] : 0) < 0) ||
+             (pos[1] > gdk_screen_height()))
+    {
+        g_debug("position %dx%d, size%dx%d is offscreen; will not move",
+                pos[0], pos[1], geom[0], geom[1]);
+    }
     else
     {
         gtk_window_move(GTK_WINDOW(window), pos[0], pos[1]);
@@ -1232,7 +1232,8 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
         _("If you don't save, changes from the past %d days and %d hours will be discarded.");
     time64 oldest_change;
     gint minutes, hours, days;
-
+    if (!gnc_current_session_exist())
+        return FALSE;
     session = gnc_get_current_session();
     book = qof_session_get_book(session);
     filename = qof_session_get_url(session);
@@ -1363,14 +1364,17 @@ static gboolean
 gnc_main_window_quit(GncMainWindow *window)
 {
     QofSession *session;
-    gboolean needs_save, do_shutdown;
-
-    session = gnc_get_current_session();
-    needs_save = qof_book_session_not_saved(qof_session_get_book(session)) &&
-                 !gnc_file_save_in_progress();
-    do_shutdown = !needs_save ||
-                  (needs_save && !gnc_main_window_prompt_for_save(GTK_WIDGET(window)));
-
+    gboolean needs_save, do_shutdown = TRUE;
+    if (gnc_current_session_exist())
+    {
+        session = gnc_get_current_session();
+        needs_save =
+            qof_book_session_not_saved(qof_session_get_book(session)) &&
+            !gnc_file_save_in_progress();
+        do_shutdown = !needs_save ||
+            (needs_save &&
+             !gnc_main_window_prompt_for_save(GTK_WIDGET(window)));
+    }
     if (do_shutdown)
     {
         g_timeout_add(250, gnc_main_window_timed_quit, NULL);
@@ -3758,10 +3762,12 @@ gnc_quartz_should_quit (GtkosxApplication *theApp, GncMainWindow *window)
     QofSession *session;
     gboolean needs_save;
 
-    if (!gnc_main_window_all_finish_pending() ||
-            gnc_file_save_in_progress())
+    if (!gnc_current_session_exist() ||
+        !gnc_main_window_all_finish_pending() ||
+        gnc_file_save_in_progress())
+
     {
-        return TRUE;
+        return FALSE;
     }
     session = gnc_get_current_session();
     needs_save = qof_book_session_not_saved(qof_session_get_book(session)) &&
