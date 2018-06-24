@@ -41,7 +41,7 @@ typedef enum
     XACC_CELL_ALLOW_SHADOW     = 1 << 1,
     XACC_CELL_ALLOW_ALL        = XACC_CELL_ALLOW_INPUT | XACC_CELL_ALLOW_SHADOW,
     XACC_CELL_ALLOW_EXACT_ONLY = 1 << 2,
-    XACC_CELL_ALLOW_ENTER	     = 1 << 3,
+    XACC_CELL_ALLOW_ENTER      = 1 << 3,
     XACC_CELL_ALLOW_READ_ONLY  = XACC_CELL_ALLOW_SHADOW | XACC_CELL_ALLOW_ENTER
 } CellIOFlags;
 
@@ -73,6 +73,9 @@ typedef const char * (*TableGetLabelHandler) (VirtualLocation virt_loc,
 typedef char * (*TableGetHelpHandler) (VirtualLocation virt_loc,
                                        gpointer user_data);
 
+typedef char * (*TableGetTooltipHandler) (VirtualLocation virt_loc,
+        gpointer user_data);
+
 typedef CellIOFlags (*TableGetCellIOFlagsHandler) (VirtualLocation virt_loc,
         gpointer user_data);
 
@@ -103,6 +106,7 @@ typedef struct
     GHashTable *entry_handlers;
     GHashTable *label_handlers;
     GHashTable *help_handlers;
+    GHashTable *tooltip_handlers;
     GHashTable *io_flags_handlers;
     GHashTable *cell_color_handlers;
     GHashTable *cell_border_handlers;
@@ -171,6 +175,17 @@ void gnc_table_model_set_default_help_handler
 (TableModel *model,
  TableGetHelpHandler help_handler);
 TableGetHelpHandler gnc_table_model_get_help_handler
+(TableModel *model,
+ const char * cell_name);
+
+void gnc_table_model_set_tooltip_handler
+(TableModel *model,
+ TableGetTooltipHandler tooltip_handler,
+ const char * cell_name);
+void gnc_table_model_set_default_tooltip_handler
+(TableModel *model,
+ TableGetTooltipHandler tooltip_handler);
+TableGetTooltipHandler gnc_table_model_get_tooltip_handler
 (TableModel *model,
  const char * cell_name);
 
