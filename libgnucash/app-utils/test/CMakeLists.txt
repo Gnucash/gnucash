@@ -82,6 +82,7 @@ set_dist_list(test_app_utils_DIST
   test-scm-query-string.cpp
   test-sx.cpp
   test-c-interface.scm
+  test-date-utilities.scm
   ${test_app_utils_scheme_SOURCES}
   ${test_app_utils_SOURCES}
 )
