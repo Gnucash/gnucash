@@ -249,8 +249,7 @@
   ;; accountlist - list of accounts
   ;; maxindent - maximum account depth
   ;; list-of-headers - list of string
-  ;; get-cell-amount-fn - a lambda (account col-idx) which produces a numeric amount
-  ;;  of the same commodity as the account
+  ;; get-cell-amount-fn - a lambda (account col-idx) which produces a gnc-monetary
 
   ;; this function will add a 2D grid into the html-table
   ;; the data cells are generated from (get-cell-amount account col-idx)
@@ -338,12 +337,12 @@
                                           (gnc-account-get-descendants curr)
                                           '()))
                (curr-balance-display (lambda (idx)
-                                       (map (lambda (acc) (gnc:make-gnc-monetary
-                                                           (xaccAccountGetCommodity acc)
-                                                           (get-cell-amount-fn acc idx)))
+                                       (map (lambda (acc) (get-cell-amount-fn acc idx))
                                             (cons curr curr-descendants-list)))))
 
-          (if (and (or show-zb-accts? (not (every zero? (map (lambda (col-idx) (get-cell-amount-fn curr col-idx))
+          (if (and (or show-zb-accts? (not (every zero? (map (lambda (col-idx)
+                                                               (gnc:gnc-monetary-amount
+                                                                (get-cell-amount-fn curr col-idx)))
                                                              (iota num-columns)))))
                    (or (not depth-limit) (<= lvl-curr depth-limit)))
               (add-indented-row lvl-curr
@@ -367,7 +366,10 @@
             (when (< col-idx num-columns)
               (let level-loop ((level 0))
                 (when (<= level lvl-curr)
-                  ((list-ref (list-ref collectors col-idx) level) 'add curr-commodity (get-cell-amount-fn curr col-idx))
+                  (let ((mon (get-cell-amount-fn curr col-idx)))
+                    ((list-ref (list-ref collectors col-idx) level) 'add
+                     (gnc:gnc-monetary-commodity mon)
+                     (gnc:gnc-monetary-amount mon)))
                   (level-loop (1+ level))))
               (columns-loop (1+ col-idx))))
 
@@ -500,9 +502,11 @@
                   (maxindent (gnc-account-get-tree-depth (gnc-get-current-root-account)))
                   (reportdates (gnc:make-date-list startdate enddate incr))
                   (get-cell-amount-fn (lambda (account col-idx)
-                                        (xaccAccountGetBalanceAsOfDate account
-                                                                       (gnc:time64-end-day-time
-                                                                        (list-ref reportdates col-idx)))))
+                                        (gnc:make-gnc-monetary
+                                         (xaccAccountGetCommodity account)
+                                         (xaccAccountGetBalanceAsOfDate account
+                                                                        (gnc:time64-end-day-time
+                                                                         (list-ref reportdates col-idx))))))
                   (reportheaders (map qof-print-date reportdates))
                   (add-to-table (lambda (title accounts)
                                   (add-multicolumn-acct-table
@@ -575,9 +579,11 @@
                                         (let* ((datepair (list-ref report-datepairs col-idx))
                                                (startdate (gnc:time64-start-day-time (car datepair)))
                                                (enddate (gnc:time64-end-day-time (cdr datepair))))
-                                          (- (xaccAccountGetBalanceAsOfDate account enddate)
-                                             (xaccAccountGetBalanceAsOfDate account startdate)
-                                             (closing-adjustment account startdate enddate)))))
+                                          (gnc:make-gnc-monetary
+                                           (xaccAccountGetCommodity account)
+                                           (- (xaccAccountGetBalanceAsOfDate account enddate)
+                                              (xaccAccountGetBalanceAsOfDate account startdate)
+                                              (closing-adjustment account startdate enddate))))))
                   (reportheaders (map (lambda (pair)
                                         (gnc:make-html-text
                                          (qof-print-date (car pair))
