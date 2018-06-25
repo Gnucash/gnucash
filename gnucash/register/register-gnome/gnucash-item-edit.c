@@ -371,9 +371,7 @@ gnc_item_edit_configure (GncItemEdit *item_edit)
 void
 gnc_item_edit_cut_clipboard (GncItemEdit *item_edit)
 {
-    gtk_editable_set_editable(GTK_EDITABLE(item_edit->editor), TRUE);
     gtk_editable_cut_clipboard(GTK_EDITABLE(item_edit->editor));
-    gtk_editable_set_editable(GTK_EDITABLE(item_edit->editor), FALSE);
 }
 
 void
@@ -385,9 +383,7 @@ gnc_item_edit_copy_clipboard (GncItemEdit *item_edit)
 void
 gnc_item_edit_paste_clipboard (GncItemEdit *item_edit)
 {
-    gtk_editable_set_editable(GTK_EDITABLE(item_edit->editor), TRUE);
     gtk_editable_paste_clipboard(GTK_EDITABLE(item_edit->editor));
-    gtk_editable_set_editable(GTK_EDITABLE(item_edit->editor), FALSE);
 }
 
 

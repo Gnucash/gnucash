@@ -1810,7 +1810,6 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
     if (pass_on)
     {
         gboolean result = FALSE;
-
         // If sheet is readonly, entry is not realized
         if (gtk_widget_get_realized (GTK_WIDGET(sheet->entry)))
             result = gtk_widget_event (sheet->entry, (GdkEvent *) event);
