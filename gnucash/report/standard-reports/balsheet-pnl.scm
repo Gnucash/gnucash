@@ -90,6 +90,8 @@
 ;; (define optname-show-rates (N_ "Show Exchange Rates"))
 ;; (define opthelp-show-rates (N_ "Show the exchange rates used."))
 
+(define trep-uuid "2fe3b9833af044abb929a88d5a59620f")
+
 (define periodlist
   (list
    (cons 'year (list
@@ -243,7 +245,8 @@
           (show-zb-accts? #t)
           (disable-indenting? #f)
           (hierarchical-subtotals? #t)
-          (depth-limit #f))
+          (depth-limit #f)
+          (get-cell-anchor-fn #f))
   ;; table - an existing html-table object
   ;; title - string as the first row
   ;; accountlist - list of accounts
@@ -291,12 +294,16 @@
        monetaries)
       (coll 'format gnc:make-gnc-monetary #f)))
 
-  (define (list-of-monetary->html-text monetaries omit-zero?)
+  (define (list-of-monetary->html-text monetaries omit-zero? anchor)
     (let ((text (gnc:make-html-text)))
       (for-each
        (lambda (monetary)
          (if (not (and omit-zero? (zero? (gnc:gnc-monetary-amount monetary))))
-             (gnc:html-text-append! text monetary (gnc:html-markup-br))))
+             (gnc:html-text-append! text
+                                    (if anchor
+                                        (gnc:html-markup-anchor anchor monetary)
+                                        monetary)
+                                    (gnc:html-markup-br))))
        monetaries)
       text))
 
@@ -353,7 +360,8 @@
                                    (gnc:make-html-table-cell/markup
                                     "number-cell" (list-of-monetary->html-text
                                                    (apply monetary+ (curr-balance-display col-idx))
-                                                   omit-zb-bals?)))
+                                                   omit-zb-bals?
+                                                   (get-cell-anchor-fn curr col-idx))))
                                  (iota num-columns))))
 
           (list-set! labels lvl-curr (gnc-account-get-full-name curr))
@@ -411,7 +419,7 @@
                                            (lambda (level-subtotal)
                                              (gnc:make-html-table-cell/markup
                                               "total-number-cell"
-                                              (list-of-monetary->html-text level-subtotal #f)))
+                                              (list-of-monetary->html-text level-subtotal #f #f)))
                                            level-subtotals)))
                     (list-set! labels lvl #f)
                     (for-each
@@ -507,6 +515,19 @@
                                          (xaccAccountGetBalanceAsOfDate account
                                                                         (gnc:time64-end-day-time
                                                                          (list-ref reportdates col-idx))))))
+                  (get-cell-anchor-fn (lambda (account col-idx)
+                                        (let* ((splits (xaccAccountGetSplitList account))
+                                               (split-date (lambda (s) (xaccTransGetDate (xaccSplitGetParent s))))
+                                               (date (gnc:time64-end-day-time (list-ref reportdates col-idx)))
+                                               (valid-split? (lambda (s) (< (split-date s) date)))
+                                               (valid-splits (filter valid-split? splits))
+                                               (sorted-splits (stable-sort! valid-splits
+                                                                            (lambda (a b)
+                                                                              (< (split-date a) (split-date b)))))
+                                               (split (and (pair? sorted-splits) (last sorted-splits))))
+                                          (and split
+                                               (gnc:split-anchor-text split)
+                                               #;(gnc:account-anchor-text account)))))
                   (reportheaders (map qof-print-date reportdates))
                   (add-to-table (lambda (title accounts summary?)
                                   (add-multicolumn-acct-table
@@ -516,13 +537,15 @@
                                    #:show-zb-accts? show-zb-accts?
                                    #:disable-indenting? export?
                                    #:hierarchical-subtotals? (and (not summary?) subtotal-mode)
-                                   #:depth-limit (if summary? 0 depth-limit)))))
+                                   #:depth-limit (if summary? 0 depth-limit)
+                                   #:get-cell-anchor-fn get-cell-anchor-fn
+                                   ))))
 
              (add-to-table (_ "Asset") asset-accounts #f)
              (add-to-table (_ "Liability") liability-accounts #f)
              (add-to-table (_ "Equity") equity-accounts #f)
              (add-to-table (_ "Trading Accounts") trading-accounts #f)
-             (add-to-table (_ "Net Worth") (append asset-accounts liability-accounts trading-accounts) #t
+             (add-to-table (_ "Net Worth") (append asset-accounts liability-accounts trading-accounts) #t)
 
              (gnc:html-document-add-object!
               doc (gnc:html-render-options-changed (gnc:report-options report-obj)))
@@ -577,6 +600,13 @@
                                            (- (xaccAccountGetBalanceAsOfDate account enddate)
                                               (xaccAccountGetBalanceAsOfDate account startdate)
                                               (closing-adjustment account startdate enddate))))))
+                  (get-cell-anchor-fn (lambda (account col-idx)
+                                        (let ((datepair (list-ref report-datepairs col-idx)))
+                                          (gnc:make-report-anchor
+                                           trep-uuid report-obj
+                                           (list (list "General" "Start Date" (cons 'absolute (car datepair)))
+                                                 (list "General" "End Date" (cons 'absolute (cdr datepair)))
+                                                 (list "Accounts" "Accounts" (list account)))))))
                   (reportheaders (map (lambda (pair)
                                         (gnc:make-html-text
                                          (qof-print-date (car pair))
@@ -592,7 +622,8 @@
                                    #:show-zb-accts? show-zb-accts?
                                    #:disable-indenting? export?
                                    #:hierarchical-subtotals? (and (not summary?) subtotal-mode)
-                                   #:depth-limit (if summary? 0 depth-limit)))))
+                                   #:depth-limit (if summary? 0 depth-limit)
+                                   #:get-cell-anchor-fn get-cell-anchor-fn))))
 
              (add-to-table (_ "Income") income-accounts #f)
              (add-to-table (_ "Expense") expense-accounts #f)
