@@ -77,9 +77,18 @@
 (define optname-closing-regexp (N_ "Closing Entries Pattern is regular expression"))
 (define opthelp-closing-regexp (N_ "Causes the Closing Entries Pattern to be treated as a regular expression."))
 
-;; (define pagename-commodities (N_ "Commodities"))
-;; (define optname-report-commodity (N_ "Report's currency"))
-;; (define optname-price-source (N_ "Price Source"))
+(define pagename-commodities (N_ "Commodities"))
+(define optname-include-chart (N_ "Include a chart"))
+(define opthelp-include-chart (N_ "Include a barchart"))
+
+(define optname-common-currency (N_ "Convert to common currency"))
+(define opthelp-common-currency (N_ "Convert all amounts to a single currency."))
+
+(define optname-report-commodity (N_ "Report's currency"))
+
+(define optname-price-source (N_ "Price Source"))
+(define opthelp-price-source (N_ "How to determine exchange rates."))
+
 ;; (define optname-show-foreign (N_ "Show Foreign Currencies"))
 ;; (define opthelp-show-foreign (N_ "Display any foreign currency amount in an account."))
 ;; (define optname-show-rates (N_ "Show Exchange Rates"))
@@ -118,6 +127,19 @@
                 (cons 'delta WeekDelta)
                 (cons 'text (_ "week"))
                 (cons 'tip (_ "every 7 days"))))))
+
+(define pricesource-list
+  (list
+   (cons 'nearest (list
+                   (cons 'text (_ "nearest"))
+                   (cons 'tip (_ "Nearest to date. Balance sheet prices
+are converted using the price on the balance sheet date. Profit & loss prices are
+converted to a price midpoint in the reporting period."))))
+
+   (cons 'latest (list
+                  (cons 'text (_ "latest"))
+                  (cons 'tip (_ "Latest price. This uses the latest prices
+available, i.e. closest to today's prices."))))))
 
 (define (keylist->vectorlist keylist)
   (map
@@ -192,6 +214,33 @@
      options gnc:pagename-accounts optname-depth-limit
      "b" opthelp-depth-limit 'all)
 
+    ;; all about currencies
+    ;; chart not implemented yet
+    ;; (add-option
+    ;;  (gnc:make-simple-boolean-option
+    ;;   pagename-commodities optname-include-chart
+    ;;   "a" opthelp-include-chart #f))
+
+    (add-option
+     (gnc:make-internal-option
+      pagename-commodities optname-include-chart #f))
+
+    (add-option
+     (gnc:make-simple-boolean-option
+      pagename-commodities optname-common-currency
+      "b" opthelp-common-currency #f))
+
+    (gnc:options-add-currency!
+     options pagename-commodities
+     optname-report-commodity "c")
+
+    (add-option
+     (gnc:make-multichoice-option
+      pagename-commodities optname-price-source
+      "d" opthelp-price-source
+      'nearest
+      (keylist->vectorlist pricesource-list)))
+
     ;; what to show for zero-balance accounts
     (add-option
      (gnc:make-simple-boolean-option
@@ -241,6 +290,7 @@
           (disable-indenting? #f)
           (hierarchical-subtotals? #t)
           (depth-limit #f)
+          (get-cell-fcur-fn #f)
           (get-cell-anchor-fn #f))
   ;; table - an existing html-table object
   ;; title - string as the first row
@@ -289,8 +339,14 @@
        monetaries)
       (coll 'format gnc:make-gnc-monetary #f)))
 
-  (define (list-of-monetary->html-text monetaries omit-zero? anchor)
+  (define (list-of-monetary->html-text monetaries monetaries-fcur omit-zero? anchor)
     (let ((text (gnc:make-html-text)))
+      (if monetaries-fcur
+          (for-each
+           (lambda (monetary)
+             (if (not (and omit-zero? (zero? (gnc:gnc-monetary-amount monetary))))
+                 (gnc:html-text-append! text monetary (gnc:html-markup-br))))
+           monetaries-fcur))
       (for-each
        (lambda (monetary)
          (if (not (and omit-zero? (zero? (gnc:gnc-monetary-amount monetary))))
@@ -338,8 +394,8 @@
                (curr-descendants-list (if (not hierarchical-subtotals?)
                                           (gnc-account-get-descendants curr)
                                           '()))
-               (curr-balance-display (lambda (idx)
-                                       (map (lambda (acc) (get-cell-amount-fn acc idx))
+               (curr-balance-display (lambda (get-cell-fn idx)
+                                       (map (lambda (acc) (get-cell-fn acc idx))
                                             (cons curr curr-descendants-list)))))
 
           (if (and (or show-zb-accts? (not (every zero? (map (lambda (col-idx)
@@ -354,7 +410,10 @@
                                  (lambda (col-idx)
                                    (gnc:make-html-table-cell/markup
                                     "number-cell" (list-of-monetary->html-text
-                                                   (apply monetary+ (curr-balance-display col-idx))
+                                                   (apply monetary+ (curr-balance-display get-cell-amount-fn col-idx))
+                                                   (and get-cell-fcur-fn
+                                                        (apply monetary+
+                                                               (filter identity (curr-balance-display get-cell-fcur-fn col-idx))))
                                                    omit-zb-bals?
                                                    (get-cell-anchor-fn curr col-idx))))
                                  (iota num-columns))))
@@ -414,7 +473,7 @@
                                            (lambda (level-subtotal)
                                              (gnc:make-html-table-cell/markup
                                               "total-number-cell"
-                                              (list-of-monetary->html-text level-subtotal #f #f)))
+                                              (list-of-monetary->html-text level-subtotal #f #f #f)))
                                            level-subtotals)))
                     (list-set! labels lvl #f)
                     (for-each
@@ -470,6 +529,11 @@
                                     optname-omit-zb-bals))
          (use-links? (get-option gnc:pagename-display
                                  optname-account-links))
+         (include-chart? (get-option pagename-commodities optname-include-chart))
+         (common-currency (and (or include-chart?
+                                   (get-option pagename-commodities optname-common-currency))
+                               (get-option pagename-commodities optname-report-commodity)))
+         (price-source (get-option pagename-commodities optname-price-source))
 
          ;; decompose the account list
          (split-up-accounts (gnc:decompose-accountlist accounts))
@@ -504,12 +568,29 @@
            (let* ((multicol-table (gnc:make-html-table))
                   (maxindent (gnc-account-get-tree-depth (gnc-get-current-root-account)))
                   (reportdates (gnc:make-date-list startdate enddate incr))
-                  (get-cell-amount-fn (lambda (account col-idx)
+                  (amount-col-amount (lambda (account col-idx)
                                         (gnc:make-gnc-monetary
                                          (xaccAccountGetCommodity account)
-                                         (xaccAccountGetBalanceAsOfDate account
-                                                                        (gnc:time64-end-day-time
-                                                                         (list-ref reportdates col-idx))))))
+                                         (xaccAccountGetBalanceAsOfDate
+                                          account
+                                          (gnc:time64-end-day-time
+                                           (list-ref reportdates col-idx))))))
+                  (get-cell-fcur-fn (lambda (account col-idx)
+                                      (and common-currency
+                                           (not (gnc-commodity-equal (xaccAccountGetCommodity account) common-currency))
+                                           (amount-col-amount account col-idx))))
+                  (get-cell-amount-fn (lambda (account col-idx)
+                                        (let* ((col-date (gnc:time64-end-day-time (list-ref reportdates col-idx)))
+                                               (monetary (gnc:make-gnc-monetary
+                                                          (xaccAccountGetCommodity account)
+                                                          (xaccAccountGetBalanceAsOfDate account col-date))))
+                                          (if common-currency
+                                              (gnc:exchange-by-pricedb-nearest
+                                               monetary common-currency
+                                               (case price-source
+                                                 ((nearest) col-date)
+                                                 ((latest) (current-time))))
+                                              monetary))))
                   (get-cell-anchor-fn (lambda (account col-idx)
                                         (let* ((splits (xaccAccountGetSplitList account))
                                                (split-date (lambda (s) (xaccTransGetDate (xaccSplitGetParent s))))
@@ -531,6 +612,7 @@
                                    #:disable-indenting? export?
                                    #:hierarchical-subtotals? (and (not summary?) subtotal-mode)
                                    #:depth-limit (if summary? 0 depth-limit)
+                                   #:get-cell-fcur-fn (and common-currency get-cell-fcur-fn)
                                    #:get-cell-anchor-fn get-cell-anchor-fn
                                    ))))
 
@@ -584,7 +666,7 @@
                                                    todate)))
                                         (let ((account-closing-splits (filter include-split? closing-entries)))
                                           (apply + (map xaccSplitGetAmount account-closing-splits)))))
-                  (get-cell-amount-fn (lambda (account col-idx)
+                  (account-col-amount (lambda (account col-idx)
                                         (let* ((datepair (list-ref report-datepairs col-idx))
                                                (startdate (gnc:time64-start-day-time (car datepair)))
                                                (enddate (gnc:time64-end-day-time (cdr datepair))))
@@ -593,6 +675,22 @@
                                            (- (xaccAccountGetBalanceAsOfDate account enddate)
                                               (xaccAccountGetBalanceAsOfDate account startdate)
                                               (closing-adjustment account startdate enddate))))))
+                  (get-cell-fcur-fn (lambda (account col-idx)
+                                      (and common-currency
+                                           (not (gnc-commodity-equal (xaccAccountGetCommodity account) common-currency))
+                                           (account-col-amount account col-idx))))
+                  (get-cell-amount-fn (lambda (account col-idx)
+                                        (let* ((monetary (account-col-amount account col-idx))
+                                               (datepair (list-ref report-datepairs col-idx))
+                                               (col-startdate (car datepair))
+                                               (col-enddate (cdr datepair)))
+                                          (if common-currency
+                                              (gnc:exchange-by-pricedb-nearest
+                                               monetary common-currency
+                                               (case price-source
+                                                 ((nearest) (floor (/ (+ col-startdate col-enddate) 2)))
+                                                 ((latest) (current-time))))
+                                              monetary))))
                   (get-cell-anchor-fn (lambda (account col-idx)
                                         (let ((datepair (list-ref report-datepairs col-idx)))
                                           (gnc:make-report-anchor
@@ -614,8 +712,11 @@
                                    #:omit-zb-bals? omit-zb-bals?
                                    #:show-zb-accts? show-zb-accts?
                                    #:disable-indenting? export?
+                                   #:get-cell-fcur-fn get-cell-fcur-fn
+                                   #:disable-headers? disable-headers?
                                    #:hierarchical-subtotals? (and (not summary?) subtotal-mode)
                                    #:depth-limit (if summary? 0 depth-limit)
+                                   #:get-cell-fcur-fn (and common-currency get-cell-fcur-fn)
                                    #:get-cell-anchor-fn get-cell-anchor-fn))))
 
              (add-to-table (_ "Income") income-accounts #f)
