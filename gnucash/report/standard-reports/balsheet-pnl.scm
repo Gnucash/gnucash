@@ -390,7 +390,7 @@
                                    (list-ref labels lvl)))
                           (add-indented-row lvl
                                             (string-append
-                                             "Total for "
+                                             (_ "Total for ")
                                              (list-ref labels lvl))
                                             "total-label-cell"
                                             (map
@@ -502,11 +502,11 @@
                                    #:hierarchical-subtotals? subtotal-mode
                                    #:depth-limit depth-limit))))
 
-             (add-to-table "ASSET" asset-accounts)
-             (add-to-table "LIABILITY" liability-accounts)
-             (add-to-table "EQUITY" equity-accounts)
+             (add-to-table (_ "Asset") asset-accounts)
+             (add-to-table (_ "Liability") liability-accounts)
+             (add-to-table (_ "Equity") equity-accounts)
              (add-multicolumn-acct-table
-              multicol-table "Net Worth" (append asset-accounts liability-accounts)
+              multicol-table (_ "Net Worth") (append asset-accounts liability-accounts)
               maxindent get-cell-amount-fn reportheaders
               #:disable-indenting? export?
               #:hierarchical-subtotals? #f
@@ -567,9 +567,11 @@
                                              (xaccAccountGetBalanceAsOfDate account startdate)
                                              (closing-adjustment account startdate enddate)))))
                   (reportheaders (map (lambda (pair)
-                                        (format #f "~a - ~a"
-                                                (qof-print-date (car pair))
-                                                (qof-print-date (cdr pair))))
+                                        (gnc:make-html-text
+                                         (qof-print-date (car pair))
+                                         (gnc:html-markup-br)
+                                         (_ " to ")
+                                         (qof-print-date (cdr pair))))
                                       report-datepairs))
                   (add-to-table (lambda (title accounts)
                                   (add-multicolumn-acct-table
@@ -584,7 +586,7 @@
              (add-to-table (_ "Income") income-accounts)
              (add-to-table (_ "Expense") expense-accounts)
              (add-multicolumn-acct-table
-              multicol-table "Net Income" (append income-accounts expense-accounts)
+              multicol-table (_ "Net Income") (append income-accounts expense-accounts)
               maxindent get-cell-amount-fn reportheaders
               #:disable-indenting? export?
               #:hierarchical-subtotals? #f
