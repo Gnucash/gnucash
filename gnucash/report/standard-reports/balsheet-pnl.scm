@@ -505,6 +505,13 @@
              (add-to-table "ASSET" asset-accounts)
              (add-to-table "LIABILITY" liability-accounts)
              (add-to-table "EQUITY" equity-accounts)
+             (add-multicolumn-acct-table
+              multicol-table "Net Worth" (append asset-accounts liability-accounts)
+              maxindent get-cell-amount-fn reportheaders
+              #:disable-indenting? export?
+              #:hierarchical-subtotals? #f
+              #:depth-limit 0)
+
              (unless (null? trading-accounts)
                (add-to-table "TRADING" trading-accounts))
 
@@ -574,10 +581,14 @@
                                    #:hierarchical-subtotals? subtotal-mode
                                    #:depth-limit depth-limit))))
 
-             (add-to-table "INCOME" income-accounts)
-             (add-to-table "EXPENSE" expense-accounts)
-             (unless (null? trading-accounts)
-               (add-to-table "TRADING" trading-accounts))
+             (add-to-table (_ "Income") income-accounts)
+             (add-to-table (_ "Expense") expense-accounts)
+             (add-multicolumn-acct-table
+              multicol-table "Net Income" (append income-accounts expense-accounts)
+              maxindent get-cell-amount-fn reportheaders
+              #:disable-indenting? export?
+              #:hierarchical-subtotals? #f
+              #:depth-limit 0)
 
              (gnc:html-document-add-object!
               doc (gnc:html-render-options-changed (gnc:report-options report-obj)))
