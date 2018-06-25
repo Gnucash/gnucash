@@ -508,28 +508,21 @@
                                                                         (gnc:time64-end-day-time
                                                                          (list-ref reportdates col-idx))))))
                   (reportheaders (map qof-print-date reportdates))
-                  (add-to-table (lambda (title accounts)
+                  (add-to-table (lambda (title accounts summary?)
                                   (add-multicolumn-acct-table
                                    multicol-table title accounts
                                    maxindent get-cell-amount-fn reportheaders
                                    #:omit-zb-bals? omit-zb-bals?
                                    #:show-zb-accts? show-zb-accts?
                                    #:disable-indenting? export?
-                                   #:hierarchical-subtotals? subtotal-mode
-                                   #:depth-limit depth-limit))))
+                                   #:hierarchical-subtotals? (and (not summary?) subtotal-mode)
+                                   #:depth-limit (if summary? 0 depth-limit)))))
 
-             (add-to-table (_ "Asset") asset-accounts)
-             (add-to-table (_ "Liability") liability-accounts)
-             (add-to-table (_ "Equity") equity-accounts)
-             (add-multicolumn-acct-table
-              multicol-table (_ "Net Worth") (append asset-accounts liability-accounts)
-              maxindent get-cell-amount-fn reportheaders
-              #:disable-indenting? export?
-              #:hierarchical-subtotals? #f
-              #:depth-limit 0)
-
-             (unless (null? trading-accounts)
-               (add-to-table "TRADING" trading-accounts))
+             (add-to-table (_ "Asset") asset-accounts #f)
+             (add-to-table (_ "Liability") liability-accounts #f)
+             (add-to-table (_ "Equity") equity-accounts #f)
+             (add-to-table (_ "Trading Accounts") trading-accounts #f)
+             (add-to-table (_ "Net Worth") (append asset-accounts liability-accounts trading-accounts) #t
 
              (gnc:html-document-add-object!
               doc (gnc:html-render-options-changed (gnc:report-options report-obj)))
@@ -591,24 +584,19 @@
                                          (_ " to ")
                                          (qof-print-date (cdr pair))))
                                       report-datepairs))
-                  (add-to-table (lambda (title accounts)
+                  (add-to-table (lambda (title accounts summary?)
                                   (add-multicolumn-acct-table
                                    multicol-table title accounts
                                    maxindent get-cell-amount-fn reportheaders
                                    #:omit-zb-bals? omit-zb-bals?
                                    #:show-zb-accts? show-zb-accts?
                                    #:disable-indenting? export?
-                                   #:hierarchical-subtotals? subtotal-mode
-                                   #:depth-limit depth-limit))))
+                                   #:hierarchical-subtotals? (and (not summary?) subtotal-mode)
+                                   #:depth-limit (if summary? 0 depth-limit)))))
 
-             (add-to-table (_ "Income") income-accounts)
-             (add-to-table (_ "Expense") expense-accounts)
-             (add-multicolumn-acct-table
-              multicol-table (_ "Net Income") (append income-accounts expense-accounts)
-              maxindent get-cell-amount-fn reportheaders
-              #:disable-indenting? export?
-              #:hierarchical-subtotals? #f
-              #:depth-limit 0)
+             (add-to-table (_ "Income") income-accounts #f)
+             (add-to-table (_ "Expense") expense-accounts #f)
+             (add-to-table (_ "Net Income") (append income-accounts expense-accounts) #t)
 
              (gnc:html-document-add-object!
               doc (gnc:html-render-options-changed (gnc:report-options report-obj)))
