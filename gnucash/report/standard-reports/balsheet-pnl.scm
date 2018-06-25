@@ -367,50 +367,57 @@
             (when (< col-idx num-columns)
               (let level-loop ((level 0))
                 (when (<= level lvl-curr)
-                  ((list-ref (list-ref collectors col-idx) level)
-                   'add curr-commodity (get-cell-amount-fn curr col-idx))
+                  ((list-ref (list-ref collectors col-idx) level) 'add curr-commodity (get-cell-amount-fn curr col-idx))
                   (level-loop (1+ level))))
               (columns-loop (1+ col-idx))))
 
-          ;; hierarchical subtotals. we're going UP hierarchy
-          ;; towards the root. start from the current level (minus
-          ;; 1), and cycle until the next account level. add level
-          ;; subtotals if conditions are met below. when all
-          ;; subtotals complete, add a single empty row before
-          ;; moving on to the next (higher level) account.
-          (if (> lvl-curr lvl-next)
-              (let add-subtotal-row ((lvl (1- lvl-curr)))
-                (if (< lvl lvl-next)
-                    (if hierarchical-subtotals?
-                        (add-whole-line #f))
-                    (let* ((level-subtotals (map (lambda (col-idx) ((list-ref (list-ref collectors col-idx) lvl)
-                                                                    'format gnc:make-gnc-monetary #f))
-                                                 (iota num-columns))))
+          (cond
+           ;; no change in level. reset the current level accumulator.
+           ((= lvl-curr lvl-next)
+            (let columns-loop ((col-idx 0))
+              (when (< col-idx num-columns)
+                ((list-ref (list-ref collectors col-idx) lvl-curr) 'reset #f #f)
+                (columns-loop (1+ col-idx)))))
 
-                      ;; the following conditions tests whether we should display the subtotal
-                      (if (or (zero? lvl)
-                              (and hierarchical-subtotals?
-                                   (or show-zb-accts? (not (every zero? (map gnc:gnc-monetary-amount (concatenate level-subtotals)))))
-                                   (or (not depth-limit) (<= lvl depth-limit))
-                                   (list-ref labels lvl)))
-                          (add-indented-row lvl
-                                            (string-append
-                                             (_ "Total for ")
-                                             (list-ref labels lvl))
-                                            "total-label-cell"
-                                            (map
-                                             (lambda (level-subtotal)
-                                               (gnc:make-html-table-cell/markup
-                                                "total-number-cell"
-                                                (list-of-monetary->html-text level-subtotal #f)))
-                                             level-subtotals)))
-                      (list-set! labels lvl #f)
-                      (for-each
-                       (lambda (col-idx)
-                         ((list-ref (list-ref collectors col-idx) lvl) 'reset #f #f)
-                         ((list-ref (list-ref collectors col-idx) (1+ lvl)) 'reset #f #f))
-                       (iota num-columns))
-                      (add-subtotal-row (1- lvl))))))
+           ;; hierarchical subtotals. we're going UP hierarchy
+           ;; towards the root. start from the current level (minus
+           ;; 1), and cycle until the next account level. add level
+           ;; subtotals if conditions are met below. when all
+           ;; subtotals complete, add a single empty row before
+           ;; moving on to the next (higher level) account.
+           ((> lvl-curr lvl-next)
+            (let add-subtotal-row ((lvl (1- lvl-curr)))
+              (if (< lvl lvl-next)
+                  (if hierarchical-subtotals?
+                      (add-whole-line #f))
+                  (let* ((level-subtotals (map (lambda (col-idx) ((list-ref (list-ref collectors col-idx) lvl)
+                                                                  'format gnc:make-gnc-monetary #f))
+                                               (iota num-columns))))
+
+                    ;; the following conditions tests whether we should display the subtotal
+                    (if (or (zero? lvl)
+                            (and hierarchical-subtotals?
+                                 (or show-zb-accts? (not (every zero? (map gnc:gnc-monetary-amount (concatenate level-subtotals)))))
+                                 (or (not depth-limit) (<= lvl depth-limit))
+                                 (list-ref labels lvl)))
+                        (add-indented-row lvl
+                                          (string-append
+                                           (_ "Total for ")
+                                           (list-ref labels lvl))
+                                          "total-label-cell"
+                                          (map
+                                           (lambda (level-subtotal)
+                                             (gnc:make-html-table-cell/markup
+                                              "total-number-cell"
+                                              (list-of-monetary->html-text level-subtotal #f)))
+                                           level-subtotals)))
+                    (list-set! labels lvl #f)
+                    (for-each
+                     (lambda (col-idx)
+                       ((list-ref (list-ref collectors col-idx) lvl) 'reset #f #f)
+                       ((list-ref (list-ref collectors col-idx) (1+ lvl)) 'reset #f #f))
+                     (iota num-columns))
+                    (add-subtotal-row (1- lvl)))))))
 
           (loop rest))))
   (add-whole-line #f)
