@@ -399,10 +399,14 @@ GncSqlColumnTableEntryImpl<CT_TIMESPEC>::load (const GncSqlBackend* sql_be,
             GncDateTime time(val);
             ts.tv_sec = static_cast<time64>(time);
         }
-        catch (std::invalid_argument&)
+        catch (const std::invalid_argument& err)
         {
-            PWARN("An invalid date was found in your database."
-                  "It has been set to 1 January 1970.");
+            if (strcmp(err.what(), "Column empty.") != 0)
+            {
+                auto val = row.get_string_at_col(m_col_name);
+                PWARN("An invalid date %s was found in your database."
+                      "It has been set to 1 January 1970.", val.c_str());
+            }
             ts.tv_sec = 0;
         }
     }
