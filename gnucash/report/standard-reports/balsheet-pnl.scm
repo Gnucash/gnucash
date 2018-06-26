@@ -292,6 +292,7 @@ available, i.e. closest to today's prices."))))))
           table title accountlist maxindent get-cell-amount-fn list-of-headers #:key
           (omit-zb-bals? #f)
           (show-zb-accts? #t)
+          (disable-headers? #f)
           (disable-indenting? #f)
           (hierarchical-subtotals? #t)
           (depth-limit #f)
@@ -382,10 +383,13 @@ available, i.e. closest to today's prices."))))))
   (add-indented-row 0
                     title
                     "total-label-cell"
-                    (map
-                     (lambda (header)
-                       (gnc:make-html-table-cell/markup "total-number-cell" header))
-                     list-of-headers))
+                    (if disable-headers? '()
+                        (map
+                         (lambda (header)
+                           (let ((cell (gnc:make-html-table-cell/markup "total-label-cell" header)))
+                             (gnc:html-table-cell-set-style! cell "total-label-cell" 'attribute '("style" "text-align:right"))
+                             cell))
+                         list-of-headers)))
 
   (let loop ((accountlist accountlist))
     (if (pair? accountlist)
@@ -457,14 +461,13 @@ available, i.e. closest to today's prices."))))))
            ((> lvl-curr lvl-next)
             (let add-subtotal-row ((lvl (1- lvl-curr)))
               (if (< lvl lvl-next)
-                  (if hierarchical-subtotals?
-                      (add-whole-line #f))
+                  'noop
                   (let* ((level-subtotals (map (lambda (col-idx) ((list-ref (list-ref collectors col-idx) lvl)
                                                                   'format gnc:make-gnc-monetary #f))
                                                (iota num-columns))))
 
                     ;; the following conditions tests whether we should display the subtotal
-                    (if (or (zero? lvl)
+                    (when (or (zero? lvl)
                             (and hierarchical-subtotals?
                                  (or show-zb-accts? (not (every zero? (map gnc:gnc-monetary-amount (concatenate level-subtotals)))))
                                  (or (not depth-limit) (<= lvl depth-limit))
@@ -479,7 +482,8 @@ available, i.e. closest to today's prices."))))))
                                              (gnc:make-html-table-cell/markup
                                               "total-number-cell"
                                               (list-of-monetary->html-text level-subtotal #f #f #f)))
-                                           level-subtotals)))
+                                           level-subtotals))
+                          (add-whole-line #f))
                     (list-set! labels lvl #f)
                     (for-each
                      (lambda (col-idx)
@@ -610,24 +614,27 @@ available, i.e. closest to today's prices."))))))
                                                (gnc:split-anchor-text split)
                                                #;(gnc:account-anchor-text account)))))
                   (reportheaders (map qof-print-date reportdates))
-                  (add-to-table (lambda (title accounts summary?)
+                  (add-to-table (lambda (title accounts disable-headers? summary?)
                                   (add-multicolumn-acct-table
                                    multicol-table title accounts
                                    maxindent get-cell-amount-fn reportheaders
                                    #:omit-zb-bals? omit-zb-bals?
                                    #:show-zb-accts? show-zb-accts?
                                    #:disable-indenting? export?
+                                   #:disable-headers? disable-headers?
                                    #:hierarchical-subtotals? (and (not summary?) subtotal-mode)
                                    #:depth-limit (if summary? 0 depth-limit)
                                    #:get-cell-fcur-fn (and common-currency get-cell-fcur-fn)
                                    #:get-cell-anchor-fn get-cell-anchor-fn
                                    ))))
 
-             (add-to-table (_ "Asset") asset-accounts #f)
-             (add-to-table (_ "Liability") liability-accounts #f)
-             (add-to-table (_ "Equity") equity-accounts #f)
-             (add-to-table (_ "Trading Accounts") trading-accounts #f)
-             (add-to-table (_ "Net Worth") (append asset-accounts liability-accounts trading-accounts) #t)
+             (add-to-table (_ "Asset") asset-accounts #f #f)
+             (add-to-table (_ "Liability") liability-accounts #t #f)
+             (add-to-table (_ "Equity") equity-accounts #t #f)
+             (unless (null? trading-accounts)
+               (add-to-table (_ "Trading Accounts") trading-accounts #t #f))
+             ;; (add-to-table (_ "Liabilities and Equity") (append liability-accounts equity-accounts) #t #t)
+             (add-to-table (_ "Net Worth") (append asset-accounts liability-accounts trading-accounts) #t #t)
 
              (gnc:html-document-add-object!
               doc (gnc:html-render-options-changed (gnc:report-options report-obj)))
@@ -712,23 +719,22 @@ available, i.e. closest to today's prices."))))))
                                          (_ " to ")
                                          (qof-print-date (cdr pair))))
                                       report-datepairs))
-                  (add-to-table (lambda (title accounts summary?)
+                  (add-to-table (lambda (title accounts disable-headers? summary?)
                                   (add-multicolumn-acct-table
                                    multicol-table title accounts
                                    maxindent get-cell-amount-fn reportheaders
                                    #:omit-zb-bals? omit-zb-bals?
                                    #:show-zb-accts? show-zb-accts?
                                    #:disable-indenting? export?
-                                   #:get-cell-fcur-fn get-cell-fcur-fn
                                    #:disable-headers? disable-headers?
                                    #:hierarchical-subtotals? (and (not summary?) subtotal-mode)
                                    #:depth-limit (if summary? 0 depth-limit)
                                    #:get-cell-fcur-fn (and common-currency get-cell-fcur-fn)
                                    #:get-cell-anchor-fn get-cell-anchor-fn))))
 
-             (add-to-table (_ "Income") income-accounts #f)
-             (add-to-table (_ "Expense") expense-accounts #f)
-             (add-to-table (_ "Net Income") (append income-accounts expense-accounts) #t)
+             (add-to-table (_ "Income") income-accounts #f #f)
+             (add-to-table (_ "Expense") expense-accounts #t #f)
+             (add-to-table (_ "Net Income") (append income-accounts expense-accounts) #t #t)
 
              (gnc:html-document-add-object!
               doc (gnc:html-render-options-changed (gnc:report-options report-obj)))
@@ -736,6 +742,9 @@ available, i.e. closest to today's prices."))))))
              (gnc:html-document-add-object!
               doc multicol-table)))))
     (gnc:report-finished)
+    (gnc:html-document-set-style-text!
+     doc "
+td.total-number-cell { border-top-style:solid; border-top-width: 1px; border-bottom-style: double }")
     ;; (gnc:html-document-set-style-text!
     ;;  doc " table, td{ border-width: 1px; border-style:solid; border-color: lightgray; border-collapse: collapse}")
     doc))
