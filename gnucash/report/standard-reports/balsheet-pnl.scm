@@ -402,10 +402,16 @@ available, i.e. closest to today's prices."))))))
                                        (map (lambda (acc) (get-cell-fn acc idx))
                                             (cons curr curr-descendants-list)))))
 
-          (if (and (or show-zb-accts? (not (every zero? (map (lambda (col-idx)
-                                                               (gnc:gnc-monetary-amount
-                                                                (get-cell-amount-fn curr col-idx)))
-                                                             (iota num-columns)))))
+          (if (and (or show-zb-accts?
+                       ;; the following function tests whether accounts (with descendants) of
+                       ;; all columns are zero
+                       (not (every zero? (concatenate
+                                          (map (lambda (acc)
+                                                 (map (lambda (col-idx)
+                                                        (gnc:gnc-monetary-amount
+                                                         (get-cell-amount-fn acc col-idx)))
+                                                      (iota num-columns)))
+                                               (cons curr (gnc-account-get-descendants curr)))))))
                    (or (not depth-limit) (<= lvl-curr depth-limit)))
               (add-indented-row lvl-curr
                                 (string-append curr-label (if (null? curr-descendants-list) "" "+"))
