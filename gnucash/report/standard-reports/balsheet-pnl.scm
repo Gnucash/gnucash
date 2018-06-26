@@ -128,17 +128,38 @@
                 (cons 'text (_ "week"))
                 (cons 'tip (_ "every 7 days"))))))
 
-(define pricesource-list
+(define pricesource-list-balsheet
   (list
    (cons 'nearest (list
                    (cons 'text (_ "nearest"))
-                   (cons 'tip (_ "Nearest to date. Balance sheet prices
-are converted using the price on the balance sheet date. Profit & loss prices are
-converted to a price midpoint in the reporting period."))))
+                   (cons 'tip (_ "Nearest to date. Balance sheet prices \
+are converted using the price on the balance sheet date."))))
 
    (cons 'latest (list
                   (cons 'text (_ "latest"))
-                  (cons 'tip (_ "Latest price. This uses the latest prices
+                  (cons 'tip (_ "Latest price. This uses the latest prices \
+available, i.e. closest to today's prices."))))))
+
+(define pricesource-list-pnl
+  (list
+   (cons 'startperiod (list
+                       (cons 'text (_ "start-period"))
+                       (cons 'tip (_ "Prices closest to the start of the reporting period \
+are used."))))
+
+   (cons 'midperiod (list
+                     (cons 'text (_ "mid-period"))
+                     (cons 'tip (_ "Prices in the middle of the reporting period \
+are used."))))
+
+   (cons 'endperiod (list
+                     (cons 'text (_ "end-period"))
+                     (cons 'tip (_ "Prices in the end of the reporting period \
+are used."))))
+
+   (cons 'latest (list
+                  (cons 'text (_ "latest"))
+                  (cons 'tip (_ "Latest price. This uses the latest prices \
 available, i.e. closest to today's prices."))))))
 
 (define (keylist->vectorlist keylist)
@@ -238,8 +259,13 @@ available, i.e. closest to today's prices."))))))
      (gnc:make-multichoice-option
       pagename-commodities optname-price-source
       "d" opthelp-price-source
-      'nearest
-      (keylist->vectorlist pricesource-list)))
+      (case report-type
+        ((pnl) 'midperiod)
+        ((balsheet) 'nearest))
+      (keylist->vectorlist
+       (case report-type
+         ((pnl) pricesource-list-pnl)
+         ((balsheet) pricesource-list-balsheet)))))
 
     ;; what to show for zero-balance accounts
     (add-option
@@ -701,7 +727,9 @@ available, i.e. closest to today's prices."))))))
                                               (gnc:exchange-by-pricedb-nearest
                                                monetary common-currency
                                                (case price-source
-                                                 ((nearest) (floor (/ (+ col-startdate col-enddate) 2)))
+                                                 ((startperiod) col-startdate)
+                                                 ((midperiod) (floor (/ (+ col-startdate col-enddate) 2)))
+                                                 ((endperiod) col-enddate)
                                                  ((latest) (current-time))))
                                               monetary))))
                   (get-cell-anchor-fn (lambda (account col-idx)
