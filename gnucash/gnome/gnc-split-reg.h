@@ -249,7 +249,6 @@ void gnc_split_reg_focus_on_sheet (GNCSplitReg *gsr);
 void gnc_split_reg_balancing_entry (GNCSplitReg *gsr, Account *account,
                                     time64 statement_date, gnc_numeric balancing_amount);
 
-void gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data );
 void gsr_default_associate_handler (GNCSplitReg *gsr, gboolean uri_is_file);
 void gsr_default_execassociated_handler( GNCSplitReg *gsr, gpointer data );
 void gnc_split_reg_enter( GNCSplitReg *gsr, gboolean next_transaction );
