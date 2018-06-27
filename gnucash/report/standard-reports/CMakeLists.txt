@@ -10,6 +10,7 @@ set (standard_reports_SCHEME_2
     average-balance.scm
     balance-sheet.scm
     balance-forecast.scm
+    balsheet-pnl.scm
     budget-balance-sheet.scm
     budget-barchart.scm
     budget-flow.scm
