@@ -34,9 +34,6 @@
 (gnc:module-load "gnucash/report/report-system" 0)
 
 ;; define all option's names and help text so that they are properly
-;; defined in *one* place.
-(define optname-report-title (N_ "Report Title"))
-(define opthelp-report-title (N_ "Title for this report."))
 
 (define optname-company-name (N_ "Company name"))
 (define opthelp-company-name (N_ "Name of company/individual."))
@@ -183,17 +180,12 @@ available, i.e. closest to today's prices."))))))
   (cdr (assq info (cdr (assq key keylist)))))
 
 ;; options generator
-(define (multicol-report-options-generator report-type reportname)
+(define (multicol-report-options-generator report-type)
   (let* ((options (gnc:new-options))
          (book (gnc-get-current-book))
          (add-option
           (lambda (new-option)
             (gnc:register-option options new-option))))
-
-    (add-option
-     (gnc:make-string-option
-      gnc:pagename-general optname-report-title
-      "a" opthelp-report-title (_ reportname)))
 
     (add-option
      (gnc:make-string-option
@@ -271,12 +263,12 @@ available, i.e. closest to today's prices."))))))
          ((pnl) pricesource-list-pnl)
          ((balsheet) pricesource-list-balsheet)))))
 
-    ;; what to show for zero-balance accounts
     (add-option
      (gnc:make-simple-boolean-option
       pagename-commodities optname-show-foreign
       "e" opthelp-show-foreign #t))
 
+    ;; what to show for zero-balance accounts
     (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-display optname-show-zb-accts
@@ -551,16 +543,16 @@ available, i.e. closest to today's prices."))))))
 ;; multicol-report-renderer
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (multicol-report-renderer report-obj report-type reportname)
+(define (multicol-report-renderer report-obj report-type)
   (define (get-option pagename optname)
     (gnc:option-value
      (gnc:lookup-option
       (gnc:report-options report-obj) pagename optname)))
 
-  (gnc:report-starting reportname)
+  (gnc:report-starting (get-option gnc:pagename-general gnc:optname-reportname))
 
   ;; get all options values
-  (let* ((report-title (get-option gnc:pagename-general optname-report-title))
+  (let* ((report-title (get-option gnc:pagename-general gnc:optname-reportname))
          (company-name (get-option gnc:pagename-general optname-company-name))
          (startdate (gnc:date-option-absolute-time
                      (get-option gnc:pagename-general
@@ -619,7 +611,7 @@ available, i.e. closest to today's prices."))))))
         (gnc:html-document-add-object!
          doc
          (gnc:html-make-no-account-warning
-          reportname (gnc:report-id report-obj)))
+          report-title (gnc:report-id report-obj)))
 
         (case report-type
           ((balsheet)
@@ -837,15 +829,15 @@ td.total-number-cell { border-top-style:solid; border-top-width: 1px; border-bot
  'name balsheet-reportname
  'report-guid "065d5d5a77ba11e8b31e83ada73c5eea"
  'menu-path (list gnc:menuname-asset-liability)
- 'options-generator (lambda () (multicol-report-options-generator 'balsheet balsheet-reportname))
- 'renderer (lambda (rpt) (multicol-report-renderer rpt 'balsheet balsheet-reportname)))
+ 'options-generator (lambda () (multicol-report-options-generator 'balsheet))
+ 'renderer (lambda (rpt) (multicol-report-renderer rpt 'balsheet)))
 
 (gnc:define-report
  'version 1
  'name pnl-reportname
  'report-guid "0e94fd0277ba11e8825d43e27232c9d4"
  'menu-path (list gnc:menuname-income-expense)
- 'options-generator (lambda () (multicol-report-options-generator 'pnl pnl-reportname))
- 'renderer (lambda (rpt) (multicol-report-renderer rpt 'pnl pnl-reportname)))
+ 'options-generator (lambda () (multicol-report-options-generator 'pnl))
+ 'renderer (lambda (rpt) (multicol-report-renderer rpt 'pnl)))
 
 ;; END
