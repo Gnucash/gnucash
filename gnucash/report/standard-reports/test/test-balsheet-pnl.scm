@@ -239,6 +239,7 @@
         )
 
       (set-option! options "Commodities" "Price Source" 'latest)
+      (set-option! options "Commodities" "Show Foreign Currencies" #t)
       (let ((sxml (options->sxml uuid options "pnl-common-currency latest")))
         (test-equal "pnl common-currency. price-source=latest. net worth is $1,111,240.00"
           '("-$1,111,240.00")
