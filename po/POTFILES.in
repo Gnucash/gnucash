@@ -469,6 +469,7 @@ gnucash/report/standard-reports/advanced-portfolio.scm
 gnucash/report/standard-reports/average-balance.scm
 gnucash/report/standard-reports/balance-forecast.scm
 gnucash/report/standard-reports/balance-sheet.scm
+gnucash/report/standard-reports/balsheet-pnl.scm
 gnucash/report/standard-reports/budget-balance-sheet.scm
 gnucash/report/standard-reports/budget-barchart.scm
 gnucash/report/standard-reports/budget-flow.scm
