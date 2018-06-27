@@ -78,8 +78,8 @@
 (define opthelp-closing-regexp (N_ "Causes the Closing Entries Pattern to be treated as a regular expression."))
 
 (define pagename-commodities (N_ "Commodities"))
-(define optname-include-chart (N_ "Include a chart"))
-(define opthelp-include-chart (N_ "Include a barchart"))
+(define optname-include-chart (N_ "Enable chart"))
+(define opthelp-include-chart (N_ "Enable link to barchart report"))
 
 (define optname-common-currency (N_ "Convert to common currency"))
 (define opthelp-common-currency (N_ "Convert all amounts to a single currency."))
@@ -96,6 +96,8 @@
 ;; (define opthelp-show-rates (N_ "Show the exchange rates used."))
 
 (define trep-uuid "2fe3b9833af044abb929a88d5a59620f")
+(define networth-barchart-uuid "cbba1696c8c24744848062c7f1cf4a72")
+(define pnl-barchart-uuid "80769921e87943adade887b9835a7685")
 
 (define periodlist
   (list
@@ -209,6 +211,11 @@ available, i.e. closest to today's prices."))))))
       gnc:pagename-general optname-export
       "c3" opthelp-export #f))
 
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-general optname-include-chart
+      "d" opthelp-include-chart #f))
+
     #;
     (add-option
     (gnc:make-simple-boolean-option
@@ -237,16 +244,6 @@ available, i.e. closest to today's prices."))))))
      "b" opthelp-depth-limit 'all)
 
     ;; all about currencies
-    ;; chart not implemented yet
-    ;; (add-option
-    ;;  (gnc:make-simple-boolean-option
-    ;;   pagename-commodities optname-include-chart
-    ;;   "a" opthelp-include-chart #f))
-
-    (add-option
-     (gnc:make-internal-option
-      pagename-commodities optname-include-chart #f))
-
     (add-option
      (gnc:make-simple-boolean-option
       pagename-commodities optname-common-currency
@@ -583,7 +580,7 @@ available, i.e. closest to today's prices."))))))
                                     optname-omit-zb-bals))
          (use-links? (get-option gnc:pagename-display
                                  optname-account-links))
-         (include-chart? (get-option pagename-commodities optname-include-chart))
+         (include-chart? (get-option gnc:pagename-general optname-include-chart))
          (common-currency (and (or include-chart?
                                    (get-option pagename-commodities optname-common-currency))
                                (get-option pagename-commodities optname-report-commodity)))
@@ -655,8 +652,17 @@ available, i.e. closest to today's prices."))))))
                                                                               (< (split-date a) (split-date b)))))
                                                (split (and (pair? sorted-splits) (last sorted-splits))))
                                           (and split
-                                               (gnc:split-anchor-text split)
-                                               #;(gnc:account-anchor-text account)))))
+                                               (gnc:split-anchor-text split)))))
+                  (chart (and include-chart?
+                              (gnc:make-report-anchor
+                               networth-barchart-uuid report-obj
+                               (list (list "General" "Start Date" (cons 'absolute startdate))
+                                     (list "General" "End Date" (cons 'absolute enddate))
+                                     (list "General" "Report's currency" common-currency)
+                                     (list "General" "Price Source" (case price-source
+                                                                      ((nearest) 'pricedb-nearest)
+                                                                      ((latest) 'pricedb-latest)))
+                                     (list "Accounts" "Accounts" (append asset-accounts liability-accounts))))))
                   (add-to-table (lambda (title accounts disable-headers? summary?)
                                   (add-multicolumn-acct-table
                                    multicol-table title accounts
@@ -682,6 +688,12 @@ available, i.e. closest to today's prices."))))))
 
              (gnc:html-document-add-object!
               doc (gnc:html-render-options-changed (gnc:report-options report-obj)))
+
+             (if include-chart?
+                 (gnc:html-document-add-object!
+                  doc
+                  (gnc:make-html-text
+                   (gnc:html-markup-anchor chart "Barchart"))))
 
              (gnc:html-document-add-object!
               doc multicol-table)))
@@ -750,13 +762,22 @@ available, i.e. closest to today's prices."))))))
                                                  ((endperiod) col-enddate)
                                                  ((latest) (current-time))))
                                               monetary))))
-                  (get-cell-anchor-fn (lambda (account col-datum)
-                                        (let ((datepair col-datum))
-                                          (gnc:make-report-anchor
-                                           trep-uuid report-obj
-                                           (list (list "General" "Start Date" (cons 'absolute (car datepair)))
-                                                 (list "General" "End Date" (cons 'absolute (cdr datepair)))
-                                                 (list "Accounts" "Accounts" (list account)))))))
+                  (get-cell-anchor-fn (lambda (account datepair)
+                                        (gnc:make-report-anchor
+                                         trep-uuid report-obj
+                                         (list (list "General" "Start Date" (cons 'absolute (car datepair)))
+                                               (list "General" "End Date" (cons 'absolute (cdr datepair)))
+                                               (list "Accounts" "Accounts" (list account))))))
+                  (chart (and include-chart?
+                              (gnc:make-report-anchor
+                               pnl-barchart-uuid report-obj
+                               (list (list "General" "Start Date" (cons 'absolute startdate))
+                                     (list "General" "End Date" (cons 'absolute enddate))
+                                     (list "General" "Report's currency" common-currency)
+                                     (list "General" "Price Source" (case price-source
+                                                                      ((latest) 'pricedb-latest)
+                                                                      (else 'pricedb-nearest)))
+                                     (list "Accounts" "Accounts" (append income-accounts expense-accounts))))))
                   (get-col-header-fn (lambda (col-datum)
                                        (gnc:make-html-text
                                         (qof-print-date (car col-datum))
@@ -785,8 +806,15 @@ available, i.e. closest to today's prices."))))))
              (gnc:html-document-add-object!
               doc (gnc:html-render-options-changed (gnc:report-options report-obj)))
 
+             (if include-chart?
+                 (gnc:html-document-add-object!
+                  doc
+                  (gnc:make-html-text
+                   (gnc:html-markup-anchor chart "Barchart"))))
+
              (gnc:html-document-add-object!
               doc multicol-table)))))
+
     (gnc:report-finished)
     (gnc:html-document-set-style-text!
      doc "
