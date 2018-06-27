@@ -40,6 +40,7 @@
 (export env-select-price-source)
 (export env-any-date)
 (export env-transfer)
+(export gnc-pricedb-create)
 (export env-transfer-foreign)
 (export env-create-transaction)
 (export env-create-account)
