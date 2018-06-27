@@ -244,9 +244,10 @@ available, i.e. closest to today's prices."))))))
          (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
       #f #t))
 
-    (gnc:options-add-account-levels!
-     options gnc:pagename-accounts optname-depth-limit
-     "b" opthelp-depth-limit 'all)
+    (add-option
+     (gnc:make-internal-option
+      gnc:pagename-accounts optname-depth-limit
+      'all))
 
     ;; all about currencies
     (add-option
