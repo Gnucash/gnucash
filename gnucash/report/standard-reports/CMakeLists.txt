@@ -9,6 +9,7 @@ set (standard_reports_SCHEME_2
     advanced-portfolio.scm
     average-balance.scm
     balance-sheet.scm
+    balsheet-pnl.scm
     budget-balance-sheet.scm
     budget-barchart.scm
     budget-flow.scm
