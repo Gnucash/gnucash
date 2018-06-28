@@ -129,6 +129,12 @@
                       (cons  100 bank-gbp)))
 
     (gnc-pricedb-create (gnc-default-report-currency) (symbol->commodity "GBP")
+                        (gnc-dmy2time64 1 1 YEAR) 110/100)
+
+    (gnc-pricedb-create (gnc-default-report-currency) (symbol->commodity "GBP")
+                        (gnc-dmy2time64 1 2 YEAR) 120/100)
+
+    (gnc-pricedb-create (gnc-default-report-currency) (symbol->commodity "GBP")
                         (gnc-dmy2time64 1 3 YEAR) 125/100)
 
     (gnc-pricedb-create (gnc-default-report-currency) (symbol->commodity "GBP")
@@ -215,11 +221,22 @@
       (set-option! options "Display" "Include accounts with zero total balances" #f)
       (set-option! options "Display" "Omit zero balance figures" #t)
       (set-option! options "Display" "Hierarchical subtotals" #f)
+      (set-option! options "General" "Period duration" 'month)
+      (set-option! options "General" "If more than 1 period column, include overall period?" #t)
       (let ((sxml (options->sxml uuid options "pnl-swap-display-options")))
         (test-equal "pnl swap display options. amounts are as expected."
           '("-$1,111,110.00" "-#100.00" "-#100.00"
             "-$1,111,110.00" "$0.00" "-#100.00" "-$1,111,110.00")
-          (cddr (sxml->table-row-col sxml 1 #f 2))))
+          (cddr (sxml->table-row-col sxml 1 #f 4)))
+        (test-equal "pnl basic options. profit columns are as expected"
+          '("$0.00" "#0.00" "$0.00" "-#100.00" "-$1,111,110.00" "-#100.00" "-$1,111,110.00")
+          (cddr (sxml->table-row-col sxml 1 12 #f))))
+
+      (set-option! options "General" "If more than 1 period column, include overall period?" #f)
+      (let ((sxml (options->sxml uuid options "pnl-swap-display-options")))
+        (test-equal "pnl remove overall-period option"
+          '("$0.00" "#0.00" "$0.00" "-#100.00" "-$1,111,110.00")
+          (cddr (sxml->table-row-col sxml 1 12 #f))))
 
       (set-option! options "Commodities" "Convert to common currency" #t)
       (set-option! options "Commodities" "Report's currency" (gnc-default-report-currency))
@@ -227,24 +244,34 @@
       (set-option! options "Commodities" "Show Foreign Currencies" #f)
       (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 1 1 YEAR)))
       (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 1 3 YEAR)))
+
+      (set-option! options "Commodities" "Price Source" 'startperiod)
+      (let ((sxml (options->sxml uuid options "pnl-common-currency startperiod")))
+        (test-equal "pnl common-currency. startperiod price. amounts are as expected."
+          '("-$1,111,110.00" "-$110.00" "-$1,111,220.00" "$0.00" "-$1,111,220.00")
+          (cddr (sxml->table-row-col sxml 1 #f 4)))
+        )
+
+      (set-option! options "Commodities" "Price Source" 'midperiod)
       (let ((sxml (options->sxml uuid options "pnl-common-currency midperiod")))
-        (test-equal "pnl common-currency. price-source=midperiod. net worth is $1,111,235.00"
-          '("-$1,111,235.00")
-          (sxml->table-row-col sxml 1 12 2))
-        (test-equal "pnl common-currency. amounts are as expected."
+        (test-equal "pnl common-currency. midperiod price. amounts are as expected."
+          '("-$1,111,110.00" "-$120.00" "-$1,111,230.00" "$0.00" "-$1,111,230.00")
+          (cddr (sxml->table-row-col sxml 1 #f 4)))
+        )
+
+      (set-option! options "Commodities" "Price Source" 'endperiod)
+      (let ((sxml (options->sxml uuid options "pnl-common-currency endperiod")))
+        (test-equal "pnl common-currency. endperiod price. amounts are as expected."
           '("-$1,111,110.00" "-$125.00" "-$1,111,235.00" "$0.00" "-$1,111,235.00")
-          (cddr (sxml->table-row-col sxml 1 #f 2)))
+          (cddr (sxml->table-row-col sxml 1 #f 4)))
         )
 
       (set-option! options "Commodities" "Price Source" 'latest)
       (set-option! options "Commodities" "Show Foreign Currencies" #t)
       (let ((sxml (options->sxml uuid options "pnl-common-currency latest")))
-        (test-equal "pnl common-currency. price-source=latest. net worth is $1,111,240.00"
-          '("-$1,111,240.00")
-          (sxml->table-row-col sxml 1 12 2))
-        (test-equal "pnl common-currency. amounts are as expected."
+        (test-equal "pnl common-currency. latest price. amounts are as expected."
           '("-$1,111,110.00" "-#100.00" "-$130.00" "-$1,111,240.00" "$0.00" "-$1,111,240.00")
-          (cddr (sxml->table-row-col sxml 1 #f 2))))
+          (cddr (sxml->table-row-col sxml 1 #f 4))))
       )
     (test-end "pnl tests")
 
