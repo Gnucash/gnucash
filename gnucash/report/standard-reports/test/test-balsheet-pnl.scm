@@ -95,7 +95,7 @@
          (creditcard (cdr (assoc "CreditCard" account-alist)))
          (payable (cdr (assoc "A/Payable" account-alist)))
          (receivable (cdr (assoc "A/Receivable" account-alist)))
-         (YEAR (1- (gnc:time64-get-year (gnc:get-today)))))
+         (YEAR (- (gnc:time64-get-year (gnc:get-today)) 5)))
 
     (define (default-testing-options uuid)
       (let ((options (gnc:make-report-options uuid)))
@@ -179,9 +179,8 @@
           '("$1,111,235.00")
           (sxml->table-row-col sxml 1 22 3))
         (test-equal "balsheet common-currency. nearest. amounts are as expected."
-          '("#100.00" "$1,111,235.00" "$1,111,100.00" "$111,100.00"
-            "$11,100.00" "$1,000.00" "$100.00" "#100.00" "$125.00" "$10.00"
-            "$1,111,235.00" "$0.00" "$0.00" "$1,111,235.00")
+          '("$1,111,235.00" "$1,111,100.00" "$111,100.00" "$11,100.00" "$1,000.00" "$100.00"
+            "#100.00" "$125.00" "$10.00" "$1,111,235.00" "$0.00" "$0.00" "$1,111,235.00")
           (cdr (sxml->table-row-col sxml 1 #f 3))))
 
       (set-option! options "Commodities" "Price Source" 'latest)
@@ -190,9 +189,8 @@
           '("$1,111,240.00")
           (sxml->table-row-col sxml 1 22 3))
         (test-equal "balsheet common-currency. latest. amounts are as expected."
-          '("#100.00" "$1,111,240.00" "$1,111,100.00" "$111,100.00"
-            "$11,100.00" "$1,000.00" "$100.00" "#100.00" "$130.00" "$10.00"
-            "$1,111,240.00" "$0.00" "$0.00" "$1,111,240.00")
+          '("$1,111,240.00" "$1,111,100.00" "$111,100.00" "$11,100.00" "$1,000.00" "$100.00"
+            "#100.00" "$130.00" "$10.00" "$1,111,240.00" "$0.00" "$0.00" "$1,111,240.00")
           (cdr (sxml->table-row-col sxml 1 #f 3))))
       )
 
