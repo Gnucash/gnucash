@@ -316,24 +316,32 @@ available, i.e. closest to today's prices."))))))
           (get-col-header-fn #f)
           (get-cell-fcur-fn #f)
           (get-cell-anchor-fn #f))
-  ;; table - an existing html-table object
-  ;; title - string as the first row
-  ;; accountlist - list of accounts
-  ;; maxindent - maximum account depth
-
-  ;; cols-data - list of data to be passed as parameter to the following helper functions
-  ;; get-col-header-fn  - a lambda (cols-data) to produce html-object
-  ;; get-cell-amount-fn - a lambda (account cols-data) which produces a gnc-monetary
-  ;; get-cell-fcur-fn   - a lambda (account cols-data) which produces a gnc-monetary or #f
-  ;; get-cell-anchor-fn - a lambda (account cols-data) which produces a url string
 
   ;; this function will add a 2D grid into the html-table
   ;; the data cells are generated from (get-cell-amount-fn account col-datum)
   ;; the data cells may request an alternative (eg. original currency) monetary
-  ;;     by calling (get-cell-fcur-fn account datum)
   ;; horizontal labels are generated from calling (get-col-header-fn col-datum)
-  ;; vertical labels are the account list
-  ;; ^ the accountlist can have hierarchical multilevel subtotals displayed
+  ;; vertical labels are the account list. it can have multilevel subtotals.
+
+  ;; the following are compulsory arguments:
+  ;; table - an existing html-table object
+  ;; title - string as the first row
+  ;; accountlist - list of accounts
+  ;; maxindent - maximum account depth
+  ;; cols-data - list of data to be passed as parameter to the following helper functions
+  ;; get-cell-amount-fn - a lambda (account cols-data) which produces a gnc-monetary - this is compulsory
+
+  ;; the following are optional:
+  ;; omit-zb-bals?      - a boolean to omit "$0.00" amounts
+  ;; show-zb-accts?     - a boolean to omit whole account lines where all amounts are $0.00 (eg closed accts)
+  ;; disable-headers?   - a boolean to disable rendering headers
+  ;; disable-indenting? - a boolean to disable narrow-cell indenting, and render account full-name instead
+  ;; hierarchical-subtotals? - a boolean to enable multilevel subtotals. if disabled, the subtotal strategy is
+  ;;                           changed to 'recursive-balance' ie parents will receive all children amounts.
+  ;; depth-limit        - (untested) accounts whose levels exceed this depth limit are not shown
+  ;; get-col-header-fn  - a lambda (cols-data) to produce html-object - this is optional
+  ;; get-cell-fcur-fn   - a lambda (account cols-data) which produces a gnc-monetary or #f - optional
+  ;; get-cell-anchor-fn - a lambda (account cols-data) which produces a url string - optional
 
   (define num-columns (length cols-data))
 
@@ -458,7 +466,8 @@ available, i.e. closest to today's prices."))))))
                                                         (apply monetary+
                                                                (filter identity (curr-balance-display get-cell-fcur-fn col-datum))))
                                                    omit-zb-bals?
-                                                   (get-cell-anchor-fn curr col-datum))))
+                                                   (and get-cell-anchor-fn
+                                                        (get-cell-anchor-fn curr col-datum)))))
                                  cols-data)))
 
           (list-set! labels lvl-curr (gnc-account-get-full-name curr))
