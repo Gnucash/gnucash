@@ -94,6 +94,10 @@
 (define optname-show-foreign (N_ "Show Foreign Currencies"))
 (define opthelp-show-foreign (N_ "Display any foreign currency amount in an account."))
 
+(define optname-include-overall-period (N_ "If more than 1 period column, include overall period?"))
+(define opthelp-include-overall-period (N_ "If several profit & loss period columns are shown, \
+also show overall period profit & loss."))
+
 ;; (define optname-show-rates (N_ "Show Exchange Rates"))
 ;; (define opthelp-show-rates (N_ "Show the exchange rates used."))
 
@@ -292,15 +296,23 @@ available, i.e. closest to today's prices."))))))
       "e" opthelp-account-links #t))
     
     (when (eq? report-type 'pnl)
+      ;; include overall period column?
+      (add-option
+       (gnc:make-simple-boolean-option
+        gnc:pagename-general optname-include-overall-period
+        "e" opthepl-include-overall-period #t))
+
       ;; closing entry match criteria
       (add-option
        (gnc:make-string-option
         pagename-entries optname-closing-pattern
         "a" opthelp-closing-pattern (_ "Closing Entries")))
+
       (add-option
        (gnc:make-simple-boolean-option
         pagename-entries optname-closing-casing
         "b" opthelp-closing-casing #f))
+
       (add-option
        (gnc:make-simple-boolean-option
         pagename-entries optname-closing-regexp
@@ -735,11 +747,16 @@ available, i.e. closest to today's prices."))))))
                   (closing-str (get-option pagename-entries optname-closing-pattern))
                   (closing-cased (get-option pagename-entries optname-closing-casing))
                   (closing-regexp (get-option pagename-entries optname-closing-regexp))
+                  (include-overall-period? (get-option gnc:pagename-general optname-include-overall-period))
                   ;; datepairs - start from startdate to startdate + incr - 1day
                   ;; repeat until enddate is reached. e.g. 1/1/18 - 31/1/18, 1/2/18 - 28/2/18, etc
                   (report-datepairs (let loop ((result '())
                                                (date startdate))
-                                      (if (> date enddate) (reverse result)
+                                      (if (> date enddate)
+                                          (if (and include-overall-period? (> (length result) 1))
+                                              (reverse (cons (cons startdate enddate)
+                                                             result))
+                                              (reverse result))
                                           (let ((nextdate (incdate date incr)))
                                             (loop (cons (cons date (min enddate (decdate nextdate DayDelta)))
                                                         result)
