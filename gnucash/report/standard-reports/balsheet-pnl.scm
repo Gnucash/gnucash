@@ -45,7 +45,7 @@
 (define opthelp-period (_ "Duration between time periods"))
 
 (define optname-export (_ "Disable indenting for export?"))
-(define opthelp-export (_ "Selecting this option disables indenting for export"))
+(define opthelp-export (_ "Selecting this option disables indenting for export, and enables full account name instead."))
 
 (define optname-accounts (N_ "Accounts"))
 (define opthelp-accounts (N_ "Report on these accounts, if display depth allows."))
@@ -430,7 +430,9 @@ available, i.e. closest to today's prices."))))))
                (next (and (pair? rest) (car rest)))
                (lvl-curr (gnc-account-get-current-depth curr))
                (lvl-next (if next (gnc-account-get-current-depth next) 0))
-               (curr-label (xaccAccountGetName curr))
+               (curr-label ((if disable-indenting?
+                                gnc-account-get-full-name
+                                xaccAccountGetName) curr))
                (curr-commodity (xaccAccountGetCommodity curr))
                (curr-descendants-list (if (not hierarchical-subtotals?)
                                           (gnc-account-get-descendants curr)
