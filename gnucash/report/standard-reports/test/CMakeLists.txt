@@ -10,6 +10,7 @@ set(scm_test_with_srfi64_SOURCES
   test-charts.scm
   test-transaction.scm
   test-balance-sheet.scm
+  test-balsheet-pnl.scm
   test-income-gst.scm
 )
 
