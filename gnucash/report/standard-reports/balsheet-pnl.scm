@@ -53,9 +53,6 @@
 (define optname-depth-limit (N_ "Levels of Subaccounts"))
 (define opthelp-depth-limit (N_ "Maximum number of levels in the account tree displayed."))
 
-(define optname-subtotal-mode (N_ "Hierarchical subtotals"))
-(define opthelp-subtotal-mode (N_ "This option enables hierarchical subtotals, otherwise parent accounts receive children account balances"))
-
 (define optname-show-zb-accts (N_ "Include accounts with zero total balances"))
 (define opthelp-show-zb-accts (N_ "Include accounts with zero total (recursive) balances in this report."))
 
@@ -277,12 +274,6 @@ available, i.e. closest to today's prices."))))))
       gnc:pagename-display optname-omit-zb-bals
       "b" opthelp-omit-zb-bals #f))
 
-    (add-option
-     (gnc:make-simple-boolean-option
-      gnc:pagename-display
-      optname-subtotal-mode 
-      "c" opthelp-subtotal-mode #t))
-
     ;; some detailed formatting options
     (add-option
      (gnc:make-simple-boolean-option
@@ -323,7 +314,6 @@ available, i.e. closest to today's prices."))))))
           (show-zb-accts? #t)
           (disable-headers? #f)
           (disable-indenting? #f)
-          (hierarchical-subtotals? #t)
           (depth-limit #f)
           (get-col-header-fn #f)
           (get-cell-fcur-fn #f)
@@ -348,8 +338,6 @@ available, i.e. closest to today's prices."))))))
   ;; show-zb-accts?     - a boolean to omit whole account lines where all amounts are $0.00 (eg closed accts)
   ;; disable-headers?   - a boolean to disable rendering headers
   ;; disable-indenting? - a boolean to disable narrow-cell indenting, and render account full-name instead
-  ;; hierarchical-subtotals? - a boolean to enable multilevel subtotals. if disabled, the subtotal strategy is
-  ;;                           changed to 'recursive-balance' ie parents will receive all children amounts.
   ;; depth-limit        - (untested) accounts whose levels exceed this depth limit are not shown
   ;; get-col-header-fn  - a lambda (cols-data) to produce html-object - this is optional
   ;; get-cell-fcur-fn   - a lambda (account cols-data) which produces a gnc-monetary or #f - optional
@@ -412,19 +400,8 @@ available, i.e. closest to today's prices."))))))
     (gnc:html-table-append-row!
      table (gnc:make-html-table-cell/size 1 (+ 1 (if disable-indenting? 0 maxindent) num-columns) contents)))
 
-  (define labels
-    (cons title (make-list (1- maxindent) #f)))
-
-  (define level-subtotal-incomplete
-    (make-list maxindent #f))
-
   (define collectors
-    (let loop ((result '())
-               (i 0))
-      (if (= i num-columns) result
-          (loop (cons (make-list-thunk maxindent gnc:make-commodity-collector)
-                      result)
-                (1+ i)))))
+    (make-list-thunk num-columns gnc:make-commodity-collector))
 
   ;; header ASSET/LIABILITY etc
   (add-indented-row 0
@@ -451,14 +428,22 @@ available, i.e. closest to today's prices."))))))
                                 gnc-account-get-full-name
                                 xaccAccountGetName) curr))
                (curr-commodity (xaccAccountGetCommodity curr))
-               (curr-descendants-list (if hierarchical-subtotals?
-                                          '()
-                                          (gnc-account-get-descendants curr)))
+               (curr-descendants-list (gnc-account-get-descendants curr))
                (curr-balance-display (lambda (get-cell-fn idx include-descendants?)
                                        (map (lambda (acc) (get-cell-fn acc idx))
                                             (cons curr (if include-descendants?
                                                            curr-descendants-list
                                                            '()))))))
+
+          (let collector-loop ((col-idx 0)
+                               (cols-data cols-data))
+            (when (pair? cols-data)
+              (let ((mon (get-cell-amount-fn curr (car cols-data))))
+                ((list-ref collectors col-idx)
+                 'add
+                 (gnc:gnc-monetary-commodity mon)
+                 (gnc:gnc-monetary-amount mon))
+                (collector-loop (1+ col-idx) (cdr cols-data)))))
 
           (if (and (or show-zb-accts?
                        ;; the following function tests whether accounts (with descendants) of
@@ -470,105 +455,56 @@ available, i.e. closest to today's prices."))))))
                                                                 (gnc:gnc-monetary-amount
                                                                  (get-cell-amount-fn acc col-datum)))
                                                               cols-data))
-                                                       (cons curr (gnc-account-get-descendants curr))))))))
+                                                       (cons curr curr-descendants-list)))))))
                    (or (not depth-limit) (<= lvl-curr depth-limit)))
-              (add-indented-row lvl-curr
-                                (string-append curr-label (if (null? curr-descendants-list) "" "+"))
-                                "text-cell"
-                                (map
-                                 (lambda (col-datum)
-                                   (gnc:make-html-table-cell/markup
-                                    "number-cell" (list-of-monetary->html-text
-                                                   (apply monetary+
-                                                          (filter identity (curr-balance-display get-cell-amount-fn col-datum #t)))
-                                                   (and get-cell-fcur-fn
-                                                        (apply monetary+
-                                                               (filter identity (curr-balance-display get-cell-fcur-fn col-datum #f))))
-                                                   omit-zb-bals?
-                                                   (and get-cell-anchor-fn
-                                                        (get-cell-anchor-fn curr col-datum)))))
-                                 cols-data)))
+              (begin
+                (add-indented-row lvl-curr
+                                  (string-append (if (null? curr-descendants-list) "" "Total for ") curr-label)
+                                  (if (null? curr-descendants-list) "text-cell" "total-label-cell")
+                                  (map
+                                   (lambda (col-datum)
+                                     (gnc:make-html-table-cell/markup
+                                      (if (null? curr-descendants-list) "number-cell" "total-number-cell")
+                                      (list-of-monetary->html-text
+                                       (apply monetary+
+                                              (filter identity (curr-balance-display get-cell-amount-fn col-datum #t)))
+                                       (and get-cell-fcur-fn
+                                            (apply monetary+
+                                                   (filter identity (curr-balance-display get-cell-fcur-fn col-datum #f))))
+                                       omit-zb-bals?
+                                       (and get-cell-anchor-fn
+                                            (null? curr-descendants-list)
+                                            (get-cell-anchor-fn curr col-datum)))))
+                                   cols-data))
 
-          (list-set! labels lvl-curr (gnc-account-get-full-name curr))
-          (list-set! level-subtotal-incomplete lvl-curr #f)
-          ;; where the magic happens. this section will cycle
-          ;; through ALL columns. each column will cycle through
-          ;; ALL account-depth levels from root to & including
-          ;; current account-depth. each column/level collector
-          ;; will accumulate account amount.
-          (let columns-loop ((col-idx 0)
-                             (cols-data cols-data))
-            (when (pair? cols-data)
-              (let level-loop ((level 0))
-                (when (<= level lvl-curr)
-                  (let ((mon (get-cell-amount-fn curr (car cols-data))))
-                    ;; mon is the cell monetary, or #f if unable to
-                    ;; produce, e.g. price conversion is impossible
-                    (if mon
-                        ((list-ref (list-ref collectors col-idx) level) 'add
-                         (gnc:gnc-monetary-commodity mon)
-                         (gnc:gnc-monetary-amount mon))
-                        ;; mark level-subtotal-incomplete to #t
-                        (list-set! level-subtotal-incomplete level #t)))
-                  (level-loop (1+ level))))
-              (columns-loop (1+ col-idx) (cdr cols-data))))
-
-          (cond
-           ;; no change in level. reset the current level accumulator.
-           ((= lvl-curr lvl-next)
-            (let columns-loop ((col-idx 0)
-                               (cols-data cols-data))
-              (when (pair? cols-data)
-                ((list-ref (list-ref collectors col-idx) lvl-curr) 'reset #f #f)
-                (columns-loop (1+ col-idx) (cdr cols-data)))))
-
-           ;; hierarchical subtotals. we're going UP hierarchy
-           ;; towards the root. start from the current level (minus
-           ;; 1), and cycle until the next account level. add level
-           ;; subtotals if conditions are met below. when all
-           ;; subtotals complete, add a single empty row before
-           ;; moving on to the next (higher level) account.
-           ((> lvl-curr lvl-next)
-            (let add-subtotal-row ((lvl (1- lvl-curr)))
-              (if (< lvl lvl-next)
-                  'noop
-                  (let* ((level-subtotals (map (lambda (col-idx) ((list-ref (list-ref collectors col-idx) lvl)
-                                                                  'format gnc:make-gnc-monetary #f))
-                                               (iota num-columns))))
-
-                    ;; the following conditions tests whether we should display the subtotal
-                    (when (or (zero? lvl)
-                            (and hierarchical-subtotals?
-                                 (or show-zb-accts? (not (every zero? (map gnc:gnc-monetary-amount (concatenate level-subtotals)))))
-                                 (or (not depth-limit) (<= lvl depth-limit))
-                                 (list-ref labels lvl)))
-                        (add-indented-row lvl
-                                          (string-append
-                                           (_ "Total for ")
-                                           (list-ref labels lvl)
-                                           (if (list-ref level-subtotal-incomplete lvl)
-                                               "(incomplete)" ""))
-                                          "total-label-cell"
-                                          (map
-                                           (lambda (level-subtotal)
-                                             (gnc:make-html-table-cell/markup
-                                              "total-number-cell"
-                                              (list-of-monetary->html-text level-subtotal #f #f #f)))
-                                           level-subtotals))
-                          (add-whole-line #f))
-                    (list-set! labels lvl #f)
-                    (list-set! level-subtotal-incomplete lvl #f)
-                    (for-each
-                     (lambda (col-idx)
-                       ((list-ref (list-ref collectors col-idx) lvl) 'reset #f #f)
-                       ((list-ref (list-ref collectors col-idx) (1+ lvl)) 'reset #f #f))
-                     (iota num-columns))
-                    (add-subtotal-row (1- lvl)))))))
+                ;; the following handles 'special' case where placeholder has descendants.
+                (if (and (pair? curr-descendants-list)
+                         (not (every zero? (map (lambda (col-datum)
+                                                  (gnc:gnc-monetary-amount
+                                                   (get-cell-amount-fn curr col-datum)))
+                                                cols-data))))
+                    (add-indented-row (1+ lvl-curr)
+                                      curr-label
+                                      "text-cell"
+                                      (map
+                                       (lambda (col-datum)
+                                         (gnc:make-html-table-cell/markup
+                                          "number-cell"
+                                          (list-of-monetary->html-text
+                                           (apply monetary+
+                                                  (filter identity (curr-balance-display get-cell-amount-fn col-datum #f)))
+                                           (and get-cell-fcur-fn
+                                                (apply monetary+
+                                                       (filter identity (curr-balance-display get-cell-fcur-fn col-datum #f))))
+                                           omit-zb-bals?
+                                           (and get-cell-anchor-fn
+                                                (get-cell-anchor-fn curr col-datum)))))
+                                       cols-data)))))
 
           (loop rest))))
   (add-whole-line #f)
   ;; return collector level 0 total
-  (map (lambda (col-idx) (car (list-ref collectors col-idx))
+  (map (lambda (col-idx) (list-ref collectors col-idx)
                'format gnc:make-gnc-monetary #f)
        (iota num-columns)))
 
@@ -603,8 +539,6 @@ available, i.e. closest to today's prices."))))))
          (depth-limit (let ((limit (get-option gnc:pagename-accounts
                                                optname-depth-limit)))
                         (and (not (eq? limit 'all)) limit)))
-         (subtotal-mode (get-option gnc:pagename-display
-                                    optname-subtotal-mode))
          (show-zb-accts? (get-option gnc:pagename-display
                                      optname-show-zb-accts))
          (omit-zb-bals? (get-option gnc:pagename-display
@@ -708,7 +642,6 @@ available, i.e. closest to today's prices."))))))
                                    #:show-zb-accts? show-zb-accts?
                                    #:disable-indenting? export?
                                    #:disable-headers? disable-headers?
-                                   #:hierarchical-subtotals? (and (not summary?) subtotal-mode)
                                    #:depth-limit (if summary? 0 depth-limit)
                                    #:get-cell-fcur-fn (and common-currency get-cell-fcur-fn)
                                    #:get-col-header-fn qof-print-date
@@ -840,7 +773,6 @@ available, i.e. closest to today's prices."))))))
                                    #:show-zb-accts? show-zb-accts?
                                    #:disable-indenting? export?
                                    #:disable-headers? disable-headers?
-                                   #:hierarchical-subtotals? (and (not summary?) subtotal-mode)
                                    #:depth-limit (if summary? 0 depth-limit)
                                    #:get-cell-fcur-fn (and common-currency get-cell-fcur-fn)
                                    #:get-col-header-fn get-col-header-fn
