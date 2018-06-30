@@ -89,8 +89,9 @@
 (define optname-price-source (N_ "Price Source"))
 (define opthelp-price-source (N_ "How to determine exchange rates."))
 
-;; (define optname-show-foreign (N_ "Show Foreign Currencies"))
-;; (define opthelp-show-foreign (N_ "Display any foreign currency amount in an account."))
+(define optname-show-foreign (N_ "Show Foreign Currencies"))
+(define opthelp-show-foreign (N_ "Display any foreign currency amount in an account."))
+
 ;; (define optname-show-rates (N_ "Show Exchange Rates"))
 ;; (define opthelp-show-rates (N_ "Show the exchange rates used."))
 
@@ -270,8 +271,14 @@ available, i.e. closest to today's prices."))))))
     ;; what to show for zero-balance accounts
     (add-option
      (gnc:make-simple-boolean-option
+      pagename-commodities optname-show-foreign
+      "e" opthelp-show-foreign #t))
+
+    (add-option
+     (gnc:make-simple-boolean-option
       gnc:pagename-display optname-show-zb-accts
       "a" opthelp-show-zb-accts #t))
+
     (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-display optname-omit-zb-bals
@@ -583,6 +590,7 @@ available, i.e. closest to today's prices."))))))
          (price-source (get-option pagename-commodities optname-price-source))
 
          ;; decompose the account list
+         (show-foreign? (get-option pagename-commodities optname-show-foreign))
          (split-up-accounts (gnc:decompose-accountlist accounts))
          (asset-accounts
           (assoc-ref split-up-accounts ACCT-TYPE-ASSET))
@@ -616,13 +624,14 @@ available, i.e. closest to today's prices."))))))
                   (maxindent (gnc-account-get-tree-depth (gnc-get-current-root-account)))
                   (report-dates (gnc:make-date-list startdate enddate incr))
                   (amount-col-amount (lambda (account col-datum)
-                                        (gnc:make-gnc-monetary
-                                         (xaccAccountGetCommodity account)
-                                         (xaccAccountGetBalanceAsOfDate
-                                          account
-                                          (gnc:time64-end-day-time col-datum)))))
+                                       (gnc:make-gnc-monetary
+                                        (xaccAccountGetCommodity account)
+                                        (xaccAccountGetBalanceAsOfDate
+                                         account
+                                         (gnc:time64-end-day-time col-datum)))))
                   (get-cell-fcur-fn (lambda (account col-datum)
                                       (and common-currency
+                                           show-foreign?
                                            (not (gnc-commodity-equal (xaccAccountGetCommodity account) common-currency))
                                            (amount-col-amount account col-datum))))
                   (get-cell-amount-fn (lambda (account col-datum)
@@ -725,6 +734,7 @@ available, i.e. closest to today's prices."))))))
                                               (closing-adjustment account startdate enddate))))))
                   (get-cell-fcur-fn (lambda (account col-datum)
                                       (and common-currency
+                                           show-foreign?
                                            (not (gnc-commodity-equal (xaccAccountGetCommodity account) common-currency))
                                            (account-col-amount account col-datum))))
                   (get-cell-amount-fn (lambda (account col-datum)
