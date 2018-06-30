@@ -378,23 +378,28 @@ available, i.e. closest to today's prices."))))))
        monetaries)
       (coll 'format gnc:make-gnc-monetary #f)))
 
-  (define (list-of-monetary->html-text monetaries monetaries-fcur omit-zero? anchor)
+  (define (list-of-monetary->html-text monetaries monetaries-fcur anchor)
+    ;; inputs:
+    ;; monetaries: list of gnc-monetary (or #f, or html-text object)
+    ;; monetaries-fcur: list of gnc-monetary (or html-text object) (or #f)
+    ;; anchor: url string for monetaries (or #f) (all have same anchor)
+    ;;
+    ;; outputs: html-text object
     (let ((text (gnc:make-html-text)))
-      (if monetaries-fcur
-          (for-each
-           (lambda (monetary)
-             (if (not (and omit-zero? (zero? (gnc:gnc-monetary-amount monetary))))
-                 (gnc:html-text-append! text monetary (gnc:html-markup-br))))
-           monetaries-fcur))
       (for-each
        (lambda (monetary)
-         (if (not (and omit-zero? (zero? (gnc:gnc-monetary-amount monetary))))
+         (if (not (and omit-zb-bals? (gnc:gnc-monetary? monetary) (zero? (gnc:gnc-monetary-amount monetary))))
+             (gnc:html-text-append! text monetary (gnc:html-markup-br))))
+       (or monetaries-fcur '()))
+      (for-each
+       (lambda (monetary)
+         (if (not (and omit-zb-bals? (gnc:gnc-monetary? monetary) (zero? (gnc:gnc-monetary-amount monetary))))
              (gnc:html-text-append! text
                                     (if anchor
                                         (gnc:html-markup-anchor anchor monetary)
                                         monetary)
                                     (gnc:html-markup-br))))
-       monetaries)
+       (or monetaries '()))
       text))
 
   (define (add-whole-line contents)
@@ -472,7 +477,6 @@ available, i.e. closest to today's prices."))))))
                                        (apply monetary+ (curr-balance-display get-cell-amount-fn col-datum #t))
                                        (and get-cell-fcur-fn
                                             (apply monetary+ (filter identity (curr-balance-display get-cell-fcur-fn col-datum #f))))
-                                       omit-zb-bals?
                                        (and get-cell-anchor-fn
                                             (null? curr-descendants-list)
                                             (get-cell-anchor-fn curr col-datum)))))
@@ -496,7 +500,6 @@ available, i.e. closest to today's prices."))))))
                                            (and get-cell-fcur-fn
                                                 (apply monetary+
                                                        (filter identity (curr-balance-display get-cell-fcur-fn col-datum #f))))
-                                           omit-zb-bals?
                                            (and get-cell-anchor-fn
                                                 (get-cell-anchor-fn curr col-datum)))))
                                        cols-data)))))
@@ -517,7 +520,7 @@ available, i.e. closest to today's prices."))))))
                              (gnc:make-html-table-cell/markup
                               "number-cell"
                               (list-of-monetary->html-text
-                               (get-exchange-rates-fn accountlist col-datum) #f #f #f)))
+                               (get-exchange-rates-fn accountlist col-datum) #f #f)))
                            cols-data))
 
         (add-indented-row 0
@@ -527,7 +530,7 @@ available, i.e. closest to today's prices."))))))
                            (lambda (col-total)
                              (gnc:make-html-table-cell/markup
                               "total-number-cell"
-                              (list-of-monetary->html-text col-total #f omit-zb-bals? #f)))
+                              (list-of-monetary->html-text col-total #f #f)))
                            grand-totals)))
 
     ;; return grandtotal
