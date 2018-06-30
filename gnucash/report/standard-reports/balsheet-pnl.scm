@@ -439,12 +439,14 @@ available, i.e. closest to today's prices."))))))
                                 gnc-account-get-full-name
                                 xaccAccountGetName) curr))
                (curr-commodity (xaccAccountGetCommodity curr))
-               (curr-descendants-list (if (not hierarchical-subtotals?)
-                                          (gnc-account-get-descendants curr)
-                                          '()))
-               (curr-balance-display (lambda (get-cell-fn idx)
+               (curr-descendants-list (if hierarchical-subtotals?
+                                          '()
+                                          (gnc-account-get-descendants curr)))
+               (curr-balance-display (lambda (get-cell-fn idx include-descendants?)
                                        (map (lambda (acc) (get-cell-fn acc idx))
-                                            (cons curr curr-descendants-list)))))
+                                            (cons curr (if include-descendants?
+                                                           curr-descendants-list
+                                                           '()))))))
 
           (if (and (or show-zb-accts?
                        ;; the following function tests whether accounts (with descendants) of
@@ -466,10 +468,10 @@ available, i.e. closest to today's prices."))))))
                                    (gnc:make-html-table-cell/markup
                                     "number-cell" (list-of-monetary->html-text
                                                    (apply monetary+
-                                                          (filter identity (curr-balance-display get-cell-amount-fn col-datum)))
+                                                          (filter identity (curr-balance-display get-cell-amount-fn col-datum #t)))
                                                    (and get-cell-fcur-fn
                                                         (apply monetary+
-                                                               (filter identity (curr-balance-display get-cell-fcur-fn col-datum))))
+                                                               (filter identity (curr-balance-display get-cell-fcur-fn col-datum #f))))
                                                    omit-zb-bals?
                                                    (and get-cell-anchor-fn
                                                         (get-cell-anchor-fn curr col-datum)))))
