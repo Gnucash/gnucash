@@ -294,7 +294,7 @@ available, i.e. closest to today's prices."))))))
       (add-option
        (gnc:make-simple-boolean-option
         gnc:pagename-general optname-include-overall-period
-        "e" opthepl-include-overall-period #t))
+        "e" opthelp-include-overall-period #f))
 
       ;; closing entry match criteria
       (add-option
@@ -803,9 +803,9 @@ available, i.e. closest to today's prices."))))))
                                                    (gnc:exchange-by-pricedb-nearest
                                                     monetary common-currency
                                                     (case price-source
-                                                      ((startperiod) col-startdate)
-                                                      ((midperiod) (floor (/ (+ col-startdate col-enddate) 2)))
-                                                      ((endperiod) col-enddate)
+                                                      ((startperiod) startdate)
+                                                      ((midperiod) (floor (/ (+ startdate enddate) 2)))
+                                                      ((endperiod) enddate)
                                                       ((latest) (current-time)))))
                                               monetary))))
                   (get-cell-anchor-fn (lambda (account datepair)
