@@ -192,12 +192,32 @@ available, i.e. closest to today's prices."))))))
     (gnc:options-add-date-interval!
      options gnc:pagename-general optname-startdate optname-enddate "c")
 
-    (add-option
-     (gnc:make-multichoice-option
-      gnc:pagename-general optname-period
-      "c2" opthelp-period
-      'halfyear
-      (keylist->vectorlist periodlist)))
+    (case report-type
+      ((pnl)
+       (add-option
+        (gnc:make-multichoice-option
+         gnc:pagename-general optname-period
+         "c2" opthelp-period
+         'halfyear
+         (keylist->vectorlist periodlist))))
+
+      ((balsheet)
+       (add-option
+        (gnc:make-multichoice-callback-option
+         gnc:pagename-general optname-period
+         "c2" opthelp-period
+         #f
+         (keylist->vectorlist
+          (cons (cons #f (list
+                          (cons 'delta #f)
+                          (cons 'text (_ "disabled"))
+                          (cons 'tip (_ "disable multicolumn"))))
+                periodlist))
+         #f
+         (lambda (x)
+           (gnc-option-db-set-option-selectable-by-name options
+                                                        gnc:pagename-general
+                                                        optname-startdate x))))))
 
     (add-option
      (gnc:make-simple-boolean-option
@@ -559,9 +579,9 @@ available, i.e. closest to today's prices."))))))
                                optname-enddate)))
          (export? (get-option gnc:pagename-general
                               optname-export))
-         (incr (keylist-get-info periodlist
-                                 (get-option gnc:pagename-general optname-period)
-                                 'delta))
+         (incr (let ((period (get-option gnc:pagename-general optname-period)))
+                 (and period
+                      (keylist-get-info periodlist period 'delta))))
          (accounts (get-option gnc:pagename-accounts
                                optname-accounts))
          (depth-limit (let ((limit (get-option gnc:pagename-accounts
@@ -624,7 +644,9 @@ available, i.e. closest to today's prices."))))))
           ((balsheet)
            (let* ((multicol-table (gnc:make-html-table))
                   (maxindent (gnc-account-get-tree-depth (gnc-get-current-root-account)))
-                  (report-dates (gnc:make-date-list startdate enddate incr))
+                  (report-dates (if incr
+                                    (gnc:make-date-list startdate enddate incr)
+                                    (list enddate)))
                   (amount-col-amount (lambda (account col-datum)
                                        (gnc:make-gnc-monetary
                                         (xaccAccountGetCommodity account)
