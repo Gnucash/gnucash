@@ -317,6 +317,7 @@ available, i.e. closest to today's prices."))))))
           (depth-limit #f)
           (get-col-header-fn #f)
           (get-cell-fcur-fn #f)
+          (get-exchange-rates-fn #f)
           (get-cell-anchor-fn #f))
 
   ;; this function will add a 2D grid into the html-table
@@ -506,15 +507,28 @@ available, i.e. closest to today's prices."))))))
   (let ((grand-totals (map (lambda (col-idx) ((list-ref collectors col-idx)
                                               'format gnc:make-gnc-monetary #f))
                            (iota num-columns))))
-    (add-indented-row 0
-                      (string-append "Total for " title)
-                      "total-label-cell"
-                      (map
-                       (lambda (col-total)
-                         (gnc:make-html-table-cell/markup
-                          "total-number-cell"
-                          (list-of-monetary->html-text col-total #f omit-zb-bals? #f)))
-                       grand-totals))
+
+    (if get-exchange-rates-fn
+        (add-indented-row 0
+                          (_ "Exchange Rates")
+                          "text-cell"
+                          (map
+                           (lambda (col-datum)
+                             (gnc:make-html-table-cell/markup
+                              "number-cell"
+                              (list-of-monetary->html-text
+                               (get-exchange-rates-fn accountlist col-datum) #f #f #f)))
+                           cols-data))
+
+        (add-indented-row 0
+                          (string-append "Total for " title)
+                          "total-label-cell"
+                          (map
+                           (lambda (col-total)
+                             (gnc:make-html-table-cell/markup
+                              "total-number-cell"
+                              (list-of-monetary->html-text col-total #f omit-zb-bals? #f)))
+                           grand-totals)))
 
     ;; return grandtotal
     grand-totals))
@@ -634,6 +648,27 @@ available, i.e. closest to today's prices."))))))
                                                  ((nearest) col-date)
                                                  ((latest) (current-time))))
                                               monetary))))
+                  (get-exchange-rates-fn (lambda (accounts col-datum)
+                                           (let ((commodities (delete common-currency
+                                                                      (delete-duplicates (map xaccAccountGetCommodity accounts)
+                                                                                         gnc-commodity-equal)
+                                                                      gnc-commodity-equal)))
+                                             (map
+                                              (lambda (commodity)
+                                                (if (has-price? commodity)
+                                                    (let* ((domestic (gnc:make-gnc-monetary commodity 1))
+                                                           (foreign (gnc:exchange-by-pricedb-nearest
+                                                                     domestic common-currency
+                                                                     (case price-source
+                                                                       ((nearest) (gnc:time64-end-day-time col-datum))
+                                                                       ((latest) (current-time))))))
+                                                      (format #f "~a = ~a"
+                                                              (gnc:monetary->string domestic)
+                                                              (gnc:monetary->string foreign)))
+                                                    (format #f "~a/~a missing"
+                                                            (gnc-commodity-get-nice-symbol common-currency)
+                                                            (gnc-commodity-get-nice-symbol commodity))))
+                                              commodities))))
                   (get-cell-anchor-fn (lambda (account col-datum)
                                         (let* ((splits (xaccAccountGetSplitList account))
                                                (split-date (lambda (s) (xaccTransGetDate (xaccSplitGetParent s))))
@@ -654,7 +689,7 @@ available, i.e. closest to today's prices."))))))
                                                                       ((nearest) 'pricedb-nearest)
                                                                       ((latest) 'pricedb-latest)))
                                      (list "Accounts" "Accounts" (append asset-accounts liability-accounts))))))
-                  (add-to-table (lambda (title accounts disable-headers? summary?)
+                  (add-to-table (lambda (title accounts disable-headers? summary? exchange?)
                                   (add-multicolumn-acct-table
                                    multicol-table title accounts
                                    maxindent get-cell-amount-fn report-dates
@@ -665,16 +700,19 @@ available, i.e. closest to today's prices."))))))
                                    #:depth-limit (if summary? 0 depth-limit)
                                    #:get-cell-fcur-fn (and common-currency get-cell-fcur-fn)
                                    #:get-col-header-fn qof-print-date
+                                   #:get-exchange-rates-fn (and exchange? get-exchange-rates-fn)
                                    #:get-cell-anchor-fn get-cell-anchor-fn
                                    ))))
 
-             (add-to-table (_ "Asset") asset-accounts #f #f)
-             (add-to-table (_ "Liability") liability-accounts #t #f)
-             (add-to-table (_ "Equity") equity-accounts #t #f)
+             (add-to-table (_ "Asset") asset-accounts #f #f #f)
+             (add-to-table (_ "Liability") liability-accounts #t #f #f)
+             (add-to-table (_ "Equity") equity-accounts #t #f #f)
              (unless (null? trading-accounts)
-               (add-to-table (_ "Trading Accounts") trading-accounts #t #f))
-             ;; (add-to-table (_ "Liabilities and Equity") (append liability-accounts equity-accounts) #t #t)
-             (add-to-table (_ "Net Worth") (append asset-accounts liability-accounts trading-accounts) #t #t)
+               (add-to-table (_ "Trading Accounts") trading-accounts #t #f #f))
+             ;; (add-to-table (_ "Liabilities and Equity") (append liability-accounts equity-accounts) #t #t #f)
+             (add-to-table (_ "Net Worth") (append asset-accounts liability-accounts trading-accounts) #t #t #f)
+             (if common-currency
+                 (add-to-table (_ "Exchange Rates") (append asset-accounts liability-accounts trading-accounts) #t #t #t))
 
              (gnc:html-document-add-object!
               doc (gnc:html-render-options-changed (gnc:report-options report-obj)))
