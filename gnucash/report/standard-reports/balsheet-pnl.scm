@@ -503,6 +503,22 @@ available, i.e. closest to today's prices."))))))
           (loop rest))))
   (add-whole-line #f)
   ;; return collector level 0 total
+
+  (add-indented-row 0
+                    (string-append "Total for " title)
+                    "total-label-cell"
+                    (map
+                     (lambda (col-idx)
+                       (gnc:make-html-table-cell/markup
+                        "total-number-cell"
+                        (list-of-monetary->html-text
+                         ((list-ref collectors col-idx)
+                          'format gnc:make-gnc-monetary #f)
+                         #f
+                         omit-zb-bals?
+                         #f)))
+                     (iota num-columns)))
+
   (map (lambda (col-idx) (list-ref collectors col-idx)
                'format gnc:make-gnc-monetary #f)
        (iota num-columns)))
