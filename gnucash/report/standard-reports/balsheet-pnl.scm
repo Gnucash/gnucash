@@ -606,8 +606,31 @@ available, i.e. closest to today's prices."))))))
                                     (gnc-commodity-get-fraction commodity)
                                     commodity
                                     common-currency)))))
-
          (price-source (get-option pagename-commodities optname-price-source))
+         (get-exchange-rates-for-date (lambda (accounts date)
+                                        (let ((commodities (delete common-currency
+                                                                   (delete-duplicates (map xaccAccountGetCommodity accounts)
+                                                                                      gnc-commodity-equal)
+                                                                   gnc-commodity-equal)))
+                                          (map
+                                           (lambda (commodity)
+                                             (if (has-price? commodity)
+                                                 (let* ((domestic (gnc:make-gnc-monetary commodity 1))
+                                                        (foreign (gnc:exchange-by-pricedb-nearest
+                                                                  domestic common-currency
+                                                                  (case price-source
+                                                                    ((startperiod) startdate)
+                                                                    ((midperiod) (floor (/ (+ startdate enddate) 2)))
+                                                                    ((endperiod) enddate)
+                                                                    ((nearest) (gnc:time64-end-day-time date))
+                                                                    ((latest) (current-time))))))
+                                                   (format #f "~a ~a"
+                                                           (gnc:monetary->string domestic)
+                                                           (gnc:monetary->string foreign)))
+                                                 (format #f "~a/~a missing"
+                                                         (gnc-commodity-get-mnemonic common-currency)
+                                                         (gnc-commodity-get-mnemonic commodity))))
+                                           commodities))))
 
          ;; decompose the account list
          (show-foreign? (get-option pagename-commodities optname-show-foreign))
@@ -668,26 +691,7 @@ available, i.e. closest to today's prices."))))))
                                                  ((latest) (current-time))))
                                               monetary))))
                   (get-exchange-rates-fn (lambda (accounts col-datum)
-                                           (let ((commodities (delete common-currency
-                                                                      (delete-duplicates (map xaccAccountGetCommodity accounts)
-                                                                                         gnc-commodity-equal)
-                                                                      gnc-commodity-equal)))
-                                             (map
-                                              (lambda (commodity)
-                                                (if (has-price? commodity)
-                                                    (let* ((domestic (gnc:make-gnc-monetary commodity 1))
-                                                           (foreign (gnc:exchange-by-pricedb-nearest
-                                                                     domestic common-currency
-                                                                     (case price-source
-                                                                       ((nearest) (gnc:time64-end-day-time col-datum))
-                                                                       ((latest) (current-time))))))
-                                                      (format #f "~a = ~a"
-                                                              (gnc:monetary->string domestic)
-                                                              (gnc:monetary->string foreign)))
-                                                    (format #f "~a/~a missing"
-                                                            (gnc-commodity-get-nice-symbol common-currency)
-                                                            (gnc-commodity-get-nice-symbol commodity))))
-                                              commodities))))
+                                           (get-exchange-rates-for-date accounts col-datum)))
                   (get-cell-anchor-fn (lambda (account col-datum)
                                         (let* ((splits (xaccAccountGetSplitList account))
                                                (split-date (lambda (s) (xaccTransGetDate (xaccSplitGetParent s))))
@@ -818,6 +822,8 @@ available, i.e. closest to today's prices."))))))
                                                  ((endperiod) enddate)
                                                  ((latest) (current-time))))
                                               monetary))))
+                  (get-exchange-rates-fn (lambda (accounts col-datum)
+                                           (get-exchange-rates-for-date accounts col-datum)))
                   (get-cell-anchor-fn (lambda (account datepair)
                                         (gnc:make-report-anchor
                                          trep-uuid report-obj
@@ -840,7 +846,7 @@ available, i.e. closest to today's prices."))))))
                                         (gnc:html-markup-br)
                                         (_ " to ")
                                         (qof-print-date (cdr col-datum)))))
-                  (add-to-table (lambda (title accounts disable-headers? summary?)
+                  (add-to-table (lambda (title accounts disable-headers? summary? exchange?)
                                   (add-multicolumn-acct-table
                                    multicol-table title accounts
                                    maxindent get-cell-amount-fn report-datepairs
@@ -851,12 +857,15 @@ available, i.e. closest to today's prices."))))))
                                    #:depth-limit (if summary? 0 depth-limit)
                                    #:get-cell-fcur-fn (and common-currency get-cell-fcur-fn)
                                    #:get-col-header-fn get-col-header-fn
+                                   #:get-exchange-rates-fn (and exchange? get-exchange-rates-fn)
                                    #:get-cell-anchor-fn get-cell-anchor-fn
                                    ))))
 
-             (add-to-table (_ "Income") income-accounts #f #f)
-             (add-to-table (_ "Expense") expense-accounts #t #f)
-             (add-to-table (_ "Net Income") (append income-accounts expense-accounts) #t #t)
+             (add-to-table (_ "Income") income-accounts #f #f #f)
+             (add-to-table (_ "Expense") expense-accounts #t #f #f)
+             (add-to-table (_ "Net Income") (append income-accounts expense-accounts) #t #t #f)
+             (if common-currency
+                 (add-to-table (_ "Exchange Rates") (append income-accounts expense-accounts) #t #t #t))
 
              (gnc:html-document-add-object!
               doc (gnc:html-render-options-changed (gnc:report-options report-obj)))
