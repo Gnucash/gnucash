@@ -48,8 +48,9 @@
     (xaccQueryAddAccountMatch query
                               currency-accounts
                               QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-    (xaccQueryAddDateMatchTT
-     query #f end-date #t end-date QOF-QUERY-AND)
+    (if end-date
+        (xaccQueryAddDateMatchTT
+         query #f end-date #t end-date QOF-QUERY-AND))
 
     ;; Get the query result, i.e. all splits in currency
     ;; accounts.
