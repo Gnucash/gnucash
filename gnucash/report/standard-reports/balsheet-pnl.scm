@@ -99,6 +99,11 @@ also show overall period profit & loss."))
 
 (define periodlist
   (list
+   (cons #f (list
+             (cons 'delta #f)
+             (cons 'text (_ "disabled"))
+             (cons 'tip (_ "disable multicolumn"))))
+
    (cons 'year (list
                 (cons 'delta YearDelta)
                 (cons 'text (_ "year"))
@@ -192,32 +197,21 @@ available, i.e. closest to today's prices."))))))
     (gnc:options-add-date-interval!
      options gnc:pagename-general optname-startdate optname-enddate "c")
 
-    (case report-type
-      ((pnl)
-       (add-option
-        (gnc:make-multichoice-option
-         gnc:pagename-general optname-period
-         "c2" opthelp-period
-         'halfyear
-         (keylist->vectorlist periodlist))))
-
-      ((balsheet)
-       (add-option
-        (gnc:make-multichoice-callback-option
-         gnc:pagename-general optname-period
-         "c2" opthelp-period
-         #f
-         (keylist->vectorlist
-          (cons (cons #f (list
-                          (cons 'delta #f)
-                          (cons 'text (_ "disabled"))
-                          (cons 'tip (_ "disable multicolumn"))))
-                periodlist))
-         #f
-         (lambda (x)
-           (gnc-option-db-set-option-selectable-by-name options
-                                                        gnc:pagename-general
-                                                        optname-startdate x))))))
+    (add-option
+     (gnc:make-multichoice-callback-option
+      gnc:pagename-general optname-period
+      "c2" opthelp-period
+      #f
+      (keylist->vectorlist periodlist)
+      #f
+      (lambda (x)
+        (gnc-option-db-set-option-selectable-by-name
+         options
+         gnc:pagename-general
+         (case report-type
+           ((balsheet) optname-startdate)
+           ((pnl) optname-include-overall-period))
+         x))))
 
     (add-option
      (gnc:make-simple-boolean-option
@@ -758,17 +752,20 @@ available, i.e. closest to today's prices."))))))
                   (include-overall-period? (get-option gnc:pagename-general optname-include-overall-period))
                   ;; datepairs - start from startdate to startdate + incr - 1day
                   ;; repeat until enddate is reached. e.g. 1/1/18 - 31/1/18, 1/2/18 - 28/2/18, etc
-                  (report-datepairs (let loop ((result '())
-                                               (date startdate))
-                                      (if (> date enddate)
-                                          (if (and include-overall-period? (> (length result) 1))
-                                              (reverse (cons (cons startdate enddate)
-                                                             result))
-                                              (reverse result))
-                                          (let ((nextdate (incdate date incr)))
-                                            (loop (cons (cons date (min enddate (decdate nextdate DayDelta)))
-                                                        result)
-                                                  nextdate)))))
+                  ;; if incr is false, datepair will have 1 list element - (cons startdate enddate)
+                  (report-datepairs (if incr
+                                        (let loop ((result '())
+                                                   (date startdate))
+                                          (if (> date enddate)
+                                              (if (and include-overall-period? (> (length result) 1))
+                                                  (reverse (cons (cons startdate enddate)
+                                                                 result))
+                                                  (reverse result))
+                                              (let ((nextdate (incdate date incr)))
+                                                (loop (cons (cons date (min enddate (decdate nextdate DayDelta)))
+                                                            result)
+                                                      nextdate))))
+                                        (list (cons startdate enddate))))
                   ;; this object will cache *all* closing entries from inc/exp accounts to equity.
                   ;; retrieve both KVP-based transaction flags, and the closing-entries string above.
                   (closing-entries (let ((query (qof-query-create-for-splits)))
