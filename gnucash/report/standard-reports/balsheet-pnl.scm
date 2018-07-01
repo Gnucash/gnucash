@@ -90,8 +90,8 @@
 (define opthelp-include-overall-period (N_ "If several profit & loss period columns are shown, \
 also show overall period profit & loss."))
 
-;; (define optname-show-rates (N_ "Show Exchange Rates"))
-;; (define opthelp-show-rates (N_ "Show the exchange rates used."))
+(define optname-show-rates (N_ "Show Exchange Rates"))
+(define opthelp-show-rates (N_ "Show the exchange rates used."))
 
 (define trep-uuid "2fe3b9833af044abb929a88d5a59620f")
 (define networth-barchart-uuid "cbba1696c8c24744848062c7f1cf4a72")
@@ -252,9 +252,18 @@ available, i.e. closest to today's prices."))))))
 
     ;; all about currencies
     (add-option
-     (gnc:make-simple-boolean-option
+     (gnc:make-complex-boolean-option
       pagename-commodities optname-common-currency
-      "b" opthelp-common-currency #f))
+      "b" opthelp-common-currency #f #f
+      (lambda (x)
+        (for-each
+         (lambda (optname)
+           (gnc-option-db-set-option-selectable-by-name
+            options pagename-commodities optname x))
+         (list optname-report-commodity
+               optname-show-rates
+               optname-show-foreign
+               optname-price-source)))))
 
     (gnc:options-add-currency!
      options pagename-commodities
@@ -276,6 +285,11 @@ available, i.e. closest to today's prices."))))))
      (gnc:make-simple-boolean-option
       pagename-commodities optname-show-foreign
       "e" opthelp-show-foreign #t))
+
+    (add-option
+     (gnc:make-simple-boolean-option
+      pagename-commodities optname-show-rates
+      "f" opthelp-show-rates #t))
 
     ;; what to show for zero-balance accounts
     (add-option
@@ -357,6 +371,9 @@ available, i.e. closest to today's prices."))))))
   ;; get-col-header-fn  - a lambda (cols-data) to produce html-object - this is optional
   ;; get-cell-fcur-fn   - a lambda (account cols-data) which produces a gnc-monetary or #f - optional
   ;; get-cell-anchor-fn - a lambda (account cols-data) which produces a url string - optional
+  ;; get-exchange-rates-fn - a lambda (accounts cols-data) function which returns a list of html-objects
+  ;;                         this function should only be specified as a special case to print exchange rates at the
+  ;;                         bottom of html-table, because it will replace the total amount printout.
 
   (define num-columns (length cols-data))
 
@@ -588,8 +605,7 @@ available, i.e. closest to today's prices."))))))
          (use-links? (get-option gnc:pagename-display
                                  optname-account-links))
          (include-chart? (get-option gnc:pagename-general optname-include-chart))
-         (common-currency (and (or include-chart?
-                                   (get-option pagename-commodities optname-common-currency))
+         (common-currency (and (get-option pagename-commodities optname-common-currency)
                                (get-option pagename-commodities optname-report-commodity)))
          (has-price? (lambda (commodity)
                        ;; the following tests whether an amount in
@@ -627,13 +643,14 @@ available, i.e. closest to today's prices."))))))
                                                    (format #f "~a ~a"
                                                            (gnc:monetary->string domestic)
                                                            (gnc:monetary->string foreign)))
-                                                 (format #f "~a/~a missing"
+                                                 (format #f (string-append "~a/~a " (_ "missing"))
                                                          (gnc-commodity-get-mnemonic common-currency)
                                                          (gnc-commodity-get-mnemonic commodity))))
                                            commodities))))
 
          ;; decompose the account list
          (show-foreign? (get-option pagename-commodities optname-show-foreign))
+         (show-rates? (get-option pagename-commodities optname-show-rates))
          (split-up-accounts (gnc:decompose-accountlist accounts))
          (asset-accounts
           (assoc-ref split-up-accounts ACCT-TYPE-ASSET))
@@ -707,7 +724,7 @@ available, i.e. closest to today's prices."))))))
                                networth-barchart-uuid report-obj
                                (list (list "General" "Start Date" (cons 'absolute startdate))
                                      (list "General" "End Date" (cons 'absolute enddate))
-                                     (list "General" "Report's currency" common-currency)
+                                     (list "General" "Report's currency" (or common-currency (gnc-default-report-currency)))
                                      (list "General" "Price Source" (case price-source
                                                                       ((nearest) 'pricedb-nearest)
                                                                       ((latest) 'pricedb-latest)))
@@ -734,7 +751,7 @@ available, i.e. closest to today's prices."))))))
                (add-to-table (_ "Trading Accounts") trading-accounts #t #f #f))
              ;; (add-to-table (_ "Liabilities and Equity") (append liability-accounts equity-accounts) #t #t #f)
              (add-to-table (_ "Net Worth") (append asset-accounts liability-accounts trading-accounts) #t #t #f)
-             (if common-currency
+             (if (and common-currency show-rates?)
                  (add-to-table (_ "Exchange Rates") (append asset-accounts liability-accounts trading-accounts) #t #t #t))
 
              (gnc:html-document-add-object!
@@ -835,7 +852,7 @@ available, i.e. closest to today's prices."))))))
                                pnl-barchart-uuid report-obj
                                (list (list "General" "Start Date" (cons 'absolute startdate))
                                      (list "General" "End Date" (cons 'absolute enddate))
-                                     (list "General" "Report's currency" common-currency)
+                                     (list "General" "Report's currency" (or common-currency (gnc-default-report-currency)))
                                      (list "General" "Price Source" (case price-source
                                                                       ((latest) 'pricedb-latest)
                                                                       (else 'pricedb-nearest)))
@@ -864,7 +881,7 @@ available, i.e. closest to today's prices."))))))
              (add-to-table (_ "Income") income-accounts #f #f #f)
              (add-to-table (_ "Expense") expense-accounts #t #f #f)
              (add-to-table (_ "Net Income") (append income-accounts expense-accounts) #t #t #f)
-             (if common-currency
+             (if (and common-currency show-rates?)
                  (add-to-table (_ "Exchange Rates") (append income-accounts expense-accounts) #t #t #t))
 
              (gnc:html-document-add-object!
