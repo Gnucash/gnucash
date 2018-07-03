@@ -18,6 +18,7 @@ set(scm_test_report_system_SOURCES
 
 set (scm_test_report_system_with_srfi64_SOURCES
   test-html-utilities-srfi64.scm
+  test-report-options.scm
   test-report-system.scm
   )
 
