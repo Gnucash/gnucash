@@ -351,7 +351,6 @@ available, i.e. closest to today's prices."))))))
           table title accountlist maxindent get-cell-amount-fn cols-data #:key
           (omit-zb-bals? #f)
           (show-zb-accts? #t)
-          (disable-headers? #f)
           (disable-indenting? #f)
           (depth-limit #f)
           (recursive-bals? #f)
@@ -377,12 +376,11 @@ available, i.e. closest to today's prices."))))))
   ;; the following are optional:
   ;; omit-zb-bals?      - a boolean to omit "$0.00" amounts
   ;; show-zb-accts?     - a boolean to omit whole account lines where all amounts are $0.00 (eg closed accts)
-  ;; disable-headers?   - a boolean to disable rendering headers
   ;; disable-indenting? - a boolean to disable narrow-cell indenting, and render account full-name instead
   ;; depth-limit        - (untested) accounts whose levels exceed this depth limit are not shown
   ;; recursive-bals?    - a boolean to confirm recursive-balances enabled (parent-accounts show balances) or
   ;;                      disabled (multilevel subtotals after each parent+children)
-  ;; get-col-header-fn  - a lambda (cols-data) to produce html-object - this is optional
+  ;; get-col-header-fn  - a lambda (accounts cols-data) to produce html-object - this is optional
   ;; get-cell-fcur-fn   - a lambda (account cols-data) which produces a gnc-monetary or #f - optional
   ;; get-cell-anchor-fn - a lambda (account cols-data) which produces a url string - optional
   ;; get-exchange-rates-fn - a lambda (accounts cols-data) function which returns a list of html-objects
@@ -458,15 +456,15 @@ available, i.e. closest to today's prices."))))))
   (add-indented-row 0
                     title
                     "total-label-cell"
-                    (if (or disable-headers? (not get-col-header-fn))
-                        '()
+                    (if get-col-header-fn
                         (map
                          (lambda (col-datum)
                            (let* ((header (get-col-header-fn col-datum))
                                   (cell (gnc:make-html-table-cell/markup "total-label-cell" header)))
                              (gnc:html-table-cell-set-style! cell "total-label-cell" 'attribute '("style" "text-align:right"))
                              cell))
-                         cols-data)))
+                         cols-data)
+                        (gnc:html-make-empty-cells maxindent)))
 
   (let loop ((accounts accountlist))
     (if (pair? accounts)
@@ -781,11 +779,10 @@ available, i.e. closest to today's prices."))))))
                                    #:omit-zb-bals? omit-zb-bals?
                                    #:show-zb-accts? show-zb-accts?
                                    #:disable-indenting? export?
-                                   #:disable-headers? disable-headers?
                                    #:depth-limit (if summary? 0 depth-limit)
                                    #:recursive-bals? recursive-bals?
                                    #:get-cell-fcur-fn (and common-currency get-cell-fcur-fn)
-                                   #:get-col-header-fn qof-print-date
+                                   #:get-col-header-fn (and (not disable-headers?) qof-print-date)
                                    #:get-exchange-rates-fn (and exchange? get-exchange-rates-fn)
                                    #:get-cell-anchor-fn get-cell-anchor-fn
                                    ))))
@@ -914,10 +911,9 @@ available, i.e. closest to today's prices."))))))
                                    #:omit-zb-bals? omit-zb-bals?
                                    #:show-zb-accts? show-zb-accts?
                                    #:disable-indenting? export?
-                                   #:disable-headers? disable-headers?
                                    #:depth-limit (if summary? 0 depth-limit)
                                    #:get-cell-fcur-fn (and common-currency get-cell-fcur-fn)
-                                   #:get-col-header-fn get-col-header-fn
+                                   #:get-col-header-fn (and (not disable-headers?) get-col-header-fn)
                                    #:recursive-bals? recursive-bals?
                                    #:get-exchange-rates-fn (and exchange? get-exchange-rates-fn)
                                    #:get-cell-anchor-fn get-cell-anchor-fn
