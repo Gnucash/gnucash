@@ -2060,6 +2060,24 @@ xaccTransWarnReadOnly (GtkWidget *parent, const Transaction *trans)
     return FALSE;
 }
 
+static gboolean reg_trans_has_reconciled_splits (SplitRegister *reg, Transaction *trans)
+{
+    GList *node;
+
+    for (node = xaccTransGetSplitList (trans); node; node = node->next)
+    {
+        Split *split = node->data;
+
+        if (!xaccTransStillHasSplit(trans, split))
+            continue;
+
+        if ((xaccSplitGetReconcile (split) == YREC) &&
+            (g_list_index (reg->unrecn_splits, split) == -1))
+            return TRUE;
+    }
+
+    return FALSE;
+}
 
 static gboolean
 gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
@@ -2087,12 +2105,14 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
     if (xaccTransWarnReadOnly(gnc_split_register_get_parent(reg), trans))
         return FALSE;
 
-    if (!xaccTransHasReconciledSplits (trans))
+    if (!reg_trans_has_reconciled_splits (reg, trans))
         return TRUE;
 
     if (gnc_table_layout_get_cell_changed (reg->table->layout, RECN_CELL, FALSE))
         recn = gnc_recn_cell_get_flag
                ((RecnCell *) gnc_table_layout_get_cell (reg->table->layout, RECN_CELL));
+    else if (g_list_index (reg->unrecn_splits, split) != -1)
+        recn = NREC;   /* A previous run of this function marked this split for unreconciling */
     else
         recn = xaccSplitGetReconcile (split);
 
@@ -2186,7 +2206,12 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
         if (recn == YREC && protected_split_cell)
         {
             if (g_list_index (reg->unrecn_splits, split) == -1)
+            {
                 reg->unrecn_splits = g_list_append (reg->unrecn_splits, split);
+                gnc_recn_cell_set_flag
+                    ((RecnCell *) gnc_table_layout_get_cell (reg->table->layout, RECN_CELL),
+                     NREC);
+            }
         }
 
         if (protected_trans_cell)
