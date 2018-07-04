@@ -506,10 +506,8 @@ available, i.e. closest to today's prices."))))))
               (begin
 
                 (add-indented-row lvl-curr
-                                  (string-append (if (or (not recursive-bals?)
-                                                         (null? curr-descendants-list)) "" "Total for ")
-                                                 curr-label)
-                                  (if (or (not recursive-bals?) (null? curr-descendants-list)) "text-cell" "total-label-cell")
+                                  curr-label
+                                  "text-cell"
                                   (map
                                    (lambda (col-datum)
                                      (gnc:make-html-table-cell/markup
@@ -589,9 +587,13 @@ available, i.e. closest to today's prices."))))))
                           "total-label-cell"
                           (map
                            (lambda (col-total)
-                             (gnc:make-html-table-cell/markup
-                              "total-number-cell"
-                              (list-of-monetary->html-text col-total #f #f)))
+                             (let ((total-cell (gnc:make-html-table-cell/markup
+                                                "total-number-cell"
+                                                (list-of-monetary->html-text col-total #f #f))))
+                               (gnc:html-table-cell-set-style!
+                                total-cell "total-number-cell"
+                                'attribute '("style" "border-top-style:solid; border-top-width: 1px; border-bottom-style:double"))
+                               total-cell))
                            grand-totals)))
 
     ;; return grandtotal
@@ -921,7 +923,7 @@ available, i.e. closest to today's prices."))))))
                                    #:get-cell-anchor-fn get-cell-anchor-fn
                                    ))))
 
-             (add-to-table (_ "Periods") income-accounts get-col-header-fn #t #t)
+             (add-to-table (_ "Periods") '() get-col-header-fn #t #t)
              (add-to-table (_ "Income") income-accounts #f #f #f)
              (add-to-table (_ "Expense") expense-accounts #f #f #f)
              (add-to-table (_ "Net Income") (append income-accounts expense-accounts) #f #t #f)
@@ -941,9 +943,6 @@ available, i.e. closest to today's prices."))))))
               doc multicol-table)))))
 
     (gnc:report-finished)
-    (gnc:html-document-set-style-text!
-     doc "
-td.total-number-cell { border-top-style:solid; border-top-width: 1px; border-bottom-style: double }")
     ;; (gnc:html-document-set-style-text!
     ;;  doc " table, td{ border-width: 1px; border-style:solid; border-color: lightgray; border-collapse: collapse}")
     doc))
