@@ -53,6 +53,12 @@
 (define optname-depth-limit (N_ "Levels of Subaccounts"))
 (define opthelp-depth-limit (N_ "Maximum number of levels in the account tree displayed."))
 
+(define optname-parent-balance-mode (N_ "Parent account amounts include children"))
+(define opthelp-parent-balance-mode (N_ "If this option is enabled, subtotals are \
+displayed within parent amounts, and if parent has own amount, it is displayed on \
+the next row as a child account. If this option is disabled, subtotals are displayed \
+below parent and children groups."))
+
 (define optname-show-zb-accts (N_ "Include accounts with zero total balances"))
 (define opthelp-show-zb-accts (N_ "Include accounts with zero total (recursive) balances in this report."))
 
@@ -302,6 +308,11 @@ available, i.e. closest to today's prices."))))))
       gnc:pagename-display optname-omit-zb-bals
       "b" opthelp-omit-zb-bals #f))
 
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display optname-parent-balance-mode
+      "c" opthelp-parent-balance-mode #t))
+
     ;; some detailed formatting options
     (add-option
      (gnc:make-simple-boolean-option
@@ -343,6 +354,7 @@ available, i.e. closest to today's prices."))))))
           (disable-headers? #f)
           (disable-indenting? #f)
           (depth-limit #f)
+          (recursive-bals? #f)
           (get-col-header-fn #f)
           (get-cell-fcur-fn #f)
           (get-exchange-rates-fn #f)
@@ -368,6 +380,8 @@ available, i.e. closest to today's prices."))))))
   ;; disable-headers?   - a boolean to disable rendering headers
   ;; disable-indenting? - a boolean to disable narrow-cell indenting, and render account full-name instead
   ;; depth-limit        - (untested) accounts whose levels exceed this depth limit are not shown
+  ;; recursive-bals?    - a boolean to confirm recursive-balances enabled (parent-accounts show balances) or
+  ;;                      disabled (multilevel subtotals after each parent+children)
   ;; get-col-header-fn  - a lambda (cols-data) to produce html-object - this is optional
   ;; get-cell-fcur-fn   - a lambda (account cols-data) which produces a gnc-monetary or #f - optional
   ;; get-cell-anchor-fn - a lambda (account cols-data) which produces a url string - optional
@@ -454,10 +468,10 @@ available, i.e. closest to today's prices."))))))
                              cell))
                          cols-data)))
 
-  (let loop ((accountlist accountlist))
-    (if (pair? accountlist)
-        (let* ((curr (car accountlist))
-               (rest (cdr accountlist))
+  (let loop ((accounts accountlist))
+    (if (pair? accounts)
+        (let* ((curr (car accounts))
+               (rest (cdr accounts))
                (next (and (pair? rest) (car rest)))
                (lvl-curr (gnc-account-get-current-depth curr))
                (lvl-next (if next (gnc-account-get-current-depth next) 0))
@@ -465,7 +479,8 @@ available, i.e. closest to today's prices."))))))
                                 gnc-account-get-full-name
                                 xaccAccountGetName) curr))
                (curr-commodity (xaccAccountGetCommodity curr))
-               (curr-descendants-list (gnc-account-get-descendants curr))
+               (curr-descendants-list (filter (lambda (acc) (member acc accountlist))
+                                              (gnc-account-get-descendants curr)))
                (curr-balance-display (lambda (get-cell-fn idx include-descendants?)
                                        (map (lambda (acc) (get-cell-fn acc idx))
                                             (cons curr (if include-descendants?
@@ -497,15 +512,16 @@ available, i.e. closest to today's prices."))))))
               (begin
 
                 (add-indented-row lvl-curr
-                                  (string-append (if (null? curr-descendants-list) "" "Total for ")
+                                  (string-append (if (or (not recursive-bals?)
+                                                         (null? curr-descendants-list)) "" "Total for ")
                                                  curr-label)
-                                  (if (null? curr-descendants-list) "text-cell" "total-label-cell")
+                                  (if (or (not recursive-bals?) (null? curr-descendants-list)) "text-cell" "total-label-cell")
                                   (map
                                    (lambda (col-datum)
                                      (gnc:make-html-table-cell/markup
-                                      (if (null? curr-descendants-list) "number-cell" "total-number-cell")
+                                      (if (or (not recursive-bals?) (null? curr-descendants-list)) "number-cell" "total-number-cell")
                                       (list-of-monetary->html-text
-                                       (apply monetary+ (curr-balance-display get-cell-amount-fn col-datum #t))
+                                       (apply monetary+ (curr-balance-display get-cell-amount-fn col-datum recursive-bals?))
                                        (and get-cell-fcur-fn
                                             (apply monetary+ (filter identity (curr-balance-display get-cell-fcur-fn col-datum #f))))
                                        (and get-cell-anchor-fn
@@ -513,8 +529,9 @@ available, i.e. closest to today's prices."))))))
                                             (get-cell-anchor-fn curr col-datum)))))
                                    cols-data))
 
-                ;; the following handles 'special' case where placeholder has descendants.
-                (if (and (pair? curr-descendants-list)
+                ;; the following handles 'special' case where placeholder has descendants. only for recursive-bals? = true
+                (if (and recursive-bals?
+                         (pair? curr-descendants-list)
                          (or (not depth-limit) (<= (1+ lvl-curr) depth-limit))
                          (not (every zero? (map (lambda (col-datum) (gnc:gnc-monetary-amount (get-cell-amount-fn curr col-datum)))
                                                 cols-data))))
@@ -535,6 +552,34 @@ available, i.e. closest to today's prices."))))))
                                                 (get-cell-anchor-fn curr col-datum)))))
                                        cols-data)))))
 
+          (if (and (not recursive-bals?)
+                   (or (not depth-limit) (<= lvl-curr depth-limit))
+                   (> lvl-curr lvl-next))
+              (let multilevel-loop ((lvl (1- lvl-curr))
+                                    (lvl-acct (gnc-account-get-parent curr)))
+                (unless (or (zero? lvl)
+                            (not (member lvl-acct accountlist))
+                            (< lvl lvl-next))
+                  (add-indented-row lvl
+                                    (string-append "Total for "
+                                                   ((if disable-indenting?
+                                                        gnc-account-get-full-name
+                                                        xaccAccountGetName) lvl-acct))
+                                    "total-label-cell"
+                                    (map
+                                     (lambda (col-datum)
+                                       (gnc:make-html-table-cell/markup
+                                        "total-number-cell"
+                                        (list-of-monetary->html-text
+                                         (apply monetary+
+                                                (map (lambda (acc) (get-cell-amount-fn acc col-datum))
+                                                     (cons lvl-acct (filter (lambda (acc) (member acc accountlist))
+                                                                            (gnc-account-get-descendants lvl-acct)))))
+                                         #f
+                                         #f)))
+                                     cols-data))
+                  (multilevel-loop (1- lvl)
+                                   (gnc-account-get-parent lvl-acct)))))
           (loop rest))))
 
   (add-whole-line #f)
@@ -602,6 +647,8 @@ available, i.e. closest to today's prices."))))))
                                      optname-show-zb-accts))
          (omit-zb-bals? (get-option gnc:pagename-display
                                     optname-omit-zb-bals))
+         (recursive-bals? (get-option gnc:pagename-display
+                                      optname-parent-balance-mode))
          (use-links? (get-option gnc:pagename-display
                                  optname-account-links))
          (include-chart? (get-option gnc:pagename-general optname-include-chart))
@@ -736,6 +783,7 @@ available, i.e. closest to today's prices."))))))
                                    #:disable-indenting? export?
                                    #:disable-headers? disable-headers?
                                    #:depth-limit (if summary? 0 depth-limit)
+                                   #:recursive-bals? recursive-bals?
                                    #:get-cell-fcur-fn (and common-currency get-cell-fcur-fn)
                                    #:get-col-header-fn qof-print-date
                                    #:get-exchange-rates-fn (and exchange? get-exchange-rates-fn)
@@ -870,6 +918,7 @@ available, i.e. closest to today's prices."))))))
                                    #:depth-limit (if summary? 0 depth-limit)
                                    #:get-cell-fcur-fn (and common-currency get-cell-fcur-fn)
                                    #:get-col-header-fn get-col-header-fn
+                                   #:recursive-bals? recursive-bals?
                                    #:get-exchange-rates-fn (and exchange? get-exchange-rates-fn)
                                    #:get-cell-anchor-fn get-cell-anchor-fn
                                    ))))
