@@ -356,6 +356,7 @@ available, i.e. closest to today's prices."))))))
           (hide-grand-total? #f)
           (depth-limit #f)
           (recursive-bals? #f)
+          (account-anchor-fn #f)
           (get-col-header-fn #f)
           (get-cell-fcur-fn #f)
           (get-cell-anchor-fn #f))
@@ -443,6 +444,17 @@ available, i.e. closest to today's prices."))))))
        (or monetaries '()))
       text))
 
+  (define (render-account account)
+    ;; input: account-name
+    ;; outputs: string or html-markup-anchor object
+    (let ((acct-label (if disable-indenting?
+                          (gnc-account-get-full-name account)
+                          (xaccAccountGetName account))))
+      (gnc:make-html-text
+       (if account-anchor-fn
+           (gnc:html-markup-anchor (account-anchor-fn account) acct-label)
+           acct-label))))
+
   (define (add-whole-line contents)
     (gnc:html-table-append-row!
      table (gnc:make-html-table-cell/size 1 (+ 1 (if disable-indenting? 0 maxindent) num-columns) contents)))
@@ -468,9 +480,6 @@ available, i.e. closest to today's prices."))))))
                (next (and (pair? rest) (car rest)))
                (lvl-curr (gnc-account-get-current-depth curr))
                (lvl-next (if next (gnc-account-get-current-depth next) 0))
-               (curr-label ((if disable-indenting?
-                                gnc-account-get-full-name
-                                xaccAccountGetName) curr))
                (curr-commodity (xaccAccountGetCommodity curr))
                (curr-descendants-list (filter (lambda (acc) (member acc accountlist))
                                               (gnc-account-get-descendants curr)))
@@ -506,7 +515,7 @@ available, i.e. closest to today's prices."))))))
               (begin
 
                 (add-indented-row lvl-curr
-                                  curr-label
+                                  (render-account curr)
                                   "text-cell"
                                   (map
                                    (lambda (col-datum)
@@ -529,7 +538,7 @@ available, i.e. closest to today's prices."))))))
                          (not (every zero? (map (lambda (col-datum) (gnc:gnc-monetary-amount (get-cell-amount-fn curr col-datum)))
                                                 cols-data))))
                     (add-indented-row (1+ lvl-curr)
-                                      curr-label
+                                      (render-account curr)
                                       "text-cell"
                                       (map
                                        (lambda (col-datum)
@@ -784,6 +793,7 @@ available, i.e. closest to today's prices."))))))
                                    #:hide-grand-total? hide-grand-total?
                                    #:depth-limit (if get-col-header-fn 0 depth-limit)
                                    #:recursive-bals? recursive-bals?
+                                   #:account-anchor-fn (and use-links? gnc:account-anchor-text)
                                    #:get-cell-fcur-fn (and common-currency get-cell-fcur-fn)
                                    #:get-col-header-fn get-col-header-fn
                                    #:get-cell-anchor-fn get-cell-anchor-fn
@@ -919,6 +929,7 @@ available, i.e. closest to today's prices."))))))
                                    #:depth-limit (if get-col-header-fn 0 depth-limit)
                                    #:hide-accounts? hide-accounts?
                                    #:hide-grand-total? hide-grand-total?
+                                   #:account-anchor-fn (and use-links? gnc:account-anchor-text)
                                    #:get-cell-fcur-fn (and common-currency get-cell-fcur-fn)
                                    #:get-col-header-fn get-col-header-fn
                                    #:recursive-bals? recursive-bals?
