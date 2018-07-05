@@ -160,16 +160,15 @@ UriStrings::UriStrings(const std::string& uri)
     m_host = std::string{host};
     m_dbname = std::string{dbname};
     if (username)
-	m_username = std::string{username};
+        m_username = std::string{username};
     if (password)
-	m_password = std::string{password};
+        m_password = std::string{password};
     m_portnum = portnum;
     g_free(protocol);
     g_free(host);
     g_free(username);
     g_free(password);
     g_free(dbname);
-    
 }
 
 std::string
@@ -275,7 +274,7 @@ GncDbiBackend<Type>::conn_setup (PairVec& options, UriStrings& uri)
     {
         PERR ("Unable to create %s dbi connection", dbstr);
         set_error (ERR_BACKEND_BAD_URL);
-	return nullptr;
+        return nullptr;
     }
 
     dbi_conn_error_handler (conn, error_handler<Type>, this);
@@ -401,7 +400,7 @@ GncDbiBackend<DbType::DBI_SQLITE>::session_begin(QofSession* session,
         set_message (msg + filepath + " not found");
         PWARN ("Sqlite3 file %s not found", filepath.c_str());
         LEAVE("Error");
-	return;
+        return;
     }
 
     if (create && !force && file_exists)
@@ -410,7 +409,7 @@ GncDbiBackend<DbType::DBI_SQLITE>::session_begin(QofSession* session,
         auto msg = "Might clobber, no force";
         PWARN ("%s", msg);
         LEAVE("Error");
-	return;
+        return;
     }
 
     connect(nullptr);
@@ -438,7 +437,7 @@ GncDbiBackend<DbType::DBI_SQLITE>::session_begin(QofSession* session,
         PERR ("Unable to connect to %s: %d\n", book_id, result);
         set_error (ERR_BACKEND_BAD_URL);
         LEAVE("Error");
-	return;
+        return;
     }
 
     if (!conn_test_dbi_library(conn))
@@ -570,10 +569,10 @@ adjust_sql_options (dbi_conn connection)
     {
         const char* errmsg;
         int err = dbi_conn_error(connection, &errmsg);
-	if (err)
-	    PERR("Unable to get sql_mode %d : %s", err, errmsg);
-	else
-	    PINFO("Sql_mode isn't set.");
+        if (err)
+            PERR("Unable to get sql_mode %d : %s", err, errmsg);
+        else
+            PINFO("Sql_mode isn't set.");
         return;
     }
     PINFO("Initial sql_mode: %s", str.c_str());
