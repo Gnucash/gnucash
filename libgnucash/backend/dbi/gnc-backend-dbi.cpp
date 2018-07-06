@@ -652,64 +652,80 @@ GncDbiBackend<Type>::session_begin (QofSession* session, const char* book_id,
             LEAVE("Error");
             return;
         }
-        if (create && !force && save_may_clobber_data (conn,
-                                                       uri.quote_dbname(Type)))
+        if (create && save_may_clobber_data (conn, uri.quote_dbname(Type)))
         {
-            set_error (ERR_BACKEND_STORE_EXISTS);
-            PWARN ("Databse already exists, Might clobber it.");
+            if (force)
+            {
+                // Drop DB
+                if (Type == DbType::DBI_PGSQL)
+                    dbi_conn_select_db (conn, "template1");
+                else if (Type == DbType::DBI_MYSQL)
+                    dbi_conn_select_db (conn, "mysql");
+                else
+                    PWARN ("Unknown database type, don't know how to connect to a system database. Dropping existing database may fail.");
+
+                if (!dbi_conn_queryf (conn, "DROP DATABASE %s",
+                                 uri.quote_dbname(Type).c_str()))
+                    PWARN ("Failed to drop database %s prior to recreating it. Creation will likely fail.",
+                           uri.quote_dbname(Type).c_str());
+            }
+            else
+            {
+                set_error (ERR_BACKEND_STORE_EXISTS);
+                PWARN ("Databse already exists, Might clobber it.");
+                dbi_conn_close(conn);
+                LEAVE("Error");
+                return;
+            }
+        }
+
+    }
+    else if (m_exists)
+    {
+        PERR ("Unable to connect to database '%s'\n", uri.dbname());
+        set_error (ERR_BACKEND_SERVER_ERR);
+        dbi_conn_close(conn);
+        LEAVE("Error");
+        return;
+    }
+    else if (!create)
+    {
+        PERR ("Database '%s' does not exist\n", uri.dbname());
+        set_error(ERR_BACKEND_NO_SUCH_DB);
+        std::string msg{"Database "};
+        set_message(msg + uri.dbname() + " not found");
+        LEAVE("Error");
+        return;
+    }
+
+    if (create)
+    {
+        if (!create_database(conn, uri.quote_dbname(Type).c_str()))
+        {
             dbi_conn_close(conn);
             LEAVE("Error");
             return;
         }
-
-    }
-    else
-    {
-
-        if (m_exists)
+        conn = conn_setup(options, uri);
+        result = dbi_conn_connect (conn);
+        if (result < 0)
         {
-            PERR ("Unable to connect to database '%s'\n", uri.dbname());
+            PERR ("Unable to create database '%s'\n", uri.dbname());
             set_error (ERR_BACKEND_SERVER_ERR);
             dbi_conn_close(conn);
             LEAVE("Error");
             return;
         }
-
-        if (create)
+        if (Type == DbType::DBI_MYSQL)
+            adjust_sql_options (conn);
+        if (!conn_test_dbi_library(conn))
         {
-            if (!create_database(conn, uri.quote_dbname(Type).c_str()))
-            {
-                dbi_conn_close(conn);
-                LEAVE("Error");
-                return;
-            }
-            conn = conn_setup(options, uri);
-            result = dbi_conn_connect (conn);
-            if (result < 0)
-            {
-                PERR ("Unable to create database '%s'\n", uri.dbname());
-                set_error (ERR_BACKEND_SERVER_ERR);
-                dbi_conn_close(conn);
-                LEAVE("Error");
-                return;
-            }
-            if (Type == DbType::DBI_MYSQL)
-                adjust_sql_options (conn);
-            if (!conn_test_dbi_library(conn))
-            {
-                if (Type == DbType::DBI_PGSQL)
-                    dbi_conn_select_db (conn, "template1");
-                dbi_conn_queryf (conn, "DROP DATABASE %s",
-                                 uri.quote_dbname(Type).c_str());
-                dbi_conn_close(conn);
-                return;
-            }
-        }
-        else
-        {
-            set_error(ERR_BACKEND_NO_SUCH_DB);
-            std::string msg{"Database "};
-            set_message(msg + uri.dbname() + " not found");
+            if (Type == DbType::DBI_PGSQL)
+                dbi_conn_select_db (conn, "template1");
+            dbi_conn_queryf (conn, "DROP DATABASE %s",
+                                uri.quote_dbname(Type).c_str());
+            dbi_conn_close(conn);
+            return;
         }
     }
 
