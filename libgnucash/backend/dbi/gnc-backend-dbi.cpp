@@ -405,7 +405,9 @@ GncDbiBackend<DbType::DBI_SQLITE>::session_begin(QofSession* session,
 
     if (create && file_exists)
     {
-        if (!force)
+        if (force)
+            g_unlink (filepath.c_str());
+        else
         {
             set_error (ERR_BACKEND_STORE_EXISTS);
             auto msg = "Might clobber, no force";
@@ -413,8 +415,6 @@ GncDbiBackend<DbType::DBI_SQLITE>::session_begin(QofSession* session,
             LEAVE("Error");
             return;
         }
-        else
-            g_unlink (filepath.c_str());
     }
 
     connect(nullptr);
