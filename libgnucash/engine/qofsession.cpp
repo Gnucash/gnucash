@@ -180,7 +180,9 @@ QofSessionImpl::load_backend (std::string access_method) noexcept
             continue;
         }
         PINFO (" Selected provider %s", prov->provider_name);
-        if (!prov->type_check (m_book_id.c_str ()))
+        // Only do a type check when trying to open an existing file
+        // When saving over an existing file the contents of the original file don't matter
+        if (!m_creating && !prov->type_check (m_book_id.c_str ()))
         {
             PINFO("Provider, %s, reported not being usable for book, %s.",
                     prov->provider_name, m_book_id.c_str ());
@@ -303,6 +305,7 @@ QofSessionImpl::begin (std::string new_book_id, bool ignore_lock,
     destroy_backend ();
     /* Store the session URL  */
     m_book_id = new_book_id;
+    m_creating = create;
     if (filename)
         load_backend ("file");
     else                       /* access method found, load appropriate backend */
@@ -481,7 +484,7 @@ QofSessionImpl::save (QofPercentageFunc percentage_func) noexcept
     }
     else
     {
-        push_error (ERR_BACKEND_NO_HANDLER, "failod to load backend");
+        push_error (ERR_BACKEND_NO_HANDLER, "failed to load backend");
         LEAVE("error -- No backend!");
     }
     m_saving = false;
