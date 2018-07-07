@@ -153,9 +153,9 @@ class Shell:
                             console.write (buf, 'output')
                             if len(buf) < 256: break
                     # Command output
-                    print(`r`)
+                    print(repr(r))
             except SyntaxError:
-                exec self.command in self.globals
+                exec(self.command in self.globals)
         except:
             if hasattr (sys, 'last_type') and sys.last_type == SystemExit:
                 console.quit()

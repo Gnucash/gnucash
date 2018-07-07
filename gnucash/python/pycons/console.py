@@ -31,12 +31,14 @@ import sys
 import re
 import tempfile
 import readline
+import gi
+gi.require_version('Gtk', '3.0')
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Pango
-from StringIO import StringIO
-import shell
-try:    import ishell
+import io
+import pycons.shell as shell
+try:    import pycons.ishell as ishell
 except: pass
 
 ansi_colors =  {'0;30': '#2E3436',
@@ -79,8 +81,8 @@ class ConsoleOut:
     def writelines(self, l):
         for s in l:
             self.console.write (s, self.style)
-    def seek(self, a):   raise IOError, (29, 'Illegal seek')
-    def tell(self):      raise IOError, (29, 'Illegal seek')
+    def seek(self, a):   raise IOError(29, 'Illegal seek')
+    def tell(self):      raise IOError(29, 'Illegal seek')
     truncate = tell
 
 
@@ -113,8 +115,8 @@ class ConsoleIn:
     def readlines(self): return []
     def write(self, s):  return None
     def writelines(self, l): return None
-    def seek(self, a):   raise IOError, (29, 'Illegal seek')
-    def tell(self):      raise IOError, (29, 'Illegal seek')
+    def seek(self, a):   raise IOError(29, 'Illegal seek')
+    def tell(self):      raise IOError(29, 'Illegal seek')
     truncate = tell
 
 
@@ -179,7 +181,7 @@ class Console (Gtk.ScrolledWindow):
         # Console stuff
         self.argv = argv
         self.history_init(filename, size)
-        self.cout = StringIO()
+        self.cout = io.StringIO()
         self.cout.truncate(0)
         if shelltype=='ipython':
             self.shell = ishell.Shell(argv,locals(),globals(),
