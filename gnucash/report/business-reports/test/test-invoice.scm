@@ -26,7 +26,9 @@
       (run-test-proper)))
 
 (define (coverage-test tester)
-  (add-to-load-path "/home/chris/sources/gnucash/gnucash/report/business-reports")
+  (let* ((currfile (dirname (current-filename)))
+         (path (string-take currfile (string-rindex currfile #\/))))
+    (add-to-load-path path))
   (call-with-values
       (lambda()
         (with-code-coverage tester))

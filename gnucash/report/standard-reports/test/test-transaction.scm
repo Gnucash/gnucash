@@ -50,11 +50,12 @@
       (run-test-proper)))
 
 (define (coverage-test)
-  (define %test-vm (make-vm))
-  (add-to-load-path "/home/chris/sources/gnucash/gnucash/report/standard-reports")
+  (let* ((currfile (dirname (current-filename)))
+         (path (string-take currfile (string-rindex currfile #\/))))
+    (add-to-load-path path))
   (call-with-values
       (lambda()
-        (with-code-coverage %test-vm run-test-proper))
+        (with-code-coverage run-test-proper))
     (lambda (data result)
       (let ((port (open-output-file "/tmp/lcov.info")))
         (coverage-data->lcov data port)

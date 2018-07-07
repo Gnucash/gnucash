@@ -1015,6 +1015,7 @@ xaccInitAccount (Account * acc, QofBook *book)
 QofBook *
 gnc_account_get_book(const Account *account)
 {
+    if (!account) return NULL;
     return qof_instance_get_book(QOF_INSTANCE(account));
 }
 
