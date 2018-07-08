@@ -1,3 +1,5 @@
+(use-modules (ice-9 textual-ports))
+(use-modules (ice-9 popen))
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
 (gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
@@ -10,6 +12,7 @@
 (use-modules (gnucash report report-system))
 (use-modules (gnucash report report-system test test-extras))
 (use-modules (srfi srfi-64))
+(use-modules (srfi srfi-98))
 (use-modules (gnucash engine test srfi64-extras))
 (use-modules (sxml simple))
 (use-modules (sxml xpath))
@@ -103,7 +106,7 @@
         (list "Equity" (list (cons 'type ACCT-TYPE-EQUITY)))
         ))
 
-(define (test report-name uuid report-options)
+(define (simple-stress-test report-name uuid report-options)
   (let ((options (gnc:make-report-options uuid)))
     (test-assert (format #f "basic test ~a" report-name)
       (gnc:options->render uuid options (string-append "stress-" report-name) "test"))
@@ -145,6 +148,82 @@
              (map (lambda (opt) (length (vector-ref opt 3)))
                   report-options)))
      )))
+
+(define (combinatorial-stress-test report-name uuid report-options)
+  (let* ((options (gnc:make-report-options uuid))
+         (render #f))
+    (test-assert (format #f "basic test ~a" report-name)
+      (set! render
+        (gnc:options->render
+         uuid options (string-append "stress-" report-name) "test")))
+    (if render
+        (begin
+          (format #t "Testing n-tuple combinatorics for:\n~a" report-name)
+          (for-each
+           (lambda (option)
+             (format #t ",~a/~a"
+                     (vector-ref option 0)
+                     (vector-ref option 1)))
+           report-options)
+          (newline)
+          ;; generate combinatorics
+          (let* ((option-lengths (map (lambda (report-option)
+                                        (length (vector-ref report-option 3)))
+                                      report-options))
+                 (jennyargs (string-join (map number->string option-lengths) " "))
+                 (n-tuple (min
+                           ;; the following is the n-tuple
+                           2
+                           (length report-options)))
+                 (cmdline (format #f "/home/chris/sources/jenny/jenny -n~a ~a"
+                                  n-tuple jennyargs))
+                 (jennyout (get-string-all (open-input-pipe cmdline)))
+                 (test-cases (string-split jennyout #\newline)))
+            (for-each
+             (lambda (case)
+               (unless (string-null? case)
+                 (let* ((choices-str (string-filter char-alphabetic? case))
+                        (choices-alpha (map char->integer (string->list choices-str)))
+                        (choices (map (lambda (n)
+                                        (- n (if (> n 96) 97 39))) ; a-z -> 0-25, and A-Z -> 26-51
+                                      choices-alpha)))
+                   (let loop ((option-idx (1- (length report-options)))
+                              (option-summary '()))
+                     (if (negative? option-idx)
+                         (catch #t
+                           (lambda ()
+                             (gnc:options->render uuid options "stress-test" "test")
+                             (format #t "[pass] ~a:~a \n"
+                                     report-name
+                                     (string-join option-summary ",")))
+                           (lambda (k . args)
+                             (format #t "[fail]... error (~s . ~s) options-list are:\n~a"
+                                     k args
+                                     (gnc:html-render-options-changed options #t))
+                             (test-assert "logging test failure as above..."
+                               #f)))
+                         (let* ((option (list-ref report-options option-idx))
+                                (section (vector-ref option 0))
+                                (name (vector-ref option 1))
+                                (value (list-ref (vector-ref option 3)
+                                                 (list-ref choices option-idx))))
+                           (set-option! options section name value)
+                           (loop (1- option-idx)
+                                 (cons (format #f "~a"
+                                               (cond
+                                                ((boolean? value) (if value 't 'f))
+                                                (else value)))
+                                       option-summary))))))))
+             test-cases)))
+        (display "...aborted due to basic test failure"))))
+
+(define test
+  ;; what strategy are we using here? simple stress test (ie tests as
+  ;; many times as the maximum number of options) or combinatorial
+  ;; tests (using jenny)
+  (if (get-environment-variable "COMBINATORICS")
+      combinatorial-stress-test
+      simple-stress-test))
 
 (define (tests)
   (let* ((env (create-test-env))
@@ -223,8 +302,11 @@
                        "General Journal"
                        "Australian Tax Invoice"
                        "Balance Sheet (eguile)"
+                       ;; "Budget Flow"
                        "networth"
                        ))
-             (format #t "Skipping ~a...\n" report-name)
-           (test report-name report-guid report-options))))
+             (format #t "\nSkipping ~a...\n" report-name)
+             (begin
+               (format #t "\nTesting ~a...\n" report-name)
+               (test report-name report-guid report-options)))))
      optionslist)))
