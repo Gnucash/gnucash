@@ -225,7 +225,7 @@
       combinatorial-stress-test
       simple-stress-test))
 
-(define (tests)
+(define (create-test-data)
   (let* ((env (create-test-env))
          (account-alist (env-create-account-structure-alist env structure))
          (bank (cdr (assoc "Bank" account-alist)))
@@ -280,33 +280,39 @@
               (iota 12))
     (let ((mid (floor (/ (+ (gnc-accounting-period-fiscal-start)
                             (gnc-accounting-period-fiscal-end)) 2))))
-      (env-create-transaction env mid bank income 200))
+      (env-create-transaction env mid bank income 200))))
 
-    (for-each
-     (lambda (option-set)
-       (let ((report-name (assq-ref option-set 'report-name))
-             (report-guid (assq-ref option-set 'report-id))
-             (report-options (assq-ref option-set 'options)))
-         (if (member report-name
-                     ;; these reports seem to cause problems when running...
-                     '("Income Statement"
-                       "Tax Invoice"
-                       "Net Worth Linechart"
-                       "Tax Schedule Report/TXF Export"
-                       "Receipt"
-                       "Future Scheduled Transactions Summary"
-                       "Welcome to GnuCash"
-                       "Hello, World"
-                       "Budget Income Statement"
-                       "Multicolumn View"
-                       "General Journal"
-                       "Australian Tax Invoice"
-                       "Balance Sheet (eguile)"
-                       ;; "Budget Flow"
-                       "networth"
-                       ))
-             (format #t "\nSkipping ~a...\n" report-name)
-             (begin
-               (format #t "\nTesting ~a...\n" report-name)
-               (test report-name report-guid report-options)))))
-     optionslist)))
+(define (run-tests prefix)
+  (for-each
+   (lambda (option-set)
+     (let ((report-name (assq-ref option-set 'report-name))
+           (report-guid (assq-ref option-set 'report-id))
+           (report-options (assq-ref option-set 'options)))
+       (if (member report-name
+                   ;; these reports seem to cause problems when running...
+                   '(
+                     ;; eguile-based reports
+                     "Tax Invoice"
+                     "Receipt"
+                     "Australian Tax Invoice"
+                     "Balance Sheet (eguile)"
+
+                     ;; tax-schedule - locale-dependent?
+                     "Tax Schedule Report/TXF Export"
+
+                     ;; unusual reports
+                     "Welcome to GnuCash"
+                     "Hello, World"
+                     "Multicolumn View"
+                     "General Journal"
+                     ))
+           (format #t "\nSkipping ~a ~a...\n" report-name prefix)
+           (begin
+             (format #t "\nTesting ~a ~a...\n" report-name prefix)
+             (test report-name report-guid report-options)))))
+   optionslist))
+
+(define (tests)
+  (run-tests "with empty book")
+  (create-test-data)
+  (run-tests "on a populated book"))
