@@ -90,8 +90,9 @@ get_associated_income_account(const Account* investment_account)
 			       gnc_account_get_book(investment_account));
 }
 
-void set_associated_income_account(Account* investment_account,
-                                   const Account *income_account)
+static void
+set_associated_income_account(Account* investment_account,
+                              const Account *income_account)
 {
     const GncGUID * income_acc_guid;
 
