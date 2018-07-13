@@ -586,6 +586,8 @@
                                (begin
                                  (set! entry (make-qif-map-entry))
                                  (qif-map-entry:set-qif-name! entry key-string)
+                                 (if (string=? key-string "")
+                                     (set! key-string (default-unspec-acct)))
                                  (qif-map-entry:set-gnc-name!
                                   entry (default-unspec-acct))
                                  (qif-map-entry:set-allowed-types!
