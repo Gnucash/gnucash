@@ -531,6 +531,12 @@ error_handler<DbType::DBI_MYSQL> (dbi_conn conn, void* user_data)
         dbi_be->set_dbi_error (ERR_BACKEND_CANT_CONNECT, 1, true);
         dbi_be->retry_connection (msg);
     }
+    else if (err_num == 1007) //Database exists
+    {
+        dbi_be->set_exists(true);
+        return;
+    }
+
     else                            // Any other error
     {
         PERR ("DBI error: %s\n", msg);
@@ -700,7 +706,8 @@ GncDbiBackend<Type>::session_begin (QofSession* session, const char* book_id,
 
     if (create)
     {
-        if (!create_database(conn, uri.quote_dbname(Type).c_str()))
+        if (!m_exists &&
+            !create_database(conn, uri.quote_dbname(Type).c_str()))
         {
             dbi_conn_close(conn);
             LEAVE("Error");
