@@ -40,7 +40,7 @@ main (int   argc,
     qof_log_init_filename_special("stderr"); /* Init the log system */
     g_test_init ( &argc, &argv, NULL ); 	/* initialize test program */
     qof_log_set_level("gnc", (QofLogLevel)G_LOG_LEVEL_DEBUG);
-    g_test_bug_base("https://bugzilla.gnome.org/show_bug.cgi?id="); /* init the bugzilla URL */
+    g_test_bug_base("https://bugs.gnucash.org/show_bug.cgi?id="); /* init the bugzilla URL */
     /* Disable the transaction log */
     xaccLogDisable();
 

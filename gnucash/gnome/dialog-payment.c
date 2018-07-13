@@ -913,7 +913,7 @@ gnc_payment_ok_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
      * before we close it. This is undesired because the lots may be in
      * an inconsistent state until after all events are handled. So
      * the gui refresh may result in a crash.
-     * See https://bugzilla.gnome.org/show_bug.cgi?id=740471
+     * See https://bugs.gnucash.org/show_bug.cgi?id=740471
      */
     gnc_gui_component_clear_watches (pw->component_id);
 

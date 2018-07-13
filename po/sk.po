@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.7.8\n"
-"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2018-03-25 12:40-0700\n"
 "PO-Revision-Date: 2018-04-02 13:29+0100\n"
 "Last-Translator: Zdenko Podobný <zdenop@gmail.com>\n"
@@ -6995,11 +6995,11 @@ msgid "The SQL database is in use by other users, and the upgrade cannot be perf
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-file.c:462
-msgid "The library \"libdbi\" installed on your system doesn't correctly store large numbers. This means GnuCash cannot use SQL databases correctly. Gnucash will not open or save to SQL databases until this is fixed by installing a different version of \"libdbi\". Please see https://bugzilla.gnome.org/show_bug.cgi?id=611936 for more information."
+msgid "The library \"libdbi\" installed on your system doesn't correctly store large numbers. This means GnuCash cannot use SQL databases correctly. Gnucash will not open or save to SQL databases until this is fixed by installing a different version of \"libdbi\". Please see https://bugs.gnucash.org/show_bug.cgi?id=611936 for more information."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-file.c:474
-msgid "GnuCash could not complete a critical test for the presence of a bug in the \"libdbi\" library. This may be caused by a permissions misconfiguration of your SQL database. Please see https://bugzilla.gnome.org/show_bug.cgi?id=645216 for more information."
+msgid "GnuCash could not complete a critical test for the presence of a bug in the \"libdbi\" library. This may be caused by a permissions misconfiguration of your SQL database. Please see https://bugs.gnucash.org/show_bug.cgi?id=645216 for more information."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-file.c:484
@@ -8739,9 +8739,9 @@ msgstr "Oznámente chyby a ostatné problémy na gnucash-devel@gnucash.org.\n"
 
 #: gnucash/gnucash-bin.c:161
 #, fuzzy
-#| msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org\n"
-msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org"
-msgstr "Tiež si môžete pozrieť oznámenia o chybách na http://bugzilla.gnome.org\n"
+#| msgid "You can also lookup and file bug reports at http://bugs.gnucash.org\n"
+msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
+msgstr "Tiež si môžete pozrieť oznámenia o chybách na http://bugs.gnucash.org\n"
 
 #: gnucash/gnucash-bin.c:162
 msgid "To find the last stable version, please refer to http://www.gnucash.org"

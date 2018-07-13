@@ -11517,19 +11517,19 @@ msgstr ""
 "ನಿಮ್ಮ ವ್ಯವಸ್ಥೆಯಲ್ಲಿ ಅನುಸ್ಥಾಪಿಸಲಾಗಿರುವ \"libdbi\" ಲೈಬ್ರರಿಯು ದೊಡ್ಡ ಸಂಖ್ಯೆಗಳನ್ನು ಸರಿಯಾದ "
 "ಶೇಖರಿಸಲು ಸಾಧ್ಯವಿರುವುದಿಲ್ಲ. ಇದರರ್ಥ \"libdbi\" ಯ ಬೇರೊಂದು ಆವೃತ್ತಿಯನ್ನು ಅನುಸ್ಥಾಪಿಸಿ "
 "ಇದನ್ನು ಸರಿಡಿಸದ ಹೊರತು ಗ್ನುಕ್ಯಾಶ್‌ನಿಂದ ಯಾವುದೆ SQL ದತ್ತಸಂಚಯಗಳನ್ನು ತೆರೆಯಲು ಅಥವ ಉಳಿಸಲು "
-"ಸಾಧ್ಯವಿರುವುದಿಲ್ಲ. ಹೆಚ್ಚಿನ ಮಾಹಿತಿಗಾಗಿ https://bugzilla.gnome.org/show_bug.cgi?"
+"ಸಾಧ್ಯವಿರುವುದಿಲ್ಲ. ಹೆಚ್ಚಿನ ಮಾಹಿತಿಗಾಗಿ https://bugs.gnucash.org/show_bug.cgi?"
 "id=611936 ಅನ್ನು ನೋಡಿ."
 
 #: ../gnucash/gnome-utils/gnc-file.c:474
 msgid ""
 "GnuCash could not complete a critical test for the presence of a bug in the "
 "\"libdbi\" library. This may be caused by a permissions misconfiguration of "
-"your SQL database. Please see https://bugzilla.gnome.org/show_bug.cgi?"
+"your SQL database. Please see https://bugs.gnucash.org/show_bug.cgi?"
 "id=645216 for more information."
 msgstr ""
 "\"libdbi\" ಲೈಬ್ರರಿಯಲ್ಲಿ ಇರುವ ಒಂದು ದೋಷಕ್ಕಾಗಿನ ಗಂಭೀರವಾದ ಪರೀಕ್ಷೆಯನ್ನು ಪೂರ್ಣಗೊಳಿಸಲು "
 "ಗ್ನೂಕ್ಯಾಶ್‌ನಿಂದ ಸಾಧ್ಯವಾಗಿಲ್ಲ. ಇದಕ್ಕೆ ನಿಮ್ಮ SQL ದತ್ತಸಂಚಯದಲ್ಲಿನ ಅನುಮತಿಗಳ ತಪ್ಪು ಸಂರಚನೆಯು "
-"ಕಾರಣವಾಗಿರಬಹುದು. ಹೆಚ್ಚಿನ ಮಾಹಿತಿಗಾಗಿ ದಯವಿಟ್ಟು https://bugzilla.gnome.org/"
+"ಕಾರಣವಾಗಿರಬಹುದು. ಹೆಚ್ಚಿನ ಮಾಹಿತಿಗಾಗಿ ದಯವಿಟ್ಟು https://bugs.gnucash.org/"
 "show_bug.cgi?id=645216 ಅನ್ನು ನೋಡಿ."
 
 #: ../gnucash/gnome-utils/gnc-file.c:484
@@ -15565,9 +15565,9 @@ msgid "Report bugs and other problems to gnucash-devel@gnucash.org"
 msgstr "gnucash-devel@gnucash.org ಗೆ ದೋಷಗಳನ್ನು ಮತ್ತು ಇತರೆ ತೊಂದರೆಗಳನ್ನು ವರದಿ ಮಾಡಿ"
 
 #: ../gnucash/gnucash-bin.c:162
-msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org"
+msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
 msgstr ""
-"ನೀವು http://bugzilla.gnome.org ನಲ್ಲಿ ದೋಷ ವರದಿಗಳನ್ನು ಹುಡುಕಬಹುದು ಅಥವ ಸಲ್ಲಿಸಬಹುದು"
+"ನೀವು http://bugs.gnucash.org ನಲ್ಲಿ ದೋಷ ವರದಿಗಳನ್ನು ಹುಡುಕಬಹುದು ಅಥವ ಸಲ್ಲಿಸಬಹುದು"
 
 #: ../gnucash/gnucash-bin.c:163
 msgid "To find the last stable version, please refer to http://www.gnucash.org"

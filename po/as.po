@@ -11462,18 +11462,18 @@ msgstr ""
 "কৰিব নোৱাৰে. এইটোৱে বুজায় যে GnuCash য়ে SQL ডাটাবেছ সঠিকভাৱে ব্যৱহাৰ কৰিব "
 "নোৱাৰে. \"libdbi\" ৰ বেলেগ এটা সংস্কৰণৰ দ্বাৰা এইটো নিৰ্দিষ্ট নকৰালৈকে Gnucash "
 "য়ে SQL ডাটাবেছত খুলিব বা ছেভ কৰিব নোৱাৰিব. অধিক তথ্যৰ বাবে অনুগ্ৰহ কৰি https://"
-"bugzilla.gnome.org/show_bug.cgi?id=611936 টো চাওক."
+"bugs.gnucash.org/show_bug.cgi?id=611936 টো চাওক."
 
 #: ../gnucash/gnome-utils/gnc-file.c:474
 msgid ""
 "GnuCash could not complete a critical test for the presence of a bug in the "
 "\"libdbi\" library. This may be caused by a permissions misconfiguration of "
-"your SQL database. Please see https://bugzilla.gnome.org/show_bug.cgi?"
+"your SQL database. Please see https://bugs.gnucash.org/show_bug.cgi?"
 "id=645216 for more information."
 msgstr ""
 "\"libdbi\" লাইব্ৰেৰীটোত বাগ এটাৰ উপস্থিতিৰ বাবে GnuCash য়ে কঠিন পৰীক্ষা এটা "
 "সম্পূৰ্ণ কৰিব নোৱাৰিলে. এইটো আপোনাৰ SQL ডাটাবেছৰ অনুমতিবোৰৰ ভুল ৰূপৰেখাকৰণ এটাৰ "
-"দ্বাৰা হব পাৰে. অনুগ্ৰহ কৰি অধিক তথ্যৰ বাবে https://bugzilla.gnome.org/show_bug."
+"দ্বাৰা হব পাৰে. অনুগ্ৰহ কৰি অধিক তথ্যৰ বাবে https://bugs.gnucash.org/show_bug."
 "cgi?id=645216 টো চাওক."
 
 #: ../gnucash/gnome-utils/gnc-file.c:484
@@ -15491,8 +15491,8 @@ msgid "Report bugs and other problems to gnucash-devel@gnucash.org"
 msgstr "gnucash-devel@gnucash.org লৈ বাগবোৰ আৰু আন সমস্যাবোৰ ৰিপোৰ্ট কৰক"
 
 #: ../gnucash/gnucash-bin.c:162
-msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org"
-msgstr "আপুনি http://bugzilla.gnome.org ত বাগ ৰিপোৰ্টবোৰ চাব আৰু ফাইল কৰিব পাৰে"
+msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
+msgstr "আপুনি http://bugs.gnucash.org ত বাগ ৰিপোৰ্টবোৰ চাব আৰু ফাইল কৰিব পাৰে"
 
 #: ../gnucash/gnucash-bin.c:163
 msgid "To find the last stable version, please refer to http://www.gnucash.org"

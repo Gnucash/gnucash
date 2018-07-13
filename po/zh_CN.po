@@ -11324,7 +11324,7 @@ msgstr ""
 msgid ""
 "GnuCash could not complete a critical test for the presence of a bug in the "
 "\"libdbi\" library. This may be caused by a permissions misconfiguration of "
-"your SQL database. Please see https://bugzilla.gnome.org/show_bug.cgi?"
+"your SQL database. Please see https://bugs.gnucash.org/show_bug.cgi?"
 "id=645216 for more information."
 msgstr ""
 
@@ -15361,8 +15361,8 @@ msgstr "请将程序错误或其它的问题报告给 gnucash-devel@gnucash.org 
 
 #: ../gnucash/gnucash-bin.c:162
 #, fuzzy
-msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org"
-msgstr "您也可以在 http://bugzilla.gnome.org 查询和报告错误\n"
+msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
+msgstr "您也可以在 http://bugs.gnucash.org 查询和报告错误\n"
 
 #: ../gnucash/gnucash-bin.c:163
 msgid "To find the last stable version, please refer to http://www.gnucash.org"

@@ -11444,12 +11444,12 @@ msgstr ""
 msgid ""
 "GnuCash could not complete a critical test for the presence of a bug in the "
 "\"libdbi\" library. This may be caused by a permissions misconfiguration of "
-"your SQL database. Please see https://bugzilla.gnome.org/show_bug.cgi?"
+"your SQL database. Please see https://bugs.gnucash.org/show_bug.cgi?"
 "id=645216 for more information."
 msgstr ""
 "GnuCash हयोक नॊ मुकमल कॊरिथ अख ज़रूरी टेसटॊ बग कॊ मोजूदगी बापत  \"libdbi\"  "
 "लायबरी मनज़. यि हेकॊ गॊछ़िथ तोहॊनदिस SQL डाटाबेस कॊस एकिस ईजाज़तस मनज़ मिसकनफिगरेशन "
-"सॊत.पिलीज़ वॊछिव https://bugzilla.gnome.org/show_bug.cgi?id=645216 मज़ीद "
+"सॊत.पिलीज़ वॊछिव https://bugs.gnucash.org/show_bug.cgi?id=645216 मज़ीद "
 "ईनफारमेशन बापत."
 
 #: ../gnucash/gnome-utils/gnc-file.c:484
@@ -15468,9 +15468,9 @@ msgid "Report bugs and other problems to gnucash-devel@gnucash.org"
 msgstr "रिपोट कॊरिव बग तॊ बाकॊय पराबलिम gnucash-devel@gnucash.org कुन"
 
 #: ../gnucash/gnucash-bin.c:162
-msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org"
+msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
 msgstr ""
-"तोहयॊ हेकिव बेयि वॊछिथ तॊ फायिल कॊरिथ बग रिपोट http://bugzilla.gnome.org पयॊठ"
+"तोहयॊ हेकिव बेयि वॊछिथ तॊ फायिल कॊरिथ बग रिपोट http://bugs.gnucash.org पयॊठ"
 
 #: ../gnucash/gnucash-bin.c:163
 msgid "To find the last stable version, please refer to http://www.gnucash.org"

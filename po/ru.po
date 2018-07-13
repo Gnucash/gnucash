@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.7.3\n"
-"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2018-03-26 21:02+0200\n"
 "PO-Revision-Date: 2018-03-26 21:20+0200\n"
@@ -7238,13 +7238,13 @@ msgstr ""
 msgid ""
 "GnuCash could not complete a critical test for the presence of a bug in the "
 "\"libdbi\" library. This may be caused by a permissions misconfiguration of "
-"your SQL database. Please see https://bugzilla.gnome.org/show_bug.cgi?"
+"your SQL database. Please see https://bugs.gnucash.org/show_bug.cgi?"
 "id=645216 for more information."
 msgstr ""
 "GnuCash не может завершить важный тест для проверки наличия ошибки в "
 "библиотеке \"libdbi\". Это может быть связано с неправильно настроенными "
 "правами доступа в вашей SQL БД. Более подробную информацию смотрите на "
-"странице https://bugzilla.gnome.org/show_bug.cgi?id=645216."
+"странице https://bugs.gnucash.org/show_bug.cgi?id=645216."
 
 #: gnucash/gnome-utils/gnc-file.c:484
 msgid ""
@@ -9006,10 +9006,10 @@ msgstr ""
 "Сообщайте об ошибках и других проблемах по адресу: gnucash-devel@gnucash.org"
 
 #: gnucash/gnucash-bin.c:161
-msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org"
+msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
 msgstr ""
 "Также вы можете искать и создавать сообщения об ошибках по адресу: http://"
-"bugzilla.gnome.org"
+"bugs.gnucash.org"
 
 #: gnucash/gnucash-bin.c:162
 msgid "To find the last stable version, please refer to http://www.gnucash.org"

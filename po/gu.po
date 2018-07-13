@@ -11512,13 +11512,13 @@ msgstr ""
 "તમારી સિસ્ટમમાં ઉપયોગ કરવામાં આવેલી \"libdbi\" લાઇબ્રેરી વધુ સંખ્યામાં યોગ્ય રીતે સંગ્રહિત "
 "કરતી નથી. GnuCashને જ્યાં સુધી \"libdbi\" માટે અલગ આવૃત્તિમાં ઇન્સ્ટોલ કરીને તેને ઠીક "
 "કરવામાં નહીં આવે ત્યાં સુધી SQL ડેટાબેઝોમાં ખોલી કે સેવ કરી શકાશે નહીં. વધુ જાણકારી માટે "
-"કૃપા કરીને https://bugzilla.gnome.org/show_bug.cgi?id=611936 જુઓ."
+"કૃપા કરીને https://bugs.gnucash.org/show_bug.cgi?id=611936 જુઓ."
 
 #: ../gnucash/gnome-utils/gnc-file.c:474
 msgid ""
 "GnuCash could not complete a critical test for the presence of a bug in the "
 "\"libdbi\" library. This may be caused by a permissions misconfiguration of "
-"your SQL database. Please see https://bugzilla.gnome.org/show_bug.cgi?"
+"your SQL database. Please see https://bugs.gnucash.org/show_bug.cgi?"
 "id=645216 for more information."
 msgstr ""
 
@@ -15605,9 +15605,9 @@ msgstr "બગ અને અન્ય મુશ્કેલીઓ વિશે g
 
 #: ../gnucash/gnucash-bin.c:162
 #, fuzzy
-msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org"
+msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
 msgstr ""
-"તમે બગનો અહેવાલ http://bugzilla.gnome.org પર પણ જોઈ શકો છો અને આપી પણ શકો છો.\n"
+"તમે બગનો અહેવાલ http://bugs.gnucash.org પર પણ જોઈ શકો છો અને આપી પણ શકો છો.\n"
 
 #: ../gnucash/gnucash-bin.c:163
 msgid "To find the last stable version, please refer to http://www.gnucash.org"

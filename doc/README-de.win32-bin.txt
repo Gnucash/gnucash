@@ -19,7 +19,7 @@ beschrieben auf http://wiki.gnucash.org/wiki/IRC
 
 Sollten Probleme auftreten, bitten die Entwickler darum, diese als
 englischsprachigen Fehlerbericht in »Bugzilla« einzutragen:
-http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+http://bugs.gnucash.org/enter_bug.cgi?product=GnuCash
 
 -------------------
 

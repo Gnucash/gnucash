@@ -12747,13 +12747,13 @@ msgstr ""
 "utiliser correctement les bases de données SQL. GnuCash n’ouvrir ni ne "
 "sauvegardera de base de donnée SQL tant que cela n’aura pas été corrigé par "
 "l’installation d’une autre version de « libdbi ». Veuillez vous référer à "
-"https://bugzilla.gnome.org/show_bug.cgi?id=611936 pour plus d’informations."
+"https://bugs.gnucash.org/show_bug.cgi?id=611936 pour plus d’informations."
 
 #: ../gnucash/gnome-utils/gnc-file.c:474
 msgid ""
 "GnuCash could not complete a critical test for the presence of a bug in the "
 "\"libdbi\" library. This may be caused by a permissions misconfiguration of "
-"your SQL database. Please see https://bugzilla.gnome.org/show_bug.cgi?"
+"your SQL database. Please see https://bugs.gnucash.org/show_bug.cgi?"
 "id=645216 for more information."
 msgstr ""
 
@@ -17215,10 +17215,10 @@ msgstr ""
 "Rapporter les anomalies ou tout autre problème à gnucash-devel@gnucash.org."
 
 #: ../gnucash/gnucash-bin.c:162
-msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org"
+msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
 msgstr ""
 "Vous pouvez aussi consulter ou transmettre des rapports d'anomalie sur "
-"http://bugzilla.gnome.org"
+"http://bugs.gnucash.org"
 
 #: ../gnucash/gnucash-bin.c:163
 msgid "To find the last stable version, please refer to http://www.gnucash.org"

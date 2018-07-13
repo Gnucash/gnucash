@@ -18,7 +18,7 @@ Vēstkopas:  http://wiki.gnucash.org/wiki/Mailing_Lists
 IRC (sazņa): #gnucash on server irc.gnome.org, skatīt arī http://wiki.gnucash.org/wiki/IRC
 
 Ja atklājat kļūdas vai problēmas, nekautrējieties tās reģistrēt "Bugzilla" kļūdu apstrādes 
-sistēmā http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+sistēmā http://bugs.gnucash.org/enter_bug.cgi?product=GnuCash
 
 -------------------
 

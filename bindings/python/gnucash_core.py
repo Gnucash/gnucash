@@ -109,7 +109,7 @@ class Session(GnuCashCoreClass):
                 # New xml file can't be loaded, new sql store
                 # has to be loaded before it can be altered
                 # Any existing store obviously has to be loaded
-                # More background: https://bugzilla.gnome.org/show_bug.cgi?id=726891
+                # More background: https://bugs.gnucash.org/show_bug.cgi?id=726891
                 if book_uri[:3] != "xml" or not is_new:
                     self.load()
             except GnuCashBackendException as backend_exception:

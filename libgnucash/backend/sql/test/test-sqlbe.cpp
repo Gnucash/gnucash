@@ -35,7 +35,7 @@ main (int   argc,
     qof_init ();            /* Initialize the GObject system */
     qof_log_init_filename_special ("stderr"); /* Init the log system */
     g_test_init (&argc, &argv, NULL);    /* initialize test program */
-    g_test_bug_base ("https://bugzilla.gnome.org/show_bug.cgi?id="); /* init the bugzilla URL */
+    g_test_bug_base ("https://bugs.gnucash.org/show_bug.cgi?id="); /* init the bugzilla URL */
 
     test_suite_gnc_backend_sql ();
 

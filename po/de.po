@@ -15,7 +15,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.7.4\n"
-"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2018-03-26 21:02+0200\n"
 "PO-Revision-Date: 2018-03-26 21:20+0200\n"
@@ -7333,19 +7333,19 @@ msgstr ""
 "Zahlen nicht korrekt speichern. Dadurch kann GnuCash keine SQL-Datenbank "
 "benutzen. GnuCash kann keine SQL-Datenbank öffnen oder dahin speichern, bis "
 "eine andere Version von »libdbi« installiert ist. Siehe auch https://"
-"bugzilla.gnome.org/show_bug.cgi?id=611936 "
+"bugs.gnucash.org/show_bug.cgi?id=611936 "
 
 #: gnucash/gnome-utils/gnc-file.c:474
 msgid ""
 "GnuCash could not complete a critical test for the presence of a bug in the "
 "\"libdbi\" library. This may be caused by a permissions misconfiguration of "
-"your SQL database. Please see https://bugzilla.gnome.org/show_bug.cgi?"
+"your SQL database. Please see https://bugs.gnucash.org/show_bug.cgi?"
 "id=645216 for more information."
 msgstr ""
 "GnuCash konnte eine wichtige Überprüfung der Hilfsbibliothek »libdbi« nicht "
 "durchführen. Dies könnte durch fehlerhafte Benutzerrechte in Ihrer SQL-"
 "Datenbank verursacht sein. Bitte lesen Sie den Fehlerbericht auf <https//"
-"bugzilla.gnome.org/show_bug.cgi?id=645216 und prüfen, ob Sie dort die "
+"bugs.gnucash.org/show_bug.cgi?id=645216 und prüfen, ob Sie dort die "
 "passende Korrektur nachlesen können."
 
 #: gnucash/gnome-utils/gnc-file.c:484
@@ -9128,9 +9128,9 @@ msgstr ""
 "Fehler und andere Probleme werden auf gnucash-devel@gnucash.org diskutiert."
 
 #: gnucash/gnucash-bin.c:161
-msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org"
+msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
 msgstr ""
-"Fehlerberichte können auf http://bugzilla.gnome.org eingesehen und erstellt "
+"Fehlerberichte können auf http://bugs.gnucash.org eingesehen und erstellt "
 "werden."
 
 #: gnucash/gnucash-bin.c:162

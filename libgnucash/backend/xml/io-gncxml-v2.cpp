@@ -77,7 +77,7 @@ extern "C"
 
 /* Do not treat -Wstrict-aliasing warnings as errors because of problems of the
  * G_LOCK* macros as declared by glib.  See
- * http://bugzilla.gnome.org/show_bug.cgi?id=316221 for additional information.
+ * http://bugs.gnucash.org/show_bug.cgi?id=316221 for additional information.
  */
 #if (__GNUC__ >= 4 && __GNUC_MINOR__ >= 2)
 #    pragma GCC diagnostic warning "-Wstrict-aliasing"
@@ -791,7 +791,7 @@ qof_session_load_from_xml_file_v2_full (
         /* Even though libxml2 knows how to decompress zipped files, we
          * do it ourself since as of version 2.9.1 it has a bug that
          * causes it to fail to decompress certain files. See
-         * https://bugzilla.gnome.org/show_bug.cgi?id=712528 for more
+         * https://bugs.gnucash.org/show_bug.cgi?id=712528 for more
          * info.
          */
          const char* filename = xml_be->get_filename();

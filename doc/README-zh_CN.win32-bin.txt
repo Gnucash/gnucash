@@ -10,7 +10,7 @@
 邮件列表:  http://wiki.gnucash.org/wiki/Mailing_Lists
 IRC (聊天):   irc.gnome.org 服务器的 #gnucash 频道，另见 http://wiki.gnucash.org/wiki/IRC
 
-如果您遇到了任何 bug 或者问题，请不要犹豫，将它们报告到我们的 bug 跟踪工具“Bugzilla”：http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+如果您遇到了任何 bug 或者问题，请不要犹豫，将它们报告到我们的 bug 跟踪工具“Bugzilla”：http://bugs.gnucash.org/enter_bug.cgi?product=GnuCash
 
 -------------------
 

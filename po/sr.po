@@ -11484,19 +11484,19 @@ msgstr ""
 "велике бројеве. То значи да Гнуов новчић не може правилно да користити СКуЛ "
 "базу података. Гнуов новчић неће отварати или чувати у СКуЛ базама података "
 "све док се ово не поправи уградњом другачијег издања библиотеке „libdbi“. "
-"Погледајте „https://bugzilla.gnome.org/show_bug.cgi?id=611936“ за више "
+"Погледајте „https://bugs.gnucash.org/show_bug.cgi?id=611936“ за више "
 "информација."
 
 #: ../gnucash/gnome-utils/gnc-file.c:474
 msgid ""
 "GnuCash could not complete a critical test for the presence of a bug in the "
 "\"libdbi\" library. This may be caused by a permissions misconfiguration of "
-"your SQL database. Please see https://bugzilla.gnome.org/show_bug.cgi?"
+"your SQL database. Please see https://bugs.gnucash.org/show_bug.cgi?"
 "id=645216 for more information."
 msgstr ""
 "Гнуов новчић није могао да доврши критични тест за присуством грешке у "
 "библиотеци „libdbi“. Ово може бити узроковано неисправним овлашћењима ваше "
-"СКуЛ базе података. Погледајте „https://bugzilla.gnome.org/show_bug.cgi?"
+"СКуЛ базе података. Погледајте „https://bugs.gnucash.org/show_bug.cgi?"
 "id=645216“ за више информација."
 
 #: ../gnucash/gnome-utils/gnc-file.c:484
@@ -15518,7 +15518,7 @@ msgid "Report bugs and other problems to gnucash-devel@gnucash.org"
 msgstr "Пријавите грешке и друге проблеме на „gnucash-devel@gnucash.org“"
 
 #: ../gnucash/gnucash-bin.c:162
-msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org"
+msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
 msgstr ""
 "Такође можете потражити и попунити извештаје о грешкама на „http://bugzilla."
 "gnome.org“"

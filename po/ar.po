@@ -11417,17 +11417,17 @@ msgstr ""
 "المكتبة \"libdbi\" مخزنة في نظامك بشكل لا يحفظ مبالغ كبيرة بشكل صحيح. هذا "
 "يعني أن البرنامج لا يستطيع استخدام قاعدة البيانات. إن البرنامج لن يقوم بفتح "
 "أو حفظ قاعدة البيانات حتى يتم تحميل مكتبة أخرى. أرجو زيارة الموقع التالي "
-"لمزيد من المعلومات https://bugzilla.gnome.org/show_bug.cgi?id=611936 "
+"لمزيد من المعلومات https://bugs.gnucash.org/show_bug.cgi?id=611936 "
 
 #: ../gnucash/gnome-utils/gnc-file.c:474
 msgid ""
 "GnuCash could not complete a critical test for the presence of a bug in the "
 "\"libdbi\" library. This may be caused by a permissions misconfiguration of "
-"your SQL database. Please see https://bugzilla.gnome.org/show_bug.cgi?"
+"your SQL database. Please see https://bugs.gnucash.org/show_bug.cgi?"
 "id=645216 for more information."
 msgstr ""
 "البرنامج لا يستطيع إكمال عملية الإختبار للمكتبة \"libdbi\" بسبب وجود عطل "
-"بها. أرجو زيارة الرابط التالي لمزيد من المعلومات https://bugzilla.gnome.org/"
+"بها. أرجو زيارة الرابط التالي لمزيد من المعلومات https://bugs.gnucash.org/"
 "show_bug.cgi?id=645216 "
 
 #: ../gnucash/gnome-utils/gnc-file.c:484
@@ -15421,8 +15421,8 @@ msgid "Report bugs and other problems to gnucash-devel@gnucash.org"
 msgstr "أرسل الأخطاء وغيرها من المشاكل لgnucash-devel@gnucash.org"
 
 #: ../gnucash/gnucash-bin.c:162
-msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org"
-msgstr "يمكنك أيضا بحث وتقديم التقارير الأخطاء في http://bugzilla.gnome.org"
+msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
+msgstr "يمكنك أيضا بحث وتقديم التقارير الأخطاء في http://bugs.gnucash.org"
 
 #: ../gnucash/gnucash-bin.c:163
 msgid "To find the last stable version, please refer to http://www.gnucash.org"

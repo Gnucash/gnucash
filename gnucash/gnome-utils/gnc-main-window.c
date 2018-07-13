@@ -667,7 +667,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
 
     /* Deal with the uncommon case that the state file defines a window
      * but no pages. An example to get in such a situation can be found
-     * here: https://bugzilla.gnome.org/show_bug.cgi?id=436479#c3
+     * here: https://bugs.gnucash.org/show_bug.cgi?id=436479#c3
      * If this happens on the first window, we will open an account hierarchy
      * to avoid confusing the user by presenting a completely empty window.
      * If it happens on a later window, we'll just skip restoring that window.
@@ -4866,7 +4866,7 @@ dgettext_swapped (const gchar *msgid,
  * This is copied into GnuCash from Gtk in order to fix problems when
  * empty msgids were passed through gettext().
  *
- * See http://bugzilla.gnome.org/show_bug.cgi?id=326200 . If that bug
+ * See http://bugs.gnucash.org/show_bug.cgi?id=326200 . If that bug
  * is fixed in the gtk that we can rely open, then
  * gnc_gtk_action_group_set_translation_domain can be replaced by
  * gtk_action_group_set_translation_domain again.

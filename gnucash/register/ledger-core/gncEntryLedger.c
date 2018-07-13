@@ -567,7 +567,7 @@ void gnc_entry_ledger_set_default_invoice (GncEntryLedger *ledger,
      * adding bills on a day different from the bill's own date.
      * Note this is for bills only, because for (customer's) invoices
      * it makes more sense to use the current date.
-     * Consult https://bugzilla.gnome.org/show_bug.cgi?id=646541
+     * Consult https://bugs.gnucash.org/show_bug.cgi?id=646541
      * to understand why.
      */
     if (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_VENDOR)

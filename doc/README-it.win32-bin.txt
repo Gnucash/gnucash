@@ -17,7 +17,7 @@ IRC (Chat):    canale #gnucash sul server irc.gnome.org; vedere anche http://wik
 
 Se si riscontrassero dei problemi o dei bug utilizzando il programma, è possibile comunicarli nel sistema
 di tracciamento dei bug di GnuCash denominato "Bugzilla":
-http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+http://bugs.gnucash.org/enter_bug.cgi?product=GnuCash
 
 -------------------
 

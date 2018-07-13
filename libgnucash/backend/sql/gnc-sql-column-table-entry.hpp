@@ -548,7 +548,7 @@ void set_parameter(T object, P item, const char* property)
     // here. This is needed to reset the infant state of objects
     // when loading them initially from sql. Failing to do so
     // could prevent future editing of these objects
-    // Example of this is https://bugzilla.gnome.org/show_bug.cgi?id=795944
+    // Example of this is https://bugs.gnucash.org/show_bug.cgi?id=795944
     qof_begin_edit(QOF_INSTANCE(object));
     g_object_set(object, property, item, nullptr);
     if (!qof_commit_edit(QOF_INSTANCE(object))) return;

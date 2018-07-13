@@ -59,7 +59,7 @@ TODO
 
   - [ ] bugs
 
-    - [?] Expired scheduled transactions never run - <http://bugzilla.gnome.org/show_bug.cgi?id=375892>
+    - [?] Expired scheduled transactions never run - <http://bugs.gnucash.org/show_bug.cgi?id=375892>
 
   - remove
 
@@ -160,7 +160,7 @@ Notes::
 - use Recurrence instead of FreqSpec
 
   - ! [x] load druid
-  - ! [x] sx-from-trans, <http://bugzilla.gnome.org/show_bug.cgi?id=412633>
+  - ! [x] sx-from-trans, <http://bugs.gnucash.org/show_bug.cgi?id=412633>
   - ! [x] XML migration, handling
 
     - xml:freqSpec -> obj:Recurrence

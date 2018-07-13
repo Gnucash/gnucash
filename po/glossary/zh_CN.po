@@ -90,7 +90,7 @@ msgid "account type: Mutual fund"
 msgstr "科目类型：投资基金"
 
 # 某人或某公司持有的某个事物，其有价值并且可以被使用或销售以支付债务
-#. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugzilla.gnome.org/show_bug.cgi?id=421766"
+#. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
 #, fuzzy
 msgid "account type: Passive"
 msgstr "科目类型：资产"

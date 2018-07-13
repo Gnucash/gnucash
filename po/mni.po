@@ -11362,19 +11362,19 @@ msgstr ""
 "ꯑꯗꯣꯝꯒꯤ ꯁꯤꯁꯇꯦꯝꯗ ꯏꯟꯁꯇꯣꯜ ꯇꯧꯕ ꯂꯥꯏꯕ꯭ꯔꯦꯔꯤ \"libdbi\" ꯑꯁꯤ ꯑꯆꯧꯕ ꯅꯝꯕꯔ ꯀꯌꯥ ꯆꯨꯝꯅ ꯁ꯭ꯇꯣꯔ "
 "ꯇꯧꯗ꯭ꯔꯦ꯫ ꯃꯁꯤꯅ ꯍꯥꯏꯔꯤꯕꯗꯤ GnuCash ꯅ SQL ꯗꯥꯇꯥꯕꯦꯖꯁꯤꯡ ꯆꯨꯝꯅ ꯁꯤꯖꯤꯟꯅꯕ ꯉꯝꯃꯣꯏ꯫ \"libdbi\" ꯒꯤ "
 "ꯇꯣꯉꯥꯟꯕ ꯚꯔꯁꯟ ꯑꯃ ꯏꯟꯁꯇꯣꯜ ꯇꯧꯗꯨꯅ ꯐꯍꯟꯗ꯭ꯔꯤꯕ ꯐꯥꯎꯕ Gnucash ꯑꯁꯤ SQL ꯗꯥꯇꯥꯕꯦꯖꯗ ꯍꯥꯡꯗꯣꯛꯂꯣꯏ ꯅꯇ꯭ꯔꯒ "
-"ꯁꯦꯚ ꯇꯧꯔ꯫ ꯑꯀꯨꯞꯄ ꯃꯔꯣꯜꯒꯤꯗꯃꯛ  https://bugzilla.gnome.org/show_bug.cgi?id=611936 ꯗ "
+"ꯁꯦꯚ ꯇꯧꯔ꯫ ꯑꯀꯨꯞꯄ ꯃꯔꯣꯜꯒꯤꯗꯃꯛ  https://bugs.gnucash.org/show_bug.cgi?id=611936 ꯗ "
 "ꯌꯦꯡꯕꯤꯌꯨ꯫"
 
 #: ../gnucash/gnome-utils/gnc-file.c:474
 msgid ""
 "GnuCash could not complete a critical test for the presence of a bug in the "
 "\"libdbi\" library. This may be caused by a permissions misconfiguration of "
-"your SQL database. Please see https://bugzilla.gnome.org/show_bug.cgi?"
+"your SQL database. Please see https://bugs.gnucash.org/show_bug.cgi?"
 "id=645216 for more information."
 msgstr ""
 "GnuCash ꯅ \"libdbi\" ꯂꯥꯏꯕ꯭ꯔꯦꯔꯤꯗ ꯕꯒ ꯑꯃ ꯌꯥꯎꯕ꯭ꯔꯥ ꯌꯦꯡꯕꯒꯤ ꯑꯔꯨꯕ ꯆꯥꯡꯌꯦꯡ ꯑꯃ ꯂꯣꯏꯕ ꯉꯝꯃꯣꯏ. ꯃꯁꯤ "
 "ꯑꯗꯣꯝꯒꯤ SQL ꯗꯥꯇꯥꯕꯦꯖꯒꯤ ꯃꯤꯁꯀꯟꯐꯤꯒ꯭ꯌꯨꯔꯦꯁꯟ ꯄꯥꯔꯃꯤꯁꯟ ꯑꯃꯅ ꯊꯣꯛꯍꯟꯕ ꯑꯣꯏꯕ ꯌꯥꯏ꯫ ꯑꯀꯨꯞꯄ ꯃꯔꯣꯜꯒꯤꯗꯃꯛ "
-"https://bugzilla.gnome.org/show_bug.cgi?id=645216 ꯗ ꯌꯦꯡꯕꯤꯌꯨ꯫"
+"https://bugs.gnucash.org/show_bug.cgi?id=645216 ꯗ ꯌꯦꯡꯕꯤꯌꯨ꯫"
 
 #: ../gnucash/gnome-utils/gnc-file.c:484
 msgid ""
@@ -15363,8 +15363,8 @@ msgid "Report bugs and other problems to gnucash-devel@gnucash.org"
 msgstr "ꯕꯒꯁꯤꯡ ꯑꯃꯁꯨꯡ ꯑꯇꯣꯞꯄ ꯈꯨꯗꯣꯡꯆꯥꯗꯕꯁꯤꯡ gnucash-devel@gnucash.org ꯇ ꯔꯤꯄꯣꯔꯠ ꯇꯧꯔꯣ"
 
 #: ../gnucash/gnucash-bin.c:162
-msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org"
-msgstr "ꯑꯗꯣꯝꯁꯨ http://bugzilla.gnome.org ꯇ ꯕꯒ ꯔꯤꯄꯣꯔꯠꯁꯤꯡ ꯊꯤꯕ ꯑꯃꯁꯨꯡ ꯐꯥꯏꯜ ꯇꯧꯕ ꯌꯥꯏ"
+msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
+msgstr "ꯑꯗꯣꯝꯁꯨ http://bugs.gnucash.org ꯇ ꯕꯒ ꯔꯤꯄꯣꯔꯠꯁꯤꯡ ꯊꯤꯕ ꯑꯃꯁꯨꯡ ꯐꯥꯏꯜ ꯇꯧꯕ ꯌꯥꯏ"
 
 #: ../gnucash/gnucash-bin.c:163
 msgid "To find the last stable version, please refer to http://www.gnucash.org"

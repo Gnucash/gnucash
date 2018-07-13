@@ -825,7 +825,7 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
      * Note that we can safely ignore the return value; we checked
      * the verify_ok earlier, so we know it's ok.
      * Additionally make sure the invoice has the owner's currency
-     * refer to https://bugzilla.gnome.org/show_bug.cgi?id=728074
+     * refer to https://bugs.gnucash.org/show_bug.cgi?id=728074
      */
     gnc_suspend_gui_refresh ();
     gncInvoiceBeginEdit (invoice);

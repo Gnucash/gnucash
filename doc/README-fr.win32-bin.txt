@@ -20,7 +20,7 @@ Aussi à consulter:		http://wiki.gnucash.org/wiki/IRC
 
 N'hésitez pas à rapporter toute erreur ou tout problème rencontré
 sur notre outil de suivi des bogues "Bugzilla":
-http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+http://bugs.gnucash.org/enter_bug.cgi?product=GnuCash
 
 -------------------
 

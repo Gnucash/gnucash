@@ -11,7 +11,7 @@ GnuCash 不僅設計成易於使用，而且功能強大又有彈性。它可以
 IRC (聊天):     irc.gnome.org 伺服器的 #gnucash 頻道，見 http://wiki.gnucash.org/wiki/IRC
 
 如果您遇到了任何 bug 或問題，請不要遲疑，將問題報告到我們的 bug 追蹤系統 "Bugzilla": (請用英文)
-http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+http://bugs.gnucash.org/enter_bug.cgi?product=GnuCash
 
 -------------------
 

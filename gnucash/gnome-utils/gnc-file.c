@@ -463,7 +463,7 @@ show_session_error (GtkWindow *parent,
                 "store large numbers. This means GnuCash cannot use SQL databases "
                 "correctly. Gnucash will not open or save to SQL databases until this is "
                 "fixed by installing a different version of \"libdbi\". Please see "
-                "https://bugzilla.gnome.org/show_bug.cgi?id=611936 for more "
+                "https://bugs.gnucash.org/show_bug.cgi?id=611936 for more "
                 "information.");
 
         gnc_error_dialog (parent, "%s", fmt);
@@ -474,7 +474,7 @@ show_session_error (GtkWindow *parent,
         fmt = _("GnuCash could not complete a critical test for the presence of "
                 "a bug in the \"libdbi\" library. This may be caused by a "
                 "permissions misconfiguration of your SQL database. Please see "
-                "https://bugzilla.gnome.org/show_bug.cgi?id=645216 for more "
+                "https://bugs.gnucash.org/show_bug.cgi?id=645216 for more "
                 "information.");
 
         gnc_error_dialog (parent, "%s", fmt);

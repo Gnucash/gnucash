@@ -369,7 +369,7 @@ void gnc_main_window_restore_default_state(GncMainWindow *window);
  * into GnuCash in order to fix problems when empty msgids were passed
  * through gettext().
  *
- * See http://bugzilla.gnome.org/show_bug.cgi?id=326200 . If that bug
+ * See http://bugs.gnucash.org/show_bug.cgi?id=326200 . If that bug
  * is fixed in the gtk that we can rely open, then
  * gnc_gtk_action_group_set_translation_domain can be replaced by
  * gtk_action_group_set_translation_domain again.

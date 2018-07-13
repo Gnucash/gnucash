@@ -11297,18 +11297,18 @@ msgstr ""
 "మీ సిస్టంలో ప్రతిష్ఠాపించబడిన లైబ్రరీ  \"libdbi\" పెద్ద సంఖ్యలను సరిగ్గా నిల్వ చేయదు. అంటే Gnuక్యాష్ "
 "SQL డేటాబేస్‌లను సరిగ్గా ఉపయోగించదు. ఒక భిన్నమైన  \"libdbi\" వెర్షన్‌ను ప్రతిష్ఠాపించడం ద్వారా దీనిని సరి "
 "చేసే వరకు Gnuక్యాష్ తెరవడం కానీ SQL డేటాబేస్‌లకు సేవ్ చేయడం కానీ జరగదు. మరింత సమాచారం కోసం దయచేసి  "
-"https://bugzilla.gnome.org/show_bug.cgi?id=611936 ను చూడగలరు. "
+"https://bugs.gnucash.org/show_bug.cgi?id=611936 ను చూడగలరు. "
 
 #: ../gnucash/gnome-utils/gnc-file.c:474
 msgid ""
 "GnuCash could not complete a critical test for the presence of a bug in the "
 "\"libdbi\" library. This may be caused by a permissions misconfiguration of "
-"your SQL database. Please see https://bugzilla.gnome.org/show_bug.cgi?"
+"your SQL database. Please see https://bugs.gnucash.org/show_bug.cgi?"
 "id=645216 for more information."
 msgstr ""
 "\"libdbi\" లైబ్రరీలో దోషం ఉనికి కోసం కీలక పరీక్షను Gnuక్యాష్ పూర్తి చేయలేకపోవచ్చు. మీ SQL డేటాబేస్ "
 "యొక్క అనుమతుల తప్పుడు ఆకృతీకరణ ద్వారా ఇది సంభవించవచ్చు. మరింత సమాచారం కోసం దయచేసి https://"
-"bugzilla.gnome.org/show_bug.cgi?id=645216 ను చూడగలరు. "
+"bugs.gnucash.org/show_bug.cgi?id=645216 ను చూడగలరు. "
 
 #: ../gnucash/gnome-utils/gnc-file.c:484
 msgid ""
@@ -15280,8 +15280,8 @@ msgid "Report bugs and other problems to gnucash-devel@gnucash.org"
 msgstr "gnuక్యాష్-డెవ్‌లప్@gnuక్యాష్.ఆర్గ్‌కు దోషాలను మరియు ఇతర సమస్యలను నివేదించు"
 
 #: ../gnucash/gnucash-bin.c:162
-msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org"
-msgstr "http://bugzilla.gnome.org కూడా మీరు దోష నివేదికలను చూడవచ్చు మరియు ఫైల్ చేయవచ్చు."
+msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
+msgstr "http://bugs.gnucash.org కూడా మీరు దోష నివేదికలను చూడవచ్చు మరియు ఫైల్ చేయవచ్చు."
 
 #: ../gnucash/gnucash-bin.c:163
 msgid "To find the last stable version, please refer to http://www.gnucash.org"

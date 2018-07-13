@@ -534,7 +534,7 @@ gncScrubBusinessSplit (Split *split)
         GNCLot *lot = xaccSplitGetLot (split);
 
         /* Look for transactions as a result of double posting an invoice or bill
-         * Refer to https://bugzilla.gnome.org/show_bug.cgi?id=754209
+         * Refer to https://bugs.gnucash.org/show_bug.cgi?id=754209
          * to learn how this could have happened in the past.
          * Characteristics of such transaction are:
          * - read only

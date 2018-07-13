@@ -909,7 +909,7 @@ gncInvoiceGetNetAndTaxesInternal (GncInvoice *invoice, gboolean use_value,
         if (use_value)
         {
             // Always use rounded net values to prevent creating imbalanced transactions on posting
-            // https://bugzilla.gnome.org/show_bug.cgi?id=628903
+            // https://bugs.gnucash.org/show_bug.cgi?id=628903
             value = gncEntryGetDocValue (entry, TRUE, is_cust_doc, is_cn);
             if (gnc_numeric_check (value) == GNC_ERROR_OK)
                 net_total = gnc_numeric_add (net_total, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
