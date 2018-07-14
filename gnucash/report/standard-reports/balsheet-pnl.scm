@@ -355,6 +355,7 @@ available, i.e. closest to today's prices."))))))
           (hide-accounts? #f)
           (hide-grand-total? #f)
           (depth-limit #f)
+          (negate-amounts? #f)
           (recursive-bals? #f)
           (account-anchor-fn #f)
           (get-col-header-fn #f)
@@ -379,6 +380,7 @@ available, i.e. closest to today's prices."))))))
   ;; omit-zb-bals?      - a boolean to omit "$0.00" amounts
   ;; show-zb-accts?     - a boolean to omit whole account lines where all amounts are $0.00 (eg closed accts)
   ;; disable-indenting? - a boolean to disable narrow-cell indenting, and render account full-name instead
+  ;; negate-amounts?    - a boolean to negate amounts. useful for e.g. income-type accounts.
   ;; depth-limit        - (untested) accounts whose levels exceed this depth limit are not shown
   ;; recursive-bals?    - a boolean to confirm recursive-balances enabled (parent-accounts show balances) or
   ;;                      disabled (multilevel subtotals after each parent+children)
@@ -416,7 +418,8 @@ available, i.e. closest to today's prices."))))))
        (lambda (monetary)
          (coll 'add
                (gnc:gnc-monetary-commodity monetary)
-               (gnc:gnc-monetary-amount monetary)))
+               (let ((amount (gnc:gnc-monetary-amount monetary)))
+                 (if negate-amounts? (- amount) amount))))
        monetaries)
       (coll 'format gnc:make-gnc-monetary #f)))
 
@@ -497,7 +500,8 @@ available, i.e. closest to today's prices."))))))
                 ((list-ref collectors col-idx)
                  'add
                  (gnc:gnc-monetary-commodity mon)
-                 (gnc:gnc-monetary-amount mon))
+                 (let ((amount (gnc:gnc-monetary-amount mon)))
+                   (if negate-amounts? (- amount) amount)))
                 (collector-loop (1+ col-idx) (cdr cols-data)))))
 
           (if (and (or show-zb-accts?
@@ -786,13 +790,14 @@ available, i.e. closest to today's prices."))))))
                                              (cell (gnc:make-html-table-cell/markup "total-label-cell" header)))
                                         (gnc:html-table-cell-set-style! cell "total-label-cell" 'attribute '("style" "text-align:right"))
                                         cell)))
-                  (add-to-table (lambda (title accounts get-col-header-fn hide-accounts? hide-grand-total?)
+                  (add-to-table (lambda (title accounts get-col-header-fn hide-accounts? hide-grand-total? negate-amounts?)
                                   (add-multicolumn-acct-table
                                    multicol-table title accounts
                                    maxindent get-cell-monetary-fn report-dates
                                    #:omit-zb-bals? omit-zb-bals?
                                    #:show-zb-accts? show-zb-accts?
                                    #:disable-indenting? export?
+                                   #:negate-amounts? negate-amounts?
                                    #:hide-accounts? hide-accounts?
                                    #:hide-grand-total? hide-grand-total?
                                    #:depth-limit (if get-col-header-fn 0 depth-limit)
@@ -803,15 +808,15 @@ available, i.e. closest to today's prices."))))))
                                    #:get-cell-anchor-fn get-cell-anchor-fn
                                    ))))
 
-             (add-to-table (_ "Dates") '() get-col-header-fn #t #t)
-             (add-to-table (_ "Asset") asset-accounts #f #f #f)
-             (add-to-table (_ "Liability") liability-accounts #f #f #f)
-             (add-to-table (_ "Equity") equity-accounts #f #f #f)
+             (add-to-table (_ "Date") '() get-col-header-fn #t #t #f)
+             (add-to-table (_ "Asset") asset-accounts #f #f #f #f)
+             (add-to-table (_ "Liability") liability-accounts #f #f #f #t)
+             ;; (add-to-table (_ "Equity") equity-accounts #f #f #f #t)
              (unless (null? trading-accounts)
-               (add-to-table (_ "Trading Accounts") trading-accounts #f #f #f))
-             ;; (add-to-table (_ "Net Worth") (append asset-accounts liability-accounts trading-accounts) #f #t #f)
+               (add-to-table (_ "Trading Accounts") trading-accounts #f #f #f #f))
+             (add-to-table (_ "Net Worth") (append asset-accounts liability-accounts trading-accounts) #f #t #f #f)
              (if (and common-currency show-rates?)
-                 (add-to-table (_ "Exchange Rates") (append asset-accounts liability-accounts trading-accounts) get-exchange-rates-fn #t #t))
+                 (add-to-table (_ "Exchange Rates") (append asset-accounts liability-accounts trading-accounts) get-exchange-rates-fn #t #t #f))
 
              (gnc:html-document-add-object!
               doc (gnc:html-render-options-changed (gnc:report-options report-obj)))
@@ -923,13 +928,14 @@ available, i.e. closest to today's prices."))))))
                                               (cell (gnc:make-html-table-cell/markup "total-label-cell" header)))
                                          (gnc:html-table-cell-set-style! cell "total-label-cell" 'attribute '("style" "text-align:right"))
                                          cell)))
-                  (add-to-table (lambda (title accounts get-col-header-fn hide-accounts? hide-grand-total?)
+                  (add-to-table (lambda (title accounts get-col-header-fn hide-accounts? hide-grand-total? negate-amounts?)
                                   (add-multicolumn-acct-table
                                    multicol-table title accounts
                                    maxindent get-cell-monetary-fn report-datepairs
                                    #:omit-zb-bals? omit-zb-bals?
                                    #:show-zb-accts? show-zb-accts?
                                    #:disable-indenting? export?
+                                   #:negate-amounts? negate-amounts?
                                    #:depth-limit (if get-col-header-fn 0 depth-limit)
                                    #:hide-accounts? hide-accounts?
                                    #:hide-grand-total? hide-grand-total?
@@ -940,12 +946,12 @@ available, i.e. closest to today's prices."))))))
                                    #:get-cell-anchor-fn get-cell-anchor-fn
                                    ))))
 
-             (add-to-table (_ "Periods") '() get-col-header-fn #t #t)
-             (add-to-table (_ "Income") income-accounts #f #f #f)
-             (add-to-table (_ "Expense") expense-accounts #f #f #f)
-             (add-to-table (_ "Net Income") (append income-accounts expense-accounts) #f #t #f)
+             (add-to-table (_ "Period") '() get-col-header-fn #t #t #f)
+             (add-to-table (_ "Income") income-accounts #f #f #f #t)
+             (add-to-table (_ "Expense") expense-accounts #f #f #f #f)
+             (add-to-table (_ "Net Income") (append income-accounts expense-accounts) #f #t #f #t)
              (if (and common-currency show-rates?)
-                 (add-to-table (_ "Exchange Rates") (append income-accounts expense-accounts) get-exchange-rates-fn #t #t))
+                 (add-to-table (_ "Exchange Rates") (append income-accounts expense-accounts) get-exchange-rates-fn #t #t #f))
 
              (gnc:html-document-add-object!
               doc (gnc:html-render-options-changed (gnc:report-options report-obj)))
