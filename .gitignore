@@ -243,3 +243,6 @@ DerivedData/
 xcuserdata/
 messages.mo
 /.settings/
+
+# ignore the project directory of NetBeans
+nbproject/
