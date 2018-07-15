@@ -192,6 +192,7 @@ TEST (QofSessionTest, save)
     qof_backend_register_provider (get_provider ());
     QofSession s;
     s.begin ("book1", false, false, false);
+    qof_book_mark_session_dirty (s.get_book ());
     s.save (nullptr);
     EXPECT_EQ (sync_called, true);
     qof_backend_unregister_all_providers ();

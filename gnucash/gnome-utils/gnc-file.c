@@ -1536,11 +1536,7 @@ gnc_file_do_save_as (GtkWindow *parent, const char* filename)
     /* if we got to here, then we've successfully gotten a new session */
     /* close up the old file session (if any) */
     qof_session_swap_data (session, new_session);
-
-    /* XXX At this point, we should really mark the data in the new session
-     * as being 'dirty', since we haven't saved it at all under the new
-     * session. But I'm lazy...
-     */
+    qof_book_mark_session_dirty (qof_session_get_book (new_session));
 
     qof_event_resume();
 

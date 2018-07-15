@@ -451,23 +451,21 @@ QofSessionImpl::is_saving () const noexcept
 void
 QofSessionImpl::save (QofPercentageFunc percentage_func) noexcept
 {
+    if (!qof_book_session_not_saved (m_book)) //Clean book, nothing to do.
+        return;
     m_saving = true;
     ENTER ("sess=%p book_id=%s", this, m_book_id.c_str ());
 
-    /* If there is a backend, and the backend is reachable
-    * (i.e. we can communicate with it), then synchronize with
-    * the backend.  If we cannot contact the backend (e.g.
-    * because we've gone offline, the network has crashed, etc.)
-    * then give the user the option to save to the local disk.
-    *
-    * hack alert -- FIXME -- XXX the code below no longer
-    * does what the words above say.  This needs fixing.
-    */
+    /* If there is a backend, the book is dirty, and the backend is reachable
+     * (i.e. we can communicate with it), then synchronize with the backend.  If
+     * we cannot contact the backend (e.g.  because we've gone offline, the
+     * network has crashed, etc.)  then raise an error so that the controlling
+     * dialog can offer the user a chance to save in a different way.
+     */
     auto backend = qof_book_get_backend (m_book);
     if (backend)
     {
-        /* if invoked as SaveAs(), then backend not yet set */
-        qof_book_set_backend (m_book, backend);
+
         backend->set_percentage(percentage_func);
         backend->sync(m_book);
         auto err = backend->get_error();
