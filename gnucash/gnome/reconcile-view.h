@@ -110,6 +110,8 @@ void gnc_reconcile_view_unselect_all (GNCReconcileView *view);
 
 gboolean gnc_reconcile_view_changed (GNCReconcileView *view);
 
+void gnc_reconcile_view_add_padding (GNCReconcileView *view, gint column, gint xpadding);
+
 G_END_DECLS
 
 #endif /* GNC_RECONCILE_VIEW_H */
