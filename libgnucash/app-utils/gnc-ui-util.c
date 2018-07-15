@@ -66,6 +66,7 @@
 #define GNC_PREF_REVERSED_ACCTS_NONE    "reversed-accounts-none"
 #define GNC_PREF_REVERSED_ACCTS_CREDIT  "reversed-accounts-credit"
 #define GNC_PREF_REVERSED_ACCTS_INC_EXP "reversed-accounts-incomeexpense"
+#define GNC_PREF_PRICES_FORCE_DECIMAL   "force-price-decimal"
 
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -1325,6 +1326,8 @@ GNCPrintAmountInfo
 gnc_default_price_print_info (const gnc_commodity *curr)
 {
     GNCPrintAmountInfo info;
+    gboolean force = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL,
+                                         GNC_PREF_PRICES_FORCE_DECIMAL);
     info.commodity = curr;
 
     if (info.commodity)
@@ -1345,8 +1348,9 @@ gnc_default_price_print_info (const gnc_commodity *curr)
     info.use_symbol = 0;
     info.use_locale = 1;
     info.monetary = 1;
-    info.force_fit = TRUE;
-    info.round = TRUE;
+    
+    info.force_fit = force;
+    info.round = force;
     return info;
 }
 

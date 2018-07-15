@@ -1338,7 +1338,7 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">12</property>
+                    <property name="top_attach">13</property>
                   </packing>
                 </child>
                 <child>
@@ -1356,7 +1356,7 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">12</property>
+                    <property name="top_attach">13</property>
                   </packing>
                 </child>
                 <child>
@@ -1375,7 +1375,7 @@ many months before the current month:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">11</property>
+                    <property name="top_attach">12</property>
                   </packing>
                 </child>
                 <child>
@@ -1387,6 +1387,25 @@ many months before the current month:</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Display negative amounts in red.</property>
                     <property name="tooltip_text" translatable="yes">Display negative amounts in red.</property>
+                    <property name="halign">start</property>
+                    <property name="margin_left">12</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">11</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="pref/general/force-price-decimal">
+                    <property name="label" translatable="yes">Force P_rices to display as decimals.</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup">Force prices to display as decimals even if they must be rounded.</property>
+                    <property name="tooltip_text" translatable="yes">If active, GnuCash will round prices as necessary to display them as decimals instead of displaying the exact fraction if the fractional part cannont be exactly represented as a decimal.</property>
                     <property name="halign">start</property>
                     <property name="margin_left">12</property>
                     <property name="use_underline">True</property>
