@@ -233,6 +233,18 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
 }
 
 
+gint
+gnc_reconcile_view_get_column_width (GNCReconcileView *view, gint column)
+{
+    GNCQueryView      *qview = GNC_QUERY_VIEW (view);
+    GtkTreeViewColumn *col;
+
+    //allow for pointer model column at column 0
+    col = gtk_tree_view_get_column (GTK_TREE_VIEW (qview), (column - 1));
+    return  gtk_tree_view_column_get_width (col);
+}
+
+
 void
 gnc_reconcile_view_add_padding (GNCReconcileView *view, gint column, gint xpadding)
 {

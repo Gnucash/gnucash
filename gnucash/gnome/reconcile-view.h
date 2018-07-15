@@ -112,6 +112,8 @@ gboolean gnc_reconcile_view_changed (GNCReconcileView *view);
 
 void gnc_reconcile_view_add_padding (GNCReconcileView *view, gint column, gint xpadding);
 
+gint gnc_reconcile_view_get_column_width (GNCReconcileView *view, gint column);
+
 G_END_DECLS
 
 #endif /* GNC_RECONCILE_VIEW_H */
