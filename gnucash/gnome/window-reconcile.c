@@ -1190,8 +1190,8 @@ gnc_reconcile_window_create_view_box(Account *account,
     vscroll = gtk_scrolled_window_get_vscrollbar (GTK_SCROLLED_WINDOW (scrollWin));
     gtk_widget_get_preferred_size (vscroll, NULL, &nat_sb);
 
-    // add xpadding to amount column so scrollbar does not cover
-    gnc_reconcile_view_add_padding (GNC_RECONCILE_VIEW(view), REC_AMOUNT, nat_sb.width);
+    // add xpadding to recn column so scrollbar does not cover
+    gnc_reconcile_view_add_padding (GNC_RECONCILE_VIEW(view), REC_RECN, nat_sb.width);
 
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
