@@ -1866,7 +1866,7 @@ gnc_ui_edit_account_window(GtkWindow *parent, Account *account)
 
     parent_acct = gnc_account_get_parent (account);
     if (parent_acct == NULL)
-        parent_acct = account;		/* must be at the root */
+        parent_acct = account;      /* must be at the root */
 
     gtk_tree_view_collapse_all (aw->parent_tree);
     gnc_tree_view_account_set_selected_account (
@@ -1951,23 +1951,23 @@ gnc_account_renumber_update_examples (RenumberDialog *data)
     prefix = gtk_editable_get_chars(GTK_EDITABLE(data->prefix), 0, -1);
     interval = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(data->interval));
     if (interval <= 0)
-	interval = 10;
+    interval = 10;
     num_digits = (unsigned int)log10((double)(data->num_children * interval)) + 1;
 
     if (strlen (prefix))
-	str = g_strdup_printf("%s-%0*d", prefix, num_digits, interval);
+    str = g_strdup_printf("%s-%0*d", prefix, num_digits, interval);
     else
-	str = g_strdup_printf("%0*d", num_digits, interval);
+    str = g_strdup_printf("%0*d", num_digits, interval);
 
     gtk_label_set_text(GTK_LABEL(data->example1), str);
     g_free(str);
 
     if (strlen (prefix))
-	str = g_strdup_printf("%s-%0*d", prefix, num_digits,
-			      interval * data->num_children);
+    str = g_strdup_printf("%s-%0*d", prefix, num_digits,
+                  interval * data->num_children);
     else
-	str = g_strdup_printf("%0*d", num_digits,
-			      interval * data->num_children);
+    str = g_strdup_printf("%0*d", num_digits,
+                  interval * data->num_children);
 
     gtk_label_set_text(GTK_LABEL(data->example2), str);
     g_free(str);
@@ -2004,27 +2004,28 @@ gnc_account_renumber_response_cb (GtkDialog *dialog,
     {
         gtk_widget_hide(data->dialog);
         children = gnc_account_get_children_sorted(data->parent);
-	if (children == NULL)
-	{
-	    PWARN ("Can't renumber children of an account with no children!");
-	    g_free (data);
-	    return;
-	}
+        if (children == NULL)
+        {
+            PWARN ("Can't renumber children of an account with no children!");
+            g_free (data);
+            return;
+        }
         prefix = gtk_editable_get_chars(GTK_EDITABLE(data->prefix), 0, -1);
-        interval =
-            gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(data->interval));
-	if (interval <= 0)
-	    interval = 10;
+        interval = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(data->interval));
+
+        if (interval <= 0)
+            interval = 10;
+
         num_digits = (unsigned int)log10 ((double)(data->num_children * interval) + 1);
 
         gnc_set_busy_cursor (NULL, TRUE);
         for (tmp = children, i = 1; tmp; tmp = g_list_next(tmp), i += 1)
         {
-	    if (strlen (prefix))
-		str = g_strdup_printf("%s-%0*d", prefix,
-				      num_digits, interval * i);
-	    else
-		str = g_strdup_printf("%0*d", num_digits, interval * i);
+            if (strlen (prefix))
+                str = g_strdup_printf("%s-%0*d", prefix,
+                          num_digits, interval * i);
+            else
+                str = g_strdup_printf("%0*d", num_digits, interval * i);
             xaccAccountSetCode(tmp->data, str);
             g_free(str);
         }
@@ -2058,7 +2059,7 @@ gnc_account_renumber_create_dialog (GtkWidget *window, Account *account)
     data->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "account_renumber_dialog"));
     gtk_window_set_transient_for(GTK_WINDOW(data->dialog), GTK_WINDOW(window));
     g_object_set_data_full(G_OBJECT(data->dialog), "builder", builder,
-			   g_object_unref);
+               g_object_unref);
 
     widget = GTK_WIDGET(gtk_builder_get_object (builder, "header_label"));
     string = g_strdup_printf(_( "Renumber the immediate sub-accounts of %s? "
