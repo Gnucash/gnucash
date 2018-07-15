@@ -2001,6 +2001,18 @@ recnWindowWithBalance (Account *account, gnc_numeric new_ending,
 
     gtk_widget_grab_focus (recnData->debit);
 
+    {   // align the Totals value with that of the amount column
+        gint recn_widthc = gnc_reconcile_view_get_column_width (GNC_RECONCILE_VIEW(recnData->credit), REC_RECN);
+        gint recn_widthd = gnc_reconcile_view_get_column_width (GNC_RECONCILE_VIEW(recnData->debit), REC_RECN);
+
+#if GTK_CHECK_VERSION(3,12,0)
+        gtk_widget_set_margin_end (GTK_WIDGET(recnData->total_credit), 10 + recn_widthc);
+        gtk_widget_set_margin_end (GTK_WIDGET(recnData->total_debit), 10 + recn_widthd);
+#else
+        gtk_widget_set_margin_right (GTK_WIDGET(recnData->total_credit), 10 + recn_widthc);
+        gtk_widget_set_margin_right (GTK_WIDGET(recnData->total_debit), 10 + recn_widthd);
+#endif
+    }
     return recnData;
 }
 
