@@ -71,6 +71,8 @@
 #define GNC_PREF_DATE_BACKMONTHS     "date-backmonths"
 #define GNC_PREF_SHOW_LEAF_ACCT_NAMES "show-leaf-account-names"
 #define GNC_PREF_ENTER_MOVES_TO_END  "enter-moves-to-end"
+#define GNC_PREF_TOOLBAR_STYLE        "toolbar-style"
+#define GNC_PREF_TOOLBAR_ICON_SIZE    "toolbar-icon-size"
 /* Register preferences */
 #define GNC_PREF_DRAW_HOR_LINES      "draw-horizontal-lines"
 #define GNC_PREF_DRAW_VERT_LINES     "draw-vertical-lines"

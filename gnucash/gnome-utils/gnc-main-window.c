@@ -3341,6 +3341,28 @@ gnc_main_window_update_tab_position (gpointer prefs, gchar *pref, gpointer user_
     LEAVE ("");
 }
 
+static void
+gnc_main_window_update_toolbar (gpointer prefs, gchar *pref, gpointer user_data)
+{
+    GncMainWindow *window;
+    GtkToolbar *tb;
+    GncMainWindowPrivate *priv;
+    gint selection;
+
+    window = GNC_MAIN_WINDOW(user_data);
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE (window);
+    tb = GTK_TOOLBAR(priv->toolbar);
+
+    selection = gnc_prefs_get_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TOOLBAR_STYLE);
+    if (gtk_toolbar_get_style (tb) != selection)
+        gtk_toolbar_set_style (tb, selection);
+
+    selection = gnc_prefs_get_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TOOLBAR_ICON_SIZE);
+    // prefs has only small and large icons so add 2 to get right enum
+    if (gtk_toolbar_get_icon_size (tb) != selection + 2)
+        gtk_toolbar_set_icon_size (tb, selection + 2);
+}
+
 /*
  * Based on code from Epiphany (src/ephy-window.c)
  */
@@ -3707,6 +3729,13 @@ gnc_main_window_setup_window (GncMainWindow *window)
                            GNC_PREF_TAB_POSITION_RIGHT,
                            gnc_main_window_update_tab_position,
                            window);
+
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TOOLBAR_STYLE,
+                           gnc_main_window_update_toolbar, window);
+
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TOOLBAR_ICON_SIZE,
+                           gnc_main_window_update_toolbar, window);
+
     gnc_main_window_update_tab_position(NULL, NULL, window);
 
     gnc_main_window_init_menu_updaters(window);
@@ -3839,6 +3868,13 @@ gnc_main_window_add_widget (GtkUIManager *merge,
     if (GTK_IS_TOOLBAR (widget))
     {
         priv->toolbar = widget;
+
+        gtk_toolbar_set_style (GTK_TOOLBAR(priv->toolbar),
+            gnc_prefs_get_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TOOLBAR_STYLE));
+
+        // prefs has only small and large icons so add 2 to get right enum
+        gtk_toolbar_set_icon_size (GTK_TOOLBAR(priv->toolbar),
+           (gnc_prefs_get_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TOOLBAR_ICON_SIZE)) + 2);
     }
 
     gtk_box_pack_start (GTK_BOX (priv->menu_dock), widget, FALSE, FALSE, 0);

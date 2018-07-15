@@ -205,6 +205,16 @@
       <summary>Display the notebook tabs at the right of the window.</summary>
       <description>This setting determines the edge at which the tabs for switching pages in notebooks are drawn. Possible values are "top", "left", "bottom" and "right". It defaults to "top".</description>
     </key>
+    <key name="toolbar-style" type="i">
+      <default>3</default>
+      <summary>Toolbar Style choice</summary>
+      <description>This setting controls how the toolbar icons are displayed.</description>
+    </key>
+        <key name="toolbar-icon-size" type="i">
+      <default>1</default>
+      <summary>Toolbar Icon Size</summary>
+      <description>This setting controls the size of the toolbar icons.</description>
+    </key>
     <key name="summarybar-position-top" type="b">
       <default>false</default>
       <summary>Display the summary bar at the top of the page.</summary>
@@ -336,7 +346,7 @@
       <description>This sets the number of characters before auto complete starts for description, notes and memo fields.</description>
     </key>
   </schema>
-  
+
   <schema id="org.gnucash.general.report" path="/org/gnucash/general/report/">
     <key name="use-new-window" type="b">
       <default>false</default>
