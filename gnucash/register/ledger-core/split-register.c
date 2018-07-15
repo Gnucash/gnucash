@@ -2648,7 +2648,7 @@ gnc_split_register_config_cells (SplitRegister *reg)
         gnc_price_cell_set_print_info
         ((PriceCell *)
          gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL),
-         gnc_default_price_print_info ());
+         gnc_default_price_print_info (gnc_default_currency ()));
         break;
 
     default:

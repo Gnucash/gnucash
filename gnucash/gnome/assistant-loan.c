@@ -2213,7 +2213,7 @@ loan_rev_update_view( LoanAssistantData *ldd, GDate *start, GDate *end )
     GtkListStore *store;
     GtkTreeIter iter;
 
-    pai = gnc_default_price_print_info();
+    pai = gnc_default_price_print_info(NULL);
     pai.min_decimal_places = 2;
 
     store = GTK_LIST_STORE(gtk_tree_view_get_model( ldd->revView ));
@@ -2522,7 +2522,7 @@ ld_setup_repayment_sx( LoanAssistantData *ldd,
     TTSplitInfo *fromSplit = NULL;
     TTSplitInfo *ttsi;
     TTInfo *toTxn = NULL;
-    GNCPrintAmountInfo pricePAI = gnc_default_price_print_info();
+    GNCPrintAmountInfo pricePAI = gnc_default_price_print_info(NULL);
 #define AMTBUF_LEN 64
     gchar amtBuf[AMTBUF_LEN];
     gint GNCN_HOW = (GNC_HOW_DENOM_SIGFIGS(2) | GNC_HOW_RND_ROUND_HALF_UP);

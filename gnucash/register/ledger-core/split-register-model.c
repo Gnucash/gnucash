@@ -1201,6 +1201,7 @@ gnc_split_register_get_rate_entry (VirtualLocation virt_loc,
     Split *split, *osplit;
     Transaction *txn;
     gnc_numeric amount, value, convrate;
+    gnc_commodity *curr;
     SRInfo *info = gnc_split_register_get_info (reg);
 
     if (info->rate_reset == RATE_RESET_REQD && info->auto_complete)
@@ -1216,7 +1217,7 @@ gnc_split_register_get_rate_entry (VirtualLocation virt_loc,
      */
     osplit = xaccSplitGetOtherSplit (split);
     txn = gnc_split_register_get_trans (reg, virt_loc.vcell_loc);
-
+    curr = xaccTransGetCurrency (xaccSplitGetParent (split));
     if (!gnc_split_register_current_trans_expanded (reg) && osplit &&
             !gnc_split_register_needs_conv_rate(reg, txn,
                     xaccSplitGetAccount(split)))
@@ -1232,7 +1233,7 @@ gnc_split_register_get_rate_entry (VirtualLocation virt_loc,
 
     convrate = gnc_numeric_div (amount, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
 
-    return xaccPrintAmount (convrate, gnc_default_price_print_info ());
+    return xaccPrintAmount (convrate, gnc_default_price_print_info (curr));
 }
 
 static const char *
@@ -1361,6 +1362,7 @@ gnc_split_register_get_price_entry (VirtualLocation virt_loc,
 {
     SplitRegister *reg = user_data;
     gnc_numeric price;
+    gnc_commodity *curr;
     Split *split;
 
     if (!gnc_split_register_use_security_cells (reg, virt_loc))
@@ -1369,10 +1371,11 @@ gnc_split_register_get_price_entry (VirtualLocation virt_loc,
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 
     price = xaccSplitGetSharePrice (split);
+    curr = xaccTransGetCurrency (xaccSplitGetParent (split));
     if (gnc_numeric_zero_p (price))
         return NULL;
 
-    return xaccPrintAmount (price, gnc_default_price_print_info ());
+    return xaccPrintAmount (price, gnc_default_price_print_info (curr));
 }
 
 static char *

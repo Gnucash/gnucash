@@ -630,7 +630,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
 
         amount = gnc_amount_edit_new ();
         gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (amount),
-                                        gnc_default_price_print_info ());
+                                        gnc_default_price_print_info (gnc_default_currency()));
         g_signal_connect (amount, "changed",
                           G_CALLBACK (gnc_stock_split_details_valid_cb), info);
         gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);

@@ -1805,12 +1805,9 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
         }
         else
         {
-            GNCPrintAmountInfo print_info;
-
-            print_info = gnc_default_price_print_info();
-            print_info.min_decimal_places = 2;
-
-            num = gnc_numeric_convert (gnc_tree_util_get_rate_for (view, trans, split, is_blank), 1000000, GNC_HOW_RND_ROUND_HALF_UP);
+            GNCPrintAmountInfo print_info =
+                gnc_default_price_print_info(xaccTransGetCurrency(trans));
+            num = gnc_tree_util_get_rate_for (view, trans, split, is_blank);
 
             if (gnc_numeric_check (num) == GNC_ERROR_OK)
                 s = xaccPrintAmount (num, print_info);

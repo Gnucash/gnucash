@@ -293,7 +293,7 @@ GNCPrintAmountInfo gnc_split_amount_print_info (Split *split,
 
 GNCPrintAmountInfo gnc_share_print_info_places (int decplaces);
 GNCPrintAmountInfo gnc_default_share_print_info (void);
-GNCPrintAmountInfo gnc_default_price_print_info (void);
+GNCPrintAmountInfo gnc_default_price_print_info (const gnc_commodity *curr);
 
 GNCPrintAmountInfo gnc_integral_print_info (void);
 

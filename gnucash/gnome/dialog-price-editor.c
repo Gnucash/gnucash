@@ -461,7 +461,7 @@ gnc_price_pedit_dialog_create (GtkWidget *parent,
     pedit_dialog->price_edit = w;
     gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE, 0);
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (w), TRUE);
-    print_info = gnc_default_price_print_info ();
+    print_info = gnc_default_price_print_info (gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT (pedit_dialog->currency_edit)));
     gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (w), print_info);
     gtk_entry_set_activates_default(GTK_ENTRY(w), TRUE);
     gtk_widget_show (w);
