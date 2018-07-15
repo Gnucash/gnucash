@@ -47,11 +47,11 @@ typedef enum
 enum
 {
     REC_POINTER, //0
-    REC_RECN,    //1
-    REC_DATE,    //2
-    REC_NUM,     //3
-    REC_DESC,    //4
-    REC_AMOUNT   //5
+    REC_DATE,    //1
+    REC_NUM,     //2
+    REC_DESC,    //3
+    REC_AMOUNT,  //4
+    REC_RECN,    //5
 };
 
 struct GNCReconcileView
