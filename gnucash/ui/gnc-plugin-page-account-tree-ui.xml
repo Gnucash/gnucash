@@ -3,9 +3,10 @@
     <menu name="Edit" action="EditAction">
       <placeholder name="EditSelectedPlaceholder">
         <menuitem name="EditEditAccount" action="EditEditAccountAction"/>
-	<menuitem name="EditDeleteAccount" action="EditDeleteAccountAction"/>
+        <menuitem name="EditDeleteAccount" action="EditDeleteAccountAction"/>
         <menuitem name="EditAccountFindAccount" action="EditFindAccountAction"/>
-	<menuitem name="EditRenumberSubaccounts" action="EditRenumberSubaccountsAction"/>
+        <menuitem name="AccountColorCascade" action="ColorCascadeAccountAction"/>
+        <menuitem name="EditRenumberSubaccounts" action="EditRenumberSubaccountsAction"/>
         <separator name="EditSep2"/>
         <menuitem name="FileOpenAccount" action="FileOpenAccountAction"/>
         <menuitem name="FileOpenSubaccounts" action="FileOpenSubaccountsAction"/>
@@ -13,29 +14,29 @@
     </menu>
     <menu name="Actions" action="ActionsAction">
       <placeholder name="ActionsPlaceholder">
-	<separator name="ActionsSep1"/>
-        <menuitem name="FileNewAccount" action="FileNewAccountAction"/>
-        <menuitem name="FileAddAccountHierarchyAssistant" action="FileAddAccountHierarchyAssistantAction"/>
-        <separator name="ActionsSep2"/>
-	<menuitem name="ActionsTransfer" action="ActionsTransferAction"/>
-	<menuitem name="ActionsReconcile" action="ActionsReconcileAction"/>
-	<menuitem name="ActionsAutoClear" action="ActionsAutoClearAction"/>
-	<menuitem name="ActionsStockSplit" action="ActionsStockSplitAction"/>
-	<menuitem name="ActionLots" action="ActionsLotsAction"/>
-	<separator name="ActionsSep3"/>
-	<menu name="ScrubMenu" action="ScrubMenuAction">
-	  <menuitem name="Scrub" action="ScrubAction"/>
-	  <menuitem name="ScrubSub" action="ScrubSubAction"/>
-	  <menuitem name="ScrubAll" action="ScrubAllAction"/>
-	</menu>
+      <separator name="ActionsSep1"/>
+      <menuitem name="FileNewAccount" action="FileNewAccountAction"/>
+      <menuitem name="FileAddAccountHierarchyAssistant" action="FileAddAccountHierarchyAssistantAction"/>
+      <separator name="ActionsSep2"/>
+      <menuitem name="ActionsTransfer" action="ActionsTransferAction"/>
+      <menuitem name="ActionsReconcile" action="ActionsReconcileAction"/>
+      <menuitem name="ActionsAutoClear" action="ActionsAutoClearAction"/>
+      <menuitem name="ActionsStockSplit" action="ActionsStockSplitAction"/>
+      <menuitem name="ActionLots" action="ActionsLotsAction"/>
+      <separator name="ActionsSep3"/>
+      <menu name="ScrubMenu" action="ScrubMenuAction">
+        <menuitem name="Scrub" action="ScrubAction"/>
+        <menuitem name="ScrubSub" action="ScrubSubAction"/>
+        <menuitem name="ScrubAll" action="ScrubAllAction"/>
+      </menu>
       </placeholder>
     </menu>
     <menu name="Extensions" action="ExtensionsAction">
       <placeholder name="ExtensionsPlaceholder">
-	<menu name="Register2Test" action="Register2TestAction">
-	  <menuitem name="Register2TestAccount" action="Register2TestAccountAction"/>
-	  <menuitem name="Register2TestSubAccount" action="Register2TestSubAccountAction"/>
-	</menu>
+    <menu name="Register2Test" action="Register2TestAction">
+      <menuitem name="Register2TestAccount" action="Register2TestAccountAction"/>
+      <menuitem name="Register2TestSubAccount" action="Register2TestSubAccountAction"/>
+    </menu>
       </placeholder>
     </menu>
   </menubar>
@@ -45,6 +46,7 @@
       <menuitem name="AccountOpenAccount" action="FileOpenAccountAction"/>
       <menuitem name="AccountOpenSubaccounts" action="FileOpenSubaccountsAction"/>
       <menuitem name="AccountEditAccount" action="EditEditAccountAction"/>
+      <menuitem name="AccountColorCascade" action="ColorCascadeAccountAction"/>
       <menuitem name="AccountFindAccountPopup" action="EditFindAccountPopupAction"/>
       <separator name="AccountSep1"/>
       <menuitem name="AccountReconcile" action="ActionsReconcileAction"/>
