@@ -569,7 +569,7 @@ available, i.e. closest to today's prices."))))))
                             (not (member lvl-acct accountlist))
                             (< lvl lvl-next))
                   (add-indented-row lvl
-                                    (string-append "Total for "
+                                    (string-append (_ "Total For ")
                                                    ((if disable-indenting?
                                                         gnc-account-get-full-name
                                                         xaccAccountGetName) lvl-acct))
@@ -597,7 +597,7 @@ available, i.e. closest to today's prices."))))))
 
     (if (not hide-grand-total?)
         (add-indented-row 0
-                          (string-append "Total for " title)
+                          (string-append (_"Total For ") title)
                           "total-label-cell"
                           (map
                            (lambda (col-total)
