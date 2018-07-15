@@ -233,6 +233,25 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
 }
 
 
+void
+gnc_reconcile_view_add_padding (GNCReconcileView *view, gint column, gint xpadding)
+{
+    GNCQueryView      *qview = GNC_QUERY_VIEW (view);
+    GtkTreeViewColumn *col;
+    GList             *renderers;
+    GtkCellRenderer   *cr0;
+    gint xpad, ypad;
+
+    col = gtk_tree_view_get_column (GTK_TREE_VIEW (qview), (column - 1));
+    renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (col));
+    cr0 = g_list_nth_data (renderers, 0);
+    g_list_free (renderers);
+
+    gtk_cell_renderer_get_padding (cr0, &xpad, &ypad);
+    gtk_cell_renderer_set_padding (cr0, xpadding, ypad);
+}
+
+
 /****************************************************************************\
  * gnc_reconcile_view_new                                                   *
  *   creates the account tree                                               *

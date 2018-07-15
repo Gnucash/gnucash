@@ -1141,6 +1141,8 @@ gnc_reconcile_window_create_view_box(Account *account,
                                      GtkWidget **total_save)
 {
     GtkWidget *frame, *scrollWin, *view, *vbox, *label, *hbox;
+    GtkWidget *vscroll;
+    GtkRequisition nat_sb;
 
     frame = gtk_frame_new(NULL);
 
@@ -1184,6 +1186,13 @@ gnc_reconcile_window_create_view_box(Account *account,
     gtk_container_add(GTK_CONTAINER(scrollWin), view);
     gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 0);
 
+    // get the vertical scroll bar width
+    vscroll = gtk_scrolled_window_get_vscrollbar (GTK_SCROLLED_WINDOW (scrollWin));
+    gtk_widget_get_preferred_size (vscroll, NULL, &nat_sb);
+
+    // add xpadding to amount column so scrollbar does not cover
+    gnc_reconcile_view_add_padding (GNC_RECONCILE_VIEW(view), REC_AMOUNT, nat_sb.width);
+
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
     gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
@@ -1197,9 +1206,9 @@ gnc_reconcile_window_create_view_box(Account *account,
     *total_save = label;
 
 #if GTK_CHECK_VERSION(3,12,0)
-    gtk_widget_set_margin_end (GTK_WIDGET(label), 10);
+    gtk_widget_set_margin_end (GTK_WIDGET(label), 10 + nat_sb.width);
 #else
-    gtk_widget_set_margin_right (GTK_WIDGET(label), 10);
+    gtk_widget_set_margin_right (GTK_WIDGET(label), 10 + nat_sb.width);
 #endif
 
     return vbox;
