@@ -2451,8 +2451,11 @@ gnucash_get_style_classes (GnucashSheet *sheet, GtkStyleContext *stylectxt,
         field_type -= COLOR_NEGATIVE;
     }
     else
-        gtk_style_context_add_class (stylectxt, "register-foreground");
-
+    {
+        if (sheet->use_gnc_color_theme) // only add this class if builtin colors used
+            gtk_style_context_add_class (stylectxt, "register-foreground");
+    }
+    
     switch (field_type)
     {
     default:
