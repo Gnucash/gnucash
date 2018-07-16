@@ -721,7 +721,6 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
             DEBUG("first window %p.", active_windows->data);
         window = gnc_main_window_new();
     }
-    gtk_widget_show(GTK_WIDGET(window));
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
@@ -906,6 +905,7 @@ cleanup:
     if (error)
         g_error_free(error);
     g_free(window_group);
+    gtk_widget_show(GTK_WIDGET(window));
 }
 
 void
