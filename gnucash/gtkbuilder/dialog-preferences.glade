@@ -1405,7 +1405,7 @@ many months before the current month:</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup">Force prices to display as decimals even if they must be rounded.</property>
-                    <property name="tooltip_text" translatable="yes">If active, GnuCash will round prices as necessary to display them as decimals instead of displaying the exact fraction if the fractional part cannont be exactly represented as a decimal.</property>
+                    <property name="tooltip_text" translatable="yes">If active, GnuCash will round prices as necessary to display them as decimals instead of displaying the exact fraction if the fractional part cannot be exactly represented as a decimal.</property>
                     <property name="halign">start</property>
                     <property name="margin_left">12</property>
                     <property name="use_underline">True</property>

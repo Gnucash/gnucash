@@ -295,7 +295,7 @@
         (gnc:html-document-add-object!
           doc
             (gnc:html-make-no-account-warning 
-              report-title (gnc:report-id report-obj))))
+              reportname (gnc:report-id report-obj))))
 
       ((not budget-valid?)
         ;; No budget selected.
