@@ -449,10 +449,11 @@ available, i.e. closest to today's prices."))))))
     ;; outputs: string or html-markup-anchor object
     (let ((acct-label (if disable-indenting?
                           (gnc-account-get-full-name account)
-                          (xaccAccountGetName account))))
+                          (xaccAccountGetName account)))
+          (acct-url (and account-anchor-fn (account-anchor-fn account))))
       (gnc:make-html-text
-       (if account-anchor-fn
-           (gnc:html-markup-anchor (account-anchor-fn account) acct-label)
+       (if acct-url
+           (gnc:html-markup-anchor acct-url acct-label)
            acct-label))))
 
   (define (add-whole-line contents)
@@ -698,6 +699,9 @@ available, i.e. closest to today's prices."))))))
                                      commodities)
                                     (gnc:make-html-table-cell/markup "number-cell" cell))))
 
+         (account->url (lambda (acct) (and use-links?
+                                           (not (xaccAccountGetPlaceholder acct))
+                                           (gnc:account-anchor-text acct))))
          ;; decompose the account list
          (show-foreign? (get-option pagename-commodities optname-show-foreign))
          (show-rates? (get-option pagename-commodities optname-show-rates))
@@ -793,7 +797,7 @@ available, i.e. closest to today's prices."))))))
                                    #:hide-grand-total? hide-grand-total?
                                    #:depth-limit (if get-col-header-fn 0 depth-limit)
                                    #:recursive-bals? recursive-bals?
-                                   #:account-anchor-fn (and use-links? gnc:account-anchor-text)
+                                   #:account-anchor-fn account->url
                                    #:get-cell-orig-monetary-fn (and common-currency get-cell-orig-monetary-fn)
                                    #:get-col-header-fn get-col-header-fn
                                    #:get-cell-anchor-fn get-cell-anchor-fn
@@ -929,7 +933,7 @@ available, i.e. closest to today's prices."))))))
                                    #:depth-limit (if get-col-header-fn 0 depth-limit)
                                    #:hide-accounts? hide-accounts?
                                    #:hide-grand-total? hide-grand-total?
-                                   #:account-anchor-fn (and use-links? gnc:account-anchor-text)
+                                   #:account-anchor-fn account->url
                                    #:get-cell-orig-monetary-fn (and common-currency get-cell-orig-monetary-fn)
                                    #:get-col-header-fn get-col-header-fn
                                    #:recursive-bals? recursive-bals?
