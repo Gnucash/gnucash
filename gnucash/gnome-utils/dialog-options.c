@@ -74,7 +74,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
  * Point where preferences switch control method from a set of
  * notebook tabs to a list.
  */
-#define MAX_TAB_COUNT 5
+#define MAX_TAB_COUNT 8
 
 /* A pointer to the last selected filename */
 #define LAST_SELECTION "last-selection"
