@@ -165,7 +165,10 @@ assoc_dialog_update (AssocDialog *assoc_dialog)
     GtkTreeIter       iter;
     gboolean          valid;
 
+    /* disconnect the model from the treeview */
     model = gtk_tree_view_get_model (GTK_TREE_VIEW(assoc_dialog->view));
+    g_object_ref (G_OBJECT(model));
+    gtk_tree_view_set_model (GTK_TREE_VIEW(assoc_dialog->view), NULL);
 
     /* Get first row in list store */
     valid = gtk_tree_model_get_iter_first (model, &iter);
@@ -205,6 +208,9 @@ assoc_dialog_update (AssocDialog *assoc_dialog)
         g_free (filename);
         valid = gtk_tree_model_iter_next (model, &iter);
     }
+    /* reconnect the model to the treeview */
+    gtk_tree_view_set_model (GTK_TREE_VIEW(assoc_dialog->view), model);
+    g_object_unref(G_OBJECT(model));
 }
 
 static void
@@ -299,7 +305,10 @@ get_trans_info (AssocDialog *assoc_dialog)
     /* Get list of Accounts */
     accts = gnc_account_get_descendants_sorted (root);
 
+    /* disconnect the model from the treeview */
     model = gtk_tree_view_get_model (GTK_TREE_VIEW(assoc_dialog->view));
+    g_object_ref (G_OBJECT(model));
+    gtk_tree_view_set_model (GTK_TREE_VIEW(assoc_dialog->view), NULL);
 
     /* Go through list of accounts */
     for (ptr = accts; ptr; ptr = g_list_next (ptr))
@@ -352,6 +361,11 @@ get_trans_info (AssocDialog *assoc_dialog)
         qof_query_destroy (query);
         g_list_free (splits);
     }
+
+    /* reconnect the model to the treeview */
+    gtk_tree_view_set_model (GTK_TREE_VIEW(assoc_dialog->view), model);
+    g_object_unref(G_OBJECT(model));
+
     g_list_free (accts);
     g_list_free (trans_list);
 }
