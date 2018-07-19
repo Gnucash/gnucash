@@ -16,6 +16,8 @@
       <column type="gchararray"/>
       <!-- column-name bal_zero -->
       <column type="gchararray"/>
+      <!-- column-name tax -->
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkWindow" id="find_account_window">

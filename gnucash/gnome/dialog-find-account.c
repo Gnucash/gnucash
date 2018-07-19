@@ -40,7 +40,7 @@
 #define GNC_PREFS_GROUP                 "dialogs.find-account"
 
 /** Enumeration for the tree-store */
-enum GncFindAccountColumn {ACC_FULL_NAME, ACCOUNT, PLACE_HOLDER, HIDDEN, NOT_USED, BAL_ZERO};
+enum GncFindAccountColumn {ACC_FULL_NAME, ACCOUNT, PLACE_HOLDER, HIDDEN, NOT_USED, BAL_ZERO, TAX};
 
 typedef struct
 {
@@ -172,7 +172,8 @@ fill_model (GtkTreeModel *model, Account *account)
                         PLACE_HOLDER, (xaccAccountGetPlaceholder (account) == TRUE ? "emblem-default" : NULL),
                         HIDDEN, (xaccAccountGetHidden (account) == TRUE ? "emblem-default" : NULL),
                         NOT_USED, (splits == 0 ? "emblem-default" : NULL),
-                        BAL_ZERO, (gnc_numeric_zero_p (total) == TRUE ? "emblem-default" : NULL), -1);
+                        BAL_ZERO, (gnc_numeric_zero_p (total) == TRUE ? "emblem-default" : NULL),
+                        TAX, (xaccAccountGetTaxRelated (account) == TRUE ? "emblem-default" : NULL), -1);
     g_free (fullname);
 }
 
@@ -339,6 +340,16 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
     gtk_tree_view_column_set_attributes (tree_column, cr, "icon-name", BAL_ZERO, NULL);
     gtk_cell_renderer_set_alignment (cr, 0.5, 0.5);
 
+    tree_column = gtk_tree_view_column_new();
+    gtk_tree_view_column_set_title (tree_column, _("Tax related"));
+    gtk_tree_view_append_column (GTK_TREE_VIEW(facc_dialog->view), tree_column);
+    gtk_tree_view_column_set_alignment (tree_column, 0.5);
+    gtk_tree_view_column_set_expand (tree_column, TRUE);
+    cr = gtk_cell_renderer_pixbuf_new();
+    gtk_tree_view_column_pack_start (tree_column, cr, TRUE);
+    // connect 'active' and set 'xalign' property of the cell renderer
+    gtk_tree_view_column_set_attributes (tree_column, cr, "icon-name", TAX, NULL);
+    gtk_cell_renderer_set_alignment (cr, 0.5, 0.5);
 
     g_signal_connect (facc_dialog->window, "destroy",
                       G_CALLBACK(gnc_find_account_dialog_window_destroy_cb), facc_dialog);
