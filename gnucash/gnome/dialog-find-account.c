@@ -156,17 +156,14 @@ gnc_find_account_dialog_close_button_cb (GtkWidget * widget, gpointer user_data)
 }
 
 static void
-fill_model (FindAccountDialog *facc_dialog, Account *account)
+fill_model (GtkTreeModel *model, Account *account)
 {
-    GtkTreeModel *model;
     GtkTreeIter   iter;
     gchar        *fullname = gnc_account_get_full_name (account);
     gint          splits = xaccAccountCountSplits (account, TRUE);
     gnc_numeric   total = xaccAccountGetBalanceInCurrency (account, NULL, TRUE);
 
     PINFO("Add to Store: Account '%s'", fullname);
-
-    model = gtk_tree_view_get_model (GTK_TREE_VIEW(facc_dialog->view));
 
     gtk_list_store_append (GTK_LIST_STORE(model), &iter);
 
@@ -187,6 +184,7 @@ get_account_info (FindAccountDialog *facc_dialog)
     GList        *ptr;
     gchar        *filter_text;
     gboolean      radio_root;
+    GtkTreeModel *model;
 
     /* Get the state of the root radio button */
     radio_root = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(facc_dialog->radio_root));
@@ -201,6 +199,14 @@ get_account_info (FindAccountDialog *facc_dialog)
 
     filter_text = g_ascii_strdown (gtk_entry_get_text (GTK_ENTRY(facc_dialog->filter_text_entry)), -1);
 
+    /* disconnect the model from the treeview */
+    model = gtk_tree_view_get_model (GTK_TREE_VIEW(facc_dialog->view));
+    g_object_ref (G_OBJECT(model));
+    gtk_tree_view_set_model (GTK_TREE_VIEW(facc_dialog->view), NULL);
+
+    // Clear the list store
+    gtk_list_store_clear (GTK_LIST_STORE(model));
+
     /* Go through list of accounts */
     for (ptr = accts; ptr; ptr = g_list_next (ptr))
     {
@@ -209,7 +215,7 @@ get_account_info (FindAccountDialog *facc_dialog)
         gchar   *match_string = g_ascii_strdown (full_name, -1);
 
         if ((g_strcmp0 (filter_text, "") == 0) || (g_strrstr (match_string, filter_text) != NULL))
-            fill_model (facc_dialog, acc);
+            fill_model (model, acc);
 
         g_free (match_string);
         g_free (full_name);
@@ -217,17 +223,16 @@ get_account_info (FindAccountDialog *facc_dialog)
     g_free (filter_text);
     g_list_free (accts);
 
+    /* reconnect the model to the treeview */
+    gtk_tree_view_set_model (GTK_TREE_VIEW(facc_dialog->view), model);
+    g_object_unref(G_OBJECT(model));
+
     gtk_tree_view_columns_autosize (GTK_TREE_VIEW(facc_dialog->view));
 }
 
 static void
 filter_button_cb (GtkButton *button, FindAccountDialog *facc_dialog)
 {
-    GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW(facc_dialog->view));
-
-    // Clear the list store
-    gtk_list_store_clear (GTK_LIST_STORE(model));
-
     get_account_info (facc_dialog);
 
     // Clear the filter
