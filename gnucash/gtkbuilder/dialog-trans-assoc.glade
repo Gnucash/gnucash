@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.20.4 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkListStore" id="list-store">
@@ -20,28 +20,31 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkDialog" id="transaction_association_dialog">
-    <property name="can_focus">True</property>
-    <property name="has_focus">True</property>
-    <property name="can_default">True</property>
-    <property name="border_width">6</property>
-    <property name="title" translatable="yes">Transaction Association Dialog</property>
-    <property name="default_width">600</property>
-    <property name="default_height">400</property>
-    <property name="destroy_with_parent">True</property>
-    <property name="type_hint">normal</property>
-    <signal name="destroy" handler="gnc_assoc_dialog_window_destroy_cb" swapped="no"/>
-    <signal name="response" handler="gnc_assoc_dialog_response_cb" swapped="no"/>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox2">
+  <object class="GtkWindow" id="transaction_association_window">
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkBox" id="dialog-vbox">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area1">
+        <child>
+          <object class="GtkLabel" id="label3">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">All Transaction Associations</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="padding">2</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButtonBox" id="buttonbox">
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="sort">
+              <object class="GtkButton" id="sort_button">
                 <property name="label" translatable="yes">_Sort Association</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -55,7 +58,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="Check">
+              <object class="GtkButton" id="check_button">
                 <property name="label" translatable="yes">_Locate Association</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -93,19 +96,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="label1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">All Transaction Associations</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="padding">2</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkLabel" id="path-head">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -118,7 +108,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkScrolledWindow" id="scrolledwindow2">
+          <object class="GtkScrolledWindow" id="scrolledwindow">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <child>
@@ -126,8 +116,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="model">list-store</property>
+                <property name="search_column">0</property>
                 <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="treeview-selection1"/>
+                  <object class="GtkTreeSelection"/>
                 </child>
                 <child>
                   <object class="GtkTreeViewColumn" id="trans-date">
@@ -193,7 +184,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="label2">
+          <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">     To jump to the Transaction, double click on the entry in the
@@ -208,10 +199,8 @@ Description column or Association column to open the Association</property>
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="-8">sort</action-widget>
-      <action-widget response="-10">Check</action-widget>
-      <action-widget response="-6">close_button</action-widget>
-    </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>
