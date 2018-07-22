@@ -142,14 +142,14 @@ also show overall period profit & loss."))
 
 (define pricesource-list-balsheet
   (list
-   (cons 'nearest (list
-                   (cons 'text (_ "nearest"))
-                   (cons 'tip (_ "Nearest to date. Balance sheet prices \
+   (cons 'pricedb-nearest (list
+                           (cons 'text (_ "nearest"))
+                           (cons 'tip (_ "Nearest to date. Balance sheet prices \
 are converted using the price on the balance sheet date."))))
 
-   (cons 'latest (list
-                  (cons 'text (_ "latest"))
-                  (cons 'tip (_ "Latest price. This uses the latest prices \
+   (cons 'pricedb-latest (list
+                          (cons 'text (_ "latest"))
+                          (cons 'tip (_ "Latest price. This uses the latest prices \
 available, i.e. closest to today's prices."))))))
 
 (define pricesource-list-pnl
@@ -169,7 +169,7 @@ are used."))))
                      (cons 'tip (_ "Prices in the end of the reporting period \
 are used."))))
 
-   (cons 'latest (list
+   (cons 'pricedb-latest (list
                   (cons 'text (_ "latest"))
                   (cons 'tip (_ "Latest price. This uses the latest prices \
 available, i.e. closest to today's prices."))))))
@@ -281,7 +281,7 @@ available, i.e. closest to today's prices."))))))
       "d" opthelp-price-source
       (case report-type
         ((pnl) 'midperiod)
-        ((balsheet) 'nearest))
+        ((balsheet) 'pricedb-nearest))
       (keylist->vectorlist
        (case report-type
          ((pnl) pricesource-list-pnl)
@@ -683,8 +683,8 @@ available, i.e. closest to today's prices."))))))
                                                               ((startperiod) startdate)
                                                               ((midperiod) (floor (/ (+ startdate enddate) 2)))
                                                               ((endperiod) enddate)
-                                                              ((nearest) (gnc:time64-end-day-time date))
-                                                              ((latest) (current-time))))))
+                                                              ((pricedb-nearest) (gnc:time64-end-day-time date))
+                                                              ((pricedb-latest) (current-time))))))
                                              (gnc:html-text-append!
                                               cell
                                               (format #f "~a ~a"
@@ -758,8 +758,8 @@ available, i.e. closest to today's prices."))))))
                                                 (gnc:exchange-by-pricedb-nearest
                                                  monetary common-currency
                                                  (case price-source
-                                                   ((nearest) col-date)
-                                                   ((latest) (current-time))))
+                                                   ((pricedb-nearest) col-date)
+                                                   ((pricedb-latest) (current-time))))
                                                 monetary))))
                   (get-cell-anchor-fn (lambda (account col-datum)
                                         (let* ((splits (xaccAccountGetSplitList account))
@@ -779,9 +779,7 @@ available, i.e. closest to today's prices."))))))
                                (list (list "General" "Start Date" (cons 'absolute startdate))
                                      (list "General" "End Date" (cons 'absolute enddate))
                                      (list "General" "Report's currency" (or common-currency (gnc-default-report-currency)))
-                                     (list "General" "Price Source" (case price-source
-                                                                      ((nearest) 'pricedb-nearest)
-                                                                      ((latest) 'pricedb-latest)))
+                                     (list "General" "Price Source" price-source)
                                      (list "Accounts" "Accounts" (append asset-accounts liability-accounts))))))
                   (get-col-header-fn (lambda (accounts col-datum)                                      
                                       (let* ((header (qof-print-date col-datum))
@@ -899,7 +897,7 @@ available, i.e. closest to today's prices."))))))
                                                    ((startperiod) startdate)
                                                    ((midperiod) (floor (/ (+ startdate enddate) 2)))
                                                    ((endperiod) enddate)
-                                                   ((latest) (current-time))))
+                                                   ((pricedb-latest) (current-time))))
                                                 monetary))))
                   (get-cell-anchor-fn (lambda (account datepair)
                                         (gnc:make-report-anchor
@@ -914,7 +912,7 @@ available, i.e. closest to today's prices."))))))
                                      (list "General" "End Date" (cons 'absolute enddate))
                                      (list "General" "Report's currency" (or common-currency (gnc-default-report-currency)))
                                      (list "General" "Price Source" (case price-source
-                                                                      ((latest) 'pricedb-latest)
+                                                                      ((pricedb-latest) 'pricedb-latest)
                                                                       (else 'pricedb-nearest)))
                                      (list "Accounts" "Accounts" (append income-accounts expense-accounts))))))
                   (get-col-header-fn (lambda (accounts col-datum)
