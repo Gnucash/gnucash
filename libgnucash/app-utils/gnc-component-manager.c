@@ -827,6 +827,9 @@ gnc_close_gui_component_by_session (gpointer session)
 
     list = find_components_by_session (session);
 
+    // reverse the list so class like dialog-options close before window-report
+    list = g_list_reverse (list);
+
     for (node = list; node; node = node->next)
     {
         ComponentInfo *ci = node->data;
