@@ -178,6 +178,67 @@
 
     (cons entry-value entry-tax-value)))
 
+(define layout-key-list
+  (list (cons 'client (list (cons 'text "Client details")
+                            (cons 'tip "Client name and address")))
+
+        (cons 'company (list (cons 'text "Company details")
+                             (cons 'tip "Company name, address and tax-ID")))
+
+        (cons 'invoice (list (cons 'text "Invoice details")
+                             (cons 'tip "Invoice date, due date, billing ID, terms, job details")))
+
+        (cons 'today (list (cons 'text "Today's date")
+                           (cons 'tip "Today's date")))
+
+        (cons 'none (list (cons 'text "(empty)")
+                          (cons 'tip "Empty space")))))
+
+(define variant-list
+  (list
+   (cons 'invoice (list (cons '1a 'none)
+                        (cons '1b 'invoice)
+                        (cons '2a 'client)
+                        (cons '2b 'company)
+                        (cons '3a 'none)
+                        (cons '3b 'today)
+                        (cons 'css base-css)))
+
+   (cons 'easy-invoice (list (cons '1a 'none)
+                             (cons '1b 'invoice)
+                             (cons '2a 'client)
+                             (cons '2b 'company)
+                             (cons '3a 'none)
+                             (cons '3b 'today)
+                             (cons 'css (string-append base-css "
+.invoice-in-progress { color:red }
+.invoice-title { font-weight: bold; text-decoration: underline }
+.main-table > table { margin: auto }
+.invoice-details-table > table { display: block; }
+.invoice-notes { margin-top: 20px }
+.entries-table > table { min-width: 600px }"))))
+
+   (cons 'fancy-invoice (list (cons '1a 'company)
+                              (cons '1b 'invoice)
+                              (cons '2a 'client)
+                              (cons '2b 'company)
+                              (cons '3a 'none)
+                              (cons '3b 'none)
+                              (cons 'css (string-append base-css "
+.company-name {font-size: x-large; }
+.client-name {font-size: x-large; }"))))))
+
+(define (keylist-get-info keylist key info)
+  (cdr (assq info (cdr (assq key keylist)))))
+
+(define (keylist->vectorlist keylist)
+  (map
+   (lambda (item)
+     (vector
+      (car item)
+      (keylist-get-info keylist (car item) 'text)
+      (keylist-get-info keylist (car item) 'tip)))
+   keylist))
 
 (define (multiline-to-html-text str)
   ;; simple function - splits string containing #\newline into
@@ -190,7 +251,7 @@
         (loop (cdr list-of-substrings)
               (cons* (gnc:html-markup-br) (car list-of-substrings) result)))))
 
-(define (options-generator css-default)
+(define (options-generator variant)
 
   (define gnc:*report-options* (gnc:new-options))
 
@@ -208,9 +269,10 @@
     ""))
 
   (gnc:register-inv-option
-   (gnc:make-internal-option
-    "General" "CSS"
-    css-default))
+   (gnc:make-text-option
+    (N_ "Layout") (N_ "CSS") "zz" "CSS code. This field specifies the CSS code
+for styling the invoice. Please see the exported report for the CSS class names."
+    (keylist-get-info variant-list variant 'css)))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
@@ -278,10 +340,37 @@
     "d" (N_ "Display the subtotals?") #t))
 
   (gnc:register-inv-option
+   (gnc:make-complex-boolean-option
+    (N_ "Display") (N_ "Payable to")
+    "ua1" (N_ "Display the Payable to: information.") #f #f
+    (lambda (x)
+      (gnc-option-db-set-option-selectable-by-name
+       gnc:*report-options* "Display" "Payable to string" x))))
+
+  (gnc:register-inv-option
+   (gnc:make-text-option
+    (N_ "Display") (N_ "Payable to string")
+    "ua2" (N_ "The phrase for specifying to whom payments should be made.")
+    (_ "Please make all checks payable to")))
+
+  (gnc:register-inv-option
+   (gnc:make-complex-boolean-option
+    (N_ "Display") (N_ "Company contact")
+    "ub1" (N_ "Display the Company contact information.") #f #f
+    (lambda (x) (gnc-option-db-set-option-selectable-by-name
+                 gnc:*report-options* "Display" "Company contact string" x))))
+
+  (gnc:register-inv-option
+   (gnc:make-text-option
+    (N_ "Display") (N_ "Company contact string")
+    "ub2" (N_ "The phrase used to introduce the company contact.")
+    (_ "Please direct all enquiries to")))
+
+  (gnc:register-inv-option
    (gnc:make-number-range-option
     (N_ "Display") (N_ "Minimum # of entries")
-    "zz" (N_ "The minimum number of invoice entries to display.") 0
-    4 23 0 1))
+    "zz" (N_ "The minimum number of invoice entries to display.") 1
+    0 23 0 1))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
@@ -328,6 +417,48 @@
     (N_ "Display") (N_ "Extra Notes")
     "u" (N_ "Extra notes to put on the invoice.")
     (_ "Thank you for your patronage!")))
+
+  (gnc:register-inv-option
+   (gnc:make-multichoice-option
+    (N_ "Layout") (N_ "Row 1 Left")
+    "1a" "1st row, left"
+    (keylist-get-info variant-list variant '1a)
+    (keylist->vectorlist layout-key-list)))
+
+  (gnc:register-inv-option
+   (gnc:make-multichoice-option
+    (N_ "Layout") (N_ "Row 1 Right")
+    "1b" "1st row, right"
+    (keylist-get-info variant-list variant '1b)
+    (keylist->vectorlist layout-key-list)))
+
+  (gnc:register-inv-option
+   (gnc:make-multichoice-option
+    (N_ "Layout") (N_ "Row 2 Left")
+    "2a" "2nd row, left"
+    (keylist-get-info variant-list variant '2a)
+    (keylist->vectorlist layout-key-list)))
+
+  (gnc:register-inv-option
+   (gnc:make-multichoice-option
+    (N_ "Layout") (N_ "Row 2 Right")
+    "2b" "2nd row, right"
+    (keylist-get-info variant-list variant '2b)
+    (keylist->vectorlist layout-key-list)))
+
+  (gnc:register-inv-option
+   (gnc:make-multichoice-option
+    (N_ "Layout") (N_ "Row 3 Left")
+    "3a" "3rd row, left"
+    (keylist-get-info variant-list variant '3a)
+    (keylist->vectorlist layout-key-list)))
+
+  (gnc:register-inv-option
+   (gnc:make-multichoice-option
+    (N_ "Layout") (N_ "Row 3 Right")
+    "3b" "3rd row, right"
+    (keylist-get-info variant-list variant '3b)
+    (keylist->vectorlist layout-key-list)))
 
   (gnc:options-set-default-section gnc:*report-options* "General")
 
@@ -582,8 +713,16 @@
 
     (gnc:html-table-append-row! table
                                 (list
-                                 (multiline-to-html-text
-                                  (gnc:owner-get-name-and-address-dep owner))))
+                                 (gnc:make-html-span/markup
+                                  "client-name"
+                                  (gnc:owner-get-name-dep owner))))
+
+    (gnc:html-table-append-row! table
+                                (list
+                                 (gnc:make-html-span/markup
+                                  "client-address"
+                                  (multiline-to-html-text
+                                   (gnc:owner-get-address-dep owner)))))
 
     (for-each
      (lambda (order)
@@ -603,7 +742,7 @@
    (strftime date-format
              (localtime date))))
 
-(define (make-myname-table book date-format display-tax-id?)
+(define (make-company-table book date-format display-tax-id?)
   ;; single-column table. my name, address, and printdate
   (let* ((table (gnc:make-html-table))
          (name (gnc:company-info book gnc:*company-name*))
@@ -612,21 +751,18 @@
 
     (gnc:html-table-set-style! table "table"
                                'attribute (list "border" 0)
-                               'attribute (list "align" "right")
                                'attribute (list "valign" "top")
                                'attribute (list "cellspacing" 0)
                                'attribute (list "cellpadding" 0))
 
     (if (and name (not (string-null? name)))
-        (gnc:html-table-append-row! table (list name)))
+        (gnc:html-table-append-row! table (list (gnc:make-html-div/markup "company-name" name))))
 
     (if (and addy (not (string-null? addy)))
-        (gnc:html-table-append-row! table (list (multiline-to-html-text addy))))
+        (gnc:html-table-append-row! table (list (gnc:make-html-div/markup "company-address" (multiline-to-html-text addy)))))
 
     (if (and display-tax-id? taxid (not (string-null? taxid)))
-        (gnc:html-table-append-row! table (list (multiline-to-html-text taxid))))
-
-    (gnc:html-table-append-row! table (list (qof-print-date (current-time))))
+        (gnc:html-table-append-row! table (list (gnc:make-html-div/markup "company-tax-id" taxid))))
 
     table))
 
@@ -666,11 +802,27 @@
                (invoice-title (format #f (_"~a #~a") title (gncInvoiceGetID invoice)))
                (entry-table (make-entry-table invoice
                                               (gnc:report-options report-obj)
-                                              cust-doc? credit-note?)))
+                                              cust-doc? credit-note?))
+
+               (layout-lookup-table (list (cons 'none #f)
+                                          (cons 'invoice (gnc:make-html-div/markup
+                                                          "invoice-details-table"
+                                                          (make-invoice-details-table
+                                                           invoice options display-due-date?)))
+                                          (cons 'client (gnc:make-html-div/markup
+                                                         "client-table"
+                                                         (make-client-table owner orders)))
+                                          (cons 'company (gnc:make-html-div/markup
+                                                          "company-table"
+                                                          (make-company-table book date-format display-tax-id?)))
+                                          (cons 'today (gnc:make-html-div/markup
+                                                        "invoice-print-date"
+                                                        (qof-print-date (current-time))))))
+               (layout-lookup (lambda (loc) (cdr (assq (opt-val "Layout" loc) layout-lookup-table)))))
 
           (gnc:html-document-set-title! document invoice-title)
 
-          (gnc:html-document-set-style-text! document (opt-val "General" "CSS"))
+          (gnc:html-document-set-style-text! document (opt-val "Layout" "CSS"))
 
           (let ((main-table (gnc:make-html-table)))
 
@@ -680,19 +832,22 @@
                                               "invoice-title" invoice-title)))
 
             (gnc:html-table-append-row! main-table
-                                        (list #f
+                                        (list (layout-lookup "Row 1 Left")
                                               (gnc:make-html-div/markup
-                                               "invoice-details-table"
-                                               (make-invoice-details-table invoice options display-due-date?))))
+                                               "align-right"
+                                               (layout-lookup "Row 1 Right"))))
 
             (gnc:html-table-append-row! main-table
-                                        (list (gnc:make-html-div/markup
-                                               "client-table"
-                                               (make-client-table owner orders))
+                                        (list (layout-lookup "Row 2 Left")
+                                              (gnc:make-html-div/markup
+                                               "align-right"
+                                               (layout-lookup "Row 2 Right"))))
 
-                                              (and company-table?
-                                                   (gnc:make-html-div/markup
-                                                    "company-table" (make-myname-table book date-format display-tax-id?)))))
+            (gnc:html-table-append-row! main-table
+                                        (list (layout-lookup "Row 3 Left")
+                                              (gnc:make-html-div/markup
+                                               "align-right"
+                                               (layout-lookup "Row 3 Right"))))
 
             (gnc:html-table-append-row! main-table
                                         (gnc:make-html-table-cell/size
@@ -706,6 +861,28 @@
                                                1 2 (gnc:make-html-div/markup
                                                     "invoice-notes"
                                                     (multiline-to-html-text notes))))))
+
+            (if (opt-val "Display" "Payable to")
+                (let* ((name (gnc:company-info book gnc:*company-name*))
+                       (name-str (opt-val "Display" "Payable to string")))
+                  (if (and name (not (string-null? name)))
+                      (gnc:html-table-append-row!
+                       main-table
+                       (gnc:make-html-div/markup
+                        "invoice-footer-payable-to"
+                        (multiline-to-html-text
+                         (string-append name-str ": " name)))))))
+
+            (if (opt-val "Display" "Company contact")
+                (let* ((contact (gnc:company-info book gnc:*company-contact*))
+                       (contact-str (opt-val "Display" "Company contact string")))
+                  (if (and contact (not (string-null? contact)))
+                      (gnc:html-table-append-row!
+                       main-table
+                       (gnc:make-html-div/markup
+                        "invoice-footer-company-contact"
+                        (multiline-to-html-text
+                         (string-append contact-str  ": " contact)))))))
 
             (gnc:html-table-append-row! main-table
                                         (gnc:make-html-table-cell/size
@@ -721,23 +898,32 @@
 
 (define invoice-report-guid "5123a759ceb9483abf2182d01c140e8d")
 (define easy-invoice-guid "67112f318bef4fc496bdc27d106bbda4")
+(define fancy-invoice-guid "3ce293441e894423a2425d7a22dd1ac6")
 
 (gnc:define-report
  'version 1
  'name (N_ "Printable Invoice")
  'report-guid invoice-report-guid
  'menu-path (list gnc:menuname-business-reports)
- 'options-generator (lambda () (options-generator easy-invoice-css))
+ 'options-generator (lambda () (options-generator 'invoice))
  'renderer reg-renderer
  'in-menu? #t)
 
-#;
 (gnc:define-report
  'version 1
  'name (N_ "Easy Invoice")
  'report-guid easy-invoice-guid
  'menu-path (list gnc:menuname-business-reports)
- 'options-generator (lambda () (options-generator easy-invoice-css))
+ 'options-generator (lambda () (options-generator 'easy-invoice))
+ 'renderer reg-renderer
+ 'in-menu? #t)
+
+(gnc:define-report
+ 'version 1
+ 'name (N_ "Fancy Invoice")
+ 'report-guid fancy-invoice-guid
+ 'menu-path (list gnc:menuname-business-reports)
+ 'options-generator (lambda () (options-generator 'fancy-invoice))
  'renderer reg-renderer
  'in-menu? #t)
 
@@ -749,3 +935,12 @@
     (gnc:make-report easy-invoice-guid options)))
 
 (export gnc:easy-invoice-report-create-internal)
+
+(define (gnc:fancy-invoice-report-create-internal invoice)
+  (let* ((options (gnc:make-report-options fancy-invoice-guid))
+         (invoice-op (gnc:lookup-option options gnc:pagename-general gnc:optname-invoice-number)))
+
+    (gnc:option-set-value invoice-op invoice)
+    (gnc:make-report fancy-invoice-guid options)))
+
+(export gnc:fancy-invoice-report-create-internal)
