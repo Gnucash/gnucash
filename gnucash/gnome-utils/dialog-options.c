@@ -67,7 +67,7 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-#define DIALOG_OPTIONS_CM_CLASS "dialog-options"
+#define DIALOG_OPTIONS_CM_CLASS      "dialog-options"
 #define DIALOG_BOOK_OPTIONS_CM_CLASS "dialog-book-options"
 
 #define GNC_PREFS_GROUP              "dialogs.options"
@@ -105,7 +105,7 @@ struct gnc_option_win
     gpointer             close_cb_data;
 
     /* Hold onto this for a complete reset */
-    GNCOptionDB *		option_db;
+    GNCOptionDB *option_db;
 
     /* Hold on to this to unregister the right class */
     const char *component_class;
@@ -696,8 +696,7 @@ gnc_set_default_gain_loss_account_widget(gnc_commodity *commodity)
                 gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(
                         book_currency_data->default_gain_loss_account_widget),
                         TRUE);
-                col = 
-                    gnc_tree_view_add_text_column(GNC_TREE_VIEW(
+                col = gnc_tree_view_add_text_column(GNC_TREE_VIEW(
                         book_currency_data->default_gain_loss_account_widget),
                          _("Currency"), /* title */
                         "commodity", /* pref name */
@@ -713,8 +712,7 @@ gnc_set_default_gain_loss_account_widget(gnc_commodity *commodity)
                 gnc_tree_view_account_column_add_color (GNC_TREE_VIEW_ACCOUNT(
                          book_currency_data->default_gain_loss_account_widget), col);
 
-                col =
-                    gnc_tree_view_add_toggle_column(GNC_TREE_VIEW(
+                col = gnc_tree_view_add_toggle_column(GNC_TREE_VIEW(
                         book_currency_data->default_gain_loss_account_widget),
                         _("Placeholder"),
                         /* Translators: This string has a context prefix; the
@@ -1918,7 +1916,7 @@ gnc_options_dialog_build_contents (GNCOptionWin *propertybox,
 }
 
 /********************************************************************\
- * gnc_options_dialog_build_contents_full                                *
+ * gnc_options_dialog_build_contents_full                           *
  *   builds an options dialog given a property box and an options   *
  *   database and make the dialog visible depending on the          *
  *   show_dialog flag                                               *
@@ -2121,10 +2119,10 @@ gnc_options_register_stocks (void)
 
     GtkStockItem items[] =
     {
-        { GTK_STOCK_APPLY		, "gnc_option_apply_button",	0, 0, NULL },
-        { GTK_STOCK_HELP		, "gnc_options_dialog_help",	0, 0, NULL },
-        { GTK_STOCK_OK			, "gnc_options_dialog_ok",	0, 0, NULL },
-        { GTK_STOCK_CANCEL		, "gnc_options_dialog_cancel",	0, 0, NULL },
+        { GTK_STOCK_APPLY       , "gnc_option_apply_button",    0, 0, NULL },
+        { GTK_STOCK_HELP        , "gnc_options_dialog_help",    0, 0, NULL },
+        { GTK_STOCK_OK          , "gnc_options_dialog_ok",      0, 0, NULL },
+        { GTK_STOCK_CANCEL      , "gnc_options_dialog_cancel",  0, 0, NULL },
     };
 
     if (done)
@@ -3585,7 +3583,7 @@ gnc_option_set_ui_value_radiobutton (GNCOption *option, gboolean use_default,
 
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
         //    g_object_set_data(G_OBJECT(widget), "gnc_radiobutton_index",
-        //			GINT_TO_POINTER(index));
+        //          GINT_TO_POINTER(index));
         return FALSE;
     }
 }
@@ -4322,8 +4320,8 @@ void gnc_options_ui_initialize (void)
 
 struct scm_cb
 {
-    SCM	apply_cb;
-    SCM	close_cb;
+    SCM apply_cb;
+    SCM close_cb;
 };
 
 static void
