@@ -105,7 +105,8 @@ typedef  struct flearandctx {
 } flearandctx;
 
 /* Pseudorandom numbers, courtesy of FLEA */
-void flearand_batch( flearandctx *x) {
+static void
+flearand_batch( flearandctx *x) {
   ub4 a, b=x->b, c=x->c+(++x->z), d=x->d, i, *m=x->m, *r=x->r;
   for (i=0; i<FLEARAND_SIZE; ++i) {
     a = m[b % FLEARAND_SIZE];
@@ -118,7 +119,8 @@ void flearand_batch( flearandctx *x) {
   x->b=b; x->c=c; x->d=d;
 }
 
-ub4 flearand( flearandctx *x) {
+static ub4
+flearand( flearandctx *x) {
   if (!x->q--) {
     x->q = FLEARAND_SIZE-1;
     flearand_batch(x);
@@ -126,7 +128,8 @@ ub4 flearand( flearandctx *x) {
   return x->r[x->q];
 }
 
-void flearand_init( flearandctx *x, ub4 seed) {
+static void
+flearand_init( flearandctx *x, ub4 seed) {
   ub4    i;
 
   x->b = x->c = x->d = x->z = seed;
@@ -210,7 +213,8 @@ typedef  struct wchain {
 
 /* Return a count of how many withouts are disobeyed. */
 /* Also set a pointer to a randomly chosen violated without */
-int count_withouts(
+static int
+count_withouts(
 test     *t,                                                /* test to check */
 wchain   *wc)                                                /* restrictions */
 {
@@ -276,13 +280,15 @@ typedef  struct state {
 } state;
 
 
-void my_free( char *x)
+static void
+my_free( char *x)
 {
   free(x);
 }
 
 /* zero out a list of tuples */
-void truncate_tuple( tu_arr **tu, ub4 *count)
+static void
+truncate_tuple( tu_arr **tu, ub4 *count)
 {
   while (*tu) {
     tu_arr *tu2 = *tu;
@@ -293,7 +299,8 @@ void truncate_tuple( tu_arr **tu, ub4 *count)
 }
 
 /* delete the i-th test */
-void delete_test( state *s, ub4 i)
+static void
+delete_test( state *s, ub4 i)
 {
   test *t = s->t[i];
 
@@ -312,7 +319,8 @@ void delete_test( state *s, ub4 i)
   }
 }
 
-void cleanup(state *s)
+static void
+cleanup(state *s)
 {
   if (s->tu) {
     ub2 d,f;
@@ -416,7 +424,8 @@ void cleanup(state *s)
 }
 
 
-char *my_alloc( state *s, size_t len)
+static char*
+my_alloc( state *s, size_t len)
 {
   char *rsl;
   if (!(rsl = (char *)malloc(len+sizeof(size_t)))) {
@@ -429,7 +438,8 @@ char *my_alloc( state *s, size_t len)
 }
 
 /* insert a tuple into a tuple array */
-int insert_tuple( state *s, tu_iter *ctx, feature *tuple)
+static int
+insert_tuple( state *s, tu_iter *ctx, feature *tuple)
 {
   ub4      i;
   feature *fe;
@@ -457,7 +467,8 @@ int insert_tuple( state *s, tu_iter *ctx, feature *tuple)
 }
 
 /* print out a single tuple */
-void show_tuple( feature *fe, ub2 len)
+static void
+show_tuple( feature *fe, ub2 len)
 {
   ub4 i;
   for (i=0; i<len; ++i) {
@@ -467,7 +478,8 @@ void show_tuple( feature *fe, ub2 len)
 }
 
 /* delete a tuple from a tuple array */
-feature *delete_tuple( tu_iter *ctx)
+static feature*
+delete_tuple( tu_iter *ctx)
 {
   feature *fe;
   ub4      i;
@@ -501,7 +513,8 @@ feature *delete_tuple( tu_iter *ctx)
 }
 
 /* start a tuple iterator */
-feature *start_tuple( tu_iter *ctx, tu_arr **tu, ub4 n, ub4 *count)
+static feature*
+start_tuple( tu_iter *ctx, tu_arr **tu, ub4 n, ub4 *count)
 {
   ctx->tu = tu;
   ctx->offset = 0;
@@ -517,7 +530,8 @@ feature *start_tuple( tu_iter *ctx, tu_arr **tu, ub4 n, ub4 *count)
 }
 
 /* get the next tuple from a tuple iterator (0 if no more tuples) */
-static feature *next_tuple( tu_iter *ctx)
+static feature*
+next_tuple( tu_iter *ctx)
 {
   if (++ctx->offset < (*ctx->tu)->len) {
     ctx->fe += ctx->n;
@@ -535,7 +549,8 @@ static feature *next_tuple( tu_iter *ctx)
 
 
 /* test if this test covers this tuple */
-static int test_tuple( ub2 *test, feature *tuple, ub2 n)
+static int
+test_tuple( ub2 *test, feature *tuple, ub2 n)
 {
   sb4 i;
   for (i=0; i<n; ++i) {
@@ -547,7 +562,8 @@ static int test_tuple( ub2 *test, feature *tuple, ub2 n)
 }
 
 /* test if first tuple (t1, n1) is a subset of second tuple (t2, n2) */
-int subset_tuple( feature *t1, ub1 n1, feature *t2, ub1 n2)
+static int
+subset_tuple( feature *t1, ub1 n1, feature *t2, ub1 n2)
 {
   sb4 i, j;
   if (n2 < n1)
@@ -564,7 +580,8 @@ int subset_tuple( feature *t1, ub1 n1, feature *t2, ub1 n2)
   return TRUE;
 }
 
-void initialize( state *s)
+static void
+initialize( state *s)
 {
   /* make all freeable pointers start out zero */
   s->dim          = (ub2 *)0;
@@ -590,7 +607,8 @@ void initialize( state *s)
 
 
 /* add one test to the list of tests */
-int add_test( state *s, test *t)
+static int
+add_test( state *s, test *t)
 {
   ub4 i;
   if (s->ntests == MAX_TESTS) {
@@ -613,7 +631,8 @@ int add_test( state *s, test *t)
  * Place the token value in *rsl
  * Return the token type
  */
-token_type parse_token(char *inp, ub4 inl, ub4 *curr, ub4 *rsl)
+static token_type
+parse_token(char *inp, ub4 inl, ub4 *curr, ub4 *rsl)
 {
   char mychar;
   ub4  i;
@@ -664,7 +683,8 @@ token_type parse_token(char *inp, ub4 inl, ub4 *curr, ub4 *rsl)
 
 #define BUFSIZE (MAX_DIMENSIONS*7+2)
 /* load old tests before generating new ones */
-int load( state *s, char *testfile)
+static int
+load( state *s, char *testfile)
 {
   char  buf[BUFSIZE];            /* buffer holding a line read from the file */
   FILE *f;
@@ -703,7 +723,7 @@ int load( state *s, char *testfile)
 	goto failure;
       }
       if (value-1 != i) {
-	printf("jenny: -o, number %d found out-of-place\n", value);
+	printf("jenny: -o, number %lu found out-of-place\n", value);
 	goto failure;
       }
       if (parse_token(buf, UB4MAXVAL, &curr, &value) != TOKEN_FEATURE) {
@@ -711,7 +731,7 @@ int load( state *s, char *testfile)
 	goto failure;
       }
       if (value >= s->dim[i]) {
-	printf("jenny: -o, feature %c does not exist in dimension %d\n", 
+	printf("jenny: -o, feature %c does not exist in dimension %lu\n", 
 	       feature_name[value], i+1);
 	goto failure;
       }
@@ -773,7 +793,8 @@ static const sb1 *jenny_doc[] = {
 
 
 /* parse -n, the tuple size */
-int parse_n( state *s, char *myarg)
+static int
+parse_n( state *s, char *myarg)
 {
   ub4 curr = 0;
   ub4 temp = UB4MAXVAL;
@@ -805,7 +826,8 @@ int parse_n( state *s, char *myarg)
 
 
 /* parse -w, a without */
-int parse_w( state *s, sb1 *myarg)
+static int
+parse_w( state *s, sb1 *myarg)
 {
   without   *w;
   wchain    *wc;
@@ -835,7 +857,7 @@ int parse_w( state *s, sb1 *myarg)
     return FALSE;
   }
   if (used[dimension_number]) {
-    printf("jenny: -w, dimension %d was given twice in a single without\n",
+    printf("jenny: -w, dimension %lu was given twice in a single without\n",
 	   dimension_number+1);
     return FALSE;
   }
@@ -855,7 +877,7 @@ int parse_w( state *s, sb1 *myarg)
   
  feature:
   if (value >= s->dim[dimension_number]) {
-    printf("jenny: -w, there is no feature '%c' in dimension %d\n",
+    printf("jenny: -w, there is no feature '%c' in dimension %lu\n",
 	   feature_name[value], dimension_number+1);
     return FALSE;
   }
@@ -913,7 +935,8 @@ int parse_w( state *s, sb1 *myarg)
 }
 
 /* parse -s, a seed for the random number generator */
-int parse_s( state *s, sb1 *myarg)
+static int
+parse_s( state *s, sb1 *myarg)
 {
   ub4 seed = 0;
   ub4 dummy = 0;
@@ -930,7 +953,8 @@ int parse_s( state *s, sb1 *myarg)
   return TRUE;
 }
 
-void preliminary( state *s)
+static void
+preliminary( state *s)
 {
   wchain  *wc;
   ub4      d;
@@ -989,7 +1013,8 @@ void preliminary( state *s)
 }
 
 /* parse the inputs */
-int parse( int argc, char *argv[], state *s)
+static int
+parse( int argc, char *argv[], state *s)
 {
   int   i, j;
   ub4   temp;
@@ -997,7 +1022,7 @@ int parse( int argc, char *argv[], state *s)
 
   /* internal check: we have MAX_FEATURES names for features */
   if (strlen(feature_name) != MAX_FEATURES) {
-    printf("feature_name length is wrong, %d\n", strlen(feature_name));
+    printf("feature_name length is wrong, %lu\n", strlen(feature_name));
     return FALSE;
   }
 
@@ -1008,7 +1033,7 @@ int parse( int argc, char *argv[], state *s)
     }
   }
   if (temp > MAX_DIMENSIONS) {
-    printf("jenny: maximum number of dimensions is %ld.  %ld is too many.\n",
+    printf("jenny: maximum number of dimensions is %d.  %ld is too many.\n",
 	   MAX_DIMENSIONS, temp);
     return FALSE;
   }
@@ -1033,7 +1058,7 @@ int parse( int argc, char *argv[], state *s)
 	return FALSE;
       }
       if (temp < 2) {
-	printf("jenny: a dimension must have at least 2 features, not %d\n",
+	printf("jenny: a dimension must have at least 2 features, not %lu\n",
 	       temp);
 	return FALSE;
       }
@@ -1041,7 +1066,7 @@ int parse( int argc, char *argv[], state *s)
     } else if (argv[i][1] == 'h') {
       int i;
       for (i=0; i<(sizeof(jenny_doc)/sizeof(ub1 *)); ++i) {
-	printf(jenny_doc[i]);
+          printf("%s", jenny_doc[i]);
       }
       return FALSE;
     }
@@ -1073,7 +1098,7 @@ int parse( int argc, char *argv[], state *s)
   }                                            /* for (each argument) if '-' */
 
   if (s->n_final > s->ndim) {
-    printf("jenny: %ld-tuples are impossible with only %d dimensions\n",
+    printf("jenny: %hhu-tuples are impossible with only %hu dimensions\n",
 	   s->n_final, s->ndim);
     return FALSE;
   }
@@ -1091,17 +1116,19 @@ int parse( int argc, char *argv[], state *s)
 }
 
 /* print out a single test */
-void report( test *t, ub2 len)
+static void
+report( test *t, ub2 len)
 {
   ub4 i;
   for (i=0; i<len; ++i) {
-    printf(" %d%c", i+1, feature_name[t->f[i]]);
+    printf(" %lu%c", i+1, feature_name[t->f[i]]);
   }
   printf(" \n");
 }
 
 /* print out all the tests */
-void report_all( state *s)
+static void
+report_all( state *s)
 {
   ub4   i;
   for (i=0; i<s->ntests; ++i) {
@@ -1110,7 +1137,8 @@ void report_all( state *s)
 }
 
 
-void start_builder( state *s, feature *tuple, ub1 n)
+static void
+start_builder( state *s, feature *tuple, ub1 n)
 {
   ub1 i;
   for (i=0; i<n; ++i) {
@@ -1119,7 +1147,8 @@ void start_builder( state *s, feature *tuple, ub1 n)
   }
 }
 
-int next_builder( state *s, feature *tuple, ub1 n)
+static int
+next_builder( state *s, feature *tuple, ub1 n)
 {
   sb4 i = n;
 
@@ -1148,7 +1177,8 @@ int next_builder( state *s, feature *tuple, ub1 n)
 }
 
 
-void build_tuples( state *s, ub2 d, ub2 f)
+static void
+build_tuples( state *s, ub2 d, ub2 f)
 {
   feature  offset[MAX_N];                                      /* n-1-tuples */
   feature  tuple[MAX_N];                      /* n-tuples that include (d,f) */
@@ -1243,7 +1273,8 @@ void build_tuples( state *s, ub2 d, ub2 f)
  * in any disobeyed without.
  */
 #define MAX_NO_PROGRESS 2
-int obey_withouts(
+static int
+obey_withouts(
 state *s,                                                    /* global state */
 test  *t,                                                /* test being built */
 ub1   *mut)              /* mut[i] = 1 if I am allowed to adjust dimension i */
@@ -1321,7 +1352,8 @@ ub1   *mut)              /* mut[i] = 1 if I am allowed to adjust dimension i */
   return FALSE;               /* failure, could not satisfy all the withouts */
 }
 
-ub4 count_tuples( state *s, test *t, int d, int f)
+static ub4
+count_tuples( state *s, test *t, int d, int f)
 {
   ub4      count = 0;
   ub1      n = s->n[d][f];
@@ -1334,7 +1366,8 @@ ub4 count_tuples( state *s, test *t, int d, int f)
   return count;
 }
 
-ub4 maximize_coverage( 
+static ub4
+maximize_coverage( 
 state *s,                                                    /* global state */
 test  *t,            /* testcase being built, already obeys all restrictions */
 ub1   *mut,                        /* mut[i] = 1 if I can adjust dimension i */
@@ -1424,7 +1457,8 @@ ub1    n)                            /* size of smallest tuple left to cover */
  * if we couldn't satisfy the withouts while covering this tuple.
  */
 #define MAX_ITERS 10
-ub4 generate_test( state *s, test *t, feature *tuple, ub1 n)
+static ub4
+generate_test( state *s, test *t, feature *tuple, ub1 n)
 {
   int  iter, i;
   ub1  mut[MAX_DIMENSIONS];        /* mut[i] = 1 if I can adjust dimension i */
@@ -1448,7 +1482,7 @@ ub4 generate_test( state *s, test *t, feature *tuple, ub1 n)
     /* If we can get all the withouts obeyed, break, success */
     if (!s->wc2 || obey_withouts(s, t, mut)) {
       if (count_withouts(t, s->wc2)) {
-	printf("internal error without %d\n", s->wc2);
+	printf("internal error without %p\n", s->wc2);
       }
       break;
     }
@@ -1470,7 +1504,8 @@ ub4 generate_test( state *s, test *t, feature *tuple, ub1 n)
 }
 
 #define GROUP_SIZE 5
-void cover_tuples( state *s)
+static void
+cover_tuples( state *s)
 {
   test *curr_test;
   curr_test = (test *)my_alloc( s, sizeof(test));
@@ -1619,7 +1654,8 @@ void cover_tuples( state *s)
   my_free((char *)curr_test);
 }
 
-void prepare_reduce( state *s) 
+static void
+prepare_reduce( state *s) 
 {
   feature tuple[MAX_N];
   ub1     n = s->n_final;
@@ -1688,7 +1724,8 @@ void prepare_reduce( state *s)
 }
 
 /* find a test to try to eliminate */
-int which_test( state *s)
+static int
+which_test( state *s)
 {
   ub4 t;
   ub4 mincount = ~0;
@@ -1706,7 +1743,8 @@ int which_test( state *s)
   return mint;
 }
 
-void reduce_tests( state *s) 
+static void
+reduce_tests( state *s) 
 {
   ub4 t;
   prepare_reduce( s);
@@ -1714,7 +1752,8 @@ void reduce_tests( state *s)
 }
 
 /* Confirm that every tuple is covered by either a testcase or a without */
-int confirm( state *s)
+static int
+confirm( state *s)
 {
   feature  offset[MAX_N];
   sb4      i, j, n = s->n_final;
@@ -1781,7 +1820,8 @@ int confirm( state *s)
 }
 
 
-void driver( int argc, char *argv[])
+static void
+driver( int argc, char *argv[])
 {
   state s;                                                 /* internal state */
 
@@ -1798,9 +1838,9 @@ void driver( int argc, char *argv[])
   cleanup(&s);                                      /* deallocate everything */
 }
 
-int main( int argc, char *argv[])
+int
+main( int argc, char *argv[])
 {
   driver(argc, argv);
   return 0;
 }
-
