@@ -56,10 +56,10 @@ G_BEGIN_DECLS
  */
 gboolean gnc_ab_enter_daterange(GtkWidget *parent,
                                 const char *heading,
-                                Timespec *from_date,
+                                time64 *from_date,
                                 gboolean *last_retv_date,
                                 gboolean *first_possible_date,
-                                Timespec *to_date,
+                                time64 *to_date,
                                 gboolean *to_now);
 
 G_END_DECLS

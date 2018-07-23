@@ -251,15 +251,14 @@ Result GncImportPrice::create_price (QofBook* book, GNCPriceDB *pdb, bool over)
         return FAILED;
     }
 
-    Timespec date;
-    timespecFromTime64 (&date, static_cast<time64>(GncDateTime(*m_date, DayPart::neutral)));
-    date.tv_nsec = 0;
+    auto date = static_cast<time64>(GncDateTime(*m_date, DayPart::neutral));
 
     bool rev = false;
     auto amount = *m_amount;
     Result ret_val = ADDED;
 
-    GNCPrice *old_price = gnc_pricedb_lookup_day (pdb, *m_from_commodity, *m_to_currency, date);
+    GNCPrice *old_price = gnc_pricedb_lookup_day_t64 (pdb, *m_from_commodity,
+                                                      *m_to_currency, date);
 
     // Should old price be over writen
     if ((old_price != nullptr) && (over == true))
@@ -287,10 +286,14 @@ Result GncImportPrice::create_price (QofBook* book, GNCPriceDB *pdb, bool over)
             rev = true;
 
     }
-    DEBUG("Date is %s, Rev is %d, Commodity from is '%s', Currency is '%s', Amount is %s", gnc_print_date (date),
-        rev, gnc_commodity_get_fullname (*m_from_commodity), gnc_commodity_get_fullname (*m_to_currency),
-        amount.to_string().c_str());
-
+    char date_str [MAX_DATE_LENGTH + 1];
+    memset (date_str, 0, sizeof(date_str));
+    qof_print_date_buff (date_str, sizeof(date_str), date);
+    DEBUG("Date is %s, Rev is %d, Commodity from is '%s', Currency is '%s', "
+          "Amount is %s", date_str, rev,
+          gnc_commodity_get_fullname (*m_from_commodity),
+          gnc_commodity_get_fullname (*m_to_currency),
+          amount.to_string().c_str());
     // Create the new price
     if (old_price == nullptr)
     {
@@ -311,7 +314,7 @@ Result GncImportPrice::create_price (QofBook* book, GNCPriceDB *pdb, bool over)
         auto amount_conv = amount.convert<RoundType::half_up>(CURRENCY_DENOM);
         gnc_price_set_value (price, static_cast<gnc_numeric>(amount_conv));
 
-        gnc_price_set_time (price, date);
+        gnc_price_set_time64 (price, date);
         gnc_price_set_source (price, PRICE_SOURCE_USER_PRICE);
 //FIXME Not sure which one        gnc_price_set_source (price, PRICE_SOURCE_FQ);
         gnc_price_set_typestr (price, PRICE_TYPE_LAST);

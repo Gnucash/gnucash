@@ -51,10 +51,10 @@ struct _DaterangeInfo
 gboolean
 gnc_ab_enter_daterange(GtkWidget *parent,
                        const char *heading,
-                       Timespec *from_date,
+                       time64 *from_date,
                        gboolean *last_retv_date,
                        gboolean *first_possible_date,
-                       Timespec *to_date,
+                       time64 *to_date,
                        gboolean *to_now)
 {
     GtkBuilder *builder;
@@ -86,12 +86,12 @@ gnc_ab_enter_daterange(GtkWidget *parent,
     now_button  = GTK_WIDGET(gtk_builder_get_object (builder, "now_button"));
     info.enter_to_button  = GTK_WIDGET(gtk_builder_get_object (builder, "enter_to_button"));
 
-    info.from_dateedit = gnc_date_edit_new_ts(*from_date, FALSE, FALSE);
+    info.from_dateedit = gnc_date_edit_new (*from_date, FALSE, FALSE);
     gtk_container_add(GTK_CONTAINER(gtk_builder_get_object (builder, "enter_from_box")),
                       info.from_dateedit);
     gtk_widget_show(info.from_dateedit);
 
-    info.to_dateedit = gnc_date_edit_new_ts(*to_date, FALSE, FALSE);
+    info.to_dateedit = gnc_date_edit_new (*to_date, FALSE, FALSE);
     gtk_container_add(GTK_CONTAINER(gtk_builder_get_object (builder, "enter_to_box")),
                       info.to_dateedit);
     gtk_widget_show(info.to_dateedit);
@@ -122,14 +122,12 @@ gnc_ab_enter_daterange(GtkWidget *parent,
 
     if (result == GTK_RESPONSE_OK)
     {
-        *from_date = gnc_date_edit_get_date_ts(
-                         GNC_DATE_EDIT(info.from_dateedit));
+        *from_date = gnc_date_edit_get_date(GNC_DATE_EDIT(info.from_dateedit));
         *last_retv_date = gtk_toggle_button_get_active(
                               GTK_TOGGLE_BUTTON(last_retrieval_button));
         *first_possible_date = gtk_toggle_button_get_active(
                                    GTK_TOGGLE_BUTTON(first_button));
-        *to_date = gnc_date_edit_get_date_ts(
-                       GNC_DATE_EDIT(info.to_dateedit));
+        *to_date = gnc_date_edit_get_date (GNC_DATE_EDIT(info.to_dateedit));
         *to_now = gtk_toggle_button_get_active(
                       GTK_TOGGLE_BUTTON(now_button));
     }

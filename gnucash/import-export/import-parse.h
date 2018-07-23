@@ -55,7 +55,7 @@ GncImportFormat gnc_import_choose_fmt(const char* msg, GncImportFormat fmts,
 gboolean gnc_import_parse_numeric(const char* str, GncImportFormat fmt,
                                   gnc_numeric *val);
 gboolean gnc_import_parse_date(const char *date, GncImportFormat fmt,
-                               Timespec *val);
+                               time64 *val);
 
 /* Set and clear flags in bit-flags */
 #define import_set_flag(i,f) (i |= f)

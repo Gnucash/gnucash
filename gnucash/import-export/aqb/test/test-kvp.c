@@ -150,7 +150,6 @@ test_qofsession_aqb_kvp( void )
             QofBook *book = qof_session_get_book(new_session);
             Account* account = gnc_book_get_root_account(book);
             struct tm *retrieved_date, *original_date;
-            gchar buff[MAX_DATE_LENGTH];
 
             g_assert(account);
 
@@ -158,10 +157,13 @@ test_qofsession_aqb_kvp( void )
             // from the xml file?
             if (1)
             {
-                Timespec retrieved_ts = gnc_ab_get_account_trans_retrieval(account);
-                g_test_message("retrieved_ts=%s\n", gnc_print_date(retrieved_ts));
+                time64 retrieved = gnc_ab_get_account_trans_retrieval(account);
+                char date_buf [MAX_DATE_LENGTH + 1];
+                memset (date_buf, 0, sizeof(date_buf));
+                qof_print_date_buff (date_buf, sizeof(date_buf), retrieved);
+                g_test_message("retrieved=%s\n", date_buf);
 
-                retrieved_date = gnc_gmtime (&retrieved_ts.tv_sec);
+                retrieved_date = gnc_gmtime (&retrieved);
                 g_assert_cmpint (retrieved_date->tm_year, ==, 114);
                 g_assert_cmpint (retrieved_date->tm_mon, ==, 7);
                 g_assert_cmpint (retrieved_date->tm_mday, ==, 29);
@@ -172,17 +174,23 @@ test_qofsession_aqb_kvp( void )
             // Account, just a general Account object.
             if (1)
             {
-                Timespec original_ts = timespec_now(), retrieved_ts;
+                time64 original = gnc_time (NULL), retrieved;
+                char date_buf_1 [MAX_DATE_LENGTH + 1];
+                char date_buf_2 [MAX_DATE_LENGTH + 1];
+                memset (date_buf_1, 0, sizeof(date_buf_1));
+                memset (date_buf_2, 0, sizeof(date_buf_2));
 
                 // Check whether the "ab-trans-retrieval" property of Account
                 // is written and read again correctly.
-                gnc_ab_set_account_trans_retrieval(account, original_ts);
-                retrieved_ts = gnc_ab_get_account_trans_retrieval(account);
-                g_test_message("original_ts=%s\n", gnc_print_date(original_ts));
-                g_test_message("retrieved_ts=%s\n", gnc_print_date(retrieved_ts));
+                gnc_ab_set_account_trans_retrieval(account, original);
+                retrieved = gnc_ab_get_account_trans_retrieval(account);
+                qof_print_date_buff(date_buf_1, sizeof(date_buf_1), original);
+                qof_print_date_buff(date_buf_2, sizeof(date_buf_2), retrieved);
+                g_test_message("original_ts=%s\n", date_buf_1);
+                g_test_message("retrieved_ts=%s\n", date_buf_2);
 
-                original_date = gnc_gmtime (&original_ts.tv_sec);
-                retrieved_date = gnc_gmtime (&retrieved_ts.tv_sec);
+                original_date = gnc_gmtime (&original);
+                retrieved_date = gnc_gmtime (&retrieved);
 
                 g_assert_cmpint (retrieved_date->tm_year, ==, original_date->tm_year);
                 g_assert_cmpint (retrieved_date->tm_mon, ==, original_date->tm_mon);

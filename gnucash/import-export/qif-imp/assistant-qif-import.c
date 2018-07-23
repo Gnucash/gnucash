@@ -3137,7 +3137,9 @@ gnc_ui_qif_import_duplicates_match_prepare (GtkAssistant *assistant,
         duplicates = wind->match_transactions;
         while (!scm_is_null(duplicates))
         {
-            Timespec send_ts = {0,0};
+            time64 send_time = 0;
+            char date_buf[MAX_DATE_LENGTH + 1];
+            memset (date_buf, 0, sizeof(date_buf));
             current_xtn = SCM_CAAR(duplicates);
 #define FUNC_NAME "xaccTransCountSplits"
             gnc_xtn = SWIG_MustGetPtr(current_xtn,
@@ -3154,12 +3156,13 @@ gnc_ui_qif_import_duplicates_match_prepare (GtkAssistant *assistant,
                                     (xaccSplitGetAccount(gnc_split), TRUE));
             }
             gtk_list_store_append(store, &iter);
-            send_ts.tv_sec = xaccTransRetDatePosted(gnc_xtn);
+            send_time = xaccTransRetDatePosted(gnc_xtn);
+            qof_print_date_buff (date_buf, sizeof(date_buf), send_time);
             gtk_list_store_set
             (store, &iter,
              QIF_TRANS_COL_INDEX, rownum++,
              QIF_TRANS_COL_DATE,
-             gnc_print_date(send_ts),
+             date_buf,
              QIF_TRANS_COL_DESCRIPTION, xaccTransGetDescription(gnc_xtn),
              QIF_TRANS_COL_AMOUNT, amount_str,
              -1);

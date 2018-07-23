@@ -503,9 +503,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
     }
     if (data.date_funds_available_valid)
     {
-        Timespec ts;
-        timespecFromTime64(&ts, data.date_funds_available);
-        gnc_timespec_to_iso8601_buff (ts, dest_string);
+        time64 time = data.date_funds_available;
+        gnc_time64_to_iso8601_buff (time, dest_string);
         tmp = notes;
         notes = g_strdup_printf("%s%s%s", tmp,
 				"|Date funds available:", dest_string);

@@ -71,11 +71,11 @@ typedef struct _split_record
     int trans_guid_present;
     GncGUID split_guid;
     int  split_guid_present;
-    Timespec log_date;
+    time64 log_date;
     int log_date_present;
-    Timespec date_entered;
+    time64 date_entered;
     int date_entered_present;
-    Timespec date_posted;
+    time64 date_posted;
     int date_posted_present;
     GncGUID acc_guid;
     int acc_guid_present;
@@ -97,7 +97,7 @@ typedef struct _split_record
     int amount_present;
     gnc_numeric value;
     int value_present;
-    Timespec date_reconciled;
+    time64 date_reconciled;
     int date_reconciled_present;
 } split_record;
 /********************************************************************\
@@ -181,20 +181,17 @@ static split_record interpret_split_record( char *record_line)
     }
     if (strlen(tok_ptr = my_strtok(NULL, "\t")) != 0)
     {
-        time64 secs = gnc_iso8601_to_time64_gmt(tok_ptr);
-        record.log_date.tv_sec = secs;
+        record.log_date = gnc_iso8601_to_time64_gmt(tok_ptr);
         record.log_date_present = TRUE;
     }
     if (strlen(tok_ptr = my_strtok(NULL, "\t")) != 0)
     {
-        time64 secs = gnc_iso8601_to_time64_gmt(tok_ptr);
-        record.date_entered.tv_sec = secs;
+        record.date_entered = gnc_iso8601_to_time64_gmt(tok_ptr);
         record.date_entered_present = TRUE;
     }
     if (strlen(tok_ptr = my_strtok(NULL, "\t")) != 0)
     {
-        time64 secs = gnc_iso8601_to_time64_gmt(tok_ptr);
-        record.date_posted.tv_sec = secs;
+        record.date_posted = gnc_iso8601_to_time64_gmt(tok_ptr);
         record.date_posted_present = TRUE;
     }
     if (strlen(tok_ptr = my_strtok(NULL, "\t")) != 0)
@@ -249,8 +246,7 @@ static split_record interpret_split_record( char *record_line)
     }
     if (strlen(tok_ptr = my_strtok(NULL, "\t")) != 0)
     {
-        time64 secs = gnc_iso8601_to_time64_gmt(tok_ptr);
-        record.date_reconciled.tv_sec = secs;
+        record.date_reconciled = gnc_iso8601_to_time64_gmt(tok_ptr);
         record.date_reconciled_present = TRUE;
     }
 
@@ -298,17 +294,17 @@ static void dump_split_record(split_record record)
     }
     if (record.log_date_present)
     {
-        gnc_timespec_to_iso8601_buff (record.log_date, string_buf);
+        gnc_time64_to_iso8601_buff (record.log_date, string_buf);
         DEBUG("Log entry date: %s", string_buf);
     }
     if (record.date_entered_present)
     {
-        gnc_timespec_to_iso8601_buff (record.date_entered, string_buf);
+        gnc_time64_to_iso8601_buff (record.date_entered, string_buf);
         DEBUG("Date entered: %s", string_buf);
     }
     if (record.date_posted_present)
     {
-        gnc_timespec_to_iso8601_buff (record.date_posted, string_buf);
+        gnc_time64_to_iso8601_buff (record.date_posted, string_buf);
         DEBUG("Date posted: %s", string_buf);
     }
     if (record.acc_guid_present)
@@ -358,7 +354,7 @@ static void dump_split_record(split_record record)
     }
     if (record.date_reconciled_present)
     {
-        gnc_timespec_to_iso8601_buff (record.date_reconciled, string_buf);
+        gnc_time64_to_iso8601_buff (record.date_reconciled, string_buf);
         DEBUG("Reconciled date: %s", string_buf);
     }
 }
@@ -452,11 +448,11 @@ static void  process_trans_record(  FILE *log_file)
                         /*Fill the transaction info*/
                         if (record.date_entered_present)
                         {
-                            xaccTransSetDateEnteredSecs(trans, record.date_entered.tv_sec);
+                            xaccTransSetDateEnteredSecs(trans, record.date_entered);
                         }
                         if (record.date_posted_present)
                         {
-                            xaccTransSetDatePostedSecs(trans, record.date_posted.tv_sec);
+                            xaccTransSetDatePostedSecs(trans, record.date_posted);
                         }
                         if (record.trans_num_present)
                         {
@@ -510,7 +506,7 @@ static void  process_trans_record(  FILE *log_file)
                         }
                         if (record.date_reconciled_present)
                         {
-                            xaccSplitSetDateReconciledTS (split, &(record.date_reconciled));
+                            xaccSplitSetDateReconciledSecs (split, record.date_reconciled);
                         }
                         if (record.split_reconcile_present)
                         {

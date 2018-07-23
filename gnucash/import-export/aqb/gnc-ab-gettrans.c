@@ -50,8 +50,7 @@ static gboolean
 gettrans_dates(GtkWidget *parent, Account *gnc_acc,
                GWEN_TIME **from_date, GWEN_TIME **to_date)
 {
-    Timespec last_timespec, until_timespec;
-    time64 now = gnc_time (NULL);
+    time64 last, until;
     gboolean use_last_date = TRUE;
     gboolean use_earliest_date = TRUE;
     gboolean use_until_now = TRUE;
@@ -59,19 +58,19 @@ gettrans_dates(GtkWidget *parent, Account *gnc_acc,
     g_return_val_if_fail(from_date && to_date, FALSE);
 
     /* Get time of last retrieval */
-    last_timespec = gnc_ab_get_account_trans_retrieval(gnc_acc);
-    if (last_timespec.tv_sec == 0)
+    last = gnc_ab_get_account_trans_retrieval(gnc_acc);
+    if (last == 0)
     {
         use_last_date = FALSE;
-        timespecFromTime64 (&last_timespec, now);
+        last = gnc_time (NULL);
     }
-    timespecFromTime64 (&until_timespec, now);
+    until = gnc_time (NULL);
 
     /* Let the user choose the date range of retrieval */
     if (!gnc_ab_enter_daterange(parent, NULL,
-                                &last_timespec,
+                                &last,
                                 &use_last_date, &use_earliest_date,
-                                &until_timespec, &use_until_now))
+                                &until, &use_until_now))
         return FALSE;
 
     /* Now calculate from date */
@@ -82,14 +81,14 @@ gettrans_dates(GtkWidget *parent, Account *gnc_acc,
     else
     {
         if (use_last_date)
-            last_timespec = gnc_ab_get_account_trans_retrieval(gnc_acc);
-        *from_date = GWEN_Time_fromSeconds(timespecToTime64(last_timespec));
+            last = gnc_ab_get_account_trans_retrieval(gnc_acc);
+        *from_date = GWEN_Time_fromSeconds(last);
     }
 
     /* Now calculate to date */
     if (use_until_now)
-        timespecFromTime64(&until_timespec, now);
-    *to_date = GWEN_Time_fromSeconds(timespecToTime64(until_timespec));
+        until = gnc_time (NULL);
+    *to_date = GWEN_Time_fromSeconds(until);
 
     return TRUE;
 }
@@ -101,7 +100,7 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
     gboolean online = FALSE;
     AB_ACCOUNT *ab_acc;
     GWEN_TIME *from_date = NULL, *to_date = NULL;
-    Timespec until_timespec;
+    time64 until;
     AB_JOB *job = NULL;
     AB_JOB_LIST2 *job_list = NULL;
     GncGWENGui *gui = NULL;
@@ -145,7 +144,7 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
         goto cleanup;
     }
     /* Use this as a local storage for the until_time below. */
-    timespecFromTime64(&until_timespec, GWEN_Time_toTime_t(to_date));
+    until = GWEN_Time_toTime_t(to_date);
 
     /* Get a GetTransactions job and enqueue it */
     job = AB_JobGetTransactions_new(ab_acc);
@@ -217,7 +216,7 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
     }
 
     /* Store the date of this retrieval */
-    gnc_ab_set_account_trans_retrieval(gnc_acc, until_timespec);
+    gnc_ab_set_account_trans_retrieval(gnc_acc, until);
 
 cleanup:
     if (ieci)
