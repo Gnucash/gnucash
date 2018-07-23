@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.20.4 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
-  <object class="GtkDialog" id="gnucash_options_dialog">
+  <object class="GtkWindow" id="gnucash_options_window">
     <property name="can_focus">False</property>
-    <property name="title" translatable="yes">GnuCash Options</property>
     <property name="default_width">640</property>
     <property name="default_height">480</property>
-    <property name="type_hint">dialog</property>
-    <signal name="response" handler="gnc_options_dialog_response_cb" swapped="no"/>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox1">
+    <child>
+      <object class="GtkBox" id="dialog-vbox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area1">
+        <child>
+          <object class="GtkButtonBox" id="buttonbox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="helpbutton1">
+              <object class="GtkButton" id="helpbutton">
                 <property name="label" translatable="yes">_Help</property>
+                <property name="name">help_button</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -32,11 +30,13 @@
                 <property name="expand">False</property>
                 <property name="fill">False</property>
                 <property name="position">0</property>
+                <property name="secondary">True</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="cancelbutton1">
+              <object class="GtkButton" id="cancelbutton">
                 <property name="label" translatable="yes">_Cancel</property>
+                <property name="name">cancel_button</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -53,6 +53,7 @@
             <child>
               <object class="GtkButton" id="applybutton">
                 <property name="label" translatable="yes">_Apply</property>
+                <property name="name">apply_button</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -67,8 +68,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="okbutton1">
+              <object class="GtkButton" id="okbutton">
                 <property name="label" translatable="yes">_OK</property>
+                <property name="name">ok_button</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
@@ -91,7 +93,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="hbox1">
+          <object class="GtkBox" id="hbox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
@@ -105,7 +107,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="treeview-selection1"/>
+                      <object class="GtkTreeSelection" id="treeview-selection"/>
                     </child>
                   </object>
                 </child>
@@ -139,11 +141,8 @@
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="-11">helpbutton1</action-widget>
-      <action-widget response="-6">cancelbutton1</action-widget>
-      <action-widget response="-10">applybutton</action-widget>
-      <action-widget response="-5">okbutton1</action-widget>
-    </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

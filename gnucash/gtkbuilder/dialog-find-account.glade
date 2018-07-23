@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.20.4 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkListStore" id="list-store">
@@ -16,23 +16,34 @@
       <column type="gchararray"/>
       <!-- column-name bal_zero -->
       <column type="gchararray"/>
+      <!-- column-name tax -->
+      <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkDialog" id="find_account_dialog">
+  <object class="GtkWindow" id="find_account_window">
     <property name="can_focus">False</property>
-    <property name="border_width">6</property>
-    <property name="title" translatable="yes">Find Account Dialog</property>
     <property name="default_width">600</property>
     <property name="default_height">400</property>
-    <property name="type_hint">dialog</property>
-    <signal name="destroy" handler="gnc_find_account_dialog_window_destroy_cb" swapped="no"/>
-    <signal name="response" handler="gnc_find_account_dialog_response_cb" swapped="no"/>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox2">
+    <child>
+      <object class="GtkBox" id="dialog-vbox">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area1">
+        <child>
+          <object class="GtkLabel" id="label5">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="margin_bottom">6</property>
+            <property name="label" translatable="yes">&lt;b&gt;Search the Account List&lt;/b&gt;</property>
+            <property name="use_markup">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButtonBox" id="buttonbox">
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
@@ -90,20 +101,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="label1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_bottom">6</property>
-            <property name="label" translatable="yes">&lt;b&gt;Search the Account List&lt;/b&gt;</property>
-            <property name="use_markup">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkBox" id="hbox-radio">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -130,7 +127,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="active">True</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">radio-root</property>
               </object>
@@ -148,7 +144,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkScrolledWindow" id="scrolledwindow2">
+          <object class="GtkScrolledWindow" id="scrollwindow">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <child>
@@ -156,15 +152,16 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="model">list-store</property>
+                <property name="search_column">0</property>
                 <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="treeview-selection1"/>
+                  <object class="GtkTreeSelection"/>
                 </child>
                 <child>
                   <object class="GtkTreeViewColumn" id="account_full_name">
                     <property name="resizable">True</property>
                     <property name="title" translatable="yes">Account Full Name</property>
                     <child>
-                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                      <object class="GtkCellRendererText" id="cellrenderertext"/>
                       <attributes>
                         <attribute name="text">0</attribute>
                       </attributes>
@@ -194,11 +191,11 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="hbox2">
+          <object class="GtkBox" id="hbox1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkLabel" id="label3">
+              <object class="GtkLabel" id="label6">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
@@ -237,7 +234,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label4">
+              <object class="GtkLabel" id="label7">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
@@ -255,7 +252,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="label2">
+          <object class="GtkLabel" id="label8">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Select a row and then press 'jump to' to jump to account in the Account Tree,
@@ -273,10 +270,8 @@ if account should not be shown, this will be temporarily overridden.</property>
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="-8">check_button</action-widget>
-      <action-widget response="-10">jumpto_button</action-widget>
-      <action-widget response="-6">close_button</action-widget>
-    </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>
