@@ -68,10 +68,6 @@ void   gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
         gboolean do_commit,
         QofBook *book);
 
-void   gnc_trans_scm_set_date(SCM trans_scm, time64 time);
-void   gnc_trans_scm_set_num(SCM trans_scm, const char *num);
-void   gnc_trans_scm_set_description(SCM trans_scm, const char *description);
-void   gnc_trans_scm_set_notes(SCM trans_scm, const char *notes);
 void   gnc_trans_scm_append_split_scm(SCM trans_scm, SCM split_scm);
 
 SCM    gnc_trans_scm_get_split_scm(SCM trans_scm, int index);

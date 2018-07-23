@@ -1386,7 +1386,7 @@ gnc_split_register_save_to_scm (SplitRegister *reg,
         time64 time;
         cell = gnc_table_layout_get_cell (reg->table->layout, DATE_CELL);
         gnc_date_cell_get_date ((DateCell *) cell, &time);
-        gnc_trans_scm_set_date(trans_scm, time);
+        xaccTransSetDatePostedSecsNormalized(trans, time);
     }
 
     if (gnc_table_layout_get_cell_changed (reg->table->layout, NUM_CELL, TRUE))
@@ -1395,7 +1395,7 @@ gnc_split_register_save_to_scm (SplitRegister *reg,
 
         value = gnc_table_layout_get_cell_value (reg->table->layout, NUM_CELL);
         if (reg->use_tran_num_for_num_field)
-            gnc_trans_scm_set_num (trans_scm, value);
+            xaccTransSetNum (trans, value);
      /* else this contains the same as ACTN_CELL which is already handled below *
       * and the TNUM_CELL contains transaction number which is handled in next  *
       * if statement. */
@@ -1407,7 +1407,7 @@ gnc_split_register_save_to_scm (SplitRegister *reg,
 
         value = gnc_table_layout_get_cell_value (reg->table->layout, TNUM_CELL);
         if (!reg->use_tran_num_for_num_field)
-            gnc_trans_scm_set_num (trans_scm, value);
+            xaccTransSetNum (trans, value);
      /* else this cell is not used */
     }
 
@@ -1416,7 +1416,7 @@ gnc_split_register_save_to_scm (SplitRegister *reg,
         const char *value;
 
         value = gnc_table_layout_get_cell_value (reg->table->layout, DESC_CELL);
-        gnc_trans_scm_set_description (trans_scm, value);
+        xaccTransSetDescription (trans, value);
     }
 
     if (gnc_table_layout_get_cell_changed (reg->table->layout, NOTES_CELL, TRUE))
@@ -1424,7 +1424,7 @@ gnc_split_register_save_to_scm (SplitRegister *reg,
         const char *value;
 
         value = gnc_table_layout_get_cell_value (reg->table->layout, NOTES_CELL);
-        gnc_trans_scm_set_notes (trans_scm, value);
+        xaccTransSetNotes (trans, value);
     }
 
     if (gnc_table_layout_get_cell_changed (reg->table->layout, RECN_CELL, TRUE))
