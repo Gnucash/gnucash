@@ -32,10 +32,7 @@
 
 /* Helpers for various conversions to and from guile */
 
-SCM      gnc_timespec2timepair(Timespec t);
-Timespec gnc_timepair2timespec(SCM x);
 GDate    gnc_time64_to_GDate(SCM x);
-int      gnc_timepair_p(SCM x);
 
 SCM  gnc_guid2scm(GncGUID guid);
 GncGUID gnc_scm2guid(SCM guid_scm);

@@ -329,8 +329,8 @@ Timespec timespec_diff(const Timespec *ta, const Timespec *tb);
 /** absolute value, also normalized */
 Timespec timespec_abs(const Timespec *t);
 
-/** convert a timepair on a certain day (localtime) to
- * the timepair representing midday on that day. Watch out - this is *not* the
+/** convert a timespec on a certain day (localtime) to
+ * the timespec representing midday on that day. Watch out - this is *not* the
  * first second of the day, which is returned by various other functions
  * returning a Timespec. */
 Timespec timespecCanonicalDayTime(Timespec t);
