@@ -3,7 +3,7 @@
 By Bob Jenkins, March 2003.  Public domain.
 
 jenny.c -- jennyrate tests from m dimensions of features that cover all
-  n-tuples of features, n <= m, with each feature chosen from a different 
+  n-tuples of features, n <= m, with each feature chosen from a different
   dimension.  For example, given 10 dimensions (m=10) with 2 to 8 features
   apiece, cover all feature triplets (n=3).  A lower bound on the number
   of tests required is the product of the sizes of the largest n dimensions.
@@ -11,7 +11,7 @@ jenny.c -- jennyrate tests from m dimensions of features that cover all
 
 Arguments
   Arguments without a leading '-' : an integer in 2..52.  Represents a
-       dimension.  Dimensions are implicitly numbered 1..65535, in the 
+       dimension.  Dimensions are implicitly numbered 1..65535, in the
        order they appear.  Features in dimensions are always implicitly
        given 1-character names, which are in order a..z, A..Z .  It's a
        good idea to pass the output of jenny through a postprocessor that
@@ -37,7 +37,7 @@ Arguments
        number followed by a one-character feature name.  A single -w can
        disallow multiple features in a dimension.  For example, -w1a2cd4ac
        disallows the combinations (1a,2c,4a),(1a,2c,4c),(1a,2d,4a),(1a,2d,4c)
-       where 1a represents the first dimension's first feature, 2c is the 
+       where 1a represents the first dimension's first feature, 2c is the
        second dimension's third feature, and 4a is the fourth dimension's
        first feature.
 
@@ -227,14 +227,14 @@ wchain   *wc)                                                /* restrictions */
     while (i<w->len) {
       int dimension_match = FALSE;                /* match in this dimension */
       do {
-	if (t->f[w->fe[i].d] == w->fe[i].f) {
-	  dimension_match = TRUE;
-	}
-	++i;
+        if (t->f[w->fe[i].d] == w->fe[i].f) {
+          dimension_match = TRUE;
+        }
+        ++i;
       } while (i<w->len && (w->fe[i].d == w->fe[i-1].d));
       if (!dimension_match) {
-	match = FALSE;
-	break;
+        match = FALSE;
+        break;
       }
     }
     if (match) {
@@ -326,10 +326,10 @@ cleanup(state *s)
     ub2 d,f;
     for (d=0; d<s->ndim; ++d) {
       if (s->tu[d]) {
-	for (f=0; f<s->dim[d]; ++f) {
-	  truncate_tuple(&s->tu[d][f], &s->tc[d][f]);
-	}
-	my_free((char *)s->tu[d]);
+        for (f=0; f<s->dim[d]; ++f) {
+          truncate_tuple(&s->tu[d][f], &s->tc[d][f]);
+        }
+        my_free((char *)s->tu[d]);
       }
     }
     my_free((char *)s->tu);
@@ -340,7 +340,7 @@ cleanup(state *s)
     ub2 d;
     for (d=0; d<s->ndim; ++d) {
       if (s->n[d]) {
-	my_free((char *)s->n[d]);
+        my_free((char *)s->n[d]);
       }
     }
     my_free((char *)s->n);
@@ -351,7 +351,7 @@ cleanup(state *s)
     ub2 d;
     for (d=0; d<s->ndim; ++d) {
       if (s->tc[d]) {
-	my_free((char *)s->tc[d]);
+        my_free((char *)s->tc[d]);
       }
     }
     my_free((char *)s->tc);
@@ -362,9 +362,9 @@ cleanup(state *s)
     ub2 i;
     for (i=0; i<s->ndim; ++i) {
       while (s->wc[i]) {
-	wchain  *wc = s->wc[i];
-	s->wc[i] = s->wc[i]->next;
-	my_free((char *)wc);
+        wchain  *wc = s->wc[i];
+        s->wc[i] = s->wc[i]->next;
+        my_free((char *)wc);
       }
     }
     my_free((char *)s->wc);
@@ -431,7 +431,7 @@ my_alloc( state *s, size_t len)
   if (!(rsl = (char *)malloc(len+sizeof(size_t)))) {
     printf("jenny: could not allocate space\n");
     cleanup(s);
-    exit(0);  
+    exit(0);
   }
   memset(rsl, 0x00, len);
   return rsl;
@@ -571,7 +571,7 @@ subset_tuple( feature *t1, ub1 n1, feature *t2, ub1 n2)
   for (i=0, j=0; i<n1; ++i) {
     while (t1[i].d > t2[j].d) {
       if (++j == n2)
-	return FALSE;
+        return FALSE;
     }
     if (t1[i].d != t2[j].d || t1[i].f != t2[j].f) {
       return FALSE;
@@ -648,7 +648,7 @@ parse_token(char *inp, ub4 inl, ub4 *curr, ub4 *rsl)
     for (i=*curr+1; i < inl; ++i) {
       mychar = inp[i];
       if (!(mychar == ' ' || mychar == '\t' || mychar == '\n'))
-	break;
+        break;
     }
     *curr = i;
     return TOKEN_SPACE;
@@ -662,16 +662,16 @@ parse_token(char *inp, ub4 inl, ub4 *curr, ub4 *rsl)
     *rsl = number;
     return TOKEN_NUMBER;
   } else if ((mychar >= 'a' && mychar <= 'z') ||
-	     (mychar >= 'A' && mychar <= 'Z')) {
+             (mychar >= 'A' && mychar <= 'Z')) {
     /*------------------------------------------------- parse a feature name */
     ub4 i;
     for (i=0; i<MAX_FEATURES; ++i)
       if (feature_name[i] == mychar)
-	break;
+        break;
     if (i == MAX_FEATURES) {
       printf("jenny: the name '%c' is not used for any feature\n",
-	     mychar);
-	return TOKEN_ERROR;
+             mychar);
+        return TOKEN_ERROR;
     }
     *rsl = i;
     ++*curr;
@@ -688,7 +688,7 @@ load( state *s, char *testfile)
 {
   char  buf[BUFSIZE];            /* buffer holding a line read from the file */
   FILE *f;
-  
+
   if (testfile[0] == '\0') {
     f = stdin;
   } else {
@@ -715,25 +715,25 @@ load( state *s, char *testfile)
 
     for (i=0; i<s->ndim; ++i) {
       if (parse_token(buf, UB4MAXVAL, &curr, &value) != TOKEN_SPACE) {
-	printf("jenny: -o, non-space found where space expected\n");
-	goto failure;
+        printf("jenny: -o, non-space found where space expected\n");
+        goto failure;
       }
       if (parse_token(buf, UB4MAXVAL, &curr, &value) != TOKEN_NUMBER) {
-	printf("jenny: -o, non-number found where number expected\n");
-	goto failure;
+        printf("jenny: -o, non-number found where number expected\n");
+        goto failure;
       }
       if (value-1 != i) {
-	printf("jenny: -o, number %lu found out-of-place\n", value);
-	goto failure;
+        printf("jenny: -o, number %lu found out-of-place\n", value);
+        goto failure;
       }
       if (parse_token(buf, UB4MAXVAL, &curr, &value) != TOKEN_FEATURE) {
-	printf("jenny: -o, non-feature found where feature expected\n");
-	goto failure;
+        printf("jenny: -o, non-feature found where feature expected\n");
+        goto failure;
       }
       if (value >= s->dim[i]) {
-	printf("jenny: -o, feature %c does not exist in dimension %lu\n", 
-	       feature_name[value], i+1);
-	goto failure;
+        printf("jenny: -o, feature %c does not exist in dimension %lu\n",
+               feature_name[value], i+1);
+        goto failure;
       }
       t->f[i] = value;
     }
@@ -809,14 +809,14 @@ parse_n( state *s, char *myarg)
     printf("jenny: -n should be followed by just an integer\n");
     return FALSE;
   }
-  
+
   if ((temp < 1) || (temp > 32)) {
     printf("jenny: -n says all n-tuples should be covered.\n");
     return FALSE;
   }
   if (temp > s->ndim) {
     printf("jenny: -n, %ld-tuples are impossible with only %d dimensions\n",
-	   temp, s->ndim);
+           temp, s->ndim);
     return FALSE;
   }
   s->n_final = (ub2)temp;
@@ -839,7 +839,7 @@ parse_w( state *s, sb1 *myarg)
   ub4        i, j, k;
   size_t     len = strlen(myarg);
   token_type t = parse_token(myarg, len, &curr, &value);
-  
+
   for (i=0; i<s->ndim; ++i)
     used[i] = FALSE;
   if (t != TOKEN_NUMBER) {
@@ -848,7 +848,7 @@ parse_w( state *s, sb1 *myarg)
     return FALSE;
   }
   fe_len=0;
-  
+
  number:
   dimension_number = --value;
   if (dimension_number >= s->ndim) {
@@ -858,12 +858,12 @@ parse_w( state *s, sb1 *myarg)
   }
   if (used[dimension_number]) {
     printf("jenny: -w, dimension %lu was given twice in a single without\n",
-	   dimension_number+1);
+           dimension_number+1);
     return FALSE;
   }
   used[dimension_number] = TRUE;
-  
-  
+
+
   switch (parse_token(myarg, len, &curr, &value)) {
   case TOKEN_FEATURE: goto feature;
   case TOKEN_END:
@@ -874,22 +874,22 @@ parse_w( state *s, sb1 *myarg)
     printf("jenny: proper withouts look like -w2a1bc99a\n");
     return FALSE;
   }
-  
+
  feature:
   if (value >= s->dim[dimension_number]) {
     printf("jenny: -w, there is no feature '%c' in dimension %lu\n",
-	   feature_name[value], dimension_number+1);
+           feature_name[value], dimension_number+1);
     return FALSE;
   }
   fe[fe_len].d = dimension_number;
   fe[fe_len].f = value;
   if (++fe_len >= MAX_WITHOUT) {
     printf("jenny: -w, at most %d features in a single without\n",
-	   MAX_WITHOUT);
+           MAX_WITHOUT);
     return FALSE;
   }
 
-  
+
   switch (parse_token(myarg, len, &curr, &value)) {
   case TOKEN_FEATURE: goto feature;
   case TOKEN_NUMBER: goto number;
@@ -899,21 +899,21 @@ parse_w( state *s, sb1 *myarg)
     printf("jenny: proper withouts look like -w2a1bc99a\n");
     return FALSE;
   }
-  
+
  end:
 
   /* sort the dimensions and features in this restriction */
   for (i=0; i<fe_len; ++i) {
     for (j=i+1; j<fe_len; ++j) {
       if ((fe[i].d > fe[j].d) ||
-	  ((fe[i].d == fe[j].d) && (fe[i].f > fe[j].f))) {
-	ub2 fe_temp;
-	fe_temp = fe[i].d;
-	fe[i].d = fe[j].d;
-	fe[j].d = fe_temp;
-	fe_temp = fe[i].f;
-	fe[i].f = fe[j].f;
-	fe[j].f = fe_temp;
+          ((fe[i].d == fe[j].d) && (fe[i].f > fe[j].f))) {
+        ub2 fe_temp;
+        fe_temp = fe[i].d;
+        fe[i].d = fe[j].d;
+        fe[j].d = fe_temp;
+        fe_temp = fe[i].f;
+        fe[i].f = fe[j].f;
+        fe[j].f = fe_temp;
       }
     }
   }
@@ -1002,11 +1002,11 @@ preliminary( state *s)
     int      i;
     for (i=0; i<w->len; ++i) {
       if (w->fe[i].d != old) {
-	wchain *wcx = (wchain *)my_alloc( s, sizeof(wchain));
-	wcx->w = w;
-	wcx->next = s->wc[w->fe[i].d];
-	s->wc[w->fe[i].d] = wcx;
-	old = w->fe[i].d;
+        wchain *wcx = (wchain *)my_alloc( s, sizeof(wchain));
+        wcx->w = w;
+        wcx->next = s->wc[w->fe[i].d];
+        s->wc[w->fe[i].d] = wcx;
+        old = w->fe[i].d;
       }
     }
   }
@@ -1034,7 +1034,7 @@ parse( int argc, char *argv[], state *s)
   }
   if (temp > MAX_DIMENSIONS) {
     printf("jenny: maximum number of dimensions is %d.  %ld is too many.\n",
-	   MAX_DIMENSIONS, temp);
+           MAX_DIMENSIONS, temp);
     return FALSE;
   }
   s->ndim = (ub2)temp;
@@ -1049,18 +1049,18 @@ parse( int argc, char *argv[], state *s)
 
       (void)parse_token(myarg, UB4MAXVAL, &curr, &temp);
       if (parse_token(myarg, UB4MAXVAL, &curr, &dummy) != TOKEN_END) {
-	printf("jenny: something was trailing a dimension number\n");
-	return FALSE;
+        printf("jenny: something was trailing a dimension number\n");
+        return FALSE;
       }
       if (temp > MAX_FEATURES) {
-	printf("jenny: dimensions must be smaller than %d.  %ld is too big.\n",
-	       MAX_FEATURES, temp);
-	return FALSE;
+        printf("jenny: dimensions must be smaller than %d.  %ld is too big.\n",
+               MAX_FEATURES, temp);
+        return FALSE;
       }
       if (temp < 2) {
-	printf("jenny: a dimension must have at least 2 features, not %lu\n",
-	       temp);
-	return FALSE;
+        printf("jenny: a dimension must have at least 2 features, not %lu\n",
+               temp);
+        return FALSE;
       }
       s->dim[j++] = (ub2)temp;
     } else if (argv[i][1] == 'h') {
@@ -1092,14 +1092,14 @@ parse( int argc, char *argv[], state *s)
       break;
     default:
       printf("jenny: legal arguments are numbers, -n, -s, -w, -h, not -%c\n",
-	     argv[i][1]);
+             argv[i][1]);
       return FALSE;
     }
   }                                            /* for (each argument) if '-' */
 
   if (s->n_final > s->ndim) {
     printf("jenny: %hhu-tuples are impossible with only %hu dimensions\n",
-	   s->n_final, s->ndim);
+           s->n_final, s->ndim);
     return FALSE;
   }
 
@@ -1153,8 +1153,8 @@ next_builder( state *s, feature *tuple, ub1 n)
   sb4 i = n;
 
   while (i-- &&
-	 tuple[i].d == s->ndim-n+i &&
-	 tuple[i].f == s->dim[tuple[i].d]-1)
+         tuple[i].d == s->ndim-n+i &&
+         tuple[i].f == s->dim[tuple[i].d]-1)
     ;
   if (i == -1)
     return FALSE;
@@ -1221,19 +1221,19 @@ build_tuples( state *s, ub2 d, ub2 f)
       s->tuple_tester->f[tuple[i].d] = tuple[i].f;
     }
     if (count_withouts(s->tuple_tester, s->wc2) ||
-	count_withouts(s->tuple_tester, s->wc3))
+        count_withouts(s->tuple_tester, s->wc3))
       goto make_next_tuple;
 
     /* is this tuple covered by the existing tests? */
     for (j=0; j<s->ntests; ++j) {
       test *t = s->t[j];
       for (i=0; i<n; ++i) {
-	if (t->f[tuple[i].d] != tuple[i].f) {
-	  break;
-	}
+        if (t->f[tuple[i].d] != tuple[i].f) {
+          break;
+        }
       }
       if (i == n) {
-	goto make_next_tuple;
+        goto make_next_tuple;
       }
     }
 
@@ -1301,7 +1301,7 @@ ub1   *mut)              /* mut[i] = 1 if I am allowed to adjust dimension i */
     ub4     j;
     ub2     best[MAX_FEATURES];                      /* best features so far */
     ub1     ok = TRUE;
-    
+
     for (j=ndim; j>0; --j) {
       ub2 fcount = 0;                    /* count of filled elements of best */
       ub2 mydim;                                    /* the current dimension */
@@ -1319,31 +1319,31 @@ ub1   *mut)              /* mut[i] = 1 if I am allowed to adjust dimension i */
 
       /* test every feature of this dimension, trying to make progress */
       for (k=0; k<s->dim[mydim]; ++k) {
-	ub2 newcount;
-	t->f[mydim] = k;
-	newcount = count_withouts(t, s->wc[mydim]);
-	if (newcount <= count) {
-	  if (newcount < count) {
-	    i = 0;                                      /* partial progress! */
-	    fcount = 0;
-	    count = newcount;
-	  }
-	  best[fcount++] = k;
-	}
+        ub2 newcount;
+        t->f[mydim] = k;
+        newcount = count_withouts(t, s->wc[mydim]);
+        if (newcount <= count) {
+          if (newcount < count) {
+            i = 0;                                      /* partial progress! */
+            fcount = 0;
+            count = newcount;
+          }
+          best[fcount++] = k;
+        }
       }
 
       /* choose one of the best features for this dimension at random */
       if (fcount == 0) {
-	printf("jenny: internal error a\n");
+        printf("jenny: internal error a\n");
       } else if (fcount == 1) {
-	t->f[mydim] = best[0];
+        t->f[mydim] = best[0];
       } else {
-	temp = (flearand(&s->r) % fcount);
-	t->f[mydim] = best[temp];
+        temp = (flearand(&s->r) % fcount);
+        t->f[mydim] = best[temp];
       }
 
       if (count > 0)
-	ok = FALSE;
+        ok = FALSE;
     }
     if (ok) {                                       /* no withouts disobeyed */
       return TRUE;
@@ -1367,7 +1367,7 @@ count_tuples( state *s, test *t, int d, int f)
 }
 
 static ub4
-maximize_coverage( 
+maximize_coverage(
 state *s,                                                    /* global state */
 test  *t,            /* testcase being built, already obeys all restrictions */
 ub1   *mut,                        /* mut[i] = 1 if I can adjust dimension i */
@@ -1409,41 +1409,41 @@ ub1    n)                            /* size of smallest tuple left to cover */
 
       /* for every feature in mydim, see if using it would improve coverage */
       for (f=0; f<s->dim[d]; ++f) {
-	t->f[d] = f;                            /* switch to the new feature */
-	if (!count_withouts(t, s->wc[d])) {         /* need to obey withouts */
-	  ub4 new_coverage = count_tuples(s, t, d, f);
-	  if (s->n[d][f] < best_n) {
-	    best_n = s->n[d][f];
-	    progress = TRUE;
-	    coverage = new_coverage;
-	    count = 0;
-	    best[count++] = f;
-	  } else if (s->n[d][f] == best_n && new_coverage >= coverage) {
-	    if (new_coverage > coverage) {
-	      progress = TRUE;
-	      coverage = new_coverage;
-	      count = 0;
-	    }
-	    best[count++] = f;
-	  }
-	}
+        t->f[d] = f;                            /* switch to the new feature */
+        if (!count_withouts(t, s->wc[d])) {         /* need to obey withouts */
+          ub4 new_coverage = count_tuples(s, t, d, f);
+          if (s->n[d][f] < best_n) {
+            best_n = s->n[d][f];
+            progress = TRUE;
+            coverage = new_coverage;
+            count = 0;
+            best[count++] = f;
+          } else if (s->n[d][f] == best_n && new_coverage >= coverage) {
+            if (new_coverage > coverage) {
+              progress = TRUE;
+              coverage = new_coverage;
+              count = 0;
+            }
+            best[count++] = f;
+          }
+        }
       }
 
-      /* 
+      /*
        * Change this dimension to the best features seen.
        * Worst case, everyone was worse than the old value, so best[0] will
        * be the old value.  Coverage will be the same and still no withouts
        * will be hit.
        */
       if (count == 0) {
-	printf("jenny: internal error b\n");
+        printf("jenny: internal error b\n");
       } else if (count == 1) {
-	t->f[d] = best[0];
+        t->f[d] = best[0];
       } else {
-	t->f[d] = best[flearand(&s->r) % count];
+        t->f[d] = best[flearand(&s->r) % count];
       }
       if (s->n[d][t->f[d]] == n)
-	total += coverage;
+        total += coverage;
     }
 
   } while (progress);
@@ -1452,7 +1452,7 @@ ub1    n)                            /* size of smallest tuple left to cover */
 
 
 /*
- * Generate one test that obeys all the restrictions and covers at 
+ * Generate one test that obeys all the restrictions and covers at
  * least one tuple.  Do not add it to the list of tests yet.  Return FALSE
  * if we couldn't satisfy the withouts while covering this tuple.
  */
@@ -1467,13 +1467,13 @@ generate_test( state *s, test *t, feature *tuple, ub1 n)
   /* mut[i] = 1 if I can modify dimension i */
   for (i=0; i<s->ndim; ++i) mut[i] = 1;
   for (i=0; i<n; ++i) mut[tuple[i].d] = 0;
-  
+
   for (iter=0; iter<MAX_ITERS; ++iter) {
     /* Produce a totally random testcase */
     for (i=0; i<s->ndim; ++i) {
       t->f[i] = flearand(&s->r) % (s->dim[i]);
     }
-    
+
     /* Plug in the chosen new tuple */
     for (i=0; i<n; ++i){
       t->f[tuple[i].d] = tuple[i].f;
@@ -1482,7 +1482,7 @@ generate_test( state *s, test *t, feature *tuple, ub1 n)
     /* If we can get all the withouts obeyed, break, success */
     if (!s->wc2 || obey_withouts(s, t, mut)) {
       if (count_withouts(t, s->wc2)) {
-	printf("internal error without %p\n", s->wc2);
+        printf("internal error without %p\n", s->wc2);
       }
       break;
     }
@@ -1526,27 +1526,27 @@ cover_tuples( state *s)
     for (d=0; d<s->ndim; ++d) {
       ub2 f;
       for (f=0; f<s->dim[d]; ++f) {
-	build_tuples(s, d, f);
-	if (s->n[d][f] < tuple_n) {
-	  tuple_n = s->n[d][f];
-	  tuple_count = s->tc[d][f];
-	  tuple = s->tu[d][f]->fe;
-	  tuple_f = f;
-	  tuple_d = d;
-	} else if (s->n[d][f] == tuple_n && s->tc[d][f] > tuple_count) {
-	  tuple_count = s->tc[d][f];
-	  tuple = s->tu[d][f]->fe;
-	  tuple_f = f;
-	  tuple_d = d;
-	}
+        build_tuples(s, d, f);
+        if (s->n[d][f] < tuple_n) {
+          tuple_n = s->n[d][f];
+          tuple_count = s->tc[d][f];
+          tuple = s->tu[d][f]->fe;
+          tuple_f = f;
+          tuple_d = d;
+        } else if (s->n[d][f] == tuple_n && s->tc[d][f] > tuple_count) {
+          tuple_count = s->tc[d][f];
+          tuple = s->tu[d][f]->fe;
+          tuple_f = f;
+          tuple_d = d;
+        }
       }
     }
 
     if (tuple_count == 0) {
       if (tuple_n == s->n_final)
-	break;                             /* no more tuples to cover, done! */
+        break;                             /* no more tuples to cover, done! */
       else
-	continue;
+        continue;
     }
 
 
@@ -1560,17 +1560,17 @@ cover_tuples( state *s)
 
       /* generate a test that covers the first tuple */
       if (!(this_count = generate_test(s, curr_test, tuple, tuple_n))) {
-	continue;
+        continue;
       }
       covered = TRUE;
 
       /* see how many tuples are covered altogether */
       if (this_count > best_count) {
-	test *temp = best_test;
-	best_test = curr_test;
-	curr_test = temp;
+        test *temp = best_test;
+        best_test = curr_test;
+        curr_test = temp;
 
-	best_count = this_count;
+        best_count = this_count;
       }
     }
 
@@ -1581,8 +1581,8 @@ cover_tuples( state *s)
 
       /* make a copy of tuple, because we'll be deleting it */
       for (i=0; i<tuple_n; ++i) {
-	extra[i].d = tuple[i].d;
-	extra[i].f = tuple[i].f;
+        extra[i].d = tuple[i].d;
+        extra[i].f = tuple[i].f;
       }
 
       printf("Could not cover tuple ");
@@ -1596,56 +1596,56 @@ cover_tuples( state *s)
       w->len = tuple_n;
       w->fe = (feature *)my_alloc( s, sizeof(feature)*tuple_n);
       for (i=0; i<tuple_n; ++i) {
-	w->fe[i].d = extra[i].d;
-	w->fe[i].f = extra[i].f;
+        w->fe[i].d = extra[i].d;
+        w->fe[i].f = extra[i].f;
       }
-      
+
       for (d=0; d<s->ndim; ++d) {
-	ub2      f;
-	tu_iter  ctx;
-	for (f=0; f<s->dim[d]; ++f) {
-	  ub1      n = s->n[d][f];
-	  feature *this = start_tuple(&ctx, &s->tu[d][f], n, &s->tc[d][f]);
-	
-	  /* remove all the tuples covered by it */
-	  while (this) {
-	    if (subset_tuple(extra, tuple_n, this, n)) {
-	      this = delete_tuple(&ctx);
-	    } else {
-	      this = next_tuple(&ctx);
-	    }
-	  }
-	}
+        ub2      f;
+        tu_iter  ctx;
+        for (f=0; f<s->dim[d]; ++f) {
+          ub1      n = s->n[d][f];
+          feature *this = start_tuple(&ctx, &s->tu[d][f], n, &s->tc[d][f]);
+
+          /* remove all the tuples covered by it */
+          while (this) {
+            if (subset_tuple(extra, tuple_n, this, n)) {
+              this = delete_tuple(&ctx);
+            } else {
+              this = next_tuple(&ctx);
+            }
+          }
+        }
       }
       my_free((char *)best_test->f);
       my_free((char *)best_test);
     } else {
       ub2      d;
       for (d=0; d<s->ndim; ++d) {
-	tu_iter  ctx;
-	ub2      f = best_test->f[d];
-	ub1      n = s->n[d][f];
-	feature *this = start_tuple(&ctx, &s->tu[d][f], n, &s->tc[d][f]);
-	
-	/* remove all the tuples covered by it */
-	while (this) {
-	  if (test_tuple(best_test->f, this, n)) {
-	    this = delete_tuple(&ctx);
-	  } else {
-	    this = next_tuple(&ctx);
-	  }
-	}
+        tu_iter  ctx;
+        ub2      f = best_test->f[d];
+        ub1      n = s->n[d][f];
+        feature *this = start_tuple(&ctx, &s->tu[d][f], n, &s->tc[d][f]);
+
+        /* remove all the tuples covered by it */
+        while (this) {
+          if (test_tuple(best_test->f, this, n)) {
+            this = delete_tuple(&ctx);
+          } else {
+            this = next_tuple(&ctx);
+          }
+        }
       }
 
       /* add it to the list of tests */
       if (!add_test(s, best_test)) {
-	printf("jenny: exceeded maximum number of tests\n");
-	my_free((char *)curr_test->f);
-	my_free((char *)curr_test);
-	my_free((char *)best_test->f);
-	my_free((char *)best_test);
-	cleanup(s);
-	exit(0);
+        printf("jenny: exceeded maximum number of tests\n");
+        my_free((char *)curr_test->f);
+        my_free((char *)curr_test);
+        my_free((char *)best_test->f);
+        my_free((char *)best_test);
+        cleanup(s);
+        exit(0);
       }
     }
   }
@@ -1655,7 +1655,7 @@ cover_tuples( state *s)
 }
 
 static void
-prepare_reduce( state *s) 
+prepare_reduce( state *s)
 {
   feature tuple[MAX_N];
   ub1     n = s->n_final;
@@ -1678,16 +1678,16 @@ prepare_reduce( state *s)
       s->tuple_tester->f[tuple[i].d] = tuple[i].f;
     }
     if (count_withouts(s->tuple_tester, s->wc2) ||
-	count_withouts(s->tuple_tester, s->wc3))
+        count_withouts(s->tuple_tester, s->wc3))
       goto make_next_tuple;
 
     for (i=0; i<s->ntests; ++i) {
       ub1 j;
       for (j=0; j<n; ++j)
-	if (s->t[i]->f[tuple[j].d] != tuple[j].f)
-	  break;
+        if (s->t[i]->f[tuple[j].d] != tuple[j].f)
+          break;
       if (j == n)
-	break;                              /* this test contains this tuple */
+        break;                              /* this test contains this tuple */
     }
 
     /* no tests cover this tuple */
@@ -1696,21 +1696,21 @@ prepare_reduce( state *s)
     } else {
       thistest = i;
       for (++i; i<s->ntests; ++i) {
-	ub1 j;
-	for (j=0; j<n; ++j)
-	  if (s->t[i]->f[tuple[j].d] != tuple[j].f)
-	    break;
-	if (j == n)
-	  break;                            /* this test contains this tuple */
+        ub1 j;
+        for (j=0; j<n; ++j)
+          if (s->t[i]->f[tuple[j].d] != tuple[j].f)
+            break;
+        if (j == n)
+          break;                            /* this test contains this tuple */
       }
       if (i == s->ntests) {
-	ub1 j;
-	for (j=0; j<n; ++j) {
-	  tu_iter ctx;
-	  (void)start_tuple(&ctx, &s->one[thistest][tuple[j].d], n, 
-			    &s->onec[thistest][tuple[j].d]);
-	  (void)insert_tuple(s, &ctx, tuple);
-	}
+        ub1 j;
+        for (j=0; j<n; ++j) {
+          tu_iter ctx;
+          (void)start_tuple(&ctx, &s->one[thistest][tuple[j].d], n,
+                            &s->onec[thistest][tuple[j].d]);
+          (void)insert_tuple(s, &ctx, tuple);
+        }
       }
     }
 
@@ -1744,7 +1744,7 @@ which_test( state *s)
 }
 
 static void
-reduce_tests( state *s) 
+reduce_tests( state *s)
 {
   ub4 t;
   prepare_reduce( s);
@@ -1769,19 +1769,19 @@ confirm( state *s)
       s->tuple_tester->f[offset[i].d] = offset[i].f;
     }
     if (count_withouts(s->tuple_tester, s->wc2) ||
-	count_withouts(s->tuple_tester, s->wc3))
+        count_withouts(s->tuple_tester, s->wc3))
       goto make_next_tuple;
 
     /* is this tuple covered by the existing tests? */
     for (j=0; j<s->ntests; ++j) {
       test *t = s->t[j];
       for (i=0; i<n; ++i) {
-	if (t->f[offset[i].d] != offset[i].f) {
-	  break;
-	}
+        if (t->f[offset[i].d] != offset[i].f) {
+          break;
+        }
       }
       if (i == n) {
-	goto make_next_tuple;
+        goto make_next_tuple;
       }
     }
 
@@ -1794,24 +1794,24 @@ confirm( state *s)
     }
     i=n;
     while (i-- &&
-	   offset[i].d == s->ndim-n+i &&
-	   offset[i].f == s->dim[offset[i].d]-1)
+           offset[i].d == s->ndim-n+i &&
+           offset[i].f == s->dim[offset[i].d]-1)
       ;
     if (i == -1)
       break;                                                         /* done */
     else if (offset[i].f < s->dim[offset[i].d]-1) {
       ++offset[i].f;                                    /* increment feature */
       for (i; i<n-1; ++i) {          /* reset all less significant positions */
-	offset[i+1].d = offset[i].d+1;
-	offset[i+1].f = 0;
+        offset[i+1].d = offset[i].d+1;
+        offset[i+1].f = 0;
       }
     }
     else {
       ++offset[i].d;   /* increment least significant non-maxed-out position */
       offset[i].f = (ub2)0;                             /* reset its feature */
       for (i; i<n-1; ++i) {          /* reset all less significant positions */
-	offset[i+1].d = offset[i].d+1;
-	offset[i+1].f = 0;
+        offset[i+1].d = offset[i].d+1;
+        offset[i+1].f = 0;
       }
     }
   }
