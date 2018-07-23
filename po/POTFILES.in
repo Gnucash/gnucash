@@ -33,6 +33,7 @@ borrowed/gwengui-gtk3/w_textedit.c
 borrowed/gwengui-gtk3/w_vlayout.c
 borrowed/gwengui-gtk3/w_vline.c
 borrowed/gwengui-gtk3/w_vspacer.c
+borrowed/jenny/jenny.c
 borrowed/libc/libc-missing-noop.c
 borrowed/libc/setenv.c
 borrowed/libc/strfmon.c
