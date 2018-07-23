@@ -108,8 +108,8 @@ gnc_ab_get_account_trans_retrieval(const Account *a)
 void
 gnc_ab_set_account_trans_retrieval(Account *a, time64 time)
 {
-    xaccAccountBeginEdit(a);
     Timespec ts = {time, 0};
+    xaccAccountBeginEdit(a);
     qof_instance_set (QOF_INSTANCE (a),
 		      "ab-trans-retrieval", &ts,
 		      NULL);
