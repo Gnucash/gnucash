@@ -2,6 +2,7 @@
 (gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
 (use-modules (gnucash engine test test-extras))
 (use-modules (gnucash report standard-reports balance-sheet))
+(use-modules (gnucash report standard-reports income-statement))
 (use-modules (gnucash report stylesheets))
 (use-modules (gnucash report report-system))
 (use-modules (gnucash report report-system test test-extras))
@@ -10,19 +11,20 @@
 (use-modules (sxml simple))
 (use-modules (sxml xpath))
 
-;; This is implementation testing for Balance Sheet.
+;; This is implementation testing for Balance Sheet and Profit&Loss.
 
 (define balance-sheet-uuid "c4173ac99b2b448289bf4d11c731af13")
+(define pnl-uuid "0b81a3bdfd504aff849ec2e8630524bc")
 
 ;; Explicitly set locale to make the report output predictable
 (setlocale LC_ALL "C")
 
 (define (run-test)
   (test-runner-factory gnc:test-runner)
-  (test-begin "balsheet.scm")
+  (test-begin "balsheet and profit&loss")
   (null-test)
-  (balsheet-tests)
-  (test-end "balsheet.scm"))
+  (balsheet-pnl-tests)
+  (test-end "balsheet and profit&loss"))
 
 (define (options->sxml uuid options test-title)
   (gnc:options->sxml uuid options "test-balsheet-pnl" test-title))
@@ -78,7 +80,7 @@
   (let ((balance-sheet-options (gnc:make-report-options balance-sheet-uuid)))
     (test-assert "null-test" (options->sxml balance-sheet-uuid balance-sheet-options "null-test"))))
 
-(define (balsheet-tests)
+(define (balsheet-pnl-tests)
   ;; This function will perform implementation testing on the transaction report.
   (let* ((env (create-test-env))
          (account-alist (env-create-account-structure-alist env structure))
@@ -102,6 +104,14 @@
         (set-option! balance-sheet-options "Accounts" "Levels of Subaccounts" 'all)
         (set-option! balance-sheet-options "Commodities" "Show Exchange Rates" #t)
         balance-sheet-options))
+
+    (define (default-pnl-testing-options)
+      (let ((pnl-options (gnc:make-report-options pnl-uuid)))
+        (set-option! pnl-options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 1 1 1980)))
+        (set-option! pnl-options "General" "End Date" (cons 'absolute (gnc-dmy2time64 1 1 1981)))
+        (set-option! pnl-options "Accounts" "Levels of Subaccounts" 'all)
+        (set-option! pnl-options "Commodities" "Show Exchange Rates" #t)
+        pnl-options))
 
     ;; $100 in Savings account
     (env-transfer env 01 01 1970 equity bank1savings 100)
@@ -159,7 +169,8 @@
     (env-transfer env 01 01 1980 income-GBP foreignsavings 500)
     (env-transfer-foreign env 01 02 1980 income-GBP bank1current 100 170 #:description "earn 100GBP into $170")
     
-    ;; Finally we can begin testing
+    ;; Finally we can begin testing balsheet
+    (display "\n\n balsheet tests\n\n")
     (let* ((balance-sheet-options (default-balsheet-testing-options))
            (sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-default")))
       (test-equal "total assets = $116,010"
@@ -343,4 +354,101 @@
         (test-equal "incl-zb-accts=#t"
           '("Empty" "$0.00")
           (sxml->table-row-col sxml 1 8 #f)))
+      )
+
+    (display "\n\n pnl tests\n\n")
+    (let* ((pnl-options (default-pnl-testing-options))
+           (sxml (options->sxml pnl-uuid pnl-options "pnl-default")))
+      (test-equal "total revenue  = $1,270.00"
+        (list "$1,270.00" "$1,270.00")
+        (sxml->table-row-col sxml 1 5 6))
+      (test-equal "total expenses  = $0.00"
+        (list "$0.00" "$0.00")
+        (sxml->table-row-col sxml 1 3 6))
+
+      (set-option! pnl-options "Commodities" "Price Source" 'weighted-average)
+      (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-weighted-average")))
+        (test-equal "weighted average revenue = $1163.33"
+          (list "$1,163.33" "$1,163.33")
+          (sxml->table-row-col sxml 1 5 6)))
+
+      (set-option! pnl-options "Commodities" "Price Source" 'average-cost)
+      (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-average-cost")))
+        (test-equal "average-cost revenue = $1,090"
+          (list "$1,090.00" "$1,090.00")
+          (sxml->table-row-col sxml 1 5 6)))
+
+      (set-option! pnl-options "Commodities" "Price Source" 'pricedb-nearest)
+      (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-pricedb-nearest")))
+        (test-equal "pricedb-nearest revenue = $1270"
+          (list "$1,270.00" "$1,270.00")
+          (sxml->table-row-col sxml 1 5 6)))
+
+      (set-option! pnl-options "Commodities" "Price Source" 'pricedb-latest)
+      (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-pricedb-latest")))
+        (test-equal "pricedb-latest revenue = $1270"
+          (list "$1,270.00" "$1,270.00")
+          (sxml->table-row-col sxml 1 5 6)))
+
+      ;; set multilevel subtotal style
+      ;; verifies amount in EVERY line of the report.
+      (set-option! pnl-options "Display" "Parent account balances" 'immediate-bal)
+      (set-option! pnl-options "Display" "Parent account subtotals" 't)
+      (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-multilevel")))
+        (test-equal "multilevel. income = -$250.00"
+          (list "-$250.00" "-$250.00")
+          (sxml->table-row-col sxml 1 3 5))
+        (test-equal "multilevel. income-GBP = $0.00"
+          (list "-#600.00" "-$1,020.00" "-#600.00" "-$1,020.00")
+          (sxml->table-row-col sxml 1 4 5))
+        (test-equal "multilevel. total income = -$1,270.00"
+          (list "-$1,270.00" "-$1,270.00")
+          (sxml->table-row-col sxml 1 5 6))
+        (test-equal "multilevel. total revenue = $1,270.00"
+          (list "$1,270.00" "$1,270.00")
+          (sxml->table-row-col sxml 1 6 6))
+        (test-equal "multilevel. expenses = $0.00"
+          (list "$0.00" "$0.00")
+          (sxml->table-row-col sxml 1 3 6))
+        (test-equal "multilevel. net-income = $1,270"
+          (list "$1,270.00" "$1,270.00")
+          (sxml->table-row-col sxml 1 4 6)))
+
+      ;; set recursive-subtotal subtotal style
+      (set-option! pnl-options "Display" "Parent account balances" 'recursive-bal)
+      (set-option! pnl-options "Display" "Parent account subtotals" 'f)
+      (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-recursive")))
+        (test-equal "recursive. income = $1020+250"
+          (list "-#600.00" "-$1,020.00" "-$250.00" "-$250.00" "$0.00" "-#600.00" "-$1,020.00" "-$250.00" "-$250.00" "$0.00")
+          (sxml->table-row-col sxml 1 3 6))
+        (test-equal "recursive. income-gbp = $1020"
+          (list "-#600.00" "-$1,020.00" "-#600.00" "-$1,020.00")
+          (sxml->table-row-col sxml 1 4 5))
+        (test-equal "recursive. total revenue = $1270"
+          (list "$1,270.00" "$1,270.00")
+          (sxml->table-row-col sxml 1 5 6)))
+
+      (set-option! pnl-options "Commodities" "Show Foreign Currencies" #f)
+      (set-option! pnl-options "Commodities" "Show Exchange Rates" #f)
+      (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-disable show-fcur show-rates")))
+        (test-equal "show-fcur disabled"
+          (list "-$1,270.00" "$0.00" "-$1,270.00" "$0.00")
+          (sxml->table-row-col sxml 1 3 6))
+        (test-equal "show-rates disabled"
+          '()
+          (sxml->table-row-col sxml 2 #f #f)))
+
+      (set-option! pnl-options "Commodities" "Show Foreign Currencies" #t)
+      (set-option! pnl-options "Commodities" "Show Exchange Rates" #t)
+      (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-enable show-fcur show-rates")))
+        (test-equal "show-fcur enabled"
+          (list "-#600.00" "-$1,020.00" "-$250.00" "-$250.00" "$0.00" "-#600.00" "-$1,020.00" "-$250.00" "-$250.00" "$0.00")
+          (sxml->table-row-col sxml 1 3 6))
+        (test-equal "show-rates enabled"
+          (list "#1.00" "$1.70")
+          (sxml->table-row-col sxml 2 #f #f)))
+
+      ;;make-multilevel
+      (set-option! pnl-options "Display" "Parent account balances" 'immediate-bal)
+      (set-option! pnl-options "Display" "Parent account subtotals" 't)
       )))
