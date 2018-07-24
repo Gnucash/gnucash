@@ -24,8 +24,8 @@
   (balsheet-tests)
   (test-end "balsheet.scm"))
 
-(define (options->sxml options test-title)
-  (gnc:options->sxml balance-sheet-uuid options "test-balsheet" test-title))
+(define (options->sxml uuid options test-title)
+  (gnc:options->sxml uuid options "test-balsheet-pnl" test-title))
 
 (define (set-option! options section name value)
   (let ((option (gnc:lookup-option options section name)))
@@ -75,8 +75,8 @@
 
 (define (null-test)
   ;; This null-test tests for the presence of report.
-  (let ((options (gnc:make-report-options balance-sheet-uuid)))
-    (test-assert "null-test" (options->sxml options "null-test"))))
+  (let ((balance-sheet-options (gnc:make-report-options balance-sheet-uuid)))
+    (test-assert "null-test" (options->sxml balance-sheet-uuid balance-sheet-options "null-test"))))
 
 (define (balsheet-tests)
   ;; This function will perform implementation testing on the transaction report.
@@ -96,12 +96,12 @@
          (income-GBP (cdr (assoc "Income-GBP" account-alist)))
          (YEAR (gnc:time64-get-year (gnc:get-today))))
 
-    (define (default-testing-options)
-      (let ((options (gnc:make-report-options balance-sheet-uuid)))
-        (set-option! options "General" "Balance Sheet Date" (cons 'absolute (gnc-dmy2time64 1 1 1971)))
-        (set-option! options "Accounts" "Levels of Subaccounts" 'all)
-        (set-option! options "Commodities" "Show Exchange Rates" #t)
-        options))
+    (define (default-balsheet-testing-options)
+      (let ((balance-sheet-options (gnc:make-report-options balance-sheet-uuid)))
+        (set-option! balance-sheet-options "General" "Balance Sheet Date" (cons 'absolute (gnc-dmy2time64 1 1 1971)))
+        (set-option! balance-sheet-options "Accounts" "Levels of Subaccounts" 'all)
+        (set-option! balance-sheet-options "Commodities" "Show Exchange Rates" #t)
+        balance-sheet-options))
 
     ;; $100 in Savings account
     (env-transfer env 01 01 1970 equity bank1savings 100)
@@ -160,8 +160,8 @@
     (env-transfer-foreign env 01 02 1980 income-GBP bank1current 100 170 #:description "earn 100GBP into $170")
     
     ;; Finally we can begin testing
-    (let* ((options (default-testing-options))
-           (sxml (options->sxml options "default")))
+    (let* ((balance-sheet-options (default-balsheet-testing-options))
+           (sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-default")))
       (test-equal "total assets = $116,010"
         (list "$116,010.00")
         (sxml->table-row-col sxml 1 15 6))
@@ -172,35 +172,35 @@
         (list "$106,510.00")
         (sxml->table-row-col sxml 1 28 6))
 
-      (set-option! options "Commodities" "Price Source" 'weighted-average)
-      (let ((sxml (options->sxml options "weighted-average")))
+      (set-option! balance-sheet-options "Commodities" "Price Source" 'weighted-average)
+      (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-weighted-average")))
         (test-equal "weighted average assets = $114,072.86"
           (list "$114,072.86")
           (sxml->table-row-col sxml 1 15 6)))
 
-      (set-option! options "Commodities" "Price Source" 'average-cost)
-      (let ((sxml (options->sxml options "average-cost")))
+      (set-option! balance-sheet-options "Commodities" "Price Source" 'average-cost)
+      (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-average-cost")))
         (test-equal "average-cost assets = $113,100"
           (list "$113,100.00")
           (sxml->table-row-col sxml 1 15 6)))
 
-      (set-option! options "Commodities" "Price Source" 'pricedb-nearest)
-      (let ((sxml (options->sxml options "pricedb-nearest")))
+      (set-option! balance-sheet-options "Commodities" "Price Source" 'pricedb-nearest)
+      (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-pricedb-nearest")))
         (test-equal "pricedb-nearest assets = $116,010"
           (list "$116,010.00")
           (sxml->table-row-col sxml 1 15 6)))
 
-      (set-option! options "Commodities" "Price Source" 'pricedb-latest)
-      (let ((sxml (options->sxml options "pricedb-latest")))
+      (set-option! balance-sheet-options "Commodities" "Price Source" 'pricedb-latest)
+      (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-pricedb-latest")))
         (test-equal "pricedb-latest assets = $122,090"
           (list "$122,090.00")
           (sxml->table-row-col sxml 1 15 6)))
 
       ;; set multilevel subtotal style
       ;; verifies amount in EVERY line of the report.
-      (set-option! options "Display" "Parent account balances" 'immediate-bal)
-      (set-option! options "Display" "Parent account subtotals" 't)
-      (let ((sxml (options->sxml options "multilevel")))
+      (set-option! balance-sheet-options "Display" "Parent account balances" 'immediate-bal)
+      (set-option! balance-sheet-options "Display" "Parent account subtotals" 't)
+      (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-multilevel")))
         (test-equal "multilevel. root = $0.00"
           (list "$0.00")
           (sxml->table-row-col sxml 1 3 5))
@@ -257,9 +257,9 @@
           (sxml->table-row-col sxml 1 20 6)))
 
       ;; set recursive-subtotal subtotal style
-      (set-option! options "Display" "Parent account balances" 'recursive-bal)
-      (set-option! options "Display" "Parent account subtotals" 'f)
-      (let ((sxml (options->sxml options "recursive")))
+      (set-option! balance-sheet-options "Display" "Parent account balances" 'recursive-bal)
+      (set-option! balance-sheet-options "Display" "Parent account subtotals" 'f)
+      (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-recursive")))
         (test-equal "recursive. root = $760+15000+104600"
           (list "#400.00" "$680.00" "30 FUNDS" "$15,000.00" "$106,410.00" "$106,410.00")
           (sxml->table-row-col sxml 1 3 6))
@@ -300,9 +300,9 @@
           (list "$122,090.00")
           (sxml->table-row-col sxml 1 15 6)))
 
-      (set-option! options "Commodities" "Show Foreign Currencies" #f)
-      (set-option! options "Commodities" "Show Exchange Rates" #f)
-      (let ((sxml (options->sxml options "disable show-fcur show-rates")))
+      (set-option! balance-sheet-options "Commodities" "Show Foreign Currencies" #f)
+      (set-option! balance-sheet-options "Commodities" "Show Exchange Rates" #f)
+      (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-disable show-fcur show-rates")))
         (test-equal "show-fcur disabled"
           (list "$122,090.00")
           (sxml->table-row-col sxml 1 3 6))
@@ -310,9 +310,9 @@
           '()
           (sxml->table-row-col sxml 2 #f #f)))
 
-      (set-option! options "Commodities" "Show Foreign Currencies" #t)
-      (set-option! options "Commodities" "Show Exchange Rates" #t)
-      (let ((sxml (options->sxml options "enable show-fcur show-rates")))
+      (set-option! balance-sheet-options "Commodities" "Show Foreign Currencies" #t)
+      (set-option! balance-sheet-options "Commodities" "Show Exchange Rates" #t)
+      (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-enable show-fcur show-rates")))
         (test-equal "show-fcur enabled"
           (list "#400.00" "$680.00" "30 FUNDS" "$15,000.00" "$106,410.00" "$106,410.00")
           (sxml->table-row-col sxml 1 3 6))
@@ -321,12 +321,12 @@
           (sxml->table-row-col sxml 2 #f #f)))
 
       ;;make-multilevel
-      (set-option! options "Display" "Parent account balances" 'immediate-bal)
-      (set-option! options "Display" "Parent account subtotals" 't)
+      (set-option! balance-sheet-options "Display" "Parent account balances" 'immediate-bal)
+      (set-option! balance-sheet-options "Display" "Parent account subtotals" 't)
 
-      (set-option! options "Display" "Omit zero balance figures" #t)
-      (set-option! options "Display" "Include accounts with zero total balances" #f)
-      (let ((sxml (options->sxml options "incl-zb-accts=#f omit-zb-bals=#t")))
+      (set-option! balance-sheet-options "Display" "Omit zero balance figures" #t)
+      (set-option! balance-sheet-options "Display" "Include accounts with zero total balances" #f)
+      (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-incl-zb-accts=#f omit-zb-bals=#t")))
         (test-equal "omit-zb-bals=#t"
           '()
           (sxml->table-row-col sxml 1 3 5))
@@ -334,9 +334,9 @@
           '("Savings" "$100.00")        ;i.e.skips "Empty" account with $0.00
           (sxml->table-row-col sxml 1 8 #f)))
 
-      (set-option! options "Display" "Omit zero balance figures" #f)
-      (set-option! options "Display" "Include accounts with zero total balances" #t)
-      (let ((sxml (options->sxml options "incl-zb-accts=#t omit-zb-bals=#f")))
+      (set-option! balance-sheet-options "Display" "Omit zero balance figures" #f)
+      (set-option! balance-sheet-options "Display" "Include accounts with zero total balances" #t)
+      (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-incl-zb-accts=#t omit-zb-bals=#f")))
         (test-equal "omit-zb-bals=#f"
           (list "$0.00")
           (sxml->table-row-col sxml 1 3 5))
