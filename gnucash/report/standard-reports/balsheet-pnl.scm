@@ -44,8 +44,11 @@
 (define optname-period (N_ "Period duration"))
 (define opthelp-period (N_ "Duration between time periods"))
 
-(define optname-export (_ "Disable indenting for export?"))
-(define opthelp-export (_ "Selecting this option disables indenting for export, and enables full account name instead."))
+(define optname-disable-amount-indent (N_ "Disable amount indenting"))
+(define opthelp-disable-amount-indent (N_ "Selecting this option will disable amount indenting, and condense amounts into a single column."))
+
+(define optname-account-full-name (N_ "Account full name instead of indenting"))
+(define opthelp-account-full-name (N_ "Selecting this option enables full account name instead, and disables indenting account names."))
 
 (define optname-accounts (N_ "Accounts"))
 (define opthelp-accounts (N_ "Report on these accounts, if display depth allows."))
@@ -221,11 +224,6 @@ available, i.e. closest to today's prices."))))))
 
     (add-option
      (gnc:make-simple-boolean-option
-      gnc:pagename-general optname-export
-      "c3" opthelp-export #f))
-
-    (add-option
-     (gnc:make-simple-boolean-option
       gnc:pagename-general optname-include-chart
       "d" opthelp-include-chart #f))
 
@@ -318,7 +316,12 @@ available, i.e. closest to today's prices."))))))
      (gnc:make-simple-boolean-option
       gnc:pagename-display optname-account-links
       "e" opthelp-account-links #t))
-    
+
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display optname-account-full-name
+      "f" opthelp-account-full-name #f))
+
     (when (eq? report-type 'pnl)
       ;; include overall period column?
       (add-option
@@ -351,7 +354,7 @@ available, i.e. closest to today's prices."))))))
           table title accountlist maxindent get-cell-monetary-fn cols-data #:key
           (omit-zb-bals? #f)
           (show-zb-accts? #t)
-          (disable-indenting? #f)
+          (account-full-name? #f)
           (hide-accounts? #f)
           (hide-grand-total? #f)
           (depth-limit #f)
@@ -379,7 +382,7 @@ available, i.e. closest to today's prices."))))))
   ;; the following are optional:
   ;; omit-zb-bals?      - a boolean to omit "$0.00" amounts
   ;; show-zb-accts?     - a boolean to omit whole account lines where all amounts are $0.00 (eg closed accts)
-  ;; disable-indenting? - a boolean to disable narrow-cell indenting, and render account full-name instead
+  ;; account-full-name? - a boolean to disable narrow-cell indenting, and render account full-name instead
   ;; negate-amounts?    - a boolean to negate amounts. useful for e.g. income-type accounts.
   ;; depth-limit        - (untested) accounts whose levels exceed this depth limit are not shown
   ;; recursive-bals?    - a boolean to confirm recursive-balances enabled (parent-accounts show balances) or
@@ -403,10 +406,10 @@ available, i.e. closest to today's prices."))))))
   (define (add-indented-row indent label label-markup rest)
     (gnc:html-table-append-row!
      table
-     (append (if disable-indenting? '() (make-list-thunk indent make-narrow-cell))
+     (append (if account-full-name? '() (make-list-thunk indent make-narrow-cell))
              (list (if label-markup
-                       (gnc:make-html-table-cell/size/markup 1 (if disable-indenting? 1 (- maxindent indent)) label-markup label)
-                       (gnc:make-html-table-cell/size 1 (if disable-indenting? 1 (- maxindent indent)) label)))
+                       (gnc:make-html-table-cell/size/markup 1 (if account-full-name? 1 (- maxindent indent)) label-markup label)
+                       (gnc:make-html-table-cell/size 1 (if account-full-name? 1 (- maxindent indent)) label)))
              rest)))
 
   (define (monetary+ . monetaries)
@@ -450,7 +453,7 @@ available, i.e. closest to today's prices."))))))
   (define (render-account account)
     ;; input: account-name
     ;; outputs: string or html-markup-anchor object
-    (let ((acct-label (if disable-indenting?
+    (let ((acct-label (if account-full-name?
                           (gnc-account-get-full-name account)
                           (xaccAccountGetName account)))
           (acct-url (and account-anchor-fn (account-anchor-fn account))))
@@ -461,7 +464,7 @@ available, i.e. closest to today's prices."))))))
 
   (define (add-whole-line contents)
     (gnc:html-table-append-row!
-     table (gnc:make-html-table-cell/size 1 (+ 1 (if disable-indenting? 0 maxindent) num-columns) contents)))
+     table (gnc:make-html-table-cell/size 1 (+ 1 (if account-full-name? 0 maxindent) num-columns) contents)))
 
   (define collectors
     (make-list-thunk num-columns gnc:make-commodity-collector))
@@ -570,7 +573,7 @@ available, i.e. closest to today's prices."))))))
                             (< lvl lvl-next))
                   (add-indented-row lvl
                                     (string-append (_ "Total For ")
-                                                   ((if disable-indenting?
+                                                   ((if account-full-name?
                                                         gnc-account-get-full-name
                                                         xaccAccountGetName) lvl-acct))
                                     "total-label-cell"
@@ -634,8 +637,8 @@ available, i.e. closest to today's prices."))))))
          (enddate (gnc:date-option-absolute-time
                    (get-option gnc:pagename-general
                                optname-enddate)))
-         (export? (get-option gnc:pagename-general
-                              optname-export))
+         (account-full-name? (get-option gnc:pagename-display
+                                         optname-account-full-name))
          (incr (let ((period (get-option gnc:pagename-general optname-period)))
                  (and period
                       (keylist-get-info periodlist period 'delta))))
@@ -792,7 +795,7 @@ available, i.e. closest to today's prices."))))))
                                    maxindent get-cell-monetary-fn report-dates
                                    #:omit-zb-bals? omit-zb-bals?
                                    #:show-zb-accts? show-zb-accts?
-                                   #:disable-indenting? export?
+                                   #:account-full-name? account-full-name?
                                    #:negate-amounts? negate-amounts?
                                    #:hide-accounts? hide-accounts?
                                    #:hide-grand-total? hide-grand-total?
@@ -930,7 +933,7 @@ available, i.e. closest to today's prices."))))))
                                    maxindent get-cell-monetary-fn report-datepairs
                                    #:omit-zb-bals? omit-zb-bals?
                                    #:show-zb-accts? show-zb-accts?
-                                   #:disable-indenting? export?
+                                   #:account-full-name? account-full-name?
                                    #:negate-amounts? negate-amounts?
                                    #:depth-limit (if get-col-header-fn 0 depth-limit)
                                    #:hide-accounts? hide-accounts?
