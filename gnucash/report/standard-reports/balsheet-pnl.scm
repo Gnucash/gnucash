@@ -51,6 +51,9 @@ reporting."))
 (define optname-disable-amount-indent (N_ "Disable amount indenting"))
 (define opthelp-disable-amount-indent (N_ "Selecting this option will disable amount indenting, and condense amounts into a single column."))
 
+(define optname-options-summary (N_ "Add options summary"))
+(define opthelp-options-summary (N_ "Add summary of options."))
+
 (define optname-account-full-name (N_ "Account full name instead of indenting"))
 (define opthelp-account-full-name (N_ "Selecting this option enables full account name instead, and disables indenting account names."))
 
@@ -248,6 +251,11 @@ available, i.e. closest to today's prices."))))))
      (gnc:make-simple-boolean-option
       gnc:pagename-general optname-dual-columns
       "c4" opthelp-dual-columns #t))
+
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-general optname-options-summary
+      "d" opthelp-options-summary #f))
 
     ;; accounts to work on
     (add-option
@@ -760,12 +768,21 @@ available, i.e. closest to today's prices."))))))
           (assoc-ref split-up-accounts ACCT-TYPE-EQUITY))
          (trading-accounts
           (assoc-ref split-up-accounts ACCT-TYPE-TRADING))
-         (doc (gnc:make-html-document)))
+         (doc (gnc:make-html-document))
+         (multicol-table-left (gnc:make-html-table))
+         (multicol-table-right (if enable-dual-columns?
+                                   (gnc:make-html-table)
+                                   multicol-table-left))
+         (maxindent (gnc-account-get-tree-depth (gnc-get-current-root-account))))
 
     (gnc:html-document-set-title!
      doc (string-append company-name " " report-title " "
                         (qof-print-date startdate) " - "
                         (qof-print-date enddate)))
+
+    (if (get-option gnc:pagename-general optname-options-summary)
+        (gnc:html-document-add-object!
+         doc (gnc:html-render-options-changed (gnc:report-options report-obj))))
 
     (if (null? accounts)
 
@@ -776,12 +793,7 @@ available, i.e. closest to today's prices."))))))
 
         (case report-type
           ((balsheet)
-           (let* ((multicol-table-left (gnc:make-html-table))
-                  (multicol-table-right (if enable-dual-columns?
-                                            (gnc:make-html-table)
-                                            multicol-table-left))
-                  (maxindent (gnc-account-get-tree-depth (gnc-get-current-root-account)))
-                  (report-dates (if incr
+           (let* ((report-dates (if incr
                                     (gnc:make-date-list startdate enddate incr)
                                     (list enddate)))
                   (amount-col-amount (lambda (account col-datum)
@@ -860,31 +872,14 @@ available, i.e. closest to today's prices."))))))
              (if (and common-currency show-rates?)
                  (add-to-table multicol-table-right (_ "Exchange Rates") (append asset-accounts liability-accounts trading-accounts) get-exchange-rates-fn #t #t #f))
 
-             (gnc:html-document-add-object!
-              doc (gnc:html-render-options-changed (gnc:report-options report-obj)))
-
              (if include-chart?
                  (gnc:html-document-add-object!
                   doc
                   (gnc:make-html-text
-                   (gnc:html-markup-anchor chart "Barchart"))))
-
-             (let ((multicol-table (if enable-dual-columns?
-                                       (gnc:make-html-table)
-                                       multicol-table-left)))
-               (when enable-dual-columns?
-                 (gnc:html-table-append-row! multicol-table
-                                             (list multicol-table-left multicol-table-right)))
-               (gnc:html-document-add-object!
-                doc multicol-table))))
+                   (gnc:html-markup-anchor chart "Barchart"))))))
 
           ((pnl)
-           (let* ((multicol-table-left (gnc:make-html-table))
-                  (multicol-table-right (if enable-dual-columns?
-                                            (gnc:make-html-table)
-                                            multicol-table-left))
-                  (maxindent (gnc-account-get-tree-depth (gnc-get-current-root-account)))
-                  (closing-str (get-option pagename-entries optname-closing-pattern))
+           (let* ((closing-str (get-option pagename-entries optname-closing-pattern))
                   (closing-cased (get-option pagename-entries optname-closing-casing))
                   (closing-regexp (get-option pagename-entries optname-closing-regexp))
                   (include-overall-period? (get-option gnc:pagename-general optname-include-overall-period))
@@ -1007,23 +1002,20 @@ available, i.e. closest to today's prices."))))))
              (if (and common-currency show-rates?)
                  (add-to-table multicol-table-left (_ "Exchange Rates") (append income-accounts expense-accounts) get-exchange-rates-fn #t #t #f))
 
-             (gnc:html-document-add-object!
-              doc (gnc:html-render-options-changed (gnc:report-options report-obj)))
-
              (if include-chart?
                  (gnc:html-document-add-object!
                   doc
                   (gnc:make-html-text
-                   (gnc:html-markup-anchor chart "Barchart"))))
+                   (gnc:html-markup-anchor chart "Barchart"))))))))
 
-             (let ((multicol-table (if enable-dual-columns?
-                                       (gnc:make-html-table)
-                                       multicol-table-left)))
-               (when enable-dual-columns?
-                 (gnc:html-table-append-row! multicol-table
-                                             (list multicol-table-left multicol-table-right)))
-               (gnc:html-document-add-object!
-                doc multicol-table))))))
+    (let ((multicol-table (if enable-dual-columns?
+                              (gnc:make-html-table)
+                              multicol-table-left)))
+      (when enable-dual-columns?
+        (gnc:html-table-append-row! multicol-table
+                                    (list multicol-table-left multicol-table-right)))
+      (gnc:html-document-add-object!
+       doc multicol-table))
 
     (gnc:report-finished)
     ;; (gnc:html-document-set-style-text!
