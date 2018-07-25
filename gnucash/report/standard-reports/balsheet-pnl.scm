@@ -44,6 +44,10 @@
 (define optname-period (N_ "Period duration"))
 (define opthelp-period (N_ "Duration between time periods"))
 
+(define optname-dual-columns (N_ "Enable dual columns"))
+(define opthelp-dual-columns (N_ "Selecting this option will enable double-column \
+reporting."))
+
 (define optname-disable-amount-indent (N_ "Disable amount indenting"))
 (define opthelp-disable-amount-indent (N_ "Selecting this option will disable amount indenting, and condense amounts into a single column."))
 
@@ -220,6 +224,10 @@ available, i.e. closest to today's prices."))))))
          (not x))
         (gnc-option-db-set-option-selectable-by-name
          options
+         gnc:pagename-general optname-dual-columns
+         (not x))
+        (gnc-option-db-set-option-selectable-by-name
+         options
          gnc:pagename-general
          (case report-type
            ((balsheet) optname-startdate)
@@ -236,11 +244,10 @@ available, i.e. closest to today's prices."))))))
       gnc:pagename-general optname-include-chart
       "d" opthelp-include-chart #f))
 
-    #;
     (add-option
-    (gnc:make-simple-boolean-option
-    gnc:pagename-general optname-single-column
-    "d" opthelp-single-column #t))
+     (gnc:make-simple-boolean-option
+      gnc:pagename-general optname-dual-columns
+      "c4" opthelp-dual-columns #t))
 
     ;; accounts to work on
     (add-option
@@ -668,6 +675,9 @@ available, i.e. closest to today's prices."))))))
          (disable-amount-indent? (and (not incr)
                                       (get-option gnc:pagename-general
                                                   optname-disable-amount-indent)))
+         (enable-dual-columns? (and (not incr)
+                                    (get-option gnc:pagename-general
+                                                optname-dual-columns)))
          (accounts (get-option gnc:pagename-accounts
                                optname-accounts))
          (depth-limit (let ((limit (get-option gnc:pagename-accounts
@@ -767,7 +777,10 @@ available, i.e. closest to today's prices."))))))
 
         (case report-type
           ((balsheet)
-           (let* ((multicol-table (gnc:make-html-table))
+           (let* ((multicol-table-left (gnc:make-html-table))
+                  (multicol-table-right (if enable-dual-columns?
+                                            (gnc:make-html-table)
+                                            multicol-table-left))
                   (maxindent (gnc-account-get-tree-depth (gnc-get-current-root-account)))
                   (report-dates (if incr
                                     (gnc:make-date-list startdate enddate incr)
@@ -817,9 +830,9 @@ available, i.e. closest to today's prices."))))))
                                              (cell (gnc:make-html-table-cell/markup "total-label-cell" header)))
                                         (gnc:html-table-cell-set-style! cell "total-label-cell" 'attribute '("style" "text-align:right"))
                                         cell)))
-                  (add-to-table (lambda (title accounts get-col-header-fn hide-accounts? hide-grand-total? negate-amounts?)
+                  (add-to-table (lambda (table title accounts get-col-header-fn hide-accounts? hide-grand-total? negate-amounts?)
                                   (add-multicolumn-acct-table
-                                   multicol-table title accounts
+                                   table title accounts
                                    maxindent get-cell-monetary-fn report-dates
                                    #:omit-zb-bals? omit-zb-bals?
                                    #:show-zb-accts? show-zb-accts?
@@ -836,15 +849,17 @@ available, i.e. closest to today's prices."))))))
                                    #:get-cell-anchor-fn get-cell-anchor-fn
                                    ))))
 
-             (add-to-table (_ "Date") '() get-col-header-fn #t #t #f)
-             (add-to-table (_ "Asset") asset-accounts #f #f #f #f)
-             (add-to-table (_ "Liability") liability-accounts #f #f #f #t)
+             (add-to-table multicol-table-left (_ "Date") '() get-col-header-fn #t #t #f)
+             (if enable-dual-columns?
+                 (add-to-table multicol-table-right (_ "Date") '() get-col-header-fn #t #t #f))
+             (add-to-table multicol-table-left (_ "Asset") asset-accounts #f #f #f #f)
+             (add-to-table multicol-table-right (_ "Liability") liability-accounts #f #f #f #t)
              ;; (add-to-table (_ "Equity") equity-accounts #f #f #f #t)
              (unless (null? trading-accounts)
-               (add-to-table (_ "Trading Accounts") trading-accounts #f #f #f #f))
-             (add-to-table (_ "Net Worth") (append asset-accounts liability-accounts trading-accounts) #f #t #f #f)
+               (add-to-table multicol-table-right (_ "Trading Accounts") trading-accounts #f #f #f #f))
+             (add-to-table multicol-table-right (_ "Net Worth") (append asset-accounts liability-accounts trading-accounts) #f #t #f #f)
              (if (and common-currency show-rates?)
-                 (add-to-table (_ "Exchange Rates") (append asset-accounts liability-accounts trading-accounts) get-exchange-rates-fn #t #t #f))
+                 (add-to-table multicol-table-right (_ "Exchange Rates") (append asset-accounts liability-accounts trading-accounts) get-exchange-rates-fn #t #t #f))
 
              (gnc:html-document-add-object!
               doc (gnc:html-render-options-changed (gnc:report-options report-obj)))
@@ -855,11 +870,20 @@ available, i.e. closest to today's prices."))))))
                   (gnc:make-html-text
                    (gnc:html-markup-anchor chart "Barchart"))))
 
-             (gnc:html-document-add-object!
-              doc multicol-table)))
+             (let ((multicol-table (if enable-dual-columns?
+                                       (gnc:make-html-table)
+                                       multicol-table-left)))
+               (when enable-dual-columns?
+                 (gnc:html-table-append-row! multicol-table
+                                             (list multicol-table-left multicol-table-right)))
+               (gnc:html-document-add-object!
+                doc multicol-table))))
 
           ((pnl)
-           (let* ((multicol-table (gnc:make-html-table))
+           (let* ((multicol-table-left (gnc:make-html-table))
+                  (multicol-table-right (if enable-dual-columns?
+                                            (gnc:make-html-table)
+                                            multicol-table-left))
                   (maxindent (gnc-account-get-tree-depth (gnc-get-current-root-account)))
                   (closing-str (get-option pagename-entries optname-closing-pattern))
                   (closing-cased (get-option pagename-entries optname-closing-casing))
@@ -956,9 +980,9 @@ available, i.e. closest to today's prices."))))))
                                               (cell (gnc:make-html-table-cell/markup "total-label-cell" header)))
                                          (gnc:html-table-cell-set-style! cell "total-label-cell" 'attribute '("style" "text-align:right"))
                                          cell)))
-                  (add-to-table (lambda (title accounts get-col-header-fn hide-accounts? hide-grand-total? negate-amounts?)
+                  (add-to-table (lambda (table title accounts get-col-header-fn hide-accounts? hide-grand-total? negate-amounts?)
                                   (add-multicolumn-acct-table
-                                   multicol-table title accounts
+                                   table title accounts
                                    maxindent get-cell-monetary-fn report-datepairs
                                    #:omit-zb-bals? omit-zb-bals?
                                    #:show-zb-accts? show-zb-accts?
@@ -975,12 +999,14 @@ available, i.e. closest to today's prices."))))))
                                    #:get-cell-anchor-fn get-cell-anchor-fn
                                    ))))
 
-             (add-to-table (_ "Period") '() get-col-header-fn #t #t #f)
-             (add-to-table (_ "Income") income-accounts #f #f #f #t)
-             (add-to-table (_ "Expense") expense-accounts #f #f #f #f)
-             (add-to-table (_ "Net Income") (append income-accounts expense-accounts) #f #t #f #t)
+             (add-to-table multicol-table-left (_ "Period") '() get-col-header-fn #t #t #f)
+             (if enable-dual-columns?
+                 (add-to-table multicol-table-right (_ "Period") '() get-col-header-fn #t #t #f))             
+             (add-to-table multicol-table-left (_ "Income") income-accounts #f #f #f #t)
+             (add-to-table multicol-table-right (_ "Expense") expense-accounts #f #f #f #f)
+             (add-to-table multicol-table-left (_ "Net Income") (append income-accounts expense-accounts) #f #t #f #t)
              (if (and common-currency show-rates?)
-                 (add-to-table (_ "Exchange Rates") (append income-accounts expense-accounts) get-exchange-rates-fn #t #t #f))
+                 (add-to-table multicol-table-left (_ "Exchange Rates") (append income-accounts expense-accounts) get-exchange-rates-fn #t #t #f))
 
              (gnc:html-document-add-object!
               doc (gnc:html-render-options-changed (gnc:report-options report-obj)))
@@ -991,8 +1017,14 @@ available, i.e. closest to today's prices."))))))
                   (gnc:make-html-text
                    (gnc:html-markup-anchor chart "Barchart"))))
 
-             (gnc:html-document-add-object!
-              doc multicol-table)))))
+             (let ((multicol-table (if enable-dual-columns?
+                                       (gnc:make-html-table)
+                                       multicol-table-left)))
+               (when enable-dual-columns?
+                 (gnc:html-table-append-row! multicol-table
+                                             (list multicol-table-left multicol-table-right)))
+               (gnc:html-document-add-object!
+                doc multicol-table))))))
 
     (gnc:report-finished)
     ;; (gnc:html-document-set-style-text!
