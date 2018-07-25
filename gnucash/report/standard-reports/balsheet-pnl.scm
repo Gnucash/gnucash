@@ -216,11 +216,20 @@ available, i.e. closest to today's prices."))))))
       (lambda (x)
         (gnc-option-db-set-option-selectable-by-name
          options
+         gnc:pagename-general optname-disable-amount-indent
+         (not x))
+        (gnc-option-db-set-option-selectable-by-name
+         options
          gnc:pagename-general
          (case report-type
            ((balsheet) optname-startdate)
            ((pnl) optname-include-overall-period))
          x))))
+
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-general optname-disable-amount-indent
+      "c3" opthelp-disable-amount-indent #f))
 
     (add-option
      (gnc:make-simple-boolean-option
@@ -355,6 +364,7 @@ available, i.e. closest to today's prices."))))))
           (omit-zb-bals? #f)
           (show-zb-accts? #t)
           (account-full-name? #f)
+          (disable-amount-indent? #f)
           (hide-accounts? #f)
           (hide-grand-total? #f)
           (depth-limit #f)
@@ -383,6 +393,7 @@ available, i.e. closest to today's prices."))))))
   ;; omit-zb-bals?      - a boolean to omit "$0.00" amounts
   ;; show-zb-accts?     - a boolean to omit whole account lines where all amounts are $0.00 (eg closed accts)
   ;; account-full-name? - a boolean to disable narrow-cell indenting, and render account full-name instead
+  ;; disable-amount-indent? - a bool to disable amount indenting (only for single data column reports)
   ;; negate-amounts?    - a boolean to negate amounts. useful for e.g. income-type accounts.
   ;; depth-limit        - (untested) accounts whose levels exceed this depth limit are not shown
   ;; recursive-bals?    - a boolean to confirm recursive-balances enabled (parent-accounts show balances) or
@@ -392,6 +403,8 @@ available, i.e. closest to today's prices."))))))
   ;; get-cell-anchor-fn - a lambda (account cols-data) which produces a url string - optional
 
   (define num-columns (length cols-data))
+
+  (define amount-indenting? (and (not disable-amount-indent?) (= num-columns 1)))
 
   (define (make-list-thunk n thunk)
     (let loop ((result '()) (n n))
@@ -403,14 +416,16 @@ available, i.e. closest to today's prices."))))))
       (gnc:html-table-cell-set-style! narrow "text-cell" 'attribute '("style" "width:1px"))
       narrow))
 
-  (define (add-indented-row indent label label-markup rest)
+  (define (add-indented-row indent label label-markup amount-indent rest)
     (gnc:html-table-append-row!
      table
      (append (if account-full-name? '() (make-list-thunk indent make-narrow-cell))
              (list (if label-markup
                        (gnc:make-html-table-cell/size/markup 1 (if account-full-name? 1 (- maxindent indent)) label-markup label)
                        (gnc:make-html-table-cell/size 1 (if account-full-name? 1 (- maxindent indent)) label)))
-             rest)))
+             (gnc:html-make-empty-cells (if amount-indenting? amount-indent 0))
+             rest
+             (gnc:html-make-empty-cells (if amount-indenting? (- maxindent amount-indent) 0)))))
 
   (define (monetary+ . monetaries)
     ;; usage: (monetary+ monetary...)
@@ -473,6 +488,7 @@ available, i.e. closest to today's prices."))))))
   (add-indented-row 0
                     title
                     "total-label-cell"
+                    maxindent
                     (if get-col-header-fn
                         (map
                          (lambda (col-datum)
@@ -490,6 +506,8 @@ available, i.e. closest to today's prices."))))))
                (curr-commodity (xaccAccountGetCommodity curr))
                (curr-descendants-list (filter (lambda (acc) (member acc accountlist))
                                               (gnc-account-get-descendants curr)))
+               (recursive-parent-acct? (and recursive-bals? (pair? curr-descendants-list)))
+               (multilevel-parent-acct? (and (not recursive-bals?) (pair? curr-descendants-list)))
                (curr-balance-display (lambda (get-cell-fn idx include-descendants?)
                                        (map (lambda (acc) (get-cell-fn acc idx))
                                             (cons curr (if include-descendants?
@@ -525,6 +543,9 @@ available, i.e. closest to today's prices."))))))
                 (add-indented-row lvl-curr
                                   (render-account curr)
                                   "text-cell"
+                                  (- maxindent
+                                     lvl-curr
+                                     (if multilevel-parent-acct? 1 0))
                                   (map
                                    (lambda (col-datum)
                                      (gnc:make-html-table-cell/markup
@@ -534,20 +555,20 @@ available, i.e. closest to today's prices."))))))
                                        (and get-cell-orig-monetary-fn
                                             (apply monetary+ (filter identity (curr-balance-display get-cell-orig-monetary-fn col-datum #f))))
                                        (and get-cell-anchor-fn
-                                            (null? curr-descendants-list)
+                                            (not recursive-parent-acct?)
                                             (get-cell-anchor-fn curr col-datum)))))
                                    cols-data))
 
                 ;; the following handles 'special' case where placeholder has descendants. only for recursive-bals? = true
-                (if (and recursive-bals?
+                (if (and recursive-parent-acct?
                          (not hide-accounts?)
-                         (pair? curr-descendants-list)
                          (or (not depth-limit) (<= (1+ lvl-curr) depth-limit))
                          (not (every zero? (map (lambda (col-datum) (gnc:gnc-monetary-amount (get-cell-monetary-fn curr col-datum)))
                                                 cols-data))))
                     (add-indented-row (1+ lvl-curr)
                                       (render-account curr)
                                       "text-cell"
+                                      (- maxindent lvl-curr 1)
                                       (map
                                        (lambda (col-datum)
                                          (gnc:make-html-table-cell/markup
@@ -577,6 +598,7 @@ available, i.e. closest to today's prices."))))))
                                                         gnc-account-get-full-name
                                                         xaccAccountGetName) lvl-acct))
                                     "total-label-cell"
+                                    (- maxindent lvl)
                                     (map
                                      (lambda (col-datum)
                                        (gnc:make-html-table-cell/markup
@@ -602,6 +624,7 @@ available, i.e. closest to today's prices."))))))
         (add-indented-row 0
                           (string-append (_"Total For ") title)
                           "total-label-cell"
+                          maxindent
                           (map
                            (lambda (col-total)
                              (let ((total-cell (gnc:make-html-table-cell/markup
@@ -642,6 +665,9 @@ available, i.e. closest to today's prices."))))))
          (incr (let ((period (get-option gnc:pagename-general optname-period)))
                  (and period
                       (keylist-get-info periodlist period 'delta))))
+         (disable-amount-indent? (and (not incr)
+                                      (get-option gnc:pagename-general
+                                                  optname-disable-amount-indent)))
          (accounts (get-option gnc:pagename-accounts
                                optname-accounts))
          (depth-limit (let ((limit (get-option gnc:pagename-accounts
@@ -797,6 +823,7 @@ available, i.e. closest to today's prices."))))))
                                    #:show-zb-accts? show-zb-accts?
                                    #:account-full-name? account-full-name?
                                    #:negate-amounts? negate-amounts?
+                                   #:disable-amount-indent? disable-amount-indent?
                                    #:hide-accounts? hide-accounts?
                                    #:hide-grand-total? hide-grand-total?
                                    #:depth-limit (if get-col-header-fn 0 depth-limit)
@@ -935,6 +962,7 @@ available, i.e. closest to today's prices."))))))
                                    #:show-zb-accts? show-zb-accts?
                                    #:account-full-name? account-full-name?
                                    #:negate-amounts? negate-amounts?
+                                   #:disable-amount-indent? disable-amount-indent?
                                    #:depth-limit (if get-col-header-fn 0 depth-limit)
                                    #:hide-accounts? hide-accounts?
                                    #:hide-grand-total? hide-grand-total?
