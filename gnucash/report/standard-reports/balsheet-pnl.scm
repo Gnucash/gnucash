@@ -496,9 +496,6 @@ available, i.e. closest to today's prices."))))))
     (gnc:html-table-append-row!
      table (gnc:make-html-table-cell/size 1 (+ 1 (if account-full-name? 0 maxindent) num-columns) contents)))
 
-  (define collectors
-    (make-list-thunk num-columns gnc:make-commodity-collector))
-
   ;; header ASSET/LIABILITY etc
   (add-indented-row 0
                     title
@@ -527,17 +524,6 @@ available, i.e. closest to today's prices."))))))
                                             (cons curr (if include-descendants?
                                                            curr-descendants-list
                                                            '()))))))
-
-          (let collector-loop ((col-idx 0)
-                               (cols-data cols-data))
-            (when (pair? cols-data)
-              (let ((mon (get-cell-monetary-fn curr (car cols-data))))
-                ((list-ref collectors col-idx)
-                 'add
-                 (gnc:gnc-monetary-commodity mon)
-                 (let ((amount (gnc:gnc-monetary-amount mon)))
-                   (if negate-amounts? (- amount) amount)))
-                (collector-loop (1+ col-idx) (cdr cols-data)))))
 
           (if (and (or show-zb-accts?
                        ;; the following function tests whether accounts (with descendants) of
@@ -630,28 +616,26 @@ available, i.e. closest to today's prices."))))))
           (loop rest))))
 
   (add-whole-line #f)
-  (let ((grand-totals (map (lambda (col-idx) ((list-ref collectors col-idx)
-                                              'format gnc:make-gnc-monetary #f))
-                           (iota num-columns))))
 
-    (if (not hide-grand-total?)
-        (add-indented-row 0
-                          (string-append (_"Total For ") title)
-                          "total-label-cell"
-                          maxindent
-                          (map
-                           (lambda (col-total)
-                             (let ((total-cell (gnc:make-html-table-cell/markup
-                                                "total-number-cell"
-                                                (list-of-monetary->html-text col-total #f #f))))
-                               (gnc:html-table-cell-set-style!
-                                total-cell "total-number-cell"
-                                'attribute '("style" "border-top-style:solid; border-top-width: 1px; border-bottom-style:double"))
-                               total-cell))
-                           grand-totals)))
-
-    ;; return grandtotal
-    grand-totals))
+  (if (not hide-grand-total?)
+      (add-indented-row 0
+                        (string-append (_ "Total For ") title)
+                        "total-label-cell"
+                        maxindent
+                        (map
+                         (lambda (col-datum)
+                           (let ((total-cell (gnc:make-html-table-cell/markup
+                                              "total-number-cell"
+                                              (list-of-monetary->html-text
+                                               (apply monetary+
+                                                      (map (lambda (acc) (get-cell-monetary-fn acc col-datum))
+                                                           accountlist))
+                                               #f #f))))
+                             (gnc:html-table-cell-set-style!
+                              total-cell "total-number-cell"
+                              'attribute '("style" "border-top-style:solid; border-top-width: 1px; border-bottom-style:double"))
+                             total-cell))
+                         cols-data))))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; multicol-report-renderer
