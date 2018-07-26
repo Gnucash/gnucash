@@ -520,7 +520,7 @@ available, i.e. closest to today's prices."))))))
                          cols-data)
                         (gnc:html-make-empty-cells maxindent)))
 
-  (let loop ((accounts accountlist))
+  (let loop ((accounts (if hide-accounts? '() accountlist)))
     (if (pair? accounts)
         (let* ((curr (car accounts))
                (rest (cdr accounts))
@@ -542,7 +542,6 @@ available, i.e. closest to today's prices."))))))
                                                                            col-datum
                                                                            get-cell-monetary-fn)))
                                                cols-data)))))
-                   (not hide-accounts?)
                    (or (not depth-limit) (<= lvl-curr depth-limit)))
 
               (begin
@@ -571,7 +570,6 @@ available, i.e. closest to today's prices."))))))
 
                 ;; the following handles 'special' case where placeholder has descendants. only for recursive-bals? = true
                 (if (and recursive-parent-acct?
-                         (not hide-accounts?)
                          (or (not depth-limit) (<= (1+ lvl-curr) depth-limit))
                          (not (every zero? (map (lambda (col-datum) (gnc:gnc-monetary-amount (get-cell-monetary-fn curr col-datum)))
                                                 cols-data))))
