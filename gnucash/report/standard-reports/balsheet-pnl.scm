@@ -449,10 +449,11 @@ available, i.e. closest to today's prices."))))))
     (let ((coll (gnc:make-commodity-collector)))
       (for-each
        (lambda (monetary)
-         (coll 'add
-               (gnc:gnc-monetary-commodity monetary)
-               (let ((amount (gnc:gnc-monetary-amount monetary)))
-                 (if negate-amounts? (- amount) amount))))
+         (if monetary
+             (coll 'add
+                   (gnc:gnc-monetary-commodity monetary)
+                   (let ((amount (gnc:gnc-monetary-amount monetary)))
+                     (if negate-amounts? (- amount) amount)))))
        monetaries)
       (coll 'format gnc:make-gnc-monetary #f)))
 
@@ -496,6 +497,17 @@ available, i.e. closest to today's prices."))))))
     (gnc:html-table-append-row!
      table (gnc:make-html-table-cell/size 1 (+ 1 (if account-full-name? 0 maxindent) num-columns) contents)))
 
+  (define (account-and-descendants account)
+    (cons account (filter (lambda (acc) (member acc accountlist))
+                          (gnc-account-get-descendants account))))
+
+  (define (sum-accounts-at-col accounts datum account->monetary)
+    ;; outputs: list of gnc-monetary, or #f
+    (and account->monetary
+         (apply monetary+
+                (map (lambda (acc) (account->monetary acc datum))
+                     accounts))))
+
   ;; header ASSET/LIABILITY etc
   (add-indented-row 0
                     title
@@ -518,23 +530,18 @@ available, i.e. closest to today's prices."))))))
                (curr-descendants-list (filter (lambda (acc) (member acc accountlist))
                                               (gnc-account-get-descendants curr)))
                (recursive-parent-acct? (and recursive-bals? (pair? curr-descendants-list)))
-               (multilevel-parent-acct? (and (not recursive-bals?) (pair? curr-descendants-list)))
-               (curr-balance-display (lambda (get-cell-fn idx include-descendants?)
-                                       (map (lambda (acc) (get-cell-fn acc idx))
-                                            (cons curr (if include-descendants?
-                                                           curr-descendants-list
-                                                           '()))))))
+               (multilevel-parent-acct? (and (not recursive-bals?) (pair? curr-descendants-list))))
 
           (if (and (or show-zb-accts?
                        ;; the following function tests whether accounts (with descendants) of
                        ;; all columns are zero
                        (not (every zero? (concatenate
-                                          (map (lambda (acc)
-                                                 (map (lambda (col-datum)
-                                                        (gnc:gnc-monetary-amount
-                                                         (get-cell-monetary-fn acc col-datum)))
-                                                      cols-data))
-                                               (cons curr curr-descendants-list))))))
+                                          (map (lambda (col-datum)
+                                                 (map gnc:gnc-monetary-amount
+                                                      (sum-accounts-at-col (account-and-descendants curr)
+                                                                           col-datum
+                                                                           get-cell-monetary-fn)))
+                                               cols-data)))))
                    (not hide-accounts?)
                    (or (not depth-limit) (<= lvl-curr depth-limit)))
 
@@ -551,9 +558,12 @@ available, i.e. closest to today's prices."))))))
                                      (gnc:make-html-table-cell/markup
                                       (if (or (not recursive-bals?) (null? curr-descendants-list)) "number-cell" "total-number-cell")
                                       (list-of-monetary->html-text
-                                       (apply monetary+ (curr-balance-display get-cell-monetary-fn col-datum recursive-bals?))
-                                       (and get-cell-orig-monetary-fn
-                                            (apply monetary+ (filter identity (curr-balance-display get-cell-orig-monetary-fn col-datum #f))))
+                                       (sum-accounts-at-col (if recursive-bals? (account-and-descendants curr) (list curr))
+                                                            col-datum
+                                                            get-cell-monetary-fn)
+                                       (sum-accounts-at-col (list curr)
+                                                            col-datum
+                                                            get-cell-orig-monetary-fn)
                                        (and get-cell-anchor-fn
                                             (not recursive-parent-acct?)
                                             (get-cell-anchor-fn curr col-datum)))))
@@ -574,17 +584,13 @@ available, i.e. closest to today's prices."))))))
                                          (gnc:make-html-table-cell/markup
                                           "number-cell"
                                           (list-of-monetary->html-text
-                                           (apply monetary+
-                                                  (curr-balance-display get-cell-monetary-fn col-datum #f))
-                                           (and get-cell-orig-monetary-fn
-                                                (apply monetary+
-                                                       (filter identity (curr-balance-display get-cell-orig-monetary-fn col-datum #f))))
+                                           (sum-accounts-at-col (list curr) col-datum get-cell-monetary-fn)
+                                           (sum-accounts-at-col (list curr) col-datum get-cell-orig-monetary-fn)
                                            (and get-cell-anchor-fn
                                                 (get-cell-anchor-fn curr col-datum)))))
                                        cols-data)))))
 
           (if (and (not recursive-bals?)
-                   (not hide-accounts?)
                    (or (not depth-limit) (<= lvl-curr depth-limit))
                    (> lvl-curr lvl-next))
               (let multilevel-loop ((lvl (1- lvl-curr))
@@ -604,10 +610,8 @@ available, i.e. closest to today's prices."))))))
                                        (gnc:make-html-table-cell/markup
                                         "total-number-cell"
                                         (list-of-monetary->html-text
-                                         (apply monetary+
-                                                (map (lambda (acc) (get-cell-monetary-fn acc col-datum))
-                                                     (cons lvl-acct (filter (lambda (acc) (member acc accountlist))
-                                                                            (gnc-account-get-descendants lvl-acct)))))
+                                         (sum-accounts-at-col (account-and-descendants lvl-acct)
+                                                              col-datum get-cell-monetary-fn)
                                          #f
                                          #f)))
                                      cols-data))
@@ -627,9 +631,7 @@ available, i.e. closest to today's prices."))))))
                            (let ((total-cell (gnc:make-html-table-cell/markup
                                               "total-number-cell"
                                               (list-of-monetary->html-text
-                                               (apply monetary+
-                                                      (map (lambda (acc) (get-cell-monetary-fn acc col-datum))
-                                                           accountlist))
+                                               (sum-accounts-at-col accountlist col-datum get-cell-monetary-fn)
                                                #f #f))))
                              (gnc:html-table-cell-set-style!
                               total-cell "total-number-cell"
