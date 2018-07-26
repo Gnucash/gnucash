@@ -459,8 +459,10 @@ available, i.e. closest to today's prices."))))))
           (show-zb-accts? #t)
           (account-full-name? #f)
           (disable-amount-indent? #f)
-          (hide-accounts? #f)
-          (hide-grand-total? #f)
+          (show-orig-cur? #t)
+          (show-title? #t)
+          (show-accounts? #t)
+          (show-total? #t)
           (depth-limit #f)
           (negate-amounts? #f)
           (recursive-bals? #f)
@@ -486,6 +488,9 @@ available, i.e. closest to today's prices."))))))
   ;; the following are optional:
   ;; omit-zb-bals?      - a boolean to omit "$0.00" amounts
   ;; show-zb-accts?     - a boolean to omit whole account lines where all amounts are $0.00 (eg closed accts)
+  ;; show-title?        - a bool to show/hide individual sections
+  ;; show-accounts?     - a bool to show/hide individual sections
+  ;; show-total?        - a bool to show/hide individual sections
   ;; account-full-name? - a boolean to disable narrow-cell indenting, and render account full-name instead
   ;; disable-amount-indent? - a bool to disable amount indenting (only for single data column reports)
   ;; negate-amounts?    - a boolean to negate amounts. useful for e.g. income-type accounts.
@@ -591,18 +596,19 @@ available, i.e. closest to today's prices."))))))
                      accounts))))
 
   ;; header ASSET/LIABILITY etc
-  (add-indented-row 0
-                    title
-                    "total-label-cell"
-                    maxindent
-                    (if get-col-header-fn
-                        (map
-                         (lambda (col-datum)
-                           (get-col-header-fn accountlist col-datum))
-                         cols-data)
-                        (gnc:html-make-empty-cells maxindent)))
+  (if show-title?
+      (add-indented-row 0
+                        title
+                        "total-label-cell"
+                        maxindent
+                        (if get-col-header-fn
+                            (map
+                             (lambda (col-datum)
+                               (get-col-header-fn accountlist col-datum))
+                             cols-data)
+                            (gnc:html-make-empty-cells num-columns))))
 
-  (let loop ((accounts (if hide-accounts? '() accountlist)))
+  (let loop ((accounts (if show-accounts? accountlist '())))
     (if (pair? accounts)
         (let* ((curr (car accounts))
                (rest (cdr accounts))
@@ -698,7 +704,7 @@ available, i.e. closest to today's prices."))))))
 
   (add-whole-line #f)
 
-  (if (not hide-grand-total?)
+  (if show-total?
       (add-indented-row 0
                         (string-append (_ "Total For ") title)
                         "total-label-cell"
@@ -906,7 +912,7 @@ available, i.e. closest to today's prices."))))))
                                              (cell (gnc:make-html-table-cell/markup "total-label-cell" header)))
                                         (gnc:html-table-cell-set-style! cell "total-label-cell" 'attribute '("style" "text-align:right"))
                                         cell)))
-                  (add-to-table (lambda (table title accounts get-col-header-fn hide-accounts? hide-grand-total? negate-amounts?)
+                  (add-to-table (lambda (table title accounts get-col-header-fn show-accounts? show-section-total? negate-amounts?)
                                   (add-multicolumn-acct-table
                                    table title accounts
                                    maxindent get-cell-monetary-fn report-dates
@@ -915,8 +921,8 @@ available, i.e. closest to today's prices."))))))
                                    #:account-full-name? account-full-name?
                                    #:negate-amounts? negate-amounts?
                                    #:disable-amount-indent? disable-amount-indent?
-                                   #:hide-accounts? hide-accounts?
-                                   #:hide-grand-total? hide-grand-total?
+                                   #:show-accounts? show-accounts?
+                                   #:show-section-total? show-section-total?
                                    #:depth-limit (if get-col-header-fn 0 depth-limit)
                                    #:recursive-bals? recursive-bals?
                                    #:account-anchor-fn account->url
@@ -925,17 +931,17 @@ available, i.e. closest to today's prices."))))))
                                    #:get-cell-anchor-fn get-cell-anchor-fn
                                    ))))
 
-             (add-to-table multicol-table-left (_ "Date") '() get-col-header-fn #t #t #f)
+             (add-to-table multicol-table-left (_ "Date") '() get-col-header-fn #f #f #f)
              (if enable-dual-columns?
-                 (add-to-table multicol-table-right (_ "Date") '() get-col-header-fn #t #t #f))
-             (add-to-table multicol-table-left (_ "Asset") asset-accounts #f #f #f #f)
-             (add-to-table multicol-table-right (_ "Liability") liability-accounts #f #f #f #t)
+                 (add-to-table multicol-table-right (_ "Date") '() get-col-header-fn #f #f #f))
+             (add-to-table multicol-table-left (_ "Asset") asset-accounts #f #t #t #f)
+             (add-to-table multicol-table-right (_ "Liability") liability-accounts #f #t #t #t)
              ;; (add-to-table (_ "Equity") equity-accounts #f #f #f #t)
              (unless (null? trading-accounts)
-               (add-to-table multicol-table-right (_ "Trading Accounts") trading-accounts #f #f #f #f))
-             (add-to-table multicol-table-right (_ "Net Worth") (append asset-accounts liability-accounts trading-accounts) #f #t #f #f)
+               (add-to-table multicol-table-right (_ "Trading Accounts") trading-accounts #f #t #t #f))
+             (add-to-table multicol-table-right (_ "Net Worth") (append asset-accounts liability-accounts trading-accounts) #f #f #t #f)
              (if (and common-currency show-rates?)
-                 (add-to-table multicol-table-right (_ "Exchange Rates") (append asset-accounts liability-accounts trading-accounts) get-exchange-rates-fn #t #t #f))
+                 (add-to-table multicol-table-right (_ "Exchange Rates") (append asset-accounts liability-accounts trading-accounts) get-exchange-rates-fn #f #f #f))
 
              (if include-chart?
                  (gnc:html-document-add-object!
@@ -1039,7 +1045,7 @@ available, i.e. closest to today's prices."))))))
                                               (cell (gnc:make-html-table-cell/markup "total-label-cell" header)))
                                          (gnc:html-table-cell-set-style! cell "total-label-cell" 'attribute '("style" "text-align:right"))
                                          cell)))
-                  (add-to-table (lambda (table title accounts get-col-header-fn hide-accounts? hide-grand-total? negate-amounts?)
+                  (add-to-table (lambda (table title accounts get-col-header-fn show-accounts? show-section-total? negate-amounts?)
                                   (add-multicolumn-acct-table
                                    table title accounts
                                    maxindent get-cell-monetary-fn report-datepairs
@@ -1049,8 +1055,8 @@ available, i.e. closest to today's prices."))))))
                                    #:negate-amounts? negate-amounts?
                                    #:disable-amount-indent? disable-amount-indent?
                                    #:depth-limit (if get-col-header-fn 0 depth-limit)
-                                   #:hide-accounts? hide-accounts?
-                                   #:hide-grand-total? hide-grand-total?
+                                   #:show-accounts? show-accounts?
+                                   #:show-section-total? show-section-total?
                                    #:account-anchor-fn account->url
                                    #:get-cell-orig-monetary-fn (and common-currency get-cell-orig-monetary-fn)
                                    #:get-col-header-fn get-col-header-fn
@@ -1058,14 +1064,14 @@ available, i.e. closest to today's prices."))))))
                                    #:get-cell-anchor-fn get-cell-anchor-fn
                                    ))))
 
-             (add-to-table multicol-table-left (_ "Period") '() get-col-header-fn #t #t #f)
+             (add-to-table multicol-table-left (_ "Period") '() get-col-header-fn #f #f #f)
              (if enable-dual-columns?
-                 (add-to-table multicol-table-right (_ "Period") '() get-col-header-fn #t #t #f))             
-             (add-to-table multicol-table-left (_ "Income") income-accounts #f #f #f #t)
-             (add-to-table multicol-table-right (_ "Expense") expense-accounts #f #f #f #f)
-             (add-to-table multicol-table-left (_ "Net Income") (append income-accounts expense-accounts) #f #t #f #t)
+                 (add-to-table multicol-table-right (_ "Period") '() get-col-header-fn #f #f #f))
+             (add-to-table multicol-table-left (_ "Income") income-accounts #f #t #t #t)
+             (add-to-table multicol-table-right (_ "Expense") expense-accounts #f #f #t #f)
+             (add-to-table multicol-table-left (_ "Net Income") (append income-accounts expense-accounts) #f #f #t #t)
              (if (and common-currency show-rates?)
-                 (add-to-table multicol-table-left (_ "Exchange Rates") (append income-accounts expense-accounts) get-exchange-rates-fn #t #t #f))
+                 (add-to-table multicol-table-left (_ "Exchange Rates") (append income-accounts expense-accounts) get-exchange-rates-fn #f #f #f))
 
              (if include-chart?
                  (gnc:html-document-add-object!
