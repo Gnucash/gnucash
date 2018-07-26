@@ -757,7 +757,9 @@ available, i.e. closest to today's prices."))))))
 
     (gnc:html-document-set-title!
      doc (string-append company-name " " report-title " "
-                        (qof-print-date startdate) " - "
+                        (if (and (eq? report-type 'balsheet) (not incr))
+                            ""
+                            (string-append (qof-print-date startdate) " - "))
                         (qof-print-date enddate)))
 
     (if (get-option gnc:pagename-general optname-options-summary)
