@@ -460,7 +460,6 @@ available, i.e. closest to today's prices."))))))
           (account-full-name? #f)
           (disable-amount-indent? #f)
           (show-orig-cur? #t)
-          (show-title? #t)
           (show-accounts? #t)
           (show-total? #t)
           (depth-limit #f)
@@ -468,7 +467,7 @@ available, i.e. closest to today's prices."))))))
           (recursive-bals? #f)
           (account-anchor-fn #f)
           (get-col-header-fn #f)
-          (get-cell-orig-monetary-fn #f)
+          (convert-curr-fn #f)
           (get-cell-anchor-fn #f))
 
   ;; this function will add a 2D grid into the html-table
@@ -498,7 +497,8 @@ available, i.e. closest to today's prices."))))))
   ;; recursive-bals?    - a boolean to confirm recursive-balances enabled (parent-accounts show balances) or
   ;;                      disabled (multilevel subtotals after each parent+children)
   ;; get-col-header-fn  - a lambda (accounts cols-data) to produce html-object - this is optional
-  ;; get-cell-orig-monetary-fn   - a lambda (account cols-data) which produces a gnc-monetary or #f - optional
+  ;; convert-curr-fn    - a lambda (monetary cols-data) which produces a gnc-monetary or #f - optional
+  ;; show-orig-cur?     - a boolean to enable/disable original currency after convert-curr-fn
   ;; get-cell-anchor-fn - a lambda (account cols-data) which produces a url string - optional
 
   (define num-columns (length cols-data))
@@ -541,27 +541,28 @@ available, i.e. closest to today's prices."))))))
        monetaries)
       (coll 'format gnc:make-gnc-monetary #f)))
 
-  (define (list-of-monetary->html-text monetaries monetaries-orig anchor)
+  (define (list-of-monetary->html-text monetaries col-datum anchor)
     ;; inputs:
     ;; monetaries: list of gnc-monetary (or #f, or html-text object)
-    ;; monetaries-orig: list of gnc-monetary (or html-text object) (or #f)
+    ;; col-datum: col-datum to help convert monetary currency
     ;; anchor: url string for monetaries (or #f) (all have same anchor)
     ;;
     ;; outputs: html-text object
     (let ((text (gnc:make-html-text)))
       (for-each
        (lambda (monetary)
-         (if (not (and omit-zb-bals? (gnc:gnc-monetary? monetary) (zero? (gnc:gnc-monetary-amount monetary))))
-             (gnc:html-text-append! text monetary (gnc:html-markup-br))))
-       (or monetaries-orig '()))
-      (for-each
-       (lambda (monetary)
-         (if (not (and omit-zb-bals? (gnc:gnc-monetary? monetary) (zero? (gnc:gnc-monetary-amount monetary))))
-             (gnc:html-text-append! text
-                                    (if anchor
-                                        (gnc:html-markup-anchor anchor monetary)
-                                        monetary)
-                                    (gnc:html-markup-br))))
+         (let ((converted (and show-orig-cur? convert-curr-fn (convert-curr-fn monetary col-datum))))
+           (if (not (and omit-zb-bals? (gnc:gnc-monetary? monetary) (zero? (gnc:gnc-monetary-amount monetary))))
+               (gnc:html-text-append! text
+                                      (if converted
+                                          (gnc:html-markup-i
+                                           (gnc:html-markup "small" monetary))
+                                          "")
+                                      " "
+                                      (if anchor
+                                          (gnc:html-markup-anchor anchor (or converted monetary))
+                                          (or converted monetary))
+                                      (gnc:html-markup-br)))))
        (or monetaries '()))
       text))
 
@@ -588,12 +589,14 @@ available, i.e. closest to today's prices."))))))
     (cons account (filter (lambda (acc) (member acc accountlist))
                           (gnc-account-get-descendants account))))
 
-  (define (sum-accounts-at-col accounts datum account->monetary)
-    ;; outputs: list of gnc-monetary, or #f
-    (and account->monetary
-         (apply monetary+
-                (map (lambda (acc) (account->monetary acc datum))
-                     accounts))))
+  (define (sum-accounts-at-col accounts datum convert?)
+    ;; outputs: list of gnc-monetary
+    (apply monetary+
+           (map (lambda (acc)
+                  (let ((monetary (get-cell-monetary-fn acc datum)))
+                    (or (and convert? convert-curr-fn (convert-curr-fn monetary datum))
+                        monetary)))
+                accounts)))
 
   ;; header ASSET/LIABILITY etc
   (if show-title?
@@ -628,7 +631,7 @@ available, i.e. closest to today's prices."))))))
                                                  (map gnc:gnc-monetary-amount
                                                       (sum-accounts-at-col (account-and-descendants curr)
                                                                            col-datum
-                                                                           get-cell-monetary-fn)))
+                                                                           #f)))
                                                cols-data)))))
                    (or (not depth-limit) (<= lvl-curr depth-limit)))
 
@@ -647,10 +650,8 @@ available, i.e. closest to today's prices."))))))
                                       (list-of-monetary->html-text
                                        (sum-accounts-at-col (if recursive-bals? (account-and-descendants curr) (list curr))
                                                             col-datum
-                                                            get-cell-monetary-fn)
-                                       (sum-accounts-at-col (list curr)
-                                                            col-datum
-                                                            get-cell-orig-monetary-fn)
+                                                            (not show-orig-cur?))
+                                       col-datum
                                        (and get-cell-anchor-fn
                                             (not recursive-parent-acct?)
                                             (get-cell-anchor-fn curr col-datum)))))
@@ -670,8 +671,10 @@ available, i.e. closest to today's prices."))))))
                                          (gnc:make-html-table-cell/markup
                                           "number-cell"
                                           (list-of-monetary->html-text
-                                           (sum-accounts-at-col (list curr) col-datum get-cell-monetary-fn)
-                                           (sum-accounts-at-col (list curr) col-datum get-cell-orig-monetary-fn)
+                                           (sum-accounts-at-col (list curr)
+                                                                col-datum
+                                                                (not show-orig-cur?))
+                                           col-datum
                                            (and get-cell-anchor-fn
                                                 (get-cell-anchor-fn curr col-datum)))))
                                        cols-data)))))
@@ -694,8 +697,9 @@ available, i.e. closest to today's prices."))))))
                                         "total-number-cell"
                                         (list-of-monetary->html-text
                                          (sum-accounts-at-col (account-and-descendants lvl-acct)
-                                                              col-datum get-cell-monetary-fn)
-                                         #f
+                                                              col-datum
+                                                              (not show-orig-cur?))
+                                         col-datum
                                          #f)))
                                      cols-data))
                   (multilevel-loop (1- lvl)
@@ -714,8 +718,11 @@ available, i.e. closest to today's prices."))))))
                            (let ((total-cell (gnc:make-html-table-cell/markup
                                               "total-number-cell"
                                               (list-of-monetary->html-text
-                                               (sum-accounts-at-col accountlist col-datum get-cell-monetary-fn)
-                                               #f #f))))
+                                               (sum-accounts-at-col accountlist
+                                                                    col-datum
+                                                                    #t)
+                                               col-datum
+                                               #f))))
                              (gnc:html-table-cell-set-style!
                               total-cell "total-number-cell"
                               'attribute '("style" "border-top-style:solid; border-top-width: 1px; border-bottom-style:double"))
@@ -863,28 +870,22 @@ available, i.e. closest to today's prices."))))))
            (let* ((report-dates (if incr
                                     (gnc:make-date-list startdate enddate incr)
                                     (list enddate)))
-                  (amount-col-amount (lambda (account col-datum)
-                                       (gnc:make-gnc-monetary
-                                        (xaccAccountGetCommodity account)
-                                        (xaccAccountGetBalanceAsOfDate
-                                         account
-                                         (gnc:time64-end-day-time col-datum)))))
-                  (get-cell-orig-monetary-fn (lambda (account col-datum)
-                                                      (and common-currency
-                                                           show-foreign?
-                                                           (not (gnc-commodity-equal (xaccAccountGetCommodity account) common-currency))
-                                                           (amount-col-amount account col-datum))))
+                  (convert-curr-fn (lambda (monetary col-datum)
+                                     (and common-currency
+                                          (not (gnc-commodity-equal (gnc:gnc-monetary-commodity monetary) common-currency))
+                                          (has-price? (gnc:gnc-monetary-commodity monetary))
+                                          (gnc:exchange-by-pricedb-nearest
+                                           monetary common-currency
+                                           (case price-source
+                                             ((pricedb-nearest) col-datum)
+                                             ((pricedb-latest) (current-time)))))))
                   (get-cell-monetary-fn (lambda (account col-datum)
-                                          (let* ((col-date (gnc:time64-end-day-time col-datum))
-                                                 (monetary (amount-col-amount account col-datum)))
-                                            (if (and common-currency
-                                                     (has-price? (xaccAccountGetCommodity account)))
-                                                (gnc:exchange-by-pricedb-nearest
-                                                 monetary common-currency
-                                                 (case price-source
-                                                   ((pricedb-nearest) col-date)
-                                                   ((pricedb-latest) (current-time))))
-                                                monetary))))
+                                          (let* ((col-date (gnc:time64-end-day-time col-datum)))
+                                            (gnc:make-gnc-monetary
+                                             (xaccAccountGetCommodity account)
+                                             (xaccAccountGetBalanceAsOfDate
+                                              account
+                                              (gnc:time64-end-day-time col-date))))))
                   (get-cell-anchor-fn (lambda (account col-datum)
                                         (let* ((splits (xaccAccountGetSplitList account))
                                                (split-date (lambda (s) (xaccTransGetDate (xaccSplitGetParent s))))
@@ -919,12 +920,13 @@ available, i.e. closest to today's prices."))))))
                                    #:account-full-name? account-full-name?
                                    #:negate-amounts? negate-amounts?
                                    #:disable-amount-indent? disable-amount-indent?
+                                   #:show-orig-cur? show-foreign?
                                    #:show-accounts? show-accounts?
                                    #:show-section-total? show-section-total?
                                    #:depth-limit (if get-col-header-fn 0 depth-limit)
                                    #:recursive-bals? recursive-bals?
                                    #:account-anchor-fn account->url
-                                   #:get-cell-orig-monetary-fn (and common-currency get-cell-orig-monetary-fn)
+                                   #:convert-curr-fn (and common-currency convert-curr-fn)
                                    #:get-col-header-fn get-col-header-fn
                                    #:get-cell-anchor-fn get-cell-anchor-fn
                                    ))))
@@ -935,9 +937,9 @@ available, i.e. closest to today's prices."))))))
              (add-to-table multicol-table-left (_ "Asset") asset-accounts #f #t #t #f)
              (add-to-table multicol-table-right (_ "Liability") liability-accounts #f #t #t #t)
              ;; (add-to-table (_ "Equity") equity-accounts #f #f #f #t)
-             (unless (null? trading-accounts)
-               (add-to-table multicol-table-right (_ "Trading Accounts") trading-accounts #f #t #t #f))
-             (add-to-table multicol-table-right (_ "Net Worth") (append asset-accounts liability-accounts trading-accounts) #f #f #t #f)
+             ;; (unless (null? trading-accounts)
+             ;;   (add-to-table multicol-table-right (_ "Trading Accounts") trading-accounts #f #t #t #f))
+             (add-to-table multicol-table-right (_ "Net Worth") (append asset-accounts liability-accounts) #f #f #t #f)
              (if (and common-currency show-rates?)
                  (add-to-table multicol-table-right (_ "Exchange Rates") (append asset-accounts liability-accounts trading-accounts) get-exchange-rates-fn #f #f #f))
 
@@ -991,33 +993,25 @@ available, i.e. closest to today's prices."))))))
                                                    todate)))
                                         (let ((account-closing-splits (filter include-split? closing-entries)))
                                           (apply + (map xaccSplitGetAmount account-closing-splits)))))
-                  (account-col-amount (lambda (account col-datum)
-                                        (let* ((startdate (gnc:time64-start-day-time (car col-datum)))
-                                               (enddate (gnc:time64-end-day-time (cdr col-datum))))
-                                          (gnc:make-gnc-monetary
-                                           (xaccAccountGetCommodity account)
-                                           (- (xaccAccountGetBalanceAsOfDate account enddate)
-                                              (xaccAccountGetBalanceAsOfDate account startdate)
-                                              (closing-adjustment account startdate enddate))))))
-                  (get-cell-orig-monetary-fn (lambda (account col-datum)
-                                                      (and common-currency
-                                                           show-foreign?
-                                                           (not (gnc-commodity-equal (xaccAccountGetCommodity account) common-currency))
-                                                           (account-col-amount account col-datum))))
+                  (convert-curr-fn (lambda (monetary col-datum)
+                                     (and common-currency
+                                          (not (gnc-commodity-equal (gnc:gnc-monetary-commodity monetary) common-currency))
+                                          (has-price? (gnc:gnc-monetary-commodity monetary))
+                                          (gnc:exchange-by-pricedb-nearest
+                                           monetary common-currency
+                                           (case price-source
+                                             ((startperiod) (car col-datum))
+                                             ((midperiod) (floor (/ (+ (car col-datum) (cdr col-datum)) 2)))
+                                             ((endperiod) (cdr col-datum))
+                                             ((pricedb-latest) (current-time)))))))
                   (get-cell-monetary-fn (lambda (account col-datum)
-                                          (let* ((monetary (account-col-amount account col-datum))
-                                                 (col-startdate (car col-datum))
-                                                 (col-enddate (cdr col-datum)))
-                                            (if (and common-currency
-                                                     (has-price? (xaccAccountGetCommodity account)))
-                                                (gnc:exchange-by-pricedb-nearest
-                                                 monetary common-currency
-                                                 (case price-source
-                                                   ((startperiod) startdate)
-                                                   ((midperiod) (floor (/ (+ startdate enddate) 2)))
-                                                   ((endperiod) enddate)
-                                                   ((pricedb-latest) (current-time))))
-                                                monetary))))
+                                          (let* ((startdate (car col-datum))
+                                                 (enddate (cdr col-datum)))
+                                            (gnc:make-gnc-monetary
+                                             (xaccAccountGetCommodity account)
+                                             (- (xaccAccountGetBalanceAsOfDate account enddate)
+                                                (xaccAccountGetBalanceAsOfDate account startdate)
+                                                (closing-adjustment account startdate enddate))))))
                   (get-cell-anchor-fn (lambda (account datepair)
                                         (gnc:make-report-anchor
                                          trep-uuid report-obj
@@ -1053,10 +1047,11 @@ available, i.e. closest to today's prices."))))))
                                    #:negate-amounts? negate-amounts?
                                    #:disable-amount-indent? disable-amount-indent?
                                    #:depth-limit (if get-col-header-fn 0 depth-limit)
+                                   #:show-orig-cur? show-foreign?
                                    #:show-accounts? show-accounts?
                                    #:show-section-total? show-section-total?
                                    #:account-anchor-fn account->url
-                                   #:get-cell-orig-monetary-fn (and common-currency get-cell-orig-monetary-fn)
+                                   #:convert-curr-fn (and common-currency convert-curr-fn)
                                    #:get-col-header-fn get-col-header-fn
                                    #:recursive-bals? recursive-bals?
                                    #:get-cell-anchor-fn get-cell-anchor-fn
