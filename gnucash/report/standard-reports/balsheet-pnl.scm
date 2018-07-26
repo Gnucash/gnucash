@@ -481,13 +481,16 @@ available, i.e. closest to today's prices."))))))
        (or monetaries '()))
       text))
 
-  (define (render-account account)
+  (define (render-account account total?)
     ;; input: account-name
     ;; outputs: string or html-markup-anchor object
-    (let ((acct-label (if account-full-name?
-                          (gnc-account-get-full-name account)
-                          (xaccAccountGetName account)))
-          (acct-url (and account-anchor-fn (account-anchor-fn account))))
+    (let* ((acct-name ((if account-full-name?
+                           gnc-account-get-full-name
+                           xaccAccountGetName) account))
+           (acct-label (if total?
+                           (string-append (_ "Total For ") acct-name)
+                           acct-name))
+           (acct-url (and (not total?) account-anchor-fn (account-anchor-fn account))))
       (gnc:make-html-text
        (if acct-url
            (gnc:html-markup-anchor acct-url acct-label)
@@ -547,7 +550,7 @@ available, i.e. closest to today's prices."))))))
               (begin
 
                 (add-indented-row lvl-curr
-                                  (render-account curr)
+                                  (render-account curr #f)
                                   "text-cell"
                                   (- maxindent
                                      lvl-curr
@@ -574,7 +577,7 @@ available, i.e. closest to today's prices."))))))
                          (not (every zero? (map (lambda (col-datum) (gnc:gnc-monetary-amount (get-cell-monetary-fn curr col-datum)))
                                                 cols-data))))
                     (add-indented-row (1+ lvl-curr)
-                                      (render-account curr)
+                                      (render-account curr #f)
                                       "text-cell"
                                       (- maxindent lvl-curr 1)
                                       (map
@@ -597,10 +600,7 @@ available, i.e. closest to today's prices."))))))
                             (not (member lvl-acct accountlist))
                             (< lvl lvl-next))
                   (add-indented-row lvl
-                                    (string-append (_ "Total For ")
-                                                   ((if account-full-name?
-                                                        gnc-account-get-full-name
-                                                        xaccAccountGetName) lvl-acct))
+                                    (render-account lvl-acct #t)
                                     "total-label-cell"
                                     (- maxindent lvl)
                                     (map
