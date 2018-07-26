@@ -87,6 +87,47 @@ below parent and children groups."))
 (define optname-closing-regexp (N_ "Closing Entries Pattern is regular expression"))
 (define opthelp-closing-regexp (N_ "Causes the Closing Entries Pattern to be treated as a regular expression."))
 
+;; section labels - for P&L report
+(define optname-label-revenue (N_ "Label the revenue section"))
+(define opthelp-label-revenue (N_ "Whether or not to include a label for the revenue section."))
+(define optname-total-revenue (N_ "Include revenue total"))
+(define opthelp-total-revenue (N_ "Whether or not to include a line indicating total revenue."))
+(define optname-label-trading (N_ "Label the trading accounts section"))
+(define opthelp-label-trading (N_ "Whether or not to include a label for the trading accounts section."))
+(define optname-total-trading (N_ "Include trading accounts total"))
+(define opthelp-total-trading (N_ "Whether or not to include a line indicating total trading accounts balance."))
+(define optname-label-expense (N_ "Label the expense section"))
+(define opthelp-label-expense (N_ "Whether or not to include a label for the expense section."))
+(define optname-total-expense (N_ "Include expense total"))
+(define opthelp-total-expense (N_ "Whether or not to include a line indicating total expense."))
+
+;; section labels - balance-sheet
+(define optname-label-assets (N_ "Label the assets section"))
+(define opthelp-label-assets (N_ "Whether or not to include a label for the assets section."))
+(define optname-total-assets (N_ "Include assets total"))
+(define opthelp-total-assets (N_ "Whether or not to include a line indicating total assets."))
+(define optname-label-liabilities (N_ "Label the liabilities section"))
+(define opthelp-label-liabilities (N_ "Whether or not to include a label for the liabilities section."))
+(define optname-total-liabilities (N_ "Include liabilities total"))
+(define opthelp-total-liabilities (N_ "Whether or not to include a line indicating total liabilities."))
+(define optname-label-equity (N_ "Label the equity section"))
+(define opthelp-label-equity (N_ "Whether or not to include a label for the equity section."))
+(define optname-total-equity (N_ "Include equity total"))
+(define opthelp-total-equity (N_ "Whether or not to include a line indicating total equity."))
+
+;; legacy account options
+(define optname-bottom-behavior (N_ "Flatten list to depth limit"))
+
+;; legacy display options
+(define optname-use-rules (N_ "Show accounting-style rules"))
+
+;; legacy general options
+(define optname-standard-order-balsheet "Use standard US layout")
+(define optname-standard-order-pnl "Display in standard, income first, order")
+(define optname-report-form "Single column Balance Sheet")
+(define optname-two-column "Display as a two column report")
+
+;; commodities
 (define pagename-commodities (N_ "Commodities"))
 (define optname-include-chart (N_ "Enable chart"))
 (define opthelp-include-chart (N_ "Enable link to barchart report"))
@@ -346,6 +387,27 @@ available, i.e. closest to today's prices."))))))
       gnc:pagename-display optname-account-full-name
       "f" opthelp-account-full-name #f))
 
+    (for-each
+     (lambda (opt)
+       (add-option
+        (gnc:make-simple-boolean-option
+         gnc:pagename-display (vector-ref opt 0) (vector-ref opt 1) (vector-ref opt 2) #t)))
+     (case report-type
+       ((balsheet)
+        (list (vector optname-label-assets "g1" opthelp-label-assets)
+              (vector optname-total-assets "g2" opthelp-total-assets)
+              (vector optname-label-liabilities "g3" opthelp-label-liabilities)
+              (vector optname-total-liabilities "g4" opthelp-total-liabilities)
+              (vector optname-label-equity "g5" opthelp-label-equity)
+              (vector optname-total-equity "g6" opthelp-total-equity)))
+       ((pnl)
+        (list (vector optname-label-revenue "g1" opthelp-label-revenue)
+              (vector optname-total-revenue "g2" opthelp-total-revenue)
+              (vector optname-label-trading "g3" opthelp-label-trading)
+              (vector optname-total-trading "g4" opthelp-total-trading)
+              (vector optname-label-expense "g5" opthelp-label-expense)
+              (vector optname-total-expense "g6" opthelp-total-expense)))))
+
     (when (eq? report-type 'pnl)
       ;; include overall period column?
       (add-option
@@ -368,6 +430,23 @@ available, i.e. closest to today's prices."))))))
        (gnc:make-simple-boolean-option
         pagename-entries optname-closing-regexp
         "c" opthelp-closing-regexp #f)))
+
+    ;; set unused legacy options
+    (for-each
+     (lambda (optionset)
+       (for-each
+        (lambda (optname)
+          (add-option
+           (gnc:make-internal-option (car optionset) optname #f)))
+        (cdr optionset)))
+     (list
+      (list gnc:pagename-general
+            optname-standard-order-balsheet
+            optname-standard-order-pnl
+            optname-two-column
+            optname-report-form)
+      (list gnc:pagename-display optname-use-rules)
+      (list gnc:pagename-accounts optname-bottom-behavior)))
 
     ;; Set the accounts page as default option tab
     (gnc:options-set-default-section options gnc:pagename-accounts)
