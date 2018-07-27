@@ -132,9 +132,9 @@
 
 ;; For each period in the budget:
 ;; Retrieve the budgeted running sum and actual running sum
-;; for bac chart.
+;; for bar chart.
 ;;
-;; Create bar and and values
+;; Create bar and values
 ;;
 (define (gnc:chart-create-budget-actual budget acct running-sum chart-type width height report-start-time report-end-time)
   (let* (
