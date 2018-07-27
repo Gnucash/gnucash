@@ -436,7 +436,7 @@ are used."))))
           table title accountlist maxindent get-cell-monetary-fn cols-data #:key
           (omit-zb-bals? #f)
           (show-zb-accts? #t)
-          (account-full-name? #f)
+          (disable-account-indent? #f)
           (disable-amount-indent? #f)
           (show-orig-cur? #t)
           (show-title? #t)
@@ -470,7 +470,7 @@ are used."))))
   ;; show-title?        - a bool to show/hide individual sections
   ;; show-accounts?     - a bool to show/hide individual sections
   ;; show-total?        - a bool to show/hide individual sections
-  ;; account-full-name? - a boolean to disable narrow-cell indenting, and render account full-name instead
+  ;; disable-account-indent? - a boolean to disable narrow-cell indenting, and render account full-name instead
   ;; disable-amount-indent? - a bool to disable amount indenting (only for single data column reports)
   ;; negate-amounts?    - a boolean to negate amounts. useful for e.g. income-type accounts.
   ;; depth-limit        - (untested) accounts whose levels exceed this depth limit are not shown
@@ -500,11 +500,11 @@ are used."))))
   (define (add-indented-row indent label label-markup amount-indent rest)
     (gnc:html-table-append-row!
      table
-     (append (if account-full-name? '() (make-list-thunk indent make-narrow-cell))
+     (append (if disable-account-indent? '() (make-list-thunk indent make-narrow-cell))
              (list (if label-markup
-                       (gnc:make-html-table-cell/size/markup 1 (if account-full-name? 1 (- maxindent indent)) label-markup label)
-                       (gnc:make-html-table-cell/size 1 (if account-full-name? 1 (- maxindent indent)) label)))
-             (gnc:html-make-empty-cells (if amount-indenting? amount-indent 0))
+                       (gnc:make-html-table-cell/size/markup 1 (if disable-account-indent? 1 (- maxindent indent)) label-markup label)
+                       (gnc:make-html-table-cell/size 1 (if disable-account-indent? 1 (- maxindent indent)) label)))
+             (gnc:html-make-empty-cells (if amount-indenting? (1- amount-indent) 0))
              rest
              (gnc:html-make-empty-cells (if amount-indenting? (- maxindent amount-indent) 0)))))
 
@@ -552,7 +552,7 @@ are used."))))
   (define (render-account account total?)
     ;; input: account-name
     ;; outputs: string or html-markup-anchor object
-    (let* ((acct-name ((if account-full-name?
+    (let* ((acct-name ((if disable-account-indent?
                            gnc-account-get-full-name
                            xaccAccountGetName) account))
            (acct-label (if total?
@@ -569,7 +569,7 @@ are used."))))
 
   (define (add-whole-line contents)
     (gnc:html-table-append-row!
-     table (gnc:make-html-table-cell/size 1 (+ 1 (if account-full-name? 0 maxindent) num-columns) contents)))
+     table (gnc:make-html-table-cell/size 1 (+ 1 (if disable-account-indent? 0 maxindent) num-columns) contents)))
 
   (define (account-and-descendants account)
     (cons account (filter (lambda (acc) (member acc accountlist))
@@ -735,8 +735,8 @@ are used."))))
          (enddate (gnc:date-option-absolute-time
                    (get-option gnc:pagename-general
                                optname-enddate)))
-         (account-full-name? (get-option gnc:pagename-display
-                                         optname-account-full-name))
+         (disable-account-indent? (get-option gnc:pagename-display
+                                              optname-account-full-name))
          (incr (let ((period (get-option gnc:pagename-general optname-period)))
                  (and period
                       (keylist-get-info periodlist period 'delta))))
@@ -914,7 +914,7 @@ are used."))))
                                    maxindent get-cell-monetary-fn report-dates
                                    #:omit-zb-bals? omit-zb-bals?
                                    #:show-zb-accts? show-zb-accts?
-                                   #:account-full-name? account-full-name?
+                                   #:disable-account-indent? disable-account-indent?
                                    #:negate-amounts? negate-amounts?
                                    #:disable-amount-indent? disable-amount-indent?
                                    #:depth-limit (if get-col-header-fn 0 depth-limit)
@@ -1055,7 +1055,7 @@ are used."))))
                                    maxindent get-cell-monetary-fn report-datepairs
                                    #:omit-zb-bals? omit-zb-bals?
                                    #:show-zb-accts? show-zb-accts?
-                                   #:account-full-name? account-full-name?
+                                   #:disable-account-indent? disable-account-indent?
                                    #:negate-amounts? negate-amounts?
                                    #:disable-amount-indent? disable-amount-indent?
                                    #:depth-limit (if get-col-header-fn 0 depth-limit)
