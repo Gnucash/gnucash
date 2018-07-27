@@ -191,39 +191,43 @@ also show overall period profit & loss."))
                 (cons 'text (_ "week"))
                 (cons 'tip (_ "every 7 days"))))))
 
-(define pricesource-list-balsheet
+(define pricesource-list-common
   (list
-   (cons 'pricedb-nearest (list
-                           (cons 'text (_ "nearest"))
-                           (cons 'tip (_ "Nearest to date. Balance sheet prices \
-are converted using the price on the balance sheet date."))))
-
    (cons 'pricedb-latest (list
-                          (cons 'text (_ "latest"))
-                          (cons 'tip (_ "Latest price. This uses the latest prices \
-available, i.e. closest to today's prices."))))))
+                          (cons 'text (_ "Most recent"))
+                          (cons 'tip (_ "The most recent recorded price."))))
+
+   (cons 'weighted-average (list
+                            (cons 'text (_ "Weighted Average"))
+                            (cons 'tip (_ "The weighted average of all currency transactions of the past."))))
+   (cons 'average-cost (list
+                        (cons 'text (_ "Average Cost"))
+                        (cons 'tip (_ "The volume-weighted average cost of purchases."))))))
+
+(define pricesource-list-balsheet
+  (cons
+   (cons 'pricedb-nearest (list
+                           (cons 'text (_ "Nearest in time"))
+                           (cons 'tip (_ "The price recorded nearest in time to the column date."))))
+   pricesource-list-common))
 
 (define pricesource-list-pnl
-  (list
+  (cons*
    (cons 'startperiod (list
-                       (cons 'text (_ "start-period"))
+                       (cons 'text (_ "Nearest to start of period"))
                        (cons 'tip (_ "Prices closest to the start of the reporting period \
 are used."))))
 
    (cons 'midperiod (list
-                     (cons 'text (_ "mid-period"))
+                     (cons 'text (_ "Nearest to mid of period"))
                      (cons 'tip (_ "Prices in the middle of the reporting period \
 are used."))))
 
    (cons 'endperiod (list
-                     (cons 'text (_ "end-period"))
+                     (cons 'text (_ "Nearest to end of period"))
                      (cons 'tip (_ "Prices in the end of the reporting period \
 are used."))))
-
-   (cons 'pricedb-latest (list
-                  (cons 'text (_ "latest"))
-                  (cons 'tip (_ "Latest price. This uses the latest prices \
-available, i.e. closest to today's prices."))))))
+   pricesource-list-common))
 
 (define (keylist->vectorlist keylist)
   (map
@@ -793,14 +797,18 @@ available, i.e. closest to today's prices."))))))
                             (and common-currency
                                  (not (gnc-commodity-equal (gnc:gnc-monetary-commodity monetary) common-currency))
                                  (has-price? (gnc:gnc-monetary-commodity monetary))
-                                 (gnc:exchange-by-pricedb-nearest
-                                  monetary common-currency
-                                  (case price-source
-                                    ((startperiod) (car col-datum))
-                                    ((midperiod) (floor (/ (+ (car col-datum) (cdr col-datum)) 2)))
-                                    ((endperiod) (cdr col-datum))
-                                    ((pricedb-nearest) col-datum)
-                                    ((pricedb-latest) (current-time)))))))
+                                 (let* ((date (case price-source
+                                                ((startperiod) startdate)
+                                                ((midperiod) (floor (/ (+ startdate enddate) 2)))
+                                                ((endperiod) enddate)
+                                                ((pricedb-latest) (current-time))
+                                                (else col-datum)))
+                                        (exchange-fn (gnc:case-exchange-fn
+                                                      (if (memq price-source '(startperiod midperiod endperiod))
+                                                          'pricedb-nearest
+                                                          price-source)
+                                                      common-currency date)))
+                                   (exchange-fn monetary common-currency)))))
          (get-exchange-rates-fn (lambda (accounts date)
                                   (let ((commodities (delete common-currency
                                                              (delete-duplicates (map xaccAccountGetCommodity accounts)
