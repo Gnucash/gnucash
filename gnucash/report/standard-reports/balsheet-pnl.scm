@@ -267,9 +267,16 @@ are used."))))
       "c4" opthelp-dual-columns #t))
 
     (add-option
-     (gnc:make-simple-boolean-option
+     (gnc:make-multichoice-option
       gnc:pagename-general optname-options-summary
-      "d" opthelp-options-summary #f))
+      "d" opthelp-options-summary
+      'never
+      (list (vector 'always
+                    (_ "Always")
+                    (_ "Always display summary."))
+            (vector 'never
+                    (_ "Never")
+                    (_ "Disable report summary.")))))
 
     ;; accounts to work on
     (add-option
@@ -859,7 +866,7 @@ are used."))))
                             (string-append (qof-print-date startdate) " to "))
                         (qof-print-date enddate)))
 
-    (if (get-option gnc:pagename-general optname-options-summary)
+    (if (eq? (get-option gnc:pagename-general optname-options-summary) 'always)
         (gnc:html-document-add-object!
          doc (gnc:html-render-options-changed (gnc:report-options report-obj))))
 
