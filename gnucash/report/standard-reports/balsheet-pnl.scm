@@ -87,33 +87,11 @@ below parent and children groups."))
 (define optname-closing-regexp (N_ "Closing Entries Pattern is regular expression"))
 (define opthelp-closing-regexp (N_ "Causes the Closing Entries Pattern to be treated as a regular expression."))
 
-;; section labels - for P&L report
-(define optname-label-revenue (N_ "Label the revenue section"))
-(define opthelp-label-revenue (N_ "Whether or not to include a label for the revenue section."))
-(define optname-total-revenue (N_ "Include revenue total"))
-(define opthelp-total-revenue (N_ "Whether or not to include a line indicating total revenue."))
-(define optname-label-trading (N_ "Label the trading accounts section"))
-(define opthelp-label-trading (N_ "Whether or not to include a label for the trading accounts section."))
-(define optname-total-trading (N_ "Include trading accounts total"))
-(define opthelp-total-trading (N_ "Whether or not to include a line indicating total trading accounts balance."))
-(define optname-label-expense (N_ "Label the expense section"))
-(define opthelp-label-expense (N_ "Whether or not to include a label for the expense section."))
-(define optname-total-expense (N_ "Include expense total"))
-(define opthelp-total-expense (N_ "Whether or not to include a line indicating total expense."))
-
-;; section labels - balance-sheet
-(define optname-label-assets (N_ "Label the assets section"))
-(define opthelp-label-assets (N_ "Whether or not to include a label for the assets section."))
-(define optname-total-assets (N_ "Include assets total"))
-(define opthelp-total-assets (N_ "Whether or not to include a line indicating total assets."))
-(define optname-label-liabilities (N_ "Label the liabilities section"))
-(define opthelp-label-liabilities (N_ "Whether or not to include a label for the liabilities section."))
-(define optname-total-liabilities (N_ "Include liabilities total"))
-(define opthelp-total-liabilities (N_ "Whether or not to include a line indicating total liabilities."))
-(define optname-label-equity (N_ "Label the equity section"))
-(define opthelp-label-equity (N_ "Whether or not to include a label for the equity section."))
-(define optname-total-equity (N_ "Include equity total"))
-(define opthelp-total-equity (N_ "Whether or not to include a line indicating total equity."))
+;; section labels
+(define optname-label-sections (N_ "Label sections"))
+(define opthelp-label-sections (N_ "Whether or not to include a label for sections."))
+(define optname-total-sections (N_ "Include totals"))
+(define opthelp-total-sections (N_ "Whether or not to include a line indicating total amounts."))
 
 ;; commodities
 (define pagename-commodities (N_ "Commodities"))
@@ -379,26 +357,13 @@ are used."))))
       gnc:pagename-display optname-account-full-name
       "f" opthelp-account-full-name #f))
 
-    (for-each
-     (lambda (opt)
-       (add-option
-        (gnc:make-simple-boolean-option
-         gnc:pagename-display (vector-ref opt 0) (vector-ref opt 1) (vector-ref opt 2) #t)))
-     (case report-type
-       ((balsheet)
-        (list (vector optname-label-assets "g1" opthelp-label-assets)
-              (vector optname-total-assets "g2" opthelp-total-assets)
-              (vector optname-label-liabilities "g3" opthelp-label-liabilities)
-              (vector optname-total-liabilities "g4" opthelp-total-liabilities)
-              (vector optname-label-equity "g5" opthelp-label-equity)
-              (vector optname-total-equity "g6" opthelp-total-equity)))
-       ((pnl)
-        (list (vector optname-label-revenue "g1" opthelp-label-revenue)
-              (vector optname-total-revenue "g2" opthelp-total-revenue)
-              (vector optname-label-trading "g3" opthelp-label-trading)
-              (vector optname-total-trading "g4" opthelp-total-trading)
-              (vector optname-label-expense "g5" opthelp-label-expense)
-              (vector optname-total-expense "g6" opthelp-total-expense)))))
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display optname-label-sections "g" opthelp-label-sections #t))
+
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display optname-total-sections "h" opthelp-total-sections #t))
 
     (when (eq? report-type 'pnl)
       ;; include overall period column?
@@ -438,6 +403,18 @@ are used."))))
             "Single column Balance Sheet"
             "Display as a two column report")
       (list gnc:pagename-display
+            "Label the assets section"
+            "Include assets total"
+            "Label the liabilities section"
+            "Include liabilities total"
+            "Label the equity section"
+            "Include equity total"
+            "Label the revenue section"
+            "Include revenue total"
+            "Label the trading accounts section"
+            "Include trading accounts total"
+            "Label the expense section"
+            "Include expense total"
             "Show accounting-style rules")
       (list gnc:pagename-accounts
             "Flatten list to depth limit")))
@@ -766,6 +743,10 @@ are used."))))
                                     optname-omit-zb-bals))
          (recursive-bals? (get-option gnc:pagename-display
                                       optname-parent-balance-mode))
+         (label-sections? (get-option gnc:pagename-display
+                                      optname-label-sections))
+         (total-sections? (get-option gnc:pagename-display
+                                      optname-total-sections))
          (use-links? (get-option gnc:pagename-display
                                  optname-account-links))
          (include-chart? (get-option gnc:pagename-general optname-include-chart))
@@ -912,9 +893,9 @@ are used."))))
                                         (gnc:html-table-cell-set-style! cell "total-label-cell" 'attribute '("style" "text-align:right"))
                                         cell)))
                   (add-to-table (lambda* (table title accounts get-col-header-fn #:key
-                                                (show-title? #t)
                                                 (show-accounts? #t)
                                                 (show-total? #t)
+                                                (force-total? #f)
                                                 (negate-amounts? #f))
                                   (add-multicolumn-acct-table
                                    table title accounts
@@ -924,11 +905,11 @@ are used."))))
                                    #:account-full-name? account-full-name?
                                    #:negate-amounts? negate-amounts?
                                    #:disable-amount-indent? disable-amount-indent?
-                                   #:show-orig-cur? show-foreign?
-                                   #:show-title? show-title?
-                                   #:show-accounts? show-accounts?
-                                   #:show-total? show-total?
                                    #:depth-limit (if get-col-header-fn 0 depth-limit)
+                                   #:show-orig-cur? show-foreign?
+                                   #:show-title? label-sections?
+                                   #:show-accounts? show-accounts?
+                                   #:show-total? (or (and total-sections? show-total?) force-total?)
                                    #:recursive-bals? recursive-bals?
                                    #:account-anchor-fn account->url
                                    #:convert-curr-fn (and common-currency convert-curr-fn)
@@ -942,14 +923,20 @@ are used."))))
                (if enable-dual-columns?
                    (add-to-table multicol-table-right (_ "Date") '()
                                  get-col-header-fn #:show-accounts? #f #:show-total? #f)))
-             (add-to-table multicol-table-left (_ "Asset") asset-accounts #f)
-             (add-to-table multicol-table-right (_ "Liability") liability-accounts
-                           #f #:negate-amounts? #t)
-             ;; (add-to-table (_ "Equity") equity-accounts #f #f #f #t)
-             ;; (unless (null? trading-accounts)
-             ;;   (add-to-table multicol-table-right (_ "Trading Accounts") trading-accounts #f #t #t #f))
-             (add-to-table multicol-table-right (_ "Net Worth")
-                           (append asset-accounts liability-accounts) #f #:show-accounts? #f)
+
+             (unless (null? asset-accounts)
+               (add-to-table multicol-table-left (_ "Asset") asset-accounts #f))
+
+             (unless (null? liability-accounts)
+               (add-to-table multicol-table-right (_ "Liability") liability-accounts
+                             #f #:negate-amounts? #t))
+
+             (unless (or (null? asset-accounts)
+                         (null? liability-accounts))
+               (add-to-table multicol-table-right (_ "Net Worth")
+                             (append asset-accounts liability-accounts) #f
+                             #:show-accounts? #f #:force-total? #t))
+
              (if (and common-currency show-rates?)
                  (add-to-table multicol-table-right (_ "Exchange Rates")
                                (append asset-accounts liability-accounts trading-accounts)
@@ -1039,9 +1026,9 @@ are used."))))
                                          (gnc:html-table-cell-set-style! cell "total-label-cell" 'attribute '("style" "text-align:right"))
                                          cell)))
                   (add-to-table (lambda* (table title accounts get-col-header-fn #:key
-                                                (show-title? #t)
                                                 (show-accounts? #t)
                                                 (show-total? #t)
+                                                (force-total? #f)
                                                 (negate-amounts? #f))
                                   (add-multicolumn-acct-table
                                    table title accounts
@@ -1053,13 +1040,13 @@ are used."))))
                                    #:disable-amount-indent? disable-amount-indent?
                                    #:depth-limit (if get-col-header-fn 0 depth-limit)
                                    #:show-orig-cur? show-foreign?
-                                   #:show-title? show-title?
+                                   #:show-title? label-sections?
                                    #:show-accounts? show-accounts?
-                                   #:show-total? show-total?
+                                   #:show-total? (or (and total-sections? show-total?) force-total?)
+                                   #:recursive-bals? recursive-bals?
                                    #:account-anchor-fn account->url
                                    #:convert-curr-fn (and common-currency convert-curr-fn)
                                    #:get-col-header-fn get-col-header-fn
-                                   #:recursive-bals? recursive-bals?
                                    #:get-cell-anchor-fn get-cell-anchor-fn
                                    ))))
 
@@ -1069,11 +1056,19 @@ are used."))))
                (if enable-dual-columns?
                    (add-to-table multicol-table-right (_ "Period") '()
                                  get-col-header-fn #:show-accounts? #f #:show-total? #f)))
-             (add-to-table multicol-table-left (_ "Income") income-accounts #f #:negate-amounts? #t)
-             (add-to-table multicol-table-right (_ "Expense") expense-accounts #f)
-             (add-to-table multicol-table-left (_ "Net Income")
-                           (append income-accounts expense-accounts)
-                           #f #:show-accounts? #f #:negate-amounts? #t)
+
+             (unless (null? income-accounts)
+               (add-to-table multicol-table-left (_ "Income") income-accounts #f #:negate-amounts? #t))
+
+             (unless (null? expense-accounts)
+               (add-to-table multicol-table-right (_ "Expense") expense-accounts #f))
+
+             (unless (or (null? income-accounts)
+                         (null? expense-accounts))
+               (add-to-table multicol-table-left (_ "Net Income")
+                             (append income-accounts expense-accounts)
+                             #f #:show-accounts? #f #:negate-amounts? #t #:force-total? #t))
+
              (if (and common-currency show-rates?)
                  (add-to-table multicol-table-left (_ "Exchange Rates")
                                (append income-accounts expense-accounts)
