@@ -984,6 +984,11 @@ are used."))))
                (add-to-table multicol-table-right (_ "Liability") liability-accounts
                              #:negate-amounts? #t))
 
+             (unless (null? equity-accounts)
+               (add-to-table multicol-table-right (_ "Equity")
+                             equity-accounts
+                             #:negate-amounts? #t))
+
              (unless (or (null? asset-accounts)
                          (null? liability-accounts))
                (add-to-table multicol-table-right (_ "Net Worth")
