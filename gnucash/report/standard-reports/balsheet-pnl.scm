@@ -837,23 +837,23 @@ are used."))))
                                         (cell (gnc:make-html-text)))
                                     (for-each
                                      (lambda (commodity)
-                                       (if (has-price? commodity)
-                                           (let* ((domestic (gnc:make-gnc-monetary commodity 1))
-                                                  (foreign (convert-curr-fn
-                                                            domestic
-                                                            (if (eq? report-type 'balsheet)
-                                                                date
-                                                                (cons startdate enddate)))))
+                                       (let ((orig-monetary (gnc:make-gnc-monetary commodity 1)))
+                                         (if (has-price? commodity)
+                                             (let ((conv-monetary (convert-curr-fn
+                                                                   orig-monetary
+                                                                   (case report-type
+                                                                     ((balsheet) date)
+                                                                     ((pnl) (cons startdate enddate))))))
+                                               (gnc:html-text-append!
+                                                cell
+                                                (format #f "~a ~a"
+                                                        (gnc:monetary->string orig-monetary)
+                                                        (gnc:monetary->string conv-monetary))))
                                              (gnc:html-text-append!
                                               cell
-                                              (format #f "~a ~a"
-                                                      (gnc:monetary->string domestic)
-                                                      (gnc:monetary->string foreign))))
-                                           (gnc:html-text-append!
-                                            cell
-                                            (format #f (string-append "~a/~a " (_ "missing"))
-                                                    (gnc-commodity-get-mnemonic common-currency)
-                                                    (gnc-commodity-get-mnemonic commodity))))
+                                              (format #f (string-append "~a ~a" (_ "missing"))
+                                                      (gnc:monetary->string orig-monetary)
+                                                      (gnc-commodity-get-nice-symbol common-currency)))))
                                        (gnc:html-text-append! cell (gnc:html-markup-br)))
                                      commodities)
                                     (gnc:make-html-table-cell/markup "number-cell" cell))))
