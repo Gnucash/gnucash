@@ -700,8 +700,6 @@ are used."))))
                                    (gnc-account-get-parent lvl-acct)))))
           (loop rest))))
 
-  (add-whole-line #f)
-
   (if show-total?
       (add-indented-row 0
                         (string-append (_ "Total For ") title)
@@ -721,7 +719,8 @@ are used."))))
                               total-cell "total-number-cell"
                               'attribute '("style" "border-top-style:solid; border-top-width: 1px; border-bottom-style:double"))
                              total-cell))
-                         cols-data))))
+                         cols-data)))
+  (add-whole-line #f))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; multicol-report-renderer
