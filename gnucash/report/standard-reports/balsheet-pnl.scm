@@ -78,6 +78,9 @@ below parent and children groups."))
 (define optname-account-links (N_ "Display accounts as hyperlinks"))
 (define opthelp-account-links (N_ "Shows each account in the table as a hyperlink to its register window."))
 
+(define optname-amount-links (N_ "Display amounts as hyperlinks"))
+(define opthelp-amount-links (N_ "Shows each amounts in the table as a hyperlink to a register or report."))
+
 ;; closing entries filter - for P&L report
 (define pagename-entries "Entries")
 (define optname-closing-pattern (N_ "Closing Entries pattern"))
@@ -354,6 +357,11 @@ are used."))))
 
     (add-option
      (gnc:make-simple-boolean-option
+      gnc:pagename-display optname-amount-links
+      "e5" opthelp-amount-links #t))
+
+    (add-option
+     (gnc:make-simple-boolean-option
       gnc:pagename-display optname-account-full-name
       "f" opthelp-account-full-name #f))
 
@@ -437,7 +445,7 @@ are used."))))
           (depth-limit #f)
           (negate-amounts? #f)
           (recursive-bals? #f)
-          (account-anchor-fn #f)
+          (account-anchor? #t)
           (get-col-header-fn #f)
           (convert-curr-fn #f)
           (get-cell-anchor-fn #f))
@@ -468,6 +476,8 @@ are used."))))
   ;; depth-limit        - (untested) accounts whose levels exceed this depth limit are not shown
   ;; recursive-bals?    - a boolean to confirm recursive-balances enabled (parent-accounts show balances) or
   ;;                      disabled (multilevel subtotals after each parent+children)
+  ;; account-anchor?    - a boolean to enable/disable account link to account
+  ;; amount-anchor?     - a boolean to enable/disable amount link to report/register
   ;; get-col-header-fn  - a lambda (accounts cols-data) to produce html-object - this is optional
   ;; convert-curr-fn    - a lambda (monetary cols-data) which produces a gnc-monetary or #f - optional
   ;; show-orig-cur?     - a boolean to enable/disable original currency after convert-curr-fn
@@ -531,8 +541,9 @@ are used."))))
                                            (gnc:html-markup "small" monetary))
                                           "")
                                       " "
-                                      (if anchor
-                                          (gnc:html-markup-anchor anchor (or converted monetary))
+                                      (if (and anchor)
+                                          (gnc:html-markup-anchor
+                                           anchor (or converted monetary))
                                           (or converted monetary))
                                       (gnc:html-markup-br)))))
        (or monetaries '()))
@@ -547,7 +558,10 @@ are used."))))
            (acct-label (if total?
                            (string-append (_ "Total For ") acct-name)
                            acct-name))
-           (acct-url (and (not total?) account-anchor-fn (account-anchor-fn account))))
+           (acct-url (and account-anchor?
+                          (not total?)
+                          (not (xaccAccountGetPlaceholder account))
+                          (gnc:account-anchor-text account))))
       (gnc:make-html-text
        (if acct-url
            (gnc:html-markup-anchor acct-url acct-label)
@@ -749,6 +763,8 @@ are used."))))
                                       optname-total-sections))
          (use-links? (get-option gnc:pagename-display
                                  optname-account-links))
+         (use-amount-links? (get-option gnc:pagename-display
+                                        optname-amount-links))
          (include-chart? (get-option gnc:pagename-general optname-include-chart))
          (common-currency (and (get-option pagename-commodities optname-common-currency)
                                (get-option pagename-commodities optname-report-commodity)))
@@ -809,9 +825,6 @@ are used."))))
                                      commodities)
                                     (gnc:make-html-table-cell/markup "number-cell" cell))))
 
-         (account->url (lambda (acct) (and use-links?
-                                           (not (xaccAccountGetPlaceholder acct))
-                                           (gnc:account-anchor-text acct))))
          ;; decompose the account list
          (show-foreign? (get-option pagename-commodities optname-show-foreign))
          (show-rates? (get-option pagename-commodities optname-show-rates))
@@ -909,10 +922,10 @@ are used."))))
                                    #:show-accounts? show-accounts?
                                    #:show-total? (or (and total-sections? show-total?) force-total?)
                                    #:recursive-bals? recursive-bals?
-                                   #:account-anchor-fn account->url
+                                   #:account-anchor? use-links?
                                    #:convert-curr-fn (and common-currency convert-curr-fn)
                                    #:get-col-header-fn get-col-header-fn
-                                   #:get-cell-anchor-fn get-cell-anchor-fn
+                                   #:get-cell-anchor-fn (and use-amount-links? get-cell-anchor-fn)
                                    ))))
 
              (when incr
@@ -926,8 +939,8 @@ are used."))))
                (add-to-table multicol-table-left (_ "Asset") asset-accounts #f))
 
              (unless (null? liability-accounts)
-               (add-to-table multicol-table-right (_ "Liability") liability-accounts
-                             #f #:negate-amounts? #t))
+               (add-to-table multicol-table-right (_ "Liability") liability-accounts #f
+                             #:negate-amounts? #t))
 
              (unless (or (null? asset-accounts)
                          (null? liability-accounts))
@@ -937,7 +950,7 @@ are used."))))
 
              (if (and common-currency show-rates?)
                  (add-to-table multicol-table-right (_ "Exchange Rates")
-                               (append asset-accounts liability-accounts trading-accounts)
+                               (append asset-accounts liability-accounts)
                                get-exchange-rates-fn #:show-accounts? #f #:show-total? #f))
 
              (if include-chart?
@@ -1042,10 +1055,10 @@ are used."))))
                                    #:show-accounts? show-accounts?
                                    #:show-total? (or (and total-sections? show-total?) force-total?)
                                    #:recursive-bals? recursive-bals?
-                                   #:account-anchor-fn account->url
+                                   #:account-anchor? use-links?
                                    #:convert-curr-fn (and common-currency convert-curr-fn)
                                    #:get-col-header-fn get-col-header-fn
-                                   #:get-cell-anchor-fn get-cell-anchor-fn
+                                   #:get-cell-anchor-fn (and use-amount-links? get-cell-anchor-fn)
                                    ))))
 
              (when incr
