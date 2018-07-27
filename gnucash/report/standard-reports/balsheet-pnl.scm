@@ -789,6 +789,18 @@ available, i.e. closest to today's prices."))))))
                                     commodity
                                     common-currency)))))
          (price-source (get-option pagename-commodities optname-price-source))
+         (convert-curr-fn (lambda (monetary col-datum)
+                            (and common-currency
+                                 (not (gnc-commodity-equal (gnc:gnc-monetary-commodity monetary) common-currency))
+                                 (has-price? (gnc:gnc-monetary-commodity monetary))
+                                 (gnc:exchange-by-pricedb-nearest
+                                  monetary common-currency
+                                  (case price-source
+                                    ((startperiod) (car col-datum))
+                                    ((midperiod) (floor (/ (+ (car col-datum) (cdr col-datum)) 2)))
+                                    ((endperiod) (cdr col-datum))
+                                    ((pricedb-nearest) col-datum)
+                                    ((pricedb-latest) (current-time)))))))
          (get-exchange-rates-fn (lambda (accounts date)
                                   (let ((commodities (delete common-currency
                                                              (delete-duplicates (map xaccAccountGetCommodity accounts)
@@ -799,14 +811,11 @@ available, i.e. closest to today's prices."))))))
                                      (lambda (commodity)
                                        (if (has-price? commodity)
                                            (let* ((domestic (gnc:make-gnc-monetary commodity 1))
-                                                  (foreign (gnc:exchange-by-pricedb-nearest
-                                                            domestic common-currency
-                                                            (case price-source
-                                                              ((startperiod) startdate)
-                                                              ((midperiod) (floor (/ (+ startdate enddate) 2)))
-                                                              ((endperiod) enddate)
-                                                              ((pricedb-nearest) (gnc:time64-end-day-time date))
-                                                              ((pricedb-latest) (current-time))))))
+                                                  (foreign (convert-curr-fn
+                                                            domestic
+                                                            (if (eq? report-type 'balsheet)
+                                                                date
+                                                                (cons startdate enddate)))))
                                              (gnc:html-text-append!
                                               cell
                                               (format #f "~a ~a"
@@ -870,15 +879,6 @@ available, i.e. closest to today's prices."))))))
            (let* ((report-dates (if incr
                                     (gnc:make-date-list startdate enddate incr)
                                     (list enddate)))
-                  (convert-curr-fn (lambda (monetary col-datum)
-                                     (and common-currency
-                                          (not (gnc-commodity-equal (gnc:gnc-monetary-commodity monetary) common-currency))
-                                          (has-price? (gnc:gnc-monetary-commodity monetary))
-                                          (gnc:exchange-by-pricedb-nearest
-                                           monetary common-currency
-                                           (case price-source
-                                             ((pricedb-nearest) col-datum)
-                                             ((pricedb-latest) (current-time)))))))
                   (get-cell-monetary-fn (lambda (account col-datum)
                                           (let* ((col-date (gnc:time64-end-day-time col-datum)))
                                             (gnc:make-gnc-monetary
@@ -993,17 +993,6 @@ available, i.e. closest to today's prices."))))))
                                                    todate)))
                                         (let ((account-closing-splits (filter include-split? closing-entries)))
                                           (apply + (map xaccSplitGetAmount account-closing-splits)))))
-                  (convert-curr-fn (lambda (monetary col-datum)
-                                     (and common-currency
-                                          (not (gnc-commodity-equal (gnc:gnc-monetary-commodity monetary) common-currency))
-                                          (has-price? (gnc:gnc-monetary-commodity monetary))
-                                          (gnc:exchange-by-pricedb-nearest
-                                           monetary common-currency
-                                           (case price-source
-                                             ((startperiod) (car col-datum))
-                                             ((midperiod) (floor (/ (+ (car col-datum) (cdr col-datum)) 2)))
-                                             ((endperiod) (cdr col-datum))
-                                             ((pricedb-latest) (current-time)))))))
                   (get-cell-monetary-fn (lambda (account col-datum)
                                           (let* ((startdate (car col-datum))
                                                  (enddate (cdr col-datum)))
