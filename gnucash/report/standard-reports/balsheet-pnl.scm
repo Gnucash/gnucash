@@ -454,6 +454,7 @@ are used."))))
           (account-full-name? #f)
           (disable-amount-indent? #f)
           (show-orig-cur? #t)
+          (show-title? #t)
           (show-accounts? #t)
           (show-total? #t)
           (depth-limit #f)
@@ -910,7 +911,11 @@ are used."))))
                                              (cell (gnc:make-html-table-cell/markup "total-label-cell" header)))
                                         (gnc:html-table-cell-set-style! cell "total-label-cell" 'attribute '("style" "text-align:right"))
                                         cell)))
-                  (add-to-table (lambda (table title accounts get-col-header-fn show-accounts? show-section-total? negate-amounts?)
+                  (add-to-table (lambda* (table title accounts get-col-header-fn #:key
+                                                (show-title? #t)
+                                                (show-accounts? #t)
+                                                (show-total? #t)
+                                                (negate-amounts? #f))
                                   (add-multicolumn-acct-table
                                    table title accounts
                                    maxindent get-cell-monetary-fn report-dates
@@ -920,8 +925,9 @@ are used."))))
                                    #:negate-amounts? negate-amounts?
                                    #:disable-amount-indent? disable-amount-indent?
                                    #:show-orig-cur? show-foreign?
+                                   #:show-title? show-title?
                                    #:show-accounts? show-accounts?
-                                   #:show-section-total? show-section-total?
+                                   #:show-total? show-total?
                                    #:depth-limit (if get-col-header-fn 0 depth-limit)
                                    #:recursive-bals? recursive-bals?
                                    #:account-anchor-fn account->url
@@ -931,17 +937,23 @@ are used."))))
                                    ))))
 
              (when incr
-               (add-to-table multicol-table-left (_ "Date") '() get-col-header-fn #f #f #f)
+               (add-to-table multicol-table-left (_ "Date") '()
+                             get-col-header-fn #:show-accounts? #f #:show-total? #f)
                (if enable-dual-columns?
-                   (add-to-table multicol-table-right (_ "Date") '() get-col-header-fn #f #f #f)))
-             (add-to-table multicol-table-left (_ "Asset") asset-accounts #f #t #t #f)
-             (add-to-table multicol-table-right (_ "Liability") liability-accounts #f #t #t #t)
+                   (add-to-table multicol-table-right (_ "Date") '()
+                                 get-col-header-fn #:show-accounts? #f #:show-total? #f)))
+             (add-to-table multicol-table-left (_ "Asset") asset-accounts #f)
+             (add-to-table multicol-table-right (_ "Liability") liability-accounts
+                           #f #:negate-amounts? #t)
              ;; (add-to-table (_ "Equity") equity-accounts #f #f #f #t)
              ;; (unless (null? trading-accounts)
              ;;   (add-to-table multicol-table-right (_ "Trading Accounts") trading-accounts #f #t #t #f))
-             (add-to-table multicol-table-right (_ "Net Worth") (append asset-accounts liability-accounts) #f #f #t #f)
+             (add-to-table multicol-table-right (_ "Net Worth")
+                           (append asset-accounts liability-accounts) #f #:show-accounts? #f)
              (if (and common-currency show-rates?)
-                 (add-to-table multicol-table-right (_ "Exchange Rates") (append asset-accounts liability-accounts trading-accounts) get-exchange-rates-fn #f #f #f))
+                 (add-to-table multicol-table-right (_ "Exchange Rates")
+                               (append asset-accounts liability-accounts trading-accounts)
+                               get-exchange-rates-fn #:show-accounts? #f #:show-total? #f))
 
              (if include-chart?
                  (gnc:html-document-add-object!
@@ -1026,7 +1038,11 @@ are used."))))
                                               (cell (gnc:make-html-table-cell/markup "total-label-cell" header)))
                                          (gnc:html-table-cell-set-style! cell "total-label-cell" 'attribute '("style" "text-align:right"))
                                          cell)))
-                  (add-to-table (lambda (table title accounts get-col-header-fn show-accounts? show-section-total? negate-amounts?)
+                  (add-to-table (lambda* (table title accounts get-col-header-fn #:key
+                                                (show-title? #t)
+                                                (show-accounts? #t)
+                                                (show-total? #t)
+                                                (negate-amounts? #f))
                                   (add-multicolumn-acct-table
                                    table title accounts
                                    maxindent get-cell-monetary-fn report-datepairs
@@ -1037,8 +1053,9 @@ are used."))))
                                    #:disable-amount-indent? disable-amount-indent?
                                    #:depth-limit (if get-col-header-fn 0 depth-limit)
                                    #:show-orig-cur? show-foreign?
+                                   #:show-title? show-title?
                                    #:show-accounts? show-accounts?
-                                   #:show-section-total? show-section-total?
+                                   #:show-total? show-total?
                                    #:account-anchor-fn account->url
                                    #:convert-curr-fn (and common-currency convert-curr-fn)
                                    #:get-col-header-fn get-col-header-fn
@@ -1047,14 +1064,21 @@ are used."))))
                                    ))))
 
              (when incr
-               (add-to-table multicol-table-left (_ "Period") '() get-col-header-fn #f #f #f)
+               (add-to-table multicol-table-left (_ "Period") '()
+                             get-col-header-fn #:show-accounts? #f #:show-total? #f)
                (if enable-dual-columns?
-                   (add-to-table multicol-table-right (_ "Period") '() get-col-header-fn #f #f #f)))
-             (add-to-table multicol-table-left (_ "Income") income-accounts #f #t #t #t)
-             (add-to-table multicol-table-right (_ "Expense") expense-accounts #f #f #t #f)
-             (add-to-table multicol-table-left (_ "Net Income") (append income-accounts expense-accounts) #f #f #t #t)
+                   (add-to-table multicol-table-right (_ "Period") '()
+                                 get-col-header-fn #:show-accounts? #f #:show-total? #f)))
+             (add-to-table multicol-table-left (_ "Income") income-accounts #f #:negate-amounts? #t)
+             (add-to-table multicol-table-right (_ "Expense") expense-accounts #f)
+             (add-to-table multicol-table-left (_ "Net Income")
+                           (append income-accounts expense-accounts)
+                           #f #:show-accounts? #f #:negate-amounts? #t)
              (if (and common-currency show-rates?)
-                 (add-to-table multicol-table-left (_ "Exchange Rates") (append income-accounts expense-accounts) get-exchange-rates-fn #f #f #f))
+                 (add-to-table multicol-table-left (_ "Exchange Rates")
+                               (append income-accounts expense-accounts)
+                               get-exchange-rates-fn
+                               #:show-accounts? #f #:show-total? #f))
 
              (if include-chart?
                  (gnc:html-document-add-object!
