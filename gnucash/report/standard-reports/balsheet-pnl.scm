@@ -905,7 +905,8 @@ are used."))))
                                              (cell (gnc:make-html-table-cell/markup "total-label-cell" header)))
                                         (gnc:html-table-cell-set-style! cell "total-label-cell" 'attribute '("style" "text-align:right"))
                                         cell)))
-                  (add-to-table (lambda* (table title accounts get-col-header-fn #:key
+                  (add-to-table (lambda* (table title accounts #:key
+                                                (get-col-header-fn #f)
                                                 (show-accounts? #t)
                                                 (show-total? #t)
                                                 (force-total? #f)
@@ -932,28 +933,35 @@ are used."))))
 
              (when incr
                (add-to-table multicol-table-left (_ "Date") '()
-                             get-col-header-fn #:show-accounts? #f #:show-total? #f)
+                             #:get-col-header-fn get-col-header-fn
+                             #:show-accounts? #f
+                             #:show-total? #f)
                (if enable-dual-columns?
                    (add-to-table multicol-table-right (_ "Date") '()
-                                 get-col-header-fn #:show-accounts? #f #:show-total? #f)))
+                                 #:get-col-header-fn get-col-header-fn
+                                 #:show-accounts? #f
+                                 #:show-total? #f)))
 
              (unless (null? asset-accounts)
-               (add-to-table multicol-table-left (_ "Asset") asset-accounts #f))
+               (add-to-table multicol-table-left (_ "Asset") asset-accounts))
 
              (unless (null? liability-accounts)
-               (add-to-table multicol-table-right (_ "Liability") liability-accounts #f
+               (add-to-table multicol-table-right (_ "Liability") liability-accounts
                              #:negate-amounts? #t))
 
              (unless (or (null? asset-accounts)
                          (null? liability-accounts))
                (add-to-table multicol-table-right (_ "Net Worth")
-                             (append asset-accounts liability-accounts) #f
-                             #:show-accounts? #f #:force-total? #t))
+                             (append asset-accounts liability-accounts)
+                             #:show-accounts? #f
+                             #:force-total? #t))
 
              (if (and common-currency show-rates?)
                  (add-to-table multicol-table-right (_ "Exchange Rates")
                                (append asset-accounts liability-accounts)
-                               get-exchange-rates-fn #:show-accounts? #f #:show-total? #f))
+                               #:get-col-header-fn get-exchange-rates-fn
+                               #:show-accounts? #f
+                               #:show-total? #f))
 
              (if include-chart?
                  (gnc:html-document-add-object!
@@ -1038,7 +1046,8 @@ are used."))))
                                               (cell (gnc:make-html-table-cell/markup "total-label-cell" header)))
                                          (gnc:html-table-cell-set-style! cell "total-label-cell" 'attribute '("style" "text-align:right"))
                                          cell)))
-                  (add-to-table (lambda* (table title accounts get-col-header-fn #:key
+                  (add-to-table (lambda* (table title accounts #:key
+                                                (get-col-header-fn #f)
                                                 (show-accounts? #t)
                                                 (show-total? #t)
                                                 (force-total? #f)
@@ -1065,28 +1074,36 @@ are used."))))
 
              (when incr
                (add-to-table multicol-table-left (_ "Period") '()
-                             get-col-header-fn #:show-accounts? #f #:show-total? #f)
+                             #:get-col-header-fn get-col-header-fn
+                             #:show-accounts? #f
+                             #:show-total? #f)
                (if enable-dual-columns?
                    (add-to-table multicol-table-right (_ "Period") '()
-                                 get-col-header-fn #:show-accounts? #f #:show-total? #f)))
+                                 #:get-col-header-fn get-col-header-fn
+                                 #:show-accounts? #f
+                                 #:show-total? #f)))
 
              (unless (null? income-accounts)
-               (add-to-table multicol-table-left (_ "Income") income-accounts #f #:negate-amounts? #t))
+               (add-to-table multicol-table-left (_ "Income") income-accounts
+                             #:negate-amounts? #t))
 
              (unless (null? expense-accounts)
-               (add-to-table multicol-table-right (_ "Expense") expense-accounts #f))
+               (add-to-table multicol-table-right (_ "Expense") expense-accounts))
 
              (unless (or (null? income-accounts)
                          (null? expense-accounts))
                (add-to-table multicol-table-left (_ "Net Income")
                              (append income-accounts expense-accounts)
-                             #f #:show-accounts? #f #:negate-amounts? #t #:force-total? #t))
+                             #:show-accounts? #f
+                             #:negate-amounts? #t
+                             #:force-total? #t))
 
              (if (and common-currency show-rates?)
                  (add-to-table multicol-table-left (_ "Exchange Rates")
                                (append income-accounts expense-accounts)
-                               get-exchange-rates-fn
-                               #:show-accounts? #f #:show-total? #f))
+                               #:get-col-header-fn get-exchange-rates-fn
+                               #:show-accounts? #f
+                               #:show-total? #f))
 
              (if include-chart?
                  (gnc:html-document-add-object!
