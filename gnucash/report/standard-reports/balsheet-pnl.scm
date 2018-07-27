@@ -115,18 +115,6 @@ below parent and children groups."))
 (define optname-total-equity (N_ "Include equity total"))
 (define opthelp-total-equity (N_ "Whether or not to include a line indicating total equity."))
 
-;; legacy account options
-(define optname-bottom-behavior (N_ "Flatten list to depth limit"))
-
-;; legacy display options
-(define optname-use-rules (N_ "Show accounting-style rules"))
-
-;; legacy general options
-(define optname-standard-order-balsheet "Use standard US layout")
-(define optname-standard-order-pnl "Display in standard, income first, order")
-(define optname-report-form "Single column Balance Sheet")
-(define optname-two-column "Display as a two column report")
-
 ;; commodities
 (define pagename-commodities (N_ "Commodities"))
 (define optname-include-chart (N_ "Enable chart"))
@@ -445,12 +433,14 @@ are used."))))
         (cdr optionset)))
      (list
       (list gnc:pagename-general
-            optname-standard-order-balsheet
-            optname-standard-order-pnl
-            optname-two-column
-            optname-report-form)
-      (list gnc:pagename-display optname-use-rules)
-      (list gnc:pagename-accounts optname-bottom-behavior)))
+            "Use standard US layout"
+            "Display in standard, income first, order"
+            "Single column Balance Sheet"
+            "Display as a two column report")
+      (list gnc:pagename-display
+            "Show accounting-style rules")
+      (list gnc:pagename-accounts
+            "Flatten list to depth limit")))
 
     ;; Set the accounts page as default option tab
     (gnc:options-set-default-section options gnc:pagename-accounts)
