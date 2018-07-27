@@ -342,6 +342,17 @@ if (GNC_SRFI64_RESULT EQUAL 0)
   set (HAVE_SRFI64 TRUE)
 endif ()
 
+# Test that guile has textual-ports. This is required for the stress test.
+execute_process (COMMAND ${GUILE_EXECUTABLE} -c "(use-modules (ice-9 textual-ports))"
+  RESULT_VARIABLE GNC_TEXT_PORTS_RESULT
+  ERROR_QUIET
+)
+
+if (GNC_TEXT_PORTS_RESULT EQUAL 0)
+  message (STATUS "Using guile textual-ports")
+  set (HAVE_TEXT_PORTS TRUE)
+endif ()
+
 # ############################################################
 if (WITH_AQBANKING)
   gnc_pkg_check_modules (GWENHYWFAR REQUIRED gwenhywfar)
