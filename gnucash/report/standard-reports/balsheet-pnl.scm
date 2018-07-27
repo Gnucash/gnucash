@@ -474,9 +474,9 @@ are used."))))
   ;; the following are optional:
   ;; omit-zb-bals?      - a boolean to omit "$0.00" amounts
   ;; show-zb-accts?     - a boolean to omit whole account lines where all amounts are $0.00 (eg closed accts)
-  ;; show-title?        - a bool to show/hide individual sections
-  ;; show-accounts?     - a bool to show/hide individual sections
-  ;; show-total?        - a bool to show/hide individual sections
+  ;; show-title?        - a bool to show/hide individual sections: title row
+  ;; show-accounts?     - a bool to show/hide individual sections: accounts list and data columns
+  ;; show-total?        - a bool to show/hide individual sections: accounts total
   ;; disable-account-indent? - a boolean to disable narrow-cell indenting, and render account full-name instead
   ;; disable-amount-indent? - a bool to disable amount indenting (only for single data column reports)
   ;; negate-amounts?    - a boolean to negate amounts. useful for e.g. income-type accounts.
@@ -513,12 +513,13 @@ are used."))))
                        (gnc:make-html-table-cell/size 1 (if disable-account-indent? 1 (- maxindent indent)) label)))
              (gnc:html-make-empty-cells (if amount-indenting? (1- amount-indent) 0))
              rest
-             (gnc:html-make-empty-cells (if amount-indenting? (- maxindent amount-indent) 0)))))
+             (gnc:html-make-empty-cells
+              (if amount-indenting? (- maxindent amount-indent) 0)))))
 
   (define (monetary+ . monetaries)
     ;; usage: (monetary+ monetary...)
     ;; inputs: list of gnc-monetary (e.g. USD 10, USD 25, GBP 5, GBP 8)
-    ;; outputs: list of gnc-monetary (e.g. USD 35, GBP 13)
+    ;; outputs: list of gnc-monetary (e.g. USD 35, GBP 13), or '()
     (let ((coll (gnc:make-commodity-collector)))
       (for-each
        (lambda (monetary)
@@ -540,20 +541,23 @@ are used."))))
     (let ((text (gnc:make-html-text)))
       (for-each
        (lambda (monetary)
-         (let ((converted (and show-orig-cur? convert-curr-fn (convert-curr-fn monetary col-datum))))
-           (if (not (and omit-zb-bals? (gnc:gnc-monetary? monetary) (zero? (gnc:gnc-monetary-amount monetary))))
+         (let ((converted (and show-orig-cur?
+                               convert-curr-fn
+                               (convert-curr-fn monetary col-datum))))
+           (if (not (and omit-zb-bals?
+                         (gnc:gnc-monetary? monetary)
+                         (zero? (gnc:gnc-monetary-amount monetary))))
                (gnc:html-text-append! text
                                       (if converted
                                           (gnc:html-markup-i
-                                           (gnc:html-markup "small" monetary))
+                                           (gnc:html-markup "small" monetary " "))
                                           "")
-                                      " "
-                                      (if (and anchor)
+                                      (if anchor
                                           (gnc:html-markup-anchor
                                            anchor (or converted monetary))
                                           (or converted monetary))
                                       (gnc:html-markup-br)))))
-       (or monetaries '()))
+       monetaries)
       text))
 
   (define (render-account account total?)
@@ -576,7 +580,9 @@ are used."))))
 
   (define (add-whole-line contents)
     (gnc:html-table-append-row!
-     table (gnc:make-html-table-cell/size 1 (+ 1 (if disable-account-indent? 0 maxindent) num-columns) contents)))
+     table (gnc:make-html-table-cell/size
+            1 (+ 1 (if disable-account-indent? 0 maxindent) num-columns)
+            contents)))
 
   (define (account-and-descendants account)
     (cons account (filter (lambda (acc) (member acc accountlist))
@@ -587,7 +593,8 @@ are used."))))
     (apply monetary+
            (map (lambda (acc)
                   (let ((monetary (get-cell-monetary-fn acc datum)))
-                    (or (and convert? convert-curr-fn (convert-curr-fn monetary datum))
+                    (or (and convert? convert-curr-fn
+                             (convert-curr-fn monetary datum))
                         monetary)))
                 accounts)))
 
@@ -611,21 +618,25 @@ are used."))))
                (next (and (pair? rest) (car rest)))
                (lvl-curr (gnc-account-get-current-depth curr))
                (lvl-next (if next (gnc-account-get-current-depth next) 0))
-               (curr-descendants-list (filter (lambda (acc) (member acc accountlist))
-                                              (gnc-account-get-descendants curr)))
-               (recursive-parent-acct? (and recursive-bals? (pair? curr-descendants-list)))
-               (multilevel-parent-acct? (and (not recursive-bals?) (pair? curr-descendants-list))))
+               (curr-descendants-list (filter
+                                       (lambda (acc) (member acc accountlist))
+                                       (gnc-account-get-descendants curr)))
+               (recursive-parent-acct? (and recursive-bals?
+                                            (pair? curr-descendants-list)))
+               (multilevel-parent-acct? (and (not recursive-bals?)
+                                             (pair? curr-descendants-list))))
 
           (if (and (or show-zb-accts?
                        ;; the following function tests whether accounts (with descendants) of
                        ;; all columns are zero
                        (not (every zero? (concatenate
-                                          (map (lambda (col-datum)
-                                                 (map gnc:gnc-monetary-amount
-                                                      (sum-accounts-at-col (account-and-descendants curr)
-                                                                           col-datum
-                                                                           #f)))
-                                               cols-data)))))
+                                          (map
+                                           (lambda (col-datum)
+                                             (map gnc:gnc-monetary-amount
+                                                  (sum-accounts-at-col (account-and-descendants curr)
+                                                                       col-datum
+                                                                       #f)))
+                                           cols-data)))))
                    (or (not depth-limit) (<= lvl-curr depth-limit)))
 
               (begin
@@ -639,11 +650,14 @@ are used."))))
                                   (map
                                    (lambda (col-datum)
                                      (gnc:make-html-table-cell/markup
-                                      (if (or (not recursive-bals?) (null? curr-descendants-list)) "number-cell" "total-number-cell")
+                                      (if (or (not recursive-bals?)
+                                              (null? curr-descendants-list))
+                                          "number-cell" "total-number-cell")
                                       (list-of-monetary->html-text
-                                       (sum-accounts-at-col (if recursive-bals? (account-and-descendants curr) (list curr))
-                                                            col-datum
-                                                            (not show-orig-cur?))
+                                       (sum-accounts-at-col
+                                        (if recursive-bals? (account-and-descendants curr) (list curr))
+                                        col-datum
+                                        (not show-orig-cur?))
                                        col-datum
                                        (and get-cell-anchor-fn
                                             (not recursive-parent-acct?)
@@ -653,8 +667,12 @@ are used."))))
                 ;; the following handles 'special' case where placeholder has descendants. only for recursive-bals? = true
                 (if (and recursive-parent-acct?
                          (or (not depth-limit) (<= (1+ lvl-curr) depth-limit))
-                         (not (every zero? (map (lambda (col-datum) (gnc:gnc-monetary-amount (get-cell-monetary-fn curr col-datum)))
-                                                cols-data))))
+                         (not (every zero?
+                                     (map
+                                      (lambda (col-datum)
+                                        (gnc:gnc-monetary-amount
+                                         (get-cell-monetary-fn curr col-datum)))
+                                      cols-data))))
                     (add-indented-row (1+ lvl-curr)
                                       (render-account curr #f)
                                       "text-cell"
@@ -669,7 +687,8 @@ are used."))))
                                                                 (not show-orig-cur?))
                                            col-datum
                                            (and get-cell-anchor-fn
-                                                (get-cell-anchor-fn curr col-datum)))))
+                                                (get-cell-anchor-fn
+                                                 curr col-datum)))))
                                        cols-data)))))
 
           (if (and (not recursive-bals?)
@@ -803,11 +822,18 @@ are used."))))
                                                           price-source)
                                                       common-currency date)))
                                    (exchange-fn monetary common-currency)))))
+         ;; the following function generates an gnc:html-text object
+         ;; to dump exchange rate for a particular column. From the
+         ;; accountlist given, obtain commodities, and convert 1 unit
+         ;; currency into report-currency. If cannot convert due to
+         ;; missing price, say so.
          (get-exchange-rates-fn (lambda (accounts date)
-                                  (let ((commodities (delete common-currency
-                                                             (delete-duplicates (map xaccAccountGetCommodity accounts)
-                                                                                gnc-commodity-equal)
-                                                             gnc-commodity-equal))
+                                  (let ((commodities (delete
+                                                      common-currency
+                                                      (delete-duplicates
+                                                       (map xaccAccountGetCommodity accounts)
+                                                       gnc-commodity-equal)
+                                                      gnc-commodity-equal))
                                         (cell (gnc:make-html-text)))
                                     (for-each
                                      (lambda (commodity)
@@ -894,7 +920,8 @@ are used."))))
                                                (sorted-splits (stable-sort! valid-splits
                                                                             (lambda (a b)
                                                                               (< (split-date a) (split-date b)))))
-                                               (split (and (pair? sorted-splits) (last sorted-splits))))
+                                               (split (and (pair? sorted-splits)
+                                                           (last sorted-splits))))
                                           (and split
                                                (gnc:split-anchor-text split)))))
                   (chart (and include-chart?
@@ -906,10 +933,13 @@ are used."))))
                                      (list "General" "Price Source" price-source)
                                      (list "Accounts" "Accounts" (append asset-accounts liability-accounts))))))
                   (get-col-header-fn (lambda (accounts col-datum)                                      
-                                      (let* ((header (qof-print-date col-datum))
-                                             (cell (gnc:make-html-table-cell/markup "total-label-cell" header)))
-                                        (gnc:html-table-cell-set-style! cell "total-label-cell" 'attribute '("style" "text-align:right"))
-                                        cell)))
+                                       (let* ((header (qof-print-date col-datum))
+                                              (cell (gnc:make-html-table-cell/markup
+                                                     "total-label-cell" header)))
+                                         (gnc:html-table-cell-set-style!
+                                          cell "total-label-cell"
+                                          'attribute '("style" "text-align:right"))
+                                         cell)))
                   (add-to-table (lambda* (table title accounts #:key
                                                 (get-col-header-fn #f)
                                                 (show-accounts? #t)
