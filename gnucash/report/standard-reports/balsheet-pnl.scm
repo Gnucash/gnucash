@@ -929,9 +929,10 @@ are used."))))
                                    #:get-cell-anchor-fn get-cell-anchor-fn
                                    ))))
 
-             (add-to-table multicol-table-left (_ "Date") '() get-col-header-fn #f #f #f)
-             (if enable-dual-columns?
-                 (add-to-table multicol-table-right (_ "Date") '() get-col-header-fn #f #f #f))
+             (when incr
+               (add-to-table multicol-table-left (_ "Date") '() get-col-header-fn #f #f #f)
+               (if enable-dual-columns?
+                   (add-to-table multicol-table-right (_ "Date") '() get-col-header-fn #f #f #f)))
              (add-to-table multicol-table-left (_ "Asset") asset-accounts #f #t #t #f)
              (add-to-table multicol-table-right (_ "Liability") liability-accounts #f #t #t #t)
              ;; (add-to-table (_ "Equity") equity-accounts #f #f #f #t)
@@ -1044,9 +1045,10 @@ are used."))))
                                    #:get-cell-anchor-fn get-cell-anchor-fn
                                    ))))
 
-             (add-to-table multicol-table-left (_ "Period") '() get-col-header-fn #f #f #f)
-             (if enable-dual-columns?
-                 (add-to-table multicol-table-right (_ "Period") '() get-col-header-fn #f #f #f))
+             (when incr
+               (add-to-table multicol-table-left (_ "Period") '() get-col-header-fn #f #f #f)
+               (if enable-dual-columns?
+                   (add-to-table multicol-table-right (_ "Period") '() get-col-header-fn #f #f #f)))
              (add-to-table multicol-table-left (_ "Income") income-accounts #f #t #t #t)
              (add-to-table multicol-table-right (_ "Expense") expense-accounts #f #f #t #f)
              (add-to-table multicol-table-left (_ "Net Income") (append income-accounts expense-accounts) #f #f #t #t)
