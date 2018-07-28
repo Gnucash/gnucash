@@ -104,35 +104,50 @@ gnc_restore_window_size(const char *group, GtkWindow *window)
     geometry = gnc_prefs_get_value (group, GNC_PREF_LAST_GEOMETRY);
     if (g_variant_is_of_type (geometry, (const GVariantType *) "(iiii)") )
     {
-        gint screen_width;
-        gint screen_height;
-#if GTK_CHECK_VERSION(3,22,0)
-        GdkWindow *win = gdk_screen_get_root_window (gtk_window_get_screen (window));
-        GdkMonitor *mon = gdk_display_get_monitor_at_window (gtk_widget_get_display (GTK_WIDGET(window)), win);
         GdkRectangle monitor_size;
 
-        gdk_monitor_get_geometry (mon, &monitor_size);
-
-        screen_width = monitor_size.width;
-        screen_height = monitor_size.height;
+#if GTK_CHECK_VERSION(3,22,0)
+        GdkDisplay *display = gdk_display_get_default ();
+        GdkMonitor *mon;
 #else
-        screen_width = gdk_screen_width(); //default screen
-        screen_height = gdk_screen_height(); //default screen
+        GdkScreen *screen = gdk_screen_get_default ();
+        gint mon_num;
 #endif
+
         g_variant_get (geometry, "(iiii)",
                        &wpos[0],  &wpos[1],
                        &wsize[0], &wsize[1]);
-        DEBUG("geometry from preferences - wpos[0]: %d, wpos[1]: %d, wsize[0]: %d, wsize[1]: %d",
-              wpos[0],  wpos[1], wsize[0], wsize[1]);
+
+#if GTK_CHECK_VERSION(3,22,0)
+        mon = gdk_display_get_monitor_at_point (display, wpos[0], wpos[1]);
+        gdk_monitor_get_geometry (mon, &monitor_size);
+#else
+        mon_num = gdk_screen_get_monitor_at_point (screen, wpos[0], wpos[1]);
+        gdk_screen_get_monitor_geometry (screen, mon_num, &monitor_size);
+#endif
+
+        DEBUG("monitor left top corner x: %d, y: %d, width: %d, height: %d",
+              monitor_size.x, monitor_size.y, monitor_size.width, monitor_size.height);
+        DEBUG("geometry from preferences - group, %s, wpos[0]: %d, wpos[1]: %d, wsize[0]: %d, wsize[1]: %d",
+              group, wpos[0],  wpos[1], wsize[0], wsize[1]);
 
         /* (-1, -1) means no geometry was saved (default preferences value) */
         if ((wpos[0] != -1) && (wpos[1] != -1))
         {
             /* Keep the window on screen if possible */
-            if (screen_width != 0)
-                wpos[0] = wpos[0] % screen_width;
-            if (screen_height != 0)
-                wpos[1] = wpos[1] % screen_height;
+            if (wpos[0] - monitor_size.x + wsize[0] > monitor_size.x + monitor_size.width)
+                wpos[0] = monitor_size.x + monitor_size.width - wsize[0];
+
+            if (wpos[1] - monitor_size.y + wsize[1] > monitor_size.y + monitor_size.height)
+                wpos[1] = monitor_size.y + monitor_size.height - wsize[1];
+
+            /* make sure the cordinates have not left the monitor */
+            if (wpos[0] < monitor_size.x)
+                wpos[0] = monitor_size.x;
+
+            if (wpos[1] < monitor_size.y)
+                wpos[1] = monitor_size.y;
+
             DEBUG("geometry after screen adaption - wpos[0]: %d, wpos[1]: %d, wsize[0]: %d, wsize[1]: %d",
                   wpos[0],  wpos[1], wsize[0], wsize[1]);
 
@@ -141,7 +156,12 @@ gnc_restore_window_size(const char *group, GtkWindow *window)
 
         /* Don't attempt to restore invalid sizes */
         if ((wsize[0] > 0) && (wsize[1] > 0))
+        {
+            wsize[0] = MIN(wsize[0], monitor_size.width - 10);
+            wsize[1] = MIN(wsize[1], monitor_size.height - 10);
+
             gtk_window_resize(window, wsize[0], wsize[1]);
+        }
     }
     g_variant_unref (geometry);
 
