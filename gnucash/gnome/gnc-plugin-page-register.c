@@ -3547,14 +3547,16 @@ static void
 gnc_plugin_page_register_cmd_lots (GtkAction *action,
                                    GncPluginPageRegister *page)
 {
+    GtkWindow *window;
     Account *account;
 
     ENTER("(action %p, plugin_page %p)", action, page);
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
 
+    window = gnc_window_get_gtk_window(GNC_WINDOW(GNC_PLUGIN_PAGE (page)->window));
     account = gnc_plugin_page_register_get_account (page);
-    gnc_lot_viewer_dialog (account);
+    gnc_lot_viewer_dialog (window, account);
     LEAVE(" ");
 }
 

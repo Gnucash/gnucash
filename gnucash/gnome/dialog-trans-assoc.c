@@ -387,7 +387,7 @@ get_trans_info (AssocDialog *assoc_dialog)
 }
 
 static void
-gnc_assoc_dialog_create (AssocDialog *assoc_dialog)
+gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
 {
     GtkWidget         *window;
     GtkBuilder        *builder;
@@ -475,7 +475,7 @@ gnc_assoc_dialog_create (AssocDialog *assoc_dialog)
 
     g_object_unref (G_OBJECT(builder));
 
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(assoc_dialog->window));
+    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(assoc_dialog->window), parent);
     get_trans_info (assoc_dialog);
     gtk_widget_show_all (GTK_WIDGET(window));
 
@@ -525,7 +525,7 @@ show_handler (const char *klass, gint component_id,
  * Return: nothing                                                  *
 \********************************************************************/
 void
-gnc_trans_assoc_dialog (void)
+gnc_trans_assoc_dialog (GtkWindow *parent)
 {
     AssocDialog *assoc_dialog;
 
@@ -537,12 +537,11 @@ gnc_trans_assoc_dialog (void)
     }
     assoc_dialog = g_new0 (AssocDialog, 1);
 
-    gnc_assoc_dialog_create (assoc_dialog);
+    gnc_assoc_dialog_create (parent, assoc_dialog);
 
     gnc_register_gui_component (DIALOG_ASSOC_CM_CLASS,
                    refresh_handler, close_handler,
                    assoc_dialog);
 
-//    gtk_widget_show (assoc_dialog->window);
     LEAVE(" ");
 }
