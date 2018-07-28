@@ -85,10 +85,12 @@ gnc_set_label_color(GtkWidget *label, gnc_numeric value)
  * Args: group - the preferences group to look in for saved coords  *
  *       window - the window for which the coords are to be         *
  *                restored                                          *
+ *       parent - the parent window that can be used to position    *
+ *                 window when it still has default entries         *
  * Returns: nothing                                                 *
  \*******************************************************************/
 void
-gnc_restore_window_size(const char *group, GtkWindow *window)
+gnc_restore_window_size(const char *group, GtkWindow *window, GtkWindow *parent)
 {
     gint wpos[2], wsize[2];
     GVariant *geometry;
@@ -153,6 +155,28 @@ gnc_restore_window_size(const char *group, GtkWindow *window)
 
             gtk_window_move(window, wpos[0], wpos[1]);
         }
+        else
+        {
+            /* preference is at default value -1,-1,-1,-1 */
+            if (parent != NULL)
+            {
+                gint parent_wpos[2], parent_wsize[2], window_wsize[2];
+                gtk_window_get_position (GTK_WINDOW(parent), &parent_wpos[0], &parent_wpos[1]);
+                gtk_window_get_size (GTK_WINDOW(parent), &parent_wsize[0], &parent_wsize[1]);
+                gtk_window_get_size (GTK_WINDOW(window), &window_wsize[0], &window_wsize[1]);
+
+                DEBUG("parent window - wpos[0]: %d, wpos[1]: %d, wsize[0]: %d, wsize[1]: %d - window size is %dx%d",
+                      parent_wpos[0],  parent_wpos[1], parent_wsize[0], parent_wsize[1],
+                      window_wsize[0], window_wsize[1]);
+
+                /* check for gtk default size, no window size specified, let gtk decide location */
+                if ((window_wsize[0] == 200) && (window_wsize[1] == 200))
+                    DEBUG("window size not specified, let gtk locate it");
+                else
+                    gtk_window_move (window, parent_wpos[0] + (parent_wsize[0] - window_wsize[0])/2,
+                                             parent_wpos[1] + (parent_wsize[1] - window_wsize[1])/2);
+            }
+        }
 
         /* Don't attempt to restore invalid sizes */
         if ((wsize[0] > 0) && (wsize[1] > 0))
@@ -164,7 +188,6 @@ gnc_restore_window_size(const char *group, GtkWindow *window)
         }
     }
     g_variant_unref (geometry);
-
     LEAVE("");
 }
 
