@@ -653,7 +653,7 @@ gnc_main_window_cmd_tools_financial_calculator (GtkAction *action, GncMainWindow
 static void
 gnc_main_window_cmd_tools_close_book (GtkAction *action, GncMainWindowActionData *data)
 {
-    gnc_ui_close_book(gnc_get_current_book());
+    gnc_ui_close_book(gnc_get_current_book(), GTK_WINDOW (data->window));
 }
 
 static void
