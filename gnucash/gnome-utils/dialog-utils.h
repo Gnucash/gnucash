@@ -48,8 +48,7 @@ void gnc_restore_window_size (const char *prefix, GtkWindow *window,
  * by the string prefix.                                            *
  *                                                                  *
  * Args: prefix - determines the options used to save the values    *
- *       width  - width of the window to save                       *
- *       height - height of the window to save                      *
+ *       window - the window being saved                            *
  * Returns: nothing                                                 *
 \********************************************************************/
 void gnc_save_window_size (const char *section, GtkWindow *window);

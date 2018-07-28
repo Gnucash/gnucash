@@ -195,7 +195,7 @@ gnc_restore_window_size(const char *group, GtkWindow *window, GtkWindow *parent)
 /********************************************************************\
  * gnc_save_window_size                                             *
  *   save the window position and size into options whose names are *
- *   prefixed by the group name.                                   *
+ *   prefixed by the group name.                                    *
  *                                                                  *
  * Args: group - preferences group to save the options in           *
  *       window - the window for which current position and size    *
@@ -208,6 +208,8 @@ gnc_save_window_size(const char *group, GtkWindow *window)
     gint wpos[2], wsize[2];
     GVariant *geometry;
 
+    ENTER("");
+
     g_return_if_fail(group != NULL);
     g_return_if_fail(window != NULL);
 
@@ -216,10 +218,15 @@ gnc_save_window_size(const char *group, GtkWindow *window)
 
     gtk_window_get_position(GTK_WINDOW(window), &wpos[0], &wpos[1]);
     gtk_window_get_size(GTK_WINDOW(window), &wsize[0], &wsize[1]);
+
+    DEBUG("save geometry - wpos[0]: %d, wpos[1]: %d, wsize[0]: %d, wsize[1]: %d",
+                  wpos[0],  wpos[1], wsize[0], wsize[1]);
+
     geometry = g_variant_new ("(iiii)", wpos[0],  wpos[1],
                               wsize[0], wsize[1]);
     gnc_prefs_set_value (group, GNC_PREF_LAST_GEOMETRY, geometry);
     /* Don't unref geometry here, it is consumed by gnc_prefs_set_value */
+    LEAVE("");
 }
 
 
