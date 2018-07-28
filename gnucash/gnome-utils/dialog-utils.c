@@ -240,15 +240,20 @@ gnc_save_window_size(const char *group, GtkWindow *window)
 void
 gnc_window_adjust_for_screen(GtkWindow * window)
 {
-#if GTK_CHECK_VERSION(3,22,0)
-    GdkWindow *win;
-    GdkMonitor *mon;
     GdkRectangle monitor_size;
-#endif
-    gint screen_width;
-    gint screen_height;
+    gint wpos[2];
     gint width;
     gint height;
+
+#if GTK_CHECK_VERSION(3,22,0)
+    GdkDisplay *display = gdk_display_get_default ();
+    GdkMonitor *mon;
+#else
+    GdkScreen *screen = gdk_screen_get_default ();
+    gint mon_num;
+#endif
+
+    ENTER("");
 
     if (window == NULL)
         return;
@@ -257,31 +262,50 @@ gnc_window_adjust_for_screen(GtkWindow * window)
     if (gtk_widget_get_window (GTK_WIDGET(window)) == NULL)
         return;
 
+    gtk_window_get_position(GTK_WINDOW(window), &wpos[0], &wpos[1]);
+    gtk_window_get_size(GTK_WINDOW(window), &width, &height);
+
 #if GTK_CHECK_VERSION(3,22,0)
-    win = gdk_screen_get_root_window (gtk_window_get_screen (window));
-    mon = gdk_display_get_monitor_at_window (gtk_widget_get_display (GTK_WIDGET(window)), win);
+    mon = gdk_display_get_monitor_at_point (display, wpos[0], wpos[1]);
     gdk_monitor_get_geometry (mon, &monitor_size);
-
-    screen_width = monitor_size.width;
-    screen_height = monitor_size.height;
 #else
-    screen_width = gdk_screen_width();
-    screen_height = gdk_screen_height();
+    mon_num = gdk_screen_get_monitor_at_point (screen, wpos[0], wpos[1]);
+    gdk_screen_get_monitor_geometry (screen, mon_num, &monitor_size);
 #endif
-    width = gdk_window_get_width (gtk_widget_get_window (GTK_WIDGET(window)));
-    height = gdk_window_get_height (gtk_widget_get_window (GTK_WIDGET(window)));
 
-    if ((width <= screen_width) && (height <= screen_height))
+    DEBUG("monitor width is %d, height is %d; wwindow width is %d, height is %d",
+           monitor_size.width, monitor_size.height, width, height);
+
+    if ((width <= monitor_size.width) && (height <= monitor_size.height))
         return;
 
-    width = MIN(width, screen_width - 10);
-    width = MAX(width, 0);
+    /* Keep the window on screen if possible */
+    if (wpos[0] - monitor_size.x + width > monitor_size.x + monitor_size.width)
+        wpos[0] = monitor_size.x + monitor_size.width - width;
 
-    height = MIN(height, screen_height - 10);
-    height = MAX(height, 0);
+    if (wpos[1] - monitor_size.y + height > monitor_size.y + monitor_size.height)
+        wpos[1] = monitor_size.y + monitor_size.height - height;
 
-    gdk_window_resize(gtk_widget_get_window (GTK_WIDGET(window)), width, height);
+    /* make sure the cordinates have not left the monitor */
+    if (wpos[0] < monitor_size.x)
+        wpos[0] = monitor_size.x;
+
+    if (wpos[1] < monitor_size.y)
+        wpos[1] = monitor_size.y;
+
+    DEBUG("move window to position %d, %d", wpos[0], wpos[1]);
+
+    gtk_window_move(window, wpos[0], wpos[1]);
+
+    /* if window is bigger, set it to monitor sizes */
+    width = MIN(width, monitor_size.width - 10);
+    height = MIN(height, monitor_size.height - 10);
+
+    DEBUG("resize window to width %d, height %d", width, height);
+
+    gtk_window_resize(GTK_WINDOW(window), width, height);
     gtk_widget_queue_resize(GTK_WIDGET(window));
+    LEAVE("");
 }
 
 /********************************************************************\
