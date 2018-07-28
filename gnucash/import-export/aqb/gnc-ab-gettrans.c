@@ -143,6 +143,23 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
         g_debug("gnc_ab_gettrans: gettrans_dates aborted");
         goto cleanup;
     }
+
+    /* validate date range: from_date should be less than or equal to to_date. */
+    if(GWEN_Time_toTime_t(from_date) > GWEN_Time_toTime_t(to_date))
+    {
+        g_debug("gnc_ab_gettrans: invalid date range - from_date is greater than to_date");
+        gnc_error_dialog (GTK_WINDOW (parent), _("Invalid date range: \nStart date cannot be greater than the End date!"));
+        goto cleanup;
+    }
+
+    /* validate to_date: to_date cann't be in the future */
+    if(GWEN_Time_toTime_t(to_date) > gnc_time(NULL))
+    {
+        g_debug("gnc_ab_gettrans: invalid date range - to_date is in the future");
+        gnc_error_dialog (GTK_WINDOW (parent), _("Invalid date range: \nEnd date cannot be in the future!"));
+        goto cleanup;
+    }
+
     /* Use this as a local storage for the until_time below. */
     until = GWEN_Time_toTime_t(to_date);
 
