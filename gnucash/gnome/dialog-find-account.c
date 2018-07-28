@@ -65,6 +65,8 @@ typedef struct
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
+static void close_handler (gpointer user_data);
+
 static void
 gnc_find_account_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data)
 {
@@ -80,6 +82,20 @@ gnc_find_account_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data
     }
     g_free (facc_dialog);
     LEAVE(" ");
+}
+
+static gboolean
+gnc_find_account_dialog_window_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+{
+    FindAccountDialog *facc_dialog = user_data;
+
+    if (event->keyval == GDK_KEY_Escape)
+    {
+        close_handler (facc_dialog);
+        return TRUE;
+    }
+    else
+        return FALSE;
 }
 
 static void
@@ -353,6 +369,9 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
 
     g_signal_connect (facc_dialog->window, "destroy",
                       G_CALLBACK(gnc_find_account_dialog_window_destroy_cb), facc_dialog);
+
+    g_signal_connect (facc_dialog->window, "key_press_event",
+                      G_CALLBACK(gnc_find_account_dialog_window_key_press_cb), facc_dialog);
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, facc_dialog);
 

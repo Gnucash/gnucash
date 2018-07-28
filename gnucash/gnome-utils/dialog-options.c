@@ -165,6 +165,7 @@ void gnc_option_changed_gain_loss_account_widget_cb(GtkTreeSelection *selection,
                                                     gpointer data);
 void gnc_option_changed_gain_loss_account_del_button_widget_cb (GtkButton *button,
                                                     gpointer data);
+static void component_close_handler (gpointer data);
 
 GtkWidget *
 gnc_option_get_gtk_widget (GNCOption *option)
@@ -2028,6 +2029,8 @@ gnc_options_dialog_help_button_cb(GtkWidget * widget, GNCOptionWin *win)
 static void
 gnc_options_dialog_cancel_button_cb(GtkWidget * widget, GNCOptionWin *win)
 {
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(win->window));
+
     if (win->close_cb)
         (win->close_cb)(win, win->close_cb_data);
     else
@@ -2075,6 +2078,20 @@ gnc_options_dialog_destroy_cb (GtkWidget *object, GNCOptionWin *win)
         if (win->close_cb)
             (win->close_cb)(win, win->close_cb_data);
     }
+}
+
+static gboolean
+gnc_options_dialog_window_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+    GNCOptionWin *win = data;
+
+    if (event->keyval == GDK_KEY_Escape)
+    {
+        component_close_handler (win);
+        return TRUE;
+    }
+    else
+        return FALSE;
 }
 
 static void
@@ -2139,6 +2156,7 @@ static void
 component_close_handler (gpointer data)
 {
     GNCOptionWin *win = data;
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(win->window));
     gnc_options_dialog_cancel_button_cb (NULL, win);
 }
 
@@ -2290,6 +2308,9 @@ gnc_options_dialog_new_modal(gboolean modal, gchar *title,
 
     g_signal_connect (retval->window, "destroy",
                       G_CALLBACK(gnc_options_dialog_destroy_cb), retval);
+
+    g_signal_connect (retval->window, "key_press_event",
+                      G_CALLBACK(gnc_options_dialog_window_key_press_cb), retval);
 
     g_object_unref(G_OBJECT(builder));
 
