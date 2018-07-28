@@ -1732,7 +1732,7 @@ gnc_ui_print_check_dialog_create(GtkWidget *parent,
     gtk_widget_destroy(GTK_WIDGET(gtk_builder_get_object (builder, "lower_left")));
 
     gnc_ui_print_restore_dialog(pcd);
-    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(pcd->dialog));
+    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(pcd->dialog), GTK_WINDOW (parent));
 
     g_object_unref(G_OBJECT(builder));
     gtk_widget_show_all(pcd->dialog);

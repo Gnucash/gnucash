@@ -1040,7 +1040,7 @@ gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_insta
     g_signal_connect(G_OBJECT(dialog->dialog), "response", G_CALLBACK(dialog_response_cb), dialog);
     g_signal_connect(G_OBJECT(dialog->dialog), "destroy", G_CALLBACK(dialog_destroy_cb), dialog);
 
-    gnc_restore_window_size(GNC_PREFS_GROUP_STARTUP, GTK_WINDOW(dialog->dialog));
+    gnc_restore_window_size(GNC_PREFS_GROUP_STARTUP, GTK_WINDOW(dialog->dialog), parent);
 
     dialog->component_id = gnc_register_gui_component
                            (DIALOG_SX_SINCE_LAST_RUN_CM_CLASS, NULL, close_handler, dialog);

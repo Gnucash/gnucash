@@ -1345,7 +1345,7 @@ gnc_search_dialog_create (GtkWindow *parent,
 
     gnc_search_dialog_init_widgets (sw, title);
     if (sw->prefs_group)
-        gnc_restore_window_size(sw->prefs_group, GTK_WINDOW(sw->dialog));
+        gnc_restore_window_size(sw->prefs_group, GTK_WINDOW(sw->dialog), parent);
     gtk_window_set_transient_for(GTK_WINDOW(sw->dialog), parent);
     gtk_widget_show(sw->dialog);
 

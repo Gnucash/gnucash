@@ -668,7 +668,8 @@ csv_import_assistant_create (CsvImportInfo *info)
     g_signal_connect (G_OBJECT(window), "destroy",
                       G_CALLBACK(csv_import_assistant_destroy_cb), info);
 
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(info->window));
+    gnc_restore_window_size (GNC_PREFS_GROUP,
+                             GTK_WINDOW(info->window), gnc_ui_get_main_window(NULL));
 
     gtk_builder_connect_signals (builder, info);
     g_object_unref (G_OBJECT(builder));

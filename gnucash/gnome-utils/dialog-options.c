@@ -2268,7 +2268,7 @@ gnc_options_dialog_new_modal(gboolean modal, gchar *title,
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, retval);
 
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(retval->window));
+    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(retval->window), parent);
 
     if (title)
         gtk_window_set_title(GTK_WINDOW(retval->window), title);

@@ -654,7 +654,8 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
     summary_page  = GTK_WIDGET(gtk_builder_get_object (builder, "summary_page"));
     summary_label = GTK_WIDGET(gtk_builder_get_object (builder, "summary_label"));
 
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(csv_imp_asst));
+    gnc_restore_window_size (GNC_PREFS_GROUP,
+                             GTK_WINDOW(csv_imp_asst), gnc_ui_get_main_window(nullptr));
 
     gtk_builder_connect_signals (builder, this);
     g_object_unref (G_OBJECT(builder));

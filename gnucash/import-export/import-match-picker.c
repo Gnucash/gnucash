@@ -492,7 +492,7 @@ init_match_picker_gui(GtkWidget *parent, GNCImportMatchPicker * matcher)
     g_signal_connect((GObject *)matcher->reconciled_chk, "toggled", G_CALLBACK(match_show_reconciled_changed_cb), matcher);
     
     gnc_restore_window_size(GNC_PREFS_GROUP,
-                            GTK_WINDOW (matcher->transaction_matcher));
+                            GTK_WINDOW (matcher->transaction_matcher), GTK_WINDOW(parent));
     gtk_widget_show(matcher->transaction_matcher);
 
     g_object_unref(G_OBJECT(builder));

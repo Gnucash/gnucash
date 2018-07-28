@@ -2046,7 +2046,8 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
     }
 
     gtk_builder_connect_signals(builder, xferData);
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW (xferData->dialog));
+    gnc_restore_window_size (GNC_PREFS_GROUP,
+                             GTK_WINDOW (xferData->dialog), GTK_WINDOW (parent));
     LEAVE(" ");
 }
 
