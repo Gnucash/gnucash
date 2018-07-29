@@ -1137,7 +1137,8 @@ refresh_old_transactions(QIFImportWindow * wind, int selection)
 
         while (!scm_is_null(possible_matches))
         {
-            Timespec ts_send = {0,0};
+            char datebuff[MAX_DATE_LENGTH + 1];
+            memset(datebuff, 0, sizeof(datebuff));
             current_xtn = SCM_CAR(possible_matches);
 #define FUNC_NAME "xaccTransCountSplits"
             gnc_xtn     = SWIG_MustGetPtr(SCM_CAR(current_xtn),
@@ -1159,11 +1160,12 @@ refresh_old_transactions(QIFImportWindow * wind, int selection)
             }
 
             gtk_list_store_append(store, &iter);
-            ts_send.tv_sec = xaccTransRetDatePosted(gnc_xtn);
+            qof_print_date_buff(datebuff, sizeof(datebuff),
+                               xaccTransRetDatePosted(gnc_xtn));
             gtk_list_store_set
             (store, &iter,
              QIF_TRANS_COL_INDEX, rownum++,
-             QIF_TRANS_COL_DATE, gnc_print_date(ts_send),
+             QIF_TRANS_COL_DATE, datebuff,
              QIF_TRANS_COL_DESCRIPTION, xaccTransGetDescription(gnc_xtn),
              QIF_TRANS_COL_AMOUNT, amount_str,
              QIF_TRANS_COL_CHECKED, selected != SCM_BOOL_F,
@@ -3138,8 +3140,8 @@ gnc_ui_qif_import_duplicates_match_prepare (GtkAssistant *assistant,
         while (!scm_is_null(duplicates))
         {
             time64 send_time = 0;
-            char date_buf[MAX_DATE_LENGTH + 1];
-            memset (date_buf, 0, sizeof(date_buf));
+            char datebuff[MAX_DATE_LENGTH + 1];
+            memset (datebuff, 0, sizeof(datebuff));
             current_xtn = SCM_CAAR(duplicates);
 #define FUNC_NAME "xaccTransCountSplits"
             gnc_xtn = SWIG_MustGetPtr(current_xtn,
@@ -3157,12 +3159,12 @@ gnc_ui_qif_import_duplicates_match_prepare (GtkAssistant *assistant,
             }
             gtk_list_store_append(store, &iter);
             send_time = xaccTransRetDatePosted(gnc_xtn);
-            qof_print_date_buff (date_buf, sizeof(date_buf), send_time);
+            qof_print_date_buff (datebuff, sizeof(datebuff), send_time);
             gtk_list_store_set
             (store, &iter,
              QIF_TRANS_COL_INDEX, rownum++,
              QIF_TRANS_COL_DATE,
-             date_buf,
+             datebuff,
              QIF_TRANS_COL_DESCRIPTION, xaccTransGetDescription(gnc_xtn),
              QIF_TRANS_COL_AMOUNT, amount_str,
              -1);
