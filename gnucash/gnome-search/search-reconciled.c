@@ -36,6 +36,7 @@
 
 #define d(x)
 
+static void pass_parent (GNCSearchCoreType *fe, gpointer parent);
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe);
 static gboolean gncs_validate (GNCSearchCoreType *fe);
 static GtkWidget *gncs_get_widget(GNCSearchCoreType *fe);
@@ -49,6 +50,7 @@ typedef struct _GNCSearchReconciledPrivate GNCSearchReconciledPrivate;
 
 struct _GNCSearchReconciledPrivate
 {
+    GtkWindow *parent;
     gpointer dummy;
 };
 
@@ -97,6 +99,7 @@ gnc_search_reconciled_class_init (GNCSearchReconciledClass *klass)
     object_class->finalize = gnc_search_reconciled_finalize;
 
     /* override methods */
+    gnc_search_core_type->pass_parent = pass_parent;
     gnc_search_core_type->validate = gncs_validate;
     gnc_search_core_type->get_widget = gncs_get_widget;
     gnc_search_core_type->get_predicate = gncs_get_predicate;
@@ -150,6 +153,19 @@ gnc_search_reconciled_set_how (GNCSearchReconciled *fi, QofCharMatch how)
     g_return_if_fail (fi);
     g_return_if_fail (IS_GNCSEARCH_RECONCILED (fi));
     fi->how = how;
+}
+
+static void
+pass_parent (GNCSearchCoreType *fe, gpointer parent)
+{
+    GNCSearchReconciled *fi = (GNCSearchReconciled *)fe;
+    GNCSearchReconciledPrivate *priv;
+
+    g_return_if_fail (fi);
+    g_return_if_fail (IS_GNCSEARCH_RECONCILED (fi));
+
+    priv = _PRIVATE(fi);
+    priv->parent = GTK_WINDOW(parent);
 }
 
 static gboolean

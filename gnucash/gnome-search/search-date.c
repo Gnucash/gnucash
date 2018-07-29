@@ -37,6 +37,7 @@
 
 #define d(x)
 
+static void pass_parent (GNCSearchCoreType *fe, gpointer parent);
 static void editable_enters (GNCSearchCoreType *fe);
 static void grab_focus (GNCSearchCoreType *fe);
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe);
@@ -53,6 +54,7 @@ typedef struct _GNCSearchDatePrivate GNCSearchDatePrivate;
 struct _GNCSearchDatePrivate
 {
     GtkWidget *entry;
+    GtkWindow *parent;
 };
 
 #define _PRIVATE(o) \
@@ -100,6 +102,7 @@ gnc_search_date_class_init (GNCSearchDateClass *klass)
     object_class->finalize = gnc_search_date_finalize;
 
     /* override methods */
+    gnc_search_core_type->pass_parent = pass_parent;
     gnc_search_core_type->editable_enters = editable_enters;
     gnc_search_core_type->grab_focus = grab_focus;
     gnc_search_core_type->validate = gncs_validate;
@@ -162,6 +165,19 @@ gnc_search_date_set_how (GNCSearchDate *fi, QofQueryCompare how)
     g_return_if_fail (fi);
     g_return_if_fail (IS_GNCSEARCH_DATE (fi));
     fi->how = how;
+}
+
+static void
+pass_parent (GNCSearchCoreType *fe, gpointer parent)
+{
+    GNCSearchDate *fi = (GNCSearchDate *)fe;
+    GNCSearchDatePrivate *priv;
+
+    g_return_if_fail (fi);
+    g_return_if_fail (IS_GNCSEARCH_DATE (fi));
+
+    priv = _PRIVATE(fi);
+    priv->parent = GTK_WINDOW(parent);
 }
 
 static gboolean

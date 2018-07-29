@@ -716,6 +716,8 @@ attach_element (GtkWidget *element, GNCSearchWindow *sw, int row)
 
     data = g_object_get_data (G_OBJECT (element), "data");
 
+    gnc_search_core_type_pass_parent (data->element, GTK_WINDOW(sw->dialog));
+
     gtk_grid_attach (GTK_GRID (sw->criteria_table), element, 0, row, 1, 1);
     gtk_widget_set_hexpand (element, TRUE);
     gtk_widget_set_halign (element, GTK_ALIGN_FILL);
@@ -773,6 +775,8 @@ combo_box_changed (GtkComboBox *combo_box, struct _crit_data *data)
         gtk_box_pack_start (GTK_BOX (data->container), data->elemwidget,
                             FALSE, FALSE, 0);
     }
+
+    gnc_search_core_type_pass_parent (data->element, GTK_WINDOW(data->dialog));
 
     /* Make sure it's visible */
     gtk_widget_show_all (data->container);
