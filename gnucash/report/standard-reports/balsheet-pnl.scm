@@ -650,14 +650,14 @@ are used."))))
                                   (map
                                    (lambda (col-datum)
                                      (gnc:make-html-table-cell/markup
-                                      (if (or (not recursive-bals?)
-                                              (null? curr-descendants-list))
-                                          "number-cell" "total-number-cell")
+                                      (if recursive-parent-acct?
+                                          "total-number-cell"
+                                          "number-cell")
                                       (list-of-monetary->html-text
                                        (sum-accounts-at-col
                                         (if recursive-bals? (account-and-descendants curr) (list curr))
                                         col-datum
-                                        (not show-orig-cur?))
+                                        (or recursive-parent-acct? (not show-orig-cur?)))
                                        col-datum
                                        (and get-cell-anchor-fn
                                             (not recursive-parent-acct?)
@@ -684,7 +684,7 @@ are used."))))
                                           (list-of-monetary->html-text
                                            (sum-accounts-at-col (list curr)
                                                                 col-datum
-                                                                (not show-orig-cur?))
+                                                                #t)
                                            col-datum
                                            (and get-cell-anchor-fn
                                                 (get-cell-anchor-fn
@@ -710,7 +710,7 @@ are used."))))
                                         (list-of-monetary->html-text
                                          (sum-accounts-at-col (account-and-descendants lvl-acct)
                                                               col-datum
-                                                              (not show-orig-cur?))
+                                                              #t)
                                          col-datum
                                          #f)))
                                      cols-data))
