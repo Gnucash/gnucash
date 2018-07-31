@@ -753,15 +753,18 @@ gboolean gncBillTermIsDirty (const GncBillTerm *term)
  *
  */
 static void
-compute_monthyear (const GncBillTerm *term, Timespec post_date,
+compute_monthyear (const GncBillTerm *term, time64 post_date,
                    int *month, int *year)
 {
     int iday, imonth, iyear;
+    struct tm tm;
     int cutoff = term->cutoff;
 
     g_return_if_fail (term->type == GNC_TERM_TYPE_PROXIMO);
-
-    gnc_timespec2dmy (post_date, &iday, &imonth, &iyear);
+    gnc_localtime_r (&post_date, &tm);
+    iday = tm.tm_mday;
+    imonth = tm.tm_mon + 1;
+    iyear = tm.tm_year + 1;
 
     if (cutoff <= 0)
         cutoff += gnc_date_get_last_mday (imonth - 1, iyear);
@@ -810,7 +813,7 @@ compute_time (const GncBillTerm *term, Timespec post_date, int days)
         res.tv_sec += (SECS_PER_DAY * days);
         break;
     case GNC_TERM_TYPE_PROXIMO:
-        compute_monthyear (term, post_date, &month, &year);
+        compute_monthyear (term, post_date.tv_sec, &month, &year);
         day = gnc_date_get_last_mday (month - 1, year);
         if (days < day)
             day = days;

@@ -1738,54 +1738,7 @@ test_gnc_timespec_to_iso8601_buff (FixtureA *f, gconstpointer pData)
     g_assert_cmpstr (buff, ==, time_str);
     g_free (time_str);
 }
-/* gnc_timespec2dmy
-void
-gnc_timespec2dmy (Timespec t, int *day, int *month, int *year)// C: 1  Local: 0:0:0
-*/
-static void
-test_gnc_timespec2dmy (FixtureA *f, gconstpointer pData)
-{
-    struct tm tm;
-    int day, r_day, mo, r_mo, yr, r_yr;
 
-
-    gnc_timespec2dmy (f->ts0, &r_day, &r_mo, &r_yr);
-    gnc_localtime_r (&f->ts0.tv_sec, &tm);
-    g_assert_cmpint (r_day, ==, tm.tm_mday);
-    g_assert_cmpint (r_mo, ==, tm.tm_mon + 1);
-    g_assert_cmpint (r_yr, ==, tm.tm_year + 1900);
-
-    gnc_timespec2dmy (f->ts1, &r_day, &r_mo, &r_yr);
-    gnc_localtime_r (&f->ts1.tv_sec, &tm);
-    g_assert_cmpint (r_day, ==, tm.tm_mday);
-    g_assert_cmpint (r_mo, ==, tm.tm_mon + 1);
-    g_assert_cmpint (r_yr, ==, tm.tm_year + 1900);
-
-    gnc_timespec2dmy (f->ts2, &r_day, &r_mo, &r_yr);
-    gnc_localtime_r (&f->ts2.tv_sec, &tm);
-    g_assert_cmpint (r_day, ==, tm.tm_mday);
-    g_assert_cmpint (r_mo, ==, tm.tm_mon + 1);
-    g_assert_cmpint (r_yr, ==, tm.tm_year + 1900);
-
-    gnc_timespec2dmy (f->ts3, &r_day, &r_mo, &r_yr);
-    gnc_localtime_r (&f->ts3.tv_sec, &tm);
-    g_assert_cmpint (r_day, ==, tm.tm_mday);
-    g_assert_cmpint (r_mo, ==, tm.tm_mon + 1);
-    g_assert_cmpint (r_yr, ==, tm.tm_year + 1900);
-
-    gnc_timespec2dmy (f->ts4, &r_day, &r_mo, &r_yr);
-    gnc_localtime_r (&f->ts4.tv_sec, &tm);
-    g_assert_cmpint (r_day, ==, tm.tm_mday);
-    g_assert_cmpint (r_mo, ==, tm.tm_mon + 1);
-    g_assert_cmpint (r_yr, ==, tm.tm_year + 1900);
-
-    gnc_timespec2dmy (f->ts5, &r_day, &r_mo, &r_yr);
-    gnc_localtime_r (&f->ts5.tv_sec, &tm);
-    g_assert_cmpint (r_day, ==, tm.tm_mday);
-    g_assert_cmpint (r_mo, ==, tm.tm_mon + 1);
-    g_assert_cmpint (r_yr, ==, tm.tm_year + 1900);
-
-}
 /* gnc_dmy2timespec_internal
 static Timespec
 gnc_dmy2timespec_internal (int day, int month, int year, gboolean start_of_day)// Local: 2:0:0
@@ -2259,7 +2212,6 @@ test_suite_gnc_date (void)
     GNC_TEST_ADD_FUNC (suitename, "gnc_date_timestamp", test_gnc_date_timestamp);
     GNC_TEST_ADD (suitename, "gnc iso8601 to time64 gmt", FixtureA, NULL, setup, test_gnc_iso8601_to_time64_gmt, NULL);
     GNC_TEST_ADD (suitename, "gnc timespec to iso8601 buff", FixtureA, NULL, setup, test_gnc_timespec_to_iso8601_buff, NULL);
-    GNC_TEST_ADD (suitename, "gnc timespec2dmy", FixtureA, NULL, setup, test_gnc_timespec2dmy, NULL);
 // GNC_TEST_ADD_FUNC (suitename, "gnc dmy2timespec internal", test_gnc_dmy2timespec_internal);
 
     GNC_TEST_ADD (suitename, "gnc dmy2timespec", FixtureB, NULL, setup_begin, test_gnc_dmy2timespec, NULL);

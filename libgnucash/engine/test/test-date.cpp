@@ -82,15 +82,19 @@ static gboolean
 check_conversion (const char * str, Timespec expected_ts)
 {
     Timespec ts;
+    struct tm tm;
     int day, month, year;
     GDate d1, d2;
 
     ts = {gnc_iso8601_to_time64_gmt (str), 0};
 
-    // We test the conversion to GDate against the timespec2dmy
+    // We test the conversion to GDate against the gnc_localtime_r
     // conversion, and also the conversion back to timespec and again
     // to GDate so that it is still the original GDate
-    gnc_timespec2dmy(ts, &day, &month, &year);
+    gnc_localtime_r (&ts.tv_sec, &tm);
+    day = tm.tm_mday;
+    month = tm.tm_mon + 1;
+    year = tm.tm_year + 1900;
     d1 = timespec_to_gdate(ts);
     d2 = timespec_to_gdate(gdate_to_timespec(d1));
     if ((g_date_compare(&d1, &d2) != 0)

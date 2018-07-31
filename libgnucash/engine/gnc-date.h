@@ -415,15 +415,6 @@ time64 gnc_iso8601_to_time64_gmt(const gchar *);
  */
 gchar * gnc_timespec_to_iso8601_buff (Timespec ts, gchar * buff);
 gchar * gnc_time64_to_iso8601_buff (time64, char * buff);
-
-/** Set the proleptic Gregorian day, month, and year from a Timespec
- * \param ts: input timespec
- * \param day: output day, 1 - 31
- * \param month: output month, 1 - 12
- * \param year: output year, 0001 - 9999 CE
- */
-void gnc_timespec2dmy (Timespec ts, gint *day, gint *month, gint *year);
-
 // @}
 
 /* ======================================================== */
