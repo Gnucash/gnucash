@@ -81,8 +81,6 @@ struct _RecnWindow
 
     GtkUIManager *ui_merge;
     GtkActionGroup *action_group;
-    GtkWidget *dock;
-    GtkWidget *toolbar;
 
     GtkWidget *starting;         /* The starting balance                 */
     GtkWidget *ending;           /* The ending balance                   */
@@ -1681,43 +1679,12 @@ recnWindow (GtkWidget *parent, Account *account)
 static void
 recnWindow_add_widget (GtkUIManager *merge,
                        GtkWidget *widget,
-                       RecnWindow *recnData)
+                       GtkBox *dock)
 {
-
-    if (GTK_IS_TOOLBAR (widget))
-    {
-      recnData->toolbar = widget;
-
-        gtk_toolbar_set_style (GTK_TOOLBAR(widget),
-            gnc_prefs_get_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TOOLBAR_STYLE));
-
-        // prefs has only small and large icons so add 2 to get right enum
-        gtk_toolbar_set_icon_size (GTK_TOOLBAR(widget),
-           (gnc_prefs_get_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TOOLBAR_ICON_SIZE)) + 2);
-    }
-
-    gtk_box_pack_start (GTK_BOX (recnData->dock), widget, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (dock), widget, FALSE, FALSE, 0);
     gtk_widget_show (widget);
 }
 
-
-static void
-recn_window_update_toolbar (gpointer prefs, gchar *pref, RecnWindow *recnData)
-{
-    GtkToolbar *tb;
-    gint selection;
-
-    tb = GTK_TOOLBAR(recnData->toolbar);
-
-    selection = gnc_prefs_get_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TOOLBAR_STYLE);
-    if (gtk_toolbar_get_style (tb) != selection)
-        gtk_toolbar_set_style (tb, selection);
-
-    selection = gnc_prefs_get_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TOOLBAR_ICON_SIZE);
-    // prefs has only small and large icons so add 2 to get right enum
-    if (gtk_toolbar_get_icon_size (tb) != selection + 2)
-        gtk_toolbar_set_icon_size (tb, selection + 2);
-}
 
 /********************************************************************\
  * recnWindowWithBalance
@@ -1785,9 +1752,8 @@ recnWindowWithBalance (Account *account, gnc_numeric new_ending,
         GError *error = NULL;
 
         recnData->ui_merge = gtk_ui_manager_new ();
-        recnData->dock = dock;
         g_signal_connect (recnData->ui_merge, "add_widget",
-                          G_CALLBACK (recnWindow_add_widget), recnData);
+                          G_CALLBACK (recnWindow_add_widget), dock);
 
         action_group = gtk_action_group_new ("ReconcileWindowActions");
         recnData->action_group = action_group;
@@ -1965,13 +1931,6 @@ recnWindowWithBalance (Account *account, gnc_numeric new_ending,
         recnRefresh (recnData);
     }
 
-    /* track toolbar preference changes */
-    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TOOLBAR_STYLE,
-                           recn_window_update_toolbar, recnData);
-
-    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TOOLBAR_ICON_SIZE,
-                           recn_window_update_toolbar, recnData);
-
     /* Allow resize */
     gtk_window_set_resizable(GTK_WINDOW(recnData->window), TRUE);
     gtk_widget_show_all(recnData->window);
@@ -2054,12 +2013,6 @@ recn_destroy_cb (GtkWidget *w, gpointer data)
 
     if (recnData->delete_refresh)
         gnc_resume_gui_refresh ();
-
-    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TOOLBAR_STYLE,
-                                 recn_window_update_toolbar, recnData);
-
-    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TOOLBAR_ICON_SIZE,
-                                 recn_window_update_toolbar, recnData);
 
     g_free (recnData);
 }
