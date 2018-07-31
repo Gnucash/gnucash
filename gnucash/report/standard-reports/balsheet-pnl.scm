@@ -819,7 +819,10 @@ are used."))))
                                                 ((midperiod) (floor (/ (+ startdate enddate) 2)))
                                                 ((endperiod) enddate)
                                                 ((pricedb-latest) (current-time))
-                                                (else col-datum)))
+                                                (else
+                                                 (case report-type
+                                                   ((balsheet) col-datum)
+                                                   ((pnl) (cdr col-datum))))))
                                         (exchange-fn (gnc:case-exchange-fn
                                                       (if (memq price-source '(startperiod midperiod endperiod))
                                                           'pricedb-nearest
