@@ -112,8 +112,11 @@
       (let ((pnl-options (gnc:make-report-options pnl-uuid)))
         (set-option! pnl-options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 1 1 1980)))
         (set-option! pnl-options "General" "End Date" (cons 'absolute (gnc-dmy2time64 1 1 1981)))
+        (set-option! pnl-options "General" "Enable dual columns" #f)
         (set-option! pnl-options "Accounts" "Levels of Subaccounts" 'all)
         (set-option! pnl-options "Commodities" "Show Exchange Rates" #t)
+        (set-option! pnl-options "Commodities" "Convert to common currency" #t)
+        (set-option! pnl-options "Commodities" "Report's currency" USD)
         pnl-options))
 
     ;; $100 in Savings account
@@ -183,10 +186,10 @@
         (sxml->table-row-col sxml 1 15 6))
       (test-equal "total liabilities = $9,500.00"
         (list "$9,500.00")
-        (sxml->table-row-col sxml 1 23 6))
+        (sxml->table-row-col sxml 1 22 6))
       (test-equal "total equity  = $106,509.00"
         (list "$106,509.00")
-        (sxml->table-row-col sxml 1 28 6))
+        (sxml->table-row-col sxml 1 29 6))
 
       (set-option! balance-sheet-options "Commodities" "Price Source" 'weighted-average)
       (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-weighted-average")))
@@ -218,98 +221,101 @@
       (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-multilevel")))
         (test-equal "multilevel. root = $0.00"
           (list "$0.00")
-          (sxml->table-row-col sxml 1 3 5))
+          (sxml->table-row-col sxml 1 2 5))
         (test-equal "multilevel. assets = $0.00"
           (list "$0.00")
-          (sxml->table-row-col sxml 1 4 4))
+          (sxml->table-row-col sxml 1 3 5))
         (test-equal "multilevel. bank1 = $0.00"
           (list "$0.00")
-          (sxml->table-row-col sxml 1 5 3))
+          (sxml->table-row-col sxml 1 4 5))
         (test-equal "multilevel. bonds = $2,000.00"
           (list "$2,000.00")
-          (sxml->table-row-col sxml 1 6 3))
+          (sxml->table-row-col sxml 1 5 6))
         (test-equal "multilevel. current = $2609.00"
           (list "$2,609.00")
-          (sxml->table-row-col sxml 1 7 3))
+          (sxml->table-row-col sxml 1 6 6))
         (test-equal "multilevel. empty = $0.00"
           (list "$0.00")
-          (sxml->table-row-col sxml 1 8 3))
+          (sxml->table-row-col sxml 1 7 6))
         (test-equal "multilevel. savings = $100.00"
           (list "$100.00")
-          (sxml->table-row-col sxml 1 9 3))
+          (sxml->table-row-col sxml 1 8 6))
         (test-equal "multilevel. total bank1 = $4709"
           (list "$4,709.00")
-          (sxml->table-row-col sxml 1 10 4))
+          (sxml->table-row-col sxml 1 9 6))
         (test-equal "multilevel. broker = $2,000.00"
           (list "$2,000.00")
-          (sxml->table-row-col sxml 1 11 3))
+          (sxml->table-row-col sxml 1 10 5))
         (test-equal "multilevel. funds = $15,000.00"
-          (list "30 FUNDS" "$15,000.00" "$15,000.00")
-          (sxml->table-row-col sxml 1 12 3))
+          (list "$15,000.00" "30 FUNDS ")
+          (sxml->table-row-col sxml 1 11 6))
         (test-equal "multilevel. total broker = $17,000.00"
           (list "$17,000.00")
-          (sxml->table-row-col sxml 1 13 4))
+          (sxml->table-row-col sxml 1 12 6))
         (test-equal "multilevel. foreign = $0.00"
-          (list "$0.00")
-          (sxml->table-row-col sxml 1 14 3))
+          (list "\n$0.00" "#0.00 ")
+          (sxml->table-row-col sxml 1 13 5))
         (test-equal "multilevel. foreignsavings = #200.00 = $340"
-          (list "#200.00" "$340.00" "$340.00")
-          (sxml->table-row-col sxml 1 15 3))
+          (list "$340.00" "#200.00 ")
+          (sxml->table-row-col sxml 1 14 6))
         (test-equal "multilevel. total foreign = $340"
           (list "$340.00")
-          (sxml->table-row-col sxml 1 16 4))
+          (sxml->table-row-col sxml 1 15 6))
         (test-equal "multilevel. house = $100,000"
           (list "$100,000.00")
-          (sxml->table-row-col sxml 1 17 4))
+          (sxml->table-row-col sxml 1 16 6))
         (test-equal "multilevel. total asset = $122,049"
           (list "$122,049.00")
-          (sxml->table-row-col sxml 1 18 5))
+          (sxml->table-row-col sxml 1 17 6))
         (test-equal "multilevel. total root = $122,049"
           (list "$122,049.00")
-          (sxml->table-row-col sxml 1 19 6))
+          (sxml->table-row-col sxml 1 18 6))
         (test-equal "multilevel. total assets = $122,049"
           (list "$122,049.00")
-          (sxml->table-row-col sxml 1 20 6)))
+          (sxml->table-row-col sxml 1 19 6)))
 
       ;; set recursive-subtotal subtotal style
       (set-option! balance-sheet-options "Display" "Parent account amounts include children" #t)
       (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-recursive")))
-        (test-equal "recursive. root = $760+15000+104600"
-          (list "#200.00" "$340.00" "30 FUNDS" "$15,000.00" "$106,709.00" "$106,709.00")
+        (test-equal "recursive. root = 122,049"
+          (list "$122,049.00")
+          (sxml->table-row-col sxml 1 2 6))
+        (test-equal "recursive. assets = 122,049"
+          (list "$122,049.00")
           (sxml->table-row-col sxml 1 3 6))
-        (test-equal "recursive. assets = $760+15000+104600"
-          (list "#200.00" "$340.00" "30 FUNDS" "$15,000.00" "$106,709.00" "$106,709.00")
-          (sxml->table-row-col sxml 1 4 5))
         (test-equal "recursive. bank1 = $4,709.00"
           (list "$4,709.00")
-          (sxml->table-row-col sxml 1 5 4))
+          (sxml->table-row-col sxml 1 4 6))
         (test-equal "recursive. bonds = $2,000.00"
           (list "$2,000.00")
-          (sxml->table-row-col sxml 1 6 3))
+          (sxml->table-row-col sxml 1 5 6))
         (test-equal "recursive. current = $2609.00"
           (list "$2,609.00")
-          (sxml->table-row-col sxml 1 7 3))
+          (sxml->table-row-col sxml 1 6 6))
         (test-equal "recursive. empty = $0.00"
           (list "$0.00")
-          (sxml->table-row-col sxml 1 8 3))
+          (sxml->table-row-col sxml 1 7 6))
         (test-equal "recursive. savings = $100.00"
           (list "$100.00")
-          (sxml->table-row-col sxml 1 9 3))
-        (test-equal "recursive. broker = $15000+2000.00"
-          (list "30 FUNDS" "$15,000.00" "$2,000.00" "$2,000.00")
-          (sxml->table-row-col sxml 1 10 4))
+          (sxml->table-row-col sxml 1 8 6))
+        (test-equal "recursive. broker = $17,000"
+          (list "$17,000.00")
+          (sxml->table-row-col sxml 1 9 6))
+        (test-equal "recursive. broker = $2000"
+          (list "$2,000.00")
+          (sxml->table-row-col sxml 1 10 6))
         (test-equal "recursive. funds = $15,000.00"
-          (list "30 FUNDS" "$15,000.00" "$15,000.00")
-          (sxml->table-row-col sxml 1 11 3))
+          (list "$15,000.00" "30 FUNDS ")
+          (sxml->table-row-col sxml 1 11 6))
         (test-equal "recursive. foreign = $340.00"
-          (list "#200.00" "$340.00")
-          (sxml->table-row-col sxml 1 12 4))
+          (list "$340.00")
+          (sxml->table-row-col sxml 1 12 6))
         (test-equal "recursive. foreignsavings = #200.00 = $340"
-          (list "#200.00" "$340.00" "$340.00")
-          (sxml->table-row-col sxml 1 13 3))
+          (list "$340.00" "#200.00 ")
+          (sxml->table-row-col sxml 1 13 6))
         (test-equal "recursive. house = $100,000"
           (list "$100,000.00")
-          (sxml->table-row-col sxml 1 14 4))
+          (sxml->table-row-col sxml 1 14 6))
         (test-equal "recursive. total assets = $122,049.00"
           (list "$122,049.00")
           (sxml->table-row-col sxml 1 15 6)))
@@ -318,21 +324,21 @@
       (set-option! balance-sheet-options "Commodities" "Show Exchange Rates" #f)
       (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-disable show-fcur show-rates")))
         (test-equal "show-fcur disabled"
-          (list "$122,049.00")
-          (sxml->table-row-col sxml 1 3 6))
+          (list "$15,000.00")
+          (sxml->table-row-col sxml 1 11 6))
         (test-equal "show-rates disabled"
           '()
-          (sxml->table-row-col sxml 2 #f #f)))
+          (sxml->table-row-col sxml 1 34 -1)))
 
       (set-option! balance-sheet-options "Commodities" "Show Foreign Currencies" #t)
       (set-option! balance-sheet-options "Commodities" "Show Exchange Rates" #t)
       (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-enable show-fcur show-rates")))
         (test-equal "show-fcur enabled"
-          (list "#200.00" "$340.00" "30 FUNDS" "$15,000.00" "$106,709.00" "$106,709.00")
-          (sxml->table-row-col sxml 1 3 6))
+          (list "$15,000.00" "30 FUNDS ")
+          (sxml->table-row-col sxml 1 11 6))
         (test-equal "show-rates enabled"
-          (list "1 FUNDS" "$500.00" "#1.00" "$1.70")
-          (sxml->table-row-col sxml 2 #f #f)))
+          (list "1 FUNDS $500.00" "#1.00 $1.70")
+          (sxml->table-row-col sxml 1 31 -1)))
 
       ;;make-multilevel
       (set-option! balance-sheet-options "Display" "Parent account amounts include children" #f)
@@ -342,54 +348,53 @@
       (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-incl-zb-accts=#f omit-zb-bals=#t")))
         (test-equal "omit-zb-bals=#t"
           '()
-          (sxml->table-row-col sxml 1 3 5))
+          (sxml->table-row-col sxml 1 2 5))
         (test-equal "incl-zb-accts=#f"
           '("Savings" "$100.00")        ;i.e.skips "Empty" account with $0.00
-          (sxml->table-row-col sxml 1 8 #f)))
+          (sxml->table-row-col sxml 1 7 #f)))
 
       (set-option! balance-sheet-options "Display" "Omit zero balance figures" #f)
       (set-option! balance-sheet-options "Display" "Include accounts with zero total balances" #t)
       (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-incl-zb-accts=#t omit-zb-bals=#f")))
         (test-equal "omit-zb-bals=#f"
           (list "$0.00")
-          (sxml->table-row-col sxml 1 3 5))
+          (sxml->table-row-col sxml 1 2 5))
         (test-equal "incl-zb-accts=#t"
           '("Empty" "$0.00")
-          (sxml->table-row-col sxml 1 8 #f)))
+          (sxml->table-row-col sxml 1 7 #f)))
       )
 
     (display "\n\n pnl tests\n\n")
     (let* ((pnl-options (default-pnl-testing-options))
            (sxml (options->sxml pnl-uuid pnl-options "pnl-default")))
       (test-equal "total revenue  = $1,270.00"
-        (list "$1,270.00" "$1,270.00")
+        (list "$1,270.00")
         (sxml->table-row-col sxml 1 5 6))
-      (test-equal "total expenses  = $0.00"
-        (list "$0.00" "$0.00")
-        (sxml->table-row-col sxml 1 3 6))
 
       (set-option! pnl-options "Commodities" "Price Source" 'weighted-average)
       (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-weighted-average")))
         (test-equal "weighted average revenue = $1160.36"
-          (list "$1,160.36" "$1,160.36")
+          (list "$1,160.36")
           (sxml->table-row-col sxml 1 5 6)))
 
       (set-option! pnl-options "Commodities" "Price Source" 'average-cost)
       (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-average-cost")))
         (test-equal "average-cost revenue = $976"
-          (list "$976.00" "$976.00")
+          (list "$976.00")
           (sxml->table-row-col sxml 1 5 6)))
 
-      (set-option! pnl-options "Commodities" "Price Source" 'pricedb-nearest)
-      (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-pricedb-nearest")))
-        (test-equal "pricedb-nearest revenue = $1270"
-          (list "$1,270.00" "$1,270.00")
+      ;; new pnl's nearest must match the end-period date.
+      ;; i.e. pricedb-nearest -> endperiod
+      (set-option! pnl-options "Commodities" "Price Source" 'endperiod)
+      (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-endperiod")))
+        (test-equal "pricedb-endperiod revenue = $1270"
+          (list "$1,270.00")
           (sxml->table-row-col sxml 1 5 6)))
 
       (set-option! pnl-options "Commodities" "Price Source" 'pricedb-latest)
       (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-pricedb-latest")))
         (test-equal "pricedb-latest revenue = $1270"
-          (list "$1,270.00" "$1,270.00")
+          (list "$1,270.00")
           (sxml->table-row-col sxml 1 5 6)))
 
       ;; set multilevel subtotal style
@@ -397,56 +402,50 @@
       (set-option! pnl-options "Display" "Parent account amounts include children" #f)
       (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-multilevel")))
         (test-equal "multilevel. income = -$250.00"
-          (list "-$250.00" "-$250.00")
-          (sxml->table-row-col sxml 1 3 5))
+          (list "$250.00")
+          (sxml->table-row-col sxml 1 2 5))
         (test-equal "multilevel. income-GBP = $0.00"
-          (list "-#600.00" "-$1,020.00" "-#600.00" "-$1,020.00")
-          (sxml->table-row-col sxml 1 4 5))
-        (test-equal "multilevel. total income = -$1,270.00"
-          (list "-$1,270.00" "-$1,270.00")
-          (sxml->table-row-col sxml 1 5 6))
-        (test-equal "multilevel. total revenue = $1,270.00"
-          (list "$1,270.00" "$1,270.00")
-          (sxml->table-row-col sxml 1 6 6))
-        (test-equal "multilevel. expenses = $0.00"
-          (list "$0.00" "$0.00")
+          (list "$1,020.00" "#600.00 ")
           (sxml->table-row-col sxml 1 3 6))
-        (test-equal "multilevel. net-income = $1,270"
-          (list "$1,270.00" "$1,270.00")
+        (test-equal "multilevel. total income = $1,270.00"
+          (list "$1,270.00")
           (sxml->table-row-col sxml 1 4 6)))
 
       ;; set recursive-subtotal subtotal style
       (set-option! pnl-options "Display" "Parent account amounts include children" #t)
       (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-recursive")))
         (test-equal "recursive. income = $1020+250"
-          (list "-#600.00" "-$1,020.00" "-$250.00" "-$250.00" "$0.00" "-#600.00" "-$1,020.00" "-$250.00" "-$250.00" "$0.00")
+          (list "$1,270.00")
+          (sxml->table-row-col sxml 1 2 6))
+        (test-equal "recursive. income = $250.00"
+          (list "$250.00")
           (sxml->table-row-col sxml 1 3 6))
         (test-equal "recursive. income-gbp = $1020"
-          (list "-#600.00" "-$1,020.00" "-#600.00" "-$1,020.00")
-          (sxml->table-row-col sxml 1 4 5))
+          (list "$1,020.00" "#600.00 ")
+          (sxml->table-row-col sxml 1 4 6))
         (test-equal "recursive. total revenue = $1270"
-          (list "$1,270.00" "$1,270.00")
+          (list "$1,270.00")
           (sxml->table-row-col sxml 1 5 6)))
 
       (set-option! pnl-options "Commodities" "Show Foreign Currencies" #f)
       (set-option! pnl-options "Commodities" "Show Exchange Rates" #f)
       (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-disable show-fcur show-rates")))
         (test-equal "show-fcur disabled"
-          (list "-$1,270.00" "$0.00" "-$1,270.00" "$0.00")
-          (sxml->table-row-col sxml 1 3 6))
+          (list "$1,020.00")
+          (sxml->table-row-col sxml 1 4 6))
         (test-equal "show-rates disabled"
           '()
-          (sxml->table-row-col sxml 2 #f #f)))
+          (sxml->table-row-col sxml 1 7 6)))
 
       (set-option! pnl-options "Commodities" "Show Foreign Currencies" #t)
       (set-option! pnl-options "Commodities" "Show Exchange Rates" #t)
       (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-enable show-fcur show-rates")))
         (test-equal "show-fcur enabled"
-          (list "-#600.00" "-$1,020.00" "-$250.00" "-$250.00" "$0.00" "-#600.00" "-$1,020.00" "-$250.00" "-$250.00" "$0.00")
-          (sxml->table-row-col sxml 1 3 6))
+          (list "$1,020.00" "#600.00 ")
+          (sxml->table-row-col sxml 1 4 6))
         (test-equal "show-rates enabled"
-          (list "#1.00" "$1.70")
-          (sxml->table-row-col sxml 2 #f #f)))
+          (list "#1.00 $1.70")
+          (sxml->table-row-col sxml 1 7 6)))
 
       ;;make-multilevel
       (set-option! pnl-options "Display" "Parent account amounts include children" #f)
