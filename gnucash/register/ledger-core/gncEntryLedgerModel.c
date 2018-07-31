@@ -186,13 +186,9 @@ static const char * get_date_entry (VirtualLocation virt_loc,
                                     gpointer user_data)
 {
     GncEntryLedger *ledger = user_data;
-    GncEntry *entry;
-    Timespec ts = {0,0};
-
-    entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
-
-    ts.tv_sec = gncEntryGetDate (entry);
-    return gnc_print_date (ts);
+    GncEntry *entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
+    time64 time = gncEntryGetDate (entry);
+    return qof_print_date(time);
 }
 
 static const char * get_desc_entry (VirtualLocation virt_loc,

@@ -487,7 +487,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     {
         GDate *d = qof_book_get_autoreadonly_gdate(gnc_get_current_book());
         // "d" is NULL if use_autoreadonly is FALSE
-        autoreadonly_time = d ? timespecToTime64(gdate_to_timespec(*d)) : 0;
+        autoreadonly_time = d ? gdate_to_time64 (*d) : 0;
         g_date_free(d);
     }
 
