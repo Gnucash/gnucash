@@ -789,9 +789,9 @@ static void test_gnc_pricedb_remove_old_prices (PriceDBFixture *fixture, gconstp
                                         PRICE_REMOVE_SOURCE_USER |
                                         PRICE_REMOVE_SOURCE_APP;
 
-    Timespec t_cut = gnc_dmy2timespec(1, 1, 2008);
-    Timespec t_cut1 = gnc_dmy2timespec(1, 1, 2009);
-    Timespec t_cut2 = gnc_dmy2timespec(1, 1, 2010);
+    time64 t_cut = gnc_dmy2time64(1, 1, 2008);
+    time64 t_cut1 = gnc_dmy2time64(1, 1, 2009);
+    time64 t_cut2 = gnc_dmy2time64(1, 1, 2010);
 
     GDate *fiscal_end_date = g_date_new ();
     g_date_set_dmy (fiscal_end_date, 31, 12, 2017);

@@ -216,7 +216,7 @@ gboolean gncOwnerGetOwnerFromTypeGuid (QofBook *book, GncOwner *owner, QofIdType
 GNCLot *
 gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction **preset_txn,
                           Account *posted_acc, Account *xfer_acc,
-                          gnc_numeric amount, gnc_numeric exch, Timespec date,
+                          gnc_numeric amount, gnc_numeric exch, time64 date,
                           const char *memo, const char *num);
 
 /**
@@ -269,7 +269,7 @@ void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots);
 void
 gncOwnerApplyPayment (const GncOwner *owner, Transaction **preset_txn, GList *lots,
                       Account *posted_acc, Account *xfer_acc,
-                      gnc_numeric amount, gnc_numeric exch, Timespec date,
+                      gnc_numeric amount, gnc_numeric exch, time64 date,
                       const char *memo, const char *num, gboolean auto_pay);
 
 /** Helper function to find a split in lot that best offsets target_value

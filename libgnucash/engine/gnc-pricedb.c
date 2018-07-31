@@ -1327,7 +1327,7 @@ gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p)
 typedef struct
 {
     GNCPriceDB *db;
-    Timespec cutoff;
+    time64 cutoff;
     gboolean delete_fq;
     gboolean delete_user;
     gboolean delete_app;
@@ -1365,7 +1365,7 @@ check_one_price_date (GNCPrice *price, gpointer user_data)
         gnc_timespec_to_iso8601_buff(pt , buf);
         DEBUG("checking date %s", buf);
     }
-    if (timespec_cmp (&pt, &data->cutoff) < 0)
+    if (pt.tv_sec < data->cutoff)
     {
         data->list = g_slist_prepend(data->list, price);
         DEBUG("will delete");
@@ -1625,12 +1625,14 @@ gnc_pricedb_process_removal_list (GNCPriceDB *db, GDate *fiscal_end_date,
 
 gboolean
 gnc_pricedb_remove_old_prices (GNCPriceDB *db, GList *comm_list,
-                              GDate *fiscal_end_date, Timespec cutoff,
+                              GDate *fiscal_end_date, time64 cutoff,
                               PriceRemoveSourceFlags source,
                               PriceRemoveKeepOptions keep)
 {
     remove_info data;
     GList *node;
+    char datebuff[MAX_DATE_LENGTH + 1];
+    memset (datebuff, sizeof(datebuff), 0);
 
     data.db = db;
     data.cutoff = cutoff;
@@ -1663,7 +1665,9 @@ gnc_pricedb_remove_old_prices (GNCPriceDB *db, GList *comm_list,
         LEAVE("Empty price list");
         return FALSE;
     }
-    DEBUG("Number of Prices in list is %d, Cutoff date is %s", g_slist_length (data.list), gnc_print_date (cutoff));
+    qof_print_date_buff (datebuff, sizeof(datebuff), cutoff);
+    DEBUG("Number of Prices in list is %d, Cutoff date is %s",
+          g_slist_length (data.list), datebuff);
 
     // Check for a valid fiscal end of year date
     if (fiscal_end_date == NULL)

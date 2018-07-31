@@ -406,7 +406,7 @@ typedef enum
  * @return True if there were prices to process, False if not.
  */
 gboolean     gnc_pricedb_remove_old_prices(GNCPriceDB *db, GList *comm_list,
-                                           GDate *fiscal_end_date, Timespec cutoff,
+                                           GDate *fiscal_end_date, time64 cutoff,
                                            PriceRemoveSourceFlags source,
                                            PriceRemoveKeepOptions keep);
 

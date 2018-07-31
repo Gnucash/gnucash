@@ -336,11 +336,12 @@ get_trans_info (AssocDialog *assoc_dialog)
             {
                 gchar *uri_u;
                 gboolean rel = FALSE;
-                Timespec ts = {xaccTransRetDatePosted (trans),0};
-
-                if (ts.tv_sec == 0)
-                    ts.tv_sec = gnc_time (NULL);
-
+                time64 t = xaccTransRetDatePosted (trans);
+                char datebuff[MAX_DATE_LENGTH + 1];
+                memset (datebuff, 0, sizeof(datebuff));
+                if (t == 0)
+                    t = gnc_time (NULL);
+                qof_print_date_buff (datebuff, sizeof(datebuff), t);
                 gtk_list_store_append (GTK_LIST_STORE(model), &iter);
 
                 if (g_str_has_prefix (uri,"file:/") && !g_str_has_prefix (uri,"file://")) // path is relative
@@ -349,7 +350,7 @@ get_trans_info (AssocDialog *assoc_dialog)
                 uri_u = convert_uri_to_unescaped (assoc_dialog, uri);
 
                 gtk_list_store_set (GTK_LIST_STORE(model), &iter,
-                                    DATE_TRANS, gnc_print_date (ts),
+                                    DATE_TRANS, datebuff,
                                     DESC_TRANS, xaccTransGetDescription (trans),
                                     URI_U, uri_u, AVAILABLE, _("Unknown"),
                                     URI_SPLIT, split, URI, uri,
