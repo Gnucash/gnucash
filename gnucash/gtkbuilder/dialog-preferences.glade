@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 -->
+<!-- Generated with glade 3.20.2 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkAdjustment" id="auto_decimal_places_adj">
@@ -96,40 +96,6 @@
     <property name="value">30</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
-  </object>
-  <object class="GtkListStore" id="toolbar-icon-sizes">
-    <columns>
-      <!-- column-name sizes-text -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Small Icons</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Large Icons</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkListStore" id="toolbar-styles">
-    <columns>
-      <!-- column-name styles-text -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Icons</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Text</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Icons and Text</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Icons and Important Text</col>
-      </row>
-    </data>
   </object>
   <object class="GtkDialog" id="gnucash_preferences_dialog">
     <property name="can_focus">False</property>
@@ -3273,114 +3239,6 @@ many months before the current month:</property>
                     <property name="left_attach">1</property>
                     <property name="top_attach">6</property>
                   </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBox" id="pref/general/toolbar-icon-size">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Specify the icon size for the toolbars.</property>
-                    <property name="tooltip_text" translatable="yes">Specify the icon size for the toolbars.</property>
-                    <property name="halign">start</property>
-                    <property name="margin_left">12</property>
-                    <property name="model">toolbar-icon-sizes</property>
-                    <property name="active">1</property>
-                    <property name="id_column">0</property>
-                    <child>
-                      <object class="GtkCellRendererText" id="toolbar-icon-renderer"/>
-                      <attributes>
-                        <attribute name="text">0</attribute>
-                      </attributes>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">15</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBox" id="pref/general/toolbar-style">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup">Change the way the toolbar items are displayed.</property>
-                    <property name="tooltip_text" translatable="yes">Change the way the toolbar items are displayed.</property>
-                    <property name="halign">start</property>
-                    <property name="margin_left">12</property>
-                    <property name="model">toolbar-styles</property>
-                    <property name="active">3</property>
-                    <property name="id_column">0</property>
-                    <child>
-                      <object class="GtkCellRendererText" id="toolbar-style-renderer"/>
-                      <attributes>
-                        <attribute name="text">0</attribute>
-                      </attributes>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">18</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label22">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Toolbar Icon Size&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">14</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label23">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Toolbar Style&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">17</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label24">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">13</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label25">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">16</property>
-                  </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
                 <child>
                   <placeholder/>
