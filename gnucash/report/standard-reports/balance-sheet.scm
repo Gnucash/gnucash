@@ -748,7 +748,7 @@
 (gnc:define-report 
  'version 1
  'name reportname
- 'report-guid "c4173ac99b2b448289bf4d11c731af13"
+ 'report-guid "c4173ac99b2b448289bf4d11c731af13-legacy"
  'menu-path (list gnc:menuname-asset-liability)
  'options-generator balance-sheet-options-generator
  'renderer (lambda (report-obj)

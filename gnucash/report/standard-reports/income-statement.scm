@@ -732,7 +732,7 @@
 (gnc:define-report 
  'version 1
  'name is-reportname
- 'report-guid "0b81a3bdfd504aff849ec2e8630524bc"
+ 'report-guid "0b81a3bdfd504aff849ec2e8630524bc-legacy"
  'menu-path (list gnc:menuname-income-expense)
  'options-generator income-statement-options-generator
  'renderer income-statement-renderer)
@@ -742,7 +742,7 @@
 (gnc:define-report 
  'version 1
  'name pnl-reportname
- 'report-guid "8758ba23984c40dea5527f5f0ca2779e"
+ 'report-guid "8758ba23984c40dea5527f5f0ca2779e-legacy"
  'menu-path (list gnc:menuname-income-expense)
  'options-generator profit-and-loss-options-generator
  'renderer profit-and-loss-renderer)

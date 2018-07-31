@@ -1,8 +1,8 @@
 (use-modules (gnucash gnc-module))
 (gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
 (use-modules (gnucash engine test test-extras))
-(use-modules (gnucash report standard-reports balance-sheet))
-(use-modules (gnucash report standard-reports income-statement))
+(use-modules (gnucash report standard-reports balsheet-pnl))
+(use-modules (gnucash report standard-reports transaction))
 (use-modules (gnucash report stylesheets))
 (use-modules (gnucash report report-system))
 (use-modules (gnucash report report-system test test-extras))
@@ -100,9 +100,12 @@
 
     (define (default-balsheet-testing-options)
       (let ((balance-sheet-options (gnc:make-report-options balance-sheet-uuid)))
-        (set-option! balance-sheet-options "General" "Balance Sheet Date" (cons 'absolute (gnc-dmy2time64 1 1 1971)))
+        (set-option! balance-sheet-options "General" "End Date" (cons 'absolute (gnc-dmy2time64 1 1 1971)))
+        (set-option! balance-sheet-options "General" "Enable dual columns" #f)
         (set-option! balance-sheet-options "Accounts" "Levels of Subaccounts" 'all)
         (set-option! balance-sheet-options "Commodities" "Show Exchange Rates" #t)
+        (set-option! balance-sheet-options "Commodities" "Convert to common currency" #t)
+        (set-option! balance-sheet-options "Commodities" "Report's currency" USD)
         balance-sheet-options))
 
     (define (default-pnl-testing-options)
@@ -211,8 +214,7 @@
 
       ;; set multilevel subtotal style
       ;; verifies amount in EVERY line of the report.
-      (set-option! balance-sheet-options "Display" "Parent account balances" 'immediate-bal)
-      (set-option! balance-sheet-options "Display" "Parent account subtotals" 't)
+      (set-option! balance-sheet-options "Display" "Parent account amounts include children" #f)
       (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-multilevel")))
         (test-equal "multilevel. root = $0.00"
           (list "$0.00")
@@ -270,8 +272,7 @@
           (sxml->table-row-col sxml 1 20 6)))
 
       ;; set recursive-subtotal subtotal style
-      (set-option! balance-sheet-options "Display" "Parent account balances" 'recursive-bal)
-      (set-option! balance-sheet-options "Display" "Parent account subtotals" 'f)
+      (set-option! balance-sheet-options "Display" "Parent account amounts include children" #t)
       (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-recursive")))
         (test-equal "recursive. root = $760+15000+104600"
           (list "#200.00" "$340.00" "30 FUNDS" "$15,000.00" "$106,709.00" "$106,709.00")
@@ -334,8 +335,7 @@
           (sxml->table-row-col sxml 2 #f #f)))
 
       ;;make-multilevel
-      (set-option! balance-sheet-options "Display" "Parent account balances" 'immediate-bal)
-      (set-option! balance-sheet-options "Display" "Parent account subtotals" 't)
+      (set-option! balance-sheet-options "Display" "Parent account amounts include children" #f)
 
       (set-option! balance-sheet-options "Display" "Omit zero balance figures" #t)
       (set-option! balance-sheet-options "Display" "Include accounts with zero total balances" #f)
@@ -394,8 +394,7 @@
 
       ;; set multilevel subtotal style
       ;; verifies amount in EVERY line of the report.
-      (set-option! pnl-options "Display" "Parent account balances" 'immediate-bal)
-      (set-option! pnl-options "Display" "Parent account subtotals" 't)
+      (set-option! pnl-options "Display" "Parent account amounts include children" #f)
       (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-multilevel")))
         (test-equal "multilevel. income = -$250.00"
           (list "-$250.00" "-$250.00")
@@ -417,8 +416,7 @@
           (sxml->table-row-col sxml 1 4 6)))
 
       ;; set recursive-subtotal subtotal style
-      (set-option! pnl-options "Display" "Parent account balances" 'recursive-bal)
-      (set-option! pnl-options "Display" "Parent account subtotals" 'f)
+      (set-option! pnl-options "Display" "Parent account amounts include children" #t)
       (let ((sxml (options->sxml pnl-uuid pnl-options "pnl-recursive")))
         (test-equal "recursive. income = $1020+250"
           (list "-#600.00" "-$1,020.00" "-$250.00" "-$250.00" "$0.00" "-#600.00" "-$1,020.00" "-$250.00" "-$250.00" "$0.00")
@@ -451,6 +449,5 @@
           (sxml->table-row-col sxml 2 #f #f)))
 
       ;;make-multilevel
-      (set-option! pnl-options "Display" "Parent account balances" 'immediate-bal)
-      (set-option! pnl-options "Display" "Parent account subtotals" 't)
+      (set-option! pnl-options "Display" "Parent account amounts include children" #f)
       )))

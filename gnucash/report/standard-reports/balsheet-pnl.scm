@@ -1159,7 +1159,7 @@ are used."))))
 (gnc:define-report
  'version 1
  'name balsheet-reportname
- 'report-guid "065d5d5a77ba11e8b31e83ada73c5eea"
+ 'report-guid "c4173ac99b2b448289bf4d11c731af13"
  'menu-path (list gnc:menuname-asset-liability)
  'options-generator (lambda () (multicol-report-options-generator 'balsheet))
  'renderer (lambda (rpt) (multicol-report-renderer rpt 'balsheet)))
@@ -1167,7 +1167,7 @@ are used."))))
 (gnc:define-report
  'version 1
  'name pnl-reportname
- 'report-guid "0e94fd0277ba11e8825d43e27232c9d4"
+ 'report-guid "0b81a3bdfd504aff849ec2e8630524bc"
  'menu-path (list gnc:menuname-income-expense)
  'options-generator (lambda () (multicol-report-options-generator 'pnl))
  'renderer (lambda (rpt) (multicol-report-renderer rpt 'pnl)))
