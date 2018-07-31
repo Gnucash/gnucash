@@ -505,16 +505,17 @@ are used."))))
       narrow))
 
   (define (add-indented-row indent label label-markup amount-indent rest)
-    (gnc:html-table-append-row!
-     table
-     (append (if disable-account-indent? '() (make-list-thunk indent make-narrow-cell))
-             (list (if label-markup
-                       (gnc:make-html-table-cell/size/markup 1 (if disable-account-indent? 1 (- maxindent indent)) label-markup label)
-                       (gnc:make-html-table-cell/size 1 (if disable-account-indent? 1 (- maxindent indent)) label)))
-             (gnc:html-make-empty-cells (if amount-indenting? (1- amount-indent) 0))
-             rest
-             (gnc:html-make-empty-cells
-              (if amount-indenting? (- maxindent amount-indent) 0)))))
+    (when (or (not depth-limit) (<= indent depth-limit))
+      (gnc:html-table-append-row!
+       table
+       (append (if disable-account-indent? '() (make-list-thunk indent make-narrow-cell))
+               (list (if label-markup
+                         (gnc:make-html-table-cell/size/markup 1 (if disable-account-indent? 1 (- maxindent indent)) label-markup label)
+                         (gnc:make-html-table-cell/size 1 (if disable-account-indent? 1 (- maxindent indent)) label)))
+               (gnc:html-make-empty-cells (if amount-indenting? (1- amount-indent) 0))
+               rest
+               (gnc:html-make-empty-cells
+                (if amount-indenting? (- maxindent amount-indent) 0))))))
 
   (define (monetary+ . monetaries)
     ;; usage: (monetary+ monetary...)
@@ -598,6 +599,61 @@ are used."))))
                         monetary)))
                 accounts)))
 
+  (define (is-not-zero? accts)
+    ;; this function tests whether accounts (with descendants) of all
+    ;; columns are zero.
+    (not (every zero? (concatenate
+                       (map
+                        (lambda (col-datum)
+                          (map gnc:gnc-monetary-amount
+                               (sum-accounts-at-col accts col-datum #f)))
+                        cols-data)))))
+
+  (define* (add-recursive-subtotal lvl lvl-acct #:key account-style-normal?)
+    (if (or show-zb-accts?
+            (is-not-zero? (account-and-descendants lvl-acct)))
+        (add-indented-row lvl
+                          (render-account lvl-acct (not account-style-normal?))
+                          (if account-style-normal?
+                              "text-cell"
+                              "total-label-cell")
+                          (- maxindent lvl)
+                          (map
+                           (lambda (col-datum)
+                             (gnc:make-html-table-cell/markup
+                              "total-number-cell"
+                              (list-of-monetary->html-text
+                               (sum-accounts-at-col (account-and-descendants lvl-acct)
+                                                    col-datum
+                                                    #t)
+                               col-datum
+                               #f)))
+                           cols-data))))
+
+  (define* (add-account-row lvl-curr curr #:key
+                            (override-show-zb-accts? #f)
+                            (account-indent 0))
+    (if (or show-zb-accts?
+            override-show-zb-accts?
+            (is-not-zero? (list curr)))
+        (add-indented-row lvl-curr
+                          (render-account curr #f)
+                          "text-cell"
+                          (- maxindent lvl-curr account-indent)
+                          (map
+                           (lambda (col-datum)
+                             (gnc:make-html-table-cell/markup
+                              "number-cell"
+                              (list-of-monetary->html-text
+                               (sum-accounts-at-col
+                                (list curr)
+                                col-datum
+                                (not show-orig-cur?))
+                               col-datum
+                               (and get-cell-anchor-fn
+                                    (get-cell-anchor-fn curr col-datum)))))
+                           cols-data))))
+
   ;; header ASSET/LIABILITY etc
   (if show-title?
       (add-indented-row 0
@@ -626,94 +682,23 @@ are used."))))
                (multilevel-parent-acct? (and (not recursive-bals?)
                                              (pair? curr-descendants-list))))
 
-          (if (and (or show-zb-accts?
-                       ;; the following function tests whether accounts (with descendants) of
-                       ;; all columns are zero
-                       (not (every zero? (concatenate
-                                          (map
-                                           (lambda (col-datum)
-                                             (map gnc:gnc-monetary-amount
-                                                  (sum-accounts-at-col (account-and-descendants curr)
-                                                                       col-datum
-                                                                       #f)))
-                                           cols-data)))))
-                   (or (not depth-limit) (<= lvl-curr depth-limit)))
-
+          (if recursive-parent-acct?
               (begin
-
-                (add-indented-row lvl-curr
-                                  (render-account curr #f)
-                                  "text-cell"
-                                  (- maxindent
-                                     lvl-curr
-                                     (if multilevel-parent-acct? 1 0))
-                                  (map
-                                   (lambda (col-datum)
-                                     (gnc:make-html-table-cell/markup
-                                      (if recursive-parent-acct?
-                                          "total-number-cell"
-                                          "number-cell")
-                                      (list-of-monetary->html-text
-                                       (sum-accounts-at-col
-                                        (if recursive-bals? (account-and-descendants curr) (list curr))
-                                        col-datum
-                                        (or recursive-parent-acct? (not show-orig-cur?)))
-                                       col-datum
-                                       (and get-cell-anchor-fn
-                                            (not recursive-parent-acct?)
-                                            (get-cell-anchor-fn curr col-datum)))))
-                                   cols-data))
-
-                ;; the following handles 'special' case where placeholder has descendants. only for recursive-bals? = true
-                (if (and recursive-parent-acct?
-                         (or (not depth-limit) (<= (1+ lvl-curr) depth-limit))
-                         (not (every zero?
-                                     (map
-                                      (lambda (col-datum)
-                                        (gnc:gnc-monetary-amount
-                                         (get-cell-monetary-fn curr col-datum)))
-                                      cols-data))))
-                    (add-indented-row (1+ lvl-curr)
-                                      (render-account curr #f)
-                                      "text-cell"
-                                      (- maxindent lvl-curr 1)
-                                      (map
-                                       (lambda (col-datum)
-                                         (gnc:make-html-table-cell/markup
-                                          "number-cell"
-                                          (list-of-monetary->html-text
-                                           (sum-accounts-at-col (list curr)
-                                                                col-datum
-                                                                #t)
-                                           col-datum
-                                           (and get-cell-anchor-fn
-                                                (get-cell-anchor-fn
-                                                 curr col-datum)))))
-                                       cols-data)))))
+                (add-recursive-subtotal lvl-curr curr #:account-style-normal? #t)
+                (if (is-not-zero? (list curr))
+                    (add-account-row (1+ lvl-curr) curr #:override-show-zb-accts? #t)))
+              (add-account-row lvl-curr curr
+                               #:account-indent (if multilevel-parent-acct? 1 0)
+                               #:override-show-zb-accts? multilevel-parent-acct?))
 
           (if (and (not recursive-bals?)
-                   (or (not depth-limit) (<= lvl-curr depth-limit))
                    (> lvl-curr lvl-next))
               (let multilevel-loop ((lvl (1- lvl-curr))
                                     (lvl-acct (gnc-account-get-parent curr)))
                 (unless (or (zero? lvl)
                             (not (member lvl-acct accountlist))
                             (< lvl lvl-next))
-                  (add-indented-row lvl
-                                    (render-account lvl-acct #t)
-                                    "total-label-cell"
-                                    (- maxindent lvl)
-                                    (map
-                                     (lambda (col-datum)
-                                       (gnc:make-html-table-cell/markup
-                                        "total-number-cell"
-                                        (list-of-monetary->html-text
-                                         (sum-accounts-at-col (account-and-descendants lvl-acct)
-                                                              col-datum
-                                                              #t)
-                                         col-datum
-                                         #f)))
-                                     cols-data))
+                  (add-recursive-subtotal lvl lvl-acct)
                   (multilevel-loop (1- lvl)
                                    (gnc-account-get-parent lvl-acct)))))
           (loop rest))))
