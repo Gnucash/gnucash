@@ -1,6 +1,6 @@
 /*
  * gnc-main-window.c -- GtkWindow which represents the
- *  GnuCash main window.
+ *	GnuCash main window.
  *
  * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
  * Copyright (C) 2003 David Hampton <hampton@employees.org>
@@ -38,7 +38,6 @@
 #include "gnc-plugin-manager.h"
 #include "gnc-ui.h"
 #include "gnc-window.h"
-#include "gnc-prefs.h"
 #include "dialog-utils.h"
 
 /* Static Globals *******************************************************/
@@ -309,13 +308,6 @@ gnc_embedded_window_add_widget (GtkUIManager *merge,
     if (GTK_IS_TOOLBAR (widget))
     {
         priv->toolbar = widget;
-
-        gtk_toolbar_set_style (GTK_TOOLBAR(priv->toolbar),
-            gnc_prefs_get_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TOOLBAR_STYLE));
-
-        // prefs has only small and large icons so add 2 to get right enum
-        gtk_toolbar_set_icon_size (GTK_TOOLBAR(priv->toolbar),
-           (gnc_prefs_get_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TOOLBAR_ICON_SIZE)) + 2);
     }
 
     gtk_box_pack_start (GTK_BOX (priv->menu_dock), widget, FALSE, FALSE, 0);
