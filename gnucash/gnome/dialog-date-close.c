@@ -87,14 +87,14 @@ gnc_dialog_date_close_ok_cb (GtkWidget *widget, gpointer user_data)
     }
 
     if (ddc->post_date)
-        *(ddc->ts2) = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (ddc->post_date));
+        ddc->ts2->tv_sec = gnc_date_edit_get_date (GNC_DATE_EDIT (ddc->post_date));
 
     if (ddc->date)
     {
         if (ddc->terms)
             ddc->ts->tv_sec = gncBillTermComputeDueDate (ddc->terms, ddc->ts2->tv_sec);
         else
-            *(ddc->ts) = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (ddc->date));
+            ddc->ts->tv_sec = gnc_date_edit_get_date (GNC_DATE_EDIT (ddc->date));
     }
 
     if (ddc->memo_entry && ddc->memo)
@@ -146,7 +146,7 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
     date_box = GTK_WIDGET(gtk_builder_get_object (builder, "date_box"));
     ddc->date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
     gtk_box_pack_start (GTK_BOX(date_box), ddc->date, TRUE, TRUE, 0);
-    gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->date), *ts);
+    gnc_date_edit_set_time (GNC_DATE_EDIT (ddc->date), ts->tv_sec);
 
     if (parent)
         gtk_window_set_transient_for (GTK_WINDOW(ddc->dialog), GTK_WINDOW(parent));
@@ -184,12 +184,12 @@ static void
 post_date_changed_cb (GNCDateEdit *gde, gpointer d)
 {
     DialogDateClose *ddc = d;
-    Timespec post_date;
-    Timespec due_date = {0,0};
+    time64 post_date;
+    time64 due_date = 0;
 
-    post_date = gnc_date_edit_get_date_ts (gde);
-    due_date.tv_sec = gncBillTermComputeDueDate (ddc->terms, post_date.tv_sec);
-    gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->date), due_date);
+    post_date = gnc_date_edit_get_date (gde);
+    due_date = gncBillTermComputeDueDate (ddc->terms, post_date);
+    gnc_date_edit_set_time (GNC_DATE_EDIT (ddc->date), due_date);
 }
 
 gboolean
@@ -278,7 +278,7 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
 
 
     /* Set the post date widget */
-    gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->post_date), *post);
+    gnc_date_edit_set_time (GNC_DATE_EDIT (ddc->post_date), post->tv_sec);
 
     /* Deal with the terms handling of the due date */
     if (terms)
@@ -289,7 +289,7 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
         post_date_changed_cb (GNC_DATE_EDIT (ddc->post_date), ddc);
     }
     else
-        gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->date), *ddue);
+        gnc_date_edit_set_time (GNC_DATE_EDIT (ddc->date), ddue->tv_sec);
 
     /* Setup the account widget */
     fill_in_acct_info (ddc, set_default_acct);
@@ -378,7 +378,7 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
     gtk_label_set_text (label, acct_label_message);
 
     /* Set the date widget */
-    gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->date), *date);
+    gnc_date_edit_set_time (GNC_DATE_EDIT (ddc->date), date->tv_sec);
 
     /* Setup the account widget */
     fill_in_acct_info (ddc, FALSE);
