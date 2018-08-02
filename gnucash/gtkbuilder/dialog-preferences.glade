@@ -825,7 +825,7 @@
                         <property name="can_focus">True</property>
                         <property name="events">GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
                         <property name="has_tooltip">True</property>
-                        <property name="tooltip_markup">The character that will be used between components of an account name. A legal value is any single character except letters and numbers, or any of the following strings: &amp;quot;colon&amp;quot; &amp;quot;slash&amp;quot;, &amp;quot;backslash&amp;quot;, &amp;quot;dash&amp;quot; and &amp;quot;period&amp;quot;.</property>
+                        <property name="tooltip_markup">The character that will be used between components of an account name. A legal value is any single character except letters and numbers, or any of the following strings: &amp;quot;colon&amp;quot;, &amp;quot;slash&amp;quot;, &amp;quot;backslash&amp;quot;, &amp;quot;dash&amp;quot; and &amp;quot;period&amp;quot;.</property>
                         <property name="tooltip_text" translatable="yes">The character that will be used between components of an account name. A legal value is any single character except letters and numbers, or any of the following strings: "colon" "slash", "backslash", "dash" and "period".</property>
                         <property name="invisible_char">●</property>
                         <property name="primary_icon_activatable">False</property>

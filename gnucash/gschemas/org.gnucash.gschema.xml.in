@@ -18,7 +18,7 @@
     <key name="account-separator" type="s">
       <default>'colon'</default>
       <summary>Character to use as separator between account names</summary>
-      <description>This setting determines the character that will be used between components of an account name. Possible values are any single non-alphanumeric unicode character, or any of the following strings: "colon" "slash", "backslash", "dash" and "period".</description>
+      <description>This setting determines the character that will be used between components of an account name. Possible values are any single non-alphanumeric unicode character, or any of the following strings: "colon", "slash", "backslash", "dash" and "period".</description>
     </key>
     <key name="assoc-head" type="s">
       <default>''</default>
