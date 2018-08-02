@@ -246,7 +246,7 @@ gncInvoiceAutoApplyPayments (GncInvoice *invoice);
  * or payments for the owner will be considered
  * to balance the payment.
  *
- * This code is actually a convenience wrapper around gncOwnerCreatePaymentLot
+ * This code is actually a convenience wrapper around gncOwnerCreatePaymentLotSecs
  * and gncOwnerAutoApplyPaymentsWithLots. See their descriptions for more
  * details on what happens exactly.
  */

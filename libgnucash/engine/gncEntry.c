@@ -1324,20 +1324,20 @@ gncEntryRecomputeValues (GncEntry *entry)
     /* See if either tax table changed since we last computed values */
     if (entry->i_tax_table)
     {
-        Timespec modtime = gncTaxTableLastModified (entry->i_tax_table);
-        if (entry->i_taxtable_modtime != modtime.tv_sec)
+        time64 modtime = gncTaxTableLastModifiedSecs (entry->i_tax_table);
+        if (entry->i_taxtable_modtime != modtime)
         {
             entry->values_dirty = TRUE;
-            entry->i_taxtable_modtime = modtime.tv_sec;
+            entry->i_taxtable_modtime = modtime;
         }
     }
     if (entry->b_tax_table)
     {
-        Timespec modtime = gncTaxTableLastModified (entry->b_tax_table);
-        if (entry->b_taxtable_modtime == modtime.tv_sec)
+        time64 modtime = gncTaxTableLastModifiedSecs (entry->b_tax_table);
+        if (entry->b_taxtable_modtime == modtime)
         {
             entry->values_dirty = TRUE;
-            entry->b_taxtable_modtime = modtime.tv_sec;
+            entry->b_taxtable_modtime = modtime;
         }
     }
 

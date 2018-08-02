@@ -973,9 +973,9 @@ gnc_payment_ok_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
         else
             auto_pay = gnc_prefs_get_bool (GNC_PREFS_GROUP_BILL, GNC_PREF_AUTO_PAY);
 
-        gncOwnerApplyPayment (&pw->owner, &(pw->tx_info->txn), selected_lots,
-                              pw->post_acct, pw->xfer_acct, pw->amount_tot,
-                              exch, t, memo, num, auto_pay);
+        gncOwnerApplyPaymentSecs (&pw->owner, &(pw->tx_info->txn), selected_lots,
+                                  pw->post_acct, pw->xfer_acct, pw->amount_tot,
+                                  exch, t, memo, num, auto_pay);
     }
     gnc_resume_gui_refresh ();
 

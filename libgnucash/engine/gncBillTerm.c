@@ -764,7 +764,7 @@ compute_monthyear (const GncBillTerm *term, time64 post_date,
     gnc_localtime_r (&post_date, &tm);
     iday = tm.tm_mday;
     imonth = tm.tm_mon + 1;
-    iyear = tm.tm_year + 1;
+    iyear = tm.tm_year + 1900;
 
     if (cutoff <= 0)
         cutoff += gnc_date_get_last_mday (imonth - 1, iyear);
@@ -801,23 +801,23 @@ compute_monthyear (const GncBillTerm *term, time64 post_date,
  * detailed explanation of proximo.
  */
 
-static Timespec
-compute_time (const GncBillTerm *term, Timespec post_date, int days)
+static time64
+compute_time (const GncBillTerm *term, time64 post_date, int days)
 {
-    Timespec res = post_date;
+    time64 res = post_date;
     int day, month, year;
 
     switch (term->type)
     {
     case GNC_TERM_TYPE_DAYS:
-        res.tv_sec += (SECS_PER_DAY * days);
+        res += (SECS_PER_DAY * days);
         break;
     case GNC_TERM_TYPE_PROXIMO:
-        compute_monthyear (term, post_date.tv_sec, &month, &year);
+        compute_monthyear (term, post_date, &month, &year);
         day = gnc_date_get_last_mday (month - 1, year);
         if (days < day)
             day = days;
-        res = gnc_dmy2timespec (day, month, year);
+        res = gnc_dmy2time64 (day, month, year);
         break;
     }
     return res;
@@ -826,9 +826,8 @@ compute_time (const GncBillTerm *term, Timespec post_date, int days)
 time64
 gncBillTermComputeDueDate (const GncBillTerm *term, time64 post_date)
 {
-    Timespec pass = {post_date, 0};
     if (!term) return post_date;
-    return compute_time (term, pass, term->due_days).tv_sec;
+    return compute_time (term, post_date, term->due_days);
 }
 
 /* Package-Private functions */
