@@ -794,7 +794,7 @@
           (gnc:exchange-if-same foreign domestic)
           (gnc:make-gnc-monetary
            domestic
-           (gnc-pricedb-convert-balance-nearest-price
+           (gnc-pricedb-convert-balance-nearest-price-t64
             (gnc-pricedb-get-db (gnc-get-current-book))
             (gnc:gnc-monetary-amount foreign)
             (gnc:gnc-monetary-commodity foreign)

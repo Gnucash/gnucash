@@ -1551,7 +1551,7 @@ Return the commodity of @var{p}.
 Return the currency of @var{p}.
 @end deftypefun
 
-@deftypefun Timespec gnc_price_get_time (GNCPrice * @var{p})
+@deftypefun time64 gnc_price_get_time64 (GNCPrice * @var{p})
 Return the time of @var{p}.
 @end deftypefun
 
@@ -1596,7 +1596,7 @@ Set the commodity of @var{p} to @var{c}.
 Set the currency of @var{p} to @var{c}.
 @end deftypefun
 
-@deftypefun void gnc_price_set_time (GNCPrice * @var{p}, Timespec @var{t})
+@deftypefun void gnc_price_set_time64 (GNCPrice * @var{p}, time64 @var{t})
 Set the time of @var{p} to @var{t}.
 @end deftypefun
 

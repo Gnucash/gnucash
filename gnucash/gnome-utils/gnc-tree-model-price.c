@@ -770,7 +770,7 @@ gnc_tree_model_price_get_value (GtkTreeModel *tree_model,
         break;
     case GNC_TREE_MODEL_PRICE_COL_DATE:
         qof_print_date_buff (datebuff, sizeof(datebuff),
-                             gnc_price_get_time (price));
+                             gnc_price_get_time64 (price));
         g_value_init (value, G_TYPE_STRING);
         g_value_set_string (value, datebuff);
         break;

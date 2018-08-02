@@ -266,7 +266,7 @@ lookup_price(PriceReq *pr, PriceDate pd)
             break;
         case NEAREST:
             prc = gnc_pricedb_lookup_nearest_in_time64 (pr->pricedb, pr->from,
-                                                      pr->to, pr->time);
+                                                          pr->to, pr->time);
             break;
         case LATEST:
             prc = gnc_pricedb_lookup_latest (pr->pricedb, pr->from, pr->to);
