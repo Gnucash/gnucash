@@ -324,11 +324,10 @@ get_random_kvp_value_depth (int type, gint depth)
     }
     break;
 
-    case KvpValue::Type::TIMESPEC:
+    case KvpValue::Type::TIME64:
     {
-        Timespec *ts = get_random_timespec();
-        ret = new KvpValue(*ts);
-        g_free(ts);
+        time64 t = get_random_time();
+        ret = new KvpValue(t);
     }
     break;
 

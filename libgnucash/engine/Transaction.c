@@ -310,7 +310,6 @@ gnc_transaction_get_property(GObject* object,
 {
     Transaction* tx;
     gchar *key;
-    Timespec ts = {0,0};
 
     g_return_if_fail(GNC_IS_TRANSACTION(object));
 
@@ -327,12 +326,10 @@ gnc_transaction_get_property(GObject* object,
         g_value_take_object(value, tx->common_currency);
         break;
     case PROP_POST_DATE:
-        ts.tv_sec = tx->date_posted;
-        g_value_set_boxed(value, &ts);
+        g_value_set_boxed(value, &tx->date_posted);
         break;
     case PROP_ENTER_DATE:
-        ts.tv_sec = tx->date_entered;
-        g_value_set_boxed(value, &ts);
+        g_value_set_boxed(value, &tx->date_entered);
         break;
     case PROP_INVOICE:
         qof_instance_get_kvp (QOF_INSTANCE (tx), value, 2, GNC_INVOICE_ID, GNC_INVOICE_GUID);
@@ -357,6 +354,7 @@ gnc_transaction_set_property(GObject* object,
 {
     Transaction* tx;
     gchar *key;
+    Time64 *t;
 
     g_return_if_fail(GNC_IS_TRANSACTION(object));
 
@@ -375,10 +373,12 @@ gnc_transaction_set_property(GObject* object,
         xaccTransSetCurrency(tx, g_value_get_object(value));
         break;
     case PROP_POST_DATE:
-        xaccTransSetDatePostedSecs(tx, ((Timespec*)g_value_get_boxed(value))->tv_sec);
+        t = (Time64*)g_value_get_boxed(value);
+        xaccTransSetDatePostedSecs(tx, t->t);
         break;
     case PROP_ENTER_DATE:
-        xaccTransSetDateEnteredSecs(tx, ((Timespec*)g_value_get_boxed(value))->tv_sec);
+        t = (Time64*)g_value_get_boxed(value);
+        xaccTransSetDateEnteredSecs(tx, t->t);
         break;
     case PROP_INVOICE:
         qof_instance_set_kvp (QOF_INSTANCE (tx), value, 2, GNC_INVOICE_ID, GNC_INVOICE_GUID);
@@ -446,7 +446,7 @@ gnc_transaction_class_init(TransactionClass* klass)
      g_param_spec_boxed("post-date",
                         "Post Date",
                         "The date the transaction occurred.",
-                        GNC_TYPE_TIMESPEC,
+                        GNC_TYPE_TIME64,
                         G_PARAM_READWRITE));
 
     g_object_class_install_property
@@ -455,7 +455,7 @@ gnc_transaction_class_init(TransactionClass* klass)
      g_param_spec_boxed("enter-date",
                         "Enter Date",
                         "The date the transaction was entered.",
-                        GNC_TYPE_TIMESPEC,
+                        GNC_TYPE_TIME64,
                         G_PARAM_READWRITE));
 
      g_object_class_install_property(
@@ -2035,10 +2035,9 @@ void
 xaccTransSetDateDue (Transaction * trans, time64 time)
 {
     GValue v = G_VALUE_INIT;
-    Timespec send_ts = {time, 0};
     if (!trans) return;
-    g_value_init (&v, GNC_TYPE_TIMESPEC);
-    g_value_set_boxed (&v, &send_ts);
+    g_value_init (&v, GNC_TYPE_TIME64);
+    g_value_set_boxed (&v, &time);
     xaccTransBeginEdit(trans);
     qof_instance_set_kvp (QOF_INSTANCE (trans), &v, 1, TRANS_DATE_DUE_KVP);
     qof_instance_set_dirty(QOF_INSTANCE(trans));

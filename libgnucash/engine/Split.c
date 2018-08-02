@@ -170,7 +170,7 @@ gnc_split_get_property(GObject         *object,
             g_value_set_boxed(value, &split->amount);
             break;
         case PROP_RECONCILE_DATE:
-            g_value_set_boxed(value, &split->date_reconciled);
+            g_value_set_boxed(value, &split->date_reconciled.tv_sec);
             break;
         case PROP_TX:
             g_value_take_object(value, split->parent);
@@ -223,7 +223,7 @@ gnc_split_set_property(GObject         *object,
     Split *split;
     gnc_numeric* number;
     gchar *key;
-
+    Time64 *t;
     g_return_if_fail(GNC_IS_SPLIT(object));
 
     split = GNC_SPLIT(object);
@@ -247,7 +247,8 @@ gnc_split_set_property(GObject         *object,
             xaccSplitSetAmount(split, *number);
             break;
         case PROP_RECONCILE_DATE:
-            xaccSplitSetDateReconciledTS(split, g_value_get_boxed(value));
+            t = g_value_get_boxed(value);
+            xaccSplitSetDateReconciledSecs(split, t->t);
             break;
         case PROP_TX:
             xaccSplitSetParent(split, g_value_get_object(value));
@@ -353,7 +354,7 @@ gnc_split_class_init(SplitClass* klass)
          g_param_spec_boxed("reconcile-date",
                             "Reconcile Date",
                             "The date this split was reconciled.",
-                            GNC_TYPE_TIMESPEC,
+                            GNC_TYPE_TIME64,
                             G_PARAM_READWRITE));
 
     g_object_class_install_property

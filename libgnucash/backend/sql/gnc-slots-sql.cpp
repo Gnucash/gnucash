@@ -397,8 +397,9 @@ get_timespec_val (gpointer pObject)
 
     g_return_val_if_fail (pObject != NULL, gnc_dmy2timespec (1, 1, 1970));
 
-//if( kvp_value_get_type( pInfo->pKvpValue ) == KvpValue::Type::TIMESPEC ) {
-    return pInfo->pKvpValue->get<Timespec> ();
+//if( kvp_value_get_type( pInfo->pKvpValue ) == KvpValue::Type::TIME64 ) {
+    auto t = pInfo->pKvpValue->get<Time64> ();
+    return {t.t, 0};
 }
 
 static void
@@ -406,11 +407,11 @@ set_timespec_val (gpointer pObject, Timespec *ts)
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
     KvpValue* value = NULL;
-
+    Time64 t{ts->tv_sec};
     g_return_if_fail (pObject != NULL);
 
-    if (pInfo->value_type != KvpValue::Type::TIMESPEC) return;
-    value = new KvpValue {*ts};
+    if (pInfo->value_type != KvpValue::Type::TIME64) return;
+    value = new KvpValue {t};
     set_slot_from_value (pInfo, value);
 }
 

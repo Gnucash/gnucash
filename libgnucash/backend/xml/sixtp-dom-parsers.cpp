@@ -235,7 +235,8 @@ dom_tree_to_guid_kvp_value (xmlNodePtr node)
 static KvpValue*
 dom_tree_to_time64_kvp_value (xmlNodePtr node)
 {
-    return new KvpValue {Timespec {dom_tree_to_time64 (node), 0}};
+    Time64 t{dom_tree_to_time64 (node)};
+    return new KvpValue {t};
 }
 
 static KvpValue*

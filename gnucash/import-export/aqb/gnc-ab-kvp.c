@@ -98,20 +98,20 @@ gnc_ab_set_account_uid(Account *a, guint32 uid)
 time64
 gnc_ab_get_account_trans_retrieval(const Account *a)
 {
-    Timespec *t = NULL;
+    Time64 *t = NULL;
     qof_instance_get (QOF_INSTANCE (a),
 		      "ab-trans-retrieval", &t,
 		      NULL);
-    return t ? t->tv_sec : 0;
+    return t ? t->t : 0;
 }
 
 void
 gnc_ab_set_account_trans_retrieval(Account *a, time64 time)
 {
-    Timespec ts = {time, 0};
+    Time64 t = {time};
     xaccAccountBeginEdit(a);
     qof_instance_set (QOF_INSTANCE (a),
-		      "ab-trans-retrieval", &ts,
+		      "ab-trans-retrieval", &t,
 		      NULL);
     xaccAccountCommitEdit(a);
 }

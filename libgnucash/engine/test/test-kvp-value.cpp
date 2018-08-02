@@ -55,14 +55,14 @@ TEST (KvpValueTest, Equality)
     v2 = std::unique_ptr<KvpValueImpl> {new KvpValueImpl {guid_copy (guid)}};
     EXPECT_EQ (compare (*v1, *v2), 0);
 
-    v1 = std::unique_ptr<KvpValueImpl> {new KvpValueImpl {timespec_now ()}};
+    v1 = std::unique_ptr<KvpValueImpl> {new KvpValueImpl {gnc_time(nullptr)}};
     v2 = std::unique_ptr<KvpValueImpl> {new KvpValueImpl {*v1}};
     EXPECT_EQ (compare (*v1, *v2), 0);
 }
 
 TEST (KvpValueTest, Add)
 {
-    auto v3 = new KvpValueImpl {timespec_now ()};
+    auto v3 = new KvpValueImpl {gnc_time(nullptr)};
     auto v4 = new KvpValueImpl {*v3};
     auto new_one = v3->add (v4);
     EXPECT_NE (new_one, v3);

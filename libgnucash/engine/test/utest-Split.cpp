@@ -201,7 +201,8 @@ test_gnc_split_set_get_property ()
     Account *acc = xaccMallocAccount (book), *racc = NULL;
     GNCLot *lot = gnc_lot_new (book), *rlot = NULL;
     Split *split = xaccMallocSplit (book);
-    Timespec time = timespec_now (), *rtime;
+    time64 time = gnc_time(nullptr);
+    Time64 t = {time}, *rtime;
     char *r_action, *r_memo;
     gnc_numeric value = gnc_numeric_create (123, 100);
     gnc_numeric amount = gnc_numeric_create (321, 100);
@@ -218,7 +219,7 @@ test_gnc_split_set_get_property ()
                   "memo", "bar",
                   "value", &value,
                   "amount", &amount,
-                  "reconcile-date", &time,
+                  "reconcile-date", &t,
                   "account", acc,
                   "lot", lot,
                   "transaction", txn,
@@ -240,7 +241,7 @@ test_gnc_split_set_get_property ()
     g_assert (gnc_numeric_equal (*r_value, value));
     /* Setting the transaction causes the amount to be scrubbed into the value */
     g_assert (gnc_numeric_equal (*r_amount, value));
-    g_assert (timespec_equal (rtime, &time));
+    g_assert_cmpint (rtime->t, ==, time);
     g_assert (txn == rtxn);
     g_assert (acc == racc);
     g_assert (lot == rlot);

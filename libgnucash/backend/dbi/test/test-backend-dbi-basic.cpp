@@ -138,7 +138,7 @@ setup_memory (Fixture* fixture, gconstpointer pData)
     frame->set ({"int64-val"}, new KvpValue (INT64_C (100)));
     frame->set ({"double-val"}, new KvpValue (3.14159));
     frame->set ({"numeric-val"}, new KvpValue (gnc_numeric_zero ()));
-    frame->set ({"timespec-val"}, new KvpValue (timespec_now ()));
+    frame->set ({"timespec-val"}, new KvpValue (gnc_time(nullptr)));
     frame->set ({"string-val"}, new KvpValue ("abcdefghijklmnop"));
     auto guid = qof_instance_get_guid (QOF_INSTANCE (acct1));
     frame->set ({"guid-val"}, new KvpValue (const_cast<GncGUID*> (guid_copy (

@@ -995,7 +995,7 @@ gnc_account_class_init (AccountClass *klass)
                         "AQBanking Last Transaction Retrieval",
                         "The time of the last transaction retrieval for this "
                         "account.",
-                        GNC_TYPE_TIMESPEC,
+                        GNC_TYPE_TIME64,
                         static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
 }

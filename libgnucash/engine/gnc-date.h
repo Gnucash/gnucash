@@ -82,6 +82,14 @@ extern "C"
  * this stops working in 2038, we define our own:
  */
 typedef gint64 time64;
+/* A bit of a hack to create a type separate from the alias of int64_t so that
+ * compile-time dispatch can use the right KVP visitor.
+ */
+typedef struct
+{
+    time64 t;
+} Time64;
+
 
 /** The Timespec is just like the unix 'struct timespec'
  * except that we use a 64-bit unsigned int to
@@ -96,8 +104,8 @@ typedef struct timespec64 Timespec;
 /** @name GValue
   @{
 */
-GType timespec_get_type( void );
-#define GNC_TYPE_TIMESPEC (timespec_get_type ())
+GType time64_get_type( void );
+#define GNC_TYPE_TIME64 (time64_get_type ())
 
 /** @} */
 /** The default date format for use with strftime. */

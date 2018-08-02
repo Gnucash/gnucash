@@ -1144,8 +1144,9 @@ qof_instance_kvp_add_guid (const QofInstance *inst, const char* path,
     g_return_if_fail (inst->kvp_data != NULL);
 
     auto container = new KvpFrame;
+    Time64 t{time.tv_sec};
     container->set({key}, new KvpValue(const_cast<GncGUID*>(guid)));
-    container->set({"date"}, new KvpValue(time));
+    container->set({"date"}, new KvpValue(t));
     delete inst->kvp_data->set_path({path}, new KvpValue(container));
 }
 

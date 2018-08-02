@@ -1262,18 +1262,6 @@ gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
     }
 }
 
-void
-gnc_timespec2dmy (Timespec t, int *day, int *month, int *year)
-{
-    struct tm result;
-    time64 t_secs = t.tv_sec + (t.tv_nsec / NANOS_PER_SECOND);
-    gnc_localtime_r(&t_secs, &result);
-
-    if (day) *day = result.tm_mday;
-    if (month) *month = result.tm_mon + 1;
-    if (year) *year = result.tm_year + 1900;
-}
-
 #define THIRTY_TWO_YEARS 0x3c30fc00LL
 
 static Timespec
@@ -1518,33 +1506,34 @@ gnc_dow_abbrev(gchar *buf, int buf_len, int dow)
 /* *******************************************************************
  *  GValue handling
  ********************************************************************/
-static gpointer
-timespec_boxed_copy_func( gpointer in_timespec )
-{
-    Timespec* newvalue;
 
-    newvalue = static_cast<Timespec*>(g_malloc (sizeof (Timespec)));
-    memcpy( newvalue, in_timespec, sizeof( Timespec ) );
+static gpointer
+time64_boxed_copy_func (gpointer in_time64)
+{
+    Time64* newvalue;
+
+    newvalue = static_cast<Time64*>(g_malloc (sizeof (Time64)));
+    memcpy (newvalue, in_time64, sizeof(Time64));
 
     return newvalue;
 }
 
 static void
-timespec_boxed_free_func( gpointer in_timespec )
+time64_boxed_free_func (gpointer in_time64)
 {
-    g_free( in_timespec );
+    g_free (in_time64);
 }
 
 GType
-timespec_get_type( void )
+time64_get_type( void )
 {
     static GType type = 0;
 
     if ( type == 0 )
     {
-        type = g_boxed_type_register_static( "timespec",
-                                             timespec_boxed_copy_func,
-                                             timespec_boxed_free_func );
+        type = g_boxed_type_register_static( "time64",
+                                             time64_boxed_copy_func,
+                                             time64_boxed_free_func );
     }
     return type;
 }

@@ -237,7 +237,7 @@ add_kvp_value_node (xmlNodePtr node, const gchar* tag, KvpValue* val)
         g_free (newstr);
         break;
     }
-    case KvpValue::Type::TIMESPEC:
+    case KvpValue::Type::TIME64:
         val_node = NULL;
         break;
     case KvpValue::Type::GDATE:
@@ -277,10 +277,10 @@ add_kvp_value_node (xmlNodePtr node, const gchar* tag, KvpValue* val)
         add_text_to_node (val_node, "guid", guidstr);
         break;
     }
-    case KvpValue::Type::TIMESPEC:
+    case KvpValue::Type::TIME64:
     {
-        auto ts = val->get<Timespec> ();
-        val_node = time64_to_dom_tree (tag, ts.tv_sec);
+        auto t = val->get<Time64> ();
+        val_node = time64_to_dom_tree (tag, t.t);
         xmlSetProp (val_node, BAD_CAST "type", BAD_CAST "timespec");
         xmlAddChild (node, val_node);
         break;
