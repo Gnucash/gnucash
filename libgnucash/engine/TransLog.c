@@ -244,7 +244,7 @@ xaccTransWriteLog (Transaction *trans, char flag)
 
     for (node = trans->splits; node; node = node->next)
     {
-        Timespec ts;
+        time64 time;
         Split *split = node->data;
         const char * accname = "";
         char acc_guid_str[GUID_ENCODING_LENGTH + 1];
@@ -261,8 +261,7 @@ xaccTransWriteLog (Transaction *trans, char flag)
             acc_guid_str[0] = '\0';
         }
 
-        timespecFromTime64(&ts, split->date_reconciled.tv_sec);
-        gnc_timespec_to_iso8601_buff (ts, drecn);
+        gnc_time64_to_iso8601_buff (split->date_reconciled, drecn);
 
         guid_to_string_buff (xaccSplitGetGUID(split), split_guid_str);
         amt = xaccSplitGetAmount (split);

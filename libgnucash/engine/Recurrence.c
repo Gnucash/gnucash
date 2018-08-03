@@ -391,23 +391,23 @@ time64
 recurrenceGetPeriodTime(const Recurrence *r, guint period_num, gboolean end)
 {
     GDate date;
-    Timespec ts;
+    time64 time;
     recurrenceNthInstance(r, period_num + (end ? 1 : 0), &date);
     if (end)
     {
         g_date_subtract_days(&date, 1);
-        ts = gnc_dmy2timespec_end (g_date_get_day(&date),
+        time = gnc_dmy2time64_end (g_date_get_day(&date),
                                    g_date_get_month(&date),
                                    g_date_get_year (&date));
 
     }
     else
     {
-        ts = gnc_dmy2timespec (g_date_get_day(&date),
+        time = gnc_dmy2time64 (g_date_get_day(&date),
                                g_date_get_month(&date),
                                g_date_get_year (&date));
     }
-    return timespecToTime64(ts);
+    return time;
 }
 
 gnc_numeric

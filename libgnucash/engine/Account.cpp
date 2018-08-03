@@ -3311,19 +3311,6 @@ xaccAccountGetBalanceAsOfDate (Account *acc, time64 date)
     priv = GET_PRIVATE(acc);
     balance = priv->balance;
 
-    /* Since transaction post times are stored as a Timespec,
-     * convert date into a Timespec as well rather than converting
-     * each transaction's Timespec into a time64.
-     *
-     * FIXME: CAS: I think this comment is a bogus justification for
-     * using xaccTransGetDatePostedTS.  There's no benefit to using
-     * Timespec when the input argument is time64, and it's hard to
-     * imagine that casting long long to long and comparing two longs is
-     * worse than comparing two long longs every time.  IMO,
-     * xaccAccountGetPresentBalance gets this right, and its algorithm
-     * should be used here.
-     */
-
     lp = priv->splits;
     while ( lp && !found )
     {
@@ -3432,7 +3419,6 @@ xaccAccountConvertBalanceToCurrencyAsOfDate(const Account *acc, /* for book */
 {
     QofBook *book;
     GNCPriceDB *pdb;
-    Timespec ts;
 
     if (gnc_numeric_zero_p (balance) ||
             gnc_commodity_equiv (balance_currency, new_currency))

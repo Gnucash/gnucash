@@ -1267,7 +1267,7 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
     const gchar *str;
     gnc_commodity *com;
     int scu, denom;
-    Timespec *ts;
+    time64 time;
 
     com = xaccTransGetCurrency (trn);
     scu = gnc_commodity_get_fraction(com);
@@ -1281,9 +1281,8 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
 
     xaccSplitSetReconcile(ret, possible_chars[get_random_int_in_range(0, 3)]);
 
-    ts = get_random_timespec();
-    xaccSplitSetDateReconciledTS(ret, ts);
-    g_free(ts);
+    time = get_random_time();
+    xaccSplitSetDateReconciledSecs (ret, time);
 
     /* Split must be in an account before we can set an amount */
     /* and in a transaction before it can be added to an account. */
@@ -1364,7 +1363,7 @@ void
 make_random_changes_to_split (Split *split)
 {
     Transaction *trans;
-    Timespec *ts;
+    time64 time;
 
     g_return_if_fail (split);
 
@@ -1377,9 +1376,8 @@ make_random_changes_to_split (Split *split)
 
     xaccSplitSetReconcile (split, possible_chars[get_random_int_in_range(0, 3)]);
 
-    ts = get_random_timespec();
-    xaccSplitSetDateReconciledTS (split, ts);
-    g_free(ts);
+    time = get_random_time();
+    xaccSplitSetDateReconciledSecs (split, time);
 
     qof_instance_set_slots (QOF_INSTANCE (split), get_random_kvp_frame());
 

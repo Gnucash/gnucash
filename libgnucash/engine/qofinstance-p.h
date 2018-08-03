@@ -144,7 +144,7 @@ int qof_instance_compare_kvp (const QofInstance *a, const QofInstance *b);
 /** Returns a g_strdup'd string which must be g_freed. */
 char* qof_instance_kvp_as_string (const QofInstance *inst);
 void qof_instance_kvp_add_guid (const QofInstance *inst, const char* path,
-                                const Timespec time, const char* key,
+                                time64 time, const char* key,
                                 const GncGUID *guid);
 void qof_instance_kvp_remove_guid (const QofInstance *inst, const char *path,
                                    const char* key, const GncGUID *guid);
