@@ -271,6 +271,9 @@ add_kvp_value_node (xmlNodePtr node, const gchar* tag, KvpValue* val)
         add_text_to_node (val_node, "guid", guidstr);
         break;
     }
+    /* Note: The type attribute must remain 'timespec' to maintain
+     * compatibility.
+     */
     case KvpValue::Type::TIME64:
     {
         auto t = val->get<Time64> ();

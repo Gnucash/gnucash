@@ -346,7 +346,7 @@ simple_chars_only_parser_new (sixtp_end_handler end_handler)
 }
 
 /****************************************************************************/
-/* generic timespec handler.
+/* generic timespec handler for XML Version 1 files.
 
    A collection of node functions intended to parse a sub-node set
    that looks like this:
