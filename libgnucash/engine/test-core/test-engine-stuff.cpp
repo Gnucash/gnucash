@@ -157,20 +157,6 @@ kvp_type_excluded (KvpValue::Type kvp_type)
 
 static gboolean zero_nsec = FALSE;
 
-void
-random_timespec_zero_nsec (gboolean zero_nsec_in)
-{
-    zero_nsec = zero_nsec_in;
-}
-
-static gboolean usec_resolution = FALSE;
-
-void
-random_timespec_usec_resolution (gboolean usec_resolution_in)
-{
-    usec_resolution = usec_resolution_in;
-}
-
 /* ========================================================== */
 
 static inline gboolean
@@ -233,20 +219,6 @@ get_random_time (void)
     time64 ret {0};
     while (ret <= 0)
         ret = rand();
-    return ret;
-}
-
-Timespec*
-get_random_timespec(void)
-{
-    Timespec *ret;
-
-    ret = g_new0(Timespec, 1);
-
-    while (ret->tv_sec <= 0)
-        ret->tv_sec = rand();
-
-    ret->tv_nsec = 0;
     return ret;
 }
 

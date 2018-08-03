@@ -51,7 +51,7 @@ void qof_instance_set_slots (QofInstance *, KvpFrame *);
  *  used for comparing version in local memory to that in remote
  *  server.
  */
-void qof_instance_set_last_update (QofInstance *inst, Timespec ts);
+void qof_instance_set_last_update (QofInstance *inst, time64 time);
 
 /** Set the dirty flag of just the instance. Don't modify the
  *  collection flag at all. */

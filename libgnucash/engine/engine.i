@@ -211,7 +211,6 @@ SplitList * qof_query_run_subquery (QofQuery *q, const QofQuery *q);
 %ignore GNC_ERROR_REMAINDER;
 %include <gnc-numeric.h>
 
-Timespec timespecCanonicalDayTime(Timespec t);
 time64 time64CanonicalDayTime(time64 t);
 
 %include <gnc-budget.h>

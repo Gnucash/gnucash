@@ -194,7 +194,7 @@ test_instance_new_destroy( void )
     QofInstance *inst;
     QofInstanceClass *klass;
     /* test var */
-    Timespec *timespec_priv;
+    Time64 *time_priv;
     const char *msg1 = "qof_instance_get_collection: assertion 'QOF_IS_INSTANCE(ptr)' failed";
     const char *msg2 = "qof_instance_get_editlevel: assertion 'QOF_IS_INSTANCE(ptr)' failed";
     const char *msg3 = "qof_instance_get_destroying: assertion 'QOF_IS_INSTANCE(ptr)' failed";
@@ -217,9 +217,8 @@ test_instance_new_destroy( void )
     g_assert( !qof_instance_get_collection( inst ) );
     g_assert( qof_instance_get_book( inst ) == NULL );
     g_assert( inst->kvp_data );
-    g_object_get( inst, "last-update", &timespec_priv, NULL);
-    g_assert_cmpint( timespec_priv->tv_sec, == , 0 );
-    g_assert_cmpint( timespec_priv->tv_nsec, == , -1 );
+    g_object_get( inst, "last-update", &time_priv, NULL);
+    g_assert_cmpint( time_priv->t, == , 0 );
     g_assert_cmpint( qof_instance_get_editlevel( inst ), == , 0 );
     g_assert( !qof_instance_get_destroying( inst ) );
     g_assert( !qof_instance_get_dirty_flag( inst ) );
@@ -311,7 +310,7 @@ test_instance_version_cmp( void )
 {
     QofInstance *left, *right;
     int result;
-    Timespec timespec_left, timespec_right;
+    time64 time_left = 0, time_right = 1;
 
     /* set up*/
     left = static_cast<QofInstance*>(g_object_new( QOF_TYPE_INSTANCE, NULL ));
@@ -330,48 +329,24 @@ test_instance_version_cmp( void )
     g_assert_cmpint( result, == , 1 );
 
     g_test_message( "Test left tv_sec lesser than right" );
-    timespec_left.tv_sec = 0;
-    timespec_right.tv_sec = 1;
-    qof_instance_set_last_update( left, timespec_left );
-    qof_instance_set_last_update( right, timespec_right );
+    qof_instance_set_last_update( left, time_left );
+    qof_instance_set_last_update( right, time_right );
     result = qof_instance_version_cmp( left, right );
     g_assert_cmpint( result, == , -1 );
 
     g_test_message( "Test right tv_sec lesser than left" );
-    timespec_left.tv_sec = 1;
-    timespec_right.tv_sec = 0;
-    qof_instance_set_last_update( left, timespec_left );
-    qof_instance_set_last_update( right, timespec_right );
-    result = qof_instance_version_cmp( left, right );
-    g_assert_cmpint( result, == , 1 );
-
-    g_test_message( "Test left tv_nsec lesser than right" );
-    timespec_left.tv_sec = 1;
-    timespec_left.tv_nsec = 0;
-    timespec_right.tv_sec = 1;
-    timespec_right.tv_nsec = 1;
-    qof_instance_set_last_update( left, timespec_left );
-    qof_instance_set_last_update( right, timespec_right );
-    result = qof_instance_version_cmp( left, right );
-    g_assert_cmpint( result, == , -1 );
-
-    g_test_message( "Test right tv_sec lesser than left" );
-    timespec_left.tv_sec = 1;
-    timespec_left.tv_nsec = 1;
-    timespec_right.tv_sec = 1;
-    timespec_right.tv_nsec = 0;
-    qof_instance_set_last_update( left, timespec_left );
-    qof_instance_set_last_update( right, timespec_right );
+    time_left = 1;
+    time_right = 0;
+    qof_instance_set_last_update( left, time_left );
+    qof_instance_set_last_update( right, time_right );
     result = qof_instance_version_cmp( left, right );
     g_assert_cmpint( result, == , 1 );
 
     g_test_message( "Test both equal" );
-    timespec_left.tv_sec = 1;
-    timespec_left.tv_nsec = 1;
-    timespec_right.tv_sec = 1;
-    timespec_right.tv_nsec = 1;
-    qof_instance_set_last_update( left, timespec_left );
-    qof_instance_set_last_update( right, timespec_right );
+    time_left = 1;
+    time_right = 1;
+    qof_instance_set_last_update( left, time_left );
+    qof_instance_set_last_update( right, time_right );
     result = qof_instance_version_cmp( left, right );
     g_assert_cmpint( result, == , 0 );
 

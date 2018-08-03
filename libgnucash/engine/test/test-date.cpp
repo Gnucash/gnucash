@@ -391,7 +391,7 @@ run_test (void)
     ts.tv_nsec = 0;
     check_time (ts, do_print);
 
-    ts = *get_random_timespec ();
+    ts.tv_sec = get_random_time ();
 
     for (i = 0; i < 10000; i++)
     {
@@ -402,7 +402,7 @@ run_test (void)
 
     for (i = 0; i < 5000; i++)
     {
-        ts = *get_random_timespec ();
+        ts.tv_sec = get_random_time ();
 
         if (!check_time (ts, FALSE))
             return;
