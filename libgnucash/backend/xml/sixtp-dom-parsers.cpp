@@ -524,12 +524,6 @@ dom_tree_to_gnc_numeric (xmlNodePtr node)
     return ret;
 }
 
-static time64
-time_parse_failure ()
-{
-    return INT64_MAX;
-}
-
 
 time64
 dom_tree_to_time64 (xmlNodePtr node)
@@ -562,21 +556,17 @@ dom_tree_to_time64 (xmlNodePtr node)
             {
                 if (seen_s)
                 {
-                    return time_parse_failure ();
+                    return INT64_MAX;
                 }
                 else
                 {
                     gchar* content = dom_tree_to_text (n);
                     if (!content)
                     {
-                        return time_parse_failure ();
+                        return INT64_MAX;
                     }
 
-                    if (!string_to_time64 (content, &ret))
-                    {
-                        g_free (content);
-                        return time_parse_failure ();
-                    }
+                    ret = gnc_iso8601_to_time64_gmt (content);
                     g_free (content);
                     seen_s = TRUE;
                 }

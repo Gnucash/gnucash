@@ -131,18 +131,12 @@ commodity_ref_to_dom_tree (const char* tag, const gnc_commodity* c)
     return ret;
 }
 
-char*
-time64_to_string (time64 time)
-{
-    return gnc_print_time64 (time, TIMESPEC_TIME_FORMAT " %q");
-}
-
 xmlNodePtr
 time64_to_dom_tree (const char* tag, const time64 time)
 {
     xmlNodePtr ret;
     g_return_val_if_fail (time != INT64_MAX, NULL);
-    auto date_str = time64_to_string (time);
+    auto date_str = gnc_print_time64 (time, "%Y-%m-%d %H:%M:%S %q");
     if (!date_str)
         return NULL;
     ret = xmlNewNode (NULL, BAD_CAST tag);
