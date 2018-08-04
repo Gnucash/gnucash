@@ -597,30 +597,6 @@ gnc_sql_add_objectref_guid_col_info_to_list (,// 1
 test_gnc_sql_add_objectref_guid_col_info_to_list (Fixture *fixture, gconstpointer pData)
 {
 }*/
-/* load_timespec
-static void
-load_timespec (const GncSqlBackend* sql_be, GncSqlRow& row,// 2
-*/
-/* static void
-test_load_timespec (Fixture *fixture, gconstpointer pData)
-{
-}*/
-/* add_timespec_col_info_to_list
-static void
-add_timespec_col_info_to_list (const GncSqlBackend* sql_be, const GncSqlColumnTableEntry& table_row,// 2
-*/
-/* static void
-test_add_timespec_col_info_to_list (Fixture *fixture, gconstpointer pData)
-{
-}*/
-/* add_value_timespec_to_vec
-static void
-add_gvalue_timespec_to_slist (const GncSqlBackend* sql_be, QofIdTypeConst obj_name,// 2
-*/
-/* static void
-test_add_value_timespec_to_vec (Fixture *fixture, gconstpointer pData)
-{
-}*/
 /* load_date
 static void
 load_date (const GncSqlBackend* sql_be, GncSqlRow& row,// 2
@@ -915,9 +891,6 @@ test_suite_gnc_backend_sql (void)
 // GNC_TEST_ADD (suitename, "add value guid to vec", Fixture, nullptr, test_add_value_guid_to_vec,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql add gvalue objectref guid to slist", Fixture, nullptr, test_gnc_sql_add_objectref_guid_to_vec,  teardown);
 // GNC_TEST_ADD (suitename, "gnc sql add objectref guid col info to list", Fixture, nullptr, test_gnc_sql_add_objectref_guid_col_info_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "load timespec", Fixture, nullptr, test_load_timespec,  teardown);
-// GNC_TEST_ADD (suitename, "add timespec col info to list", Fixture, nullptr, test_add_timespec_col_info_to_list,  teardown);
-// GNC_TEST_ADD (suitename, "add value timespec to vec", Fixture, nullptr, test_add_value_timespec_to_vec,  teardown);
 // GNC_TEST_ADD (suitename, "load date", Fixture, nullptr, test_load_date,  teardown);
 // GNC_TEST_ADD (suitename, "add date col info to list", Fixture, nullptr, test_add_date_col_info_to_list,  teardown);
 // GNC_TEST_ADD (suitename, "add value date to vec", Fixture, nullptr, test_add_value_date_to_vec,  teardown);
