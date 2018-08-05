@@ -2892,23 +2892,32 @@ gnc_plugin_page_register_filter_response_cb (GtkDialog *dialog,
     LEAVE(" ");
 }
 
-static gchar*
-gpp_get_cleared_match_filter_text (gchar *text_in, gboolean *first, const gchar *text)
+static void
+gpp_update_match_filter_text (cleared_match_t match, const guint mask,
+                              const gchar *filter_name, gchar **show, gchar **hide)
 {
-    gchar *result;
-    gchar *temp = g_strdup (text_in);
-    g_free (text_in);
-
-    if (*first)
+    if ((match & mask) == mask)
     {
-        result = g_strconcat (temp, text, NULL);
-        *first = FALSE;
+        if (*show == NULL)
+            *show = g_strdup (filter_name);
+        else
+        {
+            gchar *temp = g_strdup (*show);
+            g_free (*show);
+            *show = g_strconcat (temp, ", ", filter_name, NULL);
+        }
     }
     else
-        result = g_strconcat (temp, ", ", text, NULL);
-    g_free (temp);
-
-    return result;
+    {
+        if (*hide == NULL)
+            *hide = g_strdup (filter_name);
+        else
+        {
+            gchar *temp = g_strdup (*hide);
+            g_free (*hide);
+            *hide = g_strconcat (temp, ", ", filter_name, NULL);
+        }
+    }
 }
 
 static void
@@ -2951,44 +2960,22 @@ gnc_plugin_page_register_set_filter_tooltip (GncPluginPageRegister *page)
     // filtered match items
     if (priv->fd.cleared_match != 31)
     {
-        gchar *show = g_strdup ("");
-        gchar *hide = g_strdup ("");
+        gchar *show = NULL;
+        gchar *hide = NULL;
 
-        gboolean first_show = TRUE, first_hide = TRUE;
+        gpp_update_match_filter_text (priv->fd.cleared_match, 0x01, _("Unreconciled"), &show, &hide);
+        gpp_update_match_filter_text (priv->fd.cleared_match, 0x02, _("Cleared"), &show, &hide);
+        gpp_update_match_filter_text (priv->fd.cleared_match, 0x04, _("Reconciled"), &show, &hide);
+        gpp_update_match_filter_text (priv->fd.cleared_match, 0x08, _("Frozen"), &show, &hide);
+        gpp_update_match_filter_text (priv->fd.cleared_match, 0x10, _("Voided"), &show, &hide);
 
-        if ((priv->fd.cleared_match & 0x01) == 0x01)
-            show = gpp_get_cleared_match_filter_text (show, &first_show, _("Unreconciled"));
-        else
-            hide = gpp_get_cleared_match_filter_text (hide, &first_hide, _("Unreconciled"));
-
-        if ((priv->fd.cleared_match & 0x02) == 0x02)
-            show = gpp_get_cleared_match_filter_text (show, &first_show, _("Cleared"));
-        else
-            hide = gpp_get_cleared_match_filter_text (hide, &first_hide, _("Cleared"));
-
-        if ((priv->fd.cleared_match & 0x04) == 0x04)
-            show = gpp_get_cleared_match_filter_text (show, &first_show, _("Reconciled"));
-        else
-            hide = gpp_get_cleared_match_filter_text (hide, &first_hide, _("Reconciled"));
-
-        if ((priv->fd.cleared_match & 0x08) == 0x08)
-            show = gpp_get_cleared_match_filter_text (show, &first_show, _("Frozen"));
-        else
-            hide = gpp_get_cleared_match_filter_text (hide, &first_hide, _("Frozen"));
-
-        if ((priv->fd.cleared_match & 0x10) == 0x10)
-            show = gpp_get_cleared_match_filter_text (show, &first_show, _("Voided"));
-        else
-            hide = gpp_get_cleared_match_filter_text (hide, &first_hide, _("Voided"));
-
-        if (g_strcmp0 (show, "") == 0)
+        if (show == NULL)
             text_cleared = g_strconcat (_("Hide:"), " ", hide, NULL);
         else
             text_cleared = g_strconcat (_("Show:"), " ", show, "\n", _("Hide:"), " ", hide, NULL);
 
         g_free (show);
         g_free (hide);
-
     }
     // create the tooltip based on created text variables
     if ((text_start != NULL) || (text_end != NULL) || (text_cleared != NULL))
