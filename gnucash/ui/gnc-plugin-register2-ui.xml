@@ -1,0 +1,17 @@
+<ui>
+  <menubar>
+    <menu name="Tools" action="ToolsAction">
+      <placeholder name="ToolsPlaceholder">
+        <menuitem name="ToolsGeneralJournal2" action="ToolsGeneralJournal2Action"/>
+      </placeholder>
+    </menu>
+
+    <menu name="Extensions" action="ExtensionsAction">
+      <placeholder name="ExtensionsPlaceholder">
+	<menu name="Register2Test" action="Register2TestAction">
+	  <menuitem name="Register2TestGL" action="Register2TestGLAction"/>
+	</menu>
+      </placeholder>
+    </menu>
+  </menubar>
+</ui>

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: @gnucash@\n"
-"POT-Creation-Date: 2014-10-13 00:33+0200\n"
+"POT-Creation-Date: 2017-10-20 19:04+0200\n"
 "PO-Revision-Date: 2007-07-31 22:59+0200\n"
 "Last-Translator: Kornel Tako <takokornel@gmail.com>\n"
 "Language-Team: Hungarian <gnucash-devel-request@gnucash.org>\n"
@@ -46,6 +46,11 @@ msgstr "Számla típus:Eszköz"
 msgid "account type: Asset"
 msgstr "Számla típus:Eszköz"
 
+#. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
+#, fuzzy
+msgid "account type: Assets & Liabilities"
+msgstr "Számla típus: Kötelezettség"
+
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
 msgstr "Számla típus: Folyószámla"
@@ -81,6 +86,11 @@ msgstr "Számla típus: Befektetési alap"
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugzilla.gnome.org/show_bug.cgi?id=421766"
 #, fuzzy
 msgid "account type: Passive"
+msgstr "Számla típus:Eszköz"
+
+#. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
+#, fuzzy
+msgid "account type: Profit & Loss"
 msgstr "Számla típus:Eszköz"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
@@ -156,7 +166,7 @@ msgstr "Végrehajtás: hitel"
 msgid "action: payment"
 msgstr "Végrehajtás: kifizetés"
 
-#. "-"
+#. "Point of sale"
 msgid "action: POS"
 msgstr "Végrhajtás: POS"
 
@@ -400,7 +410,7 @@ msgstr "Pénzügyi számológép: Kifizetés"
 msgid "gain"
 msgstr "Nyereség"
 
-#. "Name of an automaticly created account to get imbalanced transactions back in balance"
+#. "Name of an automatically created account to get imbalanced transactions back in balance"
 msgid "imbalance"
 msgstr "Hiányszámla"
 
@@ -418,11 +428,6 @@ msgstr "Kamat"
 
 #. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out (to a customer), whereas a 'bill' is one that we received (from a vendor)."
 msgid "invoice"
-msgstr "Számla"
-
-#. "The customer (or vendor) to which this invoice is sent to."
-#, fuzzy
-msgid "invoice owner"
 msgstr "Számla"
 
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
@@ -525,6 +530,10 @@ msgstr "Megbízás"
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
 msgstr "Árva"
+
+#. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
+msgid "owner (of bill, invoice or expense voucher)"
+msgstr ""
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
@@ -701,7 +710,7 @@ msgstr "Oldal stílus"
 msgid "subtotal"
 msgstr "részösszeg "
 
-#. "On the goverment's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
+#. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
 #, fuzzy
 msgid "tax code"
 msgstr "adó info"
@@ -789,3 +798,7 @@ msgstr "Nyugta"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "kivét"
+
+#, fuzzy
+#~ msgid "invoice owner"
+#~ msgstr "Számla"

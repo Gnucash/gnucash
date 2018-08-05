@@ -20,10 +20,13 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+/* This is a template test suite. Copy it to the test directory and name it for
+ * the corresponding file you're testing with a "utest-" prefix. Add it to the
+ * test_program_SOURCES in Makefile.am.
+ */
 #include <config.h>
 #include <glib.h>
-/* This is optional; you only need it if you have external fixtures or mocks. */
-#include "test_module_support.h"
+#include <unittest-support.h>
 /* Header for this module and any others that you need */
 #include <module_1.h>
 
@@ -31,7 +34,10 @@
  * creates a nested set of test suites for us based on this path. */
 static const gchar *suitename = "module/module_1";
 
-/* Test fixture: A struct, a setup function, and a teardown function are passed to g_test_add(); add getters, setters, and whatever other functions you need to call from your test functions. */
+/* Test fixture: A struct, a setup function, and a teardown function are passed
+ * to g_test_add(); add getters, setters, and whatever other functions you need
+ * to call from your test functions.
+ */
 typedef struct
 {
     gint foo;
@@ -39,15 +45,17 @@ typedef struct
 } Fixture;
 
 static void
-setup_module_test(Fixture *fixture, gconstpointer pData)
+setup (Fixture *fixture, gconstpointer pData)
 {
-    /* Do something useful */
+    /* Whatever is needed to populate the fixture and initialize your module for
+     * running a single test.
+     */
 }
 
 static void
-teardown_module_test(Fixture *fixture, gconstpointer pData)
+teardown (Fixture *fixture, gconstpointer pData)
 {
-    /* Clean up after ourselves */
+    /* Whatever cleanup is needed at the end of the test. */
 }
 
 static void
@@ -92,22 +100,23 @@ test_performance_function( void )
  * You can also emit arbitrary messages into the test report with
  *  g_test_message( const char* format, ... )
  */
-GTestSuite*
-test_suite_module1 ( void )
+void
+test_suite_module1 (void)
 {
     Datatype data = something();
-    g_test_add_func( suitename, test_function );
-    g_test_add_data_func( suitename, (gconstpointer)(&data),
-                          test_function_with_data );
-    g_test_add( suitename, Fixture,
-                data,
-                setup_module_test,
-                test_function_with_fixture,
-                teardown_module_test);
+    GNC_TEST_ADD_FUNC (suitename, "Test Name 1", test_function);
+    {
+        gchar *testpath = g_strdup_printf ("%s/Test Name 2", suitename);
+        g_test_add_data_func( suitename, (gconstpointer)(&data),
+                              test_function_with_data );
+        g_free (testpath);
+    }
+    GNC_TEST_ADD (suitename, "Test Name 3", Fixture, data, setup,
+                  test_function_with_fixture, teardown);
     /* Other conditionals are g_test_quick(), g_test_slow(), and
      * g_test_thorough() */
     if ( g_test_perf() )
     {
-        g_test_add_func( suitename, test_performance_func );
+        GNC_TEST_ADD_FUNC (suitename, "Test Name 4", test_performance_func);
     }
 }

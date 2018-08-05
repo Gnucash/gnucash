@@ -24,7 +24,7 @@ HBCI (Home Banking Computer Interface) is a standard used by German
 banks for offering online banking service. Through this standard,
 business actions like statement retrieval, initiate bank transfer, or
 direct debits can be invoked by any HBCI-compliant client application,
-i.e. now also from GnuCash. Authentification and encryption is done
+i.e. now also from GnuCash. Authentication and encryption is done
 through a bank-issued chip card or a self-generated file-based RSA key
 pair. (In the latter case, the user prints out his public key finger
 print on paper, signs it, and sends it to his bank.)

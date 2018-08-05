@@ -8,6 +8,34 @@
 
 /* Begin PBXFileReference section */
 		6E056BF416C0F1E100B5E1F2 /* qof-string-cache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "qof-string-cache.h"; path = "src/libqof/qof/qof-string-cache.h"; sourceTree = "<group>"; };
+		6E0A56DF1BE6D5CB00F028BB /* dummy.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dummy.cpp; path = src/engine/test/dummy.cpp; sourceTree = "<group>"; };
+		6E0A56E01BE6D5CB00F028BB /* gtest-import-map.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "gtest-import-map.cpp"; path = "src/engine/test/gtest-import-map.cpp"; sourceTree = "<group>"; };
+		6E0A56E11BE6D5CB00F028BB /* test-account-object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test-account-object.cpp"; path = "src/engine/test/test-account-object.cpp"; sourceTree = "<group>"; };
+		6E0A56E21BE6D5CB00F028BB /* test-address.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "test-address.c"; path = "src/engine/test/test-address.c"; sourceTree = "<group>"; };
+		6E0A56E31BE6D5CB00F028BB /* test-business.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "test-business.c"; path = "src/engine/test/test-business.c"; sourceTree = "<group>"; };
+		6E0A56E41BE6D5CB00F028BB /* test-commodities.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test-commodities.cpp"; path = "src/engine/test/test-commodities.cpp"; sourceTree = "<group>"; };
+		6E0A56E51BE6D5CB00F028BB /* test-customer.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "test-customer.c"; path = "src/engine/test/test-customer.c"; sourceTree = "<group>"; };
+		6E0A56E61BE6D5CB00F028BB /* test-date.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test-date.cpp"; path = "src/engine/test/test-date.cpp"; sourceTree = "<group>"; };
+		6E0A56E71BE6D5CB00F028BB /* test-employee.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "test-employee.c"; path = "src/engine/test/test-employee.c"; sourceTree = "<group>"; };
+		6E0A56E81BE6D5CB00F028BB /* test-engine-kvp-properties.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "test-engine-kvp-properties.c"; path = "src/engine/test/test-engine-kvp-properties.c"; sourceTree = "<group>"; };
+		6E0A56E91BE6D5CB00F028BB /* test-engine.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "test-engine.c"; path = "src/engine/test/test-engine.c"; sourceTree = "<group>"; };
+		6E0A56EA1BE6D5CB00F028BB /* test-group-vs-book.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test-group-vs-book.cpp"; path = "src/engine/test/test-group-vs-book.cpp"; sourceTree = "<group>"; };
+		6E0A56EB1BE6D5CB00F028BB /* test-guid.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test-guid.cpp"; path = "src/engine/test/test-guid.cpp"; sourceTree = "<group>"; };
+		6E0A56EC1BE6D5CB00F028BB /* test-job.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "test-job.c"; path = "src/engine/test/test-job.c"; sourceTree = "<group>"; };
+		6E0A56ED1BE6D5CB00F028BB /* test-lots.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test-lots.cpp"; path = "src/engine/test/test-lots.cpp"; sourceTree = "<group>"; };
+		6E0A56EF1BE6D5CB00F028BB /* test-query.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test-query.cpp"; path = "src/engine/test/test-query.cpp"; sourceTree = "<group>"; };
+		6E0A56F01BE6D5CB00F028BB /* test-scm-query.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test-scm-query.cpp"; path = "src/engine/test/test-scm-query.cpp"; sourceTree = "<group>"; };
+		6E0A56F11BE6D5CB00F028BB /* test-split-vs-account.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test-split-vs-account.cpp"; path = "src/engine/test/test-split-vs-account.cpp"; sourceTree = "<group>"; };
+		6E0A56F21BE6D5CB00F028BB /* test-transaction-reversal.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test-transaction-reversal.cpp"; path = "src/engine/test/test-transaction-reversal.cpp"; sourceTree = "<group>"; };
+		6E0A56F31BE6D5CB00F028BB /* test-transaction-voiding.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test-transaction-voiding.cpp"; path = "src/engine/test/test-transaction-voiding.cpp"; sourceTree = "<group>"; };
+		6E0A56F41BE6D5CB00F028BB /* test-vendor.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "test-vendor.c"; path = "src/engine/test/test-vendor.c"; sourceTree = "<group>"; };
+		6E0A56F51BE6D5CB00F028BB /* utest-Account.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "utest-Account.cpp"; path = "src/engine/test/utest-Account.cpp"; sourceTree = "<group>"; };
+		6E0A56F61BE6D5CB00F028BB /* utest-Budget.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "utest-Budget.c"; path = "src/engine/test/utest-Budget.c"; sourceTree = "<group>"; };
+		6E0A56F71BE6D5CB00F028BB /* utest-Entry.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "utest-Entry.c"; path = "src/engine/test/utest-Entry.c"; sourceTree = "<group>"; };
+		6E0A56F81BE6D5CB00F028BB /* utest-gnc-pricedb.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "utest-gnc-pricedb.c"; path = "src/engine/test/utest-gnc-pricedb.c"; sourceTree = "<group>"; };
+		6E0A56F91BE6D5CB00F028BB /* utest-Invoice.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "utest-Invoice.c"; path = "src/engine/test/utest-Invoice.c"; sourceTree = "<group>"; };
+		6E0A56FA1BE6D5CB00F028BB /* utest-Split.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "utest-Split.cpp"; path = "src/engine/test/utest-Split.cpp"; sourceTree = "<group>"; };
+		6E0A56FB1BE6D5CB00F028BB /* utest-Transaction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "utest-Transaction.cpp"; path = "src/engine/test/utest-Transaction.cpp"; sourceTree = "<group>"; };
 		6E0E95251851BC8F0033FCAD /* assistant-acct-period.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "assistant-acct-period.c"; path = "src/gnome/assistant-acct-period.c"; sourceTree = "<group>"; };
 		6E0E95261851BC8F0033FCAD /* assistant-acct-period.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "assistant-acct-period.h"; path = "src/gnome/assistant-acct-period.h"; sourceTree = "<group>"; };
 		6E0E95271851BC8F0033FCAD /* assistant-hierarchy.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "assistant-hierarchy.c"; path = "src/gnome/assistant-hierarchy.c"; sourceTree = "<group>"; };
@@ -20,8 +48,6 @@
 		6E0E952E1851BC8F0033FCAD /* dialog-find-transactions2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "dialog-find-transactions2.h"; path = "src/gnome/dialog-find-transactions2.h"; sourceTree = "<group>"; };
 		6E0E952F1851BC8F0033FCAD /* dialog-lot-viewer.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "dialog-lot-viewer.c"; path = "src/gnome/dialog-lot-viewer.c"; sourceTree = "<group>"; };
 		6E0E95301851BC8F0033FCAD /* dialog-lot-viewer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "dialog-lot-viewer.h"; path = "src/gnome/dialog-lot-viewer.h"; sourceTree = "<group>"; };
-		6E0E95311851BC8F0033FCAD /* dialog-print-check2.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "dialog-print-check2.c"; path = "src/gnome/dialog-print-check2.c"; sourceTree = "<group>"; };
-		6E0E95321851BC8F0033FCAD /* dialog-print-check2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "dialog-print-check2.h"; path = "src/gnome/dialog-print-check2.h"; sourceTree = "<group>"; };
 		6E0E95331851BC8F0033FCAD /* dialog-sx-editor2.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "dialog-sx-editor2.c"; path = "src/gnome/dialog-sx-editor2.c"; sourceTree = "<group>"; };
 		6E0E95341851BC8F0033FCAD /* dialog-sx-editor2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "dialog-sx-editor2.h"; path = "src/gnome/dialog-sx-editor2.h"; sourceTree = "<group>"; };
 		6E0E95351851BC8F0033FCAD /* gnc-budget-view.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "gnc-budget-view.c"; path = "src/gnome/gnc-budget-view.c"; sourceTree = "<group>"; };
@@ -38,49 +64,70 @@
 		6E0E95401851BCFD0033FCAD /* window-autoclear.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "window-autoclear.h"; path = "src/gnome/window-autoclear.h"; sourceTree = "<group>"; };
 		6E0E95411851BCFD0033FCAD /* window-reconcile2.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "window-reconcile2.c"; path = "src/gnome/window-reconcile2.c"; sourceTree = "<group>"; };
 		6E0E95421851BCFD0033FCAD /* window-reconcile2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "window-reconcile2.h"; path = "src/gnome/window-reconcile2.h"; sourceTree = "<group>"; };
+		6E24BACC1B60373A0075D17E /* test-backend-dbi-basic.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test-backend-dbi-basic.cpp"; path = "src/backend/dbi/test/test-backend-dbi-basic.cpp"; sourceTree = "<group>"; };
+		6E24BACF1B60373A0075D17E /* test-dbi-business-stuff.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "test-dbi-business-stuff.h"; path = "src/backend/dbi/test/test-dbi-business-stuff.h"; sourceTree = "<group>"; };
+		6E24BAD01B60373A0075D17E /* test-dbi-stuff.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test-dbi-stuff.cpp"; path = "src/backend/dbi/test/test-dbi-stuff.cpp"; sourceTree = "<group>"; };
+		6E24BAD11B60373A0075D17E /* test-dbi-stuff.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "test-dbi-stuff.h"; path = "src/backend/dbi/test/test-dbi-stuff.h"; sourceTree = "<group>"; };
+		6E24BAD21B6037550075D17E /* gnc-slots-sql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-slots-sql.cpp"; path = "src/backend/sql/gnc-slots-sql.cpp"; sourceTree = "<group>"; };
+		6E24BAD51B60379D0075D17E /* io-gncxml-v1.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "io-gncxml-v1.cpp"; path = "src/backend/xml/io-gncxml-v1.cpp"; sourceTree = "<group>"; };
+		6E24BAD61B60379D0075D17E /* sixtp-dom-generators.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "sixtp-dom-generators.cpp"; path = "src/backend/xml/sixtp-dom-generators.cpp"; sourceTree = "<group>"; };
+		6E24BAD71B60379D0075D17E /* sixtp-dom-parsers.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "sixtp-dom-parsers.cpp"; path = "src/backend/xml/sixtp-dom-parsers.cpp"; sourceTree = "<group>"; };
+		6E24BAD81B6037B70075D17E /* test-file-stuff.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test-file-stuff.cpp"; path = "src/backend/xml/test/test-file-stuff.cpp"; sourceTree = "<group>"; };
+		6E24BAD91B6037B80075D17E /* test-kvp-frames.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test-kvp-frames.cpp"; path = "src/backend/xml/test/test-kvp-frames.cpp"; sourceTree = "<group>"; };
+		6E24BADA1B6038CB0075D17E /* gettext.scm */ = {isa = PBXFileReference; lastKnownFileType = text; name = gettext.scm; path = "src/app-utils/gettext.scm"; sourceTree = "<group>"; };
+		6E24BADB1B6038EC0075D17E /* expression_parser.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = expression_parser.c; path = "src/app-utils/calculation/expression_parser.c"; sourceTree = "<group>"; };
+		6E24BADC1B6038EC0075D17E /* fin_spl_protos.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = fin_spl_protos.h; path = "src/app-utils/calculation/fin_spl_protos.h"; sourceTree = "<group>"; };
+		6E24BADD1B6038EC0075D17E /* fin_static_proto.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = fin_static_proto.h; path = "src/app-utils/calculation/fin_static_proto.h"; sourceTree = "<group>"; };
+		6E24BADE1B6038EC0075D17E /* fin.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = fin.c; path = "src/app-utils/calculation/fin.c"; sourceTree = "<group>"; };
+		6E24BADF1B6038EC0075D17E /* finproto.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = finproto.h; path = "src/app-utils/calculation/finproto.h"; sourceTree = "<group>"; };
+		6E24BAE01B6038EC0075D17E /* finvar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = finvar.h; path = "src/app-utils/calculation/finvar.h"; sourceTree = "<group>"; };
+		6E24BAE11B6039060075D17E /* test-app-utils.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "test-app-utils.c"; path = "src/app-utils/test/test-app-utils.c"; sourceTree = "<group>"; };
+		6E24BAE21B6039060075D17E /* test-gnc-ui-util.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "test-gnc-ui-util.c"; path = "src/app-utils/test/test-gnc-ui-util.c"; sourceTree = "<group>"; };
+		6E24BAE31B6039060075D17E /* test-option-util.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test-option-util.cpp"; path = "src/app-utils/test/test-option-util.cpp"; sourceTree = "<group>"; };
+		6E24BAE41B6039060075D17E /* test-print-parse-amount.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test-print-parse-amount.cpp"; path = "src/app-utils/test/test-print-parse-amount.cpp"; sourceTree = "<group>"; };
+		6E24BAE51B6039840075D17E /* gnc-aqbanking-templates.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-aqbanking-templates.cpp"; path = "src/libqof/qof/gnc-aqbanking-templates.cpp"; sourceTree = "<group>"; };
+		6E24BAE61B6039840075D17E /* gnc-aqbanking-templates.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "gnc-aqbanking-templates.h"; path = "src/libqof/qof/gnc-aqbanking-templates.h"; sourceTree = "<group>"; };
+		6E24BAE71B6039840075D17E /* gnc-datetime.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-datetime.cpp"; path = "src/libqof/qof/gnc-datetime.cpp"; sourceTree = "<group>"; };
+		6E24BAE81B6039840075D17E /* gnc-datetime.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = "gnc-datetime.hpp"; path = "src/libqof/qof/gnc-datetime.hpp"; sourceTree = "<group>"; };
+		6E24BAE91B6039840075D17E /* gnc-timezone.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-timezone.cpp"; path = "src/libqof/qof/gnc-timezone.cpp"; sourceTree = "<group>"; };
+		6E24BAEA1B6039840075D17E /* gnc-timezone.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = "gnc-timezone.hpp"; path = "src/libqof/qof/gnc-timezone.hpp"; sourceTree = "<group>"; };
+		6E24BAEB1B6039CC0075D17E /* gtest-gnc-datetime.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "gtest-gnc-datetime.cpp"; path = "src/libqof/qof/test/gtest-gnc-datetime.cpp"; sourceTree = "<group>"; };
+		6E24BAEC1B6039CC0075D17E /* gtest-gnc-int128.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "gtest-gnc-int128.cpp"; path = "src/libqof/qof/test/gtest-gnc-int128.cpp"; sourceTree = "<group>"; };
+		6E24BAED1B6039CC0075D17E /* gtest-gnc-timezone.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "gtest-gnc-timezone.cpp"; path = "src/libqof/qof/test/gtest-gnc-timezone.cpp"; sourceTree = "<group>"; };
+		6E24BAEE1B6039CC0075D17E /* Makefile.am */ = {isa = PBXFileReference; lastKnownFileType = text; name = Makefile.am; path = src/libqof/qof/test/Makefile.am; sourceTree = "<group>"; };
+		6E24BAEF1B6039CC0075D17E /* test-gnc-date.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "test-gnc-date.c"; path = "src/libqof/qof/test/test-gnc-date.c"; sourceTree = "<group>"; };
+		6E24BAF01B6039CC0075D17E /* test-gnc-guid.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test-gnc-guid.cpp"; path = "src/libqof/qof/test/test-gnc-guid.cpp"; sourceTree = "<group>"; };
+		6E24BAF21B6039CC0075D17E /* test-kvp-frame.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test-kvp-frame.cpp"; path = "src/libqof/qof/test/test-kvp-frame.cpp"; sourceTree = "<group>"; };
+		6E24BAF31B6039CC0075D17E /* test-kvp-value.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test-kvp-value.cpp"; path = "src/libqof/qof/test/test-kvp-value.cpp"; sourceTree = "<group>"; };
+		6E24BAF41B6039CC0075D17E /* test-qof-string-cache.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "test-qof-string-cache.c"; path = "src/libqof/qof/test/test-qof-string-cache.c"; sourceTree = "<group>"; };
+		6E24BAF51B6039CC0075D17E /* test-qof.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "test-qof.c"; path = "src/libqof/qof/test/test-qof.c"; sourceTree = "<group>"; };
+		6E24BAF61B6039CC0075D17E /* test-qofbackend.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "test-qofbackend.c"; path = "src/libqof/qof/test/test-qofbackend.c"; sourceTree = "<group>"; };
+		6E24BAF71B6039CC0075D17E /* test-qofbook.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "test-qofbook.c"; path = "src/libqof/qof/test/test-qofbook.c"; sourceTree = "<group>"; };
+		6E24BAF81B6039CC0075D17E /* test-qofinstance.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test-qofinstance.cpp"; path = "src/libqof/qof/test/test-qofinstance.cpp"; sourceTree = "<group>"; };
+		6E24BAF91B6039CC0075D17E /* test-qofobject.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "test-qofobject.c"; path = "src/libqof/qof/test/test-qofobject.c"; sourceTree = "<group>"; };
 		6E25551D177D67E80074F7BD /* mainwindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mainwindow.cpp; path = src/gnc/mainwindow.cpp; sourceTree = "<group>"; };
 		6E25551E177D67E80074F7BD /* mainwindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = mainwindow.hpp; path = src/gnc/mainwindow.hpp; sourceTree = "<group>"; };
 		6E4A80060F27C0350024DAAF /* pow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pow.h; path = lib/libc/pow.h; sourceTree = "<group>"; };
-		6E4A800A0F27C0350024DAAF /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Makefile.am; path = lib/stf/Makefile.am; sourceTree = "<group>"; };
-		6E4A800B0F27C0350024DAAF /* stf-parse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "stf-parse.c"; path = "lib/stf/stf-parse.c"; sourceTree = "<group>"; };
-		6E4A800C0F27C0350024DAAF /* stf-parse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "stf-parse.h"; path = "lib/stf/stf-parse.h"; sourceTree = "<group>"; };
 		6E4A80370F27C2D40024DAAF /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Makefile.am; path = packaging/Makefile.am; sourceTree = "<group>"; };
-		6E4A80380F27C2D40024DAAF /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Makefile.am; path = packaging/win32/Makefile.am; sourceTree = "<group>"; };
 		6E4A80390F27C3EF0024DAAF /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Makefile.am; path = src/backend/dbi/Makefile.am; sourceTree = "<group>"; };
 		6E4A803A0F27C3EF0024DAAF /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Makefile.am; path = src/backend/sql/Makefile.am; sourceTree = "<group>"; };
 		6E4A803B0F27C3EF0024DAAF /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Makefile.am; path = src/backend/sql/test/Makefile.am; sourceTree = "<group>"; };
 		6E4A803C0F27C4FC0024DAAF /* gnc-help-utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-help-utils.c"; path = "src/app-utils/gnc-help-utils.c"; sourceTree = "<group>"; };
 		6E4A803D0F27C4FC0024DAAF /* gnc-help-utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-help-utils.h"; path = "src/app-utils/gnc-help-utils.h"; sourceTree = "<group>"; };
-		6E4A803E0F27C4FC0024DAAF /* test-sx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "test-sx.c"; path = "src/app-utils/test/test-sx.c"; sourceTree = "<group>"; };
-		6E4A803F0F27C4FC0024DAAF /* gnc-backend-dbi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-backend-dbi.c"; path = "src/backend/dbi/gnc-backend-dbi.c"; sourceTree = "<group>"; };
 		6E4A80400F27C4FC0024DAAF /* gnc-backend-dbi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-backend-dbi.h"; path = "src/backend/dbi/gnc-backend-dbi.h"; sourceTree = "<group>"; };
 		6E4A80410F27C4FC0024DAAF /* gncmod-backend-dbi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gncmod-backend-dbi.c"; path = "src/backend/dbi/gncmod-backend-dbi.c"; sourceTree = "<group>"; };
-		6E4A80440F27C4FC0024DAAF /* gnc-account-sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-account-sql.c"; path = "src/backend/sql/gnc-account-sql.c"; sourceTree = "<group>"; };
 		6E4A80450F27C4FC0024DAAF /* gnc-account-sql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-account-sql.h"; path = "src/backend/sql/gnc-account-sql.h"; sourceTree = "<group>"; };
-		6E4A80460F27C4FC0024DAAF /* gnc-backend-sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-backend-sql.c"; path = "src/backend/sql/gnc-backend-sql.c"; sourceTree = "<group>"; };
-		6E4A80470F27C4FC0024DAAF /* gnc-backend-sql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-backend-sql.h"; path = "src/backend/sql/gnc-backend-sql.h"; sourceTree = "<group>"; };
-		6E4A80480F27C4FC0024DAAF /* gnc-book-sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-book-sql.c"; path = "src/backend/sql/gnc-book-sql.c"; sourceTree = "<group>"; };
 		6E4A80490F27C4FC0024DAAF /* gnc-book-sql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-book-sql.h"; path = "src/backend/sql/gnc-book-sql.h"; sourceTree = "<group>"; };
-		6E4A804A0F27C4FC0024DAAF /* gnc-budget-sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-budget-sql.c"; path = "src/backend/sql/gnc-budget-sql.c"; sourceTree = "<group>"; };
 		6E4A804B0F27C4FC0024DAAF /* gnc-budget-sql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-budget-sql.h"; path = "src/backend/sql/gnc-budget-sql.h"; sourceTree = "<group>"; };
-		6E4A804C0F27C4FC0024DAAF /* gnc-commodity-sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-commodity-sql.c"; path = "src/backend/sql/gnc-commodity-sql.c"; sourceTree = "<group>"; };
 		6E4A804D0F27C4FC0024DAAF /* gnc-commodity-sql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-commodity-sql.h"; path = "src/backend/sql/gnc-commodity-sql.h"; sourceTree = "<group>"; };
-		6E4A804E0F27C4FC0024DAAF /* gnc-lots-sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-lots-sql.c"; path = "src/backend/sql/gnc-lots-sql.c"; sourceTree = "<group>"; };
 		6E4A804F0F27C4FC0024DAAF /* gnc-lots-sql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-lots-sql.h"; path = "src/backend/sql/gnc-lots-sql.h"; sourceTree = "<group>"; };
-		6E4A80500F27C4FC0024DAAF /* gnc-price-sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-price-sql.c"; path = "src/backend/sql/gnc-price-sql.c"; sourceTree = "<group>"; };
 		6E4A80510F27C4FC0024DAAF /* gnc-price-sql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-price-sql.h"; path = "src/backend/sql/gnc-price-sql.h"; sourceTree = "<group>"; };
-		6E4A80520F27C4FC0024DAAF /* gnc-recurrence-sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-recurrence-sql.c"; path = "src/backend/sql/gnc-recurrence-sql.c"; sourceTree = "<group>"; };
 		6E4A80530F27C4FC0024DAAF /* gnc-recurrence-sql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-recurrence-sql.h"; path = "src/backend/sql/gnc-recurrence-sql.h"; sourceTree = "<group>"; };
-		6E4A80540F27C4FC0024DAAF /* gnc-schedxaction-sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-schedxaction-sql.c"; path = "src/backend/sql/gnc-schedxaction-sql.c"; sourceTree = "<group>"; };
 		6E4A80550F27C4FC0024DAAF /* gnc-schedxaction-sql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-schedxaction-sql.h"; path = "src/backend/sql/gnc-schedxaction-sql.h"; sourceTree = "<group>"; };
-		6E4A80560F27C4FC0024DAAF /* gnc-slots-sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-slots-sql.c"; path = "src/backend/sql/gnc-slots-sql.c"; sourceTree = "<group>"; };
 		6E4A80570F27C4FC0024DAAF /* gnc-slots-sql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-slots-sql.h"; path = "src/backend/sql/gnc-slots-sql.h"; sourceTree = "<group>"; };
-		6E4A80580F27C4FC0024DAAF /* gnc-transaction-sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-transaction-sql.c"; path = "src/backend/sql/gnc-transaction-sql.c"; sourceTree = "<group>"; };
 		6E4A80590F27C4FC0024DAAF /* gnc-transaction-sql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-transaction-sql.h"; path = "src/backend/sql/gnc-transaction-sql.h"; sourceTree = "<group>"; };
-		6E4A805A0F27C4FC0024DAAF /* test-column-types.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "test-column-types.c"; path = "src/backend/sql/test/test-column-types.c"; sourceTree = "<group>"; };
 		6E4A805B0F27C6A50024DAAF /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Makefile.am; path = src/backend/dbi/test/Makefile.am; sourceTree = "<group>"; };
 		6E4A80760F27C8770024DAAF /* core-utils.scm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "core-utils.scm"; path = "src/core-utils/core-utils.scm"; sourceTree = "<group>"; };
-		6E4A80770F27C9820024DAAF /* test-account-object.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "test-account-object.c"; path = "src/engine/test/test-account-object.c"; sourceTree = "<group>"; };
 		6E4A80790F27CA4A0024DAAF /* dialog-book-close.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "dialog-book-close.c"; path = "src/gnome-utils/dialog-book-close.c"; sourceTree = "<group>"; };
 		6E4A807A0F27CA4A0024DAAF /* dialog-book-close.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "dialog-book-close.h"; path = "src/gnome-utils/dialog-book-close.h"; sourceTree = "<group>"; };
 		6E4A807D0F27CA4A0024DAAF /* gnc-autosave.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-autosave.c"; path = "src/gnome-utils/gnc-autosave.c"; sourceTree = "<group>"; };
@@ -96,61 +143,23 @@
 		6E4EC5B90F9A2FAF00C6F6AC /* dialog-custom-report.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "dialog-custom-report.h"; path = "src/report/report-gnome/dialog-custom-report.h"; sourceTree = "<group>"; };
 		6E4EC5BC0F9A303900C6F6AC /* budget-balance-sheet.scm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "budget-balance-sheet.scm"; path = "src/report/standard-reports/budget-balance-sheet.scm"; sourceTree = "<group>"; };
 		6E4EC5BD0F9A303900C6F6AC /* budget-income-statement.scm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "budget-income-statement.scm"; path = "src/report/standard-reports/budget-income-statement.scm"; sourceTree = "<group>"; };
-		6E4EC5C00F9A30E600C6F6AC /* gnc-account-xml-v2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-account-xml-v2.c"; path = "src/backend/xml/gnc-account-xml-v2.c"; sourceTree = "<group>"; };
-		6E4EC5C10F9A30E600C6F6AC /* gnc-backend-xml.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-backend-xml.c"; path = "src/backend/xml/gnc-backend-xml.c"; sourceTree = "<group>"; };
 		6E4EC5C20F9A30E600C6F6AC /* gnc-backend-xml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-backend-xml.h"; path = "src/backend/xml/gnc-backend-xml.h"; sourceTree = "<group>"; };
-		6E4EC5C30F9A30E600C6F6AC /* gnc-book-xml-v2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-book-xml-v2.c"; path = "src/backend/xml/gnc-book-xml-v2.c"; sourceTree = "<group>"; };
-		6E4EC5C40F9A30E600C6F6AC /* gnc-budget-xml-v2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-budget-xml-v2.c"; path = "src/backend/xml/gnc-budget-xml-v2.c"; sourceTree = "<group>"; };
-		6E4EC5C50F9A30E700C6F6AC /* gnc-commodity-xml-v2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-commodity-xml-v2.c"; path = "src/backend/xml/gnc-commodity-xml-v2.c"; sourceTree = "<group>"; };
-		6E4EC5C60F9A30E700C6F6AC /* gnc-freqspec-xml-v2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-freqspec-xml-v2.c"; path = "src/backend/xml/gnc-freqspec-xml-v2.c"; sourceTree = "<group>"; };
-		6E4EC5C70F9A30E700C6F6AC /* gnc-lot-xml-v2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-lot-xml-v2.c"; path = "src/backend/xml/gnc-lot-xml-v2.c"; sourceTree = "<group>"; };
-		6E4EC5C80F9A30E700C6F6AC /* gnc-pricedb-xml-v2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-pricedb-xml-v2.c"; path = "src/backend/xml/gnc-pricedb-xml-v2.c"; sourceTree = "<group>"; };
-		6E4EC5C90F9A30E700C6F6AC /* gnc-recurrence-xml-v2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-recurrence-xml-v2.c"; path = "src/backend/xml/gnc-recurrence-xml-v2.c"; sourceTree = "<group>"; };
-		6E4EC5CA0F9A30E700C6F6AC /* gnc-schedxaction-xml-v2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-schedxaction-xml-v2.c"; path = "src/backend/xml/gnc-schedxaction-xml-v2.c"; sourceTree = "<group>"; };
-		6E4EC5CB0F9A30E700C6F6AC /* gnc-transaction-xml-v2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-transaction-xml-v2.c"; path = "src/backend/xml/gnc-transaction-xml-v2.c"; sourceTree = "<group>"; };
 		6E4EC5CC0F9A30E700C6F6AC /* gnc-xml-helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-xml-helper.h"; path = "src/backend/xml/gnc-xml-helper.h"; sourceTree = "<group>"; };
 		6E4EC5CD0F9A30E700C6F6AC /* gnc-xml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-xml.h"; path = "src/backend/xml/gnc-xml.h"; sourceTree = "<group>"; };
-		6E4EC5CE0F9A30E700C6F6AC /* gncmod-backend-xml.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gncmod-backend-xml.c"; path = "src/backend/xml/gncmod-backend-xml.c"; sourceTree = "<group>"; };
-		6E4EC5CF0F9A30E700C6F6AC /* io-example-account.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "io-example-account.c"; path = "src/backend/xml/io-example-account.c"; sourceTree = "<group>"; };
 		6E4EC5D00F9A30E700C6F6AC /* io-example-account.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "io-example-account.h"; path = "src/backend/xml/io-example-account.h"; sourceTree = "<group>"; };
-		6E4EC5D10F9A30E700C6F6AC /* io-gncxml-gen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "io-gncxml-gen.c"; path = "src/backend/xml/io-gncxml-gen.c"; sourceTree = "<group>"; };
 		6E4EC5D20F9A30E700C6F6AC /* io-gncxml-gen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "io-gncxml-gen.h"; path = "src/backend/xml/io-gncxml-gen.h"; sourceTree = "<group>"; };
-		6E4EC5D30F9A30E700C6F6AC /* io-gncxml-v1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "io-gncxml-v1.c"; path = "src/backend/xml/io-gncxml-v1.c"; sourceTree = "<group>"; };
-		6E4EC5D40F9A30E700C6F6AC /* io-gncxml-v2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "io-gncxml-v2.c"; path = "src/backend/xml/io-gncxml-v2.c"; sourceTree = "<group>"; };
 		6E4EC5D50F9A30E700C6F6AC /* io-gncxml-v2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "io-gncxml-v2.h"; path = "src/backend/xml/io-gncxml-v2.h"; sourceTree = "<group>"; };
 		6E4EC5D60F9A30E700C6F6AC /* io-gncxml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "io-gncxml.h"; path = "src/backend/xml/io-gncxml.h"; sourceTree = "<group>"; };
-		6E4EC5D70F9A30E700C6F6AC /* io-utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "io-utils.c"; path = "src/backend/xml/io-utils.c"; sourceTree = "<group>"; };
 		6E4EC5D80F9A30E700C6F6AC /* io-utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "io-utils.h"; path = "src/backend/xml/io-utils.h"; sourceTree = "<group>"; };
 		6E4EC5D90F9A30E700C6F6AC /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Makefile.am; path = src/backend/xml/Makefile.am; sourceTree = "<group>"; };
-		6E4EC5DA0F9A30E700C6F6AC /* sixtp-dom-generators.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "sixtp-dom-generators.c"; path = "src/backend/xml/sixtp-dom-generators.c"; sourceTree = "<group>"; };
 		6E4EC5DB0F9A30E700C6F6AC /* sixtp-dom-generators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "sixtp-dom-generators.h"; path = "src/backend/xml/sixtp-dom-generators.h"; sourceTree = "<group>"; };
-		6E4EC5DC0F9A30E700C6F6AC /* sixtp-dom-parsers.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "sixtp-dom-parsers.c"; path = "src/backend/xml/sixtp-dom-parsers.c"; sourceTree = "<group>"; };
 		6E4EC5DD0F9A30E700C6F6AC /* sixtp-dom-parsers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "sixtp-dom-parsers.h"; path = "src/backend/xml/sixtp-dom-parsers.h"; sourceTree = "<group>"; };
 		6E4EC5DE0F9A30E700C6F6AC /* sixtp-parsers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "sixtp-parsers.h"; path = "src/backend/xml/sixtp-parsers.h"; sourceTree = "<group>"; };
-		6E4EC5DF0F9A30E700C6F6AC /* sixtp-stack.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "sixtp-stack.c"; path = "src/backend/xml/sixtp-stack.c"; sourceTree = "<group>"; };
 		6E4EC5E00F9A30E700C6F6AC /* sixtp-stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "sixtp-stack.h"; path = "src/backend/xml/sixtp-stack.h"; sourceTree = "<group>"; };
-		6E4EC5E10F9A30E700C6F6AC /* sixtp-to-dom-parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "sixtp-to-dom-parser.c"; path = "src/backend/xml/sixtp-to-dom-parser.c"; sourceTree = "<group>"; };
-		6E4EC5E20F9A30E700C6F6AC /* sixtp-utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "sixtp-utils.c"; path = "src/backend/xml/sixtp-utils.c"; sourceTree = "<group>"; };
 		6E4EC5E30F9A30E700C6F6AC /* sixtp-utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "sixtp-utils.h"; path = "src/backend/xml/sixtp-utils.h"; sourceTree = "<group>"; };
-		6E4EC5E40F9A30E700C6F6AC /* sixtp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sixtp.c; path = src/backend/xml/sixtp.c; sourceTree = "<group>"; };
 		6E4EC5E50F9A30E700C6F6AC /* sixtp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sixtp.h; path = src/backend/xml/sixtp.h; sourceTree = "<group>"; };
 		6E4EC5E60F9A30E700C6F6AC /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Makefile.am; path = src/backend/xml/test/Makefile.am; sourceTree = "<group>"; };
-		6E4EC5E70F9A30E700C6F6AC /* test-date-converting.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "test-date-converting.c"; path = "src/backend/xml/test/test-date-converting.c"; sourceTree = "<group>"; };
-		6E4EC5E80F9A30E700C6F6AC /* test-dom-converters1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "test-dom-converters1.c"; path = "src/backend/xml/test/test-dom-converters1.c"; sourceTree = "<group>"; };
-		6E4EC5E90F9A30E700C6F6AC /* test-dom-parser1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "test-dom-parser1.c"; path = "src/backend/xml/test/test-dom-parser1.c"; sourceTree = "<group>"; };
-		6E4EC5EA0F9A30E700C6F6AC /* test-file-stuff.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "test-file-stuff.c"; path = "src/backend/xml/test/test-file-stuff.c"; sourceTree = "<group>"; };
 		6E4EC5EB0F9A30E700C6F6AC /* test-file-stuff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "test-file-stuff.h"; path = "src/backend/xml/test/test-file-stuff.h"; sourceTree = "<group>"; };
-		6E4EC5EC0F9A30E700C6F6AC /* test-kvp-frames.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "test-kvp-frames.c"; path = "src/backend/xml/test/test-kvp-frames.c"; sourceTree = "<group>"; };
-		6E4EC5ED0F9A30E700C6F6AC /* test-load-backend.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "test-load-backend.c"; path = "src/backend/xml/test/test-load-backend.c"; sourceTree = "<group>"; };
-		6E4EC5EE0F9A30E700C6F6AC /* test-load-example-account.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "test-load-example-account.c"; path = "src/backend/xml/test/test-load-example-account.c"; sourceTree = "<group>"; };
-		6E4EC5EF0F9A30E700C6F6AC /* test-load-xml2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "test-load-xml2.c"; path = "src/backend/xml/test/test-load-xml2.c"; sourceTree = "<group>"; };
-		6E4EC5F00F9A30E700C6F6AC /* test-save-in-lang.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "test-save-in-lang.c"; path = "src/backend/xml/test/test-save-in-lang.c"; sourceTree = "<group>"; };
-		6E4EC5F10F9A30E700C6F6AC /* test-string-converters.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "test-string-converters.c"; path = "src/backend/xml/test/test-string-converters.c"; sourceTree = "<group>"; };
-		6E4EC5F20F9A30E700C6F6AC /* test-xml-account.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "test-xml-account.c"; path = "src/backend/xml/test/test-xml-account.c"; sourceTree = "<group>"; };
-		6E4EC5F30F9A30E700C6F6AC /* test-xml-commodity.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "test-xml-commodity.c"; path = "src/backend/xml/test/test-xml-commodity.c"; sourceTree = "<group>"; };
-		6E4EC5F40F9A30E700C6F6AC /* test-xml-pricedb.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "test-xml-pricedb.c"; path = "src/backend/xml/test/test-xml-pricedb.c"; sourceTree = "<group>"; };
-		6E4EC5F50F9A30E700C6F6AC /* test-xml-transaction.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "test-xml-transaction.c"; path = "src/backend/xml/test/test-xml-transaction.c"; sourceTree = "<group>"; };
-		6E4EC5F60F9A30E700C6F6AC /* test-xml2-is-file.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "test-xml2-is-file.c"; path = "src/backend/xml/test/test-xml2-is-file.c"; sourceTree = "<group>"; };
 		6E4EC61F0F9A32F900C6F6AC /* dialog-file-access.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "dialog-file-access.c"; path = "src/gnome-utils/dialog-file-access.c"; sourceTree = "<group>"; };
 		6E4EC6200F9A32F900C6F6AC /* dialog-file-access.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "dialog-file-access.h"; path = "src/gnome-utils/dialog-file-access.h"; sourceTree = "<group>"; };
 		6E4EC6240F9A333E00C6F6AC /* gnc-html-extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-html-extras.h"; path = "src/html/gnc-html-extras.h"; sourceTree = "<group>"; };
@@ -171,13 +180,9 @@
 		6E4EC64B0F9A359B00C6F6AC /* gnc-date.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-date.h"; path = "src/libqof/qof/gnc-date.h"; sourceTree = "<group>"; };
 		6E4EC64D0F9A359B00C6F6AC /* gnc-numeric.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-numeric.h"; path = "src/libqof/qof/gnc-numeric.h"; sourceTree = "<group>"; };
 		6E4EC64F0F9A359B00C6F6AC /* guid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = guid.h; path = src/libqof/qof/guid.h; sourceTree = "<group>"; };
-		6E4EC6500F9A359B00C6F6AC /* kvp-util-p.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "kvp-util-p.h"; path = "src/libqof/qof/kvp-util-p.h"; sourceTree = "<group>"; };
-		6E4EC6520F9A359B00C6F6AC /* kvp-util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "kvp-util.h"; path = "src/libqof/qof/kvp-util.h"; sourceTree = "<group>"; };
-		6E4EC6540F9A359B00C6F6AC /* kvp_frame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = kvp_frame.h; path = src/libqof/qof/kvp_frame.h; sourceTree = "<group>"; };
 		6E4EC6550F9A359B00C6F6AC /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Makefile.am; path = src/libqof/qof/Makefile.am; sourceTree = "<group>"; };
 		6E4EC6580F9A359B00C6F6AC /* qof-gobject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "qof-gobject.h"; path = "src/libqof/qof/qof-gobject.h"; sourceTree = "<group>"; };
 		6E4EC65A0F9A359B00C6F6AC /* qof.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qof.h; path = src/libqof/qof/qof.h; sourceTree = "<group>"; };
-		6E4EC65B0F9A359B00C6F6AC /* qofbackend-p.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "qofbackend-p.h"; path = "src/libqof/qof/qofbackend-p.h"; sourceTree = "<group>"; };
 		6E4EC65D0F9A359B00C6F6AC /* qofbackend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qofbackend.h; path = src/libqof/qof/qofbackend.h; sourceTree = "<group>"; };
 		6E4EC65E0F9A359B00C6F6AC /* qofbook-p.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "qofbook-p.h"; path = "src/libqof/qof/qofbook-p.h"; sourceTree = "<group>"; };
 		6E4EC6600F9A359B00C6F6AC /* qofbook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qofbook.h; path = src/libqof/qof/qofbook.h; sourceTree = "<group>"; };
@@ -197,7 +202,6 @@
 		6E4EC6800F9A359B00C6F6AC /* qofquery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qofquery.h; path = src/libqof/qof/qofquery.h; sourceTree = "<group>"; };
 		6E4EC6810F9A359B00C6F6AC /* qofquerycore-p.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "qofquerycore-p.h"; path = "src/libqof/qof/qofquerycore-p.h"; sourceTree = "<group>"; };
 		6E4EC6830F9A359B00C6F6AC /* qofquerycore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qofquerycore.h; path = src/libqof/qof/qofquerycore.h; sourceTree = "<group>"; };
-		6E4EC6860F9A359B00C6F6AC /* qofsession-p.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "qofsession-p.h"; path = "src/libqof/qof/qofsession-p.h"; sourceTree = "<group>"; };
 		6E4EC6880F9A359B00C6F6AC /* qofsession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qofsession.h; path = src/libqof/qof/qofsession.h; sourceTree = "<group>"; };
 		6E4EC68C0F9A359B00C6F6AC /* qofutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qofutil.h; path = src/libqof/qof/qofutil.h; sourceTree = "<group>"; };
 		6E68665D0AE95B4C00F21DBC /* gnc-session.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "gnc-session.c"; path = "src/engine/gnc-session.c"; sourceTree = "<group>"; };
@@ -275,7 +279,6 @@
 		6E8B74F009912C9D003F7E3A /* dialog-vendor.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "dialog-vendor.c"; path = "src/business/business-gnome/dialog-vendor.c"; sourceTree = "<group>"; };
 		6E8B74F109912C9D003F7E3A /* doxygen_main_page.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = doxygen_main_page.c; path = src/doc/doxygen_main_page.c; sourceTree = "<group>"; };
 		6E8B74FE09912C9D003F7E3A /* engine-helpers.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "engine-helpers.c"; path = "src/engine/engine-helpers.c"; sourceTree = "<group>"; };
-		6E8B750309912C9D003F7E3A /* fastcgi-hello.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "fastcgi-hello.c"; path = "src/experimental/cgi-bin/fastcgi-hello.c"; sourceTree = "<group>"; };
 		6E8B750409912C9D003F7E3A /* file-utils.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "file-utils.c"; path = "src/app-utils/file-utils.c"; sourceTree = "<group>"; };
 		6E8B751309912C9D003F7E3A /* foo.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = foo.c; path = "src/gnc-module/test/mod-foo/foo.c"; sourceTree = "<group>"; };
 		6E8B751609912C9D003F7E3A /* formulacell-gnome.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "formulacell-gnome.c"; path = "src/register/register-gnome/formulacell-gnome.c"; sourceTree = "<group>"; };
@@ -344,7 +347,6 @@
 		6E8B759709912C9E003F7E3A /* gnc-pricedb.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "gnc-pricedb.c"; path = "src/engine/gnc-pricedb.c"; sourceTree = "<group>"; };
 		6E8B759A09912C9E003F7E3A /* gnc-recurrence.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "gnc-recurrence.c"; path = "src/gnome-utils/gnc-recurrence.c"; sourceTree = "<group>"; };
 		6E8B759B09912C9E003F7E3A /* gnc-report.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "gnc-report.c"; path = "src/report/report-system/gnc-report.c"; sourceTree = "<group>"; };
-		6E8B759D09912C9E003F7E3A /* gnc-server.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "gnc-server.c"; path = "src/experimental/cgi-bin/gnc-server.c"; sourceTree = "<group>"; };
 		6E8B759F09912C9E003F7E3A /* gnc-splash.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "gnc-splash.c"; path = "src/gnome-utils/gnc-splash.c"; sourceTree = "<group>"; };
 		6E8B75A009912C9E003F7E3A /* gnc-split-reg.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "gnc-split-reg.c"; path = "src/gnome/gnc-split-reg.c"; sourceTree = "<group>"; };
 		6E8B75A309912C9E003F7E3A /* gnc-tree-model-account-types.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "gnc-tree-model-account-types.c"; path = "src/gnome-utils/gnc-tree-model-account-types.c"; sourceTree = "<group>"; };
@@ -396,26 +398,19 @@
 		6E8B75ED09912C9E003F7E3A /* gnucash-sheet.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "gnucash-sheet.c"; path = "src/register/register-gnome/gnucash-sheet.c"; sourceTree = "<group>"; };
 		6E8B75EE09912C9E003F7E3A /* gnucash-style.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "gnucash-style.c"; path = "src/register/register-gnome/gnucash-style.c"; sourceTree = "<group>"; };
 		6E8B768C09912C9E003F7E3A /* gtable.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = gtable.c; path = "src/register/register-core/gtable.c"; sourceTree = "<group>"; };
-		6E8B768F09912C9F003F7E3A /* guile-strings.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "guile-strings.c"; path = "intl-scm/guile-strings.c"; sourceTree = "<group>"; };
 		6E8B769009912C9F003F7E3A /* guile-util.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "guile-util.c"; path = "src/app-utils/guile-util.c"; sourceTree = "<group>"; };
-		6E8B76A009912C9F003F7E3A /* hello.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = hello.c; path = "src/experimental/cgi-bin/hello.c"; sourceTree = "<group>"; };
-		6E8B76A109912C9F003F7E3A /* hello2.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = hello2.c; path = "src/experimental/cgi-bin/hello2.c"; sourceTree = "<group>"; };
-		6E8B76A209912C9F003F7E3A /* hello3.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = hello3.c; path = "src/experimental/cgi-bin/hello3.c"; sourceTree = "<group>"; };
 		6E8B76A409912C9F003F7E3A /* import-account-matcher.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "import-account-matcher.c"; path = "src/import-export/import-account-matcher.c"; sourceTree = "<group>"; };
 		6E8B76A509912C9F003F7E3A /* import-backend.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "import-backend.c"; path = "src/import-export/import-backend.c"; sourceTree = "<group>"; };
 		6E8B76A609912C9F003F7E3A /* import-commodity-matcher.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "import-commodity-matcher.c"; path = "src/import-export/import-commodity-matcher.c"; sourceTree = "<group>"; };
 		6E8B76A709912C9F003F7E3A /* import-format-dialog.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "import-format-dialog.c"; path = "src/import-export/import-format-dialog.c"; sourceTree = "<group>"; };
 		6E8B76A809912C9F003F7E3A /* import-main-matcher.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "import-main-matcher.c"; path = "src/import-export/import-main-matcher.c"; sourceTree = "<group>"; };
-		6E8B76A909912C9F003F7E3A /* import-match-map.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "import-match-map.c"; path = "src/import-export/import-match-map.c"; sourceTree = "<group>"; };
 		6E8B76AA09912C9F003F7E3A /* import-match-picker.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "import-match-picker.c"; path = "src/import-export/import-match-picker.c"; sourceTree = "<group>"; };
 		6E8B76AB09912C9F003F7E3A /* import-parse.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "import-parse.c"; path = "src/import-export/import-parse.c"; sourceTree = "<group>"; };
 		6E8B76AC09912C9F003F7E3A /* import-settings.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "import-settings.c"; path = "src/import-export/import-settings.c"; sourceTree = "<group>"; };
 		6E8B76AD09912C9F003F7E3A /* import-utilities.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "import-utilities.c"; path = "src/import-export/import-utilities.c"; sourceTree = "<group>"; };
 		6E8B76AE09912C9F003F7E3A /* incompatdep.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = incompatdep.c; path = "src/gnc-module/test/misc-mods/incompatdep.c"; sourceTree = "<group>"; };
 		6E8B76B609912C9F003F7E3A /* iso-4217-currencies.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "iso-4217-currencies.c"; path = "../build/darwin/src/engine/iso-4217-currencies.c"; sourceTree = "<group>"; };
-		6E8B76B809912C9F003F7E3A /* kvp-scm.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "kvp-scm.c"; path = "src/engine/kvp-scm.c"; sourceTree = "<group>"; };
 		6E8B76BB09912C9F003F7E3A /* libc-missing-noop.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "libc-missing-noop.c"; path = "lib/libc/libc-missing-noop.c"; sourceTree = "<group>"; };
-		6E8B76BD09912C9F003F7E3A /* localtime_r.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = localtime_r.c; path = lib/libc/localtime_r.c; sourceTree = "<group>"; };
 		6E8B76C109912C9F003F7E3A /* misc-gnome-utils.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "misc-gnome-utils.c"; path = "src/gnome-utils/misc-gnome-utils.c"; sourceTree = "<group>"; };
 		6E8B76C209912C9F003F7E3A /* numcell.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = numcell.c; path = "src/register/register-core/numcell.c"; sourceTree = "<group>"; };
 		6E8B76C409912C9F003F7E3A /* option-util.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "option-util.c"; path = "src/app-utils/option-util.c"; sourceTree = "<group>"; };
@@ -466,14 +461,9 @@
 		6E8B771809912C9F003F7E3A /* table-layout.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "table-layout.c"; path = "src/register/register-core/table-layout.c"; sourceTree = "<group>"; };
 		6E8B771909912C9F003F7E3A /* table-model.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "table-model.c"; path = "src/register/register-core/table-model.c"; sourceTree = "<group>"; };
 		6E8B771B09912C9F003F7E3A /* test-agedver.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-agedver.c"; path = "src/gnc-module/test/test-agedver.c"; sourceTree = "<group>"; };
-		6E8B772009912C9F003F7E3A /* test-commodities.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-commodities.c"; path = "src/engine/test/test-commodities.c"; sourceTree = "<group>"; };
-		6E8B772609912C9F003F7E3A /* test-date.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-date.c"; path = "src/engine/test/test-date.c"; sourceTree = "<group>"; };
 		6E8B772B09912C9F003F7E3A /* test-dynload.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-dynload.c"; path = "src/gnc-module/test/test-dynload.c"; sourceTree = "<group>"; };
-		6E8B772D09912C9F003F7E3A /* test-engine-stuff.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-engine-stuff.c"; path = "src/engine/test-core/test-engine-stuff.c"; sourceTree = "<group>"; };
 		6E8B772F09912C9F003F7E3A /* test-exp-parser.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-exp-parser.c"; path = "src/app-utils/test/test-exp-parser.c"; sourceTree = "<group>"; };
 		6E8B773309912C9F003F7E3A /* test-gnc-recurrence.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-gnc-recurrence.c"; path = "src/gnome-utils/test/test-gnc-recurrence.c"; sourceTree = "<group>"; };
-		6E8B773409912C9F003F7E3A /* test-group-vs-book.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-group-vs-book.c"; path = "src/engine/test/test-group-vs-book.c"; sourceTree = "<group>"; };
-		6E8B773509912C9F003F7E3A /* test-guid.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-guid.c"; path = "src/engine/test/test-guid.c"; sourceTree = "<group>"; };
 		6E8B773809912C9F003F7E3A /* test-import-parse.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-import-parse.c"; path = "src/import-export/test/test-import-parse.c"; sourceTree = "<group>"; };
 		6E8B773909912C9F003F7E3A /* test-incompatdep.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-incompatdep.c"; path = "src/gnc-module/test/test-incompatdep.c"; sourceTree = "<group>"; };
 		6E8B773D09912C9F003F7E3A /* test-link-module.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-link-module.c"; path = "src/gnome-utils/test/test-link-module.c"; sourceTree = "<group>"; };
@@ -491,22 +481,12 @@
 		6E8B774E09912C9F003F7E3A /* test-link.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-link.c"; path = "src/import-export/test/test-link.c"; sourceTree = "<group>"; };
 		6E8B775109912C9F003F7E3A /* test-load-c.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-load-c.c"; path = "src/gnc-module/test/test-load-c.c"; sourceTree = "<group>"; };
 		6E8B775209912C9F003F7E3A /* test-load-engine.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-load-engine.c"; path = "src/engine/test/test-load-engine.c"; sourceTree = "<group>"; };
-		6E8B775609912C9F003F7E3A /* test-lots.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-lots.c"; path = "src/engine/test/test-lots.c"; sourceTree = "<group>"; };
 		6E8B775809912C9F003F7E3A /* test-modsysver.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-modsysver.c"; path = "src/gnc-module/test/test-modsysver.c"; sourceTree = "<group>"; };
-		6E8B775E09912C9F003F7E3A /* test-numeric.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-numeric.c"; path = "src/engine/test/test-numeric.c"; sourceTree = "<group>"; };
 		6E8B775F09912C9F003F7E3A /* test-object.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-object.c"; path = "src/engine/test/test-object.c"; sourceTree = "<group>"; };
-		6E8B776709912C9F003F7E3A /* test-print-parse-amount.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-print-parse-amount.c"; path = "src/app-utils/test/test-print-parse-amount.c"; sourceTree = "<group>"; };
-		6E8B776809912C9F003F7E3A /* test-print-queries.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-print-queries.c"; path = "src/app-utils/test/test-print-queries.c"; sourceTree = "<group>"; };
 		6E8B776909912C9F003F7E3A /* test-qif.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-qif.c"; path = "src/import-export/qif/test/test-qif.c"; sourceTree = "<group>"; };
-		6E8B776A09912C9F003F7E3A /* test-query.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-query.c"; path = "src/engine/test/test-query.c"; sourceTree = "<group>"; };
 		6E8B776B09912C9F003F7E3A /* test-querynew.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-querynew.c"; path = "src/engine/test/test-querynew.c"; sourceTree = "<group>"; };
 		6E8B776C09912C9F003F7E3A /* test-recurrence.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-recurrence.c"; path = "src/engine/test/test-recurrence.c"; sourceTree = "<group>"; };
-		6E8B777009912C9F003F7E3A /* test-scm-query-string.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-scm-query-string.c"; path = "src/app-utils/test/test-scm-query-string.c"; sourceTree = "<group>"; };
-		6E8B777109912C9F003F7E3A /* test-scm-query.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-scm-query.c"; path = "src/engine/test/test-scm-query.c"; sourceTree = "<group>"; };
-		6E8B777209912C9F003F7E3A /* test-split-vs-account.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-split-vs-account.c"; path = "src/engine/test/test-split-vs-account.c"; sourceTree = "<group>"; };
 		6E8B777409912C9F003F7E3A /* test-stuff.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-stuff.c"; path = "src/test-core/test-stuff.c"; sourceTree = "<group>"; };
-		6E8B777609912C9F003F7E3A /* test-transaction-reversal.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-transaction-reversal.c"; path = "src/engine/test/test-transaction-reversal.c"; sourceTree = "<group>"; };
-		6E8B777709912C9F003F7E3A /* test-transaction-voiding.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "test-transaction-voiding.c"; path = "src/engine/test/test-transaction-voiding.c"; sourceTree = "<group>"; };
 		6E8B778209912C9F003F7E3A /* top-level.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "top-level.c"; path = "src/gnome/top-level.c"; sourceTree = "<group>"; };
 		6E8B778409912C9F003F7E3A /* TransLog.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = TransLog.c; path = src/engine/TransLog.c; sourceTree = "<group>"; };
 		6E8B778B09912CA0003F7E3A /* window-reconcile.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = "window-reconcile.c"; path = "src/gnome/window-reconcile.c"; sourceTree = "<group>"; };
@@ -660,13 +640,11 @@
 		6E8B79900991BC41003F7E3A /* import-backend.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = "import-backend.h"; path = "src/import-export/import-backend.h"; sourceTree = "<group>"; };
 		6E8B79910991BC41003F7E3A /* import-commodity-matcher.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = "import-commodity-matcher.h"; path = "src/import-export/import-commodity-matcher.h"; sourceTree = "<group>"; };
 		6E8B79920991BC41003F7E3A /* import-main-matcher.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = "import-main-matcher.h"; path = "src/import-export/import-main-matcher.h"; sourceTree = "<group>"; };
-		6E8B79930991BC42003F7E3A /* import-match-map.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = "import-match-map.h"; path = "src/import-export/import-match-map.h"; sourceTree = "<group>"; };
 		6E8B79940991BC42003F7E3A /* import-match-picker.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = "import-match-picker.h"; path = "src/import-export/import-match-picker.h"; sourceTree = "<group>"; };
 		6E8B79950991BC42003F7E3A /* import-parse.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = "import-parse.h"; path = "src/import-export/import-parse.h"; sourceTree = "<group>"; };
 		6E8B79960991BC42003F7E3A /* import-settings.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = "import-settings.h"; path = "src/import-export/import-settings.h"; sourceTree = "<group>"; };
 		6E8B79970991BC42003F7E3A /* import-utilities.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = "import-utilities.h"; path = "src/import-export/import-utilities.h"; sourceTree = "<group>"; };
 		6E8B79A20991BC42003F7E3A /* kvp-scm.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = "kvp-scm.h"; path = "src/engine/kvp-scm.h"; sourceTree = "<group>"; };
-		6E8B79A70991BC42003F7E3A /* localtime_r.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = localtime_r.h; path = lib/libc/localtime_r.h; sourceTree = "<group>"; };
 		6E8B79AA0991BC42003F7E3A /* misc-gnome-utils.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = "misc-gnome-utils.h"; path = "src/gnome-utils/misc-gnome-utils.h"; sourceTree = "<group>"; };
 		6E8B79AD0991BC42003F7E3A /* numcell.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = numcell.h; path = "src/register/register-core/numcell.h"; sourceTree = "<group>"; };
 		6E8B79AF0991BC42003F7E3A /* option-util.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = "option-util.h"; path = "src/app-utils/option-util.h"; sourceTree = "<group>"; };
@@ -740,10 +718,8 @@
 		6E8B7A340991BC7F003F7E3A /* budget.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = budget.scm; path = "src/report/standard-reports/budget.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7A360991BC7F003F7E3A /* business-gnome.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "business-gnome.scm"; path = "src/business/business-gnome/business-gnome.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7A3B0991BC7F003F7E3A /* c-interface.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "c-interface.scm"; path = "src/app-utils/c-interface.scm"; sourceTree = SOURCE_ROOT; };
-		6E8B7A3C0991BC7F003F7E3A /* canvas-test.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; name = "canvas-test.scm"; path = "src/experimental/gg/canvas-test.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7A3D0991BC7F003F7E3A /* cash-flow.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "cash-flow.scm"; path = "src/report/standard-reports/cash-flow.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7A3E0991BC7F003F7E3A /* category-barchart.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "category-barchart.scm"; path = "src/report/standard-reports/category-barchart.scm"; sourceTree = SOURCE_ROOT; };
-		6E8B7A3F0991BC7F003F7E3A /* cgi.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = cgi.scm; path = "lib/guile-www/cgi.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7A410991BC7F003F7E3A /* commodity-table.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "commodity-table.scm"; path = "src/engine/commodity-table.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7A420991BC7F003F7E3A /* commodity-utilities.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "commodity-utilities.scm"; path = "src/report/report-system/commodity-utilities.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7A430991BC7F003F7E3A /* config-var.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "config-var.scm"; path = "src/app-utils/config-var.scm"; sourceTree = SOURCE_ROOT; };
@@ -763,9 +739,7 @@
 		6E8B7A570991BC7F003F7E3A /* gnc-module.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "gnc-module.scm"; path = "src/gnc-module/gnc-module.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7A580991BC7F003F7E3A /* gnc-numeric.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "gnc-numeric.scm"; path = "src/engine/gnc-numeric.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7A590991BC7F003F7E3A /* gnome-utils.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "gnome-utils.scm"; path = "src/gnome-utils/gnome-utils.scm"; sourceTree = SOURCE_ROOT; };
-		6E8B7A5A0991BC7F003F7E3A /* gnucash-sample.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; name = "gnucash-sample.scm"; path = "src/experimental/gg/gnucash-sample.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7A5B0991BC7F003F7E3A /* gnumeric-utilities.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "gnumeric-utilities.scm"; path = "src/scm/gnumeric/gnumeric-utilities.scm"; sourceTree = SOURCE_ROOT; };
-		6E8B7A680991BC7F003F7E3A /* hello-world.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; name = "hello-world.scm"; path = "src/experimental/gg/hello-world.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7A690991BC7F003F7E3A /* hello-world.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "hello-world.scm"; path = "src/report/utility-reports/hello-world.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7A6B0991BC7F003F7E3A /* hooks.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = hooks.scm; path = "src/app-utils/hooks.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7A6C0991BC7F003F7E3A /* html-acct-table.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "html-acct-table.scm"; path = "src/report/report-system/html-acct-table.scm"; sourceTree = SOURCE_ROOT; };
@@ -778,11 +752,8 @@
 		6E8B7A730991BC7F003F7E3A /* html-table.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "html-table.scm"; path = "src/report/report-system/html-table.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7A740991BC7F003F7E3A /* html-text.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "html-text.scm"; path = "src/report/report-system/html-text.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7A750991BC7F003F7E3A /* html-utilities.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "html-utilities.scm"; path = "src/report/report-system/html-utilities.scm"; sourceTree = SOURCE_ROOT; };
-		6E8B7A760991BC7F003F7E3A /* http.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = http.scm; path = "lib/guile-www/http.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7A780991BC7F003F7E3A /* income-statement.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "income-statement.scm"; path = "src/report/standard-reports/income-statement.scm"; sourceTree = SOURCE_ROOT; };
-		6E8B7A7A0991BC7F003F7E3A /* iso-4217-currencies.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "iso-4217-currencies.scm"; path = "src/engine/iso-4217-currencies.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7A7D0991BC7F003F7E3A /* main.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = main.scm; path = src/scm/main.scm; sourceTree = SOURCE_ROOT; };
-		6E8B7A7E0991BC7F003F7E3A /* main.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = main.scm; path = "lib/guile-www/main.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7A7F0991BC7F003F7E3A /* net-barchart.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "net-barchart.scm"; path = "src/report/standard-reports/net-barchart.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7A810991BC7F003F7E3A /* options-utilities.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "options-utilities.scm"; path = "src/report/report-system/options-utilities.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7A820991BC7F003F7E3A /* options.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = options.scm; path = "src/app-utils/options.scm"; sourceTree = SOURCE_ROOT; };
@@ -813,13 +784,11 @@
 		6E8B7ABD0991BC7F003F7E3A /* txf-help-de_DE.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "txf-help-de_DE.scm"; path = "src/tax/us/txf-help-de_DE.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7ABE0991BC7F003F7E3A /* txf-help.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "txf-help.scm"; path = "src/tax/us/txf-help.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7ABF0991BC7F003F7E3A /* txf.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = txf.scm; path = src/tax/us/txf.scm; sourceTree = SOURCE_ROOT; };
-		6E8B7AC00991BC7F003F7E3A /* url.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = url.scm; path = "lib/guile-www/url.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7AC10991BC7F003F7E3A /* us.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = us.scm; path = src/tax/us/us.scm; sourceTree = SOURCE_ROOT; };
 		6E8B7AC20991BC7F003F7E3A /* us.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = us.scm; path = "src/report/locale-specific/us/us.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7AC30991BC7F003F7E3A /* utility-reports.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "utility-reports.scm"; path = "src/report/utility-reports/utility-reports.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7AC40991BC7F003F7E3A /* view-column.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "view-column.scm"; path = "src/report/utility-reports/view-column.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7AC50991BC7F003F7E3A /* welcome-to-gnucash.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "welcome-to-gnucash.scm"; path = "src/report/utility-reports/welcome-to-gnucash.scm"; sourceTree = SOURCE_ROOT; };
-		6E8B7AC60991BC7F003F7E3A /* xgettext.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = xgettext.scm; path = "intl-scm/xgettext.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7AC70991BC7F003F7E3A /* xml-generator.scm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = "xml-generator.scm"; path = "src/scm/xml-generator.scm"; sourceTree = SOURCE_ROOT; };
 		6E8B7AD00991BE25003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = "src/import-export/Makefile.am"; sourceTree = SOURCE_ROOT; };
 		6E8B7AD10991BE25003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = "src/app-utils/Makefile.am"; sourceTree = SOURCE_ROOT; };
@@ -844,7 +813,6 @@
 		6E8B7AEB0991BE25003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = "src/report/utility-reports/Makefile.am"; sourceTree = SOURCE_ROOT; };
 		6E8B7AEC0991BE25003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = "src/import-export/log-replay/Makefile.am"; sourceTree = SOURCE_ROOT; };
 		6E8B7AED0991BE25003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = "src/import-export/ofx/Makefile.am"; sourceTree = SOURCE_ROOT; };
-		6E8B7AEE0991BE25003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = "lib/guile-www/Makefile.am"; sourceTree = SOURCE_ROOT; };
 		6E8B7AEF0991BE73003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = src/tax/us/Makefile.am; sourceTree = SOURCE_ROOT; };
 		6E8B7AF00991BE73003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = Makefile.am; sourceTree = SOURCE_ROOT; };
 		6E8B7AF10991BE73003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = doc/Makefile.am; sourceTree = SOURCE_ROOT; };
@@ -860,9 +828,6 @@
 		6E8B7B210991BE73003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = doc/examples/Makefile.am; sourceTree = SOURCE_ROOT; };
 		6E8B7B220991BE73003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = src/Makefile.am; sourceTree = SOURCE_ROOT; };
 		6E8B7B240991BE73003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = "src/gnome-utils/ui/Makefile.am"; sourceTree = SOURCE_ROOT; };
-		6E8B7B270991BE73003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = src/experimental/ofx/explore/Makefile.am; sourceTree = SOURCE_ROOT; };
-		6E8B7B280991BE73003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = "src/experimental/cgi-bin/Makefile.am"; sourceTree = SOURCE_ROOT; };
-		6E8B7B290991BE73003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = src/experimental/Makefile.am; sourceTree = SOURCE_ROOT; };
 		6E8B7B2B0991BE73003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = "src/business/business-gnome/ui/Makefile.am"; sourceTree = SOURCE_ROOT; };
 		6E8B7B2D0991BE73003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = "src/business/business-ledger/Makefile.am"; sourceTree = SOURCE_ROOT; };
 		6E8B7B340991BE73003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = src/scm/gnumeric/Makefile.am; sourceTree = SOURCE_ROOT; };
@@ -886,7 +851,6 @@
 		6E8B7B510991BE74003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = "src/register/register-core/test/Makefile.am"; sourceTree = SOURCE_ROOT; };
 		6E8B7B530991BE74003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = src/optional/Makefile.am; sourceTree = SOURCE_ROOT; };
 		6E8B7B540991BE74003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = "src/register/register-gnome/test/Makefile.am"; sourceTree = SOURCE_ROOT; };
-		6E8B7B550991BE74003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = "intl-scm/Makefile.am"; sourceTree = SOURCE_ROOT; };
 		6E8B7B560991BE74003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = src/quotes/Makefile.am; sourceTree = SOURCE_ROOT; };
 		6E8B7B570991BE74003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = src/pixmaps/Makefile.am; sourceTree = SOURCE_ROOT; };
 		6E8B7B580991BE74003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = accounts/sk/Makefile.am; sourceTree = SOURCE_ROOT; };
@@ -904,9 +868,6 @@
 		6E8B7B640991BE74003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = accounts/da/Makefile.am; sourceTree = SOURCE_ROOT; };
 		6E8B7B650991BE74003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = accounts/C/Makefile.am; sourceTree = SOURCE_ROOT; };
 		6E8B7B660991BE74003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = accounts/pt_PT/Makefile.am; sourceTree = SOURCE_ROOT; };
-		6E8B7B670991BE74003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = src/experimental/gg/Makefile.am; sourceTree = SOURCE_ROOT; };
-		6E8B7B680991BE74003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = src/experimental/cbb/Makefile.am; sourceTree = SOURCE_ROOT; };
-		6E8B7B690991BE74003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = "src/experimental/cbb/cbb-engine/Makefile.am"; sourceTree = SOURCE_ROOT; };
 		6E8B7B6A0991BE74003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = src/tax/Makefile.am; sourceTree = SOURCE_ROOT; };
 		6E8B7B6B0991BE74003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = src/business/Makefile.am; sourceTree = SOURCE_ROOT; };
 		6E8B7B6C0991BE74003F7E3A /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Makefile.am; path = src/tax/us/test/Makefile.am; sourceTree = SOURCE_ROOT; };
@@ -921,10 +882,8 @@
 		6E97EB731915B9D90021442F /* gnc-numeric.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-numeric.cpp"; path = "src/libqof/qof/gnc-numeric.cpp"; sourceTree = "<group>"; };
 		6E97EB741915B9D90021442F /* guid.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = guid.cpp; path = src/libqof/qof/guid.cpp; sourceTree = "<group>"; };
 		6E97EB751915B9D90021442F /* kvp_frame.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = kvp_frame.cpp; path = src/libqof/qof/kvp_frame.cpp; sourceTree = "<group>"; };
-		6E97EB761915B9D90021442F /* kvp-util.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "kvp-util.cpp"; path = "src/libqof/qof/kvp-util.cpp"; sourceTree = "<group>"; };
 		6E97EB771915B9D90021442F /* qof-string-cache.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "qof-string-cache.cpp"; path = "src/libqof/qof/qof-string-cache.cpp"; sourceTree = "<group>"; };
 		6E97EB781915B9D90021442F /* qof-win32.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "qof-win32.cpp"; path = "src/libqof/qof/qof-win32.cpp"; sourceTree = "<group>"; };
-		6E97EB791915B9D90021442F /* qofbackend.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qofbackend.cpp; path = src/libqof/qof/qofbackend.cpp; sourceTree = "<group>"; };
 		6E97EB7A1915B9D90021442F /* qofbook.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qofbook.cpp; path = src/libqof/qof/qofbook.cpp; sourceTree = "<group>"; };
 		6E97EB7B1915B9D90021442F /* qofchoice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qofchoice.cpp; path = src/libqof/qof/qofchoice.cpp; sourceTree = "<group>"; };
 		6E97EB7C1915B9D90021442F /* qofclass.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qofclass.cpp; path = src/libqof/qof/qofclass.cpp; sourceTree = "<group>"; };
@@ -946,51 +905,26 @@
 		6EB9569C1A39565A002E3AC5 /* kvp-value.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = "kvp-value.hpp"; path = "src/libqof/qof/kvp-value.hpp"; sourceTree = "<group>"; };
 		6EBC06EF18B1D66300A5CEB7 /* gnc-state.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-state.c"; path = "src/app-utils/gnc-state.c"; sourceTree = "<group>"; };
 		6EBC06F018B1D66300A5CEB7 /* gnc-state.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-state.h"; path = "src/app-utils/gnc-state.h"; sourceTree = "<group>"; };
-		6EBC06F118B1D6E600A5CEB7 /* gnc-address-sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-address-sql.c"; path = "src/backend/sql/gnc-address-sql.c"; sourceTree = "<group>"; };
-		6EBC06F218B1D6E600A5CEB7 /* gnc-address-sql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-address-sql.h"; path = "src/backend/sql/gnc-address-sql.h"; sourceTree = "<group>"; };
-		6EBC06F318B1D6E600A5CEB7 /* gnc-bill-term-sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-bill-term-sql.c"; path = "src/backend/sql/gnc-bill-term-sql.c"; sourceTree = "<group>"; };
 		6EBC06F418B1D6E600A5CEB7 /* gnc-bill-term-sql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-bill-term-sql.h"; path = "src/backend/sql/gnc-bill-term-sql.h"; sourceTree = "<group>"; };
-		6EBC06F518B1D6E600A5CEB7 /* gnc-customer-sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-customer-sql.c"; path = "src/backend/sql/gnc-customer-sql.c"; sourceTree = "<group>"; };
 		6EBC06F618B1D6E600A5CEB7 /* gnc-customer-sql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-customer-sql.h"; path = "src/backend/sql/gnc-customer-sql.h"; sourceTree = "<group>"; };
-		6EBC06F718B1D6E600A5CEB7 /* gnc-employee-sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-employee-sql.c"; path = "src/backend/sql/gnc-employee-sql.c"; sourceTree = "<group>"; };
 		6EBC06F818B1D6E600A5CEB7 /* gnc-employee-sql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-employee-sql.h"; path = "src/backend/sql/gnc-employee-sql.h"; sourceTree = "<group>"; };
-		6EBC06F918B1D6E600A5CEB7 /* gnc-entry-sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-entry-sql.c"; path = "src/backend/sql/gnc-entry-sql.c"; sourceTree = "<group>"; };
 		6EBC06FA18B1D6E600A5CEB7 /* gnc-entry-sql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-entry-sql.h"; path = "src/backend/sql/gnc-entry-sql.h"; sourceTree = "<group>"; };
-		6EBC06FB18B1D6E600A5CEB7 /* gnc-invoice-sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-invoice-sql.c"; path = "src/backend/sql/gnc-invoice-sql.c"; sourceTree = "<group>"; };
 		6EBC06FC18B1D6E600A5CEB7 /* gnc-invoice-sql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-invoice-sql.h"; path = "src/backend/sql/gnc-invoice-sql.h"; sourceTree = "<group>"; };
-		6EBC06FD18B1D6E600A5CEB7 /* gnc-job-sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-job-sql.c"; path = "src/backend/sql/gnc-job-sql.c"; sourceTree = "<group>"; };
 		6EBC06FE18B1D6E600A5CEB7 /* gnc-job-sql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-job-sql.h"; path = "src/backend/sql/gnc-job-sql.h"; sourceTree = "<group>"; };
-		6EBC06FF18B1D6E600A5CEB7 /* gnc-order-sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-order-sql.c"; path = "src/backend/sql/gnc-order-sql.c"; sourceTree = "<group>"; };
 		6EBC070018B1D6E600A5CEB7 /* gnc-order-sql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-order-sql.h"; path = "src/backend/sql/gnc-order-sql.h"; sourceTree = "<group>"; };
-		6EBC070118B1D6E600A5CEB7 /* gnc-owner-sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-owner-sql.c"; path = "src/backend/sql/gnc-owner-sql.c"; sourceTree = "<group>"; };
-		6EBC070218B1D6E600A5CEB7 /* gnc-owner-sql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-owner-sql.h"; path = "src/backend/sql/gnc-owner-sql.h"; sourceTree = "<group>"; };
-		6EBC070318B1D6E600A5CEB7 /* gnc-tax-table-sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-tax-table-sql.c"; path = "src/backend/sql/gnc-tax-table-sql.c"; sourceTree = "<group>"; };
 		6EBC070418B1D6E600A5CEB7 /* gnc-tax-table-sql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-tax-table-sql.h"; path = "src/backend/sql/gnc-tax-table-sql.h"; sourceTree = "<group>"; };
-		6EBC070518B1D6E600A5CEB7 /* gnc-vendor-sql.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-vendor-sql.c"; path = "src/backend/sql/gnc-vendor-sql.c"; sourceTree = "<group>"; };
 		6EBC070618B1D6E600A5CEB7 /* gnc-vendor-sql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-vendor-sql.h"; path = "src/backend/sql/gnc-vendor-sql.h"; sourceTree = "<group>"; };
-		6EBC070718B1D76F00A5CEB7 /* gnc-address-xml-v2.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "gnc-address-xml-v2.c"; path = "src/backend/xml/gnc-address-xml-v2.c"; sourceTree = "<group>"; };
 		6EBC070818B1D76F00A5CEB7 /* gnc-address-xml-v2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "gnc-address-xml-v2.h"; path = "src/backend/xml/gnc-address-xml-v2.h"; sourceTree = "<group>"; };
-		6EBC070918B1D76F00A5CEB7 /* gnc-bill-term-xml-v2.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "gnc-bill-term-xml-v2.c"; path = "src/backend/xml/gnc-bill-term-xml-v2.c"; sourceTree = "<group>"; };
 		6EBC070A18B1D76F00A5CEB7 /* gnc-bill-term-xml-v2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "gnc-bill-term-xml-v2.h"; path = "src/backend/xml/gnc-bill-term-xml-v2.h"; sourceTree = "<group>"; };
-		6EBC070B18B1D76F00A5CEB7 /* gnc-customer-xml-v2.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "gnc-customer-xml-v2.c"; path = "src/backend/xml/gnc-customer-xml-v2.c"; sourceTree = "<group>"; };
 		6EBC070C18B1D76F00A5CEB7 /* gnc-customer-xml-v2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "gnc-customer-xml-v2.h"; path = "src/backend/xml/gnc-customer-xml-v2.h"; sourceTree = "<group>"; };
-		6EBC070D18B1D76F00A5CEB7 /* gnc-employee-xml-v2.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "gnc-employee-xml-v2.c"; path = "src/backend/xml/gnc-employee-xml-v2.c"; sourceTree = "<group>"; };
 		6EBC070E18B1D76F00A5CEB7 /* gnc-employee-xml-v2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "gnc-employee-xml-v2.h"; path = "src/backend/xml/gnc-employee-xml-v2.h"; sourceTree = "<group>"; };
-		6EBC070F18B1D76F00A5CEB7 /* gnc-entry-xml-v2.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "gnc-entry-xml-v2.c"; path = "src/backend/xml/gnc-entry-xml-v2.c"; sourceTree = "<group>"; };
 		6EBC071018B1D76F00A5CEB7 /* gnc-entry-xml-v2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "gnc-entry-xml-v2.h"; path = "src/backend/xml/gnc-entry-xml-v2.h"; sourceTree = "<group>"; };
-		6EBC071118B1D76F00A5CEB7 /* gnc-invoice-xml-v2.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "gnc-invoice-xml-v2.c"; path = "src/backend/xml/gnc-invoice-xml-v2.c"; sourceTree = "<group>"; };
 		6EBC071218B1D76F00A5CEB7 /* gnc-invoice-xml-v2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "gnc-invoice-xml-v2.h"; path = "src/backend/xml/gnc-invoice-xml-v2.h"; sourceTree = "<group>"; };
-		6EBC071318B1D76F00A5CEB7 /* gnc-job-xml-v2.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "gnc-job-xml-v2.c"; path = "src/backend/xml/gnc-job-xml-v2.c"; sourceTree = "<group>"; };
 		6EBC071418B1D76F00A5CEB7 /* gnc-job-xml-v2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "gnc-job-xml-v2.h"; path = "src/backend/xml/gnc-job-xml-v2.h"; sourceTree = "<group>"; };
-		6EBC071518B1D76F00A5CEB7 /* gnc-order-xml-v2.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "gnc-order-xml-v2.c"; path = "src/backend/xml/gnc-order-xml-v2.c"; sourceTree = "<group>"; };
 		6EBC071618B1D76F00A5CEB7 /* gnc-order-xml-v2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "gnc-order-xml-v2.h"; path = "src/backend/xml/gnc-order-xml-v2.h"; sourceTree = "<group>"; };
-		6EBC071718B1D76F00A5CEB7 /* gnc-owner-xml-v2.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "gnc-owner-xml-v2.c"; path = "src/backend/xml/gnc-owner-xml-v2.c"; sourceTree = "<group>"; };
 		6EBC071818B1D76F00A5CEB7 /* gnc-owner-xml-v2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "gnc-owner-xml-v2.h"; path = "src/backend/xml/gnc-owner-xml-v2.h"; sourceTree = "<group>"; };
-		6EBC071918B1D76F00A5CEB7 /* gnc-tax-table-xml-v2.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "gnc-tax-table-xml-v2.c"; path = "src/backend/xml/gnc-tax-table-xml-v2.c"; sourceTree = "<group>"; };
 		6EBC071A18B1D76F00A5CEB7 /* gnc-tax-table-xml-v2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "gnc-tax-table-xml-v2.h"; path = "src/backend/xml/gnc-tax-table-xml-v2.h"; sourceTree = "<group>"; };
-		6EBC071B18B1D76F00A5CEB7 /* gnc-vendor-xml-v2.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "gnc-vendor-xml-v2.c"; path = "src/backend/xml/gnc-vendor-xml-v2.c"; sourceTree = "<group>"; };
 		6EBC071C18B1D76F00A5CEB7 /* gnc-vendor-xml-v2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "gnc-vendor-xml-v2.h"; path = "src/backend/xml/gnc-vendor-xml-v2.h"; sourceTree = "<group>"; };
-		6EBC071D18B1D76F00A5CEB7 /* gnc-xml-helper.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "gnc-xml-helper.c"; path = "src/backend/xml/gnc-xml-helper.c"; sourceTree = "<group>"; };
 		6EBC071E18B1D76F00A5CEB7 /* xml-helpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "xml-helpers.h"; path = "src/backend/xml/xml-helpers.h"; sourceTree = "<group>"; };
 		6EBC071F18B1D85200A5CEB7 /* gnc-plugin-page-owner-tree.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "gnc-plugin-page-owner-tree.c"; path = "src/business/business-gnome/gnc-plugin-page-owner-tree.c"; sourceTree = "<group>"; };
 		6EBC072018B1D85200A5CEB7 /* gnc-plugin-page-owner-tree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "gnc-plugin-page-owner-tree.h"; path = "src/business/business-gnome/gnc-plugin-page-owner-tree.h"; sourceTree = "<group>"; };
@@ -1047,8 +981,6 @@
 		6EBC075318B1D98500A5CEB7 /* gncVendor.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = gncVendor.c; path = src/engine/gncVendor.c; sourceTree = "<group>"; };
 		6EBC075418B1D98500A5CEB7 /* gncVendor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gncVendor.h; path = src/engine/gncVendor.h; sourceTree = "<group>"; };
 		6EBC075518B1D98500A5CEB7 /* gncVendorP.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gncVendorP.h; path = src/engine/gncVendorP.h; sourceTree = "<group>"; };
-		6EBC075618B1DA8800A5CEB7 /* assistant-utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "assistant-utils.c"; path = "src/gnome-utils/assistant-utils.c"; sourceTree = "<group>"; };
-		6EBC075718B1DA8800A5CEB7 /* assistant-utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "assistant-utils.h"; path = "src/gnome-utils/assistant-utils.h"; sourceTree = "<group>"; };
 		6EBC075818B1DA8800A5CEB7 /* assistant-xml-encoding.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "assistant-xml-encoding.c"; path = "src/gnome-utils/assistant-xml-encoding.c"; sourceTree = "<group>"; };
 		6EBC075918B1DA8800A5CEB7 /* assistant-xml-encoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "assistant-xml-encoding.h"; path = "src/gnome-utils/assistant-xml-encoding.h"; sourceTree = "<group>"; };
 		6EBC075A18B1DA8800A5CEB7 /* dialog-dup-trans.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "dialog-dup-trans.c"; path = "src/gnome-utils/dialog-dup-trans.c"; sourceTree = "<group>"; };
@@ -1094,8 +1026,6 @@
 		6EBC078218B1DB4D00A5CEB7 /* gnc-ab-gettrans.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "gnc-ab-gettrans.h"; path = "src/import-export/aqb/gnc-ab-gettrans.h"; sourceTree = "<group>"; };
 		6EBC078318B1DB4D00A5CEB7 /* gnc-ab-kvp.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "gnc-ab-kvp.c"; path = "src/import-export/aqb/gnc-ab-kvp.c"; sourceTree = "<group>"; };
 		6EBC078418B1DB4D00A5CEB7 /* gnc-ab-kvp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "gnc-ab-kvp.h"; path = "src/import-export/aqb/gnc-ab-kvp.h"; sourceTree = "<group>"; };
-		6EBC078518B1DB4D00A5CEB7 /* gnc-ab-trans-templ.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "gnc-ab-trans-templ.c"; path = "src/import-export/aqb/gnc-ab-trans-templ.c"; sourceTree = "<group>"; };
-		6EBC078618B1DB4D00A5CEB7 /* gnc-ab-trans-templ.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "gnc-ab-trans-templ.h"; path = "src/import-export/aqb/gnc-ab-trans-templ.h"; sourceTree = "<group>"; };
 		6EBC078718B1DB4D00A5CEB7 /* gnc-ab-transfer.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "gnc-ab-transfer.c"; path = "src/import-export/aqb/gnc-ab-transfer.c"; sourceTree = "<group>"; };
 		6EBC078818B1DB4D00A5CEB7 /* gnc-ab-transfer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "gnc-ab-transfer.h"; path = "src/import-export/aqb/gnc-ab-transfer.h"; sourceTree = "<group>"; };
 		6EBC078918B1DB4D00A5CEB7 /* gnc-ab-utils.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "gnc-ab-utils.c"; path = "src/import-export/aqb/gnc-ab-utils.c"; sourceTree = "<group>"; };
@@ -1118,14 +1048,11 @@
 		6EBC079B18B1DB7F00A5CEB7 /* gncmod-csv-export.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "gncmod-csv-export.c"; path = "src/import-export/csv-exp/gncmod-csv-export.c"; sourceTree = "<group>"; };
 		6EBC079C18B1DBAA00A5CEB7 /* assistant-csv-account-import.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "assistant-csv-account-import.c"; path = "src/import-export/csv-imp/assistant-csv-account-import.c"; sourceTree = "<group>"; };
 		6EBC079D18B1DBAA00A5CEB7 /* assistant-csv-account-import.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "assistant-csv-account-import.h"; path = "src/import-export/csv-imp/assistant-csv-account-import.h"; sourceTree = "<group>"; };
-		6EBC079E18B1DBAA00A5CEB7 /* assistant-csv-trans-import.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "assistant-csv-trans-import.c"; path = "src/import-export/csv-imp/assistant-csv-trans-import.c"; sourceTree = "<group>"; };
 		6EBC079F18B1DBAA00A5CEB7 /* assistant-csv-trans-import.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "assistant-csv-trans-import.h"; path = "src/import-export/csv-imp/assistant-csv-trans-import.h"; sourceTree = "<group>"; };
 		6EBC07A018B1DBAA00A5CEB7 /* csv-account-import.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "csv-account-import.c"; path = "src/import-export/csv-imp/csv-account-import.c"; sourceTree = "<group>"; };
 		6EBC07A118B1DBAA00A5CEB7 /* csv-account-import.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "csv-account-import.h"; path = "src/import-export/csv-imp/csv-account-import.h"; sourceTree = "<group>"; };
 		6EBC07A218B1DBAA00A5CEB7 /* gnc-csv-gnumeric-popup.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "gnc-csv-gnumeric-popup.c"; path = "src/import-export/csv-imp/gnc-csv-gnumeric-popup.c"; sourceTree = "<group>"; };
 		6EBC07A318B1DBAA00A5CEB7 /* gnc-csv-gnumeric-popup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "gnc-csv-gnumeric-popup.h"; path = "src/import-export/csv-imp/gnc-csv-gnumeric-popup.h"; sourceTree = "<group>"; };
-		6EBC07A418B1DBAA00A5CEB7 /* gnc-csv-model.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "gnc-csv-model.c"; path = "src/import-export/csv-imp/gnc-csv-model.c"; sourceTree = "<group>"; };
-		6EBC07A518B1DBAA00A5CEB7 /* gnc-csv-model.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "gnc-csv-model.h"; path = "src/import-export/csv-imp/gnc-csv-model.h"; sourceTree = "<group>"; };
 		6EBC07A618B1DBAA00A5CEB7 /* gnc-plugin-csv-import.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "gnc-plugin-csv-import.c"; path = "src/import-export/csv-imp/gnc-plugin-csv-import.c"; sourceTree = "<group>"; };
 		6EBC07A718B1DBAA00A5CEB7 /* gnc-plugin-csv-import.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "gnc-plugin-csv-import.h"; path = "src/import-export/csv-imp/gnc-plugin-csv-import.h"; sourceTree = "<group>"; };
 		6EBC07A818B1DBAA00A5CEB7 /* gncmod-csv-import.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "gncmod-csv-import.c"; path = "src/import-export/csv-imp/gncmod-csv-import.c"; sourceTree = "<group>"; };
@@ -1177,9 +1104,6 @@
 		6EBC07D818B1DDD000A5CEB7 /* sx-summary.scm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "sx-summary.scm"; path = "src/report/standard-reports/sx-summary.scm"; sourceTree = "<group>"; };
 		6EBC07D918B1DDE300A5CEB7 /* stylesheet-footer.scm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "stylesheet-footer.scm"; path = "src/report/stylesheets/stylesheet-footer.scm"; sourceTree = "<group>"; };
 		6EBC07DA18B1DE0200A5CEB7 /* printf.scm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = printf.scm; path = src/scm/printf.scm; sourceTree = "<group>"; };
-		6EC70BFC1176DA09006E876C /* gmtime_r.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gmtime_r.c; path = lib/libc/gmtime_r.c; sourceTree = "<group>"; };
-		6EC70BFD1176DA09006E876C /* gmtime_r.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gmtime_r.h; path = lib/libc/gmtime_r.h; sourceTree = "<group>"; };
-		6EC70C011176DB3B006E876C /* escape.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = escape.c; path = src/backend/sql/escape.c; sourceTree = "<group>"; };
 		6EC70C021176DB3B006E876C /* escape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = escape.h; path = src/backend/sql/escape.h; sourceTree = "<group>"; };
 		6EC70C0A1176DC9B006E876C /* binreloc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = binreloc.c; path = "src/core-utils/binreloc.c"; sourceTree = "<group>"; };
 		6EC70C0B1176DC9B006E876C /* binreloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = binreloc.h; path = "src/core-utils/binreloc.h"; sourceTree = "<group>"; };
@@ -1208,6 +1132,158 @@
 		6EE6D28215FDA360008B3F08 /* business-options.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "business-options.h"; path = "src/app-utils/business-options.h"; sourceTree = "<group>"; };
 		6EE6D28315FDA360008B3F08 /* business-options.scm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "business-options.scm"; path = "src/app-utils/business-options.scm"; sourceTree = "<group>"; };
 		6EE6D28415FDA360008B3F08 /* business-prefs.scm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "business-prefs.scm"; path = "src/app-utils/business-prefs.scm"; sourceTree = "<group>"; };
+		6EEA3CB81E8E2A1600BA45AE /* gnc-backend-dbi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-backend-dbi.cpp"; path = "src/backend/dbi/gnc-backend-dbi.cpp"; sourceTree = "<group>"; };
+		6EEA3CB91E8E2A1600BA45AE /* gnc-backend-dbi.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "gnc-backend-dbi.hpp"; path = "src/backend/dbi/gnc-backend-dbi.hpp"; sourceTree = "<group>"; };
+		6EEA3CBA1E8E2A1600BA45AE /* gnc-dbiprovider.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "gnc-dbiprovider.hpp"; path = "src/backend/dbi/gnc-dbiprovider.hpp"; sourceTree = "<group>"; };
+		6EEA3CBB1E8E2A1600BA45AE /* gnc-dbiproviderimpl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "gnc-dbiproviderimpl.hpp"; path = "src/backend/dbi/gnc-dbiproviderimpl.hpp"; sourceTree = "<group>"; };
+		6EEA3CBC1E8E2A1600BA45AE /* gnc-dbisqlconnection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-dbisqlconnection.cpp"; path = "src/backend/dbi/gnc-dbisqlconnection.cpp"; sourceTree = "<group>"; };
+		6EEA3CBD1E8E2A1600BA45AE /* gnc-dbisqlconnection.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "gnc-dbisqlconnection.hpp"; path = "src/backend/dbi/gnc-dbisqlconnection.hpp"; sourceTree = "<group>"; };
+		6EEA3CBE1E8E2A1600BA45AE /* gnc-dbisqlresult.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-dbisqlresult.cpp"; path = "src/backend/dbi/gnc-dbisqlresult.cpp"; sourceTree = "<group>"; };
+		6EEA3CBF1E8E2A1600BA45AE /* gnc-dbisqlresult.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "gnc-dbisqlresult.hpp"; path = "src/backend/dbi/gnc-dbisqlresult.hpp"; sourceTree = "<group>"; };
+		6EEA3CC01E8E2B5F00BA45AE /* escape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = escape.cpp; path = src/backend/sql/escape.cpp; sourceTree = "<group>"; };
+		6EEA3CC11E8E2B5F00BA45AE /* gnc-account-sql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-account-sql.cpp"; path = "src/backend/sql/gnc-account-sql.cpp"; sourceTree = "<group>"; };
+		6EEA3CC21E8E2B5F00BA45AE /* gnc-address-sql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-address-sql.cpp"; path = "src/backend/sql/gnc-address-sql.cpp"; sourceTree = "<group>"; };
+		6EEA3CC31E8E2B5F00BA45AE /* gnc-bill-term-sql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-bill-term-sql.cpp"; path = "src/backend/sql/gnc-bill-term-sql.cpp"; sourceTree = "<group>"; };
+		6EEA3CC41E8E2B5F00BA45AE /* gnc-book-sql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-book-sql.cpp"; path = "src/backend/sql/gnc-book-sql.cpp"; sourceTree = "<group>"; };
+		6EEA3CC51E8E2B5F00BA45AE /* gnc-budget-sql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-budget-sql.cpp"; path = "src/backend/sql/gnc-budget-sql.cpp"; sourceTree = "<group>"; };
+		6EEA3CC61E8E2B5F00BA45AE /* gnc-commodity-sql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-commodity-sql.cpp"; path = "src/backend/sql/gnc-commodity-sql.cpp"; sourceTree = "<group>"; };
+		6EEA3CC71E8E2B5F00BA45AE /* gnc-customer-sql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-customer-sql.cpp"; path = "src/backend/sql/gnc-customer-sql.cpp"; sourceTree = "<group>"; };
+		6EEA3CC81E8E2B5F00BA45AE /* gnc-employee-sql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-employee-sql.cpp"; path = "src/backend/sql/gnc-employee-sql.cpp"; sourceTree = "<group>"; };
+		6EEA3CC91E8E2B5F00BA45AE /* gnc-entry-sql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-entry-sql.cpp"; path = "src/backend/sql/gnc-entry-sql.cpp"; sourceTree = "<group>"; };
+		6EEA3CCA1E8E2B5F00BA45AE /* gnc-invoice-sql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-invoice-sql.cpp"; path = "src/backend/sql/gnc-invoice-sql.cpp"; sourceTree = "<group>"; };
+		6EEA3CCB1E8E2B5F00BA45AE /* gnc-job-sql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-job-sql.cpp"; path = "src/backend/sql/gnc-job-sql.cpp"; sourceTree = "<group>"; };
+		6EEA3CCC1E8E2B5F00BA45AE /* gnc-lots-sql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-lots-sql.cpp"; path = "src/backend/sql/gnc-lots-sql.cpp"; sourceTree = "<group>"; };
+		6EEA3CCD1E8E2B5F00BA45AE /* gnc-order-sql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-order-sql.cpp"; path = "src/backend/sql/gnc-order-sql.cpp"; sourceTree = "<group>"; };
+		6EEA3CCE1E8E2B5F00BA45AE /* gnc-owner-sql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-owner-sql.cpp"; path = "src/backend/sql/gnc-owner-sql.cpp"; sourceTree = "<group>"; };
+		6EEA3CCF1E8E2B5F00BA45AE /* gnc-price-sql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-price-sql.cpp"; path = "src/backend/sql/gnc-price-sql.cpp"; sourceTree = "<group>"; };
+		6EEA3CD01E8E2B5F00BA45AE /* gnc-recurrence-sql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-recurrence-sql.cpp"; path = "src/backend/sql/gnc-recurrence-sql.cpp"; sourceTree = "<group>"; };
+		6EEA3CD11E8E2B5F00BA45AE /* gnc-schedxaction-sql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-schedxaction-sql.cpp"; path = "src/backend/sql/gnc-schedxaction-sql.cpp"; sourceTree = "<group>"; };
+		6EEA3CD21E8E2B5F00BA45AE /* gnc-sql-backend.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-sql-backend.cpp"; path = "src/backend/sql/gnc-sql-backend.cpp"; sourceTree = "<group>"; };
+		6EEA3CD31E8E2B5F00BA45AE /* gnc-sql-column-table-entry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-sql-column-table-entry.cpp"; path = "src/backend/sql/gnc-sql-column-table-entry.cpp"; sourceTree = "<group>"; };
+		6EEA3CD41E8E2B5F00BA45AE /* gnc-sql-object-backend.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-sql-object-backend.cpp"; path = "src/backend/sql/gnc-sql-object-backend.cpp"; sourceTree = "<group>"; };
+		6EEA3CD51E8E2B5F00BA45AE /* gnc-sql-result.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-sql-result.cpp"; path = "src/backend/sql/gnc-sql-result.cpp"; sourceTree = "<group>"; };
+		6EEA3CD61E8E2B5F00BA45AE /* gnc-tax-table-sql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-tax-table-sql.cpp"; path = "src/backend/sql/gnc-tax-table-sql.cpp"; sourceTree = "<group>"; };
+		6EEA3CD71E8E2B5F00BA45AE /* gnc-transaction-sql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-transaction-sql.cpp"; path = "src/backend/sql/gnc-transaction-sql.cpp"; sourceTree = "<group>"; };
+		6EEA3CD81E8E2B5F00BA45AE /* gnc-vendor-sql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-vendor-sql.cpp"; path = "src/backend/sql/gnc-vendor-sql.cpp"; sourceTree = "<group>"; };
+		6EEA3CD91E8E2B9400BA45AE /* gnc-sql-backend.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "gnc-sql-backend.hpp"; path = "src/backend/sql/gnc-sql-backend.hpp"; sourceTree = "<group>"; };
+		6EEA3CDA1E8E2B9400BA45AE /* gnc-sql-column-table-entry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "gnc-sql-column-table-entry.hpp"; path = "src/backend/sql/gnc-sql-column-table-entry.hpp"; sourceTree = "<group>"; };
+		6EEA3CDB1E8E2B9400BA45AE /* gnc-sql-connection.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "gnc-sql-connection.hpp"; path = "src/backend/sql/gnc-sql-connection.hpp"; sourceTree = "<group>"; };
+		6EEA3CDC1E8E2B9400BA45AE /* gnc-sql-object-backend.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "gnc-sql-object-backend.hpp"; path = "src/backend/sql/gnc-sql-object-backend.hpp"; sourceTree = "<group>"; };
+		6EEA3CDD1E8E2B9400BA45AE /* gnc-sql-result.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "gnc-sql-result.hpp"; path = "src/backend/sql/gnc-sql-result.hpp"; sourceTree = "<group>"; };
+		6EEA3CDE1E8E2C8F00BA45AE /* gnc-account-xml-v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-account-xml-v2.cpp"; path = "src/backend/xml/gnc-account-xml-v2.cpp"; sourceTree = "<group>"; };
+		6EEA3CDF1E8E2C8F00BA45AE /* gnc-address-xml-v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-address-xml-v2.cpp"; path = "src/backend/xml/gnc-address-xml-v2.cpp"; sourceTree = "<group>"; };
+		6EEA3CE01E8E2C8F00BA45AE /* gnc-backend-xml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-backend-xml.cpp"; path = "src/backend/xml/gnc-backend-xml.cpp"; sourceTree = "<group>"; };
+		6EEA3CE11E8E2C8F00BA45AE /* gnc-bill-term-xml-v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-bill-term-xml-v2.cpp"; path = "src/backend/xml/gnc-bill-term-xml-v2.cpp"; sourceTree = "<group>"; };
+		6EEA3CE21E8E2C8F00BA45AE /* gnc-book-xml-v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-book-xml-v2.cpp"; path = "src/backend/xml/gnc-book-xml-v2.cpp"; sourceTree = "<group>"; };
+		6EEA3CE31E8E2C8F00BA45AE /* gnc-budget-xml-v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-budget-xml-v2.cpp"; path = "src/backend/xml/gnc-budget-xml-v2.cpp"; sourceTree = "<group>"; };
+		6EEA3CE41E8E2C8F00BA45AE /* gnc-commodity-xml-v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-commodity-xml-v2.cpp"; path = "src/backend/xml/gnc-commodity-xml-v2.cpp"; sourceTree = "<group>"; };
+		6EEA3CE51E8E2C8F00BA45AE /* gnc-customer-xml-v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-customer-xml-v2.cpp"; path = "src/backend/xml/gnc-customer-xml-v2.cpp"; sourceTree = "<group>"; };
+		6EEA3CE61E8E2C8F00BA45AE /* gnc-employee-xml-v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-employee-xml-v2.cpp"; path = "src/backend/xml/gnc-employee-xml-v2.cpp"; sourceTree = "<group>"; };
+		6EEA3CE71E8E2C8F00BA45AE /* gnc-entry-xml-v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-entry-xml-v2.cpp"; path = "src/backend/xml/gnc-entry-xml-v2.cpp"; sourceTree = "<group>"; };
+		6EEA3CE81E8E2C8F00BA45AE /* gnc-freqspec-xml-v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-freqspec-xml-v2.cpp"; path = "src/backend/xml/gnc-freqspec-xml-v2.cpp"; sourceTree = "<group>"; };
+		6EEA3CE91E8E2C8F00BA45AE /* gnc-invoice-xml-v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-invoice-xml-v2.cpp"; path = "src/backend/xml/gnc-invoice-xml-v2.cpp"; sourceTree = "<group>"; };
+		6EEA3CEA1E8E2C8F00BA45AE /* gnc-job-xml-v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-job-xml-v2.cpp"; path = "src/backend/xml/gnc-job-xml-v2.cpp"; sourceTree = "<group>"; };
+		6EEA3CEB1E8E2C8F00BA45AE /* gnc-lot-xml-v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-lot-xml-v2.cpp"; path = "src/backend/xml/gnc-lot-xml-v2.cpp"; sourceTree = "<group>"; };
+		6EEA3CEC1E8E2C8F00BA45AE /* gnc-order-xml-v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-order-xml-v2.cpp"; path = "src/backend/xml/gnc-order-xml-v2.cpp"; sourceTree = "<group>"; };
+		6EEA3CED1E8E2C8F00BA45AE /* gnc-owner-xml-v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-owner-xml-v2.cpp"; path = "src/backend/xml/gnc-owner-xml-v2.cpp"; sourceTree = "<group>"; };
+		6EEA3CEE1E8E2C8F00BA45AE /* gnc-pricedb-xml-v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-pricedb-xml-v2.cpp"; path = "src/backend/xml/gnc-pricedb-xml-v2.cpp"; sourceTree = "<group>"; };
+		6EEA3CEF1E8E2C8F00BA45AE /* gnc-recurrence-xml-v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-recurrence-xml-v2.cpp"; path = "src/backend/xml/gnc-recurrence-xml-v2.cpp"; sourceTree = "<group>"; };
+		6EEA3CF01E8E2C8F00BA45AE /* gnc-schedxaction-xml-v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-schedxaction-xml-v2.cpp"; path = "src/backend/xml/gnc-schedxaction-xml-v2.cpp"; sourceTree = "<group>"; };
+		6EEA3CF11E8E2C8F00BA45AE /* gnc-tax-table-xml-v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-tax-table-xml-v2.cpp"; path = "src/backend/xml/gnc-tax-table-xml-v2.cpp"; sourceTree = "<group>"; };
+		6EEA3CF21E8E2C8F00BA45AE /* gnc-transaction-xml-v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-transaction-xml-v2.cpp"; path = "src/backend/xml/gnc-transaction-xml-v2.cpp"; sourceTree = "<group>"; };
+		6EEA3CF31E8E2C8F00BA45AE /* gnc-vendor-xml-v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-vendor-xml-v2.cpp"; path = "src/backend/xml/gnc-vendor-xml-v2.cpp"; sourceTree = "<group>"; };
+		6EEA3CF41E8E2C8F00BA45AE /* gnc-xml-backend.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-xml-backend.cpp"; path = "src/backend/xml/gnc-xml-backend.cpp"; sourceTree = "<group>"; };
+		6EEA3CF51E8E2C8F00BA45AE /* gnc-xml-helper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-xml-helper.cpp"; path = "src/backend/xml/gnc-xml-helper.cpp"; sourceTree = "<group>"; };
+		6EEA3CF61E8E2C8F00BA45AE /* gncmod-backend-xml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gncmod-backend-xml.cpp"; path = "src/backend/xml/gncmod-backend-xml.cpp"; sourceTree = "<group>"; };
+		6EEA3CF71E8E2C8F00BA45AE /* io-example-account.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "io-example-account.cpp"; path = "src/backend/xml/io-example-account.cpp"; sourceTree = "<group>"; };
+		6EEA3CF81E8E2C8F00BA45AE /* io-gncxml-gen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "io-gncxml-gen.cpp"; path = "src/backend/xml/io-gncxml-gen.cpp"; sourceTree = "<group>"; };
+		6EEA3CF91E8E2C8F00BA45AE /* io-gncxml-v2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "io-gncxml-v2.cpp"; path = "src/backend/xml/io-gncxml-v2.cpp"; sourceTree = "<group>"; };
+		6EEA3CFA1E8E2C8F00BA45AE /* io-utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "io-utils.cpp"; path = "src/backend/xml/io-utils.cpp"; sourceTree = "<group>"; };
+		6EEA3CFB1E8E2C8F00BA45AE /* sixtp-stack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "sixtp-stack.cpp"; path = "src/backend/xml/sixtp-stack.cpp"; sourceTree = "<group>"; };
+		6EEA3CFC1E8E2C8F00BA45AE /* sixtp-to-dom-parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "sixtp-to-dom-parser.cpp"; path = "src/backend/xml/sixtp-to-dom-parser.cpp"; sourceTree = "<group>"; };
+		6EEA3CFD1E8E2C8F00BA45AE /* sixtp-utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "sixtp-utils.cpp"; path = "src/backend/xml/sixtp-utils.cpp"; sourceTree = "<group>"; };
+		6EEA3CFE1E8E2C8F00BA45AE /* sixtp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sixtp.cpp; path = src/backend/xml/sixtp.cpp; sourceTree = "<group>"; };
+		6EEA3CFF1E8E2CC100BA45AE /* gnc-xml-backend.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "gnc-xml-backend.hpp"; path = "src/backend/xml/gnc-xml-backend.hpp"; sourceTree = "<group>"; };
+		6EEA3D001E8E2D2300BA45AE /* test-backend-dbi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "test-backend-dbi.cpp"; path = "src/backend/dbi/test/test-backend-dbi.cpp"; sourceTree = "<group>"; };
+		6EEA3D011E8E2D2300BA45AE /* test-dbi-business-stuff.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "test-dbi-business-stuff.cpp"; path = "src/backend/dbi/test/test-dbi-business-stuff.cpp"; sourceTree = "<group>"; };
+		6EEA3D021E8E2D4A00BA45AE /* test-column-types.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "test-column-types.cpp"; path = "src/backend/sql/test/test-column-types.cpp"; sourceTree = "<group>"; };
+		6EEA3D031E8E2D4A00BA45AE /* test-sqlbe.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "test-sqlbe.cpp"; path = "src/backend/sql/test/test-sqlbe.cpp"; sourceTree = "<group>"; };
+		6EEA3D041E8E2D4A00BA45AE /* utest-gnc-backend-sql.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "utest-gnc-backend-sql.cpp"; path = "src/backend/sql/test/utest-gnc-backend-sql.cpp"; sourceTree = "<group>"; };
+		6EEA3D051E8E2D8E00BA45AE /* test-date-converting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "test-date-converting.cpp"; path = "src/backend/xml/test/test-date-converting.cpp"; sourceTree = "<group>"; };
+		6EEA3D061E8E2D8E00BA45AE /* test-dom-converters1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "test-dom-converters1.cpp"; path = "src/backend/xml/test/test-dom-converters1.cpp"; sourceTree = "<group>"; };
+		6EEA3D071E8E2D8E00BA45AE /* test-dom-parser1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "test-dom-parser1.cpp"; path = "src/backend/xml/test/test-dom-parser1.cpp"; sourceTree = "<group>"; };
+		6EEA3D081E8E2D8E00BA45AE /* test-load-backend.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "test-load-backend.cpp"; path = "src/backend/xml/test/test-load-backend.cpp"; sourceTree = "<group>"; };
+		6EEA3D091E8E2D8E00BA45AE /* test-load-example-account.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "test-load-example-account.cpp"; path = "src/backend/xml/test/test-load-example-account.cpp"; sourceTree = "<group>"; };
+		6EEA3D0A1E8E2D8E00BA45AE /* test-load-xml2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "test-load-xml2.cpp"; path = "src/backend/xml/test/test-load-xml2.cpp"; sourceTree = "<group>"; };
+		6EEA3D0B1E8E2D8E00BA45AE /* test-save-in-lang.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "test-save-in-lang.cpp"; path = "src/backend/xml/test/test-save-in-lang.cpp"; sourceTree = "<group>"; };
+		6EEA3D0C1E8E2D8E00BA45AE /* test-string-converters.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "test-string-converters.cpp"; path = "src/backend/xml/test/test-string-converters.cpp"; sourceTree = "<group>"; };
+		6EEA3D0D1E8E2D8E00BA45AE /* test-xml-account.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "test-xml-account.cpp"; path = "src/backend/xml/test/test-xml-account.cpp"; sourceTree = "<group>"; };
+		6EEA3D0E1E8E2D8E00BA45AE /* test-xml-commodity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "test-xml-commodity.cpp"; path = "src/backend/xml/test/test-xml-commodity.cpp"; sourceTree = "<group>"; };
+		6EEA3D0F1E8E2D8E00BA45AE /* test-xml-pricedb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "test-xml-pricedb.cpp"; path = "src/backend/xml/test/test-xml-pricedb.cpp"; sourceTree = "<group>"; };
+		6EEA3D101E8E2D8E00BA45AE /* test-xml-transaction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "test-xml-transaction.cpp"; path = "src/backend/xml/test/test-xml-transaction.cpp"; sourceTree = "<group>"; };
+		6EEA3D111E8E2D8E00BA45AE /* test-xml2-is-file.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "test-xml2-is-file.cpp"; path = "src/backend/xml/test/test-xml2-is-file.cpp"; sourceTree = "<group>"; };
+		6EEA3D121E8E2DA100BA45AE /* test-real-data.sh.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "test-real-data.sh.in"; path = "src/backend/xml/test/test-real-data.sh.in"; sourceTree = "<group>"; };
+		6EEA3D131E8E2F5500BA45AE /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Makefile.am; path = "src/core-utils/test/Makefile.am"; sourceTree = "<group>"; };
+		6EEA3D141E8E2F5500BA45AE /* test-gnc-glib-utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "test-gnc-glib-utils.c"; path = "src/core-utils/test/test-gnc-glib-utils.c"; sourceTree = "<group>"; };
+		6EEA3D151E8E301E00BA45AE /* test-engine-stuff.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "test-engine-stuff.cpp"; path = "src/engine/test-core/test-engine-stuff.cpp"; sourceTree = "<group>"; };
+		6EEA3D161E8E313800BA45AE /* dialog-find-account.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "dialog-find-account.c"; path = "src/gnome/dialog-find-account.c"; sourceTree = "<group>"; };
+		6EEA3D171E8E313800BA45AE /* dialog-imap-editor.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "dialog-imap-editor.c"; path = "src/gnome/dialog-imap-editor.c"; sourceTree = "<group>"; };
+		6EEA3D181E8E313800BA45AE /* dialog-trans-assoc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "dialog-trans-assoc.c"; path = "src/gnome/dialog-trans-assoc.c"; sourceTree = "<group>"; };
+		6EEA3D191E8E316E00BA45AE /* dialog-find-account.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "dialog-find-account.h"; path = "src/gnome/dialog-find-account.h"; sourceTree = "<group>"; };
+		6EEA3D1A1E8E316E00BA45AE /* dialog-imap-editor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "dialog-imap-editor.h"; path = "src/gnome/dialog-imap-editor.h"; sourceTree = "<group>"; };
+		6EEA3D1B1E8E316E00BA45AE /* dialog-trans-assoc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "dialog-trans-assoc.h"; path = "src/gnome/dialog-trans-assoc.h"; sourceTree = "<group>"; };
+		6EEA3D1C1E8E32E100BA45AE /* import-pending-matches.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "import-pending-matches.c"; path = "src/import-export/import-pending-matches.c"; sourceTree = "<group>"; };
+		6EEA3D1D1E8E333400BA45AE /* import-pending-matches.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "import-pending-matches.h"; path = "src/import-export/import-pending-matches.h"; sourceTree = "<group>"; };
+		6EEA3D1E1E8E337800BA45AE /* test-aqb.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "test-aqb.c"; path = "src/import-export/aqb/test/test-aqb.c"; sourceTree = "<group>"; };
+		6EEA3D1F1E8E337800BA45AE /* test-kvp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "test-kvp.c"; path = "src/import-export/aqb/test/test-kvp.c"; sourceTree = "<group>"; };
+		6EEA3D201E8E339700BA45AE /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Makefile.am; path = "src/import-export/csv-exp/Makefile.am"; sourceTree = "<group>"; };
+		6EEA3D211E8E33EC00BA45AE /* gnc-csv-account-map.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-csv-account-map.c"; path = "src/import-export/csv-imp/gnc-csv-account-map.c"; sourceTree = "<group>"; };
+		6EEA3D221E8E33EC00BA45AE /* gnc-csv-tokenizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-csv-tokenizer.cpp"; path = "src/import-export/csv-imp/gnc-csv-tokenizer.cpp"; sourceTree = "<group>"; };
+		6EEA3D231E8E33EC00BA45AE /* gnc-csv-trans-settings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-csv-trans-settings.cpp"; path = "src/import-export/csv-imp/gnc-csv-trans-settings.cpp"; sourceTree = "<group>"; };
+		6EEA3D241E8E33EC00BA45AE /* gnc-dummy-tokenizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-dummy-tokenizer.cpp"; path = "src/import-export/csv-imp/gnc-dummy-tokenizer.cpp"; sourceTree = "<group>"; };
+		6EEA3D251E8E33EC00BA45AE /* gnc-fw-tokenizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-fw-tokenizer.cpp"; path = "src/import-export/csv-imp/gnc-fw-tokenizer.cpp"; sourceTree = "<group>"; };
+		6EEA3D261E8E33EC00BA45AE /* gnc-tokenizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-tokenizer.cpp"; path = "src/import-export/csv-imp/gnc-tokenizer.cpp"; sourceTree = "<group>"; };
+		6EEA3D271E8E33EC00BA45AE /* gnc-trans-props.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-trans-props.cpp"; path = "src/import-export/csv-imp/gnc-trans-props.cpp"; sourceTree = "<group>"; };
+		6EEA3D281E8E33EC00BA45AE /* gnc-tx-import.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gnc-tx-import.cpp"; path = "src/import-export/csv-imp/gnc-tx-import.cpp"; sourceTree = "<group>"; };
+		6EEA3D291E8E33EC00BA45AE /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Makefile.am; path = "src/import-export/csv-imp/Makefile.am"; sourceTree = "<group>"; };
+		6EEA3D2A1E8E342A00BA45AE /* assistant-csv-trans-import.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "assistant-csv-trans-import.cpp"; path = "src/import-export/csv-imp/assistant-csv-trans-import.cpp"; sourceTree = "<group>"; };
+		6EEA3D2B1E8E342A00BA45AE /* gnc-csv-account-map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "gnc-csv-account-map.h"; path = "src/import-export/csv-imp/gnc-csv-account-map.h"; sourceTree = "<group>"; };
+		6EEA3D2C1E8E342A00BA45AE /* gnc-csv-tokenizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "gnc-csv-tokenizer.hpp"; path = "src/import-export/csv-imp/gnc-csv-tokenizer.hpp"; sourceTree = "<group>"; };
+		6EEA3D2D1E8E342A00BA45AE /* gnc-csv-trans-settings.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "gnc-csv-trans-settings.hpp"; path = "src/import-export/csv-imp/gnc-csv-trans-settings.hpp"; sourceTree = "<group>"; };
+		6EEA3D2E1E8E342A00BA45AE /* gnc-dummy-tokenizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "gnc-dummy-tokenizer.hpp"; path = "src/import-export/csv-imp/gnc-dummy-tokenizer.hpp"; sourceTree = "<group>"; };
+		6EEA3D2F1E8E342A00BA45AE /* gnc-fw-tokenizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "gnc-fw-tokenizer.hpp"; path = "src/import-export/csv-imp/gnc-fw-tokenizer.hpp"; sourceTree = "<group>"; };
+		6EEA3D301E8E342A00BA45AE /* gnc-tokenizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "gnc-tokenizer.hpp"; path = "src/import-export/csv-imp/gnc-tokenizer.hpp"; sourceTree = "<group>"; };
+		6EEA3D311E8E342A00BA45AE /* gnc-trans-props.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "gnc-trans-props.hpp"; path = "src/import-export/csv-imp/gnc-trans-props.hpp"; sourceTree = "<group>"; };
+		6EEA3D321E8E342A00BA45AE /* gnc-tx-import.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "gnc-tx-import.hpp"; path = "src/import-export/csv-imp/gnc-tx-import.hpp"; sourceTree = "<group>"; };
+		6EEA3D331E8E347000BA45AE /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Makefile.am; path = "src/import-export/csv-imp/test/Makefile.am"; sourceTree = "<group>"; };
+		6EEA3D341E8E347000BA45AE /* test-tokenizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "test-tokenizer.cpp"; path = "src/import-export/csv-imp/test/test-tokenizer.cpp"; sourceTree = "<group>"; };
+		6EEA3D351E8E347000BA45AE /* test-tx-import.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "test-tx-import.cpp"; path = "src/import-export/csv-imp/test/test-tx-import.cpp"; sourceTree = "<group>"; };
+		6EEA3D361E8E34DC00BA45AE /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Makefile.am; path = "src/import-export/qif-imp/test/Makefile.am"; sourceTree = "<group>"; };
+		6EEA3D371E8E34DC00BA45AE /* test-link.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "test-link.c"; path = "src/import-export/qif-imp/test/test-link.c"; sourceTree = "<group>"; };
+		6EEA3D381E8E354D00BA45AE /* test-import-pending-matches.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "test-import-pending-matches.c"; path = "src/import-export/test/test-import-pending-matches.c"; sourceTree = "<group>"; };
+		6EEA3D391E8E35DA00BA45AE /* qof-backend.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "qof-backend.cpp"; path = "src/libqof/qof/qof-backend.cpp"; sourceTree = "<group>"; };
+		6EEA3D3A1E8E360D00BA45AE /* gnc-backend-prov.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "gnc-backend-prov.hpp"; path = "src/libqof/qof/gnc-backend-prov.hpp"; sourceTree = "<group>"; };
+		6EEA3D3B1E8E360D00BA45AE /* gnc-numeric.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "gnc-numeric.hpp"; path = "src/libqof/qof/gnc-numeric.hpp"; sourceTree = "<group>"; };
+		6EEA3D3C1E8E360D00BA45AE /* gnc-rational-rounding.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "gnc-rational-rounding.hpp"; path = "src/libqof/qof/gnc-rational-rounding.hpp"; sourceTree = "<group>"; };
+		6EEA3D3D1E8E360D00BA45AE /* guid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = guid.hpp; path = src/libqof/qof/guid.hpp; sourceTree = "<group>"; };
+		6EEA3D3E1E8E360D00BA45AE /* qof-backend.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "qof-backend.hpp"; path = "src/libqof/qof/qof-backend.hpp"; sourceTree = "<group>"; };
+		6EEA3D3F1E8E360D00BA45AE /* qofsession.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = qofsession.hpp; path = src/libqof/qof/qofsession.hpp; sourceTree = "<group>"; };
+		6EEA3D401E8E363400BA45AE /* gtest-gnc-numeric.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gtest-gnc-numeric.cpp"; path = "src/libqof/qof/test/gtest-gnc-numeric.cpp"; sourceTree = "<group>"; };
+		6EEA3D411E8E363400BA45AE /* gtest-gnc-rational.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "gtest-gnc-rational.cpp"; path = "src/libqof/qof/test/gtest-gnc-rational.cpp"; sourceTree = "<group>"; };
+		6EEA3D421E8E363400BA45AE /* test-gnc-guid-old.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "test-gnc-guid-old.cpp"; path = "src/libqof/qof/test/test-gnc-guid-old.cpp"; sourceTree = "<group>"; };
+		6EEA3D431E8E363400BA45AE /* test-numeric.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "test-numeric.cpp"; path = "src/libqof/qof/test/test-numeric.cpp"; sourceTree = "<group>"; };
+		6EEA3D441E8E363400BA45AE /* test-qofsession-old.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "test-qofsession-old.cpp"; path = "src/libqof/qof/test/test-qofsession-old.cpp"; sourceTree = "<group>"; };
+		6EEA3D451E8E363400BA45AE /* test-qofsession.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "test-qofsession.cpp"; path = "src/libqof/qof/test/test-qofsession.cpp"; sourceTree = "<group>"; };
+		6EECD8661BE965650013E93A /* kvp-scm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "kvp-scm.cpp"; path = "src/engine/kvp-scm.cpp"; sourceTree = "<group>"; };
+		6EECD8671BE965650013E93A /* ScrubBusiness.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = ScrubBusiness.c; path = src/engine/ScrubBusiness.c; sourceTree = "<group>"; };
+		6EECD8681BE965650013E93A /* ScrubBusiness.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ScrubBusiness.h; path = src/engine/ScrubBusiness.h; sourceTree = "<group>"; };
+		6EECD8691BE965DD0013E93A /* test-gnc-uri-utils.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "test-gnc-uri-utils.c"; path = "src/core-utils/test/test-gnc-uri-utils.c"; sourceTree = "<group>"; };
+		6EECD86A1BE965DD0013E93A /* test-resolve-file-path.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "test-resolve-file-path.c"; path = "src/core-utils/test/test-resolve-file-path.c"; sourceTree = "<group>"; };
+		6EECD86B1BE9676A0013E93A /* test-print-queries.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test-print-queries.cpp"; path = "src/app-utils/test/test-print-queries.cpp"; sourceTree = "<group>"; };
+		6EECD86C1BE9676A0013E93A /* test-scm-query-string.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test-scm-query-string.cpp"; path = "src/app-utils/test/test-scm-query-string.cpp"; sourceTree = "<group>"; };
+		6EECD86D1BE9676A0013E93A /* test-sx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "test-sx.cpp"; path = "src/app-utils/test/test-sx.cpp"; sourceTree = "<group>"; };
+		6EECD86E1BE9683D0013E93A /* strfmon.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = strfmon.c; path = lib/libc/strfmon.c; sourceTree = "<group>"; };
+		6EECD86F1BE9683D0013E93A /* strfmon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = strfmon.h; path = lib/libc/strfmon.h; sourceTree = "<group>"; };
 		6EF6018618137B2100B8E15A /* business-helpers.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = "business-helpers.c"; path = "src/app-utils/business-helpers.c"; sourceTree = "<group>"; };
 		6EF6018718137B2100B8E15A /* business-helpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "business-helpers.h"; path = "src/app-utils/business-helpers.h"; sourceTree = "<group>"; };
 		6EF6018918137B7200B8E15A /* gnc-addr-quickfill.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "gnc-addr-quickfill.c"; path = "src/app-utils/gnc-addr-quickfill.c"; sourceTree = "<group>"; };
@@ -1242,21 +1318,21 @@
 		6E0F8136098D48F700D0BB5C /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				6E7BB1360B95558F000B79D4 /* engine */,
-				6E7BB1350B955574000B79D4 /* core-utils */,
-				6E7BB13C0B9556C5000B79D4 /* register */,
-				6E7BB13A0B955657000B79D4 /* gnome */,
-				6E7BB1390B955620000B79D4 /* gnome-utils */,
-				6E7BB1380B955602000B79D4 /* gnome-search */,
-				6E7BB13D0B9556D0000B79D4 /* report */,
-				6E7BB13B0B955679000B79D4 /* import-export */,
+				6E7BB1310B9554A1000B79D4 /* app-utils */,
 				6E7BB1320B9554D1000B79D4 /* backend */,
 				6E7BB1330B95551A000B79D4 /* business */,
+				6E7BB1350B955574000B79D4 /* core-utils */,
+				6E7BB1360B95558F000B79D4 /* engine */,
 				6E7BB1370B9555D9000B79D4 /* gnc-module */,
-				6E7BB1310B9554A1000B79D4 /* app-utils */,
-				6E7BB1300B955465000B79D4 /* libqof */,
+				6E7BB13A0B955657000B79D4 /* gnome */,
+				6E7BB1380B955602000B79D4 /* gnome-search */,
+				6E7BB1390B955620000B79D4 /* gnome-utils */,
 				6E4EC63D0F9A335B00C6F6AC /* html */,
+				6E7BB13B0B955679000B79D4 /* import-export */,
+				6E7BB1300B955465000B79D4 /* libqof */,
 				6E7BB13E0B955714000B79D4 /* miscellaneous */,
+				6E7BB13C0B9556C5000B79D4 /* register */,
+				6E7BB13D0B9556D0000B79D4 /* report */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -1290,17 +1366,24 @@
 		6E7BB1300B955465000B79D4 /* libqof */ = {
 			isa = PBXGroup;
 			children = (
-				6EB956961A39565A002E3AC5 /* gnc-int128.cpp */,
-				6EB956981A39565A002E3AC5 /* gnc-rational.cpp */,
-				6EB9569B1A39565A002E3AC5 /* kvp-value.cpp */,
+				6E24BAE51B6039840075D17E /* gnc-aqbanking-templates.cpp */,
 				6E97EB721915B9D90021442F /* gnc-date.cpp */,
+				6E24BAE71B6039840075D17E /* gnc-datetime.cpp */,
+				6EB956961A39565A002E3AC5 /* gnc-int128.cpp */,
 				6E97EB731915B9D90021442F /* gnc-numeric.cpp */,
+				6EB956981A39565A002E3AC5 /* gnc-rational.cpp */,
+				6E24BAE91B6039840075D17E /* gnc-timezone.cpp */,
+				6E24BAEB1B6039CC0075D17E /* gtest-gnc-datetime.cpp */,
+				6E24BAEC1B6039CC0075D17E /* gtest-gnc-int128.cpp */,
+				6EEA3D401E8E363400BA45AE /* gtest-gnc-numeric.cpp */,
+				6EEA3D411E8E363400BA45AE /* gtest-gnc-rational.cpp */,
+				6E24BAED1B6039CC0075D17E /* gtest-gnc-timezone.cpp */,
 				6E97EB741915B9D90021442F /* guid.cpp */,
 				6E97EB751915B9D90021442F /* kvp_frame.cpp */,
-				6E97EB761915B9D90021442F /* kvp-util.cpp */,
+				6EB9569B1A39565A002E3AC5 /* kvp-value.cpp */,
+				6EEA3D391E8E35DA00BA45AE /* qof-backend.cpp */,
 				6E97EB771915B9D90021442F /* qof-string-cache.cpp */,
 				6E97EB781915B9D90021442F /* qof-win32.cpp */,
-				6E97EB791915B9D90021442F /* qofbackend.cpp */,
 				6E97EB7A1915B9D90021442F /* qofbook.cpp */,
 				6E97EB7B1915B9D90021442F /* qofchoice.cpp */,
 				6E97EB7C1915B9D90021442F /* qofclass.cpp */,
@@ -1313,6 +1396,20 @@
 				6E97EB841915B9D90021442F /* qofquerycore.cpp */,
 				6E97EB851915B9D90021442F /* qofsession.cpp */,
 				6E97EB861915B9D90021442F /* qofutil.cpp */,
+				6E24BAEF1B6039CC0075D17E /* test-gnc-date.c */,
+				6EEA3D421E8E363400BA45AE /* test-gnc-guid-old.cpp */,
+				6E24BAF01B6039CC0075D17E /* test-gnc-guid.cpp */,
+				6E24BAF21B6039CC0075D17E /* test-kvp-frame.cpp */,
+				6E24BAF31B6039CC0075D17E /* test-kvp-value.cpp */,
+				6EEA3D431E8E363400BA45AE /* test-numeric.cpp */,
+				6E24BAF41B6039CC0075D17E /* test-qof-string-cache.c */,
+				6E24BAF51B6039CC0075D17E /* test-qof.c */,
+				6E24BAF61B6039CC0075D17E /* test-qofbackend.c */,
+				6E24BAF71B6039CC0075D17E /* test-qofbook.c */,
+				6E24BAF81B6039CC0075D17E /* test-qofinstance.cpp */,
+				6E24BAF91B6039CC0075D17E /* test-qofobject.c */,
+				6EEA3D441E8E363400BA45AE /* test-qofsession-old.cpp */,
+				6EEA3D451E8E363400BA45AE /* test-qofsession.cpp */,
 			);
 			name = libqof;
 			sourceTree = "<group>";
@@ -1321,7 +1418,9 @@
 			isa = PBXGroup;
 			children = (
 				6EF6018618137B2100B8E15A /* business-helpers.c */,
+				6E24BADB1B6038EC0075D17E /* expression_parser.c */,
 				6E8B750409912C9D003F7E3A /* file-utils.c */,
+				6E24BADE1B6038EC0075D17E /* fin.c */,
 				6E8B751B09912C9D003F7E3A /* gfec.c */,
 				6E8B752009912C9D003F7E3A /* gnc-account-merge.c */,
 				6E8B752309912C9D003F7E3A /* gnc-accounting-period.c */,
@@ -1344,12 +1443,15 @@
 				6E8B76C409912C9F003F7E3A /* option-util.c */,
 				6EF6019418137B7200B8E15A /* QuickFill.c */,
 				6EF6019518137B7200B8E15A /* QuickFill.h */,
+				6E24BAE11B6039060075D17E /* test-app-utils.c */,
 				6E8B772F09912C9F003F7E3A /* test-exp-parser.c */,
+				6E24BAE21B6039060075D17E /* test-gnc-ui-util.c */,
 				6E8B773E09912C9F003F7E3A /* test-link-module.c */,
-				6E8B776709912C9F003F7E3A /* test-print-parse-amount.c */,
-				6E8B776809912C9F003F7E3A /* test-print-queries.c */,
-				6E8B777009912C9F003F7E3A /* test-scm-query-string.c */,
-				6E4A803E0F27C4FC0024DAAF /* test-sx.c */,
+				6E24BAE31B6039060075D17E /* test-option-util.cpp */,
+				6E24BAE41B6039060075D17E /* test-print-parse-amount.cpp */,
+				6EECD86B1BE9676A0013E93A /* test-print-queries.cpp */,
+				6EECD86C1BE9676A0013E93A /* test-scm-query-string.cpp */,
+				6EECD86D1BE9676A0013E93A /* test-sx.cpp */,
 			);
 			name = "app-utils";
 			sourceTree = "<group>";
@@ -1357,84 +1459,96 @@
 		6E7BB1320B9554D1000B79D4 /* backend */ = {
 			isa = PBXGroup;
 			children = (
-				6EC70C011176DB3B006E876C /* escape.c */,
-				6E4A80440F27C4FC0024DAAF /* gnc-account-sql.c */,
-				6E4EC5C00F9A30E600C6F6AC /* gnc-account-xml-v2.c */,
-				6EBC06F218B1D6E600A5CEB7 /* gnc-address-sql.h */,
-				6EBC070718B1D76F00A5CEB7 /* gnc-address-xml-v2.c */,
-				6E4A803F0F27C4FC0024DAAF /* gnc-backend-dbi.c */,
-				6E4A80460F27C4FC0024DAAF /* gnc-backend-sql.c */,
-				6E4EC5C10F9A30E600C6F6AC /* gnc-backend-xml.c */,
-				6EBC06F418B1D6E600A5CEB7 /* gnc-bill-term-sql.h */,
-				6EBC070918B1D76F00A5CEB7 /* gnc-bill-term-xml-v2.c */,
-				6E4A80480F27C4FC0024DAAF /* gnc-book-sql.c */,
-				6E4EC5C30F9A30E600C6F6AC /* gnc-book-xml-v2.c */,
-				6E4A804A0F27C4FC0024DAAF /* gnc-budget-sql.c */,
-				6E4EC5C40F9A30E600C6F6AC /* gnc-budget-xml-v2.c */,
-				6E4A804C0F27C4FC0024DAAF /* gnc-commodity-sql.c */,
-				6E4EC5C50F9A30E700C6F6AC /* gnc-commodity-xml-v2.c */,
-				6EBC06F618B1D6E600A5CEB7 /* gnc-customer-sql.h */,
-				6EBC070B18B1D76F00A5CEB7 /* gnc-customer-xml-v2.c */,
-				6EBC06F818B1D6E600A5CEB7 /* gnc-employee-sql.h */,
-				6EBC070D18B1D76F00A5CEB7 /* gnc-employee-xml-v2.c */,
-				6EBC06FA18B1D6E600A5CEB7 /* gnc-entry-sql.h */,
-				6EBC070F18B1D76F00A5CEB7 /* gnc-entry-xml-v2.c */,
-				6E4EC5C60F9A30E700C6F6AC /* gnc-freqspec-xml-v2.c */,
-				6EBC06FC18B1D6E600A5CEB7 /* gnc-invoice-sql.h */,
-				6EBC071118B1D76F00A5CEB7 /* gnc-invoice-xml-v2.c */,
-				6EBC06FE18B1D6E600A5CEB7 /* gnc-job-sql.h */,
-				6EBC071318B1D76F00A5CEB7 /* gnc-job-xml-v2.c */,
-				6E4EC5C70F9A30E700C6F6AC /* gnc-lot-xml-v2.c */,
-				6E4A804E0F27C4FC0024DAAF /* gnc-lots-sql.c */,
-				6EBC070018B1D6E600A5CEB7 /* gnc-order-sql.h */,
-				6EBC071518B1D76F00A5CEB7 /* gnc-order-xml-v2.c */,
-				6EBC070218B1D6E600A5CEB7 /* gnc-owner-sql.h */,
-				6EBC071718B1D76F00A5CEB7 /* gnc-owner-xml-v2.c */,
-				6E4A80500F27C4FC0024DAAF /* gnc-price-sql.c */,
-				6E4EC5C80F9A30E700C6F6AC /* gnc-pricedb-xml-v2.c */,
-				6E4A80520F27C4FC0024DAAF /* gnc-recurrence-sql.c */,
-				6E4EC5C90F9A30E700C6F6AC /* gnc-recurrence-xml-v2.c */,
-				6E4A80540F27C4FC0024DAAF /* gnc-schedxaction-sql.c */,
-				6E4EC5CA0F9A30E700C6F6AC /* gnc-schedxaction-xml-v2.c */,
-				6E4A80560F27C4FC0024DAAF /* gnc-slots-sql.c */,
-				6EBC070418B1D6E600A5CEB7 /* gnc-tax-table-sql.h */,
-				6EBC071918B1D76F00A5CEB7 /* gnc-tax-table-xml-v2.c */,
-				6E4A80580F27C4FC0024DAAF /* gnc-transaction-sql.c */,
-				6E4EC5CB0F9A30E700C6F6AC /* gnc-transaction-xml-v2.c */,
-				6EBC070618B1D6E600A5CEB7 /* gnc-vendor-sql.h */,
-				6EBC071B18B1D76F00A5CEB7 /* gnc-vendor-xml-v2.c */,
-				6EBC071D18B1D76F00A5CEB7 /* gnc-xml-helper.c */,
+				6EEA3CC01E8E2B5F00BA45AE /* escape.cpp */,
+				6EEA3CC11E8E2B5F00BA45AE /* gnc-account-sql.cpp */,
+				6EEA3CDE1E8E2C8F00BA45AE /* gnc-account-xml-v2.cpp */,
+				6EEA3CC21E8E2B5F00BA45AE /* gnc-address-sql.cpp */,
+				6EEA3CDF1E8E2C8F00BA45AE /* gnc-address-xml-v2.cpp */,
+				6EEA3CB81E8E2A1600BA45AE /* gnc-backend-dbi.cpp */,
+				6EEA3CE01E8E2C8F00BA45AE /* gnc-backend-xml.cpp */,
+				6EEA3CC31E8E2B5F00BA45AE /* gnc-bill-term-sql.cpp */,
+				6EEA3CE11E8E2C8F00BA45AE /* gnc-bill-term-xml-v2.cpp */,
+				6EEA3CC41E8E2B5F00BA45AE /* gnc-book-sql.cpp */,
+				6EEA3CE21E8E2C8F00BA45AE /* gnc-book-xml-v2.cpp */,
+				6EEA3CC51E8E2B5F00BA45AE /* gnc-budget-sql.cpp */,
+				6EEA3CE31E8E2C8F00BA45AE /* gnc-budget-xml-v2.cpp */,
+				6EEA3CC61E8E2B5F00BA45AE /* gnc-commodity-sql.cpp */,
+				6EEA3CE41E8E2C8F00BA45AE /* gnc-commodity-xml-v2.cpp */,
+				6EEA3CC71E8E2B5F00BA45AE /* gnc-customer-sql.cpp */,
+				6EEA3CE51E8E2C8F00BA45AE /* gnc-customer-xml-v2.cpp */,
+				6EEA3CBC1E8E2A1600BA45AE /* gnc-dbisqlconnection.cpp */,
+				6EEA3CBE1E8E2A1600BA45AE /* gnc-dbisqlresult.cpp */,
+				6EEA3CC81E8E2B5F00BA45AE /* gnc-employee-sql.cpp */,
+				6EEA3CE61E8E2C8F00BA45AE /* gnc-employee-xml-v2.cpp */,
+				6EEA3CC91E8E2B5F00BA45AE /* gnc-entry-sql.cpp */,
+				6EEA3CE71E8E2C8F00BA45AE /* gnc-entry-xml-v2.cpp */,
+				6EEA3CE81E8E2C8F00BA45AE /* gnc-freqspec-xml-v2.cpp */,
+				6EEA3CCA1E8E2B5F00BA45AE /* gnc-invoice-sql.cpp */,
+				6EEA3CE91E8E2C8F00BA45AE /* gnc-invoice-xml-v2.cpp */,
+				6EEA3CCB1E8E2B5F00BA45AE /* gnc-job-sql.cpp */,
+				6EEA3CEA1E8E2C8F00BA45AE /* gnc-job-xml-v2.cpp */,
+				6EEA3CEB1E8E2C8F00BA45AE /* gnc-lot-xml-v2.cpp */,
+				6EEA3CCC1E8E2B5F00BA45AE /* gnc-lots-sql.cpp */,
+				6EEA3CCD1E8E2B5F00BA45AE /* gnc-order-sql.cpp */,
+				6EEA3CEC1E8E2C8F00BA45AE /* gnc-order-xml-v2.cpp */,
+				6EEA3CCE1E8E2B5F00BA45AE /* gnc-owner-sql.cpp */,
+				6EEA3CED1E8E2C8F00BA45AE /* gnc-owner-xml-v2.cpp */,
+				6EEA3CCF1E8E2B5F00BA45AE /* gnc-price-sql.cpp */,
+				6EEA3CEE1E8E2C8F00BA45AE /* gnc-pricedb-xml-v2.cpp */,
+				6EEA3CD01E8E2B5F00BA45AE /* gnc-recurrence-sql.cpp */,
+				6EEA3CEF1E8E2C8F00BA45AE /* gnc-recurrence-xml-v2.cpp */,
+				6EEA3CD11E8E2B5F00BA45AE /* gnc-schedxaction-sql.cpp */,
+				6EEA3CF01E8E2C8F00BA45AE /* gnc-schedxaction-xml-v2.cpp */,
+				6E24BAD21B6037550075D17E /* gnc-slots-sql.cpp */,
+				6EEA3CD21E8E2B5F00BA45AE /* gnc-sql-backend.cpp */,
+				6EEA3CD31E8E2B5F00BA45AE /* gnc-sql-column-table-entry.cpp */,
+				6EEA3CD41E8E2B5F00BA45AE /* gnc-sql-object-backend.cpp */,
+				6EEA3CD51E8E2B5F00BA45AE /* gnc-sql-result.cpp */,
+				6EEA3CD61E8E2B5F00BA45AE /* gnc-tax-table-sql.cpp */,
+				6EEA3CF11E8E2C8F00BA45AE /* gnc-tax-table-xml-v2.cpp */,
+				6EEA3CD71E8E2B5F00BA45AE /* gnc-transaction-sql.cpp */,
+				6EEA3CF21E8E2C8F00BA45AE /* gnc-transaction-xml-v2.cpp */,
+				6EEA3CD81E8E2B5F00BA45AE /* gnc-vendor-sql.cpp */,
+				6EEA3CF31E8E2C8F00BA45AE /* gnc-vendor-xml-v2.cpp */,
+				6EEA3CF41E8E2C8F00BA45AE /* gnc-xml-backend.cpp */,
+				6EEA3CF51E8E2C8F00BA45AE /* gnc-xml-helper.cpp */,
 				6E4A80410F27C4FC0024DAAF /* gncmod-backend-dbi.c */,
-				6E4EC5CE0F9A30E700C6F6AC /* gncmod-backend-xml.c */,
-				6E4EC5CF0F9A30E700C6F6AC /* io-example-account.c */,
-				6E4EC5D10F9A30E700C6F6AC /* io-gncxml-gen.c */,
-				6E4EC5D30F9A30E700C6F6AC /* io-gncxml-v1.c */,
-				6E4EC5D40F9A30E700C6F6AC /* io-gncxml-v2.c */,
-				6E4EC5D70F9A30E700C6F6AC /* io-utils.c */,
+				6EEA3CF61E8E2C8F00BA45AE /* gncmod-backend-xml.cpp */,
+				6EEA3CF71E8E2C8F00BA45AE /* io-example-account.cpp */,
+				6EEA3CF81E8E2C8F00BA45AE /* io-gncxml-gen.cpp */,
+				6E24BAD51B60379D0075D17E /* io-gncxml-v1.cpp */,
+				6EEA3CF91E8E2C8F00BA45AE /* io-gncxml-v2.cpp */,
+				6EEA3CFA1E8E2C8F00BA45AE /* io-utils.cpp */,
 				6E4EC5D90F9A30E700C6F6AC /* Makefile.am */,
 				6E4EC5E60F9A30E700C6F6AC /* Makefile.am */,
-				6E4EC5DA0F9A30E700C6F6AC /* sixtp-dom-generators.c */,
-				6E4EC5DC0F9A30E700C6F6AC /* sixtp-dom-parsers.c */,
-				6E4EC5DF0F9A30E700C6F6AC /* sixtp-stack.c */,
-				6E4EC5E10F9A30E700C6F6AC /* sixtp-to-dom-parser.c */,
-				6E4EC5E20F9A30E700C6F6AC /* sixtp-utils.c */,
-				6E4EC5E40F9A30E700C6F6AC /* sixtp.c */,
-				6E4A805A0F27C4FC0024DAAF /* test-column-types.c */,
-				6E4EC5E70F9A30E700C6F6AC /* test-date-converting.c */,
-				6E4EC5E80F9A30E700C6F6AC /* test-dom-converters1.c */,
-				6E4EC5E90F9A30E700C6F6AC /* test-dom-parser1.c */,
-				6E4EC5EA0F9A30E700C6F6AC /* test-file-stuff.c */,
-				6E4EC5EC0F9A30E700C6F6AC /* test-kvp-frames.c */,
-				6E4EC5ED0F9A30E700C6F6AC /* test-load-backend.c */,
-				6E4EC5EE0F9A30E700C6F6AC /* test-load-example-account.c */,
-				6E4EC5EF0F9A30E700C6F6AC /* test-load-xml2.c */,
-				6E4EC5F00F9A30E700C6F6AC /* test-save-in-lang.c */,
-				6E4EC5F10F9A30E700C6F6AC /* test-string-converters.c */,
-				6E4EC5F20F9A30E700C6F6AC /* test-xml-account.c */,
-				6E4EC5F30F9A30E700C6F6AC /* test-xml-commodity.c */,
-				6E4EC5F40F9A30E700C6F6AC /* test-xml-pricedb.c */,
-				6E4EC5F50F9A30E700C6F6AC /* test-xml-transaction.c */,
-				6E4EC5F60F9A30E700C6F6AC /* test-xml2-is-file.c */,
+				6E24BAD61B60379D0075D17E /* sixtp-dom-generators.cpp */,
+				6E24BAD71B60379D0075D17E /* sixtp-dom-parsers.cpp */,
+				6EEA3CFB1E8E2C8F00BA45AE /* sixtp-stack.cpp */,
+				6EEA3CFC1E8E2C8F00BA45AE /* sixtp-to-dom-parser.cpp */,
+				6EEA3CFD1E8E2C8F00BA45AE /* sixtp-utils.cpp */,
+				6EEA3CFE1E8E2C8F00BA45AE /* sixtp.cpp */,
+				6E24BACC1B60373A0075D17E /* test-backend-dbi-basic.cpp */,
+				6EEA3D001E8E2D2300BA45AE /* test-backend-dbi.cpp */,
+				6EEA3D021E8E2D4A00BA45AE /* test-column-types.cpp */,
+				6EEA3D051E8E2D8E00BA45AE /* test-date-converting.cpp */,
+				6EEA3D011E8E2D2300BA45AE /* test-dbi-business-stuff.cpp */,
+				6E24BAD01B60373A0075D17E /* test-dbi-stuff.cpp */,
+				6EEA3D061E8E2D8E00BA45AE /* test-dom-converters1.cpp */,
+				6EEA3D071E8E2D8E00BA45AE /* test-dom-parser1.cpp */,
+				6E24BAD81B6037B70075D17E /* test-file-stuff.cpp */,
+				6E24BAD91B6037B80075D17E /* test-kvp-frames.cpp */,
+				6EEA3D081E8E2D8E00BA45AE /* test-load-backend.cpp */,
+				6EEA3D091E8E2D8E00BA45AE /* test-load-example-account.cpp */,
+				6EEA3D0A1E8E2D8E00BA45AE /* test-load-xml2.cpp */,
+				6EEA3D0B1E8E2D8E00BA45AE /* test-save-in-lang.cpp */,
+				6EEA3D031E8E2D4A00BA45AE /* test-sqlbe.cpp */,
+				6EEA3D0C1E8E2D8E00BA45AE /* test-string-converters.cpp */,
+				6EEA3D0D1E8E2D8E00BA45AE /* test-xml-account.cpp */,
+				6EEA3D0E1E8E2D8E00BA45AE /* test-xml-commodity.cpp */,
+				6EEA3D0F1E8E2D8E00BA45AE /* test-xml-pricedb.cpp */,
+				6EEA3D101E8E2D8E00BA45AE /* test-xml-transaction.cpp */,
+				6EEA3D111E8E2D8E00BA45AE /* test-xml2-is-file.cpp */,
+				6EEA3D041E8E2D4A00BA45AE /* utest-gnc-backend-sql.cpp */,
 			);
 			name = backend;
 			sourceTree = "<group>";
@@ -1474,7 +1588,6 @@
 		6E7BB1350B955574000B79D4 /* core-utils */ = {
 			isa = PBXGroup;
 			children = (
-				6EBC075618B1DA8800A5CEB7 /* assistant-utils.c */,
 				6EBC075818B1DA8800A5CEB7 /* assistant-xml-encoding.c */,
 				6EC70C0A1176DC9B006E876C /* binreloc.c */,
 				6EBC075A18B1DA8800A5CEB7 /* dialog-dup-trans.c */,
@@ -1504,6 +1617,9 @@
 				6EBC077218B1DA8900A5CEB7 /* gnc-tree-view-owner.c */,
 				6EBC077418B1DA8900A5CEB7 /* gnc-tree-view-split-reg.c */,
 				6EC70C121176DC9B006E876C /* gnc-uri-utils.c */,
+				6EEA3D141E8E2F5500BA45AE /* test-gnc-glib-utils.c */,
+				6EECD8691BE965DD0013E93A /* test-gnc-uri-utils.c */,
+				6EECD86A1BE965DD0013E93A /* test-resolve-file-path.c */,
 				6EBC077718B1DA8900A5CEB7 /* tree-view-utils.c */,
 			);
 			name = "core-utils";
@@ -1515,6 +1631,7 @@
 				6E8B74A909912C9D003F7E3A /* Account.c */,
 				6E8B74BC09912C9D003F7E3A /* cap-gains.c */,
 				6E8B74BD09912C9D003F7E3A /* cashobjects.c */,
+				6E0A56DF1BE6D5CB00F028BB /* dummy.cpp */,
 				6E8B74FE09912C9D003F7E3A /* engine-helpers.c */,
 				6E8B751D09912C9D003F7E3A /* glib-helpers.c */,
 				6E8B752B09912C9D003F7E3A /* gnc-budget.c */,
@@ -1541,7 +1658,8 @@
 				6EBC074D18B1D98500A5CEB7 /* gncOwner.c */,
 				6EBC075018B1D98500A5CEB7 /* gncTaxTable.c */,
 				6EBC075318B1D98500A5CEB7 /* gncVendor.c */,
-				6E8B76B809912C9F003F7E3A /* kvp-scm.c */,
+				6E0A56E01BE6D5CB00F028BB /* gtest-import-map.cpp */,
+				6EECD8661BE965650013E93A /* kvp-scm.cpp */,
 				6E8B76C909912C9F003F7E3A /* policy.c */,
 				6E8B76EA09912C9F003F7E3A /* Query.c */,
 				6E8B76F009912C9F003F7E3A /* Recurrence.c */,
@@ -1549,29 +1667,44 @@
 				6E8B76F509912C9F003F7E3A /* Scrub.c */,
 				6E8B76F609912C9F003F7E3A /* Scrub2.c */,
 				6E8B76F709912C9F003F7E3A /* Scrub3.c */,
+				6EECD8671BE965650013E93A /* ScrubBusiness.c */,
 				6EFB257109B038210062574C /* Split.c */,
 				6E8B771309912C9F003F7E3A /* SX-book.c */,
 				6E8B771409912C9F003F7E3A /* SX-ttinfo.c */,
-				6E4A80770F27C9820024DAAF /* test-account-object.c */,
-				6E8B772009912C9F003F7E3A /* test-commodities.c */,
-				6E8B772609912C9F003F7E3A /* test-date.c */,
-				6E8B772D09912C9F003F7E3A /* test-engine-stuff.c */,
-				6E8B773409912C9F003F7E3A /* test-group-vs-book.c */,
-				6E8B773509912C9F003F7E3A /* test-guid.c */,
+				6E0A56E11BE6D5CB00F028BB /* test-account-object.cpp */,
+				6E0A56E21BE6D5CB00F028BB /* test-address.c */,
+				6E0A56E31BE6D5CB00F028BB /* test-business.c */,
+				6E0A56E41BE6D5CB00F028BB /* test-commodities.cpp */,
+				6E0A56E51BE6D5CB00F028BB /* test-customer.c */,
+				6E0A56E61BE6D5CB00F028BB /* test-date.cpp */,
+				6E0A56E71BE6D5CB00F028BB /* test-employee.c */,
+				6E0A56E81BE6D5CB00F028BB /* test-engine-kvp-properties.c */,
+				6EEA3D151E8E301E00BA45AE /* test-engine-stuff.cpp */,
+				6E0A56E91BE6D5CB00F028BB /* test-engine.c */,
+				6E0A56EA1BE6D5CB00F028BB /* test-group-vs-book.cpp */,
+				6E0A56EB1BE6D5CB00F028BB /* test-guid.cpp */,
+				6E0A56EC1BE6D5CB00F028BB /* test-job.c */,
 				6E8B774909912C9F003F7E3A /* test-link.c */,
 				6E8B775209912C9F003F7E3A /* test-load-engine.c */,
-				6E8B775609912C9F003F7E3A /* test-lots.c */,
-				6E8B775E09912C9F003F7E3A /* test-numeric.c */,
+				6E0A56ED1BE6D5CB00F028BB /* test-lots.cpp */,
 				6E8B775F09912C9F003F7E3A /* test-object.c */,
-				6E8B776A09912C9F003F7E3A /* test-query.c */,
+				6E0A56EF1BE6D5CB00F028BB /* test-query.cpp */,
 				6E8B776B09912C9F003F7E3A /* test-querynew.c */,
 				6E8B776C09912C9F003F7E3A /* test-recurrence.c */,
-				6E8B777109912C9F003F7E3A /* test-scm-query.c */,
-				6E8B777209912C9F003F7E3A /* test-split-vs-account.c */,
-				6E8B777609912C9F003F7E3A /* test-transaction-reversal.c */,
-				6E8B777709912C9F003F7E3A /* test-transaction-voiding.c */,
+				6E0A56F01BE6D5CB00F028BB /* test-scm-query.cpp */,
+				6E0A56F11BE6D5CB00F028BB /* test-split-vs-account.cpp */,
+				6E0A56F21BE6D5CB00F028BB /* test-transaction-reversal.cpp */,
+				6E0A56F31BE6D5CB00F028BB /* test-transaction-voiding.cpp */,
+				6E0A56F41BE6D5CB00F028BB /* test-vendor.c */,
 				6E93FC1E09CE87FB005BE17C /* Transaction.c */,
 				6E8B778409912C9F003F7E3A /* TransLog.c */,
+				6E0A56F51BE6D5CB00F028BB /* utest-Account.cpp */,
+				6E0A56F61BE6D5CB00F028BB /* utest-Budget.c */,
+				6E0A56F71BE6D5CB00F028BB /* utest-Entry.c */,
+				6E0A56F81BE6D5CB00F028BB /* utest-gnc-pricedb.c */,
+				6E0A56F91BE6D5CB00F028BB /* utest-Invoice.c */,
+				6E0A56FA1BE6D5CB00F028BB /* utest-Split.cpp */,
+				6E0A56FB1BE6D5CB00F028BB /* utest-Transaction.cpp */,
 			);
 			name = engine;
 			sourceTree = "<group>";
@@ -1701,20 +1834,22 @@
 				6E0E952B1851BC8F0033FCAD /* assistant-stock-split.c */,
 				6E8B74CD09912C9D003F7E3A /* dialog-commodities.c */,
 				6E8B74D409912C9D003F7E3A /* dialog-fincalc.c */,
+				6EEA3D161E8E313800BA45AE /* dialog-find-account.c */,
 				6E8B74D509912C9D003F7E3A /* dialog-find-transactions.c */,
 				6E0E952D1851BC8F0033FCAD /* dialog-find-transactions2.c */,
+				6EEA3D171E8E313800BA45AE /* dialog-imap-editor.c */,
 				6E0E952F1851BC8F0033FCAD /* dialog-lot-viewer.c */,
 				6E8B74D909912C9D003F7E3A /* dialog-new-user.c */,
 				6E8B74DF09912C9D003F7E3A /* dialog-price-edit-db.c */,
 				6E8B74E009912C9D003F7E3A /* dialog-price-editor.c */,
 				6E8B74E109912C9D003F7E3A /* dialog-print-check.c */,
-				6E0E95311851BC8F0033FCAD /* dialog-print-check2.c */,
 				6E8B74E209912C9D003F7E3A /* dialog-progress.c */,
 				6E7BAEE70B93E2DB000B79D4 /* dialog-sx-editor.c */,
 				6E0E95331851BC8F0033FCAD /* dialog-sx-editor2.c */,
 				6E8B74E809912C9D003F7E3A /* dialog-sx-from-trans.c */,
 				6E7BAEE80B93E2DB000B79D4 /* dialog-sx-since-last-run.c */,
 				6E8B74EA09912C9D003F7E3A /* dialog-tax-info.c */,
+				6EEA3D181E8E313800BA45AE /* dialog-trans-assoc.c */,
 				6E0E95351851BC8F0033FCAD /* gnc-budget-view.c */,
 				6E8B758109912C9D003F7E3A /* gnc-plugin-account-tree.c */,
 				6E8B758209912C9D003F7E3A /* gnc-plugin-basic-commands.c */,
@@ -1743,7 +1878,7 @@
 				6EBC077918B1DB4D00A5CEB7 /* assistant-ab-initial.c */,
 				6EBC079C18B1DBAA00A5CEB7 /* assistant-csv-account-import.c */,
 				6EBC079318B1DB7F00A5CEB7 /* assistant-csv-export.c */,
-				6EBC079E18B1DBAA00A5CEB7 /* assistant-csv-trans-import.c */,
+				6EEA3D2A1E8E342A00BA45AE /* assistant-csv-trans-import.cpp */,
 				6EBC07AB18B1DC1500A5CEB7 /* assistant-qif-import.c */,
 				6EBC07A018B1DBAA00A5CEB7 /* csv-account-import.c */,
 				6EBC079518B1DB7F00A5CEB7 /* csv-transactions-export.c */,
@@ -1754,12 +1889,15 @@
 				6EBC077F18B1DB4D00A5CEB7 /* gnc-ab-getbalance.c */,
 				6EBC078118B1DB4D00A5CEB7 /* gnc-ab-gettrans.c */,
 				6EBC078318B1DB4D00A5CEB7 /* gnc-ab-kvp.c */,
-				6EBC078518B1DB4D00A5CEB7 /* gnc-ab-trans-templ.c */,
 				6EBC078718B1DB4D00A5CEB7 /* gnc-ab-transfer.c */,
 				6EBC078918B1DB4D00A5CEB7 /* gnc-ab-utils.c */,
+				6EEA3D211E8E33EC00BA45AE /* gnc-csv-account-map.c */,
 				6EBC07A218B1DBAA00A5CEB7 /* gnc-csv-gnumeric-popup.c */,
-				6EBC07A418B1DBAA00A5CEB7 /* gnc-csv-model.c */,
+				6EEA3D221E8E33EC00BA45AE /* gnc-csv-tokenizer.cpp */,
+				6EEA3D231E8E33EC00BA45AE /* gnc-csv-trans-settings.cpp */,
+				6EEA3D241E8E33EC00BA45AE /* gnc-dummy-tokenizer.cpp */,
 				6EBC078B18B1DB4D00A5CEB7 /* gnc-file-aqb-import.c */,
+				6EEA3D251E8E33EC00BA45AE /* gnc-fw-tokenizer.cpp */,
 				6EBC078D18B1DB4E00A5CEB7 /* gnc-gwen-gui.c */,
 				6E8B757109912C9D003F7E3A /* gnc-log-replay.c */,
 				6E8B757D09912C9D003F7E3A /* gnc-ofx-import.c */,
@@ -1770,6 +1908,9 @@
 				6E8B758709912C9D003F7E3A /* gnc-plugin-log-replay.c */,
 				6E8B758B09912C9D003F7E3A /* gnc-plugin-ofx.c */,
 				6EBC07AF18B1DC1500A5CEB7 /* gnc-plugin-qif-import.c */,
+				6EEA3D261E8E33EC00BA45AE /* gnc-tokenizer.cpp */,
+				6EEA3D271E8E33EC00BA45AE /* gnc-trans-props.cpp */,
+				6EEA3D281E8E33EC00BA45AE /* gnc-tx-import.cpp */,
 				6EBC079218B1DB4E00A5CEB7 /* gncmod-aqbanking.c */,
 				6EBC079B18B1DB7F00A5CEB7 /* gncmod-csv-export.c */,
 				6EBC07A818B1DBAA00A5CEB7 /* gncmod-csv-import.c */,
@@ -1782,9 +1923,9 @@
 				6E8B76A609912C9F003F7E3A /* import-commodity-matcher.c */,
 				6E8B76A709912C9F003F7E3A /* import-format-dialog.c */,
 				6E8B76A809912C9F003F7E3A /* import-main-matcher.c */,
-				6E8B76A909912C9F003F7E3A /* import-match-map.c */,
 				6E8B76AA09912C9F003F7E3A /* import-match-picker.c */,
 				6E8B76AB09912C9F003F7E3A /* import-parse.c */,
+				6EEA3D1C1E8E32E100BA45AE /* import-pending-matches.c */,
 				6E8B76AC09912C9F003F7E3A /* import-settings.c */,
 				6E8B76AD09912C9F003F7E3A /* import-utilities.c */,
 				6E8B76D009912C9F003F7E3A /* qif-context.c */,
@@ -1792,11 +1933,17 @@
 				6E8B76D209912C9F003F7E3A /* qif-file.c */,
 				6E8B76D309912C9F003F7E3A /* qif-objects.c */,
 				6E8B76D409912C9F003F7E3A /* qif-parse.c */,
+				6EEA3D1E1E8E337800BA45AE /* test-aqb.c */,
 				6E8B773809912C9F003F7E3A /* test-import-parse.c */,
+				6EEA3D381E8E354D00BA45AE /* test-import-pending-matches.c */,
+				6EEA3D1F1E8E337800BA45AE /* test-kvp.c */,
+				6EEA3D371E8E34DC00BA45AE /* test-link.c */,
 				6E8B774C09912C9F003F7E3A /* test-link.c */,
 				6E8B774A09912C9F003F7E3A /* test-link.c */,
 				6E8B774E09912C9F003F7E3A /* test-link.c */,
 				6E8B776909912C9F003F7E3A /* test-qif.c */,
+				6EEA3D341E8E347000BA45AE /* test-tokenizer.cpp */,
+				6EEA3D351E8E347000BA45AE /* test-tx-import.cpp */,
 			);
 			name = "import-export";
 			sourceTree = "<group>";
@@ -1880,23 +2027,15 @@
 		6E7BB13E0B955714000B79D4 /* miscellaneous */ = {
 			isa = PBXGroup;
 			children = (
-				6E25551D177D67E80074F7BD /* mainwindow.cpp */,
-				6E25551E177D67E80074F7BD /* mainwindow.hpp */,
 				6E8B74F109912C9D003F7E3A /* doxygen_main_page.c */,
-				6E8B750309912C9D003F7E3A /* fastcgi-hello.c */,
-				6EC70BFC1176DA09006E876C /* gmtime_r.c */,
-				6E8B759D09912C9E003F7E3A /* gnc-server.c */,
 				6E8B75DB09912C9E003F7E3A /* gncmod-tax-us.c */,
 				6E8B75E409912C9E003F7E3A /* gnucash-bin.c */,
-				6E8B768F09912C9F003F7E3A /* guile-strings.c */,
-				6E8B76A009912C9F003F7E3A /* hello.c */,
-				6E8B76A109912C9F003F7E3A /* hello2.c */,
-				6E8B76A209912C9F003F7E3A /* hello3.c */,
 				6E8B76B609912C9F003F7E3A /* iso-4217-currencies.c */,
 				6E8B76BB09912C9F003F7E3A /* libc-missing-noop.c */,
-				6E8B76BD09912C9F003F7E3A /* localtime_r.c */,
+				6E25551D177D67E80074F7BD /* mainwindow.cpp */,
+				6E25551E177D67E80074F7BD /* mainwindow.hpp */,
 				6E8B770309912C9F003F7E3A /* setenv.c */,
-				6E4A800B0F27C0350024DAAF /* stf-parse.c */,
+				6EECD86E1BE9683D0013E93A /* strfmon.c */,
 				6E8B771109912C9F003F7E3A /* strptime.c */,
 				6E8B773F09912C9F003F7E3A /* test-link-module.c */,
 				6E8B777409912C9F003F7E3A /* test-stuff.c */,
@@ -1960,6 +2099,7 @@
 				6E8B79F10991BC42003F7E3A /* Scrub.h */,
 				6E8B79F20991BC42003F7E3A /* Scrub2.h */,
 				6E8B79F30991BC42003F7E3A /* Scrub3.h */,
+				6EECD8681BE965650013E93A /* ScrubBusiness.h */,
 				6E8B79F40991BC42003F7E3A /* ScrubP.h */,
 				6EFB257309B0383B0062574C /* Split.h */,
 				6EFB257409B0383B0062574C /* SplitP.h */,
@@ -2045,40 +2185,42 @@
 		6E7BB1430B955892000B79D4 /* gnome */ = {
 			isa = PBXGroup;
 			children = (
-				6E0E953C1851BCFD0033FCAD /* gnc-split-reg2.h */,
-				6E0E953E1851BCFD0033FCAD /* reconcile-view.h */,
-				6E0E95401851BCFD0033FCAD /* window-autoclear.h */,
-				6E0E95421851BCFD0033FCAD /* window-reconcile2.h */,
 				6E0E95261851BC8F0033FCAD /* assistant-acct-period.h */,
 				6E0E95281851BC8F0033FCAD /* assistant-hierarchy.h */,
 				6E0E952A1851BC8F0033FCAD /* assistant-loan.h */,
 				6E0E952C1851BC8F0033FCAD /* assistant-stock-split.h */,
-				6E0E952E1851BC8F0033FCAD /* dialog-find-transactions2.h */,
-				6E0E95301851BC8F0033FCAD /* dialog-lot-viewer.h */,
-				6E0E95321851BC8F0033FCAD /* dialog-print-check2.h */,
-				6E0E95341851BC8F0033FCAD /* dialog-sx-editor2.h */,
-				6E0E95361851BC8F0033FCAD /* gnc-budget-view.h */,
-				6E0E95381851BC8F0033FCAD /* gnc-plugin-page-register2.h */,
-				6E0E953A1851BC8F0033FCAD /* gnc-plugin-register2.h */,
 				6E8B77D40991BC41003F7E3A /* dialog-fincalc.h */,
+				6EEA3D191E8E316E00BA45AE /* dialog-find-account.h */,
 				6E8B77D50991BC41003F7E3A /* dialog-find-transactions.h */,
+				6E0E952E1851BC8F0033FCAD /* dialog-find-transactions2.h */,
+				6EEA3D1A1E8E316E00BA45AE /* dialog-imap-editor.h */,
+				6E0E95301851BC8F0033FCAD /* dialog-lot-viewer.h */,
 				6E8B77D90991BC41003F7E3A /* dialog-new-user.h */,
 				6E8B77DF0991BC41003F7E3A /* dialog-print-check.h */,
 				6E8B77E00991BC41003F7E3A /* dialog-progress.h */,
 				6E7BAEEA0B93E2F9000B79D4 /* dialog-sx-editor.h */,
+				6E0E95341851BC8F0033FCAD /* dialog-sx-editor2.h */,
 				6E8B77E60991BC41003F7E3A /* dialog-sx-from-trans.h */,
 				6E7BAEEB0B93E2F9000B79D4 /* dialog-sx-since-last-run.h */,
+				6EEA3D1B1E8E316E00BA45AE /* dialog-trans-assoc.h */,
+				6E0E95361851BC8F0033FCAD /* gnc-budget-view.h */,
 				6E8B78780991BC41003F7E3A /* gnc-plugin-account-tree.h */,
 				6E8B78790991BC41003F7E3A /* gnc-plugin-basic-commands.h */,
 				6E8B787A0991BC41003F7E3A /* gnc-plugin-budget.h */,
 				6E8B78830991BC41003F7E3A /* gnc-plugin-page-account-tree.h */,
 				6E8B78840991BC41003F7E3A /* gnc-plugin-page-budget.h */,
 				6E8B78860991BC41003F7E3A /* gnc-plugin-page-register.h */,
+				6E0E95381851BC8F0033FCAD /* gnc-plugin-page-register2.h */,
 				6E7BAEEC0B93E2F9000B79D4 /* gnc-plugin-page-sx-list.h */,
 				6E8B788A0991BC41003F7E3A /* gnc-plugin-register.h */,
+				6E0E953A1851BC8F0033FCAD /* gnc-plugin-register2.h */,
 				6E8B78950991BC41003F7E3A /* gnc-split-reg.h */,
+				6E0E953C1851BCFD0033FCAD /* gnc-split-reg2.h */,
+				6E0E953E1851BCFD0033FCAD /* reconcile-view.h */,
 				6E8B7A1A0991BC42003F7E3A /* top-level.h */,
+				6E0E95401851BCFD0033FCAD /* window-autoclear.h */,
 				6E8B7A230991BC42003F7E3A /* window-reconcile.h */,
+				6E0E95421851BCFD0033FCAD /* window-reconcile2.h */,
 			);
 			name = gnome;
 			sourceTree = "<group>";
@@ -2087,7 +2229,6 @@
 			isa = PBXGroup;
 			children = (
 				6E8B77B10991BC41003F7E3A /* account-quickfill.h */,
-				6EBC075718B1DA8800A5CEB7 /* assistant-utils.h */,
 				6EBC075918B1DA8800A5CEB7 /* assistant-xml-encoding.h */,
 				6E8B77CA0991BC41003F7E3A /* dialog-account.h */,
 				6E4A807A0F27CA4A0024DAAF /* dialog-book-close.h */,
@@ -2173,13 +2314,11 @@
 		6E7BB1450B9558BF000B79D4 /* miscellaneous */ = {
 			isa = PBXGroup;
 			children = (
-				6E4A800C0F27C0350024DAAF /* stf-parse.h */,
-				6E4A80060F27C0350024DAAF /* pow.h */,
-				6EC70BFD1176DA09006E876C /* gmtime_r.h */,
-				6E8B79A70991BC42003F7E3A /* localtime_r.h */,
-				6E8B7A000991BC42003F7E3A /* setenv.h */,
-				6E8B7A0D0991BC42003F7E3A /* strptime.h */,
 				6E8B79890991BC41003F7E3A /* guile-mappings.h */,
+				6E4A80060F27C0350024DAAF /* pow.h */,
+				6E8B7A000991BC42003F7E3A /* setenv.h */,
+				6EECD86F1BE9683D0013E93A /* strfmon.h */,
+				6E8B7A0D0991BC42003F7E3A /* strptime.h */,
 				6E8B7A190991BC42003F7E3A /* test-stuff.h */,
 			);
 			name = miscellaneous;
@@ -2188,24 +2327,29 @@
 		6E7BB1480B9558DE000B79D4 /* libqof */ = {
 			isa = PBXGroup;
 			children = (
-				6EB956971A39565A002E3AC5 /* gnc-int128.hpp */,
-				6EB956991A39565A002E3AC5 /* gnc-rational.hpp */,
-				6EB9569A1A39565A002E3AC5 /* kvp_frame.hpp */,
-				6EB9569C1A39565A002E3AC5 /* kvp-value.hpp */,
-				6EC70C2C1176DF50006E876C /* qofbookslots.h */,
+				6E24BAE61B6039840075D17E /* gnc-aqbanking-templates.h */,
+				6EEA3D3A1E8E360D00BA45AE /* gnc-backend-prov.hpp */,
 				6E4EC6490F9A359B00C6F6AC /* gnc-date-p.h */,
 				6E4EC64B0F9A359B00C6F6AC /* gnc-date.h */,
+				6E24BAE81B6039840075D17E /* gnc-datetime.hpp */,
+				6EB956971A39565A002E3AC5 /* gnc-int128.hpp */,
 				6E4EC64D0F9A359B00C6F6AC /* gnc-numeric.h */,
+				6EEA3D3B1E8E360D00BA45AE /* gnc-numeric.hpp */,
+				6EEA3D3C1E8E360D00BA45AE /* gnc-rational-rounding.hpp */,
+				6EB956991A39565A002E3AC5 /* gnc-rational.hpp */,
+				6E24BAEA1B6039840075D17E /* gnc-timezone.hpp */,
 				6E4EC64F0F9A359B00C6F6AC /* guid.h */,
-				6E4EC6500F9A359B00C6F6AC /* kvp-util-p.h */,
-				6E4EC6520F9A359B00C6F6AC /* kvp-util.h */,
-				6E4EC6540F9A359B00C6F6AC /* kvp_frame.h */,
+				6EEA3D3D1E8E360D00BA45AE /* guid.hpp */,
+				6EB9569A1A39565A002E3AC5 /* kvp_frame.hpp */,
+				6EB9569C1A39565A002E3AC5 /* kvp-value.hpp */,
+				6EEA3D3E1E8E360D00BA45AE /* qof-backend.hpp */,
 				6E4EC6580F9A359B00C6F6AC /* qof-gobject.h */,
+				6E056BF416C0F1E100B5E1F2 /* qof-string-cache.h */,
 				6E4EC65A0F9A359B00C6F6AC /* qof.h */,
-				6E4EC65B0F9A359B00C6F6AC /* qofbackend-p.h */,
 				6E4EC65D0F9A359B00C6F6AC /* qofbackend.h */,
 				6E4EC65E0F9A359B00C6F6AC /* qofbook-p.h */,
 				6E4EC6600F9A359B00C6F6AC /* qofbook.h */,
+				6EC70C2C1176DF50006E876C /* qofbookslots.h */,
 				6E4EC6640F9A359B00C6F6AC /* qofchoice.h */,
 				6E4EC6650F9A359B00C6F6AC /* qofclass-p.h */,
 				6E4EC6670F9A359B00C6F6AC /* qofclass.h */,
@@ -2222,10 +2366,9 @@
 				6E4EC6800F9A359B00C6F6AC /* qofquery.h */,
 				6E4EC6810F9A359B00C6F6AC /* qofquerycore-p.h */,
 				6E4EC6830F9A359B00C6F6AC /* qofquerycore.h */,
-				6E4EC6860F9A359B00C6F6AC /* qofsession-p.h */,
 				6E4EC6880F9A359B00C6F6AC /* qofsession.h */,
+				6EEA3D3F1E8E360D00BA45AE /* qofsession.hpp */,
 				6E4EC68C0F9A359B00C6F6AC /* qofutil.h */,
-				6E056BF416C0F1E100B5E1F2 /* qof-string-cache.h */,
 			);
 			name = libqof;
 			sourceTree = "<group>";
@@ -2235,6 +2378,10 @@
 			children = (
 				6EF6018718137B2100B8E15A /* business-helpers.h */,
 				6E8B77FD0991BC41003F7E3A /* file-utils.h */,
+				6E24BADC1B6038EC0075D17E /* fin_spl_protos.h */,
+				6E24BADD1B6038EC0075D17E /* fin_static_proto.h */,
+				6E24BADF1B6038EC0075D17E /* finproto.h */,
+				6E24BAE01B6038EC0075D17E /* finvar.h */,
 				6E8B78120991BC41003F7E3A /* gfec.h */,
 				6E8B78180991BC41003F7E3A /* gnc-account-merge.h */,
 				6E8B781A0991BC41003F7E3A /* gnc-accounting-period.h */,
@@ -2262,11 +2409,11 @@
 		6E7BB14B0B955906000B79D4 /* gnc-module */ = {
 			isa = PBXGroup;
 			children = (
-				6E8B78700991BC41003F7E3A /* gnc-module-api.h */,
-				6E8B78710991BC41003F7E3A /* gnc-module.h */,
 				6E8B77B60991BC41003F7E3A /* bar.h */,
 				6E8B77B80991BC41003F7E3A /* baz.h */,
 				6E8B780C0991BC41003F7E3A /* foo.h */,
+				6E8B78700991BC41003F7E3A /* gnc-module-api.h */,
+				6E8B78710991BC41003F7E3A /* gnc-module.h */,
 			);
 			name = "gnc-module";
 			sourceTree = "<group>";
@@ -2306,40 +2453,48 @@
 			children = (
 				6EC70C021176DB3B006E876C /* escape.h */,
 				6E4A80450F27C4FC0024DAAF /* gnc-account-sql.h */,
-				6EBC06F118B1D6E600A5CEB7 /* gnc-address-sql.c */,
 				6EBC070818B1D76F00A5CEB7 /* gnc-address-xml-v2.h */,
 				6E4A80400F27C4FC0024DAAF /* gnc-backend-dbi.h */,
-				6E4A80470F27C4FC0024DAAF /* gnc-backend-sql.h */,
+				6EEA3CB91E8E2A1600BA45AE /* gnc-backend-dbi.hpp */,
 				6E4EC5C20F9A30E600C6F6AC /* gnc-backend-xml.h */,
-				6EBC06F318B1D6E600A5CEB7 /* gnc-bill-term-sql.c */,
+				6EBC06F418B1D6E600A5CEB7 /* gnc-bill-term-sql.h */,
 				6EBC070A18B1D76F00A5CEB7 /* gnc-bill-term-xml-v2.h */,
 				6E4A80490F27C4FC0024DAAF /* gnc-book-sql.h */,
 				6E4A804B0F27C4FC0024DAAF /* gnc-budget-sql.h */,
 				6E4A804D0F27C4FC0024DAAF /* gnc-commodity-sql.h */,
-				6EBC06F518B1D6E600A5CEB7 /* gnc-customer-sql.c */,
+				6EBC06F618B1D6E600A5CEB7 /* gnc-customer-sql.h */,
 				6EBC070C18B1D76F00A5CEB7 /* gnc-customer-xml-v2.h */,
-				6EBC06F718B1D6E600A5CEB7 /* gnc-employee-sql.c */,
+				6EEA3CBA1E8E2A1600BA45AE /* gnc-dbiprovider.hpp */,
+				6EEA3CBB1E8E2A1600BA45AE /* gnc-dbiproviderimpl.hpp */,
+				6EEA3CBD1E8E2A1600BA45AE /* gnc-dbisqlconnection.hpp */,
+				6EEA3CBF1E8E2A1600BA45AE /* gnc-dbisqlresult.hpp */,
+				6EBC06F818B1D6E600A5CEB7 /* gnc-employee-sql.h */,
 				6EBC070E18B1D76F00A5CEB7 /* gnc-employee-xml-v2.h */,
-				6EBC06F918B1D6E600A5CEB7 /* gnc-entry-sql.c */,
+				6EBC06FA18B1D6E600A5CEB7 /* gnc-entry-sql.h */,
 				6EBC071018B1D76F00A5CEB7 /* gnc-entry-xml-v2.h */,
-				6EBC06FB18B1D6E600A5CEB7 /* gnc-invoice-sql.c */,
+				6EBC06FC18B1D6E600A5CEB7 /* gnc-invoice-sql.h */,
 				6EBC071218B1D76F00A5CEB7 /* gnc-invoice-xml-v2.h */,
-				6EBC06FD18B1D6E600A5CEB7 /* gnc-job-sql.c */,
+				6EBC06FE18B1D6E600A5CEB7 /* gnc-job-sql.h */,
 				6EBC071418B1D76F00A5CEB7 /* gnc-job-xml-v2.h */,
 				6E4A804F0F27C4FC0024DAAF /* gnc-lots-sql.h */,
-				6EBC06FF18B1D6E600A5CEB7 /* gnc-order-sql.c */,
+				6EBC070018B1D6E600A5CEB7 /* gnc-order-sql.h */,
 				6EBC071618B1D76F00A5CEB7 /* gnc-order-xml-v2.h */,
-				6EBC070118B1D6E600A5CEB7 /* gnc-owner-sql.c */,
 				6EBC071818B1D76F00A5CEB7 /* gnc-owner-xml-v2.h */,
 				6E4A80510F27C4FC0024DAAF /* gnc-price-sql.h */,
 				6E4A80530F27C4FC0024DAAF /* gnc-recurrence-sql.h */,
 				6E4A80550F27C4FC0024DAAF /* gnc-schedxaction-sql.h */,
 				6E4A80570F27C4FC0024DAAF /* gnc-slots-sql.h */,
-				6EBC070318B1D6E600A5CEB7 /* gnc-tax-table-sql.c */,
+				6EEA3CD91E8E2B9400BA45AE /* gnc-sql-backend.hpp */,
+				6EEA3CDA1E8E2B9400BA45AE /* gnc-sql-column-table-entry.hpp */,
+				6EEA3CDB1E8E2B9400BA45AE /* gnc-sql-connection.hpp */,
+				6EEA3CDC1E8E2B9400BA45AE /* gnc-sql-object-backend.hpp */,
+				6EEA3CDD1E8E2B9400BA45AE /* gnc-sql-result.hpp */,
+				6EBC070418B1D6E600A5CEB7 /* gnc-tax-table-sql.h */,
 				6EBC071A18B1D76F00A5CEB7 /* gnc-tax-table-xml-v2.h */,
 				6E4A80590F27C4FC0024DAAF /* gnc-transaction-sql.h */,
-				6EBC070518B1D6E600A5CEB7 /* gnc-vendor-sql.c */,
+				6EBC070618B1D6E600A5CEB7 /* gnc-vendor-sql.h */,
 				6EBC071C18B1D76F00A5CEB7 /* gnc-vendor-xml-v2.h */,
+				6EEA3CFF1E8E2CC100BA45AE /* gnc-xml-backend.hpp */,
 				6E4EC5CC0F9A30E700C6F6AC /* gnc-xml-helper.h */,
 				6E4EC5CD0F9A30E700C6F6AC /* gnc-xml.h */,
 				6E4EC5D00F9A30E700C6F6AC /* io-example-account.h */,
@@ -2353,7 +2508,10 @@
 				6E4EC5E00F9A30E700C6F6AC /* sixtp-stack.h */,
 				6E4EC5E30F9A30E700C6F6AC /* sixtp-utils.h */,
 				6E4EC5E50F9A30E700C6F6AC /* sixtp.h */,
+				6E24BACF1B60373A0075D17E /* test-dbi-business-stuff.h */,
+				6E24BAD11B60373A0075D17E /* test-dbi-stuff.h */,
 				6E4EC5EB0F9A30E700C6F6AC /* test-file-stuff.h */,
+				6EEA3D121E8E2DA100BA45AE /* test-real-data.sh.in */,
 				6EBC071E18B1D76F00A5CEB7 /* xml-helpers.h */,
 			);
 			name = backend;
@@ -2376,12 +2534,15 @@
 				6EBC078018B1DB4D00A5CEB7 /* gnc-ab-getbalance.h */,
 				6EBC078218B1DB4D00A5CEB7 /* gnc-ab-gettrans.h */,
 				6EBC078418B1DB4D00A5CEB7 /* gnc-ab-kvp.h */,
-				6EBC078618B1DB4D00A5CEB7 /* gnc-ab-trans-templ.h */,
 				6EBC078818B1DB4D00A5CEB7 /* gnc-ab-transfer.h */,
 				6EBC078A18B1DB4D00A5CEB7 /* gnc-ab-utils.h */,
+				6EEA3D2B1E8E342A00BA45AE /* gnc-csv-account-map.h */,
 				6EBC07A318B1DBAA00A5CEB7 /* gnc-csv-gnumeric-popup.h */,
-				6EBC07A518B1DBAA00A5CEB7 /* gnc-csv-model.h */,
+				6EEA3D2C1E8E342A00BA45AE /* gnc-csv-tokenizer.hpp */,
+				6EEA3D2D1E8E342A00BA45AE /* gnc-csv-trans-settings.hpp */,
+				6EEA3D2E1E8E342A00BA45AE /* gnc-dummy-tokenizer.hpp */,
 				6EBC078C18B1DB4E00A5CEB7 /* gnc-file-aqb-import.h */,
+				6EEA3D2F1E8E342A00BA45AE /* gnc-fw-tokenizer.hpp */,
 				6EBC078E18B1DB4E00A5CEB7 /* gnc-gwen-gui.h */,
 				6E8B786A0991BC41003F7E3A /* gnc-log-replay.h */,
 				6E8B78740991BC41003F7E3A /* gnc-ofx-import.h */,
@@ -2392,13 +2553,16 @@
 				6E8B787E0991BC41003F7E3A /* gnc-plugin-log-replay.h */,
 				6E8B78820991BC41003F7E3A /* gnc-plugin-ofx.h */,
 				6EBC07B018B1DC1500A5CEB7 /* gnc-plugin-qif-import.h */,
+				6EEA3D301E8E342A00BA45AE /* gnc-tokenizer.hpp */,
+				6EEA3D311E8E342A00BA45AE /* gnc-trans-props.hpp */,
+				6EEA3D321E8E342A00BA45AE /* gnc-tx-import.hpp */,
 				6E8B798F0991BC41003F7E3A /* import-account-matcher.h */,
 				6E8B79900991BC41003F7E3A /* import-backend.h */,
 				6E8B79910991BC41003F7E3A /* import-commodity-matcher.h */,
 				6E8B79920991BC41003F7E3A /* import-main-matcher.h */,
-				6E8B79930991BC42003F7E3A /* import-match-map.h */,
 				6E8B79940991BC42003F7E3A /* import-match-picker.h */,
 				6E8B79950991BC42003F7E3A /* import-parse.h */,
+				6EEA3D1D1E8E333400BA45AE /* import-pending-matches.h */,
 				6E8B79960991BC42003F7E3A /* import-settings.h */,
 				6E8B79970991BC42003F7E3A /* import-utilities.h */,
 				6E8B79BB0991BC42003F7E3A /* qif-defaults.h */,
@@ -2448,21 +2612,21 @@
 		6E8B77AE0991BAD7003F7E3A /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				6E7BB13F0B9557EB000B79D4 /* engine */,
-				6E7BB1400B955818000B79D4 /* core-utils */,
-				6E7BB1410B955848000B79D4 /* register */,
-				6E7BB1430B955892000B79D4 /* gnome */,
-				6E7BB1440B95589E000B79D4 /* gnome-utils */,
-				6E7BB1500B955951000B79D4 /* gnome-search */,
-				6E7BB14F0B955934000B79D4 /* report */,
-				6E7BB14E0B955928000B79D4 /* import-export */,
+				6E7BB1490B9558E9000B79D4 /* app-utils */,
 				6E7BB14D0B95591C000B79D4 /* backend */,
 				6E7BB14C0B955910000B79D4 /* business */,
+				6E7BB1400B955818000B79D4 /* core-utils */,
+				6E7BB13F0B9557EB000B79D4 /* engine */,
 				6E7BB14B0B955906000B79D4 /* gnc-module */,
-				6E7BB1490B9558E9000B79D4 /* app-utils */,
-				6E7BB1480B9558DE000B79D4 /* libqof */,
+				6E7BB1430B955892000B79D4 /* gnome */,
+				6E7BB1500B955951000B79D4 /* gnome-search */,
+				6E7BB1440B95589E000B79D4 /* gnome-utils */,
 				6E4EC63E0F9A33BE00C6F6AC /* html */,
+				6E7BB14E0B955928000B79D4 /* import-export */,
+				6E7BB1480B9558DE000B79D4 /* libqof */,
 				6E7BB1450B9558BF000B79D4 /* miscellaneous */,
+				6E7BB1410B955848000B79D4 /* register */,
+				6E7BB14F0B955934000B79D4 /* report */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -2470,6 +2634,7 @@
 		6E8B77AF0991BAE1003F7E3A /* Scheme */ = {
 			isa = PBXGroup;
 			children = (
+				6E24BADA1B6038CB0075D17E /* gettext.scm */,
 				6E8B7A290991BC7F003F7E3A /* account-piecharts.scm */,
 				6E8B7A2A0991BC7F003F7E3A /* account-summary.scm */,
 				6E8B7A2B0991BC7F003F7E3A /* advanced-portfolio.scm */,
@@ -2492,10 +2657,8 @@
 				6EE6D28415FDA360008B3F08 /* business-prefs.scm */,
 				6EBC07C118B1DD5B00A5CEB7 /* business-reports.scm */,
 				6E8B7A3B0991BC7F003F7E3A /* c-interface.scm */,
-				6E8B7A3C0991BC7F003F7E3A /* canvas-test.scm */,
 				6E8B7A3D0991BC7F003F7E3A /* cash-flow.scm */,
 				6E8B7A3E0991BC7F003F7E3A /* category-barchart.scm */,
-				6E8B7A3F0991BC7F003F7E3A /* cgi.scm */,
 				6EBC07D218B1DDB000A5CEB7 /* collectors.scm */,
 				6E8B7A410991BC7F003F7E3A /* commodity-table.scm */,
 				6E8B7A420991BC7F003F7E3A /* commodity-utilities.scm */,
@@ -2523,9 +2686,7 @@
 				6E8B7A570991BC7F003F7E3A /* gnc-module.scm */,
 				6E8B7A580991BC7F003F7E3A /* gnc-numeric.scm */,
 				6E8B7A590991BC7F003F7E3A /* gnome-utils.scm */,
-				6E8B7A5A0991BC7F003F7E3A /* gnucash-sample.scm */,
 				6E8B7A5B0991BC7F003F7E3A /* gnumeric-utilities.scm */,
-				6E8B7A680991BC7F003F7E3A /* hello-world.scm */,
 				6E8B7A690991BC7F003F7E3A /* hello-world.scm */,
 				6E8B7A6B0991BC7F003F7E3A /* hooks.scm */,
 				6E8B7A6C0991BC7F003F7E3A /* html-acct-table.scm */,
@@ -2541,14 +2702,11 @@
 				6E8B7A730991BC7F003F7E3A /* html-table.scm */,
 				6E8B7A740991BC7F003F7E3A /* html-text.scm */,
 				6E8B7A750991BC7F003F7E3A /* html-utilities.scm */,
-				6E8B7A760991BC7F003F7E3A /* http.scm */,
 				6E8B7A780991BC7F003F7E3A /* income-statement.scm */,
 				6EBC07C518B1DD5B00A5CEB7 /* invoice.scm */,
-				6E8B7A7A0991BC7F003F7E3A /* iso-4217-currencies.scm */,
 				6EBC07C618B1DD5B00A5CEB7 /* job-report.scm */,
 				6EBC07D518B1DDB000A5CEB7 /* list-extras.scm */,
 				6E8B7A7D0991BC7F003F7E3A /* main.scm */,
-				6E8B7A7E0991BC7F003F7E3A /* main.scm */,
 				6EF6019318137B7200B8E15A /* migrate-prefs.scm */,
 				6E8B7A7F0991BC7F003F7E3A /* net-barchart.scm */,
 				6EBC07D718B1DDD000A5CEB7 /* net-linechart.scm */,
@@ -2599,13 +2757,11 @@
 				6E8B7ABD0991BC7F003F7E3A /* txf-help-de_DE.scm */,
 				6E8B7ABE0991BC7F003F7E3A /* txf-help.scm */,
 				6E8B7ABF0991BC7F003F7E3A /* txf.scm */,
-				6E8B7AC00991BC7F003F7E3A /* url.scm */,
 				6E8B7AC10991BC7F003F7E3A /* us.scm */,
 				6E8B7AC20991BC7F003F7E3A /* us.scm */,
 				6E8B7AC30991BC7F003F7E3A /* utility-reports.scm */,
 				6E8B7AC40991BC7F003F7E3A /* view-column.scm */,
 				6E8B7AC50991BC7F003F7E3A /* welcome-to-gnucash.scm */,
-				6E8B7AC60991BC7F003F7E3A /* xgettext.scm */,
 				6E8B7AC70991BC7F003F7E3A /* xml-generator.scm */,
 			);
 			name = Scheme;
@@ -2614,6 +2770,10 @@
 		6E8B7AC80991BCCE003F7E3A /* Makefiles */ = {
 			isa = PBXGroup;
 			children = (
+				6EEA3D361E8E34DC00BA45AE /* Makefile.am */,
+				6EEA3D331E8E347000BA45AE /* Makefile.am */,
+				6EEA3D291E8E33EC00BA45AE /* Makefile.am */,
+				6E24BAEE1B6039CC0075D17E /* Makefile.am */,
 				6EBC07C718B1DD5B00A5CEB7 /* Makefile.am */,
 				6EBC07B218B1DC1500A5CEB7 /* Makefile.am */,
 				6E4EC6550F9A359B00C6F6AC /* Makefile.am */,
@@ -2625,8 +2785,6 @@
 				6E4A803A0F27C3EF0024DAAF /* Makefile.am */,
 				6E4A803B0F27C3EF0024DAAF /* Makefile.am */,
 				6E4A80370F27C2D40024DAAF /* Makefile.am */,
-				6E4A80380F27C2D40024DAAF /* Makefile.am */,
-				6E4A800A0F27C0350024DAAF /* Makefile.am */,
 				6E8B7AD00991BE25003F7E3A /* Makefile.am */,
 				6E8B7AD10991BE25003F7E3A /* Makefile.am */,
 				6E8B7AD20991BE25003F7E3A /* Makefile.am */,
@@ -2650,7 +2808,6 @@
 				6E8B7AEB0991BE25003F7E3A /* Makefile.am */,
 				6E8B7AEC0991BE25003F7E3A /* Makefile.am */,
 				6E8B7AED0991BE25003F7E3A /* Makefile.am */,
-				6E8B7AEE0991BE25003F7E3A /* Makefile.am */,
 				6E8B7AEF0991BE73003F7E3A /* Makefile.am */,
 				6E8B7AF00991BE73003F7E3A /* Makefile.am */,
 				6E8B7AF10991BE73003F7E3A /* Makefile.am */,
@@ -2666,9 +2823,6 @@
 				6E8B7B210991BE73003F7E3A /* Makefile.am */,
 				6E8B7B220991BE73003F7E3A /* Makefile.am */,
 				6E8B7B240991BE73003F7E3A /* Makefile.am */,
-				6E8B7B270991BE73003F7E3A /* Makefile.am */,
-				6E8B7B280991BE73003F7E3A /* Makefile.am */,
-				6E8B7B290991BE73003F7E3A /* Makefile.am */,
 				6E8B7B2B0991BE73003F7E3A /* Makefile.am */,
 				6E8B7B2D0991BE73003F7E3A /* Makefile.am */,
 				6E8B7B340991BE73003F7E3A /* Makefile.am */,
@@ -2692,7 +2846,6 @@
 				6E8B7B510991BE74003F7E3A /* Makefile.am */,
 				6E8B7B530991BE74003F7E3A /* Makefile.am */,
 				6E8B7B540991BE74003F7E3A /* Makefile.am */,
-				6E8B7B550991BE74003F7E3A /* Makefile.am */,
 				6E8B7B560991BE74003F7E3A /* Makefile.am */,
 				6E8B7B570991BE74003F7E3A /* Makefile.am */,
 				6E8B7B580991BE74003F7E3A /* Makefile.am */,
@@ -2710,9 +2863,6 @@
 				6E8B7B640991BE74003F7E3A /* Makefile.am */,
 				6E8B7B650991BE74003F7E3A /* Makefile.am */,
 				6E8B7B660991BE74003F7E3A /* Makefile.am */,
-				6E8B7B670991BE74003F7E3A /* Makefile.am */,
-				6E8B7B680991BE74003F7E3A /* Makefile.am */,
-				6E8B7B690991BE74003F7E3A /* Makefile.am */,
 				6E8B7B6A0991BE74003F7E3A /* Makefile.am */,
 				6E8B7B6B0991BE74003F7E3A /* Makefile.am */,
 				6E8B7B6C0991BE74003F7E3A /* Makefile.am */,
@@ -2722,6 +2872,8 @@
 				6E8B7B720991BE74003F7E3A /* Makefile.am */,
 				6E8B7B760991BE74003F7E3A /* Makefile.am */,
 				6E8B7B770991BE74003F7E3A /* Makefile.am */,
+				6EEA3D131E8E2F5500BA45AE /* Makefile.am */,
+				6EEA3D201E8E339700BA45AE /* Makefile.am */,
 			);
 			name = Makefiles;
 			sourceTree = "<group>";
@@ -2729,19 +2881,33 @@
 /* End PBXGroup section */
 
 /* Begin PBXLegacyTarget section */
-		6E0F8138098D492A00D0BB5C /* debug */ = {
+		6E0F8138098D492A00D0BB5C /* Gnucash */ = {
 			isa = PBXLegacyTarget;
 			buildArgumentsString = "";
-			buildConfigurationList = 6E0F8139098D496900D0BB5C /* Build configuration list for PBXLegacyTarget "debug" */;
+			buildConfigurationList = 6E0F8139098D496900D0BB5C /* Build configuration list for PBXLegacyTarget "Gnucash" */;
 			buildPhases = (
 			);
 			buildToolPath = /usr/bin/true;
 			buildWorkingDirectory = ../build/darwin;
 			dependencies = (
 			);
-			name = debug;
+			name = Gnucash;
 			passBuildSettingsInEnvironment = 1;
 			productName = debug;
+		};
+		6EB409A21E93773A009904A3 /* Test Numeric */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION)";
+			buildConfigurationList = 6EB409A51E93773B009904A3 /* Build configuration list for PBXLegacyTarget "Test Numeric" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/true;
+			buildWorkingDirectory = ../build/darwin;
+			dependencies = (
+			);
+			name = "Test Numeric";
+			passBuildSettingsInEnvironment = 0;
+			productName = "Test Numeric";
 		};
 /* End PBXLegacyTarget section */
 
@@ -2750,6 +2916,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0460;
+				TargetAttributes = {
+					6EB409A21E93773A009904A3 = {
+						CreatedOnToolsVersion = 8.2;
+						ProvisioningStyle = Automatic;
+					};
+				};
 			};
 			buildConfigurationList = 6E0F8122098D48CD00D0BB5C /* Build configuration list for PBXProject "gnucash" */;
 			compatibilityVersion = "Xcode 3.1";
@@ -2762,7 +2934,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6E0F8138098D492A00D0BB5C /* debug */,
+				6E0F8138098D492A00D0BB5C /* Gnucash */,
+				6EB409A21E93773A009904A3 /* Test Numeric */,
 			);
 		};
 /* End PBXProject section */
@@ -2791,7 +2964,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				PRODUCT_NAME = debug;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
 		};
@@ -2800,8 +2973,96 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				PRODUCT_NAME = debug;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		6EB409A31E93773A009904A3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DEBUGGING_SYMBOLS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		6EB409A41E93773A009904A3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -2817,11 +3078,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		6E0F8139098D496900D0BB5C /* Build configuration list for PBXLegacyTarget "debug" */ = {
+		6E0F8139098D496900D0BB5C /* Build configuration list for PBXLegacyTarget "Gnucash" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6E0F813A098D496900D0BB5C /* Debug */,
 				6E0F813B098D496900D0BB5C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6EB409A51E93773B009904A3 /* Build configuration list for PBXLegacyTarget "Test Numeric" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6EB409A31E93773A009904A3 /* Debug */,
+				6EB409A41E93773A009904A3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

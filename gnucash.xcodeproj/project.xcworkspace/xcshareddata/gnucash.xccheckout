@@ -10,29 +10,29 @@
 	<string>gnucash</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>C3786002-363C-453E-BC43-4B9FC637A0A3</key>
+		<key>891201B2FD1333E21F62FC8E4D7B084108B7C6B0</key>
 		<string>git://github.com/Gnucash/gnucash.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>gnucash.xcodeproj/project.xcworkspace</string>
+	<string>gnucash.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>C3786002-363C-453E-BC43-4B9FC637A0A3</key>
+		<key>891201B2FD1333E21F62FC8E4D7B084108B7C6B0</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>git://github.com/Gnucash/gnucash.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>C3786002-363C-453E-BC43-4B9FC637A0A3</string>
+	<string>891201B2FD1333E21F62FC8E4D7B084108B7C6B0</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>C3786002-363C-453E-BC43-4B9FC637A0A3</string>
+			<string>891201B2FD1333E21F62FC8E4D7B084108B7C6B0</string>
 			<key>IDESourceControlWCCName</key>
 			<string>gnucash</string>
 		</dict>

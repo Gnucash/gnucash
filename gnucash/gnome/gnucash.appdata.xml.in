@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component>
+  <id type="desktop">org.gnucash.Gnucash</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>GnuCash</name>
+  <summary>Manage your finances, accounts, and investments</summary>
+  <description>
+    <p>
+      GnuCash is a program for personal and small-business financial-accounting.
+    </p>
+    <p>
+      Designed to be easy to use, yet powerful and flexible, GnuCash allows you to track bank accounts, stocks, income and expenses. As quick and intuitive to use as a checkbook register, it is based on professional accounting principles like double-entry
+      accounting to ensure balanced books and accurate reports.
+    </p>
+    <p>With GnuCash you can (but are not limited to):</p>
+    <ul>
+      <li>Keep track of your day to day personal income and expenses</li>
+      <li>Manage your stock, bond and mutual fund accounts with ease</li>
+      <li>Keep your small business' accounting up to date</li>
+      <li>Create accurate reports and graphs from your financial data</li>
+      <li>Set up scheduled transactions to avoid repeated data entry</li>
+      <li>QIF/OFX/HBCI Import, Transaction Matching</li>
+      <li>Perform financial calculations, such as a loan repayment</li>
+    </ul>
+  </description>
+  <categories>
+    <category>Finance</category>
+  </categories>
+  <screenshots>
+    <screenshot type="default">
+      <image type="source" width="1049" height="590">https://www.gnucash.org/images/features/feature_accounts_lg.png</image>
+    </screenshot>
+    <screenshot>
+      <image type="source" width="1049" height="590">https://www.gnucash.org/images/features/feature_register_lg.png</image>
+    </screenshot>
+    <screenshot>
+      <image type="source" width="1049" height="590">https://www.gnucash.org/images/features/feature_bar_chart_lg.png</image>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">https://www.gnucash.org</url>
+  <url type="bugtracker">https://bugzilla.gnome.org</url>
+  <url type="faq">https://wiki.gnucash.org/wiki/FAQ</url>
+  <url type="help">https://gnucash.org/docs.phtml</url>
+  <url type="donation">https://gnucash.org/donate.phtml</url>
+  <url type="translate">https://wiki.gnucash.org/wiki/Translation</url>
+  <update_contact>gnucash-devel@gnucash.org</update_contact>
+</component>

@@ -1,0 +1,78 @@
+/* Note: Widgets obtained from Glade files will not be addressable
+   unless they have been named or have style classes added. Only
+   the widget type can be configured unless they are named in code */
+
+
+/* Import Matcher, amount of intervention required */
+@define-color intervention-required_bg_color brown1;
+@define-color intervention-probably-required_bg_color gold;
+@define-color intervention-not-required_bg_color DarkSeaGreen1;
+
+.intervention-required {
+  background-color: @intervention-required_bg_color;
+}
+
+.intervention-probably-required {
+  background-color: @intervention-probably-required_bg_color;
+}
+
+.intervention-not-required {
+  background-color: @intervention-not-required_bg_color;
+}
+
+.intervention-required-dark {
+  background-color: shade (@intervention-required_bg_color, 0.7);
+}
+
+.intervention-probably-required-dark {
+  background-color: shade (@intervention-probably-required_bg_color, 0.8);
+}
+
+.intervention-not-required-dark {
+  background-color: shade (@intervention-not-required_bg_color, 0.3);
+}
+
+/* Negative value label colors */
+@define-color default-color currentColor;
+@define-color negative-numbers rgb(75%, 0%, 0%);
+
+/* Register2 grid lines color */
+.register2_grid_lines {
+  border-color: black;
+}
+
+/* Make label more important */
+.emphasize-label {
+  font-size: large;
+  font-weight: bold;
+}
+
+/* The Dense Calendar defaults */
+@define-color primary_bg_color lavender;
+@define-color secondary_bg_color SlateGray1;
+@define-color marker_bg_color yellow;
+
+*.primary {
+  background-color: @primary_bg_color;
+}
+
+*.primary-dark {
+  background-color: shade (@primary_bg_color, 0.7);
+}
+
+*.secondary {
+  background-color: @secondary_bg_color;
+}
+
+*.secondary-dark {
+  background-color: shade (@secondary_bg_color, 0.7);
+}
+
+*.markers {
+  background-color: @marker_bg_color;
+}
+
+*.markers-dark {
+  background-color: shade (@marker_bg_color, 0.8);
+}
+

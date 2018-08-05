@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gnc-account-example 
+  xmlns="http://www.gnucash.org/XML/"
+  xmlns:act="http://www.gnucash.org/XML/act"
+  xmlns:addr="http://www.gnucash.org/XML/addr"
+  xmlns:bgt="http://www.gnucash.org/XML/bgt"
+  xmlns:billterm="http://www.gnucash.org/XML/billterm"
+  xmlns:book="http://www.gnucash.org/XML/book"
+  xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+  xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+  xmlns:cd="http://www.gnucash.org/XML/cd"
+  xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+  xmlns:cust="http://www.gnucash.org/XML/cust"
+  xmlns:employee="http://www.gnucash.org/XML/employee"
+  xmlns:entry="http://www.gnucash.org/XML/entry"
+  xmlns:fs="http://www.gnucash.org/XML/fs"
+  xmlns:gnc="http://www.gnucash.org/XML/gnc"
+  xmlns:gnc-act="http://www.gnucash.org/XML/gnc-act"
+  xmlns:invoice="http://www.gnucash.org/XML/invoice"
+  xmlns:job="http://www.gnucash.org/XML/job"
+  xmlns:lot="http://www.gnucash.org/XML/lot"
+  xmlns:order="http://www.gnucash.org/XML/order"
+  xmlns:owner="http://www.gnucash.org/XML/owner"
+  xmlns:price="http://www.gnucash.org/XML/price"
+  xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+  xmlns:slot="http://www.gnucash.org/XML/slot"
+  xmlns:split="http://www.gnucash.org/XML/split"
+  xmlns:sx="http://www.gnucash.org/XML/sx"
+  xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+  xmlns:trn="http://www.gnucash.org/XML/trn"
+  xmlns:ts="http://www.gnucash.org/XML/ts"
+  xmlns:tte="http://www.gnucash.org/XML/tte"
+  xmlns:vendor="http://www.gnucash.org/XML/vendor">
+    <gnc-act:title>
+     Compte d'Inversió
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Compte de corredor de borsa amb els comptes d'inversions associades
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Hauríeu d'escollir aquest joc de comptes si teniu inversions (accions, bons, fons d'inversió, fons indexats, interessos, dividents).
+  </gnc-act:long-description>
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Actiu</act:name>
+  <act:id type="new">52b5942b5beaec856eaca5a75ee71592</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Actiu</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Inversions</act:name>
+  <act:id type="new">7ff59d92615cce4d8388d7e179ee3ff6</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Inversions</act:description>
+  <act:parent type="new">52b5942b5beaec856eaca5a75ee71592</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Compte d'inversió</act:name>
+  <act:id type="new">f15ec9568727f08a5ebd8f3e66483876</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Compte d'inversió</act:description>
+  <act:parent type="new">7ff59d92615cce4d8388d7e179ee3ff6</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Bons</act:name>
+  <act:id type="new">8196bf0015c25f501338f07a87c512d8</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Bons</act:description>
+  <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Accions</act:name>
+  <act:id type="new">7d7db9bed07f21fc0b1f50674702aff0</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Accions</act:description>
+  <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Fons d'índex</act:name>
+  <act:id type="new">fe9db8a7eedf2990e9846f634a922143</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Fons d'índex</act:description>
+  <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Fons d'inversió</act:name>
+  <act:id type="new">9da28c1aa7789e84bdc8484ba8f527b3</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Fons d'inversió</act:description>
+  <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Ingressos</act:name>
+  <act:id type="new">9da3c880bd04b9db49eb7f5b06403bda</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Ingressos</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Ingressos per dividents</act:name>
+  <act:id type="new">1af1f4894aeab96d840e66254d023b88</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Ingressos per dividents</act:description>
+  <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Ingressos per interessos</act:name>
+  <act:id type="new">7943bc59ffbb9a7be4afcd2996147119</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Ingressos per interessos</act:description>
+  <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Interessos de bons</act:name>
+  <act:id type="new">8ceb4752a11e2d342b9009b343fdba38</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Interessos de bons</act:description>
+  <act:parent type="new">7943bc59ffbb9a7be4afcd2996147119</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Despeses</act:name>
+  <act:id type="new">6de23244232785031501171abcc1d4aa</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Despeses</act:description>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Comissions</act:name>
+  <act:id type="new">77fdffddc79c662c93c482cefa5a4744</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Comissions</act:description>
+  <act:parent type="new">6de23244232785031501171abcc1d4aa</act:parent>
+</gnc:account>
+</gnc-account-example>

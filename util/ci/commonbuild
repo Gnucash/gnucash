@@ -1,0 +1,20 @@
+#!/bin/bash -e
+
+mkdir -p "$HOME"/.local/share
+
+mkdir build
+cd build
+export TZ="America/Los_Angeles"
+
+if [[ "$BUILDTYPE" == "cmake-make" ]]; then
+    cmake ../gnucash $PLATFORM_CMAKE_OPTS
+    make -j 4
+    make check || ../afterfailure
+elif [[ "$BUILDTYPE" == "cmake-ninja" ]]; then
+    cmake ../gnucash -DWITH_PYTHON=ON -DCMAKE_BUILD_TYPE=debug -G Ninja $PLATFORM_CMAKE_OPTS
+    ninja
+    ninja check || ../afterfailure;
+else
+    echo "Unknown buildtype: \"$BUILDTYPE\". Not building."
+fi
+

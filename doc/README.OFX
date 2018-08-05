@@ -15,7 +15,7 @@ README.OFX
 
 Since the first 1.7.x beta releases, GnuCash features OFX online banking
 support. This makes it the world's first *free* OFX-enabled personal
-finance manager.  The developement of OFX and HBCI support also spawned the 
+finance manager.  The development of OFX and HBCI support also spawned the 
  a new generic import infrastructure, including a much improved transaction 
 matcher.
 OFX (Open Financial eXchange) is an open standard increasingly popular 
@@ -199,13 +199,13 @@ output of the ofxdump utility on your file.
 This is probably bug http://bugzilla.gnome.org/show_bug.cgi?id=101738
 Unfortunately the main developpers are unable to reproduce.  So far, this bug
 only occurs with OpenSP 1.5.  It does not occur for anyone with OpenSP 1.3.x,
-which is shipped on most Linux distro as part of openjade, so you may wan't to
+which is shipped on most Linux distro as part of openjade, so you may want to
 downgrade. (Please note that OpenSP 1.3.x has several other issues however)
 
 This bug is beleived to be a threading issue, and may be a problem in GnuCash,
-LibOFX, OpenSP, or some versions of the Linux kernel.  If you have any usefull 
+LibOFX, OpenSP, or some versions of the Linux kernel.  If you have any useful 
 info,please add a comment to the bug above (even if only to say you encountered 
-the bug,and your version of the previously mentionned packages).
+the bug,and your version of the previously mentioned packages).
 
 
 (2) Why doesn't GnuCash support direct connections to bank like Quicken/Money
@@ -257,7 +257,7 @@ bock@step.polymtl.ca
 (7) Where do I find/How do I download OFX files for bank XYZ?
 
 Somewhere on one of the banks website.  We can't say anymore than this, the
-adress, interface, and origin of the info used as user id and password changes
+address, interface, and origin of the info used as user id and password changes
 from bank to bank.
 
 (8) Can I export my Gnucash data in QIF, OFX, CSV, etc. ?

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<gresources>
+  <gresource prefix="/org/gnucash">
+    <file>gnucash-310.css</file>
+    <file>gnucash-320.css</file>
+    <file>gnucash-fallback-310.css</file>
+  </gresource>
+</gresources>

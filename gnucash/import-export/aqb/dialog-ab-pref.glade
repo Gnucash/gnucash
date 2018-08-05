@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.0 -->
+<interface>
+  <requires lib="gtk+" version="3.10"/>
+  <object class="GtkWindow" id="aqbanking_preferences">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">window1</property>
+    <child>
+      <object class="GtkGrid" id="aqbanking_prefs">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkLabel" id="label8877457">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">&lt;b&gt;Online Banking&lt;/b&gt;</property>
+            <property name="use_markup">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="pref/dialogs.import.hbci/close-on-finish">
+            <property name="label" translatable="yes">_Close log window when finished</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">If active, the window will be closed automatically when you finish the HBCI/AqBanking import process. Otherwise it will stay open.</property>
+            <property name="tooltip_text" translatable="yes">If active, the window will be closed automatically when you finish the HBCI/AqBanking import process. Otherwise it will stay open.</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
+            <property name="use_underline">True</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="pref/dialogs.import.hbci/remember-pin">
+            <property name="label" translatable="yes">Remember the _PIN in memory</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">If active, the PIN for HBCI/AqBanking actions will be remembered in memory during a session. Otherwise it will have to be entered again each time during a session when it is needed.</property>
+            <property name="tooltip_text" translatable="yes">If active, the PIN for HBCI/AqBanking actions will be remembered in memory during a session. Otherwise it will have to be entered again each time during a session when it is needed.</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
+            <property name="use_underline">True</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="checkbutton3">
+            <property name="label" translatable="yes">_Verbose debug messages</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">Enables verbose debug messages for HBCI/AqBanking Online Banking.</property>
+            <property name="tooltip_text" translatable="yes">Enables verbose debug messages for HBCI/AqBanking Online Banking.</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
+            <property name="use_underline">True</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="pref/dialogs.import.hbci/use-ns-transaction-text">
+            <property name="label" translatable="yes">Use Non-SWIFT _transaction text</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="has_tooltip">True</property>
+            <property name="tooltip_markup">Some banks place part of transaction description as "transaction text" in the MT940 file. Normally GNUcash ignores this text. However by activating this option, the transaction text is used for the transaction description too.</property>
+            <property name="tooltip_text" translatable="yes">Some banks place part of transaction description as "transaction text" in the MT940 file. Normally GNUcash ignores this text. However by activating this option, the transaction text is used for the transaction description too.</property>
+            <property name="halign">start</property>
+            <property name="margin_left">12</property>
+            <property name="use_underline">True</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">3</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

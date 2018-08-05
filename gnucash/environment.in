@@ -1,0 +1,91 @@
+@NOTE If you make any changes here, you should probably    @
+@NOTE also verify that modifications performed in          @
+@NOTE - gnucash-on-windows.git:gnucash.iss don't conflict. @
+# environment
+#
+# This configuration file defines a number of environment variables to set/alter
+# during GnuCash startup.
+#
+# The contents of this file is overwritten with each gnucash update.
+# If you want to add your own variables to the environment or wish
+# to override what gets set in this file please create a new file
+# named "environment.local" next to this one with the same structure:
+#
+# [Variables]
+# VAR_X=value_x
+# ....
+#
+#
+# Both files use a very simple syntax:
+# <variable_name>=<variable_value>
+#
+# You can refer to existing environment variables in the new value by
+# enclosing it in {}, for example
+# NEW_VARIABLE={OLD_VARIABLE}_something
+#
+# When adding variables that hold a collection of directories (path variables),
+# always use ';' to separate the directories. GnuCash will replace these with
+# the proper separator for your operating system. For example:
+# PATH=/some/extra/path;{PATH}
+#
+# Finally, GnuCash exports a number of environment variables itself you can use
+# here as you see fit. They are read only. GnuCash will ignore any changes you
+# make to them. These variables are:
+# GNC_HOME the directory where GnuCash was installed. This is the base
+#          directory of all the other directories below
+# GNC_BIN  the directory where the GnuCash executable resides. This is
+#          equivalent to {GNC_HOME}/bin
+# GNC_LIB  the directory where the GnuCash private libraries reside. This is
+#          equivalent to {GNC_HOME}/lib/gnucash
+# GNC_DATA the directory where GnuCash specific additional data is stored,
+#          equivalent to {GNC_HOME}/share/gnucash
+# GNC_CONF the directory where GnuCash configuration files are stored,
+#          equivalent to {GNC_HOME}/etc/gnucash
+# SYS_LIB  the directory where the GnuCash public libraries reside. This is
+#          equivalent to {GNC_HOME}/lib
+
+[Variables]
+# PATH is used to find the finance::quote utility functions
+PATH={GNC_BIN};{PATH}
+
+# Tell GnuCash where to look for GnuCash modules
+GNC_MODULE_PATH={GNC_LIB};{GNC_MODULE_PATH}
+
+# Prevent embedded guile from issuing deprecation warnings
+GUILE_WARN_DEPRECATED=no
+
+# Tell Guile where to find GnuCash specific guile modules GUILE_LIBS
+# can be used to override the path to Guile's own modules; likewise,
+# GUILE_COMPILED_LIBS overrides the path to Guile's precompiled
+# modules.
+# GUILE_LIBS=
+# GUILE_COMPILED_LIBS=
+GUILE_LOAD_PATH={GNC_DATA}/scm;{GNC_HOME}/share/guile//@GUILE_EFFECTIVE_VERSION@;{GUILE_LIBS};{GUILE_LOAD_PATH}
+
+# On Windows {GNC_LIB} points to {GNC_HOME}/bin because that's where the DLLs
+# are. It's not where the compiled scheme files are so we use {SYS_LIB} here.
+GUILE_LOAD_COMPILED_PATH={SYS_LIB}/guile/@GUILE_EFFECTIVE_VERSION@/ccache;{SYS_LIB}/gnucash/scm/ccache/@GUILE_EFFECTIVE_VERSION@;{GUILE_COMPILED_LIBS};{GUILE_LOAD_COMPILED_PATH}
+
+# Tell Guile where to find GnuCash specific shared libraries
+GNC_LIBRARY_PATH={SYS_LIB};{GNC_LIB}
+LD_LIBRARY_PATH={GNC_LIBRARY_PATH};{LD_LIBRARY_PATH}
+# The same, but for GnuCash on OS X
+DYLD_LIBRARY_PATH={GNC_LIBRARY_PATH};{DYLD_LIBRARY_PATH}
+
+# If you wish GnuCash to use a different language, copy the two parameters
+# below to environment.local, remove '# ' in front and set LANG to your preferred locale
+# LANG=nl_BE
+# LANGUAGE={LANG}
+
+# Set the location of the gnucash user specific application data
+# The default depends on the operating system
+# Linux - follows the freedesktop xdg data home specification
+# Windows - uses the user's AppData(Roaming)\GnuCash
+# OS X/Quarz - uses the value of NSApplicationSupportDirectory/GnuCash
+# If these are not what you want, you can override it in enviromnent.local
+# GNC_DATA_HOME=
+
+# Similarly you can override the default location for AqBanking's settings.
+# This will only be used if gnucash is built with AqBanking support enabled.
+# Default: $HOME/.aqbanking
+# AQBANKING_HOME=

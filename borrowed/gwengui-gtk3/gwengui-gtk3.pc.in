@@ -1,0 +1,23 @@
+# pkg-config configuration for gwengui_gtk3
+# For information about the syntax, see pkg-config(1)
+
+# General installation directories
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+pkgincludedir=@includedir@/gwenhywfar
+datarootdir=@datarootdir@
+datadir=@datadir@
+bindir=@bindir@
+sysconfdir=@sysconfdir@
+
+# Human-readable name
+Name: gwengui-gtk3
+# Human-readable description
+Description: GTK3 Implementation of the GWEN_DIALOG framework.
+
+Version: @VERSION@
+Libs: -L@libdir@ -lgwengui-gtk3
+Cflags: -I@includedir@
+

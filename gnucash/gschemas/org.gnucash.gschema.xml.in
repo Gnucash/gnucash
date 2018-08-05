@@ -1,0 +1,389 @@
+<schemalist gettext-domain="@GETTEXT_PACKAGE@">
+  <schema id="org.gnucash" path="/org/gnucash/">
+    <child name="general" schema="org.gnucash.general"/>
+    <child name="dev" schema="org.gnucash.dev"/>
+  </schema>
+
+  <schema id="org.gnucash.general" path="/org/gnucash/general/">
+    <key name="prefs-version" type="i">
+      <default>0</default>
+      <summary>The version of these settings</summary>
+      <description>This is used internally to determine whether some preferences may need conversion when switching to a newer version of GnuCash.</description>
+    </key>
+    <key name="save-window-geometry" type="b">
+      <default>true</default>
+      <summary>Save window sizes and locations</summary>
+      <description>If active, the size and location of each dialog window will be saved when it is closed. The sizes and locations of content windows will be remembered when you quit GnuCash. Otherwise the sizes will not be saved.</description>
+    </key>
+    <key name="account-separator" type="s">
+      <default>'colon'</default>
+      <summary>Character to use as separator between account names</summary>
+      <description>This setting determines the character that will be used between components of an account name. Possible values are any single non-alphanumeric unicode character, or any of the following strings: "colon" "slash", "backslash", "dash" and "period".</description>
+    </key>
+    <key name="assoc-head" type="s">
+      <default>''</default>
+      <summary>Transaction Associations head path</summary>
+      <description>This is the path head for the Transaction file Associations</description>
+    </key>
+    <key name="file-compression" type="b">
+      <default>true</default>
+      <summary>Compress the data file</summary>
+      <description>Enables file compression when writing the data file.</description>
+    </key>
+    <key name="autosave-show-explanation" type="b">
+      <default>true</default>
+      <summary>Show auto-save explanation</summary>
+      <description>If active, GnuCash shows an explanation of the auto-save feature the first time that feature is started. Otherwise no extra explanation is shown.</description>
+    </key>
+    <key name="autosave-interval-minutes" type="d">
+      <default>5</default>
+      <summary>Auto-save time interval</summary>
+      <description>The number of minutes until saving of the data file to harddisk will be started automatically. If zero, no saving will be started automatically.</description>
+    </key>
+    <key name="save-on-close-expires" type="b">
+      <default>false</default>
+      <summary>Enable timeout on "Save changes on closing" question</summary>
+      <description>If enabled, the "Save changes on closing" question will only wait a limited number of seconds for an answer. If the user didn't answer within that time, the changes will be saved automatically and the question window closed.</description>
+    </key>
+    <key name="save-on-close-wait-time" type="i">
+      <default>20</default>
+      <summary>Time to wait for answer</summary>
+      <description>The number of seconds to wait before the question window will be closed and the changes saved automatically.</description>
+    </key>
+    <key name="negative-in-red" type="b">
+      <default>true</default>
+      <summary>Display negative amounts in red</summary>
+      <description>Display negative amounts in red</description>
+    </key>
+    <key name="auto-decimal-point" type="b">
+      <default>false</default>
+      <summary>Automatically insert a decimal point</summary>
+      <description>If active, GnuCash will automatically insert a decimal point into values that are entered without one. Otherwise GnuCash will not modify entered numbers.</description>
+    </key>
+    <key name="auto-decimal-places" type="i">
+      <default>2</default>
+      <summary>Number of automatic decimal places</summary>
+      <description>This field specifies the number of automatic decimal places that will be filled in.</description>
+    </key>
+    <key name="migrate-prefs-done" type="b">
+      <default>false</default>
+      <summary>Tool to migrate preferences from old backend (CGonf) to new one (GSettings) has run successfully.</summary>
+      <description>GnuCash switched to another backend to store user preferences between 2.4 and 2.6. To smooth the transition, most preferences will be migrated the first time a 2.6 version of GnuCash is run. This migration should only run once. This preference keeps track whether or not this migration tool has run successfully.</description>
+    </key>
+    <key name="retain-type-never" type="b">
+      <default>false</default>
+      <summary>Do not create log/backup files.</summary>
+      <description>This setting specifies what to do with old log/backups files. "forever" means keep all old files. "never" means no old log/backup files are kept. Each time you save, older versions of the file are removed. "days" means keep old files for a number of days. How many days is defined in key 'retain-days'</description>
+    </key>
+    <key name="retain-type-days" type="b">
+      <default>true</default>
+      <summary>Delete old log/backup files after this many days (0 = never).</summary>
+      <description>This setting specifies what to do with old log/backups files. "forever" means keep all old files. "never" means no old log/backup files are kept. Each time you save, older versions of the file are removed. "days" means keep old files for a number of days. How many days is defined in key 'retain-days'</description>
+    </key>
+    <key name="retain-type-forever" type="b">
+      <default>false</default>
+      <summary>Do not delete log/backup files.</summary>
+      <description>This setting specifies what to do with old log/backups files. "forever" means keep all old files. "never" means no old log/backup files are kept. Each time you save, older versions of the file are removed. "days" means keep old files for a number of days. How many days is defined in key 'retain-days'</description>
+    </key>
+    <key name="retain-days" type="d">
+      <default>30.0</default>
+      <summary>Delete old log/backup files after this many days (0 = never)</summary>
+      <description>This setting specifies the number of days after which old log/backup files will be deleted (0 = never).</description>
+    </key>
+    <key name="reversed-accounts-none" type="b">
+      <default>false</default>
+      <summary>Don't sign reverse any accounts.</summary>
+      <description>This setting allows certain accounts to have their balances reversed in sign from positive to negative, or vice versa. The setting "income-expense" is for users who like to see negative expenses and positive income. The setting of "credit" is for users who want to see balances reflect the debit/credit status of the account. The setting "none" doesn't reverse the sign on any balances.</description>
+    </key>
+    <key name="reversed-accounts-credit" type="b">
+      <default>true</default>
+      <summary>Sign reverse balances on the following: Credit Card, Payable, Liability, Equity, and Income.</summary>
+      <description>This setting allows certain accounts to have their balances reversed in sign from positive to negative, or vice versa. The setting "income-expense" is for users who like to see negative expenses and positive income. The setting of "credit" is for users who want to see balances reflect the debit/credit status of the account. The setting "none" doesn't reverse the sign on any balances.</description>
+    </key>
+    <key name="reversed-accounts-incomeexpense" type="b">
+      <default>false</default>
+      <summary>Sign reverse balances on income and expense accounts.</summary>
+      <description>This setting allows certain accounts to have their balances reversed in sign from positive to negative, or vice versa. The setting "income-expense" is for users who like to see negative expenses and positive income. The setting of "credit" is for users who want to see balances reflect the debit/credit status of the account. The setting "none" doesn't reverse the sign on any balances.</description>
+    </key>
+    <key name="show-account-color" type="b">
+      <default>false</default>
+      <summary>Use account colors in the account hierarchy</summary>
+      <description>If active the account hierarchy will colorize the account using the account's custom color if set. This can serve as a visual aid to quickly identify accounts.</description>
+    </key>
+    <key name="show-account-color-tabs" type="b">
+      <default>false</default>
+      <summary>Use account colors in the tabs of open account registers</summary>
+      <description>If active the account register tabs will be colored using the account's custom color if set. This can serve as a visual aid to quickly identify accounts.</description>
+    </key>
+    <key name="use-accounting-labels" type="b">
+      <default>false</default>
+      <summary>Use formal account labels</summary>
+      <description>If active, formal accounting labels "Credit" and "Debit" will be used when designating fields on screen. Otherwise, informal labels such as Increase/Decrease, "Funds In"/"Funds Out", etc. will be used.</description>
+    </key>
+    <key name="tab-close-buttons" type="b">
+      <default>true</default>
+      <summary>Show close buttons on notebook tabs</summary>
+      <description>If active, a "close" button will be displayed on any notebook tab that may be closed. Otherwise, no such button will be shown on the tab. Regardless of this setting, pages can always be closed via the "close" menu item or the "close" button on toolbar.</description>
+    </key>
+    <key name="tab-width" type="d">
+      <default>30.0</default>
+      <summary>Width of notebook tabs</summary>
+      <description>This key specifies the maximum width of notebook tabs. If the text in the tab is longer than this value (the test is approximate) then the tab label will have the middle cut and replaced with an ellipsis.</description>
+    </key>
+    <key name="currency-choice-locale" type="b">
+      <default>true</default>
+      <summary>Use the system locale currency for all newly created accounts.</summary>
+      <description>This setting controls the source of the default currency for new accounts. If set to "locale" then GnuCash will retrieve the default currency from the user's locale setting. If set to "other", GnuCash will use the setting specified by the currency-other key.</description>
+    </key>
+    <key name="currency-choice-other" type="b">
+      <default>false</default>
+      <summary>Use the specified currency for all newly created accounts.</summary>
+      <description>This setting controls the source of the default currency for new accounts. If set to "locale" then GnuCash will retrieve the default currency from the user's locale setting. If set to "other", GnuCash will use the setting specified by the currency-other key.</description>
+    </key>
+    <key name="currency-other" type="s">
+      <default>'USD'</default>
+      <summary>Default currency for new accounts</summary>
+      <description>This setting specifies the default currency used for new accounts if the currency-choice setting is set to "other". This field must contain the three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB).</description>
+    </key>
+    <key name="clock-24h" type="b">
+      <default>false</default>
+      <summary>Use 24 hour time format</summary>
+      <description>If active, use a 24 hour time format. Otherwise use a 12 hour time format.</description>
+    </key>
+    <key name="date-format" type="i">
+      <default>4</default>
+      <summary>Date format choice</summary>
+      <description>This setting chooses the way dates are displayed in GnuCash. Possible values for this setting are "locale" to use the system locale setting, "ce" for Continental Europe style dates, "iso" for ISO 8601 standard dates , "uk" for United Kingdom style dates, and "us" for United States style dates.</description>
+    </key>
+    <key name="date-completion-thisyear" type="b">
+      <default>false</default>
+      <summary>In the current calendar year</summary>
+      <description>When a date is entered without year it can be completed so that it will be within the current calendar year or close to the current date based on a sliding window starting a set number of months backwards in time.</description>
+    </key>
+    <key name="date-completion-sliding" type="b">
+      <default>true</default>
+      <summary>In a sliding 12-month window starting a configurable number of months before the current month</summary>
+      <description>When a date is entered without year it can be completed so that it will be within the current calendar year or close to the current date based on a sliding window starting a set number of months backwards in time.</description>
+    </key>
+    <key name="date-backmonths" type="d">
+      <default>11.0</default>
+      <summary>Maximum number of months to go back.</summary>
+      <description>Dates will be completed so that they are close to the current date. Enter the maximum number of months to go backwards in time when completing dates.</description>
+    </key>
+    <key name="grid-lines-horizontal" type="b">
+      <default>false</default>
+      <summary>Show Horizontal Grid Lines</summary>
+      <description>If active, horizontal grid lines will be shown on table displays. Otherwise no horizontal grid lines will be shown.</description>
+    </key>
+    <key name="grid-lines-vertical" type="b">
+      <default>false</default>
+      <summary>Show Vertical Grid Lines</summary>
+      <description>If active, vertical grid lines will be shown on table displays. Otherwise no vertical grid lines will be shown.</description>
+    </key>
+    <key name="show-splash-screen" type="b">
+      <default>true</default>
+      <summary>Show splash screen</summary>
+      <description>If active, a splash screen will be shown at startup. Otherwise no splash screen will be shown.</description>
+    </key>
+    <key name="tab-position-top" type="b">
+      <default>true</default>
+      <summary>Display the notebook tabs at the top of the window.</summary>
+      <description>This setting determines the edge at which the tabs for switching pages in notebooks are drawn. Possible values are "top", "left", "bottom" and "right". It defaults to "top".</description>
+    </key>
+    <key name="tab-position-bottom" type="b">
+      <default>false</default>
+      <summary>Display the notebook tabs at the bottom of the window.</summary>
+      <description>This setting determines the edge at which the tabs for switching pages in notebooks are drawn. Possible values are "top", "left", "bottom" and "right". It defaults to "top".</description>
+    </key>
+    <key name="tab-position-left" type="b">
+      <default>false</default>
+      <summary>Display the notebook tabs at the left of the window.</summary>
+      <description>This setting determines the edge at which the tabs for switching pages in notebooks are drawn. Possible values are "top", "left", "bottom" and "right". It defaults to "top".</description>
+    </key>
+    <key name="tab-position-right" type="b">
+      <default>false</default>
+      <summary>Display the notebook tabs at the right of the window.</summary>
+      <description>This setting determines the edge at which the tabs for switching pages in notebooks are drawn. Possible values are "top", "left", "bottom" and "right". It defaults to "top".</description>
+    </key>
+    <key name="summarybar-position-top" type="b">
+      <default>false</default>
+      <summary>Display the summary bar at the top of the page.</summary>
+      <description>This setting determines the edge at which the summary bar for various pages is drawn. Possible values are "top" and "bottom". It defaults to "bottom".</description>
+    </key>
+    <key name="summarybar-position-bottom" type="b">
+      <default>true</default>
+      <summary>Display the summary bar at the bottom of the page.</summary>
+      <description>This setting determines the edge at which the summary bar for various pages is drawn. Possible values are "top" and "bottom". It defaults to "bottom".</description>
+    </key>
+    <key name="tab-next-recent" type="b">
+      <default>false</default>
+      <summary>Closing a tab moves to the most recently visited tab.</summary>
+      <description>If active, closing a tab moves to the most recently visited tab. Otherwise closing a tab moves one tab to the left.</description>
+    </key>
+    <key name="num-source" type="b">
+      <default>false</default>
+      <summary>Set book option on new files to use split "action" field for "Num" field on registers/reports</summary>
+      <description>If selected, the default book option for new files is set so that the 'Num' cell on registers shows/updates the split 'action' field and the transaction 'num' field is shown on the second line in double line mode (and is not visible in single line mode). Otherwise, the default book option for new files is set so that the 'Num' cell on registers shows/updates the transaction 'num' field.</description>
+    </key>
+    <child name="register" schema="org.gnucash.general.register"/>
+    <child name="report" schema="org.gnucash.general.report"/>
+  </schema>
+
+  <schema id="org.gnucash.general.register" path="/org/gnucash/general/register/">
+    <key name="use-gnucash-color-theme" type="b">
+      <default>true</default>
+      <summary>Color the register using a gnucash specific color theme</summary>
+      <description>When enabled the register will use a GnuCash specific color theme (green/yellow). Otherwise it will use the system color theme. Regardless of this setting the user can always override the color theme via a gnucash specific css file to be stored in the gnucash used config directory. More information can be found in the gnucash FAQ.</description>
+    </key>
+    <key name="use-theme-colors" type="b">
+      <default>false</default>
+      <summary>Superseded by "use-gnucash-color-theme"</summary>
+      <description>This option is temporarily kept around for backwards compatibility. It will be removed in a future version.</description>
+    </key>
+    <key name="enter-moves-to-end" type="b">
+      <default>false</default>
+      <summary>"Enter" key moves to bottom of register</summary>
+      <description>If active, pressing the enter key will move to the bottom of the register. Otherwise pressing the enter key will move to the next transaction line.</description>
+    </key>
+    <key name="auto-raise-lists" type="b">
+      <default>true</default>
+      <summary>Automatically raise the list of accounts or actions during input</summary>
+      <description>Automatically raise the list of accounts or actions during input</description>
+    </key>
+    <key name="tab-to-transfer-on-memorised" type="b">
+      <default>false</default>
+      <summary>Move to Transfer field when memorised transaction auto filled</summary>
+      <description>If active then after a memorised transaction is automatically filled in the cursor will move to the Transfer field. If not active then it skips to the value field.</description>
+    </key>
+    <key name="use-new-window" type="b">
+      <default>false</default>
+      <summary>Create a new window for each new register</summary>
+      <description>If active, each new register will be opened in a new window. Otherwise each new register will be opened as a tab in the main window.</description>
+    </key>
+    <key name="alternate-color-by-transaction" type="b">
+      <default>false</default>
+      <summary>Color all lines of a transaction the same</summary>
+      <description>If active all lines that make up a single transaction will use the same color for their background. Otherwise the background colors are alternated on each line.</description>
+    </key>
+    <key name="draw-horizontal-lines" type="b">
+      <default>true</default>
+      <summary>Show horizontal borders in a register</summary>
+      <description>Show horizontal borders between rows in a register. If active the border between cells will be indicated with a heavy line. Otherwise the border between cells will not be marked.</description>
+    </key>
+    <key name="draw-vertical-lines" type="b">
+      <default>true</default>
+      <summary>Show vertical borders in a register</summary>
+      <description>Show vertical borders between columns in a register. If active the border between cells will be indicated with a heavy line. Otherwise the border between cells will not be marked.</description>
+    </key>
+    <key name="future-after-blank-transaction" type="b">
+      <default>false</default>
+      <summary>Show future transactions after the blank transaction in a register</summary>
+      <description>Show future transactions after the blank transaction in a register. If active then transactions with a date in the future will be displayed at the bottom of the register after the blank transaction. Otherwise the blank transaction will be at the bottom of the register after all transactions.</description>
+    </key>
+    <key name="default-style-ledger" type="b">
+      <default>true</default>
+      <summary>Show all transactions on one line. (Two in double line mode.)</summary>
+      <description>This field specifies the default view style when opening a new register window. Possible values are "ledger", "auto-ledger" and "journal". The "ledger" setting says to show each transaction on one or two lines. The "auto-ledger" setting does the same, but also expands only the current transaction to show all splits. The "journal" setting shows all transactions in expanded form.</description>
+    </key>
+    <key name="default-style-autoledger" type="b">
+      <default>false</default>
+      <summary>Automatically expand the current transaction to show all splits. All other transactions are shown on one line. (Two in double line mode.)</summary>
+      <description>This field specifies the default view style when opening a new register window. Possible values are "ledger", "auto-ledger" and "journal". The "ledger" setting says to show each transaction on one or two lines. The "auto-ledger" setting does the same, but also expands only the current transaction to show all splits. The "journal" setting shows all transactions in expanded form.</description>
+    </key>
+    <key name="default-style-journal" type="b">
+      <default>false</default>
+      <summary>All transactions are expanded to show all splits.</summary>
+      <description>This field specifies the default view style when opening a new register window. Possible values are "ledger", "auto-ledger" and "journal". The "ledger" setting says to show each transaction on one or two lines. The "auto-ledger" setting does the same, but also expands only the current transaction to show all splits. The "journal" setting shows all transactions in expanded form.</description>
+    </key>
+    <key name="double-line-mode" type="b">
+      <default>false</default>
+      <summary>Show two lines of information for each transaction</summary>
+      <description>Show two lines of information for each transaction in a register. This is the default setting for when a register is first opened. The setting can be changed at any time via the "View-&gt;Double Line" menu item.</description>
+    </key>
+    <key name="show-leaf-account-names" type="b">
+      <default>false</default>
+      <summary>Only display leaf account names.</summary>
+      <description>Show only the names of the leaf accounts in the register and in the account selection popup. The default behaviour is to display the full name, including the path in the account tree. Activating this option implies that you use unique leaf names.</description>
+    </key>
+    <key name="show-extra-dates" type="b">
+      <default>false</default>
+      <summary>Show the entered and reconcile dates</summary>
+      <description>Show the date when the transaction was entered below the posted date and reconciled date on split row.</description>
+    </key>
+    <key name="show-extra-dates-on-selection" type="b">
+      <default>false</default>
+      <summary>Show entered and reconciled dates on selection</summary>
+      <description>Show the entered date and reconciled date on transaction selection.</description>
+    </key>
+    <key name="show-calendar-buttons" type="b">
+      <default>false</default>
+      <summary>Show the calendar buttons</summary>
+      <description>Show the calendar buttons Cancel, Today and Select.</description>
+    </key>
+    <key name="selection-to-blank-on-expand" type="b">
+      <default>false</default>
+      <summary>Move the selection to the blank split on expand</summary>
+      <description>This will move the selection to the blank split when the transaction is expanded.</description>
+    </key>
+    <key name="max-transactions" type="d">
+      <default>0.0</default>
+      <summary>Number of transactions to show in a register.</summary>
+      <description>Show this many transactions in a register. A value of zero means show all transactions.</description>
+    </key>
+    <key name="key-length" type="d">
+      <default>2.0</default>
+      <summary>Number of characters for auto complete.</summary>
+      <description>This sets the number of characters before auto complete starts for description, notes and memo fields.</description>
+    </key>
+  </schema>
+  
+  <schema id="org.gnucash.general.report" path="/org/gnucash/general/report/">
+    <key name="use-new-window" type="b">
+      <default>false</default>
+      <summary>Create a new window for each new report</summary>
+      <description>If active, each new report will be opened in its own window. Otherwise new reports will be opened as tabs in the main window.</description>
+    </key>
+    <key name="currency-choice-locale" type="b">
+      <default>true</default>
+      <summary>Use the system locale currency for all newly created reports.</summary>
+      <description>This setting controls the default currency used for reports. If set to "locale" then GnuCash will retrieve the default currency from the user's locale setting. If set to "other", GnuCash will use the setting specified by the currency-other key.</description>
+    </key>
+    <key name="currency-choice-other" type="b">
+      <default>false</default>
+      <summary>Use the specified currency for all newly created reports.</summary>
+      <description>This setting controls the source of the default currency for new accounts. If set to "locale" then GnuCash will retrieve the default currency from the user's locale setting. If set to "other", GnuCash will use the setting specified by the currency-other key.</description>
+    </key>
+    <key name="currency-other" type="s">
+      <default>'USD'</default>
+      <summary>Default currency for new reports</summary>
+      <description>This setting controls the default currency used for reports. If set to "locale" then GnuCash will retrieve the default currency from the user's locale setting. If set to "other", GnuCash will use the setting specified by the currency-other key.</description>
+    </key>
+    <key name="default-zoom" type="d">
+      <default>1.0</default>
+      <summary>Zoom factor to use by default for reports.</summary>
+      <description>On high resolution screens reports tend to be hard to read.
+This option allows you to scale reports up by the set factor.
+For example setting this to 2.0 will display reports at twice their typical size.</description>
+    </key>
+    <child name="pdf-export" schema="org.gnucash.general.report.pdf-export"/>
+  </schema>
+  <schema id="org.gnucash.general.report.pdf-export" path="/org/gnucash/general/report/pdf-export/">
+    <key name="filename-format" type="s">
+      <default>'%1$s-%2$s-%3$s'</default>
+      <summary>PDF export file name format</summary>
+      <description>This setting chooses the file name for PDF export. This is a sprintf(3) string with three arguments: "%1$s" is the report name such as "Invoice". "%2$s" is the number of the report, which for an invoice report is the invoice number. "%3$s" is the date of the report, formatted according to the filename-date-format setting. (Note: Any characters that are not allowed in filenames, such as '/', will be replaced with underscores '_' in the resulting file name.)</description>
+    </key>
+    <key name="filename-date-format" type="s">
+      <default>'locale'</default>
+      <summary>PDF export file name date format choice</summary>
+      <description>This setting chooses the way dates are used in the filename of PDF export. Possible values for this setting are "locale" to use the system locale setting, "ce" for Continental Europe style dates, "iso" for ISO 8601 standard dates , "uk" for United Kingdom style dates, and "us" for United States style dates.</description>
+    </key>
+  </schema>
+  <schema id="org.gnucash.dev" path="/org/gnucash/dev/">
+    <key name="allow-file-incompatibility" type="b">
+      <default>false</default>
+      <summary>Allow file incompatibility with older versions.</summary>
+      <description>If active, gnucash will be allowed to intentionally break file compatibility with older versions, so that a data file saved in this version cannot be read by an older version again. Otherwise gnucash will write data files only in formats that can be read by older versions as well.</description>
+    </key>
+  </schema>
+</schemalist>

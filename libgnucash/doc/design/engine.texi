@@ -1,0 +1,2826 @@
+@node Engine, Component Manager, Top Level, Top
+@chapter Engine
+@cindex The Engine
+
+@strong{This whole document is completely outdated. Don't read this. All
+function names and every described structure has changed
+completely. Only read this if you want to know how gnucash looked like
+in 1999. This is completely outdated!}
+
+The Engine provides an interface to a financial engine with three basic
+financial entities: Accounts, Transactions (known as Journal Entries in
+accounting practice), and Splits (known as Ledger Entries). These three
+entities are the central data structures of the GnuCash financial data
+model.
+
+In addition, the Engine provides the abstraction of Account Groups
+(collections of related accounts) and GNCBooks. A GNCBook abstracts both
+a set of related GnuCash data (financial entities plus additional
+information such as budgets, per-file preferences, etc.) plus a
+file-editing session allowing transparent support for locking and
+implementation with other backends such as SQL.
+
+The Engine code contains no GUI code whatsoever and is designed to
+be created as a shared library for use by other programs.
+
+@menu
+* Engine Introduction::         
+* Using and Extending the Engine API::  
+* Globally Unique Identifiers::  
+* Numeric Library::             
+* Key-Value Pair Frames::       
+* Events::                      
+* Commodities::                 
+* Commodity Tables::            
+* Prices::                      
+* Price Databases::             
+* Splits::                      
+* Transactions::                
+* Accounts::                    
+* Account Groups::              
+* GNCBooks::                    
+* Scrub::                       
+@end menu
+
+
+@node Engine Introduction, Using and Extending the Engine API, Engine, Engine
+@section Introduction
+
+Splits (@pxref{Splits}), or "Ledger Entries" are the fundamental
+accounting units. Each Split consists of an amount (number of dollar
+bills, number of shares, etc.), the value of that amount expressed in
+a (possibly) different currency than the amount, a Memo, a pointer to
+the parent Transaction, a pointer to the debited Account, a reconciled
+flag and timestamp, an "Action" field, and a key-value frame which can
+store arbitrary data (@pxref{Key-Value Pair Frames}).
+
+Transactions (@pxref{Transactions}) embody the notion of "double entry"
+accounting. A Transaction consists of a date, a description, an ID number, a
+list of one or more Splits, and a key-value frame. The transaction
+also specifies the currency with which all of the splits will be
+valued.  When double-entry rules are enforced, the total value of 
+the splits are zero.  If there are only two splits,
+then the value of one must be positive, the other negative: this denotes
+that one account is debited, and another is credited by an equal
+amount.   By forcing the value of the splits to always 'add up' to
+zero, we can gaurentee that the balances of the accounts are always
+correctly balanced.
+
+The engine does not enforce double-entry accounting, but provides an API
+to enable user-code to find unbalanced transactions and 'repair' them so
+that they are in balance. @xref{Scrub}.
+
+Note the sum of the values of Splits in a Transaction is always computed
+with respect to a currency; thus splits can be balanced even when they
+are in different currencies, as long as they share a common currency.
+This feature allows currency-trading accounts to be established.
+
+Every Split must point to its parent Transaction, and that Transaction
+must in turn include that Split in the Transaction's list of Splits. A
+Split can belong to at most one Transaction. These relationships are
+enforced by the engine. The engine user cannnot accidentally destroy
+this relationship as long as they stick to using the API and never
+access internal structures directly.
+
+Splits are grouped into Accounts (@pxref{Accounts}) which are also known
+as "Ledgers" in accounting practice. Each Account consists of a list of
+Splits that debit that Account. To ensure consistency, if a Split points
+to an Account, then the Account must point to the Split, and vice-versa.
+A Split can belong to at most one Account. Besides merely containing a
+list of Splits, the Account structure also give the Account a name, a
+code number, description and notes fields, a key-value frame, a pointer
+to the commodity that is used for all splits in this account. The
+commodity can be the name of anything traded and tradable: a stock
+(e.g. "IBM", "McDonald's"), a currency (e.g. "USD", "GBP"), or
+anything added to the commodity table.
+
+Accounts can be arranged in a hierarchical tree. The nodes of the tree
+are called "Account Groups" (@pxref{Account Groups}). By accounting
+convention, the value of an Account is equal to the value of all of its
+Splits plus the value of all of its sub-Accounts.
+
+
+@node Using and Extending the Engine API, Globally Unique Identifiers, Engine Introduction, Engine
+@section Using and Extending the Engine API
+
+Engine API calls are named using a specific convention. For example,
+the function to access the Memo field of a Split is
+@code{xaccSplitGetMemo}.  The prefix @code{xacc} comes
+first@footnote{The @code{xacc} prefix is a historical artifact. GnuCash
+was derived from X-Accountant by Robin Clark.}, followed by the name of
+the entity for which the API call applies (@code{Split}), followed by
+the action performed by the call (@code{Get}), followed by the name of
+the field being accessed (@code{Memo}). Future API calls should conform
+to this naming convention.
+
+The formal arguments to Engine API calls always begin with the entity to
+which the call applies. Thus, the arguments to @code{xaccSplitSetMemo}
+are the @code{Split} pointer followed by the pointer to a memo
+string. Future API calls should also conform to this convention.
+
+Engine API calls should be implemented to behave as gracefully as
+possible with unexpected input. Specifically, public API calls should
+gracefully handle @code{NULL} pointer arguments. User code should be
+able to handle @code{NULL} return values from Engine calls as well.
+
+
+@node Globally Unique Identifiers, Numeric Library, Using and Extending the Engine API, Engine
+@section Globally Unique Identifiers
+@cindex Globally Unique Identifier
+@tindex GUID
+
+It is common for Engine structures to reference other Engine structures.
+For example, an Account must reference its Splits, its parent Account
+Group, and its child Account Group. Furthermore, other GnuCash modules
+may need to reference Engine structures. For example, a GUI
+implementation may wish to save a list of Accounts which the user has
+open when the application exits in order to restore that same state upon
+the next invocation.
+
+One way to uniquely identify an Engine structure, at least while the
+program is running, is using the C pointer which points to the
+structure. C pointers have the advantage of speed, but also have some
+disadvantages:
+
+@itemize
+
+@item
+Pointers cannot be used in data files and are not persistent across
+different program invocations.
+
+@item
+When an entity is destroyed, every other structure which references that
+entity through a direct pointer must be immediately updated to prevent
+illegal accesses.
+
+@end itemize
+
+The @dfn{GUID} (Globally Unique Identifier) provides a way to reference
+Engine structures that is more flexible than C pointers. Each Engine
+structure has an associated GUID which can be used to reference that
+structure. Engine GUIDs have the following features:
+
+@itemize
+
+@item
+The GUID is permanent, i.e., it persists between invocations of GnuCash.
+
+@item
+The GUID is guaranteed to be unique with the set of all Splits,
+Transactions, and Accounts in the hierarchy of which the structure
+is a member.
+
+@item
+With very high probability, the GUID is unique among all GUIDs
+created by any invocation of GnuCash, all over the world.
+
+@item
+GUIDs can be efficiently encoded in a string representation.
+
+@end itemize
+
+
+@menu
+* When to use GUIDs::           
+* GUID Types::                  
+* How to use GUIDs::            
+* GUIDs and GnuCash Entities::  
+* The GUID Generator::          
+@end menu
+
+@node When to use GUIDs, GUID Types, Globally Unique Identifiers, Globally Unique Identifiers
+@subsection When to use GUIDs
+@cindex When to use GUIDs
+
+Although GUIDs are very flexible, the engine structures like Accounts
+will probably continue to use C pointers for the foreseeable future,
+since they are much faster (and in certain respects more convenient)
+than using GUIDs. In general, however, it is much safer to use GUIDs.
+In particular, you should consider using GUIDs if any of the following
+is true:
+
+@itemize
+
+@item
+You need to save a reference to an engine structure in a file.
+
+@item
+You need to save a reference to an engine structure that could
+be deleted in between accesses to the saved reference.
+
+@end itemize
+
+
+@node GUID Types, How to use GUIDs, When to use GUIDs, Globally Unique Identifiers
+@subsection GUID Types
+@tindex GNCIdType
+
+The GUIDs in GnuCash are typed using the enum @code{GNCIdType}.
+Possible values and their meanings for GUID types are:
+
+@table @code
+
+@item GNC_ID_NONE
+The GUID does not currently refer to a GnuCash entity, though it
+could refer to one in the future.
+
+@item GNC_ID_NULL
+The GUID does not, and never will, refer to a GnuCash entity.
+
+@item GNC_ID_ACCOUNT
+The GUID refers to an Account (@pxref{Accounts}).
+
+@item GNC_ID_TRANS
+The GUID refers to a Transation (@pxref{Transactions}).
+
+@item GNC_ID_SPLIT
+The GUID refers to a Split (@pxref{Splits}).
+
+@end table
+
+@deftypefun GNCIdType xaccGUIDType (const GUID * @var{guid})
+Return the type associated with @var{guid}.
+@end deftypefun
+
+@deftypefun {const GUID *} xaccGUIDNull (void)
+Return a GUID which is guaranteed to always have type @code{GNC_ID_NULL}.
+@end deftypefun
+
+
+@node How to use GUIDs, GUIDs and GnuCash Entities, GUID Types, Globally Unique Identifiers
+@subsection How to use GUIDs
+
+The Engine API functions which access the GUID for a specific entity
+return a pointer to the GUID.  NOTE: Do not store the pointer
+itself! Instead, store a copy of the GUID. Storing the pointer itself
+would present some of the same problems as using the account pointer
+directly. Example:
+
+@example
+@{
+  GUID saved_guid;
+  Account *account;
+
+  account = < something to get an Account pointer >
+
+  saved_guid = *xaccAccountGetGUID(account);
+
+  ...
+
+  account = xaccAccountLookup(&saved_guid);
+
+  ...
+@}
+@end example
+
+You can compare two GUIDs with the following functions.
+
+@deftypefun gboolean guid_equal (const GUID * @var{guid_1}, const GUID * @var{guid_2})
+Compare two guids and return TRUE if they are both non-NULL and equal.
+@end deftypefun
+
+@deftypefun gint guid_compare (const GUID * @var{g1}, const GUID * @var{g2})
+Return the @code{memcmp} of the two GUID's.
+@end deftypefun
+
+
+You can encode and decode GUIDs and their string representations using the
+next two functions.
+
+@deftypefun {gchar *} guid_to_string (const GUID * @var{guid})
+Return a null-terminated string encoding of @var{guid}. String encodings
+of identifiers are hex numbers printed only with the characters @code{0}
+through @code{9} and @code{a} through @code{f}.  The encoding will
+always be @code{GUID_ENCODING_LENGTH} characters long. The returned
+string must be freed when no longer needed using g_free.
+@end deftypefun
+
+@deftypefun {char *} guid_to_string_buff (const GUID * @var{guid}, char * @var{buff})
+This routine does the same work as @code{guid_to_string}, except that the
+string is written into the memory pointed at by @var{buff}. The
+buffer must be at least GUID_ENCODING_LENGTH+1 characters long.
+This routine is handy for avoiding a malloc/free cycle.
+It returns a pointer to the @emph{end} of what was written.
+(i.e. it can be used like @code{stpcpy} during string concatenation)
+@end deftypefun
+
+@deftypefun gboolean string_to_guid (const char * @var{string}, GUID * @var{guid})
+Given a string, decode an id into @var{guid} if @var{guid} is
+non-NULL. The function returns TRUE if the string was a valid 32
+character hexadecimal number. This function accepts both upper and lower
+case hex digits. If the return value is FALSE, the effect on @var{guid}
+is undefined.
+@end deftypefun
+
+
+You can allocate and deallocate space for GUIDs using standard
+memory routines. However, if your code is allocating and deallocating
+lots of GUID objects, then the next two functions should be used.
+
+@deftypefun {GUID *} xaccGUIDMalloc (void)
+Return newly allocated memory for a GUID object. The memory must
+be freed with @code{xaccGUIDFree}. In general, this function is
+faster than using the standard libc allocators.
+@end deftypefun
+
+@deftypefun void xaccGUIDFree (GUID * @var{guid})
+Free the space for a GUID that was allocated with @code{xaccGUIDMalloc}.
+@end deftypefun
+
+
+You can use the following two functions to aid in using GUIDS in hash
+tables.
+
+@deftypefun guint guid_hash_to_guint (gconstpointer @var{ptr})
+Return a hash value suitable for use with a @code{GHashTable}.
+@var{ptr} must point to a GUID.
+@end deftypefun
+
+@deftypefun {GHashTable *} guid_hash_table_new (void)
+Return a new @code{GHashTable} which uses GUIDs as keys.
+@end deftypefun
+
+
+@node GUIDs and GnuCash Entities, The GUID Generator, How to use GUIDs, Globally Unique Identifiers
+@subsection GUIDs and GnuCash Entities
+
+This section documents a low-level API for associating entities with
+GUIDs. User code and general engine code should not use this API;
+instead use the API documented in the sections for the specific GnuCash
+entities such as Accounts and Transactions.
+
+@deftypefun void xaccGUIDNew (GUID * @var{guid})
+Generate a new guid. This function is guaranteed to return a guid that
+is unique within the scope of all GnuCash entities being managed by the
+the current invocation of GnuCash. GnuCash routines should always use
+this function and not @code{guid_replace}!
+@end deftypefun
+
+@deftypefun {void *} xaccLookupEntity (const GUID * @var{guid}, GNCIdType @var{entity_type})
+Lookup an entity given an id and a type. If there is no entity
+associated with the id, or if it has a different type, NULL is returned.
+@end deftypefun
+
+@deftypefun void xaccStoreEntity (void * @var{entity}, const GUID * @var{guid}, GNCIdType entity_type)
+Store the given entity under the given id with the given type.
+@end deftypefun
+
+@deftypefun void xaccRemoveEntity (const GUID * @var{guid})
+Remove any existing association between an entity and the given id. The
+entity is not changed in any way.
+@end deftypefun
+
+
+@node The GUID Generator,  , GUIDs and GnuCash Entities, Globally Unique Identifiers
+@subsection The GUID Generator
+@cindex The GUID Generator
+
+GUIDs are created by the GUID generator. The API for this generator is
+low-level and should not be used by user-code.
+
+@deftypefun void guid_replace (GUID * @var{guid})
+Create a new GUID and store it in @var{guid}. This is a low-level function!
+GnuCash code should use @code{xaccGUIDNew}.
+@end deftypefun
+
+
+@node Numeric Library, Key-Value Pair Frames, Globally Unique Identifiers, Engine
+@section Numeric Library
+@cindex Numeric Library
+@tindex gnc_numeric
+
+=============== The documentation below for gnc_numeric is obsolete
+  and has been superseded by the gnc_numeric docs in the header file.
+=========================================
+
+Financial quantities in GnuCash (Split quantities and values) are stored
+as exact quantities measured in the smallest denominational unit of the
+appropriate currency. For example, 100.50 US Dollars would be stored as
+(10050 / 100) US Dollars. GnuCash uses the @code{gnc_numeric} datatype
+to store financial quantities.
+
+The @code{gnc_numeric} API provides data types and functions for
+manipulating exact numeric quantities. While the @code{gnc_numeric}
+library was developed to represent and operate on exact financial
+quantities in GnuCash, the library is also (hopefully) suitable for use
+in any application where exact numeric representation for rational
+numbers is needed.
+
+A @code{gnc_numeric} value represents a number in rational form, with a
+64-bit @code{long long} integer as numerator and denominator. If more
+precision, a higher-precision representation of irrational numbers, or a
+wider dynamic range is needed, a floating point format may be
+appropriate. There are reasonable rational approximations to common
+irrational constants (@pxref{Numeric Example}), but the transcendental
+functions have not been implemented for @code{gnc_numeric} objects.
+
+@menu
+* Standard Numeric Arguments::  
+* Creating Numeric Objects::    
+* Basic Arithmetic Operations::  
+* Numeric Comparisons and Predicates::  
+* Numeric Denominator Conversion::  
+* Numeric Floating Point Conversion::  
+* Numeric String Conversion::   
+* Numeric Error Handling ::     
+* Numeric Example::             
+@end menu
+
+@node Standard Numeric Arguments, Creating Numeric Objects, Numeric Library, Numeric Library
+@subsection Standard Numeric Arguments
+@cindex Standard Numeric Arguments
+
+=============== The documentation below for gnc_numeric is obsolete
+  and has been superseded by the gnc_numeric docs in the header file.
+=========================================
+
+It is useful to specify a denominator in cases where it is known that
+the output value is of constrained precision. For example, monetary
+transactions must be executed in an integer number of the "smallest
+currency unit" of the transaction. In US Dollars, the smallest currency
+unit is the cent, and all monetary transactions must be done in units of
+cents. Therefore, any fractional cents in a computed price must be
+rounded away.
+
+Most of the @code{gnc_numeric} arithmetic functions take two arguments
+in addition to their numeric args: @var{denom}, which is the denominator
+to use in the output @code{gnc_numeric object}, and @var{how}, which
+describes how the arithmetic result is to be converted to that
+denominator. This combination of output denominator and rounding policy
+allows the results of financial and other exact computations to be
+properly rounded to the appropriate units.
+
+Valid values for @var{denom} are:
+
+@table @code
+
+@item n (positive int)
+Use the number @code{n} as the denominator of the output value.
+
+@item GNC_DENOM_RECIPROCAL (n)
+Use the value @code{1/n} as the denominator of the output value.
+
+@item GNC_DENOM_AUTO
+Compute an appropriate denominator automatically. Flags in the @var{how}
+argument will specify how to compute the denominator.
+
+@end table
+
+
+Valid values for @var{how} are bitwise combinations of zero or one
+"rounding instructions" with zero or one "denominator types". 
+
+Rounding instructions control how fractional parts in the specified
+denominator affect the result. For example, if a computed result is
+"3/4" but the specified denominator for the return value is 2, should
+the return value be "1/2" or "2/2"?  
+
+Possible rounding instructions are:
+
+@table @code
+
+@item GNC_RND_FLOOR
+Round toward -infinity
+
+@item GNC_RND_CEIL
+Round toward +infinity
+
+@item GNC_RND_TRUNC
+Truncate fractions (round toward zero)
+
+@item GNC_RND_PROMOTE
+Promote fractions (round away from zero)
+
+@item GNC_RND_ROUND
+Use unbiased ("banker's") rounding. This rounds to the nearest integer,
+and to the nearest even integer when there are two equidistant nearest
+integers. This is generally the one you should use for financial
+quantities.
+
+@item GNC_RND_ROUND_HALF_UP
+Round to the nearest integer, rounding away from zero when there are two
+equidistant nearest integers.
+
+@item GNC_RND_ROUND_HALF_DOWN
+Round to the nearest integer, rounding toward zero when there are two
+equidistant nearest integers.
+
+@item GNC_RND_NEVER
+Never round at all, and signal an error if there is a fractional result
+in a computation.
+
+@end table
+
+
+The denominator type specifies how to compute a denominator if
+@code{GNC_DENOM_AUTO} is specified as the @var{denom}. Valid denominator
+types are:
+
+@table @code
+
+@item GNC_DENOM_EXACT
+Use any denominator which gives an exactly correct ratio of numerator to
+denominator. Use EXACT when you do not wish to lose any information in
+the result but also do not want to spend any time finding the "best"
+denominator.
+
+@item GNC_DENOM_REDUCE
+Reduce the result value by common factor elimination, using the smallest
+possible value for the denominator that keeps the correct ratio. The
+numerator and denominator of the result are relatively prime. This can
+be computationally expensive for large fractions.
+
+@item GNC_DENOM_LCD
+Find the least common multiple of the arguments' denominators and use
+that as the denominator of the result.
+
+@item GNC_DENOM_FIXED
+All arguments are required to have the same denominator, that
+denominator is to be used in the output, and an error is to be signaled
+if any argument has a different denominator.
+
+@item GNC_DENOM_SIGFIG
+Round to the number of significant figures given in the rounding
+instructions by the GNC_DENOM_SIGFIGS () macro.
+
+@item GNC_DENOM_SIGFIGS (n)
+Use a value for the denominator that will keep at least @code{n}
+significant figures in the result.
+
+@end table
+
+
+To use traditional rational-number operational semantics (all results
+are exact and are reduced to relatively-prime fractions) pass the
+argument @code{GNC_DENOM_AUTO} as @var{denom} and @code{GNC_DENOM_REDUCE
+| GNC_RND_NEVER} as @var{how}.
+
+To enforce strict financial semantics (such that all operands must have
+the same denominator as each other and as the result), use
+@var{GNC_DENOM_AUTO} as @var{denom} and @code{GNC_DENOM_FIXED |
+GNC_RND_NEVER} as @var{how}.
+
+
+@node Creating Numeric Objects, Basic Arithmetic Operations, Standard Numeric Arguments, Numeric Library
+
+=============== The documentation below for gnc_numeric is obsolete
+  and has been superseded by the gnc_numeric docs in the header file.
+=========================================
+
+@subsection Creating Numeric Objects
+@cindex Creating Numeric Objects
+
+@deftypefun gnc_numeric gnc_numeric_create (int @var{num}, int @var{denom})
+Create a @code{gnc_numeric} object with a value of "@var{num} / @var{denom}".
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_zero ()
+Create a @code{gnc_numeric} object with a value of 0. 
+@end deftypefun
+
+
+@node Basic Arithmetic Operations, Numeric Comparisons and Predicates, Creating Numeric Objects, Numeric Library
+@subsection Basic Arithmetic Operations
+@cindex Basic Arithmetic Operations
+
+See @ref{Standard Numeric Arguments} for a description of the @var{denom}
+and @var{how} arguments to each arithmetic function.
+
+@deftypefun gnc_numeric gnc_numeric_add (gnc_numeric @var{a}, gnc_numeric @var{b}, gint64 @var{denom}, gint @var{how})
+Return the sum of @var{a} and @var{b}.
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_sub (gnc_numeric @var{a}, gnc_numeric @var{b}, gint64 @var{denom}, gint @var{how})
+Return "@var{a} - @var{b}".
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_mul (gnc_numeric @var{a}, gnc_numeric @var{b}, gint64 @var{denom}, gint @var{how})
+Return the product of @var{a} and @var{b}.
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_div (gnc_numeric @var{a}, gnc_numeric @var{b}, gint64 @var{denom}, gint @var{how})
+Return "@var{a} / @var{b}".
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_neg (gnc_numeric @var{a})
+Return "-@var{a}".
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_abs (gnc_numeric @var{a})
+Return the absolute value of @var{a}.
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_add_fixed (gnc_numeric @var{a}, gnc_numeric @var{b})
+Equivalent to @code{gnc_numeric_add} on @var{a} and @var{b} with
+@code{GNC_DENOM_AUTO} for @var{denom} and @code{GNC_DENOM_FIXED |
+GNC_RND_NEVER} for @var{how}.
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_sub_fixed (gnc_numeric @var{a}, gnc_numeric @var{b})
+Equivalent to @code{gnc_numeric_sub} on @var{a} and @var{b} with
+@code{GNC_DENOM_AUTO} for @var{denom} and @code{GNC_DENOM_FIXED |
+GNC_RND_NEVER} for @var{how}.
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_add_with_error (gnc_numeric @var{a}, gnc_numeric @var{b}, gint64 @var{denom}, gint @var{how}, {gnc_numeric *} @var{error})
+The same as @code{gnc_numeric_add}, but uses @var{error} for accumulating
+conversion roundoff error.
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_sub_with_error (gnc_numeric @var{a}, gnc_numeric @var{b}, gint64 @var{denom}, gint @var{how}, {gnc_numeric *} @var{error})
+The same as @code{gnc_numeric_sub}, but uses @var{error} for accumulating
+conversion roundoff error.
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_mul_with_error (gnc_numeric @var{a}, gnc_numeric @var{b}, gint64 @var{denom}, gint @var{how}, {gnc_numeric *} @var{error})
+The same as @code{gnc_numeric_mul}, but uses @var{error} for accumulating
+conversion roundoff error.
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_div_with_error (gnc_numeric @var{a}, gnc_numeric @var{b}, gint64 @var{denom}, gint @var{how}, {gnc_numeric *} @var{error})
+The same as @code{gnc_numeric_div}, but uses @var{error} for accumulating
+conversion roundoff error.
+@end deftypefun
+
+
+@node Numeric Comparisons and Predicates, Numeric Denominator Conversion, Basic Arithmetic Operations, Numeric Library
+@subsection Numeric Comparisons and Predicates
+@cindex Numeric Comparisons and Predicates
+
+@deftypefun int gnc_numeric_zero_p (gnc_numeric @var{a})
+Returns 1 if @code{@var{a} == 0}, otherwise returns 0.
+@end deftypefun
+
+@deftypefun int gnc_numeric_positive_p (gnc_numeric @var{a})
+Returns 1 if @code{@var{a} > 0}, otherwise returns 0.
+@end deftypefun
+
+@deftypefun int gnc_numeric_negative_p (gnc_numeric @var{a})
+Returns 1 if @code{@var{a} < 0}, otherwise returns 0.
+@end deftypefun
+
+@deftypefun int gnc_numeric_compare (gnc_numeric @var{a}, gnc_numeric @var{b})
+Returns +1 if @code{@var{a} > @var{b}}, -1 if @code{@var{b} > @var{a}}, 0 if @code{@var{a} == @var{b}}.
+@end deftypefun
+
+@deftypefun int gnc_numeric_eq (gnc_numeric @var{a}, gnc_numeric @var{b})
+Returns 1 if @code{numerator(@var{a}) == numerator(@var{b})} and
+@code{denominator(@var{a}) == denominator(@var{b})}, otherwise returns 0.
+@end deftypefun
+
+@deftypefun int gnc_numeric_equal (gnc_numeric @var{a}, gnc_numeric @var{b})
+Returns 1 if the fraction represented by @var{a} is equal to the fraction
+represented by @var{b}, otherwise returns 0.
+@end deftypefun
+
+@deftypefun int gnc_numeric_same (gnc_numeric @var{a}, gnc_numeric @var{b}, gint64 @var{denom}, gint @var{how})
+Convert both @var{a} and @var{b} to @var{denom} (@pxref{Standard Numeric
+Arguments} and compare numerators of the result.
+
+@example
+  For example, if @code{@var{a} == 7/16} and @code{@var{b} == 3/4},
+  @code{gnc_numeric_same(@var{a}, @var{b}, 2, GNC_RND_TRUNC) == 1}
+  because both 7/16 and 3/4 round to 1/2 under truncation. However,
+  @code{gnc_numeric_same(@var{a}, @var{b}, 2, GNC_RND_ROUND) == 0}
+  because 7/16 rounds to 1/2 under unbiased rounding but 3/4 rounds
+  to 2/2.
+@end example
+@end deftypefun
+
+
+@node Numeric Denominator Conversion, Numeric Floating Point Conversion, Numeric Comparisons and Predicates, Numeric Library
+=============== The documentation below for gnc_numeric is obsolete
+  and has been superseded by the gnc_numeric docs in the header file.
+=========================================
+
+@subsection Numeric Denominator Conversion
+@cindex Numeric Denominator Conversion
+
+@deftypefun gnc_numeric gnc_numeric_convert (gnc_numeric @var{in}, gint64 @var{denom}, gint @var{how})
+Convert @var{in} to the specified denominator under standard arguments
+@var{denom} and @var{how}. @xref{Standard Numeric Arguments}.
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_convert_with_error (gnc_numeric @var{in}, gint64 @var{denom}, gint @var{how}, {gnc_numeric *} @var{error})
+Same as @code{gnc_numeric_convert}, but return a remainder value for
+accumulating conversion error.
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_reduce (gnc_numeric @var{in})
+Return @var{in} reduced by GCF reduction.
+@end deftypefun
+
+
+@node Numeric Floating Point Conversion, Numeric String Conversion, Numeric Denominator Conversion, Numeric Library
+@subsection Numeric Floating Point Conversion
+@cindex Numeric Floating Point Conversion
+
+@deftypefun gnc_numeric double_to_gnc_numeric (double @var{arg}, gint64 @var{denom}, gint @var{how})
+Convert a floating-point number to a @code{gnc_numeric}. Both @var{denom}
+and @var{how} are used as in arithmetic, but @code{GNC_DENOM_AUTO} is 
+not recognized.
+@end deftypefun
+
+@deftypefun double gnc_numeric_to_double (gnc_numeric @var{arg})
+Convert @var{arg} to a @code{double} value.
+@end deftypefun
+
+
+@node Numeric String Conversion, Numeric Error Handling , Numeric Floating Point Conversion, Numeric Library
+@subsection Numeric String Conversion
+@cindex Numeric String Conversion
+
+@deftypefun {gchar *} gnc_numeric_to_string (gnc_numeric @var{n})
+Return a string representation of @var{n}. The string must be
+freed with @code{g_free}.
+@end deftypefun
+
+@deftypefun {const gchar *} string_to_gnc_numeric (const {gchar *} @var{str}, {gnc_numeric *} @var{n})
+Read a @code{gnc_numeric} from @var{str}, skipping any leading
+whitespace, and returning a pointer to just past the last byte
+read. Return NULL on error.
+@end deftypefun
+
+
+@node Numeric Error Handling , Numeric Example, Numeric String Conversion, Numeric Library
+@subsection Numeric Error Handling 
+@cindex Numeric Error Handling 
+
+@deftypefun int gnc_numeric_check (gnc_numeric @var{num})
+Check @var{num} for the possibility that it is an error signal rather
+than a proper value. Possible return codes are:
+
+@table @code
+
+@item GNC_ERROR_OK
+No error condition
+     
+@item GNC_ERROR_ARG
+An improper argument was passed to a function
+
+@item GNC_ERROR_OVERFLOW
+An overflow occurred while calculating a result 
+
+@item GNC_ERROR_DENOM_DIFF
+@code{GNC_DENOM_FIXED} was specified, but argument denominators differed.
+
+@item GNC_ERROR_REMAINDER
+@code{GNC_RND_NEVER} was specified, but the result could not be
+converted to the desired denominator without a remainder.
+
+@end table
+
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_error (int error_code)
+Create a @code{gnc_numeric} object that signals the error condition
+noted by @var{error_code} rather than a number.
+@end deftypefun
+
+
+@node Numeric Example,  , Numeric Error Handling , Numeric Library
+@subsection Numeric Example
+@cindex Numeric Example
+
+=============== The documentation below for gnc_numeric is obsolete
+  and has been superseded by the gnc_numeric docs in the header file.
+=========================================
+
+The following program finds the best @code{gnc_numeric} approximation to
+the @file{math.h} constant @code{M_PI} given a maximum denominator. For
+large denominators, the @code{gnc_numeric} approximation is accurate to
+more decimal places than will generally be needed, but in some cases
+this may not be good enough. For example,
+
+@example
+    M_PI                   = 3.14159265358979323846
+    245850922 / 78256779   = 3.14159265358979311599  (16 sig figs)
+    3126535 / 995207       = 3.14159265358865047446  (12 sig figs)
+    355 / 113              = 3.14159292035398252096  (7 sig figs)
+@end example
+
+@example
+#include <glib.h>
+#include "gnc-numeric.h"
+#include <math.h>
+
+int
+main(int argc, char ** argv)
+@{
+  gnc_numeric approx, best;
+  double err, best_err=1.0;
+  double m_pi = M_PI;
+  gint64 denom;
+  gint64 max;
+
+  sscanf(argv[1], "%Ld", &max);
+  
+  for (denom = 1; denom < max; denom++)
+  @{
+    approx = double_to_gnc_numeric (m_pi, denom, GNC_RND_ROUND);
+    err    = m_pi - gnc_numeric_to_double (approx);
+    if (fabs (err) < fabs (best_err))
+    @{
+      best = approx;
+      best_err = err;
+      printf ("%Ld / %Ld = %.30f\n", gnc_numeric_num (best),
+              gnc_numeric_denom (best), gnc_numeric_to_double (best));
+    @}
+  @}
+@}
+@end example
+
+
+@node Key-Value Pair Frames, Events, Numeric Library, Engine
+@section Key-Value Pair Frames
+@cindex Key-Value Pairs
+
+The number and types of data items which are associated with the
+financial abstractions (Accounts, Transactions, and Splits) can vary
+widely. For example, an Account which represents a user's checking
+account might need to store the bank name, a telephone number, and a
+username for online banking purposes. Another Account representing the
+user's ownership of a stock might need to store information about
+retrieving price quotes online such as the ticker symbol and the
+exchange.
+
+To meet this need for varying data storage, the GnuCash accounting
+entities use Key-Value Pair Frames (hereafter referred to as the
+datatype @code{kvp_frame}). A @code{kvp_frame} is a set of associations
+between character strings (keys) and @code{KvpValue} structures. A
+@code{KvpValue} is a union with possible types enumerated in the
+@code{kvp_value_t} enum which indicates the type of data stored in a
+@code{KvpValue} object.
+
+@menu
+* Key-Value Policy::            
+* kvp_frame::                   
+* KvpValue::                   
+* kvp_list::                    
+@end menu
+
+
+@node Key-Value Policy, kvp_frame, Key-Value Pair Frames, Key-Value Pair Frames
+@subsection Key-Value Policy
+@cindex Key-Value Policy
+
+This section defines the policy that programmers should follow
+when using key-value pairs to store information. Because of the
+large amount of information which can potentially be stored using
+this mechanism, it is important to follow these guidelines so
+that order will be maintained.
+
+The following rules should be followed for using key-value pairs:
+
+@itemize
+
+@item
+The document @file{src/engine/kvp_doc.txt} should be used to document the
+use of keys and values. Please consult this document before planning any
+use of new keys.
+
+@item
+Key strings should be in all lower case with the '-' character
+separating words. If possible, use only alphanumeric characters and
+'-'. Example: @code{bank-info}. Because the '/' character is useful for
+describing keys in sub-frames (@code{bank-info/routing-number}), do not
+use the '/' character in key names.
+
+@item
+Favor longer, descriptive key strings over short ones. Example:
+@code{online-banking-info} is better than @code{onln-bnk}.
+
+@item
+Make use of the fact that frames can be stored in frames. If a group
+of keys are used for a related purpose, consider storing them together
+in a sub-frame.
+
+@item
+Values should generally not be accessed directly through keys, but
+should rather be accessed through specific API calls. The API calls
+do not necessarily need to part a part of the Engine API. For example,
+the GUI would probably define keys that the Engine does not need to
+know about.
+
+@item
+The same key should not be used for different engine structures (Accounts,
+Transactions, Splits), unless the key's value has the same type and the
+same basic purpose.
+
+@end itemize
+
+
+@node kvp_frame, KvpValue, Key-Value Policy, Key-Value Pair Frames
+@subsection kvp_frame
+@tindex kvp_frame
+
+A @code{kvp_frame} is the datatype used to associate key strings with
+@code{KvpValue} objects (@pxref{KvpValue}).
+
+@deftypefun kvp_frame* kvp_frame_new (void)
+Create and initialize a new @code{kvp_frame} object and return
+a pointer to it.
+@end deftypefun
+
+@deftypefun void kvp_frame_delete (kvp_frame * @var{frame})
+Free all memory associated with @var{frame}.
+@end deftypefun
+
+@deftypefun kvp_frame* kvp_frame_copy (const kvp_frame * frame)
+Return a deep copy of @var{frame}.
+@end deftypefun
+
+@deftypefun void kvp_frame_set_slot (kvp_frame * @var{frame}, const char * @var{key}, const KvpValue * @var{value})
+Associate @var{key} with @var{value} in @var{frame}.
+@end deftypefun
+
+@deftypefun void kvp_frame_set_slot_nc (kvp_frame * @var{frame}, const char * @var{key}, KvpValue * @var{value})
+Same as @code{kvp_frame_set_slot}, except that @var{value} is used
+directly, instead of being copied. This call transfers 'ownership'
+of @var{value} to @var{frame}.
+@end deftypefun
+
+@deftypefun KvpValue* kvp_frame_get_slot (kvp_frame * @var{frame}, const char * @var{key})
+Return the @code{KvpValue} object associated with @var{key}
+in @var{frame} or return @code{NULL} if there is no association
+for @var{key}. The value returned is not a copy.
+@end deftypefun
+
+@deftypefun void kvp_frame_set_slot_path (kvp_frame * @var{frame}, const KvpValue * @var{value}, const char * @var{first_key}, ...)
+Associate @var{value} with the ``key path'' specified by the variable
+argument list. Each key in the path except the last denotes a sub-frame
+which is associated with the given key. The variable list must be
+terminated with NULL.
+@end deftypefun
+
+@deftypefun void kvp_frame_set_slot_path_gslist (kvp_frame * @var{frame}, const KvpValue * @var{value}, GSList * @var{key_path})
+The same as @code{kvp_frame_set_slot_path}, except that the key path is
+specified using a GSList. All the keys in the list should be non-NULL.
+@end deftypefun
+
+@deftypefun {KvpValue *} kvp_frame_get_slot_path (kvp_frame * @var{frame}, const char * @var{first_key}, ...)
+Return the value associated with the key path, or @code{NULL} if none.
+The path is specified as in @code{kvp_frame_set_slot_path}.
+@end deftypefun
+
+@deftypefun {KvpValue *} kvp_frame_get_slot_path_gslist (kvp_frame * @var{frame}, GSList * @var{key_path})
+Return the value associated with the key path, or @code{NULL} if none.
+The path is specified as in @code{kvp_frame_set_slot_path_gslist}.
+@end deftypefun
+
+@deftypefun {kvp_frame *} kvp_frame_get_frame (kvp_frame * @var{frame}, ...)
+Works like @code{kvp_frame_get_slot_path}, but returns the last frame
+in the path. All the keys should refer to frames. If the frame path
+does not exist, it is created.
+@end deftypefun
+
+@deftypefun {kvp_frame *} kvp_frame_get_frame_gslist (kvp_frame * @var{frame}, GSList * @var{key_path})
+Works like @code{kvp_frame_get_slot_path_gslist}, but returns the last
+frame in the path. All the keys should refer to frames. If the frame
+path does not exist, it is created.
+@end deftypefun
+
+@deftypefun {kvp_frame *} kvp_frame_get_frame_slash (kvp_frame * @var{frame}, const char * @var{path})
+Works like @code{kvp_frame_get_frame}, but the frame path is specified
+as a single string where the keys are separated by slashes; thus, for
+example: @code{/this/is/a/valid/path} and @code{///so//is////this/}.
+Multiple slashes are compressed and a leading slash is optional. The
+pointers @code{.} and @code{..} are @emph{not} followed/obeyed. (This
+is arguably a bug that needs fixing).
+@end deftypefun
+
+
+@node KvpValue, kvp_list, kvp_frame, Key-Value Pair Frames
+@subsection KvpValue
+@tindex KvpValue
+@tindex kvp_value_t
+
+The @code{KvpValue} object stores the 'value' part of a key-value
+association in a @code{kvp_frame} object.
+
+@deftypefun void kvp_value_delete (KvpValue * @var{value})
+Free all of the memory associated with @var{value}.
+@end deftypefun
+
+@deftypefun KvpValue* kvp_value_copy (const KvpValue * @var{value})
+Return a deep copy of @var{value}.
+@end deftypefun
+
+@deftypefun kvp_value_t kvp_value_get_type (const KvpValue * @var{value})
+Return the type of value stored in @var{value}.
+@end deftypefun
+
+A @code{kvp_value_t} enum must have one of the following values:
+
+@table @code
+
+@item KVP_TYPE_NONE
+Indicates the abscence of a value in a @code{kvp_frame}.
+
+@item KVP_TYPE_INT64
+A @code{gint64} value.
+
+@item KVP_TYPE_FLOAT64
+A @code{double} value.
+
+@item KVP_TYPE_STRING
+A @code{char *} value of arbitrary length.
+
+@item KVP_TYPE_GUID
+A @code{GUID} value. @xref{Globally Unique Identifiers}.
+
+@item KVP_TYPE_BINARY
+Arbitrary binary data.
+
+@item KVP_TYPE_LIST
+A @code{kvp_list} item which contains a list of @code{KvpValue} items.
+
+@item KVP_TYPE_FRAME
+A @code{kvp_frame} object. Thus, frames may contain other frames in a
+recursive manner.
+
+@end table
+
+@subsubsection Value Constructors
+
+The following functions create and return @code{KvpValue} objects with
+particular values. In the case of pointer arguments, deep copies are
+performed.
+
+@deftypefun KvpValue* kvp_value_new_int64 (gint64 @var{value})
+@end deftypefun
+@deftypefun KvpValue* kvp_value_new_float64 (double @var{value})
+@end deftypefun
+@deftypefun KvpValue* kvp_value_new_string (const char * @var{value})
+@end deftypefun
+@deftypefun KvpValue* kvp_value_new_guid (const GUID * @var{guid})
+@end deftypefun
+@deftypefun KvpValue* kvp_value_new_binary (const void * @var{data}, int @var{datasize})
+@end deftypefun
+@deftypefun KvpValue* kvp_value_new_list (const kvp_list * @var{value})
+@end deftypefun
+@deftypefun KvpValue* kvp_value_new_frame (const kvp_frame * @var{value});
+@end deftypefun
+
+@subsubsection Value Accessors
+
+The following functions access the value of a given @code{KvpValue}
+object. If the type of the object does not correspond to that named
+in the function, @code{NULL}, @code{0}, or @code{0.0} is returned
+as appropriate.
+
+@deftypefun gint64 kvp_value_get_int64 (const KvpValue * @var{value})
+@end deftypefun
+@deftypefun double kvp_value_get_float64 (const KvpValue * @var{value})
+@end deftypefun
+@deftypefun char* kvp_value_get_string (const KvpValue * @var{value})
+@end deftypefun
+@deftypefun GUID* kvp_value_get_guid (const KvpValue * @var{value})
+@end deftypefun
+@deftypefun void* kvp_value_get_binary (const KvpValue * @var{value}, int * @var{size_return})
+@end deftypefun
+@deftypefun kvp_list* kvp_value_get_list (const KvpValue * @var{value})
+@end deftypefun
+@deftypefun kvp_frame* kvp_value_get_frame (const KvpValue * @var{value})
+@end deftypefun
+
+
+@node kvp_list,  , KvpValue, Key-Value Pair Frames
+@subsection kvp_list
+@tindex kvp_list
+
+A @code{kvp_list} object abstract a list of @code{KvpValue} objects.
+
+@deftypefun kvp_list* kvp_list_new ()
+Return a newly allocated @code{kvp_list} object.
+@end deftypefun
+
+@deftypefun void kvp_list_delete (kvp_list * @var{list})
+Free all memory associated with @var{list}, including the
+@code{KvpValue} objects in @var{list}.
+@end deftypefun
+
+@deftypefun kvp_list* kvp_list_copy (const kvp_list * @var{list})
+Return a deep copy of @var{list}.
+@end deftypefun
+
+@deftypefun gboolean kvp_list_null_p (const kvp_list * @var{list})
+Return @code{TRUE} if @var{list} is the empty list.
+@end deftypefun
+
+@deftypefun KvpValue* kvp_list_car (kvp_list * @var{list})
+If @var{list} is @code{NULL} or the empty list, return @code{NULL}.
+Otherwise, return the first @code{KvpValue} object in the list.
+@end deftypefun
+
+@deftypefun kvp_list* kvp_list_cdr (kvp_list * @var{list})
+If @var{list} is @code{NULL} or the empty list, return @code{NULL}.
+Otherwise, return a @code{kvp_list} object consisting of @var{list}
+with the first value removed. NOTE: the returned list is not a copy!
+@end deftypefun
+
+@deftypefun kvp_list* kvp_list_cons (KvpValue * @var{car}, kvp_list * @var{cdr})
+If either @var{car} or @var{cdr} is @code{NULL}, return @code{NULL}. Otherwise,
+return a @code{kvp_list} object consisting of the value of @var{car} followed
+by the values of @var{cdr}. This function uses 'hand-over' semantics, i.e.,
+the arguments @var{car} and @var{cdr} are no longer the responsibility of
+the caller and should not be accessed after the function returns.
+@end deftypefun
+
+
+@node Events, Commodities, Key-Value Pair Frames, Engine
+@section Events
+
+The Engine supports the concept of @dfn{Events} which notify
+external code when engine entities are created, modified, or
+destroyed.
+
+User code can register event handers which are invoked for each event,
+giving information about the specific engine entity generating the event
+and the nature of the event (creation, modification, or deletion).
+
+
+@menu
+* Event API::                   
+@end menu
+
+
+@node Event API,  , Events, Events
+@subsection Event API
+@tindex GNCEngineEventType
+
+Engine events are classified using the @code{GNCEngineEventType}
+bitmask which has the following predefined values:
+
+@table @code
+
+@item GNC_EVENT_NONE
+A null value.
+
+@item GNC_EVENT_CREATE
+Indicates an entity has been created.
+
+@item GNC_EVENT_MODIFY
+Indicates an entity has been changed in some way.
+
+@item GNC_EVENT_DESTROY
+Indicates an entity is being destroyed.
+
+@item GNC_EVENT_ALL
+The boolean OR of @code{GNC_EVENT_CREATE}, @code{GNC_EVENT_MODIFY},
+and @code{GNC_EVENT_DESTROY}.
+
+@end table
+
+Event handlers are functions with the following type:
+
+@deftp {Data type} GNCEngineEventHandler void (*) (GUID * @var{entity}, GNCEngineEventType @var{event_type}, gpointer @var{user_data})
+A callback invoked when an engine event occurs. @var{entity} is the
+@code{GUID} of the entity generating the event. @var{event_type} is
+one of @code{GNC_EVENT_CREATE}, @code{GNC_EVENT_MODIFY}, or
+@code{GNC_EVENT_DESTROY}. @var{user_data} is the user data parameter
+supplied when the handler was registered.
+@end deftp
+
+@deftypefun gint gnc_engine_register_event_handler (GNCEngineEventHandler @var{handler}, gpointer @var{user_data})
+Register a handler for engine events. The return value is an identifier used
+to specify this handler in other API calls.
+@end deftypefun
+
+@deftypefun void gnc_engine_unregister_event_handler (gint @var{handler_id})
+Unregister the event handler specified by @var{handler_id}.
+@end deftypefun
+
+@deftypefun void gnc_engine_suspend_events (void)
+Suspend all engine events. This function may be called multiple
+times. To resume event generation, an equal number of calls to
+@code{gnc_engine_resume_events} must be made.
+@end deftypefun
+
+@deftypefun void gnc_engine_resume_events (void)
+Resume engine event generation.
+@end deftypefun
+
+
+@node Commodities, Commodity Tables, Events, Engine
+@section Commodities
+@tindex gnc_commodity
+
+A Commodity is the Engine abstraction of a tradable quantity,
+like a national currency or shares of a stock. A commodity
+object contains the following pieces of information:
+
+@table @asis
+
+@item A mnemonic name
+The `short' name for the commodity. For national currencies
+this is the 3-letter ISO4217 code (USD, AUD, etc.). For stocks
+this is generally the exchange symbol (RHAT, IBM, etc.).
+
+@item A namespace
+A string identifying the context in which the mnemonic is meaninful.
+
+@item A full name
+The `long' name for the commodity, such as "US Dollar" or "IBM Common
+Stock".
+
+@item A printable name
+The name used to print out a string describing the commodity to
+a user. This name is generally long -- in some contexts it may
+be better to use the mnemonic instead. The printable name is
+determined by the namespace and mnemonic.
+
+@item A unique name
+A canonical name for the commodity that cannot be identical to
+another commodity's unique name. The unique name is determined
+by the namespace and mnemonic.
+
+@item An exchange code
+A code used to identify the commodity in its namespace context.
+For example, stocks have a unique code assigned to them by the
+exchange they are listed on.
+
+@item A fraction
+An integer N which specifies that 1/N is generally the smallest
+fraction of the commodity which can be traded. For example, most
+currencies are tradable in 1/100ths, so the fraction would be 100.
+
+@end table
+
+@menu
+* General Commodity API::       
+* Commodity Getters::           
+* Commodity Setters::           
+@end menu
+
+
+@node General Commodity API, Commodity Getters, Commodities, Commodities
+@subsection General Commodity API
+
+@deftypefun {gnc_commodity *} gnc_commodity_new (const char * @var{fullname}, const char * @var{namespace}, const char * @var{mnemonic}, const char * @var{exchange_code}, int @var{fraction})
+Create and return a new commodity object with the given values, or
+@code{NULL} if any of the values are invalid.
+@end deftypefun
+
+@deftypefun void gnc_commodity_destroy (gnc_commodity * @var{cm})
+Destroy the given commodity and free all associated memory.
+@end deftypefun
+
+@deftypefun gboolean gnc_commodity_equiv (const gnc_commodity * @var{a}, const gnc_commodity * @var{b})
+Return true if the two given commodities are equivalent. Two commodities
+are equivalent when they have the same namespace and the same mnemonic.
+@end deftypefun
+
+
+@node Commodity Getters, Commodity Setters, General Commodity API, Commodities
+@subsection Commodity Getters
+
+@deftypefun {const char *} gnc_commodity_get_mnemonic (const gnc_commodity * @var{cm})
+Return the mnemonic of @var{cm}.
+@end deftypefun
+
+@deftypefun {const char *} gnc_commodity_get_namespace (const gnc_commodity * @var{cm})
+Return the namespace of @var{cm}.
+@end deftypefun
+
+@deftypefun {const char *} gnc_commodity_get_fullname (const gnc_commodity * @var{cm})
+Return the full name of @var{cm}.
+@end deftypefun
+
+@deftypefun {const char *} gnc_commodity_get_printname (const gnc_commodity * @var{cm})
+Return the print name of @var{cm}.
+@end deftypefun
+
+@deftypefun {const char *} gnc_commodity_get_exchange_code (const gnc_commodity * @var{cm})
+Return the exchange code of @var{cm}.
+@end deftypefun
+
+@deftypefun {const char *} gnc_commodity_get_unique_name (const gnc_commodity * @var{cm})
+Return the unique name of @var{cm}.
+@end deftypefun
+
+@deftypefun int gnc_commodity_get_fraction (const gnc_commodity * @var{cm})
+Return the smallest tradable fraction of @var{cm}.
+@end deftypefun
+
+
+@node Commodity Setters,  , Commodity Getters, Commodities
+@subsection Commodity Setters
+
+@deftypefun void gnc_commodity_set_mnemonic (gnc_commodity * @var{cm}, const char * @var{mnemonic})
+Set the mnemonic of @var{cm} to @var{mnemonic}.
+@end deftypefun
+
+@deftypefun void gnc_commodity_set_namespace (gnc_commodity * @var{cm}, const char * @var{namespace})
+Set the namespace of @var{cm} to @var{namespace}.
+@end deftypefun
+
+@deftypefun void gnc_commodity_set_fullname (gnc_commodity * @var{cm}, const char * @var{fullname})
+Set the fullname of @var{cm} to @var{fullname}.
+@end deftypefun
+
+@deftypefun void gnc_commodity_set_exchange_code (gnc_commodity * @var{cm}, const char * @var{exchange_code})
+Set the exchange code of @var{cm} to @var{exchange_code}.
+@end deftypefun
+
+@deftypefun void gnc_commodity_set_fraction (gnc_commodity * @var{cm}, int @var{smallest_fraction})
+Set the fraction of @var{cm} to @var{fraction}.
+@end deftypefun
+
+
+@node Commodity Tables, Prices, Commodities, Engine
+@section Commodity Tables
+@tindex gnc_commodity_table
+
+A Commodity Table holds a set of commodities and allows user code
+to add, remove, and access the commodities in the table.
+
+There is a single, global Commodity Table used by the Engine.
+
+@menu
+* General Commodity Table API::  
+* Commodity Table Access API::  
+* Commodity Table Modification API::  
+@end menu
+
+
+@node General Commodity Table API, Commodity Table Access API, Commodity Tables, Commodity Tables
+@subsection General Commodity Table API
+
+@deftypefun {gnc_commodity_table *} gnc_commodity_table_new (void)
+Allocate and initialize a @code{gnc_commodity_table}. The returned
+table must be destroyed with @code{gnc_commodity_table_destroy}.
+@end deftypefun
+
+@deftypefun void gnc_commodity_table_destroy (gnc_commodity_table * @var{table})
+Destroy @var{table} and all associated resources, including all
+Commodity objects in the table.
+@end deftypefun
+
+@deftypefun {gnc_commodity_table *} gnc_engine_commodities (void)
+Return the global engine commodity table.
+@end deftypefun
+
+
+@node Commodity Table Access API, Commodity Table Modification API, General Commodity Table API, Commodity Tables
+@subsection Commodity Table Access API
+
+@deftypefun {gnc_commodity *} gnc_commodity_table_lookup (const gnc_commodity_table * @var{table}, const char * @var{namespace}, const char * @var{mnemonic})
+Look up a commodity in @var{table} given the namespace and the mnemonic.
+If no such commodity exists, @code{NULL} is returned.
+@end deftypefun
+
+@deftypefun {gnc_commodity *} gnc_commodity_table_find_full (const gnc_commodity_table * @var{table}, const char * @var{namespace}, const char * @var{fullnam}e)
+Look up a commodity in @var{table} given the namespace and the full name.
+If no such commodity exists, @code{NULL} is returned.
+@end deftypefun
+
+@deftypefun int gnc_commodity_table_has_namespace (const gnc_commodity_table * @var{table}, const char * @var{namespace})
+Return true if @var{table} has the namespace @var{namespace}.
+@end deftypefun
+
+@deftypefun guint gnc_commodity_table_get_size (gnc_commodity_table * @var{table})
+Return the total number of commodities stored in @var{table}.
+@end deftypefun
+
+@deftypefun guint gnc_commodity_table_get_number_of_namespaces (gnc_commodity_table * @var{table})
+Return the number of distinct namespaces in @var{table}.
+@end deftypefun
+
+@deftypefun {GList *} gnc_commodity_table_get_namespaces (const gnc_commodity_table * @var{table})
+Return a list of the distinct namespaces in @var{table}. The list should
+be freed with @code{g_list_free} but the namespaces should not be freed
+or modified.
+@end deftypefun
+
+@deftypefun {GList *} gnc_commodity_table_get_commodities (const gnc_commodity_table * @var{table}, const char * @var{namespace})
+Return a list of the commodities under @var{namespace} in @var{table}.
+The list should be freed with @code{g_list_free} but the commodities
+should not be freed.
+@end deftypefun
+
+
+@node Commodity Table Modification API,  , Commodity Table Access API, Commodity Tables
+@subsection Commodity Table Modification API
+
+@deftypefun {gnc_commodity *} gnc_commodity_table_insert (gnc_commodity_table * @var{table}, gnc_commodity * @var{comm})
+Add commodity @var{comm} to @var{table}. If @var{comm}'s namespace is
+not in @var{table}, the namespace will be added. This function has
+hand-over semantics, i.e., @var{table} assumes responsibility for
+@var{comm}.  @var{comm} may even be destroyed by this call! The function
+returns the actual commodity added as a result of the call. It may not
+be the same object as @var{comm}, but will be equivalent to @var{comm}.
+@end deftypefun
+
+@deftypefun void gnc_commodity_table_remove (gnc_commodity_table * @var{table}, gnc_commodity * @var{comm})
+Remove the given commodity from @var{table}. @var{comm} is not modified
+or destroyed.
+@end deftypefun
+
+@deftypefun void gnc_commodity_table_add_namespace (gnc_commodity_table * @var{table}, const char * @var{namespace})
+Add @var{namespace} to @var{table}.
+@end deftypefun
+
+@deftypefun void gnc_commodity_table_delete_namespace (gnc_commodity_table * @var{table}, const char * @var{namespace})
+Delete @var{namespace} from @var{table} including all associated
+commodities.
+@end deftypefun
+
+@deftypefun void gnc_commodity_table_remove_non_iso (gnc_commodity_table * @var{table})
+Remove and destroy all commodities in @var{table} which are not in the
+ISO4217 namespace.
+@end deftypefun
+
+
+@node Prices, Price Databases, Commodity Tables, Engine
+@section Prices
+@tindex GNCPrice
+
+A Price is the Engine abstraction of an "instantaneous" price quote for a
+given commodity with respect to another commodity. For example, a given
+price might represent the value of LNUX in USD on 2001-02-03. A Price
+contains the following pieces of information:
+
+@table @asis
+
+@item A GUID
+A GUID uniquely identifying the GNCPrice.
+
+@item A commodity
+The commodity being priced.
+
+@item A currency
+The denomination of the value of the item being priced.
+
+@item A value
+The value of the item being priced.
+
+@item A time
+The time the price was valid.
+
+@item A source
+A string describing the source of the quote. These strings will have a
+form like this: "Finance::Quote", "user:misc", "user:foo", etc. If the
+quote came from a user, as a matter of policy, you @emph{must} prefix
+the string you give with "user:". For now, the only other reserved
+values are "Finance::Quote" and "old-file-import".
+
+@item A type
+A string describing the type of quote -- types possible right now are
+"bid", "ask", "last", "nav", and "unknown".
+
+@end table
+
+
+@menu
+* Price Implementation Details::  
+* General Price API::           
+* Price Getters::               
+* Price Setters::               
+@end menu
+
+
+@node Price Implementation Details, General Price API, Prices, Prices
+@subsection Price Implementation Details
+
+For the source and type fields, @code{NULL} and the empty string are
+considered the same, so if one of these is the empty string then it
+might be @code{NULL} after a file save/restore.
+
+GNCPrices are reference counted. When you create a price or or clone
+one, the new price's reference count is set to 1. When you are finished
+with a price, call @code{gnc_price_unref}. If you hand the price pointer
+to some other code that needs to keep it, make sure it calls
+@code{gnc_price_ref} to indicate its interest in that price, and calls
+@code{gnc_price_unref} when it's finished with the price. For those
+unfamiliar with reference counting, basically each price stores an
+integer count which starts at 1 and is incremented every time someone
+calls @code{gnc_price_ref}. Conversely, the count is decremented every
+time someone calls @code{gnc_price_unref}. If the count ever reaches 0,
+the price is destroyed.
+
+All of the getters return data that's internal to the GNCPrice,
+not copies, so don't free or modify these values.
+
+All of the setters store copies of the data given, with the exception of
+the commodity field which just stores the pointer given. It is assumed
+that commodities are a global resource and are pointer unique.
+
+
+@node General Price API, Price Getters, Price Implementation Details, Prices
+@subsection General Price API
+
+@deftypefun {GNCPrice *} gnc_price_create (void)
+Return a newly allocated and initialized price with a reference count of
+1. The price should be dereferenced with @code{gnc_price_unref} when no
+longer needed, but the price should not be freed by user code.
+@end deftypefun
+
+@deftypefun {GNCPrice *} gnc_price_clone (GNCPrice * @var{p})
+Return a newly allocated price that's a content-wise duplicate of
+@var{p}. The returned clone will have a reference count of 1.
+@end deftypefun
+
+@deftypefun void gnc_price_ref (GNCPrice * @var{p})
+Increase the reference count of @var{p} by 1.
+@end deftypefun
+
+@deftypefun void gnc_price_unref (GNCPrice * @var{p})
+Decrease the reference coutn of @var{p} by 1. If the
+resulting count is 0, @var{p} will be destroyed.
+@end deftypefun
+
+@deftypefun {GNCPrice *} gnc_price_lookup (const GUID * @var{guid})
+Lookup and return the price associated with @var{guid}, or @code{NULL}
+if there is no such price.
+@end deftypefun
+
+
+@node Price Getters, Price Setters, General Price API, Prices
+@subsection Price Getters
+
+@deftypefun {const GUID *} gnc_price_get_guid (GNCPrice * @var{p})
+Return the GUID of @var{p}.
+@end deftypefun
+
+@deftypefun {gnc_commodity *} gnc_price_get_commodity (GNCPrice * @var{p})
+Return the commodity of @var{p}.
+@end deftypefun
+
+@deftypefun {gnc_commodity *} gnc_price_get_currency (GNCPrice * @var{p})
+Return the currency of @var{p}.
+@end deftypefun
+
+@deftypefun Timespec gnc_price_get_time (GNCPrice * @var{p})
+Return the time of @var{p}.
+@end deftypefun
+
+@deftypefun {const char *} gnc_price_get_source (GNCPrice * @var{p})
+Return the source of @var{p}.
+@end deftypefun
+
+@deftypefun {const char *} gnc_price_get_type (GNCPrice * @var{p})
+Return the type of @var{p}.
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_price_get_value (GNCPrice * @var{p})
+Return the value of @var{p}.
+@end deftypefun
+
+@deftypefun gint32 gnc_price_get_version (GNCPrice * @var{p})
+Return the version of @var{p}.
+@end deftypefun
+
+
+@node Price Setters,  , Price Getters, Prices
+@subsection Price Setters
+
+Invocations of the setters should be wrapped with calls to
+@code{gnc_price_begin_edit} and @code{gnc_price_commit_edit}. The
+begin/commit calls help ensure that the local price db is synchronized
+with the backend.
+
+@deftypefun void gnc_price_begin_edit (GNCPrice * @var{p})
+Begin a sequence of changes to @var{p}.
+@end deftypefun
+
+@deftypefun void gnc_price_commit_edit (GNCPrice * @var{p})
+End a sequence of changes to @var{p}.
+@end deftypefun
+
+@deftypefun void gnc_price_set_commodity (GNCPrice * @var{p}, gnc_commodity * @var{c})
+Set the commodity of @var{p} to @var{c}.
+@end deftypefun
+
+@deftypefun void gnc_price_set_currency (GNCPrice * @var{p}, gnc_commodity * @var{c})
+Set the currency of @var{p} to @var{c}.
+@end deftypefun
+
+@deftypefun void gnc_price_set_time (GNCPrice * @var{p}, Timespec @var{t})
+Set the time of @var{p} to @var{t}.
+@end deftypefun
+
+@deftypefun void gnc_price_set_source (GNCPrice * @var{p}, const char * @var{source})
+Set the source of @var{p} to @var{source}.
+@end deftypefun
+
+@deftypefun void gnc_price_set_type (GNCPrice * @var{p}, const char * @var{type})
+Set the type of @var{p}to @var{type}.
+@end deftypefun
+
+@deftypefun void gnc_price_set_value (GNCPrice * @var{p}, gnc_numeric @var{value})
+Set the value of @var{p} to @var{value}.
+@end deftypefun
+
+@deftypefun void gnc_price_set_version (GNCPrice * @var{p}, gint32 @var{versn})
+Set the version of @var{p} to @var{versn}.
+@end deftypefun
+
+
+@node Price Databases, Splits, Prices, Engine
+@section Price Databases
+@tindex GNCPriceDB
+
+A Price Database stores GNCPrices and allows prices to be looked
+up based on currency, commodity, and time.
+
+
+@menu
+* Price Lists::                 
+* General Price Database API::  
+@end menu
+
+
+@node Price Lists, General Price Database API, Price Databases, Price Databases
+@subsection Price Lists
+
+Price Lists are used by Price Databases to organize prices for a given
+commodity and currency. A Price List is a list of prices with the same
+commodity and currency, sorted by decreasing time (earlier prices come
+later in the list).
+
+@deftypefun gboolean gnc_price_list_insert (GList ** @var{prices}, GNCPrice * @var{p})
+Insert price @var{p} into the list @var{prices}, calling
+@var{gnc_price_ref} on @var{p} during the process.
+@end deftypefun
+
+@deftypefun gboolean gnc_price_list_remove (GList ** @var{prices}, GNCPrice * @var{p})
+Remove price @var{p} from the list @var{prices}, calling
+@code{gnc_price_unref} on @var{p} during the process.
+@end deftypefun
+
+@deftypefun void gnc_price_list_destroy (GList * @var{prices})
+Destroy the price list @var{prices}, calling @code{gnc_price_unref}
+on all the prices in the list.
+@end deftypefun
+
+
+@node General Price Database API,  , Price Lists, Price Databases
+@subsection General Price Database API
+
+@deftypefun {GNCPriceDB *} gnc_pricedb_create (void)
+Create and return a new price database.
+@end deftypefun
+
+@deftypefun void gnc_pricedb_destroy (GNCPriceDB * @var{db})
+Destroy the price database @var{db} and unreference all of
+the prices it contains. This may not deallocate all of those
+prices; other code may still be holding references to them.
+@end deftypefun
+
+@deftypefun gboolean gnc_pricedb_add_price (GNCPriceDB * @var{db}, GNCPrice * @var{p})
+Add the price @var{p} to @var{db}. This will increase the
+reference count of @var{p}, so user code may safely drop
+its reference to the price (i.e. call @code{gnc_price_unref})
+if the call succeeds (returns true).
+@end deftypefun
+
+@deftypefun gboolean gnc_pricedb_remove_price (GNCPriceDB * @var{db}, GNCPrice * @var{p})
+Removes the price @var{p} from the price database @var{db}. Returns true
+if successful and false otherwise.
+@end deftypefun
+
+
+@node Splits, Transactions, Price Databases, Engine
+@section Splits
+@tindex Split
+
+A Split is the Engine abstraction of an accounting entry in an Account
+Ledger. In accounting terms, a Split is a Ledger Entry. As such, it
+contains the following pieces of information:
+
+@table @asis
+
+@item A parent Account
+The Account of which it is an entry.
+
+@item A parent Transaction.
+In accounting terms, this is the Journal Entry which this Ledger Entry
+is linked to.
+
+@item A 'share quantity'
+This is the number of 'shares' which have been debited to the parent
+Account. This quantity may be negative, in which case the Split
+represents a 'credit'. Shares are given in units of the security of the
+Account, unless the security field is NULL, in which case shares are
+given in units of the Account currency. @xref{Accounts}.
+
+@item A 'value'
+This represents the value of the shares in units of the currency of
+the Account. If the currency and the security are the same, or the
+security field is NULL, the value and share quantity must be equal.
+
+@item A 'reconciled' flag
+This flag represents the reconciled status of the Split. Possible
+reconciliation states for a Split are:
+
+  @table @asis
+
+  @item Not Reconciled
+  The Split has not been reconciled or cleared.
+
+  @item Cleared
+  The Split has been cleared, but not reconciled.
+
+  @item Reconciled
+  The Split has been reconciled with a statement.
+
+  @item Frozen
+  The Split has been frozen into the accounting period.
+
+  @end table
+
+@end table
+
+In addition to the above, Splits contain a Memo field, an Action
+field, and a key-value pair frame. The Memo and Action fields are for
+arbitrary user input.  See src/engine/kvp_frame.txt for the names of
+keys that have already been reserved for use in the frame.
+
+
+@menu
+* General Split API::           
+* Split Getters::               
+* Split Setters::               
+@end menu
+
+@node General Split API, Split Getters, Splits, Splits
+@subsection General Split API
+
+@deftypefun {Split *} xaccMallocSplit (void)
+Allocate, initialize, and return a new Split.
+@end deftypefun
+
+@deftypefun void xaccSplitDestroy (Split * @var{split})
+Update @var{split}'s parent Account and Transaction in a consistent
+manner, completely unlinking of @var{split} and freeing its memory. The
+goal of this routine is to perform the removal and destruction of the
+Split in an atomic fashion, with no chance of accidentally leaving the
+accounting structure out-of-balance or otherwise inconsistent.
+
+If the deletion of the Split leaves the Transaction with no Splits, then
+the Transaction will be marked for deletion, but will not be deleted
+until the @code{xaccTransCommitEdit()} routine is called.
+@end deftypefun
+
+@deftypefun {const GUID *} xaccSplitGetGUID (Split * @var{split})
+Return the GUID of @var{split}.
+@end deftypefun 
+
+@deftypefun {Split *} xaccSplitLookup (const GUID * @var{guid})
+Return the split associated with @var{GUID}, or @code{NULL} if there is
+no such split.
+@end deftypefun
+
+@deftypefun void xaccSplitMakeStockSplit (Split * @var{split})
+Modify @var{split} to be an ``official'' stock-split split.  Among other
+things, this involves clearing the value of the split to 0.
+@end deftypefun
+
+
+@node Split Getters, Split Setters, General Split API, Splits
+@subsection Split Getters
+
+@deftypefun {Account *} xaccSplitGetAccount (Split * @var{split})
+Return the parent Account of @var{split}.
+@end deftypefun
+
+@deftypefun {Transaction *} xaccSplitGetParent (Split * @var{split})
+Return the parent Transaction of @var{split}.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccSplitGetShareAmount (Split * @var{split})
+Return the 'share quantity' of @var{split}.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccSplitGetSharePrice (Split * @var{split})
+Return the 'share price' of @var{split}, which is the value
+divided by the share quantity.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccSplitGetValue (Split * @var{split})
+Return the value of @var{split}.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccSplitGetBaseValue (Split * @var{split}, const char * @var{base_currency})
+Return either the share quantity or the value of @var{split}, depending
+upon whether @var{base_currency} matches the security or currency of the
+parent Account, respectively. No other value for @var{base_currency} is
+legal.
+@end deftypefun
+
+@deftypefun char xaccSplitGetReconcile (Split * @var{split})
+Return the value of the reconcile flag in @var{split}. Possible
+values for the flag are:
+
+  @table @code
+
+  @item NREC
+  Not Reconciled
+
+  @item CREC
+  Cleared
+
+  @item YREC
+  Reconciled
+
+  @item FREC
+  Frozen
+
+  @end table
+
+@end deftypefun
+
+@deftypefun void xaccSplitGetDateReconciledTS (Split * @var{split}, Timespec * @var{ts})
+Fill @var{ts} with the reconciled date of @var{split}.
+@end deftypefun
+
+@deftypefun {const char *} xaccSplitGetMemo (Split * @var{split})
+Return the Memo field of @var{split}.
+@end deftypefun
+
+@deftypefun {const char *} xaccSplitGetAction (Split * @var{split})
+Return the Action field of @var{split}.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccSplitGetBalance (Split * @var{split})
+Return the balance of @var{split}'s parent Account up to and including
+@var{split}. See @ref{Accounts} for details.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccSplitGetClearedBalance (Split * @code{split})
+Return the cleared balance of @var{split}'s parent Account up to and
+including @var{split}. See @ref{Accounts} for details.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccSplitGetReconciledBalance (Split * @code{split})
+Return the reconciled balance of @var{split}'s parent Account up to and
+including @var{split}. See @ref{Accounts} for details.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccSplitGetShareBalance (Split * @var{split})
+Return the share balance of @var{split}'s parent Account up to and
+including @var{split}. See @ref{Accounts} for details.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccSplitGetShareClearedBalance (Split * @code{split})
+Return the share cleared balance of @var{split}'s parent Account up to
+and including @var{split}. See @ref{Accounts} for details.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccSplitGetShareReconciledBalance (Split * @code{split})
+Return the share reconciled balance of @var{split}'s parent Account up
+to and including @var{split}. See @ref{Accounts} for details.
+@end deftypefun
+
+@deftypefun {const char*} xaccSplitGetType (Split * @var{split})
+Return @var{split}'s type as a string.  Currently, the possibilities are 
+
+  @table @code
+  @item normal
+  a normal split -- the default.
+
+  @item stock-split
+  a split representing a stock split.  The value should be 0 and the
+  share amount should represent the number of shares added/subtracted from
+  the account as a result of the forward/reverse stock split.
+  @end table
+
+@end deftypefun
+
+
+@node Split Setters,  , Split Getters, Splits
+@subsection Split Setters
+
+@deftypefun void xaccSplitSetMemo (Split * @var{split}, const char * @var{memo})
+Set the memo field of @var{split} to @var{memo}.
+@end deftypefun
+
+@deftypefun void xaccSplitSetAction (Split * @var{split}, const char * @var{action})
+Set the action field of @var{split} to @var{memo}. The action field is
+an arbitrary string, but is intended to be conveniently limited to a
+menu of selections such as "Buy", "Sell", "Interest", etc.
+@end deftypefun
+
+@deftypefun void xaccSplitSetReconcile (Split * @var{split}, char @var{reconciled_flag})
+Set the reconciled flag of @var{split} to @var{reconciled_flag}. For the
+possible values and meanings of @var{reconciled_flag}, see @ref{Split Getters}.
+@end deftypefun
+
+@deftypefun void xaccSplitSetDateReconciledSecs (Split * @var{split}, time_t @var{time})
+Set the reconciliation date of @var{split} to @var{time}.
+@end deftypefun
+
+@deftypefun void xaccSplitSetDateReconciledTS (Split * @var{split}, Timespec * @var{ts})
+Set the reconciliation date of @var{split} to @var{ts}.
+@end deftypefun
+
+@deftypefun void xaccSplitSetShareAmount (Split * @var{split}, gnc_numeric amount)
+Set the share quantity of @var{split} to @var{amount}.
+@end deftypefun
+
+@deftypefun void xaccSplitSetSharePrice (Split * @var{split}, gnc_numeric @var{price})
+Set the share price of @var{split} to @var{price}.
+@end deftypefun
+
+@deftypefun void xaccSplitSetSharePriceAndAmount (Split * @var{split}, gnc_numeric @var{price}, gnc_numeric @var{amount})
+Set both the share price and share quantity of @var{split}. This routine
+is more efficient than calling @code{xaccSplitSetShareAmount} and
+@code{xaccSplitSetSharePrice} in succesion.
+@end deftypefun
+
+@deftypefun void xaccSplitSetValue (Split * @var{split}, gnc_numeric @var{value})
+Adjust the share quantity of @var{split} so that @var{split}'s value is
+equal to @var{value}.
+@end deftypefun
+
+@deftypefun void xaccSplitSetBaseValue (Split * @var{split}, gnc_numeric @var{value}, const char * @var{base_currency})
+Set either the share quantity or value of @var{split} depending upon
+whether @var{base_currency} is the security or current of @var{split}'s
+parent Account. @xref{Accounts}.
+@end deftypefun
+
+
+@node Transactions, Accounts, Splits, Engine
+@section Transactions
+@tindex Transaction
+
+A Transaction is the Engine abstraction of an accounting entry in a
+Journal. In accounting terms, a Transaction is a Journal Entry. As
+such, it contains the following pieces of information:
+
+@table @asis
+
+@item A list of Ledger Entries, or Splits
+The list of debits and credits which make up this Transaction. As in
+accounting, a Transaction is balanced when the sum of the debits equals
+the sum of the credits.
+
+@item The entry date
+The date the transaction was entered into GnuCash.
+
+@item The post date
+The date the transaction was posted. This is often the date the
+transaction was recorded by the bank, or the date the user initiated
+the transaction (i.e., wrote the check, made the ATM withdrawal).
+
+@item A transaction number field
+This field is intended to hold a transaction number, such as a
+check number or an ID assigned by a bank to an electronic transfer.
+
+@item A description
+A textual description of the transaction.
+
+@end table
+
+In addition to the above, Transactions contain a key-value pair frame.
+
+
+@subsection The Transaction Edit Cycle
+
+The Engine supports (and, in fact, requires) a 2-phase commit/rollback
+cycle for modifying Transactions and their constituent Splits. A Transaction
+must be opened for editing using @code{xaccTransBeginEdit()} before any of
+the following actions may be taken.
+
+@itemize
+
+@item
+Modifying any field of a Transaction.
+
+@item
+Modifying any Split belonging to the Transaction. That includes
+re-parenting a Split to a different Account or a different Transaction.
+In the case of re-parenting to a new Transaction, both Transactions must
+be opened for editing.
+
+@item
+Deleting any Split belonging to the Transaction.
+
+@item
+Adding a Split to the transaction.
+
+@item
+Deleting the Transaction.
+
+@end itemize
+
+After the desired changes have been made, they must either be committed
+using @code{xaccTransCommitEdit()} or rolled back using
+@code{xaccTransRollbackEdit()}. Rolling back a transaction will undo any
+changes which have been made to it or to its Splits since it was opened
+for editing.
+
+
+@menu
+* General Transaction API::     
+* Transaction Getters::         
+* Transaction Setters::         
+@end menu
+
+
+@node General Transaction API, Transaction Getters, Transactions, Transactions
+@subsection General Transaction API
+
+@deftypefun {Transaction *} xaccMallocTransaction (void)
+Allocate, initialize, and return a new Transaction.
+@end deftypefun
+
+@deftypefun void xaccTransDestroy (Transaction * {trans})
+Remove all of the Splits from each of their accounts and free the memory
+associated with them. This routine must be followed by either an
+@code{xaccTransCommitEdit()} in which case the transaction memory will
+be freed, or by @code{xaccTransRollbackEdit()}, in which case all the
+original Splits are put back into place.
+@end deftypefun
+
+@deftypefun void xaccTransAppendSplit (Transaction * @var{trans}, Split * @var{split})
+Append @var{split} to the collection of Splits in @var{trans}. If the
+Split is already a part of another Transaction, it will be removed from
+that Transaction first.
+@end deftypefun
+
+@deftypefun void xaccTransBeginEdit (Transaction * @var{trans})
+This method must be called before any changes are made to @var{trans} or
+any of its component Splits. If this is not done, errors will result.
+@end deftypefun
+
+@deftypefun void xaccTransCommitEdit (Transaction * @var{trans})
+This method indicates that the changes to @var{trans} and its Splits are
+complete and should be made permanent. Note this routine may result in
+the deletion of the transaction, if the Transaction is "empty" (has no
+Splits) or if @code{xaccTransDestroy()} was called on the Transaction.
+@end deftypefun
+
+@deftypefun void xaccTransRollbackEdit (Transaction * @var{trans})
+Rejects all changes made to @var{trans} and its Splits, and sets
+@var{trans} back to where it was before the @code{xaccTransBeginEdit()}
+call. This includes restoring any deleted Splits, removing any added
+Splits, and undoing the effects of @code{xaccTransDestroy()}, as well
+as restoring share quantities, memos, descriptions, etc.
+@end deftypefun
+
+@deftypefun gboolean xaccTransIsOpen (Transaction * @var{trans})
+Return @code{TRUE} if @var{trans} is open for editing. Otherwise, it
+returns @code{FALSE}.
+@end deftypefun
+
+@deftypefun {const GUID *} xaccTransGetGUID (Transaction * @var{trans})
+Return the GUID of @var{trans}.
+@end deftypefun 
+
+@deftypefun {Transaction *} xaccTransLookup (const GUID * @var{guid})
+Return the Transaction associated with @var{GUID}, or @code{NULL} if
+there is no such Transaction.
+@end deftypefun
+
+@deftypefun {KvpValue *} xaccTransGetSlot (Transaction * @var{trans}, const char * @var{key})
+Return the @code{KvpValue} associated with @var{key} in @var{trans}.
+If there is none, @code{NULL} is returned.
+@end deftypefun
+
+@deftypefun void xaccTransSetSlot (Split * @var{trans}, const char * @var{key}, const KvpValue * @var{value})
+Associate a copy of @var{value} with @var{key} in @var{trans}.
+@end deftypefun
+
+
+@node Transaction Getters, Transaction Setters, General Transaction API, Transactions
+@subsection Transaction Getters
+
+@deftypefun {Split *} xaccTransGetSplit (Transaction * @var{trans}, int @var{i})
+Return the @var{I}th Split of @var{trans}.
+@end deftypefun
+
+@deftypefun {GList *} xaccTransGetSplitList (Transaction * @var{trans})
+Return a @code{GList} of the Splits in @var{trans}. This list is owned
+by @var{trans} and should not be modified in any way!
+@end deftypefun
+
+@deftypefun {const char *} xaccTransGetNum (Transaction * @var{trans})
+Return the number field of @var{trans}.
+@end deftypefun
+
+@deftypefun {const char *} xaccTransGetDescription (Transaction * @var{trans})
+Return the description field of @var{trans}.
+@end deftypefun
+
+@deftypefun time_t xaccTransGetDate (Transaction * @var{trans})
+Return the post date of @var{trans} as a @code{time_t} value.
+@end deftypefun
+
+@deftypefun {long long} xaccTransGetDateL (Transaction * @var{trans})
+Return the post date of @var{trans} as a @code{long long} value.
+@end deftypefun
+
+@deftypefun void xaccTransGetDateTS (Transaction * @var{trans}, Timespec * @var{ts})
+Return the post date of @var{trans} in @var{ts}.
+@end deftypefun
+
+@deftypefun void xaccTransGetDateEnteredTS (Transaction * @var{trans}, Timespec * @var{ts})
+Return the entry date of @var{trans} in @var{ts}.
+@end deftypefun
+
+@deftypefun {char *} xaccTransGetDateStr (Transaction * @var{trans})
+Return a string representing the post date of @var{trans}, or NULL if
+@var{trans} is NULL. The string must be freed with @code{free()} after
+use.
+@end deftypefun
+
+@deftypefun int xaccTransCountSplits (Transaction * @var{trans})
+Return the number of Splits in @var{trans}.
+@end deftypefun
+
+
+@node Transaction Setters,  , Transaction Getters, Transactions
+@subsection Transaction Setters
+
+Remember, before you modify a Transaction, you must open it for editing
+with @code{xaccTransBeginEdit}.
+
+@deftypefun void xaccTransSetDate (Transaction * @var{trans}, int @var{day}, int @var{mon}, int @var{year})
+Set the post date of @var{trans} with @var{day}, @var{month}, and @var{year}.
+@end deftypefun
+
+@deftypefun void xaccTransSetDateSecs (Transaction * @var{trans}, time_t @var{time})
+Set the post date of @var{trans} using a @code{time_t} value.
+@end deftypefun
+
+@deftypefun void xaccTransSetDateToday (Transaction * @var{trans})
+Set the post date of @var{trans} to the current time.
+@end deftypefun
+
+@deftypefun void xaccTransSetDateTS (Transaction * @var{trans}, const Timespec * @var{ts})
+Set the post date of @var{trans} from @var{ts}.
+@end deftypefun
+
+@deftypefun void xaccTransSetDateEnteredSecs (Transaction *trans, time_t time)
+Set the entry date of @var{trans} from a @code{time_t} value.
+@end deftypefun
+
+@deftypefun void xaccTransSetDateEnteredTS (Transaction * @var{trans}, const Timespec * @var{ts})
+Set the entry date of @var{trans} from @var{ts}.
+@end deftypefun
+
+@deftypefun void xaccTransSetNum (Transaction * @var{trans}, const char * @var{num})
+Set the number field of @var{trans} to @var{num}.
+@end deftypefun
+
+@deftypefun void xaccTransSetDescription (Transaction * @var{trans}, const char * @var{desc})
+Set the description field of @var{trans} to @var{desc}.
+@end deftypefun
+
+
+@node Accounts, Account Groups, Transactions, Engine
+@section Accounts
+@tindex Account
+
+An Account is the Engine abstraction of an, well, an account. Accounts
+contain the following pieces of information:
+
+@table @asis
+
+@item A list of Ledger Entries, or Splits
+The list of debits and credits which apply to the Account. The sum of
+all debits and credits is the account balance.
+
+@item A type
+An integer code identifying the type of account. The Account type
+determines whether the Account holds shares valued in a currency
+or not. It is also used by the GUI and reporting system to determine
+how debits & credits to the Account should be treated and displayed.
+
+@item A name
+The name of the Account.
+
+@item An account code
+A string that is intended to hold a unique user-selected identifier
+for the account. However, uniqueness of this field is not enforced.
+
+@item A description
+A textual description of the Account.
+
+@item A currency
+The commodity that Splits in the account are valued in, i.e., the
+denomination of the 'value' member of Splits in the account.
+
+@item A curreny SCU
+The SCU is the smallest convertible unit that the currency is
+traded in. This value overrides the default SCU of the currency.
+
+@item A security
+For Accounts which may contain shares (such as stock accounts),
+the denomination of the 'share quantity' member of Splits in
+the accounts. For accounts which do not contain shares, the
+security is blank, and the share quantities are denominated
+in the Account currency.
+
+@item A security SCU
+Analogous to the currency SCU, but for the security.
+
+@item A parent and child Account Group.
+The parent and child of an Account are Account Groups
+(@pxref{Account Groups}). Account Groups are used to
+connect Accounts together into an Account hierarchy.
+If the parent Account Group is not present, the Account
+is at the top level of the hierarchy. If the child
+Account Group is not present, the Account has no
+children.
+
+@end table
+
+In addition to the above, Accounts contain a key-value pair frame.
+
+@menu
+* Account Types::               
+* General Account API::         
+* Account Type API::            
+* Account Getters::             
+* Account Tax API::             
+@end menu
+
+
+@node Account Types, General Account API, Accounts, Accounts
+@subsection Account Types
+@tindex GNCAccountType
+
+Account Types are defined by the @code{GNCAccountType} enumeration.
+Possible values are:
+
+  @table @code
+
+  @item BAD_TYPE, NO_TYPE
+  Both of these values indicate an illegal Account type.
+
+  @item BANK
+  Denotes a savings or checking account held at a bank.
+  Such an account is often interest bearing.
+
+  @item CASH
+  Denotes a shoe-box or pillowcase stuffed with cash. In other
+  words, actual currency held by the user.
+
+  @item CREDIT
+  Denotes credit card accounts.
+
+  @item ASSET
+  Denotes a generic asset account.
+
+  @item LIABILITY
+  Denotes a generic liability account.
+
+  @item STOCK
+  A stock account containing stock shares.
+
+  @item MUTUAL
+  A mutual fund account containing fund shares.
+
+  @item CURRENCY
+  Denotes a currency trading account. In many ways, a currency trading
+  account is like a stock trading account, where both quantities
+  and prices are set. However, generally both currency and security
+  are national currencies.
+
+  @item INCOME
+  Denotes an income account. The GnuCash financial model does not
+  use 'categories'. Actual accounts are used instead.
+
+  @item EXPENSE
+  Denotes an expense account.
+
+  @item EQUITY = 10,
+  Denotes an equity account.
+
+  @end table
+
+
+@node General Account API, Account Type API, Account Types, Accounts
+@subsection General Account API
+
+@deftypefun {Account *} xaccMallocAccount (void)
+Allocate and initialize an Account. The account must be
+destroyed by calling @code{xaccAccountBeginEdit} followed
+by @code{xaccAccountDestroy}.
+@end deftypefun
+
+@deftypefun void xaccAccountDestroy (Account * @var{account})
+Destroys @var{account} and frees all memory associated with
+it. This routine will also destroy the Account's children.
+You must call @code{xaccAccountBeginEdit} before calling
+this function.
+@end deftypefun
+
+@deftypefun void xaccAccountBeginEdit (Account * @var{account})
+This routine, together with @code{xaccAccountCommitEdit},
+provide a two-phase-commit wrapper for account updates
+much in the same way as @var{xaccTransBeginEdit} and
+@var{xaccTransCommitEdit} do for Transactions.
+@end deftypefun
+
+@deftypefun void xaccAccountCommitEdit (Account * @var{account})
+The counterpart to @var{xaccAccountBeginEdit}.
+@end deftypefun
+
+@deftypefun {Account *} xaccCloneAccountSimple (const Account * @var{from})
+Return a 'copy' of @var{from} that is identical in the type, name, code,
+description, kvp data, and currency. All other fields are the same as an
+account returned by @code{xaccMallocAccount}.
+@end deftypefun
+
+@deftypefun {const GUID *} xaccAccountGetGUID (Account * @var{account})
+Return the globally unique id associated with @var{account}.
+@end deftypefun
+
+@deftypefun {Account *} xaccAccountLookup (const GUID * @var{guid})
+Return the Account associated with @var{guid}, or NULL if there is
+no such Account.
+@end deftypefun
+
+@deftypefun {kvp_frame *} xaccAccountGetSlots (Account * @var{account})
+Return the @code{kvp_frame} associated with @var{account}. User code
+may modify this @code{kvp_frame}, but must not destroy it.
+@end deftypefun
+
+@deftypefun void xaccAccountSetSlots_nc (Account * @var{account}, kvp_frame * @var{frame})
+Set the @code{kvp_frame} associated wih @var{account}. After the call,
+@var{frame} is owned by @var{account}, so don't destroy it.
+@end deftypefun
+
+
+@node Account Type API, Account Getters, General Account API, Accounts
+@subsection Account Type API
+
+@deftypefun {const char *} xaccAccountGetTypeStr (GNCAccountType @var{type})
+Return a string corresponding to the given Account type suitable for
+display by a GUI. The string is translated with gettext according to
+the current locale.
+@end deftypefun
+
+@deftypefun {char *} xaccAccountTypeEnumAsString (GNCAccountType @var{type})
+Return a string corresponding to the given Account type. The string
+is not translated and is independent of the current locale.
+@end deftypefun
+
+@deftypefun gboolean xaccAccountStringToType (const char * @var{str}, GNCAccountType * @var{type})
+Converts a string of the form returned by @code{xaccAccountTypeEnumAsString}
+to a type, return in @var{type}. Returns true if the string corresponds
+to an actual type.
+@end deftypefun
+
+@deftypefun GNCAccountType xaccAccountStringToEnum (const char * @var{str})
+Similar to @code{xaccAccountStringToEnum}, but returns the type. If
+@var{str} does not correspond to any valid type, @code{BAD_TYPE} is
+returned.
+@end deftypefun
+
+@deftypefun gboolean xaccAccountTypesCompatible (GNCAccountType @var{parent_type}, GNCAccountType @var{child_type})
+Returns TRUE if accounts of type @var{parent_type} can have child accounts
+of type @var{child_type}. This compatibility is not enforced by the
+engine, but one day it may be!
+@end deftypefun
+
+
+@node Account Getters, Account Tax API, Account Type API, Accounts
+@subsection Account Getters
+
+@deftypefun GNCAccountType xaccAccountGetType (Account * @var{account})
+Return the type of @var{account}.
+@end deftypefun
+
+@deftypefun {const char *} xaccAccountGetName (Account * @var{account})
+Return the name of @var{account}.
+@end deftypefun
+
+@deftypefun {const char *} xaccAccountGetCode (Account * @var{account})
+Return the code of @var{account}.
+@end deftypefun
+
+@deftypefun {const char *} xaccAccountGetDescription (Account * @var{account})
+Return the description of @var{account}.
+@end deftypefun
+
+@deftypefun {const char *} xaccAccountGetNotes (Account * @var{account})
+Return the notes of @var{account}.
+@end deftypefun
+
+@deftypefun {gnc_commodity *} xaccAccountGetCurrency (Account * @var{account})
+Return the currency of @var{account}.
+@end deftypefun
+
+@deftypefun int xaccAccountGetCurrencySCU (Account * @var{account})
+Return the SCU (smallest convertible unit) of @var{account}'s
+currency.
+@end deftypefun
+
+@deftypefun {gnc_commodity *} xaccAccountGetSecurity (Account * @var{account})
+Return the security of @var{account}. For accounts without shares, this
+field will be @code{NULL}.
+@end deftypefun
+
+@deftypefun int xaccAccountGetSecuritySCU (Account * @var{account})
+Return the SCU (smallest convertible unit) of @var{account}'s
+security.
+@end deftypefun
+
+@deftypefun {gnc_commodity *} xaccAccountGetEffectiveSecurity (Account * @var{account})
+Get the `effective' security of the account. If the account has a non-NULL
+security field, that field will be returned. Otherwise, the currency will
+be returned.
+@end deftypefun
+
+@deftypefun {AccountGroup *} xaccAccountGetChildren (Account * @var{account})
+Return the child group of @var{account}. The child group may be @code{NULL},
+indicating @var{account} has no children.
+@end deftypefun
+
+@deftypefun {AccountGroup *} xaccAccountGetParent (Account * @var{account})
+Return the parent Group of @var{account}. The parent may be @code{NULL},
+indicating @var{account} is a top-level Account. However, even if the
+parent is not @code{NULL}, the account may still be top-level if the
+parent Group has no parent Account.
+@end deftypefun
+
+@deftypefun {Account *} xaccAccountGetParentAccount (Account * @var{account})
+Similar to @code{xaccAccountGetParent}, but returns the parent Account
+of the parent Group if the parent Group exists. Otherwise, returns
+@code{NULL}.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccAccountGetBalance (Account * @var{account})
+Return the balance of @var{account}, which is also the balance of the
+last Split in @var{account}. If there are no Splits, the balance is
+zero. The balance is denominated in the Account currency.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccAccountGetClearedBalance (Account * @var{account})
+Return the cleared balance of @var{account}. The cleared balance is the
+balance of all Splits in @var{account} which are either cleared or
+reconciled or frozen. The cleared balance is denominated in the Account
+currency.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccAccountGetReconciledBalance (Account * @var{account})
+Return the reconciled balance of @var{account}. The reconciled balance
+is the balance of all Splits in @var{account} which are reconciled or
+frozen.  The reconciled balance is denominated in the Account currency.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccAccountGetShareBalance (Account *account)
+Return the share balance of @var{account}, which is also the share
+balance of the last Split in @var{account}. If there are no Splits, the
+balance is zero. The balance is denominated in the Account security, if
+the Account security exits; otherwise the share balance is denominated
+in the Account currency.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccAccountGetShareClearedBalance (Account * @var{account})
+Return the cleared share balance of @var{account}. The cleared share
+balance is the share balance of all Splits in @var{account} which are
+either cleared or reconciled or frozen. The cleared share balance is
+denominated as the share balance.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccAccountGetShareReconciledBalance (Account * @var{account})
+Return the reconciled share balance of @var{account}. The reconciled
+share balance is the share balance of all Splits in @var{account} which
+are reconciled or frozen. The reconciled sharea balance is denominated
+as the share balance.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccAccountGetBalanceAsOfDate (Account * @var{account}, time_t @var{date})
+Return the balance of @var{account} including all Splits whose parent
+Transactions have posted dates on or before @var{date}.
+@end deftypefun
+
+@deftypefun gnc_numeric xaccAccountGetShareBalanceAsOfDate (Account * @var{account}, time_t @var{date})
+Return the share balance of @var{account} including all Splits whose
+parent Transactions have posted dates on or before @var{date}.
+@end deftypefun
+
+@deftypefun {GList *} xaccAccountGetSplitList (Account * @var{account})
+Return a @code{GList} of the Splits in @var{account}. This list must
+not be modified in any way.
+@end deftypefun
+
+@deftypefun {char *} xaccAccountGetFullName (Account * @var{account}, const char @var{separator})
+Returns the fully qualified name of @var{account} using the given
+separator character. The name must be g_freed after use. The fully
+qualified name of an account is the concatenation of the names of the
+account and all its ancestor accounts starting with the topmost account
+and ending with the given account. Each name is separated by the given
+character.
+@end deftypefun
+
+
+@node Account Tax API,  , Account Getters, Accounts
+@subsection Account Tax API
+
+This set of API calls is related to tax information. All accounts have a
+tax-related boolean flag that can be set or unset. There is an
+additional set of API calls related to United States taxes that have
+`US' in the function call names. Future API calls that are specific to
+other countries should include the appropriate 2-letter country code in
+the function names.
+
+@deftypefun gboolean xaccAccountGetTaxRelated (Account * @var{account})
+Return the tax-related flag of @var{account}.
+@end deftypefun
+
+@deftypefun void xaccAccountSetTaxRelated (Account * @var{account}, gboolean @var{tax_related})
+Set the tax-related flag of @var{account}.
+@end deftypefun
+
+@deftypefun {const char *} xaccAccountGetTaxUSCode (Account * @var{account})
+Get the US-specific tax code associated with @var{account}, or
+@code{NULL} if there is none. These codes are internal to GnuCash
+and currently defined in @file{src/scm/report/txf-export.scm}.
+@end deftypefun
+
+@deftypefun void xaccAccountSetTaxUSCode (Account * @var{account}, const char * @var{code})
+Set the US-specific tax code associated with @var{account}.
+@end deftypefun
+
+@deftypefun {const char *} xaccAccountGetTaxUSPayerNameSource (Account * @var{account})
+Get the payer name source associated with @var{account}. See
+@file{src/scm/repot/taxtxf.scm} for details.
+@end deftypefun
+
+@deftypefun void xaccAccountSetTaxUSPayerNameSource (Account * @var{account}, const char * @var{source})
+Set the payer name source associated with @var{account}.
+@end deftypefun
+
+
+@node Account Groups, GNCBooks, Accounts, Engine
+@section Account Groups
+@tindex AccountGroup
+
+Account Groups are used by the Engine to connect Accounts
+together into an Account hierarchy. Account Groups do not
+correspond to any accounting concept -- they are specific
+to the GnuCash engine. Account Groups contain the following
+pieces of information:
+
+@table @asis
+
+@item A list of Accounts
+The list Accounts in the Group.
+
+@item A not-saved flag
+Indicates whether any information in the hierarchy
+rooted at the Group needs to be saved. That includes
+Accounts, Splits, and Transactions.
+
+@end table
+
+Account Groups do not have key-value frames or GUIDs.
+
+@menu
+* General Account Group API::   
+* Account Group Account API::   
+@end menu
+
+@node General Account Group API, Account Group Account API, Account Groups, Account Groups
+@subsection General Account Group API
+
+@deftypefun {AccountGroup *} xaccMallocAccountGroup (void)
+Return a newly-allocated & initialized Account Group.
+The Group must be freed with @code{xaccFreeAccountGroup}.
+@end deftypefun
+
+@deftypefun void xaccFreeAccountGroup (AccountGroup * @var{account_group})
+Free the given Group and all its resources, including the Accounts.
+@end deftypefun
+
+@deftypefun void xaccAccountGroupCommitEdit (AccountGroup * @var{grp})
+Recursively call @code{xaccAccountCommitEdit} on all child accounts
+and their children.
+@end deftypefun
+
+@deftypefun void xaccGroupConcatGroup (AccountGroup * @var{to}, AccountGroup * @var{from})
+Move all accounts in @var{from} to @var{to}. After this function
+returns, @var{from} will have been destroyed.
+@end deftypefun
+
+@deftypefun void xaccGroupMergeAccounts (AccountGroup * @var{grp})
+Merge all accounts in @var{grp} that have the same name and description.
+The semantics of this function are rather complex. Consult the
+implementation before use!
+@end deftypefun
+
+@deftypefun gboolean xaccGroupNotSaved (AccountGroup * @var{grp})
+Return true if @var{grp} has changes which have not been saved.
+@end deftypefun
+
+@deftypefun void xaccGroupMarkSaved (AccountGroup * @var{grp})
+Mark @var{grp} and all its children as saved.
+@end deftypefun
+
+@deftypefun void xaccGroupMarkNotSaved (AccountGroup * @var{grp})
+Mark @var{grp} as not saved.
+@end deftypefun
+
+@deftypefun void xaccGroupMarkDoFree (AccountGroup * @var{grp})
+Mark all accounts in @var{grp} as slated for destruction. This will
+improve the efficiency of destroying a large account hierarchy.
+@end deftypefun
+
+
+@node Account Group Account API,  , General Account Group API, Account Groups
+@subsection Account Group Account API
+
+@deftypefun void xaccGroupRemoveAccount (AccountGroup * @var{grp}, Account * @var{account})
+Remove @var{account} from @var{grp}. If @var{account} is not in
+@var{grp}, the function will return without performing any action.
+In no case will @var{account} be destroyed or modified.
+@end deftypefun
+
+@deftypefun void xaccAccountRemoveGroup (Account * @var{acc})
+Remove @var{acc}'s child group. The child group is not otherwise
+modified or destroyed.
+@end deftypefun
+
+@deftypefun void xaccGroupInsertAccount (AccountGroup * @var{grp}, Account * @var{acc})
+Add @var{acc} to @var{grp}. If @var{acc} is in another Group, it will be
+removed first.
+@end deftypefun
+
+@deftypefun void xaccAccountInsertSubAccount (Account * @var{parent}, Account * @var{child})
+Like @code{xaccGroupInsertAccount}, but uses a parent Account instead
+of a parent group. If @var{parent} does not have a child Group, one
+will be created.
+@end deftypefun
+
+@deftypefun int xaccGroupGetNumSubAccounts (AccountGroup * @var{grp})
+Return the total number of Accounts in the hierarchy rooted at @var{grp}.
+@end deftypefun
+
+@deftypefun int xaccGroupGetNumAccounts (AccountGroup * @var{grp})
+Return the number of accounts in @var{grp}. This count does not
+include Accounts lower in the hierarchy.
+@end deftypefun
+
+@deftypefun int xaccGroupGetDepth (AccountGroup * @var{grp})
+Returns the length of the longest tree branch in the hierarchy
+rooted at @var{grp}. Each link between an Account and its
+(non-null) children counts as one unit of length.
+@end deftypefun
+
+@deftypefun {Account *} xaccGroupGetAccount (AccountGroup * @var{group}, int @var{index})
+Return the @var{index}th Account in @var{group}, starting at zero.
+If @var{index} is out of range, @code{NULL} is returned.
+@end deftypefun
+
+@deftypefun {GList *} xaccGroupGetSubAccounts (AccountGroup * @var{grp})
+Return a list of the Accounts, including sub-Accounts, in @var{grp}. The
+returned list should be freed with @code{g_list_free} when no longer
+needed.
+@end deftypefun
+
+@deftypefun {GList *} xaccGroupGetAccountList (AccountGroup * @var{grp})
+Return a list of the immediate children of @var{grp}. The returned list
+should not be freed or modified in any way.
+@end deftypefun
+
+
+@node GNCBooks, Scrub, Account Groups, Engine
+@section GNCBooks
+@tindex GNCBook
+
+The @dfn{GNCBook} interface encapsulates all the information about a
+GnuCash dataset, including the methods used to read and write the
+dataset to datastores.  This class provides several important services:
+
+@itemize
+
+@item
+Prevents multiple users from editing the same file at the same time,
+thus avoiding lost data due to race conditions. Thus an 'open book'
+implies that the associated file is locked.
+
+@item
+Provides a search path for the file to be edited. This should simplify
+install & maintenance problems for users who may not have a good grasp
+of what a file system is, or where they want to keep their data files.
+
+@end itemize
+
+The current implementation assumes the use of files and file locks;
+however, the API was designed to be general enough to allow the use
+of generic URL's, and/or implementation on top of SQL or other
+database/persistent object technology.
+
+@menu
+* GNCBook API::                 
+@end menu
+
+
+@node GNCBook API,  , GNCBooks, GNCBooks
+@subsection GNCBook API
+
+@deftypefun {GNCBook *} gnc_book_new (void)
+Allocate, initialize, and return a new GNCBook. The new book will contain
+a newly allocated AccountGroup.
+@end deftypefun
+
+@deftypefun void gnc_book_destroy (GNCBook * @var{book})
+End any editing session associated with @var{book}, and free all
+memory associated with it.
+@end deftypefun
+
+@deftypefun gboolean gnc_book_begin (GNCBook * @var{book}, const char * @var{book_id}, gboolean ignore_lock, gboolean create_if_nonexistent)
+Begins a new book editing session. It takes as an argument the book id.
+The book id must be a string in the form of a URI/URL.  In the current
+implementation, only one type of URI is supported, and that is the file
+URI: anything of the form @url{file:/home/somewhere/somedir/file.xac}
+The path part must be a valid path.  The file-part must be a valid
+GnuCash data file. Paths may be relative or absolute. If the path is
+relative; that is, if the argument is @url{file:somefile.xac} then a
+sequence of search paths are checked for a file of this name.
+
+The 'ignore_lock' argument, if set to TRUE, will cause this routine to
+ignore any file locks that it finds.  If set to FALSE, then file locks
+will be tested and obeyed.
+
+If the file exists, can be opened and read, and a lock can be obtained
+then a lock will be obtained and the function returns TRUE.
+
+If the file/database doesn't exist, and the create_if_nonexistent flag
+is set to TRUE, then the database is created.
+
+Otherwise the function returns FALSE.
+@end deftypefun
+
+@deftypefun gboolean gnc_book_load (GNCBook * @var{book})
+Load the data associated with the book. The function returns TRUE on
+success.
+@end deftypefun
+
+@deftypefun GNCBackendError gnc_book_get_error (GNCBook * @var{book})
+Obtain the reason for a failure. Standard errno values are used. Calling
+this routine resets the error value. This routine allows an
+implementation of multiple error values, e.g. in a stack, where this
+routine pops the top value. The current implementation has a stack that
+is one-deep.
+
+Some important error values:
+
+@table @code
+
+@item EINVAL
+bad argument
+
+@item ETXTBSY
+book id is in use; it's locked by someone else
+
+@item ENOSYS
+unsupported URI type
+
+@item ERANGE
+file path too long
+
+@item ENOLCK
+book not open when @code{gnc_book_save()} was called.
+
+@end table
+@end deftypefun
+
+@deftypefun {const char *} gnc_book_get_error_message (GNCBook * @var{book})
+Return a string describing the reason for the current error. Calling
+this routine resets the error value.
+@end deftypefun
+
+@deftypefun GNCBackendError gnc_book_pop_error (GNCBook * @var{book})
+Same as @code{gnc_book_get_error}, but the error value is reset
+in @var{book}.
+@end deftypefun
+
+@deftypefun {AccountGroup *} gnc_book_get_group (GNCBook * @var{book})
+Return the current top-level account group.
+@end deftypefun
+
+@deftypefun void gnc_book_set_group (GNCBook * @var{book}, AccountGroup * @var{topgroup})
+Set the topgroup to a new value.
+@end deftypefun
+
+@deftypefun {const char *} gnc_book_get_file_path (GNCBook * @var{book})
+Return the fully-qualified file path for the book. That is, if a
+relative or partial filename was for the book, then it had to have been
+fully resolved to open the book. This routine returns the result of this
+resolution.
+@end deftypefun
+
+@deftypefun gboolean gnc_book_save_may_clobber_data (GNCBook * @var{book})
+Return TRUE if saving the book would overwrite other information.
+@end deftypefun
+
+@deftypefun void gnc_book_save (GNCBook * @var{book})
+Commit all changes that have been made to the book.
+@end deftypefun
+
+@deftypefun void gnc_book_end (GNCBook * @var{book})
+Release the session lock. It will @emph{not} save the account group to
+a file. Thus, this method acts as an "abort" or "rollback" primitive.
+@end deftypefun
+
+
+@node Scrub,  , GNCBooks, Engine
+@section Scrub

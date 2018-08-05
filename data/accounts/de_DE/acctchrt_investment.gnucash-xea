@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gnc-account-example 
+  xmlns="http://www.gnucash.org/XML/"
+  xmlns:act="http://www.gnucash.org/XML/act"
+  xmlns:addr="http://www.gnucash.org/XML/addr"
+  xmlns:bgt="http://www.gnucash.org/XML/bgt"
+  xmlns:billterm="http://www.gnucash.org/XML/billterm"
+  xmlns:book="http://www.gnucash.org/XML/book"
+  xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+  xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+  xmlns:cd="http://www.gnucash.org/XML/cd"
+  xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+  xmlns:cust="http://www.gnucash.org/XML/cust"
+  xmlns:employee="http://www.gnucash.org/XML/employee"
+  xmlns:entry="http://www.gnucash.org/XML/entry"
+  xmlns:fs="http://www.gnucash.org/XML/fs"
+  xmlns:gnc="http://www.gnucash.org/XML/gnc"
+  xmlns:gnc-act="http://www.gnucash.org/XML/gnc-act"
+  xmlns:invoice="http://www.gnucash.org/XML/invoice"
+  xmlns:job="http://www.gnucash.org/XML/job"
+  xmlns:lot="http://www.gnucash.org/XML/lot"
+  xmlns:order="http://www.gnucash.org/XML/order"
+  xmlns:owner="http://www.gnucash.org/XML/owner"
+  xmlns:price="http://www.gnucash.org/XML/price"
+  xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+  xmlns:slot="http://www.gnucash.org/XML/slot"
+  xmlns:split="http://www.gnucash.org/XML/split"
+  xmlns:sx="http://www.gnucash.org/XML/sx"
+  xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+  xmlns:trn="http://www.gnucash.org/XML/trn"
+  xmlns:ts="http://www.gnucash.org/XML/ts"
+  xmlns:tte="http://www.gnucash.org/XML/tte"
+  xmlns:vendor="http://www.gnucash.org/XML/vendor">
+    <gnc-act:title>
+      Geldanlagen
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Konten für Geldanlagen
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+      Konten für Investitionen in Geldanlagen: Bausparvertrag, Lebensversicherung, Festgeld, Investmentfonds.
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Aktiva</act:name>
+  <act:id type="new">8f1b9e7e37e9a76c2289ef4fe9adcdd9</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Aktiva</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Geldanlagen</act:name>
+  <act:id type="new">ccb5a03f67534cb0a2e71658684cc963</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Geldanlagen</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">8f1b9e7e37e9a76c2289ef4fe9adcdd9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Bausparvertrag</act:name>
+  <act:id type="new">fb7be755d2e4f796fd0730019e8c063d</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Bausparvertrag</act:description>
+  <act:parent type="new">ccb5a03f67534cb0a2e71658684cc963</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Festgeld</act:name>
+  <act:id type="new">2aeed74b412e53ac944e6a4a11318180</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Festgeld</act:description>
+  <act:parent type="new">ccb5a03f67534cb0a2e71658684cc963</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Investmentfonds</act:name>
+  <act:id type="new">c398134b373294ec6a06896efaa3200f</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Investmentfonds</act:description>
+  <act:parent type="new">ccb5a03f67534cb0a2e71658684cc963</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Lebensversicherung</act:name>
+  <act:id type="new">edb93c3acbe12ac4130567be02452638</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Lebensversicherung</act:description>
+  <act:parent type="new">ccb5a03f67534cb0a2e71658684cc963</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Erträge</act:name>
+  <act:id type="new">724c2a1128e49b0b28304d372b19f5a1</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Erträge</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Zinsen</act:name>
+  <act:id type="new">fbbab8b9f9b46ea19754b9861ac5b6f3</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Zinseinkommen</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">724c2a1128e49b0b28304d372b19f5a1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Bausparvertrag</act:name>
+  <act:id type="new">bd45ea66a1e7977161f528db64fe545d</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Bausparvertrag Zinsen</act:description>
+  <act:parent type="new">fbbab8b9f9b46ea19754b9861ac5b6f3</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Festgeld</act:name>
+  <act:id type="new">6c3937c6b5a243d1c0314304a2c113c5</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Festgeld Zinsen</act:description>
+  <act:parent type="new">fbbab8b9f9b46ea19754b9861ac5b6f3</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Investmentfonds</act:name>
+  <act:id type="new">ada1223abfcc1bdce40e4162a920a57d</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Investmentfonds Zinsen</act:description>
+  <act:parent type="new">fbbab8b9f9b46ea19754b9861ac5b6f3</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Aufwendungen</act:name>
+  <act:id type="new">bc39f4d37eb75353f4f971e80b9d2818</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Aufwendungen</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Versicherungen</act:name>
+  <act:id type="new">b0dbf43ea99f54e0a9f94a535b10941b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Versicherungen</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Lebensversicherung</act:name>
+  <act:id type="new">a471a33cd64d9870be562e909c78c94c</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>EUR</cmdty:id>
+  </act:commodity>
+  <act:description>Lebensversicherung</act:description>
+  <act:parent type="new">b0dbf43ea99f54e0a9f94a535b10941b</act:parent>
+</gnc:account>
+</gnc-account-example>

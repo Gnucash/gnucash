@@ -3,41 +3,8 @@ They have been adapted from the guidelines for gnome-libs by
 Miguel de Icaza who adapted them from guidelines written by
 Owen Taylor.
 
- + In order to build GnuCash from git, you need to run the autogen.sh
-   command to generate a configure script:
-
-	./autogen.sh
-
-   After the ./configure script has been created, you need to run it
-   with all the usual options.  See ./configure --help for a
-   reminder.  For example:
-
-	./configure --enable-ofx --enable-opt-style-install --prefix=/opt/gnucash
-
-   If in doubt, you can run autogen.sh, run ./configure --help,
-   then re-run ./configure with your options.
-
-   (Note: Previously, autogen.sh automatically called configure as
-   well. This behaviour was dropped in favor of two separate calls
-   because autogen should be an additional step taken by only by
-   developers using git sources.  Configure is a step taken by
-   everyone compiling the sources, be it from git or a tarball.)
-
- + Some versions of gettextize don't deal well with re-running themselves.
-   You will see this as an error like:
-
-	configure.ac:1141: error: `intl/Makefile' is already registered with
-	AC_CONFIG_FILES. autoconf/status.m4:844: AC_CONFIG_FILES is expanded
-	from... configure.ac:1141: the top level
-	autom4te: /usr/bin/m4 failed with exit status: 1
-	autoheader: /usr/bin/autom4te failed with exit status: 1
-	**Error**: autoheader failed.
-
-   If you see this error, it most likely means that you've made some
-   local changes to configure.ac or one or more Makefile.am. You can
-   reset changes on a file-by-file basis with git checkout, e.g.
-
-        git checkout configure.ac Makefile.am
+Autotools specific information in this file was removed in Jan 2018 
+by Rob Gowin as part of the transition to CMake.
 
 When making changes to GnuCash and trying to commit to the repository:
 
@@ -51,7 +18,7 @@ When making changes to GnuCash and trying to commit to the repository:
    you can submit your changes as a patch to gnucash-devel@gnucash.org.
    See README for details.
 
-   If you are making changes to gnucash SVN, you should be subscribed
+   If you are making changes to gnucash, you should be subscribed
    to gnucash-devel@gnucash.org and to gnucash-changes@gnucash.org.
    (Subscription address: http://www.gnucash.org/en/lists.phtml)
    gnucash-devel@gnucash.org is a good place to ask about intended
@@ -66,10 +33,13 @@ When making changes to GnuCash and trying to commit to the repository:
    run git pull, build and make distcheck. If that passes, it's safe
    to push.
 
- + It's wise to do major work in a branch. That allows you to keep the rest of your repo up to date. It's also better to commit small changes often rather than to make a single large change. Run make check often so that you can quickly find errors.
+ + It's wise to do major work in a branch. That allows you to keep the
+   rest of your repo up to date. It's also better to commit small
+   changes often rather than to make a single large change. Run make
+   check often so that you can quickly find errors.
 
- + When code is added from new developers, add them to AUTHORS and
-   to doc/sgml/C/xacc-about.sgml.
+ + When code is added from new developers, add them to AUTHORS and to
+   doc/sgml/C/xacc-about.sgml.
 
 Dave Peticolas
 June 21, 2002

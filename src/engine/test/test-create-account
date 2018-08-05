@@ -1,2 +1,0 @@
-#!/bin/sh
-${GUILE} -l $SRCDIR/test-create-account.scm -c "(exit (run-test))"

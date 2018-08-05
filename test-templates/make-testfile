@@ -93,10 +93,10 @@ sub search_external {
     my @excludes = qw(test* utest* swig* gnucash_core.c);
     push @excludes, $infile;
     my $exclude_string = "--exclude=" . join(" --exclude=", @excludes);
-    my $calls = `egrep -r $name --include="*.c" $exclude_string src | wc -l`;
+    my $calls = `egrep -r $name --include="*.c" $exclude_string bindings common gnucash libgnucash | wc -l`;
     chomp $calls;
     $calls =~ s/\s//g;
-    my $files = `egrep -rl $name --include="*.c" $exclude_string src | wc -l`;
+    my $files = `egrep -rl $name --include="*.c" $exclude_string bindings common gnucash libgnucash | wc -l`;
     chomp $files;
     $files =~ s/\s//g;
 
@@ -107,10 +107,10 @@ sub search_scheme {
     my ($name) = @_;
     $name =~ tr/_/-/;
     my $egrepre = '\b' . $name . '[^\w_-]';
-    my $calls = `egrep -r "$egrepre"  --include="*.scm" src | wc -l`;
+    my $calls = `egrep -r "$egrepre"  --include="*.scm" bindings common gnucash libgnucash | wc -l`;
     chomp $calls;
     $calls =~ s/\s//g;
-    my $files = `egrep -rl "$egrepre" --include="*.scm" src | wc -l`;
+    my $files = `egrep -rl "$egrepre" --include="*.scm" bindings common gnucash libgnucash | wc -l`;
     chomp $files;
     $files =~ s/\s//g;
 
@@ -119,10 +119,10 @@ sub search_scheme {
 
 sub search_glade {
     my ($name) = @_;
-    my $calls = `egrep -r $name --include="*.glade" --include=*.xml"  --include=*.ui" src | wc -l`;
+    my $calls = `egrep -r $name --include="*.glade" --include=*.xml"  --include=*.ui" bindings common gnucash libgnucash | wc -l`;
     chomp $calls;
     $calls =~ s/\s//g;
-    my $files = `egrep -rl $name --include="*.glade" --include=*.xml"  --include=*.ui" src | wc -l`;
+    my $files = `egrep -rl $name --include="*.glade" --include=*.xml"  --include=*.ui" bindings common gnucash libgnucash | wc -l`;
     chomp $files;
     $files =~ s/\s//g;
 
@@ -277,8 +277,8 @@ make_testfile "Author Name <author@email.addr>" path/to/input [path/to/output]
 
 Creates template unit test files from C source files. The default
 output file is utest-filename in a subdirectory named "test". For
-example, if the input file is src/engine/Account.c, the default output
-file will be src/engine/test/test-Account.c.
+example, if the input file is libgnucash/engine/Account.c, the default output
+file will be libgnucash/engine/test/utest-Account.c.
 
 The program scans the input file to find function signatures. Each
 function signature will generate a comment with the function's

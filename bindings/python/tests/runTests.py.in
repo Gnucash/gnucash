@@ -1,0 +1,17 @@
+#!@PYTHON@
+
+import unittest
+import os
+
+os.environ["GNC_UNINSTALLED"] = "1"
+
+from test_book import TestBook
+from test_account import TestAccount
+from test_split import TestSplit
+from test_transaction import TestTransaction
+from test_business import TestBusiness
+from test_commodity import TestCommodity, TestCommodityNamespace
+from test_numeric import TestGncNumeric
+
+if __name__ == '__main__':
+    unittest.main()

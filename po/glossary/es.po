@@ -1,22 +1,22 @@
-# Glosario de términos de GnuCash traducido al español
+# Glosario de tÃ©rminos de GnuCash traducido al espaÃ±ol
 # Copyright (C) 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
-# Raúl Miró <cotin@geocities.com>, 2001.
+# RaÃºl MirÃ³ <cotin@geocities.com>, 2001.
 # Eneko Lacunza <enlar@enlar.net>, 2003.
-# Raúl Miró <cotin@geocities.com>, 2003.
+# RaÃºl MirÃ³ <cotin@geocities.com>, 2003.
 # Eneko Lacunza <enlar@enlar.net>, 2004.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.8.9\n"
 "Report-Msgid-Bugs-To: Eneko Lacunza <enlar@enlar.net>\n"
-"POT-Creation-Date: 2014-10-13 00:33+0200\n"
+"POT-Creation-Date: 2017-10-20 19:04+0200\n"
 "PO-Revision-Date: 2004-11-23 22:19+0100\n"
 "Last-Translator: Eneko Lacunza <enlar@enlar.net>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-15\n"
-"Content-Transfer-Encoding: 8-bit\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -28,7 +28,7 @@ msgstr "cuenta"
 
 #. "-"
 msgid "account code"
-msgstr "código de cuenta"
+msgstr "cÃ³digo de cuenta"
 
 #. "the tree view of all accounts"
 msgid "account hierarchy"
@@ -46,6 +46,11 @@ msgstr "tipo de cuenta: Activo"
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 msgid "account type: Asset"
 msgstr "tipo de cuenta: Activo"
+
+#. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
+#, fuzzy
+msgid "account type: Assets & Liabilities"
+msgstr "tipo de cuenta: Pasivo"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
@@ -77,11 +82,16 @@ msgstr "tipo de cuenta: mercado monetario"
 
 #. "-"
 msgid "account type: Mutual fund"
-msgstr "tipo de cuenta: Fondo de Inversión"
+msgstr "tipo de cuenta: Fondo de InversiÃ³n"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugzilla.gnome.org/show_bug.cgi?id=421766"
 #, fuzzy
 msgid "account type: Passive"
+msgstr "tipo de cuenta: Activo"
+
+#. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
+#, fuzzy
+msgid "account type: Profit & Loss"
 msgstr "tipo de cuenta: Activo"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
@@ -111,71 +121,71 @@ msgstr "cuenta: cuenta de nivel superior"
 
 #. "The process of doing something that caused a transaction to happen"
 msgid "Action (register)"
-msgstr "Acción (libro)"
+msgstr "AcciÃ³n (libro)"
 
 #. "Automated teller machine"
 msgid "action: ATM"
-msgstr "acción: cajero automático"
+msgstr "acciÃ³n: cajero automÃ¡tico"
 
 #. "Transaction was an auto deposit"
 msgid "action: autoDep"
-msgstr "acción: autoDep"
+msgstr "acciÃ³n: autoDep"
 
 #. "-"
 msgid "action: buy"
-msgstr "acción: compra"
+msgstr "acciÃ³n: compra"
 
 #. "-"
 msgid "action: deposit"
-msgstr "acción: ingreso"
+msgstr "acciÃ³n: ingreso"
 
 #. "When people can automatically deduct money straight from your account. The reverse of Direct Deposit."
 msgid "action: direct debit"
-msgstr "acción: abono directo"
+msgstr "acciÃ³n: abono directo"
 
 #. "transaction is a distribution (???)"
 msgid "action: dist"
-msgstr "acción: dist"
+msgstr "acciÃ³n: dist"
 
 #. "transaction is a dividend"
 msgid "action: div"
-msgstr "acción: div"
+msgstr "acciÃ³n: div"
 
 #. "-"
 msgid "action: fee"
-msgstr "acción: fee"
+msgstr "acciÃ³n: fee"
 
 #. "transaction comes from interest"
 msgid "action: int"
-msgstr "acción: int"
+msgstr "acciÃ³n: int"
 
 #. "-"
 msgid "action: loan"
-msgstr "acción: préstamo"
+msgstr "acciÃ³n: prÃ©stamo"
 
 #. "see: payment 1."
 msgid "action: payment"
-msgstr "acción: pago"
+msgstr "acciÃ³n: pago"
 
-#. "-"
+#. "Point of sale"
 msgid "action: POS"
-msgstr "acción: POS"
+msgstr "acciÃ³n: POS"
 
 #. "-"
 msgid "action: rebate"
-msgstr "acción: descuento"
+msgstr "acciÃ³n: descuento"
 
 #. "-"
 msgid "action: sell"
-msgstr "acción: venta"
+msgstr "acciÃ³n: venta"
 
 #. "-"
 msgid "action: Teller"
-msgstr "acción: cajero (persona)"
+msgstr "acciÃ³n: cajero (persona)"
 
 #. "see: transfer 2. (=credit transfer)"
 msgid "action: transfer"
-msgstr "acción: transferencia"
+msgstr "acciÃ³n: transferencia"
 
 #. "-"
 msgid "action: wire"
@@ -183,7 +193,7 @@ msgstr ""
 
 #. "-"
 msgid "action: withdraw"
-msgstr "acción: reintegro"
+msgstr "acciÃ³n: reintegro"
 
 #. "A sum of money"
 msgid "amount"
@@ -248,11 +258,11 @@ msgstr "ganancias de capital"
 
 #. "Distinguishing the uppercase and lowercase letters"
 msgid "case sensitive"
-msgstr "distinguir mayúsculas"
+msgstr "distinguir mayÃºsculas"
 
 #. "Money in coins or notes"
 msgid "cash"
-msgstr "metálico"
+msgstr "metÃ¡lico"
 
 #. "(esp. US) (= cheque) A special printed form on which one writes an order to a bank to pay a sum of money from one's account to another person"
 msgid "check"
@@ -272,20 +282,20 @@ msgstr "valor"
 
 #. "e.g. NASDAQ"
 msgid "commodity listing"
-msgstr "índice de valores"
+msgstr "Ã­ndice de valores"
 
 #. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
 msgid "commodity option: fraction"
-msgstr "opción de valor: fracción"
+msgstr "opciÃ³n de valor: fracciÃ³n"
 
 #. "e.g. USD, DEM"
 msgid "commodity option: Symbol"
-msgstr "opción de valor: Símbolo"
+msgstr "opciÃ³n de valor: SÃ­mbolo"
 
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
 #, fuzzy
 msgid "compound interests"
-msgstr "interés"
+msgstr "interÃ©s"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
@@ -293,7 +303,7 @@ msgstr "Haber (columna en el libro), Abono"
 
 #. "-"
 msgid "Credit Card"
-msgstr "Tarjeta de crédito"
+msgstr "Tarjeta de crÃ©dito"
 
 #. "A transfer of money direct from one bank account to another, without using a cheque"
 msgid "credit transfer"
@@ -318,7 +328,7 @@ msgstr "base de datos"
 
 #. "A specific numbered day of the month"
 msgid "Date"
-msgstr "Día (Fecha)"
+msgstr "DÃ­a (Fecha)"
 
 #. "DD/MM/YY or MM/DD/YY or something else"
 msgid "date format"
@@ -342,11 +352,11 @@ msgstr "ingreso"
 
 #. "The process of something becoming less valuable"
 msgid "depreciation"
-msgstr "depreciación"
+msgstr "depreciaciÃ³n"
 
 #. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
 msgid "Description (column in register)"
-msgstr "Descripción"
+msgstr "DescripciÃ³n"
 
 #. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
 #, fuzzy
@@ -391,7 +401,7 @@ msgstr "tipo de archivo"
 
 #. "-"
 msgid "financial calculator: interest rate"
-msgstr "calculadora financiera: tasa de interés"
+msgstr "calculadora financiera: tasa de interÃ©s"
 
 #. "see: payment"
 msgid "financial calculator: payments"
@@ -401,7 +411,7 @@ msgstr "calculadora financiera: pagos"
 msgid "gain"
 msgstr "ganancia, beneficio"
 
-#. "Name of an automaticly created account to get imbalanced transactions back in balance"
+#. "Name of an automatically created account to get imbalanced transactions back in balance"
 msgid "imbalance"
 msgstr "descuadre"
 
@@ -415,15 +425,10 @@ msgstr ""
 
 #. "Money charged for borrowing money, or paid to somebody who invests money"
 msgid "interest"
-msgstr "interés"
+msgstr "interÃ©s"
 
 #. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out (to a customer), whereas a 'bill' is one that we received (from a vendor)."
 msgid "invoice"
-msgstr "factura"
-
-#. "The customer (or vendor) to which this invoice is sent to."
-#, fuzzy
-msgid "invoice owner"
 msgstr "factura"
 
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
@@ -440,11 +445,11 @@ msgstr "pasivo/patrimonio"
 
 #. "A sum of money that is lent (by a bank)"
 msgid "loan"
-msgstr "préstamo"
+msgstr "prÃ©stamo"
 
 #. "The money lost in business activity"
 msgid "loss"
-msgstr "pérdida"
+msgstr "pÃ©rdida"
 
 #. "name of an automatically created account"
 msgid "Lost Accounts"
@@ -507,7 +512,7 @@ msgstr "notas"
 
 #. "Abbreviation for: number; Field in a transaction. If this transaction was done by check, then the check number should be noted in this field."
 msgid "Num (column in register)"
-msgstr "Núm."
+msgstr "NÃºm."
 
 #. "to make accessible"
 msgid "open, to"
@@ -527,7 +532,11 @@ msgstr "pedido"
 
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
-msgstr "huérfano"
+msgstr "huÃ©rfano"
+
+#. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
+msgid "owner (of bill, invoice or expense voucher)"
+msgstr ""
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
@@ -569,11 +578,11 @@ msgstr "preferencias"
 #. "Loan repayment calculator: your payments are split in interests payment and principal payment"
 #, fuzzy
 msgid "principal payment"
-msgstr "acción: pago"
+msgstr "acciÃ³n: pago"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
-msgstr "cotización (valor), precio (asiento)"
+msgstr "cotizaciÃ³n (valor), precio (asiento)"
 
 #. "An ask is an offer to sell, and the price you want to sell at."
 msgid "price type: ask"
@@ -593,7 +602,7 @@ msgstr "beneficio"
 
 #. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
-msgstr "Cuenta de Pérdidas y Ganancias"
+msgstr "Cuenta de PÃ©rdidas y Ganancias"
 
 #. "-"
 msgid "quick-fill"
@@ -609,7 +618,7 @@ msgstr "conciliar"
 
 #. "-"
 msgid "record keeping"
-msgstr "teneduría de libros?"
+msgstr "tenedurÃ­a de libros?"
 
 #. "A list of items; a book containing such a list"
 msgid "register"
@@ -617,11 +626,11 @@ msgstr "libro de cuentas/anotaciones"
 
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
-msgstr "anotación de libro de cuentas: asiento múltiple"
+msgstr "anotaciÃ³n de libro de cuentas: asiento mÃºltiple"
 
 #. "-"
 msgid "register entry: stock split"
-msgstr "anotación en libro de cuentas: división de valor"
+msgstr "anotaciÃ³n en libro de cuentas: divisiÃ³n de valor"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
@@ -629,7 +638,7 @@ msgstr "libro de cuentas: libro con asientos desglosados"
 
 #. "another form of register"
 msgid "register: basic ledger"
-msgstr "libro de cuentas: libro básico"
+msgstr "libro de cuentas: libro bÃ¡sico"
 
 #. "another form of register"
 msgid "register: general ledger"
@@ -658,7 +667,7 @@ msgstr ""
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 #, fuzzy
 msgid "reverse transaction, to (Action in the register)"
-msgstr "Descripción"
+msgstr "DescripciÃ³n"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
@@ -704,14 +713,14 @@ msgstr "hoja de estilo"
 msgid "subtotal"
 msgstr "subtotal"
 
-#. "On the goverment's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
+#. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
 #, fuzzy
 msgid "tax code"
-msgstr "información sobre impuestos"
+msgstr "informaciÃ³n sobre impuestos"
 
 #. "field of an account"
 msgid "tax info"
-msgstr "información sobre impuestos"
+msgstr "informaciÃ³n sobre impuestos"
 
 #. "if you create a new e.g. style sheet, you can start from a template"
 msgid "template"
@@ -719,7 +728,7 @@ msgstr "plantilla"
 
 #. "see: date range"
 msgid "time period"
-msgstr "período de tiempo"
+msgstr "perÃ­odo de tiempo"
 
 #. "as abbreviation for Total"
 msgid "Tot"
@@ -747,7 +756,7 @@ msgstr "estado del asiento: conciliado"
 
 #. "A transaction that is void i.e. not valid (anymore)."
 msgid "transaction state: voided"
-msgstr "estado de asiento: inválido"
+msgstr "estado de asiento: invÃ¡lido"
 
 #. "1. The action of transferring sth. 2. see: credit transfer"
 msgid "transfer (noun)"
@@ -795,5 +804,9 @@ msgstr "fuente"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "cargo"
 
+#, fuzzy
+#~ msgid "invoice owner"
+#~ msgstr "factura"
+
 #~ msgid "Term"
-#~ msgstr "Condiciones (Términos) (de pago)"
+#~ msgstr "Condiciones (TÃ©rminos) (de pago)"

@@ -6,19 +6,19 @@
 # Cristian Marchi <cri79@libero.it>, 2008.
 #
 # - I messaggi ancora dubbi sono marcati come fuzzy.
-# - Quando qui sono indicate pi˘ traduzioni, la prima Ë quella usata
+# - Quando qui sono indicate pi√π traduzioni, la prima √® quella usata
 #   nel .po vero del programma.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.7.4\n"
-"POT-Creation-Date: 2014-10-13 00:33+0200\n"
+"POT-Creation-Date: 2017-10-20 19:04+0200\n"
 "PO-Revision-Date: 2004-01-31 15:33+0100\n"
 "Last-Translator: Lorenzo Cappelletti <lorenzo.cappelletti@email.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
@@ -44,11 +44,16 @@ msgstr "nome conto"
 #. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
 #, fuzzy
 msgid "account type: Active"
-msgstr "tipo conto: attivo, attivit‡"
+msgstr "tipo conto: attivo, attivit√†"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 msgid "account type: Asset"
-msgstr "tipo conto: attivo, attivit‡"
+msgstr "tipo conto: attivo, attivit√†"
+
+#. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
+#, fuzzy
+msgid "account type: Assets & Liabilities"
+msgstr "tipo conto: passivo, passivit√†, obbligazione, debito"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
@@ -72,7 +77,7 @@ msgstr "tipo conto: entrate"
 
 #. "A debt, a financial obligation, but see also 'account type: Passive'"
 msgid "account type: Liability"
-msgstr "tipo conto: passivo, passivit‡, obbligazione, debito"
+msgstr "tipo conto: passivo, passivit√†, obbligazione, debito"
 
 #. "-"
 msgid "account type: money-market"
@@ -85,7 +90,12 @@ msgstr "tipo conto: fondi comuni"
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugzilla.gnome.org/show_bug.cgi?id=421766"
 #, fuzzy
 msgid "account type: Passive"
-msgstr "tipo conto: attivo, attivit‡"
+msgstr "tipo conto: attivo, attivit√†"
+
+#. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
+#, fuzzy
+msgid "account type: Profit & Loss"
+msgstr "tipo conto: attivo, attivit√†"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
@@ -161,7 +171,7 @@ msgstr "operazione: mutuo, prestito"
 msgid "action: payment"
 msgstr "operazione: pagamento"
 
-#. "-"
+#. "Point of sale"
 msgid "action: POS"
 msgstr "operazione: POS"
 
@@ -407,7 +417,7 @@ msgstr "calcolatrice finanziaria: pagamenti"
 msgid "gain"
 msgstr "guadagno"
 
-#. "Name of an automaticly created account to get imbalanced transactions back in balance"
+#. "Name of an automatically created account to get imbalanced transactions back in balance"
 msgid "imbalance"
 msgstr "sbilancio"
 
@@ -427,11 +437,6 @@ msgstr "interesse"
 msgid "invoice"
 msgstr "fattura"
 
-#. "The customer (or vendor) to which this invoice is sent to."
-#, fuzzy
-msgid "invoice owner"
-msgstr "fattura"
-
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
 msgstr "lavoro, compito"
@@ -442,7 +447,7 @@ msgstr "libro mastro, mastro"
 
 #. "The heading for the right side of the balance sheet. See also: Equity."
 msgid "liabilities/equity"
-msgstr "passivit‡/nette"
+msgstr "passivit√†/nette"
 
 #. "A sum of money that is lent (by a bank)"
 msgid "loan"
@@ -477,7 +482,7 @@ msgstr "marcatore"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
-msgstr "modalit‡ MDI"
+msgstr "modalit√† MDI"
 
 #. "One textfield per split that should help you remember what this split was about."
 msgid "Memo"
@@ -534,6 +539,10 @@ msgstr "ordine"
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
 msgstr "orfano"
+
+#. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
+msgid "owner (of bill, invoice or expense voucher)"
+msgstr ""
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
@@ -619,7 +628,7 @@ msgstr "tenere traccia"
 
 #. "A list of items; a book containing such a list"
 msgid "register"
-msgstr "registro (termine generico e pi˘ comprensibile)"
+msgstr "registro (termine generico e pi√π comprensibile)"
 
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
@@ -711,7 +720,7 @@ msgstr "foglio di stile"
 msgid "subtotal"
 msgstr "subtotale"
 
-#. "On the goverment's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
+#. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
 #, fuzzy
 msgid "tax code"
 msgstr "info imposte"
@@ -779,7 +788,7 @@ msgstr "tipo"
 
 #. "A fixed amount or number used as a standard of measurement; e.g. millimeters, inch; for absolute positioning in the custom check format."
 msgid "units"
-msgstr "unit‡"
+msgstr "unit√†"
 
 #. "-"
 msgid "URL"
@@ -801,6 +810,10 @@ msgstr "buono, nota, garante"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "prelievo (in una finestra di riconciliazione)"
+
+#, fuzzy
+#~ msgid "invoice owner"
+#~ msgstr "fattura"
 
 #~ msgid "Term"
 #~ msgstr "Termine"

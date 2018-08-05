@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gnc-account-example 
+  xmlns="http://www.gnucash.org/XML/"
+  xmlns:act="http://www.gnucash.org/XML/act"
+  xmlns:addr="http://www.gnucash.org/XML/addr"
+  xmlns:bgt="http://www.gnucash.org/XML/bgt"
+  xmlns:billterm="http://www.gnucash.org/XML/billterm"
+  xmlns:book="http://www.gnucash.org/XML/book"
+  xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+  xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+  xmlns:cd="http://www.gnucash.org/XML/cd"
+  xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+  xmlns:cust="http://www.gnucash.org/XML/cust"
+  xmlns:employee="http://www.gnucash.org/XML/employee"
+  xmlns:entry="http://www.gnucash.org/XML/entry"
+  xmlns:fs="http://www.gnucash.org/XML/fs"
+  xmlns:gnc="http://www.gnucash.org/XML/gnc"
+  xmlns:gnc-act="http://www.gnucash.org/XML/gnc-act"
+  xmlns:invoice="http://www.gnucash.org/XML/invoice"
+  xmlns:job="http://www.gnucash.org/XML/job"
+  xmlns:lot="http://www.gnucash.org/XML/lot"
+  xmlns:order="http://www.gnucash.org/XML/order"
+  xmlns:owner="http://www.gnucash.org/XML/owner"
+  xmlns:price="http://www.gnucash.org/XML/price"
+  xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+  xmlns:slot="http://www.gnucash.org/XML/slot"
+  xmlns:split="http://www.gnucash.org/XML/split"
+  xmlns:sx="http://www.gnucash.org/XML/sx"
+  xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+  xmlns:trn="http://www.gnucash.org/XML/trn"
+  xmlns:ts="http://www.gnucash.org/XML/ts"
+  xmlns:tte="http://www.gnucash.org/XML/tte"
+  xmlns:vendor="http://www.gnucash.org/XML/vendor">
+    <gnc-act:title>
+      Revenus - Conjoint(e)
+    </gnc-act:title>
+    <gnc-act:short-description>
+     Comptes pour le suivi distinct des revenus du (de la) conjoint(e)
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Sélectionnez ce groupe de comptes si vous voulez suivre séparément les revenus et dépenses d'emploi du (de la) conjoint(e).
+  </gnc-act:long-description>    
+  <gnc:account version="2.0.0">
+	  <act:name>Root Account</act:name>
+	  <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
+	  <act:type>ROOT</act:type>
+	  <act:commodity-scu>0</act:commodity-scu>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Revenus</act:name>
+	  <act:id type="new">e5e6414e2da9abb0d11a675a1244e380</act:id>
+	  <act:type>INCOME</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Revenus</act:description>
+	  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+	  <act:slots>
+		  <slot>
+			  <slot:key>placeholder</slot:key>
+			  <slot:value type="string">true</slot:value>
+		  </slot>
+	  </act:slots>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Emploi - Conjoint(e)</act:name>
+	  <act:id type="new">645791ddccbe9ff1c4906b3126f458c8</act:id>
+	  <act:type>INCOME</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Revenus d'emploi du (de la) conjoint(e)</act:description>
+	  <act:parent type="new">e5e6414e2da9abb0d11a675a1244e380</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Primes</act:name>
+	  <act:id type="new">a374c4a7cf2411241eb6679ab5c689f7</act:id>
+	  <act:type>INCOME</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Primes et bonis</act:description>
+	  <act:parent type="new">645791ddccbe9ff1c4906b3126f458c8</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Commissions</act:name>
+	  <act:id type="new">4fa3217194f22373ecdfcfbdfffb8370</act:id>
+	  <act:type>INCOME</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Commissions sur ventes</act:description>
+	  <act:parent type="new">645791ddccbe9ff1c4906b3126f458c8</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Salaire</act:name>
+	  <act:id type="new">3c8250e8fe4c5cfd1506526c3e387a23</act:id>
+	  <act:type>INCOME</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Salaire brut</act:description>
+	  <act:parent type="new">645791ddccbe9ff1c4906b3126f458c8</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Frais remboursés</act:name>
+	  <act:id type="new">b2c01d9d1cce60e83becb7dff88f30e3</act:id>
+	  <act:type>INCOME</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Notes de frais remboursées</act:description>
+	  <act:parent type="new">645791ddccbe9ff1c4906b3126f458c8</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Dépenses</act:name>
+	  <act:id type="new">5882be9c31d58cc589c53f94d86f82da</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Dépenses</act:description>
+	  <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
+	  <act:slots>
+		  <slot>
+			  <slot:key>placeholder</slot:key>
+			  <slot:value type="string">true</slot:value>
+		  </slot>
+	  </act:slots>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Taxes et impôts</act:name>
+	  <act:id type="new">80e04606e5258beb9d50e264d5a40d85</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Taxes et impôts</act:description>
+	  <act:slots>
+		  <slot>
+			  <slot:key>placeholder</slot:key>
+			  <slot:value type="string">true</slot:value>
+		  </slot>
+	  </act:slots>
+	  <act:parent type="new">5882be9c31d58cc589c53f94d86f82da</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Emploi - Conjoint(e)</act:name>
+	  <act:id type="new">b39178d39ea997115b592f0b8a488dee</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Taxes et impôts sur revenus d'emploi du (de la) conjoint (e)</act:description>
+	  <act:parent type="new">80e04606e5258beb9d50e264d5a40d85</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Assurance emploi</act:name>
+	  <act:id type="new">c95316227b45f5e5d7413296973bc97d</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Assurance emploi</act:description>
+	  <act:parent type="new">b39178d39ea997115b592f0b8a488dee</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Fédéral</act:name>
+	  <act:id type="new">1a2bec160b3db460d132c0ce4284fecc</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Impôt fédéral</act:description>
+	  <act:parent type="new">b39178d39ea997115b592f0b8a488dee</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>Provincial</act:name>
+	  <act:id type="new">bfde23aefb4089a13ded6cd720cec257</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Impôt provincial</act:description>
+	  <act:parent type="new">b39178d39ea997115b592f0b8a488dee</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>RAMQ/Medicare</act:name>
+	  <act:id type="new">8337c159fce0eef4be0e1341b55a708f</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Régime d'assurance maladie</act:description>
+	  <act:parent type="new">b39178d39ea997115b592f0b8a488dee</act:parent>
+  </gnc:account>
+  <gnc:account version="2.0.0">
+	  <act:name>RRQ/RCP</act:name>
+	  <act:id type="new">1b97e8e587751f0f88457c9fa8fb6d77</act:id>
+	  <act:type>EXPENSE</act:type>
+	  <act:commodity>
+		  <cmdty:space>ISO4217</cmdty:space>
+		  <cmdty:id>CAD</cmdty:id>
+	  </act:commodity>
+	  <act:commodity-scu>100</act:commodity-scu>
+	  <act:description>Régime de rente d'état</act:description>
+	  <act:parent type="new">b39178d39ea997115b592f0b8a488dee</act:parent>
+  </gnc:account>
+</gnc-account-example>

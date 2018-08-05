@@ -2,7 +2,7 @@ HOWTO: Translating GnuCash
 Last update: 2003-07-04
 
 The concept of this document is to give you step-by-step instructions on 
-how to update (or create if non-existant) language translations for the 
+how to update (or create if non-existent) language translations for the 
 gnucash project.  
 
 Any additions or corrections to this file should be sent to either Jon 
@@ -206,7 +206,7 @@ msgid ""
 "The GNU way to manage your money!"
 msgstr ""
 
-After, the tranlation in the de.po file:
+After, the translation in the de.po file:
 
 #: messages-i18n.c:11
 msgid ""
@@ -331,7 +331,7 @@ gnc-mdi-utils.c:574"?  Open that source file and find line 574:
 574:  gtk_signal_handler_block_by_data(GTK_OBJECT(widget), info);
 
 So, the problem is with the translation of "_View/_Toolbar".  The "/" is a 
-menu seperator, so you now know that the problem is with either the 
+menu separator, so you now know that the problem is with either the 
 translation of "_View" or "_Toolbar".  By switching to an English gnucash
 and looking through your .po file, you should be able to find the problem.
 Change the offending translation to whatever you see in the gnucash app.
@@ -377,7 +377,7 @@ For each file:
 4) Change the gnc-act:title, gnc-act:short-description, and
    gnc-act:long-description to contain appropriately translated text.
    Do not add any newlines in the long description except at the end
-   and begining of the string.
+   and beginning of the string.
 5) For each gnc:account in the file translate the act:name, and
    act:description fields.  Please do not translate any other fields.
 

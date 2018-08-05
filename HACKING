@@ -73,23 +73,30 @@ August 22, 2000
 TIPS AND HINTS
 ==============
 
+Building GnuCash in-tree
+------------------------
+This is generally discouraged. You should always use a separate build directory,
+preferably outside of the source directory. If you really want a build directory
+inside your source directory, make it a hidden one (starting with a '.'), to
+keep intltool from incorrectly picking up translatable strings from the build directory.
+
 Starting GnuCash from the build tree
 ------------------------------------
-This is known to not work very well.  Instead, `--prefix` your build into /opt/gnc/svn/ (or some such).
+This should mostly work, but there may be corner cases where it behaves differently from
+running gnucash from the target installation directory. You can tell cmake which
+install directory to use via the command line switch '-DCMAKE_INSTALL_PREFIX='
+Don't use '/usr' or '/usr/local' unless you're a package maintainer for a distro.
+Instead choose /opt/gnc/git/ or even $HOME/gnc/git (or something similar).
 
 Getting Trace Messages From GnuCash
 -----------------------------------
-See the doxygen comments in lib/libqof/qof/qoflog.h (and .c)
+See the doxygen comments in libgnucash/engine/qoflog.h (and .c)
 
 Starting GnuCash in GDB
 -----------------------
 To run gdb on an installed version of gnucash (installed in /opt/gnc/unstable:)
 
     % gdb /opt/gnc/unstable/bin/gnucash
-
-OS X/Quartz developers can't run gnucash in gdb this way. They should instead use:
-
-    % /opt/gnc/unstable/bin/gnucash-gdb
 
 You'll also probably want to know about these:
 
@@ -116,15 +123,17 @@ jsled does not need the above with emacs-22, thankfully.  It was getting quite t
 
 Using Electric Fence with GnuCash
 ---------------------------------
-    % configure --enable-efence
-(except this doesn't actually enable efence :-( need to hack
-configure.in and add $LIBS = -lefence and re-run ./autogen.sh)
+There are currently no rules in our build system to build and run gnucash
+or unit tests with Electric Fence.
 
-Don't know why, efence does not currently work with gnucash:
-I get a bunch of errors:
-   warning: Cannot initialize thread debugging library: unknown thread_db error '22'
+It should probably be relatively straightforward to add this as all it
+needs is to link with libefence.so (-lefence).
 
-If you know how to fix this, please update these instructions.
+Fedora 27 ships an ElectricFence package containing that libary and also
+an exectuable 'ef' to run an arbitrary program with Electric Fence
+guarding enabled. I have given it a quick spin on gnucash but it immediatly
+crashes. I haven't investigated whether this is because I should first have
+linked gnucash with -lefence or because a real problem in GnuCash code.
 
 
 Using Valgrind with GnuCash
@@ -157,6 +166,7 @@ These commands may be useful to find out the library that actually
 exported a particular symbol, and to check which import symbol one
 particular library depends upon and where they are imported
 from. Run these from the top-level of the build tree.
+Note "lib64" below should be "lib" for a 32-bit build.
 
 # Create a table of all exported symbols and where they come from
 nm -A `find . -name '*.so'` | grep ' T ' | \
@@ -164,26 +174,26 @@ nm -A `find . -name '*.so'` | grep ' T ' | \
 
 # For a particular library, check symbol import requirements, 
 # listing all symbols (needs the file from above)
-A=src/gnc-module/.libs/libgw-gnc-module.so && echo "$A requirements:" \
+A=lib64/libgnc-module.so && echo "$A requirements:" \
   && nm $A | grep ' U ' | sed 's/^.* \([^ ]*\)$/\1/' | \
   grep -wFf- exportedsymbols
 
 # For a particular library, check import requirements, 
 # summarized by library
-A=src/gnc-module/.libs/libgw-gnc-module.so && echo "$A requirements:" \
+A=lib64/libgnc-module.so && echo "$A requirements:" \
   && nm $A | grep ' U ' | sed 's/^.* \([^ ]*\)$/\1/' | \
   grep -wFf- exportedsymbols | cut -d: -f1 | sort | uniq
 
 # For a particular library, check import requirements, 
-# summarized by library, formatted for Makefile.am
-A=src/gnc-module/.libs/libgw-gnc-module.so && echo "$A requirements:" \
+# summarized by library, formatted for a cmake TARGET_LINK_LIBRARIES command
+A=lib64/libgnc-gnome.so && echo "$A target link libraries:" \
   && nm $A | grep ' U ' | sed 's/^.* \([^ ]*\)$/\1/' | \
   grep -wFf- exportedsymbols | cut -d: -f1 | sort | uniq | \
-  sed 's!.libs/!!' | sed 's/.so$/.la \\/' | sed 's!^.!  \${top_builddir}!'
+  sed 's!.*/lib!  !' | sed 's/.so$//'
 
 # List all import requirements summarized by library for a full
 # recursive directory tree
-for A in `find src/business/business-core -name '*.so'`; do \
+for A in `find lib64 -name '*.so'`; do \
   echo -e "\n##$A requirements:" && nm $A | grep ' U ' | \
   sed 's/^.* \([^ ]*\)$/\1/' | grep -wFf- exportedsymbols | \
   cut -d: -f1 | sort | uniq; done
@@ -195,6 +205,10 @@ There is an XCode project available in gnucash.xcodeproj at the root of the
 source tree.  This project can be used with XCode on a Macintosh to debug
 GnuCash.  It is not set up to build GnuCash, but only to debug it. Building must
 be done using the normal command line tools.
+
+Note this XCode project has not been updated since the big directory restructuring
+preceding the 2.7.1 release. So it will currently not find source files where
+it's expecting them.
 
 This project is designed to be used with the X Window version of GnuCash, not
 the native Quartz version.  To use it you must build and install GnuCash into

@@ -1,0 +1,1165 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<gnc-account-example
+     xmlns:gnc-act="http://www.gnucash.org/XML/gnc-act"
+     xmlns:gnc="http://www.gnucash.org/XML/gnc"
+     xmlns:act="http://www.gnucash.org/XML/act"
+     xmlns:book="http://www.gnucash.org/XML/book"
+     xmlns:cd="http://www.gnucash.org/XML/cd"
+     xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+     xmlns:price="http://www.gnucash.org/XML/price"
+     xmlns:slot="http://www.gnucash.org/XML/slot"
+     xmlns:split="http://www.gnucash.org/XML/split"
+     xmlns:sx="http://www.gnucash.org/XML/sx"
+     xmlns:trn="http://www.gnucash.org/XML/trn"
+     xmlns:ts="http://www.gnucash.org/XML/ts"
+     xmlns:fs="http://www.gnucash.org/XML/fs"
+     xmlns:bgt="http://www.gnucash.org/XML/bgt"
+     xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+     xmlns:lot="http://www.gnucash.org/XML/lot"
+     xmlns:addr="http://www.gnucash.org/XML/addr"
+     xmlns:owner="http://www.gnucash.org/XML/owner"
+     xmlns:billterm="http://www.gnucash.org/XML/billterm"
+     xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+     xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+     xmlns:cust="http://www.gnucash.org/XML/cust"
+     xmlns:employee="http://www.gnucash.org/XML/employee"
+     xmlns:entry="http://www.gnucash.org/XML/entry"
+     xmlns:invoice="http://www.gnucash.org/XML/invoice"
+     xmlns:job="http://www.gnucash.org/XML/job"
+     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+     xmlns:tte="http://www.gnucash.org/XML/tte"
+     xmlns:vendor="http://www.gnucash.org/XML/vendor">
+<gnc-act:title>
+    GST Indian Business
+</gnc-act:title>
+<gnc-act:short-description>
+    Business accounts for India with GST.
+</gnc-act:short-description>
+<gnc-act:long-description>
+    This is the base module for setting up accounts for an Indian Business with Goods and Service Tax (GST). Mostly uses Indian terminology to ease the filing of Income tax returns, MCA returns and GST returns.
+</gnc-act:long-description>
+<gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">582a2e2ab76f4c3c85a0dbb4d42db409</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Assets</act:name>
+  <act:id type="new">5fa36e498ee2754fb3a723ba30b439fd</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Assets</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">582a2e2ab76f4c3c85a0dbb4d42db409</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Current Assets</act:name>
+  <act:id type="new">45e25602b885ac1f09b1cdf03782df69</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Current Assets</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">5fa36e498ee2754fb3a723ba30b439fd</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Savings Account</act:name>
+  <act:id type="new">2be5457affff139ccd930de1da010012</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Savings Account</act:description>
+  <act:parent type="new">45e25602b885ac1f09b1cdf03782df69</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Current Account</act:name>
+  <act:id type="new">cfd3222c517d9b1e5483a4e074ef5fbe</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Current Account</act:description>
+  <act:parent type="new">45e25602b885ac1f09b1cdf03782df69</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Cash</act:name>
+  <act:id type="new">5a78a0e185bd1e2cbae57cd5360ccd1a</act:id>
+  <act:type>CASH</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Cash</act:description>
+  <act:parent type="new">45e25602b885ac1f09b1cdf03782df69</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Advance Professional Tax</act:name>
+  <act:id type="new">4712b364111c40509487fb40851bc373</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">45e25602b885ac1f09b1cdf03782df69</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Fixed Assets</act:name>
+  <act:id type="new">1ad9c8a0a01b46b7a070f5ccc1926142</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Fixed Assets</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">5fa36e498ee2754fb3a723ba30b439fd</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Plant Machine etc</act:name>
+  <act:id type="new">e3d0ad3f135e47789dd91ae55c0fee3a</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">1ad9c8a0a01b46b7a070f5ccc1926142</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Depreciation</act:name>
+  <act:id type="new">ab2a089c9beb454d863cce871cdbd356</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">1ad9c8a0a01b46b7a070f5ccc1926142</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Inventories</act:name>
+  <act:id type="new">8e007cf9199a482696d73b6b5b6ebb55</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">5fa36e498ee2754fb3a723ba30b439fd</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Long Term Loans and Advances</act:name>
+  <act:id type="new">d522c8f8c3a142a2912de5f1c0bddc06</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">5fa36e498ee2754fb3a723ba30b439fd</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Short Term Loans and Advances</act:name>
+  <act:id type="new">1c557045482b4f5499bbd083eab44611</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">5fa36e498ee2754fb3a723ba30b439fd</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Other Assets</act:name>
+  <act:id type="new">d24c50eac5e21716b2f232aab38d2c84</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">5fa36e498ee2754fb3a723ba30b439fd</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Tax Credit</act:name>
+  <act:id type="new">aee19f07050712e0fa46b2c7b40853ed</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>TDS or Advance tax credit</act:description>
+  <act:parent type="new">5fa36e498ee2754fb3a723ba30b439fd</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Trade Receivables</act:name>
+  <act:id type="new">ebb6ef8fea856406e4b3db83c738c83c</act:id>
+  <act:type>RECEIVABLE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">5fa36e498ee2754fb3a723ba30b439fd</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>NonGST</act:name>
+  <act:id type="new">c79e7f930eb186f4a8c265d5c85ced02</act:id>
+  <act:type>RECEIVABLE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">ebb6ef8fea856406e4b3db83c738c83c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>GST</act:name>
+  <act:id type="new">3dd4fd017cd9542fc5330781d0baef7a</act:id>
+  <act:type>RECEIVABLE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">ebb6ef8fea856406e4b3db83c738c83c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Purchase</act:name>
+  <act:id type="new">0061e420c5ab5f1ba2972cb52a3a3afe</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">5fa36e498ee2754fb3a723ba30b439fd</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>GST</act:name>
+  <act:id type="new">9f6d5a32662c11def8498a60d78bfad2</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">0061e420c5ab5f1ba2972cb52a3a3afe</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>CGST</act:name>
+  <act:id type="new">10e36ceb9695c250929753024062acf1</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">9f6d5a32662c11def8498a60d78bfad2</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>IGST</act:name>
+  <act:id type="new">e7b48dc858c25d03a11bda22b2197f9e</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">9f6d5a32662c11def8498a60d78bfad2</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>SGST</act:name>
+  <act:id type="new">12d59648ceb7abe5c7caf9b3f73de946</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">9f6d5a32662c11def8498a60d78bfad2</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>NonGST</act:name>
+  <act:id type="new">134f75105af83e78fbd87b8354fd7ca8</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">0061e420c5ab5f1ba2972cb52a3a3afe</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>CGST</act:name>
+  <act:id type="new">28fe052c85ccea8bd557ccf94d4ed886</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">134f75105af83e78fbd87b8354fd7ca8</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>IGST</act:name>
+  <act:id type="new">ccaee24bdc84a3925fcdba0dc7cc2d28</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">134f75105af83e78fbd87b8354fd7ca8</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>SGST</act:name>
+  <act:id type="new">b094c0e16232b5614a45050d0c855617</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">134f75105af83e78fbd87b8354fd7ca8</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Income</act:name>
+  <act:id type="new">433e1485f0e91d42b708c2519671f395</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Income</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">582a2e2ab76f4c3c85a0dbb4d42db409</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Interest Income</act:name>
+  <act:id type="new">817a5b9217e06f21d7d9cd7a92637c03</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">433e1485f0e91d42b708c2519671f395</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Other Interest</act:name>
+  <act:id type="new">1e049743af66483bc5dd4ab203464814</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Other Interest</act:description>
+  <act:parent type="new">817a5b9217e06f21d7d9cd7a92637c03</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Bank Interest</act:name>
+  <act:id type="new">9ee5b6e99f266b3061f3ceb1916f7018</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Bank Interest</act:description>
+  <act:parent type="new">817a5b9217e06f21d7d9cd7a92637c03</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>FD Interest</act:name>
+  <act:id type="new">12e1a105ec9b7e6df616480651291813</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>FD Interest</act:description>
+  <act:parent type="new">817a5b9217e06f21d7d9cd7a92637c03</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Other Income</act:name>
+  <act:id type="new">bd688ba4ae0b0492742f7babc277c419</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Other Income</act:description>
+  <act:parent type="new">433e1485f0e91d42b708c2519671f395</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Sales</act:name>
+  <act:id type="new">35cf65f9d7a72bf6e851ccc26d291950</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">433e1485f0e91d42b708c2519671f395</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>GST</act:name>
+  <act:id type="new">3431b4000d91051a4d7593b37c9673c4</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">35cf65f9d7a72bf6e851ccc26d291950</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>NonGST</act:name>
+  <act:id type="new">416572cabddedcc4839b402371de7ce8</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">35cf65f9d7a72bf6e851ccc26d291950</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Roundoff</act:name>
+  <act:id type="new">c4772f8e120736cf2b32a385b37337d9</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">35cf65f9d7a72bf6e851ccc26d291950</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Expenses</act:name>
+  <act:id type="new">c1aec02c8b9c001933af80f5f08255b4</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Expenses</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">582a2e2ab76f4c3c85a0dbb4d42db409</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Adjustment</act:name>
+  <act:id type="new">2949b95d1a80502e1430b8dec7247094</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Adjustment</act:description>
+  <act:parent type="new">c1aec02c8b9c001933af80f5f08255b4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Bank Service Charge</act:name>
+  <act:id type="new">c8af356484e68c5a3aa1ed8128acc1f6</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Bank Service Charge</act:description>
+  <act:parent type="new">c1aec02c8b9c001933af80f5f08255b4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Commission</act:name>
+  <act:id type="new">bdad6c4dc9e2490eb55deb92cb4c832d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Commission</act:description>
+  <act:parent type="new">c1aec02c8b9c001933af80f5f08255b4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Depreciation</act:name>
+  <act:id type="new">b6190f89a585412d9264905817ce746c</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Depreciation</act:description>
+  <act:parent type="new">c1aec02c8b9c001933af80f5f08255b4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Director Remuneration</act:name>
+  <act:id type="new">09dfd50a1d594765a01177e827450e1d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">c1aec02c8b9c001933af80f5f08255b4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Donation</act:name>
+  <act:id type="new">0339fd1eccd68f83d7ccde42b826c8b7</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Donation</act:description>
+  <act:parent type="new">c1aec02c8b9c001933af80f5f08255b4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Gifts</act:name>
+  <act:id type="new">c9b15c6555c5b7ced2e09679d2e614f9</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Gifts</act:description>
+  <act:parent type="new">c1aec02c8b9c001933af80f5f08255b4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Medical Expenses</act:name>
+  <act:id type="new">cdcc70772752e2117b6aed4f39767bd0</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Medical Expenses</act:description>
+  <act:parent type="new">c1aec02c8b9c001933af80f5f08255b4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Miscellaneous</act:name>
+  <act:id type="new">96129f8d08faa746eca5c34167c1fb0d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Miscellaneous</act:description>
+  <act:parent type="new">c1aec02c8b9c001933af80f5f08255b4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Taxes</act:name>
+  <act:id type="new">1d10998dcfda525e99a4dd86dea9c912</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Taxes</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">c1aec02c8b9c001933af80f5f08255b4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Income Tax</act:name>
+  <act:id type="new">b293f5cc941e27888de12ad35125b206</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Income Tax</act:description>
+  <act:parent type="new">1d10998dcfda525e99a4dd86dea9c912</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Professional Tax</act:name>
+  <act:id type="new">09806298eba64e80a5eacb1db672675a</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">1d10998dcfda525e99a4dd86dea9c912</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>TDS</act:name>
+  <act:id type="new">3409695392c644b6b18a317691df3cf6</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">1d10998dcfda525e99a4dd86dea9c912</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Other Tax</act:name>
+  <act:id type="new">c02f88ab579aaecf13e9dc11c9299248</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Other Tax</act:description>
+  <act:parent type="new">1d10998dcfda525e99a4dd86dea9c912</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Salary</act:name>
+  <act:id type="new">f98a2a5a239d4f0fa8ec79438a3db1b4</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">c1aec02c8b9c001933af80f5f08255b4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Utilities</act:name>
+  <act:id type="new">ca4390dbd3382d18e2fc217fddc50597</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Utilities</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">c1aec02c8b9c001933af80f5f08255b4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Electric</act:name>
+  <act:id type="new">569dfae9a9022cd44a1e10ea92245f1b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Electric</act:description>
+  <act:parent type="new">ca4390dbd3382d18e2fc217fddc50597</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Gas</act:name>
+  <act:id type="new">29ab6f60a21be95ea5b7183ca5683cc0</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Gas</act:description>
+  <act:parent type="new">ca4390dbd3382d18e2fc217fddc50597</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Water</act:name>
+  <act:id type="new">fdb9e0b24f9d90451847f72540f1acec</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Water</act:description>
+  <act:parent type="new">ca4390dbd3382d18e2fc217fddc50597</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Phone</act:name>
+  <act:id type="new">d8c6e8b5681cc07c025af095e122ee7c</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Phone</act:description>
+  <act:parent type="new">ca4390dbd3382d18e2fc217fddc50597</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Travel</act:name>
+  <act:id type="new">775ec47db6eab66655ed0a133f74e727</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Travel</act:description>
+  <act:parent type="new">c1aec02c8b9c001933af80f5f08255b4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Maintenance</act:name>
+  <act:id type="new">0fa7eafeae0842726bd0c0049e0a422e</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">c1aec02c8b9c001933af80f5f08255b4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>GST Adjustment</act:name>
+  <act:id type="new">1b87212fd08debd214738103510790a9</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">c1aec02c8b9c001933af80f5f08255b4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Purchase</act:name>
+  <act:id type="new">0295f7922493ee7e2071430468fb405f</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">c1aec02c8b9c001933af80f5f08255b4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>GST</act:name>
+  <act:id type="new">d2cf0b374ad9eb69bda2d37c9b6b3a7c</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">0295f7922493ee7e2071430468fb405f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>NonGST</act:name>
+  <act:id type="new">c6e60aeda6db067fd14bfe484ee38dcb</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">0295f7922493ee7e2071430468fb405f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Roundoff</act:name>
+  <act:id type="new">3f87d7b53b441ae577d04b1ab508a0e2</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">0295f7922493ee7e2071430468fb405f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Liabilities</act:name>
+  <act:id type="new">7cd65c496292f14d247e1cdcfb63378b</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Liabilities</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">582a2e2ab76f4c3c85a0dbb4d42db409</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Audit Fees</act:name>
+  <act:id type="new">acdf8b13f73f48ebb63d50692dca7c9d</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">7cd65c496292f14d247e1cdcfb63378b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Commission</act:name>
+  <act:id type="new">23a8f479f73779a5542cff46b611c60a</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">7cd65c496292f14d247e1cdcfb63378b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Director Remuneration</act:name>
+  <act:id type="new">b5bf8752a49840ef83375d5ea919cad7</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">7cd65c496292f14d247e1cdcfb63378b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Other Liabilities</act:name>
+  <act:id type="new">cda3c3532334ff9bc6c704de940ee8a2</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">7cd65c496292f14d247e1cdcfb63378b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Income Tax</act:name>
+  <act:id type="new">f9aec6c859ab46e6b92a682c4c5ef285</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">7cd65c496292f14d247e1cdcfb63378b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>TDS</act:name>
+  <act:id type="new">9bf16d5585b34b8181372b540e13cc74</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">7cd65c496292f14d247e1cdcfb63378b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Sales</act:name>
+  <act:id type="new">74e60c87d1b6333e934b4c246b35d3fb</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">7cd65c496292f14d247e1cdcfb63378b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>GST</act:name>
+  <act:id type="new">9e85c68344f067f21321a092605da502</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">74e60c87d1b6333e934b4c246b35d3fb</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>CGST</act:name>
+  <act:id type="new">becdc381fe2dcca1ab0732744629cc52</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">9e85c68344f067f21321a092605da502</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>IGST</act:name>
+  <act:id type="new">8d06532022e78e70aac5f0927b8a2777</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">9e85c68344f067f21321a092605da502</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>SGST</act:name>
+  <act:id type="new">daa6250595556f9a473aed36f6690ad7</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">9e85c68344f067f21321a092605da502</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>NonGST</act:name>
+  <act:id type="new">266b115089bb13e1ec2db183e5501f2e</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">74e60c87d1b6333e934b4c246b35d3fb</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>CGST</act:name>
+  <act:id type="new">0fe2c5d89e4ba11a2aaf0dbfb56fd179</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">266b115089bb13e1ec2db183e5501f2e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>IGST</act:name>
+  <act:id type="new">35f2075adc89faa4b861b3a618131919</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">266b115089bb13e1ec2db183e5501f2e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>SGST</act:name>
+  <act:id type="new">32aa48523459c9b6ee327a0731947257</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">266b115089bb13e1ec2db183e5501f2e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Trade Payables</act:name>
+  <act:id type="new">baa63396db44e96c4cd928a3195cc84e</act:id>
+  <act:type>PAYABLE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">7cd65c496292f14d247e1cdcfb63378b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>GST</act:name>
+  <act:id type="new">9289ad461afc48f9a84e051029998f73</act:id>
+  <act:type>PAYABLE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">baa63396db44e96c4cd928a3195cc84e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>NonGST</act:name>
+  <act:id type="new">669b3622c133cf6cac6ce3a15cdead68</act:id>
+  <act:type>PAYABLE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:parent type="new">baa63396db44e96c4cd928a3195cc84e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Equity</act:name>
+  <act:id type="new">599b08659324698f0177ce3dbb513e5f</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Equity</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">582a2e2ab76f4c3c85a0dbb4d42db409</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Opening Balances</act:name>
+  <act:id type="new">2a799605427cef60676f484b23706b68</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Opening Balances</act:description>
+  <act:parent type="new">599b08659324698f0177ce3dbb513e5f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Reserves and Surplus</act:name>
+  <act:id type="new">2c1d2486e01342c39a16f92774bb344b</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Reserves and Surplus</act:description>
+  <act:parent type="new">599b08659324698f0177ce3dbb513e5f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+    <act:name>Share Capital</act:name>
+  <act:id type="new">f3e8406f1ecd4cf99f6bb62266eda6ce</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>INR</cmdty:id>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
+  <act:description>Share Capital</act:description>
+  <act:parent type="new">599b08659324698f0177ce3dbb513e5f</act:parent>
+</gnc:account>
+</gnc-account-example>

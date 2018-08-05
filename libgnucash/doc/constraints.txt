@@ -1,0 +1,98 @@
+/** \page financeconstraints Financial Constraints in GnuCash
+
+				Linas Vepstas <linas@linas.org>
+                        September 2003
+ 
+
+\section financeoverview Overview:
+
+The GnuCash Engine implements a set of financial constraints so
+that a set of basic/core accounting rules are obeyed.  The best
+known example is the "double-entry" constraint: the total value
+of a transaction must always be zero.  A more mundane example
+is that cap gains are recorded on the date that they occur: or,
+more plainly: the posted date on the transaction that records
+cap gains is the same as the posted date of the transaction that
+caused the gains.  At this time, these constraints are 
+implemented in an ad-hoc manner.  The goal of this document is
+to list and document as many of these constraints as possible,
+and to review the framework in which they operate.  A possible
+future direction is to formalize the framework, so that it becomes
+easier to add and work with new types of constraints.
+
+
+\section financeintro Introduction:
+
+There are three very different classes of constraints within GnuCash,
+which should not be confused with each other. They work in very
+different ways and have very different goals.  First, there are
+the "GUI Constraints", which are implemented as events: they make
+sure that the the GUI displays the data in the engine as it currently
+stands.  Next are the "Multi-User Constraints", which are implemented
+in the Postgres SQL backend: They make sure that as one user alters
+data, that it is reflected in what the other users see.  Finally,
+there are the "Financial Constraints", implemented in the engine,
+that make sure that the financial data recorded in the engine meets 
+a set of core and extended accounting rules.  This document deals 
+primarily with this third class.
+
+Note that some financial constraints are so core, so key to GnuCash 
+that they are woven into the object design itself.  For example, the 
+posted date is a part of the transaction: different splits cannot 
+possibly have different posted dates, as there is no mechanism to 
+represent this.  All splits get their posted date from their parent 
+transaction.
+
+The constraints that we are most interested in are the ones that 
+are implemented as 'triggers' or 'scrubbers':  these are not reflected
+in the core structure, but are rather implemented as routines that
+run at specific times and alter the data to be self-consistent in 
+certain ways.   The 'double-entry' constraint belongs to this class:
+it computes the total value of all the splits in a transaction, and 
+adds one, if needed, to bring the total to zero.  This constraint
+runs when the transaction is committed.   Although this is an important
+cosntraint, there is no (easy) way to reflect it directly in the
+object design; thus, it acts as a rule that must be periodically
+imposed.
+
+At this time, the financial constraints within gnucash are impelmented
+in an ad-hoc manner, with no governing framework.  This may change,
+as there is pressure to support more complex constraints that vary
+by region/country, by account type, by industry, etc.
+
+\section financelazy Why Not 'Lazy Evaluation'?
+
+Lazy evaluation is superficially like constraints, but differs in an
+important way.  With lazy evaluation, when something changes (e.g.
+the posted date) it is marked dirty. Later, when something else needs
+something (e.g. the posted date on a gains split), the dirty flag
+is examined, and, if dirty, the new/corrected value is computed and 
+returned.
+
+Simple/ad-hoc lazy evaluation works well when data dependencies are 
+simple, but it breaks down when there are too many/circular
+relationships.  It becomes all too easy to get trapped in inifite
+loops of corrections.   The goal of moving to a formal constraint
+system is to introduce specific, well-defined sync points where 
+constraint checking can be done, without incuring circular
+deopendencies.  At this time, the sync point is the xaccTransCommitEdit()
+subroutine.
+
+\section financelist List of Constraints
+
+The following is a list of the constraints that are currently
+implemented in the GnuCash Engine, with a short description of what
+they are, and how they work.
+
+- Double Entry
+- Double-Balance
+- Date Posted of Gains Transaction
+   The posted date of the gains transaction is kept in sync with the
+   posted date on the transaction that is the source of the gains.
+   See the document 'lots.txt', section 'Cap Gains Actual Implementation' 
+   for details.
+- Value of Gains Transaction
+   The value recorded by the gains transaction is kept in sync with
+   the value
+
+*/

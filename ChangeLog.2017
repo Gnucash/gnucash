@@ -1,0 +1,5704 @@
+2017-12-31 John Ralls 
+
+	* Fix extra instance of test-test-extras* in install_manifest.txt
+
+2017-12-31 Mechtilde 
+
+	* correct typo
+
+2017-12-31 John Ralls 
+
+	* Update ChangeLogs for the new year.
+
+2017-12-30 John Ralls 
+
+	* Release GnuCash 2.7.3 (tag: 2.7.3)
+
+2017-12-30 John Ralls 
+
+	* Merge Bob Fewell's 'gtk3-update12' into unstable.
+
+2017-12-30 John Ralls 
+
+	* Prevent "Save before closing" dialog from appearing at startup.
+
+2017-12-30 John Ralls 
+
+	* Fix distcheck errors.
+
+2017-12-30 John Ralls 
+
+	* Fix -Wsign-compare error.
+
+2017-12-30 John Ralls 
+
+	* Merge branch 'maint' into unstable
+
+2017-12-30 Robert Fewell 
+
+	* Fix register move to another window
+
+2017-12-30 Robert Fewell 
+
+	* Fix some transient parent warnings
+
+2017-12-30 Robert Fewell 
+
+	* Fix There is no budget icon yet so set it to the account one.
+
+2017-12-30 Robert Fewell 
+
+	* Fix error when sheet is read only.
+
+2017-12-30 Robert Fewell 
+
+	* Fix transient parent warnings for budgets
+
+2017-12-30 Robert Fewell 
+
+	* Fix Invalid cast from GncWebkitHtml to GtkWindow
+
+2017-12-30 Robert Fewell 
+
+	* Fix Test for filepath is NULL when cancel pressed for export
+
+2017-12-30 Robert Fewell 
+
+	* Fix Critical errors when SX editor loaded
+
+2017-12-30 Robert Fewell 
+
+	* Fix Transient parent warnings for SX editor
+
+2017-12-30 Robert Fewell 
+
+	* Add a left margin to report zoom to align with other options
+
+2017-12-30 Robert Fewell 
+
+	* Fix register cell height by adding 1px for cell border
+
+2017-12-30 Geert Janssens 
+
+	* A few translatable string changes in the warnings for editing reconciled splits
+
+2017-11-29 Robert Fewell 
+
+	* Bug 771667 - Change reconciled splits warning
+
+2017-12-30 Christopher Lam 
+
+	* ENH: display infobox when no accounts matched
+
+2017-12-29 John Ralls 
+
+	* Bug 616709 - Pressing delete key while editing account name offers...
+
+2017-12-29 John Ralls 
+
+	* Fix crash in customer/employee/vendor reports.
+
+2017-12-29 John Ralls 
+
+	* Merge Bob Fewell's 'gtk3-update11' into unstable.
+
+2017-12-29 Geert Janssens 
+
+	* Merge branch 'unstable-TR-plus' of https://github.com/christopherlam/gnucash into unstable
+
+2017-12-30 Christopher Lam 
+
+	* COSMETIC: amend strings in options
+
+2017-12-29 Geert Janssens 
+
+	* Update POTEFILES.in
+
+2017-12-29 Geert Janssens 
+
+	* Fix a few compile warnings-turned-errors
+
+2017-12-29 Geert Janssens 
+
+	* Merge branch 'prices-in' of https://github.com/Bob-IT/gnucash into unstable
+
+2017-12-29 Robert Fewell 
+
+	* Bug 616709 - Stop the delete button on the Account page
+
+2017-12-29 Robert Fewell 
+
+	* Set focus for invoice pages
+
+2017-12-29 Robert Fewell 
+
+	* Add function to get whether sheet is read only
+
+2017-12-29 Robert Fewell 
+
+	* Make sure the tree view is the focus on an owner page
+
+2017-12-29 Robert Fewell 
+
+	* Replace tabs with spaces for budget files
+
+2017-12-29 Robert Fewell 
+
+	* ake sure the Account tree view has focus when budgets open
+
+2017-12-29 Robert Fewell 
+
+	* Change tabs to spaces in gnc-html-webkit2.c
+
+2017-12-29 Robert Fewell 
+
+	*  Make sure the webkit widget has focus on report load
+
+2017-12-29 Robert Fewell 
+
+	* Replace tabs with spaces in a couple of source files
+
+2017-12-29 Robert Fewell 
+
+	* Make sure the sx tree view has focus on page load
+
+2017-12-29 Robert Fewell 
+
+	* Make sure the sheet has focus in a register when opened
+
+2017-12-29 Robert Fewell 
+
+	* Prevent the tab being the focus
+
+2017-12-29 Robert Fewell 
+
+	* Make sure the tree view has focus on Account tree page load
+
+2017-12-27 John Ralls 
+
+	* Fix Travis 'dangling else' warning.
+
+2017-12-26 John Ralls 
+
+	* Another attempt to make Travis's g++ happy about compiler warnings.
+
+2017-12-26 John Ralls 
+
+	* Fix CXX Flags for g++.
+
+2017-12-23 John Ralls 
+
+	* Bug 791848 - GC 2.6.x does not handle ISO dates introduced with GC 2.7.
+
+2017-12-26 John Ralls 
+
+	* Enforce -Werror on C++ files and fix resulting errors.
+
+2017-12-23 John Ralls 
+
+	* Test struct tm* returns from gnc_gmtime and gnc_localtime
+
+2017-12-23 John Ralls 
+
+	* Fix autotools test setup for test-date-utilities.
+
+2017-12-23 John Ralls 
+
+	* Fix picky gcc-7.2 complaint about a %d conversion not fitting in 3 bytes.
+
+2017-12-23 John Ralls 
+
+	* Bug 791848 - GC 2.6.x does not handle ISO dates introduced with GC 2.7
+
+2017-12-23 John Ralls 
+
+	* Enable reading undelimited YYYYMMDDHHMMSS time strings.
+
+2017-12-24 Christopher Lam 
+
+	* REFACTOR: gnc-numeric not available in scheme anymore
+
+2017-12-05 Christopher Lam 
+
+	* ENH: Optionally hide transactions
+
+2017-12-13 Christopher Lam 
+
+	* ENH: Add 'daily subtotal strategy
+
+2017-12-02 Christopher Lam 
+
+	* ENH: Formalise Reconciliation Report as a new menu item.
+
+2017-11-30 Christopher Lam 
+
+	* ENH: Add indenting for main data and subheadings/subtotals
+
+2017-11-30 Christopher Lam 
+
+	* ENH: Add sortkey Reconciled Status
+
+2017-11-30 Christopher Lam 
+
+	* ENH: Add debit/credit friendly names in subheading rendering
+
+2017-11-27 Christopher Lam 
+
+	* ENH: Add option to choose infobox display summary
+
+2017-12-11 Christopher Lam 
+
+	* COSMETIC: if grand-totals=#f then omit <hr>
+
+2017-11-29 Christopher Lam 
+
+	* REFACTOR: remove 'renderer-key lookup symbol, simplify custom sorter
+
+2017-11-29 Christopher Lam 
+
+	* REFACTOR: simplify num/t-num display code
+
+2017-12-11 Christopher Lam 
+
+	* REFACTOR: centralize left-cols to a vector-list
+
+2017-11-28 Christopher Lam 
+
+	* ENH: if no Display/* selected, insert empty left-column
+
+2017-11-28 Christopher Lam 
+
+	* REFACTOR: simplify render-summary
+
+2017-11-28 Christopher Lam 
+
+	* REFACTOR: simplify do-rows-with-subtotals
+
+2017-11-27 Christopher Lam 
+
+	* REFACTOR:bisect subtotal-get-info into primary/secondary
+
+2017-12-11 Christopher Lam 
+
+	* REFACTOR: start refactor subtotal
+
+2017-12-11 Christopher Lam 
+
+	* BUGFIX: Reverse sign on display only
+
+2017-12-11 Christopher Lam 
+
+	* BUGFIX: Fix incorrect N_ and _ handling
+
+2017-12-11 Christopher Lam 
+
+	* ENH: Upgrade Sign Reversal to use global preference by default
+
+2017-11-26 Christopher Lam 
+
+	* REFACTOR: move calculated-cells to allow access from add-subtotal-row
+
+2017-12-11 Christopher Lam 
+
+	* ENH: 'original currency amt' now shows dual columns
+
+2017-12-11 Christopher Lam 
+
+	* REFACTOR+ENH:Add common-currency mnemonic to header if enabled
+
+2017-12-11 Christopher Lam 
+
+	* REFACTOR: move column-uses? location
+
+2017-12-11 Christopher Lam 
+
+	* REFACTOR:Move Void-status filter to filter tab
+
+2017-11-26 Christopher Lam 
+
+	* REFACTOR:Centralise sign-reverse-list
+
+2017-12-10 Christopher Lam 
+
+	* ENH: add infobox to summarise options used
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: Centralize options
+
+2017-11-27 Christopher Lam 
+
+	* ENH: disable filter accounts selector if filter-mode=none
+
+2017-12-10 Christopher Lam 
+
+	* ENH: dual columns subtotals now in correct column
+
+2017-12-11 Christopher Lam 
+
+	* REFACTOR: Use time64 instead of timepair
+
+2017-12-10 Christopher Lam 
+
+	* COSMETIC: Move Display>Sign reversal option
+
+2017-12-10 Christopher Lam 
+
+	* ENH: Enable sign reversal for amount 'single only
+
+2017-12-10 Christopher Lam 
+
+	* ENH: "Shares" column gets number-cell styling
+
+2017-12-13 Christopher Lam 
+
+	* ENH: "Price" column gets number-cell styling.
+
+2017-12-15 Christopher Lam 
+
+	* ENH: show original currency, and enable multicolumns.
+
+2017-12-15 Christopher Lam 
+
+	* ENH: add custom sorter which can handle periodic dates
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: simplify do-rows-with-subtotals to use fewer args
+
+2017-12-15 Christopher Lam 
+
+	* REFACTOR: use scheme idioms
+
+2017-12-15 Christopher Lam 
+
+	* REFACTOR: Simplify Trans Number handling
+
+2017-12-10 Christopher Lam 
+
+	* COSMETIC:Rename subtitles -> subheadings in sorting/account display
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: initialize accounts/filter by to null list
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: rewrite renderers to lookup 'renderer-key from sortlists
+
+2017-12-10 Christopher Lam 
+
+	* ENH: Show account description in subheadings
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: move add-split-row into make-split-table
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: move *-choice-list into options-generator
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: simplify functions, reduce arguments
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: improve heading-list to handle dual headings
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: centralize BOOK-SPLIT-ACTION
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: centralize DATE-SORTING-TYPES and SUBTOTAL-ENABLED
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: centralize key-choice-list
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: centralize date-subtotal-list
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: centralize sortkey-list
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: centralize numerous used-* into column-uses? helper function
+
+2017-12-22 Christopher Lam 
+
+	* REFACTOR: combine 2 key-choice-list into 1
+
+2017-12-22 Christopher Lam 
+
+	* REFACTOR: move some funcs to refactor later
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: always run qof-query-destroyer
+
+2017-12-09 Christopher Lam 
+
+	* ENH: Optimise Transaction Matcher filter
+
+2017-12-10 Christopher Lam 
+
+	* ENH: add reconciled status filtering
+
+2017-12-10 Christopher Lam 
+
+	* ENH: Move Account matcher to Filter tab
+
+2017-12-09 Christopher Lam 
+
+	* REFACTOR: Delete unused functions
+
+2017-12-10 Christopher Lam 
+
+	* REFACTOR: rename funcs, centralize strings
+
+2017-12-10 Christopher Lam 
+
+	* ***reindent and remove trailing whitespace***
+
+2017-12-09 Christopher Lam 
+
+	* ENH: Move Transaction Matcher to new Filter tab
+
+2017-12-12 Christopher Lam 
+
+	* BUGFIX: change date-sorting-types
+
+2017-12-12 Christopher Lam 
+
+	* OBSOLETE: 'exact-time removed
+
+2017-12-21 Christopher Lam 
+
+	* options.scm: upgrade lookup-value to learn section changes
+
+2017-12-23 Geert Janssens 
+
+	* Merge branch 'fix_bayes' of https://github.com/limitedAtonement/gnucash into unstable
+
+2017-12-22 Geert Janssens 
+
+	* Remove cmake hoop to change file permissions
+
+2017-12-21 Geert Janssens 
+
+	* Replace GNC_CONFIGURE(2) with configure_file
+
+2017-12-22 John Ralls 
+
+	* Fix use of guile function introduced in 2.0.10, not available in Ubuntu14.04.
+
+2017-12-22 John Ralls 
+
+	* Don't build borrowed/gwengui-gtk3 if its provided by gwenhywfar.
+
+2017-12-21 John Ralls 
+
+	* Replace the gnc:numeric pair with normal Scheme rationals.
+
+2017-12-18 John Ralls 
+
+	* Remove SIGFIG rounding from price calculation.
+
+2017-12-21 lmat 
+
+	* Adding to version info to feature string
+
+2017-12-12 lmat 
+
+	* Correct string cache code
+
+2017-12-10 lmat 
+
+	* Rename qofinstance function
+
+2017-12-09 lmat 
+
+	* Changed bayes import map design
+
+2017-12-06 lmat 
+
+	* Code review responses
+
+2017-12-01 lmat 
+
+	* Changed some constants to constexpr
+
+2017-11-28 lmat 
+
+	* Remove unused kvp function
+
+2017-11-28 lmat 
+
+	* kvp string: allocate enough space
+
+2017-11-28 lmat 
+
+	* Correct kvp to_string typo
+
+2017-11-16 lmat 
+
+	* Keep tokens as they are, don't translate them
+
+2017-11-15 lmat 
+
+	* Corrected memory management issue
+
+2017-11-09 lmat 
+
+	* Renaming functions to get rid of temporary name
+
+2017-11-06 lmat 
+
+	* Kvp no longer parses entries looking for delimiters
+
+2017-11-03 lmat 
+
+	* Added test for and corrected get_bayes_info
+
+2017-11-02 lmat 
+
+	* Removed qof_instance_set_kvp, qof_instance_get_kvp
+
+2017-10-27 lmat 
+
+	* Fixed conversion problem
+
+2017-10-19 lmat 
+
+	* Implement flat bayes kvp
+
+2017-10-19 lmat 
+
+	* Change kvp string representation
+
+2017-10-05 lmat 
+
+	* kvp frame to template and correcting failure macro
+
+2017-08-14 lmat 
+
+	* Account.c to Account.cpp
+
+2017-12-20 Geert Janssens 
+
+	* Force build order on report system support files
+
+2017-12-19 Geert Janssens 
+
+	* Add unit test for rewritten scheme error handlers
+
+2017-12-19 Geert Janssens 
+
+	* Drop guile 1.8 support
+
+2017-12-19 Geert Janssens 
+
+	* Add support for guile 2.2
+
+2017-12-19 John Ralls 
+
+	* Merge Chris Lam's Bug 790526 fix into maint.
+
+2017-12-20 christopherlam 
+
+	* fix silly mistake
+
+2017-12-20 christopherlam 
+
+	* fix unit test again
+
+2017-12-19 John Ralls 
+
+	* Add test-date-utilities to CMakeLists.txt and Makefile.am.
+
+2017-12-19 John Ralls 
+
+	* Fix duplicate test-case name.
+
+2017-12-20 christopherlam 
+
+	* typo
+
+2017-12-20 christopherlam 
+
+	* add unittest for bugzilla 790526
+
+2017-12-19 christopherlam 
+
+	* Fix -DWITH_SQL=OFF Build.
+
+2017-12-08 Robert Fewell 
+
+	* Change the relative path to a full one for rpath
+
+2017-12-19 John Ralls 
+
+	* Fix date offset error in datetime test.
+
+2017-12-18 John Ralls 
+
+	* Add tests for GMT and GMT+7 timezones.
+
+2017-12-18 John Ralls 
+
+	* Fix timezone constructor crash when zone file has no transitions.
+
+2017-12-17 John Ralls 
+
+	* Merge branch 'maint' into unstable
+
+2017-12-16 John Ralls 
+
+	* Release 2.6.19 (tag: 2.6.19)
+
+2017-12-16 John Ralls 
+
+	* Fix python tests when building from tarball.
+
+2017-12-16 John Ralls 
+
+	* Update Dutch and Serbian translations from the Translation project.
+
+2017-12-16 John Ralls 
+
+	* Merge Rob Gowin's Partial Fix for Bug 787497 into maint.
+
+2017-12-16 John Ralls 
+
+	* Add test-flat-bayes to autotools build.
+
+2017-12-16 John Ralls 
+
+	* Add minimum version to feature and fix copy-paste error in test-flat-bayes.
+
+2017-12-15 John Ralls 
+
+	* Handle mid-pacific timezones in date-sensitive tests.
+
+2017-12-15 John Ralls 
+
+	* Revert post-construction adjustment of ldt for DST.
+
+2017-12-14 Robert Fewell 
+
+	* Change the way the import settings are handled
+
+2017-12-12 John Ralls 
+
+	* Fix neutral time for consistent dates in mid-pacific time zones.
+
+2017-12-12 John Ralls 
+
+	* Fix posted-date scrub incrementing the day in central pacific timezones.
+
+2017-12-12 John Ralls 
+
+	* Remove (unused because of an error) parse-to-tm string timespec construction.
+
+2017-12-12 John Ralls 
+
+	* Fix offset handling in GncDateTime struct tm ctor, gnc_mktime, & gnc_timegm.
+
+2017-12-11 Geert Janssens 
+
+	* Add infrastructure to handle preference schema migrations and use it to replace one preference
+
+2017-12-11 Robert Fewell 
+
+	* Remove surplus statement
+
+2017-12-08 John Ralls 
+
+	* Fix the Mac install_name_dir to point at CMAKE_INSTALL_FULL_LIBDIR.
+
+2017-12-10 John Ralls 
+
+	* Bug 791422 - gnucash 2.7 no longer opens sqlite3...
+
+2017-12-10 Robert Fewell 
+
+	* Update file with changes for transient dialog changes
+
+2017-12-10 Robert Fewell 
+
+	* Replace magic numbers used in std::get... with values from enum
+
+2017-12-10 Robert Fewell 
+
+	* Merge branch 'prices-in' of /mygit/gnucash into prices-in
+
+2017-12-07 Robert Fewell 
+
+	* Add a test for empty values
+
+2017-12-07 Robert Fewell 
+
+	* Replace date parse function with one from gnc_datetime
+
+2017-12-04 Robert Fewell 
+
+	* Make changes for Gtk3 compatibility
+
+2017-12-01 Robert Fewell 
+
+	* Pot file changes for new files and settings rename
+
+2017-12-01 Robert Fewell 
+
+	* Rename gnc-csv-trans-settings.* to gnc-csv-import-settings.*
+
+2017-12-01 Robert Fewell 
+
+	* Reorder the create price procedure.
+
+2017-12-01 Robert Fewell 
+
+	* Add the ability to test from_commodity and to_currency being the same.
+
+2017-12-01 Robert Fewell 
+
+	* Add a test for from_commodity not being the same as to_currency
+
+2017-12-01 Robert Fewell 
+
+	* Various changes to comments in source files and displayed text.
+
+2017-12-01 Robert Fewell 
+
+	* Change the way commodity and currency combo's are shown.
+
+2017-12-01 Robert Fewell 
+
+	* Minor changes and tidy up
+
+2017-12-01 Robert Fewell 
+
+	* Change the settings file to save and load price settings.
+
+2017-12-01 Robert Fewell 
+
+	* Fix some errors in conversion of some function names
+
+2017-12-01 Robert Fewell 
+
+	* Remove duplicated function
+
+2017-12-01 Robert Fewell 
+
+	* Made changes to preset column types to align with other changes
+
+2017-12-01 Robert Fewell 
+
+	* Add option to specify Commodity from and Currency to for whole file
+
+2017-12-01 Robert Fewell 
+
+	* Some text changes
+
+2017-12-01 Robert Fewell 
+
+	* Remove not required account update
+
+2017-12-01 Robert Fewell 
+
+	* Add CSV Price importer assistant files
+
+2017-12-01 Robert Fewell 
+
+	* Rename function gnc_csv_price_col_type_strs to gnc_price_col_type_strs
+
+2017-12-01 Robert Fewell 
+
+	* Add price import files for the csv price importer
+
+2017-12-01 Robert Fewell 
+
+	* Add property files for the csv price importer
+
+2017-12-09 John Ralls 
+
+	* Test more thoroughly gnc-timezone's parsing of the zoneinfo database.
+
+2017-12-08 Geert Janssens 
+
+	* Fix transient parent warnings for tip-of-the-day and file dialogs
+
+2017-12-08 Geert Janssens 
+
+	* Fix transient parent warnings in search callbacks
+
+2017-12-07 Robert Fewell 
+
+	* Add a test for empty values
+
+2017-12-07 Robert Fewell 
+
+	* Replace date parse function with one from gnc_datetime
+
+2017-12-06 Geert Janssens 
+
+	* Add transient parent for search dialog
+
+2017-12-03 Geert Janssens 
+
+	* Fix missing transient parent warnings for several business dialogs
+
+2017-11-16 Geert Janssens 
+
+	* Fix transient parent for SX since last run... at startup
+
+2017-11-16 Geert Janssens 
+
+	* Set transient parents for all query views and dialogs
+
+2017-11-26 Geert Janssens 
+
+	* Alter function signature of gnc_(verify|yes_no|info|warning|error)_dialog
+
+2017-11-25 Geert Janssens 
+
+	* Improve window management
+
+2017-11-16 Geert Janssens 
+
+	* Ensure the main window is mapped before any reminder dialogs are shown at startup
+
+2017-11-16 Geert Janssens 
+
+	* Handle the splash/lock file warning more the gtk way
+
+2017-11-22 lmat 
+
+	* GUID/Flat bayes handling in 2.6
+
+2017-12-05 John Ralls 
+
+	* Rework directory determination in CMake builds.
+
+2017-12-04 Robert Fewell 
+
+	* Make changes for Gtk3 compatibility
+
+2017-12-01 Robert Fewell 
+
+	* Pot file changes for new files and settings rename
+
+2017-12-01 Robert Fewell 
+
+	* Rename gnc-csv-trans-settings.* to gnc-csv-import-settings.*
+
+2017-12-01 Robert Fewell 
+
+	* Reorder the create price procedure.
+
+2017-12-01 Robert Fewell 
+
+	* Add the ability to test from_commodity and to_currency being the same.
+
+2017-12-01 Robert Fewell 
+
+	* Add a test for from_commodity not being the same as to_currency
+
+2017-12-01 Robert Fewell 
+
+	* Various changes to comments in source files and displayed text.
+
+2017-12-01 Robert Fewell 
+
+	* Change the way commodity and currency combo's are shown.
+
+2017-12-01 Robert Fewell 
+
+	* Minor changes and tidy up
+
+2017-12-01 Robert Fewell 
+
+	* Change the settings file to save and load price settings.
+
+2017-12-01 Robert Fewell 
+
+	* Fix some errors in conversion of some function names
+
+2017-12-01 Robert Fewell 
+
+	* Remove duplicated function
+
+2017-12-01 Robert Fewell 
+
+	* Made changes to preset column types to align with other changes
+
+2017-12-01 Robert Fewell 
+
+	* Add option to specify Commodity from and Currency to for whole file
+
+2017-12-01 Robert Fewell 
+
+	* Some text changes
+
+2017-12-01 Robert Fewell 
+
+	* Remove not required account update
+
+2017-12-01 Robert Fewell 
+
+	* Add CSV Price importer assistant files
+
+2017-12-01 Robert Fewell 
+
+	* Rename function gnc_csv_price_col_type_strs to gnc_price_col_type_strs
+
+2017-12-01 Robert Fewell 
+
+	* Add price import files for the csv price importer
+
+2017-12-01 Robert Fewell 
+
+	* Add property files for the csv price importer
+
+2017-12-02 Rob Gowin 
+
+	* Partial fix for Bug 787497 - Disabling options cripples dist package (PR243)
+
+2017-12-02 John Ralls 
+
+	* One more stray header in libexec.
+
+2017-12-01 John Ralls 
+
+	* LIBDIR is not lib--two more CMakeLists.txt.
+
+2017-12-01 John Ralls 
+
+	* Remove gnucash/test.
+
+2017-12-01 John Ralls 
+
+	* Some fixes to complete removing gnucash/overrides.
+
+2017-12-01 Rob Gowin 
+
+	* Handle cases where LIBDIR is not "lib"
+
+2017-12-01 John Ralls 
+
+	* Fix autotools build after removing gnucash/overrides.
+
+2017-12-01 Rob Gowin 
+
+	* Handle cases where LIBDIR is not "lib"
+
+2017-12-01 John Ralls 
+
+	* Remove overrides directory as being obsolete.
+
+2017-11-30 John Ralls 
+
+	* More GNUInstallDirs path fixes.
+
+2017-12-01 John Ralls 
+
+	* Fix the fixed path to compiled guile files.
+
+2017-11-30 John Ralls 
+
+	* Fix path to compiled guile files in environment.in.
+
+2017-11-30 John Ralls 
+
+	* Add GLIB_CFLAGS and srcdir to SWIG includes.
+
+2017-11-30 John Ralls 
+
+	* Remove unset variable SWIG_ARGS from Makefile.am
+
+2017-11-30 Geert Janssens 
+
+	* Fix installation destinations for overrides and quotes scripts
+
+2017-11-19 Christopher Lam 
+
+	* Bugzilla 790526 Correct weeknum calculator
+
+2017-11-28 John Ralls 
+
+	* Fix python test failure on Travis.
+
+2017-11-28 John Ralls 
+
+	* Merge branch 'PyGncNumeric' into unstable
+
+2017-06-03 Guy Taylor 
+
+	* Use builtin SWIG conversions for glib types
+
+2017-06-03 Guy Taylor 
+
+	* Use glib.h over custom typedefs in Python SWIG
+
+2017-05-28 Guy Taylor 
+
+	* Add GncNumeric to native Python Fraction
+
+2017-05-17 Guy Taylor 
+
+	* Fix Python GncNumeric for non (int, int) pairs
+
+2017-11-28 John Ralls 
+
+	* Fix null pointer dereference segfault.
+
+2017-11-28 John Ralls 
+
+	* Merge Aaron Laws's 'unneeded-build-flag' into unstable
+
+2017-11-28 John Ralls 
+
+	* Use GNUInstallDirs in CMake Builds
+
+2017-11-28 John Ralls 
+
+	* Fix python tests in tarball builds.
+
+2017-11-28 lmat 
+
+	* Removing Arch Linux Autotools build
+
+2017-11-28 lmat 
+
+	* Removing unneeded build flag from docker
+
+2017-11-28 John Ralls 
+
+	* Remove common/test-core/unittest_support.py from git.
+
+2017-11-25 John Ralls 
+
+	* Release 2.7.2 (tag: 2.7.2)
+
+2017-11-25 John Ralls 
+
+	* Merge branch 'maint' into unstable
+
+2017-11-25 John Ralls 
+
+	* Correct GUILE_LOAD_COMPILE_PATH to include Guile's own modules as well as ours.
+
+2017-11-24 John Ralls 
+
+	* Correct quoting for SQL backends.
+
+2017-11-24 Geert Janssens 
+
+	* Merge branch 'gtk3-update8' of https://github.com/Bob-IT/gnucash into unstable
+
+2017-11-21 Jose Marino 
+
+	* report: fix default colors incorrectly set to transparent
+
+2017-11-23 John Ralls 
+
+	* Bug 784623 - GNUCash does not work with sql backend.
+
+2017-11-23 Rob Gowin 
+
+	* Bug 790620 - Failed to create file “/usr/share/glib-2.0/schemas/gschemas.compiled.XY789Y”
+
+2017-11-23 Robert Fewell 
+
+	* Fix some corrupted glade files
+
+2017-11-23 Robert Fewell 
+
+	* Change assistant-ab-initial.glade to gtk3.10 version
+
+2017-11-23 Robert Fewell 
+
+	* Replace deprecated GTK_STOCK_ macro identifiers
+
+2017-11-23 Robert Fewell 
+
+	* Change a couple of deprecated functions in gnc-html-webkit1.c
+
+2017-11-23 Robert Fewell 
+
+	* Control the toggle button width
+
+2017-11-23 Robert Fewell 
+
+	* Move the double line to be inside the cursor cell
+
+2017-11-23 Robert Fewell 
+
+	* If a font size is specified for the sheet, popup size may be wrong
+
+2017-11-23 Robert Fewell 
+
+	* Use previously created functions
+
+2017-11-23 Robert Fewell 
+
+	* Provide two functions for common code
+
+2017-11-23 Robert Fewell 
+
+	* This function doesn't do much and is only used for new account registers
+
+2017-11-23 Robert Fewell 
+
+	* Adjust the sheet to get its spacings from the item_edit CSS
+
+2017-11-23 Robert Fewell 
+
+	* Get the item_edit cell padding from CSS instead of defines
+
+2017-11-23 Robert Fewell 
+
+	* Replace the cell foreground and background colour handlers
+
+2017-11-01 Robert Fewell 
+
+	* Test the widget state to get the correct background colour.
+
+2017-11-21 John Ralls 
+
+	* Set GncSqlObjectBackend::m_version to the appropriate TABLE_VERSION.
+
+2017-11-21 John Ralls 
+
+	* Fix python build and test errors on Mac.
+
+2017-11-21 Geert Janssens 
+
+	* Revert "Merge branch 'gtk3-update8' of https://github.com/Bob-IT/gnucash into unstable"
+
+2017-11-21 Geert Janssens 
+
+	* Merge branch 'gtk3-update8' of https://github.com/Bob-IT/gnucash into unstable
+
+2017-11-21 Geert Janssens 
+
+	* Merge branch 'gtk3-update9' of https://github.com/Bob-IT/gnucash into unstable
+
+2017-11-19 John Ralls 
+
+	* Fix missing/misspelled files for distribution.
+
+2017-11-19 John Ralls 
+
+	* Bug 790550 - FTBFS: missing __init__.py
+
+2017-11-19 John Ralls 
+
+	* Fix distribution paths for resource files.
+
+2017-11-19 John Ralls 
+
+	* Fix bad string construction in adjust_sql_options.
+
+2017-11-19 John Ralls 
+
+	* A better way to handle MySQL's 0000-00-00 invalid date indicator.
+
+2017-11-19 John Ralls 
+
+	* Don't try to unref a NULL GDateTime*.
+
+2017-11-18 Geert Janssens 
+
+	* Fix a few travis failures (potentially uninitialized use)
+
+2017-11-18 Geert Janssens 
+
+	* Bug 736765 - Assign as payment... should re-populate the payment represented by the selected transaction if any
+
+2017-11-15 Geert Janssens 
+
+	* Bug 778692 - Assign as payment should work for employee expense vouchers
+
+2017-11-18 Geert Janssens 
+
+	* Assign as payment - when random transaction is selected, reset transaction description to owner
+
+2017-11-14 Geert Janssens 
+
+	* Assign as payment - refactor a few code blocks into separate functions
+
+2017-11-14 Geert Janssens 
+
+	* Assign as payment - Differentiate between new and existing payments for 'Assign as payment'
+
+2017-11-14 Geert Janssens 
+
+	* Assign as payment - offer possible payment splits to user in case there are multiple valid candidates for assignment
+
+2017-11-09 Geert Janssens 
+
+	* Bug 734865 - Assign as Payment... can silently 'unpay' a payed invoice
+
+2017-11-13 Geert Janssens 
+
+	* Add functions to retrieve a copy of splits of a certain type from business transactions
+
+2017-11-09 Geert Janssens 
+
+	* Inform the user when assign as payment can't be used
+
+2017-11-14 Geert Janssens 
+
+	* Mark unused function parameters as such in dialog-payment.c
+
+2017-11-15 fell 
+
+	* Add po/glossary/gnc-glossary.pot to .gitignore
+
+2017-11-15 fell 
+
+	* Fix a few encodings and Content-* tags in glossary
+
+2017-11-09 John Ralls 
+
+	* Bug 789608 - Compilation problems when linking libraries.
+
+2017-11-09 John Ralls 
+
+	* Merge branch 'maint' into unstable
+
+2017-11-09 John Ralls 
+
+	* Fix with_Python build in cmake.
+
+2017-11-09 Robert Fewell 
+
+	* Prevent the rename popup from appearing in the dense calendar
+
+2017-11-09 Robert Fewell 
+
+	* Dense calendar popup window of screen at bottom
+
+2017-11-09 Robert Fewell 
+
+	* Add a margin to the Date label
+
+2017-11-09 Robert Fewell 
+
+	* Don't re-populate dense calendar treeview on every mouse move
+
+2017-11-09 Robert Fewell 
+
+	* Save the screen dimensions on button click
+
+2017-11-09 Robert Fewell 
+
+	* If there are no marked days on Windows the dense calendar crashes
+
+2017-11-07 John Ralls 
+
+	* Bug 789928 - FTBFS with libdbi 0.9.0-5 on Debian
+
+2017-11-07 John Ralls 
+
+	* Merge J. Marino's 'fix-negative-colors' into unstable.
+
+2017-10-31 John Ralls 
+
+	* Convert shell-executed scheme tests to run directly from Guile.
+
+2017-11-02 John Ralls 
+
+	* Remove extraneous parameters from GNC_ADD_SCHEME_TARGETS
+
+2017-11-02 Jose Marino 
+
+	* report: fix negative colors in barcharts
+
+2017-11-01 Robert Fewell 
+
+	* Update the register for the change in RegisterColor enums
+
+2017-11-01 Robert Fewell 
+
+	* Change the split and entry models to reflect the colour changes
+
+2017-11-01 Robert Fewell 
+
+	* Reduce the RegisterColor enums so there is one for each type
+
+2017-11-01 Robert Fewell 
+
+	* Replace the cell foreground and background colour handlers
+
+2017-11-01 Robert Fewell 
+
+	* Test the widget state to get the correct background colour.
+
+2017-11-01 Robert Fewell 
+
+	* Change the look of the toggle button
+
+2017-11-01 Robert Fewell 
+
+	* Control the toggle button width
+
+2017-11-01 Robert Fewell 
+
+	* Move the double line to be inside the cursor cell
+
+2017-11-01 Robert Fewell 
+
+	* If a font size is specified for the sheet, popup size may be wrong
+
+2017-11-01 Robert Fewell 
+
+	* Use previously created functions
+
+2017-11-01 Robert Fewell 
+
+	* Provide two functions for common code
+
+2017-11-01 Robert Fewell 
+
+	* This function doesn't do much and is only used for new account registers
+
+2017-11-01 Robert Fewell 
+
+	* Adjust the sheet to get its spacings from the item_edit CSS
+
+2017-11-01 Robert Fewell 
+
+	* Get the item_edit cell padding from CSS instead of defines
+
+2017-10-31 John Ralls 
+
+	* Merge branch J. Marino's fix-report-colors into unstable
+
+2017-10-31 John Ralls 
+
+	* Merge J. Marino's 'fix/report-net-barchart' into unstable
+
+2017-10-18 Jose Marino 
+
+	* report/category-barchart: fix unit test to work with gnc-monetary
+
+2017-10-18 Jose Marino 
+
+	* report/category-barchart: calculate using gnc-monetary instead of double
+
+2017-10-18 Jose Marino 
+
+	* report/net-linechart: fix unit test to work with gnc-monetary
+
+2017-10-18 Jose Marino 
+
+	* report/net-linechart: calculate using gnc-monetary instead of double
+
+2017-10-17 Jose Marino 
+
+	* report/net-barchart: fix unit test to work with gnc-monetary
+
+2017-10-17 Jose Marino 
+
+	* report/net-barchart: default to list of zeros instead of empty list
+
+2017-10-13 Jose Marino 
+
+	* report/net-barchart: calculate using gnc-monetary instead of double
+
+2017-10-31 John Ralls 
+
+	* [Gwenhywfar] Use the new getpassword API only on the gwen5 branch.
+
+2017-10-31 John Ralls 
+
+	* Provide for report/report-system/test/test-extras to be built before other tests.
+
+2017-10-31 John Ralls 
+
+	* Ensure that report unit tests dependencies are built with  target.
+
+2017-10-31 John Ralls 
+
+	* Merge J. Marino's cashflow-barchart updates into unstable.
+
+2017-10-31 Jose Marino 
+
+	* report-test: move add-to-load-path to build system
+
+2017-10-30 John Ralls 
+
+	* Remove X11 error handler
+
+2017-10-31 Geert Janssens 
+
+	* Merge branch 'gtk3-update7' of https://github.com/Bob-IT/gnucash into unstable
+
+2017-10-02 Robert Fewell 
+
+	* Move the CSS files to a Gresource file
+
+2017-10-28 John Ralls 
+
+	* Release 2.7.1 (tag: 2.7.1)
+
+2017-10-29 John Ralls 
+
+	* Set relative path to icon file in Windows resource script.
+
+2017-10-28 John Ralls 
+
+	* Don't copy ChangeLog on a tarball build.
+
+2017-10-28 John Ralls 
+
+	* Pass a NULL parent to gnc_options_dialog_new_modal in assistant-hierarchy.
+
+2017-10-27 John Ralls 
+
+	* Set a parent window for the options dialogs.
+
+2017-10-27 Jose Marino 
+
+	* cashflow-barchart: split option "show money in/out" into two separate ones
+
+2017-10-27 Jose Marino 
+
+	* cashflow-barchart: delete unnecessary intermediate lists
+
+2017-10-27 Jose Marino 
+
+	* cashflow-barchart: use direct gnc-monetary math instead of collectors
+
+2017-10-27 John Ralls 
+
+	* Merge branch Christopher Lam's Transaction Report Improvements into unstable.
+
+2017-10-27 John Ralls 
+
+	* Merge branch J. Marino's cashflow-barchart report into unstable.
+
+2017-10-27 John Ralls 
+
+	* Merge Aaron Law's branch 'buildfix' to unstable.
+
+2017-10-27 John Ralls 
+
+	* [SQL] Check return of string_to_guid, bail if false.
+
+2017-10-26 John Ralls 
+
+	* Bug 789298 - Prompt for file history update leads to crash during startup.
+
+2017-10-27 lmat 
+
+	* Updating home directory to fix CI error messages
+
+2017-10-27 Christopher Lam 
+
+	* transaction.scm upgrade complete
+
+2017-10-27 christopherlam 
+
+	* refactor old is-filter-member to use srfi-1
+
+2017-10-26 christopherlam 
+
+	* improve split-remove-duplicates, combine filters
+
+2017-10-25 christopherlam 
+
+	* Regex is optional, and add transaction matcher
+
+2017-10-24 Christopher Lam 
+
+	* Enhance transaction.scm account filter to regex
+
+2017-10-24 christopherlam 
+
+	* Enhance account filter to a regex
+
+2017-10-24 christopherlam 
+
+	* Amend some strings for improved visibility
+
+2017-10-24 christopherlam 
+
+	* Change critical code to pure FP
+
+2017-10-26 John Ralls 
+
+	* Bug 789297 - Account Tax Related Information - 2.7.0 is not backwards compatible
+
+2017-10-26 John Ralls 
+
+	* Fix NEWS errors reported by Chris Lam
+
+2017-10-26 Geert Janssens 
+
+	* Add GNUCASH_BUILD_ID cmake/configure variable which allows packagers to define their own
+
+2017-10-26 Geert Janssens 
+
+	* Use alternative revision retrieval if git describe is failing
+
+2017-10-26 Geert Janssens 
+
+	* Improve about dialog layout and contents
+
+2017-10-26 John Ralls 
+
+	* Revert "Partial fix to exception crashes on Windows."
+
+2017-10-26 John Ralls 
+
+	* Fix Windows crash-on-throw.
+
+2017-10-22 John Ralls 
+
+	* Partial fix to exception crashes on Windows.
+
+2017-10-25 Geert Janssens 
+
+	* Fix building from dist tarball with python bindings enabled
+
+2017-10-25 Geert Janssens 
+
+	* Fix disabling src docs build on Windows
+
+2017-10-26 Geert Janssens 
+
+	* Prevent gcc from searching config.h in the current directory
+
+2017-10-26 Geert Janssens 
+
+	* Add gnucash.1 man page as proper dependency for dist
+
+2017-10-22 Carwyn Nelson 
+
+	* Little refactor of account.c
+
+2017-10-23 Geert Janssens 
+
+	* Improve gnc_numeric_boxed_copy_func based on discussion in PR#145
+
+2017-04-23 Bob-IT 
+
+	* Save button active on every load
+
+2017-10-22 John Ralls 
+
+	* Don't build design docs on Windows.
+
+2017-10-20 John Ralls 
+
+	* Add fixed bugs for 2.7.0 to NEWS.
+
+2017-10-20 fell 
+
+	* Add a bunch of translator comments and a few accelerators to glade files
+
+2017-10-20 Geert Janssens 
+
+	* Remove configure option --enable-locale-specific-tax and make gnucash always behave as if it was set
+
+2017-10-20 fell 
+
+	* Add a bunch of translator comments to C files
+
+2017-10-20 fell 
+
+	* Improve type of bank accounts in SKR03
+
+2017-10-20 fell 
+
+	* Add "Assets & Liabilities", "Profit & Loss" to the glossary,
+
+2017-10-20 fell 
+
+	* Mayor overhaul of de.po
+
+2017-10-20 fell 
+
+	* Fix wiki link
+
+2017-10-19 Jose Marino 
+
+	* fix reconcile dialog always showing ending balance of zero
+
+2017-10-17 Jose Marino 
+
+	* add unit test for cashflow-barchart report
+
+2017-10-17 John Ralls 
+
+	* Merge branch 'unstable'
+
+2017-10-15 John Ralls 
+
+	* Re-release 2.7.0 (tag: 2.7.0a)
+
+2017-10-16 Jose Marino 
+
+	* add new report 'cashflow-barchart.scm' to build system
+
+2017-10-16 Jose Marino 
+
+	* fix module location of new cashflow-barchart report
+
+2017-10-15 John Ralls 
+
+	* Disable inclusion of transaction text for OFX transactions in the description.
+
+2017-10-16 John Ralls 
+
+	* Use file:/// when constructing a tempdir uri on Windows.
+
+2017-10-16 John Ralls 
+
+	* Merge branch 'unstable-fix-spelling' of https://github.com/christopherlam/gnucash into unstable
+
+2017-10-16 John Ralls 
+
+	* Install libgwengui-gtk3.dll on Windows.
+
+2017-10-16 Christopher Lam 
+
+	* Fix spelling insensative->insensitive
+
+2017-10-15 John Ralls 
+
+	* [MacOS] Change CMake installed names to absolute paths from @rpath/...
+
+2017-10-14 John Ralls 
+
+	* Build Macs with WebKit1.
+
+2017-10-14 John Ralls 
+
+	* HTML: Connect to load-failed and resource-load signals.
+
+2017-10-13 John Ralls 
+
+	* Fix html temp-file URI.
+
+2017-10-13 fell 
+
+	* update de.po to commit f283437
+
+2017-10-12 Jose Marino 
+
+	* report: render linechart with requested line colors
+
+2017-10-12 Jose Marino 
+
+	* report: render piechart with requested colors
+
+2017-10-12 Jose Marino 
+
+	* report: render barchart with requested bar colors
+
+2017-10-11 fell 
+
+	* Merge branch 'maint' of https://github.com/DiMan/Gnucash into maint
+
+2017-10-11 fell 
+
+	* reapply commit 3cdac65 on the new dialog-ab-pref and remove obsolete section from dialog-ab.gade
+
+2017-10-11 Jose Marino 
+
+	* add new report: cashflow-barchart.scm
+
+2017-10-07 Di Mang 
+
+	* Adjustment of some Russian translations
+
+2017-10-06 fell 
+
+	* Merge branch 'maint' into unstable
+
+2017-10-06 fell 
+
+	* Use descriptions from gschema as tooltips in Preferences Aqbanking
+
+2017-10-05 Geert Janssens 
+
+	* Replace ambiguous 'scm' with 'vcs' in macro name
+
+2017-10-05 Geert Janssens 
+
+	* Use different format specifier to make older git versions happy
+
+2017-10-05 Geert Janssens 
+
+	* Merge branch maint into unstable
+
+2017-10-04 Geert Janssens 
+
+	* Additional changes to use commit date rather than build date
+
+2017-10-03 Geert Janssens 
+
+	* Fix gnucash.pot generation from cmake build.
+
+2017-10-03 Geert Janssens 
+
+	* Stop testing GObject's handling of invalid parameters
+
+2017-10-03 fell 
+
+	* Fix a typo in gir error message
+
+2017-10-02 fell 
+
+	* Readd the missing glade msgctx strings to ru.po
+
+2017-10-02 fell 
+
+	* ru.po: Minor improvements of the header after PR #209
+
+2017-10-01 ashed 
+
+	* Update Russian Translation with the 2.6.18 gnucash.pot.
+
+2017-09-07 Bernhard M. Wiedemann 
+
+	* Allow to export the last commit's date
+
+2017-09-29 Ashed 
+
+	* Updated and polished Russian Translation.
+
+2017-09-29 Robert Fewell 
+
+	* Change the item_edit blanking rectangle position and size
+
+2017-09-29 Robert Fewell 
+
+	* Change the position of the double row on the cursor
+
+2017-09-29 Robert Fewell 
+
+	* Instead of removing a css class, wrap the change in save/restore
+
+2017-09-29 Robert Fewell 
+
+	* Rename internal CSS class prefix for the register to 'register-'
+
+2017-09-29 Robert Fewell 
+
+	* Remove the CSS for a dark theme Register
+
+2017-09-29 Robert Fewell 
+
+	* Fix typo in comment
+
+2017-09-23 Robert Fewell 
+
+	* Make sure the sheet has focus at start
+
+2017-09-23 Robert Fewell 
+
+	* Fix problem with scrollbar sliders not tracking value
+
+2017-09-13 Robert Fewell 
+
+	* Fix missing hatchings when transaction unbalanced
+
+2017-09-13 Robert Fewell 
+
+	* When tabbing to the field, text should be highlighted only
+
+2017-09-13 Robert Fewell 
+
+	* Remove spaces from blank lines
+
+2017-09-13 Robert Fewell 
+
+	* Adjust text position to be the same as the item_edit entry
+
+2017-09-09 Robert Fewell 
+
+	* Make sure the cursor background is filled to start to hide whats below it
+
+2017-09-09 Robert Fewell 
+
+	* Add ability to draw a text cursor for the entry
+
+2017-09-09 Robert Fewell 
+
+	* Do not copy the colour and so prevent form having to free it
+
+2017-09-09 Robert Fewell 
+
+	* Allow the sheet to be scrolled with the mouse wheel
+
+2017-09-09 Robert Fewell 
+
+	* Rename a couple of functions to align with the format of the rest
+
+2017-09-09 Robert Fewell 
+
+	* Use a higher priority for the idle add when item edit updating
+
+2017-09-09 Robert Fewell 
+
+	* Fix problem when sheet first loaded in the register
+
+2017-09-09 Robert Fewell 
+
+	* Change the line position to make double thickness line on cursor
+
+2017-09-04 Robert Fewell 
+
+	* Use the background class for the dense-calendar
+
+2017-09-04 Robert Fewell 
+
+	* Change the way negative-numbers class was defined in CSS
+
+2017-09-04 Robert Fewell 
+
+	* Remove white space and tabs from split-register-model
+
+2017-09-04 Robert Fewell 
+
+	* Add a heading for the Rate column.
+
+2017-09-04 Robert Fewell 
+
+	* Register in journal mode with rate column, split columns loose alignment
+
+2017-09-04 Robert Fewell 
+
+	* Redraw the header after size allocation of the sheet.
+
+2017-09-04 Robert Fewell 
+
+	* Add redraw of the header when preference changes
+
+2017-09-04 Robert Fewell 
+
+	* Remove the no longer widgets for setting register colours
+
+2017-09-04 Robert Fewell 
+
+	* Change the register to be based on CSS
+
+2017-09-04 Robert Fewell 
+
+	* Change tabs to spaces in gnucash-style.c
+
+2017-09-04 Robert Fewell 
+
+	* Remove trailing white space from gnucash-sheet.c
+
+2017-09-04 Robert Fewell 
+
+	* Remove trailing white space from gnucash-item-edit.c
+
+2017-09-04 Robert Fewell 
+
+	* This dialog-invoice.glade file had missing changes, corrected.
+
+2017-09-01 Robert Fewell 
+
+	* This change is needed after all, used when header is resized
+
+2017-08-31 Robert Fewell 
+
+	* Remove white space and change tabs to spaces in gnucash-register.c
+
+2017-08-31 Robert Fewell 
+
+	* Rework the item-edit pop up to use sheet width and not move about
+
+2017-08-31 Robert Fewell 
+
+	* Change gnc_item_edit_update to be used in an idle add function
+
+2017-08-31 Robert Fewell 
+
+	* Move inline css for padding to gnucash.css
+
+2017-08-31 Robert Fewell 
+
+	* Remove an obsolete source comment in gnucash-item-list.c
+
+2017-08-31 Robert Fewell 
+
+	* Remove white space and change tabs to spaces in datecell-gnome.c
+
+2017-08-31 Robert Fewell 
+
+	* Rename various forms of Get Popup Height to Popup Get Height
+
+2017-09-21 christopherlam 
+
+	* Add missing export (gnc:date-get-week)
+
+2017-09-27 Geert Janssens 
+
+	* Merge branch 'maint' into unstable
+
+2017-09-27 Geert Janssens 
+
+	* Use the same bugzilla url in AC_INIT as on maint
+
+2017-09-27 Geert Janssens 
+
+	* Add Catalan README file to autotools based build
+
+2017-09-26 Geert Janssens 
+
+	* Fix build failures if userdata_home exists but gnc_userdata_home  doesn't
+
+2017-09-26 Josep-Maria Prat 
+
+	* Readme translated into catalan
+
+2017-09-22 John Ralls 
+
+	* Release 2.6.18 (tag: 2.6.18)
+
+2017-09-22 John Ralls 
+
+	* Remove automake version check for make dist.
+
+2017-09-22 John Ralls 
+
+	* Fix typo in CA_DIST name.
+
+2017-09-21 John Ralls 
+
+	* Import latest Farsi and Srpska translations from the translation project.
+
+2017-09-21 Geert Janssens 
+
+	* Ignore softlink for new report
+
+2017-09-21 Geert Janssens 
+
+	* Revert "Ignore softlink for new report"
+
+2017-09-21 Geert Janssens 
+
+	* Ignore softlink for new report
+
+2017-09-21 Geert Janssens 
+
+	* Merge 'maint' into unstable
+
+2017-09-21 Geert Janssens 
+
+	* Add income-gst-statement.scm to POTFILES.in
+
+2017-09-21 christopherlam 
+
+	* Fix some (gnc:make-gnc-monetary) errors
+
+2017-09-17 christopherlam 
+
+	* Restore "sign reverses" option This was removed during development.
+
+2017-09-17 christopherlam 
+
+	* Initial commit income-gst-statement.scm
+
+2017-09-17 christopherlam 
+
+	* Reindent from transaction.scm
+
+2017-09-17 christopherlam 
+
+	* cp transaction.scm income-gst-statement.scm
+
+2017-09-21 Geert Janssens 
+
+	* Fixup for Catalan account charts
+
+2017-09-21 Geert Janssens 
+
+	* Add boilerplate to get Catalan account charts installed and added to the distribution
+
+2017-09-21 Josep-Maria Prat 
+
+	* Catalan accounts missing
+
+2017-09-20 Geert Janssens 
+
+	* Properly ignore internal report options that are not on invisible option pages when opening the report options dialog
+
+2017-09-16 John Ralls 
+
+	* Release 2.7.0 (tag: 2.7.0)
+
+2017-09-16 John Ralls 
+
+	* Fix the fix from mac for test-userdata-dir.c
+
+2017-09-16 John Ralls 
+
+	* Fix test-userdata-dir on Mac.
+
+2017-09-16 Geert Janssens 
+
+	* Travis fixes
+
+2017-09-16 Geert Janssens 
+
+	* Minor tweaks to the userdata_dir logic
+
+2017-09-16 John Ralls 
+
+	* Fix python init errors.
+
+2017-09-16 Geert Janssens 
+
+	* Improve a few comments.
+
+2017-09-16 Geert Janssens 
+
+	* Disable creating a user_data_dir in the test environment
+
+2017-09-16 Geert Janssens 
+
+	* Also undo the changes to POTFILES.in
+
+2017-09-06 John Ralls 
+
+	* Install the current, 2015, and 2016 ChangeLogs.
+
+2017-09-16 Geert Janssens 
+
+	* Revert "Merge branch 'new-gst-report' of https://github.com/christopherlam/gnucash"
+
+2017-09-16 Geert Janssens 
+
+	* Update python bindings to use PyGI and Gtk3
+
+2017-09-16 Geert Janssens 
+
+	* Merge branch 'new-gst-report' of https://github.com/christopherlam/gnucash
+
+2017-09-11 christopherlam 
+
+	* "Sorting" tab overhaul to improve UI
+
+2017-09-16 christopherlam 
+
+	* Disallow Closing Transactions. These txns must not be counted in this report.
+
+2017-09-15 christopherlam 
+
+	* Initial commit income-gst-report.scm
+
+2017-09-15 christopherlam 
+
+	* Reindent income-gst-report.scm
+
+2017-09-15 christopherlam 
+
+	* cp transction.scm income-gst-statement.scm
+
+2017-09-15 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2017-09-15 Geert Janssens 
+
+	* Bug 647805 - Interdependent report options fail to change state after using apply for a limited number of times
+
+2017-09-15 fell 
+
+	* Bug 787479 - Persian currency symbol is doubled
+
+2017-09-14 John Ralls 
+
+	* Fix the actual cmake dist problem, missing macros.
+
+2017-09-13 Geert Janssens 
+
+	* Apply python binding changes to correct file
+
+2017-09-12 John Ralls 
+
+	* Fix some odd automake errors that show up only during a CMake ninja dist.
+
+2017-09-12 John Ralls 
+
+	* Fix distribution pieces for gwenhywfar-gtk3.
+
+2017-09-12 John Ralls 
+
+	* Re-enable generation of POTFILES.in
+
+2017-09-10 lmat 
+
+	* Adding python tests to cmake
+
+2017-09-12 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2017-09-11 Rob Gowin 
+
+	* Fix issues with loading and running init.py
+
+2017-09-11 John Ralls 
+
+	* Disable regeneration of POTFILES.in
+
+2017-09-11 John Ralls 
+
+	* Fix tiny omission that didn't build standard-reports.go.
+
+2017-09-11 fell 
+
+	* Update changed string in de.po
+
+2017-09-11 fell 
+
+	* Fix error in recent commit
+
+2017-09-10 John Ralls 
+
+	* Link libgncmod-app-utils-python to libgncmod-app-utils.
+
+2017-09-11 fell 
+
+	* Remove build_year from translatable copyright string
+
+2017-09-10 fell 
+
+	* Review of PR #183
+
+2017-09-10 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2017-09-10 Geert Janssens 
+
+	* Merge branch 'fix_cmake_ofx_dep' of https://github.com/bhardwajs/gnucash
+
+2017-09-09 christopherlam 
+
+	* Fix swig wrapper for gncTaxTableGetTaxTables
+
+2017-09-10 Geert Janssens 
+
+	* Merge branch 'trav' of https://github.com/limitedAtonement/gnucash
+
+2017-09-10 Geert Janssens 
+
+	* Re-enable python-bindings test this time with a fully corrected python path
+
+2017-09-09 John Ralls 
+
+	* Add w_image.c to EXTRA_DIST.
+
+2017-09-04 Daniel 
+
+	* L10N: DE, some small corrections.
+
+2017-09-09 Sumit Bhardwaj 
+
+	* Made ofx-gschema dependent on WITH_OFX flag
+
+2017-09-06 lmat 
+
+	* Configure travis to use docker for CI
+
+2017-09-09 Geert Janssens 
+
+	* Temporarily disable python-bindings as it's currently failing
+
+2017-09-09 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2017-09-08 Rob Gowin 
+
+	* Fix problems that occur when running out of CMake build dir
+
+2017-09-08 Rob Gowin 
+
+	* Run the python bindings test when using CMake
+
+2017-09-06 lmat 
+
+	* Adding .gitignore entries for ctags and vim swaps
+
+2017-09-08 fell 
+
+	* Revert PR #182 mostly.
+
+2017-09-08 Geert Janssens 
+
+	* Merge branch 'maint.translation.de.02' of https://github.com/quazgar/gnucash into maint
+
+2017-09-06 John Ralls 
+
+	* Add include of Foundation framework for NSString and NSBundle.
+
+2017-09-06 John Ralls 
+
+	* Set -xobjective-c or -xobjective-c++ for Mac code depending compiler.
+
+2017-09-06 John Ralls 
+
+	* Append to string the pre-cmake-3.4 way.
+
+2017-09-06 John Ralls 
+
+	* Install the current, 2015, and 2016 ChangeLogs.
+
+2017-09-06 Geert Janssens 
+
+	* Ajust the GUILE_COMPILE_PATH such that it also works on Windows
+
+2017-09-05 Geert Janssens 
+
+	* Fix gtest-gnc-timezone test on Windows
+
+2017-09-05 Geert Janssens 
+
+	* Fix gnc-rational test on Windows
+
+2017-09-04 Geert Janssens 
+
+	* Windows: check permissions actually used on the platform
+
+2017-09-04 Geert Janssens 
+
+	* Amend previous commit
+
+2017-08-31 Geert Janssens 
+
+	* Convert boost::filesystem path strings to utf8.
+
+2017-09-04 Daniel 
+
+	* L10N: DE, automatic "make pot" changes.
+
+2017-09-04 Daniel 
+
+	* L10N: DE, fix bug #787226: Bill ID / Billing ID swapped.
+
+2017-09-03 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2017-09-03 Geert Janssens 
+
+	* Only build aqbanking when requested
+
+2017-09-02 Sumit Bhardwaj 
+
+	* Added WITH_OFX fix to CMakeLists in gnucash/import-export/ofx
+
+2017-09-02 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2017-09-02 Geert Janssens 
+
+	* Fix deliberate test failure on previous commit
+
+2017-09-02 Geert Janssens 
+
+	* Have Travis print out build logs in case of test failures
+
+2017-09-02 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2017-09-02 Geert Janssens 
+
+	* Set up a build matrix on Travis CI
+
+2017-09-01 Rob Gowin 
+
+	* Enable CMake build in Travis CI
+
+2017-08-31 Geert Janssens 
+
+	* Use boost::filesystem's built-in conversion between character encodings.
+
+2017-08-27 John Ralls 
+
+	* Remove set target property on no-longer-extant gncmod-utility-reports target.
+
+2017-08-27 John Ralls 
+
+	* Fix poor error message on missing guile and make it fatal.
+
+2017-08-27 John Ralls 
+
+	* Remove references to special HTMLHELP directory.
+
+2017-08-27 John Ralls 
+
+	* Fix type mismatch (ptr & int) in comparison.
+
+2017-08-27 John Ralls 
+
+	* Move Win32 additions to engine_SOURCES to before first use.
+
+2017-08-31 Geert Janssens 
+
+	* Fix FIND_PROGRAM invocation for guile
+
+2017-08-31 Geert Janssens 
+
+	* Set the same minimum required gtk version for cmake and autotools
+
+2017-08-31 Geert Janssens 
+
+	* Merge branch 'kvpvaltostring' of https://github.com/limitedAtonement/gnucash
+
+2017-08-31 Geert Janssens 
+
+	* Detail what is meant with a dark theme
+
+2017-08-31 Geert Janssens 
+
+	* Merge branch 'gtk3-update5' of https://github.com/Bob-IT/gnucash
+
+2017-08-30 Robert Fewell 
+
+	* Move another couple of functions used more than once to gnc-gtk-utils
+
+2017-08-30 Robert Fewell 
+
+	* Move function is_color_light to gnc-gtk-utils and rename
+
+2017-08-29 Geert Janssens 
+
+	* Merge branch 'prices-out2' of https://github.com/Bob-IT/gnucash
+
+2017-08-18 lmat 
+
+	* Should return std::string
+
+2017-08-08 lmat 
+
+	* Clear up guile2 vs. guile cmake confusion
+
+2017-08-28 Robert Fewell 
+
+	* Change the background colours of the import-main-matcher
+
+2017-08-28 Robert Fewell 
+
+	* Change colour function to is_color_light in gnc-dense-cal
+
+2017-08-26 Geert Janssens 
+
+	* Extend environment file parsing to also parse environment.local
+
+2017-08-26 Geert Janssens 
+
+	* Mention GNC_DATA_HOME and AQBANKING_HOME in the environment file.
+
+2017-08-26 Geert Janssens 
+
+	* Check GNC_DATA_HOME environment to override default userdata location.
+
+2017-08-23 Geert Janssens 
+
+	* Use platform dependent locations for gnucash user's data (gnc_userdata_home)
+
+2017-08-22 Geert Janssens 
+
+	* Rewrite several file path routines to use boost::filesystem
+
+2017-08-25 John Ralls 
+
+	* Build gwengui-gkt3 only if AQBanking is enabled.
+
+2017-08-25 John Ralls 
+
+	* Temporarily include building libgwengui-gtk3 in GnuCash.
+
+2017-08-24 John Ralls 
+
+	* Conditionally modify getpassword_cb to match new signature in gwenhywfar 4.7.99.
+
+2017-08-24 John Ralls 
+
+	* Convert to libgwengui-gtk3
+
+2017-08-25 Geert Janssens 
+
+	* Fully enable the new Account Substring option on the transaction report
+
+2017-08-25 Geert Janssens 
+
+	* Hide Account Substring option
+
+2017-08-25 christopherlam 
+
+	* Reduce to compatibility shim
+
+2017-08-16 christopherlam 
+
+	* added case sensitive filter
+
+2017-08-16 christopherlam 
+
+	* Account fullname filter for transaction.scm
+
+2017-08-25 Geert Janssens 
+
+	* Hide Account Substring option
+
+2017-08-25 Geert Janssens 
+
+	* Merge branch 'patch-3' of https://github.com/christopherlam/gnucash into maint
+
+2017-08-25 christopherlam 
+
+	* Reduce to compatibility shim
+
+2017-08-24 Robert Fewell 
+
+	* Change comment in fallback css file for emphasize-label
+
+2017-08-23 Robert Fewell 
+
+	* Rename the colour defines to closely match the text in import matcher
+
+2017-08-23 Robert Fewell 
+
+	* Rename direction boolean to arrow_down
+
+2017-08-23 Robert Fewell 
+
+	* Change the way dense calendar background colours are sourced
+
+2017-08-23 Robert Fewell 
+
+	* Improve marker alignment depending on row height being odd or even
+
+2017-08-23 Robert Fewell 
+
+	* Fix some lines with spaces on them
+
+2017-08-23 Robert Fewell 
+
+	* Change glade comment in css file
+
+2017-08-23 Geert Janssens 
+
+	* Build test-import-pending-matches as c++
+
+2017-08-22 Robert Fewell 
+
+	* Use GTK_STYLE_PROVIDER_PRIORITY_FALLBACK for fallback css file
+
+2017-08-14 Robert Fewell 
+
+	* Use the css class defines in the import matcher help dialog
+
+2017-08-13 Robert Fewell 
+
+	* Minor fix to gnc-tree-model-account, removal of double ;
+
+2017-08-13 Robert Fewell 
+
+	* These variables are not required any more in gnc-dense-cal
+
+2017-08-13 Robert Fewell 
+
+	* Change the css for the primary label in dialog account
+
+2017-08-13 Robert Fewell 
+
+	* Change the Register2 css to be from the fallback file
+
+2017-08-13 Robert Fewell 
+
+	* Do not set the foreground colour in Import Matcher
+
+2017-08-13 Robert Fewell 
+
+	* Rework the Import Matcher colours to be from the fallback css file
+
+2017-08-13 Robert Fewell 
+
+	* Rename css class negative-color to negative-numbers
+
+2017-08-12 Robert Fewell 
+
+	* The summary bar never respected the use of a negative colour
+
+2017-08-12 Robert Fewell 
+
+	* Change the account treeview to use the css negative color
+
+2017-08-12 Robert Fewell 
+
+	* Rework the negative label colour
+
+2017-08-09 Robert Fewell 
+
+	* Replace toggle arrow with a theme drawn one
+
+2017-08-09 Robert Fewell 
+
+	* Add draw arrow call back to various widgets
+
+2017-08-09 Robert Fewell 
+
+	* Add a draw callback to draw a theme based up/down arrow
+
+2017-08-08 Robert Fewell 
+
+	* Change the dense calender to use css so that it can be themed
+
+2017-08-08 Robert Fewell 
+
+	* Add CSS provider of a lesser priority than themes
+
+2017-08-22 Mike Alexander 
+
+	* Fix sigfigs(n) rounding to work when the input is bigger tnan 10**n.
+
+2017-08-22 Mike Alexander 
+
+	* Fix numerator overflow constructing GncNumeric from 96.16
+
+2017-04-15 Mike Alexander 
+
+	* Add tests for converting doubles 96.16 and 9616000000.0 to GncNumeric.
+
+2017-08-21 Mike Alexander 
+
+	* Add a couple of directories containing dependencies of libtest-core-guile.
+
+2017-08-21 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2017-07-01 Yasuaki Taniguchi 
+
+	* Bug 784284 - unifying "Clear the entry." tooltip on Loan Repayment Calculator
+
+2017-08-21 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2017-08-19 Kristjan Onu 
+
+	* Correct Price Overview documentation typos
+
+2017-08-21 fell 
+
+	* PR #172: Accelerator fixes for Latvian language
+
+2017-08-08 Robert Fewell 
+
+	* Remove the rules hint from gnc-tree-view to align with current setting
+
+2017-08-21 Geert Janssens 
+
+	* Fix cmake run on Ubuntu 16.04 (and possibly other distros)
+
+2017-08-21 Geert Janssens 
+
+	* Fix missing Find... functionality
+
+2017-08-20 John Ralls 
+
+	* Remove test for transaction set-date diagnostic message.
+
+2017-08-20 John Ralls 
+
+	* Use time64 GncDateTime constructor instead of struct tm constructor.
+
+2017-08-20 John Ralls 
+
+	* Disable creating a date string to maybe use in a PINFO message.
+
+2017-08-20 John Ralls 
+
+	* Parse date strings into a struct tm and construct GDateTime with that.
+
+2017-08-20 John Ralls 
+
+	* Test features to see if they're already set before setting them.
+
+2017-08-20 Robert Fewell 
+
+	* Move gnc-gdate-utils functions to gnc-date and remove files.
+
+2017-08-20 Robert Fewell 
+
+	* Change tabs to spaces and remove some blank lines
+
+2017-08-20 Robert Fewell 
+
+	* Rename gnc_pricedb_remove_old_prices_keep_last
+
+2017-08-20 Robert Fewell 
+
+	* Rename save_cloned_price to clone_price
+
+2017-08-20 Robert Fewell 
+
+	* Added second if clause for completeness.
+
+2017-08-20 Robert Fewell 
+
+	* Remove the 'if else' blocks by using boolean variable.
+
+2017-08-20 Robert Fewell 
+
+	* Rename function to be plural as more than one commodity returned in list
+
+2017-08-20 Robert Fewell 
+
+	* Move gnc-gdate-utils.c/h from app-utils to engine
+
+2017-08-10 Robert Fewell 
+
+	* Fix some missing id's in the glade file
+
+2017-08-10 Robert Fewell 
+
+	* Modify the unit tests to reflect changes.
+
+2017-08-10 Robert Fewell 
+
+	* This change modifies the way old prices can be removed.
+
+2017-08-19 John Ralls 
+
+	* Commit imap conversions once per account instead of per import map slot.
+
+2017-08-19 John Ralls 
+
+	* Revert "Fix mac looking in wrong directory for libgncmod-backend-dbi.dylib."
+
+2017-08-19 John Ralls 
+
+	* Fix load string KVP memory error.
+
+2017-08-19 John Ralls 
+
+	* Fix typo, broke build on Mac.
+
+2017-08-16 John Ralls 
+
+	* Fix mac looking in wrong directory for libgncmod-backend-dbi.dylib.
+
+2017-08-17 Geert Janssens 
+
+	* Minor cleanupus in .gitignore
+
+2017-08-17 Geert Janssens 
+
+	* Rename directory for code from external projects
+
+2017-08-17 Geert Janssens 
+
+	* Win32: drop goffice directory from path
+
+2017-08-17 Geert Janssens 
+
+	* Improve a comment
+
+2017-08-17 Geert Janssens 
+
+	* Add as many values as there are fields in the list
+
+2017-08-17 Geert Janssens 
+
+	* Use another way to fix backend loading on OS X
+
+2017-08-16 John Ralls 
+
+	* Fix mac looking in wrong directory for libgncmod-backend-dbi.dylib.
+
+2017-08-16 John Ralls 
+
+	* Fix time-string format in backend for GncDateTime(std::string).
+
+2017-08-14 John Ralls 
+
+	* Fix the most serious backend memory leaks.
+
+2017-08-16 christopherlam 
+
+	* added case sensitive filter
+
+2017-08-16 christopherlam 
+
+	* Account fullname filter for transaction.scm
+
+2017-08-03 christopherlam 
+
+	* Remove clutter from generated html
+
+2017-08-03 christopherlam 
+
+	* Partial fix for bug 660027
+
+2017-08-16 Geert Janssens 
+
+	* Fix a number of test mismatches between cmake and autotools
+
+2017-08-16 Geert Janssens 
+
+	* Keep the test modules from gnc-module outside of the normal GNC_MODULE_PATH
+
+2017-08-16 Valdis Vitolins 
+
+	* Accelerator fixes for Latvian language
+
+2017-08-14 Geert Janssens 
+
+	* Merge branch 'reorganize-source-dirs'
+
+2017-08-14 Geert Janssens 
+
+	* Eliminate plugins directory
+
+2017-08-13 Geert Janssens 
+
+	* Eliminate the separate bin directory
+
+2017-08-13 Geert Janssens 
+
+	* Update .gitignore to handle all the renamed directories
+
+2017-08-11 Geert Janssens 
+
+	* Drop packaging directory
+
+2017-08-11 Geert Janssens 
+
+	* Add conditional source files to dist tarball
+
+2017-08-11 Geert Janssens 
+
+	* Cleanup some more obscure references to no longer existing 'src' directory
+
+2017-08-11 Geert Janssens 
+
+	* Move accounts, checks and pixmaps into a data directory
+
+2017-08-11 fell 
+
+	* PR #170 Fixes for po/lv.po file
+
+2017-08-11 Valdis Vitolins 
+
+	* Fixes for po/lv.po file
+
+2017-08-10 Geert Janssens 
+
+	* Restructure the src directory
+
+2017-08-10 fell 
+
+	* Merge Messages fom Maint in lv.po
+
+2017-08-09 Valdis Vitolins 
+
+	* *.po file updated for Latvian language
+
+2017-08-09 Geert Janssens 
+
+	* Move global definitions to toplevel CMakeLists.txt
+
+2017-08-09 Geert Janssens 
+
+	* Drop the cutecash experiment and the gtkmm optional bindings
+
+2017-08-08 Geert Janssens 
+
+	* Drop gtk dependency from app-utils
+
+2017-08-07 Geert Janssens 
+
+	* Make all backend loading use the same build environment module path resolution
+
+2017-08-06 Geert Janssens 
+
+	* Merge qof directory into engine
+
+2017-08-09 Geert Janssens 
+
+	* Fix ambiguity in Dutch translation of the gnucash description
+
+2017-08-05 Geert Janssens 
+
+	* Move core-utils files with depedencies on qof to engine
+
+2017-08-07 Geert Janssens 
+
+	* Fix cmake based sqlite3 test when run twice in a row
+
+2017-08-05 Geert Janssens 
+
+	* Fix source file dependency on config.h in engine
+
+2017-08-04 Geert Janssens 
+
+	* Remove the gncmod boilerplate from standard-reports and utility-reports
+
+2017-07-21 Geert Janssens 
+
+	* Integrate gnome-business into gnome
+
+2017-07-21 Geert Janssens 
+
+	* Move auxiliary business files to gnome directory
+
+2017-07-20 Geert Janssens 
+
+	* Move business-gnome subdirectory to higher level
+
+2017-07-20 Geert Janssens 
+
+	* Remove references to long obsolete source directories
+
+2011-11-19 Geert Janssens 
+
+	* Merge business ledger into ledger-core
+
+2017-08-07 Geert Janssens 
+
+	* Update ChangeLog
+
+2017-08-04 Geert Janssens 
+
+	* Merge branch 'gtk3-update4' of https://github.com/Bob-IT/gnucash
+
+2017-08-03 Robert Fewell 
+
+	* Missed changing the GncItemEdit alignment for the first row
+
+2017-08-03 Geert Janssens 
+
+	* Tweak cmake/autotools so they produce the same output for POTFILES.in
+
+2017-08-03 Robert Fewell 
+
+	* Change how the widgets are named for CSS
+
+2017-08-03 Robert Fewell 
+
+	* Replace the thicker lower line for the cursor, removed by mistake
+
+2017-08-03 Robert Fewell 
+
+	* When drawing the cursor, remove the requirement to test for first row
+
+2017-08-03 Robert Fewell 
+
+	* Change the divider line back to 3px
+
+2017-08-03 Robert Fewell 
+
+	* Revert change to text vertical offset
+
+2017-08-03 Robert Fewell 
+
+	* Do not make the first row height smaller
+
+2017-08-03 Robert Fewell 
+
+	* Return the vertical split borders to light
+
+2017-08-03 Robert Fewell 
+
+	* Change the hatching draw fix to use a relative move
+
+2017-08-01 Geert Janssens 
+
+	* Merge branch 'master' of https://github.com/0-wiz-0/gnucash
+
+2017-08-01 christopherlam 
+
+	* Fix income statement when trading accounts not used
+
+2017-08-01 Robert Fewell 
+
+	* Fix a problem with the arrows when register first loads
+
+2017-08-01 christopherlam 
+
+	* Add vertical-align:top to default text fields.
+
+2017-08-01 Robert Fewell 
+
+	* Fix the place the popup appears when above the row
+
+2017-08-01 Robert Fewell 
+
+	* To update the toggle arrow it needs to be removed from the container
+
+2017-08-01 Robert Fewell 
+
+	* Change the cursor grid coordinates to reflect the other changes
+
+2017-08-01 Robert Fewell 
+
+	* Change the cursor grid coordinates to reflect the other changes
+
+2017-08-01 Robert Fewell 
+
+	* Remove some blank lines from the header source file
+
+2017-08-01 Robert Fewell 
+
+	* Add css style classes to parts of the register
+
+2017-08-01 Robert Fewell 
+
+	* Change the cell grid lines slightly
+
+2017-08-01 Robert Fewell 
+
+	* Make the header align with the sheet when scrolled horizontally
+
+2017-08-01 Robert Fewell 
+
+	* Change the layout to show left border of first cell
+
+2017-08-01 Robert Fewell 
+
+	* Update the register grid
+
+2017-07-31 John Ralls 
+
+	* Check the right variable in the right version of gdk to test for a Mac build.
+
+2017-07-29 Thomas Klausner 
+
+	* Use proper glib2 include path.
+
+2017-07-27 Thomas Klausner 
+
+	* Use portable test(1) operator.
+
+2017-07-23 John Ralls 
+
+	* Merge Guido Falsi's 'fix-typo-and-indent' branch.
+
+2017-07-10 Guido Falsi 
+
+	* Fix a typo in a comment, and indentition of if conditional content.
+
+2017-07-23 John Ralls 
+
+	* Merge Bob Fewell's 'gtk3-update3' branch.
+
+2017-07-23 Robert Fewell 
+
+	* These files have the QofLogModule defined but never used
+
+2017-07-23 Robert Fewell 
+
+	* Comment out some unused variables while register is still in flux
+
+2017-07-23 Robert Fewell 
+
+	* Add some additional REGISTER2_ENABLED code blocks
+
+2017-07-23 Robert Fewell 
+
+	* Code clean up, comment out some additional static defines
+
+2017-07-23 Robert Fewell 
+
+	* Code clean up on register2 files
+
+2017-07-23 Robert Fewell 
+
+	* Code clean up, remove unused variable
+
+2017-07-23 Robert Fewell 
+
+	* Add a gtk version check for gnc-cell-renderer-popup
+
+2017-07-23 Robert Fewell 
+
+	* Code clean up, remove some variables that were set but never used
+
+2017-07-23 Robert Fewell 
+
+	* Code clean up, remove some static defines and redundant code
+
+2017-07-23 Robert Fewell 
+
+	* Code clean up, remove unused variables
+
+2017-07-23 Robert Fewell 
+
+	* Code clean up, remove unused variables
+
+2017-07-23 Robert Fewell 
+
+	* Code clean up, remove unused variables
+
+2017-07-23 Robert Fewell 
+
+	* Code clean up, remove unused variables
+
+2017-07-23 Robert Fewell 
+
+	* Move static inline CSS to gnucash.css file
+
+2017-07-23 Robert Fewell 
+
+	* Add an application specific CSS file
+
+2017-07-23 Robert Fewell 
+
+	* Fix problem with gbv_treeview_resized_cb
+
+2017-07-23 Robert Fewell 
+
+	* Fix error in use of AccountFilterDialog structure in budgets
+
+2017-07-23 Robert Fewell 
+
+	* Fix typo of version, should be 3.10
+
+2017-07-23 Robert Fewell 
+
+	* Fix critical error when Gnucash closes with report pages open
+
+2017-07-23 John Ralls 
+
+	* [Mac] use gtk-mac-integration-gtk3 now that we're building with gtk3.
+
+2017-07-22 John Ralls 
+
+	* Detect and flag MinGW64
+
+2017-07-22 Alex Aycinena 
+
+	* Revert visible changes to File->Properties for Book Currency from master in order to do further work in feature branch.
+
+2017-07-21 John Ralls 
+
+	* Merge Sumit Bhardway's 'gdate-day-buffer' fix for gcc-7.
+
+2017-07-20 Sumit Bhardwaj 
+
+	* membuf changes in gnc-dense-cal.c for gcc7 warnings
+
+2017-07-16 John Ralls 
+
+	* Turn off GncAddSchemeTargets debugging messages.
+
+2017-07-20 John Ralls 
+
+	* Remove obsolete throw specifications.
+
+2017-07-17 John Ralls 
+
+	* Merge branch 'maint'
+
+2017-07-17 Rob Gowin 
+
+	* Fix failure to compile AQBanking GSchemas in CMake Build.
+
+2017-07-16 John Ralls 
+
+	* Version-check some webkit properties.
+
+2017-07-15 John Ralls 
+
+	* Relax handling of bad numeric values in the DOM parser.
+
+2017-07-15 John Ralls 
+
+	* Prevent infinite loop in to_decimal if numerator becomes 0.
+
+2017-07-15 John Ralls 
+
+	* Merge Bob Fewell's Gtk3-Update2 branch.
+
+2017-07-15 Robert Fewell 
+
+	* Fix missing id values for GtkTreeSelection in glade files
+
+2017-07-15 Robert Fewell 
+
+	* Remove redundant GTK_CHECK_VERSION's
+
+2017-07-15 Robert Fewell 
+
+	* Replace deprecated stock-id with icon-name
+
+2017-07-15 Robert Fewell 
+
+	* Replace some missed GTK_STOCK_ items
+
+2017-07-15 Robert Fewell 
+
+	* Add function to add the color background data function to account column
+
+2017-07-15 Robert Fewell 
+
+	* Replace Gtk3 deprecated widgets in currency_accounting_widget
+
+2017-07-15 Robert Fewell 
+
+	* Add function to clear the display of the currency edit widget
+
+2017-07-15 Robert Fewell 
+
+	* Modify the Account color button
+
+2017-07-15 Robert Fewell 
+
+	* Replace missing key accelerators
+
+2017-07-14 John Ralls 
+
+	* Enable AQBanking by default in CMake build.
+
+2017-07-14 John Ralls 
+
+	* Adjust autotools build for gnc-html-webkit changes.
+
+2017-07-11 John Ralls 
+
+	* Conditionally build for Webkit1 on Win32 and Webkit2 everywhere else.
+
+2017-07-09 John Ralls 
+
+	* Check for package webkitgtk-3.0 (webkit1 API) on Windows.
+
+2017-07-03 John Ralls 
+
+	* Use GStatBuf to match newer GLib API
+
+2017-06-15 John Ralls 
+
+	* Include winsock2.h before windows.h to silence a compile warning.
+
+2017-06-15 John Ralls 
+
+	* Disable Guile's GnuLib broken redefinition of 'close'.
+
+2017-06-15 John Ralls 
+
+	* Change the dll lookup directory when building with CMake on Win32.
+
+2017-06-15 John Ralls 
+
+	* Win32 doesn't use the fake backend links, it just uses the regular dlls.
+
+2017-06-15 John Ralls 
+
+	* Link libws32 to the DBI backend on MINGW64
+
+2017-06-15 John Ralls 
+
+	* Set deprecated-declarations to no-error for WIN32 so that it will work with Guile2.
+
+2017-06-05 John Ralls 
+
+	* Replace use of CMAKE_PREFIX_PATH
+
+2017-06-05 John Ralls 
+
+	* [Mingw64] Set command variables correctly for Guile2 compilation.
+
+2017-05-27 John Ralls 
+
+	* Fix ENDIF() parameter.
+
+2017-05-27 John Ralls 
+
+	* Add CMake files and .gitattributes to lf-only files.
+
+2017-05-26 John Ralls 
+
+	* Adjustments to build on mingw-64.
+
+2017-07-13 Alex Aycinena 
+
+	* Change test-gnc-ui-util.c and test-option-util.cpp so that test-app-utils passes during make check.
+
+2017-07-12 Geert Janssens 
+
+	* Fix cmake's build as installed
+
+2017-07-11 Alex Aycinena 
+
+	* Revert changes to test-gnc-ui-util.c until I can get my system to test them.
+
+2017-07-10 Geert Janssens 
+
+	* Merge branch 'dist-alignment'
+
+2017-07-10 Geert Janssens 
+
+	* Align master-only dist files between cmake and autotools
+
+2017-07-10 Alex Aycinena 
+
+	* Fix error of incorrect argument passed to gnc_commodity_new.
+
+2017-07-10 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2017-07-10 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2017-07-10 Geert Janssens 
+
+	* Fix a couple of double EXTRA_DIST declarations from the previous commit
+
+2017-07-10 Geert Janssens 
+
+	* Add CMakeLists.txt files to dist tarball generated by autotools
+
+2017-07-10 Geert Janssens 
+
+	* Rework icon cache loading
+
+2017-07-10 Geert Janssens 
+
+	* Add icons in the proper directory
+
+2017-07-09 Robert Fewell 
+
+	* Replace style strings with proper defined types
+
+2017-07-09 Robert Fewell 
+
+	* Redo the change to Gtk3.10 based glade file from current master
+
+2017-07-09 Robert Fewell 
+
+	* Remove the preference for showing an icon and label
+
+2017-07-09 Robert Fewell 
+
+	* Remove setting the rules hint for tree views
+
+2017-07-09 Robert Fewell 
+
+	* Fix mistake in changing button labels from stock
+
+2017-07-09 Robert Fewell 
+
+	* Fix mistake in adding style context to Find Transactions dialog
+
+2017-07-09 Robert Fewell 
+
+	* Replace register Gtk3 deprecated functions in gnucash-sheet.c
+
+2017-07-09 Robert Fewell 
+
+	* Replace register Gtk3.14 deprecated functions related to gtk_arrow
+
+2017-07-09 Robert Fewell 
+
+	* Replace register GTk3.16 deprecated function gdk_cursor_new
+
+2017-07-09 Robert Fewell 
+
+	* Replace deprecated Gtk3.22 function to get monitor size
+
+2017-07-09 Robert Fewell 
+
+	* Replace Gtk3.20 deprecated functions in gnc-cell-renderer-popup.c
+
+2017-07-09 Robert Fewell 
+
+	* Replace Gtk3.22 deprecated functions to do with monitor size
+
+2017-07-09 Robert Fewell 
+
+	* Replace Gtk3.20 functions in gnc-date-edit.c
+
+2017-07-09 Robert Fewell 
+
+	* Replace Gtk3.22 deprecated function gtk_menu_popup
+
+2017-07-09 Robert Fewell 
+
+	* Replace Gtk3.22 deprecated function gtk_menu_popup
+
+2017-07-09 Robert Fewell 
+
+	* Replace Gtk3.22 deprecated function gtk_menu_popup
+
+2017-07-09 Robert Fewell 
+
+	* Replace Gtk3.22 deprecated function gtk_menu_popup
+
+2017-07-09 Robert Fewell 
+
+	* Replace Gtk3.22 deprecated function to get monitor size
+
+2017-07-09 Robert Fewell 
+
+	* Replace Gtk3.20 deprecated functions based on device_manager
+
+2017-07-09 Robert Fewell 
+
+	* Replace Gtk3.22 deprecated function gtk_menu_popup
+
+2017-07-09 Robert Fewell 
+
+	* Replace Gtk3.22 deprecated function gtk_menu_popup
+
+2017-07-09 Robert Fewell 
+
+	* Replace Gtk3.22 deprecated gtk_show_uri
+
+2017-07-09 Geert Janssens 
+
+	* Rework our icon management
+
+2017-07-09 Alex Aycinena 
+
+	* Book-Currency Feature step 6
+
+2017-07-09 Geert Janssens 
+
+	* Fix build with cmake > 3.5
+
+2017-07-08 John Ralls 
+
+	* Allow compilation with either Webkit2Gtk-4.0 or WebKit2Gtk-3.0.
+
+2017-07-08 John Ralls 
+
+	* Adjust Makefile.am for pixmap hierarchy change in 4aea4c5.
+
+2017-07-08 John Ralls 
+
+	* Don't warn about all of the deprecated Gtk functions we're using.
+
+2017-07-08 Geert Janssens 
+
+	* Travis - install libgtk-3-dev and libwebkit2gtk-3.0-dev before building
+
+2017-07-08 Geert Janssens 
+
+	* A few cleanups from the previous merge commit
+
+2017-07-08 Geert Janssens 
+
+	* Merge branch 'gtk3'
+
+2017-07-06 Robert Fewell 
+
+	* Make the About dialog sizeable and format AUTHORS and DOCUMENTERS
+
+2017-07-04 John Ralls 
+
+	* Merge CMake Distcheck from 'maint'.
+
+2017-07-04 Robert Fewell 
+
+	* Replace Gtk3.14 function gtk_icon_theme_add_builtin_icon
+
+2017-07-04 Robert Fewell 
+
+	* Missed this from previous commit
+
+2017-07-04 Robert Fewell 
+
+	* Rearrange the pixmap folder to contain a hicolor directory structure
+
+2017-06-06 Rob Gowin 
+
+	* No need for make dist and distcheck when checking autotools build in cmake
+
+2017-02-01 Rob Gowin 
+
+	* Implement 'dist', 'distcheck' and 'uninstall' targets for CMake
+
+2017-06-26 Kuang-che Wu 
+
+	* Fix import-export compile on windows
+
+2017-07-03 Robert Fewell 
+
+	* Missed specifying Gtk3.12 version for set_margin_end
+
+2017-07-03 Robert Fewell 
+
+	* Fix some entries in glade files that did not have id's
+
+2017-07-02 John Ralls 
+
+	* Merge branch 'maint'
+
+2017-07-02 John Ralls 
+
+	* Some more translations from the TP. (tag: 2.6.17b)
+
+2017-07-02 Robert Fewell 
+
+	* Fix corrupted Gtk2 aqbanking glade file
+
+2017-07-02 Robert Fewell 
+
+	* Missed a preference option from the aqbanking glade file
+
+2017-07-02 Geert Janssens 
+
+	* Merge branch 'fix-win-compile' of https://github.com/kcwu/gnucash
+
+2017-07-02 Robert Fewell 
+
+	* Change the relative column to a pixbuf so it looks like find account
+
+2017-07-02 Robert Fewell 
+
+	* Fixup for gnc-gui-query.c, invalid cast
+
+2017-07-02 Robert Fewell 
+
+	* Remove Gtk3.14 deprecated function, it does not do any thing
+
+2017-07-02 Robert Fewell 
+
+	* Replace deprecated Gtk3.16 gtk_override_background_color
+
+2017-07-02 Robert Fewell 
+
+	* Replace deprecated Gtk3.16 functions to change colour.
+
+2017-07-02 Robert Fewell 
+
+	* Replace deprecated Gtk3.16 function gtk_widget_override_font
+
+2017-07-02 Robert Fewell 
+
+	* Replace gtk_alignment in various functions
+
+2017-07-02 Robert Fewell 
+
+	* Replace deprecated Gtk3.14 function gtk_arrow_new with an icon
+
+2017-07-02 Robert Fewell 
+
+	* Replace deprecated Gtk3.16 function in dialog-account.c
+
+2017-07-02 Robert Fewell 
+
+	* Add css style context to various widgets so they can easily be changed
+
+2017-07-02 Robert Fewell 
+
+	* Add css style context to various widgets so they can easily be changed
+
+2017-07-02 Robert Fewell 
+
+	* Add css style context to various widgets so they can easily be changed
+
+2017-07-02 Robert Fewell 
+
+	* Add function to add css style context to a widget
+
+2017-07-02 Robert Fewell 
+
+	* Use the new preference to control icons and labels on buttons
+
+2017-07-02 Robert Fewell 
+
+	* Add grid line preference to various tree views
+
+2017-07-02 Robert Fewell 
+
+	* Tweak the tab labels to add left and right margins
+
+2017-07-02 Robert Fewell 
+
+	* Add new preference to show tree view grid lines
+
+2017-07-01 John Ralls 
+
+	* Re-release 2.6.17 (tag: 2.6.17a)
+
+2017-07-01 John Ralls 
+
+	* Release 2.6.17 (tag: 2.6.17)
+
+2017-06-30 John Ralls 
+
+	* Update translations from the translation project.
+
+2017-06-29 Mike Evans 
+
+	* Bug 784317 - typo in 'import customers or vendors from text file' dialog
+
+2017-06-28 Robert Fewell 
+
+	* Minor fixups to the assistant-csv-trans-import glade file
+
+2017-06-28 Robert Fewell 
+
+	* Replace deprecated gtk_image_menu_item in gnumeric popup
+
+2017-06-28 Robert Fewell 
+
+	* Fix error of invalid cast to GTK_COMBO_BOX in trans importer
+
+2017-06-28 Robert Fewell 
+
+	* Replace deprecated render_icon_pixbuf in dialog-print-check
+
+2017-06-27 Robert Fewell 
+
+	* Rename use of icon defines to reflect changes in icon.h
+
+2017-06-27 Robert Fewell 
+
+	* Change the way icons are loaded and the corresponding define names
+
+2017-06-27 Robert Fewell 
+
+	* Change some functions to use icon names instead of stock id's
+
+2017-06-26 Robert Fewell 
+
+	* Replace GTK_STOCK_INDEX, _YES and _APPLY with icon names.
+
+2017-06-26 Robert Fewell 
+
+	* Replace GTK_STOCK_PRINT_PREVIEW with icon name "document-print-preview"
+
+2017-06-26 Robert Fewell 
+
+	* Replace GTK_STOCK_CANCEL with icon name "process-stop"
+
+2017-06-26 Robert Fewell 
+
+	* Replace GTK_STOCK_CONVERT with two icon names
+
+2017-06-26 Robert Fewell 
+
+	* Missed some replace GTK_STOCK_... images with there equivalent icon name
+
+2017-06-26 Robert Fewell 
+
+	* Missed changing some stock labels on buttons to icon names
+
+2017-06-26 Robert Fewell 
+
+	* Replace GTK_STOCK_... images with there equivalent icon name
+
+2017-06-26 Robert Fewell 
+
+	* Missed changing some stock labels on some buttons
+
+2017-06-25 John Ralls 
+
+	* Bug 782274 - Transactions produced by Transfer Funds or Process...
+
+2017-06-26 Kuang-che Wu 
+
+	* Fix import-export compile on windows
+
+2017-06-25 Robert Fewell 
+
+	* Replace deprecated functions in gnc_cell_renderer_date
+
+2017-06-25 Robert Fewell 
+
+	* Replace deprecated function to get mouse pointer position
+
+2017-06-24 John Ralls 
+
+	* Bug 782897 - Stock Split Assistant crashes GnuCash if you enter a New...
+
+2017-06-24 Robert Fewell 
+
+	* GtkTreeView rules_hint is deprecated after version 3.14
+
+2017-06-24 Robert Fewell 
+
+	* Replace deprecated widget_render_icon function in print-check
+
+2017-06-23 Robert Fewell 
+
+	* Replace GtkTable with GtkGrid in the register
+
+2017-06-23 Robert Fewell 
+
+	* Replace deprecated size_request in register date-picker
+
+2017-06-23 Robert Fewell 
+
+	* Replace deprecated menu function in gnc-csv-gnumeric-popup.c
+
+2017-06-23 Robert Fewell 
+
+	* Replace deprecated size_request in gnc-tree-view.c
+
+2017-06-23 Robert Fewell 
+
+	* Replace deprecated gtk_rc... functions in gnc-tree-view_split-reg.c
+
+2017-06-23 Robert Fewell 
+
+	* Replace deprecated functions in gnc-date-edit.c
+
+2017-06-23 Robert Fewell 
+
+	* Replace deprecated functions in gnc-combott.c
+
+2017-06-23 Robert Fewell 
+
+	* Replace deprecated font function in gnc-report.c
+
+2017-06-23 Robert Fewell 
+
+	* Glade GUI adds a has_padding property to the action area which is wrong
+
+2017-06-23 Robert Fewell 
+
+	* Fix up, box should be a GtkWidget
+
+2017-06-22 Robert Fewell 
+
+	* Files linked to assistant-loan.glade
+
+2017-06-22 Robert Fewell 
+
+	* Files linked to dialog-import.glade
+
+2017-06-22 Robert Fewell 
+
+	* Files linked to dialog-account-picker.glade
+
+2017-06-22 Robert Fewell 
+
+	* Convert gtktable to grid in assistant-qif-import
+
+2017-06-22 Robert Fewell 
+
+	* Files linked to assistant-csv-trans-import.glade
+
+2017-06-22 Robert Fewell 
+
+	* Fix up for to align button or account import
+
+2017-06-21 Robert Fewell 
+
+	* Files linked to assistant-csv-account-import.glade
+
+2017-06-21 Robert Fewell 
+
+	* Files linked to assistant-csv-export.glade
+
+2017-06-21 Robert Fewell 
+
+	* Files linked to assistant-acct-period.glade
+
+2017-06-21 Robert Fewell 
+
+	* Files linked to assistant-stock-split.glade
+
+2017-06-21 Robert Fewell 
+
+	* Files linked to assistant-hierarchy.glade
+
+2017-06-21 Geert Janssens 
+
+	* Fix commodity namespace tests
+
+2017-06-20 Geert Janssens 
+
+	* Stop writing commodity namespaces to xml files in gnucash 1.8 compatible way
+
+2017-06-20 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2017-06-20 Geert Janssens 
+
+	* Bug 603379 - Prevent changing some Account Options if it has transactions - followup
+
+2017-06-20 John Ralls 
+
+	* Fix Travis Failure
+
+2017-06-20 John Ralls 
+
+	* Merge branch 'maint'
+
+2017-06-20 Robert Fewell 
+
+	* This is minor change to eliminate the spaces in dialog names
+
+2017-06-20 Robert Fewell 
+
+	* Remove the aqbanking preferences from this gtk2 glade file
+
+2017-06-20 Robert Fewell 
+
+	* Create a new glade for aqbanking preferences as this now uses a grid
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-preferences.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-customer-import-gui.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-bi-import-gui.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-report.glade
+
+2017-06-20 Robert Fewell 
+
+	* Changes to dialog-custom-report.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-search.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to business-prefs.glade
+
+2017-06-20 Robert Fewell 
+
+	* Change business-options-gnome.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-vendor.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-payment.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-order.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-job.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-invoice.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-employee.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-date-close.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-customer.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-choose-owner.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-billterms.glade
+
+2017-06-20 Geert Janssens 
+
+	* Properly define the template namespace rather than using a local string everywhere
+
+2017-06-16 Geert Janssens 
+
+	* Bug 781634 followup - separate translatable commodity namespace strings from those uses in storage
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to gnc-plugin-page-register2.glade
+
+2017-06-20 Robert Fewell 
+
+	* File linked to gnc-plugin-page-register.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to window-reconcile.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to window-autoclear.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-sx-glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-tax-info.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-trans-assoc.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-print-check.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-price.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to gnc-plugin-page-budget.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-progress.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-new-user.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-lot-viewer.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-imap-editor.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-find-account.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-fincalc.glade
+
+2017-06-20 Robert Fewell 
+
+	* Files linked to dialog-commodities.glade
+
+2017-06-18 Robert Fewell 
+
+	* Files linked to dialog-options.glade
+
+2017-06-18 Robert Fewell 
+
+	* Files linked to gnc-date-format.glade
+
+2017-06-18 Robert Fewell 
+
+	* Files linked to gnc-tree-view-owner.glade
+
+2017-06-18 Robert Fewell 
+
+	* Fix up for incorrect glade file option
+
+2017-06-18 Robert Fewell 
+
+	* Change files linked to gnc-frequency.glade
+
+2017-06-18 Robert Fewell 
+
+	* Change recurrence.glade
+
+2017-06-18 Robert Fewell 
+
+	* Files linked to dialog-userpass.glade
+
+2017-06-18 Robert Fewell 
+
+	* Files linked to dialog-transfer.glade
+
+2017-06-18 Robert Fewell 
+
+	* Fix ups for dialog-commodity
+
+2017-06-18 Robert Fewell 
+
+	* Files linked to dialog-tax-table.glade
+
+2017-06-18 Robert Fewell 
+
+	* Files linked to dialog-query-view.glade
+
+2017-06-18 Robert Fewell 
+
+	* Files linked to dialog-reset-warnings.glade
+
+2017-06-18 Robert Fewell 
+
+	* Change file dialog-totd.glade
+
+2017-06-18 Robert Fewell 
+
+	* Files linked to dialog-object-references.glade
+
+2017-06-18 Robert Fewell 
+
+	* Files linked to dialog-file-access.glade
+
+2017-06-18 Robert Fewell 
+
+	* Files linked to dialog-commodity.glade
+
+2017-06-18 Robert Fewell 
+
+	* Files linked to dialog-book-close.glade
+
+2017-06-18 Robert Fewell 
+
+	* Files linked to assistant-xml-encoding.glade
+
+2017-06-18 Robert Fewell 
+
+	* Change dialog-account.glade
+
+2017-06-18 Robert Fewell 
+
+	* Files linked to dialog-account.glade
+
+2017-06-17 Robert Fewell 
+
+	* Couple of corrections to previous commit.
+
+2017-06-17 Robert Fewell 
+
+	* Replace gtk_misc_set_alignment with own label alignment function
+
+2017-06-17 Robert Fewell 
+
+	* Replace gtk_scrolled_window_add_with_viewport
+
+2017-06-17 Robert Fewell 
+
+	* Change dialog buttons from using GKT_STOCK_ labels
+
+2017-06-17 Robert Fewell 
+
+	* Remove depreciated gtk_button_set_use_stock
+
+2017-06-16 John Ralls 
+
+	* Correctly store time64 0 in the SQL backend.
+
+2017-06-16 John Ralls 
+
+	* Clamp time64 values passed to GDateTime functions to the valid range.
+
+2017-06-16 Robert Fewell 
+
+	* Replace deprecated widgets in goffice
+
+2017-06-16 Robert Fewell 
+
+	* Correct corrupted line in gnc-account-sel.h
+
+2017-06-16 Robert Fewell 
+
+	* Change register Gtk horizontal and vertical widgets
+
+2017-06-16 Robert Fewell 
+
+	* Change all Gtk horizontal and vertical widgets
+
+2017-06-16 Robert Fewell 
+
+	* Change register GtkHbox widgets
+
+2017-06-16 Robert Fewell 
+
+	* Change all the GtkHbox widgets
+
+2017-06-16 Robert Fewell 
+
+	* Change all the GtkVBox widgets
+
+2017-06-16 Robert Fewell 
+
+	* Fix the tab label width update function to reflect changes
+
+2017-06-15 Robert Fewell 
+
+	* Replaced some deprecated widgets with the gtk3 equivalent
+
+2017-06-15 Robert Fewell 
+
+	* Fix Tab Labels
+
+2017-06-15 Robert Fewell 
+
+	* Replace some deprecated widgets in the register.
+
+2017-06-15 Robert Fewell 
+
+	* There were critical errors in trace file.
+
+2017-06-15 Robert Fewell 
+
+	* Replace deprecated widgets for GncDenseCal with gtk3 equivalents
+
+2017-06-15 Robert Fewell 
+
+	* Composite functions not required for GncDenseCal
+
+2017-06-15 Robert Fewell 
+
+	* Set the background of the GncDenseCal Widget
+
+2017-06-15 Robert Fewell 
+
+	* With Gtk3 it uses css to do the theming so change the file to load
+
+2017-06-04 christopherlam 
+
+	* Bug 776396 Further Fix
+
+2017-05-26 John Ralls 
+
+	* Bug 783095 - gnucash-2.6.16 segfaults on startup
+
+2017-05-21 Mike Evans 
+
+	* Change from deprecated gncEntrySetDate to gncEntrySetDateGDate. Again.
+
+2017-05-21 Mike Evans 
+
+	* Revert "Change from deprecated gncEntrySetDate to gncEntrySetDateGDate." Oops, more work required.
+
+2017-05-21 Mike Evans 
+
+	* Change from deprecated gncEntrySetDate to gncEntrySetDateGDate.
+
+2017-05-19 Mike Evans 
+
+	* Correct a typo.
+
+2017-05-18 Mike Evans 
+
+	* Use correct column for entry date.
+
+2017-05-16 Guy Taylor 
+
+	* Fix coredump in Python when using "get_namespaces"
+
+2017-05-16 Guy Taylor 
+
+	* Enable Python tests in Travis CI
+
+2017-05-13 Bert 
+
+	* Bug 776396 - Foreign currency reports, amounts are not aligned correctly
+
+2016-08-10 fell 
+
+	* Add XSU to iso-4217-currencies
+
+2017-05-03 Geert Janssens 
+
+	* Drop ifdeffed out code block
+
+2017-05-03 Geert Janssens 
+
+	* Bug 781634 - Alert on missing account currency when opening account
+
+2017-05-03 Geert Janssens 
+
+	* Properly handle import of reconcile state.
+
+2017-05-03 Geert Janssens 
+
+	* Document supported date formats in the saved csv settings
+
+2017-05-01 Geert Janssens 
+
+	* Use GncDate in csv importer
+
+2017-05-02 Geert Janssens 
+
+	* Add copy constructor and assignment operator to GncDate
+
+2017-04-29 Geert Janssens 
+
+	* Add comparison operators for GncDate
+
+2017-04-29 John Ralls 
+
+	* CMakeLists.txt: Remove Apple architecture settings.
+
+2017-04-16 John Ralls 
+
+	* Updated ar.po from ashalash@msn.com
+
+2017-04-29 fell 
+
+	* Fix wrong displayed position of the verbose flag in gnc-fq-dump
+
+2017-04-28 Geert Janssens 
+
+	* Convert gnc_dmy2timespec{,_end,_neutral} to use the equivalent GncDateTime constructor
+
+2017-04-28 Geert Janssens 
+
+	* Align day end time as used in the GncDateTime constructor and gnc_dmy2timespec_end
+
+2017-04-28 Geert Janssens 
+
+	* Fix John's remarks
+
+2017-04-28 Geert Janssens 
+
+	* Fix double free abort in gtest-gnc-datetime.cpp
+
+2017-04-21 Geert Janssens 
+
+	* Add constructor to create GncDate from string and predefined date format
+
+2017-04-22 Geert Janssens 
+
+	* Various small fixups in csv importer
+
+2017-04-28 Geert Janssens 
+
+	* Align cmake rational/numeric test invocation with Makefile based one
+
+2017-04-26 Geert Janssens 
+
+	* Fix autotools based build
+
+2017-04-20 Geert Janssens 
+
+	* Fix static code checker warnings about parameter definition in doxygen comments
+
+2017-04-20 Geert Janssens 
+
+	* Add GncDateTime constructor taking a GncDate as parameter
+
+2017-04-20 Geert Janssens 
+
+	* Swap GncDate and GncDateTime in preparation of a future commit
+
+2017-04-17 John Ralls 
+
+	* Work around googletest bug 920.
+
+2017-04-16 John Ralls 
+
+	* Merge branch 'PR140' into maint
+
+2017-04-16 John Ralls 
+
+	* Merge branch 'pr141'
+
+2017-04-16 Nitin Anand 
+
+	* Fix crash while saving scheduled transaction template
+
+2016-08-04 John Ralls 
+
+	* Adjust CMAKE_C_FLAGS for better release/debug behavior.
+
+2017-04-14 Geert Janssens 
+
+	* Gtk3: fix failing item-edit widget on sheets
+
+2017-04-14 Geert Janssens 
+
+	* Gtk3: fix register redrawing when the window is scrolled
+
+2017-04-11 Geert Janssens 
+
+	* Gtk3: Fix register not being drawn - item_edit still missing
+
+2017-04-11 Geert Janssens 
+
+	* Fix build with webkitgtk >= 2.8
+
+2017-03-31 John Ralls 
+
+	* Get links working.
+
+2017-03-31 John Ralls 
+
+	* Get WebKit2Gtk basics compiling and working.
+
+2017-03-23 John Ralls 
+
+	* Revert "Fix query period in test-account-get-trans-type-splits-interval."
+
+2017-02-27 John Ralls 
+
+	* Correct gnc-html-webkit.c indentation.
+
+2017-03-31 Geert Janssens 
+
+	* Gtk3: Replace obsolete functions
+
+2017-03-31 Geert Janssens 
+
+	* Temporarily disable deprecation warnings
+
+2017-02-27 John Ralls 
+
+	* Remove if-0-ed out code from gnc-html-webkit.c
+
+2015-08-25 Geert Janssens 
+
+	* Gtk3: fix direct access issue for entry widget in cell renderer mode
+
+2017-03-13 Geert Janssens 
+
+	* Gtk3: Convert GdkColor into GdkRGBA
+
+2017-03-13 Geert Janssens 
+
+	* Gtk3: replace expose_event size_request functions
+
+2015-08-29 Geert Janssens 
+
+	* Gtk3: Fix the remaining gtk direct access violations
+
+2015-08-24 Geert Janssens 
+
+	* Gtk3: adapt to changed callback function signature
+
+2015-08-23 Geert Janssens 
+
+	* Gtk3: use CSS style instead of old GtkStyle interface
+
+2017-04-10 John Ralls 
+
+	* Use the Mac Locale to find the account templates only when building with quartz.
+
+2017-04-10 Mike Alexander 
+
+	* Fix a minor typo.
+
+2017-04-10 Mike Alexander 
+
+	* Delete left over line from previous merge conflict.
+
+2017-04-10 Mike Alexander 
+
+	* Merge branch 'maint'
+
+2017-04-04 Mike Alexander 
+
+	* Fix the SWIG Guile wrapping of functions that have a "struct tm" parameter.
+
+2017-04-04 Mike Alexander 
+
+	* Calling sigfigs_denom with a zero crashes due to a divide by zero.
+
+2017-04-05 Mike Alexander 
+
+	* Add an XCode target to run the numeric unit tests and rename the main target to GnuCash.
+
+2017-04-04 Mike Alexander 
+
+	* Update XCode file lists and sort them alphabetically.
+
+2017-04-04 Mike Alexander 
+
+	* Fix a crash in scrub_sx_split_numeric introduced in b3eb9d0.
+
+2017-04-04 Mike Alexander 
+
+	* gnc_numeric_convert should return an invalid number unchanged instead of crashing.
+
+2017-04-08 John Ralls 
+
+	* Revert "Some instrumentation output..."
+
+2017-04-08 John Ralls 
+
+	* Change GTest annotations to use the right class name for GncInt128 tests.
+
+2017-04-07 John Ralls 
+
+	* Some instrumentation output for how much the numerator or denominator is shifted.
+
+2017-04-07 John Ralls 
+
+	* Better manage truncation in GncRational::round_to_numeric.
+
+2017-04-07 John Ralls 
+
+	* Fix GncInt128 maxbits to account for the flag bits.
+
+2017-04-07 John Ralls 
+
+	* Fix carrying to the wrong end of the lower leg in left shift.
+
+2017-04-07 John Ralls 
+
+	* Fix a magic number in GncInt128.
+
+2017-04-03 John Ralls 
+
+	* Save Changes Bug 780889 - Split-register transactions result in invalid...
+
+2017-04-02 John Ralls 
+
+	* Add some tests looking for a GncInt128 divide overflow problem.
+
+2017-04-02 John Ralls 
+
+	* Bug 780845 - link in github repo README file needs correction/editing
+
+2017-04-02 John Ralls 
+
+	* Bug 780845 - link in github repo README file needs correction/editing
+
+2015-08-22 Geert Janssens 
+
+	* Gtk3: Fix cursor handling
+
+2015-08-22 Geert Janssens 
+
+	* Gtk3: GtkObject has been removed
+
+2015-08-22 Geert Janssens 
+
+	* Switch to building with the gtk+-3.0 toolkit
+
+2017-03-13 Geert Janssens 
+
+	* GnucashSheet - drop unused variables
+
+2017-03-13 Geert Janssens 
+
+	* GnucashSheet - fix screen refresh
+
+2017-03-13 Geert Janssens 
+
+	* Fix two critical GObject warnings
+
+2017-03-13 Geert Janssens 
+
+	* ItemEdit - drop unused function
+
+2017-03-10 Geert Janssens 
+
+	* Extract the GnucashRegister widget into a separate file
+
+2017-03-10 Geert Janssens 
+
+	* Restore pasting in the item_edit
+
+2017-03-09 Geert Janssens 
+
+	* Rework GncItemEdit widget
+
+2017-03-09 Geert Janssens 
+
+	* Fix hidden scrollbars for itemlist type popup
+
+2017-03-09 Geert Janssens 
+
+	* Fix crash in previously unreached code
+
+2017-03-09 Geert Janssens 
+
+	* Create specialized popup items their respective source files
+
+2017-03-07 Geert Janssens 
+
+	* Reduce the cursor from a full widget to a simple gobject that tracks cursor coordinates
+
+2017-03-07 Geert Janssens 
+
+	* Rework gnucash-cursor
+
+2017-03-11 Geert Janssens 
+
+	* Reduce grid object from a complete widget to only two utility functions
+
+2017-03-11 Geert Janssens 
+
+	* Refactor divider line drawing some more to reduce duplicate code
+
+2017-03-11 Geert Janssens 
+
+	* Use cairo to redraw the grid widget
+
+2017-03-01 Geert Janssens 
+
+	* Replace all other uses of GnomeCanvas with standard gtk widgets
+
+2017-02-24 Geert Janssens 
+
+	* Convert gnc-header from GnomeCanvas to GtkLayout
+
+2017-03-30 John Ralls 
+
+	* Merge Ueli Neiderer's swift-transactiontxt branch into maint.
+
+2017-03-30 Ueli Niederer 
+
+	* Obey GNUcash coding style
+
+2017-03-30 Ueli Niederer 
+
+	* Added a preference to control import behaivour of transaction text
+
+2017-03-28 Ueli Niederer 
+
+	* Including the transaction text into the purpose text
+
+2017-03-28 John Ralls 
+
+	* Use qof_instance_set/get instead of g_object_set/get.
+
+2017-03-28 John Ralls 
+
+	* Merge branch 'maint'
+
+2017-03-26 Mike Alexander 
+
+	* Remove the xxx_with_error functions from Python bindings. They were removed from GnuCash in b199593 In January.
+
+2017-03-25 John Ralls 
+
+	* Release 2.6.16 (tag: 2.6.16)
+
+2017-03-25 John Ralls 
+
+	* Reduce the gate on get_random_gnc_numeric.
+
+2017-03-25 John Ralls 
+
+	* Update translations ca, nl, and sr from the translation project.
+
+2017-03-24 John Ralls 
+
+	* Bug 670731 - Future Value not working with Loan Scheduled transaction
+
+2017-03-23 John Ralls 
+
+	* Revert "Fix query period in test-account-get-trans-type-splits-interval."
+
+2017-03-24 fell 
+
+	* Update of de.po
+
+2017-03-24 fell 
+
+	* update de.po
+
+2017-03-24 fell 
+
+	* Use "Billing Information" as in other biz modules
+
+2014-12-18 Geert Janssens 
+
+	* Whitespace cosmetics
+
+2017-03-23 John Ralls 
+
+	* Bug 776247 - PriceEditor thinks Currency XXX is an actual currency...
+
+2017-03-23 fell 
+
+	* Fix a typo in my last commit
+
+2017-03-23 fell 
+
+	* Exlpain "Blank Transaction" to translators
+
+2017-03-23 Geert Janssens 
+
+	* Align a help string in two different files for easier translation
+
+2017-03-23 Robert Fewell 
+
+	* Bug388500 - Add option to remove deleted files from the history list
+
+2017-03-23 Geert Janssens 
+
+	* Disable tests when minimum glib2 requirement is not met
+
+2017-03-22 Geert Janssens 
+
+	* Bug 739571 - Small fixups for previous commits
+
+2016-02-13 Jesse Olmer 
+
+	* Bug 739571 - Matching imported transactions doesn't indicate previously matched entries
+
+2016-01-17 Jesse Olmer 
+
+	* Bug 739571 - Matching imported transactions doesn't indicate previously matched entries
+
+2017-03-22 fell 
+
+	* Update de.po
+
+2017-03-22 fell 
+
+	* Prepare update of de.po
+
+2017-03-16 fell 
+
+	* Add 2 translator comments to get a unique translation for 'Tax Report Options'
+
+2017-03-21 John Ralls 
+
+	* Save Changes Bug 776517 - Trial Balance Report:...
+
+2017-03-21 Geert Janssens 
+
+	* Bug 766630 - gui dialog for sorting transactions to accounts after aqbanking import broken
+
+2017-03-21 Geert Janssens 
+
+	* Resave dialog-import.glade without any real change
+
+2017-03-21 John Ralls 
+
+	* Bug 778208 - Scheduling 2nd, 3rd or 4th Wed doesn't seem to work.
+
+2017-03-18 Robert Fewell 
+
+	* Bug 603379 - Prevent changing some Account Options if it has transactions
+
+2017-03-18 Robert Fewell 
+
+	* Bug 603379 - Count the splits in an Account.
+
+2017-03-18 John Ralls 
+
+	* Merge en_GB budget->Budget into maint.
+
+2017-03-18 Simon Hollingshead 
+
+	* Consistently capitalise budget in en-GB menu items
+
+2017-03-18 John Ralls 
+
+	* Revert "Fix query period in test-account-get-trans-type-splits-interval."
+
+2017-03-17 John Ralls 
+
+	* Fix query period in test-account-get-trans-type-splits-interval.
+
+2017-03-18 John Ralls 
+
+	* Merge new Finnish translation into maint.
+
+2017-03-18 John Ralls 
+
+	* Update GnuCash version and PO date for Finnish translation.
+
+2017-03-17 John Ralls 
+
+	* Fix DST calculation error.
+
+2017-03-17 John Ralls 
+
+	* Fix query period in test-account-get-trans-type-splits-interval.
+
+2017-03-13 Tuomo Hartikainen 
+
+	* Update Finnish translation
+
+2017-03-17 Tuomo Hartikainen 
+
+	* Merge updated po template in fi.po
+
+2017-03-17 Geert Janssens 
+
+	* Add missing macros
+
+2017-03-16 fell 
+
+	* PR #134: Update local symbol of iso-4217-currency MUR
+
+2017-03-16 Geert Janssens 
+
+	* Fix a couple of other deprecated symbols (gtk/gdk 2.x still)
+
+2017-03-16 Geert Janssens 
+
+	* Handle deprecation of g_settings_list_keys in gio 2.46
+
+2017-03-16 Geert Janssens 
+
+	* Raise minimum required version of glib-2.0 to 2.40
+
+2017-03-16 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2017-03-11 Robert Fewell 
+
+	* Bug 779411 - jqplot fixes for piechart and syntax error.
+
+2017-03-13 Robert Fewell 
+
+	* Bug388500 - Add option to remove deleted files from the history list
+
+2017-03-16 Geert Janssens 
+
+	* Fixup last commit
+
+2017-03-11 Geert Janssens 
+
+	* Csv Import - drop another reference to the no longer used lib/stf
+
+2017-03-13 Geert Janssens 
+
+	* Csv Import - Fix doxygen comment
+
+2017-03-14 John Ralls 
+
+	* Fix up building on MinGW with autotools.
+
+2017-03-14 John Ralls 
+
+	* Adjust locale test so that it works on both Ubuntu and MacOS.
+
+2017-03-13 Christian Stimming 
+
+	* Online banking: Add output of bank messages that might occasionally be received.
+
+2017-03-13 John Ralls 
+
+	* Fix missing fi in configure.ac.
+
+2017-03-13 John Ralls 
+
+	* Require ICU.
+
+2017-03-12 John Ralls 
+
+	* Change 'uint' to 'uint32_t'.
+
+2017-03-11 Christoph Rohland 
+
+	* Fix logic error for discounts
+
+2017-03-10 Christoph Rohland 
+
+	* Fix taxinvoice for bill entries with taxes
+
+2017-03-08 Christoph Rohland 
+
+	* Let taxinvoice optionally show the net instead of the given price
+
+2017-03-11 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2017-03-09 Christoph Rohland 
+
+	* Charge back net value of bill entries in invoices
+
+2017-03-10 John Ralls 
+
+	* Fix failed unit test from previous commit.
+
+2017-03-10 John Ralls 
+
+	* Bug 779217 - Transactions rounded to 5 decimal places when opening file.
+
+2017-03-10 John Ralls 
+
+	* Bug 777949 - Accounts implicitly created in ledger attempt creation twice
+
+2017-03-09 John Ralls 
+
+	* Bug 776564 - Creating a scheduled transaction from an existing...
+
+2017-03-04 Geert Janssens 
+
+	* Allow only date entry for opening balances on new accounts
+
+2017-03-04 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2017-03-02 hcrohland 
+
+	* Revert the taxinvoice.scm changes
+
+2017-03-01 hcrohland 
+
+	* Make the net price option better compatible with master
+
+2017-02-03 hcrohland 
+
+	* Enable taxinvoice to show net price
+
+2017-03-01 Geert Janssens 
+
+	* Make older compilers happy by using std::isnan instead of isnan
+
+2017-03-01 Geert Janssens 
+
+	* Remove redundant gtk_widget_show_all call
+
+2017-02-20 Robert Fewell 
+
+	* Bug 778042 These are the script changes for jqplot reports.
+
+2017-02-20 Robert Fewell 
+
+	* Bug 778042 Change the way reports are loaded in conjunction with script changes.
+
+2017-02-20 Geert Janssens 
+
+	* Csv Import - Use GncNumeric rather than GncRational
+
+2017-02-21 Geert Janssens 
+
+	* Fix typo in GcnRational's + operator
+
+2017-02-21 Geert Janssens 
+
+	* Fix gnc-numeric locale test on travis
+
+2017-02-20 John Ralls 
+
+	* Prevent localizing the decimal point in gcc<5.
+
+2017-02-20 John Ralls 
+
+	* Merge fetaure-branch 'numeric', provides GncNumeric C++ API.
+
+2017-02-20 John Ralls 
+
+	* Fix Geert’s code review comments.
+
+2017-02-06 John Ralls 
+
+	* Fix documentation errors.
+
+2017-02-03 John Ralls 
+
+	* Relax comparison test for GncRational::round_to_numeric
+
+2017-02-03 John Ralls 
+
+	* Replace std::regex with boost::regex.
+
+2017-02-03 John Ralls 
+
+	* Add libgnc-qof to dependencies for test-numeric.
+
+2017-02-02 John Ralls 
+
+	* Fix indentation error.
+
+2017-02-02 John Ralls 
+
+	* Remove a commented-out diagnostic.
+
+2017-02-02 John Ralls 
+
+	* Make the GncRational and GncNumeric APIs mostly identical.
+
+2017-02-02 John Ralls 
+
+	* Change GncRational::round to GncRational::convert.
+
+2017-01-31 John Ralls 
+
+	* Make the rounding functions templates and move them to their own header.
+
+2017-01-31 John Ralls 
+
+	* Replace GncInt128’s flags variable with bit-stuffing in the high leg.
+
+2017-01-30 John Ralls 
+
+	* Convert GncRational to throw instead of using a status byte.
+
+2017-01-30 John Ralls 
+
+	* Reimplement gnc_numeric in terms of GncNumeric instead of GncRational.
+
+2017-01-30 John Ralls 
+
+	* Add GncRational test for GncRational::round_to_numeric().
+
+2017-01-30 John Ralls 
+
+	* Fix GncInt128 tests for older compilers.
+
+2017-01-30 John Ralls 
+
+	* Add GncRational(GncNumeric) constructor.
+
+2017-01-30 John Ralls 
+
+	* Extract new class GncNumeric.
+
+2017-01-30 John Ralls 
+
+	* Remove #ifdef __cplusplus from gnu-numeric.cpp
+
+2017-01-30 John Ralls 
+
+	* Fix GncInt128 shift operators when shift amount will clear a leg.
+
+2017-01-30 John Ralls 
+
+	* Declare GncInt128::div() const
+
+2017-01-30 John Ralls 
+
+	* Fix minor typos and whitespace issues.
+
+2017-01-30 John Ralls 
+
+	* Change signature of GncRational::round from taking a GncDenominator…
+
+2017-01-30 John Ralls 
+
+	* Move test-numeric from src/engine to src/libqof/qof.
+
+2017-01-30 John Ralls 
+
+	* Add GncRational::reduce() and GncRational::round_to_numeric().
+
+2017-01-30 John Ralls 
+
+	* Fix inverted subtraction.
+
+2017-01-30 John Ralls 
+
+	* Add guard macro to gnu-rational.hpp.
+
+2017-01-16 John Ralls 
+
+	* Untabify gnu-numeric.cpp.
+
+2017-01-16 John Ralls 
+
+	* Remove unused gnc_numeric_foo_with_error functions.
+
+2017-01-15 John Ralls 
+
+	* Implement basic arithmetic operators for GncRational.
+
+2017-01-14 John Ralls 
+
+	* Reorder test parameters so that the expected value is first.
+
+2017-01-14 John Ralls 
+
+	* Add an error parameter on the GncInt128 constructor.
+
+2017-01-14 John Ralls 
+
+	* Add GTest test program for GncRational.
+
+2017-01-14 John Ralls 
+
+	* Add explicit and correct default GncRational constructor.
+
+2017-02-20 John Ralls 
+
+	* Add ICU libraries on which Boost:locale is dependent to CSV-Import LINK_LIBRARIES.
+
+2017-02-20 Geert Janssens 
+
+	* Merge branch 'csv_imp_cpp'
+
+2017-02-20 Geert Janssens 
+
+	* Use boost::locale:conv:utf_to_uft instead of codecvt_utf8
+
+2017-02-20 Geert Janssens 
+
+	* Properly test for invalid dates (gnc-date C interface no longer throws - rightfully so)
+
+2017-02-20 Geert Janssens 
+
+	* Some ui refinement
+
+2017-02-20 Geert Janssens 
+
+	* Cleanup - use less ambiguous variable name for an iterator
+
+2017-02-20 Geert Janssens 
+
+	* Fix base account reset when an account column is selected
+
+2017-02-18 Geert Janssens 
+
+	* Recover separators or column_widths when juggling file format more than once
+
+2017-02-17 Geert Janssens 
+
+	* Prevent multi-byte characters from erroneously being split in fixed-width mode
+
+2017-02-15 Geert Janssens 
+
+	* Include glib.h as everywhere else
+
+2017-02-11 Geert Janssens 
+
+	* Remove some obsolete comments and commented out code
+
+2017-02-11 Geert Janssens 
+
+	* Trim newlines from csv data
+
+2017-02-10 Geert Janssens 
+
+	* Fix crash when adding columns by double-clicking the preview data
+
+2017-02-09 Geert Janssens 
+
+	* Fix settings loading and saving
+
+2017-02-08 Geert Janssens 
+
+	* Improve visual feedback when previewing importable data
+
+2017-02-06 Geert Janssens 
+
+	* Improve preview table handling
+
+2017-01-14 Geert Janssens 
+
+	* Use GncRational directly instead of gnc_numeric in gnc-trans-props
+
+2017-01-12 Geert Janssens 
+
+	* Prevent the user from setting an invalid settings name
+
+2016-12-30 Geert Janssens 
+
+	* Move column parsing earlier up the chain of events
+
+2016-12-28 Geert Janssens 
+
+	* Copyright updates
+
+2016-12-28 Geert Janssens 
+
+	* Add a reset member function to GncPreTrans and GncPreSplit
+
+2016-12-24 Geert Janssens 
+
+	* Make sure all lines are checked for errors, regardless of their skipped status
+
+2016-12-24 Geert Janssens 
+
+	* Isolate the gtk callbacks from the assistant class' member variables.
+
+2016-12-24 Geert Janssens 
+
+	* Consistently use gnucash dialogs instead of generic gtk ones
+
+2016-12-24 Geert Janssens 
+
+	* Use std::unique_ptr for the TxImport object for better memory management
+
+2016-12-24 Geert Janssens 
+
+	* Convert assistant struct into a real c++ class
+
+2016-12-23 Geert Janssens 
+
+	* Handle error skipping on the preview page as well and drop the custom page forwarder
+
+2016-12-22 Geert Janssens 
+
+	* Complete error checking on the preview page
+
+2016-12-20 Geert Janssens 
+
+	* Move account searching to GncTxImport as it's responsible for the data
+
+2016-12-20 Geert Janssens 
+
+	* Remove redundant code
+
+2016-12-20 Geert Janssens 
+
+	* Cleanup round - move functions up and down to group related ones
+
+2016-12-18 Geert Janssens 
+
+	* Cleanup round
+
+2016-12-17 Geert Janssens 
+
+	* Revisit csv settings
+
+2016-12-16 Geert Janssens 
+
+	* Revisit error checking on the preview page.
+
+2016-12-16 Geert Janssens 
+
+	* Move the base account selection to the preview page
+
+2016-12-16 Geert Janssens 
+
+	* Add account selector to the preview window
+
+2016-12-16 Geert Janssens 
+
+	* Some variable declaration cleanups
+
+2016-12-16 Geert Janssens 
+
+	* Make sure row coloring happens each time the preview is updated
+
+2016-12-16 Geert Janssens 
+
+	* Remove redundant check for valid column types
+
+2016-12-13 Geert Janssens 
+
+	* Revisit csv trans import settings handling
+
+2016-12-13 Geert Janssens 
+
+	* Drop fixed-format csv importer
+
+2016-12-13 Geert Janssens 
+
+	* Allow user to only select column_types that make sense in the current context
+
+2016-12-13 Geert Janssens 
+
+	* Drop balance column from csv importer
+
+2016-12-11 Geert Janssens 
+
+	* Adapt csv export format to new csv importer capabilities
+
+2016-12-11 Geert Janssens 
+
+	* Extend csv importer to be able to import multi-currency and stock transactions
+
+2016-12-11 Geert Janssens 
+
+	* Extend csv importer to be able to import voided transactions
+
+2016-12-11 Geert Janssens 
+
+	* Extend csv importer to be able to import reconcile states
+
+2016-12-11 Geert Janssens 
+
+	* Add additional check before creating splits or transactions
+
+2016-12-11 Geert Janssens 
+
+	* Defer testing boost:optionals until really needed Similarly only lookup book when really needed
+
+2016-12-11 Geert Janssens 
+
+	* Create trans/split props only when needed and have them keep their own value of date/currency format
+
+2017-01-14 Geert Janssens 
+
+	* Extend csv importer to be able to import split action fields
+
+2016-12-10 Geert Janssens 
+
+	* Avoid assigning empty or null char*'s to a std::string
+
+2016-12-10 Geert Janssens 
+
+	* csv import prefs - store coltypes as strings
+
+2016-12-08 Geert Janssens 
+
+	* Convert column_widths to a vector
+
+2016-12-08 Geert Janssens 
+
+	* Drop superfluous code that sets the default in case of an error.
+
+2016-12-08 Geert Janssens 
+
+	* Use std::vector to store column types, and a few other data type changes
+
+2016-12-05 Geert Janssens 
+
+	* Convert CsvTransSettings into a c++ class
+
+2017-01-14 Geert Janssens 
+
+	* Remove final dependencies on GOFFICE
+
+2016-12-03 Geert Janssens 
+
+	* Fix error handling in the multi-split case (and probaly in the other case as well)
+
+2016-12-02 Geert Janssens 
+
+	* Introduce multi-split imports in the csv importer
+
+2016-12-02 Geert Janssens 
+
+	* Rework csv import preview with additional cleanups
+
+2016-11-29 Geert Janssens 
+
+	* Fix memory leaks in the draft transactions object
+
+2016-12-11 Geert Janssens 
+
+	* Cleanup commit
+
+2016-11-29 Geert Janssens 
+
+	* Rework the intermediate properties storage
+
+2016-11-28 Geert Janssens 
+
+	* Refactor parse_to_trans into smaller functions
+
+2016-11-28 Geert Janssens 
+
+	* Add property structs for transaction vs split properties
+
+2016-11-28 Geert Janssens 
+
+	* Refactor pair into a tuple in preparation of extending it
+
+2016-11-28 Geert Janssens 
+
+	* Factor out balance calculating function
+
+2016-10-12 Geert Janssens 
+
+	* Drop unused parameter
+
+2016-10-11 Geert Janssens 
+
+	* Drop remaining GError boilerplate from the c++ importer
+
+2016-10-11 Geert Janssens 
+
+	* Replace GError usage in parse function with proper try catch blocks
+
+2016-10-10 Geert Janssens 
+
+	* Replace GError usage in file_format and load_file with proper try catch blocks
+
+2017-01-14 Geert Janssens 
+
+	* Throw in case date can't be parsed instead of returning -1 as date
+
+2016-10-10 Geert Janssens 
+
+	* Various small C++ and other cleanups
+
+2016-10-10 Geert Janssens 
+
+	* Use gnc-date functions while parsing date strings for consistent timezone handling
+
+2016-09-16 Geert Janssens 
+
+	* Migrate the glib based test case for GncTxImport to google-test
+
+2016-09-16 Geert Janssens 
+
+	* Use consistent name for importer class and its filename
+
+2016-09-15 Geert Janssens 
+
+	* Fix column sizing for fixed width data
+
+2016-09-15 Geert Janssens 
+
+	* Prevent crash when switching to fixed with in assistant
+
+2016-09-15 Geert Janssens 
+
+	* Readd a column for the error messages when reviewing parse errors
+
+2016-09-15 Geert Janssens 
+
+	* Return nullptr in case of invalid numeric field to allow proper error handling
+
+2016-09-15 Geert Janssens 
+
+	* Rearrange statements in gnc_csv_preview_update_assist
+
+2016-09-14 Geert Janssens 
+
+	* Use one common liststore for all the combocells in the preview header treeview
+
+2016-09-14 Geert Janssens 
+
+	* Some changes to adhere better to the gnucash coding guidelines
+
+2016-09-13 Geert Janssens 
+
+	* Drop fake test in fw tokenizer
+
+2016-09-13 Geert Janssens 
+
+	* Add test cases for tokenizer classes
+
+2016-09-13 Geert Janssens 
+
+	* Trim whitespace in case of fixed width input
+
+2016-09-10 Geert Janssens 
+
+	* Replace transactions GList with a std::multimap
+
+2016-09-10 Geert Janssens 
+
+	* Another round of small c to c++(11) conversions
+
+2016-09-10 Geert Janssens 
+
+	* Delay the test for a default account until it's needed
+
+2016-09-09 Geert Janssens 
+
+	* Fix memory management for the temporary trans properties
+
+2016-09-10 Geert Janssens 
+
+	* Reduce code duplication by reusing trans_add_split
+
+2016-09-09 Geert Janssens 
+
+	* Fix memory corruption bug
+
+2016-09-09 Geert Janssens 
+
+	* Refactor TransProperty stuff to a simple void*
+
+2016-09-08 Geert Janssens 
+
+	* Replace private data structure TransPropertyList with a std::map
+
+2016-07-05 Geert Janssens 
+
+	* Remove fake csv parsing test
+
+2016-07-05 Geert Janssens 
+
+	* Add some polish to csv_import_trans_file_chooser_confirm_cb
+
+2016-06-25 Geert Janssens 
+
+	* Prevent c++ name mangling on functions used as callbacks by gtk
+
+2016-06-25 Geert Janssens 
+
+	* csv-imp - use enum instead of strings to track user selected column types
+
+2016-06-12 Geert Janssens 
+
+	* Convert column type to name mapping into a std::map
+
+2016-06-12 Geert Janssens 
+
+	* Adapt assistant for c++ guid changes
+
+2016-01-30 Geert Janssens 
+
+	* Refactor csv assistant code to use GncCsvParseData class instead of gnc-csv-model code
+
+2016-06-07 Geert Janssens 
+
+	* Build assistant-csv-trans-import.c(pp) as c++
+
+2016-06-12 Geert Janssens 
+
+	* Introduce parse error state
+
+2016-06-12 Geert Janssens 
+
+	* Small local variable cleanups
+
+2016-06-07 Geert Janssens 
+
+	* C++ - use std::pair to store tokenized line together with its error message
+
+2016-01-31 Geert Janssens 
+
+	* C++11 Convert unscoped enum into scoped one
+
+2016-01-31 Geert Janssens 
+
+	* Use more C++11 features
+
+2016-02-08 Geert Janssens 
+
+	* Revert to boost.regex without ICU support
+
+2016-02-06 Geert Janssens 
+
+	* Redo parse_date function using boost regular expressions
+
+2016-01-28 Geert Janssens 
+
+	* Convert error_lines GList in a vector of strings
+
+2016-01-28 Geert Janssens 
+
+	* Replace stf based file parser with gnc-tokenizer based one
+
+2015-05-08 Geert Janssens 
+
+	* Use vector instead of GArray for column_types class member
+
+2016-01-23 Geert Janssens 
+
+	* Convert GncCsvParseData into a class
+
+2016-01-23 Geert Janssens 
+
+	* csv-imp - copy gnc-csv-model and make it build as c++
+
+2016-06-07 Geert Janssens 
+
+	* Add dummy tokenizer to be used when file format isn't known yet
+
+2016-06-12 Geert Janssens 
+
+	* Add functions to manipulate fixed width column positions
+
+2016-01-28 Geert Janssens 
+
+	* Add fixed width file parser based on boost::tokenize
+
+2016-01-26 Geert Janssens 
+
+	* Add csv file parser based on boost::tokenize
+
+2016-01-28 Geert Janssens 
+
+	* Introduce base class for parsing importable files
+
+2016-01-28 Geert Janssens 
+
+	* Whitespace and spelling corrections
+
+2017-01-14 Geert Janssens 
+
+	* Look for translatable strings in lib directory as well
+
+2017-01-14 Geert Janssens 
+
+	* Use internalized goffice parts in csv-import
+
+2016-01-26 Geert Janssens 
+
+	* Fix build issues with goffice imported sources
+
+2016-01-28 Geert Janssens 
+
+	* Internalize parts of the goffice code
+
+2016-01-27 Geert Janssens 
+
+	* Small amendements to gnc-csv-account-map
+
+2017-02-20 Geert Janssens 
+
+	* Yet another tweak to properly find GMOCK sources
+
+2017-02-18 John Ralls 
+
+	* Silence the no lock table warnings in test-backend-dbi.
+
+2017-02-18 John Ralls 
+
+	* Fix failure to drop the temp numeric table at the end of dbi_library_test.
+
+2017-02-18 John Ralls 
+
+	* Make gnc_dbi_safe_sync_all safer.
+
+2017-02-18 sdementen 
+
+	* add gnc_get_current_session to swig interface
+
+2017-02-16 John Ralls 
+
+	* Move begin_transaction in lock_database to include checking for the table…
+
+2017-02-16 John Ralls 
+
+	* Add SAVEPOINT support to enable nested gnc_dbi_transaction calls.
+
+2017-02-16 John Ralls 
+
+	* Use the transactional member functions instead of running queries directly.
+
+2017-02-15 John Ralls 
+
+	* Merge branch 'maint'
+
+2017-02-14 fell 
+
+	* Review of pull request #125 from Mechtilde
+
+2017-02-14 Frank H. Ellenberger 
+
+	* Merge pull request #125 from Mechtilde/TranslationDE
+
+2017-02-12 Mechtilde 
+
+	* msgmerge with gnucash-2.6.15.pot
+
+2016-12-26 Mechtilde 
+
+	* translation tip_of_the_day
+
+2017-02-12 fell 
+
+	* Improve comment about available languages
+
+2017-02-10 fell 
+
+	* Set a separate translator comment to avoid pulling the whole file header comment in POT
+
+2017-02-10 fell 
+
+	* Fix german language tag
+
+2017-02-10 fell 
+
+	* Update PACKAGE_BUGREPORT, set PACKAGE_URL
+
+2017-02-08 Geert Janssens 
+
+	* One more stab at properly discovering gtest/gmock
+
+2017-02-06 Geert Janssens 
+
+	* Fix cmake's gmock handling to work with Fedora packages
+
+2017-02-04 John Ralls 
+
+	* Make gnc_dbi_safe_sync_all safer.
+
+2017-02-04 John Ralls 
+
+	* Move the transaction-lock on obtaining the database lock earlier.
+
+2017-02-04 John Ralls 
+
+	* Add SAVEPOINT support to enable nested gnc_dbi_transaction calls.
+
+2017-02-04 John Ralls 
+
+	* Extract static gnc_dbi_transaction functions.
+
+2017-02-02 Geert Janssens 
+
+	* Optionally locate boost via environment variable BOOST_ROOT
+
+2017-02-02 Geert Janssens 
+
+	* Fix building gtest library on mingw
+
+2017-02-02 Geert Janssens 
+
+	* Make google test framework a mandatory build dependency
+
+2017-02-01 DIG 
+
+	* Small updates for Russian translation
+
+2017-02-01 Geert Janssens 
+
+	* Fake change to test mail script on code.gnucash.org
+
+2017-02-01 Geert Janssens 
+
+	* Drop callback that reloads report when a report tab is selected
+
+2017-02-01 Geert Janssens 
+
+	* Revert "Add call back to track page size changes"
+
+2017-02-01 Geert Janssens 
+
+	* Revert "Change report resizing when not in view"
+
+2017-02-01 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2017-02-01 Geert Janssens 
+
+	* Log javascript console messages to the trace file
+
+2017-02-01 Geert Janssens 
+
+	* Always use actual window size when calculating x-axis ticks for charts
+
+2017-02-01 Geert Janssens 
+
+	* Bug 777875 - Reports with charts are flickering in certain circumstances
+
+2017-01-30 Geert Janssens 
+
+	* Extend account color to all columns in the account hierarchy page
+
+2017-01-30 Geert Janssens 
+
+	* Fix duplicate widget names in gtkbuilder file
+
+2017-01-30 Geert Janssens 
+
+	* Drop with_html_engine option
+
+2017-01-30 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2017-01-28 Geert Janssens 
+
+	* Travis - fix failure to load some libraries while running scm tests
+
+2017-01-28 Geert Janssens 
+
+	* Bug 759934 - Tiny reports in HiDPI
+
+2017-01-27 Geert Janssens 
+
+	* Drop a couple of webkit related configure tests
+
+2017-01-26 D. Hugh Redelmeier 
+
+	* add comments to clarify that taxtxf.scm is US-specific
+
+2017-01-26 Pedro Albuquerque 
+
+	* Bug 777561 - Update pt.po to v. 2.6.15
+
+2016-12-27 Robert Fewell 
+
+	* Bug 516920 - Calendar Pop up disappears of the left side
+
+2017-01-16 klemens 
+
+	* spelling fixes
+
+2017-01-23 Geert Janssens 
+
+	* Merge branch 'maint'
+
+2017-01-16 klemens 
+
+	* spelling fixes
+
+2017-01-21 Pedro Albuquerque 
+
+	* Several spelling corrections of the pt_PT translation
+
+2017-01-17 Mike Evans 
+
+	* Make strings translatable in dialog-bi-import.c
+
+2017-01-15 Mike Evans 
+
+	* Bug 767032 - Bad invoices from importing "posted" needing currency conversion
+
+2017-01-14 John Ralls 
+
+	* Ensure that all GncDate and GncDateTime constructors are in try blocks.
+
+2017-01-14 John Ralls 
+
+	* Make GncDate and GncDateTime default constructors have the current day/time.
+
+2017-01-14 John Ralls 
+
+	* Fix crash when $TZ isn’t defined.
+
+2017-01-14 John Ralls 
+
+	* Actually checkout gtest 1.8.0 in travis tests.
+
+2017-01-13 John Ralls 
+
+	* Fix local timezone-dependent test.
+
+2017-01-13 John Ralls 
+
+	* Change last test in test-gnc-timezone to EXPECT_EQ so it will log the results.
+
+2017-01-13 John Ralls 
+
+	* Display failing test-gnc-timezone.log for troubleshooting.
+
+2017-01-13 John Ralls 
+
+	* Fix test failures from adding bad-date tests.
+
+2017-01-13 Geert Janssens 
+
+	* Travis - lock google test framework to 1.8.0 for reproducible tests
+
+2017-01-13 Geert Janssens 
+
+	* Travis - skip testing on trunk branch
+
+2017-01-12 Geert Janssens 
+
+	* Enable google test on travis
+
+2017-01-12 Geert Janssens 
+
+	* Fix signedness of certain gmock based tests
+
+2017-01-12 John Ralls 
+
+	* Prevent leaking exceptions from gnc_dmy2timespec_neutral
+
+2017-01-10 John Ralls 
+
+	* Add note about setting GTEST cmake variables.
+
+2017-01-10 Geert Janssens 
+
+	* Fix compiler warning about confusing indentation
+
+2017-01-10 Geert Janssens 
+
+	* Drop unused DEBUG_MEMORY macro
+
+2017-01-07 Stefan Talpalaru 
+
+	* configure: fix --disable-debug, --disable-profile and --disable-locale-specific-tax
+

@@ -1,23 +1,23 @@
 LEG22102001 - es_NI-policy.txt
 
 En este documento se describen las normas aplicadas al traducir los
-textos de GnuCash al idioma espa駉l
+textos de GnuCash al idioma espa帽ol
 
-Nota: El autor no es native speaker del espa駉l, ni especialista
-      contable.  Cualquier recomendaci髇 o correcci髇 es muy
+Nota: El autor no es native speaker del espa帽ol, ni especialista
+      contable.  Cualquier recomendaci贸n o correcci贸n es muy
       bienvenida.
 
 
 Onda:
 =====
 
-La onda es, crear una notaci髇 apta para peque駉s negocios, de tal
+La onda es, crear una notaci贸n apta para peque帽os negocios, de tal
 manera, que se puede usar en la vida comercial y fiscal.  Por lo tanto
-se prefiere t閞minos oficiales/contables ante t閞minos del habla
-com鷑.
+se prefiere t茅rminos oficiales/contables ante t茅rminos del habla
+com煤n.
 
-La explicaci髇 de estos t閞minos a una persona privada que quiere usar
-GnuCash es tarea de la documentaci髇.
+La explicaci贸n de estos t茅rminos a una persona privada que quiere usar
+GnuCash es tarea de la documentaci贸n.
 
 
 Mayuscula/Menuscula:
@@ -37,10 +37,10 @@ Ejemplos:
 + "Abrir"
 
 
-Puntuaci髇
+Puntuaci贸n
 ==========
 
-Normalmente se deja dos espacios despu閟 de la puntuaci髇 de frases.
+Normalmente se deja dos espacios despu茅s de la puntuaci贸n de frases.
 Ya que supongo que usamos fuentes proporcionales no se utiliza esta
 regla y solamente se inserta un (1) espacio.
 
@@ -49,12 +49,12 @@ Diccionario
 ===========
 
 Commodity	valores (plural)
-Stock		acci髇
+Stock		acci贸n
 Income		ingreso
 Expense		egreso
 Asset		activo
 Liability	pasivo
-Price quote	cotizaci髇
+Price quote	cotizaci贸n
 Reconcile	reconciliar
 Portfolio	cartera
 Parent account	cuenta superior
@@ -67,15 +67,15 @@ Forward		avanzar
 
 Top-Level	primer plano
 
-Account Tree	jerarqu韆 de cuentas
+Account Tree	jerarqu铆a de cuentas
 GnuCash Network	Red GnuCash
 
--- estoy buscando el t閞mino correcto para
+-- estoy buscando el t茅rmino correcto para
 
-Equity		縫atrimonio? o equidad, lo 鷏timo esta actualmente en
+Equity		驴patrimonio? o equidad, lo 煤ltimo esta actualmente en
 		uso.
 
-Security	c骴igo de seguridad
+Security	c贸digo de seguridad
 
 Share		partida
 
@@ -93,12 +93,12 @@ Nota: prefiereo "encontrar" bara "find" y "buscar" para "search", pero
 no ha sido esforzado.
 
 
-G閚ero
+G茅nero
 ======
 
-Donde aplicable se utiliza los dos g閚eros al referirse a personas,
-usando la notaci髇: el/la contador/a. Por razones de consistencia
-siempre el g閚ero femenino viene en segunda posici髇.
+Donde aplicable se utiliza los dos g茅neros al referirse a personas,
+usando la notaci贸n: el/la contador/a. Por razones de consistencia
+siempre el g茅nero femenino viene en segunda posici贸n.
 
 
 

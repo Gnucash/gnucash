@@ -1,0 +1,616 @@
+# Aug 2012: A RELAX NG Compact schema for gnucash "v2" XML files.
+# Copyright (C) 2006 Joshua Sled <jsled@asynchronous.org>
+# Copyright (C) 2012 Baptiste Carvello <devel@baptiste-carvello.net>
+
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2 of
+# the License, or (at your option) version 3.
+
+# This schema is non-normative; files emitted by gnucash <= 2.0 (and perhaps
+# later) that do not validate against it likely represent a problem with the
+# schema, not the file. The schema was last updated for gnucash trunk, rev 22330.
+
+# http://relaxng.org/compact-tutorial-20030326.html
+
+# from write_v2_header in src/backend/xml/io-gncxml-v2.c
+
+namespace gnc = "http://www.gnucash.org/XML/gnc"
+namespace act = "http://www.gnucash.org/XML/act"
+namespace book = "http://www.gnucash.org/XML/book"
+namespace cd = "http://www.gnucash.org/XML/cd"
+namespace cmdty = "http://www.gnucash.org/XML/cmdty"
+namespace price = "http://www.gnucash.org/XML/price"
+namespace slot = "http://www.gnucash.org/XML/slot"
+namespace split = "http://www.gnucash.org/XML/split"
+namespace sx = "http://www.gnucash.org/XML/sx"
+namespace trn = "http://www.gnucash.org/XML/trn"
+namespace ts = "http://www.gnucash.org/XML/ts"
+namespace fs = "http://www.gnucash.org/XML/fs"
+namespace bgt = "http://www.gnucash.org/XML/bgt"
+namespace recurrence = "http://www.gnucash.org/XML/recurrence"
+namespace lot = "http://www.gnucash.org/XML/lot"
+
+# plugins, in order (address, owner, bill-term, customer, employee, entry, invoice,
+# job, order, tax-table, vendor)
+
+namespace addr = "http://www.gnucash.org/XML/addr"
+namespace owner = "http://www.gnucash.org/XML/owner"
+namespace billterm = "http://www.gnucash.org/XML/billterm"
+namespace bt-days = "http://www.gnucash.org/XML/bt-days"
+namespace bt-prox = "http://www.gnucash.org/XML/bt-prox"
+namespace cust = "http://www.gnucash.org/XML/cust"
+namespace employee = "http://www.gnucash.org/XML/employee"
+namespace entry = "http://www.gnucash.org/XML/entry"
+namespace invoice = "http://www.gnucash.org/XML/invoice"
+namespace job = "http://www.gnucash.org/XML/job"
+namespace order = "http://www.gnucash.org/XML/order"
+namespace taxtable = "http://www.gnucash.org/XML/taxtable"
+namespace tte = "http://www.gnucash.org/XML/tte"
+namespace vendor = "http://www.gnucash.org/XML/vendor"
+
+start = GnuCashXml
+
+GnuCashXml = element gnc-v2 {
+
+# from gnc_book_write_to_xml_filehandle_v2 in src/backend/xml/io-gncxml-v2.c
+
+  ( ( element gnc:count-data { attribute cd:type { "book" }, "1" },
+      Book
+    )
+
+# from gnc_book_write_accounts_to_xml_filehandle_v2 in src/backend/xml/io-gncxml-v2.c
+
+  | ( element gnc:count-data { attribute cd:type { "commodity" }, xsd:int }?,
+      element gnc:count-data { attribute cd:type { "account" }, xsd:int }?,
+      Commodity*,
+      Account*
+    )
+  )
+}
+
+# from write_book in src/backend/xml/io-gncxml-v2.c
+
+Book = element gnc:book {
+  attribute version { "2.0.0" },
+
+# from write_book_parts in src/backend/xml/gnc-book-xml-v2.c
+
+  element book:id { attribute type { "guid" }, GUID },
+  element book:slots { KvpSlot+ }?,
+
+# from write_book in src/backend/xml/io-gncxml-v2.c
+
+  element gnc:count-data { attribute cd:type { "commodity" }, xsd:int }?,
+  element gnc:count-data { attribute cd:type { "account" }, xsd:int }?,
+  element gnc:count-data { attribute cd:type { "transaction" }, xsd:int }?,
+  element gnc:count-data { attribute cd:type { "schedxaction" }, xsd:int }?,
+  element gnc:count-data { attribute cd:type { "budget" }, xsd:int }?,
+  element gnc:count-data { attribute cd:type { "price" }, xsd:int }?,
+
+# plugins (those with a get_count slot)
+
+  element gnc:count-data { attribute cd:type { "gnc:GncBillTerm" }, xsd:int }?,
+  element gnc:count-data { attribute cd:type { "gnc:GncCustomer" }, xsd:int }?,
+  element gnc:count-data { attribute cd:type { "gnc:GncEmployee" }, xsd:int }?,
+  element gnc:count-data { attribute cd:type { "gnc:GncEntry" }, xsd:int }?,
+  element gnc:count-data { attribute cd:type { "gnc:GncInvoice" }, xsd:int }?,
+  element gnc:count-data { attribute cd:type { "gnc:GncJob" }, xsd:int }?,
+  element gnc:count-data { attribute cd:type { "gnc:GncOrder" }, xsd:int }?,
+  element gnc:count-data { attribute cd:type { "gnc:GncTaxTable" }, xsd:int }?,
+  element gnc:count-data { attribute cd:type { "gnc:GncVendor" }, xsd:int }?,
+
+  Commodity*,
+  PriceDb?,
+  Account*,
+  Transaction*,
+  TemplateTransactions*,
+  ScheduledTransaction*,
+  Budget*,
+
+# plugins (those with a write slot)
+
+  BillTerm*,
+  Customer*,
+  Employee*,
+  Entry*,
+  Invoice*,
+  Job*,
+  Order*,
+  TaxTable*,
+  Vendor*
+}
+
+# from src/backend/xml/sixtp-dom-generators.c
+
+KvpSlot = element slot {
+  element slot:key { text },
+  KvpValue
+}
+
+KvpValue = ( element slot:value { attribute type { "integer" }, xsd:int }
+           | element slot:value { attribute type { "double" }, xsd:double }
+           | element slot:value { attribute type { "numeric" }, GncNumeric }
+           | element slot:value { attribute type { "string" }, text }
+           | element slot:value { attribute type { "guid" }, GUID }
+           | element slot:value { attribute type { "timespec" }, TimeSpec }
+           | element slot:value { attribute type { "gdate" }, GDate }
+           | element slot:value { attribute type { "binary" }, xsd:string { pattern = "[0-9a-f]*" }}
+           | element slot:value { attribute type { "list" }, KvpValue* }
+           | element slot:value { attribute type { "frame" }, KvpSlot* }
+           )
+
+# various patterns
+
+GncNumeric = xsd:string { pattern = "-?[0-9]+/-?[0-9]+" }
+
+GUID = xsd:string { pattern = "[0-9a-f]{32}" }
+
+TimeSpec = ( TimeStamp,
+             element ts:ns { xsd:int }?
+           )
+
+TimeStamp = element ts:date { xsd:string { pattern = "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} (\+|-)[0-9]{4}" } }
+
+GDate = element gdate { xsd:string { pattern = "[0-9]{4}-[0-9]{2}-[0-9]{2}" } }
+
+# from gnc_commodity_dom_tree_create in src/backend/xml/gnc-commodity-xml-v2.c
+
+Commodity = element gnc:commodity {
+  attribute version { "2.0.0" },
+  ( ( element cmdty:space { "ISO4217" },    # catégorie (monnaies)
+      element cmdty:id { text }    # dénomination
+    )
+  | ( element cmdty:space { text },
+      element cmdty:id { text },
+      element cmdty:name { text }?,
+      element cmdty:xcode { text }?,
+      element cmdty:fraction { text }
+    )
+  ),
+  ( element cmdty:get_quotes { empty },
+    element cmdty:quote_source { text }?,
+    element cmdty:quote_tz { text | empty }?
+  )?,
+  element cmdty:slots { KvpSlot+ }?
+}
+
+# from gnc_pricedb_to_dom_tree in src/backend/xml/gnc-pricedb-xml-v2.c
+
+PriceDb = element gnc:pricedb {
+  attribute version { "1" },
+  Price+
+}
+
+# from gnc_price_to_dom_tree in src/backend/xml/gnc-pricedb-xml-v2.c
+
+Price = element price {
+  element price:id { attribute type { "guid" }, GUID },
+  element price:commodity {
+    element cmdty:space { text },
+    element cmdty:id { text }
+  },
+  element price:currency {
+    element cmdty:space { text },
+    element cmdty:id { text }
+  },
+  element price:time { TimeSpec },
+  element price:source { text }?,
+
+# from the doc string of gnc_price_class_init in src/engine/gnc-pricedb.c
+
+  element price:type { "bid" | "ask" | "last" | "nav" | "transaction" | "unknown" }?,
+
+  element price:value { GncNumeric }
+}
+
+# from gnc_account_dom_tree_create in src/backend/xml/gnc-account-xml-v2.c
+
+Account = element gnc:account {
+  attribute version { "2.0.0" },
+  element act:name { text },
+  element act:id { attribute type { "guid" }, GUID },
+
+# from xaccAccountTypeEnumAsString in src/engine/Account.c
+
+  element act:type { "NONE"
+                   | "BANK"
+                   | "CASH"
+                   | "CREDIT"
+                   | "ASSET"
+                   | "LIABILITY"
+                   | "STOCK"
+                   | "MUTUAL"
+                   | "CURRENCY"
+                   | "INCOME"
+                   | "EXPENSE"
+                   | "EQUITY"
+                   | "RECEIVABLE"
+                   | "PAYABLE"
+                   | "ROOT"
+                   | "TRADING"
+                   | "CHECKING"
+                   | "SAVINGS"
+                   | "MONEYMRKT"
+                   | "CREDITLINE" },
+
+  ( element act:commodity { 
+      element cmdty:space { text },
+      element cmdty:id { text }
+    },
+    element act:commodity-scu { xsd:int },
+    element act:non-standard-scu { empty }?
+  )?,
+  element act:code { text }?,
+  element act:description { text }?,
+  element act:slots { KvpSlot+ }?,
+  element act:parent { attribute type { "guid" }, GUID }?,
+  element act:lots { Lot+ }?
+}
+
+# from gnc_lot_dom_tree_create in src/backend/xml/gnc-lot-xml-v2.c
+
+Lot = element gnc:lot {
+  attribute version { "2.0.0" },
+  element lot:id { attribute type { "guid" }, GUID },
+  element lot:slots { KvpSlot+ }
+}
+
+# from gnc_transaction_dom_tree_create in src/backend/xml/gnc-transaction-xml-v2.c
+
+Transaction = element gnc:transaction {
+  attribute version { "2.0.0" },
+  element trn:id { attribute type { "guid" }, GUID },
+  element trn:currency {
+    element cmdty:space { text },
+    element cmdty:id { text }
+  },
+  element trn:num { text }?,
+  element trn:date-posted { TimeSpec },
+  element trn:date-entered { TimeSpec },
+  element trn:description { text }?,
+  element trn:slots { KvpSlot+ }?,
+  element trn:splits { Split+ }
+}
+
+# from split_to_dom_tree in src/backend/xml/gnc-transaction-xml-v2.c
+
+Split = element trn:split {
+  element split:id { attribute type { "guid" }, GUID },
+  element split:memo { text }?,
+  element split:action { text }?,
+
+# from defines in src/engine/Split.h
+
+  element split:reconciled-state { "y" | "n" | "c" | "f" | "v" },
+
+  element split:reconcile-date { TimeSpec }?,
+  element split:value { GncNumeric },
+  element split:quantity { GncNumeric },
+  element split:account { attribute type { "guid" }, GUID },
+  element split:lot { attribute type { "guid" }, GUID }?,
+  element split:slots { KvpSlot+ }?
+}
+
+# from write_template_transaction_data in src/backend/xml/io-gncxml-v2.c
+
+TemplateTransactions = element gnc:template-transactions {
+  Account*,
+  Transaction*
+}
+
+# from gnc_schedXaction_dom_tree_create in src/backend/xml/gnc-schedxaction-xml-v2.c
+
+ScheduledTransaction = element gnc:schedxaction {
+  attribute version { "2.0.0" },
+  element sx:id { attribute type { "guid" }, GUID },
+  element sx:name { text },
+  element sx:enabled { "y" | "n" },
+  element sx:autoCreate { "y" | "n" },
+  element sx:autoCreateNotify { "y" | "n" },
+  element sx:advanceCreateDays { xsd:int },
+  element sx:advanceRemindDays { xsd:int },
+  element sx:instanceCount { xsd:int },
+  element sx:start { GDate },
+  element sx:last { GDate }?,
+  ( ( element sx:num-occur { xsd:int },
+      element sx:rem-occur { xsd:int }
+    )
+  | element sx:end { GDate }
+  )?,
+  element sx:templ-acct { attribute type { "guid" }, GUID },
+  element sx:schedule { 
+    element gnc:recurrence { RecurrenceContent }*
+  },
+  DeferredInstance*,
+  element sx:slots { KvpSlot+ }? 
+}
+
+DeferredInstance = element sx:deferredInstance {
+  element sx:last { GDate }?,
+  element sx:rem-occur { xsd:int },
+  element sx:instanceCount { xsd:int } 
+}
+
+# from recurrence_to_dom_tree in src/backend/xml/gnc-recurrence-xml-v2.c
+
+RecurrenceContent = (
+  attribute version { "1.0.0" },
+  element recurrence:mult { xsd:int },
+
+# from a static array in src/engine/Recurrence.c
+
+  element recurrence:period_type { "once"
+                                 | "day"
+                                 | "week"
+                                 | "month"
+                                 | "end of month"
+                                 | "nth weekday"
+                                 | "last weekday"
+                                 | "year" },
+
+  element recurrence:start { GDate },
+  element recurrence:weekend_adj { "none"
+                                 | "back"
+                                 | "forward" }?
+)
+
+# from gnc_budget_dom_tree_create in src/backend/xml/gnc-budget-xml-v2.c
+
+Budget = element gnc:budget {
+  attribute version { "2.0.0" },
+  element bgt:id { attribute type { "guid" }, GUID },
+  element bgt:name { text },
+  element bgt:description { text },
+  element bgt:num-periods { xsd:int },
+  element bgt:recurrence { RecurrenceContent },
+  element bgt:slots { KvpSlot+ }?
+}
+
+# from in src/backend/xml/gnc-bill-term-xml-v2.c
+
+BillTerm = element gnc:GncBillTerm {
+  attribute version { "2.0.0" },
+  element billterm:guid { attribute type { "guid" }, GUID }?,
+  element billterm:name { text },
+  element billterm:desc { text },
+  element billterm:refcount { xsd:int },
+  element billterm:invisible { xsd:boolean { pattern = "[01]" } },
+  element billterm:slots { KvpSlot+ }?,
+  element billterm:child { attribute type { "guid" }, GUID }?,
+  element billterm:parent { attribute type { "guid" }, GUID }?,
+  ( element billterm:days {
+      element bt-days:due-days { xsd:int }?,
+      element bt-days:disc-days { xsd:int }?,
+      element bt-days:discount { GncNumeric }?
+    }
+  | element billterm:proximo {
+      element bt-prox:due-day { xsd:int }?,
+      element bt-prox:disc-day { xsd:int }?,
+      element bt-prox:discount { GncNumeric }?,
+      element bt-prox:cutoff-day { xsd:int }?
+    }
+  )
+}
+
+# from customer_dom_tree_create in src/backend/xml/gnc-customer-xml-v2.c
+
+Customer = element gnc:GncCustomer {
+  attribute version { "2.0.0" },
+  element cust:guid { attribute type { "guid" }, GUID },
+  element cust:name { text },
+  element cust:id { text },
+  element cust:addr { AddressContent },
+  element cust:shipaddr { AddressContent },
+  element cust:notes { text }?,
+  element cust:terms { attribute type { "guid" }, GUID }?,
+
+# from gncTaxIncludedTypeToString in src/engine/gncTaxTable.c
+
+  element cust:taxincluded { "YES" | "NO" | "USEGLOBAL"},
+
+  element cust:active { xsd:boolean { pattern = "[01]" } },
+  element cust:discount { GncNumeric },
+  element cust:credit { GncNumeric },
+  element cust:currency {
+    element cmdty:space { text },
+    element cmdty:id { text }
+  },
+  element cust:use-tt { xsd:boolean { pattern = "[01]" } },
+  element cust:taxtable { attribute type { "guid" }, GUID }?,
+  element cust:slots { KvpSlot+ }?
+}
+
+# from gnc_address_to_dom_tree in src/backend/xml/gnc-address-xml-v2.c
+
+AddressContent = (
+    attribute version { "2.0.0" },
+    ( empty
+    | ( element addr:name { text }?,
+        element addr:addr1 { text }?,
+        element addr:addr2 { text }?,
+        element addr:addr3 { text }?,
+        element addr:addr4 { text }?,
+        element addr:phone { text }?,
+        element addr:fax { text }?,
+        element addr:email { text }?
+      )
+    )
+)
+
+# from employee_dom_tree_create in src/backend/xml/gnc-employee-xml-v2.c
+
+Employee = element gnc:GncEmployee {
+  attribute version { "2.0.0" },
+  element employee:guid { attribute type { "guid" }, GUID },
+  element employee:username { text },
+  element employee:id { text },
+  element employee:addr { AddressContent },
+  element employee:language { text }?,
+  element employee:acl { text }?,
+  element employee:active { xsd:boolean { pattern = "[01]" } },
+  element employee:workday { GncNumeric },
+  element employee:rate { GncNumeric },
+  element employee:currency {
+    element cmdty:space { text },
+    element cmdty:id { text }
+  },
+  element employee:ccard { attribute type { "guid" }, GUID }?,
+  element employee:slots { KvpSlot+ }?
+}
+
+# from entry_dom_tree_create in src/backend/xml/gnc-entry-xml-v2.c
+
+Entry = element gnc:GncEntry {
+  attribute version { "2.0.0" },
+  element entry:guid { attribute type { "guid" }, GUID },
+  element entry:date { TimeSpec },
+  element entry:entered { TimeSpec },
+  element entry:description { text }?,
+  element entry:action { text }?,
+  element entry:notes { text }?,
+  element entry:qty { GncNumeric }?,
+  element entry:i-acct { attribute type { "guid" }, GUID }?,
+  element entry:i-price { GncNumeric }?,
+  element entry:i-discount { GncNumeric }?,
+  ( element entry:invoice { attribute type { "guid" }, GUID },
+
+# from gncAmountTypeToString in src/engine/gncTaxTable.c
+
+    element entry:i-disc-type { "VALUE" | "PERCENT" },
+
+# from gncEntryDiscountHowToString in src/engine/gncEntry.c
+
+    element entry:i-disc-how { "PRETAX" | "POSTTAX" | "SAMETIME" },
+
+    element entry:i-taxable { xsd:boolean { pattern = "[01]" } },
+    element entry:i-taxincluded { xsd:boolean { pattern = "[01]" } }
+  )?,
+  element entry:i-taxtable { attribute type { "guid" }, GUID }?,
+  element entry:b-acct { attribute type { "guid" }, GUID }?,
+  element entry:b-price { GncNumeric }?,
+  ( element entry:bill { attribute type { "guid" }, GUID },
+    element entry:billable { xsd:boolean { pattern = "[01]" } },
+    element entry:billto { OwnerContent }?,
+    element entry:b-taxable { xsd:boolean { pattern = "[01]" } },
+    element entry:b-taxincluded { xsd:boolean { pattern = "[01]" } },
+
+# from gncEntryPaymentTypeToString in src/engine/gncEntry.c
+
+    element entry:b-pay { "CASH" | "CARD" }?
+  )?,
+  element entry:b-taxtable { attribute type { "guid" }, GUID }?,
+  element entry:order { attribute type { "guid" }, GUID }?
+}
+
+# from gnc_owner_to_dom_tree in src/backend/xml/gnc-owner-xml-v2.c
+
+OwnerContent = (
+  attribute version { "2.0.0" },
+  element owner:type { "gncCustomer"
+                     | "gncJob"
+                     | "gncVendor"
+                     | "gncEmployee" },
+  element owner:id { attribute type { "guid" }, GUID }
+)
+
+# from invoice_dom_tree_create in src/backend/xml/gnc-invoice-xml-v2.c
+
+Invoice = element gnc:GncInvoice {
+  attribute version { "2.0.0" },
+  element invoice:guid { attribute type { "guid" }, GUID },
+  element invoice:id { text },
+  element invoice:owner { OwnerContent },
+  element invoice:opened { TimeSpec },
+  element invoice:posted { TimeSpec }?,
+  element invoice:terms { attribute type { "guid" }, GUID }?,
+  element invoice:billing_id { text }?,
+  element invoice:notes { text }?,
+  element invoice:active { xsd:boolean { pattern = "[01]" } },
+  element invoice:posttxn { attribute type { "guid" }, GUID }?,
+  element invoice:postlot { attribute type { "guid" }, GUID }?,
+  element invoice:postacc { attribute type { "guid" }, GUID }?,
+  element invoice:currency {
+    element cmdty:space { text },
+    element cmdty:id { text }
+  },
+  element invoice:billto { OwnerContent }?,
+  element invoice:charge-amt { GncNumeric }?,
+  element invoice:slots { KvpSlot+ }?
+}
+
+# from job_dom_tree_create in src/backend/xml/gnc-job-xml-v2.c
+
+Job = element gnc:GncJob {
+  attribute version { "2.0.0" },
+  element job:guid { attribute type { "guid" }, GUID },
+  element job:id { text },
+  element job:name { text },
+  element job:reference { text }?,
+  element job:owner { OwnerContent },
+  element job:active { xsd:boolean { pattern = "[01]" } }
+}
+
+# from order_dom_tree_create in src/backend/xml/gnc-order-xml-v2.c
+
+Order = element gnc:GncOrder {
+  attribute version { "2.0.0" },
+  element order:guid { attribute type { "guid" }, GUID },
+  element order:id { text },
+  element order:owner { OwnerContent },
+  element order:opened { TimeSpec },
+  element order:closed { TimeSpec }?,
+  element order:notes { text }?,
+  element order:reference { text }?,
+  element order:active { xsd:boolean { pattern = "[01]" } }
+}
+
+# from taxtable_dom_tree_create in src/backend/xml/gnc-tax-table-xml-v2.c
+
+TaxTable = element gnc:GncTaxTable {
+  attribute version { "2.0.0" },
+  element taxtable:guid { attribute type { "guid" }, GUID }?,
+  element taxtable:name { text },
+  element taxtable:refcount { xsd:int },
+  element taxtable:invisible { xsd:boolean { pattern = "[01]" } },
+  element taxtable:child { attribute type { "guid" }, GUID }?,
+  element taxtable:parent { attribute type { "guid" }, GUID }?,
+  element taxtable:entries { TaxTableEntry* }
+}
+
+# from ttentry_dom_tree_create in src/backend/xml/gnc-tax-table-xml-v2.c
+
+TaxTableEntry = element gnc:GncTaxTableEntry {
+  element tte:acct { attribute type { "guid" }, GUID }?,
+  element tte:amount { GncNumeric },
+
+# from gncAmountTypeToString in src/engine/gncTaxTable.c
+
+  element tte:type { "VALUE" | "PERCENT" } 
+}
+
+# from vendor_dom_tree_create in src/backend/xml/gnc-vendor-xml-v2.c
+
+Vendor = element gnc:GncVendor {
+  attribute version { "2.0.0" },
+  element vendor:guid { attribute type { "guid" }, GUID },
+  element vendor:name { text },
+  element vendor:id { text },
+  element vendor:addr { AddressContent },
+  element vendor:notes { text }?,
+  element vendor:terms { attribute type { "guid" }, GUID }?,
+
+# from gncTaxIncludedTypeToString in src/engine/gncTaxTable.c
+
+  element vendor:taxincluded { "YES" | "NO" | "USEGLOBAL"},
+
+  element vendor:active { xsd:boolean { pattern = "[01]" } },
+  element vendor:currency {
+    element cmdty:space { text },
+    element cmdty:id { text }
+  },
+  element vendor:use-tt { xsd:boolean { pattern = "[01]" } },
+  element vendor:taxtable { attribute type { "guid" }, GUID }?,
+  element vendor:slots { KvpSlot+ }?
+}
+

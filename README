@@ -1,7 +1,7 @@
 ############################################################
-          GnuCash 2.6.x README file.
+          GnuCash 3.x README file.
 
-The last known stable series is the 2.6.0 series.
+The current stable series is GnuCash 3.x.
 ------------------------------------------------------------
 
 ##################
@@ -15,7 +15,7 @@ Table of Contents:
   - Building & Installing
   - Supported Platforms
   - Additional Download Sites
-  - Getting the Source via SVN
+  - Getting the Source via Git
   - Developing GnuCash
 
 ########
@@ -54,9 +54,9 @@ Features include:
     picks duplicate transactions and assigns contra accounts based on
     similar previously-imported transactions.
 
-  - HBCI Support: GnuCash also supports the German Home Banking
-    Computer Interface protocol which includes statement download,
-    initiate bank transfers and direct debits.
+  - HBCI/FinTS Support: GnuCash also supports the German Financial Transaction
+    Services (formerly Home Banking Computer Interface) which includes
+    statement download, initiate bank transfers and direct debits.
 
   - Quicken File Import: Import Quicken QIF style files.  QIF files
     are automatically merged to eliminate duplicate transactions.
@@ -65,8 +65,7 @@ Features include:
     makes reconciliation easy.
 
   - Stock/Mutual Fund Portfolios: Track stocks individually (one per
-    account) or in portfolio of accounts (a group of accounts that can
-    be displayed together).
+    account).
 
   - Get Stock & Mutual Fund quotes from various web sites, update
     portfolio automatically (more funds being added regularly).
@@ -79,10 +78,6 @@ Features include:
   - Multiple Currencies & Currency Trading: Multiple currencies are
     supported and can be bought and sold (traded).  Currency movements
     between accounts are fully balanced when double-entry is enabled.
-
-  - New Multi-Currency Transaction Handling: GnuCash no longer
-    requires separate currency exchange accounts to handle multiple
-    currency transfers.
 
   - Chart of Accounts: A master account can have a hierarchy of detail
     accounts underneath it.  This allows similar account types
@@ -108,11 +103,11 @@ Features include:
     viewing a portfolio of many stocks, by showing all transactions in
     that portfolio.
 
-  - Written in C with embedded scheme support via Guile.
+  - Written in C/C++ with embedded scheme support via Guile.
 
   - File access is locked in a network-safe fashion, preventing
     accidental damage if several users attempt to access the same
-    file, even if the file is NFS-mounted.
+    file, even if the file is on a shared file system.
 
   - SQL storage is supported using MySQL, Postgresql, and
     SQLite3. Note that this does not support multiple concurrent
@@ -136,31 +131,17 @@ The following packages are required to be installed to run GnuCash:
 
 [see README.dependencies]
 
-The optional online stock and currency price retrieval feature requires Perl. This is generally already installed on Gnu/Linux and *BSD, and MacOSX.
+The optional online stock and currency price retrieval feature requires Perl.
+This is generally already installed on Gnu/Linux and *BSD, and MacOS.
 
 In addition, some perl modules need to be installed. You can run the
-script 'update-finance-quote' as root to obtain the latest versions of
-required packages. This program requires an C compiler, which is
-generally already installed in Gnu/Linux and *BSD, but must be
-installed separately on MacOSX; on versions 10.6 and earlier, install
-Xcode from the distribution DVD or by downloading from
-http://developer.apple.com (you'll need to log in with your Apple ID);
-for 10.7 and 10.8, you can get Xcode for free from the App store. 10.9
-has a cool feature that detects an attempt to compile and offers to
-install the command-line build tools for you.
+script 'gnc-fq-update' as root to obtain the latest versions of
+required packages.
 
-Microsoft Windows users can use the "Install Online Quotes" program in the Start menu's Gnucash group.
-
-To use the OFX and HBCI import features you need to obtain
-the following;
-  libofx: This library provide support for OFX file imports. 
-    GnuCash-2.0.0 and newer needs at least the version libofx-0.7.0
-    or newer. Sources can be found at
-    http://sourceforge.net/projects/libofx/
-  aqbanking: This library provide support for HBCI and openOFX online actions.
-    Three libraries, Ktoblzcheck, Gwenhywfar, and AQBanking, are required.
-    All may be obtained from
-    http://www2.aquamaniac.de/sites/download/packages.php
+Microsoft Windows users can use the "Install Online Quotes" program in the
+Start menu's Gnucash group; it will install perl and all of the required
+modules more-or-less automatically. MacOS users will find "Update Finance Quote"
+in the distribution disk image; it will automate running gnc-fq-update for you.
 
 #######
 Running
@@ -207,19 +188,17 @@ http://wiki.gnucash.org/wiki/Locale_Settings
 Building & Installing
 ---------------------
 
-(For additional build system details, see doc/README.build-system.)
-
-GnuCash uses GNU Automake to handle the build process, so for most of
-the details, see the generic instructions in INSTALL.  (If you are
-building directory from SVN, read the README.svn for more instructions.)
-Below we detail the GnuCash specific bits.
+GnuCash uses CMake to handle the build process. Details are available
+in cmake/README_CMAKE.txt
 
 Prior to building GnuCash, you will have to obtain and install the
 following packages:
 
+  cmake: Available https://cmake.org.
 
-  autoconf, automake, and libtool: Available at ftp://ftp.gnu.org/gnu.
-    RPM's and debs are widely available with most distributions.
+  ninja: Optional, available at http://ninja-build.org. CMake can
+    generated build rules for Ninja, and generally using Ninja results
+    in faster builds that Makefile based ones.
 
   gnome development system: headers, libraries, etc.
 
@@ -228,57 +207,32 @@ following packages:
   SWIG: 2.0.10 or later is needed. See http://www.swig.org or
     http://sourceforge.net/projects/swig/
 
-What you'll need to get and install in order to make sure you have all
-of these pieces properly installed for your particular operating
-system flavor will vary, but here's at least a partial list of what
-you'll need for the systems we know about:
+Generally, up-to-date build instructions for various Linux
+distributions can be found on the GnuCash wiki at
+https://wiki.gnucash.org/wiki/Building
 
-  Debian/GNU/Linux: see README.dependencies and 
-    current:
-      libgnome-dev
-      libwebkit-dev
-      guile1.8
-      libguile9-dev
-      libguile9-slib
+The options that the CMake build system understands are documented in
+cmake/README_CMAKE.txt and in the Building wiki page mentioned above.
 
+Note that while you need the Gnome libraries installed, you don't need
+to have a Gnome desktop.
 
-  SuSE:
-    see README.dependencies
-
-GnuCash understands a few non-standard ./configure options.  You
-should run ./configure --help for the most up to date summary of the
-supported options.
-
-If you only want a particular language installed, you can set the
-LINGUAS environment variable before you run configure. For example,
-to only install the French translations, run
-
-  $ export LINGUAS=fr
-  $ ./configure
-
-If you want to make sure that all languages get installed, run
-
-  $ unset LINGUAS
-  $ ./configure
-
-Note that while you need the Gnome libraries installed, you don't
-need to have a Gnome desktop.  
-
-Runtime and install destinations are separate.  The --prefix you
-specify to configure determines where the resulting binary will look
+Runtime and install destinations are separate.  The CMake option
+CMAKE_INSTALL_PREFIX determines where the resulting binary will look
 for things at runtime.  Normally this determines where a "make
-install" will put all the files.  However, automake also supports the
-variable.  DESTDIR is used during the `make install' step to relocate
-install objects into a staging area.  Each object and path is prefixed
-with the value of `DESTDIR' before being copied into the install area.
-Here is an example of typical DESTDIR usage:
+install" will put all the files.  However, cmake also supports the
+DESTDIR variable.  DESTDIR is used during the `make install' step to
+relocate install objects into a staging area.  Each object and path is
+prefixed with the value of `DESTDIR' before being copied into the
+install area.  Here is an example of typical DESTDIR usage:
 
      make DESTDIR=/tmp/staging install
 
-   This places install objects in a directory tree built under
+This places install objects in a directory tree built under
 `/tmp/staging'.  If `/gnu/bin/foo' and `/gnu/share/aclocal/foo.m4' are
 to be installed, the above command would install
-`/tmp/staging/gnu/bin/foo' and `/tmp/staging/gnu/share/aclocal/foo.m4'.
+`/tmp/staging/gnu/bin/foo' and
+`/tmp/staging/gnu/share/aclocal/foo.m4'.
 
 DESTDIR can be helpful when trying to build install images and
 packages.
@@ -294,24 +248,25 @@ details.
 Supported Platforms
 -------------------
 
-GnuCash 2.x is known to work with the following operating systems:
+GnuCash 3.x is known to work with the following operating systems:
 
 GNU/Linux             -- x86, Sparc, PPC
 FreeBSD               -- x86
 OpenBSD               -- x86
-MacOS X		      -- PPC and Intel, Versions 10.5 and later
+MacOS		      -- Intel, Versions 10.9 and later
 
 
-GnuCash can probably be made to work on any platform for which Gtk+ can,
-given sufficient effort. If you try and encounter difficulty, please join
-the developer's mailing list, gnucash-devel@gnucash.org.
+GnuCash can probably be made to work on any platform for which Gtk+ can
+and for which there is a C++11 compiler available, given sufficient expertise
+and effort. If you try and encounter difficulty, please subscribe to the
+developer's mailing list, gnucash-devel@gnucash.org and we'll try to help you.
 
 #########################
 Downloads
 -------------------------
 
 GnuCash sources and Mac and Windows binaries are hosted at
-SourceForge. Links for the current version are provided at
+SourceForge and Github. Links for the current version are provided at
 http://www.gnucash.org. We depend upon distribution packagers for
 GNU/Linux and *BSD binaries, so if you want a more recent version than
 your distribution provides you'll have to build from source.
@@ -323,8 +278,7 @@ Getting Source with Git
 We maintain a mirror of our master repository on Github. You can
 browse the code at https://github.com/Gnucash/gnucash. Clone URIs are
 on that page, or if you have a Github account you can fork it
-there. Note, however, that we do *not* accept Github pull requests:
-All patches should be submitted via Bugzilla, see below.
+there.
 
 ##################
 Developing GnuCash
@@ -334,7 +288,8 @@ Before you start developing GnuCash, you should do the following:
 1. Read http://wiki.gnucash.org/wiki/Development
 
 2. Look over the doxygen-generated documentation at
-    http://code.gnucash.org/docs/HEAD/
+    http://code.gnucash.org/docs/MASTER/ or
+    http://code.gnucash.org/docs/MAINT/
 
 3. Go to the GnuCash website and skim the archives of the GnuCash
    development mailing list.
@@ -342,18 +297,11 @@ Before you start developing GnuCash, you should do the following:
 4. Join the GnuCash development mailing list. See the GnuCash website
    for details on how to do this.
 
+5. Build the branch you want from a git clone of our repository and make
+   sure that your build passes all of the tests and runs correctly.
 
 Submitting a Patch:
 
-  Patches should be created from a git clone using the appropriate
-  branch HEAD. For those unfamiliar with git, instructions on making a
-  patch may be found at http://wiki.gnucash.org/wiki/Git#Patches
-
-  Please attach patches to the appropriate bug or enhancement request
-  in Bugzilla (https://bugzilla.gnome.org, Project GnuCash). Create a
-  new bug if you don't find one that's applicable. Please don't submit
-  patches to either of the mailing lists, as they tend to be
-  forgotten.
-
+  Please read http://wiki.gnucash.org/wiki/Development#Submitting_Patches.
 
 Thank you.

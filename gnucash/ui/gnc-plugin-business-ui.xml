@@ -1,0 +1,81 @@
+<ui>
+  <menubar>
+    <menu name="Edit" action="EditAction">
+      <placeholder name="EditSelectedPlaceholder">
+          <menuitem name="RegisterAssignPayment"       action="RegisterAssignPayment"/>
+          <menuitem name="RegisterEditPayment"       action="RegisterEditPayment"/>
+      </placeholder>
+    </menu>
+
+    <placeholder name="AdditionalMenusPlaceholder">
+      <menu name="Business" action="BusinessAction">
+	<menu name="CustomerMenu" action="CustomerMenuAction">
+	  <menuitem name="CustomerOverviewPage"     action="CustomerOverviewPageAction"/>
+	  <menuitem name="CustomerNewCustomerOpen"  action="CustomerNewCustomerOpenAction"/>
+	  <menuitem name="CustomerFindCustomerOpen" action="CustomerFindCustomerOpenAction"/>
+	  <menuitem name="CustomerNewInvoiceOpen"   action="CustomerNewInvoiceOpenAction"/>
+	  <menuitem name="CustomerFindInvoiceOpen"  action="CustomerFindInvoiceOpenAction"/>
+	  <menuitem name="CustomerNewJobOpen"       action="CustomerNewJobOpenAction"/>
+	  <menuitem name="CustomerFindJobOpen"      action="CustomerFindJobOpenAction"/>
+	  <menuitem name="CustomerProcessPayment"   action="CustomerProcessPaymentAction"/>
+          <menuitem name="InvoicesDueReminderOpen" action="InvoicesDueReminderOpenAction"/>
+	</menu>
+
+	<menu name="VendorMenu" action="VendorMenuAction">
+	  <menuitem name="VendorOverviewPage"   action="VendorOverviewPageAction"/>
+	  <menuitem name="VendorNewVendorOpen"  action="VendorNewVendorOpenAction"/>
+	  <menuitem name="VendorFindVendorOpen" action="VendorFindVendorOpenAction"/>
+	  <menuitem name="VendorNewBillOpen"    action="VendorNewBillOpenAction"/>
+	  <menuitem name="VendorFindBillOpen"   action="VendorFindBillOpenAction"/>
+	  <menuitem name="VendorNewJobOpen"     action="VendorNewJobOpenAction"/>
+	  <menuitem name="VendorFindJobOpen"    action="VendorFindJobOpenAction"/>
+	  <menuitem name="VendorProcessPayment" action="VendorProcessPaymentAction"/>
+          <menuitem name="BillsDueReminderOpen" action="BillsDueReminderOpenAction"/>
+	</menu>
+
+	<menu name="EmployeeMenu" action="EmployeeMenuAction">
+	  <menuitem name="EmployeeOverviewPage"     action="EmployeeOverviewPageAction"/>
+	  <menuitem name="EmployeeNewEmployeeOpen"  action="EmployeeNewEmployeeOpenAction"/>
+	  <menuitem name="EmployeeFindEmployeeOpen" action="EmployeeFindEmployeeOpenAction"/>
+	  <menuitem name="EmployeeNewExpenseOpen"   action="EmployeeNewExpenseVoucherOpenAction"/>
+	  <menuitem name="EmployeeFindExpenseOpen"  action="EmployeeFindExpenseVoucherOpenAction"/>
+	  <menuitem name="EmployeeProcessPayment"   action="EmployeeProcessPaymentAction"/>
+	</menu>
+
+        <placeholder name="BusinessPlaceholderTop"/>
+        <separator name="Sep1"/>
+
+	<menuitem name="TaxTablesOpen" action="TaxTablesOpenAction"/>
+	<menuitem name="BillingTermsOpen" action="BillingTermsOpenAction"/>
+
+        <placeholder name="BusinessPlaceholderMiddle"/>
+        <placeholder name="BusinessPlaceholderBottom"/>
+
+      </menu>
+    </placeholder>
+
+    <menu name="Extensions" action="ExtensionsAction">
+      <placeholder name="ExtensionsPlaceholder">
+      	<menu name="BusinessTest" action="BusinessTestAction">
+      	  <menuitem name="BusinessTestSearch" action="BusinessTestSearchAction"/>
+      	  <menuitem name="BusinessTestInitData" action="BusinessTestInitDataAction"/>
+      	</menu>
+      </placeholder>
+    </menu>
+
+  </menubar>
+
+  <toolbar name="DefaultToolbar">
+    <placeholder name="DefaultToolbarPlaceholder">
+      <toolitem name="ToolbarInvoiceNew" action="ToolbarNewInvoiceAction"/>
+    </placeholder>
+  </toolbar>
+
+  <popup name="MainPopup" action="FakeToplevel">
+    <!--separator name="PopupSep3"/-->
+    <placeholder name="PopupPlaceholder3">
+        <menuitem name="RegisterAssignPayment"       action="RegisterAssignPayment"/>
+        <menuitem name="RegisterEditPayment"       action="RegisterEditPayment"/>
+    </placeholder>
+  </popup>
+</ui>

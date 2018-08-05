@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.8.9\n"
-"POT-Creation-Date: 2014-10-13 00:33+0200\n"
+"POT-Creation-Date: 2017-10-20 19:04+0200\n"
 "PO-Revision-Date: 2005-04-04 10:55-0700\n"
 "Last-Translator: Steven Michael Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -57,6 +57,11 @@ msgstr "Aderesi Ubwoko"
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 #, fuzzy
 msgid "account type: Asset"
+msgstr "Aderesi Ubwoko"
+
+#. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
+#, fuzzy
+msgid "account type: Assets & Liabilities"
 msgstr "Aderesi Ubwoko"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
@@ -102,6 +107,11 @@ msgstr "Aderesi Ubwoko"
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugzilla.gnome.org/show_bug.cgi?id=421766"
 #, fuzzy
 msgid "account type: Passive"
+msgstr "Aderesi Ubwoko"
+
+#. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
+#, fuzzy
+msgid "account type: Profit & Loss"
 msgstr "Aderesi Ubwoko"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
@@ -194,7 +204,7 @@ msgstr "Igikorwa"
 msgid "action: payment"
 msgstr "Igikorwa"
 
-#. "-"
+#. "Point of sale"
 #, fuzzy
 msgid "action: POS"
 msgstr "Igikorwa"
@@ -485,7 +495,7 @@ msgstr "Bijyanye n'umutungo Ubwishyu"
 msgid "gain"
 msgstr ""
 
-#. "Name of an automaticly created account to get imbalanced transactions back in balance"
+#. "Name of an automatically created account to get imbalanced transactions back in balance"
 msgid "imbalance"
 msgstr ""
 
@@ -505,10 +515,6 @@ msgstr ""
 
 #. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out (to a customer), whereas a 'bill' is one that we received (from a vendor)."
 msgid "invoice"
-msgstr ""
-
-#. "The customer (or vendor) to which this invoice is sent to."
-msgid "invoice owner"
 msgstr ""
 
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
@@ -624,6 +630,10 @@ msgstr "Itondekanya"
 
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
+msgstr ""
+
+#. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
+msgid "owner (of bill, invoice or expense voucher)"
 msgstr ""
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
@@ -836,7 +846,7 @@ msgstr "Urupapuro rw'Imisusire"
 msgid "subtotal"
 msgstr "IGITERANYOCYUNGIRIJE"
 
-#. "On the goverment's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
+#. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
 #, fuzzy
 msgid "tax code"
 msgstr "Ibisobanuro"

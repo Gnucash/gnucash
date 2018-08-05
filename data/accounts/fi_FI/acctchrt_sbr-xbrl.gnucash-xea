@@ -1,0 +1,2710 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gnc-account-example 
+  xmlns="http://www.gnucash.org/XML/"
+  xmlns:act="http://www.gnucash.org/XML/act"
+  xmlns:addr="http://www.gnucash.org/XML/addr"
+  xmlns:bgt="http://www.gnucash.org/XML/bgt"
+  xmlns:billterm="http://www.gnucash.org/XML/billterm"
+  xmlns:book="http://www.gnucash.org/XML/book"
+  xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+  xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+  xmlns:cd="http://www.gnucash.org/XML/cd"
+  xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+  xmlns:cust="http://www.gnucash.org/XML/cust"
+  xmlns:employee="http://www.gnucash.org/XML/employee"
+  xmlns:entry="http://www.gnucash.org/XML/entry"
+  xmlns:fs="http://www.gnucash.org/XML/fs"
+  xmlns:gnc="http://www.gnucash.org/XML/gnc"
+  xmlns:gnc-act="http://www.gnucash.org/XML/gnc-act"
+  xmlns:invoice="http://www.gnucash.org/XML/invoice"
+  xmlns:job="http://www.gnucash.org/XML/job"
+  xmlns:lot="http://www.gnucash.org/XML/lot"
+  xmlns:order="http://www.gnucash.org/XML/order"
+  xmlns:owner="http://www.gnucash.org/XML/owner"
+  xmlns:price="http://www.gnucash.org/XML/price"
+  xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+  xmlns:slot="http://www.gnucash.org/XML/slot"
+  xmlns:split="http://www.gnucash.org/XML/split"
+  xmlns:sx="http://www.gnucash.org/XML/sx"
+  xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+  xmlns:trn="http://www.gnucash.org/XML/trn"
+  xmlns:ts="http://www.gnucash.org/XML/ts"
+  xmlns:tte="http://www.gnucash.org/XML/tte"
+  xmlns:vendor="http://www.gnucash.org/XML/vendor">
+    <gnc-act:title>Yritykset ja organisaatiot</gnc-act:title>
+    <gnc-act:short-description>Yritykset ja organisaatiot</gnc-act:short-description>
+    <gnc-act:long-description>
+        Tilit mukaan Kirjanpitoasetus.
+        Ref: http://www.finlex.fi/fi/laki/ajantasa/1997/19971339
+        Tilinumerot pääasiassa mukaan TIEKE Tietoyhteiskunnan kehittämiskeskus ry, Raportointikoodisto-SBR-XBRL-taksonomia_kartoistus2013.xlsx
+        Ref: http://www.tieke.fi/display/XBRL/SBR+Taksonomia
+        Vaihtuvat vastaavat käyttää LIABILITY sihasta EQUITY.
+    </gnc-act:long-description>
+    <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
+    <gnc:account version="2.0.0">
+        <act:name>Root Account</act:name>
+        <act:id type="guid">91ca36e058bbbb5deae199ca187e701e</act:id>
+        <act:type>ROOT</act:type>
+        <act:commodity-scu>0</act:commodity-scu>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Rahoitustuotot ja –kulut</act:name>
+        <act:id type="guid">c0424c67f1c3ca6b694d12f2194bdbee</act:id>
+        <act:type>INCOME</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>90</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+            <slot>
+                <slot:key>placeholder</slot:key>
+                <slot:value type="string">true</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Tuotot osuuksista saman konsernin yrityksissä</act:name>
+        <act:id type="guid">8477211fac2faa884cf74b6a1b668eb2</act:id>
+        <act:type>INCOME</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>902</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">c0424c67f1c3ca6b694d12f2194bdbee</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Tuotot osuuksista omistusyhteysyrityksissä</act:name>
+        <act:id type="guid">0ce625b3919db18a4fba426d5ad2e167</act:id>
+        <act:type>INCOME</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>903</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">c0424c67f1c3ca6b694d12f2194bdbee</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Tuotot muista pysyvien vastaavien sijoituksista</act:name>
+        <act:id type="guid">bf057dcf7a4e4531f9e696939b715d64</act:id>
+        <act:type>INCOME</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>904</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">c0424c67f1c3ca6b694d12f2194bdbee</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Muut korko- ja rahoitustuotot</act:name>
+        <act:id type="guid">8dbb8b0fbd738a8bacfca43d0a2b6ac8</act:id>
+        <act:type>INCOME</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>905</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">c0424c67f1c3ca6b694d12f2194bdbee</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Arvonalentumiset pysyvien vastaavien sijoituksista</act:name>
+        <act:id type="guid">9612615b024452c1ccf5825526e1429b</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>906</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">c0424c67f1c3ca6b694d12f2194bdbee</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Arvonalentumiset vaihtuvien vastaavien rahoitusarvopapereista</act:name>
+        <act:id type="guid">ab491349ef0c803805f03ef9dd8a3f54</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>907</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">c0424c67f1c3ca6b694d12f2194bdbee</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Korkokulut ja muut rahoituskulut</act:name>
+        <act:id type="guid">580ef40b933abc20df58797a9d8dc900</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>908</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">c0424c67f1c3ca6b694d12f2194bdbee</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Tilinpäätössiirrot</act:name>
+        <act:id type="guid">aa508289d9883ff11d9072e0c7172289</act:id>
+        <act:type>INCOME</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>95</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+            <slot>
+                <slot:key>placeholder</slot:key>
+                <slot:value type="string">true</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Poistoeron muutos</act:name>
+        <act:id type="guid">00191cac48436c81cc74f3653271af3d</act:id>
+        <act:type>INCOME</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>950</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">aa508289d9883ff11d9072e0c7172289</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Verotusperusteisten varausten muutos</act:name>
+        <act:id type="guid">7d05b333d6734b73a167ef6fd4933b83</act:id>
+        <act:type>INCOME</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>951</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">aa508289d9883ff11d9072e0c7172289</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Konserniavustus</act:name>
+        <act:id type="guid">82cdfecc6036fcb0aa0804cde45dfced</act:id>
+        <act:type>INCOME</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>952</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">aa508289d9883ff11d9072e0c7172289</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Tuloverot</act:name>
+        <act:id type="guid">6f5fa22c3da4148c79d8c1bd0e5e6123</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>96</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Muut välittömät verot</act:name>
+        <act:id type="guid">9e91851f7f89e43d6bc4e622973d89d0</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>97</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Liikevaihto</act:name>
+        <act:id type="guid">4068fc54bda42ca931a61a9ce5184bfc</act:id>
+        <act:type>INCOME</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>30</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Valmiiden ja keskeneräisten tuotteiden varastojen muutos</act:name>
+        <act:id type="guid">0c1b0303a160348550f60aa28c788662</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>37</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Valmistus omaan käyttöön</act:name>
+        <act:id type="guid">602fdec8b05c721b546919ad75931195</act:id>
+        <act:type>INCOME</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>38</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Liiketoiminnan muut tuotot</act:name>
+        <act:id type="guid">cd6981fd693cfdb8f5a1b33834e41035</act:id>
+        <act:type>INCOME</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>39</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Materiaalit ja palvelut</act:name>
+        <act:id type="guid">28ffd589b69c52be7b6483468fa3caf0</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>40</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Aineet tarvikkeet ja tavarat</act:name>
+        <act:id type="guid">04b83b724eedad37f18ce7c06dd11bd5</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>400</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">28ffd589b69c52be7b6483468fa3caf0</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Ostot tilikauden aikana</act:name>
+        <act:id type="guid">951867ae0a1ad6c4888cad02a93a4e07</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>4000</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">04b83b724eedad37f18ce7c06dd11bd5</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Varastojen muutos</act:name>
+        <act:id type="guid">df4109a609247caf00215457cab4f819</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>4007</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">04b83b724eedad37f18ce7c06dd11bd5</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Ulkopuoliset palvelut</act:name>
+        <act:id type="guid">2e1243bc13baadecfbaf52e41f37ea5b</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>407</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">28ffd589b69c52be7b6483468fa3caf0</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Henkilöstökulut</act:name>
+        <act:id type="guid">8852af5f48233f8e0df30a38158a4f6f</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>50</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Palkat ja palkkiot</act:name>
+        <act:id type="guid">193fb816d45e146ec95401dd4499888b</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>500</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">8852af5f48233f8e0df30a38158a4f6f</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Henkilösivukulut</act:name>
+        <act:id type="guid">a08d7e4c30da868c2f5478b90e1b46dd</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>501</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">8852af5f48233f8e0df30a38158a4f6f</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Eläkekulut</act:name>
+        <act:id type="guid">ff029e709ed5d9710659fb6c368d8513</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>5010</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">a08d7e4c30da868c2f5478b90e1b46dd</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Muut henkilösivukulut</act:name>
+        <act:id type="guid">261f481c52283664e046548c4fca75bb</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>5011</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">a08d7e4c30da868c2f5478b90e1b46dd</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Poistot ja arvonalentumiset</act:name>
+        <act:id type="guid">2746467380984ca397b82ef1e9e0afc1</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>60</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Suunnitelman mukaiset poistot</act:name>
+        <act:id type="guid">43b902866aeb9d9337a561df360aeebd</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>600</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">2746467380984ca397b82ef1e9e0afc1</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Arvonalentumiset pysyvien vastaavien hyödykkeistä</act:name>
+        <act:id type="guid">de1911138a1be2c625a227e6ee0a7ea4</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>602</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">2746467380984ca397b82ef1e9e0afc1</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Vaihtuvien vastaavien poikkeukselliset arvonalentumiset</act:name>
+        <act:id type="guid">879d646270395597a782494fe76bcba9</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>603</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">2746467380984ca397b82ef1e9e0afc1</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Liiketoiminnan muut kulut</act:name>
+        <act:id type="guid">fcff567ae65bfdc789648c9a94b21de8</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>70</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Pysyvät vastaavat</act:name>
+        <act:id type="guid">826e3268405c78917240d32b31cbdc75</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+            <slot>
+                <slot:key>placeholder</slot:key>
+                <slot:value type="string">true</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Aineettomat hyödykkeet</act:name>
+        <act:id type="guid">1149340ef3149246d57718a69d2d60c2</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>10</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">826e3268405c78917240d32b31cbdc75</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Kehittämismenot</act:name>
+        <act:id type="guid">939a6bec9cc8808f7468581b324942da</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>102</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">1149340ef3149246d57718a69d2d60c2</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Aineettomat oikeudet</act:name>
+        <act:id type="guid">546c42f47b092df4110e0ae54441a016</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>103</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">1149340ef3149246d57718a69d2d60c2</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Liikearvo</act:name>
+        <act:id type="guid">f8cd5606ee0733367ff6a60bab668d40</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>104</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">1149340ef3149246d57718a69d2d60c2</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Muut aineettomat hyödykkeet</act:name>
+        <act:id type="guid">4ce993dce116e12c8785586e31dc5bca</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>106</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">1149340ef3149246d57718a69d2d60c2</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Ennakkomaksut</act:name>
+        <act:id type="guid">cd74f35ec21c0a399d7678583a4e433e</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>107</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">1149340ef3149246d57718a69d2d60c2</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Konserniliikearvo</act:name>
+        <act:id type="guid">00aaa8030014ef9982a3c8a5f6b75fa8</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>105</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">1149340ef3149246d57718a69d2d60c2</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Aineelliset hyödykkeet</act:name>
+        <act:id type="guid">5e1c09b20c4fa680915744bbc6c75bae</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>11</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">826e3268405c78917240d32b31cbdc75</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Maa- ja vesialueet</act:name>
+        <act:id type="guid">1ee0fc496854b0e4040f21c17e67ee41</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>111</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">5e1c09b20c4fa680915744bbc6c75bae</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Rakennukset ja rakennelmat</act:name>
+        <act:id type="guid">675350cd67079b898be2352026028e78</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>113</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">5e1c09b20c4fa680915744bbc6c75bae</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Koneet ja kalusto</act:name>
+        <act:id type="guid">aef9b376c23b9a12526e2c5e82906c6a</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>116</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">5e1c09b20c4fa680915744bbc6c75bae</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Muut aineelliset hyödykkeet</act:name>
+        <act:id type="guid">5ef7f23068240129d7ead6838dbdd9bc</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>117</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">5e1c09b20c4fa680915744bbc6c75bae</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Ennakkomaksut ja keskeneräiset hankinnat</act:name>
+        <act:id type="guid">795b0e57bcb1a4f0bb8e1513eace322b</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>118</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">5e1c09b20c4fa680915744bbc6c75bae</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Maa- ja vesialueet (Vuokraoikeudet)</act:name>
+        <act:id type="guid">3588ea0be402cb76d6bb1c7cbe0bf55f</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>112</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">5e1c09b20c4fa680915744bbc6c75bae</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Rakennukset ja rakennelmat (Vuokraoikeudet)</act:name>
+        <act:id type="guid">ffcefe488da62058b64f5d0c2d30625b</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>114</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">5e1c09b20c4fa680915744bbc6c75bae</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Sijoitukset</act:name>
+        <act:id type="guid">8baa7669204fbdd46596bf0048903dcd</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>14</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">826e3268405c78917240d32b31cbdc75</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Osuudet saman konsernin yrityksissä</act:name>
+        <act:id type="guid">f84d369fd419bda9815acbf855d5046e</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>141</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">8baa7669204fbdd46596bf0048903dcd</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Saamiset saman konsernin yrityksiltä</act:name>
+        <act:id type="guid">2416f201f9ce24c19d83d48dcf792358</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>145</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">8baa7669204fbdd46596bf0048903dcd</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Osuudet omistusyhteysyrityksissä</act:name>
+        <act:id type="guid">2634cd55484a01d60c03a2383bcccd44</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>143</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">8baa7669204fbdd46596bf0048903dcd</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Saamiset omistusyhteysyrityksiltä</act:name>
+        <act:id type="guid">d4397c4677667cae3cd382b3814a6dc6</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>147</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">8baa7669204fbdd46596bf0048903dcd</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Muut osakkeet ja osuudet</act:name>
+        <act:id type="guid">cabe21ef415a48a28cee8b93596655e3</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>144</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">8baa7669204fbdd46596bf0048903dcd</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Muut saamiset</act:name>
+        <act:id type="guid">20f70494a1aa7cc0a194ba631a155db7</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>148</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">8baa7669204fbdd46596bf0048903dcd</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Sijoitusten arvonkorotukset</act:name>
+        <act:id type="guid">29a4ab29553d229fc4f5946b57e690cc</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>140</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">8baa7669204fbdd46596bf0048903dcd</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Osuudet osakkuusyrityksissä</act:name>
+        <act:id type="guid">3260f95f9318680f9eece8299dad294b</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>142</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">8baa7669204fbdd46596bf0048903dcd</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Saamiset osakkuusyrityksiltä</act:name>
+        <act:id type="guid">7611e67ee0d50e65b70de4129f50f23d</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>146</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">8baa7669204fbdd46596bf0048903dcd</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Vaihtuvat vastaavat</act:name>
+        <act:id type="guid">444af4532e02be9325cb34bc34088e53</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+            <slot>
+                <slot:key>placeholder</slot:key>
+                <slot:value type="string">true</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Vaihto-omaisuus</act:name>
+        <act:id type="guid">eccc0966e946f4c792eaa686d151eaac</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>15</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">444af4532e02be9325cb34bc34088e53</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Aineet ja tarvikkeet</act:name>
+        <act:id type="guid">840dcd25b1a456f26187d25b5ed07875</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>151</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">eccc0966e946f4c792eaa686d151eaac</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Keskeneräiset tuotteet</act:name>
+        <act:id type="guid">39b43ca6d8b2bdf2b61f60fc01db7653</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>152</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">eccc0966e946f4c792eaa686d151eaac</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Valmiit tuotteet/tavarat</act:name>
+        <act:id type="guid">f55d15bdadb1d8fdaa7abf4ea75591b7</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>153</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">eccc0966e946f4c792eaa686d151eaac</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Muu vaihto-omaisuus</act:name>
+        <act:id type="guid">d14be69be668b3ed4d7a496d774c8c2a</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>154</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">eccc0966e946f4c792eaa686d151eaac</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Ennakkomaksut</act:name>
+        <act:id type="guid">01c385f8305d19b9fede2ecb456dd061</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>155</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">eccc0966e946f4c792eaa686d151eaac</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Lyhytaikaiset saamiset</act:name>
+        <act:id type="guid">5f9d87ea803adceaf4f8e80196cb7766</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>17</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">444af4532e02be9325cb34bc34088e53</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Myyntisaamiset</act:name>
+        <act:id type="guid">1e94228a0c08a3fe6a59c2ee34dac763</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>170</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">5f9d87ea803adceaf4f8e80196cb7766</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Saamiset saman konsernin yrityksiltä</act:name>
+        <act:id type="guid">d446571349418a9bf5d3047b804d04f3</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>171</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">5f9d87ea803adceaf4f8e80196cb7766</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Saamiset omistusyhteysyrityksiltä</act:name>
+        <act:id type="guid">a1f2b1b42a3f3549203cde2448968b98</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>173</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">5f9d87ea803adceaf4f8e80196cb7766</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Lainasaamiset</act:name>
+        <act:id type="guid">af3b0d777ea29c55a651f3b5fcd07551</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>174</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">5f9d87ea803adceaf4f8e80196cb7766</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Muut saamiset</act:name>
+        <act:id type="guid">fd4bd804f4d995ba34f879365455f50a</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>176</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">5f9d87ea803adceaf4f8e80196cb7766</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Maksamattomat osakkeet/osuudet</act:name>
+        <act:id type="guid">fe0e156846de1e9a0ed3a2ca2434af08</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>1763</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">fd4bd804f4d995ba34f879365455f50a</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Siirtosaamiset</act:name>
+        <act:id type="guid">4c5ecbd0089c0bfbda107a26470efa5c</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>177</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">5f9d87ea803adceaf4f8e80196cb7766</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Rahoitusarvopaperit</act:name>
+        <act:id type="guid">32fe8478f6dc7459535204bedffa4bf0</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>18</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">444af4532e02be9325cb34bc34088e53</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Osuudet saman konsernin yrityksissä</act:name>
+        <act:id type="guid">6b2b9796ed7e3885e2571875c1b18af2</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>181</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">32fe8478f6dc7459535204bedffa4bf0</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Muut osakkeet ja osuudet</act:name>
+        <act:id type="guid">f89de293a71e435a07df036f82342b01</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>182</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">32fe8478f6dc7459535204bedffa4bf0</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Muut arvopaperit</act:name>
+        <act:id type="guid">0176752fc7bbe9d875a526367abfde7f</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>183</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">32fe8478f6dc7459535204bedffa4bf0</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Rahat ja pankkisaamiset</act:name>
+        <act:id type="guid">e4dea3bf14514bcbdbac31cb0047a3d1</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>19</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">444af4532e02be9325cb34bc34088e53</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Rahat</act:name>
+        <act:id type="guid">da69d1aa788ec047ed8e19d110734a1d</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>190</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">e4dea3bf14514bcbdbac31cb0047a3d1</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Pankkisaamiset</act:name>
+        <act:id type="guid">710585f12b0ecc99ec3112b2ef94b0ee</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>191</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">e4dea3bf14514bcbdbac31cb0047a3d1</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Pitkäaikaiset saamiset</act:name>
+        <act:id type="guid">244b43c8d2e36d1eaaa94dd947a41af4</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>16</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">444af4532e02be9325cb34bc34088e53</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Myyntisaamiset</act:name>
+        <act:id type="guid">80bef7368dd68066bb90a486b5eb9348</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>160</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">244b43c8d2e36d1eaaa94dd947a41af4</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Saamiset saman konsernin yrityksiltä</act:name>
+        <act:id type="guid">7e39de72419d98b645fd046d506a43bb</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>161</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">244b43c8d2e36d1eaaa94dd947a41af4</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Saamiset omistusyhteysyrityksiltä</act:name>
+        <act:id type="guid">dbe7e6b674f159de79938de9827f5042</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>163</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">244b43c8d2e36d1eaaa94dd947a41af4</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Lainasaamiset</act:name>
+        <act:id type="guid">0d089eb780336b8214f1314e4059cbc6</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>164</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">244b43c8d2e36d1eaaa94dd947a41af4</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Muut saamiset</act:name>
+        <act:id type="guid">7b2b8004ceb8cf3ac99a56ea72b23f02</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>166</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">244b43c8d2e36d1eaaa94dd947a41af4</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Maksamattomat osakkeet/osuudet</act:name>
+        <act:id type="guid">35f71988cf086c9236c02bf07f223ea4</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>1663</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">7b2b8004ceb8cf3ac99a56ea72b23f02</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Siirtosaamiset</act:name>
+        <act:id type="guid">8ed9bc7e11070c61251b71e4b695523a</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>167</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">244b43c8d2e36d1eaaa94dd947a41af4</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Laskennalliset verosaamiset</act:name>
+        <act:id type="guid">65ccd371afbf267a5406711bf8d8bfdd</act:id>
+        <act:type>ASSET</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>165</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">244b43c8d2e36d1eaaa94dd947a41af4</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Oma pääoma</act:name>
+        <act:id type="guid">178ba4c184699cfbbd2461bc806a5eb7</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>20</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Osake- osuus- tai muu vastaava pääoma</act:name>
+        <act:id type="guid">8cd7b0139eeb88fd5963fb3ce82ef1aa</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>200</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">178ba4c184699cfbbd2461bc806a5eb7</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Ylikurssirahasto</act:name>
+        <act:id type="guid">78656ac6840c41c1eefc5d950d88c427</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>201</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">178ba4c184699cfbbd2461bc806a5eb7</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Arvonkorotusrahasto</act:name>
+        <act:id type="guid">0761bf2479233893c0e8c2089f07640c</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>202</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">178ba4c184699cfbbd2461bc806a5eb7</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Muut rahastot</act:name>
+        <act:id type="guid">818d0b58b26b2e6a5499b2c240be8fac</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>205</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">178ba4c184699cfbbd2461bc806a5eb7</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Sijoitetun vapaan oman pääoman rahasto</act:name>
+        <act:id type="guid">f544907a6aa78b7c31ad9b82d0ceea07</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>20500</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">818d0b58b26b2e6a5499b2c240be8fac</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Vararahasto</act:name>
+        <act:id type="guid">6307ed7b91ea0a484ba294cdec7515e0</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>204</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">818d0b58b26b2e6a5499b2c240be8fac</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Yhtiöjärjestyksen mukaiset rahastot</act:name>
+        <act:id type="guid">a7e17fd36208656ad7e138c9107d4216</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>20510</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">818d0b58b26b2e6a5499b2c240be8fac</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Käyvän arvon rahasto</act:name>
+        <act:id type="guid">008f3c7e7bb1538c1bb924824126e88d</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>203</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">818d0b58b26b2e6a5499b2c240be8fac</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Muut rahastot</act:name>
+        <act:id type="guid">575e6c2a693aeac251348798b69e9dc8</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>20530</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">818d0b58b26b2e6a5499b2c240be8fac</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Sääntöjen mukaiset rahastot</act:name>
+        <act:id type="guid">513cdd71834ebf547ac5edaa8b2d8b6c</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>20520</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">818d0b58b26b2e6a5499b2c240be8fac</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Edellisten tilikausien voitto (tappio)</act:name>
+        <act:id type="guid">d03df3c3f4935500f319408a279e91e0</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>207</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">178ba4c184699cfbbd2461bc806a5eb7</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Tilikauden voitto (tappio)</act:name>
+        <act:id type="guid">484af3263fd4d1b18210115c3d5677ae</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>219</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">178ba4c184699cfbbd2461bc806a5eb7</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Pääomapanokset</act:name>
+        <act:id type="guid">d7654cc354d34641ce3fe5cacfd37d63</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>210</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">178ba4c184699cfbbd2461bc806a5eb7</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Arvonkorotusrahasto (ay, ky, tmi)</act:name>
+        <act:id type="guid">c6e596a98cab38e49ef735953ab8f492</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>211</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">178ba4c184699cfbbd2461bc806a5eb7</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Tilikauden voitto (tappio) (ay, ky, tmi)</act:name>
+        <act:id type="guid">a3f9cbe35db4f36ae5f718dd4e016224</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>213</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">178ba4c184699cfbbd2461bc806a5eb7</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Tilinpäätössiirtojen kertymä</act:name>
+        <act:id type="guid">f64721d39e2d215b0a42a1df2e324b24</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>25</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Poistoero</act:name>
+        <act:id type="guid">ed6fe4185f02324932c0c369e6cc1578</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>250</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">f64721d39e2d215b0a42a1df2e324b24</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Verotusperäiset varaukset</act:name>
+        <act:id type="guid">2bbcc1f76bcf3d9069118aa44843a88e</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>251</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">f64721d39e2d215b0a42a1df2e324b24</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Pakolliset varaukset</act:name>
+        <act:id type="guid">ba87317a2996b3abaaa089db893f2ae7</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>26</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Eläkevaraukset</act:name>
+        <act:id type="guid">7a860a63ae175a640c4adbea6af0ab87</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>260</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">ba87317a2996b3abaaa089db893f2ae7</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Verovaraukset</act:name>
+        <act:id type="guid">a65cb5f240c95ab7cefd11cc89433eff</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>261</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">ba87317a2996b3abaaa089db893f2ae7</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Muut pakolliset varaukset</act:name>
+        <act:id type="guid">bdb5948c6063670fcc438477d8368c2d</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>262</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">ba87317a2996b3abaaa089db893f2ae7</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Lyhytaikainen vieras pääoma</act:name>
+        <act:id type="guid">3b530f9bf5770857279f9e889dce3b2e</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>29</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Joukkovelkakirjalainat</act:name>
+        <act:id type="guid">3e8765f3b0e4333531b8f3575b3f6970</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2901</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">3b530f9bf5770857279f9e889dce3b2e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Vaihtovelkakirjalainat</act:name>
+        <act:id type="guid">a3fc1cb69feee67863051da2777d1355</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2902</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">3b530f9bf5770857279f9e889dce3b2e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Lainat rahoituslaitoksilta</act:name>
+        <act:id type="guid">4fd772819dea7bf0c6579779ebad61c2</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2903</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">3b530f9bf5770857279f9e889dce3b2e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Takaisinlainat työeläkevakuutuslaitoksilta</act:name>
+        <act:id type="guid">daa537537b51e95beb1f7a63e470d4ac</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2904</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">3b530f9bf5770857279f9e889dce3b2e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Saadut ennakot</act:name>
+        <act:id type="guid">aa82ecfa51151381319505dd503f6a1b</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2905</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">3b530f9bf5770857279f9e889dce3b2e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Ostovelat</act:name>
+        <act:id type="guid">d850aae31d1ad8a86e7e924206454e40</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2906</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">3b530f9bf5770857279f9e889dce3b2e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Rahoitusvekselit</act:name>
+        <act:id type="guid">3df2c9700cf3079289b5c0a87cbe9857</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2907</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">3b530f9bf5770857279f9e889dce3b2e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Velat saman konsernin yrityksille</act:name>
+        <act:id type="guid">694a5c5a3849820ea918620dc223e9f4</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2908</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">3b530f9bf5770857279f9e889dce3b2e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Velat omistusyhteysyrityksille</act:name>
+        <act:id type="guid">fc00d3227f708d63fde7d8375c9abf62</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2909</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">3b530f9bf5770857279f9e889dce3b2e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Muut velat</act:name>
+        <act:id type="guid">d462376b6b0c6f123a2fefad18090bb4</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2911</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">3b530f9bf5770857279f9e889dce3b2e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Siirtovelat</act:name>
+        <act:id type="guid">569ccbf9890feca796fa06400ad0ff3e</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2950</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">3b530f9bf5770857279f9e889dce3b2e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Laskennalliset verovela</act:name>
+        <act:id type="guid">1bcc1016959c0782df212f2371038322</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2910</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">3b530f9bf5770857279f9e889dce3b2e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Tilikauden voitto (tappio)</act:name>
+        <act:id type="guid">e0a6b1bfd7a9083421852641ca07404a</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>99</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Vähemmistöosuudet</act:name>
+        <act:id type="guid">a10a972c59c8c0a4c8e04fdc898fdac2</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>24</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Konsernireservi</act:name>
+        <act:id type="guid">e5b65287efc60272cc7405f8555cd464</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>27</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Pitkäaikainen vieras pääoma</act:name>
+        <act:id type="guid">c078cbc197dffb098820d3c0c1edb5d9</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>28</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Takaisinlainat työeläkevakuutuslaitoksilta</act:name>
+        <act:id type="guid">ee0f5948ac3647b800c88bd64d81c1f8</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2804</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">c078cbc197dffb098820d3c0c1edb5d9</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Joukkovelkakirjalainat</act:name>
+        <act:id type="guid">056dea27c81778f8f8a72ad3f37af7cd</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2801</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">c078cbc197dffb098820d3c0c1edb5d9</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Vaihtovelkakirjalainat</act:name>
+        <act:id type="guid">89a323266c65c858d1085476ae4a8498</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2802</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">c078cbc197dffb098820d3c0c1edb5d9</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Lainat rahoituslaitoksilta</act:name>
+        <act:id type="guid">3dc07091d01904941386423754d4c063</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2803</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">c078cbc197dffb098820d3c0c1edb5d9</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Saadut ennakot</act:name>
+        <act:id type="guid">1db16c27d051bf173d534acd68c7cfcf</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2805</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">c078cbc197dffb098820d3c0c1edb5d9</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Ostovelat</act:name>
+        <act:id type="guid">5e9ad24f84b9bdaeacb16c36b839bea2</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2806</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">c078cbc197dffb098820d3c0c1edb5d9</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Rahoitusvekselit</act:name>
+        <act:id type="guid">5f6d81378e9241d874c509093032c75b</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2807</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">c078cbc197dffb098820d3c0c1edb5d9</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Velat saman konsernin yrityksille</act:name>
+        <act:id type="guid">73d20805fd03d7597bdcfeb6c36e29d1</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2808</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">c078cbc197dffb098820d3c0c1edb5d9</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Velat omistusyhteysyrityksille</act:name>
+        <act:id type="guid">101a8a349d1f39ce8edaade6da116f6f</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2809</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">c078cbc197dffb098820d3c0c1edb5d9</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Muut velat</act:name>
+        <act:id type="guid">f96b99399af4681a6886d63d0930a8ac</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2811</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">c078cbc197dffb098820d3c0c1edb5d9</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Siirtovelat</act:name>
+        <act:id type="guid">1da2c0789ed9466d36cda286cbf3a024</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2850</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">c078cbc197dffb098820d3c0c1edb5d9</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Pääomalainat</act:name>
+        <act:id type="guid">c68077ac649ae3ebf1522cc51e4d2a2e</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2800</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">c078cbc197dffb098820d3c0c1edb5d9</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Laskennalliset verovela</act:name>
+        <act:id type="guid">3588d14217c8b76adc9df3990e6e3ab8</act:id>
+        <act:type>LIABILITY</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>2810</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">c078cbc197dffb098820d3c0c1edb5d9</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Liikevoitto (-tappio)</act:name>
+        <act:id type="guid">90de269dc891517c13fb84e016445348</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>80</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Voitto (tappio) ennen tilinpäätössiirtoja ja veroja</act:name>
+        <act:id type="guid">5cdea912345e9d52383af97c5ae6fda9</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>92</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Satunnaiset erät</act:name>
+        <act:id type="guid">6a63669fcb4b52dfaacba4296e166f5c</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>94</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+    <gnc:account version="2.0.0">
+        <act:name>Vähemmistöosuudet</act:name>
+        <act:id type="guid">c21e40dda8dc9eca8005cc519d823a38</act:id>
+        <act:type>EXPENSE</act:type>
+        <act:commodity>
+            <cmdty:space>ISO4217</cmdty:space>
+            <cmdty:id>EUR</cmdty:id>
+        </act:commodity>
+        <act:commodity-scu>100</act:commodity-scu>
+        <act:code>98</act:code>
+        <act:slots>
+            <slot>
+                <slot:key>color</slot:key>
+                <slot:value type="string">Not Set</slot:value>
+            </slot>
+        </act:slots>
+        <act:parent type="guid">91ca36e058bbbb5deae199ca187e701e</act:parent>
+    </gnc:account>
+</gnc-account-example>

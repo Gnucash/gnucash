@@ -62,45 +62,64 @@ Libraries/Deps
 --------------
   required		Version
   --------		_______
-glib2			2.28.0
-gtk+2			2.24.0
-guile			1.8.5 or 2.0.0
-libgnomecanvas		2.0
-[lib]goffice		0.7.0
-libxml2			2.5.10
-libxslt
-boost			1.50.0
-swig			2.0.10			Only required to build from git
-						or SVN.
-webkit			1.0
+  glib2			2.40.0
+  gtk+3			3.14.0
+  guile			2.2.0 or 2.0.0
+  libxml2		2.5.10
+  gettext               0.19.6                  Can use older if you pass
+                                                -DALLOW_OLD_GETTEXT to cmake;
+                                                doesn't include all file types
+                                                when building gnucash.pot.
+  libxslt, including xsltproc
+  ICU                                           International Compnents for
+                                                Unicode
+  boost			1.50.0                  locale and regex libs must be
+                                                built with ICU support.
+  swig			2.0.10			Only required to build from git.
+  webkit		webkitgtk-3.0 (Windows, Mac)
+                        webkit2gtk-3.0 (Everything Else)
+  googletest            1.7.0                   Some distros call it gtest.
+                                                Some distros also separate out
+                                                googlemock or gmock; both are
+                                                required.
 
   optional
   --------
-aqbanking		4.0.0			 online banking; also requires
+  aqbanking		4.0.0			 online banking; also requires
 						 gwehywfar and ktoblzcheck
 
-libdbi			0.8.3			 SQL backend; also requires at
+  libdbi		0.8.3			 SQL backend; also requires at
 						 least one of libdbd-sqlite3,
 						 libdbd-mysql, or libdbd-pgsql
 
-libofx			0.9.0			 OFX/QFX import
+  libofx		0.9.0			 OFX/QFX import
 
-python			2.4.0			 python bindings; headers
+  python		3.4.0			 python bindings; headers
 						 required, not just binaries.
+
+  makeinfo                                       Not really needed, it
+                                                 just builds the
+                                                 mostly obsolete
+                                                 design documentation
+                                                 (superceded for the
+                                                 most part in Doxygen
+                                                 docs).
+  doxygen                                        For building the Doxygen API
+                                                 documentation.
 
   at runtime, required
   ---------------------
-a gsettings backend to store the gnucash global preferences in
-This backend is platform dependent.
-- linux:        dconf
-- windows:      registry
-- osx/quarz:    plists
+  a gsettings backend to store the gnucash global preferences in
+  This backend is platform dependent.
+  - linux:        dconf
+  - windows:      registry
+  - osx/quarz:    plists
 
-Note that the osx and windows backends are built-in in gio for their
-respective platforms. On linux and similar systems, the dconf package
-should be installed.
+  Note that the osx and windows backends are built-in in gio for their
+  respective platforms. On linux and similar systems, the dconf package
+  should be installed.
 
   at runtime, suggested
   ---------------------
-isocodes: translation of currency names
+  isocodes: translation of currency names
 

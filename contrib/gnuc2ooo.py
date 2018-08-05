@@ -629,7 +629,7 @@ def exec_fillGnuCashDB():
     crout = 'exec_fillGnuCashDB'
     filepaths = read_filepaths()
     if not filepaths:
-        MessageBox('Reading filepaths not successfull.\n' +
+        MessageBox('Reading filepaths not successful.\n' +
             'Please run makro ' + '"' + set_makro + '"', MsgType="errorbox")
         return False
         
