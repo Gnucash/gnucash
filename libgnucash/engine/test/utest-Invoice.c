@@ -205,7 +205,7 @@ test_invoice_posted_trans ( Fixture *fixture, gconstpointer pData )
 void
 test_suite_gncInvoice ( void )
 {
-    InvoiceData pData = { FALSE, FALSE, { 1000, 100 }, { 2000, 100 } };  // Vendor bill
+    static InvoiceData pData = { FALSE, FALSE, { 1000, 100 }, { 2000, 100 } };  // Vendor bill
     GNC_TEST_ADD( suitename, "post/unpost", Fixture, &pData, setup, test_invoice_post, teardown );
 
     GNC_TEST_ADD( suitename, "post trans - vendor bill", Fixture, &pData, setup_with_invoice, test_invoice_posted_trans, teardown_with_invoice );
