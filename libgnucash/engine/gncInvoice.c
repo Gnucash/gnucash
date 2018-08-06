@@ -1509,8 +1509,11 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     total = gncInvoiceGetTotal (invoice);
     taxes = gncInvoiceGetTotalTaxList (invoice);
     /* The two functions above return signs relative to the document
-     * We need to convert them to balance values before we can use them here */
-    if (is_cust_doc)
+     * We need to convert them to balance values before we can use them here
+     * Note the odd construct comparing two booleans is to xor them
+     * that is, only evaluate true if both are different.
+     */
+    if (is_cust_doc != is_cn)
     {
         GList *node;
         total = gnc_numeric_neg (total);
