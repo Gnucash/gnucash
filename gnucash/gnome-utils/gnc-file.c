@@ -834,8 +834,8 @@ RESTART:
         if (!show_session_error (parent, io_err, newfile, GNC_FILE_DIALOG_OPEN))
         {
             /* user told us to create a new database. Do it. We
-            	     * shouldn't have to worry about locking or clobbering,
-            	     * it's supposed to be new. */
+                     * shouldn't have to worry about locking or clobbering,
+                     * it's supposed to be new. */
             qof_session_begin (new_session, newfile, FALSE, TRUE, FALSE);
         }
     }
@@ -1193,14 +1193,14 @@ gnc_file_do_export(GtkWindow *parent, const char * filename)
     /* Some extra steps for file based uri's only */
     if (gnc_uri_is_file_protocol(protocol))
     {
-	if (check_file_path (path))
-	{
-	    show_session_error (parent, ERR_FILEIO_RESERVED_WRITE, newfile,
-				GNC_FILE_DIALOG_SAVE);
-	    return;
-	}
-	gnc_set_default_directory (GNC_PREFS_GROUP_OPEN_SAVE,
-				   g_path_get_dirname(path));
+        if (check_file_path (path))
+        {
+            show_session_error (parent, ERR_FILEIO_RESERVED_WRITE, newfile,
+                    GNC_FILE_DIALOG_SAVE);
+            return;
+        }
+        gnc_set_default_directory (GNC_PREFS_GROUP_OPEN_SAVE,
+                       g_path_get_dirname(path));
     }
     /* Check to see if the user specified the same file as the current
      * file. If so, prevent the export from happening to avoid killing this file */
@@ -1425,14 +1425,14 @@ gnc_file_do_save_as (GtkWindow *parent, const char* filename)
     /* Some extra steps for file based uri's only */
     if (gnc_uri_is_file_protocol(protocol))
     {
-	if (check_file_path (path))
-	{
-	    show_session_error (parent, ERR_FILEIO_RESERVED_WRITE, newfile,
-				GNC_FILE_DIALOG_SAVE);
-	    return;
-	}
-	gnc_set_default_directory (GNC_PREFS_GROUP_OPEN_SAVE,
-				   g_path_get_dirname (path));
+        if (check_file_path (path))
+        {
+            show_session_error (parent, ERR_FILEIO_RESERVED_WRITE, newfile,
+                    GNC_FILE_DIALOG_SAVE);
+            return;
+        }
+        gnc_set_default_directory (GNC_PREFS_GROUP_OPEN_SAVE,
+                       g_path_get_dirname (path));
     }
 
     /* Check to see if the user specified the same file as the current
