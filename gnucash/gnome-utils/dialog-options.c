@@ -639,7 +639,7 @@ gnc_set_default_gain_loss_account_widget(gnc_commodity *commodity)
     {
         book_currency_data->default_gain_loss_account_text =
                     gtk_label_new( _("Because no accounts have " \
-                        "been set up yet,you will need to return to this " \
+                        "been set up yet, you will need to return to this " \
                         "dialog (via File->Properties), after account setup, " \
                         "if you want to set a default gain/loss account.") );
 
