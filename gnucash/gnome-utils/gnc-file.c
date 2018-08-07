@@ -1019,7 +1019,7 @@ RESTART:
     {
         gchar *message = gnc_account_name_violations_errmsg ( gnc_get_account_separator_string(),
                          invalid_account_names );
-        gnc_warning_dialog(NULL, "%s", message);
+        gnc_warning_dialog(parent, "%s", message);
         g_free ( message );
     }
     return TRUE;
@@ -1234,7 +1234,7 @@ gnc_file_do_export(GtkWindow *parent, const char * filename)
         else
             name = gnc_uri_normalize_uri ( newfile, FALSE );
         /* if user says cancel, we should break out */
-        if (!gnc_verify_dialog (NULL, FALSE, format, name))
+        if (!gnc_verify_dialog (parent, FALSE, format, name))
         {
             return;
         }
@@ -1269,7 +1269,7 @@ gnc_file_do_export(GtkWindow *parent, const char * filename)
         /* %s is the strerror(3) error string of the error that occurred. */
         const char *format = _("There was an error saving the file.\n\n%s");
 
-        gnc_error_dialog (NULL, format, strerror(errno));
+        gnc_error_dialog (parent, format, strerror(errno));
         return;
     }
 }
@@ -1471,7 +1471,7 @@ gnc_file_do_save_as (GtkWindow *parent, const char* filename)
             name = gnc_uri_normalize_uri ( newfile, FALSE );
 
         /* if user says cancel, we should break out */
-        if (!gnc_verify_dialog (NULL, FALSE, format, name ))
+        if (!gnc_verify_dialog (parent, FALSE, format, name ))
         {
             xaccLogDisable();
             qof_session_destroy (new_session);
@@ -1600,7 +1600,7 @@ gnc_file_revert (GtkWindow *parent)
     else
         filename = fileurl;
 
-    if (!gnc_verify_dialog (NULL, FALSE, title, filename))
+    if (!gnc_verify_dialog (parent, FALSE, title, filename))
         return;
 
     qof_book_mark_session_saved (qof_session_get_book (session));
