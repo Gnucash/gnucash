@@ -834,8 +834,8 @@ RESTART:
         if (!show_session_error (parent, io_err, newfile, GNC_FILE_DIALOG_OPEN))
         {
             /* user told us to create a new database. Do it. We
-            	     * shouldn't have to worry about locking or clobbering,
-            	     * it's supposed to be new. */
+                     * shouldn't have to worry about locking or clobbering,
+                     * it's supposed to be new. */
             qof_session_begin (new_session, newfile, FALSE, TRUE, FALSE);
         }
     }
@@ -1019,7 +1019,7 @@ RESTART:
     {
         gchar *message = gnc_account_name_violations_errmsg ( gnc_get_account_separator_string(),
                          invalid_account_names );
-        gnc_warning_dialog(NULL, "%s", message);
+        gnc_warning_dialog(parent, "%s", message);
         g_free ( message );
     }
     return TRUE;
@@ -1193,14 +1193,14 @@ gnc_file_do_export(GtkWindow *parent, const char * filename)
     /* Some extra steps for file based uri's only */
     if (gnc_uri_is_file_protocol(protocol))
     {
-	if (check_file_path (path))
-	{
-	    show_session_error (parent, ERR_FILEIO_RESERVED_WRITE, newfile,
-				GNC_FILE_DIALOG_SAVE);
-	    return;
-	}
-	gnc_set_default_directory (GNC_PREFS_GROUP_OPEN_SAVE,
-				   g_path_get_dirname(path));
+        if (check_file_path (path))
+        {
+            show_session_error (parent, ERR_FILEIO_RESERVED_WRITE, newfile,
+                    GNC_FILE_DIALOG_SAVE);
+            return;
+        }
+        gnc_set_default_directory (GNC_PREFS_GROUP_OPEN_SAVE,
+                       g_path_get_dirname(path));
     }
     /* Check to see if the user specified the same file as the current
      * file. If so, prevent the export from happening to avoid killing this file */
@@ -1234,7 +1234,7 @@ gnc_file_do_export(GtkWindow *parent, const char * filename)
         else
             name = gnc_uri_normalize_uri ( newfile, FALSE );
         /* if user says cancel, we should break out */
-        if (!gnc_verify_dialog (NULL, FALSE, format, name))
+        if (!gnc_verify_dialog (parent, FALSE, format, name))
         {
             return;
         }
@@ -1269,7 +1269,7 @@ gnc_file_do_export(GtkWindow *parent, const char * filename)
         /* %s is the strerror(3) error string of the error that occurred. */
         const char *format = _("There was an error saving the file.\n\n%s");
 
-        gnc_error_dialog (NULL, format, strerror(errno));
+        gnc_error_dialog (parent, format, strerror(errno));
         return;
     }
 }
@@ -1425,14 +1425,14 @@ gnc_file_do_save_as (GtkWindow *parent, const char* filename)
     /* Some extra steps for file based uri's only */
     if (gnc_uri_is_file_protocol(protocol))
     {
-	if (check_file_path (path))
-	{
-	    show_session_error (parent, ERR_FILEIO_RESERVED_WRITE, newfile,
-				GNC_FILE_DIALOG_SAVE);
-	    return;
-	}
-	gnc_set_default_directory (GNC_PREFS_GROUP_OPEN_SAVE,
-				   g_path_get_dirname (path));
+        if (check_file_path (path))
+        {
+            show_session_error (parent, ERR_FILEIO_RESERVED_WRITE, newfile,
+                    GNC_FILE_DIALOG_SAVE);
+            return;
+        }
+        gnc_set_default_directory (GNC_PREFS_GROUP_OPEN_SAVE,
+                       g_path_get_dirname (path));
     }
 
     /* Check to see if the user specified the same file as the current
@@ -1471,7 +1471,7 @@ gnc_file_do_save_as (GtkWindow *parent, const char* filename)
             name = gnc_uri_normalize_uri ( newfile, FALSE );
 
         /* if user says cancel, we should break out */
-        if (!gnc_verify_dialog (NULL, FALSE, format, name ))
+        if (!gnc_verify_dialog (parent, FALSE, format, name ))
         {
             xaccLogDisable();
             qof_session_destroy (new_session);
@@ -1600,7 +1600,7 @@ gnc_file_revert (GtkWindow *parent)
     else
         filename = fileurl;
 
-    if (!gnc_verify_dialog (NULL, FALSE, title, filename))
+    if (!gnc_verify_dialog (parent, FALSE, title, filename))
         return;
 
     qof_book_mark_session_saved (qof_session_get_book (session));
