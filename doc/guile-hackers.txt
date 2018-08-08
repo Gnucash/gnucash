@@ -33,7 +33,7 @@ either end.  Guile supports a superset of R4RS (the Scheme standard).
 For initial experimentation, you can  use Guile as an interactive Scheme 
 shell to play around with the system.  
 
-SLIB is a a library for Scheme implementations (including guile)
+SLIB is a library for Scheme implementations (including guile)
 that implements a large collection of useful data structures
 and algorithms.
 

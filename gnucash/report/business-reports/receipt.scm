@@ -256,7 +256,7 @@
   'name (N_ "Receipt")
   'report-guid "7eb3df21073d4c33920a0257da15fba5"
   'menu-name (N_ "Receipt")
-  'menu-tip (N_ "Display a customer invoice as receipt, cash vousher")
+  'menu-tip (N_ "Display a customer invoice as receipt, cash voucher")
   'menu-path (list gnc:menuname-business-reports)
   'options-generator options-generator
   'renderer report-renderer)

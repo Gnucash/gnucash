@@ -84,7 +84,7 @@ char * gnc_get_credit_string(GNCAccountType account_type);
 typedef struct _Process Process;
 
 /** Wraps g_spawn_async_with_pipes minimally.  Use gnc_process_get_fd to access
- *  the file descriptors to the child.  To close them them and free the memory
+ *  the file descriptors to the child.  To close them and free the memory
  *  allocated for the process once it has exited, call gnc_detach_process.
  *
  *  @param argl A list of null-terminated strings used as arguments for spawning,

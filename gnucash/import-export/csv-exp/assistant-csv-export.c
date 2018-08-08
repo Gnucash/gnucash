@@ -88,7 +88,7 @@ static const gchar *finish_trans_string = N_(
 
 static const gchar *finish_trans_search_gl_string = N_(
             /* Translators: %s is the file name string. */
-            "When you click 'Apply', the transactions will be exported to the file '%s.\n\n"
+            "When you click 'Apply', the transactions will be exported to the file '%s'.\n\n"
             "You can also verify your selections by clicking on 'Back' or 'Cancel' to Abort Export.\n");
 
 static const gchar *start_tree_string = N_(
