@@ -61,6 +61,6 @@ private:
     std::string m_linkfile;
     int m_lockfd;
 
-    QofBook* m_book;  /* The primary, main open book */
+    QofBook* m_book = nullptr;  /* The primary, main open book */
 };
 #endif // __GNC_XML_BACKEND_HPP__
