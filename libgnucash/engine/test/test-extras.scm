@@ -49,6 +49,7 @@
 (export env-create-account-structure)
 (export env-create-account-structure-alist)
 (export env-expense-account-structure)
+(export gnc-pricedb-create)
 
 ;;
 ;; Random test related syntax and the like
