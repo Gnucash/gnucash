@@ -41,7 +41,7 @@
 enum available_cols
 {
     AVAILABLE_COL_NAME = 0,
-    AVAILABLE_COL_ROW,
+    AVAILABLE_COL_GUID,
     NUM_AVAILABLE_COLS
 };
 
@@ -65,8 +65,6 @@ struct gncp_column_view_edit
     GNCOptionDB  * odb;
 
     SCM       available_list;
-    int       available_selected;
-
     SCM       contents_list;
     int       contents_selected;
 };
@@ -104,82 +102,95 @@ gnc_column_view_edit_destroy(gnc_column_view_edit * view)
 }
 
 static void
-update_display_lists(gnc_column_view_edit * view)
+update_available_lists(gnc_column_view_edit * view)
 {
     SCM   get_rpt_guids = scm_c_eval_string("gnc:all-report-template-guids");
     SCM   template_menu_name = scm_c_eval_string("gnc:report-template-menu-name/report-guid");
-    SCM   report_menu_name = scm_c_eval_string("gnc:report-menu-name");
     SCM   rpt_guids = scm_call_0(get_rpt_guids);
+    SCM   selection;
+
+    gchar *name;
+    gchar *guid_str;
+
+    GtkTreeModel *model;
+    GtkListStore *store;
+    GtkTreeIter iter;
+    GtkTreeSelection *tree_selection;
+
+    /* Update the list of available reports (left selection box). */
+    tree_selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(view->available));
+    model = gtk_tree_view_get_model (GTK_TREE_VIEW(view->available));
+
+    if (gtk_tree_selection_get_selected(tree_selection, &model, &iter))
+    {
+        gchar *guid_str;
+        gtk_tree_model_get(model, &iter,
+                           AVAILABLE_COL_GUID, &guid_str,
+                           -1);
+        selection = scm_from_utf8_string(guid_str);
+        g_free (guid_str);
+    }
+    else
+        selection = SCM_UNDEFINED;
+
+    scm_gc_unprotect_object(view->available_list);
+    view->available_list = rpt_guids;
+    scm_gc_protect_object(view->available_list);
+
+    store = GTK_LIST_STORE(model);
+    gtk_list_store_clear(store);
+
+    if (scm_is_list(rpt_guids))
+    {
+        for (int i = 0; !scm_is_null(rpt_guids); rpt_guids = SCM_CDR(rpt_guids), i++)
+        {
+            SCM rpt_guids_temp = SCM_CAR(rpt_guids);
+
+            guid_str = scm_to_utf8_string (rpt_guids_temp);
+            name = gnc_scm_to_utf8_string (scm_call_2(template_menu_name, rpt_guids_temp,
+                                             SCM_BOOL_F));
+
+            gtk_list_store_append(store, &iter);
+            gtk_list_store_set(store, &iter,
+                               AVAILABLE_COL_NAME, _(name),
+                               AVAILABLE_COL_GUID, guid_str,
+                               -1);
+
+            if (scm_is_equal (rpt_guids_temp, selection))
+                gtk_tree_selection_select_iter (tree_selection, &iter);
+
+            g_free (name);
+            g_free (guid_str);
+        }
+    }
+}
+
+static void
+update_contents_lists(gnc_column_view_edit * view)
+{
+    SCM   report_menu_name = scm_c_eval_string("gnc:report-menu-name");
     SCM   contents =
         gnc_option_db_lookup_option(view->odb, "__general", "report-list",
                                     SCM_BOOL_F);
     SCM   this_report;
     SCM   selection;
     gchar *name;
-    int   row, i, id;
+
     GtkListStore *store;
     GtkTreeIter iter;
-    GtkTreePath *path;
     GtkTreeSelection *tree_selection;
 
-
-    /* Update the list of available reports (left selection box). */
-    row = view->available_selected;
-
-    if (scm_is_list(view->available_list) && !scm_is_null (view->available_list))
-    {
-        row = MIN (row, scm_ilength (view->available_list) - 1);
-        selection = scm_list_ref (view->available_list, scm_from_int  (row));
-    }
-    else
-    {
-        selection = SCM_UNDEFINED;
-    }
-
-    scm_gc_unprotect_object(view->available_list);
-    view->available_list = rpt_guids;
-    scm_gc_protect_object(view->available_list);
-
-    store = GTK_LIST_STORE(gtk_tree_view_get_model(view->available));
-    gtk_list_store_clear(store);
-
-    if (scm_is_list(rpt_guids))
-    {
-        for (i = 0; !scm_is_null(rpt_guids); rpt_guids = SCM_CDR(rpt_guids), i++)
-        {
-            if (scm_is_equal (SCM_CAR(rpt_guids), selection))
-                row = i;
-            name = gnc_scm_to_utf8_string (scm_call_2(template_menu_name, SCM_CAR(rpt_guids),
-                                             SCM_BOOL_F));
-
-            gtk_list_store_append(store, &iter);
-            gtk_list_store_set(store, &iter,
-                               AVAILABLE_COL_NAME, _(name),
-                               AVAILABLE_COL_ROW, i,
-                               -1);
-            g_free (name);
-        }
-
-    }
-
-    tree_selection = gtk_tree_view_get_selection(view->available);
-    path = gtk_tree_path_new_from_indices(row, -1);
-    gtk_tree_selection_select_path(tree_selection, path);
-    gtk_tree_path_free(path);
-
-
     /* Update the list of selected reports (right selection box). */
-    row = view->contents_selected;
+    tree_selection = gtk_tree_view_get_selection(view->contents);
 
     if (scm_is_list(view->contents_list) && !scm_is_null (view->contents_list))
     {
+        int row = view->contents_selected;
         row = MIN (row, scm_ilength (view->contents_list) - 1);
-        selection = scm_list_ref (view->contents_list, scm_from_int  (row));
+        selection = scm_list_ref (view->contents_list, scm_from_int (row));
     }
     else
-    {
         selection = SCM_UNDEFINED;
-    }
 
     scm_gc_unprotect_object(view->contents_list);
     view->contents_list = contents;
@@ -187,14 +198,15 @@ update_display_lists(gnc_column_view_edit * view)
 
     store = GTK_LIST_STORE(gtk_tree_view_get_model(view->contents));
     gtk_list_store_clear(store);
+
     if (scm_is_list(contents))
     {
-        for (i = 0; !scm_is_null(contents); contents = SCM_CDR(contents), i++)
+        for (int i = 0; !scm_is_null(contents); contents = SCM_CDR(contents), i++)
         {
-            if (scm_is_equal (SCM_CAR(contents), selection))
-                row = i;
+            SCM contents_temp = SCM_CAR(contents);
 
-            id = scm_to_int(SCM_CAAR(contents));
+            int id = scm_to_int(SCM_CAAR(contents));
+
             this_report = gnc_report_find(id);
             name = gnc_scm_to_utf8_string (scm_call_1(report_menu_name, this_report));
 
@@ -203,44 +215,16 @@ update_display_lists(gnc_column_view_edit * view)
             (store, &iter,
              CONTENTS_COL_NAME, _(name),
              CONTENTS_COL_ROW, i,
-             CONTENTS_COL_REPORT_COLS, scm_to_int(SCM_CADR(SCM_CAR(contents))),
-             CONTENTS_COL_REPORT_ROWS, scm_to_int(SCM_CADDR(SCM_CAR(contents))),
+             CONTENTS_COL_REPORT_COLS, scm_to_int(SCM_CADR(contents_temp)),
+             CONTENTS_COL_REPORT_ROWS, scm_to_int(SCM_CADDR(contents_temp)),
              -1);
+
+            if (scm_is_equal (contents_temp, selection))
+                gtk_tree_selection_select_iter (tree_selection, &iter);
+
             g_free (name);
         }
     }
-
-    tree_selection = gtk_tree_view_get_selection(view->contents);
-    path = gtk_tree_path_new_from_indices(row, -1);
-    gtk_tree_selection_select_path(tree_selection, path);
-    //  gtk_tree_view_scroll_to_cell(view->contents, path, NULL, TRUE, 0.5, 0.0);
-    gtk_tree_path_free(path);
-}
-
-static void
-gnc_column_view_select_avail_cb(GtkTreeSelection *selection,
-                                gnc_column_view_edit *r)
-{
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-
-    if (gtk_tree_selection_get_selected(selection, &model, &iter))
-        gtk_tree_model_get(model, &iter,
-                           AVAILABLE_COL_ROW, &r->available_selected,
-                           -1);
-}
-
-static void
-gnc_column_view_select_contents_cb(GtkTreeSelection *selection,
-                                   gnc_column_view_edit *r)
-{
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-
-    if (gtk_tree_selection_get_selected(selection, &model, &iter))
-        gtk_tree_model_get(model, &iter,
-                           AVAILABLE_COL_ROW, &r->contents_selected,
-                           -1);
 }
 
 static void
@@ -294,7 +278,6 @@ gnc_column_view_edit_options(SCM options, SCM view)
     GtkListStore *store;
     GtkCellRenderer *renderer;
     GtkTreeViewColumn *column;
-    GtkTreeSelection *selection;
 
     ptr = scm_call_1(get_editor, view);
     if (ptr != SCM_BOOL_F)
@@ -323,7 +306,6 @@ gnc_column_view_edit_options(SCM options, SCM view)
         r->contents  = GTK_TREE_VIEW (gtk_builder_get_object (builder, "contents_view"));
         r->options   = options;
         r->view      = view;
-        r->available_selected = 0;
         r->available_list = SCM_EOL;
         r->contents_selected = 0;
         r->contents_list = SCM_EOL;
@@ -342,7 +324,7 @@ gnc_column_view_edit_options(SCM options, SCM view)
         scm_gc_protect_object(r->contents_list);
 
         /* Build the 'available' view */
-        store = gtk_list_store_new (NUM_AVAILABLE_COLS, G_TYPE_STRING, G_TYPE_INT);
+        store = gtk_list_store_new (NUM_AVAILABLE_COLS, G_TYPE_STRING, G_TYPE_STRING);
         gtk_tree_view_set_model(r->available, GTK_TREE_MODEL(store));
         gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store), AVAILABLE_COL_NAME, GTK_SORT_ASCENDING);
         g_object_unref(store);
@@ -352,10 +334,6 @@ gnc_column_view_edit_options(SCM options, SCM view)
                  "text", AVAILABLE_COL_NAME,
                  NULL);
         gtk_tree_view_append_column(r->available, column);
-
-        selection = gtk_tree_view_get_selection(r->available);
-        g_signal_connect(selection, "changed",
-                         G_CALLBACK(gnc_column_view_select_avail_cb), r);
 
         /* Build the 'contents' view */
         store = gtk_list_store_new (NUM_CONTENTS_COLS, G_TYPE_STRING, G_TYPE_INT,
@@ -381,11 +359,8 @@ gnc_column_view_edit_options(SCM options, SCM view)
                  NULL);
         gtk_tree_view_append_column(r->contents, column);
 
-        selection = gtk_tree_view_get_selection(r->contents);
-        g_signal_connect(selection, "changed",
-                         G_CALLBACK(gnc_column_view_select_contents_cb), r);
-
-        update_display_lists(r);
+        update_available_lists(r);
+        update_contents_lists(r);
 
         gnc_options_dialog_set_apply_cb(r->optwin,
                                         gnc_column_view_edit_apply_cb, r);
@@ -414,12 +389,22 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data)
     SCM oldlist = r->contents_list;
     int count;
     int oldlength, id;
+    gchar *guid_str;
+    GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(r->available));
+    GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW(r->available));
+    GtkTreeIter iter;
 
-    if (scm_is_list(r->available_list) &&
-            (scm_ilength(r->available_list) > r->available_selected))
+    /* make sure there is a selected entry */
+    if (gtk_tree_selection_get_selected(selection, &model, &iter))
+        gtk_tree_model_get(model, &iter,
+                           AVAILABLE_COL_GUID, &guid_str, -1);
+    else
+        return;
+
+    if (scm_is_list(r->available_list))
     {
-        template_name = scm_list_ref(r->available_list,
-                                     scm_from_int (r->available_selected));
+        template_name = scm_from_utf8_string(guid_str);
+
         new_report = scm_call_1(make_report, template_name);
         id = scm_to_int(new_report);
         scm_call_2(mark_report, gnc_report_find(id), SCM_BOOL_T);
@@ -461,8 +446,8 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data)
                                    r->contents_list);
         gnc_options_dialog_changed (r->optwin);
     }
-
-    update_display_lists(r);
+    g_free (guid_str);
+    update_contents_lists(r);
 }
 
 void
@@ -473,6 +458,16 @@ gnc_column_view_edit_remove_cb(GtkButton * button, gpointer user_data)
     SCM oldlist = r->contents_list;
     int count;
     int oldlength;
+    GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(r->contents));
+    GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW(r->contents));
+    GtkTreeIter iter;
+
+    /* make sure there is a selected entry */
+    if (gtk_tree_selection_get_selected(selection, &model, &iter))
+        gtk_tree_model_get(model, &iter,
+                           CONTENTS_COL_ROW, &r->contents_selected, -1);
+    else
+        return;
 
     if (scm_is_list(r->contents_list))
     {
@@ -504,8 +499,7 @@ gnc_column_view_edit_remove_cb(GtkButton * button, gpointer user_data)
 
         gnc_options_dialog_changed (r->optwin);
     }
-
-    update_display_lists(r);
+    update_contents_lists(r);
 }
 
 void
@@ -517,6 +511,16 @@ gnc_edit_column_view_move_up_cb(GtkButton * button, gpointer user_data)
     SCM temp;
     int oldlength;
     int count;
+    GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(r->contents));
+    GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW(r->contents));
+    GtkTreeIter iter;
+
+    /* make sure there is a selected entry */
+    if (gtk_tree_selection_get_selected(selection, &model, &iter))
+        gtk_tree_model_get(model, &iter,
+                           CONTENTS_COL_ROW, &r->contents_selected, -1);
+    else
+        return;
 
     oldlength = scm_ilength(r->contents_list);
     if ((r->contents_selected > 0) && (oldlength > r->contents_selected))
@@ -542,7 +546,7 @@ gnc_edit_column_view_move_up_cb(GtkButton * button, gpointer user_data)
 
         gnc_options_dialog_changed (r->optwin);
 
-        update_display_lists(r);
+        update_contents_lists(r);
     }
 }
 
@@ -555,6 +559,16 @@ gnc_edit_column_view_move_down_cb(GtkButton * button, gpointer user_data)
     SCM temp;
     int oldlength;
     int count;
+    GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(r->contents));
+    GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW(r->contents));
+    GtkTreeIter iter;
+
+    /* make sure there is a selected entry */
+    if (gtk_tree_selection_get_selected(selection, &model, &iter))
+        gtk_tree_model_get(model, &iter,
+                           CONTENTS_COL_ROW, &r->contents_selected, -1);
+    else
+        return;
 
     oldlength = scm_ilength(r->contents_list);
     if (oldlength > (r->contents_selected + 1))
@@ -580,7 +594,7 @@ gnc_edit_column_view_move_down_cb(GtkButton * button, gpointer user_data)
 
         gnc_options_dialog_changed (r->optwin);
 
-        update_display_lists(r);
+        update_contents_lists(r);
     }
 }
 
@@ -636,7 +650,7 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data)
                                               current);
             scm_gc_protect_object(r->contents_list);
             gnc_options_dialog_changed (r->optwin);
-            update_display_lists(r);
+            update_contents_lists(r);
         }
 
         g_object_unref(G_OBJECT(builder));
