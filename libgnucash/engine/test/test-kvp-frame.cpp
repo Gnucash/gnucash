@@ -42,8 +42,8 @@ public:
     }
 protected:
     KvpFrameImpl t_root;
-    KvpValue *t_int_val;
-    KvpValue *t_str_val;
+    KvpValue *t_int_val = nullptr;
+    KvpValue *t_str_val = nullptr;
 };
 
 template <typename A, typename B> void
