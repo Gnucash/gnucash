@@ -259,6 +259,9 @@ gnc_column_view_update_buttons_cb (GtkTreeSelection *selection,
     {
         int len = scm_ilength (r->contents_list);
 
+        gtk_tree_model_get(model, &iter,
+                           CONTENTS_COL_ROW, &r->contents_selected, -1);
+
         gtk_widget_set_sensitive (r->size_button, TRUE);
         gtk_widget_set_sensitive (r->remove_button, TRUE);
 
@@ -459,7 +462,7 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data)
     int oldlength, id;
     gchar *guid_str;
     GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(r->available));
-    GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW(r->available));
+    GtkTreeModel *model;
     GtkTreeIter iter;
 
     /* make sure there is a selected entry */
@@ -526,16 +529,6 @@ gnc_column_view_edit_remove_cb(GtkButton * button, gpointer user_data)
     SCM oldlist = r->contents_list;
     int count;
     int oldlength;
-    GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(r->contents));
-    GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW(r->contents));
-    GtkTreeIter iter;
-
-    /* make sure there is a selected entry */
-    if (gtk_tree_selection_get_selected(selection, &model, &iter))
-        gtk_tree_model_get(model, &iter,
-                           CONTENTS_COL_ROW, &r->contents_selected, -1);
-    else
-        return;
 
     if (scm_is_list(r->contents_list))
     {
@@ -579,16 +572,6 @@ gnc_edit_column_view_move_up_cb(GtkButton * button, gpointer user_data)
     SCM temp;
     int oldlength;
     int count;
-    GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(r->contents));
-    GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW(r->contents));
-    GtkTreeIter iter;
-
-    /* make sure there is a selected entry */
-    if (gtk_tree_selection_get_selected(selection, &model, &iter))
-        gtk_tree_model_get(model, &iter,
-                           CONTENTS_COL_ROW, &r->contents_selected, -1);
-    else
-        return;
 
     oldlength = scm_ilength(r->contents_list);
     if ((r->contents_selected > 0) && (oldlength > r->contents_selected))
@@ -627,16 +610,6 @@ gnc_edit_column_view_move_down_cb(GtkButton * button, gpointer user_data)
     SCM temp;
     int oldlength;
     int count;
-    GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(r->contents));
-    GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW(r->contents));
-    GtkTreeIter iter;
-
-    /* make sure there is a selected entry */
-    if (gtk_tree_selection_get_selected(selection, &model, &iter))
-        gtk_tree_model_get(model, &iter,
-                           CONTENTS_COL_ROW, &r->contents_selected, -1);
-    else
-        return;
 
     oldlength = scm_ilength(r->contents_list);
     if (oldlength > (r->contents_selected + 1))
