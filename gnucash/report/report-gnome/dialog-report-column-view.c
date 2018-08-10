@@ -292,7 +292,7 @@ gnc_column_view_edit_apply_cb(GNCOptionWin * w, gpointer user_data)
     results = gnc_option_db_commit (win->odb);
     for (iter = results; iter; iter = iter->next)
     {
-        GtkWidget *dialog = gtk_message_dialog_new(NULL,
+        GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(gnc_options_dialog_widget(w)),
                                                    0,
                                                    GTK_MESSAGE_ERROR,
                                                    GTK_BUTTONS_OK,

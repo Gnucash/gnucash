@@ -4335,7 +4335,7 @@ scm_apply_cb (GNCOptionWin *win, gpointer data)
         results = gnc_option_db_commit (win->option_db);
         for (iter = results; iter; iter = iter->next)
         {
-            GtkWidget *dialog = gtk_message_dialog_new(NULL,
+            GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(gnc_options_dialog_widget(win)),
                                                        0,
                                                        GTK_MESSAGE_ERROR,
                                                        GTK_BUTTONS_OK,
