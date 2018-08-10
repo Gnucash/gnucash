@@ -285,7 +285,7 @@ endif (WIN32)
 
 # SWIG
 if(GENERATE_SWIG_WRAPPERS)
-  find_package (SWIG REQUIRED)
+  find_package (SWIG 2.0.10 REQUIRED)
   include (${SWIG_USE_FILE})
 endif()
 
