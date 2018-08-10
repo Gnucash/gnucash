@@ -67,6 +67,12 @@ struct gncp_column_view_edit
     SCM       available_list;
     SCM       contents_list;
     int       contents_selected;
+
+    GtkWidget *add_button;
+    GtkWidget *remove_button;
+    GtkWidget *up_button;
+    GtkWidget *down_button;
+    GtkWidget *size_button;
 };
 
 void gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data);
@@ -228,6 +234,50 @@ update_contents_lists(gnc_column_view_edit * view)
 }
 
 static void
+gnc_column_view_update_buttons_cb (GtkTreeSelection *selection,
+                                       gnc_column_view_edit *r)
+{
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    GtkTreeSelection *available_selection;
+
+    /* compare selection to establish which treeview selected */
+    available_selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(r->available));
+
+    /* available treeview */
+    if (available_selection == selection)
+    {
+        if (gtk_tree_selection_get_selected(selection, &model, &iter))
+            gtk_widget_set_sensitive (r->add_button, TRUE);
+        else
+            gtk_widget_set_sensitive (r->add_button, FALSE);
+        return;
+    }
+
+    /* contents treeview */
+    if (gtk_tree_selection_get_selected(selection, &model, &iter))
+    {
+        int len = scm_ilength (r->contents_list);
+
+        gtk_widget_set_sensitive (r->size_button, TRUE);
+        gtk_widget_set_sensitive (r->remove_button, TRUE);
+
+        if (len > 1)
+        {
+            gtk_widget_set_sensitive (r->up_button, TRUE);
+            gtk_widget_set_sensitive (r->down_button, TRUE);
+        }
+    }
+    else
+    {
+        gtk_widget_set_sensitive (r->up_button, FALSE);
+        gtk_widget_set_sensitive (r->down_button, FALSE);
+        gtk_widget_set_sensitive (r->size_button, FALSE);
+        gtk_widget_set_sensitive (r->remove_button, FALSE);
+    }
+}
+
+static void
 gnc_column_view_edit_apply_cb(GNCOptionWin * w, gpointer user_data)
 {
     SCM  dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
@@ -278,6 +328,7 @@ gnc_column_view_edit_options(SCM options, SCM view)
     GtkListStore *store;
     GtkCellRenderer *renderer;
     GtkTreeViewColumn *column;
+    GtkTreeSelection *selection;
 
     ptr = scm_call_1(get_editor, view);
     if (ptr != SCM_BOOL_F)
@@ -304,6 +355,13 @@ gnc_column_view_edit_options(SCM options, SCM view)
         editor       = GTK_WIDGET(gtk_builder_get_object (builder, "view_contents_table"));
         r->available = GTK_TREE_VIEW (gtk_builder_get_object (builder, "available_view"));
         r->contents  = GTK_TREE_VIEW (gtk_builder_get_object (builder, "contents_view"));
+
+        r->add_button = GTK_WIDGET(gtk_builder_get_object (builder, "add_button1"));
+        r->remove_button = GTK_WIDGET(gtk_builder_get_object (builder, "remove_button1"));
+        r->up_button = GTK_WIDGET(gtk_builder_get_object (builder, "up_button1"));
+        r->down_button = GTK_WIDGET(gtk_builder_get_object (builder, "down_button1"));
+        r->size_button = GTK_WIDGET(gtk_builder_get_object (builder, "size_button1"));
+
         r->options   = options;
         r->view      = view;
         r->available_list = SCM_EOL;
@@ -335,6 +393,11 @@ gnc_column_view_edit_options(SCM options, SCM view)
                  NULL);
         gtk_tree_view_append_column(r->available, column);
 
+        /* use the selection cb to update buttons */
+        selection = gtk_tree_view_get_selection(r->available);
+        g_signal_connect(selection, "changed",
+                         G_CALLBACK(gnc_column_view_update_buttons_cb), r);
+
         /* Build the 'contents' view */
         store = gtk_list_store_new (NUM_CONTENTS_COLS, G_TYPE_STRING, G_TYPE_INT,
                                     G_TYPE_INT, G_TYPE_INT);
@@ -358,6 +421,11 @@ gnc_column_view_edit_options(SCM options, SCM view)
                  "text", CONTENTS_COL_REPORT_COLS,
                  NULL);
         gtk_tree_view_append_column(r->contents, column);
+
+        /* use the selection cb to update buttons */
+        selection = gtk_tree_view_get_selection(r->contents);
+        g_signal_connect(selection, "changed",
+                         G_CALLBACK(gnc_column_view_update_buttons_cb), r);
 
         update_available_lists(r);
         update_contents_lists(r);
