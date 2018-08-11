@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.20.4 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkAdjustment" id="col_adjustment">
@@ -95,9 +95,10 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button85">
+              <object class="GtkButton" id="add_button1">
                 <property name="label" translatable="yes">A_dd  &gt;&gt;</property>
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
@@ -110,9 +111,10 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button86">
+              <object class="GtkButton" id="remove_button1">
                 <property name="label" translatable="yes">&lt;&lt; _Remove</property>
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
@@ -137,9 +139,10 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button87">
+              <object class="GtkButton" id="up_button1">
                 <property name="label" translatable="yes">Move _up</property>
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
@@ -152,9 +155,10 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button88">
+              <object class="GtkButton" id="down_button1">
                 <property name="label" translatable="yes">Move dow_n</property>
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
@@ -179,9 +183,10 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button89">
+              <object class="GtkButton" id="size_button1">
                 <property name="label" translatable="yes">Si_ze...</property>
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
@@ -241,9 +246,11 @@
         </child>
       </object>
     </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkDialog" id="html_style_sheet_dialog">
-    <property name="visible">False</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">HTML Style Sheets</property>
     <property name="type_hint">dialog</property>
@@ -416,6 +423,9 @@
     <action-widgets>
       <action-widget response="-7">closebutton1</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkAdjustment" id="row_adjustment">
     <property name="upper">100</property>
@@ -573,6 +583,9 @@
       <action-widget response="-6">cancelbutton</action-widget>
       <action-widget response="-5">okbutton</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkDialog" id="select_style_sheet_dialog">
     <property name="can_focus">False</property>
@@ -690,6 +703,9 @@
       <action-widget response="2">delete_button</action-widget>
       <action-widget response="-7">close_button</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkListStore" id="template_liststore">
     <columns>
@@ -849,5 +865,8 @@
       <action-widget response="-6">cancelbutton1</action-widget>
       <action-widget response="-5">okbutton1</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
 </interface>
