@@ -64,7 +64,7 @@ gnc_add_swig_guile_command (swig-gnome-c
 set (gnc_gnome_SOURCES
   assistant-acct-period.c
   assistant-hierarchy.c
-  assistant-loan.c
+  assistant-loan.cpp
   assistant-stock-split.c
   business-options-gnome.c
   business-urls.c

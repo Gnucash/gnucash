@@ -23,6 +23,8 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+extern "C"
+{
 #include <config.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
@@ -51,6 +53,8 @@
 #else
 # include <monetary.h>
 #endif
+}
+
 #define DIALOG_LOAN_ASSISTANT_CM_CLASS "assistant-loan-setup"
 
 static QofLogModule log_module = GNC_MOD_ASSISTANT;
@@ -102,8 +106,8 @@ typedef struct RepayOptData_
  **/
 typedef struct RepayOptDataDefault_
 {
-    char *name;
-    char *defaultTxnMemo;
+    const char *name;
+    const char *defaultTxnMemo;
     gboolean escrowDefault;
     gboolean specSrcAcctDefault;
 } RepayOptDataDefault;
@@ -362,10 +366,12 @@ static gint loan_find_ttsplit_with_acct( gconstpointer elt, gconstpointer crit )
 static void loan_create_sx_from_tcSX( LoanAssistantData *ldd, toCreateSX *tcSX );
 static void loan_tcSX_free( gpointer data, gpointer user_data );
 
+extern "C" {
 void loan_assistant_prepare( GtkAssistant *assistant, GtkWidget *page, gpointer user_data );
 void loan_assistant_finish( GtkAssistant *gtkassistant, gpointer user_data );
 void loan_assistant_cancel( GtkAssistant *gtkassistant, gpointer user_data );
 void loan_assistant_close( GtkAssistant *gtkassistant, gpointer user_data );
+}
 
 /*****************************************************************************/
 
@@ -374,7 +380,7 @@ static
 void
 loan_assistant_close_handler( gpointer user_data )
 {
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
     gtk_widget_destroy( ldd->window );
 }
 
@@ -383,7 +389,7 @@ static
 void
 loan_assistant_window_destroy_cb( GtkWidget *object, gpointer user_data )
 {
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
 
     g_assert( ldd );
 
@@ -951,7 +957,7 @@ static
 void
 loan_info_prep( GtkAssistant *assistant, gpointer user_data )
 {
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
 
     gnc_amount_edit_set_amount( ldd->prmOrigPrincGAE, ldd->ld.principal );
     gtk_spin_button_set_value( ldd->prmIrateSpin, ldd->ld.interestRate );
@@ -959,9 +965,11 @@ loan_info_prep( GtkAssistant *assistant, gpointer user_data )
     gtk_combo_box_set_active( ldd->prmType, ldd->ld.type );
     if ( ldd->ld.type != GNC_FIXED )
     {
-        g_signal_handlers_block_by_func( GNC_FREQUENCY( ldd->prmVarGncFreq), loan_info_page_valid_cb , ldd );
+        g_signal_handlers_block_by_func( GNC_FREQUENCY( ldd->prmVarGncFreq),
+                                         (gpointer) loan_info_page_valid_cb, ldd );
         gnc_frequency_setup_recurrence(ldd->prmVarGncFreq, ldd->ld.loan_schedule, ldd->ld.varStartDate);
-        g_signal_handlers_unblock_by_func( GNC_FREQUENCY( ldd->prmVarGncFreq), loan_info_page_valid_cb , ldd );
+        g_signal_handlers_unblock_by_func( GNC_FREQUENCY( ldd->prmVarGncFreq),
+                                           (gpointer) loan_info_page_valid_cb, ldd );
     }
 
     /* start date */
@@ -989,7 +997,7 @@ static
 void
 loan_info_prm_type_cb( GtkWidget *w, gpointer user_data )
 {
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
     gint index;
 
     index = gtk_combo_box_get_active( ldd->prmType );
@@ -1002,7 +1010,7 @@ static
 void
 loan_info_calc_update_cb( GtkWidget *w, gpointer user_data )
 {
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
     GDate start, now;
     int i, totalVal, total, remain;
 
@@ -1034,7 +1042,7 @@ loan_info_calc_update_cb( GtkWidget *w, gpointer user_data )
 void
 loan_info_page_valid_cb (GtkWidget *widget, gpointer user_data )
 {
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
     GtkAssistant *assistant = GTK_ASSISTANT(ldd->window);
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
@@ -1048,7 +1056,7 @@ static
 gboolean
 loan_info_page_complete( GtkAssistant *assistant, gpointer user_data )
 {
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
 
     ldd->ld.primaryAcct = gnc_account_sel_get_account( ldd->prmAccountGAS );
     /* Test for valid Account */
@@ -1063,7 +1071,7 @@ static
 void
 loan_info_page_save( GtkAssistant *assistant, gpointer user_data )
 {
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
 
     ldd->ld.primaryAcct = gnc_account_sel_get_account( ldd->prmAccountGAS );
 
@@ -1073,8 +1081,8 @@ loan_info_page_save( GtkAssistant *assistant, gpointer user_data )
     }
     ldd->ld.principal = gnc_amount_edit_get_amount( ldd->prmOrigPrincGAE );
     ldd->ld.interestRate = gtk_spin_button_get_value( ldd->prmIrateSpin );
-    ldd->ld.rateType = gtk_combo_box_get_active (ldd->prmIrateType );
-    ldd->ld.type = gtk_combo_box_get_active( ldd->prmType );
+    ldd->ld.rateType = static_cast<IRateType>( gtk_combo_box_get_active (ldd->prmIrateType ));
+    ldd->ld.type = static_cast<LoanType>( gtk_combo_box_get_active( ldd->prmType ));
 
     if ( ldd->ld.type != GNC_FIXED )
     {
@@ -1095,7 +1103,7 @@ loan_info_page_save( GtkAssistant *assistant, gpointer user_data )
         {
             g_date_set_dmy( ldd->ld.startDate,
                             tmpTm->tm_mday,
-                            (tmpTm->tm_mon + 1),
+                            static_cast<GDateMonth>(tmpTm->tm_mon + 1),
                             (1900 + tmpTm->tm_year) );
             gnc_tm_free (tmpTm);
         }
@@ -1121,7 +1129,7 @@ loan_opt_prep( GtkAssistant *assistant, gpointer user_data )
 {
     int i;
     RepayOptUIData *rouid;
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
 
     /* Save Previous Page ( Information ) */
     loan_info_page_save(assistant, ldd);
@@ -1190,7 +1198,7 @@ loan_opt_escrow_toggle_cb( GtkToggleButton *tb, gpointer user_data )
     int i;
     gboolean newState;
     RepayOptUIData *rouid;
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
     GtkAssistant *assistant = GTK_ASSISTANT(ldd->window);
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
@@ -1221,7 +1229,7 @@ loan_opt_escrow_toggle_cb( GtkToggleButton *tb, gpointer user_data )
         /* prevent the toggle handler from running and "trashing" the
          * state of the throughEscrowP selection */
         g_signal_handlers_block_by_func( rouid->escrowCb,
-                                         loan_opt_escrow_toggled_cb,
+                                         (gpointer) loan_opt_escrow_toggled_cb,
                                          rouid );
         gtk_toggle_button_set_active(
             GTK_TOGGLE_BUTTON(rouid->escrowCb),
@@ -1233,7 +1241,7 @@ loan_opt_escrow_toggle_cb( GtkToggleButton *tb, gpointer user_data )
             newState
             && gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(rouid->optCb) ) );
         g_signal_handlers_unblock_by_func( rouid->escrowCb,
-                                           loan_opt_escrow_toggled_cb,
+                                           (gpointer) loan_opt_escrow_toggled_cb,
                                            rouid );
         if ( newState )
         {
@@ -1261,7 +1269,7 @@ loan_opt_escrow_toggled_cb( GtkToggleButton *tb, gpointer user_data )
 void
 loan_opt_page_valid_cb (GtkWidget *widget, gpointer user_data )
 {
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
 
     GtkAssistant *assistant = GTK_ASSISTANT(ldd->window);
     gint num = gtk_assistant_get_current_page (assistant);
@@ -1276,7 +1284,7 @@ static
 gboolean
 loan_opt_page_complete( GtkAssistant *assistant, gpointer user_data )
 {
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
 
     if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(ldd->optEscrowCb) ) )
     {
@@ -1299,7 +1307,7 @@ static
 void
 loan_rep_prep( GtkAssistant *assistant, gpointer user_data )
 {
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
     GString *str;
 
     if ( ldd->ld.repAmount )
@@ -1322,9 +1330,11 @@ loan_rep_prep( GtkAssistant *assistant, gpointer user_data )
     gnc_account_sel_set_account( ldd->repPrincToGAS, ldd->ld.repPriAcct, FALSE );
     gnc_account_sel_set_account( ldd->repIntToGAS, ldd->ld.repIntAcct, FALSE );
 
-    g_signal_handlers_block_by_func( ldd->repGncFreq, loan_rep_page_valid_cb , ldd );
+    g_signal_handlers_block_by_func( ldd->repGncFreq,
+                                     (gpointer) loan_rep_page_valid_cb, ldd );
     gnc_frequency_setup_recurrence(ldd->repGncFreq, ldd->ld.repayment_schedule, ldd->ld.repStartDate);
-    g_signal_handlers_unblock_by_func( ldd->repGncFreq, loan_rep_page_valid_cb , ldd );
+    g_signal_handlers_unblock_by_func( ldd->repGncFreq,
+                                       (gpointer) loan_rep_page_valid_cb, ldd );
 
     /* Find the first enabled option */
     {
@@ -1345,7 +1355,7 @@ loan_rep_prep( GtkAssistant *assistant, gpointer user_data )
 void
 loan_rep_page_valid_cb (GtkWidget *widget, gpointer user_data )
 {
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
     GtkAssistant *assistant = GTK_ASSISTANT(ldd->window);
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
@@ -1359,7 +1369,7 @@ static
 gboolean
 loan_rep_page_complete( GtkAssistant *assistant, gpointer user_data )
 {
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
 
     ldd->ld.repFromAcct =
         gnc_account_sel_get_account( ldd->repAssetsFromGAS );
@@ -1387,7 +1397,7 @@ static
 void
 loan_rep_page_save( GtkAssistant *assistant, gpointer user_data )
 {
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
 
     if ( ldd->ld.repMemo )
         g_free( ldd->ld.repMemo );
@@ -1420,7 +1430,7 @@ static
 void
 loan_pay_prep( GtkAssistant *assistant, gpointer user_data )
 {
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
     RepayOptData *rod;
     GString *str;
 
@@ -1457,7 +1467,7 @@ loan_pay_prep( GtkAssistant *assistant, gpointer user_data )
 
         {
             g_signal_handlers_block_by_func( ldd->payUseEscrow,
-                                             loan_pay_use_esc_toggle_cb,
+                                             (gpointer) loan_pay_use_esc_toggle_cb,
                                              ldd );
 
             loan_pay_use_esc_setup( ldd,
@@ -1468,38 +1478,43 @@ loan_pay_prep( GtkAssistant *assistant, gpointer user_data )
                                            && ldd->ld.escrowAcct != NULL) );
 
             g_signal_handlers_unblock_by_func( ldd->payUseEscrow,
-                                               loan_pay_use_esc_toggle_cb,
+                                               (gpointer) loan_pay_use_esc_toggle_cb,
                                                ldd );
         }
 
         {
             g_signal_handlers_block_by_func( ldd->paySpecSrcAcct,
-                                             loan_pay_spec_src_toggle_cb,
+                                             (gpointer) loan_pay_spec_src_toggle_cb,
                                              ldd );
             loan_pay_spec_src_setup( ldd, rod->specSrcAcctP );
             gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(ldd->paySpecSrcAcct),
                                           rod->specSrcAcctP );
 
             g_signal_handlers_unblock_by_func( ldd->paySpecSrcAcct,
-                                               loan_pay_spec_src_toggle_cb,
+                                               (gpointer) loan_pay_spec_src_toggle_cb,
                                                ldd );
         }
 
-        g_signal_handlers_block_by_func(ldd->payAcctToGAS, loan_pay_page_valid_cb, ldd );
+        g_signal_handlers_block_by_func(ldd->payAcctToGAS,
+                                        (gpointer) loan_pay_page_valid_cb, ldd );
         gnc_account_sel_set_account( ldd->payAcctToGAS,   rod->to, FALSE );
-        g_signal_handlers_unblock_by_func(ldd->payAcctToGAS, loan_pay_page_valid_cb, ldd );
+        g_signal_handlers_unblock_by_func(ldd->payAcctToGAS,
+                                          (gpointer) loan_pay_page_valid_cb, ldd );
 
 
-        g_signal_handlers_block_by_func(ldd->payTxnFreqUniqRb, loan_pay_freq_toggle_cb, ldd );
+        g_signal_handlers_block_by_func(ldd->payTxnFreqUniqRb,
+                                        (gpointer) loan_pay_freq_toggle_cb, ldd );
         gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(ldd->payTxnFreqPartRb), !rod->FreqUniq );
         gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(ldd->payTxnFreqUniqRb), rod->FreqUniq );
-        g_signal_handlers_unblock_by_func(ldd->payTxnFreqUniqRb, loan_pay_freq_toggle_cb, ldd );
+        g_signal_handlers_unblock_by_func(ldd->payTxnFreqUniqRb,
+                                          (gpointer) loan_pay_freq_toggle_cb, ldd );
 
         gtk_widget_set_sensitive( GTK_WIDGET(ldd->payFreqHBox), rod->FreqUniq );
 
         if ( rod->FreqUniq )
         {
-            g_signal_handlers_disconnect_by_func( ldd->payGncFreq, loan_pay_page_valid_cb, ldd );
+            g_signal_handlers_disconnect_by_func( ldd->payGncFreq,
+                                                  (gpointer) loan_pay_page_valid_cb, ldd );
             gtk_container_remove( GTK_CONTAINER(ldd->payFreqHBox), GTK_WIDGET(ldd->payGncFreq) );
             ldd->payGncFreq = NULL;
             ldd->payGncFreq = GNC_FREQUENCY(gnc_frequency_new_from_recurrence( rod->schedule, rod->startDate ));
@@ -1516,7 +1531,7 @@ loan_pay_prep( GtkAssistant *assistant, gpointer user_data )
 void
 loan_pay_page_valid_cb (GtkWidget *widget, gpointer user_data )
 {
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
     GtkAssistant *assistant = GTK_ASSISTANT(ldd->window);
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
@@ -1535,12 +1550,16 @@ loan_pay_use_esc_setup( LoanAssistantData *ldd, gboolean newState )
     gtk_widget_set_sensitive( GTK_WIDGET(ldd->payEscFromLabel), newState );
     if ( newState )
     {
-        g_signal_handlers_block_by_func( ldd->payAcctEscToGAS, loan_pay_page_valid_cb, ldd );
-        g_signal_handlers_block_by_func( ldd->payAcctEscFromGAS, loan_pay_page_valid_cb, ldd );
+        g_signal_handlers_block_by_func( ldd->payAcctEscToGAS,
+                                         (gpointer) loan_pay_page_valid_cb, ldd );
+        g_signal_handlers_block_by_func( ldd->payAcctEscFromGAS,
+                                         (gpointer) loan_pay_page_valid_cb, ldd );
         gnc_account_sel_set_account( ldd->payAcctEscToGAS, ldd->ld.escrowAcct, FALSE );
         gnc_account_sel_set_account( ldd->payAcctEscFromGAS, ldd->ld.escrowAcct, FALSE );
-        g_signal_handlers_unblock_by_func( ldd->payAcctEscToGAS, loan_pay_page_valid_cb, ldd );
-        g_signal_handlers_unblock_by_func( ldd->payAcctEscFromGAS, loan_pay_page_valid_cb, ldd );
+        g_signal_handlers_unblock_by_func( ldd->payAcctEscToGAS,
+                                           (gpointer) loan_pay_page_valid_cb, ldd );
+        g_signal_handlers_unblock_by_func( ldd->payAcctEscFromGAS,
+                                           (gpointer) loan_pay_page_valid_cb, ldd );
     }
 }
 
@@ -1550,7 +1569,7 @@ void
 loan_pay_use_esc_toggle_cb( GtkToggleButton *tb, gpointer user_data )
 {
     gboolean newState;
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
 
     newState = gtk_toggle_button_get_active( tb );
     loan_pay_use_esc_setup( ldd, newState );
@@ -1565,16 +1584,20 @@ loan_pay_spec_src_setup( LoanAssistantData *ldd, gboolean newState )
     gtk_widget_set_sensitive( GTK_WIDGET(ldd->payAcctFromGAS), newState );
     if ( newState )
     {
-        g_signal_handlers_block_by_func( ldd->payAcctFromGAS, loan_pay_page_valid_cb, ldd );
+        g_signal_handlers_block_by_func( ldd->payAcctFromGAS,
+                                         (gpointer) loan_pay_page_valid_cb, ldd );
         gnc_account_sel_set_account( ldd->payAcctFromGAS, ldd->ld.repayOpts[ldd->currentIdx]->from, FALSE );
-        g_signal_handlers_unblock_by_func( ldd->payAcctFromGAS, loan_pay_page_valid_cb, ldd );
+        g_signal_handlers_unblock_by_func( ldd->payAcctFromGAS,
+                                           (gpointer) loan_pay_page_valid_cb, ldd );
     }
     else
     {
-        g_signal_handlers_block_by_func( ldd->payAcctFromGAS, loan_pay_page_valid_cb, ldd );
+        g_signal_handlers_block_by_func( ldd->payAcctFromGAS,
+                                         (gpointer) loan_pay_page_valid_cb, ldd );
         gnc_account_sel_set_account( ldd->payAcctFromGAS, NULL, FALSE );
         ldd->ld.repayOpts[ldd->currentIdx]->from = NULL;
-        g_signal_handlers_unblock_by_func( ldd->payAcctFromGAS, loan_pay_page_valid_cb, ldd );
+        g_signal_handlers_unblock_by_func( ldd->payAcctFromGAS,
+                                           (gpointer) loan_pay_page_valid_cb, ldd );
     }
 }
 
@@ -1584,7 +1607,7 @@ void
 loan_pay_spec_src_toggle_cb( GtkToggleButton *tb, gpointer user_data )
 {
     gboolean newState;
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
 
     newState = gtk_toggle_button_get_active( tb );
     loan_pay_spec_src_setup( ldd, newState );
@@ -1595,7 +1618,7 @@ static
 void
 loan_pay_freq_toggle_cb( GtkToggleButton *tb, gpointer user_data )
 {
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
     RepayOptData *rod;
 
     g_assert( ldd->currentIdx >= 0 );
@@ -1620,9 +1643,11 @@ loan_pay_freq_toggle_cb( GtkToggleButton *tb, gpointer user_data )
             rod->startDate = g_date_new();
             *rod->startDate = *ldd->ld.startDate;
         }
-        g_signal_handlers_block_by_func( ldd->payGncFreq, loan_pay_page_valid_cb, ldd );
+        g_signal_handlers_block_by_func( ldd->payGncFreq,
+                                         (gpointer) loan_pay_page_valid_cb, ldd );
         gnc_frequency_setup_recurrence(ldd->payGncFreq, rod->schedule, rod->startDate);
-        g_signal_handlers_unblock_by_func( ldd->payGncFreq, loan_pay_page_valid_cb, ldd );
+        g_signal_handlers_unblock_by_func( ldd->payGncFreq,
+                                           (gpointer) loan_pay_page_valid_cb, ldd );
     }
     else
     {
@@ -1644,7 +1669,7 @@ void
 loan_pay_next_button_cb( GtkButton *button, gpointer user_data )
 {
     int i;
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
 
     /* save current data */
     if ( loan_pay_complete ( GTK_ASSISTANT(ldd->window), user_data ) != FALSE )
@@ -1668,7 +1693,7 @@ void
 loan_pay_back_button_cb( GtkButton *button, gpointer user_data )
 {
     int i;
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
 
     /* save current data */
     if ( loan_pay_complete ( GTK_ASSISTANT(ldd->window), user_data ) != FALSE)
@@ -1691,7 +1716,7 @@ static
 gboolean
 loan_pay_all_opt_valid ( GtkAssistant *assistant, gpointer user_data )
 {
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
     int i;
     gboolean all_valid;
     all_valid = FALSE;
@@ -1716,7 +1741,7 @@ gboolean
 loan_pay_complete( GtkAssistant *assistant, gpointer user_data )
 {
     gchar *tmpStr;
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
     RepayOptData *rod;
 
     g_assert( ldd->currentIdx >= 0 );
@@ -1783,7 +1808,7 @@ loan_rev_prep( GtkAssistant *assistant, gpointer user_data )
 {
     /* 3, here, does not include the Date column. */
     static const int BASE_COLS = 3;
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
     GtkListStore *store;
     GtkCellRenderer *renderer;
     GtkTreeViewColumn *column;
@@ -1892,7 +1917,7 @@ static
 void
 loan_rev_range_opt_changed_cb( GtkComboBox *combo, gpointer user_data )
 {
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
     int opt;
 
     opt = gtk_combo_box_get_active( ldd->revRangeOpt );
@@ -1912,7 +1937,7 @@ static
 void
 loan_rev_range_changed_cb( GNCDateEdit *gde, gpointer user_data )
 {
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
     {
         GDate start, end;
         g_date_clear( &start, 1 );
@@ -2085,7 +2110,7 @@ loan_rev_recalc_schedule( LoanAssistantData *ldd )
             /* evaluate the expressions given the correct
              * sequence number i */
             ival = gnc_numeric_create( i, 1 );
-            g_hash_table_insert( ivar, "i", &ival );
+            g_hash_table_insert( ivar, (gpointer) "i", &ival );
 
             if ( ! gnc_exp_parser_parse_separate_vars(
                         pmtFormula->str, &val, &eloc, ivar ) )
@@ -2207,7 +2232,7 @@ static
 void
 loan_rev_update_view( LoanAssistantData *ldd, GDate *start, GDate *end )
 {
-    static gchar *NO_AMT_CELL_TEXT = " ";
+    static const gchar *NO_AMT_CELL_TEXT = " ";
     GList *l;
     GNCPrintAmountInfo pai;
     GtkListStore *store;
@@ -2277,7 +2302,7 @@ gfloat loan_apr_to_simple_formula (gfloat rate, gfloat compounding_periods)
 
 static
 void
-loan_get_formula_internal( LoanAssistantData *ldd, GString *gstr, const gchar* template )
+loan_get_formula_internal( LoanAssistantData *ldd, GString *gstr, const gchar* tpl )
 {
     gint rate_case;
     gfloat pass_thru_rate, period_rate;
@@ -2318,7 +2343,7 @@ loan_get_formula_internal( LoanAssistantData *ldd, GString *gstr, const gchar* t
         break;
     }
 
-    if (0 < strfmon (formula, MAX_FORMULA, template,
+    if (0 < strfmon (formula, MAX_FORMULA, tpl,
                      period_rate, 12.0, periods, principal ))
         g_string_append (gstr, formula);
 }
@@ -2944,7 +2969,7 @@ loan_create_sxes( LoanAssistantData *ldd )
 void
 loan_assistant_finish ( GtkAssistant *gtkassistant, gpointer user_data )
 {
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
     loan_create_sxes( ldd );
 
 }
@@ -2953,7 +2978,7 @@ loan_assistant_finish ( GtkAssistant *gtkassistant, gpointer user_data )
 void
 loan_assistant_cancel( GtkAssistant *gtkassistant, gpointer user_data )
 {
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
     gnc_close_gui_component_by_data( DIALOG_LOAN_ASSISTANT_CM_CLASS, ldd );
 }
 
@@ -2961,7 +2986,7 @@ loan_assistant_cancel( GtkAssistant *gtkassistant, gpointer user_data )
 void
 loan_assistant_close( GtkAssistant *gtkassistant, gpointer user_data )
 {
-    LoanAssistantData *ldd = user_data;
+    LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
     gnc_close_gui_component_by_data( DIALOG_LOAN_ASSISTANT_CM_CLASS, ldd );
 }
 
