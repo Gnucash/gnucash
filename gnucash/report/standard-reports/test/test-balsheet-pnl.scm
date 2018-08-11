@@ -187,9 +187,9 @@
       (test-equal "total liabilities = $9,500.00"
         (list "$9,500.00")
         (sxml->table-row-col sxml 1 22 6))
-      (test-equal "total equity  = $106,509.00"
+      (test-equal "total networth = asset+liability+trading  = $106,509.00"
         (list "$106,509.00")
-        (sxml->table-row-col sxml 1 29 6))
+        (sxml->table-row-col sxml 1 27 6))
 
       (set-option! balance-sheet-options "Commodities" "Price Source" 'weighted-average)
       (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-weighted-average")))

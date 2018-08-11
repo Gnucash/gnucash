@@ -977,10 +977,17 @@ are used."))))
                              equity-accounts
                              #:negate-amounts? #t))
 
+             (unless (null? trading-accounts)
+               (add-to-table multicol-table-right (_ "Trading")
+                             trading-accounts
+                             #:negate-amounts? #t
+                             #:show-accounts? #f))
+
              (unless (or (null? asset-accounts)
                          (null? liability-accounts))
                (add-to-table multicol-table-right (_ "Net Worth")
-                             (append asset-accounts liability-accounts)
+                             (append asset-accounts liability-accounts trading-accounts)
+                             #:show-title? #f
                              #:show-accounts? #f
                              #:force-total? #t))
 
