@@ -189,7 +189,7 @@
         (sxml->table-row-col sxml 1 22 6))
       (test-equal "total networth = asset+liability+trading  = $106,509.00"
         (list "$106,509.00")
-        (sxml->table-row-col sxml 1 27 6))
+        (sxml->table-row-col sxml 1 28 6))
 
       (set-option! balance-sheet-options "Commodities" "Price Source" 'weighted-average)
       (let ((sxml (options->sxml balance-sheet-uuid balance-sheet-options "balsheet-weighted-average")))
@@ -338,7 +338,7 @@
           (sxml->table-row-col sxml 1 11 6))
         (test-equal "show-rates enabled"
           (list "1 FUNDS $500.00" "#1.00 $1.70")
-          (sxml->table-row-col sxml 1 31 -1)))
+          (sxml->table-row-col sxml 1 30 -1)))
 
       ;;make-multilevel
       (set-option! balance-sheet-options "Display" "Parent account amounts include children" #f)

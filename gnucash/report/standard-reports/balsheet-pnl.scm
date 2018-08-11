@@ -705,7 +705,9 @@ are used."))))
 
   (if show-total?
       (add-indented-row 0
-                        (string-append (_ "Total For ") title)
+                        (if show-title?
+                            (string-append (_ "Total For ") title)
+                            title)
                         "total-label-cell"
                         maxindent
                         (map
@@ -931,6 +933,7 @@ are used."))))
                   (add-to-table (lambda* (table title accounts #:key
                                                 (get-col-header-fn #f)
                                                 (show-accounts? #t)
+                                                (show-title? #t)
                                                 (show-total? #t)
                                                 (force-total? #f)
                                                 (negate-amounts? #f))
@@ -944,7 +947,7 @@ are used."))))
                                    #:disable-amount-indent? disable-amount-indent?
                                    #:depth-limit (if get-col-header-fn 0 depth-limit)
                                    #:show-orig-cur? show-foreign?
-                                   #:show-title? label-sections?
+                                   #:show-title? (and label-sections? show-title?)
                                    #:show-accounts? show-accounts?
                                    #:show-total? (or (and total-sections? show-total?) force-total?)
                                    #:recursive-bals? recursive-bals?
@@ -981,14 +984,15 @@ are used."))))
                (add-to-table multicol-table-right (_ "Trading")
                              trading-accounts
                              #:negate-amounts? #t
+                             #:show-title? #f
                              #:show-accounts? #f))
 
              (unless (or (null? asset-accounts)
                          (null? liability-accounts))
                (add-to-table multicol-table-right (_ "Net Worth")
                              (append asset-accounts liability-accounts trading-accounts)
-                             #:show-title? #f
                              #:show-accounts? #f
+                             #:show-title? #f
                              #:force-total? #t))
 
              (if (and common-currency show-rates?)
@@ -1083,6 +1087,7 @@ are used."))))
                                          cell)))
                   (add-to-table (lambda* (table title accounts #:key
                                                 (get-col-header-fn #f)
+                                                (show-title? #t)
                                                 (show-accounts? #t)
                                                 (show-total? #t)
                                                 (force-total? #f)
@@ -1097,7 +1102,7 @@ are used."))))
                                    #:disable-amount-indent? disable-amount-indent?
                                    #:depth-limit (if get-col-header-fn 0 depth-limit)
                                    #:show-orig-cur? show-foreign?
-                                   #:show-title? label-sections?
+                                   #:show-title? (and label-sections? show-title?)
                                    #:show-accounts? show-accounts?
                                    #:show-total? (or (and total-sections? show-total?) force-total?)
                                    #:recursive-bals? recursive-bals?
@@ -1129,6 +1134,7 @@ are used."))))
                          (null? expense-accounts))
                (add-to-table multicol-table-left (_ "Net Income")
                              (append income-accounts expense-accounts)
+                             #:show-title? #f
                              #:show-accounts? #f
                              #:negate-amounts? #t
                              #:force-total? #t))
