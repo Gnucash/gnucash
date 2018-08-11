@@ -239,44 +239,45 @@ gnc_column_view_update_buttons_cb (GtkTreeSelection *selection,
 {
     GtkTreeModel *model;
     GtkTreeIter iter;
-    GtkTreeSelection *available_selection;
+    gboolean is_selected;
 
-    /* compare selection to establish which treeview selected */
-    available_selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(r->available));
-
-    /* available treeview */
-    if (available_selection == selection)
+    /* compare treeviews to establish which selected treeview */
+    if (gtk_tree_selection_get_tree_view (selection) == r->available)
     {
-        if (gtk_tree_selection_get_selected(selection, &model, &iter))
-            gtk_widget_set_sensitive (r->add_button, TRUE);
-        else
-            gtk_widget_set_sensitive (r->add_button, FALSE);
+        /* available treeview */
+        is_selected = gtk_tree_selection_get_selected (selection, &model, &iter);
+        gtk_widget_set_sensitive (r->add_button, is_selected);
         return;
     }
 
     /* contents treeview */
-    if (gtk_tree_selection_get_selected(selection, &model, &iter))
+    is_selected = gtk_tree_selection_get_selected (selection, &model, &iter);
+    gtk_widget_set_sensitive (r->size_button, is_selected);
+    gtk_widget_set_sensitive (r->remove_button, is_selected);
+
+    if (is_selected)
     {
         int len = scm_ilength (r->contents_list);
 
-        gtk_tree_model_get(model, &iter,
+        gtk_tree_model_get (model, &iter,
                            CONTENTS_COL_ROW, &r->contents_selected, -1);
-
-        gtk_widget_set_sensitive (r->size_button, TRUE);
-        gtk_widget_set_sensitive (r->remove_button, TRUE);
 
         if (len > 1)
         {
             gtk_widget_set_sensitive (r->up_button, TRUE);
             gtk_widget_set_sensitive (r->down_button, TRUE);
+
+            if (r->contents_selected == len -1)
+                gtk_widget_set_sensitive (r->down_button, FALSE);
+
+            if (r->contents_selected == 0)
+                gtk_widget_set_sensitive (r->up_button, FALSE);
         }
     }
     else
     {
         gtk_widget_set_sensitive (r->up_button, FALSE);
         gtk_widget_set_sensitive (r->down_button, FALSE);
-        gtk_widget_set_sensitive (r->size_button, FALSE);
-        gtk_widget_set_sensitive (r->remove_button, FALSE);
     }
 }
 
