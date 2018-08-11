@@ -36,7 +36,6 @@ borrowed/gwengui-gtk3/w_vspacer.c
 borrowed/jenny/jenny.c
 borrowed/libc/libc-missing-noop.c
 borrowed/libc/setenv.c
-borrowed/libc/strfmon.c
 borrowed/libc/strptime.c
 doc/tip_of_the_day.list.c
 gnucash/gnome/assistant-acct-period.c

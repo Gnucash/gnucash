@@ -47,13 +47,14 @@ extern "C"
 #include "gnc-ui-util.h"
 #include "gnc-frequency.h"
 #include "gnc-engine.h"
-
-#ifndef HAVE_STRFMON
-# include "strfmon.h"
-#else
-# include <monetary.h>
-#endif
 }
+
+#include <boost/locale.hpp>
+#include <string>
+#include <sstream>
+#include <iomanip>
+
+namespace bl = boost::locale;
 
 #define DIALOG_LOAN_ASSISTANT_CM_CLASS "assistant-loan-setup"
 
@@ -2298,26 +2299,46 @@ gfloat loan_apr_to_simple_formula (gfloat rate, gfloat compounding_periods)
     return (simple_rate);
 }
 
-#define MAX_FORMULA 1024
+using boost::locale::conv::utf_to_utf;
+
+// Define a monetary facet template for printing monetary values
+// with a custom precision <prec>
+// This will be used to generate the loan formulas, which use 5 decimal places
+// for the loan percentage and 2 decimal places for all other numbers.
+
+// Note this facet is wchar_t based: some locales have non-ascii thousands
+// separators and these can't be handled by a char based moneypunct facet.
+
+template<int prec>
+struct cust_prec_punct : std::moneypunct_byname<wchar_t, false> {
+    cust_prec_punct(const char* name) : moneypunct_byname(name) {}
+    int do_frac_digits() const { return prec; }
+};
+
+// Convert a double to a string hardcoding <prec> decimal places
+template<int prec>
+std::string to_str_with_prec (const gdouble val)
+{
+    auto loc = std::locale(std::locale(""), new cust_prec_punct<prec>(""));
+    std::wstringstream valstr;
+    valstr.imbue(loc);
+    valstr << std::put_money(val * pow(10, prec));
+    return utf_to_utf<char>(valstr.str());
+}
 
 static
 void
-loan_get_formula_internal( LoanAssistantData *ldd, GString *gstr, const gchar* tpl )
+loan_get_formula_internal( LoanAssistantData *ldd, GString *gstr, const gchar *tpl )
 {
-    gint rate_case;
-    gfloat pass_thru_rate, period_rate;
-    gfloat periods;
-    gfloat principal;
-    gchar formula[MAX_FORMULA];
-
     g_assert( ldd != NULL );
     g_assert( gstr != NULL );
 
-    pass_thru_rate = ldd->ld.interestRate / 100;
-    periods = (ldd->ld.numPer * (ldd->ld.perSize == GNC_MONTHS ? 1 : 12)) * 1.;
-    principal = gnc_numeric_to_double(ldd->ld.principal);
+    gdouble pass_thru_rate = ldd->ld.interestRate / 100.0;
+    gdouble periods = (ldd->ld.numPer * (ldd->ld.perSize == GNC_MONTHS ? 1 : 12)) * 1.;
+    auto principal = gnc_numeric_to_double(ldd->ld.principal);
 
-    rate_case = ldd->ld.rateType;
+    gdouble period_rate;
+    auto rate_case = ldd->ld.rateType;
     switch (rate_case)
     {
     case GNC_IRATE_SIMPLE:
@@ -2343,17 +2364,29 @@ loan_get_formula_internal( LoanAssistantData *ldd, GString *gstr, const gchar* t
         break;
     }
 
-    if (0 < strfmon (formula, MAX_FORMULA, tpl,
-                     period_rate, 12.0, periods, principal ))
-        g_string_append (gstr, formula);
-}
+    auto period_rate_str = to_str_with_prec<5> (period_rate);
+    auto period_base_str = to_str_with_prec<2> (12.0);
+    auto periods_str = to_str_with_prec<2> (periods);
+    auto principal_str = to_str_with_prec<2> (principal);
 
+    // Using boost::locale::format here to merge a template
+    // with plain strings. We can't use bl::format directly on the double
+    // values as it will use numeric punctuation instead of monetary punctuation.
+    // This is different in several locales (like nl_BE and ru_RU)
+    // and our parsing function does expect monetary punctuation to work properly.
+    // So instead of bl::format we could also have used boost::format.
+    // However at the time of this writing that sublibrary is not yet a requirement
+    // for gnucash. So I stuck with bl::format, which is.
+    auto formula = (bl::format (tpl) % period_rate_str %
+                    period_base_str % periods_str % principal_str).str();
+        g_string_append (gstr, formula.c_str());
+}
 
 static
 void
 loan_get_pmt_formula( LoanAssistantData *ldd, GString *gstr )
 {
-    loan_get_formula_internal (ldd, gstr, "pmt( %!.5i / %!0.2i : %!0.2i : %!0.2i : 0 : 0 )");
+    loan_get_formula_internal (ldd, gstr, "pmt( {1} / {2} : {3} : {4} : 0 : 0 )");
 }
 
 
@@ -2361,7 +2394,7 @@ static
 void
 loan_get_ppmt_formula( LoanAssistantData *ldd, GString *gstr )
 {
-    loan_get_formula_internal (ldd, gstr, "ppmt( %!.5i / %!0.2i : i : %!0.2i : %!0.2i : 0 : 0 )");
+    loan_get_formula_internal (ldd, gstr, "ppmt( {1} / {2} : i : {3} : {4} : 0 : 0 )");
 }
 
 
@@ -2369,7 +2402,7 @@ static
 void
 loan_get_ipmt_formula( LoanAssistantData *ldd, GString *gstr )
 {
-    loan_get_formula_internal (ldd, gstr, "ipmt( %!.5i / %!0.2i : i : %!0.2i : %!0.2i : 0 : 0 )");
+    loan_get_formula_internal (ldd, gstr, "ipmt( {1} / {2} : i : {3} : {4} : 0 : 0 )");
 }
 
 /******************* Scheduled Transaction Functions ********************/
