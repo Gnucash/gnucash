@@ -450,6 +450,7 @@ are used."))))
           (show-accounts? #t)
           (show-total? #t)
           (depth-limit #f)
+          (disable-total-style? #f)
           (negate-amounts? #f)
           (recursive-bals? #f)
           (account-anchor? #t)
@@ -720,9 +721,10 @@ are used."))))
                                                                     #t)
                                                col-datum
                                                #f))))
-                             (gnc:html-table-cell-set-style!
-                              total-cell "total-number-cell"
-                              'attribute '("style" "border-top-style:solid; border-top-width: 1px; border-bottom-style:double"))
+                             (unless disable-total-style?
+                               (gnc:html-table-cell-set-style!
+                                total-cell "total-number-cell"
+                                'attribute '("style" "border-top-style:solid; border-top-width: 1px; border-bottom-style:double")))
                              total-cell))
                          cols-data)))
   (add-whole-line #f))
@@ -936,6 +938,7 @@ are used."))))
                                                 (show-title? #t)
                                                 (show-total? #t)
                                                 (force-total? #f)
+                                                (disable-total-style? #f)
                                                 (negate-amounts? #f))
                                   (add-multicolumn-acct-table
                                    table title accounts
@@ -948,6 +951,7 @@ are used."))))
                                    #:depth-limit (if get-col-header-fn 0 depth-limit)
                                    #:show-orig-cur? show-foreign?
                                    #:show-title? (and label-sections? show-title?)
+                                   #:disable-total-style? disable-total-style?
                                    #:show-accounts? show-accounts?
                                    #:show-total? (or (and total-sections? show-total?) force-total?)
                                    #:recursive-bals? recursive-bals?
@@ -996,7 +1000,7 @@ are used."))))
                              #:force-total? #t))
 
              (if (and common-currency show-rates?)
-                 (add-to-table multicol-table-right (_ "Exchange Rates")
+                 (add-to-table multicol-table-left (_ "Exchange Rates")
                                (append asset-accounts liability-accounts)
                                #:get-col-header-fn get-exchange-rates-fn
                                #:show-accounts? #f
