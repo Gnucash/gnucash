@@ -624,6 +624,7 @@ libgnucash/engine/business-core.scm
 libgnucash/engine/cap-gains.c
 libgnucash/engine/cashobjects.c
 libgnucash/engine/commodity-table.scm
+libgnucash/engine/engine-deprecated.c
 libgnucash/engine/engine-helpers.c
 libgnucash/engine/engine-interface.scm
 libgnucash/engine/engine.scm

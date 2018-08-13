@@ -33,6 +33,7 @@
 #include "gnc-lot.h"
 #include "gnc-session.h"
 #include "gnc-hooks-scm.h"
+#include "engine-deprecated.h"
 #include "engine-helpers.h"
 #include "engine-helpers-guile.h"
 #include "policy.h"
@@ -80,6 +81,7 @@ engine-common.i */
 %newobject gnc_account_get_full_name;
 
 %include "engine-common.i"
+%include "engine-deprecated.h"
 
 %inline %{
 static const GncGUID * gncPriceGetGUID(GNCPrice *x)
