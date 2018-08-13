@@ -569,19 +569,16 @@ static char * get_date_help (VirtualLocation virt_loc, gpointer user_data)
     GncEntryLedger *ledger = user_data;
     BasicCell *cell;
     char string[1024];
-    struct tm tm;
-    time64 tt;
+    GDate date;
 
     cell = gnc_table_get_cell (ledger->table, virt_loc);
-    if (!cell)
+    if (!cell || !cell->value || *cell->value == '\0')
         return NULL;
 
-    if (!cell->value || *cell->value == '\0')
-        return NULL;
+    g_date_clear (&date, 1);
+    gnc_date_cell_get_date_gdate ((DateCell *) cell, &date);
 
-    gnc_date_cell_get_date ((DateCell *) cell, &tt);
-    gnc_localtime_r (&tt, &tm);
-    qof_strftime (string, sizeof(string), _("%A %d %B %Y"), &tm);
+    g_date_strftime (string, sizeof (string), _("%A %d %B %Y"), &date);
 
     return g_strdup (string);
 }
