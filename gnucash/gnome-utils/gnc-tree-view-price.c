@@ -219,7 +219,7 @@ static gint
 default_sort (GNCPrice *price_a, GNCPrice *price_b)
 {
     gnc_commodity *curr_a, *curr_b;
-    Timespec ts_a, ts_b;
+    time64 time_a, time_b;
     gint result;
 
     /* Primary sort (i.e. commodity name) handled by the tree structure.  */
@@ -237,9 +237,9 @@ default_sort (GNCPrice *price_a, GNCPrice *price_b)
     if (result != 0) return result;
 
     /* tertiary sort: time */
-    ts_a = gnc_price_get_time (price_a);
-    ts_b = gnc_price_get_time (price_b);
-    result = timespec_cmp (&ts_a, &ts_b);
+    time_a = gnc_price_get_time64 (price_a);
+    time_b = gnc_price_get_time64 (price_b);
+    result = time_a < time_b ? -1 : time_a > time_b ? 1 : 0;
     if (result)
         /* Reverse the result to present the most recent quote first. */
         return -result;
@@ -270,16 +270,16 @@ sort_by_date (GtkTreeModel *f_model,
               gpointer user_data)
 {
     GNCPrice *price_a, *price_b;
-    Timespec ts_a, ts_b;
+    time64 time_a, time_b;
     gboolean result;
 
     if (!get_prices (f_model, f_iter_a, f_iter_b, &price_a, &price_b))
         return sort_ns_or_cm (f_model, f_iter_a, f_iter_b);
 
     /* sort by time first */
-    ts_a = gnc_price_get_time (price_a);
-    ts_b = gnc_price_get_time (price_b);
-    result = timespec_cmp (&ts_a, &ts_b);
+    time_a = gnc_price_get_time64 (price_a);
+    time_b = gnc_price_get_time64 (price_b);
+    result = time_a < time_b ? -1 : time_a > time_b ? 1 : 0;
     if (result)
         /* Reverse the result to present the most recent quote first. */
         return -result;

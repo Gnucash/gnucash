@@ -465,7 +465,6 @@ ap_assistant_finish (GtkAssistant *assistant, gpointer user_data)
     gint len;
     const char *btitle;
     char *bnotes;
-    Timespec closing_date;
 
     ENTER("info=%p", info);
 
@@ -478,8 +477,6 @@ ap_assistant_finish (GtkAssistant *assistant, gpointer user_data)
     bnotes = gtk_text_buffer_get_text(buffer, &startiter, &enditer , 0);
     PINFO("Book title is - %s\n", btitle);
 
-    timespecFromTime64 (&closing_date,
-                        gnc_time64_get_day_end_gdate (&info->closing_date));
     g_free(bnotes);
 
     /* Report the status back to the user. */

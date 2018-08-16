@@ -723,10 +723,10 @@ gncOwnerLotsSortFunc (GNCLot *lotA, GNCLot *lotB)
 }
 
 GNCLot *
-gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction **preset_txn,
-                          Account *posted_acc, Account *xfer_acc,
-                          gnc_numeric amount, gnc_numeric exch, Timespec date,
-                          const char *memo, const char *num)
+gncOwnerCreatePaymentLotSecs (const GncOwner *owner, Transaction **preset_txn,
+                              Account *posted_acc, Account *xfer_acc,
+                              gnc_numeric amount, gnc_numeric exch, time64 date,
+                              const char *memo, const char *num)
 {
     QofBook *book;
     Split *split;
@@ -814,7 +814,7 @@ gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction **preset_txn,
         /* set per book option */
         xaccTransSetCurrency (txn, commodity);
         xaccTransSetDateEnteredSecs (txn, gnc_time (NULL));
-        xaccTransSetDatePostedSecs (txn, date.tv_sec);
+        xaccTransSetDatePostedSecs (txn, date);
 
 
         /* The split for the transfer account */
@@ -1376,10 +1376,10 @@ void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots)
  * then all open lots for the owner are considered.
  */
 void
-gncOwnerApplyPayment (const GncOwner *owner, Transaction **preset_txn, GList *lots,
-                      Account *posted_acc, Account *xfer_acc,
-                      gnc_numeric amount, gnc_numeric exch, Timespec date,
-                      const char *memo, const char *num, gboolean auto_pay)
+gncOwnerApplyPaymentSecs (const GncOwner *owner, Transaction **preset_txn,
+                          GList *lots, Account *posted_acc, Account *xfer_acc,
+                          gnc_numeric amount, gnc_numeric exch, time64 date,
+                          const char *memo, const char *num, gboolean auto_pay)
 {
     GNCLot *payment_lot = NULL;
     GList *selected_lots = NULL;
@@ -1391,8 +1391,10 @@ gncOwnerApplyPayment (const GncOwner *owner, Transaction **preset_txn, GList *lo
 
     /* If there's a real amount to transfer create a lot for this payment */
     if (!gnc_numeric_zero_p (amount))
-        payment_lot = gncOwnerCreatePaymentLot (owner, preset_txn, posted_acc, xfer_acc,
-                                                amount, exch, date, memo, num);
+        payment_lot = gncOwnerCreatePaymentLotSecs (owner, preset_txn,
+                                                    posted_acc, xfer_acc,
+                                                    amount, exch, date, memo,
+                                                    num);
 
     if (lots)
         selected_lots = lots;

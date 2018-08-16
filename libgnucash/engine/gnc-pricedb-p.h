@@ -38,7 +38,7 @@ struct gnc_price_s
     GNCPriceDB *db;
     gnc_commodity *commodity;
     gnc_commodity *currency;
-    Timespec tmspec;
+    time64 tmspec;
     PriceSource source;
     char *type;
     gnc_numeric value;
@@ -82,7 +82,7 @@ typedef struct gnc_price_lookup_helper_s
 {
     GList    **return_list;
     gnc_commodity *key;
-    Timespec time;
+    time64 time;
 } GNCPriceLookupHelper;
 
 #define  gnc_price_set_guid(P,G)  qof_instance_set_guid(QOF_INSTANCE(P),(G))

@@ -1537,15 +1537,15 @@ static gboolean gtcsr_move_current_entry_updown(GncTreeViewSplitReg *view,
             }
 
             /* Special treatment if the equality doesn't hold if we access the
-            dates as timespec. See the comment in gncEntrySetDateGDate() for the
-            reason: Some code used the timespec at noon for the EntryDate, other
-            code used the timespec at the start of day. */
+            dates as time64. See the comment in gncEntrySetDateGDate() for the
+            reason: Some code used the time64 at noon for the EntryDate, other
+            code used the time64 at the start of day. */
             time1 = xaccTransRetDatePosted(current_trans);
             time2 = xaccTransRetDatePosted(target_trans);
             if (really_do_it && time1 != time2)
             {
-                /* Timespecs are not equal, even though the GDates were equal? Then
-                we set the GDates again. This will force the timespecs to be equal
+                /* Times are not equal, even though the GDates were equal? Then
+                we set the GDates again. This will force the times to be equal
                 as well. */
                 xaccTransSetDatePostedGDate(current_trans, d1);
                 xaccTransSetDatePostedGDate(target_trans, d2);

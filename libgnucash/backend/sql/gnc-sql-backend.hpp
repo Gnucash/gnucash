@@ -246,7 +246,7 @@ protected:
     bool m_loading;        /**< We are performing an initial load */
     bool m_in_query;       /**< We are processing a query */
     bool m_is_pristine_db; /**< Are we saving to a new pristine db? */
-    const char* m_timespec_format = nullptr; /**< Server-specific date-time string format */
+    const char* m_time_format = nullptr; /**< Server-specific date-time string format */
     VersionVec m_versions;    /**< Version number for each table */
 private:
     bool write_account_tree(Account*);

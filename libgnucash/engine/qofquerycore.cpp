@@ -450,7 +450,7 @@ date_to_string (gpointer object, QofParam *getter)
     time64 tt = ((query_date_getter)getter->param_getfcn)(object, getter);
 
     if (tt != INT64_MAX)
-        return g_strdup (gnc_print_date ({tt, 0}));
+        return qof_print_date (tt);
 
     return NULL;
 }

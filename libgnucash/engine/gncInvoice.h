@@ -101,7 +101,7 @@ GncInvoice *gncInvoiceCopy (const GncInvoice *other_invoice);
 void gncInvoiceSetID (GncInvoice *invoice, const char *id);
 void gncInvoiceSetOwner (GncInvoice *invoice, GncOwner *owner);
 /** Set the DateOpened using a GDate argument. (Note: Internally this stores
-the date in a time64 as created through timespecCanonicalDayTime()). */
+the date in a time64 as created through time64CanonicalDayTime()). */
 void gncInvoiceSetDateOpenedGDate (GncInvoice *invoice, const GDate *date);
 void gncInvoiceSetDateOpened (GncInvoice *invoice, time64 date);
 void gncInvoiceSetDatePosted (GncInvoice *invoice, time64 date);
@@ -246,7 +246,7 @@ gncInvoiceAutoApplyPayments (GncInvoice *invoice);
  * or payments for the owner will be considered
  * to balance the payment.
  *
- * This code is actually a convenience wrapper around gncOwnerCreatePaymentLot
+ * This code is actually a convenience wrapper around gncOwnerCreatePaymentLotSecs
  * and gncOwnerAutoApplyPaymentsWithLots. See their descriptions for more
  * details on what happens exactly.
  */

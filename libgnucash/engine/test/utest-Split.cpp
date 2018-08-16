@@ -65,7 +65,7 @@ setup (Fixture *fixture, gconstpointer pData)
     GNCLot *lot = gnc_lot_new (book);
     gnc_numeric value = gnc_numeric_create (123, 240);
     gnc_numeric amount = gnc_numeric_create (321, 1000);
-    Timespec time = timespec_now ();
+    time64 time = gnc_time(NULL);
     Split *gains_split = xaccMallocSplit (book);
     fixture->curr = gnc_commodity_new (book, "Gnu Rand", "CURRENCY", "GNR", "", 240);
     fixture->comm = gnc_commodity_new (book, "Wildebeest Fund", "FUND", "WBFXX", "", 1000);
@@ -201,7 +201,8 @@ test_gnc_split_set_get_property ()
     Account *acc = xaccMallocAccount (book), *racc = NULL;
     GNCLot *lot = gnc_lot_new (book), *rlot = NULL;
     Split *split = xaccMallocSplit (book);
-    Timespec time = timespec_now (), *rtime;
+    time64 time = gnc_time(nullptr);
+    Time64 t = {time}, *rtime;
     char *r_action, *r_memo;
     gnc_numeric value = gnc_numeric_create (123, 100);
     gnc_numeric amount = gnc_numeric_create (321, 100);
@@ -218,7 +219,7 @@ test_gnc_split_set_get_property ()
                   "memo", "bar",
                   "value", &value,
                   "amount", &amount,
-                  "reconcile-date", &time,
+                  "reconcile-date", &t,
                   "account", acc,
                   "lot", lot,
                   "transaction", txn,
@@ -240,7 +241,7 @@ test_gnc_split_set_get_property ()
     g_assert (gnc_numeric_equal (*r_value, value));
     /* Setting the transaction causes the amount to be scrubbed into the value */
     g_assert (gnc_numeric_equal (*r_amount, value));
-    g_assert (timespec_equal (rtime, &time));
+    g_assert_cmpint (rtime->t, ==, time);
     g_assert (txn == rtxn);
     g_assert (acc == racc);
     g_assert (lot == rlot);
@@ -302,7 +303,7 @@ test_xaccDupeSplit (Fixture *fixture, gconstpointer pData)
     g_assert_cmpstr (split->action, ==, f_split->action);
     g_assert (compare (split->inst.kvp_data, f_split->inst.kvp_data) == 0);
     g_assert_cmpint (split->reconciled, ==, f_split->reconciled);
-    g_assert (timespec_equal (&(split->date_reconciled), &(f_split->date_reconciled)));
+    g_assert_cmpint (split->date_reconciled, ==, f_split->date_reconciled);
     g_assert (gnc_numeric_equal (split->value, f_split->value));
     g_assert (gnc_numeric_equal (split->amount, f_split->amount));
     /* xaccDupeSplit intentionally doesn't copy the balances */
@@ -337,7 +338,7 @@ test_xaccSplitCloneNoKvp (Fixture *fixture, gconstpointer pData)
     g_assert_cmpstr (split->action, ==, f_split->action);
     g_assert (split->inst.kvp_data->empty());
     g_assert_cmpint (split->reconciled, ==, f_split->reconciled);
-    g_assert (timespec_equal (&(split->date_reconciled), &(f_split->date_reconciled)));
+    g_assert_cmpint (split->date_reconciled, == , f_split->date_reconciled);
     g_assert (gnc_numeric_equal (split->value, f_split->value));
     g_assert (gnc_numeric_equal (split->amount, f_split->amount));
     g_assert (gnc_numeric_equal (split->balance, f_split->balance));
@@ -1203,14 +1204,14 @@ test_xaccSplitOrder (Fixture *fixture, gconstpointer pData)
     o_split->value = split->value;
     /* Make sure that it doesn't crash if o_split->date_reconciled == NULL */
     g_assert_cmpint (xaccSplitOrder (split, o_split), ==, 1);
-    o_split->date_reconciled = timespec_now();
-    o_split->date_reconciled.tv_sec -= 50;
+    o_split->date_reconciled = gnc_time(NULL);
+    o_split->date_reconciled -= 50;
     g_assert_cmpint (xaccSplitOrder (split, o_split), ==, 1);
-    o_split->date_reconciled.tv_sec += 100;
+    o_split->date_reconciled += 100;
     g_assert_cmpint (xaccSplitOrder (split, o_split), ==, -1);
 
-    o_split->date_reconciled.tv_sec = split->date_reconciled.tv_sec;
-    o_split->date_reconciled.tv_nsec = split->date_reconciled.tv_nsec;
+    o_split->date_reconciled = split->date_reconciled;
+    o_split->date_reconciled = split->date_reconciled;
 
     g_assert_cmpint (xaccSplitOrder (split, o_split), ==,
                      qof_instance_guid_compare (split, o_split));

@@ -261,7 +261,7 @@ gvalue_from_kvp_value (const KvpValue *kval)
 {
     GValue *val;
     gnc_numeric num;
-    Timespec tm;
+    Time64 tm;
     GDate gdate;
 
     if (kval == NULL) return NULL;
@@ -290,9 +290,9 @@ gvalue_from_kvp_value (const KvpValue *kval)
             g_value_init (val, GNC_TYPE_GUID);
             g_value_set_boxed (val, kval->get<GncGUID*>());
             break;
-        case KvpValue::Type::TIMESPEC:
-            g_value_init (val, GNC_TYPE_TIMESPEC);
-            tm = kval->get<Timespec>();
+        case KvpValue::Type::TIME64:
+            g_value_init (val, GNC_TYPE_TIME64);
+            tm = kval->get<Time64>();
             g_value_set_boxed (val, &tm);
             break;
         case KvpValue::Type::GDATE:
@@ -357,8 +357,8 @@ kvp_value_from_gvalue (const GValue *gval)
         if (boxed != nullptr)
             val = new KvpValue(guid_copy(static_cast<GncGUID*>(boxed)));
     }
-    else if (type == GNC_TYPE_TIMESPEC)
-        val = new KvpValue(*(Timespec*)g_value_get_boxed (gval));
+    else if (type == GNC_TYPE_TIME64)
+        val = new KvpValue(*(Time64*)g_value_get_boxed (gval));
     else if (type == G_TYPE_DATE)
         val = new KvpValue(*(GDate*)g_value_get_boxed (gval));
     else if (type == GNC_TYPE_VALUE_LIST)

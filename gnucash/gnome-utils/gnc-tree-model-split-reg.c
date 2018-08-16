@@ -830,10 +830,11 @@ gnc_tree_model_split_reg_get_tooltip (GncTreeModelSplitReg *model, gint position
 {
     GncTreeModelSplitRegPrivate *priv;
     Transaction *trans;
-    const gchar *date_text;
+    char date_text[MAX_DATE_LENGTH + 1];
     const gchar *desc_text;
     GList *node;
 
+    memset (date_text, 0, sizeof(date_text));
     priv = model->priv;
 
     node = g_list_nth (priv->full_tlist, position);
@@ -848,8 +849,8 @@ gnc_tree_model_split_reg_get_tooltip (GncTreeModelSplitReg *model, gint position
            return g_strconcat ("Blank Transaction", NULL);
         else
         {
-            Timespec ts = {xaccTransRetDatePosted (trans), 0};
-            date_text = gnc_print_date (ts);
+            time64 t = xaccTransRetDatePosted (trans);
+            qof_print_date_buff (date_text, sizeof(date_text), t);
             desc_text = xaccTransGetDescription (trans);
             model->current_trans = trans;
             return g_strconcat (date_text, "\n", desc_text, NULL);

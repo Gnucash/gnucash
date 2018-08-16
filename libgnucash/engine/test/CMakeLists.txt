@@ -26,7 +26,6 @@ add_dependencies(check test-link)
 
 add_engine_test(test-load-engine test-load-engine.c)
 add_engine_test(test-guid test-guid.cpp)
-add_engine_test(test-date test-date.cpp)
 add_engine_test(test-object test-object.c)
 add_engine_test(test-commodities test-commodities.cpp)
 
@@ -271,7 +270,6 @@ set(test_engine_SOURCES_DIST
         test-business.c
         test-commodities.cpp
         test-customer.c
-        test-date.cpp
         test-employee.c
         test-engine-kvp-properties.c
         test-engine.c

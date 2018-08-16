@@ -72,7 +72,7 @@ Use:  An enumerated identifier indicating how often books are supposed
 
 \verbatim
 Name: /book/close-date
-Type: Timespec
+Type: Time64
 Entities: Book
 Use:  The posted closing date of this book.  This book only contains
       transactions whose posted date is earlier than this closing date.
@@ -98,7 +98,7 @@ Use:  The GUID of the book for which this transaction represents the
 
 \verbatim
 Name: /book/log-date
-Type: Timespec
+Type: Time64
 Entities: Book
 Use:  A log of the date which the user performed the closing of the book.
 \endverbatim
@@ -131,7 +131,7 @@ Use:  User-suplied notes for the book.  The user can set this to any value
 
 \verbatim
 Name: /book/open-date
-Type: Timespec
+Type: Time64
 Entities: Book
 Use:  The posted opening date of this book.  This book only contains transactions
       whose posted date is later than this closing date.
@@ -254,7 +254,7 @@ Use:  When this appears in an account, then it contains the guid of
 
 \verbatim
 Name: /gemini/<type>/date
-Type: timespec
+Type: time64
 Entities: Account, Book
 Use:  date that the copy was created.
 \endverbatim
@@ -293,7 +293,7 @@ Use: Country code of the bank of HBCI account
 
 \verbatim
 Name: /hbci/trans-retrieval
-Type: Timespec
+Type: Time64
 Entities: Account
 Use: Time of the last statement retrieval through HBCI for this
 specific account
@@ -577,7 +577,7 @@ Use:  A user-supplied title for the lot.  The user can set this to
 
 \verbatim
 Name: trans-date-due
-Type: Timespec
+Type: Time64
 Entities: Transaction
 Use: Accounts/Receivable, Accounts/Payable Due Date.
 \endverbatim

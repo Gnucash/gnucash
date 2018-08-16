@@ -86,7 +86,7 @@ typedef struct QofInstancePrivate
      *  SQL backend, this field is reserved for SQL use, to compare
      *  the version in local memory to the remote, server version.
      */
-    Timespec last_update;
+    time64 last_update;
 
     /*  Keep track of nesting level of begin/end edit calls */
     int editlevel;
@@ -264,8 +264,7 @@ qof_instance_init (QofInstance *inst)
     priv = GET_PRIVATE(inst);
     priv->book = NULL;
     inst->kvp_data = new KvpFrame;
-    priv->last_update.tv_sec = 0;
-    priv->last_update.tv_nsec = -1;
+    priv->last_update = 0;
     priv->editlevel = 0;
     priv->do_free = FALSE;
     priv->dirty = FALSE;
@@ -415,7 +414,7 @@ qof_instance_set_property (GObject         *object,
                            GParamSpec      *pspec)
 {
     QofInstance *inst;
-    Timespec *ts;
+    Time64 t;
 
     g_return_if_fail(QOF_IS_INSTANCE(object));
 
@@ -435,8 +434,8 @@ qof_instance_set_property (GObject         *object,
 			      static_cast<QofBook*>(g_value_get_object(value)));
         break;
     case PROP_LAST_UPDATE:
-        ts = static_cast<Timespec*>(g_value_get_pointer(value));
-        qof_instance_set_last_update(inst, *ts);
+        t = *(static_cast<Time64*>(g_value_get_pointer(value)));
+        qof_instance_set_last_update(inst, t.t);
         break;
     case PROP_DESTROYING:
         qof_instance_set_destroying(inst, g_value_get_boolean(value));
@@ -598,10 +597,10 @@ qof_instance_set_slots (QofInstance *inst, KvpFrame *frm)
 }
 
 void
-qof_instance_set_last_update (QofInstance *inst, Timespec ts)
+qof_instance_set_last_update (QofInstance *inst, time64 t)
 {
     if (!inst) return;
-    GET_PRIVATE(inst)->last_update = ts;
+    GET_PRIVATE(inst)->last_update = t;
 }
 
 gint
@@ -640,11 +639,8 @@ qof_instance_version_cmp (const QofInstance *left, const QofInstance *right)
 
     lpriv = GET_PRIVATE(left);
     rpriv = GET_PRIVATE(right);
-    if (lpriv->last_update.tv_sec  < rpriv->last_update.tv_sec) return -1;
-    if (lpriv->last_update.tv_sec  > rpriv->last_update.tv_sec) return +1;
-    if (lpriv->last_update.tv_nsec < rpriv->last_update.tv_nsec) return -1;
-    if (lpriv->last_update.tv_nsec > rpriv->last_update.tv_nsec) return +1;
-    return 0;
+    return lpriv->last_update < rpriv->last_update ? -1 :
+        lpriv->last_update > rpriv->last_update ? 1 : 0;
 }
 
 gboolean
@@ -1138,14 +1134,15 @@ qof_instance_kvp_as_string (const QofInstance *inst)
 
 void
 qof_instance_kvp_add_guid (const QofInstance *inst, const char* path,
-                           const Timespec time, const char *key,
+                           time64 time, const char *key,
                            const GncGUID *guid)
 {
     g_return_if_fail (inst->kvp_data != NULL);
 
     auto container = new KvpFrame;
+    Time64 t{time};
     container->set({key}, new KvpValue(const_cast<GncGUID*>(guid)));
-    container->set({"date"}, new KvpValue(time));
+    container->set({"date"}, new KvpValue(t));
     delete inst->kvp_data->set_path({path}, new KvpValue(container));
 }
 

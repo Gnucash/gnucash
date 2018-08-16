@@ -257,7 +257,7 @@ gnc_order_class_init (GncOrderClass *klass)
      g_param_spec_boxed("date-opened",
                         "Date Opened",
                         "The date the order was opened.",
-                        GNC_TYPE_TIMESPEC,
+                        GNC_TYPE_TIME64,
                         G_PARAM_READWRITE));
 
     g_object_class_install_property
@@ -266,7 +266,7 @@ gnc_order_class_init (GncOrderClass *klass)
      g_param_spec_boxed("date-closed",
                         "Date Closed",
                         "The date the order was closed.",
-                        GNC_TYPE_TIMESPEC,
+                        GNC_TYPE_TIME64,
                         G_PARAM_READWRITE));
 
     g_object_class_install_property
