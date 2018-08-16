@@ -39,14 +39,14 @@
 
 static void editable_enters (GNCSearchCoreType *fe);
 static void grab_focus (GNCSearchCoreType *fe);
-static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe);
+static GNCSearchCoreType *gncs_clone (GNCSearchCoreType *fe);
 static gboolean gncs_validate (GNCSearchCoreType *fe);
-static GtkWidget *gncs_get_widget(GNCSearchCoreType *fe);
+static GtkWidget *gncs_get_widget (GNCSearchCoreType *fe);
 static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
-static void gnc_search_date_class_init	(GNCSearchDateClass *klass);
-static void gnc_search_date_init	(GNCSearchDate *gspaper);
-static void gnc_search_date_finalize	(GObject *obj);
+static void gnc_search_date_class_init (GNCSearchDateClass *klass);
+static void gnc_search_date_init (GNCSearchDate *gspaper);
+static void gnc_search_date_finalize (GObject *obj);
 
 typedef struct _GNCSearchDatePrivate GNCSearchDatePrivate;
 
@@ -69,14 +69,14 @@ gnc_search_date_get_type (void)
     {
         GTypeInfo type_info =
         {
-            sizeof(GNCSearchDateClass),       /* class_size */
-            NULL,   				/* base_init */
-            NULL,				/* base_finalize */
+            sizeof(GNCSearchDateClass),      /* class_size */
+            NULL,                            /* base_init */
+            NULL,                            /* base_finalize */
             (GClassInitFunc)gnc_search_date_class_init,
-            NULL,				/* class_finalize */
-            NULL,				/* class_data */
-            sizeof(GNCSearchDate),		/* */
-            0,				/* n_preallocs */
+            NULL,                            /* class_finalize */
+            NULL,                            /* class_data */
+            sizeof(GNCSearchDate),           /* */
+            0,                               /* n_preallocs */
             (GInstanceInitFunc)gnc_search_date_init,
         };
 
