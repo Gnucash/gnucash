@@ -404,8 +404,8 @@
     ;; numeric-collectors, where [abc] are numeric-collectors. See the
     ;; real variable names below.
     (define (make-newrate unknown-coll un->known-coll known-pair)
-      (let ((a (gnc:make-number-collector))
-            (b (gnc:make-number-collector)))
+      (let ((a (gnc:make-value-collector))
+            (b (gnc:make-value-collector)))
         (a 'add (unknown-coll 'total #f))
         (b 'add
            ;; round to (at least) 8 significant digits
@@ -448,7 +448,7 @@
                          ;; If this is an Euro currency, create the
                          ;; pair of appropriately exchanged amounts.
                          (if euro-monetary
-                             (let ((a (gnc:make-number-collector)))
+                             (let ((a (gnc:make-value-collector)))
                                (a 'add
                                   (gnc:gnc-monetary-amount euro-monetary))
                                (list report-commodity
@@ -578,8 +578,8 @@
                     ;; entry doesn't exist in comm-list
                     ;; create sub-alist from scratch
                     (let ((pair (list transaction-comm
-                                      (cons (gnc:make-number-collector)
-                                            (gnc:make-number-collector)))))
+                                      (cons (gnc:make-value-collector)
+                                            (gnc:make-value-collector)))))
                       ((caadr pair) 'add value-amount)
                       ((cdadr pair) 'add share-amount)
                       (set! comm-list (list account-comm (list pair)))
@@ -603,8 +603,8 @@
                           (begin
                             (set!
                              pair (list (car foreignlist)
-                                        (cons (gnc:make-number-collector)
-                                              (gnc:make-number-collector))))
+                                        (cons (gnc:make-value-collector)
+                                              (gnc:make-value-collector))))
                             (set!
                              comm-list (list (car comm-list)
                                              (cons pair (cadr comm-list))))
@@ -665,8 +665,8 @@
                  (if (not comm-list)
                      ;; no, create sub-alist from scratch
                      (let ((pair (list transaction-comm
-                                       (cons (gnc:make-number-collector)
-                                             (gnc:make-number-collector)))))
+                                       (cons (gnc:make-value-collector)
+                                             (gnc:make-value-collector)))))
                        ((caadr pair) 'add value-amount)
                        ((cdadr pair) 'add share-amount)
                        (set! comm-list (list account-comm (list pair)))
@@ -690,8 +690,8 @@
                            (begin
                              (set!
                               pair (list (car foreignlist)
-                                         (cons (gnc:make-number-collector)
-                                               (gnc:make-number-collector))))
+                                         (cons (gnc:make-value-collector)
+                                               (gnc:make-value-collector))))
                              (set!
                               comm-list (list (car comm-list)
                                               (cons pair (cadr comm-list))))
