@@ -118,11 +118,24 @@
 (define (gnc:price-is-not-zero? elem)
   (not (gnc-numeric-zero-p (second elem))))
 
-;; Create a list of all prices of 'price-commodity' measured in the
-;; currency 'report-currency'. The prices are taken from all splits in
-;; 'currency-accounts' up until the date 'end-date'. Returns a list
-;; of lists. Each listelement looks like the list (time price), where
-;; 'time' is the time64 when the <gnc:numeric*> 'price' was valid.
+;; Create a list of all prices of 'price-commodity' measured in the currency
+;; 'report-currency'. The prices are taken from all splits in
+;; 'currency-accounts' up until the date 'end-date'. Returns a list of
+;; lists. Each listelement looks like the list (time price), where 'time' is the
+;; time64 when the <gnc:numeric*> 'price' was valid.  The results are distorted
+;; by the existence of capital gains splits because the amount of the gain is
+;; added to the total value with no adjustment to the total amount. For example
+;; if on day1 one buys 200 shares of XYZ at 20 and on day2 sells 100 at 25
+;; booking a capital gain of 500, the resulting foreignlist will be:
+;; ((day1 4000 200)
+;; (day2 500 0)
+;; (day2 2500 100))
+;; returning the following price list:
+;; ((day1 20)
+;;  (day2 22.50)
+;;  (day2 23.33))
+;; The intended second price is 6500/300, or 21.67.
+
 (define (gnc:get-commodity-totalavg-prices
          currency-accounts end-date price-commodity report-currency)
   (let ((total-foreign (gnc-numeric-zero))
