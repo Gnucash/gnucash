@@ -90,6 +90,7 @@
 static QofLogModule log_module = GNC_MOD_GUI;
 
 #define DEFAULT_LINES_AMOUNT         50
+#define DEFAULT_FILTER_NUM_DAYS_GL  "30"
 
 static void gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *klass);
 static void gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page);
@@ -1091,6 +1092,15 @@ gnc_plugin_page_register_ui_initial_state (GncPluginPageRegister *page)
 
 /* Virtual Functions */
 
+static const gchar *
+get_filter_default_num_of_days (GNCLedgerDisplayType ledger_type)
+{
+    if (ledger_type == LD_GL)
+        return DEFAULT_FILTER_NUM_DAYS_GL;
+    else
+        return "0";
+}
+
 static GtkWidget *
 gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 {
@@ -1204,7 +1214,11 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
             filter_changed = filter_changed + 1;
         }
 
-        if (filter[3] && (g_strcmp0 (filter[3], "0") != 0 ))
+        // set the default for the number of days
+        priv->fd.days = (gint)g_ascii_strtoll (
+                                    get_filter_default_num_of_days (ledger_type), NULL, 10);
+
+        if (filter[3] && (g_strcmp0 (filter[3], get_filter_default_num_of_days (ledger_type)) != 0 ))
         {
             PINFO("Loaded Filter Days is %s", filter[3]);
 
@@ -1225,13 +1239,8 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 
         if (reg->type == GENERAL_JOURNAL)
         {
-            if ((priv->fd.days == 0) && (priv->fd.start_time == 0) && (priv->fd.end_time == 0))
-                priv->fd.days = 30; // default number of days for gl
-            else
-            {
-                start_time = priv->fd.start_time;
-                end_time = priv->fd.end_time;
-            }
+            start_time = priv->fd.start_time;
+            end_time = priv->fd.end_time;
         }
         else // search ledger and the like
         {
@@ -1824,7 +1833,9 @@ gnc_plugin_page_register_get_filter (GncPluginPage *plugin_page)
         if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT))
             filter = xaccAccountGetFilter (leader);
     }
-    return filter ? g_strdup(filter) : g_strdup_printf("%s,%s,%s,%s", DEFAULT_FILTER, "0", "0", "0");
+
+    return filter ? g_strdup(filter) : g_strdup_printf("%s,%s,%s,%s", DEFAULT_FILTER,
+                                       "0", "0", get_filter_default_num_of_days (ledger_type));
 }
 
 static void
@@ -1860,12 +1871,15 @@ gnc_plugin_page_register_set_filter (GncPluginPage *plugin_page, const gchar *fi
     GNCLedgerDisplayType ledger_type;
     GNCLedgerDisplay *ld;
     Account *leader;
-    gchar *default_filter = g_strdup_printf("%s,%s,%s,%s", DEFAULT_FILTER, "0", "0", "0");
+    gchar *default_filter;
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
     ld = priv->ledger;
     ledger_type = gnc_ledger_display_type (ld);
     leader = gnc_ledger_display_leader (ld);
+
+    default_filter = g_strdup_printf("%s,%s,%s,%s", DEFAULT_FILTER,
+                                      "0", "0", get_filter_default_num_of_days (ledger_type));
 
     // save to gcm file for LD_GL or when feature is set
     if (ledger_type == LD_GL ||
