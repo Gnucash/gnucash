@@ -1509,65 +1509,46 @@ be excluded from periodic reporting.")
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     (define (add-split-row split cell-calculators row-style transaction-row?)
-      (let* ((row-contents '())
-             (trans (xaccSplitGetParent split))
-             (account (xaccSplitGetAccount split)))
+      (let* ((account (xaccSplitGetAccount split))
+             (reversible-account? (if account-types-to-reverse
+                                      (member (xaccAccountGetType account)
+                                              account-types-to-reverse)
+                                      (gnc-reverse-balance account)))
+             (cells (map (lambda (cell)
+                           (let* ((split->monetary (vector-ref cell 1)))
+                             (vector (split->monetary split)
+                                     (vector-ref cell 2) ;reverse?
+                                     (vector-ref cell 3) ;subtotal?
+                                     )))
+                         cell-calculators)))
 
-        (define left-cols
-          (map (lambda (left-col)
-                 (let* ((col-fn (vector-ref left-col 1))
-                        (col-data (col-fn split transaction-row?)))
-                   col-data))
-               left-columns))
-
-        (define cells
-          (map (lambda (cell)
-                 (let* ((calculator (vector-ref cell 1))
-                        (reverse? (vector-ref cell 2))
-                        (subtotal? (vector-ref cell 3))
-                        (calculated (calculator split)))
-                   (vector calculated
-                           reverse?
-                           subtotal?)))
-               cell-calculators))
-
-        (for-each (lambda (cell) (addto! row-contents cell))
-                  (gnc:html-make-empty-cells indent-level))
-
-        (for-each (lambda (col)
-                    (addto! row-contents col))
-                  left-cols)
-
-        (for-each (lambda (cell)
-                    (let ((cell-content (vector-ref cell 0))
-                          ;; reverse? returns a bool - will check if the cell type has reversible sign,
-                          ;; whether the account is also reversible according to Report Option, or
-                          ;; if Report Option follows Global Settings, will retrieve bool from it.
-                          (reverse? (and (vector-ref cell 1)
-                                         (if account-types-to-reverse
-                                             (member (xaccAccountGetType account) account-types-to-reverse)
-                                             (gnc-reverse-balance account)))))
-                      (if cell-content
-                          (addto! row-contents
-                                  (gnc:make-html-table-cell/markup
-                                   "number-cell"
-                                   (gnc:html-transaction-anchor
-                                    trans
-                                    ;; if conditions for reverse are satisfied, apply sign reverse to
-                                    ;; monetary amount
-                                    (if reverse?
-                                        (gnc:monetary-neg cell-content)
-                                        cell-content))))
-                          (addto! row-contents (gnc:html-make-empty-cell)))))
-                  cells)
-
-        (if (not (column-uses? 'subtotals-only))
-            (gnc:html-table-append-row/markup! table row-style (reverse row-contents)))
+        (unless (column-uses? 'subtotals-only)
+          (gnc:html-table-append-row/markup!
+           table row-style
+           (append
+            (gnc:html-make-empty-cells indent-level)
+            (map (lambda (left-col)
+                   ((vector-ref left-col 1)
+                    split transaction-row?))
+                 left-columns)
+            (map (lambda (cell)
+                   (let ((cell-monetary (vector-ref cell 0))
+                         (reverse? (and (vector-ref cell 1)
+                                        reversible-account?)))
+                     (and cell-monetary
+                          (gnc:make-html-table-cell/markup
+                           "number-cell"
+                           (gnc:html-transaction-anchor
+                            (xaccSplitGetParent split)
+                            (if reverse?
+                                (gnc:monetary-neg cell-monetary)
+                                cell-monetary))))))
+                 cells))))
 
         (map (lambda (cell)
-               (let ((cell-content (vector-ref cell 0))
+               (let ((cell-monetary (vector-ref cell 0))
                      (subtotal? (vector-ref cell 2)))
-                 (and subtotal? cell-content)))
+                 (and subtotal? cell-monetary)))
              cells)))
 
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
