@@ -1305,10 +1305,8 @@ be excluded from periodic reporting.")
     (define indent-level
       (+ primary-indent secondary-indent))
 
-
     (define (add-subheading data subheading-style split level)
-      (let* ((row-contents '())
-             (sortkey (opt-val pagename-sorting
+      (let* ((sortkey (opt-val pagename-sorting
                                (case level
                                  ((primary) optname-prime-sortkey)
                                  ((secondary) optname-sec-sortkey))))
@@ -1316,31 +1314,36 @@ be excluded from periodic reporting.")
                             ((primary total) 0)
                             ((secondary) primary-indent)))
              (right-indent (- indent-level left-indent)))
-        (for-each (lambda (cell) (addto! row-contents cell))
-                  (gnc:html-make-empty-cells left-indent))
-        (if (and (opt-val pagename-sorting optname-show-informal-headers)
-                 (column-uses? 'amount-double)
-                 (member sortkey SORTKEY-INFORMAL-HEADERS))
-            (begin
-              (if export?
-                  (begin
-                    (addto! row-contents (gnc:make-html-table-cell data))
-                    (for-each (lambda (cell) (addto! row-contents cell))
-                              (gnc:html-make-empty-cells (+ right-indent width-left-columns -1))))
-                  (addto! row-contents (gnc:make-html-table-cell/size
-                                        1 (+ right-indent width-left-columns) data)))
-              (for-each (lambda (cell)
-                          (addto! row-contents
-                                  (gnc:make-html-text
-                                   (gnc:html-markup-b
-                                    ((vector-ref cell 5)
-                                     ((keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) sortkey 'renderer-fn) split))))))
-                        calculated-cells))
-            (addto! row-contents (gnc:make-html-table-cell/size
-                                  1 (+ right-indent width-left-columns width-right-columns) data)))
 
-        (if (not (column-uses? 'subtotals-only))
-            (gnc:html-table-append-row/markup! table subheading-style (reverse row-contents)))))
+        (unless (column-uses? 'subtotals-only)
+          (gnc:html-table-append-row/markup!
+           table subheading-style
+           (append
+            (gnc:html-make-empty-cells left-indent)
+            (if (and (opt-val pagename-sorting optname-show-informal-headers)
+                     (column-uses? 'amount-double)
+                     (member sortkey SORTKEY-INFORMAL-HEADERS))
+                (append
+                 (if export?
+                     (cons
+                      (gnc:make-html-table-cell data)
+                      (gnc:html-make-empty-cells
+                       (+ right-indent width-left-columns -1)))
+                     (list
+                      (gnc:make-html-table-cell/size
+                       1 (+ right-indent width-left-columns) data)))
+                 (map (lambda (cell)
+                        (gnc:make-html-text
+                         (gnc:html-markup-b
+                          ((vector-ref cell 5)
+                           ((keylist-get-info (sortkey-list BOOK-SPLIT-ACTION)
+                                              sortkey 'renderer-fn)
+                            split)))))
+                      calculated-cells))
+                (list
+                 (gnc:make-html-table-cell/size
+                  1 (+ right-indent width-left-columns width-right-columns)
+                  data))))))))
 
     (define (add-subtotal-row subtotal-string subtotal-collectors subtotal-style level row col)
       (let* ((left-indent (case level
