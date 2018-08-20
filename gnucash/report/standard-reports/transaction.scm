@@ -1605,23 +1605,23 @@ be excluded from periodic reporting.")
                    (add-split-row othersplits calculated-cells def:alternate-row-style #f))
                  (delete current (xaccTransGetSplitList (xaccSplitGetParent current)))))
 
-            (map (lambda (collector value)
-                   (if value
-                       (collector 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))))
-                 primary-subtotal-collectors
-                 split-values)
+            (for-each
+             (lambda (collector value)
+               (if value
+                   (collector 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))))
+             primary-subtotal-collectors split-values)
 
-            (map (lambda (collector value)
-                   (if value
-                       (collector 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))))
-                 secondary-subtotal-collectors
-                 split-values)
+            (for-each
+             (lambda (collector value)
+               (if value
+                   (collector 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))))
+             secondary-subtotal-collectors split-values)
 
-            (map (lambda (collector value)
-                   (if value
-                       (collector 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))))
-                 total-collectors
-                 split-values)
+            (for-each
+             (lambda (collector value)
+               (if value
+                   (collector 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))))
+             total-collectors split-values)
 
             (if (and primary-subtotal-comparator
                      (or (not next)
