@@ -127,11 +127,5 @@ void        gnc_date_cell_commit (DateCell *cell);
  */
 void        gnc_date_cell_get_date (DateCell *cell, time64 *time, gboolean warn);
 
-/**  Set a GDate to the value in the DateCell.
- * @param cell The DateCell
- * @param date A GDate* into which the functino will write the date.
- */
-
-void        gnc_date_cell_get_date_gdate (DateCell *cell, GDate *date);
 /** @} */
 #endif

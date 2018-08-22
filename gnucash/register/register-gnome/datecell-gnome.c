@@ -715,22 +715,6 @@ gnc_date_cell_leave (BasicCell *bcell)
 }
 
 void
-gnc_date_cell_get_date_gdate (DateCell *cell, GDate *date)
-{
-    PopBox *box = cell->cell.gui_private;
-
-    if (!cell || !date)
-        return;
-
-    gnc_parse_date (&(box->date), cell->cell.value, FALSE);
-
-    g_date_set_dmy(date,
-                   box->date.tm_mday,
-                   box->date.tm_mon + 1,
-                   box->date.tm_year + 1900);
-}
-
-void
 gnc_date_cell_get_date (DateCell *cell, time64 *time, gboolean warn)
 {
     PopBox *box = cell->cell.gui_private;
