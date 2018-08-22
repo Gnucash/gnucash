@@ -1012,7 +1012,7 @@ static void gnc_entry_ledger_save_cells (gpointer save_data,
 
         cell = gnc_table_layout_get_cell (ledger->table->layout, ENTRY_DATE_CELL);
 
-        gnc_date_cell_get_date ((DateCell *) cell, &cell_time);
+        gnc_date_cell_get_date ((DateCell *) cell, &cell_time, TRUE);
 
         /* commit any pending changes */
         gnc_date_cell_commit ((DateCell *) cell);

@@ -710,7 +710,7 @@ gnc_date_cell_leave (BasicCell *bcell)
     box->calendar_popped = FALSE;
 
     /* Refresh the date to expand any shortcuts. */
-    gnc_date_cell_get_date ((DateCell *)bcell, &time);
+    gnc_date_cell_get_date ((DateCell *)bcell, &time, TRUE);
     gnc_date_cell_set_value_secs ((DateCell *)bcell, time);
 }
 
@@ -731,13 +731,13 @@ gnc_date_cell_get_date_gdate (DateCell *cell, GDate *date)
 }
 
 void
-gnc_date_cell_get_date (DateCell *cell, time64 *time)
+gnc_date_cell_get_date (DateCell *cell, time64 *time, gboolean warn)
 {
     PopBox *box = cell->cell.gui_private;
     if (!cell || !time)
         return;
 
-    gnc_parse_date (&(box->date), cell->cell.value, TRUE);
+    gnc_parse_date (&(box->date), cell->cell.value, warn);
     *time = gnc_mktime (&box->date);
 }
 
