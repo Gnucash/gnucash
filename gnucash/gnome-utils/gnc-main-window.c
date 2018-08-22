@@ -4025,8 +4025,10 @@ gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
         qof_book_use_split_action_for_num_field (book);
     gboolean use_book_currency_before =
         gnc_book_use_book_currency (book);
+    gint use_read_only_threshold_before = qof_book_get_num_days_autoreadonly (book);
     gboolean use_split_action_for_num_after;
     gboolean use_book_currency_after;
+    gint use_read_only_threshold_after;
     gboolean return_val = FALSE;
     GList *results = NULL, *iter;
 
@@ -4051,6 +4053,7 @@ gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
     use_split_action_for_num_after =
         qof_book_use_split_action_for_num_field (book);
     use_book_currency_after = gnc_book_use_book_currency (book);
+    use_read_only_threshold_after = qof_book_get_num_days_autoreadonly (book);
     if (use_split_action_for_num_before != use_split_action_for_num_after)
     {
         gnc_book_option_num_field_source_change_cb (
@@ -4062,6 +4065,9 @@ gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
         gnc_book_option_book_currency_selected_cb (use_book_currency_after);
         return_val = TRUE;
     }
+    if (use_read_only_threshold_before != use_read_only_threshold_after)
+        return_val = TRUE;
+
     qof_book_commit_edit (book);
     return return_val;
 }
