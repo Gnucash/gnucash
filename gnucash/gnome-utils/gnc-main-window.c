@@ -4098,10 +4098,15 @@ static gboolean
 show_handler (const char *class_name, gint component_id,
               gpointer user_data, gpointer iter_data)
 {
-    GtkWidget *dialog;
+    GNCOptionWin *optwin = user_data;
+    GtkWidget *widget;
 
-    dialog = GTK_WIDGET(user_data);
-    gtk_window_present(GTK_WINDOW(dialog));
+    if (!optwin)
+        return(FALSE);
+
+    widget = gnc_options_dialog_widget(optwin);
+
+    gtk_window_present(GTK_WINDOW(widget));
     return(TRUE);
 }
 
