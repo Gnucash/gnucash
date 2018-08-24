@@ -4025,7 +4025,8 @@ gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
         qof_book_use_split_action_for_num_field (book);
     gboolean use_book_currency_before =
         gnc_book_use_book_currency (book);
-    gint use_read_only_threshold_before = qof_book_get_num_days_autoreadonly (book);
+    gint use_read_only_threshold_before =
+        qof_book_get_num_days_autoreadonly (book);
     gboolean use_split_action_for_num_after;
     gboolean use_book_currency_after;
     gint use_read_only_threshold_after;
@@ -4037,7 +4038,7 @@ gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
     results = gnc_option_db_commit (options);
     for (iter = results; iter; iter = iter->next)
     {
-        GtkWidget *dialog = gtk_message_dialog_new(NULL,
+        GtkWidget *dialog = gtk_message_dialog_new(gnc_ui_get_main_window (NULL),
                                                    0,
                                                    GTK_MESSAGE_ERROR,
                                                    GTK_BUTTONS_OK,
@@ -4053,7 +4054,11 @@ gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
     use_split_action_for_num_after =
         qof_book_use_split_action_for_num_field (book);
     use_book_currency_after = gnc_book_use_book_currency (book);
+
+    // mark cached value as invalid so we get new value
+    book->cached_num_days_autoreadonly_isvalid = FALSE;
     use_read_only_threshold_after = qof_book_get_num_days_autoreadonly (book);
+
     if (use_split_action_for_num_before != use_split_action_for_num_after)
     {
         gnc_book_option_num_field_source_change_cb (

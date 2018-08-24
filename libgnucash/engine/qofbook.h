@@ -154,6 +154,12 @@ struct _QofBook
     gboolean cached_num_field_source;
     /* Whether the above cached value is valid. */
     gboolean cached_num_field_source_isvalid;
+
+    /* A cahed value of the "autoreadonly-days" option value because it is
+     * queried quite a lot, so we want to avoid a KVP lookup on each query */
+    gint cached_num_days_autoreadonly;
+    /* Whether the above cached value is valid. */
+    gboolean cached_num_days_autoreadonly_isvalid;
 };
 
 struct _QofBookClass

@@ -96,8 +96,14 @@ static void
 qof_book_option_num_field_source_changed_cb (GObject *gobject,
                                              GParamSpec *pspec,
                                              gpointer    user_data);
+static void
+qof_book_option_num_autoreadonly_changed_cb (GObject *gobject,
+                                             GParamSpec *pspec,
+                                             gpointer    user_data);
+
 // Use a #define for the GParam name to avoid typos
 #define PARAM_NAME_NUM_FIELD_SOURCE "split-action-num-field"
+#define PARAM_NAME_NUM_AUTOREAD_ONLY "autoreadonly-days"
 
 QOF_GOBJECT_GET_TYPE(QofBook, qof_book, QOF_TYPE_INSTANCE, {});
 QOF_GOBJECT_DISPOSE(qof_book);
@@ -134,6 +140,7 @@ qof_book_init (QofBook *book)
     book->session_dirty = FALSE;
     book->version = 0;
     book->cached_num_field_source_isvalid = FALSE;
+    book->cached_num_days_autoreadonly_isvalid = FALSE;
 
     // Register a callback on this NUM_FIELD_SOURCE property of that object
     // because it gets called quite a lot, so that its value must be stored in
@@ -141,6 +148,14 @@ qof_book_init (QofBook *book)
     g_signal_connect (G_OBJECT(book),
                       "notify::" PARAM_NAME_NUM_FIELD_SOURCE,
                       G_CALLBACK (qof_book_option_num_field_source_changed_cb),
+                      book);
+
+    // Register a callback on this NUM_AUTOREAD_ONLY property of that object
+    // because it gets called quite a lot, so that its value must be stored in
+    // a bool member variable instead of a KVP lookup on each getter call.
+    g_signal_connect (G_OBJECT(book),
+                      "notify::" PARAM_NAME_NUM_AUTOREAD_ONLY,
+                      G_CALLBACK (qof_book_option_num_autoreadonly_changed_cb),
                       book);
 }
 
@@ -1065,11 +1080,21 @@ gboolean qof_book_uses_autoreadonly (const QofBook *book)
 gint qof_book_get_num_days_autoreadonly (const QofBook *book)
 {
     g_assert(book);
-    double tmp;
-    qof_instance_get (QOF_INSTANCE (book),
-		      "autoreadonly-days", &tmp,
-		      NULL);
-    return (gint) tmp;
+
+    if (!book->cached_num_days_autoreadonly_isvalid)
+    {
+        double tmp;
+
+        // No cached value? Then do the expensive KVP lookup
+        qof_instance_get (QOF_INSTANCE (book),
+              PARAM_NAME_NUM_AUTOREAD_ONLY, &tmp,
+              NULL);
+
+        const_cast<QofBook*>(book)->cached_num_days_autoreadonly = tmp;
+        const_cast<QofBook*>(book)->cached_num_days_autoreadonly_isvalid = TRUE;
+    }
+    // Value is cached now. Use the cheap variable returning.
+    return (gint) book->cached_num_days_autoreadonly;
 }
 
 GDate* qof_book_get_autoreadonly_gdate (const QofBook *book)
@@ -1085,6 +1110,19 @@ GDate* qof_book_get_autoreadonly_gdate (const QofBook *book)
         g_date_subtract_days(result, num_days);
     }
     return result;
+}
+
+// The callback that is called when the KVP option value of
+// "autoreadonly-days" changes, so that we mark the cached value as
+// invalid.
+static void
+qof_book_option_num_autoreadonly_changed_cb (GObject *gobject,
+                                             GParamSpec *pspec,
+                                             gpointer    user_data)
+{
+    QofBook *book = reinterpret_cast<QofBook*>(user_data);
+    g_return_if_fail(QOF_IS_BOOK(book));
+    book->cached_num_days_autoreadonly_isvalid = FALSE;
 }
 
 /* Note: this will fail if the book slots we're looking for here are flattened at some point !
