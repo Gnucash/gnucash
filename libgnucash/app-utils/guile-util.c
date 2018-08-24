@@ -19,6 +19,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+/* strptime */
+#define _XOPEN_SOURCE
 #include <config.h>
 
 #include "swig-runtime.h"

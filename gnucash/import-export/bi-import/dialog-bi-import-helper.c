@@ -19,6 +19,8 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
+/* strptime */
+#define _XOPEN_SOURCE
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif

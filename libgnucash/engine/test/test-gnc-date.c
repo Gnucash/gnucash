@@ -26,6 +26,10 @@ extern "C"
 {
 #endif
 
+/* strptime */
+#define _XOPEN_SOURCE
+/* struct tm.tm_gmtoff */
+#define _DEFAULT_SOURCE
 #include <config.h>
 #include "platform.h"
 #include <string.h>
