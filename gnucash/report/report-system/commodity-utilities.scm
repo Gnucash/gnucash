@@ -388,13 +388,24 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions to get one price at a given time (i.e. not time-variant).
 
+;; Several of the following functions use two types of alist, a return-list or a
+;; sumlist.
+;;
+;; A return-list is an alist with a GncCommodity pointer as the keys and a pair
+;; of gnc-value-collectors, one for amount and the other for value, as the
+;; value.
+;;
+;; A sumlist is an alist having a GncCommodity pointer as the key and a
+;; return-list as the values. The reason for the outer alist is that there might
+;; be commodity transactions which do not involve the report-commodity, but
+;; which can still be calculated after *all* transactions are processed.
 
-;; Go through all toplevel non-'report-commodity' balances in
-;; 'sumlist' and add them to 'report-commodity', if possible. This
-;; function takes a sumlist (described in gnc:get-exchange-totals) and
-;; returns an alist similar to one value of the sumlist's alist,
-;; e.g. (cadr (assoc report-commodity sumlist))). This resulting alist
-;; can immediately be plugged into gnc:make-exchange-alist.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Go through all toplevel non-'report-commodity' balances in 'sumlist' and add
+;; them to 'report-commodity', if possible. This function takes a sumlist
+;; (described in gnc:get-exchange-totals) and returns a report-list, This
+;; resulting alist can immediately be plugged into gnc:make-exchange-alist.
+
 (define (gnc:resolve-unknown-comm sumlist report-commodity)
   ;; reportlist contains all known transactions with the
   ;; report-commodity, and now the transactions with unknown
@@ -529,28 +540,17 @@
 ;; this functions to use some kind of recursiveness.
 
 
-;; Calculate the weighted average exchange rate between all
-;; commodities and the 'report-commodity'. Uses all currency
-;; transactions up until the 'end-date'. Returns an alist, see
-;; sumlist.
+;; Sum the absolute value of the amounts and values in the report commodity of
+;; all exchanges, ignoring gain/loss splits (i.e. those with a 0 amount). For
+;; example, if one bought 1000 GBP for 1210 EUR and then 1190 EUR for 1000 GBP,
+;; if the report currency is EUR the result will be an entry for GBP having an
+;; amount total of 2000 GBP and a value of 2400 EUR. Returns a report-list.
+
 (define (gnc:get-exchange-totals report-commodity end-date)
   (let ((curr-accounts
          ;;(filter gnc:account-has-shares? ))
          ;; -- use all accounts, not only share accounts, since gnucash-1.7
          (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
-        ;; sumlist: a multilevel alist. Each element has a commodity
-        ;; as key, and another alist as a value. The value-alist's
-        ;; elements consist of a commodity as a key, and a pair of two
-        ;; value-collectors as value, e.g. with only one (the report-)
-        ;; commodity DEM in the outer alist: ( {DEM ( [USD (400 .
-        ;; 1000)] [FRF (300 . 100)] ) } ) where DEM,USD,FRF are
-        ;; <gnc:commodity> and the numbers are a numeric-collector
-        ;; which in turn store a <gnc:numeric>. In the example, USD
-        ;; 400 were bought for an amount of DEM 1000, FRF 300 were
-        ;; bought for DEM 100. The reason for the outer alist is that
-        ;; there might be commodity transactions which do not involve
-        ;; the report-commodity, but which can still be calculated
-        ;; after *all* transactions are processed.
         (sumlist (list (list report-commodity '()))))
 
     (if (not (null? curr-accounts))
@@ -621,27 +621,15 @@
 
     (gnc:resolve-unknown-comm sumlist report-commodity)))
 
-;; Calculate the volume-weighted average cost of all commodities,
-;; priced in the 'report-commodity'. Uses all transactions up until
-;; the 'end-date'. Returns an alist, see sumlist.
+;; Sum the net amounts and values in the report commodity, including booked
+;; gains and losses, of each commodity across all accounts. Returns a
+;; report-list.
+
 (define (gnc:get-exchange-cost-totals report-commodity end-date)
   (let ((curr-accounts
          ;;(filter gnc:account-has-shares? ))
          ;; -- use all accounts, not only share accounts, since gnucash-1.7
          (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
-        ;; sumlist: a multilevel alist. Each element has a commodity
-        ;; as key, and another alist as a value. The value-alist's
-        ;; elements consist of a commodity as a key, and a pair of two
-        ;; value-collectors as value, e.g. with only one (the report-)
-        ;; commodity DEM in the outer alist: ( {DEM ( [USD (400 .
-        ;; 1000)] [FRF (300 . 100)] ) } ) where DEM,USD,FRF are
-        ;; <gnc:commodity> and the numbers are a numeric-collector
-        ;; which in turn store a <gnc:numeric>. In the example, USD
-        ;; 400 were bought for an amount of DEM 1000, FRF 300 were
-        ;; bought for DEM 100. The reason for the outer alist is that
-        ;; there might be commodity transactions which do not involve
-        ;; the report-commodity, but which can still be calculated
-        ;; after *all* transactions are processed.
         (sumlist (list (list report-commodity '()))))
 
     (if (not (null? curr-accounts))
