@@ -157,6 +157,17 @@
     (gnc-price-commit-edit price)
     (gnc-pricedb-add-price pricedb price)))
 
+;; When creating stock transactions always put the stock account and the number
+;; of shares second, using negative numbers for a sale. e.g., to buy 100 shares
+;; of IBM:
+;;    (env-transfer-foreign env 15 01 2012 cash-a ibm-a 3583200/100 200
+;;                          #:description "Buy IBM 200") ;;200 @ $179.16
+;; and to sell them:
+;;    (env-transfer-foreign env 8 8 2014 cash-a ibm-a -3732600/100 -200
+;;                          #:description "Sell IBM 200") ;;-200 @ $186.63
+;;    (env-transfer-foreign env 8 8 2014 capgain ibm-a 149400/100 0
+;;                          #:description "IBM 200 G/L")
+
 (define* (env-transfer-foreign
           env
           DD MM YY         ; day/month/year
@@ -204,7 +215,7 @@
           (xaccSplitSetMemo split-1 memo)
           (xaccSplitSetMemo split-2 memo)))
     (if (> amount2 0)
-    (gnc-pricedb-create (xaccAccountGetCommodity debit)
+        (gnc-pricedb-create (xaccAccountGetCommodity debit)
                         (xaccAccountGetCommodity credit)
                         (gnc-dmy2time64 DD MM YY)
                         (/ amount1 amount2)))
