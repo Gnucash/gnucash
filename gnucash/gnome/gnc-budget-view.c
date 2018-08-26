@@ -3,7 +3,7 @@
  * @addtogroup budget Budgets
  * @{
  * @file gnc-budget-view.c
- * @brief File to define budget views for gnucash (the actual display 
+ * @brief File to define budget views for gnucash (the actual display
           of the budget, along with some calculations and event handlers).
  * @author Phil Longstaff Copyright (C) 2013 phil.longstaff@yahoo.ca
  *
@@ -99,7 +99,7 @@ enum
 /**< \brief ENUM for different budget totals types.
 
 This enum is used to specify the specific type of account that the
- selected account belongs to. This is important to ensure that the sum 
+ selected account belongs to. This is important to ensure that the sum
  of the different types of accounts can be calculated.
 */
 
@@ -134,12 +134,12 @@ static gnc_numeric gbv_get_accumulated_budget_amount(GncBudget* budget,
 
 /** \brief the private budget view structure
 
-    This structure defines the different elements required for a budget view - 
+    This structure defines the different elements required for a budget view -
     the actual display of how a budget looks when you open it.
         @param tree_view Pointer to the widget to display the detailed budget.
         @param totals_tree_view Pointer to the widget to display the totals tree at the bottom of the budget screen.
-        @param the main scrolled window horizonatl adjustment
-        @param saved value for the horizontal adjustment
+        @param totals_scroll_window the main scrolled window for the totals tree view
+        @param hadj the account scroll window horizontal adjustment
         @param budget Contains much of the data required to implement a budget.
         @param key Each budget struct has its own GUID.
         @param period_col_list List of columns in the tree_view widget (this list varies depending on the number of periods)
@@ -151,9 +151,8 @@ struct GncBudgetViewPrivate
 {
     GtkTreeView *tree_view;
     GtkTreeView *totals_tree_view;
-
+    GtkWidget *totals_scroll_window;
     GtkAdjustment *hadj;
-    gfloat hadj_value;
 
     GncBudget* budget;
     GncGUID key;
@@ -226,6 +225,9 @@ gnc_budget_view_init(GncBudgetView *budget_view)
     gint i;
 
     ENTER("view %p", budget_view);
+
+    gtk_orientable_set_orientation (GTK_ORIENTABLE(budget_view), GTK_ORIENTATION_VERTICAL);
+
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
 
     /* Keep track of the root and top level asset, liability, income and expense accounts */
@@ -276,7 +278,7 @@ gnc_budget_view_finalize(GObject *object)
 
 /** \brief returns the current selection in the gnc budget view.
 
-    Returns the current selection in the gnc budget view by using the 
+    Returns the current selection in the gnc budget view by using the
     macro GNC_BUDGET_VIEW_GET_PRIVATE.
 */
 GtkTreeSelection*
@@ -324,29 +326,14 @@ gnc_budget_view_get_selected_accounts(GncBudgetView* view)
 }
 
 static void
-gbv_container_set_focus_child_cb(GtkContainer *container, GtkWidget *widget,
-                               GncBudgetView* view)
+gbv_totals_scrollbar_value_changed_cb (GtkAdjustment *adj, GncBudgetView* view)
 {
     GncBudgetViewPrivate *priv;
-    g_return_if_fail(GNC_IS_BUDGET_VIEW(view));
 
+    g_return_if_fail(GNC_IS_BUDGET_VIEW(view));
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(view);
 
-    PINFO("set-focus-child container is %p, widget is %p", container, widget);
-
-    /* There seems to be an underlying gtk issue in this configuration when
-     * the main scroll window is scrolled to reveal the cells on the right
-     * and once selected/focused the window snapps back to the left so
-     * you can no longer see the cell. By saving the horizontal adjustment
-     * value from when this callback is called for inner_scrolled_window
-     * and using it when the main scrolled windows calls this call back
-     * visualy stops the error.
-     */
-
-    if (widget == GTK_WIDGET(priv->tree_view)) // we are looking at the inner scrolled window
-        priv->hadj_value = gtk_adjustment_get_value(priv->hadj);
-    else // we are looking at the scrolled window
-        gtk_adjustment_set_value(priv->hadj, priv->hadj_value);
+    gtk_adjustment_set_value (priv->hadj, gtk_adjustment_get_value (adj));
 }
 
 /****************************
@@ -354,7 +341,10 @@ gbv_container_set_focus_child_cb(GtkContainer *container, GtkWidget *widget,
  ***************************/
 /** \brief Creates necessary widgets for display of gnc budget.
 
-    This function steps through and performs the necessary actions for creating the widgets associated with a budget view. For example, creating the trees for the accounts, creating the graphics objects, creating the links between actions and events etc.
+    This function steps through and performs the necessary actions for
+    creating the widgets associated with a budget view. For example,
+    creating the trees for the accounts, creating the graphics objects,
+    creating the links between actions and events etc.
 */
 static void
 gbv_create_widget(GncBudgetView *view)
@@ -363,9 +353,9 @@ gbv_create_widget(GncBudgetView *view)
     GtkTreeSelection *selection;
     GtkTreeView *tree_view;
     GtkWidget *scrolled_window;
-    GtkWidget *inner_scrolled_window;
+    GtkAdjustment* h_adj;
+    GtkWidget* h_scrollbar;
     GtkBox* vbox;
-    GtkWidget* inner_vbox;
     GtkListStore* totals_tree_model;
     GtkTreeView* totals_tree_view;
     GtkTreeViewColumn* totals_title_col;
@@ -377,42 +367,17 @@ gbv_create_widget(GncBudgetView *view)
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(view);
     vbox = GTK_BOX(view);
 
-    gtk_widget_show(GTK_WIDGET(vbox));
-    gtk_box_set_homogeneous(GTK_BOX(vbox), FALSE);
-
     // Set the style context for this page so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(vbox), "GncBudgetPage");
 
+    // Accounts scroll window
     scrolled_window = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window),
-                                   GTK_POLICY_AUTOMATIC,
-                                   GTK_POLICY_NEVER);
-    // save the main scrolled window horizontal adjustment
-    priv->hadj = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(scrolled_window));
+                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
-    gtk_widget_show(scrolled_window);
-    gtk_box_pack_start(GTK_BOX(vbox), scrolled_window, /*expand*/TRUE, /*fill*/TRUE, 0);
-
-    inner_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_set_homogeneous (GTK_BOX (inner_vbox), FALSE);
-    gtk_container_add (GTK_CONTAINER(scrolled_window), GTK_WIDGET(inner_vbox));
-    gtk_widget_show(GTK_WIDGET(inner_vbox));
-
-    // This is used to keep the selected cell in view
-    g_signal_connect(G_OBJECT(scrolled_window), "set-focus-child",
-                     G_CALLBACK(gbv_container_set_focus_child_cb), view);
-
-    inner_scrolled_window = gtk_scrolled_window_new(NULL, NULL);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(inner_scrolled_window),
-                                   GTK_POLICY_NEVER,
-                                   GTK_POLICY_AUTOMATIC);
-    gtk_widget_show(inner_scrolled_window);
+    // Create Accounts tree_view
     tree_view = gnc_tree_view_account_new(FALSE);
-    gtk_container_add(GTK_CONTAINER(inner_scrolled_window), GTK_WIDGET(tree_view));
-
-    // This is used to keep the selected cell in view
-    g_signal_connect(G_OBJECT(inner_scrolled_window), "set-focus-child",
-                     G_CALLBACK(gbv_container_set_focus_child_cb), view);
+    gtk_tree_view_set_headers_visible(tree_view, TRUE);
 
     guid_to_string_buff(&priv->key, guidstr);
     state_section = g_strjoin(" ", STATE_SECTION_PREFIX, guidstr, NULL);
@@ -424,10 +389,26 @@ gbv_create_widget(GncBudgetView *view)
     selection = gtk_tree_view_get_selection(tree_view);
     gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
 
+    // make sure the account column is the expand column
+    gnc_tree_view_expand_columns (GNC_TREE_VIEW(tree_view), "name", NULL);
+
+    // Accounts filter
+    priv->fd->tree_view = GNC_TREE_VIEW_ACCOUNT(priv->tree_view);
+    gnc_tree_view_account_set_filter(
+        GNC_TREE_VIEW_ACCOUNT(tree_view),
+        gnc_plugin_page_account_tree_filter_accounts,
+        priv->fd, NULL);
+
+    // Add accounts tree view to scroll window
+    gtk_container_add(GTK_CONTAINER(scrolled_window), GTK_WIDGET(tree_view));
+
     g_signal_connect(G_OBJECT(tree_view), "row-activated",
                      G_CALLBACK(gbv_row_activated_cb), view);
-    g_signal_connect(G_OBJECT(tree_view), "size-allocate",
-                     G_CALLBACK(gbv_treeview_resized_cb), view);
+
+    // save the main scrolled window horizontal adjustment
+    priv->hadj = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(scrolled_window));
+
+    PINFO("Number of Created Account columns is %d", gtk_tree_view_get_n_columns (tree_view));
 
 #if 0
     g_signal_connect(G_OBJECT(selection), "changed",
@@ -439,15 +420,17 @@ gbv_create_widget(GncBudgetView *view)
 
     gbv_selection_changed_cb(NULL, view);
 #endif
-    gtk_tree_view_set_headers_visible(tree_view, TRUE);
-    gtk_widget_show(GTK_WIDGET(tree_view));
-    gtk_box_pack_start(GTK_BOX(inner_vbox), GTK_WIDGET(inner_scrolled_window), /*expand*/TRUE, /*fill*/TRUE, 0);
-    priv->fd->tree_view = GNC_TREE_VIEW_ACCOUNT(priv->tree_view);
-    gnc_tree_view_account_set_filter(
-        GNC_TREE_VIEW_ACCOUNT(tree_view),
-        gnc_plugin_page_account_tree_filter_accounts,
-        priv->fd, NULL);
 
+    // Totals scroll window
+    priv->totals_scroll_window = gtk_scrolled_window_new(NULL, NULL);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(priv->totals_scroll_window),
+                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_NEVER); // horzontal/vertical
+
+    h_adj = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(priv->totals_scroll_window));
+    g_signal_connect(G_OBJECT(h_adj), "value-changed",
+                     G_CALLBACK(gbv_totals_scrollbar_value_changed_cb), view);
+
+    // Create totals tree view
     totals_tree_model = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_INT);
     gtk_list_store_append(totals_tree_model, &iter);
     gtk_list_store_set(totals_tree_model, &iter, 0, _("Income"), 1, TOTALS_TYPE_INCOME, -1);
@@ -460,13 +443,7 @@ gbv_create_widget(GncBudgetView *view)
 
     totals_tree_view = GTK_TREE_VIEW(gtk_tree_view_new());
     priv->totals_tree_view = totals_tree_view;
-
-    // Set grid lines option to preference
-    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(totals_tree_view), gnc_tree_view_get_grid_lines_pref ());
-
-    gtk_widget_show(GTK_WIDGET(totals_tree_view));
-    gtk_tree_selection_set_mode(gtk_tree_view_get_selection(totals_tree_view),
-                                GTK_SELECTION_NONE);
+    gtk_tree_selection_set_mode(gtk_tree_view_get_selection(totals_tree_view), GTK_SELECTION_NONE);
     gtk_tree_view_set_headers_visible(totals_tree_view, FALSE);
     gtk_tree_view_set_model(totals_tree_view, GTK_TREE_MODEL(totals_tree_model));
 
@@ -475,11 +452,31 @@ gbv_create_widget(GncBudgetView *view)
     gtk_tree_view_column_set_sizing(totals_title_col, GTK_TREE_VIEW_COLUMN_FIXED);
     gtk_tree_view_append_column(totals_tree_view, totals_title_col);
 
-    gtk_box_pack_end(GTK_BOX(inner_vbox), GTK_WIDGET(totals_tree_view), /*expand*/FALSE, /*fill*/TRUE, 0);
+    // Add totals tree view to scroll window
+    gtk_container_add (GTK_CONTAINER(priv->totals_scroll_window), GTK_WIDGET(totals_tree_view));
+
+    // Set grid lines option to preference
+    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(totals_tree_view), gnc_tree_view_get_grid_lines_pref ());
+
+    PINFO("Number of Created totals columns is %d", gtk_tree_view_get_n_columns (totals_tree_view));
+
+    gtk_box_set_homogeneous(GTK_BOX(vbox), FALSE);
+
+    gtk_box_pack_start(GTK_BOX(vbox), scrolled_window, /*expand*/TRUE, /*fill*/TRUE, 0);
 
     h_separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-    gtk_widget_show(h_separator);
-    gtk_box_pack_end(GTK_BOX(inner_vbox), h_separator, /*expand*/FALSE, /*fill*/TRUE, 0);
+    gtk_box_pack_end(GTK_BOX(vbox), h_separator, /*expand*/FALSE, /*fill*/TRUE, 0);
+
+    gtk_box_pack_start(GTK_BOX(vbox), GTK_WIDGET(priv->totals_scroll_window), /*expand*/FALSE, /*fill*/TRUE, 0);
+
+    gtk_widget_show_all (GTK_WIDGET(vbox));
+
+    // hide the account scroll window horizontal scroll bar
+    h_scrollbar = gtk_scrolled_window_get_hscrollbar (GTK_SCROLLED_WINDOW(scrolled_window));
+    gtk_widget_hide (h_scrollbar);
+
+    g_signal_connect(G_OBJECT(tree_view), "size-allocate",
+                     G_CALLBACK(gbv_treeview_resized_cb), view);
 
     gnc_budget_view_refresh(view);
 }
@@ -702,6 +699,8 @@ gbv_treeview_resized_cb(GtkWidget* widget, GtkAllocation* allocation, GncBudgetV
             j++;
         }
     }
+    // make sure the account column is the expand column
+    gnc_tree_view_expand_columns (GNC_TREE_VIEW(priv->tree_view), "name", NULL);
     LEAVE("");
 }
 
@@ -1126,6 +1125,16 @@ gbv_refresh_col_titles(GncBudgetView *view)
     }
 }
 
+static void
+gbv_renderer_add_padding (GtkCellRenderer *renderer)
+{
+    gint xpad, ypad;
+
+    gtk_cell_renderer_get_padding (renderer, &xpad, &ypad);
+    if (xpad < 5)
+        gtk_cell_renderer_set_padding (renderer, 5, ypad);
+}
+
 /** \brief Function to create the totals column to the right of the view.
 */
 static GtkTreeViewColumn*
@@ -1140,6 +1149,9 @@ gbv_create_totals_column(GncBudgetView* view, gint period_num)
 
     renderer = gtk_cell_renderer_text_new();
     col = gtk_tree_view_column_new_with_attributes("", renderer, NULL);
+
+    // add some padding to the right of the numbers
+    gbv_renderer_add_padding (renderer);
 
     gtk_tree_view_column_set_cell_data_func(col, renderer, totals_col_source, view, NULL);
     g_object_set_data(G_OBJECT(col), "budget", priv->budget);
@@ -1220,8 +1232,7 @@ gnc_budget_view_refresh(GncBudgetView *view)
     /* Create any needed columns */
     while (num_periods_visible < num_periods)
     {
-        GList* renderer_list;
-        GList* renderer_node;
+        GtkCellRenderer* renderer;
 
         col = gnc_tree_view_account_add_custom_column(
                   GNC_TREE_VIEW_ACCOUNT(priv->tree_view), "",
@@ -1232,13 +1243,13 @@ gnc_budget_view_refresh(GncBudgetView *view)
                           GUINT_TO_POINTER(num_periods_visible));
         col_list = g_list_append(col_list, col);
 
-        renderer_list = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(col));
-        for (renderer_node = renderer_list; renderer_node != NULL; renderer_node = g_list_next(renderer_node))
-        {
-            GtkCellRenderer* renderer = GTK_CELL_RENDERER(renderer_node->data);
-            g_signal_connect(G_OBJECT(renderer), "edited", (GCallback)gbv_col_edited_cb, view);
-        }
-        g_list_free(renderer_list);
+        // as we only have one renderer/column, use this function to get it
+        renderer = gnc_tree_view_column_get_renderer (col);
+
+        // add some padding to the right of the numbers
+        gbv_renderer_add_padding (renderer);
+
+        g_signal_connect(G_OBJECT(renderer), "edited", (GCallback)gbv_col_edited_cb, view);
 
         col = gbv_create_totals_column(view, num_periods_visible);
         if (col != NULL)
@@ -1254,10 +1265,39 @@ gnc_budget_view_refresh(GncBudgetView *view)
 
     if (priv->total_col == NULL)
     {
+        gchar title[MAX_DATE_LENGTH];
+        guint titlelen;
+        GDate *date;
+        GtkCellRenderer* renderer;
+
         priv->total_col = gnc_tree_view_account_add_custom_column(
                               GNC_TREE_VIEW_ACCOUNT(priv->tree_view), _("Total"),
                               budget_total_col_source, NULL);
+
+        // set column title alignment to right to match column data
+        gtk_tree_view_column_set_alignment (priv->total_col, 1.0);
+
+        // set a minimum column size based on the date length, adds some space to the column
+        date = g_date_new_dmy (31, 12, 2018);
+        titlelen = qof_print_gdate (title, MAX_DATE_LENGTH, date);
+        if (titlelen > 0)
+        {
+            PangoLayout *layout = gtk_widget_create_pango_layout (GTK_WIDGET (view), title);
+            PangoRectangle logical_rect;
+            pango_layout_set_width (layout, -1);
+            pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+            g_object_unref (layout);
+
+            gtk_tree_view_column_set_min_width (priv->total_col, logical_rect.width);
+        }
+        g_date_free (date);
         g_object_set_data(G_OBJECT(priv->total_col), "budget", priv->budget);
+
+        // as we only have one renderer/column, use this function to get it
+        renderer = gnc_tree_view_column_get_renderer (priv->total_col);
+
+        // add some padding to the right of the numbers
+        gbv_renderer_add_padding (renderer);
 
         col = gbv_create_totals_column(view, -1);
         if (col != NULL)
@@ -1266,6 +1306,10 @@ gnc_budget_view_refresh(GncBudgetView *view)
         }
     }
     gbv_refresh_col_titles(view);
+
+    PINFO("Number of columns is %d, totals columns is %d",
+          gtk_tree_view_get_n_columns (priv->tree_view), gtk_tree_view_get_n_columns (priv->totals_tree_view));
+
     LEAVE(" ");
 }
 

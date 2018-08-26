@@ -190,7 +190,7 @@
 (define (gnc:html-markup-anchor href . rest)
   (apply gnc:html-markup/attr 
          "a" 
-         (string-append "href=\"" href "\"")
+         (format #f "href=~s" href)
          rest))
 
 (define (gnc:html-markup-img src . rest)
@@ -198,15 +198,11 @@
    "img" 
    (with-output-to-string
      (lambda ()
-       (display "src=\"") (display src) (display"\"")
-       (display " ")
        (for-each 
         (lambda (kvp)
-          (display (car kvp))
-          (display "=\"")
-          (display (cadr kvp))
-          (display "\" "))
-        rest)))))
+          (format #t "~a=~s " (car kvp) (cadr kvp)))
+        (cons (list 'src src)
+              rest))))))
 
 (define (gnc:html-text-render p doc)
   (let* ((retval '())

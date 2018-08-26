@@ -158,12 +158,16 @@ LDT_from_unix_local(const time64 time)
 static LDT
 LDT_from_struct_tm(const struct tm tm)
 {
-    auto tdate = boost::gregorian::date_from_tm(tm);
-    auto tdur = boost::posix_time::time_duration(tm.tm_hour, tm.tm_min,
-                                                 tm.tm_sec, 0);
-    auto tz = tzp.get(tdate.year());
+    Date tdate;
+    Duration tdur;
+    TZ_Ptr tz;
+
     try
     {
+        tdate = boost::gregorian::date_from_tm(tm);
+        tdur = boost::posix_time::time_duration(tm.tm_hour, tm.tm_min,
+                                                 tm.tm_sec, 0);
+        tz = tzp.get(tdate.year());
         LDT ldt(tdate, tdur, tz, LDTBase::EXCEPTION_ON_ERROR);
         return ldt;
     }
@@ -366,13 +370,31 @@ GncDateTimeImpl::date() const
     return std::unique_ptr<GncDateImpl>(new GncDateImpl(m_time.local_time().date()));
 }
 
+/* The 'O', 'E', and '-' format modifiers are not supported by
+ * boost's output facets. Remove them.
+ */
+static inline std::string
+normalize_format (const std::string& format)
+{
+    bool is_pct = false;
+    std::string normalized;
+    std::remove_copy_if(
+        format.begin(), format.end(), back_inserter(normalized),
+        [&is_pct](char e){
+            bool r = (is_pct && (e == 'E' || e == 'O' || e == '-'));
+            is_pct = e == '%';
+            return r;
+        });
+    return normalized;
+}
+
 std::string
 GncDateTimeImpl::format(const char* format) const
 {
     using Facet = boost::local_time::local_time_facet;
     std::stringstream ss;
     //The stream destructor frees the facet, so it must be heap-allocated.
-    auto output_facet(new Facet(format));
+    auto output_facet(new Facet(normalize_format(format).c_str()));
     ss.imbue(std::locale(std::locale(), output_facet));
     ss << m_time;
     return ss.str();
@@ -384,7 +406,7 @@ GncDateTimeImpl::format_zulu(const char* format) const
     using Facet = boost::posix_time::time_facet;
     std::stringstream ss;
     //The stream destructor frees the facet, so it must be heap-allocated.
-    auto output_facet(new Facet(format));
+    auto output_facet(new Facet(normalize_format(format).c_str()));
     ss.imbue(std::locale(std::locale(), output_facet));
     ss << m_time.utc_time();
     return ss.str();
@@ -443,7 +465,7 @@ GncDateImpl::format(const char* format) const
     using Facet = boost::gregorian::date_facet;
     std::stringstream ss;
     //The stream destructor frees the facet, so it must be heap-allocated.
-    auto output_facet(new Facet(format));
+    auto output_facet(new Facet(normalize_format(format).c_str()));
     ss.imbue(std::locale(std::locale(), output_facet));
     ss << m_greg;
     return ss.str();

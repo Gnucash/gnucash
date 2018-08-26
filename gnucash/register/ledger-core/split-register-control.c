@@ -1322,6 +1322,13 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
 
     ENTER("reg=%p, force_dialog=%s", reg, force_dialog ? "TRUE" : "FALSE" );
 
+    /* No point in setting a rate on a template transaction. */
+    if (reg->is_template)
+    {
+        LEAVE("Template transaction, rate makes no sense.");
+        return FALSE;
+    }
+
     /* Make sure we NEED this for this type of register */
     if (!gnc_split_reg_has_rate_cell (reg->type))
     {

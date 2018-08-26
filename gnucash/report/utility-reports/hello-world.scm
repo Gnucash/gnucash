@@ -93,8 +93,8 @@
       "c" (N_ "This is a string option.") (N_ "Hello, World")))
     
     ;; This is a date/time option. The user can pick a date and,
-    ;; possibly, a time. Times are stored as a pair
-    ;; (seconds . nanoseconds) measured from Jan 1, 1970, i.e.,
+    ;; possibly, a time. Times are stored as an integer specifying
+    ;; number of seconds measured from Jan 1, 1970, i.e.,
     ;; Unix time. The last option is false, so the user can only
     ;; select a date, not a time. The default value is the current
     ;; time.

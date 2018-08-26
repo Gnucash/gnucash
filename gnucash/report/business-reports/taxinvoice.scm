@@ -237,7 +237,7 @@
                 notespage optname-extra-notes "a"
                 (_ "Notes added at end of invoice -- may contain HTML markup.") 
                 (_ "Thank you for your patronage!")))
-                ;(N_ "(Development version -- don't rely on the numbers on this report without double-checking them.<br>Change the 'Extra Notes' option to get rid of this message)")))
+                ;(N_ "(Development version -- don't rely on the numbers on this report without double-checking them.<br/>Change the 'Extra Notes' option to get rid of this message)")))
 
   (add-option (gnc:make-text-option	notespage optname-extra-css "b"
                 (N_ "Embedded CSS.")	"h1.coyname { text-align: left; }"))
@@ -306,22 +306,13 @@
          (opt-jobname-text          (opt-value headingpage2 optname-jobname-text))
          (opt-extra-css             (opt-value notespage    optname-extra-css)) 
          (opt-extra-notes           (opt-value notespage    optname-extra-notes)) 
-         (css? #t) ;(and (defined? 'gnc-html-engine-supports-css) (gnc-html-engine-supports-css)))
-         (html #f))
-
-    (set! html (eguile-file-to-string 
+         (html (eguile-file-to-string
                  opt-template-file
-                 (the-environment)))
+                 (the-environment))))
 
-    (gnc:debug "taxinvoice.scm: css? is " css?)
-    (gnc:debug "taxinvoice.scm: defined is " (defined? 'gnc-html-engine-supports-css))
     (gnc:debug "taxinvoice.scm - generated html:") (gnc:debug html)
 
-    (if css? ; return report as document or html, depending on version 
-      html 
-      (let ((document (gnc:make-html-document)))
-        (gnc:html-document-add-object! document html)
-        document))))
+    html))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Define the report

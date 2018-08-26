@@ -125,10 +125,10 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
         g_list_free (cols);
 
         /* If column is not description, do not show tooltip */
-        if (col_pos != 2)
+        if (col_pos != (REC_DESC - 1)) // allow for the pointer model column at 0
             return FALSE;
 
-        gtk_tree_model_get (model, &iter, 3, &desc_text, -1);
+        gtk_tree_model_get (model, &iter, REC_DESC, &desc_text, -1);
 
         if (desc_text)
         {
@@ -259,8 +259,9 @@ gnc_reconcile_view_construct (GNCReconcileView *view, Query *query)
     gnc_query_view_construct (qview, view->column_list, query);
     gnc_query_view_set_numerics (qview, TRUE, inv_sort);
 
-    /* Set the description field to have spare space */
-    col = gtk_tree_view_get_column (GTK_TREE_VIEW (qview), 3);
+    /* Set the description field to have spare space,
+       REC_DESC -1 to allow for the pointer model column at 0 */
+    col = gtk_tree_view_get_column (GTK_TREE_VIEW (qview), (REC_DESC - 1));
     gtk_tree_view_column_set_expand (col, TRUE);
 
     /* Get the renderer of the description column and set ellipsize value */
@@ -411,7 +412,7 @@ gnc_reconcile_view_init (GNCReconcileView *view)
                                     gnc_reconcile_view_is_reconciled, view);
     gnc_search_param_set_title ((GNCSearchParam *) param, _("Reconciled:R") + 11);
     gnc_search_param_set_justify ((GNCSearchParam *) param, GTK_JUSTIFY_CENTER);
-    gnc_search_param_set_passive ((GNCSearchParam *) param, TRUE);
+    gnc_search_param_set_passive ((GNCSearchParam *) param, FALSE);
     gnc_search_param_set_non_resizeable ((GNCSearchParam *) param, TRUE);
     columns = g_list_prepend (columns, param);
 
@@ -540,13 +541,13 @@ gnc_reconcile_view_toggle_children (Account *account, GNCReconcileView *view, Sp
         while (valid)
         {
             // Walk through the list, reading each row
-            gtk_tree_model_get (model, &iter, 0, &pointer, -1);
+            gtk_tree_model_get (model, &iter, REC_POINTER, &pointer, -1);
 
             if(pointer == other_split)
             {
                 gboolean toggled;
-                gtk_tree_model_get (model, &iter, 1, &toggled, -1);
-                gtk_list_store_set (GTK_LIST_STORE (model), &iter, 1, !toggled, -1);
+                gtk_tree_model_get (model, &iter, REC_RECN, &toggled, -1);
+                gtk_list_store_set (GTK_LIST_STORE (model), &iter, REC_RECN, !toggled, -1);
                 break;
             }
 
@@ -597,7 +598,7 @@ gnc_reconcile_view_line_toggled (GNCQueryView *qview,
     model = gtk_tree_view_get_model (GTK_TREE_VIEW (qview));
     gtk_tree_model_iter_nth_child (model, &iter, NULL, qview->toggled_row);
     gtk_list_store_set (GTK_LIST_STORE (model), &iter, qview->toggled_column, GPOINTER_TO_INT(item), -1);
-    gtk_tree_model_get (model, &iter, 0, &entry, -1);
+    gtk_tree_model_get (model, &iter, REC_POINTER, &entry, -1);
 
     gnc_reconcile_view_toggle (view, entry);
 }
@@ -659,16 +660,19 @@ gnc_reconcile_view_set_list ( GNCReconcileView  *view, gboolean reconcile)
         if(gtk_tree_model_get_iter(model, &iter, node->data))
         {
             /* now iter is a valid row iterator */
-            gtk_tree_model_get (model, &iter, 0, &entry, -1);
-            gtk_tree_model_get (model, &iter, 1, &toggled, -1);
+            gtk_tree_model_get (model, &iter, REC_POINTER, &entry, -1);
+            gtk_tree_model_get (model, &iter, REC_RECN, &toggled, -1);
 
-            gtk_list_store_set (GTK_LIST_STORE (model), &iter, 1, reconcile, -1);
+            gtk_list_store_set (GTK_LIST_STORE (model), &iter, REC_RECN, reconcile, -1);
 
             if(reconcile != toggled)
                 gnc_reconcile_view_toggle (view, entry);
         }
         gtk_tree_path_free(node->data);
     }
+    // Out of site toggles on selected rows may not appear correctly drawn so
+    // queue a draw for the treeview widget
+    gtk_widget_queue_draw (GTK_WIDGET(qview));
     g_list_free(list_of_rows);
 }
 
@@ -709,7 +713,7 @@ gnc_reconcile_view_set_toggle (GNCReconcileView  *view)
         if(gtk_tree_model_get_iter(model, &iter, node->data))
         {
             /* now iter is a valid row iterator */
-            gtk_tree_model_get (model, &iter, 1, &toggled, -1);
+            gtk_tree_model_get (model, &iter, REC_RECN, &toggled, -1);
 
             if(toggled)
                 num_toggled++;
@@ -943,7 +947,7 @@ gnc_reconcile_view_postpone (GNCReconcileView *view)
     {
         char recn;
 
-        gtk_tree_model_get (model, &iter, 0, &entry, -1);
+        gtk_tree_model_get (model, &iter, REC_POINTER, &entry, -1);
 
         // Don't change splits past reconciliation date that haven't been
         // set to be reconciled

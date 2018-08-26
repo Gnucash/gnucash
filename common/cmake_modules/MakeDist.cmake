@@ -97,7 +97,7 @@ function(make_dist PACKAGE_PREFIX GNUCASH_SOURCE_DIR BUILD_SOURCE_DIR BUILDING_F
 endfunction()
 
 if (NOT WITH_GNUCASH)
-    message(SEND_ERROR "Creation of dist tarballs not support when WITH_GNUCASH=OFF.")
+    message(SEND_ERROR "Creation of dist tarballs is not supported when WITH_GNUCASH=OFF.")
 endif()
 
  make_dist(${PACKAGE_PREFIX} ${GNUCASH_SOURCE_DIR} ${BUILD_SOURCE_DIR} ${BUILDING_FROM_VCS})

@@ -108,7 +108,6 @@
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
 <title><?scm:d (_ "Invoice") ?> <?scm:d invoiceid ?></title>
 
-<?scm (if css? (begin ?>
 <link rel="stylesheet" href="<?scm:d opt-css-file ?>" type="text/css">
 <!-- Note that the external stylesheet file is overridden by this following: -->
 <style type="text/css">
@@ -122,7 +121,6 @@
     <?scm:d opt-heading-font ?>
   }
 </style>
-<?scm )) ?>
 
 </head>
 <body>
@@ -170,10 +168,12 @@
 
       <tbody> <!-- display invoice entry lines, keeping running totals -->
         <?scm
-          (let ((tax-total (gnc:make-commodity-collector))
-                (sub-total (gnc:make-commodity-collector))
-                (dsc-total (gnc:make-commodity-collector))
-                (inv-total (gnc:make-commodity-collector)))
+          (let* ((inv-total (gncInvoiceGetTotal opt-invoice))
+                 (tax-total (gncInvoiceGetTotalTax opt-invoice))
+                 (sub-total (gncInvoiceGetTotalSubtotal opt-invoice))
+                 (dsc-total (- inv-total tax-total sub-total))
+                 (total-col (gnc:make-commodity-collector)))
+            (total-col 'add currency inv-total)
             (for entry in entries do
                 (let ((qty       (gncEntryGetQuantity entry))
                       (each      (gncEntryGetInvPrice entry))
@@ -186,11 +186,6 @@
                       (acc       (gncEntryGetInvAccount entry))
                       (taxable   (gncEntryGetInvTaxable entry))
                       (taxtable  (gncEntryGetInvTaxTable entry)))
-                  (inv-total 'add currency rval)
-                  (inv-total 'add currency rtaxval)
-                  (tax-total 'add currency rtaxval)
-                  (sub-total 'add currency rval)
-                  (dsc-total 'add currency rdiscval)
         ?>
         <tr valign="top">
           <td align="left"><?scm:d (qof-print-date (gncEntryGetDate entry)) ?></td>
@@ -227,11 +222,11 @@
         <?scm (if tax? (begin ?>
           <tr valign="top">
             <td align="left"  class="subtotal" colspan="<?scm:d (- maxcols 2) ?>"><strong><?scm:d opt-net-price-heading ?></strong></td>
-            <td align="right" class="subtotal" colspan="2>"><strong><?scm (display-comm-coll-total sub-total #f) ?></strong></td>
+            <td align="right" class="subtotal" colspan="2>"><strong><?scm:d (fmtmoney currency sub-total) ?></strong></td>
           </tr>
           <tr valign="top">
             <td align="left"  class="subtotal" colspan="<?scm:d (- maxcols 2) ?>"><strong><?scm:d opt-tax-amount-heading ?></strong></td>
-            <td align="right" class="subtotal" colspan="2>"><strong><?scm (display-comm-coll-total tax-total #f) ?></strong></td>
+            <td align="right" class="subtotal" colspan="2>"><strong><?scm:d (fmtmoney currency tax-total) ?></strong></td>
           </tr>
         <?scm )) ?>
 
@@ -240,7 +235,7 @@
         <?scm (if payments? (begin ?>
           <tr valign="top">
             <td align="left"  class="subtotal" colspan="<?scm:d (- maxcols 2) ?>"><strong><?scm:d opt-total-price-heading ?></strong></td>
-            <td align="right" class="subtotal" colspan="2>"><strong><?scm (display-comm-coll-total inv-total #f) ?></strong></td>
+            <td align="right" class="subtotal" colspan="2>"><strong><?scm:d (fmtmoney currency inv-total) ?></strong></td>
           </tr>
         <?scm )) ?>
 
@@ -251,7 +246,7 @@
                   (if (not (equal? t txn)) ; don't process the entry itself as a split
                     (let ((c (xaccTransGetCurrency t))
                           (a (xaccSplitGetValue    split)))
-                      (inv-total 'add c a)
+                      (total-col 'add c a)
         ?>
         <tr valign="top">
           <td align="center"><?scm:d (qof-print-date (xaccTransGetDate t)) ?></td>
@@ -263,7 +258,7 @@
         <!-- total row -->
         <tr valign="top">
           <td align="left"  class="total total_last" colspan="<?scm:d (- maxcols 2) ?>"><strong><?scm:d opt-amount-due-heading ?></strong></td>
-          <td align="right" class="total total_last" colspan="2>"><strong><?scm (display-comm-coll-total inv-total #f) ?></strong></td>
+          <td align="right" class="total total_last" colspan="2>"><strong><?scm (display-comm-coll-total total-col #f) ?></strong></td>
         </tr>
 
       </tbody>

@@ -12,7 +12,7 @@ gnc_add_scheme_targets(scm-scm
 gnc_add_scheme_targets(price-quotes
   price-quotes.scm
   gnucash
-  "scm-scm;scm-gnome-utils;scm-app-utils"
+  "scm-scm;scm-app-utils"
   FALSE)
 
 

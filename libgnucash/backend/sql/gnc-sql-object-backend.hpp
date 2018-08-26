@@ -54,6 +54,7 @@ public:
                          const std::string& table, const EntryVec& vec) :
         m_table_name{table}, m_version{version}, m_type_name{type},
         m_col_table(vec) {}
+    virtual ~GncSqlObjectBackend() = default;
     /**
      * Load all objects of m_type in the database into memory.
      * @param sql_be The GncSqlBackend containing the database connection.

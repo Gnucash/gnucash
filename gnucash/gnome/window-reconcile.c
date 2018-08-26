@@ -1186,12 +1186,6 @@ gnc_reconcile_window_create_view_box(Account *account,
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
     gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 
-#if GTK_CHECK_VERSION(3,12,0)
-    gtk_widget_set_margin_end (GTK_WIDGET(hbox), 10);
-#else
-    gtk_widget_set_margin_right (GTK_WIDGET(hbox), 10);
-#endif
-
     label = gtk_label_new(_("Total:"));
     gnc_label_set_alignment(label, 1.0, 0.5);
     gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
@@ -1199,6 +1193,12 @@ gnc_reconcile_window_create_view_box(Account *account,
     label = gtk_label_new("");
     gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
     *total_save = label;
+
+#if GTK_CHECK_VERSION(3,12,0)
+    gtk_widget_set_margin_end (GTK_WIDGET(label), 10);
+#else
+    gtk_widget_set_margin_right (GTK_WIDGET(label), 10);
+#endif
 
     return vbox;
 }
@@ -1946,8 +1946,8 @@ recnWindowWithBalance (Account *account, gnc_numeric new_ending,
     gnc_window_adjust_for_screen(GTK_WINDOW(recnData->window));
 
     /* Set the sort orders of the debit and credit tree views */
-    gnc_query_sort_order(GNC_QUERY_VIEW(recnData->debit), 1, GTK_SORT_ASCENDING);
-    gnc_query_sort_order(GNC_QUERY_VIEW(recnData->credit), 1, GTK_SORT_ASCENDING);
+    gnc_query_sort_order(GNC_QUERY_VIEW(recnData->debit), REC_DATE, GTK_SORT_ASCENDING);
+    gnc_query_sort_order(GNC_QUERY_VIEW(recnData->credit), REC_DATE, GTK_SORT_ASCENDING);
 
     gtk_widget_grab_focus (recnData->debit);
 
@@ -2156,7 +2156,7 @@ recnFinishCB (GtkAction *action, RecnWindow *recnData)
         Account *payment_account;
         XferDialog *xfer;
 
-        xfer = gnc_xfer_dialog (GTK_WIDGET (recnData->window), account);
+        xfer = gnc_xfer_dialog (GTK_WIDGET (gnc_ui_get_main_window (recnData->window)), account);
 
         gnc_xfer_dialog_set_amount(xfer, gnc_numeric_neg (recnData->new_ending));
 

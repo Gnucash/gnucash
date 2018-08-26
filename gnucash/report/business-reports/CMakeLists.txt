@@ -1,3 +1,4 @@
+add_subdirectory (test)
 
 set (business_reports_SCHEME
   aging.scm
@@ -46,4 +47,7 @@ gnc_add_scheme_targets(scm-business-reports
 
 install(FILES ${business_reports_DATA} DESTINATION ${SCHEME_INSTALLED_SOURCE_DIR}/gnucash/report)
 
-set_dist_list(business_reports_DIST CMakeLists.txt ${business_reports_SCHEME} ${business_reports_DATA})
+set_local_dist(business_reports_DIST_local CMakeLists.txt
+  ${business_reports_SCHEME} ${business_reports_DATA})
+set(business_reports_DIST ${business_reports_DIST_local}
+  ${test_business_reports_DIST} PARENT_SCOPE)

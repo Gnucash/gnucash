@@ -326,14 +326,7 @@
   (record-modifier <html-table> 'num-rows))
 
 (define (gnc:html-table-num-columns table)
-  (let ((max 0))
-    (for-each 
-     (lambda (row)
-       (let ((l (length row))) 
-         (if (> l max)
-             (set! max l))))
-     (gnc:html-table-data table))
-    max))
+  (apply max (map length (gnc:html-table-data table))))
 
 (define (gnc:html-table-append-row/markup! table markup newrow)
   (let ((rownum (gnc:html-table-append-row! table newrow)))
@@ -346,16 +339,12 @@
     
 
 (define (gnc:html-table-append-row! table newrow)
-  (let* ((dd (gnc:html-table-data table))
-	 (current-num-rows (gnc:html-table-num-rows table))
-	 (new-num-rows (+ current-num-rows 1)))
-    (if (list? newrow)
-        (set! dd (cons newrow dd))
-        (set! dd (cons (list newrow) dd)))
-    (gnc:html-table-set-num-rows-internal! 
-     table 
-     new-num-rows)
-    (gnc:html-table-set-data! table dd)
+  (let* ((current-num-rows (gnc:html-table-num-rows table))
+	 (new-num-rows (1+ current-num-rows)))
+    (gnc:html-table-set-num-rows-internal! table new-num-rows)
+    (gnc:html-table-set-data! table
+                              (cons (if (list? newrow) newrow (list newrow))
+                                    (gnc:html-table-data table)))
     new-num-rows))
 
 (define (gnc:html-table-remove-last-row! table)
@@ -613,18 +602,6 @@
 ;; Feel free to contribute! :-)
 ;; 
 
-;; This function was moved here from balance-sheet.scm.
-;; This function "stacks" the two tables vertically.
-(define (gnc:html-table-merge t1 t2)
-  (begin 
-    (gnc:html-table-set-data! t1
-			      (append
-			       (gnc:html-table-data t2)
-			       (gnc:html-table-data t1)))
-    (gnc:html-table-set-num-rows-internal!
-     t1 (+ (gnc:html-table-num-rows t1)
-           (gnc:html-table-num-rows t2)))))
-
 (define (gnc:html-table-render table doc)
   (let* ((retval '())
          (push (lambda (l) (set! retval (cons l retval)))))
@@ -756,3 +733,7 @@
     (push (gnc:html-document-markup-end doc "table"))
     (gnc:html-document-pop-style doc)
     retval))
+
+(define (gnc:html-table-set-last-row-style! table tag . rest)
+  (apply gnc:html-table-set-row-style!
+         (cons* table (1- (gnc:html-table-num-rows table)) tag rest)))

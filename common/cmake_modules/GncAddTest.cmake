@@ -125,9 +125,9 @@ function(gnc_gtest_configure)
     set(GMOCK_ROOT $ENV{GMOCK_ROOT})
   endif()
   find_path(GTEST_INCLUDE_DIR gtest/gtest.h
-    PATHS ${GTEST_ROOT}/include ${GMOCK_ROOT}/gtest/include /usr/include)
+    HINTS ${GTEST_ROOT}/include ${GMOCK_ROOT}/gtest/include /usr/include)
   find_path(GTEST_SRC_DIR src/gtest-all.cc
-    PATHS ${GTEST_ROOT} ${GMOCK_ROOT}/gtest /usr/src/gtest)
+    HINTS ${GTEST_ROOT} ${GMOCK_ROOT}/gtest /usr/src/gtest)
   find_library(GTEST_SHARED_LIB gtest)
   find_library(GTEST_MAIN_LIB gtest_main)
   if ((GTEST_SHARED_LIB OR GTEST_SRC_DIR) AND GTEST_INCLUDE_DIR)
@@ -147,17 +147,17 @@ function(gnc_gtest_configure)
 
   message(STATUS "Checking for GMOCK")
   find_path(GMOCK_INCLUDE_DIR gmock/gmock.h
-    PATHS ${GMOCK_ROOT}/include /usr/include)
+    HINTS ${GMOCK_ROOT}/include /usr/include)
   unset(GMOCK_SRC_DIR CACHE)
   find_library(GMOCK_SHARED_LIB gmock)
   find_library(GMOCK_MAIN_LIB gmock_main)
   find_path(GMOCK_SRC_DIR src/gmock-all.cc
-    PATHS ${GMOCK_ROOT} /usr/src/gmock)
+    HINTS ${GMOCK_ROOT} /usr/src/gmock)
   if (GMOCK_SRC_DIR)
     set(GMOCK_MAIN_SRC_DIR "${GMOCK_SRC_DIR}/src")
   else()
     find_path(GMOCK_SRC_DIR gmock-all.cc
-      PATHS ${GMOCK_ROOT} /usr/src/gmock)
+      HINTS ${GMOCK_ROOT} /usr/src/gmock)
     if (GMOCK_SRC_DIR)
       set(GMOCK_MAIN_SRC_DIR "${GMOCK_SRC_DIR}")
     endif()

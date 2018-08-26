@@ -6,10 +6,11 @@
 (use-modules (gnucash report report-system))
 (use-modules (gnucash report report-system test test-extras))
 (use-modules (srfi srfi-64))
+(use-modules (gnucash engine test srfi64-extras))
 (use-modules (sxml simple))
 (use-modules (sxml xpath))
-(use-modules (system vm coverage)
-             (system vm vm))
+(use-modules (system vm coverage))
+(use-modules (system vm vm))
 
 ;; Guide to the test-transaction.scm
 
@@ -24,7 +25,7 @@
 ;; which sets the SRFI-64 test runner, and initiates the proper test suite
 ;; in (null-test) and (trep-tests). Please note the tests will all call
 ;; (options->sxml) which in turn generates the transaction report, and
-;; dumps the output at /tmp/out-XX.html for review.
+;; dumps the output at /tmp/test-trep-*.html for review.
 
 ;; For coverage analysis, please amend (run-test) (if #f ...) to (if
 ;; #t ...)  and this will run (coverage-test) instead, which will
@@ -38,36 +39,10 @@
 
 ;; copied from transaction.scm
 (define trep-uuid "2fe3b9833af044abb929a88d5a59620f")
+(define reconcile-uuid "e45218c6d76f11e7b5ef0800277ef320")
 
 ;; Explicitly set locale to make the report output predictable
 (setlocale LC_ALL "C")
-
-(define (test-runner)
-  (let ((runner (test-runner-null))
-        (num-passed 0)
-        (num-failed 0))
-    (test-runner-on-test-end! runner
-      (lambda (runner)
-        (format #t "[~a] line:~a, test: ~a\n"
-                (test-result-ref runner 'result-kind)
-                (test-result-ref runner 'source-line)
-                (test-runner-test-name runner))
-        (case (test-result-kind runner)
-          ((pass xpass) (set! num-passed (1+ num-passed)))
-          ((fail xfail)
-           (if (test-result-ref runner 'expected-value)
-               (format #t "~a\n -> expected: ~s\n -> obtained: ~s\n"
-                       (string-join (test-runner-group-path runner) "/")
-                       (test-result-ref runner 'expected-value)
-                       (test-result-ref runner 'actual-value)))
-           (set! num-failed (1+ num-failed)))
-          (else #t))))
-    (test-runner-on-final! runner
-      (lambda (runner)
-        (format #t "Source:~a\npass = ~a, fail = ~a\n"
-                (test-result-ref runner 'source-file) num-passed num-failed)
-        (zero? num-failed)))
-    runner))
 
 (define (run-test)
   (if #f
@@ -86,10 +61,11 @@
         (close port)))))
 
 (define (run-test-proper)
-  (test-runner-factory test-runner)
+  (test-runner-factory gnc:test-runner)
   (test-begin "transaction.scm")
   (null-test)
   (trep-tests)
+  (reconcile-tests)
   ;; (test-end) must be run as the last function, it will
   ;; return #f if any of the tests have failed.
   (test-end "transaction.scm"))
@@ -110,63 +86,17 @@
                     (memv c '(#\- #\.))))
     str)))
 
-(define counter
-  (let ((count 0))
-    (lambda ()
-      (set! count (1+ count))
-      count)))
-
 (define (options->sxml options test-title)
   ;; options object -> sxml tree
   ;;
   ;; This function abstracts the whole transaction report renderer.
   ;; It also catches XML parsing errors, dumping the options changed.
   ;;
-  ;; It also dumps the render into /tmp/out-N.html where N is a counter
-  (let* ((template (gnc:find-report-template trep-uuid))
-         (report (constructor trep-uuid "bar" options #t #t #f #f ""))
-         (renderer (gnc:report-template-renderer template))
-         (document (renderer report)))
-    (gnc:html-document-set-style-sheet! document (gnc:report-stylesheet report))
-    (if test-title
-        (gnc:html-document-set-title! document test-title))
-    (let* ((filename (format #f "/tmp/out-~a.html" (counter)))
-           (render (gnc:html-document-render document))
-           (outfile (open-file filename "w")))
-      (display render outfile)
-      (close-output-port outfile)
-      (catch 'parser-error
-        (lambda () (xml->sxml render))
-        (lambda (k . args)
-          (test-assert k #f)            ; XML parse error doesn't cause a crash but logs as a failure
-          (format #t "see render output at ~a\n~a" filename (gnc:render-options-changed options #t)))))))
+  ;; It also dumps the render into /tmp/test-trep-XX.html where XX is the test title
+  (gnc:options->sxml trep-uuid options "test-trep" test-title))
 
 (define (get-row-col sxml row col)
-  ;; sxml, row & col (numbers or #f) -> list-of-string
-  ;;
-  ;; from an SXML table tree with tr/th/td elements, retrieve row/col
-  ;; if row  =  0 retrieve <tr><th> elements
-  ;; if row  = #f retrieve whole <td> col, excludes <th> cols
-  ;; if col  = #f retrieve whole <tr> row
-  ;; if both = #f retrieve all text elements
-  ;;
-  ;; NOTE: This will retrieve cells from the first table in the tree.
-  ;; If there are multiple tables, I recommend that the tree is first
-  ;; pruned to the desired table via e.g. '(// (table 2)) then sent as
-  ;; argument to this function.
-  (let ((xpath (cond
-                ((not (or row col))             '(// (table 1) // tr // *text*))
-                ((not row)                      `(// (table 1) // tr // (td ,col) // *text*))
-                ((and (equal? row 0) (not col)) '(// (table 1) // tr // th // *text*))
-                ((not col)                      `(// (table 1) // (tr ,row) // td // *text*))
-                ((equal? row 0)                 `(// (table 1) // tr // (th ,col) // *text*))
-                (else                           `(// (table 1) // (tr ,row) // (td ,col) // *text*)))))
-    ((sxpath xpath) sxml)))
-;;
-;; END CANDIDATES
-;;
-
-(define constructor (record-constructor <report>))
+  (sxml->table-row-col sxml 1 row col))
 
 (define (set-option! options section name value)
   (let ((option (gnc:lookup-option options section name)))
@@ -187,14 +117,16 @@
               (list "USD Bank")
               (list "Wallet"))
         (list "Income" (list (cons 'type ACCT-TYPE-INCOME)))
+        (list "Income-GBP" (list (cons 'type ACCT-TYPE-INCOME)))
         (list "Expenses" (list (cons 'type ACCT-TYPE-EXPENSE)))
         (list "Liabilities" (list (cons 'type ACCT-TYPE-LIABILITY)))
+        (list "Equity" (list (cons 'type ACCT-TYPE-EQUITY)))
         ))
 
 (define (null-test)
   ;; This null-test tests for the presence of report.
   (let ((options (gnc:make-report-options trep-uuid)))
-    (test-assert "null-test" (options->sxml options "null-test")))) ;out-1.html
+    (test-assert "null-test" (options->sxml options "null-test"))))
 
 (define (trep-tests)
   ;; This function will perform implementation testing on the transaction report.
@@ -205,8 +137,10 @@
          (usd-bank (cdr (assoc "USD Bank" account-alist)))
          (wallet (cdr (assoc "Wallet" account-alist)))
          (income (cdr (assoc "Income" account-alist)))
+         (gbp-income (cdr (assoc "Income-GBP" account-alist)))
          (expense (cdr (assoc "Expenses" account-alist)))
          (liability (cdr (assoc "Liabilities" account-alist)))
+         (equity (cdr (assoc "Equity" account-alist)))
          (YEAR (gnc:time64-get-year (gnc:get-today)))
          (foreign1 (gnc-commodity-table-lookup
                     (gnc-commodity-table-get-table (gnc-account-get-book bank))
@@ -238,12 +172,21 @@
        (xaccAccountSetCommodity (cdr pair) (gnc-default-report-currency)))
      account-alist)
 
-    ;; Here we set foreign banks' currencies
+    ;; Here we set foreign currencies
+
+    (gnc-commodity-set-user-symbol foreign2 "#")
+
     (with-account
      gbp-bank
      (lambda ()
        (xaccAccountSetCode gbp-bank "01-GBP")
        (xaccAccountSetCommodity gbp-bank foreign2)))
+
+    (with-account
+     gbp-income
+     (lambda ()
+       (xaccAccountSetCode gbp-income "01-GBP")
+       (xaccAccountSetCommodity gbp-income foreign2)))
 
     (with-account
      usd-bank
@@ -293,6 +236,10 @@
       (xaccTransSetNotes txn "multisplit")
       (xaccTransCommitEdit txn))
 
+    ;; A single closing transaction
+    (let ((closing-txn (env-transfer env 31 12 1999 expense equity 111 #:description "Closing")))
+      (xaccTransSetIsClosingTxn closing-txn #t))
+
     ;; A couple of transactions which involve foreign currency
     ;; conversions. We'll set the currencies to GBP and USD.
     (env-transfer-foreign env 15 01 2000 gbp-bank usd-bank 10 14 #:description "GBP 10 to USD 14")
@@ -305,7 +252,9 @@
     ;; run in modern times, otherwise these transactions will be mixed
     ;; up with the old transactions above. The year end net bank balance
     ;; should be (* 12 (+ 103 109 -22)) = $2280.
+    ;; there will also be a #51 income monthly, tested at end of file
     (for-each (lambda (m)
+                (env-transfer env 08 (1+ m) YEAR gbp-income gbp-bank 51 #:description "#51 income")
                 (env-transfer env 03 (1+ m) YEAR income bank  103 #:description "$103 income")
                 (env-transfer env 15 (1+ m) YEAR bank expense  22 #:description "$22 expense")
                 (env-transfer env 09 (1+ m) YEAR income bank  109 #:description "$109 income"))
@@ -325,14 +274,11 @@
     (test-begin "general options")
 
     (let* ((options (default-testing-options))
-           (sxml (options->sxml options "general options")) ;out-2.html
+           (sxml (options->sxml options "general options"))
            (default-headers '("Date" "Num" "Description" "Memo/Notes" "Account" "Amount")))
       (test-equal "default headers"
         default-headers
         (get-row-col sxml 0 #f))
-      (test-equal "last row has same number of cols as header"
-        (length default-headers)
-        (length (get-row-col sxml -1 #f)))
       (test-equal "grand total present"
         '("Grand Total")
         (get-row-col sxml -1 1))
@@ -351,9 +297,9 @@
       (set-option! options "Sorting" "Primary Subtotal" #t)
       (set-option! options "Sorting" "Secondary Key" 'date)
       (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'monthly)
-      (let ((sxml (options->sxml options "test basic column headers, and original currency"))) ;out-3.html
+      (let ((sxml (options->sxml options "test basic column headers, and original currency")))
         (test-equal "default headers, indented, includes common-currency"
-          '(" " " " "Date" "Num" "Description" "Memo/Notes" "Account" "Amount" "USD" "Amount")
+          '("Date" "Num" "Description" "Memo/Notes" "Account" "Amount (USD)" "Amount")
           (get-row-col sxml 0 #f))
         (test-equal "grand total present, no blank cells, and is $2,280 in both common-currency and original-currency"
           '("Grand Total" "$2,280.00" "$2,280.00")
@@ -377,19 +323,19 @@
 
       ;; Filter Account Name Filters
       (set-option! options "Filter" "Account Name Filter" "Expenses")
-      (let ((sxml (options->sxml options "accounts filter expenses"))) ;out-4.html
+      (let ((sxml (options->sxml options "accounts filter expenses")))
         (test-equal "account name filter to 'expenses', sum = $31.00"
           '("$31.00")
           (get-row-col sxml -1 -1)))
 
       (set-option! options "Filter" "Account Name Filter" "Expen.es")
-      (let ((sxml (options->sxml options "accounts filter expen.es"))) ;out-5.html
+      (let ((sxml (options->sxml options "accounts filter expen.es")))
         (test-equal "account name filter to 'expen.es', blank report"
           '()
           (get-row-col sxml #f #f)))
 
       (set-option! options "Filter" "Use regular expressions for account name filter" #t)
-      (let ((sxml (options->sxml options "accounts filter expen.es regex"))) ;out-6.html
+      (let ((sxml (options->sxml options "accounts filter expen.es regex")))
         (test-equal "account name filter to 'expen.es' and switch on regex filter, sum = $31.00"
           '("$31.00")
           (get-row-col sxml -1 -1)))
@@ -399,19 +345,19 @@
       (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 01 01 1969)))
       (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 31 12 1970)))
       (set-option! options "Filter" "Transaction Filter" "desc-3")
-      (let ((sxml (options->sxml options "transaction filter to ponies"))) ;out-7.html
+      (let ((sxml (options->sxml options "transaction filter to ponies")))
         (test-equal "transaction filter in bank to 'desc-3', sum = $29.00"
           '("$29.00")
           (get-row-col sxml -1 -1)))
 
       (set-option! options "Filter" "Transaction Filter" "not.s?")
-      (let ((sxml (options->sxml options "transaction filter not.s?"))) ;out-8.html
+      (let ((sxml (options->sxml options "transaction filter not.s?")))
         (test-equal "transaction filter in bank to 'not.s?', blank report"
           '()
           (get-row-col sxml #f #f)))
 
       (set-option! options "Filter" "Use regular expressions for transaction filter" #t)
-      (let ((sxml (options->sxml options "transaction filter not.s? regex"))) ;out-9.html
+      (let ((sxml (options->sxml options "transaction filter not.s? regex")))
         (test-equal "transaction filter in bank to 'not.s?' and switch regex, sum = -$23.00"
           '("-$23.00")
           (get-row-col sxml -1 -1)))
@@ -421,19 +367,19 @@
       (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 01 01 1969)))
       (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 31 12 1970)))      
       (set-option! options "Filter" "Reconcile Status" 'unreconciled)
-      (let ((sxml (options->sxml options "unreconciled"))) ;out-10.html
+      (let ((sxml (options->sxml options "unreconciled")))
         (test-equal "filter unreconciled only, sum = -$20.00"
           '("-$20.00")
           (get-row-col sxml -1 -1)))
 
       (set-option! options "Filter" "Reconcile Status" 'cleared)
-      (let ((sxml (options->sxml options "cleared"))) ;out-11.html
+      (let ((sxml (options->sxml options "cleared")))
         (test-equal "filter cleared only, sum = $29.00"
           '("$29.00")
           (get-row-col sxml -1 -1)))
 
       (set-option! options "Filter" "Reconcile Status" 'reconciled)
-      (let ((sxml (options->sxml options "reconciled"))) ;out-12.html
+      (let ((sxml (options->sxml options "reconciled")))
         (test-equal "filter reconciled only, sum = -$8.00"
           '("-$8.00")
           (get-row-col sxml -1 -1)))
@@ -444,13 +390,13 @@
       (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 31 12 1970)))      
       (set-option! options "Accounts" "Filter By..." (list income))
       (set-option! options "Accounts" "Filter Type" 'include)
-      (let ((sxml (options->sxml options "including bank-income accts only"))) ;out-13.html
+      (let ((sxml (options->sxml options "including bank-income accts only")))
         (test-equal "filter includes bank-income, sum = -$29.00"
           '("$29.00")
           (get-row-col sxml -1 -1)))
 
       (set-option! options "Accounts" "Filter Type" 'exclude)
-      (let ((sxml (options->sxml options "bank exclude bank-income accts"))) ;out-14.html
+      (let ((sxml (options->sxml options "bank exclude bank-income accts")))
         (test-equal "filter excludes bank-income, sum = -$28.00"
           '("-$28.00")
           (get-row-col sxml -1 -1)))
@@ -460,16 +406,40 @@
       (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 01 01 1969)))
       (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 31 12 1970)))      
       (set-option! options "Filter" "Void Transactions" 'void-only)
-      (let ((sxml (options->sxml options "void only"))) ;out-15.html
+      (let ((sxml (options->sxml options "void only")))
         (test-equal "filter void-transactions only, sum = -$10.00"
           '("$10.00")
           (get-row-col sxml -1 -1)))
 
       (set-option! options "Filter" "Void Transactions" 'both)
-      (let ((sxml (options->sxml options "both void and non-void"))) ;out-16.html
+      (let ((sxml (options->sxml options "both void and non-void")))
         (test-equal "filter void-transactions only, sum = $11.00"
           '("$11.00")
-          (get-row-col sxml -1 -1))))
+          (get-row-col sxml -1 -1)))
+
+      ;; Test Closing-Txn Filters
+      (set! options (default-testing-options))
+      (set-option! options "Accounts" "Accounts" (list expense))
+      (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 01 01 1911)))
+      (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 31 12 2012)))      
+      (set-option! options "Filter" "Closing transactions" 'exclude-closing)
+      (let ((sxml (options->sxml options "filter closing - exclude closing txns ")))
+        (test-equal "filter exclude closing. bal = $111"
+          '("$111.00")
+          (get-row-col sxml -1 -1)))
+
+      (set-option! options "Filter" "Closing transactions" 'closing-only)
+      (let ((sxml (options->sxml options "filter closing - include closing only")))
+        (test-equal "filter closing only. bal = -$111"
+          '("-$111.00")
+          (get-row-col sxml -1 -1)))
+
+      (set-option! options "Filter" "Closing transactions" 'include-both)
+      (let ((sxml (options->sxml options "filter closing - include both")))
+        (test-equal "filter include both. bal = $0"
+          '("$0.00")
+          (get-row-col sxml -1 -1)))
+      )
 
     (test-end "accounts selectors and filtering")
 
@@ -483,7 +453,7 @@
        (list "Date" "Reconciled Date" "Num" "Description" "Memo" "Notes"
              "Account Name" "Other Account Name" "Shares" "Price" "Running Balance"
              "Totals"))
-      (let ((sxml (options->sxml options "all columns off"))) ;out-17.html
+      (let ((sxml (options->sxml options "all columns off")))
         (test-assert "all display columns off, except amount and subtotals are enabled, there should be 2 columns"
           (= (length ((sxpath '(// (table 1) // (tr 1) // th)) sxml))
              (length ((sxpath '(// (table 1) // (tr 4) // td)) sxml))
@@ -494,7 +464,7 @@
       (set-option! options "Sorting" "Primary Subtotal for Date Key" 'none)
       (set-option! options "Sorting" "Secondary Subtotal" #f)
       (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'none)
-      (let ((sxml (options->sxml options "only amounts"))) ;out-18.html
+      (let ((sxml (options->sxml options "only amounts")))
         (test-assert "all display columns off, and no subtotals, but amount enabled, there should be 1 column"
           (= (length ((sxpath '(// (table 1) // (tr 1) // th)) sxml))
              (length ((sxpath '(// (table 1) // (tr 4) // td)) sxml))
@@ -502,7 +472,7 @@
              1)))
 
       (set-option! options "Display" "Amount" 'none)
-      (let ((sxml (options->sxml options "no columns"))) ;out-19.html
+      (let ((sxml (options->sxml options "no columns")))
         (test-assert "all display columns off, without amount nor subtotals, there should be 0 column"
           (= (length ((sxpath '(// (table 1) // (tr 1) // th)) sxml))
              (length ((sxpath '(// (table 1) // (tr 4) // td)) sxml))
@@ -513,7 +483,7 @@
       (set-option! options "Sorting" "Primary Subtotal for Date Key" 'weekly)
       (set-option! options "Sorting" "Secondary Subtotal" #t)
       (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'weekly)
-      (let ((sxml (options->sxml options "subtotals only"))) ;out-20.html
+      (let ((sxml (options->sxml options "subtotals only")))
         (test-assert "all display columns including amount are disabled, but subtotals are enabled, there should be 1 column"
           (= (length ((sxpath '(// (table 1) // (tr 1) // th)) sxml))
              (length ((sxpath '(// (table 1) // (tr -1) // td)) sxml))
@@ -531,7 +501,7 @@
        (list "Date" "Reconciled Date" "Num" "Description" "Memo" "Notes"
              "Account Name" "Other Account Name" "Shares" "Price" "Running Balance"
              "Totals" "Use Full Other Account Name" "Use Full Account Name"))
-      (let* ((sxml (options->sxml options "all columns on"))) ;out-21.html
+      (let* ((sxml (options->sxml options "all columns on")))
         (test-equal "all display columns on, displays correct columns"
           (list "Date" "Reconciled Date" "Num" "Description" "Memo/Notes" "Account"
                 "Transfer from/to" "Shares" "Price" "Amount" "Running Balance")
@@ -544,7 +514,7 @@
                  (string-null? (string-trim-both reconcile-date-string))))
            (get-row-col sxml #f 2)))
         (test-equal "reconciled status subtotal"
-          (list "Total For Unreconciled" " " " " " " " " " " " " " " " " "$0.00" " ")
+          (list "Total For Unreconciled" "$0.00")
           (get-row-col sxml -3 #f))
         )
 
@@ -560,7 +530,7 @@
       (set-option! options "Sorting" "Primary Subtotal for Date Key" 'none)
       (set-option! options "Sorting" "Secondary Subtotal" #f)
       (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'none)
-      (let* ((sxml (options->sxml options "multiline"))) ;out-22.html
+      (let* ((sxml (options->sxml options "multiline")))
         (test-assert "multi line transaction with 1st split have same memo"
           (apply string=? (get-row-col sxml #f 4)))
 
@@ -573,7 +543,7 @@
       ;; Remove expense multisplit, transaction is not shown
       (set-option! options "Accounts" "Filter By..." (list expense))
       (set-option! options "Accounts" "Filter Type" 'exclude)
-      (let* ((sxml (options->sxml options "multiline, filtered out"))) ;out-23.html
+      (let* ((sxml (options->sxml options "multiline, filtered out")))
         (test-equal "multi-line has been excluded"
           '()
           (get-row-col sxml #f #f)))
@@ -586,10 +556,10 @@
       (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 31 12 2000)))
       (set-option! options "General" "Common Currency" #t)
       (set-option! options "General" "Show original currency amount" #t)
-      (let* ((sxml (options->sxml options "single column, with original currency headers"))) ;out-24.html
+      (let* ((sxml (options->sxml options "single column, with original currency headers")))
         (test-equal "single amount column, with original currency headers"
           (list "Date" "Num" "Description" "Memo/Notes" "Account"
-                "Amount" "USD" "Amount")
+                "Amount (USD)" "Amount")
           (get-row-col sxml 0 #f)))
 
       (set-option! options "Display" "Amount" 'double)
@@ -597,16 +567,10 @@
       (set-option! options "Display" "Account Code" #t)
       (set-option! options "Display" "Other Account Name" #t)
       (set-option! options "Display" "Other Account Code" #t)
-      (let* ((sxml (options->sxml options "dual column"))) ;out-25.html
-        ;; Note. It's difficult to test converted monetary
-        ;; amounts. Although I've set transfers from USD/GBP, the
-        ;; transfers do not update the pricedb automatically,
-        ;; therefore converted amounts are displayed as $0. We are not
-        ;; testing the pricedb so it does not seem fair to test its
-        ;; output here too.
+      (let* ((sxml (options->sxml options "dual column")))
         (test-equal "dual amount headers"
           (list "Date" "Num" "Description" "Memo/Notes" "Account" "Transfer from/to"
-                "Debit" "USD" "Credit" "USD" "Debit" "Credit")
+                "Debit (USD)" "Credit (USD)" "Debit" "Credit")
           (get-row-col sxml 0 #f))
         (test-equal "Account Name and Code displayed"
           (list "01-GBP Root.Asset.GBP Bank")
@@ -614,15 +578,18 @@
         (test-equal "Other Account Name and Code displayed"
           (list "01-GBP GBP Bank")
           (get-row-col sxml 7 6))
-        (test-equal "GBP original currency totals = £4"
+        (test-equal "GBP original currency totals = #4"
           (list 4.0)
           (map str->num (get-row-col sxml 5 10)))
-        (test-assert "USD original currency totals = $5"
+        (test-assert "USD original currency totals = $5 (tests pricedb)"
           (equal?
            (list 5.0)
+           (map str->num (get-row-col sxml 4 8))
            (map str->num (get-row-col sxml 9 7))
            (map str->num (get-row-col sxml 9 9))))
-        )
+        (test-equal "USD grand totals are correct (tests pricedb)"
+          (list "Grand Total" "$0.00" "$5.00")
+          (get-row-col sxml 11 #f)))
 
       ;; This test group will test sign reversal strategy. We will
       ;; display all transactions in the 1969-1970 series, sorted by
@@ -638,21 +605,21 @@
       (set-option! options "Sorting" "Primary Subtotal" #f)
       (set-option! options "Sorting" "Secondary Key" 'description)
       (set-option! options "Sorting" "Secondary Subtotal" #f)
-      (let* ((sxml (options->sxml options "sign-reversal is none, correct signs of amounts?"))) ;out-26.html
+      (let* ((sxml (options->sxml options "sign-reversal is none, correct signs of amounts?")))
         (test-equal "sign-reversal is none, correct signs of amounts"
           '(#f #t #t #f #f #t #t #t #t #f #f #f #f #t)
           (map (lambda (s) (not (string-contains s "-")))
                ((sxpath '(// (table 1) // tr // (td -1) // a // *text*)) sxml))))
 
       (set-option! options "Display" "Sign Reverses" 'income-expense)
-      (let* ((sxml (options->sxml options "sign-reversal is income-expense, correct signs of amounts?"))) ;out-27.html
+      (let* ((sxml (options->sxml options "sign-reversal is income-expense, correct signs of amounts?")))
         (test-equal "sign-reversal is income-expense, correct signs of amounts"
           '(#f #t #t #f #f #f #f #f #f #t #t #f #f #t)
           (map (lambda (s) (not (string-contains s "-")))
                ((sxpath '(// (table 1) // tr // (td -1) // a // *text*)) sxml))))
 
       (set-option! options "Display" "Sign Reverses" 'credit-accounts)
-      (let* ((sxml (options->sxml options "sign-reversal is credit-accounts, correct signs of amounts?"))) ;out-28.html
+      (let* ((sxml (options->sxml options "sign-reversal is credit-accounts, correct signs of amounts?")))
         (test-equal "sign-reversal is credit-accounts, correct signs of amounts"
           '(#f #t #t #f #f #t #t #t #t #t #t #t #t #f)
           (map (lambda (s) (not (string-contains s "-")))
@@ -665,16 +632,16 @@
       (set-option! options "General" "Show original currency amount" #t)
       (set-option! options "Sorting" "Primary Key" 'date)
       (set-option! options "Sorting" "Primary Subtotal for Date Key" 'none)
-      (let* ((sxml (options->sxml options "dual columns"))) ;out-29.html
+      (let* ((sxml (options->sxml options "dual columns")))
         (test-equal "dual amount column, with original currency headers"
           (list "Date" "Num" "Description" "Memo/Notes" "Account"
-                "Debit" "USD" "Credit" "USD" "Debit" "Credit")
+                "Debit (USD)" "Credit (USD)" "Debit" "Credit")
           (get-row-col sxml 0 #f))
         (test-equal "dual amount column, grand totals available"
-          (list "Grand Total" " " " " " " " " "$2,280.00" "$2,280.00")
+          (list "Grand Total" "$2,280.00" "$2,280.00")
           (get-row-col sxml -1 #f))
         (test-equal "dual amount column, first transaction correct"
-          (list "01/03/18" "$103 income" "Root.Asset.Bank" "\n" "$103.00" " " "\n" "$103.00" " ")
+          (list "01/03/18" "$103 income" "Root.Asset.Bank" "$103.00" "$103.00")
           (get-row-col sxml 1 #f)))
       )
 
@@ -696,42 +663,48 @@
       (set-option! options "Sorting" "Secondary Subtotal" #f)
 
       (set-option! options "Sorting" "Primary Key" 'date)
-      (let* ((sxml (options->sxml options "sorting=date"))) ;out-30.html
+      (let* ((sxml (options->sxml options "sorting=date")))
         (test-equal "dates are sorted"
           '("12/31/69" "12/31/69" "01/01/70" "02/01/70" "02/10/70")
           (get-row-col sxml #f 1)))
 
       (set-option! options "Sorting" "Primary Key" 'number)
-      (let* ((sxml (options->sxml options "sorting=number"))) ;out-31.html
+      (let* ((sxml (options->sxml options "sorting=number")))
         (test-equal "sort by number"
           '("trn1" "trn2" "trn3" "trn4" "trn7")
           (get-row-col sxml #f 2)))
 
       (set-option! options "Sorting" "Primary Key" 'reconciled-status)
-      (let* ((sxml (options->sxml options "sorting=reconciled-status"))) ;out-32.html
+      (let* ((sxml (options->sxml options "sorting=reconciled-status")))
         (test-equal "sort by reconciled status"
           '("desc-2" "desc-7" "desc-3" "desc-1" "desc-4")
           (get-row-col sxml #f 3)))
 
       (set-option! options "Sorting" "Primary Key" 'memo)
-      (let* ((sxml (options->sxml options "sorting=memo"))) ;out-33.html
+      (let* ((sxml (options->sxml options "sorting=memo")))
         (test-equal "sort by memo"
           '("notes3" "memo-1" "memo-2" "memo-3")
           (get-row-col sxml #f 4)))
 
       (set-option! options "Sorting" "Primary Key" 'account-name)
-      (let* ((sxml (options->sxml options "sorting=account-name"))) ;out-34.html
+      (let* ((sxml (options->sxml options "sorting=account-name")))
         (test-assert "account names are sorted"
           (sorted? (get-row-col sxml #f 5) string<?)))
 
       (set-option! options "Sorting" "Primary Key" 'corresponding-acc-name)
-      (let* ((sxml (options->sxml options "sorting=corresponding-acc-name"))) ;out-35.html
+      (let* ((sxml (options->sxml options "sorting=corresponding-acc-name")))
         (test-equal "sort by corresponding-acc-name"
           '("Expenses" "Expenses" "Income" "Income" "Liabilities")
           (get-row-col sxml #f 6)))
 
+      (set-option! options "Sorting" "Primary Key" 'notes)
+      (let* ((sxml (options->sxml options "sorting=trans-notes")))
+        (test-equal "sort by transaction notes"
+          '("memo-3" "memo-2" "memo-1" "notes3")
+          (get-row-col sxml #f 4)))
+
       (set-option! options "Sorting" "Primary Key" 'amount)
-      (let* ((sxml (options->sxml options "sorting=amount"))) ;out-36.html
+      (let* ((sxml (options->sxml options "sorting=amount")))
         (test-equal "sort by amount"
           '("-$15.00" "-$8.00" "-$5.00" "$10.00" "$29.00")
           ((sxpath '(// (table 1) // tr // (td -1) // a // *text*)) sxml)))
@@ -746,7 +719,7 @@
       (set-option! options "Display" "Totals" #t)
       (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'quarterly)
       (set-option! options "Sorting" "Show subtotals only (hide transactional data)" #t)
-      (let* ((sxml (options->sxml options "sorting=account-name, date-quarterly, subtotals only"))) ;out-37.html
+      (let* ((sxml (options->sxml options "sorting=account-name, date-quarterly, subtotals only")))
         (test-equal "sorting=account-name, date-quarterly, subtotals only"
           '("$570.00" "$570.00" "$570.00" "$570.00" "$2,280.00" "$2,280.00")
           (get-row-col sxml #f -1)))
@@ -764,30 +737,30 @@
       (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'quarterly)
       (set-option! options "Sorting" "Show Informal Debit/Credit Headers" #t)
       (set-option! options "Sorting" "Show Account Description" #t)
-      (let* ((sxml (options->sxml options "sorting=date"))) ;out-38.html
+      (let* ((sxml (options->sxml options "sorting=date, friendly headers")))
         (test-equal "expense acc friendly headers"
-          '("\n" "Expenses" "Expense" "Rebate")
-          (get-row-col sxml 47 #f))
+          '("Expenses" "Expense" "Rebate")
+          (get-row-col sxml 69 #f))
         (test-equal "income acc friendly headers"
-          '("\n" "Income" "Charge" "Income")
-          (get-row-col sxml 69 #f)))
+          '("Income" "Charge" "Income")
+          (get-row-col sxml 91 #f)))
 
       (set-option! options "Accounts" "Accounts" (list bank))
       (set-option! options "Display" "Totals" #f)
       (set-option! options "Sorting" "Show subtotals only (hide transactional data)" #t)
-      (let* ((sxml (options->sxml options "sorting=date quarterly"))) ;out-39.html
+      (let* ((sxml (options->sxml options "sorting=date quarterly")))
         (test-equal "quarterly subtotals are correct"
           '("$570.00" "$570.00" "$570.00" "$570.00")
           (get-row-col sxml #f 4)))
 
       (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'monthly)
-      (let* ((sxml (options->sxml options "sorting=date monthly"))) ;out-40.html
+      (let* ((sxml (options->sxml options "sorting=date monthly")))
         (test-equal "monthly subtotals are correct"
           '("$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$190.00")
           (get-row-col sxml #f 4)))
 
       (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'yearly)
-      (let* ((sxml (options->sxml options "sorting=date yearly"))) ;out-41.html
+      (let* ((sxml (options->sxml options "sorting=date yearly")))
         (test-equal "yearly subtotals are correct"
           '("$2,280.00")
           (get-row-col sxml #f 4)))
@@ -797,14 +770,14 @@
       (set-option! options "Sorting" "Show subtotals only (hide transactional data)" #f)
       (set-option! options "Filter" "Void Transactions" 'both)
       (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'daily)
-      (let* ((sxml (options->sxml options "sorting=date"))) ;out-42.html
+      (let* ((sxml (options->sxml options "sorting=date")))
         (test-equal "daily subtotals are correct"
           '("$39.00")
           (get-row-col sxml 5 4)))
 
       (set-option! options "Sorting" "Show subtotals only (hide transactional data)" #t)
       (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'weekly)
-      (let* ((sxml (options->sxml options "sorting=date weekly"))) ;out-43.html
+      (let* ((sxml (options->sxml options "sorting=date weekly")))
         (test-equal "weekly subtotals are correct (1)"
           '("$34.00" "$89.00")
           (get-row-col sxml #f 4))
@@ -817,7 +790,7 @@
     (test-begin "subtotal table")
 
     (let ((options (default-testing-options)))
-      (set-option! options "Accounts" "Accounts" (list bank income expense))
+      (set-option! options "Accounts" "Accounts" (list bank gbp-bank gbp-income income expense))
       (set-option! options "General" "Start Date" (cons 'relative 'start-cal-year))
       (set-option! options "General" "End Date" (cons 'relative 'end-cal-year))
       (set-option! options "Display" "Subtotal Table" #t)
@@ -825,38 +798,49 @@
       (set-option! options "Sorting" "Primary Subtotal" #t)
       (set-option! options "Sorting" "Secondary Key" 'date)
       (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'monthly)
-      (let ((sxml (options->sxml options "subtotal table"))) ;out-44.html
+      (let ((sxml (options->sxml options "subtotal table")))
         (test-equal "summary bank-row is correct"
           (list "Bank" "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$190.00"
-                "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$2,280.00")
+                "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$190.00" "$2,280.00" "$190.00")
           (get-row-col sxml 1 #f))
+        (test-equal "summary gbp bank-row is correct"
+          (list "GBP Bank" "#51.00" "#51.00" "#51.00" "#51.00" "#51.00" "#51.00"
+                "#51.00" "#51.00" "#51.00" "#51.00" "#51.00" "#51.00" "#612.00" "#51.00")
+          (get-row-col sxml 2 #f))
         (test-equal "summary expense-row is correct"
           (list "Expenses" "$22.00" "$22.00" "$22.00" "$22.00" "$22.00" "$22.00"
-                "$22.00" "$22.00" "$22.00" "$22.00" "$22.00" "$22.00" "$264.00")
-          (get-row-col sxml 2 #f))
+                "$22.00" "$22.00" "$22.00" "$22.00" "$22.00" "$22.00" "$264.00" "$22.00")
+          (get-row-col sxml 3 #f))
         (test-equal "summary income-row is correct"
           (list "Income" "-$212.00" "-$212.00" "-$212.00" "-$212.00" "-$212.00"
                 "-$212.00" "-$212.00" "-$212.00" "-$212.00" "-$212.00" "-$212.00"
-                "-$212.00" "-$2,544.00")
-          (get-row-col sxml 3 #f))
+                "-$212.00" "-$2,544.00" "-$212.00")
+          (get-row-col sxml 4 #f))
+        (test-equal "summary gbp income-row is correct"
+          (list "Income-GBP" "-#51.00" "-#51.00" "-#51.00" "-#51.00" "-#51.00" "-#51.00"
+                "-#51.00" "-#51.00" "-#51.00" "-#51.00" "-#51.00" "-#51.00" "-#612.00" "-#51.00")
+          (get-row-col sxml 5 #f))
+        (test-equal "summary gbp total-row is correct"
+          (list "Grand Total" "#0.00" "#0.00")
+          (get-row-col sxml 6 #f))
         (test-equal "summary total-row is correct"
-          (list "Grand Total" "$0.00")
-          (get-row-col sxml 4 #f)))
+          (list "$0.00" "$0.00")
+          (get-row-col sxml 7 #f)))
 
       (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 01 01 1969)))
       (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 31 12 1970)))
-      (let ((sxml (options->sxml options "sparse subtotal table"))) ;out-45.html
+      (let ((sxml (options->sxml options "sparse subtotal table")))
         (test-equal "sparse summary-table - row 1"
-          (list "Bank" "$29.00" "-$5.00" "-$23.00" "$1.00")
+          (list "Bank" "$29.00" "-$5.00" "-$23.00" "$1.00" "$0.33")
           (get-row-col sxml 1 #f))
         (test-equal "sparse summary-table - row 2"
-          (list "Expenses" "$16.00" "$15.00" "$31.00")
+          (list "Expenses" "$16.00" "$15.00" "$31.00" "$10.33")
           (get-row-col sxml 2 #f))
         (test-equal "sparse summary-table - row 3"
-          (list "Income" "-$29.00" "-$29.00")
+          (list "Income" "-$29.00" "-$29.00" "-$9.67")
           (get-row-col sxml 3 #f))
         (test-equal "sparse summary-table - row 4"
-          (list "Grand Total" "$3.00")
+          (list "Grand Total" "$3.00" "$1.00")
           (get-row-col sxml 4 #f))
         (test-equal "sparse summary-table - col 1"
           (list "Bank" "Expenses" "Income" "Grand Total")
@@ -872,6 +856,58 @@
           (get-row-col sxml #f 4))
         (test-equal "sparse summary-table - col 5"
           (list "$1.00" "$31.00" "-$29.00" "$3.00")
-          (get-row-col sxml #f 5))))
+          (get-row-col sxml #f 5))
+        (test-equal "sparse summary-table - col 6 average"
+          (list "$0.33" "$10.33" "-$9.67" "$1.00")
+          (get-row-col sxml #f 6))))
     (test-end "subtotal table")
     ))
+
+(define (reconcile-tests)
+  (let* ((env (create-test-env))
+         (account-alist (env-create-account-structure-alist env structure))
+         (bank (cdr (assoc "Bank" account-alist)))
+         (income (cdr (assoc "Income" account-alist)))
+         (liability (cdr (assoc "Liabilities" account-alist)))
+         (expense (cdr (assoc "Expenses" account-alist)))
+         (YEAR (gnc:time64-get-year (gnc:get-today)))
+         )
+
+    (define (options->sxml options test-title)
+      (gnc:options->sxml reconcile-uuid options "test-reconcile" test-title))
+
+    (define (default-testing-options)
+      (let ((options (gnc:make-report-options reconcile-uuid)))
+        (set-option! options "Accounts" "Accounts" (list bank liability))
+        options))
+
+    ;; old transactions for testing reconcile date options
+    (env-transfer env 01 01 1970 bank expense       5   #:description "desc-1" #:num "trn1" #:memo "memo-3")
+    (env-transfer env 31 12 1969 income bank       10   #:description "desc-2" #:num "trn2" #:void-reason "void" #:notes "notes3")
+    (env-transfer env 31 12 1969 income bank       29   #:description "desc-3" #:num "trn3"
+                  #:reconcile (cons #\c (gnc-dmy2time64 01 03 1970)))
+    (env-transfer env 01 02 1970 bank expense      15   #:description "desc-4" #:num "trn4" #:notes "notes2" #:memo "memo-1")
+    (env-transfer env 10 01 1970 liability expense 10   #:description "desc-5" #:num "trn5" #:void-reason "any")
+    (env-transfer env 10 01 1970 liability expense 11   #:description "desc-6" #:num "trn6" #:notes "notes1")
+    (env-transfer env 10 02 1970 bank expense       8   #:description "desc-7" #:num "trn7" #:notes "notes1" #:memo "memo-2"
+                  #:reconcile (cons #\y (gnc-dmy2time64 01 03 1970)))
+
+
+    (let* ((options (default-testing-options)))
+      (let ((sxml (options->sxml options "null test")))
+        (test-assert "sxml"
+          sxml))
+      (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 01 03 1970)))
+      (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 31 03 1970)))
+      (let ((sxml (options->sxml options "filter reconcile date")))
+        (test-equal "test reconciled amounts = $8"
+          (list "Total For Reconciled" "$8.00")
+          (get-row-col sxml 3 #f))
+        (test-equal "test cleared amounts = $29"
+          (list "Total For Cleared" "$29.00")
+          (get-row-col sxml 6 #f))
+        (test-equal "test unreconciled amounts = $31"
+          (list "Total For Unreconciled" "$31.00")
+          (get-row-col sxml 11 #f))
+        sxml)
+      )))

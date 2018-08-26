@@ -391,8 +391,8 @@ query_transactions (GncSqlBackend* sql_be, std::string selector)
 
         if (selector.empty())
         {
-            selector = "(SELECT DISTINCT ";
-            selector += tpkey + " FROM " TRANSACTION_TABLE ")";
+            selector = "SELECT DISTINCT ";
+            selector += tpkey + " FROM " TRANSACTION_TABLE;
         }
         gnc_sql_slots_load_for_sql_subquery (sql_be, selector,
 					     (BookLookupFn)xaccTransLookup);

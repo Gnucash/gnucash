@@ -433,8 +433,6 @@
          ;; XXX I haven't found a way to get the book for which the report was opened here
          (coyname (or (gnc:company-info (gnc-get-current-book) gnc:*company-name*) ""))
 
-         (css? (gnc-html-engine-supports-css))
-
          (html #f))
 
     ;; end of all the lets.  time for some real code
@@ -458,8 +456,7 @@
 
     (define (foreignstyle item)
       ;; apply styling for amount in foreign currency
-      (if css?
-        (string-append "<span class=\"foreign\">" item "</span>"))
+        (string-append "<span class=\"foreign\">" item "</span>")
         (string-append "<small><i>" item "</i></small>"))
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -671,13 +668,7 @@
     (set! html (eguile-file-to-string opt-template-file (the-environment)))
     (gnc:debug "balsheet-eg.scm - generated html:") (gnc:debug html)
     (gnc:report-finished)
-    (if css? ; return report as document or html, depending on version
-      html
-      (let ((document (gnc:make-html-document)))
-        (gnc:html-document-add-object! document html)
-        document))
-
-    ))
+    html))
 
 (gnc:define-report
   'version 1

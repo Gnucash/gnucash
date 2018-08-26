@@ -31,7 +31,7 @@
 (use-modules (srfi srfi-13))
 (use-modules (srfi srfi-14))
 
-(gnc:module-load "gnucash/html" 0)   ; added for 'gnc-html-engine-supports-css'
+(gnc:module-load "gnucash/html" 0)
 (gnc:module-load "gnucash/report/report-system" 0)
 
 ;; plain style sheet
@@ -123,143 +123,70 @@
        'attribute (list "cellspacing" spacing)
        'attribute (list "cellpadding" padding))
 
-    (if (gnc-html-engine-supports-css)
-        (begin ;; this is for webkit
-          (gnc:html-document-set-style!
-             ssdoc "column-heading-left"
-             'tag "th"
-             'attribute (list "class" "column-heading-left"))
+    (gnc:html-document-set-style!
+     ssdoc "column-heading-left"
+     'tag "th"
+     'attribute (list "class" "column-heading-left"))
 
-          (gnc:html-document-set-style!
-             ssdoc "column-heading-center"
-             'tag "th"
-             'attribute (list "class" "column-heading-center"))
+    (gnc:html-document-set-style!
+     ssdoc "column-heading-center"
+     'tag "th"
+     'attribute (list "class" "column-heading-center"))
 
-          (gnc:html-document-set-style!
-             ssdoc "column-heading-right"
-             'tag "th"
-             'attribute (list "class" "column-heading-right"))
+    (gnc:html-document-set-style!
+     ssdoc "column-heading-right"
+     'tag "th"
+     'attribute (list "class" "column-heading-right"))
 
-          (gnc:html-document-set-style!
-             ssdoc "date-cell"
-             'tag "td"
-             'attribute (list "class" "date-cell"))
+    (gnc:html-document-set-style!
+     ssdoc "date-cell"
+     'tag "td"
+     'attribute (list "class" "date-cell"))
 
-          (gnc:html-document-set-style!
-             ssdoc "anchor-cell"
-             'tag "td"
-             'attribute (list "class" "anchor-cell"))
+    (gnc:html-document-set-style!
+     ssdoc "anchor-cell"
+     'tag "td"
+     'attribute (list "class" "anchor-cell"))
 
-          (gnc:html-document-set-style!
-             ssdoc "number-cell"
-             'tag "td"
-             'attribute (list "class" "number-cell"))
+    (gnc:html-document-set-style!
+     ssdoc "number-cell"
+     'tag "td"
+     'attribute (list "class" "number-cell"))
 
-          (gnc:html-document-set-style!
-             ssdoc "number-cell-neg"
-             'tag "td"
-             'attribute (list "class" "number-cell neg"))
+    (gnc:html-document-set-style!
+     ssdoc "number-cell-neg"
+     'tag "td"
+     'attribute (list "class" "number-cell neg"))
 
-          (gnc:html-document-set-style!
-             ssdoc "number-header"
-             'tag "th"
-             'attribute (list "class" "number-header"))
+    (gnc:html-document-set-style!
+     ssdoc "number-header"
+     'tag "th"
+     'attribute (list "class" "number-header"))
 
-          (gnc:html-document-set-style!
-             ssdoc "text-cell"
-             'tag "td"
-             'attribute (list "class" "text-cell"))
+    (gnc:html-document-set-style!
+     ssdoc "text-cell"
+     'tag "td"
+     'attribute (list "class" "text-cell"))
 
-          (gnc:html-document-set-style!
-             ssdoc "total-number-cell"
-             'tag "td"
-             'attribute (list "class" "total-number-cell"))
+    (gnc:html-document-set-style!
+     ssdoc "total-number-cell"
+     'tag "td"
+     'attribute (list "class" "total-number-cell"))
 
-          (gnc:html-document-set-style!
-             ssdoc "total-number-cell-neg"
-             'tag "td"
-             'attribute (list "class" "total-number-cell neg"))
+    (gnc:html-document-set-style!
+     ssdoc "total-number-cell-neg"
+     'tag "td"
+     'attribute (list "class" "total-number-cell neg"))
 
-          (gnc:html-document-set-style!
-             ssdoc "total-label-cell"
-             'tag "td"
-             'attribute (list "class" "total-label-cell"))
+    (gnc:html-document-set-style!
+     ssdoc "total-label-cell"
+     'tag "td"
+     'attribute (list "class" "total-label-cell"))
 
-          (gnc:html-document-set-style!
-             ssdoc "centered-label-cell"
-             'tag "td"
-             'attribute (list "class" "centered-label-cell"))
-        )
-        (begin ;; this is for gtkhtml
-          (gnc:html-document-set-style!
-             ssdoc "column-heading-left"
-             'tag "th"
-             'attribute (list "align" "left"))
-
-          (gnc:html-document-set-style!
-             ssdoc "column-heading-center"
-             'tag "th"
-             'attribute (list "align" "center"))
-
-          (gnc:html-document-set-style!
-             ssdoc "column-heading-right"
-             'tag "th"
-             'attribute (list "align" "right"))
-
-          (gnc:html-document-set-style!
-             ssdoc "date-cell"
-             'tag "td"
-             'attribute (list "nowrap" "nowrap"))
-
-          (gnc:html-document-set-style!
-             ssdoc "anchor-cell"
-             'tag "td"
-             'attribute (list "align" "left")
-             'attribute (list "nowrap"))
-
-          (gnc:html-document-set-style!
-             ssdoc "number-cell"
-             'tag "td"
-             'attribute (list "align" "right")
-             'attribute (list "nowrap"))
-
-          (gnc:html-document-set-style!
-             ssdoc "number-cell-neg"
-             'tag "td"
-             'attribute (list "align" "right")
-             'attribute (list "nowrap"))
-
-          (gnc:html-document-set-style!
-             ssdoc "number-header"
-             'tag "th"
-             'attribute (list "align" "right"))
-
-          (gnc:html-document-set-style!
-             ssdoc "text-cell"
-             'tag "td"
-             'attribute (list "align" "left"))
-
-          (gnc:html-document-set-style!
-             ssdoc "total-number-cell"
-             'tag "td"
-             'attribute (list "align" "right"))
-
-          (gnc:html-document-set-style!
-             ssdoc "total-number-cell-neg"
-             'tag "td"
-             'attribute (list "align" "right"))
-
-          (gnc:html-document-set-style!
-             ssdoc "total-label-cell"
-             'tag "td"
-             'attribute (list "align" "left"))
-
-          (gnc:html-document-set-style!
-             ssdoc "centered-label-cell"
-             'tag "td"
-             'attribute (list "align" "center"))
-        )
-    )
+    (gnc:html-document-set-style!
+     ssdoc "centered-label-cell"
+     'tag "td"
+     'attribute (list "class" "centered-label-cell"))
 
     (gnc:html-document-set-style!
        ssdoc "normal-row"
@@ -289,7 +216,7 @@
      ssdoc "a"
      'tag ""))
 
-    (add-css-information-to-doc options ssdoc)
+    (add-css-information-to-doc options ssdoc doc)
 
     (let* ((title (gnc:html-document-title doc))
            (doc-headline (gnc:html-document-headline doc))

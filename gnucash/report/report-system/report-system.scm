@@ -112,6 +112,7 @@
 (export gnc:html-build-acct-table)
 (export gnc:first-html-build-acct-table)
 (export gnc:html-make-exchangerates)
+(export gnc:html-render-options-changed)
 (export gnc:html-make-generic-warning)
 (export gnc:html-make-no-account-warning)
 (export gnc:html-make-generic-budget-warning)
@@ -600,6 +601,7 @@
 (export gnc:html-table-set-col-headers-style!)
 (export gnc:html-table-row-headers-style)
 (export gnc:html-table-set-row-headers-style!)
+(export gnc:html-table-set-last-row-style!)
 (export gnc:html-table-set-style!)
 (export gnc:html-table-set-col-style!)
 (export gnc:html-table-set-row-style!)
@@ -618,8 +620,21 @@
 (export gnc:html-table-set-cell/tag!)
 (export gnc:html-table-append-column!)
 (export gnc:html-table-prepend-column!)
-(export gnc:html-table-merge)
 (export gnc:html-table-render)
+
+;; html-anytag.scm
+(export <html-anytag>)
+(export html-anytag?)
+(export gnc:html-anytag-data)
+(export gnc:html-anytag-set-data!)
+(export gnc:html-anytag-style)
+(export gnc:html-anytag-append-data!)
+(export gnc:html-anytag-set-style!)
+(export gnc:html-anytag-render div doc)
+(export gnc:make-html-div)
+(export gnc:make-html-div/markup)
+(export gnc:make-html-span)
+(export gnc:make-html-span/markup)
 
 ;; html-text.scm
 
@@ -733,6 +748,7 @@
 (load-from-path "html-fonts")
 
 (load-from-path "html-style-sheet")
+(load-from-path "html-anytag")
 (load-from-path "html-table")
 (load-from-path "html-text")
 (load-from-path "html-acct-table")

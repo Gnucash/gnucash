@@ -21,21 +21,16 @@
 
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash engine test test-extras))
+(use-modules (gnucash report report-system))
+(use-modules (sxml simple))
+(use-modules (sxml xpath))
 
 (export pattern-streamer)
-
-(export create-option-set)
-(export option-set-setter)
-(export option-set-getter)
 
 (export tbl-column-count)
 (export tbl-row-count)
 (export tbl-ref)
 (export tbl-ref->number)
-
-;;
-;; Random report test related syntax and the like
-;;
 
 ;;
 ;; Table parsing
@@ -88,69 +83,68 @@
 (define (tbl-ref->number tbl row-index column-index)
   (string->number (car (tbl-ref tbl row-index column-index))))
 
-;;
-;; Test sinks
-;;
+(export gnc:options->render)
+(define (gnc:options->render uuid options prefix test-title)
+  ;; uuid - str to locate report uuid
+  ;; options - gnc:options object
+  ;; prefix - str describing tests e.g. "test-trep"
+  ;; test-title: str describing each unit test e.g. "test disable filter"
+  ;;
+  ;; outputs: string
+  ;;
+  ;; This function abstracts the report renderer, producing a string. It
+  ;; can be useful for reports which may not valid XML.
+  ;;
+  ;; It also dumps the render into /tmp/XX-YY.html where XX is the
+  ;; test prefix and YY is the test title.
 
-(define (make-test-sink) (list 'sink 0 '()))
+  (let* ((template (gnc:find-report-template uuid))
+         (constructor (record-constructor <report>))
+         (report (constructor uuid "bar" options #t #t #f #f ""))
+         (renderer (gnc:report-template-renderer template))
+         (document (renderer report))
+         (sanitize-char (lambda (c)
+                          (if (or (char-alphabetic? c)
+                                  (char-numeric? c)) c #\-))))
+    (gnc:html-document-set-style-sheet! document (gnc:report-stylesheet report))
+    (if test-title
+        (gnc:html-document-set-title! document test-title))
+    (let ((render (gnc:html-document-render document)))
+      (with-output-to-file (format #f "/tmp/~a-~a.html"
+                                   (string-map sanitize-char prefix)
+                                   (string-map sanitize-char test-title))
+        (lambda ()
+          (display render)))
+      render)))
 
-(define (test-sink-count sink)
-  (second sink))
+(export gnc:options->sxml)
+(define (gnc:options->sxml uuid options prefix test-title)
+  ;; This functions calls the above gnc:options->render to render
+  ;; report.  Then report is converted to SXML.  It catches XML
+  ;; parsing errors, dumping the options changed.
+  (let ((render (gnc:options->render uuid options prefix test-title)))
+    (catch 'parser-error
+      (lambda () (xml->sxml render
+                            #:trim-whitespace? #t
+                            #:entities '((nbsp . "\xa0"))))
+      (lambda (k . args)
+        (format #t "*** XML error: ~a ~a\n~a"
+                prefix test-title
+                (gnc:html-render-options-changed options #t))
+        (throw k args)))))
 
-(define (test-sink-count! sink value)
-  (set-car! (cdr sink) value))
-
-(define (test-sink-messages sink)
-  (third sink))
-
-(define (test-sink-messages! sink messages)
-  (set-car! (cdr (cdr sink)) messages))
-
-(define (test-sink-check sink message flag)
-  (test-sink-count! sink (+ (test-sink-count sink) 1))
-  (if flag #t
-      (test-sink-messages! sink (cons message (test-sink-messages sink)))))
-
-(define (test-sink-report sink)
-  (format #t "Completed ~a tests ~a\n"
-	  (test-sink-count sink)
-	  (if (null? (test-sink-messages sink)) "PASS" "FAIL"))
-  (if (null? (test-sink-messages sink)) #t
-      (begin (for-each (lambda (delayed-message)
-			 (delayed-format-render #t delayed-message))
-		       (test-sink-messages sink))
-	     #f)))
-
-(define (delayed-format . x) x)
-
-(define (delayed-format-render stream msg)
-  (apply format stream msg))
-
-;;
-;; options
-;;
-
-
-(define (create-option-set)
-  (make-hash-table) )
-
-(define (option-set-setter option-set)
-  (lambda (category name value)
-    (hash-set! option-set (list category name) value)))
-
-(define (option-set-getter option-set)
-  (lambda (category name)
-    (hash-ref option-set (list category name))))
-
-;;
-;;
-;;
-
-(define (report-show-options stream expense-options)
-  (gnc:options-for-each (lambda (option)
-			  (format stream "Option: ~a.~a Value ~a\n"
-				  (gnc:option-section option)
-				  (gnc:option-name option)
-				  (gnc:option-value option)))
-			expense-options))
-
+(export sxml->table-row-col)
+(define (sxml->table-row-col sxml tbl row col)
+  ;; sxml - sxml input tree
+  ;; tbl - table number (e.g. 2 = second table in tree)
+  ;; row - row number (negative counts from bottom) or #f (all rows)
+  ;;       or zero (retrieves <th> headers)
+  ;; col - col number (negative counts from right) or all cols
+  ;;
+  ;; output: list-of-string
+  (let* ((tbl-path `(table ,tbl))
+         (row-path (if (and row (not (zero? row))) `(tr ,row) 'tr))
+         (col-tag  (if (and row (zero? row)) 'th 'td))
+         (col-path (if col `(,col-tag ,col) col-tag))
+         (xpath `(// ,tbl-path // ,row-path // ,col-path // *text*)))
+    ((sxpath xpath) sxml)))

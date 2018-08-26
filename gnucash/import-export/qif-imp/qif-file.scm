@@ -516,7 +516,7 @@
                 ;; ...and this is if we read a null or eof line.
                 (if (and (not abort-read)
                          (not (eof-object? line)))
-                    (line-loop))))))
+                    (line-loop))))) #:encoding "UTF-8")
 
       ;; Reverse the transaction list so xtns are in the same order that
       ;; they appeared in the file.  This is important in a few cases.

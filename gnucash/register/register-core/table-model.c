@@ -133,6 +133,7 @@ gnc_table_model_new (void)
     model->entry_handlers = gnc_table_model_handler_hash_new ();
     model->label_handlers = gnc_table_model_handler_hash_new ();
     model->help_handlers = gnc_table_model_handler_hash_new ();
+    model->tooltip_handlers = gnc_table_model_handler_hash_new ();
     model->io_flags_handlers = gnc_table_model_handler_hash_new ();
     model->cell_color_handlers = gnc_table_model_handler_hash_new ();
     model->cell_border_handlers = gnc_table_model_handler_hash_new ();
@@ -157,6 +158,9 @@ gnc_table_model_destroy (TableModel *model)
 
     gnc_table_model_handler_hash_destroy (model->label_handlers);
     model->label_handlers = NULL;
+
+    gnc_table_model_handler_hash_destroy (model->tooltip_handlers);
+    model->tooltip_handlers = NULL;
 
     gnc_table_model_handler_hash_destroy (model->help_handlers);
     model->help_handlers = NULL;
@@ -258,6 +262,39 @@ gnc_table_model_get_label_handler (TableModel *model, const char * cell_name)
     g_return_val_if_fail (model != NULL, NULL);
 
     return gnc_table_model_handler_hash_lookup (model->label_handlers,
+            cell_name);
+}
+
+void
+gnc_table_model_set_tooltip_handler (TableModel *model,
+                                   TableGetTooltipHandler tooltip_handler,
+                                   const char * cell_name)
+{
+    g_return_if_fail (model != NULL);
+    g_return_if_fail (cell_name != NULL);
+
+    gnc_table_model_handler_hash_insert (model->tooltip_handlers,
+                                         cell_name,
+                                         tooltip_handler);
+}
+
+void
+gnc_table_model_set_default_tooltip_handler
+(TableModel *model, TableGetTooltipHandler tooltip_handler)
+{
+    g_return_if_fail (model != NULL);
+
+    gnc_table_model_handler_hash_insert (model->tooltip_handlers,
+                                         DEFAULT_HANDLER,
+                                         tooltip_handler);
+}
+
+TableGetTooltipHandler
+gnc_table_model_get_tooltip_handler (TableModel *model, const char * cell_name)
+{
+    g_return_val_if_fail (model != NULL, NULL);
+
+    return gnc_table_model_handler_hash_lookup (model->tooltip_handlers,
             cell_name);
 }
 

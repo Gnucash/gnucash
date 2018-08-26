@@ -66,7 +66,7 @@ protected:
             virtual GncSqlResult* operator*() { return m_inst; }
             virtual int64_t get_int_at_col (const char* col) const
             { return 1LL; }
-            virtual float get_float_at_col (const char* col) const
+            virtual double get_float_at_col (const char* col) const
             { return 1.0; }
             virtual double get_double_at_col (const char* col) const
             { return 1.0; }
@@ -118,7 +118,7 @@ public:
     virtual std::string quote_string (const std::string& str)
         const noexcept override { return std::string{str}; }
     int dberror() const noexcept override { return 0; }
-    void set_error(int error, unsigned int repeat, bool retry) noexcept override { return; }
+    void set_error(QofBackendError error, unsigned int repeat, bool retry) noexcept override { return; }
     bool verify() noexcept override { return true; }
     bool retry_connection(const char* msg) noexcept override { return true; }
 private:

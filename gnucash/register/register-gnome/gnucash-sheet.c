@@ -1810,13 +1810,11 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
     if (pass_on)
     {
         gboolean result = FALSE;
-        gtk_editable_set_editable(GTK_EDITABLE(sheet->entry), TRUE);
 
         // If sheet is readonly, entry is not realized
         if (gtk_widget_get_realized (GTK_WIDGET(sheet->entry)))
             result = gtk_widget_event (sheet->entry, (GdkEvent *) event);
 
-        gtk_editable_set_editable(GTK_EDITABLE(sheet->entry), FALSE);
         return result;
     }
 
@@ -2622,6 +2620,66 @@ gnucash_sheet_get_type (void)
     return gnucash_sheet_type;
 }
 
+
+static gboolean
+gnucash_sheet_tooltip (GtkWidget  *widget, gint x, gint y,
+               gboolean    keyboard_mode, GtkTooltip *tooltip,
+               gpointer    user_data)
+{
+    GnucashSheet *sheet = GNUCASH_SHEET (widget);
+    GnucashCursor *cursor = sheet->cursor;
+    Table *table = sheet->table;
+    VirtualLocation virt_loc;
+    gchar *tooltip_text;
+    gint cx, cy, cw, ch;
+    GdkRectangle rect;
+    SheetBlock *block;
+    gint bx, by;
+    gint hscroll_val, vscroll_val;
+
+    if (keyboard_mode)
+        return FALSE;
+
+    // get the scroll window values
+    hscroll_val = (gint) gtk_adjustment_get_value (sheet->hadj);
+    vscroll_val = (gint) gtk_adjustment_get_value (sheet->vadj);
+
+    if (!gnucash_sheet_find_loc_by_pixel (sheet, x + hscroll_val, y + vscroll_val, &virt_loc))
+        return FALSE;
+
+    tooltip_text = gnc_table_get_tooltip (table, virt_loc);
+
+    // if tooltip_text empty, clear tooltip and return FALSE
+    if ((tooltip_text == NULL) || (g_strcmp0 (tooltip_text,"") == 0))
+    {
+        gtk_tooltip_set_text (tooltip, NULL);
+        return FALSE;
+    }
+
+    block = gnucash_sheet_get_block (sheet, virt_loc.vcell_loc);
+    if (block == NULL)
+        return FALSE;
+
+    bx = block->origin_x;
+    by = block->origin_y;
+
+    // get the cell location and dimensions
+    gnucash_sheet_style_get_cell_pixel_rel_coords (cursor->style,
+            virt_loc.phys_row_offset, virt_loc.phys_col_offset,
+            &cx, &cy, &cw, &ch);
+
+     rect.x = cx + bx - hscroll_val;
+     rect.y = cy + by - vscroll_val;
+     rect.width = cw;
+     rect.height = ch;
+
+     gtk_tooltip_set_tip_area (tooltip, &rect);
+     gtk_tooltip_set_text (tooltip, tooltip_text);
+     g_free (tooltip_text);
+     return TRUE;
+}
+
+
 GtkWidget *
 gnucash_sheet_new (Table *table)
 {
@@ -2641,6 +2699,11 @@ gnucash_sheet_new (Table *table)
     sheet->dimensions_hash_table = g_hash_table_new_full (g_int_hash,
                                    g_int_equal,
                                    g_free, NULL);
+
+    /* add tooltips to sheet */
+    gtk_widget_set_has_tooltip (GTK_WIDGET(sheet), TRUE);
+    g_signal_connect(G_OBJECT(sheet), "query-tooltip",
+                     G_CALLBACK(gnucash_sheet_tooltip), NULL);
 
     gnucash_sheet_refresh_from_prefs(sheet);
 

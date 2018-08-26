@@ -140,7 +140,6 @@
                (push (lambda (l) (set! retval (cons l retval))))
                (objs (gnc:html-document-objects doc))
                (work-to-do (length objs))
-               (css? (gnc-html-engine-supports-css))
                (work-done 0)
                (title (gnc:html-document-title doc)))
           ;; compile the doc style
@@ -160,9 +159,8 @@
                 (push "<html>\n")
                 (push "<head>\n")
                 (push "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n")
-                (if css?
-                  (if style-text
-                    (push (list "</style>" style-text "<style type=\"text/css\">\n"))))
+                (if style-text
+                    (push (list "</style>" style-text "<style type=\"text/css\">\n")))
                 (let ((title (gnc:html-document-title doc)))
                   (if title
                       (push (list "</title>" title "<title>\n"))))
@@ -401,6 +399,9 @@
          ((gnc:html-table? obj)
           (set! o (gnc:make-html-object-internal
                    gnc:html-table-render obj)))
+         ((gnc:html-anytag? obj)
+          (set! o (gnc:make-html-object-internal
+                   gnc:html-anytag-render obj)))
          ((gnc:html-table-cell? obj)
           (set! o (gnc:make-html-object-internal
                    gnc:html-table-cell-render obj)))

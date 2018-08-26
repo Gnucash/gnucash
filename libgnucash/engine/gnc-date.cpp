@@ -728,6 +728,26 @@ floordiv(int a, int b)
     }
 }
 
+/* Normalize the localized date format to avoid date scanning issues.
+ *
+ *   The 'O' and 'E' format modifiers are for localized input/output
+ *   characters. Remove them as we are always using Arabic numbers.
+ */
+static inline std::string
+normalize_format (const std::string& format)
+{
+    bool is_pct = false;
+    std::string normalized;
+    std::remove_copy_if(
+        format.begin(), format.end(), back_inserter(normalized),
+        [&is_pct](char e){
+            bool r = (is_pct && (e == 'E' || e == 'O' || e == '-'));
+            is_pct = e == '%';
+            return r;
+        });
+    return normalized;
+}
+
 /* Convert a string into  day, month and year integers
 
     Convert a string into  day / month / year integers according to
@@ -820,30 +840,9 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
         if (buff[0] != '\0')
         {
             struct tm thetime;
-            gchar *format = g_strdup (GNC_D_FMT);
-            gchar *stripped_format = g_strdup (GNC_D_FMT);
-            gint counter = 0, stripped_counter = 0;
-
-            /* strptime can't handle the - format modifier
-             * let's strip it out of the format before using it
-             */
-            while (format[counter] != '\0')
-            {
-                stripped_format[stripped_counter] = format[counter];
-                if ((format[counter] == '%') && (format[counter+1] == '-'))
-                    counter++;  // skip - format modifier
-
-                counter++;
-                stripped_counter++;
-            }
-            stripped_format[stripped_counter] = '\0';
-            g_free (format);
-
-
             /* Parse time string. */
             memset(&thetime, -1, sizeof(struct tm));
-            strptime (buff, stripped_format, &thetime);
-            g_free (stripped_format);
+            strptime (buff, normalize_format(GNC_D_FMT).c_str(), &thetime);
 
             if (third_field)
             {
@@ -936,6 +935,9 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
     }
 
     g_free (dupe);
+
+    if ((imonth == 0) || (iday == 0))
+        return FALSE;
 
     if ((12 < imonth) || (31 < iday))
     {
@@ -1040,7 +1042,9 @@ char dateSeparator (void)
 
             secs = gnc_time (NULL);
             gnc_localtime_r(&secs, &tm);
-            qof_strftime(string, sizeof(string), GNC_D_FMT, &tm);
+            auto normalized_fmt =
+                normalize_format(qof_date_format_get_string(dateFormat));
+            qof_strftime(string, sizeof(string), normalized_fmt.c_str(), &tm);
 
             for (s = string; *s != '\0'; s++)
                 if (!isdigit(*s))

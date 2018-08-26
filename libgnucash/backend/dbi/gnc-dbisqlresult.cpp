@@ -30,6 +30,7 @@ extern "C"
 /* For direct access to dbi data structs, sadly needed for datetime */
 #include <dbi/dbi-dev.h>
 }
+#include <cmath>
 #include <gnc-datetime.hpp>
 #include "gnc-dbisqlresult.hpp"
 #include "gnc-dbisqlconnection.hpp"
@@ -109,7 +110,7 @@ GncDbiSqlResult::IteratorImpl::get_int_at_col(const char* col) const
     return dbi_result_get_longlong (m_inst->m_dbi_result, col);
 }
 
-float
+double
 GncDbiSqlResult::IteratorImpl::get_float_at_col(const char* col) const
 {
     auto type = dbi_result_get_field_type (m_inst->m_dbi_result, col);
@@ -118,8 +119,9 @@ GncDbiSqlResult::IteratorImpl::get_float_at_col(const char* col) const
        (attrs & DBI_DECIMAL_SIZEMASK) != DBI_DECIMAL_SIZE4)
         throw (std::invalid_argument{"Requested float from non-float column."});
     auto locale = gnc_push_locale (LC_NUMERIC, "C");
-    auto retval =  dbi_result_get_float(m_inst->m_dbi_result, col);
+    auto interim =  dbi_result_get_float(m_inst->m_dbi_result, col);
     gnc_pop_locale (LC_NUMERIC, locale);
+    double retval = static_cast<double>(round(interim * 1000000.0)) / 1000000.0;
     return retval;
 }
 

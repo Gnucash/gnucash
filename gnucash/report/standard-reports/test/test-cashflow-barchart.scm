@@ -39,9 +39,9 @@
 (setlocale LC_ALL "C")
 
 (define (run-test)
-  (logging-and (test-in-txn)
-               (test-out-txn)
-               (test-null-txn)))
+  (and (test-in-txn)
+       (test-out-txn)
+       (test-null-txn)))
 
 
 (define (set-option report page tag value)
@@ -95,8 +95,8 @@
         (set-option report gnc:pagename-general "Price Source" 'pricedb-nearest)
         (set-option report gnc:pagename-general "Report's currency"  (gnc-default-report-currency))
         (set-option report gnc:pagename-accounts "Accounts" (list wallet-account bank-account))
-        (format #t "Create first transaction on ~a~%" (gnc-ctime date-1))
-        (format #t "Create second transaction on ~a~%" (gnc-ctime date-2))
+        ;; (format #t "Create first transaction on ~a~%" (gnc-ctime date-1))
+        ;; (format #t "Create second transaction on ~a~%" (gnc-ctime date-2))
         (let ((doc (renderer report)))
           (gnc:html-document-set-style-sheet! doc (gnc:report-stylesheet report))
           (let* ((result (gnc:html-document-render doc #f))
@@ -114,7 +114,7 @@
                                                  (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1)
                                                  (list "<td class=\"number-cell\">[^0-9]*([^<]*)</td>" 1))
                                            result))))
-            (format #t "Report Result ~a~%" result)
+            ;; (format #t "Report Result ~a~%" result)
             (and (every (lambda (row)                 ; test in=net & out=0 in all rows (all days)
                           (and (or (equal? (second row) (fourth row))
                                    (begin (format #t "Failed, ~a and ~a differ~%" (second row) (fourth row)) #f))

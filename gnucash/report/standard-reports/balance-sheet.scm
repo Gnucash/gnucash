@@ -697,7 +697,8 @@
                                   total-liabilities? liability-balance))
 
           (add-subtotal-line
-           right-table (_ "Total Liabilities & Equity")
+           right-table (gnc:html-string-sanitize
+                        (_ "Total Liabilities & Equity"))
 	   #f liability-plus-equity)
 	  
 	  (gnc:html-document-add-object!

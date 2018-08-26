@@ -52,7 +52,6 @@ set (report_system_SCHEME
 
 set (report_system_SCHEME_2a
     collectors.scm
-    list-extras.scm
 )
 
 set (report_system_SCHEME_2b
@@ -70,6 +69,7 @@ set (report_system_SCHEME_3
     html-linechart.scm
     html-style-info.scm
     html-style-sheet.scm
+    html-anytag.scm
     html-table.scm
     html-text.scm
     html-utilities.scm

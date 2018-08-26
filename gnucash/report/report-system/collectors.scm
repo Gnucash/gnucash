@@ -333,15 +333,15 @@
 ;; Binary search. Returns highest index with content less than or
 ;; equal to the supplied value.
 
-(define (binary-search-lt <= value vector)
-  (define (search low high)
-    (let* ((midpoint (+ low (ceiling (/ (- high low) 2))))
-	   (midvalue (vector-ref vector midpoint)))
-      (if (= low high)
-	  (if (<= midvalue value)
-	      low #f)
-	  (if (<= midvalue value)
-	      (search midpoint high)
-	      (search low (- midpoint 1))))))
-  (if (= 0 (vector-length vector)) #f
-      (search 0 (- (vector-length vector) 1))))
+(define (binary-search-lt <= val vec)
+  (and (not (zero? (vector-length vec)))
+       (let loop ((low 0)
+                  (high (1- (vector-length vec))))
+         (let* ((midpoint (ceiling (/ (+ low high) 2)))
+                (midvalue (vector-ref vec midpoint)))
+           (if (= low high)
+               (and (<= midvalue val)
+                    low)
+               (if (<= midvalue val)
+                   (loop midpoint high)
+                   (loop low (1- midpoint))))))))

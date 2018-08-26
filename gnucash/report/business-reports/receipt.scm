@@ -191,7 +191,7 @@
                 notespage optname-extra-notes "a"
                 (N_ "Notes added at end of invoice -- may contain HTML markup")
                 ""))
-                ;(N_ "(Development version -- don't rely on the numbers on this report without double-checking them.<br>Change the 'Extra Notes' option to get rid of this message)")))
+                ;(N_ "(Development version -- don't rely on the numbers on this report without double-checking them.<br/>Change the 'Extra Notes' option to get rid of this message)")))
 
   (gnc:options-set-default-section
     report-options generalpage)
@@ -240,22 +240,13 @@
          (opt-amount-due-heading    (opt-value headingpage2 optname-amount-due))
          (opt-payment-recd-heading  (opt-value headingpage2 optname-payment-recd))
          (opt-extra-notes           (opt-value notespage    optname-extra-notes))
-         (css? #t) ;(and (defined? 'gnc-html-engine-supports-css) (gnc-html-engine-supports-css)))
-         (html #f))
-
-    (set! html (eguile-file-to-string
+         (html (eguile-file-to-string
                  opt-template-file
-                 (the-environment)))
+                 (the-environment))))
 
-    (gnc:debug "receipt.scm: css? is " css?)
-    (gnc:debug "receipt.scm: defined is " (defined? 'gnc-html-engine-supports-css))
     (gnc:debug "receipt.scm - generated html:") (gnc:debug html)
 
-    (if css? ; return report as document or html, depending on version
-      html
-      (let ((document (gnc:make-html-document)))
-        (gnc:html-document-add-object! document html)
-        document))))
+    html))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Define the report

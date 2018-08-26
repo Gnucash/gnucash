@@ -328,9 +328,13 @@ gnc_sx_get_variables(SchedXaction *sx, GHashTable *var_hash)
 static void
 _set_var_to_random_value(gchar *key, GncSxVariable *var, gpointer unused_user_data)
 {
-    var->value = double_to_gnc_numeric(g_random_int() + 2, 1,
-                                       GNC_NUMERIC_RND_MASK
-                                       | GNC_HOW_RND_FLOOR);
+    /* This is used by dialog-sx-editor to plug in values as a simplistic way to
+     * check balances. One possible variable is the number of periods in a
+     * interest or future value calculation where the variable is used as an
+     * exponent, so we want the numbers to be monotonically > 0 and not so large
+     * that they'll cause overflows.
+     */
+    var->value = gnc_numeric_create(g_random_int_range(1, 1000), 1);
 }
 
 void
@@ -1136,20 +1140,86 @@ split_apply_exchange_rate (Split *split, GHashTable *bindings,
     xaccSplitSetAmount(split, amt); /* marks split dirty */
 
 }
+/* If the template_txn was created from the SX Editor then it has the default
+ * currency even if none of its splits do; if the template_txn was created from
+ * a non-currency register then it will be requesting backwards prices. Check
+ * that the template_txn currency is in at least one split; if it's not a
+ * currency and one of the splits is, use that currency. If there are no
+ * currencies at all assume that the user knew what they were doing and return
+ * the template_transaction's commodity.
+ *
+ * Since we're going through the split commodities anyway, check that they all
+ * have useable values. If we find an error return NULL as a signal to
+ * create_each_transaction_helper to bail out.
+ */
+
+static gnc_commodity*
+get_transaction_currency(SxTxnCreationData *creation_data,
+                         SchedXaction *sx, Transaction *template_txn)
+{
+    gnc_commodity *first_currency = NULL, *first_cmdty = NULL;
+    gboolean err_flag = FALSE, txn_cmdty_in_splits = FALSE;
+    gnc_commodity *txn_cmdty = xaccTransGetCurrency (template_txn);
+    GList* txn_splits = xaccTransGetSplitList (template_txn);
+
+    if (txn_cmdty)
+        g_debug("Template txn currency is %s.",
+                gnc_commodity_get_mnemonic (txn_cmdty));
+    else
+        g_debug("No template txn currency.");
+
+    for (;txn_splits; txn_splits = txn_splits->next)
+    {
+        Split* t_split = (Split*)txn_splits->data;
+        Account* split_account = NULL;
+        gnc_commodity *split_cmdty = NULL;
+        if (!_get_template_split_account(sx, t_split, &split_account,
+                                         creation_data->creation_errors))
+        {
+            err_flag = TRUE;
+            break;
+        }
+        split_cmdty = xaccAccountGetCommodity (split_account);
+        if (!txn_cmdty)
+            txn_cmdty = split_cmdty;
+        if (!first_cmdty)
+            first_cmdty = split_cmdty;
+        if (gnc_commodity_equal (split_cmdty, txn_cmdty))
+            txn_cmdty_in_splits = TRUE;
+        if (!first_currency && gnc_commodity_is_currency (split_cmdty))
+            first_currency = split_cmdty;
+    }
+    if (err_flag)
+    {
+        g_critical("Error in SX transaction [%s], split missing account: "
+                   "Creation aborted.", xaccSchedXactionGetName(sx));
+        return NULL;
+    }
+    if (first_currency &&
+        (!txn_cmdty_in_splits || !gnc_commodity_is_currency (txn_cmdty)))
+        return first_currency;
+    if (!txn_cmdty_in_splits)
+        return first_cmdty;
+    return txn_cmdty;
+}
 
 static gboolean
 create_each_transaction_helper(Transaction *template_txn, void *user_data)
 {
     Transaction *new_txn;
-    GList *txn_splits, *template_splits;
+    GList *txn_splits, *template_splits, *node;
     Split *copying_split;
-    gnc_commodity *first_cmdty = NULL;
-    gboolean err_flag = FALSE;
     SxTxnCreationData *creation_data = (SxTxnCreationData*)user_data;
     SchedXaction *sx = creation_data->instance->parent->sx;
+    gnc_commodity *txn_cmdty = get_transaction_currency (creation_data,
+                                                         sx, template_txn);
+
+    /* No txn_cmdty means there was a defective split. Bail. */
+    if (txn_cmdty == NULL)
+         return FALSE;
 
     /* FIXME: In general, this should [correctly] deal with errors such
-       as not finding the approrpiate Accounts and not being able to
+       as not finding the appropriate Accounts and not being able to
        parse the formula|credit/debit strings. */
 
     new_txn = xaccTransCloneNoKvp(template_txn);
@@ -1159,8 +1229,6 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
             xaccTransGetDescription(new_txn),
             xaccSchedXactionGetName(sx));
 
-    g_debug("template txn currency is %s",
-            gnc_commodity_get_mnemonic(xaccTransGetCurrency (template_txn)));
 
     /* Bug#500427: copy the notes, if any */
     if (xaccTransGetNotes(template_txn) != NULL)
@@ -1184,6 +1252,14 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
         return FALSE;
     }
 
+    if (txn_cmdty == NULL)
+    {
+        xaccTransDestroy(new_txn);
+        xaccTransCommitEdit(new_txn);
+        return FALSE;
+    }
+    xaccTransSetCurrency(new_txn, txn_cmdty);
+
     for (;
          txn_splits && template_splits;
          txn_splits = txn_splits->next, template_splits = template_splits->next)
@@ -1198,30 +1274,10 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
         template_split = (Split*)template_splits->data;
         copying_split = (Split*)txn_splits->data;
 
-        if (!_get_template_split_account(sx, template_split, &split_acct,
-                                         creation_data->creation_errors))
-        {
-            err_flag = TRUE;
-            break;
-        }
+        _get_template_split_account(sx, template_split, &split_acct,
+                                    creation_data->creation_errors);
 
         split_cmdty = xaccAccountGetCommodity(split_acct);
-        if (first_cmdty == NULL)
-        {
-            /* Set new_txn currency to template_txn if we have one, else first
-             * split
-             */
-            if (xaccTransGetCurrency(template_txn))
-                xaccTransSetCurrency(new_txn,
-                                     xaccTransGetCurrency(template_txn));
-            else /* FIXME check for marker split */
-                xaccTransSetCurrency(new_txn, split_cmdty);
-
-            first_cmdty = xaccTransGetCurrency(new_txn);
-        }
-        g_debug("new txn currency is %s",
-                gnc_commodity_get_mnemonic(first_cmdty));
-
         xaccSplitSetAccount(copying_split, split_acct);
 
         {
@@ -1231,26 +1287,17 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
             g_debug("value is %s for memo split '%s'",
                     gnc_numeric_to_string (final),
                     xaccSplitGetMemo (copying_split));
-            if (! gnc_commodity_equal(split_cmdty,
-                                      xaccTransGetCurrency (new_txn)))
+            if (! gnc_commodity_equal(split_cmdty, txn_cmdty))
             {
                 split_apply_exchange_rate(copying_split,
                                           creation_data->instance->variable_bindings,
-                                          first_cmdty, split_cmdty, &final);
+                                          txn_cmdty, split_cmdty, &final);
             }
 
             xaccSplitScrub(copying_split);
         }
     }
 
-    if (err_flag)
-    {
-        g_critical("Error in SX transaction [%s], creation aborted.",
-                   xaccSchedXactionGetName(sx));
-        xaccTransDestroy(new_txn);
-        xaccTransCommitEdit(new_txn);
-        return FALSE;
-    }
 
     {
 	qof_instance_set (QOF_INSTANCE (new_txn),

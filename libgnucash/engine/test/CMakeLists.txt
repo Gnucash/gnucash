@@ -233,6 +233,20 @@ gnc_add_scheme_targets(scm-test-engine-extras
   FALSE
   )
 
+if (HAVE_SRFI64)
+  gnc_add_scheme_targets (scm-srfi64-extras
+    "srfi64-extras.scm"
+    "gnucash/engine/test/"
+    "${GUILE_DEPENDS}"
+    FALSE
+    )
+
+  set(srfi64_extras_SCHEME_DIST
+    srfi64-extras.scm
+    )
+
+endif (HAVE_SRFI64)
+
 gnc_add_scheme_targets(scm-test-engine
   "${engine_test_SCHEME}"
   ""
@@ -311,4 +325,5 @@ set(test_engine_EXTRA_DIST
 )
 
 set_dist_list(test_engine_DIST CMakeLists.txt
+        ${srfi64_extras_SCHEME_DIST}
         ${test_engine_SOURCES_DIST} ${test_engine_SCHEME_DIST} ${test_engine_EXTRA_DIST})

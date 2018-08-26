@@ -283,7 +283,7 @@ GncSqlColumnTableEntryImpl<CT_DOUBLE>::load (const GncSqlBackend* sql_be,
     {
         try
         {
-            val = static_cast<double>(row.get_float_at_col(m_col_name));
+            val = row.get_float_at_col(m_col_name);
         }
         catch (std::invalid_argument&)
         {
@@ -401,7 +401,9 @@ GncSqlColumnTableEntryImpl<CT_TIMESPEC>::load (const GncSqlBackend* sql_be,
         }
         catch (std::invalid_argument&)
         {
-            return;
+            PWARN("An invalid date was found in your database."
+                  "It has been set to 1 January 1970.");
+            ts.tv_sec = 0;
         }
     }
     set_parameter(pObject, &ts,

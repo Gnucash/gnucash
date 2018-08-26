@@ -63,6 +63,29 @@ int GncCsvTokenizer::tokenize()
             }
             // ---
 
+            // Deal with backslashes that are not meant to be escapes
+            // The boost::tokenizer with escaped_list_separator as we use
+            // it would choke on this.
+            auto bs_pos = line.find ('\\');
+            while (bs_pos != std::string::npos)
+            {
+                if ((bs_pos == line.size()) ||                                 // got trailing single backslash
+                    (line.find_first_of ("\"\\n", bs_pos + 1) != bs_pos + 1))  // backslash is not part of known escapes \\, \" or \n
+                    line = line.substr(0, bs_pos) + "\\\\" + line.substr(bs_pos + 1);
+                bs_pos += 2;
+                bs_pos = line.find ('\\', bs_pos);
+            }
+
+            // Deal with repeated " ("") in strings.
+            // This is commonly used as escape mechanism for double quotes in csv files.
+            // However boost just eats them.
+            bs_pos = line.find ("\"\"");
+            while (bs_pos != std::string::npos)
+            {
+                line.replace (bs_pos, 2, "\\\"");
+                bs_pos = line.find ("\"\"");
+            }
+
             Tokenizer tok(line, sep);
             vec.assign(tok.begin(),tok.end());
             m_tokenized_contents.push_back(vec);

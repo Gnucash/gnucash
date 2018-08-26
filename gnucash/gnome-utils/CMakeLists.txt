@@ -212,7 +212,7 @@ add_library (gncmod-gnome-utils
 )
 
 target_link_libraries(gncmod-gnome-utils gncmod-app-utils gncmod-engine gnc-backend-xml-utils
-     ${CMAKE_DL_LIBS} ${GTK3_LDFLAGS} ${GTK_MAC_LDFLAGS})
+     ${CMAKE_DL_LIBS} ${GTK3_LDFLAGS} ${LIBSECRET_LDFLAGS} ${GTK_MAC_LDFLAGS})
 
 target_compile_definitions(gncmod-gnome-utils PUBLIC ${GTK_MAC_CFLAGS_OTHER}
   PRIVATE -DG_LOG_DOMAIN=\"gnc.gui\")
@@ -232,6 +232,7 @@ target_include_directories(gncmod-gnome-utils
       ${CMAKE_CURRENT_SOURCE_DIR}
     PRIVATE
       ${GTK_MAC_INCLUDE_DIRS}
+      ${LIBSECRET_INCLUDE_DIRS}
       ${CMAKE_CURRENT_BINARY_DIR}
 )
 

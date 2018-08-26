@@ -64,7 +64,7 @@ public:
         return dbi_conn_error(m_conn, nullptr); }
     QofBackend* qbe () const noexcept { return m_qbe; }
     dbi_conn conn() const noexcept { return m_conn; }
-    inline void set_error(int error, unsigned int repeat,
+    inline void set_error(QofBackendError error, unsigned int repeat,
                           bool retry) noexcept override
     {
         m_last_error = error;
@@ -80,7 +80,7 @@ public:
      */
     bool verify() noexcept override;
     bool retry_connection(const char* msg) noexcept override;
-    dbi_result table_manage_backup(const std::string& table_name, TableOpType op);
+
     bool table_operation (TableOpType op) noexcept;
     std::string add_columns_ddl(const std::string& table_name,
                                 const ColVec& info_vec) const noexcept;
@@ -96,7 +96,7 @@ private:
     /** Code of the last error that occurred. This is set in the error callback
      * function.
      */
-    int m_last_error;
+    QofBackendError m_last_error;
     /** Used in case of transient errors. After such error, another attempt at
      * the original call is allowed. error_repeat tracks the number of attempts
      * and can be used to prevent infinite loops.
@@ -110,8 +110,10 @@ private:
     unsigned int m_sql_savepoint;
     bool lock_database(bool ignore_lock);
     void unlock_database();
+    bool rename_table(const std::string& old_name, const std::string& new_name);
+    bool drop_table(const std::string& table);
+    bool merge_tables(const std::string& table, const std::string& other);
     bool check_and_rollback_failed_save();
-
 };
 
 #endif //_GNC_DBISQLCONNECTION_HPP_

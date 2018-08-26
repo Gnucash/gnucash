@@ -47,6 +47,8 @@ typedef enum
     GNC_DISC_POSTTAX
 } GncDiscountHow;
 
+typedef GList AccountValueList;
+
 #ifdef GNUCASH_MAJOR_VERSION
 #include "gncBusiness.h"
 #endif
@@ -243,7 +245,6 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest, gboolean add_entry);
  * these functions.
  @{
 */
-typedef GList AccountValueList;
 gnc_numeric gncEntryGetDocValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn);
 gnc_numeric gncEntryGetDocTaxValue (GncEntry *entry, gboolean round, gboolean is_cust_doc, gboolean is_cn);
 /** Careful: the returned list is NOT owned by the entry and should be freed by the caller */

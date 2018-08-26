@@ -297,6 +297,25 @@ gnc_table_get_entry (Table *table, VirtualLocation virt_loc)
     return entry;
 }
 
+char *
+gnc_table_get_tooltip (Table *table, VirtualLocation virt_loc)
+{
+    TableGetTooltipHandler tooltip_handler;
+    BasicCell *cell;
+
+    cell = gnc_table_get_cell (table, virt_loc);
+    if (!cell || !cell->cell_name)
+        return NULL;
+
+    tooltip_handler = gnc_table_model_get_tooltip_handler (table->model,
+                         cell->cell_name);
+
+    if (!tooltip_handler)
+        return NULL;
+
+    return  tooltip_handler (virt_loc, table->model->handler_user_data);
+}
+
 CellIOFlags
 gnc_table_get_io_flags (Table *table, VirtualLocation virt_loc)
 {

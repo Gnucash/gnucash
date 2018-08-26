@@ -104,7 +104,7 @@
 
 (use-modules (gnucash core-utils)) ; for gnc:version
 
-(gnc:module-load "gnucash/html" 0)   ; added for 'gnc-html-engine-supports-css'
+(gnc:module-load "gnucash/html" 0)
 (gnc:module-load "gnucash/tax/us" 0)
 (gnc:module-load "gnucash/report/report-system" 0)
 
@@ -262,13 +262,7 @@
            (list 'conv-to-report-date (N_ "Nearest report date") (N_ "Use nearest to report date.")))
     )))
 
-  (if (gnc-html-engine-supports-css)
-      #t
-      (gnc:register-tax-option
-       (gnc:make-simple-boolean-option
-        gnc:pagename-display (N_ "Shade alternate transactions")
-        "n" (N_ "Shade background of alternate transactions, if more than one displayed.") #f))
-  )
+  #t
 
   (gnc:options-set-default-section options gnc:pagename-general)
 
@@ -973,7 +967,7 @@
                                              (list (gnc:make-html-table-cell/markup
                                                     "text-cell-center"
                                                   (strftime "%Y-%b-%d" (gnc-localtime
-                                                            (car trans-date)))))
+                                                            trans-date))))
                                              (list (gnc:make-html-table-cell/markup
                                                     "number-cell-bot"
                                                     (xaccPrintAmount
@@ -2063,10 +2057,7 @@
                                      "Do not print Action:Memo data")
                                     (get-option gnc:pagename-display
                                      "Do not print T-Num:Memo data")))
-         (shade-alternate-transactions? (if (gnc-html-engine-supports-css)
-                                            #t
-                                            (get-option gnc:pagename-display
-                                               "Shade alternate transactions")))
+         (shade-alternate-transactions? #t)
          (currency-conversion-date (get-option gnc:pagename-display
                                  "Currency conversion date"))
          (user-sel-accnts (get-option gnc:pagename-accounts
@@ -3058,8 +3049,6 @@
               #f) ;;end of if
           #f) ;;end of if
           (begin  ; else do tax report
-             (if (gnc-html-engine-supports-css)
-                 (begin ;; this is for webkit
                   (gnc:html-document-set-style!
                    doc "header-just-top"
                    'tag "th"
@@ -3101,66 +3090,6 @@
                    'tag "td"
                    'attribute (list "class" "number-cell neg")
                    'attribute (list "valign" "bottom"))
-                 )
-                 (begin ;; this is for gtkhtml
-                  (gnc:html-document-set-style!
-                   doc "header-just-top"
-                   'tag "th"
-                   'attribute (list "align" "left")
-                   'attribute (list "valign" "top"))
-
-                  (gnc:html-document-set-style!
-                   doc "header-just-bot"
-                   'tag "th"
-                   'attribute (list "align" "left")
-                   'attribute (list "valign" "bottom"))
-
-                  (gnc:html-document-set-style!
-                   doc "column-heading-center"
-                   'tag "th"
-                   'attribute (list "align" "center")
-                   'attribute (list "valign" "bottom"))
-
-                  (gnc:html-document-set-style!
-                   doc "tran-detail"
-                   'tag "tr"
-                   'attribute (list "valign" "top"))
-
-                  (gnc:html-document-set-style!
-                   doc "tran-detail-shade"
-                   'tag "tr"
-                   'attribute (list "valign" "top")
-                   'attribute (list "bgcolor" "grey"))
-
-                  (gnc:html-document-set-style!
-                   doc "column-heading-right"
-                   'tag "th"
-                   'attribute (list "align" "right"))
-
-                  (gnc:html-document-set-style!
-                   doc "text-cell-center"
-                   'tag "td"
-                   'attribute (list "align" "center"))
-
-                  (gnc:html-document-set-style!
-                   doc "number-cell-bot"
-                   'tag "td"
-                   'attribute (list "align" "right")
-                   'attribute (list "nowrap" "nowrap")
-                   'attribute (list "valign" "bottom"))
-
-                  (gnc:html-document-set-style!
-                   doc "number-cell-bot-neg"
-                   'tag "td"
-                   'attribute (list "align" "right")
-                   'attribute (list "nowrap" "nowrap")
-                   'attribute (list "valign" "bottom"))
-
-                  (gnc:html-document-set-style!
-                   doc "date-cell"
-                   'tag "td"
-                   'attribute (list "nowrap" "nowrap"))
-                 ))
 
              (gnc:html-document-set-style!
               doc "just-bot"
@@ -3469,10 +3398,7 @@
                              ;; currency conversion date
                              "&nbsp; &nbsp; &nbsp; ~a <br/>"
                              ;; alternate transaction shading
-                             (if (gnc-html-engine-supports-css)
-                                 ""
-                                 "&nbsp; &nbsp; &nbsp; ~a <br/>"
-                             ))
+                             "")
                              (if (not (null? user-sel-accnts))
                                  "Subset of accounts"
                                  "No accounts (none = all accounts)")
@@ -3501,11 +3427,6 @@
                                          'conv-to-tran-date)
                                  "PriceDB lookups nearest to transaction date"
                                  "PriceDB lookups nearest to report end date")
-                             (if (not (gnc-html-engine-supports-css))
-                                 (if shade-alternate-transactions?
-                                     "Shade alternate transactions"
-                                     "Do not shade alternate transactions")
-                             )
                           )
                         ))))
 

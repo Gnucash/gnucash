@@ -27,20 +27,11 @@
 (use-modules (srfi srfi-1))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
+(use-modules (gnucash utilities))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 (use-modules (gnucash report standard-reports))
 (use-modules (gnucash report business-reports))
-
-(define-macro (addto! alist element)
-  `(set! ,alist (cons ,element ,alist)))
-
-(define (set-last-row-style! table tag . rest)
-  (let ((arg-list
-         (cons table
-               (cons (- (gnc:html-table-num-rows table) 1)
-                     (cons tag rest)))))
-    (apply gnc:html-table-set-row-style! arg-list)))
 
 (define (date-col columns-used)
   (vector-ref columns-used 0))
@@ -118,18 +109,6 @@
     (if (value-col column-vector)
 	(addto! heading-list (_ "Total")))
     (reverse heading-list)))
-
-(define (make-account-hash) (make-hash-table 23))
-
-(define (update-account-hash hash values)
-  (for-each
-   (lambda (item)
-     (let* ((acct (car item))
-	    (val (cdr item))
-	    (ref (hash-ref hash acct)))
-
-       (hash-set! hash acct (if ref (gnc-numeric-add-fixed ref val) val))))
-   values))
 
 
 (define (monetary-or-percent numeric currency entry-type)
@@ -332,10 +311,10 @@
 	(display-all-taxes (opt-val "Display" "Individual Taxes"))
 	(lot (gncInvoiceGetPostedLot invoice))
 	(txn (gncInvoiceGetPostedTxn invoice))
-  (job? (opt-val "Display" "Job Details"))
+        (job? (opt-val "Display" "Job Details"))
 	(currency (gncInvoiceGetCurrency invoice))
-  (jobnumber  (gncJobGetID (gncOwnerGetJob (gncInvoiceGetOwner  invoice))))
-  (jobname    (gncJobGetName (gncOwnerGetJob (gncInvoiceGetOwner  invoice))))
+        (jobnumber  (gncJobGetID (gncOwnerGetJob (gncInvoiceGetOwner  invoice))))
+        (jobname    (gncJobGetName (gncOwnerGetJob (gncInvoiceGetOwner  invoice))))
 	(reverse-payments? (not (gncInvoiceAmountPositive invoice))))
 
     (define (colspan monetary used-columns)
@@ -355,28 +334,23 @@
 		monetary))))
 
     (define (add-subtotal-row table used-columns
-			      subtotal-collector subtotal-style subtotal-label)
-      (let ((currency-totals (subtotal-collector
-			      'format gnc:make-gnc-monetary #f)))
+                              subtotal subtotal-style subtotal-label)
+      (let ((subtotal-mon (gnc:make-gnc-monetary currency subtotal)))
 
-	(for-each (lambda (currency)
-		    (gnc:html-table-append-row/markup!
-		     table
-		     subtotal-style
-		     (append (cons (gnc:make-html-table-cell/markup
-				    "total-label-cell" subtotal-label)
-				   '())
-			     (list (gnc:make-html-table-cell/size/markup
-				    1 (colspan currency used-columns)
-				    "total-number-cell"
-				    (display-subtotal currency used-columns))))))
-		  currency-totals)))
+        (gnc:html-table-append-row/markup!
+            table
+            subtotal-style
+            (append (cons (gnc:make-html-table-cell/markup
+                        "total-label-cell" subtotal-label)
+                        '())
+                    (list (gnc:make-html-table-cell/size/markup
+                        1 (colspan subtotal-mon used-columns)
+                        "total-number-cell"
+                        (display-subtotal subtotal-mon used-columns)))))))
 
     (define (add-payment-row table used-columns split total-collector reverse-payments?)
       (let* ((t (xaccSplitGetParent split))
 	     (currency (xaccTransGetCurrency t))
-	     (invoice (opt-val gnc:pagename-general gnc:optname-invoice-number))
-	     (owner '())
 	     ;; Depending on the document type, the payments may need to be sign-reversed
 	     (amt (gnc:make-gnc-monetary currency
 		    (if reverse-payments?
@@ -409,34 +383,32 @@
 				    table
 				    used-columns
 				    width
-				    odd-row?
-				    value-collector
-				    tax-collector
-				    total-collector
-				    acct-hash)
+				    odd-row?)
       (if (null? entries)
-	  (begin
-	    (add-subtotal-row table used-columns value-collector
-			      "grand-total" (_ "Net Price"))
+          (let ((total-collector (gnc:make-commodity-collector)))
 
-	    (if display-all-taxes
-		(hash-for-each
-		 (lambda (acct value)
-		   (let ((collector (gnc:make-commodity-collector))
-			 (commodity (xaccAccountGetCommodity acct))
-			 (name (xaccAccountGetName acct)))
-		     (collector 'add commodity value)
-		     (add-subtotal-row table used-columns collector
-				       "grand-total" name)))
-		 acct-hash)
+            (add-subtotal-row table used-columns (gncInvoiceGetTotalSubtotal invoice)
+                              "grand-total" (_ "Net Price"))
 
-		; nope, just show the total tax.
-		(add-subtotal-row table used-columns tax-collector
-				  "grand-total" (_ "Tax")))
+            (if display-all-taxes
+              (let ((acct-val-list (gncInvoiceGetTotalTaxList invoice)))
+                (for-each
+                  (lambda (parm)
+                    (let* ((value (cdr parm))
+                           (acct (car parm))
+                           (name (xaccAccountGetName acct)))
+                      (add-subtotal-row table used-columns value
+                                        "grand-total" name)))
+                    acct-val-list))
 
-	    (add-subtotal-row table used-columns total-collector
-			      "grand-total" (_ "Total Price"))
+              ; nope, just show the total tax.
+              (add-subtotal-row table used-columns (gncInvoiceGetTotalTax invoice)
+                                "grand-total" (_ "Tax")))
 
+            (add-subtotal-row table used-columns (gncInvoiceGetTotal invoice)
+                              "grand-total" (_ "Total Price"))
+
+            (total-collector 'add currency (gncInvoiceGetTotal invoice))
 	    (if (and show-payments (not (null? lot)))
 		(let ((splits (sort-list!
 			       (gnc-lot-get-split-list lot)
@@ -452,7 +424,7 @@
 					  reverse-payments?)))
 		   splits)))
 
-	    (add-subtotal-row table used-columns total-collector
+	    (add-subtotal-row table used-columns (cadr (total-collector 'getpair currency #f))
 			      "grand-total" (_ "Amount Due")))
 
 	  ;;
@@ -470,24 +442,6 @@
 					      current-row-style
 					      cust-doc? credit-note?)))
 
-	    (if display-all-taxes
-		(let ((tax-list (gncEntryGetDocTaxValues current cust-doc? credit-note?)))
-		  (update-account-hash acct-hash tax-list))
-		(tax-collector 'add
-			       (gnc:gnc-monetary-commodity (cdr entry-values))
-			       (gnc:gnc-monetary-amount (cdr entry-values))))
-
-	    (value-collector 'add
-			     (gnc:gnc-monetary-commodity (car entry-values))
-			     (gnc:gnc-monetary-amount (car entry-values)))
-
-	    (total-collector 'add
-			     (gnc:gnc-monetary-commodity (car entry-values))
-			     (gnc:gnc-monetary-amount (car entry-values)))
-	    (total-collector 'add
-			     (gnc:gnc-monetary-commodity (cdr entry-values))
-			     (gnc:gnc-monetary-amount (cdr entry-values)))
-
 	    (let ((order (gncEntryGetOrder current)))
 	      (if (not (null? order)) (add-order order)))
 
@@ -495,17 +449,12 @@
 				    table
 				    used-columns
 				    width
-				    (not odd-row?)
-				    value-collector
-				    tax-collector
-				    total-collector
-				    acct-hash))))
+				    (not odd-row?)))))
 
     (let* ((table (gnc:make-html-table))
 	   (used-columns (build-column-used options))
 	   (width (num-columns-required used-columns))
-	   (entries (gncInvoiceGetEntries invoice))
-	   (totals (gnc:make-commodity-collector)))
+	   (entries (gncInvoiceGetEntries invoice)))
 
       (gnc:html-table-set-col-headers!
        table
@@ -515,11 +464,7 @@
 			      table
 			      used-columns
 			      width
-			      #t
-			      (gnc:make-commodity-collector)
-			      (gnc:make-commodity-collector)
-			      totals
-			      (make-account-hash))
+			      #t)
       table)))
 
 (define (string-expand string character replace-string)
@@ -550,10 +495,10 @@
     (gnc:html-table-append-row!
      table
      (list
-      (string-expand (gnc:owner-get-name-and-address-dep owner) #\newline "<br>")))
+      (string-expand (gnc:owner-get-name-and-address-dep owner) #\newline "<br/>")))
     (gnc:html-table-append-row!
      table
-     (list "<br>"))
+     (list "<br/>"))
     (for-each
      (lambda (order)
        (let* ((reference (gncOrderGetReference order)))
@@ -563,7 +508,7 @@
 	      (list
 	       (string-append (_ "REF") ":&nbsp;" reference))))))
      orders)
-    (set-last-row-style!
+    (gnc:html-table-set-last-row-style!
      table "td"
      'attribute (list "valign" "top"))
     table))
@@ -584,7 +529,7 @@
      table "table"
      'attribute (list "border" 0)
      'attribute (list "cellpadding" 0))
-    (set-last-row-style!
+    (gnc:html-table-set-last-row-style!
      table "td"
      'attribute (list "valign" "top"))
     table))
@@ -604,7 +549,7 @@
     (gnc:html-table-append-row! table (list (if name name "")))
     (gnc:html-table-append-row! table (list (string-expand
 					     (if addy addy "")
-					     #\newline "<br>")))
+					     #\newline "<br/>")))
     (gnc:html-table-append-row! table (list
 				       (strftime
 					date-format
@@ -727,7 +672,7 @@
 		       (gnc:make-html-text
 			(string-append
 			 (_ "Reference") ":&nbsp;"
-			 (string-expand billing-id #\newline "<br>"))))
+			 (string-expand billing-id #\newline "<br/>"))))
 		      (make-break! document)))))
 
 	  (if (opt-val "Display" "Billing Terms")
@@ -740,7 +685,7 @@
 		       (gnc:make-html-text
 			(string-append
 			  (_ "Terms") ":&nbsp;"
-			  (string-expand terms #\newline "<br>"))))
+			  (string-expand terms #\newline "<br/>"))))
 		      (make-break! document))
 		)))
 
@@ -755,14 +700,14 @@
 		       (gnc:make-html-text
 			(string-append
 			 (_ "Job number") ":&nbsp;"
-			 (string-expand jobnumber #\newline "<br>"))))
+			 (string-expand jobnumber #\newline "<br/>"))))
        (make-break! document)
        (gnc:html-document-add-object!
 		       document
 		       (gnc:make-html-text
 			(string-append
 			 (_ "Job name") ":&nbsp;"
-			 (string-expand jobname #\newline "<br>"))))
+			 (string-expand jobname #\newline "<br/>"))))
        (make-break! document)
        (make-break! document)
     )))
@@ -777,7 +722,7 @@
 		(gnc:html-document-add-object!
 		 document
 		 (gnc:make-html-text
-		  (string-expand notes #\newline "<br>")))))
+		  (string-expand notes #\newline "<br/>")))))
 
 	  (make-break! document)
 
@@ -785,7 +730,7 @@
 	   document
 	   (gnc:make-html-text
 	    (gnc:html-markup-br)
-	    (string-expand (opt-val "Display" "Extra Notes") #\newline "<br>")
+	    (string-expand (opt-val "Display" "Extra Notes") #\newline "<br/>")
 	    (gnc:html-markup-br))))
 
 	; else

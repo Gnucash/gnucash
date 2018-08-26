@@ -54,7 +54,7 @@ protected:
         virtual GncSqlRow& operator++(int) { return ++(*this); };
         virtual GncSqlResult* operator*() { return m_inst; }
         virtual int64_t get_int_at_col (const char* col) const;
-        virtual float get_float_at_col (const char* col) const;
+        virtual double get_float_at_col (const char* col) const;
         virtual double get_double_at_col (const char* col) const;
         virtual std::string get_string_at_col (const char* col)const;
         virtual time64 get_time64_at_col (const char* col) const;

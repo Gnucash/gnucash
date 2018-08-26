@@ -201,7 +201,7 @@ Table *     gnc_table_new (TableLayout *layout,
                            TableControl *control);
 void        gnc_virtual_location_init (VirtualLocation *vloc);
 
-void        gnc_table_save_state (Table *table, gchar *state_section);
+void        gnc_table_save_state (Table *table, gchar *state_section, gchar *account_fullname);
 void        gnc_table_destroy (Table *table);
 
 
@@ -237,6 +237,8 @@ VirtualCell *  gnc_table_get_virtual_cell (Table *table,
         VirtualCellLocation vcell_loc);
 
 const char *   gnc_table_get_entry (Table *table, VirtualLocation virt_loc);
+
+char *         gnc_table_get_tooltip (Table *table, VirtualLocation virt_loc);
 
 const char *   gnc_table_get_label (Table *table, VirtualLocation virt_loc);
 

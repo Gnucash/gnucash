@@ -93,7 +93,8 @@ public:
      * If not 0 will normally be meaningless outside of implementation code.
      */
     virtual int dberror() const noexcept = 0;
-    virtual void set_error(int error, unsigned int repeat,  bool retry) noexcept = 0;
+    virtual void set_error(QofBackendError error, unsigned int repeat,
+                           bool retry) noexcept = 0;
     virtual bool verify() noexcept = 0;
     virtual bool retry_connection(const char* msg) noexcept = 0;
 

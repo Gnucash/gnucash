@@ -569,8 +569,11 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
         QofBook *book = gnc_account_get_book (leader);
         GNCPriceDB *pricedb = gnc_pricedb_get_db (book);
         gnc_commodity *currency = gnc_default_currency ();
+        gnc_numeric value =
+            gnc_pricedb_convert_balance_latest_price (pricedb, amount,
+                                                      commodity, currency);
         print_info = gnc_commodity_print_info (currency, TRUE);
-        xaccSPrintAmount (string, amount, print_info);
+        xaccSPrintAmount (string, value, print_info);
         gnc_set_label_color (gsr->value_label, amount);
         gtk_label_set_text (GTK_LABEL (gsr->value_label), string);
 
@@ -586,10 +589,15 @@ gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
     const GncGUID * guid = xaccAccountGetGUID(account);
     gchar guidstr[GUID_ENCODING_LENGTH+1];
     gchar *state_section;
-
+    gchar *acct_fullname;
     guid_to_string_buff(guid, guidstr);
 
     state_section = g_strconcat (STATE_SECTION_REG_PREFIX, " ", guidstr, NULL);
+
+    if (g_strcmp0(guidstr, "00000000000000000000000000000000") == 0)
+        acct_fullname = g_strdup(_("General Journal"));
+    else
+        acct_fullname = gnc_account_get_full_name(account);
 
     if (gsr)
     {
@@ -598,7 +606,7 @@ gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
         reg = gnc_ledger_display_get_split_register (ledger);
 
         if (reg && reg->table)
-            gnc_table_save_state (reg->table, state_section);
+            gnc_table_save_state (reg->table, state_section, acct_fullname);
 
         /*
          * Don't destroy the window here any more.  The register no longer
@@ -606,6 +614,7 @@ gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
          */
     }
     g_free (state_section);
+    g_free (acct_fullname);
     gnc_ledger_display_set_user_data (ledger, NULL);
 }
 

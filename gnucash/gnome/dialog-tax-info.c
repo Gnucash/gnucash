@@ -931,6 +931,12 @@ gnc_tax_info_account_changed_cb (GtkTreeSelection *selection,
            can only get a list of accounts. */
         view = GNC_TREE_VIEW_ACCOUNT(ti_dialog->account_treeview);
         accounts = gnc_tree_view_account_get_selected_accounts (view);
+        if (accounts == NULL)
+        {
+            clear_gui (ti_dialog);
+            gnc_tax_info_set_changed (ti_dialog, FALSE);
+            return;
+        }
         account_to_gui (ti_dialog, accounts->data);
         g_list_free(accounts);
 

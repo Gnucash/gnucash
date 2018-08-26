@@ -232,7 +232,16 @@ GncDbiSqlConnection::check_and_rollback_failed_save()
     auto backup_tables = m_provider->get_table_list(m_conn, "%back");
     if (backup_tables.empty())
         return true;
-    return table_operation(rollback);
+    auto merge_tables = m_provider->get_table_list(m_conn, "%_merge");
+    if (!merge_tables.empty())
+    {
+        PERR("Merge tables exist in the database indicating a previous"
+             "attempt to recover from a failed safe-save. Automatic"
+             "recovery is beyond GnuCash's ability, you must recover"
+             "by hand or restore from a good backup.");
+        return false;
+    }
+    return table_operation(recover);
 }
 
 GncDbiSqlConnection::~GncDbiSqlConnection()
@@ -260,7 +269,13 @@ GncDbiSqlConnection::execute_select_statement (const GncSqlStatementPtr& stmt)
     }
     while (m_retry);
     if (result == nullptr)
+    {
         PERR ("Error executing SQL %s\n", stmt->to_sql());
+        if(m_last_error)
+            m_qbe->set_error(m_last_error);
+        else
+            m_qbe->set_error(ERR_BACKEND_SERVER_ERR);
+    }
     gnc_pop_locale (LC_NUMERIC, locale);
     return GncSqlResultPtr(new GncDbiSqlResult (this, result));
 }
@@ -281,6 +296,10 @@ GncDbiSqlConnection::execute_nonselect_statement (const GncSqlStatementPtr& stmt
     if (result == nullptr && m_last_error)
     {
         PERR ("Error executing SQL %s\n", stmt->to_sql());
+        if(m_last_error)
+            m_qbe->set_error(m_last_error);
+        else
+            m_qbe->set_error(ERR_BACKEND_SERVER_ERR);
         return -1;
     }
     if (!result)
@@ -290,7 +309,10 @@ GncDbiSqlConnection::execute_nonselect_statement (const GncSqlStatementPtr& stmt
     if (status < 0)
     {
         PERR ("Error in dbi_result_free() result\n");
-        qof_backend_set_error (m_qbe, ERR_BACKEND_SERVER_ERR);
+        if(m_last_error)
+            m_qbe->set_error(m_last_error);
+        else
+            m_qbe->set_error(ERR_BACKEND_SERVER_ERR);
     }
     return num_rows;
 }
@@ -575,38 +597,45 @@ GncDbiSqlConnection::retry_connection(const char* msg)
 
     }
     PERR ("DBI error: %s - Giving up after %d consecutive attempts.\n", msg,
-                DBI_MAX_CONN_ATTEMPTS);
+          DBI_MAX_CONN_ATTEMPTS);
     m_conn_ok = false;
     return false;
 }
 
-
-dbi_result
-GncDbiSqlConnection::table_manage_backup (const std::string& table_name,
-                                          TableOpType op)
+bool
+GncDbiSqlConnection::rename_table(const std::string& old_name,
+                                  const std::string& new_name)
 {
-    auto new_name = table_name + "_back";
-    dbi_result result = nullptr;
-    switch (op)
-    {
-    case TableOpType::backup:
-        result = dbi_conn_queryf (m_conn, "ALTER TABLE %s RENAME TO %s",
-                                  table_name.c_str(), new_name.c_str());
-        break;
-    case TableOpType::rollback:
-        result = dbi_conn_queryf (m_conn,
-                                  "ALTER TABLE %s RENAME TO %s",
-                                  new_name.c_str(), table_name.c_str());
-        break;
-    case TableOpType::drop_backup:
-        result = dbi_conn_queryf (m_conn, "DROP TABLE %s",
-                                  new_name.c_str());
-        break;
-    default:
-        break;
-    }
-    return result;
+    std::string sql = "ALTER TABLE " + old_name + " RENAME TO " + new_name;
+    auto stmt = create_statement_from_sql(sql);
+    return execute_nonselect_statement(stmt) >= 0;
 }
+
+bool
+GncDbiSqlConnection::drop_table(const std::string& table)
+{
+    std::string sql = "DROP TABLE " + table;
+    auto stmt = create_statement_from_sql(sql);
+    return execute_nonselect_statement(stmt) >= 0;
+}
+
+bool
+GncDbiSqlConnection::merge_tables(const std::string& table,
+                                  const std::string& other)
+{
+    auto merge_table = table + "_merge";
+    std::string sql = "CREATE TABLE " + merge_table + " AS SELECT * FROM " +
+        table + " UNION SELECT * FROM " + other;
+    auto stmt = create_statement_from_sql(sql);
+    if (execute_nonselect_statement(stmt) < 0)
+        return false;
+    if (!drop_table(table))
+        return false;
+    if (!rename_table(merge_table, table))
+        return false;
+    return drop_table(other);
+}
+
 /**
  * Perform a specified SQL operation on every table in a
  * database. Possible operations are:
@@ -635,65 +664,69 @@ GncDbiSqlConnection::table_manage_backup (const std::string& table_name,
 bool
 GncDbiSqlConnection::table_operation(TableOpType op) noexcept
 {
-    static const std::regex backupre (".*_back");
-    bool retval{true};
-    for (auto table : m_provider->get_table_list(m_conn, ""))
+    auto backup_tables = m_provider->get_table_list(m_conn, "%_back");
+    auto all_tables = m_provider->get_table_list(m_conn, "");
+    /* No operations on the lock table */
+    auto new_end = std::remove(all_tables.begin(), all_tables.end(), lock_table);
+    all_tables.erase(new_end, all_tables.end());
+    StrVec data_tables;
+    data_tables.reserve(all_tables.size() - backup_tables.size());
+    std::set_difference(all_tables.begin(), all_tables.end(),
+                        backup_tables.begin(), backup_tables.end(),
+                        std::back_inserter(data_tables));
+    switch(op)
     {
-        dbi_result result;
-        /* Skip the lock table and existing backup tables; the former we don't
-         * want to touch, the latter are handled by table_manage_backup. It
-         * would be nicer to handle this with the get_table_list query, but that
-         * can accept only SQL LIKE patterns (not even regexps) and there's no
-         * way to have a negative one.
-         */
-        if (table == lock_table || std::regex_match(table, backupre))
+    case backup:
+        if (!backup_tables.empty())
         {
-            continue;
+            PERR("Unable to backup database, an existing backup is present.");
+            qof_backend_set_error(m_qbe, ERR_BACKEND_DATA_CORRUPT);
+            return false;
         }
-        do
+        for (auto table : data_tables)
+            if (!rename_table(table, table +"_back"))
+                return false; /* Error, trigger rollback. */
+        break;
+    case drop_backup:
+        for (auto table : backup_tables)
         {
-            init_error();
-            switch (op)
-            {
-            case rollback:
-            {
-                auto all_tables = m_provider->get_table_list(m_conn, "");
-                if (std::find(all_tables.begin(),
-                              all_tables.end(), table) != all_tables.end())
-                {
-                    result = dbi_conn_queryf (m_conn, "DROP TABLE %s",
-                                              table.c_str());
-                    if (result)
-                        break;
-                }
-            }
-            /* Fall through to rename the _back tables back.*/
-            case backup:
-            case drop_backup:
-                result = table_manage_backup (table, op);
-                break;
-            case empty:
-                result = dbi_conn_queryf (m_conn, "DELETE FROM TABLE %s",
-                                          table.c_str());
-                break;
-            case drop:
-            default:
-                result = dbi_conn_queryf (m_conn, "DROP TABLE %s", table.c_str());
-                break;
-            }
+            auto data_table = table.substr(0, table.find("_back"));
+            if (std::find(data_tables.begin(), data_tables.end(),
+                          data_table) != data_tables.end())
+                drop_table(table); /* Other table exists, OK. */
+            else /* No data table, restore the backup */
+                rename_table(table, data_table);
         }
-        while (m_retry);
-
-        if (result != nullptr)
+        break;
+    case rollback:
+        for (auto table : backup_tables)
         {
-            if (dbi_result_free (result) < 0)
+            auto data_table = table.substr(0, table.find("_back"));
+            if (std::find(data_tables.begin(), data_tables.end(),
+                          data_table) != data_tables.end())
+                drop_table(data_table); /* Other table exists, OK. */
+            rename_table(table, data_table);
+        }
+        break;
+    case recover:
+        for (auto table : backup_tables)
+        {
+            auto data_table = table.substr(0, table.find("_back"));
+            if (std::find(data_tables.begin(), data_tables.end(),
+                          data_table) != data_tables.end())
             {
-                PERR ("Error in dbi_result_free() result\n");
-                retval = false;
+                if (!merge_tables(data_table, table))
+                    return false;
+            }
+            else
+            {
+                if (!rename_table(table, data_table))
+                    return false;
             }
         }
+        break;
     }
-    return retval;
+   return true;
 }
 
 bool
