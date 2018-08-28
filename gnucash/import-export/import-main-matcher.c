@@ -95,6 +95,11 @@ void on_matcher_help_clicked (GtkButton *button, gpointer user_data);
 void on_matcher_help_close_clicked (GtkButton *button, gpointer user_data);
 
 /* Local prototypes */
+static Account *
+gnc_gen_trans_assign_transfer_account(GNCImportMainMatcher *gui, 
+                                      gboolean first,
+                                      GtkTreePath *path,
+                                      Account *new_acc);
 static void
 refresh_model_row(GNCImportMainMatcher *gui, GtkTreeModel *model,
                   GtkTreeIter *iter, GNCImportTransInfo *info);
@@ -357,19 +362,21 @@ gnc_gen_trans_update_toggled_cb (GtkCellRendererToggle *cell_renderer,
     refresh_model_row(gui, model, &iter, trans_info);
 }
 
-static void
-gnc_gen_trans_row_activated_cb (GtkTreeView           *view,
-                                GtkTreePath           *path,
-                                GtkTreeViewColumn     *column,
-                                GNCImportMainMatcher  *gui)
+static Account *
+gnc_gen_trans_assign_transfer_account(GNCImportMainMatcher *gui, 
+                                      gboolean first,
+                                      GtkTreePath *path,
+                                      Account *new_acc)
 {
     GtkTreeModel *model;
     GtkTreeIter iter;
     GNCImportTransInfo *trans_info;
+    Account *old_acc;
+    gboolean ok_pressed;
 
     model = gtk_tree_view_get_model(gui->view);
     if (!gtk_tree_model_get_iter(model, &iter, path))
-        return;
+        return NULL;
     gtk_tree_model_get(model, &iter, DOWNLOADED_COL_DATA, &trans_info, -1);
 
     switch (gnc_import_TransInfo_get_action (trans_info))
@@ -377,7 +384,21 @@ gnc_gen_trans_row_activated_cb (GtkTreeView           *view,
     case GNCImport_ADD:
         if (gnc_import_TransInfo_is_balanced(trans_info) == FALSE)
         {
-            run_account_picker_dialog (gui, model, &iter, trans_info);
+            old_acc  = gnc_import_TransInfo_get_destacc (trans_info);
+            if (first)
+            {
+                new_acc = gnc_import_select_account(gui->main_widget,
+                                        NULL,
+                                        TRUE,
+                                        _("Destination account for the auto-balance split."),
+                                        xaccTransGetCurrency(gnc_import_TransInfo_get_trans(trans_info)),
+                                        ACCT_TYPE_NONE,
+                                        old_acc,
+                                        &ok_pressed);
+                first = FALSE;
+            }
+            if (ok_pressed)
+                    gnc_import_TransInfo_set_destacc (trans_info, new_acc, TRUE);
         }
         break;
     case GNCImport_CLEAR:
@@ -388,10 +409,23 @@ gnc_gen_trans_row_activated_cb (GtkTreeView           *view,
         /*The information displayed is only informative, until you select an action*/
         break;
     default:
-        PERR("I don't know what to do! (Yet...)");
+        PERR("InvalidGNCImportValue");
         break;
     }
     refresh_model_row(gui, model, &iter, trans_info);
+    return new_acc;
+}
+
+static void
+gnc_gen_trans_row_activated_cb (GtkTreeView           *view,
+                                GtkTreePath           *path,
+                                GtkTreeViewColumn     *column,
+                                GNCImportMainMatcher  *gui)
+{
+    Account *assigned_account =NULL;
+    gboolean first = TRUE;
+
+    assigned_account = gnc_gen_trans_assign_transfer_account(gui, first, path, assigned_account);
 }
 
 static void
