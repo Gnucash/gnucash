@@ -139,8 +139,8 @@ static gchar *gnc_plugin_page_register_get_filter (GncPluginPage *plugin_page);
 void gnc_plugin_page_register_set_filter (GncPluginPage *plugin_page, const gchar *filter);
 static void gnc_plugin_page_register_set_filter_tooltip (GncPluginPageRegister *page);
 
-static void gnc_ppr_update_status_query (GncPluginPageRegister *page);
-static void gnc_ppr_update_date_query (GncPluginPageRegister *page);
+static void gnc_ppr_update_status_query (GncPluginPageRegister *page, gboolean refresh);
+static void gnc_ppr_update_date_query (GncPluginPageRegister *page, gboolean refresh);
 
 /* Command callbacks */
 static void gnc_plugin_page_register_cmd_print_check (GtkAction *action, GncPluginPageRegister *plugin_page);
@@ -1155,7 +1155,6 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
     reg = gnc_ledger_display_get_split_register(priv->ledger);
     gnc_split_register_config(reg, reg->type, reg->style,
                               reg->use_double_line);
-    gnc_ledger_display_refresh(priv->ledger);
 
     gnc_plugin_page_register_ui_initial_state (page);
     gnc_plugin_page_register_ui_update (NULL, page);
@@ -1178,7 +1177,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
         g_free(order);
 
         priv->sd.reverse_order = gnc_plugin_page_register_get_sort_reversed(plugin_page);
-        gnc_split_reg_set_sort_reversed(priv->gsr, priv->sd.reverse_order);
+        gnc_split_reg_set_sort_reversed(priv->gsr, priv->sd.reverse_order, FALSE);
         if (priv->sd.reverse_order)
             priv->sd.save_order = TRUE;
 
@@ -1261,8 +1260,11 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
     }
 
     /* Update Query with Filter Status and Dates */
-    gnc_ppr_update_status_query (page);
-    gnc_ppr_update_date_query(page);
+    gnc_ppr_update_status_query (page, FALSE);
+    gnc_ppr_update_date_query(page, FALSE);
+
+    /* Now do the refresh */
+    gnc_ledger_display_refresh(priv->ledger);
 
     // Set filter tooltip for summary bar
     gnc_plugin_page_register_set_filter_tooltip (page);
@@ -2248,7 +2250,7 @@ gnc_plugin_page_register_sort_response_cb (GtkDialog *dialog,
     if (response != GTK_RESPONSE_OK)
     {
         /* Restore the original sort order */
-        gnc_split_reg_set_sort_reversed(priv->gsr, priv->sd.original_reverse_order);
+        gnc_split_reg_set_sort_reversed(priv->gsr, priv->sd.original_reverse_order, TRUE);
         priv->sd.reverse_order = priv->sd.original_reverse_order;
         gnc_split_reg_set_sort_type(priv->gsr, priv->sd.original_sort_type);
         priv->sd.save_order = priv->sd.original_save_order;
@@ -2363,7 +2365,7 @@ gnc_plugin_page_register_sort_order_reverse_cb (GtkToggleButton *button,
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
 
     priv->sd.reverse_order = gtk_toggle_button_get_active(button);
-    gnc_split_reg_set_sort_reversed(priv->gsr, priv->sd.reverse_order);
+    gnc_split_reg_set_sort_reversed(priv->gsr, priv->sd.reverse_order, TRUE);
     LEAVE(" ");
 }
 
@@ -2384,7 +2386,7 @@ gnc_plugin_page_register_sort_order_reverse_cb (GtkToggleButton *button,
  *  associated with this filter dialog.
  */
 static void
-gnc_ppr_update_status_query (GncPluginPageRegister *page)
+gnc_ppr_update_status_query (GncPluginPageRegister *page, gboolean refresh)
 {
     GncPluginPageRegisterPrivate *priv;
     GSList *param_list;
@@ -2414,7 +2416,8 @@ gnc_ppr_update_status_query (GncPluginPageRegister *page)
     // Set filter tooltip for summary bar
     gnc_plugin_page_register_set_filter_tooltip (page);
 
-    gnc_ledger_display_refresh (priv->ledger);
+    if (refresh)
+        gnc_ledger_display_refresh (priv->ledger);
     LEAVE(" ");
 }
 
@@ -2432,7 +2435,7 @@ gnc_ppr_update_status_query (GncPluginPageRegister *page)
  *  associated with this filter dialog.
  */
 static void
-gnc_ppr_update_date_query (GncPluginPageRegister *page)
+gnc_ppr_update_date_query (GncPluginPageRegister *page, gboolean refresh)
 {
     GncPluginPageRegisterPrivate *priv;
     GSList *param_list;
@@ -2485,7 +2488,8 @@ gnc_ppr_update_date_query (GncPluginPageRegister *page)
     // Set filter tooltip for summary bar
     gnc_plugin_page_register_set_filter_tooltip (page);
 
-    gnc_ledger_display_refresh (priv->ledger);
+    if (refresh)
+        gnc_ledger_display_refresh (priv->ledger);
     LEAVE(" ");
 }
 
@@ -2566,7 +2570,7 @@ gnc_plugin_page_register_filter_status_one_cb (GtkToggleButton *button,
         priv->fd.cleared_match |= value;
     else
         priv->fd.cleared_match &= ~value;
-    gnc_ppr_update_status_query(page);
+    gnc_ppr_update_status_query(page, TRUE);
     LEAVE(" ");
 }
 
@@ -2605,7 +2609,7 @@ gnc_plugin_page_register_filter_status_all_cb (GtkButton *button,
     /* Set the requested status */
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
     priv->fd.cleared_match = CLEARED_ALL;
-    gnc_ppr_update_status_query(page);
+    gnc_ppr_update_status_query(page, TRUE);
     LEAVE(" ");
 }
 
@@ -2713,7 +2717,7 @@ gnc_plugin_page_register_filter_select_range_cb (GtkRadioButton *button,
         priv->fd.start_time = 0;
         priv->fd.end_time = 0;
     }
-    gnc_ppr_update_date_query(page);
+    gnc_ppr_update_date_query(page, TRUE);
     LEAVE(" ");
 }
 
@@ -2741,7 +2745,7 @@ gnc_plugin_page_register_filter_days_changed_cb (GtkSpinButton *button,
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
 
     priv->fd.days = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button));
-    gnc_ppr_update_date_query(page);
+    gnc_ppr_update_date_query(page, TRUE);
     LEAVE(" ");
 }
 
@@ -2764,7 +2768,7 @@ gnc_plugin_page_register_filter_gde_changed_cb (GtkWidget *unused,
 
     ENTER("(widget %s(%p), page %p)", gtk_buildable_get_name(GTK_BUILDABLE(unused)), unused, page);
     get_filter_times(page);
-    gnc_ppr_update_date_query(page);
+    gnc_ppr_update_date_query(page, TRUE);
     LEAVE(" ");
 }
 
@@ -2811,7 +2815,7 @@ gnc_plugin_page_register_filter_start_cb (GtkWidget *radio,
     active = ( g_strcmp0(name, g_strdup("start_date_choose")) == 0 ? 1 : 0 );
     gtk_widget_set_sensitive(priv->fd.start_date, active);
     get_filter_times(page);
-    gnc_ppr_update_date_query(page);
+    gnc_ppr_update_date_query(page, TRUE);
     LEAVE(" ");
 }
 
@@ -2858,7 +2862,7 @@ gnc_plugin_page_register_filter_end_cb (GtkWidget *radio,
     active = ( g_strcmp0(name, g_strdup("end_date_choose")) == 0 ? 1 : 0 );
     gtk_widget_set_sensitive(priv->fd.end_date, active);
     get_filter_times(page);
-    gnc_ppr_update_date_query(page);
+    gnc_ppr_update_date_query(page, TRUE);
     LEAVE(" ");
 }
 
@@ -2922,12 +2926,12 @@ gnc_plugin_page_register_filter_response_cb (GtkDialog *dialog,
     {
         /* Remove the old status match */
         priv->fd.cleared_match = priv->fd.original_cleared_match;
-        gnc_ppr_update_status_query(page);
+        gnc_ppr_update_status_query(page, FALSE);
         priv->fd.start_time = priv->fd.original_start_time;
         priv->fd.end_time = priv->fd.original_end_time;
         priv->fd.days = priv->fd.original_days;
         priv->fd.save_filter = priv->fd.original_save_filter;
-        gnc_ppr_update_date_query(page);
+        gnc_ppr_update_date_query(page, TRUE);
     }
     else
     {
