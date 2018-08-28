@@ -193,11 +193,12 @@
                                                        (second foreignlist)
                                                        GNC-DENOM-AUTO
                                                        GNC-DENOM-LCD))
-                 (gnc-numeric-div
-                  total-domestic
-                  total-foreign
-                  GNC-DENOM-AUTO
-                  (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND)))))))
+                 (if (not (zero? total-foreign))
+                     (gnc-numeric-div
+                      total-domestic
+                      total-foreign
+                      GNC-DENOM-AUTO
+                      (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND)) 0))))))
       ;; Get all the interesting splits, and sort them according to the
       ;; date.
       (gnc:get-match-commodity-splits-sorted
@@ -295,11 +296,12 @@
                      (gnc-commodity-numeric->string
                       report-currency (gnc-numeric-zero)))
                (gnc-numeric-zero))
-             (gnc-numeric-div
-              (second foreignlist)
-              (third foreignlist)
-              GNC-DENOM-AUTO
-              (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND))))))
+             (if (not (zero? (third foreignlist)))
+                 (gnc-numeric-div
+                  (second foreignlist)
+                  (third foreignlist)
+                  GNC-DENOM-AUTO
+                  (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND)) 0)))))
     ;; Get all the interesting splits, sorted by date.
     (gnc:get-match-commodity-splits-sorted
      currency-accounts

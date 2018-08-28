@@ -203,10 +203,11 @@
         (begin
           (xaccSplitSetMemo split-1 memo)
           (xaccSplitSetMemo split-2 memo)))
+    (if (> amount2 0)
     (gnc-pricedb-create (xaccAccountGetCommodity debit)
                         (xaccAccountGetCommodity credit)
                         (gnc-dmy2time64 DD MM YY)
-                        (/ amount1 amount2))
+                        (/ amount1 amount2)))
     (xaccTransCommitEdit txn)
     txn))
 
