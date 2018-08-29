@@ -398,8 +398,7 @@
         (let ((price
                (gnc:pricelist-price-find-nearest
                 plist date)))
-          (if price
-              price
+          (or price
               (gnc-numeric-zero)))
         (gnc-numeric-zero))))
 
@@ -785,9 +784,8 @@
 ;; #f if the commodities don't match.  Therefore, if you use this
 ;; function in a mixed commodity context, stuff will probably crash.
 (define (gnc:exchange-if-same foreign domestic)
-  (if (gnc-commodity-equiv (gnc:gnc-monetary-commodity foreign) domestic)
-      foreign
-      #f))
+  (and (gnc-commodity-equiv (gnc:gnc-monetary-commodity foreign) domestic)
+       foreign))
 
 ;; This one returns the ready-to-use function for calculation of the
 ;; exchange rates.  The returned function takes a <gnc-monetary> and
@@ -798,43 +796,41 @@
     (lambda (foreign domestic)
       (gnc:debug "foreign: " (gnc:monetary->string foreign))
       (gnc:debug "domestic: " (gnc-commodity-get-printname domestic))
-      (if foreign
-          (or (gnc:exchange-by-euro foreign domestic #f)
-              (gnc:exchange-if-same foreign domestic)
-              (gnc:make-gnc-monetary
-               domestic
-               (let ((pair (assoc (gnc:gnc-monetary-commodity foreign)
-                                  exchangelist))
-                     (foreign-amount (gnc:gnc-monetary-amount foreign)))
-                 (if (or (not pair)
-                         (gnc-numeric-zero-p foreign-amount))
-                     (gnc-numeric-zero)
-                     (gnc-numeric-mul foreign-amount
-                                      (cadr pair)
-                                      (gnc-commodity-get-fraction domestic)
-                                      GNC-RND-ROUND)))))
-          #f))))
+      (and foreign
+           (or (gnc:exchange-by-euro foreign domestic #f)
+               (gnc:exchange-if-same foreign domestic)
+               (gnc:make-gnc-monetary
+                domestic
+                (let ((pair (assoc (gnc:gnc-monetary-commodity foreign)
+                                   exchangelist))
+                      (foreign-amount (gnc:gnc-monetary-amount foreign)))
+                  (if (or (not pair)
+                          (gnc-numeric-zero-p foreign-amount))
+                      (gnc-numeric-zero)
+                      (gnc-numeric-mul foreign-amount
+                                       (cadr pair)
+                                       (gnc-commodity-get-fraction domestic)
+                                       GNC-RND-ROUND)))))))))
 
 ;; Helper for the gnc:exchange-by-pricalist* below. Exchange the
 ;; <gnc:monetary> 'foreign' into the <gnc:commodity*> 'domestic' by
 ;; the <gnc:numeric> 'price-value'. Returns a <gnc:monetary>.
 (define (gnc:exchange-by-pricevalue-helper
          foreign domestic price-value)
-  (if (gnc:gnc-monetary? foreign)
-      (gnc:make-gnc-monetary
-       domestic
-       (if price-value
-           (gnc-numeric-mul (gnc:gnc-monetary-amount foreign)
-                            price-value
-                            (gnc-commodity-get-fraction domestic)
-                            GNC-RND-ROUND)
-           (begin
-             (warn "gnc:exchange-by-pricevalue-helper: No price found for "
-                   (gnc:monetary->string foreign) " into "
-                   (gnc:monetary->string
-                    (gnc:make-gnc-monetary domestic (gnc-numeric-zero))))
-             (gnc-numeric-zero))))
-      #f))
+  (and (gnc:gnc-monetary? foreign)
+       (gnc:make-gnc-monetary
+        domestic
+        (if price-value
+            (gnc-numeric-mul (gnc:gnc-monetary-amount foreign)
+                             price-value
+                             (gnc-commodity-get-fraction domestic)
+                             GNC-RND-ROUND)
+            (begin
+              (warn "gnc:exchange-by-pricevalue-helper: No price found for "
+                    (gnc:monetary->string foreign) " into "
+                    (gnc:monetary->string
+                     (gnc:make-gnc-monetary domestic (gnc-numeric-zero))))
+              (gnc-numeric-zero))))))
 
 ;; Helper for gnc:exchange-by-pricedb-* below. 'price' gets tested for
 ;; #f here, and gets unref'd here too. Exchange the <gnc:monetary>
@@ -842,24 +838,23 @@
 ;; 'price'. Returns a <gnc:monetary>.
 (define (gnc:exchange-by-pricedb-helper
          foreign domestic price)
-  (if (gnc:gnc-monetary? foreign)
-      (gnc:make-gnc-monetary
-       domestic
-       (if price
-           (let ((result
-                  (gnc-numeric-mul (gnc:gnc-monetary-amount foreign)
-                                   (gnc-price-get-value price)
-                                   (gnc-commodity-get-fraction domestic)
-                                   GNC-RND-ROUND)))
-             (gnc-price-unref price)
-             result)
-           (begin
-             (warn "gnc:exchange-by-pricedb-helper: No price found for "
-                   (gnc:monetary->string foreign) " into "
-                   (gnc:monetary->string
-                    (gnc:make-gnc-monetary domestic (gnc-numeric-zero))))
-             (gnc-numeric-zero))))
-      #f))
+  (and (gnc:gnc-monetary? foreign)
+       (gnc:make-gnc-monetary
+        domestic
+        (if price
+            (let ((result
+                   (gnc-numeric-mul (gnc:gnc-monetary-amount foreign)
+                                    (gnc-price-get-value price)
+                                    (gnc-commodity-get-fraction domestic)
+                                    GNC-RND-ROUND)))
+              (gnc-price-unref price)
+              result)
+            (begin
+              (warn "gnc:exchange-by-pricedb-helper: No price found for "
+                    (gnc:monetary->string foreign) " into "
+                    (gnc:monetary->string
+                     (gnc:make-gnc-monetary domestic (gnc-numeric-zero))))
+              (gnc-numeric-zero))))))
 
 ;; This is another ready-to-use function for calculation of exchange
 ;; rates. (Note that this is already the function itself. It doesn't
@@ -870,17 +865,17 @@
 ;; returns a <gnc-monetary>.
 (define (gnc:exchange-by-pricedb-latest
          foreign domestic)
-  (if (and (record? foreign) (gnc:gnc-monetary? foreign))
-      (or (gnc:exchange-by-euro foreign domestic #f)
-          (gnc:exchange-if-same foreign domestic)
-          (gnc:make-gnc-monetary
-           domestic
-           (gnc-pricedb-convert-balance-latest-price
-            (gnc-pricedb-get-db (gnc-get-current-book))
-            (gnc:gnc-monetary-amount foreign)
-            (gnc:gnc-monetary-commodity foreign)
-            domestic)))
-      #f))
+  (and (record? foreign)
+       (gnc:gnc-monetary? foreign)
+       (or (gnc:exchange-by-euro foreign domestic #f)
+           (gnc:exchange-if-same foreign domestic)
+           (gnc:make-gnc-monetary
+            domestic
+            (gnc-pricedb-convert-balance-latest-price
+             (gnc-pricedb-get-db (gnc-get-current-book))
+             (gnc:gnc-monetary-amount foreign)
+             (gnc:gnc-monetary-commodity foreign)
+             domestic)))))
 
 ;; Yet another ready-to-use function for calculation of exchange
 ;; rates. (Note that this is already the function itself. It doesn't
@@ -892,18 +887,18 @@
 ;; <gnc-monetary>.
 (define (gnc:exchange-by-pricedb-nearest
          foreign domestic date)
-  (if (and (record? foreign) (gnc:gnc-monetary? foreign)
-           date)
-      (or (gnc:exchange-by-euro foreign domestic date)
-          (gnc:exchange-if-same foreign domestic)
-          (gnc:make-gnc-monetary
-           domestic
-           (gnc-pricedb-convert-balance-nearest-price-t64
-            (gnc-pricedb-get-db (gnc-get-current-book))
-            (gnc:gnc-monetary-amount foreign)
-            (gnc:gnc-monetary-commodity foreign)
-            domestic (time64CanonicalDayTime date))))
-      #f))
+  (and (record? foreign)
+       (gnc:gnc-monetary? foreign)
+       date
+       (or (gnc:exchange-by-euro foreign domestic date)
+           (gnc:exchange-if-same foreign domestic)
+           (gnc:make-gnc-monetary
+            domestic
+            (gnc-pricedb-convert-balance-nearest-price-t64
+             (gnc-pricedb-get-db (gnc-get-current-book))
+             (gnc:gnc-monetary-amount foreign)
+             (gnc:gnc-monetary-commodity foreign)
+             domestic (time64CanonicalDayTime date))))))
 
 ;; Exchange by the nearest price from pricelist. This function takes
 ;; the <gnc-monetary> 'foreign' amount, the <gnc:commodity*>
@@ -913,26 +908,19 @@
 ;; function returns a <gnc-monetary>.
 (define (gnc:exchange-by-pricealist-nearest
          pricealist foreign domestic date)
-  (begin
-    (gnc:debug "foreign " (gnc:monetary->string foreign))
-    (gnc:debug "domestic " (gnc-commodity-get-printname domestic))
-    (gnc:debug "pricealist " pricealist)
-
-    (if (and (record? foreign) (gnc:gnc-monetary? foreign)
-             date)
-        (or (gnc:exchange-by-euro foreign domestic date)
-            (gnc:exchange-if-same foreign domestic)
-            (if (not (null? pricealist))
+  (gnc:debug "foreign " (gnc:monetary->string foreign))
+  (gnc:debug "domestic " (gnc-commodity-get-printname domestic))
+  (gnc:debug "pricealist " pricealist)
+  (and (record? foreign)
+       (gnc:gnc-monetary? foreign)
+       date
+       (or (gnc:exchange-by-euro foreign domestic date)
+           (gnc:exchange-if-same foreign domestic)
+           (and (pair? pricealist)
                 (gnc:exchange-by-pricevalue-helper
                  foreign domestic
                  (gnc:pricealist-lookup-nearest-in-time
-                  pricealist (gnc:gnc-monetary-commodity foreign) date))
-                #f))
-        #f)))
-
-
-
-
+                  pricealist (gnc:gnc-monetary-commodity foreign) date))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Choosing exchange functions made easy -- get the right function by
@@ -1036,45 +1024,44 @@
 ;; Returns a <gnc-monetary> with the domestic commodity and its
 ;; corresponding balance. If the foreign balance is #f, it returns #f.
 (define (gnc:sum-collector-commodity foreign domestic exchange-fn)
-  (cond ((and foreign exchange-fn)
-         (let ((balance (gnc:make-commodity-collector)))
-           (foreign
-            'format
-            (lambda (curr val)
-              (if (gnc-commodity-equiv domestic curr)
-                  (balance 'add domestic val)
-                  (balance 'add domestic
-                           (gnc:gnc-monetary-amount
-                            ;; BUG?: this bombs if the exchange-fn
-                            ;; returns #f instead of an actual
-                            ;; <gnc:monetary>.  Better to just return #f.
-                            (exchange-fn (gnc:make-gnc-monetary curr val)
-                                         domestic)))))
-            #f)
-           (balance 'getmonetary domestic #f)))
-        (else #f)))
+  (and foreign
+       exchange-fn
+       (let ((balance (gnc:make-commodity-collector)))
+         (foreign
+          'format
+          (lambda (curr val)
+            (if (gnc-commodity-equiv domestic curr)
+                (balance 'add domestic val)
+                (balance 'add domestic
+                         (gnc:gnc-monetary-amount
+                          ;; BUG?: this bombs if the exchange-fn
+                          ;; returns #f instead of an actual
+                          ;; <gnc:monetary>.  Better to just return #f.
+                          (exchange-fn (gnc:make-gnc-monetary curr val)
+                                       domestic)))))
+          #f)
+         (balance 'getmonetary domestic #f))))
 
 ;; As above, but adds only the commodities of other stocks and
 ;; mutual-funds. Returns a commodity-collector, (not a <gnc:monetary>)
 ;; which (still) may have several different commodities in it -- if
 ;; there have been different *currencies*, not only stocks.
 (define (gnc:sum-collector-stocks foreign domestic exchange-fn)
-  (if foreign
-      (let ((balance (gnc:make-commodity-collector)))
-        (foreign
-         'format
-         (lambda (curr val)
-           (if (gnc-commodity-equiv domestic curr)
-               (balance 'add domestic val)
-               (if (gnc-commodity-is-currency curr)
-                   (balance 'add curr val)
-                   (balance 'add domestic
-                            (gnc:gnc-monetary-amount
-                             (exchange-fn (gnc:make-gnc-monetary curr val)
-                                          domestic))))))
-         #f)
-        balance)
-      #f))
+  (and foreign
+       (let ((balance (gnc:make-commodity-collector)))
+         (foreign
+          'format
+          (lambda (curr val)
+            (if (gnc-commodity-equiv domestic curr)
+                (balance 'add domestic val)
+                (if (gnc-commodity-is-currency curr)
+                    (balance 'add curr val)
+                    (balance 'add domestic
+                             (gnc:gnc-monetary-amount
+                              (exchange-fn (gnc:make-gnc-monetary curr val)
+                                           domestic))))))
+          #f)
+         balance)))
 
 ;; Returns the number of commodities in a commodity-collector.
 ;; (If this were implemented as a record, I would be able to
