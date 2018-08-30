@@ -699,21 +699,15 @@
 ;; If type is #f, sums all splits in the interval (even closing splits)
 (define (gnc:account-get-trans-type-balance-interval-with-closing
 	 account-list type start-date end-date)
-  (let* ((total (gnc:make-commodity-collector)))
+  (let ((total (gnc:make-commodity-collector)))
     (map (lambda (split)
            (let* ((shares (xaccSplitGetAmount split))
                   (acct-comm (xaccAccountGetCommodity
-                              (xaccSplitGetAccount split)))
-                  )
-                (gnc-commodity-collector-add total acct-comm shares)
-             )
-           )
+                              (xaccSplitGetAccount split))))
+             (gnc-commodity-collector-add total acct-comm shares)))
 	 (gnc:account-get-trans-type-splits-interval
-          account-list type start-date end-date)
-	 )
-    total
-    )
-  )
+          account-list type start-date end-date))
+    total))
 
 ;; Filters the splits from the source to the target accounts
 ;; returns a commodity collector
@@ -904,15 +898,11 @@
 
 
 (define (gnc:budget-accountlist-helper accountlist get-fn)
-  (let
-    (
-      (net (gnc:make-commodity-collector)))
+  (let ((net (gnc:make-commodity-collector)))
     (for-each
-      (lambda (account)
-        (net 'merge
-          (get-fn account)
-          #f))
-      accountlist)
+     (lambda (account)
+       (net 'merge (get-fn account) #f))
+     accountlist)
     net))
 
 ;; Sums budget values for a single account from start-period (inclusive) to
@@ -923,17 +913,14 @@
 ;;
 ;; Returns a commodity-collector.
 (define (gnc:budget-account-get-net budget account start-period end-period)
-  (if (not start-period) (set! start-period 0))
   (if (not end-period) (set! end-period (gnc-budget-get-num-periods budget)))
-  (let*
-    (
-      (period start-period)
-      (net (gnc:make-commodity-collector))
-      (acct-comm (xaccAccountGetCommodity account)))
+  (let* ((period (or start-period 0))
+         (net (gnc:make-commodity-collector))
+         (acct-comm (xaccAccountGetCommodity account)))
     (while (< period end-period)
       (net 'add acct-comm
-          (gnc-budget-get-account-period-value budget account period))
-      (set! period (+ period 1)))
+           (gnc-budget-get-account-period-value budget account period))
+      (set! period (1+ period)))
     net))
 
 ;; Sums budget values for accounts in accountlist from start-period (inclusive)
@@ -1016,17 +1003,14 @@
 ;;
 ;; Returns a gnc-numeric value
 (define (gnc:budget-account-get-rolledup-net budget account start-period end-period)
-  (if (not start-period) (set! start-period 0))
   (if (not end-period) (set! end-period (gnc-budget-get-num-periods budget)))
-  (let*
-    (
-      (period start-period)
-      (net (gnc-numeric-zero))
-      (acct-comm (xaccAccountGetCommodity account)))
+  (let* ((period (or start-period 0))
+         (net (gnc-numeric-zero))
+         (acct-comm (xaccAccountGetCommodity account)))
     (while (< period end-period)
       (set! net (gnc-numeric-add net
-          (gnc:get-account-period-rolledup-budget-value budget account period)
-	  GNC-DENOM-AUTO GNC-RND-ROUND))
+                                 (gnc:get-account-period-rolledup-budget-value budget account period)
+                                 GNC-DENOM-AUTO GNC-RND-ROUND))
       (set! period (+ period 1)))
     net))
 
@@ -1043,29 +1027,20 @@
     initial-balances))
 
 (define (gnc:select-assoc-account-balance account-balances account)
-  (let*
-    (
-      (account-balance (car account-balances))
-      (result
-        (if
-          (equal? account-balance '())
-          #f
-          (if
-            (equal? (car account-balance) account)
-            (car (cdr account-balance))
-            (gnc:select-assoc-account-balance
+  (let ((account-balance (car account-balances)))
+    (and (pair? account-balance)
+         (if (equal? (car account-balance) account)
+             (cadr account-balance)
+             (gnc:select-assoc-account-balance
               (cdr account-balances)
               account)))))
-    result))
 
 (define (gnc:get-assoc-account-balances-total account-balances)
-  (let
-    (
-      (total (gnc:make-commodity-collector)))
+  (let ((total (gnc:make-commodity-collector)))
     (for-each
-      (lambda (account-balance)
-        (total 'merge (car (cdr account-balance)) #f))
-      account-balances)
+     (lambda (account-balance)
+       (total 'merge (cadr account-balance) #f))
+     account-balances)
     total))
 
 ;; Adds "file:///" to the beginning of a URL if it doesn't already exist
