@@ -116,7 +116,8 @@
 
 ;; Returns true if the given pricealist element is a non-zero price.
 (define (gnc:price-is-not-zero? elem)
-  (not (gnc-numeric-zero-p (second elem))))
+  (and (second elem)
+       (not (gnc-numeric-zero-p (second elem)))))
 
 ;; Create a list of all prices of 'price-commodity' measured in the currency
 ;; 'report-currency'. The prices are taken from all splits in
@@ -155,12 +156,16 @@
                (transaction-date (xaccTransGetDate
                                   (xaccSplitGetParent a)))
                (foreignlist
-                (if (gnc-commodity-equiv transaction-comm
-                                         price-commodity)
-                    (list account-comm
-                          share-amount value-amount)
-                    (list transaction-comm
-                          value-amount share-amount))))
+                (if (and
+                     (not (zero? share-amount))
+                     (not (zero? value-amount)))
+                    (if (gnc-commodity-equiv transaction-comm
+                                             price-commodity)
+                        (list account-comm
+                              share-amount value-amount)
+                        (list transaction-comm
+                              value-amount share-amount))
+                    #f)))
 
           ;;(warn "gnc:get-commodity-totalavg-prices: value "
           ;;    (gnc-commodity-numeric->string
@@ -170,8 +175,9 @@
           ;;price-commodity (third foreignlist)))
 
           ;; Try EURO exchange if necessary
-          (if (not (gnc-commodity-equiv (first foreignlist)
-                                        report-currency))
+          (if (and foreignlist
+                   (not (gnc-commodity-equiv (first foreignlist)
+                                        report-currency)))
               (let ((exchanged (gnc:exchange-by-euro-numeric
                                 (first foreignlist) (second foreignlist)
                                 report-currency transaction-date)))
@@ -183,35 +189,37 @@
 
           (list
            transaction-date
-           (if (not (gnc-commodity-equiv (first foreignlist)
-                                         report-currency))
-               (begin
-                 (warn "gnc:get-commodity-totalavg-prices: "
-                       "Sorry, currency exchange not yet implemented:"
-                       (gnc-commodity-numeric->string
-                        (first foreignlist) (second foreignlist))
-                       " (buying "
-                       (gnc-commodity-numeric->string
-                        price-commodity (third foreignlist))
-                       ") =? "
-                       (gnc-commodity-numeric->string
-                        report-currency (gnc-numeric-zero)))
-                 (gnc-numeric-zero))
-               (begin
-                 (set! total-foreign (gnc-numeric-add total-foreign
-                                                      (third foreignlist)
-                                                      GNC-DENOM-AUTO
-                                                      GNC-DENOM-LCD))
-                 (set! total-domestic (gnc-numeric-add total-domestic
-                                                       (second foreignlist)
-                                                       GNC-DENOM-AUTO
-                                                       GNC-DENOM-LCD))
-                 (if (not (zero? total-foreign))
-                     (gnc-numeric-div
-                      total-domestic
-                      total-foreign
-                      GNC-DENOM-AUTO
-                      (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND)) 0))))))
+           (if foreignlist
+               (if (not (gnc-commodity-equiv (first foreignlist)
+                                             report-currency))
+                   (begin
+                     (warn "gnc:get-commodity-totalavg-prices: "
+                           "Sorry, currency exchange not yet implemented:"
+                           (gnc-commodity-numeric->string
+                            (first foreignlist) (second foreignlist))
+                           " (buying "
+                           (gnc-commodity-numeric->string
+                            price-commodity (third foreignlist))
+                           ") =? "
+                           (gnc-commodity-numeric->string
+                            report-currency (gnc-numeric-zero)))
+                     (gnc-numeric-zero))
+                   (begin
+                     (set! total-foreign (gnc-numeric-add total-foreign
+                                                          (third foreignlist)
+                                                          GNC-DENOM-AUTO
+                                                          GNC-DENOM-LCD))
+                     (set! total-domestic (gnc-numeric-add total-domestic
+                                                           (second foreignlist)
+                                                           GNC-DENOM-AUTO
+                                                           GNC-DENOM-LCD))
+                     (if (not (zero? total-foreign))
+                         (gnc-numeric-div
+                          total-domestic
+                          total-foreign
+                          GNC-DENOM-AUTO
+                          (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND)) 0)))
+               #f))))
       ;; Get all the interesting splits, and sort them according to the
       ;; date.
       (gnc:get-match-commodity-splits-sorted
@@ -985,6 +993,9 @@
                           (lambda (foreign domestic date)
                             (gnc:exchange-by-pricealist-nearest
                              pricealist foreign domestic date))))
+  ;; actual-transactions isn't used, at least not as a value passed to this
+  ;; function. price-scatter.scm does use it but calls
+  ;; gnc:get-commodity-inst-prices directly.
     ((actual-transactions) (let ((pricealist
                                   (gnc:get-commoditylist-inst-prices
                                    commodity-list report-currency to-date-tp)))

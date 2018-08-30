@@ -537,16 +537,16 @@
 ;; the comment at the gnc:get-commodity-totalavg-prices definition for more
 ;; about the prices from this function.
        (test-equal "MSFT totalavg 2014-12-05"
-                   (gnc-numeric-div 5232000/100 1500 GNC-DENOM-AUTO
+                   (gnc-numeric-div 6637500/100 2000 GNC-DENOM-AUTO
                                     (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND))
                    (cadr (assoc (gnc-dmy2time64-neutral 5 12 2014)
                                 report-list)))
        (test-equal "MSFT totalavg 2015-04-02"
-                   (gnc-numeric-div 10876200/100 2800 GNC-DENOM-AUTO
+                   (gnc-numeric-div 9860700/100 2800 GNC-DENOM-AUTO
                                     (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND))
                    (cadr (assoc (gnc-dmy2time64-neutral 2 4 2015) report-list)))
        (test-equal "MSFT totalavg 2016-03-11"
-                   (gnc-numeric-div 12634400/100 2800 GNC-DENOM-AUTO
+                   (gnc-numeric-div 14637000/100 3700 GNC-DENOM-AUTO
                                     (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND))
                    (cadr (assoc (gnc-dmy2time64-neutral 11 3 2016)
                                 report-list))))
