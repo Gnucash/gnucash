@@ -145,10 +145,8 @@
 
 ;; Get all children of this list of accounts.
 (define (gnc:acccounts-get-all-subaccounts accountlist)
-  (append-map 
-   (lambda (a)
-     (gnc-account-get-descendants-sorted a))
-   accountlist))
+  (append-map gnc-account-get-descendants-sorted
+              accountlist))
 
 ;;; Here's a statistics collector...  Collects max, min, total, and makes
 ;;; it easy to get at the mean.
@@ -412,10 +410,8 @@
 ;; Returns zero if all entries in this collector are zero.
 (define (gnc-commodity-collector-allzero? collector)
   (every zero?
-         (gnc-commodity-collector-map
-          collector
-          (lambda (commodity amount)
-            amount))))
+         (map gnc:gnc-monetary-amount
+              (collector 'format gnc:make-gnc-monetary #f))))
 
 ;; get the account balance at the specified date. if include-children?
 ;; is true, the balances of all children (not just direct children)
@@ -586,15 +582,11 @@
 	   collector (xaccAccountGetCommodity account) #f))))
 
 ;; the version which returns a commodity-collector
-(define (gnc:account-get-comm-balance-interval 
-	 account from to include-children?)
-  (let ((account-list (if include-children?
-                          (let ((sub-accts (gnc-account-get-descendants-sorted account)))
-                            (if sub-accts
-                                (append (list account) sub-accts)
-                                (list account)))
-                          (list account))))
-    (gnc:account-get-trans-type-balance-interval account-list #f from to)))
+(define (gnc:account-get-comm-balance-interval account from to include-children?)
+  (let ((sub-accts (gnc-account-get-descendants-sorted account)))
+    (gnc:account-get-trans-type-balance-interval
+     (cons account (or (and include-children? sub-accts) '()))
+     #f from to)))
 
 ;; This calculates the increase in the balance(s) of all accounts in
 ;; <accountlist> over the period from <from-date> to <to-date>.
@@ -1003,38 +995,37 @@
 ;;
 ;; Returns a gnc-numeric value
 (define (gnc:budget-account-get-rolledup-net budget account start-period end-period)
-  (if (not end-period) (set! end-period (gnc-budget-get-num-periods budget)))
-  (let* ((period (or start-period 0))
-         (net (gnc-numeric-zero))
-         (acct-comm (xaccAccountGetCommodity account)))
-    (while (< period end-period)
-      (set! net (gnc-numeric-add net
-                                 (gnc:get-account-period-rolledup-budget-value budget account period)
-                                 GNC-DENOM-AUTO GNC-RND-ROUND))
-      (set! period (+ period 1)))
-    net))
+  (let* ((start (or start-period 0))
+         (end (or end-period (gnc-budget-get-num-periods budget)))
+         (numperiods (- end start -1)))
+  (apply +
+         (map
+          (lambda (period)
+            (gnc:get-account-period-rolledup-budget-value budget account period))
+          (iota numperiods start 1)))))
+
+;; ***************************************************************************
+;; The following 3 functions belong together
+;; Input: accounts, get-balance-fn
+;; Output: account-balances, a list of 2-element lists
 
 (define (gnc:get-assoc-account-balances accounts get-balance-fn)
-  (let*
-    (
-      (initial-balances (list)))
-    (for-each
-      (lambda (account)
-        (set! initial-balances
-          (append initial-balances
-            (list (list account (get-balance-fn account))))))
-      accounts)
-    initial-balances))
+  (map
+   (lambda (acct)
+     (list acct (get-balance-fn acct)))
+   accounts))
 
+;; Input: account-balances, account
+;; Output: commodity-collector
 (define (gnc:select-assoc-account-balance account-balances account)
-  (let ((account-balance (car account-balances)))
-    (and (pair? account-balance)
-         (if (equal? (car account-balance) account)
-             (cadr account-balance)
-             (gnc:select-assoc-account-balance
-              (cdr account-balances)
-              account)))))
+  (let ((found (find
+                (lambda (acct-bal)
+                  (equal? (car acct-bal) account))
+                account-balances)))
+    (and found (cadr found))))
 
+;; Input: account-balances
+;; Output: commodity-collector
 (define (gnc:get-assoc-account-balances-total account-balances)
   (let ((total (gnc:make-commodity-collector)))
     (for-each
@@ -1042,6 +1033,7 @@
        (total 'merge (cadr account-balance) #f))
      account-balances)
     total))
+;; ***************************************************************************
 
 ;; Adds "file:///" to the beginning of a URL if it doesn't already exist
 ;;
