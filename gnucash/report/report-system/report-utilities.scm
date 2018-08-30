@@ -668,10 +668,7 @@
 
 ;; function to count the total number of splits to be iterated
 (define (gnc:accounts-count-splits accounts)
-  (if (not (null? accounts))
-      (+ (length (xaccAccountGetSplitList (car accounts)))
-	 (gnc:accounts-count-splits (cdr accounts)))
-      0))
+  (apply + (map length (map xaccAccountGetSplitList accounts))))
 
 ;; Sums up any splits of a certain type affecting a set of accounts.
 ;; the type is an alist '((str "match me") (cased #f) (regexp #f))
@@ -722,68 +719,22 @@
 ;; returns a commodity collector
 ;; does NOT do currency exchanges
 (define (gnc:account-get-total-flow direction target-account-list from-date to-date)
-
-  (let* (
-          (total-flow (gnc:make-commodity-collector))
-        )
-
-    ;; ------------------------------------------------------------------
-    ;; process all target accounts
-    ;; ------------------------------------------------------------------
+  (let ((total-flow (gnc:make-commodity-collector)))
     (for-each
-      (lambda (target-account)
-        ;; -------------------------------------
-        ;; process all splits of current account
-        ;; -------------------------------------
-        (for-each
-          (lambda (target-account-split)
-            ;; ----------------------------------------------------
-            ;; only target account splits that are within the specified time range
-            ;; ----------------------------------------------------
-            (let* (
-                    (transaction (xaccSplitGetParent target-account-split))
-                    (transaction-date-posted (xaccTransGetDate transaction))
-                  )
-              (if (and
-                    (<= transaction-date-posted to-date)
-                    (>= transaction-date-posted from-date)
-                  )
-                ;; -------------------------------------------------------------
-                ;; get the split information
-                ;; -------------------------------------------------------------
-                (let* (
-                        (transaction-currency   (xaccTransGetCurrency transaction))
-                        (transaction-value (gnc-numeric-zero))
-                        (split-value       (xaccSplitGetAmount target-account-split))
-                      )
-                  ;; -------------------------------------------------------------
-                  ;; update the return value
-                  ;; -------------------------------------------------------------
-                  (case direction
-                    ((in)
-                      (if (gnc-numeric-positive-p split-value)
-                        (total-flow 'add transaction-currency split-value)
-                      )
-                    )
-                    ((out)
-                      (if (gnc-numeric-negative-p split-value)
-                        (total-flow 'add transaction-currency split-value)
-                      )
-                    )
-                    (else  (gnc:warn  "bad gnc:account-get-total-flow action: "  direction))
-                  )
-                )
-              )
-            )
-          )
-          (xaccAccountGetSplitList target-account)
-        )
-      )
-      target-account-list
-    )
-    total-flow ;; RETURN
-  )
-)
+     (lambda (target-account)
+       (for-each
+        (lambda (target-account-split)
+          (let* ((transaction (xaccSplitGetParent target-account-split))
+                 (split-value (xaccSplitGetAmount target-account-split)))
+            (if (and (<= from-date (xaccTransGetDate transaction) to-date)
+                     (or (and (eq? direction 'in)
+                              (positive? split-value))
+                         (and (eq? direction 'out)
+                              (negative? split-value))))
+                (total-flow 'add (xaccTransGetCurrency transaction) split-value))))
+        (xaccAccountGetSplitList target-account)))
+     target-account-list)
+    total-flow))
 
 ;; similar, but only counts transactions with non-negative shares and
 ;; *ignores* any closing entries
