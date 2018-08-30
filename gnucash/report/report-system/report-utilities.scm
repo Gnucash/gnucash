@@ -20,9 +20,8 @@
 (use-modules (srfi srfi-13))
 
 (define (list-ref-safe list elt)
-  (if (> (length list) elt)
-      (list-ref list elt)
-      #f))
+  (and (> (length list) elt)
+       (list-ref list elt)))
 
 (define (list-set-safe! l elt val)
   (if (and (list? l) (> (length l) elt))
@@ -349,31 +348,19 @@
        clist))
 
     ;; helper function which is given a commodity and returns, if
-    ;; existing, a list (gnc:commodity gnc:numeric). If the second
-    ;; argument was #t, the sign gets reversed.
+    ;; existing, a list (gnc:commodity gnc:numeric).
     (define (getpair c sign?)
-      (let ((pair (assoc c commoditylist)))
-	(cons c (cons 
-	      (if (not pair)
-		  (gnc-numeric-zero)
-		  (if sign?
-		      (gnc-numeric-neg
-		       (gnc:value-collector-total (cadr pair)))
-		      (gnc:value-collector-total (cadr pair))))
-	      '()))))
+      (let* ((pair (assoc c commoditylist))
+             (total (and pair (gnc:value-collector-total (cadr pair)))))
+	(list c (if pair (if sign? (- total) total) 0))))
 
     ;; helper function which is given a commodity and returns, if
-    ;; existing, a <gnc:monetary> value. If the second argument was
-    ;; #t, the sign gets reversed.
+    ;; existing, a <gnc:monetary> value.
     (define (getmonetary c sign?)
-      (let ((pair (assoc c commoditylist)))
+      (let* ((pair (assoc c commoditylist))
+             (total (and pair (gnc:value-collector-total (cadr pair)))))
 	(gnc:make-gnc-monetary
-	 c (if (not pair)
-	       (gnc-numeric-zero)
-	       (if sign?
-		   (gnc-numeric-neg
-		    (gnc:value-collector-total (cadr pair)))
-		   (gnc:value-collector-total (cadr pair)))))))
+         c (if pair (if sign? (- total) total) 0))))
     
     ;; Dispatch function
     (lambda (action commodity amount)
@@ -391,14 +378,12 @@
 	(else (gnc:warn "bad commodity-collector action: " action))))))
 
 (define (gnc:commodity-collector-get-negated collector)
-  (let
-    ((negated (gnc:make-commodity-collector)))
+  (let ((negated (gnc:make-commodity-collector)))
     (negated 'minusmerge collector #f)
     negated))
 
 (define (gnc:commodity-collectorlist-get-merged collectorlist)
-  (let
-    ((merged (gnc:make-commodity-collector)))
+  (let ((merged (gnc:make-commodity-collector)))
     (for-each (lambda (collector) (merged 'merge collector #f)) collectorlist)
     merged))
 
