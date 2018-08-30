@@ -980,18 +980,10 @@
 ;; Return value:
 ;;   budget value to use for account for specified period.
 (define (budget-account-sum budget children period)
-  (let* ((sum
-           (cond
-             ((null? children) (gnc-numeric-zero))
-             (else
-               (gnc-numeric-add
-                 (gnc:get-account-period-rolledup-budget-value budget (car children) period)
-                 (budget-account-sum budget (cdr children) period)
-                 GNC-DENOM-AUTO GNC-RND-ROUND))
-               )
-        ))
-  sum)
-)
+  (apply + (map
+            (lambda (child)
+              (gnc:get-account-period-rolledup-budget-value budget child period))
+            children)))
 
 ;; Calculate the value to use for the budget of an account for a specific period.
 ;; - If the account has a budget value set for the period, use it
@@ -1007,14 +999,11 @@
 ;;   sum of all budgets for list of children for specified period.
 (define (gnc:get-account-period-rolledup-budget-value budget acct period)
   (let* ((bgt-set? (gnc-budget-is-account-period-value-set budget acct period))
-        (children (gnc-account-get-children acct))
-        (amount (cond
-                  (bgt-set? (gnc-budget-get-account-period-value budget acct period))
-          ((not (null? children)) (budget-account-sum budget children period))
-          (else (gnc-numeric-zero)))
-        ))
-  amount)
-)
+         (children (gnc-account-get-children acct)))
+    (cond
+     (bgt-set? (gnc-budget-get-account-period-value budget acct period))
+     ((not (null? children)) (budget-account-sum budget children period))
+     (else 0))))
 
 ;; Sums rolled-up budget values for a single account from start-period (inclusive) to
 ;; end-period (exclusive).
