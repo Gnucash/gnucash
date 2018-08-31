@@ -45,7 +45,7 @@ typedef struct _dialog_date_close_window
     GtkWidget *memo_entry;
     GtkWidget *question_check;
     GncBillTerm *terms;
-    time64 t, t2;
+    time64 *t, *t2;
     GList * acct_types;
     GList * acct_commodities;
     QofBook *book;
@@ -87,14 +87,14 @@ gnc_dialog_date_close_ok_cb (GtkWidget *widget, gpointer user_data)
     }
 
     if (ddc->post_date)
-        ddc->t2 = gnc_date_edit_get_date (GNC_DATE_EDIT (ddc->post_date));
+        *ddc->t2 = gnc_date_edit_get_date (GNC_DATE_EDIT (ddc->post_date));
 
     if (ddc->date)
     {
         if (ddc->terms)
-            ddc->t = gncBillTermComputeDueDate (ddc->terms, ddc->t2);
+            *ddc->t = gncBillTermComputeDueDate (ddc->terms, *ddc->t2);
         else
-            ddc->t = gnc_date_edit_get_date (GNC_DATE_EDIT (ddc->date));
+            *ddc->t = gnc_date_edit_get_date (GNC_DATE_EDIT (ddc->date));
     }
 
     if (ddc->memo_entry && ddc->memo)
@@ -134,7 +134,7 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
         return FALSE;
 
     ddc = g_new0 (DialogDateClose, 1);
-    ddc->t = *t;
+    ddc->t = t;
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-date-close.glade", "date_close_dialog");
@@ -220,8 +220,8 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
         return FALSE;
 
     ddc = g_new0 (DialogDateClose, 1);
-    ddc->t = *ddue;
-    ddc->t2 = *post;
+    ddc->t = ddue;
+    ddc->t2 = post;
     ddc->book = book;
     ddc->acct_types = acct_types;
     ddc->acct_commodities = acct_commodities;
@@ -343,7 +343,7 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
         return FALSE;
 
     ddc = g_new0 (DialogDateClose, 1);
-    ddc->t = *date;
+    ddc->t = date;
     ddc->book = book;
     ddc->acct_types = acct_types;
     ddc->acct = *acct;
