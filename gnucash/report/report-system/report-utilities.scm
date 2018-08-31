@@ -24,17 +24,15 @@
        (list-ref list elt)))
 
 (define (list-set-safe! l elt val)
-  (if (and (list? l) (> (length l) elt))
+  (unless (list? l)
+    (set! l '()))
+  (if (> (length l) elt)
       (list-set! l elt val)
-      (let ((filler (list val)))
-        (if (not (list? l))
-            (set! l '()))
-        (let loop ((i (length l)))
-          (if (< i elt)
-              (begin 
-                (set! filler (cons #f filler))
-                (loop (+ 1 i)))))
-        (set! l (append! l filler))))
+      (let loop ((filler (list val))
+                 (i (length l)))
+        (if (< i elt)
+            (loop (cons #f filler) (1+ i))
+            (set! l (append! l filler)))))
   l)
 
 ;; pair is a list of one gnc:commodity and one gnc:numeric
