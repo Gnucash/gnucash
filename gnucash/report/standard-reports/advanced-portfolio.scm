@@ -535,7 +535,8 @@ by preventing negative stock balances.<br/>")
             ;; Now that we have a pricing transaction if needed, set the value of the asset
             (set! value (my-exchange-fn (gnc:make-gnc-monetary commodity units) currency))
             (gnc:debug "Value " (gnc:monetary->string value)
-                       " from " (gnc-commodity-numeric->string commodity units))
+                       " from " (gnc:monetary->string
+                                 (gnc:make-gnc-monetary commodity units)))
 
 	    (for-each
 	     ;; we're looking at each split we find in the account. these splits

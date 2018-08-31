@@ -675,9 +675,6 @@
                     (acct-comm (xaccAccountGetCommodity acct))
                     (shares (xaccSplitGetAmount split))
                     (hash (hash-ref hash-table guid)))
-;                (gnc:debug "Merging split for " (xaccAccountGetName acct) " for "
-;                           (gnc-commodity-numeric->string acct-comm shares)
-;                           " into hash entry " hash)
                (if (not hash)
                    (begin (set! hash (gnc:make-commodity-collector))
                           (hash-set! hash-table guid hash)))

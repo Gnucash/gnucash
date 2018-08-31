@@ -94,6 +94,7 @@
 
 ;; Helper for warnings below.
 (define (gnc-commodity-numeric->string commodity numeric)
+  (issue-deprecation-warning "gnc-commodity-numeric->string deprecated.")
   (gnc:monetary->string
    (gnc:make-gnc-monetary commodity numeric)))
 
@@ -157,13 +158,6 @@
                               value-amount share-amount))
                     #f)))
 
-          ;;(warn "gnc:get-commodity-totalavg-prices: value "
-          ;;    (gnc-commodity-numeric->string
-          ;;(first foreignlist) (second foreignlist))
-          ;;      " bought shares "
-          ;;    (gnc-commodity-numeric->string
-          ;;price-commodity (third foreignlist)))
-
           ;; Try EURO exchange if necessary
           (if (and foreignlist
                    (not (gnc-commodity-equiv (first foreignlist)
@@ -185,14 +179,17 @@
                    (begin
                      (warn "gnc:get-commodity-totalavg-prices: "
                            "Sorry, currency exchange not yet implemented:"
-                           (gnc-commodity-numeric->string
-                            (first foreignlist) (second foreignlist))
+                           (gnc:monetary->string
+                            (gnc:make-gnc-monetary
+                             (first foreignlist) (second foreignlist)))
                            " (buying "
-                           (gnc-commodity-numeric->string
-                            price-commodity (third foreignlist))
+                           (gnc:monetary->string
+                            (gnc:make-gnc-monetary
+                             price-commodity (third foreignlist)))
                            ") =? "
-                           (gnc-commodity-numeric->string
-                            report-currency (gnc-numeric-zero)))
+                           (gnc:monetary->string
+                            (gnc:make-gnc-monetary
+                            report-currency (gnc-numeric-zero))))
                      (gnc-numeric-zero))
                    (begin
                      (set! total-foreign (gnc-numeric-add total-foreign
@@ -272,13 +269,6 @@
                   (list transaction-comm
                         value-amount share-amount))))
 
-        ;;(warn "get-commodity-inst-prices: value "
-        ;;    (gnc-commodity-numeric->string
-        ;;   (first foreignlist) (second foreignlist))
-        ;; " bought shares "
-        ;;(gnc-commodity-numeric->string
-        ;; price-commodity (third foreignlist)))
-
         ;; Try EURO exchange if necessary
         (if (not (gnc-commodity-equiv (first foreignlist)
                                       report-currency))
@@ -298,14 +288,17 @@
              (begin
                (warn "get-commodity-inst-prices: "
                      "Sorry, currency exchange not yet implemented:"
-                     (gnc-commodity-numeric->string
-                      (first foreignlist) (second foreignlist))
-                     " (buying "
-                     (gnc-commodity-numeric->string
-                      price-commodity (third foreignlist))
-                     ") =? "
-                     (gnc-commodity-numeric->string
-                      report-currency (gnc-numeric-zero)))
+                       (gnc:monetary->string
+                        (gnc:make-gnc-monetary
+                         (first foreignlist) (second foreignlist)))
+                       " (buying "
+                       (gnc:monetary->string
+                        (gnc:make-gnc-monetary
+                         price-commodity (third foreignlist)))
+                       ") =? "
+                       (gnc:monetary->string
+                        (gnc:make-gnc-monetary
+                         report-currency (gnc-numeric-zero))))
                (gnc-numeric-zero))
              (if (not (zero? (third foreignlist)))
                  (gnc-numeric-div
