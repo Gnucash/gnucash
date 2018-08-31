@@ -31,6 +31,7 @@
   (map gnc:monetary->string (coll 'format gnc:make-gnc-monetary #f)))
 
 (define (test-account-get-trans-type-splits-interval)
+  (test-group-with-cleanup "test-account-get-trans-type-splits-interval"
   (let* ((env (create-test-env))
          (ts-now (gnc-localtime (current-time)))
          (test-day (tm:mday ts-now))
@@ -57,7 +58,8 @@
 	;; 10 is the right number (5 days, two splits per tx)
 	(test-equal "length splits = 10"
           10
-          (length splits))))))
+          (length splits)))))
+  (teardown)))
 
 (define (teardown)
   (gnc-clear-current-session))
