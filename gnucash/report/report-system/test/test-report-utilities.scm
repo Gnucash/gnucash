@@ -17,6 +17,7 @@
   (test-list-set-safe)
   (test-gnc:monetary->string)
   (test-commodity-collector)
+  (test-get-account-balances)
   (test-end "report-utilities"))
 
 (define (NDayDelta t64 n)
@@ -177,4 +178,264 @@
       (test-equal "gnc-commodity-collector-allzero? #t"
         #t
         (gnc-commodity-collector-allzero? coll-A)))
+    (teardown)))
+
+(define (mnemonic->commodity sym)
+  (gnc-commodity-table-lookup
+   (gnc-commodity-table-get-table (gnc-get-current-book))
+   (gnc-commodity-get-namespace (gnc-default-report-currency))
+   sym))
+
+(define structure
+  (list "Root" (list (cons 'type ACCT-TYPE-ASSET))
+        (list "Asset"
+              (list "Bank")
+              (list "GBP Bank" (list (cons 'commodity (mnemonic->commodity "GBP")))
+                    (list "GBP Savings"))
+              (list "Wallet"))
+        (list "Income" (list (cons 'type ACCT-TYPE-INCOME)))
+        (list "Income-GBP" (list (cons 'type ACCT-TYPE-INCOME)
+                                 (cons 'commodity (mnemonic->commodity "GBP"))))
+        (list "Expenses" (list (cons 'type ACCT-TYPE-EXPENSE)))
+        (list "Liabilities" (list (cons 'type ACCT-TYPE-LIABILITY)))
+        (list "Equity" (list (cons 'type ACCT-TYPE-EQUITY)))
+        ))
+
+(define (create-test-data)
+  (let* ((env (create-test-env))
+         (account-alist (env-create-account-structure-alist env structure))
+         (asset (cdr (assoc "Asset" account-alist)))
+         (bank (cdr (assoc "Bank" account-alist)))
+         (gbp-bank (cdr (assoc "GBP Bank" account-alist)))
+         (gbp-savings (cdr (assoc "GBP Savings" account-alist)))
+         (wallet (cdr (assoc "Wallet" account-alist)))
+         (income (cdr (assoc "Income" account-alist)))
+         (gbp-income (cdr (assoc "Income-GBP" account-alist)))
+         (expense (cdr (assoc "Expenses" account-alist)))
+         (liability (cdr (assoc "Liabilities" account-alist)))
+         (equity (cdr (assoc "Equity" account-alist))))
+    ;; populate datafile with old transactions
+    (env-transfer env 01 01 1970 bank expense       5   #:description "desc-1" #:num "trn1" #:memo "memo-3")
+    (env-transfer env 31 12 1969 income bank       10   #:description "desc-2" #:num "trn2" #:void-reason "void" #:notes "notes3")
+    (env-transfer env 31 12 1969 income bank       29   #:description "desc-3" #:num "trn3"
+                  #:reconcile (cons #\c (gnc-dmy2time64 01 03 1970)))
+    (env-transfer env 01 02 1970 bank expense      15   #:description "desc-4" #:num "trn4" #:notes "notes2" #:memo "memo-1")
+    (env-transfer env 10 01 1970 liability expense 10   #:description "desc-5" #:num "trn5" #:void-reason "any")
+    (env-transfer env 10 01 1970 liability expense 11   #:description "desc-6" #:num "trn6" #:notes "notes1")
+    (env-transfer env 10 02 1970 bank liability     8   #:description "desc-7" #:num "trn7" #:notes "notes1" #:memo "memo-2"
+                  #:reconcile (cons #\y (gnc-dmy2time64 01 03 1970)))
+    (env-transfer env 01 01 1975 equity asset      15  #:description "$15 in asset")
+    (env-transfer-foreign env 15 01 2000 gbp-bank bank 10 14 #:description "GBP 10 to USD 14")
+    (env-transfer-foreign env 15 02 2000 bank gbp-bank  9  6 #:description "USD 9 to GBP 6")
+    (env-transfer env 15 03 2000 gbp-bank gbp-savings 5 #:description "GBP 5 from bank to savings")
+    ;; A single closing transaction
+    (let ((closing-txn (env-transfer env 31 12 1999 expense equity 111 #:description "Closing")))
+      (xaccTransSetIsClosingTxn closing-txn #t))
+    (for-each (lambda (m)
+                (env-transfer env 08 (1+ m) 1978 gbp-income gbp-bank 51 #:description "#51 income")
+                (env-transfer env 03 (1+ m) 1978 income bank  103 #:description "$103 income")
+                (env-transfer env 15 (1+ m) 1978 bank expense  22 #:description "$22 expense")
+                (env-transfer env 09 (1+ m) 1978 income bank  109 #:description "$109 income"))
+              (iota 12))
+    (let ((mid (floor (/ (+ (gnc-accounting-period-fiscal-start)
+                            (gnc-accounting-period-fiscal-end)) 2))))
+      (env-create-transaction env mid bank income 200))))
+
+
+(define (test-get-account-balances)
+  (define (account-lookup str)
+    (gnc-account-lookup-by-name
+     (gnc-book-get-root-account (gnc-get-current-book))
+     str))
+
+  (create-test-data)
+
+  (test-group-with-cleanup "test-get-account-balances"
+    (let* ((all-accounts (gnc-account-get-descendants
+                          (gnc-book-get-root-account (gnc-get-current-book))))
+           (asset (account-lookup "Asset"))
+           (expense (account-lookup "Expenses"))
+           (income (account-lookup "Income"))
+           (bank (account-lookup "Bank"))
+           (gbp-bank (account-lookup "GBP Bank")))
+      (test-equal "gnc:account-get-balance-at-date 1/1/2001 incl children"
+        2301
+        (gnc:account-get-balance-at-date asset (gnc-dmy2time64 01 01 2001) #t))
+
+      (test-equal "gnc:account-get-balance-at-date 1/1/2001 excl children"
+        15
+        (gnc:account-get-balance-at-date asset (gnc-dmy2time64 01 01 2001) #f))
+
+      (test-equal "gnc:account-get-comm-balance-at-date 1/1/2001 incl children"
+        '("£608.00" "$2,301.00")
+        (collector->list
+         (gnc:account-get-comm-balance-at-date asset (gnc-dmy2time64 01 01 2001) #t)))
+
+      (test-equal "gnc:account-get-comm-balance-at-date 1/1/2001 excl children"
+        '("$15.00")
+        (collector->list
+         (gnc:account-get-comm-balance-at-date asset (gnc-dmy2time64 01 01 2001) #f)))
+
+      (test-equal "gnc:account-get-comm-value-interval 1/1/2000-1/1/2001 excl children"
+        '("$9.00" "-£15.00")
+        (collector->list
+         (gnc:account-get-comm-value-interval gbp-bank
+                                              (gnc-dmy2time64 01 01 2000)
+                                              (gnc-dmy2time64 01 01 2001)
+                                              #f)))
+
+      (test-equal "gnc:account-get-comm-value-interval 1/1/2000-1/1/2001 incl children"
+        '("$9.00" "-£10.00")
+        (collector->list
+         (gnc:account-get-comm-value-interval gbp-bank
+                                              (gnc-dmy2time64 01 01 2000)
+                                              (gnc-dmy2time64 01 01 2001)
+                                              #t)))
+
+      (test-equal "gnc:account-get-comm-value-at-date 1/1/2001 excl children"
+        '("$9.00" "£597.00")
+        (collector->list
+         (gnc:account-get-comm-value-at-date gbp-bank
+                                             (gnc-dmy2time64 01 01 2001)
+                                             #f)))
+
+      (test-equal "gnc:account-get-comm-value-at-date 1/1/2001 incl children"
+        '("$9.00" "£602.00")
+        (collector->list
+         (gnc:account-get-comm-value-at-date gbp-bank
+                                             (gnc-dmy2time64 01 01 2001)
+                                             #t)))
+
+      (test-equal "gnc:accounts-get-comm-total-profit"
+        '("£612.00" "$2,389.00")
+        (collector->list
+         (gnc:accounts-get-comm-total-profit all-accounts
+                                             (lambda (acct)
+                                               (gnc:account-get-comm-balance-at-date
+                                                acct (gnc-dmy2time64 01 01 2001) #f)))))
+
+      (test-equal "gnc:accounts-get-comm-total-income"
+        '("£612.00" "$2,573.00")
+        (collector->list
+         (gnc:accounts-get-comm-total-income all-accounts
+                                             (lambda (acct)
+                                               (gnc:account-get-comm-balance-at-date
+                                                acct (gnc-dmy2time64 01 01 2001) #f)))))
+
+      (test-equal "gnc:accounts-get-comm-total-expense"
+        '("-$184.00")
+        (collector->list
+         (gnc:accounts-get-comm-total-expense all-accounts
+                                              (lambda (acct)
+                                                (gnc:account-get-comm-balance-at-date
+                                                 acct (gnc-dmy2time64 01 01 2001) #f)))))
+
+      (test-equal "gnc:accounts-get-comm-total-assets"
+        '("£608.00" "$2,394.00")
+        (collector->list
+         (gnc:accounts-get-comm-total-assets all-accounts
+                                             (lambda (acct)
+                                               (gnc:account-get-comm-balance-at-date
+                                                acct (gnc-dmy2time64 01 01 2001) #f)))))
+
+      (test-equal "gnc:account-get-balance-interval 1/1/60 - 1/1/01 incl children"
+        608
+        (gnc:account-get-balance-interval gbp-bank
+                                          (gnc-dmy2time64 01 01 1960)
+                                          (gnc-dmy2time64 01 01 2001)
+                                          #t))
+
+      (test-equal "gnc:account-get-balance-interval 1/1/60 - 1/1/01 excl children"
+        603
+        (gnc:account-get-balance-interval gbp-bank
+                                          (gnc-dmy2time64 01 01 1960)
+                                          (gnc-dmy2time64 01 01 2001)
+                                          #f))
+
+      (test-equal "gnc:account-comm-balance-interval 1/1/1960-1/1/2001 incl children"
+        '("£608.00")
+        (collector->list
+         (gnc:account-get-comm-balance-interval gbp-bank
+                                                (gnc-dmy2time64 01 01 1960)
+                                                (gnc-dmy2time64 01 01 2001)
+                                                #t)))
+
+      (test-equal "gnc:account-comm-balance-interval 1/1/1960-1/1/2001 excl children"
+        '("£603.00")
+        (collector->list
+         (gnc:account-get-comm-balance-interval gbp-bank
+                                                (gnc-dmy2time64 01 01 1960)
+                                                (gnc-dmy2time64 01 01 2001)
+                                                #f)))
+
+      (test-equal "gnc:accountlist-get-comm-balance-interval"
+        '("$279.00")
+        (collector->list
+         (gnc:accountlist-get-comm-balance-interval (list expense)
+                                                    (gnc-dmy2time64 15 01 1970)
+                                                    (gnc-dmy2time64 01 01 2001))))
+
+      (test-equal "gnc:accountlist-get-comm-balance-interval-with-closing"
+        '("$168.00")
+        (collector->list
+         (gnc:accountlist-get-comm-balance-interval-with-closing (list expense)
+                                                                 (gnc-dmy2time64 15 01 1970)
+                                                                 (gnc-dmy2time64 01 01 2001))))
+
+      (test-equal "gnc:accountlist-get-comm-balance-at-date"
+        '("$295.00")
+        (collector->list
+         (gnc:accountlist-get-comm-balance-at-date (list expense)
+                                                   (gnc-dmy2time64 01 01 2001))))
+
+      (test-equal "gnc:accountlist-get-comm-balance-interval-with-closing"
+        '("$184.00")
+        (collector->list
+         (gnc:accountlist-get-comm-balance-at-date-with-closing (list expense)
+                                                                (gnc-dmy2time64 01 01 2001))))
+
+      (test-equal "gnc:accounts-count-splits"
+        44
+        (gnc:accounts-count-splits (list expense income)))
+
+      (test-equal "gnc:account-get-total-flow 'in"
+        '("£14.00" "$2,544.00")
+        (collector->list
+         (gnc:account-get-total-flow 'in
+                                     (list bank)
+                                     (gnc-dmy2time64 15 01 1970)
+                                     (gnc-dmy2time64 01 01 2001))))
+
+      (test-equal "gnc:account-get-total-flow 'out"
+        '("-$296.00")
+        (collector->list
+         (gnc:account-get-total-flow 'out
+                                     (list bank)
+                                     (gnc-dmy2time64 15 01 1970)
+                                     (gnc-dmy2time64 01 01 2001))))
+
+      (let ((account-balances (gnc:get-assoc-account-balances
+                               (list bank gbp-bank)
+                               (lambda (acct)
+                                 (gnc:account-get-comm-balance-at-date
+                                  acct (gnc-dmy2time64 01 01 2001) #f)))))
+
+        (test-equal "gnc:get-assoc-account-balances"
+          '("$2,286.00")
+          (collector->list (car (assoc-ref account-balances bank))))
+
+        (test-equal "gnc:select-assoc-account-balance - hit"
+          '("$2,286.00")
+          (collector->list
+           (gnc:select-assoc-account-balance account-balances bank)))
+
+        (test-equal "gnc:select-assoc-account-balance - miss"
+          #f
+          (collector->list
+           (gnc:select-assoc-account-balance account-balances expense)))
+
+        (test-equal "gnc:get-assoc-account-balances-total"
+          '("£603.00" "$2,286.00")
+          (collector->list
+           (gnc:get-assoc-account-balances-total account-balances)))))
     (teardown)))
