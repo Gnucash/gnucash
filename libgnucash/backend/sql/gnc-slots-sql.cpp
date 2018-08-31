@@ -140,7 +140,7 @@ static const EntryVec col_table
     gnc_sql_make_table_entry<CT_DOUBLE>("double_val", 0, 0,
                                         (QofAccessFunc)get_double_val,
                                         set_double_val),
-    gnc_sql_make_table_entry<CT_TIME>("time_val", 0, 0,
+    gnc_sql_make_table_entry<CT_TIME>("timespec_val", 0, 0,
                                           (QofAccessFunc)get_time_val,
                                           (QofSetterFunc)set_time_val),
     gnc_sql_make_table_entry<CT_GUID>("guid_val", 0, 0,
