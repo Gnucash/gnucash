@@ -362,10 +362,10 @@
     (lambda (action commodity amount)
       (case action
 	((add) (add-commodity-value commodity amount))
-	((merge) (add-commodity-clist 
-		 (gnc-commodity-collector-list commodity)))
+	((merge) (add-commodity-clist
+                  (commodity 'list #f #f)))
 	((minusmerge) (minus-commodity-clist
-		      (gnc-commodity-collector-list commodity)))
+                       (commodity 'list #f #f)))
 	((format) (process-commodity-list commodity commoditylist))
 	((reset) (set! commoditylist '()))
 	((getpair) (getpair commodity amount))
@@ -383,28 +383,6 @@
     (for-each (lambda (collector) (merged 'merge collector #f)) collectorlist)
     merged))
 
-;; Bah. Let's get back to normal data types -- this procedure thingy
-;; from above makes every code almost unreadable. First step: replace
-;; all 'action function calls by the normal functions below.
-
-;; CAS: ugh.  Having two usages is even *more* confusing, so let's
-;; please settle on one or the other.  What's Step 2?  How 'bout
-;; documenting the new functions?
-(define (gnc-commodity-collector-add collector commodity amount)
-  (collector 'add commodity amount))
-(define (gnc-commodity-collector-merge collector other-collector)
-  (collector 'merge other-collector #f))
-(define (gnc-commodity-collector-minusmerge collector other-collector)
-  (collector 'minusmerge other-collector #f))
-(define (gnc-commodity-collector-map collector function)
-  (collector 'format function #f))
-(define (gnc-commodity-collector-assoc collector commodity sign?)
-  (collector 'getmonetary commodity sign?))
-(define (gnc-commodity-collector-assoc-pair collector commodity sign?)
-  (collector 'getpair commodity sign?))
-(define (gnc-commodity-collector-list collector)
-  (collector 'list #f #f))
-
 ;; Returns zero if all entries in this collector are zero.
 (define (gnc-commodity-collector-allzero? collector)
   (every zero?
@@ -417,8 +395,7 @@
 (define (gnc:account-get-balance-at-date account date include-children?)
   (let ((collector (gnc:account-get-comm-balance-at-date
                     account date include-children?)))
-    (cadr (gnc-commodity-collector-assoc-pair
-	   collector (xaccAccountGetCommodity account) #f))))
+    (cadr (collector 'getpair (xaccAccountGetCommodity account) #f))))
 
 ;; This works similar as above but returns a commodity-collector, 
 ;; thus takes care of children accounts with different currencies.
@@ -434,7 +411,7 @@
       (if include-children?
 	  (for-each 
 	   (lambda (x) 
-	     (gnc-commodity-collector-merge balance-collector x))
+	     (balance-collector 'merge x #f))
 	   (gnc:account-map-descendants
 	    (lambda (child)
 	      (gnc:account-get-comm-balance-at-date child date #f))
@@ -454,9 +431,9 @@
       (qof-query-destroy query)
 
       (if (and splits (not (null? splits)))
-	  (gnc-commodity-collector-add balance-collector
-				       (xaccAccountGetCommodity account)
-				       (xaccSplitGetBalance (car splits))))
+	  (balance-collector 'add
+                             (xaccAccountGetCommodity account)
+                             (xaccSplitGetBalance (car splits))))
       balance-collector))
 
 ;; Calculate the increase in the balance of the account in terms of
@@ -473,7 +450,7 @@
     (if include-children?
         (for-each
          (lambda (x)
-           (gnc-commodity-collector-merge value-collector x))
+           (value-collector 'merge x #f))
          (gnc:account-map-descendants
           (lambda (d)
             (gnc:account-get-comm-value-interval d start-date end-date #f))
@@ -520,10 +497,10 @@
   (let ((collector (gnc:make-commodity-collector)))
     (for-each 
      (lambda (acct)
-       ((if (reverse-balance-fn acct)
-	    gnc-commodity-collector-minusmerge
-	    gnc-commodity-collector-merge)
-	collector (get-balance-fn acct)))
+       (collector
+        (if (reverse-balance-fn acct) 'minusmerge 'merge)
+        (get-balance-fn acct)
+        #f))
      accounts)
     collector))
 
@@ -576,8 +553,7 @@
 (define (gnc:account-get-balance-interval account from to include-children?)
   (let ((collector (gnc:account-get-comm-balance-interval
                     account from to include-children?)))
-    (cadr (gnc-commodity-collector-assoc-pair
-	   collector (xaccAccountGetCommodity account) #f))))
+    (cadr (collector 'getpair (xaccAccountGetCommodity account) #f))))
 
 ;; the version which returns a commodity-collector
 (define (gnc:account-get-comm-balance-interval account from to include-children?)
@@ -672,17 +648,12 @@
                               (xaccSplitGetAccount split)))
                   (txn (xaccSplitGetParent split)))
              (if type 
-                (gnc-commodity-collector-add total acct-comm shares)
-                (if (not (xaccTransGetIsClosingTxn txn))
-                    (gnc-commodity-collector-add total acct-comm shares)
-             )))
-           )
+                 (total 'add acct-comm shares)
+                 (if (not (xaccTransGetIsClosingTxn txn))
+                     (total 'add acct-comm shares)))))
 	 (gnc:account-get-trans-type-splits-interval
-          account-list type start-date end-date)
-	 )
-    total
-    )
-  )
+          account-list type start-date end-date))
+    total))
 
 ;; Sums up any splits of a certain type affecting a set of accounts.
 ;; the type is an alist '((str "match me") (cased #f) (regexp #f))
@@ -694,7 +665,7 @@
            (let* ((shares (xaccSplitGetAmount split))
                   (acct-comm (xaccAccountGetCommodity
                               (xaccSplitGetAccount split))))
-             (gnc-commodity-collector-add total acct-comm shares)))
+             (total 'add acct-comm shares)))
 	 (gnc:account-get-trans-type-splits-interval
           account-list type start-date end-date))
     total))
@@ -773,7 +744,7 @@
 			      (xaccSplitGetAccount split)))
 		  )
 	     (or (gnc-numeric-negative-p shares)
-		 (gnc-commodity-collector-add total acct-comm shares)
+		 (total 'add acct-comm shares)
 		 )
 	     )
 	   )

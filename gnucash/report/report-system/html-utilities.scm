@@ -281,18 +281,15 @@
 	;; commodity
 	(commodity-row-helper! 
 	 my-name #f
-	 (if balance 
-	     (gnc-commodity-collector-assoc
-	      balance report-commodity reverse-balance?)
-	     #f)
+	 (and balance
+              (balance 'getmonetary report-commodity reverse-balance?))
 	 main-row-style)
 	;; Special case for stock-accounts: then the foreign commodity
 	;; gets displayed in this line rather then the following lines
 	;; (loop below). Is also used if is-stock-account? is true.
-	(let ((my-balance 
-	       (if balance 
-		   (gnc-commodity-collector-assoc
-		    balance my-commodity reverse-balance?) #f)))
+	(let ((my-balance
+               (and balance
+                    (balance 'getmonetary my-commodity reverse-balance?))))
 	  (set! already-printed my-commodity)
 	  (commodity-row-helper! 
 	   my-name
@@ -304,8 +301,8 @@
     ;; balance and its corresponding value in the
     ;; report-currency. One row for each non-report-currency. 
     (if (and balance (not is-stock-account?))
-	(gnc-commodity-collector-map
-	 balance 
+	(balance
+         'format
 	 (lambda (curr val)
 	   (if (or (gnc-commodity-equiv curr report-commodity)
 		   (and already-printed
@@ -323,7 +320,7 @@
 		  bal
 		  (exchange-fn bal report-commodity)
 		  other-rows-style))))
-	 ))))
+	 #f))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -466,8 +463,7 @@
       (let ((this-collector (my-get-balance-nosub account)))
 	(for-each 
 	 (lambda (x) (if x 
-			 (gnc-commodity-collector-merge
-			  this-collector x )))
+			 (this-collector 'merge x #f)))
 	 (gnc:account-map-descendants
 	  (lambda (a)
 	    ;; Important: Calculate the balance if and only if the
@@ -639,7 +635,7 @@
 				  subaccounts my-get-balance 
 				  gnc-reverse-balance)))
 		 (if thisbalance 
-		     (gnc-commodity-collector-merge subbalance thisbalance))
+		     (subbalance 'merge thisbalance #f))
 		 subbalance)
 	       heading-style
 	       #t #f)))))
