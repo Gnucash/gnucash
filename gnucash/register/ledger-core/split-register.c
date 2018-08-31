@@ -1385,7 +1385,7 @@ gnc_split_register_save_to_scm (SplitRegister *reg,
         BasicCell *cell;
         time64 time;
         cell = gnc_table_layout_get_cell (reg->table->layout, DATE_CELL);
-        gnc_date_cell_get_date ((DateCell *) cell, &time);
+        gnc_date_cell_get_date ((DateCell *) cell, &time, TRUE);
         xaccTransSetDatePostedSecsNormalized(trans, time);
     }
 
@@ -2085,7 +2085,7 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value,
      */
     if (gnc_split_reg_has_rate_cell (reg->type))
         return;
-    gnc_date_cell_get_date ((DateCell*)cell, &time);
+    gnc_date_cell_get_date ((DateCell*)cell, &time, TRUE);
     price = gnc_pricedb_lookup_day_t64 (pricedb, comm, curr, time);
     if (gnc_commodity_equiv (comm, gnc_price_get_currency (price)))
             swap = TRUE;

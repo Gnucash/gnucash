@@ -123,14 +123,9 @@ void        gnc_date_cell_commit (DateCell *cell);
 /** Set a time64 to the value in the DateCell.
  * @param cell The DateCell
  * @param time A time64* to which the function will write the time.
+ * @param warn Whether to warn of parse errors or silently change to a valid one.
  */
-void        gnc_date_cell_get_date (DateCell *cell, time64 *time);
+void        gnc_date_cell_get_date (DateCell *cell, time64 *time, gboolean warn);
 
-/**  Set a GDate to the value in the DateCell.
- * @param cell The DateCell
- * @param date A GDate* into which the functino will write the date.
- */
-
-void        gnc_date_cell_get_date_gdate (DateCell *cell, GDate *date);
 /** @} */
 #endif

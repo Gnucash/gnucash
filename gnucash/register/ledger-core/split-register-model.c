@@ -968,19 +968,18 @@ gnc_split_register_get_date_help (VirtualLocation virt_loc,
 {
     SplitRegister *reg = user_data;
     BasicCell *cell;
-    char string[1024];
-    GDate date;
+    const char *date_string;
+    time64 cell_time;
 
     cell = gnc_table_get_cell (reg->table, virt_loc);
     if (!cell || !cell->value || *cell->value == '\0')
         return NULL;
 
-    g_date_clear (&date, 1);
-    gnc_date_cell_get_date_gdate ((DateCell *) cell, &date);
+    gnc_date_cell_get_date ((DateCell *) cell, &cell_time, FALSE);
 
-    g_date_strftime (string, sizeof (string), _("%A %d %B %Y"), &date);
+    date_string = gnc_print_time64 (cell_time, _("%A %d %B %Y"));
 
-    return g_strdup (string);
+    return g_strdup (date_string);
 }
 
 static const char *

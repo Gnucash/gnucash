@@ -4025,8 +4025,11 @@ gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
         qof_book_use_split_action_for_num_field (book);
     gboolean use_book_currency_before =
         gnc_book_use_book_currency (book);
+    gint use_read_only_threshold_before =
+        qof_book_get_num_days_autoreadonly (book);
     gboolean use_split_action_for_num_after;
     gboolean use_book_currency_after;
+    gint use_read_only_threshold_after;
     gboolean return_val = FALSE;
     GList *results = NULL, *iter;
 
@@ -4035,7 +4038,7 @@ gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
     results = gnc_option_db_commit (options);
     for (iter = results; iter; iter = iter->next)
     {
-        GtkWidget *dialog = gtk_message_dialog_new(NULL,
+        GtkWidget *dialog = gtk_message_dialog_new(gnc_ui_get_main_window (NULL),
                                                    0,
                                                    GTK_MESSAGE_ERROR,
                                                    GTK_BUTTONS_OK,
@@ -4051,6 +4054,11 @@ gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
     use_split_action_for_num_after =
         qof_book_use_split_action_for_num_field (book);
     use_book_currency_after = gnc_book_use_book_currency (book);
+
+    // mark cached value as invalid so we get new value
+    book->cached_num_days_autoreadonly_isvalid = FALSE;
+    use_read_only_threshold_after = qof_book_get_num_days_autoreadonly (book);
+
     if (use_split_action_for_num_before != use_split_action_for_num_after)
     {
         gnc_book_option_num_field_source_change_cb (
@@ -4062,6 +4070,9 @@ gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
         gnc_book_option_book_currency_selected_cb (use_book_currency_after);
         return_val = TRUE;
     }
+    if (use_read_only_threshold_before != use_read_only_threshold_after)
+        return_val = TRUE;
+
     qof_book_commit_edit (book);
     return return_val;
 }
@@ -4092,10 +4103,15 @@ static gboolean
 show_handler (const char *class_name, gint component_id,
               gpointer user_data, gpointer iter_data)
 {
-    GtkWidget *dialog;
+    GNCOptionWin *optwin = user_data;
+    GtkWidget *widget;
 
-    dialog = GTK_WIDGET(user_data);
-    gtk_window_present(GTK_WINDOW(dialog));
+    if (!optwin)
+        return(FALSE);
+
+    widget = gnc_options_dialog_widget(optwin);
+
+    gtk_window_present(GTK_WINDOW(widget));
     return(TRUE);
 }
 
