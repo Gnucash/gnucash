@@ -243,21 +243,13 @@
 ;; This is a collector of values -- works similar to the stats-collector but
 ;; has much less overhead. It is used by the currency-collector (see below).
 (define (gnc:make-value-collector)
-  (let ;;; values
-      ((value 0))
-    (lambda (action amount)  ;;; Dispatch function
+  (let ((value 0))
+    (lambda (action amount)
       (case action
-	((add) (if (number? amount) 
-		  (set! value (+ amount value))))
+	((add) (if (number? amount)
+                   (set! value (+ amount value))))
 	((total) value)
 	(else (gnc:warn "bad value-collector action: " action))))))
-;; Bah. Let's get back to normal data types -- this procedure thingy
-;; from above makes every code almost unreadable. First step: replace
-;; all 'action function calls by the normal functions below.
-(define (gnc:value-collector-add collector amount)
-  (collector 'add amount))
-(define (gnc:value-collector-total collector)
-  (collector 'total #f))
 
 ;; A commodity collector. This is intended to handle multiple
 ;; currencies' amounts. The amounts are accumulated via 'add, the
@@ -316,7 +308,7 @@
 	      ;; and add it to the alist
 	      (set! commoditylist (cons pair commoditylist))))
 	;; add the value
-	(gnc:value-collector-add (cadr pair) rvalue)))
+	((cadr pair) 'add rvalue)))
     
     ;; helper function to walk an association list, adding each
     ;; (commodity -> collector) pair to our list at the appropriate 
@@ -325,14 +317,14 @@
       (cond ((null? clist) '())
 	    (else (add-commodity-value 
 		   (caar clist) 
-		   (gnc:value-collector-total (cadar clist)))
+		   ((cadar clist) 'total #f))
 		  (add-commodity-clist (cdr clist)))))
 
     (define (minus-commodity-clist clist)
       (cond ((null? clist) '())
 	    (else (add-commodity-value 
 		   (caar clist) 
-		   (- (gnc:value-collector-total (cadar clist))))
+		   (- ((cadar clist) 'total #f)))
 		  (minus-commodity-clist (cdr clist)))))
 
     ;; helper function walk the association list doing a callback on
@@ -340,21 +332,21 @@
     (define (process-commodity-list fn clist)
       (map 
        (lambda (pair) (fn (car pair) 
-			  (gnc:value-collector-total (cadr pair))))
+			  ((cadr pair) 'total #f)))
        clist))
 
     ;; helper function which is given a commodity and returns, if
     ;; existing, a list (gnc:commodity gnc:numeric).
     (define (getpair c sign?)
       (let* ((pair (assoc c commoditylist))
-             (total (and pair (gnc:value-collector-total (cadr pair)))))
+             (total (and pair ((cadr pair) 'total #f))))
 	(list c (if pair (if sign? (- total) total) 0))))
 
     ;; helper function which is given a commodity and returns, if
     ;; existing, a <gnc:monetary> value.
     (define (getmonetary c sign?)
       (let* ((pair (assoc c commoditylist))
-             (total (and pair (gnc:value-collector-total (cadr pair)))))
+             (total (and pair ((cadr pair) 'total #f))))
 	(gnc:make-gnc-monetary
          c (if pair (if sign? (- total) total) 0))))
     
