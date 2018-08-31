@@ -1747,7 +1747,6 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
         GtkTextBuffer* text_buffer;
         const char *string;
         gchar * tmp_string;
-        Account *acct;
         time64 time;
 
         gtk_entry_set_text (GTK_ENTRY (iw->id_entry), gncInvoiceGetID (invoice));
@@ -1800,16 +1799,13 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
 
         /*
          * Next, figure out if we've been posted, and if so set the appropriate
-         * bits of information.. Then work on hiding or showing as
-         * necessary. This duplicates the logic in gncInvoiceIsPosted, but we
-         * need the accout pointer.
+         * bits of information... Then work on hiding or showing as
+         * necessary.
          */
-
-        acct = gncInvoiceGetPostedAcc (invoice);
-        if (acct)
+        is_posted = gncInvoiceIsPosted (invoice);
+        if (is_posted)
         {
-            /* Ok, it's definitely posted. Setup the 'posted-invoice' fields now */
-            is_posted = TRUE;
+            Account *acct = gncInvoiceGetPostedAcc (invoice);
 
             /* Can we unpost this invoice?
              * XXX: right now we always can, but there
@@ -1851,7 +1847,7 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
     {
         GtkWidget *hide, *show;
 
-        if (is_posted == TRUE)
+        if (is_posted)
         {
             hide = GTK_WIDGET (gtk_builder_get_object (iw->builder, "hide3"));
             gtk_widget_hide (hide);
