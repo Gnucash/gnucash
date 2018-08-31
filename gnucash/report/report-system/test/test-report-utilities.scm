@@ -3,13 +3,19 @@
 (gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
 (gnc:module-begin-syntax (gnc:module-load "gnucash/report/report-system" 0))
 
-
+(use-modules (srfi srfi-64))
+(use-modules (gnucash engine test srfi64-extras))
 (use-modules (gnucash engine test test-extras))
 (use-modules (gnucash report report-system test test-extras))
 (use-modules (gnucash report report-system))
 
 (define (run-test)
-  (test-account-get-trans-type-splits-interval))
+  (test-runner-factory gnc:test-runner)
+  (test-begin "report-utilities")
+  (test-account-get-trans-type-splits-interval)
+  (test-list-ref-safe)
+  (test-end "report-utilities")
+  )
 
 (define (NDayDelta t64 n)
   (let* ((day-secs (* 60 60 24 n)) ; n days in seconds is n times 60 sec/min * 60 min/h * 24 h/day
@@ -41,4 +47,20 @@
 							      ACCT-TYPE-ASSET
 							      q-start-date q-end-date)))
 	;; 10 is the right number (5 days, two splits per tx)
-	(or (equal? 10 (length splits)) (begin (format #t "Fail, ~d splits, expected 10~%" (length splits)) #f))))))
+	(test-equal "length splits = 10"
+          10
+          (length splits))))))
+
+(define (teardown)
+  (gnc-clear-current-session))
+
+(define (test-list-ref-safe)
+  (test-begin "list-ref-safe")
+  (let ((lst '(1 2)))
+    (test-equal "list-ref-safe normal"
+      1
+      (list-ref-safe lst 0))
+    (test-equal "list-ref-safe out of bounds"
+      #f
+      (list-ref-safe lst 3)))
+  (test-end "list-ref-safe"))
