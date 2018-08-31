@@ -41,6 +41,7 @@
 ;; pair is a list of one gnc:commodity and one gnc:numeric
 ;; value. Deprecated -- use <gnc-monetary> instead.
 (define (gnc-commodity-value->string pair)
+  (issue-deprecation-warning "gnc-commodity-value->string deprecated")
   (xaccPrintAmount
    (cadr pair) (gnc-commodity-print-info (car pair) #t)))
 

@@ -487,14 +487,14 @@
                      ;; resolve the exchange rate to this currency.
                      (warn "gnc:resolve-unknown-comm:"
                            "can't calculate rate for "
-                           (gnc-commodity-value->string
-                            (list (car pair) ((caadr pair) 'total #f)))
+                           (gnc:monetary->string
+                            (gnc:make-gnc-monetary (car pair) ((caadr pair) 'total #f)))
                            " = "
-                           (gnc-commodity-value->string
-                            (list (car otherlist) ((cdadr pair) 'total #f)))
+                           (gnc:monetary->string
+                            (gnc:make-gnc-monetary (car otherlist) ((cdadr pair) 'total #f)))
                            " to "
-                           (gnc-commodity-value->string
-                            (list report-commodity (gnc-numeric-zero))))
+                           (gnc:monetary->string
+                            (gnc:make-gnc-monetary report-commodity (gnc-numeric-zero))))
                      (if (and pair-a pair-b)
                          ;; If both currencies are found then something
                          ;; went wrong inside
@@ -502,11 +502,11 @@
                          ;; better thing to do in this case.
                          (warn "gnc:resolve-unknown-comm:"
                                "Oops - exchange rate ambiguity error: "
-                               (gnc-commodity-value->string
-                                (list (car pair) ((caadr pair) 'total #f)))
+                               (gnc:monetary->string
+                                (gnc:make-gnc-monetary (car pair) ((caadr pair) 'total #f)))
                                " = "
-                               (gnc-commodity-value->string
-                                (list (car otherlist)
+                               (gnc:monetary->string
+                                (gnc:make-gnc-monetary (car otherlist)
                                       ((cdadr pair) 'total #f))))
                          (let
                              ;; Usual case: one of pair-{a,b} was found
@@ -520,23 +520,12 @@
                                    (list (car pair)
                                          (make-newrate (caadr pair)
                                                        (cdadr pair) pair-a)))))
-                           ;; (warn "created new rate: "
-                           ;; (gnc-commodity-value->string (list (car
-                           ;; newrate) ((caadr newrate) 'total #f))) "
-                           ;; = " (gnc-commodity-value->string (list
-                           ;; report-commodity ((cdadr newrate) 'total
-                           ;; #f))))
                            (set! reportlist (cons newrate reportlist))))))
                ;; Huh, the report-currency showed up on the wrong side
                ;; -- we will just add it to the reportlist on the
                ;; right side.
                (let ((newrate (list (car otherlist)
                                     (cons (cdadr pair) (caadr pair)))))
-                 ;; (warn "created new rate: "
-                 ;; (gnc-commodity-value->string (list (car newrate)
-                 ;; ((caadr newrate) 'total #f))) " = "
-                 ;; (gnc-commodity-value->string (list
-                 ;; report-commodity ((cdadr newrate) 'total #f))))
                  (set! reportlist (cons newrate reportlist)))))
             (cadr otherlist))))
      sumlist)
