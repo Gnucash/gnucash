@@ -20,16 +20,6 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-(define (gnc-commodity-collector-contains-commodity? collector commodity)
-  (let ((ret #f))
-    (gnc-commodity-collector-map
-     collector
-     (lambda (comm amt)
-       (set! ret (or ret (gnc-commodity-equiv comm commodity)))))
-    ret
-    ))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions to get splits with interesting data from accounts.
 
@@ -1063,23 +1053,19 @@
           #f)
          balance)))
 
-;; Returns the number of commodities in a commodity-collector.
-;; (If this were implemented as a record, I would be able to
-;; just (length ...) the alist, but....)
 (define (gnc-commodity-collector-commodity-count collector)
-  (let ((commodities 0))
-    (gnc-commodity-collector-map
-     collector
-     (lambda (comm amt)
-       (set! commodities (+ commodities 1))))
-    commodities
-    ))
+  (length (collector 'format (lambda (comm amt) comm) #f)))
+
+(define (gnc-commodity-collector-contains-commodity? collector commodity)
+  (member commodity
+          (collector 'format (lambda (comm amt) comm) #f)
+          gnc-commodity-equiv))
 
 (define (gnc:uniform-commodity? amt report-commodity)
   ;; function to see if the commodity-collector amt
   ;; contains any foreign commodities
   (let ((elts (gnc-commodity-collector-commodity-count amt)))
-    (or (equal? elts 0)
-        (and (equal? elts 1)
+    (or (zero? elts)
+        (and (= elts 1)
              (gnc-commodity-collector-contains-commodity?
               amt report-commodity)))))

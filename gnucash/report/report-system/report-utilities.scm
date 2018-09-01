@@ -425,14 +425,11 @@
 
 ;; Returns zero if all entries in this collector are zero.
 (define (gnc-commodity-collector-allzero? collector)
-  (let ((result #t))
-    (gnc-commodity-collector-map
-     collector
-     (lambda (commodity amount)
-       (if (not (gnc-numeric-zero-p amount))
-	   (set! result #f))))
-    result))
-
+  (every zero?
+         (gnc-commodity-collector-map
+          collector
+          (lambda (commodity amount)
+            amount))))
 
 ;; get the account balance at the specified date. if include-children?
 ;; is true, the balances of all children (not just direct children)
