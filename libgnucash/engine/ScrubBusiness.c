@@ -561,7 +561,7 @@ gncScrubBusinessSplit (Split *split)
          */
         else if (invoice && (txn != posted_txn))
         {
-            const gchar *memo = _("Please delete this transaction. Explanation at https://wiki.gnucash.org/wiki/Business_Features_Issues#Double_posting");
+            const gchar *memo = _("Please delete this transaction. Explanation at https://wiki.gnucash.org/wiki/Business_Features_Issues#I_can.27t_delete_a_transaction_of_type_.22I.22_from_the_AR.2FAP_account");
             gchar *txn_date = qof_print_date (xaccTransGetDateEntered (txn));
             xaccTransClearReadOnly (txn);
             xaccTransSetTxnType (txn, TXN_TYPE_NONE);
