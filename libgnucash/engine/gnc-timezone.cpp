@@ -471,7 +471,10 @@ namespace IANAParser
 	for(uint32_t index = 0; index < type_count; ++index)
 	{
 	    fb_index = start_index + index * tzinfo_size;
-	    TTInfo info = *reinterpret_cast<TTInfo*>(&fileblock[fb_index]);
+	    /* alignment */
+	    uint32_t ttinfo_raw[2];
+	    memcpy(ttinfo_raw, &fileblock[fb_index], ttinfo_size);
+	    TTInfo info = *reinterpret_cast<TTInfo*>(ttinfo_raw);
 	    endian_swap(&info.gmtoff);
 	    tzinfo.push_back(
 		{info, &fileblock[abbrev + info.abbrind],
