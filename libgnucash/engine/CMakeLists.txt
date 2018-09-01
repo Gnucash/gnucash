@@ -235,7 +235,6 @@ add_dependencies (gncmod-engine swig-runtime-h iso-4217-c)
 target_link_libraries(gncmod-engine gnc-core-utils gnc-module ${Boost_DATE_TIME_LIBRARIES}  ${Boost_REGEX_LIBRARIES} ${REGEX_LDFLAGS} ${GMODULE_LDFLAGS} ${GLIB2_LDFLAGS} ${GOBJECT_LDFLAGS} ${GUILE_LDFLAGS})
 
 target_compile_definitions (gncmod-engine PRIVATE -DG_LOG_DOMAIN=\"gnc.engine\")
-target_compile_options (gncmod-engine PRIVATE -Wno-deprecated-register)
 
 target_include_directories (gncmod-engine
     PRIVATE ${CMAKE_CURRENT_BINARY_DIR} # for iso-4217-currencies.c
