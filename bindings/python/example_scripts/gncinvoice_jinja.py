@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 ##@file
@@ -63,7 +63,7 @@ def main(argv=None):
 
         try:
             opts, args = getopt.getopt(argv[1:], "fhlI:t:o:", ["help"])
-        except getopt.error, msg:
+        except getopt.error as msg:
              raise Usage(msg)
 
         for opt in opts:
@@ -105,12 +105,12 @@ def main(argv=None):
                 filename_output = filename_template + ".out"
                 print("no output filename given, will be:", filename_output)
 
-    except Usage, err:
+    except Usage as err:
         if err.msg == "Help:":
             retcode=0
         else:
-            print(>>sys.stderr, "Error:",err.msg)
-            print(>>sys.stderr, "for help use --help")
+            print("Error:", err.msg, file=sys.stderr)
+            print("for help use --help", file=sys.stderr)
             retcode=2
 
         print()

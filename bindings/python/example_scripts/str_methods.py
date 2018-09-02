@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 ## @file
 #  @brief Add __str__ and __unicode__ methods to financial objects so that @code print object @endcode leads to human readable results
 """ @package str_methods.py -- Add __str__ and __unicode__ methods to financial objects
@@ -30,7 +30,8 @@
 #   * It seems useful to have an object for each modification. That is because there is some Initialisation to be done.
 #
 
-import gnucash, function_class
+import gnucash
+from gnucash import function_class
 
 # Default values for encoding of strings in GnuCashs Database
 DEFAULT_ENCODING = "UTF-8"
