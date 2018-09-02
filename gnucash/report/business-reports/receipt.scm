@@ -46,7 +46,7 @@
   (if (or (not taxable) (eq? taxtable '()))
     (display "&nbsp;")
     (let* ((amttot  (gnc:make-commodity-collector))
-           (pctot   (gnc:make-number-collector))
+           (pctot   (gnc:make-value-collector))
            (entries (gncTaxTableGetEntries taxtable))
            (amt?    #f)  ; becomes #t if any entries are amounts
            (pc?     #f)) ; becomes #t if any entries are percentages
@@ -256,7 +256,7 @@
   'name (N_ "Receipt")
   'report-guid "7eb3df21073d4c33920a0257da15fba5"
   'menu-name (N_ "Receipt")
-  'menu-tip (N_ "Display a customer invoice as receipt, cash vousher")
+  'menu-tip (N_ "Display a customer invoice as receipt, cash voucher")
   'menu-path (list gnc:menuname-business-reports)
   'options-generator options-generator
   'renderer report-renderer)

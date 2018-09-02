@@ -653,7 +653,7 @@
  *
  *   For those cases where a yearly summary only is desired, it is not
  *   necessary to compute each transaction for each payment period,
- *   rather the PV may be be computed for the beginning of each year,
+ *   rather the PV may be computed for the beginning of each year,
  *   PV[yr], and the FV computed for the end of the year, FV[yr]. The
  *   interest paid during the year is the computed as:
  *

@@ -100,7 +100,7 @@
         // Multiplier the bubble size if autoscaleBubbles is true.
         this.autoscaleMultiplier = 1.0;
         // prop: autoscalePointsFactor
-        // Factor which decreases bubble size based on how many bubbles on on the chart.
+        // Factor which decreases bubble size based on how many bubbles are on the chart.
         // 0 means no adjustment for number of bubbles.  Negative values will decrease
         // size of bubbles as more bubbles are added.  Values between 0 and -0.2
         // should work well.

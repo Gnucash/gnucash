@@ -88,7 +88,7 @@
 ; explicit lambda and has the list expression all the way at the end).
 (define-syntax for
   (syntax-rules (for in => do hash)
-		; Multiple variables and and equal number of lists (in
+		; Multiple variables and equal number of lists (in
 		; parenthesis). e.g.:
 		;
 		;   (for (a b) in (lsta lstb) do (display (+ a b)))

@@ -33,6 +33,7 @@
 #include "gnc-lot.h"
 #include "gnc-session.h"
 #include "gnc-hooks-scm.h"
+#include "engine-deprecated.h"
 #include "engine-helpers.h"
 #include "engine-helpers-guile.h"
 #include "policy.h"
@@ -80,6 +81,7 @@ engine-common.i */
 %newobject gnc_account_get_full_name;
 
 %include "engine-common.i"
+%include "engine-deprecated.h"
 
 %inline %{
 static const GncGUID * gncPriceGetGUID(GNCPrice *x)
@@ -97,10 +99,14 @@ functions. */
 %newobject gnc_pricedb_lookup_latest_any_currency;
 
 %newobject gnc_pricedb_lookup_nearest_in_time_any_currency;
+%newobject gnc_pricedb_lookup_nearest_in_time_any_currency_t64;
 %newobject gnc_pricedb_lookup_latest_before_any_currency;
+%newobject gnc_pricedb_lookup_latest_before_any_currency_t64;
 %newobject gnc_pricedb_get_prices;
 %newobject gnc_pricedb_lookup_at_time;
+%newobject gnc_pricedb_lookup_at_time64;
 %newobject gnc_pricedb_lookup_day;
+%newobject gnc_pricedb_lookup_day_t64;
 
 %newobject xaccQueryGetSplitsUniqueTrans;
 %newobject xaccQueryGetTransactions;
@@ -207,7 +213,6 @@ SplitList * qof_query_run_subquery (QofQuery *q, const QofQuery *q);
 %ignore GNC_ERROR_REMAINDER;
 %include <gnc-numeric.h>
 
-Timespec timespecCanonicalDayTime(Timespec t);
 time64 time64CanonicalDayTime(time64 t);
 
 %include <gnc-budget.h>

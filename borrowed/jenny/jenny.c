@@ -1019,10 +1019,12 @@ parse( int argc, char *argv[], state *s)
   int   i, j;
   ub4   temp;
   char *testfile = (char *)0;
+  /* Finesse differences in size_t between 32 and 64-bit builds. */
+  long feature_length = strlen(feature_name);
 
   /* internal check: we have MAX_FEATURES names for features */
-  if (strlen(feature_name) != MAX_FEATURES) {
-    printf("feature_name length is wrong, %lu\n", strlen(feature_name));
+  if (feature_length != MAX_FEATURES) {
+    printf("feature_name length is wrong, %lu\n", feature_length);
     return FALSE;
   }
 
@@ -1098,7 +1100,7 @@ parse( int argc, char *argv[], state *s)
   }                                            /* for (each argument) if '-' */
 
   if (s->n_final > s->ndim) {
-    printf("jenny: %hhu-tuples are impossible with only %hu dimensions\n",
+    printf("jenny: %u-tuples are impossible with only %u dimensions\n",
            s->n_final, s->ndim);
     return FALSE;
   }

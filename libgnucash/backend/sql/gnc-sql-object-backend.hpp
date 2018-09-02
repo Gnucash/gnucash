@@ -131,9 +131,9 @@ struct write_objects_t
     void commit (QofInstance* inst) {
         if (is_ok) is_ok = obe->commit (be, inst);
     }
-    GncSqlBackend* be;
-    bool is_ok;
-    GncSqlObjectBackend* obe;
+    GncSqlBackend* be = nullptr;
+    bool is_ok = false;
+    GncSqlObjectBackend* obe = nullptr;
 };
 
 

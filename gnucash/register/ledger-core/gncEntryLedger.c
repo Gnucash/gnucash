@@ -1036,15 +1036,15 @@ void gnc_entry_ledger_move_current_entry_updown (GncEntryLedger *ledger,
             return;
 
         /* Special treatment if the equality doesn't hold if we access the
-        dates as timespec. See the comment in gncEntrySetDateGDate() for the
-        reason: Some code used the timespec at noon for the EntryDate, other
-        code used the timespec at the start of day. */
+        dates as time64. See the comment in gncEntrySetDateGDate() for the
+        reason: Some code used the time64 at noon for the EntryDate, other
+        code used the time64 at the start of day. */
         t1 = gncEntryGetDate(current);
         t2 = gncEntryGetDate(target);
         if (t1 != t2)
         {
-            /* Timespecs are not equal, even though the GDates were equal? Then
-            we set the GDates again. This will force the timespecs to be equal
+            /* times are not equal, even though the GDates were equal? Then
+            we set the GDates again. This will force the times to be equal
             as well. */
             gncEntrySetDateGDate(current, &d1);
             gncEntrySetDateGDate(target, &d2);

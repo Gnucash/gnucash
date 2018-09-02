@@ -35,10 +35,6 @@ typedef struct
     guint s_block_count;
 } Time64ParseInfo;
 
-#define TIMESPEC_TIME_FORMAT  "%Y-%m-%d %H:%M:%S"
-#define TIMESPEC_PARSE_TIME_FORMAT  "%Y-%m-%d %H:%M:%S"
-#define TIMESPEC_SEC_FORMAT_MAX 256
-
 gboolean isspace_str (const gchar* str, int nomorethan);
 
 gboolean allow_and_ignore_only_whitespace (GSList* sibling_data,
@@ -83,8 +79,6 @@ gboolean generic_return_chars_end_handler (gpointer data_for_children,
                                            const gchar* tag);
 
 sixtp* simple_chars_only_parser_new (sixtp_end_handler end_handler);
-
-gboolean string_to_time64 (const gchar* str, time64* ts);
 
 gboolean generic_timespec_start_handler (GSList* sibling_data,
                                          gpointer parent_data,

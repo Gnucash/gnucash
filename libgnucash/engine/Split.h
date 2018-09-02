@@ -191,15 +191,6 @@ char          xaccSplitGetReconcile (const Split *split);
 /** Set the date on which this split was reconciled by specifying the
  * time as time64. */
 void          xaccSplitSetDateReconciledSecs (Split *split, time64 time);
-/** Set the date on which this split was reconciled by specifying the
- * time as Timespec.  Caller still owns *ts! */
-void          xaccSplitSetDateReconciledTS (Split *split, Timespec *ts);
-/** Get the date on which this split was reconciled by having it
- * written into the Timespec that 'ts' is pointing to. */
-void          xaccSplitGetDateReconciledTS (const Split *split,
-        Timespec *ts);
-/** Returns the date (as Timespec) on which this split was reconciled. */
-Timespec      xaccSplitRetDateReconciledTS (const Split *split);
 
 /*################## Added for Reg2 #################*/
 /** Retrieve the date when the Split was reconciled. */

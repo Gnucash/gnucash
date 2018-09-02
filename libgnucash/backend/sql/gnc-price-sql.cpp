@@ -63,7 +63,7 @@ static const EntryVec col_table
                                               "commodity"),
     gnc_sql_make_table_entry<CT_COMMODITYREF>("currency_guid", 0, COL_NNUL,
                                               "currency"),
-    gnc_sql_make_table_entry<CT_TIMESPEC>("date", 0, COL_NNUL, "date"),
+    gnc_sql_make_table_entry<CT_TIME>("date", 0, COL_NNUL, "date"),
     gnc_sql_make_table_entry<CT_STRING>("source", PRICE_MAX_SOURCE_LEN, 0,
                                         "source"),
     gnc_sql_make_table_entry<CT_STRING>("type", PRICE_MAX_TYPE_LEN, 0, "type"),

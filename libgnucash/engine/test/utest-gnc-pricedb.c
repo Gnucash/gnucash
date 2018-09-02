@@ -70,12 +70,12 @@ setup_commodities (QofBook *book)
  */
 static GNCPrice *
 construct_price(QofBook *book, gnc_commodity *com, gnc_commodity *cur,
-                Timespec t, PriceSource source, gnc_numeric price)
+                time64 t, PriceSource source, gnc_numeric price)
 {
     GNCPrice *p = gnc_price_create(book);
     gnc_price_set_commodity(p, com);
     gnc_price_set_currency(p, cur);
-    gnc_price_set_time(p, t);
+    gnc_price_set_time64(p, t);
     gnc_price_set_source(p, source);
     gnc_price_set_value(p, price);
     return p;
@@ -229,12 +229,12 @@ gnc_price_set_currency(GNCPrice *p, gnc_commodity *c)// C: 7 in 7 SCM: 1  Local:
 test_gnc_price_set_currency (Fixture *fixture, gconstpointer pData)
 {
 }*/
-/* gnc_price_set_time
+/* gnc_price_set_time64
 void
-gnc_price_set_time(GNCPrice *p, Timespec t)// C: 9 in 7 SCM: 2 in 1 Local: 2:0:0
+gnc_price_set_time64(GNCPrice *p, time64 t)// C: 9 in 7 SCM: 2 in 1 Local: 2:0:0
 */
 /* static void
-test_gnc_price_set_time (Fixture *fixture, gconstpointer pData)
+test_gnc_price_set_time64 (Fixture *fixture, gconstpointer pData)
 {
 }*/
 /* gnc_price_set_source
@@ -285,12 +285,12 @@ gnc_price_get_commodity(const GNCPrice *p)// C: 12 in 5  Local: 20:1:0
 test_gnc_price_get_commodity (Fixture *fixture, gconstpointer pData)
 {
 }*/
-/* gnc_price_get_time
-Timespec
-gnc_price_get_time(const GNCPrice *p)// C: 7 in 4 SCM: 1  Local: 18:1:0
+/* gnc_price_get_time64
+time64
+gnc_price_get_time64(const GNCPrice *p)// C: 7 in 4 SCM: 1  Local: 18:1:0
 */
 /* static void
-test_gnc_price_get_time (Fixture *fixture, gconstpointer pData)
+test_gnc_price_get_time64 (Fixture *fixture, gconstpointer pData)
 {
 }*/
 /* gnc_price_get_source
@@ -412,171 +412,171 @@ create_some_prices (PriceDBFixture *fixture)
     Commodities *c = fixture->com;
     gnc_pricedb_set_bulk_update(db, TRUE);
     gnc_pricedb_add_price(db, construct_price(book, c->usd, c->aud,
-                                              gnc_dmy2timespec(11, 4, 2009),
+                                              gnc_dmy2time64(11, 4, 2009),
                                               PRICE_SOURCE_FQ,
                                             gnc_numeric_create(131190, 10000)));
     gnc_pricedb_add_price(db, construct_price(book, c->usd, c->aud,
-                                              gnc_dmy2timespec(12, 4, 2009),
+                                              gnc_dmy2time64(12, 4, 2009),
                                               PRICE_SOURCE_USER_PRICE,
                                             gnc_numeric_create(131190, 10000)));
     gnc_pricedb_add_price(db, construct_price(book, c->usd, c->aud,
-                                              gnc_dmy2timespec(21, 8, 2010),
+                                              gnc_dmy2time64(21, 8, 2010),
                                               PRICE_SOURCE_FQ,
                                             gnc_numeric_create(111794, 10000)));
     gnc_pricedb_add_price(db, construct_price(book, c->usd, c->aud,
-                                              gnc_dmy2timespec(1, 8, 2013),
+                                              gnc_dmy2time64(1, 8, 2013),
                                               PRICE_SOURCE_FQ,
                                            gnc_numeric_create(111878, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->usd, c->aud,
-                                              gnc_dmy2timespec(12, 11, 2014),
+                                              gnc_dmy2time64(12, 11, 2014),
                                               PRICE_SOURCE_FQ,
                                            gnc_numeric_create(114784, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->gbp, c->usd,
-                                              gnc_dmy2timespec(11, 4, 2009),
+                                              gnc_dmy2time64(11, 4, 2009),
                                               PRICE_SOURCE_FQ,
                                            gnc_numeric_create(166651, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->aud, c->usd,
-                                              gnc_dmy2timespec(20, 7, 2011),
+                                              gnc_dmy2time64(20, 7, 2011),
                                               PRICE_SOURCE_FQ,
                                            gnc_numeric_create(106480, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->aud, c->usd,
-                                              gnc_dmy2timespec(17, 11, 2012),
+                                              gnc_dmy2time64(17, 11, 2012),
                                               PRICE_SOURCE_FQ,
                                            gnc_numeric_create(103415, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->gbp, c->usd,
-                                              gnc_dmy2timespec(21, 8, 2010),
+                                              gnc_dmy2time64(21, 8, 2010),
                                               PRICE_SOURCE_FQ,
                                            gnc_numeric_create(159037, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->gbp, c->usd,
-                                              gnc_dmy2timespec(20, 7, 2011),
+                                              gnc_dmy2time64(20, 7, 2011),
                                               PRICE_SOURCE_FQ,
                                            gnc_numeric_create(161643, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->gbp, c->usd,
-                                              gnc_dmy2timespec(17, 11, 2012),
+                                              gnc_dmy2time64(17, 11, 2012),
                                               PRICE_SOURCE_FQ,
                                            gnc_numeric_create(158855, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->gbp, c->usd,
-                                              gnc_dmy2timespec(13, 10, 2012),
+                                              gnc_dmy2time64(13, 10, 2012),
                                               PRICE_SOURCE_FQ,
                                            gnc_numeric_create(160705, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->gbp, c->usd,
-                                              gnc_dmy2timespec(1, 8, 2013),
+                                              gnc_dmy2time64(1, 8, 2013),
                                               PRICE_SOURCE_FQ,
                                            gnc_numeric_create(151173, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->gbp, c->usd,
-                                              gnc_dmy2timespec(12, 11, 2014),
+                                              gnc_dmy2time64(12, 11, 2014),
                                               PRICE_SOURCE_FQ,
                                            gnc_numeric_create(157658, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->gbp, c->eur,
-                                              gnc_dmy2timespec(11, 4, 2009),
+                                              gnc_dmy2time64(11, 4, 2009),
                                               PRICE_SOURCE_FQ,
                                            gnc_numeric_create(111257, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->gbp, c->eur,
-                                              gnc_dmy2timespec(21, 8, 2010),
+                                              gnc_dmy2time64(21, 8, 2010),
                                               PRICE_SOURCE_FQ,
                                            gnc_numeric_create(122195, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->gbp, c->eur,
-                                              gnc_dmy2timespec(20, 7, 2011),
+                                              gnc_dmy2time64(20, 7, 2011),
                                               PRICE_SOURCE_FQ,
                                            gnc_numeric_create(113289, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->gbp, c->eur,
-                                              gnc_dmy2timespec(17, 11, 2012),
+                                              gnc_dmy2time64(17, 11, 2012),
                                               PRICE_SOURCE_FQ,
                                            gnc_numeric_create(124646, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->gbp, c->eur,
-                                              gnc_dmy2timespec(13, 10, 2012),
+                                              gnc_dmy2time64(13, 10, 2012),
                                               PRICE_SOURCE_FQ,
                                            gnc_numeric_create(124072, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->gbp, c->eur,
-                                              gnc_dmy2timespec(1, 8, 2013),
+                                              gnc_dmy2time64(1, 8, 2013),
                                               PRICE_SOURCE_FQ,
                                            gnc_numeric_create(114420, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->gbp, c->eur,
-                                              gnc_dmy2timespec(12, 11, 2014),
+                                              gnc_dmy2time64(12, 11, 2014),
                                               PRICE_SOURCE_FQ,
                                            gnc_numeric_create(126836, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->usd, c->dkk,
-                                              gnc_dmy2timespec(11, 4, 2009),
+                                              gnc_dmy2time64(11, 4, 2009),
                                               PRICE_SOURCE_FQ,
                                            gnc_numeric_create(567859, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->usd, c->dkk,
-                                              gnc_dmy2timespec(21, 8, 2010),
+                                              gnc_dmy2time64(21, 8, 2010),
                                               PRICE_SOURCE_FQ,
                                            gnc_numeric_create(585810, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->usd, c->dkk,
-                                              gnc_dmy2timespec(20, 7, 2011),
+                                              gnc_dmy2time64(20, 7, 2011),
                                               PRICE_SOURCE_FQ,
                                            gnc_numeric_create(522449, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->usd, c->dkk,
-                                              gnc_dmy2timespec(17, 11, 2012),
+                                              gnc_dmy2time64(17, 11, 2012),
                                               PRICE_SOURCE_FQ,
                                            gnc_numeric_create(585380, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->usd, c->dkk,
-                                              gnc_dmy2timespec(1, 8, 2013),
+                                              gnc_dmy2time64(1, 8, 2013),
                                               PRICE_SOURCE_FQ,
                                            gnc_numeric_create(564281, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->usd, c->dkk,
-                                              gnc_dmy2timespec(12, 11, 2014),
+                                              gnc_dmy2time64(12, 11, 2014),
                                               PRICE_SOURCE_FQ,
                                            gnc_numeric_create(598693, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->amzn, c->usd,
-                                              gnc_dmy2timespec(13, 4, 2009),
+                                              gnc_dmy2time64(13, 4, 2009),
                                               PRICE_SOURCE_FQ,
                                               gnc_numeric_create(7805, 100)));
     gnc_pricedb_add_price(db, construct_price(book, c->amzn, c->usd,
-                                              gnc_dmy2timespec(23, 8, 2010),
+                                              gnc_dmy2time64(23, 8, 2010),
                                               PRICE_SOURCE_FQ,
                                               gnc_numeric_create(12664, 100)));
     gnc_pricedb_add_price(db, construct_price(book, c->amzn, c->usd,
-                                              gnc_dmy2timespec(25, 7, 2011),
+                                              gnc_dmy2time64(25, 7, 2011),
                                               PRICE_SOURCE_FQ,
                                               gnc_numeric_create(22252, 100)));
     gnc_pricedb_add_price(db, construct_price(book, c->amzn, c->usd,
-                                              gnc_dmy2timespec(19, 11, 2012),
+                                              gnc_dmy2time64(19, 11, 2012),
                                               PRICE_SOURCE_FQ,
                                               gnc_numeric_create(23988, 100)));
     gnc_pricedb_add_price(db, construct_price(book, c->amzn, c->usd,
-                                              gnc_dmy2timespec(5, 8, 2013),
+                                              gnc_dmy2time64(5, 8, 2013),
                                               PRICE_SOURCE_FQ,
                                               gnc_numeric_create(29726, 100)));
     gnc_pricedb_add_price(db, construct_price(book, c->amzn, c->usd,
-                                              gnc_dmy2timespec(12, 11, 2014),
+                                              gnc_dmy2time64(12, 11, 2014),
                                               PRICE_SOURCE_FQ,
                                               gnc_numeric_create(31151, 100)));
     gnc_pricedb_add_price(db, construct_price(book, c->gbp, c->eur,
-                                              gnc_dmy2timespec(12, 05, 2007),
+                                              gnc_dmy2time64(12, 05, 2007),
                                               PRICE_SOURCE_USER_PRICE,
                                               gnc_numeric_create(126836, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->gbp, c->eur,
-                                              gnc_dmy2timespec(12, 05, 2008),
+                                              gnc_dmy2time64(12, 05, 2008),
                                               PRICE_SOURCE_FQ,
                                               gnc_numeric_create(126836, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->gbp, c->eur,
-                                              gnc_dmy2timespec(13, 05, 2008),
+                                              gnc_dmy2time64(13, 05, 2008),
                                               PRICE_SOURCE_USER_PRICE,
                                               gnc_numeric_create(126836, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->gbp, c->eur,
-                                              gnc_dmy2timespec(14, 05, 2008),
+                                              gnc_dmy2time64(14, 05, 2008),
                                               PRICE_SOURCE_USER_PRICE,
                                               gnc_numeric_create(126836, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->gbp, c->eur,
-                                              gnc_dmy2timespec(19, 05, 2008),
+                                              gnc_dmy2time64(19, 05, 2008),
                                               PRICE_SOURCE_FQ,
                                               gnc_numeric_create(126836, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->gbp, c->eur,
-                                              gnc_dmy2timespec(22, 05, 2008),
+                                              gnc_dmy2time64(22, 05, 2008),
                                               PRICE_SOURCE_FQ,
                                               gnc_numeric_create(126836, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->gbp, c->eur,
-                                              gnc_dmy2timespec(12, 06, 2008),
+                                              gnc_dmy2time64(12, 06, 2008),
                                               PRICE_SOURCE_FQ,
                                               gnc_numeric_create(126836, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->gbp, c->eur,
-                                              gnc_dmy2timespec(12, 07, 2008),
+                                              gnc_dmy2time64(12, 07, 2008),
                                               PRICE_SOURCE_FQ,
                                               gnc_numeric_create(126836, 100000)));
     gnc_pricedb_add_price(db, construct_price(book, c->gbp, c->eur,
-                                              gnc_dmy2timespec(12, 11, 2008),
+                                              gnc_dmy2time64(12, 11, 2008),
                                               PRICE_SOURCE_FQ,
                                               gnc_numeric_create(126836, 100000)));
     gnc_pricedb_set_bulk_update(db, FALSE);
@@ -789,9 +789,9 @@ static void test_gnc_pricedb_remove_old_prices (PriceDBFixture *fixture, gconstp
                                         PRICE_REMOVE_SOURCE_USER |
                                         PRICE_REMOVE_SOURCE_APP;
 
-    Timespec t_cut = gnc_dmy2timespec(1, 1, 2008);
-    Timespec t_cut1 = gnc_dmy2timespec(1, 1, 2009);
-    Timespec t_cut2 = gnc_dmy2timespec(1, 1, 2010);
+    time64 t_cut = gnc_dmy2time64(1, 1, 2008);
+    time64 t_cut1 = gnc_dmy2time64(1, 1, 2009);
+    time64 t_cut2 = gnc_dmy2time64(1, 1, 2010);
 
     GDate *fiscal_end_date = g_date_new ();
     g_date_set_dmy (fiscal_end_date, 31, 12, 2017);
@@ -876,11 +876,11 @@ test_gnc_pricedb_lookup_latest (PriceDBFixture *fixture, gconstpointer pData)
     GNCPrice *price2, *price = gnc_pricedb_lookup_latest(fixture->pricedb,
                                                          fixture->com->gbp,
                                                          fixture->com->eur);
-    Timespec t = gnc_dmy2timespec(12, 11, 2014);
-    Timespec price_time = gnc_price_get_time(price);
+    time64 t = gnc_dmy2time64(12, 11, 2014);
+    time64 price_time = gnc_price_get_time64(price);
     g_assert(gnc_price_get_commodity(price) == fixture->com->gbp);
     g_assert(gnc_price_get_currency(price) == fixture->com->eur);
-    g_assert(timespec_equal(&price_time, &t));
+    g_assert_cmpint(price_time, ==, t);
     price2 = gnc_pricedb_lookup_latest(fixture->pricedb, fixture->com->eur,
                                       fixture->com->gbp);
     g_assert(price2 == price);
@@ -910,7 +910,7 @@ test_is_in_list (Fixture *fixture, gconstpointer pData)
 }*/
 /* latest_before
 static PriceList*
-latest_before (PriceList *prices, const gnc_commodity* target, Timespec t)// Local: 2:0:0
+latest_before (PriceList *prices, const gnc_commodity* target, time64 t)// Local: 2:0:0
 */
 /* static void
 test_latest_before (Fixture *fixture, gconstpointer pData)
@@ -934,7 +934,7 @@ test_add_nearest_price (Fixture *fixture, gconstpointer pData)
 }*/
 /* nearest_to
 static PriceList *
-nearest_to (PriceList *prices, const gnc_commodity* target, Timespec t)// Local: 1:0:0
+nearest_to (PriceList *prices, const gnc_commodity* target, time64 t)// Local: 1:0:0
 */
 /* static void
 test_nearest_to (PriceDBFixture *fixture, gconstpointer pData)
@@ -974,26 +974,28 @@ test_gnc_pricedb_lookup_latest_any_currency (PriceDBFixture *fixture, gconstpoin
     gnc_price_list_destroy(prices);
 }
 // Make Static
-/* gnc_pricedb_lookup_nearest_in_time_any_currency
+/* gnc_pricedb_lookup_nearest_in_time_any_currency_t64
 PriceList *
-gnc_pricedb_lookup_nearest_in_time_any_currency(GNCPriceDB *db,// Local: 2:0:0
+gnc_pricedb_lookup_nearest_in_time_any_currency_t64(GNCPriceDB *db,// Local: 2:0:0
 */
 static void
-test_gnc_pricedb_lookup_nearest_in_time_any_currency (PriceDBFixture *fixture, gconstpointer pData)
+test_gnc_pricedb_lookup_nearest_in_time_any_currency_t64 (PriceDBFixture *fixture, gconstpointer pData)
 {
-    Timespec t1 = gnc_dmy2timespec(25, 3, 2013);
-    Timespec t2 = gnc_dmy2timespec(26, 3, 2013);
+    time64 t1 = gnc_dmy2time64(25, 3, 2013);
+    time64 t2 = gnc_dmy2time64(26, 3, 2013);
     PriceList *prices =
-        gnc_pricedb_lookup_nearest_in_time_any_currency(fixture->pricedb,
-                                                        fixture->com->usd, t1);
+        gnc_pricedb_lookup_nearest_in_time_any_currency_t64(fixture->pricedb,
+                                                            fixture->com->usd,
+                                                            t1);
     g_assert_cmpint(g_list_length(prices), ==, 4);
     prices = g_list_sort(prices, compare_price_commodities);
     g_assert_cmpstr(GET_COM_NAME(prices->next->data), ==, "AUD");
     g_assert_cmpstr(GET_CUR_NAME(prices->next->data), ==, "USD");
     gnc_price_list_destroy(prices);
     prices =
-        gnc_pricedb_lookup_nearest_in_time_any_currency(fixture->pricedb,
-                                                        fixture->com->usd, t2);
+        gnc_pricedb_lookup_nearest_in_time_any_currency_t64(fixture->pricedb,
+                                                            fixture->com->usd,
+                                                            t2);
     g_assert_cmpint(g_list_length(prices), ==, 4);
     prices = g_list_sort(prices, compare_price_commodities);
     g_assert_cmpstr(GET_CUR_NAME(prices->next->data), ==, "AUD");
@@ -1002,18 +1004,18 @@ test_gnc_pricedb_lookup_nearest_in_time_any_currency (PriceDBFixture *fixture, g
 }
 
 // Not Used
-/* gnc_pricedb_lookup_latest_before_any_currency
+/* gnc_pricedb_lookup_latest_before_any_currency_t64
 PriceList *
-gnc_pricedb_lookup_latest_before_any_currency(GNCPriceDB *db,// Local: 0:0:0
+gnc_pricedb_lookup_latest_before_any_currency_t64(GNCPriceDB *db,// Local: 0:0:0
 */
 static void
-test_gnc_pricedb_lookup_latest_before_any_currency (PriceDBFixture *fixture,
+test_gnc_pricedb_lookup_latest_before_any_currency_t64 (PriceDBFixture *fixture,
                                                     gconstpointer pData)
 {
-    Timespec t1 = gnc_dmy2timespec(31, 7, 2013);
-    Timespec t2 = gnc_dmy2timespec(5, 8, 2013);
+    time64 t1 = gnc_dmy2time64(31, 7, 2013);
+    time64 t2 = gnc_dmy2time64(5, 8, 2013);
     PriceList *prices =
-        gnc_pricedb_lookup_latest_before_any_currency(fixture->pricedb,
+        gnc_pricedb_lookup_latest_before_any_currency_t64(fixture->pricedb,
                                                         fixture->com->usd, t1);
     g_assert_cmpint(g_list_length(prices), ==, 4);
     prices = g_list_sort(prices, compare_price_commodities);
@@ -1021,7 +1023,7 @@ test_gnc_pricedb_lookup_latest_before_any_currency (PriceDBFixture *fixture,
     g_assert_cmpstr(GET_CUR_NAME(prices->next->data), ==, "USD");
     gnc_price_list_destroy(prices);
     prices =
-        gnc_pricedb_lookup_latest_before_any_currency(fixture->pricedb,
+        gnc_pricedb_lookup_latest_before_any_currency_t64(fixture->pricedb,
                                                         fixture->com->usd, t2);
     g_assert_cmpint(g_list_length(prices), ==, 4);
     prices = g_list_sort(prices, compare_price_commodities);
@@ -1062,31 +1064,31 @@ test_gnc_pricedb_get_prices (PriceDBFixture *fixture, gconstpointer pData)
     g_assert_cmpint(g_list_length(prices), ==, 5);
     gnc_price_list_destroy(prices);
 }
-/* gnc_pricedb_lookup_day
+/* gnc_pricedb_lookup_day_t64
 GNCPrice *
-gnc_pricedb_lookup_day(GNCPriceDB *db,// C: 4 in 2 SCM: 2 in 1 Local: 1:0:0
+gnc_pricedb_lookup_day_t64(GNCPriceDB *db,// C: 4 in 2 SCM: 2 in 1 Local: 1:0:0
 */
 static void
-test_gnc_pricedb_lookup_day (PriceDBFixture *fixture, gconstpointer pData)
+test_gnc_pricedb_lookup_day_t64 (PriceDBFixture *fixture, gconstpointer pData)
 {
     gchar *msg1 = "[gnc_dmy2timespec_internal()] Date computation error from Y-M-D 12-11-18: Year is out of valid range: 1400..10000";
     gint loglevel = G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL;
     gchar *logdomain = "qof.engine";
     TestErrorStruct check = {loglevel, logdomain, msg1, 0};
     GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
-    Timespec t = gnc_dmy2timespec(17, 11, 2012);
-    GNCPrice *price = gnc_pricedb_lookup_day(fixture->pricedb,
+    time64 t = gnc_dmy2time64(17, 11, 2012);
+    GNCPrice *price = gnc_pricedb_lookup_day_t64(fixture->pricedb,
                                              fixture->com->usd,
                                              fixture->com->gbp, t);
     g_assert_cmpstr(GET_COM_NAME(price), ==, "GBP");
-    t.tv_sec += 20247; /* A random number of seconds later, still the same day.*/
-    price = gnc_pricedb_lookup_day(fixture->pricedb,
+    t += 20247; /* A random number of seconds later, still the same day.*/
+    price = gnc_pricedb_lookup_day_t64(fixture->pricedb,
                                    fixture->com->usd,
                                    fixture->com->gbp, t);
     g_assert_cmpstr(GET_COM_NAME(price), ==, "GBP");
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
-    t = gnc_dmy2timespec(18, 11, 12);
-    price = gnc_pricedb_lookup_day(fixture->pricedb,
+    t = gnc_dmy2time64(18, 11, 12);
+    price = gnc_pricedb_lookup_day_t64(fixture->pricedb,
                                    fixture->com->usd,
                                    fixture->com->gbp, t);
     g_assert(price == NULL);
@@ -1094,9 +1096,9 @@ test_gnc_pricedb_lookup_day (PriceDBFixture *fixture, gconstpointer pData)
 }
 
 // Not Used
-/* gnc_pricedb_lookup_at_time
+/* gnc_pricedb_lookup_at_time64
 GNCPrice *
-gnc_pricedb_lookup_at_time(GNCPriceDB *db,// Local: 0:0:0
+gnc_pricedb_lookup_at_time64(GNCPriceDB *db,// Local: 0:0:0
 */
 /* lookup_nearest_in_time
 static GNCPrice *
@@ -1105,30 +1107,32 @@ lookup_nearest_in_time(GNCPriceDB *db,// Local: 2:0:0
 /* test_lookup_nearest_in_time (Fixture *fixture, gconstpointer pData)
 {
 }*/
-/* gnc_pricedb_lookup_nearest_in_time
+/* gnc_pricedb_lookup_nearest_in_time64
 GNCPrice *
-gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,// C: 2 in 1  Local: 1:0:0
+gnc_pricedb_lookup_nearest_in_time64(GNCPriceDB *db,// C: 2 in 1  Local: 1:0:0
 */
 static void
-test_gnc_pricedb_lookup_nearest_in_time (PriceDBFixture *fixture, gconstpointer pData)
+test_gnc_pricedb_lookup_nearest_in_time64 (PriceDBFixture *fixture, gconstpointer pData)
 {
-    Timespec t1 = gnc_dmy2timespec(25, 3, 2013);
-    Timespec t2 = gnc_dmy2timespec(26, 3, 2013);
+    time64 t1 = gnc_dmy2time64(25, 3, 2013);
+    time64 t2 = gnc_dmy2time64(26, 3, 2013);
     GNCPrice *price =
-        gnc_pricedb_lookup_nearest_in_time(fixture->pricedb, fixture->com->usd,
-                                           fixture->com->aud, t1);
+        gnc_pricedb_lookup_nearest_in_time64(fixture->pricedb,
+                                             fixture->com->usd,
+                                             fixture->com->aud, t1);
     g_assert_cmpstr(GET_COM_NAME(price), ==, "AUD");
     g_assert_cmpstr(GET_CUR_NAME(price), ==, "USD");
     price =
-        gnc_pricedb_lookup_nearest_in_time(fixture->pricedb, fixture->com->usd,
-                                           fixture->com->aud, t2);
+        gnc_pricedb_lookup_nearest_in_time64(fixture->pricedb,
+                                             fixture->com->usd,
+                                             fixture->com->aud, t2);
     g_assert_cmpstr(GET_CUR_NAME(price), ==, "AUD");
     g_assert_cmpstr(GET_COM_NAME(price), ==, "USD");
 }
 // Not Used
-/* gnc_pricedb_lookup_latest_before
+/* gnc_pricedb_lookup_latest_before_t64
 GNCPrice *
-gnc_pricedb_lookup_latest_before (GNCPriceDB *db,// Local: 0:0:0
+gnc_pricedb_lookup_latest_before_t64 (GNCPriceDB *db,// Local: 0:0:0
 */
 /* direct_balance_conversion
 static gnc_numeric
@@ -1199,39 +1203,47 @@ test_gnc_pricedb_convert_balance_latest_price (PriceDBFixture *fixture, gconstpo
 
 
 }
-/* gnc_pricedb_convert_balance_nearest_price
+/* gnc_pricedb_convert_balance_nearest_price_t64
 gnc_numeric
-gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,// C: 1  Local: 0:0:0
+gnc_pricedb_convert_balance_nearest_price_t64(GNCPriceDB *pdb,// C: 1  Local: 0:0:0
 */
 static void
-test_gnc_pricedb_convert_balance_nearest_price (PriceDBFixture *fixture, gconstpointer pData)
+test_gnc_pricedb_convert_balance_nearest_price_t64 (PriceDBFixture *fixture, gconstpointer pData)
 {
     time64 t = gnc_dmy2time64(15, 8, 2011);
     gnc_numeric from = gnc_numeric_create(10000, 100);
     gnc_numeric result =
-        gnc_pricedb_convert_balance_nearest_price(fixture->pricedb, from,
-                                                 fixture->com->usd,
-                                                 fixture->com->aud, t);
+        gnc_pricedb_convert_balance_nearest_price_t64(fixture->pricedb, from,
+                                                      fixture->com->usd,
+                                                      fixture->com->aud, t);
     g_assert_cmpint(result.num, ==, 9391);
     g_assert_cmpint(result.denom, ==, 100);
-    result = gnc_pricedb_convert_balance_nearest_price(fixture->pricedb, from,
-                                                      fixture->com->usd,
-                                                      fixture->com->gbp, t);
+    result = gnc_pricedb_convert_balance_nearest_price_t64(fixture->pricedb,
+                                                           from,
+                                                           fixture->com->usd,
+                                                           fixture->com->gbp,
+                                                           t);
     g_assert_cmpint(result.num, ==, 6186);
     g_assert_cmpint(result.denom, ==, 100);
-    result = gnc_pricedb_convert_balance_nearest_price(fixture->pricedb, from,
-                                                      fixture->com->usd,
-                                                      fixture->com->eur, t);
+    result = gnc_pricedb_convert_balance_nearest_price_t64(fixture->pricedb,
+                                                           from,
+                                                           fixture->com->usd,
+                                                           fixture->com->eur,
+                                                           t);
     g_assert_cmpint(result.num, ==, 7009);
     g_assert_cmpint(result.denom, ==, 100);
-    result = gnc_pricedb_convert_balance_nearest_price(fixture->pricedb, from,
-                                                      fixture->com->gbp,
-                                                      fixture->com->dkk, t);
+    result = gnc_pricedb_convert_balance_nearest_price_t64(fixture->pricedb,
+                                                           from,
+                                                           fixture->com->gbp,
+                                                           fixture->com->dkk,
+                                                           t);
     g_assert_cmpint(result.num, ==, 84450);
     g_assert_cmpint(result.denom, ==, 100);
-    result = gnc_pricedb_convert_balance_nearest_price(fixture->pricedb, from,
-                                                      fixture->com->amzn,
-                                                      fixture->com->aud, t);
+    result = gnc_pricedb_convert_balance_nearest_price_t64(fixture->pricedb,
+                                                           from,
+                                                           fixture->com->amzn,
+                                                           fixture->com->aud,
+                                                           t);
     g_assert_cmpint(result.num, ==, 2089782);
     g_assert_cmpint(result.denom, ==, 100);
 
@@ -1426,14 +1438,14 @@ test_suite_gnc_pricedb (void)
 // GNC_TEST_ADD (suitename, "gnc price set dirty", Fixture, NULL, setup, test_gnc_price_set_dirty, teardown);
 // GNC_TEST_ADD (suitename, "gnc price set commodity", Fixture, NULL, setup, test_gnc_price_set_commodity, teardown);
 // GNC_TEST_ADD (suitename, "gnc price set currency", Fixture, NULL, setup, test_gnc_price_set_currency, teardown);
-// GNC_TEST_ADD (suitename, "gnc price set time", Fixture, NULL, setup, test_gnc_price_set_time, teardown);
+// GNC_TEST_ADD (suitename, "gnc price set time", Fixture, NULL, setup, test_gnc_price_set_time64, teardown);
 // GNC_TEST_ADD (suitename, "gnc price set source", Fixture, NULL, setup, test_gnc_price_set_source, teardown);
 // GNC_TEST_ADD (suitename, "gnc price set source string", Fixture, NULL, setup, test_gnc_price_set_source_string, teardown);
 // GNC_TEST_ADD (suitename, "gnc price set typestr", Fixture, NULL, setup, test_gnc_price_set_typestr, teardown);
 // GNC_TEST_ADD (suitename, "gnc price set value", Fixture, NULL, setup, test_gnc_price_set_value, teardown);
 // GNC_TEST_ADD (suitename, "gnc price lookup", Fixture, NULL, setup, test_gnc_price_lookup, teardown);
 // GNC_TEST_ADD (suitename, "gnc price get commodity", Fixture, NULL, setup, test_gnc_price_get_commodity, teardown);
-// GNC_TEST_ADD (suitename, "gnc price get time", Fixture, NULL, setup, test_gnc_price_get_time, teardown);
+// GNC_TEST_ADD (suitename, "gnc price get time", Fixture, NULL, setup, test_gnc_price_get_time64, teardown);
 // GNC_TEST_ADD (suitename, "gnc price get source", Fixture, NULL, setup, test_gnc_price_get_source, teardown);
 // GNC_TEST_ADD (suitename, "gnc price get source string", Fixture, NULL, setup, test_gnc_price_get_source_string, teardown);
 // GNC_TEST_ADD (suitename, "gnc price get typestr", Fixture, NULL, setup, test_gnc_price_get_typestr, teardown);
@@ -1478,20 +1490,20 @@ test_suite_gnc_pricedb (void)
 // GNC_TEST_ADD (suitename, "add nearest price", Fixture, NULL, setup, test_add_nearest_price, teardown);
 // GNC_TEST_ADD (suitename, "nearest to", Fixture, NULL, setup, test_nearest_to, teardown);
     GNC_TEST_ADD (suitename, "gnc pricedb lookup latest any currency", PriceDBFixture, NULL, setup, test_gnc_pricedb_lookup_latest_any_currency, teardown);
-    GNC_TEST_ADD (suitename, "gnc pricedb lookup nearest in time any currency", PriceDBFixture, NULL, setup, test_gnc_pricedb_lookup_nearest_in_time_any_currency, teardown);
-    GNC_TEST_ADD (suitename, "gnc pricedb lookup latest before any currency", PriceDBFixture, NULL, setup, test_gnc_pricedb_lookup_latest_before_any_currency, teardown);
+    GNC_TEST_ADD (suitename, "gnc pricedb lookup nearest in time any currency", PriceDBFixture, NULL, setup, test_gnc_pricedb_lookup_nearest_in_time_any_currency_t64, teardown);
+    GNC_TEST_ADD (suitename, "gnc pricedb lookup latest before any currency", PriceDBFixture, NULL, setup, test_gnc_pricedb_lookup_latest_before_any_currency_t64, teardown);
 // GNC_TEST_ADD (suitename, "hash values helper", PriceDBFixture, NULL, setup, test_hash_values_helper, teardown);
     GNC_TEST_ADD (suitename, "gnc pricedb has prices", PriceDBFixture, NULL, setup, test_gnc_pricedb_has_prices, teardown);
     GNC_TEST_ADD (suitename, "gnc pricedb get prices", PriceDBFixture, NULL, setup, test_gnc_pricedb_get_prices, teardown);
-    GNC_TEST_ADD (suitename, "gnc pricedb lookup day", PriceDBFixture, NULL, setup, test_gnc_pricedb_lookup_day, teardown);
+    GNC_TEST_ADD (suitename, "gnc pricedb lookup day", PriceDBFixture, NULL, setup, test_gnc_pricedb_lookup_day_t64, teardown);
 // GNC_TEST_ADD (suitename, "lookup nearest in time", Fixture, NULL, setup, test_lookup_nearest_in_time, teardown);
-    GNC_TEST_ADD (suitename, "gnc pricedb lookup nearest in time", PriceDBFixture, NULL, setup, test_gnc_pricedb_lookup_nearest_in_time, teardown);
+    GNC_TEST_ADD (suitename, "gnc pricedb lookup nearest in time", PriceDBFixture, NULL, setup, test_gnc_pricedb_lookup_nearest_in_time64, teardown);
 // GNC_TEST_ADD (suitename, "direct balance conversion", Fixture, NULL, setup, test_direct_balance_conversion, teardown);
 // GNC_TEST_ADD (suitename, "extract common prices", Fixture, NULL, setup, test_extract_common_prices, teardown);
 // GNC_TEST_ADD (suitename, "convert balance", Fixture, NULL, setup, test_convert_balance, teardown);
 // GNC_TEST_ADD (suitename, "indirect balance conversion", Fixture, NULL, setup, test_indirect_balance_conversion, teardown);
     GNC_TEST_ADD (suitename, "gnc pricedb convert balance latest price", PriceDBFixture, NULL, setup, test_gnc_pricedb_convert_balance_latest_price, teardown);
-    GNC_TEST_ADD (suitename, "gnc pricedb convert balance nearest price", PriceDBFixture, NULL, setup, test_gnc_pricedb_convert_balance_nearest_price, teardown);
+    GNC_TEST_ADD (suitename, "gnc pricedb convert balance nearest price", PriceDBFixture, NULL, setup, test_gnc_pricedb_convert_balance_nearest_price_t64, teardown);
 // GNC_TEST_ADD (suitename, "pricedb foreach pricelist", Fixture, NULL, setup, test_pricedb_foreach_pricelist, teardown);
 // GNC_TEST_ADD (suitename, "pricedb foreach currencies hash", Fixture, NULL, setup, test_pricedb_foreach_currencies_hash, teardown);
 // GNC_TEST_ADD (suitename, "unstable price traversal", Fixture, NULL, setup, test_unstable_price_traversal, teardown);

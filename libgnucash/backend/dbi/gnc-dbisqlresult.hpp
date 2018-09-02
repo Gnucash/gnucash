@@ -63,11 +63,11 @@ protected:
             return dbi_result_field_is_null(m_inst->m_dbi_result, col);
         }
     private:
-        GncDbiSqlResult* m_inst;
+        GncDbiSqlResult* m_inst = nullptr;
     };
 
 private:
-    const GncDbiSqlConnection* m_conn;
+    const GncDbiSqlConnection* m_conn = nullptr;
     dbi_result m_dbi_result;
     IteratorImpl m_iter;
     GncSqlRow m_row;

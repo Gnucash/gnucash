@@ -93,8 +93,8 @@ struct split_s
      */
     char  * action;            /* Buy, Sell, Div, etc.                      */
 
-    Timespec date_reconciled;  /* date split was reconciled                 */
-    char    reconciled;        /* The reconciled field                      */
+    time64 date_reconciled;  /* date split was reconciled                 */
+    char   reconciled;        /* The reconciled field                      */
 
     /* gains is a flag used to track the relationship between
      * capital-gains splits. Depending on its value, this flag indicates
@@ -201,28 +201,6 @@ void         DxaccSplitSetShareAmount (Split *split, double amount);
  *
 \********************************************************************/
 
-
-#define DATE_CMP(aaa,bbb,field) {                       \
-  /* if dates differ, return */                         \
-  if ( (aaa->field.tv_sec) <                            \
-       (bbb->field.tv_sec)) {                           \
-    return -1;                                          \
-  } else                                                \
-  if ( (aaa->field.tv_sec) >                            \
-       (bbb->field.tv_sec)) {                           \
-    return +1;                                          \
-  }                                                     \
-                                                        \
-  /* else, seconds match. check nanoseconds */          \
-  if ( (aaa->field.tv_nsec) <                           \
-       (bbb->field.tv_nsec)) {                          \
-    return -1;                                          \
-  } else                                                \
-  if ( (aaa->field.tv_nsec) >                           \
-       (bbb->field.tv_nsec)) {                          \
-    return +1;                                          \
-  }                                                     \
-}
 
 #define CHECK_GAINS_STATUS(s)  \
    if (GAINS_STATUS_UNKNOWN == s->gains) xaccSplitDetermineGainStatus(s);

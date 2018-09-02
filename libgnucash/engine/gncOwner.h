@@ -214,10 +214,10 @@ gboolean gncOwnerGetOwnerFromTypeGuid (QofBook *book, GncOwner *owner, QofIdType
  * split in the transfer account).
  */
 GNCLot *
-gncOwnerCreatePaymentLot (const GncOwner *owner, Transaction **preset_txn,
-                          Account *posted_acc, Account *xfer_acc,
-                          gnc_numeric amount, gnc_numeric exch, Timespec date,
-                          const char *memo, const char *num);
+gncOwnerCreatePaymentLotSecs (const GncOwner *owner, Transaction **preset_txn,
+                              Account *posted_acc, Account *xfer_acc,
+                              gnc_numeric amount, gnc_numeric exch, time64 date,
+                              const char *memo, const char *num);
 
 /**
  * Given a list of lots, try to balance as many of them as possible
@@ -267,10 +267,10 @@ void gncOwnerAutoApplyPaymentsWithLots (const GncOwner *owner, GList *lots);
  * details on what happens exactly.
  */
 void
-gncOwnerApplyPayment (const GncOwner *owner, Transaction **preset_txn, GList *lots,
-                      Account *posted_acc, Account *xfer_acc,
-                      gnc_numeric amount, gnc_numeric exch, Timespec date,
-                      const char *memo, const char *num, gboolean auto_pay);
+gncOwnerApplyPaymentSecs (const GncOwner *owner, Transaction **preset_txn,
+                          GList *lots, Account *posted_acc, Account *xfer_acc,
+                          gnc_numeric amount, gnc_numeric exch, time64 date,
+                          const char *memo, const char *num, gboolean auto_pay);
 
 /** Helper function to find a split in lot that best offsets target_value
  *  Obviously it should be of opposite sign.

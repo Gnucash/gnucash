@@ -39,14 +39,14 @@
 
 static void editable_enters (GNCSearchCoreType *fe);
 static void grab_focus (GNCSearchCoreType *fe);
-static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe);
+static GNCSearchCoreType *gncs_clone (GNCSearchCoreType *fe);
 static gboolean gncs_validate (GNCSearchCoreType *fe);
-static GtkWidget *gncs_get_widget(GNCSearchCoreType *fe);
+static GtkWidget *gncs_get_widget (GNCSearchCoreType *fe);
 static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
-static void gnc_search_date_class_init	(GNCSearchDateClass *klass);
-static void gnc_search_date_init	(GNCSearchDate *gspaper);
-static void gnc_search_date_finalize	(GObject *obj);
+static void gnc_search_date_class_init (GNCSearchDateClass *klass);
+static void gnc_search_date_init (GNCSearchDate *gspaper);
+static void gnc_search_date_finalize (GObject *obj);
 
 typedef struct _GNCSearchDatePrivate GNCSearchDatePrivate;
 
@@ -69,14 +69,14 @@ gnc_search_date_get_type (void)
     {
         GTypeInfo type_info =
         {
-            sizeof(GNCSearchDateClass),       /* class_size */
-            NULL,   				/* base_init */
-            NULL,				/* base_finalize */
+            sizeof(GNCSearchDateClass),      /* class_size */
+            NULL,                            /* base_init */
+            NULL,                            /* base_finalize */
             (GClassInitFunc)gnc_search_date_class_init,
-            NULL,				/* class_finalize */
-            NULL,				/* class_data */
-            sizeof(GNCSearchDate),		/* */
-            0,				/* n_preallocs */
+            NULL,                            /* class_finalize */
+            NULL,                            /* class_data */
+            sizeof(GNCSearchDate),           /* */
+            0,                               /* n_preallocs */
             (GInstanceInitFunc)gnc_search_date_init,
         };
 
@@ -179,9 +179,22 @@ gncs_validate (GNCSearchCoreType *fe)
 }
 
 static void
+gnc_search_date_set_date_from_edit (GNCSearchDate *fe, GNCDateEdit *de)
+{
+   /* The gnc_date_edit_get_date function returns a value set to the
+    * start of the day 00:00:00, use gnc_date_edit_get_date_end to get
+    * value for day end 23:59:59 for LessThanEqual and GreaterThan */
+
+    if (fe->how == QOF_COMPARE_LTE || fe->how == QOF_COMPARE_GT)
+        fe->tt = gnc_date_edit_get_date_end (de);
+    else
+        fe->tt = gnc_date_edit_get_date (de);
+}
+
+static void
 date_changed (GNCDateEdit *date_edit, GNCSearchDate *fe)
 {
-    fe->tt = gnc_date_edit_get_date (date_edit);
+    gnc_search_date_set_date_from_edit (fe, date_edit);
 }
 
 static GtkWidget *
@@ -272,9 +285,12 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
     /* Make sure we actually use the currently-entered date */
     priv = _PRIVATE(fi);
     if (priv->entry)
-        fi->tt = gnc_date_edit_get_date (GNC_DATE_EDIT (priv->entry));
+        gnc_search_date_set_date_from_edit (fi, GNC_DATE_EDIT (priv->entry));
 
-    return qof_query_date_predicate (fi->how, QOF_DATE_MATCH_NORMAL, fi->tt);
+    if (fi->how == QOF_COMPARE_EQUAL || fi->how == QOF_COMPARE_NEQ)
+        return qof_query_date_predicate (fi->how, QOF_DATE_MATCH_DAY, fi->tt);
+    else
+        return qof_query_date_predicate (fi->how, QOF_DATE_MATCH_NORMAL, fi->tt);
 }
 
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)

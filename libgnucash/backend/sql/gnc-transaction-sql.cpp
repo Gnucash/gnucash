@@ -90,8 +90,8 @@ static const EntryVec tx_col_table
     gnc_sql_make_table_entry<CT_COMMODITYREF>("currency_guid", 0, COL_NNUL,
                                               "currency"),
     gnc_sql_make_table_entry<CT_STRING>("num", TX_MAX_NUM_LEN, COL_NNUL, "num"),
-    gnc_sql_make_table_entry<CT_TIMESPEC>("post_date", 0, 0, "post-date"),
-    gnc_sql_make_table_entry<CT_TIMESPEC>("enter_date", 0, 0, "enter-date"),
+    gnc_sql_make_table_entry<CT_TIME>("post_date", 0, 0, "post-date"),
+    gnc_sql_make_table_entry<CT_TIME>("enter_date", 0, 0, "enter-date"),
     gnc_sql_make_table_entry<CT_STRING>("description", TX_MAX_DESCRIPTION_LEN,
                                         0, "description"),
 };
@@ -116,7 +116,7 @@ static const EntryVec split_col_table
     gnc_sql_make_table_entry<CT_STRING>("reconcile_state", 1, COL_NNUL,
                                        (QofAccessFunc)get_split_reconcile_state,
                                         set_split_reconcile_state),
-    gnc_sql_make_table_entry<CT_TIMESPEC>("reconcile_date", 0, 0,
+    gnc_sql_make_table_entry<CT_TIME>("reconcile_date", 0, 0,
                                           "reconcile-date"),
     gnc_sql_make_table_entry<CT_NUMERIC>("value", 0, COL_NNUL, "value"),
     gnc_sql_make_table_entry<CT_NUMERIC>("quantity", 0, COL_NNUL, "amount"),
@@ -127,7 +127,7 @@ static const EntryVec split_col_table
 
 static const EntryVec post_date_col_table
 {
-    gnc_sql_make_table_entry<CT_TIMESPEC>("post_date", 0, 0, "post-date"),
+    gnc_sql_make_table_entry<CT_TIME>("post_date", 0, 0, "post-date"),
 };
 
 static const EntryVec account_guid_col_table

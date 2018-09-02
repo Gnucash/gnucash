@@ -2961,8 +2961,7 @@ price_parse_xml_sub_node (GNCPrice* p, xmlNodePtr sub_node, QofBook* book)
     {
         time64 time = dom_tree_to_time64 (sub_node);
         if (!dom_tree_valid_time64 (time, sub_node->name)) time = 0;
-        Timespec ts = {time, 0};
-        gnc_price_set_time (p, ts);
+        gnc_price_set_time64 (p, time);
     }
     else if (g_strcmp0 ("price:source", (char*)sub_node->name) == 0)
     {

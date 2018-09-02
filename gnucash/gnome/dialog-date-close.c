@@ -45,7 +45,7 @@ typedef struct _dialog_date_close_window
     GtkWidget *memo_entry;
     GtkWidget *question_check;
     GncBillTerm *terms;
-    Timespec *ts, *ts2;
+    time64 *t, *t2;
     GList * acct_types;
     GList * acct_commodities;
     QofBook *book;
@@ -87,14 +87,14 @@ gnc_dialog_date_close_ok_cb (GtkWidget *widget, gpointer user_data)
     }
 
     if (ddc->post_date)
-        *(ddc->ts2) = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (ddc->post_date));
+        *ddc->t2 = gnc_date_edit_get_date (GNC_DATE_EDIT (ddc->post_date));
 
     if (ddc->date)
     {
         if (ddc->terms)
-            ddc->ts->tv_sec = gncBillTermComputeDueDate (ddc->terms, ddc->ts2->tv_sec);
+            *ddc->t = gncBillTermComputeDueDate (ddc->terms, *ddc->t2);
         else
-            *(ddc->ts) = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (ddc->date));
+            *ddc->t = gnc_date_edit_get_date (GNC_DATE_EDIT (ddc->date));
     }
 
     if (ddc->memo_entry && ddc->memo)
@@ -122,7 +122,7 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
                                 const char *label_message,
                                 gboolean ok_is_default,
                                 /* Returned data ... */
-                                Timespec *ts)
+                                time64 *t)
 {
     DialogDateClose *ddc;
     GtkWidget *date_box;
@@ -130,11 +130,11 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
     GtkBuilder *builder;
     gboolean retval;
 
-    if (!message || !label_message || !ts)
+    if (!message || !label_message || !t)
         return FALSE;
 
     ddc = g_new0 (DialogDateClose, 1);
-    ddc->ts = ts;
+    ddc->t = t;
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-date-close.glade", "date_close_dialog");
@@ -146,7 +146,7 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
     date_box = GTK_WIDGET(gtk_builder_get_object (builder, "date_box"));
     ddc->date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
     gtk_box_pack_start (GTK_BOX(date_box), ddc->date, TRUE, TRUE, 0);
-    gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->date), *ts);
+    gnc_date_edit_set_time (GNC_DATE_EDIT (ddc->date), *t);
 
     if (parent)
         gtk_window_set_transient_for (GTK_WINDOW(ddc->dialog), GTK_WINDOW(parent));
@@ -184,12 +184,12 @@ static void
 post_date_changed_cb (GNCDateEdit *gde, gpointer d)
 {
     DialogDateClose *ddc = d;
-    Timespec post_date;
-    Timespec due_date = {0,0};
+    time64 post_date;
+    time64 due_date = 0;
 
-    post_date = gnc_date_edit_get_date_ts (gde);
-    due_date.tv_sec = gncBillTermComputeDueDate (ddc->terms, post_date.tv_sec);
-    gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->date), due_date);
+    post_date = gnc_date_edit_get_date (gde);
+    due_date = gncBillTermComputeDueDate (ddc->terms, post_date);
+    gnc_date_edit_set_time (GNC_DATE_EDIT (ddc->date), due_date);
 }
 
 gboolean
@@ -203,7 +203,7 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
         GList * acct_types, GList * acct_commodities,
         QofBook *book, GncBillTerm *terms,
         /* Returned Data... */
-        Timespec *ddue, Timespec *post,
+        time64 *ddue, time64 *post,
         char **memo, Account **acct, gboolean *answer)
 {
     DialogDateClose *ddc;
@@ -220,8 +220,8 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
         return FALSE;
 
     ddc = g_new0 (DialogDateClose, 1);
-    ddc->ts = ddue;
-    ddc->ts2 = post;
+    ddc->t = ddue;
+    ddc->t2 = post;
     ddc->book = book;
     ddc->acct_types = acct_types;
     ddc->acct_commodities = acct_commodities;
@@ -278,7 +278,7 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
 
 
     /* Set the post date widget */
-    gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->post_date), *post);
+    gnc_date_edit_set_time (GNC_DATE_EDIT (ddc->post_date), *post);
 
     /* Deal with the terms handling of the due date */
     if (terms)
@@ -289,7 +289,7 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
         post_date_changed_cb (GNC_DATE_EDIT (ddc->post_date), ddc);
     }
     else
-        gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->date), *ddue);
+        gnc_date_edit_set_time (GNC_DATE_EDIT (ddc->date), *ddue);
 
     /* Setup the account widget */
     fill_in_acct_info (ddc, set_default_acct);
@@ -329,7 +329,7 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
                                gboolean ok_is_default,
                                GList * acct_types, QofBook *book,
                                /* Returned Data... */
-                               Timespec *date, Account **acct)
+                               time64 *date, Account **acct)
 {
     DialogDateClose *ddc;
     GtkLabel *label;
@@ -343,7 +343,7 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
         return FALSE;
 
     ddc = g_new0 (DialogDateClose, 1);
-    ddc->ts = date;
+    ddc->t = date;
     ddc->book = book;
     ddc->acct_types = acct_types;
     ddc->acct = *acct;
@@ -378,7 +378,7 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
     gtk_label_set_text (label, acct_label_message);
 
     /* Set the date widget */
-    gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->date), *date);
+    gnc_date_edit_set_time (GNC_DATE_EDIT (ddc->date), *date);
 
     /* Setup the account widget */
     fill_in_acct_info (ddc, FALSE);

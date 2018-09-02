@@ -33,10 +33,6 @@ either end.  Guile supports a superset of R4RS (the Scheme standard).
 For initial experimentation, you can  use Guile as an interactive Scheme 
 shell to play around with the system.  
 
-SLIB is a a library for Scheme implementations (including guile)
-that implements a large collection of useful data structures
-and algorithms.
-
 FIXME: Starting gnucash as a guile shell. .. 
 
 While the Guile documentation (in info format) explains
@@ -49,18 +45,6 @@ has quite a useful collection of information, including
 FAQs, online copies of the Scheme standard (which is actually
 quite readable and useful), and pointers to web tutorials
 and other resources.   
-
-g-wrap
-------
-
-Note: gwrap has been replaced by swig and dropped completely in
-SVN-trunk on 2006-10-20 and for gnucash-2.2.0.
-
-(Old info: g-wrap is the tool used to automate the wrapping of C
-functions to make them callable from the guile code.  g-wrap is
-now maintained by Rob Browning and is available from
-ftp://ftp.gnucash.org/pub/g-wrap )
-
 
 Garbage collection:
 -------------------
@@ -97,14 +81,10 @@ use it.
 The moral of this story is that if you need to have the C side ferret
 away a scheme item for later, you must also keep at least one
 reference to that item on the guile side until the C side is finished
-with it.  I believe that the guile people have recently come up with a
-nice general solution to this problem, but until that's generally
-available, there are a number of ways you can solve this.
+with it.
 
-If nothing else, you can just create a global hash on the guile side,
-place the object in question in the hash table, and then have the
-C-side delete that item from the hash when it's finished with it.
-
+You can protect an object using scm_gc_protect_object. When you're done
+with it you can release it using scm_gc_unprotect_object.
 
 Guile Interrupts:
 -----------------

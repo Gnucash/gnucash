@@ -521,11 +521,11 @@ gnc_split_register_get_recn_tooltip (VirtualLocation virt_loc,
 
     if (xaccSplitGetReconcile (split) == YREC)
     {
-        Timespec     ts = {0,0};
-        const char *str_rec_date;
-        xaccSplitGetDateReconciledTS (split, &ts);
-        str_rec_date = gnc_print_date (ts);
-        return g_strdup_printf (_("Reconciled on %s"), str_rec_date);
+        char datebuff[MAX_DATE_LENGTH + 1];
+        time64 time = xaccSplitGetDateReconciled (split);
+        memset (datebuff, 0, sizeof(datebuff));
+        qof_print_date_buff (datebuff, sizeof(datebuff), time);
+        return g_strdup_printf (_("Reconciled on %s"), datebuff);
     }
     else if (xaccSplitGetReconcile (split) == VREC)
     {
@@ -904,7 +904,6 @@ gnc_split_register_get_due_date_entry (VirtualLocation virt_loc,
     SplitRegister *reg = user_data;
     Transaction *trans;
     Split *split;
-    Timespec ts = {0, 0};
     gboolean is_current;
     char type;
 
@@ -941,10 +940,9 @@ gnc_split_register_get_due_date_entry (VirtualLocation virt_loc,
         return NULL;
     }
 
-    ts.tv_sec = xaccTransRetDateDue (trans);
     //PWARN ("returning valid due_date entry");
 
-    return gnc_print_date (ts);
+    return qof_print_date (xaccTransRetDateDue (trans));
 }
 
 static const char *
@@ -956,16 +954,12 @@ gnc_split_register_get_date_entry (VirtualLocation virt_loc,
     SplitRegister *reg = user_data;
     Transaction *trans;
     Split *split;
-    Timespec ts = {0, 0};
 
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
     trans = xaccSplitGetParent (split);
     if (!trans)
         return NULL;
-
-    ts.tv_sec = xaccTransRetDatePosted (trans);
-
-    return gnc_print_date (ts);
+    return qof_print_date (xaccTransRetDatePosted (trans));
 }
 
 static char *
@@ -974,19 +968,18 @@ gnc_split_register_get_date_help (VirtualLocation virt_loc,
 {
     SplitRegister *reg = user_data;
     BasicCell *cell;
-    char string[1024];
-    GDate date;
+    const char *date_string;
+    time64 cell_time;
 
     cell = gnc_table_get_cell (reg->table, virt_loc);
     if (!cell || !cell->value || *cell->value == '\0')
         return NULL;
 
-    g_date_clear (&date, 1);
-    gnc_date_cell_get_date_gdate ((DateCell *) cell, &date);
+    gnc_date_cell_get_date ((DateCell *) cell, &cell_time, FALSE);
 
-    g_date_strftime (string, sizeof (string), _("%A %d %B %Y"), &date);
+    date_string = gnc_print_time64 (cell_time, _("%A %d %B %Y"));
 
-    return g_strdup (string);
+    return g_strdup (date_string);
 }
 
 static const char *

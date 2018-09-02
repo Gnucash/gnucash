@@ -53,7 +53,7 @@
   (if (or (not taxable) (eq? taxtable '()))
     (display "&nbsp;")
     (let* ((amttot  (gnc:make-commodity-collector))
-           (pctot   (gnc:make-number-collector)) 
+           (pctot   (gnc:make-value-collector))
            (entries (gncTaxTableGetEntries taxtable))
            (amt?    #f)  ; becomes #t if any entries are amounts
            (pc?     #f)) ; becomes #t if any entries are percentages

@@ -146,15 +146,15 @@ gnc_ui_file_access_response_cb(GtkDialog *dialog, gint response, GtkDialog *unus
             gboolean open_readonly = faw->readonly_checkbutton
                                      ? gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(faw->readonly_checkbutton))
                                      : FALSE;
-            gnc_file_open_file (gnc_ui_get_main_window (GTK_WIDGET (dialog)), url, open_readonly);
+            gnc_file_open_file (GTK_WINDOW(dialog), url, open_readonly);
         }
         else if ( faw->type == FILE_ACCESS_SAVE_AS )
         {
-            gnc_file_do_save_as (gnc_ui_get_main_window (GTK_WIDGET (dialog)), url);
+            gnc_file_do_save_as (GTK_WINDOW(dialog), url);
         }
         else if ( faw->type == FILE_ACCESS_EXPORT )
         {
-            gnc_file_do_export (gnc_ui_get_main_window (GTK_WIDGET (dialog)), url);
+            gnc_file_do_export (GTK_WINDOW(dialog), url);
         }
         break;
 

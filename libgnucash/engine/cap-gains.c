@@ -106,23 +106,21 @@ struct find_lot_s
 {
     GNCLot *lot;
     gnc_commodity *currency;
-    Timespec ts;
+    time64 time;
     int (*numeric_pred)(gnc_numeric);
-    gboolean (*date_pred)(Timespec e, Timespec tr);
+    gboolean (*date_pred)(time64 e, time64 tr);
 };
 
 static gboolean
-earliest_pred (Timespec earl, Timespec tran)
+earliest_pred (time64 earl, time64 tran)
 {
-    return ((earl.tv_sec > tran.tv_sec)  ||
-            ((earl.tv_sec == tran.tv_sec) && (earl.tv_nsec > tran.tv_nsec)));
+    return earl > tran;
 }
 
 static gboolean
-latest_pred (Timespec earl, Timespec tran)
+latest_pred (time64 earl, time64 tran)
 {
-    return ((earl.tv_sec < tran.tv_sec)  ||
-            ((earl.tv_sec == tran.tv_sec) && (earl.tv_nsec < tran.tv_nsec)));
+    return earl < tran;
 }
 
 static gpointer
@@ -133,7 +131,7 @@ finder_helper (GNCLot *lot,  gpointer user_data)
     Transaction *trans;
     gnc_numeric bal;
     gboolean opening_is_positive, bal_is_positive;
-    Timespec posted_ts = {0,0};
+    time64 posted = 0;
 
     if (gnc_lot_is_closed (lot)) return NULL;
 
@@ -158,10 +156,10 @@ finder_helper (GNCLot *lot,  gpointer user_data)
         return NULL;
     }
 
-    posted_ts.tv_sec = trans->date_posted;
-    if (els->date_pred (els->ts, posted_ts))
+    posted = trans->date_posted;
+    if (els->date_pred (els->time, posted))
     {
-        els->ts.tv_sec = trans->date_posted;
+        els->time = trans->date_posted;
         els->lot = lot;
     }
 
@@ -172,14 +170,13 @@ static inline GNCLot *
 xaccAccountFindOpenLot (Account *acc, gnc_numeric sign,
                         gnc_commodity *currency,
                         gint64 guess,
-                        gboolean (*date_pred)(Timespec, Timespec))
+                        gboolean (*date_pred)(time64, time64))
 {
     struct find_lot_s es;
 
     es.lot = NULL;
     es.currency = currency;
-    es.ts.tv_sec = guess;
-    es.ts.tv_nsec = 0;
+    es.time = guess;
     es.date_pred = date_pred;
 
     if (gnc_numeric_positive_p(sign)) es.numeric_pred = gnc_numeric_negative_p;
@@ -324,13 +321,12 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
     /* If we are here, then (cmp == +1 iff (amt > baln)) and we need
      * to split up the split into pieces. Do it. */
     {
-        time64 now = gnc_time (NULL);
+        time64 now = gnc_time (NULL), time = 0;
         Split * new_split;
         gnc_numeric amt_a, amt_b, amt_tot;
         gnc_numeric val_a, val_b, val_tot;
         gnc_numeric frac;
         Transaction *trans;
-        Timespec ts;
 
         acc = split->acc;
         xaccAccountBeginEdit (acc);
@@ -400,8 +396,8 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
          * split-action which is the same as xaccSplitGetAction */
         gnc_set_num_action(NULL, new_split, NULL, gnc_get_num_action(NULL, split));
         xaccSplitSetReconcile (new_split, xaccSplitGetReconcile (split));
-        ts = xaccSplitRetDateReconciledTS (split);
-        xaccSplitSetDateReconciledTS (new_split, &ts);
+        time = xaccSplitGetDateReconciled (split);
+        xaccSplitSetDateReconciledSecs (new_split, time);
 
         /* Set the lot-split and peer_guid properties on the two
          * splits to indicate that they're linked. 

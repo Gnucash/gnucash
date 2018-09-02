@@ -1204,36 +1204,6 @@ gnc_split_register_get_account_always (SplitRegister *reg,
     return gnc_split_register_get_account_by_name (reg, cell, name);
 }
 
-#if 0 /* Not Used */
-static const char *
-gnc_split_register_get_cell_string (SplitRegister *reg, const char *cell_name)
-{
-    BasicCell *cell;
-
-    cell = gnc_table_layout_get_cell (reg->table->layout, cell_name);
-    if (!cell)
-        return "";
-
-    return gnc_basic_cell_get_value (cell);
-}
-
-static Timespec
-gnc_split_register_get_cell_date (SplitRegister *reg, const char *cell_name)
-{
-    DateCell *cell;
-    Timespec ts;
-
-    cell = (DateCell*) gnc_table_layout_get_cell (reg->table->layout, cell_name);
-
-    if (cell)
-        gnc_date_cell_get_date (cell, &ts);
-    else
-        timespecFromTime64 (&ts, gnc_time (NULL));
-
-    return ts;
-}
-#endif /* Not Used */
-
 /* Creates a transfer dialog and fills its values from register cells (if
  * available) or from the provided transaction and split.
  */
@@ -1288,7 +1258,7 @@ gnc_split_register_xfer_dialog(SplitRegister *reg, Transaction *txn,
     if (cell)
     {
         time64 time;
-        gnc_date_cell_get_date((DateCell*) cell, &time);
+        gnc_date_cell_get_date((DateCell*) cell, &time, TRUE);
         gnc_xfer_dialog_set_date(xfer, time);
     }
     else

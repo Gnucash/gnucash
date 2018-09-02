@@ -138,7 +138,7 @@ test_dom_tree_to_time64 (void)
         time64 test_spec2 = dom_tree_to_time64 (test_node);
         if (!dom_tree_valid_time64 (test_spec2, (const xmlChar*)"test-spec"))
         {
-            failure_args ("dom_tree_to_timespec",
+            failure_args ("dom_tree_to_time64",
                           __FILE__, __LINE__, "NULL return");
             printf ("Node looks like:\n");
             xmlElemDump (stdout, NULL, test_node);

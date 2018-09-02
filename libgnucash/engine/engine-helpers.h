@@ -34,13 +34,6 @@
 
 typedef void (*GncBOCb)    (gpointer new_val, gpointer user_data);
 
-Timespec gnc_transaction_get_date_posted(const Transaction *t);
-Timespec gnc_transaction_get_date_entered(const Transaction *t);
-
-Timespec gnc_split_get_date_reconciled(const Split *s);
-
-void gnc_transaction_set_date(Transaction *t, Timespec ts);
-
 /** Gets the transaction Number or split Action based on book option:
   * if the book option is TRUE (split action is used for NUM) and a
   * split is provided, split-action is returned; if book option is FALSE

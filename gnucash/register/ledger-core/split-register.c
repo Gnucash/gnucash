@@ -1385,7 +1385,7 @@ gnc_split_register_save_to_scm (SplitRegister *reg,
         BasicCell *cell;
         time64 time;
         cell = gnc_table_layout_get_cell (reg->table->layout, DATE_CELL);
-        gnc_date_cell_get_date ((DateCell *) cell, &time);
+        gnc_date_cell_get_date ((DateCell *) cell, &time, TRUE);
         xaccTransSetDatePostedSecsNormalized(trans, time);
     }
 
@@ -2078,7 +2078,6 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value,
     time64 time;
     BasicCell *cell = gnc_table_layout_get_cell (reg->table->layout, DATE_CELL);
     gboolean swap = FALSE;
-    Timespec ts;
 
     /* Only record the price for account types that don't have a
      * "rate" cell. They'll get handled later by
@@ -2086,10 +2085,8 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value,
      */
     if (gnc_split_reg_has_rate_cell (reg->type))
         return;
-    gnc_date_cell_get_date ((DateCell*)cell, &time);
-    ts.tv_sec = time;
-    ts.tv_nsec = 0;
-    price = gnc_pricedb_lookup_day (pricedb, comm, curr, ts);
+    gnc_date_cell_get_date ((DateCell*)cell, &time, TRUE);
+    price = gnc_pricedb_lookup_day_t64 (pricedb, comm, curr, time);
     if (gnc_commodity_equiv (comm, gnc_price_get_currency (price)))
             swap = TRUE;
 
@@ -2116,7 +2113,7 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value,
         value = gnc_numeric_convert(value, scu * COMMODITY_DENOM_MULT,
                                     GNC_HOW_RND_ROUND_HALF_UP);
         gnc_price_begin_edit (price);
-        gnc_price_set_time (price, ts);
+        gnc_price_set_time64 (price, time);
         gnc_price_set_source (price, source);
         gnc_price_set_typestr (price, PRICE_TYPE_TRN);
         gnc_price_set_value (price, value);
@@ -2131,7 +2128,7 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value,
     gnc_price_begin_edit (price);
     gnc_price_set_commodity (price, comm);
     gnc_price_set_currency (price, curr);
-    gnc_price_set_time (price, ts);
+    gnc_price_set_time64 (price, time);
     gnc_price_set_source (price, source);
     gnc_price_set_typestr (price, PRICE_TYPE_TRN);
     gnc_price_set_value (price, value);

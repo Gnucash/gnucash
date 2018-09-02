@@ -86,7 +86,7 @@ public:
                                 const ColVec& info_vec) const noexcept;
     bool drop_indexes() noexcept;
 private:
-    QofBackend* m_qbe;
+    QofBackend* m_qbe = nullptr;
     dbi_conn m_conn;
     std::unique_ptr<GncDbiProvider> m_provider;
     /** Used by the error handler routines to flag if the connection is ok to

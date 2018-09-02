@@ -74,7 +74,6 @@ const char *qof_win32_get_time_format(QofWin32Picture picture);
 /* Test Access for static functions */
 typedef struct
 {
-    void (*timespec_normalize) (Timespec *t);
     GTimeZone* (*timezone_new_local) (void);
 } Testfuncs;
 

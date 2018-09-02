@@ -57,7 +57,7 @@ set(test_backend_xml_module_SOURCES
 )
 
 set_local_dist(test_backend_xml_DIST_local CMakeLists.txt grab-types.pl
-  README test-date-converting.cpp test-dom-converters1.cpp
+  README test-dom-converters1.cpp
   test-dom-parser1.cpp test-file-stuff.cpp test-file-stuff.h test-kvp-frames.cpp
   test-load-backend.cpp test-load-example-account.cpp  test-load-xml2.cpp
   test-save-in-lang.cpp test-string-converters.cpp test-xml2-is-file.cpp
@@ -65,7 +65,6 @@ set_local_dist(test_backend_xml_DIST_local CMakeLists.txt grab-types.pl
   test-xml-pricedb.cpp test-xml-transaction.cpp)
 set(test_backend_xml_DIST ${test_backend_xml_DIST_local} ${test_backend_xml_test_files_DIST} PARENT_SCOPE)
 
-add_xml_test(test-date-converting "${test_backend_xml_base_SOURCES};test-date-converting.cpp")
 add_xml_test(test-dom-converters1 "${test_backend_xml_base_SOURCES};test-dom-converters1.cpp")
 add_xml_test(test-kvp-frames      "${test_backend_xml_base_SOURCES};test-kvp-frames.cpp")
 add_xml_test(test-load-backend  test-load-backend.cpp)

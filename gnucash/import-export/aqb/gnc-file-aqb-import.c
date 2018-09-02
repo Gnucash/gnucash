@@ -331,7 +331,7 @@ gnc_file_aqbanking_import(GtkWindow *parent,
                 if (num_jobs == 0)
                 {
                     gnc_info_dialog(parent,
-                                    _("No jobs to be send.")
+                                    _("No jobs to be sent.")
                                    );
                 }
                 else

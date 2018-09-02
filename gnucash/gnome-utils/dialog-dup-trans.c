@@ -282,7 +282,7 @@ gnc_dup_trans_dialog_gdate (GtkWidget * parent, GDate *gdate_p,
     time64 tmp_time;
     g_assert(gdate_p);
 
-    tmp_time = timespecToTime64(gdate_to_timespec(*gdate_p));
+    tmp_time = gdate_to_time64 (*gdate_p);
     return gnc_dup_trans_dialog_internal(parent, NULL, TRUE, &tmp_time, gdate_p,
                                          num, out_num, NULL, NULL);
 }
@@ -293,7 +293,7 @@ gnc_dup_date_dialog (GtkWidget * parent, const char* title, GDate *gdate_p)
     time64 tmp_time;
     g_assert(gdate_p);
 
-    tmp_time = timespecToTime64(gdate_to_timespec(*gdate_p));
+    tmp_time = gdate_to_time64(*gdate_p);
     return gnc_dup_trans_dialog_internal(parent, title, TRUE, &tmp_time, gdate_p,
                                          NULL, NULL, NULL, NULL);
 }

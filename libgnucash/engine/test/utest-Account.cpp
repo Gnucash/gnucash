@@ -1962,7 +1962,7 @@ test_xaccAccountGetPresentBalance (Fixture *fixture, gconstpointer pData)
  * xaccAccountConvertBalanceToCurrency
  * xaccAccountConvertBalanceToCurrencyAsOfDate are wrappers around
  * gnc_pricedb_convert_balance_latest_price and
- * gnc_pricedb_convert_balance_nearest_price. Don't test.
+ * gnc_pricedb_convert_balance_nearest_price_t64. Don't test.
  *
  * The rest of these are convenience functions that wrap
  * xaccAccountConvertBalanceToCurrency* with one of the balance getter

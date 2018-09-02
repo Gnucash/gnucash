@@ -995,7 +995,7 @@ gnc_account_class_init (AccountClass *klass)
                         "AQBanking Last Transaction Retrieval",
                         "The time of the last transaction retrieval for this "
                         "account.",
-                        GNC_TYPE_TIMESPEC,
+                        GNC_TYPE_TIME64,
                         static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
 }
@@ -3311,19 +3311,6 @@ xaccAccountGetBalanceAsOfDate (Account *acc, time64 date)
     priv = GET_PRIVATE(acc);
     balance = priv->balance;
 
-    /* Since transaction post times are stored as a Timespec,
-     * convert date into a Timespec as well rather than converting
-     * each transaction's Timespec into a time64.
-     *
-     * FIXME: CAS: I think this comment is a bogus justification for
-     * using xaccTransGetDatePostedTS.  There's no benefit to using
-     * Timespec when the input argument is time64, and it's hard to
-     * imagine that casting long long to long and comparing two longs is
-     * worse than comparing two long longs every time.  IMO,
-     * xaccAccountGetPresentBalance gets this right, and its algorithm
-     * should be used here.
-     */
-
     lp = priv->splits;
     while ( lp && !found )
     {
@@ -3432,7 +3419,6 @@ xaccAccountConvertBalanceToCurrencyAsOfDate(const Account *acc, /* for book */
 {
     QofBook *book;
     GNCPriceDB *pdb;
-    Timespec ts;
 
     if (gnc_numeric_zero_p (balance) ||
             gnc_commodity_equiv (balance_currency, new_currency))
@@ -3441,7 +3427,7 @@ xaccAccountConvertBalanceToCurrencyAsOfDate(const Account *acc, /* for book */
     book = gnc_account_get_book (acc);
     pdb = gnc_pricedb_get_db (book);
 
-    balance = gnc_pricedb_convert_balance_nearest_price(
+    balance = gnc_pricedb_convert_balance_nearest_price_t64(
                   pdb, balance, balance_currency, new_currency, date);
 
     return balance;

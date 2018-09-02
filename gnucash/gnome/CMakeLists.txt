@@ -64,7 +64,7 @@ gnc_add_swig_guile_command (swig-gnome-c
 set (gnc_gnome_SOURCES
   assistant-acct-period.c
   assistant-hierarchy.c
-  assistant-loan.c
+  assistant-loan.cpp
   assistant-stock-split.c
   business-options-gnome.c
   business-urls.c
@@ -122,10 +122,6 @@ set (gnc_gnome_SOURCES
 )
 
 set_source_files_properties (${gnc_gnome_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
-
-if (WIN32)
-  set (gnc_gnome_SOURCES ${gnc_gnome_SOURCES} ${CMAKE_SOURCE_DIR}/borrowed/libc/strfmon.c)
-endif(WIN32)
 
 add_library (gnc-gnome ${gnc_gnome_SOURCES} ${gnc_gnome_noinst_HEADERS} ${SWIG_GNOME_C})
 target_link_libraries(gnc-gnome gncmod-gnome-search gncmod-ledger-core gncmod-report-gnome gncmod-report-system

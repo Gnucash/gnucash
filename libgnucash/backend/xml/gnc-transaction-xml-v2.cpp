@@ -63,15 +63,6 @@ add_time64 (xmlNodePtr node, const gchar * tag, time64 time, gboolean always)
         xmlAddChild (node, time64_to_dom_tree (tag, time));
 }
 
-static void
-add_timespec (xmlNodePtr node, const gchar* tag, Timespec tms, gboolean always)
-{
-    if (always || tms.tv_sec)
-    {
-        xmlAddChild (node, time64_to_dom_tree (tag, tms.tv_sec));
-    }
-}
-
 static xmlNodePtr
 split_to_dom_tree (const gchar* tag, Split* spl)
 {
@@ -113,8 +104,8 @@ split_to_dom_tree (const gchar* tag, Split* spl)
                          BAD_CAST tmp);
     }
 
-    add_timespec (ret, "split:reconcile-date",
-                  xaccSplitRetDateReconciledTS (spl), FALSE);
+    add_time64 (ret, "split:reconcile-date",
+                xaccSplitGetDateReconciled (spl), FALSE);
 
     add_gnc_num (ret, "split:value", xaccSplitGetValue (spl));
 
@@ -445,12 +436,11 @@ set_tran_time64 (xmlNodePtr node, Transaction * trn,
 
 static inline gboolean
 set_tran_date (xmlNodePtr node, Transaction* trn,
-               void (*func) (Transaction* trn, const Timespec* tm))
+               void (*func) (Transaction* trn, const time64 tm))
 {
     time64 time = dom_tree_to_time64 (node);
     if (!dom_tree_valid_time64 (time, node->name)) time = 0;
-    Timespec ts {time, 0};
-    func (trn, &ts);
+    func (trn, time);
     return TRUE;
 }
 

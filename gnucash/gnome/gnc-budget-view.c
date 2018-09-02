@@ -424,7 +424,7 @@ gbv_create_widget(GncBudgetView *view)
     // Totals scroll window
     priv->totals_scroll_window = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(priv->totals_scroll_window),
-                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_NEVER); // horzontal/vertical
+                                   GTK_POLICY_AUTOMATIC, GTK_POLICY_NEVER); // horizontal/vertical
 
     h_adj = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(priv->totals_scroll_window));
     g_signal_connect(G_OBJECT(h_adj), "value-changed",

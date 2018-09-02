@@ -285,7 +285,7 @@ endif (WIN32)
 
 # SWIG
 if(GENERATE_SWIG_WRAPPERS)
-  find_package (SWIG REQUIRED)
+  find_package (SWIG 2.0.10 REQUIRED)
   include (${SWIG_USE_FILE})
 endif()
 
@@ -572,8 +572,9 @@ set(CMAKE_CXX_FLAGS "-std=gnu++11 ${CMAKE_CXX_FLAGS}")  # FIXME: should be -std=
 
 if (UNIX)
   set( CMAKE_C_FLAGS "-Werror -Wdeclaration-after-statement -Wno-pointer-sign -Wall -Wmissing-prototypes -Wmissing-declarations -Wno-unused ${CMAKE_C_FLAGS}")
-  set( CMAKE_CXX_FLAGS "-Werror -Wall -Wmissing-declarations -Wno-unused -Wno-error=parentheses ${CMAKE_CXX_FLAGS}")
   set( CMAKE_C_FLAGS "-Wno-deprecated-declarations -std=gnu11 -Wno-error=parentheses ${CMAKE_C_FLAGS}")
+  set( CMAKE_CXX_FLAGS "-Werror -Wall -Wmissing-declarations -Wno-unused -Wno-error=parentheses ${CMAKE_CXX_FLAGS}")
+  set( CMAKE_CXX_FLAGS "-Wno-deprecated-declarations -Wno-register ${CMAKE_CXX_FLAGS}")
   set( CMAKE_C_FLAGS_RELEASE "-O3 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 ${CMAKE_C_FLAGS}")
 endif (UNIX)
 if (MINGW)
@@ -732,7 +733,6 @@ set (HAVE_PTHREAD_PRIO_INHERIT 1)
 set (HAVE_SCANF_LLD 1)
 set (HAVE_SETENV 1)
 set (HAVE_STPCPY 1)
-set (HAVE_STRFMON 1)
 set (HAVE_STRPTIME 1)
 set (HAVE_STRUCT_TM_GMTOFF 1)
 set (HAVE_TIMEGM 1)

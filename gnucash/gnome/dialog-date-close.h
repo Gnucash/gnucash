@@ -33,7 +33,7 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
                                 const char *label_message,
                                 gboolean ok_is_default,
                                 /* Returned data ... */
-                                Timespec *date);
+                                time64 *date);
 
 
 /*
@@ -55,7 +55,7 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
         GList * acct_types, GList * acct_commodities,
         QofBook *book, GncBillTerm *terms,
         /* Returned Data... */
-        Timespec *ddue, Timespec *post,
+        time64 *ddue, time64 *post,
         char **memo, Account **acct, gboolean *answer);
 
 
@@ -66,6 +66,6 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
                                gboolean ok_is_default,
                                GList * acct_types, QofBook *book,
                                /* Returned Data... */
-                               Timespec *date, Account **acct);
+                               time64 *date, Account **acct);
 
 #endif /* _DIALOG_DATE_CLOSE_H */
