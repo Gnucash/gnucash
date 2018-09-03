@@ -1681,6 +1681,13 @@ recnWindow_add_widget (GtkUIManager *merge,
                        GtkWidget *widget,
                        GtkBox *dock)
 {
+    if (GTK_IS_TOOLBAR (widget))
+    {
+        gtk_toolbar_set_style (GTK_TOOLBAR(widget),
+                               GTK_TOOLBAR_BOTH);
+        gtk_toolbar_set_icon_size (GTK_TOOLBAR(widget),
+                                   GTK_ICON_SIZE_SMALL_TOOLBAR);
+    }
     gtk_box_pack_start (GTK_BOX (dock), widget, FALSE, FALSE, 0);
     gtk_widget_show (widget);
 }

@@ -308,6 +308,10 @@ gnc_embedded_window_add_widget (GtkUIManager *merge,
     if (GTK_IS_TOOLBAR (widget))
     {
         priv->toolbar = widget;
+        gtk_toolbar_set_style (GTK_TOOLBAR(priv->toolbar),
+                               GTK_TOOLBAR_BOTH);
+        gtk_toolbar_set_icon_size (GTK_TOOLBAR(priv->toolbar),
+                                   GTK_ICON_SIZE_SMALL_TOOLBAR);
     }
 
     gtk_box_pack_start (GTK_BOX (priv->menu_dock), widget, FALSE, FALSE, 0);
