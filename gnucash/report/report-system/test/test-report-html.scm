@@ -20,13 +20,6 @@
     (test-end "Testing/Temporary/test-report-html")
 )
 
-(define html-doc-header-empty-title
-"<html>\n\
-<head>\n\
-<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n\
-<title>\n\
-</title></head><body>")
-
 (define html-doc-header-no-title
 "<html>\n\
 <head>\n\
@@ -59,20 +52,14 @@
     (test-assert "HTML Document - default no headline" (not (gnc:html-document-headline test-doc)))
     (test-assert "HTML Document - default no objects" (null? (gnc:html-document-objects test-doc)))
 
-    (test-equal "HTML Document - Render empty body (without enhancement bug 796832)"
-      (string-append html-doc-header-empty-title html-doc-tail)
-      (gnc:html-document-render test-doc)
-    )
-
-    (test-expect-fail 2)
-    (test-equal "HTML Document - Render without title (Bug 796827)"
+    (test-equal "HTML Document - Render empty body"
       (string-append html-doc-header-no-title html-doc-tail)
       (gnc:html-document-render test-doc)
     )
 
-    (test-equal "HTML Document - Render without header (Bug 796826)"
+    (test-equal "HTML Document - Render empty body without header"
       html-doc-no-header-empty-body
-      (gnc:html-document-render test-doc '())
+      (gnc:html-document-render test-doc #f)
     )
 
     (gnc:html-document-set-title! test-doc "HTML Document Title")
@@ -97,7 +84,7 @@ HTML Document Title</title></head><body></body>\n\
   (test-begin "HTML Object Definitions for literals")
 
   (test-equal "HTML Object for Strings"
-    (string-append html-doc-header-empty-title "<string> HTML Plain Text Body" html-doc-tail)
+    (string-append html-doc-header-no-title "<string> HTML Plain Text Body" html-doc-tail)
     (let (
          (test-doc (gnc:make-html-document))
          )
@@ -111,7 +98,7 @@ HTML Document Title</title></head><body></body>\n\
   )
 
   (test-equal "HTML Object for Numbers"
-    (string-append html-doc-header-empty-title "<number> 1234567890" html-doc-tail)
+    (string-append html-doc-header-no-title "<number> 1234567890" html-doc-tail)
     (let (
          (test-doc (gnc:make-html-document))
          )
@@ -125,7 +112,7 @@ HTML Document Title</title></head><body></body>\n\
   )
 
   (test-equal "HTML Object for Boolean TRUE"
-    (string-append html-doc-header-empty-title "<boolean> #t" html-doc-tail)
+    (string-append html-doc-header-no-title "<boolean> #t" html-doc-tail)
     (let (
          (test-doc (gnc:make-html-document))
          )
@@ -138,9 +125,10 @@ HTML Document Title</title></head><body></body>\n\
     )
   )
 
-  (test-expect-fail 1)
-  (test-equal "HTML Object for Boolean FALSE - Bug 796828"
-    (string-append html-doc-header-empty-title "<boolean> #f" html-doc-tail)
+  ;; NOTE: The following test for Boolean FALSE is correct.
+  ;; #f values are used to indicate empty cells and will be converted to spaces
+  (test-equal "HTML Object for Boolean FALSE"
+    (string-append html-doc-header-no-title "<string>  " html-doc-tail)
     (let (
          (test-doc (gnc:make-html-document))
          )
@@ -154,7 +142,7 @@ HTML Document Title</title></head><body></body>\n\
   )
 
   (test-equal "HTML Object for generic types"
-    (string-append html-doc-header-empty-title "<generic> (a b c d)" html-doc-tail)
+    (string-append html-doc-header-no-title "<generic> (a b c d)" html-doc-tail)
     (let (
          (test-doc (gnc:make-html-document))
          )
@@ -177,7 +165,7 @@ HTML Document Title</title></head><body></body>\n\
   (test-begin "HTML Text Objects")
 
   (test-equal "HTML Text Object - no markup"
-    (string-append html-doc-header-empty-title 
+    (string-append html-doc-header-no-title
                    "<string> HTML Text Body - Part 1.<string> Part 2."
                    html-doc-tail
     )
@@ -197,7 +185,7 @@ HTML Document Title</title></head><body></body>\n\
   )
 
   (test-equal "HTML Text Object - with number in decimal format"
-    (string-append html-doc-header-empty-title 
+    (string-append html-doc-header-no-title
                    "HTML Text with number <number> 7 in decimal format."
                    html-doc-tail
     )
@@ -219,7 +207,7 @@ HTML Document Title</title></head><body></body>\n\
   )
 
   (test-equal "HTML Text Object - with number in float format"
-    (string-append html-doc-header-empty-title 
+    (string-append html-doc-header-no-title
                    "HTML Text with number <number> 8.8 in float format."
                    html-doc-tail
     )
@@ -241,7 +229,7 @@ HTML Document Title</title></head><body></body>\n\
   )
 
   (test-equal "HTML Text Object - with boolean format"
-    (string-append html-doc-header-empty-title 
+    (string-append html-doc-header-no-title
                    "HTML Text with boolean <boolean> #f."
                    html-doc-tail
     )
@@ -263,7 +251,7 @@ HTML Document Title</title></head><body></body>\n\
   )
 
   (test-equal "HTML Text Object - with literal format"
-    (string-append html-doc-header-empty-title 
+    (string-append html-doc-header-no-title
                    "HTML Text with literal <string> text123."
                    html-doc-tail
     )
@@ -285,7 +273,7 @@ HTML Document Title</title></head><body></body>\n\
   )
 
   (test-equal "HTML Text Object - with generic format"
-    (string-append html-doc-header-empty-title 
+    (string-append html-doc-header-no-title
                    "HTML Text with generic <generic> (a b c d)."
                    html-doc-tail
     )
@@ -307,7 +295,7 @@ HTML Document Title</title></head><body></body>\n\
   )
 
   (test-equal "HTML Text Object - Paragraph"
-    (string-append html-doc-header-empty-title 
+    (string-append html-doc-header-no-title
                    "<p><string> HTML Text Paragraph</p>\n"
                    html-doc-tail
     )
@@ -326,7 +314,7 @@ HTML Document Title</title></head><body></body>\n\
   )
 
   (test-equal "HTML Text Object - Typewriter"
-    (string-append html-doc-header-empty-title 
+    (string-append html-doc-header-no-title
                    "<tt><string> HTML Text Typewriter</tt>\n"
                    html-doc-tail
     )
@@ -345,7 +333,7 @@ HTML Document Title</title></head><body></body>\n\
   )
 
   (test-equal "HTML Text Object - Emphasized"
-    (string-append html-doc-header-empty-title 
+    (string-append html-doc-header-no-title
                    "<em><string> HTML Text Emphasized</em>\n"
                    html-doc-tail
     )
@@ -364,7 +352,7 @@ HTML Document Title</title></head><body></body>\n\
   )
 
   (test-equal "HTML Text Object - Bold"
-    (string-append html-doc-header-empty-title 
+    (string-append html-doc-header-no-title
                    "<b><string> HTML Text Bold</b>\n"
                    html-doc-tail
     )
@@ -383,7 +371,7 @@ HTML Document Title</title></head><body></body>\n\
   )
 
   (test-equal "HTML Text Object - Italic"
-    (string-append html-doc-header-empty-title 
+    (string-append html-doc-header-no-title
                    "<i><string> HTML Text Italic</i>\n"
                    html-doc-tail
     )
@@ -402,7 +390,7 @@ HTML Document Title</title></head><body></body>\n\
   )
 
   (test-equal "HTML Text Object - Heading1"
-    (string-append html-doc-header-empty-title 
+    (string-append html-doc-header-no-title
                    "<h1><string> HTML Text Heading1</h1>\n"
                    html-doc-tail
     )
@@ -421,7 +409,7 @@ HTML Document Title</title></head><body></body>\n\
   )
 
   (test-equal "HTML Text Object - Heading2"
-    (string-append html-doc-header-empty-title 
+    (string-append html-doc-header-no-title
                    "<h2><string> HTML Text Heading2</h2>\n"
                    html-doc-tail
     )
@@ -440,7 +428,7 @@ HTML Document Title</title></head><body></body>\n\
   )
 
   (test-equal "HTML Text Object - Heading3"
-    (string-append html-doc-header-empty-title 
+    (string-append html-doc-header-no-title
                    "<h3><string> HTML Text Heading3</h3>\n"
                    html-doc-tail
     )
@@ -459,7 +447,7 @@ HTML Document Title</title></head><body></body>\n\
   )
 
   (test-equal "HTML Text Object - Linebreak"
-    (string-append html-doc-header-empty-title 
+    (string-append html-doc-header-no-title
                    "<br /><string> HTML Text Linebreak"
                    html-doc-tail
     )
@@ -479,7 +467,7 @@ HTML Document Title</title></head><body></body>\n\
   )
 
   (test-equal "HTML Text Object - Headrow"
-    (string-append html-doc-header-empty-title 
+    (string-append html-doc-header-no-title
                    "<hr /><string> HTML Text Headrow"
                    html-doc-tail
     )
@@ -499,7 +487,7 @@ HTML Document Title</title></head><body></body>\n\
   )
 
   (test-equal "HTML Text Object - Unsorted List"
-    (string-append html-doc-header-empty-title 
+    (string-append html-doc-header-no-title
                    "<string> HTML Text Unsorted List<ul><li><string> Item1</li>\n<li><string> Item2</li>\n</ul>\n"
                    html-doc-tail
     )
@@ -519,7 +507,7 @@ HTML Document Title</title></head><body></body>\n\
   )
 
   (test-equal "HTML Text Object - Anchor Link"
-    (string-append html-doc-header-empty-title 
+    (string-append html-doc-header-no-title
                    "<a href=\"HTML Text Anchor Link\"><string> HTML Text Anchor Description</a>\n"
                    html-doc-tail
     )
@@ -541,7 +529,7 @@ HTML Document Title</title></head><body></body>\n\
   )
 
   (test-equal "HTML Text Object - Image"
-    (string-append html-doc-header-empty-title 
+    (string-append html-doc-header-no-title
                    "<img src=\"http://www.gnucash.org/images/banner5.png\" width=\"72\" height=\"48\" alt=\"GunCash web site\"  />"
                    html-doc-tail
     )
@@ -573,15 +561,14 @@ HTML Document Title</title></head><body></body>\n\
 
   (test-begin "HTML Cells")
 
-  (test-expect-fail 1)
-  (test-equal "HTML Cell Creation - Bug 796828"
+  (test-equal "HTML Cell Creation"
 
 "<tag rowspan=\"2\" colspan=\"3\">\
 <string> HTML Table Cell\
 <string> obj1\
 <string> obj2<number> 123\
 <boolean> #t\
-<boolean> #f\
+<string>  \
 <generic> (a b c d)</tag>\n"
 
     (let (
@@ -692,7 +679,6 @@ HTML Document Title</title></head><body></body>\n\
             (gnc:html-table-num-rows test-table)
           )
           (test-equal "Check data after prepend row"
-
             '(("Row 2") ("Row 1") ("Row 0") ("Row -1") ("r-2-c1" "r-2-c2"))
             (gnc:html-table-data test-table)
           )
