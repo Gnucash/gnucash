@@ -686,13 +686,14 @@ HTML Document Title</title></head><body></body>\n\
           (gnc:html-table-prepend-row! test-table "Row 1")
           (gnc:html-table-prepend-row! test-table "Row 0")
           (gnc:html-table-prepend-row! test-table "Row -1")
+          (gnc:html-table-prepend-row! test-table '("r-2-c1" "r-2-c2"))
           (test-equal "Check Num Rows after prepend row"
-            4
+            5
             (gnc:html-table-num-rows test-table)
           )
-          (test-expect-fail 1)
-          (test-equal "Check data after prepend row - Bug 796829"
-            '(("Row 2") ("Row 1") ("Row 0") ("Row -1"))
+          (test-equal "Check data after prepend row"
+
+            '(("Row 2") ("Row 1") ("Row 0") ("Row -1") ("r-2-c1" "r-2-c2"))
             (gnc:html-table-data test-table)
           )
         )
