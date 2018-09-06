@@ -125,19 +125,23 @@ class ClassFromFunctions(object):
         return method_function
 
     @classmethod
-    def add_methods_with_prefix(cls, prefix):
-        """Add a group of functions with the same prefix
+    def add_methods_with_prefix(cls, prefix, exclude=[]):
+        """Add a group of functions with the same prefix, exclude methods
+        in array exclude.
         """
         for function_name, function_value, after_prefix in \
-            extract_attributes_with_prefix(cls._module, prefix):
+                extract_attributes_with_prefix(cls._module, prefix):
+
+            if not (function_name in exclude):
                 cls.add_method(function_name, after_prefix)
 
     @classmethod
-    def add_constructor_and_methods_with_prefix(cls, prefix, constructor):
+    def add_constructor_and_methods_with_prefix(cls, prefix, constructor, exclude=[]):
         """Add a group of functions with the same prefix, and set the
-        _new_instance attribute to prefix + constructor
+        _new_instance attribute to prefix + constructor. Don't add methods
+        in array exclude.
         """
-        cls.add_methods_with_prefix(prefix)
+        cls.add_methods_with_prefix(prefix, exclude=exclude)
         cls._new_instance = prefix + constructor
 
     @classmethod
