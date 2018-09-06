@@ -95,14 +95,28 @@ void on_matcher_help_clicked (GtkButton *button, gpointer user_data);
 void on_matcher_help_close_clicked (GtkButton *button, gpointer user_data);
 
 /* Local prototypes */
-static Account *
-gnc_gen_trans_assign_transfer_account(GNCImportMainMatcher *gui, 
-                                      gboolean first,
-                                      GtkTreePath *path,
-                                      Account *new_acc);
-static void
-refresh_model_row(GNCImportMainMatcher *gui, GtkTreeModel *model,
+static void gnc_gen_trans_assign_transfer_account(
+                                                GtkTreeView *treeview, 
+                                                gboolean *first,
+                                                gboolean *is_selection,
+                                                GtkTreePath *path,
+                                                Account **new_acc,
+                                                GNCImportMainMatcher *info);
+static void gnc_gen_trans_assign_transfer_account_to_selection_cb (
+                                          GtkMenuItem *menuitem,
+                                          GNCImportMainMatcher *info);
+static void gnc_gen_trans_view_popup_menu (GtkTreeView *treeview, 
+                                          GdkEvent *event,
+                                          GNCImportMainMatcher *info);
+static gboolean gnc_gen_trans_onButtonPressed_cb (GtkTreeView *treeview,
+                                                  GdkEvent *event,
+                                                  GNCImportMainMatcher *info);
+static gboolean gnc_gen_trans_onPopupMenu_cb (GtkTreeView *treeview,
+                                              GdkEvent *event, 
+                                              GNCImportMainMatcher *info);
+static void refresh_model_row(GNCImportMainMatcher *gui, GtkTreeModel *model,
                   GtkTreeIter *iter, GNCImportTransInfo *info);
+/* end local prototypes */
 
 void gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
 {
@@ -362,11 +376,13 @@ gnc_gen_trans_update_toggled_cb (GtkCellRendererToggle *cell_renderer,
     refresh_model_row(gui, model, &iter, trans_info);
 }
 
-static Account *
-gnc_gen_trans_assign_transfer_account(GNCImportMainMatcher *gui, 
-                                      gboolean first,
+static void
+gnc_gen_trans_assign_transfer_account(GtkTreeView *treeview, 
+                                      gboolean *first,
+                                      gboolean *is_selection,
                                       GtkTreePath *path,
-                                      Account *new_acc)
+                                      Account **new_acc,
+                                      GNCImportMainMatcher *info)
 {
     GtkTreeModel *model;
     GtkTreeIter iter;
@@ -374,71 +390,224 @@ gnc_gen_trans_assign_transfer_account(GNCImportMainMatcher *gui,
     Account *old_acc;
     gboolean ok_pressed;
 
-    model = gtk_tree_view_get_model(gui->view);
-    if (!gtk_tree_model_get_iter(model, &iter, path))
-        return NULL;
-    gtk_tree_model_get(model, &iter, DOWNLOADED_COL_DATA, &trans_info, -1);
-
-    switch (gnc_import_TransInfo_get_action (trans_info))
+    ENTER("");
+    DEBUG("first = %s",*first?"true":"false");
+    DEBUG("is_selection = %s",*is_selection?"true":"false");
+    DEBUG("path  = %s", gtk_tree_path_to_string(path));
+    DEBUG("account passed in = %s", gnc_get_account_name_for_register(*new_acc));
+    model = gtk_tree_view_get_model(treeview);
+    if (gtk_tree_model_get_iter(model, &iter, path))
     {
-    case GNCImport_ADD:
-        if (gnc_import_TransInfo_is_balanced(trans_info) == FALSE)
+        gtk_tree_model_get(model, &iter, DOWNLOADED_COL_DATA, &trans_info, -1);
+
+        switch (gnc_import_TransInfo_get_action (trans_info))
         {
-            old_acc  = gnc_import_TransInfo_get_destacc (trans_info);
-            if (first)
+        case GNCImport_ADD:
+            if (gnc_import_TransInfo_is_balanced(trans_info) == FALSE)
             {
-                new_acc = gnc_import_select_account(gui->main_widget,
-                                        NULL,
-                                        TRUE,
-                                        _("Destination account for the auto-balance split."),
-                                        xaccTransGetCurrency(gnc_import_TransInfo_get_trans(trans_info)),
-                                        ACCT_TYPE_NONE,
-                                        old_acc,
-                                        &ok_pressed);
-                first = FALSE;
+                ok_pressed = TRUE;
+                old_acc  = gnc_import_TransInfo_get_destacc (trans_info);
+                if (*first)
+                {
+                    ok_pressed = FALSE;
+                    *new_acc = gnc_import_select_account(info->main_widget,
+                        NULL,
+                        TRUE,
+                        _("Destination account for the auto-balance split."),
+                        xaccTransGetCurrency(
+                              gnc_import_TransInfo_get_trans(trans_info)),
+                        ACCT_TYPE_NONE,
+                        old_acc,
+                        &ok_pressed);
+                    *first = FALSE;
+                    DEBUG("account selected = %s", 
+                            gnc_account_get_full_name(*new_acc));                    
+                }
+                if (ok_pressed)
+                        gnc_import_TransInfo_set_destacc (trans_info, 
+                                                    *new_acc, TRUE);
             }
-            if (ok_pressed)
-                    gnc_import_TransInfo_set_destacc (trans_info, new_acc, TRUE);
+            break;
+        case GNCImport_CLEAR:
+        case GNCImport_UPDATE:
+            if (first && !is_selection) run_match_dialog (info, trans_info);
+            break;
+        case GNCImport_SKIP:        
+            break;
+        default:
+            PERR("InvalidGNCImportValue");
+            break;
         }
-        break;
-    case GNCImport_CLEAR:
-    case GNCImport_UPDATE:
-        run_match_dialog (gui, trans_info);
-        break;
-    case GNCImport_SKIP:
-        /*The information displayed is only informative, until you select an action*/
-        break;
-    default:
-        PERR("InvalidGNCImportValue");
-        break;
+        refresh_model_row(info, model, &iter, trans_info);
     }
-    refresh_model_row(gui, model, &iter, trans_info);
-    return new_acc;
+    LEAVE("");
 }
 
 static void
-gnc_gen_trans_row_activated_cb (GtkTreeView           *view,
-                                GtkTreePath           *path,
-                                GtkTreeViewColumn     *column,
-                                GNCImportMainMatcher  *gui)
+gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
+                                             GNCImportMainMatcher *info)
 {
-    Account *assigned_account =NULL;
-    gboolean first = TRUE;
+    GtkTreeView *treeview;
+    GtkTreeSelection *selection;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    GNCImportTransInfo *trans_info;
+    Account *assigned_account;
+    GList *selected_rows, *l;
+    gboolean first, is_selection;
 
-    assigned_account = gnc_gen_trans_assign_transfer_account(gui, first, path, assigned_account);
+    ENTER("");
+    treeview = GTK_TREE_VIEW(info->view);
+    model = gtk_tree_view_get_model(treeview);
+    selection = gtk_tree_view_get_selection(treeview);
+    selected_rows = gtk_tree_selection_get_selected_rows (selection, &model);
+    assigned_account = NULL;
+    first = TRUE;
+    is_selection = TRUE;    
+    DEBUG("Rows in selection = %i",
+          gtk_tree_selection_count_selected_rows(selection));
+    DEBUG("Entering loop over selection");
+
+    for (l = selected_rows; l != NULL; l = l->next)
+    {
+        DEBUG("passing first = %s",
+                                            first?"true":"false");
+        DEBUG("passing is_selection = %s",
+                                            is_selection?"true":"false");
+        DEBUG("passing path = %s",
+                       gtk_tree_path_to_string(l->data));
+        DEBUG("passing account value = %s",
+                    gnc_account_get_full_name(assigned_account));
+        gnc_gen_trans_assign_transfer_account(treeview,
+                       &first, &is_selection, l->data, &assigned_account, info);
+        DEBUG("returned value of account = %s", 
+                    gnc_account_get_full_name(assigned_account));
+        DEBUG("returned value of first = %s",first?"true":"false");
+        if (assigned_account == NULL) break;
+        gtk_tree_selection_unselect_path(selection, l->data);
+    }
+
+    g_list_free_full (selected_rows, (GDestroyNotify) gtk_tree_path_free);
+    g_list_free_full(l, (GDestroyNotify) gtk_tree_path_free);
+    LEAVE("");
+}
+
+static void
+gnc_gen_trans_row_activated_cb (GtkTreeView *treeview,
+                                GtkTreePath *path,
+                                GtkTreeViewColumn *column,
+                                GNCImportMainMatcher *info)
+{
+    Account *assigned_account;
+    gboolean first, is_selection;
+
+    ENTER("");
+    assigned_account = NULL;
+    first = TRUE;
+    is_selection = FALSE;
+    gnc_gen_trans_assign_transfer_account(treeview, 
+                            &first,  &is_selection, path,
+                            &assigned_account, info);
+    DEBUG("account returned = %s", gnc_account_get_full_name(assigned_account));
+    LEAVE("");
 }
 
 static void
 gnc_gen_trans_row_changed_cb (GtkTreeSelection *selection,
-                              GNCImportMainMatcher *gui)
+                              GNCImportMainMatcher *info)
 {
     GtkTreeModel *model;
     GtkTreeIter iter;
+    GtkSelectionMode mode;
 
-    if (!gtk_tree_selection_get_selected(selection, &model, &iter))
-        return;
-    gtk_tree_selection_unselect_iter(selection, &iter);
+    ENTER("");
+    mode = gtk_tree_selection_get_mode(selection);
+    switch (mode)
+    {
+        case GTK_SELECTION_MULTIPLE:
+            DEBUG("mode = GTK_SELECTION_MULTIPLE, no action");
+            break;
+        case GTK_SELECTION_NONE:
+            DEBUG("mode = GTK_SELECTION_NONE, no action");
+            break;
+        case GTK_SELECTION_BROWSE:
+            DEBUG("mode = GTK_SELECTION_BROWSE->default");
+        case GTK_SELECTION_SINGLE:
+            DEBUG("mode = GTK_SELECTION_SINGLE->default");
+        default:
+            DEBUG("mode = default unselect selected row");
+            if (gtk_tree_selection_get_selected(selection, &model, &iter))
+            {
+                gtk_tree_selection_unselect_iter(selection, &iter);
+            }
+    }
+    LEAVE("");
 }
+
+static void
+gnc_gen_trans_view_popup_menu (GtkTreeView *treeview, 
+                               GdkEvent *event,
+                               GNCImportMainMatcher *info)
+{    
+    GtkWidget *menu, *menuitem;
+    GdkEventButton *event_button;
+
+    ENTER ("");
+    menu = gtk_menu_new();
+    menuitem = gtk_menu_item_new_with_label(_("Assign a transfer account."));
+    g_signal_connect(menuitem, "activate",
+                     G_CALLBACK(
+                     gnc_gen_trans_assign_transfer_account_to_selection_cb),
+                     info);
+    DEBUG("Callback to assign destination account to selection connected");
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+    gtk_widget_show_all(menu);
+    event_button = (GdkEventButton *) event;
+    /* Note: event can be NULL here when called from view_onPopupMenu;
+     *  gdk_event_get_time() accepts a NULL argument */
+    gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, 
+                    (event_button != NULL) ? event_button->button : 0, 
+                    gdk_event_get_time((GdkEvent*)event));
+    LEAVE ("");
+}
+
+static gboolean
+gnc_gen_trans_onButtonPressed_cb (GtkTreeView *treeview,
+                                  GdkEvent *event,
+                                  GNCImportMainMatcher *info)
+{
+    GdkEventButton *event_button;
+    ENTER("");
+    g_return_val_if_fail (treeview != NULL, FALSE);
+    g_return_val_if_fail (event != NULL, FALSE);
+    /* handle single click with the right mouse button? */
+    if (event->type == GDK_BUTTON_PRESS)
+    {
+        event_button = (GdkEventButton *) event;
+        if (event_button->button == GDK_BUTTON_SECONDARY)
+        {
+            DEBUG("Right mouseClick detected- popup the menu.");
+            gnc_gen_trans_view_popup_menu(treeview, event, info);
+            LEAVE("return TRUE");
+            return TRUE;
+        }
+    }
+    LEAVE("return FALSE");
+    return FALSE;
+}
+
+static gboolean
+gnc_gen_trans_onPopupMenu_cb (GtkTreeView *treeview,
+                              GdkEvent *event, 
+                              GNCImportMainMatcher *info)
+{
+    ENTER("");
+    /* respond to Shift-F10 popup menu hotkey */
+    gnc_gen_trans_view_popup_menu(treeview, NULL, info);
+    LEAVE ("");
+    return TRUE;
+}
+
 
 static GtkTreeViewColumn *
 add_text_column(GtkTreeView *view, const gchar *title, int col_num)
@@ -552,6 +721,11 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
                      G_CALLBACK(gnc_gen_trans_row_activated_cb), info);
     g_signal_connect(selection, "changed",
                      G_CALLBACK(gnc_gen_trans_row_changed_cb), info);
+
+    g_signal_connect(view, "button-press-event", 
+                     G_CALLBACK(gnc_gen_trans_onButtonPressed_cb), info);
+    g_signal_connect(view, "popup-menu", 
+                     G_CALLBACK(gnc_gen_trans_onPopupMenu_cb), info);
 }
 
 
