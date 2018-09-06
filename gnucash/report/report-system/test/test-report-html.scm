@@ -740,20 +740,20 @@ HTML Document Title</title></head><body></body>\n\
         ;; col-headers must be #f or a list
         (gnc:html-table-set-row-headers! test-table #t)
         (gnc:html-table-set-caption! test-table #t)
-        (gnc:html-table-append-row! test-table "Row 1")
-        (gnc:html-table-append-row! test-table "Row 2")
-        (gnc:html-table-append-column! test-table '("Col A" "Col B" "Col C"))
+        (gnc:html-table-append-row! test-table "r1c1")
+        (gnc:html-table-append-row! test-table '("r2c1" "r2c2" "r2c3"))
+        (gnc:html-table-append-row! test-table '("r3c1" "r3c2"))
+        (gnc:html-table-append-column! test-table '("r1c4" "r2c4" "r3c4" "r4c4"))
         (test-equal "Check Num Rows after append column"
-          3
+          4
           (gnc:html-table-num-rows test-table)
         )
-        (test-expect-fail 2)
-        (test-equal "Check data after append column - Bug"
-          '(("&nbsp" "Col C") ("Row 2" "Col B") ("Row 1" "Col A"))
+        (test-equal "Check data after append column"
+          '((#f #f #f "r4c4") ("r3c1" "r3c2" #f "r3c4") ("r2c1" "r2c2" "r2c3" "r2c4") ("r1c1" #f #f "r1c4"))
           (gnc:html-table-data test-table)
         )
-        (test-equal "Check Cell Access after append column - Bug 796831"
-          "Col C"
+        (test-equal "Check Cell Access after append column"
+          "r3c2"
           (gnc:html-table-get-cell test-table 2 1)
         )
       )

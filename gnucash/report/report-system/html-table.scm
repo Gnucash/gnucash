@@ -495,7 +495,7 @@
           (new-suffix (list element)))
       (do 
 	  ((i current-width (+ i 1)))
-	  ((< i width) #f)
+          ((>= 1 (- width i)))
 	(set! new-suffix (cons #f new-suffix)))
       (append row new-suffix)))
 
