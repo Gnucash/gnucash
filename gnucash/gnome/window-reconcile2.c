@@ -1764,7 +1764,8 @@ recnWindow2WithBalance (GtkWidget *parent, Account *account,
 
         /* Force a reasonable starting size */
         gtk_window_set_default_size (GTK_WINDOW (recnData->window), 800, 600);
-        gnc_restore_window_size (GNC_PREFS_GROUP_RECONCILE, GTK_WINDOW (recnData->window));
+        gnc_restore_window_size (GNC_PREFS_GROUP_RECONCILE,
+                                 GTK_WINDOW (recnData->window), GTK_WINDOW(parent));
 
         gtk_container_add(GTK_CONTAINER(frame), main_area);
         gtk_container_set_border_width(GTK_CONTAINER(main_area), 10);

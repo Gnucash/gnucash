@@ -573,7 +573,7 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     if (heading)
         gtk_label_set_text (GTK_LABEL (heading_label), heading);
 
-    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(info->main_widget));
+    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(info->main_widget), GTK_WINDOW (parent));
     gtk_widget_show_all (GTK_WIDGET (info->main_widget));
 
     info->transaction_processed_cb = NULL;

@@ -626,7 +626,8 @@ reset_dialog(GncGWENGui *gui)
     if (gui->parent)
         gtk_window_set_transient_for(GTK_WINDOW(gui->dialog),
                                      GTK_WINDOW(gui->parent));
-    gnc_restore_window_size(GNC_PREFS_GROUP_CONNECTION, GTK_WINDOW(gui->dialog));
+    gnc_restore_window_size(GNC_PREFS_GROUP_CONNECTION,
+                            GTK_WINDOW(gui->dialog), GTK_WINDOW(gui->parent));
 
     gui->keep_alive = TRUE;
     gui->state = INIT;

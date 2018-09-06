@@ -362,7 +362,7 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), cd->show_currencies);
 
     g_object_unref(G_OBJECT(builder));
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(cd->dialog));
+    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(cd->dialog), GTK_WINDOW(parent));
 }
 
 static void

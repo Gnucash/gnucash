@@ -1435,7 +1435,7 @@ gnc_account_window_create(GtkWindow *parent, AccountWindow *aw)
     }
     gnc_account_type_view_create (aw, compat_types);
 
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(aw->dialog));
+    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(aw->dialog), parent);
 
     gtk_widget_grab_focus(GTK_WIDGET(aw->name_entry));
 

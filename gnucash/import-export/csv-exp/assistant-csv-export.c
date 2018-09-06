@@ -944,7 +944,8 @@ csv_export_assistant_create (CsvExportInfo *info)
     g_signal_connect (G_OBJECT(window), "destroy",
                       G_CALLBACK(csv_export_assistant_destroy_cb), info);
 
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(info->window));
+    gnc_restore_window_size (GNC_PREFS_GROUP,
+                             GTK_WINDOW(info->window), gnc_ui_get_main_window(NULL));
     if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
     {
         GObject *object = gtk_builder_get_object (builder, "paned");

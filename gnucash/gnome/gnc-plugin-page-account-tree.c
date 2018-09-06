@@ -1749,10 +1749,9 @@ static void
 gnc_plugin_page_account_tree_cmd_lots (GtkAction *action,
                                        GncPluginPageAccountTree *page)
 {
-    Account *account;
-
-    account = gnc_plugin_page_account_tree_get_current_account (page);
-    gnc_lot_viewer_dialog (account);
+    Account *account = gnc_plugin_page_account_tree_get_current_account (page);
+    GtkWidget *window = GNC_PLUGIN_PAGE (page)->window;
+    gnc_lot_viewer_dialog (GTK_WINDOW(window), account);
 }
 
 static void

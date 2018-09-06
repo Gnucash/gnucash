@@ -1442,7 +1442,7 @@ gnc_preferences_dialog (GtkWindow *parent)
 
     dialog = gnc_preferences_dialog_create(parent);
 
-    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(dialog));
+    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(dialog), parent);
     gtk_widget_show(dialog);
 
     gnc_register_gui_component(DIALOG_PREFERENCES_CM_CLASS,

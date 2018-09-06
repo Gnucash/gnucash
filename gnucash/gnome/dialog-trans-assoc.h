@@ -23,6 +23,6 @@
 #ifndef DIALOG_TRANS_ASSOC_H
 #define DIALOG_TRANS_ASSOC_H
 
-void gnc_trans_assoc_dialog (void);
+void gnc_trans_assoc_dialog (GtkWindow *parent);
 
 #endif

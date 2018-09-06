@@ -542,7 +542,7 @@ gnc_price_edit_dialog (GtkWidget * parent,
 
     pedit_dialog = g_new0 (PriceEditDialog, 1);
     gnc_price_pedit_dialog_create (parent, pedit_dialog, session);
-    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(pedit_dialog->dialog));
+    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(pedit_dialog->dialog), GTK_WINDOW(parent));
     pedit_dialog->type = type;
 
     switch (type)

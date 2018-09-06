@@ -149,6 +149,12 @@ gnc_search_core_type_grab_focus (GNCSearchCoreType *fe)
     GNC_SEARCH_CORE_TYPE_GET_CLASS (fe)->grab_focus (fe);
 }
 
+void
+gnc_search_core_type_pass_parent (GNCSearchCoreType *fe, gpointer parent)
+{
+    GNC_SEARCH_CORE_TYPE_GET_CLASS (fe)->pass_parent (fe, parent);
+}
+
 gboolean
 gnc_search_core_type_validate (GNCSearchCoreType *fe)
 {

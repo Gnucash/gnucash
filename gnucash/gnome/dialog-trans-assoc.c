@@ -57,6 +57,8 @@ typedef struct
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
+static void close_handler (gpointer user_data);
+
 static void
 gnc_assoc_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data)
 {
@@ -71,6 +73,20 @@ gnc_assoc_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data)
     }
     g_free (assoc_dialog);
     LEAVE(" ");
+}
+
+static gboolean
+gnc_assoc_dialog_window_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+{
+    AssocDialog *assoc_dialog = user_data;
+
+    if (event->keyval == GDK_KEY_Escape)
+    {
+        close_handler (assoc_dialog);
+        return TRUE;
+    }
+    else
+        return FALSE;
 }
 
 static gint
@@ -372,7 +388,7 @@ get_trans_info (AssocDialog *assoc_dialog)
 }
 
 static void
-gnc_assoc_dialog_create (AssocDialog *assoc_dialog)
+gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
 {
     GtkWidget         *window;
     GtkBuilder        *builder;
@@ -453,11 +469,14 @@ gnc_assoc_dialog_create (AssocDialog *assoc_dialog)
     g_signal_connect (assoc_dialog->window, "destroy",
                       G_CALLBACK(gnc_assoc_dialog_window_destroy_cb), assoc_dialog);
 
+    g_signal_connect (assoc_dialog->window, "key_press_event",
+                      G_CALLBACK(gnc_assoc_dialog_window_key_press_cb), assoc_dialog);
+
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, assoc_dialog);
 
     g_object_unref (G_OBJECT(builder));
 
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(assoc_dialog->window));
+    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(assoc_dialog->window), parent);
     get_trans_info (assoc_dialog);
     gtk_widget_show_all (GTK_WIDGET(window));
 
@@ -507,7 +526,7 @@ show_handler (const char *klass, gint component_id,
  * Return: nothing                                                  *
 \********************************************************************/
 void
-gnc_trans_assoc_dialog (void)
+gnc_trans_assoc_dialog (GtkWindow *parent)
 {
     AssocDialog *assoc_dialog;
 
@@ -519,12 +538,11 @@ gnc_trans_assoc_dialog (void)
     }
     assoc_dialog = g_new0 (AssocDialog, 1);
 
-    gnc_assoc_dialog_create (assoc_dialog);
+    gnc_assoc_dialog_create (parent, assoc_dialog);
 
     gnc_register_gui_component (DIALOG_ASSOC_CM_CLASS,
                    refresh_handler, close_handler,
                    assoc_dialog);
 
-//    gtk_widget_show (assoc_dialog->window);
     LEAVE(" ");
 }
