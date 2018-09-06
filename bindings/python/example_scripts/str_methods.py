@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 ## @file
-#  @brief Add __str__ and __unicode__ methods to financial objects so that @code print object @endcode leads to human readable results
-""" @package str_methods.py -- Add __str__ and __unicode__ methods to financial objects
+#  @brief Add __str__ methods to financial objects so that @code print object @endcode leads to human readable results
+""" @package str_methods.py -- Add __str__ methods to financial objects
 
-   Import this module and str(Object) and unicode(Object) where Object is Transaction, Split,Invoice
-   or Entry leads to human readable results. That is handy when using @code print object @endcode
+   Import this module and str(Object) where Object is Transaction, Split, Invoice or Entry leads to
+   human readable results. That is handy when using @code print object @endcode
 
    I chose to put these functions/methods in a separate file to develop them like this and maybe if
    they prove to be useful they can be put in gnucash_core.py.
@@ -150,29 +150,29 @@ class ClassWithCutting__format__():
         value=self.value
 
         # Replace Tabs and linebreaks
-        import types
-        if type(value) in [types.StringType, types.UnicodeType]:
-            value=value.replace("\t","|")
-            value=value.replace("\n","|")
+        #import types
+        if isinstance(value, str):
+            value = value.replace("\t","|")
+            value = value.replace("\n","|")
 
         # Do regular formatting of object
-        value=value.__format__(fmt)
+        value = value.__format__(fmt)
 
         # Cut resulting value if longer than specified by width
-        width=get_width(fmt)
+        width = get_width(fmt)
         if width:
-            value=cut(value, width, "...")
+            value = cut(value, width, "...")
 
         return value
 
 def all_as_classwithcutting__format__(*args):
     """Converts every argument to instance of ClassWithCutting__format__"""
 
-    import types
+    #import types
     l=[]
     for a in args:
-        if type(a) in [types.StringType, types.UnicodeType]:
-          a=a.decode("UTF-8")
+        #if type(a) in [types.StringType, types.UnicodeType]:
+        #  a=a.decode("UTF-8")
         l.append(ClassWithCutting__format__(a))
 
     return l
@@ -180,15 +180,15 @@ def all_as_classwithcutting__format__(*args):
 def all_as_classwithcutting__format__keys(encoding=None, error=None, **keys):
     """Converts every argument to instance of ClassWithCutting__format__"""
 
-    import types
+    #import types
     d={}
     if encoding==None:
       encoding=DEFAULT_ENCODING
     if error==None:
       error=DEFAULT_ERROR
     for a in keys:
-        if type(keys[a]) in [types.StringType, types.UnicodeType]:
-          keys[a]=keys[a].decode(encoding,error)
+        #if isinstance(keys[a], str):
+        #  keys[a]=keys[a].decode(encoding,error)
         d[a]=ClassWithCutting__format__(keys[a])
 
     return d
@@ -196,8 +196,8 @@ def all_as_classwithcutting__format__keys(encoding=None, error=None, **keys):
 
 
 # Split
-def __split__unicode__(self, encoding=None, error=None):
-    """__unicode__(self, encoding=None, error=None) -> object
+def __split__str__(self, encoding=None, error=None):
+    """__str__(self, encoding=None, error=None) -> object
 
     Serialize the Split object and return as a new Unicode object.
 
@@ -229,40 +229,31 @@ def __split__unicode__(self, encoding=None, error=None):
         "memo":self.GetMemo(),
         "lot":lot_str}
 
-    fmt_str= (u"Account: {account:20} "+
-            u"Value: {value:>10} "+
-            u"Memo: {memo:30} ")
+    fmt_str= ("Account: {account:20} "+
+            "Value: {value:>10} "+
+            "Memo: {memo:30} ")
 
     if self.optionflags & self.OPTIONFLAGS_BY_NAME["PRINT_TRANSACTION"]:
         fmt_t_dict={
             "transaction_time":time.ctime(transaction.GetDate()),
             "transaction2":transaction.GetDescription()}
         fmt_t_str=(
-            u"Transaction: {transaction_time:30} "+
-            u"- {transaction2:30} "+
-            u"Lot: {lot:10}")
+            "Transaction: {transaction_time:30} "+
+            "- {transaction2:30} "+
+            "Lot: {lot:10}")
         fmt_dict.update(fmt_t_dict)
         fmt_str += fmt_t_str
 
     return fmt_str.format(**all_as_classwithcutting__format__keys(encoding,error,**fmt_dict))
 
-def __split__str__(self):
-    """Returns a bytestring representation of self.__unicode__"""
-
-    from gnucash import Split
-    #self=Split(instance=self)
-
-    return unicode(self).encode('utf-8')
-
 # This could be something like an __init__. Maybe we could call it virus because it infects the Split object which
 # thereafter mutates to have better capabilities.
 infect(gnucash.Split,__split__str__,"__str__")
-infect(gnucash.Split,__split__unicode__,"__unicode__")
 gnucash.Split.register_optionflag("PRINT_TRANSACTION")
 gnucash.Split.setflag("PRINT_TRANSACTION",True)
 
-def __transaction__unicode__(self):
-    """__unicode__ method for Transaction class"""
+def __transaction__str__(self):
+    """__str__ method for Transaction class"""
     from gnucash import Transaction
     import time
     self=Transaction(instance=self)
@@ -271,7 +262,7 @@ def __transaction__unicode__(self):
           'Description:',self.GetDescription(),
           'Notes:',self.GetNotes())
 
-    transaction_str = u"{0:6}{1:25} {2:14}{3:40} {4:7}{5:40}".format(
+    transaction_str = "{0:6}{1:25} {2:14}{3:40} {4:7}{5:40}".format(
           *all_as_classwithcutting__format__(*fmt_tuple))
     transaction_str += "\n"
 
@@ -282,29 +273,18 @@ def __transaction__unicode__(self):
 
         transaction_flag = split.getflag("PRINT_TRANSACTION")
         split.setflag("PRINT_TRANSACTION",False)
-        splits_str += u"[{0:>2}] ".format(unicode(n))
-        splits_str += unicode(split)
+        splits_str += "[{0:>2}] ".format(str(n))
+        splits_str += str(split)
         splits_str += "\n"
         split.setflag("PRINT_TRANSACTION",transaction_flag)
 
     return transaction_str + splits_str
 
-def __transaction__str__(self):
-    """__str__ method for Transaction class"""
-    from gnucash import Transaction
-
-    self=Transaction(instance=self)
-    return unicode(self).encode('utf-8')
-
-# These lines add transaction_str as method __str__ to Transaction object
 gnucash.gnucash_core_c.__transaction__str__=__transaction__str__
 gnucash.Transaction.add_method("__transaction__str__","__str__")
 
-gnucash.gnucash_core_c.__transaction__unicode__=__transaction__unicode__
-gnucash.Transaction.add_method("__transaction__unicode__","__unicode__")
-
-def __invoice__unicode__(self):
-    """__unicode__ method for Invoice"""
+def __invoice__str__(self):
+    """__str__ method for Invoice"""
 
     from gnucash.gnucash_business import Invoice
     self=Invoice(instance=self)
@@ -324,37 +304,27 @@ def __invoice__unicode__(self):
         "total_value":str(self.GetTotal()),
         "currency_mnemonic":self.GetCurrency().get_mnemonic()}
 
-    ret_invoice= (u"{id_name:4}{id_value:10} {notes_name:7}{notes_value:20} {active_name:8}{active_value:7} {owner_name:12}{owner_value:20}"+
-                  u"{total_name:8}{total_value:10}{currency_mnemonic:3}").\
+    ret_invoice= ("{id_name:4}{id_value:10} {notes_name:7}{notes_value:20} {active_name:8}{active_value:7} {owner_name:12}{owner_value:20}"+
+                  "{total_name:8}{total_value:10}{currency_mnemonic:3}").\
                     format(**all_as_classwithcutting__format__keys(**fmt_dict))
 
-    ret_entries=u""
+    ret_entries=""
     entry_list = self.GetEntries()
     for entry in entry_list: # Type of entry has to be checked
       if not(type(entry)==Entry):
         entry=Entry(instance=entry)
-      ret_entries += "  "+unicode(entry)+"\n"
+      ret_entries += "  "+str(entry)+"\n"
 
     return ret_invoice+"\n"+ret_entries
 
-def __invoice__str__(self):
-    """__str__ method for invoice class"""
-
-    from gnucash.gnucash_business import Invoice
-    self=Invoice(instance=self)
-
-    return unicode(self).encode('utf-8')
 
 from gnucash.gnucash_business import Invoice
 
 gnucash.gnucash_core_c.__invoice__str__=__invoice__str__
 gnucash.gnucash_business.Invoice.add_method("__invoice__str__","__str__")
 
-gnucash.gnucash_core_c.__invoice__unicode__=__invoice__unicode__
-gnucash.gnucash_business.Invoice.add_method("__invoice__unicode__","__unicode__")
-
-def __entry__unicode__(self):
-    """__unicode__ method for Entry"""
+def __entry__str__(self):
+    """__str__ method for Entry"""
 
     from gnucash.gnucash_business import Entry
     self=Entry(instance=self)
@@ -362,34 +332,21 @@ def __entry__unicode__(self):
     # This dict and the return statement can be changed according to individual needs
     fmt_dict={
         "date_name":"Date:",
-        "date_value":unicode(self.GetDate()),
+        "date_value":str(self.GetDate()),
         "description_name":"Description:",
         "description_value":self.GetDescription(),
         "notes_name":"Notes:",
         "notes_value":self.GetNotes(),
         "quant_name":"Quantity:",
-        "quant_value":unicode(self.GetQuantity()),
+        "quant_value":str(self.GetQuantity()),
         "invprice_name":"InvPrice:",
-        "invprice_value":unicode(self.GetInvPrice())}
+        "invprice_value":str(self.GetInvPrice())}
 
-    return (u"{date_name:6}{date_value:15} {description_name:13}{description_value:20} {notes_name:7}{notes_value:20}"+
-            u"{quant_name:12}{quant_value:7} {invprice_name:10}{invprice_value:7}").\
+    return ("{date_name:6}{date_value:15} {description_name:13}{description_value:20} {notes_name:7}{notes_value:20}"+
+            "{quant_name:12}{quant_value:7} {invprice_name:10}{invprice_value:7}").\
                 format(**all_as_classwithcutting__format__keys(**fmt_dict))
-
-def __entry__str__(self):
-    """__str__ method for Entry class"""
-
-    from gnucash.gnucash_business import Entry
-    self=Entry(instance=self)
-
-    return unicode(self).encode('utf-8')
 
 from gnucash.gnucash_business import Entry
 
 gnucash.gnucash_core_c.__entry__str__=__entry__str__
 gnucash.gnucash_business.Entry.add_method("__entry__str__","__str__")
-
-gnucash.gnucash_core_c.__entry__unicode__=__entry__unicode__
-gnucash.gnucash_business.Entry.add_method("__entry__unicode__","__unicode__")
-
-
