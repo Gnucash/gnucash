@@ -115,8 +115,7 @@ gnc_split_init(Split* split)
     split->amount      = gnc_numeric_zero();
     split->value       = gnc_numeric_zero();
 
-    split->date_reconciled.tv_sec  = 0;
-    split->date_reconciled.tv_nsec = 0;
+    split->date_reconciled  = 0;
 
     split->balance             = gnc_numeric_zero();
     split->cleared_balance     = gnc_numeric_zero();
@@ -151,6 +150,7 @@ gnc_split_get_property(GObject         *object,
 {
     Split *split;
     gchar *key;
+    Time64 t;
 
     g_return_if_fail(GNC_IS_SPLIT(object));
 
@@ -170,7 +170,8 @@ gnc_split_get_property(GObject         *object,
             g_value_set_boxed(value, &split->amount);
             break;
         case PROP_RECONCILE_DATE:
-            g_value_set_boxed(value, &split->date_reconciled);
+            t.t = split->date_reconciled;
+            g_value_set_boxed(value, &t);
             break;
         case PROP_TX:
             g_value_take_object(value, split->parent);
@@ -223,7 +224,7 @@ gnc_split_set_property(GObject         *object,
     Split *split;
     gnc_numeric* number;
     gchar *key;
-
+    Time64 *t;
     g_return_if_fail(GNC_IS_SPLIT(object));
 
     split = GNC_SPLIT(object);
@@ -247,7 +248,8 @@ gnc_split_set_property(GObject         *object,
             xaccSplitSetAmount(split, *number);
             break;
         case PROP_RECONCILE_DATE:
-            xaccSplitSetDateReconciledTS(split, g_value_get_boxed(value));
+            t = g_value_get_boxed(value);
+            xaccSplitSetDateReconciledSecs(split, t->t);
             break;
         case PROP_TX:
             xaccSplitSetParent(split, g_value_get_object(value));
@@ -353,7 +355,7 @@ gnc_split_class_init(SplitClass* klass)
          g_param_spec_boxed("reconcile-date",
                             "Reconcile Date",
                             "The date this split was reconciled.",
-                            GNC_TYPE_TIMESPEC,
+                            GNC_TYPE_TIME64,
                             G_PARAM_READWRITE));
 
     g_object_class_install_property
@@ -506,8 +508,7 @@ xaccSplitReinit(Split * split)
     split->amount      = gnc_numeric_zero();
     split->value       = gnc_numeric_zero();
 
-    split->date_reconciled.tv_sec  = 0;
-    split->date_reconciled.tv_nsec = 0;
+    split->date_reconciled  = 0;
 
     split->balance             = gnc_numeric_zero();
     split->cleared_balance     = gnc_numeric_zero();
@@ -653,6 +654,9 @@ xaccSplitCopyOnto(const Split *from_split, Split *to_split)
 void
 xaccSplitDump (const Split *split, const char *tag)
 {
+    char datebuff[MAX_DATE_LENGTH + 1];
+    memset (datebuff, 0, sizeof(datebuff));
+    qof_print_date_buff (datebuff, sizeof(datebuff), split->date_reconciled);
     printf("  %s Split %p", tag, split);
     printf("    Book:     %p\n", qof_instance_get_book(split));
     printf("    Account:  %p (%s)\n", split->acc,
@@ -667,8 +671,8 @@ xaccSplitDump (const Split *split, const char *tag)
     printf("    Memo:     %s\n", split->memo ? split->memo : "(null)");
     printf("    Action:   %s\n", split->action ? split->action : "(null)");
     printf("    KVP Data: %s\n", qof_instance_kvp_as_string (QOF_INSTANCE (split)));
-    printf("    Recncld:  %c (date %s)\n", split->reconciled,
-           gnc_print_date(split->date_reconciled));
+    printf("    Recncld:  %c (date %s)\n", split->reconciled, datebuff);
+
     printf("    Value:    %s\n", gnc_numeric_to_string(split->value));
     printf("    Amount:   %s\n", gnc_numeric_to_string(split->amount));
     printf("    Balance:  %s\n", gnc_numeric_to_string(split->balance));
@@ -707,8 +711,7 @@ xaccFreeSplit (Split *split)
     split->acc         = NULL;
     split->orig_acc    = NULL;
 
-    split->date_reconciled.tv_sec = 0;
-    split->date_reconciled.tv_nsec = 0;
+    split->date_reconciled = 0;
     G_OBJECT_CLASS (QOF_INSTANCE_GET_CLASS (&split->inst))->dispose(G_OBJECT (split));
     // Is this right?
     if (split->gains_split) split->gains_split->gains_split = NULL;
@@ -817,7 +820,7 @@ xaccSplitEqual(const Split *sa, const Split *sb,
         return FALSE;
     }
 
-    if (timespec_cmp(&(sa->date_reconciled), &(sb->date_reconciled)))
+    if (sa->date_reconciled != sb->date_reconciled)
     {
         PINFO ("reconciled date differs");
         return FALSE;
@@ -1513,7 +1516,10 @@ xaccSplitOrder (const Split *sa, const Split *sb)
     if (comp > 0) return +1;
 
     /* if dates differ, return */
-    DATE_CMP(sa, sb, date_reconciled);
+    if (sa->date_reconciled < sb->date_reconciled)
+        return -1;
+    else if (sa->date_reconciled > sb->date_reconciled)
+        return 1;
 
     /* else, sort on guid - keeps sort stable. */
     retval = qof_instance_guid_compare(sa, sb);
@@ -1771,44 +1777,18 @@ xaccSplitSetDateReconciledSecs (Split *split, time64 secs)
     if (!split) return;
     xaccTransBeginEdit (split->parent);
 
-    split->date_reconciled.tv_sec = secs;
-    split->date_reconciled.tv_nsec = 0;
+    split->date_reconciled = secs;
     qof_instance_set_dirty(QOF_INSTANCE(split));
     xaccTransCommitEdit(split->parent);
 
 }
 
-void
-xaccSplitSetDateReconciledTS (Split *split, Timespec *ts)
-{
-    if (!split || !ts) return;
-    xaccTransBeginEdit (split->parent);
-
-    split->date_reconciled = *ts;
-    qof_instance_set_dirty(QOF_INSTANCE(split));
-    xaccTransCommitEdit(split->parent);
-
-}
-
-void
-xaccSplitGetDateReconciledTS (const Split * split, Timespec *ts)
-{
-    if (!split || !ts) return;
-    *ts = (split->date_reconciled);
-}
-
-Timespec
-xaccSplitRetDateReconciledTS (const Split * split)
-{
-    Timespec ts = {0, 0};
-    return split ? split->date_reconciled : ts;
-}
 
 /*################## Added for Reg2 #################*/
 time64
 xaccSplitGetDateReconciled (const Split * split)
 {
-    return split ? split->date_reconciled.tv_sec : 0;
+    return split ? split->date_reconciled : 0;
 }
 /*################## Added for Reg2 #################*/
 
@@ -2003,7 +1983,7 @@ xaccSplitAddPeerSplit (Split *split, const Split *other_split,
     guid = qof_instance_get_guid (QOF_INSTANCE (other_split));
     xaccTransBeginEdit (split->parent);
     qof_instance_kvp_add_guid (QOF_INSTANCE (split), "lot-split",
-                               timespec_now(), "peer_guid", guid_copy(guid));
+                               gnc_time(NULL), "peer_guid", guid_copy(guid));
     mark_split (split);
     qof_instance_set_dirty (QOF_INSTANCE (split));
     xaccTransCommitEdit (split->parent);

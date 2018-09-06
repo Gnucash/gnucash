@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.20.4 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
+  <object class="GtkAdjustment" id="days_adjustment">
+    <property name="upper">1100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkDialog" id="filter_by_dialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -87,19 +92,53 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label847680">
+                  <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkRadioButton" id="filter_show_days">
+                        <property name="label" translatable="yes">Show _number of days</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="group">filter_show_all</property>
+                        <signal name="toggled" handler="gnc_plugin_page_register_filter_select_range_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="filter_show_num_days">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">Valid range is 0 to 1100 days
+If 0, all previous days included</property>
+                        <property name="adjustment">days_adjustment</property>
+                        <property name="numeric">True</property>
+                        <signal name="value-changed" handler="gnc_plugin_page_register_filter_days_changed_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="fill">False</property>
+                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="filter_show_range">
-                    <property name="label" translatable="yes">Select Range:</property>
+                    <property name="label" translatable="yes">Select _Range:</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -123,6 +162,7 @@
                     <child>
                       <object class="GtkLabel" id="label847682">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="label" translatable="yes" comments="Filter By Dialog, Date Tab, Start section">Start:</property>
                       </object>
                       <packing>
@@ -209,6 +249,7 @@
                     <child>
                       <object class="GtkLabel" id="label847684">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="label" translatable="yes" comments="Filter By Dialog, Date Tab, End section">End:</property>
                       </object>
                       <packing>
@@ -510,6 +551,9 @@
       <action-widget response="-6">cancelbutton4</action-widget>
       <action-widget response="-5">okbutton4</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkAdjustment" id="num_adjustment">
     <property name="upper">1000000000</property>
@@ -864,6 +908,9 @@
       <action-widget response="-6">cancelbutton2</action-widget>
       <action-widget response="-5">okbutton2</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkAdjustment" id="tnum_adjustment">
     <property name="upper">1000000000</property>
@@ -1053,6 +1100,9 @@
       <action-widget response="-6">button76</action-widget>
       <action-widget response="-5">button77</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkDialog" id="void_transaction_dialog">
     <property name="can_focus">False</property>
@@ -1158,5 +1208,8 @@
       <action-widget response="-6">cancelbutton1</action-widget>
       <action-widget response="-5">okbutton1</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
 </interface>

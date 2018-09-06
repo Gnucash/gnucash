@@ -71,8 +71,7 @@ enum GncSqlObjectType
     CT_GUID,
     CT_INT,
     CT_INT64,
-    CT_TIMESPEC,
-    CT_TIME64,
+    CT_TIME,
     CT_GDATE,
     CT_NUMERIC,
     CT_DOUBLE,
@@ -231,12 +230,12 @@ protected:
  */
     void add_objectref_guid_to_table (ColVec& vec) const noexcept;
 private:
-    const char* m_col_name;        /**< Column name */
+    const char* m_col_name = nullptr;        /**< Column name */
     const GncSqlObjectType m_col_type;        /**< Column type */
     unsigned int m_size;       /**< Column size in bytes, for string columns */
     ColumnFlags m_flags;           /**< Column flags */
-    const char* m_gobj_param_name; /**< If non-null, g_object param name */
-    const char* m_qof_param_name;  /**< If non-null, qof parameter name */
+    const char* m_gobj_param_name = nullptr; /**< If non-null, g_object param name */
+    const char* m_qof_param_name = nullptr;  /**< If non-null, qof parameter name */
     QofAccessFunc m_getter;        /**< General access function */
     QofSetterFunc m_setter;        /**< General setter function */
     template <typename T> T get_row_value_from_object(QofIdTypeConst obj_name,
@@ -548,7 +547,7 @@ void set_parameter(T object, P item, const char* property)
     // here. This is needed to reset the infant state of objects
     // when loading them initially from sql. Failing to do so
     // could prevent future editing of these objects
-    // Example of this is https://bugzilla.gnome.org/show_bug.cgi?id=795944
+    // Example of this is https://bugs.gnucash.org/show_bug.cgi?id=795944
     qof_begin_edit(QOF_INSTANCE(object));
     g_object_set(object, property, item, nullptr);
     if (!qof_commit_edit(QOF_INSTANCE(object))) return;

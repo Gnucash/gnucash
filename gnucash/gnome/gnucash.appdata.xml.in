@@ -39,7 +39,7 @@
     </screenshot>
   </screenshots>
   <url type="homepage">https://www.gnucash.org</url>
-  <url type="bugtracker">https://bugzilla.gnome.org</url>
+  <url type="bugtracker">https://bugs.gnucash.org</url>
   <url type="faq">https://wiki.gnucash.org/wiki/FAQ</url>
   <url type="help">https://gnucash.org/docs.phtml</url>
   <url type="donation">https://gnucash.org/donate.phtml</url>

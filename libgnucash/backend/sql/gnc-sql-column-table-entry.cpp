@@ -367,107 +367,18 @@ GncSqlColumnTableEntryImpl<CT_GUID>::add_to_query(QofIdTypeConst obj_name,
     }
 }
 /* ----------------------------------------------------------------- */
-typedef Timespec (*TimespecAccessFunc) (const gpointer);
-typedef void (*TimespecSetterFunc) (const gpointer, Timespec*);
-
-#define TIMESPEC_COL_SIZE (4+3+3+3+3+3)
-
-template<> void
-GncSqlColumnTableEntryImpl<CT_TIMESPEC>::load (const GncSqlBackend* sql_be,
-                                               GncSqlRow& row,
-                                               QofIdTypeConst obj_name,
-                                               gpointer pObject) const noexcept
-{
-
-    Timespec ts = {0, 0};
-    gboolean isOK = FALSE;
-
-
-    g_return_if_fail (pObject != NULL);
-    g_return_if_fail (m_gobj_param_name != nullptr || get_setter(obj_name) != nullptr);
-
-    try
-    {
-        auto val = row.get_time64_at_col(m_col_name);
-        timespecFromTime64 (&ts, val);
-    }
-    catch (std::invalid_argument&)
-    {
-        try
-        {
-            auto val = row.get_string_at_col(m_col_name);
-            GncDateTime time(val);
-            ts.tv_sec = static_cast<time64>(time);
-        }
-        catch (std::invalid_argument&)
-        {
-            PWARN("An invalid date was found in your database."
-                  "It has been set to 1 January 1970.");
-            ts.tv_sec = 0;
-        }
-    }
-    set_parameter(pObject, &ts,
-                  reinterpret_cast<TimespecSetterFunc>(get_setter(obj_name)),
-                  m_gobj_param_name);
- }
-
-template<> void
-GncSqlColumnTableEntryImpl<CT_TIMESPEC>::add_to_table(ColVec& vec) const noexcept
-{
-    GncSqlColumnInfo info{*this, BCT_DATETIME, TIMESPEC_COL_SIZE, FALSE};
-    vec.emplace_back(std::move(info));
-}
-
-template<> void
-GncSqlColumnTableEntryImpl<CT_TIMESPEC>::add_to_query(QofIdTypeConst obj_name,
-                                                      const gpointer pObject,
-                                                      PairVec& vec) const noexcept
-{
-    TimespecAccessFunc ts_getter;
-    Timespec ts;
-/* Can't use get_row_value_from_object because g_object_get returns a
- * Timespec* and the getter returns a Timespec. Will be fixed by the
- * replacement of timespecs with time64s.
- */
-    g_return_if_fail (obj_name != NULL);
-    g_return_if_fail (pObject != NULL);
-    
-    if (m_gobj_param_name != NULL)
-    {
-        Timespec* pts;
-        g_object_get (pObject, m_gobj_param_name, &pts, NULL);
-        ts = *pts;
-    }
-    else
-    {
-        ts_getter = (TimespecAccessFunc)get_getter (obj_name);
-        g_return_if_fail (ts_getter != NULL);
-        ts = (*ts_getter) (pObject);
-    }
-    if (ts.tv_sec > MINTIME && ts.tv_sec < MAXTIME)
-    {
-        GncDateTime time(ts.tv_sec);
-        vec.emplace_back (std::make_pair (std::string{m_col_name},
-                                          time.format_zulu ("'%Y-%m-%d %H:%M:%S'")));
-    }
-    else
-    {
-        vec.emplace_back (std::make_pair (std::string{m_col_name},
-                                          "NULL"));
-    }
-}
-/* ----------------------------------------------------------------- */
 typedef time64 (*Time64AccessFunc) (const gpointer);
 typedef void (*Time64SetterFunc) (const gpointer, time64);
+constexpr int TIME_COL_SIZE = 4 + 3 + 3 + 3 + 3 + 3;
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_TIME64>::load (const GncSqlBackend* sql_be,
+GncSqlColumnTableEntryImpl<CT_TIME>::load (const GncSqlBackend* sql_be,
                                             GncSqlRow& row,
                                             QofIdTypeConst obj_name,
                                             gpointer pObject)
     const noexcept
 {
-    time64 t;
+    time64 t{0};
     g_return_if_fail (m_gobj_param_name != nullptr || get_setter(obj_name) != nullptr);
     try
     {
@@ -481,33 +392,62 @@ GncSqlColumnTableEntryImpl<CT_TIME64>::load (const GncSqlBackend* sql_be,
             GncDateTime time(val);
             t = static_cast<time64>(time);
         }
-        catch (std::invalid_argument&)
+        catch (const std::invalid_argument& err)
         {
-            return;
+            if (strcmp(err.what(), "Column empty.") != 0)
+            {
+                auto val = row.get_string_at_col (m_col_name);
+                PWARN("An invalid date %s was found in your database."
+                      "It has been set to 1 January 1970.", val.c_str());
+            }
         }
     }
-    set_parameter(pObject, t,
-                  reinterpret_cast<Time64SetterFunc>(get_setter(obj_name)),
-                  m_gobj_param_name);
+    if (m_gobj_param_name != nullptr)
+    {
+        Time64 t64{t};
+        set_parameter(pObject, &t64, m_gobj_param_name);
+    }
+    else
+    {
+        set_parameter(pObject, t,
+                      reinterpret_cast<Time64SetterFunc>(get_setter(obj_name)),
+                      nullptr);
+    }
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_TIME64>::add_to_table(ColVec& vec) const noexcept
+GncSqlColumnTableEntryImpl<CT_TIME>::add_to_table(ColVec& vec) const noexcept
 {
 
-    GncSqlColumnInfo info{*this, BCT_DATETIME, TIMESPEC_COL_SIZE, FALSE};
+    GncSqlColumnInfo info{*this, BCT_DATETIME, TIME_COL_SIZE, FALSE};
     vec.emplace_back(std::move(info));
 }
 
 template<> void
-GncSqlColumnTableEntryImpl<CT_TIME64>::add_to_query(QofIdTypeConst obj_name,
+GncSqlColumnTableEntryImpl<CT_TIME>::add_to_query(QofIdTypeConst obj_name,
                                                    const gpointer pObject,
                                                    PairVec& vec) const noexcept
 {
-    auto t = get_row_value_from_object<time64>(obj_name, pObject);
-    if (t > MINTIME && t < MAXTIME)
+    /* We still can't use get_row_value_from_object because while g_value could
+     * contentedly store a time64 in an int64, KVP wouldn't be able to tell them
+     * apart, so we have the struct Time64 hack, see engine/gnc-date.c.
+     */
+    time64 t64;
+    if (m_gobj_param_name != nullptr)
     {
-        GncDateTime time(t);
+        Time64* t;
+        g_object_get (pObject, m_gobj_param_name, &t, nullptr);
+        t64 = t->t;
+    }
+    else
+    {
+        auto getter = (Time64AccessFunc)get_getter (obj_name);
+        g_return_if_fail(getter != nullptr);
+        t64 = (*getter)(pObject);
+    }
+    if (t64 > MINTIME && t64 < MAXTIME)
+    {
+        GncDateTime time(t64);
         vec.emplace_back (std::make_pair (std::string{m_col_name},
                                           time.format_zulu ("'%Y-%m-%d %H:%M:%S'")));
     }
@@ -535,7 +475,7 @@ GncSqlColumnTableEntryImpl<CT_GDATE>::load (const GncSqlBackend* sql_be,
     g_date_clear (&date, 1);
     try
     {
-        /* timespec_to_gdate applies the tz, and gdates are saved
+        /* time64_to_gdate applies the tz, and gdates are saved
          * as ymd, so we don't want that.
          */
         auto time = row.get_time64_at_col(m_col_name);
@@ -663,7 +603,7 @@ GncSqlColumnTableEntryImpl<CT_NUMERIC>::add_to_query(QofIdTypeConst obj_name,
                                                      const gpointer pObject,
                                                      PairVec& vec) const noexcept
 {
-/* We can't use get_row_value_from_object for the same reason as Timespec. */
+/* We can't use get_row_value_from_object for the same reason as time64. */
     NumericGetterFunc getter;
     gnc_numeric n;
 

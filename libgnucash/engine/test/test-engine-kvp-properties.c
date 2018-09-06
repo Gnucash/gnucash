@@ -144,8 +144,8 @@ test_account_kvp_properties (Fixture *fixture, gconstpointer pData)
     gchar *online_id_r, *ab_acct_id_r, *ab_bank_code_r;
     GncGUID *ofx_income_acct = guid_malloc ();
     GncGUID *ofx_income_acct_r;
-    Timespec trans_retr = timespec_now ();
-    Timespec *trans_retr_r;
+    Time64 trans_retr = {gnc_time(NULL)};
+    Time64 *trans_retr_r;
 
     xaccAccountBeginEdit (fixture->acct);
     qof_instance_set (QOF_INSTANCE (fixture->acct),
@@ -176,7 +176,7 @@ test_account_kvp_properties (Fixture *fixture, gconstpointer pData)
     g_assert_cmpstr (ab_acct_id, ==, ab_acct_id_r);
     g_assert_cmpstr (ab_bank_code, ==, ab_bank_code_r);
     g_assert_cmpint (ab_acct_uid, ==, ab_acct_uid_r);
-    g_assert (timespec_equal (&trans_retr, trans_retr_r));
+    g_assert_cmpint (trans_retr.t, ==, trans_retr_r->t);
     g_assert (!qof_instance_is_dirty (QOF_INSTANCE (fixture->acct)));
 }
 

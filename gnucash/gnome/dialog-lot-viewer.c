@@ -667,7 +667,6 @@ void
 lv_window_destroy_cb (GtkWidget *object, gpointer user_data)
 {
     GNCLotViewer *lv = user_data;
-    gnc_close_gui_component_by_data (LOT_VIEWER_CM_CLASS, lv);
     gnc_unregister_gui_component_by_data (LOT_VIEWER_CM_CLASS, lv);
     g_free (lv);
 }
@@ -732,7 +731,7 @@ lv_response_cb (GtkDialog *dialog, gint response, gpointer data)
     switch (response)
     {
     case GTK_RESPONSE_CLOSE:
-        lv_close_handler(lv);
+        gnc_close_gui_component_by_data (LOT_VIEWER_CM_CLASS, lv);
         return;
 
     case RESPONSE_VIEW:
@@ -979,7 +978,7 @@ lv_init_split_buttons (GNCLotViewer *lv)
 /* ======================================================================== */
 
 static void
-lv_create (GNCLotViewer *lv)
+lv_create (GNCLotViewer *lv, GtkWindow *parent)
 {
     gchar *win_title;
     GtkBuilder *builder;
@@ -988,6 +987,8 @@ lv_create (GNCLotViewer *lv)
     gnc_builder_add_from_file (builder, "dialog-lot-viewer.glade", "lot_viewer_dialog");
 
     lv->window = GTK_WIDGET(gtk_builder_get_object (builder, "lot_viewer_dialog"));
+
+    gtk_window_set_transient_for (GTK_WINDOW (lv->window), parent);
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(lv->window), "GncLotViewerDialog");
@@ -1046,13 +1047,13 @@ lv_create (GNCLotViewer *lv)
 
     lv_update_split_buttons(lv);
 
-    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(lv->window));
+    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(lv->window), parent);
 }
 
 /* ======================================================================== */
 
 GNCLotViewer *
-gnc_lot_viewer_dialog (Account *account)
+gnc_lot_viewer_dialog (GtkWindow *parent, Account *account)
 {
     GNCLotViewer *lv;
     gint component_id;
@@ -1061,7 +1062,7 @@ gnc_lot_viewer_dialog (Account *account)
 
     lv = g_new0 (GNCLotViewer, 1);
     lv->account = account;
-    lv_create (lv);
+    lv_create (lv, parent);
     gnc_lot_viewer_fill (lv);
     lv_show_splits_free (lv);
 

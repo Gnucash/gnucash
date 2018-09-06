@@ -378,114 +378,12 @@ gnc_print_time64(time64 time, const char* format)
 /********************************************************************\
 \********************************************************************/
 
-static void
-timespec_normalize(Timespec *t)
-{
-    if (t->tv_nsec > NANOS_PER_SECOND)
-    {
-        t->tv_sec += (t->tv_nsec / NANOS_PER_SECOND);
-        t->tv_nsec = t->tv_nsec % NANOS_PER_SECOND;
-    }
-
-    if (t->tv_nsec < - NANOS_PER_SECOND)
-    {
-        t->tv_sec += - (-t->tv_nsec / NANOS_PER_SECOND);
-        t->tv_nsec = - (-t->tv_nsec % NANOS_PER_SECOND);
-    }
-
-    if (t->tv_sec > 0 && t->tv_nsec < 0)
-    {
-        t->tv_sec--;
-        t->tv_nsec = NANOS_PER_SECOND + t->tv_nsec;
-    }
-
-    if (t->tv_sec < 0 && t->tv_nsec > 0)
-    {
-        t->tv_sec++;
-        t->tv_nsec = - NANOS_PER_SECOND + t->tv_nsec;
-    }
-    return;
-}
-
-gboolean
-timespec_equal (const Timespec *ta, const Timespec *tb)
-{
-    Timespec pta, ptb;
-
-    if (ta == tb) return TRUE;
-/* Copy and normalize the copies */
-    pta = *ta;
-    ptb = *tb;
-    timespec_normalize (&pta);
-    timespec_normalize (&ptb);
-
-    if (pta.tv_sec != ptb.tv_sec) return FALSE;
-    if (pta.tv_nsec != ptb.tv_nsec) return FALSE;
-    return TRUE;
-}
-
-gint
-timespec_cmp(const Timespec *ta, const Timespec *tb)
-{
-    Timespec pta, ptb;
-
-    if (ta == tb) return 0;
-/* Copy and normalize the copies */
-    pta = *ta;
-    ptb = *tb;
-    timespec_normalize (&pta);
-    timespec_normalize (&ptb);
-
-    if (pta.tv_sec < ptb.tv_sec) return -1;
-    if (pta.tv_sec > ptb.tv_sec) return 1;
-    if (pta.tv_nsec < ptb.tv_nsec) return -1;
-    if (pta.tv_nsec > ptb.tv_nsec) return 1;
-    return 0;
-}
-
-Timespec
-timespec_diff(const Timespec *ta, const Timespec *tb)
-{
-    Timespec retval;
-    retval.tv_sec = ta->tv_sec - tb->tv_sec;
-    retval.tv_nsec = ta->tv_nsec - tb->tv_nsec;
-    timespec_normalize(&retval);
-    return retval;
-}
-
-Timespec
-timespec_abs(const Timespec *t)
-{
-    Timespec retval = *t;
-
-    timespec_normalize(&retval);
-    if (retval.tv_sec < 0)
-    {
-        retval.tv_sec = - retval.tv_sec;
-        retval.tv_nsec = - retval.tv_nsec;
-    }
-
-    return retval;
-}
 
 /* Converts any time on a day to midday that day.
 
  * given a timepair contains any time on a certain day (local time)
  * converts it to be midday that day.
  */
-Timespec
-timespecCanonicalDayTime(Timespec t)
-{
-    struct tm tm;
-    Timespec retval;
-    time64 t_secs = t.tv_sec + (t.tv_nsec / NANOS_PER_SECOND);
-    gnc_localtime_r(&t_secs, &tm);
-    gnc_tm_set_day_middle(&tm);
-    retval.tv_sec = gnc_mktime(&tm);
-    retval.tv_nsec = 0;
-    return retval;
-}
-
 time64
 time64CanonicalDayTime (time64 t)
 {
@@ -695,20 +593,6 @@ qof_print_date (time64 t)
     memset (buff, 0, sizeof (buff));
     qof_print_date_buff (buff, MAX_DATE_LENGTH, t);
     return g_strdup (buff);
-}
-
-const char *
-gnc_print_date (Timespec ts)
-{
-    static char buff[MAX_DATE_LENGTH];
-    time64 t;
-
-    memset (buff, 0, sizeof (buff));
-    t = ts.tv_sec + (time64)(ts.tv_nsec / 1000000000.0);
-
-    qof_print_date_buff (buff, MAX_DATE_LENGTH, t);
-
-    return buff;
 }
 
 /* ============================================================== */
@@ -1230,20 +1114,13 @@ gnc_iso8601_to_time64_gmt(const char *cstr)
 char *
 gnc_time64_to_iso8601_buff (time64 time, char * buff)
 {
-    Timespec ts = {time, 0};
-    return gnc_timespec_to_iso8601_buff (ts, buff);
-}
-
-char *
-gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
-{
     constexpr size_t max_iso_date_length = 32;
-    const char* format = "%Y-%m-%d %H:%M:%s %q";
+    const char* format = "%Y-%m-%d %H:%M:%S %q";
 
     if (! buff) return NULL;
     try
     {
-        GncDateTime gncdt(ts.tv_sec);
+        GncDateTime gncdt(time);
         auto sstr = gncdt.format(format);
 
         memset(buff, 0, sstr.length() + 1);
@@ -1252,129 +1129,63 @@ gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
     }
     catch(std::logic_error& err)
     {
-        PWARN("Error processing time64 %" PRId64 ": %s", ts.tv_sec, err.what());
+        PWARN("Error processing time64 %" PRId64 ": %s", time, err.what());
         return buff;
     }
     catch(std::runtime_error& err)
     {
-        PWARN("Error processing time64 %" PRId64 ": %s", ts.tv_sec, err.what());
+        PWARN("Error processing time64 %" PRId64 ": %s", time, err.what());
         return buff;
     }
 }
 
-void
-gnc_timespec2dmy (Timespec t, int *day, int *month, int *year)
-{
-    struct tm result;
-    time64 t_secs = t.tv_sec + (t.tv_nsec / NANOS_PER_SECOND);
-    gnc_localtime_r(&t_secs, &result);
-
-    if (day) *day = result.tm_mday;
-    if (month) *month = result.tm_mon + 1;
-    if (year) *year = result.tm_year + 1900;
-}
-
 #define THIRTY_TWO_YEARS 0x3c30fc00LL
 
-static Timespec
-gnc_dmy2timespec_internal (int day, int month, int year, DayPart day_part)
+static time64
+gnc_dmy2time64_internal (int day, int month, int year, DayPart day_part)
 {
     try
     {
         auto date = GncDate(year, month, day);
-        return { static_cast<time64>(GncDateTime (date, day_part)), 0 };
+        return static_cast<time64>(GncDateTime (date, day_part));
     }
     catch(const std::logic_error& err)
     {
         PWARN("Date computation error from Y-M-D %d-%d-%d: %s",
               year, month, day, err.what());
-        return {INT64_MAX, 0};
+        return INT64_MAX;
     }
     catch(const std::runtime_error& err)
     {
         PWARN("Date computation error from Y-M-D %d-%d-%d: %s",
               year, month, day, err.what());
-        return {INT64_MAX, 0};
+        return INT64_MAX;
     }
 }
 
 time64
 gnc_dmy2time64 (int day, int month, int year)
 {
-    return gnc_dmy2timespec_internal (day, month, year, DayPart::start).tv_sec;
+    return gnc_dmy2time64_internal (day, month, year, DayPart::start);
 }
 
 time64
 gnc_dmy2time64_end (int day, int month, int year)
 {
-    return gnc_dmy2timespec_internal (day, month, year, DayPart::end).tv_sec;
+    return gnc_dmy2time64_internal (day, month, year, DayPart::end);
 }
 
 time64
 gnc_dmy2time64_neutral (int day, int month, int year)
 {
-    return gnc_dmy2timespec_internal (day, month, year, DayPart::neutral).tv_sec;
+    return gnc_dmy2time64_internal (day, month, year, DayPart::neutral);
 }
 
-Timespec
-gnc_dmy2timespec (int day, int month, int year)
-{
-    return gnc_dmy2timespec_internal (day, month, year, DayPart::start);
-}
-
-Timespec
-gnc_dmy2timespec_end (int day, int month, int year)
-{
-    return gnc_dmy2timespec_internal (day, month, year, DayPart::end);
-}
-
-Timespec
-gnc_dmy2timespec_neutral (int day, int month, int year)
-{
-    return gnc_dmy2timespec_internal (day, month, year, DayPart::neutral);
-}
-/********************************************************************\
-\********************************************************************/
-void
-timespecFromTime64 ( Timespec *ts, time64 t )
-{
-    ts->tv_sec = t;
-    ts->tv_nsec = 0;
-}
-
-Timespec
-timespec_now()
-{
-    Timespec ts;
-    ts.tv_sec = gnc_time(NULL);
-    ts.tv_nsec = 0;
-    return ts;
-}
-
-time64
-timespecToTime64 (Timespec ts)
-{
-    return ts.tv_sec;
-}
 
 /* The GDate setter functions all in the end use g_date_set_time_t,
  * which in turn relies on localtime and is therefore subject to the
  * 2038 bug.
  */
-GDate timespec_to_gdate (Timespec ts)
-{
-    GDate result;
-
-    g_date_clear (&result, 1);
-    GncDateTime time(ts.tv_sec);
-    auto date = time.date().year_month_day();
-    g_date_set_dmy (&result, date.day, static_cast<GDateMonth>(date.month),
-                    date.year);
-    g_assert(g_date_valid (&result));
-
-    return result;
-}
-
 GDate time64_to_gdate (time64 t)
 {
     GDate result;
@@ -1419,13 +1230,6 @@ gnc_gdate_set_time64 (GDate* gd, time64 time)
 time64 gdate_to_time64 (GDate d)
 {
     return gnc_dmy2time64_neutral (g_date_get_day(&d),
-                                     g_date_get_month(&d),
-                                     g_date_get_year(&d));
-}
-
-Timespec gdate_to_timespec (GDate d)
-{
-    return gnc_dmy2timespec_neutral (g_date_get_day(&d),
                                      g_date_get_month(&d),
                                      g_date_get_year(&d));
 }
@@ -1518,43 +1322,36 @@ gnc_dow_abbrev(gchar *buf, int buf_len, int dow)
 /* *******************************************************************
  *  GValue handling
  ********************************************************************/
-static gpointer
-timespec_boxed_copy_func( gpointer in_timespec )
-{
-    Timespec* newvalue;
 
-    newvalue = static_cast<Timespec*>(g_malloc (sizeof (Timespec)));
-    memcpy( newvalue, in_timespec, sizeof( Timespec ) );
+static gpointer
+time64_boxed_copy_func (gpointer in_time64)
+{
+    Time64* newvalue;
+
+    newvalue = static_cast<Time64*>(g_malloc (sizeof (Time64)));
+    memcpy (newvalue, in_time64, sizeof(Time64));
 
     return newvalue;
 }
 
 static void
-timespec_boxed_free_func( gpointer in_timespec )
+time64_boxed_free_func (gpointer in_time64)
 {
-    g_free( in_timespec );
+    g_free (in_time64);
 }
 
 GType
-timespec_get_type( void )
+time64_get_type( void )
 {
     static GType type = 0;
 
     if ( type == 0 )
     {
-        type = g_boxed_type_register_static( "timespec",
-                                             timespec_boxed_copy_func,
-                                             timespec_boxed_free_func );
+        type = g_boxed_type_register_static( "time64",
+                                             time64_boxed_copy_func,
+                                             time64_boxed_free_func );
     }
     return type;
-}
-
-Testfuncs*
-gnc_date_load_funcs (void)
-{
-    Testfuncs *tf = g_slice_new (Testfuncs);
-    tf->timespec_normalize = timespec_normalize;
-    return tf;
 }
 
 /* ================================================= */
@@ -1809,4 +1606,11 @@ gnc_gdate_set_prev_fiscal_year_end (GDate *date,
 
     gnc_gdate_set_fiscal_year_end(date, fy_end);
     g_date_subtract_years(date, 1);
+}
+
+Testfuncs*
+gnc_date_load_funcs (void)
+{
+    Testfuncs *tf = g_slice_new (Testfuncs);
+    return tf;
 }

@@ -180,7 +180,9 @@ QofSessionImpl::load_backend (std::string access_method) noexcept
             continue;
         }
         PINFO (" Selected provider %s", prov->provider_name);
-        if (!prov->type_check (m_book_id.c_str ()))
+        // Only do a type check when trying to open an existing file
+        // When saving over an existing file the contents of the original file don't matter
+        if (!m_creating && !prov->type_check (m_book_id.c_str ()))
         {
             PINFO("Provider, %s, reported not being usable for book, %s.",
                     prov->provider_name, m_book_id.c_str ());
@@ -303,6 +305,7 @@ QofSessionImpl::begin (std::string new_book_id, bool ignore_lock,
     destroy_backend ();
     /* Store the session URL  */
     m_book_id = new_book_id;
+    m_creating = create;
     if (filename)
         load_backend ("file");
     else                       /* access method found, load appropriate backend */
@@ -448,23 +451,21 @@ QofSessionImpl::is_saving () const noexcept
 void
 QofSessionImpl::save (QofPercentageFunc percentage_func) noexcept
 {
+    if (!qof_book_session_not_saved (m_book)) //Clean book, nothing to do.
+        return;
     m_saving = true;
     ENTER ("sess=%p book_id=%s", this, m_book_id.c_str ());
 
-    /* If there is a backend, and the backend is reachable
-    * (i.e. we can communicate with it), then synchronize with
-    * the backend.  If we cannot contact the backend (e.g.
-    * because we've gone offline, the network has crashed, etc.)
-    * then give the user the option to save to the local disk.
-    *
-    * hack alert -- FIXME -- XXX the code below no longer
-    * does what the words above say.  This needs fixing.
-    */
+    /* If there is a backend, the book is dirty, and the backend is reachable
+     * (i.e. we can communicate with it), then synchronize with the backend.  If
+     * we cannot contact the backend (e.g.  because we've gone offline, the
+     * network has crashed, etc.)  then raise an error so that the controlling
+     * dialog can offer the user a chance to save in a different way.
+     */
     auto backend = qof_book_get_backend (m_book);
     if (backend)
     {
-        /* if invoked as SaveAs(), then backend not yet set */
-        qof_book_set_backend (m_book, backend);
+
         backend->set_percentage(percentage_func);
         backend->sync(m_book);
         auto err = backend->get_error();
@@ -481,7 +482,7 @@ QofSessionImpl::save (QofPercentageFunc percentage_func) noexcept
     }
     else
     {
-        push_error (ERR_BACKEND_NO_HANDLER, "failod to load backend");
+        push_error (ERR_BACKEND_NO_HANDLER, "failed to load backend");
         LEAVE("error -- No backend!");
     }
     m_saving = false;

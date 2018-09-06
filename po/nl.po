@@ -11,7 +11,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.7.8\n"
-"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2018-03-25 12:40-0700\n"
 "PO-Revision-Date: 2018-05-10 14:11+0200\n"
 "Last-Translator: Mark Haanen <i18n@haanen.net>\n"
@@ -6730,12 +6730,12 @@ msgid "The SQL database is in use by other users, and the upgrade cannot be perf
 msgstr "De SQL databank wordt gebruikt door andere gebruikers; de upgrade kan niet worden uitgevoerd tot deze zijn afgemeld. Als er op dit moment geen andere gebruikers zijn, raadpleeg dan de documentatie om uit te zoeken hoe u problemen met onafgesloten sessies kunt verhelpen."
 
 #: gnucash/gnome-utils/gnc-file.c:462
-msgid "The library \"libdbi\" installed on your system doesn't correctly store large numbers. This means GnuCash cannot use SQL databases correctly. Gnucash will not open or save to SQL databases until this is fixed by installing a different version of \"libdbi\". Please see https://bugzilla.gnome.org/show_bug.cgi?id=611936 for more information."
-msgstr "De op uw systeem geïnstalleerde bibliotheek “libdbi” slaat grote getallen niet juist op. Dit betekent dat GnuCash geen juist gebruik kan maken van SQL-databanken. Gnucash zal geen SQL-databank openen of opslaan tot dit is opgelost door de installatie van een andere versie van “libdbi”. Zie https://bugzilla.gnome.org/show_bug.cgi?id=611936 voor meer informatie."
+msgid "The library \"libdbi\" installed on your system doesn't correctly store large numbers. This means GnuCash cannot use SQL databases correctly. Gnucash will not open or save to SQL databases until this is fixed by installing a different version of \"libdbi\". Please see https://bugs.gnucash.org/show_bug.cgi?id=611936 for more information."
+msgstr "De op uw systeem geïnstalleerde bibliotheek “libdbi” slaat grote getallen niet juist op. Dit betekent dat GnuCash geen juist gebruik kan maken van SQL-databanken. Gnucash zal geen SQL-databank openen of opslaan tot dit is opgelost door de installatie van een andere versie van “libdbi”. Zie https://bugs.gnucash.org/show_bug.cgi?id=611936 voor meer informatie."
 
 #: gnucash/gnome-utils/gnc-file.c:474
-msgid "GnuCash could not complete a critical test for the presence of a bug in the \"libdbi\" library. This may be caused by a permissions misconfiguration of your SQL database. Please see https://bugzilla.gnome.org/show_bug.cgi?id=645216 for more information."
-msgstr "GnuCash was niet in staat om vast te stellen of er een significante fout in de bibliotheek “libdbi” aanwezig was. Dit kan worden veroorzaakt door een verkeerde configuratie van rechten binnen uw SQL-database. Zie https://bugzilla.gnome.org/show_bug.cgi?id=645216 voor meer informatie."
+msgid "GnuCash could not complete a critical test for the presence of a bug in the \"libdbi\" library. This may be caused by a permissions misconfiguration of your SQL database. Please see https://bugs.gnucash.org/show_bug.cgi?id=645216 for more information."
+msgstr "GnuCash was niet in staat om vast te stellen of er een significante fout in de bibliotheek “libdbi” aanwezig was. Dit kan worden veroorzaakt door een verkeerde configuratie van rechten binnen uw SQL-database. Zie https://bugs.gnucash.org/show_bug.cgi?id=645216 voor meer informatie."
 
 #: gnucash/gnome-utils/gnc-file.c:484
 msgid "This file is from an older version of GnuCash and will be upgraded when saved by this version. You will not be able to read the saved file from the older version of Gnucash (it will report an \"error parsing the file\"). If you wish to preserve the old version, exit without saving."
@@ -8392,8 +8392,8 @@ msgid "Report bugs and other problems to gnucash-devel@gnucash.org"
 msgstr "Fouten en andere problemen kunt u aan gnucash-devel@gnucash.org rapporteren."
 
 #: gnucash/gnucash-bin.c:161
-msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org"
-msgstr "U kunt geconstateerde fouten ook op http://bugzilla.gnome.org melden."
+msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
+msgstr "U kunt geconstateerde fouten ook op http://bugs.gnucash.org melden."
 
 #: gnucash/gnucash-bin.c:162
 msgid "To find the last stable version, please refer to http://www.gnucash.org"

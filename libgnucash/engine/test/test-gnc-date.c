@@ -61,12 +61,12 @@ typedef struct
     TZOffset off_zulu;
     TZOffset off_05w;
     TZOffset off_0840e;
-    Timespec ts0;
-    Timespec ts1;
-    Timespec ts2;
-    Timespec ts3;
-    Timespec ts4;
-    Timespec ts5;
+    time64 t0;
+    time64 t1;
+    time64 t2;
+    time64 t3;
+    time64 t4;
+    time64 t5;
 } FixtureA;
 
 static int
@@ -83,15 +83,15 @@ offset_string (TZOffset tz)
 
 static void setup (FixtureA *f, gconstpointer pData)
 {
-    f->ts0 = (Timespec){gnc_time(NULL), 0};
+    f->t0 = gnc_time(NULL);
     f->off_zulu = (TZOffset){0, 0};
     f->off_05w = (TZOffset){-5, 0};
     f->off_0840e = (TZOffset){8, 40};
-    f->ts1 = (Timespec){607009407, 0}; //1989-3-27 13:43:27 Z
-    f->ts2 = (Timespec){1604748079, 0}; //2020-11-7 06:21:19 -05:00
-    f->ts3 = (Timespec){1341398864, 0}; //2012-07-04 19:27:44 +08:40
-    f->ts4 = (Timespec){-261104801, 0}; //1961-09-22 17:53:19 -05:00
-    f->ts5 = (Timespec){2873938879LL, 0}; //2061-01-25 23:21:19 -05:00
+    f->t1 = 607009407; //1989-3-27 13:43:27 Z
+    f->t2 = 1604748079; //2020-11-7 06:21:19 -05:00
+    f->t3 = 1341398864; //2012-07-04 19:27:44 +08:40
+    f->t4 = -261104801; //1961-09-22 17:53:19 -05:00
+    f->t5 = 2873938879LL; //2061-01-25 23:21:19 -05:00
 }
 
 typedef struct
@@ -492,217 +492,23 @@ test_gnc_setlocale (int category, gchar *locale)
               "if a suffix is needed it's in the suffixes array.");
     g_assert_not_reached ();
 }
-/* timespec_normalize
-static void
-timespec_normalize(Timespec *t)// Local: 2:0:0
-*/
-static void
-test_timespec_normalize (void)
-{
-    const int offset = 4396432;
-    const int factor = 2;
-    int base = 50;
-    Timespec t = { base, factor * NANOS_PER_SECOND + offset };
-    Testfuncs *tf = gnc_date_load_funcs ();
-
-    tf->timespec_normalize (&t);
-    g_assert_cmpint (t.tv_sec, ==, base + factor);
-    g_assert_cmpint (t.tv_nsec, ==, offset);
-
-    t.tv_sec = base;
-    t.tv_nsec = - factor * NANOS_PER_SECOND - offset;
-    tf->timespec_normalize (&t);
-    g_assert_cmpint (t.tv_sec, ==, base - factor - 1);
-    g_assert_cmpint (t.tv_nsec, ==, NANOS_PER_SECOND - offset);
-
-    t.tv_sec = - base;
-    t.tv_nsec = factor * NANOS_PER_SECOND + offset;
-    tf->timespec_normalize (&t);
-    g_assert_cmpint (t.tv_sec, ==, - base + factor + 1);
-    g_assert_cmpint (t.tv_nsec, ==, - NANOS_PER_SECOND + offset);
-
-    t.tv_sec = - base;
-    t.tv_nsec = - factor * NANOS_PER_SECOND - offset;
-    tf->timespec_normalize (&t);
-    g_assert_cmpint (t.tv_sec, ==, - base - factor);
-    g_assert_cmpint (t.tv_nsec, ==, - offset);
-
-    g_slice_free (Testfuncs, tf);
-}
-
-
-/* timespec_equal
-gboolean
-timespec_equal (const Timespec *ta, const Timespec *tb)// C: 19 in 8  Local: 0:0:0
-*/
-static void
-test_timespec_equal (void)
-{
-    const int sec_per_day = 24 * 3600;
-    const int sec_per_mo = 30 * sec_per_day;
-    const time64 sec_per_yr = 365 * sec_per_day;
-    const int nsec1 = 439652, nsec2 = 132794892, nsec3 = 1132794892;
-    const time64 secs1 = 23 * sec_per_yr + 5 * sec_per_mo + 11 * sec_per_day;
-    const time64 secs2 = 21 * sec_per_yr + 11 * sec_per_mo + 19 * sec_per_day;
-    const time64 secs3 = 72 * sec_per_yr + 2 * sec_per_mo + 26 * sec_per_day;
-    Timespec ta = { secs1, nsec1 };
-    Timespec tb = { secs2, nsec2 };
-    Timespec tc = { secs1, nsec1 };
-    Timespec td = { secs3, nsec1 };
-    Timespec te = { secs1, nsec2 };
-    Timespec tf = { secs2 - 1, nsec3 }; /* When normalized, equal to tb */
-
-    g_assert (timespec_equal (&ta, &ta));
-    g_assert (timespec_equal (&ta, &tc));
-    g_assert (!timespec_equal (&ta, &tb));
-    g_assert (!timespec_equal (&ta, &td));
-    g_assert (!timespec_equal (&ta, &te));
-    g_assert (timespec_equal (&tb, &tf));
-}
-/* timespec_cmp
-gint
-timespec_cmp(const Timespec *ta, const Timespec *tb)// C: 28 in 11  Local: 0:0:0
-*/
-static void
-test_timespec_cmp (void)
-{
-    const int sec_per_day = 24 * 3600;
-    const int sec_per_mo = 30 * sec_per_day;
-    const time64 sec_per_yr = 365 * sec_per_day;
-    const int nsec1 = 439652, nsec2 = 132794892, nsec3 = 1132794892;
-    const time64 secs1 = 23 * sec_per_yr + 5 * sec_per_mo + 11 * sec_per_day;
-    const time64 secs2 = 21 * sec_per_yr + 11 * sec_per_mo + 19 * sec_per_day;
-    const time64 secs3 = 72 * sec_per_yr + 2 * sec_per_mo + 26 * sec_per_day;
-    Timespec ta = { secs1, nsec1 };
-    Timespec tb = { secs2, nsec2 };
-    Timespec tc = { secs1, nsec1 };
-    Timespec td = { secs3, nsec1 };
-    Timespec te = { secs1, nsec2 };
-    Timespec tf = { secs2 - 1, nsec3 }; /* When normalized, equal to tb */
-    Timespec tg = { -secs2, nsec2 };
-    Timespec th = { secs1, -nsec1 };
-
-    g_assert_cmpint (timespec_cmp (&ta, &ta), ==, 0);
-    g_assert_cmpint (timespec_cmp (&ta, &tc), ==, 0);
-    g_assert_cmpint (timespec_cmp (&tf, &tb), ==, 0);
-    g_assert_cmpint (timespec_cmp (&ta, &tb), ==, 1);
-    g_assert_cmpint (timespec_cmp (&te, &ta), ==, 1);
-    g_assert_cmpint (timespec_cmp (&td, &ta), ==, 1);
-    g_assert_cmpint (timespec_cmp (&ta, &te), ==, -1);
-    g_assert_cmpint (timespec_cmp (&ta, &tg), ==, 1);
-    g_assert_cmpint (timespec_cmp (&th, &ta), ==, -1);
-
-}
-/* timespec_diff
-Timespec
-timespec_diff(const Timespec *ta, const Timespec *tb)// C: 4 in 1  Local: 0:0:0
-*/
-static void
-test_timespec_diff (void)
-{
-    const gint sec_per_day = 24 * 3600;
-    const gint sec_per_mo = 30 * sec_per_day;
-    const time64 sec_per_yr = 365 * sec_per_day;
-    const time64 nsec1 = 439652, nsec2 = 132794892, nsec3 = 1132794892;
-    const time64 secs1 = 23 * sec_per_yr + 5 * sec_per_mo + 11 * sec_per_day;
-    const time64 secs2 = 21 * sec_per_yr + 11 * sec_per_mo + 19 * sec_per_day;
-    const time64 secs3 = 72 * sec_per_yr + 2 * sec_per_mo + 26 * sec_per_day;
-    Timespec ta = { secs1, nsec1 };
-    Timespec tb = { secs2, nsec2 };
-    Timespec td = { secs3, nsec1 };
-    Timespec te = { secs1, nsec2 };
-    Timespec tf = { secs2 - 1, nsec3 }; /* When normalized, equal to tb */
-    Timespec tg = { -secs2, nsec2 };
-    Timespec th = { secs1, -nsec3 };
-
-    Timespec tt = timespec_diff (&ta, &ta);
-
-    g_assert_cmpint (tt.tv_sec, ==, 0);
-    g_assert_cmpint (tt.tv_nsec, ==, 0);
-
-    tt = timespec_diff (&ta, &tb);
-    g_assert_cmpint (tt.tv_sec, ==, secs1 - secs2 - 1);
-    g_assert_cmpint (tt.tv_nsec, ==, nsec1 - nsec2 + NANOS_PER_SECOND);
-
-    tt = timespec_diff (&ta, &te);
-    g_assert_cmpint (tt.tv_sec, ==, 0);
-    g_assert_cmpint (tt.tv_nsec, ==, nsec1 - nsec2);
-
-    tt = timespec_diff (&tb, &tf);
-    g_assert_cmpint (tt.tv_sec, ==, 0);
-    g_assert_cmpint (tt.tv_nsec, ==, 0);
-
-    tt = timespec_diff (&tf, &th);
-    if (sizeof (glong) > 4)
-    {
-        glong nsec_diff_norm = 2 * nsec3 - 2 * NANOS_PER_SECOND - NANOS_PER_SECOND;
-        g_assert_cmpint (tt.tv_sec, ==, secs2 - secs1 + 2);
-        g_assert_cmpint (tt.tv_nsec, ==,  nsec_diff_norm);
-    }
-    else
-    {
-        g_assert_cmpint (tt.tv_sec, ==, secs2 - secs1 - 3);
-        g_assert_cmpint (tt.tv_nsec, <, 0); /* Overflow nanosecs */
-    }
-    tt = timespec_diff (&tg, &td);
-    g_assert_cmpint (tt.tv_sec, ==, -secs2 - secs3 + 1);
-    g_assert_cmpint (tt.tv_nsec, ==, nsec2 - nsec1 - NANOS_PER_SECOND);
-
-}
-/* timespec_abs
-Timespec
-timespec_abs(const Timespec *t)// C: 4 in 1  Local: 0:0:0
-*/
-static void
-test_timespec_abs (void)
-{
-    const int sec_per_day = 24 * 3600;
-    const int sec_per_mo = 30 * sec_per_day;
-    const int sec_per_yr = 365 * sec_per_day;
-    const int nsec1 = 439652, nsec2 = 132794892, nsec3 = 1132794892;
-    const time64 secs1 = 23 * sec_per_yr + 5 * sec_per_mo + 11 * sec_per_day;
-    const time64 secs2 = 21 * sec_per_yr + 11 * sec_per_mo + 19 * sec_per_day;
-    Timespec ta = { secs1, nsec1 };
-    Timespec tf = { secs2 - 1, nsec3 }; /* When normalized, equal to tb */
-    Timespec tg = { -secs2, nsec2 };
-    Timespec th = { secs1, -nsec1 };
-
-    Timespec tt = timespec_abs (&ta);
-    g_assert_cmpint (tt.tv_sec, ==, secs1);
-    g_assert_cmpint (tt.tv_nsec, ==, nsec1);
-
-    tt = timespec_abs (&tf);
-    g_assert_cmpint (tt.tv_sec, ==, secs2);
-    g_assert_cmpint (tt.tv_nsec, ==, nsec2);
-
-    tt = timespec_abs (&tg);
-    g_assert_cmpint (tt.tv_sec, ==, secs2 - 1);
-    g_assert_cmpint (tt.tv_nsec, ==, NANOS_PER_SECOND - nsec2);
-
-    tt = timespec_abs (&th);
-    g_assert_cmpint (tt.tv_sec, ==, secs1 - 1);
-    g_assert_cmpint (tt.tv_nsec, ==, NANOS_PER_SECOND - nsec1);
-
-}
 /* timespecCanonicalDayTime
-Timespec
-timespecCanonicalDayTime(Timespec t)// C: 12 in 5 SCM: 19 in 10 Local: 0:0:0
+time64
+time64CanonicalDayTime(time64 t)// C: 12 in 5 SCM: 19 in 10 Local: 0:0:0
 */
-static Timespec
-compute_noon_of_day (Timespec *ts)
+static time64
+compute_noon_of_day (const time64 *t)
 {
-    Timespec nt = {0, 0};
-    time_t secs = (time_t)ts->tv_sec;
-    struct tm *time = localtime(&secs);
-    time->tm_hour = 12;
-    time->tm_min = 0;
-    time->tm_sec = 0;
-    nt.tv_sec = mktime(time);
-    return nt;
+    struct tm time;
+    gnc_localtime_r(t, &time);
+    time.tm_hour = 12;
+    time.tm_min = 0;
+    time.tm_sec = 0;
+    return gnc_mktime(&time);
 }
 
 static void
-test_timespecCanonicalDayTime (void)
+test_time64CanonicalDayTime (void)
 {
     const int sec_per_day = 24 * 3600;
     const int sec_per_mo = 30 * sec_per_day;
@@ -713,21 +519,17 @@ test_timespecCanonicalDayTime (void)
     const time64 secs2 = 21 * sec_per_yr + 11 * sec_per_mo +
         19 * sec_per_day + 21 * 3600 + 9 * 60 + 48; /* 1991-11-19 21:09:48 Z */
 
-    Timespec t0 = { secs, 0 };
-    Timespec ta = { secs1, 0 };
-    Timespec tb = { secs2, 0 };
+    time64 n0 = compute_noon_of_day (&secs);
+    time64 na = compute_noon_of_day (&secs1);
+    time64 nb = compute_noon_of_day (&secs2);
 
-    Timespec n0 = compute_noon_of_day (&t0);
-    Timespec na = compute_noon_of_day (&ta);
-    Timespec nb = compute_noon_of_day (&tb);
+    time64 r0 = time64CanonicalDayTime (secs);
+    time64 ra = time64CanonicalDayTime (secs1);
+    time64 rb = time64CanonicalDayTime (secs2);
 
-    Timespec r0 = timespecCanonicalDayTime (t0);
-    Timespec ra = timespecCanonicalDayTime (ta);
-    Timespec rb = timespecCanonicalDayTime (tb);
-
-    g_assert_cmpint (n0.tv_sec, ==, r0.tv_sec);
-    g_assert_cmpint (na.tv_sec, ==, ra.tv_sec);
-    g_assert_cmpint (nb.tv_sec, ==, rb.tv_sec);
+    g_assert_cmpint (n0, ==, r0);
+    g_assert_cmpint (na, ==, ra);
+    g_assert_cmpint (nb, ==, rb);
 
 }
 
@@ -1339,74 +1141,6 @@ test_qof_print_date (void)
     setlocale (LC_TIME, locale);
     g_free (locale);
 }
-/* gnc_print_date
-const char *
-gnc_print_date (Timespec ts)// C: 11 in 9 SCM: 166 in 59 Local: 0:0:0
-*/
-static void
-test_gnc_print_date (void)
-{
-    gchar t_buff[MAX_DATE_LENGTH];
-    gchar *locale = g_strdup (setlocale (LC_TIME, NULL));
-    GDate *gd1 = g_date_new_dmy (23, 11, 1974);
-    GDate *gd2 = g_date_new_dmy (2, 2, 1961);
-    GDate *gd3 = g_date_new_dmy (16, 6, 2045);
-    Timespec tm1 = gdate_to_timespec (*gd1);
-    Timespec tm2 = gdate_to_timespec (*gd2);
-    Timespec tm3 = gdate_to_timespec (*gd3);
-
-
-    qof_date_format_set (QOF_DATE_FORMAT_UK);
-    g_assert_cmpstr (gnc_print_date (tm1), ==, "23/11/1974");
-    g_assert_cmpstr (gnc_print_date (tm2), ==, "02/02/1961");
-    g_assert_cmpstr (gnc_print_date (tm3), ==, "16/06/2045");
-
-    qof_date_format_set (QOF_DATE_FORMAT_CE);
-    g_assert_cmpstr (gnc_print_date (tm1), ==, "23.11.1974");
-    g_assert_cmpstr (gnc_print_date (tm2), ==, "02.02.1961");
-    g_assert_cmpstr (gnc_print_date (tm3), ==, "16.06.2045");
-
-    qof_date_format_set (QOF_DATE_FORMAT_US);
-    g_assert_cmpstr (gnc_print_date (tm1), ==, "11/23/1974");
-    g_assert_cmpstr (gnc_print_date (tm2), ==, "02/02/1961");
-    g_assert_cmpstr (gnc_print_date (tm3), ==, "06/16/2045");
-
-    qof_date_format_set (QOF_DATE_FORMAT_ISO);
-    g_assert_cmpstr (gnc_print_date (tm1), ==, "1974-11-23");
-    g_assert_cmpstr (gnc_print_date (tm2), ==, "1961-02-02");
-    g_assert_cmpstr (gnc_print_date (tm3), ==, "2045-06-16");
-
-    qof_date_format_set (QOF_DATE_FORMAT_LOCALE);
-    test_gnc_setlocale (LC_TIME, "en_US");
-    g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd1);
-    g_assert_cmpstr (gnc_print_date (tm1), ==, t_buff);
-    g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd2);
-    g_assert_cmpstr (gnc_print_date (tm2), ==, t_buff);
-    g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd3);
-    g_assert_cmpstr (gnc_print_date (tm3), ==, t_buff);
-
-    test_gnc_setlocale (LC_TIME, "en_GB");
-    g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd1);
-    g_assert_cmpstr (gnc_print_date (tm1), ==, t_buff);
-    g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd2);
-    g_assert_cmpstr (gnc_print_date (tm2), ==, t_buff);
-    g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd3);
-    g_assert_cmpstr (gnc_print_date (tm3), ==, t_buff);
-
-    test_gnc_setlocale (LC_TIME, "fr_FR");
-    g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd1);
-    g_assert_cmpstr (gnc_print_date (tm1), ==, t_buff);
-    g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd2);
-    g_assert_cmpstr (gnc_print_date (tm2), ==, t_buff);
-    g_date_strftime (t_buff, MAX_DATE_LENGTH, GNC_D_FMT, gd3);
-    g_assert_cmpstr (gnc_print_date (tm3), ==, t_buff);
-
-    setlocale (LC_TIME, locale);
-    g_free (locale);
-    g_date_free (gd1);
-    g_date_free (gd2);
-    g_date_free (gd3);
-}
 /* floordiv
 static int
 floordiv(int a, int b)// Local: 1:0:0
@@ -1622,9 +1356,9 @@ test_gnc_date_timestamp (void)
 
     g_free (timestr);
 }
-/* gnc_iso8601_to_timespec_gmt
-Timespec
-gnc_iso8601_to_timespec_gmt(const char *str)// C: 6 in 3  Local: 0:0:0
+/* gnc_iso8601_to_time64_gmt
+time64
+gnc_iso8601_to_time64_gmt(const char *str)// C: 6 in 3  Local: 0:0:0
 */
 static gint
 get_nanoseconds (GDateTime *gdt)
@@ -1642,44 +1376,43 @@ test_gnc_iso8601_to_time64_gmt (FixtureA *f, gconstpointer pData)
     g_assert_cmpint (t, ==, 0);
 
     t = gnc_iso8601_to_time64_gmt ("1989-03-27 13:43:27");
-    g_assert_cmpint (t, ==, f->ts1.tv_sec);
+    g_assert_cmpint (t, ==, f->t1);
 
     t = gnc_iso8601_to_time64_gmt ("2020-11-07 06:21:19 -05");
-    g_assert_cmpint (t, ==, f->ts2.tv_sec);
+    g_assert_cmpint (t, ==, f->t2);
 
     t = gnc_iso8601_to_time64_gmt ("2012-07-04 19:27:44.0+08:40");
-    g_assert_cmpint (t, ==, f->ts3.tv_sec);
+    g_assert_cmpint (t, ==, f->t3);
 
     t = gnc_iso8601_to_time64_gmt ("1961-09-22 17:53:19 -05");
-    g_assert_cmpint (t, ==, f->ts4.tv_sec);
+    g_assert_cmpint (t, ==, f->t4);
 
     t = gnc_iso8601_to_time64_gmt ("2061-01-25 23:21:19.0 -05:00");
-    g_assert_cmpint (t, ==, f->ts5.tv_sec);
+    g_assert_cmpint (t, ==, f->t5);
 }
-/* gnc_timespec_to_iso8601_buff
+/* gnc_time64_to_iso8601_buff
 char *
-gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)// C: 18 in 7  Local: 0:0:0
+gnc_time64_to_iso8601_buff (time64 t, char * buff)// C: 18 in 7  Local: 0:0:0
 */
-static Timespec
-g_date_time_to_timespec (GDateTime *gdt)
+static time64
+g_date_time_to_time64 (GDateTime *gdt)
 {
-    Timespec t;
-    t.tv_sec = g_date_time_to_unix (gdt);
-    t.tv_nsec = g_date_time_get_microsecond (gdt) * 1000;
+    time64 t;
+    t = g_date_time_to_unix (gdt);
     return t;
 }
 
 #define ISO8601_SIZE MAX_DATE_LENGTH + 4
 static gchar*
-format_timestring (Timespec ts, TZOffset tz)
+format_timestring (time64 t, TZOffset tz)
 {
-  static const unsigned tzlen = MAX_DATE_LENGTH - 26;
-    char *fmt = "%Y-%m-%d %H:%M:%S";
+    static const unsigned tzlen = MAX_DATE_LENGTH - 26;
+    char *fmt = "%Y-%m-%d %H:%M:%S %z";
     struct tm tm;
-    char buf[MAX_DATE_LENGTH], *retval;
+    char buf[MAX_DATE_LENGTH + 1];
     char tzbuf[tzlen];
     memset(tzbuf, 0, sizeof(tzbuf));
-    gnc_localtime_r(&ts.tv_sec, &tm);
+    gnc_localtime_r(&t, &tm);
 #if PLATFORM(WINDOWS)
     strftime(tzbuf, sizeof(tzbuf), "%Z", &tm);
 #else
@@ -1687,121 +1420,73 @@ format_timestring (Timespec ts, TZOffset tz)
 #endif
     memset (buf, 0, sizeof(buf));
     strftime(buf, sizeof(buf), fmt, &tm);
-    retval = g_strdup_printf ("%s.%06ld %s", buf, ts.tv_nsec / 1000, tzbuf);
 
-    return retval;
+    return g_strdup(buf);
 }
 
 static void
-test_gnc_timespec_to_iso8601_buff (FixtureA *f, gconstpointer pData)
+test_gnc_time64_to_iso8601_buff (FixtureA *f, gconstpointer pData)
 {
 
     gchar buff[ISO8601_SIZE];
     gchar *time_str;
-    Timespec t = { 0, 0 };
+    time64 t = 0;
     gchar *end;
 
     memset (buff, 0, sizeof buff);
 
-    end = gnc_timespec_to_iso8601_buff (t, NULL);
+    end = gnc_time64_to_iso8601_buff (t, NULL);
     g_assert (end == NULL);
 
-    end = gnc_timespec_to_iso8601_buff (f->ts0, buff);
+    end = gnc_time64_to_iso8601_buff (f->t0, buff);
     g_assert_cmpint (end - buff, ==, strlen (buff));
-    time_str = format_timestring (f->ts0, f->off_zulu);
+    time_str = format_timestring (f->t0, f->off_zulu);
     g_assert_cmpstr (buff, ==, time_str);
     g_free (time_str);
 
-    end = gnc_timespec_to_iso8601_buff (f->ts1, buff);
-    time_str = format_timestring (f->ts1, f->off_zulu);
+    end = gnc_time64_to_iso8601_buff (f->t1, buff);
+    time_str = format_timestring (f->t1, f->off_zulu);
     g_assert_cmpstr (buff, ==, time_str);
     g_free (time_str);
 
 
-    end = gnc_timespec_to_iso8601_buff (f->ts2, buff);
-    time_str = format_timestring (f->ts2, f->off_05w);
+    end = gnc_time64_to_iso8601_buff (f->t2, buff);
+    time_str = format_timestring (f->t2, f->off_05w);
     g_assert_cmpstr (buff, ==, time_str);
     g_free (time_str);
 
-    end = gnc_timespec_to_iso8601_buff (f->ts3, buff);
-    time_str = format_timestring (f->ts3, f->off_0840e);
+    end = gnc_time64_to_iso8601_buff (f->t3, buff);
+    time_str = format_timestring (f->t3, f->off_0840e);
     g_assert_cmpstr (buff, ==, time_str);
     g_free (time_str);
 
-    end = gnc_timespec_to_iso8601_buff (f->ts4, buff);
-    time_str = format_timestring (f->ts4, f->off_05w);
+    end = gnc_time64_to_iso8601_buff (f->t4, buff);
+    time_str = format_timestring (f->t4, f->off_05w);
     g_assert_cmpstr (buff, ==, time_str);
     g_free (time_str);
 
-    end = gnc_timespec_to_iso8601_buff (f->ts5, buff);
-    time_str = format_timestring (f->ts5, f->off_05w);
+    end = gnc_time64_to_iso8601_buff (f->t5, buff);
+    time_str = format_timestring (f->t5, f->off_05w);
     g_assert_cmpstr (buff, ==, time_str);
     g_free (time_str);
 }
-/* gnc_timespec2dmy
-void
-gnc_timespec2dmy (Timespec t, int *day, int *month, int *year)// C: 1  Local: 0:0:0
-*/
-static void
-test_gnc_timespec2dmy (FixtureA *f, gconstpointer pData)
-{
-    struct tm tm;
-    int day, r_day, mo, r_mo, yr, r_yr;
 
-
-    gnc_timespec2dmy (f->ts0, &r_day, &r_mo, &r_yr);
-    gnc_localtime_r (&f->ts0.tv_sec, &tm);
-    g_assert_cmpint (r_day, ==, tm.tm_mday);
-    g_assert_cmpint (r_mo, ==, tm.tm_mon + 1);
-    g_assert_cmpint (r_yr, ==, tm.tm_year + 1900);
-
-    gnc_timespec2dmy (f->ts1, &r_day, &r_mo, &r_yr);
-    gnc_localtime_r (&f->ts1.tv_sec, &tm);
-    g_assert_cmpint (r_day, ==, tm.tm_mday);
-    g_assert_cmpint (r_mo, ==, tm.tm_mon + 1);
-    g_assert_cmpint (r_yr, ==, tm.tm_year + 1900);
-
-    gnc_timespec2dmy (f->ts2, &r_day, &r_mo, &r_yr);
-    gnc_localtime_r (&f->ts2.tv_sec, &tm);
-    g_assert_cmpint (r_day, ==, tm.tm_mday);
-    g_assert_cmpint (r_mo, ==, tm.tm_mon + 1);
-    g_assert_cmpint (r_yr, ==, tm.tm_year + 1900);
-
-    gnc_timespec2dmy (f->ts3, &r_day, &r_mo, &r_yr);
-    gnc_localtime_r (&f->ts3.tv_sec, &tm);
-    g_assert_cmpint (r_day, ==, tm.tm_mday);
-    g_assert_cmpint (r_mo, ==, tm.tm_mon + 1);
-    g_assert_cmpint (r_yr, ==, tm.tm_year + 1900);
-
-    gnc_timespec2dmy (f->ts4, &r_day, &r_mo, &r_yr);
-    gnc_localtime_r (&f->ts4.tv_sec, &tm);
-    g_assert_cmpint (r_day, ==, tm.tm_mday);
-    g_assert_cmpint (r_mo, ==, tm.tm_mon + 1);
-    g_assert_cmpint (r_yr, ==, tm.tm_year + 1900);
-
-    gnc_timespec2dmy (f->ts5, &r_day, &r_mo, &r_yr);
-    gnc_localtime_r (&f->ts5.tv_sec, &tm);
-    g_assert_cmpint (r_day, ==, tm.tm_mday);
-    g_assert_cmpint (r_mo, ==, tm.tm_mon + 1);
-    g_assert_cmpint (r_yr, ==, tm.tm_year + 1900);
-
-}
-/* gnc_dmy2timespec_internal
-static Timespec
-gnc_dmy2timespec_internal (int day, int month, int year, gboolean start_of_day)// Local: 2:0:0
+/* gnc_dmy2time64_internal
+static time64
+gnc_dmy2time64_internal (int day, int month, int year, gboolean start_of_day)// Local: 2:0:0
 */
 /* static void
-test_gnc_dmy2timespec_internal (void)
+test_gnc_dmy2time64_internal (void)
 {
 }*/
-/* gnc_dmy2timespec
-Timespec
-gnc_dmy2timespec (int day, int month, int year)// C: 8 in 5  Local: 1:0:0
+/* gnc_dmy2time64
+time64
+gnc_dmy2time64 (int day, int month, int year)// C: 8 in 5  Local: 1:0:0
 */
 static void
-test_gnc_dmy2timespec (FixtureB *f, gconstpointer pData)
+test_gnc_dmy2time64 (FixtureB *f, gconstpointer pData)
 {
-    gchar *msg1 = "[qof_dmy2timespec()] Date computation error from Y-M-D 1257-7-2: Time value is outside the supported year range.";
+    gchar *msg1 = "[qof_dmy2time64()] Date computation error from Y-M-D 1257-7-2: Time value is outside the supported year range.";
     gint loglevel = G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL;
     gchar *logdomain = "qof.engine";
     TestErrorStruct check = {loglevel, logdomain, msg1, 0};
@@ -1816,27 +1501,27 @@ test_gnc_dmy2timespec (FixtureB *f, gconstpointer pData)
         struct tm tm = {0, 0, 0, f->test[i].day, f->test[i].mon - 1,
                         f->test[i].yr - 1900, 0, 0, -1};
 #endif
-        Timespec r_t = gnc_dmy2timespec (f->test[i].day, f->test[i].mon,
+        time64 r_t = gnc_dmy2time64 (f->test[i].day, f->test[i].mon,
                                          f->test[i].yr);
         struct tm time1 = tm, time2 = tm;
         int offset = gnc_mktime(&time1) - gnc_timegm(&time2);
         if (f->test[i].secs == INT64_MAX)
-            /* We use INT64_MAX as invalid timespec.secs.
+            /* We use INT64_MAX as invalid time64.secs.
              * As we can't *add* to the max, we can ignore the tz offset in this case. */
-            g_assert_cmpint (r_t.tv_sec, ==, INT64_MAX);
+            g_assert_cmpint (r_t, ==, INT64_MAX);
         else
-            g_assert_cmpint (r_t.tv_sec, ==, f->test[i].secs - offset);
+            g_assert_cmpint (r_t, ==, f->test[i].secs - offset);
     }
     g_log_set_default_handler (hdlr, 0);
 }
-/* gnc_dmy2timespec_end
-Timespec
-gnc_dmy2timespec_end (int day, int month, int year)// C: 1  Local: 0:0:0
+/* gnc_dmy2time64_end
+time64
+gnc_dmy2time64_end (int day, int month, int year)// C: 1  Local: 0:0:0
 */
 static void
-test_gnc_dmy2timespec_end (FixtureB *f, gconstpointer pData)
+test_gnc_dmy2time64_end (FixtureB *f, gconstpointer pData)
 {
-    gchar *msg1 = "[qof_dmy2timespec_end()] Date computation error from Y-M-D 1257-7-2: Time value is outside the supported year range.";
+    gchar *msg1 = "[qof_dmy2time64_end()] Date computation error from Y-M-D 1257-7-2: Time value is outside the supported year range.";
     gint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
     gchar *logdomain = "qof.engine";
     TestErrorStruct check = {loglevel, logdomain, msg1, 0};
@@ -1851,15 +1536,15 @@ test_gnc_dmy2timespec_end (FixtureB *f, gconstpointer pData)
         struct tm tm = {59, 59, 23, f->test[i].day, f->test[i].mon - 1,
                         f->test[i].yr - 1900, 0, 0, -1};
 #endif
-        Timespec r_t = gnc_dmy2timespec_end (f->test[i].day, f->test[i].mon,
+        time64 r_t = gnc_dmy2time64_end (f->test[i].day, f->test[i].mon,
                                              f->test[i].yr);
         int offset = gnc_mktime(&tm) - gnc_timegm(&tm);
         if (f->test[i].secs == INT64_MAX)
-            /* We use INT64_MAX as invalid timespec.secs.
+            /* We use INT64_MAX as invalid time64.secs.
              * As we can't *add* to the max, we can ignore the tz offset in this case. */
-            g_assert_cmpint (r_t.tv_sec, ==, INT64_MAX);
+            g_assert_cmpint (r_t, ==, INT64_MAX);
         else
-            g_assert_cmpint (r_t.tv_sec, ==, f->test[i].secs - offset);
+            g_assert_cmpint (r_t, ==, f->test[i].secs - offset);
     }
     g_log_set_default_handler (hdlr, 0);
 }
@@ -1880,18 +1565,18 @@ offset_adjust(GDateTime *gdt)
      return new_gdt;
 }
 
-/*gnc_dmy2timespec_neutral*/
+/*gnc_dmy2time64_neutral*/
 static void
-test_gnc_dmy2timespec_neutral (FixtureB *f, gconstpointer pData)
+test_gnc_dmy2time64_neutral (FixtureB *f, gconstpointer pData)
 {
-    gchar *msg1 = "[qof_dmy2timespec_neutral()] Date computation error from Y-M-D 1257-7-2: Time value is outside the supported year range.";
+    gchar *msg1 = "[qof_dmy2time64_neutral()] Date computation error from Y-M-D 1257-7-2: Time value is outside the supported year range.";
     gint loglevel = G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL;
     gchar *logdomain = "qof.engine";
     TestErrorStruct check = {loglevel, logdomain, msg1, 0};
     GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
     struct tm check_tz;
     gnc_localtime_r(&(f->test[0].secs), &check_tz);
-    /* gnc_dmy2timespec_neutral returns the timespec for 10:59:00 Z
+    /* gnc_dmy2time64_neutral returns the time64 for 10:59:00 Z
      * for timezones in the range -11 to +13. If the timezone being
      * tested is outside that range then the day of the month will be
      * different from the one in the test fixture and we skip the
@@ -1902,10 +1587,10 @@ test_gnc_dmy2timespec_neutral (FixtureB *f, gconstpointer pData)
          g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, &check);
          for (int i = 0; i < sizeof(f->test)/sizeof(TimeMap); ++i)
          {
-              Timespec r_t = gnc_dmy2timespec_neutral (f->test[i].day, f->test[i].mon,
+              time64 r_t = gnc_dmy2time64_neutral (f->test[i].day, f->test[i].mon,
                                                        f->test[i].yr);
 
-              g_assert_cmpint (r_t.tv_sec, ==, f->test[i].secs);
+              g_assert_cmpint (r_t, ==, f->test[i].secs);
          }
     }
     g_log_set_default_handler (hdlr, 0);
@@ -1919,83 +1604,59 @@ gnc_timezone (const struct tm *tm)// C: 5 in 2  Local: 2:0:0
 test_gnc_timezone (void)
 {
 }*/
-/* timespecFromtime64
-void
-timespecFromtime64( Timespec *ts, time64 t )// C: 22 in 11  Local: 0:0:0
-*/
-/* static void
-test_timespecFromtime64 (void)
-{
-}*/
-/* timespec_now
-Timespec
-timespec_now()// C: 2 in 2  Local: 0:0:0
-*/
-/* static void
-test_timespec_now (void)
-{
-}*/
-/* timespecTotime64
-time64
-timespecTotime64 (Timespec ts)// C: 10 in 6  Local: 1:0:0
-*/
-/* static void
-test_timespecTotime64 (void)
-{
-}*/
-/* timespec_to_gdate
-GDate timespec_to_gdate (Timespec ts)// C: 5 in 4  Local: 0:0:0
+/* time64_to_gdate
+GDate time64_to_gdate (time64 t)// C: 5 in 4  Local: 0:0:0
 */
 static void
-test_timespec_to_gdate (FixtureA *f, gconstpointer pData)
+test_time64_to_gdate (FixtureA *f, gconstpointer pData)
 {
     GDate date1, date2;
     struct tm tm;
 
     g_date_clear (&date2, 1);
 
-    date1 = timespec_to_gdate (f->ts0);
-    gnc_localtime_r(&f->ts0.tv_sec, &tm);
+    date1 = time64_to_gdate (f->t0);
+    gnc_localtime_r(&f->t0, &tm);
     g_date_set_dmy (&date2, tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
     g_assert_cmpint (g_date_get_julian (&date1), ==,
                      g_date_get_julian (&date2));
 
-    date1 = timespec_to_gdate (f->ts1);
-    gnc_localtime_r(&f->ts1.tv_sec, &tm);
+    date1 = time64_to_gdate (f->t1);
+    gnc_localtime_r(&f->t1, &tm);
     g_date_set_dmy (&date2, tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
     g_assert_cmpint (g_date_get_julian (&date1), ==,
                      g_date_get_julian (&date2));
 
-    date1 = timespec_to_gdate (f->ts2);
-    gnc_localtime_r(&f->ts2.tv_sec, &tm);
+    date1 = time64_to_gdate (f->t2);
+    gnc_localtime_r(&f->t2, &tm);
     g_date_set_dmy (&date2, tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
     g_assert_cmpint (g_date_get_julian (&date1), ==,
                      g_date_get_julian (&date2));
 
-    date1 = timespec_to_gdate (f->ts3);
-    gnc_localtime_r(&f->ts3.tv_sec, &tm);
+    date1 = time64_to_gdate (f->t3);
+    gnc_localtime_r(&f->t3, &tm);
     g_date_set_dmy (&date2, tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
     g_assert_cmpint (g_date_get_julian (&date1), ==,
                      g_date_get_julian (&date2));
 
-    date1 = timespec_to_gdate (f->ts4);
-    gnc_localtime_r(&f->ts4.tv_sec, &tm);
+    date1 = time64_to_gdate (f->t4);
+    gnc_localtime_r(&f->t4, &tm);
     g_date_set_dmy (&date2, tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
     g_assert_cmpint (g_date_get_julian (&date1), ==,
                      g_date_get_julian (&date2));
 
-    date1 = timespec_to_gdate (f->ts5);
-    gnc_localtime_r(&f->ts5.tv_sec, &tm);
+    date1 = time64_to_gdate (f->t5);
+    gnc_localtime_r(&f->t5, &tm);
     g_date_set_dmy (&date2, tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
     g_assert_cmpint (g_date_get_julian (&date1), ==,
                      g_date_get_julian (&date2));
 }
 
-/* gdate_to_timespec
-Timespec gdate_to_timespec (GDate d)// C: 7 in 6  Local: 0:0:0
+/* gdate_to_time64
+time64 gdate_to_time64 (GDate d)// C: 7 in 6  Local: 0:0:0
 */
 static void
-test_gdate_to_timespec (FixtureB *f, gconstpointer pData)
+test_gdate_to_time64 (FixtureB *f, gconstpointer pData)
 {
 
     gchar *msg = "g_date_set_dmy: assertion 'g_date_valid_dmy (day, m, y)' failed";
@@ -2005,7 +1666,7 @@ test_gdate_to_timespec (FixtureB *f, gconstpointer pData)
     GLogFunc hdlr = g_log_set_default_handler ((GLogFunc)test_null_handler, &check);
     struct tm check_tz;
     gnc_localtime_r(&(f->test[0].secs), &check_tz);
-    /* gdate_to_timespec returns the timespec for 10:59:00 Z
+    /* gdate_to_time64 returns the time64 for 10:59:00 Z
      * for timezones in the range -11 to +13. If the timezone being
      * tested is outside that range then the day of the month will be
      * different from the one in the test fixture and we skip the
@@ -2017,15 +1678,15 @@ test_gdate_to_timespec (FixtureB *f, gconstpointer pData)
          for (int i = 0; i < sizeof(f->test)/sizeof(TimeMap); ++i)
          {
               GDate gd, gd2;
-              Timespec r_t;
+              time64 r_t;
               g_date_clear(&gd, 1);
               g_date_clear(&gd2, 1);
               g_date_set_dmy(&gd, f->test[i].day, f->test[i].mon, f->test[i].yr);
-              r_t = gdate_to_timespec(gd);
-              g_assert_cmpint (r_t.tv_sec, ==, f->test[i].secs);
+              r_t = gdate_to_time64(gd);
+              g_assert_cmpint (r_t, ==, f->test[i].secs);
               if (f->test[i].secs < INT64_MAX)
               {
-                   gd2 = timespec_to_gdate(r_t);
+                   gd2 = time64_to_gdate(r_t);
                    g_assert (g_date_compare (&gd2, &gd) == 0);
               }
          }
@@ -2067,40 +1728,40 @@ test_gnc_time64_get_day_start (FixtureA *f, gconstpointer pData)
     struct tm tm;
     time64 t_time, r_time;
 
-    gnc_localtime_r(&f->ts0.tv_sec, &tm);
+    gnc_localtime_r(&f->t0, &tm);
     tm_day_begin(&tm);
     t_time = gnc_mktime(&tm);
-    r_time = gnc_time64_get_day_start (f->ts0.tv_sec);
+    r_time = gnc_time64_get_day_start (f->t0);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gnc_localtime_r(&f->ts1.tv_sec, &tm);
+    gnc_localtime_r(&f->t1, &tm);
     tm_day_begin(&tm);
     t_time = gnc_mktime(&tm);
-    r_time = gnc_time64_get_day_start (f->ts1.tv_sec);
+    r_time = gnc_time64_get_day_start (f->t1);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gnc_localtime_r(&f->ts2.tv_sec, &tm);
+    gnc_localtime_r(&f->t2, &tm);
     tm_day_begin(&tm);
     t_time = gnc_mktime(&tm);
-    r_time = gnc_time64_get_day_start (f->ts2.tv_sec);
+    r_time = gnc_time64_get_day_start (f->t2);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gnc_localtime_r(&f->ts3.tv_sec, &tm);
+    gnc_localtime_r(&f->t3, &tm);
     tm_day_begin(&tm);
     t_time = gnc_mktime(&tm);
-    r_time = gnc_time64_get_day_start (f->ts3.tv_sec);
+    r_time = gnc_time64_get_day_start (f->t3);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gnc_localtime_r(&f->ts4.tv_sec, &tm);
+    gnc_localtime_r(&f->t4, &tm);
     tm_day_begin(&tm);
     t_time = gnc_mktime(&tm);
-    r_time = gnc_time64_get_day_start (f->ts4.tv_sec);
+    r_time = gnc_time64_get_day_start (f->t4);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gnc_localtime_r(&f->ts5.tv_sec, &tm);
+    gnc_localtime_r(&f->t5, &tm);
     tm_day_begin(&tm);
     t_time = gnc_mktime(&tm);
-    r_time = gnc_time64_get_day_start (f->ts5.tv_sec);
+    r_time = gnc_time64_get_day_start (f->t5);
     g_assert_cmpint (t_time, ==, r_time);
 
  }
@@ -2122,40 +1783,40 @@ test_gnc_time64_get_day_end (FixtureA *f, gconstpointer pData)
     struct tm tm;
     time64 t_time, r_time;
 
-    gnc_localtime_r(&f->ts0.tv_sec, &tm);
+    gnc_localtime_r(&f->t0, &tm);
     tm_day_end(&tm);
     t_time = gnc_mktime(&tm);
-    r_time = gnc_time64_get_day_end (f->ts0.tv_sec);
+    r_time = gnc_time64_get_day_end (f->t0);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gnc_localtime_r(&f->ts1.tv_sec, &tm);
+    gnc_localtime_r(&f->t1, &tm);
     tm_day_end(&tm);
     t_time = gnc_mktime(&tm);
-    r_time = gnc_time64_get_day_end (f->ts1.tv_sec);
+    r_time = gnc_time64_get_day_end (f->t1);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gnc_localtime_r(&f->ts2.tv_sec, &tm);
+    gnc_localtime_r(&f->t2, &tm);
     tm_day_end(&tm);
     t_time = gnc_mktime(&tm);
-    r_time = gnc_time64_get_day_end (f->ts2.tv_sec);
+    r_time = gnc_time64_get_day_end (f->t2);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gnc_localtime_r(&f->ts3.tv_sec, &tm);
+    gnc_localtime_r(&f->t3, &tm);
     tm_day_end(&tm);
     t_time = gnc_mktime(&tm);
-    r_time = gnc_time64_get_day_end (f->ts3.tv_sec);
+    r_time = gnc_time64_get_day_end (f->t3);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gnc_localtime_r(&f->ts4.tv_sec, &tm);
+    gnc_localtime_r(&f->t4, &tm);
     tm_day_end(&tm);
     t_time = gnc_mktime(&tm);
-    r_time = gnc_time64_get_day_end (f->ts4.tv_sec);
+    r_time = gnc_time64_get_day_end (f->t4);
     g_assert_cmpint (t_time, ==, r_time);
 
-    gnc_localtime_r(&f->ts5.tv_sec, &tm);
+    gnc_localtime_r(&f->t5, &tm);
     tm_day_end(&tm);
     t_time = gnc_mktime(&tm);
-    r_time = gnc_time64_get_day_end (f->ts5.tv_sec);
+    r_time = gnc_time64_get_day_end (f->t5);
     g_assert_cmpint (t_time, ==, r_time);
 
 }
@@ -2196,26 +1857,26 @@ gnc_dow_abbrev(gchar *buf, int buf_len, int dow)// C: 4 in 2  Local: 0:0:0
 test_gnc_dow_abbrev (void)
 {
 }*/
-/* timespec_boxed_copy_func
+/* time64_boxed_copy_func
 static gpointer
-timespec_boxed_copy_func( gpointer in_timespec )// Local: 0:1:0
+time64_boxed_copy_func( gpointer in_time64 )// Local: 0:1:0
 */
 /* static void
-test_timespec_boxed_copy_func (void)
+test_time64_boxed_copy_func (void)
 {
 }*/
-/* timespec_boxed_free_func
+/* time64_boxed_free_func
 static void
-timespec_boxed_free_func( gpointer in_timespec )// Local: 0:1:0
+time64_boxed_free_func( gpointer in_time64 )// Local: 0:1:0
 */
 /* static void
-test_timespec_boxed_free_func (void)
+test_time64_boxed_free_func (void)
 {
 }*/
 // Not Used
-/* timespec_get_type
+/* time64_get_type
 GType
-timespec_get_type( void )// Local: 0:0:0
+time64_get_type( void )// Local: 0:0:0
 */
 
 
@@ -2234,12 +1895,7 @@ test_suite_gnc_date (void)
     GNC_TEST_ADD_FUNC (suitename, "gnc date string to dateformat", test_gnc_date_string_to_dateformat);
     GNC_TEST_ADD_FUNC (suitename, "gnc date monthformat to string", test_gnc_date_monthformat_to_string);
     GNC_TEST_ADD_FUNC (suitename, "gnc date string to monthformat", test_gnc_date_string_to_monthformat);
-    GNC_TEST_ADD_FUNC (suitename, "timespec normalize", test_timespec_normalize);
-    GNC_TEST_ADD_FUNC (suitename, "timespec equal", test_timespec_equal);
-    GNC_TEST_ADD_FUNC (suitename, "timespec cmp", test_timespec_cmp);
-    GNC_TEST_ADD_FUNC (suitename, "timespec diff", test_timespec_diff);
-    GNC_TEST_ADD_FUNC (suitename, "timespec abs", test_timespec_abs);
-    GNC_TEST_ADD_FUNC (suitename, "timespecCanonicalDayTime", test_timespecCanonicalDayTime);
+    GNC_TEST_ADD_FUNC (suitename, "time64CanonicalDayTime", test_time64CanonicalDayTime);
     GNC_TEST_ADD_FUNC (suitename, "date get last mday", test_gnc_date_get_last_mday);
     GNC_TEST_ADD_FUNC (suitename, "qof date format set", test_qof_date_format_set);
 // GNC_TEST_ADD_FUNC (suitename, "qof date completion set", test_qof_date_completion_set);
@@ -2247,7 +1903,6 @@ test_suite_gnc_date (void)
     GNC_TEST_ADD_FUNC (suitename, "qof print date buff", test_qof_print_date_buff);
     GNC_TEST_ADD_FUNC (suitename, "qof print gdate", test_qof_print_gdate);
     GNC_TEST_ADD_FUNC (suitename, "qof print date", test_qof_print_date);
-    GNC_TEST_ADD_FUNC (suitename, "gnc print date", test_gnc_print_date);
 // GNC_TEST_ADD_FUNC (suitename, "floordiv", test_floordiv);
 // GNC_TEST_ADD_FUNC (suitename, "qof scan date internal", test_qof_scan_date_internal);
     GNC_TEST_ADD_FUNC (suitename, "qof scan date", test_qof_scan_date);
@@ -2258,19 +1913,15 @@ test_suite_gnc_date (void)
 // GNC_TEST_ADD_FUNC (suitename, "qof strftime", test_qof_strftime);
     GNC_TEST_ADD_FUNC (suitename, "gnc_date_timestamp", test_gnc_date_timestamp);
     GNC_TEST_ADD (suitename, "gnc iso8601 to time64 gmt", FixtureA, NULL, setup, test_gnc_iso8601_to_time64_gmt, NULL);
-    GNC_TEST_ADD (suitename, "gnc timespec to iso8601 buff", FixtureA, NULL, setup, test_gnc_timespec_to_iso8601_buff, NULL);
-    GNC_TEST_ADD (suitename, "gnc timespec2dmy", FixtureA, NULL, setup, test_gnc_timespec2dmy, NULL);
-// GNC_TEST_ADD_FUNC (suitename, "gnc dmy2timespec internal", test_gnc_dmy2timespec_internal);
+    GNC_TEST_ADD (suitename, "gnc time64 to iso8601 buff", FixtureA, NULL, setup, test_gnc_time64_to_iso8601_buff, NULL);
+// GNC_TEST_ADD_FUNC (suitename, "gnc dmy2time64 internal", test_gnc_dmy2time64_internal);
 
-    GNC_TEST_ADD (suitename, "gnc dmy2timespec", FixtureB, NULL, setup_begin, test_gnc_dmy2timespec, NULL);
-    GNC_TEST_ADD (suitename, "gnc dmy2timespec end", FixtureB, NULL, setup_end, test_gnc_dmy2timespec_end, NULL);
-    GNC_TEST_ADD (suitename, "gnc dmy2timespec Neutral", FixtureB, NULL, setup_neutral, test_gnc_dmy2timespec_neutral, NULL);
+    GNC_TEST_ADD (suitename, "gnc dmy2time64", FixtureB, NULL, setup_begin, test_gnc_dmy2time64, NULL);
+    GNC_TEST_ADD (suitename, "gnc dmy2time64 end", FixtureB, NULL, setup_end, test_gnc_dmy2time64_end, NULL);
+    GNC_TEST_ADD (suitename, "gnc dmy2time64 Neutral", FixtureB, NULL, setup_neutral, test_gnc_dmy2time64_neutral, NULL);
 // GNC_TEST_ADD_FUNC (suitename, "gnc timezone", test_gnc_timezone);
-// GNC_TEST_ADD_FUNC (suitename, "timespecFromTime t", test_timespecFromtime64);
-// GNC_TEST_ADD_FUNC (suitename, "timespec now", test_timespec_now);
-// GNC_TEST_ADD_FUNC (suitename, "timespecToTime t", test_timespecTotime64);
-    GNC_TEST_ADD (suitename, "timespec to gdate", FixtureA, NULL, setup, test_timespec_to_gdate, NULL);
-    GNC_TEST_ADD (suitename, "gdate to timespec", FixtureB, NULL, setup_neutral, test_gdate_to_timespec, NULL);
+    GNC_TEST_ADD (suitename, "time64 to gdate", FixtureA, NULL, setup, test_time64_to_gdate, NULL);
+    GNC_TEST_ADD (suitename, "gdate to time64", FixtureB, NULL, setup_neutral, test_gdate_to_time64, NULL);
 // GNC_TEST_ADD_FUNC (suitename, "gnc tm get day start", test_gnc_tm_get_day_start);
 // GNC_TEST_ADD_FUNC (suitename, "gnc tm get day end", test_gnc_tm_get_day_end);
     GNC_TEST_ADD (suitename, "gnc time64 get day start", FixtureA, NULL, setup, test_gnc_time64_get_day_start, NULL);
@@ -2279,7 +1930,7 @@ test_suite_gnc_date (void)
 // GNC_TEST_ADD_FUNC (suitename, "gnc timet get today start", test_gnc_time64_get_today_start);
 // GNC_TEST_ADD_FUNC (suitename, "gnc timet get today end", test_gnc_time64_get_today_end);
 // GNC_TEST_ADD_FUNC (suitename, "gnc dow abbrev", test_gnc_dow_abbrev);
-// GNC_TEST_ADD_FUNC (suitename, "timespec boxed copy func", test_timespec_boxed_copy_func);
-// GNC_TEST_ADD_FUNC (suitename, "timespec boxed free func", test_timespec_boxed_free_func);
+// GNC_TEST_ADD_FUNC (suitename, "time64 boxed copy func", test_time64_boxed_copy_func);
+// GNC_TEST_ADD_FUNC (suitename, "time64 boxed free func", test_time64_boxed_free_func);
     g_time_zone_unref(tz);
 }

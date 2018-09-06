@@ -261,7 +261,7 @@ gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
     GList *entries;
     char *message, *label;
     gboolean non_inv = FALSE;
-    Timespec ts = {gnc_time (NULL), 0};
+    time64 t = gnc_time (NULL);
 
     /* Make sure the order is ok */
     if (!gnc_order_window_verify_ok (ow))
@@ -310,10 +310,10 @@ gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
     message = _("Do you really want to close the order?");
     label = _("Close Date");
 
-    if (!gnc_dialog_date_close_parented (ow->dialog, message, label, TRUE, &ts))
+    if (!gnc_dialog_date_close_parented (ow->dialog, message, label, TRUE, &t))
         return;
 
-    gncOrderSetDateClosed (order, ts.tv_nsec);
+    gncOrderSetDateClosed (order, t);
 
     /* save it off */
     gnc_order_window_ok_save (ow);

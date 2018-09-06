@@ -518,7 +518,6 @@ gncScrubBusinessLot (GNCLot *lot)
 gboolean
 gncScrubBusinessSplit (Split *split)
 {
-    const gchar *memo = _("Please delete this transaction. Explanation at https://wiki.gnucash.org/wiki/Business_Features_Issues#Double_posting");
     Transaction *txn;
     gboolean deleted_split = FALSE;
 
@@ -532,9 +531,11 @@ gncScrubBusinessSplit (Split *split)
         const gchar *read_only = xaccTransGetReadOnly (txn);
         gboolean is_void = xaccTransGetVoidStatus (txn);
         GNCLot *lot = xaccSplitGetLot (split);
+        GncInvoice *invoice = gncInvoiceGetInvoiceFromTxn (txn);
+        Transaction *posted_txn = gncInvoiceGetPostedTxn (invoice);
 
         /* Look for transactions as a result of double posting an invoice or bill
-         * Refer to https://bugzilla.gnome.org/show_bug.cgi?id=754209
+         * Refer to https://bugs.gnucash.org/show_bug.cgi?id=754209
          * to learn how this could have happened in the past.
          * Characteristics of such transaction are:
          * - read only
@@ -544,6 +545,7 @@ gncScrubBusinessSplit (Split *split)
          */
         if ((txntype == TXN_TYPE_NONE) && read_only && !is_void && lot)
         {
+            const gchar *memo = _("Please delete this transaction. Explanation at https://wiki.gnucash.org/wiki/Business_Features_Issues#Double_posting");
             gchar *txn_date = qof_print_date (xaccTransGetDateEntered (txn));
             xaccTransClearReadOnly (txn);
             xaccSplitSetMemo (split, memo);
@@ -551,6 +553,28 @@ gncScrubBusinessSplit (Split *split)
             PWARN("Cleared double post status of transaction \"%s\", dated %s. "
                   "Please delete transaction and verify balance.",
                   xaccTransGetDescription (txn),
+                  txn_date);
+            g_free (txn_date);
+        }
+        /* Next check for transactions which claim to be the posted transaction of
+         * an invoice but the invoice disagrees. In that case
+         */
+        else if (invoice && (txn != posted_txn))
+        {
+            const gchar *memo = _("Please delete this transaction. Explanation at https://wiki.gnucash.org/wiki/Business_Features_Issues#I_can.27t_delete_a_transaction_of_type_.22I.22_from_the_AR.2FAP_account");
+            gchar *txn_date = qof_print_date (xaccTransGetDateEntered (txn));
+            xaccTransClearReadOnly (txn);
+            xaccTransSetTxnType (txn, TXN_TYPE_NONE);
+            xaccSplitSetMemo (split, memo);
+            if (lot)
+            {
+                gnc_lot_remove_split (lot, split);
+                gncInvoiceDetachFromLot (lot);
+                gncOwnerAttachToLot (gncInvoiceGetOwner(invoice), lot);
+            }
+            PWARN("Cleared double post status of transaction \"%s\", dated %s. "
+            "Please delete transaction and verify balance.",
+            xaccTransGetDescription (txn),
                   txn_date);
             g_free (txn_date);
         }

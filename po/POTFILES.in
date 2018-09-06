@@ -33,14 +33,14 @@ borrowed/gwengui-gtk3/w_textedit.c
 borrowed/gwengui-gtk3/w_vlayout.c
 borrowed/gwengui-gtk3/w_vline.c
 borrowed/gwengui-gtk3/w_vspacer.c
+borrowed/jenny/jenny.c
 borrowed/libc/libc-missing-noop.c
 borrowed/libc/setenv.c
-borrowed/libc/strfmon.c
 borrowed/libc/strptime.c
 doc/tip_of_the_day.list.c
 gnucash/gnome/assistant-acct-period.c
 gnucash/gnome/assistant-hierarchy.c
-gnucash/gnome/assistant-loan.c
+gnucash/gnome/assistant-loan.cpp
 gnucash/gnome/assistant-stock-split.c
 gnucash/gnome/business-gnome-utils.c
 gnucash/gnome/business-options-gnome.c
@@ -344,7 +344,6 @@ gnucash/import-export/log-replay/gncmod-log-replay.c
 gnucash/import-export/log-replay/gnc-plugin-log-replay.c
 gnucash/import-export/ofx/gncmod-ofx-import.c
 gnucash/import-export/ofx/gnc-ofx-import.c
-gnucash/import-export/ofx/gnc-ofx-kvp.c
 gnucash/import-export/ofx/gnc-plugin-ofx.c
 gnucash/import-export/ofx/gschemas/org.gnucash.dialogs.import.ofx.gschema.xml.in
 gnucash/import-export/qif-imp/assistant-qif-import.c
@@ -361,6 +360,7 @@ gnucash/import-export/qif-imp/qif-parse.scm
 gnucash/import-export/qif-imp/qif-to-gnc.scm
 gnucash/import-export/qif-imp/qif-utils.scm
 gnucash/import-export/qif-imp/string.scm
+gnucash/python/gncmod-python.c
 gnucash/register/ledger-core/gncEntryLedger.c
 gnucash/register/ledger-core/gncEntryLedgerControl.c
 gnucash/register/ledger-core/gncEntryLedgerDisplay.c
@@ -623,6 +623,7 @@ libgnucash/engine/business-core.scm
 libgnucash/engine/cap-gains.c
 libgnucash/engine/cashobjects.c
 libgnucash/engine/commodity-table.scm
+libgnucash/engine/engine-deprecated.c
 libgnucash/engine/engine-helpers.c
 libgnucash/engine/engine-interface.scm
 libgnucash/engine/engine.scm

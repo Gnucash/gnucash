@@ -1139,6 +1139,8 @@ gnc_reconcile_window_create_view_box(Account *account,
                                      GtkWidget **total_save)
 {
     GtkWidget *frame, *scrollWin, *view, *vbox, *label, *hbox;
+    GtkWidget *vscroll;
+    GtkRequisition nat_sb;
 
     frame = gtk_frame_new(NULL);
 
@@ -1182,6 +1184,13 @@ gnc_reconcile_window_create_view_box(Account *account,
     gtk_container_add(GTK_CONTAINER(scrollWin), view);
     gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 0);
 
+    // get the vertical scroll bar width
+    vscroll = gtk_scrolled_window_get_vscrollbar (GTK_SCROLLED_WINDOW (scrollWin));
+    gtk_widget_get_preferred_size (vscroll, NULL, &nat_sb);
+
+    // add xpadding to recn column so scrollbar does not cover
+    gnc_reconcile_view_add_padding (GNC_RECONCILE_VIEW(view), REC_RECN, nat_sb.width);
+
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
     gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
@@ -1195,9 +1204,9 @@ gnc_reconcile_window_create_view_box(Account *account,
     *total_save = label;
 
 #if GTK_CHECK_VERSION(3,12,0)
-    gtk_widget_set_margin_end (GTK_WIDGET(label), 10);
+    gtk_widget_set_margin_end (GTK_WIDGET(label), 10 + nat_sb.width);
 #else
-    gtk_widget_set_margin_right (GTK_WIDGET(label), 10);
+    gtk_widget_set_margin_right (GTK_WIDGET(label), 10 + nat_sb.width);
 #endif
 
     return vbox;
@@ -1663,7 +1672,7 @@ recnWindow (GtkWidget *parent, Account *account)
             enable_subaccounts))
         return NULL;
 
-    return recnWindowWithBalance (account, new_ending, statement_date);
+    return recnWindowWithBalance (parent, account, new_ending, statement_date);
 }
 
 
@@ -1672,6 +1681,13 @@ recnWindow_add_widget (GtkUIManager *merge,
                        GtkWidget *widget,
                        GtkBox *dock)
 {
+    if (GTK_IS_TOOLBAR (widget))
+    {
+        gtk_toolbar_set_style (GTK_TOOLBAR(widget),
+                               GTK_TOOLBAR_BOTH);
+        gtk_toolbar_set_icon_size (GTK_TOOLBAR(widget),
+                                   GTK_ICON_SIZE_SMALL_TOOLBAR);
+    }
     gtk_box_pack_start (GTK_BOX (dock), widget, FALSE, FALSE, 0);
     gtk_widget_show (widget);
 }
@@ -1683,13 +1699,14 @@ recnWindow_add_widget (GtkUIManager *merge,
  *   Opens up the window to reconcile an account, but with ending
  *   balance and statement date already given.
  *
- * Args:   account        - The account to reconcile
+ * Args:   parent         - The parent widget of the new window
+ *         account        - The account to reconcile
  *         new_ending     - The amount for ending balance
  *         statement_date - The date of the statement
  * Return: recnData - the instance of this RecnWindow
 \********************************************************************/
 RecnWindow *
-recnWindowWithBalance (Account *account, gnc_numeric new_ending,
+recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_ending,
                        time64 statement_date)
 {
     RecnWindow *recnData;
@@ -1806,7 +1823,8 @@ recnWindowWithBalance (Account *account, gnc_numeric new_ending,
 
         /* Force a reasonable starting size */
         gtk_window_set_default_size(GTK_WINDOW(recnData->window), 800, 600);
-        gnc_restore_window_size (GNC_PREFS_GROUP_RECONCILE, GTK_WINDOW(recnData->window));
+        gnc_restore_window_size (GNC_PREFS_GROUP_RECONCILE,
+                                 GTK_WINDOW(recnData->window), GTK_WINDOW(parent));
 
         gtk_container_add(GTK_CONTAINER(frame), main_area);
         gtk_container_set_border_width(GTK_CONTAINER(main_area), 10);
@@ -1951,6 +1969,18 @@ recnWindowWithBalance (Account *account, gnc_numeric new_ending,
 
     gtk_widget_grab_focus (recnData->debit);
 
+    {   // align the Totals value with that of the amount column
+        gint recn_widthc = gnc_reconcile_view_get_column_width (GNC_RECONCILE_VIEW(recnData->credit), REC_RECN);
+        gint recn_widthd = gnc_reconcile_view_get_column_width (GNC_RECONCILE_VIEW(recnData->debit), REC_RECN);
+
+#if GTK_CHECK_VERSION(3,12,0)
+        gtk_widget_set_margin_end (GTK_WIDGET(recnData->total_credit), 10 + recn_widthc);
+        gtk_widget_set_margin_end (GTK_WIDGET(recnData->total_debit), 10 + recn_widthd);
+#else
+        gtk_widget_set_margin_right (GTK_WIDGET(recnData->total_credit), 10 + recn_widthc);
+        gtk_widget_set_margin_right (GTK_WIDGET(recnData->total_debit), 10 + recn_widthd);
+#endif
+    }
     return recnData;
 }
 

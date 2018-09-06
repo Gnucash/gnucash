@@ -148,12 +148,19 @@ struct _QofBook
      * from the session.  Better solutions welcome ... */
     QofBackend *backend;
 
-    /* A cached value of the OPTION_NAME_NUM_FIELD_SOURCE option value because
-     * it is queried quite a lot, so we want to avoid a KVP lookup on each query
-     */
+    /* A cached value of the OPTION_NAME_NUM_FIELD_SOURCE option value
+     * because it is queried quite a lot, so we want to avoid a KVP
+     * lookup on each query */
     gboolean cached_num_field_source;
     /* Whether the above cached value is valid. */
     gboolean cached_num_field_source_isvalid;
+
+    /* A cahed value of the "autoreadonly-days" option value because
+     * it is queried quite a lot, so we want to avoid a KVP lookup on
+     * each query */
+    gint cached_num_days_autoreadonly;
+    /* Whether the above cached value is valid. */
+    gboolean cached_num_days_autoreadonly_isvalid;
 };
 
 struct _QofBookClass
@@ -174,7 +181,7 @@ GType qof_book_get_type(void);
  * but not somewhere inline in the code. */
 #define QOF_BOOK_RETURN_ENTITY(book,guid,e_type,c_type) {   \
   QofInstance *val = NULL;                                  \
-  if ((guid != NULL) && (book != NULL)) {		    \
+  if ((guid != NULL) && (book != NULL)) {                   \
     const QofCollection *col;                               \
     col = qof_book_get_collection (book, e_type);           \
     val = qof_collection_lookup_entity (col, guid);         \
@@ -185,7 +192,7 @@ GType qof_book_get_type(void);
 
 
 /** GList of QofBook */
-typedef GList                 QofBookList;
+typedef GList QofBookList;
 
 typedef void (*QofBookFinalCB) (QofBook *, gpointer key, gpointer user_data);
 
@@ -198,7 +205,7 @@ QofBook * qof_book_new (void);
 
 /** End any editing sessions associated with book, and free all memory
     associated with it. */
-void      qof_book_destroy (QofBook *book);
+void qof_book_destroy (QofBook *book);
 
 /** Close a book to editing.
 
@@ -384,7 +391,7 @@ void qof_book_commit_edit(QofBook *book);
  * @param odb: The GNCOptionDB to load.
  */
 void qof_book_load_options (QofBook *book, GNCOptionLoad load_cb,
-			    GNCOptionDB *odb);
+                GNCOptionDB *odb);
 /** Save a GNCOptionsDB back to the book's KVP.
  * @param book: The book.
  * @param save_cb: A callback function that does the saving.

@@ -16,22 +16,22 @@ file(COPY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 install(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/hicolor DESTINATION  ${CMAKE_INSTALL_DATADIR}/gnucash/icons
-    REGEX ".*/apps.*" EXCLUDE
+    REGEX "hicolor/.*/apps/.*" EXCLUDE
 )
 file(
     COPY ${CMAKE_CURRENT_SOURCE_DIR}/hicolor
     DESTINATION ${DATADIR_BUILD}/gnucash/icons
-    REGEX ".*/apps.*" EXCLUDE
+    REGEX "hicolor/.*/apps/.*" EXCLUDE
 )
 
 install(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/hicolor DESTINATION  ${CMAKE_INSTALL_DATADIR}/icons
-    REGEX ".*/actions.*" EXCLUDE
+    REGEX "hicolor/.*/actions/.*" EXCLUDE
 )
 file(
     COPY ${CMAKE_CURRENT_SOURCE_DIR}/hicolor
     DESTINATION ${DATADIR_BUILD}/icons
-    REGEX ".*/actions.*" EXCLUDE
+    REGEX "hicolor/.*/actions/.*" EXCLUDE
 )
 
 set(gncpixmap_DATA

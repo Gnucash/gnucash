@@ -53,7 +53,7 @@ public:
     void add_where_cond(QofIdTypeConst, const PairVec&) override;
 
 private:
-    const GncSqlConnection* m_conn;
+    const GncSqlConnection* m_conn = nullptr;
     std::string m_sql;
 };
 

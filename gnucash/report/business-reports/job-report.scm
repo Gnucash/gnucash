@@ -541,7 +541,7 @@
 	 (end-date (gnc:time64-end-day-time 
 		       (gnc:date-option-absolute-time
 			(opt-val gnc:pagename-general (N_ "To")))))
-	 (book (gnc-account-get-book account))
+	 (book (gnc-get-current-book))
          (date-format (gnc:options-fancy-date book))
 	 (type (opt-val "__reg" "owner-type"))
 	 (type-str "")

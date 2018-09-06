@@ -450,23 +450,7 @@
     (let* ((owner     (gncInvoiceGetOwner  opt-invoice))
            (endowner  (gncOwnerGetEndOwner owner))
            (ownertype (gncOwnerGetType     endowner)))
-      (if (not (eqv? ownertype GNC-OWNER-CUSTOMER))
-        (begin
-           (set! opt-report-title "Vendor Bill")
-           (set! opt-extra-notes "")
-           (set! opt-payment-recd-heading "Payment")
-           (set! opt-invoice-number-text "Bill number")
-           (display-report opt-invoice owner endowner ownertype)
-        )
-        (begin
-           (set! opt-report-title "Customer Invoice")
-           (set! opt-extra-notes "")
-           (set! opt-payment-recd-heading "Payment")
-           (set! opt-invoice-number-text "Invoice number")
-           (display-report opt-invoice owner endowner ownertype)
-        )
-      )
-      ))
+      (display-report opt-invoice owner endowner ownertype)))
 
 ?>
 </div>

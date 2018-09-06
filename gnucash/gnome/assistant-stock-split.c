@@ -388,19 +388,14 @@ gnc_stock_split_assistant_finish (GtkAssistant *assistant,
         GNCPrice *price;
         GNCPriceDB *pdb;
         GNCCurrencyEdit *ce;
-        Timespec ts;
 
         ce = GNC_CURRENCY_EDIT (info->price_currency_edit);
-
-        ts.tv_sec = date;
-        ts.tv_nsec = 0;
-
         price = gnc_price_create (gnc_get_current_book ());
 
         gnc_price_begin_edit (price);
         gnc_price_set_commodity (price, xaccAccountGetCommodity (account));
         gnc_price_set_currency (price, gnc_currency_edit_get_currency (ce));
-        gnc_price_set_time (price, ts);
+        gnc_price_set_time64 (price, date);
         gnc_price_set_source (price, PRICE_SOURCE_STOCK_SPLIT);
         gnc_price_set_typestr (price, PRICE_TYPE_UNK);
         gnc_price_set_value (price, amount);
@@ -630,7 +625,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
 
         amount = gnc_amount_edit_new ();
         gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (amount),
-                                        gnc_default_price_print_info ());
+                                        gnc_default_price_print_info (gnc_default_currency()));
         g_signal_connect (amount, "changed",
                           G_CALLBACK (gnc_stock_split_details_valid_cb), info);
         gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);

@@ -137,11 +137,11 @@ test_parse_numeric(void)
 static void
 test_date(const char* str, GncImportFormat fmt, my_ymd_t date)
 {
-    Timespec ts, ts2;;
+    time64 t1, t2;
 
-    do_test(gnc_import_parse_date(str, fmt, &ts), "Parsing date");
-    ts2 = gnc_dmy2timespec(date.d, date.m, date.y);
-    do_test(timespec_equal(&ts, &ts2), "Date Equal");
+    do_test(gnc_import_parse_date(str, fmt, &t1), "Parsing date");
+    t2 = gnc_dmy2time64(date.d, date.m, date.y);
+    do_test(t1 == t2, "Date Equal");
 }
 
 static void

@@ -346,7 +346,7 @@ simple_chars_only_parser_new (sixtp_end_handler end_handler)
 }
 
 /****************************************************************************/
-/* generic timespec handler.
+/* generic timespec handler for XML Version 1 files.
 
    A collection of node functions intended to parse a sub-node set
    that looks like this:
@@ -361,13 +361,6 @@ simple_chars_only_parser_new (sixtp_end_handler end_handler)
    the seconds and the <ns> block is ignored.  If
    all goes well, returns the time64 as the result.
 */
-
-gboolean
-string_to_time64 (const gchar* str, time64* time)
-{
-    *time = gnc_iso8601_to_time64_gmt (str);
-    return (TRUE);
-}
 
 /* Top level timespec node:
 
@@ -436,17 +429,17 @@ generic_timespec_secs_end_handler (gpointer data_for_children,
 {
     gchar* txt = NULL;
     Time64ParseInfo* info = (Time64ParseInfo*) parent_data;
-    gboolean ok;
 
     g_return_val_if_fail (parent_data, FALSE);
 
     txt = concatenate_child_result_chars (data_from_children);
     g_return_val_if_fail (txt, FALSE);
 
-    ok = string_to_time64 (txt, & info->time);
+    info->time = gnc_iso8601_to_time64_gmt (txt);
     g_free (txt);
 
-    g_return_val_if_fail (ok, FALSE);
+// gnc_iso8601_to_time64_gmt returns INT64_MAX on failure.
+    g_return_val_if_fail (info->time < INT64_MAX, FALSE);
 
     info->s_block_count++;
     return (TRUE);

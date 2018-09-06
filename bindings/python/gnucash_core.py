@@ -109,7 +109,7 @@ class Session(GnuCashCoreClass):
                 # New xml file can't be loaded, new sql store
                 # has to be loaded before it can be altered
                 # Any existing store obviously has to be loaded
-                # More background: https://bugzilla.gnome.org/show_bug.cgi?id=726891
+                # More background: https://bugs.gnucash.org/show_bug.cgi?id=726891
                 if book_uri[:3] != "xml" or not is_new:
                     self.load()
             except GnuCashBackendException as backend_exception:
@@ -375,10 +375,10 @@ class GncPriceDB(GnuCashCoreClass):
 GncPriceDB.add_methods_with_prefix('gnc_pricedb_')
 PriceDB_dict =  {
                 'lookup_latest' : GncPrice,
-                'lookup_nearest_in_time' : GncPrice,
-                'lookup_latest_before' : GncPrice,
+                'lookup_nearest_in_time64' : GncPrice,
+                'lookup_latest_before_t64' : GncPrice,
                 'convert_balance_latest_price' : GncNumeric,
-                'convert_balance_nearest_price' : GncNumeric,
+                'convert_balance_nearest_price_t64' : GncNumeric,
                 }
 methods_return_instance(GncPriceDB,PriceDB_dict)
 GncPriceDB.get_prices = method_function_returns_instance_list(

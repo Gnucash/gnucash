@@ -587,7 +587,9 @@
                                     (not (string=? memo ""))
                                     (hash-ref qif-memo-map memo))))
                      (if (not far-acct-info)
-                         (set! far-acct-info (hash-ref qif-cat-map cat)))))
+                                (set! far-acct-info
+                                      (hash-ref qif-memo-map
+                                                (default-unspec-acct))))))
 
                    (set! far-acct-name (qif-map-entry:gnc-name far-acct-info))
                    (set! far-acct (hash-ref gnc-acct-hash far-acct-name))

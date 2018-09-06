@@ -90,3 +90,5 @@ if(NOT GMOCK_SHARED_LIB)
     ${GTEST_INCLUDE_DIR} ${GTEST_SRC_DIR}
     ${GMOCK_INCLUDE_DIR} ${GMOCK_SRC_DIR})
 endif()
+
+add_executable(jenny  ${CMAKE_SOURCE_DIR}/borrowed/jenny/jenny.c)

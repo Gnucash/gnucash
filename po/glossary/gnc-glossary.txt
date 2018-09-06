@@ -14,7 +14,7 @@
 "account type: Liability"	"A debt, a financial obligation, but see also 'account type: Passive'"
 "account type: money-market"	"-"
 "account type: Mutual fund"	"-"
-"account type: Passive"	"The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugzilla.gnome.org/show_bug.cgi?id=421766"
+"account type: Passive"	"The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
 "account type: Profit & Loss"	"Group of accounts tracking your success, complement of 'Assets & Liabilities'"
 "account type: saving"	"1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 "account type: Stock"	"-"

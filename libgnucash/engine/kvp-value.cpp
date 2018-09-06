@@ -85,8 +85,8 @@ KvpValueImpl::get_type() const noexcept
         return KvpValue::Type::STRING;
     else if (datastore.type() == typeid(GncGUID *))
         return KvpValue::Type::GUID;
-    else if (datastore.type() == typeid(Timespec))
-        return KvpValue::Type::TIMESPEC;
+    else if (datastore.type() == typeid(Time64))
+        return KvpValue::Type::TIME64;
     else if (datastore.type() == typeid(GList *))
         return KvpValue::Type::GLIST;
     else if (datastore.type() == typeid(KvpFrameImpl *))
@@ -155,11 +155,11 @@ struct to_string_visitor : boost::static_visitor<void>
         output << ")";
     }
 
-    void operator()(Timespec val)
+    void operator()(Time64 val)
     {
-        char tmp1[40] {};
-        gnc_timespec_to_iso8601_buff (val, tmp1);
-        output << tmp1 << " (timespec)";
+        char tmp1[MAX_DATE_LENGTH + 1] {};
+        gnc_time64_to_iso8601_buff (val.t, tmp1);
+        output << tmp1 << " (time64)";
     }
 
     void operator()(gnc_numeric val)
@@ -301,9 +301,9 @@ template <> int compare_visitor::operator()(GncGUID * const & one, GncGUID * con
 {
     return guid_compare(one, two);
 }
-template <> int compare_visitor::operator()(Timespec const & one, Timespec const & two) const
+template <> int compare_visitor::operator()(Time64 const & one, Time64 const & two) const
 {
-    return timespec_cmp(&one,&two);
+    return one.t < two.t ? -1 : one.t > two.t ? 1 : 0;
 }
 template <> int compare_visitor::operator()(GDate const & one, GDate const & two) const
 {

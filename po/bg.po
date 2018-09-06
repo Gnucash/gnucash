@@ -11639,13 +11639,13 @@ msgstr ""
 "големи числа. Това означава, че GnuCash не може да използва правилно бази от "
 "данни SQL. Gnucash няма да отваря или запазва в бази от данни SQL до "
 "поправяне чрез използване на друга версия на \"libdbi\". За повече "
-"информация, моля, посетете https://bugzilla.gnome.org/show_bug.cgi?id=611936."
+"информация, моля, посетете https://bugs.gnucash.org/show_bug.cgi?id=611936."
 
 #: ../gnucash/gnome-utils/gnc-file.c:474
 msgid ""
 "GnuCash could not complete a critical test for the presence of a bug in the "
 "\"libdbi\" library. This may be caused by a permissions misconfiguration of "
-"your SQL database. Please see https://bugzilla.gnome.org/show_bug.cgi?"
+"your SQL database. Please see https://bugs.gnucash.org/show_bug.cgi?"
 "id=645216 for more information."
 msgstr ""
 
@@ -15772,7 +15772,7 @@ msgstr "Докладвайте за грешки и проблеми на gnucas
 
 #: ../gnucash/gnucash-bin.c:162
 #, fuzzy
-msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org"
+msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
 msgstr ""
 "Можете да проследявате и подавате доклади за грешка на http://bugzilla.gnome."
 "org\n"

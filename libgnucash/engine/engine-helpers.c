@@ -51,34 +51,6 @@ cannot be considered "standard" or public parts of QOF. */
 
 static QofLogModule log_module = GNC_MOD_ENGINE;
 
-Timespec
-gnc_transaction_get_date_posted(const Transaction *t)
-{
-    Timespec ret = {xaccTransRetDatePosted(t), 0};
-    return ret;
-}
-
-Timespec
-gnc_transaction_get_date_entered(const Transaction *t)
-{
-    Timespec result = {xaccTransRetDateEntered(t), 0};
-    return result;
-}
-
-Timespec
-gnc_split_get_date_reconciled(const Split *s)
-{
-    Timespec result;
-    xaccSplitGetDateReconciledTS(s, &result);
-    return(result);
-}
-
-void
-gnc_transaction_set_date(Transaction *t, Timespec ts)
-{
-    xaccTransSetDatePostedSecs(t, ts.tv_sec);
-}
-
 /** Gets the transaction Number or split Action based on book option:
   * if the book option is TRUE (split action is used for NUM) and a
   * split is provided, split-action is returned; if book option is FALSE
@@ -284,41 +256,11 @@ gnc_book_option_remove_cb (gchar *key, GncBOCb func, gpointer user_data)
     }
 }
 
-SCM
-gnc_timespec2timepair(Timespec t)
-{
-    SCM secs;
-    SCM nsecs;
-
-    secs = scm_from_int64(t.tv_sec);
-    nsecs = scm_from_long (t.tv_nsec);
-    return(scm_cons(secs, nsecs));
-}
-
-Timespec
-gnc_timepair2timespec(SCM x)
-{
-    Timespec result = {0, 0};
-    if (gnc_timepair_p (x))
-    {
-        result.tv_sec = scm_to_int64(SCM_CAR(x));
-        result.tv_nsec = scm_to_long(SCM_CDR(x));
-    }
-    return(result);
-}
 
 GDate gnc_time64_to_GDate(SCM x)
 {
     time64 time = scm_to_int64 (x);
     return time64_to_gdate(time);
-}
-
-int
-gnc_timepair_p(SCM x)
-{
-    return(scm_is_pair(x) &&
-           (scm_is_signed_integer(SCM_CAR(x), INT64_MIN, INT64_MAX) &&
-            scm_is_signed_integer(SCM_CDR(x), INT64_MIN, INT64_MAX)));
 }
 
 SCM
@@ -390,8 +332,6 @@ gnc_guid_p(SCM guid_scm)
  *   Each OR term is a list of AND terms.
  *   Each AND term is a list of one of the following forms:
  *
- *   ('pd-date pr-type sense-bool use-start-bool start-timepair
- *             use-end-bool use-end-timepair)
  *   ('pd-amount pr-type sense-bool amt-match-how amt-match-sign amount)
  *   ('pd-account pr-type sense-bool acct-match-how list-of-account-guids)
  *   ('pd-string pr-type sense-bool case-sense-bool use-regexp-bool string)

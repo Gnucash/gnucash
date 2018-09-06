@@ -679,6 +679,8 @@ gnc_tree_model_price_get_value (GtkTreeModel *tree_model,
     gnc_commodity_namespace *name_space;
     gnc_commodity *commodity;
     GNCPrice *price;
+    char datebuff[MAX_DATE_LENGTH + 1];
+    memset (datebuff, 0, sizeof(datebuff));
 
     g_return_if_fail (GNC_IS_TREE_MODEL_PRICE (model));
     g_return_if_fail (iter != NULL);
@@ -767,8 +769,10 @@ gnc_tree_model_price_get_value (GtkTreeModel *tree_model,
         g_value_set_string (value, gnc_commodity_get_printname (commodity));
         break;
     case GNC_TREE_MODEL_PRICE_COL_DATE:
+        qof_print_date_buff (datebuff, sizeof(datebuff),
+                             gnc_price_get_time64 (price));
         g_value_init (value, G_TYPE_STRING);
-        g_value_set_string (value, gnc_print_date (gnc_price_get_time (price)));
+        g_value_set_string (value, datebuff);
         break;
     case GNC_TREE_MODEL_PRICE_COL_SOURCE:
         g_value_init (value, G_TYPE_STRING);

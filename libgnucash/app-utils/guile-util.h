@@ -68,10 +68,6 @@ void   gnc_copy_trans_scm_onto_trans_swap_accounts(SCM trans_scm,
         gboolean do_commit,
         QofBook *book);
 
-void   gnc_trans_scm_set_date(SCM trans_scm, time64 time);
-void   gnc_trans_scm_set_num(SCM trans_scm, const char *num);
-void   gnc_trans_scm_set_description(SCM trans_scm, const char *description);
-void   gnc_trans_scm_set_notes(SCM trans_scm, const char *notes);
 void   gnc_trans_scm_append_split_scm(SCM trans_scm, SCM split_scm);
 
 SCM    gnc_trans_scm_get_split_scm(SCM trans_scm, int index);
@@ -88,7 +84,7 @@ char * gnc_get_credit_string(GNCAccountType account_type);
 typedef struct _Process Process;
 
 /** Wraps g_spawn_async_with_pipes minimally.  Use gnc_process_get_fd to access
- *  the file descriptors to the child.  To close them them and free the memory
+ *  the file descriptors to the child.  To close them and free the memory
  *  allocated for the process once it has exited, call gnc_detach_process.
  *
  *  @param argl A list of null-terminated strings used as arguments for spawning,

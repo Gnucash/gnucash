@@ -20,11 +20,11 @@
 */
 
 /* Register sheet font setting */
-sheet {
+.sheet {
   font: 18px arial, sans-serif;
 }
 
-sheet calendar {
+.sheet calendar {
   font: 12px arial, sans-serif;
 }
 

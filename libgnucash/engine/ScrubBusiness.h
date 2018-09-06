@@ -62,7 +62,7 @@ gboolean gncScrubBusinessLot (GNCLot *lot);
  *    * check if the split is
  *    part of a transaction that was generated as the result of a doubly
  *    posted invoice/bill/credit note. Refer to
- *    https://bugzilla.gnome.org/show_bug.cgi?id=754209 to learn how this
+ *    https://bugs.gnucash.org/show_bug.cgi?id=754209 to learn how this
  *    could have happened in the past.
  *    If such a transaction is found, its read-only status is removed and
  *    a warning is written to the trace file. Considering the user may

@@ -326,7 +326,7 @@
   (record-modifier <html-table> 'num-rows))
 
 (define (gnc:html-table-num-columns table)
-  (apply max (map length (gnc:html-table-data table))))
+  (apply max (cons 0 (map length (gnc:html-table-data table)))))
 
 (define (gnc:html-table-append-row/markup! table markup newrow)
   (let ((rownum (gnc:html-table-append-row! table newrow)))

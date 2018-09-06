@@ -90,8 +90,8 @@ static  gpointer get_string_val (gpointer pObject);
 static void set_string_val (gpointer pObject,  gpointer pValue);
 static  gpointer get_double_val (gpointer pObject);
 static void set_double_val (gpointer pObject,  gpointer pValue);
-static Timespec get_timespec_val (gpointer pObject);
-static void set_timespec_val (gpointer pObject, Timespec *ts);
+static time64 get_time_val (gpointer pObject);
+static void set_time_val (gpointer pObject, time64 t);
 static  gpointer get_guid_val (gpointer pObject);
 static void set_guid_val (gpointer pObject,  gpointer pValue);
 static gnc_numeric get_numeric_val (gpointer pObject);
@@ -112,7 +112,7 @@ enum
     int64_val_col,
     string_val_col,
     double_val_col,
-    timespec_val_col,
+    time_val_col,
     guid_val_col,
     numeric_val_col,
     gdate_val_col
@@ -140,9 +140,9 @@ static const EntryVec col_table
     gnc_sql_make_table_entry<CT_DOUBLE>("double_val", 0, 0,
                                         (QofAccessFunc)get_double_val,
                                         set_double_val),
-    gnc_sql_make_table_entry<CT_TIMESPEC>("timespec_val", 0, 0,
-                                          (QofAccessFunc)get_timespec_val,
-                                          (QofSetterFunc)set_timespec_val),
+    gnc_sql_make_table_entry<CT_TIME>("timespec_val", 0, 0,
+                                          (QofAccessFunc)get_time_val,
+                                          (QofSetterFunc)set_time_val),
     gnc_sql_make_table_entry<CT_GUID>("guid_val", 0, 0,
                                       (QofAccessFunc)get_guid_val,
                                       set_guid_val),
@@ -390,27 +390,28 @@ set_double_val (gpointer pObject,  gpointer pValue)
     set_slot_from_value (pInfo, value);
 }
 
-static Timespec
-get_timespec_val (gpointer pObject)
+static time64
+get_time_val (gpointer pObject)
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
 
-    g_return_val_if_fail (pObject != NULL, gnc_dmy2timespec (1, 1, 1970));
+    g_return_val_if_fail (pObject != NULL, 0);
 
-//if( kvp_value_get_type( pInfo->pKvpValue ) == KvpValue::Type::TIMESPEC ) {
-    return pInfo->pKvpValue->get<Timespec> ();
+//if( kvp_value_get_type( pInfo->pKvpValue ) == KvpValue::Type::TIME64 ) {
+    auto t = pInfo->pKvpValue->get<Time64> ();
+    return t.t;
 }
 
 static void
-set_timespec_val (gpointer pObject, Timespec *ts)
+set_time_val (gpointer pObject, time64 time)
 {
     slot_info_t* pInfo = (slot_info_t*)pObject;
     KvpValue* value = NULL;
-
+    Time64 t{time};
     g_return_if_fail (pObject != NULL);
 
-    if (pInfo->value_type != KvpValue::Type::TIMESPEC) return;
-    value = new KvpValue {*ts};
+    if (pInfo->value_type != KvpValue::Type::TIME64) return;
+    value = new KvpValue {t};
     set_slot_from_value (pInfo, value);
 }
 

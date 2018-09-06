@@ -720,7 +720,7 @@ check_mult_div (void)
                      a, b, "expected %s got %s = %s * %s for div 100th's");
 
     /* Check for math with 2^63 < num*num < 2^64 which previously failed
-     * see http://bugzilla.gnome.org/show_bug.cgi?id=144980
+     * see http://bugs.gnucash.org/show_bug.cgi?id=144980
      */
     v = 1000000;
     a = gnc_numeric_create(1 * v, v);

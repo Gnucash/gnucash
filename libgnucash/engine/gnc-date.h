@@ -82,22 +82,20 @@ extern "C"
  * this stops working in 2038, we define our own:
  */
 typedef gint64 time64;
-
-/** The Timespec is just like the unix 'struct timespec'
- * except that we use a 64-bit unsigned int to
- * store the seconds.  This should adequately cover dates in the
- * distant future as well as the distant past, as long as they're not
- * more than a couple dozen times the age of the universe
- * Values of this type can range from -9,223,372,036,854,775,808 to
- * 9,223,372,036,854,775,807.
+/* A bit of a hack to create a type separate from the alias of int64_t so that
+ * compile-time dispatch can use the right KVP visitor.
  */
-typedef struct timespec64 Timespec;
+typedef struct
+{
+    time64 t;
+} Time64;
+
 
 /** @name GValue
   @{
 */
-GType timespec_get_type( void );
-#define GNC_TYPE_TIMESPEC (timespec_get_type ())
+GType time64_get_type( void );
+#define GNC_TYPE_TIME64 (time64_get_type ())
 
 /** @} */
 /** The default date format for use with strftime. */
@@ -287,72 +285,11 @@ void gnc_gdate_set_today (GDate* gd);
 void gnc_gdate_set_time64 (GDate* gd, time64 time);
 
 /** @} */
-
-/* Datatypes *******************************************************/
-
-/** \brief Use a 64-bit unsigned int timespec
- *
- * struct timespec64 is just like the unix 'struct timespec' except
- * that we use a 64-bit
- * unsigned int to store the seconds.  This should adequately cover
- * dates in the distant future as well as the distant past, as long as
- * they're not more than a couple dozen times the age of the universe.
- * Values of this type can range from -9,223,372,036,854,775,808 to
- * 9,223,372,036,854,775,807.
- */
-
-#ifndef SWIG   /* swig 1.1p5 can't hack the long long type */
-struct timespec64
-{
-    time64 tv_sec;
-    glong tv_nsec;
-};
-#endif /* SWIG */
-
-
-
-/* Prototypes ******************************************************/
-
-/** \name Timespec functions */
-// @{
-/** strict equality */
-gboolean timespec_equal(const Timespec *ta, const Timespec *tb);
-
-/** comparison:  if (ta < tb) -1; else if (ta > tb) 1; else 0; */
-gint      timespec_cmp(const Timespec *ta, const Timespec *tb);
-
-/** difference between ta and tb, results are normalized
- * ie tv_sec and tv_nsec of the result have the same size
- * abs(result.tv_nsec) <= 1000000000 */
-Timespec timespec_diff(const Timespec *ta, const Timespec *tb);
-
-/** absolute value, also normalized */
-Timespec timespec_abs(const Timespec *t);
-
-/** convert a timepair on a certain day (localtime) to
- * the timepair representing midday on that day. Watch out - this is *not* the
+/** convert a time64 on a certain day (localtime) to
+ * the time64 representing midday on that day. Watch out - this is *not* the
  * first second of the day, which is returned by various other functions
- * returning a Timespec. */
-Timespec timespecCanonicalDayTime(Timespec t);
-
+ * returning a time64. */
 time64 time64CanonicalDayTime(time64 t);
-
-/** Returns the current clock time as a Timespec, taken from time(2). */
-Timespec timespec_now (void);
-
-/** Turns a time64 into a Timespec */
-void timespecFromTime64 (Timespec *ts, time64 t );
-
-/** Turns a Timespec into a time64 */
-time64 timespecToTime64 (Timespec ts);
-
-GDate time64_to_gdate (time64 t);
-
-/** Turns a Timespec into a GDate */
-GDate timespec_to_gdate (Timespec ts);
-
-/** Turns a GDate into a Timespec, returning the first second of the day  */
-Timespec gdate_to_timespec (GDate d);
 
 /** Turns a GDate into a time64, returning the first second of the day */
 time64 gdate_to_time64 (GDate d);
@@ -360,24 +297,17 @@ time64 gdate_to_time64 (GDate d);
 /** Convert a day, month, and year to a time64, returning the first second of the day */
 time64 gnc_dmy2time64 (gint day, gint month, gint year);
 
-time64 gnc_dmy2time64_neutral (gint day, gint month, gint year);
-
-time64 gnc_dmy2time64_end (gint day, gint month, gint year);
-
-/** Convert a day, month, and year to a Timespec, returning the first second of the day */
-Timespec gnc_dmy2timespec (gint day, gint month, gint year);
-
-/** Same as gnc_dmy2timespec, but last second of the day */
-Timespec gnc_dmy2timespec_end (gint day, gint month, gint year);
-
-/** Converts a day, month, and year to a Timespec representing 11:00:00 UTC
+/** Converts a day, month, and year to a time64 representing 11:00:00 UTC
  *  11:00:00 UTC falls on the same time in almost all timezones, the exceptions
  *  being the +13, +14, and -12 timezones used by countries along the
  *  International Date Line. Since users in those timezones would see dates
  *  immediately change by one day, the function checks the current timezone for
  *  those changes and adjusts the UTC time so that the date will be consistent.
  */
-Timespec gnc_dmy2timespec_neutral (gint day, gint month, gint year);
+time64 gnc_dmy2time64_neutral (gint day, gint month, gint year);
+
+/** Same as gnc_dmy2time64, but last second of the day */
+time64 gnc_dmy2time64_end (gint day, gint month, gint year);
 
 /** The gnc_iso8601_to_time64_gmt() routine converts an ISO-8601 style
  *    date/time string to time64.  Please note that ISO-8601 strings
@@ -397,8 +327,8 @@ Timespec gnc_dmy2timespec_neutral (gint day, gint month, gint year);
  */
 time64 gnc_iso8601_to_time64_gmt(const gchar *);
 
-/** The gnc_timespec_to_iso8601_buff() routine takes the input
- *    UTC Timespec value and prints it as an ISO-8601 style string.
+/** The gnc_time64_to_iso8601_buff() routine takes the input
+ *    UTC time64 value and prints it as an ISO-8601 style string.
  *    The buffer must be long enough to contain the NULL-terminated
  *    string (32 characters + NUL).  This routine returns a pointer
  *    to the null terminator (and can thus be used in the 'stpcpy'
@@ -413,17 +343,7 @@ time64 gnc_iso8601_to_time64_gmt(const gchar *);
  *    The string generated by this routine uses the local time zone
  *    on the machine on which it is executing to create the time string.
  */
-gchar * gnc_timespec_to_iso8601_buff (Timespec ts, gchar * buff);
 gchar * gnc_time64_to_iso8601_buff (time64, char * buff);
-
-/** Set the proleptic Gregorian day, month, and year from a Timespec
- * \param ts: input timespec
- * \param day: output day, 1 - 31
- * \param month: output month, 1 - 12
- * \param year: output year, 0001 - 9999 CE
- */
-void gnc_timespec2dmy (Timespec ts, gint *day, gint *month, gint *year);
-
 // @}
 
 /* ======================================================== */
@@ -556,13 +476,6 @@ size_t qof_print_gdate(char *buf, size_t bufflen, const GDate *gd);
  * **/
 char * qof_print_date (time64 secs);
 
-/** Convenience; calls through to qof_print_date_dmy_buff().
- *  Return: static global string.
- *  \warning This routine is not thread-safe, because it uses a single
- *      global buffer to store the return value.  Use qof_print_date_buff()
- *      or qof_print_date() instead.
- * **/
-const char * gnc_print_date(Timespec ts);
 
 /* ------------------------------------------------------------------ */
 /* time printing utilities */
@@ -707,6 +620,11 @@ guint gnc_gdate_hash( gconstpointer gd );
 
 /** \name GDate to time64 conversions */
 // @{
+/** Returns the GDate in which the time64 occurs.
+ * @param t The time64
+ * @returns A GDate for the day in which the time64 occurs.
+ */
+GDate time64_to_gdate (time64 t);
 
 /** The gnc_time64_get_day_start() routine will take the given time in
  *  GLib GDate format and adjust it to the first second of that day.

@@ -40,8 +40,9 @@
  *
  *  @param book This parameter specifies the book whose data
  *  will be closed.
+ *  @param parent This parameter specifies the parent window
  */
-void gnc_ui_close_book (QofBook* book);
+void gnc_ui_close_book (QofBook* book, GtkWindow *parent);
 
 
 /** @} */

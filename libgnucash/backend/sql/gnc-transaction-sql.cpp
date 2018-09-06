@@ -90,8 +90,8 @@ static const EntryVec tx_col_table
     gnc_sql_make_table_entry<CT_COMMODITYREF>("currency_guid", 0, COL_NNUL,
                                               "currency"),
     gnc_sql_make_table_entry<CT_STRING>("num", TX_MAX_NUM_LEN, COL_NNUL, "num"),
-    gnc_sql_make_table_entry<CT_TIMESPEC>("post_date", 0, 0, "post-date"),
-    gnc_sql_make_table_entry<CT_TIMESPEC>("enter_date", 0, 0, "enter-date"),
+    gnc_sql_make_table_entry<CT_TIME>("post_date", 0, 0, "post-date"),
+    gnc_sql_make_table_entry<CT_TIME>("enter_date", 0, 0, "enter-date"),
     gnc_sql_make_table_entry<CT_STRING>("description", TX_MAX_DESCRIPTION_LEN,
                                         0, "description"),
 };
@@ -116,7 +116,7 @@ static const EntryVec split_col_table
     gnc_sql_make_table_entry<CT_STRING>("reconcile_state", 1, COL_NNUL,
                                        (QofAccessFunc)get_split_reconcile_state,
                                         set_split_reconcile_state),
-    gnc_sql_make_table_entry<CT_TIMESPEC>("reconcile_date", 0, 0,
+    gnc_sql_make_table_entry<CT_TIME>("reconcile_date", 0, 0,
                                           "reconcile-date"),
     gnc_sql_make_table_entry<CT_NUMERIC>("value", 0, COL_NNUL, "value"),
     gnc_sql_make_table_entry<CT_NUMERIC>("quantity", 0, COL_NNUL, "amount"),
@@ -127,7 +127,7 @@ static const EntryVec split_col_table
 
 static const EntryVec post_date_col_table
 {
-    gnc_sql_make_table_entry<CT_TIMESPEC>("post_date", 0, 0, "post-date"),
+    gnc_sql_make_table_entry<CT_TIME>("post_date", 0, 0, "post-date"),
 };
 
 static const EntryVec account_guid_col_table
@@ -225,16 +225,11 @@ load_single_split (GncSqlBackend* sql_be, GncSqlRow& row)
         pSplit = xaccSplitLookup (&split_guid, sql_be->book());
     }
 
-    if (pSplit == NULL)
-    {
-        pSplit = xaccMallocSplit (sql_be->book());
-    }
+    if (pSplit)
+        return pSplit; //Already loaded, nothing to do.
 
-    /* If the split is dirty, don't overwrite it */
-    if (!qof_instance_is_dirty (QOF_INSTANCE (pSplit)))
-    {
-        gnc_sql_load_object (sql_be, row, GNC_ID_SPLIT, pSplit, split_col_table);
-    }
+    pSplit = xaccMallocSplit (sql_be->book());
+    gnc_sql_load_object (sql_be, row, GNC_ID_SPLIT, pSplit, split_col_table);
 
     /*# -ifempty */
     if (pSplit != xaccSplitLookup (&split_guid, sql_be->book()))
@@ -272,7 +267,7 @@ load_splits_for_transactions (GncSqlBackend* sql_be, std::string selector)
     auto result = sql_be->execute_select_statement (stmt);
 
     for (auto row : *result)
-        Split* s = load_single_split (sql_be, row);
+        load_single_split (sql_be, row);
     sql = "SELECT DISTINCT ";
     sql += spkey + " FROM " SPLIT_TABLE " WHERE " + sskey + " IN " + selector;
     gnc_sql_slots_load_for_sql_subquery(sql_be, sql,
@@ -292,14 +287,9 @@ load_single_tx (GncSqlBackend* sql_be, GncSqlRow& row)
     if (guid == NULL) return NULL;
     tx_guid = *guid;
 
-    // Don't overwrite the transaction if it's already been loaded (and possibly modified).
-    // However increase the edit level, it may be modified while loading its splits
     pTx = xaccTransLookup (&tx_guid, sql_be->book());
-    if (pTx != NULL)
-    {
-        xaccTransBeginEdit (pTx);
-        return NULL;
-    }
+    if (pTx)
+        return nullptr; // Nothing to do. 
 
     pTx = xaccMallocTransaction (sql_be->book());
     xaccTransBeginEdit (pTx);

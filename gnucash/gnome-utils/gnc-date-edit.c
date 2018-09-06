@@ -184,13 +184,13 @@ gnc_date_edit_popdown(GNCDateEdit *gde)
 static void
 day_selected (GtkCalendar *calendar, GNCDateEdit *gde)
 {
-    Timespec t;
+    time64 t;
     guint year, month, day;
     gde->in_selected_handler = TRUE;
     gtk_calendar_get_date (calendar, &year, &month, &day);
     /* GtkCalendar returns a 0-based month */
-    t = gnc_dmy2timespec (day, month + 1, year);
-    gnc_date_edit_set_time_ts (gde, t);
+    t = gnc_dmy2time64 (day, month + 1, year);
+    gnc_date_edit_set_time (gde, t);
     gde->in_selected_handler = FALSE;
 }
 
@@ -809,12 +809,6 @@ gnc_date_edit_set_gdate (GNCDateEdit *gde, const GDate *date)
     gnc_date_edit_set_time(gde, t);
 }
 
-void
-gnc_date_edit_set_time_ts (GNCDateEdit *gde, Timespec the_time)
-{
-    gnc_date_edit_set_time (gde, the_time.tv_sec);
-}
-
 /**
  * gnc_date_edit_set_popup_range:
  * @gde: The GNCDateEdit widget
@@ -1033,13 +1027,6 @@ gnc_date_edit_new (time64 the_time, int show_time, int use_24_format)
              | (use_24_format ? GNC_DATE_EDIT_24_HR : 0)));
 }
 
-GtkWidget *
-gnc_date_edit_new_ts (Timespec the_time, int show_time, int use_24_format)
-{
-    return gnc_date_edit_new (the_time.tv_sec, show_time, use_24_format);
-}
-
-
 /*
  * Create a new GncDateEdit widget from a glade file.  The widget
  * generated is set to today's date, and will not show a time as part
@@ -1193,16 +1180,6 @@ gnc_date_edit_get_gdate (GNCDateEdit *gde, GDate *date)
     gnc_gdate_set_time64 (date, t);
 }
 
-Timespec
-gnc_date_edit_get_date_ts (GNCDateEdit *gde)
-{
-    Timespec ts = { 0, 0 };
-
-    ts.tv_sec = gnc_date_edit_get_date (gde);
-
-    return ts;
-}
-
 /**
  * gnc_date_edit_get_date_end:
  * @gde: The GNCDateEdit widget
@@ -1222,16 +1199,6 @@ gnc_date_edit_get_date_end (GNCDateEdit *gde)
     gnc_tm_set_day_end(&tm);
 
     return gnc_mktime (&tm);
-}
-
-Timespec
-gnc_date_edit_get_date_end_ts (GNCDateEdit *gde)
-{
-    Timespec ts = { 0, 0 };
-
-    ts.tv_sec = gnc_date_edit_get_date_end (gde);
-
-    return ts;
 }
 
 /**

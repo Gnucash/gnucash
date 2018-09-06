@@ -686,7 +686,7 @@ gnc_invoice_window_printCB (GtkWindow* parent, gpointer data)
 
 static gboolean
 gnc_dialog_post_invoice(InvoiceWindow *iw, char *message,
-                        Timespec *ddue, Timespec *postdate,
+                        time64 *ddue, time64 *postdate,
                         char **memo, Account **acc, gboolean *accumulate)
 {
     GncInvoice *invoice;
@@ -719,17 +719,17 @@ gnc_dialog_post_invoice(InvoiceWindow *iw, char *message,
      * For Vendor Bills and Employee Vouchers
      * that would be the date of the most recent invoice entry.
      * Failing that, today is used as a fallback */
-    *postdate = timespec_now();
+    *postdate = gnc_time(NULL);
 
     if (entries && ((gncInvoiceGetOwnerType (invoice) == GNC_OWNER_VENDOR) ||
                     (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_EMPLOYEE)))
     {
-        postdate->tv_sec = gncEntryGetDate ((GncEntry*)entries->data);
+        *postdate = gncEntryGetDate ((GncEntry*)entries->data);
         for (entries_iter = entries; entries_iter != NULL; entries_iter = g_list_next(entries_iter))
         {
             time64 entrydate = gncEntryGetDate ((GncEntry*)entries_iter->data);
-            if (entrydate > postdate->tv_sec)
-                postdate->tv_sec = entrydate;
+            if (entrydate > *postdate)
+                *postdate = entrydate;
         }
     }
 
@@ -758,8 +758,8 @@ gnc_dialog_post_invoice(InvoiceWindow *iw, char *message,
 
 struct post_invoice_params
 {
-    Timespec ddue;          /* Due date */
-    Timespec postdate;      /* Date posted */
+    time64 ddue;            /* Due date */
+    time64 postdate;        /* Date posted */
     char *memo;             /* Memo for posting transaction */
     Account *acc;           /* Account to post to */
     gboolean accumulate;    /* Whether to accumulate splits */
@@ -772,7 +772,7 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
     GncInvoice *invoice;
     char *message, *memo;
     Account *acc = NULL;
-    Timespec ddue, postdate;
+    time64 ddue, postdate;
     gboolean accumulate;
     QofInstance *owner_inst;
     const char *text;
@@ -825,7 +825,7 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
      * Note that we can safely ignore the return value; we checked
      * the verify_ok earlier, so we know it's ok.
      * Additionally make sure the invoice has the owner's currency
-     * refer to https://bugzilla.gnome.org/show_bug.cgi?id=728074
+     * refer to https://bugs.gnucash.org/show_bug.cgi?id=728074
      */
     gnc_suspend_gui_refresh ();
     gncInvoiceBeginEdit (invoice);
@@ -873,7 +873,7 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
         xfer = gnc_xfer_dialog (iw_get_window(iw), acc);
         gnc_xfer_dialog_is_exchange_dialog(xfer, &exch_rate);
         gnc_xfer_dialog_select_to_currency(xfer, account_currency);
-        gnc_xfer_dialog_set_date (xfer, timespecToTime64 (postdate));
+        gnc_xfer_dialog_set_date (xfer, postdate);
         /* Even if amount is 0 ask for an exchange rate. It's required
          * for the transaction generating code. Use an amount of 1 in
          * that case as the dialog won't allow to specify an exchange
@@ -913,7 +913,7 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
             gnc_price_begin_edit (convprice);
             gnc_price_set_commodity (convprice, account_currency);
             gnc_price_set_currency (convprice, gncInvoiceGetCurrency (invoice));
-            gnc_price_set_time (convprice, postdate);
+            gnc_price_set_time64 (convprice, postdate);
             gnc_price_set_source (convprice, PRICE_SOURCE_TEMP);
             gnc_price_set_typestr (convprice, PRICE_TYPE_LAST);
             gnc_price_set_value (convprice, exch_rate);
@@ -948,7 +948,7 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
     else
         auto_pay = gnc_prefs_get_bool (GNC_PREFS_GROUP_BILL, GNC_PREF_AUTO_PAY);
 
-    gncInvoicePostToAccount (invoice, acc, postdate.tv_sec, ddue.tv_sec, memo, accumulate, auto_pay);
+    gncInvoicePostToAccount (invoice, acc, postdate, ddue, memo, accumulate, auto_pay);
 
 cleanup:
     gncInvoiceCommitEdit (invoice);
@@ -1747,7 +1747,6 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
         GtkTextBuffer* text_buffer;
         const char *string;
         gchar * tmp_string;
-        Account *acct;
         time64 time;
 
         gtk_entry_set_text (GTK_ENTRY (iw->id_entry), gncInvoiceGetID (invoice));
@@ -1800,16 +1799,13 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
 
         /*
          * Next, figure out if we've been posted, and if so set the appropriate
-         * bits of information.. Then work on hiding or showing as
-         * necessary. This duplicates the logic in gncInvoiceIsPosted, but we
-         * need the accout pointer.
+         * bits of information... Then work on hiding or showing as
+         * necessary.
          */
-
-        acct = gncInvoiceGetPostedAcc (invoice);
-        if (acct)
+        is_posted = gncInvoiceIsPosted (invoice);
+        if (is_posted)
         {
-            /* Ok, it's definitely posted. Setup the 'posted-invoice' fields now */
-            is_posted = TRUE;
+            Account *acct = gncInvoiceGetPostedAcc (invoice);
 
             /* Can we unpost this invoice?
              * XXX: right now we always can, but there
@@ -1851,7 +1847,7 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
     {
         GtkWidget *hide, *show;
 
-        if (is_posted == TRUE)
+        if (is_posted)
         {
             hide = GTK_WIDGET (gtk_builder_get_object (iw->builder, "hide3"));
             gtk_widget_hide (hide);

@@ -66,6 +66,7 @@
 #define GNC_PREF_REVERSED_ACCTS_NONE    "reversed-accounts-none"
 #define GNC_PREF_REVERSED_ACCTS_CREDIT  "reversed-accounts-credit"
 #define GNC_PREF_REVERSED_ACCTS_INC_EXP "reversed-accounts-incomeexpense"
+#define GNC_PREF_PRICES_FORCE_DECIMAL   "force-price-decimal"
 
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -80,6 +81,11 @@ static gboolean reverse_type[NUM_ACCOUNT_TYPES];
  * as that will change any time the book changes. */
 static gchar *user_default_currency = NULL;
 static gchar *user_report_currency = NULL;
+const static int maximum_decimals = 15;
+static const gint64 pow_10[] = {1, 10, 100, 1000, 10000, 100000, 1000000,
+                               10000000, 100000000, 1000000000, 10000000000,
+                               100000000000, 1000000000000, 10000000000000,
+                               100000000000000, 1000000000000000};
 
 gchar *gnc_normalize_account_separator (const gchar* separator)
 {
@@ -1317,17 +1323,34 @@ gnc_share_print_info_places (int decplaces)
 }
 
 GNCPrintAmountInfo
-gnc_default_price_print_info (void)
+gnc_default_price_print_info (const gnc_commodity *curr)
 {
-    static GNCPrintAmountInfo info;
-    static gboolean got_it = FALSE;
+    GNCPrintAmountInfo info;
+    gboolean force = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL,
+                                         GNC_PREF_PRICES_FORCE_DECIMAL);
+    info.commodity = curr;
 
-    if (!got_it)
+    if (info.commodity)
     {
-        info = gnc_default_print_info_helper (6);
-        got_it = TRUE;
+        int frac = gnc_commodity_get_fraction (curr);
+        guint8 decplaces = 2;
+        while (frac != 1 && (frac % 10) == 0 && (frac /= 10)) ++decplaces;
+        info.max_decimal_places = decplaces;
+        info.min_decimal_places = decplaces;
+    }
+    else
+    {
+        info.max_decimal_places = 6;
+        info.min_decimal_places = 0;
     }
 
+    info.use_separators = 1;
+    info.use_symbol = 0;
+    info.use_locale = 1;
+    info.monetary = 1;
+    
+    info.force_fit = force;
+    info.round = force;
     return info;
 }
 
@@ -1373,7 +1396,21 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
 
     /* Try to print as decimal. */
     value_is_decimal = gnc_numeric_to_decimal(&val, NULL);
-
+    if (!value_is_decimal && info->force_fit && info->round)
+    {
+        /* if there's a commodity use 100x the commodity's fraction. N.B. This
+         * assumes that commodity fractions are multiples of 10, a reasonable
+         * assumption in 2018. Otherwise, if there's a reasonable
+         * max_decimal_places, use that.
+         */
+        const gint64 denom = info->commodity ?
+             gnc_commodity_get_fraction(info->commodity) * 100 :
+             (info->max_decimal_places &&
+               info->max_decimal_places <= maximum_decimals) ?
+             pow_10[info->max_decimal_places] : pow_10[maximum_decimals];
+        val = gnc_numeric_convert(val, denom, GNC_HOW_RND_ROUND_HALF_UP);
+        value_is_decimal = gnc_numeric_to_decimal(&val, NULL);
+    }
     /* Force at least auto_decimal_places zeros */
     if (auto_decimal_enabled)
     {

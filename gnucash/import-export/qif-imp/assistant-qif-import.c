@@ -1137,7 +1137,8 @@ refresh_old_transactions(QIFImportWindow * wind, int selection)
 
         while (!scm_is_null(possible_matches))
         {
-            Timespec ts_send = {0,0};
+            char datebuff[MAX_DATE_LENGTH + 1];
+            memset(datebuff, 0, sizeof(datebuff));
             current_xtn = SCM_CAR(possible_matches);
 #define FUNC_NAME "xaccTransCountSplits"
             gnc_xtn     = SWIG_MustGetPtr(SCM_CAR(current_xtn),
@@ -1159,11 +1160,12 @@ refresh_old_transactions(QIFImportWindow * wind, int selection)
             }
 
             gtk_list_store_append(store, &iter);
-            ts_send.tv_sec = xaccTransRetDatePosted(gnc_xtn);
+            qof_print_date_buff(datebuff, sizeof(datebuff),
+                               xaccTransRetDatePosted(gnc_xtn));
             gtk_list_store_set
             (store, &iter,
              QIF_TRANS_COL_INDEX, rownum++,
-             QIF_TRANS_COL_DATE, gnc_print_date(ts_send),
+             QIF_TRANS_COL_DATE, datebuff,
              QIF_TRANS_COL_DESCRIPTION, xaccTransGetDescription(gnc_xtn),
              QIF_TRANS_COL_AMOUNT, amount_str,
              QIF_TRANS_COL_CHECKED, selected != SCM_BOOL_F,
@@ -3137,7 +3139,9 @@ gnc_ui_qif_import_duplicates_match_prepare (GtkAssistant *assistant,
         duplicates = wind->match_transactions;
         while (!scm_is_null(duplicates))
         {
-            Timespec send_ts = {0,0};
+            time64 send_time = 0;
+            char datebuff[MAX_DATE_LENGTH + 1];
+            memset (datebuff, 0, sizeof(datebuff));
             current_xtn = SCM_CAAR(duplicates);
 #define FUNC_NAME "xaccTransCountSplits"
             gnc_xtn = SWIG_MustGetPtr(current_xtn,
@@ -3154,12 +3158,13 @@ gnc_ui_qif_import_duplicates_match_prepare (GtkAssistant *assistant,
                                     (xaccSplitGetAccount(gnc_split), TRUE));
             }
             gtk_list_store_append(store, &iter);
-            send_ts.tv_sec = xaccTransRetDatePosted(gnc_xtn);
+            send_time = xaccTransRetDatePosted(gnc_xtn);
+            qof_print_date_buff (datebuff, sizeof(datebuff), send_time);
             gtk_list_store_set
             (store, &iter,
              QIF_TRANS_COL_INDEX, rownum++,
              QIF_TRANS_COL_DATE,
-             gnc_print_date(send_ts),
+             datebuff,
              QIF_TRANS_COL_DESCRIPTION, xaccTransGetDescription(gnc_xtn),
              QIF_TRANS_COL_AMOUNT, amount_str,
              -1);
@@ -3650,7 +3655,8 @@ gnc_ui_qif_import_assistant_make(QIFImportWindow *qif_win)
     box = GTK_WIDGET(gtk_builder_get_object (builder, "currency_picker_hbox"));
     gtk_box_pack_start(GTK_BOX(box), qif_win->currency_picker, TRUE, TRUE, 0);
 
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(qif_win->window));
+    gnc_restore_window_size (GNC_PREFS_GROUP,
+                             GTK_WINDOW(qif_win->window), gnc_ui_get_main_window(NULL));
 
     g_signal_connect( qif_win->window, "destroy",
                       G_CALLBACK(gnc_ui_qif_import_assistant_destroy), qif_win );

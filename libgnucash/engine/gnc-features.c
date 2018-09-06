@@ -48,6 +48,7 @@ static gncFeature known_features[] =
     { GNC_FEATURE_GUID_BAYESIAN, "Use account GUID as key for Bayesian data (requires at least GnuCash 2.6.12)" },
     { GNC_FEATURE_GUID_FLAT_BAYESIAN, "Use account GUID as key for bayesian data and store KVP flat (requires at least Gnucash 2.6.19)" },
     { GNC_FEATURE_SQLITE3_ISO_DATES, "Use ISO formatted date-time strings in SQLite3 databases (requires at least GnuCash 2.6.20)"},
+    { GNC_FEATURE_REG_SORT_FILTER, "Store the register sort and filter settings in .gcm metadata file (requires at least GnuCash 3.3)"},
     { NULL },
 };
 
@@ -72,7 +73,7 @@ static void gnc_features_init ()
 }
 
 static void gnc_features_test_one(gpointer pkey, gpointer value,
-				  gpointer data)
+                  gpointer data)
 {
     const gchar *key = (const gchar*)pkey;
     const gchar *feature_desc = (const gchar*)value;
@@ -89,7 +90,7 @@ static void gnc_features_test_one(gpointer pkey, gpointer value,
     g_assert(feature_desc);
 
     *unknown_features = g_list_prepend(*unknown_features,
-				       (gpointer)feature_desc);
+                       (gpointer)feature_desc);
 }
 
 /* Check if the session requires features unknown to this version of GnuCash.
@@ -108,25 +109,25 @@ gchar *gnc_features_test_unknown (QofBook *book)
 
     /* Iterate over the members of this frame for unknown features */
     g_hash_table_foreach (features_used, &gnc_features_test_one,
-			  &features_list);
+              &features_list);
     if (features_list)
     {
-	GList *i;
-	char* msg = g_strdup(_("This Dataset contains features not supported "
-			       "by this version of GnuCash. You must use a "
-			       "newer version of GnuCash in order to support "
-			       "the following features:"
-                             ));
+        GList *i;
+        char* msg = g_strdup(_("This Dataset contains features not supported "
+                       "by this version of GnuCash. You must use a "
+                       "newer version of GnuCash in order to support "
+                       "the following features:"
+                                 ));
 
-	for (i = features_list; i; i = i->next)
-	{
-	    char *tmp = g_strconcat(msg, "\n* ", i->data, NULL);
-	    g_free (msg);
-	    msg = tmp;
-	}
+        for (i = features_list; i; i = i->next)
+        {
+            char *tmp = g_strconcat(msg, "\n* ", i->data, NULL);
+            g_free (msg);
+            msg = tmp;
+        }
 
-	g_list_free(features_list);
-	return msg;
+        g_list_free(features_list);
+        return msg;
     }
     g_hash_table_unref (features_used);
     return NULL;
@@ -159,7 +160,7 @@ struct CheckFeature
 };
 
 static void gnc_features_check_feature_cb (gpointer pkey, gpointer value,
-				  gpointer data)
+                  gpointer data)
 {
     const gchar *key = (const gchar*)pkey;
     struct CheckFeature * check_data = data;

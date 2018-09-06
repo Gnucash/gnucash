@@ -48,7 +48,7 @@ enum GncAssocColumn {DATE_TRANS, DESC_TRANS, URI_U, AVAILABLE, URI_SPLIT, URI, U
 
 typedef struct
 {
-    GtkWidget    *dialog;
+    GtkWidget    *window;
     GtkWidget    *view;
     const gchar  *path_head;
     gboolean      valid_path_head;
@@ -57,36 +57,36 @@ typedef struct
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-void gnc_assoc_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data);
-void gnc_assoc_dialog_close_cb (GtkDialog *dialog, gpointer user_data);
-void gnc_assoc_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_data);
+static void close_handler (gpointer user_data);
 
-
-void
+static void
 gnc_assoc_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data)
 {
     AssocDialog *assoc_dialog = user_data;
 
     ENTER(" ");
     gnc_unregister_gui_component_by_data (DIALOG_ASSOC_CM_CLASS, assoc_dialog);
-
-    if (assoc_dialog->dialog)
+    if (assoc_dialog->window)
     {
-        gtk_widget_destroy (assoc_dialog->dialog);
-        assoc_dialog->dialog = NULL;
+        gtk_widget_destroy (assoc_dialog->window);
+        assoc_dialog->window = NULL;
     }
     g_free (assoc_dialog);
     LEAVE(" ");
 }
 
-void
-gnc_assoc_dialog_close_cb (GtkDialog *dialog, gpointer user_data)
+static gboolean
+gnc_assoc_dialog_window_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
     AssocDialog *assoc_dialog = user_data;
 
-    ENTER(" ");
-    gnc_close_gui_component_by_data (DIALOG_ASSOC_CM_CLASS, assoc_dialog);
-    LEAVE(" ");
+    if (event->keyval == GDK_KEY_Escape)
+    {
+        close_handler (assoc_dialog);
+        return TRUE;
+    }
+    else
+        return FALSE;
 }
 
 static gint
@@ -181,8 +181,11 @@ assoc_dialog_update (AssocDialog *assoc_dialog)
     GtkTreeIter       iter;
     gboolean          valid;
 
+    /* disconnect the model from the treeview */
     model = gtk_tree_view_get_model (GTK_TREE_VIEW(assoc_dialog->view));
- 
+    g_object_ref (G_OBJECT(model));
+    gtk_tree_view_set_model (GTK_TREE_VIEW(assoc_dialog->view), NULL);
+
     /* Get first row in list store */
     valid = gtk_tree_model_get_iter_first (model, &iter);
 
@@ -221,28 +224,30 @@ assoc_dialog_update (AssocDialog *assoc_dialog)
         g_free (filename);
         valid = gtk_tree_model_iter_next (model, &iter);
     }
+    /* reconnect the model to the treeview */
+    gtk_tree_view_set_model (GTK_TREE_VIEW(assoc_dialog->view), model);
+    g_object_unref(G_OBJECT(model));
 }
 
-void
-gnc_assoc_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_data)
+static void
+gnc_assoc_dialog_sort_button_cb (GtkWidget * widget, gpointer user_data)
 {
-    AssocDialog *assoc_dialog = user_data;
+    AssocDialog   *assoc_dialog = user_data;
+    assoc_dialog_sort (assoc_dialog);
+}
 
-    switch (response_id)
-    {
-    case GTK_RESPONSE_APPLY:
-        assoc_dialog_update (assoc_dialog);
-        return;
+static void
+gnc_assoc_dialog_check_button_cb (GtkWidget * widget, gpointer user_data)
+{
+    AssocDialog   *assoc_dialog = user_data;
+    assoc_dialog_update (assoc_dialog);
+}
 
-    case -8:
-        assoc_dialog_sort (assoc_dialog);
-        return;
-
-    case GTK_RESPONSE_CLOSE:
-    default:
-        gnc_close_gui_component_by_data (DIALOG_ASSOC_CM_CLASS, assoc_dialog);
-        return;
-    }
+static void
+gnc_assoc_dialog_close_button_cb (GtkWidget * widget, gpointer user_data)
+{
+    AssocDialog   *assoc_dialog = user_data;
+    gnc_close_gui_component_by_data (DIALOG_ASSOC_CM_CLASS, assoc_dialog);
 }
 
 static void
@@ -316,7 +321,10 @@ get_trans_info (AssocDialog *assoc_dialog)
     /* Get list of Accounts */
     accts = gnc_account_get_descendants_sorted (root);
 
+    /* disconnect the model from the treeview */
     model = gtk_tree_view_get_model (GTK_TREE_VIEW(assoc_dialog->view));
+    g_object_ref (G_OBJECT(model));
+    gtk_tree_view_set_model (GTK_TREE_VIEW(assoc_dialog->view), NULL);
 
     /* Go through list of accounts */
     for (ptr = accts; ptr; ptr = g_list_next (ptr))
@@ -344,11 +352,12 @@ get_trans_info (AssocDialog *assoc_dialog)
             {
                 gchar *uri_u;
                 gboolean rel = FALSE;
-                Timespec ts = {xaccTransRetDatePosted (trans),0};
-
-                if (ts.tv_sec == 0)
-                    ts.tv_sec = gnc_time (NULL);
-
+                time64 t = xaccTransRetDatePosted (trans);
+                char datebuff[MAX_DATE_LENGTH + 1];
+                memset (datebuff, 0, sizeof(datebuff));
+                if (t == 0)
+                    t = gnc_time (NULL);
+                qof_print_date_buff (datebuff, sizeof(datebuff), t);
                 gtk_list_store_append (GTK_LIST_STORE(model), &iter);
 
                 if (g_str_has_prefix (uri,"file:/") && !g_str_has_prefix (uri,"file://")) // path is relative
@@ -357,7 +366,7 @@ get_trans_info (AssocDialog *assoc_dialog)
                 uri_u = convert_uri_to_unescaped (assoc_dialog, uri);
 
                 gtk_list_store_set (GTK_LIST_STORE(model), &iter,
-                                    DATE_TRANS, gnc_print_date (ts),
+                                    DATE_TRANS, datebuff,
                                     DESC_TRANS, xaccTransGetDescription (trans),
                                     URI_U, uri_u, AVAILABLE, _("Unknown"),
                                     URI_SPLIT, split, URI, uri,
@@ -369,6 +378,11 @@ get_trans_info (AssocDialog *assoc_dialog)
         qof_query_destroy (query);
         g_list_free (splits);
     }
+
+    /* reconnect the model to the treeview */
+    gtk_tree_view_set_model (GTK_TREE_VIEW(assoc_dialog->view), model);
+    g_object_unref(G_OBJECT(model));
+
     g_list_free (accts);
     g_list_free (trans_list);
 }
@@ -376,28 +390,33 @@ get_trans_info (AssocDialog *assoc_dialog)
 static void
 gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
 {
-    GtkWidget         *dialog;
+    GtkWidget         *window;
     GtkBuilder        *builder;
     GtkTreeSelection  *selection;
     GtkWidget         *path_head;
     GtkTreeViewColumn *tree_column;
     GtkCellRenderer   *cr;
+    GtkWidget         *button;
 
     ENTER(" ");
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-trans-assoc.glade", "list-store");
+    gnc_builder_add_from_file (builder, "dialog-trans-assoc.glade", "transaction_association_window");
 
-    gnc_builder_add_from_file (builder, "dialog-trans-assoc.glade", "transaction_association_dialog");
+    window = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_association_window"));
+    assoc_dialog->window = window;
 
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_association_dialog"));
-    assoc_dialog->dialog = dialog;
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "sort_button"));
+        g_signal_connect(button, "clicked", G_CALLBACK(gnc_assoc_dialog_sort_button_cb), assoc_dialog);
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "check_button"));
+        g_signal_connect(button, "clicked", G_CALLBACK(gnc_assoc_dialog_check_button_cb), assoc_dialog);
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "close_button"));
+        g_signal_connect(button, "clicked", G_CALLBACK(gnc_assoc_dialog_close_button_cb), assoc_dialog);
+
+    gtk_window_set_title (GTK_WINDOW(assoc_dialog->window), _("Transaction Associations"));
 
     // Set the style context for this dialog so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncTransAssocDialog");
-
-    /* parent */
-    if (parent != NULL)
-        gtk_window_set_transient_for (GTK_WINDOW(dialog), GTK_WINDOW(parent));
+    gnc_widget_set_style_context (GTK_WIDGET(window), "GncTransAssocDialog");
 
     assoc_dialog->view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
     path_head = GTK_WIDGET(gtk_builder_get_object (builder, "path-head"));
@@ -444,18 +463,22 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
     // Set grid lines option to preference
     gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(assoc_dialog->view), gnc_tree_view_get_grid_lines_pref ());
 
-    /* default to 'close' button */
-    gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
-
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(assoc_dialog->view));
     gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
+
+    g_signal_connect (assoc_dialog->window, "destroy",
+                      G_CALLBACK(gnc_assoc_dialog_window_destroy_cb), assoc_dialog);
+
+    g_signal_connect (assoc_dialog->window, "key_press_event",
+                      G_CALLBACK(gnc_assoc_dialog_window_key_press_cb), assoc_dialog);
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, assoc_dialog);
 
     g_object_unref (G_OBJECT(builder));
 
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(assoc_dialog->dialog));
+    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(assoc_dialog->window), parent);
     get_trans_info (assoc_dialog);
+    gtk_widget_show_all (GTK_WIDGET(window));
 
     LEAVE(" ");
 }
@@ -466,8 +489,8 @@ close_handler (gpointer user_data)
     AssocDialog *assoc_dialog = user_data;
 
     ENTER(" ");
-    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(assoc_dialog->dialog));
-    gtk_widget_destroy (GTK_WIDGET(assoc_dialog->dialog));
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(assoc_dialog->window));
+    gtk_widget_destroy (GTK_WIDGET(assoc_dialog->window));
     LEAVE(" ");
 }
 
@@ -490,7 +513,7 @@ show_handler (const char *klass, gint component_id,
         LEAVE("No data strucure");
         return(FALSE);
     }
-    gtk_window_present (GTK_WINDOW(assoc_dialog->dialog));
+    gtk_window_present (GTK_WINDOW(assoc_dialog->window));
     LEAVE(" ");
     return(TRUE);
 }
@@ -521,6 +544,5 @@ gnc_trans_assoc_dialog (GtkWindow *parent)
                    refresh_handler, close_handler,
                    assoc_dialog);
 
-    gtk_widget_show (assoc_dialog->dialog);
     LEAVE(" ");
 }

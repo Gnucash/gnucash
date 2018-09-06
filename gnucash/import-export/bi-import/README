@@ -17,4 +17,4 @@ strings', date fields get quoted, probably because the actual value that goes
 to the file is the result of implicit to_char(date_value) function call.
 The importer tries its best to work in all circumstances, by allowing quotes
 on all fields, but not requiring them.
-See bug https://bugzilla.gnome.org/show_bug.cgi?id=658738 for more details.
+See bug https://bugs.gnucash.org/show_bug.cgi?id=658738 for more details.

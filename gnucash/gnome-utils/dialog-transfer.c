@@ -230,7 +230,7 @@ typedef struct
     GNCPriceDB *pricedb;
     gnc_commodity *from;
     gnc_commodity *to;
-    Timespec ts;
+    time64 time;
     gboolean reverse;
 } PriceReq;
 
@@ -243,7 +243,7 @@ price_request_from_xferData(PriceReq *pr, XferDialog *xd)
     pr->pricedb = xd->pricedb;
     pr->from = xd->from_commodity;
     pr->to = xd->to_commodity;
-    pr->ts = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (xd->date_entry));
+    pr->time = gnc_date_edit_get_date (GNC_DATE_EDIT (xd->date_entry));
     pr->reverse = FALSE;
 }
 
@@ -261,12 +261,12 @@ lookup_price(PriceReq *pr, PriceDate pd)
     {
         default:
         case SAME_DAY:
-            prc = gnc_pricedb_lookup_day (pr->pricedb, pr->from,
-                                          pr->to, pr->ts);
+            prc = gnc_pricedb_lookup_day_t64 (pr->pricedb, pr->from,
+                                              pr->to, pr->time);
             break;
         case NEAREST:
-            prc = gnc_pricedb_lookup_nearest_in_time (pr->pricedb, pr->from,
-                                                      pr->to, pr->ts);
+            prc = gnc_pricedb_lookup_nearest_in_time64 (pr->pricedb, pr->from,
+                                                          pr->to, pr->time);
             break;
         case LATEST:
             prc = gnc_pricedb_lookup_latest (pr->pricedb, pr->from, pr->to);
@@ -1499,7 +1499,7 @@ check_edit(XferDialog *xferData)
 }
 
 static void
-create_transaction(XferDialog *xferData, Timespec *ts,
+create_transaction(XferDialog *xferData, time64 time,
                    Account *from_account, Account* to_account,
                    gnc_numeric amount, gnc_numeric to_amount)
 {
@@ -1513,7 +1513,7 @@ create_transaction(XferDialog *xferData, Timespec *ts,
     xaccTransBeginEdit(trans);
 
     xaccTransSetCurrency(trans, xferData->from_commodity);
-    xaccTransSetDatePostedSecs(trans, ts->tv_sec);
+    xaccTransSetDatePostedSecs(trans, time);
 
     /* Trans-Num or Split-Action set with gnc_set_num_action below per book
      * option */
@@ -1601,7 +1601,7 @@ update_price(XferDialog *xferData, PriceReq *pr)
         return;
     }
     gnc_price_begin_edit (pr->price);
-    gnc_price_set_time (pr->price, pr->ts);
+    gnc_price_set_time64 (pr->price, pr->time);
     gnc_price_set_typestr(pr->price, xferData->price_type);
     gnc_price_set_value (pr->price, value);
     gnc_price_commit_edit (pr->price);
@@ -1613,7 +1613,7 @@ update_price(XferDialog *xferData, PriceReq *pr)
 }
 
 static void
-new_price(XferDialog *xferData, Timespec ts)
+new_price(XferDialog *xferData, time64 time)
 {
     GNCPrice *price = NULL;
     gnc_commodity *from = xferData->from_commodity;
@@ -1637,7 +1637,7 @@ new_price(XferDialog *xferData, Timespec ts)
     gnc_price_begin_edit (price);
     gnc_price_set_commodity (price, from);
     gnc_price_set_currency (price, to);
-    gnc_price_set_time (price, ts);
+    gnc_price_set_time64 (price, time);
     gnc_price_set_source (price, xferData->price_source);
     gnc_price_set_typestr (price, xferData->price_type);
     gnc_price_set_value (price, value);
@@ -1649,7 +1649,7 @@ new_price(XferDialog *xferData, Timespec ts)
 }
 
 static void
-create_price(XferDialog *xferData, Timespec ts)
+create_price(XferDialog *xferData, time64 time)
 {
     PriceReq pr;
 
@@ -1664,7 +1664,7 @@ create_price(XferDialog *xferData, Timespec ts)
         update_price(xferData, &pr);
         return;
     }
-    new_price (xferData, ts);
+    new_price (xferData, time);
 }
 
 void
@@ -1674,7 +1674,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
     Account *to_account;
     Account *from_account;
     gnc_numeric amount, to_amount;
-    Timespec ts;
+    time64 time;
     GDate date;
 
     g_return_if_fail (xferData != NULL);
@@ -1718,7 +1718,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
     }
     g_date_clear (&date, 1);
     gnc_date_edit_get_gdate (GNC_DATE_EDIT (xferData->date_entry), &date);
-    ts = gdate_to_timespec (date);
+    time = gdate_to_time64 (date);
 
     if (!gnc_commodity_equiv(xferData->from_commodity, xferData->to_commodity))
     {
@@ -1748,12 +1748,12 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
         *(xferData->exch_rate) = gnc_numeric_abs(price_value);
     }
     else
-        create_transaction (xferData, &ts, from_account, to_account,
+        create_transaction (xferData, time, from_account, to_account,
                             amount, to_amount);
     /* try to save this to the pricedb */
     if (xferData->pricedb && !gnc_commodity_equal (xferData->from_commodity,
                                                    xferData->to_commodity))
-        create_price(xferData, ts);
+        create_price(xferData, time);
     /* Refresh everything */
     gnc_resume_gui_refresh ();
 
@@ -2046,7 +2046,8 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
     }
 
     gtk_builder_connect_signals(builder, xferData);
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW (xferData->dialog));
+    gnc_restore_window_size (GNC_PREFS_GROUP,
+                             GTK_WINDOW (xferData->dialog), GTK_WINDOW (parent));
     LEAVE(" ");
 }
 

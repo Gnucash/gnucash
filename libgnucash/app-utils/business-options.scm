@@ -461,7 +461,7 @@
 ;; exception as gnc:make-counter-option above.
 ;; Note this function uses a hack to make sure there never is a default value
 ;; (default-value is set to #f and value subsequently set to whatever was passed as default-value)
-;; This hack was introduced to fix https://bugzilla.gnome.org/show_bug.cgi?id=687504
+;; This hack was introduced to fix https://bugs.gnucash.org/show_bug.cgi?id=687504
 (define (gnc:make-counter-format-option
          section
          name

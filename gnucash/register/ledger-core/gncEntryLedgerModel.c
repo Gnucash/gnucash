@@ -186,13 +186,9 @@ static const char * get_date_entry (VirtualLocation virt_loc,
                                     gpointer user_data)
 {
     GncEntryLedger *ledger = user_data;
-    GncEntry *entry;
-    Timespec ts = {0,0};
-
-    entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
-
-    ts.tv_sec = gncEntryGetDate (entry);
-    return gnc_print_date (ts);
+    GncEntry *entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
+    time64 time = gncEntryGetDate (entry);
+    return qof_print_date(time);
 }
 
 static const char * get_desc_entry (VirtualLocation virt_loc,
@@ -568,22 +564,18 @@ static char * get_date_help (VirtualLocation virt_loc, gpointer user_data)
 {
     GncEntryLedger *ledger = user_data;
     BasicCell *cell;
-    char string[1024];
-    struct tm tm;
-    time64 tt;
+    const char *date_string;
+    time64 cell_time;
 
     cell = gnc_table_get_cell (ledger->table, virt_loc);
-    if (!cell)
+    if (!cell || !cell->value || *cell->value == '\0')
         return NULL;
 
-    if (!cell->value || *cell->value == '\0')
-        return NULL;
+    gnc_date_cell_get_date ((DateCell *) cell, &cell_time, FALSE);
 
-    gnc_date_cell_get_date ((DateCell *) cell, &tt);
-    gnc_localtime_r (&tt, &tm);
-    qof_strftime (string, sizeof(string), _("%A %d %B %Y"), &tm);
+    date_string = gnc_print_time64 (cell_time, _("%A %d %B %Y"));
 
-    return g_strdup (string);
+    return g_strdup (date_string);
 }
 
 static char * get_desc_help (VirtualLocation virt_loc, gpointer user_data)
@@ -1015,15 +1007,17 @@ static void gnc_entry_ledger_save_cells (gpointer save_data,
                                            ENTRY_DATE_CELL, TRUE))
     {
         BasicCell *cell;
-        GDate date;
+        time64 cell_time;
 
         cell = gnc_table_layout_get_cell (ledger->table->layout, ENTRY_DATE_CELL);
+
+        gnc_date_cell_get_date ((DateCell *) cell, &cell_time, TRUE);
 
         /* commit any pending changes */
         gnc_date_cell_commit ((DateCell *) cell);
 
-        gnc_date_cell_get_date_gdate ((DateCell *) cell, &date);
-        gncEntrySetDateGDate (entry, &date);
+        /* Note use of time64CanonicalDayTime to set time part to midday */
+        gncEntrySetDate (entry, time64CanonicalDayTime(cell_time));
     }
 
     if (gnc_table_layout_get_cell_changed (ledger->table->layout,

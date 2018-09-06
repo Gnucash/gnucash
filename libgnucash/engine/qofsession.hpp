@@ -95,6 +95,7 @@ private:
     std::string m_book_id;
 
     bool m_saving;
+    bool m_creating;
 
     /* If any book subroutine failed, this records the failure reason
      * (file not found, etc).

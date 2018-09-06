@@ -1040,6 +1040,9 @@ gnucash_sheet_insert_cb (GtkWidget *widget,
 
     if (start_sel != end_sel)
         gtk_editable_select_region(editable, start_sel, end_sel);
+    /* Save the selected region in case the input module eats it. */
+    sheet->start_sel = start_sel;
+    sheet->end_sel = end_sel;
 
     g_string_free (new_text_gs, TRUE);
     g_string_free (change_text_gs, TRUE);
@@ -1810,11 +1813,17 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
     if (pass_on)
     {
         gboolean result = FALSE;
+        GtkEditable *editable = GTK_EDITABLE(sheet->entry);
 
         // If sheet is readonly, entry is not realized
-        if (gtk_widget_get_realized (GTK_WIDGET(sheet->entry)))
-            result = gtk_widget_event (sheet->entry, (GdkEvent *) event);
-
+        if (gtk_widget_get_realized (GTK_WIDGET(editable)))
+            result = gtk_widget_event (GTK_WIDGET(editable), (GdkEvent*)event);
+        /* Restore the stored selection in case it was eaten by the input
+         * module.
+         */
+        if (sheet->start_sel != sheet->end_sel)
+            gtk_editable_select_region(editable, sheet->start_sel,
+                                       sheet->end_sel);
         return result;
     }
 
@@ -1835,13 +1844,15 @@ static gint
 gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
 {
     GnucashSheet *sheet;
+    GtkEditable *editable = NULL;
+    int start_sel = 0, end_sel = 0;
 
     g_return_val_if_fail(widget != NULL, TRUE);
     g_return_val_if_fail(GNUCASH_IS_SHEET(widget), TRUE);
     g_return_val_if_fail(event != NULL, TRUE);
 
     sheet = GNUCASH_SHEET (widget);
-
+    editable = GTK_EDITABLE(sheet->entry);
     /* bug#60582 comment#27 2
            save shift state to enable <shift minus> and <shift equal>
        bug#618434
@@ -1862,6 +1873,9 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
         sheet->shift_state = event->state & GDK_SHIFT_MASK;
         sheet->keyval_state = (event->keyval == GDK_KEY_KP_Decimal) ? GDK_KEY_KP_Decimal : 0;
     }
+
+    gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
+
     if (gtk_im_context_filter_keypress (sheet->im_context, event))
     {
         sheet->need_im_reset = TRUE;
@@ -2452,8 +2466,11 @@ gnucash_get_style_classes (GnucashSheet *sheet, GtkStyleContext *stylectxt,
         field_type -= COLOR_NEGATIVE;
     }
     else
-        gtk_style_context_add_class (stylectxt, "register-foreground");
-
+    {
+        if (sheet->use_gnc_color_theme) // only add this class if builtin colors used
+            gtk_style_context_add_class (stylectxt, "register-foreground");
+    }
+    
     switch (field_type)
     {
     default:
@@ -2588,6 +2605,7 @@ gnucash_sheet_init (GnucashSheet *sheet)
     sheet->delete_surrounding_signal = 0;
     sheet->shift_state = 0;
     sheet->keyval_state = 0;
+    sheet->start_sel = sheet->end_sel = 0;
 }
 
 

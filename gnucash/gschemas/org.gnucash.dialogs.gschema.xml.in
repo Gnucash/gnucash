@@ -21,6 +21,7 @@
     <child name="search" schema="org.gnucash.dialogs.search"/>
     <child name="transfer" schema="org.gnucash.dialogs.transfer"/>
     <child name="trans-assoc" schema="org.gnucash.dialogs.trans-assoc"/>
+    <child name="options" schema="org.gnucash.dialogs.options"/>
   </schema>
 
   <schema id="org.gnucash.dialogs.account" path="/org/gnucash/dialogs/account/">
@@ -238,6 +239,16 @@
 
   <schema id="org.gnucash.dialogs.trans-assoc" path="/org/gnucash/dialogs/trans-assoc/">
     <key type="(iiii)" name="last-geometry">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.dialogs.options" path="/org/gnucash/dialogs/options/">
+    <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>
       <description>This setting describes the size and position of the window when it was last closed.

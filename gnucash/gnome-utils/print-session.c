@@ -31,7 +31,7 @@
 
 /* Do not treat -Wstrict-aliasing warnings as errors because of problems of the
  * G_LOCK* macros as declared by glib.  See
- * http://bugzilla.gnome.org/show_bug.cgi?id=316221 for additional information.
+ * http://bugs.gnucash.org/show_bug.cgi?id=316221 for additional information.
  */
 #if (__GNUC__ >= 4 && __GNUC_MINOR__ >= 2)
 #    pragma GCC diagnostic warning "-Wstrict-aliasing"

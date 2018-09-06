@@ -90,6 +90,8 @@ void aai_match_page_prepare (GtkAssistant *assistant, gpointer user_data);
 
 static gboolean banking_has_accounts(AB_BANKING *banking);
 static void hash_from_kvp_acc_cb(Account *gnc_acc, gpointer user_data);
+static ABInitialInfo *single_info = NULL;
+
 #if AQBANKING_VERSION_INT <= 49908
 static void child_exit_cb(GPid pid, gint status, gpointer data);
 #endif
@@ -178,6 +180,7 @@ void
 aai_destroy_cb(GtkWidget *object, gpointer user_data)
 {
     ABInitialInfo *info = user_data;
+    g_return_if_fail (single_info && info == single_info);
 
     gnc_unregister_gui_component_by_data(ASSISTANT_AB_INITIAL_CM_CLASS, info);
 
@@ -211,6 +214,7 @@ aai_destroy_cb(GtkWidget *object, gpointer user_data)
     info->window = NULL;
 
     g_free(info);
+    single_info = NULL;
 }
 
 void
@@ -845,16 +849,15 @@ void aai_on_prepare (GtkAssistant  *assistant, GtkWidget *page,
     }
 }
 
-void
-gnc_ab_initial_assistant(void)
+static ABInitialInfo *
+gnc_ab_initial_assistant_new(void)
 {
-    ABInitialInfo *info;
     GtkBuilder *builder;
     GtkTreeViewColumn *column;
     GtkTreeSelection *selection;
     gint component_id;
 
-    info = g_new0(ABInitialInfo, 1);
+    ABInitialInfo *info = g_new0(ABInitialInfo, 1);
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "assistant-ab-initial.glade", "aqbanking_init_assistant");
 
@@ -895,7 +898,8 @@ gnc_ab_initial_assistant(void)
     selection = gtk_tree_view_get_selection(info->account_view);
     gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
 
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(info->window));
+    gnc_restore_window_size (GNC_PREFS_GROUP,
+                             GTK_WINDOW(info->window), gnc_ui_get_main_window(NULL));
 
     g_signal_connect(info->account_view, "row-activated",
                      G_CALLBACK(account_list_clicked_cb), info);
@@ -910,6 +914,14 @@ gnc_ab_initial_assistant(void)
                    NULL, aai_close_handler, info);
 
     gnc_gui_component_set_session(component_id, gnc_get_current_session());
-
-    gtk_widget_show(info->window);
+    return info;
 }
+
+void
+gnc_ab_initial_assistant(void)
+{
+    if (!single_info)
+        single_info = gnc_ab_initial_assistant_new();
+    gtk_widget_show(single_info->window);
+}
+

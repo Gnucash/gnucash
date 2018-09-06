@@ -161,6 +161,8 @@ void gnc_ui_register_account_destroy_callback (void (*cb)(Account *));
 
 void gnc_account_renumber_create_dialog (GtkWidget *window, Account *account);
 
+void gnc_account_cascade_color_dialog (GtkWidget *window, Account *account);
+
 /** @} */
 /** @} */
 

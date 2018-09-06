@@ -162,7 +162,7 @@ gnc_print_unstable_message(void)
     g_print("\n\n%s\n%s\n%s\n%s\n",
             _("This is a development version. It may or may not work."),
             _("Report bugs and other problems to gnucash-devel@gnucash.org"),
-            _("You can also lookup and file bug reports at http://bugzilla.gnome.org"),
+            _("You can also lookup and file bug reports at http://bugs.gnucash.org"),
             _("To find the last stable version, please refer to http://www.gnucash.org"));
 }
 
@@ -585,8 +585,13 @@ inner_main_add_price_quotes(void *closure, int argc, char **argv)
     gnc_shutdown(0);
     return;
 fail:
-    if (session && qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
-        g_warning("Session Error: %s", qof_session_get_error_message(session));
+    if (session)
+    {
+        if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
+            g_warning("Session Error: %s",
+                      qof_session_get_error_message(session));
+        qof_session_destroy(session);
+    }
     qof_event_resume();
     gnc_shutdown(1);
 }

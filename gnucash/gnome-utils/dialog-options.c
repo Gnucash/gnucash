@@ -67,14 +67,16 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-#define DIALOG_OPTIONS_CM_CLASS "dialog-options"
+#define DIALOG_OPTIONS_CM_CLASS      "dialog-options"
 #define DIALOG_BOOK_OPTIONS_CM_CLASS "dialog-book-options"
+
+#define GNC_PREFS_GROUP              "dialogs.options"
 
 /*
  * Point where preferences switch control method from a set of
  * notebook tabs to a list.
  */
-#define MAX_TAB_COUNT 4
+#define MAX_TAB_COUNT 6
 
 /* A pointer to the last selected filename */
 #define LAST_SELECTION "last-selection"
@@ -86,7 +88,7 @@ static int gain_loss_accounts_in_filter = 0;
 
 struct gnc_option_win
 {
-    GtkWidget  * dialog;
+    GtkWidget  * window;
     GtkWidget  * notebook;
     GtkWidget  * page_list_view;
     GtkWidget  * page_list;
@@ -103,10 +105,13 @@ struct gnc_option_win
     gpointer             close_cb_data;
 
     /* Hold onto this for a complete reset */
-    GNCOptionDB *		option_db;
+    GNCOptionDB *option_db;
 
     /* Hold on to this to unregister the right class */
     const char *component_class;
+
+    /* widget being destroyed */
+    gboolean destroyed;
 };
 
 typedef enum
@@ -150,8 +155,6 @@ static currency_accounting_data *book_currency_data = NULL;
 static GNCOptionWinCallback global_help_cb = NULL;
 gpointer global_help_cb_data = NULL;
 
-void gnc_options_dialog_response_cb(GtkDialog *dialog, gint response,
-                                    GNCOptionWin *window);
 static void gnc_options_dialog_reset_cb(GtkWidget * w, gpointer data);
 void gnc_options_dialog_list_select_cb (GtkTreeSelection *selection,
                                         gpointer data);
@@ -162,6 +165,7 @@ void gnc_option_changed_gain_loss_account_widget_cb(GtkTreeSelection *selection,
                                                     gpointer data);
 void gnc_option_changed_gain_loss_account_del_button_widget_cb (GtkButton *button,
                                                     gpointer data);
+static void component_close_handler (gpointer data);
 
 GtkWidget *
 gnc_option_get_gtk_widget (GNCOption *option)
@@ -172,16 +176,42 @@ gnc_option_get_gtk_widget (GNCOption *option)
 static void
 gnc_options_dialog_changed_internal (GtkWidget *widget, gboolean sensitive)
 {
-    GtkDialog *dialog;
-
-    while (widget && !GTK_IS_DIALOG(widget))
+    while (widget && !GTK_IS_WINDOW(widget))
         widget = gtk_widget_get_parent(widget);
     if (widget == NULL)
         return;
 
-    dialog = GTK_DIALOG(widget);
-    gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_OK, sensitive);
-    gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_APPLY, sensitive);
+    /* find the ok and cancel buttons, we know where they will be so do it
+       this way as opposed to using gtk_container_foreach, much less iteration */
+    if (GTK_IS_CONTAINER(widget))
+    {
+        GList *children = gtk_container_get_children(GTK_CONTAINER(widget));
+        for (GList *it = children; it; it = it->next)
+        {
+            if (GTK_IS_BOX (GTK_WIDGET(it->data)))
+            {
+                GList *children = gtk_container_get_children(GTK_CONTAINER(it->data));
+                for (GList *it = children; it; it = it->next)
+                {
+                    if (GTK_IS_BUTTON_BOX (GTK_WIDGET(it->data)))
+                    {
+                        GList *children = gtk_container_get_children(GTK_CONTAINER(it->data));
+                        for (GList *it = children; it; it = it->next)
+                        {
+                            if (g_strcmp0 (gtk_widget_get_name(GTK_WIDGET(it->data)), "ok_button") == 0)
+                                gtk_widget_set_sensitive (GTK_WIDGET(it->data), sensitive);
+
+                            if (g_strcmp0 (gtk_widget_get_name(GTK_WIDGET(it->data)), "apply_button") == 0)
+                                gtk_widget_set_sensitive (GTK_WIDGET(it->data), sensitive);
+                        }
+                        g_list_free (children);
+                    }
+                }
+                g_list_free (children);
+            }
+        }
+        g_list_free (children);
+    }
 }
 
 void
@@ -189,7 +219,7 @@ gnc_options_dialog_changed (GNCOptionWin *win)
 {
     if (!win) return;
 
-    gnc_options_dialog_changed_internal (win->dialog, TRUE);
+    gnc_options_dialog_changed_internal (win->window, TRUE);
 }
 
 void
@@ -610,7 +640,7 @@ gnc_set_default_gain_loss_account_widget(gnc_commodity *commodity)
     {
         book_currency_data->default_gain_loss_account_text =
                     gtk_label_new( _("Because no accounts have " \
-                        "been set up yet,you will need to return to this " \
+                        "been set up yet, you will need to return to this " \
                         "dialog (via File->Properties), after account setup, " \
                         "if you want to set a default gain/loss account.") );
 
@@ -667,8 +697,7 @@ gnc_set_default_gain_loss_account_widget(gnc_commodity *commodity)
                 gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(
                         book_currency_data->default_gain_loss_account_widget),
                         TRUE);
-                col = 
-                    gnc_tree_view_add_text_column(GNC_TREE_VIEW(
+                col = gnc_tree_view_add_text_column(GNC_TREE_VIEW(
                         book_currency_data->default_gain_loss_account_widget),
                          _("Currency"), /* title */
                         "commodity", /* pref name */
@@ -684,8 +713,7 @@ gnc_set_default_gain_loss_account_widget(gnc_commodity *commodity)
                 gnc_tree_view_account_column_add_color (GNC_TREE_VIEW_ACCOUNT(
                          book_currency_data->default_gain_loss_account_widget), col);
 
-                col =
-                    gnc_tree_view_add_toggle_column(GNC_TREE_VIEW(
+                col = gnc_tree_view_add_toggle_column(GNC_TREE_VIEW(
                         book_currency_data->default_gain_loss_account_widget),
                         _("Placeholder"),
                         /* Translators: This string has a context prefix; the
@@ -979,7 +1007,7 @@ gnc_option_create_date_widget (GNCOption *option)
                created a basic one called Combott implemented in gnc-combott.
                Have highlighted changes in this file with comments for when
                the feature of per-item tooltips is implemented in gtk,
-               see http://bugzilla.gnome.org/show_bug.cgi?id=303717 */
+               see http://bugs.gnucash.org/show_bug.cgi?id=303717 */
 
             GtkListStore *store;
             GtkTreeIter  iter;
@@ -1086,7 +1114,7 @@ gnc_option_create_multichoice_widget(GNCOption *option)
            created a basic one called Combott implemented in gnc-combott.
            Have highlighted changes in this file with comments for when
            the feature of per-item tooltips is implemented in gtk,
-           see http://bugzilla.gnome.org/show_bug.cgi?id=303717 */
+           see http://bugs.gnucash.org/show_bug.cgi?id=303717 */
         GtkListStore *store;
         GtkTreeIter  iter;
 
@@ -1889,7 +1917,7 @@ gnc_options_dialog_build_contents (GNCOptionWin *propertybox,
 }
 
 /********************************************************************\
- * gnc_options_dialog_build_contents_full                                *
+ * gnc_options_dialog_build_contents_full                           *
  *   builds an options dialog given a property box and an options   *
  *   database and make the dialog visible depending on the          *
  *   show_dialog flag                                               *
@@ -1968,15 +1996,15 @@ gnc_options_dialog_build_contents_full (GNCOptionWin *propertybox,
         gtk_tree_selection_select_iter (selection, &iter);
         gtk_notebook_set_current_page(GTK_NOTEBOOK(propertybox->notebook), default_page);
     }
-    gnc_options_dialog_changed_internal(propertybox->dialog, FALSE);
+    gnc_options_dialog_changed_internal(propertybox->window, FALSE);
     if (show_dialog)
-        gtk_widget_show(propertybox->dialog);
+        gtk_widget_show(propertybox->window);
 }
 
 GtkWidget *
 gnc_options_dialog_widget(GNCOptionWin * win)
 {
-    return win->dialog;
+    return win->window;
 }
 
 GtkWidget *
@@ -1991,43 +2019,79 @@ gnc_options_dialog_notebook(GNCOptionWin * win)
     return win->notebook;
 }
 
-void
-gnc_options_dialog_response_cb(GtkDialog *dialog, gint response, GNCOptionWin *window)
+static void
+gnc_options_dialog_help_button_cb(GtkWidget * widget, GNCOptionWin *win)
 {
-    GNCOptionWinCallback close_cb;
+    if (win->help_cb)
+        (win->help_cb)(win, win->help_cb_data);
+}
 
-    switch (response)
+static void
+gnc_options_dialog_cancel_button_cb(GtkWidget * widget, GNCOptionWin *win)
+{
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(win->window));
+
+    if (win->close_cb)
+        (win->close_cb)(win, win->close_cb_data);
+    else
+        gtk_widget_hide(win->window);
+}
+
+static void
+gnc_options_dialog_apply_button_cb(GtkWidget * widget, GNCOptionWin *win)
+{
+    GNCOptionWinCallback close_cb = win->close_cb;
+
+    win->close_cb = NULL;
+    if (win->apply_cb)
+        win->apply_cb (win, win->apply_cb_data);
+    win->close_cb = close_cb;
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(win->window));
+    gnc_options_dialog_changed_internal (win->window, FALSE);
+}
+
+static void
+gnc_options_dialog_ok_button_cb(GtkWidget * widget, GNCOptionWin *win)
+{
+    GNCOptionWinCallback close_cb = win->close_cb;
+
+    win->close_cb = NULL;
+    if (win->apply_cb)
+        win->apply_cb (win, win->apply_cb_data);
+    win->close_cb = close_cb;
+
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(win->window));
+
+    if (win->close_cb)
+        (win->close_cb)(win, win->close_cb_data);
+    else
+        gtk_widget_hide(win->window);
+}
+
+static void
+gnc_options_dialog_destroy_cb (GtkWidget *object, GNCOptionWin *win)
+{
+    if (!win) return;
+
+    if (win->destroyed == FALSE)
     {
-    case GTK_RESPONSE_HELP:
-        if (window->help_cb)
-            (window->help_cb)(window, window->help_cb_data);
-        break;
-
-    case GTK_RESPONSE_OK:
-    case GTK_RESPONSE_APPLY:
-        close_cb = window->close_cb;
-        window->close_cb = NULL;
-        if (window->apply_cb)
-            window->apply_cb (window, window->apply_cb_data);
-        window->close_cb = close_cb;
-        if (response == GTK_RESPONSE_APPLY)
-        {
-            gnc_options_dialog_changed_internal (window->dialog, FALSE);
-            break;
-        }
-        /* fall through */
-
-    default:
-        if (window->close_cb)
-        {
-            (window->close_cb)(window, window->close_cb_data);
-        }
-        else
-        {
-            gtk_widget_hide(window->dialog);
-        }
-        break;
+        if (win->close_cb)
+            (win->close_cb)(win, win->close_cb_data);
     }
+}
+
+static gboolean
+gnc_options_dialog_window_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+    GNCOptionWin *win = data;
+
+    if (event->keyval == GDK_KEY_Escape)
+    {
+        component_close_handler (win);
+        return TRUE;
+    }
+    else
+        return FALSE;
 }
 
 static void
@@ -2043,7 +2107,7 @@ gnc_options_dialog_reset_cb(GtkWidget * w, gpointer data)
 
     section = (GNCOptionSection*)val;
     gnc_option_db_section_reset_widgets (section);
-    gnc_options_dialog_changed_internal (win->dialog, TRUE);
+    gnc_options_dialog_changed_internal (win->window, TRUE);
 }
 
 void
@@ -2072,10 +2136,10 @@ gnc_options_register_stocks (void)
 
     GtkStockItem items[] =
     {
-        { GTK_STOCK_APPLY		, "gnc_option_apply_button",	0, 0, NULL },
-        { GTK_STOCK_HELP		, "gnc_options_dialog_help",	0, 0, NULL },
-        { GTK_STOCK_OK			, "gnc_options_dialog_ok",	0, 0, NULL },
-        { GTK_STOCK_CANCEL		, "gnc_options_dialog_cancel",	0, 0, NULL },
+        { GTK_STOCK_APPLY       , "gnc_option_apply_button",    0, 0, NULL },
+        { GTK_STOCK_HELP        , "gnc_options_dialog_help",    0, 0, NULL },
+        { GTK_STOCK_OK          , "gnc_options_dialog_ok",      0, 0, NULL },
+        { GTK_STOCK_CANCEL      , "gnc_options_dialog_cancel",  0, 0, NULL },
     };
 
     if (done)
@@ -2091,8 +2155,9 @@ gnc_options_register_stocks (void)
 static void
 component_close_handler (gpointer data)
 {
-    GNCOptionWin *window = data;
-    gtk_dialog_response(GTK_DIALOG(window->dialog), GTK_RESPONSE_CANCEL);
+    GNCOptionWin *win = data;
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(win->window));
+    gnc_options_dialog_cancel_button_cb (NULL, win);
 }
 
 static void
@@ -2152,16 +2217,17 @@ gnc_options_dialog_new_modal(gboolean modal, gchar *title,
     GtkBuilder   *builder;
     GtkWidget    *hbox;
     gint component_id;
+    GtkWidget    *button;
 
     retval = g_new0(GNCOptionWin, 1);
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-options.glade", "gnucash_options_dialog");
-    retval->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "gnucash_options_dialog"));
+    gnc_builder_add_from_file (builder, "dialog-options.glade", "gnucash_options_window");
+    retval->window = GTK_WIDGET(gtk_builder_get_object (builder, "gnucash_options_window"));
     retval->page_list = GTK_WIDGET(gtk_builder_get_object (builder, "page_list_scroll"));
 
     // Set the style context for this dialog so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(retval->dialog), "GncOptionsDialog");
-    gtk_window_set_transient_for (GTK_WINDOW (retval->dialog), parent);
+    gnc_widget_set_style_context (GTK_WIDGET(retval->window), "GncOptionsDialog");
+
     /* Page List */
     {
         GtkTreeView *view;
@@ -2189,13 +2255,23 @@ gnc_options_dialog_new_modal(gboolean modal, gchar *title,
         gtk_tree_selection_set_mode(selection, GTK_SELECTION_BROWSE);
         g_signal_connect (selection, "changed",
                           G_CALLBACK (gnc_options_dialog_list_select_cb), retval);
-
     }
+
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "helpbutton"));
+        g_signal_connect(button, "clicked", G_CALLBACK(gnc_options_dialog_help_button_cb), retval);
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "cancelbutton"));
+        g_signal_connect(button, "clicked", G_CALLBACK(gnc_options_dialog_cancel_button_cb), retval);
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "applybutton"));
+        g_signal_connect(button, "clicked", G_CALLBACK(gnc_options_dialog_apply_button_cb), retval);
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "okbutton"));
+        g_signal_connect(button, "clicked", G_CALLBACK(gnc_options_dialog_ok_button_cb), retval);
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, retval);
 
+    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(retval->window), parent);
+
     if (title)
-        gtk_window_set_title(GTK_WINDOW(retval->dialog), title);
+        gtk_window_set_title(GTK_WINDOW(retval->window), title);
 
     /* modal */
     if (modal == TRUE)
@@ -2229,20 +2305,28 @@ gnc_options_dialog_new_modal(gboolean modal, gchar *title,
                                          GNC_ID_ACCOUNT,
                                          QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
     }
+
+    g_signal_connect (retval->window, "destroy",
+                      G_CALLBACK(gnc_options_dialog_destroy_cb), retval);
+
+    g_signal_connect (retval->window, "key_press_event",
+                      G_CALLBACK(gnc_options_dialog_window_key_press_cb), retval);
+
     g_object_unref(G_OBJECT(builder));
 
+    retval->destroyed = FALSE;
     return retval;
 }
 
 /* Creates a new GNCOptionWin structure, but assumes you have your own
    dialog widget you want to plugin */
 GNCOptionWin *
-gnc_options_dialog_new_w_dialog(gchar *title, GtkWidget *dialog)
+gnc_options_dialog_new_w_dialog(gchar *title, GtkWidget *window)
 {
     GNCOptionWin * retval;
 
     retval = g_new0(GNCOptionWin, 1);
-    retval->dialog = dialog;
+    retval->window = window;
     return retval;
 }
 
@@ -2286,9 +2370,10 @@ gnc_options_dialog_destroy(GNCOptionWin * win)
 
     gnc_unregister_gui_component_by_data(win->component_class, win);
 
-    gtk_widget_destroy(win->dialog);
+    win->destroyed = TRUE;
+    gtk_widget_destroy(win->window);
 
-    win->dialog = NULL;
+    win->window = NULL;
     win->notebook = NULL;
     win->apply_cb = NULL;
     win->help_cb = NULL;
@@ -3519,7 +3604,7 @@ gnc_option_set_ui_value_radiobutton (GNCOption *option, gboolean use_default,
 
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
         //    g_object_set_data(G_OBJECT(widget), "gnc_radiobutton_index",
-        //			GINT_TO_POINTER(index));
+        //          GINT_TO_POINTER(index));
         return FALSE;
     }
 }
@@ -4256,8 +4341,8 @@ void gnc_options_ui_initialize (void)
 
 struct scm_cb
 {
-    SCM	apply_cb;
-    SCM	close_cb;
+    SCM apply_cb;
+    SCM close_cb;
 };
 
 static void
@@ -4271,7 +4356,7 @@ scm_apply_cb (GNCOptionWin *win, gpointer data)
         results = gnc_option_db_commit (win->option_db);
         for (iter = results; iter; iter = iter->next)
         {
-            GtkWidget *dialog = gtk_message_dialog_new(NULL,
+            GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(gnc_options_dialog_widget(win)),
                                                        0,
                                                        GTK_MESSAGE_ERROR,
                                                        GTK_BUTTONS_OK,

@@ -511,7 +511,7 @@ gnucash_register_enter_scrollbar (GtkWidget *widget,
 
     // There seems to be a problem with the scrollbar slider not being
     // updated as the mouse moves possibly related to the following bug
-    // https://bugzilla.gnome.org/show_bug.cgi?id=765410
+    // https://bugs.gnucash.org/show_bug.cgi?id=765410
     // If they are hidden and shown it seems to fix it.
 
     gtk_widget_hide (GTK_WIDGET(vscrollbar));

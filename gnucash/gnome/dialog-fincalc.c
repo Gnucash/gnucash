@@ -676,7 +676,7 @@ gnc_ui_fincalc_dialog_create(GtkWindow *parent)
     gtk_builder_connect_signals(builder, fcd);
     g_object_unref(G_OBJECT(builder));
 
-    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(fcd->dialog));
+    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(fcd->dialog), parent);
     gtk_widget_show(fcd->dialog);
 }
 

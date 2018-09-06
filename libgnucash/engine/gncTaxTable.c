@@ -39,7 +39,7 @@ struct _gncTaxTable
     QofInstance     inst;
     char *          name;
     GncTaxTableEntryList*  entries;
-    Timespec        modtime;      /* internal date of last modtime */
+    time64          modtime;      /* internal date of last modtime */
 
     /* See src/doc/business.txt for an explanation of the following */
     /* Code that handles this is *identical* to that in gncBillTerm */
@@ -165,7 +165,7 @@ maybe_resort_list (GncTaxTable *table)
 static inline void
 mod_table (GncTaxTable *table)
 {
-    timespecFromTime64 (&table->modtime, gnc_time (NULL));
+    table->modtime = gnc_time (NULL);
 }
 
 static inline void addObj (GncTaxTable *table)
@@ -761,10 +761,9 @@ gint64 gncTaxTableGetRefcount (const GncTaxTable *table)
     return table->refcount;
 }
 
-Timespec gncTaxTableLastModified (const GncTaxTable *table)
+time64 gncTaxTableLastModifiedSecs (const GncTaxTable *table)
 {
-    Timespec ts = { 0 , 0 };
-    if (!table) return ts;
+    if (!table) return 0;
     return table->modtime;
 }
 

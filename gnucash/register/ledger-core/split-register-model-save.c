@@ -59,20 +59,20 @@ gnc_split_register_save_date_cell (BasicCell * cell,
 {
     SRSaveData *sd = save_data;
     const char *value;
-    GDate gdate;
+    time64 cell_time;
 
     g_return_if_fail (gnc_basic_cell_has_name (cell, DATE_CELL));
 
     value = gnc_basic_cell_get_value (cell);
 
+    DEBUG ("DATE: %s", value ? value : "(null)");
+
+    gnc_date_cell_get_date ((DateCell *) cell, &cell_time, TRUE);
+
     /* commit any pending changes */
     gnc_date_cell_commit ((DateCell *) cell);
 
-    DEBUG ("DATE: %s", value ? value : "(null)");
-
-    gnc_date_cell_get_date_gdate ((DateCell *) cell, &gdate);
-
-    xaccTransSetDatePostedGDate (sd->trans, gdate);
+    xaccTransSetDatePostedSecsNormalized (sd->trans, cell_time);
 }
 
 static void
@@ -103,7 +103,7 @@ gnc_split_register_save_due_date_cell (BasicCell * cell,
     /* commit any pending changes */
     gnc_date_cell_commit ((DateCell *) cell);
     DEBUG ("DATE: %s", value ? value : "(null)");
-    gnc_date_cell_get_date ((DateCell *) cell, &time);
+    gnc_date_cell_get_date ((DateCell *) cell, &time, TRUE);
     xaccTransSetDateDue (sd->trans, time);
 }
 

@@ -143,7 +143,7 @@ price_to_gui (PriceEditDialog *pedit_dialog)
     const char *source;
     const char *type;
     gnc_numeric value;
-    Timespec date;
+    time64 date;
 
     if (pedit_dialog->price)
     {
@@ -160,7 +160,7 @@ price_to_gui (PriceEditDialog *pedit_dialog)
                                        name_space, fullname);
 
         currency = gnc_price_get_currency (pedit_dialog->price);
-        date = gnc_price_get_time (pedit_dialog->price);
+        date = gnc_price_get_time64 (pedit_dialog->price);
         source = gnc_price_get_source_string (pedit_dialog->price);
         type = gnc_price_get_typestr (pedit_dialog->price);
         value = gnc_price_get_value (pedit_dialog->price);
@@ -168,8 +168,7 @@ price_to_gui (PriceEditDialog *pedit_dialog)
     else
     {
         currency = gnc_default_currency ();
-        date.tv_sec = gnc_time (NULL);
-        date.tv_nsec = 0;
+        date = gnc_time (NULL);
         source = "user:price-editor"; //Sync with source_names in gnc-pricedb.c
         type = "";
         value = gnc_numeric_zero ();
@@ -182,7 +181,7 @@ price_to_gui (PriceEditDialog *pedit_dialog)
         (GNC_CURRENCY_EDIT (pedit_dialog->currency_edit), currency);
     }
 
-    gnc_date_edit_set_time (GNC_DATE_EDIT (pedit_dialog->date_edit), date.tv_sec);
+    gnc_date_edit_set_time (GNC_DATE_EDIT (pedit_dialog->date_edit), date);
 
     gtk_entry_set_text (GTK_ENTRY (pedit_dialog->source_entry), source);
 
@@ -203,7 +202,7 @@ gui_to_price (PriceEditDialog *pedit_dialog)
     const char *source;
     const char *type;
     gnc_numeric value;
-    Timespec date;
+    time64 date;
 
     name_space = gnc_ui_namespace_picker_ns (pedit_dialog->namespace_cbwe);
     fullname = gtk_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(pedit_dialog->commodity_cbwe)))));
@@ -217,8 +216,7 @@ gui_to_price (PriceEditDialog *pedit_dialog)
     if (!currency)
         return _("You must select a Currency.");
 
-    date.tv_sec = gnc_date_edit_get_date (GNC_DATE_EDIT (pedit_dialog->date_edit));
-    date.tv_nsec = 0;
+    date = gnc_date_edit_get_date (GNC_DATE_EDIT (pedit_dialog->date_edit));
 
     source = gtk_entry_get_text (GTK_ENTRY (pedit_dialog->source_entry));
 
@@ -236,7 +234,7 @@ gui_to_price (PriceEditDialog *pedit_dialog)
     gnc_price_begin_edit (pedit_dialog->price);
     gnc_price_set_commodity (pedit_dialog->price, commodity);
     gnc_price_set_currency (pedit_dialog->price, currency);
-    gnc_price_set_time (pedit_dialog->price, date);
+    gnc_price_set_time64 (pedit_dialog->price, date);
     gnc_price_set_source_string (pedit_dialog->price, source);
     gnc_price_set_typestr (pedit_dialog->price, type);
     gnc_price_set_value (pedit_dialog->price, value);
@@ -461,7 +459,7 @@ gnc_price_pedit_dialog_create (GtkWidget *parent,
     pedit_dialog->price_edit = w;
     gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE, 0);
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (w), TRUE);
-    print_info = gnc_default_price_print_info ();
+    print_info = gnc_default_price_print_info (gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT (pedit_dialog->currency_edit)));
     gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (w), print_info);
     gtk_entry_set_activates_default(GTK_ENTRY(w), TRUE);
     gtk_widget_show (w);
@@ -544,7 +542,7 @@ gnc_price_edit_dialog (GtkWidget * parent,
 
     pedit_dialog = g_new0 (PriceEditDialog, 1);
     gnc_price_pedit_dialog_create (parent, pedit_dialog, session);
-    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(pedit_dialog->dialog));
+    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(pedit_dialog->dialog), GTK_WINDOW(parent));
     pedit_dialog->type = type;
 
     switch (type)

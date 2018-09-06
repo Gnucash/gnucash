@@ -238,8 +238,7 @@ void gnc_price_commit_edit (GNCPrice *p);
 
 void gnc_price_set_commodity(GNCPrice *p, gnc_commodity *c);
 void gnc_price_set_currency(GNCPrice *p, gnc_commodity *c);
-void gnc_price_set_time(GNCPrice *p, Timespec t);
-void gnc_price_set_time64(GNCPrice *p, time64 t64);
+void gnc_price_set_time64(GNCPrice *p, time64 t);
 void gnc_price_set_source(GNCPrice *p, PriceSource source);
 void gnc_price_set_source_string(GNCPrice *p, const char* s);
 void gnc_price_set_typestr(GNCPrice *p, const char* type);
@@ -257,7 +256,6 @@ void gnc_price_set_value(GNCPrice *p, gnc_numeric value);
 gnc_commodity * gnc_price_get_commodity(const GNCPrice *p);
 /*@ dependent @*/
 gnc_commodity * gnc_price_get_currency(const GNCPrice *p);
-Timespec        gnc_price_get_time(const GNCPrice *p);
 time64          gnc_price_get_time64(const GNCPrice *p);
 PriceSource     gnc_price_get_source(const GNCPrice *p);
 const char *    gnc_price_get_source_string(const GNCPrice *p);
@@ -406,7 +404,7 @@ typedef enum
  * @return True if there were prices to process, False if not.
  */
 gboolean     gnc_pricedb_remove_old_prices(GNCPriceDB *db, GList *comm_list,
-                                           GDate *fiscal_end_date, Timespec cutoff,
+                                           GDate *fiscal_end_date, time64 cutoff,
                                            PriceRemoveSourceFlags source,
                                            PriceRemoveKeepOptions keep);
 
@@ -463,21 +461,21 @@ PriceList * gnc_pricedb_get_prices(GNCPriceDB *db,
                                    const gnc_commodity *commodity,
                                    const gnc_commodity *currency);
 
-/** @brief Find the price between two commodities at a timespec.
+/** @brief Find the price between two commodities at a time64.
  *
  * The returned GNCPrice may be in either direction so check to ensure that its
  * value is correctly applied.
  * @param db The pricedb
  * @param commodity The first commodity
  * @param currency The second commodity
- * @param t The timespec at which to retrieve the price.
+ * @param t The time64 at which to retrieve the price.
  * @return A GNCPrice or NULL if none matches.
  */
 /* NOT USED */
-GNCPrice * gnc_pricedb_lookup_at_time(GNCPriceDB *db,
-                                       const gnc_commodity *commodity,
-                                       const gnc_commodity *currency,
-                                       Timespec t);
+GNCPrice * gnc_pricedb_lookup_at_time64(GNCPriceDB *db,
+                                        const gnc_commodity *commodity,
+                                        const gnc_commodity *currency,
+                                        time64 t);
 
 /** @brief Return the price between the two commodities on the indicated
  * day. Note that the notion of day might be distorted by changes in timezone.
@@ -491,15 +489,10 @@ GNCPrice * gnc_pricedb_lookup_at_time(GNCPriceDB *db,
  * according to the local timezone.
  * @return A GNCPrice or NULL on failure.
  */
-GNCPrice * gnc_pricedb_lookup_day(GNCPriceDB *db,
-                                  const gnc_commodity *commodity,
-                                  const gnc_commodity *currency,
-                                  Timespec t);
-
 GNCPrice * gnc_pricedb_lookup_day_t64(GNCPriceDB *db,
-                                  const gnc_commodity *commodity,
-                                  const gnc_commodity *currency,
-                                  time64 t64);
+                                      const gnc_commodity *commodity,
+                                      const gnc_commodity *currency,
+                                      time64 t);
 
 /** @brief Return the price between the two commoditiesz nearest to the given
  * time.
@@ -512,15 +505,10 @@ GNCPrice * gnc_pricedb_lookup_day_t64(GNCPriceDB *db,
  * @param t The time nearest to which the returned price should be.
  * @return A GNCPrice or NULL if no prices exist between the two commodities.
  */
-GNCPrice   * gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
-        const gnc_commodity *c,
-        const gnc_commodity *currency,
-        Timespec t);
-
 GNCPrice   * gnc_pricedb_lookup_nearest_in_time64(GNCPriceDB *db,
-        const gnc_commodity *c,
-        const gnc_commodity *currency,
-        time64 t);
+                                                  const gnc_commodity *c,
+                                                  const gnc_commodity *currency,
+                                                  time64 t);
 
 /** @brief Return the price nearest in time to that given between the given
  * commodity and every other.
@@ -534,12 +522,9 @@ GNCPrice   * gnc_pricedb_lookup_nearest_in_time64(GNCPriceDB *db,
  * @return A PriceList of prices for each commodity pair found or NULL if none
  * are.
  */
-PriceList * gnc_pricedb_lookup_nearest_in_time_any_currency(GNCPriceDB *db,
-        const gnc_commodity *c,
-        Timespec t);
 PriceList * gnc_pricedb_lookup_nearest_in_time_any_currency_t64(GNCPriceDB *db,
         const gnc_commodity *c,
-        time64 t64);
+        time64 t);
 
 /** @brief Return the latest price between the given commodities before the
  * given time.
@@ -553,10 +538,10 @@ PriceList * gnc_pricedb_lookup_nearest_in_time_any_currency_t64(GNCPriceDB *db,
  * @return A GNCPrice or NULL if no prices are found before t.
  */
 /* NOT USED, but see bug 743753 */
-GNCPrice * gnc_pricedb_lookup_latest_before(GNCPriceDB *db,
-        gnc_commodity *c,
-        gnc_commodity *currency,
-        Timespec t);
+GNCPrice * gnc_pricedb_lookup_latest_before_t64(GNCPriceDB *db,
+                                                gnc_commodity *c,
+                                                gnc_commodity *currency,
+                                                time64 t);
 
 /** @brief Return the latest price between the given commodity and any other
  * before the given time.
@@ -569,9 +554,9 @@ GNCPrice * gnc_pricedb_lookup_latest_before(GNCPriceDB *db,
  * @return A PriceList of prices for each commodity found or NULL if none are.
  */
 /* NOT USED, but see bug 743753 */
-PriceList * gnc_pricedb_lookup_latest_before_any_currency(GNCPriceDB *db,
+PriceList * gnc_pricedb_lookup_latest_before_any_currency_t64(GNCPriceDB *db,
                                                          const gnc_commodity *c,
-                                                          Timespec t);
+                                                              time64 t);
 
 
 /** @brief Convert a balance from one currency to another using the most recent
@@ -600,11 +585,11 @@ gnc_pricedb_convert_balance_latest_price(GNCPriceDB *pdb,
  * @return A new balance or gnc_numeric_zero if no price is available.
  */
 gnc_numeric
-gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
-                                          gnc_numeric balance,
-                                          const gnc_commodity *balance_currency,
-                                          const gnc_commodity *new_currency,
-                                          time64 t);
+gnc_pricedb_convert_balance_nearest_price_t64(GNCPriceDB *pdb,
+                                              gnc_numeric balance,
+                                              const gnc_commodity *balance_currency,
+                                              const gnc_commodity *new_currency,
+                                              time64 t);
 
 typedef gboolean (*GncPriceForeachFunc)(GNCPrice *p, gpointer user_data);
 

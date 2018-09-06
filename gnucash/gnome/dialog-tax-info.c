@@ -1456,7 +1456,8 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
     clear_gui (ti_dialog);
     gnc_tax_info_set_changed (ti_dialog, FALSE);
 
-    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(ti_dialog->dialog));
+    gnc_restore_window_size(GNC_PREFS_GROUP,
+                            GTK_WINDOW(ti_dialog->dialog), GTK_WINDOW (parent));
 
 
     if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))

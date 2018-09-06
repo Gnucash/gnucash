@@ -1435,7 +1435,7 @@ gnc_account_window_create(GtkWindow *parent, AccountWindow *aw)
     }
     gnc_account_type_view_create (aw, compat_types);
 
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(aw->dialog));
+    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(aw->dialog), parent);
 
     gtk_widget_grab_focus(GTK_WIDGET(aw->name_entry));
 
@@ -1866,7 +1866,7 @@ gnc_ui_edit_account_window(GtkWindow *parent, Account *account)
 
     parent_acct = gnc_account_get_parent (account);
     if (parent_acct == NULL)
-        parent_acct = account;		/* must be at the root */
+        parent_acct = account;      /* must be at the root */
 
     gtk_tree_view_collapse_all (aw->parent_tree);
     gnc_tree_view_account_set_selected_account (
@@ -1951,23 +1951,23 @@ gnc_account_renumber_update_examples (RenumberDialog *data)
     prefix = gtk_editable_get_chars(GTK_EDITABLE(data->prefix), 0, -1);
     interval = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(data->interval));
     if (interval <= 0)
-	interval = 10;
+    interval = 10;
     num_digits = (unsigned int)log10((double)(data->num_children * interval)) + 1;
 
     if (strlen (prefix))
-	str = g_strdup_printf("%s-%0*d", prefix, num_digits, interval);
+    str = g_strdup_printf("%s-%0*d", prefix, num_digits, interval);
     else
-	str = g_strdup_printf("%0*d", num_digits, interval);
+    str = g_strdup_printf("%0*d", num_digits, interval);
 
     gtk_label_set_text(GTK_LABEL(data->example1), str);
     g_free(str);
 
     if (strlen (prefix))
-	str = g_strdup_printf("%s-%0*d", prefix, num_digits,
-			      interval * data->num_children);
+    str = g_strdup_printf("%s-%0*d", prefix, num_digits,
+                  interval * data->num_children);
     else
-	str = g_strdup_printf("%0*d", num_digits,
-			      interval * data->num_children);
+    str = g_strdup_printf("%0*d", num_digits,
+                  interval * data->num_children);
 
     gtk_label_set_text(GTK_LABEL(data->example2), str);
     g_free(str);
@@ -2004,27 +2004,28 @@ gnc_account_renumber_response_cb (GtkDialog *dialog,
     {
         gtk_widget_hide(data->dialog);
         children = gnc_account_get_children_sorted(data->parent);
-	if (children == NULL)
-	{
-	    PWARN ("Can't renumber children of an account with no children!");
-	    g_free (data);
-	    return;
-	}
+        if (children == NULL)
+        {
+            PWARN ("Can't renumber children of an account with no children!");
+            g_free (data);
+            return;
+        }
         prefix = gtk_editable_get_chars(GTK_EDITABLE(data->prefix), 0, -1);
-        interval =
-            gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(data->interval));
-	if (interval <= 0)
-	    interval = 10;
+        interval = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(data->interval));
+
+        if (interval <= 0)
+            interval = 10;
+
         num_digits = (unsigned int)log10 ((double)(data->num_children * interval) + 1);
 
         gnc_set_busy_cursor (NULL, TRUE);
         for (tmp = children, i = 1; tmp; tmp = g_list_next(tmp), i += 1)
         {
-	    if (strlen (prefix))
-		str = g_strdup_printf("%s-%0*d", prefix,
-				      num_digits, interval * i);
-	    else
-		str = g_strdup_printf("%0*d", num_digits, interval * i);
+            if (strlen (prefix))
+                str = g_strdup_printf("%s-%0*d", prefix,
+                          num_digits, interval * i);
+            else
+                str = g_strdup_printf("%0*d", num_digits, interval * i);
             xaccAccountSetCode(tmp->data, str);
             g_free(str);
         }
@@ -2058,7 +2059,7 @@ gnc_account_renumber_create_dialog (GtkWidget *window, Account *account)
     data->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "account_renumber_dialog"));
     gtk_window_set_transient_for(GTK_WINDOW(data->dialog), GTK_WINDOW(window));
     g_object_set_data_full(G_OBJECT(data->dialog), "builder", builder,
-			   g_object_unref);
+               g_object_unref);
 
     widget = GTK_WIDGET(gtk_builder_get_object (builder, "header_label"));
     string = g_strdup_printf(_( "Renumber the immediate sub-accounts of %s? "
@@ -2079,4 +2080,120 @@ gnc_account_renumber_create_dialog (GtkWidget *window, Account *account)
     gtk_builder_connect_signals(builder, data);
 
     gtk_widget_show_all(data->dialog);
+}
+
+static void
+default_color_button_cb (GtkButton *button, gpointer user_data)
+{
+    GdkRGBA color;
+
+    if (gdk_rgba_parse (&color, DEFAULT_COLOR))
+        gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER(user_data), &color);
+}
+
+static void
+update_account_color (Account *acc, const gchar *old_color, const gchar *new_color, gboolean replace)
+{
+    // check to see if the color has been changed
+    if (g_strcmp0 (new_color, old_color) != 0)
+    {
+        if ((old_color == NULL) || (g_strcmp0 (old_color, "Not Set") == 0) || (replace == TRUE))
+        {
+             xaccAccountBeginEdit (acc);
+             xaccAccountSetColor (acc, new_color);
+             xaccAccountCommitEdit (acc);
+        }
+    }
+}
+
+void
+gnc_account_cascade_color_dialog (GtkWidget *window, Account *account)
+{
+    GtkWidget *dialog;
+    GtkBuilder *builder;
+    GtkWidget *color_label, *color_button, *over_write, *color_button_default;
+    gchar *string;
+    const char *color_string;
+    gchar *old_color_string;
+    GdkRGBA color;
+    gint response;
+
+    // check if we actualy do have sub accounts
+    g_return_if_fail (gnc_account_n_children (account) > 0);
+
+    builder = gtk_builder_new();
+    gnc_builder_add_from_file (builder, "dialog-account.glade", "account_cascade_color_dialog");
+    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "account_cascade_color_dialog"));
+    gtk_window_set_transient_for (GTK_WINDOW(dialog), GTK_WINDOW(window));
+
+    color_label = GTK_WIDGET(gtk_builder_get_object (builder, "color_label"));
+    over_write = GTK_WIDGET(gtk_builder_get_object (builder, "replace_check"));
+    color_button = GTK_WIDGET(gtk_builder_get_object (builder, "color_button"));
+    color_button_default = GTK_WIDGET(gtk_builder_get_object (builder, "color_button_default"));
+
+    gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER(color_button), FALSE);
+
+    g_signal_connect (G_OBJECT(color_button_default), "clicked",
+                      G_CALLBACK(default_color_button_cb), (gpointer)color_button);
+
+    string = g_strdup_printf(_( "Set the account color for account '%s' "
+                                "including all sub-accounts to the selected color:"),
+                             gnc_account_get_full_name(account));
+    gtk_label_set_text (GTK_LABEL(color_label), string);
+    g_free (string);
+
+    color_string = xaccAccountGetColor (account); // get existing account color
+
+    old_color_string = g_strdup (color_string); // save the old color string
+
+    if ((color_string == NULL) || (g_strcmp0 (color_string, "Not Set") == 0))
+        color_string = DEFAULT_COLOR;
+
+    // set the color chooser to account color
+    if (gdk_rgba_parse (&color, color_string))
+        gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER(color_button), &color);
+
+    /* default to cancel */
+    gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
+
+    gtk_builder_connect_signals (builder, dialog);
+    g_object_unref (G_OBJECT(builder));
+
+    gtk_widget_show_all (dialog);
+
+    response = gtk_dialog_run (GTK_DIALOG(dialog));
+
+    if (response == GTK_RESPONSE_OK)
+    {
+        GList *accounts = gnc_account_get_descendants (account);
+        gboolean replace = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(over_write));
+        GList *acct;
+        GdkRGBA new_color;
+        const gchar *new_color_string;
+
+        gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER(color_button), &new_color);
+        new_color_string = gdk_rgba_to_string (&new_color);
+
+        if (g_strcmp0 (new_color_string, DEFAULT_COLOR) == 0)
+            new_color_string = "Not Set";
+
+        // check/update selected account
+        update_account_color (account, old_color_string, new_color_string, replace);
+
+        if (accounts != NULL)
+        {
+            for (acct = accounts; acct; acct = g_list_next(acct))
+            {
+                const char *string = xaccAccountGetColor (acct->data);
+
+                // check/update sub-account
+                update_account_color (acct->data, string, new_color_string, replace);
+            }
+            g_list_free (accounts);
+        }
+    }
+    if (old_color_string)
+        g_free (old_color_string);
+
+    gtk_widget_destroy (dialog);
 }

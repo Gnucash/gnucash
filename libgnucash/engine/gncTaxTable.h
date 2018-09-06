@@ -41,7 +41,7 @@ is *identical* to that in ::GncBillTerm
 @param	QofInstance     inst;
 @param 	char *          name;
 @param 	GncTaxTableEntryList*  entries;
-@param 	Timespec        modtime;
+@param 	time64        modtime;
 @param 	gint64          refcount;
 @param 	GncTaxTable *   parent; if non-null, we are an immutable child
 @param 	GncTaxTable *   child;  if non-null, we have not changed
@@ -162,7 +162,7 @@ GncTaxTable *gncTaxTableReturnChild (GncTaxTable *table, gboolean make_new);
 typedef GList GncTaxTableEntryList;
 GncTaxTableEntryList* gncTaxTableGetEntries (const GncTaxTable *table);
 gint64 gncTaxTableGetRefcount (const GncTaxTable *table);
-Timespec gncTaxTableLastModified (const GncTaxTable *table);
+time64 gncTaxTableLastModifiedSecs (const GncTaxTable *table);
 
 Account * gncTaxTableEntryGetAccount (const GncTaxTableEntry *entry);
 GncAmountType gncTaxTableEntryGetType (const GncTaxTableEntry *entry);

@@ -17,7 +17,7 @@ IRC (Chat):    Channel #gnucash on server irc.gnome.org, see also http://wiki.gn
 
 If you encounter any bugs or problems, do not hesitate to report them
 into our bug tracking tool "Bugzilla":
-http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+http://bugs.gnucash.org/enter_bug.cgi?product=GnuCash
 
 -------------------
 

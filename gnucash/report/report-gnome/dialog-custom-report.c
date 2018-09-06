@@ -73,6 +73,7 @@ typedef struct _CustomReportDialog
     GtkTreeViewColumn *runcol;
     GtkTreeViewColumn *editcol;
     GtkTreeViewColumn *delcol;
+    GtkTreeViewColumn *dummycol;
 
     /* data */
     SCM reportlist;
@@ -195,6 +196,7 @@ set_reports_view_and_model(CustomReportDialog *crd)
 {
     GtkCellRenderer *renderer;
     GtkTreeModel *model;
+    gint number_of_columns;
 
     crd->namerenderer = gtk_cell_renderer_text_new();
     g_signal_connect (G_OBJECT (crd->namerenderer), "edited",
@@ -226,6 +228,14 @@ set_reports_view_and_model(CustomReportDialog *crd)
              "D", renderer,
              NULL);
     crd->delcol = gtk_tree_view_get_column (GTK_TREE_VIEW (crd->reportview), VIEW_COL_DELETE);
+
+    // this is a dummy column which will be set the same width of the vertical scrollbar
+    renderer = gtk_cell_renderer_text_new();
+    number_of_columns = gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (crd->reportview), -1,
+             "", renderer,
+             NULL);
+
+    crd->dummycol = gtk_tree_view_get_column (GTK_TREE_VIEW (crd->reportview), number_of_columns -1);
 
     model = create_and_fill_report_list(crd);
 
@@ -495,6 +505,9 @@ gnc_ui_custom_report_internal(GncMainWindow * window)
     GtkTreeIter iter;
     GtkTreeModel *model;
     GtkWidget *no_report_notification;
+    GtkWidget *scroll_window;
+    GtkWidget *vscroll;
+    GtkRequisition nat_sb;
 
     crd = g_new0(CustomReportDialog, 1);
 
@@ -503,16 +516,25 @@ gnc_ui_custom_report_internal(GncMainWindow * window)
 
     crd->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "custom_report_dialog"));
     crd->reportview = GTK_WIDGET(gtk_builder_get_object (builder, "custom_report_list_view"));
+    scroll_window = GTK_WIDGET(gtk_builder_get_object (builder, "custom_report_sw"));
     no_report_notification = GTK_WIDGET(gtk_builder_get_object (builder, "label2"));
     set_reports_view_and_model(crd);
     crd->window = window;
+
+    // get the vertical scroll bar width
+    vscroll = gtk_scrolled_window_get_vscrollbar (GTK_SCROLLED_WINDOW (scroll_window));
+    gtk_widget_get_preferred_size (vscroll, NULL, &nat_sb);
+
+    // set the width of the dummy column to that of the scrollbar
+    gtk_tree_view_column_set_fixed_width (crd->dummycol, nat_sb.width);
 
     gtk_window_set_transient_for (GTK_WINDOW (crd->dialog), GTK_WINDOW(window));
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(crd->dialog), "GncCustomReportDialog");
 
-    gnc_restore_window_size (GNC_PREFS_GROUP_REPORT_SAVED_CONFIGS, GTK_WINDOW(crd->dialog));
+    gnc_restore_window_size (GNC_PREFS_GROUP_REPORT_SAVED_CONFIGS,
+                             GTK_WINDOW(crd->dialog), GTK_WINDOW(window));
 
     /* connect the signals */
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, crd);

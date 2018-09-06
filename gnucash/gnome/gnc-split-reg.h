@@ -36,6 +36,8 @@
 #define GNC_SPLIT_REG_CLASS(klass) G_TYPE_CHECK_CLASS_CAST( klass, gnc_split_reg_get_type(), GNCSplitRegClass )
 #define IS_GNC_SPLIT_REG(obj)      G_TYPE_CHECK_INSTANCE_TYPE( obj, gnc_split_reg_get_type() )
 
+#define STATE_SECTION_REG_PREFIX "Register"
+
 typedef struct _GNCSplitReg GNCSplitReg;
 typedef struct _GNCSplitRegClass GNCSplitRegClass;
 
@@ -74,6 +76,9 @@ struct _GNCSplitReg
     GtkWidget *projectedminimum_label;
     GtkWidget *shares_label;
     GtkWidget *value_label;
+    GtkWidget *sort_label;
+    GtkWidget *sort_arrow;
+    GtkWidget *filter_label;
 
     /** The current ledger display. **/
     GNCLedgerDisplay *ledger;
@@ -82,7 +87,10 @@ struct _GNCSplitReg
 
     gint numRows;
 
-    guint sort_type;
+    guint    sort_type;
+    gboolean sort_rev;
+    gulong   sort_arrow_handler_id;
+    gchar   *filter_text;
 
     gboolean read_only;
 };
@@ -197,8 +205,8 @@ void gnc_split_reg_set_sort_type_force( GNCSplitReg *gsr, SortType t, gboolean f
 
 /**
  * Set/get sort order of register
- **/ 
-void gnc_split_reg_set_sort_reversed(GNCSplitReg *gsr, gboolean rev);
+ **/
+void gnc_split_reg_set_sort_reversed(GNCSplitReg *gsr, gboolean rev, gboolean refresh);
 
 
 /**
@@ -249,7 +257,6 @@ void gnc_split_reg_focus_on_sheet (GNCSplitReg *gsr);
 void gnc_split_reg_balancing_entry (GNCSplitReg *gsr, Account *account,
                                     time64 statement_date, gnc_numeric balancing_amount);
 
-void gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data );
 void gsr_default_associate_handler (GNCSplitReg *gsr, gboolean uri_is_file);
 void gsr_default_execassociated_handler( GNCSplitReg *gsr, gpointer data );
 void gnc_split_reg_enter( GNCSplitReg *gsr, gboolean next_transaction );

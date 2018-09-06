@@ -136,7 +136,7 @@
                                 (list->vector
                                  (list 'manual
                                        (N_ "Manual period selection")
-                                       (N_ "Explicitly select period valud with spinner below")))))
+                                       (N_ "Explicitly select period value with spinner below")))))
           (ui-use-periods #f)
           (ui-start-period-type 'current)
           (ui-end-period-type 'next)

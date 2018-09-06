@@ -292,7 +292,7 @@ fix_year(int y)
 }
 
 gboolean
-gnc_import_parse_date(const char *str, GncImportFormat fmt, Timespec *val)
+gnc_import_parse_date(const char *str, GncImportFormat fmt, time64 *val)
 {
     regmatch_t match[5];
     char temp[9];
@@ -405,7 +405,7 @@ gnc_import_parse_date(const char *str, GncImportFormat fmt, Timespec *val)
             return FALSE;
 
         y = fix_year(y);
-        *val = gnc_dmy2timespec(d, m, y);
+        *val = gnc_dmy2time64(d, m, y);
         return TRUE;
     }
 

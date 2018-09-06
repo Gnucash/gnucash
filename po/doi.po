@@ -11565,13 +11565,13 @@ msgstr ""
 "कन्नै  भंडार नेईं करदी .इसदा मतलब ऐ जे Gnucash SQL  डैटाबेसें गी  स्हेई तरीके कन्नै नेईं बरती "
 "सकदा.जिसले तगर \"libdbi\"दा बक्खरा सरूप इंस्टाल करियै इसी ठीक नेईं कीता जंदा  उसे तगर "
 "Gnucash  SQL  डैटाबेसें च खोह्‌लेआ जां बचाइयै नेईं  रक्खेआ  जाह्‌ग. होर मती जानकारी आस्तै कृपा "
-"करियै https://bugzilla.gnome.org/show_bug.cgi?id=611936 दिक्खो. "
+"करियै https://bugs.gnucash.org/show_bug.cgi?id=611936 दिक्खो. "
 
 #: ../gnucash/gnome-utils/gnc-file.c:474
 msgid ""
 "GnuCash could not complete a critical test for the presence of a bug in the "
 "\"libdbi\" library. This may be caused by a permissions misconfiguration of "
-"your SQL database. Please see https://bugzilla.gnome.org/show_bug.cgi?"
+"your SQL database. Please see https://bugs.gnucash.org/show_bug.cgi?"
 "id=645216 for more information."
 msgstr ""
 
@@ -15682,8 +15682,8 @@ msgstr "बगें ते होर दूइयें समस्याए�
 
 #: ../gnucash/gnucash-bin.c:162
 #, fuzzy
-msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org"
-msgstr "तुस http://bugzilla.gnome.org पर बग रिपोटां दिक्खी ते दर्ज करी सकदे ओ.\n"
+msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
+msgstr "तुस http://bugs.gnucash.org पर बग रिपोटां दिक्खी ते दर्ज करी सकदे ओ.\n"
 
 #: ../gnucash/gnucash-bin.c:163
 msgid "To find the last stable version, please refer to http://www.gnucash.org"

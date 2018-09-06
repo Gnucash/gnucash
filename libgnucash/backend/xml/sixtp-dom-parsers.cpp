@@ -235,7 +235,8 @@ dom_tree_to_guid_kvp_value (xmlNodePtr node)
 static KvpValue*
 dom_tree_to_time64_kvp_value (xmlNodePtr node)
 {
-    return new KvpValue {Timespec {dom_tree_to_time64 (node), 0}};
+    Time64 t{dom_tree_to_time64 (node)};
+    return new KvpValue {t};
 }
 
 static KvpValue*
@@ -347,6 +348,8 @@ struct kvp_val_converter
     const gchar* tag;
     KvpValue* (*converter) (xmlNodePtr node);
 };
+/* Note: The type attribute must remain 'timespec' to maintain compatibility.
+ */
 
 struct kvp_val_converter val_converters[] =
 {
@@ -523,12 +526,6 @@ dom_tree_to_gnc_numeric (xmlNodePtr node)
     return ret;
 }
 
-static time64
-time_parse_failure ()
-{
-    return INT64_MAX;
-}
-
 
 time64
 dom_tree_to_time64 (xmlNodePtr node)
@@ -536,17 +533,16 @@ dom_tree_to_time64 (xmlNodePtr node)
     /* Turn something like this
 
        <date-posted>
-         <s>Mon, 05 Jun 2000 23:16:19 -0500</s>
-         <ns>658864000</ns>
+         <ts:date>Mon, 05 Jun 2000 23:16:19 -0500</ts:date>
        </date-posted>
 
-       into a time64.  If this returns FALSE, the effects on *ts are
-       undefined.  The XML is valid if it has at least one of <s> or <ns>
-       and no more than one of each.  Order is irrelevant. */
+       into a time64, returning INT64_MAX that we're using to flag an erroneous
+       date if there's a problem. Only one ts:date element is permitted for any
+       date attribute.
+    */
 
     time64 ret {INT64_MAX};
-    gboolean seen_s = FALSE;
-    gboolean seen_ns = FALSE;
+    gboolean seen = FALSE;
     xmlNodePtr n;
 
     for (n = node->xmlChildrenNode; n; n = n->next)
@@ -559,39 +555,35 @@ dom_tree_to_time64 (xmlNodePtr node)
         case XML_ELEMENT_NODE:
             if (g_strcmp0 ("ts:date", (char*)n->name) == 0)
             {
-                if (seen_s)
+                if (seen)
                 {
-                    return time_parse_failure ();
+                    return INT64_MAX;
                 }
                 else
                 {
                     gchar* content = dom_tree_to_text (n);
                     if (!content)
                     {
-                        return time_parse_failure ();
+                        return INT64_MAX;
                     }
 
-                    if (!string_to_time64 (content, &ret))
-                    {
-                        g_free (content);
-                        return time_parse_failure ();
-                    }
+                    ret = gnc_iso8601_to_time64_gmt (content);
                     g_free (content);
-                    seen_s = TRUE;
+                    seen = TRUE;
                 }
             }
             break;
         default:
             PERR ("unexpected sub-node.");
-            return time_parse_failure ();
+            return INT64_MAX;
             break;
         }
     }
 
-    if (!seen_s)
+    if (!seen)
     {
         PERR ("no ts:date node found.");
-        return time_parse_failure ();
+        return INT64_MAX;
     }
 
     return ret;

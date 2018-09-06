@@ -84,7 +84,7 @@ msgstr "tipo de cuenta: mercado monetario"
 msgid "account type: Mutual fund"
 msgstr "tipo de cuenta: Fondo de Inversión"
 
-#. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugzilla.gnome.org/show_bug.cgi?id=421766"
+#. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
 #, fuzzy
 msgid "account type: Passive"
 msgstr "tipo de cuenta: Activo"

@@ -153,6 +153,7 @@ static void gnc_plugin_page_account_tree_cmd_lots (GtkAction *action, GncPluginP
 static void gnc_plugin_page_account_tree_cmd_scrub (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_scrub_sub (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_scrub_all (GtkAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_cascade_color_account (GtkAction *action, GncPluginPageAccountTree *page);
 
 /* Command callback for new Register Test */
 static void gnc_plugin_page_account_tree_cmd_open2_account (GtkAction *action, GncPluginPageAccountTree *page);
@@ -225,6 +226,11 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] =
         "EditDeleteAccountAction", GNC_ICON_DELETE_ACCOUNT, N_("_Delete Account..."), "Delete",
         N_("Delete selected account"),
         G_CALLBACK (gnc_plugin_page_account_tree_cmd_delete_account)
+    },
+    {
+        "ColorCascadeAccountAction", NULL, N_("_Cascade Account Color..."), NULL,
+        N_("Cascade selected account color"),
+        G_CALLBACK (gnc_plugin_page_account_tree_cmd_cascade_color_account)
     },
     {
         "EditFindAccountAction", "edit-find", N_("F_ind Account"), "<primary>i",
@@ -1179,6 +1185,24 @@ gnc_plugin_page_account_tree_cmd_find_account_popup (GtkAction *action, GncPlugi
     LEAVE(" ");
 }
 
+static void
+gnc_plugin_page_account_tree_cmd_cascade_color_account (GtkAction *action, GncPluginPageAccountTree *page)
+{
+    Account *account = NULL;
+    GtkWidget *window;
+
+    ENTER("action %p, page %p", action, page);
+
+    account = gnc_plugin_page_account_tree_get_current_account (page);
+
+    window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page));
+
+    if (account != NULL)
+        gnc_account_cascade_color_dialog (window, account);
+
+    LEAVE(" ");
+}
+
 /********************************************************************
  * delete_account_helper
  * See if this account has any splits present.  Set the user data
@@ -1725,10 +1749,9 @@ static void
 gnc_plugin_page_account_tree_cmd_lots (GtkAction *action,
                                        GncPluginPageAccountTree *page)
 {
-    Account *account;
-
-    account = gnc_plugin_page_account_tree_get_current_account (page);
-    gnc_lot_viewer_dialog (account);
+    Account *account = gnc_plugin_page_account_tree_get_current_account (page);
+    GtkWidget *window = GNC_PLUGIN_PAGE (page)->window;
+    gnc_lot_viewer_dialog (GTK_WINDOW(window), account);
 }
 
 static void

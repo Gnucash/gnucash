@@ -12,9 +12,6 @@ cat > ${TARGET_SCRIPT}.tmp <<EOF
 PATH="${GNC_OVERRIDES_DIR}:\${PATH}"
 export PATH
 
-GUILE_WARN_DEPRECATED="no"
-export GUILE_WARN_DEPRECATED
-
 exec "${TARGET_SCRIPT}" "\$@"
 EOF
 

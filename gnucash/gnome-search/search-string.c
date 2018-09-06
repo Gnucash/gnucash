@@ -38,6 +38,7 @@
 #define d(x)
 
 static void editable_enters (GNCSearchCoreType *fe);
+static void pass_parent (GNCSearchCoreType *fe, gpointer parent);
 static void grab_focus (GNCSearchCoreType *fe);
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe);
 static gboolean gncs_validate (GNCSearchCoreType *fe);
@@ -53,6 +54,7 @@ typedef struct _GNCSearchStringPrivate GNCSearchStringPrivate;
 struct _GNCSearchStringPrivate
 {
     GtkWidget *entry;
+    GtkWindow *parent;
 };
 
 #define _PRIVATE(o) \
@@ -101,6 +103,7 @@ gnc_search_string_class_init (GNCSearchStringClass *klass)
 
     /* override methods */
     gnc_search_core_type->editable_enters = editable_enters;
+    gnc_search_core_type->pass_parent = pass_parent;
     gnc_search_core_type->grab_focus = grab_focus;
     gnc_search_core_type->validate = gncs_validate;
     gnc_search_core_type->get_widget = gncs_get_widget;
@@ -175,15 +178,18 @@ static gboolean
 gncs_validate (GNCSearchCoreType *fe)
 {
     GNCSearchString *fi = (GNCSearchString *)fe;
+    GNCSearchStringPrivate *priv;
     gboolean valid = TRUE;
 
     g_return_val_if_fail (fi, FALSE);
     g_return_val_if_fail (IS_GNCSEARCH_STRING (fi), FALSE);
 
+    priv = _PRIVATE(fi);
+
     if (!fi->value || *(fi->value) == '\0')
     {
         GtkWidget *dialog;
-        dialog = gtk_message_dialog_new (NULL,
+        dialog = gtk_message_dialog_new (GTK_WINDOW(priv->parent),
                                          GTK_DIALOG_MODAL,
                                          GTK_MESSAGE_ERROR,
                                          GTK_BUTTONS_OK,
@@ -221,7 +227,7 @@ gncs_validate (GNCSearchCoreType *fe)
                                       fi->value, regmsg);
             g_free (regmsg);
 
-            dialog = gtk_message_dialog_new (NULL,
+            dialog = gtk_message_dialog_new (GTK_WINDOW(priv->parent),
                                              GTK_DIALOG_MODAL,
                                              GTK_MESSAGE_ERROR,
                                              GTK_BUTTONS_OK,
@@ -299,6 +305,19 @@ editable_enters (GNCSearchCoreType *fe)
     priv = _PRIVATE(fi);
     if (priv->entry)
         gtk_entry_set_activates_default(GTK_ENTRY (priv->entry), TRUE);
+}
+
+static void
+pass_parent (GNCSearchCoreType *fe, gpointer parent)
+{
+    GNCSearchString *fi = (GNCSearchString *)fe;
+    GNCSearchStringPrivate *priv;
+
+    g_return_if_fail (fi);
+    g_return_if_fail (IS_GNCSEARCH_STRING (fi));
+
+    priv = _PRIVATE(fi);
+    priv->parent = GTK_WINDOW(parent);
 }
 
 static GtkWidget *

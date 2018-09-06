@@ -408,7 +408,8 @@ test_gnc_transaction_set_get_property (Fixture *fixture, gconstpointer pData)
     gchar *t_num = NULL, *t_desc = NULL;
     gnc_commodity *curr = gnc_commodity_new (book, "Gnu Rand", "CURRENCY",
                           "GNR", "", 240), *t_curr = NULL;
-    Timespec now = timespec_now (), *t_entered = NULL, *t_posted = NULL;
+    time64 now = gnc_time(NULL);
+    Time64 *t_entered, *t_posted;
     g_assert_cmpstr (txn->num, ==, "");
     g_assert_cmpstr (txn->description, ==, "");
     g_assert (txn->common_currency == NULL);
@@ -427,8 +428,8 @@ test_gnc_transaction_set_get_property (Fixture *fixture, gconstpointer pData)
     g_assert_cmpstr (txn->num, ==, num);
     g_assert_cmpstr (txn->description, ==, desc);
     g_assert (txn->common_currency == curr);
-    g_assert (txn->date_entered == now.tv_sec);
-    g_assert (txn->date_posted == now.tv_sec);
+    g_assert (txn->date_entered == now);
+    g_assert (txn->date_posted == now);
 
     g_object_get (G_OBJECT (txn),
                   "num", &t_num,
@@ -441,8 +442,8 @@ test_gnc_transaction_set_get_property (Fixture *fixture, gconstpointer pData)
     g_assert_cmpstr (t_num, ==, num);
     g_assert_cmpstr (t_desc, ==, desc);
     g_assert (t_curr == curr);
-    g_assert (t_entered->tv_sec == now.tv_sec);
-    g_assert (t_posted->tv_sec == now.tv_sec);
+    g_assert_cmpint (t_entered->t, ==, now);
+    g_assert_cmpint (t_posted->t, ==, now);
     xaccTransRollbackEdit (txn);
     test_destroy (txn);
     test_destroy (curr);
@@ -1772,10 +1773,7 @@ test_xaccTransOrder_num_action (Fixture *fixture, gconstpointer pData)
  * xaccTransSetDatePostedSecs C: 17 in 13  Local: 0:0:0
  * xaccTransSetDatePostedGDate C: 1  Local: 1:0:0
  * xaccTransSetDateEnteredSecs C: 10 in 9  Local: 0:0:0
- * xaccTransSetDatePostedTS C: 9 in 8  Local: 2:0:0
- * xaccTransSetDateEnteredTS C: 3 in 3  Local: 1:0:0
  * xaccTransSetDate C: 43 in 23 SCM: 2 in 2 Local: 0:0:0
- * xaccTransSetDateDueTS C: 2 in 2  Local: 0:0:0
  * xaccTransSetTxnType C: 4 in 3  Local: 0:0:0
  * xaccTransClearReadOnly C: 4 in 2  Local: 1:0:0
  * xaccTransSetReadOnly C: 2 in 2  Local: 1:0:0
@@ -1843,7 +1841,7 @@ test_xaccTransVoid (Fixture *fixture, gconstpointer pData)
     auto frame = fixture->txn->inst.kvp_data;
     auto void_reason = "Voided for Unit Test";
     auto txn_notes = g_strdup (frame->get_slot({trans_notes_str})->get<const char*>());
-    Timespec now = timespec_now ();
+    time64 now = gnc_time(NULL);
     char iso8601_str[ISO_DATELENGTH + 1] = "";
     GList *split = NULL;
 
@@ -1854,7 +1852,7 @@ test_xaccTransVoid (Fixture *fixture, gconstpointer pData)
                      ==, txn_notes);
     g_assert_cmpstr (frame->get_slot({void_reason_str})->get<const char*>(), ==,
                      void_reason);
-    gnc_timespec_to_iso8601_buff (now, iso8601_str);
+    gnc_time64_to_iso8601_buff (now, iso8601_str);
     g_assert_cmpstr (frame->get_slot({void_time_str})->get<const char*>(), ==,
                      iso8601_str);
     g_assert_cmpstr (frame->get_slot({TRANS_READ_ONLY_REASON})->get<const char*>(),

@@ -155,9 +155,9 @@ test_parser (void)
     add_fail_test ("whitespace", "  \t\n", 4);
     add_fail_test ("bad expression", "\\", 0);
     add_fail_test ("bad expression", "1 +", 3);
-    /* Bug#334811 - http://bugzilla.gnome.org/show_bug.cgi?id=334811 */
+    /* Bug#334811 - http://bugs.gnucash.org/show_bug.cgi?id=334811 */
     add_fail_test ("bad expression", "1 2", 3);
-    /* Bug#308554 - http://bugzilla.gnome.org/show_bug.cgi?id=308554 */
+    /* Bug#308554 - http://bugs.gnucash.org/show_bug.cgi?id=308554 */
     add_fail_test ("bad expression", "1 ç", 2);
     add_fail_test ("bad expression", "ç 1", 0);
     add_fail_test ("bad expression", "1 asdf", 6);

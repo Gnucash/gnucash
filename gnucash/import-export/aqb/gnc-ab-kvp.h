@@ -99,7 +99,7 @@ void gnc_ab_set_account_uid(Account *a, guint32 uid);
  * @param a Account
  * @return Retrieval time
  */
-Timespec gnc_ab_get_account_trans_retrieval(const Account *a);
+time64 gnc_ab_get_account_trans_retrieval(const Account *a);
 
 /**
  * Set the time of last online transaction retrieval for Account @a a.  The
@@ -108,7 +108,7 @@ Timespec gnc_ab_get_account_trans_retrieval(const Account *a);
  * @param a Account
  * @param time Retrieval time
  */
-void gnc_ab_set_account_trans_retrieval(Account *a, Timespec time);
+void gnc_ab_set_account_trans_retrieval(Account *a, time64 time);
 
 /** @} */
 

@@ -521,11 +521,11 @@ gnc_split_register_get_recn_tooltip (VirtualLocation virt_loc,
 
     if (xaccSplitGetReconcile (split) == YREC)
     {
-        Timespec     ts = {0,0};
-        const char *str_rec_date;
-        xaccSplitGetDateReconciledTS (split, &ts);
-        str_rec_date = gnc_print_date (ts);
-        return g_strdup_printf (_("Reconciled on %s"), str_rec_date);
+        char datebuff[MAX_DATE_LENGTH + 1];
+        time64 time = xaccSplitGetDateReconciled (split);
+        memset (datebuff, 0, sizeof(datebuff));
+        qof_print_date_buff (datebuff, sizeof(datebuff), time);
+        return g_strdup_printf (_("Reconciled on %s"), datebuff);
     }
     else if (xaccSplitGetReconcile (split) == VREC)
     {
@@ -904,7 +904,6 @@ gnc_split_register_get_due_date_entry (VirtualLocation virt_loc,
     SplitRegister *reg = user_data;
     Transaction *trans;
     Split *split;
-    Timespec ts = {0, 0};
     gboolean is_current;
     char type;
 
@@ -941,10 +940,9 @@ gnc_split_register_get_due_date_entry (VirtualLocation virt_loc,
         return NULL;
     }
 
-    ts.tv_sec = xaccTransRetDateDue (trans);
     //PWARN ("returning valid due_date entry");
 
-    return gnc_print_date (ts);
+    return qof_print_date (xaccTransRetDateDue (trans));
 }
 
 static const char *
@@ -956,16 +954,12 @@ gnc_split_register_get_date_entry (VirtualLocation virt_loc,
     SplitRegister *reg = user_data;
     Transaction *trans;
     Split *split;
-    Timespec ts = {0, 0};
 
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
     trans = xaccSplitGetParent (split);
     if (!trans)
         return NULL;
-
-    ts.tv_sec = xaccTransRetDatePosted (trans);
-
-    return gnc_print_date (ts);
+    return qof_print_date (xaccTransRetDatePosted (trans));
 }
 
 static char *
@@ -974,19 +968,18 @@ gnc_split_register_get_date_help (VirtualLocation virt_loc,
 {
     SplitRegister *reg = user_data;
     BasicCell *cell;
-    char string[1024];
-    GDate date;
+    const char *date_string;
+    time64 cell_time;
 
     cell = gnc_table_get_cell (reg->table, virt_loc);
     if (!cell || !cell->value || *cell->value == '\0')
         return NULL;
 
-    g_date_clear (&date, 1);
-    gnc_date_cell_get_date_gdate ((DateCell *) cell, &date);
+    gnc_date_cell_get_date ((DateCell *) cell, &cell_time, FALSE);
 
-    g_date_strftime (string, sizeof (string), _("%A %d %B %Y"), &date);
+    date_string = gnc_print_time64 (cell_time, _("%A %d %B %Y"));
 
-    return g_strdup (string);
+    return g_strdup (date_string);
 }
 
 static const char *
@@ -1201,6 +1194,7 @@ gnc_split_register_get_rate_entry (VirtualLocation virt_loc,
     Split *split, *osplit;
     Transaction *txn;
     gnc_numeric amount, value, convrate;
+    gnc_commodity *curr;
     SRInfo *info = gnc_split_register_get_info (reg);
 
     if (info->rate_reset == RATE_RESET_REQD && info->auto_complete)
@@ -1216,7 +1210,7 @@ gnc_split_register_get_rate_entry (VirtualLocation virt_loc,
      */
     osplit = xaccSplitGetOtherSplit (split);
     txn = gnc_split_register_get_trans (reg, virt_loc.vcell_loc);
-
+    curr = xaccTransGetCurrency (xaccSplitGetParent (split));
     if (!gnc_split_register_current_trans_expanded (reg) && osplit &&
             !gnc_split_register_needs_conv_rate(reg, txn,
                     xaccSplitGetAccount(split)))
@@ -1232,7 +1226,7 @@ gnc_split_register_get_rate_entry (VirtualLocation virt_loc,
 
     convrate = gnc_numeric_div (amount, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
 
-    return xaccPrintAmount (convrate, gnc_default_price_print_info ());
+    return xaccPrintAmount (convrate, gnc_default_price_print_info (curr));
 }
 
 static const char *
@@ -1361,6 +1355,7 @@ gnc_split_register_get_price_entry (VirtualLocation virt_loc,
 {
     SplitRegister *reg = user_data;
     gnc_numeric price;
+    gnc_commodity *curr;
     Split *split;
 
     if (!gnc_split_register_use_security_cells (reg, virt_loc))
@@ -1369,10 +1364,11 @@ gnc_split_register_get_price_entry (VirtualLocation virt_loc,
     split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
 
     price = xaccSplitGetSharePrice (split);
+    curr = xaccTransGetCurrency (xaccSplitGetParent (split));
     if (gnc_numeric_zero_p (price))
         return NULL;
 
-    return xaccPrintAmount (price, gnc_default_price_print_info ());
+    return xaccPrintAmount (price, gnc_default_price_print_info (curr));
 }
 
 static char *
@@ -2060,6 +2056,24 @@ xaccTransWarnReadOnly (GtkWidget *parent, const Transaction *trans)
     return FALSE;
 }
 
+static gboolean reg_trans_has_reconciled_splits (SplitRegister *reg, Transaction *trans)
+{
+    GList *node;
+
+    for (node = xaccTransGetSplitList (trans); node; node = node->next)
+    {
+        Split *split = node->data;
+
+        if (!xaccTransStillHasSplit(trans, split))
+            continue;
+
+        if ((xaccSplitGetReconcile (split) == YREC) &&
+            (g_list_index (reg->unrecn_splits, split) == -1))
+            return TRUE;
+    }
+
+    return FALSE;
+}
 
 static gboolean
 gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
@@ -2087,12 +2101,14 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
     if (xaccTransWarnReadOnly(gnc_split_register_get_parent(reg), trans))
         return FALSE;
 
-    if (!xaccTransHasReconciledSplits (trans))
+    if (!reg_trans_has_reconciled_splits (reg, trans))
         return TRUE;
 
     if (gnc_table_layout_get_cell_changed (reg->table->layout, RECN_CELL, FALSE))
         recn = gnc_recn_cell_get_flag
                ((RecnCell *) gnc_table_layout_get_cell (reg->table->layout, RECN_CELL));
+    else if (g_list_index (reg->unrecn_splits, split) != -1)
+        recn = NREC;   /* A previous run of this function marked this split for unreconciling */
     else
         recn = xaccSplitGetReconcile (split);
 
@@ -2186,7 +2202,12 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
         if (recn == YREC && protected_split_cell)
         {
             if (g_list_index (reg->unrecn_splits, split) == -1)
+            {
                 reg->unrecn_splits = g_list_append (reg->unrecn_splits, split);
+                gnc_recn_cell_set_flag
+                    ((RecnCell *) gnc_table_layout_get_cell (reg->table->layout, RECN_CELL),
+                     NREC);
+            }
         }
 
         if (protected_trans_cell)

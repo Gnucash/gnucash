@@ -29,7 +29,7 @@ execute_process(
                         --keyword=translate:1c,2,3,4t
                         --package-name=${PACKAGE_NAME}
                         --package-version=${PACKAGE_VERSION}
-                        --msgid-bugs-address=https://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash&component=Translations
+                        --msgid-bugs-address=https://bugs.gnucash.org/enter_bug.cgi?product=GnuCash&component=Translations
   WORKING_DIRECTORY ${PO_BIN_DIR}
   RESULT_VARIABLE GNUCASH_POT_RESULT
 )

@@ -1,6 +1,6 @@
 /*
  * gnc-main-window.c -- GtkWindow which represents the
- *	GnuCash main window.
+ *  GnuCash main window.
  *
  * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
  * Copyright (C) 2003,2005,2006 David Hampton <hampton@employees.org>
@@ -667,7 +667,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
 
     /* Deal with the uncommon case that the state file defines a window
      * but no pages. An example to get in such a situation can be found
-     * here: https://bugzilla.gnome.org/show_bug.cgi?id=436479#c3
+     * here: https://bugs.gnucash.org/show_bug.cgi?id=436479#c3
      * If this happens on the first window, we will open an account hierarchy
      * to avoid confusing the user by presenting a completely empty window.
      * If it happens on a later window, we'll just skip restoring that window.
@@ -721,7 +721,6 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
             DEBUG("first window %p.", active_windows->data);
         window = gnc_main_window_new();
     }
-    gtk_widget_show(GTK_WIDGET(window));
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
@@ -906,6 +905,7 @@ cleanup:
     if (error)
         g_error_free(error);
     g_free(window_group);
+    gtk_widget_show(GTK_WIDGET(window));
 }
 
 void
@@ -1670,9 +1670,8 @@ static gchar *generate_statusbar_lastmodified_message()
                     last modification. The string is a format string using
                     boost::date_time's format flags, see the boost docs for an
                     explanation of the modifiers. */
-                    char *time_string =
-			gnc_print_time64(statbuf.st_mtime,
-					 _("Last modified on %a, %b %d, %Y at %I:%M %p"));
+                    char *time_string = gnc_print_time64(statbuf.st_mtime,
+                     _("Last modified on %a, %b %d, %Y at %I:%M %p"));
                     //g_warning("got time %ld, str=%s\n", mtime, time_string);
                     /* Translators: This message appears in the status bar after opening the file. */
                     message = g_strdup_printf(_("File %s opened. %s"),
@@ -2695,7 +2694,7 @@ gnc_main_window_destroy (GtkWidget *widget)
         g_list_free (plugins);
     }
     if (priv->about_dialog)
-	g_object_unref (priv->about_dialog);
+        g_object_unref (priv->about_dialog);
     GTK_WIDGET_CLASS (parent_class)->destroy (widget);
 }
 
@@ -3839,6 +3838,10 @@ gnc_main_window_add_widget (GtkUIManager *merge,
     if (GTK_IS_TOOLBAR (widget))
     {
         priv->toolbar = widget;
+        gtk_toolbar_set_style (GTK_TOOLBAR(priv->toolbar),
+                               GTK_TOOLBAR_BOTH);
+        gtk_toolbar_set_icon_size (GTK_TOOLBAR(priv->toolbar),
+                                   GTK_ICON_SIZE_SMALL_TOOLBAR);
     }
 
     gtk_box_pack_start (GTK_BOX (priv->menu_dock), widget, FALSE, FALSE, 0);
@@ -4026,8 +4029,11 @@ gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
         qof_book_use_split_action_for_num_field (book);
     gboolean use_book_currency_before =
         gnc_book_use_book_currency (book);
+    gint use_read_only_threshold_before =
+        qof_book_get_num_days_autoreadonly (book);
     gboolean use_split_action_for_num_after;
     gboolean use_book_currency_after;
+    gint use_read_only_threshold_after;
     gboolean return_val = FALSE;
     GList *results = NULL, *iter;
 
@@ -4036,7 +4042,7 @@ gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
     results = gnc_option_db_commit (options);
     for (iter = results; iter; iter = iter->next)
     {
-        GtkWidget *dialog = gtk_message_dialog_new(NULL,
+        GtkWidget *dialog = gtk_message_dialog_new(gnc_ui_get_main_window (NULL),
                                                    0,
                                                    GTK_MESSAGE_ERROR,
                                                    GTK_BUTTONS_OK,
@@ -4052,6 +4058,11 @@ gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
     use_split_action_for_num_after =
         qof_book_use_split_action_for_num_field (book);
     use_book_currency_after = gnc_book_use_book_currency (book);
+
+    // mark cached value as invalid so we get new value
+    book->cached_num_days_autoreadonly_isvalid = FALSE;
+    use_read_only_threshold_after = qof_book_get_num_days_autoreadonly (book);
+
     if (use_split_action_for_num_before != use_split_action_for_num_after)
     {
         gnc_book_option_num_field_source_change_cb (
@@ -4063,6 +4074,9 @@ gnc_book_options_dialog_apply_helper(GNCOptionDB * options)
         gnc_book_option_book_currency_selected_cb (use_book_currency_after);
         return_val = TRUE;
     }
+    if (use_read_only_threshold_before != use_read_only_threshold_after)
+        return_val = TRUE;
+
     qof_book_commit_edit (book);
     return return_val;
 }
@@ -4093,10 +4107,15 @@ static gboolean
 show_handler (const char *class_name, gint component_id,
               gpointer user_data, gpointer iter_data)
 {
-    GtkWidget *dialog;
+    GNCOptionWin *optwin = user_data;
+    GtkWidget *widget;
 
-    dialog = GTK_WIDGET(user_data);
-    gtk_window_present(GTK_WINDOW(dialog));
+    if (!optwin)
+        return(FALSE);
+
+    widget = gnc_options_dialog_widget(optwin);
+
+    gtk_window_present(GTK_WINDOW(widget));
     return(TRUE);
 }
 
@@ -4445,11 +4464,11 @@ get_file (const gchar *partial)
     filename = gnc_filepath_locate_doc_file(partial);
     if (filename && g_file_get_contents(filename, &text, &length, NULL))
     {
-	if (length)
-	{
-	    g_free(filename);
-	    return text;
-	}
+        if (length)
+        {
+            g_free(filename);
+            return text;
+        }
         g_free(text);
     }
     g_free (filename);
@@ -4508,15 +4527,15 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
     if (priv->about_dialog == NULL)
     {
         /* Translators: %s will be replaced with the current year */
-	gchar *copyright = g_strdup_printf(_("Copyright © 1997-%s The GnuCash contributors."),
+        gchar *copyright = g_strdup_printf(_("Copyright © 1997-%s The GnuCash contributors."),
                                            GNC_VCS_REV_YEAR);
-	gchar **authors = get_file_strsplit("AUTHORS");
-	gchar **documenters = get_file_strsplit("DOCUMENTERS");
-	gchar *license = get_file("LICENSE");
+        gchar **authors = get_file_strsplit("AUTHORS");
+        gchar **documenters = get_file_strsplit("DOCUMENTERS");
+        gchar *license = get_file("LICENSE");
         gchar *version = NULL;
         gchar *vcs = NULL;
         GtkIconTheme *icon_theme = gtk_icon_theme_get_default ();
-	GdkPixbuf *logo = gtk_icon_theme_load_icon (icon_theme,
+        GdkPixbuf *logo = gtk_icon_theme_load_icon (icon_theme,
                                                     GNC_ICON_APP,
                                                     128,
                                                     GTK_ICON_LOOKUP_USE_BUILTIN,
@@ -4538,41 +4557,44 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
             version = g_strdup_printf ("%s: %s\n%s: %s%s (%s)\nFinance::Quote: %s", _("Version"), VERSION,
                                        _("Build ID"), vcs, GNC_VCS_REV, GNC_VCS_REV_DATE,
                                        gnc_quote_source_fq_version () ? gnc_quote_source_fq_version () : "-");
-	priv->about_dialog = gtk_about_dialog_new ();
-	g_object_set (priv->about_dialog,
-		      "authors", authors,
-		      "documenters", documenters,
-		      "comments", _("Accounting for personal and small business finance."),
-		      "copyright", copyright,
-		      "license", license,
-		      "logo", logo,
-		      "name", "GnuCash",
-     /* Translators: the following string will be shown in Help->About->Credits
-      * Enter your name or that of your team and an email contact for feedback.
-      * The string can have multiple rows, so you can also add a list of
-      * contributors. */
-		      "translator-credits", _("translator_credits"),
-		      "version", version,
-		      "website", "http://www.gnucash.org",
-		      "website_label", _("Visit the GnuCash website."),
-		      NULL);
+        priv->about_dialog = gtk_about_dialog_new ();
+        g_object_set (priv->about_dialog,
+                  "authors", authors,
+                  "documenters", documenters,
+                  "comments", _("Accounting for personal and small business finance."),
+                  "copyright", copyright,
+                  "license", license,
+                  "logo", logo,
+                  "name", "GnuCash",
+         /* Translators: the following string will be shown in Help->About->Credits
+          * Enter your name or that of your team and an email contact for feedback.
+          * The string can have multiple rows, so you can also add a list of
+          * contributors. */
+                  "translator-credits", _("translator_credits"),
+                  "version", version,
+                  "website", "http://www.gnucash.org",
+                  "website_label", _("Visit the GnuCash website."),
+                  NULL);
 
         g_free(version);
-	g_free(copyright);
-	if (license)     g_free(license);
-	if (documenters) g_strfreev(documenters);
-	if (authors)     g_strfreev(authors);
-	g_object_unref (logo);
-	g_signal_connect (priv->about_dialog, "activate-link",
-			  G_CALLBACK (url_signal_cb), NULL);
-	g_signal_connect (priv->about_dialog, "response",
-			  G_CALLBACK (gtk_widget_hide), NULL);
+        g_free(copyright);
+        if (license)
+             g_free(license);
+        if (documenters)
+             g_strfreev(documenters);
+        if (authors)
+             g_strfreev(authors);
+        g_object_unref (logo);
+        g_signal_connect (priv->about_dialog, "activate-link",
+              G_CALLBACK (url_signal_cb), NULL);
+        g_signal_connect (priv->about_dialog, "response",
+              G_CALLBACK (gtk_widget_hide), NULL);
 
         /* Set dialog to resize. */
         gtk_window_set_resizable(GTK_WINDOW(priv->about_dialog), TRUE);
 
-	gtk_window_set_transient_for (GTK_WINDOW (priv->about_dialog),
-				      GTK_WINDOW (window));
+        gtk_window_set_transient_for (GTK_WINDOW (priv->about_dialog),
+                          GTK_WINDOW (window));
     }
     gtk_dialog_run (GTK_DIALOG (priv->about_dialog));
 }
@@ -4866,7 +4888,7 @@ dgettext_swapped (const gchar *msgid,
  * This is copied into GnuCash from Gtk in order to fix problems when
  * empty msgids were passed through gettext().
  *
- * See http://bugzilla.gnome.org/show_bug.cgi?id=326200 . If that bug
+ * See http://bugs.gnucash.org/show_bug.cgi?id=326200 . If that bug
  * is fixed in the gtk that we can rely open, then
  * gnc_gtk_action_group_set_translation_domain can be replaced by
  * gtk_action_group_set_translation_domain again.

@@ -233,6 +233,38 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
 }
 
 
+gint
+gnc_reconcile_view_get_column_width (GNCReconcileView *view, gint column)
+{
+    GNCQueryView      *qview = GNC_QUERY_VIEW (view);
+    GtkTreeViewColumn *col;
+
+    //allow for pointer model column at column 0
+    col = gtk_tree_view_get_column (GTK_TREE_VIEW (qview), (column - 1));
+    return  gtk_tree_view_column_get_width (col);
+}
+
+
+void
+gnc_reconcile_view_add_padding (GNCReconcileView *view, gint column, gint xpadding)
+{
+    GNCQueryView      *qview = GNC_QUERY_VIEW (view);
+    GtkTreeViewColumn *col;
+    GList             *renderers;
+    GtkCellRenderer   *cr0;
+    gint xpad, ypad;
+
+    //allow for pointer model column at column 0
+    col = gtk_tree_view_get_column (GTK_TREE_VIEW (qview), (column - 1));
+    renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (col));
+    cr0 = g_list_nth_data (renderers, 0);
+    g_list_free (renderers);
+
+    gtk_cell_renderer_get_padding (cr0, &xpad, &ypad);
+    gtk_cell_renderer_set_padding (cr0, xpadding, ypad);
+}
+
+
 /****************************************************************************\
  * gnc_reconcile_view_new                                                   *
  *   creates the account tree                                               *
@@ -309,8 +341,8 @@ gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
 
     /* Create the list store with 6 columns and add to treeview,
        column 0 will be a pointer to the entry */
-    liststore = gtk_list_store_new (6, G_TYPE_POINTER, G_TYPE_BOOLEAN,
-                G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING );
+    liststore = gtk_list_store_new (6, G_TYPE_POINTER, G_TYPE_STRING,
+                G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,  G_TYPE_BOOLEAN );
     gtk_tree_view_set_model (GTK_TREE_VIEW (view), GTK_TREE_MODEL (liststore));
     g_object_unref (liststore);
 
@@ -388,6 +420,15 @@ gnc_reconcile_view_init (GNCReconcileView *view)
     view->account = NULL;
     view->sibling = NULL;
 
+    param = gnc_search_param_simple_new();
+    gnc_search_param_set_param_fcn (param, QOF_TYPE_BOOLEAN,
+                                    gnc_reconcile_view_is_reconciled, view);
+    gnc_search_param_set_title ((GNCSearchParam *) param, _("Reconciled:R") + 11);
+    gnc_search_param_set_justify ((GNCSearchParam *) param, GTK_JUSTIFY_CENTER);
+    gnc_search_param_set_passive ((GNCSearchParam *) param, FALSE);
+    gnc_search_param_set_non_resizeable ((GNCSearchParam *) param, TRUE);
+    columns = g_list_prepend (columns, param);
+
     columns = gnc_search_param_prepend_with_justify (columns, _("Amount"),
               GTK_JUSTIFY_RIGHT,
               NULL, GNC_ID_SPLIT,
@@ -406,15 +447,6 @@ gnc_reconcile_view_init (GNCReconcileView *view)
               SPLIT_TRANS, TRANS_NUM, NULL);
     columns = gnc_search_param_prepend (columns, _("Date"), NULL, GNC_ID_SPLIT,
                                         SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
-
-    param = gnc_search_param_simple_new();
-    gnc_search_param_set_param_fcn (param, QOF_TYPE_BOOLEAN,
-                                    gnc_reconcile_view_is_reconciled, view);
-    gnc_search_param_set_title ((GNCSearchParam *) param, _("Reconciled:R") + 11);
-    gnc_search_param_set_justify ((GNCSearchParam *) param, GTK_JUSTIFY_CENTER);
-    gnc_search_param_set_passive ((GNCSearchParam *) param, FALSE);
-    gnc_search_param_set_non_resizeable ((GNCSearchParam *) param, TRUE);
-    columns = g_list_prepend (columns, param);
 
     view->column_list = columns;
 }

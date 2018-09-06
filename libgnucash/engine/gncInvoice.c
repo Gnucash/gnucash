@@ -909,7 +909,7 @@ gncInvoiceGetNetAndTaxesInternal (GncInvoice *invoice, gboolean use_value,
         if (use_value)
         {
             // Always use rounded net values to prevent creating imbalanced transactions on posting
-            // https://bugzilla.gnome.org/show_bug.cgi?id=628903
+            // https://bugs.gnucash.org/show_bug.cgi?id=628903
             value = gncEntryGetDocValue (entry, TRUE, is_cust_doc, is_cn);
             if (gnc_numeric_check (value) == GNC_ERROR_OK)
                 net_total = gnc_numeric_add (net_total, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
@@ -1509,8 +1509,11 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     total = gncInvoiceGetTotal (invoice);
     taxes = gncInvoiceGetTotalTaxList (invoice);
     /* The two functions above return signs relative to the document
-     * We need to convert them to balance values before we can use them here */
-    if (is_cust_doc)
+     * We need to convert them to balance values before we can use them here
+     * Note the odd construct comparing two booleans is to xor them
+     * that is, only evaluate true if both are different.
+     */
+    if (is_cust_doc != is_cn)
     {
         GList *node;
         total = gnc_numeric_neg (total);
@@ -1932,7 +1935,6 @@ gncInvoiceApplyPayment (const GncInvoice *invoice, Transaction *txn,
     GNCLot *payment_lot;
     GList *selected_lots = NULL;
     const GncOwner *owner;
-    Timespec ts_pass = {date,0};
 
     /* Verify our arguments */
     if (!invoice || !gncInvoiceIsPosted (invoice) || !xfer_acc) return;
@@ -1941,8 +1943,10 @@ gncInvoiceApplyPayment (const GncInvoice *invoice, Transaction *txn,
     g_return_if_fail (owner->owner.undefined);
 
     /* Create a lot for this payment */
-    payment_lot = gncOwnerCreatePaymentLot (owner, &txn, invoice->posted_acc, xfer_acc,
-                                            amount, exch, ts_pass, memo, num);
+    payment_lot = gncOwnerCreatePaymentLotSecs (owner, &txn,
+                                                invoice->posted_acc,
+                                                xfer_acc, amount, exch,
+                                                date, memo, num);
 
     /* Select the invoice as only payment candidate */
     selected_lots = g_list_prepend (selected_lots, invoice->posted_lot);

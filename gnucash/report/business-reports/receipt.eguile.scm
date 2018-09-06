@@ -90,7 +90,7 @@
                 (let ((ttentries (gncTaxTableGetEntries taxtable)))
                   (if (string-prefix? "#<swig-pointer PriceList" (object->string ttentries))
                     ; error in SWIG binding -- disable display of tax details
-                    ; (see http://bugzilla.gnome.org/show_bug.cgi?id=573645)
+                    ; (see http://bugs.gnucash.org/show_bug.cgi?id=573645)
                     (set! taxtables? #f))))))) ; hack required until Swig is fixed
 
       ; pre-scan invoice splits to see if any payments have been made

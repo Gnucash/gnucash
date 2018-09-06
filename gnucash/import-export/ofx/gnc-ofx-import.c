@@ -51,8 +51,6 @@
 #include "dialog-account.h"
 #include "dialog-utils.h"
 
-#include "gnc-ofx-kvp.h"
-
 #define GNC_PREFS_GROUP "dialogs.import.ofx"
 #define GNC_PREF_AUTO_COMMODITY "auto-create-commodity"
 
@@ -77,6 +75,37 @@ int ofx_proc_status_cb(struct OfxStatusData data)
   return 0;
 }
 */
+
+static const char *PROP_OFX_INCOME_ACCOUNT = "ofx-income-account";
+
+static Account*
+get_associated_income_account(const Account* investment_account)
+{
+    GncGUID *income_guid= NULL;
+    g_assert(investment_account);
+    qof_instance_get (QOF_INSTANCE (investment_account),
+		      PROP_OFX_INCOME_ACCOUNT, &income_guid,
+		      NULL);
+    return xaccAccountLookup(income_guid,
+			       gnc_account_get_book(investment_account));
+}
+
+static void
+set_associated_income_account(Account* investment_account,
+                              const Account *income_account)
+{
+    const GncGUID * income_acc_guid;
+
+    g_assert(investment_account);
+    g_assert(income_account);
+
+    income_acc_guid = xaccAccountGetGUID(income_account);
+    xaccAccountBeginEdit(investment_account);
+    qof_instance_set (QOF_INSTANCE (investment_account),
+		      PROP_OFX_INCOME_ACCOUNT, income_acc_guid,
+		      NULL);
+    xaccAccountCommitEdit(investment_account);
+}
 
 int ofx_proc_security_cb(const struct OfxSecurityData data, void * security_user_data);
 int ofx_proc_transaction_cb (struct OfxTransactionData data, void *user_data);
@@ -474,9 +503,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
     }
     if (data.date_funds_available_valid)
     {
-        Timespec ts;
-        timespecFromTime64(&ts, data.date_funds_available);
-        gnc_timespec_to_iso8601_buff (ts, dest_string);
+        time64 time = data.date_funds_available;
+        gnc_time64_to_iso8601_buff (time, dest_string);
         tmp = notes;
         notes = g_strdup_printf("%s%s%s", tmp,
 				"|Date funds available:", dest_string);
@@ -756,7 +784,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
                 {
                     DEBUG("Now let's find an account for the destination split");
 
-                    income_account = gnc_ofx_kvp_get_assoc_account(investment_account);
+                    income_account =
+                        get_associated_income_account(investment_account);
 
                     if (income_account == NULL)
                     {
@@ -778,7 +807,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void *user_data)
                                              NULL);
                         if (income_account != NULL)
                         {
-                            gnc_ofx_kvp_set_assoc_account(investment_account,
+                            set_associated_income_account(investment_account,
                                                           income_account);
                             DEBUG("KVP written");
                         }

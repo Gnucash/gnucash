@@ -18,7 +18,7 @@
     <key name="account-separator" type="s">
       <default>'colon'</default>
       <summary>Character to use as separator between account names</summary>
-      <description>This setting determines the character that will be used between components of an account name. Possible values are any single non-alphanumeric unicode character, or any of the following strings: "colon" "slash", "backslash", "dash" and "period".</description>
+      <description>This setting determines the character that will be used between components of an account name. Possible values are any single non-alphanumeric unicode character, or any of the following strings: "colon", "slash", "backslash", "dash" and "period".</description>
     </key>
     <key name="assoc-head" type="s">
       <default>''</default>
@@ -65,9 +65,14 @@
       <summary>Number of automatic decimal places</summary>
       <description>This field specifies the number of automatic decimal places that will be filled in.</description>
     </key>
+    <key name='force-price-decimal' type="b">
+      <default>false</default>
+      <summary>Force prices to display as decimals even if they must be rounded.</summary>
+      <description>If active, GnuCash will round prices as necessary to display them as decimals instead of displaying the exact fraction if the fractional part cannot be exactly represented as a decimal.</description>
+    </key>
     <key name="migrate-prefs-done" type="b">
       <default>false</default>
-      <summary>Tool to migrate preferences from old backend (CGonf) to new one (GSettings) has run successfully.</summary>
+      <summary>Tool to migrate preferences from old backend (GConf) to new one (GSettings) has run successfully.</summary>
       <description>GnuCash switched to another backend to store user preferences between 2.4 and 2.6. To smooth the transition, most preferences will be migrated the first time a 2.6 version of GnuCash is run. This migration should only run once. This preference keeps track whether or not this migration tool has run successfully.</description>
     </key>
     <key name="retain-type-never" type="b">

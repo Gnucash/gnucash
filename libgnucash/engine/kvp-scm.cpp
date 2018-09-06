@@ -56,11 +56,6 @@ gnc_scm_to_kvp_value_ptr(SCM val)
         auto tmpguid = guid_copy(&guid);
         return new KvpValue{tmpguid};
     }
-    else if (gnc_timepair_p(val))
-    {
-        Timespec ts = gnc_timepair2timespec(val);
-        return new KvpValue{ts};
-    }
     else if (scm_is_string(val))
     {
         return new KvpValue{gnc_scm_to_utf8_string(val)};
@@ -106,10 +101,6 @@ gnc_kvp_value_ptr_to_scm(KvpValue* val)
         return gnc_guid2scm(*tempguid);
     }
     break;
-    case KvpValue::Type::TIMESPEC:
-        return gnc_timespec2timepair(val->get<Timespec>());
-        break;
-
     case KvpValue::Type::FRAME:
     {
         auto frame = val->get<KvpFrame*>();
@@ -117,10 +108,6 @@ gnc_kvp_value_ptr_to_scm(KvpValue* val)
             return SWIG_NewPointerObj(frame, SWIG_TypeQuery("_p_KvpFrame"), 0);
     }
     break;
-    case KvpValue::Type::GDATE:
-        return gnc_timespec2timepair(gdate_to_timespec(val->get<GDate>()));
-
-        /* FIXME: handle types below */
     case KvpValue::Type::GLIST:
     default:
 	break;

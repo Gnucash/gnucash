@@ -47,11 +47,11 @@ typedef enum
 enum
 {
     REC_POINTER, //0
-    REC_RECN,    //1
-    REC_DATE,    //2
-    REC_NUM,     //3
-    REC_DESC,    //4
-    REC_AMOUNT   //5
+    REC_DATE,    //1
+    REC_NUM,     //2
+    REC_DESC,    //3
+    REC_AMOUNT,  //4
+    REC_RECN,    //5
 };
 
 struct GNCReconcileView
@@ -109,6 +109,10 @@ void gnc_reconcile_view_postpone (GNCReconcileView *view);
 void gnc_reconcile_view_unselect_all (GNCReconcileView *view);
 
 gboolean gnc_reconcile_view_changed (GNCReconcileView *view);
+
+void gnc_reconcile_view_add_padding (GNCReconcileView *view, gint column, gint xpadding);
+
+gint gnc_reconcile_view_get_column_width (GNCReconcileView *view, gint column);
 
 G_END_DECLS
 

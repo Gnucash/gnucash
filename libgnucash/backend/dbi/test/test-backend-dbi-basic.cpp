@@ -138,7 +138,7 @@ setup_memory (Fixture* fixture, gconstpointer pData)
     frame->set ({"int64-val"}, new KvpValue (INT64_C (100)));
     frame->set ({"double-val"}, new KvpValue (3.14159));
     frame->set ({"numeric-val"}, new KvpValue (gnc_numeric_zero ()));
-    frame->set ({"timespec-val"}, new KvpValue (timespec_now ()));
+    frame->set ({"time-val"}, new KvpValue (gnc_time(nullptr)));
     frame->set ({"string-val"}, new KvpValue ("abcdefghijklmnop"));
     auto guid = qof_instance_get_guid (QOF_INSTANCE (acct1));
     frame->set ({"guid-val"}, new KvpValue (const_cast<GncGUID*> (guid_copy (
@@ -401,6 +401,7 @@ test_dbi_store_and_reload (Fixture* fixture, gconstpointer pData)
     g_assert (session_2 != NULL);
     g_assert_cmpint (qof_session_get_error (session_2), == , ERR_BACKEND_NO_ERR);
     qof_session_swap_data (fixture->session, session_2);
+    qof_book_mark_session_dirty (qof_session_get_book (session_2));
     qof_session_save (session_2, NULL);
     g_assert (session_2 != NULL);
     g_assert_cmpint (qof_session_get_error (session_2), == , ERR_BACKEND_NO_ERR);
@@ -459,6 +460,7 @@ test_dbi_safe_save (Fixture* fixture, gconstpointer pData)
         goto cleanup;
     }
     qof_session_swap_data (fixture->session, session_1);
+    qof_book_mark_session_dirty (qof_session_get_book (session_1));
     qof_session_save (session_1, NULL);
     /* Do a safe save */
     qof_session_safe_save (session_1, NULL);
@@ -532,6 +534,7 @@ test_dbi_version_control (Fixture* fixture, gconstpointer pData)
         goto cleanup;
     }
     qof_session_swap_data (fixture->session, sess);
+    qof_book_mark_session_dirty (qof_session_get_book (sess));
     qof_session_save (sess, NULL);
     sql_be = reinterpret_cast<decltype(sql_be)>(qof_session_get_backend (sess));
     book = qof_session_get_book (sess);
@@ -587,6 +590,7 @@ test_dbi_business_store_and_reload (Fixture* fixture, gconstpointer pData)
     session_2 = qof_session_new ();
     qof_session_begin (session_2, url, FALSE, TRUE, TRUE);
     qof_session_swap_data (fixture->session, session_2);
+    qof_book_mark_session_dirty (qof_session_get_book (session_2));
     qof_session_save (session_2, NULL);
 
     // Reload the session data

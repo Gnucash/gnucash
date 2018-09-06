@@ -131,18 +131,12 @@ commodity_ref_to_dom_tree (const char* tag, const gnc_commodity* c)
     return ret;
 }
 
-char*
-time64_to_string (time64 time)
-{
-    return gnc_print_time64 (time, TIMESPEC_TIME_FORMAT " %q");
-}
-
 xmlNodePtr
 time64_to_dom_tree (const char* tag, const time64 time)
 {
     xmlNodePtr ret;
     g_return_val_if_fail (time != INT64_MAX, NULL);
-    auto date_str = time64_to_string (time);
+    auto date_str = gnc_print_time64 (time, "%Y-%m-%d %H:%M:%S %q");
     if (!date_str)
         return NULL;
     ret = xmlNewNode (NULL, BAD_CAST tag);
@@ -237,7 +231,7 @@ add_kvp_value_node (xmlNodePtr node, const gchar* tag, KvpValue* val)
         g_free (newstr);
         break;
     }
-    case KvpValue::Type::TIMESPEC:
+    case KvpValue::Type::TIME64:
         val_node = NULL;
         break;
     case KvpValue::Type::GDATE:
@@ -277,10 +271,13 @@ add_kvp_value_node (xmlNodePtr node, const gchar* tag, KvpValue* val)
         add_text_to_node (val_node, "guid", guidstr);
         break;
     }
-    case KvpValue::Type::TIMESPEC:
+    /* Note: The type attribute must remain 'timespec' to maintain
+     * compatibility.
+     */
+    case KvpValue::Type::TIME64:
     {
-        auto ts = val->get<Timespec> ();
-        val_node = time64_to_dom_tree (tag, ts.tv_sec);
+        auto t = val->get<Time64> ();
+        val_node = time64_to_dom_tree (tag, t.t);
         xmlSetProp (val_node, BAD_CAST "type", BAD_CAST "timespec");
         xmlAddChild (node, val_node);
         break;

@@ -115,8 +115,7 @@ price_parse_xml_sub_node (GNCPrice* p, xmlNodePtr sub_node, QofBook* book)
     {
         time64 time = dom_tree_to_time64 (sub_node);
         if (!dom_tree_valid_time64 (time, sub_node->name)) time = 0;
-        Timespec ts {time, 0};
-        gnc_price_set_time (p, ts);
+        gnc_price_set_time64 (p, time);
     }
     else if (g_strcmp0 ("price:source", (char*)sub_node->name) == 0)
     {
@@ -416,7 +415,7 @@ gnc_price_to_dom_tree (const xmlChar* tag, GNCPrice* price)
     xmlNodePtr tmpnode;
     gnc_commodity* commodity;
     gnc_commodity* currency;
-    Timespec timesp;
+    time64 time;
     gnc_numeric value;
 
     if (! (tag && price)) return NULL;
@@ -438,8 +437,8 @@ gnc_price_to_dom_tree (const xmlChar* tag, GNCPrice* price)
     tmpnode = commodity_ref_to_dom_tree ("price:currency", currency);
     if (!add_child_or_kill_parent (price_xml, tmpnode)) return NULL;
 
-    timesp = gnc_price_get_time (price);
-    tmpnode = time64_to_dom_tree ("price:time", timesp.tv_sec);
+    time = gnc_price_get_time64 (price);
+    tmpnode = time64_to_dom_tree ("price:time", time);
     if (!add_child_or_kill_parent (price_xml, tmpnode)) return NULL;
 
     sourcestr = gnc_price_get_source_string (price);

@@ -1385,8 +1385,8 @@ gnc_split_register_save_to_scm (SplitRegister *reg,
         BasicCell *cell;
         time64 time;
         cell = gnc_table_layout_get_cell (reg->table->layout, DATE_CELL);
-        gnc_date_cell_get_date ((DateCell *) cell, &time);
-        gnc_trans_scm_set_date(trans_scm, time);
+        gnc_date_cell_get_date ((DateCell *) cell, &time, TRUE);
+        xaccTransSetDatePostedSecsNormalized(trans, time);
     }
 
     if (gnc_table_layout_get_cell_changed (reg->table->layout, NUM_CELL, TRUE))
@@ -1395,7 +1395,7 @@ gnc_split_register_save_to_scm (SplitRegister *reg,
 
         value = gnc_table_layout_get_cell_value (reg->table->layout, NUM_CELL);
         if (reg->use_tran_num_for_num_field)
-            gnc_trans_scm_set_num (trans_scm, value);
+            xaccTransSetNum (trans, value);
      /* else this contains the same as ACTN_CELL which is already handled below *
       * and the TNUM_CELL contains transaction number which is handled in next  *
       * if statement. */
@@ -1407,7 +1407,7 @@ gnc_split_register_save_to_scm (SplitRegister *reg,
 
         value = gnc_table_layout_get_cell_value (reg->table->layout, TNUM_CELL);
         if (!reg->use_tran_num_for_num_field)
-            gnc_trans_scm_set_num (trans_scm, value);
+            xaccTransSetNum (trans, value);
      /* else this cell is not used */
     }
 
@@ -1416,7 +1416,7 @@ gnc_split_register_save_to_scm (SplitRegister *reg,
         const char *value;
 
         value = gnc_table_layout_get_cell_value (reg->table->layout, DESC_CELL);
-        gnc_trans_scm_set_description (trans_scm, value);
+        xaccTransSetDescription (trans, value);
     }
 
     if (gnc_table_layout_get_cell_changed (reg->table->layout, NOTES_CELL, TRUE))
@@ -1424,7 +1424,7 @@ gnc_split_register_save_to_scm (SplitRegister *reg,
         const char *value;
 
         value = gnc_table_layout_get_cell_value (reg->table->layout, NOTES_CELL);
-        gnc_trans_scm_set_notes (trans_scm, value);
+        xaccTransSetNotes (trans, value);
     }
 
     if (gnc_table_layout_get_cell_changed (reg->table->layout, RECN_CELL, TRUE))
@@ -2078,7 +2078,6 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value,
     time64 time;
     BasicCell *cell = gnc_table_layout_get_cell (reg->table->layout, DATE_CELL);
     gboolean swap = FALSE;
-    Timespec ts;
 
     /* Only record the price for account types that don't have a
      * "rate" cell. They'll get handled later by
@@ -2086,10 +2085,8 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value,
      */
     if (gnc_split_reg_has_rate_cell (reg->type))
         return;
-    gnc_date_cell_get_date ((DateCell*)cell, &time);
-    ts.tv_sec = time;
-    ts.tv_nsec = 0;
-    price = gnc_pricedb_lookup_day (pricedb, comm, curr, ts);
+    gnc_date_cell_get_date ((DateCell*)cell, &time, TRUE);
+    price = gnc_pricedb_lookup_day_t64 (pricedb, comm, curr, time);
     if (gnc_commodity_equiv (comm, gnc_price_get_currency (price)))
             swap = TRUE;
 
@@ -2116,7 +2113,7 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value,
         value = gnc_numeric_convert(value, scu * COMMODITY_DENOM_MULT,
                                     GNC_HOW_RND_ROUND_HALF_UP);
         gnc_price_begin_edit (price);
-        gnc_price_set_time (price, ts);
+        gnc_price_set_time64 (price, time);
         gnc_price_set_source (price, source);
         gnc_price_set_typestr (price, PRICE_TYPE_TRN);
         gnc_price_set_value (price, value);
@@ -2131,7 +2128,7 @@ record_price (SplitRegister *reg, Account *account, gnc_numeric value,
     gnc_price_begin_edit (price);
     gnc_price_set_commodity (price, comm);
     gnc_price_set_currency (price, curr);
-    gnc_price_set_time (price, ts);
+    gnc_price_set_time64 (price, time);
     gnc_price_set_source (price, source);
     gnc_price_set_typestr (price, PRICE_TYPE_TRN);
     gnc_price_set_value (price, value);
@@ -2648,7 +2645,7 @@ gnc_split_register_config_cells (SplitRegister *reg)
         gnc_price_cell_set_print_info
         ((PriceCell *)
          gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL),
-         gnc_default_price_print_info ());
+         gnc_default_price_print_info (gnc_default_currency ()));
         break;
 
     default:

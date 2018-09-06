@@ -36,6 +36,7 @@
 
 #define d(x)
 
+static void pass_parent (GNCSearchCoreType *fe, gpointer parent);
 static void editable_enters (GNCSearchCoreType *fe);
 static void grab_focus (GNCSearchCoreType *fe);
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe);
@@ -53,6 +54,7 @@ struct _GNCSearchDoublePrivate
 {
     GtkWidget * entry;
     GNCAmountEdit *gae;
+    GtkWindow *parent;
 };
 
 #define _PRIVATE(o) \
@@ -100,6 +102,7 @@ gnc_search_double_class_init (GNCSearchDoubleClass *klass)
     object_class->finalize = gnc_search_double_finalize;
 
     /* override methods */
+    gnc_search_core_type->pass_parent = pass_parent;
     gnc_search_core_type->editable_enters = editable_enters;
     gnc_search_core_type->grab_focus = grab_focus;
     gnc_search_core_type->validate = gncs_validate;
@@ -154,6 +157,19 @@ gnc_search_double_set_how (GNCSearchDouble *fi, QofQueryCompare how)
     g_return_if_fail (fi);
     g_return_if_fail (IS_GNCSEARCH_DOUBLE (fi));
     fi->how = how;
+}
+
+static void
+pass_parent (GNCSearchCoreType *fe, gpointer parent)
+{
+    GNCSearchDouble *fi = (GNCSearchDouble *)fe;
+    GNCSearchDoublePrivate *priv;
+
+    g_return_if_fail (fi);
+    g_return_if_fail (IS_GNCSEARCH_DOUBLE (fi));
+
+    priv = _PRIVATE(fi);
+    priv->parent = GTK_WINDOW(parent);
 }
 
 static gboolean
