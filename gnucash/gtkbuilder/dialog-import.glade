@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkImage" id="account_new_icon">
@@ -14,6 +14,9 @@
     <property name="default_height">600</property>
     <property name="type_hint">dialog</property>
     <signal name="map" handler="gnc_ui_generic_account_picker_map_cb" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="account_picker_vbox">
         <property name="visible">True</property>
@@ -165,7 +168,6 @@
     <property name="page_increment">10</property>
   </object>
   <object class="GtkDialog" id="format_picker_dialog">
-    <property name="visible">False</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Choose a format</property>
     <property name="resizable">False</property>
@@ -173,6 +175,9 @@
     <property name="default_width">600</property>
     <property name="default_height">400</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox16">
         <property name="visible">True</property>
@@ -301,6 +306,9 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Preferences</property>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkGrid" id="matcher_prefs">
         <property name="visible">True</property>
@@ -554,6 +562,9 @@
     <property name="default_width">600</property>
     <property name="default_height">400</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox14">
         <property name="visible">True</property>
@@ -717,7 +728,8 @@
     <property name="text" translatable="yes">This transaction requires your intervention or it will NOT be imported.</property>
   </object>
   <object class="GtkTextBuffer" id="textbuffer5">
-    <property name="text" translatable="yes">Double click on the transaction to change the matching transaction to reconcile, or the destination account of the auto-balance split (if required).</property>
+    <property name="text" translatable="yes">Double click on the transaction to change the matching transaction to reconcile, or the destination account of the auto-balance split (if required).
+Multiply select rows using Ctrl-Click, Shift-Click and Rubber banding . Right-Click or Shift-F10 to bring up popup menu and click or select to assign a destination account to the selected rows.</property>
   </object>
   <object class="GtkDialog" id="matcher_help_dialog">
     <property name="can_focus">False</property>
@@ -726,6 +738,9 @@
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <signal name="close" handler="on_matcher_help_close_clicked" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox18">
         <property name="visible">True</property>
@@ -764,6 +779,7 @@
           <object class="GtkGrid" id="table1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_bottom">42</property>
             <property name="row_spacing">6</property>
             <property name="column_spacing">12</property>
             <child>
@@ -990,6 +1006,7 @@
                   <object class="GtkTextView" id="textview5">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="margin_bottom">2</property>
                     <property name="pixels_above_lines">5</property>
                     <property name="pixels_below_lines">5</property>
                     <property name="editable">False</property>
@@ -1107,8 +1124,11 @@
             <property name="reorderable">True</property>
             <property name="rules_hint">True</property>
             <property name="enable_search">False</property>
+            <property name="rubber_banding">True</property>
             <child internal-child="selection">
-              <object class="GtkTreeSelection" id="treeview-selection3"/>
+              <object class="GtkTreeSelection" id="treeview-selection3">
+                <property name="mode">multiple</property>
+              </object>
             </child>
           </object>
         </child>
@@ -1130,6 +1150,9 @@
     <property name="default_height">400</property>
     <property name="type_hint">dialog</property>
     <signal name="close" handler="on_matcher_cancel_clicked" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="transaction_matcher_vbox">
         <property name="visible">True</property>
