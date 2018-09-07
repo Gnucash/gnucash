@@ -206,13 +206,15 @@ void gnc_split_reg_set_sort_type_force( GNCSplitReg *gsr, SortType t, gboolean f
 /**
  * Set/get sort order of register
  **/
-void gnc_split_reg_set_sort_reversed(GNCSplitReg *gsr, gboolean rev, gboolean refresh);
+void gnc_split_reg_set_sort_reversed(GNCSplitReg *gsr,
+                                     gboolean rev, gboolean refresh);
 
 
 /**
  * Gets/sets the style of the GNCSplitReg.
  **/
-void gnc_split_reg_change_style (GNCSplitReg *gsr, SplitRegisterStyle style);
+void gnc_split_reg_change_style (GNCSplitReg *gsr,
+                                 SplitRegisterStyle style, gboolean refresh);
 
 /**
  * Can return NULL if the indicated subwidget was not created.
