@@ -250,17 +250,6 @@ typedef char gchar;
         int size = PyList_Size($input);
         for (i = size-1; i >= 0; i--) {
             PyObject *o = PyList_GetItem($input, i);
-%#if PY_VERSION_HEX>=0x03000000
-            if (PyUnicode_Check(o)) {
-                $1 = g_slist_prepend($1,PyUnicode_AsUTF8(PyList_GetItem($input, i)));
-            } else if (PyBytes_Check(o)) {
-                $1 = g_slist_prepend($1,PyBytes_AsString(PyList_GetItem($input, i)));
-            } else {
-                PyErr_SetString(PyExc_TypeError, "list must contain strings or bytes");
-                g_slist_free($1);
-                return NULL;
-            }
-%#else
             if (PyString_Check(o)) {
                 $1 = g_slist_prepend($1,PyString_AsString(PyList_GetItem($input, i)));
             } else {
@@ -268,7 +257,6 @@ typedef char gchar;
                 g_slist_free($1);
                 return NULL;
             }
-%#endif
         }
     } else {
         PyErr_SetString(PyExc_TypeError, "not a list");
