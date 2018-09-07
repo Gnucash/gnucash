@@ -548,6 +548,8 @@ typedef struct GncPluginPageRegisterPrivate
 
     gint lines_default;
     gboolean read_only;
+    Query *search_query;     // saved search query for comparison
+    Query *filter_query;     // saved filter query for comparison
 
     struct
     {
@@ -806,6 +808,8 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
     priv->read_only         = FALSE;
     priv->fd.cleared_match  = CLEARED_ALL;
     priv->fd.days           = 0;
+    priv->search_query      = NULL;
+    priv->filter_query      = NULL;
 }
 
 static void
@@ -1358,6 +1362,9 @@ gnc_plugin_page_register_destroy_widget (GncPluginPage *plugin_page)
         gtk_widget_destroy(priv->fd.dialog);
         memset(&priv->fd, 0, sizeof(priv->fd));
     }
+
+    qof_query_destroy (priv->search_query);
+    qof_query_destroy (priv->filter_query);
 
     gtk_widget_hide(priv->widget);
     gnc_ledger_display_close (priv->ledger);
@@ -2373,6 +2380,33 @@ gnc_plugin_page_register_sort_order_reverse_cb (GtkToggleButton *button,
 /*                    "Filter By" Dialog                    */
 /************************************************************/
 
+static void
+gnc_ppr_update_for_search_query (GncPluginPageRegister *page)
+{
+    GncPluginPageRegisterPrivate *priv;
+    SplitRegister *reg;
+
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+    reg = gnc_ledger_display_get_split_register (priv->ledger);
+
+    if (reg->type == SEARCH_LEDGER)
+    {
+        Query *query_tmp = gnc_ledger_display_get_query (priv->ledger);
+
+        // if filter_query is NULL, then the dialogue find has been run
+        // before coming here. if query_tmp does not equal filter_query
+        // then the dialogue find has been run again before coming here
+        if ((priv->filter_query == NULL) ||
+           (!qof_query_equal (query_tmp, priv->filter_query)))
+        {
+            qof_query_destroy (priv->search_query);
+            priv->search_query = qof_query_copy (query_tmp);
+        }
+        gnc_ledger_display_set_query (priv->ledger, priv->search_query);
+    }
+}
+
+
 /** This function updates the "cleared match" term of the register
  *  query.  It unconditionally removes any old "cleared match" query
  *  term, then adds back a new query term if needed.  There seems to
@@ -2391,9 +2425,18 @@ gnc_ppr_update_status_query (GncPluginPageRegister *page, gboolean refresh)
     GncPluginPageRegisterPrivate *priv;
     GSList *param_list;
     Query *query;
+    SplitRegister *reg;
 
     ENTER(" ");
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+    if (!priv->ledger)
+    {
+        LEAVE("no ledger");
+        return;
+    }
+    // check if this a search register and save query
+    gnc_ppr_update_for_search_query (page);
+
     query = gnc_ledger_display_get_query( priv->ledger );
     if (!query)
     {
@@ -2401,9 +2444,11 @@ gnc_ppr_update_status_query (GncPluginPageRegister *page, gboolean refresh)
         return;
     }
 
+    reg = gnc_ledger_display_get_split_register (priv->ledger);
+
     /* Remove the old status match */
     param_list = qof_query_build_param_list (SPLIT_RECONCILE, NULL);
-    if (param_list)
+    if (param_list && (reg->type != SEARCH_LEDGER))
     {
         qof_query_purge_terms (query, param_list);
         g_slist_free(param_list);
@@ -2415,6 +2460,10 @@ gnc_ppr_update_status_query (GncPluginPageRegister *page, gboolean refresh)
 
     // Set filter tooltip for summary bar
     gnc_plugin_page_register_set_filter_tooltip (page);
+
+    // clear previous filter query and save current
+    qof_query_destroy (priv->filter_query);
+    priv->filter_query = qof_query_copy (query);
 
     if (refresh)
         gnc_ledger_display_refresh (priv->ledger);
@@ -2440,6 +2489,7 @@ gnc_ppr_update_date_query (GncPluginPageRegister *page, gboolean refresh)
     GncPluginPageRegisterPrivate *priv;
     GSList *param_list;
     Query *query;
+    SplitRegister *reg;
 
     ENTER(" ");
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
@@ -2448,17 +2498,22 @@ gnc_ppr_update_date_query (GncPluginPageRegister *page, gboolean refresh)
         LEAVE("no ledger");
         return;
     }
+    // check if this a search register and save query
+    gnc_ppr_update_for_search_query (page);
 
-    query = gnc_ledger_display_get_query( priv->ledger );
+    query = gnc_ledger_display_get_query (priv->ledger);
+
     if (!query)
     {
         LEAVE("no query");
         return;
     }
 
+    reg = gnc_ledger_display_get_split_register (priv->ledger);
+
     /* Delete any existing old date spec. */
     param_list = qof_query_build_param_list(SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
-    if (param_list)
+    if (param_list && (reg->type != SEARCH_LEDGER))
     {
         qof_query_purge_terms (query, param_list);
         g_slist_free(param_list);
@@ -2487,6 +2542,11 @@ gnc_ppr_update_date_query (GncPluginPageRegister *page, gboolean refresh)
 
     // Set filter tooltip for summary bar
     gnc_plugin_page_register_set_filter_tooltip (page);
+
+
+    // clear previous filter query and save current
+    qof_query_destroy (priv->filter_query);
+    priv->filter_query = qof_query_copy (query);
 
     if (refresh)
         gnc_ledger_display_refresh (priv->ledger);
