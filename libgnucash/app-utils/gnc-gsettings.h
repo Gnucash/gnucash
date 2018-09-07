@@ -86,6 +86,16 @@ void gnc_gsettings_set_prefix (const gchar *prefix);
 const gchar *gnc_gsettings_get_prefix (void);
 
 
+/** Block all prefs callbacks, used while preference dialog is loaded.
+ */
+void gnc_gsettings_block_all (void);
+
+
+/** UnBlock all prefs callbacks, used while preference dialog is loaded.
+ */
+void gnc_gsettings_unblock_all (void);
+
+
 /** @name Listening for changes
  @{
 */

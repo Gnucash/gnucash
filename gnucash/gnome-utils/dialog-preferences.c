@@ -1153,9 +1153,8 @@ gnc_prefs_connect_one (const gchar *name,
         GList* child = gtk_container_get_children(GTK_CONTAINER(widget));
         widget_child = child->data;
         g_list_free(child);
-        DEBUG("  %s - hbox", name);
-        DEBUG("Hbox widget type is %s and name is %s", gtk_widget_get_name(GTK_WIDGET(widget_child)), name);
-
+        DEBUG("  %s - box", name);
+        DEBUG("Box widget type is %s and name is %s", gtk_widget_get_name(GTK_WIDGET(widget_child)), name);
         if (GNC_IS_CURRENCY_EDIT(widget_child))
         {
             DEBUG("  %s - currency_edit", name);
@@ -1163,7 +1162,7 @@ gnc_prefs_connect_one (const gchar *name,
         }
         else if (GNC_IS_PERIOD_SELECT(widget_child))
         {
-            DEBUG("  %s - period_Select", name);
+            DEBUG("  %s - period_select", name);
             gnc_prefs_connect_period_select(GNC_PERIOD_SELECT(widget_child), name );
         }
         else if (GNC_IS_DATE_EDIT(widget_child))
@@ -1173,7 +1172,7 @@ gnc_prefs_connect_one (const gchar *name,
         }
         else if (GTK_FILE_CHOOSER_BUTTON(widget_child))
         {
-            DEBUG("  %s - file chooser buuton", name);
+            DEBUG("  %s - file chooser button", name);
             gnc_prefs_connect_file_chooser_button(GTK_FILE_CHOOSER_BUTTON(widget_child), name );
         }
     }
@@ -1344,7 +1343,9 @@ gnc_preferences_dialog_create(GtkWindow *parent)
     gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 0);
 
     DEBUG("We have the following interesting widgets:");
+    gnc_prefs_block_all(); // Block All Registered callbacks
     g_hash_table_foreach(prefs_table, (GHFunc)gnc_prefs_connect_one, dialog);
+    gnc_prefs_unblock_all(); // UnBlock All Registered callbacks
     DEBUG("Done with interesting widgets.");
 
     /* Other stuff */

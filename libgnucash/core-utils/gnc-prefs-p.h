@@ -104,6 +104,10 @@ typedef struct
 
     void (*reset_group) (const gchar *group);
 
+    void (*block_all) (void);
+
+    void (*unblock_all) (void);
+
 } PrefsBackend;
 
 extern PrefsBackend *prefsbackend;
