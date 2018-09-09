@@ -12,12 +12,12 @@ gnc_add_test_with_guile(test-link-module-report-system test-link-module.c
 set(scm_test_report_system_SOURCES
   test-load-report-system-module.scm
   test-collectors.scm
-  test-report-utilities.scm
   test-test-extras.scm
 )
 
 set (scm_test_report_system_with_srfi64_SOURCES
   test-commodity-utils.scm
+  test-report-utilities.scm
   test-html-utilities-srfi64.scm
   test-report-system.scm
   )
