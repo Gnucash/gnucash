@@ -903,7 +903,7 @@ gnc_split_reg_reverse_trans_cb (GtkWidget *w, gpointer data)
 
 
 static gboolean
-is_trans_readonly_and_warn (GtkWindow *parent, const Transaction *trans)
+is_trans_readonly_and_warn (GtkWindow *parent, Transaction *trans)
 {
     GtkWidget *dialog;
     const gchar *reason;
