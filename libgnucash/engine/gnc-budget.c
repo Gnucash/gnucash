@@ -637,14 +637,14 @@ gnc_budget_get_default (QofBook *book)
 {
     QofCollection *col;
     GncBudget *bgt = NULL;
-    const GncGUID *default_budget_guid = NULL;
+    GncGUID *default_budget_guid = NULL;
 
     g_return_val_if_fail(book, NULL);
 
     qof_instance_get (QOF_INSTANCE (book),
                       "default-budget", &default_budget_guid,
                       NULL);
-    if (default_budget_guid != NULL)
+    if (default_budget_guid)
     {
         col = qof_book_get_collection(book, GNC_ID_BUDGET);
         bgt = (GncBudget *) qof_collection_lookup_entity(col,
@@ -662,6 +662,7 @@ gnc_budget_get_default (QofBook *book)
         }
     }
 
+    guid_free (default_budget_guid);
     return bgt;
 }
 

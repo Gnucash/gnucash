@@ -1250,12 +1250,15 @@ GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot)
 {
     GncGUID *guid = NULL;
     QofBook *book;
+    GncInvoice *invoice = NULL;
 
     if (!lot) return NULL;
 
     book = gnc_lot_get_book (lot);
     qof_instance_get (QOF_INSTANCE (lot), "invoice", &guid, NULL);
-    return gncInvoiceLookup(book, guid);
+    invoice = gncInvoiceLookup(book, guid);
+    guid_free (guid);
+    return invoice;
 }
 
 void
@@ -1279,12 +1282,15 @@ gncInvoiceGetInvoiceFromTxn (const Transaction *txn)
 {
     GncGUID *guid = NULL;
     QofBook *book;
+    GncInvoice *invoice = NULL;
 
     if (!txn) return NULL;
 
     book = xaccTransGetBook (txn);
     qof_instance_get (QOF_INSTANCE (txn), "invoice", &guid, NULL);
-    return gncInvoiceLookup(book, guid);
+    invoice = gncInvoiceLookup(book, guid);
+    guid_free (guid);
+    return invoice;
 }
 
 gboolean gncInvoiceAmountPositive (const GncInvoice *invoice)

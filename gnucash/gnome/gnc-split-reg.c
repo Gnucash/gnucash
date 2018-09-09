@@ -1477,6 +1477,7 @@ gsr_default_schedule_handler( GNCSplitReg *gsr, gpointer data )
         ((guid_equal (xaccSchedXactionGetGUID (sx), fromSXId))
          ? sx : NULL);
     }
+    guid_free (fromSXId);
 
     if ( theSX )
     {

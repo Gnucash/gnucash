@@ -1004,7 +1004,7 @@ qof_book_get_default_gains_policy (QofBook *book)
   * valid book-currency, both of which are required, for the 'book-currency'
   * currency accounting method to apply. Use instead
   * 'gnc_book_get_default_gain_loss_acct' which does these validations. */
-const GncGUID *
+GncGUID *
 qof_book_get_default_gain_loss_acct_guid (QofBook *book)
 {
     GncGUID *guid = NULL;

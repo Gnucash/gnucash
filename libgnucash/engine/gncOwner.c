@@ -641,9 +641,11 @@ gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner)
         gncOwnerInitJob (owner, gncJobLookup (book, guid));
         break;
     default:
+        guid_free (guid);
         return FALSE;
     }
 
+    guid_free (guid);
     return (owner->owner.undefined != NULL);
 }
 

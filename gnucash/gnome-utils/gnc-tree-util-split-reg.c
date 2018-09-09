@@ -389,6 +389,7 @@ gnc_tree_util_split_reg_template_get_transfer_entry (Split *split)
 		      "sx-account", &guid,
 		      NULL);
     account = xaccAccountLookup (guid, gnc_get_current_book ());
+    guid_free (guid);
     name = account ? gnc_get_account_name_for_register (account) : NULL;
 
     return name;

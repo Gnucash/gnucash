@@ -3683,6 +3683,7 @@ gnc_plugin_page_register2_cmd_schedule (GtkAction *action,
 		((guid_equal (xaccSchedXactionGetGUID (sx), fromSXId))
 		 ? sx : NULL);
 	}
+	guid_free (fromSXId);
 
 	if (theSX)
 	{
