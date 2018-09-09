@@ -1749,7 +1749,7 @@ gnc_split_reg_jump_cb( GtkWidget *widget, gpointer data )
 }
 
 void
-gnc_split_reg_change_style (GNCSplitReg *gsr, SplitRegisterStyle style)
+gnc_split_reg_change_style (GNCSplitReg *gsr, SplitRegisterStyle style, gboolean refresh)
 {
     SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
 
@@ -1757,7 +1757,8 @@ gnc_split_reg_change_style (GNCSplitReg *gsr, SplitRegisterStyle style)
         return;
 
     gnc_split_register_config (reg, reg->type, style, reg->use_double_line);
-    gnc_ledger_display_refresh (gsr->ledger);
+    if (refresh)
+        gnc_ledger_display_refresh (gsr->ledger);
 }
 
 void
@@ -1768,7 +1769,7 @@ gnc_split_reg_style_ledger_cb (GtkWidget *w, gpointer data)
     if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w)))
         return;
 
-    gnc_split_reg_change_style (gsr, REG_STYLE_LEDGER);
+    gnc_split_reg_change_style (gsr, REG_STYLE_LEDGER, TRUE);
 }
 
 void
@@ -1779,7 +1780,7 @@ gnc_split_reg_style_auto_ledger_cb (GtkWidget *w, gpointer data)
     if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w)))
         return;
 
-    gnc_split_reg_change_style (gsr, REG_STYLE_AUTO_LEDGER);
+    gnc_split_reg_change_style (gsr, REG_STYLE_AUTO_LEDGER, TRUE);
 }
 
 void
@@ -1790,7 +1791,7 @@ gnc_split_reg_style_journal_cb (GtkWidget *w, gpointer data)
     if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w)))
         return;
 
-    gnc_split_reg_change_style (gsr, REG_STYLE_JOURNAL);
+    gnc_split_reg_change_style (gsr, REG_STYLE_JOURNAL, TRUE);
 }
 
 void
