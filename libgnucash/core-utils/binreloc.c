@@ -434,6 +434,42 @@ gnc_gbr_find_prefix (const gchar *default_prefix)
     return dir2;
 }
 
+/* Locate a specified component directory.
+ *
+ * E.g., <prefix>/share
+
+ * default_dir is passed in from the wrapper function, compiled_dir is the corresponding constant from gncla-dir.h.
+ *
+ * If compiled_dir exists and is an absolute path then we check the dynamic
+ * prefix and if it's NULL fall back first on the passed-in default and then on
+ * compiled_dir; otherwise we pass the compiled PREFIX value as a default to
+ * gnc_gbr_find_prefix, remove the PREFIX part (if any) from the compiled_dir
+ * and append that to the retrieved prefix.
+ */
+static gchar*
+find_component_directory (const gchar *default_dir, const gchar* compiled_dir)
+{
+    gchar *prefix = NULL, *dir = NULL, *subdir = NULL;
+
+    prefix = gnc_gbr_find_prefix (NULL);
+    if (prefix == NULL)
+        return g_strdup (default_dir ? default_dir : compiled_dir);
+    subdir = gnc_file_path_relative_part(PREFIX, compiled_dir);
+    if (g_strcmp0 (compiled_dir, subdir) == 0)
+    {
+        /* compiled_dir isn't a subdir of PREFIX. This isn't relocatable so
+         * return compiled_dir.
+         */
+        g_free (subdir);
+        g_free (prefix);
+        return g_strdup (compiled_dir);
+    }
+    dir = g_build_filename (prefix, subdir, NULL);
+    g_free (subdir);
+    g_free (prefix);
+    return dir;
+}
+
 
 /** Locate the application's binary folder.
  *
@@ -451,21 +487,7 @@ gnc_gbr_find_prefix (const gchar *default_prefix)
 gchar *
 gnc_gbr_find_bin_dir (const gchar *default_bin_dir)
 {
-    gchar *prefix, *dir, *bindir;
-    prefix = gnc_gbr_find_prefix (NULL);
-    if (prefix == NULL)
-    {
-        /* BinReloc not initialized. */
-        if (default_bin_dir != NULL)
-            return g_strdup (default_bin_dir);
-        else
-            return NULL;
-    }
-    bindir = gnc_file_path_relative_part(PREFIX, BINDIR);
-    dir = g_build_filename (prefix, bindir, NULL);
-    g_free (bindir);
-    g_free (prefix);
-    return dir;
+        return find_component_directory (default_bin_dir, BINDIR);
 }
 
 /** Locate the application's data folder.
@@ -485,23 +507,7 @@ gnc_gbr_find_bin_dir (const gchar *default_bin_dir)
 gchar *
 gnc_gbr_find_data_dir (const gchar *default_data_dir)
 {
-    gchar *prefix, *dir, *datadir;
-
-    prefix = gnc_gbr_find_prefix (NULL);
-    if (prefix == NULL)
-    {
-        /* BinReloc not initialized. */
-        if (default_data_dir != NULL)
-            return g_strdup (default_data_dir);
-        else
-            return NULL;
-    }
-
-    datadir = gnc_file_path_relative_part(PREFIX, DATADIR);
-    dir = g_build_filename (prefix, datadir, NULL);
-    g_free (datadir);
-    g_free (prefix);
-    return dir;
+    return find_component_directory (default_data_dir, DATADIR);
 }
 
 /** Locate the application's library folder.
@@ -520,23 +526,8 @@ gnc_gbr_find_data_dir (const gchar *default_data_dir)
 gchar *
 gnc_gbr_find_lib_dir (const gchar *default_lib_dir)
 {
-    gchar *prefix, *dir, *libdir;
+    return find_component_directory (default_lib_dir, LIBDIR);
 
-    prefix = gnc_gbr_find_prefix (NULL);
-    if (prefix == NULL)
-    {
-        /* BinReloc not initialized. */
-        if (default_lib_dir != NULL)
-            return g_strdup (default_lib_dir);
-        else
-            return NULL;
-    }
-
-    libdir = gnc_file_path_relative_part(PREFIX, LIBDIR);
-    dir = g_build_filename (prefix, libdir, NULL);
-    g_free (libdir);
-    g_free (prefix);
-    return dir;
 }
 
 /** Locate the application's configuration files folder.
@@ -569,7 +560,12 @@ gnc_gbr_find_etc_dir (const gchar *default_etc_dir)
 
     if (g_path_is_absolute (SYSCONFDIR))
     {
-        sysconfdir = gnc_file_path_relative_part("/", SYSCONFDIR);
+        sysconfdir = gnc_file_path_relative_part (PREFIX, SYSCONFDIR);
+        if (g_strcmp0 (sysconfdir, SYSCONFDIR) == 0)
+        {
+            g_free (sysconfdir);
+            sysconfdir = gnc_file_path_relative_part("/", SYSCONFDIR);
+        }
         dir = g_build_filename (prefix, sysconfdir, NULL);
         g_free (sysconfdir);
     }
