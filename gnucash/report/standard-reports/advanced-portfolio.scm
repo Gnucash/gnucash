@@ -473,10 +473,10 @@ by preventing negative stock balances.<br/>")
                     (exchange-fn fromunits tocurrency)))
 
             (gnc:debug "Starting account " (xaccAccountGetName current) ", initial price: "
-                   (if price
-                     (gnc-commodity-value->string
-	 	         (list (gnc-price-get-currency price) (gnc-price-get-value price)))
-	 	     #f))
+                       (and price
+                            (gnc:monetary->string
+                             (gnc:make-gnc-monetary
+                              (gnc-price-get-currency price) (gnc-price-get-value price)))))
 
             ;; If we have a price that can't be converted to the report currency
             ;; don't use it
@@ -535,7 +535,8 @@ by preventing negative stock balances.<br/>")
             ;; Now that we have a pricing transaction if needed, set the value of the asset
             (set! value (my-exchange-fn (gnc:make-gnc-monetary commodity units) currency))
             (gnc:debug "Value " (gnc:monetary->string value)
-                       " from " (gnc-commodity-numeric->string commodity units))
+                       " from " (gnc:monetary->string
+                                 (gnc:make-gnc-monetary commodity units)))
 
 	    (for-each
 	     ;; we're looking at each split we find in the account. these splits
