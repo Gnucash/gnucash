@@ -452,8 +452,10 @@ gnc_split_reg_dispose(GObject *obj)
     gsr->filter_text = NULL;
 
     if (gsr->reg)
+    {
         g_signal_handlers_disconnect_by_data (gsr->reg, gsr);
         gtk_widget_destroy (GTK_WIDGET (gsr->reg));
+    }
     gsr->reg = NULL;
 }
 
