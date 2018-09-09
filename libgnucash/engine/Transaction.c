@@ -813,8 +813,7 @@ xaccFreeTransaction (Transaction *trans)
     /* free up transaction strings */
     CACHE_REMOVE(trans->num);
     CACHE_REMOVE(trans->description);
-    if (trans->readonly_reason)
-        g_free (trans->readonly_reason);
+    g_free (trans->readonly_reason);
 
     /* Just in case someone looks up freed memory ... */
     trans->num         = (char *) 1;
@@ -2076,8 +2075,7 @@ void xaccTransClearReadOnly (Transaction *trans)
         qof_instance_set_dirty(QOF_INSTANCE(trans));
         xaccTransCommitEdit(trans);
 
-        if (trans->readonly_reason)
-            g_free (trans->readonly_reason);
+        g_free (trans->readonly_reason);
         trans->readonly_reason = NULL;
         trans->reason_cache_valid = TRUE;
     }
@@ -2096,8 +2094,7 @@ xaccTransSetReadOnly (Transaction *trans, const char *reason)
         qof_instance_set_dirty(QOF_INSTANCE(trans));
         xaccTransCommitEdit(trans);
 
-        if (trans->readonly_reason)
-            g_free (trans->readonly_reason);
+        g_free (trans->readonly_reason);
         trans->readonly_reason = g_strdup (reason);
         trans->reason_cache_valid = TRUE;
     }
@@ -2467,15 +2464,16 @@ xaccTransGetReadOnly (Transaction *trans)
         qof_instance_get_kvp (QOF_INSTANCE(trans), &v, 1, TRANS_READ_ONLY_REASON);
 
         /* Clear possible old cache value first */
-        if (trans->readonly_reason)
-            g_free (trans->readonly_reason);
+        g_free (trans->readonly_reason);
         trans->readonly_reason = NULL;
 
         /* Then set the new one */
         if (G_VALUE_HOLDS_STRING (&v))
+        {
             trans->readonly_reason = g_value_dup_string (&v);
-        g_value_unset (&v);
-        trans->reason_cache_valid = TRUE;
+            g_value_unset (&v);
+            trans->reason_cache_valid = TRUE;
+        }
     }
     return trans->readonly_reason;
 }
