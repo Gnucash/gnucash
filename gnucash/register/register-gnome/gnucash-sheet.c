@@ -763,6 +763,7 @@ gnucash_sheet_finalize (GObject *object)
 
     sheet = GNUCASH_SHEET (object);
 
+    g_table_resize (sheet->blocks, 0, 0);
     g_table_destroy (sheet->blocks);
     sheet->blocks = NULL;
 
@@ -2214,7 +2215,7 @@ gnucash_sheet_block_set_from_table (GnucashSheet *sheet,
 
     if (block->style && (block->style != style))
     {
-        gnucash_style_unref (block->style);
+        gnucash_sheet_style_unref (sheet, block->style);
         block->style = NULL;
     }
 
@@ -2223,7 +2224,7 @@ gnucash_sheet_block_set_from_table (GnucashSheet *sheet,
     if (block->style == NULL)
     {
         block->style = style;
-        gnucash_style_ref(block->style);
+        gnucash_sheet_style_ref(sheet, block->style);
         return TRUE;
     }
 
@@ -2323,14 +2324,15 @@ static void
 gnucash_sheet_block_destroy (gpointer _block, gpointer user_data)
 {
     SheetBlock *block = _block;
+    GnucashSheet *sheet = GNUCASH_SHEET(user_data);
 
     if (block == NULL)
         return;
 
     if (block->style)
     {
-        gnucash_style_unref (block->style);
-        block->style = NULL;
+        gnucash_sheet_style_unref (sheet, block->style);
+        /* Don't free the block itself here. It's managed by the block table */
     }
 }
 
@@ -2588,7 +2590,7 @@ gnucash_sheet_init (GnucashSheet *sheet)
 
     sheet->blocks = g_table_new (sizeof (SheetBlock),
                                  gnucash_sheet_block_construct,
-                                 gnucash_sheet_block_destroy, NULL);
+                                 gnucash_sheet_block_destroy, sheet);
 
     gtk_widget_add_events(GTK_WIDGET(sheet), (GDK_EXPOSURE_MASK
     | GDK_BUTTON_PRESS_MASK
@@ -2723,7 +2725,7 @@ gnucash_sheet_new (Table *table)
     /* some register data */
     sheet->dimensions_hash_table = g_hash_table_new_full (g_int_hash,
                                    g_int_equal,
-                                   g_free, NULL);
+                                   g_free, g_free);
 
     /* add tooltips to sheet */
     gtk_widget_set_has_tooltip (GTK_WIDGET(sheet), TRUE);

@@ -109,8 +109,8 @@ void gnucash_sheet_style_get_cell_pixel_rel_coords (SheetBlockStyle *style,
         gint *x, gint *y,
         gint *w, gint *h);
 
-void gnucash_style_ref   (SheetBlockStyle *style);
-void gnucash_style_unref (SheetBlockStyle *style);
+void gnucash_sheet_style_ref   (GnucashSheet *sheet, SheetBlockStyle *style);
+void gnucash_sheet_style_unref (GnucashSheet *sheet, SheetBlockStyle *style);
 
 void gnucash_sheet_get_borders (GnucashSheet *sheet, VirtualLocation virt_loc,
                                 PhysicalCellBorders *borders);
