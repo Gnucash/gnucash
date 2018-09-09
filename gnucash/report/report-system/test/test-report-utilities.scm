@@ -188,7 +188,7 @@
    (gnc-commodity-get-namespace (gnc-default-report-currency))
    sym))
 
-(define structure
+(define (structure)
   (list "Root" (list (cons 'type ACCT-TYPE-ASSET))
         (list "Asset"
               (list "Bank")
@@ -205,7 +205,7 @@
 
 (define (create-test-data)
   (let* ((env (create-test-env))
-         (account-alist (env-create-account-structure-alist env structure))
+         (account-alist (env-create-account-structure-alist env (structure)))
          (asset (cdr (assoc "Asset" account-alist)))
          (bank (cdr (assoc "Bank" account-alist)))
          (gbp-bank (cdr (assoc "GBP Bank" account-alist)))
