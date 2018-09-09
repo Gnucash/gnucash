@@ -94,7 +94,8 @@
 
 ;; Helper for warnings below.
 (define (gnc-commodity-numeric->string commodity numeric)
-  (issue-deprecation-warning "gnc-commodity-numeric->string deprecated.")
+  (issue-deprecation-warning "gnc-commodity-numeric->string deprecated. \
+construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
   (gnc:monetary->string
    (gnc:make-gnc-monetary commodity numeric)))
 
