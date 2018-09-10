@@ -1211,7 +1211,7 @@ qof_book_set_feature (QofBook *book, const gchar *key, const gchar *descr)
     if (feature == nullptr || g_strcmp0 (feature->get<const char*>(), descr))
     {
         qof_book_begin_edit (book);
-        delete frame->set_path({GNC_FEATURES, key}, new KvpValue(descr));
+        delete frame->set_path({GNC_FEATURES, key}, new KvpValue(g_strdup (descr)));
         qof_instance_set_dirty (QOF_INSTANCE (book));
         qof_book_commit_edit (book);
     }
