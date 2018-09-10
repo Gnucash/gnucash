@@ -2472,8 +2472,8 @@ xaccTransGetReadOnly (Transaction *trans)
         {
             trans->readonly_reason = g_value_dup_string (&v);
             g_value_unset (&v);
-            trans->reason_cache_valid = TRUE;
         }
+        trans->reason_cache_valid = TRUE;
     }
     return trans->readonly_reason;
 }
