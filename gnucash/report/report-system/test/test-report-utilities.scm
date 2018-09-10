@@ -9,6 +9,8 @@
 (use-modules (gnucash report report-system test test-extras))
 (use-modules (gnucash report report-system))
 
+(setlocale LC_ALL "C")
+
 (define (run-test)
   (test-runner-factory gnc:test-runner)
   (test-begin "report-utilities")
@@ -27,8 +29,10 @@
 
 (define (collector->list coll)
   ;; input:  collector
-  ;; output: list of strings e.g. '("$25.00" "-£15.00")
-  (map gnc:monetary->string (coll 'format gnc:make-gnc-monetary #f)))
+  ;; output: list of monetary pairs e.g. '(("USD" . 25) ("GBP" . 15.00))
+  (define (monetary->pair comm amt)
+    (cons (gnc-commodity-get-mnemonic comm) amt))
+  (append (coll 'format monetary->pair #f)))
 
 (define (test-account-get-trans-type-splits-interval)
   (test-group-with-cleanup "test-account-get-trans-type-splits-interval"
@@ -95,9 +99,8 @@
            (monetary (gnc:make-gnc-monetary
                       (gnc-commodity-table-lookup comm-table "CURRENCY" "USD")
                       100)))
-      (test-equal "gnc:monetary->string"
-        "$100.00"
-        (gnc:monetary->string monetary)))
+      (test-assert "gnc:monetary->string is a string"
+        (string? (gnc:monetary->string monetary))))
     (teardown)))
 
 (define (test-commodity-collector)
@@ -116,17 +119,17 @@
 
       (coll-A 'add USD 25)
       (test-equal "coll-A 'add USD25"
-        '("$25.00")
+        '(("USD" . 25))
         (collector->list coll-A))
 
       (coll-A 'add USD 25)
       (test-equal "coll-A 'add USD25"
-        '("$50.00")
+        '(("USD" . 50))
         (collector->list coll-A))
 
       (coll-A 'add GBP 20)
       (test-equal "coll-A 'add GBP20"
-        '("£20.00" "$50.00")
+        '(("GBP" . 20) ("USD" . 50))
         (collector->list coll-A))
 
       (coll-A 'reset #f #f)
@@ -137,19 +140,19 @@
       (coll-A 'add USD 25)
       (coll-B 'add GBP 20)
       (test-equal "coll-B 'add GBP20"
-        '("£20.00")
+        '(("GBP" . 20))
         (collector->list coll-B))
 
       (coll-A 'merge coll-B #f)
       (test-equal "coll-A 'merge coll-B"
-        '("£20.00" "$25.00")
+        '(("GBP" . 20) ("USD" . 25))
         (collector->list coll-A))
 
       (coll-A 'reset #f #f)
       (coll-A 'add USD 25)
       (coll-A 'minusmerge coll-B #f)
       (test-equal "coll-A 'minusmerge coll-B"
-        '("-£20.00" "$25.00")
+        '(("GBP" . -20) ("USD" . 25))
         (collector->list coll-A))
 
       (test-equal "coll-A 'getpair USD"
@@ -161,12 +164,12 @@
         (coll-A 'getmonetary USD #f))
 
       (test-equal "gnc:commodity-collector-get-negated"
-        '("-$25.00" "£20.00")
+        '(("USD" . -25) ("GBP" . 20))
         (collector->list
          (gnc:commodity-collector-get-negated coll-A)))
 
       (test-equal "gnc:commodity-collectorlist-get-merged"
-        '("$25.00" "£0.00")
+        '(("USD" . 25) ("GBP" . 0))
         (collector->list
          (gnc:commodity-collectorlist-get-merged (list coll-A coll-B))))
 
@@ -269,17 +272,17 @@
         (gnc:account-get-balance-at-date asset (gnc-dmy2time64 01 01 2001) #f))
 
       (test-equal "gnc:account-get-comm-balance-at-date 1/1/2001 incl children"
-        '("£608.00" "$2,301.00")
+        '(("GBP" . 608) ("USD" . 2301))
         (collector->list
          (gnc:account-get-comm-balance-at-date asset (gnc-dmy2time64 01 01 2001) #t)))
 
       (test-equal "gnc:account-get-comm-balance-at-date 1/1/2001 excl children"
-        '("$15.00")
+        '(("USD" . 15))
         (collector->list
          (gnc:account-get-comm-balance-at-date asset (gnc-dmy2time64 01 01 2001) #f)))
 
       (test-equal "gnc:account-get-comm-value-interval 1/1/2000-1/1/2001 excl children"
-        '("$9.00" "-£15.00")
+        '(("USD" . 9) ("GBP" . -15))
         (collector->list
          (gnc:account-get-comm-value-interval gbp-bank
                                               (gnc-dmy2time64 01 01 2000)
@@ -287,7 +290,7 @@
                                               #f)))
 
       (test-equal "gnc:account-get-comm-value-interval 1/1/2000-1/1/2001 incl children"
-        '("$9.00" "-£10.00")
+        '(("USD" . 9) ("GBP" . -10))
         (collector->list
          (gnc:account-get-comm-value-interval gbp-bank
                                               (gnc-dmy2time64 01 01 2000)
@@ -295,21 +298,21 @@
                                               #t)))
 
       (test-equal "gnc:account-get-comm-value-at-date 1/1/2001 excl children"
-        '("$9.00" "£597.00")
+        '(("USD" . 9) ("GBP" . 597))
         (collector->list
          (gnc:account-get-comm-value-at-date gbp-bank
                                              (gnc-dmy2time64 01 01 2001)
                                              #f)))
 
       (test-equal "gnc:account-get-comm-value-at-date 1/1/2001 incl children"
-        '("$9.00" "£602.00")
+        '(("USD" . 9) ("GBP" . 602))
         (collector->list
          (gnc:account-get-comm-value-at-date gbp-bank
                                              (gnc-dmy2time64 01 01 2001)
                                              #t)))
 
       (test-equal "gnc:accounts-get-comm-total-profit"
-        '("£612.00" "$2,389.00")
+        '(("GBP" . 612) ("USD" . 2389))
         (collector->list
          (gnc:accounts-get-comm-total-profit all-accounts
                                              (lambda (acct)
@@ -317,7 +320,7 @@
                                                 acct (gnc-dmy2time64 01 01 2001) #f)))))
 
       (test-equal "gnc:accounts-get-comm-total-income"
-        '("£612.00" "$2,573.00")
+        '(("GBP" . 612) ("USD" . 2573))
         (collector->list
          (gnc:accounts-get-comm-total-income all-accounts
                                              (lambda (acct)
@@ -325,7 +328,7 @@
                                                 acct (gnc-dmy2time64 01 01 2001) #f)))))
 
       (test-equal "gnc:accounts-get-comm-total-expense"
-        '("-$184.00")
+        '(("USD" . -184))
         (collector->list
          (gnc:accounts-get-comm-total-expense all-accounts
                                               (lambda (acct)
@@ -333,7 +336,7 @@
                                                  acct (gnc-dmy2time64 01 01 2001) #f)))))
 
       (test-equal "gnc:accounts-get-comm-total-assets"
-        '("£608.00" "$2,394.00")
+        '(("GBP" . 608) ("USD" . 2394))
         (collector->list
          (gnc:accounts-get-comm-total-assets all-accounts
                                              (lambda (acct)
@@ -355,7 +358,7 @@
                                           #f))
 
       (test-equal "gnc:account-comm-balance-interval 1/1/1960-1/1/2001 incl children"
-        '("£608.00")
+        '(("GBP" . 608))
         (collector->list
          (gnc:account-get-comm-balance-interval gbp-bank
                                                 (gnc-dmy2time64 01 01 1960)
@@ -363,7 +366,7 @@
                                                 #t)))
 
       (test-equal "gnc:account-comm-balance-interval 1/1/1960-1/1/2001 excl children"
-        '("£603.00")
+        '(("GBP" . 603))
         (collector->list
          (gnc:account-get-comm-balance-interval gbp-bank
                                                 (gnc-dmy2time64 01 01 1960)
@@ -371,27 +374,27 @@
                                                 #f)))
 
       (test-equal "gnc:accountlist-get-comm-balance-interval"
-        '("$279.00")
+        '(("USD" . 279))
         (collector->list
          (gnc:accountlist-get-comm-balance-interval (list expense)
                                                     (gnc-dmy2time64 15 01 1970)
                                                     (gnc-dmy2time64 01 01 2001))))
 
       (test-equal "gnc:accountlist-get-comm-balance-interval-with-closing"
-        '("$168.00")
+        '(("USD" . 168))
         (collector->list
          (gnc:accountlist-get-comm-balance-interval-with-closing (list expense)
                                                                  (gnc-dmy2time64 15 01 1970)
                                                                  (gnc-dmy2time64 01 01 2001))))
 
       (test-equal "gnc:accountlist-get-comm-balance-at-date"
-        '("$295.00")
+        '(("USD" . 295))
         (collector->list
          (gnc:accountlist-get-comm-balance-at-date (list expense)
                                                    (gnc-dmy2time64 01 01 2001))))
 
       (test-equal "gnc:accountlist-get-comm-balance-interval-with-closing"
-        '("$184.00")
+        '(("USD" . 184))
         (collector->list
          (gnc:accountlist-get-comm-balance-at-date-with-closing (list expense)
                                                                 (gnc-dmy2time64 01 01 2001))))
@@ -401,7 +404,7 @@
         (gnc:accounts-count-splits (list expense income)))
 
       (test-equal "gnc:account-get-total-flow 'in"
-        '("£14.00" "$2,544.00")
+        '(("GBP" . 14) ("USD" . 2544))
         (collector->list
          (gnc:account-get-total-flow 'in
                                      (list bank)
@@ -409,7 +412,7 @@
                                      (gnc-dmy2time64 01 01 2001))))
 
       (test-equal "gnc:account-get-total-flow 'out"
-        '("-$296.00")
+        '(("USD" . -296))
         (collector->list
          (gnc:account-get-total-flow 'out
                                      (list bank)
@@ -423,11 +426,11 @@
                                   acct (gnc-dmy2time64 01 01 2001) #f)))))
 
         (test-equal "gnc:get-assoc-account-balances"
-          '("$2,286.00")
+          '(("USD" . 2286))
           (collector->list (car (assoc-ref account-balances bank))))
 
         (test-equal "gnc:select-assoc-account-balance - hit"
-          '("$2,286.00")
+          '(("USD" . 2286))
           (collector->list
            (gnc:select-assoc-account-balance account-balances bank)))
 
@@ -437,7 +440,7 @@
            (gnc:select-assoc-account-balance account-balances expense)))
 
         (test-equal "gnc:get-assoc-account-balances-total"
-          '("£603.00" "$2,286.00")
+          '(("GBP" . 603) ("USD" . 2286))
           (collector->list
            (gnc:get-assoc-account-balances-total account-balances)))))
     (teardown)))
