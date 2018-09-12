@@ -45,12 +45,8 @@
 (define (run-test)
   (test-runner-factory gnc:test-runner)
   (test-begin "net-charts.scm")
-  (for-each (lambda (variant)
-              (null-test variant))
-            (map car variant-alist))
-  (for-each (lambda (variant)
-              (net-charts-test variant))
-            (map car variant-alist))
+  (for-each null-test (map car variant-alist))
+  (for-each test-chart (map car variant-alist))
   (test-end "net-charts.scm"))
 
 (define (options->render variant options test-title)
@@ -74,7 +70,12 @@
     (test-assert (format #f "null-test: ~a" variant)
       (options->render uuid options "null-test"))))
 
-(define (net-charts-test variant)
+(define (test-chart variant)
+  (test-group-with-cleanup (format #f "test variant ~a" variant)
+    (test-chart-variant variant)
+    (gnc-clear-current-session)))
+
+(define (test-chart-variant variant)
   (define (set-option! options section name value)
     (let ((option (gnc:lookup-option options section name)))
       (if option
