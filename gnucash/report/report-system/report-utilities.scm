@@ -392,42 +392,20 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
 
 ;; This works similar as above but returns a commodity-collector, 
 ;; thus takes care of children accounts with different currencies.
-;;
-;; Also note that the commodity-collector contains <gnc:numeric>
-;; values rather than double values.
-(define (gnc:account-get-comm-balance-at-date account 
-					      date include-children?)
+(define (gnc:account-get-comm-balance-at-date
+         account date include-children?)
   (let ((balance-collector (gnc:make-commodity-collector))
-	(query (qof-query-create-for-splits))
-	(splits #f))
-
-      (if include-children?
-	  (for-each 
-	   (lambda (x) 
-	     (balance-collector 'merge x #f))
-	   (gnc:account-map-descendants
-	    (lambda (child)
-	      (gnc:account-get-comm-balance-at-date child date #f))
-	    account)))
-
-      (qof-query-set-book query (gnc-get-current-book))
-      (xaccQueryAddSingleAccountMatch query account QOF-QUERY-AND)
-      (xaccQueryAddDateMatchTT query #f date #t date QOF-QUERY-AND)
-      (qof-query-set-sort-order query
-				(list SPLIT-TRANS TRANS-DATE-POSTED)
-				(list QUERY-DEFAULT-SORT)
-				'())
-      (qof-query-set-sort-increasing query #t #t #t)
-      (qof-query-set-max-results query 1)
-      
-      (set! splits (qof-query-run query))
-      (qof-query-destroy query)
-
-      (if (and splits (not (null? splits)))
-	  (balance-collector 'add
-                             (xaccAccountGetCommodity account)
-                             (xaccSplitGetBalance (car splits))))
-      balance-collector))
+        (accounts (cons account
+                        (if include-children?
+                            (gnc-account-get-descendants account)
+                            '()))))
+    (for-each
+     (lambda (acct)
+       (balance-collector 'add
+                          (xaccAccountGetCommodity acct)
+                          (xaccAccountGetBalanceAsOfDate acct date)))
+     accounts)
+    balance-collector))
 
 ;; Calculate the increase in the balance of the account in terms of
 ;; "value" (as opposed to "amount") between the specified dates.
