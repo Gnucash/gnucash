@@ -117,14 +117,27 @@
           (display render)))
       render)))
 
+(define (strip-string s1 s2)
+  (let loop ((str s1))
+    (let ((startpos (string-contains str (format #f "<~a" s2)))
+          (endpos (string-contains str (format #f "</~a>" s2))))
+      (if (and startpos endpos)
+          (loop (string-append
+                 (string-take str startpos)
+                 (string-drop str (+ endpos (string-length s2) 3))))
+          str))))
+
 (export gnc:options->sxml)
-(define (gnc:options->sxml uuid options prefix test-title)
+(define* (gnc:options->sxml uuid options prefix test-title #:key strip-tag)
   ;; This functions calls the above gnc:options->render to render
   ;; report.  Then report is converted to SXML.  It catches XML
-  ;; parsing errors, dumping the options changed.
+  ;; parsing errors, dumping the options changed. Also optionally strip
+  ;; an HTML tag from the render, e.g. <script>...</script>
   (let ((render (gnc:options->render uuid options prefix test-title)))
     (catch 'parser-error
-      (lambda () (xml->sxml render
+      (lambda () (xml->sxml (if strip-tag
+                                (strip-string render strip-tag)
+                                render)
                             #:trim-whitespace? #t
                             #:entities '((nbsp . "\xa0"))))
       (lambda (k . args)
