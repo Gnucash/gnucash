@@ -602,6 +602,7 @@ get_file_to_load()
     if (file_to_load)
         return g_strdup(file_to_load);
     else
+        /* Note history will always return a valid (possibly empty) string */
         return gnc_history_get_last();
 }
 
@@ -645,7 +646,7 @@ inner_main (void *closure, int argc, char **argv)
 
     gnc_hook_run(HOOK_STARTUP, NULL);
 
-    if (!nofile && (fn = get_file_to_load()))
+    if (!nofile && (fn = get_file_to_load()) && *fn )
     {
         gnc_update_splash_screen(_("Loading data..."), GNC_SPLASH_PERCENTAGE_UNKNOWN);
         gnc_file_open_file(gnc_get_splash_screen(), fn, /*open_readonly*/ FALSE);
