@@ -2430,7 +2430,10 @@ xaccTransRetDateDue(const Transaction *trans)
     if (!trans) return 0;
     qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, TRANS_DATE_DUE_KVP);
     if (G_VALUE_HOLDS_BOXED (&v))
+    {
         ret = ((Time64*)g_value_get_boxed (&v))->t;
+        g_value_unset (&v);
+    }
     if (!ret)
         return xaccTransRetDatePosted (trans);
     return ret;
