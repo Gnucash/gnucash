@@ -110,10 +110,10 @@
       (gnc:make-gnc-monetary currency numeric)))
 
 (define layout-key-list
-  (list (cons 'client (list (cons 'text "Client details")
-                            (cons 'tip "Client name and address")))
+  (list (cons 'client (list (cons 'text (_ "Their details"))
+                            (cons 'tip (_ "Client or vendor name, address and ID"))))
 
-        (cons 'company (list (cons 'text "Company details")
+        (cons 'company (list (cons 'text "Our details")
                              (cons 'tip "Company name, address and tax-ID")))
 
         (cons 'invoice (list (cons 'text "Invoice details")
@@ -332,6 +332,11 @@ for styling the invoice. Please see the exported report for the CSS class names.
    (gnc:make-simple-boolean-option
     (N_ "Display") (N_ "Billing ID")
     "ta" (N_ "Display the billing id?") #t))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display") (N_ "Invoice owner ID")
+    "tam" (N_ "Display the customer/vendor id?") #f))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
@@ -669,7 +674,10 @@ for styling the invoice. Please see the exported report for the CSS class names.
   (gnc:make-html-text
    (gnc:html-markup-img img-url)))
 
-(define (make-client-table owner orders)
+(define (make-client-table owner orders options)
+  (define (opt-val section name)
+    (gnc:option-value
+     (gnc:lookup-option options section name)))
   ;; this is a single-column table.
   (let ((table (gnc:make-html-table)))
 
@@ -685,6 +693,14 @@ for styling the invoice. Please see the exported report for the CSS class names.
                                   "maybe-align-right client-address"
                                   (multiline-to-html-text
                                    (gnc:owner-get-address-dep owner)))))
+
+    (if (opt-val "Display" "Invoice owner ID")
+        (gnc:html-table-append-row! table
+                                    (list
+                                     (gnc:make-html-div/markup
+                                      "maybe-align-right client-id"
+                                      (multiline-to-html-text
+                                       (gnc:owner-get-owner-id owner))))))
 
     (for-each
      (lambda (order)
@@ -793,7 +809,8 @@ for styling the invoice. Please see the exported report for the CSS class names.
                                                            invoice options)))
                                           (cons 'client (gnc:make-html-div/markup
                                                          "client-table"
-                                                         (make-client-table owner orders)))
+                                                         (make-client-table
+                                                          owner orders options)))
                                           (cons 'company (gnc:make-html-div/markup
                                                           "company-table"
                                                           (make-company-table book)))
