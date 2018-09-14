@@ -413,41 +413,35 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
 ;; just direct children) are are included in the calculation. The results
 ;; are returned in a commodity collector.
 (define (gnc:account-get-comm-value-interval account start-date end-date
-                                                include-children?)
+                                             include-children?)
   (let ((value-collector (gnc:make-commodity-collector))
-	(query (qof-query-create-for-splits))
-	(splits #f))
-
-    (if include-children?
-        (for-each
-         (lambda (x)
-           (value-collector 'merge x #f))
-         (gnc:account-map-descendants
-          (lambda (d)
-            (gnc:account-get-comm-value-interval d start-date end-date #f))
-          account)))
+        (query (qof-query-create-for-splits))
+        (accounts (cons account
+                        (if include-children?
+                            (gnc-account-get-descendants account)
+                            '()))))
 
     ;; Build a query to find all splits between the indicated dates.
     (qof-query-set-book query (gnc-get-current-book))
-    (xaccQueryAddSingleAccountMatch query account QOF-QUERY-AND)
+    (xaccQueryAddAccountMatch query accounts
+                              QOF-GUID-MATCH-ANY
+                              QOF-QUERY-AND)
     (xaccQueryAddDateMatchTT query
-                             (and start-date #t) (if start-date start-date 0)
-                             (and end-date #t) (if end-date end-date 0)
+                             (and start-date #t) (or start-date 0)
+                             (and end-date #t) (or end-date 0)
                              QOF-QUERY-AND)
 
     ;; Get the query results.
-    (set! splits (qof-query-run query))
-    (qof-query-destroy query)
-
-    ;; Add the "value" of each split returned (which is measured
-    ;; in the transaction currency).
-    (for-each
-     (lambda (split)
-       (value-collector 'add
-                        (xaccTransGetCurrency (xaccSplitGetParent split))
-                        (xaccSplitGetValue split)))
-     splits)
-
+    (let ((splits (qof-query-run query)))
+      (qof-query-destroy query)
+      ;; Add the "value" of each split returned (which is measured
+      ;; in the transaction currency).
+      (for-each
+       (lambda (split)
+         (value-collector 'add
+                          (xaccTransGetCurrency (xaccSplitGetParent split))
+                          (xaccSplitGetValue split)))
+       splits))
     value-collector))
 
 ;; Calculate the balance of the account in terms of "value" (rather
