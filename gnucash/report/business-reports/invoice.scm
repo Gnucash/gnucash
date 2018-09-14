@@ -110,23 +110,26 @@
       (gnc:make-gnc-monetary currency numeric)))
 
 (define layout-key-list
+  ;; Translators: "Their details" refer to the invoice 'other party' details i.e. client/vendor name/address/ID
   (list (cons 'client (list (cons 'text (_ "Their details"))
                             (cons 'tip (_ "Client or vendor name, address and ID"))))
 
-        (cons 'company (list (cons 'text "Our details")
-                             (cons 'tip "Company name, address and tax-ID")))
+        ;; Translators: "Our details" refer to the book owner's details i.e. name/address/tax-ID
+        (cons 'company (list (cons 'text (_ "Our details"))
+                             (cons 'tip (_ "Company name, address and tax-ID"))))
 
-        (cons 'invoice (list (cons 'text "Invoice details")
-                             (cons 'tip "Invoice date, due date, billing ID, terms, job details")))
+        (cons 'invoice (list (cons 'text (_ "Invoice details"))
+                             (cons 'tip (_ "Invoice date, due date, billing ID, terms, job details"))))
 
-        (cons 'today (list (cons 'text "Today's date")
-                           (cons 'tip "Today's date")))
+        (cons 'today (list (cons 'text (_ "Today's date"))
+                           (cons 'tip (_ "Today's date"))))
 
-        (cons 'picture (list (cons 'text "Picture")
-                             (cons 'tip "Picture")))
+        (cons 'picture (list (cons 'text (_ "Picture"))
+                             (cons 'tip (_ "Picture"))))
 
-        (cons 'none (list (cons 'text "(empty)")
-                          (cons 'tip "Empty space")))))
+        ;; Translators: "(empty)" refers to invoice header section being left blank
+        (cons 'none (list (cons 'text (_ "(empty)"))
+                          (cons 'tip (_ "Empty space"))))))
 
 (define variant-list
   (list
