@@ -555,17 +555,15 @@
                  table columns)
                 (for-each
                  (lambda (row)
-                   (gnc:html-table-append-row! table row))
+                   (gnc:html-table-append-row!
+                    table
+                    (map
+                     gnc:make-html-table-cell/markup
+                     (list "date-cell" "date-cell"
+                           "number-cell" "number-cell" "number-cell"
+                           "number-cell" "number-cell" "number-cell")
+                     row)))
                  data)
-                
-                ;; set numeric columns to align right 
-                (for-each 
-                 (lambda (col)
-                   (gnc:html-table-set-col-style! 
-                    table col "td" 
-                    'attribute (list "align" "right")))
-                 '(2 3 4 5 6 7))
-                
                 (gnc:html-document-add-object! document table))))
 
         ;; if there are no accounts selected...
