@@ -209,7 +209,7 @@ GncSqlBackend::create_tables() noexcept
 
 /* Main object load order */
 static const StrVec fixed_load_order
-{ GNC_ID_BOOK, GNC_ID_COMMODITY, GNC_ID_ACCOUNT, GNC_ID_LOT };
+{ GNC_ID_BOOK, GNC_ID_COMMODITY, GNC_ID_ACCOUNT, GNC_ID_LOT, GNC_ID_TRANS };
 
 /* Order in which business objects need to be loaded */
 static const StrVec business_fixed_load_order =
