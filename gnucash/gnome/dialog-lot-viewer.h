@@ -30,6 +30,6 @@
 typedef struct _GNCLotViewer GNCLotViewer;
 
 /** Create and realize and show a lot-viewing dialog. */
-GNCLotViewer * gnc_lot_viewer_dialog (Account *);
+GNCLotViewer * gnc_lot_viewer_dialog (GtkWindow *parent, Account *account);
 
 #endif /* LOT_VIEWER_H */

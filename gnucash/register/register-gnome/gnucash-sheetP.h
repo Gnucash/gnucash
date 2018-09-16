@@ -112,6 +112,7 @@ struct _GnucashSheet
 
     guint shift_state;
     guint keyval_state;
+    int start_sel, end_sel;
 
 };
 

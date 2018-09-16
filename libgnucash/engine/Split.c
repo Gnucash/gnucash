@@ -1447,6 +1447,7 @@ xaccSplitDestroy (Split *split)
     acc = split->acc;
     trans = split->parent;
     if (acc && !qof_instance_get_destroying(acc)
+        && !qof_instance_get_destroying(trans)
         && xaccTransGetReadOnly(trans))
         return FALSE;
 

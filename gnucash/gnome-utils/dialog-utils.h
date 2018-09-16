@@ -36,19 +36,19 @@ void gnc_set_label_color (GtkWidget *label, gnc_numeric value);
  * if window sizes are being saved, otherwise returns 0 for both.   *
  *                                                                  *
  * Args: prefix - the option name prefix                            *
- *       width  - pointer to width                                  *
- *       height - pointer to height                                 *
+ *       window - the window being restored                         *
+ *       parent - the parent window for first use alignment         *
  * Returns: nothing                                                 *
  \*******************************************************************/
-void gnc_restore_window_size (const char *prefix, GtkWindow *window);
+void gnc_restore_window_size (const char *prefix, GtkWindow *window,
+                              GtkWindow *parent);
 
 /********************************************************************\
  * Save the window size into options whose names are determined     *
  * by the string prefix.                                            *
  *                                                                  *
  * Args: prefix - determines the options used to save the values    *
- *       width  - width of the window to save                       *
- *       height - height of the window to save                      *
+ *       window - the window being saved                            *
  * Returns: nothing                                                 *
 \********************************************************************/
 void gnc_save_window_size (const char *section, GtkWindow *window);

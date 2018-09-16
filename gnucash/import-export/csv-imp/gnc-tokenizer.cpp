@@ -12,6 +12,7 @@
 #include <memory>
 
 #include <boost/locale.hpp>
+#include <boost/algorithm/string.hpp>
 
 extern "C" {
 #include <go-glib-extras.h>
@@ -79,6 +80,11 @@ GncTokenizer::encoding(const std::string& encoding)
 {
     m_enc_str = encoding;
     m_utf8_contents = boost::locale::conv::to_utf<char>(m_raw_contents, m_enc_str);
+
+    // While we are converting here, let's also normalize line-endings to "\n"
+    // That's what STL expects by default
+    boost::replace_all (m_utf8_contents, "\r\n", "\n");
+    boost::replace_all (m_utf8_contents, "\r", "\n");
 }
 
 const std::string&

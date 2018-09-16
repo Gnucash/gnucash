@@ -2030,7 +2030,7 @@ gnc_split_register_get_security_io_flags (VirtualLocation virt_loc,
 }
 
 static gboolean
-xaccTransWarnReadOnly (GtkWidget *parent, const Transaction *trans)
+xaccTransWarnReadOnly (GtkWidget *parent, Transaction *trans)
 {
     GtkWidget *dialog;
     const gchar *reason;

@@ -39,6 +39,7 @@
 
 #define d(x)
 
+static void pass_parent (GNCSearchCoreType *fe, gpointer parent);
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe);
 static gboolean gncs_validate (GNCSearchCoreType *fe);
 static GtkWidget *gncs_get_widget(GNCSearchCoreType *fe);
@@ -54,6 +55,7 @@ struct _GNCSearchAccountPrivate
 {
     gboolean	match_all;
     GList *	selected_accounts;
+    GtkWindow *parent;
 };
 
 #define _PRIVATE(o) \
@@ -102,6 +104,7 @@ gnc_search_account_class_init (GNCSearchAccountClass *klass)
     object_class->finalize = gnc_search_account_finalize;
 
     /* override methods */
+    gnc_search_core_type->pass_parent = pass_parent;
     gnc_search_core_type->validate = gncs_validate;
     gnc_search_core_type->get_widget = gncs_get_widget;
     gnc_search_core_type->get_predicate = gncs_get_predicate;
@@ -170,10 +173,11 @@ gncs_validate (GNCSearchCoreType *fe)
     g_return_val_if_fail (IS_GNCSEARCH_ACCOUNT (fi), FALSE);
 
     priv = _PRIVATE(fi);
+
     if (priv->selected_accounts == NULL && fi->how )
     {
         valid = FALSE;
-        gnc_error_dialog (NULL, "%s", _("You have not selected any accounts"));
+        gnc_error_dialog (GTK_WINDOW(priv->parent), "%s", _("You have not selected any accounts"));
     }
 
     /* XXX */
@@ -257,7 +261,7 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
     /* Create the dialog */
     dialog =
         GTK_DIALOG(gtk_dialog_new_with_buttons(_("Select the Accounts to Compare"),
-                   NULL,
+                   GTK_WINDOW(priv->parent),
                    0,
                    _("_Cancel"), GTK_RESPONSE_CANCEL,
                    _("_OK"), GTK_RESPONSE_OK,
@@ -355,4 +359,17 @@ static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
     se_priv->selected_accounts = g_list_copy (fse_priv->selected_accounts);
 
     return (GNCSearchCoreType *)se;
+}
+
+static void
+pass_parent (GNCSearchCoreType *fe, gpointer parent)
+{
+    GNCSearchAccount *fi = (GNCSearchAccount *)fe;
+    GNCSearchAccountPrivate *priv;
+
+    g_return_if_fail (fi);
+    g_return_if_fail (IS_GNCSEARCH_ACCOUNT (fi));
+
+    priv = _PRIVATE(fi);
+    priv->parent = GTK_WINDOW(parent);
 }

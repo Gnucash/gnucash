@@ -1672,7 +1672,7 @@ recnWindow (GtkWidget *parent, Account *account)
             enable_subaccounts))
         return NULL;
 
-    return recnWindowWithBalance (account, new_ending, statement_date);
+    return recnWindowWithBalance (parent, account, new_ending, statement_date);
 }
 
 
@@ -1681,6 +1681,13 @@ recnWindow_add_widget (GtkUIManager *merge,
                        GtkWidget *widget,
                        GtkBox *dock)
 {
+    if (GTK_IS_TOOLBAR (widget))
+    {
+        gtk_toolbar_set_style (GTK_TOOLBAR(widget),
+                               GTK_TOOLBAR_BOTH);
+        gtk_toolbar_set_icon_size (GTK_TOOLBAR(widget),
+                                   GTK_ICON_SIZE_SMALL_TOOLBAR);
+    }
     gtk_box_pack_start (GTK_BOX (dock), widget, FALSE, FALSE, 0);
     gtk_widget_show (widget);
 }
@@ -1692,13 +1699,14 @@ recnWindow_add_widget (GtkUIManager *merge,
  *   Opens up the window to reconcile an account, but with ending
  *   balance and statement date already given.
  *
- * Args:   account        - The account to reconcile
+ * Args:   parent         - The parent widget of the new window
+ *         account        - The account to reconcile
  *         new_ending     - The amount for ending balance
  *         statement_date - The date of the statement
  * Return: recnData - the instance of this RecnWindow
 \********************************************************************/
 RecnWindow *
-recnWindowWithBalance (Account *account, gnc_numeric new_ending,
+recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_ending,
                        time64 statement_date)
 {
     RecnWindow *recnData;
@@ -1815,7 +1823,8 @@ recnWindowWithBalance (Account *account, gnc_numeric new_ending,
 
         /* Force a reasonable starting size */
         gtk_window_set_default_size(GTK_WINDOW(recnData->window), 800, 600);
-        gnc_restore_window_size (GNC_PREFS_GROUP_RECONCILE, GTK_WINDOW(recnData->window));
+        gnc_restore_window_size (GNC_PREFS_GROUP_RECONCILE,
+                                 GTK_WINDOW(recnData->window), GTK_WINDOW(parent));
 
         gtk_container_add(GTK_CONTAINER(frame), main_area);
         gtk_container_set_border_width(GTK_CONTAINER(main_area), 10);

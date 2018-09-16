@@ -35,6 +35,7 @@
 
 #define d(x)
 
+static void pass_parent (GNCSearchCoreType *fe, gpointer parent);
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe);
 static gboolean gncs_validate (GNCSearchCoreType *fe);
 static GtkWidget *gncs_get_widget(GNCSearchCoreType *fe);
@@ -48,6 +49,7 @@ typedef struct _GNCSearchBooleanPrivate GNCSearchBooleanPrivate;
 
 struct _GNCSearchBooleanPrivate
 {
+    GtkWindow *parent;
     gpointer dummy;
 };
 
@@ -96,6 +98,7 @@ gnc_search_boolean_class_init (GNCSearchBooleanClass *klass)
     object_class->finalize = gnc_search_boolean_finalize;
 
     /* override methods */
+    gnc_search_core_type->pass_parent = pass_parent;
     gnc_search_core_type->validate = gncs_validate;
     gnc_search_core_type->get_widget = gncs_get_widget;
     gnc_search_core_type->get_predicate = gncs_get_predicate;
@@ -140,6 +143,19 @@ gnc_search_boolean_set_value (GNCSearchBoolean *fi, gboolean value)
     g_return_if_fail (IS_GNCSEARCH_BOOLEAN (fi));
 
     fi->value = value;
+}
+
+static void
+pass_parent (GNCSearchCoreType *fe, gpointer parent)
+{
+    GNCSearchBoolean *fi = (GNCSearchBoolean *)fe;
+    GNCSearchBooleanPrivate *priv;
+
+    g_return_if_fail (fi);
+    g_return_if_fail (IS_GNCSEARCH_BOOLEAN (fi));
+
+    priv = _PRIVATE(fi);
+    priv->parent = GTK_WINDOW(parent);
 }
 
 static gboolean

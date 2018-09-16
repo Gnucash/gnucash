@@ -8,7 +8,6 @@
 (use-modules (gnucash engine test srfi64-extras))
 
 (define (run-test)
-    (set! test-report-system-flag #t)
     (test-runner-factory gnc:test-runner)
     (test-begin "Testing/Temporary/test-report-system") ;; if (test-runner-factory gnc:test-runner) is commented out, this
                                                             ;; will create Testing/Temporary/test-asset-performance.log
@@ -16,7 +15,6 @@
     (test-assert "Missing GUID detection" (test-check2))
     (test-assert "Detect double GUID" (test-check3))
     (test-assert "Report with Full Argument Set" (test-check4))
-    (set! test-report-system-flag #f)
     (test-end "Testing/Temporary/test-report-system")
 )
 

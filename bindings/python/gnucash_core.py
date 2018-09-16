@@ -760,12 +760,19 @@ from gnucash.gnucash_core_c import \
     INVOICE_IS_PAID
 
 class Query(GnuCashCoreClass):
-    pass
 
-Query.add_constructor_and_methods_with_prefix('qof_query_', 'create')
+    def search_for(self, obj_type):
+        """Set search_for to obj_type
+
+        calls qof_query_search_for. Buffers search string for queries lifetime.
+        @see https://bugs.gnucash.org/show_bug.cgi?id=796137"""
+        self.__search_for_buf = obj_type
+        self._search_for(self.__search_for_buf)
+
+Query.add_constructor_and_methods_with_prefix('qof_query_', 'create', exclude=["qof_query_search_for"])
 
 Query.add_method('qof_query_set_book', 'set_book')
-Query.add_method('qof_query_search_for', 'search_for')
+Query.add_method('qof_query_search_for', '_search_for')
 Query.add_method('qof_query_run', 'run')
 Query.add_method('qof_query_add_term', 'add_term')
 Query.add_method('qof_query_add_boolean_match', 'add_boolean_match')

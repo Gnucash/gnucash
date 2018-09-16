@@ -380,9 +380,9 @@ gnc_sx_get_sxes_referencing_account(QofBook *book, Account *acct)
             GncGUID *guid = NULL;
             qof_instance_get (QOF_INSTANCE (s), "sx-account", &guid, NULL);
             if (guid_equal(acct_guid, guid))
-            {
                 rtn = g_list_append(rtn, sx);
-            }
+
+            guid_free (guid);
         }
     }
     return rtn;

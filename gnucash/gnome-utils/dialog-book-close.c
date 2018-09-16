@@ -322,7 +322,7 @@ gnc_book_close_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
     LEAVE("");
 }
 
-void gnc_ui_close_book (QofBook* book)
+void gnc_ui_close_book (QofBook* book, GtkWindow *parent)
 {
     struct CloseBookWindow *cbw;
     GtkBuilder* builder;
@@ -342,6 +342,10 @@ void gnc_ui_close_book (QofBook* book)
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(cbw->dialog), "GncBookCloseDialog");
+
+    /* parent */
+    if (parent != NULL)
+        gtk_window_set_transient_for (GTK_WINDOW(cbw->dialog), GTK_WINDOW(parent));
 
     PINFO("Closed Book Window is %p, Dialog is %p", cbw, cbw->dialog);
 

@@ -898,7 +898,8 @@ gnc_ab_initial_assistant_new(void)
     selection = gtk_tree_view_get_selection(info->account_view);
     gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
 
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(info->window));
+    gnc_restore_window_size (GNC_PREFS_GROUP,
+                             GTK_WINDOW(info->window), gnc_ui_get_main_window(NULL));
 
     g_signal_connect(info->account_view, "row-activated",
                      G_CALLBACK(account_list_clicked_cb), info);

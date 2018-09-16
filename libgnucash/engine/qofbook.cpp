@@ -1004,7 +1004,7 @@ qof_book_get_default_gains_policy (QofBook *book)
   * valid book-currency, both of which are required, for the 'book-currency'
   * currency accounting method to apply. Use instead
   * 'gnc_book_get_default_gain_loss_acct' which does these validations. */
-const GncGUID *
+GncGUID *
 qof_book_get_default_gain_loss_acct_guid (QofBook *book)
 {
     GncGUID *guid = NULL;
@@ -1211,7 +1211,7 @@ qof_book_set_feature (QofBook *book, const gchar *key, const gchar *descr)
     if (feature == nullptr || g_strcmp0 (feature->get<const char*>(), descr))
     {
         qof_book_begin_edit (book);
-        delete frame->set_path({GNC_FEATURES, key}, new KvpValue(descr));
+        delete frame->set_path({GNC_FEATURES, key}, new KvpValue(g_strdup (descr)));
         qof_instance_set_dirty (QOF_INSTANCE (book));
         qof_book_commit_edit (book);
     }

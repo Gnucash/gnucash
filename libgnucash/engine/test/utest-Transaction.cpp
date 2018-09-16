@@ -151,7 +151,7 @@ setup (Fixture *fixture, gconstpointer pData)
         xaccTransSetCurrency (txn, fixture->curr);
         xaccSplitSetParent (split1, txn);
         xaccSplitSetParent (split2, txn);
-        frame->set({trans_notes_str}, new KvpValue("Salt pork sausage"));
+        frame->set({trans_notes_str}, new KvpValue(g_strdup ("Salt pork sausage")));
         frame->set_path({"qux", "quux", "corge"}, new KvpValue(123.456));
         qof_instance_set_slots (QOF_INSTANCE (txn), frame);
     }
@@ -557,7 +557,7 @@ test_dupe_trans (Fixture *fixture, gconstpointer pData)
     oldtxn->date_posted = posted;
     oldtxn->date_entered = entered;
     oldtxn->inst.kvp_data->set({"foo", "bar", "baz"},
-                               new KvpValue("The Great Waldo Pepper"));
+                               new KvpValue(g_strdup ("The Great Waldo Pepper")));
 
     newtxn = fixture->func->dupe_trans (oldtxn);
 

@@ -641,9 +641,11 @@ gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner)
         gncOwnerInitJob (owner, gncJobLookup (book, guid));
         break;
     default:
+        guid_free (guid);
         return FALSE;
     }
 
+    guid_free (guid);
     return (owner->owner.undefined != NULL);
 }
 
@@ -1491,7 +1493,10 @@ gncOwnerGetBalanceInCurrency (const GncOwner *owner,
                balance = gnc_numeric_add (balance, lot_balance,
                                           gnc_commodity_get_fraction (owner_currency), GNC_HOW_RND_ROUND_HALF_UP);
         }
+        g_list_free (lot_list);
     }
+    g_list_free (acct_list);
+    g_list_free (acct_types);
 
     pdb = gnc_pricedb_get_db (book);
 

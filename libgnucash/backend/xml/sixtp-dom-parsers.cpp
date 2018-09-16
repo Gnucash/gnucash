@@ -205,7 +205,7 @@ dom_tree_to_numeric_kvp_value (xmlNodePtr node)
 static KvpValue*
 dom_tree_to_string_kvp_value (xmlNodePtr node)
 {
-    gchar* datext;
+    const gchar* datext;
     KvpValue* ret = NULL;
 
     datext = dom_tree_to_text (node);

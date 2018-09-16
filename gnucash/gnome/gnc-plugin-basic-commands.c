@@ -624,7 +624,7 @@ static void
 gnc_main_window_cmd_tools_trans_assoc (GtkAction *action, GncMainWindowActionData *data)
 {
     gnc_set_busy_cursor (NULL, TRUE);
-    gnc_trans_assoc_dialog ();
+    gnc_trans_assoc_dialog (GTK_WINDOW (data->window));
     gnc_unset_busy_cursor (NULL);
 }
 
@@ -653,7 +653,7 @@ gnc_main_window_cmd_tools_financial_calculator (GtkAction *action, GncMainWindow
 static void
 gnc_main_window_cmd_tools_close_book (GtkAction *action, GncMainWindowActionData *data)
 {
-    gnc_ui_close_book(gnc_get_current_book());
+    gnc_ui_close_book(gnc_get_current_book(), GTK_WINDOW (data->window));
 }
 
 static void

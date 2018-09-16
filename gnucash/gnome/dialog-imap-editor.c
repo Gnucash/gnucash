@@ -716,7 +716,7 @@ gnc_imap_dialog_create (GtkWidget *parent, ImapDialog *imap_dialog)
 
     g_object_unref (G_OBJECT(builder));
 
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(imap_dialog->dialog));
+    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(imap_dialog->dialog), GTK_WINDOW(parent));
     get_account_info (imap_dialog);
 
     LEAVE(" ");

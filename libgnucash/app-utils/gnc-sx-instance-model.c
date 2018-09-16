@@ -266,6 +266,7 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
 			  "sx-debit-formula", &debit_formula,
 			  NULL);
         acct = xaccAccountLookup(acct_guid, gnc_get_current_book());
+        guid_free (acct_guid);
         split_cmdty = xaccAccountGetCommodity(acct);
         // existing... ------------------------------------------
 	if (credit_formula && strlen(credit_formula) != 0)
@@ -974,6 +975,7 @@ _get_template_split_account(const SchedXaction* sx,
 			    Account **split_acct,
 			    GList **creation_errors)
 {
+    gboolean success = TRUE;
     GncGUID *acct_guid = NULL;
     qof_instance_get (QOF_INSTANCE (template_split),
 		      "sx-account", &acct_guid,
@@ -987,10 +989,11 @@ _get_template_split_account(const SchedXaction* sx,
         gchar* err = N_("Unknown account for guid [%s], cancelling SX [%s] creation.");
         guid_to_string_buff((const GncGUID*)acct_guid, guid_str);
         REPORT_ERROR(creation_errors, err, guid_str, xaccSchedXactionGetName(sx));
-        return FALSE;
+        success = FALSE;
     }
 
-    return TRUE;
+    guid_free (acct_guid);
+    return success;
 }
 
 static void

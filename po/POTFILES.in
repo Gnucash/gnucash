@@ -416,8 +416,6 @@ gnucash/report/business-reports/balsheet-eg.eguile.scm
 gnucash/report/business-reports/balsheet-eg.scm
 gnucash/report/business-reports/business-reports.scm
 gnucash/report/business-reports/customer-summary.scm
-gnucash/report/business-reports/easy-invoice.scm
-gnucash/report/business-reports/fancy-invoice.scm
 gnucash/report/business-reports/invoice.scm
 gnucash/report/business-reports/job-report.scm
 gnucash/report/business-reports/owner-report.scm

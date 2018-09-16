@@ -220,6 +220,28 @@ typedef char gchar;
     }
 }
 
+%typemap(in) QofIdType {
+    if (PyUnicode_Check($input)) {
+      $1 = PyUnicode_AsUTF8($input);
+    } else if (PyBytes_Check($input)) {
+      $1 = PyBytes_AsString($input);
+    } else {
+      PyErr_SetString(PyExc_TypeError, "not a string or bytes object");
+      return NULL;
+    }
+}
+
+%typemap(in) QofIdTypeConst {
+    if (PyUnicode_Check($input)) {
+      $1 = PyUnicode_AsUTF8($input);
+    } else if (PyBytes_Check($input)) {
+      $1 = PyBytes_AsString($input);
+    } else {
+      PyErr_SetString(PyExc_TypeError, "not a string or bytes object");
+      return NULL;
+    }
+}
+
 %typemap(in) GSList *, QofQueryParamList * {
     $1 = NULL;
     /* Check if is a list */

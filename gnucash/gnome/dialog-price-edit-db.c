@@ -739,7 +739,7 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
 
     g_object_unref(G_OBJECT(builder));
 
-    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(pdb_dialog->dialog));
+    gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(pdb_dialog->dialog), GTK_WINDOW (parent));
     LEAVE(" ");
 }
 

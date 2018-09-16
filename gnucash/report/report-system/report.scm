@@ -72,9 +72,6 @@
 (define gnc:optname-stylesheet (N_ "Stylesheet"))
 (define gnc:menuname-business-reports (N_ "_Business"))
 (define gnc:optname-invoice-number (N_ "Invoice Number"))
-(define test-report-system-flag #f)
-
-(export test-report-system-flag)
 
 ;; We want to warn users if they've got an old-style, non-guid custom
 ;; report-template, but only once
@@ -142,7 +139,7 @@
 		;; FIXME: We should pass the top-level window
 		;; instead of the '() to gnc-error-dialog, but I
 		;; have no idea where to get it from.
-                (if (not test-report-system-flag)
+                (if (gnucash-ui-is-running)
 		  (gnc-error-dialog '() (string-append
           (_ "One of your reports has a report-guid that is a duplicate. Please check the report system, especially your saved reports, for a report with this report-guid: ")
           report-guid))
@@ -175,14 +172,14 @@
                     (if (not gnc:old-style-report-warned)
 	              (begin
 		        (set! gnc:old-style-report-warned #t)
-                        (if (not test-report-system-flag) ;; do not call this during "make test"
+                        (if (gnucash-ui-is-running)
 		          (gnc-error-dialog '() (string-append (_ "The GnuCash report system has been upgraded. Your old saved reports have been transferred into a new format. If you experience trouble with saved reports, please contact the GnuCash development team."))))
 	                (hash-set! *gnc:_report-templates_* (gnc:report-template-report-guid report-rec) report-rec)
                       )
                     )
                   )
                   ;;there is no parent -> this is an inital faulty report definition
-                  (if (not test-report-system-flag) ;; do not call this during "make test"
+                  (if (gnucash-ui-is-running)
                     (gnc-error-dialog '() (string-append (_ "Wrong report definition: ")
                                                             (gnc:report-template-name report-rec)
                                                          (_ " Report is missing a GUID.")))

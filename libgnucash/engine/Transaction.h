@@ -423,7 +423,7 @@ void	      xaccTransClearReadOnly (Transaction *trans);
 
 /** Returns a non-NULL value if this Transaction was marked as read-only with
  * some specific "reason" text. */
-const char *  xaccTransGetReadOnly (const Transaction *trans);
+const char *  xaccTransGetReadOnly (Transaction *trans);
 
 /** Returns TRUE if this Transaction is read-only because its posted-date is
  * older than the "auto-readonly" threshold of this book. See

@@ -3655,7 +3655,8 @@ gnc_ui_qif_import_assistant_make(QIFImportWindow *qif_win)
     box = GTK_WIDGET(gtk_builder_get_object (builder, "currency_picker_hbox"));
     gtk_box_pack_start(GTK_BOX(box), qif_win->currency_picker, TRUE, TRUE, 0);
 
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(qif_win->window));
+    gnc_restore_window_size (GNC_PREFS_GROUP,
+                             GTK_WINDOW(qif_win->window), gnc_ui_get_main_window(NULL));
 
     g_signal_connect( qif_win->window, "destroy",
                       G_CALLBACK(gnc_ui_qif_import_assistant_destroy), qif_win );

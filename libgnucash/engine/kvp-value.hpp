@@ -86,7 +86,7 @@ struct KvpValueImpl
 
     /** Create a KvpValue containing the passed in item. Note that for pointer
      * types const char*, KvpFrame*, GncGUID*, and GList* the KvpValue takes
-     * ownership of the objcet and will delete/free it when the KvpValue is
+     * ownership of the object and will delete/free it when the KvpValue is
      * destroyed. That means these objects must be allocated in the free store
      * or heap as follows:
      * * const char*: GLib string allocation, e.g. g_strdup()/

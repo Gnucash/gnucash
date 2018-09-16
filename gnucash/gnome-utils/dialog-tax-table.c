@@ -768,7 +768,7 @@ gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
                                     ttw);
 
     tax_table_window_refresh (ttw);
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW (ttw->dialog));
+    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW (ttw->dialog), parent);
     gtk_widget_show_all (ttw->dialog);
 
     g_object_unref(G_OBJECT(builder));

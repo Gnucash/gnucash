@@ -1317,7 +1317,8 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
 
     data->balance_hash = g_hash_table_new(NULL, NULL);
 
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(data->dialog));
+    gnc_restore_window_size (GNC_PREFS_GROUP,
+                             GTK_WINDOW(data->dialog), gnc_ui_get_main_window(NULL));
 
     g_signal_connect (G_OBJECT(dialog), "destroy",
                       G_CALLBACK (gnc_hierarchy_destroy_cb), data);

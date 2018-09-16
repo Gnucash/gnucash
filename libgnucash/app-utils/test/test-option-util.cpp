@@ -70,7 +70,7 @@ setup_kvp (Fixture *fixture, gconstpointer pData)
                      NULL);
 
     slots->set_path({"options", "Business", "Company Name"},
-               new KvpValue("Bogus Company"));
+               new KvpValue(g_strdup ("Bogus Company")));
     qof_commit_edit (QOF_INSTANCE (book));
 }
 

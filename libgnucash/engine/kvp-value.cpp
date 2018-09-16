@@ -365,9 +365,9 @@ delete_visitor::operator()(GList * & value)
     g_list_free_full(value, destroy_value);
 }
 template <> void
-delete_visitor::operator()(gchar * & value)
+delete_visitor::operator()(const gchar * & value)
 {
-    g_free(value);
+    g_free(const_cast<gchar *> (value));
 }
 template <> void
 delete_visitor::operator()(GncGUID * & value)
@@ -390,7 +390,7 @@ void
 KvpValueImpl::duplicate(const KvpValueImpl& other) noexcept
 {
     if (other.datastore.type() == typeid(const gchar *))
-        this->datastore = g_strdup(other.get<const gchar *>());
+        this->datastore = const_cast<const gchar *>(g_strdup(other.get<const gchar *>()));
     else if (other.datastore.type() == typeid(GncGUID*))
         this->datastore = guid_copy(other.get<GncGUID *>());
     else if (other.datastore.type() == typeid(GList*))
