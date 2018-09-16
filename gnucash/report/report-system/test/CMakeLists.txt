@@ -19,6 +19,7 @@ set (scm_test_report_system_with_srfi64_SOURCES
   test-report-utilities.scm
   test-html-utilities-srfi64.scm
   test-html-fonts.scm
+  test-html-chart.scm
   test-report-html.scm
   test-report-system.scm
   )

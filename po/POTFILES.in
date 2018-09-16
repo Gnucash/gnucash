@@ -480,6 +480,7 @@ gnucash/report/report-system/gnc-report.c
 gnucash/report/report-system/html-acct-table.scm
 gnucash/report/report-system/html-anytag.scm
 gnucash/report/report-system/html-barchart.scm
+gnucash/report/report-system/html-chart.scm
 gnucash/report/report-system/html-document.scm
 gnucash/report/report-system/html-fonts.scm
 gnucash/report/report-system/html-linechart.scm

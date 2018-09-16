@@ -427,6 +427,7 @@
 (export gnc:html-linechart-render linechart)
 (export gnc:html-linechart-set-line-width!)
 (export gnc:html-linechart-line-width)
+
 ;; html-style-info.scm
 
 (export <html-markup-style-info>)
@@ -557,6 +558,27 @@
 (export gnc:second-html-build-acct-table)
 (export gnc-commodity-table)
 (export gnc:uniform-commodity?)
+
+;; html-chart.scm
+
+(export gnc:html-chart?)
+(export gnc:make-html-chart)
+(export gnc:html-chart-data)
+(export gnc:html-chart-set-data!)
+(export gnc:html-chart-width)
+(export gnc:html-chart-set-width!)
+(export gnc:html-chart-height)
+(export gnc:html-chart-set-height!)
+(export gnc:html-chart-type)
+(export gnc:html-chart-set-type!)
+(export gnc:html-chart-title)
+(export gnc:html-chart-get)
+(export gnc:html-chart-set!)
+(export gnc:html-chart-currency-iso)
+(export gnc:html-chart-set-currency-iso!)
+(export gnc:html-chart-currency-symbol)
+(export gnc:html-chart-set-currency-symbol!)
+(export gnc:html-chart-render)
 
 ;; html-table.scm
 
@@ -765,6 +787,7 @@
 
 
 (load-from-path "commodity-utilities")
+(load-from-path "html-chart")
 (load-from-path "html-barchart")
 (load-from-path "html-document")
 (load-from-path "html-piechart")

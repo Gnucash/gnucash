@@ -64,6 +64,7 @@ set (report_system_SCHEME_2b
 set (report_system_SCHEME_3
     commodity-utilities.scm
     html-acct-table.scm
+    html-chart.scm
     html-barchart.scm
     html-document.scm
     html-fonts.scm
