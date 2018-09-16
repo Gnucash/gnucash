@@ -77,23 +77,23 @@ _br_find_exe (Gnc_GbrInitError *error)
      */
     gchar *prefix = g_win32_get_package_installation_directory_of_module (NULL);
     gchar *result = g_build_filename (prefix, "bin", "gnucash.exe", NULL);
-    if (prefix = NULL)
+    if (prefix == NULL)
     {
         if (error)
-            *error = GNC_GBR_INIT_WIN32_NO_EXE;
+            *error = GNC_GBR_INIT_WIN32_NO_EXE_DIR;
         return NULL;
     }
     if (!g_file_test (result, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_EXECUTABLE))
     {
         g_free (result);
-        result = g_build_filename (prefix, "gnucash.exe");
+        result = g_build_filename (prefix, "gnucash.exe", NULL);
         if (!g_file_test (result,
                            G_FILE_TEST_EXISTS | G_FILE_TEST_IS_EXECUTABLE))
         {
             g_free (result);
             result = NULL;
             if (error)
-                *error = GNC_GBR_INIT_WIN32_NO_EXE;
+                *error = GNC_GBR_INIT_WIN32_NO_EXE_DIR;
         }
     }
     g_free (prefix);
