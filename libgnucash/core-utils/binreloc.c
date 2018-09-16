@@ -70,23 +70,32 @@ _br_find_exe (Gnc_GbrInitError *error)
     if (error)
         *error = GNC_GBR_INIT_ERROR_DISABLED;
     return NULL;
-#else
-#ifdef G_OS_WIN32
-    /* I *thought* this program code already included the
-       relocation code for windows. Unfortunately this is not
-       the case and we have to add this manually. This is only
-       one possibility; other ways of looking up the full path
-       of gnucash.exe probably exist.*/
-    gchar *prefix;
-    gchar *result;
-
-    /* From the glib docs: When passed NULL, this function looks
-       up installation the directory of the main executable of
-       the current process */
-    prefix = g_win32_get_package_installation_directory_of_module (NULL);
-    result = g_build_filename (prefix,
-                               BINDIR, "gnucash.exe",
-                               (char*)NULL);
+#elif defined G_OS_WIN32
+    /* N.B. g_win32_get_package_installation_directory_of_module returns the
+     * parent if the last element of the directory is "bin" or "lib", but
+     * otherwise the directory itself. We assume that gnucash.exe isn't in lib.
+     */
+    gchar *prefix = g_win32_get_package_installation_directory_of_module (NULL);
+    gchar *result = g_build_filename (prefix, "bin", "gnucash.exe", NULL);
+    if (prefix = NULL)
+    {
+        if (error)
+            *error = GNC_GBR_INIT_WIN32_NO_EXE;
+        return NULL;
+    }
+    if (!g_file_test (result, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_EXECUTABLE))
+    {
+        g_free (result);
+        result = g_build_filename (prefix, "gnucash.exe");
+        if (!g_file_test (result,
+                           G_FILE_TEST_EXISTS | G_FILE_TEST_IS_EXECUTABLE))
+        {
+            g_free (result);
+            result = NULL;
+            if (error)
+                *error = GNC_GBR_INIT_WIN32_NO_EXE;
+        }
+    }
     g_free (prefix);
     return result;
 #elif defined MAC_INTEGRATION
@@ -228,7 +237,6 @@ _br_find_exe (Gnc_GbrInitError *error)
     g_free (line);
     fclose (f);
     return path;
-#endif /* G_OS_WINDOWS */
 #endif /* ENABLE_BINRELOC */
 }
 
@@ -308,6 +316,15 @@ set_gerror (GError **error, Gnc_GbrInitError errcode)
         break;
     case GNC_GBR_INIT_ERROR_DISABLED:
         error_message = "Binary relocation support is disabled.";
+        break;
+    case GNC_GBR_INIT_ERROR_MAC_NOT_BUNDLE:
+        error_message = "BinReloc determined that gnucash is not running from a bundle";
+        break;
+    case GNC_GBR_INIT_ERROR_MAC_NOT_APP_BUNDLE:
+        error_message = "Binreloc determined that the bundle is not an app bundle";
+        break;
+    case GNC_GBR_INIT_WIN32_NO_EXE_DIR:
+        error_message = "Binreloc was unable to determine the location of gnucash.exe.";
         break;
     default:
         error_message = "Unknown error.";

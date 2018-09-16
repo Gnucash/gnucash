@@ -54,7 +54,9 @@ typedef enum
     /** Binreloc determined that the bundle is not an app bundle */
     GNC_GBR_INIT_ERROR_MAC_NOT_APP_BUNDLE,
     /** BinReloc is disabled (the ENABLE_BINRELOC macro is not defined). */
-    GNC_GBR_INIT_ERROR_DISABLED
+    GNC_GBR_INIT_ERROR_DISABLED,
+    /** Binreloc was unable to determine the location of gnucash.exe. */
+    GNC_GBR_INIT_WIN32_NO_EXE_DIR
 } Gnc_GbrInitError;
 
 
