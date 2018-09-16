@@ -399,8 +399,6 @@ gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
         {
             gtk_editable_set_position (editable, cursor_pos);
             gtk_editable_select_region (editable, start_sel, end_sel);
-            sheet->start_sel = start_sel;
-            sheet->end_sel = end_sel;
         }
         else
             gtk_editable_set_position (editable,
