@@ -369,6 +369,9 @@
    ((gnc:html-anytag? obj)
     (gnc:make-html-object-internal gnc:html-anytag-render obj))
 
+   ((gnc:html-chart? obj)
+    (gnc:make-html-object-internal gnc:html-chart-render obj))
+
    ((gnc:html-table-cell? obj)
     (gnc:make-html-object-internal gnc:html-table-cell-render obj))
 
