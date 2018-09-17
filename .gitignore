@@ -243,3 +243,4 @@ DerivedData/
 xcuserdata/
 messages.mo
 /.settings/
+/build/
