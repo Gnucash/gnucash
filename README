@@ -22,106 +22,16 @@ Table of Contents:
 Overview
 --------
 
-GnuCash is a personal finance manager. A check-book like register GUI
-allows you to enter and track bank accounts, stocks, income and even
-currency trades. A full set of reports allow you to see the state of
-your finances. The interface is designed to be simple and easy to use,
-but is backed with double-entry accounting principles to ensure
-balanced books.
-
-Features include:
-
-  - An easy-to-use interface.  If you can use the register in the back
-    of your checkbook, you can use GnuCash.  Type directly into the
-    register, tab between fields, and use quick-fill to automatically
-    complete the transaction.
-
-  - Scheduled Transactions: GnuCash has the ability to automatically
-    create and enter transactions, remind when a transaction is due,
-    give a choice of entering a transaction or postponing it and
-    remove an automated transaction after a certain period.
-
-  - Mortgage & Loan Repayment Assistant: Used to setup a variable
-    payment loan scheduled transaction.
-
-  - Small Business Accounting Features: GnuCash can be used
-    for Customer and Vendor tracking, Invoicing and Bill Payment,
-    and using different Tax and Billing	Terms in a small business.
-
-  - OFX Import: GnuCash can import downloaded OFX/QFX files and
-    retrieve account info and transactions via OFXDirect. The results
-    are passed through a transaction matching system that accurately
-    picks duplicate transactions and assigns contra accounts based on
-    similar previously-imported transactions.
-
-  - HBCI/FinTS Support: GnuCash also supports the German Financial Transaction
-    Services (formerly Home Banking Computer Interface) which includes
-    statement download, initiate bank transfers and direct debits.
-
-  - Quicken File Import: Import Quicken QIF style files.  QIF files
-    are automatically merged to eliminate duplicate transactions.
-
-  - Reconcile window with running reconciled and cleared balances
-    makes reconciliation easy.
-
-  - Stock/Mutual Fund Portfolios: Track stocks individually (one per
-    account).
-
-  - Get Stock & Mutual Fund quotes from various web sites, update
-    portfolio automatically (more funds being added regularly).
-
-  - Reports: Display Balance Sheet, Profit&Loss, Portfolio Valuation,
-    Transaction Reports, or account balance tracking, or export them
-    as HTML.  You can write your own custom report if you know a
-    little Scheme.  Reports can be run over any arbitrary period.
-
-  - Multiple Currencies & Currency Trading: Multiple currencies are
-    supported and can be bought and sold (traded).  Currency movements
-    between accounts are fully balanced when double-entry is enabled.
-
-  - Chart of Accounts: A master account can have a hierarchy of detail
-    accounts underneath it.  This allows similar account types
-    (e.g. Cash, Bank, Stock) to be grouped into one master account
-    (e.g. Assets).
-
-  - Split Transactions: A single transaction can be split into several
-    pieces to record taxes, fees, and other compound entries.
-
-  - Double Entry: Every transaction must debit one account and credit
-    another by an equal amount.  This ensures that the "books
-    balance": that the difference between income and outflow exactly
-    equals the sum of all assets, be they bank, cash, stock or other.
-
-  - Income/Expense Account Types (Categories): These serve not only to
-    categorize your cash flow, but when used properly with the
-    double-entry feature, these can provide an accurate Profit&Loss
-    statement.
-
-  - General Ledger: Multiple accounts can be displayed in one register
-    window at the same time.  This can ease the trouble of tracking
-    down typing/entry errors.  It also provides a convenient way of
-    viewing a portfolio of many stocks, by showing all transactions in
-    that portfolio.
-
-  - Written in C/C++ with embedded scheme support via Guile.
-
-  - File access is locked in a network-safe fashion, preventing
-    accidental damage if several users attempt to access the same
-    file, even if the file is on a shared file system.
-
-  - SQL storage is supported using MySQL, Postgresql, and
-    SQLite3. Note that this does not support multiple concurrent
-    access.
-
-
+GnuCash is a personal and small business double entry accounting application.
 
 Home Page:
-http://www.gnucash.org/
+https://www.gnucash.org/
+
+Wiki:
+https://wiki.gnucash.org/wiki/GnuCash
 
 Precompiled binaries:
-http://www.gnucash.org/download
-
-
+https://www.gnucash.org/download
 
 ############
 Dependencies
@@ -182,7 +92,7 @@ Message catalogs exist for many different languages. In general
 GnuCash will use the locale configured in the desktop environment if
 we have a translation for it, but this may be overridden if one
 likes. Instructions for overriding the locale settings may be found at
-http://wiki.gnucash.org/wiki/Locale_Settings
+https://wiki.gnucash.org/wiki/Locale_Settings
 
 #####################
 Building & Installing
@@ -196,7 +106,7 @@ following packages:
 
   cmake: Available https://cmake.org.
 
-  ninja: Optional, available at http://ninja-build.org. CMake can
+  ninja: Optional, available at https://ninja-build.org. CMake can
     generated build rules for Ninja, and generally using Ninja results
     in faster builds that Makefile based ones.
 
@@ -205,7 +115,7 @@ following packages:
   libxml2: available from ftp.gnome.org
 
   SWIG: 2.0.10 or later is needed. See http://www.swig.org or
-    http://sourceforge.net/projects/swig/
+    https://sourceforge.net/projects/swig/
 
 Generally, up-to-date build instructions for various Linux
 distributions can be found on the GnuCash wiki at
@@ -267,7 +177,7 @@ Downloads
 
 GnuCash sources and Mac and Windows binaries are hosted at
 SourceForge and Github. Links for the current version are provided at
-http://www.gnucash.org. We depend upon distribution packagers for
+https://www.gnucash.org. We depend upon distribution packagers for
 GNU/Linux and *BSD binaries, so if you want a more recent version than
 your distribution provides you'll have to build from source.
 
@@ -285,11 +195,11 @@ Developing GnuCash
 ------------------
 Before you start developing GnuCash, you should do the following:
 
-1. Read http://wiki.gnucash.org/wiki/Development
+1. Read https://wiki.gnucash.org/wiki/Development
 
 2. Look over the doxygen-generated documentation at
-    http://code.gnucash.org/docs/MASTER/ or
-    http://code.gnucash.org/docs/MAINT/
+    https://code.gnucash.org/docs/MASTER/ or
+    https://code.gnucash.org/docs/MAINT/
 
 3. Go to the GnuCash website and skim the archives of the GnuCash
    development mailing list.
@@ -302,6 +212,6 @@ Before you start developing GnuCash, you should do the following:
 
 Submitting a Patch:
 
-  Please read http://wiki.gnucash.org/wiki/Development#Submitting_Patches.
+  Please read https://wiki.gnucash.org/wiki/Development#Submitting_Patches.
 
 Thank you.
