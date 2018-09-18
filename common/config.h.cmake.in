@@ -1,3 +1,5 @@
+#include <endian.h>
+
 /* Template file for processing by the cmake command CONFIGURE_FILE */
 
 /* If we're using this file it's a CMAKE build, so say so */
@@ -356,7 +358,11 @@
 # endif
 #else
 # ifndef WORDS_BIGENDIAN
+#  if __BYTE_ORDER == __BIG_ENDIAN
+#   define WORDS_BIGENDIAN 1
+#  else
 #cmakedefine WORDS_BIGENDIAN
+#  endif
 # endif
 #endif
 
