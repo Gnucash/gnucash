@@ -175,7 +175,7 @@ typedef char gchar;
 %import "glib.h"
 %include <stdint.i>
 
-%apply int { gint };
+%apply int { gint, gint32 };
 %apply unsigned int { guint };
 %apply long { glong };
 %apply int32_t { gint32 };
