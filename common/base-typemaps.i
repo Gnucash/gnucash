@@ -252,7 +252,8 @@ typedef char gchar;
         for (i = size-1; i >= 0; i--) {
             PyObject *o = PyList_GetItem($input, i);
             if (PyUnicode_Check(o)) {
-                $1 = g_slist_prepend($1,PyUnicode_AsUTF8(PyList_GetItem($input, i)));
+                /* There's no way to preserve constness in GSList items. */
+                $1 = g_slist_prepend($1, (char*)PyUnicode_AsUTF8(PyList_GetItem($input, i)));
             } else {
                 PyErr_SetString(PyExc_TypeError, "list must contain strings");
                 g_slist_free($1);
