@@ -392,42 +392,20 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
 
 ;; This works similar as above but returns a commodity-collector, 
 ;; thus takes care of children accounts with different currencies.
-;;
-;; Also note that the commodity-collector contains <gnc:numeric>
-;; values rather than double values.
-(define (gnc:account-get-comm-balance-at-date account 
-					      date include-children?)
+(define (gnc:account-get-comm-balance-at-date
+         account date include-children?)
   (let ((balance-collector (gnc:make-commodity-collector))
-	(query (qof-query-create-for-splits))
-	(splits #f))
-
-      (if include-children?
-	  (for-each 
-	   (lambda (x) 
-	     (balance-collector 'merge x #f))
-	   (gnc:account-map-descendants
-	    (lambda (child)
-	      (gnc:account-get-comm-balance-at-date child date #f))
-	    account)))
-
-      (qof-query-set-book query (gnc-get-current-book))
-      (xaccQueryAddSingleAccountMatch query account QOF-QUERY-AND)
-      (xaccQueryAddDateMatchTT query #f date #t date QOF-QUERY-AND)
-      (qof-query-set-sort-order query
-				(list SPLIT-TRANS TRANS-DATE-POSTED)
-				(list QUERY-DEFAULT-SORT)
-				'())
-      (qof-query-set-sort-increasing query #t #t #t)
-      (qof-query-set-max-results query 1)
-      
-      (set! splits (qof-query-run query))
-      (qof-query-destroy query)
-
-      (if (and splits (not (null? splits)))
-	  (balance-collector 'add
-                             (xaccAccountGetCommodity account)
-                             (xaccSplitGetBalance (car splits))))
-      balance-collector))
+        (accounts (cons account
+                        (if include-children?
+                            (gnc-account-get-descendants account)
+                            '()))))
+    (for-each
+     (lambda (acct)
+       (balance-collector 'add
+                          (xaccAccountGetCommodity acct)
+                          (xaccAccountGetBalanceAsOfDate acct date)))
+     accounts)
+    balance-collector))
 
 ;; Calculate the increase in the balance of the account in terms of
 ;; "value" (as opposed to "amount") between the specified dates.
@@ -435,41 +413,35 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
 ;; just direct children) are are included in the calculation. The results
 ;; are returned in a commodity collector.
 (define (gnc:account-get-comm-value-interval account start-date end-date
-                                                include-children?)
+                                             include-children?)
   (let ((value-collector (gnc:make-commodity-collector))
-	(query (qof-query-create-for-splits))
-	(splits #f))
-
-    (if include-children?
-        (for-each
-         (lambda (x)
-           (value-collector 'merge x #f))
-         (gnc:account-map-descendants
-          (lambda (d)
-            (gnc:account-get-comm-value-interval d start-date end-date #f))
-          account)))
+        (query (qof-query-create-for-splits))
+        (accounts (cons account
+                        (if include-children?
+                            (gnc-account-get-descendants account)
+                            '()))))
 
     ;; Build a query to find all splits between the indicated dates.
     (qof-query-set-book query (gnc-get-current-book))
-    (xaccQueryAddSingleAccountMatch query account QOF-QUERY-AND)
+    (xaccQueryAddAccountMatch query accounts
+                              QOF-GUID-MATCH-ANY
+                              QOF-QUERY-AND)
     (xaccQueryAddDateMatchTT query
-                             (and start-date #t) (if start-date start-date 0)
-                             (and end-date #t) (if end-date end-date 0)
+                             (and start-date #t) (or start-date 0)
+                             (and end-date #t) (or end-date 0)
                              QOF-QUERY-AND)
 
     ;; Get the query results.
-    (set! splits (qof-query-run query))
-    (qof-query-destroy query)
-
-    ;; Add the "value" of each split returned (which is measured
-    ;; in the transaction currency).
-    (for-each
-     (lambda (split)
-       (value-collector 'add
-                        (xaccTransGetCurrency (xaccSplitGetParent split))
-                        (xaccSplitGetValue split)))
-     splits)
-
+    (let ((splits (qof-query-run query)))
+      (qof-query-destroy query)
+      ;; Add the "value" of each split returned (which is measured
+      ;; in the transaction currency).
+      (for-each
+       (lambda (split)
+         (value-collector 'add
+                          (xaccTransGetCurrency (xaccSplitGetParent split))
+                          (xaccSplitGetValue split)))
+       splits))
     value-collector))
 
 ;; Calculate the balance of the account in terms of "value" (rather
@@ -633,34 +605,31 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
 ;; the type is an alist '((str "match me") (cased #f) (regexp #f))
 ;; If type is #f, sums all non-closing splits in the interval
 (define (gnc:account-get-trans-type-balance-interval
-	 account-list type start-date end-date)
+         account-list type start-date end-date)
   (let* ((total (gnc:make-commodity-collector)))
-    (map (lambda (split)
-           (let* ((shares (xaccSplitGetAmount split))
-                  (acct-comm (xaccAccountGetCommodity
-                              (xaccSplitGetAccount split)))
-                  (txn (xaccSplitGetParent split)))
-             (if type 
-                 (total 'add acct-comm shares)
-                 (if (not (xaccTransGetIsClosingTxn txn))
-                     (total 'add acct-comm shares)))))
-	 (gnc:account-get-trans-type-splits-interval
-          account-list type start-date end-date))
+    (for-each
+     (lambda (split)
+       (if (or type (not (xaccTransGetIsClosingTxn (xaccSplitGetParent split))))
+           (total 'add
+                  (xaccAccountGetCommodity (xaccSplitGetAccount split))
+                  (xaccSplitGetAmount split))))
+     (gnc:account-get-trans-type-splits-interval
+      account-list type start-date end-date))
     total))
 
 ;; Sums up any splits of a certain type affecting a set of accounts.
 ;; the type is an alist '((str "match me") (cased #f) (regexp #f))
 ;; If type is #f, sums all splits in the interval (even closing splits)
 (define (gnc:account-get-trans-type-balance-interval-with-closing
-	 account-list type start-date end-date)
+         account-list type start-date end-date)
   (let ((total (gnc:make-commodity-collector)))
-    (map (lambda (split)
-           (let* ((shares (xaccSplitGetAmount split))
-                  (acct-comm (xaccAccountGetCommodity
-                              (xaccSplitGetAccount split))))
-             (total 'add acct-comm shares)))
-	 (gnc:account-get-trans-type-splits-interval
-          account-list type start-date end-date))
+    (for-each
+     (lambda (split)
+       (total 'add
+              (xaccAccountGetCommodity (xaccSplitGetAccount split))
+              (xaccSplitGetAmount split)))
+     (gnc:account-get-trans-type-splits-interval
+      account-list type start-date end-date))
     total))
 
 ;; Filters the splits from the source to the target accounts
@@ -757,44 +726,36 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
 (define (gnc:account-get-trans-type-splits-interval
          account-list type start-date end-date)
   (if (null? account-list)
-      ;; No accounts given. Return empty list.
       '()
-      ;; The normal case: There are accounts given.
-  (let* ((query (qof-query-create-for-splits))
-         (query2 #f)
-	 (splits #f)
-	 (get-val (lambda (alist key)
-		    (let ((lst (assoc-ref alist key)))
-		      (if lst (car lst) lst))))
-	 (matchstr (get-val type 'str))
-	 (case-sens (if (get-val type 'cased) #t #f))
-	 (regexp (if (get-val type 'regexp) #t #f))
-	 (closing (if (get-val type 'closing) #t #f))
-	 )
-    (qof-query-set-book query (gnc-get-current-book))
-    (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
-    (xaccQueryAddAccountMatch query account-list QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-    (xaccQueryAddDateMatchTT
-     query
-     (and start-date #t) (if start-date start-date 0)
-     (and end-date #t) (if end-date end-date 0)
-     QOF-QUERY-AND)
-    (if (or matchstr closing) 
-         (begin
-           (set! query2 (qof-query-create-for-splits))
-           (if matchstr (xaccQueryAddDescriptionMatch
-                         query2 matchstr case-sens regexp QOF-COMPARE-CONTAINS QOF-QUERY-OR))
-           (if closing (xaccQueryAddClosingTransMatch query2 1 QOF-QUERY-OR))
-           (qof-query-merge-in-place query query2 QOF-QUERY-AND)
-           (qof-query-destroy query2)
-    ))
-
-    (set! splits (qof-query-run query))
-    (qof-query-destroy query)
-    splits
-    )
-  )
-  )
+      (let* ((query (qof-query-create-for-splits))
+             (get-val (lambda (key)
+                        (let ((lst (assq-ref type key)))
+                          (and lst (car lst)))))
+             (matchstr (get-val 'str))
+             (case-sens (get-val 'cased))
+             (regexp (get-val 'regexp))
+             (closing (get-val 'closing)))
+        (qof-query-set-book query (gnc-get-current-book))
+        (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
+        (xaccQueryAddAccountMatch query account-list QOF-GUID-MATCH-ANY QOF-QUERY-AND)
+        (xaccQueryAddDateMatchTT
+         query
+         (and start-date #t) (or start-date 0)
+         (and end-date #t) (or end-date 0)
+         QOF-QUERY-AND)
+        (when (or matchstr closing)
+          (let ((query2 (qof-query-create-for-splits)))
+            (if matchstr
+                (xaccQueryAddDescriptionMatch
+                 query2 matchstr case-sens regexp
+                 QOF-COMPARE-CONTAINS QOF-QUERY-OR))
+            (if closing
+                (xaccQueryAddClosingTransMatch query2 1 QOF-QUERY-OR))
+            (qof-query-merge-in-place query query2 QOF-QUERY-AND)
+            (qof-query-destroy query2)))
+        (let ((splits (qof-query-run query)))
+          (qof-query-destroy query)
+          splits))))
 
 ;; utility to assist with double-column balance tables
 ;; a request is made with the <req> argument
@@ -867,12 +828,12 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
 ;;
 ;; Returns a commodity-collector.
 (define (gnc:budget-account-get-net budget account start-period end-period)
-  (if (not end-period) (set! end-period (gnc-budget-get-num-periods budget)))
   (let* ((period (or start-period 0))
-         (net (gnc:make-commodity-collector))
-         (acct-comm (xaccAccountGetCommodity account)))
-    (while (< period end-period)
-      (net 'add acct-comm
+         (maxperiod (or end-period (gnc-budget-get-num-periods budget)))
+         (net (gnc:make-commodity-collector)))
+    (while (< period maxperiod)
+      (net 'add
+           (xaccAccountGetCommodity account)
            (gnc-budget-get-account-period-value budget account period))
       (set! period (1+ period)))
     net))

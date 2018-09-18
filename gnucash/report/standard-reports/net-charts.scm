@@ -33,8 +33,6 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
-(use-modules (gnucash report report-system report-collectors))
-(use-modules (gnucash report report-system collectors))
 (use-modules (gnucash report standard-reports category-barchart)) ; for guids of called reports
 (gnc:module-load "gnucash/report/report-system" 0)
 
@@ -306,50 +304,16 @@
 
     (if
      (not (null? accounts))
-     (let* ((the-account-destination-alist
-             (if inc-exp?
-                 (append (map (lambda (account) (cons account 'asset))
-                              (assoc-ref classified-accounts ACCT-TYPE-INCOME))
-                         (map (lambda (account) (cons account 'liability))
-                              (assoc-ref classified-accounts ACCT-TYPE-EXPENSE)))
-                 (append  (map (lambda (account) (cons account 'asset))
-                               (assoc-ref classified-accounts ACCT-TYPE-ASSET))
-                          (map (lambda (account) (cons account 'liability))
-                               (assoc-ref classified-accounts ACCT-TYPE-LIABILITY)))))
-            (account-reformat (if inc-exp?
-                                  (lambda (account result)
-                                    (map (lambda (collector date-interval)
-                                           (gnc:monetary-neg (collector->monetary collector (second date-interval))))
-                                         result dates-list))
-                                  (lambda (account result)
-                                    (let ((commodity-collector (gnc:make-commodity-collector)))
-                                      (collector-end (fold (lambda (next date list-collector)
-                                                             (commodity-collector 'merge next #f)
-                                                             (collector-add list-collector
-                                                                            (collector->monetary
-                                                                             commodity-collector date)))
-                                                           (collector-into-list)
-                                                           result
-                                                           dates-list))))))
-            (work (category-by-account-report-work inc-exp?
-                                                   dates-list
-                                                   the-account-destination-alist
-                                                   (lambda (account date)
-                                                     (make-gnc-collector-collector))
-                                                   account-reformat))
-            (rpt (category-by-account-report-do-work work (cons 50 90)))
-            (assets (assoc-ref rpt 'asset))
-            (liabilities (assoc-ref rpt 'liability))
-            (assets-list (if assets
-                             (car assets)
-                             (map (lambda (d)
-                                    (gnc:make-gnc-monetary report-currency 0))
-                                  dates-list)))
-            (liability-list (if liabilities
-                                (car liabilities)
-                                (map (lambda (d)
-                                       (gnc:make-gnc-monetary report-currency 0))
-                                     dates-list)))
+     (let* ((assets-list (process-datelist
+                          (if inc-exp?
+                              accounts
+                              (assoc-ref classified-accounts ACCT-TYPE-ASSET))
+                          dates-list #t))
+            (liability-list (process-datelist
+                             (if inc-exp?
+                                 accounts
+                                 (assoc-ref classified-accounts ACCT-TYPE-LIABILITY))
+                             dates-list #f))
             (net-list (map monetary+ assets-list liability-list))
             ;; Here the date strings for the x-axis labels are
             ;; created.
