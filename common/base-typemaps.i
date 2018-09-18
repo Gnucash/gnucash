@@ -178,6 +178,7 @@ typedef char gchar;
 %apply int { gint };
 %apply unsigned int { guint };
 %apply long { glong };
+%apply int32_t { gint32 };
 %apply int64_t { gint64 };
 %apply unsigned long { gulong };
 %apply uint64_t { guint64 };
@@ -250,8 +251,8 @@ typedef char gchar;
         int size = PyList_Size($input);
         for (i = size-1; i >= 0; i--) {
             PyObject *o = PyList_GetItem($input, i);
-            if (PyString_Check(o)) {
-                $1 = g_slist_prepend($1,PyString_AsString(PyList_GetItem($input, i)));
+            if (PyUnicode_Check(o)) {
+                $1 = g_slist_prepend($1,PyUnicode_AsUTF8(PyList_GetItem($input, i)));
             } else {
                 PyErr_SetString(PyExc_TypeError, "list must contain strings");
                 g_slist_free($1);
