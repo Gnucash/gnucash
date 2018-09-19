@@ -53,7 +53,7 @@
   (record-constructor <html-piechart>))
 
 (define (gnc:make-html-piechart)
-  (gnc:make-html-piechart-internal '(pixels . -1) '(pixels . -1) #f #f #f #f #f #f #f #f #f #f #f))
+  (gnc:make-html-piechart-internal '(pixels . -1) '(pixels . -1) #f #f #f '() #f #f #f #f #f #f #f))
 
 (define gnc:html-piechart-data
   (record-accessor <html-piechart> 'data))

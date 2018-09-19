@@ -558,9 +558,6 @@ function formatTooltip(str, seriesIndex, pointIndex) {\n\
     (gnc:html-piechart-set-subtitle! html-pie-chart "Created 2017-08-09")
     (gnc:html-piechart-set-data! html-pie-chart '(100 100.5 "100" "100.5" 'any-tag #f))
     (gnc:html-piechart-set-labels! html-pie-chart '("Pie Chart Label 1" "Pie Chart Label 2" "Pie Chart Label 3" "Pie Chart Label 4" "Pie Chart Label 5" "Pie Chart Label 6"))
-    ;;(gnc:html-piechart-set-colors! html-pie-chart '("color" "no-color"))
-    ;;(gnc:html-piechart-set-colors! html-pie-chart '(""))
-    (gnc:html-piechart-set-colors! html-pie-chart '()) ;; Bug: colors are set to default #f, which will make the rendering fail
 
     ;; do the test
     (test-equal "Jqplot - Render Pie Chart"
