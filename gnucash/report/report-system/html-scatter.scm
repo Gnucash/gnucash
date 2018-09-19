@@ -58,7 +58,7 @@
   (record-constructor <html-scatter>))
 
 (define (gnc:make-html-scatter)
-  (gnc:make-html-scatter-internal '(pixels . -1) '(pixels . -1) #f #f #f #f '() #f #f))
+  (gnc:make-html-scatter-internal '(pixels . -1) '(pixels . -1) #f #f #f #f '() #f "ffffff"))
 
 (define gnc:html-scatter-width
   (record-accessor <html-scatter> 'width))

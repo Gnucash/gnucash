@@ -629,9 +629,6 @@ $(window).resize(function () {\n\
     (gnc:html-scatter-set-x-axis-label! html-scatter-chart "Test x-Axis Label Scatterchart")
     (gnc:html-scatter-set-y-axis-label! html-scatter-chart "Test y-Axis Label Scatterchart")
     (gnc:html-scatter-set-y-axis-label! html-scatter-chart "Test y-Axis Label Scatterchart")
-    (gnc:html-scatter-set-markercolor! html-scatter-chart "ffffff")
-    ;; BUG: set the default values for marker and markercolor to one of the allowed values, not #f
-    ;; if markercolor is #f it runs into: ERROR: In procedure string-append: Wrong type (expecting string): #f	
     (gnc:html-scatter-add-datapoint! html-scatter-chart '(1.1 1.1))
     (gnc:html-scatter-add-datapoint! html-scatter-chart '(2.2 2.2))
     (gnc:html-scatter-add-datapoint! html-scatter-chart '(3.3 3.3))
