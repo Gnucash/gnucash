@@ -11,6 +11,8 @@
 ;;(use-modules (ice-9 regex)) ;; for regexp-substitute/global
 (use-modules (srfi srfi-1)) ;; make the (drop lst i) command available
 
+;; Explicitly set locale to make the report output predictable
+(setlocale LC_ALL "C")
 
 (define (run-test)
     (test-runner-factory gnc:test-runner)
@@ -493,7 +495,7 @@ var options = {\n\
   options.title += ' <br />' + \"Created 2018-08-02\";\n\
   options.axes.xaxis.label = \"Test x-Axis Label linechart\";\n\
   options.axes.yaxis.label = \"Test y-Axis Label linechart\";\n\
-  options.axes.xaxis.tickOptions.formatString = '%d.%m.%Y';\n\
+  options.axes.xaxis.tickOptions.formatString = '%m/%d/%y';\n\
 $.jqplot.config.enablePlugins = true;\n\
 $(document).ready(function() {\n\
 var plot = $.jqplot('chart-208691', data, options);\n\
