@@ -57,6 +57,9 @@
 (define structure
   (list "Root" (list (cons 'type ACCT-TYPE-ASSET))
         (list "Asset"
+              (list "Bank1")
+              (list "Bank2")
+              (list "Bank3")
               (list "Bank"))
         (list "Income" (list (cons 'type ACCT-TYPE-INCOME)))
         (list "Liability" (list (cons 'type ACCT-TYPE-LIABILITY)))
@@ -74,6 +77,69 @@
   (test-group-with-cleanup (format #f "test variant ~a" variant)
     (test-chart-variant variant)
     (gnc-clear-current-session)))
+
+(define (test-net-chart-variant variant)
+  (define (set-option! options section name value)
+    (let ((option (gnc:lookup-option options section name)))
+      (if option
+          (gnc:option-set-value option value)
+          (test-assert (format #f "[~a] wrong-option ~a ~a" variant section name) #f))))
+  (let* ((uuid (variant->uuid variant))
+         (inc-exp? (memq variant '(income-expense-barchart income-expense-linechart)))
+         (env (create-test-env))
+         (account-alist (env-create-account-structure-alist env structure))
+         (bank1 (cdr (assoc "Bank1" account-alist)))
+         (bank2 (cdr (assoc "Bank2" account-alist)))
+         (bank3 (cdr (assoc "Bank3" account-alist)))
+         (liability (cdr (assoc "Liability" account-alist)))
+         (income (cdr (assoc "Income" account-alist)))
+         (expense (cdr (assoc "Expenses" account-alist)))
+         (equity (cdr (assoc "Equity" account-alist))))
+
+    (env-transfer env 12 01 1970 income bank1 10)
+    (env-transfer env 18 01 1970 income bank1 15)
+    (env-transfer env 03 03 1970 income bank1 200)
+
+    (env-transfer env 18 01 1970 income bank2 50)
+    (env-transfer env 18 02 1970 income bank2 50)
+
+    (env-transfer env 05 05 1969 income bank3 25)
+    (env-transfer env 05 01 1970 income bank3 25)
+
+    ;; one closing txn which should be ignored by the inc-exp charts
+    (let ((txn (env-transfer env 03 01 1970 equity income 25)))
+      (xaccTransSetIsClosingTxn txn #t))
+
+    (let* ((options (gnc:make-report-options (variant->uuid variant))))
+      (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 1 1 1970)))
+      (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 15 4 1970)))
+      (set-option! options "Accounts" "Accounts" (list income bank1 bank2 bank3))
+      (set-option! options "General" "Step Size" 'MonthDelta)
+      (set-option! options "Display" "Show table" #t)
+      (format #t "\n\ntesting net-chart variant:~a\n" variant)
+      (let ((sxml (gnc:options->sxml uuid options (format #f "test-net-charts ~a 3 months" variant)
+                                     "test-table" #:strip-tag "script")))
+        (unless inc-exp?
+          (test-equal "first row"
+            '("Date" "Assets" "Liabilities" "Net Worth")
+            (sxml->table-row-col sxml 1 0 #f))
+          (test-equal "first data row"
+            '("01/01/70" "$25.00" "$0.00" "$25.00")
+            (sxml->table-row-col sxml 1 1 #f))
+          (test-equal "last data row"
+            '("04/15/70" "$375.00" "$0.00" "$375.00")
+            (sxml->table-row-col sxml 1 -1 #f)))
+
+        (when inc-exp?
+          (test-equal "first row"
+            '("Date" "Income" "Expense" "Net Profit")
+            (sxml->table-row-col sxml 1 0 #f))
+          (test-equal "first data row"
+            '("01/01/70" "$100.00" "$0.00" "$100.00")
+            (sxml->table-row-col sxml 1 1 #f))
+          (test-equal "last data row"
+            '("04/01/70" "$0.00" "$0.00" "$0.00")
+            (sxml->table-row-col sxml 1 -1 #f)))))))
 
 (define (test-chart-variant variant)
   (define (set-option! options section name value)
@@ -179,4 +245,5 @@
        'daily-tests)
 
       ((net-worth-barchart income-expense-barchart net-worth-linechart income-expense-linechart)
-       'net-charts-tests))))
+       (test-net-chart-variant variant)))))
+
