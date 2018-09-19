@@ -16,7 +16,7 @@
     (test-runner-factory gnc:test-runner)
     (test-begin "Testing/Temporary/test-report-jqplot") ;; if (test-runner-factory gnc:test-runner) is commented out, this
                                                         ;; will create Testing/Temporary/test-report-jqplot.log
-    (test-assert "Jqplot - Availability" (test-check1))
+    ;;(test-assert "Jqplot - Availability" (test-check1))
     ;; in order to run this test successfully
     ;; set GNC_DOC_PATH and make it point to $PREFIX/share/gnucash
     ;; e.g.:
@@ -24,14 +24,14 @@
     ;; export GNC_DOC_PATH
 
     ;; the following tests are independent of GNC_DOC_PATH
-    (test-assert "Jqplot - HTML Bar Chart zero-data detection" (test-check2))
-    (test-assert "Jqplot - HTML Line Chart zero-data detection" (test-check3))
-    (test-assert "Jqplot - HTML Bar Chart Data" (test-check4))
-    (test-assert "Jqplot - HTML Line Chart Data" (test-check5))
-    (test-assert "Jqplot - HTML Bar Chart Rendering" (test-check6))
-    (test-assert "Jqplot - HTML Line Chart Rendering" (test-check7))
-    (test-assert "Jqplot - HTML Pie Chart Rendering" (test-check8))
-    (test-assert "Jqplot - HTML Scatter Chart Rendering" (test-check9))
+    (test-bar-chart-zero-detection)
+    (test-line-chart-zero-detection)
+    (test-bar-chart-data)
+    (test-line-chart-data)
+    (test-bar-chart-rendering)
+    (test-line-chart-rendering)
+    (test-pie-chart-rendering)
+    (test-scatter-chart-rendering)
     (test-end "Testing/Temporary/test-report-jqplot")
 )
 
@@ -124,118 +124,152 @@
 
 ;; -----------------------------------------------------------------------
 
-(define (test-check2)
+(define (test-bar-chart-zero-detection)
+
+  (test-begin "Jqplot - HTML Bar Chart zero-data detection")
+
   (let (
          (html-bar-chart (gnc:make-html-barchart))
        )
-    (and
-      ;; no data, no rendering - check that zero values are detected
-      (gnc:html-barchart-set-data! html-bar-chart '())
-      (not (gnc:not-all-zeros (gnc:html-barchart-data html-bar-chart)))
-      (gnc:html-barchart-set-data! html-bar-chart '(() () ()))
-      (not (gnc:not-all-zeros (gnc:html-barchart-data html-bar-chart)))
-      (gnc:html-barchart-set-data! html-bar-chart 0)
-      (not (gnc:not-all-zeros (gnc:html-barchart-data html-bar-chart)))
-      (gnc:html-barchart-set-data! html-bar-chart 0.00)
-      (not (gnc:not-all-zeros (gnc:html-barchart-data html-bar-chart)))
-      (gnc:html-barchart-set-data! html-bar-chart '((0) (0) (0)))
-      (not (gnc:not-all-zeros (gnc:html-barchart-data html-bar-chart)))
-      (gnc:html-barchart-set-data! html-bar-chart '((0.00) (0.00) (0.00)))
-      (not (gnc:not-all-zeros (gnc:html-barchart-data html-bar-chart)))
-      ;; check that non-zero values are detected
-      (gnc:html-barchart-set-data! html-bar-chart 2)
-      (gnc:not-all-zeros (gnc:html-barchart-data html-bar-chart))
-      (gnc:html-barchart-set-data! html-bar-chart 2.00)
-      (gnc:not-all-zeros (gnc:html-barchart-data html-bar-chart))
-      (gnc:html-barchart-set-data! html-bar-chart '((0) (2) (0)))
-      (gnc:not-all-zeros (gnc:html-barchart-data html-bar-chart))
-      (gnc:html-barchart-set-data! html-bar-chart '((0.00) (0.00) (2.00)))
-      (gnc:not-all-zeros (gnc:html-barchart-data html-bar-chart))
-      (gnc:html-barchart-set-data! html-bar-chart '(() () (3)))
-      (gnc:not-all-zeros (gnc:html-barchart-data html-bar-chart))
-    )
+    ;; no data, no rendering - check that zero values are detected
+    (gnc:html-barchart-set-data! html-bar-chart '())
+    (test-assert "HTML Bar Chart - zero detection 1" (not (gnc:not-all-zeros (gnc:html-barchart-data html-bar-chart))))
+    (gnc:html-barchart-set-data! html-bar-chart '(() () ()))
+    (test-assert "HTML Bar Chart - zero detection 2" (not (gnc:not-all-zeros (gnc:html-barchart-data html-bar-chart))))
+    (gnc:html-barchart-set-data! html-bar-chart 0)
+    (test-assert "HTML Bar Chart - zero detection 3" (not (gnc:not-all-zeros (gnc:html-barchart-data html-bar-chart))))
+    (gnc:html-barchart-set-data! html-bar-chart 0.00)
+    (test-assert "HTML Bar Chart - zero detection 4" (not (gnc:not-all-zeros (gnc:html-barchart-data html-bar-chart))))
+    (gnc:html-barchart-set-data! html-bar-chart '((0) (0) (0)))
+    (test-assert "HTML Bar Chart - zero detection 5" (not (gnc:not-all-zeros (gnc:html-barchart-data html-bar-chart))))
+    (gnc:html-barchart-set-data! html-bar-chart '((0.00) (0.00) (0.00)))
+    (test-assert "HTML Bar Chart - zero detection 6" (not (gnc:not-all-zeros (gnc:html-barchart-data html-bar-chart))))
+
+    ;; check that non-zero values are detected
+    (gnc:html-barchart-set-data! html-bar-chart 2)
+    (test-assert "HTML Bar Chart - zero detection 7" (gnc:not-all-zeros (gnc:html-barchart-data html-bar-chart)))
+    (gnc:html-barchart-set-data! html-bar-chart 2.00)
+    (test-assert "HTML Bar Chart - zero detection 8" (gnc:not-all-zeros (gnc:html-barchart-data html-bar-chart)))
+    (gnc:html-barchart-set-data! html-bar-chart '((0) (2) (0)))
+    (test-assert "HTML Bar Chart - zero detection 9" (gnc:not-all-zeros (gnc:html-barchart-data html-bar-chart)))
+    (gnc:html-barchart-set-data! html-bar-chart '((0.00) (0.00) (2.00)))
+    (test-assert "HTML Bar Chart - zero detection 10" (gnc:not-all-zeros (gnc:html-barchart-data html-bar-chart)))
+    (gnc:html-barchart-set-data! html-bar-chart '(() () (3)))
+    (test-assert "HTML Bar Chart - zero detection 11" (gnc:not-all-zeros (gnc:html-barchart-data html-bar-chart)))
   )
+
+  (test-end "Jqplot - HTML Bar Chart zero-data detection")
 )
 
 ;; -----------------------------------------------------------------------
 
-(define (test-check3)
+(define (test-line-chart-zero-detection)
+
+  (test-begin "Jqplot - HTML Line Chart zero-data detection")
+
   (let (
          (html-line-chart (gnc:make-html-linechart))
        )
-    (and
-      ;; no data, no rendering - check that zero values are detected
-      (gnc:html-linechart-set-data! html-line-chart '())
-      (not (gnc:not-all-zeros (gnc:html-linechart-data html-line-chart)))
-      (gnc:html-linechart-set-data! html-line-chart '(() () ()))
-      (not (gnc:not-all-zeros (gnc:html-linechart-data html-line-chart)))
-      (gnc:html-linechart-set-data! html-line-chart 0)
-      (not (gnc:not-all-zeros (gnc:html-linechart-data html-line-chart)))
-      (gnc:html-linechart-set-data! html-line-chart 0.00)
-      (not (gnc:not-all-zeros (gnc:html-linechart-data html-line-chart)))
-      (gnc:html-linechart-set-data! html-line-chart '((0) (0) (0)))
-      (not (gnc:not-all-zeros (gnc:html-linechart-data html-line-chart)))
-      (gnc:html-linechart-set-data! html-line-chart '((0.00) (0.00) (0.00)))
-      (not (gnc:not-all-zeros (gnc:html-linechart-data html-line-chart)))
-      ;; check that non-zero values are detected
-      (gnc:html-linechart-set-data! html-line-chart 2)
-      (gnc:not-all-zeros (gnc:html-linechart-data html-line-chart))
-      (gnc:html-linechart-set-data! html-line-chart 2.00)
-      (gnc:not-all-zeros (gnc:html-linechart-data html-line-chart))
-      (gnc:html-linechart-set-data! html-line-chart '((0) (2) (0)))
-      (gnc:not-all-zeros (gnc:html-linechart-data html-line-chart))
-      (gnc:html-linechart-set-data! html-line-chart '((0.00) (0.00) (2.00)))
-      (gnc:not-all-zeros (gnc:html-linechart-data html-line-chart))
-      (gnc:html-linechart-set-data! html-line-chart '(() () (3)))
-      (gnc:not-all-zeros (gnc:html-linechart-data html-line-chart))
-    )
+    ;; no data, no rendering - check that zero values are detected
+    (gnc:html-linechart-set-data! html-line-chart '())
+    (test-assert "HTML Line Chart - zero detection 1" (not (gnc:not-all-zeros (gnc:html-linechart-data html-line-chart))))
+    (gnc:html-linechart-set-data! html-line-chart '(() () ()))
+    (test-assert "HTML Line Chart - zero detection 2" (not (gnc:not-all-zeros (gnc:html-linechart-data html-line-chart))))
+    (gnc:html-linechart-set-data! html-line-chart 0)
+    (test-assert "HTML Line Chart - zero detection 3" (not (gnc:not-all-zeros (gnc:html-linechart-data html-line-chart))))
+    (gnc:html-linechart-set-data! html-line-chart 0.00)
+    (test-assert "HTML Line Chart - zero detection 4" (not (gnc:not-all-zeros (gnc:html-linechart-data html-line-chart))))
+    (gnc:html-linechart-set-data! html-line-chart '((0) (0) (0)))
+    (test-assert "HTML Line Chart - zero detection 5" (not (gnc:not-all-zeros (gnc:html-linechart-data html-line-chart))))
+    (gnc:html-linechart-set-data! html-line-chart '((0.00) (0.00) (0.00)))
+    (test-assert "HTML Line Chart - zero detection 6" (not (gnc:not-all-zeros (gnc:html-linechart-data html-line-chart))))
+    (not (gnc:not-all-zeros (gnc:html-linechart-data html-line-chart)))
+    ;; check that non-zero values are detected
+    (gnc:html-linechart-set-data! html-line-chart 2)
+    (test-assert "HTML Line Chart - zero detection 7" (gnc:not-all-zeros (gnc:html-linechart-data html-line-chart)))
+    (gnc:html-linechart-set-data! html-line-chart 2.00)
+    (test-assert "HTML Line Chart - zero detection 8" (gnc:not-all-zeros (gnc:html-linechart-data html-line-chart)))
+    (gnc:html-linechart-set-data! html-line-chart '((0) (2) (0)))
+    (test-assert "HTML Line Chart - zero detection 9" (gnc:not-all-zeros (gnc:html-linechart-data html-line-chart)))
+    (gnc:html-linechart-set-data! html-line-chart '((0.00) (0.00) (2.00)))
+    (test-assert "HTML Line Chart - zero detection 10" (gnc:not-all-zeros (gnc:html-linechart-data html-line-chart)))
+    (gnc:html-linechart-set-data! html-line-chart '(() () (3)))
+    (test-assert "HTML Line Chart - zero detection 11" (gnc:not-all-zeros (gnc:html-linechart-data html-line-chart)))
   )
+
+  (test-end "Jqplot - HTML Line Chart zero-data detection")
 )
 
 ;; -----------------------------------------------------------------------
 
-(define (test-check4)
+(define (test-bar-chart-data)
+
+  (test-begin "Jqplot - HTML Bar Chart Data")
+
   (let (
          (html-bar-chart (gnc:make-html-barchart))
        )
+    ;; prepare test data
     (gnc:html-barchart-set-data! html-bar-chart '((5.00)))
     (gnc:html-barchart-append-row! html-bar-chart '(6.00))
     (gnc:html-barchart-prepend-row! html-bar-chart '(4.00))
     (gnc:html-barchart-append-column! html-bar-chart '(7.00 8.00 9.00))
     (gnc:html-barchart-prepend-column! html-bar-chart '(1.00 2.00 3.00))
-    (and
-      (list= = (car (gnc:html-barchart-data html-bar-chart)) (list 1.0 4.0 7.0))
-      (list= = (cadr (gnc:html-barchart-data html-bar-chart)) (list 2.0 5.0 8.0))
-      (list= = (caddr (gnc:html-barchart-data html-bar-chart)) (list 3.0 6.0 9.0))
-    )
+    ;; check test data
+    (test-equal "HTML Bar Chart - data row 0"
+      '(1.0 4.0 7.0)
+      (car (gnc:html-barchart-data html-bar-chart)))
+    (test-equal "HTML Bar Chart - data row 1"
+      '(2.0 5.0 8.0)
+      (cadr (gnc:html-barchart-data html-bar-chart)))
+    (test-equal "HTML Bar Chart - data row 2"
+      '(3.0 6.0 9.0)
+      (caddr (gnc:html-barchart-data html-bar-chart)))
   )
+
+  (test-end "Jqplot - HTML Bar Chart Data")
 )
 
 ;; -----------------------------------------------------------------------
 
-(define (test-check5)
+(define (test-line-chart-data)
+
+  (test-begin "Jqplot - HTML Line Chart Data")
+
   (let (
          (html-line-chart (gnc:make-html-linechart))
        )
+    ;; prepare test data
     (gnc:html-linechart-set-data! html-line-chart '((5.00)))
     (gnc:html-linechart-append-row! html-line-chart '(6.00))
     (gnc:html-linechart-prepend-row! html-line-chart '(4.00))
     (gnc:html-linechart-append-column! html-line-chart '(7.00 8.00 9.00))
     (gnc:html-linechart-prepend-column! html-line-chart '(1.00 2.00 3.00))
-    (and
-      (list= = (car (gnc:html-linechart-data html-line-chart)) (list 1.0 4.0 7.0))
-      (list= = (cadr (gnc:html-linechart-data html-line-chart)) (list 2.0 5.0 8.0))
-      (list= = (caddr (gnc:html-linechart-data html-line-chart)) (list 3.0 6.0 9.0))
-    )
+    ;; check test data
+    (test-equal "HTML Line Chart - data row 0"
+      '(1.0 4.0 7.0)
+      (car (gnc:html-linechart-data html-line-chart)))
+    (test-equal "HTML Line Chart - data row 1"
+      '(2.0 5.0 8.0)
+      (cadr (gnc:html-linechart-data html-line-chart)))
+    (test-equal "HTML Line Chart - data row 2"
+      '(3.0 6.0 9.0)
+      (caddr (gnc:html-linechart-data html-line-chart)))
   )
+
+  (test-begin "Jqplot - HTML Line Chart Data")
 )
 
 ;; -----------------------------------------------------------------------
 
-(define (test-check6)
+(define (test-bar-chart-rendering)
+
+  (test-begin "Jqplot - HTML Bar Chart Rendering")
+
   (let (
          (html-bar-chart (gnc:make-html-barchart))
        )
+    ;; prepare test data
     (gnc:html-barchart-set-width! html-bar-chart (cons 'pixels 800))
     (gnc:html-barchart-set-height! html-bar-chart (cons 'pixels 400))
     (gnc:html-barchart-set-title! html-bar-chart "Test bar Chart")
@@ -245,8 +279,11 @@
     (gnc:html-barchart-set-col-labels! html-bar-chart '("Col1" "Col2" "Col3"))
     (gnc:html-barchart-set-row-labels! html-bar-chart '("Row1" "Row2" "Row3"))
     (gnc:html-barchart-set-data! html-bar-chart '((5.00)))
-    (string=? (string-concatenate (drop (gnc:html-document-tree-collapse (gnc:html-barchart-render html-bar-chart #f)) 9))
-"<div id=\"chart-968125\" style=\"width:800px;height:400px;\"></div>\n\
+
+    ;; do the test
+    (test-equal "Jqplot - Render Bar Chart"
+      (string-concatenate (drop (gnc:html-document-tree-collapse (gnc:html-barchart-render html-bar-chart #f)) 11))
+"\" style=\"width:800px;height:400px;\"></div>\n\
 <script id=\"source\">\n\
 $(function () {var data = [];var series = [];\n\
 var d0 = [];\n\
@@ -377,14 +414,19 @@ function getVisualTicks() {\n\
 });\n\
 </script>")
   )
+  (test-end "Jqplot - HTML Bar Chart Rendering")
 )
 
 ;; -----------------------------------------------------------------------
 
-(define (test-check7)
+(define (test-line-chart-rendering)
+
+  (test-end "Jqplot - HTML Line Chart Rendering")
+
   (let (
          (html-line-chart (gnc:make-html-linechart))
        )
+    ;; prepare test data
     (gnc:html-linechart-set-width! html-line-chart (cons 'pixels 800))
     (gnc:html-linechart-set-height! html-line-chart (cons 'pixels 400))
     (gnc:html-linechart-set-title! html-line-chart "Test line Chart")
@@ -394,9 +436,11 @@ function getVisualTicks() {\n\
     (gnc:html-linechart-set-col-labels! html-line-chart '("Col1" "Col2" "Col3"))
     (gnc:html-linechart-set-row-labels! html-line-chart '("Row1" "Row2" "Row3"))
     (gnc:html-linechart-set-data! html-line-chart '((5.00)))
-    (string=? 
-      (string-concatenate (drop (gnc:html-document-tree-collapse (gnc:html-linechart-render html-line-chart #f)) 8))
-      "<div id=\"chart-208691\" style=\"width:800px;height:400px;\"></div>\n\
+
+    ;; do the test
+    (test-equal "Jqplot - Render Line Chart"
+      (string-concatenate (drop (gnc:html-document-tree-collapse (gnc:html-linechart-render html-line-chart #f)) 10))
+      "\" style=\"width:800px;height:400px;\"></div>\n\
 <script id=\"source\">\n\
 $(function () {var data = [];var series = [];\n\
 var d0 = [];\n\
@@ -496,14 +540,18 @@ function formatTooltip(str, seriesIndex, pointIndex) {\n\
 });\n\
 </script>")
   )
+  (test-end "Jqplot - HTML Line Chart Rendering")
 )
 
 ;; -----------------------------------------------------------------------
 
-(define (test-check8)
+(define (test-pie-chart-rendering)
+
+  (test-begin "Jqplot - HTML Pie Chart Rendering")
   (let (
          (html-pie-chart (gnc:make-html-piechart))
        )
+    ;; prepare test data
     (gnc:html-piechart-set-width! html-pie-chart (cons 'pixels 800))
     (gnc:html-piechart-set-height! html-pie-chart (cons 'pixels 400))
     (gnc:html-piechart-set-title! html-pie-chart "Test Pie Chart")
@@ -513,9 +561,11 @@ function formatTooltip(str, seriesIndex, pointIndex) {\n\
     ;;(gnc:html-piechart-set-colors! html-pie-chart '("color" "no-color"))
     ;;(gnc:html-piechart-set-colors! html-pie-chart '(""))
     (gnc:html-piechart-set-colors! html-pie-chart '()) ;; Bug: colors are set to default #f, which will make the rendering fail
-    (string=? 
-      (string-concatenate (drop (gnc:html-document-tree-collapse (gnc:html-piechart-render html-pie-chart #f)) 4))
-      "<div id=\"chart-326253\" style=\"width:800px;height:400px;\"></div>\n\
+
+    ;; do the test
+    (test-equal "Jqplot - Render Pie Chart"
+      (string-concatenate (drop (gnc:html-document-tree-collapse (gnc:html-piechart-render html-pie-chart #f)) 6))
+      "\" style=\"width:800px;height:400px;\"></div>\n\
 <script id=\"source\">\n\
 $(function () {var data = [];\n\
   data.push([\"Pie Chart Label 1\",100.0]);\n\
@@ -562,14 +612,19 @@ $(window).resize(function () {\n\
 });\n\
 </script>")
   )
+  (test-end "Jqplot - HTML Pie Chart Rendering")
 )
 
 ;; -----------------------------------------------------------------------
 
-(define (test-check9)
+(define (test-scatter-chart-rendering)
+
+  (test-begin "Jqplot - HTML Scatter Chart Rendering")
+
   (let (
          (html-scatter-chart (gnc:make-html-scatter))
        )
+    ;; prepare test data
     (gnc:html-scatter-set-width! html-scatter-chart (cons 'pixels 800))
     (gnc:html-scatter-set-height! html-scatter-chart (cons 'pixels 400))
     (gnc:html-scatter-set-title! html-scatter-chart "Test Scatter Chart")
@@ -585,9 +640,11 @@ $(window).resize(function () {\n\
     (gnc:html-scatter-add-datapoint! html-scatter-chart '(3.3 3.3))
     (gnc:html-scatter-add-datapoint! html-scatter-chart '(4.4 4.4))
     (gnc:html-scatter-add-datapoint! html-scatter-chart '(5.5 5.5))
-    (string=? 
-      (string-concatenate (drop (gnc:html-document-tree-collapse (gnc:html-scatter-render html-scatter-chart #f)) 3))
-      "<div id=\"chart-871844\" style=\"width:800px;height:400px;\"></div>\n\
+
+    ;; do the test
+    (test-equal "Jqplot - Render Scatter Chart"
+      (string-concatenate (drop (gnc:html-document-tree-collapse (gnc:html-scatter-render html-scatter-chart #f)) 5))
+      "\" style=\"width:800px;height:400px;\"></div>\n\
 <script id=\"source\">\n\
 $(function () {var data = [];var series = [];\n\
   data.push([5.5, 5.5]);\n\
@@ -642,4 +699,5 @@ $(window).resize(function () {\n\
 });\n\
 </script>")
   )
+  (test-end "Jqplot - HTML Scatter Chart Rendering")
 )
