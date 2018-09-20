@@ -22,6 +22,7 @@ set(test_python_bindings_DATA
         test_commodity.py
         test_numeric.py
         test_split.py
-        test_transaction.py)
+        test_transaction.py
+        test_query.py)
 
 set_dist_list(test_python_bindings_DIST CMakeLists.txt ${test_python_bindings_DATA})

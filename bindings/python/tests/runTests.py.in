@@ -12,6 +12,7 @@ from test_transaction import TestTransaction
 from test_business import TestBusiness
 from test_commodity import TestCommodity, TestCommodityNamespace
 from test_numeric import TestGncNumeric
+from test_query import TestQuery
 
 if __name__ == '__main__':
     unittest.main()
