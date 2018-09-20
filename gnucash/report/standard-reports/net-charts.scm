@@ -214,9 +214,7 @@
          ;;(x-grid (if linechart? (get-option gnc:pagename-display optname-x-grid)))
          (commodity-list #f)
          (exchange-fn #f)
-         (dates-list ((if inc-exp?
-                          gnc:make-date-interval-list
-                          gnc:make-date-list)
+         (dates-list (gnc:make-date-list
                       ((if inc-exp?
                            gnc:time64-start-day-time
                            gnc:time64-end-day-time)
@@ -334,26 +332,47 @@
     ;; reversed according to income-sign-reverse general option
     ;; settings. Uses the collector->monetary conversion function
     ;; above. Returns a list of gnc-monetary.
-    (define (process-datelist accounts dates income?)
-      (map
-       (lambda (date)
-         (collector->monetary
-          ((if inc-exp?
-               (if income?
-                   gnc:accounts-get-comm-total-income
-                   gnc:accounts-get-comm-total-expense)
-               gnc:accounts-get-comm-total-assets)
-           accounts
-           (lambda (account)
-             (if inc-exp?
-                 ;; for inc-exp, 'date' is a pair of time values, else
-                 ;; it is a time value.
-                 (gnc:account-get-comm-balance-interval
-                  account (first date) (second date) #f)
-                 (gnc:account-get-comm-balance-at-date
-                  account date #f))))
-          (if inc-exp? (second date) date)))
-       dates))
+    (define (process-datelist account-balances accounts dates income?)
+
+      (define (get-nth-balance account n)
+        (let ((acct-balances (cdr (assoc account account-balances))))
+          (list-ref acct-balances n)))
+
+      (define (get-nth-interval account n)
+        (let ((bal1 (get-nth-balance account n))
+              (bal2 (get-nth-balance account (1+ n))))
+          (- bal2 bal1)))
+
+      (define (monetary->collector mon)
+        (let ((c (gnc:make-commodity-collector)))
+          (c 'add (gnc:gnc-monetary-commodity mon) (gnc:gnc-monetary-amount mon))
+          c))
+
+      (let loop ((dates dates)
+                 (dates-idx 0)
+                 (result '()))
+        (if (if inc-exp?
+                (null? (cdr dates))
+                (null? dates))
+            (reverse result)
+            (loop (cdr dates)
+                  (1+ dates-idx)
+                  (cons (collector->monetary
+                         ((if inc-exp?
+                              (if income?
+                                  gnc:accounts-get-comm-total-income
+                                  gnc:accounts-get-comm-total-expense)
+                              gnc:accounts-get-comm-total-assets)
+                          accounts
+                          (lambda (account)
+                            (monetary->collector
+                             (gnc:make-gnc-monetary
+                              (xaccAccountGetCommodity account)
+                              (if inc-exp?
+                                  (get-nth-interval account dates-idx)
+                                  (get-nth-balance account dates-idx))))))
+                         (if inc-exp? (cadr dates) (car dates)))
+                        result)))))
 
     (gnc:report-percent-done 1)
     (set! commodity-list (gnc:accounts-get-commodities
@@ -370,36 +389,33 @@
 
     (if
      (not (null? accounts))
-     (let* ((assets-list (process-datelist
+     (let* ((account-balancelist (map account->balancelist accounts))
+            (assets-list (process-datelist
+                          account-balancelist
                           (if inc-exp?
                               accounts
                               (assoc-ref classified-accounts ACCT-TYPE-ASSET))
                           dates-list #t))
             (liability-list (process-datelist
+                             account-balancelist
                              (if inc-exp?
                                  accounts
                                  (assoc-ref classified-accounts ACCT-TYPE-LIABILITY))
                              dates-list #f))
             (net-list (map monetary+ assets-list liability-list))
+            (dates-list (if inc-exp?
+                            (list-head dates-list (1- (length dates-list)))
+                            dates-list))
             ;; Here the date strings for the x-axis labels are
             ;; created.
             (datelist->stringlist (lambda (dates-list)
                                     (map (lambda (date-list-item)
-                                           (qof-print-date
-                                            (if inc-exp?
-                                                (car date-list-item)
-                                                date-list-item)))
+                                           (qof-print-date date-list-item))
                                          dates-list)))
 
             (date-string-list (if linechart?
                                   (datelist->stringlist dates-list)
-                                  (map
-                                   (if inc-exp?
-                                       (lambda (date-list-item)
-                                         (qof-print-date
-                                          (car date-list-item)))
-                                       qof-print-date)
-                                   dates-list)))
+                                  (map qof-print-date dates-list)))
             
             (date-iso-string-list (let ((save-fmt (qof-date-format-get))
                                         (retlist #f))
