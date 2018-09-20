@@ -263,6 +263,72 @@
     (define (monetary->double monetary)
       (gnc-numeric-to-double (gnc:gnc-monetary-amount monetary)))
 
+    (define (split->date s)
+      (xaccTransGetDate (xaccSplitGetParent s)))
+
+    ;; this function will scan through the account splitlist, building
+    ;; a list of balances along the way. it will use the dates
+    ;; specified in the variable dates-list.
+    ;; input: account
+    ;;  uses: dates-list (list of time64)
+    ;;   out: (list account bal0 bal1 ...)
+    (define (account->balancelist account)
+
+      ;; the test-closing? function will enable testing closing status
+      ;; for inc-exp only. this may squeeze more speed for net-worth charts.
+      (define test-closing?
+        (gnc:account-is-inc-exp? account))
+
+      (let loop ((splits (xaccAccountGetSplitList account))
+                 (dates dates-list)
+                 (currentbal 0)
+                 (lastbal 0)
+                 (balancelist '()))
+        (cond
+
+         ;; end of dates. job done!
+         ((null? dates)
+          (cons account (reverse balancelist)))
+
+         ;; end of splits, but still has dates. pad with last-bal
+         ;; until end of dates.
+         ((null? splits)
+          (loop '()
+                (cdr dates)
+                currentbal
+                lastbal
+                (cons lastbal balancelist)))
+
+         (else
+          (let* ((this (car splits))
+                 (rest (cdr splits))
+                 (currentbal (if (and test-closing?
+                                      (xaccTransGetIsClosingTxn (xaccSplitGetParent this)))
+                                 currentbal
+                                 (+ (xaccSplitGetAmount this) currentbal)))
+                 (next (and (pair? rest) (car rest))))
+
+            (cond
+             ;; the next split is still before date
+             ((and next (< (split->date next) (car dates)))
+              (loop rest dates currentbal lastbal balancelist))
+
+             ;; this split after date, add previous bal to balancelist
+             ((< (car dates) (split->date this))
+              (loop splits
+                    (cdr dates)
+                    lastbal
+                    lastbal
+                    (cons lastbal balancelist)))
+
+             ;; this split before date, next split after date, or end.
+             (else
+              (loop rest
+                    (cdr dates)
+                    currentbal
+                    currentbal
+                    (cons currentbal balancelist)))))))))
+
     ;; This calculates the balances for all the 'accounts' for each
     ;; element of the list 'dates'. If income?==#t, the signs get
     ;; reversed according to income-sign-reverse general option
