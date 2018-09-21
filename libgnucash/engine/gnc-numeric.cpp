@@ -391,6 +391,13 @@ GncNumeric::to_decimal(unsigned int max_places) const
             << " overflows when attempting to convert it to decimal.\n";
         throw std::range_error(msg.str());
     }
+    catch (const std::underflow_error& err)
+    {
+        std::ostringstream msg;
+        msg << "GncNumeric " << *this
+            << " underflows when attempting to convert it to decimal.\n";
+        throw std::range_error(msg.str());
+    }
 }
 
 void
@@ -995,6 +1002,10 @@ gnc_numeric_convert(gnc_numeric in, int64_t denom, int how)
         return convert(GncNumeric(in), denom, how);
     }
     catch (const std::overflow_error& err)
+    {
+        return gnc_numeric_error(GNC_ERROR_OVERFLOW);
+    }
+    catch (const std::underflow_error& err)
     {
         return gnc_numeric_error(GNC_ERROR_OVERFLOW);
     }
