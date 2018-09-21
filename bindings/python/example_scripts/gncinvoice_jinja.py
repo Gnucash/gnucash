@@ -5,7 +5,7 @@
 # @brief exports an invoice from gnucash using a template file, see \ref py_invoice_export
 # @ingroup python_bindings_examples
 # @author Christoph Holtermann (c.holtermann (at) gmx.de)
-# @date 2014-11
+# @date 2014-2018
 #
 # @details
 # Input is a template file that will be filled with information from
@@ -143,9 +143,8 @@ def main(argv=None):
         print("-I ID          use invoice ID")
         print("-t filename    use filename as template file")
         print("-o filename    use filename as output file")
-        print( "-o filename    use filename as output file" )
-        print( "-O             create output filename by date, owner and invoice number" )
-        print( "-P path        path for output file. Overwrites path in -o option" )
+        print("-O             create output filename by date, owner and invoice number")
+        print("-P path        path for output file. Overwrites path in -o option")
 
         return retcode
 
