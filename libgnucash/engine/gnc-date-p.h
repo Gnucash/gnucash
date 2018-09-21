@@ -31,8 +31,6 @@ extern "C"
 #include <stdint.h>
 #include "gnc-date.h"
 
-#define NANOS_PER_SECOND INT32_C(1000000000)
-
 /** Convert a given date/time format from UTF-8 to an encoding suitable for the
  *  strftime system call.
  *
