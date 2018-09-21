@@ -9,8 +9,8 @@
 #
 # @details
 # Input is a template file that will be filled with information from
-# gnucash Invoices. Jinja2 templating engine ist used. Templates can
-# be Latex, Html or anything.
+# gnucash Invoices. Jinja2 templating engine is being used for this.
+# Templates can be Latex, Html or anything.
 #
 # Example templates for german invoices:
 # - Invoice.tex.tmpl
