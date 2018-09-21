@@ -113,6 +113,7 @@ GncDbiSqlResult::IteratorImpl::get_int_at_col(const char* col) const
 double
 GncDbiSqlResult::IteratorImpl::get_float_at_col(const char* col) const
 {
+    constexpr double float_precision = 1000000.0;
     auto type = dbi_result_get_field_type (m_inst->m_dbi_result, col);
     auto attrs = dbi_result_get_field_attribs (m_inst->m_dbi_result, col);
     if(type != DBI_TYPE_DECIMAL ||
@@ -121,7 +122,7 @@ GncDbiSqlResult::IteratorImpl::get_float_at_col(const char* col) const
     auto locale = gnc_push_locale (LC_NUMERIC, "C");
     auto interim =  dbi_result_get_float(m_inst->m_dbi_result, col);
     gnc_pop_locale (LC_NUMERIC, locale);
-    double retval = static_cast<double>(round(interim * 1000000.0)) / 1000000.0;
+    double retval = static_cast<double>(round(interim * float_precision)) / float_precision;
     return retval;
 }
 
