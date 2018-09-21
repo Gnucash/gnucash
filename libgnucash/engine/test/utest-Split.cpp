@@ -759,10 +759,10 @@ test_get_currency_denom (Fixture *fixture, gconstpointer pData)
     const gint denom = gnc_commodity_get_fraction (fixture->curr);
     g_assert_cmpint (fixture->func->get_currency_denom (NULL), ==, 0);
     fixture->split->parent = NULL;
-    g_assert_cmpint (fixture->func->get_currency_denom (fixture->split), ==, 1000000);
+    g_assert_cmpint (fixture->func->get_currency_denom (fixture->split), ==, GNC_COMMODITY_MAX_FRACTION);
     fixture->split->parent = txn;
     txn->common_currency = NULL;
-    g_assert_cmpint (fixture->func->get_currency_denom (fixture->split), ==, 1000000);
+    g_assert_cmpint (fixture->func->get_currency_denom (fixture->split), ==, GNC_COMMODITY_MAX_FRACTION);
     txn->common_currency = fixture->curr;
     g_assert_cmpint (fixture->func->get_currency_denom (fixture->split), ==, denom);
 }
@@ -777,7 +777,7 @@ test_get_commodity_denom (Fixture *fixture, gconstpointer pData)
     const gint denom = gnc_commodity_get_fraction (fixture->comm);
     g_assert_cmpint (fixture->func->get_commodity_denom (NULL), ==, 0);
     fixture->split->acc = NULL;
-    g_assert_cmpint (fixture->func->get_commodity_denom (fixture->split), ==, 1000000);
+    g_assert_cmpint (fixture->func->get_commodity_denom (fixture->split), ==, GNC_COMMODITY_MAX_FRACTION);
     fixture->split->acc = acc;
     g_assert_cmpint (fixture->func->get_commodity_denom (fixture->split), ==, denom);
 }
