@@ -85,6 +85,7 @@
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="save_on_close_adj">
+    <property name="lower">1</property>
     <property name="upper">300</property>
     <property name="value">20</property>
     <property name="step_increment">1</property>
@@ -1624,6 +1625,7 @@ many months before the current month:</property>
                     <property name="margin_left">12</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
+                    <signal name="toggled" handler="gnc_save_on_close_expires_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
