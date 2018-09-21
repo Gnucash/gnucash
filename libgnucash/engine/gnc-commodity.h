@@ -115,6 +115,11 @@ GType gnc_commodity_namespace_get_type(void);
    when presenting the currency related namespace to the user */
 #define GNC_COMMODITY_NS_ISO_GUI N_("Currencies")
 
+/** Max fraction is 10^9 because 10^10 would require changing it to an
+ * int64_t.
+ */
+#define GNC_COMMODITY_MAX_FRACTION 1000000000
+
 typedef GList CommodityList;
 
 /** @name Commodity Quote Source functions

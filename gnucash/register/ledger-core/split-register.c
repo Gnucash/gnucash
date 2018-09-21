@@ -65,9 +65,6 @@ static QofLogModule log_module = GNC_MOD_LEDGER;
 static CursorClass copied_class = CURSOR_CLASS_NONE;
 static SCM copied_item = SCM_UNDEFINED;
 static GncGUID copied_leader_guid;
-/* A denominator representing number of digits to the right of the decimal point
- * displayed in a price cell. */
-static int PRICE_CELL_DENOM = 1000000;
 /** static prototypes *****************************************************/
 
 static gboolean gnc_split_register_save_to_scm (SplitRegister *reg,
@@ -2609,11 +2606,11 @@ gnc_split_register_config_cells (SplitRegister *reg)
     ((ComboCell *)
      gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL), TRUE);
 
-    /* Use 6 decimal places for prices and "exchange rates"  */
+    /* Use GNC_COMMODITY_MAX_FRACTION for prices and "exchange rates"  */
     gnc_price_cell_set_fraction
     ((PriceCell *)
      gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL),
-     PRICE_CELL_DENOM);
+     GNC_COMMODITY_MAX_FRACTION);
 
     /* Initialize shares and share balance cells */
     gnc_price_cell_set_print_info
