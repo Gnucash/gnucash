@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # test_imbalance_transaction.py -- Test the transaction imbalace viewing
 # mechanisms

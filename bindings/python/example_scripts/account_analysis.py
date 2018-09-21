@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # account_analysis.py -- Output all the credits and debits on an account
 #
