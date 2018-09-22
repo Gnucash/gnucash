@@ -129,7 +129,7 @@ def period_end(start_year, start_month, period_type):
 
 
 def generate_period_boundaries(start_year, start_month, period_type, periods):
-    for i in xrange(periods):
+    for i in range(periods):
         yield ( date(start_year, start_month, 1),
                 period_end(start_year, start_month, period_type) )
         start_year, start_month = next_period_start(start_year, start_month,

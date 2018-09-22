@@ -22,7 +22,7 @@
 # @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
 
 # Opens a GnuCash book file and adds an invoice to it for a particular
-# customer (by ID) with a specific ID and value 
+# customer (by ID) with a specific ID and value
 # Optionally also adds a payment for the invoice as well
 #
 # The account tree and tax tables are assumed to be the same as the ones
@@ -67,7 +67,7 @@ def gnc_numeric_from_decimal(decimal_value):
     numerator_place_value = 1
     # add each digit to the final value multiplied by the place value
     # from least significant to most sigificant
-    for i in xrange(len(digits)-1,-1,-1):
+    for i in range(len(digits)-1,-1,-1):
         numerator += digits[i] * numerator_place_value
         numerator_place_value *= TEN
 
