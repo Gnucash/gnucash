@@ -219,8 +219,6 @@ gnc_query_view_init (GNCQueryView *qview)
     gnc_widget_set_style_context (GTK_WIDGET(qview), "GncQueryView");
 
     qview->query = NULL;
-    qview->selected_entry = NULL;
-    qview->selected_entry_list = NULL;
 
     qview->num_columns = 0;
     qview->column_params = NULL;
@@ -480,9 +478,8 @@ gnc_query_view_select_row_cb (GtkTreeSelection *selection, gpointer user_data)
     GList          *node;
     GList          *list_of_rows;
 
-    qview->selected_entry = NULL;
-    g_list_free (qview->selected_entry_list);
     qview->selected_entry_list = NULL;
+    qview->selected_entry = NULL;
 
     model =  gtk_tree_view_get_model (GTK_TREE_VIEW (qview));
     list_of_rows = gtk_tree_selection_get_selected_rows (selection, &model);
@@ -532,7 +529,6 @@ gnc_query_view_double_click_cb (GtkTreeView       *view,
         gtk_tree_model_get (model, &iter, 0, &entry, -1);
 
     qview->selected_entry = entry;
-    g_list_free (qview->selected_entry_list);
     qview->selected_entry_list = NULL;
 
     g_signal_emit (qview, query_view_signals[DOUBLE_CLICK_ENTRY], 0, entry);
@@ -652,7 +648,7 @@ gnc_query_view_refresh_selected (GNCQueryView *qview, GList *old_entry)
     model = gtk_tree_view_get_model (GTK_TREE_VIEW (qview));
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (qview));
 
-    if(old_entry && g_list_length (old_entry) > 0)
+    if(g_list_length (old_entry) > 0)
     {
         /* Walk the list of old entries */
         for(node = old_entry; node; node = node->next)
@@ -688,23 +684,25 @@ gnc_query_view_refresh_selected (GNCQueryView *qview, GList *old_entry)
 void
 gnc_query_view_refresh (GNCQueryView *qview)
 {
-    GtkTreeModel *model;
+    GtkTreeModel     *model;
+    GList            *old_entry;
 
     g_return_if_fail (qview != NULL);
     g_return_if_fail (GNC_IS_QUERY_VIEW (qview));
 
+    old_entry = qview->selected_entry_list;
     model = gtk_tree_view_get_model (GTK_TREE_VIEW (qview));
     gtk_list_store_clear (GTK_LIST_STORE (model));
 
     qview->num_entries = 0;
     qview->selected_entry = NULL;
+    qview->selected_entry_list = NULL;
 
     gnc_query_view_fill (qview);
 
-    gnc_query_view_refresh_selected (qview, qview->selected_entry_list);
+    gnc_query_view_refresh_selected (qview, old_entry);
 
-    g_list_free(qview->selected_entry_list);
-    qview->selected_entry_list = NULL;
+    g_list_free(old_entry);
 }
 
 
@@ -877,7 +875,6 @@ gnc_query_view_unselect_all (GNCQueryView *qview)
     gtk_tree_selection_unselect_all (selection);
 
     qview->selected_entry = NULL;
-    g_list_free (qview->selected_entry_list);
     qview->selected_entry_list = NULL;
 }
 
