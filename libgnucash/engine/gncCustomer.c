@@ -46,9 +46,9 @@
 #include "gncJobP.h"
 #include "gncTaxTableP.h"
 
-static gint gs_address_event_handler_id = 0;
-static void listen_for_address_events(QofInstance *entity, QofEventId event_type,
-                                      gpointer user_data, gpointer event_data);
+static gint cust_qof_event_handler_id = 0;
+static void cust_handle_qof_events (QofInstance *entity, QofEventId event_type,
+                                    gpointer user_data, gpointer event_data);
 
 struct _gncCustomer
 {
@@ -66,6 +66,7 @@ struct _gncCustomer
     GncTaxIncluded  taxincluded;
     gboolean        active;
     GList *         jobs;
+    gnc_numeric *   balance; /* cached customer balance, will not be stored */
 
     /* The following fields are unique to 'customer' */
     gnc_numeric     credit;
@@ -319,15 +320,14 @@ GncCustomer *gncCustomerCreate (QofBook *book)
     cust->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
     cust->active = TRUE;
     cust->jobs = NULL;
+    cust->balance = NULL;
 
     cust->discount = gnc_numeric_zero();
     cust->credit = gnc_numeric_zero();
     cust->shipaddr = gncAddressCreate (book, &cust->inst);
 
-    if (gs_address_event_handler_id == 0)
-    {
-        gs_address_event_handler_id = qof_event_register_handler(listen_for_address_events, NULL);
-    }
+    if (cust_qof_event_handler_id == 0)
+        cust_qof_event_handler_id = qof_event_register_handler (cust_handle_qof_events, NULL);
 
     qof_event_gen (&cust->inst, QOF_EVENT_CREATE, NULL);
 
@@ -356,6 +356,7 @@ static void gncCustomerFree (GncCustomer *cust)
     gncAddressBeginEdit (cust->shipaddr);
     gncAddressDestroy (cust->shipaddr);
     g_list_free (cust->jobs);
+    g_free (cust->balance);
 
     if (cust->terms)
         gncBillTermDecRef (cust->terms);
@@ -825,8 +826,11 @@ gncCustomerEqual(const GncCustomer *a, const GncCustomer *b)
 }
 
 /**
- * Listens for MODIFY events from addresses.   If the address belongs to a customer,
- * mark the customer as dirty.
+ * Listen for qof events.
+ *
+ * - If the address of a customer has changed, mark the customer as dirty.
+ * - If a lot related to a customer has changed, clear the customer's
+ *   cached balance as it likely has become invalid.
  *
  * @param entity Entity for the event
  * @param event_type Event type
@@ -834,28 +838,50 @@ gncCustomerEqual(const GncCustomer *a, const GncCustomer *b)
  * @param event_data Event data passed with the event.
  */
 static void
-listen_for_address_events(QofInstance *entity, QofEventId event_type,
-                          gpointer user_data, gpointer event_data)
+cust_handle_qof_events (QofInstance *entity, QofEventId event_type,
+                        gpointer user_data, gpointer event_data)
 {
-    GncCustomer* cust;
+    /* Handle address change events */
+    if ((GNC_IS_ADDRESS (entity) &&
+        (event_type & QOF_EVENT_MODIFY) != 0))
+    {
+        if (GNC_IS_CUSTOMER (event_data))
+        {
+            GncCustomer* cust = GNC_CUSTOMER (event_data);
+            gncCustomerBeginEdit (cust);
+            mark_customer (cust);
+            gncCustomerCommitEdit (cust);
+        }
+        return;
+    }
 
-    if ((event_type & QOF_EVENT_MODIFY) == 0)
+    /* Handle lot change events */
+    if (GNC_IS_LOT (entity))
     {
+        GNCLot *lot = GNC_LOT (entity);
+        GncOwner lot_owner;
+        const GncOwner *end_owner = NULL;
+        GncInvoice *invoice = gncInvoiceGetInvoiceFromLot (lot);
+
+        /* Determine the owner associated with the lot */
+        if (invoice)
+            /* Invoice lots */
+            end_owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
+        else if (gncOwnerGetOwnerFromLot (lot, &lot_owner))
+            /* Pre-payment lots */
+            end_owner = gncOwnerGetEndOwner (&lot_owner);
+
+        if (gncOwnerGetType (end_owner) == GNC_OWNER_CUSTOMER)
+        {
+            /* Clear the cached balance */
+            GncCustomer* cust = gncOwnerGetCustomer (end_owner);
+            g_free (cust->balance);
+            cust->balance = NULL;
+        }
         return;
     }
-    if (!GNC_IS_ADDRESS(entity))
-    {
-        return;
-    }
-    if (!GNC_IS_CUSTOMER(event_data))
-    {
-        return;
-    }
-    cust = GNC_CUSTOMER(event_data);
-    gncCustomerBeginEdit(cust);
-    mark_customer(cust);
-    gncCustomerCommitEdit(cust);
 }
+
 /* ============================================================== */
 /* Package-Private functions */
 static const char * _gncCustomerPrintable (gpointer item)
@@ -951,4 +977,25 @@ gboolean gncCustomerRegister (void)
 gchar *gncCustomerNextID (QofBook *book)
 {
     return qof_book_increment_and_format_counter (book, _GNC_MOD_NAME);
+}
+
+const gnc_numeric*
+gncCustomerGetCachedBalance (GncCustomer *cust)
+{
+    return cust->balance;
+}
+
+void gncCustomerSetCachedBalance (GncCustomer *cust, const gnc_numeric *new_bal)
+{
+    if (!new_bal && cust->balance)
+    {
+        g_free (cust->balance);
+        cust->balance = NULL;
+        return;
+    }
+
+    if (!cust->balance)
+        cust->balance = g_new0 (gnc_numeric, 1);
+
+    *cust->balance = *new_bal;
 }

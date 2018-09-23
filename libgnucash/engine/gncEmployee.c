@@ -37,10 +37,12 @@
 #include "gncAddressP.h"
 #include "gncEmployee.h"
 #include "gncEmployeeP.h"
+#include "gnc-lot.h"
+#include "gncOwner.h"
 
-static gint gs_address_event_handler_id = 0;
-static void listen_for_address_events(QofInstance *entity, QofEventId event_type,
-                                      gpointer user_data, gpointer event_data);
+static gint empl_qof_event_handler_id = 0;
+static void empl_handle_qof_events (QofInstance *entity, QofEventId event_type,
+                                    gpointer user_data, gpointer event_data);
 
 struct _gncEmployee
 {
@@ -50,6 +52,7 @@ struct _gncEmployee
     GncAddress *    addr;
     gnc_commodity * currency;
     gboolean        active;
+    gnc_numeric *   balance;
 
     char *          language;
     char *          acl;
@@ -439,11 +442,10 @@ GncEmployee *gncEmployeeCreate (QofBook *book)
     employee->workday = gnc_numeric_zero();
     employee->rate = gnc_numeric_zero();
     employee->active = TRUE;
+    employee->balance = NULL;
 
-    if (gs_address_event_handler_id == 0)
-    {
-        gs_address_event_handler_id = qof_event_register_handler(listen_for_address_events, NULL);
-    }
+    if (empl_qof_event_handler_id == 0)
+        empl_qof_event_handler_id = qof_event_register_handler (empl_handle_qof_events, NULL);
 
     qof_event_gen (&employee->inst, QOF_EVENT_CREATE, NULL);
 
@@ -469,6 +471,7 @@ static void gncEmployeeFree (GncEmployee *employee)
     CACHE_REMOVE (employee->acl);
     gncAddressBeginEdit (employee->addr);
     gncAddressDestroy (employee->addr);
+    g_free (employee->balance);
 
     /* qof_instance_release (&employee->inst); */
     g_object_unref (employee);
@@ -816,8 +819,11 @@ static const char * _gncEmployeePrintable (gpointer item)
 }
 
 /**
- * Listens for MODIFY events from addresses.   If the address belongs to an employee,
- * mark the employee as dirty.
+ * Listen for qof events.
+ *
+ * - If the address of an employee has changed, mark the employee as dirty.
+ * - If a lot related to an employee has changed, clear the employee's
+ *   cached balance as it likely has become invalid.
  *
  * @param entity Entity for the event
  * @param event_type Event type
@@ -825,27 +831,49 @@ static const char * _gncEmployeePrintable (gpointer item)
  * @param event_data Event data passed with the event.
  */
 static void
-listen_for_address_events(QofInstance *entity, QofEventId event_type,
-                          gpointer user_data, gpointer event_data)
+empl_handle_qof_events (QofInstance *entity, QofEventId event_type,
+                        gpointer user_data, gpointer event_data)
 {
-    GncEmployee* empl;
 
-    if ((event_type & QOF_EVENT_MODIFY) == 0)
+    /* Handle address change events */
+    if ((GNC_IS_ADDRESS (entity) &&
+        (event_type & QOF_EVENT_MODIFY) != 0))
     {
+        if (GNC_IS_EMPLOYEE (event_data))
+        {
+            GncEmployee* empl = GNC_EMPLOYEE (event_data);
+            gncEmployeeBeginEdit (empl);
+            mark_employee (empl);
+            gncEmployeeCommitEdit (empl);
+        }
         return;
     }
-    if (!GNC_IS_ADDRESS(entity))
+
+    /* Handle lot change events */
+    if (GNC_IS_LOT (entity))
     {
+        GNCLot *lot = GNC_LOT (entity);
+        GncOwner lot_owner;
+        const GncOwner *end_owner = NULL;
+        GncInvoice *invoice = gncInvoiceGetInvoiceFromLot (lot);
+
+        /* Determine the owner associated with the lot */
+        if (invoice)
+            /* Invoice lots */
+            end_owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
+        else if (gncOwnerGetOwnerFromLot (lot, &lot_owner))
+            /* Pre-payment lots */
+            end_owner = gncOwnerGetEndOwner (&lot_owner);
+
+        if (gncOwnerGetType (end_owner) == GNC_OWNER_EMPLOYEE)
+        {
+            /* Clear the cached balance */
+            GncEmployee* empl = gncOwnerGetEmployee (end_owner);
+            g_free (empl->balance);
+            empl->balance = NULL;
+        }
         return;
     }
-    if (!GNC_IS_EMPLOYEE(event_data))
-    {
-        return;
-    }
-    empl = GNC_EMPLOYEE(event_data);
-    gncEmployeeBeginEdit(empl);
-    mark_employee(empl);
-    gncEmployeeCommitEdit(empl);
 }
 
 static void
@@ -924,4 +952,25 @@ gboolean gncEmployeeRegister (void)
 gchar *gncEmployeeNextID (QofBook *book)
 {
     return qof_book_increment_and_format_counter (book, _GNC_MOD_NAME);
+}
+
+const gnc_numeric*
+gncEmployeeGetCachedBalance (GncEmployee *empl)
+{
+    return empl->balance;
+}
+
+void gncEmployeeSetCachedBalance (GncEmployee *empl, const gnc_numeric *new_bal)
+{
+    if (!new_bal && empl->balance)
+    {
+        g_free (empl->balance);
+        empl->balance = NULL;
+        return;
+    }
+
+    if (!empl->balance)
+        empl->balance = g_new0 (gnc_numeric, 1);
+
+    *empl->balance = *new_bal;
 }

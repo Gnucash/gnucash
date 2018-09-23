@@ -31,6 +31,8 @@
 #include "gncOwner.h"
 
 gboolean gncOwnerRegister (void);
+const gnc_numeric *gncOwnerGetCachedBalance (const GncOwner *owner);
+void gncOwnerSetCachedBalance (const GncOwner *owner, const gnc_numeric *new_bal);
 
 
 #endif /* GNC_OWNERP_H_ */

@@ -1483,6 +1483,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
     /* Create a new lot for this invoice */
     lot = gnc_lot_new (book);
+    gncInvoiceAttachToLot (invoice, lot);
     gnc_lot_begin_edit (lot);
 
     type = gncInvoiceGetTypeString (invoice);
@@ -1697,8 +1698,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
         gnc_lot_add_split (lot, split);
     }
 
-    /* Now attach this invoice to the txn, lot, and account */
-    gncInvoiceAttachToLot (invoice, lot);
+    /* Now attach this invoice to the txn and account */
     gncInvoiceAttachToTxn (invoice, txn);
     gncInvoiceSetPostedAcc (invoice, acc);
 

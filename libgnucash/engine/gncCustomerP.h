@@ -33,6 +33,8 @@
 
 gboolean gncCustomerRegister (void);
 gchar *gncCustomerNextID (QofBook *book);
+const gnc_numeric *gncCustomerGetCachedBalance (GncCustomer *cust);
+void gncCustomerSetCachedBalance (GncCustomer *cust, const gnc_numeric *new_bal);
 
 #define gncCustomerSetGUID(E,G) qof_instance_set_guid(QOF_INSTANCE(E),(G))
 
