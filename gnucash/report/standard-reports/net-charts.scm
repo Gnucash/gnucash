@@ -413,27 +413,20 @@
             (liability-list (process-datelist
                              account-balancelist
                              dates-list #f))
+
             (net-list (map monetary+ assets-list liability-list))
+
             (dates-list (if inc-exp?
                             (list-head dates-list (1- (length dates-list)))
                             dates-list))
-            ;; Here the date strings for the x-axis labels are
-            ;; created.
-            (datelist->stringlist (lambda (dates-list)
-                                    (map (lambda (date-list-item)
-                                           (qof-print-date date-list-item))
-                                         dates-list)))
 
-            (date-string-list (if linechart?
-                                  (datelist->stringlist dates-list)
-                                  (map qof-print-date dates-list)))
+            (date-string-list (map qof-print-date dates-list))
             
-            (date-iso-string-list (let ((save-fmt (qof-date-format-get))
-                                        (retlist #f))
+            (date-iso-string-list (let ((save-fmt (qof-date-format-get)))
                                     (qof-date-format-set QOF-DATE-FORMAT-ISO)
-                                    (set! retlist (datelist->stringlist dates-list))
-                                    (qof-date-format-set save-fmt)
-                                    retlist)))
+                                    (let ((retlist (map qof-print-date dates-list)))
+                                      (qof-date-format-set save-fmt)
+                                      retlist))))
 
        (gnc:report-percent-done 90)
 
