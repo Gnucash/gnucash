@@ -895,13 +895,7 @@ gnc_plugin_page_owner_tree_double_click_cb (GtkTreeView        *treeview,
         GtkTreeViewColumn  *col,
         GncPluginPageOwnerTree *page)
 {
-    GncOwner *owner;
-    GtkWindow *parent;
-
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_OWNER_TREE (page));
-    owner = gnc_tree_view_owner_get_owner_from_path (GNC_TREE_VIEW_OWNER(treeview), path);
-    parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
-    gnc_ui_owner_edit (parent, owner);
+    gnc_plugin_page_owner_tree_cmd_owner_report (NULL, page);
 }
 
 static void
