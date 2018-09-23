@@ -36,6 +36,8 @@ extern "C"
 #include "../qof.h"
 #include "../qofbook-p.h"
 #include "../qofbookslots.h"
+/* For gnc_account_create_root() */
+#include "../Account.h"
 
 static const gchar *suitename = "/qof/qofbook";
 void test_suite_qofbook ( void );
@@ -285,6 +287,7 @@ test_book_session_not_saved( Fixture *fixture, gconstpointer pData )
     g_assert( !qof_book_session_not_saved( fixture->book ) );
     qof_book_mark_session_saved( fixture->book );
     g_assert( !qof_book_session_not_saved( fixture->book ) );
+    gnc_account_create_root (fixture->book);
     qof_book_mark_session_dirty( fixture-> book );
     g_assert( qof_book_session_not_saved( fixture->book ) );
 }
@@ -294,6 +297,7 @@ test_book_mark_session_saved( Fixture *fixture, gconstpointer pData )
 {
     time64 dirty_time, clean_time;
 
+    gnc_account_create_root (fixture->book);
     qof_book_mark_session_dirty( fixture-> book );
     g_assert( qof_book_session_not_saved( fixture->book ) );
     dirty_time = qof_book_get_session_dirty_time( fixture->book );
@@ -626,6 +630,7 @@ test_book_mark_session_dirty( Fixture *fixture, gconstpointer pData )
     g_assert( fixture->book->dirty_cb == NULL );
     g_assert( qof_book_session_not_saved( fixture->book ) == FALSE );
     before = gnc_time (NULL);
+    gnc_account_create_root (fixture->book);
     qof_book_mark_session_dirty( fixture->book );
     after = gnc_time (NULL);
     g_assert_cmpint( qof_book_get_session_dirty_time( fixture->book ), >= , before);

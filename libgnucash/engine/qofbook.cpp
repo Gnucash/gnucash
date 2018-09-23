@@ -58,6 +58,8 @@ extern "C"
 #include "qofobject-p.h"
 #include "qofbookslots.h"
 #include "kvp-frame.hpp"
+// For GNC_ID_ROOT_ACCOUNT:
+#include "AccountP.h"
 
 static QofLogModule log_module = QOF_MOD_ENGINE;
 #define AB_KEY "hbci"
@@ -456,7 +458,7 @@ gboolean
 qof_book_session_not_saved (const QofBook *book)
 {
     if (!book) return FALSE;
-    return book->session_dirty;
+    return !qof_book_empty(book) && book->session_dirty;
 
 }
 
@@ -585,6 +587,15 @@ qof_book_mark_readonly(QofBook *book)
     g_return_if_fail( book != NULL );
     book->read_only = TRUE;
 }
+
+gboolean
+qof_book_empty(const QofBook *book)
+{
+    if (!book) return TRUE;
+    auto root_acct_col = qof_book_get_collection (book, GNC_ID_ROOT_ACCOUNT);
+    return qof_collection_get_data(root_acct_col) == nullptr;
+}
+
 /* ====================================================================== */
 
 QofCollection *

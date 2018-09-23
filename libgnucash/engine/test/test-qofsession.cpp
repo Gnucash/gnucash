@@ -28,6 +28,7 @@
 #include <qof-backend.hpp>
 #include <cstdlib>
 #include "../gnc-backend-prov.hpp"
+#include "../Account.h"
 
 static QofBook * exported_book {nullptr};
 static bool safe_sync_called {false};
@@ -57,9 +58,12 @@ example_hook (QofSession & session)
     hook_called = true;
 }
 
-void QofSessionMockBackend::load (QofBook *, QofBackendLoadType)
+void QofSessionMockBackend::load (QofBook *book, QofBackendLoadType)
 {
-    if (load_error) set_error(ERR_BACKEND_NO_BACKEND);
+    if (load_error)
+        set_error(ERR_BACKEND_NO_BACKEND);
+    else
+        auto root = gnc_account_create_root (book);
     data_loaded = true;
 }
 
@@ -178,10 +182,13 @@ TEST (QofSessionTest, load)
     EXPECT_EQ (book, s.get_book ());
 
     // Now we'll do the load without returning an error from the backend,
-    // and ensure that the book changed to a new book.
+    // and ensure that it's the original book and that it's not empty.
     load_error = false;
     s.load (nullptr);
-    EXPECT_NE (book, s.get_book ());
+    EXPECT_EQ (book, s.get_book ());
+    EXPECT_EQ (s.get_error(), ERR_BACKEND_NO_ERR);
+    //But it's still empty, to the book shouldn't need saving
+    EXPECT_FALSE(qof_book_session_not_saved (s.get_book ()));
     // I'll put load_error back just to be tidy.
     load_error = true;
     qof_backend_unregister_all_providers ();
@@ -192,11 +199,14 @@ TEST (QofSessionTest, save)
     qof_backend_register_provider (get_provider ());
     QofSession s;
     s.begin ("book1", false, false, false);
+    load_error = false;
+    s.load (nullptr);
     qof_book_mark_session_dirty (s.get_book ());
     s.save (nullptr);
     EXPECT_EQ (sync_called, true);
     qof_backend_unregister_all_providers ();
     sync_called = false;
+    load_error = true;
 }
 
 TEST (QofSessionTest, safe_save)

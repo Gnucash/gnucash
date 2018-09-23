@@ -298,6 +298,7 @@ test_gnc_sql_commit_edit (void)
     qof_instance_init_data (inst, QOF_ID_NULL, book);
     qof_book_set_dirty_cb (book, test_dirty_cb, &dirty_called);
     qof_instance_set_dirty_flag (inst, TRUE);
+    gnc_account_create_root (book);
     qof_book_mark_session_dirty (book);
 
     g_assert (qof_instance_get_dirty_flag (inst));

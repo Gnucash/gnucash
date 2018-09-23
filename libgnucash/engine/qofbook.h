@@ -258,6 +258,9 @@ gboolean qof_book_is_readonly(const QofBook *book);
 /** Mark the book as read only. */
 void qof_book_mark_readonly(QofBook *book);
 
+/** Check if the book has had anything loaded into it. */
+gboolean qof_book_empty(const QofBook *book);
+
 #endif /* SWIG */
 
 /** Returns flag indicating whether this book uses trading accounts */

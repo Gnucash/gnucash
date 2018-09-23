@@ -1238,6 +1238,8 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
         return FALSE;
     session = gnc_get_current_session();
     book = qof_session_get_book(session);
+    if (!qof_book_session_not_saved(book))
+        return FALSE;
     filename = qof_session_get_url(session);
     if (!strlen (filename))
         filename = _("<unknown>");
