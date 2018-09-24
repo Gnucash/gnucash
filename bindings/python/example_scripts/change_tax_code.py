@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 ##  @file
-#   @brief if the account (or one of its children) has the target codem set the tax related flag to True
+#   @brief mark an account having target_account_code as tax related, else Recurse over all of its sub-accounts  marks the first one having target_account_code as tax related
 #   @ingroup python_bindings_examples
 
 from gnucash import Session, Account
