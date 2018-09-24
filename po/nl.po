@@ -5164,7 +5164,7 @@ msgstr "Financieel management"
 
 #: gnucash/gnome/gnucash.desktop.in.in:10
 msgid "gnucash-icon"
-msgstr "gnucash-icoon"
+msgstr ""
 
 #. Translators: The abbreviation for 'Reconciled'
 #. in the header row of the register. Please only

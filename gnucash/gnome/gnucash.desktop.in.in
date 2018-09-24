@@ -6,6 +6,7 @@ Name=GnuCash
 GenericName=Finance Management
 Comment=Manage your finances, accounts, and investments
 Exec=gnucash %f
+# Icon file name, do not translate or use "gnucash-icon" as msgstr
 Icon=gnucash-icon
 StartupNotify=true
 Terminal=false
