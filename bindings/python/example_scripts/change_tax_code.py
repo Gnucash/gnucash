@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 ##  @file
-#   @brief Output all the credits and debits on an account
+#   @brief if the account (or one of its children) has the target codem set the tax related flag to True
 #   @ingroup python_bindings_examples
 
 from gnucash import Session, Account
