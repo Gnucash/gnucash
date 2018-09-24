@@ -274,8 +274,7 @@ gnc_plugin_init_short_names (GtkActionGroup *action_group,
         /* Add a couple of short labels for the toolbar */
         action = gtk_action_group_get_action (action_group,
                                               toolbar_labels[i].action_name);
-        g_value_set_static_string (&value, gettext(toolbar_labels[i].label));
-        g_object_set_property (G_OBJECT(action), "short_label", &value);
+        gtk_action_set_short_label (action, toolbar_labels[i].label);
     }
 }
 
