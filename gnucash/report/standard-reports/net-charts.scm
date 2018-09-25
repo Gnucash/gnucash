@@ -327,52 +327,69 @@
                     currentbal
                     (cons currentbal balancelist)))))))))
 
-    ;; This calculates the balances for all the 'accounts' for each
-    ;; element of the list 'dates'. If income?==#t, the signs get
-    ;; reversed according to income-sign-reverse general option
-    ;; settings. Uses the collector->monetary conversion function
-    ;; above. Returns a list of gnc-monetary.
-    (define (process-datelist account-balances accounts dates income?)
+    ;; This calculates the balances for all the 'account-balances' for
+    ;; each element of the list 'dates'. Uses the collector->monetary
+    ;; conversion function above. Returns a list of gnc-monetary.
+    (define (process-datelist account-balances dates left-col?)
 
-      (define (get-nth-balance account n)
-        (let ((acct-balances (cdr (assoc account account-balances))))
-          (list-ref acct-balances n)))
+      (define (collector-minus coll1 coll2)
+        (let ((res (gnc:make-commodity-collector)))
+          (res 'merge coll1 #f)
+          (res 'minusmerge coll2 #f)
+          res))
 
-      (define (get-nth-interval account n)
-        (let ((bal1 (get-nth-balance account n))
-              (bal2 (get-nth-balance account (1+ n))))
-          (- bal2 bal1)))
+      (define accountlist
+        (if inc-exp?
+            (if left-col?
+                (assoc-ref classified-accounts ACCT-TYPE-INCOME)
+                (assoc-ref classified-accounts ACCT-TYPE-EXPENSE))
+            (if left-col?
+                (assoc-ref classified-accounts ACCT-TYPE-ASSET)
+                (assoc-ref classified-accounts ACCT-TYPE-LIABILITY))))
 
-      (define (monetary->collector mon)
-        (let ((c (gnc:make-commodity-collector)))
-          (c 'add (gnc:gnc-monetary-commodity mon) (gnc:gnc-monetary-amount mon))
-          c))
+      (define filtered-account-balances
+        (filter
+         (lambda (a)
+           (member (car a) accountlist))
+         account-balances))
+
+      (define (acc-balances->list-of-balances lst)
+        ;; input: (list (list acc1 bal0 bal1 bal2 ...)
+        ;;              (list acc2 bal0 bal1 bal2 ...) ...)
+        ;; whereby list of balances are numbers in the acc's currency
+        ;; output: (list <mon-coll0> <mon-coll1> <mon-coll2>)
+        (define list-of-collectors
+          (let loop ((n (length dates)) (result '()))
+            (if (zero? n) result
+                (loop (1- n) (cons (gnc:make-commodity-collector) result)))))
+        (let loop ((lst lst))
+          (when (pair? lst)
+            (let innerloop ((list-of-collectors list-of-collectors)
+                            (list-of-balances (cdar lst)))
+              (when (pair? list-of-balances)
+                ((car list-of-collectors) 'add
+                 (xaccAccountGetCommodity (caar lst))
+                 (car list-of-balances))
+                (innerloop (cdr list-of-collectors) (cdr list-of-balances))))
+            (loop (cdr lst))))
+        list-of-collectors)
 
       (let loop ((dates dates)
-                 (dates-idx 0)
+                 (acct-balances (acc-balances->list-of-balances filtered-account-balances))
                  (result '()))
         (if (if inc-exp?
                 (null? (cdr dates))
                 (null? dates))
             (reverse result)
             (loop (cdr dates)
-                  (1+ dates-idx)
-                  (cons (collector->monetary
-                         ((if inc-exp?
-                              (if income?
-                                  gnc:accounts-get-comm-total-income
-                                  gnc:accounts-get-comm-total-expense)
-                              gnc:accounts-get-comm-total-assets)
-                          accounts
-                          (lambda (account)
-                            (monetary->collector
-                             (gnc:make-gnc-monetary
-                              (xaccAccountGetCommodity account)
-                              (if inc-exp?
-                                  (get-nth-interval account dates-idx)
-                                  (get-nth-balance account dates-idx))))))
-                         (if inc-exp? (cadr dates) (car dates)))
-                        result)))))
+                  (cdr acct-balances)
+                  (cons
+                   (collector->monetary
+                    (if inc-exp?
+                        (collector-minus (car acct-balances) (cadr acct-balances))
+                        (car acct-balances))
+                    (if inc-exp? (cadr dates) (car dates)))
+                   result)))))
 
     (gnc:report-percent-done 1)
     (set! commodity-list (gnc:accounts-get-commodities
@@ -392,15 +409,9 @@
      (let* ((account-balancelist (map account->balancelist accounts))
             (assets-list (process-datelist
                           account-balancelist
-                          (if inc-exp?
-                              accounts
-                              (assoc-ref classified-accounts ACCT-TYPE-ASSET))
                           dates-list #t))
             (liability-list (process-datelist
                              account-balancelist
-                             (if inc-exp?
-                                 accounts
-                                 (assoc-ref classified-accounts ACCT-TYPE-LIABILITY))
                              dates-list #f))
             (net-list (map monetary+ assets-list liability-list))
             (dates-list (if inc-exp?
