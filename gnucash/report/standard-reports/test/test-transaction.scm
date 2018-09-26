@@ -472,6 +472,16 @@
              (length ((sxpath '(// (table 1) // (tr -1) // td)) sxml))
              1)))
 
+      (set-option! options "Display" "Enable links" #f)
+      (let ((sxml (options->sxml options "disable hyperlinks")))
+        (test-assert "no anchor when disabling hyperlinks"
+          (zero? (length ((sxpath '(// a // *text*)) sxml)))))
+
+      (set-option! options "Display" "Enable links" #t)
+      (let ((sxml (options->sxml options "enable hyperlinks")))
+        (test-assert "anchors exist when enabling hyperlinks"
+          (positive? (length ((sxpath '(// a // *text*)) sxml)))))
+
       (set-option! options "Display" "Amount" 'none)
       (let ((sxml (options->sxml options "no columns")))
         (test-assert "all display columns off, without amount nor subtotals, there should be 0 column"
