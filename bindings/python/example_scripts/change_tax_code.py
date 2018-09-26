@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 ##  @file
-#   @brief Output all the credits and debits on an account
+#   @brief Recurse over all accounts in a book and marks the first one having target_account_code as tax related
 #   @ingroup python_bindings_examples
 
 from gnucash import Session, Account
