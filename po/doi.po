@@ -15682,8 +15682,8 @@ msgstr "बगें ते होर दूइयें समस्याए�
 
 #: ../gnucash/gnucash-bin.c:162
 #, fuzzy
-msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
-msgstr "तुस http://bugs.gnucash.org पर बग रिपोटां दिक्खी ते दर्ज करी सकदे ओ.\n"
+msgid "You can also lookup and file bug reports at https://bugs.gnucash.org"
+msgstr "तुस https://bugs.gnucash.org पर बग रिपोटां दिक्खी ते दर्ज करी सकदे ओ.\n"
 
 #: ../gnucash/gnucash-bin.c:163
 msgid "To find the last stable version, please refer to http://www.gnucash.org"

@@ -16606,7 +16606,7 @@ msgstr "org."
 
 #: ../gnucash/gnucash-bin.c:162
 #, fuzzy
-msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
+msgid "You can also lookup and file bug reports at https://bugs.gnucash.org"
 msgstr "GUSHAKISHA Na IDOSIYE Raporo ku HTTP"
 
 #: ../gnucash/gnucash-bin.c:163

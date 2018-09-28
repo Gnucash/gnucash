@@ -15684,8 +15684,8 @@ msgstr "Hãy thông báo lỗi cho <gnucash-devel@gnucash.org>.\n"
 
 #: ../gnucash/gnucash-bin.c:162
 #, fuzzy
-msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
-msgstr "Cũng có thể tra tìm và thông báo lỗi ở « http://bugs.gnucash.org »\n"
+msgid "You can also lookup and file bug reports at https://bugs.gnucash.org"
+msgstr "Cũng có thể tra tìm và thông báo lỗi ở « https://bugs.gnucash.org »\n"
 
 #: ../gnucash/gnucash-bin.c:163
 msgid "To find the last stable version, please refer to http://www.gnucash.org"

@@ -9128,9 +9128,9 @@ msgstr ""
 "Fehler und andere Probleme werden auf gnucash-devel@gnucash.org diskutiert."
 
 #: gnucash/gnucash-bin.c:161
-msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
+msgid "You can also lookup and file bug reports at https://bugs.gnucash.org"
 msgstr ""
-"Fehlerberichte können auf http://bugs.gnucash.org eingesehen und erstellt "
+"Fehlerberichte können auf https://bugs.gnucash.org eingesehen und erstellt "
 "werden."
 
 #: gnucash/gnucash-bin.c:162

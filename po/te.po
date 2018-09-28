@@ -15280,8 +15280,8 @@ msgid "Report bugs and other problems to gnucash-devel@gnucash.org"
 msgstr "gnuక్యాష్-డెవ్‌లప్@gnuక్యాష్.ఆర్గ్‌కు దోషాలను మరియు ఇతర సమస్యలను నివేదించు"
 
 #: ../gnucash/gnucash-bin.c:162
-msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
-msgstr "http://bugs.gnucash.org కూడా మీరు దోష నివేదికలను చూడవచ్చు మరియు ఫైల్ చేయవచ్చు."
+msgid "You can also lookup and file bug reports at https://bugs.gnucash.org"
+msgstr "https://bugs.gnucash.org కూడా మీరు దోష నివేదికలను చూడవచ్చు మరియు ఫైల్ చేయవచ్చు."
 
 #: ../gnucash/gnucash-bin.c:163
 msgid "To find the last stable version, please refer to http://www.gnucash.org"

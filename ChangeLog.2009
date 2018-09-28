@@ -919,7 +919,7 @@
 	  keeping track of personal finances. This feature has been
 	  requested on occasion, such as at
 	  https://lists.gnucash.org/pipermail/gnucash-devel/2003-August/010279.html
-	  and https://bugzilla.gnome.org/show_bug.cgi?id=92274 and
+	  and https://bugs.gnucash.org/show_bug.cgi?id=92274 and
 	  http://lists.gnucash.org/pipermail/gnucash-user/2009-October/031839.html
 	  "Transaction date" refers to such as the date the purchase was
 	  rung up in the store cash register, payment mailed or possibly
@@ -4507,7 +4507,7 @@
 	  online_id in split instead of transaction to avoid import
 	  conflicts Affects all users of the generic import: OFX, HBCI and
 	  AqBanking. Suggested by
-	  <http://bugzilla.gnome.org/show_bug.cgi?id=139310>. " Assume you
+	  <https://bugs.gnucash.org/show_bug.cgi?id=139310>. " Assume you
 	  have a transaction that transfers money from account 1 to
 	  account 2. Import an OFX statement from account 1 that matches
 	  the transaction. Then import an OFX statement from account 2

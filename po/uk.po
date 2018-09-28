@@ -15413,9 +15413,9 @@ msgstr ""
 
 #: ../gnucash/gnucash-bin.c:162
 #, fuzzy
-msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
+msgid "You can also lookup and file bug reports at https://bugs.gnucash.org"
 msgstr ""
-"Ви можете скласти звіт про помилку за адресою http://bugs.gnucash.org\n"
+"Ви можете скласти звіт про помилку за адресою https://bugs.gnucash.org\n"
 
 #: ../gnucash/gnucash-bin.c:163
 msgid "To find the last stable version, please refer to http://www.gnucash.org"

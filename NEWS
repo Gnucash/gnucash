@@ -2888,7 +2888,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 reason GnuCash crashes in testing these releases.
 	 o PLEASE TEST TEST AND TEST SOME MORE any and all features important
 	 to you. Then post any bugs you find to bugzilla
-	 http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+	 https://bugs.gnucash.org/enter_bug.cgi
 	 o If you have the urge to help beyond testing please get involved in
 	 the discussions on the GnuCash mailing lists which you will find at
 	 http://www.gnucash.org.  Please see http://wiki.gnucash.org/wiki/Development
@@ -3358,7 +3358,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 GnuCash crashes in testing these releases.
 	 o Please test any and all features important to you. Then post any
 	 bugs you find to bugzilla
-	 http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+	 https://bugs.gnucash.org/enter_bug.cgi
 	 o Compared to the 2.0.x series, there are only very few user-visible
 	 new features, except for the completed port to the Microsoft Windows
 	 operating system. Minor new features compared to the 2.0.x series
@@ -3407,7 +3407,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 GnuCash crashes in testing these releases.
 	 o Please test any and all features important to you. Then post any
 	 bugs you find to bugzilla
-	 http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+	 https://bugs.gnucash.org/enter_bug.cgi
 	 o Compared to the 2.0.x series, there are only very few user-visible
 	 new features, except for the completed port to the Microsoft Windows
 	 operating system. Minor new features compared to the 2.0.x series
@@ -3447,7 +3447,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 GnuCash crashes in testing these releases.
 	 o Please test any and all features important to you. Then post any
 	 bugs you find to bugzilla
-	 http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+	 https://bugs.gnucash.org/enter_bug.cgi
 	 o Compared to the 2.0.x series, there are only very few user-visible
 	 new features, except for the completed port to the Microsoft Windows
 	 operating system. Minor new features compared to the 2.0.x series
@@ -3487,7 +3487,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 GnuCash crashes in testing these releases.
 	 o Please test any and all features important to you. Then post any
 	 bugs you find to bugzilla
-	 http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+	 https://bugs.gnucash.org/enter_bug.cgi
 	 o Compared to the 2.0.x series, there are only very few user-visible
 	 new features, except for the completed port to the Microsoft Windows
 	 operating system. Minor new features compared to the 2.0.x series
@@ -3521,7 +3521,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 GnuCash crashes in testing these releases.
 	 o Please test any and all features important to you. Then post any
 	 bugs you find to bugzilla
-	 http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+	 https://bugs.gnucash.org/enter_bug.cgi
 	 o Compared to the 2.0.x series, there are only very few user-visible
 	 new features, except for the completed port to the Microsoft Windows
 	 operating system. Minor new features compared to the 2.0.x series
@@ -3558,7 +3558,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 reason GnuCash crashes in testing these releases.
 	 o PLEASE TEST TEST AND TEST SOME MORE any and all features important
 	 to you. Then post any bugs you find to bugzilla
-	 http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+	 https://bugs.gnucash.org/enter_bug.cgi
 	 o If you have the urge to help beyond testing please get involved in
 	 the discussions on the GnuCash mailing lists which you will find at
 	 http://www.gnucash.org. We especially need people to help with
@@ -3703,7 +3703,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 release.
 	 o PLEASE TEST any and all features important to you. Then post any 
 	 bugs you find to bugzilla
-	 http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+	 https://bugs.gnucash.org/enter_bug.cgi
 	 o We would like to encourage people to test this and any further
 	 releases as much as possible and submit bug reports in order that we
 	 can polish GnuCash to be as stable as possible for the 2.0.0 release
@@ -3723,7 +3723,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 many bugfixes since the first beta release.
 	 o PLEASE TEST any and all features important to you. Then post any 
 	 bugs you find to bugzilla
-	 http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+	 https://bugs.gnucash.org/enter_bug.cgi
 	 o We would like to encourage people to test this and any further
 	 releases as much as possible and submit bug reports in order that we
 	 can polish GnuCash to be as stable as possible for the 2.0.0 release
@@ -3749,7 +3749,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 many bugfixes since the sixth unstable release.
 	 o PLEASE TEST any and all features important to you. Then post any 
 	 bugs you find to bugzilla
-	 http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+	 https://bugs.gnucash.org/enter_bug.cgi
 	 o We would like to encourage people to test this and any further
 	 releases as much as possible and submit bug reports in order that we
 	 can polish GnuCash to be as stable as possible for the 2.0.0 release
@@ -3780,7 +3780,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 reason GnuCash crashes in testing these releases.
 	 o PLEASE TEST TEST AND TEST SOME MORE any and all features important
 	 to you. Then post any bugs you find to bugzilla
-	 http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+	 https://bugs.gnucash.org/enter_bug.cgi
 	 o Major bugfixes include -
 	 o More Register fixes.
 	 o Fixes to Scheduled Transactions.
@@ -3809,7 +3809,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 reason GnuCash crashes in testing these releases.
 	 o PLEASE TEST TEST AND TEST SOME MORE any and all features important
 	 to you. Then post any bugs you find to bugzilla
-	 http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+	 https://bugs.gnucash.org/enter_bug.cgi
 	 o Major bugfixes include -
 	 o More Register fixes.
 	 o Fixes to Scheduled Transactions.
@@ -3841,7 +3841,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 reason GnuCash crashes in testing these releases.
 	 o PLEASE TEST TEST AND TEST SOME MORE any and all features important
 	 to you. Then post any bugs you find to bugzilla
-	 http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+	 https://bugs.gnucash.org/enter_bug.cgi
 	 o Major bugfixes include -
 	 o More Register fixes.
 	 o Fixes for OFX importer.
@@ -3874,7 +3874,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 reason GnuCash crashes in testing these releases.
 	 o PLEASE TEST TEST AND TEST SOME MORE any and all features important
 	 to you. Then post any bugs you find to bugzilla
-	 http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+	 https://bugs.gnucash.org/enter_bug.cgi
 	 o Major bugfixes include -
 	 o More Register fixes.
 	 o HIGify the scheduled transaction dialogs.
@@ -3911,7 +3911,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 reason GnuCash crashes in testing these releases.
 	 o PLEASE TEST TEST AND TEST SOME MORE any and all features important
 	 to you. Then post any bugs you find to bugzilla
-	 http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+	 https://bugs.gnucash.org/enter_bug.cgi
 	 o Major bugfixes include - 
 	 o Register fixes
 	 o Finance::Quote issues
@@ -3943,7 +3943,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 reason GnuCash crashes in testing these releases.
 	 o PLEASE TEST TEST AND TEST SOME MORE any and all features important
 	 to you. Then post any bugs you find to bugzilla
-	 http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash
+	 https://bugs.gnucash.org/enter_bug.cgi
 	 o If you have the urge to help beyond testing please get involved in
 	 the discussions on the GnuCash mailing lists which you will find at
 	 http://www.gnucash.org. We especially need people to help with
@@ -4729,7 +4729,7 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	 o Added calculate the number of remaining payments based on the start
 	   date, loan length and current date to Mortgage druid
 	 o loads of bugfixes, keep those bugs coming!
-	 o NOTE: Report bugs to bugzilla.gnome.org
+	 o NOTE: Report bugs to https://bugs.gnucash.org
 
  1.7.2  - 27 October 2002
  	 o second alpha release
@@ -4746,14 +4746,14 @@ Concurrent with the release of Gnucash 2.6.4 we're pleased to also release a new
 	   PIN to user preferences.
 	 o HBCI suport requires OpenHBCI 0.9.3 or current OpenHBCI CVS
 	 o loads of bugfixes, keep those bugs coming!
-	 o NOTE: Report bugs to bugzilla.gnome.org
+	 o NOTE: Report bugs to https://bugs.gnucash.org
 	 
  1.7.1  - 13 October 2002
  	 o first alpha release
 	 o lots of new features, please test as much as you can
 	 o esp Scheduled Transactions, Small Business and OFX/HBCI.
 	 o please check Changelog for exact details
-	 o NOTE: Report bugs to bugzilla.gnome.org
+	 o NOTE: Report bugs to https://bugs.gnucash.org
 
  1.5.98 - 04 June 2001
          o second beta release

@@ -15542,7 +15542,7 @@
 	  report-utilities.scm. For the affected calculations, the
 	  balances no longer exclude transactions on the first day of the
 	  reporting period. This fixes
-	  http://bugzilla.gnome.org/show_bug.cgi?id=331005. Changed
+	  https://bugs.gnucash.org/show_bug.cgi?id=331005. Changed
 	  calculations: Income Statement: Total Expenses, Total Revenues
 	  Balance Sheet: Retained Earnings (*) Equity Statement: Retained
 	  Earnings (*), Net Income (*) The Retained Earning calculations
@@ -15723,7 +15723,7 @@
 
 	* [r13243] trunk/src/calculation/expression_parser.c: Don't
 	  continue to parse the expression if we've already reached the
-	  end. Fixes http://bugzilla.gnome.org/show_bug.cgi?id=166840.
+	  end. Fixes https://bugs.gnucash.org/show_bug.cgi?id=166840.
 
 2006-02-12 20:29  warlord
 
@@ -18235,7 +18235,7 @@
 	  from "schedule transaction" dialog to "Advanced..." (Scheduled
 	  Transaction Editor). Patch from Robert Zaleski
 	  <rzaleski81@yahoo.com>.
-	  <http://bugzilla.gnome.org/show_bug.cgi?id=327547>.
+	  <https://bugs.gnucash.org/show_bug.cgi?id=327547>.
 
 2006-01-18 15:57  warlord
 
@@ -18264,7 +18264,7 @@
 	  trunk/src/import-export/mt940/gnc-mt940-import.c: Add initial
 	  work on upgrading the old non-compilable mt940-importer code by
 	  F. Steinel. Code still non-compilable, see
-	  http://bugzilla.gnome.org/show_bug.cgi?id=325170
+	  https://bugs.gnucash.org/show_bug.cgi?id=325170
 
 2006-01-17 17:56  codehelp
 

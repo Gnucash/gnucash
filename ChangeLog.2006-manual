@@ -5103,7 +5103,7 @@ r13266 | chris | 2006-02-14 20:52:15 -0500 (Tue, 14 Feb 2006) | 15 lines
    gnc:accountlist-get-comm-balance-interval provided by
    report-utilities.scm.  For the affected calculations, the balances no 
    longer exclude transactions on the first day of the reporting period.  
-   This fixes http://bugzilla.gnome.org/show_bug.cgi?id=331005.
+   This fixes https://bugs.gnucash.org/show_bug.cgi?id=331005.
 
    Changed calculations:
      Income Statement: Total Expenses, Total Revenues
@@ -5243,7 +5243,7 @@ r13243 | chris | 2006-02-12 15:31:11 -0500 (Sun, 12 Feb 2006) | 3 lines
    M /gnucash/trunk/src/calculation/expression_parser.c
 
    Don't continue to parse the expression if we've already reached the end.
-   Fixes http://bugzilla.gnome.org/show_bug.cgi?id=166840.
+   Fixes https://bugs.gnucash.org/show_bug.cgi?id=166840.
 
 
 r13229 | chris | 2006-02-12 00:21:09 -0500 (Sun, 12 Feb 2006) | 3 lines
@@ -6971,7 +6971,7 @@ r12881 | chris | 2006-01-19 00:18:27 -0500 (Thu, 19 Jan 2006) | 2 lines
 	bi-weekly ui-frequency in transition from "schedule transaction"
 	dialog to "Advanced..." (Scheduled Transaction Editor).
 	Patch from Robert Zaleski <rzaleski81@yahoo.com>.
-	<http://bugzilla.gnome.org/show_bug.cgi?id=327547>.
+	<https://bugs.gnucash.org/show_bug.cgi?id=327547>.
 
 2006-01-18  Derek Atkins  <derek@ihtfp.com>
 
@@ -7032,7 +7032,7 @@ r12838 | chris | 2006-01-17 22:46:53 -0500 (Tue, 17 Jan 2006) | 3 lines
 	* src/import-export/mt940/gnc-mt940-import.c: Add initial work on
 	upgrading the old non-compilable mt940-importer code by
 	F. Steinel. Code still non-compilable, see
-	http://bugzilla.gnome.org/show_bug.cgi?id=325170
+	https://bugs.gnucash.org/show_bug.cgi?id=325170
 
 2006-01-17  Neil Williams <linux@codehelp.co.uk>
 

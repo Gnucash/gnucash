@@ -15491,8 +15491,8 @@ msgid "Report bugs and other problems to gnucash-devel@gnucash.org"
 msgstr "gnucash-devel@gnucash.org লৈ বাগবোৰ আৰু আন সমস্যাবোৰ ৰিপোৰ্ট কৰক"
 
 #: ../gnucash/gnucash-bin.c:162
-msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
-msgstr "আপুনি http://bugs.gnucash.org ত বাগ ৰিপোৰ্টবোৰ চাব আৰু ফাইল কৰিব পাৰে"
+msgid "You can also lookup and file bug reports at https://bugs.gnucash.org"
+msgstr "আপুনি https://bugs.gnucash.org ত বাগ ৰিপোৰ্টবোৰ চাব আৰু ফাইল কৰিব পাৰে"
 
 #: ../gnucash/gnucash-bin.c:163
 msgid "To find the last stable version, please refer to http://www.gnucash.org"

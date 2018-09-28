@@ -4289,7 +4289,7 @@
 	* [r20637] src/report/business-reports/owner-report.scm: Bug
 	  #649992: Let owner-report aging table include due date / post
 	  date options in aging. Patch by "Bert": Follow up on bug:
-	  https://bugzilla.gnome.org/show_bug.cgi?id=502066 #502066 called
+	  https://bugs.gnucash.org/show_bug.cgi?id=502066 #502066 called
 	  "The aging in business reports should use the due date instead
 	  of the post date". In that bug the aging reports were extended
 	  to use the due date when reporting overdue in buckets such as

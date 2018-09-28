@@ -15605,9 +15605,9 @@ msgstr "બગ અને અન્ય મુશ્કેલીઓ વિશે g
 
 #: ../gnucash/gnucash-bin.c:162
 #, fuzzy
-msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
+msgid "You can also lookup and file bug reports at https://bugs.gnucash.org"
 msgstr ""
-"તમે બગનો અહેવાલ http://bugs.gnucash.org પર પણ જોઈ શકો છો અને આપી પણ શકો છો.\n"
+"તમે બગનો અહેવાલ https://bugs.gnucash.org પર પણ જોઈ શકો છો અને આપી પણ શકો છો.\n"
 
 #: ../gnucash/gnucash-bin.c:163
 msgid "To find the last stable version, please refer to http://www.gnucash.org"

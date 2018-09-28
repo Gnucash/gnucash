@@ -4892,7 +4892,7 @@ dgettext_swapped (const gchar *msgid,
  * This is copied into GnuCash from Gtk in order to fix problems when
  * empty msgids were passed through gettext().
  *
- * See http://bugs.gnucash.org/show_bug.cgi?id=326200 . If that bug
+ * See https://bugs.gnucash.org/show_bug.cgi?id=326200 . If that bug
  * is fixed in the gtk that we can rely open, then
  * gnc_gtk_action_group_set_translation_domain can be replaced by
  * gtk_action_group_set_translation_domain again.
