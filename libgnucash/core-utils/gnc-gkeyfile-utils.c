@@ -122,7 +122,7 @@ gnc_key_file_save_to_file (const gchar *filename,
         if (error)
         {
             *error = g_error_new(G_FILE_ERROR, g_file_error_from_errno(errno),
-                                 "Cannot open file %s: %s", filename,
+                                 "%s: %s", filename,
                                  strerror(errno));
         }
         else

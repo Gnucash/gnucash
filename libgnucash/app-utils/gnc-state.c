@@ -240,8 +240,7 @@ void gnc_state_save (const QofSession *session)
 
     if (error)
     {
-        PERR ("Error: Failure saving state file.\n  %s",
-              error->message);
+        PERR ("Error: Cannot open state file %s", error->message);
         g_error_free (error);
     }
 }
