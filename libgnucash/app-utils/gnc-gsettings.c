@@ -53,6 +53,8 @@ static GHashTable *schema_hash = NULL;
 static const gchar *gsettings_prefix;
 static xmlExternalEntityLoader defaultEntityLoader = NULL;
 
+static GHashTable *registered_handlers_hash = NULL;
+
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = "gnc.app-utils.gsettings";
 
@@ -131,6 +133,19 @@ static GSettings * gnc_gsettings_get_settings_ptr (const gchar *schema_str)
     return gset;
 }
 
+static void
+handlers_hash_block_helper (gpointer key, gpointer settings_ptr, gpointer pointer)
+{
+    g_signal_handler_block (settings_ptr, (gulong)key); // block signal_handler
+    PINFO("Block handler_id %ld for settings_ptr %p", (gulong)key, settings_ptr);
+}
+
+static void
+handlers_hash_unblock_helper (gpointer key, gpointer settings_ptr, gpointer pointer)
+{
+    g_signal_handler_unblock (settings_ptr, (gulong)key); // unblock signal_handler
+    PINFO("UnBlock handler_id %ld for settings_ptr %p", (gulong)key, settings_ptr);
+}
 
 /************************************************************/
 /*                      GSettings Utilities                 */
@@ -203,6 +218,17 @@ gnc_gsettings_register_cb (const gchar *schema,
 
     retval = g_signal_connect (settings_ptr, signal, G_CALLBACK (func), user_data);
 
+    if (!registered_handlers_hash)
+        registered_handlers_hash = g_hash_table_new (g_direct_hash, g_direct_equal);
+
+    if (retval != 0)
+    {
+        g_hash_table_insert (registered_handlers_hash,
+                             GINT_TO_POINTER(retval), settings_ptr); //key, value
+
+        PINFO("schema: %s, key: %s, settings_ptr: %p, handler_id: %ld",
+               schema, key, settings_ptr, retval);
+    }
     g_free (signal);
 
     LEAVE("");
@@ -218,6 +244,7 @@ gnc_gsettings_remove_cb_by_func (const gchar *schema,
 {
     gint matched = 0;
     GQuark quark = 0;
+    gulong handler_id = 0;
 
     GSettings *settings_ptr = gnc_gsettings_get_settings_ptr (schema);
     g_return_if_fail (G_IS_SETTINGS (settings_ptr));
@@ -228,7 +255,7 @@ gnc_gsettings_remove_cb_by_func (const gchar *schema,
     if ((key) && (gnc_gsettings_is_valid_key(settings_ptr, key)))
         quark = g_quark_from_string (key);
 
-    matched = g_signal_handlers_disconnect_matched (
+    handler_id = g_signal_handler_find (
                   settings_ptr,
                   G_SIGNAL_MATCH_DETAIL | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
                   g_signal_lookup ("changed", G_TYPE_SETTINGS), /* signal_id */
@@ -236,7 +263,24 @@ gnc_gsettings_remove_cb_by_func (const gchar *schema,
                   NULL, /* closure */
                   G_CALLBACK (func), /* callback function */
                   user_data);
-    LEAVE ("Schema: %s, key: %s - removed %d handlers for 'changed' signal", schema, key, matched);
+
+    while (handler_id)
+    {
+        matched ++;
+        gnc_gsettings_remove_cb_by_id (schema, handler_id);
+
+        handler_id = g_signal_handler_find (
+                      settings_ptr,
+                      G_SIGNAL_MATCH_DETAIL | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
+                      g_signal_lookup ("changed", G_TYPE_SETTINGS), /* signal_id */
+                      quark,   /* signal_detail */
+                      NULL, /* closure */
+                      G_CALLBACK (func), /* callback function */
+                      user_data);
+    }
+
+    LEAVE ("Schema: %s, key: %s, hashtable size: %d - removed %d handlers for 'changed' signal",
+            schema, key, g_hash_table_size (registered_handlers_hash), matched);
 }
 
 
@@ -247,7 +291,15 @@ gnc_gsettings_remove_cb_by_id (const gchar *schema,
     GSettings *settings_ptr = gnc_gsettings_get_settings_ptr (schema);
     g_return_if_fail (G_IS_SETTINGS (settings_ptr));
 
+    ENTER ();
+
     g_signal_handler_disconnect (settings_ptr, handlerid);
+
+    // remove the handlerid from the registerered_handlers_hash
+    g_hash_table_remove (registered_handlers_hash, GINT_TO_POINTER(handlerid));
+
+    LEAVE ("Schema: %s, handlerid: %d, hashtable size: %d - removed for handler",
+            schema, handlerid, g_hash_table_size (registered_handlers_hash));
 }
 
 
@@ -600,6 +652,8 @@ void gnc_gsettings_load_backend (void)
     prefsbackend->set_value = gnc_gsettings_set_value;
     prefsbackend->reset = gnc_gsettings_reset;
     prefsbackend->reset_group = gnc_gsettings_reset_schema;
+    prefsbackend->block_all = gnc_gsettings_block_all;
+    prefsbackend->unblock_all = gnc_gsettings_unblock_all;
 
     LEAVE("Prefsbackend bind = %p", prefsbackend->bind);
 }
@@ -849,4 +903,22 @@ void gnc_gsettings_version_upgrade (void)
     /* Only write current version if it's more recent than what was set */
     if (cur_maj_min > old_maj_min)
         gnc_gsettings_set_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_VERSION, cur_maj_min);
+}
+
+
+void gnc_gsettings_block_all (void)
+{
+    PINFO("block registered_handlers_hash list size is %d",
+           g_hash_table_size (registered_handlers_hash));
+    g_hash_table_foreach (registered_handlers_hash,
+                          handlers_hash_block_helper, NULL);
+}
+
+
+void gnc_gsettings_unblock_all (void)
+{
+    PINFO("unblock registered_handlers_hash list size is %d",
+           g_hash_table_size (registered_handlers_hash));
+    g_hash_table_foreach (registered_handlers_hash,
+                          handlers_hash_unblock_helper, NULL);
 }

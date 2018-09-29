@@ -237,7 +237,7 @@ public:
     QofBook* book() const noexcept { return m_book; }
     void set_loading(bool loading) noexcept { m_loading = loading; }
     bool pristine() const noexcept { return m_is_pristine_db; }
-    void update_progress() const noexcept;
+    void update_progress(double pct) const noexcept;
     void finish_progress() const noexcept;
 
 protected:
@@ -282,6 +282,7 @@ private:
         void load_remaining(GncSqlBackend*);
         OBEVec::iterator begin() { return m_registry.begin(); }
         OBEVec::iterator end() { return m_registry.end(); }
+        OBEVec::size_type size() { return m_registry.size(); }
     private:
         OBEVec m_registry;
     };

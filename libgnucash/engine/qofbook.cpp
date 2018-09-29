@@ -58,6 +58,8 @@ extern "C"
 #include "qofobject-p.h"
 #include "qofbookslots.h"
 #include "kvp-frame.hpp"
+// For GNC_ID_ROOT_ACCOUNT:
+#include "AccountP.h"
 
 static QofLogModule log_module = QOF_MOD_ENGINE;
 #define AB_KEY "hbci"
@@ -456,7 +458,7 @@ gboolean
 qof_book_session_not_saved (const QofBook *book)
 {
     if (!book) return FALSE;
-    return book->session_dirty;
+    return !qof_book_empty(book) && book->session_dirty;
 
 }
 
@@ -585,6 +587,15 @@ qof_book_mark_readonly(QofBook *book)
     g_return_if_fail( book != NULL );
     book->read_only = TRUE;
 }
+
+gboolean
+qof_book_empty(const QofBook *book)
+{
+    if (!book) return TRUE;
+    auto root_acct_col = qof_book_get_collection (book, GNC_ID_ROOT_ACCOUNT);
+    return qof_collection_get_data(root_acct_col) == nullptr;
+}
+
 /* ====================================================================== */
 
 QofCollection *
@@ -1004,7 +1015,7 @@ qof_book_get_default_gains_policy (QofBook *book)
   * valid book-currency, both of which are required, for the 'book-currency'
   * currency accounting method to apply. Use instead
   * 'gnc_book_get_default_gain_loss_acct' which does these validations. */
-const GncGUID *
+GncGUID *
 qof_book_get_default_gain_loss_acct_guid (QofBook *book)
 {
     GncGUID *guid = NULL;
@@ -1211,7 +1222,7 @@ qof_book_set_feature (QofBook *book, const gchar *key, const gchar *descr)
     if (feature == nullptr || g_strcmp0 (feature->get<const char*>(), descr))
     {
         qof_book_begin_edit (book);
-        delete frame->set_path({GNC_FEATURES, key}, new KvpValue(descr));
+        delete frame->set_path({GNC_FEATURES, key}, new KvpValue(g_strdup (descr)));
         qof_instance_set_dirty (QOF_INSTANCE (book));
         qof_book_commit_edit (book);
     }

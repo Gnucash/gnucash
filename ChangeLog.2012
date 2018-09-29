@@ -1978,7 +1978,7 @@
 
 	* [r22279] configure.ac: Bug 680671: configure should check for
 	  the python-devel package if called with --enable-python
-	  https://bugzilla.gnome.org/show_bug.cgi?id=680671 BP
+	  https://bugs.gnucash.org/show_bug.cgi?id=680671 BP
 
 2012-08-02 13:31  gjanssens
 
@@ -2016,7 +2016,7 @@
 	  Option functions - part 1 The option menu's that appear in
 	  dialog options rely on per item tool tips that GtkComboBox did
 	  not have. From a comment in the code, this was highlighted on
-	  bug http://bugzilla.gnome.org/show_bug.cgi?id=303717 which
+	  bug https://bugzilla.gnome.org/show_bug.cgi?id=303717 which
 	  implies this is now fixed but I could not see a way of adding
 	  them so I created my own basic combo with per item tooltips.
 	  This basic combo uses an external list store to reduce the
@@ -3550,7 +3550,7 @@
 	  src/import-export/csv/gnc-csv-import.c: Bug #670727: Extend
 	  license of 3 files to be GPLv2 and GPLv3. This has been granted
 	  by the gnumeric copyright holders. See
-	  https://bugzilla.gnome.org/show_bug.cgi?id=670727#c7
+	  https://bugs.gnucash.org/show_bug.cgi?id=670727#c7
 
 2012-02-28 18:38  mikee
 

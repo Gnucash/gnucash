@@ -675,9 +675,6 @@
                     (acct-comm (xaccAccountGetCommodity acct))
                     (shares (xaccSplitGetAmount split))
                     (hash (hash-ref hash-table guid)))
-;                (gnc:debug "Merging split for " (xaccAccountGetName acct) " for "
-;                           (gnc-commodity-numeric->string acct-comm shares)
-;                           " into hash entry " hash)
                (if (not hash)
                    (begin (set! hash (gnc:make-commodity-collector))
                           (hash-set! hash-table guid hash)))
@@ -735,13 +732,12 @@
       ;; ( acct . balance ) cells
       (define (get-balance acct-balances acct)
 	(let ((this-collector (gnc:make-commodity-collector)))
-	  (gnc-commodity-collector-merge 
-	   this-collector 
+	  (this-collector
+           'merge
 	   (or (hash-ref acct-balances (gncAccountGetGUID acct))
 	       ;; return a zero commodity collector
-	       (gnc:make-commodity-collector)
-	       )
-	   )
+	       (gnc:make-commodity-collector))
+	   #f)
 	  this-collector
 	  )
 	)
@@ -757,9 +753,9 @@
 	(let ((this-collector (gnc:make-commodity-collector)))
 	  ;; get the balance of the parent account and stick it on the collector
 	  ;; that nice shiny *NEW* collector!!
-	  (gnc-commodity-collector-merge this-collector (get-balance acct-balances account))
+	  (this-collector 'merge (get-balance acct-balances account) #f)
 	  (for-each
-	   (lambda (x) (if x (gnc-commodity-collector-merge this-collector x)))
+	   (lambda (x) (if x (this-collector 'merge x #f)))
 	   (gnc:account-map-descendants
 	    (lambda (a)
 	      (get-balance acct-balances a ))
@@ -1146,8 +1142,8 @@
   ;; readable.
   (let* ((table (gnc:make-html-table))
 	 )
-    (gnc-commodity-collector-map
-     amount
+    (amount
+     'format
      (lambda (curr val)
        (let ((bal (gnc:make-gnc-monetary curr val)))
 	 (gnc:html-table-append-row!
@@ -1165,7 +1161,8 @@
 	    "number-cell" (exchange-fn bal report-commodity))
 	   )
 	  )
-	 )))
+	 ))
+     #f)
     (gnc:html-table-set-style! table "table" 'attribute(list "style" "width:100%; max-width:20em") 'attribute (list "cellpadding" "0"))
     table))
 

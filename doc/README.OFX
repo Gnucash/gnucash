@@ -179,7 +179,7 @@ file)
 If you encounter an error, you can report it in one of the following ways (in
 order of effectiveness for you, but ANY report is apreciated):
 
-* Open a bug at http://bugzilla.gnome.org/
+* Open a bug at https://bugs.gnucash.org/
 * gnucash-devel@gnucash.org or gnucash-user@gnucash.org (Subscriber-only list;
 please subscribe on http://www.gnucash.org/cgi-bin/mailman/listinfo/ )
 * http://lists.sourceforge.net/lists/listinfo/libofx-devel/ if ofxdump doesn't
@@ -196,7 +196,7 @@ output of the ofxdump utility on your file.
 
 (1) GnuCash simply hangs when importing an OFX file
 
-This is probably bug http://bugzilla.gnome.org/show_bug.cgi?id=101738
+This is probably bug https://bugs.gnucash.org/show_bug.cgi?id=101738
 Unfortunately the main developpers are unable to reproduce.  So far, this bug
 only occurs with OpenSP 1.5.  It does not occur for anyone with OpenSP 1.3.x,
 which is shipped on most Linux distro as part of openjade, so you may want to

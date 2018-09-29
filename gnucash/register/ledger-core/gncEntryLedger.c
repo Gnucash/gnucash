@@ -265,21 +265,21 @@ gnc_entry_ledger_config_cells (GncEntryLedger *ledger)
     ((ComboCell *)
      gnc_table_layout_get_cell (ledger->table->layout, ENTRY_ACTN_CELL), FALSE);
 
-    /* Use 6 decimal places for all prices and quantities */
+    /* Use GNC_COMMODITY_MAX_FRACTION for all prices and quantities */
     gnc_price_cell_set_fraction
     ((PriceCell *)
      gnc_table_layout_get_cell (ledger->table->layout, ENTRY_PRIC_CELL),
-     1000000);
+     GNC_COMMODITY_MAX_FRACTION);
 
     gnc_price_cell_set_fraction
     ((PriceCell *)
      gnc_table_layout_get_cell (ledger->table->layout, ENTRY_DISC_CELL),
-     1000000);
+     GNC_COMMODITY_MAX_FRACTION);
 
     gnc_price_cell_set_fraction
     ((PriceCell *) gnc_table_layout_get_cell (ledger->table->layout,
             ENTRY_QTY_CELL),
-     1000000);
+     GNC_COMMODITY_MAX_FRACTION);
 
     /* add menu items for the action and payment cells */
     gnc_entry_ledger_config_action (ledger);

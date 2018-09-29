@@ -15693,7 +15693,7 @@ msgstr "Rapporter feil og andre problemer til gnucash-devel@gnucash.org.\n"
 
 #: ../gnucash/gnucash-bin.c:162
 #, fuzzy
-msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
+msgid "You can also lookup and file bug reports at https://bugs.gnucash.org"
 msgstr ""
 "Du kan også søke etter og legge inn feilrapporter på http://bugzilla.gnome."
 "org\n"

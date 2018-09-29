@@ -70,23 +70,32 @@ _br_find_exe (Gnc_GbrInitError *error)
     if (error)
         *error = GNC_GBR_INIT_ERROR_DISABLED;
     return NULL;
-#else
-#ifdef G_OS_WIN32
-    /* I *thought* this program code already included the
-       relocation code for windows. Unfortunately this is not
-       the case and we have to add this manually. This is only
-       one possibility; other ways of looking up the full path
-       of gnucash.exe probably exist.*/
-    gchar *prefix;
-    gchar *result;
-
-    /* From the glib docs: When passed NULL, this function looks
-       up installation the directory of the main executable of
-       the current process */
-    prefix = g_win32_get_package_installation_directory_of_module (NULL);
-    result = g_build_filename (prefix,
-                               BINDIR, "gnucash.exe",
-                               (char*)NULL);
+#elif defined G_OS_WIN32
+    /* N.B. g_win32_get_package_installation_directory_of_module returns the
+     * parent if the last element of the directory is "bin" or "lib", but
+     * otherwise the directory itself. We assume that gnucash.exe isn't in lib.
+     */
+    gchar *prefix = g_win32_get_package_installation_directory_of_module (NULL);
+    gchar *result = g_build_filename (prefix, "bin", "gnucash.exe", NULL);
+    if (prefix == NULL)
+    {
+        if (error)
+            *error = GNC_GBR_INIT_WIN32_NO_EXE_DIR;
+        return NULL;
+    }
+    if (!g_file_test (result, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_EXECUTABLE))
+    {
+        g_free (result);
+        result = g_build_filename (prefix, "gnucash.exe", NULL);
+        if (!g_file_test (result,
+                           G_FILE_TEST_EXISTS | G_FILE_TEST_IS_EXECUTABLE))
+        {
+            g_free (result);
+            result = NULL;
+            if (error)
+                *error = GNC_GBR_INIT_WIN32_NO_EXE_DIR;
+        }
+    }
     g_free (prefix);
     return result;
 #elif defined MAC_INTEGRATION
@@ -228,7 +237,6 @@ _br_find_exe (Gnc_GbrInitError *error)
     g_free (line);
     fclose (f);
     return path;
-#endif /* G_OS_WINDOWS */
 #endif /* ENABLE_BINRELOC */
 }
 
@@ -308,6 +316,15 @@ set_gerror (GError **error, Gnc_GbrInitError errcode)
         break;
     case GNC_GBR_INIT_ERROR_DISABLED:
         error_message = "Binary relocation support is disabled.";
+        break;
+    case GNC_GBR_INIT_ERROR_MAC_NOT_BUNDLE:
+        error_message = "BinReloc determined that gnucash is not running from a bundle";
+        break;
+    case GNC_GBR_INIT_ERROR_MAC_NOT_APP_BUNDLE:
+        error_message = "Binreloc determined that the bundle is not an app bundle";
+        break;
+    case GNC_GBR_INIT_WIN32_NO_EXE_DIR:
+        error_message = "Binreloc was unable to determine the location of gnucash.exe.";
         break;
     default:
         error_message = "Unknown error.";
@@ -434,6 +451,42 @@ gnc_gbr_find_prefix (const gchar *default_prefix)
     return dir2;
 }
 
+/* Locate a specified component directory.
+ *
+ * E.g., <prefix>/share
+
+ * default_dir is passed in from the wrapper function, compiled_dir is the corresponding constant from gncla-dir.h.
+ *
+ * If compiled_dir exists and is an absolute path then we check the dynamic
+ * prefix and if it's NULL fall back first on the passed-in default and then on
+ * compiled_dir; otherwise we pass the compiled PREFIX value as a default to
+ * gnc_gbr_find_prefix, remove the PREFIX part (if any) from the compiled_dir
+ * and append that to the retrieved prefix.
+ */
+static gchar*
+find_component_directory (const gchar *default_dir, const gchar* compiled_dir)
+{
+    gchar *prefix = NULL, *dir = NULL, *subdir = NULL;
+
+    prefix = gnc_gbr_find_prefix (NULL);
+    if (prefix == NULL)
+        return g_strdup (default_dir ? default_dir : compiled_dir);
+    subdir = gnc_file_path_relative_part(PREFIX, compiled_dir);
+    if (g_strcmp0 (compiled_dir, subdir) == 0)
+    {
+        /* compiled_dir isn't a subdir of PREFIX. This isn't relocatable so
+         * return compiled_dir.
+         */
+        g_free (subdir);
+        g_free (prefix);
+        return g_strdup (compiled_dir);
+    }
+    dir = g_build_filename (prefix, subdir, NULL);
+    g_free (subdir);
+    g_free (prefix);
+    return dir;
+}
+
 
 /** Locate the application's binary folder.
  *
@@ -451,21 +504,7 @@ gnc_gbr_find_prefix (const gchar *default_prefix)
 gchar *
 gnc_gbr_find_bin_dir (const gchar *default_bin_dir)
 {
-    gchar *prefix, *dir, *bindir;
-    prefix = gnc_gbr_find_prefix (NULL);
-    if (prefix == NULL)
-    {
-        /* BinReloc not initialized. */
-        if (default_bin_dir != NULL)
-            return g_strdup (default_bin_dir);
-        else
-            return NULL;
-    }
-    bindir = gnc_file_path_relative_part(PREFIX, BINDIR);
-    dir = g_build_filename (prefix, bindir, NULL);
-    g_free (bindir);
-    g_free (prefix);
-    return dir;
+        return find_component_directory (default_bin_dir, BINDIR);
 }
 
 /** Locate the application's data folder.
@@ -485,23 +524,7 @@ gnc_gbr_find_bin_dir (const gchar *default_bin_dir)
 gchar *
 gnc_gbr_find_data_dir (const gchar *default_data_dir)
 {
-    gchar *prefix, *dir, *datadir;
-
-    prefix = gnc_gbr_find_prefix (NULL);
-    if (prefix == NULL)
-    {
-        /* BinReloc not initialized. */
-        if (default_data_dir != NULL)
-            return g_strdup (default_data_dir);
-        else
-            return NULL;
-    }
-
-    datadir = gnc_file_path_relative_part(PREFIX, DATADIR);
-    dir = g_build_filename (prefix, datadir, NULL);
-    g_free (datadir);
-    g_free (prefix);
-    return dir;
+    return find_component_directory (default_data_dir, DATADIR);
 }
 
 /** Locate the application's library folder.
@@ -520,23 +543,8 @@ gnc_gbr_find_data_dir (const gchar *default_data_dir)
 gchar *
 gnc_gbr_find_lib_dir (const gchar *default_lib_dir)
 {
-    gchar *prefix, *dir, *libdir;
+    return find_component_directory (default_lib_dir, LIBDIR);
 
-    prefix = gnc_gbr_find_prefix (NULL);
-    if (prefix == NULL)
-    {
-        /* BinReloc not initialized. */
-        if (default_lib_dir != NULL)
-            return g_strdup (default_lib_dir);
-        else
-            return NULL;
-    }
-
-    libdir = gnc_file_path_relative_part(PREFIX, LIBDIR);
-    dir = g_build_filename (prefix, libdir, NULL);
-    g_free (libdir);
-    g_free (prefix);
-    return dir;
 }
 
 /** Locate the application's configuration files folder.
@@ -569,7 +577,12 @@ gnc_gbr_find_etc_dir (const gchar *default_etc_dir)
 
     if (g_path_is_absolute (SYSCONFDIR))
     {
-        sysconfdir = gnc_file_path_relative_part("/", SYSCONFDIR);
+        sysconfdir = gnc_file_path_relative_part (PREFIX, SYSCONFDIR);
+        if (g_strcmp0 (sysconfdir, SYSCONFDIR) == 0)
+        {
+            g_free (sysconfdir);
+            sysconfdir = gnc_file_path_relative_part("/", SYSCONFDIR);
+        }
         dir = g_build_filename (prefix, sysconfdir, NULL);
         g_free (sysconfdir);
     }

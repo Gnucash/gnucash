@@ -15621,9 +15621,9 @@ msgstr "gnucash-devel@gnucash.org मा बगहरू र अरू समस
 
 #: ../gnucash/gnucash-bin.c:162
 #, fuzzy
-msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
+msgid "You can also lookup and file bug reports at https://bugs.gnucash.org"
 msgstr ""
-"तपाईँले http://bugs.gnucash.org मा बग प्रतिवेदनहरू फाइल गर्न र पत्ता लगाउन पनि "
+"तपाईँले https://bugs.gnucash.org मा बग प्रतिवेदनहरू फाइल गर्न र पत्ता लगाउन पनि "
 "सक्नुहुन्छ\n"
 
 #: ../gnucash/gnucash-bin.c:163

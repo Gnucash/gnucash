@@ -77,7 +77,7 @@ extern "C"
 
 /* Do not treat -Wstrict-aliasing warnings as errors because of problems of the
  * G_LOCK* macros as declared by glib.  See
- * http://bugs.gnucash.org/show_bug.cgi?id=316221 for additional information.
+ * https://bugs.gnucash.org/show_bug.cgi?id=316221 for additional information.
  */
 #if (__GNUC__ >= 4 && __GNUC_MINOR__ >= 2)
 #    pragma GCC diagnostic warning "-Wstrict-aliasing"

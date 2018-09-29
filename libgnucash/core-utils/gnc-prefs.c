@@ -368,3 +368,14 @@ gboolean gnc_prefs_is_set_up (void)
     return (prefsbackend !=NULL);
 }
 
+void gnc_prefs_block_all (void)
+{
+    if (prefsbackend && prefsbackend->block_all)
+        (prefsbackend->block_all) ();
+}
+
+void gnc_prefs_unblock_all (void)
+{
+    if (prefsbackend && prefsbackend->unblock_all)
+        (prefsbackend->unblock_all) ();
+}

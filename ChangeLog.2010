@@ -5086,7 +5086,7 @@
 	  internet have this sort order. So maintainance becomes easier.
 	  3. inserting a Column local_symbol, because some people like to
 	  use it, e.g.
-	  https://bugzilla.gnome.org/show_bug.cgi?id=492417#c3 But
+	  https://bugs.gnucash.org/show_bug.cgi?id=492417#c3 But
 	  probably there is a better way to get this informations. 4.
 	  Review List: a. adding: CDF, GHS, ... b. outdated:
 	  AON->AOR->AOA, GWP->XOF, ... c. Typos like "fening". d. Alway

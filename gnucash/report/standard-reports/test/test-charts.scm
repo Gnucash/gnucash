@@ -45,12 +45,8 @@
 (define (run-test)
   (test-runner-factory gnc:test-runner)
   (test-begin "net-charts.scm")
-  (for-each (lambda (variant)
-              (null-test variant))
-            (map car variant-alist))
-  (for-each (lambda (variant)
-              (net-charts-test variant))
-            (map car variant-alist))
+  (for-each null-test (map car variant-alist))
+  (for-each test-chart (map car variant-alist))
   (test-end "net-charts.scm"))
 
 (define (options->render variant options test-title)
@@ -74,7 +70,12 @@
     (test-assert (format #f "null-test: ~a" variant)
       (options->render uuid options "null-test"))))
 
-(define (net-charts-test variant)
+(define (test-chart variant)
+  (test-group-with-cleanup (format #f "test variant ~a" variant)
+    (test-chart-variant variant)
+    (gnc-clear-current-session)))
+
+(define (test-chart-variant variant)
   (define (set-option! options section name value)
     (let ((option (gnc:lookup-option options section name)))
       (if option
@@ -115,7 +116,54 @@
 
     (let* ((options (default-testing-options)))
       (test-assert (format #f "basic report exists: ~a" variant)
-        (options->render uuid options (format #f "net-charts-test ~a default options" variant))))
+        (options->render uuid options (format #f "test-null ~a default options" variant))))
+
+    ;; test net worth barchart amounts
+    (when (or (eq? variant 'net-worth-barchart)
+              (eq? variant 'income-expense-barchart))
+      ;; create 100 daily transactions from 1/1/70.  this is meant to
+      ;; test chart date ranges.  day 0 = $0, day 1 = $1, etc
+      (let loop ((date (gnc-dmy2time64 1 1 1970)) (idx 0))
+        (when (<= idx 100)
+          (env-create-transaction env date bank income idx)
+          (loop (incdate date DayDelta) (1+ idx))))
+      (when (eq? variant 'net-worth-barchart)
+        (let* ((options (default-testing-options)))
+        (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 15 1 1970)))
+        (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 15 3 1970)))
+        (set-option! options "General" "Step Size" 'DayDelta)
+        (set-option! options "Display" "Show table" #t)
+        (let ((sxml (gnc:options->sxml uuid options (format #f "test-net-charts ~a 2 months" variant)
+                                         "test-table" #:strip-tag "script")))
+          (test-equal "net-worth-barchart: first row"
+            '("Date" "Assets" "Liabilities" "Net Worth")
+            (sxml->table-row-col sxml 1 0 #f))
+          (test-equal "net-worth-barchart: first data row"
+            '("01/15/70" "$105.00" "$0.00" "$105.00")
+            (sxml->table-row-col sxml 1 1 #f))
+          (test-equal "net-worth-barchart: last data row"
+            '("03/15/70" "$2,701.00" "$0.00" "$2,701.00")
+            (sxml->table-row-col sxml 1 -1 #f)))))
+
+      (when (eq? variant 'income-expense-barchart)
+        (let* ((options (default-testing-options)))
+        (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 15 1 1970)))
+        (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 15 3 1970)))
+        (set-option! options "General" "Step Size" 'DayDelta)
+        (set-option! options "Display" "Show table" #t)
+        (set-option! options "Accounts" "Accounts" (list income expense))
+        (let ((sxml (gnc:options->sxml uuid options (format #f "test-net-charts ~a 2 years" variant)
+                                         "test-table" #:strip-tag "script")))
+          (test-equal "income-expense-barchart: first row"
+            '("Date" "Income" "Expense" "Net Profit")
+            (sxml->table-row-col sxml 1 0 #f))
+          (test-equal "income-expense: first data row"
+            '("01/15/70" "$14.00" "$0.00" "$14.00")
+            (sxml->table-row-col sxml 1 1 #f))
+          (test-equal "income-expense: last data row"
+            '("03/15/70" "$73.00" "$0.00" "$73.00")
+            (sxml->table-row-col sxml 1 -1 #f))))
+      ))
 
     (case variant
       ((liability-piechart stock-piechart asset-piechart expense-piechart income-piechart)

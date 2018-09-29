@@ -41,9 +41,9 @@
 #include "gncVendor.h"
 #include "gncVendorP.h"
 
-static gint gs_address_event_handler_id = 0;
-static void listen_for_address_events(QofInstance *entity, QofEventId event_type,
-                                      gpointer user_data, gpointer event_data);
+static gint vend_qof_event_handler_id = 0;
+static void vend_handle_qof_events (QofInstance *entity, QofEventId event_type,
+                                    gpointer user_data, gpointer event_data);
 static void qofVendorSetAddr (GncVendor *vendor, QofInstance *addr_ent);
 static const char* qofVendorGetTaxIncluded(const GncVendor *vendor);
 static void qofVendorSetTaxIncluded(GncVendor *vendor, const char* type_string);
@@ -63,6 +63,7 @@ struct _gncVendor
     GncTaxIncluded  taxincluded;
     gboolean        active;
     GList *         jobs;
+    gnc_numeric *   balance; /* cached vendor balance, will not be stored */
 };
 
 struct _gncVendorClass
@@ -467,11 +468,10 @@ GncVendor *gncVendorCreate (QofBook *book)
     vendor->taxincluded = GNC_TAXINCLUDED_USEGLOBAL;
     vendor->active = TRUE;
     vendor->jobs = NULL;
+    vendor->balance = NULL;
 
-    if (gs_address_event_handler_id == 0)
-    {
-        gs_address_event_handler_id = qof_event_register_handler(listen_for_address_events, NULL);
-    }
+    if (vend_qof_event_handler_id == 0)
+        vend_qof_event_handler_id = qof_event_register_handler (vend_handle_qof_events, NULL);
 
     qof_event_gen (&vendor->inst, QOF_EVENT_CREATE, NULL);
 
@@ -497,6 +497,7 @@ static void gncVendorFree (GncVendor *vendor)
     gncAddressBeginEdit (vendor->addr);
     gncAddressDestroy (vendor->addr);
     g_list_free (vendor->jobs);
+    g_free (vendor->balance);
 
     if (vendor->terms)
         gncBillTermDecRef (vendor->terms);
@@ -882,8 +883,11 @@ gncVendorIsDirty (const GncVendor *vendor)
 }
 
 /**
- * Listens for MODIFY events from addresses.   If the address belongs to a vendor,
- * mark the vendor as dirty.
+ * Listen for qof events.
+ *
+ * - If the address of a vendor has changed, mark the vendor as dirty.
+ * - If a lot related to a vendor has changed, clear the vendor's
+ *   cached balance as it likely has become invalid.
  *
  * @param entity Entity for the event
  * @param event_type Event type
@@ -891,28 +895,50 @@ gncVendorIsDirty (const GncVendor *vendor)
  * @param event_data Event data passed with the event.
  */
 static void
-listen_for_address_events(QofInstance *entity, QofEventId event_type,
-                          gpointer user_data, gpointer event_data)
+vend_handle_qof_events (QofInstance *entity, QofEventId event_type,
+                        gpointer user_data, gpointer event_data)
 {
-    GncVendor* v;
+    /* Handle address change events */
+    if ((GNC_IS_ADDRESS (entity) &&
+        (event_type & QOF_EVENT_MODIFY) != 0))
+    {
+        if (GNC_IS_VENDOR (event_data))
+        {
+            GncVendor* vend = GNC_VENDOR (event_data);
+            gncVendorBeginEdit (vend);
+            mark_vendor (vend);
+            gncVendorCommitEdit (vend);
+        }
+        return;
+    }
 
-    if ((event_type & QOF_EVENT_MODIFY) == 0)
+    /* Handle lot change events */
+    if (GNC_IS_LOT (entity))
     {
+        GNCLot *lot = GNC_LOT (entity);
+        GncOwner lot_owner;
+        const GncOwner *end_owner = NULL;
+        GncInvoice *invoice = gncInvoiceGetInvoiceFromLot (lot);
+
+        /* Determine the owner associated with the lot */
+        if (invoice)
+            /* Invoice lots */
+            end_owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
+        else if (gncOwnerGetOwnerFromLot (lot, &lot_owner))
+            /* Pre-payment lots */
+            end_owner = gncOwnerGetEndOwner (&lot_owner);
+
+        if (gncOwnerGetType (end_owner) == GNC_OWNER_VENDOR)
+        {
+            /* Clear the cached balance */
+            GncVendor* vend = gncOwnerGetVendor (end_owner);
+            g_free (vend->balance);
+            vend->balance = NULL;
+        }
         return;
     }
-    if (!GNC_IS_ADDRESS(entity))
-    {
-        return;
-    }
-    if (!GNC_IS_VENDOR(event_data))
-    {
-        return;
-    }
-    v = GNC_VENDOR(event_data);
-    gncVendorBeginEdit(v);
-    mark_vendor(v);
-    gncVendorCommitEdit(v);
 }
+
 /* ============================================================== */
 /* Package-Private functions */
 
@@ -1004,4 +1030,25 @@ gboolean gncVendorRegister (void)
 gchar *gncVendorNextID (QofBook *book)
 {
     return qof_book_increment_and_format_counter (book, _GNC_MOD_NAME);
+}
+
+const gnc_numeric*
+gncVendorGetCachedBalance (GncVendor *vend)
+{
+    return vend->balance;
+}
+
+void gncVendorSetCachedBalance (GncVendor *vend, const gnc_numeric *new_bal)
+{
+    if (!new_bal && vend->balance)
+    {
+        g_free (vend->balance);
+        vend->balance = NULL;
+        return;
+    }
+
+    if (!vend->balance)
+        vend->balance = g_new0 (gnc_numeric, 1);
+
+    *vend->balance = *new_bal;
 }

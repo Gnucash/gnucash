@@ -761,6 +761,7 @@ gnucash_sheet_finalize (GObject *object)
 
     sheet = GNUCASH_SHEET (object);
 
+    g_table_resize (sheet->blocks, 0, 0);
     g_table_destroy (sheet->blocks);
     sheet->blocks = NULL;
 
@@ -890,6 +891,8 @@ gnucash_sheet_modify_current_cell (GnucashSheet *sheet, const gchar *new_text)
 
     gtk_editable_set_position (editable, cursor_position);
     gtk_editable_select_region(editable, start_sel, end_sel);
+    sheet->start_sel = start_sel;
+    sheet->end_sel = end_sel;
 
     return retval;
 }
@@ -1148,6 +1151,8 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
 
     if (start_sel != end_sel)
         gtk_editable_select_region (editable, start_sel, end_sel);
+    sheet->start_sel = start_sel;
+    sheet->end_sel = end_sel;
 
     g_string_free (new_text_gs, TRUE);
 }
@@ -1675,6 +1680,8 @@ gnucash_sheet_direct_event(GnucashSheet *sheet, GdkEvent *event)
     if ((new_start != start_sel) || (new_end != end_sel))
     {
         gtk_editable_select_region(editable, new_start, new_end);
+        sheet->start_sel = new_start;
+        sheet->end_sel = new_end;
 //        changed = TRUE;
     }
 
@@ -1845,7 +1852,6 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
 {
     GnucashSheet *sheet;
     GtkEditable *editable = NULL;
-    int start_sel = 0, end_sel = 0;
 
     g_return_val_if_fail(widget != NULL, TRUE);
     g_return_val_if_fail(GNUCASH_IS_SHEET(widget), TRUE);
@@ -1873,8 +1879,6 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
         sheet->shift_state = event->state & GDK_SHIFT_MASK;
         sheet->keyval_state = (event->keyval == GDK_KEY_KP_Decimal) ? GDK_KEY_KP_Decimal : 0;
     }
-
-    gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
 
     if (gtk_im_context_filter_keypress (sheet->im_context, event))
     {
@@ -1936,7 +1940,7 @@ gnucash_sheet_commit_cb (GtkIMContext *context, const gchar *str,
                          GnucashSheet *sheet)
 {
     GtkEditable *editable;
-    gint tmp_pos, sel_start, sel_end;
+    gint tmp_pos, start_sel, end_sel;
 
     g_return_if_fail(strlen(str) > 0);
     g_return_if_fail(sheet->editing == TRUE);
@@ -1978,9 +1982,9 @@ gnucash_sheet_commit_cb (GtkIMContext *context, const gchar *str,
                                   sheet->delete_signal);
     }
 
-    if (gtk_editable_get_selection_bounds (editable, &sel_start, &sel_end))
+    if (gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel))
     {
-        if (sel_start != sel_end)
+        if (start_sel != end_sel)
         {
             sheet->preedit_selection_length = 0;
             gtk_editable_delete_selection (editable);
@@ -1994,10 +1998,12 @@ gnucash_sheet_commit_cb (GtkIMContext *context, const gchar *str,
 
     /* insert_cb may have changed the selection, but gtk_editable_set_position
        (erroneously?) clears it.  If a selection is set, preserve it. */
-    gtk_editable_get_selection_bounds (editable, &sel_start, &sel_end);
+    gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
     gtk_editable_set_position (editable, tmp_pos);
-    if (sel_start != sel_end)
-        gtk_editable_select_region (editable, sel_start, sel_end);
+    if (start_sel != end_sel)
+        gtk_editable_select_region (editable, start_sel, end_sel);
+    sheet->start_sel = start_sel;
+    sheet->end_sel = end_sel;
 
     gnucash_sheet_im_context_reset_flags(sheet);
 }
@@ -2207,7 +2213,7 @@ gnucash_sheet_block_set_from_table (GnucashSheet *sheet,
 
     if (block->style && (block->style != style))
     {
-        gnucash_style_unref (block->style);
+        gnucash_sheet_style_unref (sheet, block->style);
         block->style = NULL;
     }
 
@@ -2216,7 +2222,7 @@ gnucash_sheet_block_set_from_table (GnucashSheet *sheet,
     if (block->style == NULL)
     {
         block->style = style;
-        gnucash_style_ref(block->style);
+        gnucash_sheet_style_ref(sheet, block->style);
         return TRUE;
     }
 
@@ -2316,14 +2322,15 @@ static void
 gnucash_sheet_block_destroy (gpointer _block, gpointer user_data)
 {
     SheetBlock *block = _block;
+    GnucashSheet *sheet = GNUCASH_SHEET(user_data);
 
     if (block == NULL)
         return;
 
     if (block->style)
     {
-        gnucash_style_unref (block->style);
-        block->style = NULL;
+        gnucash_sheet_style_unref (sheet, block->style);
+        /* Don't free the block itself here. It's managed by the block table */
     }
 }
 
@@ -2581,7 +2588,7 @@ gnucash_sheet_init (GnucashSheet *sheet)
 
     sheet->blocks = g_table_new (sizeof (SheetBlock),
                                  gnucash_sheet_block_construct,
-                                 gnucash_sheet_block_destroy, NULL);
+                                 gnucash_sheet_block_destroy, sheet);
 
     gtk_widget_add_events(GTK_WIDGET(sheet), (GDK_EXPOSURE_MASK
     | GDK_BUTTON_PRESS_MASK
@@ -2716,7 +2723,7 @@ gnucash_sheet_new (Table *table)
     /* some register data */
     sheet->dimensions_hash_table = g_hash_table_new_full (g_int_hash,
                                    g_int_equal,
-                                   g_free, NULL);
+                                   g_free, g_free);
 
     /* add tooltips to sheet */
     gtk_widget_set_has_tooltip (GTK_WIDGET(sheet), TRUE);

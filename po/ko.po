@@ -15114,9 +15114,9 @@ msgstr "버그 및 기타 문제를 gnucash-devel@gnucash.org에 보고하여 �
 
 #: ../gnucash/gnucash-bin.c:162
 #, fuzzy
-msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
+msgid "You can also lookup and file bug reports at https://bugs.gnucash.org"
 msgstr ""
-"http://bugs.gnucash.org에서 찾을 수 있고, 파일 버그 보고도 할 수 있습니다\n"
+"https://bugs.gnucash.org에서 찾을 수 있고, 파일 버그 보고도 할 수 있습니다\n"
 
 #: ../gnucash/gnucash-bin.c:163
 msgid "To find the last stable version, please refer to http://www.gnucash.org"

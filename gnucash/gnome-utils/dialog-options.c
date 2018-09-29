@@ -1007,7 +1007,7 @@ gnc_option_create_date_widget (GNCOption *option)
                created a basic one called Combott implemented in gnc-combott.
                Have highlighted changes in this file with comments for when
                the feature of per-item tooltips is implemented in gtk,
-               see http://bugs.gnucash.org/show_bug.cgi?id=303717 */
+               see https://bugs.gnucash.org/show_bug.cgi?id=303717 */
 
             GtkListStore *store;
             GtkTreeIter  iter;
@@ -1114,7 +1114,7 @@ gnc_option_create_multichoice_widget(GNCOption *option)
            created a basic one called Combott implemented in gnc-combott.
            Have highlighted changes in this file with comments for when
            the feature of per-item tooltips is implemented in gtk,
-           see http://bugs.gnucash.org/show_bug.cgi?id=303717 */
+           see https://bugs.gnucash.org/show_bug.cgi?id=303717 */
         GtkListStore *store;
         GtkTreeIter  iter;
 

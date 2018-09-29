@@ -281,6 +281,8 @@ gnc_transaction_init(Transaction* trans)
     trans->date_posted  = 0;
     trans->marker = 0;
     trans->orig = NULL;
+    trans->readonly_reason = NULL;
+    trans->reason_cache_valid = FALSE;
     LEAVE (" ");
 }
 
@@ -811,12 +813,15 @@ xaccFreeTransaction (Transaction *trans)
     /* free up transaction strings */
     CACHE_REMOVE(trans->num);
     CACHE_REMOVE(trans->description);
+    g_free (trans->readonly_reason);
 
     /* Just in case someone looks up freed memory ... */
     trans->num         = (char *) 1;
     trans->description = NULL;
     trans->date_entered = 0;
     trans->date_posted = 0;
+    trans->readonly_reason = NULL;
+    trans->reason_cache_valid = FALSE;
     if (trans->orig)
     {
         xaccFreeTransaction (trans->orig);
@@ -2069,6 +2074,10 @@ void xaccTransClearReadOnly (Transaction *trans)
         qof_instance_set_kvp (QOF_INSTANCE (trans), NULL, 1, TRANS_READ_ONLY_REASON);
         qof_instance_set_dirty(QOF_INSTANCE(trans));
         xaccTransCommitEdit(trans);
+
+        g_free (trans->readonly_reason);
+        trans->readonly_reason = NULL;
+        trans->reason_cache_valid = TRUE;
     }
 }
 
@@ -2084,6 +2093,10 @@ xaccTransSetReadOnly (Transaction *trans, const char *reason)
         qof_instance_set_kvp (QOF_INSTANCE (trans), &v, 1, TRANS_READ_ONLY_REASON);
         qof_instance_set_dirty(QOF_INSTANCE(trans));
         xaccTransCommitEdit(trans);
+
+        g_free (trans->readonly_reason);
+        trans->readonly_reason = g_strdup (reason);
+        trans->reason_cache_valid = TRUE;
     }
 }
 
@@ -2417,7 +2430,10 @@ xaccTransRetDateDue(const Transaction *trans)
     if (!trans) return 0;
     qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, TRANS_DATE_DUE_KVP);
     if (G_VALUE_HOLDS_BOXED (&v))
+    {
         ret = ((Time64*)g_value_get_boxed (&v))->t;
+        g_value_unset (&v);
+    }
     if (!ret)
         return xaccTransRetDatePosted (trans);
     return ret;
@@ -2440,21 +2456,29 @@ xaccTransGetTxnType (const Transaction *trans)
 }
 
 const char *
-xaccTransGetReadOnly (const Transaction *trans)
+xaccTransGetReadOnly (Transaction *trans)
 {
-    /* XXX This flag should be cached in the transaction structure
-     * for performance reasons, since its checked every trans commit.
-     */
-    GValue v = G_VALUE_INIT;
-    const char *s = NULL;
-    if (trans == NULL) return NULL;
-    qof_instance_get_kvp (QOF_INSTANCE(trans), &v, 1, TRANS_READ_ONLY_REASON);
-    if (G_VALUE_HOLDS_STRING (&v))
-         s = g_value_get_string (&v);
-    if (s && strlen (s))
-        return s;
+    if (!trans)
+        return NULL;
 
-    return NULL;
+    if (!trans->reason_cache_valid)
+    {
+        GValue v = G_VALUE_INIT;
+        qof_instance_get_kvp (QOF_INSTANCE(trans), &v, 1, TRANS_READ_ONLY_REASON);
+
+        /* Clear possible old cache value first */
+        g_free (trans->readonly_reason);
+        trans->readonly_reason = NULL;
+
+        /* Then set the new one */
+        if (G_VALUE_HOLDS_STRING (&v))
+        {
+            trans->readonly_reason = g_value_dup_string (&v);
+            g_value_unset (&v);
+        }
+        trans->reason_cache_valid = TRUE;
+    }
+    return trans->readonly_reason;
 }
 
 static gboolean

@@ -15421,8 +15421,8 @@ msgid "Report bugs and other problems to gnucash-devel@gnucash.org"
 msgstr "أرسل الأخطاء وغيرها من المشاكل لgnucash-devel@gnucash.org"
 
 #: ../gnucash/gnucash-bin.c:162
-msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
-msgstr "يمكنك أيضا بحث وتقديم التقارير الأخطاء في http://bugs.gnucash.org"
+msgid "You can also lookup and file bug reports at https://bugs.gnucash.org"
+msgstr "يمكنك أيضا بحث وتقديم التقارير الأخطاء في https://bugs.gnucash.org"
 
 #: ../gnucash/gnucash-bin.c:163
 msgid "To find the last stable version, please refer to http://www.gnucash.org"

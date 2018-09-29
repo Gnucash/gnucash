@@ -1686,6 +1686,13 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
         return;
     }
 
+    /* We're closing, either by cancel, esc or ok
+     * Remove date changed handler to prevent it from triggering
+     * on a focus-out event while we're already destroying the widget */
+    g_signal_handlers_disconnect_by_func (G_OBJECT (xferData->date_entry),
+                                            G_CALLBACK (gnc_xfer_date_changed_cb),
+                                            xferData);
+
     if (response != GTK_RESPONSE_OK)
     {
         gnc_close_gui_component_by_data (DIALOG_TRANSFER_CM_CLASS, xferData);

@@ -47,11 +47,8 @@ extern "C" {
 
         /* Query information */
         Query      *query;
-        gint        num_entries;
 
         /* Select information */
-        gpointer    selected_entry;
-        GList      *selected_entry_list;
         gint        toggled_row;
         gint        toggled_column;
 
@@ -108,6 +105,8 @@ extern "C" {
 
     gpointer gnc_query_view_get_selected_entry (GNCQueryView *qview);
 
+    /** Returns a list of selected entries in the query view.
+     *  The returned GList should be freed by the caller */
     GList * gnc_query_view_get_selected_entry_list (GNCQueryView *qview);
 
     void gnc_query_view_refresh (GNCQueryView *qview);

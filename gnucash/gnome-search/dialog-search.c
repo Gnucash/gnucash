@@ -77,8 +77,6 @@ struct _GNCSearchWindow
 
     /* The "results" sub-window widgets */
     GtkWidget               *result_view;
-    gpointer                 selected_item;
-    GList                   *selected_item_list;
 
     /* The search_type radio-buttons */
     GtkWidget               *new_rb;
@@ -146,29 +144,24 @@ gnc_search_callback_button_execute (GNCSearchCallbackButton *cb,
                                     GNCSearchWindow *sw)
 {
     GNCQueryView     *qview = GNC_QUERY_VIEW(sw->result_view);
-    GtkTreeSelection *selection;
 
     // Sanity check
     g_assert(qview);
-    selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(qview));
-    g_assert(gtk_tree_selection_get_mode(selection) == GTK_SELECTION_MULTIPLE);
-    selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(qview));
 
     /* Do we have a callback for multi-selections ? */
     if (cb->cb_multiselect_fn && (!cb->cb_fcn ))
     {
-        /* We have allready populated the selected_item_list from the select row callback */
-        // We use g_list_prepend (for performance reasons), so we have to reverse once here
-        sw->selected_item_list = g_list_reverse(sw->selected_item_list);
-
+        GList *entries = gnc_query_view_get_selected_entry_list (qview);
         // Call the callback
-        (cb->cb_multiselect_fn)(GTK_WINDOW (sw->dialog), sw->selected_item_list, sw->user_data);
+        (cb->cb_multiselect_fn)(GTK_WINDOW (sw->dialog), entries, sw->user_data);
+        g_list_free (entries);
     }
     else
     {
         // No, stick to the single-item callback
+        gpointer entry = gnc_query_view_get_selected_entry (qview);
         if (cb->cb_fcn)
-            (cb->cb_fcn)(GTK_WINDOW (sw->dialog), &(sw->selected_item), sw->user_data);
+            (cb->cb_fcn)(GTK_WINDOW (sw->dialog), &entry, sw->user_data);
     }
 }
 
@@ -229,16 +222,18 @@ gnc_search_dialog_select_buttons_enable (GNCSearchWindow *sw, gint selected)
 static void
 gnc_search_dialog_select_cb (GtkButton *button, GNCSearchWindow *sw)
 {
+    gpointer entry;
     g_return_if_fail (sw->selected_cb);
 
-    if (sw->selected_item == NULL && sw->allow_clear == FALSE)
+    entry = gnc_query_view_get_selected_entry (GNC_QUERY_VIEW (sw->result_view));
+    if (!entry && !sw->allow_clear)
     {
         char *msg = _("You must select an item from the list");
         gnc_error_dialog (GTK_WINDOW (sw->dialog), "%s", msg);
         return;
     }
 
-    (sw->selected_cb)(GTK_WINDOW (sw->dialog), sw->selected_item, sw->select_arg);
+    (sw->selected_cb)(GTK_WINDOW (sw->dialog), entry, sw->select_arg);
     gnc_search_dialog_destroy (sw);
 }
 
@@ -249,22 +244,8 @@ gnc_search_dialog_select_row_cb (GNCQueryView *qview,
                                  gpointer user_data)
 {
     GNCSearchWindow  *sw = user_data;
-    gint              number_of_rows;
-
-    sw->selected_item_list = NULL;
-    sw->selected_item = NULL;
-
-    number_of_rows = GPOINTER_TO_INT(item);
-
+    gint number_of_rows = GPOINTER_TO_INT(item);
     gnc_search_dialog_select_buttons_enable(sw, number_of_rows);
-
-    if(number_of_rows == 1)
-    {
-        sw->selected_item = qview->selected_entry;
-        sw->selected_item_list = qview->selected_entry_list;
-    }
-    else
-        sw->selected_item_list = qview->selected_entry_list;
 }
 
 
@@ -275,7 +256,6 @@ gnc_search_dialog_double_click_cb (GNCQueryView *qview,
 {
     GNCSearchWindow  *sw = user_data;
 
-    sw->selected_item = item;
     if (sw->selected_cb)
         /* Select the item */
         gnc_search_dialog_select_cb (NULL, sw);
@@ -624,7 +604,15 @@ search_find_cb (GtkButton *button, GNCSearchWindow *sw)
     gnc_search_dialog_reset_widgets (sw);
 
     if (sw->result_cb)
-        (sw->result_cb)(sw->q, sw->user_data, &(sw->selected_item));
+    {
+        gpointer entry = NULL;
+        if (sw->result_view)
+        {
+            GNCQueryView *qview = GNC_QUERY_VIEW (sw->result_view);
+            entry = gnc_query_view_get_selected_entry (qview);
+        }
+        (sw->result_cb)(sw->q, sw->user_data, &entry);
+    }
     else
         gnc_search_dialog_display_results (sw);
 }
@@ -668,7 +656,6 @@ static void
 search_cancel_cb (GtkButton *button, GNCSearchWindow *sw)
 {
     /* Don't select anything */
-    sw->selected_item = NULL;
     gnc_search_dialog_destroy (sw);
 }
 

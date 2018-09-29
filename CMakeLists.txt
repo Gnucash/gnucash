@@ -12,13 +12,13 @@ enable_testing()
 
 # Version number of gnucash
 set (GNUCASH_MAJOR_VERSION 3)
-set (GNUCASH_MINOR_VERSION 2)
+set (GNUCASH_MINOR_VERSION 900)
 set (VERSION "${GNUCASH_MAJOR_VERSION}.${GNUCASH_MINOR_VERSION}")
 set (GNUCASH_LATEST_STABLE_SERIES 3.x)
 
 set (PACKAGE gnucash)
 set (PACKAGE_NAME GnuCash)
-set (PACKAGE_VERSION 3.2)
+set (PACKAGE_VERSION 3.900)
 set (PACKAGE_BUGREPORT gnucash-devel@gnucash.org)
 set (PACKAGE_TARNAME ${PACKAGE})
 set (PACKAGE_STRING "${PACKAGE_NAME} ${PACKAGE_VERSION}")
@@ -48,6 +48,7 @@ include (GncAddGSchemaTargets)
 include (GncAddTest)
 include (MakeDistFiles)
 include (GNUInstallDirs)
+include (TestBigEndian)
 
 # ############################################################
 # These options are settable from the CMake command line. For example, to disable
@@ -545,6 +546,7 @@ check_c_compiler_flag(-Wstringop-truncation have_stringop_truncation)
 if (have_stringop_truncation)
     set(HAVE_STRINGOP_TRUNCATION TRUE)
 endif()
+add_definitions(-D_GNU_SOURCE)
 
 if (APPLE)
   include (CheckCXXCompilerFlag)
@@ -687,6 +689,11 @@ check_include_files (sys/wait.h HAVE_SYS_WAIT_H)
 check_include_files (unistd.h HAVE_UNISTD_H)
 check_include_files (utmp.h HAVE_UTMP_H)
 check_include_files (wctype.h HAVE_WCTYPE_H)
+
+test_big_endian(IS_BIGENDIAN)
+if (IS_BIGENDIAN)
+  set(WORDS_BIGENDIAN)
+endif (IS_BIGENDIAN)
 
 if (NOT DISABLE_NLS)
 set(ENABLE_NLS 1)

@@ -110,9 +110,7 @@
         0
         ))
 
-(use-modules (gnucash report fancy-invoice))
 (use-modules (gnucash report invoice))
-(use-modules (gnucash report easy-invoice))
 (use-modules (gnucash report taxinvoice))
 (use-modules (gnucash report receipt))
 (use-modules (gnucash report owner-report))

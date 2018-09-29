@@ -1305,10 +1305,8 @@ be excluded from periodic reporting.")
     (define indent-level
       (+ primary-indent secondary-indent))
 
-
     (define (add-subheading data subheading-style split level)
-      (let* ((row-contents '())
-             (sortkey (opt-val pagename-sorting
+      (let* ((sortkey (opt-val pagename-sorting
                                (case level
                                  ((primary) optname-prime-sortkey)
                                  ((secondary) optname-sec-sortkey))))
@@ -1316,31 +1314,36 @@ be excluded from periodic reporting.")
                             ((primary total) 0)
                             ((secondary) primary-indent)))
              (right-indent (- indent-level left-indent)))
-        (for-each (lambda (cell) (addto! row-contents cell))
-                  (gnc:html-make-empty-cells left-indent))
-        (if (and (opt-val pagename-sorting optname-show-informal-headers)
-                 (column-uses? 'amount-double)
-                 (member sortkey SORTKEY-INFORMAL-HEADERS))
-            (begin
-              (if export?
-                  (begin
-                    (addto! row-contents (gnc:make-html-table-cell data))
-                    (for-each (lambda (cell) (addto! row-contents cell))
-                              (gnc:html-make-empty-cells (+ right-indent width-left-columns -1))))
-                  (addto! row-contents (gnc:make-html-table-cell/size
-                                        1 (+ right-indent width-left-columns) data)))
-              (for-each (lambda (cell)
-                          (addto! row-contents
-                                  (gnc:make-html-text
-                                   (gnc:html-markup-b
-                                    ((vector-ref cell 5)
-                                     ((keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) sortkey 'renderer-fn) split))))))
-                        calculated-cells))
-            (addto! row-contents (gnc:make-html-table-cell/size
-                                  1 (+ right-indent width-left-columns width-right-columns) data)))
 
-        (if (not (column-uses? 'subtotals-only))
-            (gnc:html-table-append-row/markup! table subheading-style (reverse row-contents)))))
+        (unless (column-uses? 'subtotals-only)
+          (gnc:html-table-append-row/markup!
+           table subheading-style
+           (append
+            (gnc:html-make-empty-cells left-indent)
+            (if (and (opt-val pagename-sorting optname-show-informal-headers)
+                     (column-uses? 'amount-double)
+                     (member sortkey SORTKEY-INFORMAL-HEADERS))
+                (append
+                 (if export?
+                     (cons
+                      (gnc:make-html-table-cell data)
+                      (gnc:html-make-empty-cells
+                       (+ right-indent width-left-columns -1)))
+                     (list
+                      (gnc:make-html-table-cell/size
+                       1 (+ right-indent width-left-columns) data)))
+                 (map (lambda (cell)
+                        (gnc:make-html-text
+                         (gnc:html-markup-b
+                          ((vector-ref cell 5)
+                           ((keylist-get-info (sortkey-list BOOK-SPLIT-ACTION)
+                                              sortkey 'renderer-fn)
+                            split)))))
+                      calculated-cells))
+                (list
+                 (gnc:make-html-table-cell/size
+                  1 (+ right-indent width-left-columns width-right-columns)
+                  data))))))))
 
     (define (add-subtotal-row subtotal-string subtotal-collectors subtotal-style level row col)
       (let* ((left-indent (case level
@@ -1506,65 +1509,46 @@ be excluded from periodic reporting.")
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     (define (add-split-row split cell-calculators row-style transaction-row?)
-      (let* ((row-contents '())
-             (trans (xaccSplitGetParent split))
-             (account (xaccSplitGetAccount split)))
+      (let* ((account (xaccSplitGetAccount split))
+             (reversible-account? (if account-types-to-reverse
+                                      (member (xaccAccountGetType account)
+                                              account-types-to-reverse)
+                                      (gnc-reverse-balance account)))
+             (cells (map (lambda (cell)
+                           (let* ((split->monetary (vector-ref cell 1)))
+                             (vector (split->monetary split)
+                                     (vector-ref cell 2) ;reverse?
+                                     (vector-ref cell 3) ;subtotal?
+                                     )))
+                         cell-calculators)))
 
-        (define left-cols
-          (map (lambda (left-col)
-                 (let* ((col-fn (vector-ref left-col 1))
-                        (col-data (col-fn split transaction-row?)))
-                   col-data))
-               left-columns))
-
-        (define cells
-          (map (lambda (cell)
-                 (let* ((calculator (vector-ref cell 1))
-                        (reverse? (vector-ref cell 2))
-                        (subtotal? (vector-ref cell 3))
-                        (calculated (calculator split)))
-                   (vector calculated
-                           reverse?
-                           subtotal?)))
-               cell-calculators))
-
-        (for-each (lambda (cell) (addto! row-contents cell))
-                  (gnc:html-make-empty-cells indent-level))
-
-        (for-each (lambda (col)
-                    (addto! row-contents col))
-                  left-cols)
-
-        (for-each (lambda (cell)
-                    (let ((cell-content (vector-ref cell 0))
-                          ;; reverse? returns a bool - will check if the cell type has reversible sign,
-                          ;; whether the account is also reversible according to Report Option, or
-                          ;; if Report Option follows Global Settings, will retrieve bool from it.
-                          (reverse? (and (vector-ref cell 1)
-                                         (if account-types-to-reverse
-                                             (member (xaccAccountGetType account) account-types-to-reverse)
-                                             (gnc-reverse-balance account)))))
-                      (if cell-content
-                          (addto! row-contents
-                                  (gnc:make-html-table-cell/markup
-                                   "number-cell"
-                                   (gnc:html-transaction-anchor
-                                    trans
-                                    ;; if conditions for reverse are satisfied, apply sign reverse to
-                                    ;; monetary amount
-                                    (if reverse?
-                                        (gnc:monetary-neg cell-content)
-                                        cell-content))))
-                          (addto! row-contents (gnc:html-make-empty-cell)))))
-                  cells)
-
-        (if (not (column-uses? 'subtotals-only))
-            (gnc:html-table-append-row/markup! table row-style (reverse row-contents)))
+        (unless (column-uses? 'subtotals-only)
+          (gnc:html-table-append-row/markup!
+           table row-style
+           (append
+            (gnc:html-make-empty-cells indent-level)
+            (map (lambda (left-col)
+                   ((vector-ref left-col 1)
+                    split transaction-row?))
+                 left-columns)
+            (map (lambda (cell)
+                   (let ((cell-monetary (vector-ref cell 0))
+                         (reverse? (and (vector-ref cell 1)
+                                        reversible-account?)))
+                     (and cell-monetary
+                          (gnc:make-html-table-cell/markup
+                           "number-cell"
+                           (gnc:html-transaction-anchor
+                            (xaccSplitGetParent split)
+                            (if reverse?
+                                (gnc:monetary-neg cell-monetary)
+                                cell-monetary))))))
+                 cells))))
 
         (map (lambda (cell)
-               (let ((cell-content (vector-ref cell 0))
+               (let ((cell-monetary (vector-ref cell 0))
                      (subtotal? (vector-ref cell 2)))
-                 (and subtotal? cell-content)))
+                 (and subtotal? cell-monetary)))
              cells)))
 
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1621,23 +1605,23 @@ be excluded from periodic reporting.")
                    (add-split-row othersplits calculated-cells def:alternate-row-style #f))
                  (delete current (xaccTransGetSplitList (xaccSplitGetParent current)))))
 
-            (map (lambda (collector value)
-                   (if value
-                       (collector 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))))
-                 primary-subtotal-collectors
-                 split-values)
+            (for-each
+             (lambda (collector value)
+               (if value
+                   (collector 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))))
+             primary-subtotal-collectors split-values)
 
-            (map (lambda (collector value)
-                   (if value
-                       (collector 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))))
-                 secondary-subtotal-collectors
-                 split-values)
+            (for-each
+             (lambda (collector value)
+               (if value
+                   (collector 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))))
+             secondary-subtotal-collectors split-values)
 
-            (map (lambda (collector value)
-                   (if value
-                       (collector 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))))
-                 total-collectors
-                 split-values)
+            (for-each
+             (lambda (collector value)
+               (if value
+                   (collector 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))))
+             total-collectors split-values)
 
             (if (and primary-subtotal-comparator
                      (or (not next)

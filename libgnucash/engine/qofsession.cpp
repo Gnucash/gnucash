@@ -125,7 +125,6 @@ QofSessionImpl::QofSessionImpl () noexcept
     m_last_err {},
     m_error_message {}
 {
-    clear_error ();
 }
 
 QofSessionImpl::~QofSessionImpl () noexcept
@@ -201,44 +200,23 @@ QofSessionImpl::load_backend (std::string access_method) noexcept
 void
 QofSessionImpl::load (QofPercentageFunc percentage_func) noexcept
 {
+    /* We must have an empty book to load into or bad things will happen. */
+    g_return_if_fail(m_book && qof_book_empty(m_book));
+    
     if (!m_book_id.size ()) return;
     ENTER ("sess=%p book_id=%s", this, m_book_id.c_str ());
 
     /* At this point, we should are supposed to have a valid book
     * id and a lock on the file. */
-    QofBook * oldbook {m_book};
-
-    QofBook * newbook {qof_book_new ()};
-    m_book = newbook;
-    PINFO ("new book=%p", newbook);
     clear_error ();
-
-    /* This code should be sufficient to initialize *any* backend,
-    * whether http, postgres, or anything else that might come along.
-    * Basically, the idea is that by now, a backend has already been
-    * created & set up.  At this point, we only need to get the
-    * top-level account group out of the backend, and that is a
-    * generic, backend-independent operation.
-    */
-    auto be (qof_book_get_backend (oldbook));
-    qof_book_set_backend (newbook, be);
-
-    /* Starting the session should result in a bunch of accounts
-    * and currencies being downloaded, but probably no transactions;
-    * The GUI will need to do a query for that.
-    */
+    auto be (qof_book_get_backend(m_book));
     if (be)
     {
         be->set_percentage(percentage_func);
-        be->load (newbook, LOAD_TYPE_INITIAL_LOAD);
+        be->load (m_book, LOAD_TYPE_INITIAL_LOAD);
         push_error (be->get_error(), {});
     }
 
-    /* XXX if the load fails, then we try to restore the old set of books;
-    * however, we don't undo the session id (the URL).  Thus if the
-    * user attempts to save after a failed load, they weill be trying to
-    * save to some bogus URL.   This is wrong. XXX  FIXME.
-    */
     auto err = get_error ();
     if ((err != ERR_BACKEND_NO_ERR) &&
             (err != ERR_FILEIO_FILE_TOO_OLD) &&
@@ -247,16 +225,11 @@ QofSessionImpl::load (QofPercentageFunc percentage_func) noexcept
             (err != ERR_SQL_DB_TOO_OLD) &&
             (err != ERR_SQL_DB_TOO_NEW))
     {
-        /* Something broke, put back the old stuff */
-        qof_book_set_backend (newbook, NULL);
-        qof_book_destroy (newbook);
-        m_book = oldbook;
+        qof_book_destroy(m_book);
+        m_book = qof_book_new();
         LEAVE ("error from backend %d", get_error ());
         return;
     }
-    qof_book_set_backend (oldbook, NULL);
-    qof_book_destroy (oldbook);
-
     LEAVE ("sess = %p, book_id=%s", this, m_book_id.c_str ());
 }
 

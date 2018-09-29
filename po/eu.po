@@ -16000,9 +16000,9 @@ msgstr ""
 
 #: ../gnucash/gnucash-bin.c:162
 #, fuzzy
-msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
+msgid "You can also lookup and file bug reports at https://bugs.gnucash.org"
 msgstr ""
-"Akatsen berriemateak ikusi eta bidaltzeko http://bugs.gnucash.org ere "
+"Akatsen berriemateak ikusi eta bidaltzeko https://bugs.gnucash.org ere "
 "erabil dezakezu.\n"
 
 #: ../gnucash/gnucash-bin.c:163

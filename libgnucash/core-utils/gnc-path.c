@@ -24,6 +24,7 @@
 #include "gncla-dir.h"
 #include <stdio.h>
 #include "binreloc.h"
+#include "gnc-filepath-utils.h"
 
 gchar *gnc_path_get_prefix()
 {
@@ -138,13 +139,19 @@ gchar *gnc_path_get_gtkbuilderdir()
  * @returns A newly allocated string. */
 gchar *gnc_path_get_localedir()
 {
-    if (g_path_is_absolute (LOCALEDIR))
-        return g_strdup(LOCALEDIR);
+    gchar *prefix = gnc_path_get_prefix();
+    char *locale_subdir = gnc_file_path_relative_part (PREFIX, LOCALEDIR);
+    if (prefix == NULL || g_strcmp0 (locale_subdir, LOCALEDIR) == 0)
+    {
+        g_free (prefix);
+        g_free (locale_subdir);
+        return LOCALEDIR;
+    }
     else
     {
-        gchar *prefix = gnc_path_get_prefix();
-        gchar *result = g_build_filename (prefix, LOCALEDIR, (char*)NULL);
+        gchar *result = g_build_filename (prefix, locale_subdir, (char*)NULL);
         g_free (prefix);
+        g_free (locale_subdir);
         //printf("Returning localedir %s\n", result);
         return result;
     }

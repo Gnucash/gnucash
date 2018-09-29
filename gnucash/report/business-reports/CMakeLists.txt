@@ -3,8 +3,6 @@ add_subdirectory (test)
 set (business_reports_SCHEME
   aging.scm
   customer-summary.scm
-  easy-invoice.scm
-  fancy-invoice.scm
   taxinvoice.scm
   receipt.scm
   invoice.scm

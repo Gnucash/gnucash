@@ -32,6 +32,9 @@
 #include "gnc-query-view.h"
 #include "search-param.h"
 
+/* This static indicates the debugging module that this .o belongs to.  */
+static QofLogModule log_module = GNC_MOD_GUI;
+
 /* Signal codes */
 enum
 {
@@ -471,44 +474,11 @@ gnc_query_view_class_init (GNCQueryViewClass *klass)
 static void
 gnc_query_view_select_row_cb (GtkTreeSelection *selection, gpointer user_data)
 {
-    GNCQueryView   *qview = GNC_QUERY_VIEW (gtk_tree_selection_get_tree_view (selection));
-    GtkTreeModel   *model;
-    gint            number_of_rows;
-    gpointer        entry = NULL;
-    GList          *node;
-    GList          *list_of_rows;
+    GNCQueryView *qview = GNC_QUERY_VIEW (gtk_tree_selection_get_tree_view (selection));
+    gint number_of_rows = gtk_tree_selection_count_selected_rows (selection);
 
-    qview->selected_entry_list = NULL;
-    qview->selected_entry = NULL;
-
-    model =  gtk_tree_view_get_model (GTK_TREE_VIEW (qview));
-    list_of_rows = gtk_tree_selection_get_selected_rows (selection, &model);
-    number_of_rows = gtk_tree_selection_count_selected_rows (selection);
-
-    /* We get a list of TreePaths */
-    for(node = list_of_rows; node; node = node->next)
-    {
-        GtkTreeIter iter;
-        if(gtk_tree_model_get_iter(model, &iter, node->data))
-        {
-            /* now iter is a valid row iterator */
-            gtk_tree_model_get (model, &iter, 0, &entry, -1);
-            if(number_of_rows == 1)
-            {
-                qview->selected_entry = entry;
-                qview->selected_entry_list = g_list_prepend(qview->selected_entry_list, entry);
-            }
-            else
-            {
-                qview->selected_entry = NULL;
-                qview->selected_entry_list = g_list_prepend(qview->selected_entry_list, entry);
-            }
-        }
-        gtk_tree_path_free(node->data);
-    }
-    g_list_free(list_of_rows);
-
-    g_signal_emit (qview, query_view_signals[ROW_SELECTED], 0, GINT_TO_POINTER(number_of_rows));
+    g_signal_emit (qview, query_view_signals[ROW_SELECTED], 0,
+                   GINT_TO_POINTER(number_of_rows));
 }
 
 
@@ -527,9 +497,6 @@ gnc_query_view_double_click_cb (GtkTreeView       *view,
 
     if (gtk_tree_model_get_iter (model, &iter, path))
         gtk_tree_model_get (model, &iter, 0, &entry, -1);
-
-    qview->selected_entry = entry;
-    qview->selected_entry_list = NULL;
 
     g_signal_emit (qview, query_view_signals[DOUBLE_CLICK_ENTRY], 0, entry);
 }
@@ -563,14 +530,12 @@ gnc_query_view_toggled_cb (GtkCellRendererToggle *cell_renderer,
         indices = gtk_tree_path_get_indices (treepath);
         qview->toggled_row = indices[0];
         qview->toggled_column = column;
-        qview->selected_entry = entry;
 
         if(toggled)
             g_signal_emit (qview, query_view_signals[COLUMN_TOGGLED], 0, GINT_TO_POINTER(0));
         else
             g_signal_emit (qview, query_view_signals[COLUMN_TOGGLED], 0, GINT_TO_POINTER(1));
     }
-    qview->selected_entry = entry;
 }
 
 
@@ -586,12 +551,7 @@ gnc_query_view_destroy (GtkWidget *widget)
         gnc_unregister_gui_component (priv->component_id);
         priv->component_id = 0;
     }
-    /* Free the selected entry list */
-    if (qview->selected_entry_list)
-    {
-        g_list_free(qview->selected_entry_list);
-        qview->selected_entry_list = NULL;
-    }
+
     /* Remove the query */
     if (qview->query)
     {
@@ -606,30 +566,74 @@ gnc_query_view_destroy (GtkWidget *widget)
 gint
 gnc_query_view_get_num_entries (GNCQueryView *qview)
 {
+    GtkTreeModel *model;
+
     g_return_val_if_fail (qview != NULL, 0);
     g_return_val_if_fail (GNC_IS_QUERY_VIEW (qview), 0);
 
-    return qview->num_entries;
+    model = gtk_tree_view_get_model (GTK_TREE_VIEW (qview));
+    return gtk_tree_model_iter_n_children (model, NULL);
 }
 
 
 gpointer
 gnc_query_view_get_selected_entry (GNCQueryView *qview)
 {
+    gpointer entry = NULL;
+    GList *entries = NULL;
+    gint num_entries = 0;
+
     g_return_val_if_fail (qview != NULL, NULL);
     g_return_val_if_fail (GNC_IS_QUERY_VIEW (qview), NULL);
 
-    return qview->selected_entry;
+    entries = gnc_query_view_get_selected_entry_list (qview);
+    if (entries)
+        entry = entries->data;
+
+    num_entries = g_list_length (entries);
+    if (num_entries > 1)
+        PWARN ("Expected only one selected entry but found %i. "
+               "Discarding all but the first one.", num_entries);
+
+    g_list_free (entries);
+
+    return entry;
 }
 
+typedef struct
+{
+    GList *entries;
+} acc_data;
+
+static void
+accumulate_entries (GtkTreeModel *model, GtkTreePath *path,
+                    GtkTreeIter *iter, gpointer data)
+{
+    acc_data *acc_entries = (acc_data*)data;
+    gpointer entry = NULL;
+    GList *entries = acc_entries->entries;
+
+    gtk_tree_model_get (model, iter, 0, &entry, -1);
+    entries = g_list_prepend (entries, entry);
+    acc_entries->entries = entries;
+}
 
 GList *
 gnc_query_view_get_selected_entry_list (GNCQueryView *qview)
 {
+    GtkTreeSelection *selection;
+    acc_data acc_entries;
+    GList *entries = NULL;
+
     g_return_val_if_fail (qview != NULL, NULL);
     g_return_val_if_fail (GNC_IS_QUERY_VIEW (qview), NULL);
 
-    return qview->selected_entry_list;
+    acc_entries.entries = NULL;
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (qview));
+    gtk_tree_selection_selected_foreach (selection, accumulate_entries,
+                                         &acc_entries);
+    acc_entries.entries = g_list_reverse (acc_entries.entries);
+    return acc_entries.entries;
 }
 
 
@@ -685,24 +689,18 @@ void
 gnc_query_view_refresh (GNCQueryView *qview)
 {
     GtkTreeModel     *model;
-    GList            *old_entry;
+    GList            *selected_entries;
 
     g_return_if_fail (qview != NULL);
     g_return_if_fail (GNC_IS_QUERY_VIEW (qview));
 
-    old_entry = qview->selected_entry_list;
+    selected_entries = gnc_query_view_get_selected_entry_list (qview);
     model = gtk_tree_view_get_model (GTK_TREE_VIEW (qview));
     gtk_list_store_clear (GTK_LIST_STORE (model));
 
-    qview->num_entries = 0;
-    qview->selected_entry = NULL;
-    qview->selected_entry_list = NULL;
-
     gnc_query_view_fill (qview);
-
-    gnc_query_view_refresh_selected (qview, old_entry);
-
-    g_list_free(old_entry);
+    gnc_query_view_refresh_selected (qview, selected_entries);
+    g_list_free (selected_entries);
 }
 
 
@@ -850,8 +848,6 @@ gnc_query_view_fill (GNCQueryView *qview)
         guid = (const GncGUID*)((gup->param_getfcn)(item->data, gup));
         gnc_gui_component_watch_entity (priv->component_id, guid,
                                         QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
-
-        qview->num_entries++;
     }
 }
 
@@ -873,9 +869,6 @@ gnc_query_view_unselect_all (GNCQueryView *qview)
 
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (qview));
     gtk_tree_selection_unselect_all (selection);
-
-    qview->selected_entry = NULL;
-    qview->selected_entry_list = NULL;
 }
 
 

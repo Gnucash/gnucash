@@ -818,7 +818,8 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
                                         GTK_BUTTONS_CLOSE, "%s",
                                         _("Cannot save check format file."));
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-                "%s", error->message);
+                                                 _("Cannot open file %s"),
+                                                 _(error->message));
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
         g_error_free(error);

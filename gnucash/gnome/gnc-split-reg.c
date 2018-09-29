@@ -159,7 +159,6 @@ void gnc_split_reg_sort_action_cb (GtkWidget *w, gpointer data);
 void gnc_split_reg_sort_notes_cb (GtkWidget *w, gpointer data);
 
 
-void gnc_split_reg_destroy_cb(GtkWidget *widget, gpointer data);
 void gnc_split_reg_size_allocate( GtkWidget *widget,
                                   GtkAllocation *allocation,
                                   gpointer user_data );
@@ -168,6 +167,7 @@ void gnc_split_reg_size_allocate( GtkWidget *widget,
 static void gnc_split_reg_class_init( GNCSplitRegClass *klass );
 static void gnc_split_reg_init( GNCSplitReg *gsr );
 static void gnc_split_reg_init2( GNCSplitReg *gsr );
+void gnc_split_reg_dispose(GObject *obj);
 
 FROM_STRING_FUNC(SortType, ENUM_LIST_SORTTYPE)
 AS_STRING_FUNC(SortType, ENUM_LIST_SORTTYPE)
@@ -314,6 +314,8 @@ gnc_split_reg_class_init( GNCSplitRegClass *klass )
     klass->help_changed_cb = NULL;
     klass->show_popup_menu_cb = NULL;
     klass->include_date_cb = NULL;
+
+    object_class->dispose = gnc_split_reg_dispose;
 }
 
 GtkWidget*
@@ -354,9 +356,6 @@ gnc_split_reg_init( GNCSplitReg *gsr )
     gsr->height = -1;
     gsr->numRows = 10;
     gsr->read_only = FALSE;
-
-    g_signal_connect( gsr, "destroy",
-                      G_CALLBACK (gnc_split_reg_destroy_cb), gsr );
 }
 
 static void
@@ -444,12 +443,20 @@ gsr_setup_status_widgets( GNCSplitReg *gsr )
 }
 
 void
-gnc_split_reg_destroy_cb(GtkWidget *widget, gpointer data)
+gnc_split_reg_dispose(GObject *obj)
 {
-    GNCSplitReg *gsr = data;
+    GNCSplitReg *gsr = GNC_SPLIT_REG(obj);
 
     if (gsr->filter_text)
         g_free (gsr->filter_text);
+    gsr->filter_text = NULL;
+
+    if (gsr->reg)
+    {
+        g_signal_handlers_disconnect_by_data (gsr->reg, gsr);
+        gtk_widget_destroy (GTK_WIDGET (gsr->reg));
+    }
+    gsr->reg = NULL;
 }
 
 /**
@@ -710,7 +717,9 @@ gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
     }
     g_free (state_section);
     g_free (acct_fullname);
+
     gnc_ledger_display_set_user_data (ledger, NULL);
+    g_object_unref (gsr);
 }
 
 void
@@ -896,7 +905,7 @@ gnc_split_reg_reverse_trans_cb (GtkWidget *w, gpointer data)
 
 
 static gboolean
-is_trans_readonly_and_warn (GtkWindow *parent, const Transaction *trans)
+is_trans_readonly_and_warn (GtkWindow *parent, Transaction *trans)
 {
     GtkWidget *dialog;
     const gchar *reason;
@@ -1470,6 +1479,7 @@ gsr_default_schedule_handler( GNCSplitReg *gsr, gpointer data )
         ((guid_equal (xaccSchedXactionGetGUID (sx), fromSXId))
          ? sx : NULL);
     }
+    guid_free (fromSXId);
 
     if ( theSX )
     {
@@ -1749,7 +1759,7 @@ gnc_split_reg_jump_cb( GtkWidget *widget, gpointer data )
 }
 
 void
-gnc_split_reg_change_style (GNCSplitReg *gsr, SplitRegisterStyle style)
+gnc_split_reg_change_style (GNCSplitReg *gsr, SplitRegisterStyle style, gboolean refresh)
 {
     SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
 
@@ -1757,7 +1767,8 @@ gnc_split_reg_change_style (GNCSplitReg *gsr, SplitRegisterStyle style)
         return;
 
     gnc_split_register_config (reg, reg->type, style, reg->use_double_line);
-    gnc_ledger_display_refresh (gsr->ledger);
+    if (refresh)
+        gnc_ledger_display_refresh (gsr->ledger);
 }
 
 void
@@ -1768,7 +1779,7 @@ gnc_split_reg_style_ledger_cb (GtkWidget *w, gpointer data)
     if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w)))
         return;
 
-    gnc_split_reg_change_style (gsr, REG_STYLE_LEDGER);
+    gnc_split_reg_change_style (gsr, REG_STYLE_LEDGER, TRUE);
 }
 
 void
@@ -1779,7 +1790,7 @@ gnc_split_reg_style_auto_ledger_cb (GtkWidget *w, gpointer data)
     if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w)))
         return;
 
-    gnc_split_reg_change_style (gsr, REG_STYLE_AUTO_LEDGER);
+    gnc_split_reg_change_style (gsr, REG_STYLE_AUTO_LEDGER, TRUE);
 }
 
 void
@@ -1790,7 +1801,7 @@ gnc_split_reg_style_journal_cb (GtkWidget *w, gpointer data)
     if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w)))
         return;
 
-    gnc_split_reg_change_style (gsr, REG_STYLE_JOURNAL);
+    gnc_split_reg_change_style (gsr, REG_STYLE_JOURNAL, TRUE);
 }
 
 void

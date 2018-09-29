@@ -323,7 +323,8 @@ show_session_error (GtkWindow *parent,
     case ERR_BACKEND_READONLY:
         fmt = _("GnuCash could not write to %s. "
                 "That database may be on a read-only file system, "
-                "or you may not have write permission for the directory.");
+                "you may not have write permission for the directory "
+                "or your anti-virus software is preventing this action.");
         gnc_error_dialog (parent, fmt, displayname);
         break;
 
@@ -766,7 +767,8 @@ RESTART:
                         "in which case you should not open the database. "
                         "What would you like to do?") :
                       _("That database may be on a read-only file system, "
-                        "or you may not have write permission for the directory. "
+                        "you may not have write permission for the directory, "
+                        "or your anti-virus software is preventing this action. "
                         "If you proceed you may not be able to save any changes. "
                         "What would you like to do?")
                      );

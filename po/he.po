@@ -14989,8 +14989,8 @@ msgstr "דווח על באגים ובעיות אחרות ל- gnucash@devel@gnuca
 
 #: ../gnucash/gnucash-bin.c:162
 #, fuzzy
-msgid "You can also lookup and file bug reports at http://bugs.gnucash.org"
-msgstr "הנך יכול גם לחפש ולדווח על באגים ב- http://bugs.gnucash.org\n"
+msgid "You can also lookup and file bug reports at https://bugs.gnucash.org"
+msgstr "הנך יכול גם לחפש ולדווח על באגים ב- https://bugs.gnucash.org\n"
 
 #: ../gnucash/gnucash-bin.c:163
 msgid "To find the last stable version, please refer to http://www.gnucash.org"

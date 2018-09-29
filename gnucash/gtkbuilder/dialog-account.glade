@@ -875,6 +875,15 @@
       <row>
         <col id="0" translatable="yes">1/1000000</col>
       </row>
+      <row>
+        <col id="0" translatable="yes">1/10000000</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/100000000</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/1000000000</col>
+      </row>
     </data>
   </object>
   <object class="GtkDialog" id="account_dialog">

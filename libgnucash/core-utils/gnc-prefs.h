@@ -124,6 +124,14 @@ guint gnc_prefs_get_long_version( void );
 */
 gboolean gnc_prefs_is_set_up (void);
 
+/** Block all preference callbacks
+*/
+void gnc_prefs_block_all (void);
+
+/** Unblock all preferences callbacks
+*/
+void gnc_prefs_unblock_all (void);
+
 /** @name Listening for changes
  @{
 */

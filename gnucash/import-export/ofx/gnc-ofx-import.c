@@ -81,13 +81,16 @@ static const char *PROP_OFX_INCOME_ACCOUNT = "ofx-income-account";
 static Account*
 get_associated_income_account(const Account* investment_account)
 {
-    GncGUID *income_guid= NULL;
+    GncGUID *income_guid = NULL;
+    Account *acct = NULL;
     g_assert(investment_account);
     qof_instance_get (QOF_INSTANCE (investment_account),
-		      PROP_OFX_INCOME_ACCOUNT, &income_guid,
-		      NULL);
-    return xaccAccountLookup(income_guid,
-			       gnc_account_get_book(investment_account));
+                      PROP_OFX_INCOME_ACCOUNT, &income_guid,
+                      NULL);
+    acct = xaccAccountLookup (income_guid,
+                              gnc_account_get_book(investment_account));
+    guid_free (income_guid);
+    return acct;
 }
 
 static void

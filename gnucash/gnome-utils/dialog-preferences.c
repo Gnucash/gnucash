@@ -90,6 +90,7 @@ static QofLogModule log_module = GNC_MOD_PREFS;
 void gnc_preferences_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused);
 void gnc_account_separator_pref_changed_cb (GtkEntry *entry, GtkWidget *dialog);
 gboolean gnc_account_separator_validate_cb (GtkEntry *entry, GdkEvent *event, GtkWidget *dialog);
+void gnc_save_on_close_expires_cb (GtkToggleButton *button, GtkWidget *dialog);
 
 /** This data structure holds the information for a single addition to
  *  the preferences dialog. */
@@ -200,6 +201,18 @@ gnc_account_separator_validate_cb (GtkEntry *entry, GdkEvent *event, GtkWidget *
     return FALSE;
 }
 
+/** Called when the save-on-close checkbutton is toggled.
+ * @internal
+ * @param button the toggle button.
+ * @param dialog the prefs dialog.
+ */
+void
+gnc_save_on_close_expires_cb (GtkToggleButton *button, GtkWidget *dialog)
+{
+    GtkWidget *spinner = g_object_get_data (G_OBJECT (dialog),
+                                            "save_on_close_wait_time");
+    gtk_widget_set_sensitive(spinner, gtk_toggle_button_get_active(button));
+}
 
 /** This function compares two add-ins to see if they specify the same
  *  tab name.
@@ -1153,9 +1166,8 @@ gnc_prefs_connect_one (const gchar *name,
         GList* child = gtk_container_get_children(GTK_CONTAINER(widget));
         widget_child = child->data;
         g_list_free(child);
-        DEBUG("  %s - hbox", name);
-        DEBUG("Hbox widget type is %s and name is %s", gtk_widget_get_name(GTK_WIDGET(widget_child)), name);
-
+        DEBUG("  %s - box", name);
+        DEBUG("Box widget type is %s and name is %s", gtk_widget_get_name(GTK_WIDGET(widget_child)), name);
         if (GNC_IS_CURRENCY_EDIT(widget_child))
         {
             DEBUG("  %s - currency_edit", name);
@@ -1163,7 +1175,7 @@ gnc_prefs_connect_one (const gchar *name,
         }
         else if (GNC_IS_PERIOD_SELECT(widget_child))
         {
-            DEBUG("  %s - period_Select", name);
+            DEBUG("  %s - period_select", name);
             gnc_prefs_connect_period_select(GNC_PERIOD_SELECT(widget_child), name );
         }
         else if (GNC_IS_DATE_EDIT(widget_child))
@@ -1173,7 +1185,7 @@ gnc_prefs_connect_one (const gchar *name,
         }
         else if (GTK_FILE_CHOOSER_BUTTON(widget_child))
         {
-            DEBUG("  %s - file chooser buuton", name);
+            DEBUG("  %s - file chooser button", name);
             gnc_prefs_connect_file_chooser_button(GTK_FILE_CHOOSER_BUTTON(widget_child), name );
         }
     }
@@ -1200,7 +1212,7 @@ static GtkWidget *
 gnc_preferences_dialog_create(GtkWindow *parent)
 {
     GtkBuilder *builder;
-    GtkWidget *dialog, *notebook, *label, *image;
+    GtkWidget *dialog, *notebook, *label, *image, *spinner;
     GtkWidget *box, *date, *period, *currency, *fcb, *button;
     GHashTable *prefs_table;
     GDate* gdate = NULL;
@@ -1260,6 +1272,9 @@ gnc_preferences_dialog_create(GtkWindow *parent)
 
     image = GTK_WIDGET(gtk_builder_get_object (builder, "separator_error"));
     g_object_set_data(G_OBJECT(dialog), "separator_error", image);
+
+    spinner = GTK_WIDGET(gtk_builder_get_object (builder, "pref/general/save-on-close-wait-time"));
+    g_object_set_data(G_OBJECT(dialog), "save_on_close_wait_time", spinner);
 
     DEBUG("autoconnect");
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
@@ -1344,7 +1359,9 @@ gnc_preferences_dialog_create(GtkWindow *parent)
     gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 0);
 
     DEBUG("We have the following interesting widgets:");
+    gnc_prefs_block_all(); // Block All Registered callbacks
     g_hash_table_foreach(prefs_table, (GHFunc)gnc_prefs_connect_one, dialog);
+    gnc_prefs_unblock_all(); // UnBlock All Registered callbacks
     DEBUG("Done with interesting widgets.");
 
     /* Other stuff */
@@ -1362,6 +1379,9 @@ gnc_preferences_dialog_create(GtkWindow *parent)
     gtk_label_set_label(GTK_LABEL(label), currency_name);
     label = GTK_WIDGET(gtk_builder_get_object (builder, "locale_currency2"));
     gtk_label_set_label(GTK_LABEL(label), currency_name);
+
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "pref/general/save-on-close-expires"));
+    gnc_save_on_close_expires_cb (GTK_TOGGLE_BUTTON(button), dialog);
 
     g_object_unref(G_OBJECT(builder));
 

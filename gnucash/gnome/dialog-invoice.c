@@ -2619,7 +2619,9 @@ gnc_invoice_window_new_invoice (GtkWindow *parent, InvoiceDialogType dialog_type
     gtk_box_pack_start (GTK_BOX(hbox), iw->opened_date, TRUE, TRUE, 0);
 
     /* If this is a New Invoice, reset the Notes file to read/write */
-    gtk_widget_set_sensitive (iw->notes_text, (iw->dialog_type == NEW_INVOICE));
+    gtk_widget_set_sensitive (iw->notes_text,
+                              (iw->dialog_type == NEW_INVOICE) ||
+                              (iw->dialog_type == DUP_INVOICE));
 
     /* Setup signals */
     gtk_builder_connect_signals_full( builder,

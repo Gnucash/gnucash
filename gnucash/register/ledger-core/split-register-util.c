@@ -426,7 +426,7 @@ gnc_split_register_set_cell_fractions (SplitRegister *reg, Split *split)
     if (split_account)
         gnc_price_cell_set_fraction (cell, xaccAccountGetCommoditySCU (split_account));
     else
-        gnc_price_cell_set_fraction (cell, 1000000);
+        gnc_price_cell_set_fraction (cell, GNC_COMMODITY_MAX_FRACTION);
 }
 
 CellBlock *

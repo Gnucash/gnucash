@@ -258,6 +258,9 @@ gboolean qof_book_is_readonly(const QofBook *book);
 /** Mark the book as read only. */
 void qof_book_mark_readonly(QofBook *book);
 
+/** Check if the book has had anything loaded into it. */
+gboolean qof_book_empty(const QofBook *book);
+
 #endif /* SWIG */
 
 /** Returns flag indicating whether this book uses trading accounts */
@@ -282,7 +285,7 @@ const gchar * qof_book_get_default_gains_policy (QofBook *book);
   * valid book-currency, both of which are required, for the 'book-currency'
   * currency accounting method to apply. Use instead
   * 'gnc_book_get_default_gain_loss_acct' which does these validations. */
-const GncGUID * qof_book_get_default_gain_loss_acct_guid (QofBook *book);
+GncGUID * qof_book_get_default_gain_loss_acct_guid (QofBook *book);
 
 /** Returns TRUE if the auto-read-only feature should be used, otherwise
  * FALSE. This is just a wrapper on qof_book_get_num_days_autoreadonly() == 0. */

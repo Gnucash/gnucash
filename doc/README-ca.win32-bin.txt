@@ -17,7 +17,7 @@ IRC (Xat): canal #gnucash al servidor irc.gnome.org, vegeu també http://wiki.gn
 
 Si trobeu errors o problemes, no dubteu a informar-los
 a la nostra eina de seguiment d'errors "Bugzilla":
-http://bugs.gnucash.org/enter_bug.cgi?product=GnuCash
+https://bugs.gnucash.org/enter_bug.cgi?product=GnuCash
 
 -------------------
 

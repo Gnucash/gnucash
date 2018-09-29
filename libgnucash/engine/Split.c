@@ -1111,7 +1111,7 @@ get_currency_denom(const Split * s)
     }
     else if (!s->parent || !s->parent->common_currency)
     {
-        return 1000000; /* Max supported denom to avoid premature rounding. */
+        return GNC_COMMODITY_MAX_FRACTION;
     }
     else
     {
@@ -1128,7 +1128,7 @@ get_commodity_denom(const Split * s)
     }
     else if (!s->acc)
     {
-        return 1000000; /* Max supported denom to avoid premature rounding. */
+        return GNC_COMMODITY_MAX_FRACTION;
     }
     else
     {
@@ -1447,6 +1447,7 @@ xaccSplitDestroy (Split *split)
     acc = split->acc;
     trans = split->parent;
     if (acc && !qof_instance_get_destroying(acc)
+        && !qof_instance_get_destroying(trans)
         && xaccTransGetReadOnly(trans))
         return FALSE;
 

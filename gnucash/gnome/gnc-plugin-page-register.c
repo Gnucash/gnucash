@@ -139,8 +139,8 @@ static gchar *gnc_plugin_page_register_get_filter (GncPluginPage *plugin_page);
 void gnc_plugin_page_register_set_filter (GncPluginPage *plugin_page, const gchar *filter);
 static void gnc_plugin_page_register_set_filter_tooltip (GncPluginPageRegister *page);
 
-static void gnc_ppr_update_status_query (GncPluginPageRegister *page, gboolean refresh);
-static void gnc_ppr_update_date_query (GncPluginPageRegister *page, gboolean refresh);
+static void gnc_ppr_update_status_query (GncPluginPageRegister *page);
+static void gnc_ppr_update_date_query (GncPluginPageRegister *page);
 
 /* Command callbacks */
 static void gnc_plugin_page_register_cmd_print_check (GtkAction *action, GncPluginPageRegister *plugin_page);
@@ -548,6 +548,9 @@ typedef struct GncPluginPageRegisterPrivate
 
     gint lines_default;
     gboolean read_only;
+    gboolean enable_refresh; // used to reduce ledger display refreshes
+    Query *search_query;     // saved search query for comparison
+    Query *filter_query;     // saved filter query for comparison
 
     struct
     {
@@ -806,6 +809,9 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
     priv->read_only         = FALSE;
     priv->fd.cleared_match  = CLEARED_ALL;
     priv->fd.days           = 0;
+    priv->enable_refresh    = TRUE;
+    priv->search_query      = NULL;
+    priv->filter_query      = NULL;
 }
 
 static void
@@ -1115,6 +1121,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
     gchar **filter;
     gchar *order;
     int filter_changed = 0;
+    gboolean create_new_page = FALSE;
 
     ENTER("page %p", plugin_page);
     page = GNC_PLUGIN_PAGE_REGISTER (plugin_page);
@@ -1259,12 +1266,24 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
         priv->fd.end_time = end_time;
     }
 
-    /* Update Query with Filter Status and Dates */
-    gnc_ppr_update_status_query (page, FALSE);
-    gnc_ppr_update_date_query(page, FALSE);
+    // if enable_refresh is TRUE, default, come from creating
+    // new page instead of restoring
+    if (priv->enable_refresh == TRUE)
+    {
+        create_new_page = TRUE;
+        priv->enable_refresh = FALSE; // disable refresh
+    }
 
-    /* Now do the refresh */
-    gnc_ledger_display_refresh(priv->ledger);
+    /* Update Query with Filter Status and Dates */
+    gnc_ppr_update_status_query (page);
+    gnc_ppr_update_date_query (page);
+
+    /* Now do the refresh if this is a new page instaed of restore */
+    if (create_new_page)
+    {
+        priv->enable_refresh = TRUE;
+        gnc_ledger_display_refresh (priv->ledger);
+    }
 
     // Set filter tooltip for summary bar
     gnc_plugin_page_register_set_filter_tooltip (page);
@@ -1358,6 +1377,9 @@ gnc_plugin_page_register_destroy_widget (GncPluginPage *plugin_page)
         gtk_widget_destroy(priv->fd.dialog);
         memset(&priv->fd, 0, sizeof(priv->fd));
     }
+
+    qof_query_destroy (priv->search_query);
+    qof_query_destroy (priv->filter_query);
 
     gtk_widget_hide(priv->widget);
     gnc_ledger_display_close (priv->ledger);
@@ -1551,6 +1573,7 @@ gnc_plugin_page_register_recreate_page (GtkWidget *window,
                                         GKeyFile *key_file,
                                         const gchar *group_name)
 {
+    GncPluginPageRegisterPrivate *priv;
     GncPluginPage *page;
     GError *error = NULL;
     gchar *reg_type, *acct_guid;
@@ -1608,6 +1631,11 @@ gnc_plugin_page_register_recreate_page (GtkWidget *window,
     }
     g_free(reg_type);
 
+    /* disable the refresh of the display ledger, this is for
+     * sort/filter updates and double line/style changes */
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+    priv->enable_refresh = FALSE;
+
     /* Recreate page in given window */
     gnc_plugin_page_set_use_new_window(page, FALSE);
 
@@ -1616,6 +1644,10 @@ gnc_plugin_page_register_recreate_page (GtkWidget *window,
 
     /* Now update the page to the last state it was in */
     gnc_plugin_page_register_restore_edit_menu(page, key_file, group_name);
+
+    /* enable the refresh */
+    priv->enable_refresh = TRUE;
+    gnc_ledger_display_refresh (priv->ledger);
     LEAVE(" ");
     return page;
 }
@@ -2373,6 +2405,33 @@ gnc_plugin_page_register_sort_order_reverse_cb (GtkToggleButton *button,
 /*                    "Filter By" Dialog                    */
 /************************************************************/
 
+static void
+gnc_ppr_update_for_search_query (GncPluginPageRegister *page)
+{
+    GncPluginPageRegisterPrivate *priv;
+    SplitRegister *reg;
+
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+    reg = gnc_ledger_display_get_split_register (priv->ledger);
+
+    if (reg->type == SEARCH_LEDGER)
+    {
+        Query *query_tmp = gnc_ledger_display_get_query (priv->ledger);
+
+        // if filter_query is NULL, then the dialogue find has been run
+        // before coming here. if query_tmp does not equal filter_query
+        // then the dialogue find has been run again before coming here
+        if ((priv->filter_query == NULL) ||
+           (!qof_query_equal (query_tmp, priv->filter_query)))
+        {
+            qof_query_destroy (priv->search_query);
+            priv->search_query = qof_query_copy (query_tmp);
+        }
+        gnc_ledger_display_set_query (priv->ledger, priv->search_query);
+    }
+}
+
+
 /** This function updates the "cleared match" term of the register
  *  query.  It unconditionally removes any old "cleared match" query
  *  term, then adds back a new query term if needed.  There seems to
@@ -2386,14 +2445,23 @@ gnc_plugin_page_register_sort_order_reverse_cb (GtkToggleButton *button,
  *  associated with this filter dialog.
  */
 static void
-gnc_ppr_update_status_query (GncPluginPageRegister *page, gboolean refresh)
+gnc_ppr_update_status_query (GncPluginPageRegister *page)
 {
     GncPluginPageRegisterPrivate *priv;
     GSList *param_list;
     Query *query;
+    SplitRegister *reg;
 
     ENTER(" ");
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+    if (!priv->ledger)
+    {
+        LEAVE("no ledger");
+        return;
+    }
+    // check if this a search register and save query
+    gnc_ppr_update_for_search_query (page);
+
     query = gnc_ledger_display_get_query( priv->ledger );
     if (!query)
     {
@@ -2401,9 +2469,11 @@ gnc_ppr_update_status_query (GncPluginPageRegister *page, gboolean refresh)
         return;
     }
 
+    reg = gnc_ledger_display_get_split_register (priv->ledger);
+
     /* Remove the old status match */
     param_list = qof_query_build_param_list (SPLIT_RECONCILE, NULL);
-    if (param_list)
+    if (param_list && (reg->type != SEARCH_LEDGER))
     {
         qof_query_purge_terms (query, param_list);
         g_slist_free(param_list);
@@ -2416,7 +2486,11 @@ gnc_ppr_update_status_query (GncPluginPageRegister *page, gboolean refresh)
     // Set filter tooltip for summary bar
     gnc_plugin_page_register_set_filter_tooltip (page);
 
-    if (refresh)
+    // clear previous filter query and save current
+    qof_query_destroy (priv->filter_query);
+    priv->filter_query = qof_query_copy (query);
+
+    if (priv->enable_refresh)
         gnc_ledger_display_refresh (priv->ledger);
     LEAVE(" ");
 }
@@ -2435,11 +2509,12 @@ gnc_ppr_update_status_query (GncPluginPageRegister *page, gboolean refresh)
  *  associated with this filter dialog.
  */
 static void
-gnc_ppr_update_date_query (GncPluginPageRegister *page, gboolean refresh)
+gnc_ppr_update_date_query (GncPluginPageRegister *page)
 {
     GncPluginPageRegisterPrivate *priv;
     GSList *param_list;
     Query *query;
+    SplitRegister *reg;
 
     ENTER(" ");
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
@@ -2448,17 +2523,22 @@ gnc_ppr_update_date_query (GncPluginPageRegister *page, gboolean refresh)
         LEAVE("no ledger");
         return;
     }
+    // check if this a search register and save query
+    gnc_ppr_update_for_search_query (page);
 
-    query = gnc_ledger_display_get_query( priv->ledger );
+    query = gnc_ledger_display_get_query (priv->ledger);
+
     if (!query)
     {
         LEAVE("no query");
         return;
     }
 
+    reg = gnc_ledger_display_get_split_register (priv->ledger);
+
     /* Delete any existing old date spec. */
     param_list = qof_query_build_param_list(SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
-    if (param_list)
+    if (param_list && (reg->type != SEARCH_LEDGER))
     {
         qof_query_purge_terms (query, param_list);
         g_slist_free(param_list);
@@ -2488,7 +2568,11 @@ gnc_ppr_update_date_query (GncPluginPageRegister *page, gboolean refresh)
     // Set filter tooltip for summary bar
     gnc_plugin_page_register_set_filter_tooltip (page);
 
-    if (refresh)
+    // clear previous filter query and save current
+    qof_query_destroy (priv->filter_query);
+    priv->filter_query = qof_query_copy (query);
+
+    if (priv->enable_refresh)
         gnc_ledger_display_refresh (priv->ledger);
     LEAVE(" ");
 }
@@ -2570,7 +2654,7 @@ gnc_plugin_page_register_filter_status_one_cb (GtkToggleButton *button,
         priv->fd.cleared_match |= value;
     else
         priv->fd.cleared_match &= ~value;
-    gnc_ppr_update_status_query(page, TRUE);
+    gnc_ppr_update_status_query(page);
     LEAVE(" ");
 }
 
@@ -2609,7 +2693,7 @@ gnc_plugin_page_register_filter_status_all_cb (GtkButton *button,
     /* Set the requested status */
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
     priv->fd.cleared_match = CLEARED_ALL;
-    gnc_ppr_update_status_query(page, TRUE);
+    gnc_ppr_update_status_query(page);
     LEAVE(" ");
 }
 
@@ -2717,7 +2801,7 @@ gnc_plugin_page_register_filter_select_range_cb (GtkRadioButton *button,
         priv->fd.start_time = 0;
         priv->fd.end_time = 0;
     }
-    gnc_ppr_update_date_query(page, TRUE);
+    gnc_ppr_update_date_query(page);
     LEAVE(" ");
 }
 
@@ -2745,7 +2829,7 @@ gnc_plugin_page_register_filter_days_changed_cb (GtkSpinButton *button,
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
 
     priv->fd.days = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button));
-    gnc_ppr_update_date_query(page, TRUE);
+    gnc_ppr_update_date_query(page);
     LEAVE(" ");
 }
 
@@ -2768,7 +2852,7 @@ gnc_plugin_page_register_filter_gde_changed_cb (GtkWidget *unused,
 
     ENTER("(widget %s(%p), page %p)", gtk_buildable_get_name(GTK_BUILDABLE(unused)), unused, page);
     get_filter_times(page);
-    gnc_ppr_update_date_query(page, TRUE);
+    gnc_ppr_update_date_query(page);
     LEAVE(" ");
 }
 
@@ -2815,7 +2899,7 @@ gnc_plugin_page_register_filter_start_cb (GtkWidget *radio,
     active = ( g_strcmp0(name, g_strdup("start_date_choose")) == 0 ? 1 : 0 );
     gtk_widget_set_sensitive(priv->fd.start_date, active);
     get_filter_times(page);
-    gnc_ppr_update_date_query(page, TRUE);
+    gnc_ppr_update_date_query(page);
     LEAVE(" ");
 }
 
@@ -2862,7 +2946,7 @@ gnc_plugin_page_register_filter_end_cb (GtkWidget *radio,
     active = ( g_strcmp0(name, g_strdup("end_date_choose")) == 0 ? 1 : 0 );
     gtk_widget_set_sensitive(priv->fd.end_date, active);
     get_filter_times(page);
-    gnc_ppr_update_date_query(page, TRUE);
+    gnc_ppr_update_date_query(page);
     LEAVE(" ");
 }
 
@@ -2926,12 +3010,14 @@ gnc_plugin_page_register_filter_response_cb (GtkDialog *dialog,
     {
         /* Remove the old status match */
         priv->fd.cleared_match = priv->fd.original_cleared_match;
-        gnc_ppr_update_status_query(page, FALSE);
+        priv->enable_refresh = FALSE;
+        gnc_ppr_update_status_query(page);
+        priv->enable_refresh = TRUE;
         priv->fd.start_time = priv->fd.original_start_time;
         priv->fd.end_time = priv->fd.original_end_time;
         priv->fd.days = priv->fd.original_days;
         priv->fd.save_filter = priv->fd.original_save_filter;
-        gnc_ppr_update_date_query(page, TRUE);
+        gnc_ppr_update_date_query(page);
     }
     else
     {
@@ -3966,7 +4052,7 @@ gnc_plugin_page_register_cmd_style_changed (GtkAction *action,
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
     value = gtk_radio_action_get_current_value(current);
-    gnc_split_reg_change_style(priv->gsr, value);
+    gnc_split_reg_change_style(priv->gsr, value, priv->enable_refresh);
 
     gnc_plugin_page_register_ui_update (NULL, plugin_page);
     LEAVE(" ");
@@ -3992,7 +4078,8 @@ gnc_plugin_page_register_cmd_style_double_line (GtkToggleAction *action,
     if (use_double_line != reg->use_double_line)
     {
         gnc_split_register_config(reg, reg->type, reg->style, use_double_line);
-        gnc_ledger_display_refresh(priv->ledger);
+        if (priv->enable_refresh)
+            gnc_ledger_display_refresh(priv->ledger);
     }
     LEAVE(" ");
 }

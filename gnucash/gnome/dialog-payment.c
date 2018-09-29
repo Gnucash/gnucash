@@ -626,6 +626,7 @@ gnc_payment_dialog_owner_changed (PaymentWindow *pw)
                             "payment-last-account", &guid,
                             NULL);
         last_acct = xaccAccountLookup(guid, pw->book);
+        guid_free (guid);
         if (last_acct)
             gnc_tree_view_account_set_selected_account(GNC_TREE_VIEW_ACCOUNT(pw->acct_tree),
                 last_acct);

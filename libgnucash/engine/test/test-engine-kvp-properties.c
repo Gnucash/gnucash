@@ -178,6 +178,9 @@ test_account_kvp_properties (Fixture *fixture, gconstpointer pData)
     g_assert_cmpint (ab_acct_uid, ==, ab_acct_uid_r);
     g_assert_cmpint (trans_retr.t, ==, trans_retr_r->t);
     g_assert (!qof_instance_is_dirty (QOF_INSTANCE (fixture->acct)));
+
+    guid_free (ofx_income_acct);
+    guid_free (ofx_income_acct_r);
 }
 
 static void

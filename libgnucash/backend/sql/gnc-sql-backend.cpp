@@ -184,10 +184,10 @@ GncSqlBackend::add_columns_to_table(const std::string& table_name,
 }
 
 void
-GncSqlBackend::update_progress() const noexcept
+GncSqlBackend::update_progress(double pct) const noexcept
 {
     if (m_percentage != nullptr)
-        (m_percentage) (nullptr, 101.0);
+        (m_percentage) (nullptr, pct);
 }
 
 void
@@ -202,14 +202,14 @@ GncSqlBackend::create_tables() noexcept
 {
     for(auto entry : m_backend_registry)
     {
-        update_progress();
+        update_progress(101.0);
         std::get<1>(entry)->create_tables(this);
     }
 }
 
 /* Main object load order */
 static const StrVec fixed_load_order
-{ GNC_ID_BOOK, GNC_ID_COMMODITY, GNC_ID_ACCOUNT, GNC_ID_LOT };
+{ GNC_ID_BOOK, GNC_ID_COMMODITY, GNC_ID_ACCOUNT, GNC_ID_LOT, GNC_ID_TRANS };
 
 /* Order in which business objects need to be loaded */
 static const StrVec business_fixed_load_order =
@@ -218,6 +218,9 @@ static const StrVec business_fixed_load_order =
 void
 GncSqlBackend::ObjectBackendRegistry::load_remaining(GncSqlBackend* sql_be)
 {
+
+    auto num_types = m_registry.size();
+    auto num_done = fixed_load_order.size() + business_fixed_load_order.size();
 
     for (auto entry : m_registry)
     {
@@ -234,6 +237,8 @@ GncSqlBackend::ObjectBackendRegistry::load_remaining(GncSqlBackend* sql_be)
                       business_fixed_load_order.end(),
                       type) != business_fixed_load_order.end()) continue;
 
+        num_done++;
+        sql_be->update_progress(num_done * 100 / num_types);
         obe->load_all (sql_be);
     }
 }
@@ -273,22 +278,27 @@ GncSqlBackend::load (QofBook* book, QofBackendLoadType loadType)
         assert (m_book == nullptr);
         m_book = book;
 
+        auto num_types = m_backend_registry.size();
+        auto num_done = 0;
+
         /* Load any initial stuff. Some of this needs to happen in a certain order */
         for (auto type : fixed_load_order)
         {
+            num_done++;
             auto obe = m_backend_registry.get_object_backend(type);
             if (obe)
             {
-                update_progress();
+                update_progress(num_done * 100 / num_types);
                 obe->load_all(this);
             }
         }
         for (auto type : business_fixed_load_order)
         {
+            num_done++;
             auto obe = m_backend_registry.get_object_backend(type);
             if (obe)
             {
-                update_progress();
+                update_progress(num_done * 100 / num_types);
                 obe->load_all(this);
             }
         }
@@ -349,7 +359,7 @@ GncSqlBackend::write_account_tree(Account* root)
         }
         g_list_free (descendants);
     }
-    update_progress();
+    update_progress(101.0);
 
     return is_ok;
 }
@@ -357,11 +367,11 @@ GncSqlBackend::write_account_tree(Account* root)
 bool
 GncSqlBackend::write_accounts()
 {
-    update_progress();
+    update_progress(101.0);
     auto is_ok = write_account_tree (gnc_book_get_root_account (m_book));
     if (is_ok)
     {
-        update_progress();
+        update_progress(101.0);
         is_ok = write_account_tree (gnc_book_get_template_root(m_book));
     }
 
@@ -384,7 +394,7 @@ write_tx (Transaction* tx, gpointer data)
     {
         s->is_ok = splitbe->commit(s->be, QOF_INSTANCE(split_node->data));
     }
-    s->be->update_progress ();
+    s->be->update_progress (101.0);
     return (s->is_ok ? 0 : 1);
 }
 
@@ -396,7 +406,7 @@ GncSqlBackend::write_transactions()
 
     (void)xaccAccountTreeForEachTransaction (
         gnc_book_get_root_account (m_book), write_tx, &data);
-    update_progress();
+    update_progress(101.0);
     return data.is_ok;
 }
 
@@ -409,7 +419,7 @@ GncSqlBackend::write_template_transactions()
     if (gnc_account_n_descendants (ra) > 0)
     {
         (void)xaccAccountTreeForEachTransaction (ra, write_tx, &data);
-        update_progress();
+        update_progress(101.0);
     }
 
     return data.is_ok;
@@ -430,7 +440,7 @@ GncSqlBackend::write_schedXactions()
         tmpSX = static_cast<decltype (tmpSX)> (schedXactions->data);
         is_ok = obe->commit (this, QOF_INSTANCE (tmpSX));
     }
-    update_progress();
+    update_progress(101.0);
 
     return is_ok;
 }
@@ -444,7 +454,7 @@ GncSqlBackend::sync(QofBook* book)
 
     reset_version_info();
     ENTER ("book=%p, sql_be->book=%p", book, m_book);
-    update_progress();
+    update_progress(101.0);
 
     /* Create new tables */
     m_is_pristine_db = true;

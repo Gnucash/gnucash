@@ -1250,12 +1250,15 @@ GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot)
 {
     GncGUID *guid = NULL;
     QofBook *book;
+    GncInvoice *invoice = NULL;
 
     if (!lot) return NULL;
 
     book = gnc_lot_get_book (lot);
     qof_instance_get (QOF_INSTANCE (lot), "invoice", &guid, NULL);
-    return gncInvoiceLookup(book, guid);
+    invoice = gncInvoiceLookup(book, guid);
+    guid_free (guid);
+    return invoice;
 }
 
 void
@@ -1279,12 +1282,15 @@ gncInvoiceGetInvoiceFromTxn (const Transaction *txn)
 {
     GncGUID *guid = NULL;
     QofBook *book;
+    GncInvoice *invoice = NULL;
 
     if (!txn) return NULL;
 
     book = xaccTransGetBook (txn);
     qof_instance_get (QOF_INSTANCE (txn), "invoice", &guid, NULL);
-    return gncInvoiceLookup(book, guid);
+    invoice = gncInvoiceLookup(book, guid);
+    guid_free (guid);
+    return invoice;
 }
 
 gboolean gncInvoiceAmountPositive (const GncInvoice *invoice)
@@ -1477,6 +1483,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
     /* Create a new lot for this invoice */
     lot = gnc_lot_new (book);
+    gncInvoiceAttachToLot (invoice, lot);
     gnc_lot_begin_edit (lot);
 
     type = gncInvoiceGetTypeString (invoice);
@@ -1691,8 +1698,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
         gnc_lot_add_split (lot, split);
     }
 
-    /* Now attach this invoice to the txn, lot, and account */
-    gncInvoiceAttachToLot (invoice, lot);
+    /* Now attach this invoice to the txn and account */
     gncInvoiceAttachToTxn (invoice, txn);
     gncInvoiceSetPostedAcc (invoice, acc);
 

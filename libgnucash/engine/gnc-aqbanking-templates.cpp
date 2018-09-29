@@ -106,13 +106,13 @@ KvpFrame*
 _GncABTransTempl::make_kvp_frame()
 {
     auto frame = new KvpFrame;
-    frame->set({TT_NAME}, new KvpValue(m_name.c_str()));
-    frame->set({TT_RNAME}, new KvpValue(m_recipient_name.c_str()));
-    frame->set({TT_RACC}, new KvpValue(m_recipient_account.c_str()));
-    frame->set({TT_RBCODE}, new KvpValue(m_recipient_bankcode.c_str()));
+    frame->set({TT_NAME}, new KvpValue(g_strdup (m_name.c_str())));
+    frame->set({TT_RNAME}, new KvpValue(g_strdup (m_recipient_name.c_str())));
+    frame->set({TT_RACC}, new KvpValue(g_strdup (m_recipient_account.c_str())));
+    frame->set({TT_RBCODE}, new KvpValue(g_strdup (m_recipient_bankcode.c_str())));
     frame->set({TT_AMOUNT}, new KvpValue(m_amount));
-    frame->set({TT_PURPOS}, new KvpValue(m_purpose.c_str()));
-    frame->set({TT_PURPOSCT}, new KvpValue(m_purpose_continuation.c_str()));
+    frame->set({TT_PURPOS}, new KvpValue(g_strdup (m_purpose.c_str())));
+    frame->set({TT_PURPOSCT}, new KvpValue(g_strdup (m_purpose_continuation.c_str())));
     return frame;
 }
 

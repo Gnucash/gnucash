@@ -1125,7 +1125,7 @@
 	* [r17567] src/backend/file/io-gncxml-v2.c,
 	  src/gnome-utils/gnc-html.c, src/gnome/dialog-print-check.c: Do
 	  not treat -Wstrict-aliasing warnings as errors in files using
-	  G_LOCK. See http://bugzilla.gnome.org/show_bug.cgi?id=316221 for
+	  G_LOCK. See https://bugzilla.gnome.org/show_bug.cgi?id=316221 for
 	  information why G_LOCK breaks strict-aliasing. GCC 4.2
 	  introduced diagnostic pragmas and the error seems to be most
 	  prominent on GCC >= 4.3, so a compilation with -Werror should

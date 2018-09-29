@@ -4691,7 +4691,7 @@
 
 	* src/import-export/import-utilities.c: Build on Nigel's patch.
 	This hopefully permanently closes
-	http://bugzilla.gnome.org/show_bug.cgi?id=101705.
+	https://bugs.gnucash.org/show_bug.cgi?id=101705.
 
 	* src/import-export/Makefile.am: No longuer compile Christian's
 	old matcher.

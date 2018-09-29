@@ -87,7 +87,7 @@ static gint total_num_accounts = 0;
 static gint max_scu = 100; //6000;
 static gint min_scu = 100; //1;
 static const int64_t num_limit = INT64_MAX; //1E19+
-static const int64_t max_denom_mult = 1000000LL; //1E6
+static const int64_t max_denom_mult = 1000000000LL; //1E9
 
 
 /* The inverse fraction of split/transaction data that should
@@ -402,7 +402,7 @@ get_random_gnc_numeric(int64_t deno)
         {
             gint64 norm = RAND_IN_RANGE (11ULL);
 
-            /* multiple of 10, between 1 and 1 million */
+            /* multiple of 10, between 1 and 100 billion */
             deno = 1;
             while (norm)
             {

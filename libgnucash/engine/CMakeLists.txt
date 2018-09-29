@@ -305,7 +305,6 @@ set(engine_EXTRA_DIST
         design.txt
         engine.i
         engine-common.i
-        engine-deprecated.i
         extensions.txt
         iso-4217-currencies.xml
         iso-currencies-to-c.xsl

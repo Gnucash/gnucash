@@ -617,6 +617,7 @@ gnc_sxed_check_consistent (GncSxEditorDialog2 *sxed)
 				  "sx-debit-formula", &debit_formula,
 				  NULL);
                 acct = xaccAccountLookup( acct_guid, gnc_get_current_book ());
+                guid_free (acct_guid);
                 split_cmdty = xaccAccountGetCommodity(acct);
                 if (base_cmdty == NULL)
                 {

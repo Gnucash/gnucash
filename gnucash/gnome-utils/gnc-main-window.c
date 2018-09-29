@@ -1188,7 +1188,9 @@ static gboolean auto_save_countdown (GtkWidget *dialog)
     if (!GTK_IS_LABEL (label))
         return FALSE; /* remove timer */
 
-    secs_to_save--;
+    /* Protect against rolling over to MAXUINT */
+    if (secs_to_save)
+        --secs_to_save;
     DEBUG ("Counting down: %d seconds", secs_to_save);
 
     timeoutstr = g_strdup_printf (MSG_AUTO_SAVE, secs_to_save);
@@ -1236,6 +1238,8 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
         return FALSE;
     session = gnc_get_current_session();
     book = qof_session_get_book(session);
+    if (!qof_book_session_not_saved(book))
+        return FALSE;
     filename = qof_session_get_url(session);
     if (!strlen (filename))
         filename = _("<unknown>");
@@ -4888,7 +4892,7 @@ dgettext_swapped (const gchar *msgid,
  * This is copied into GnuCash from Gtk in order to fix problems when
  * empty msgids were passed through gettext().
  *
- * See http://bugs.gnucash.org/show_bug.cgi?id=326200 . If that bug
+ * See https://bugs.gnucash.org/show_bug.cgi?id=326200 . If that bug
  * is fixed in the gtk that we can rely open, then
  * gnc_gtk_action_group_set_translation_domain can be replaced by
  * gtk_action_group_set_translation_domain again.

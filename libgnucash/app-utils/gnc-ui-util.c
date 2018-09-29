@@ -386,8 +386,11 @@ gnc_book_get_default_gain_loss_acct (QofBook *book)
     if (!book) return NULL;
 
     if (gnc_book_use_book_currency (book))
-        gains_account = xaccAccountLookup
-                        (qof_book_get_default_gain_loss_acct_guid (book), book);
+    {
+        GncGUID *guid = qof_book_get_default_gain_loss_acct_guid (book);
+        gains_account = xaccAccountLookup (guid, book);
+        guid_free (guid);
+    }
 
     if (gains_account &&
         !xaccAccountGetPlaceholder(gains_account) &&
