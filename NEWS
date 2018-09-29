@@ -1,5 +1,143 @@
 Version history:
 ------- -------
+3.3 - 30 September 2018
+The fourth release of the 3.x stable series.
+The following bugs have been fixed:
+
+    Bug 771667 - Different warnings when changing reconciled splits vs. splits
+                 linked to reconciled splits.
+    Bug 784420 - "Save changes on closing" window waits 2^32 seconds when
+                 "Time to wait for answer" is set 0.
+    Bug 786708 - GnuCash won't load currency fractions larger than 1000000.
+                 Also create larger fractions for the account dialog.
+    Bug 787439 - Segmentation Fault in Transfer dialog after clearing Date field
+                 and pressing escape.
+    Bug 789594 - Unable to overwrite sqlite3 database file.
+    Bug 792446 - Mixed languages in error dialog.
+    Bug 794526 - Python bindings can't find loadable modules.
+    Bug 794755 - Commodity Register displays fractional prices.
+                 Prices will now be displayed in decimal, rounded to two more
+                 places than the currency's smallest unit.
+    Bug 794870 - If no book is opened, gnucash still asks if the user wants
+                 to save changes when opening a file.
+    Bug 795821 - GnuCash could not obtain the lock for
+                 file://C:\Users\username\Documents\GnuCash\2.6.21\xxxx\xxxx.gnucash
+    Bug 796054 - Unposting and reposting invoice doubles amounts.
+                 Add scrub function to unblock the double post transaction
+    Bug 796137 - query.search_for outputs critical qof.object errors and
+                 prevents queries being run.
+    Bug 796248 - Editing Scheduled Transaction.
+                 In addition to not begining to edit already-loaded
+                 transactions, don't try to load splits that are already
+                 loaded. It shouldn't be possible to load a transaction
+                 without also loading its splits.
+    Bug 796474 - Segmentation fault while setting up online banking.
+                 Allow only a single instance of the assistant.
+    Bug 796509 - Saved reports don't respect *some* 'Edit report options'.
+    Bug 796579 - Cannot go forward with empty duplicates screen.
+    Bug 796665 - Backspace Key Inoperable After Ctrl+V.
+    Bug 796669 - Dark Theme Text Colors Hard to Read.
+                 Only add the register-foreground class when using Gnucash built
+                 in colours. When this setting not used, the foreground colour
+                 by default will be what ever the theme has set and will be
+                 down to the user to over ride along with the other register
+                 colours.
+    Bug 796724 - Can't overwrite gnucash DB on MariaDB.
+    Bug 796725 - 4 of 6 Date Posted options fail to return matching
+                 transactions.
+    Bug 796734 - Auto-complete entry not highlighting to allow for incremental
+                 entry.
+    Bug 796737 - Patch to restore gncmod-python.c.
+    Bug 796739 - Toolbar buttons have no labels.
+    Bug 796751 - reconcile window usability - R column should be next to Amount.
+    Bug 796755 - buggy window handling at startup.
+    Bug 796756 - OFX import fails to recognize associated income accounts.
+    Bug 796759 - --add-price-quotes <sql file> leaves a lock on the file.
+    Bug 796762 - Scrollbar partially hides the delete button in  the Saved
+                 Report Configurations window.
+                 The vertical scrollbar obscures the delete button in the tree
+                 view so add a dummy blank column to the end and set it to the
+                 width of the vertical scrollbar.
+    Bug 796766 - Credit note creating 'imbalance' with wrong entries
+    Bug 796777 - CVE-2008-1391: Integer overflow in included strfmon function.
+    Bug 796788 - Strange behaviour in options of multicolumn report.
+    Bug 796792 - SaveAs Overwrite dialogue in background and not visible.
+    Bug 796812 - gnc_date_cell_get_date and gnc_date_cell_get_date_gdate have
+                 different date validation behaviour.
+    Bug 796813 - Date validation inconsistent.
+    Bug 796814 - Changing a book's read-only threshold doesn't immediately
+                 affect open registers.
+    Bug 796816 - Notes field in Duplicate Invoice dialogue is 'read-only'.
+    Bug 796819 - Bad icon with Spanish localization.
+                 Drop translations of the 'gnucash-icon' string from our po
+                 files and add a note for translators to not translate this
+                 string or use the literal 'gnucash-icon' as translation.
+    Bug 796820 - References to 'Gnome Bugzilla' should be changed to
+                 'GnuCash Bugzilla'.
+    Bug 796833 - Excel csv Format misprocessed.
+                 Convert all line ending styles to the one expected by the C++
+                 standard library before starting to parse a csv file.
+    Bug 796839 - Find transaction won't filter on Date Posted.
+    Bug 796858 - TypeError: in method 'qof_query_int32_predicate', argument 2 of
+                 type 'gint32' on gnucash.gnucash_core.QueryInt32Predicate.
+
+Other repairs or enhancements not marked as bugs:
+
+    Set toolbar buttons to show both icon and text.
+        And make the icon small to recover some vertical screen estate. The
+        motivation for this is that Gtk has dropped the ability for users
+        to change a toolbar's appearance. And as our icons are often less than
+        descriptive many users benefit from having textual descriptions as
+        well. This is the best compromise we can make until the gui gets an
+        in-depth redesign.
+    Add preference for forcing prices to decimal display.
+        Anticipating that some users might prefer to see exact prices, add
+        a preference to General>Numbers to configure whether prices are
+        rounded to decimals or are displayed as exact fractions.
+    Revert the "Average Cost" pricing changes made in 2.6.17.
+        These changes broke trial balances in many books.
+    Allow saving to xml over an existing sqlite3 file and the other way around.
+    Add customer/vendor ID in client section of invoices.
+        Partly fixes bugs 430259 and 742086; full fixes would require
+        not-backward-compatible data model changes.
+    Change the default filter for General Ledger.
+        The General Ledger default for the number of days shown is 30 but
+        for the Register it is 0, meaning show all. So change the default
+        filter based on ledger type and use this when determining if the
+        setting should be saved or removed.
+    Fix gtk accelerator mixups by explicitly disabling actions that are not
+        relevant. For example, File->Print and its variants for various page
+        types all use the same '<primary>p' as global accelerator. It was
+        possible to have gnucash invoke the 'Print Report...' action instead
+        of the 'Print Invoice...' action when hitting <primary>p on an invoice
+        page. If no report page was open at this point, gnucash would crash.
+        If a report was open, gnucash would invoke the print action on that
+        report instead of opening an invoice report for the invoice.
+    [job-report] Prevent Crash if there is no AR account
+    Add the ability to cascade account colours in account tree.
+        The colour on an account that has sub-accounts can be applied to its
+        sub-accounts; by default only those sub-accounts that don't have a
+        colour set are affected, but there's a preference to override that.
+    Speed up loading the preference dialog by blocking register updates until
+        the dialog is fully loaded.
+    Update change_tax_code.py, add basic test for python query.
+    Simplify GNCQueryView's data model: It was managing a number of redudant
+        parameters which were leaking memory all over the place. The information
+        that was tracked could easily be extracted from the underlying
+        GtkTreeView, GtkTreeModel or GtkTreeSelection when needed.
+    Open customer/vendor/employee report when double-clicking an the
+        respective owner the cust/vend/empl overview page.
+    Update Overview of README based on https://lists.gnucash.org/pipermail/gnucash-devel/2018-September/042748.html
+    Many new tests for reports.
+    Some substantial speedups when loading large amounts of business
+        transactions from a SQL backend.
+    Clean up a lot of memory leaks.
+    Remove all use of Timespec in the program. Provide deprecated wrapper
+        functions supporting timespecs for custom reports; users should update
+        the reports as soonas possible.
+
+Updated Translations: Farsi, Ukrainian
+
 3.2 - 25 June 2018
 The third release of the 3.x stable series.
 
