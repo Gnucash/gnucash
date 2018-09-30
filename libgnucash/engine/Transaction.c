@@ -2370,7 +2370,7 @@ xaccTransGetDate (const Transaction *trans)
 time64
 xaccTransGetDateEntered (const Transaction *trans)
 {
-    return trans ? trans->date_entered : 0;;
+    return trans ? trans->date_entered : 0;
 }
 /*################## Added for Reg2 #################*/
 

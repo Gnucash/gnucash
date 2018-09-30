@@ -884,7 +884,7 @@ gnc_dense_cal_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
 
     dcal = GNC_DENSE_CAL(user_data);
 
-    cairo_save (cr);;
+    cairo_save (cr);
     cairo_set_source_surface (cr, dcal->surface, 0, 0);
     cairo_paint (cr);
     cairo_restore (cr);

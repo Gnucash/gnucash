@@ -913,7 +913,7 @@ kvp_frame_fail_handler (gpointer data_for_children,
 static void
 kvp_frame_result_cleanup (sixtp_child_result* cr)
 {
-    auto f = static_cast<KvpFrame*> (cr->data);;
+    auto f = static_cast<KvpFrame*> (cr->data);
     if (f) delete f;
 }
 

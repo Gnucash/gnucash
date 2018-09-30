@@ -402,7 +402,7 @@ gboolean
 gnc_write_example_account (GncExampleAccount* gea, const gchar* filename)
 {
     FILE* out;
-    sixtp_gdv2 data = { 0 };;
+    sixtp_gdv2 data = { 0 };
 
     out = g_fopen (filename, "w");
     if (out == NULL)

@@ -314,7 +314,7 @@ using std::to_string;
 #include <istream>
 #include <cstdlib>
 
-using boost::posix_time::ptime;;
+using boost::posix_time::ptime;
 //To enable using Transition with different meanings for IANA files
 //and for DSTRules.
 namespace IANAParser

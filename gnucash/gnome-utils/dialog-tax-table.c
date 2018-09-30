@@ -481,7 +481,7 @@ tax_table_window_refresh (TaxTableWindow *ttw)
             gtk_tree_path_free(path);
         }
     }
-    ;;
+
     tax_table_entries_refresh (ttw);
     /* select_row() above will refresh the entries window */
 }

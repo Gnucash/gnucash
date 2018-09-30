@@ -301,7 +301,7 @@ test_gnc_uri_is_file_protocol()
         gboolean tis_file_protocol;
 
         tis_file_protocol = gnc_uri_is_file_protocol( strs[i].protocol );
-        g_assert_true ( tis_file_protocol == strs[i].is_file_protocol );;
+        g_assert_true ( tis_file_protocol == strs[i].is_file_protocol );
     }
 }
 
