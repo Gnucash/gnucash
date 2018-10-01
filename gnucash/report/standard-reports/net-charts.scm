@@ -258,9 +258,6 @@
                 (warn "incompatible currencies in monetary+: " a b)))
           (warn "wrong arguments for monetary+: " a b)))
 
-    (define (monetary->double monetary)
-      (gnc-numeric-to-double (gnc:gnc-monetary-amount monetary)))
-
     (define (split->date s)
       (xaccTransGetDate (xaccSplitGetParent s)))
 
@@ -469,11 +466,11 @@
 
        ;; Add the data
        (when show-sep?
-         (add-column! (map monetary->double minuend-balances))
-         (add-column! (map - (map monetary->double subtrahend-balances))))
+         (add-column! (map gnc:gnc-monetary-amount minuend-balances))
+         (add-column! (map - (map gnc:gnc-monetary-amount subtrahend-balances))))
 
        (if show-net?
-           (add-column! (map monetary->double difference-balances)))
+           (add-column! (map gnc:gnc-monetary-amount difference-balances)))
 
        ;; Legend labels, colors
        ((if linechart?
