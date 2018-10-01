@@ -407,14 +407,19 @@
     (if
      (not (null? accounts))
      (let* ((account-balancelist (map account->balancelist accounts))
-            (assets-list (process-datelist
-                          account-balancelist
-                          dates-list #t))
-            (liability-list (process-datelist
-                             account-balancelist
-                             dates-list #f))
+            (dummy (gnc:report-percent-done 60))
 
-            (net-list (map monetary+ assets-list liability-list))
+            (minuend-balances (process-datelist
+                               account-balancelist
+                               dates-list #t))
+            (dummy (gnc:report-percent-done 70))
+
+            (subtrahend-balances (process-datelist
+                                  account-balancelist
+                                  dates-list #f))
+            (dummy (gnc:report-percent-done 80))
+
+            (difference-balances (map monetary+ minuend-balances subtrahend-balances))
 
             (dates-list (if inc-exp?
                             (list-head dates-list (1- (length dates-list)))
@@ -463,15 +468,12 @@
         chart (gnc-commodity-get-mnemonic report-currency))
 
        ;; Add the data
-       (if show-sep?
-           (begin
-             (add-column! (map monetary->double assets-list))
-             (add-column!                     ;;(if inc-exp?
-              (map - (map monetary->double liability-list))
-              ;;liability-list)
-              )))
+       (when show-sep?
+         (add-column! (map monetary->double minuend-balances))
+         (add-column! (map - (map monetary->double subtrahend-balances))))
+
        (if show-net?
-           (add-column! (map monetary->double net-list)))
+           (add-column! (map monetary->double difference-balances)))
 
        ;; Legend labels, colors
        ((if linechart?
@@ -567,18 +569,15 @@
                          (if inc-exp?
                              (list (_ "Net Profit"))
                              (list (_ "Net Worth")))
-                         '()))
-                    )
+                         '())))
                    (gnc:html-table-append-column! table date-string-list)
-                   (if show-sep?
-                       (begin
-                         (gnc:html-table-append-column! table assets-list)
-                         (gnc:html-table-append-column! table liability-list)
-                         )
-                       )
+                   (when show-sep?
+                     (gnc:html-table-append-column! table minuend-balances)
+                     (gnc:html-table-append-column! table subtrahend-balances))
+
                    (if show-net?
-                       (gnc:html-table-append-column! table net-list)
-                       )
+                       (gnc:html-table-append-column! table difference-balances))
+
                    ;; set numeric columns to align right
                    (for-each
                     (lambda (col)
