@@ -175,7 +175,7 @@ static gboolean
 ownerreportCB (const char *location, const char *label,
                gboolean new_window, GNCURLResult * result)
 {
-    const char *ownerptr;
+    char *ownerptr;
     const char *acctptr;
     GncGUID guid;
     GncOwner owner;
@@ -190,10 +190,6 @@ ownerreportCB (const char *location, const char *label,
 
     /* href="...:owner=<owner-type>:guid=<guid>[&acct=<guid>]" */
 
-    acctptr = strchr (location, '&');
-    if (acctptr)
-        acctptr++;
-
     if (strncmp ("owner=", location, 6) != 0)
     {
         result->error_message = g_strdup_printf (_("Badly formed URL %s"),
@@ -201,9 +197,17 @@ ownerreportCB (const char *location, const char *label,
         return FALSE;
     }
 
+    acctptr = strchr (location, '&');
+    if (acctptr)
+    {
+        ownerptr = g_strndup (location + 6, acctptr - location - 6);
+        acctptr++;
+    }
+    else
+        ownerptr = g_strdup (location + 6);
+
     memset (&owner, 0, sizeof (owner));
 
-    ownerptr = location + 6;
     switch (*ownerptr)
     {
     case 'c':
@@ -220,15 +224,18 @@ ownerreportCB (const char *location, const char *label,
         break;
     default:
         result->error_message = g_strdup_printf (_("Bad URL: %s"), location);
+        g_free (ownerptr);
         return FALSE;
     }
 
     if (!string_to_guid (ownerptr + 2, &guid))
     {
         result->error_message = g_strdup_printf (_("Bad URL: %s"), location);
+        g_free (ownerptr);
         return FALSE;
     }
 
+    g_free (ownerptr);
 
     switch (type)
     {
