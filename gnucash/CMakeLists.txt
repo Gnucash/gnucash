@@ -75,15 +75,18 @@ execute_process(
    COMMAND
        ${PKG_CONFIG_EXECUTABLE} gio-2.0 --variable glib_compile_resources
    OUTPUT_VARIABLE
-       GLIB_COMPILE_RESOURCES_EXECUTABLE
+       GLIB_COMPILE_RESOURCES_NAME
    OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 
+find_program(GLIB_COMPILE_RESOURCES_EXECUTABLE ${GLIB_COMPILE_RESOURCES_NAME})
+
 # Get the dependencies of the gresource
+
 execute_process(
   OUTPUT_VARIABLE
       gr_files
-  COMMAND ${GLIB_COMPILE_RESOURCES_EXECUTABLE}
+  COMMAND "${GLIB_COMPILE_RESOURCES_EXECUTABLE}"
      --sourcedir=${CMAKE_CURRENT_SOURCE_DIR}
      --generate-dependencies
      ${CMAKE_CURRENT_SOURCE_DIR}/gnucash-gresources.xml
@@ -94,7 +97,7 @@ string (REPLACE "\n" ";" gresource_files ${gr_files})
 add_custom_command(
    OUTPUT gnucash-gresources.c
    COMMAND
-    ${GLIB_COMPILE_RESOURCES_EXECUTABLE}
+    "${GLIB_COMPILE_RESOURCES_EXECUTABLE}"
     --target=gnucash-gresources.c
     --sourcedir=${CMAKE_CURRENT_SOURCE_DIR}
     --generate-source
