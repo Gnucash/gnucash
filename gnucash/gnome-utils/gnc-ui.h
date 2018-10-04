@@ -43,8 +43,8 @@
 #    define HF_GUIDE         "gnucash-guide.chm"
 #    define HF_HELP          "gnucash-help.chm"
 #elif defined MAC_INTEGRATION
-#    define HF_GUIDE         "Gnucash Guide"
-#    define HF_HELP          "Gnucash Help"
+#    define HF_GUIDE         "GnuCash Guide"
+#    define HF_HELP          "GnuCash Help"
 #else
 #    define HF_GUIDE         "gnucash-guide"
 #    define HF_HELP          "gnucash-help"
