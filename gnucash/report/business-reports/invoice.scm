@@ -675,7 +675,8 @@ for styling the invoice. Please see the exported report for the CSS class names.
 (define (make-img img-url)
   ;; just an image
   (gnc:make-html-text
-   (gnc:html-markup-img img-url)))
+   (gnc:html-markup-img
+    (make-file-url img-url))))
 
 (define (make-client-table owner orders options)
   (define (opt-val section name)
