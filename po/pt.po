@@ -1,21 +1,22 @@
 # GnuCash 2.6.15 pt_PT
 # Copyright (C) 2017
 # This file is distributed under the same license as the Gnucash package.
-# Pedro Albuquerque <palbuquerque73@gmail.com>, 2015, 2016, 2017.
+# Pedro Albuquerque <palbuquerque73@gmail.com>, 2015, 2016, 2017, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.6.15\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-13 20:39+0100\n"
-"PO-Revision-Date: 2017-01-26 07:32+0000\n"
-"Last-Translator: Pedro Albuquerque <pedro@pedro>\n"
-"Language-Team: Português <>\n"
+"PO-Revision-Date: 2018-10-08 15:04+0100\n"
+"Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
+"Language-Team: Portuguese <translation-team-pt@lists.sourceforge.net>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Bugs: Report translation errors to the Language-Team address.\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\\n\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
 #: ../borrowed/goffice/go-charmap-sel.c:70
@@ -571,13 +572,13 @@ msgid ""
 "new accounts. Accounts in other currencies must be\n"
 "added manually."
 msgstr ""
+"Seleccionou uma moeda do livro e será usada para novas\n"
+"contas. Contas noutras moedas terão de ser adicionadas\n"
+"manualmente."
 
 #: ../gnucash/gnome/assistant-hierarchy.c:1145
-#, fuzzy
 msgid "Please choose the currency to use for new accounts."
-msgstr ""
-"\n"
-"Por favor, escolha a moeda a utilizar para as novas contas."
+msgstr "Por favor, escolha a moeda a utilizar para as novas contas."
 
 #. The options dialog gets added to the notebook so it doesn't need a parent.
 #: ../gnucash/gnome/assistant-hierarchy.c:1190
@@ -1645,7 +1646,7 @@ msgstr "Código da conta"
 #: ../gnucash/gnome/dialog-imap-editor.c:503
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:5
 msgid "Bayesian"
-msgstr ""
+msgstr "Bayesiana"
 
 #. Description
 #: ../gnucash/gnome/dialog-imap-editor.c:518
@@ -1656,7 +1657,7 @@ msgstr "Descrição"
 #. Memo
 #: ../gnucash/gnome/dialog-imap-editor.c:521
 msgid "Memo Field"
-msgstr ""
+msgstr "Campo de nota"
 
 #. CSV Account Map
 #: ../gnucash/gnome/dialog-imap-editor.c:524
@@ -2382,6 +2383,8 @@ msgid ""
 "The selected transaction doesn't have splits that can be assigned as a "
 "payment"
 msgstr ""
+"A transacção seleccionada não tem parcelas que possam ser atribuídas como "
+"pagamento"
 
 #: ../gnucash/gnome/dialog-payment.c:1514
 msgid ""
@@ -2390,17 +2393,19 @@ msgid ""
 "Please select one, the others will be ignored.\n"
 "\n"
 msgstr ""
+"Embora esta transacção tenha múltiplas parcelas que podem ser\n"
+"consideradas como \"pagamento\", o Gnucash so sabe como gerir uma.\n"
+"Por favor, seleccione uma, as outras serão ignoradas.\n"
+"\n"
 
 #: ../gnucash/gnome/dialog-payment.c:1517
-#, fuzzy
 msgid "Warning"
-msgstr "Repor avisos"
+msgstr "Aviso"
 
 #: ../gnucash/gnome/dialog-payment.c:1520
 #: ../gnucash/gnome/dialog-payment.c:1638
-#, fuzzy
 msgid "Continue"
-msgstr "Contínua"
+msgstr "Continuar"
 
 #: ../gnucash/gnome/dialog-payment.c:1521
 #: ../gnucash/gnome/gnc-plugin-page-invoice.c:260
@@ -2420,6 +2425,12 @@ msgid ""
 "%s\n"
 "Do you wish to continue and ignore these splits ?"
 msgstr ""
+"A transacção tem pelo menos uma parcela numa conta de negócios que não é "
+"parte de uma transacção\n"
+"de negócios. Se continuar, estas parcelas serão ignoradas:\n"
+"\n"
+"%s\n"
+"Deseja continuar e ignorar as parcelas?"
 
 #. Translators: %d is the number of prices. This is a ngettext(3) message.
 #: ../gnucash/gnome/dialog-price-edit-db.c:189
@@ -2442,9 +2453,8 @@ msgid "Entries"
 msgstr "Entradas"
 
 #: ../gnucash/gnome/dialog-price-edit-db.c:451
-#, fuzzy
 msgid "Are you sure you want to delete these prices ?"
-msgstr "Tem a certeza que quer eliminar o preço seleccionado?"
+msgstr "Tem a certeza que quer eliminar estes preços?"
 
 #: ../gnucash/gnome/dialog-price-editor.c:213
 msgid "You must select a Security."
@@ -2814,7 +2824,7 @@ msgstr "Identidade de imposto recebido"
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-options.glade.h:5
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-reset-warnings.glade.h:3
 msgid "_Apply"
-msgstr ""
+msgstr "_Aplicar"
 
 #: ../gnucash/gnome/dialog-tax-info.c:1191
 msgid ""
@@ -2830,41 +2840,36 @@ msgstr "Formulário"
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:203
 msgid "File Found"
-msgstr ""
+msgstr "Ficheiro encontrado"
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:205
-#, fuzzy
 msgid "File Not Found"
-msgstr "Não encontrado"
+msgstr "Ficheiro não encontrado"
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:215
-#, fuzzy
 msgid "Address Found"
-msgstr "Telef. de endereço"
+msgstr "Endereço encontrado"
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:217
-#, fuzzy
 msgid "Address Not Found"
-msgstr "Telef. de endereço"
+msgstr "Endereço não encontrado"
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:276
 #: ../gnucash/gnome/gnc-split-reg.c:1143
-#, fuzzy
 msgid "This transaction is not associated with a valid URI."
-msgstr "Esta transacção não está associada a um URI."
+msgstr "Esta transacção não está associada a um URI válido."
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:418
 msgid "Path head for files is, "
-msgstr ""
+msgstr "Caminho para os ficheiros é, "
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:420
 msgid "Path head does not exist, "
-msgstr ""
+msgstr "O caminho não existe, "
 
 #: ../gnucash/gnome/dialog-trans-assoc.c:432
-#, fuzzy
 msgid "Relative"
-msgstr "_Relativa:"
+msgstr "Relativo"
 
 #: ../gnucash/gnome/dialog-vendor.c:214
 msgid ""
@@ -3144,21 +3149,19 @@ msgstr "Fechar o livro no final do período"
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:211
 msgid "_Import Map Editor"
-msgstr ""
+msgstr "_Importar editor de mapa"
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:212
 msgid "View and Delete Bayesian and Non Bayesian information"
-msgstr ""
+msgstr "Ver e eliminar informação bayesiana e não bayesiana"
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:216
-#, fuzzy
 msgid "_Transaction Associations"
-msgstr "Informação da transacção"
+msgstr "Associações da _transacção"
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:217
-#, fuzzy
 msgid "View all Transaction Associations"
-msgstr "Informação da transacção"
+msgstr "Ver todas as associações da transacção"
 
 #: ../gnucash/gnome/gnc-plugin-basic-commands.c:224
 msgid "_Tips Of The Day"
@@ -3264,7 +3267,7 @@ msgstr "Seleccionar um orçamento"
 #: ../gnucash/import-export/qif-imp/dialog-account-picker.glade.h:14
 #: ../gnucash/report/report-gnome/dialog-report.glade.h:15
 msgid "_OK"
-msgstr ""
+msgstr "_Aceitar"
 
 #. Toplevel
 #. Extensions Menu
@@ -5154,37 +5157,32 @@ msgid "_Remove Splits"
 msgstr "_Remover parcelas"
 
 #: ../gnucash/gnome/gnc-split-reg.c:910
-#, fuzzy
 msgid "Associate File with Transaction"
-msgstr "_Associar ficheiro com transacção"
+msgstr "Associar ficheiro com transacção"
 
 #: ../gnucash/gnome/gnc-split-reg.c:913 ../gnucash/gnome/gnc-split-reg.c:984
 #: ../gnucash/gnome/gtkbuilder/dialog-commodities.glade.h:4
 #: ../gnucash/gnome/gtkbuilder/dialog-price.glade.h:53
 #: ../gnucash/gnome-search/dialog-search.c:724
 #: ../gnucash/gnome-utils/gnc-recurrence.c:552
-#, fuzzy
 msgid "_Remove"
-msgstr "<< _Remover"
+msgstr "_Remover"
 
 #: ../gnucash/gnome/gnc-split-reg.c:940
-#, fuzzy
 msgid "Existing Association is "
-msgstr "Activos existentes"
+msgstr "Associação existente é "
 
 #: ../gnucash/gnome/gnc-split-reg.c:981
-#, fuzzy
 msgid "Associate Location with Transaction"
-msgstr "_Associar localização com transacção"
+msgstr "Associar localização com transacção"
 
 #: ../gnucash/gnome/gnc-split-reg.c:999
 msgid "Amend URL:"
-msgstr ""
+msgstr "Emendar URL:"
 
 #: ../gnucash/gnome/gnc-split-reg.c:1003
-#, fuzzy
 msgid "Enter URL:"
-msgstr "Registar"
+msgstr "Inserir URL:"
 
 #: ../gnucash/gnome/gnc-split-reg.c:1117
 msgid "This transaction is not associated with a URI."
@@ -5922,13 +5920,15 @@ msgstr ""
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:1
 msgid "The version of these settings"
-msgstr ""
+msgstr "A versão destas definições"
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:2
 msgid ""
 "This is used internally to determine whether some preferences may need "
 "conversion when switching to a newer version of GnuCash."
 msgstr ""
+"Isto é usado internamente para determinar se algumas preferências podem "
+"precisar de conversão ao mudar para uma versão mais recente do Gnucash."
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:3
 msgid "Save window sizes and locations"
@@ -5962,13 +5962,12 @@ msgstr ""
 "esquerda, hífen e ponto)."
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:7
-#, fuzzy
 msgid "Transaction Associations head path"
-msgstr "Informação da transacção"
+msgstr "Caminho das associações da transacção"
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:8
 msgid "This is the path head for the Transaction file Associations"
-msgstr ""
+msgstr "Este é o caminho para as associações de ficheiro da transacção"
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:9
 msgid "Compress the data file"
@@ -6464,9 +6463,8 @@ msgstr ""
 "actualize o campo \"Núm\" da transacção."
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:78
-#, fuzzy
 msgid "Color the register using a gnucash specific color theme"
-msgstr "Colorir o diário como especificado pelo tema do sistema"
+msgstr "Colorir o diário com um tema específico do Gnucash"
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:79
 msgid ""
@@ -6476,16 +6474,23 @@ msgid ""
 "css file to be stored in the gnucash used config directory. More information "
 "can be found in the gnucash FAQ."
 msgstr ""
+"Quando activo, o diário usa um tema de cores específico do Gnucash (verde/"
+"amarelo). Senão usa o tema do sistema. Independentemente desta definição, o "
+"utilizador pode sempre ignorar o tema de cor através de um ficheiro css do "
+"Gnucash, a gravar na pasta de configuração do Gnucash. Pode encontrar mais "
+"informação nas FAQ."
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:80
 msgid "Superseded by \"use-gnucash-color-theme\""
-msgstr ""
+msgstr "Sobreposto por \"use-gnucash-color-theme\""
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:81
 msgid ""
 "This option is temporarily kept around for backwards compatibility. It will "
 "be removed in a future version."
 msgstr ""
+"Esta opção é temporariamente mantida por compatibilidade com versões "
+"anteriores. Será removida numa versão futura."
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:82
 msgid "\"Enter\" key moves to bottom of register"
@@ -6572,9 +6577,8 @@ msgstr ""
 "será marcado."
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:95
-#, fuzzy
 msgid "Show future transactions after the blank transaction in a register"
-msgstr "Ir para a transacção em branco no final do registo"
+msgstr "Mostrar transacções futuras após o registo em branco num diário"
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:96
 msgid ""
@@ -6583,6 +6587,10 @@ msgid ""
 "bottom of the register after the blank transaction. Otherwise the blank "
 "transaction will be at the bottom of the register after all transactions."
 msgstr ""
+"Mostrar transacções futuras após o registo em branco num diário. Se activa, "
+"as transacções com uma data futura, serão mostradas ao fundo do diário, após "
+"o registo em branco. Senão, o registo em branco será o último do diário, "
+"após todas as transacções."
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:97
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:160
@@ -6759,7 +6767,7 @@ msgstr "Moeda predefinida para novos relatórios"
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:123
 msgid "Zoom factor to use by default for reports."
-msgstr ""
+msgstr "Factor de ampliação predefinido para todos os relatórios."
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:124
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:197
@@ -6768,6 +6776,9 @@ msgid ""
 "allows you to scale reports up by the set factor. For example setting this "
 "to 2.0 will display reports at twice their typical size."
 msgstr ""
+"Em ecrãs de alta resolução, os relatórios tendem a ser de difícil leitura. "
+"Esta opção permite dimensionar os relatórios. Por exemplo, se o factor for "
+"2, o tamanho será o dobro do tamanho típico."
 
 #: ../gnucash/gnome/gschemas/org.gnucash.gschema.xml.in.in.h:125
 msgid "PDF export file name format"
@@ -8279,48 +8290,42 @@ msgid "<b>Period:</b>"
 msgstr "<b>Período:</b>"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:1
-#, fuzzy
 msgid "Find Account Dialog"
-msgstr "Eliminação de conta"
+msgstr "Localizar diálogo da conta"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:2
-#, fuzzy
 msgid "Close on Jump"
-msgstr "Fechar livro"
+msgstr "Fechar ao ir para"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:3
-#, fuzzy
 msgid "_Jump To"
-msgstr "_Saltar"
+msgstr "_Ir para"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:5
-#, fuzzy
 msgid "<b>Search the Account List</b>"
-msgstr "<b>_Conta-mãe</b>"
+msgstr "<b>Procurar na lista de contas</b>"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:6
-#, fuzzy
 msgid "Search from Root"
-msgstr "Resultados da procura"
+msgstr "Procurar desde a raiz"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:7
-#, fuzzy
 msgid "Search from Sub Account"
-msgstr "Limpar _conta"
+msgstr "Procurar desde sub-conta"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:8
-#, fuzzy
 msgid "Account Full Name"
-msgstr "Nome da conta"
+msgstr "Nome completo de conta"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:9
 msgid "Case insensitive searching is available on 'Account Full Name'."
 msgstr ""
+"Procura insensível a maiúsculas está disponível em \"Nome completo de conta"
+"\"."
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:10
-#, fuzzy
 msgid "_Search"
-msgstr " Procurar "
+msgstr "_Procurar"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-find-account.glade.h:11
 msgid ""
@@ -8328,72 +8333,72 @@ msgid ""
 "Tree,\n"
 "if account should not be shown, this will be temporarily overridden."
 msgstr ""
+"Seleccione uma linha e prima \"Saltar para\" para ir para a conta na "
+"árvore,\n"
+"se a conta não deve ser mostrada, será temporariamente ignorado."
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:1
 msgid "Import Map Editor"
-msgstr ""
+msgstr "Importar editor de mapa"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:4
 msgid "<b>What type of information to display?</b>"
-msgstr ""
+msgstr "<b>Que tipo de informação mostrar?</b>"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:6
 msgid "Non-Bayesian"
-msgstr ""
+msgstr "Não-bayesiana"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:7
-#, fuzzy
 msgid "Online ID"
-msgstr "Online"
+msgstr "Id online"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:8
-#, fuzzy
 msgid "Source Account Name"
-msgstr "Mostrar nome completo de conta"
+msgstr "Nome de conta fonte"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:9
 msgid "Based On"
-msgstr ""
+msgstr "Baseado em"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:10
-#, fuzzy
 msgid "Match String"
-msgstr "Correspondência em falta!"
+msgstr "Comparar cadeia"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:11
-#, fuzzy
 msgid "Mapped to Account Name"
-msgstr "Nome da conta"
+msgstr "Mapeado para nome de conta"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:12
 msgid "Count of Match String Usage"
-msgstr ""
+msgstr "Total de uso de comparação"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:13
 msgid ""
 "Case sensative filtering is available on 'Match String' and 'Mapped to "
 "Account Name'."
 msgstr ""
+"Filtro de sensibilidade a maiúsculas disponível em \"Comparar cadeia\" e "
+"\"Mapeado para nome de conta\"."
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:14
-#, fuzzy
 msgid "_Filter"
-msgstr "_Ficheiro"
+msgstr "_Filtro"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:15
 msgid "_Expand All"
-msgstr ""
+msgstr "_Expandir tudo"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:16
-#, fuzzy
 msgid "_Collapse All"
-msgstr "Limpar tudo"
+msgstr "_Colapsar tudo"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-imap-editor.glade.h:17
 msgid ""
 "Multiple rows can be selected and then deleted by pressing the delete "
 "button..."
 msgstr ""
+"Pode seleccionar múltiplas linhas e depois eliminá-las premindo Delete..."
 
 #: ../gnucash/gnome/gtkbuilder/dialog-invoice.glade.h:6
 msgid "Posted Account"
@@ -8555,13 +8560,12 @@ msgid "<b>Splits _in lot</b>"
 msgstr "<b>Desdobramentos _no lote</b>"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-new-user.glade.h:1
-#, fuzzy
 msgid "_No"
-msgstr "_Agora"
+msgstr "Não"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-new-user.glade.h:2
 msgid "_Yes"
-msgstr ""
+msgstr "_Sim"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-new-user.glade.h:3
 msgid ""
@@ -8657,7 +8661,7 @@ msgstr "A empresa associada a este pagamento."
 
 #: ../gnucash/gnome/gtkbuilder/dialog-payment.glade.h:8
 msgid "Partner"
-msgstr ""
+msgstr "Sócio"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-payment.glade.h:9
 msgid "Post To"
@@ -8704,7 +8708,7 @@ msgstr "Imprimir cheque"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-payment.glade.h:27
 msgid "(USD)"
-msgstr ""
+msgstr "(USD)"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-payment.glade.h:28
 msgid "Transaction Details"
@@ -8769,16 +8773,12 @@ msgid "_Price:"
 msgstr "_Preço:"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-price.glade.h:19
-#, fuzzy
 msgid "Remove Old Prices"
-msgstr "Remover _antigo..."
+msgstr "Remover preços antigos"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-price.glade.h:20
-#, fuzzy
 msgid "Delete prices that meet the following criteria:"
-msgstr ""
-"Eliminar todos os preços de acções antes da data abaixo, baseado no seguinte "
-"critério:"
+msgstr "Eliminar preços que cumpram o seguinte critério:"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-price.glade.h:21
 #: ../gnucash/gnome-utils/gtkbuilder/dialog-preferences.glade.h:34
@@ -8786,9 +8786,8 @@ msgid "_None"
 msgstr "_Nenhum"
 
 #: ../gnucash/gnome/gtkbuilder/dialog-price.glade.h:22
-#, fuzzy
 msgid "Remove all prices before date."
-msgstr "Remover cotações anteriores à data indicada."
+msgstr "Remover todos os preços antes da data."
 
 #: ../gnucash/gnome/gtkbuilder/dialog-price.glade.h:23
 msgid "Last of _Week"
