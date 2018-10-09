@@ -23,6 +23,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions to get splits with interesting data from accounts.
 
+;; helper function. queries book for all splits in accounts before
+;; end-date (end-date can be #f)
+(define (get-all-splits accounts end-date)
+  (let ((query (qof-query-create-for-splits)))
+    (qof-query-set-book query (gnc-get-current-book))
+    (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
+    (xaccQueryAddAccountMatch query accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
+    (xaccQueryAddDateMatchTT query #f 0 (and end-date #t) (or end-date 0) QOF-QUERY-AND)
+    (let ((splits (qof-query-run query)))
+      (qof-query-destroy query)
+      splits)))
 
 ;; Returns a list of all splits in the 'currency-accounts' up to
 ;; 'end-date' which have two different commodities involved, one of
@@ -30,42 +41,17 @@
 ;; 'commodity' != #f ).
 (define (gnc:get-match-commodity-splits
          currency-accounts end-date commodity)
-  (let ((query (qof-query-create-for-splits))
-        (splits #f))
-
-    (qof-query-set-book query (gnc-get-current-book))
-    (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
-    (xaccQueryAddAccountMatch query
-                              currency-accounts
-                              QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-    (if end-date
-        (xaccQueryAddDateMatchTT
-         query #f end-date #t end-date QOF-QUERY-AND))
-
-    ;; Get the query result, i.e. all splits in currency
-    ;; accounts.
-    (set! splits (filter
-                  ;; Filter such that we get only those splits
-                  ;; which have two *different* commodities
-                  ;; involved.
-                  (lambda (s) (let ((trans-comm
-                                     (xaccTransGetCurrency
-                                      (xaccSplitGetParent s)))
-                                    (acc-comm
-                                     (xaccAccountGetCommodity
-                                      (xaccSplitGetAccount s))))
-                                (and
-                                 (not (gnc-commodity-equiv
-                                       trans-comm acc-comm))
-                                 (or
-                                  (not commodity)
-                                  (gnc-commodity-equiv
-                                   commodity trans-comm)
-                                  (gnc-commodity-equiv
-                                   commodity acc-comm)))))
-                  (qof-query-run query)))
-    (qof-query-destroy query)
-    splits))
+  ;; Filter such that we get only those splits which have two
+  ;; *different* commodities involved.
+  (filter
+   (lambda (s)
+     (let ((txn-comm (xaccTransGetCurrency (xaccSplitGetParent s)))
+           (acc-comm (xaccAccountGetCommodity (xaccSplitGetAccount s))))
+       (and (not (gnc-commodity-equiv txn-comm acc-comm))
+            (or (not commodity)
+                (gnc-commodity-equiv commodity txn-comm)
+                (gnc-commodity-equiv commodity acc-comm)))))
+   (get-all-splits currency-accounts end-date)))
 
 ;; Returns a sorted list of all splits in the 'currency-accounts' up
 ;; to 'end-date' which have the 'commodity' and one other commodity
@@ -129,8 +115,14 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
 ;;  (day2 23.33))
 ;; The intended second price is 6500/300, or 21.67.
 
-(define (gnc:get-commodity-totalavg-prices
-         currency-accounts end-date price-commodity report-currency)
+;; NOTE there is an optional #:commodity-splits argument which should
+;; contain a sorted splitlist with pricing information related to the
+;; price-commodity. See (gnc:get-commoditylist-totalavg-prices) how to
+;; generate this splitlist. This is NOT to be used by external
+;; reports.
+(define* (gnc:get-commodity-totalavg-prices
+          currency-accounts end-date price-commodity report-currency
+          #:key commodity-splits)
   (let ((total-foreign (gnc-numeric-zero))
         (total-domestic (gnc-numeric-zero)))
     (filter
@@ -210,9 +202,9 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
                #f))))
       ;; Get all the interesting splits, and sort them according to the
       ;; date.
-      (gnc:get-match-commodity-splits-sorted
-       currency-accounts
-       end-date price-commodity)))))
+      (or commodity-splits
+          (gnc:get-match-commodity-splits-sorted
+           currency-accounts end-date price-commodity))))))
 
 ;; Create a list of prices for all commodities in 'commodity-list',
 ;; i.e. the same thing as in get-commodity-totalavg-prices but
@@ -222,22 +214,34 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
 (define (gnc:get-commoditylist-totalavg-prices
          commodity-list report-currency end-date
          start-percent delta-percent)
-  (let ((currency-accounts
-         ;;(filter gnc:account-has-shares?
-         ;; -- use all accounts, not only share accounts, since gnucash-1.7
-         (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
-        (work-to-do (length commodity-list))
-        (work-done 0))
+  (define (interesting-split? s)
+    (not (gnc-commodity-equiv
+          (xaccTransGetCurrency (xaccSplitGetParent s))
+          (xaccAccountGetCommodity (xaccSplitGetAccount s)))))
+  (define (date<? a b)
+    (< (xaccTransGetDate (xaccSplitGetParent a))
+       (xaccTransGetDate (xaccSplitGetParent b))))
+  (let* ((currency-accounts
+          ;;(filter gnc:account-has-shares?
+          ;; -- use all accounts, not only share accounts, since gnucash-1.7
+          (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
+         (all-splits (get-all-splits currency-accounts end-date))
+         (interesting-splits (sort (filter interesting-split? all-splits) date<?))
+         (work-to-do (length commodity-list))
+         (work-done 0))
     (map
      (lambda (c)
-       (begin
-         (set! work-done (+ 1 work-done))
-         (if start-percent
-             (gnc:report-percent-done
-              (+ start-percent (* delta-percent (/ work-done work-to-do)))))
-         (cons c
-               (gnc:get-commodity-totalavg-prices
-                currency-accounts end-date c report-currency))))
+       (define (split-has-commodity? s)
+         (or (gnc-commodity-equiv c (xaccTransGetCurrency (xaccSplitGetParent s)))
+             (gnc-commodity-equiv c (xaccAccountGetCommodity (xaccSplitGetAccount s)))))
+       (set! work-done (1+ work-done))
+       (if start-percent
+           (gnc:report-percent-done
+            (+ start-percent (* delta-percent (/ work-done work-to-do)))))
+       (cons c
+             (gnc:get-commodity-totalavg-prices
+              currency-accounts end-date c report-currency
+              #:commodity-splits (filter split-has-commodity? interesting-splits))))
      commodity-list)))
 
 ;; Get the instantaneous prices for the 'price-commodity', measured in
