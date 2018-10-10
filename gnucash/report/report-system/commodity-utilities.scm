@@ -95,7 +95,7 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
 ;; Returns true if the given pricealist element is a non-zero price.
 (define (gnc:price-is-not-zero? elem)
   (and (second elem)
-       (not (gnc-numeric-zero-p (second elem)))))
+       (not (zero? (second elem)))))
 
 ;; Create a list of all prices of 'price-commodity' measured in the currency
 ;; 'report-currency'. The prices are taken from all splits in
@@ -123,8 +123,8 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
 (define* (gnc:get-commodity-totalavg-prices
           currency-accounts end-date price-commodity report-currency
           #:key commodity-splits)
-  (let ((total-foreign (gnc-numeric-zero))
-        (total-domestic (gnc-numeric-zero)))
+  (let ((total-foreign 0)
+        (total-domestic 0))
     (filter
      gnc:price-is-not-zero?
      (map-in-order
@@ -133,9 +133,9 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
                                   (xaccSplitGetParent a)))
                (account-comm (xaccAccountGetCommodity
                               (xaccSplitGetAccount a)))
-               (share-amount (gnc-numeric-abs
+               (share-amount (abs
                               (xaccSplitGetAmount a)))
-               (value-amount (gnc-numeric-abs
+               (value-amount (abs
                               (xaccSplitGetValue a)))
                (transaction-date (xaccTransGetDate
                                   (xaccSplitGetParent a)))
@@ -182,8 +182,8 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
                            ") =? "
                            (gnc:monetary->string
                             (gnc:make-gnc-monetary
-                            report-currency (gnc-numeric-zero))))
-                     (gnc-numeric-zero))
+                            report-currency 0)))
+                     0)
                    (begin
                      (set! total-foreign (gnc-numeric-add total-foreign
                                                           (third foreignlist)
@@ -222,8 +222,6 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
     (< (xaccTransGetDate (xaccSplitGetParent a))
        (xaccTransGetDate (xaccSplitGetParent b))))
   (let* ((currency-accounts
-          ;;(filter gnc:account-has-shares?
-          ;; -- use all accounts, not only share accounts, since gnucash-1.7
           (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
          (all-splits (get-all-splits currency-accounts end-date))
          (interesting-splits (sort (filter interesting-split? all-splits) date<?))
@@ -261,9 +259,9 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
                                 (xaccSplitGetParent a)))
              (account-comm (xaccAccountGetCommodity
                             (xaccSplitGetAccount a)))
-             (share-amount (gnc-numeric-abs
+             (share-amount (abs
                             (xaccSplitGetAmount a)))
-             (value-amount (gnc-numeric-abs
+             (value-amount (abs
                             (xaccSplitGetValue a)))
              (transaction-date (xaccTransGetDate
                                 (xaccSplitGetParent a)))
@@ -303,8 +301,8 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
                        ") =? "
                        (gnc:monetary->string
                         (gnc:make-gnc-monetary
-                         report-currency (gnc-numeric-zero))))
-               (gnc-numeric-zero))
+                         report-currency 0)))
+               0)
              (if (not (zero? (third foreignlist)))
                  (gnc-numeric-div
                   (second foreignlist)
@@ -325,8 +323,6 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
          commodity-list report-currency end-date
          start-percent delta-percent)
   (let ((currency-accounts
-         ;;(filter gnc:account-has-shares?
-         ;; -- use all accounts, not only share accounts, since gnucash-1.7
          (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
         (work-to-do (length commodity-list))
         (work-done 0))
@@ -379,19 +375,12 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
 
 ;; Find the price of the 'commodity' in the 'pricealist' that is
 ;; nearest to the 'date'.
-(define (gnc:pricealist-lookup-nearest-in-time
-         pricealist commodity date)
+(define (gnc:pricealist-lookup-nearest-in-time pricealist commodity date)
   (let ((plist (assoc-ref pricealist commodity)))
-    (if (and plist (not (null? plist)))
-        (let ((price
-               (gnc:pricelist-price-find-nearest
-                plist date)))
-          (or price
-              (gnc-numeric-zero)))
-        (gnc-numeric-zero))))
-
-
-
+    (or (and plist
+             (not (null? plist))
+             (gnc:pricelist-price-find-nearest plist date))
+        0)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions to get one price at a given time (i.e. not time-variant).
@@ -478,7 +467,7 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
                      ;; Find the pair's currency in reportlist. FIXME:
                      ;; Also try the Euro here.
                      (pair-b (assoc (car pair) reportlist))
-                     (rate (gnc-numeric-zero)))
+                     (rate 0))
                  (if (and (not pair-a) (not pair-b))
                      ;; If neither the currency of otherlist nor of
                      ;; pair was found in reportlist then we can't
@@ -492,7 +481,7 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
                             (gnc:make-gnc-monetary (car otherlist) ((cdadr pair) 'total #f)))
                            " to "
                            (gnc:monetary->string
-                            (gnc:make-gnc-monetary report-commodity (gnc-numeric-zero))))
+                            (gnc:make-gnc-monetary report-commodity 0)))
                      (if (and pair-a pair-b)
                          ;; If both currencies are found then something
                          ;; went wrong inside
@@ -545,8 +534,6 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
 
 (define (gnc:get-exchange-totals report-commodity end-date)
   (let ((curr-accounts
-         ;;(filter gnc:account-has-shares? ))
-         ;; -- use all accounts, not only share accounts, since gnucash-1.7
          (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
         (sumlist (list (list report-commodity '()))))
 
@@ -560,16 +547,14 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
                   (account-comm (xaccAccountGetCommodity
                                  (xaccSplitGetAccount a)))
                   ;; Always use the absolute value here.
-                  (share-amount (gnc-numeric-abs
+                  (share-amount (abs
                                  (xaccSplitGetAmount a)))
-                  (value-amount (gnc-numeric-abs
+                  (value-amount (abs
                                  (xaccSplitGetValue a)))
-                  (tmp (assoc transaction-comm sumlist))
-                  (comm-list (if (not tmp)
-                                 (assoc account-comm sumlist)
-                                 tmp)))
+                  (comm-list (or (assoc transaction-comm sumlist)
+                                 (assoc account-comm sumlist))))
 
-             (cond ((gnc-numeric-zero-p share-amount)
+             (cond ((zero? share-amount)
                     ;; Without shares this is not a buy or sell; ignore it.
                     #f)
 
@@ -621,11 +606,8 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
 ;; Sum the net amounts and values in the report commodity, including booked
 ;; gains and losses, of each commodity across all accounts. Returns a
 ;; report-list.
-
 (define (gnc:get-exchange-cost-totals report-commodity end-date)
   (let ((curr-accounts
-         ;;(filter gnc:account-has-shares? ))
-         ;; -- use all accounts, not only share accounts, since gnucash-1.7
          (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
         (sumlist (list (list report-commodity '()))))
 
@@ -643,10 +625,8 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
                                      (xaccSplitGetAccount a)))
                       (share-amount (xaccSplitGetAmount a))
                       (value-amount (xaccSplitGetValue a))
-                      (tmp (assoc transaction-comm sumlist))
-                      (comm-list (if (not tmp)
-                                     (assoc account-comm sumlist)
-                                     tmp)))
+                      (comm-list (or (assoc transaction-comm sumlist)
+                                     (assoc account-comm sumlist))))
 
                  ;; entry exists already in comm-list?
                  (if (not comm-list)
@@ -668,8 +648,8 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
                                (list account-comm
                                      share-amount value-amount)
                                (list transaction-comm
-                                     (gnc-numeric-neg value-amount)
-                                     (gnc-numeric-neg share-amount))))
+                                     (- value-amount)
+                                     (- share-amount))))
                           ;; second commodity already existing in comm-list?
                           (pair (assoc (car foreignlist) (cadr comm-list))))
                        ;; if not, create a new entry in comm-list.
@@ -703,7 +683,7 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
   (map
    (lambda (e)
      (list (car e)
-           (gnc-numeric-abs
+           (abs
             (gnc-numeric-div ((cdadr e) 'total #f)
                              ((caadr e) 'total #f)
                              GNC-DENOM-AUTO
@@ -718,7 +698,7 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
    (lambda (e)
      (list (car e)
            (if (zero? ((caadr e) 'total #f)) #f
-           (gnc-numeric-abs
+           (abs
             (gnc-numeric-div ((cdadr e) 'total #f)
                              ((caadr e) 'total #f)
                              GNC-DENOM-AUTO
@@ -782,8 +762,8 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
                                    exchangelist))
                       (foreign-amount (gnc:gnc-monetary-amount foreign)))
                   (if (or (not pair)
-                          (gnc-numeric-zero-p foreign-amount))
-                      (gnc-numeric-zero)
+                          (zero? foreign-amount))
+                      0
                       (gnc-numeric-mul foreign-amount
                                        (cadr pair)
                                        (gnc-commodity-get-fraction domestic)
@@ -806,8 +786,8 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
               (warn "gnc:exchange-by-pricevalue-helper: No price found for "
                     (gnc:monetary->string foreign) " into "
                     (gnc:monetary->string
-                     (gnc:make-gnc-monetary domestic (gnc-numeric-zero))))
-              (gnc-numeric-zero))))))
+                     (gnc:make-gnc-monetary domestic 0)))
+              0)))))
 
 ;; Helper for gnc:exchange-by-pricedb-* below. 'price' gets tested for
 ;; #f here, and gets unref'd here too. Exchange the <gnc:monetary>
@@ -830,8 +810,8 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
               (warn "gnc:exchange-by-pricedb-helper: No price found for "
                     (gnc:monetary->string foreign) " into "
                     (gnc:monetary->string
-                     (gnc:make-gnc-monetary domestic (gnc-numeric-zero))))
-              (gnc-numeric-zero))))))
+                     (gnc:make-gnc-monetary domestic 0)))
+              0)))))
 
 ;; This is another ready-to-use function for calculation of exchange
 ;; rates. (Note that this is already the function itself. It doesn't
