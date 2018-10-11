@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2018-10-11 01:34+0200\n"
-"PO-Revision-Date: 2018-10-09 09:06+0100\n"
+"PO-Revision-Date: 2018-10-11 07:04+0100\n"
 "Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
 "Language-Team: Portuguese <translation-team-pt@lists.sourceforge.net>\n"
 "Language: pt\n"
@@ -1594,9 +1594,8 @@ msgid "The number of payments cannot be negative."
 msgstr "O número de prestações não pode ser negativo."
 
 #: gnucash/gnome/dialog-find-account.c:284
-#, fuzzy
 msgid "Find Account"
-msgstr "Local_izar conta"
+msgstr "Localizar conta"
 
 #: gnucash/gnome/dialog-find-account.c:316
 msgid "Place Holder"
@@ -1615,9 +1614,8 @@ msgid "Balance Zero"
 msgstr "Balanço zero"
 
 #: gnucash/gnome/dialog-find-account.c:360
-#, fuzzy
 msgid "Tax related"
-msgstr "Sujeita a _impostos"
+msgstr "Sujeita a impostos"
 
 #: gnucash/gnome/dialog-find-account.c:386
 msgid "Search from "
@@ -2644,9 +2642,9 @@ msgid "Cannot save check format file."
 msgstr "Impossível gravar ficheiro de formato de cheque."
 
 #: gnucash/gnome/dialog-print-check.c:821
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open file %s"
-msgstr "Impossível abrir o ficheiro .log actual: %s"
+msgstr "Impossível abrir %s"
 
 #: gnucash/gnome/dialog-print-check.c:1508
 msgid "There is a duplicate check format file."
@@ -3015,9 +3013,8 @@ msgid "This transaction is not associated with a valid URI."
 msgstr "Esta transacção não está associada a um URI válido."
 
 #: gnucash/gnome/dialog-trans-assoc.c:416
-#, fuzzy
 msgid "Transaction Associations"
-msgstr "Associações da _transacção"
+msgstr "Associações da transacção"
 
 #: gnucash/gnome/dialog-trans-assoc.c:436
 msgid "Path head for files is, "
@@ -3764,14 +3761,12 @@ msgid "Delete selected account"
 msgstr "Eliminar a conta seleccionada"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:231
-#, fuzzy
 msgid "_Cascade Account Color..."
-msgstr "Cor da conta"
+msgstr "_Cor da conta em cascata..."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:232
-#, fuzzy
 msgid "Cascade selected account color"
-msgstr "Por favor, seleccione uma coluna de conta."
+msgstr "Cor da conta seleccionada em cascata."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:236
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:241
@@ -3992,6 +3987,9 @@ msgid ""
 "modify them so they make use\n"
 "of another account"
 msgstr ""
+"A lista abaixo mostra objectos que utilizam a conta que pretende eliminar.\n"
+"Primeiro tem de eliminar estes objectos ou modificá-los para que utilizem "
+"outra conta."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1383
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1126
@@ -5108,9 +5106,8 @@ msgstr ""
 "Tentou abrir uma conta no diário antigo enquanto está aberta no novo diário."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3115
-#, fuzzy
 msgid "Filter By:"
-msgstr "Filtrar por..."
+msgstr "Filtrar por:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3130
 #: gnucash/gtkbuilder/assistant-loan.glade:161
@@ -5122,9 +5119,8 @@ msgid "Start Date:"
 msgstr "Data inicial:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3136
-#, fuzzy
 msgid "Show previous number of days:"
-msgstr "Mostrar número de acções"
+msgstr "Mostrar número prévio de dias:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3142
 #: gnucash/gtkbuilder/assistant-loan.glade:1260
@@ -5171,11 +5167,11 @@ msgstr "Esvaziada"
 #: gnucash/gnome/gnc-plugin-page-register.c:3159
 #: gnucash/gnome/gnc-plugin-page-register.c:3161
 msgid "Hide:"
-msgstr ""
+msgstr "Ocultar:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3161
 msgid "Show:"
-msgstr ""
+msgstr "Mostrar:"
 
 #. Define the strings here to avoid typos and make changes easier.
 #: gnucash/gnome/gnc-plugin-page-register.c:3244
@@ -5366,19 +5362,16 @@ msgstr ""
 "individual em vez de um conjunto de contas."
 
 #: gnucash/gnome/gnc-split-reg.c:580
-#, fuzzy
 msgid "Standard Order"
-msgstr "Ordem _padrão"
+msgstr "Ordem padrão"
 
 #: gnucash/gnome/gnc-split-reg.c:586
-#, fuzzy
 msgid "Date of Entry"
-msgstr "Data de _registo"
+msgstr "Data de registo"
 
 #: gnucash/gnome/gnc-split-reg.c:589
-#, fuzzy
 msgid "Statement Date"
-msgstr "Data do documento:"
+msgstr "Data de declaração"
 
 #: gnucash/gnome/gnc-split-reg.c:612
 #: gnucash/report/business-reports/customer-summary.scm:471
@@ -5393,9 +5386,8 @@ msgid "Ascending"
 msgstr "Ascendente"
 
 #: gnucash/gnome/gnc-split-reg.c:640
-#, fuzzy
 msgid "Filtered"
-msgstr "Filtro"
+msgstr "Filtrado"
 
 #: gnucash/gnome/gnc-split-reg.c:912
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:66
@@ -5521,9 +5513,8 @@ msgstr ""
 "ideia, visto que fará com que o balanço fique errado."
 
 #: gnucash/gnome/gnc-split-reg.c:2189
-#, fuzzy
 msgid "Sort By: "
-msgstr "Ordenar por"
+msgstr "Ordenar por:"
 
 #: gnucash/gnome/gnucash.appdata.xml.in:6 gnucash/gnome/gnucash.desktop.in.in:6
 msgid "GnuCash"
@@ -6407,6 +6398,8 @@ msgid ""
 "Set the account color for account '%s' including all sub-accounts to the "
 "selected color:"
 msgstr ""
+"Definir a cor da conta para \"%s\" incluindo todas as sub-contas para a cor "
+"seleccionada:"
 
 #: gnucash/gnome-utils/dialog-book-close.c:301
 msgid "Please select an Equity account to hold the total Period Income."
@@ -6570,15 +6563,14 @@ msgid "Export"
 msgstr "Exportar"
 
 #: gnucash/gnome-utils/dialog-options.c:642
-#, fuzzy
 msgid ""
 "Because no accounts have been set up yet, you will need to return to this "
 "dialog (via File->Properties), after account setup, if you want to set a "
 "default gain/loss account."
 msgstr ""
 "Como ainda não foram definidas contas, terá de voltar a este diálogo (via "
-"Ficheiro->Propriedades) após a definição das contas, se quiser definir uma "
-"conta predefinida de ganhos/perdas."
+"Ficheiro->Propriedades) após a definição das contas, se quiser predefinir "
+"uma conta de ganhos/perdas."
 
 #: gnucash/gnome-utils/dialog-options.c:686
 msgid "Select no account"
@@ -6871,11 +6863,12 @@ msgid ""
 "The entered date is out of the range 01/01/1400 - 31/12/9999, resetting to "
 "this year"
 msgstr ""
+"A data inserida está fora do intervalo 01/01/1400 - 31/12/9999, a repor para "
+"este ano"
 
 #: gnucash/gnome-utils/dialog-utils.c:435
-#, fuzzy
 msgid "Date out of range"
-msgstr "Intrevalo de datas"
+msgstr "Data fora do intervalo"
 
 #: gnucash/gnome-utils/dialog-utils.c:763
 msgid "Remember and don't _ask me again."
@@ -7154,14 +7147,15 @@ msgstr ""
 "com a exportação da base de dados?"
 
 #: gnucash/gnome-utils/gnc-file.c:324
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "GnuCash could not write to %s. That database may be on a read-only file "
 "system, you may not have write permission for the directory or your anti-"
 "virus software is preventing this action."
 msgstr ""
 "O GnuCash não conseguiu escrever em %s. Essa base de dados pode ser só de "
-"leitura ou pode não ter permissões de escrita nessa pasta."
+"leitura, pode não ter permissões de escrita nessa pasta ou o seu antivírus "
+"está a impedir a acção."
 
 #: gnucash/gnome-utils/gnc-file.c:332
 #, c-format
@@ -7298,7 +7292,6 @@ msgstr ""
 "penduradas."
 
 #: gnucash/gnome-utils/gnc-file.c:463
-#, fuzzy
 msgid ""
 "The library \"libdbi\" installed on your system doesn't correctly store "
 "large numbers. This means GnuCash cannot use SQL databases correctly. "
@@ -7309,8 +7302,8 @@ msgstr ""
 "A biblioteca \"libdbi\" instalada no seu sistema não armazena correctamente "
 "números grandes. Isto significa que o GnuCash não pode usar bases de dados "
 "SQL correctamente. O Gnucash não vai usar bases de dados SQL até que instale "
-"uma versão diferente da \"libdbi\". Por favor, veja https://bugzilla.gnome."
-"org/show_bug.cgi?id=611936 para mais informação."
+"uma versão diferente da \"libdbi\". Por favor, veja https://bugs.gnucash.org/"
+"show_bug.cgi?id=611936 para mais informação."
 
 #: gnucash/gnome-utils/gnc-file.c:475
 msgid ""
@@ -7373,16 +7366,15 @@ msgstr ""
 "deverá tentar abri-la. O que quer fazer?"
 
 #: gnucash/gnome-utils/gnc-file.c:769
-#, fuzzy
 msgid ""
 "That database may be on a read-only file system, you may not have write "
 "permission for the directory, or your anti-virus software is preventing this "
 "action. If you proceed you may not be able to save any changes. What would "
 "you like to do?"
 msgstr ""
-"Essa base de dados pode ser só de leitura ou pode não ter permissões para "
-"escrever nessa pasta. Se continuar, não gravará nenhumas alterações. O que "
-"quer fazer?"
+"Essa base de dados pode ser só de leitura, pode não ter permissões para "
+"escrever nessa pasta ou o seu antivírus pode estar a impedir a acção. Se "
+"continuar, não poderá gravar nenhumas alterações. O que quer fazer?"
 
 #: gnucash/gnome-utils/gnc-file.c:791
 msgid "_Open Read-Only"
@@ -10067,7 +10059,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.general.finance-quote.gschema.xml.in:5
 #: gnucash/gtkbuilder/dialog-preferences.glade:3292
 msgid "Alpha Vantage API key"
-msgstr ""
+msgstr "Chave Alpha Vantage API"
 
 #: gnucash/gschemas/org.gnucash.general.finance-quote.gschema.xml.in:6
 #: gnucash/gtkbuilder/dialog-preferences.glade:3291
@@ -10076,6 +10068,8 @@ msgid ""
 "To retrieve online quotes from Alphavantage, this key needs to be set. A key "
 "can be retrieved from the Alpha Vantage website."
 msgstr ""
+"Para obter cotações online de Alphavantage, tem de definir esta chave. Pode "
+"obter uma chave na página web da Alpha Vantage."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:10
 msgid "The version of these settings"
@@ -10108,7 +10102,6 @@ msgid "Character to use as separator between account names"
 msgstr "O carácter utilizado para separar nomes de contas"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:21
-#, fuzzy
 msgid ""
 "This setting determines the character that will be used between components "
 "of an account name. Possible values are any single non-alphanumeric unicode "
@@ -10227,6 +10220,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:70
 msgid "Force prices to display as decimals even if they must be rounded."
 msgstr ""
+"Forçar amostragem de cotações em decimais, mesmo as que serão arredondadas."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:71
 #: gnucash/gtkbuilder/dialog-preferences.glade:1375
@@ -10235,9 +10229,11 @@ msgid ""
 "decimals instead of displaying the exact fraction if the fractional part "
 "cannot be exactly represented as a decimal."
 msgstr ""
+"Se activa, O GnuCash arredondará as cotações para as mostrar em decimais em "
+"vez de mostrar a fracção exacta, se a parte fraccionada não puder ser "
+"exactamente representada como decimal."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:75
-#, fuzzy
 msgid ""
 "Tool to migrate preferences from old backend (GConf) to new one (GSettings) "
 "has run successfully."
@@ -10519,7 +10515,6 @@ msgid "Show Horizontal Grid Lines"
 msgstr "Mostrar linhas horizontais"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:181
-#, fuzzy
 msgid ""
 "If active, horizontal grid lines will be shown on table displays. Otherwise "
 "no horizontal grid lines will be shown."
@@ -10816,7 +10811,6 @@ msgid "All transactions are expanded to show all splits."
 msgstr "Todas as transacções são expandidas para mostrar todas as parcelas."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:306
-#, fuzzy
 msgid ""
 "Show two lines of information for each transaction in a register. This is "
 "the default setting for when a register is first opened. The setting can be "
@@ -10824,7 +10818,7 @@ msgid ""
 msgstr ""
 "Mostrar duas linhas de informação para cada transacção num diário. Esta é a "
 "predefinição para quando um diário é aberto pela primeira vez. Pode ser "
-"alterada a qualquer altura via item de menu \"Ver-&gt;Linha dupla\""
+"alterada a qualquer altura via item de menu \"Ver->Linha dupla\""
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:310
 msgid "Only display leaf account names."
@@ -13364,9 +13358,8 @@ msgid "Whether to display the list of Invoices Due at startup."
 msgstr "Se deve mostrar a lista de facturas devidas no arranque."
 
 #: gnucash/gtkbuilder/dialog-account.glade:7
-#, fuzzy
 msgid "Cascade Account Color"
-msgstr "Cor da conta"
+msgstr "Cor da conta em cascata"
 
 #. instantiate a default style sheet
 #: gnucash/gtkbuilder/dialog-account.glade:92
@@ -13382,11 +13375,12 @@ msgid ""
 "If any account has an existing color it will not be replaced unless the "
 "following is ticked."
 msgstr ""
+"Se alguma conta tiver uma cor existente, não será substituída a não ser que "
+"o seguinte esteja marcado."
 
 #: gnucash/gtkbuilder/dialog-account.glade:125
-#, fuzzy
 msgid "Replace any existing account colors"
-msgstr "A eliminar conta %s"
+msgstr "Substituir quaisquer cores de conta existentes"
 
 #: gnucash/gtkbuilder/dialog-account.glade:158
 msgid "Delete Account"
@@ -13528,19 +13522,16 @@ msgid "1/1000000"
 msgstr "1/1000000"
 
 #: gnucash/gtkbuilder/dialog-account.glade:879
-#, fuzzy
 msgid "1/10000000"
-msgstr "1/1000000"
+msgstr "1/10000000"
 
 #: gnucash/gtkbuilder/dialog-account.glade:882
-#, fuzzy
 msgid "1/100000000"
-msgstr "1/1000000"
+msgstr "1/100000000"
 
 #: gnucash/gtkbuilder/dialog-account.glade:885
-#, fuzzy
 msgid "1/1000000000"
-msgstr "1/1000000"
+msgstr "1/1000000000"
 
 #: gnucash/gtkbuilder/dialog-account.glade:986
 msgid "<b>Identification</b>"
@@ -13861,9 +13852,8 @@ msgstr "5. Após"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:48
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:8
-#, fuzzy
 msgid "window1"
-msgstr "Janela _1"
+msgstr "Janela1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:75
 msgid "Due Days: "
@@ -14700,7 +14690,6 @@ msgid "Count of Match String Usage"
 msgstr "Total de uso de comparação"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:260
-#, fuzzy
 msgid ""
 "Case sensitive filtering is available on 'Match String' and 'Mapped to "
 "Account Name'."
@@ -15618,7 +15607,7 @@ msgstr "Mostrar montantes negativos a vermelho."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1369
 msgid "Force P_rices to display as decimals."
-msgstr ""
+msgstr "Fo_rçar amostragem de cotações em decimais."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1391
 msgid "<b>Numbers</b>"
@@ -16086,9 +16075,8 @@ msgid "Windows"
 msgstr "Janelas"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3321
-#, fuzzy
 msgid "Online Quotes"
-msgstr "_Obter cotações online"
+msgstr "Cotações online"
 
 #: gnucash/gtkbuilder/dialog-price.glade:12
 msgid "Bid"
@@ -17690,20 +17678,20 @@ msgid "Reason for voiding transaction:"
 msgstr "Motivo para esvaziar a transacção:"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:100
-#, fuzzy
 msgid "Show _number of days"
-msgstr "Mostrar número de acções"
+msgstr "Mostrar _número de dias"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:120
 msgid ""
 "Valid range is 0 to 1100 days\n"
 "If 0, all previous days included"
 msgstr ""
+"O intervalo válido é 0 a 1100 dias\n"
+"Se for 0, inclui todos os anteriores"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:141
-#, fuzzy
 msgid "Select _Range:"
-msgstr "Definir intervalo:"
+msgstr "Selecciona_r intervalo:"
 
 #. Sort register by Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:566
@@ -18798,7 +18786,6 @@ msgstr ""
 "%s"
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:334
-#, fuzzy
 msgid "No jobs to be sent."
 msgstr "Sem trabalhos a enviar."
 
@@ -19193,7 +19180,7 @@ msgstr ""
 
 #. Translators: %s is the file name string.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:91
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "When you click 'Apply', the transactions will be exported to the file '%s'.\n"
 "\n"
@@ -19534,30 +19521,30 @@ msgstr "_Estreitar esta coluna"
 
 #. Translators: This is a ngettext(3) message, %d is the number of prices added
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1775
-#, fuzzy, c-format
+#, c-format
 msgid "%d added price"
 msgid_plural "%d added prices"
-msgstr[0] "Adicionar nova cotação."
-msgstr[1] "Adicionar nova cotação."
+msgstr[0] "%d cotação adicionada"
+msgstr[1] "%d cotações adicionadas"
 
 #. Translators: This is a ngettext(3) message, %d is the number of duplicate prices
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1780
-#, fuzzy, c-format
+#, c-format
 msgid "%d duplicate price"
 msgid_plural "%d duplicate prices"
-msgstr[0] "_Duplicar factura"
-msgstr[1] "_Duplicar factura"
+msgstr[0] "%d cotação duplicada"
+msgstr[1] "%d cotações duplicadas"
 
 #. Translators: This is a ngettext(3) message, %d is the number of replaced prices
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1785
-#, fuzzy, c-format
+#, c-format
 msgid "%d replaced price"
 msgid_plural "%d replaced prices"
-msgstr[0] "Os preços gravados."
-msgstr[1] "Os preços gravados."
+msgstr[0] "%d cotação substituída"
+msgstr[1] "%d cotações substituídas"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1790
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The prices were imported from file '%s'.\n"
 "\n"
@@ -19565,7 +19552,13 @@ msgid ""
 "- %s\n"
 "- %s\n"
 "- %s"
-msgstr "Os preços foram importados do ficheiro \""
+msgstr ""
+"As cotações foram importadas do ficheiro \"%s\".\n"
+"\n"
+"Resumo da importação:\n"
+"- %s\n"
+"- %s\n"
+"- %s"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1834
 #, c-format
@@ -19634,9 +19627,8 @@ msgstr ""
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2034
-#, fuzzy
 msgid "The transactions were imported from file '{1}'."
-msgstr "As transacções foram importadas do ficheiro \""
+msgstr "As transacções foram importadas do ficheiro \"{1}\"."
 
 #: gnucash/import-export/csv-imp/csv-account-import.c:251
 #, c-format
@@ -19988,14 +19980,12 @@ msgstr ""
 
 #. Menu entry with label and tooltip
 #: gnucash/import-export/customer-import/gnc-plugin-customer-import.c:58
-#, fuzzy
 msgid "Import _Customers & Vendors..."
-msgstr "Importar clientes e fornecedores"
+msgstr "Importar _clientes e fornecedores..."
 
 #: gnucash/import-export/customer-import/gnc-plugin-customer-import.c:58
-#, fuzzy
 msgid "Import Customers and Vendors from a CSV text file."
-msgstr "Importar clientes ou fornecedores de ficheiro de texto"
+msgstr "Importar clientes e fornecedores de ficheiro de texto CSV."
 
 #: gnucash/import-export/import-account-matcher.c:201
 #: gnucash/import-export/import-account-matcher.c:378
@@ -20014,9 +20004,8 @@ msgstr "(ID completa de conta: "
 
 #. Add the New Account Button
 #: gnucash/import-export/import-account-matcher.c:455
-#, fuzzy
 msgid "_New Account"
-msgstr "Nova conta"
+msgstr "_Nova conta"
 
 #: gnucash/import-export/import-commodity-matcher.c:113
 msgid ""
@@ -20627,28 +20616,28 @@ msgid "Parse ambiguity between formats"
 msgstr "Ambiguidade de processamento entre formatos"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:1031
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Value '~a' could be ~a or ~a."
-msgstr "O valor \"%s\" pode ser %s ou %s."
+msgstr "O valor '~a' pode ser ~a ou ~a."
 
 #: gnucash/import-export/qif-imp/qif-merge-groups.scm:113
 msgid "Finding duplicate transactions"
 msgstr "A localizar transacções duplicadas"
 
 #: gnucash/import-export/qif-imp/qif-parse.scm:190
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Unrecognized account type '~s'. Defaulting to Bank."
-msgstr "Tipo de conta \"%s\" não reconhecido. Definida como Banco."
+msgstr "Tipo de conta \"~s\" não reconhecido. Definida como Banco."
 
 #: gnucash/import-export/qif-imp/qif-parse.scm:297
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Unrecognized action '~a'."
-msgstr "Acção \"%s\" não reconhecida."
+msgstr "Acção \"~a\" não reconhecida."
 
 #: gnucash/import-export/qif-imp/qif-parse.scm:322
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Unrecognized status '~a'. Defaulting to uncleared."
-msgstr "Estado \"%s\" não reconhecido. Definido como Não confirmada."
+msgstr "Estado \"~a\" não reconhecido. Definido como Não confirmada."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:189
 msgid "QIF import: Name conflict with another account."
@@ -21184,9 +21173,9 @@ msgid "Tot Shares"
 msgstr "Tot acções"
 
 #: gnucash/register/ledger-core/split-register-model.c:528
-#, fuzzy, c-format
+#, c-format
 msgid "Reconciled on %s"
-msgstr "Só reconciliadas"
+msgstr "Reconciliada em %s"
 
 #. This seems to be the one that initially gets used, the InactiveDateCell
 #. is set to, and subsequently displayed.
@@ -21316,7 +21305,6 @@ msgid "Chan_ge Transaction"
 msgstr "_Alterar transacção"
 
 #: gnucash/register/register-gnome/datecell-gnome.c:103
-#, fuzzy
 msgid ""
 "The entered date of the transaction is older than the \"Read-Only Threshold"
 "\" set for this book. This setting can be changed in File -> Properties -> "
@@ -21324,7 +21312,7 @@ msgid ""
 msgstr ""
 "A data de entrada da nova transacção é anterior ao limite de edição definido "
 "para este livro. Pode alterar este limite em Ficheiro -> Propriedades -> "
-"Contas."
+"Contas, repondo o limite."
 
 #: gnucash/register/register-gnome/gnucash-item-list.c:468
 msgid "List"
@@ -21433,12 +21421,12 @@ msgid "Address Email"
 msgstr "E-mail de endereço"
 
 #: gnucash/report/business-reports/aging.scm:225
-#, fuzzy, scheme-format
+#, scheme-format
 msgid ""
 "Transactions relating to '~a' contain more than one currency. This report is "
 "not designed to cope with this possibility."
 msgstr ""
-"Transacções relacionadas com \"%s\" contêm mais de uma moeda. Este relatório "
+"Transacções relacionadas com \"~a\" contêm mais de uma moeda. Este relatório "
 "não foi desenhado para lidar com essa possibilidade."
 
 #: gnucash/report/business-reports/aging.scm:364
@@ -22114,14 +22102,14 @@ msgstr "Sem cliente"
 #: gnucash/report/business-reports/customer-summary.scm:993
 #, scheme-format
 msgid "~a ~a - ~a"
-msgstr ""
+msgstr "~a ~a - ~a"
 
 #: gnucash/report/business-reports/customer-summary.scm:1013
 #: gnucash/report/business-reports/job-report.scm:625
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "No valid ~a selected. Click on the Options button to select a company."
 msgstr ""
-"Sem selecção válida de %s. Clique em Opções para seleccionar uma empresa."
+"Sem selecção válida de ~a. Clique em Opções para seleccionar uma empresa."
 
 #: gnucash/report/business-reports/customer-summary.scm:1026
 msgid "Customer Summary"
@@ -22144,52 +22132,49 @@ msgstr "Montante de imposto"
 #. Translators: "Their details" refer to the invoice 'other party' details i.e. client/vendor name/address/ID
 #: gnucash/report/business-reports/invoice.scm:114
 msgid "Their details"
-msgstr ""
+msgstr "Os seus detalhes"
 
 #: gnucash/report/business-reports/invoice.scm:115
 msgid "Client or vendor name, address and ID"
-msgstr ""
+msgstr "Nome de vendedor ou cliente, morada e ID"
 
 #. Translators: "Our details" refer to the book owner's details i.e. name/address/tax-ID
 #: gnucash/report/business-reports/invoice.scm:118
-#, fuzzy
 msgid "Our details"
-msgstr "Detalhes do trabalho"
+msgstr "Os nossos detalhes"
 
 #: gnucash/report/business-reports/invoice.scm:119
-#, fuzzy
 msgid "Company name, address and tax-ID"
-msgstr "Email da empresa"
+msgstr "Nome da empresa, morada e ID de impostos"
 
 #: gnucash/report/business-reports/invoice.scm:121
-#, fuzzy
 msgid "Invoice details"
-msgstr "Transacções da factura"
+msgstr "Detalhes da factura"
 
 #: gnucash/report/business-reports/invoice.scm:122
 msgid "Invoice date, due date, billing ID, terms, job details"
 msgstr ""
+"Data da factura, data de pagamento, ID de facturação, condições, detalhes da "
+"tarefa"
 
 #: gnucash/report/business-reports/invoice.scm:124
 #: gnucash/report/business-reports/invoice.scm:125
-#, fuzzy
 msgid "Today's date"
-msgstr "Formato da data de hoje"
+msgstr "Data de hoje"
 
 #: gnucash/report/business-reports/invoice.scm:127
 #: gnucash/report/business-reports/invoice.scm:128
 msgid "Picture"
-msgstr ""
+msgstr "Imagem"
 
 #. Translators: "(empty)" refers to invoice header section being left blank
 #: gnucash/report/business-reports/invoice.scm:131
 msgid "(empty)"
-msgstr ""
+msgstr "(vazio)"
 
 #: gnucash/report/business-reports/invoice.scm:132
-#, fuzzy
 msgid "Empty space"
-msgstr "Espaço de nome"
+msgstr "Espaço vazio"
 
 #: gnucash/report/business-reports/invoice.scm:204
 msgid "Custom Title"
@@ -22209,18 +22194,16 @@ msgstr ""
 #: gnucash/report/business-reports/invoice.scm:388
 #: gnucash/report/business-reports/invoice.scm:395
 #: gnucash/report/business-reports/invoice.scm:402
-#, fuzzy
 msgid "Layout"
-msgstr "<b>Disposição</b>"
+msgstr "Disposição"
 
 #: gnucash/report/business-reports/invoice.scm:210
 msgid "CSS"
-msgstr ""
+msgstr "CSS"
 
 #: gnucash/report/business-reports/invoice.scm:216
-#, fuzzy
 msgid "Picture Location"
-msgstr "Associar localização"
+msgstr "Localização da imagem"
 
 #. Elements page options
 #: gnucash/report/business-reports/invoice.scm:222
@@ -22302,9 +22285,8 @@ msgid "Display"
 msgstr "Mostrar"
 
 #: gnucash/report/business-reports/invoice.scm:272
-#, fuzzy
 msgid "Display invoice title and invoice ID?"
-msgstr "Mostrar as notas da factura?"
+msgstr "Mostrar título e ID da factura?"
 
 #: gnucash/report/business-reports/invoice.scm:277
 msgid "Display due date?"
@@ -22331,9 +22313,8 @@ msgid "The phrase for specifying to whom payments should be made."
 msgstr "A frase que especifica a quem são feitos os pagamentos."
 
 #: gnucash/report/business-reports/invoice.scm:296
-#, fuzzy
 msgid "Please make all checks payable to"
-msgstr "Passar todos os cheques a Pagável a"
+msgstr "Passar todos os cheques pagáveis a"
 
 #: gnucash/report/business-reports/invoice.scm:300
 msgid "Company contact"
@@ -22352,7 +22333,6 @@ msgid "The phrase used to introduce the company contact."
 msgstr "A frase usada para apresentar o contacto da empresa."
 
 #: gnucash/report/business-reports/invoice.scm:309
-#, fuzzy
 msgid "Please direct all enquiries to"
 msgstr "Dirigir todas as perguntas a"
 
@@ -22393,14 +22373,12 @@ msgid "Display the billing id?"
 msgstr "Mostrar a id do pagamento?"
 
 #: gnucash/report/business-reports/invoice.scm:341
-#, fuzzy
 msgid "Invoice owner ID"
-msgstr "Títular da factura"
+msgstr "ID do titular da factura"
 
 #: gnucash/report/business-reports/invoice.scm:342
-#, fuzzy
 msgid "Display the customer/vendor id?"
-msgstr "Mostrar a acção?"
+msgstr "Mostrar ID do cliente/fornecedor?"
 
 #: gnucash/report/business-reports/invoice.scm:347
 msgid "Display the invoice notes?"
@@ -22433,30 +22411,27 @@ msgstr "Obrigado pelo seu patrocínio!"
 
 #: gnucash/report/business-reports/invoice.scm:367
 msgid "Row 1 Left"
-msgstr ""
+msgstr "Linha 1 esquerda"
 
 #: gnucash/report/business-reports/invoice.scm:374
-#, fuzzy
 msgid "Row 1 Right"
-msgstr "Direita"
+msgstr "Linha 1 direita"
 
 #: gnucash/report/business-reports/invoice.scm:381
 msgid "Row 2 Left"
-msgstr ""
+msgstr "Linha 2 esquerda"
 
 #: gnucash/report/business-reports/invoice.scm:388
-#, fuzzy
 msgid "Row 2 Right"
-msgstr "Direita"
+msgstr "Linha 2 direita"
 
 #: gnucash/report/business-reports/invoice.scm:395
 msgid "Row 3 Left"
-msgstr ""
+msgstr "Linha 3 esquerda"
 
 #: gnucash/report/business-reports/invoice.scm:402
-#, fuzzy
 msgid "Row 3 Right"
-msgstr "Direita"
+msgstr "Linha 3 direita"
 
 #: gnucash/report/business-reports/invoice.scm:455
 #: gnucash/report/business-reports/job-report.scm:242
@@ -22498,24 +22473,20 @@ msgid "Invoice in progress..."
 msgstr "Factura em curso..."
 
 #: gnucash/report/business-reports/invoice.scm:642
-#, fuzzy
 msgid "Reference:"
-msgstr "Referência: "
+msgstr "Referência:"
 
 #: gnucash/report/business-reports/invoice.scm:654
-#, fuzzy
 msgid "Terms:"
-msgstr "Condições: "
+msgstr "Condições:"
 
 #: gnucash/report/business-reports/invoice.scm:664
-#, fuzzy
 msgid "Job number:"
-msgstr "Nº da tarefa: "
+msgstr "Nº da tarefa:"
 
 #: gnucash/report/business-reports/invoice.scm:669
-#, fuzzy
 msgid "Job name:"
-msgstr "Nome da tarefa: "
+msgstr "Nome da tarefa:"
 
 #: gnucash/report/business-reports/invoice.scm:714
 msgid "REF"
@@ -22532,7 +22503,7 @@ msgstr ""
 #: gnucash/report/business-reports/invoice.scm:804
 #, scheme-format
 msgid "~a #~a"
-msgstr ""
+msgstr "~a #~a"
 
 #: gnucash/report/business-reports/job-report.scm:321
 #: gnucash/report/business-reports/owner-report.scm:506
@@ -22868,7 +22839,6 @@ msgid "Notes added at end of invoice -- may contain HTML markup"
 msgstr "Notas adicionadas no final da factura -- podem conter marcação HTML"
 
 #: gnucash/report/business-reports/receipt.scm:259
-#, fuzzy
 msgid "Display a customer invoice as receipt, cash voucher"
 msgstr "Mostrar uma factura de cliente como recibo, vale de caixa"
 
@@ -23332,9 +23302,9 @@ msgstr ""
 "ser repetidos códigos de modelo com origens de pagador."
 
 #: gnucash/report/locale-specific/us/taxtxf-de_DE.scm:853
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Period from ~a to ~a"
-msgstr "Período de %s a %s"
+msgstr "Período de ~a a ~a"
 
 #: gnucash/report/locale-specific/us/taxtxf-de_DE.scm:890
 msgid "Tax Report & XML Export"
@@ -23695,9 +23665,9 @@ msgid "GnuCash-Report"
 msgstr "Relatório GnuCash"
 
 #: gnucash/report/report-gnome/report-gnome.scm:68
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Display the ~a report"
-msgstr "Mostrar o relatório %s"
+msgstr "Mostrar o relatório ~a"
 
 #: gnucash/report/report-gnome/report-gnome.scm:116
 msgid "Manage and run saved report configurations"
@@ -23745,9 +23715,9 @@ msgid "An error occurred when processing the template:"
 msgstr "Ocorreu um erro ao processar o modelo:"
 
 #: gnucash/report/report-system/eguile-gnc.scm:246
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Template file \"~a\" can not be read"
-msgstr "O ficheiro modelo %s não pode ser lido"
+msgstr "O ficheiro modelo \"~a\" não pode ser lido"
 
 #: gnucash/report/report-system/html-acct-table.scm:638
 #: gnucash/report/standard-reports/trial-balance.scm:243
@@ -24275,13 +24245,12 @@ msgstr ""
 "GnuCash."
 
 #: gnucash/report/report-system/report.scm:183
-#, fuzzy
 msgid "Wrong report definition: "
-msgstr "Carregar configuração de relatório"
+msgstr "Definição de relatório errada: "
 
 #: gnucash/report/report-system/report.scm:185
 msgid " Report is missing a GUID."
-msgstr ""
+msgstr "O relatório tem uma GUID em falta."
 
 #: gnucash/report/report-system/report.scm:255
 msgid "Enter a descriptive name for this report."
@@ -24363,14 +24332,14 @@ msgid "Credit Lines"
 msgstr "Linhas de crédito"
 
 #: gnucash/report/report-system/report-utilities.scm:580
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Building '~a' report ..."
-msgstr "A construir o relatório \"%s\"..."
+msgstr "A construir o relatório \"~a\"..."
 
 #: gnucash/report/report-system/report-utilities.scm:586
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Rendering '~a' report ..."
-msgstr "A desenhar o relatório \"%s\"..."
+msgstr "A desenhar o relatório \"~a\"..."
 
 #: gnucash/report/standard-reports/account-piecharts.scm:35
 msgid "Income Piechart"
@@ -24561,9 +24530,8 @@ msgid "Show the full account name in legend?"
 msgstr "Mostrar o nome completo da conta na legenda?"
 
 #: gnucash/report/standard-reports/account-piecharts.scm:160
-#, fuzzy
 msgid "Show the full security name in the legend?"
-msgstr "Mostrar o nome completo da conta na legenda?"
+msgstr "Mostrar o nome completo da garantia na legenda?"
 
 #: gnucash/report/standard-reports/account-piecharts.scm:166
 #: gnucash/report/standard-reports/daily-reports.scm:118
@@ -24606,12 +24574,12 @@ msgstr "Média semanal"
 #: libgnucash/app-utils/date-utilities.scm:94
 #, scheme-format
 msgid "~a to ~a"
-msgstr ""
+msgstr "~a para ~a"
 
 #: gnucash/report/standard-reports/account-piecharts.scm:569
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Balance at ~a"
-msgstr "Saldo em %s"
+msgstr "Saldo em ~a"
 
 #. account summary report prints a table of account information,
 #. optionally with clickable links to open the corresponding register
@@ -25442,7 +25410,7 @@ msgstr "Número de períodos."
 #: gnucash/report/standard-reports/budget-flow.scm:319
 #, scheme-format
 msgid "~a: ~a - ~a"
-msgstr ""
+msgstr "~a: ~a - ~a"
 
 #: gnucash/report/standard-reports/budget-income-statement.scm:62
 #: gnucash/report/standard-reports/budget.scm:72
@@ -25546,19 +25514,19 @@ msgstr ""
 "O final do período do relatório não pode ser anterior ao início do período."
 
 #: gnucash/report/standard-reports/budget-income-statement.scm:507
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "for Budget ~a Period ~d"
-msgstr "para o orçamento %s, período %u"
+msgstr "para o orçamento ~a, período ~d"
 
 #: gnucash/report/standard-reports/budget-income-statement.scm:512
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "for Budget ~a Periods ~d - ~d"
-msgstr "para o orçamento %s, períodos %u - %u"
+msgstr "para o orçamento ~a, períodos ~d - ~d"
 
 #: gnucash/report/standard-reports/budget-income-statement.scm:518
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "for Budget ~a"
-msgstr "para o orçamento %s"
+msgstr "para o orçamento ~a"
 
 #: gnucash/report/standard-reports/budget-income-statement.scm:660
 #: gnucash/report/standard-reports/income-statement.scm:597
@@ -25767,7 +25735,6 @@ msgid "Manual period selection"
 msgstr "Selecção manual do período"
 
 #: gnucash/report/standard-reports/budget.scm:139
-#, fuzzy
 msgid "Explicitly select period value with spinner below"
 msgstr "Seleccionar explicitamente o valor do período com o botão abaixo"
 
@@ -25791,7 +25758,7 @@ msgstr "Dif."
 #: gnucash/report/standard-reports/budget.scm:878
 #, scheme-format
 msgid "~a: ~a"
-msgstr ""
+msgstr "~a: ~a"
 
 #: gnucash/report/standard-reports/cashflow-barchart.scm:43
 msgid "Cash Flow Barchart"
@@ -25854,14 +25821,14 @@ msgid "Cash Flow"
 msgstr "Fluxo de caixa"
 
 #: gnucash/report/standard-reports/cash-flow.scm:240
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "~a and subaccounts"
-msgstr "e sub-contas"
+msgstr "~a e sub-contas"
 
 #: gnucash/report/standard-reports/cash-flow.scm:241
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "~a and selected subaccounts"
-msgstr "%s e sub-contas seleccionadas"
+msgstr "~a e sub-contas seleccionadas"
 
 #: gnucash/report/standard-reports/cash-flow.scm:273
 msgid "Money into selected accounts comes from"
@@ -25977,9 +25944,9 @@ msgstr "Média diária"
 
 #: gnucash/report/standard-reports/category-barchart.scm:531
 #: gnucash/report/standard-reports/category-barchart.scm:557
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Balances ~a to ~a"
-msgstr "Salda %s para %s"
+msgstr "Salda ~a para ~a"
 
 #: gnucash/report/standard-reports/category-barchart.scm:741
 #: gnucash/report/standard-reports/transaction.scm:1503
@@ -26061,9 +26028,9 @@ msgstr ""
 #: gnucash/report/standard-reports/income-statement.scm:434
 #: gnucash/report/standard-reports/sx-summary.scm:313
 #: gnucash/report/standard-reports/trial-balance.scm:402
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "For Period Covering ~a to ~a"
-msgstr "Para período desde %s até %s"
+msgstr "Para período desde ~a até ~a"
 
 #: gnucash/report/standard-reports/equity-statement.scm:344
 #: gnucash/report/standard-reports/income-statement.scm:473
@@ -26262,9 +26229,8 @@ msgstr "Ordem secundária"
 
 #. Define the strings here to avoid typos and make changes easier.
 #: gnucash/report/standard-reports/income-gst-statement.scm:38
-#, fuzzy
 msgid "Income and GST Statement"
-msgstr "Declaração de rendimentos"
+msgstr "Declaração de rendimentos e de IRS/IRC"
 
 #. Filtering
 #: gnucash/report/standard-reports/income-gst-statement.scm:40
@@ -26283,6 +26249,14 @@ msgid ""
 " a split to a tax account, e.g. Income:Sales -$1000, Liability:GST on Sales -"
 "$100, Asset:Bank $1100."
 msgstr ""
+"Este relatório é útil para calcular impostos a pagar/receber periódicos. "
+"De \n"
+"\"Editar opções do relatório\" acima, escolha as suas contas de receita e "
+"despesa de impostos.\n"
+"Cada transacção pode conter, em adição a essas contas e à conta bancária, "
+"uma parcela com\n"
+"uma conta de impostos, e.g. Receita:Vendas - 1000€, Passivo:IRS sobre as "
+"vendas - 100€, Activo:Banco - 1100€."
 
 #: gnucash/report/standard-reports/income-gst-statement.scm:49
 msgid ""
@@ -26291,6 +26265,9 @@ msgid ""
 " which will require Tax Tables to be set up correctly. Please see the "
 "documentation."
 msgstr ""
+"Estas contas de impostos podem ser povoadas com o diário padrão ou através "
+"de facturas da empresa, o que requer que as tabelas de impostos estejam "
+"devidamente definidas. Por favor, leia a documentação."
 
 #: gnucash/report/standard-reports/income-gst-statement.scm:53
 msgid ""
@@ -26749,9 +26726,8 @@ msgid "Future Scheduled Transactions Summary"
 msgstr "Resumo de transacções agendadas futuras"
 
 #: gnucash/report/standard-reports/transaction.scm:64
-#, fuzzy
 msgid "Subtotal Table"
-msgstr "Sub-total"
+msgstr "Tabela de sub-total"
 
 #: gnucash/report/standard-reports/transaction.scm:74
 #: gnucash/report/standard-reports/transaction.scm:1036
@@ -26803,9 +26779,8 @@ msgid "Reconcile Status"
 msgstr "Estado de reconciliação"
 
 #: gnucash/report/standard-reports/transaction.scm:100
-#, fuzzy
 msgid "Closing transactions"
-msgstr "A processar transacções"
+msgstr "A fechar transacções"
 
 #: gnucash/report/standard-reports/transaction.scm:109
 msgid "No matching transactions found"
@@ -26868,9 +26843,8 @@ msgid "Sort by transaction number."
 msgstr "Ordenar por número de transacção."
 
 #: gnucash/report/standard-reports/transaction.scm:230
-#, fuzzy
 msgid "Sort by transaction notes."
-msgstr "Ordenar por número de transacção."
+msgstr "Ordenar por notas da transacção."
 
 #: gnucash/report/standard-reports/transaction.scm:236
 msgid "Do not sort."
@@ -26945,34 +26919,28 @@ msgid "Show both (and include void transactions in totals)."
 msgstr "Mostrar ambas (e incluir transacções vazias nos totais)."
 
 #: gnucash/report/standard-reports/transaction.scm:330
-#, fuzzy
 msgid "Exclude closing transactions"
-msgstr "A processar transacções"
+msgstr "Excluir transacções de fecho"
 
 #: gnucash/report/standard-reports/transaction.scm:331
-#, fuzzy
 msgid "Exclude closing transactions from report."
-msgstr "Excluir transacções de/para todas as contas filtradas."
+msgstr "Excluir transacções de fecho do relatório."
 
 #: gnucash/report/standard-reports/transaction.scm:335
-#, fuzzy
 msgid "Show both closing and regular transactions"
-msgstr "Mostrar só transacções vazias."
+msgstr "Mostrar transacções normais e de fecho"
 
 #: gnucash/report/standard-reports/transaction.scm:336
-#, fuzzy
 msgid "Show both (and include closing transactions in totals)."
-msgstr "Mostrar ambas (e incluir transacções vazias nos totais)."
+msgstr "Mostrar ambas (e incluir transacções de fecho nos totais)."
 
 #: gnucash/report/standard-reports/transaction.scm:340
-#, fuzzy
 msgid "Show closing transactions only"
-msgstr "Sem transacções correspondentes"
+msgstr "Mostrar só transacções de fecho"
 
 #: gnucash/report/standard-reports/transaction.scm:341
-#, fuzzy
 msgid "Show only closing transactions."
-msgstr "Mostrar só transacções vazias."
+msgstr "Mostrar só transacções de fecho."
 
 #: gnucash/report/standard-reports/transaction.scm:353
 msgid "Show All Transactions"
@@ -27038,6 +27006,11 @@ msgid ""
 "specified in the options\n"
 "will apply to the Reconciliation Date."
 msgstr ""
+"O relatório de reconciliação foi desenhado para ser semelhante à ferramenta "
+"de reconciliação formal.\n"
+"Por favor, escolha a conta nas opções do relatório. Note que a data "
+"especificada nas opções\n"
+"se aplica à data de reconciliação."
 
 #: gnucash/report/standard-reports/transaction.scm:515
 msgid "Convert all transactions into a common currency."
@@ -27139,6 +27112,10 @@ msgid ""
 "expense accounts to equity, and must usually be excluded from periodic "
 "reporting."
 msgstr ""
+"Por predefinição, a maioria dos utilizadores não inclui transacções de fecho "
+"no relatório de transacções. Estas são transferências de contas de receita e "
+"despesa para o capital próprio e têm de ser igualmente excluídas de "
+"relatórios periódicos."
 
 #: gnucash/report/standard-reports/transaction.scm:637
 msgid "Filter on these accounts."
@@ -27227,6 +27204,8 @@ msgstr "Mostrar o outro código de conta?"
 msgid ""
 "Display a subtotal summary table. This requires Display/Amount being 'single"
 msgstr ""
+"Mostrar uma tabela resumo do sub-total. Requer que \"Mostrar/Valor\" seja "
+"\"único"
 
 #: gnucash/report/standard-reports/transaction.scm:910
 msgid "Display the trans number?"
@@ -27287,9 +27266,9 @@ msgid "Split Transaction"
 msgstr "Dividir transacção"
 
 #: gnucash/report/standard-reports/transaction.scm:2024
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "From ~a to ~a"
-msgstr "De %s para %s"
+msgstr "De ~a para ~a"
 
 #: gnucash/report/standard-reports/transaction.scm:2061
 msgid "Reconciliation Report"
@@ -28322,13 +28301,13 @@ msgstr ""
 "relatórios ou alterar os existentes."
 
 #: gnucash/report/utility-reports/hello-world.scm:348
-#, fuzzy, scheme-format
+#, scheme-format
 msgid ""
 "For help on writing reports, or to contribute your brand new, totally cool "
 "report, consult the mailing list ~a."
 msgstr ""
 "Para ajuda sobre como escrever relatórios ou contribuir com novos e muito "
-"fixes relatórios, consulte a lista de correio %s."
+"fixes relatórios, consulte a lista de correio ~a."
 
 #: gnucash/report/utility-reports/hello-world.scm:353
 msgid ""
@@ -28346,14 +28325,14 @@ msgstr ""
 "com/tspl2d/&gt;."
 
 #: gnucash/report/utility-reports/hello-world.scm:358
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The current time is ~a."
-msgstr "A hora actual é %s."
+msgstr "A hora actual é ~a."
 
 #: gnucash/report/utility-reports/hello-world.scm:363
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The boolean option is ~a."
-msgstr "A opção booleana é %s."
+msgstr "A opção booleana é ~a."
 
 #: gnucash/report/utility-reports/hello-world.scm:364
 msgid "true"
@@ -28364,44 +28343,44 @@ msgid "false"
 msgstr "falso"
 
 #: gnucash/report/utility-reports/hello-world.scm:368
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The multi-choice option is ~a."
-msgstr "A opção de escolha múltipla é %s."
+msgstr "A opção de escolha múltipla é ~a."
 
 #: gnucash/report/utility-reports/hello-world.scm:373
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The string option is ~a."
-msgstr "A opção de cadeia é %s."
+msgstr "A opção de cadeia é ~a."
 
 #: gnucash/report/utility-reports/hello-world.scm:378
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The date option is ~a."
-msgstr "A opção de data é %s."
+msgstr "A opção de data é ~a."
 
 #: gnucash/report/utility-reports/hello-world.scm:383
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The date and time option is ~a."
-msgstr "A opção de data e hora é %s."
+msgstr "A opção de data e hora é ~a."
 
 #: gnucash/report/utility-reports/hello-world.scm:388
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The relative date option is ~a."
-msgstr "A opção de data relativa é %s."
+msgstr "A opção de data relativa é ~a."
 
 #: gnucash/report/utility-reports/hello-world.scm:393
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The combination date option is ~a."
-msgstr "A opção de data de combinação é %s."
+msgstr "A opção de data de combinação é ~a."
 
 #: gnucash/report/utility-reports/hello-world.scm:398
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The number option is ~a."
-msgstr "A opção de número é %s."
+msgstr "A opção de número é ~a."
 
 #: gnucash/report/utility-reports/hello-world.scm:409
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "The number option formatted as currency is ~a."
-msgstr "A opção de número formatado como moeda é %s."
+msgstr "A opção de número formatado como moeda é ~a."
 
 #: gnucash/report/utility-reports/hello-world.scm:421
 msgid "Items you selected:"
@@ -29043,23 +29022,24 @@ msgstr "Erro numérico"
 #: libgnucash/app-utils/gnc-sx-instance-model.c:989
 #, c-format
 msgid "Unknown account for guid [%s], cancelling SX [%s] creation."
-msgstr ""
+msgstr "Conta desconhecida para guid [%s], a cancelar criação de SX [%s]."
 
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1042
 #, c-format
 msgid "Error parsing SX [%s] key [%s]=formula [%s] at [%s]: %s."
-msgstr ""
+msgstr "Erro ao analisar chave SX [%s] [%s]=fórmula [%s] em [%s]: %s."
 
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1096
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1757
 #, c-format
 msgid "Error %d in SX [%s] final gnc_numeric value, using 0 instead."
-msgstr ""
+msgstr "Erro %d em SX [%s] final gnc_numeric value, a usar antes 0."
 
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1766
 #, c-format
 msgid "No exchange rate available in SX [%s] for %s -> %s, value is zero."
 msgstr ""
+"Sem taxa de câmbio disponível em SX [%s] para %s -> %s, o valor é zero."
 
 #. Translators: This and the following strings appear on
 #. * the account tab if the Tax Info column is displayed,
@@ -29180,29 +29160,26 @@ msgstr "Valor de opção inválido"
 
 #. Translators: this string refers to a file name that gets renamed
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:650
-#, fuzzy
 msgid "Renamed to:"
-msgstr "Re_nomear página"
+msgstr "Renomeado para:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:675
 msgid "Notice"
-msgstr ""
+msgstr "Aviso"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:680
 msgid "Your gnucash metadata has been migrated ."
-msgstr ""
+msgstr "Os seus meta-dados gnucash foram migrados."
 
 #. Translators: this refers to a directory name.
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:682
-#, fuzzy
 msgid "Old location:"
-msgstr "Abrir ficheiro/localização"
+msgstr "Localização antiga:"
 
 #. Translators: this refers to a directory name.
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:684
-#, fuzzy
 msgid "New location:"
-msgstr "Nova informação de desdobramento"
+msgstr "Nova localização:"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:686
@@ -29210,34 +29187,34 @@ msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
 msgstr ""
+"Se já não pensa executar o {1} 2.6.x ou anterior neste sistema, pode remover "
+"a pasta antiga sem problemas."
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:693
 msgid "In addition:"
-msgstr ""
+msgstr "Em adição:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:699
-#, fuzzy
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
-msgstr[0] "A codificação já foi adicionada à lista."
-msgstr[1] "A codificação já foi adicionada à lista."
+msgstr[0] "O ficheiro seguinte foi antes copiado para {1}:"
+msgstr[1] "Os ficheiros seguintes foram antes copiados para {1}:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:703
 msgid "The following file in {1} has been renamed:"
-msgstr ""
+msgstr "O seguinte ficheiro em {1} foi renomeado:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:713
 msgid "The following file has become obsolete and will be ignored:"
 msgid_plural "The following files have become obsolete and will be ignored:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "O ficheiro seguinte ficou obsoleto e será ignorado:"
+msgstr[1] "Os ficheiros seguintes ficaram obsoletos e serão ignorados:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:723
-#, fuzzy
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
-msgstr[0] "O ficheiro não pode ser reaberto."
-msgstr[1] "O ficheiro não pode ser reaberto."
+msgstr[0] "Impossível mover o ficheiro seguinte para {1}:"
+msgstr[1] "Impossível mover os ficheiros seguintes para {1}:"
 
 #: libgnucash/engine/Account.cpp:202
 #, c-format
@@ -29496,13 +29473,13 @@ msgstr ""
 "wiki/Business_Features_Issues#Double_posting"
 
 #: libgnucash/engine/ScrubBusiness.c:564
-#, fuzzy
 msgid ""
 "Please delete this transaction. Explanation at https://wiki.gnucash.org/wiki/"
 "Business_Features_Issues#I_can.27t_delete_a_transaction_of_type_.22I.22_from_the_AR.2FAP_account"
 msgstr ""
 "Por favor, elimine esta transacção. Explicação em  https://wiki.gnucash.org/"
-"wiki/Business_Features_Issues#Double_posting"
+"wiki/"
+"Business_Features_Issues#I_can.27t_delete_a_transaction_of_type_.22I.22_from_the_AR.2FAP_account"
 
 #: libgnucash/engine/ScrubBusiness.c:615
 #, c-format
