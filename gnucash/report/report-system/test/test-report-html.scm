@@ -608,8 +608,8 @@ HTML Document Title</title></head><body></body>\n\
 
   (test-begin "HTML Tables - without style sheets")
 
-    (test-begin "Row Manipulations")
-      (test-begin "Append Rows")
+    (test-begin "HTML Table - Row Manipulations")
+      (test-begin "HTML Table - Append Rows")
         (let (
                (test-doc (gnc:make-html-document))
                (test-table (gnc:make-html-table))
@@ -622,17 +622,17 @@ HTML Document Title</title></head><body></body>\n\
           (gnc:html-table-set-caption! test-table #t)
           (gnc:html-table-append-row! test-table "Row 1")
           (gnc:html-table-append-row! test-table "Row 2")
-          (test-equal "Check Num Rows after append row"
+          (test-equal "HTML Table - Check Num Rows after append row"
             2
             (gnc:html-table-num-rows test-table)
           )
-          (test-equal "Check data after append row"
+          (test-equal "HTML Table - Check data after append row"
             '(("Row 2") ("Row 1"))
             (gnc:html-table-data test-table)
           )
         )
-      (test-end "Append Rows")
-      (test-begin "Remove Rows")
+      (test-end "HTML Table - Append Rows")
+      (test-begin "HTML Table - Remove Rows")
         (let (
                (test-doc (gnc:make-html-document))
                (test-table (gnc:make-html-table))
@@ -646,19 +646,19 @@ HTML Document Title</title></head><body></body>\n\
           (gnc:html-table-append-row! test-table "Row 1")
           (gnc:html-table-append-row! test-table "Row 2")
           (gnc:html-table-remove-last-row! test-table)
-          (test-equal "Check Num Rows after remove row"
+          (test-equal "HTML Table - Check Num Rows after remove row"
             1
             (gnc:html-table-num-rows test-table)
           )
-          (test-equal "Check data after remove row"
+          (test-equal "HTML Table - Check data after remove row"
             '(("Row 1"))
             (gnc:html-table-data test-table)
           )
           (gnc:html-table-remove-last-row! test-table)
-          (test-equal "Negative Test: Remove non-existing rows" '() (gnc:html-table-remove-last-row! test-table))
+          (test-equal "HTML Table - Negative Test: Remove non-existing rows" '() (gnc:html-table-remove-last-row! test-table))
         )
-      (test-end "Remove Rows")
-      (test-begin "Prepend Rows")
+      (test-end "HTML Table - Remove Rows")
+      (test-begin "HTML Table - Prepend Rows")
         (let (
                (test-doc (gnc:make-html-document))
                (test-table (gnc:make-html-table))
@@ -674,18 +674,18 @@ HTML Document Title</title></head><body></body>\n\
           (gnc:html-table-prepend-row! test-table "Row 0")
           (gnc:html-table-prepend-row! test-table "Row -1")
           (gnc:html-table-prepend-row! test-table '("r-2-c1" "r-2-c2"))
-          (test-equal "Check Num Rows after prepend row"
+          (test-equal "HTML Table - Check Num Rows after prepend row"
             5
             (gnc:html-table-num-rows test-table)
           )
-          (test-equal "Check data after prepend row"
+          (test-equal "HTML Table - Check data after prepend row"
             '(("Row 2") ("Row 1") ("Row 0") ("Row -1") ("r-2-c1" "r-2-c2"))
             (gnc:html-table-data test-table)
           )
         )
-      (test-end "Prepend Rows")
-    (test-end "Row Manipulations")
-    (test-begin "Cell Access and Edit")
+      (test-end "HTML Table - Prepend Rows")
+    (test-end "HTML Table - Row Manipulations")
+    (test-begin "HTML Table - Cell Access and Edit")
       (let (
              (test-doc (gnc:make-html-document))
              (test-table (gnc:make-html-table))
@@ -699,7 +699,7 @@ HTML Document Title</title></head><body></body>\n\
         (gnc:html-table-append-row! test-table "Row 1")
         (gnc:html-table-append-row! test-table "Row 2")
         (gnc:html-table-append-row! test-table "Row 3")
-        (test-equal "Check Cell Access"
+        (test-equal "HTML Table - Check Cell Access"
           "Row 1Row 2Row 3"
           (string-append
             (gnc:html-table-get-cell test-table 0 0)
@@ -707,7 +707,7 @@ HTML Document Title</title></head><body></body>\n\
             (gnc:html-table-get-cell test-table 2 0)
           )
         )
-        (test-assert "Negative Test: Check Cell Access - non-existing cells"
+        (test-assert "HTML Table - Negative Test: Check Cell Access - non-existing cells"
           (not
             (or (gnc:html-table-get-cell test-table 1 1)
                 (gnc:html-table-get-cell test-table -1 0)
@@ -715,8 +715,8 @@ HTML Document Title</title></head><body></body>\n\
           )
         )
       )
-    (test-end "Cell Access and Edit")
-    (test-begin "Append Columns")
+    (test-end "HTML Table - Cell Access and Edit")
+    (test-begin "HTML Table - Append Columns")
       (let (
              (test-doc (gnc:make-html-document))
              (test-table (gnc:make-html-table))
@@ -731,21 +731,21 @@ HTML Document Title</title></head><body></body>\n\
         (gnc:html-table-append-row! test-table '("r2c1" "r2c2" "r2c3"))
         (gnc:html-table-append-row! test-table '("r3c1" "r3c2"))
         (gnc:html-table-append-column! test-table '("r1c4" "r2c4" "r3c4" "r4c4"))
-        (test-equal "Check Num Rows after append column"
+        (test-equal "HTML Table - Check Num Rows after append column"
           4
           (gnc:html-table-num-rows test-table)
         )
-        (test-equal "Check data after append column"
+        (test-equal "HTML Table - Check data after append column"
           '((#f #f #f "r4c4") ("r3c1" "r3c2" #f "r3c4") ("r2c1" "r2c2" "r2c3" "r2c4") ("r1c1" #f #f "r1c4"))
           (gnc:html-table-data test-table)
         )
-        (test-equal "Check Cell Access after append column"
+        (test-equal "HTML Table - Check Cell Access after append column"
           "r3c2"
           (gnc:html-table-get-cell test-table 2 1)
         )
       )
-    (test-end "Append Columns")
-    (test-begin "Table Rendering")
+    (test-end "HTML Table - Append Columns")
+    (test-begin "HTML Table - Table Rendering")
       (let (
              (test-doc (gnc:make-html-document))
              (test-table (gnc:make-html-table))
@@ -759,7 +759,7 @@ HTML Document Title</title></head><body></body>\n\
         (gnc:html-table-append-row! test-table "Row 1")
         (gnc:html-table-append-row! test-table "Row 2")
         (gnc:html-table-append-column! test-table '("Col A" "Col B"))
-        (test-equal "Check table rendering result"
+        (test-equal "HTML Table - Check table rendering result"
 "<table><caption><boolean> #t</caption>\n\
 <tbody>\
 <tr><td><string> Row 1</td>\n<td><string> Col A</td>\n</tr>\n\
@@ -773,7 +773,7 @@ HTML Document Title</title></head><body></body>\n\
           )
         )
       )
-    (test-end "Table Rendering")
+    (test-end "HTML Table - Table Rendering")
 
   (test-end "HTML Tables - without style sheets")
 )
