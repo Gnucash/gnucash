@@ -41,8 +41,6 @@
 ;; 'commodity' != #f ).
 (define (gnc:get-match-commodity-splits
          currency-accounts end-date commodity)
-  ;; Filter such that we get only those splits which have two
-  ;; *different* commodities involved.
   (filter
    (lambda (s)
      (let ((txn-comm (xaccTransGetCurrency (xaccSplitGetParent s)))
@@ -115,14 +113,16 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
 ;;  (day2 23.33))
 ;; The intended second price is 6500/300, or 21.67.
 
-;; NOTE there is an optional #:commodity-splits argument which should
-;; contain a sorted splitlist with pricing information related to the
-;; price-commodity. See (gnc:get-commoditylist-totalavg-prices) how to
-;; generate this splitlist. This is NOT to be used by external
-;; reports.
-(define* (gnc:get-commodity-totalavg-prices
-          currency-accounts end-date price-commodity report-currency
-          #:key commodity-splits)
+(define (gnc:get-commodity-totalavg-prices
+         currency-accounts end-date price-commodity report-currency)
+  (gnc:get-commodity-totalavg-prices-internal
+   currency-accounts end-date price-commodity report-currency
+   (gnc:get-match-commodity-splits-sorted
+    currency-accounts end-date price-commodity)))
+
+(define (gnc:get-commodity-totalavg-prices-internal
+         currency-accounts end-date price-commodity report-currency
+         commodity-splits)
   (let ((total-foreign 0)
         (total-domestic 0))
     (filter
@@ -200,11 +200,8 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
                           GNC-DENOM-AUTO
                           (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND)) 0)))
                #f))))
-      ;; Get all the interesting splits, and sort them according to the
-      ;; date.
-      (or commodity-splits
-          (gnc:get-match-commodity-splits-sorted
-           currency-accounts end-date price-commodity))))))
+      commodity-splits))))
+
 
 ;; Create a list of prices for all commodities in 'commodity-list',
 ;; i.e. the same thing as in get-commodity-totalavg-prices but
@@ -237,9 +234,9 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
            (gnc:report-percent-done
             (+ start-percent (* delta-percent (/ work-done work-to-do)))))
        (cons c
-             (gnc:get-commodity-totalavg-prices
+             (gnc:get-commodity-totalavg-prices-internal
               currency-accounts end-date c report-currency
-              #:commodity-splits (filter split-has-commodity? interesting-splits))))
+              (filter split-has-commodity? interesting-splits))))
      commodity-list)))
 
 ;; Get the instantaneous prices for the 'price-commodity', measured in
