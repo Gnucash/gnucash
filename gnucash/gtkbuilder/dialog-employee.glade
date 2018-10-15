@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.20.4 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkDialog" id="employee_dialog">
@@ -591,6 +591,24 @@
                     <property name="position">2</property>
                   </packing>
                 </child>
+              </object>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="label9">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Employee</property>
+                <property name="justify">center</property>
+              </object>
+              <packing>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="vbox40">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkFrame" id="frame5">
                     <property name="visible">True</property>
@@ -794,19 +812,22 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
-                    <property name="position">3</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
               </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label9">
+              <object class="GtkLabel" id="label40">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Employee</property>
-                <property name="justify">center</property>
+                <property name="label" translatable="yes">Billing Information</property>
               </object>
               <packing>
+                <property name="position">1</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -847,7 +868,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child type="tab">
@@ -858,7 +879,7 @@
                 <property name="justify">center</property>
               </object>
               <packing>
-                <property name="position">1</property>
+                <property name="position">2</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -876,5 +897,8 @@
       <action-widget response="-6">cancelbutton</action-widget>
       <action-widget response="-5">okbutton</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
 </interface>
