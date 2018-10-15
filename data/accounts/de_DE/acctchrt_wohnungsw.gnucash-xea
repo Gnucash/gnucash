@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<gnc-account-example xmlns="http://www.gnucash.org/XML/"
+<gnc-account-example
+  xmlns="http://www.gnucash.org/XML/"
   xmlns:act="http://www.gnucash.org/XML/act"
   xmlns:addr="http://www.gnucash.org/XML/addr"
   xmlns:bgt="http://www.gnucash.org/XML/bgt"
@@ -30,6 +31,7 @@
   xmlns:ts="http://www.gnucash.org/XML/ts"
   xmlns:tte="http://www.gnucash.org/XML/tte"
   xmlns:vendor="http://www.gnucash.org/XML/vendor">
+
 <gnc-act:title>Kontenrahmen für die Wohnungswirtschaft</gnc-act:title>
 <gnc-act:short-description>Kontenrahmen für die Immobilienwirtschaft (Stand 2012)</gnc-act:short-description>
 <gnc-act:long-description>Kontenrahmen für die Wohnungswirtschaft nach GdW / Hammonia Verlag (jetzt Haufe), Stand 2012
@@ -55,10 +57,6 @@ Ersteller: Christoph Franzen, christoph@alte-pflasterei.de
   <act:code>0</act:code>
   <act:description>Anlagevermögen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Klasse 0</slot:value>
@@ -159,10 +157,6 @@ Ersteller: Christoph Franzen, christoph@alte-pflasterei.de
   <act:description>Garagen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2008: war 004 oder Druckfehler)</slot:value>
     </slot>
@@ -186,10 +180,6 @@ Ersteller: Christoph Franzen, christoph@alte-pflasterei.de
   <act:description>Außenanlagen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2008: war 005 oder Druckfehler)</slot:value>
     </slot>
@@ -212,10 +202,6 @@ Ersteller: Christoph Franzen, christoph@alte-pflasterei.de
   <act:code>005</act:code>
   <act:description>Hof- und Wegbefestigungen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2008: war 006 oder Druckfehler)</slot:value>
@@ -316,10 +302,6 @@ Ersteller: Christoph Franzen, christoph@alte-pflasterei.de
   <act:description>Garagen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2008: war 014 oder Druckfehler)</slot:value>
     </slot>
@@ -343,10 +325,6 @@ Ersteller: Christoph Franzen, christoph@alte-pflasterei.de
   <act:description>Außenanlagen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2008: war 015 oder Druckfehler)</slot:value>
     </slot>
@@ -369,10 +347,6 @@ Ersteller: Christoph Franzen, christoph@alte-pflasterei.de
   <act:code>015</act:code>
   <act:description>Hof- und Wegbefestigungen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2008: war 016 oder Druckfehler)</slot:value>
@@ -682,10 +656,6 @@ Ersteller: Christoph Franzen, christoph@alte-pflasterei.de
   <act:description>geringwertige Wirtschaftsgüter</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">§ 6 Abs. 2 und 2a EStG
 (2010 geändert/ergänzt)</slot:value>
@@ -709,10 +679,6 @@ Ersteller: Christoph Franzen, christoph@alte-pflasterei.de
   <act:code>040xx</act:code>
   <act:description>Geringwertige Wirtschaftsgüter 150€ bis 1000€ in 2008 / 2009 / …</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2008 neu)</slot:value>
@@ -774,10 +740,6 @@ Ersteller: Christoph Franzen, christoph@alte-pflasterei.de
   <act:code>050</act:code>
   <act:description>geringwertige Wirtschaftsgüter</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">§ 6 Abs. 2 und 2a EStG
@@ -841,10 +803,6 @@ Ersteller: Christoph Franzen, christoph@alte-pflasterei.de
   <act:description>Kosten des Baugrundstücks</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2008 neu)</slot:value>
     </slot>
@@ -867,10 +825,6 @@ Ersteller: Christoph Franzen, christoph@alte-pflasterei.de
   <act:code>062</act:code>
   <act:description>Kosten der Erschließung</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2008 neu)</slot:value>
@@ -895,10 +849,6 @@ Ersteller: Christoph Franzen, christoph@alte-pflasterei.de
   <act:description>Kosten des Bauwerks</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2008 neu)</slot:value>
     </slot>
@@ -921,10 +871,6 @@ Ersteller: Christoph Franzen, christoph@alte-pflasterei.de
   <act:code>064</act:code>
   <act:description>Kosten des Geräts</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2008 neu)</slot:value>
@@ -949,10 +895,6 @@ Ersteller: Christoph Franzen, christoph@alte-pflasterei.de
   <act:description>Kosten der Außenanlagen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2008 neu)</slot:value>
     </slot>
@@ -975,10 +917,6 @@ Ersteller: Christoph Franzen, christoph@alte-pflasterei.de
   <act:code>066</act:code>
   <act:description>Kosten für zusätzliche Maßnahmen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2008 neu)</slot:value>
@@ -1003,10 +941,6 @@ Ersteller: Christoph Franzen, christoph@alte-pflasterei.de
   <act:description>Baunebenkosten</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2008 neu)</slot:value>
     </slot>
@@ -1029,10 +963,6 @@ Ersteller: Christoph Franzen, christoph@alte-pflasterei.de
   <act:code>069</act:code>
   <act:description>Baukostenminderungen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2008 neu)</slot:value>
@@ -1113,10 +1043,6 @@ Ersteller: Christoph Franzen, christoph@alte-pflasterei.de
   <act:code>08</act:code>
   <act:description>Finanzanlagen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
@@ -1289,10 +1215,6 @@ Ersteller: Christoph Franzen, christoph@alte-pflasterei.de
   <act:description>Immaterielle Vermögensgegenstände</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 geändert/ergänzt)
 Alter Titel: "Aufwendungen für die Ingangsetzung und Erweiterung des Geschäftsbetriebes sowie immaterielle Vermögensgegenstände";
@@ -1317,10 +1239,6 @@ Kurzbezeichnung in der letzten Version des Kontenrahmens: "Ingangsetzung / Erwei
   <act:code>090</act:code>
   <act:description>Selbstgeschaffene gewerbliche Schutzrechte und ähnliche Rechte und Werte</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(Konto durch das BilMoG neu eingeführt)
@@ -1404,10 +1322,6 @@ Alter Titel: "Aufwendungen für die Ingangsetzung und Erweiterung des Geschäfts
   <act:description>Zum Verkauf bestimmte Grundstücke und andere Vorräte</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Klasse 1
 Zum Verkauf bestimmte Grundstücke und andere Vorräte</slot:value>
@@ -1470,10 +1384,6 @@ Zum Verkauf bestimmte Grundstücke und andere Vorräte</slot:value>
   <act:description>im Zustand der Erschließung durch Dritte</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -1511,10 +1421,6 @@ Zum Verkauf bestimmte Grundstücke und andere Vorräte</slot:value>
   <act:code>11</act:code>
   <act:description>selbst erschlossene Grundstücke und grundstücksgleiche Rechte ohne Bauten</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
@@ -1881,10 +1787,6 @@ Zum Verkauf bestimmte Grundstücke und andere Vorräte</slot:value>
   <act:description>Forderungen und sonstige Vermögensgegenstände</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Klasse 2
 Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel und Bausparguthaben, aktive Rechnungsabgrenzungsposten</slot:value>
@@ -1908,10 +1810,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:code>20</act:code>
   <act:description>Forderungen aus Vermietung und Verpachtung</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(Version 2010: ohne weitere Untergliederung)</slot:value>
@@ -2001,10 +1899,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:description>Mietforderungen aus abgerechneten Umlagen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 geändert/ergänzt)</slot:value>
     </slot>
@@ -2047,10 +1941,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:description>Zweifelhafte Mietforderungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 neu)</slot:value>
     </slot>
@@ -2073,10 +1963,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:code>201</act:code>
   <act:description>Umlagenabrechnung</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">jetzt 2002!</slot:value>
@@ -2101,10 +1987,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:description>zweifelhafte Mietforderungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">jetzt 2004!</slot:value>
     </slot>
@@ -2128,10 +2010,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:description>Wertberichtigungen zu Mietforderungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 weggefallen)</slot:value>
     </slot>
@@ -2154,10 +2032,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:code>21</act:code>
   <act:description>Forderungen aus dem Verkauf von Grundstücken</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(Version 2010: ohne weitere Untergliederung)</slot:value>
@@ -2239,10 +2113,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:description>Forderungen aus Betreuungstätigkeit</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(Version 2010: ohne weitere Untergliederung)</slot:value>
     </slot>
@@ -2322,10 +2192,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:code>23</act:code>
   <act:description>Forderungen aus anderen Lieferungen und Leistungen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Pacht aus unbebauten Grundstücken
@@ -2408,10 +2274,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:description>Forderungen aus Inventarverkäufen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2008 neu)</slot:value>
     </slot>
@@ -2454,10 +2316,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:description>Forderungen an verbundene Unternehmen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -2477,10 +2335,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:description>Forderungen an Unternehmen, mit denen ein Beteiligungsverhältnis besteht</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -2499,10 +2353,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:code>242</act:code>
   <act:description>Forderungen an Gesellschafter</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">GmbH</slot:value>
@@ -2526,10 +2376,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:code>25</act:code>
   <act:description>sonstige Vermögensgegenstände</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Kaution
@@ -2635,10 +2481,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:description>aufgelaufene Zinsen für Wertpapiere und Festgeldguthaben</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -2657,10 +2499,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:code>255</act:code>
   <act:description>rückständige und aufgelaufene Darlehenszinsen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
@@ -2681,10 +2519,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:description>rückständige und aufgelaufene Erbbauzinsen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -2703,10 +2537,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:code>257</act:code>
   <act:description>rückständige und aufgelaufene Aufwandssubventionen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Forderungen an die öffentliche Hand</slot:value>
@@ -2730,10 +2560,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:code>258</act:code>
   <act:description>Darlehensforderungen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">soweit sie nicht unter dem Gruppenkonto 087 zu erfassen sind</slot:value>
@@ -2781,10 +2607,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:description>Wertpapiere</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -2804,10 +2626,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:description>Anteile an verbundenen Unternehmen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -2826,10 +2644,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:code>261</act:code>
   <act:description>eigene Anteile</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 weggefallen)</slot:value>
@@ -2854,10 +2668,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:description>sonstige Wertpapiere</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -2876,10 +2686,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:code>27</act:code>
   <act:description>flüssige Mittel</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
@@ -2957,10 +2763,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:description>Postbankguthaben</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 weggefallen)</slot:value>
     </slot>
@@ -2983,10 +2785,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:code>274</act:code>
   <act:description>Guthaben bei Kreditinstituten</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(Version 2010: ohne weitere Untergliederung)</slot:value>
@@ -3068,10 +2866,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:description>aktive Rechnungsabgrenzungsposten, aktive latente Steuern, aktiver Unterschiedsbetrag aus der Vermögensverrechnung</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -3129,10 +2923,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:description>aktive Steuerabgrenzung</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">§ 274 Abs. 2 HGB
 (2010 weggefallen)</slot:value>
@@ -3157,10 +2947,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:description>aktive latente Steuern</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 geändert/ergänzt)</slot:value>
     </slot>
@@ -3183,10 +2969,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:code>298</act:code>
   <act:description>aktiver Unterschiedsbetrag aus der Vermögensverrechnung</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 geändert/ergänzt)</slot:value>
@@ -3211,10 +2993,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:description>Eigenkapital / Rückstellungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -3233,10 +3011,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:code>30</act:code>
   <act:description>gezeichnetes Kapital</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(Version 2010: ohne weitere Untergliederung)</slot:value>
@@ -3261,10 +3035,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:description>Grundkapital / Stammkapital / Geschäftsguthaben</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 weggefallen zu Gunsten alternativ benannter Konten mit der Nummer 30, siehe die beiden Unterkonten)</slot:value>
     </slot>
@@ -3287,10 +3057,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:code>30</act:code>
   <act:description>Geschäftsguthaben</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">2010: Alternative 2</slot:value>
@@ -3315,10 +3081,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:description>Grundkapital / Stammkapital</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">2010: Alternative 1</slot:value>
     </slot>
@@ -3341,10 +3103,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:code>301</act:code>
   <act:description>Eigenkapital</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 weggefallen)</slot:value>
@@ -3369,10 +3127,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:description>Privateinlagen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 weggefallen)</slot:value>
     </slot>
@@ -3396,10 +3150,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:description>Privatentnahmen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 weggefallen)</slot:value>
     </slot>
@@ -3422,10 +3172,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:code>31</act:code>
   <act:description>ausstehende Einlagen auf das gezeichnete Kapital und eigene Anteile</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 geändert/ergänzt)</slot:value>
@@ -3468,10 +3214,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:code>311</act:code>
   <act:description>eigene Anteile</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(Konto durch das BilMoG neu eingeführt)</slot:value>
@@ -3552,10 +3294,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:code>331</act:code>
   <act:description>Rücklage für eigene Anteile</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 weggefallen)</slot:value>
@@ -3972,10 +3710,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:description>Rückstellung für latente Steuern</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">§ 274 Abs. 1 HGB
 (2010 geändert/ergänzt, 2012 entfallen)</slot:value>
@@ -3999,10 +3733,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:code>38</act:code>
   <act:description>Rückstellungen für Bauinstandhaltung</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">§ 249 Abs. 2 HGB a. F.
@@ -4069,10 +3799,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:code>391</act:code>
   <act:description>Rückstellungen für unterlassene Instandhaltung, Nachholung innerhalb des 4.-12. Monats</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">freiwillige Rückstellungen gemäß § 249 Abs. 1 Satz 3 HGB a. F.
@@ -4216,10 +3942,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:description>Rückstellungen für noch anfallende Baukosten</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -4257,10 +3979,6 @@ Forderungen und sonstige Vermögensgegenstände, Wertpapiere, flüssige Mittel u
   <act:code>4</act:code>
   <act:description>Verbindlichkeiten / passive Rechnungsabgrenzungsposten</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Klasse 4
@@ -4746,10 +4464,6 @@ Verbindlichkeiten / passive Rechnungsabgrenzungsposten</slot:value>
   <act:description>Anzahlungen auf unfertige Leistungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(Version 2010: ohne weitere Untergliederung)</slot:value>
     </slot>
@@ -4849,10 +4563,6 @@ Verbindlichkeiten / passive Rechnungsabgrenzungsposten</slot:value>
   <act:description>Verbindlichkeiten aus Vermietung</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Mieterguthaben
 (Version 2010: ohne weitere Untergliederung)</slot:value>
@@ -4915,10 +4625,6 @@ Verbindlichkeiten / passive Rechnungsabgrenzungsposten</slot:value>
   <act:description>Verbindlichkeiten aus Betreuungstätigkeiten</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -4938,10 +4644,6 @@ Verbindlichkeiten / passive Rechnungsabgrenzungsposten</slot:value>
   <act:description>Verbindlichkeiten aus Lieferungen und Leistungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -4960,10 +4662,6 @@ Verbindlichkeiten / passive Rechnungsabgrenzungsposten</slot:value>
   <act:code>4420</act:code>
   <act:description>Verbindlichkeiten aus Bau- und Instandhaltungsleistungen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(Version 2010: ohne weitere Untergliederung)</slot:value>
@@ -5044,10 +4742,6 @@ Verbindlichkeiten / passive Rechnungsabgrenzungsposten</slot:value>
   <act:code>4421</act:code>
   <act:description>Verbindlichkeiten aus anderen Lieferungen und Leistungen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(Version 2010: ohne weitere Untergliederung)</slot:value>
@@ -5167,10 +4861,6 @@ Verbindlichkeiten / passive Rechnungsabgrenzungsposten</slot:value>
   <act:description>unternehmensrechtliche Sonderposten</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -5189,10 +4879,6 @@ Verbindlichkeiten / passive Rechnungsabgrenzungsposten</slot:value>
   <act:code>460</act:code>
   <act:description>Verbindlichkeiten gegenüber verbundenen Unternehmen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
@@ -5213,10 +4899,6 @@ Verbindlichkeiten / passive Rechnungsabgrenzungsposten</slot:value>
   <act:description>Verbindlichkeiten gegenüber Unternehmen, mit denen ein Beteiligungsverhältnis besteht</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -5235,10 +4917,6 @@ Verbindlichkeiten / passive Rechnungsabgrenzungsposten</slot:value>
   <act:code>462</act:code>
   <act:description>Verbindlichkeiten gegenüber Gesellschaftern</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">GmbH</slot:value>
@@ -5281,10 +4959,6 @@ Verbindlichkeiten / passive Rechnungsabgrenzungsposten</slot:value>
   <act:code>470</act:code>
   <act:description>Verbindlichkeiten aus Steuern</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(Version 2010: ohne weitere Untergliederung)</slot:value>
@@ -5385,10 +5059,6 @@ Verbindlichkeiten / passive Rechnungsabgrenzungsposten</slot:value>
   <act:description>Verbindlichkeiten gegenüber Mitgliedern (eG)</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -5407,10 +5077,6 @@ Verbindlichkeiten / passive Rechnungsabgrenzungsposten</slot:value>
   <act:code>473</act:code>
   <act:description>Verbindlichkeiten aus Löhnen und Gehältern</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 weggefallen)</slot:value>
@@ -5435,10 +5101,6 @@ Verbindlichkeiten / passive Rechnungsabgrenzungsposten</slot:value>
   <act:description>Verbindlichkeiten vermögenswirksame Sparleistungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 weggefallen)</slot:value>
     </slot>
@@ -5461,10 +5123,6 @@ Verbindlichkeiten / passive Rechnungsabgrenzungsposten</slot:value>
   <act:code>479</act:code>
   <act:description>andere Verbindlichkeiten</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(Version 2010: ohne weitere Untergliederung)</slot:value>
@@ -5565,10 +5223,6 @@ Verbindlichkeiten / passive Rechnungsabgrenzungsposten</slot:value>
   <act:description>passive Rechnungsabgrenzungsposten und passive latente Steuern</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 geändert/ergänzt)</slot:value>
     </slot>
@@ -5634,10 +5288,6 @@ Verbindlichkeiten / passive Rechnungsabgrenzungsposten</slot:value>
   <act:description>Leistungsverrechnung</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Klasse 5
 Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:value>
@@ -5661,10 +5311,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:code>6</act:code>
   <act:description>Erträge</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Klasse 6</slot:value>
@@ -5840,10 +5486,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:code>607</act:code>
   <act:description>Erträge aus Mieterbelastung</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 weggefallen)</slot:value>
@@ -6024,10 +5666,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:description>Umsatzerlöse aus anderen Lieferungen und Leistungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(Version 2010: ohne weitere Untergliederung)</slot:value>
     </slot>
@@ -6093,10 +5731,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:description>Bestandserhöhungen bei Verkaufsobjekten</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Im Kontenrahmen 2010 ist das eine „Kategorisierung“, so daß ich eine Hierarchieebene eingefügt habe.</slot:value>
     </slot>
@@ -6120,10 +5754,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:description>Bestandserhöhungen aus aktivierten Fremdkosten</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -6142,10 +5772,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:code>641</act:code>
   <act:description>Bestandserhöhungen aus der Übernahme unbebauter Grundstücke in die Bebauung</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
@@ -6166,10 +5792,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:description>Bestandserhöhungen aus aktivierten eigenen Architekten- und Verwaltungsleistungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -6188,10 +5810,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:code>643</act:code>
   <act:description>Bestandserhöhung aus anderen Aktivierungen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
@@ -6269,10 +5887,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:description>Sonstige Bestandserhöhungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 weggefallen)</slot:value>
     </slot>
@@ -6295,10 +5909,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:code>644-645</act:code>
   <act:description>Bestandsverminderungen bei Verkaufsobjekten</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Im Kontenrahmen 2010 ist das eine „Kategorisierung“, so daß ich eine Hierarchieebene eingefügt habe.</slot:value>
@@ -6323,10 +5933,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:description>Bestandsverminderungen bei Verkaufsobjekten</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -6345,10 +5951,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:code>645</act:code>
   <act:description>Wertminderungen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">soweit sie die im Unternehmen üblichen Abschreibungen nicht übersteigen</slot:value>
@@ -6391,10 +5993,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:code>6451</act:code>
   <act:description>steuerliche Sonderabschreibungen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">§§ 254, 279 Abs. 2, 281 Abs. 2 Satz 1 HGB
@@ -6439,10 +6037,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:description>Bestandserhöhungen bei unfertigen Leistungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Im Kontenrahmen 2010 ist das eine „Kategorisierung“, so daß ich eine Hierarchieebene eingefügt habe.</slot:value>
     </slot>
@@ -6466,10 +6060,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:description>Bestandserhöhungen aus noch nicht abgerechneten Betriebskosten</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -6489,10 +6079,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:description>Bestandserhöhungen aus anderen unfertigen Leistungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -6511,10 +6097,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:code>648-649</act:code>
   <act:description>Bestandsverminderungen bei unfertigen Leistungen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Im Kontenrahmen 2010 ist das eine „Kategorisierung“, so daß ich eine Hierarchieebene eingefügt habe.</slot:value>
@@ -6539,10 +6121,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:description>Bestandsverminderungen aus noch nicht abgerechneten Betriebskosten</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -6561,10 +6139,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:code>649</act:code>
   <act:description>Bestandsverminderungen aus anderen unfertigen Leistungen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
@@ -6622,10 +6196,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:code>659</act:code>
   <act:description>Sonstige aktivierte Eigenleistungen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(Version 2010: ohne weitere Untergliederung)</slot:value>
@@ -6687,10 +6257,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:code>6592</act:code>
   <act:description>aktivierte Erbbauzinsen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 weggefallen)</slot:value>
@@ -6867,10 +6433,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:description>Erträge aus der Auflösung von Sonderposten mit Rücklageanteil, steuerrechtliche Wertberichtigungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">§ 281 Abs. 2 Satz 2 HGB a. F.
 (2010 geändert/ergänzt)</slot:value>
@@ -6971,10 +6533,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:description>verschiedene sonstige Erlöse (soweit nicht außerordentlich)</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Skontoertrag
 (Version 2010: ohne weitere Untergliederung; 2012: erweitert)</slot:value>
@@ -7037,10 +6595,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:description>Versicherungsentschädigungen und Entschädigungen für unterlassene Schönheitsreparaturen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(Version 2012: ohne weitere Untergliederung)</slot:value>
     </slot>
@@ -7101,10 +6655,6 @@ Freigehalten für eine Gliederung nach den betrieblichen Erfordernissen.</slot:v
   <act:code>6699</act:code>
   <act:description>Schuldnachlässe, Erträge aus Kontenbereinigung, Aufzinsungsbeträge u.a.</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(Version 2012: ohne weitere Untergliederung)
@@ -7168,10 +6718,6 @@ Schuldnachlässe, Erträge aus Kontenbereinigungen, Aufzinsbeträge, Erträge au
   <act:description>Zinszuschüsse</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 neu)</slot:value>
     </slot>
@@ -7194,10 +6740,6 @@ Schuldnachlässe, Erträge aus Kontenbereinigungen, Aufzinsbeträge, Erträge au
   <act:code>6691</act:code>
   <act:description>Baukostenzuschüsse</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 neu)</slot:value>
@@ -7222,10 +6764,6 @@ Schuldnachlässe, Erträge aus Kontenbereinigungen, Aufzinsbeträge, Erträge au
   <act:description>Instandhaltungskostenzuschüsse (Investitionszulagen)</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 neu)</slot:value>
     </slot>
@@ -7249,10 +6787,6 @@ Schuldnachlässe, Erträge aus Kontenbereinigungen, Aufzinsbeträge, Erträge au
   <act:description>Inanspruchnahme aus der Rückstellung für noch anfallende Kosten für verkaufte Grundstücke</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 neu)</slot:value>
     </slot>
@@ -7275,10 +6809,6 @@ Schuldnachlässe, Erträge aus Kontenbereinigungen, Aufzinsbeträge, Erträge au
   <act:code>67</act:code>
   <act:description>Erträge aus Beteiligungen und anderen Wertpapieren und Ausleihungen des Finanzanlagevermögens</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Alte Bezeichnung:
@@ -7305,10 +6835,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:description>Erträge aus Beteiligungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Im Kontenrahmen 2010 ist das eine „Kategorisierung“, so daß ich eine Hierarchieebene eingefügt habe.</slot:value>
     </slot>
@@ -7332,10 +6858,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:description>Erträge aus Beteiligungen an verbundenen Unternehmen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -7355,10 +6877,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:description>Erträge aus anderen Beteiligungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -7377,10 +6895,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:code>672</act:code>
   <act:description>Erträge aus Beteiligungen an Unternehmen, mit denen Verträge über Gewinngemeinschaft, (Teil-) Gewinnabführung bestehen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">§ 277 Abs. 3 Satz 2 HGB</slot:value>
@@ -7405,10 +6919,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:description>Erträge aus anderen Wertpapieren und Ausleihungen des Finanzanlagevermögens</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Im Kontenrahmen 2010 ist das eine „Kategorisierung“, so daß ich eine Hierarchieebene eingefügt habe.</slot:value>
     </slot>
@@ -7432,10 +6942,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:description>Erträge aus Ausleihungen an verbundene Unternehmen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -7454,10 +6960,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:code>674</act:code>
   <act:description>Erträge aus Ausleihungen an Unternehmen, mit denen ein Beteiligungsverhältnis besteht</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
@@ -7478,10 +6980,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:description>Erträge aus Wertpapieren des Anlagevermögens</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -7501,10 +6999,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:description>Erträge aus sonstigen Ausleihungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -7523,10 +7017,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:code>677</act:code>
   <act:description>Erträge aus anderen Finanzanlagen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
@@ -7623,10 +7113,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:description>außerordentliche Erträge oder aus Verlustübernahme</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(Version 2012: ohne weitere Untergliederung)</slot:value>
     </slot>
@@ -7687,10 +7173,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:code>7</act:code>
   <act:description>Bautätigkeit</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Klasse 7</slot:value>
@@ -7847,10 +7329,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:code>706</act:code>
   <act:description>Kosten der zusätzlichen Maßnahmen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
@@ -8042,10 +7520,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:description>Kosten der zusätzlichen Maßnahmen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -8121,10 +7595,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:code>720</act:code>
   <act:description>Kosten der Bauvorbereitung</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
@@ -8240,10 +7710,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:description>Kosten der zusätzlichen Maßnahmen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -8301,10 +7767,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:description>Aufwendungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Klasse 8</slot:value>
     </slot>
@@ -8346,10 +7808,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:code>800-804</act:code>
   <act:description>Betriebskosten</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
@@ -8712,10 +8170,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:description>Grundsteuer</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">jetzt 8019 oder Schreibfehler?</slot:value>
     </slot>
@@ -8739,10 +8193,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:description>andere Betriebskosten</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -8761,10 +8211,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:code>8019</act:code>
   <act:description>Grundsteuer</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">zuvor 8018 oder Schreibfehler?</slot:value>
@@ -8884,10 +8330,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:description>Versicherungsbelastung</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 weggefallen, 2012 wieder da)</slot:value>
     </slot>
@@ -8910,10 +8352,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:code>8099</act:code>
   <act:description>Mieterbelastung</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 weggefallen, 2012 wieder da)</slot:value>
@@ -8938,10 +8376,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:description>Fremdkosten für von Unternehmen betriebene Gemeinschaftseinrichtungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 neu)</slot:value>
     </slot>
@@ -8965,10 +8399,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:description>Instandhaltung</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -8987,10 +8417,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:code>805</act:code>
   <act:description>Instandhaltungskosten</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Reparaturkosten</slot:value>
@@ -9072,10 +8498,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:description>Kosten der Instandhaltung für Gemeinschaftsanlagen und Folgeeinrichtungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -9095,10 +8517,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:description>andere Instandhaltungskosten</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -9117,10 +8535,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:code>808</act:code>
   <act:description>Zuführung zur Rückstellung für unterlassene Instandhaltung</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
@@ -9159,10 +8573,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:code>810</act:code>
   <act:description>Fremdkosten</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(Version 2012: ohne weitere Untergliederung)</slot:value>
@@ -9434,10 +8844,6 @@ Erträge aus Bestellungen, anderen Wertpapieren und Ausleihungen des Finanzanlag
   <act:description>Abschreibungen auf Grundstücke und grundstücksgleiche Rechte ohne Bauten des Umlaufvermögens</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(Version 2010: ohne weitere Untergliederung)
 noch nicht erschlossen, durch Dritte erschlossen, erschlossen erworben
@@ -9638,10 +9044,6 @@ noch nicht erschlossen, durch Dritte erschlossen, erschlossen erworben
   <act:description>Löhne und Gehälter</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(Version 2010: ohne weitere Untergliederung)</slot:value>
     </slot>
@@ -9811,10 +9213,6 @@ noch nicht erschlossen, durch Dritte erschlossen, erschlossen erworben
   <act:description>Aufwendungen für Altersversorgung</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(Version 2010: ohne weitere Untergliederung)</slot:value>
     </slot>
@@ -9914,10 +9312,6 @@ noch nicht erschlossen, durch Dritte erschlossen, erschlossen erworben
   <act:description>vermögenswirksame Leistungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 weggefallen)</slot:value>
     </slot>
@@ -9960,10 +9354,6 @@ noch nicht erschlossen, durch Dritte erschlossen, erschlossen erworben
   <act:description>Abschreibungen auf immaterielle Vermögensgegenstände des Anlagevermögens und Sachanlagen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Vor der Version 2010:
 Abschreibungen auf Sachanlagen und immaterielle Vermögensgegenstände sowie auf aktivierte Aufwendungen für die Ingangsetzung und Erweiterung des Geschäftsbetriebs
@@ -9989,10 +9379,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Sonderabschreibungen auf Sachanlagen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">gemäß § 254 HGB
 (2010 weggefallen)</slot:value>
@@ -10016,10 +9402,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>843</act:code>
   <act:description>Abschreibungen auf Vermögensgegenstände des Umlaufvermögens, soweit diese die im Unternehmen üblichen Abschreibungen überschreiten</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 weggefallen)</slot:value>
@@ -10124,10 +9506,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Geschenke steuerlich abzugsfähig</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">§ 4 Abs. 5 Nr. 1 EStG</slot:value>
     </slot>
@@ -10150,10 +9528,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>8505</act:code>
   <act:description>Geschenke steuerlich nicht abzugsfähig</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
@@ -10216,10 +9590,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Büroaufwendungen und Sachversicherungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 neu)</slot:value>
     </slot>
@@ -10242,10 +9612,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>85000</act:code>
   <act:description>Post- und Telekommunikationskosten</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 neu)</slot:value>
@@ -10270,10 +9636,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Büromaterial, Drucksachen, Zeitschriften, Bücher</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 neu)</slot:value>
     </slot>
@@ -10296,10 +9658,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>85002</act:code>
   <act:description>Raumkosten für Geschäftsräume</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 neu)</slot:value>
@@ -10324,10 +9682,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Reparaturen und Wartung der Büroeinrichtung</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 neu)</slot:value>
     </slot>
@@ -10350,10 +9704,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>85004</act:code>
   <act:description>Sach- und Haftpflichtversicherung</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 neu)</slot:value>
@@ -10378,10 +9728,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Fahr-, Reise- und Autobetriebskosten/Kommunikationskosten</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 neu)</slot:value>
     </slot>
@@ -10404,10 +9750,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>85010</act:code>
   <act:description>Fahr- und Reisekosten</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 neu)</slot:value>
@@ -10432,10 +9774,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Autobetriebskosten</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 neu)</slot:value>
     </slot>
@@ -10458,10 +9796,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>85015</act:code>
   <act:description>Kosten für die Inanspruchnahme von Leistungen fremder Rechenzentren/Kosten für eigene EDV-Anlagen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 neu)</slot:value>
@@ -10486,10 +9820,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Übrige Unternehmenskosten</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 neu)</slot:value>
     </slot>
@@ -10512,10 +9842,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>85080</act:code>
   <act:description>Kosten der Haupt-, General- oder Gesellschafterversammlungen sowie Kosten der Offenlegung und Veröffentlichungen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 neu)</slot:value>
@@ -10540,10 +9866,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Gerichts- und Anwaltskosten</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 neu)</slot:value>
     </slot>
@@ -10566,10 +9888,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>85082</act:code>
   <act:description>Prüfungs- und Beratungskosten</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 neu)</slot:value>
@@ -10594,10 +9912,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Verbands- und andere Beiträge</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 neu)</slot:value>
     </slot>
@@ -10620,10 +9934,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>85084</act:code>
   <act:description>Kosten des Betriebsrates</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 neu)</slot:value>
@@ -10648,10 +9958,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Sonstige sächliche Verwaltungsaufwendungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 neu)</slot:value>
     </slot>
@@ -10674,10 +9980,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>851</act:code>
   <act:description>freiwillige soziale Aufwendungen und Aufwendungen für Gemeinschaftspflege</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(Version 2010: ohne weitere Untergliederung)</slot:value>
@@ -10797,10 +10099,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Abschreibungen auf Forderungen und sonstige Vermögensgegenstände</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(Version 2010: ohne weitere Untergliederung)</slot:value>
     </slot>
@@ -10881,10 +10179,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Einstellung in Sonderposten mit Rücklagenanteil und steuerliche Wertberichtigungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 weggefallen, 2012 wieder da)
 2012: 857 enthält NUR noch die steuerlichen Wertberichtigungen 8575-8579</slot:value>
@@ -10909,10 +10203,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Einstellung in Sonderposten mit Rücklageanteil</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 weggefallen)</slot:value>
     </slot>
@@ -10936,10 +10226,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Einstellung in steuerrechtliche Wertberichtigungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 weggefallen, 2012 wieder da)</slot:value>
     </slot>
@@ -10962,10 +10248,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>858</act:code>
   <act:description>Zuführung zu Rückstellungen für die Bauinstandhaltung</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 weggefallen)</slot:value>
@@ -11294,10 +10576,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Steuern</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -11426,10 +10704,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Gewerbesteuer</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -11461,10 +10735,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>8906</act:code>
   <act:description>latente Steuern</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">§ 274 Abs. 1 HGB</slot:value>
@@ -11534,10 +10804,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Solidaritätszuschlag</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2012 neu)</slot:value>
     </slot>
@@ -11560,10 +10826,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>891</act:code>
   <act:description>sonstige Steuern</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
@@ -11661,10 +10923,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Vermögenssteuer</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 weggefallen)</slot:value>
     </slot>
@@ -11700,10 +10958,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>8913</act:code>
   <act:description>Gewerbekapitalsteuer</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 weggefallen)</slot:value>
@@ -11773,10 +11027,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Aufwendungen aus Gewinnabführungsverträgen,  Erträge aus Verlustübernahme</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -11795,10 +11045,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>895</act:code>
   <act:description>Aufwendungen aus Gewinnabführungsverträgen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
@@ -11831,10 +11077,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>896</act:code>
   <act:description>Erträge aus Verlustübernahme</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">(2010 weggefallen)</slot:value>
@@ -11872,10 +11114,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Abschlußkonten sowie ergänzende und Verrechnungskonten für das Umsatzkostenverfahren</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Klasse 9</slot:value>
     </slot>
@@ -11899,10 +11137,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Herstellungskosten der zur Erzielung der Umsatzerlöse erbrachten Leistungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -11921,10 +11155,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>901</act:code>
   <act:description>Hausbewirtschaftung</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">- Betriebskosten
@@ -11954,10 +11184,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Verkauf von Grundstücken des Umlaufvermögens</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">- Buchwert der verkauften Grundstücke
 - Sonstige Kosten</slot:value>
@@ -11981,10 +11207,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>903</act:code>
   <act:description>Betreuungstätigkeit</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">- Fremdkosten
@@ -12010,10 +11232,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>andere Lieferungen und Leistungen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">- Fremdkosten
 - Verwaltungskosten</slot:value>
@@ -12037,10 +11255,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>91</act:code>
   <act:description>Vertriebskosten</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">- Fremdkosten
@@ -12066,10 +11280,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>allgemeine Verwaltungskosten</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">- Fremdkosten
 - eigene Kosten</slot:value>
@@ -12093,10 +11303,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>93</act:code>
   <act:description>sonstige betriebliche Aufwendungen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">- Abschreibungen
@@ -12127,10 +11333,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Abschlußkonten</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Konten für den Rechnungsabschluß</slot:value>
     </slot>
@@ -12153,10 +11355,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>980</act:code>
   <act:description>Eröffnungsbilanzkonten</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
@@ -12219,10 +11417,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Entnahme aus Rücklagen</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -12241,10 +11435,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>984</act:code>
   <act:description>Einstellung in Rücklagen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
@@ -12284,10 +11474,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Verwaltungskosten – Verrechnungskonten</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">Im Kontenrahmen 2010 ist das eine „Kategorisierung“, so daß ich eine Hierarchieebene eingefügt habe.</slot:value>
     </slot>
@@ -12311,10 +11497,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:description>Personalkosten</act:description>
   <act:slots>
     <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
-    <slot>
       <slot:key>placeholder</slot:key>
       <slot:value type="string">true</slot:value>
     </slot>
@@ -12333,10 +11515,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>95</act:code>
   <act:description>sächliche Kosten</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">- Abschreibungen
@@ -12361,10 +11539,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>96</act:code>
   <act:description>Aufwandsverrechnungskonten</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">- Hausbewirtschaftung
@@ -12392,10 +11566,6 @@ außer Sonderabschreibungen gemäß § 254 HGB</slot:value>
   <act:code>97</act:code>
   <act:description>Verrechnungskonten für Aktivierungen</act:description>
   <act:slots>
-    <slot>
-      <slot:key>color</slot:key>
-      <slot:value type="string">Not Set</slot:value>
-    </slot>
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">- Bauten des Anlagevermögens
