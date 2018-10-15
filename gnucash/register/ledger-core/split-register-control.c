@@ -453,18 +453,21 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
             (old_split != new_split) &&
             gnc_split_register_old_split_empty_p(reg, old_split))
     {
-        int current_row;
+        if (old_split != gnc_split_register_get_blank_split (reg))
+        {
+            int current_row;
 
-        xaccSplitDestroy(old_split);
-        old_split = NULL;
+            xaccSplitDestroy(old_split);
+            old_split = NULL;
 
-        /*
-         * If the user is moving down a row, we've just thrown off the
-         * numbers by deleting a split. Correct for that.
-         */
-        current_row = reg->table->current_cursor_loc.vcell_loc.virt_row;
-        if (new_virt_loc.vcell_loc.virt_row > current_row)
-            new_virt_loc.vcell_loc.virt_row--;
+            /*
+             * If the user is moving down a row, we've just thrown off the
+             * numbers by deleting a split. Correct for that.
+             */
+            current_row = reg->table->current_cursor_loc.vcell_loc.virt_row;
+            if (new_virt_loc.vcell_loc.virt_row > current_row)
+                new_virt_loc.vcell_loc.virt_row--;
+        }
     }
     else if ((pending_trans != NULL)      &&
              (pending_trans == old_trans) &&
