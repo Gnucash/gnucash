@@ -40,6 +40,7 @@
 #define d(x)
 
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe);
+static void pass_parent (GNCSearchCoreType *fe, gpointer parent);
 static gboolean gncs_validate (GNCSearchCoreType *fe);
 static GtkWidget *gncs_get_widget(GNCSearchCoreType *fe);
 static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
@@ -53,6 +54,7 @@ static void gnc_search_owner_finalize	(GObject *obj);
 typedef struct _GNCSearchOwnerPrivate
 {
     GncOwner	owner;
+    GtkWindow * parent;
     GtkWidget *	owner_box;
     GtkWidget *	owner_choice;
 } GNCSearchOwnerPrivate;
@@ -112,6 +114,7 @@ gnc_search_owner_class_init (GNCSearchOwnerClass *klass)
 
     /* override methods */
     gnc_search_core_type->validate = gncs_validate;
+    gnc_search_core_type->pass_parent = pass_parent;
     gnc_search_core_type->get_widget = gncs_get_widget;
     gnc_search_core_type->get_predicate = gncs_get_predicate;
     gnc_search_core_type->clone = gncs_clone;
@@ -160,7 +163,7 @@ gncs_validate (GNCSearchCoreType *fe)
     if (priv->owner.owner.undefined == NULL)
     {
         valid = FALSE;
-        gnc_error_dialog (NULL, "%s", _("You have not selected an owner"));
+        gnc_error_dialog (GTK_WINDOW(priv->parent), "%s", _("You have not selected an owner"));
     }
 
     /* XXX */
@@ -261,6 +264,19 @@ make_how_menu (GNCSearchCoreType *fe)
     gnc_combo_box_search_set_active(combo, fi->how ? fi->how : QOF_GUID_MATCH_ANY);
 
     return GTK_WIDGET(combo);
+}
+
+static void
+pass_parent (GNCSearchCoreType *fe, gpointer parent)
+{
+    GNCSearchOwner *fi = (GNCSearchOwner *)fe;
+    GNCSearchOwnerPrivate *priv;
+
+    g_return_if_fail (fi);
+    g_return_if_fail (IS_GNCSEARCH_OWNER (fi));
+
+    priv = GNC_SEARCH_OWNER_GET_PRIVATE(fi);
+    priv->parent = GTK_WINDOW(parent);
 }
 
 static GtkWidget *
