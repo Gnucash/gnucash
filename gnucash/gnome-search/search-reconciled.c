@@ -111,7 +111,7 @@ gnc_search_reconciled_class_init (GNCSearchReconciledClass *klass)
 static void
 gnc_search_reconciled_init (GNCSearchReconciled *o)
 {
-    o->how = QOF_CHAR_MATCH_ANY;;
+    o->how = QOF_CHAR_MATCH_ANY;
     o->value = CLEARED_NO;
 }
 

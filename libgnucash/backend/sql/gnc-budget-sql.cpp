@@ -258,7 +258,7 @@ save_budget_amounts (GncSqlBackend* sql_be, GncBudget* budget)
     GList* node;
     budget_amount_info_t info;
     guint num_periods;
-    gboolean is_ok = TRUE;;
+    gboolean is_ok = TRUE;
 
     g_return_val_if_fail (sql_be != NULL, FALSE);
     g_return_val_if_fail (budget != NULL, FALSE);

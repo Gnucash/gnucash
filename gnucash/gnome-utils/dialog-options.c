@@ -3455,7 +3455,7 @@ gnc_option_set_ui_value_number_range (GNCOption *option, gboolean use_default,
                                       GtkWidget *widget, SCM value)
 {
     GtkSpinButton *spinner;
-    gdouble d_value;;
+    gdouble d_value;
 
     spinner = GTK_SPIN_BUTTON(widget);
 
