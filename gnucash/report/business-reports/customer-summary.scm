@@ -650,8 +650,8 @@
     (gnc:html-markup-br))))
 
 (define (markup-percent profit sales)
-  (let ((m (gnc-numeric-div profit sales 1000 GNC-HOW-RND-ROUND)))
-    (* 100 (gnc-numeric-to-double m))))
+  (if (zero? sales) 0
+      (* 100 (gnc-numeric-div profit sales 1000 GNC-HOW-RND-ROUND))))
 
 (define (query-split-value sub-query toplevel-query)
   (let ((splits (qof-query-run-subquery sub-query toplevel-query))
