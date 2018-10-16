@@ -737,6 +737,8 @@
 (export gnc:select-assoc-account-balance)
 (export gnc:get-assoc-account-balances-total)
 (export make-file-url)
+(export gnc:strify)
+(export gnc:pk)
 
 (load-from-path "commodity-utilities")
 (load-from-path "html-barchart")

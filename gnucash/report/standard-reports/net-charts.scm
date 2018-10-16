@@ -33,8 +33,6 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
-(use-modules (gnucash report report-system report-collectors))
-(use-modules (gnucash report report-system collectors))
 (use-modules (gnucash report standard-reports category-barchart)) ; for guids of called reports
 (gnc:module-load "gnucash/report/report-system" 0)
 
@@ -216,9 +214,7 @@
          ;;(x-grid (if linechart? (get-option gnc:pagename-display optname-x-grid)))
          (commodity-list #f)
          (exchange-fn #f)
-         (dates-list ((if inc-exp?
-                          gnc:make-date-interval-list
-                          gnc:make-date-list)
+         (dates-list (gnc:make-date-list
                       ((if inc-exp?
                            gnc:time64-start-day-time
                            gnc:time64-end-day-time)
@@ -262,34 +258,135 @@
                 (warn "incompatible currencies in monetary+: " a b)))
           (warn "wrong arguments for monetary+: " a b)))
 
-    (define (monetary->double monetary)
-      (gnc-numeric-to-double (gnc:gnc-monetary-amount monetary)))
+    (define (split->date s)
+      (xaccTransGetDate (xaccSplitGetParent s)))
 
-    ;; This calculates the balances for all the 'accounts' for each
-    ;; element of the list 'dates'. If income?==#t, the signs get
-    ;; reversed according to income-sign-reverse general option
-    ;; settings. Uses the collector->monetary conversion function
-    ;; above. Returns a list of gnc-monetary.
-    (define (process-datelist accounts dates income?)
-      (map
-       (lambda (date)
-         (collector->monetary
-          ((if inc-exp?
-               (if income?
-                   gnc:accounts-get-comm-total-income
-                   gnc:accounts-get-comm-total-expense)
-               gnc:accounts-get-comm-total-assets)
-           accounts
-           (lambda (account)
-             (if inc-exp?
-                 ;; for inc-exp, 'date' is a pair of time values, else
-                 ;; it is a time value.
-                 (gnc:account-get-comm-balance-interval
-                  account (first date) (second date) #f)
-                 (gnc:account-get-comm-balance-at-date
-                  account date #f))))
-          (if inc-exp? (second date) date)))
-       dates))
+    ;; this function will scan through the account splitlist, building
+    ;; a list of balances along the way. it will use the dates
+    ;; specified in the variable dates-list.
+    ;; input: account
+    ;;  uses: dates-list (list of time64)
+    ;;   out: (list account bal0 bal1 ...)
+    (define (account->balancelist account)
+
+      ;; the test-closing? function will enable testing closing status
+      ;; for inc-exp only. this may squeeze more speed for net-worth charts.
+      (define test-closing?
+        (gnc:account-is-inc-exp? account))
+
+      (let loop ((splits (xaccAccountGetSplitList account))
+                 (dates dates-list)
+                 (currentbal 0)
+                 (lastbal 0)
+                 (balancelist '()))
+        (cond
+
+         ;; end of dates. job done!
+         ((null? dates)
+          (cons account (reverse balancelist)))
+
+         ;; end of splits, but still has dates. pad with last-bal
+         ;; until end of dates.
+         ((null? splits)
+          (loop '()
+                (cdr dates)
+                currentbal
+                lastbal
+                (cons lastbal balancelist)))
+
+         (else
+          (let* ((this (car splits))
+                 (rest (cdr splits))
+                 (currentbal (if (and test-closing?
+                                      (xaccTransGetIsClosingTxn (xaccSplitGetParent this)))
+                                 currentbal
+                                 (+ (xaccSplitGetAmount this) currentbal)))
+                 (next (and (pair? rest) (car rest))))
+
+            (cond
+             ;; the next split is still before date
+             ((and next (< (split->date next) (car dates)))
+              (loop rest dates currentbal lastbal balancelist))
+
+             ;; this split after date, add previous bal to balancelist
+             ((< (car dates) (split->date this))
+              (loop splits
+                    (cdr dates)
+                    lastbal
+                    lastbal
+                    (cons lastbal balancelist)))
+
+             ;; this split before date, next split after date, or end.
+             (else
+              (loop rest
+                    (cdr dates)
+                    currentbal
+                    currentbal
+                    (cons currentbal balancelist)))))))))
+
+    ;; This calculates the balances for all the 'account-balances' for
+    ;; each element of the list 'dates'. Uses the collector->monetary
+    ;; conversion function above. Returns a list of gnc-monetary.
+    (define (process-datelist account-balances dates left-col?)
+
+      (define (collector-minus coll1 coll2)
+        (let ((res (gnc:make-commodity-collector)))
+          (res 'merge coll1 #f)
+          (res 'minusmerge coll2 #f)
+          res))
+
+      (define accountlist
+        (if inc-exp?
+            (if left-col?
+                (assoc-ref classified-accounts ACCT-TYPE-INCOME)
+                (assoc-ref classified-accounts ACCT-TYPE-EXPENSE))
+            (if left-col?
+                (assoc-ref classified-accounts ACCT-TYPE-ASSET)
+                (assoc-ref classified-accounts ACCT-TYPE-LIABILITY))))
+
+      (define filtered-account-balances
+        (filter
+         (lambda (a)
+           (member (car a) accountlist))
+         account-balances))
+
+      (define (acc-balances->list-of-balances lst)
+        ;; input: (list (list acc1 bal0 bal1 bal2 ...)
+        ;;              (list acc2 bal0 bal1 bal2 ...) ...)
+        ;; whereby list of balances are numbers in the acc's currency
+        ;; output: (list <mon-coll0> <mon-coll1> <mon-coll2>)
+        (define list-of-collectors
+          (let loop ((n (length dates)) (result '()))
+            (if (zero? n) result
+                (loop (1- n) (cons (gnc:make-commodity-collector) result)))))
+        (let loop ((lst lst))
+          (when (pair? lst)
+            (let innerloop ((list-of-collectors list-of-collectors)
+                            (list-of-balances (cdar lst)))
+              (when (pair? list-of-balances)
+                ((car list-of-collectors) 'add
+                 (xaccAccountGetCommodity (caar lst))
+                 (car list-of-balances))
+                (innerloop (cdr list-of-collectors) (cdr list-of-balances))))
+            (loop (cdr lst))))
+        list-of-collectors)
+
+      (let loop ((dates dates)
+                 (acct-balances (acc-balances->list-of-balances filtered-account-balances))
+                 (result '()))
+        (if (if inc-exp?
+                (null? (cdr dates))
+                (null? dates))
+            (reverse result)
+            (loop (cdr dates)
+                  (cdr acct-balances)
+                  (cons
+                   (collector->monetary
+                    (if inc-exp?
+                        (collector-minus (car acct-balances) (cadr acct-balances))
+                        (car acct-balances))
+                    (if inc-exp? (cadr dates) (car dates)))
+                   result)))))
 
     (gnc:report-percent-done 1)
     (set! commodity-list (gnc:accounts-get-commodities
@@ -306,77 +403,32 @@
 
     (if
      (not (null? accounts))
-     (let* ((the-account-destination-alist
-             (if inc-exp?
-                 (append (map (lambda (account) (cons account 'asset))
-                              (assoc-ref classified-accounts ACCT-TYPE-INCOME))
-                         (map (lambda (account) (cons account 'liability))
-                              (assoc-ref classified-accounts ACCT-TYPE-EXPENSE)))
-                 (append  (map (lambda (account) (cons account 'asset))
-                               (assoc-ref classified-accounts ACCT-TYPE-ASSET))
-                          (map (lambda (account) (cons account 'liability))
-                               (assoc-ref classified-accounts ACCT-TYPE-LIABILITY)))))
-            (account-reformat (if inc-exp?
-                                  (lambda (account result)
-                                    (map (lambda (collector date-interval)
-                                           (gnc:monetary-neg (collector->monetary collector (second date-interval))))
-                                         result dates-list))
-                                  (lambda (account result)
-                                    (let ((commodity-collector (gnc:make-commodity-collector)))
-                                      (collector-end (fold (lambda (next date list-collector)
-                                                             (commodity-collector 'merge next #f)
-                                                             (collector-add list-collector
-                                                                            (collector->monetary
-                                                                             commodity-collector date)))
-                                                           (collector-into-list)
-                                                           result
-                                                           dates-list))))))
-            (work (category-by-account-report-work inc-exp?
-                                                   dates-list
-                                                   the-account-destination-alist
-                                                   (lambda (account date)
-                                                     (make-gnc-collector-collector))
-                                                   account-reformat))
-            (rpt (category-by-account-report-do-work work (cons 50 90)))
-            (assets (assoc-ref rpt 'asset))
-            (liabilities (assoc-ref rpt 'liability))
-            (assets-list (if assets
-                             (car assets)
-                             (map (lambda (d)
-                                    (gnc:make-gnc-monetary report-currency 0))
-                                  dates-list)))
-            (liability-list (if liabilities
-                                (car liabilities)
-                                (map (lambda (d)
-                                       (gnc:make-gnc-monetary report-currency 0))
-                                     dates-list)))
-            (net-list (map monetary+ assets-list liability-list))
-            ;; Here the date strings for the x-axis labels are
-            ;; created.
-            (datelist->stringlist (lambda (dates-list)
-                                    (map (lambda (date-list-item)
-                                           (qof-print-date
-                                            (if inc-exp?
-                                                (car date-list-item)
-                                                date-list-item)))
-                                         dates-list)))
+     (let* ((account-balancelist (map account->balancelist accounts))
+            (dummy (gnc:report-percent-done 60))
 
-            (date-string-list (if linechart?
-                                  (datelist->stringlist dates-list)
-                                  (map
-                                   (if inc-exp?
-                                       (lambda (date-list-item)
-                                         (qof-print-date
-                                          (car date-list-item)))
-                                       qof-print-date)
-                                   dates-list)))
+            (minuend-balances (process-datelist
+                               account-balancelist
+                               dates-list #t))
+            (dummy (gnc:report-percent-done 70))
+
+            (subtrahend-balances (process-datelist
+                                  account-balancelist
+                                  dates-list #f))
+            (dummy (gnc:report-percent-done 80))
+
+            (difference-balances (map monetary+ minuend-balances subtrahend-balances))
+
+            (dates-list (if inc-exp?
+                            (list-head dates-list (1- (length dates-list)))
+                            dates-list))
+
+            (date-string-list (map qof-print-date dates-list))
             
-            (date-iso-string-list (let ((save-fmt (qof-date-format-get))
-                                        (retlist #f))
+            (date-iso-string-list (let ((save-fmt (qof-date-format-get)))
                                     (qof-date-format-set QOF-DATE-FORMAT-ISO)
-                                    (set! retlist (datelist->stringlist dates-list))
-                                    (qof-date-format-set save-fmt)
-                                    retlist)))
+                                    (let ((retlist (map qof-print-date dates-list)))
+                                      (qof-date-format-set save-fmt)
+                                      retlist))))
 
        (gnc:report-percent-done 90)
 
@@ -413,15 +465,12 @@
         chart (gnc-commodity-get-mnemonic report-currency))
 
        ;; Add the data
-       (if show-sep?
-           (begin
-             (add-column! (map monetary->double assets-list))
-             (add-column!                     ;;(if inc-exp?
-              (map - (map monetary->double liability-list))
-              ;;liability-list)
-              )))
+       (when show-sep?
+         (add-column! (map gnc:gnc-monetary-amount minuend-balances))
+         (add-column! (map - (map gnc:gnc-monetary-amount subtrahend-balances))))
+
        (if show-net?
-           (add-column! (map monetary->double net-list)))
+           (add-column! (map gnc:gnc-monetary-amount difference-balances)))
 
        ;; Legend labels, colors
        ((if linechart?
@@ -517,18 +566,15 @@
                          (if inc-exp?
                              (list (_ "Net Profit"))
                              (list (_ "Net Worth")))
-                         '()))
-                    )
+                         '())))
                    (gnc:html-table-append-column! table date-string-list)
-                   (if show-sep?
-                       (begin
-                         (gnc:html-table-append-column! table assets-list)
-                         (gnc:html-table-append-column! table liability-list)
-                         )
-                       )
+                   (when show-sep?
+                     (gnc:html-table-append-column! table minuend-balances)
+                     (gnc:html-table-append-column! table subtrahend-balances))
+
                    (if show-net?
-                       (gnc:html-table-append-column! table net-list)
-                       )
+                       (gnc:html-table-append-column! table difference-balances))
+
                    ;; set numeric columns to align right
                    (for-each
                     (lambda (col)

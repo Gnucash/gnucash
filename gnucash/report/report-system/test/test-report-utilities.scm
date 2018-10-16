@@ -17,6 +17,7 @@
   (test-account-get-trans-type-splits-interval)
   (test-list-ref-safe)
   (test-list-set-safe)
+  (test-gnc-pk)
   (test-gnc:monetary->string)
   (test-commodity-collector)
   (test-get-account-balances)
@@ -102,6 +103,33 @@
       (test-assert "gnc:monetary->string is a string"
         (string? (gnc:monetary->string monetary))))
     (teardown)))
+
+(define (test-gnc-pk)
+  (test-begin "debugging tools")
+  (test-equal "gnc:pk testing"
+    'works
+    (gnc:pk 'testing "gnc:pk" 'works))
+  (test-equal "gnc:strify #t"
+    "#t"
+    (gnc:strify #t))
+  (test-equal "gnc:strify '()"
+    "#null"
+    (gnc:strify '()))
+  (test-equal "gnc:strify 'sym"
+    "'sym"
+    (gnc:strify 'sym))
+  (test-equal "gnc:strify \"str\""
+    "str"
+    (gnc:strify "str"))
+  (test-equal "gnc:strify '(1 2 3)"
+    "(list 1 2 3)"
+    (gnc:strify '(1 2 3)))
+  (test-equal "gnc:strify (a . 2)"
+    "('a . 2)"
+    (gnc:strify (cons 'a 2)))
+  (test-equal "gnc:strify cons"
+    "Proc<cons>"
+    (gnc:strify cons)))
 
 (define (test-commodity-collector)
   (test-group-with-cleanup "test-commodity-collector"

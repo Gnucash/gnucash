@@ -18,6 +18,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
 (use-modules (srfi srfi-13))
+(use-modules (ice-9 format))
 
 (define (list-ref-safe list elt)
   (and (> (length list) elt)
@@ -966,3 +967,89 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
   (if (string-prefix? "file:///" url)
      url
      (string-append "file:///" url)))
+
+(define-public (gnc:strify d)
+  ;; any object -> string.  The option is passed to various
+  ;; scm->string converters; ultimately a generic stringify
+  ;; function handles symbol/string/other types.
+  (define (split->str spl)
+    (let ((txn (xaccSplitGetParent spl)))
+      (format #f "Split<d:~a,acc:~a,amt:~a,val:~a>"
+              (qof-print-date (xaccTransGetDate txn))
+              (xaccAccountGetName (xaccSplitGetAccount spl))
+              (gnc:monetary->string
+               (gnc:make-gnc-monetary
+                (xaccTransGetCurrency txn)
+                (xaccSplitGetValue spl)))
+              (gnc:monetary->string
+               (gnc:make-gnc-monetary
+                (xaccAccountGetCommodity
+                 (xaccSplitGetAccount spl))
+                (xaccSplitGetAmount spl))))))
+  (define (trans->str txn)
+    (format #f "Txn<d:~a>" (qof-print-date (xaccTransGetDate txn))))
+  (define (account->str acc)
+    (format #f "Acc<~a>" (xaccAccountGetName acc)))
+  (define (monetary-collector->str coll)
+    (format #f "Mon-coll<~a>"
+            (map gnc:strify (coll 'format gnc:make-gnc-monetary #f))))
+  (define (value-collector->str coll)
+    (format #f "Val-coll<~a>"
+            (map gnc:strify (coll 'total gnc:make-gnc-monetary))))
+  (define (procedure->str proc)
+    (format #f "Proc<~a>"
+            (or (procedure-name proc) "unk")))
+  (define (monetary->string mon)
+    (format #f "Mon<~a>"
+            (gnc:monetary->string mon)))
+  (define (try proc)
+    ;; Try proc with d as a parameter, catching 'wrong-type-arg
+    ;; exceptions to return #f to the (or) evaluator below.
+    (catch 'wrong-type-arg
+      (lambda () (proc d))
+      (const #f)))
+  (or (and (boolean? d) (if d "#t" "#f"))
+      (and (null? d) "#null")
+      (and (symbol? d) (format #f "'~a" d))
+      (and (string? d) d)
+      (and (list? d) (string-append
+                      "(list "
+                      (string-join (map gnc:strify d) " ")
+                      ")"))
+      (and (pair? d) (format #f "(~a . ~a)"
+                             (gnc:strify (car d))
+                             (if (eq? (car d) 'absolute)
+                                 (qof-print-date (cdr d))
+                                 (gnc:strify (cdr d)))))
+      (try procedure->str)
+      (try gnc-commodity-get-mnemonic)
+      (try account->str)
+      (try split->str)
+      (try trans->str)
+      (try monetary-collector->str)
+      (try value-collector->str)
+      (try monetary->string)
+      (try gnc-budget-get-name)
+      (object->string d)))
+
+(define (pair->num pair)
+  (+ (car pair)
+     (/ (cdr pair) 1000000)))
+
+(define (delta t1 t2)
+  (exact->inexact
+   (- (pair->num t2)
+      (pair->num t1))))
+
+(define-public gnc:pk
+  (let* ((start-time (gettimeofday))
+         (last-time start-time))
+    (lambda args
+      (let ((now (gettimeofday)))
+        (format #t "d~,4f t~,3f: "
+                (delta last-time now)
+                (delta start-time now))
+        (set! last-time now))
+      (display (map gnc:strify args))
+      (newline)
+      (last args))))
