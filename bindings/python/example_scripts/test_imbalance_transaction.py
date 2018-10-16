@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # test_imbalance_transaction.py -- Test the transaction imbalace viewing
 # mechanisms
@@ -41,7 +41,7 @@ from gnucash import Session, Transaction, Split, Account, GncNumeric, \
 # You should try it out with a gnucash file with tranding accounts enabled
 # and trading accounts disabled
 
-if len(argv) < 2:    
+if len(argv) < 2:
     print('not enough parameters')
     print('usage: test_imbalance_transaction.py {book_url}')
     print('examples:')

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # account_analysis.py -- Output all the credits and debits on an account
 #
@@ -45,7 +45,7 @@ from gnucash import Session, GncNumeric, Split
 # That will do an analysis on the account 'Assets:Test Account' from
 # gnucash_file.xac, all of the debits and all of the credits will be shown
 # and summed on for 12 monthly periods starting from January (1st month) 2010
-# 
+#
 # if you just want to see the credit and debit sums for each period, use
 # the debits-noshow and credits-noshow argument
 #
@@ -92,7 +92,7 @@ def gnc_numeric_to_python_Decimal(numeric):
     exponent = int(log10(denominator))
     assert( (10 ** exponent) == denominator )
     return Decimal( (sign, digit_tuple, -exponent) )
-    
+
 
 def next_period_start(start_year, start_month, period_type):
     # add numbers of months for the period length
@@ -112,7 +112,7 @@ def next_period_start(start_year, start_month, period_type):
     end_month = ( (end_month-1) % NUM_MONTHS ) + 1
 
     return end_year, end_month
-    
+
 
 def period_end(start_year, start_month, period_type):
     if period_type not in PERIODS:
@@ -126,10 +126,10 @@ def period_end(start_year, start_month, period_type):
     # so we get a period end like
     # 2010-03-31 for period starting 2010-01 instead of 2010-04-01
     return date(end_year, end_month, 1) - ONE_DAY
-    
+
 
 def generate_period_boundaries(start_year, start_month, period_type, periods):
-    for i in xrange(periods):
+    for i in range(periods):
         yield ( date(start_year, start_month, 1),
                 period_end(start_year, start_month, period_type) )
         start_year, start_month = next_period_start(start_year, start_month,
@@ -192,7 +192,7 @@ def main():
             ]
         # a copy of the above list with just the period start dates
         period_starts = [e[0] for e in period_list ]
-    
+
         # insert and add all splits in the periods of interest
         for split in account_of_interest.GetSplitList():
             trans = split.parent
@@ -201,13 +201,13 @@ def main():
             # use binary search to find the period that starts before or on
             # the transaction date
             period_index = bisect_right( period_starts, trans_date ) - 1
-        
+
             # ignore transactions with a date before the matching period start
             # (after subtracting 1 above start_index would be -1)
             # and after the last period_end
             if period_index >= 0 and \
                     trans_date <= period_list[len(period_list)-1][1]:
-  
+
                 # get the period bucket appropriate for the split in question
                 period = period_list[period_index]
 
@@ -220,7 +220,7 @@ def main():
                 # and the filtered results from the above if provide all the
                 # protection we need
                 assert( trans_date>= period[0] and trans_date <= period[1] )
-               
+
                 split_amount = gnc_numeric_to_python_Decimal(split.GetAmount())
 
                 # if the amount is negative, this is a credit
@@ -235,20 +235,20 @@ def main():
                 #
                 # if we wanted to be really cool we'd keep the transactions
                 period[2+debit_credit_offset].append( (trans, split) )
-    
+
                 # add the debit or credit to the sum, using the above offset
                 # to get in the right bucket
                 period[4+debit_credit_offset] += split_amount
 
         csv_writer = csv.writer(stdout)
         csv_writer.writerow( ('period start', 'period end', 'debits', 'credits') )
-    
+
         def generate_detail_rows(values):
             return (
                 ('', '', '', '', trans.GetDescription(),
                  gnc_numeric_to_python_Decimal(split.GetAmount()))
                 for trans, split in values )
-            
+
 
         for start_date, end_date, debits, credits, debit_sum, credit_sum in \
                 period_list:
