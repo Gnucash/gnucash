@@ -406,6 +406,63 @@ flawed. see report-utilities.scm. please update reports.")
                     account date include-children?)))
     (cadr (collector 'getpair (xaccAccountGetCommodity account) #f))))
 
+;; this function will scan through the account splitlist, building
+;; a list of balances along the way at dates specified in dates-list.
+;; in:  account
+;;      dates-list (list of time64)
+;;      ignore-closing? - if #true, will skip closing entries
+;; out: (list bal0 bal1 ...), each entry is a scheme number
+(define* (gnc:account-get-balances-at-dates account dates-list #:key ignore-closing?)
+  (let loop ((splits (xaccAccountGetSplitList account))
+             (dates-list dates-list)
+             (currentbal 0)
+             (lastbal 0)
+             (balancelist '()))
+    (cond
+
+     ;; end of dates. job done!
+     ((null? dates-list)
+      (reverse balancelist))
+
+     ;; end of splits, but still has dates. pad with last-bal
+     ;; until end of dates.
+     ((null? splits)
+      (loop '()
+            (cdr dates-list)
+            currentbal
+            lastbal
+            (cons lastbal balancelist)))
+
+     (else
+      (let* ((this (car splits))
+             (rest (cdr splits))
+             (currentbal (if (and ignore-closing?
+                                  (xaccTransGetIsClosingTxn (xaccSplitGetParent this)))
+                             currentbal
+                             (+ (xaccSplitGetAmount this) currentbal)))
+             (next (and (pair? rest) (car rest))))
+
+        (cond
+         ;; the next split is still before date
+         ((and next (< (xaccTransGetDate (xaccSplitGetParent next)) (car dates-list)))
+          (loop rest dates-list currentbal lastbal balancelist))
+
+         ;; this split after date, add previous bal to balancelist
+         ((< (car dates-list) (xaccTransGetDate (xaccSplitGetParent this)))
+          (loop splits
+                (cdr dates-list)
+                lastbal
+                lastbal
+                (cons lastbal balancelist)))
+
+         ;; this split before date, next split after date, or end.
+         (else
+          (loop rest
+                (cdr dates-list)
+                currentbal
+                currentbal
+                (cons currentbal balancelist)))))))))
+
 ;; This works similar as above but returns a commodity-collector, 
 ;; thus takes care of children accounts with different currencies.
 (define (gnc:account-get-comm-balance-at-date
