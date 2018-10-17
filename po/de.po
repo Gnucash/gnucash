@@ -9157,7 +9157,7 @@ msgid ""
 "Enable debugging mode: provide deep detail in the logs.\n"
 "This is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
 msgstr ""
-"Debugging aktivieren: liefere ausführliche Details in den Logs.\"
+"Debugging aktivieren: liefere ausführliche Details in den Logs.\n"
 "Das ist äquivalent zu: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
 
 #: gnucash/gnucash-bin.c:110
