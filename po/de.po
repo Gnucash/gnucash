@@ -2,15 +2,15 @@
 # Messages in Deutsch für GnuCash
 # Copyright (C) 1999-2001, 2004 Free Software Foundation, Inc.
 # This file is distributed under the same license as the GnuCash package.
-# Jan-Uwe Finck <Jan-Uwe.Finck@bigfoot.de>, 1999.
-# Christian Stimming <stimming@tuhh.de>, 2001-2014.
-# Christian Meyer <chrisime@gnome.org>, 2000, 2001.
-# Herbert Thoma <tma@iis.fhg.de>, 2001.
-# Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2007, 2009-2018.
-# Rolf Leggewie, 2008.
+# Dmitriy Mangul <dimang.freetime@gmail.com>, 2017-2018
 # Mechtilde Stehmann <ooo@mechtilde.de>, 2014-2018.
+# Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2007, 2009-2018.
 # quazgar <quazgar@posteo.de> 2017.
-# Dmitriy Mangul <dimang.freetime@gmail.com>, 2017, 2018
+# Christian Stimming <stimming@tuhh.de>, 2001-2014.
+# Rolf Leggewie, 2008.
+# Herbert Thoma <tma@iis.fhg.de>, 2001.
+# Christian Meyer <chrisime@gnome.org>, 2000, 2001.
+# Jan-Uwe Finck <Jan-Uwe.Finck@bigfoot.de>, 1999.
 #
 msgid ""
 msgstr ""
@@ -7955,7 +7955,16 @@ msgstr "Finanzverwaltung für Privatanwender und Kleinbetriebe."
 #. * contributors.
 #: gnucash/gnome-utils/gnc-main-window.c:4577
 msgid "translator_credits"
-msgstr "Christian Stimming <christian@cstimming.de> et. al."
+msgstr ""
+"Dmitriy Mangul, 2017-2018\n"
+"Mechtilde Stehmann, 2014-2018\n"
+"Frank H. Ellenberger, 2007, 2009-2018\n"
+"quazgar, 2017\n"
+"Christian Stimming, 2001-2014\n"
+"Rolf Leggewie, 2008\n"
+"Herbert Thoma, 2001\n"
+"Christian Meyer, 2000-2001\n"
+"Jan-Uwe Finck, 1999"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4580
 msgid "Visit the GnuCash website."
