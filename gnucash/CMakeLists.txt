@@ -156,7 +156,7 @@ if (LIBDBI_LIBRARY AND LIBDBI_DRIVERS_DIR)
   get_filename_component(libdir ${LIBDBI_LIBRARY} DIRECTORY)
   string(FIND ${LIBDBI_DRIVERS_DIR} ${libdir} is_subdir)
   if (NOT is_subdir EQUAL 0)
-    file(APPEND ${BUILD_ENV_FILE_OUT} "GNC_DBD_DIR=${LIBDBI_DRIVERS_DIR}")
+    file(APPEND ${BUILD_ENV_FILE_OUT} "GNC_DBD_DIR=${LIBDBI_DRIVERS_DIR}\n")
   endif()
 endif()
 
