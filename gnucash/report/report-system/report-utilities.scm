@@ -411,8 +411,10 @@ flawed. see report-utilities.scm. please update reports.")
 ;; in:  account
 ;;      dates-list (list of time64)
 ;;      ignore-closing? - if #true, will skip closing entries
-;; out: (list bal0 bal1 ...), each entry is a scheme number
+;; out: (list bal0 bal1 ...), each entry is a gnc-monetary object
 (define* (gnc:account-get-balances-at-dates account dates-list #:key ignore-closing?)
+  (define (amount->monetary bal)
+    (gnc:make-gnc-monetary (xaccAccountGetCommodity account) bal))
   (let loop ((splits (xaccAccountGetSplitList account))
              (dates-list dates-list)
              (currentbal 0)
@@ -422,7 +424,7 @@ flawed. see report-utilities.scm. please update reports.")
 
      ;; end of dates. job done!
      ((null? dates-list)
-      (reverse balancelist))
+      (map amount->monetary (reverse balancelist)))
 
      ;; end of splits, but still has dates. pad with last-bal
      ;; until end of dates.

@@ -295,7 +295,7 @@
       (define (acc-balances->list-of-balances lst)
         ;; input: (list (list acc1 bal0 bal1 bal2 ...)
         ;;              (list acc2 bal0 bal1 bal2 ...) ...)
-        ;; whereby list of balances are numbers in the acc's currency
+        ;; whereby list of balances are gnc-monetary objects
         ;; output: (list <mon-coll0> <mon-coll1> <mon-coll2>)
         (define list-of-collectors
           (let loop ((n (length dates)) (result '()))
@@ -307,8 +307,8 @@
                             (list-of-balances (cdar lst)))
               (when (pair? list-of-balances)
                 ((car list-of-collectors) 'add
-                 (xaccAccountGetCommodity (caar lst))
-                 (car list-of-balances))
+                 (gnc:gnc-monetary-commodity (car list-of-balances))
+                 (gnc:gnc-monetary-amount (car list-of-balances)))
                 (innerloop (cdr list-of-collectors) (cdr list-of-balances))))
             (loop (cdr lst))))
         list-of-collectors)
