@@ -7963,8 +7963,9 @@ msgstr ""
 "Rolf Leggewie, 2008\n"
 "Herbert Thoma, 2001\n"
 "Christian Meyer, 2000-2001\n"
-"Jan-Uwe Finck, 1999"
-
+"Jan-Uwe Finck, 1999\n\n"
+"Verbesserungsvorschläge zur Übersetzung an gnucash-de@gnucash.org"
+ 
 #: gnucash/gnome-utils/gnc-main-window.c:4580
 msgid "Visit the GnuCash website."
 msgstr "Besuchen Sie die GnuCash-Website."
