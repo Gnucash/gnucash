@@ -19,10 +19,10 @@ set (GNUCASH_LATEST_STABLE_SERIES 3.x)
 set (PACKAGE gnucash)
 set (PACKAGE_NAME GnuCash)
 set (PACKAGE_VERSION 3.3)
-set (PACKAGE_BUGREPORT gnucash-devel@gnucash.org)
+set (PACKAGE_BUGREPORT "https://bugs.gnucash.org")
 set (PACKAGE_TARNAME ${PACKAGE})
 set (PACKAGE_STRING "${PACKAGE_NAME} ${PACKAGE_VERSION}")
-set (PACKAGE_URL "")
+set (PACKAGE_URL "https://www.gnucash.org/")
 
 # Change this in development versions when changing anything that
 # affects stored data structures. Reset to zero when bumping version.
