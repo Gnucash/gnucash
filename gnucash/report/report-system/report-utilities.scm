@@ -386,7 +386,22 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
 ;; get the account balance at the specified date. if include-children?
 ;; is true, the balances of all children (not just direct children)
 ;; are included in the calculation.
+;; I think this (gnc:account-get-balance-at-date) is flawed in sub-acct handling.
+;; Consider account structure:
+;; Assets [USD] - bal=$0
+;;    Bank [USD] - bal=$100
+;;    Broker [USD] - bal=$200
+;;       Cash [USD] - bal=$800
+;;       Funds [FUND] - bal=3 FUND @ $1000 each = $3000
+;; - Calling (gnc:account-get-balance-at-date BANK TODAY #f) returns 100
+;; - Calling (gnc:account-get-balance-at-date BROKER TODAY #f) returns 200
+;; - Calling (gnc:account-get-balance-at-date BROKER TODAY #t) returns 1000
+;;   this is because although it counts all subaccounts bal $200 + $800 + 3FUND,
+;;   it retrieves the parent account commodity USD $1000 only.
+;; It needs to be deprecated.
 (define (gnc:account-get-balance-at-date account date include-children?)
+  (issue-deprecation-warning "this gnc:account-get-balance-at-date function is \
+flawed. see report-utilities.scm. please update reports.")
   (let ((collector (gnc:account-get-comm-balance-at-date
                     account date include-children?)))
     (cadr (collector 'getpair (xaccAccountGetCommodity account) #f))))
