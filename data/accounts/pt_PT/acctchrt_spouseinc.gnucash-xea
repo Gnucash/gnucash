@@ -32,16 +32,17 @@
   xmlns:tte="http://www.gnucash.org/XML/tte"
   xmlns:vendor="http://www.gnucash.org/XML/vendor">
     <gnc-act:title>
-      Receitas da Esposa
+      Receitas da esposa
     </gnc-act:title>
     <gnc-act:short-description>
      Contas para registar separadamente as receitas da esposa
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Desejará seleccionar este conjunto de contas caso tenha uma esposa que tenha emprego (salário (esposa), impostos (esposa)).
+    Desejará seleccionar este conjunto de contas caso tenha uma esposa 
+    que tenha emprego (salário, impostos).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
-  <act:name>Root Account</act:name>
+  <act:name>Conta raiz</act:name>
   <act:id type="new">1972cce2e2364f95b2b0bc014502661d</act:id>
   <act:type>ROOT</act:type>
   <act:commodity-scu>0</act:commodity-scu>
@@ -52,20 +53,20 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>PTE</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Receita</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Salário (Esposa)</act:name>
+  <act:name>Salário (esposa)</act:name>
   <act:id type="new">7c4495ff132d100b0aa339ce683200dd</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>PTE</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Salário (Esposa)</act:description>
+  <act:description>Salário (esposa)</act:description>
   <act:parent type="new">b4fadf6188d7f1ae7e7aa4fa27f5cc95</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -74,20 +75,20 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>PTE</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Despesas</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Impostos (Esposa)</act:name>
+  <act:name>Impostos (esposa)</act:name>
   <act:id type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>PTE</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Impostos (Esposa)</act:description>
+  <act:description>Impostos (esposa)</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -96,31 +97,31 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>PTE</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>IRS</act:description>
   <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Seguro Saúde</act:name>
+  <act:name>Seguro de saúde</act:name>
   <act:id type="new">eba0c095658c7c3a4f4294db9c7392f3</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>PTE</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Seguro Saúde</act:description>
+  <act:description>Seguro de saúde</act:description>
   <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Outros Impostos</act:name>
+  <act:name>Outros impostos</act:name>
   <act:id type="new">dea0cf67026749c9a5aa97be4e5cd052</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>PTE</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Outros Impostos</act:description>
+  <act:description>Outros impostos</act:description>
   <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -129,20 +130,20 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>PTE</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Segurança Social</act:description>
   <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Municipais</act:name>
+  <act:name>Impostos municipais</act:name>
   <act:id type="new">aa14dbcd622024495a8a972b0f37d13a</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>PTE</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Municipais</act:description>
+  <act:description>Impostos municipais</act:description>
   <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
 </gnc:account>
 </gnc-account-example>
