@@ -313,15 +313,12 @@ developing over time"))
                   (else report-title)))
                (currency-frac (gnc-commodity-get-fraction report-currency))
                ;; This is the list of date intervals to calculate.
-               (dates-list (if do-intervals?
-                               (gnc:make-date-interval-list
-                                (gnc:time64-start-day-time from-date-t64)
-                                (gnc:time64-end-day-time to-date-t64)
-                                (gnc:deltasym-to-delta interval))
-                               (gnc:make-date-list
-                                (gnc:time64-end-day-time from-date-t64)
-                                (gnc:time64-end-day-time to-date-t64)
-                                (gnc:deltasym-to-delta interval))))
+               (dates-list (gnc:make-date-list
+                            ((if do-intervals?
+                                 gnc:time64-start-day-time
+                                 gnc:time64-end-day-time) from-date-t64)
+                            (gnc:time64-end-day-time to-date-t64)
+                            (gnc:deltasym-to-delta interval)))
                ;; Here the date strings for the x-axis labels are
                ;; created.
                (date-string-list '())
@@ -331,12 +328,7 @@ developing over time"))
                (all-data '()))
 
           (define (datelist->stringlist dates-list)
-            (map (lambda (date-list-item)
-                   (qof-print-date
-                    (if do-intervals?
-                        (car date-list-item)
-                        date-list-item)))
-                 dates-list))
+            (map qof-print-date dates-list))
 
           ;; Converts a commodity-collector into gnc-monetary in the report's
           ;; currency using the exchange-fn calculated above. Returns a gnc-monetary
@@ -367,11 +359,33 @@ developing over time"))
                   (car (coll 'format gnc:make-gnc-monetary #f))
                   (gnc:warn "monetary+ expects 1 currency " (gnc:strify monetaries)))))
 
+          (define (collector-minus a b)
+            (let ((coll (gnc:make-commodity-collector)))
+              (coll 'merge a #f)
+              (coll 'minusmerge b #f)
+              coll))
+
           ;; copy of gnc:not-all-zeros using gnc-monetary
           (define (not-all-zeros data)
             (cond ((gnc:gnc-monetary? data) (not (zero? (gnc:gnc-monetary-amount data))))
                   ((list? data) (or-map not-all-zeros data))
                   (else #f)))
+
+          ;; this is an alist of account-balances
+          ;; (list (list acc0 bal0 bal1 bal2 ...)
+          ;;       (list acc1 bal0 bal1 bal2 ...)
+          ;;       ...)
+          ;; whereby each balance is a gnc-monetary
+          (define account-balances-alist
+            (map
+             (lambda (acc)
+               (cons acc
+                     (map
+                      (if (reverse-balance? acc) gnc:monetary-neg identity)
+                      (gnc:account-get-balances-at-dates
+                       acc dates-list
+                       #:ignore-closing? (gnc:account-is-inc-exp? acc)))))
+             accounts))
 
           ;; Calculates the net balance (profit or loss) of an account in
           ;; the given time interval. date-list-entry is a pair containing
@@ -397,9 +411,34 @@ developing over time"))
           ;; Creates the <balance-list> to be used in the function
           ;; below.
           (define (account->balance-list account subacct?)
-            (map
-             (lambda (d) (get-balance account d subacct?))
-             dates-list))
+            (let* ((accountslist (cons account
+                                   (if subacct?
+                                       (gnc-account-get-descendants account)
+                                       '())))
+                   (selected-balances (filter
+                                       (lambda (entry)
+                                         (member (car entry) accountslist))
+                                       account-balances-alist))
+                   (selected-monetaries (map cdr selected-balances))
+                   (list-of-mon-collectors (apply map monetaries-add selected-monetaries)))
+              (let loop ((list-of-mon-collectors list-of-mon-collectors)
+                         (dates-list dates-list)
+                         (result '()))
+                (if (null? (if do-intervals?
+                               (cdr list-of-mon-collectors)
+                               list-of-mon-collectors))
+                    (reverse result)
+                    (loop (cdr list-of-mon-collectors)
+                          (cdr dates-list)
+                          (cons (if do-intervals?
+                                    (collector->monetary
+                                     (collector-minus (cadr list-of-mon-collectors)
+                                                      (car list-of-mon-collectors))
+                                     (cadr dates-list))
+                                    (collector->monetary
+                                     (car list-of-mon-collectors)
+                                     (car dates-list)))
+                                result))))))
 
           (define (count-accounts current-depth accts)
             (if (< current-depth tree-depth)
@@ -512,7 +551,9 @@ developing over time"))
           (if
            (and (not (null? all-data))
                 (not-all-zeros  (map cadr all-data)))
-           (begin
+           (let ((dates-list (if do-intervals?
+                                 (list-head dates-list (1- (length dates-list)))
+                                 dates-list)))
              (set! date-string-list (datelist->stringlist dates-list))
              (qof-date-format-set QOF-DATE-FORMAT-ISO)
              (set! date-iso-string-list (datelist->stringlist dates-list))
