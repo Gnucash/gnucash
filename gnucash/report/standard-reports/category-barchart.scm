@@ -290,17 +290,17 @@ developing over time"))
                     ;; Calculate the divisor of the amounts so that an
                     ;; average is shown. Multiplier factor is a gnc-numeric
                     (let* ((start-frac-avg (averaging-fraction-func from-date-t64))
-                           (end-frac-avg (averaging-fraction-func (+ 1 to-date-t64)))
+                           (end-frac-avg (averaging-fraction-func (1+ to-date-t64)))
                            (diff-avg (- end-frac-avg start-frac-avg))
                            (diff-avg-numeric (/ (inexact->exact (round (* diff-avg 1000000))) ; 6 decimals precision
                                                 1000000))
                            (start-frac-int (interval-fraction-func from-date-t64))
-                           (end-frac-int (interval-fraction-func (+ 1 to-date-t64)))
+                           (end-frac-int (interval-fraction-func (1+ to-date-t64)))
                            (diff-int (- end-frac-int start-frac-int))
                            (diff-int-numeric (inexact->exact diff-int)))
                       ;; Extra sanity check to ensure a number smaller than 1
                       (if (> diff-avg diff-int)
-                          (gnc-numeric-div diff-int-numeric diff-avg-numeric GNC-DENOM-AUTO GNC-RND-ROUND)
+                          (/ diff-int-numeric diff-avg-numeric)
                           1))
                     1))
                ;; If there is averaging, the report-title is extended
@@ -346,12 +346,11 @@ developing over time"))
           (define (collector->monetary c date)
             (gnc:make-gnc-monetary
              report-currency
-             (gnc-numeric-mul
-              (gnc:gnc-monetary-amount
-               (gnc:sum-collector-commodity
-                c report-currency
-                (lambda (a b) (exchange-fn a b date))))
-              averaging-multiplier currency-frac GNC-RND-ROUND)))
+             (* averaging-multiplier
+                (gnc:gnc-monetary-amount
+                 (gnc:sum-collector-commodity
+                  c report-currency
+                  (lambda (a b) (exchange-fn a b date)))))))
 
           ;; Add two or more gnc-monetary objects
           (define (monetary+ a . blist)
@@ -360,7 +359,7 @@ developing over time"))
                 (let ((b (apply monetary+ blist)))
                   (if (and (gnc:gnc-monetary? a) (gnc:gnc-monetary? b))
                       (let ((same-currency? (gnc-commodity-equal (gnc:gnc-monetary-commodity a) (gnc:gnc-monetary-commodity b)))
-                            (amount (gnc-numeric-add (gnc:gnc-monetary-amount a) (gnc:gnc-monetary-amount b) GNC-DENOM-AUTO GNC-RND-ROUND)))
+                            (amount (+ (gnc:gnc-monetary-amount a) (gnc:gnc-monetary-amount b))))
                         (if same-currency?
                             (gnc:make-gnc-monetary (gnc:gnc-monetary-commodity a) amount)
                             (warn "incompatible currencies in monetary+: " a b)))
@@ -368,7 +367,7 @@ developing over time"))
 
           ;; Extract value of gnc-monetary and return it as double
           (define (monetary->double monetary)
-            (gnc-numeric-to-double (gnc:gnc-monetary-amount monetary)))
+            (gnc:gnc-monetary-amount monetary))
 
           ;; copy of gnc:not-all-zeros using gnc-monetary
           (define (not-all-zeros data)
@@ -376,7 +375,7 @@ developing over time"))
               (begin
                 (if (null? list) #f
                     (or (car list) (myor (cdr list))))))
-            (cond ((gnc:gnc-monetary? data) (not (gnc-numeric-zero-p (gnc:gnc-monetary-amount data))))
+            (cond ((gnc:gnc-monetary? data) (not (zero? (gnc:gnc-monetary-amount data))))
                   ((list? data) (myor (map not-all-zeros data)))
                   (else #f)))
 
@@ -413,8 +412,8 @@ developing over time"))
                 (let ((sum 0))
                   (for-each
                    (lambda (a)
-                     (set! sum (+ sum (+ 1 (count-accounts (1+ current-depth)
-                                                           (gnc-account-get-children a))))))
+                     (set! sum (+ sum (1+ (count-accounts (1+ current-depth)
+                                                          (gnc-account-get-children a))))))
                    accts)
                   sum)
                 (length (filter show-acct? accts))))
@@ -503,10 +502,8 @@ developing over time"))
                                              xaccAccountGetName) (car b)))))
                            (else
                             (lambda (a b)
-                              (> (gnc-numeric-compare (gnc:gnc-monetary-amount (apply monetary+ (cadr a)))
-                                                      (gnc:gnc-monetary-amount (apply monetary+ (cadr b))))
-                                 0)))
-                           )))
+                              (> (gnc:gnc-monetary-amount (apply monetary+ (cadr a)))
+                                 (gnc:gnc-monetary-amount (apply monetary+ (cadr b)))))))))
           ;; Or rather sort by total amount?
           ;;(< (apply + (cadr a))
           ;;   (apply + (cadr b))))))
@@ -751,7 +748,7 @@ developing over time"))
                              (lambda (row)
                                (if (not (null? row))
                                    (monetary+ (car row) (sumrow (cdr row)))
-                                   (gnc:make-gnc-monetary report-currency (gnc-numeric-zero))))))
+                                   (gnc:make-gnc-monetary report-currency 0)))))
                          (gnc:html-table-append-column!
                           table
                           (sumtot (apply zip (map cadr all-data))))))
