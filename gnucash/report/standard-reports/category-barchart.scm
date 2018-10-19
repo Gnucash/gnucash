@@ -367,10 +367,6 @@ developing over time"))
                   (car (coll 'format gnc:make-gnc-monetary #f))
                   (gnc:warn "monetary+ expects 1 currency " (gnc:strify monetaries)))))
 
-          ;; Extract value of gnc-monetary and return it as double
-          (define (monetary->double monetary)
-            (gnc:gnc-monetary-amount monetary))
-
           ;; copy of gnc:not-all-zeros using gnc-monetary
           (define (not-all-zeros data)
             (define (myor list)
@@ -618,7 +614,7 @@ developing over time"))
                         (gnc:html-barchart-set-data!
                          chart
                          (apply zip (map (lambda (mlist)
-                                           (map monetary->double mlist))
+                                           (map gnc:gnc-monetary-amount mlist))
                                          (map cadr all-data)))))
 
                     ;; Labels and colors
@@ -639,7 +635,7 @@ developing over time"))
                         (gnc:html-linechart-set-data!
                          chart
                          (apply zip (map (lambda (mlist)
-                                           (map monetary->double mlist))
+                                           (map gnc:gnc-monetary-amount mlist))
                                          (map cadr all-data)))))
 
                     ;; Labels and colors
