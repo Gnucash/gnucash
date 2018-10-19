@@ -384,27 +384,6 @@ developing over time"))
                        #:ignore-closing? (gnc:account-is-inc-exp? acc)))))
              accounts))
 
-          ;; Calculates the net balance (profit or loss) of an account in
-          ;; the given time interval. date-list-entry is a pair containing
-          ;; the start- and end-date of that interval. If subacct?==#t,
-          ;; the subaccount's balances are included as well. Returns a
-          ;; double, exchanged into the report-currency by the above
-          ;; conversion function, and possibly with reversed sign.
-          (define (get-balance account date-list-entry subacct?)
-            ((if (reverse-balance? account)
-                 gnc:monetary-neg identity)
-             (if do-intervals?
-                 (collector->monetary
-                  (gnc:account-get-comm-balance-interval
-                   account
-                   (first date-list-entry)
-                   (second date-list-entry) subacct?)
-                  (second date-list-entry))
-                 (collector->monetary
-                  (gnc:account-get-comm-balance-at-date
-                   account date-list-entry subacct?)
-                  date-list-entry))))
-
           ;; Creates the <balance-list> to be used in the function
           ;; below.
           (define (account->balance-list account subacct?)
