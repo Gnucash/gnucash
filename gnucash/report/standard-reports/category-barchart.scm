@@ -352,18 +352,20 @@ developing over time"))
                   c report-currency
                   (lambda (a b) (exchange-fn a b date)))))))
 
-          ;; Add two or more gnc-monetary objects
-          (define (monetary+ a . blist)
-            (if (null? blist)
-                a
-                (let ((b (apply monetary+ blist)))
-                  (if (and (gnc:gnc-monetary? a) (gnc:gnc-monetary? b))
-                      (let ((same-currency? (gnc-commodity-equal (gnc:gnc-monetary-commodity a) (gnc:gnc-monetary-commodity b)))
-                            (amount (+ (gnc:gnc-monetary-amount a) (gnc:gnc-monetary-amount b))))
-                        (if same-currency?
-                            (gnc:make-gnc-monetary (gnc:gnc-monetary-commodity a) amount)
-                            (warn "incompatible currencies in monetary+: " a b)))
-                      (warn "wrong arguments for monetary+: " a b)))))
+          (define (monetaries-add . monetaries)
+            (let ((coll (gnc:make-commodity-collector)))
+              (for-each
+               (lambda (mon)
+                 (coll 'add (gnc:gnc-monetary-commodity mon) (gnc:gnc-monetary-amount mon)))
+               monetaries)
+              coll))
+
+          ;; Special case for monetaries-add whereby only 1 currency is expected
+          (define (monetary+ . monetaries)
+            (let ((coll (apply monetaries-add monetaries)))
+              (if (= 1 (gnc-commodity-collector-commodity-count coll))
+                  (car (coll 'format gnc:make-gnc-monetary #f))
+                  (gnc:warn "monetary+ expects 1 currency " (gnc:strify monetaries)))))
 
           ;; Extract value of gnc-monetary and return it as double
           (define (monetary->double monetary)
