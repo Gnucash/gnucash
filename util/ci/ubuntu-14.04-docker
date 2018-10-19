@@ -1,5 +1,5 @@
 from ubuntu:14.04
-run cat /etc/apt/sources.list
+run sed -i"" "s/^# deb-src/deb-src/" /etc/apt/sources.list
 run apt-get update -qq
 run apt-get build-dep -qq gnucash > /dev/null
 run apt-get install -qq git bash-completion cmake3 make swig xsltproc libdbd-sqlite3 texinfo ninja-build libboost-all-dev libgtk-3-dev libwebkit2gtk-3.0-dev > /dev/null
