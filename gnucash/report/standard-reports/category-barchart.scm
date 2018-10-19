@@ -128,10 +128,7 @@ developing over time"))
                         (N_ "Show the average weekly amount during the reporting period."))
                 (vector 'DayDelta
                         (N_ "Daily")
-                        (N_ "Show the average daily amount during the reporting period."))
-                )
-          ))
-        )
+                        (N_ "Show the average daily amount during the reporting period."))))))
 
 
     ;; Accounts tab
@@ -170,10 +167,7 @@ developing over time"))
                     (N_ "Use bar charts."))
             (vector 'linechart
                     (N_ "Line Chart")
-                    (N_ "Use line charts."))
-            )
-      )
-     )
+                    (N_ "Use line charts.")))))
 
     (add-option
      (gnc:make-simple-boolean-option
@@ -265,11 +259,9 @@ developing over time"))
          (work-to-do 0)
          (show-table? (get-option gnc:pagename-display (N_ "Show table")))
          (document (gnc:make-html-document))
-         (chart
-          (if  (eqv? chart-type 'barchart)
-               (gnc:make-html-barchart)
-               (gnc:make-html-linechart)
-               ))
+         (chart (if (eqv? chart-type 'barchart)
+                    (gnc:make-html-barchart)
+                    (gnc:make-html-linechart)))
          (table (gnc:make-html-table))
          (topl-accounts (gnc:filter-accountlist-type
                          account-types
@@ -281,7 +273,7 @@ developing over time"))
     (define (show-acct? a)
       (member a accounts))
 
-    (define tree-depth (if (equal? account-levels 'all)
+    (define tree-depth (if (eq? account-levels 'all)
                            (gnc:get-current-account-tree-depth)
                            account-levels))
 
@@ -300,20 +292,17 @@ developing over time"))
                     (let* ((start-frac-avg (averaging-fraction-func from-date-t64))
                            (end-frac-avg (averaging-fraction-func (+ 1 to-date-t64)))
                            (diff-avg (- end-frac-avg start-frac-avg))
-                           (diff-avg-numeric (/
-                                              (inexact->exact (round (* diff-avg 1000000))) ; 6 decimals precision
-                                              1000000))
+                           (diff-avg-numeric (/ (inexact->exact (round (* diff-avg 1000000))) ; 6 decimals precision
+                                                1000000))
                            (start-frac-int (interval-fraction-func from-date-t64))
                            (end-frac-int (interval-fraction-func (+ 1 to-date-t64)))
                            (diff-int (- end-frac-int start-frac-int))
-                           (diff-int-numeric (/
-                                              (inexact->exact diff-int) 1))
-                           )
+                           (diff-int-numeric (inexact->exact diff-int)))
                       ;; Extra sanity check to ensure a number smaller than 1
                       (if (> diff-avg diff-int)
                           (gnc-numeric-div diff-int-numeric diff-avg-numeric GNC-DENOM-AUTO GNC-RND-ROUND)
-                          1/1))
-                    1/1))
+                          1))
+                    1))
                ;; If there is averaging, the report-title is extended
                ;; accordingly.
                (report-title
@@ -355,8 +344,6 @@ developing over time"))
           ;; instead of division to avoid division-by-zero issues) in case
           ;; the user wants to see the amounts averaged over some value.
           (define (collector->monetary c date)
-            (if (not (number? date))
-                (throw 'wrong))
             (gnc:make-gnc-monetary
              report-currency
              (gnc-numeric-mul
@@ -364,8 +351,7 @@ developing over time"))
                (gnc:sum-collector-commodity
                 c report-currency
                 (lambda (a b) (exchange-fn a b date))))
-              averaging-multiplier currency-frac GNC-RND-ROUND)
-             ))
+              averaging-multiplier currency-frac GNC-RND-ROUND)))
 
           ;; Add two or more gnc-monetary objects
           (define (monetary+ a . blist)
@@ -378,9 +364,7 @@ developing over time"))
                         (if same-currency?
                             (gnc:make-gnc-monetary (gnc:gnc-monetary-commodity a) amount)
                             (warn "incompatible currencies in monetary+: " a b)))
-                      (warn "wrong arguments for monetary+: " a b)))
-                )
-            )
+                      (warn "wrong arguments for monetary+: " a b)))))
 
           ;; Extract value of gnc-monetary and return it as double
           (define (monetary->double monetary)
@@ -429,7 +413,7 @@ developing over time"))
                 (let ((sum 0))
                   (for-each
                    (lambda (a)
-                     (set! sum (+ sum (+ 1 (count-accounts (+ 1 current-depth)
+                     (set! sum (+ sum (+ 1 (count-accounts (1+ current-depth)
                                                            (gnc-account-get-children a))))))
                    accts)
                   sum)
@@ -463,7 +447,7 @@ developing over time"))
                                    res)))
                        (set! res (append
                                   (traverse-accounts
-                                   (+ 1 current-depth)
+                                   (1+ current-depth)
                                    (gnc-account-get-children a))
                                   res))))
                    accts)
@@ -543,7 +527,7 @@ developing over time"))
              (set! date-iso-string-list (datelist->stringlist dates-list))
              (qof-date-format-set save-fmt)
              ;; Set chart title, subtitle etc.
-             (if  (eqv? chart-type 'barchart)
+             (if  (eq? chart-type 'barchart)
                   (begin
                     (gnc:html-barchart-set-title! chart report-title)
                     (gnc:html-barchart-set-subtitle!
@@ -551,8 +535,8 @@ developing over time"))
                                    (if do-intervals?
                                        (_ "~a to ~a")
                                        (_ "Balances ~a to ~a"))
-                                   (gnc:html-string-sanitize (qof-print-date from-date-t64))
-                                   (gnc:html-string-sanitize (qof-print-date to-date-t64))))
+                                   (qof-print-date from-date-t64)
+                                   (qof-print-date to-date-t64)))
 
                     (gnc:html-barchart-set-width! chart width)
                     (gnc:html-barchart-set-height! chart height)
@@ -577,8 +561,8 @@ developing over time"))
                                    (if do-intervals?
                                        (_ "~a to ~a")
                                        (_ "Balances ~a to ~a"))
-                                   (gnc:html-string-sanitize (qof-print-date from-date-t64))
-                                   (gnc:html-string-sanitize (qof-print-date to-date-t64))))
+                                   (qof-print-date from-date-t64)
+                                   (qof-print-date to-date-t64)))
 
                     (gnc:html-linechart-set-width! chart width)
                     (gnc:html-linechart-set-height! chart height)
@@ -602,8 +586,8 @@ developing over time"))
              ;; 'other' category and add a link to a new report with just
              ;; those accounts.
              (if (> (length all-data) max-slices)
-                 (let* ((start (take all-data (- max-slices 1)))
-                        (finish (drop all-data (- max-slices 1)))
+                 (let* ((start (take all-data (1- max-slices)))
+                        (finish (drop all-data (1- max-slices)))
                         (other-sum (map
                                     (lambda (l) (apply monetary+ l))
                                     (apply zip (map cadr finish)))))
@@ -629,7 +613,7 @@ developing over time"))
              ;; transposes the data, i.e. swaps rows and columns. Pretty
              ;; cool, eh? Courtesy of dave_p.
              (gnc:report-percent-done 92)
-             (if  (eqv? chart-type 'barchart)
+             (if  (eq? chart-type 'barchart)
                   (begin ;; bar chart
                     (if (not (null? all-data))
                         (gnc:html-barchart-set-data!
@@ -650,8 +634,7 @@ developing over time"))
                                 all-data))
                     (gnc:html-barchart-set-col-colors!
                      chart
-                     (gnc:assign-colors (length all-data)))
-                    )
+                     (gnc:assign-colors (length all-data))))
                   (begin ;; line chart
                     (if (not (null? all-data))
                         (gnc:html-linechart-set-data!
@@ -672,9 +655,7 @@ developing over time"))
                                 all-data))
                     (gnc:html-linechart-set-col-colors!
                      chart
-                     (gnc:assign-colors (length all-data)))
-                    )
-                  )
+                     (gnc:assign-colors (length all-data)))))
 
              ;; set the URLs; the slices are links to other reports
              ;;      (gnc:report-percent-done 96)
@@ -703,14 +684,14 @@ developing over time"))
              ;;                               (list gnc:pagename-accounts optname-accounts
              ;;                                     (cons acct subaccts))
              ;;                               (list gnc:pagename-accounts optname-levels
-             ;;                                     (+ 1 tree-depth))
+             ;;                                     (1+ tree-depth))
              ;;                               (list gnc:pagename-general
              ;;                                     gnc:optname-reportname
              ;;                                     ((if show-fullname?
              ;;                                          gnc-account-get-full-name
              ;;                                          xaccAccountGetName) acct))))))))
              ;;                    all-data)))
-             ;;               (if  (eqv? chart-type 'barchart)
+             ;;               (if  (eq? chart-type 'barchart)
              ;;                 (begin ;; bar chart
              ;;                   (gnc:html-barchart-set-button-1-bar-urls!
              ;;                    chart (append urls urls))
@@ -741,12 +722,8 @@ developing over time"))
                                (begin
                                  (gnc:html-table-append-column!
                                   table (car col))
-                                 (addcol (cdr col))
-                                 )
-                               ))
-                         ))
-                     (addcol (map cadr all-data))
-                     )
+                                 (addcol (cdr col)))))))
+                     (addcol (map cadr all-data)))
 
                    (gnc:html-table-set-col-headers!
                     table
@@ -761,9 +738,7 @@ developing over time"))
                           all-data)
                      (if (> (gnc:html-table-num-columns table) 2)
                          (list (_ "Grand Total"))
-                         '()
-                         )
-                     ))
+                         '())))
 
                    (if (> (gnc:html-table-num-columns table) 2)
                        (letrec
@@ -771,24 +746,15 @@ developing over time"))
                              (lambda (row)
                                (if (null? row)
                                    '()
-                                   (cons (sumrow (car row)) (sumtot (cdr row)))
-                                   )
-                               )
-                             )
+                                   (cons (sumrow (car row)) (sumtot (cdr row))))))
                             (sumrow
                              (lambda (row)
                                (if (not (null? row))
                                    (monetary+ (car row) (sumrow (cdr row)))
-                                   (gnc:make-gnc-monetary report-currency (gnc-numeric-zero))
-                                   )
-                               )
-                             ))
+                                   (gnc:make-gnc-monetary report-currency (gnc-numeric-zero))))))
                          (gnc:html-table-append-column!
                           table
-                          (sumtot (apply zip (map cadr all-data)))
-                          )
-                         )
-                       )
+                          (sumtot (apply zip (map cadr all-data))))))
                    ;; set numeric columns to align right
                    (for-each
                     (lambda (col)
@@ -796,10 +762,7 @@ developing over time"))
                        table col "td"
                        'attribute (list "class" "number-cell")))
                     '(1 2 3 4 5 6 7 8 9 10 11 12 13 14))
-                   (gnc:html-document-add-object! document table)
-                   ) ;; begin if
-                 )
-             )
+                   (gnc:html-document-add-object! document table))))
 
            ;; else if empty data
            (gnc:html-document-add-object!
