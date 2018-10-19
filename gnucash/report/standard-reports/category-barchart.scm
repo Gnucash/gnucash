@@ -369,12 +369,8 @@ developing over time"))
 
           ;; copy of gnc:not-all-zeros using gnc-monetary
           (define (not-all-zeros data)
-            (define (myor list)
-              (begin
-                (if (null? list) #f
-                    (or (car list) (myor (cdr list))))))
             (cond ((gnc:gnc-monetary? data) (not (zero? (gnc:gnc-monetary-amount data))))
-                  ((list? data) (myor (map not-all-zeros data)))
+                  ((list? data) (or-map not-all-zeros data))
                   (else #f)))
 
           ;; Calculates the net balance (profit or loss) of an account in
