@@ -142,20 +142,20 @@
     txn))
 
 (define (gnc-pricedb-create currency commodity time64 value)
-  ;; I think adding pricedb for a DMY date will clobber any existing
-  ;; pricedb entry for that date.
-  (let ((price (gnc-price-create (gnc-get-current-book)))
-        (pricedb (gnc-pricedb-get-db (gnc-get-current-book))))
-    (gnc-price-begin-edit price)
-    (gnc-price-set-commodity price commodity)
-    (gnc-price-set-currency price currency)
-    (gnc-price-set-time64 price time64)
-    (gnc-price-set-source price PRICE-SOURCE-XFER-DLG-VAL)
-    (gnc-price-set-source-string price "test-price")
-    (gnc-price-set-typestr price "test")
-    (gnc-price-set-value price value)
-    (gnc-price-commit-edit price)
-    (gnc-pricedb-add-price pricedb price)))
+  ;; does not check for pre-existing pricedb data on date
+  (unless (gnc-commodity-equiv currency commodity)
+    (let ((price (gnc-price-create (gnc-get-current-book)))
+          (pricedb (gnc-pricedb-get-db (gnc-get-current-book))))
+      (gnc-price-begin-edit price)
+      (gnc-price-set-commodity price commodity)
+      (gnc-price-set-currency price currency)
+      (gnc-price-set-time64 price time64)
+      (gnc-price-set-source price PRICE-SOURCE-XFER-DLG-VAL)
+      (gnc-price-set-source-string price "test-price")
+      (gnc-price-set-typestr price "test")
+      (gnc-price-set-value price value)
+      (gnc-price-commit-edit price)
+      (gnc-pricedb-add-price pricedb price))))
 
 ;; When creating stock transactions always put the stock account and the number
 ;; of shares second, using negative numbers for a sale. e.g., to buy 100 shares
