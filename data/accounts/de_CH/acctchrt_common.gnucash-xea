@@ -38,7 +38,7 @@
       Grundlegende Kontenstruktur
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Die meisten Anwender benötigen diese grundlegende Kontenstruktur. Sie finden hier die allgemein üblichen Konten wie Giro-, Sparkonto, Bargeld, Kreditkarte, Erträge und verschiedene Ausgaben.
+    Die meisten privaten, aber nicht die geschäftlichen Anwender benötigen diese grundlegende Kontenstruktur. Sie finden hier die allgemein üblichen Konten wie Giro-, Sparkonto, Bargeld, Kreditkarte, Erträge und verschiedene Ausgaben.
   </gnc-act:long-description>
   <gnc-act:start-selected>1</gnc-act:start-selected>
 <gnc:account version="2.0.0">
