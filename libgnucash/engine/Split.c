@@ -1240,6 +1240,9 @@ qofSplitSetValue (Split *split, gnc_numeric amt)
 void
 xaccSplitSetValue (Split *s, gnc_numeric amt)
 {
+    const gnc_commodity *currency;
+    const gnc_commodity *commodity;
+
     gnc_numeric new_val;
     if (!s) return;
 
@@ -1249,8 +1252,19 @@ xaccSplitSetValue (Split *s, gnc_numeric amt)
            s->value.num, s->value.denom, amt.num, amt.denom);
 
     xaccTransBeginEdit (s->parent);
-    new_val = gnc_numeric_convert(amt, get_currency_denom(s),
+
+    currency = xaccTransGetCurrency (s->parent);
+    commodity = xaccAccountGetCommodity (s->acc);
+
+    if (gnc_commodity_equiv(currency, commodity))
+    {
+        // if transaction and account currency are the same, use the accounts SCU as denom for split entry
+        new_val = gnc_numeric_convert(amt, xaccAccountGetCommoditySCU(s->acc),
+                                      GNC_HOW_RND_ROUND_HALF_UP);;
+    } else {
+        new_val = gnc_numeric_convert(amt, get_currency_denom(s),
                                   GNC_HOW_RND_ROUND_HALF_UP);
+    }
     if (gnc_numeric_check(new_val) == GNC_ERROR_OK &&
         !(gnc_numeric_zero_p (new_val) && !gnc_numeric_zero_p (amt)))
         s->value = new_val;
