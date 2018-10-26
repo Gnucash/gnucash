@@ -1313,10 +1313,14 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
             s->amount = gnc_numeric_convert(value,
                                             get_commodity_denom(s),
                                             GNC_HOW_RND_ROUND_HALF_UP);
+            s->value = gnc_numeric_convert(value,
+                                           get_commodity_denom(s),
+                                           GNC_HOW_RND_ROUND_HALF_UP);
+        } else {
+            s->value = gnc_numeric_convert(value,
+                                           get_currency_denom(s),
+                                           GNC_HOW_RND_ROUND_HALF_UP);
         }
-        s->value = gnc_numeric_convert(value,
-                                       get_currency_denom(s),
-                                       GNC_HOW_RND_ROUND_HALF_UP);
     }
     else if (gnc_commodity_equiv(commodity, base_currency))
     {
