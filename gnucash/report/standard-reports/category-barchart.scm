@@ -327,9 +327,6 @@ developing over time"))
                (other-anchor "")
                (all-data '()))
 
-          (define (datelist->stringlist dates-list)
-            (map qof-print-date dates-list))
-
           ;; Converts a commodity-collector into gnc-monetary in the report's
           ;; currency using the exchange-fn calculated above. Returns a gnc-monetary
           ;; multiplied by the averaging-multiplier (smaller than one; multiplication
@@ -554,9 +551,9 @@ developing over time"))
            (let ((dates-list (if do-intervals?
                                  (list-head dates-list (1- (length dates-list)))
                                  dates-list)))
-             (set! date-string-list (datelist->stringlist dates-list))
+             (set! date-string-list (map qof-print-date dates-list))
              (qof-date-format-set QOF-DATE-FORMAT-ISO)
-             (set! date-iso-string-list (datelist->stringlist dates-list))
+             (set! date-iso-string-list (map qof-print-date dates-list))
              (qof-date-format-set save-fmt)
              ;; Set chart title, subtitle etc.
              (if  (eq? chart-type 'barchart)
