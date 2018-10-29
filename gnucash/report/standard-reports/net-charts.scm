@@ -258,71 +258,13 @@
                 (warn "incompatible currencies in monetary+: " a b)))
           (warn "wrong arguments for monetary+: " a b)))
 
-    (define (split->date s)
-      (xaccTransGetDate (xaccSplitGetParent s)))
-
-    ;; this function will scan through the account splitlist, building
-    ;; a list of balances along the way. it will use the dates
-    ;; specified in the variable dates-list.
-    ;; input: account
-    ;;  uses: dates-list (list of time64)
-    ;;   out: (list account bal0 bal1 ...)
+    ;; gets an account alist balances
+    ;; output: (list acc bal0 bal1 bal2 ...)
     (define (account->balancelist account)
-
-      ;; the test-closing? function will enable testing closing status
-      ;; for inc-exp only. this may squeeze more speed for net-worth charts.
-      (define test-closing?
-        (gnc:account-is-inc-exp? account))
-
-      (let loop ((splits (xaccAccountGetSplitList account))
-                 (dates dates-list)
-                 (currentbal 0)
-                 (lastbal 0)
-                 (balancelist '()))
-        (cond
-
-         ;; end of dates. job done!
-         ((null? dates)
-          (cons account (reverse balancelist)))
-
-         ;; end of splits, but still has dates. pad with last-bal
-         ;; until end of dates.
-         ((null? splits)
-          (loop '()
-                (cdr dates)
-                currentbal
-                lastbal
-                (cons lastbal balancelist)))
-
-         (else
-          (let* ((this (car splits))
-                 (rest (cdr splits))
-                 (currentbal (if (and test-closing?
-                                      (xaccTransGetIsClosingTxn (xaccSplitGetParent this)))
-                                 currentbal
-                                 (+ (xaccSplitGetAmount this) currentbal)))
-                 (next (and (pair? rest) (car rest))))
-
-            (cond
-             ;; the next split is still before date
-             ((and next (< (split->date next) (car dates)))
-              (loop rest dates currentbal lastbal balancelist))
-
-             ;; this split after date, add previous bal to balancelist
-             ((< (car dates) (split->date this))
-              (loop splits
-                    (cdr dates)
-                    lastbal
-                    lastbal
-                    (cons lastbal balancelist)))
-
-             ;; this split before date, next split after date, or end.
-             (else
-              (loop rest
-                    (cdr dates)
-                    currentbal
-                    currentbal
-                    (cons currentbal balancelist)))))))))
+      (cons account
+            (gnc:account-get-balances-at-dates
+             account dates-list
+             #:ignore-closing? (gnc:account-is-inc-exp? account))))
 
     ;; This calculates the balances for all the 'account-balances' for
     ;; each element of the list 'dates'. Uses the collector->monetary
@@ -353,7 +295,7 @@
       (define (acc-balances->list-of-balances lst)
         ;; input: (list (list acc1 bal0 bal1 bal2 ...)
         ;;              (list acc2 bal0 bal1 bal2 ...) ...)
-        ;; whereby list of balances are numbers in the acc's currency
+        ;; whereby list of balances are gnc-monetary objects
         ;; output: (list <mon-coll0> <mon-coll1> <mon-coll2>)
         (define list-of-collectors
           (let loop ((n (length dates)) (result '()))
@@ -365,8 +307,8 @@
                             (list-of-balances (cdar lst)))
               (when (pair? list-of-balances)
                 ((car list-of-collectors) 'add
-                 (xaccAccountGetCommodity (caar lst))
-                 (car list-of-balances))
+                 (gnc:gnc-monetary-commodity (car list-of-balances))
+                 (gnc:gnc-monetary-amount (car list-of-balances)))
                 (innerloop (cdr list-of-collectors) (cdr list-of-balances))))
             (loop (cdr lst))))
         list-of-collectors)

@@ -695,6 +695,7 @@
 (export gnc:commodity-collectorlist-get-merged)
 (export gnc-commodity-collector-commodity-count)
 (export gnc:account-get-balance-at-date)
+(export gnc:account-get-balances-at-dates)
 (export gnc:account-get-comm-balance-at-date)
 (export gnc:account-get-comm-value-interval)
 (export gnc:account-get-comm-value-at-date)
