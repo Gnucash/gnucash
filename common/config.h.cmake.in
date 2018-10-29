@@ -356,7 +356,7 @@
 # endif
 #else
 # ifndef WORDS_BIGENDIAN
-#cmakedefine WORDS_BIGENDIAN
+#  cmakedefine WORDS_BIGENDIAN 1
 # endif
 #endif
 
