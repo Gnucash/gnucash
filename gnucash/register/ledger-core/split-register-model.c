@@ -30,6 +30,7 @@
 #include "gnc-engine.h"
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
+#include "gnc-uri-utils.h"
 #include "gnc-warnings.h"
 #include "pricecell.h"
 #include "recncell.h"
@@ -554,21 +555,20 @@ gnc_split_register_get_associate_tooltip (VirtualLocation virt_loc,
     // Check for uri is empty or NULL
     if (g_strcmp0 (uri, "") != 0 && g_strcmp0 (uri, NULL) != 0)
     {
-        gboolean valid_path_head = FALSE;
+        const gchar *new_uri;
+        gchar *ret_uri = NULL;
         gchar *path_head = gnc_prefs_get_string (GNC_PREFS_GROUP_GENERAL, "assoc-head");
+        gboolean file_path = gnc_uri_absolute_associate_file_path (uri, path_head, &ret_uri);
 
-        if ((path_head != NULL) && (g_strcmp0 (path_head, "") != 0)) // not default entry
-            valid_path_head = TRUE;
-
-        if (valid_path_head && g_str_has_prefix (uri,"file:/") && !g_str_has_prefix (uri,"file://"))
-        {
-            const gchar *part = uri + strlen ("file:");
-            gchar *new_uri = g_strconcat (path_head, part, NULL);
-            g_free (path_head);
-            return g_strdup (new_uri);
-        }
+        if (file_path)
+            new_uri = g_strdup (ret_uri);
         else
-            return g_strdup (uri);
+            new_uri = g_strdup (uri);
+
+        g_free (path_head);
+        g_free (ret_uri);
+
+        return g_strdup (new_uri);
     }
     else
         return NULL;
@@ -826,10 +826,14 @@ gnc_split_register_get_associate_entry (VirtualLocation virt_loc,
     // Check for uri is empty or NULL
     if (g_strcmp0 (uri, "") != 0 && g_strcmp0 (uri, NULL) != 0)
     {
-        if (g_str_has_prefix (uri, "file:"))
+        gchar *scheme = gnc_uri_parse_scheme (uri);
+
+        if (scheme == NULL || g_strcmp0 (scheme, "file") == 0)
             associate = 'f';
         else
             associate = 'w';
+
+        g_free (scheme);
     }
     else
         associate = ' ';
