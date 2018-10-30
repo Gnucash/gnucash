@@ -657,6 +657,9 @@ gnc_tree_view_account_color_update (gpointer gsettings, gchar *key, gpointer use
     priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(view);
     if (g_strcmp0 (key, GNC_PREF_ACCOUNT_COLOR) == 0)
         priv->show_account_color = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, key);
+
+    // do a refilter so the tree view background color gets updated
+    gnc_tree_view_account_refilter (view);
 }
 
 /** Add the account color background data function to the GncTreeViewAccount column to
