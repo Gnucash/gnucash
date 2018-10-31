@@ -60,7 +60,8 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static void gnc_tree_view_account_class_init (GncTreeViewAccountClass *klass);
 static void gnc_tree_view_account_init (GncTreeViewAccount *view);
 static void gnc_tree_view_account_finalize (GObject *object);
-static gboolean gnc_tree_view_search_compare (GtkTreeModel *model, gint column, const gchar *key, GtkTreeIter *iter, gpointer search_data);
+static gboolean gnc_tree_view_search_compare (GtkTreeModel *model, gint column,
+        const gchar *key, GtkTreeIter *iter, gpointer search_data);
 
 static void gtva_update_column_names (GncTreeView *view);
 static void gtva_currency_changed_cb (void);
@@ -86,7 +87,8 @@ static void acc_color_data_func (GtkTreeViewColumn *col,
                                  GtkTreeIter       *iter,
                                  gpointer           view);
 
-static void gnc_tree_view_account_color_update (gpointer gsettings, gchar *key, gpointer user_data);
+static void gnc_tree_view_account_color_update (gpointer gsettings,
+         gchar *key, gpointer user_data);
 
 
 typedef struct GncTreeViewAccountPrivate
@@ -930,7 +932,7 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
 
     gnc_tree_view_add_toggle_column(view, _("Placeholder"),
                                     /* Translators: This string has a context prefix; the translation
-                                    	must only contain the part after the | character. */
+                                        must only contain the part after the | character. */
                                     Q_("Column letter for 'Placeholder'|P"),
                                     "placeholder",
                                     GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER,
@@ -993,10 +995,10 @@ gnc_tree_view_account_new (gboolean show_root)
 /*                   Auxiliary Functions                    */
 /************************************************************/
 
-#define debug_path(fn, path) {				\
+#define debug_path(fn, path) {              \
     gchar *path_string = gtk_tree_path_to_string(path); \
-    fn("tree path %s", path_string);			\
-    g_free(path_string);				\
+    fn("tree path %s", path_string);            \
+    g_free(path_string);                \
   }
 
 static GtkTreePath *
@@ -1778,10 +1780,10 @@ gtva_currency_changed_cb (void)
  */
 static void
 account_cell_property_data_func (GtkTreeViewColumn *tree_column,
-				 GtkCellRenderer *cell,
-				 GtkTreeModel *s_model,
-				 GtkTreeIter *s_iter,
-				 gpointer key)
+                 GtkCellRenderer *cell,
+                 GtkTreeModel *s_model,
+                 GtkTreeIter *s_iter,
+                 gpointer key)
 {
     GncTreeViewAccount *view;
     Account *account;
@@ -1789,11 +1791,9 @@ account_cell_property_data_func (GtkTreeViewColumn *tree_column,
 
     g_return_if_fail (GTK_IS_TREE_MODEL_SORT (s_model));
     account = gnc_tree_view_account_get_account_from_iter(s_model, s_iter);
-    qof_instance_get (QOF_INSTANCE (account),
-		      key, &string,
-		      NULL);
+    qof_instance_get (QOF_INSTANCE (account), key, &string, NULL);
     if (string == NULL)
-	string = "";
+        string = "";
 
     g_object_set (G_OBJECT (cell), "text", string, "xalign", 0.0, NULL);
 
@@ -2270,15 +2270,12 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
     g_signal_connect(renderer, "toggled",
                      G_CALLBACK(gppat_filter_visible_toggled_cb), fd);
 
-    gtk_tree_view_insert_column_with_data_func
-    (view,
-     -1, NULL, renderer,
-     gppat_filter_visible_set_func, fd, NULL);
+    gtk_tree_view_insert_column_with_data_func (view, -1, NULL, renderer,
+                     gppat_filter_visible_set_func, fd, NULL);
 
-    gtk_tree_view_insert_column_with_attributes
-    (view,
-     -1, _("Account Types"), gtk_cell_renderer_text_new(),
-     "text", GNC_TREE_MODEL_ACCOUNT_TYPES_COL_NAME, NULL);
+    gtk_tree_view_insert_column_with_attributes (view,
+            -1, _("Account Types"), gtk_cell_renderer_text_new(),
+            "text", GNC_TREE_MODEL_ACCOUNT_TYPES_COL_NAME, NULL);
 
     /* Wire up the rest of the callbacks */
     gtk_builder_connect_signals(builder, fd);
@@ -2643,7 +2640,9 @@ gnc_tree_view_account_set_notes_edited(GncTreeViewAccount *view,
     gtva_set_column_editor(view, priv->notes_column, edited_cb);
 }
 
-static gboolean gnc_tree_view_search_compare (GtkTreeModel *model, gint column, const gchar *key, GtkTreeIter *iter, gpointer search_data)
+static
+gboolean gnc_tree_view_search_compare (GtkTreeModel *model, gint column,
+        const gchar *key, GtkTreeIter *iter, gpointer search_data)
 {
     gchar *normalized_key;
     gchar *case_normalized_key = NULL;
@@ -2703,11 +2702,13 @@ static gboolean gnc_tree_view_search_compare (GtkTreeModel *model, gint column, 
 void gnc_tree_view_account_set_editing_started_cb(GncTreeViewAccount *view,
     GFunc editing_started_cb, gpointer editing_cb_data)
 {
-    gnc_tree_view_set_editing_started_cb (GNC_TREE_VIEW(view), editing_started_cb, editing_cb_data);
+    gnc_tree_view_set_editing_started_cb (GNC_TREE_VIEW(view),
+            editing_started_cb, editing_cb_data);
 }
 
 void gnc_tree_view_account_set_editing_finished_cb(GncTreeViewAccount *view,
     GFunc editing_finished_cb, gpointer editing_cb_data)
 {
-    gnc_tree_view_set_editing_finished_cb (GNC_TREE_VIEW(view), editing_finished_cb, editing_cb_data);
+    gnc_tree_view_set_editing_finished_cb (GNC_TREE_VIEW(view),
+            editing_finished_cb, editing_cb_data);
 }
