@@ -15,16 +15,20 @@ note that GnuCash uses accounts instead of categories to track \
 income and expenses. For more information on income and expense \
 accounts, please see the GnuCash online manual.")
 
- N_( "Create new accounts by clicking the New button in the main window \
-tool bar. This will bring up a dialog box where you can enter \
-account details. For more information on choosing an account type \
-or setting up a chart of accounts, please see the GnuCash online \
-manual.")
+ N_( "It is possible to change which columns display in the Chart of \
+Accounts. Just locate the triangle at the far right of the column \
+headings, and click it to see the different columns available.")
 
  N_( "Click the right mouse button (control-click in Mac OS X) in the \
 Accounts tab of the main window to bring up the \
 account menu options. Within each register, clicking the right \
 mouse button brings up the transaction menu options.")
+
+ N_( "Create new accounts by clicking the New button in the main window \
+tool bar. This will bring up a dialog box where you can enter \
+account details. For more information on choosing an account type \
+or setting up a chart of accounts, please see the GnuCash online \
+manual.")
 
  N_( "To enter multiple-split transactions such as a paycheck with \
 multiple deductions, click the Split button in the tool bar. \
@@ -66,6 +70,11 @@ move between deposits and withdrawals.")
 click on the Transfer button in the register toolbar, select the \
 accounts, and the Currency Transfer options for entering the exchange \
 rate or the other currency's amount will be available.")
+
+ N_( "You can set the Security Editor screen to display the Quote Source \
+ of a security, which makes it easy to see which online sources your \
+ securities use. Click the triangle at the far right of the column \
+ headings to change the display.")
 
  N_( "You can pack multiple reports into a single window,  \
 providing all the financial information you want at a glance. \
