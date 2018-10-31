@@ -299,6 +299,31 @@ sort_cb_setup (GtkTreeModel *f_model,
 }
 
 static gint
+sort_by_last_reconcile_date (GtkTreeModel *f_model,
+                             GtkTreeIter *f_iter1,
+                             GtkTreeIter *f_iter2,
+                             gpointer user_data)
+{
+    const Account *account1, *account2;
+    time64 account1_date, account2_date;
+
+    sort_cb_setup (f_model, f_iter1, f_iter2, &account1, &account2);
+
+    if (!xaccAccountGetReconcileLastDate (account1, &account1_date))
+        account1_date = 0;
+
+    if (!xaccAccountGetReconcileLastDate (account2, &account2_date))
+        account2_date = 0;
+
+    if (account1_date < account2_date)
+        return -1;
+    else if (account1_date > account2_date)
+        return 1;
+    else
+        return xaccAccountOrder (account1, account2);
+}
+
+static gint
 sort_by_string (GtkTreeModel *f_model,
                 GtkTreeIter *f_iter1,
                 GtkTreeIter *f_iter2,
@@ -834,7 +859,7 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
                                   "Last Reconcile Date",
                                   GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED_DATE,
                                   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-                                  sort_by_string);
+                                  sort_by_last_reconcile_date);
 
     gnc_tree_view_add_numeric_column(view, _("Future Minimum"), "future_min",
                                      SAMPLE_ACCOUNT_VALUE,
