@@ -893,20 +893,23 @@ are used."))))
 
         (case report-type
           ((balsheet)
-           (let* ((report-dates (if incr
-                                    (gnc:make-date-list startdate enddate incr)
-                                    (list enddate)))
-                  (get-cell-monetary-fn (lambda (account col-datum)
-                                          (let* ((col-date (gnc:time64-end-day-time col-datum)))
-                                            (gnc:make-gnc-monetary
-                                             (xaccAccountGetCommodity account)
-                                             (xaccAccountGetBalanceAsOfDate
-                                              account
-                                              (gnc:time64-end-day-time col-date))))))
-                  (get-cell-anchor-fn (lambda (account col-datum)
+           (let* ((report-dates (map gnc:time64-end-day-time
+                                     (if incr
+                                         (gnc:make-date-list startdate enddate incr)
+                                         (list enddate))))
+                  (accounts-balances (map
+                                      (lambda (acc)
+                                        (cons acc
+                                              (gnc:account-get-balances-at-dates acc report-dates)))
+                                      accounts))
+                  (get-cell-monetary-fn (lambda (account col-idx)
+                                          (let ((account-balance-list (assoc account accounts-balances)))
+                                            (and account-balance-list
+                                                 (list-ref account-balance-list (1+ col-idx))))))
+                  (get-cell-anchor-fn (lambda (account col-idx)
                                         (let* ((splits (xaccAccountGetSplitList account))
                                                (split-date (lambda (s) (xaccTransGetDate (xaccSplitGetParent s))))
-                                               (date (gnc:time64-end-day-time col-datum))
+                                               (date (list-ref report-dates col-idx))
                                                (valid-split? (lambda (s) (< (split-date s) date)))
                                                (valid-splits (filter valid-split? splits))
                                                (split (and (pair? valid-splits)
@@ -921,8 +924,9 @@ are used."))))
                                      (list "General" "Report's currency" (or common-currency (gnc-default-report-currency)))
                                      (list "General" "Price Source" price-source)
                                      (list "Accounts" "Accounts" (append asset-accounts liability-accounts))))))
-                  (get-col-header-fn (lambda (accounts col-datum)                                      
-                                       (let* ((header (qof-print-date col-datum))
+                  (get-col-header-fn (lambda (accounts col-idx)
+                                       (let* ((date (list-ref report-dates col-idx))
+                                              (header (qof-print-date date))
                                               (cell (gnc:make-html-table-cell/markup
                                                      "total-label-cell" header)))
                                          (gnc:html-table-cell-set-style!
@@ -937,7 +941,7 @@ are used."))))
                                                 (negate-amounts? #f))
                                   (add-multicolumn-acct-table
                                    table title accounts
-                                   maxindent get-cell-monetary-fn report-dates
+                                   maxindent get-cell-monetary-fn (iota (length report-dates))
                                    #:omit-zb-bals? omit-zb-bals?
                                    #:show-zb-accts? show-zb-accts?
                                    #:disable-account-indent? disable-account-indent?
