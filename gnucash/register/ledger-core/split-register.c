@@ -510,8 +510,10 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
                 in_num = xaccAccountGetLastNum (account);
             else
                 in_num = gnc_get_num_action (NULL, split);
+
             if (!gnc_dup_trans_dialog (gnc_split_register_get_parent (reg),
-                                   title, FALSE, &date, in_num, &out_num, NULL, NULL))
+                                   title, FALSE, &date, in_num, &out_num,
+                                   NULL, NULL, NULL, NULL))
             {
                 gnc_resume_gui_refresh ();
                 LEAVE("dup cancelled");
@@ -527,6 +529,7 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
         gnc_copy_split_onto_split (split, new_split, FALSE);
         if (new_act_num) /* if new number supplied by user dialog */
             gnc_set_num_action (NULL, new_split, out_num, NULL);
+
         xaccTransCommitEdit (trans);
 
         if (new_act_num && gnc_strisnum (out_num))
@@ -567,6 +570,7 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
         const char *in_tnum = NULL;
         char *out_num = NULL;
         char *out_tnum = NULL;
+        char *out_tassoc = NULL;
         time64 date;
         gboolean use_autoreadonly = qof_book_uses_autoreadonly(gnc_get_current_book());
 
@@ -587,7 +591,8 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
         }
 
         if (!gnc_dup_trans_dialog (gnc_split_register_get_parent (reg), NULL,
-                                   TRUE, &date, in_num, &out_num, in_tnum, &out_tnum))
+                                   TRUE, &date, in_num, &out_num, in_tnum, &out_tnum,
+                                   xaccTransGetAssociation (trans), &out_tassoc))
         {
             gnc_resume_gui_refresh ();
             LEAVE("dup cancelled");
@@ -637,6 +642,12 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
         /* We also must set a new DateEntered on the new entry
          * because otherwise the ordering is not deterministic */
         xaccTransSetDateEnteredSecs(new_trans, gnc_time(NULL));
+
+        /* clear the associated entry if returned value NULL */
+        if (out_tassoc == NULL)
+            xaccTransSetAssociation (new_trans, "");
+        else
+            g_free (out_tassoc);
 
         /* set per book option */
         gnc_set_num_action (new_trans, NULL, out_num, out_tnum);

@@ -757,6 +757,7 @@ xaccTransCopyFromClipBoard(const Transaction *from_trans, Transaction *to_trans,
         xaccTransSetNum(to_trans, xaccTransGetNum(from_trans));
 
     xaccTransSetNotes(to_trans, xaccTransGetNotes(from_trans));
+    xaccTransSetAssociation(to_trans, xaccTransGetAssociation (from_trans));
     if(!no_date)
     {
         xaccTransSetDatePostedSecs(to_trans, xaccTransRetDatePosted (from_trans));

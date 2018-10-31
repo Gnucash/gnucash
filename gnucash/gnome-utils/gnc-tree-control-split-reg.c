@@ -1240,7 +1240,7 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
 
         /* We are on a split in an expanded transaction.
          * Just copy the split and add it to the transaction.
-         * However, if the split-action field is being used as the register 
+         * However, if the split-action field is being used as the register
          * number, and the action field is a number, request a new value or
          * cancel. Need to get next number and update account last num from
          * split account not register account, which may be the same or not */
@@ -1260,7 +1260,7 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
                     in_num = gnc_get_num_action (NULL, split);
 
                 if (!gnc_dup_trans_dialog (GTK_WIDGET (window), title, FALSE,
-                                           &date, in_num, &out_num, NULL, NULL))
+                                           &date, in_num, &out_num, NULL, NULL, NULL, NULL))
                 {
                     LEAVE("dup cancelled");
                     return FALSE;
@@ -1314,6 +1314,7 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
         const char *in_tnum = NULL;
         char *out_num;
         char *out_tnum;
+        char *out_tassoc = NULL;
         time64 date;
         gboolean use_autoreadonly = qof_book_uses_autoreadonly (gnc_get_current_book());
 
@@ -1335,7 +1336,8 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
                                         : NULL);
 
         if (!gnc_dup_trans_dialog (GTK_WIDGET (window), NULL, TRUE,
-                                   &date, in_num, &out_num, in_tnum, &out_tnum))
+                                   &date, in_num, &out_num, in_tnum, &out_tnum,
+                                   xaccTransGetAssociation (trans), &out_tassoc))
         {
             LEAVE("dup cancelled");
             return FALSE;
@@ -1379,6 +1381,12 @@ gnc_tree_control_split_reg_duplicate_current (GncTreeViewSplitReg *view)
         /* We also must set a new DateEntered on the new entry
          * because otherwise the ordering is not deterministic */
         xaccTransSetDateEnteredSecs(new_trans, gnc_time(NULL));
+
+        /* clear the associated entry if returned value NULL */
+        if (out_tassoc == NULL)
+            xaccTransSetAssociation (new_trans, "");
+        else
+            g_free (out_tassoc);
 
         /* set per book option */
         gnc_set_num_action (new_trans, NULL, out_num, out_tnum);
@@ -1942,7 +1950,7 @@ gnc_tree_control_split_reg_recn_test (GncTreeViewSplitReg *view, GtkTreePath *sp
 }
 
 
-/* Return the account for name given or create it */ 
+/* Return the account for name given or create it */
 Account *
 gnc_tree_control_split_reg_get_account_by_name (GncTreeViewSplitReg *view, const char *name)
 {
@@ -2163,6 +2171,9 @@ gnc_tree_control_auto_complete (GncTreeViewSplitReg *view, Transaction *trans,  
         if (g_strcmp0 (text, new_text) == 0)
         {
             xaccTransCopyOnto (trans_from, trans);
+            /* if there is an association, lets clear it */
+            if (xaccTransGetAssociation (trans_from) != NULL)
+                xaccTransSetAssociation (trans, "");
             g_free (text);
             break;
         }

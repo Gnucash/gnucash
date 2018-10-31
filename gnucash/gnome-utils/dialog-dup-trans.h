@@ -45,12 +45,15 @@
  *         out_num   - output num field, g_newed string             *
  *         tnum      - input tnum field, if used, else NULL         *
  *         out_tnum  - output tnum field, g_newed string            *
+ *         tassoc    - input association field, if used, else NULL  *
+ *         out_tnum  - output association field, g_newed string     *
  * Return: TRUE if user closes dialog with 'OK'                     *
 \********************************************************************/
 gboolean
 gnc_dup_trans_dialog (GtkWidget * parent, const char* title, gboolean show_date,
                       time64 *date_p, const char *num, char **out_num,
-                      const char *tnum, char **out_tnum);
+                      const char *tnum, char **out_tnum,
+                      const char *tassoc, char **out_tassoc);
 
 gboolean
 gnc_dup_trans_dialog_gdate (GtkWidget * parent, GDate *gdate_p,
