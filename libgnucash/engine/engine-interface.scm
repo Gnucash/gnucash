@@ -136,7 +136,7 @@
   (make-record-type
    "gnc:transaction-structure"
    '(transaction-guid currency date-entered date-posted
-                      num description notes split-scms)))
+                      num description notes association split-scms)))
 
 ;; constructor
 (define gnc:make-transaction-scm
@@ -167,6 +167,9 @@
 
 (define gnc:transaction-scm-get-notes
   (record-accessor gnc:transaction-structure 'notes))
+
+(define gnc:transaction-scm-get-association
+  (record-accessor gnc:transaction-structure 'association))
 
 (define gnc:transaction-scm-get-split-scms
   (record-accessor gnc:transaction-structure 'split-scms))
@@ -206,6 +209,9 @@
 (define gnc:transaction-scm-set-notes
   (record-modifier gnc:transaction-structure 'notes))
 
+(define gnc:transaction-scm-set-association
+  (record-modifier gnc:transaction-structure 'association))
+
 (define gnc:transaction-scm-set-split-scms
   (record-modifier gnc:transaction-structure 'split-scms))
 
@@ -235,6 +241,7 @@
        #f)
    (xaccTransGetDescription trans)
    (xaccTransGetNotes trans)
+   (xaccTransGetAssociation trans)
    (trans-splits 0)))
 
 ;; Copy a scheme representation of a transaction onto a C transaction.
@@ -254,11 +261,13 @@
               (description (gnc:transaction-scm-get-description trans-scm))
               (num         (gnc:transaction-scm-get-num trans-scm))
               (notes       (gnc:transaction-scm-get-notes trans-scm))
+              (association (gnc:transaction-scm-get-association trans-scm))
               (date-posted (gnc:transaction-scm-get-date-posted trans-scm)))
           (if currency    (xaccTransSetCurrency trans currency))
           (if description (xaccTransSetDescription trans description))
           (if num         (xaccTransSetNum trans num))
           (if notes       (xaccTransSetNotes trans notes))
+          (if association (xaccTransSetAssociation trans association))
           (if date-posted (xaccTransSetDatePostedSecs trans date-posted)))
 
         ;; strip off the old splits
