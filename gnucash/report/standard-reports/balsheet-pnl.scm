@@ -824,7 +824,7 @@ are used."))))
                                (cons acc
                                      (gnc:account-get-balances-at-dates acc report-dates)))
                              accounts))
-         (convert-curr-fn (lambda (monetary col-datum)
+         (convert-curr-fn (lambda (monetary col-idx)
                             (and common-currency
                                  (not (gnc-commodity-equal (gnc:gnc-monetary-commodity monetary) common-currency))
                                  (has-price? (gnc:gnc-monetary-commodity monetary))
@@ -834,9 +834,10 @@ are used."))))
                                                 ((endperiod) enddate)
                                                 ((pricedb-latest) (current-time))
                                                 (else
-                                                 (case report-type
-                                                   ((balsheet) col-datum)
-                                                   ((pnl) (1+ col-datum))))))
+                                                 (list-ref report-dates
+                                                           (case report-type
+                                                             ((balsheet) col-idx)
+                                                             ((pnl) (1+ col-idx)))))))
                                         (exchange-fn (gnc:case-exchange-fn
                                                       (if (memq price-source '(startperiod midperiod endperiod))
                                                           'pricedb-nearest
@@ -848,7 +849,7 @@ are used."))))
          ;; accountlist given, obtain commodities, and convert 1 unit
          ;; currency into report-currency. If cannot convert due to
          ;; missing price, say so.
-         (get-exchange-rates-fn (lambda (accounts date)
+         (get-exchange-rates-fn (lambda (accounts col-idx)
                                   (let ((commodities (delete
                                                       common-currency
                                                       (delete-duplicates
@@ -860,11 +861,7 @@ are used."))))
                                      (lambda (commodity)
                                        (let ((orig-monetary (gnc:make-gnc-monetary commodity 1)))
                                          (if (has-price? commodity)
-                                             (let ((conv-monetary (convert-curr-fn
-                                                                   orig-monetary
-                                                                   (case report-type
-                                                                     ((balsheet) date)
-                                                                     ((pnl) (cons startdate enddate))))))
+                                             (let ((conv-monetary (convert-curr-fn orig-monetary col-idx)))
                                                (gnc:html-text-append!
                                                 cell
                                                 (format #f "~a ~a"
