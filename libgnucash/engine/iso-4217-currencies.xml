@@ -2689,9 +2689,10 @@
   exchange-code="862"
   parts-per-unit="100"
   smallest-fraction="100"
-  local-symbol=""
+  local-symbol="Bs."
 />
 <!-- "VEF" - "Bolivar Fuerte"
+2018-08-20 "VES" 100000
 -->
 <currency
   isocode="VEF"
@@ -2702,7 +2703,20 @@
   exchange-code="937"
   parts-per-unit="100"
   smallest-fraction="100"
-  local-symbol="Bs."
+  local-symbol="BsF."
+/>
+<!-- "VES" - "Bolivar Soberano"
+-->
+<currency
+  isocode="VES"
+  fullname="Bolivar Soberano"
+  unitname="bolivar"
+  partname="centimo"
+  namespace="ISO4217"
+  exchange-code="928"
+  parts-per-unit="100"
+  smallest-fraction="100"
+  local-symbol="BsS."
 />
 <!-- "VND" - "Dong"
 -->
