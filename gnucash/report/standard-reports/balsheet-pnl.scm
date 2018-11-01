@@ -208,7 +208,7 @@ are used."))))
    keylist))
 
 (define (keylist-get-info keylist key info)
-  (cdr (assq info (cdr (assq key keylist)))))
+  (assq-ref (assq-ref keylist key) info))
 
 ;; options generator
 (define (multicol-report-options-generator report-type)
@@ -725,6 +725,22 @@ are used."))))
                          cols-data)))
   (add-whole-line #f))
 
+(define (monetary-less . monetaries)
+  ;; syntax: (monetary-less mon0 mon1 mon2 ...)
+  ;; equiv:  (- mon0 mon1 mon2 ...)
+  ;; this works only if all monetaries have the same commodity
+  (let ((res (gnc:make-commodity-collector)))
+    (res 'add (gnc:gnc-monetary-commodity (car monetaries))
+         (gnc:gnc-monetary-amount (car monetaries)))
+    (for-each
+     (lambda (mon)
+       (res 'add (gnc:gnc-monetary-commodity mon) (- (gnc:gnc-monetary-amount mon))))
+     (cdr monetaries))
+    (let ((reslist (res 'format gnc:make-gnc-monetary #f)))
+      (if (null? (cdr reslist))
+          (car reslist)
+          (gnc:error "monetary-less: 1 commodity only" monetaries)))))
+
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; multicol-report-renderer
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -807,7 +823,7 @@ are used."))))
                                                 (else
                                                  (case report-type
                                                    ((balsheet) col-datum)
-                                                   ((pnl) (cdr col-datum))))))
+                                                   ((pnl) (1+ col-datum))))))
                                         (exchange-fn (gnc:case-exchange-fn
                                                       (if (memq price-source '(startperiod midperiod endperiod))
                                                           'pricedb-nearest
@@ -1006,24 +1022,25 @@ are used."))))
                   (closing-cased (get-option pagename-entries optname-closing-casing))
                   (closing-regexp (get-option pagename-entries optname-closing-regexp))
                   (include-overall-period? (get-option gnc:pagename-general optname-include-overall-period))
-                  ;; datepairs - start from startdate to startdate + incr - 1day
-                  ;; repeat until enddate is reached. e.g. 1/1/18 - 31/1/18, 1/2/18 - 28/2/18, etc
-                  ;; if incr is false, datepair will have 1 list element - (cons startdate enddate)
-                  (report-datepairs (if incr
-                                        (let loop ((result '())
-                                                   (date startdate))
-                                          (if (> date enddate)
-                                              (if (and include-overall-period? (> (length result) 1))
-                                                  (reverse (cons (cons startdate enddate)
-                                                                 result))
-                                                  (reverse result))
-                                              (let ((nextdate (incdate date incr)))
-                                                (loop (cons (cons date (min enddate (decdate nextdate DayDelta)))
-                                                            result)
-                                                      nextdate))))
-                                        (list (cons startdate enddate))))
-                  ;; this object will cache *all* closing entries from inc/exp accounts to equity.
-                  ;; retrieve both KVP-based transaction flags, and the closing-entries string above.
+                  (report-dates (map gnc:time64-start-day-time
+                                     (if incr
+                                         (gnc:make-date-list startdate enddate incr)
+                                         (list startdate enddate))))
+                  (col-idx->datepair (lambda (idx)
+                                        (if (eq? idx 'overall-period)
+                                            (cons (car report-dates) (last report-dates))
+                                            (cons (list-ref report-dates idx)
+                                                  (list-ref report-dates (1+ idx))))))
+                  (accounts-balances (map
+                                      (lambda (acc)
+                                        (cons acc
+                                              (gnc:account-get-balances-at-dates acc report-dates)))
+                                      accounts))
+                  (col-idx->monetarypair (lambda (balancelist idx)
+                                           (if (eq? idx 'overall-period)
+                                               (cons (car balancelist) (last balancelist))
+                                               (cons (list-ref balancelist idx)
+                                                     (list-ref balancelist (1+ idx))))))
                   (closing-entries (let ((query (qof-query-create-for-splits)))
                                      (qof-query-set-book query (gnc-get-current-book))
                                      (xaccQueryAddAccountMatch query (append income-accounts expense-accounts)
@@ -1037,23 +1054,27 @@ are used."))))
                                        splits)))
                   ;; this function will query the above closing-entries for splits within the date range,
                   ;; and produce the total amount for these closing entries
-                  (closing-adjustment (lambda (account fromdate todate)
+                  (closing-adjustment (lambda (account col-idx)
+                                        (define datepair (col-idx->datepair col-idx))
                                         (define (include-split? split)
                                           (and (equal? (xaccSplitGetAccount split) account)
-                                               (<= fromdate
+                                               (<= (car datepair)
                                                    (xaccTransGetDate (xaccSplitGetParent split))
-                                                   todate)))
+                                                   (cdr datepair))))
                                         (let ((account-closing-splits (filter include-split? closing-entries)))
-                                          (apply + (map xaccSplitGetAmount account-closing-splits)))))
-                  (get-cell-monetary-fn (lambda (account col-datum)
-                                          (let* ((startdate (car col-datum))
-                                                 (enddate (cdr col-datum)))
-                                            (gnc:make-gnc-monetary
-                                             (xaccAccountGetCommodity account)
-                                             (- (xaccAccountGetBalanceAsOfDate account enddate)
-                                                (xaccAccountGetBalanceAsOfDate account startdate)
-                                                (closing-adjustment account startdate enddate))))))
-                  (get-cell-anchor-fn (lambda (account datepair)
+                                          (gnc:make-gnc-monetary
+                                           (xaccAccountGetCommodity account)
+                                           (apply + (map xaccSplitGetAmount account-closing-splits))))))
+                  (get-cell-monetary-fn (lambda (account col-idx)
+                                          (let ((account-balance-list (assoc account accounts-balances)))
+                                            (and account-balance-list
+                                                 (let ((monetarypair (col-idx->monetarypair (cdr account-balance-list) col-idx)))
+                                                   (monetary-less
+                                                    (cdr monetarypair)
+                                                    (car monetarypair)
+                                                    (closing-adjustment account col-idx)))))))
+                  (get-cell-anchor-fn (lambda (account col-idx)
+                                        (define datepair (col-idx->datepair col-idx))
                                         (gnc:make-report-anchor
                                          trep-uuid report-obj
                                          (list (list "General" "Start Date" (cons 'absolute (car datepair)))
@@ -1069,12 +1090,13 @@ are used."))))
                                                                       ((pricedb-latest) 'pricedb-latest)
                                                                       (else 'pricedb-nearest)))
                                      (list "Accounts" "Accounts" (append income-accounts expense-accounts))))))
-                  (get-col-header-fn (lambda (accounts col-datum)
-                                       (let* ((header (gnc:make-html-text
-                                                       (qof-print-date (car col-datum))
+                  (get-col-header-fn (lambda (accounts col-idx)
+                                       (let* ((datepair (col-idx->datepair col-idx))
+                                              (header (gnc:make-html-text
+                                                       (qof-print-date (car datepair))
                                                        (gnc:html-markup-br)
                                                        (_ " to ")
-                                                       (qof-print-date (cdr col-datum))))
+                                                       (qof-print-date (cdr datepair))))
                                               (cell (gnc:make-html-table-cell/markup "total-label-cell" header)))
                                          (gnc:html-table-cell-set-style! cell "total-label-cell" 'attribute '("style" "text-align:right"))
                                          cell)))
@@ -1086,7 +1108,13 @@ are used."))))
                                                 (negate-amounts? #f))
                                   (add-multicolumn-acct-table
                                    table title accounts
-                                   maxindent get-cell-monetary-fn report-datepairs
+                                   maxindent get-cell-monetary-fn
+                                   (append
+                                    (iota (1- (length report-dates)))
+                                    (if (and include-overall-period?
+                                             (> (length report-dates) 2))
+                                        '(overall-period)
+                                        '()))
                                    #:omit-zb-bals? omit-zb-bals?
                                    #:show-zb-accts? show-zb-accts?
                                    #:disable-account-indent? disable-account-indent?
