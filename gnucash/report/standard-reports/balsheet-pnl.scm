@@ -811,6 +811,19 @@ are used."))))
                                     commodity
                                     common-currency)))))
          (price-source (get-option pagename-commodities optname-price-source))
+         (report-dates (map (if (eq? report-type 'balsheet)
+                                gnc:time64-end-day-time
+                                gnc:time64-start-day-time)
+                            (if incr
+                                (gnc:make-date-list startdate enddate incr)
+                                (if (eq? report-type 'balsheet)
+                                    (list enddate)
+                                    (list startdate enddate)))))
+         (accounts-balances (map
+                             (lambda (acc)
+                               (cons acc
+                                     (gnc:account-get-balances-at-dates acc report-dates)))
+                             accounts))
          (convert-curr-fn (lambda (monetary col-datum)
                             (and common-currency
                                  (not (gnc-commodity-equal (gnc:gnc-monetary-commodity monetary) common-currency))
@@ -909,16 +922,7 @@ are used."))))
 
         (case report-type
           ((balsheet)
-           (let* ((report-dates (map gnc:time64-end-day-time
-                                     (if incr
-                                         (gnc:make-date-list startdate enddate incr)
-                                         (list enddate))))
-                  (accounts-balances (map
-                                      (lambda (acc)
-                                        (cons acc
-                                              (gnc:account-get-balances-at-dates acc report-dates)))
-                                      accounts))
-                  (get-cell-monetary-fn (lambda (account col-idx)
+           (let* ((get-cell-monetary-fn (lambda (account col-idx)
                                           (let ((account-balance-list (assoc account accounts-balances)))
                                             (and account-balance-list
                                                  (list-ref account-balance-list (1+ col-idx))))))
@@ -1022,20 +1026,11 @@ are used."))))
                   (closing-cased (get-option pagename-entries optname-closing-casing))
                   (closing-regexp (get-option pagename-entries optname-closing-regexp))
                   (include-overall-period? (get-option gnc:pagename-general optname-include-overall-period))
-                  (report-dates (map gnc:time64-start-day-time
-                                     (if incr
-                                         (gnc:make-date-list startdate enddate incr)
-                                         (list startdate enddate))))
                   (col-idx->datepair (lambda (idx)
                                         (if (eq? idx 'overall-period)
                                             (cons (car report-dates) (last report-dates))
                                             (cons (list-ref report-dates idx)
                                                   (list-ref report-dates (1+ idx))))))
-                  (accounts-balances (map
-                                      (lambda (acc)
-                                        (cons acc
-                                              (gnc:account-get-balances-at-dates acc report-dates)))
-                                      accounts))
                   (col-idx->monetarypair (lambda (balancelist idx)
                                            (if (eq? idx 'overall-period)
                                                (cons (car balancelist) (last balancelist))
