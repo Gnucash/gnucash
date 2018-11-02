@@ -52,11 +52,17 @@ using LDTBase = boost::local_time::local_date_time_base<PTime, boost::date_time:
 using boost::date_time::not_a_date_time;
 using time64 = int64_t;
 
-static const TimeZoneProvider tzp;
+static const TimeZoneProvider ltzp;
+static const TimeZoneProvider* tzp = &ltzp;
+
 // For converting to/from POSIX time.
 static const PTime unix_epoch (Date(1970, boost::gregorian::Jan, 1),
         boost::posix_time::seconds(0));
 static const TZ_Ptr utc_zone(new boost::local_time::posix_time_zone("UTC-0"));
+
+/* Backdoor to enable unittests to temporarily override the timezone: */
+void _set_tzp(TimeZoneProvider& tz);
+void _reset_tzp();
 
 /* To ensure things aren't overly screwed up by setting the nanosecond clock for boost::date_time. Don't do it, though, it doesn't get us anything and slows down the date/time library. */
 #ifndef BOOST_DATE_TIME_HAS_NANOSECONDS
@@ -146,7 +152,7 @@ LDT_from_unix_local(const time64 time)
         PTime temp(unix_epoch.date(),
                    boost::posix_time::hours(time / 3600) +
                    boost::posix_time::seconds(time % 3600));
-        auto tz = tzp.get(temp.date().year());
+        auto tz = tzp->get(temp.date().year());
         return LDT(temp, tz);
     }
     catch(boost::gregorian::bad_year&)
@@ -167,7 +173,7 @@ LDT_from_struct_tm(const struct tm tm)
         tdate = boost::gregorian::date_from_tm(tm);
         tdur = boost::posix_time::time_duration(tm.tm_hour, tm.tm_min,
                                                  tm.tm_sec, 0);
-        tz = tzp.get(tdate.year());
+        tz = tzp->get(tdate.year());
         LDT ldt(tdate, tdur, tz, LDTBase::EXCEPTION_ON_ERROR);
         return ldt;
     }
@@ -198,20 +204,32 @@ LDT_from_struct_tm(const struct tm tm)
 
 using TD = boost::posix_time::time_duration;
 
+void
+_set_tzp(TimeZoneProvider& new_tzp)
+{
+    tzp = &new_tzp;
+}
+
+void
+_reset_tzp()
+{
+    tzp = &ltzp;
+}
+
 class GncDateTimeImpl
 {
 public:
-    GncDateTimeImpl() : m_time(boost::local_time::local_sec_clock::local_time(tzp.get(boost::gregorian::day_clock::local_day().year()))) {}
+    GncDateTimeImpl() : m_time(boost::local_time::local_sec_clock::local_time(tzp->get(boost::gregorian::day_clock::local_day().year()))) {}
     GncDateTimeImpl(const time64 time) : m_time(LDT_from_unix_local(time)) {}
     GncDateTimeImpl(const struct tm tm) : m_time(LDT_from_struct_tm(tm)) {}
     GncDateTimeImpl(const GncDateImpl& date, DayPart part = DayPart::neutral);
     GncDateTimeImpl(std::string str);
-    GncDateTimeImpl(PTime&& pt) : m_time(pt, tzp.get(pt.date().year())) {}
+    GncDateTimeImpl(PTime&& pt) : m_time(pt, tzp->get(pt.date().year())) {}
     GncDateTimeImpl(LDT&& ldt) : m_time(ldt) {}
 
     operator time64() const;
     operator struct tm() const;
-    void now() { m_time = boost::local_time::local_sec_clock::local_time(tzp.get(boost::gregorian::day_clock::local_day().year())); }
+    void now() { m_time = boost::local_time::local_sec_clock::local_time(tzp->get(boost::gregorian::day_clock::local_day().year())); }
     long offset() const;
     struct tm utc_tm() const { return to_tm(m_time.utc_time()); }
     std::unique_ptr<GncDateImpl> date() const;
@@ -254,13 +272,28 @@ private:
  */
 
 GncDateTimeImpl::GncDateTimeImpl(const GncDateImpl& date, DayPart part) :
-    m_time(date.m_greg, time_of_day[part], tzp.get(date.m_greg.year()),
+    m_time(date.m_greg, time_of_day[part], tzp->get(date.m_greg.year()),
                      LDT::NOT_DATE_TIME_ON_ERROR)
 {
     using boost::posix_time::hours;
-    try
+    if (m_time.is_not_a_date_time())
     {
-        if (part == DayPart::neutral)
+        try
+        {
+            auto t_o_d = time_of_day[part] + hours(3);
+            LDT time(date.m_greg, t_o_d, tzp->get(date.m_greg.year()),
+                     LDT::EXCEPTION_ON_ERROR);
+            m_time = time - hours(3);
+        }
+        catch(boost::gregorian::bad_year&)
+        {
+            throw(std::invalid_argument("Time value is outside the supported year range."));
+        }
+    }
+
+    if (part == DayPart::neutral)
+    {
+        try
         {
             auto offset = m_time.local_time() - m_time.utc_time();
             m_time = LDT(date.m_greg, time_of_day[part], utc_zone,
@@ -270,10 +303,10 @@ GncDateTimeImpl::GncDateTimeImpl(const GncDateImpl& date, DayPart part) :
             if (offset > hours(13))
                 m_time -= hours(offset.hours() - 11);
         }
-    }
-    catch(boost::gregorian::bad_year&)
-    {
-        throw(std::invalid_argument("Time value is outside the supported year range."));
+        catch(boost::gregorian::bad_year&)
+        {
+            throw(std::invalid_argument("Time value is outside the supported year range."));
+        }
     }
 }
 
