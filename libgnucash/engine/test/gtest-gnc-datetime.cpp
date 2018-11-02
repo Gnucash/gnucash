@@ -23,10 +23,10 @@
 \********************************************************************/
 
 #include "../gnc-datetime.hpp"
-#include "../gnc-timezone.hpp"
 #include <gtest/gtest.h>
 
 /* Backdoor to enable unittests to temporarily override the timezone: */
+class TimeZoneProvider;
 void _set_tzp(TimeZoneProvider& tz);
 void _reset_tzp();
 
@@ -346,6 +346,12 @@ TEST(gnc_datetime_constructors, test_gncdate_start_constructor)
     EXPECT_EQ(atime.format("%d-%m-%Y %H:%M:%S"), "20-04-2017 00:00:00");
 }
 
+/* Putting this here is a bit weird but it includes
+ * boost/date_time/local_time/local_time.hpp and that redefines struct
+ * tm in a way that breaks initializing the tm in
+ * test_struct_tm_constructor on Linux.
+ */
+#include "../gnc-timezone.hpp"
 /* Summertime transitions have been a recurring problem. At the time of adding
  * this test the GncDateEditor was refusing to set the date to 28 October 2018
  * in the Europe/London timezone.
