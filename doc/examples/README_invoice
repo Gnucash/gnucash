@@ -6,5 +6,5 @@ The example csv file must have the 22 elements for it to work.
 
 To use the example file, create an account "Expenses:Materials General" and a Customer with owner = 000013.
 
-More information can be found at http://svn.gnucash.org/docs/guide/python-import-invoices.html
+More information can be found at https://code.gnucash.org/docs/C/gnucash-guide/import-invoices.html
 

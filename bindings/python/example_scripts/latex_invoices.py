@@ -28,7 +28,7 @@
 #
 # Additional information :
 #
-# - Doxygen docs: see page \ref py_invoice_export at http://svn.gnucash.org/docs/HEAD/
+# - Doxygen docs: see page \ref py_invoice_export at https://code.gnucash.org/docs/MAINT or MASTER
 # - http://www.uweziegenhagen.de/latex/documents/rechnung/rechnungen.pdf (german)
 #
 # Credits to and ideas from
