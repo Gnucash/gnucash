@@ -403,37 +403,6 @@ are used."))))
         pagename-entries optname-closing-regexp
         "c" opthelp-closing-regexp #f)))
 
-    ;; set unused legacy options
-    (for-each
-     (lambda (optionset)
-       (for-each
-        (lambda (optname)
-          (add-option
-           (gnc:make-internal-option (car optionset) optname #f)))
-        (cdr optionset)))
-     (list
-      (list gnc:pagename-general
-            "Use standard US layout"
-            "Display in standard, income first, order"
-            "Single column Balance Sheet"
-            "Display as a two column report")
-      (list gnc:pagename-display
-            "Label the assets section"
-            "Include assets total"
-            "Label the liabilities section"
-            "Include liabilities total"
-            "Label the equity section"
-            "Include equity total"
-            "Label the revenue section"
-            "Include revenue total"
-            "Label the trading accounts section"
-            "Include trading accounts total"
-            "Label the expense section"
-            "Include expense total"
-            "Show accounting-style rules")
-      (list gnc:pagename-accounts
-            "Flatten list to depth limit")))
-
     ;; Set the accounts page as default option tab
     (gnc:options-set-default-section options gnc:pagename-accounts)
 
