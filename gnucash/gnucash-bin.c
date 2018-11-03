@@ -159,11 +159,13 @@ gnc_print_unstable_message(void)
 {
     if (!is_development_version) return;
 
-    g_print("\n\n%s\n%s\n%s\n%s\n",
+    g_print("\n\n%s\n%s\n%s %s\n%s %s\n",
             _("This is a development version. It may or may not work."),
             _("Report bugs and other problems to gnucash-devel@gnucash.org"),
-            _("You can also lookup and file bug reports at https://bugs.gnucash.org"),
-            _("To find the last stable version, please refer to http://www.gnucash.org"));
+	    /* Translators: An URLs follows*/
+            _("You can also lookup and file bug reports at"), PACKAGE_BUGREPORT,
+	    /* Translators: An URLs follows*/
+           _("To find the last stable version, please refer to"), PACKAGE_URL);
 }
 
 #ifdef MAC_INTEGRATION

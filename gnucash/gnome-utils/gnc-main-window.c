@@ -4576,7 +4576,7 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
           * contributors. */
                   "translator-credits", _("translator_credits"),
                   "version", version,
-                  "website", "http://www.gnucash.org",
+                  "website", PACKAGE_URL,
                   "website_label", _("Visit the GnuCash website."),
                   NULL);
 
@@ -4892,8 +4892,8 @@ dgettext_swapped (const gchar *msgid,
  * This is copied into GnuCash from Gtk in order to fix problems when
  * empty msgids were passed through gettext().
  *
- * See https://bugs.gnucash.org/show_bug.cgi?id=326200 . If that bug
- * is fixed in the gtk that we can rely open, then
+ * TODO: See https://bugzilla.gnome.org/show_bug.cgi?id=326200 . If that bug
+ * is fixed in the gtk that we can rely on, then
  * gnc_gtk_action_group_set_translation_domain can be replaced by
  * gtk_action_group_set_translation_domain again.
  */
