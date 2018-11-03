@@ -356,28 +356,6 @@ void gnc_main_window_save_all_windows(GKeyFile *keyfile);
  */
 void gnc_main_window_restore_default_state(GncMainWindow *window);
 
-/**
- * gnc_gtk_action_group_set_translation_domain:
- * @param action_group a #GtkActionGroup
- * @param domain the translation domain to use for dgettext() calls
- *
- * Sets the translation domain and uses dgettext() for translating the
- * @a label and @a tooltip of #GtkActionEntry<!-- -->s added by
- * gtk_action_group_add_actions().
- *
- * This is copied from gtk's gtk_action_group_set_translation_domain()
- * into GnuCash in order to fix problems when empty msgids were passed
- * through gettext().
- *
- * See https://bugs.gnucash.org/show_bug.cgi?id=326200 . If that bug
- * is fixed in the gtk that we can rely open, then
- * gnc_gtk_action_group_set_translation_domain can be replaced by
- * gtk_action_group_set_translation_domain again.
- **/
-void
-gnc_gtk_action_group_set_translation_domain (GtkActionGroup *action_group,
-        const gchar    *domain);
-
 
 /** Tell a window to finish any outstanding activities.  This function
  *  will call gnc_plugin_page_finish_pending for each installed page.

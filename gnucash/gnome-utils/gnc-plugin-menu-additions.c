@@ -41,7 +41,6 @@
 
 #include "guile-util.h"
 #include "gnc-engine.h"
-#include "gnc-main-window.h"
 #include "gnc-plugin-menu-additions.h"
 #include "gnc-window.h"
 #include "gnc-ui.h"
@@ -452,7 +451,7 @@ gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
     per_window.window = window;
     per_window.ui_manager = window->ui_merge;
     per_window.group = gtk_action_group_new ("MenuAdditions" );
-    gnc_gtk_action_group_set_translation_domain (per_window.group, GETTEXT_PACKAGE);
+    gtk_action_group_set_translation_domain (per_window.group, GETTEXT_PACKAGE);
     per_window.merge_id = gtk_ui_manager_new_merge_id(window->ui_merge);
     gtk_ui_manager_insert_action_group(window->ui_merge, per_window.group, 0);
 
