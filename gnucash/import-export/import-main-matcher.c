@@ -476,6 +476,9 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
     gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
     g_object_unref(store);
 
+    /* prevent the rows being dragged to a different order */
+    gtk_tree_view_set_reorderable (view, FALSE);
+
     /* Add the columns *
      * (keep the line break below to avoid a translator comment) */
     add_text_column(view,
