@@ -91,9 +91,12 @@
     (gnc:html-document-add-object! 
      doc
      (gnc:make-html-text 
-      (gnc:html-markup-h2 (format (_ "Welcome to GnuCash ~a !") gnc:version))
-      (gnc:html-markup-p (format
-       (_ "GnuCash ~a has lots of nice features. Here are a few.") gnc:version))))
+      (gnc:html-markup-h2
+       (format #f (_ "Welcome to GnuCash ~a !")
+               gnc:version))
+      (gnc:html-markup-p
+       (format #f (_ "GnuCash ~a has lots of nice features. Here are a few.")
+               gnc:version))))
     doc))
 
 (gnc:define-report 
