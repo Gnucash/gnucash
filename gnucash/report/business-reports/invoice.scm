@@ -268,11 +268,6 @@ for styling the invoice. Please see the exported report for the CSS class names.
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display") (N_ "Title")
-    "a" (N_ "Display invoice title and invoice ID?") #t))
-
-  (gnc:register-inv-option
-   (gnc:make-simple-boolean-option
     (N_ "Display") (N_ "Due Date")
     "c" (N_ "Display due date?") #t))
 
@@ -826,17 +821,14 @@ for styling the invoice. Please see the exported report for the CSS class names.
                                                         (qof-print-date (current-time))))))
                (layout-lookup (lambda (loc) (cdr (assq (opt-val "Layout" loc) layout-lookup-table)))))
 
-          (gnc:html-document-set-title! document invoice-title)
-
           (gnc:html-document-set-style-text! document (opt-val "Layout" "CSS"))
 
           (let ((main-table (gnc:make-html-table)))
 
-            (if (opt-val "Display" "Title")
-                (gnc:html-table-append-row! main-table
-                                            (gnc:make-html-table-cell/size
-                                             1 2 (gnc:make-html-div/markup
-                                                  "invoice-title" invoice-title))))
+            (gnc:html-table-append-row! main-table
+                                        (gnc:make-html-table-cell/size
+                                         1 2 (gnc:make-html-div/markup
+                                              "invoice-title" invoice-title)))
 
             (gnc:html-table-append-row! main-table
                                         (list (layout-lookup "Row 1 Left")
