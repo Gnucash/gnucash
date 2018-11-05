@@ -33,6 +33,15 @@
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
+(define FOOTER-TEXT
+  (gnc:make-html-text
+   ;; Translators: This string has low priority. ~a will be for bugzilla url.
+   (_ "WARNING: Please be aware these figures are not guaranteed to be
+correct.  No calculations for capital gains, or unrealized gains are
+made.  Foreign currency conversions are not currently confirmed
+correct. This report may be modified without notice. Bug reports are
+very welcome at https://bugs.gnucash.org/")))
+
 ;; define all option's names and help text so that they are properly
 
 (define optname-company-name (N_ "Company name"))
@@ -1140,6 +1149,9 @@ are used."))))
                                     (list multicol-table-left multicol-table-right)))
       (gnc:html-document-add-object!
        doc multicol-table))
+
+    (gnc:html-document-add-object!
+     doc FOOTER-TEXT)
 
     (gnc:report-finished)
     ;; (gnc:html-document-set-style-text!
