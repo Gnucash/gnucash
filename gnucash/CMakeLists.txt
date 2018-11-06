@@ -60,6 +60,7 @@ add_dependencies (gnucash gnucash-manpage)
 target_compile_definitions(gnucash PRIVATE -DG_LOG_DOMAIN=\"gnc.bin\")
 
 if (BUILDING_FROM_VCS)
+  target_compile_definitions(gnucash PRIVATE -DGNC_VCS=\"git\")
   target_compile_definitions(gncmod-gnome-utils PRIVATE -DGNC_VCS=\"git\")
 endif (BUILDING_FROM_VCS)
 
