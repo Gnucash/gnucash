@@ -265,6 +265,7 @@ static action_toolbar_labels toolbar_labels[] =
     { "BlankEntryAction",           N_("Blank") },
     { "EditPostInvoiceAction",      N_("Post") },
     { "EditUnpostInvoiceAction",    N_("Unpost") },
+    { "ToolsProcessPaymentAction",    N_("Pay") },
     { NULL, NULL },
 };
 

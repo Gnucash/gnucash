@@ -39,10 +39,10 @@
       <toolitem name="ReportToolbarReload" action="ReportReloadAction" />
       <toolitem name="ReportToolbarStop" action="ReportStopAction" />
       <separator name="ReportToolbarSep1" />
+      <toolitem name="ReportToolbarOptions" action="ReportOptionsAction" />
       <toolitem name="ReportToolbarSave" action="ReportSaveAction" />
       <toolitem name="ReportToolbarSaveAs" action="ReportSaveAsAction" />
       <toolitem name="ReportToolbarExport" action="ReportExportAction" />
-      <toolitem name="ReportToolbarOptions" action="ReportOptionsAction" />
       <toolitem name="ReportToolbarPrint" action="FilePrintAction" />
       <toolitem name="ReportToolbarExportPDF" action="FilePrintPDFAction"/>
     </placeholder>
