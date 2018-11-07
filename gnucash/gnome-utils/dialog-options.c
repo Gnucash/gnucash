@@ -1759,7 +1759,12 @@ gnc_option_set_ui_widget(GNCOption *option,
         GtkWidget *eventbox = gtk_event_box_new();
 
         gtk_container_add (GTK_CONTAINER (eventbox), enclosing);
-        gtk_box_pack_start (page_box, eventbox, FALSE, FALSE, 0);
+
+        /* Allow the text widget to expand and fill remaining space */
+        if (g_strcmp0 (type, "text") == 0)
+            gtk_box_pack_start (page_box, eventbox, TRUE, TRUE, 0);
+        else
+            gtk_box_pack_start (page_box, eventbox, FALSE, FALSE, 0);
 
         gtk_widget_set_tooltip_text (eventbox, documentation);
     }
