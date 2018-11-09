@@ -183,29 +183,31 @@ also show overall period profit & loss."))
                         (cons 'tip (_ "The volume-weighted average cost of purchases."))))))
 
 (define pricesource-list-balsheet
-  (cons
-   (cons 'pricedb-nearest (list
-                           (cons 'text (_ "Nearest in time"))
-                           (cons 'tip (_ "The price recorded nearest in time to the column date."))))
-   pricesource-list-common))
+  (reverse
+   (cons
+    (cons 'pricedb-nearest (list
+                            (cons 'text (_ "Nearest in time"))
+                            (cons 'tip (_ "The price recorded nearest in time to the column date."))))
+    pricesource-list-common)))
 
 (define pricesource-list-pnl
-  (cons*
-   (cons 'startperiod (list
-                       (cons 'text (_ "Nearest to start of period"))
-                       (cons 'tip (_ "Prices closest to the start of the reporting period \
+  (reverse
+   (cons*
+    (cons 'startperiod (list
+                        (cons 'text (_ "Nearest to start of period"))
+                        (cons 'tip (_ "Prices closest to the start of the reporting period \
 are used."))))
 
-   (cons 'midperiod (list
-                     (cons 'text (_ "Nearest to mid of period"))
-                     (cons 'tip (_ "Prices in the middle of the reporting period \
+    (cons 'midperiod (list
+                      (cons 'text (_ "Nearest to mid of period"))
+                      (cons 'tip (_ "Prices in the middle of the reporting period \
 are used."))))
 
-   (cons 'endperiod (list
-                     (cons 'text (_ "Nearest to end of period"))
-                     (cons 'tip (_ "Prices in the end of the reporting period \
+    (cons 'endperiod (list
+                      (cons 'text (_ "Nearest to end of period"))
+                      (cons 'tip (_ "Prices in the end of the reporting period \
 are used."))))
-   pricesource-list-common))
+    pricesource-list-common)))
 
 (define (keylist->vectorlist keylist)
   (map
