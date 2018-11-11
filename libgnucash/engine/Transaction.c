@@ -35,17 +35,7 @@
 #include <glib/gi18n.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef HAVE_SYS_TIME_H
-# include <sys/time.h>
-#else
-/* We simply define the struct timeval on our own here. */
-struct timeval
-{
-    long    tv_sec;         /* seconds */
-    long    tv_usec;        /* and microseconds */
-};
-/* include <Winsock2.h> */
-#endif
+#include <stdint.h>
 #include <time.h>
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
