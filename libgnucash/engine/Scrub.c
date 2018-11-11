@@ -1400,9 +1400,10 @@ xaccTransScrubPostedDate (Transaction *trans)
     time64 orig = xaccTransGetDate(trans);
     GDate date = xaccTransGetDatePostedGDate(trans);
     time64 time = gdate_to_time64(date);
-    if (orig && orig != time)
+    /* xaccTransGetDatePostedGDate will return a valid time */
+    if (orig == INT64_MAX && orig != time)
     {
-        /* xaccTransSetDatePostedTS handles committing the change. */
+        /* xaccTransSetDatePostedSecs handles committing the change. */
         xaccTransSetDatePostedSecs(trans, time);
     }
 }

@@ -2394,13 +2394,11 @@ xaccTransGetDatePostedGDate (const Transaction *trans)
         qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, TRANS_DATE_POSTED);
         if (G_VALUE_HOLDS_BOXED (&v))
              result = *(GDate*)g_value_get_boxed (&v);
-        if (! g_date_valid (&result))
+        if (! g_date_valid (&result) || gdate_to_time64 (result) == INT64_MAX)
         {
-             /* Well, this txn doesn't have a GDate saved in a
-              * slot. Avoid getting the date in the local TZ by
-              * converting to UTC before generating the
-              * date. (time64_to_gdate doesn't do this so don't use
-              * it.
+             /* Well, this txn doesn't have a valid GDate saved in a slot.
+              * time64_to_gdate() uses local time and we want UTC so we have
+              * to write it out.
               */
              time64 time = xaccTransGetDate(trans);
              struct tm *stm = gnc_gmtime(&time);
