@@ -445,7 +445,8 @@ def decorate_monetary_list_returning_function(orig_function):
             array of tuples: (GncCommodity, GncNumeric)
 
         ToDo:
-            Maybe this function should better reside in module function_class (?)"""
+            * Maybe this function should better reside in module function_class ?
+            * Should it be tuples anyway ? Wouldn't it be better to have GncMonetary to reflect gnc_monetary in c ?"""
         # warning, item.commodity has been shown to be None
         # when the transaction doesn't have a currency
         return [(GncCommodity(instance=item.commodity),
