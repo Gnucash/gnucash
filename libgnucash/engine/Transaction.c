@@ -2137,12 +2137,17 @@ xaccTransSetDescription (Transaction *trans, const char *desc)
 void
 xaccTransSetAssociation (Transaction *trans, const char *assoc)
 {
-    GValue v = G_VALUE_INIT;
     if (!trans || !assoc) return;
-    g_value_init (&v, G_TYPE_STRING);
-    g_value_set_string (&v, assoc);
     xaccTransBeginEdit(trans);
-    qof_instance_set_kvp (QOF_INSTANCE (trans), &v, 1, assoc_uri_str);
+    if (g_strcmp0 (assoc, "") == 0)
+        qof_instance_set_kvp (QOF_INSTANCE (trans), NULL, 1, assoc_uri_str);
+    else
+    {
+        GValue v = G_VALUE_INIT;
+        g_value_init (&v, G_TYPE_STRING);
+        g_value_set_string (&v, assoc);
+        qof_instance_set_kvp (QOF_INSTANCE (trans), &v, 1, assoc_uri_str);
+    }
     qof_instance_set_dirty(QOF_INSTANCE(trans));
     xaccTransCommitEdit(trans);
 }
