@@ -42,7 +42,7 @@
 #include "Account.h"
 
 #define DIALOG_ASSOC_CM_CLASS    "dialog-trans-assoc"
-#define GNC_PREFS_GROUP         "dialogs.trans-assoc"
+#define GNC_PREFS_GROUP          "dialogs.trans-assoc"
 
 /** Enumeration for the tree-store */
 enum GncAssocColumn {DATE_TRANS, DESC_TRANS, URI_U, AVAILABLE, URI_SPLIT, URI, URI_RELATIVE};
@@ -356,7 +356,8 @@ get_trans_info (AssocDialog *assoc_dialog)
     GList        *accts, *ptr;
     GtkTreeModel *model;
     GtkTreeIter   iter;
-    GList        *splits, *trans_list = NULL;
+    GList        *splits;
+    GHashTable   *trans_hash = g_hash_table_new (g_direct_hash, g_direct_equal);
 
     /* Get list of Accounts */
     accts = gnc_account_get_descendants_sorted (root);
@@ -382,8 +383,8 @@ get_trans_info (AssocDialog *assoc_dialog)
             Transaction *trans = xaccSplitGetParent (split);
             const gchar *uri;
 
-            // Look for trans already in trans_list
-            if (g_list_find (trans_list, trans) != NULL)
+            // Look for trans already in trans_hash
+            if (g_hash_table_lookup (trans_hash, trans))
                 continue;
 
             // fix an earlier error when storing relative paths in version 3.3
@@ -416,7 +417,7 @@ get_trans_info (AssocDialog *assoc_dialog)
                 g_free (uri_u);
                 g_free (scheme);
             }
-            trans_list = g_list_prepend (trans_list, trans); // add trans to trans_list
+            g_hash_table_insert (trans_hash, trans, trans); // add trans to trans_hash
         }
         qof_query_destroy (query);
         g_list_free (splits);
@@ -426,8 +427,8 @@ get_trans_info (AssocDialog *assoc_dialog)
     gtk_tree_view_set_model (GTK_TREE_VIEW(assoc_dialog->view), model);
     g_object_unref(G_OBJECT(model));
 
+    g_hash_table_destroy (trans_hash);
     g_list_free (accts);
-    g_list_free (trans_list);
 }
 
 static void
