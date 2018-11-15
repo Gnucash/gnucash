@@ -225,6 +225,33 @@ gboolean gnc_uri_is_file_uri (const gchar *uri);
  */
 gchar *gnc_uri_add_extension ( const gchar *uri, const gchar *extension );
 
+/**  Creates an absolute path from a relative one and a path head:
+ *  * relative uri should not start with /
+ *  * path head will be a valid file directory uri
+ *
+ *  @param uri The uri to process
+ *  @param path_head The file directory uri for the base directory used to
+ *                   add the relative path too.
+ *                   If path_head does not end in a /, one will be added so
+ *                   to form a valid absolute path the relative path should
+ *                   not start with a /
+ *  @param ret_uri   The returned absolute path
+ *
+ *  @return TRUE if the ret_uri contains an absolute path or FALSE and the
+ *          ret_uri will be NULL
+ */
+gboolean gnc_uri_absolute_associate_file_path (const gchar *uri,
+                                               const gchar *path_head,
+                                               gchar **ret_uri);
+
+/** Returns the scheme for a given uri, like 'file', 'http', 'ftp'
+ *
+ *  @param uri The uri to check
+ *
+ *  @return The scheme used or NULL if one can not be found
+ */
+gchar *gnc_uri_parse_scheme (const gchar *uri);
+
 #endif /* GNCURIUTILS_H_ */
 /** @} */
 /** @} */

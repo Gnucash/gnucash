@@ -342,3 +342,81 @@ gchar *gnc_uri_add_extension ( const gchar *uri, const gchar *extension )
     /* Ok, all tests passed, let's add the extension */
     return g_strconcat( uri, extension, NULL );
 }
+
+gboolean gnc_uri_absolute_associate_file_path (const gchar *uri,
+                                               const gchar *path_head,
+                                               gchar **ret_uri)
+{
+    gchar *uri_scheme = gnc_uri_parse_scheme (uri);
+    *ret_uri = NULL;
+
+    // Check for an absolute path
+    if (g_strcmp0 (uri_scheme, "file") == 0)
+    {
+        *ret_uri = g_strdup (uri);
+        g_free (uri_scheme);
+        return TRUE;
+    }
+
+    // Check for relative path
+    if (uri_scheme == NULL)
+    {
+        gchar *ph_scheme = gnc_uri_parse_scheme (path_head);
+        gboolean valid_path_head = FALSE;
+        gboolean add_trailing_slash = FALSE;
+
+        // check for a valid path_head
+        if (g_strcmp0 (ph_scheme, "file") == 0)
+            valid_path_head = TRUE;
+
+        // relative paths do not start with a / so need to add one depending on path_head
+        if (valid_path_head && !g_str_has_suffix (path_head, "/"))
+            add_trailing_slash = TRUE;
+
+        if (valid_path_head)
+        {
+            if (add_trailing_slash)
+                *ret_uri = g_strconcat (path_head, "/", uri, NULL);
+            else
+                *ret_uri = g_strconcat (path_head, uri, NULL);
+        }
+        else
+            *ret_uri = g_strconcat ("file:///", uri, NULL);
+
+        g_free (ph_scheme);
+        return TRUE;
+    }
+    g_free (uri_scheme);
+    return FALSE;
+}
+
+gchar *
+gnc_uri_parse_scheme (const gchar *uri)
+{
+    const char *p;
+    char c;
+
+    g_return_val_if_fail (uri != NULL, NULL);
+
+    // URI = scheme ":" host-part [ "?" query ] [ "#" fragment ]
+
+    p = uri;
+
+    if (!g_ascii_isalpha (*p))
+      return NULL;
+
+    while (1)
+    {
+        c = *p++;
+
+        if (c == ':')
+            break;
+
+        if (!(g_ascii_isalnum(c) ||
+            c == '+' ||
+            c == '-' ||
+            c == '.'))
+        return NULL;
+    }
+    return g_strndup (uri, p - uri - 1);
+}
