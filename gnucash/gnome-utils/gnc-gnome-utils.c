@@ -482,30 +482,30 @@ void
 gnc_launch_assoc (const char *uri)
 {
     wchar_t *winuri = NULL;
-    char* scheme = g_uri_parse_scheme(uri);
+    char* scheme = gnc_uri_parse_scheme (uri);
     /* ShellExecuteW open doesn't decode http escapes if it's passed a
      * file URI so we have to do it. */
     if (scheme && strcmp (scheme, "file") == 0)
     {
-	gchar *filename = g_filename_from_uri (uri, NULL, NULL);
-	winuri = (wchar_t *)g_utf8_to_utf16(filename, -1, NULL, NULL, NULL);
+        gchar *filename = g_filename_from_uri (uri, NULL, NULL);
+        winuri = (wchar_t *)g_utf8_to_utf16(filename, -1, NULL, NULL, NULL);
     }
     else
-	winuri = (wchar_t *)g_utf8_to_utf16(uri, -1, NULL, NULL, NULL);
+        winuri = (wchar_t *)g_utf8_to_utf16(uri, -1, NULL, NULL, NULL);
 
     if (winuri)
     {
-	wchar_t *wincmd = (wchar_t *)g_utf8_to_utf16("open", -1,
-						     NULL, NULL, NULL);
-	if ((INT_PTR)ShellExecuteW(NULL, wincmd, winuri,
-				   NULL, NULL, SW_SHOWNORMAL) <= 32)
-	{
-	    const gchar *message =
-		_("GnuCash could not find the associated file");
-	    gnc_error_dialog(NULL, "%s: %s", message, uri);
-	}
-	g_free (wincmd);
-	g_free (winuri);
+        wchar_t *wincmd = (wchar_t *)g_utf8_to_utf16("open", -1,
+                                 NULL, NULL, NULL);
+        if ((INT_PTR)ShellExecuteW(NULL, wincmd, winuri,
+                       NULL, NULL, SW_SHOWNORMAL) <= 32)
+        {
+            const gchar *message =
+            _("GnuCash could not find the associated file");
+            gnc_error_dialog(NULL, "%s: %s", message, uri);
+        }
+        g_free (wincmd);
+        g_free (winuri);
     }
     g_free (scheme);
 }
