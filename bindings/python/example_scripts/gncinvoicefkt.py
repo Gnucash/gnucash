@@ -56,7 +56,7 @@ def get_all_invoices_from_lots(account):
 def get_all_invoices(book, is_paid=None, is_active=None):
     """Returns a list of all invoices in the book.
 
-    posts a query to search for all invoices.
+    Posts a query to search for all invoices.
 
     arguments:
         book                the gnucash book to work with
@@ -90,7 +90,6 @@ def get_all_invoices(book, is_paid=None, is_active=None):
 
     invoice_list = []
 
-    result = query.run()
     for result in query.run():
         invoice_list.append(Invoice(instance=result))
 
@@ -101,16 +100,21 @@ def get_all_invoices(book, is_paid=None, is_active=None):
 def get_all_customers(book):
     """Returns all customers in book.
 
-    Counts IDs upwards. May miss customers with irregular IDs.
-    Should be replaced by query as in get_all_invoices."""
+    Posts a query to search for all customers.
+
+    arguments:
+        book                the gnucash book to work with
+    """
+
+    query = gnucash.Query()
+    query.search_for('gncCustomer')
+    query.set_book(book)
 
     customer_list = []
-    customer = True
-    customer_id = 0
-    while customer:
-        customer_id += 1
-        customer = book.CustomerLookupByID('%06d' % customer_id)
-        if customer:
-            customer_list.append(customer)
+
+    for result in query.run():
+        customer_list.append(Customer(instance=result))
+
+    query.destroy()
 
     return customer_list
