@@ -1723,6 +1723,7 @@
                                         "Void Transactions?" (cons "Filter" "Void Transactions")
                                         "Void Transactions" (cons "Filter" "Void Transactions")
                                         "Account Substring" (cons "Filter" "Account Name Filter")
+                                        "Individual Taxes" (cons "#f" "Use Detailed Tax Summary") ;invoice.scm, renamed November 2018
                                         ))
                        (name-match (member name new-names-list)))
 

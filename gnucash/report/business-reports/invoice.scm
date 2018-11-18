@@ -316,8 +316,8 @@ for styling the invoice. Please see the exported report for the CSS class names.
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display") (N_ "Individual Taxes")
-    "o" (N_ "Display all the individual taxes?") #f))
+    (N_ "Display") (N_ "Use Detailed Tax Summary")
+    "o" (N_ "Display all tax categories separately (one per line) instead of one single tax line.?") #f))
 
   (gnc:register-inv-option (gnc:make-internal-option "Display" "Totals" #t))
 
@@ -415,7 +415,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
      (gnc:lookup-option options section name)))
 
   (let ((show-payments (opt-val "Display" "Payments"))
-        (display-all-taxes (opt-val "Display" "Individual Taxes"))
+        (display-all-taxes (opt-val "Display" "Use Detailed Tax Summary"))
         (display-subtotal? (opt-val "Display" "Subtotal"))
         (lot (gncInvoiceGetPostedLot invoice))
         (txn (gncInvoiceGetPostedTxn invoice))
