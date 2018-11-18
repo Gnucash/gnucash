@@ -120,7 +120,7 @@ GncNumeric parse_amount (const std::string &str, int currency_format)
     {
     case 0:
         /* Currency locale */
-        if (!(xaccParseAmount (str_no_symbols.c_str(), TRUE, &val, &endptr)))
+        if (!(xaccParseAmountPosSign (str_no_symbols.c_str(), TRUE, &val, &endptr, TRUE)))
             throw std::invalid_argument (_("Value can't be parsed into a number using the selected currency format."));
         break;
     case 1:

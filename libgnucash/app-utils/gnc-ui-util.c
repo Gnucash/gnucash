@@ -1986,11 +1986,20 @@ gboolean
 xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
                  char **endstr)
 {
+    return xaccParseAmountPosSign (in_str, monetary, result, endstr, FALSE);
+}
+
+gboolean
+xaccParseAmountPosSign (const char * in_str, gboolean monetary, gnc_numeric *result,
+                        char **endstr, gboolean skip)
+{
     struct lconv *lc = gnc_localeconv();
 
     gunichar negative_sign;
     gunichar decimal_point;
     gunichar group_separator;
+    gchar *ignore = NULL;
+    char *plus_sign = "+";
     char *group;
 
     negative_sign = g_utf8_get_char(lc->negative_sign);
@@ -2007,8 +2016,18 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
         group = lc->grouping;
     }
 
+    if (skip)
+    {
+        /* We want the locale's positive sign to be ignored.
+        * If the locale doesn't specify one, we assume "+" as
+        * an optional positive sign and ignore that */
+        ignore = lc->positive_sign;
+        if (!ignore || !*ignore)
+            ignore = plus_sign;
+    }
+
     return xaccParseAmountExtended(in_str, monetary, negative_sign, decimal_point,
-                                   group_separator, group, NULL, result, endstr);
+                                   group_separator, group, ignore, result, endstr);
 }
 
 /* Note: xaccParseAmountExtended causes test-print-parse-amount
