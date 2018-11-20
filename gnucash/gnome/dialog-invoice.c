@@ -310,7 +310,7 @@ set_gncEntry_date(gpointer data, gpointer user_data)
     time64 new_date = *(time64*) user_data;
     //g_warning("Modifying date for entry with desc=\"%s\"", gncEntryGetDescription(entry));
 
-    gncEntrySetDate(entry, time64CanonicalDayTime (new_date));
+    gncEntrySetDate(entry, gnc_time64_get_day_neutral (new_date));
     /*gncEntrySetDateEntered(entry, *new_date); - don't modify this
      * because apparently it defines the ordering of the entries,
      * which we don't want to change. */
@@ -2756,9 +2756,9 @@ InvoiceWindow * gnc_ui_invoice_duplicate (GtkWindow *parent, GncInvoice *old_inv
 
     // Modify the date to today
     if (new_date)
-        entry_date = time64CanonicalDayTime (gdate_to_time64 (*new_date));
+        entry_date = gnc_time64_get_day_neutral (gdate_to_time64 (*new_date));
     else
-        entry_date = time64CanonicalDayTime (gnc_time (NULL));
+        entry_date = gnc_time64_get_day_neutral (gnc_time (NULL));
     gncInvoiceSetDateOpened(new_invoice, entry_date);
 
     // Also modify the date of all entries to today
