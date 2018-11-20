@@ -1886,6 +1886,14 @@ xaccTransOrder_num_action (const Transaction *ta, const char *actna,
     if (ta->date_posted != tb->date_posted)
         return (ta->date_posted > tb->date_posted) - (ta->date_posted < tb->date_posted);
 
+    /* Always sort closing transactions after normal transactions */
+    {
+        gboolean ta_is_closing = xaccTransGetIsClosingTxn (ta);
+        gboolean tb_is_closing = xaccTransGetIsClosingTxn (tb);
+        if (ta_is_closing != tb_is_closing)
+            return (ta_is_closing - tb_is_closing);
+    }
+
     /* otherwise, sort on number string */
     if (actna && actnb) /* split action string, if not NULL */
     {
