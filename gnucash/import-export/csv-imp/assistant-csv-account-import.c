@@ -259,7 +259,10 @@ void csv_import_sep_cb (GtkWidget *radio, gpointer user_data)
 
     if (g_strcmp0 (name, "radio_custom") == 0)
     {
-        temp = gnc_input_dialog (0, _("Adjust regular expression used for import"), _("This regular expression is used to parse the import file. Modify according to your needs.\n"), info->regexp->str);
+        temp = gnc_input_dialog (GTK_WIDGET (info->assistant),
+                                 _("Adjust regular expression used for import"),
+                                 _("This regular expression is used to parse the import file. Modify according to your needs.\n"),
+                                  info->regexp->str);
         if (temp)
         {
             g_string_assign (info->regexp, temp);
@@ -271,7 +274,7 @@ void csv_import_sep_cb (GtkWidget *radio, gpointer user_data)
     gtk_list_store_clear (info->store);
     gtk_widget_set_sensitive (info->header_row_spin, TRUE);
 
-    if (csv_import_read_file (info->file_name, info->regexp->str, info->store, 11) == MATCH_FOUND)
+    if (csv_import_read_file (GTK_WINDOW (info->assistant), info->file_name, info->regexp->str, info->store, 11) == MATCH_FOUND)
         gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->header_row_spin), 1); // set header spin to 1
     else
         gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->header_row_spin), 0); //reset header spin to 0
@@ -412,7 +415,7 @@ csv_import_assistant_account_page_prepare (GtkAssistant *assistant,
 
     /* test read one line */
     gtk_list_store_clear (info->store);
-    res = csv_import_read_file (info->file_name, info->regexp->str, info->store, 1 );
+    res = csv_import_read_file (GTK_WINDOW (info->assistant), info->file_name, info->regexp->str, info->store, 1 );
     if (res == RESULT_OPEN_FAILED)
     {
         gnc_error_dialog (GTK_WINDOW (info->assistant), _("The input file can not be opened."));
@@ -428,7 +431,7 @@ csv_import_assistant_account_page_prepare (GtkAssistant *assistant,
 
     gtk_widget_set_sensitive (info->header_row_spin, TRUE);
 
-    if (csv_import_read_file (info->file_name, info->regexp->str, info->store, 11 ) == MATCH_FOUND)
+    if (csv_import_read_file (GTK_WINDOW (info->assistant), info->file_name, info->regexp->str, info->store, 11 ) == MATCH_FOUND)
         gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->header_row_spin), 1); // set header spin to 1
     else
         gtk_spin_button_set_value (GTK_SPIN_BUTTON(info->header_row_spin), 0); //reset header spin to 0
@@ -563,7 +566,7 @@ csv_import_assistant_finish (GtkAssistant *assistant, gpointer user_data)
     CsvImportInfo *info = user_data;
 
     gtk_list_store_clear (info->store);
-    csv_import_read_file (info->file_name, info->regexp->str, info->store, 0 );
+    csv_import_read_file (GTK_WINDOW (info->assistant), info->file_name, info->regexp->str, info->store, 0 );
     csv_account_import (info);
 }
 
