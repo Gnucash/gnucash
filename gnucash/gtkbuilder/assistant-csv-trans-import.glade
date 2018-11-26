@@ -57,6 +57,7 @@ Lastly, for repeated imports the preview page has buttons to Load and Save the s
       </object>
       <packing>
         <property name="page_type">intro</property>
+        <property name="title" translatable="yes">Transaction Import Assistant</property>
         <property name="complete">True</property>
         <property name="has_padding">False</property>
       </packing>
@@ -982,7 +983,7 @@ For example
         </child>
       </object>
       <packing>
-        <property name="page_type">intro</property>
+        <property name="title" translatable="yes">Import Preview</property>
         <property name="complete">True</property>
         <property name="has_padding">False</property>
       </packing>
@@ -1098,7 +1099,7 @@ For example
         </child>
       </object>
       <packing>
-        <property name="title" translatable="yes">Match Import accounts with GnuCash accounts</property>
+        <property name="title" translatable="yes">Match Import and GnuCash accounts</property>
         <property name="has_padding">False</property>
       </packing>
     </child>
