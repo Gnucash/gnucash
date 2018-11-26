@@ -39,7 +39,6 @@ enum tree_import_model_columns
 
 typedef struct
 {
-    GtkWidget    *window;
     GtkWidget    *assistant;
 
     GtkWidget    *file_chooser;
