@@ -93,7 +93,7 @@ public:
     void assist_finish ();
     void assist_compmgr_close ();
 
-    void file_confirm_cb ();
+    void file_selection_changed_cb ();
 
     void preview_settings_delete ();
     void preview_settings_save ();
@@ -190,7 +190,7 @@ extern "C"
 void csv_price_imp_assist_prepare_cb (GtkAssistant  *assistant, GtkWidget *page, CsvImpPriceAssist* info);
 void csv_price_imp_assist_close_cb (GtkAssistant *gtkassistant, CsvImpPriceAssist* info);
 void csv_price_imp_assist_finish_cb (GtkAssistant *gtkassistant, CsvImpPriceAssist* info);
-void csv_price_imp_file_confirm_cb (GtkWidget *button, CsvImpPriceAssist *info);
+void csv_price_imp_file_selection_changed_cb (GtkFileChooser *chooser, CsvImpPriceAssist *info);
 void csv_price_imp_preview_del_settings_cb (GtkWidget *button, CsvImpPriceAssist *info);
 void csv_price_imp_preview_save_settings_cb (GtkWidget *button, CsvImpPriceAssist *info);
 void csv_price_imp_preview_settings_sel_changed_cb (GtkComboBox *combo, CsvImpPriceAssist *info);
@@ -228,9 +228,9 @@ csv_price_imp_assist_finish_cb (GtkAssistant *assistant, CsvImpPriceAssist* info
     info->assist_finish ();
 }
 
-void csv_price_imp_file_confirm_cb (GtkWidget *button, CsvImpPriceAssist *info)
+void csv_price_imp_file_selection_changed_cb (GtkFileChooser *chooser, CsvImpPriceAssist *info)
 {
-    info->file_confirm_cb();
+    info->file_selection_changed_cb();
 }
 
 void csv_price_imp_preview_del_settings_cb (GtkWidget *button, CsvImpPriceAssist *info)
@@ -500,18 +500,9 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
     /* File chooser Page */
     file_page = GTK_WIDGET(gtk_builder_get_object (builder, "file_page"));
     file_chooser = gtk_file_chooser_widget_new (GTK_FILE_CHOOSER_ACTION_OPEN);
-    g_signal_connect (G_OBJECT(file_chooser), "file-activated",
-                      G_CALLBACK(csv_price_imp_file_confirm_cb), this);
-    auto button = gtk_button_new_with_mnemonic (_("_OK"));
-    gtk_widget_set_size_request (button, 100, -1);
-    gtk_widget_show (button);
-    auto h_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_box_set_homogeneous (GTK_BOX (h_box), TRUE);
-    gtk_widget_set_hexpand (GTK_WIDGET(h_box), TRUE);
-    gtk_box_pack_start (GTK_BOX(h_box), button, FALSE, FALSE, 0);
-    gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER(file_chooser), h_box);
-    g_signal_connect (G_OBJECT(button), "clicked",
-                      G_CALLBACK(csv_price_imp_file_confirm_cb), this);
+
+    g_signal_connect (G_OBJECT(file_chooser), "selection-changed",
+                      G_CALLBACK(csv_price_imp_file_selection_changed_cb), this);
 
     auto box = GTK_WIDGET(gtk_builder_get_object (builder, "file_page"));
     gtk_box_pack_start (GTK_BOX(box), file_chooser, TRUE, TRUE, 6);
@@ -676,15 +667,17 @@ CsvImpPriceAssist::~CsvImpPriceAssist ()
  * Code related to the file chooser page
  **************************************************/
 
-/* csv_price_imp_file_confirm_cb
+/* csv_price_imp_file_selection_changed_cb
  *
- * call back for ok button in file chooser widget
+ * call back for file chooser widget
  */
 void
-CsvImpPriceAssist::file_confirm_cb ()
+CsvImpPriceAssist::file_selection_changed_cb ()
 {
+    gtk_assistant_set_page_complete (csv_imp_asst, file_page, false);
+
     auto file_name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(file_chooser));
-    if (!file_name)
+    if (!file_name || g_file_test (file_name, G_FILE_TEST_IS_DIR))
         return;
 
     auto filepath = gnc_uri_get_path (file_name);
@@ -700,36 +693,7 @@ CsvImpPriceAssist::file_confirm_cb ()
     g_free (file_name);
     g_free (starting_dir);
 
-    /* Load the file into parse_data. */
-    price_imp = std::unique_ptr<GncPriceImport>(new GncPriceImport);
-    /* Assume data is CSV. User can later override to Fixed Width if needed */
-    try
-    {
-        price_imp->file_format (GncImpFileFormat::CSV);
-        price_imp->load_file (m_file_name);
-        price_imp->tokenize (true);
-    }
-    catch (std::ifstream::failure& e)
-    {
-        /* File loading failed ... */
-        gnc_error_dialog (GTK_WINDOW(csv_imp_asst), "%s", e.what());
-        return;
-    }
-    catch (std::range_error &e)
-    {
-        /* Parsing failed ... */
-        gnc_error_dialog (GTK_WINDOW(csv_imp_asst), "%s", _(e.what()));
-        return;
-    }
-    /* Get settings store and populate */
-    preview_populate_settings_combo();
-    gtk_combo_box_set_active (settings_combo, 0);
-
-    // set over_write to false as default
-    price_imp->over_write (false);
-
-    auto num = gtk_assistant_get_current_page (csv_imp_asst);
-    gtk_assistant_set_current_page (csv_imp_asst, num + 1);
+    gtk_assistant_set_page_complete (csv_imp_asst, file_page, true);
 }
 
 
@@ -1742,6 +1706,10 @@ void CsvImpPriceAssist::preview_validate_settings ()
 void
 CsvImpPriceAssist::assist_file_page_prepare ()
 {
+    /* Disable the Forward Assistant Button */
+    gtk_assistant_set_page_complete (csv_imp_asst, file_page, false);
+    gtk_assistant_set_page_complete (csv_imp_asst, preview_page, false);
+
     /* Set the default directory */
     auto starting_dir = gnc_get_default_directory (GNC_PREFS_GROUP);
     if (starting_dir)
@@ -1754,11 +1722,51 @@ CsvImpPriceAssist::assist_file_page_prepare ()
 void
 CsvImpPriceAssist::assist_preview_page_prepare ()
 {
-    /* Disable the Forward Assistant Button */
-    gtk_assistant_set_page_complete (csv_imp_asst, preview_page, false);
+    auto go_back = false;
 
-    /* Load the data into the treeview. */
-    preview_refresh_table ();
+    /* Load the file into parse_data, reset it if altrady loaded. */
+    if (price_imp)
+        price_imp.reset();
+
+    /* Load the file into parse_data. */
+    price_imp = std::unique_ptr<GncPriceImport>(new GncPriceImport);
+    /* Assume data is CSV. User can later override to Fixed Width if needed */
+    try
+    {
+        price_imp->file_format (GncImpFileFormat::CSV);
+        price_imp->load_file (m_file_name);
+        price_imp->tokenize (true);
+    }
+    catch (std::ifstream::failure& e)
+    {
+        /* File loading failed ... */
+        gnc_error_dialog (GTK_WINDOW(csv_imp_asst), "%s", e.what());
+        go_back = true;
+    }
+    catch (std::range_error &e)
+    {
+        /* Parsing failed ... */
+        gnc_error_dialog (GTK_WINDOW(csv_imp_asst), "%s", _(e.what()));
+        go_back = true;
+    }
+
+    if (go_back)
+        gtk_assistant_previous_page (csv_imp_asst);
+    else
+    {
+        /* Get settings store and populate */
+        preview_populate_settings_combo();
+        gtk_combo_box_set_active (settings_combo, 0);
+
+        // set over_write to false as default
+        price_imp->over_write (false);
+
+        /* Disable the Forward Assistant Button */
+        gtk_assistant_set_page_complete (csv_imp_asst, preview_page, false);
+
+        /* Load the data into the treeview. */
+        g_idle_add ((GSourceFunc)csv_imp_preview_queue_rebuild_table, this);
+    }
 }
 
 void
