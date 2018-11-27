@@ -2480,7 +2480,8 @@ typedef struct
 } PriceTuple;
 
 static PriceTuple
-extract_common_prices (PriceList *from_prices, PriceList *to_prices)
+extract_common_prices (PriceList *from_prices, PriceList *to_prices,
+                       const gnc_commodity *from, const gnc_commodity *to)
 {
     PriceTuple retval = {NULL, NULL};
     GList *from_node = NULL, *to_node = NULL;
@@ -2500,8 +2501,10 @@ extract_common_prices (PriceList *from_prices, PriceList *to_prices)
             to_cur = gnc_price_get_currency (to_price);
             from_com = gnc_price_get_commodity (from_price);
             from_cur = gnc_price_get_currency (from_price);
-            if (to_com == from_com || to_com == from_cur ||
-                to_cur == from_com || to_cur == from_cur)
+            if (((to_com == from_com || to_com == from_cur) &&
+                 (to_com != from && to_com != to)) ||
+                ((to_cur == from_com || to_cur == from_cur) &&
+                 (to_cur != from && to_cur != to)))
                 break;
             to_price = NULL;
             from_price = NULL;
@@ -2578,7 +2581,7 @@ indirect_balance_conversion (GNCPriceDB *db, gnc_numeric bal,
     }
     if (from_prices == NULL || to_prices == NULL)
         return zero;
-    tuple = extract_common_prices(from_prices, to_prices);
+    tuple = extract_common_prices(from_prices, to_prices, from, to);
     gnc_price_list_destroy(from_prices);
     gnc_price_list_destroy(to_prices);
     if (tuple.from)
