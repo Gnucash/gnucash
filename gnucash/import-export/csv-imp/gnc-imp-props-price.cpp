@@ -66,7 +66,7 @@ GncNumeric parse_amount_price (const std::string &str, int currency_format)
     std::string str_no_symbols = boost::u32regex_replace(str, expr, "");
 
     /* Convert based on user chosen currency format */
-    gnc_numeric val;
+    gnc_numeric val = gnc_numeric_zero();
     char *endptr;
     switch (currency_format)
     {

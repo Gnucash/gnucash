@@ -721,7 +721,7 @@ void
 gnc_entry_ledger_compute_value (GncEntryLedger *ledger,
                                 gnc_numeric *value, gnc_numeric *tax_value)
 {
-    gnc_numeric qty, price, discount;
+    gnc_numeric qty, price = gnc_numeric_zero(), discount = gnc_numeric_zero();
     gint disc_type, disc_how;
     gboolean taxable, taxincluded;
     GncTaxTable *table;

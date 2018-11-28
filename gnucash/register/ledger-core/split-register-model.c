@@ -597,7 +597,7 @@ gnc_split_register_use_negative_color (VirtualLocation virt_loc,
                                        SplitRegister *reg)
 {
     const char * cell_name;
-    gnc_numeric value;
+    gnc_numeric value = gnc_numeric_zero();
     Split *split;
 
     if (!use_red_for_negative)
