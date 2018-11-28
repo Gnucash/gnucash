@@ -822,7 +822,7 @@ gnc_query_view_fill (GNCQueryView *qview)
             }
 
             /* Now convert this to a text value for the row */
-            if ( g_strcmp0(type, QOF_TYPE_DEBCRED) == 0 || g_strcmp0(type, QOF_TYPE_NUMERIC) == 0 )
+            if (qp && (g_strcmp0(type, QOF_TYPE_DEBCRED) == 0 || g_strcmp0(type, QOF_TYPE_NUMERIC) == 0))
             {
 
                 gnc_numeric (*nfcn)(gpointer, QofParam *) =

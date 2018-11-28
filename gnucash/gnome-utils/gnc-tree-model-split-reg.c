@@ -1337,7 +1337,7 @@ gnc_tree_model_split_reg_get_path (GtkTreeModel *tree_model, GtkTreeIter *iter)
        This path should be freed with gtk_tree_path_free(). */
     GncTreeModelSplitReg *model = GNC_TREE_MODEL_SPLIT_REG (tree_model);
     GtkTreePath *path;
-    gint tpos, spos;
+    gint tpos = -1, spos = -1;
     GList *tnode, *snode;
 
     g_return_val_if_fail (GNC_IS_TREE_MODEL_SPLIT_REG (model), NULL);
@@ -1371,7 +1371,7 @@ gnc_tree_model_split_reg_get_path (GtkTreeModel *tree_model, GtkTreeIter *iter)
         {
             spos = xaccTransCountSplits (tnode->data);
         }
-        else
+        else if (tnode && snode)
         {
             /* Can not use snode position directly as slist length does not follow
                number of splits exactly, especailly if you delete a split */

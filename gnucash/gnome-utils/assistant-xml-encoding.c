@@ -1266,7 +1266,7 @@ gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data)
     if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK)
     {
         g_list_free (encodings_bak);
-        if (!g_list_find (data->encodings,
+        if (data->encodings && !g_list_find (data->encodings,
                           GUINT_TO_POINTER (data->default_encoding)))
         {
             /* choose top level encoding then */

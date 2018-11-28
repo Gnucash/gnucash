@@ -561,7 +561,7 @@ gnc_preferences_build_page (gpointer data,
     GtkWidget *dialog, *existing_content, *new_content, *label;
     GtkNotebook *notebook;
     addition *add_in;
-    struct copy_data copydata;
+    struct copy_data copydata = {NULL, NULL, 0, 0};
     gchar **widgetname;
     gint i;
 

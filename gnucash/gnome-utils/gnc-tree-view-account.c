@@ -2591,14 +2591,15 @@ gtva_set_column_editor(GncTreeViewAccount *view,
                        GncTreeViewAccountColumnTextEdited edited_cb)
 {
     GList *renderers_orig, *renderers;
-    GtkCellRenderer *renderer;
+    GtkCellRenderer *renderer = NULL;
 
     // look for the first text-renderer; on the 0th column of the account tree,
     // there are two renderers: pixbuf and text.  So find the text one.
     for (renderers_orig = renderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(column));
             renderers && !GTK_IS_CELL_RENDERER_TEXT(renderers->data);
             renderers = renderers->next);
-    renderer = GTK_CELL_RENDERER(renderers->data);
+    if (renderers)
+        renderer = GTK_CELL_RENDERER(renderers->data);
     g_list_free(renderers_orig);
     g_return_if_fail(renderer != NULL);
     gtva_setup_column_renderer_edited_cb(GNC_TREE_VIEW_ACCOUNT(view), column, renderer, edited_cb);

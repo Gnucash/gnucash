@@ -102,11 +102,11 @@ gnc_new_tip_number (TotdDialog *totd_dialog, gint offset)
      *  Welcome to GnuCash version %s|2.4
      */
     if (tip_list[current_tip_number])
-	tip_components = g_strsplit(tip_list[current_tip_number], "|", 0);
+        tip_components = g_strsplit(tip_list[current_tip_number], "|", 0);
     /* If the tip is empty, g_strisplit will return an empty list. This
      * shouldn't normally happen, but make sure we don't crash just in
      * case */
-    if (tip_components[0] == NULL)
+    if (tip_components == NULL)
     {
         tip = g_strdup("");
     }
