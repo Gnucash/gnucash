@@ -1539,7 +1539,6 @@ try_gz_open (const char* filename, const char* perms, gboolean use_gzip,
     {
         int filedes[2];
         GThread* thread;
-        GError* error = NULL;
         gz_thread_params_t* params;
         FILE* file;
 
@@ -1564,9 +1563,7 @@ try_gz_open (const char* filename, const char* perms, gboolean use_gzip,
                                params);
         if (!thread)
         {
-            g_warning ("Could not create thread for (de)compression: %s",
-                       error->message);
-            g_error_free (error);
+            g_warning ("Could not create thread for (de)compression.");
             g_free (params->filename);
             g_free (params->perms);
             g_free (params);
