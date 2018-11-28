@@ -603,7 +603,7 @@ gboolean
 gnucash_sheet_draw_internal (GnucashSheet* sheet, cairo_t* cr,
                              GtkAllocation* alloc)
 {
-    VirtualLocation virt_loc;
+    VirtualLocation virt_loc = {{0, 0}, 0, 0};
     SheetBlock *sheet_block;
     int x = 0;
     int y = 0;

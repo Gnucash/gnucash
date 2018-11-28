@@ -2410,7 +2410,7 @@ gnucash_sheet_recompute_block_offsets (GnucashSheet *sheet)
                 width += block->style->dimensions->width;
         }
 
-        if (i > 0 && block->visible)
+        if (i > 0 && block && block->visible)
             height += block->style->dimensions->height;
     }
 
