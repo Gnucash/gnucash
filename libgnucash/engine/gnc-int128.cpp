@@ -374,6 +374,8 @@ GncInt128&
 GncInt128::operator<<= (unsigned int i) noexcept
 {
     auto flags = get_flags(m_hi);
+    if (i == 0)
+        return *this;
     if (i > maxbits)
     {
         flags &= 0xfe;
