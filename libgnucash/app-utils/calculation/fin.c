@@ -1969,13 +1969,16 @@ Amortization_Schedule (amort_sched_ptr amortsched)
             /* and set remaining pv to fv */
             pv = fv;
 
-            pmtsched->period_num = s++;
-            pmtsched->interest = pmt_int;
-            pmtsched->principal = prin;
-            pmtsched->advanced_pmt = adv_pmt;
-            pmtsched->total_pmt = final_pmt;
-            pmtsched->balance = pv;
-
+            if (pmtsched)
+            {
+                pmtsched->period_num = s++;
+                pmtsched->interest = pmt_int;
+                pmtsched->principal = prin;
+                pmtsched->advanced_pmt = adv_pmt;
+                pmtsched->total_pmt = final_pmt;
+                pmtsched->balance = pv;
+            }
+            
             per_cnt++;
             pmt_cnt++;
         }				/* endif */
@@ -2111,13 +2114,16 @@ Amortization_Schedule (amort_sched_ptr amortsched)
             /* # and set remaining pv to fv */
             pv = fv;
 
-            pmtsched->period_num = s++;
-            pmtsched->interest = pmt_int;
-            pmtsched->principal = prin;
-            pmtsched->advanced_pmt = adv_pmt;
-            pmtsched->total_pmt = final_pmt;
-            pmtsched->balance = pv;
-
+            if (pmtsched)
+            {
+                pmtsched->period_num = s++;
+                pmtsched->interest = pmt_int;
+                pmtsched->principal = prin;
+                pmtsched->advanced_pmt = adv_pmt;
+                pmtsched->total_pmt = final_pmt;
+                pmtsched->balance = pv;
+            }
+            
             per_cnt++;
             pmt_cnt++;
         }				/* # endif */
@@ -2199,12 +2205,14 @@ Amortization_Schedule (amort_sched_ptr amortsched)
 
             /* sum total interest paid */
             sum_int += pmt_int;
-
-            pmtsched->period_num = s++;
-            pmtsched->interest = -pmt_int;
-            pmtsched->total_pmt = -pv + pmt_int;
-            pmtsched->balance = 0.0;
-
+            if (pmtsched)
+            {
+                pmtsched->period_num = s++;
+                pmtsched->interest = -pmt_int;
+                pmtsched->total_pmt = -pv + pmt_int;
+                pmtsched->balance = 0.0;
+            }
+            
             amortyr->final_pmt = -pv - pmt_int;
         }				/* endif */
 
