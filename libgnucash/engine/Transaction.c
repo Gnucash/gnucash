@@ -1752,7 +1752,7 @@ xaccTransRollbackEdit (Transaction *trans)
         if (!qof_instance_is_dirty(QOF_INSTANCE(s)))
             continue;
 
-        if (i < num_preexist)
+        if (i < num_preexist && onode)
         {
             Split *so = onode->data;
 
