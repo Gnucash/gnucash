@@ -770,6 +770,7 @@ GncInt128::div (const GncInt128& b, GncInt128& q, GncInt128& r) const noexcept
     q.m_hi = set_flags(hi, qflags);
     if (hi == 0 && bhi == 0) //let the hardware do it
     {
+        assert (b.m_lo != 0); // b.m_hi is 0 but b isn't or we didn't get here.
         q.m_lo = m_lo / b.m_lo;
         r.m_lo = m_lo % b.m_lo;
         return;
