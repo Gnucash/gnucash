@@ -248,7 +248,7 @@ Account * gnc_import_select_account(GtkWidget *parent,
     const gchar *retval_name = NULL;
     GtkBuilder *builder;
     GtkWidget * online_id_label, *box, *pbox;
-    gchar account_description_text[ACCOUNT_DESCRIPTION_MAX_SIZE] = "";
+    gchar account_description_text[ACCOUNT_DESCRIPTION_MAX_SIZE + 1] = "";
     gboolean ok_pressed_retval = FALSE;
 
     ENTER("Default commodity received: %s", gnc_commodity_get_fullname( new_account_default_commodity));
@@ -496,7 +496,7 @@ Account * gnc_import_account_assist_update (AccountPickerDialog *picker)
 #define ACCOUNT_DESCRIPTION_MAX_SIZE 255
 
     const gchar *retval_name = NULL;
-    gchar account_description_text[ACCOUNT_DESCRIPTION_MAX_SIZE] = "";
+    gchar account_description_text[ACCOUNT_DESCRIPTION_MAX_SIZE + 1] = "";
 
     ENTER("Default commodity received: %s", gnc_commodity_get_fullname( picker->new_account_default_commodity));
     DEBUG("Default account type received: %s", xaccAccountGetTypeStr( picker->new_account_default_type));
