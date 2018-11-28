@@ -2285,7 +2285,6 @@ static
 void
 gnc_split_reg_determine_read_only( GNCSplitReg *gsr )
 {
-    dialog_args *args = g_malloc(sizeof(dialog_args));
     SplitRegister *reg;
 
     if (qof_book_is_readonly(gnc_get_current_book()))
@@ -2297,7 +2296,8 @@ gnc_split_reg_determine_read_only( GNCSplitReg *gsr )
 
     if ( !gsr->read_only )
     {
-
+        dialog_args *args;
+        char *string = NULL;
         switch (gnc_split_reg_get_placeholder(gsr))
         {
         case PLACEHOLDER_NONE:
@@ -2305,14 +2305,14 @@ gnc_split_reg_determine_read_only( GNCSplitReg *gsr )
             return;
 
         case PLACEHOLDER_THIS:
-            args->string = _("This account may not be edited. If you want "
+            string = _("This account may not be edited. If you want "
                              "to edit transactions in this register, please "
                              "open the account options and turn off the "
                              "placeholder checkbox.");
             break;
 
         default:
-            args->string = _("One of the sub-accounts selected may not be "
+            string = _("One of the sub-accounts selected may not be "
                              "edited. If you want to edit transactions in "
                              "this register, please open the sub-account "
                              "options and turn off the placeholder checkbox. "
@@ -2322,6 +2322,8 @@ gnc_split_reg_determine_read_only( GNCSplitReg *gsr )
         }
         gsr->read_only = TRUE;
         /* Put up a warning dialog */
+        args = g_malloc(sizeof(dialog_args));
+        args->string = string;
         args->gsr = gsr;
         g_timeout_add (250, gtk_callback_bug_workaround, args); /* 0.25 seconds */
     }

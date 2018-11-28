@@ -789,7 +789,7 @@ gnc_sx_create_from_trans( GtkWindow *parent, Transaction *trans )
                                  "from a Transaction currently "
                                  "being edited. Please Enter the "
                                  "Transaction before Scheduling." ) );
-            sxftd_close( sxfti, TRUE );
+            sxftd_destroy (NULL, sxfti);
             return;
         }
         else

@@ -4996,7 +4996,7 @@ gtv_sr_num_cb (GtkEntry    *entry,
         snprintf (buff, sizeof(buff), "%ld", number);
 
         if (g_strcmp0 (buff, "") == 0)
-            leave_string = "";
+            leave_string = g_strdup ("");
         else
             leave_string = g_strdup (buff);
     }

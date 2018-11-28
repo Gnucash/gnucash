@@ -879,15 +879,15 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
 static char * un_escape(char *str)
 {
     gchar quote = '"';
-    gchar *newStr = NULL;
+    gchar *newStr = NULL, *tmpstr = str;
     int n = 0;
     newStr = g_malloc(strlen(str)+1); // This must be freed in the calling code.
-    while(*str != '\0')
+    while(*tmpstr != '\0')
     {
-        if(*str == quote)
+        if(*tmpstr == quote)
         {
-            str++;
-            if(*str == quote)
+            tmpstr++;
+            if(*tmpstr == quote)
             {
                 newStr[n] = quote;
             }
@@ -896,9 +896,10 @@ static char * un_escape(char *str)
         {
             newStr[n] = *str;
         }
-            str++;
+            tmpstr++;
             n++;
-        }
+    }
+    g_free (str);
 	newStr[n] = '\0'; //ending the character array
     return newStr;
 }

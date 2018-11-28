@@ -2187,6 +2187,7 @@ gnc_invoice_recreate_page (GncMainWindow *window,
         goto give_up;
     }
     g_free(tmp_string);
+    tmp_string = NULL;
 
     /* Get Owner Type */
     owner_type = g_key_file_get_string(key_file, group_name,

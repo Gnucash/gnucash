@@ -315,8 +315,6 @@ gnc_totd_dialog (GtkWindow *parent, gboolean startup)
     GtkTextView *textview;
     gboolean show_tips;
 
-    totd_dialog = g_new0 (TotdDialog, 1);
-
     show_tips = gnc_prefs_get_bool(GNC_PREFS_GROUP, GNC_PREF_SHOW_TIPS);
     if (startup && !show_tips)
         return;
@@ -350,6 +348,7 @@ gnc_totd_dialog (GtkWindow *parent, gboolean startup)
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(dialog), "GncTotdDialog");
 
+    totd_dialog = g_new0 (TotdDialog, 1);
     totd_dialog->dialog = dialog;
 
     ENTER("totd_dialog %p, dialog %p", totd_dialog, dialog);

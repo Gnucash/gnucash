@@ -1529,6 +1529,7 @@ read_one_check_directory(PrintCheckDialog *pcd, GtkListStore *store,
             found = TRUE;
         }
     }
+    free_check_format (format);
     g_dir_close(dir);
 
     /* If any files were added to the list, add a separator between

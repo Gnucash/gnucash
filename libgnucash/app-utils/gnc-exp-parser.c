@@ -230,6 +230,7 @@ make_predefined_vars_from_external_helper( gpointer key, gpointer value, gpointe
         pnum->value = *(gnc_numeric*)value;
 
     make_predefined_vars_helper( key, pnum, data );
+    g_free(pnum); /* make_predefined_vars_helper allocs its own copy. */
 }
 
 static var_store_ptr

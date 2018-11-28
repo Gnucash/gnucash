@@ -378,6 +378,7 @@ GncXmlBackend::write_to_file (bool make_backup)
 
     if (!mktemp (tmp_name))
     {
+        g_free (tmp_name);
         set_error(ERR_BACKEND_MISC);
         set_message("Failed to make temp file");
         LEAVE ("");
@@ -388,6 +389,7 @@ GncXmlBackend::write_to_file (bool make_backup)
     {
         if (!backup_file ())
         {
+            g_free (tmp_name);
             LEAVE ("");
             return FALSE;
         }
@@ -513,6 +515,7 @@ GncXmlBackend::write_to_file (bool make_backup)
         LEAVE ("");
         return FALSE;
     }
+    g_free (tmp_name);
     LEAVE ("");
     return TRUE;
 }

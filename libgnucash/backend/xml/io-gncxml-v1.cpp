@@ -765,49 +765,42 @@ kvp_frame_slot_end_handler (gpointer data_for_children,
 {
     KvpFrame* f = (KvpFrame*) parent_data;
     GSList* lp;
-    guint64 key_node_count;
+    gboolean first = TRUE;
     gchar* key = NULL;
-    sixtp_child_result* value_cr = NULL;
     KvpValue* value = NULL;
     gboolean delete_value = FALSE;
-
+    sixtp_child_result *cr1 = NULL, *cr2 = NULL, *cr = NULL;
     g_return_val_if_fail (f, FALSE);
 
     if (g_slist_length (data_from_children) != 2) return (FALSE);
-
-    /* check to see that we got exactly one <key> node */
-    lp = data_from_children;
-    key_node_count = 0;
-    for (lp = data_from_children; lp; lp = lp->next)
+    cr1 = (sixtp_child_result*)data_from_children->data;
+    cr2 = (sixtp_child_result*)data_from_children->next->data;
+    
+    if (is_child_result_from_node_named(cr1, "k"))
     {
-        sixtp_child_result* cr = (sixtp_child_result*) lp->data;
-
-        if (is_child_result_from_node_named (cr, "k"))
-        {
-            key = (char*) cr->data;
-            key_node_count++;
-        }
-        else
-        {
-            if (is_child_result_from_node_named (cr, "frame"))
-            {
-                KvpFrame* frame = static_cast<KvpFrame*> (cr->data);
-                value = new KvpValue {frame};
-                delete_value = TRUE;
-            }
-            else
-            {
-                value = static_cast<KvpValue*> (cr->data);
-                delete_value = FALSE;
-            }
-
-            value_cr = cr;
-        }
+        key = (char*)cr1->data;
+        cr = cr2;
     }
-
-    if (key_node_count != 1) return (FALSE);
-
-    value_cr->should_cleanup = TRUE;
+    else if (is_child_result_from_node_named(cr2, "k"))
+    {
+        key = (char*)cr2->data;
+        cr = cr1;
+    }
+    else
+        return FALSE;
+    
+    if (is_child_result_from_node_named (cr, "frame"))
+    {
+        KvpFrame* frame = static_cast<KvpFrame*> (cr->data);
+        value = new KvpValue {frame};
+        delete_value = TRUE;
+    }
+    else
+    {
+        value = static_cast<KvpValue*> (cr->data);
+        delete_value = FALSE;
+    }
+    
     f->set ({key}, value);
     if (delete_value)
         delete value;

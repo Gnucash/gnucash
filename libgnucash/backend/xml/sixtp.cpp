@@ -267,20 +267,22 @@ sixtp_destroy_child (gpointer key, gpointer value, gpointer user_data)
     gpointer lookup_value;
 
     g_debug ("Killing sixtp child under key <%s>", key ? (char*) key : "(null)");
-    g_free (key);
 
     if (!corpses)
     {
         g_critical ("no corpses in sixtp_destroy_child <%s>",
                     key ? (char*) key : "(null)");
+        g_free (key);
         return;
     }
     if (!child)
     {
         g_critical ("no child in sixtp_destroy_child <%s>",
                     key ? (char*) key : "");
+        g_free (key);
         return;
     }
+    g_free (key);
 
     if (!g_hash_table_lookup_extended (corpses, (gconstpointer) child,
                                        &lookup_key, &lookup_value))

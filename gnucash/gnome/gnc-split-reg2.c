@@ -911,7 +911,7 @@ gsr2_determine_account_pr_dialog (gpointer argp)
 static void
 gnc_split_reg2_determine_account_pr (GNCSplitReg2 *gsr)
 {
-    dialog_args *args = g_malloc (sizeof (dialog_args));
+    dialog_args *args;
     GncTreeModelSplitReg *model;
 
     model = gnc_ledger_display2_get_split_model_register (gsr->ledger);
@@ -920,6 +920,8 @@ gnc_split_reg2_determine_account_pr (GNCSplitReg2 *gsr)
         return;
 
     /* Put up a warning dialog */
+    args  = g_malloc (sizeof (dialog_args));
+    args->string = _(""); /* FIXME: No string for dialog. */
     args->gsr = gsr;
     g_timeout_add (250, gsr2_determine_account_pr_dialog, args); /* 0.25 seconds */
 }
@@ -958,7 +960,6 @@ static
 void
 gnc_split_reg2_determine_read_only (GNCSplitReg2 *gsr) //this works
 {
-    dialog_args *args = g_malloc (sizeof (dialog_args));
 
     if (qof_book_is_readonly (gnc_get_current_book()))
     {
@@ -969,6 +970,7 @@ gnc_split_reg2_determine_read_only (GNCSplitReg2 *gsr) //this works
 
     if (!gsr->read_only)
     {
+        dialog_args *args = g_malloc (sizeof (dialog_args));
 
         switch (gnc_split_reg2_get_placeholder (gsr))
         {

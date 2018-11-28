@@ -366,8 +366,6 @@ gnc_reset_warnings_dialog (GtkWindow *parent)
     GtkWidget  *dialog;
     GtkBuilder *builder;
 
-    rw_dialog = g_new0 (RWDialog, 1);
-
     ENTER("");
     if (gnc_forall_gui_components(DIALOG_RESET_WARNINGS_CM_CLASS,
                                   show_handler, NULL))
@@ -386,6 +384,7 @@ gnc_reset_warnings_dialog (GtkWindow *parent)
 
     gtk_window_set_transient_for(GTK_WINDOW (dialog), parent);
 
+    rw_dialog = g_new0 (RWDialog, 1);
     rw_dialog->dialog = dialog;
     PINFO("rw_dialog %p, dialog %p", rw_dialog, dialog);
 

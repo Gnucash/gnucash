@@ -1868,6 +1868,7 @@ gnc_xml2_find_ambiguous (const gchar* filename, GList* encodings,
         if (iconv_item->iconv == (GIConv) - 1)
         {
             PWARN ("Unable to open IConv conversion descriptor for '%s'", enc);
+            g_free (iconv_item);
             goto cleanup_find_ambs;
         }
         else
@@ -2176,7 +2177,8 @@ gnc_xml2_parse_with_subst (GncXmlBackend* xml_be, QofBook* book, GHashTable* sub
     success = qof_session_load_from_xml_file_v2_full (
                   xml_be, book, (sixtp_push_handler) parse_with_subst_push_handler,
                   push_data, GNC_BOOK_XML2_FILE);
-
+    g_free (push_data);
+    
     if (success)
         qof_instance_set_dirty (QOF_INSTANCE (book));
 
