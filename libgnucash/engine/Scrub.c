@@ -683,7 +683,6 @@ gnc_transaction_balance_trading (Transaction *trans, Account *root)
         gnc_monetary *imbal_mon = imbalance_commod->data;
         gnc_commodity *commodity;
         gnc_numeric old_amount, new_amount;
-        gnc_numeric old_value, new_value, val_imbalance;
         const gnc_commodity *txn_curr = xaccTransGetCurrency (trans);
 
         commodity = gnc_monetary_commodity (*imbal_mon);
@@ -695,11 +694,6 @@ gnc_transaction_balance_trading (Transaction *trans, Account *root)
             gnc_monetary_list_free(imbal_list);
             LEAVE("");
             return;
-        }
-
-        if (! gnc_commodity_equal (txn_curr, commodity))
-        {
-            val_imbalance = gnc_transaction_get_commodity_imbalance (trans, commodity);
         }
 
         xaccTransBeginEdit (trans);
@@ -719,8 +713,10 @@ gnc_transaction_balance_trading (Transaction *trans, Account *root)
         }
         else
         {
-            old_value = xaccSplitGetValue (balance_split);
-            new_value = gnc_numeric_sub (old_value, val_imbalance,
+            gnc_numeric val_imbalance = gnc_transaction_get_commodity_imbalance (trans,            commodity);
+
+            gnc_numeric old_value = xaccSplitGetValue (balance_split);
+            gnc_numeric new_value = gnc_numeric_sub (old_value, val_imbalance,
                                          gnc_commodity_get_fraction(txn_curr),
                                          GNC_HOW_RND_ROUND_HALF_UP);
 
