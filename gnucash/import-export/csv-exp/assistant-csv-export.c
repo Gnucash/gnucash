@@ -73,7 +73,7 @@ void csv_export_show_range_cb (GtkRadioButton *button, gpointer user_data);
 void csv_export_start_date_cb (GtkWidget *radio, gpointer user_data);
 void csv_export_end_date_cb (GtkWidget *radio, gpointer user_data);
 
-void csv_export_file_chooser_confirm_cb (GtkWidget *button, CsvExportInfo *info);
+void csv_export_file_chooser_selection_changed_cb (GtkFileChooser *chooser, CsvExportInfo *info);
 
 static const gchar *finish_tree_string = N_(
             /* Translators: %s is the file name string. */
@@ -121,55 +121,43 @@ static const gchar *start_trans_simple_string = N_(
 
 
 /**************************************************
- * csv_export_file_chooser_confirm_cb
+ * csv_export_file_chooser_selection_changed_cb
  *
- * call back for ok button in file chooser widget
+ * call back for GtkFileChooser widget
  **************************************************/
 void
-csv_export_file_chooser_confirm_cb (GtkWidget *button, CsvExportInfo *info)
+csv_export_file_chooser_selection_changed_cb (GtkFileChooser *chooser, CsvExportInfo *info)
 {
     GtkAssistant *assistant = GTK_ASSISTANT(info->window);
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-
     gchar *file_name;
 
     gtk_assistant_set_page_complete (assistant, page, FALSE);
 
     file_name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(info->file_chooser));
 
-    if (file_name)
-    {
-        if (g_file_test (file_name, G_FILE_TEST_EXISTS))
-        {
-            const char *format = _("The file %s already exists. "
-                                   "Are you sure you want to overwrite it?");
-
-            /* if user says cancel, we should break out */
-            if (!gnc_verify_dialog (GTK_WINDOW (assistant), FALSE, format, file_name))
-                return;
-        }
-
-        info->file_name = g_strdup (file_name);
-        gtk_assistant_set_page_complete (assistant, page, TRUE);
-    }
-
-    if (file_name)
+    /* Test for a valid filename and not a directory */
+    if (file_name && !g_file_test (file_name, G_FILE_TEST_IS_DIR))
     {
         gchar *filepath = gnc_uri_get_path (file_name);
         gchar *filedir = g_path_get_dirname (filepath);
+
+        g_free (info->file_name);
+        info->file_name = g_strdup (file_name);
+
+        g_free (info->starting_dir);
         info->starting_dir = g_strdup (filedir);
+
         g_free (filedir);
         g_free (filepath);
+
+        gtk_assistant_set_page_complete (assistant, page, TRUE);
     }
     g_free (file_name);
 
     DEBUG("file_name selected is %s", info->file_name);
     DEBUG("starting directory is %s", info->starting_dir);
-
-    /* Step to next page if page is complete */
-    if(gtk_assistant_get_page_complete (assistant, page))
-        gtk_assistant_set_current_page (assistant, num + 1);
 }
 
 
@@ -268,7 +256,6 @@ csv_export_custom_entry_cb (GtkWidget *widget, gpointer user_data)
     info->separator_str = strdup (custom_str);
 
     if (info->use_custom == TRUE && gtk_entry_get_text_length (GTK_ENTRY(info->custom_entry)) == 0)
-
         gtk_assistant_set_page_complete (assistant, page, FALSE);
     else
         gtk_assistant_set_page_complete (assistant, page, TRUE);
@@ -701,6 +688,16 @@ csv_export_assistant_finish_page_prepare (GtkAssistant *assistant,
     gtk_label_set_text (GTK_LABEL(info->finish_label), text);
     g_free (text);
 
+    /* Test if the filename exists */
+    if (g_file_test (info->file_name, G_FILE_TEST_EXISTS))
+    {
+        const char *format = _("The file %s already exists. "
+                               "Are you sure you want to overwrite it?");
+
+        /* if user says cancel, we should go back a page */
+        if (!gnc_verify_dialog (GTK_WINDOW (assistant), FALSE, format, info->file_name))
+            gtk_assistant_previous_page (assistant);
+    }
     /* Enable the Assistant Buttons */
     gtk_assistant_set_page_complete (assistant, page, TRUE);
 }
@@ -921,15 +918,9 @@ csv_export_assistant_create (CsvExportInfo *info)
     /* File chooser Page */
     info->file_page = GTK_WIDGET(gtk_builder_get_object(builder, "file_page"));
     info->file_chooser = gtk_file_chooser_widget_new (GTK_FILE_CHOOSER_ACTION_SAVE);
-    button = gtk_button_new_with_mnemonic (_("_OK"));
-    gtk_widget_set_size_request (button, 100, -1);
-    gtk_widget_show (button);
-    h_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_box_set_homogeneous (GTK_BOX (h_box), TRUE);
-    gtk_box_pack_start(GTK_BOX(h_box), button, FALSE, FALSE, 0);
-    gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER(info->file_chooser), h_box);
-    g_signal_connect (G_OBJECT(button), "clicked",
-                      G_CALLBACK(csv_export_file_chooser_confirm_cb), info);
+
+    g_signal_connect (G_OBJECT(info->file_chooser), "selection-changed",
+                      G_CALLBACK(csv_export_file_chooser_selection_changed_cb), info);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "file_page"));
     gtk_box_pack_start (GTK_BOX (box), info->file_chooser, TRUE, TRUE, 6);
