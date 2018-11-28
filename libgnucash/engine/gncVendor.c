@@ -1040,10 +1040,13 @@ gncVendorGetCachedBalance (GncVendor *vend)
 
 void gncVendorSetCachedBalance (GncVendor *vend, const gnc_numeric *new_bal)
 {
-    if (!new_bal && vend->balance)
+    if (!new_bal)
     {
-        g_free (vend->balance);
-        vend->balance = NULL;
+        if (vend->balance)
+        {
+            g_free (vend->balance);
+            vend->balance = NULL;
+        }
         return;
     }
 

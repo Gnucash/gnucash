@@ -962,10 +962,13 @@ gncEmployeeGetCachedBalance (GncEmployee *empl)
 
 void gncEmployeeSetCachedBalance (GncEmployee *empl, const gnc_numeric *new_bal)
 {
-    if (!new_bal && empl->balance)
+    if (!new_bal)
     {
-        g_free (empl->balance);
-        empl->balance = NULL;
+        if (empl->balance)
+        {
+            g_free (empl->balance);
+            empl->balance = NULL;
+        }
         return;
     }
 
