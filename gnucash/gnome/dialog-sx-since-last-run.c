@@ -920,7 +920,7 @@ variable_value_changed_cb(GtkCellRendererText *cell,
                           const gchar *value,
                           GncSxSinceLastRunDialog *dialog)
 {
-    GncSxVariable *var;
+    GncSxVariable *var = NULL;
     GncSxInstance *inst;
     GtkTreeIter tree_iter;
     gnc_numeric parsed_num;

@@ -505,7 +505,7 @@ gsr2_redraw_all_cb (GncTreeViewSplitReg *view, gpointer user_data)
     GNCSplitReg2 *gsr = user_data;
     gnc_commodity * commodity;
     GNCPrintAmountInfo print_info;
-    gnc_numeric amount;
+    gnc_numeric amount = gnc_numeric_zero();
     Account *leader;
     gboolean reverse;
     gboolean euro;
@@ -976,6 +976,7 @@ gnc_split_reg2_determine_read_only (GNCSplitReg2 *gsr) //this works
         {
         case PLACEHOLDER_NONE:
             /* stay as false. */
+            g_free (args);
             return;
 
         case PLACEHOLDER_THIS:
