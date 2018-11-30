@@ -548,6 +548,7 @@ gnc_plugin_page_account_tree_open (Account *account, GtkWindow *win)
     else // we have no account pages, create one
         plugin_page = gnc_plugin_page_account_tree_new ();
 
+    g_return_if_fail(plugin_page);
     window = plugin_page->window;
 
     gnc_main_window_open_page (GNC_MAIN_WINDOW(window), plugin_page);

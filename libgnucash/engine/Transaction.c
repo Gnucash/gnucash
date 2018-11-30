@@ -35,17 +35,7 @@
 #include <glib/gi18n.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef HAVE_SYS_TIME_H
-# include <sys/time.h>
-#else
-/* We simply define the struct timeval on our own here. */
-struct timeval
-{
-    long    tv_sec;         /* seconds */
-    long    tv_usec;        /* and microseconds */
-};
-/* include <Winsock2.h> */
-#endif
+#include <stdint.h>
 #include <time.h>
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
@@ -1762,7 +1752,7 @@ xaccTransRollbackEdit (Transaction *trans)
         if (!qof_instance_is_dirty(QOF_INSTANCE(s)))
             continue;
 
-        if (i < num_preexist)
+        if (i < num_preexist && onode)
         {
             Split *so = onode->data;
 
@@ -1895,6 +1885,14 @@ xaccTransOrder_num_action (const Transaction *ta, const char *actna,
 
     if (ta->date_posted != tb->date_posted)
         return (ta->date_posted > tb->date_posted) - (ta->date_posted < tb->date_posted);
+
+    /* Always sort closing transactions after normal transactions */
+    {
+        gboolean ta_is_closing = xaccTransGetIsClosingTxn (ta);
+        gboolean tb_is_closing = xaccTransGetIsClosingTxn (tb);
+        if (ta_is_closing != tb_is_closing)
+            return (ta_is_closing - tb_is_closing);
+    }
 
     /* otherwise, sort on number string */
     if (actna && actnb) /* split action string, if not NULL */
@@ -2147,12 +2145,17 @@ xaccTransSetDescription (Transaction *trans, const char *desc)
 void
 xaccTransSetAssociation (Transaction *trans, const char *assoc)
 {
-    GValue v = G_VALUE_INIT;
     if (!trans || !assoc) return;
-    g_value_init (&v, G_TYPE_STRING);
-    g_value_set_string (&v, assoc);
     xaccTransBeginEdit(trans);
-    qof_instance_set_kvp (QOF_INSTANCE (trans), &v, 1, assoc_uri_str);
+    if (g_strcmp0 (assoc, "") == 0)
+        qof_instance_set_kvp (QOF_INSTANCE (trans), NULL, 1, assoc_uri_str);
+    else
+    {
+        GValue v = G_VALUE_INIT;
+        g_value_init (&v, G_TYPE_STRING);
+        g_value_set_string (&v, assoc);
+        qof_instance_set_kvp (QOF_INSTANCE (trans), &v, 1, assoc_uri_str);
+    }
     qof_instance_set_dirty(QOF_INSTANCE(trans));
     xaccTransCommitEdit(trans);
 }
@@ -2370,7 +2373,7 @@ xaccTransGetDate (const Transaction *trans)
 time64
 xaccTransGetDateEntered (const Transaction *trans)
 {
-    return trans ? trans->date_entered : 0;;
+    return trans ? trans->date_entered : 0;
 }
 /*################## Added for Reg2 #################*/
 
@@ -2394,13 +2397,11 @@ xaccTransGetDatePostedGDate (const Transaction *trans)
         qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, TRANS_DATE_POSTED);
         if (G_VALUE_HOLDS_BOXED (&v))
              result = *(GDate*)g_value_get_boxed (&v);
-        if (! g_date_valid (&result))
+        if (! g_date_valid (&result) || gdate_to_time64 (result) == INT64_MAX)
         {
-             /* Well, this txn doesn't have a GDate saved in a
-              * slot. Avoid getting the date in the local TZ by
-              * converting to UTC before generating the
-              * date. (time64_to_gdate doesn't do this so don't use
-              * it.
+             /* Well, this txn doesn't have a valid GDate saved in a slot.
+              * time64_to_gdate() uses local time and we want UTC so we have
+              * to write it out.
               */
              time64 time = xaccTransGetDate(trans);
              struct tm *stm = gnc_gmtime(&time);

@@ -258,7 +258,7 @@ save_budget_amounts (GncSqlBackend* sql_be, GncBudget* budget)
     GList* node;
     budget_amount_info_t info;
     guint num_periods;
-    gboolean is_ok = TRUE;;
+    gboolean is_ok = TRUE;
 
     g_return_val_if_fail (sql_be != NULL, FALSE);
     g_return_val_if_fail (budget != NULL, FALSE);
@@ -333,7 +333,7 @@ GncSqlBudgetBackend::load_all (GncSqlBackend* sql_be)
     auto stmt = sql_be->create_statement_from_sql(sql);
     auto result = sql_be->execute_select_statement(stmt);
     for (auto row : *result)
-        auto b = load_single_budget (sql_be, row);
+        load_single_budget (sql_be, row);
 
     std::string pkey(col_table[0]->name());
     sql = "SELECT DISTINCT ";

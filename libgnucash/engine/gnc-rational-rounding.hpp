@@ -23,6 +23,7 @@
 #ifndef __GNC_RATIONAL_ROUNDING_HPP__
 #define __GNC_RATIONAL_ROUNDING_HPP__
 #include "gnc-numeric.h"
+#include "gnc-int128.hpp"
 
 enum class RoundType
 {
@@ -105,7 +106,18 @@ round(T num, T den, T rem, RT2T<RoundType::half_down>)
 {
     if (rem == 0)
         return num;
-    if (rem * 2 > den)
+    if (std::abs(rem * 2) > std::abs(den))
+        return num + (num < 0 ? -1 : 1);
+    return num;
+}
+
+template <> inline GncInt128
+round<GncInt128>(GncInt128 num, GncInt128 den, GncInt128 rem,
+                 RT2T<RoundType::half_down>)
+{
+    if (rem == 0)
+        return num;
+    if (rem.abs() * 2 > den.abs())
         return num + (num < 0 ? -1 : 1);
     return num;
 }
@@ -115,7 +127,18 @@ round(T num, T den, T rem, RT2T<RoundType::half_up>)
 {
     if (rem == 0)
         return num;
-    if (rem * 2 >= den)
+    if (std::abs(rem) * 2 >= std::abs(den))
+        return num + (num < 0 ? -1 : 1);
+    return num;
+}
+
+template <> inline GncInt128
+round<GncInt128>(GncInt128 num, GncInt128 den, GncInt128 rem,
+                 RT2T<RoundType::half_up>)
+{
+    if (rem == 0)
+        return num;
+    if (rem.abs() * 2 >= den.abs())
         return num + (num < 0 ? -1 : 1);
     return num;
 }
@@ -125,9 +148,21 @@ round(T num, T den, T rem, RT2T<RoundType::bankers>)
 {
     if (rem == 0)
         return num;
-    if (rem * 2 > den || (rem * 2 == den && num % 2))
+    if (std::abs(rem * 2) > std::abs(den) ||
+        (std::abs(rem * 2) == std::abs(den) && num % 2))
         return num += (num < 0 ? -1 : 1);
     return num;
 }
 
+template<> inline GncInt128
+round<GncInt128>(GncInt128 num, GncInt128 den, GncInt128 rem,
+                 RT2T<RoundType::bankers>)
+{
+    if (rem == 0)
+        return num;
+    if (rem.abs() * 2 > den.abs() ||
+        (rem.abs() * 2 == den.abs() && num % 2))
+        return num += (num < 0 ? -1 : 1);
+    return num;
+}
 #endif //__GNC_RATIONAL_ROUNDING_HPP__

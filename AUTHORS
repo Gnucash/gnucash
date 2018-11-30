@@ -9,7 +9,7 @@ Current Project Team:
 J. Alex Aycinena: Tax Reports, General Development
 Derek Atkins: Infrastructure, User Support
 Mike Alexander: Pricing/Exchange Rates, Lots, Advanced Portfolio Report
-Frank Ellenberger: Currencies
+Frank Ellenberger: Internationalization and  Assistance for Localizations
 Rob Gowin: CMake build system
 Robert Fewell: GUI Development
 Geert Janssens: General Development and Maintenance
@@ -119,7 +119,7 @@ Chris Shoemaker implemented budgeting support for GnuCash. He replaced
 Andreas Köhler hunted down lots of bugs, especially for GUI code and
    other gtk related issues.
 
-Charles Day overhauled the QIF importer and now focuses mainly on
+Charles Day overhauled the QIF importer and focused then on
    investment- and currency-related issues.
 
 Other Contributors:
@@ -165,9 +165,8 @@ Glen Ditchfield  updated documentation
 Tyson Dowd  for config/make patches &amp; debian maint
 Koen D'Hondt  for Solaris patches to XmHTML
 Bob Drzyzgula  for budgeting design notes
-Frank H. Ellenberger  small things, usually germany related
+Frank H. Ellenberger  parts of german localization and currency fixes
 Volker Englisch  QA and testing
-Frank H. Ellenberger  Fix for IDR currency
 Christoph Ernst  Small bugfixes and minor enhancements
 Jonathan Ernst  Translations
 Stephen Evanchik  Logging improvements; gtk2 conversions

@@ -1675,7 +1675,6 @@ Amortization_init (amort_sched_ptr amortsched)
 
     if (pmt == 0.0)
     {
-        s = 0;
         amortsched->pve = pv;
     }
     else
@@ -1854,8 +1853,6 @@ Amortization_Schedule (amort_sched_ptr amortsched)
         amortsched->schedule.first_yr =
             amortyr = (amort_sched_yr_ptr) calloc (1, sizeof (amort_sched_yr));
 
-        d = pv;
-
         for (per_cnt = 0, s = 1, j = n; pv != fv; j -= 2, per_cnt++)
         {
             /* basic equation to compute interest this payment period */
@@ -1969,13 +1966,16 @@ Amortization_Schedule (amort_sched_ptr amortsched)
             /* and set remaining pv to fv */
             pv = fv;
 
-            pmtsched->period_num = s++;
-            pmtsched->interest = pmt_int;
-            pmtsched->principal = prin;
-            pmtsched->advanced_pmt = adv_pmt;
-            pmtsched->total_pmt = final_pmt;
-            pmtsched->balance = pv;
-
+            if (pmtsched)
+            {
+                pmtsched->period_num = s++;
+                pmtsched->interest = pmt_int;
+                pmtsched->principal = prin;
+                pmtsched->advanced_pmt = adv_pmt;
+                pmtsched->total_pmt = final_pmt;
+                pmtsched->balance = pv;
+            }
+            
             per_cnt++;
             pmt_cnt++;
         }				/* endif */
@@ -1995,8 +1995,6 @@ Amortization_Schedule (amort_sched_ptr amortsched)
         /* fixed prepaymet schedule prepayment specified by user */
         amortsched->schedule.first_yr =
             amortyr = (amort_sched_yr_ptr) calloc (1, sizeof (amort_sched_yr));
-
-        d = pv;
 
         /*  set advnaced payment */
         adv_pmt = amortsched->fixed_pmt;
@@ -2111,13 +2109,16 @@ Amortization_Schedule (amort_sched_ptr amortsched)
             /* # and set remaining pv to fv */
             pv = fv;
 
-            pmtsched->period_num = s++;
-            pmtsched->interest = pmt_int;
-            pmtsched->principal = prin;
-            pmtsched->advanced_pmt = adv_pmt;
-            pmtsched->total_pmt = final_pmt;
-            pmtsched->balance = pv;
-
+            if (pmtsched)
+            {
+                pmtsched->period_num = s++;
+                pmtsched->interest = pmt_int;
+                pmtsched->principal = prin;
+                pmtsched->advanced_pmt = adv_pmt;
+                pmtsched->total_pmt = final_pmt;
+                pmtsched->balance = pv;
+            }
+            
             per_cnt++;
             pmt_cnt++;
         }				/* # endif */
@@ -2199,12 +2200,14 @@ Amortization_Schedule (amort_sched_ptr amortsched)
 
             /* sum total interest paid */
             sum_int += pmt_int;
-
-            pmtsched->period_num = s++;
-            pmtsched->interest = -pmt_int;
-            pmtsched->total_pmt = -pv + pmt_int;
-            pmtsched->balance = 0.0;
-
+            if (pmtsched)
+            {
+                pmtsched->period_num = s++;
+                pmtsched->interest = -pmt_int;
+                pmtsched->total_pmt = -pv + pmt_int;
+                pmtsched->balance = 0.0;
+            }
+            
             amortyr->final_pmt = -pv - pmt_int;
         }				/* endif */
 

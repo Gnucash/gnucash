@@ -1134,7 +1134,6 @@ gboolean gnc_option_get_range_info(GNCOption *option,
 
     /* step size */
     value = SCM_CAR(list);
-    list = SCM_CDR(list);
 
     if (!scm_is_number(value))
         return FALSE;
@@ -1694,7 +1693,7 @@ gnc_commit_option(GNCOption *option)
     {
         SCM oops;
         char *section, *name;
-        const char *message;
+        const char *message = NULL;
         const char *format = _("There is a problem with option %s:%s.\n%s");
         const char *bad_value = _("Invalid option value");
 
@@ -1711,13 +1710,14 @@ gnc_commit_option(GNCOption *option)
                                      name ? name : "(null)",
                                      bad_value);
         }
-
-        message = gnc_scm_to_utf8_string (oops);
-        retval = g_strdup_printf(format,
-                                 section ? section : "(null)",
-                                 name ? name : "(null)",
-                                 message ? message : "(null)");
-
+        else
+        {
+            message = gnc_scm_to_utf8_string (oops);
+            retval = g_strdup_printf(format,
+                                     section ? section : "(null)",
+                                     name ? name : "(null)",
+                                     message ? message : "(null)");
+        }
         if (name != NULL)
             free(name);
         if (section != NULL)

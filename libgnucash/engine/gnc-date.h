@@ -524,6 +524,20 @@ void gnc_tm_set_day_start (struct tm *tm)
     tm->tm_sec = 0;
 }
 
+/** The gnc_tm_set_day_neutral() inline routine will set the appropriate
+ *  fields in the struct tm to indicate 10:59am of that day.  This
+ *  routine assumes that the contents of the data structure is already
+ *  in normalized form.*/
+static inline
+void gnc_tm_set_day_neutral (struct tm *tm)
+{
+    /* First second of the day */
+    g_return_if_fail (tm != NULL);
+    tm->tm_hour = 10;
+    tm->tm_min = 59;
+    tm->tm_sec = 0;
+}
+
 /** The gnc_tm_set_day_middle() inline routine will set the appropriate
  *  fields in the struct tm to indicate noon of that day.  This
  *  routine assumes that the contents of the data structure is already
@@ -553,8 +567,12 @@ void gnc_tm_set_day_end (struct tm *tm)
 }
 
 /** The gnc_time64_get_day_start() routine will take the given time in
- *  seconds and adjust it to the last second of that day. */
+ *  seconds and adjust it to the first second of that day. */
 time64 gnc_time64_get_day_start(time64 time_val);
+
+/** The gnc_time64_get_day_netural() routine will take the given time in
+ *  seconds and adjust it to 10:59am of that day. */
+time64 gnc_time64_get_day_neutral(time64 time_val);
 
 /** The gnc_time64_get_day_end() routine will take the given time in
  *  seconds and adjust it to the last second of that day. */

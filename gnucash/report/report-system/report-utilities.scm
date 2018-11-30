@@ -18,6 +18,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
 (use-modules (srfi srfi-13))
+(use-modules (ice-9 format))
 
 (define (list-ref-safe list elt)
   (and (> (length list) elt)
@@ -385,10 +386,84 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
 ;; get the account balance at the specified date. if include-children?
 ;; is true, the balances of all children (not just direct children)
 ;; are included in the calculation.
+;; I think this (gnc:account-get-balance-at-date) is flawed in sub-acct handling.
+;; Consider account structure:
+;; Assets [USD] - bal=$0
+;;    Bank [USD] - bal=$100
+;;    Broker [USD] - bal=$200
+;;       Cash [USD] - bal=$800
+;;       Funds [FUND] - bal=3 FUND @ $1000 each = $3000
+;; - Calling (gnc:account-get-balance-at-date BANK TODAY #f) returns 100
+;; - Calling (gnc:account-get-balance-at-date BROKER TODAY #f) returns 200
+;; - Calling (gnc:account-get-balance-at-date BROKER TODAY #t) returns 1000
+;;   this is because although it counts all subaccounts bal $200 + $800 + 3FUND,
+;;   it retrieves the parent account commodity USD $1000 only.
+;; It needs to be deprecated.
 (define (gnc:account-get-balance-at-date account date include-children?)
+  (issue-deprecation-warning "this gnc:account-get-balance-at-date function is \
+flawed. see report-utilities.scm. please update reports.")
   (let ((collector (gnc:account-get-comm-balance-at-date
                     account date include-children?)))
     (cadr (collector 'getpair (xaccAccountGetCommodity account) #f))))
+
+;; this function will scan through the account splitlist, building
+;; a list of balances along the way at dates specified in dates-list.
+;; in:  account
+;;      dates-list (list of time64)
+;;      ignore-closing? - if #true, will skip closing entries
+;; out: (list bal0 bal1 ...), each entry is a gnc-monetary object
+(define* (gnc:account-get-balances-at-dates account dates-list #:key ignore-closing?)
+  (define (amount->monetary bal)
+    (gnc:make-gnc-monetary (xaccAccountGetCommodity account) bal))
+  (let loop ((splits (xaccAccountGetSplitList account))
+             (dates-list dates-list)
+             (currentbal 0)
+             (lastbal 0)
+             (balancelist '()))
+    (cond
+
+     ;; end of dates. job done!
+     ((null? dates-list)
+      (map amount->monetary (reverse balancelist)))
+
+     ;; end of splits, but still has dates. pad with last-bal
+     ;; until end of dates.
+     ((null? splits)
+      (loop '()
+            (cdr dates-list)
+            currentbal
+            lastbal
+            (cons lastbal balancelist)))
+
+     (else
+      (let* ((this (car splits))
+             (rest (cdr splits))
+             (currentbal (if (and ignore-closing?
+                                  (xaccTransGetIsClosingTxn (xaccSplitGetParent this)))
+                             currentbal
+                             (+ (xaccSplitGetAmount this) currentbal)))
+             (next (and (pair? rest) (car rest))))
+
+        (cond
+         ;; the next split is still before date
+         ((and next (< (xaccTransGetDate (xaccSplitGetParent next)) (car dates-list)))
+          (loop rest dates-list currentbal lastbal balancelist))
+
+         ;; this split after date, add previous bal to balancelist
+         ((< (car dates-list) (xaccTransGetDate (xaccSplitGetParent this)))
+          (loop splits
+                (cdr dates-list)
+                lastbal
+                lastbal
+                (cons lastbal balancelist)))
+
+         ;; this split before date, next split after date, or end.
+         (else
+          (loop rest
+                (cdr dates-list)
+                currentbal
+                currentbal
+                (cons currentbal balancelist)))))))))
 
 ;; This works similar as above but returns a commodity-collector, 
 ;; thus takes care of children accounts with different currencies.
@@ -966,3 +1041,89 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
   (if (string-prefix? "file:///" url)
      url
      (string-append "file:///" url)))
+
+(define-public (gnc:strify d)
+  ;; any object -> string.  The option is passed to various
+  ;; scm->string converters; ultimately a generic stringify
+  ;; function handles symbol/string/other types.
+  (define (split->str spl)
+    (let ((txn (xaccSplitGetParent spl)))
+      (format #f "Split<d:~a,acc:~a,amt:~a,val:~a>"
+              (qof-print-date (xaccTransGetDate txn))
+              (xaccAccountGetName (xaccSplitGetAccount spl))
+              (gnc:monetary->string
+               (gnc:make-gnc-monetary
+                (xaccTransGetCurrency txn)
+                (xaccSplitGetValue spl)))
+              (gnc:monetary->string
+               (gnc:make-gnc-monetary
+                (xaccAccountGetCommodity
+                 (xaccSplitGetAccount spl))
+                (xaccSplitGetAmount spl))))))
+  (define (trans->str txn)
+    (format #f "Txn<d:~a>" (qof-print-date (xaccTransGetDate txn))))
+  (define (account->str acc)
+    (format #f "Acc<~a>" (xaccAccountGetName acc)))
+  (define (monetary-collector->str coll)
+    (format #f "Mon-coll<~a>"
+            (map gnc:strify (coll 'format gnc:make-gnc-monetary #f))))
+  (define (value-collector->str coll)
+    (format #f "Val-coll<~a>"
+            (map gnc:strify (coll 'total gnc:make-gnc-monetary))))
+  (define (procedure->str proc)
+    (format #f "Proc<~a>"
+            (or (procedure-name proc) "unk")))
+  (define (monetary->string mon)
+    (format #f "Mon<~a>"
+            (gnc:monetary->string mon)))
+  (define (try proc)
+    ;; Try proc with d as a parameter, catching 'wrong-type-arg
+    ;; exceptions to return #f to the (or) evaluator below.
+    (catch 'wrong-type-arg
+      (lambda () (proc d))
+      (const #f)))
+  (or (and (boolean? d) (if d "#t" "#f"))
+      (and (null? d) "#null")
+      (and (symbol? d) (format #f "'~a" d))
+      (and (string? d) d)
+      (and (list? d) (string-append
+                      "(list "
+                      (string-join (map gnc:strify d) " ")
+                      ")"))
+      (and (pair? d) (format #f "(~a . ~a)"
+                             (gnc:strify (car d))
+                             (if (eq? (car d) 'absolute)
+                                 (qof-print-date (cdr d))
+                                 (gnc:strify (cdr d)))))
+      (try procedure->str)
+      (try gnc-commodity-get-mnemonic)
+      (try account->str)
+      (try split->str)
+      (try trans->str)
+      (try monetary-collector->str)
+      (try value-collector->str)
+      (try monetary->string)
+      (try gnc-budget-get-name)
+      (object->string d)))
+
+(define (pair->num pair)
+  (+ (car pair)
+     (/ (cdr pair) 1000000)))
+
+(define (delta t1 t2)
+  (exact->inexact
+   (- (pair->num t2)
+      (pair->num t1))))
+
+(define-public gnc:pk
+  (let* ((start-time (gettimeofday))
+         (last-time start-time))
+    (lambda args
+      (let ((now (gettimeofday)))
+        (format #t "d~,4f t~,3f: "
+                (delta last-time now)
+                (delta start-time now))
+        (set! last-time now))
+      (display (map gnc:strify args))
+      (newline)
+      (last args))))

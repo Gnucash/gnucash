@@ -126,7 +126,7 @@ gnc_strtok_r (char *s, const char *delim, char **save_ptr)
 
     /* Scan leading delimiters.  */
     s += strspn (s, delim);
-    if (*s == '\0')
+    if (!s || *s == '\0')
         return NULL;
 
     /* Find the end of the token.  */

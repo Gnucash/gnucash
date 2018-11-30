@@ -28,7 +28,7 @@
 #
 # Additional information :
 #
-# - Doxygen docs: see page \ref py_invoice_export at http://svn.gnucash.org/docs/HEAD/
+# - Doxygen docs: see page \ref py_invoice_export at https://code.gnucash.org/docs/MAINT or MASTER
 # - http://www.uweziegenhagen.de/latex/documents/rechnung/rechnungen.pdf (german)
 #
 # Credits to and ideas from
@@ -179,7 +179,7 @@ def main(argv=None):
 
         try:
             opts, args = getopt.getopt(argv[1:], "fhiln:po:", ["help"])
-        except getopt.error, msg:
+        except getopt.error as msg:
              raise Usage(msg)
 
         for opt in opts:
@@ -207,12 +207,12 @@ def main(argv=None):
         if len(args)==0:
             raise Usage("No input given !")
         input_url = args[0]
-    except Usage, err:
+    except Usage as err:
         if err.msg == "Help:":
             retcode=0
         else:
-            print(>>sys.stderr, "Error:",err.msg)
-            print(>>sys.stderr, "for help use --help")
+            print("Error:", err.msg, file=sys.stderr)
+            print("for help use --help", file=sys.stderr)
             retcode=2
 
         print("Generate a LaTeX invoice or print out all invoices.")

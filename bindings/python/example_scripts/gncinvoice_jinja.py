@@ -22,7 +22,7 @@
 # more modular as it allows to use arbitrary templates
 #
 # Doxygen docs:
-# - http://svn.gnucash.org/docs/HEAD/
+# - https://code.gnucash.org/docs/MAINT or MASTER
 # - see page \ref py_invoice_export
 #
 # Questions / Issues:

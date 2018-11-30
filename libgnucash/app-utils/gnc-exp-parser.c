@@ -230,6 +230,7 @@ make_predefined_vars_from_external_helper( gpointer key, gpointer value, gpointe
         pnum->value = *(gnc_numeric*)value;
 
     make_predefined_vars_helper( key, pnum, data );
+    g_free(pnum); /* make_predefined_vars_helper allocs its own copy. */
 }
 
 static var_store_ptr
@@ -567,7 +568,6 @@ gnc_exp_parser_parse_separate_vars (const char * expression,
         newVars = parser_get_vars( pe );
         for ( ; newVars ; newVars = newVars->next_var )
         {
-            pnum = newVars->value;
             if ( g_hash_table_lookup_extended( varHash, newVars->variable_name,
                                                &maybeKey, &maybeValue ) )
             {

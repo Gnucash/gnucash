@@ -60,7 +60,8 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static void gnc_tree_view_account_class_init (GncTreeViewAccountClass *klass);
 static void gnc_tree_view_account_init (GncTreeViewAccount *view);
 static void gnc_tree_view_account_finalize (GObject *object);
-static gboolean gnc_tree_view_search_compare (GtkTreeModel *model, gint column, const gchar *key, GtkTreeIter *iter, gpointer search_data);
+static gboolean gnc_tree_view_search_compare (GtkTreeModel *model, gint column,
+        const gchar *key, GtkTreeIter *iter, gpointer search_data);
 
 static void gtva_update_column_names (GncTreeView *view);
 static void gtva_currency_changed_cb (void);
@@ -86,7 +87,8 @@ static void acc_color_data_func (GtkTreeViewColumn *col,
                                  GtkTreeIter       *iter,
                                  gpointer           view);
 
-static void gnc_tree_view_account_color_update (gpointer gsettings, gchar *key, gpointer user_data);
+static void gnc_tree_view_account_color_update (gpointer gsettings,
+         gchar *key, gpointer user_data);
 
 
 typedef struct GncTreeViewAccountPrivate
@@ -296,6 +298,31 @@ sort_cb_setup (GtkTreeModel *f_model,
 
     sort_cb_setup_w_iters (f_model, f_iter_a, f_iter_b,
                            &iter_a, &iter_b, account_a, account_b);
+}
+
+static gint
+sort_by_last_reconcile_date (GtkTreeModel *f_model,
+                             GtkTreeIter *f_iter1,
+                             GtkTreeIter *f_iter2,
+                             gpointer user_data)
+{
+    const Account *account1, *account2;
+    time64 account1_date, account2_date;
+
+    sort_cb_setup (f_model, f_iter1, f_iter2, &account1, &account2);
+
+    if (!xaccAccountGetReconcileLastDate (account1, &account1_date))
+        account1_date = 0;
+
+    if (!xaccAccountGetReconcileLastDate (account2, &account2_date))
+        account2_date = 0;
+
+    if (account1_date < account2_date)
+        return -1;
+    else if (account1_date > account2_date)
+        return 1;
+    else
+        return xaccAccountOrder (account1, account2);
 }
 
 static gint
@@ -657,6 +684,9 @@ gnc_tree_view_account_color_update (gpointer gsettings, gchar *key, gpointer use
     priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(view);
     if (g_strcmp0 (key, GNC_PREF_ACCOUNT_COLOR) == 0)
         priv->show_account_color = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, key);
+
+    // do a refilter so the tree view background color gets updated
+    gnc_tree_view_account_refilter (view);
 }
 
 /** Add the account color background data function to the GncTreeViewAccount column to
@@ -831,7 +861,7 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
                                   "Last Reconcile Date",
                                   GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED_DATE,
                                   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-                                  sort_by_string);
+                                  sort_by_last_reconcile_date);
 
     gnc_tree_view_add_numeric_column(view, _("Future Minimum"), "future_min",
                                      SAMPLE_ACCOUNT_VALUE,
@@ -902,7 +932,7 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
 
     gnc_tree_view_add_toggle_column(view, _("Placeholder"),
                                     /* Translators: This string has a context prefix; the translation
-                                    	must only contain the part after the | character. */
+                                        must only contain the part after the | character. */
                                     Q_("Column letter for 'Placeholder'|P"),
                                     "placeholder",
                                     GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER,
@@ -965,10 +995,10 @@ gnc_tree_view_account_new (gboolean show_root)
 /*                   Auxiliary Functions                    */
 /************************************************************/
 
-#define debug_path(fn, path) {				\
+#define debug_path(fn, path) {              \
     gchar *path_string = gtk_tree_path_to_string(path); \
-    fn("tree path %s", path_string);			\
-    g_free(path_string);				\
+    fn("tree path %s", path_string);            \
+    g_free(path_string);                \
   }
 
 static GtkTreePath *
@@ -1750,10 +1780,10 @@ gtva_currency_changed_cb (void)
  */
 static void
 account_cell_property_data_func (GtkTreeViewColumn *tree_column,
-				 GtkCellRenderer *cell,
-				 GtkTreeModel *s_model,
-				 GtkTreeIter *s_iter,
-				 gpointer key)
+                 GtkCellRenderer *cell,
+                 GtkTreeModel *s_model,
+                 GtkTreeIter *s_iter,
+                 gpointer key)
 {
     GncTreeViewAccount *view;
     Account *account;
@@ -1761,11 +1791,9 @@ account_cell_property_data_func (GtkTreeViewColumn *tree_column,
 
     g_return_if_fail (GTK_IS_TREE_MODEL_SORT (s_model));
     account = gnc_tree_view_account_get_account_from_iter(s_model, s_iter);
-    qof_instance_get (QOF_INSTANCE (account),
-		      key, &string,
-		      NULL);
+    qof_instance_get (QOF_INSTANCE (account), key, &string, NULL);
     if (string == NULL)
-	string = "";
+        string = "";
 
     g_object_set (G_OBJECT (cell), "text", string, "xalign", 0.0, NULL);
 
@@ -2242,15 +2270,12 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
     g_signal_connect(renderer, "toggled",
                      G_CALLBACK(gppat_filter_visible_toggled_cb), fd);
 
-    gtk_tree_view_insert_column_with_data_func
-    (view,
-     -1, NULL, renderer,
-     gppat_filter_visible_set_func, fd, NULL);
+    gtk_tree_view_insert_column_with_data_func (view, -1, NULL, renderer,
+                     gppat_filter_visible_set_func, fd, NULL);
 
-    gtk_tree_view_insert_column_with_attributes
-    (view,
-     -1, _("Account Types"), gtk_cell_renderer_text_new(),
-     "text", GNC_TREE_MODEL_ACCOUNT_TYPES_COL_NAME, NULL);
+    gtk_tree_view_insert_column_with_attributes (view,
+            -1, _("Account Types"), gtk_cell_renderer_text_new(),
+            "text", GNC_TREE_MODEL_ACCOUNT_TYPES_COL_NAME, NULL);
 
     /* Wire up the rest of the callbacks */
     gtk_builder_connect_signals(builder, fd);
@@ -2566,14 +2591,15 @@ gtva_set_column_editor(GncTreeViewAccount *view,
                        GncTreeViewAccountColumnTextEdited edited_cb)
 {
     GList *renderers_orig, *renderers;
-    GtkCellRenderer *renderer;
+    GtkCellRenderer *renderer = NULL;
 
     // look for the first text-renderer; on the 0th column of the account tree,
     // there are two renderers: pixbuf and text.  So find the text one.
     for (renderers_orig = renderers = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(column));
             renderers && !GTK_IS_CELL_RENDERER_TEXT(renderers->data);
             renderers = renderers->next);
-    renderer = GTK_CELL_RENDERER(renderers->data);
+    if (renderers)
+        renderer = GTK_CELL_RENDERER(renderers->data);
     g_list_free(renderers_orig);
     g_return_if_fail(renderer != NULL);
     gtva_setup_column_renderer_edited_cb(GNC_TREE_VIEW_ACCOUNT(view), column, renderer, edited_cb);
@@ -2615,7 +2641,9 @@ gnc_tree_view_account_set_notes_edited(GncTreeViewAccount *view,
     gtva_set_column_editor(view, priv->notes_column, edited_cb);
 }
 
-static gboolean gnc_tree_view_search_compare (GtkTreeModel *model, gint column, const gchar *key, GtkTreeIter *iter, gpointer search_data)
+static
+gboolean gnc_tree_view_search_compare (GtkTreeModel *model, gint column,
+        const gchar *key, GtkTreeIter *iter, gpointer search_data)
 {
     gchar *normalized_key;
     gchar *case_normalized_key = NULL;
@@ -2675,11 +2703,13 @@ static gboolean gnc_tree_view_search_compare (GtkTreeModel *model, gint column, 
 void gnc_tree_view_account_set_editing_started_cb(GncTreeViewAccount *view,
     GFunc editing_started_cb, gpointer editing_cb_data)
 {
-    gnc_tree_view_set_editing_started_cb (GNC_TREE_VIEW(view), editing_started_cb, editing_cb_data);
+    gnc_tree_view_set_editing_started_cb (GNC_TREE_VIEW(view),
+            editing_started_cb, editing_cb_data);
 }
 
 void gnc_tree_view_account_set_editing_finished_cb(GncTreeViewAccount *view,
     GFunc editing_finished_cb, gpointer editing_cb_data)
 {
-    gnc_tree_view_set_editing_finished_cb (GNC_TREE_VIEW(view), editing_finished_cb, editing_cb_data);
+    gnc_tree_view_set_editing_finished_cb (GNC_TREE_VIEW(view),
+            editing_finished_cb, editing_cb_data);
 }

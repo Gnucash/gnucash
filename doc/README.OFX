@@ -181,7 +181,7 @@ order of effectiveness for you, but ANY report is apreciated):
 
 * Open a bug at https://bugs.gnucash.org/
 * gnucash-devel@gnucash.org or gnucash-user@gnucash.org (Subscriber-only list;
-please subscribe on http://www.gnucash.org/cgi-bin/mailman/listinfo/ )
+please subscribe on https://lists.gnucash.org/mailman/listinfo/ )
 * http://lists.sourceforge.net/lists/listinfo/libofx-devel/ if ofxdump doesn't
 give you the expected data.
 * many developers hang on the IRC channel #gnucash on irc.gnome.org
@@ -267,11 +267,11 @@ Export capability is currently being built into LibOfx.
 
 7. Credits-------
 
-The LibOFX library is written by Benoit Grégoire <bock@step.polymtl.ca>
-The Generic Import Infrastructure was written by Benoit Grégoire 
+The LibOFX library is written by Benoit Grï¿½goire <bock@step.polymtl.ca>
+The Generic Import Infrastructure was written by Benoit Grï¿½goire 
 <bock@step.polymtl.ca>, Christian Stimming <stimming@tuhh.de> and Derek Atkins 
 <warlord@mit.edu>.
 
-By Benoit Grégoire <bock@step.polymtl.ca>
+By Benoit Grï¿½goire <bock@step.polymtl.ca>
 Sunday, Feb 2, 2003
 

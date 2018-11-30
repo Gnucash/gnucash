@@ -103,13 +103,7 @@ find_or_create_txn(struct CloseAccountsCB* cacb, gnc_commodity* cmdty)
         txn->txn = xaccMallocTransaction(cacb->cbw->book);
         xaccTransBeginEdit(txn->txn);
         xaccTransSetDateEnteredSecs(txn->txn, gnc_time (NULL));
-
-        /* Watch out: The book-closing txn currently assume that their
-        posted-date is the end date plus 12 hours, so that the closing txn can
-        be distinguished from normal txns of the last day. This is the only
-        case within GnuCash where the PostedDate is a different time-of-day
-        that what the GDate normally says as a normalized date. */
-        xaccTransSetDatePostedSecs(txn->txn, cacb->cbw->close_date);
+        xaccTransSetDatePostedSecsNormalized(txn->txn, cacb->cbw->close_date);
 
         xaccTransSetDescription(txn->txn, cacb->cbw->desc);
         xaccTransSetCurrency(txn->txn, cmdty);
@@ -142,7 +136,7 @@ static void close_accounts_cb(Account *a, gpointer data)
     if (cacb->acct_type != xaccAccountGetType(a))
         return;
 
-    bal = xaccAccountGetBalanceAsOfDate(a, cacb->cbw->close_date + 1);
+    bal = xaccAccountGetBalanceAsOfDate(a, gnc_time64_get_day_end (cacb->cbw->close_date));
     if (gnc_numeric_zero_p(bal))
         return;
 
@@ -289,7 +283,6 @@ gnc_book_close_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
         break;
     case GTK_RESPONSE_OK:
         cbw->close_date = gnc_date_edit_get_date(GNC_DATE_EDIT(cbw->close_date_widget));
-        cbw->close_date += (3600 * 12);  /* Add 12 hours to the timestamp */
         cbw->desc = gtk_entry_get_text(GTK_ENTRY(cbw->desc_widget));
 
         income_acct = gnc_account_sel_get_account(GNC_ACCOUNT_SEL(cbw->income_acct_widget));

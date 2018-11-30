@@ -225,8 +225,9 @@ QofSessionImpl::load (QofPercentageFunc percentage_func) noexcept
             (err != ERR_SQL_DB_TOO_OLD) &&
             (err != ERR_SQL_DB_TOO_NEW))
     {
-        qof_book_destroy(m_book);
+        auto old_book = m_book;
         m_book = qof_book_new();
+        qof_book_destroy(old_book);
         LEAVE ("error from backend %d", get_error ());
         return;
     }

@@ -2180,6 +2180,8 @@ gnc_ui_qif_import_load_another_cb(GtkButton * button,
     QIFImportWindow * wind = user_data;
     GtkAssistant *assistant = GTK_ASSISTANT(wind->window);
 
+    gtk_entry_set_text (GTK_ENTRY(wind->filename_entry), "");
+
     gtk_assistant_set_current_page (assistant, 1);
 }
 

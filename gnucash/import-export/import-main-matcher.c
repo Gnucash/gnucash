@@ -68,7 +68,8 @@ struct _main_matcher_info
 
 enum downloaded_cols
 {
-    DOWNLOADED_COL_DATE = 0,
+    DOWNLOADED_COL_DATE_TXT = 0,
+    DOWNLOADED_COL_DATE_INT64,
     DOWNLOADED_COL_ACCOUNT,
     DOWNLOADED_COL_AMOUNT,
     DOWNLOADED_COL_DESCRIPTION,
@@ -621,7 +622,13 @@ add_text_column(GtkTreeView *view, const gchar *title, int col_num)
               "text", col_num,
               "background", DOWNLOADED_COL_COLOR,
               NULL);
-    gtk_tree_view_column_set_sort_column_id(column, col_num);
+
+    // If date column, use the time64 value for the sorting.
+    if (col_num == DOWNLOADED_COL_DATE_TXT)
+        gtk_tree_view_column_set_sort_column_id(column, DOWNLOADED_COL_DATE_INT64);
+    else
+        gtk_tree_view_column_set_sort_column_id(column, col_num);
+
     g_object_set(G_OBJECT(column),
                  "reorderable", TRUE,
                  "resizable", TRUE,
@@ -664,18 +671,21 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
     GtkTreeSelection *selection;
 
     view = info->view;
-    store = gtk_list_store_new(NUM_DOWNLOADED_COLS,
-                               G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
+    store = gtk_list_store_new(NUM_DOWNLOADED_COLS, G_TYPE_STRING,
+                               G_TYPE_INT64, G_TYPE_STRING, G_TYPE_STRING,
                                G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN,
                                G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_STRING,
                                GDK_TYPE_PIXBUF, G_TYPE_POINTER, G_TYPE_STRING);
     gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
     g_object_unref(store);
 
+    /* prevent the rows being dragged to a different order */
+    gtk_tree_view_set_reorderable (view, FALSE);
+
     /* Add the columns *
      * (keep the line break below to avoid a translator comment) */
     add_text_column(view,
-                    _("Date"), DOWNLOADED_COL_DATE);
+                    _("Date"), DOWNLOADED_COL_DATE_TXT);
     column = add_text_column(view, _("Account"), DOWNLOADED_COL_ACCOUNT);
     gtk_tree_view_column_set_visible(column, show_account);
     add_text_column(view, _("Amount"), DOWNLOADED_COL_AMOUNT);
@@ -910,6 +920,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
     gchar *int_required_class, *int_prob_required_class, *int_not_required_class;
     gchar *class_extension = NULL;
     Split *split;
+    time64 date;
     g_assert (gui);
     g_assert (model);
     g_assert (info);
@@ -932,8 +943,10 @@ refresh_model_row (GNCImportMainMatcher *gui,
     gtk_list_store_set(store, iter, DOWNLOADED_COL_ACCOUNT, ro_text, -1);
 
     /*Date*/
-    text = qof_print_date ( xaccTransGetDate( gnc_import_TransInfo_get_trans(info) ) );
-    gtk_list_store_set(store, iter, DOWNLOADED_COL_DATE, text, -1);
+    date = xaccTransGetDate (gnc_import_TransInfo_get_trans(info));
+    text = qof_print_date (date);
+    gtk_list_store_set(store, iter, DOWNLOADED_COL_DATE_TXT, text, -1);
+    gtk_list_store_set(store, iter, DOWNLOADED_COL_DATE_INT64, date, -1);
     g_free(text);
 
     /*Amount*/

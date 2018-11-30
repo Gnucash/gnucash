@@ -25,6 +25,11 @@
 #include "../gnc-datetime.hpp"
 #include <gtest/gtest.h>
 
+/* Backdoor to enable unittests to temporarily override the timezone: */
+class TimeZoneProvider;
+void _set_tzp(TimeZoneProvider& tz);
+void _reset_tzp();
+
 TEST(gnc_date_constructors, test_default_constructor)
 {
     GncDate date;
@@ -339,6 +344,29 @@ TEST(gnc_datetime_constructors, test_gncdate_start_constructor)
     GncDateTime atime(GncDate(aymd.year, aymd.month, aymd.day), DayPart::start);
     //Skipping timezone information as this can't be controlled.
     EXPECT_EQ(atime.format("%d-%m-%Y %H:%M:%S"), "20-04-2017 00:00:00");
+}
+
+/* Putting this here is a bit weird but it includes
+ * boost/date_time/local_time/local_time.hpp and that redefines struct
+ * tm in a way that breaks initializing the tm in
+ * test_struct_tm_constructor on Linux.
+ */
+#include "../gnc-timezone.hpp"
+/* Summertime transitions have been a recurring problem. At the time of adding
+ * this test the GncDateEditor was refusing to set the date to 28 October 2018
+ * in the Europe/London timezone.
+ */
+TEST(gnc_datetime_constructors, test_gncdate_BST_transition)
+{
+    const ymd begins = {2018, 03, 25};
+    const ymd ends = {2018, 10, 28};
+    TimeZoneProvider tzp("Europe/London");
+    _set_tzp(tzp);
+    GncDateTime btime(GncDate(begins.year, begins.month, begins.day), DayPart::start);
+    GncDateTime etime(GncDate(ends.year, ends.month, ends.day), DayPart::start);
+    _reset_tzp();
+    EXPECT_EQ(btime.format("%d-%m-%Y %H:%M:%S"), "25-03-2018 00:00:00");
+    EXPECT_EQ(etime.format("%d-%m-%Y %H:%M:%S"), "28-10-2018 00:00:00");
 }
 
 TEST(gnc_datetime_constructors, test_gncdate_end_constructor)

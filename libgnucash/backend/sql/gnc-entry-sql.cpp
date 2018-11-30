@@ -203,7 +203,7 @@ GncSqlEntryBackend::load_all (GncSqlBackend* sql_be)
     auto result = sql_be->execute_select_statement(stmt);
 
     for (auto row : *result)
-        GncEntry* pEntry = load_single_entry (sql_be, row);
+        load_single_entry (sql_be, row);
 
     std::string pkey(col_table[0]->name());
     sql = "SELECT DISTINCT ";

@@ -1081,7 +1081,8 @@ on_cancel (GtkAssistant      *gtkassistant,
 {
     gnc_suspend_gui_refresh ();
     if (data->new_book)
-        gtk_dialog_response(GTK_DIALOG(gnc_options_dialog_widget (data->optionwin)), GTK_RESPONSE_CANCEL);
+        gnc_options_dialog_destroy (data->optionwin);
+
     delete_hierarchy_dialog (data);
     delete_our_account_tree (data);
     g_free(data);
@@ -1126,7 +1127,7 @@ on_finish (GtkAssistant  *gtkassistant,
 
     gnc_suspend_gui_refresh ();
     if (data->new_book)
-        gtk_dialog_response(GTK_DIALOG(gnc_options_dialog_widget (data->optionwin)), GTK_RESPONSE_CANCEL);
+        gnc_options_dialog_destroy (data->optionwin);
 
     account_trees_merge(gnc_get_current_root_account(), data->our_account_tree);
 

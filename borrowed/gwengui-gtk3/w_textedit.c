@@ -187,11 +187,8 @@ static void Gtk3Gui_WTextEdit_Changed_handler(GtkTextBuffer *buffer, gpointer da
 static int Gtk3Gui_WTextEdit_Setup(GWEN_WIDGET *w) {
   GtkWidget *g;
   const char *s;
-  uint32_t flags;
   GWEN_WIDGET *wParent;
-  gulong changed_handler_id;
 
-  flags=GWEN_Widget_GetFlags(w);
   wParent=GWEN_Widget_Tree_GetParent(w);
   s=GWEN_Widget_GetText(w, 0);
 
@@ -208,7 +205,7 @@ static int Gtk3Gui_WTextEdit_Setup(GWEN_WIDGET *w) {
   GWEN_Widget_SetSetCharPropertyFn(w, Gtk3Gui_WTextEdit_SetCharProperty);
   GWEN_Widget_SetGetCharPropertyFn(w, Gtk3Gui_WTextEdit_GetCharProperty);
 
-  changed_handler_id=g_signal_connect(gtk_text_view_get_buffer(GTK_TEXT_VIEW(g)),
+  g_signal_connect(gtk_text_view_get_buffer(GTK_TEXT_VIEW(g)),
                                       "changed",
                                       G_CALLBACK (Gtk3Gui_WTextEdit_Changed_handler),
                                       w);

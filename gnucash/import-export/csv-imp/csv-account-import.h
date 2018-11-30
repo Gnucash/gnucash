@@ -42,7 +42,9 @@ enum _csv_import_result
 typedef enum _csv_import_result csv_import_result;
 
 csv_import_result
-csv_import_read_file (const gchar *filename, const gchar *parser_regexp, GtkListStore *store, guint max_rows );
+csv_import_read_file (GtkWindow *win, const gchar *filename,
+                      const gchar *parser_regexp,
+                      GtkListStore *store, guint max_rows );
 
 void csv_account_import (CsvImportInfo *info);
 

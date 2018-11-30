@@ -156,7 +156,6 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
                 GdkDeviceManager *device_manager;
 #endif
                 GdkDevice *pointer;
-                GdkScreen *screen;
                 GtkWindow *tip_win = NULL;
                 GdkWindow *parent_window;
                 GList *win_list, *node;
@@ -174,9 +173,7 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
 
                 gdk_window_get_origin (parent_window, &root_x, &root_y);
 
-                screen = gtk_widget_get_screen (GTK_WIDGET (qview));
-
-                /* Get a list of toplevel windows */
+                 /* Get a list of toplevel windows */
                 win_list = gtk_window_list_toplevels ();
 
                 /* Look for the gtk-tooltip window, we do this as gtk_widget_get_tooltip_window
@@ -195,6 +192,7 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
 #if GTK_CHECK_VERSION(3,22,0)
                     GdkMonitor *mon;
 #else
+                    GdkScreen *screen;
                     gint monitor_num;
 #endif
                     GdkRectangle monitor;
@@ -210,6 +208,7 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
                     mon = gdk_display_get_monitor_at_point (gdk_display_get_default(), x, y);
                     gdk_monitor_get_geometry (mon, &monitor);
 #else
+                    screen = gtk_widget_get_screen (GTK_WIDGET (qview));
                     monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
                     gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
 #endif

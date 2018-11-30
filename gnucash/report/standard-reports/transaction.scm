@@ -844,7 +844,7 @@ be excluded from periodic reporting.")
         (disp-accname? #t)
         (disp-other-accname? #f)
         (detail-is-single? #t)
-        (amount-is-single? #t))
+        (amount-value 'single))
 
     (define (apply-selectable-by-name-display-options)
       (gnc-option-db-set-option-selectable-by-name
@@ -857,11 +857,15 @@ be excluded from periodic reporting.")
 
       (gnc-option-db-set-option-selectable-by-name
        options gnc:pagename-display (N_ "Sign Reverses")
-       amount-is-single?)
+       (eq? amount-value 'single))
 
       (gnc-option-db-set-option-selectable-by-name
        options gnc:pagename-display optname-grid
-       amount-is-single?)
+       (eq? amount-value 'single))
+
+      (gnc-option-db-set-option-selectable-by-name
+       options gnc:pagename-display "Enable links"
+       (not (eq? amount-value 'none)))
 
       (gnc-option-db-set-option-selectable-by-name
        options gnc:pagename-display (N_ "Use Full Other Account Name")
@@ -960,15 +964,20 @@ be excluded from periodic reporting.")
      (gnc:make-multichoice-callback-option
       gnc:pagename-display (N_ "Amount")
       "m" (_ "Display the amount?")
-      'single
+      amount-value
       (list
        (vector 'none   (_ "None") (_ "No amount display."))
        (vector 'single (_ "Single") (_ "Single Column Display."))
        (vector 'double (_ "Double") (_ "Two Column Display.")))
       #f
       (lambda (x)
-        (set! amount-is-single? (eq? x 'single))
+        (set! amount-value x)
         (apply-selectable-by-name-display-options))))
+
+    (gnc:register-trep-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display (N_ "Enable links")
+      "m2" (_ "Enable hyperlinks in amounts.") #t))
 
     (gnc:register-trep-option
      (gnc:make-multichoice-option
@@ -1056,6 +1065,7 @@ be excluded from periodic reporting.")
          (work-done 0)
          (table (gnc:make-html-table))
          (used-columns (build-columns-used))
+         (opt-use-links? (opt-val gnc:pagename-display "Enable links"))
          (account-types-to-reverse
           (keylist-get-info sign-reverse-list
                             (opt-val gnc:pagename-display (N_ "Sign Reverses"))
@@ -1472,7 +1482,8 @@ be excluded from periodic reporting.")
                                    (not (string-null? (xaccAccountGetDescription account))))
                               (string-append ": " (xaccAccountGetDescription account))
                               "")))
-        (if (and anchor? (not (null? account))) ;html anchor for 2-split transactions only
+        (if (and anchor? opt-use-links?
+                 (not (null? account))) ;html anchor for 2-split transactions only
             (gnc:make-html-text
              (gnc:html-markup-anchor (gnc:account-anchor-text account) name)
              description)
@@ -1532,17 +1543,21 @@ be excluded from periodic reporting.")
                     split transaction-row?))
                  left-columns)
             (map (lambda (cell)
-                   (let ((cell-monetary (vector-ref cell 0))
-                         (reverse? (and (vector-ref cell 1)
-                                        reversible-account?)))
-                     (and cell-monetary
+                   (let* ((cell-monetary (vector-ref cell 0))
+                          (reverse? (and (vector-ref cell 1)
+                                         reversible-account?))
+                          (cell-content (and cell-monetary
+                                             (if reverse?
+                                                 (gnc:monetary-neg cell-monetary)
+                                                 cell-monetary))))
+                     (and cell-content
                           (gnc:make-html-table-cell/markup
                            "number-cell"
-                           (gnc:html-transaction-anchor
-                            (xaccSplitGetParent split)
-                            (if reverse?
-                                (gnc:monetary-neg cell-monetary)
-                                cell-monetary))))))
+                           (if opt-use-links?
+                               (gnc:html-transaction-anchor
+                                (xaccSplitGetParent split)
+                                cell-content)
+                               cell-content)))))
                  cells))))
 
         (map (lambda (cell)

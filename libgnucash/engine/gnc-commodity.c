@@ -2457,8 +2457,8 @@ gnc_commodity_table_destroy(gnc_commodity_table * t)
     t->ns_list = NULL;
     g_hash_table_destroy(t->ns_table);
     t->ns_table = NULL;
-    g_free(t);
     LEAVE ("table=%p", t);
+    g_free(t);
 }
 
 /* =========================================================== */

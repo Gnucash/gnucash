@@ -987,10 +987,13 @@ gncCustomerGetCachedBalance (GncCustomer *cust)
 
 void gncCustomerSetCachedBalance (GncCustomer *cust, const gnc_numeric *new_bal)
 {
-    if (!new_bal && cust->balance)
+    if (!new_bal)
     {
-        g_free (cust->balance);
-        cust->balance = NULL;
+        if (cust->balance)
+        {
+            g_free (cust->balance);
+            cust->balance = NULL;
+        }
         return;
     }
 

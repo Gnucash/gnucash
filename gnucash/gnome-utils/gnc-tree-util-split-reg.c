@@ -1082,7 +1082,6 @@ gnc_tree_util_set_number_for_input (GncTreeViewSplitReg *view, Transaction *tran
         if (gnc_numeric_zero_p (value))
         {
             amount = gnc_numeric_create (1,1);
-            value = gnc_numeric_mul (input, amount, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND);
             xaccSplitSetValue (split, input);
             xaccSplitSetAmount (split, amount);
             LEAVE("");

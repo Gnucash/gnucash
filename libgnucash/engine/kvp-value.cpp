@@ -344,6 +344,7 @@ compare(const KvpValueImpl * one, const KvpValueImpl * two) noexcept
     if (one == two) return 0;
     if (one && !two) return 1;
     if (!one && two) return -1;
+    assert (one && two);  /* Silence a static analysis warning. */
     return compare(*one, *two);
 }
 

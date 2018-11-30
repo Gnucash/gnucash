@@ -111,7 +111,7 @@ gnc_item_edit_tb_get_preferred_width (GtkWidget *widget,
 {
     GncItemEditTb *tb = GNC_ITEM_EDIT_TB (widget);
     GncItemEdit *item_edit = GNC_ITEM_EDIT(tb->sheet->item_editor);
-    gint x, y, w, h, width = 0;
+    gint x, y, w, h = 2, width = 0;
     gnc_item_edit_get_pixel_coords (GNC_ITEM_EDIT (item_edit), &x, &y, &w, &h);
     width = ((h - 2)*2)/3;
     if (width < 20) // minimum size for a button
@@ -126,7 +126,7 @@ gnc_item_edit_tb_get_preferred_height (GtkWidget *widget,
 {
     GncItemEditTb *tb = GNC_ITEM_EDIT_TB (widget);
     GncItemEdit *item_edit = GNC_ITEM_EDIT(tb->sheet->item_editor);
-    gint x, y, w, h;
+    gint x, y, w, h = 2;
     gnc_item_edit_get_pixel_coords (GNC_ITEM_EDIT (item_edit), &x, &y, &w, &h);
     *minimal_width = *natural_width = (h - 2);
 }
@@ -246,7 +246,7 @@ gnc_item_edit_get_pixel_coords (GncItemEdit *item_edit,
 static gboolean
 gnc_item_edit_update (GncItemEdit *item_edit)
 {
-    gint x, y, w, h;
+    gint x = 0, y = 0, w, h;
 
     gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &w, &h);
     gtk_layout_move (GTK_LAYOUT(item_edit->sheet),
@@ -670,7 +670,7 @@ gnc_item_edit_get_preferred_width (GtkWidget *widget,
                                    gint *minimal_width,
                                    gint *natural_width)
 {
-    gint x, y, w, h;
+    gint x, y, w = 1, h;
     gnc_item_edit_get_pixel_coords (GNC_ITEM_EDIT (widget), &x, &y, &w, &h);
     *minimal_width = *natural_width = w - 1;
 }
@@ -681,7 +681,7 @@ gnc_item_edit_get_preferred_height (GtkWidget *widget,
                                     gint *minimal_width,
                                     gint *natural_width)
 {
-    gint x, y, w, h;
+    gint x, y, w, h = 1;
     gnc_item_edit_get_pixel_coords (GNC_ITEM_EDIT (widget), &x, &y, &w, &h);
     *minimal_width = *natural_width = h - 1;
 }
@@ -913,7 +913,6 @@ check_popup_height_is_true (GtkWidget    *widget,
                             gpointer user_data)
 {
     GncItemEdit *item_edit = GNC_ITEM_EDIT(user_data);
-    GnucashSheet *sheet = item_edit->sheet;
 
     // if a larger font is specified in css for the sheet, the popup returned height value
     // on first pop does not reflect the true height but the minimum height so just to be
@@ -934,7 +933,7 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
     GtkAdjustment *vadj, *hadj;
     GtkAllocation alloc;
     GnucashSheet *sheet;
-    gint x, y, w, h;
+    gint x = 0, y = 0, w = 0, h = 0;
     gint y_offset, x_offset;
     gint popup_x, popup_y;
     gint popup_w = -1, popup_h = -1;
@@ -955,7 +954,6 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
 
     gtk_widget_get_allocation (GTK_WIDGET (sheet), &alloc);
     view_height = alloc.height;
-    view_width  = alloc.width;
 
     vadj = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(sheet));
     hadj = gtk_scrollable_get_hadjustment(GTK_SCROLLABLE(sheet));

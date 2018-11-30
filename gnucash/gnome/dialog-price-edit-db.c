@@ -429,7 +429,7 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
     gtk_cell_renderer_set_alignment (cr, 0.5, 0.5);
 
     // Load the view and get the earliest date
-    first = gnc_prices_dialog_load_view (pdb_dialog->remove_view, pdb_dialog->price_db);
+    gnc_prices_dialog_load_view (pdb_dialog->remove_view, pdb_dialog->price_db);
     gtk_tree_selection_select_all (selection);
     g_signal_connect (selection, "changed", G_CALLBACK(selection_changed_cb), pdb_dialog);
 

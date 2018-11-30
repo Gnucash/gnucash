@@ -722,6 +722,8 @@ static GncTaxTable *gncTaxTableCopy (const GncTaxTable *table)
         GncTaxTableEntry *entry, *e;
         entry = list->data;
         e = gncTaxTableEntryCopy (entry);
+       /* Clang static analyzer thinks we're leaking e, but we're not.
+        * We're transferring it to table. */
         gncTaxTableAddEntry (t, e);
     }
     return t;

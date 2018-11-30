@@ -69,8 +69,13 @@ LD_LIBRARY_PATH={GNC_LIBRARY_PATH};{LD_LIBRARY_PATH}
 # The same, but for GnuCash on OS X
 DYLD_LIBRARY_PATH={GNC_LIBRARY_PATH};{DYLD_LIBRARY_PATH}
 
-# If you wish GnuCash to use a different language, copy the two parameters
-# below to environment.local, remove '# ' in front and set LANG to your preferred locale
+# For changing the language GnuCash uses, first refer to
+# to https://wiki.gnucash.org/wiki/Locale_Settings.
+# If you wish GnuCash to use a different language
+# than your OS default language, you can
+# 1. copy the two parameters below to the [Variables] section in environment.local,
+# 2. remove '# ' in front
+# 3. replace nl_BE with your preferred locale
 # LANG=nl_BE
 # LANGUAGE={LANG}
 

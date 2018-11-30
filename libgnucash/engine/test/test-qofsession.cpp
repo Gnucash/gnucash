@@ -170,20 +170,22 @@ TEST (QofSessionTest, clear_error)
 
 TEST (QofSessionTest, load)
 {
-    // We register a provider that gives a backend that
-    // throws an error on load.
-    // This error during load should cause the qof session to
-    // "roll back" the book load.
+    /* We register a provider that gives a backend that throws an error on load.
+     * This error during load should cause the qof session to destroy the book
+     * and create a new one.
+     */
     qof_backend_register_provider (get_provider ());
     QofSession s;
     s.begin ("book1", false, false, false);
     auto book = s.get_book ();
     s.load (nullptr);
-    EXPECT_EQ (book, s.get_book ());
+    EXPECT_NE (book, s.get_book ());
 
-    // Now we'll do the load without returning an error from the backend,
-    // and ensure that it's the original book and that it's not empty.
+    /* Now we'll do the load without returning an error from the backend,
+     * and ensure that it's the new book from the previous test.
+     */
     load_error = false;
+    book = s.get_book();
     s.load (nullptr);
     EXPECT_EQ (book, s.get_book ());
     EXPECT_EQ (s.get_error(), ERR_BACKEND_NO_ERR);

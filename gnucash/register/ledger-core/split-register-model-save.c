@@ -549,7 +549,7 @@ gnc_split_register_save_cells (gpointer save_data,
     SplitRegister *reg = user_data;
     Split *other_split;
     gnc_commodity *txn_cur;
-    gnc_numeric rate = gnc_numeric_zero();
+    gnc_numeric rate;
 
     g_return_if_fail (sd != NULL);
 

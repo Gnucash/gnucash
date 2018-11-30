@@ -508,7 +508,7 @@ GncSqlBackend::sync(QofBook* book)
     else
     {
         set_error (ERR_BACKEND_SERVER_ERR);
-        is_ok = m_conn->rollback_transaction ();
+        m_conn->rollback_transaction ();
     }
     finish_progress();
     LEAVE ("book=%p", book);

@@ -171,10 +171,8 @@ static int Gtk3Gui_WGroupBox_Setup(GWEN_WIDGET *w) {
   GtkWidget *g;
   GtkWidget *gContent;
   const char *s;
-  uint32_t flags;
   GWEN_WIDGET *wParent;
 
-  flags=GWEN_Widget_GetFlags(w);
   wParent=GWEN_Widget_Tree_GetParent(w);
   s=GWEN_Widget_GetText(w, 0);
 

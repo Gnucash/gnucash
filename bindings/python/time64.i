@@ -74,10 +74,14 @@
 // A typemap for converting time64 values returned from functions to
 // python dates. Note that we can't use Python DateTime's fromtimestamp function because it relies upon libc's localtime. Note also that while we create times with timegm we retrieve it with localtime
 %typemap(out) time64 {
-    PyDateTime_IMPORT;
-    struct tm t;
-    gnc_localtime_r(&$1, &t);
-    $result = PyDateTime_FromDateAndTime(t.tm_year + 1900, t.tm_mon + 1,
-                                         t.tm_mday, t.tm_hour, t.tm_min,
-                                         t.tm_sec, 0);
+    if ($1 == INT64_MAX) {
+        $result = Py_None;
+    } else {
+        PyDateTime_IMPORT;
+        struct tm t;
+        gnc_localtime_r(&$1, &t);
+        $result = PyDateTime_FromDateAndTime(t.tm_year + 1900, t.tm_mon + 1,
+                                             t.tm_mday, t.tm_hour, t.tm_min,
+                                             t.tm_sec, 0);
+    }
 }

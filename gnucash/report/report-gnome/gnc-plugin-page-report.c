@@ -1122,6 +1122,13 @@ static action_toolbar_labels toolbar_labels[] =
     { "FilePrintAction", 	    N_("Print") },
     { "ReportExportAction",   N_("Export") },
     { "ReportOptionsAction",  N_("Options") },
+    /* Translators: This string is meant to be a short alternative for "Save Report Configuration"
+     * to be used as toolbar button label. */
+    { "ReportSaveAction", N_("Save Config") },
+    /* Translators: This string is meant to be a short alternative for "Save Report Configuration As..."
+     * to be used as toolbar button label. */
+    { "ReportSaveAsAction", N_("Save Config As...") },
+    { "FilePrintPDFAction", N_("Make Pdf") },
     { NULL, NULL },
 };
 

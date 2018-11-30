@@ -216,7 +216,6 @@ load_single_split (GncSqlBackend* sql_be, GncSqlRow& row)
     if (guid_equal (guid, guid_null ()))
     {
         PWARN ("Bad GUID, creating new");
-        bad_guid = TRUE;
         split_guid = guid_new_return ();
     }
     else
@@ -715,7 +714,7 @@ GncSqlTransBackend::load_all (GncSqlBackend* sql_be)
 {
     g_return_if_fail (sql_be != NULL);
 
-    auto root = gnc_book_get_root_account (sql_be->book());;
+    auto root = gnc_book_get_root_account (sql_be->book());
     gnc_account_foreach_descendant(root, (AccountCb)xaccAccountBeginEdit,
                                    nullptr);
     query_transactions (sql_be, "");

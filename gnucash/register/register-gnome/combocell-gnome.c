@@ -693,8 +693,6 @@ gnc_combo_cell_direct_update (BasicCell *bcell,
         }
     }
 
-    new_pos = *cursor_position;
-
     if (find_pos >= 0)
     {
         new_pos = find_pos;

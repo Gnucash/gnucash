@@ -1652,7 +1652,6 @@ gnc_tree_view_column_properties (GncTreeView *view,
     }
     else
     {
-        priv = GNC_TREE_VIEW_GET_PRIVATE(view);
 
         /* If saved state comes back with a width of zero (or there is no saved
          * state width) the use the default width for the column.  Allow for

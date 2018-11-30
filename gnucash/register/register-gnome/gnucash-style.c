@@ -228,7 +228,7 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
             cd->pixel_width = MAX (cd->pixel_width, width);
         }
 
-        cd = g_table_index (dimensions->cell_dimensions, row, 0);
+        g_table_index (dimensions->cell_dimensions, row, 0);
         dimensions->height += max_height;
     }
 
@@ -294,7 +294,6 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
             cd = g_table_index (cd_table, 0, col);
 
             cd->pixel_width += (default_width - width);
-            width += (default_width - width);
             widths[col] = cd->pixel_width;
 
             break;
@@ -316,8 +315,6 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
 
             cd = g_table_index (cd_table, 0, col);
 
-            old_width = cd->pixel_width;
-
             cd->pixel_width += (default_width - width);
 
             text = cell->sample_text;
@@ -335,7 +332,6 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
 
             cd->pixel_width = MAX (cd->pixel_width, sample_width);
 
-            width += cd->pixel_width - old_width;
             widths[col] = cd->pixel_width;
 
             break;

@@ -146,9 +146,10 @@ gnc_environment_parse_one (const gchar *env_path)
 
             /* Remove the "x" from our result */
             if (g_strcmp0 (tmp_val, "x"))
+            {
                 new_val = g_strdup (tmp_val + sizeof (G_SEARCHPATH_SEPARATOR_S));
-            g_free (tmp_val);
-
+                g_free (tmp_val);
+            }
             if (!g_setenv (env_vars[i], new_val, TRUE))
                 g_warning ("Couldn't properly override environment variable \"%s\". "
                 "This may lead to unexpected results", env_vars[i]);

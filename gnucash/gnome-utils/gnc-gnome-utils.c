@@ -241,15 +241,15 @@ void
 gnc_gnome_help (const char *dir, const char *detail)
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-NSString *subdir = [NSString stringWithUTF8String: dir];
-NSString *tag, *subdirectory;
+    NSString *subdir = [NSString stringWithUTF8String: dir];
+    NSString *tag, *subdirectory;
     NSURL *url = NULL;
 
     if (detail)
-tag  = [NSString stringWithUTF8String: detail];
-else if ([subdir compare: @HF_HELP] == NSOrderedSame)
+        tag  = [NSString stringWithUTF8String: detail];
+    else if ([subdir compare: @HF_HELP] == NSOrderedSame)
         tag = @"help";
-else if ([subdir compare: @HF_GUIDE] == NSOrderedSame)
+    else if ([subdir compare: @HF_GUIDE] == NSOrderedSame)
         tag = @"index";
     else
     {
@@ -266,18 +266,18 @@ else if ([subdir compare: @HF_GUIDE] == NSOrderedSame)
          * add some more pieces, and put it all back together again. Then,
          * because the gettext way of handling localizations is different from
          * OSX's, we have to figure out which translation to use. */
-NSArray *components = [NSArray arrayWithObjects: @"share", @"doc", @"gnucash-docs", nil ];
+        NSArray *components = [NSArray arrayWithObjects: @"share", @"doc", @"gnucash-docs", nil ];
         NSString *prefix = [[[NSBundle mainBundle] resourcePath]
                             stringByDeletingLastPathComponent];
         NSArray *prefix_comps = [[prefix pathComponents]
-                         arrayByAddingObjectsFromArray: components];
-NSString *docs_dir = [NSString pathWithComponents: prefix_comps];
+                                 arrayByAddingObjectsFromArray: components];
+        NSString *docs_dir = [NSString pathWithComponents: prefix_comps];
         NSArray *languages = [[NSUserDefaults standardUserDefaults]
-                      objectForKey: @"AppleLanguages"];
+                              objectForKey: @"AppleLanguages"];
         BOOL dir;
-subdir = [[[subdir lowercaseString] componentsSeparatedByString: @" "]
-          componentsJoinedByString: @"-"];
-if (![[NSFileManager defaultManager] fileExistsAtPath: docs_dir])
+        subdir = [[[subdir lowercaseString] componentsSeparatedByString: @" "]
+                  componentsJoinedByString: @"-"];
+        if (![[NSFileManager defaultManager] fileExistsAtPath: docs_dir])
         {
             const gchar *message =
                 _("GnuCash could not find the files for the help documentation. "
@@ -296,28 +296,28 @@ if (![[NSFileManager defaultManager] fileExistsAtPath: docs_dir])
                 NSArray *elements;
                 unsigned int paths;
                 NSString *completed_path = [NSString alloc];
-this_lang = [this_lang stringByTrimmingCharactersInSet:
-             [NSCharacterSet characterSetWithCharactersInString:
+                this_lang = [this_lang stringByTrimmingCharactersInSet:
+                             [NSCharacterSet characterSetWithCharactersInString:
                               @"\""]];
-elements = [this_lang componentsSeparatedByString: @"-"];
+                elements = [this_lang componentsSeparatedByString: @"-"];
                 this_lang = [elements objectAtIndex: 0];
-path = [docs_dir stringByAppendingPathComponent: this_lang];
-paths = [path completePathIntoString: &completed_path
-         caseSensitive: FALSE
-         matchesIntoArray: NULL filterTypes: NULL];
+                path = [docs_dir stringByAppendingPathComponent: this_lang];
+                paths = [path completePathIntoString: &completed_path
+                         caseSensitive: FALSE
+                         matchesIntoArray: NULL filterTypes: NULL];
                 if (paths > 1 &&
-                        [[NSFileManager defaultManager]
-         fileExistsAtPath: completed_path
-         isDirectory: &dir])
+                    [[NSFileManager defaultManager]
+                     fileExistsAtPath: completed_path
+                     isDirectory: &dir])
                     if (dir)
                     {
                         @try
                         {
-url = [NSURL fileURLWithPath:
+                            url = [NSURL fileURLWithPath:
                                    [[[completed_path
-          stringByAppendingPathComponent: subdir]
-         stringByAppendingPathComponent: tag]
-        stringByAppendingPathExtension: @"html"]];
+                                      stringByAppendingPathComponent: subdir]
+                                     stringByAppendingPathComponent: tag]
+                                    stringByAppendingPathExtension: @"html"]];
                         }
                         @catch (NSException *e)
                         {
@@ -327,7 +327,7 @@ url = [NSURL fileURLWithPath:
                         }
                         break;
                     }
-if ([this_lang compare: @"en"] == NSOrderedSame)
+                if ([this_lang compare: @"en"] == NSOrderedSame)
                     break; /* Special case, forces use of "C" locale */
             }
         }
@@ -336,11 +336,11 @@ if ([this_lang compare: @"en"] == NSOrderedSame)
             @try
             {
                 url = [NSURL
-       fileURLWithPath: [[[[docs_dir
-                            stringByAppendingPathComponent: @"C"]
-                           stringByAppendingPathComponent: subdir]
-                          stringByAppendingPathComponent: tag]
-                         stringByAppendingPathExtension: @"html"]];
+                       fileURLWithPath: [[[[docs_dir
+                                            stringByAppendingPathComponent: @"C"]
+                                           stringByAppendingPathComponent: subdir]
+                                          stringByAppendingPathComponent: tag]
+                                         stringByAppendingPathExtension: @"html"]];
             }
             @catch (NSException *e)
             {
@@ -355,10 +355,10 @@ if ([this_lang compare: @"en"] == NSOrderedSame)
     {
         @try
         {
-url = [NSURL fileURLWithPath: [[NSBundle mainBundle]
-                               pathForResource: tag
-                               ofType: @"html"
-                               inDirectory: subdir ]];
+            url = [NSURL fileURLWithPath: [[NSBundle mainBundle]
+                                           pathForResource: tag
+                                           ofType: @"html"
+                                           inDirectory: subdir ]];
         }
         @catch (NSException *e)
         {
@@ -369,7 +369,7 @@ url = [NSURL fileURLWithPath: [[NSBundle mainBundle]
     }
     /* Now just open the URL in the default app for opening URLs */
     if (url)
-[[NSWorkspace sharedWorkspace] openURL: url];
+        [[NSWorkspace sharedWorkspace] openURL: url];
     else
     {
         const gchar *message =

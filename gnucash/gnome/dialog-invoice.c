@@ -303,6 +303,19 @@ set_gncEntry_switch_type (gpointer data, gpointer user_data)
     gncEntrySetQuantity (entry, gnc_numeric_neg (gncEntryGetQuantity (entry)));
 }
 
+static void
+set_gncEntry_date(gpointer data, gpointer user_data)
+{
+    GncEntry *entry = data;
+    time64 new_date = *(time64*) user_data;
+    //g_warning("Modifying date for entry with desc=\"%s\"", gncEntryGetDescription(entry));
+
+    gncEntrySetDate(entry, gnc_time64_get_day_neutral (new_date));
+    /*gncEntrySetDateEntered(entry, *new_date); - don't modify this
+     * because apparently it defines the ordering of the entries,
+     * which we don't want to change. */
+}
+
 static void gnc_ui_to_invoice (InvoiceWindow *iw, GncInvoice *invoice)
 {
     GtkTextBuffer* text_buffer;
@@ -332,6 +345,8 @@ static void gnc_ui_to_invoice (InvoiceWindow *iw, GncInvoice *invoice)
                                      gnc_amount_edit_get_amount
                                      (GNC_AMOUNT_EDIT (iw->to_charge_edit)));
 
+    time = gnc_date_edit_get_date (GNC_DATE_EDIT (iw->opened_date));
+
     /* Only set these values for NEW/MOD INVOICE types */
     if (iw->dialog_type != EDIT_INVOICE)
     {
@@ -341,7 +356,6 @@ static void gnc_ui_to_invoice (InvoiceWindow *iw, GncInvoice *invoice)
                                 (GTK_EDITABLE (iw->billing_id_entry), 0, -1));
         gncInvoiceSetTerms (invoice, iw->terms);
 
-        time = gnc_date_edit_get_date (GNC_DATE_EDIT (iw->opened_date));
         gncInvoiceSetDateOpened (invoice, time);
 
         gnc_owner_get_owner (iw->owner_choice, &(iw->owner));
@@ -366,7 +380,16 @@ static void gnc_ui_to_invoice (InvoiceWindow *iw, GncInvoice *invoice)
 
     /* Document type can only be modified for a new or duplicated invoice/credit note */
     if (iw->dialog_type == NEW_INVOICE || iw->dialog_type == DUP_INVOICE)
+    {
+        /* Update the entry dates to match the invoice date. This only really
+         * should happen for a duplicate invoice. However as a new invoice has
+         * no entries we can run this unconditionally. */
+        g_list_foreach(gncInvoiceGetEntries(invoice),
+                    &set_gncEntry_date, &time);
+
+
         gncInvoiceSetIsCreditNote (invoice, iw->is_credit_note);
+    }
 
     /* If the document type changed on a duplicated invoice,
      * its entries should be updated
@@ -2164,6 +2187,7 @@ gnc_invoice_recreate_page (GncMainWindow *window,
         goto give_up;
     }
     g_free(tmp_string);
+    tmp_string = NULL;
 
     /* Get Owner Type */
     owner_type = g_key_file_get_string(key_file, group_name,
@@ -2703,25 +2727,12 @@ gnc_ui_invoice_modify (GtkWindow *parent, GncInvoice *invoice)
     return iw;
 }
 
-static void
-set_gncEntry_date(gpointer data, gpointer user_data)
-{
-    GncEntry *entry = data;
-    const GDate* new_date = user_data;
-    //g_warning("Modifying date for entry with desc=\"%s\"", gncEntryGetDescription(entry));
-
-    gncEntrySetDateGDate(entry, new_date);
-    /*gncEntrySetDateEntered(entry, *new_date); - don't modify this
-     * because apparently it defines the ordering of the entries,
-     * which we don't want to change. */
-}
-
 
 InvoiceWindow * gnc_ui_invoice_duplicate (GtkWindow *parent, GncInvoice *old_invoice, gboolean open_properties, const GDate *new_date)
 {
     InvoiceWindow *iw = NULL;
     GncInvoice *new_invoice = NULL;
-    GDate new_date_gdate;
+    time64 entry_date;
 
     g_assert(old_invoice);
 
@@ -2746,21 +2757,15 @@ InvoiceWindow * gnc_ui_invoice_duplicate (GtkWindow *parent, GncInvoice *old_inv
 
     // Modify the date to today
     if (new_date)
-    {
-        new_date_gdate = *new_date;
-    }
+        entry_date = gnc_time64_get_day_neutral (gdate_to_time64 (*new_date));
     else
-    {
-        GDate *tmp = gnc_g_date_new_today();
-        new_date_gdate = *tmp;
-        g_date_free(tmp);
-    }
-    gncInvoiceSetDateOpenedGDate(new_invoice, &new_date_gdate);
+        entry_date = gnc_time64_get_day_neutral (gnc_time (NULL));
+    gncInvoiceSetDateOpened(new_invoice, entry_date);
 
     // Also modify the date of all entries to today
     //g_warning("We have %d entries", g_list_length(gncInvoiceGetEntries(new_invoice)));
     g_list_foreach(gncInvoiceGetEntries(new_invoice),
-                   &set_gncEntry_date, &new_date_gdate);
+                   &set_gncEntry_date, &entry_date);
 
 
     if (open_properties)

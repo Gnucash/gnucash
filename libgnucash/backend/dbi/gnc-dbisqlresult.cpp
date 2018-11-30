@@ -144,7 +144,7 @@ std::string
 GncDbiSqlResult::IteratorImpl::get_string_at_col(const char* col) const
 {
     auto type = dbi_result_get_field_type (m_inst->m_dbi_result, col);
-    auto attrs = dbi_result_get_field_attribs (m_inst->m_dbi_result, col);
+    dbi_result_get_field_attribs (m_inst->m_dbi_result, col);
     if(type != DBI_TYPE_STRING)
         throw (std::invalid_argument{"Requested string from non-string column."});
     auto strval = dbi_result_get_string(m_inst->m_dbi_result, col);
@@ -160,7 +160,7 @@ GncDbiSqlResult::IteratorImpl::get_time64_at_col (const char* col) const
 {
     auto result = (dbi_result_t*) (m_inst->m_dbi_result);
     auto type = dbi_result_get_field_type (result, col);
-    auto attrs = dbi_result_get_field_attribs (result, col);
+    dbi_result_get_field_attribs (result, col);
     if (type != DBI_TYPE_DATETIME)
         throw (std::invalid_argument{"Requested time64 from non-time64 column."});
 #if HAVE_LIBDBI_TO_LONGLONG

@@ -231,8 +231,13 @@ add_library (gncmod-engine
 
 # Add dependency on swig-runtime.h and iso-4217-currencies.c
 add_dependencies (gncmod-engine swig-runtime-h iso-4217-c)
+if (WIN32 AND ${CMAKE_HOST_SYSTEM_VERSION} VERSION_LESS "10.0")
+  set(BCRYPT "bcrypt.lib")
+else()
+  set(BCRYPT "")
+endif()
 
-target_link_libraries(gncmod-engine gnc-core-utils gnc-module ${Boost_DATE_TIME_LIBRARIES}  ${Boost_REGEX_LIBRARIES} ${REGEX_LDFLAGS} ${GMODULE_LDFLAGS} ${GLIB2_LDFLAGS} ${GOBJECT_LDFLAGS} ${GUILE_LDFLAGS})
+target_link_libraries(gncmod-engine gnc-core-utils gnc-module ${Boost_DATE_TIME_LIBRARIES}  ${Boost_REGEX_LIBRARIES} ${BCRYPT} ${REGEX_LDFLAGS} ${GMODULE_LDFLAGS} ${GLIB2_LDFLAGS} ${GOBJECT_LDFLAGS} ${GUILE_LDFLAGS})
 
 target_compile_definitions (gncmod-engine PRIVATE -DG_LOG_DOMAIN=\"gnc.engine\")
 

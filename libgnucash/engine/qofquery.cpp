@@ -486,7 +486,7 @@ compile_sort (QofQuerySort *sort, QofIdType obj)
     /* If we have valid parameters, grab the compare function,
      * If not, check if this is the default sort.
      */
-    if (sort->param_fcns)
+    if (sort->param_fcns && resObj)
     {
         /* First, check if this parameter has a sort function override.
          * if not then check if there's a global compare function for the type
@@ -535,7 +535,7 @@ static void compile_terms (QofQuery *q)
              * If not, see if this is the default sort.
              */
 
-            if (qt->param_fcns)
+            if (qt->param_fcns && resObj)
                 qt->pred_fcn = qof_query_core_get_predicate (resObj->param_type);
             else
                 qt->pred_fcn = NULL;
@@ -803,7 +803,6 @@ static GList * qof_query_run_internal (QofQuery *q,
             g_list_free(matching_objects);
             matching_objects = NULL;
         }
-        object_count = q->max_results;
     }
 
     q->changed = 0;

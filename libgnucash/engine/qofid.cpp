@@ -234,6 +234,7 @@ qof_collection_from_glist (QofIdType type, const GList *glist)
         ent = QOF_INSTANCE(list->data);
         if (FALSE == qof_collection_add_entity(coll, ent))
         {
+            qof_collection_destroy(coll);
             return NULL;
         }
     }

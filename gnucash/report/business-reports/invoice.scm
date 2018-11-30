@@ -316,8 +316,8 @@ for styling the invoice. Please see the exported report for the CSS class names.
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display") (N_ "Individual Taxes")
-    "o" (N_ "Display all the individual taxes?") #f))
+    (N_ "Display") (N_ "Use Detailed Tax Summary")
+    "o" (N_ "Display all tax categories separately (one per line) instead of one single tax line.?") #f))
 
   (gnc:register-inv-option (gnc:make-internal-option "Display" "Totals" #t))
 
@@ -415,7 +415,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
      (gnc:lookup-option options section name)))
 
   (let ((show-payments (opt-val "Display" "Payments"))
-        (display-all-taxes (opt-val "Display" "Individual Taxes"))
+        (display-all-taxes (opt-val "Display" "Use Detailed Tax Summary"))
         (display-subtotal? (opt-val "Display" "Subtotal"))
         (lot (gncInvoiceGetPostedLot invoice))
         (txn (gncInvoiceGetPostedTxn invoice))
@@ -675,7 +675,8 @@ for styling the invoice. Please see the exported report for the CSS class names.
 (define (make-img img-url)
   ;; just an image
   (gnc:make-html-text
-   (gnc:html-markup-img img-url)))
+   (gnc:html-markup-img
+    (make-file-url img-url))))
 
 (define (make-client-table owner orders options)
   (define (opt-val section name)
@@ -801,6 +802,9 @@ for styling the invoice. Please see the exported report for the CSS class names.
                                 (else
                                  (_ "Invoice"))))
                (title (if (string-null? custom-title) default-title custom-title))
+               ;; Translators: This is the format of the invoice title.
+               ;; The first ~a is "Invoice", "Credit Note"... and the second the number.
+               ;; Replace " #" by whatever is common as number abbreviation, i.e. "~a Nr. ~a"
                (invoice-title (format #f (_"~a #~a") title (gncInvoiceGetID invoice)))
                (layout-lookup-table (list (cons 'none #f)
                                           (cons 'picture (gnc:make-html-div/markup

@@ -1495,7 +1495,6 @@ gnc_pricedb_process_removal_list (GNCPriceDB *db, GDate *fiscal_end_date,
     gboolean save_first_price = FALSE;
     gint saved_test_value = 0, next_test_value = 0;
     GNCPrice *cloned_price = NULL;
-    GDateMonth fiscal_month_end = g_date_get_month (fiscal_end_date);
     GDateMonth fiscal_month_start;
     GDate *tmp_date = g_date_new_dmy (g_date_get_day (fiscal_end_date),
                                       g_date_get_month (fiscal_end_date),
@@ -1527,7 +1526,6 @@ gnc_pricedb_process_removal_list (GNCPriceDB *db, GDate *fiscal_end_date,
         if (save_first_price == TRUE)
         {
             clone_price (&cloned_price, item->data);
-            save_first_price = FALSE;
             continue;
         }
 
@@ -2198,28 +2196,28 @@ gnc_pricedb_nth_price (GNCPriceDB *db,
                merged currency list. */
             GList **price_array = (GList **)g_new(gpointer, num_currencies);
             GList **next_list;
-            int i, j;
+            int i, j, k;
             GHashTableIter iter;
             gpointer key, value;
 
             /* Build an array of all the currencies this commodity has prices for */
             for (i = 0, g_hash_table_iter_init(&iter, currency_hash);
                  g_hash_table_iter_next(&iter, &key, &value) && i < num_currencies;
-                 i++)
+                 ++i)
             {
                 price_array[i] = value;
             }
 
-            /* Iterate n times to get the nth price, each time finding the currency
+            /* Iterate up to n times (there are i prices, so going past i will run off the end of the array) to get the nth price, each time finding the currency
                with the latest price */
-            for (i = 0; i <= n; i++)
+            for (k = 0; k < n && k < i; ++k)
             {
                 next_list = NULL;
-                for (j = 0; j < num_currencies; j++)
+                for (j = 0; j < i; ++j)
                 {
                     /* Save this entry if it's the first one or later than
                        the saved one. */
-                    if (price_array[j] != NULL &&
+                    if (price_array[k] != NULL &&
                         (next_list == NULL || *next_list == NULL ||
                         compare_prices_by_date((*next_list)->data, (price_array[j])->data) > 0))
                     {
@@ -2480,7 +2478,8 @@ typedef struct
 } PriceTuple;
 
 static PriceTuple
-extract_common_prices (PriceList *from_prices, PriceList *to_prices)
+extract_common_prices (PriceList *from_prices, PriceList *to_prices,
+                       const gnc_commodity *from, const gnc_commodity *to)
 {
     PriceTuple retval = {NULL, NULL};
     GList *from_node = NULL, *to_node = NULL;
@@ -2500,8 +2499,10 @@ extract_common_prices (PriceList *from_prices, PriceList *to_prices)
             to_cur = gnc_price_get_currency (to_price);
             from_com = gnc_price_get_commodity (from_price);
             from_cur = gnc_price_get_currency (from_price);
-            if (to_com == from_com || to_com == from_cur ||
-                to_cur == from_com || to_cur == from_cur)
+            if (((to_com == from_com || to_com == from_cur) &&
+                 (to_com != from && to_com != to)) ||
+                ((to_cur == from_com || to_cur == from_cur) &&
+                 (to_cur != from && to_cur != to)))
                 break;
             to_price = NULL;
             from_price = NULL;
@@ -2578,7 +2579,7 @@ indirect_balance_conversion (GNCPriceDB *db, gnc_numeric bal,
     }
     if (from_prices == NULL || to_prices == NULL)
         return zero;
-    tuple = extract_common_prices(from_prices, to_prices);
+    tuple = extract_common_prices(from_prices, to_prices, from, to);
     gnc_price_list_destroy(from_prices);
     gnc_price_list_destroy(to_prices);
     if (tuple.from)

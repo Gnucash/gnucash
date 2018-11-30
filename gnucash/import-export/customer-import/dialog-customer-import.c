@@ -336,7 +336,6 @@ gnc_customer_import_create_customers (GtkListStore *store, QofBook *book, guint 
         // Set the customer id if one has not been chosen
         if (strlen (id) == 0)
         {
-            g_free (id);
             if (g_ascii_strcasecmp (type, "CUSTOMER") == 0) id = gncCustomerNextID (book);
             else if (g_ascii_strcasecmp (type, "VENDOR") == 0)id = gncVendorNextID (book);
             //printf("ASSIGNED ID = %s\n",id);
@@ -413,6 +412,7 @@ gnc_customer_import_create_customers (GtkListStore *store, QofBook *book, guint 
             //printf("TYPE %s created with ID = %s.\n", type, id); // DEBUG
         }
 
+        g_free (id);
         g_free (company);
         g_free (name);
         g_free (addr1);

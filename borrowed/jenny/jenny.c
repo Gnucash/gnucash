@@ -1184,7 +1184,7 @@ build_tuples( state *s, ub2 d, ub2 f)
 {
   feature  offset[MAX_N];                                      /* n-1-tuples */
   feature  tuple[MAX_N];                      /* n-tuples that include (d,f) */
-  sb4      i, j, n = s->n[d][f];
+  sb4      i, j, n;
   ub8      count = 0;
   test    *t;
   tu_iter  ctx;
@@ -1522,7 +1522,6 @@ cover_tuples( state *s)
     ub4         tuple_count = 0;
     ub1         covered = FALSE;
     feature    *tuple = (feature *)0;
-    ub4         tuple_f, tuple_d;
 
     /* extend lists of tuples and choose one tuple to cover */
     for (d=0; d<s->ndim; ++d) {
@@ -1533,13 +1532,9 @@ cover_tuples( state *s)
           tuple_n = s->n[d][f];
           tuple_count = s->tc[d][f];
           tuple = s->tu[d][f]->fe;
-          tuple_f = f;
-          tuple_d = d;
         } else if (s->n[d][f] == tuple_n && s->tc[d][f] > tuple_count) {
           tuple_count = s->tc[d][f];
           tuple = s->tu[d][f]->fe;
-          tuple_f = f;
-          tuple_d = d;
         }
       }
     }
@@ -1748,9 +1743,7 @@ which_test( state *s)
 static void
 reduce_tests( state *s)
 {
-  ub4 t;
   prepare_reduce( s);
-  t = which_test( s);
 }
 
 /* Confirm that every tuple is covered by either a testcase or a without */

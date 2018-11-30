@@ -270,11 +270,6 @@ verify_term_ok (NewBillTerm *nbt)
     gint days_due_days, days_disc_days;
     gint prox_due_days, prox_disc_days;
 
-    days_due_days=0;
-    days_disc_days=0;
-    prox_due_days=0;
-    prox_disc_days=0;
-
     notebook = &nbt->notebook;
     result=TRUE;
 

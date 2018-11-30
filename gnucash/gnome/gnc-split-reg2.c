@@ -505,7 +505,7 @@ gsr2_redraw_all_cb (GncTreeViewSplitReg *view, gpointer user_data)
     GNCSplitReg2 *gsr = user_data;
     gnc_commodity * commodity;
     GNCPrintAmountInfo print_info;
-    gnc_numeric amount;
+    gnc_numeric amount = gnc_numeric_zero();
     Account *leader;
     gboolean reverse;
     gboolean euro;
@@ -560,9 +560,6 @@ gsr2_redraw_all_cb (GncTreeViewSplitReg *view, gpointer user_data)
     if (gsr->value_label != NULL)
     {
         char string[256];
-        QofBook *book = gnc_account_get_book (leader);
-        GNCPriceDB *pricedb = gnc_pricedb_get_db (book);
-        gnc_commodity *commodity = xaccAccountGetCommodity (leader);
         gnc_commodity *currency = gnc_default_currency ();
         print_info = gnc_commodity_print_info (currency, TRUE);
         xaccSPrintAmount (string, amount, print_info);
@@ -911,7 +908,7 @@ gsr2_determine_account_pr_dialog (gpointer argp)
 static void
 gnc_split_reg2_determine_account_pr (GNCSplitReg2 *gsr)
 {
-    dialog_args *args = g_malloc (sizeof (dialog_args));
+    dialog_args *args;
     GncTreeModelSplitReg *model;
 
     model = gnc_ledger_display2_get_split_model_register (gsr->ledger);
@@ -920,6 +917,8 @@ gnc_split_reg2_determine_account_pr (GNCSplitReg2 *gsr)
         return;
 
     /* Put up a warning dialog */
+    args  = g_malloc (sizeof (dialog_args));
+    args->string = _(""); /* FIXME: No string for dialog. */
     args->gsr = gsr;
     g_timeout_add (250, gsr2_determine_account_pr_dialog, args); /* 0.25 seconds */
 }
@@ -958,7 +957,6 @@ static
 void
 gnc_split_reg2_determine_read_only (GNCSplitReg2 *gsr) //this works
 {
-    dialog_args *args = g_malloc (sizeof (dialog_args));
 
     if (qof_book_is_readonly (gnc_get_current_book()))
     {
@@ -969,11 +967,13 @@ gnc_split_reg2_determine_read_only (GNCSplitReg2 *gsr) //this works
 
     if (!gsr->read_only)
     {
+        dialog_args *args = g_malloc (sizeof (dialog_args));
 
         switch (gnc_split_reg2_get_placeholder (gsr))
         {
         case PLACEHOLDER_NONE:
             /* stay as false. */
+            g_free (args);
             return;
 
         case PLACEHOLDER_THIS:

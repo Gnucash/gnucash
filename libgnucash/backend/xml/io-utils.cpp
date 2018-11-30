@@ -65,6 +65,8 @@ write_one_account (FILE* out,
     xmlElemDump (out, NULL, accnode);
     xmlFreeNode (accnode);
 
+    g_return_val_if_fail(gd, FALSE);
+    
     if (ferror (out) || fprintf (out, "\n") < 0)
         return FALSE;
 

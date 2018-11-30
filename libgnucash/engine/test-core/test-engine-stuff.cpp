@@ -913,7 +913,7 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
     /* Other split should have equal and opposite value */
     if (do_bork())
     {
-        val = get_random_gnc_numeric(GNC_DENOM_AUTO);
+        val = get_random_gnc_numeric(s2_scu);
         g_log ("test.engine.suff", G_LOG_LEVEL_DEBUG, "Borking second %" PRIu64
 	       " / %" PRIu64 ", scu %d\n", val.num, val.denom, s2_scu);
     }

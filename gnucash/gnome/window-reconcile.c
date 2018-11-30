@@ -49,7 +49,7 @@
 #include "gnc-event.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-gnome-utils.h"
-#include "gnc-main-window.h"
+//#include "gnc-main-window.h"
 #include "gnc-plugin-page-register.h"
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
@@ -584,7 +584,7 @@ gnc_reconcile_interest_xfer_run(startRecnWindowData *data)
                            GNC_AMOUNT_EDIT(data->end_value) );
     gnc_numeric before = gnc_amount_edit_get_amount(
                              GNC_AMOUNT_EDIT(data->end_value) );
-    gnc_numeric after = gnc_numeric_zero();
+    gnc_numeric after;
 
     recnInterestXferWindow( data );
 
@@ -937,6 +937,9 @@ do_popup_menu(RecnWindow *recnData, GdkEventButton *event)
         return;
     }
 
+#if GTK_CHECK_VERSION(3,22,0)
+    gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *) event);
+#else
     if (event)
     {
         button = event->button;
@@ -948,9 +951,6 @@ do_popup_menu(RecnWindow *recnData, GdkEventButton *event)
         event_time = gtk_get_current_event_time ();
     }
 
-#if GTK_CHECK_VERSION(3,22,0)
-    gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *) event);
-#else
     gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, button, event_time);
 #endif
 }
@@ -1765,7 +1765,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
 
         action_group = gtk_action_group_new ("ReconcileWindowActions");
         recnData->action_group = action_group;
-        gnc_gtk_action_group_set_translation_domain(action_group, GETTEXT_PACKAGE);
+        gtk_action_group_set_translation_domain(action_group, GETTEXT_PACKAGE);
         gtk_action_group_add_actions (action_group, recnWindow_actions,
                                       recnWindow_n_actions, recnData);
         action =

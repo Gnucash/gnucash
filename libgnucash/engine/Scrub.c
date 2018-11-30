@@ -42,6 +42,7 @@
 #include <glib/gi18n.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 
 #include "Account.h"
 #include "AccountP.h"
@@ -682,7 +683,6 @@ gnc_transaction_balance_trading (Transaction *trans, Account *root)
         gnc_monetary *imbal_mon = imbalance_commod->data;
         gnc_commodity *commodity;
         gnc_numeric old_amount, new_amount;
-        gnc_numeric old_value, new_value, val_imbalance;
         const gnc_commodity *txn_curr = xaccTransGetCurrency (trans);
 
         commodity = gnc_monetary_commodity (*imbal_mon);
@@ -694,11 +694,6 @@ gnc_transaction_balance_trading (Transaction *trans, Account *root)
             gnc_monetary_list_free(imbal_list);
             LEAVE("");
             return;
-        }
-
-        if (! gnc_commodity_equal (txn_curr, commodity))
-        {
-            val_imbalance = gnc_transaction_get_commodity_imbalance (trans, commodity);
         }
 
         xaccTransBeginEdit (trans);
@@ -718,8 +713,10 @@ gnc_transaction_balance_trading (Transaction *trans, Account *root)
         }
         else
         {
-            old_value = xaccSplitGetValue (balance_split);
-            new_value = gnc_numeric_sub (old_value, val_imbalance,
+            gnc_numeric val_imbalance = gnc_transaction_get_commodity_imbalance (trans,            commodity);
+
+            gnc_numeric old_value = xaccSplitGetValue (balance_split);
+            gnc_numeric new_value = gnc_numeric_sub (old_value, val_imbalance,
                                          gnc_commodity_get_fraction(txn_curr),
                                          GNC_HOW_RND_ROUND_HALF_UP);
 
@@ -1400,9 +1397,10 @@ xaccTransScrubPostedDate (Transaction *trans)
     time64 orig = xaccTransGetDate(trans);
     GDate date = xaccTransGetDatePostedGDate(trans);
     time64 time = gdate_to_time64(date);
-    if (orig && orig != time)
+    /* xaccTransGetDatePostedGDate will return a valid time */
+    if (orig == INT64_MAX && orig != time)
     {
-        /* xaccTransSetDatePostedTS handles committing the change. */
+        /* xaccTransSetDatePostedSecs handles committing the change. */
         xaccTransSetDatePostedSecs(trans, time);
     }
 }

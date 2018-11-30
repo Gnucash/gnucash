@@ -131,7 +131,7 @@ gnucash_cursor_get_virt (GnucashCursor *cursor, VirtualLocation *virt_loc)
 void
 gnucash_cursor_configure (GnucashCursor *cursor)
 {
-    gint x, y, w, h;
+    gint x = 0, y = 0, w = 0, h = 0;
 
     g_return_if_fail (cursor != NULL);
     g_return_if_fail (GNUCASH_IS_CURSOR (cursor));

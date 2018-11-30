@@ -78,7 +78,8 @@ fill_model_with_match(GMatchInfo *match_info,
  * Parse the file for a correctly formatted file
  *******************************************************/
 csv_import_result
-csv_import_read_file (const gchar *filename, const gchar *parser_regexp,
+csv_import_read_file (GtkWindow *win, const gchar *filename,
+                      const gchar *parser_regexp,
                       GtkListStore *store, guint max_rows)
 {
     gchar      *locale_cont, *contents;

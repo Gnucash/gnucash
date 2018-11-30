@@ -2017,7 +2017,7 @@ void
 loan_rev_hash_to_list( gpointer key, gpointer val, gpointer user_data )
 {
     GList **l = (GList**)user_data;
-    RevRepaymentRow *rrr = g_new0( RevRepaymentRow, 1 );
+    RevRepaymentRow *rrr;
     if ( !key || !val )
     {
         DEBUG( "%.8x, %.8x",
@@ -2025,6 +2025,7 @@ loan_rev_hash_to_list( gpointer key, gpointer val, gpointer user_data )
                GPOINTER_TO_UINT(val));
         return;
     }
+    rrr  = g_new0( RevRepaymentRow, 1 );
     rrr->date = *(GDate*)key;
     rrr->numCells = (gnc_numeric*)val;
     *l = g_list_append( *l, (gpointer)rrr );

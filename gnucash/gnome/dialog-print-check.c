@@ -1414,6 +1414,7 @@ format_read_general_info(const gchar *file,
 static void
 free_check_format(check_format_t *data)
 {
+    g_return_if_fail(data);
     g_free(data->guid);
     g_free(data->filename);
     g_free(data->title);
@@ -1476,7 +1477,7 @@ static void
 read_one_check_directory(PrintCheckDialog *pcd, GtkListStore *store,
                          const gchar *groupname, const gchar *dirname)
 {
-    check_format_t *format, *existing;
+    check_format_t *format = NULL, *existing;
     GDir *dir;
     const gchar *filename;
     GtkTreeIter iter;
@@ -1529,6 +1530,7 @@ read_one_check_directory(PrintCheckDialog *pcd, GtkListStore *store,
             found = TRUE;
         }
     }
+    free_check_format (format);
     g_dir_close(dir);
 
     /* If any files were added to the list, add a separator between

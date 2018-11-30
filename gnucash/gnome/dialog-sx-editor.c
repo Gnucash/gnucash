@@ -636,7 +636,7 @@ gnc_sxed_split_check_account (GncSxEditorDialog *sxed, Split *s,
                      gnc_commodity *base_cmdty, gboolean *multi_cmdty)
 {
     gnc_commodity *split_cmdty = NULL;
-    gnc_numeric split_amount = gnc_numeric_zero ();
+    gnc_numeric split_amount;
     Account *acct = NULL;
     GncGUID *acct_guid = NULL;
     qof_instance_get (QOF_INSTANCE (s),

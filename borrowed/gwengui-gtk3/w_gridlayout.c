@@ -128,7 +128,6 @@ int Gtk3Gui_WGridLayout_AddChildGuiWidget(GWEN_WIDGET *w, GWEN_WIDGET *wChild) {
   GTK3_GRIDLAYOUT_WIDGET *xw;
   GtkWidget *g;
   GtkWidget *gChild;
-  uint32_t cflags;
   int x;
   int y;
 
@@ -136,7 +135,6 @@ int Gtk3Gui_WGridLayout_AddChildGuiWidget(GWEN_WIDGET *w, GWEN_WIDGET *wChild) {
   xw=GWEN_INHERIT_GETDATA(GWEN_WIDGET, GTK3_GRIDLAYOUT_WIDGET, w);
   assert(xw);
 
-  cflags=GWEN_Widget_GetFlags(wChild);
 
   g=GTK_WIDGET(GWEN_Widget_GetImplData(w, GTK3_DIALOG_WIDGET_REAL));
   assert(g);
@@ -194,7 +192,6 @@ void Gtk3Gui_WGridLayout_FreeData(void *bp, void *p) {
 
 static int Gtk3Gui_WGridLayout_Setup(GWEN_WIDGET *w) {
   GtkWidget *g;
-  uint32_t flags;
   GWEN_WIDGET *wParent;
   GTK3_GRIDLAYOUT_WIDGET *xw;
   int rows;
@@ -203,7 +200,6 @@ static int Gtk3Gui_WGridLayout_Setup(GWEN_WIDGET *w) {
   GWEN_NEW_OBJECT(GTK3_GRIDLAYOUT_WIDGET, xw);
   GWEN_INHERIT_SETDATA(GWEN_WIDGET, GTK3_GRIDLAYOUT_WIDGET, w, xw, Gtk3Gui_WGridLayout_FreeData);
 
-  flags=GWEN_Widget_GetFlags(w);
   wParent=GWEN_Widget_Tree_GetParent(w);
   cols=GWEN_Widget_GetColumns(w);
   rows=GWEN_Widget_GetRows(w);

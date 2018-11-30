@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.20.4 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkAdjustment" id="num_hrows_adj">
@@ -279,7 +279,6 @@ Enter file name and location for the Import...
         </child>
       </object>
       <packing>
-        <property name="page_type">progress</property>
         <property name="title" translatable="yes">Import Account Preview, first 10 rows only</property>
         <property name="complete">True</property>
         <property name="has_padding">False</property>

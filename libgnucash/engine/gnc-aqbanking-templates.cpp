@@ -150,7 +150,6 @@ gnc_ab_trans_templ_list_new_from_book(QofBook *b)
         auto n_func = [frame](const char* key)
             { auto slot = frame->get_slot({key});
               return slot == nullptr ? gnc_numeric_zero() : slot->get<gnc_numeric>();};
-        auto amt_slot = frame->get_slot({TT_AMOUNT});
         auto templ = new _GncABTransTempl (c_func(TT_NAME), c_func(TT_RNAME),
                                            c_func(TT_RACC), c_func(TT_RBCODE),
                                            n_func(TT_AMOUNT), c_func(TT_PURPOS),

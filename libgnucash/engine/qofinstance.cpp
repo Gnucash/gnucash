@@ -937,7 +937,6 @@ void
 qof_instance_set (QofInstance *inst, const gchar *first_prop, ...)
 {
     va_list ap;
-    QofInstancePrivate *priv = GET_PRIVATE(inst);
     g_return_if_fail (QOF_IS_INSTANCE (inst));
 
     qof_instance_set_dirty (inst);

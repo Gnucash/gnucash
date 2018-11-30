@@ -308,9 +308,9 @@ gcrd_show (GncCellRendererPopup *cell,
 	   gint                      y2)
 {
 	GncCellRendererDate     *date;
-	gint                     year;
-	gint                     month;
-	gint                     day;
+	gint                     year = 0;
+	gint                     month = 0;
+	gint                     day = 0;
 	const gchar             *text;
 
 	if (parent_class->show_popup) {
@@ -358,7 +358,7 @@ static void
 gcrd_today_clicked (GtkWidget *button, GncCellRendererDate *cell)
 {
 	time64  today;
-	gint    year, month, day;
+	gint    year = 0, month = 0, day = 0;
 	
 	today = gnc_time (NULL);
 

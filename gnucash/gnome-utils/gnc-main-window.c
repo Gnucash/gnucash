@@ -768,7 +768,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
              (pos[1] > gdk_screen_height()))
     {
         g_debug("position %dx%d, size%dx%d is offscreen; will not move",
-                pos[0], pos[1], geom[0], geom[1]);
+                pos[0], pos[1], geom ? geom[0] : 0, geom ? geom[1] : 0);
     }
     else
     {
@@ -1653,7 +1653,7 @@ static gchar *generate_statusbar_lastmodified_message()
         book_id = qof_session_get_url (gnc_get_current_session ());
     }
 
-    if (!strlen (book_id))
+    if (!(book_id && strlen (book_id)))
         return NULL;
     else
     {
@@ -2965,7 +2965,6 @@ gnc_main_window_open_page (GncMainWindow *window,
     }
 
     page->window = GTK_WIDGET(window);
-    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     page->notebook_page = gnc_plugin_page_create_widget (page);
     g_object_set_data (G_OBJECT (page->notebook_page),
                        PLUGIN_PAGE_LABEL, page);
@@ -3197,7 +3196,7 @@ gnc_main_window_merge_actions (GncMainWindow *window,
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     entry = g_new0 (MergedActionEntry, 1);
     entry->action_group = gtk_action_group_new (group_name);
-    gnc_gtk_action_group_set_translation_domain (entry->action_group, GETTEXT_PACKAGE);
+    gtk_action_group_set_translation_domain (entry->action_group, GETTEXT_PACKAGE);
     gtk_action_group_add_actions (entry->action_group, actions, n_actions, data);
     if (toggle_actions != NULL && n_toggle_actions > 0)
     {
@@ -3645,7 +3644,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
 
     /* Create menu and toolbar information */
     priv->action_group = gtk_action_group_new ("MainWindowActions");
-    gnc_gtk_action_group_set_translation_domain (priv->action_group, GETTEXT_PACKAGE);
+    gtk_action_group_set_translation_domain (priv->action_group, GETTEXT_PACKAGE);
     gtk_action_group_add_actions (priv->action_group, gnc_menu_actions,
                                   gnc_menu_n_actions, window);
     gtk_action_group_add_toggle_actions (priv->action_group,
@@ -4576,7 +4575,7 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
           * contributors. */
                   "translator-credits", _("translator_credits"),
                   "version", version,
-                  "website", "http://www.gnucash.org",
+                  "website", PACKAGE_URL,
                   "website_label", _("Visit the GnuCash website."),
                   NULL);
 
@@ -4810,6 +4809,9 @@ do_popup_menu(GncPluginPage *page, GdkEventButton *event)
         return;
     }
 
+#if GTK_CHECK_VERSION(3,22,0)
+    gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *) event);
+#else
     if (event)
     {
         button = event->button;
@@ -4820,9 +4822,6 @@ do_popup_menu(GncPluginPage *page, GdkEventButton *event)
         button = 0;
         event_time = gtk_get_current_event_time ();
     }
-#if GTK_CHECK_VERSION(3,22,0)
-    gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *) event);
-#else
     gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, button, event_time);
 #endif
     LEAVE(" ");
@@ -4876,39 +4875,6 @@ gnc_main_window_button_press_cb (GtkWidget *whatever,
     LEAVE("other click");
     return FALSE;
 }
-
-
-/* CS: Code copied from gtk/gtkactiongroup.c */
-static gchar *
-dgettext_swapped (const gchar *msgid,
-                  const gchar *domainname)
-{
-    /* CS: Pass this through dgettext if and only if msgid is
-       nonempty. */
-    return (msgid && *msgid) ? dgettext (domainname, msgid) : (gchar*) msgid;
-}
-
-/*
- * This is copied into GnuCash from Gtk in order to fix problems when
- * empty msgids were passed through gettext().
- *
- * See https://bugs.gnucash.org/show_bug.cgi?id=326200 . If that bug
- * is fixed in the gtk that we can rely open, then
- * gnc_gtk_action_group_set_translation_domain can be replaced by
- * gtk_action_group_set_translation_domain again.
- */
-void
-gnc_gtk_action_group_set_translation_domain (GtkActionGroup *action_group,
-        const gchar    *domain)
-{
-    g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
-
-    gtk_action_group_set_translate_func (action_group,
-                                         (GtkTranslateFunc)dgettext_swapped,
-                                         g_strdup (domain),
-                                         g_free);
-}
-/* CS: End of code copied from gtk/gtkactiongroup.c */
 
 void
 gnc_main_window_all_action_set_sensitive (const gchar *action_name,

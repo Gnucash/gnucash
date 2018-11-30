@@ -673,7 +673,6 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
             !found_divider_upper && need_divider_upper)
     {
         table->model->dividing_row_upper = vcell_loc.virt_row;
-        found_divider_upper = TRUE;
     }
 
     /* If we didn't find the pending transaction, it was removed

@@ -381,7 +381,7 @@ gnc_tree_view_commodity_new (QofBook *book,
     /* Set default visibilities */
     gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(view), FALSE);
 
-    col = gnc_tree_view_add_text_column (
+    gnc_tree_view_add_text_column (
               view, _("Namespace"), "namespace", NULL, "NASDAQ",
               GNC_TREE_MODEL_COMMODITY_COL_NAMESPACE,
               GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
@@ -398,7 +398,7 @@ gnc_tree_view_commodity_new (QofBook *book,
               GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
               sort_by_commodity_string);
     g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
-    col = gnc_tree_view_add_text_column (
+    gnc_tree_view_add_text_column (
               view, _("Print Name"), "printname", NULL,
               "ACMEACME (Acme Corporation, Inc.)",
               GNC_TREE_MODEL_COMMODITY_COL_PRINTNAME,
@@ -410,7 +410,7 @@ gnc_tree_view_commodity_new (QofBook *book,
               GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
               sort_by_commodity_string);
     g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
-    col = gnc_tree_view_add_text_column (
+    gnc_tree_view_add_text_column (
               view, _("Unique Name"), "uniquename", NULL,
               "NASDAQ::ACMEACME", GNC_TREE_MODEL_COMMODITY_COL_UNIQUE_NAME,
               GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
@@ -430,7 +430,7 @@ gnc_tree_view_commodity_new (QofBook *book,
               GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
               sort_by_fraction);
     g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
-    col = gnc_tree_view_add_toggle_column(
+    gnc_tree_view_add_toggle_column(
               view, _("Get Quotes"),
               /* Translators: This string has a context prefix; the translation
                  must only contain the part after the | character. */
@@ -439,7 +439,7 @@ gnc_tree_view_commodity_new (QofBook *book,
               GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
               sort_by_quote_flag,
               NULL);
-    col = gnc_tree_view_add_text_column (
+    gnc_tree_view_add_text_column (
               view, _("Source"), "quote_source", NULL, "alphavantage",
               GNC_TREE_MODEL_COMMODITY_COL_QUOTE_SOURCE,
               GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,

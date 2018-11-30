@@ -26,18 +26,18 @@
 #include "qof.h"
 
 #define GNC_TYPE_SEARCH_OWNER             (gnc_search_owner_get_type ())
-#define GNCSEARCH_OWNER(obj)	          G_TYPE_CHECK_INSTANCE_CAST(obj, gnc_search_owner_get_type (), GNCSearchOwner)
-#define GNCSEARCH_OWNER_CLASS(klass)	  G_TYPE_CHECK_CLASS_CAST(klass, gnc_search_owner_get_type (), GNCSearchOwnerClass)
+#define GNCSEARCH_OWNER(obj)              G_TYPE_CHECK_INSTANCE_CAST(obj, gnc_search_owner_get_type (), GNCSearchOwner)
+#define GNCSEARCH_OWNER_CLASS(klass)      G_TYPE_CHECK_CLASS_CAST(klass, gnc_search_owner_get_type (), GNCSearchOwnerClass)
 #define IS_GNCSEARCH_OWNER(obj)           G_TYPE_CHECK_INSTANCE_TYPE(obj, gnc_search_owner_get_type ())
 
-typedef struct _GNCSearchOwner	GNCSearchOwner;
-typedef struct _GNCSearchOwnerClass	GNCSearchOwnerClass;
+typedef struct _GNCSearchOwner  GNCSearchOwner;
+typedef struct _GNCSearchOwnerClass GNCSearchOwnerClass;
 
 struct _GNCSearchOwner
 {
     GNCSearchCoreType parent;
 
-    QofGuidMatch	how;
+    QofGuidMatch    how;
 };
 
 struct _GNCSearchOwnerClass
@@ -49,8 +49,8 @@ struct _GNCSearchOwnerClass
     /* signals */
 };
 
-GType		gnc_search_owner_get_type	(void);
-GNCSearchOwner	*gnc_search_owner_new	(void);
+GType       gnc_search_owner_get_type   (void);
+GNCSearchOwner  *gnc_search_owner_new   (void);
 
 /* methods */
 
