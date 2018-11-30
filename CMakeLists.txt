@@ -288,7 +288,7 @@ endif (WIN32)
 if(GENERATE_SWIG_WRAPPERS)
   find_package (SWIG 2.0.10 REQUIRED)
   include (${SWIG_USE_FILE})
-  string(REGEX MATCH "^[0-9]+\." SWIG_MAJOR ${SWIG_VERSION})
+  string(REGEX MATCH "^[0-9]+[.]" SWIG_MAJOR ${SWIG_VERSION})
 endif()
 
 # Find Guile and determine which version we are using.
