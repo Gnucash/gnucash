@@ -2196,28 +2196,28 @@ gnc_pricedb_nth_price (GNCPriceDB *db,
                merged currency list. */
             GList **price_array = (GList **)g_new(gpointer, num_currencies);
             GList **next_list;
-            int i, j;
+            int i, j, k;
             GHashTableIter iter;
             gpointer key, value;
 
             /* Build an array of all the currencies this commodity has prices for */
             for (i = 0, g_hash_table_iter_init(&iter, currency_hash);
                  g_hash_table_iter_next(&iter, &key, &value) && i < num_currencies;
-                 i++)
+                 ++i)
             {
                 price_array[i] = value;
             }
 
-            /* Iterate n times to get the nth price, each time finding the currency
+            /* Iterate up to n times (there are i prices, so going past i will run off the end of the array) to get the nth price, each time finding the currency
                with the latest price */
-            for (i = 0; i <= n; i++)
+            for (k = 0; k < n && k < i; ++k)
             {
                 next_list = NULL;
-                for (j = 0; j < num_currencies; j++)
+                for (j = 0; j < i; ++j)
                 {
                     /* Save this entry if it's the first one or later than
                        the saved one. */
-                    if (price_array[j] != NULL &&
+                    if (price_array[k] != NULL &&
                         (next_list == NULL || *next_list == NULL ||
                         compare_prices_by_date((*next_list)->data, (price_array[j])->data) > 0))
                     {

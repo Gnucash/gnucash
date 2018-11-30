@@ -222,7 +222,7 @@ add_clicked (CommoditiesDialog *cd)
     else
         name_space = NULL;
 
-    commodity = gnc_ui_new_commodity_modal (name_space, cd->dialog);
+    gnc_ui_new_commodity_modal (name_space, cd->dialog);
 }
 
 void

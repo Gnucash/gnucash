@@ -1599,7 +1599,7 @@ int gncEntryCompare (const GncEntry *a, const GncEntry *b)
     if (a == b) return 0;
     if (!a && b) return -1;
     if (a && !b) return 1;
-
+    g_assert (a && b);  /* Silence a static analysis warning. */
     if (a->date != b->date) return a->date - b->date;
     if (a->date_entered != b->date_entered) return a->date_entered - b->date_entered;
 

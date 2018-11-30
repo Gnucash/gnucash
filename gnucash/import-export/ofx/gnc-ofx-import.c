@@ -973,7 +973,7 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
          * calling 'gnc_import_select_account', allow the user to set book
          * options. */
         if (new_book)
-            new_book = gnc_new_book_option_display (GTK_WIDGET (gnc_ui_get_main_window (NULL)));
+            gnc_new_book_option_display (GTK_WIDGET (gnc_ui_get_main_window (NULL)));
 
         gnc_utf8_strip_invalid(data.account_name);
         gnc_utf8_strip_invalid(data.account_id);

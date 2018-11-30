@@ -992,7 +992,7 @@ gnc_tree_model_split_reg_get_sub_account (GncTreeModelSplitReg *model)
 void
 gnc_tree_model_split_reg_update_query (GncTreeModelSplitReg *model, Query *query)
 {
-    GSList *p1 = NULL, *p2 = NULL, *p3 = NULL, *standard;
+    GSList *p1 = NULL, *p2 = NULL, *standard;
 
     time64 start;
     struct tm tm;
@@ -1019,7 +1019,7 @@ gnc_tree_model_split_reg_update_query (GncTreeModelSplitReg *model, Query *query
             else if (model->sort_depth == 3)
             {
                 p1 = g_slist_prepend (p1, SPLIT_RECONCILE);
-                p1 = g_slist_prepend (p2, SPLIT_DATE_RECONCILED);
+                p1 = g_slist_prepend (p1, SPLIT_DATE_RECONCILED);
                 p2 = standard;
             }
             break;
@@ -1061,7 +1061,7 @@ gnc_tree_model_split_reg_update_query (GncTreeModelSplitReg *model, Query *query
         case GNC_TREE_MODEL_SPLIT_REG_COL_RECN:
             {
                 p1 = g_slist_prepend (p1, SPLIT_RECONCILE);
-                p1 = g_slist_prepend (p2, SPLIT_DATE_RECONCILED);
+                p1 = g_slist_prepend (p1, SPLIT_DATE_RECONCILED);
                 p2 = standard;
             }
             break;
@@ -1088,7 +1088,7 @@ gnc_tree_model_split_reg_update_query (GncTreeModelSplitReg *model, Query *query
         xaccQueryAddDateMatchTT (query, TRUE, start, FALSE, 0, QOF_QUERY_AND);
     }
 
-    qof_query_set_sort_order (query, p1, p2, p3);
+    qof_query_set_sort_order (query, p1, p2, NULL);
 
 }
 
