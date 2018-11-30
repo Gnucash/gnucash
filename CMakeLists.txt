@@ -562,26 +562,6 @@ endif()
 endif()
 add_definitions(-D_GNU_SOURCE)
 
-if (APPLE)
-  include (CheckCXXCompilerFlag)
-  check_cxx_compiler_flag(-Wno-unused-local-typedef, have_wno_ult)
-  if (have_wno_ult)
-    set( CMAKE_CXX_FLAGS "-Wno-unused-local-typedef -Wmissing-prototypes ${CMAKE_CXX_FLAGS}")
-  else()
-    set( CMAKE_CXX_FLAGS "-Wmissing-prototypes ${CMAKE_CXX_FLAGS}")
-  endif()
-  check_c_compiler_flag(-Wno-unknown-attributes have_no_unkatt)
-  if (have_no_unkatt)
-    set(CMAKE_C_FLAGS "-Wno-unknown-attributes -Wno-typedef-redefinition ${CMAKE_C_FLAGS}")
-    set(CMAKE_CXX_FLAGS "-Wno-unknown-attributes -Wno-typedef-redefinition ${CMAKE_CXX_FLAGS}")
-  else()
-    set(CMAKE_C_FLAGS "-Wno-typedef-redefinition ${CMAKE_C_FLAGS}")
-    set(CMAKE_CXX_FLAGS "-Wno-typedef-redefinition ${CMAKE_CXX_FLAGS}")
-  endif()
-  #  set (CMAKE_OSX_ARCHITECTURES "i386")
-endif (APPLE)
-
-
 # Also, set the C++ version to c++11
 set(CMAKE_CXX_FLAGS "-std=gnu++11 ${CMAKE_CXX_FLAGS}")  # FIXME: should be -std=c++11
 
