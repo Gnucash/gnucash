@@ -2965,7 +2965,6 @@ gnc_main_window_open_page (GncMainWindow *window,
     }
 
     page->window = GTK_WIDGET(window);
-    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     page->notebook_page = gnc_plugin_page_create_widget (page);
     g_object_set_data (G_OBJECT (page->notebook_page),
                        PLUGIN_PAGE_LABEL, page);
@@ -4810,6 +4809,9 @@ do_popup_menu(GncPluginPage *page, GdkEventButton *event)
         return;
     }
 
+#if GTK_CHECK_VERSION(3,22,0)
+    gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *) event);
+#else
     if (event)
     {
         button = event->button;
@@ -4820,9 +4822,6 @@ do_popup_menu(GncPluginPage *page, GdkEventButton *event)
         button = 0;
         event_time = gtk_get_current_event_time ();
     }
-#if GTK_CHECK_VERSION(3,22,0)
-    gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *) event);
-#else
     gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, button, event_time);
 #endif
     LEAVE(" ");

@@ -205,7 +205,7 @@ set_options(dbi_conn conn, const PairVec& options)
         if (result < 0)
         {
             const char *msg = nullptr;
-            int err = dbi_conn_error(conn, &msg);
+            dbi_conn_error(conn, &msg);
             PERR("Error setting %s option to %s: %s", opt, val, msg);
             throw std::runtime_error(msg);
         }

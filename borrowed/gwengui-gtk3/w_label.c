@@ -146,11 +146,9 @@ const char* Gtk3Gui_WLabel_GetCharProperty(GWEN_WIDGET *w,
 static int Gtk3Gui_WLabel_Setup(GWEN_WIDGET *w) {
   GtkWidget *g;
   const char *s;
-  uint32_t flags;
   GWEN_WIDGET *wParent;
   GWEN_BUFFER *tbuf;
 
-  flags=GWEN_Widget_GetFlags(w);
   wParent=GWEN_Widget_Tree_GetParent(w);
   s=GWEN_Widget_GetText(w, 0);
 

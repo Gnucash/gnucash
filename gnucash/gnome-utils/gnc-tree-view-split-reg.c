@@ -1497,20 +1497,11 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
             editable = FALSE;
         }
         else if (is_split && show_extra_dates) {
-            time64 t = 0;
 
             if (xaccSplitGetReconcile (split) == YREC)
             {
-                t = xaccSplitGetDateReconciled (split);
-                //If the time returned by xaccTransGetDateEnteredTS is 0 then assume it
-                //is a new transaction and set the time to current time to show current
-                //date on new transactions
-                if (t == 0)
-                {
-                    t = gnc_time (NULL);
-                    //xaccSplitSetDateReconciledTS (split, ts.tv_sec);
-                }//if
-                qof_print_date_buff (datebuff, sizeof(datebuff), 0);
+                time64 t = xaccSplitGetDateReconciled (split);
+                qof_print_date_buff (datebuff, sizeof(datebuff), t);
             }
             editable = FALSE;
         }
@@ -1870,7 +1861,6 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
         if (is_trow2)
         {
             s = "";
-            editable = FALSE;
         }
         else if (is_trow1) // Value
         {
@@ -1878,11 +1868,7 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
             {
                 Split *this_split;
 
-                this_split = gtv_sr_get_this_split (view, trans);
-
                 num = xaccTransGetAccountValue (trans, anchor);
-
-                editable = !expanded && !gnc_tree_util_split_reg_is_multi (this_split);
 
                 if (expanded)
                     s = "";
@@ -1892,7 +1878,6 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
             else
             {
                 s = "";
-                editable = FALSE;
             }
         }
 
@@ -1902,7 +1887,6 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
             {
                 num = xaccSplitGetAmount (split);
                 s = xaccPrintAmount (num, gnc_account_print_info (xaccSplitGetAccount (split), SHOW_SYMBOL));
-                editable = TRUE;
             }
             else if (anchor)
             {
@@ -1913,13 +1897,11 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
                 {
                     num = xaccSplitGetAmount (split);
                     s = xaccPrintAmount (num, gnc_account_print_info (xaccSplitGetAccount (split), SHOW_SYMBOL));
-                    editable = TRUE;
                 }
             }
             else
             {
                 s = "";
-                editable = FALSE;
             }
 
             if (gtv_sr_get_imbalance (trans))
@@ -1945,14 +1927,12 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
         if (is_trow2)
         {
             s = "";
-            editable = FALSE;
         }
         else if (is_trow1)
         {
             if (expanded)
             {
                 s = "";
-                editable = FALSE;
             }
             else
             {
@@ -1968,22 +1948,18 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
                         else
                             num = xaccSplitGetSharePrice (this_split);
 
-                        editable = !expanded && !gnc_tree_util_split_reg_is_multi (this_split);
-
-                        if (gnc_numeric_check (num) == GNC_ERROR_OK)
+                         if (gnc_numeric_check (num) == GNC_ERROR_OK)
                         {
                             s = xaccPrintAmount (num, gnc_split_amount_print_info (split, SHOW_SYMBOL));
                         }
                         else
                         {
                             s = "";
-                            editable = FALSE;
                         }
                     }
                     else
                     {
                         s = "";
-                        editable = FALSE;
                     }
                 }
             }
@@ -2001,18 +1977,15 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
                 if (gnc_numeric_check (num) == GNC_ERROR_OK)
                 {
                     s = xaccPrintAmount (num, gnc_split_amount_print_info (split, SHOW_SYMBOL));
-                    editable = TRUE;
                 }
                 else
                 {
                     s = "";
-                    editable = FALSE;
                 }
             }
             else
             {
                 s = "";
-                editable = FALSE;
             }
 
             if (gtv_sr_get_imbalance (trans))
@@ -2041,7 +2014,6 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
                     if (!gnc_tree_util_split_reg_get_debcred_entry (view, trans, split, is_blank, &num, &print_info))
                         num = gnc_numeric_zero();
 
-                    editable = TRUE;
                     if (gtv_sr_get_imbalance (trans))
                         g_object_set (cell, "cell-background", PINKCELL, (gchar*)NULL);
                 }
@@ -2049,18 +2021,15 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
                 {
                     if (anchor)
                     {
-                         editable = !expanded && !gnc_tree_util_split_reg_is_multi (gtv_sr_get_this_split (view, trans));
                          num = xaccTransGetAccountAmount (trans, anchor);
                     }
                     else
                     {
-                        editable = FALSE;
                         num = gnc_numeric_zero();
                     }
                 }
                 else if (is_trow2)
                 {
-                    editable = FALSE;
                     num = gnc_numeric_zero();
                 }
 
@@ -2081,12 +2050,10 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
             }
             else
             {
-                editable = TRUE;
 
                 if (is_trow1 || is_trow2)
                 {
                     s = "";
-                    editable = FALSE;
                 }
                 else if (is_split && viewcol == COL_DEBIT)
                     s = gnc_tree_util_split_reg_template_get_fdebt_entry (split);
@@ -4030,8 +3997,6 @@ gtv_sr_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
                 DEBUG("Column title is %s and start path is %s", gtk_tree_view_column_get_title (col), string);
                 g_free (string);
             }
-
-            model = gnc_tree_view_split_reg_get_model_from_view (view);
 
             /* Step to the next column, we may wrap */
             gnc_tree_view_keynav (GNC_TREE_VIEW (view), &col, spath, event); // returns path and column

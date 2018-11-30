@@ -544,7 +544,7 @@ gnc_reconcile_interest_xfer_run (startRecnWindowData *data)
                            GNC_AMOUNT_EDIT(data->end_value));
     gnc_numeric before = gnc_amount_edit_get_amount (
                              GNC_AMOUNT_EDIT(data->end_value));
-    gnc_numeric after = gnc_numeric_zero();
+    gnc_numeric after;
 
     recnInterestXferWindow (data);
 
@@ -896,6 +896,9 @@ do_popup_menu (RecnWindow2 *recnData, GdkEventButton *event)
         return;
     }
 
+#if GTK_CHECK_VERSION(3,22,0)
+    gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *) event);
+#else
     if (event)
     {
         button = event->button;
@@ -907,9 +910,6 @@ do_popup_menu (RecnWindow2 *recnData, GdkEventButton *event)
         event_time = gtk_get_current_event_time ();
     }
 
-#if GTK_CHECK_VERSION(3,22,0)
-    gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *) event);
-#else
     gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, button, event_time);
 #endif
 }

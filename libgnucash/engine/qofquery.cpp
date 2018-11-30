@@ -803,7 +803,6 @@ static GList * qof_query_run_internal (QofQuery *q,
             g_list_free(matching_objects);
             matching_objects = NULL;
         }
-        object_count = q->max_results;
     }
 
     q->changed = 0;

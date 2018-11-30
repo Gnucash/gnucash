@@ -335,7 +335,7 @@ gnucash_sheet_get_text_cursor_position (GnucashSheet *sheet, const VirtualLocati
     x_offset = gnucash_sheet_get_text_offset (sheet, virt_loc,
                                               rect.width, logical_rect.width);
 
-    result = pango_layout_xy_to_index (layout,
+    pango_layout_xy_to_index (layout,
                  PANGO_SCALE * (sheet->button_x - rect.x - x_offset),
                  PANGO_SCALE * (height/2), &index, &trailing);
 
@@ -1169,7 +1169,7 @@ gnucash_sheet_draw_cb (GtkWidget *widget, cairo_t *cr, G_GNUC_UNUSED gpointer da
     gtk_style_context_restore (context);
 
 //FIXME what should be done with result being TRUE or FALSE
-    result = gnucash_sheet_draw_internal (sheet, cr, &alloc);
+    gnucash_sheet_draw_internal (sheet, cr, &alloc);
     gnucash_sheet_draw_cursor (sheet->cursor, cr);
 
     return FALSE;
@@ -1531,7 +1531,7 @@ gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event)
         return TRUE;
 
 //FIXME does something need to be done if changed_cells is true or false ?
-    changed_cells = gnucash_sheet_cursor_move (sheet, new_virt_loc);
+    gnucash_sheet_cursor_move (sheet, new_virt_loc);
 
     if (button_1)
         gnucash_sheet_check_grab (sheet);

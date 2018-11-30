@@ -220,8 +220,8 @@ gcrp_grab_on_window (GdkWindow *window,
     GdkSeat *seat;
 #else
     GdkDeviceManager *device_manager;
-#endif
     GdkDevice *device;
+#endif
 
 #if GTK_CHECK_VERSION(3,22,0)
     GdkEvent *event = gtk_get_current_event ();
@@ -229,7 +229,6 @@ gcrp_grab_on_window (GdkWindow *window,
 
 #if GTK_CHECK_VERSION(3,20,0)
     seat = gdk_display_get_default_seat (display);
-    device = gdk_seat_get_pointer (seat);
 #else
     device_manager = gdk_display_get_device_manager (display);
     device = gdk_device_manager_get_client_pointer (device_manager);
@@ -316,7 +315,6 @@ gcrp_show_popup (GncCellRendererPopup *cell,
 		if (alloc.height > screen_height && y - button_height > screen_height) {
 			/* We don't, so we show the popup above the cell
 			   instead of below it. */
-			screen_height = y - button_height;
 			y -= (alloc.height + button_height);
 			if (y < 0) {
 				y = 0;

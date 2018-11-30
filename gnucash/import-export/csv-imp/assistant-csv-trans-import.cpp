@@ -1741,7 +1741,6 @@ csv_tximp_acct_match_text_parse (std::string acct_name)
             alt_sep = "-";
         else
             alt_sep = ":";
-        sep_pos = acct_name.find(sep);
         for (sep_pos = acct_name.find(sep); sep_pos != std::string::npos;
                 sep_pos = acct_name.find(sep))
             acct_name.replace (sep_pos, strlen(sep), alt_sep);

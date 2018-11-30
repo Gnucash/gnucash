@@ -174,9 +174,7 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
 
                 gdk_window_get_origin (parent_window, &root_x, &root_y);
 
-                screen = gtk_widget_get_screen (GTK_WIDGET (qview));
-
-                /* Get a list of toplevel windows */
+                 /* Get a list of toplevel windows */
                 win_list = gtk_window_list_toplevels ();
 
                 /* Look for the gtk-tooltip window, we do this as gtk_widget_get_tooltip_window

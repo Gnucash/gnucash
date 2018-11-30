@@ -86,7 +86,7 @@ gnc_file_dialog (GtkWindow *parent,
     GtkWidget *file_box;
     const char *internal_name;
     char *file_name = NULL;
-    gchar * okbutton = _("_Open");
+    gchar * okbutton;
     const gchar *ok_icon = NULL;
     GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
     gint response;
@@ -742,7 +742,6 @@ RESTART:
     {
         gchar *directory;
         show_session_error (parent, io_err, newfile, GNC_FILE_DIALOG_OPEN);
-        io_err = ERR_BACKEND_NO_ERR;
         if (g_file_test (filename, G_FILE_TEST_IS_DIR))
             directory = g_strdup (filename);
         else

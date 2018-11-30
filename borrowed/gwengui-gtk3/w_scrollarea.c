@@ -163,10 +163,8 @@ int Gtk3Gui_WScrollArea_AddChildGuiWidget(GWEN_WIDGET *w, GWEN_WIDGET *wChild) {
 static int Gtk3Gui_WScrollArea_Setup(GWEN_WIDGET *w) {
   GtkWidget *g;
   GtkWidget *gContent;
-  uint32_t flags;
   GWEN_WIDGET *wParent;
 
-  flags=GWEN_Widget_GetFlags(w);
   wParent=GWEN_Widget_Tree_GetParent(w);
 
   /* create widget */

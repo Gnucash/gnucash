@@ -244,8 +244,7 @@ GncSqlBillTermBackend::load_all (GncSqlBackend* sql_be)
 
     for (auto row : *result)
     {
-        auto pBillTerm =
-            load_single_billterm (sql_be, row, l_billterms_needing_parents);
+        load_single_billterm (sql_be, row, l_billterms_needing_parents);
     }
     delete result;
     std::string pkey(col_table[0]->name());

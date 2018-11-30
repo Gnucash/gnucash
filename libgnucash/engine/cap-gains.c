@@ -532,7 +532,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
     GNCPolicy *pcy;
     gnc_commodity *currency = NULL;
     gnc_numeric zero = gnc_numeric_zero();
-    gnc_numeric value = zero;
+    gnc_numeric value;
     gnc_numeric frac;
     gnc_numeric opening_amount, opening_value;
     gnc_numeric lot_amount, lot_value;

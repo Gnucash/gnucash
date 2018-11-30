@@ -156,11 +156,8 @@ static void Gtk3Gui_WPushButton_Clicked_handler(GtkButton *button, gpointer data
 static int Gtk3Gui_WPushButton_Setup(GWEN_WIDGET *w) {
   GtkWidget *g;
   const char *s;
-  uint32_t flags;
   GWEN_WIDGET *wParent;
-  gulong clicked_handler_id;
 
-  flags=GWEN_Widget_GetFlags(w);
   wParent=GWEN_Widget_Tree_GetParent(w);
   s=GWEN_Widget_GetText(w, 0);
 
@@ -204,10 +201,10 @@ static int Gtk3Gui_WPushButton_Setup(GWEN_WIDGET *w) {
   GWEN_Widget_SetSetCharPropertyFn(w, Gtk3Gui_WPushButton_SetCharProperty);
   GWEN_Widget_SetGetCharPropertyFn(w, Gtk3Gui_WPushButton_GetCharProperty);
 
-  clicked_handler_id=g_signal_connect(g,
-                                      "clicked",
-                                      G_CALLBACK (Gtk3Gui_WPushButton_Clicked_handler),
-                                      w);
+  g_signal_connect(g,
+                   "clicked",
+                   G_CALLBACK (Gtk3Gui_WPushButton_Clicked_handler),
+                   w);
 
   if (wParent)
     GWEN_Widget_AddChildGuiWidget(wParent, w);

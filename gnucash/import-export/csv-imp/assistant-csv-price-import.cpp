@@ -401,7 +401,7 @@ set_commodity_for_combo (GtkComboBox *combo, gnc_commodity *comm)
         valid = gtk_tree_model_iter_next (model, &iter);
     }
     // Not found, set it to first iter
-    valid = gtk_tree_model_get_iter_first (model, &iter);
+    gtk_tree_model_get_iter_first (model, &iter);
     if (gtk_tree_model_sort_convert_child_iter_to_iter (GTK_TREE_MODEL_SORT(sort_model), &siter, &iter))
         gtk_combo_box_set_active_iter (combo, &siter);
 }
@@ -829,7 +829,6 @@ CsvImpPriceAssist::preview_settings_delete ()
 void
 CsvImpPriceAssist::preview_settings_save ()
 {
-    auto title = _("Save the Import Settings.");
     auto new_name = price_imp->settings_name();
 
     /* Check if the entry text matches an already existing preset */

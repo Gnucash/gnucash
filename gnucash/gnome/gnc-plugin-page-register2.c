@@ -2870,7 +2870,6 @@ gnc_plugin_page_register2_cmd_void_transaction (GtkAction *action,
     }
     if (xaccTransHasReconciledSplits (trans) || xaccTransHasSplitsInState (trans, CREC))
     {
-        GtkWindow *window = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)));
         gnc_error_dialog (NULL, "%s", _("You cannot void a transaction with reconciled or cleared splits."));
         LEAVE("trans with reconciled splits");
         return;

@@ -568,7 +568,6 @@ gnc_exp_parser_parse_separate_vars (const char * expression,
         newVars = parser_get_vars( pe );
         for ( ; newVars ; newVars = newVars->next_var )
         {
-            pnum = newVars->value;
             if ( g_hash_table_lookup_extended( varHash, newVars->variable_name,
                                                &maybeKey, &maybeValue ) )
             {

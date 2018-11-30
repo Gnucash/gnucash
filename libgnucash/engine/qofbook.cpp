@@ -212,8 +212,7 @@ qof_book_get_property (GObject* object,
         qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {"fy_end"});
         break;
     case PROP_AB_TEMPLATES:
-        key = const_cast<char*>(AB_KEY "/" AB_TEMPLATES);
-        qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {"AB_KEY", "AB_TEMPLATES"});
+          qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {"AB_KEY", "AB_TEMPLATES"});
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);

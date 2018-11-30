@@ -462,8 +462,6 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
         if (event->button.button != 1)
             break;
 
-        x = event->button.x;
-        y = event->button.y;
 
         if (header->in_resize)
         {

@@ -253,7 +253,6 @@ GDate *
 gnc_period_select_get_fy_end (GncPeriodSelect *period)
 {
     GncPeriodSelectPrivate *priv;
-    priv = GNC_PERIOD_SELECT_GET_PRIVATE(period);
 
     g_return_val_if_fail(period != NULL, NULL);
     g_return_val_if_fail(GNC_IS_PERIOD_SELECT(period), NULL);

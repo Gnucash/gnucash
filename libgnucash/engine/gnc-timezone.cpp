@@ -435,9 +435,6 @@ namespace IANAParser
 	    time_count = *(endian_swap(reinterpret_cast<uint32_t*>(tzh.timecnt)));
 	    type_count = *(endian_swap(reinterpret_cast<uint32_t*>(tzh.typecnt)));
 	    char_count = *(endian_swap(reinterpret_cast<uint32_t*>(tzh.charcnt)));
-	    isgmt_count = *(endian_swap(reinterpret_cast<uint32_t*>(tzh.ttisgmtcnt)));
-	    isstd_count = *(endian_swap(reinterpret_cast<uint32_t*>(tzh.ttisstdcnt)));
-	    leap_count = *(endian_swap(reinterpret_cast<uint32_t*>(tzh.leapcnt)));
 	    transition_size = 8;
 	}
 	fb_index += sizeof(tzh);

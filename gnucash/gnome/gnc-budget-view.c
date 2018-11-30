@@ -913,7 +913,7 @@ budget_total_col_source(Account *account, GtkTreeViewColumn *col,
                         GtkCellRenderer *cell)
 {
     GncBudget *budget;
-    gnc_numeric total = gnc_numeric_zero();
+    gnc_numeric total;
     gchar amtbuff[100]; //FIXME: overkill, where's the #define?
 
     budget = GNC_BUDGET(g_object_get_data(G_OBJECT(col), "budget"));

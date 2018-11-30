@@ -913,7 +913,6 @@ check_popup_height_is_true (GtkWidget    *widget,
                             gpointer user_data)
 {
     GncItemEdit *item_edit = GNC_ITEM_EDIT(user_data);
-    GnucashSheet *sheet = item_edit->sheet;
 
     // if a larger font is specified in css for the sheet, the popup returned height value
     // on first pop does not reflect the true height but the minimum height so just to be
@@ -955,7 +954,6 @@ gnc_item_edit_show_popup (GncItemEdit *item_edit)
 
     gtk_widget_get_allocation (GTK_WIDGET (sheet), &alloc);
     view_height = alloc.height;
-    view_width  = alloc.width;
 
     vadj = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(sheet));
     hadj = gtk_scrollable_get_hadjustment(GTK_SCROLLABLE(sheet));

@@ -560,9 +560,6 @@ gsr2_redraw_all_cb (GncTreeViewSplitReg *view, gpointer user_data)
     if (gsr->value_label != NULL)
     {
         char string[256];
-        QofBook *book = gnc_account_get_book (leader);
-        GNCPriceDB *pricedb = gnc_pricedb_get_db (book);
-        gnc_commodity *commodity = xaccAccountGetCommodity (leader);
         gnc_commodity *currency = gnc_default_currency ();
         print_info = gnc_commodity_print_info (currency, TRUE);
         xaccSPrintAmount (string, amount, print_info);

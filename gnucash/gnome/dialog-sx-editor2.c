@@ -514,7 +514,7 @@ gnc_sxed_check_consistent (GncSxEditorDialog2 *sxed)
 {
     gboolean multi_commodity = FALSE;
     gnc_commodity *base_cmdty = NULL;
-    gint ttVarCount, splitCount;
+    gint ttVarCount, splitCount = 0;
     GList *schedule = NULL;
 
     /* Do checks on validity and such, interrupting the user if
@@ -536,8 +536,6 @@ gnc_sxed_check_consistent (GncSxEditorDialog2 *sxed)
      *   right... ]
      */
 
-    ttVarCount = 0;
-    splitCount = 0;
     {
         static const int NUM_ITERS_WITH_VARS = 5;
         static const int NUM_ITERS_NO_VARS = 1;

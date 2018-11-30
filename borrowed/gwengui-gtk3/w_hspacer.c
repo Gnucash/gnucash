@@ -76,10 +76,8 @@ int Gtk3Gui_WHSpacer_GetIntProperty(GWEN_WIDGET *w,
 
 static int Gtk3Gui_WHSpacer_Setup(GWEN_WIDGET *w) {
   GtkWidget *g;
-  uint32_t flags;
   GWEN_WIDGET *wParent;
 
-  flags=GWEN_Widget_GetFlags(w);
   wParent=GWEN_Widget_Tree_GetParent(w);
 
   g=gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);

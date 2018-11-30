@@ -3710,7 +3710,6 @@ xaccAccountCountSplits (const Account *acc, gboolean include_children)
 {
     gint64 nr, i;
 
-    nr = 0;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), 0);
 
     nr = g_list_length(xaccAccountGetSplitList(acc));

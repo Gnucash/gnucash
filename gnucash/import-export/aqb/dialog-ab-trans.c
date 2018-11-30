@@ -983,12 +983,11 @@ gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkTreeView *view,
     GncABTransDialog *td = user_data;
     GtkTreeIter iter;
     GncABTransTempl *templ;
-    const gchar *old_name, *new_name;
-    const gchar *old_account, *new_account;
-    const gchar *old_bankcode, *new_bankcode;
-    const gchar *old_purpose, *new_purpose;
-    const gchar *old_purpose_cont, *new_purpose_cont;
-    GtkWidget *amount_widget;
+    const gchar *new_name;
+    const gchar *new_account;
+    const gchar *new_bankcode;
+    const gchar *new_purpose;
+    const gchar *new_purpose_cont;
     const gchar *old_amount_text;
     gnc_numeric old_amount, new_amount;
 
@@ -1003,16 +1002,6 @@ gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkTreeView *view,
     }
     gtk_tree_model_get(GTK_TREE_MODEL(td->template_list_store), &iter,
                        TEMPLATE_POINTER, &templ, -1);
-
-    /* Get old values */
-    old_name = gtk_entry_get_text(GTK_ENTRY(td->recp_name_entry));
-    old_account = gtk_entry_get_text(GTK_ENTRY(td->recp_account_entry));
-    old_bankcode = gtk_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry));
-    old_purpose = gtk_entry_get_text(GTK_ENTRY(td->purpose_entry));
-    old_purpose_cont = gtk_entry_get_text(GTK_ENTRY(td->purpose_cont_entry));
-    amount_widget = gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT(td->amount_edit));
-    old_amount_text = gtk_entry_get_text(GTK_ENTRY(amount_widget));
-    old_amount = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(td->amount_edit));
 
     /* Get new values */
     new_name = gnc_ab_trans_templ_get_recp_name(templ);

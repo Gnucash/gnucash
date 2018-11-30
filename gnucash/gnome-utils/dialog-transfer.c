@@ -1299,8 +1299,7 @@ gnc_xfer_dialog_set_amount(XferDialog *xferData, gnc_numeric amount)
     account = gnc_transfer_dialog_get_selected_account (xferData,
                                                         XFER_DIALOG_FROM);
     if (account == NULL)
-        account = gnc_transfer_dialog_get_selected_account (xferData,
-                                                            XFER_DIALOG_TO);
+        gnc_transfer_dialog_get_selected_account (xferData, XFER_DIALOG_TO);
 
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (xferData->amount_edit), amount);
 }

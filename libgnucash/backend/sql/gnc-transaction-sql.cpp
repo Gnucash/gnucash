@@ -216,7 +216,6 @@ load_single_split (GncSqlBackend* sql_be, GncSqlRow& row)
     if (guid_equal (guid, guid_null ()))
     {
         PWARN ("Bad GUID, creating new");
-        bad_guid = TRUE;
         split_guid = guid_new_return ();
     }
     else

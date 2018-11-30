@@ -1495,7 +1495,6 @@ gnc_pricedb_process_removal_list (GNCPriceDB *db, GDate *fiscal_end_date,
     gboolean save_first_price = FALSE;
     gint saved_test_value = 0, next_test_value = 0;
     GNCPrice *cloned_price = NULL;
-    GDateMonth fiscal_month_end = g_date_get_month (fiscal_end_date);
     GDateMonth fiscal_month_start;
     GDate *tmp_date = g_date_new_dmy (g_date_get_day (fiscal_end_date),
                                       g_date_get_month (fiscal_end_date),
@@ -1527,7 +1526,6 @@ gnc_pricedb_process_removal_list (GNCPriceDB *db, GDate *fiscal_end_date,
         if (save_first_price == TRUE)
         {
             clone_price (&cloned_price, item->data);
-            save_first_price = FALSE;
             continue;
         }
 

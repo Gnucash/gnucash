@@ -953,7 +953,6 @@ gncInvoiceGetTotalInternal(GncInvoice *invoice, gboolean use_value,
 
     if (!invoice) return gnc_numeric_zero();
 
-    denom = gnc_commodity_get_fraction(gncInvoiceGetCurrency(invoice));
     total = gncInvoiceGetNetAndTaxesInternal(invoice, use_value, use_tax? &taxes : NULL, use_payment_type, type);
 
     if (use_tax)
@@ -998,7 +997,7 @@ AccountValueList *gncInvoiceGetTotalTaxList (GncInvoice *invoice)
     AccountValueList *taxes;
     if (!invoice) return NULL;
 
-    unused = gncInvoiceGetNetAndTaxesInternal(invoice, FALSE, &taxes, FALSE, 0);
+    gncInvoiceGetNetAndTaxesInternal(invoice, FALSE, &taxes, FALSE, 0);
     return taxes;
 }
 

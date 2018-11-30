@@ -147,10 +147,8 @@ int Gtk3Gui_WStack_AddChildGuiWidget(GWEN_WIDGET *w, GWEN_WIDGET *wChild) {
 
 static int Gtk3Gui_WStack_Setup(GWEN_WIDGET *w) {
   GtkWidget *g;
-  uint32_t flags;
   GWEN_WIDGET *wParent;
 
-  flags=GWEN_Widget_GetFlags(w);
   wParent=GWEN_Widget_Tree_GetParent(w);
 
   g=gtk_notebook_new();

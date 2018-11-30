@@ -151,7 +151,6 @@ scrub_other_link (GNCLot *from_lot, Split *ll_from_split,
     // At this point ll_to_split and real_from_split should have the same value
     // If not, flag a warning and skip to the next iteration
     to_val        = xaccSplitGetValue (ll_to_split);
-    from_val      = xaccSplitGetValue (ll_from_split);
     real_from_val = xaccSplitGetValue (real_from_split);
     if (!gnc_numeric_equal (real_from_val, to_val))
     {

@@ -1352,7 +1352,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
         gnc_commodity_commit_edit(c);
 
         /* remember the commodity */
-        c = gnc_commodity_table_insert(gnc_get_current_commodities(), c);
+        gnc_commodity_table_insert(gnc_get_current_commodities(), c);
     }
     else
     {

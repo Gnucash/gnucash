@@ -446,10 +446,8 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
         for (node = pw->tx_info->lots; node; node = node->next)
         {
             PreExistLotInfo *lot_info = node->data;
-            if (!gnc_numeric_zero_p (gnc_lot_get_balance (lot_info->lot)))
-                /* This case will be handled below when the lot is processed as part of the open lots */
-                tx_lot = lot_info->lot;
-            else
+            if (gnc_numeric_zero_p (gnc_lot_get_balance (lot_info->lot)))
+                /* The not-zero case will be handled below when the lot is processed as part of the open lots */
             {
                 GncOwner lotowner;
                 gncOwnerInitUndefined(&lotowner, NULL);
@@ -486,7 +484,7 @@ gnc_payment_window_fill_docs_list (PaymentWindow *pw)
         const gchar *doc_cred_str = NULL;
         GtkTreeIter iter;
         GncInvoice *document;
-        gnc_numeric value = gnc_numeric_zero();
+        gnc_numeric value;
         gnc_numeric debit = gnc_numeric_zero();
         gnc_numeric credit = gnc_numeric_zero();
 
