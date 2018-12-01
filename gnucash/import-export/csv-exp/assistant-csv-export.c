@@ -128,9 +128,9 @@ static const gchar *start_trans_simple_string = N_(
 void
 csv_export_file_chooser_selection_changed_cb (GtkFileChooser *chooser, CsvExportInfo *info)
 {
-    GtkAssistant *assistant = GTK_ASSISTANT(info->window);
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
+    GtkAssistant *assistant = GTK_ASSISTANT(info->assistant);
     gchar *file_name;
 
     gtk_assistant_set_page_complete (assistant, page, FALSE);
@@ -170,9 +170,9 @@ void
 csv_export_sep_cb (GtkWidget *radio, gpointer user_data)
 {
     CsvExportInfo *info = user_data;
+    GtkAssistant *assistant = GTK_ASSISTANT(info->assistant);
     const gchar *name;
 
-    GtkAssistant *assistant = GTK_ASSISTANT(info->window);
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
@@ -246,9 +246,9 @@ void
 csv_export_custom_entry_cb (GtkWidget *widget, gpointer user_data)
 {
     CsvExportInfo *info = user_data;
+    GtkAssistant *assistant = GTK_ASSISTANT(info->assistant);
     const gchar *custom_str;
 
-    GtkAssistant *assistant = GTK_ASSISTANT(info->window);
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
@@ -384,10 +384,10 @@ csv_export_account_changed_cb (GtkTreeSelection *selection,
                                gpointer user_data)
 {
     CsvExportInfo *info = user_data;
-    GtkAssistant *assistant = GTK_ASSISTANT(info->window);
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
+    GtkAssistant *assistant = GTK_ASSISTANT(info->assistant);
     GncTreeViewAccount *view;
 
     g_return_if_fail(GTK_IS_TREE_SELECTION(selection));
@@ -793,8 +793,8 @@ csv_export_close_handler (gpointer user_data)
     if (info->mid_sep)
         g_free (info->mid_sep);
 
-    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(info->window));
-    gtk_widget_destroy (info->window);
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(info->assistant));
+    gtk_widget_destroy (info->assistant);
 }
 
 /*******************************************************
@@ -804,7 +804,6 @@ static GtkWidget *
 csv_export_assistant_create (CsvExportInfo *info)
 {
     GtkBuilder *builder;
-    GtkWidget *window;
     GtkWidget *box, *h_box;
     GtkWidget *button;
     GtkWidget *table, *hbox;
@@ -812,11 +811,10 @@ csv_export_assistant_create (CsvExportInfo *info)
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file  (builder , "assistant-csv-export.glade", "csv_export_assistant");
-    window = GTK_WIDGET(gtk_builder_get_object (builder, "csv_export_assistant"));
-    info->window = window;
+    info->assistant = GTK_WIDGET(gtk_builder_get_object (builder, "csv_export_assistant"));
 
     // Set the style context for this assistant so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(window), "GncAssistExport");
+    gnc_widget_set_style_context (GTK_WIDGET(info->assistant), "GncAssistExport");
 
     /* Load default settings */
     load_settings (info);
@@ -837,7 +835,7 @@ csv_export_assistant_create (CsvExportInfo *info)
         // Don't provide simple export layout for search registers and General Journal
         if ((info->export_type == XML_EXPORT_TREE) || (info->account == NULL))
             gtk_widget_destroy (chkbox);
-        gtk_assistant_remove_page (GTK_ASSISTANT(window), 1); //remove accounts page
+        gtk_assistant_remove_page (GTK_ASSISTANT(info->assistant), 1); //remove accounts page
     }
     else
     {
@@ -932,11 +930,11 @@ csv_export_assistant_create (CsvExportInfo *info)
     /* Summary Page */
     info->summary_label = GTK_WIDGET(gtk_builder_get_object (builder, "summary_page"));
 
-    g_signal_connect (G_OBJECT(window), "destroy",
+    g_signal_connect (G_OBJECT(info->assistant), "destroy",
                       G_CALLBACK(csv_export_assistant_destroy_cb), info);
 
     gnc_restore_window_size (GNC_PREFS_GROUP,
-                             GTK_WINDOW(info->window), gnc_ui_get_main_window(NULL));
+                             GTK_WINDOW(info->assistant), gnc_ui_get_main_window(NULL));
     if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
     {
         GObject *object = gtk_builder_get_object (builder, "paned");
@@ -945,7 +943,7 @@ csv_export_assistant_create (CsvExportInfo *info)
 
     gtk_builder_connect_signals (builder, info);
     g_object_unref (G_OBJECT(builder));
-    return window;
+    return info->assistant;
 }
 
 static void
@@ -967,8 +965,8 @@ gnc_file_csv_export_internal (CsvExportType export_type, Query *q, Account *acc)
     gnc_register_gui_component (ASSISTANT_CSV_EXPORT_CM_CLASS,
                                 NULL, csv_export_close_handler,
                                 info);
-    gtk_widget_show_all (info->window);
-    gnc_window_adjust_for_screen (GTK_WINDOW(info->window));
+    gtk_widget_show_all (info->assistant);
+    gnc_window_adjust_for_screen (GTK_WINDOW(info->assistant));
 }
 
 
