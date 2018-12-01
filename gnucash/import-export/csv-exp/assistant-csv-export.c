@@ -128,12 +128,10 @@ static const gchar *start_trans_simple_string = N_(
 void
 csv_export_file_chooser_selection_changed_cb (GtkFileChooser *chooser, CsvExportInfo *info)
 {
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
     GtkAssistant *assistant = GTK_ASSISTANT(info->assistant);
     gchar *file_name;
 
-    gtk_assistant_set_page_complete (assistant, page, FALSE);
+    gtk_assistant_set_page_complete (assistant, info->file_page, FALSE);
 
     file_name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(info->file_chooser));
 
@@ -152,7 +150,7 @@ csv_export_file_chooser_selection_changed_cb (GtkFileChooser *chooser, CsvExport
         g_free (filedir);
         g_free (filepath);
 
-        gtk_assistant_set_page_complete (assistant, page, TRUE);
+        gtk_assistant_set_page_complete (assistant, info->file_page, TRUE);
     }
     g_free (file_name);
 
@@ -173,9 +171,6 @@ csv_export_sep_cb (GtkWidget *radio, gpointer user_data)
     GtkAssistant *assistant = GTK_ASSISTANT(info->assistant);
     const gchar *name;
 
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-
     if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(radio)))
     {
         LEAVE("1st callback of pair. Defer to 2nd callback.");
@@ -186,7 +181,7 @@ csv_export_sep_cb (GtkWidget *radio, gpointer user_data)
 
     gtk_widget_set_sensitive (info->custom_entry, FALSE);
     info->use_custom = FALSE;
-    gtk_assistant_set_page_complete (assistant, page, TRUE);
+    gtk_assistant_set_page_complete (assistant, info->start_page, TRUE);
 
     if (g_strcmp0 (name, "comma_radio") == 0)
         info->separator_str = ",";
@@ -200,7 +195,7 @@ csv_export_sep_cb (GtkWidget *radio, gpointer user_data)
         gtk_widget_set_sensitive (info->custom_entry, TRUE);
         info->use_custom = TRUE;
         if (gtk_entry_get_text_length (GTK_ENTRY(info->custom_entry)) == 0)
-            gtk_assistant_set_page_complete (assistant, page, FALSE);
+            gtk_assistant_set_page_complete (assistant, info->start_page, FALSE);
     }
 }
 
@@ -249,16 +244,13 @@ csv_export_custom_entry_cb (GtkWidget *widget, gpointer user_data)
     GtkAssistant *assistant = GTK_ASSISTANT(info->assistant);
     const gchar *custom_str;
 
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-
     custom_str = gtk_entry_get_text (GTK_ENTRY(info->custom_entry));
     info->separator_str = strdup (custom_str);
 
     if (info->use_custom == TRUE && gtk_entry_get_text_length (GTK_ENTRY(info->custom_entry)) == 0)
-        gtk_assistant_set_page_complete (assistant, page, FALSE);
+        gtk_assistant_set_page_complete (assistant, info->start_page, FALSE);
     else
-        gtk_assistant_set_page_complete (assistant, page, TRUE);
+        gtk_assistant_set_page_complete (assistant, info->start_page, TRUE);
 }
 
 
@@ -384,9 +376,6 @@ csv_export_account_changed_cb (GtkTreeSelection *selection,
                                gpointer user_data)
 {
     CsvExportInfo *info = user_data;
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-
     GtkAssistant *assistant = GTK_ASSISTANT(info->assistant);
     GncTreeViewAccount *view;
 
@@ -396,9 +385,9 @@ csv_export_account_changed_cb (GtkTreeSelection *selection,
 
     /* Enable the Forward Assistant Button if we have accounts */
     if (info->csva.num_accounts > 0)
-        gtk_assistant_set_page_complete (assistant, page, TRUE);
+        gtk_assistant_set_page_complete (assistant, info->account_page, TRUE);
     else
-        gtk_assistant_set_page_complete (assistant, page, FALSE);
+        gtk_assistant_set_page_complete (assistant, info->account_page, FALSE);
 
     view = GNC_TREE_VIEW_ACCOUNT(info->csva.account_treeview);
     info->csva.account_list = gnc_tree_view_account_get_selected_accounts (view);
@@ -612,8 +601,6 @@ csv_export_assistant_start_page_prepare (GtkAssistant *assistant,
         gpointer user_data)
 {
     CsvExportInfo *info = user_data;
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     /* Set Start page text */
     if (info->export_type == XML_EXPORT_TREE)
@@ -628,7 +615,7 @@ csv_export_assistant_start_page_prepare (GtkAssistant *assistant,
     }
 
     /* Enable the Assistant Buttons */
-    gtk_assistant_set_page_complete (assistant, page, TRUE);
+    gtk_assistant_set_page_complete (assistant, info->start_page, TRUE);
 }
 
 
@@ -637,14 +624,12 @@ csv_export_assistant_account_page_prepare (GtkAssistant *assistant,
         gpointer user_data)
 {
     CsvExportInfo *info = user_data;
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     /* Enable the Forward Assistant Button if we have accounts */
     if (info->csva.num_accounts > 0)
-        gtk_assistant_set_page_complete (assistant, page, TRUE);
+        gtk_assistant_set_page_complete (assistant, info->account_page, TRUE);
     else
-        gtk_assistant_set_page_complete (assistant, page, FALSE);
+        gtk_assistant_set_page_complete (assistant, info->account_page, FALSE);
 }
 
 
@@ -653,8 +638,6 @@ csv_export_assistant_file_page_prepare (GtkAssistant *assistant,
                                         gpointer user_data)
 {
     CsvExportInfo *info = user_data;
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     /* Set the default directory */
     if (info->starting_dir)
@@ -662,7 +645,7 @@ csv_export_assistant_file_page_prepare (GtkAssistant *assistant,
     gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER(info->file_chooser), "");
 
     /* Disable the Forward Assistant Button */
-    gtk_assistant_set_page_complete (assistant, page, FALSE);
+    gtk_assistant_set_page_complete (assistant, info->file_page, FALSE);
 }
 
 
@@ -671,8 +654,6 @@ csv_export_assistant_finish_page_prepare (GtkAssistant *assistant,
         gpointer user_data)
 {
     CsvExportInfo *info = user_data;
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
     gchar *text;
 
     /* Set Finish page text */
@@ -699,7 +680,7 @@ csv_export_assistant_finish_page_prepare (GtkAssistant *assistant,
             gtk_assistant_previous_page (assistant);
     }
     /* Enable the Assistant Buttons */
-    gtk_assistant_set_page_complete (assistant, page, TRUE);
+    gtk_assistant_set_page_complete (assistant, info->finish_label, TRUE);
 }
 
 
@@ -804,7 +785,7 @@ static GtkWidget *
 csv_export_assistant_create (CsvExportInfo *info)
 {
     GtkBuilder *builder;
-    GtkWidget *box, *h_box;
+    GtkWidget *h_box;
     GtkWidget *button;
     GtkWidget *table, *hbox;
     time64 start_time, end_time;
@@ -920,8 +901,7 @@ csv_export_assistant_create (CsvExportInfo *info)
     g_signal_connect (G_OBJECT(info->file_chooser), "selection-changed",
                       G_CALLBACK(csv_export_file_chooser_selection_changed_cb), info);
 
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "file_page"));
-    gtk_box_pack_start (GTK_BOX (box), info->file_chooser, TRUE, TRUE, 6);
+    gtk_box_pack_start (GTK_BOX (info->file_page), info->file_chooser, TRUE, TRUE, 6);
     gtk_widget_show (info->file_chooser);
 
     /* Finish Page */
