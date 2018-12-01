@@ -73,6 +73,7 @@ void csv_export_show_range_cb (GtkRadioButton *button, gpointer user_data);
 void csv_export_start_date_cb (GtkWidget *radio, gpointer user_data);
 void csv_export_end_date_cb (GtkWidget *radio, gpointer user_data);
 
+void csv_export_file_chooser_file_activated_cb (GtkFileChooser *chooser, CsvExportInfo *info);
 void csv_export_file_chooser_selection_changed_cb (GtkFileChooser *chooser, CsvExportInfo *info);
 
 static const gchar *finish_tree_string = N_(
@@ -121,19 +122,15 @@ static const gchar *start_trans_simple_string = N_(
 
 
 /**************************************************
- * csv_export_file_chooser_selection_changed_cb
+ * csv_export_assistant_check_filename
  *
- * call back for GtkFileChooser widget
+ * check for a valid filename for GtkFileChooser callbacks
  **************************************************/
-void
-csv_export_file_chooser_selection_changed_cb (GtkFileChooser *chooser, CsvExportInfo *info)
+static gboolean
+csv_export_assistant_check_filename (GtkFileChooser *chooser,
+                                     CsvExportInfo *info)
 {
-    GtkAssistant *assistant = GTK_ASSISTANT(info->assistant);
-    gchar *file_name;
-
-    gtk_assistant_set_page_complete (assistant, info->file_page, FALSE);
-
-    file_name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(info->file_chooser));
+    gchar *file_name = gtk_file_chooser_get_filename (chooser);
 
     /* Test for a valid filename and not a directory */
     if (file_name && !g_file_test (file_name, G_FILE_TEST_IS_DIR))
@@ -149,13 +146,52 @@ csv_export_file_chooser_selection_changed_cb (GtkFileChooser *chooser, CsvExport
 
         g_free (filedir);
         g_free (filepath);
+        g_free (file_name);
 
-        gtk_assistant_set_page_complete (assistant, info->file_page, TRUE);
+        DEBUG("file_name selected is %s", info->file_name);
+        DEBUG("starting directory is %s", info->starting_dir);
+        return TRUE;
     }
     g_free (file_name);
+    return FALSE;
+}
 
-    DEBUG("file_name selected is %s", info->file_name);
-    DEBUG("starting directory is %s", info->starting_dir);
+
+/**************************************************
+ * csv_export_file_chooser_file_activated_cb
+ *
+ * call back for GtkFileChooser file-activated signal
+ **************************************************/
+void
+csv_export_file_chooser_file_activated_cb (GtkFileChooser *chooser,
+                                           CsvExportInfo *info)
+{
+    GtkAssistant *assistant = GTK_ASSISTANT(info->assistant);
+    gtk_assistant_set_page_complete (assistant, info->file_page, FALSE);
+
+    /* Test for a valid filename and not a directory */
+    if (csv_export_assistant_check_filename (chooser, info))
+    {
+        gtk_assistant_set_page_complete (assistant, info->file_page, TRUE);
+        gtk_assistant_next_page (assistant);
+    }
+}
+
+
+/**************************************************
+ * csv_export_file_chooser_selection_changed_cb
+ *
+ * call back for GtkFileChooser widget
+ **************************************************/
+void
+csv_export_file_chooser_selection_changed_cb (GtkFileChooser *chooser,
+                                              CsvExportInfo *info)
+{
+    GtkAssistant *assistant = GTK_ASSISTANT(info->assistant);
+
+    /* Enable the forward button based on a valid filename */
+    gtk_assistant_set_page_complete (assistant, info->file_page,
+        csv_export_assistant_check_filename (chooser, info));
 }
 
 
@@ -900,6 +936,9 @@ csv_export_assistant_create (CsvExportInfo *info)
 
     g_signal_connect (G_OBJECT(info->file_chooser), "selection-changed",
                       G_CALLBACK(csv_export_file_chooser_selection_changed_cb), info);
+
+    g_signal_connect (G_OBJECT(info->file_chooser), "file-activated",
+                      G_CALLBACK(csv_export_file_chooser_file_activated_cb), info);
 
     gtk_box_pack_start (GTK_BOX (info->file_page), info->file_chooser, TRUE, TRUE, 6);
     gtk_widget_show (info->file_chooser);
