@@ -86,7 +86,7 @@ gnc_file_dialog (GtkWindow *parent,
     GtkWidget *file_box;
     const char *internal_name;
     char *file_name = NULL;
-    gchar * okbutton;
+    gchar * okbutton = NULL;
     const gchar *ok_icon = NULL;
     GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
     gint response;
