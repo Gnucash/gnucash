@@ -433,6 +433,7 @@ Select location and file name for the Import, then click 'OK'...
                               <object class="GtkGrid" id="table2">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="column_spacing">5</property>
                                 <child>
                                   <object class="GtkLabel" id="label2">
                                     <property name="visible">True</property>
