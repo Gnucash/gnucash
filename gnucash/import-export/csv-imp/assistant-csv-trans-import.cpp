@@ -159,6 +159,7 @@ public:
     void assist_finish ();
     void assist_compmgr_close ();
 
+    void file_activated_cb ();
     void file_selection_changed_cb ();
 
     void preview_settings_delete ();
@@ -202,6 +203,8 @@ private:
     GtkWidget* preview_cbox_factory (GtkTreeModel* model, uint32_t colnum);
     /* helper function to set rendering parameters for preview data columns */
     void preview_style_column (uint32_t col_num, GtkTreeModel* model);
+    /* helper function to check for a valid filename as opposed to a directory */
+    bool check_for_valid_filename ();
 
     GtkAssistant    *csv_imp_asst;
 
@@ -269,6 +272,7 @@ extern "C"
 void csv_tximp_assist_prepare_cb (GtkAssistant  *assistant, GtkWidget *page, CsvImpTransAssist* info);
 void csv_tximp_assist_close_cb (GtkAssistant *gtkassistant, CsvImpTransAssist* info);
 void csv_tximp_assist_finish_cb (GtkAssistant *gtkassistant, CsvImpTransAssist* info);
+void csv_tximp_file_activated_cb (GtkFileChooser *chooser,  CsvImpTransAssist *info);
 void csv_tximp_file_selection_changed_cb (GtkFileChooser *chooser,  CsvImpTransAssist *info);
 void csv_tximp_preview_del_settings_cb (GtkWidget *button, CsvImpTransAssist *info);
 void csv_tximp_preview_save_settings_cb (GtkWidget *button, CsvImpTransAssist *info);
@@ -309,6 +313,10 @@ csv_tximp_assist_finish_cb (GtkAssistant *assistant, CsvImpTransAssist* info)
     info->assist_finish ();
 }
 
+void csv_tximp_file_activated_cb (GtkFileChooser *chooser, CsvImpTransAssist *info)
+{
+    info->file_activated_cb();
+}
 
 void csv_tximp_file_selection_changed_cb (GtkFileChooser *chooser, CsvImpTransAssist *info)
 {
@@ -481,6 +489,8 @@ CsvImpTransAssist::CsvImpTransAssist ()
     file_chooser = gtk_file_chooser_widget_new (GTK_FILE_CHOOSER_ACTION_OPEN);
     g_signal_connect (G_OBJECT(file_chooser), "selection-changed",
                       G_CALLBACK(csv_tximp_file_selection_changed_cb), this);
+    g_signal_connect (G_OBJECT(file_chooser), "file-activated",
+                      G_CALLBACK(csv_tximp_file_activated_cb), this);
 
     auto box = GTK_WIDGET(gtk_builder_get_object (builder, "file_page"));
     gtk_box_pack_start (GTK_BOX(box), file_chooser, TRUE, TRUE, 6);
@@ -671,18 +681,14 @@ CsvImpTransAssist::~CsvImpTransAssist ()
  * Code related to the file chooser page
  **************************************************/
 
-/* csv_tximp_file_selection_changed_cb
- *
- * call back for ok button in file chooser widget
+/* check_for_valid_filename for a valid file to activate the forward button
  */
-void
-CsvImpTransAssist::file_selection_changed_cb ()
+bool
+CsvImpTransAssist::check_for_valid_filename ()
 {
-    gtk_assistant_set_page_complete (csv_imp_asst, file_page, false);
-
     auto file_name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(file_chooser));
     if (!file_name || g_file_test (file_name, G_FILE_TEST_IS_DIR))
-        return;
+        return false;
 
     auto filepath = gnc_uri_get_path (file_name);
     auto starting_dir = g_path_get_dirname (filepath);
@@ -697,7 +703,36 @@ CsvImpTransAssist::file_selection_changed_cb ()
     g_free (file_name);
     g_free (starting_dir);
 
-    gtk_assistant_set_page_complete (csv_imp_asst, file_page, true);
+    return true;
+}
+
+/* csv_tximp_file_activated_cb
+ *
+ * call back for file chooser widget
+ */
+void
+CsvImpTransAssist::file_activated_cb ()
+{
+    gtk_assistant_set_page_complete (csv_imp_asst, file_page, false);
+
+    /* Test for a valid filename and not a directory */
+    if (check_for_valid_filename ())
+    {
+        gtk_assistant_set_page_complete (csv_imp_asst, file_page, true);
+        gtk_assistant_next_page (csv_imp_asst);
+    }
+}
+
+/* csv_tximp_file_selection_changed_cb
+ *
+ * call back for file chooser widget
+ */
+void
+CsvImpTransAssist::file_selection_changed_cb ()
+{
+    /* Enable the forward button based on a valid filename */
+    gtk_assistant_set_page_complete (csv_imp_asst, file_page,
+        check_for_valid_filename ());
 }
 
 
@@ -1846,11 +1881,11 @@ void
 CsvImpTransAssist::assist_preview_page_prepare ()
 {
     auto go_back = false;
- 
-    /* Load the file into parse_data, reset it if altrady loaded. */
+
+    /* Load the file into parse_data, reset if already loaded. */
     if (tx_imp)
         tx_imp.reset();
- 
+
     tx_imp = std::unique_ptr<GncTxImport>(new GncTxImport);
 
     /* Assume data is CSV. User can later override to Fixed Width if needed */
