@@ -72,6 +72,7 @@ enum downloaded_cols
     DOWNLOADED_COL_DATE_INT64,
     DOWNLOADED_COL_ACCOUNT,
     DOWNLOADED_COL_AMOUNT,
+    DOWNLOADED_COL_AMOUNT_DOUBLE,
     DOWNLOADED_COL_DESCRIPTION,
     DOWNLOADED_COL_MEMO,
     DOWNLOADED_COL_ACTION_ADD,
@@ -423,6 +424,12 @@ add_text_column(GtkTreeView *view, const gchar *title, int col_num)
     // If date column, use the time64 value for the sorting.
     if (col_num == DOWNLOADED_COL_DATE_TXT)
         gtk_tree_view_column_set_sort_column_id(column, DOWNLOADED_COL_DATE_INT64);
+    else if (col_num == DOWNLOADED_COL_AMOUNT) // If amount column, use double value
+    {
+        gtk_cell_renderer_set_alignment (renderer, 1.0, 0.5); // right align amount column
+        gtk_cell_renderer_set_padding (renderer, 5, 0); // add padding so its not close to description
+        gtk_tree_view_column_set_sort_column_id(column, DOWNLOADED_COL_AMOUNT_DOUBLE);
+    }
     else
         gtk_tree_view_column_set_sort_column_id(column, col_num);
 
@@ -468,8 +475,8 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
     GtkTreeSelection *selection;
 
     view = info->view;
-    store = gtk_list_store_new(NUM_DOWNLOADED_COLS, G_TYPE_STRING,
-                               G_TYPE_INT64, G_TYPE_STRING, G_TYPE_STRING,
+    store = gtk_list_store_new(NUM_DOWNLOADED_COLS, G_TYPE_STRING, G_TYPE_INT64,
+                               G_TYPE_STRING, G_TYPE_STRING, G_TYPE_DOUBLE,
                                G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN,
                                G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_STRING,
                                GDK_TYPE_PIXBUF, G_TYPE_POINTER, G_TYPE_STRING);
@@ -713,6 +720,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
     gchar *class_extension = NULL;
     Split *split;
     time64 date;
+    gnc_numeric amount;
     g_assert (gui);
     g_assert (model);
     g_assert (info);
@@ -742,11 +750,10 @@ refresh_model_row (GNCImportMainMatcher *gui,
     g_free(text);
 
     /*Amount*/
-    ro_text = xaccPrintAmount
-              (xaccSplitGetAmount (split),
-               gnc_split_amount_print_info(split, TRUE)
-              );
+    amount = xaccSplitGetAmount (split);
+    ro_text = xaccPrintAmount (amount, gnc_split_amount_print_info(split, TRUE));
     gtk_list_store_set(store, iter, DOWNLOADED_COL_AMOUNT, ro_text, -1);
+    gtk_list_store_set(store, iter, DOWNLOADED_COL_AMOUNT_DOUBLE, gnc_numeric_to_double (amount), -1);
 
     /*Description*/
     ro_text = xaccTransGetDescription(gnc_import_TransInfo_get_trans(info) );
