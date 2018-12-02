@@ -64,6 +64,7 @@ struct _main_matcher_info
     GNCTransactionProcessedCB transaction_processed_cb;
     gpointer user_data;
     GNCImportPendingMatches *pending_matches;
+    GtkTreeViewColumn *account_column;
 };
 
 enum downloaded_cols
@@ -490,8 +491,8 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
      * (keep the line break below to avoid a translator comment) */
     add_text_column(view,
                     _("Date"), DOWNLOADED_COL_DATE_TXT);
-    column = add_text_column(view, _("Account"), DOWNLOADED_COL_ACCOUNT);
-    gtk_tree_view_column_set_visible(column, show_account);
+    info->account_column = add_text_column(view, _("Account"), DOWNLOADED_COL_ACCOUNT);
+    gtk_tree_view_column_set_visible(info->account_column, show_account);
     add_text_column(view, _("Amount"), DOWNLOADED_COL_AMOUNT);
     add_text_column(view, _("Description"), DOWNLOADED_COL_DESCRIPTION);
     add_text_column(view, _("Memo"), DOWNLOADED_COL_MEMO);
@@ -537,7 +538,13 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
                      G_CALLBACK(gnc_gen_trans_row_changed_cb), info);
 }
 
-
+static void
+show_account_column_toggled_cb (GtkToggleButton *togglebutton,
+               GNCImportMainMatcher *info)
+{
+    gtk_tree_view_column_set_visible (info->account_column,
+         gtk_toggle_button_get_active (togglebutton));
+}
 
 GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
         const gchar* heading,
@@ -551,6 +558,7 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     gboolean show_update;
     GtkStyleContext *stylectxt;
     GdkRGBA color;
+    GtkWidget *button;
 
     info = g_new0 (GNCImportMainMatcher, 1);
     info->pending_matches = gnc_import_PendingMatches_new();
@@ -578,6 +586,11 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
     /* Get the view */
     info->view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "downloaded_view"));
     g_assert (info->view != NULL);
+
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "show_source_account_button"));
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), all_from_same_account);
+    g_signal_connect(G_OBJECT(button), "toggled",
+                     G_CALLBACK(show_account_column_toggled_cb), info);
 
     show_update = gnc_import_Settings_get_action_update_enabled(info->user_settings);
     gnc_gen_trans_init_view(info, all_from_same_account, show_update);
@@ -618,6 +631,7 @@ GNCImportMainMatcher * gnc_gen_trans_assist_new (GtkWidget *parent,
     gboolean show_update;
     GtkStyleContext *stylectxt;
     GdkRGBA color;
+    GtkWidget *button;
 
     info = g_new0 (GNCImportMainMatcher, 1);
     info->pending_matches = gnc_import_PendingMatches_new();
@@ -645,6 +659,11 @@ GNCImportMainMatcher * gnc_gen_trans_assist_new (GtkWidget *parent,
     /* Get the view */
     info->view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "downloaded_view"));
     g_assert (info->view != NULL);
+
+    button = GTK_WIDGET(gtk_builder_get_object (builder, "show_source_account_button"));
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), all_from_same_account);
+    g_signal_connect(G_OBJECT(button), "toggled",
+                     G_CALLBACK(show_account_column_toggled_cb), info);
 
     show_update = gnc_import_Settings_get_action_update_enabled(info->user_settings);
     gnc_gen_trans_init_view(info, all_from_same_account, show_update);
