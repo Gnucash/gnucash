@@ -287,21 +287,10 @@
         ;;              (list acc2 bal0 bal1 bal2 ...) ...)
         ;; whereby list of balances are gnc-monetary objects
         ;; output: (list <mon-coll0> <mon-coll1> <mon-coll2>)
-        (define list-of-collectors
-          (let loop ((n (length dates)) (result '()))
-            (if (zero? n) result
-                (loop (1- n) (cons (gnc:make-commodity-collector) result)))))
-        (let loop ((lst lst))
-          (when (pair? lst)
-            (let innerloop ((list-of-collectors list-of-collectors)
-                            (list-of-balances (cdar lst)))
-              (when (pair? list-of-balances)
-                ((car list-of-collectors) 'add
-                 (gnc:gnc-monetary-commodity (car list-of-balances))
-                 (gnc:gnc-monetary-amount (car list-of-balances)))
-                (innerloop (cdr list-of-collectors) (cdr list-of-balances))))
-            (loop (cdr lst))))
-        list-of-collectors)
+        (define (call thunk) (thunk))
+        (if (null? lst)
+            (map call (make-list (length dates) gnc:make-commodity-collector))
+            (apply map gnc:monetaries-add (map cdr lst))))
 
       (let loop ((dates dates)
                  (acct-balances (acc-balances->list-of-balances filtered-account-balances))
