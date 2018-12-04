@@ -38,7 +38,7 @@ class GncRational;
  * GncRational) and reducing the result. If the result would overflow a 64-bit
  * representation then the GncNumeric(GncRational&) constructor will call
  * GncRational::round_to_numeric() to get the value to fit. It will not raise an
- * exeception, so in the unlikely event that you need an error instead of
+ * exception, so in the unlikely event that you need an error instead of
  * rounding, use GncRational directly.
  *
  * Errors: Errors are signalled by exceptions as follows:
