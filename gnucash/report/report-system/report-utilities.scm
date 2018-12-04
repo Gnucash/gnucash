@@ -383,6 +383,26 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
          (map gnc:gnc-monetary-amount
               (collector 'format gnc:make-gnc-monetary #f))))
 
+;; add any number of gnc-monetary objects into a commodity-collector
+;; usage: (gnc:monetaries-add monetary1 monetary2 ...)
+;; output: a commodity-collector object
+(define (gnc:monetaries-add . monetaries)
+  (let ((coll (gnc:make-commodity-collector)))
+    (for-each
+     (lambda (mon)
+       (coll 'add (gnc:gnc-monetary-commodity mon) (gnc:gnc-monetary-amount mon)))
+     monetaries)
+    coll))
+
+;; special case for gnc:monetaries-add whereby only 1 currency is expected
+;; usage: (gnc:monetaries-add monetary1 monetary2 ...)
+;; output: a monetary object
+(define (gnc:monetary+ . monetaries)
+  (let ((coll (apply gnc:monetaries-add monetaries)))
+    (if (= 1 (gnc-commodity-collector-commodity-count coll))
+        (car (coll 'format gnc:make-gnc-monetary #f))
+        (throw "gnc:monetary+ expects 1 currency " (gnc:strify monetaries)))))
+
 ;; get the account balance at the specified date. if include-children?
 ;; is true, the balances of all children (not just direct children)
 ;; are included in the calculation.

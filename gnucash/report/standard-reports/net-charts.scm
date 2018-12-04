@@ -248,16 +248,6 @@
        c report-currency
        (lambda (a b) (exchange-fn a b date))))
 
-    ;; Add two gnc-monetary objects in the same currency.
-    (define (monetary+ a b)
-      (if (and (gnc:gnc-monetary? a) (gnc:gnc-monetary? b))
-          (let ((same-currency? (gnc-commodity-equal (gnc:gnc-monetary-commodity a) (gnc:gnc-monetary-commodity b)))
-                (amount (+ (gnc:gnc-monetary-amount a) (gnc:gnc-monetary-amount b))))
-            (if same-currency?
-                (gnc:make-gnc-monetary (gnc:gnc-monetary-commodity a) amount)
-                (warn "incompatible currencies in monetary+: " a b)))
-          (warn "wrong arguments for monetary+: " a b)))
-
     ;; gets an account alist balances
     ;; output: (list acc bal0 bal1 bal2 ...)
     (define (account->balancelist account)
@@ -358,7 +348,7 @@
                                   dates-list #f))
             (dummy (gnc:report-percent-done 80))
 
-            (difference-balances (map monetary+ minuend-balances subtrahend-balances))
+            (difference-balances (map gnc:monetary+ minuend-balances subtrahend-balances))
 
             (dates-list (if inc-exp?
                             (list-head dates-list (1- (length dates-list)))

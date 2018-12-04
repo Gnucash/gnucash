@@ -139,15 +139,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
           (gnc:option-value option)
           (gnc:error "gnc:lookup-option error: " section "/" name))))
   (letrec*
-      ((monetary+ (lambda (a b)
-                    (if (and (gnc:gnc-monetary? a) (gnc:gnc-monetary? b))
-                        (let ((same-currency? (gnc-commodity-equal (gnc:gnc-monetary-commodity a) (gnc:gnc-monetary-commodity b)))
-                              (amount (+ (gnc:gnc-monetary-amount a) (gnc:gnc-monetary-amount b))))
-                          (if same-currency?
-                              (gnc:make-gnc-monetary (gnc:gnc-monetary-commodity a) amount)
-                              (gnc:error "incompatible currencies in monetary+: " a b)))
-                        (gnc:error "wrong arguments for monetary+: " a b))))
-       (myadd (lambda (X Y) (if X (if Y (monetary+ X Y) X) Y)))               ; custom adder which understands #f values
+      ((myadd (lambda (X Y) (if X (if Y (gnc:monetary+ X Y) X) Y)))           ; custom monetary adder which understands #f
        (myneg (lambda (X) (and X (gnc:monetary-neg X))))                      ; custom monetary negator which understands #f
        (accounts (opt-val gnc:pagename-accounts "Accounts"))
        (tax-accounts (opt-val gnc:pagename-accounts "Tax Accounts"))
