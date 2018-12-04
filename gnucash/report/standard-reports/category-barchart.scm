@@ -341,21 +341,6 @@ developing over time"))
                   c report-currency
                   (lambda (a b) (exchange-fn a b date)))))))
 
-          (define (monetaries-add . monetaries)
-            (let ((coll (gnc:make-commodity-collector)))
-              (for-each
-               (lambda (mon)
-                 (coll 'add (gnc:gnc-monetary-commodity mon) (gnc:gnc-monetary-amount mon)))
-               monetaries)
-              coll))
-
-          ;; Special case for monetaries-add whereby only 1 currency is expected
-          (define (monetary+ . monetaries)
-            (let ((coll (apply monetaries-add monetaries)))
-              (if (= 1 (gnc-commodity-collector-commodity-count coll))
-                  (car (coll 'format gnc:make-gnc-monetary #f))
-                  (gnc:warn "monetary+ expects 1 currency " (gnc:strify monetaries)))))
-
           (define (collector-minus a b)
             (let ((coll (gnc:make-commodity-collector)))
               (coll 'merge a #f)
@@ -396,7 +381,7 @@ developing over time"))
                                          (member (car entry) accountslist))
                                        account-balances-alist))
                    (selected-monetaries (map cdr selected-balances))
-                   (list-of-mon-collectors (apply map monetaries-add selected-monetaries)))
+                   (list-of-mon-collectors (apply map gnc:monetaries-add selected-monetaries)))
               (let loop ((list-of-mon-collectors list-of-mon-collectors)
                          (dates-list dates-list)
                          (result '()))
@@ -494,7 +479,7 @@ developing over time"))
                           (filter (lambda (l)
                                     (not (zero?
                                           (gnc:gnc-monetary-amount
-                                           (apply monetary+ (cadr l))))))
+                                           (apply gnc:monetary+ (cadr l))))))
                                   (traverse-accounts 1 topl-accounts))
                           (cond
                            ((eq? sort-method 'acct-code)
@@ -511,8 +496,8 @@ developing over time"))
                                              xaccAccountGetName) (car b)))))
                            (else
                             (lambda (a b)
-                              (> (gnc:gnc-monetary-amount (apply monetary+ (cadr a)))
-                                 (gnc:gnc-monetary-amount (apply monetary+ (cadr b)))))))))
+                              (> (gnc:gnc-monetary-amount (apply gnc:monetary+ (cadr a)))
+                                 (gnc:gnc-monetary-amount (apply gnc:monetary+ (cadr b)))))))))
           ;; Or rather sort by total amount?
           ;;(< (apply + (cadr a))
           ;;   (apply + (cadr b))))))
@@ -597,7 +582,7 @@ developing over time"))
                  (let* ((start (take all-data (1- max-slices)))
                         (finish (drop all-data (1- max-slices)))
                         (other-sum (map
-                                    (lambda (l) (apply monetary+ l))
+                                    (lambda (l) (apply gnc:monetary+ l))
                                     (apply zip (map cadr finish)))))
                    (set! all-data
                      (append start
@@ -758,7 +743,7 @@ developing over time"))
                             (sumrow
                              (lambda (row)
                                (if (not (null? row))
-                                   (monetary+ (car row) (sumrow (cdr row)))
+                                   (gnc:monetary+ (car row) (sumrow (cdr row)))
                                    (gnc:make-gnc-monetary report-currency 0)))))
                          (gnc:html-table-append-column!
                           table

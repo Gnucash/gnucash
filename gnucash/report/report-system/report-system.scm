@@ -719,6 +719,8 @@
 (export gnc:report-finished)
 (export gnc:accounts-count-splits)
 (export gnc-commodity-collector-allzero?)
+(export gnc:monetary+)
+(export gnc:monetaries-add)
 (export gnc:account-get-trans-type-balance-interval)
 (export gnc:account-get-trans-type-balance-interval-with-closing)
 (export gnc:account-get-total-flow)
