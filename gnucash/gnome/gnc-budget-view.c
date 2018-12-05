@@ -172,7 +172,7 @@ struct GncBudgetViewPrivate
 #define GNC_BUDGET_VIEW_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE((o), GNC_TYPE_BUDGET_VIEW, GncBudgetViewPrivate))
 
-G_DEFINE_TYPE(GncBudgetView, gnc_budget_view, GTK_TYPE_BOX)
+G_DEFINE_TYPE_WITH_PRIVATE(GncBudgetView, gnc_budget_view, GTK_TYPE_BOX)
 
 /** \brief Create new gnc budget view.
 
@@ -211,8 +211,6 @@ gnc_budget_view_class_init(GncBudgetViewClass *klass)
 
     g_signal_new("account-activated", GNC_TYPE_BUDGET_VIEW, G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
                  G_TYPE_NONE, 1, GNC_TYPE_ACCOUNT);
-
-    g_type_class_add_private(klass, sizeof(GncBudgetViewPrivate));
 }
 
 
