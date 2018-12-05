@@ -66,7 +66,7 @@ struct gnc_commodity_s
     QofInstance inst;
 };
 
-typedef struct CommodityPrivate
+typedef struct gnc_commodityPrivate
 {
     gnc_commodity_namespace *name_space;
 
@@ -87,10 +87,10 @@ typedef struct CommodityPrivate
 
     /* the default display_symbol, set in iso-4217-currencies at start-up */
     const char * default_symbol;
-} CommodityPrivate;
+} gnc_commodityPrivate;
 
 #define GET_PRIVATE(o) \
-    (G_TYPE_INSTANCE_GET_PRIVATE((o), GNC_TYPE_COMMODITY, CommodityPrivate))
+    (G_TYPE_INSTANCE_GET_PRIVATE((o), GNC_TYPE_COMMODITY, gnc_commodityPrivate))
 
 struct _GncCommodityClass
 {
@@ -629,7 +629,7 @@ mark_commodity_dirty (gnc_commodity *cm)
 }
 
 static void
-reset_printname(CommodityPrivate *priv)
+reset_printname(gnc_commodityPrivate *priv)
 {
     g_free(priv->printname);
     priv->printname = g_strdup_printf("%s (%s)",
@@ -638,7 +638,7 @@ reset_printname(CommodityPrivate *priv)
 }
 
 static void
-reset_unique_name(CommodityPrivate *priv)
+reset_unique_name(gnc_commodityPrivate *priv)
 {
     gnc_commodity_namespace *ns;
 
@@ -650,12 +650,12 @@ reset_unique_name(CommodityPrivate *priv)
 }
 
 /* GObject Initialization */
-G_DEFINE_TYPE(gnc_commodity, gnc_commodity, QOF_TYPE_INSTANCE);
+G_DEFINE_TYPE_WITH_PRIVATE(gnc_commodity, gnc_commodity, QOF_TYPE_INSTANCE);
 
 static void
 gnc_commodity_init(gnc_commodity* com)
 {
-    CommodityPrivate* priv;
+    gnc_commodityPrivate* priv;
 
     priv = GET_PRIVATE(com);
 
@@ -696,7 +696,7 @@ gnc_commodity_get_property (GObject         *object,
                             GParamSpec      *pspec)
 {
     gnc_commodity *commodity;
-    CommodityPrivate* priv;
+    gnc_commodityPrivate* priv;
 
     g_return_if_fail(GNC_IS_COMMODITY(object));
 
@@ -793,8 +793,6 @@ gnc_commodity_class_init(struct _GncCommodityClass* klass)
     gobject_class->finalize = gnc_commodity_finalize;
     gobject_class->set_property = gnc_commodity_set_property;
     gobject_class->get_property = gnc_commodity_get_property;
-
-    g_type_class_add_private(klass, sizeof(CommodityPrivate));
 
     g_object_class_install_property(gobject_class,
                                     PROP_NAMESPACE,
@@ -925,7 +923,7 @@ commodity_free(gnc_commodity * cm)
 {
     QofBook *book;
     gnc_commodity_table *table;
-    CommodityPrivate* priv;
+    gnc_commodityPrivate* priv;
 
     if (!cm) return;
 
@@ -980,8 +978,8 @@ gnc_commodity_destroy(gnc_commodity * cm)
 void
 gnc_commodity_copy(gnc_commodity * dest, const gnc_commodity *src)
 {
-    CommodityPrivate* src_priv = GET_PRIVATE(src);
-    CommodityPrivate* dest_priv = GET_PRIVATE(dest);
+    gnc_commodityPrivate* src_priv = GET_PRIVATE(src);
+    gnc_commodityPrivate* dest_priv = GET_PRIVATE(dest);
 
     gnc_commodity_set_fullname (dest, src_priv->fullname);
     gnc_commodity_set_mnemonic (dest, src_priv->mnemonic);
@@ -997,8 +995,8 @@ gnc_commodity_copy(gnc_commodity * dest, const gnc_commodity *src)
 gnc_commodity *
 gnc_commodity_clone(const gnc_commodity *src, QofBook *dest_book)
 {
-    CommodityPrivate* src_priv;
-    CommodityPrivate* dest_priv;
+    gnc_commodityPrivate* src_priv;
+    gnc_commodityPrivate* dest_priv;
 
     gnc_commodity * dest = g_object_new(GNC_TYPE_COMMODITY, NULL);
     qof_instance_init_data (&dest->inst, GNC_ID_COMMODITY, dest_book);
@@ -1147,7 +1145,7 @@ gnc_commodity_get_quote_flag(const gnc_commodity *cm)
 gnc_quote_source*
 gnc_commodity_get_quote_source(const gnc_commodity *cm)
 {
-    CommodityPrivate* priv;
+    gnc_commodityPrivate* priv;
 
     if (!cm) return NULL;
     priv = GET_PRIVATE(cm);
@@ -1233,7 +1231,7 @@ gnc_commodity_get_nice_symbol (const gnc_commodity *cm)
 void
 gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic)
 {
-    CommodityPrivate* priv;
+    gnc_commodityPrivate* priv;
 
     if (!cm) return;
     priv = GET_PRIVATE(cm);
@@ -1259,7 +1257,7 @@ gnc_commodity_set_namespace(gnc_commodity * cm, const char * name_space)
     QofBook *book;
     gnc_commodity_table *table;
     gnc_commodity_namespace *nsp;
-    CommodityPrivate* priv;
+    gnc_commodityPrivate* priv;
 
     if (!cm) return;
     priv = GET_PRIVATE(cm);
@@ -1286,7 +1284,7 @@ gnc_commodity_set_namespace(gnc_commodity * cm, const char * name_space)
 void
 gnc_commodity_set_fullname(gnc_commodity * cm, const char * fullname)
 {
-    CommodityPrivate* priv;
+    gnc_commodityPrivate* priv;
 
     if (!cm) return;
     priv = GET_PRIVATE(cm);
@@ -1309,7 +1307,7 @@ void
 gnc_commodity_set_cusip(gnc_commodity * cm,
                         const char * cusip)
 {
-    CommodityPrivate* priv;
+    gnc_commodityPrivate* priv;
 
     if (!cm) return;
 
@@ -1374,7 +1372,7 @@ gnc_commodity_set_auto_quote_control_flag(gnc_commodity *cm,
 void
 gnc_commodity_user_set_quote_flag(gnc_commodity *cm, const gboolean flag)
 {
-    CommodityPrivate* priv;
+    gnc_commodityPrivate* priv;
 
     ENTER ("(cm=%p, flag=%d)", cm, flag);
 
@@ -1444,7 +1442,7 @@ gnc_commodity_set_quote_source(gnc_commodity *cm, gnc_quote_source *src)
 void
 gnc_commodity_set_quote_tz(gnc_commodity *cm, const char *tz)
 {
-    CommodityPrivate* priv;
+    gnc_commodityPrivate* priv;
 
     if (!cm) return;
 
@@ -1525,7 +1523,7 @@ gnc_commodity_set_default_symbol(gnc_commodity * cm,
 void
 gnc_commodity_increment_usage_count(gnc_commodity *cm)
 {
-    CommodityPrivate* priv;
+    gnc_commodityPrivate* priv;
 
     ENTER("(cm=%p)", cm);
 
@@ -1560,7 +1558,7 @@ gnc_commodity_increment_usage_count(gnc_commodity *cm)
 void
 gnc_commodity_decrement_usage_count(gnc_commodity *cm)
 {
-    CommodityPrivate* priv;
+    gnc_commodityPrivate* priv;
 
     ENTER("(cm=%p)", cm);
 
@@ -1603,8 +1601,8 @@ gnc_commodity_decrement_usage_count(gnc_commodity *cm)
 gboolean
 gnc_commodity_equiv(const gnc_commodity * a, const gnc_commodity * b)
 {
-    CommodityPrivate* priv_a;
-    CommodityPrivate* priv_b;
+    gnc_commodityPrivate* priv_a;
+    gnc_commodityPrivate* priv_b;
 
     if (a == b) return TRUE;
     if (!a || !b) return FALSE;
@@ -1619,8 +1617,8 @@ gnc_commodity_equiv(const gnc_commodity * a, const gnc_commodity * b)
 gboolean
 gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b)
 {
-    CommodityPrivate* priv_a;
-    CommodityPrivate* priv_b;
+    gnc_commodityPrivate* priv_a;
+    gnc_commodityPrivate* priv_b;
     gboolean same_book;
 
     if (a == b) return TRUE;
@@ -1935,7 +1933,7 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
     gnc_commodity_namespace * nsp = NULL;
     gnc_commodity *c;
     const char *ns_name;
-    CommodityPrivate* priv;
+    gnc_commodityPrivate* priv;
     QofBook *book;
 
     if (!table) return NULL;
@@ -2015,7 +2013,7 @@ gnc_commodity_table_remove(gnc_commodity_table * table,
 {
     gnc_commodity_namespace * nsp;
     gnc_commodity *c;
-    CommodityPrivate* priv;
+    gnc_commodityPrivate* priv;
     const char *ns_name;
 
     if (!table) return;
@@ -2125,7 +2123,7 @@ gnc_commodity_table_get_namespaces_list(const gnc_commodity_table * table)
 gboolean
 gnc_commodity_is_iso(const gnc_commodity * cm)
 {
-    CommodityPrivate* priv;
+    gnc_commodityPrivate* priv;
 
     if (!cm) return FALSE;
 
@@ -2196,7 +2194,7 @@ static void
 get_quotables_helper1(gpointer key, gpointer value, gpointer data)
 {
     gnc_commodity *comm = value;
-    CommodityPrivate* priv = GET_PRIVATE(comm);
+    gnc_commodityPrivate* priv = GET_PRIVATE(comm);
     GList ** l = data;
 
     if (!priv->quote_flag ||
@@ -2209,7 +2207,7 @@ static gboolean
 get_quotables_helper2 (gnc_commodity *comm, gpointer data)
 {
     GList ** l = data;
-    CommodityPrivate* priv = GET_PRIVATE(comm);
+    gnc_commodityPrivate* priv = GET_PRIVATE(comm);
 
     if (!priv->quote_flag ||
             !priv->quote_source || !priv->quote_source->supported)
