@@ -58,7 +58,7 @@ typedef struct
     QofInstanceClass parent_class;
 } BudgetClass;
 
-typedef struct BudgetPrivate
+typedef struct GncBudgetPrivate
 {
     /* The name is an arbitrary string assigned by the user. */
     gchar* name;
@@ -71,10 +71,10 @@ typedef struct BudgetPrivate
 
     /* Number of periods */
     guint  num_periods;
-} BudgetPrivate;
+} GncBudgetPrivate;
 
 #define GET_PRIVATE(o) \
-  (G_TYPE_INSTANCE_GET_PRIVATE((o), GNC_TYPE_BUDGET, BudgetPrivate))
+  (G_TYPE_INSTANCE_GET_PRIVATE((o), GNC_TYPE_BUDGET, GncBudgetPrivate))
 
 struct _GncBudgetClass
 {
@@ -82,12 +82,12 @@ struct _GncBudgetClass
 };
 
 /* GObject Initialization */
-G_DEFINE_TYPE(GncBudget, gnc_budget, QOF_TYPE_INSTANCE)
+G_DEFINE_TYPE_WITH_PRIVATE(GncBudget, gnc_budget, QOF_TYPE_INSTANCE)
 
 static void
 gnc_budget_init(GncBudget* budget)
 {
-    BudgetPrivate* priv;
+    GncBudgetPrivate* priv;
     GDate *date;
 
     priv = GET_PRIVATE(budget);
@@ -120,7 +120,7 @@ gnc_budget_get_property( GObject* object,
                          GParamSpec* pspec)
 {
     GncBudget* budget;
-    BudgetPrivate* priv;
+    GncBudgetPrivate* priv;
 
     g_return_if_fail(GNC_IS_BUDGET(object));
 
@@ -191,8 +191,6 @@ gnc_budget_class_init(GncBudgetClass* klass)
     gobject_class->get_property = gnc_budget_get_property;
     gobject_class->set_property = gnc_budget_set_property;
 
-    g_type_class_add_private(klass, sizeof(BudgetPrivate));
-
     g_object_class_install_property(
         gobject_class,
         PROP_NAME,
@@ -248,7 +246,7 @@ static void
 gnc_budget_free(QofInstance *inst)
 {
     GncBudget *budget;
-    BudgetPrivate* priv;
+    GncBudgetPrivate* priv;
 
     if (inst == NULL)
         return;
@@ -370,7 +368,7 @@ gnc_budget_clone(const GncBudget* old_b)
 void
 gnc_budget_set_name(GncBudget* budget, const gchar* name)
 {
-    BudgetPrivate* priv;
+    GncBudgetPrivate* priv;
 
     g_return_if_fail(GNC_IS_BUDGET(budget) && name);
 
@@ -395,7 +393,7 @@ gnc_budget_get_name(const GncBudget* budget)
 void
 gnc_budget_set_description(GncBudget* budget, const gchar* description)
 {
-    BudgetPrivate* priv;
+    GncBudgetPrivate* priv;
 
     g_return_if_fail(GNC_IS_BUDGET(budget));
     g_return_if_fail(description);
@@ -420,7 +418,7 @@ gnc_budget_get_description(const GncBudget* budget)
 void
 gnc_budget_set_recurrence(GncBudget *budget, const Recurrence *r)
 {
-    BudgetPrivate* priv;
+    GncBudgetPrivate* priv;
 
     g_return_if_fail(budget && r);
     priv = GET_PRIVATE(budget);
@@ -451,7 +449,7 @@ gnc_budget_get_guid(const GncBudget* budget)
 void
 gnc_budget_set_num_periods(GncBudget* budget, guint num_periods)
 {
-    BudgetPrivate* priv;
+    GncBudgetPrivate* priv;
 
     g_return_if_fail(GNC_IS_BUDGET(budget));
 
