@@ -344,34 +344,6 @@ typedef struct GncPluginBusinessPrivate
 
 static GObjectClass *parent_class = NULL;
 
-GType
-gnc_plugin_business_get_type (void)
-{
-    static GType gnc_plugin_business_type = 0;
-
-    if (gnc_plugin_business_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncPluginBusinessClass),
-            NULL,       /* base_init */
-            NULL,       /* base_finalize */
-            (GClassInitFunc) gnc_plugin_business_class_init,
-            NULL,       /* class_finalize */
-            NULL,       /* class_data */
-            sizeof (GncPluginBusiness),
-            0,          /* n_preallocs */
-            (GInstanceInitFunc) gnc_plugin_business_init
-        };
-
-        gnc_plugin_business_type = g_type_register_static (GNC_TYPE_PLUGIN,
-                                   "GncPluginBusiness",
-                                   &our_info, 0);
-    }
-
-    return gnc_plugin_business_type;
-}
-
 GncPlugin *
 gnc_plugin_business_new (void)
 {
@@ -387,6 +359,8 @@ gnc_plugin_business_new (void)
 
     return GNC_PLUGIN (plugin);
 }
+
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginBusiness, gnc_plugin_business, GNC_TYPE_PLUGIN)
 
 static void
 gnc_plugin_business_class_init (GncPluginBusinessClass *klass)
@@ -409,8 +383,6 @@ gnc_plugin_business_class_init (GncPluginBusinessClass *klass)
     plugin_class->actions      = gnc_plugin_actions;
     plugin_class->n_actions    = gnc_plugin_n_actions;
     plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
-
-    g_type_class_add_private(klass, sizeof(GncPluginBusinessPrivate));
 }
 
 static void
