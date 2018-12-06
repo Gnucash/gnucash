@@ -368,35 +368,6 @@ static action_toolbar_labels toolbar_labels[] =
     { NULL, NULL },
 };
 
-
-GType
-gnc_plugin_page_account_tree_get_type (void)
-{
-    static GType gnc_plugin_page_account_tree_type = 0;
-
-    if (gnc_plugin_page_account_tree_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncPluginPageAccountTreeClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_plugin_page_account_tree_class_init,
-            NULL,
-            NULL,
-            sizeof (GncPluginPageAccountTree),
-            0,
-            (GInstanceInitFunc) gnc_plugin_page_account_tree_init
-        };
-
-        gnc_plugin_page_account_tree_type = g_type_register_static (GNC_TYPE_PLUGIN_PAGE,
-                                            GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME,
-                                            &our_info, 0);
-    }
-
-    return gnc_plugin_page_account_tree_type;
-}
-
 GncPluginPage *
 gnc_plugin_page_account_tree_new (void)
 {
@@ -409,6 +380,8 @@ gnc_plugin_page_account_tree_new (void)
     LEAVE("new account tree page %p", plugin_page);
     return GNC_PLUGIN_PAGE (plugin_page);
 }
+
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageAccountTree, gnc_plugin_page_account_tree, GNC_TYPE_PLUGIN_PAGE)
 
 static void
 gnc_plugin_page_account_tree_class_init (GncPluginPageAccountTreeClass *klass)
@@ -426,8 +399,6 @@ gnc_plugin_page_account_tree_class_init (GncPluginPageAccountTreeClass *klass)
     gnc_plugin_class->destroy_widget  = gnc_plugin_page_account_tree_destroy_widget;
     gnc_plugin_class->save_page       = gnc_plugin_page_account_tree_save_page;
     gnc_plugin_class->recreate_page   = gnc_plugin_page_account_tree_recreate_page;
-
-    g_type_class_add_private(klass, sizeof(GncPluginPageAccountTreePrivate));
 
     plugin_page_signals[ACCOUNT_SELECTED] =
         g_signal_new ("account_selected",
