@@ -292,34 +292,6 @@ static GObjectClass *parent_class = NULL;
 /*                      Implementation                      */
 /************************************************************/
 
-GType
-gnc_plugin_page_invoice_get_type (void)
-{
-    static GType gnc_plugin_page_invoice_type = 0;
-
-    if (gnc_plugin_page_invoice_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncPluginPageInvoiceClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_plugin_page_invoice_class_init,
-            NULL,
-            NULL,
-            sizeof (GncPluginPageInvoice),
-            0,
-            (GInstanceInitFunc) gnc_plugin_page_invoice_init
-        };
-
-        gnc_plugin_page_invoice_type = g_type_register_static (GNC_TYPE_PLUGIN_PAGE,
-                                       "GncPluginPageInvoice",
-                                       &our_info, 0);
-    }
-
-    return gnc_plugin_page_invoice_type;
-}
-
 GncPluginPage *
 gnc_plugin_page_invoice_new (InvoiceWindow *iw)
 {
@@ -350,6 +322,8 @@ gnc_plugin_page_invoice_new (InvoiceWindow *iw)
     return plugin_page;
 }
 
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageInvoice, gnc_plugin_page_invoice, GNC_TYPE_PLUGIN_PAGE)
+
 static void
 gnc_plugin_page_invoice_class_init (GncPluginPageInvoiceClass *klass)
 {
@@ -367,8 +341,6 @@ gnc_plugin_page_invoice_class_init (GncPluginPageInvoiceClass *klass)
     gnc_plugin_class->save_page       = gnc_plugin_page_invoice_save_page;
     gnc_plugin_class->recreate_page   = gnc_plugin_page_invoice_recreate_page;
     gnc_plugin_class->window_changed  = gnc_plugin_page_invoice_window_changed;
-
-    g_type_class_add_private(klass, sizeof(GncPluginPageInvoicePrivate));
 }
 
 static void
