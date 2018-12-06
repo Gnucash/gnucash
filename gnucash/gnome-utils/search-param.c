@@ -95,32 +95,8 @@ static guint signals[LAST_SIGNAL] = { 0 };
 #endif
 
 /* Base class */
-GType
-gnc_search_param_get_type (void)
-{
-    static GType type = 0;
 
-    if (type == 0)
-    {
-        static GTypeInfo type_info =
-        {
-            sizeof(GNCSearchParamClass),
-            NULL,
-            NULL,
-            (GClassInitFunc)gnc_search_param_class_init,
-            NULL,
-            NULL,
-            sizeof(GNCSearchParam),
-            0,
-            (GInstanceInitFunc)gnc_search_param_init
-        };
-
-        type = g_type_register_static (G_TYPE_OBJECT, "GNCSearchParam",
-                                       &type_info, 0);
-    }
-
-    return type;
-}
+G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchParam, gnc_search_param, G_TYPE_OBJECT)
 
 static void
 gnc_search_param_class_init (GNCSearchParamClass *klass)
@@ -130,8 +106,6 @@ gnc_search_param_class_init (GNCSearchParamClass *klass)
     parent_gobject_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_search_param_finalize;
-
-    g_type_class_add_private(klass, sizeof(GNCSearchParamPrivate));
 }
 
 static void
@@ -149,32 +123,8 @@ gnc_search_param_finalize (GObject *obj)
 }
 
 /* subclass for simple searches of a single element */
-GType
-gnc_search_param_simple_get_type (void)
-{
-    static GType type = 0;
 
-    if (type == 0)
-    {
-        static GTypeInfo type_info =
-        {
-            sizeof(GNCSearchParamSimpleClass),
-            NULL,
-            NULL,
-            (GClassInitFunc)gnc_search_param_simple_class_init,
-            NULL,
-            NULL,
-            sizeof(GNCSearchParamSimple),
-            0,
-            (GInstanceInitFunc)gnc_search_param_simple_init
-        };
-
-        type = g_type_register_static (GNC_TYPE_SEARCH_PARAM, "GNCSearchParamSimple",
-                                       &type_info, 0);
-    }
-
-    return type;
-}
+G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchParamSimple, gnc_search_param_simple, GNC_TYPE_SEARCH_PARAM)
 
 static void
 gnc_search_param_simple_class_init (GNCSearchParamSimpleClass *klass)
@@ -184,8 +134,6 @@ gnc_search_param_simple_class_init (GNCSearchParamSimpleClass *klass)
     parent_search_param_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_search_param_simple_finalize;
-
-    g_type_class_add_private(klass, sizeof(GNCSearchParamSimplePrivate));
 }
 
 static void
@@ -214,32 +162,8 @@ gnc_search_param_simple_finalize (GObject *obj)
 }
 
 /* Subclass for compound searches consisting of AND/OR of several elements */
-GType
-gnc_search_param_compound_get_type (void)
-{
-    static GType type = 0;
 
-    if (type == 0)
-    {
-        static GTypeInfo type_info =
-        {
-            sizeof(GNCSearchParamCompoundClass),
-            NULL,
-            NULL,
-            (GClassInitFunc)gnc_search_param_compound_class_init,
-            NULL,
-            NULL,
-            sizeof(GNCSearchParamCompound),
-            0,
-            (GInstanceInitFunc)gnc_search_param_compound_init
-        };
-
-        type = g_type_register_static (GNC_TYPE_SEARCH_PARAM, "GNCSearchParamCompound",
-                                       &type_info, 0);
-    }
-
-    return type;
-}
+G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchParamCompound, gnc_search_param_compound, GNC_TYPE_SEARCH_PARAM)
 
 static void
 gnc_search_param_compound_class_init (GNCSearchParamCompoundClass *klass)
@@ -249,8 +173,6 @@ gnc_search_param_compound_class_init (GNCSearchParamCompoundClass *klass)
     parent_search_param_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_search_param_compound_finalize;
-
-    g_type_class_add_private(klass, sizeof(GNCSearchParamCompoundPrivate));
 }
 
 static void
