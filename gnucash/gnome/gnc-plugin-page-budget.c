@@ -206,40 +206,12 @@ typedef struct GncPluginPageBudgetPrivate
     gint sigFigs;
 } GncPluginPageBudgetPrivate;
 
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageBudget, gnc_plugin_page_budget, GNC_TYPE_PLUGIN_PAGE)
+
 #define GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_PAGE_BUDGET, GncPluginPageBudgetPrivate))
 
 static GObjectClass *parent_class = NULL;
-
-
-GType
-gnc_plugin_page_budget_get_type (void)
-{
-    static GType gnc_plugin_page_budget_type = 0;
-
-    if (gnc_plugin_page_budget_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncPluginPageBudgetClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_plugin_page_budget_class_init,
-            NULL,
-            NULL,
-            sizeof (GncPluginPageBudget),
-            0,
-            (GInstanceInitFunc) gnc_plugin_page_budget_init
-        };
-
-        gnc_plugin_page_budget_type =
-            g_type_register_static (GNC_TYPE_PLUGIN_PAGE,
-                                    "GncPluginPageBudget", &our_info, 0);
-    }
-
-    return gnc_plugin_page_budget_type;
-}
-
 
 GncPluginPage *
 gnc_plugin_page_budget_new (GncBudget *budget)
@@ -295,8 +267,6 @@ gnc_plugin_page_budget_class_init (GncPluginPageBudgetClass *klass)
     gnc_plugin_class->destroy_widget  = gnc_plugin_page_budget_destroy_widget;
     gnc_plugin_class->save_page       = gnc_plugin_page_budget_save_page;
     gnc_plugin_class->recreate_page   = gnc_plugin_page_budget_recreate_page;
-
-    g_type_class_add_private(klass, sizeof(GncPluginPageBudgetPrivate));
 }
 
 

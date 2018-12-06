@@ -588,6 +588,8 @@ typedef struct GncPluginPageRegisterPrivate
     } fd;
 } GncPluginPageRegisterPrivate;
 
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageRegister, gnc_plugin_page_register, GNC_TYPE_PLUGIN_PAGE)
+
 #define GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_PAGE_REGISTER, GncPluginPageRegisterPrivate))
 
@@ -596,34 +598,6 @@ static GObjectClass *parent_class = NULL;
 /************************************************************/
 /*                      Implementation                      */
 /************************************************************/
-
-GType
-gnc_plugin_page_register_get_type (void)
-{
-    static GType gnc_plugin_page_register_type = 0;
-
-    if (gnc_plugin_page_register_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncPluginPageRegisterClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_plugin_page_register_class_init,
-            NULL,
-            NULL,
-            sizeof (GncPluginPageRegister),
-            0,
-            (GInstanceInitFunc) gnc_plugin_page_register_init
-        };
-
-        gnc_plugin_page_register_type = g_type_register_static (GNC_TYPE_PLUGIN_PAGE,
-                                        GNC_PLUGIN_PAGE_REGISTER_NAME,
-                                        &our_info, 0);
-    }
-
-    return gnc_plugin_page_register_type;
-}
 
 static GncPluginPage *
 gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
@@ -761,8 +735,6 @@ gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *klass)
     gnc_plugin_class->recreate_page   = gnc_plugin_page_register_recreate_page;
     gnc_plugin_class->update_edit_menu_actions = gnc_plugin_page_register_update_edit_menu;
     gnc_plugin_class->finish_pending  = gnc_plugin_page_register_finish_pending;
-
-    g_type_class_add_private(klass, sizeof(GncPluginPageRegisterPrivate));
 
     gnc_ui_register_account_destroy_callback (gppr_account_destroy_cb);
 }
