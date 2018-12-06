@@ -137,44 +137,10 @@ typedef struct GncTreeModelPricePrivate
 /** A pointer to the parent class of a price tree model. */
 static GObjectClass *parent_class = NULL;
 
-GType
-gnc_tree_model_price_get_type (void)
-{
-    static GType gnc_tree_model_price_type = 0;
-
-    if (gnc_tree_model_price_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncTreeModelPriceClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_tree_model_price_class_init,
-            NULL,
-            NULL,
-            sizeof (GncTreeModelPrice),
-            0,
-            (GInstanceInitFunc) gnc_tree_model_price_init
-        };
-
-        static const GInterfaceInfo tree_model_info =
-        {
-            (GInterfaceInitFunc) gnc_tree_model_price_tree_model_init,
-            NULL,
-            NULL
-        };
-
-        gnc_tree_model_price_type = g_type_register_static (GNC_TYPE_TREE_MODEL,
-                                    GNC_TREE_MODEL_PRICE_NAME,
-                                    &our_info, 0);
-
-        g_type_add_interface_static (gnc_tree_model_price_type,
-                                     GTK_TYPE_TREE_MODEL,
-                                     &tree_model_info);
-    }
-
-    return gnc_tree_model_price_type;
-}
+G_DEFINE_TYPE_WITH_CODE(GncTreeModelPrice, gnc_tree_model_price, GNC_TYPE_TREE_MODEL,
+                        G_ADD_PRIVATE(GncTreeModelPrice)
+                        G_IMPLEMENT_INTERFACE(GTK_TYPE_TREE_MODEL,
+                                              gnc_tree_model_price_tree_model_init))
 
 static void
 gnc_tree_model_price_class_init (GncTreeModelPriceClass *klass)
@@ -185,8 +151,6 @@ gnc_tree_model_price_class_init (GncTreeModelPriceClass *klass)
 
     o_class->finalize = gnc_tree_model_price_finalize;
     o_class->dispose = gnc_tree_model_price_dispose;
-
-    g_type_class_add_private(klass, sizeof(GncTreeModelPricePrivate));
 }
 
 static void
