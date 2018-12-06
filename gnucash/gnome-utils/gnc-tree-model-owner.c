@@ -132,45 +132,6 @@ gnc_tree_model_owner_update_color (gpointer gsettings, gchar *key, gpointer user
 /** A pointer to the parent class of an owner tree model. */
 static GObjectClass *parent_class = NULL;
 
-GType
-gnc_tree_model_owner_get_type (void)
-{
-    static GType gnc_tree_model_owner_type = 0;
-
-    if (gnc_tree_model_owner_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncTreeModelOwnerClass), /* class_size */
-            NULL,                            /* base_init */
-            NULL,                            /* base_finalize */
-            (GClassInitFunc) gnc_tree_model_owner_class_init,
-            NULL,                            /* class_finalize */
-            NULL,                            /* class_data */
-            sizeof (GncTreeModelOwner),      /* */
-            0,                               /* n_preallocs */
-            (GInstanceInitFunc) gnc_tree_model_owner_init
-        };
-
-        static const GInterfaceInfo tree_model_info =
-        {
-            (GInterfaceInitFunc) gnc_tree_model_owner_tree_model_init,
-            NULL,
-            NULL
-        };
-
-        gnc_tree_model_owner_type = g_type_register_static (GNC_TYPE_TREE_MODEL,
-                                    GNC_TREE_MODEL_OWNER_NAME,
-                                    &our_info, 0);
-
-        g_type_add_interface_static (gnc_tree_model_owner_type,
-                                     GTK_TYPE_TREE_MODEL,
-                                     &tree_model_info);
-    }
-
-    return gnc_tree_model_owner_type;
-}
-
 static void
 gnc_tree_model_owner_class_init (GncTreeModelOwnerClass *klass)
 {
@@ -183,9 +144,12 @@ gnc_tree_model_owner_class_init (GncTreeModelOwnerClass *klass)
     /* GObject signals */
     o_class->finalize = gnc_tree_model_owner_finalize;
     o_class->dispose = gnc_tree_model_owner_dispose;
-
-    g_type_class_add_private(klass, sizeof(GncTreeModelOwnerPrivate));
 }
+
+G_DEFINE_TYPE_WITH_CODE(GncTreeModelOwner, gnc_tree_model_owner, GNC_TYPE_TREE_MODEL,
+		G_ADD_PRIVATE(GncTreeModelOwner)
+                G_IMPLEMENT_INTERFACE(GTK_TYPE_TREE_MODEL,
+                                      gnc_tree_model_owner_tree_model_init))
 
 static void
 gnc_tree_model_owner_init (GncTreeModelOwner *model)
