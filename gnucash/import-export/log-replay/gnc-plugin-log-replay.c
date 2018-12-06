@@ -62,39 +62,13 @@ typedef struct GncPluginLogreplayPrivate
 
 static GObjectClass *parent_class = NULL;
 
-GType
-gnc_plugin_log_replay_get_type (void)
-{
-    static GType gnc_plugin_log_replay_type = 0;
-
-    if (gnc_plugin_log_replay_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncPluginLogreplayClass),
-            NULL,		/* base_init */
-            NULL,		/* base_finalize */
-            (GClassInitFunc) gnc_plugin_log_replay_class_init,
-            NULL,		/* class_finalize */
-            NULL,		/* class_data */
-            sizeof (GncPluginLogreplay),
-            0,		/* n_preallocs */
-            (GInstanceInitFunc) gnc_plugin_log_replay_init,
-        };
-
-        gnc_plugin_log_replay_type = g_type_register_static (GNC_TYPE_PLUGIN,
-                                     "GncPluginLogreplay",
-                                     &our_info, 0);
-    }
-
-    return gnc_plugin_log_replay_type;
-}
-
 GncPlugin *
 gnc_plugin_log_replay_new (void)
 {
     return GNC_PLUGIN (g_object_new (GNC_TYPE_PLUGIN_LOG_REPLAY, NULL));
 }
+
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginLogreplay, gnc_plugin_log_replay, GNC_TYPE_PLUGIN)
 
 static void
 gnc_plugin_log_replay_class_init (GncPluginLogreplayClass *klass)
@@ -114,8 +88,6 @@ gnc_plugin_log_replay_class_init (GncPluginLogreplayClass *klass)
     plugin_class->actions      = gnc_plugin_actions;
     plugin_class->n_actions    = gnc_plugin_n_actions;
     plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
-
-    g_type_class_add_private(klass, sizeof(GncPluginLogreplayPrivate));
 }
 
 static void
