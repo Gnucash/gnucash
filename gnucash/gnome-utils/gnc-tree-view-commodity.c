@@ -67,33 +67,7 @@ typedef struct GncTreeViewCommodityPrivate
 
 static GObjectClass *parent_class = NULL;
 
-GType
-gnc_tree_view_commodity_get_type (void)
-{
-    static GType gnc_tree_view_commodity_type = 0;
-
-    if (gnc_tree_view_commodity_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncTreeViewCommodityClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_tree_view_commodity_class_init,
-            NULL,
-            NULL,
-            sizeof (GncTreeViewCommodity),
-            0,
-            (GInstanceInitFunc) gnc_tree_view_commodity_init
-        };
-
-        gnc_tree_view_commodity_type = g_type_register_static (GNC_TYPE_TREE_VIEW,
-                                       "GncTreeViewCommodity",
-                                       &our_info, 0);
-    }
-
-    return gnc_tree_view_commodity_type;
-}
+G_DEFINE_TYPE_WITH_PRIVATE(GncTreeViewCommodity, gnc_tree_view_commodity, GNC_TYPE_TREE_VIEW)
 
 static void
 gnc_tree_view_commodity_class_init (GncTreeViewCommodityClass *klass)
