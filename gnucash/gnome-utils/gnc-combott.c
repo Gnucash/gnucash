@@ -118,7 +118,33 @@ static void menuitem_response_cb (GtkMenuItem *item, gpointer *user_data);
 /************************************************************/
 static GObjectClass *parent_class = NULL;
 
-G_DEFINE_TYPE_WITH_PRIVATE(GncCombott, gnc_combott, GTK_TYPE_BOX)
+GType
+gnc_combott_get_type (void)
+{
+    static GType combott_type = 0;
+
+    if (!combott_type)
+    {
+        static const GTypeInfo combott_info =
+        {
+            sizeof (GncCombottClass),
+            NULL,		/* base_init */
+            NULL,		/* base_finalize */
+            (GClassInitFunc) gctt_class_init,
+            NULL,		/* class_finalize */
+            NULL,		/* class_data */
+            sizeof (GncCombott),
+            0,              /* n_preallocs */
+            (GInstanceInitFunc) gctt_init,
+        };
+
+        combott_type = g_type_register_static (GTK_TYPE_BOX,
+                                               "GncCombott",
+                                               &combott_info, 0);
+    }
+    return combott_type;
+}
+
 
 static void
 gctt_class_init (GncCombottClass *klass)
@@ -173,6 +199,8 @@ gctt_class_init (GncCombottClass *klass)
                           G_MAXINT,
                           1,
                           G_PARAM_READWRITE));
+
+    g_type_class_add_private(klass, sizeof(GncCombottPrivate));
 }
 
 
