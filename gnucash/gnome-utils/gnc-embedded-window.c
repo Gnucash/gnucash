@@ -90,48 +90,6 @@ typedef struct GncEmbeddedWindowPrivate
 #define GNC_EMBEDDED_WINDOW_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_EMBEDDED_WINDOW, GncEmbeddedWindowPrivate))
 
-
-
-/*  Get the type of a gnc embedded window. */
-GType
-gnc_embedded_window_get_type (void)
-{
-    static GType gnc_embedded_window_type = 0;
-
-    if (gnc_embedded_window_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncEmbeddedWindowClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_embedded_window_class_init,
-            NULL,
-            NULL,
-            sizeof (GncEmbeddedWindow),
-            0,
-            (GInstanceInitFunc) gnc_embedded_window_init
-        };
-
-        static const GInterfaceInfo plugin_info =
-        {
-            (GInterfaceInitFunc) gnc_window_embedded_window_init,
-            NULL,
-            NULL
-        };
-
-        gnc_embedded_window_type = g_type_register_static (GTK_TYPE_BOX,
-                                   "GncEmbeddedWindow",
-                                   &our_info, 0);
-        g_type_add_interface_static (gnc_embedded_window_type,
-                                     GNC_TYPE_WINDOW,
-                                     &plugin_info);
-    }
-
-    return gnc_embedded_window_type;
-}
-
-
 /*  Display a data plugin page in a window. */
 void
 gnc_embedded_window_open_page (GncEmbeddedWindow *window,
@@ -200,6 +158,10 @@ gnc_embedded_window_get_page (GncEmbeddedWindow *window)
     return priv->page;
 }
 
+G_DEFINE_TYPE_WITH_CODE(GncEmbeddedWindow, gnc_embedded_window, GTK_TYPE_BOX,
+                        G_ADD_PRIVATE(GncEmbeddedWindow)
+                        G_IMPLEMENT_INTERFACE(GNC_TYPE_WINDOW,
+                                              gnc_window_embedded_window_init))
 
 /** Initialize the class for a new gnucash embedded window.  This will
  *  set up any function pointers that override functions in the parent
@@ -218,8 +180,7 @@ gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass)
 
     object_class->finalize = gnc_embedded_window_finalize;
     object_class->dispose = gnc_embedded_window_dispose;
-
-    g_type_class_add_private(klass, sizeof(GncEmbeddedWindowPrivate));
+    
     LEAVE(" ");
 }
 
