@@ -142,39 +142,7 @@ typedef struct GncTreeViewPrivate
 
 static GObjectClass *parent_class = NULL;
 
-/** Create a new glib type for the base gnucash tree view.
- *
- *  @internal
- *
- *  @return The new type value.
- */
-GType
-gnc_tree_view_get_type (void)
-{
-    static GType gnc_tree_view_type = 0;
-
-    if (gnc_tree_view_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncTreeViewClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_tree_view_class_init,
-            NULL,
-            NULL,
-            sizeof (GncTreeView),
-            0,
-            (GInstanceInitFunc) gnc_tree_view_init
-        };
-
-        gnc_tree_view_type = g_type_register_static (GTK_TYPE_TREE_VIEW,
-                             GNC_TREE_VIEW_NAME,
-                             &our_info, 0);
-    }
-
-    return gnc_tree_view_type;
-}
+G_DEFINE_TYPE_WITH_PRIVATE(GncTreeView, gnc_tree_view, GTK_TYPE_TREE_VIEW)
 
 /** Initialize the class for the new base gnucash tree view.  This
  *  will set up any function pointers that override functions in the
@@ -198,8 +166,6 @@ gnc_tree_view_class_init (GncTreeViewClass *klass)
 
     gobject_class->set_property = gnc_tree_view_set_property;
     gobject_class->get_property = gnc_tree_view_get_property;
-
-    g_type_class_add_private(klass, sizeof(GncTreeViewPrivate));
 
     g_object_class_install_property (gobject_class,
                                      PROP_STATE_SECTION,
