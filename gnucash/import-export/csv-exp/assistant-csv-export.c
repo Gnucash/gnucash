@@ -73,6 +73,7 @@ void csv_export_show_range_cb (GtkRadioButton *button, gpointer user_data);
 void csv_export_start_date_cb (GtkWidget *radio, gpointer user_data);
 void csv_export_end_date_cb (GtkWidget *radio, gpointer user_data);
 
+void csv_export_file_chooser_file_activated_cb (GtkFileChooser *chooser, CsvExportInfo *info);
 void csv_export_file_chooser_selection_changed_cb (GtkFileChooser *chooser, CsvExportInfo *info);
 
 static const gchar *finish_tree_string = N_(
@@ -121,21 +122,15 @@ static const gchar *start_trans_simple_string = N_(
 
 
 /**************************************************
- * csv_export_file_chooser_selection_changed_cb
+ * csv_export_assistant_check_filename
  *
- * call back for GtkFileChooser widget
+ * check for a valid filename for GtkFileChooser callbacks
  **************************************************/
-void
-csv_export_file_chooser_selection_changed_cb (GtkFileChooser *chooser, CsvExportInfo *info)
+static gboolean
+csv_export_assistant_check_filename (GtkFileChooser *chooser,
+                                     CsvExportInfo *info)
 {
-    GtkAssistant *assistant = GTK_ASSISTANT(info->window);
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-    gchar *file_name;
-
-    gtk_assistant_set_page_complete (assistant, page, FALSE);
-
-    file_name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(info->file_chooser));
+    gchar *file_name = gtk_file_chooser_get_filename (chooser);
 
     /* Test for a valid filename and not a directory */
     if (file_name && !g_file_test (file_name, G_FILE_TEST_IS_DIR))
@@ -151,13 +146,52 @@ csv_export_file_chooser_selection_changed_cb (GtkFileChooser *chooser, CsvExport
 
         g_free (filedir);
         g_free (filepath);
+        g_free (file_name);
 
-        gtk_assistant_set_page_complete (assistant, page, TRUE);
+        DEBUG("file_name selected is %s", info->file_name);
+        DEBUG("starting directory is %s", info->starting_dir);
+        return TRUE;
     }
     g_free (file_name);
+    return FALSE;
+}
 
-    DEBUG("file_name selected is %s", info->file_name);
-    DEBUG("starting directory is %s", info->starting_dir);
+
+/**************************************************
+ * csv_export_file_chooser_file_activated_cb
+ *
+ * call back for GtkFileChooser file-activated signal
+ **************************************************/
+void
+csv_export_file_chooser_file_activated_cb (GtkFileChooser *chooser,
+                                           CsvExportInfo *info)
+{
+    GtkAssistant *assistant = GTK_ASSISTANT(info->assistant);
+    gtk_assistant_set_page_complete (assistant, info->file_page, FALSE);
+
+    /* Test for a valid filename and not a directory */
+    if (csv_export_assistant_check_filename (chooser, info))
+    {
+        gtk_assistant_set_page_complete (assistant, info->file_page, TRUE);
+        gtk_assistant_next_page (assistant);
+    }
+}
+
+
+/**************************************************
+ * csv_export_file_chooser_selection_changed_cb
+ *
+ * call back for GtkFileChooser widget
+ **************************************************/
+void
+csv_export_file_chooser_selection_changed_cb (GtkFileChooser *chooser,
+                                              CsvExportInfo *info)
+{
+    GtkAssistant *assistant = GTK_ASSISTANT(info->assistant);
+
+    /* Enable the forward button based on a valid filename */
+    gtk_assistant_set_page_complete (assistant, info->file_page,
+        csv_export_assistant_check_filename (chooser, info));
 }
 
 
@@ -170,11 +204,8 @@ void
 csv_export_sep_cb (GtkWidget *radio, gpointer user_data)
 {
     CsvExportInfo *info = user_data;
+    GtkAssistant *assistant = GTK_ASSISTANT(info->assistant);
     const gchar *name;
-
-    GtkAssistant *assistant = GTK_ASSISTANT(info->window);
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(radio)))
     {
@@ -186,7 +217,7 @@ csv_export_sep_cb (GtkWidget *radio, gpointer user_data)
 
     gtk_widget_set_sensitive (info->custom_entry, FALSE);
     info->use_custom = FALSE;
-    gtk_assistant_set_page_complete (assistant, page, TRUE);
+    gtk_assistant_set_page_complete (assistant, info->start_page, TRUE);
 
     if (g_strcmp0 (name, "comma_radio") == 0)
         info->separator_str = ",";
@@ -200,7 +231,7 @@ csv_export_sep_cb (GtkWidget *radio, gpointer user_data)
         gtk_widget_set_sensitive (info->custom_entry, TRUE);
         info->use_custom = TRUE;
         if (gtk_entry_get_text_length (GTK_ENTRY(info->custom_entry)) == 0)
-            gtk_assistant_set_page_complete (assistant, page, FALSE);
+            gtk_assistant_set_page_complete (assistant, info->start_page, FALSE);
     }
 }
 
@@ -246,19 +277,16 @@ void
 csv_export_custom_entry_cb (GtkWidget *widget, gpointer user_data)
 {
     CsvExportInfo *info = user_data;
+    GtkAssistant *assistant = GTK_ASSISTANT(info->assistant);
     const gchar *custom_str;
-
-    GtkAssistant *assistant = GTK_ASSISTANT(info->window);
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     custom_str = gtk_entry_get_text (GTK_ENTRY(info->custom_entry));
     info->separator_str = strdup (custom_str);
 
     if (info->use_custom == TRUE && gtk_entry_get_text_length (GTK_ENTRY(info->custom_entry)) == 0)
-        gtk_assistant_set_page_complete (assistant, page, FALSE);
+        gtk_assistant_set_page_complete (assistant, info->start_page, FALSE);
     else
-        gtk_assistant_set_page_complete (assistant, page, TRUE);
+        gtk_assistant_set_page_complete (assistant, info->start_page, TRUE);
 }
 
 
@@ -384,10 +412,7 @@ csv_export_account_changed_cb (GtkTreeSelection *selection,
                                gpointer user_data)
 {
     CsvExportInfo *info = user_data;
-    GtkAssistant *assistant = GTK_ASSISTANT(info->window);
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-
+    GtkAssistant *assistant = GTK_ASSISTANT(info->assistant);
     GncTreeViewAccount *view;
 
     g_return_if_fail(GTK_IS_TREE_SELECTION(selection));
@@ -396,9 +421,9 @@ csv_export_account_changed_cb (GtkTreeSelection *selection,
 
     /* Enable the Forward Assistant Button if we have accounts */
     if (info->csva.num_accounts > 0)
-        gtk_assistant_set_page_complete (assistant, page, TRUE);
+        gtk_assistant_set_page_complete (assistant, info->account_page, TRUE);
     else
-        gtk_assistant_set_page_complete (assistant, page, FALSE);
+        gtk_assistant_set_page_complete (assistant, info->account_page, FALSE);
 
     view = GNC_TREE_VIEW_ACCOUNT(info->csva.account_treeview);
     info->csva.account_list = gnc_tree_view_account_get_selected_accounts (view);
@@ -612,8 +637,6 @@ csv_export_assistant_start_page_prepare (GtkAssistant *assistant,
         gpointer user_data)
 {
     CsvExportInfo *info = user_data;
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     /* Set Start page text */
     if (info->export_type == XML_EXPORT_TREE)
@@ -628,7 +651,7 @@ csv_export_assistant_start_page_prepare (GtkAssistant *assistant,
     }
 
     /* Enable the Assistant Buttons */
-    gtk_assistant_set_page_complete (assistant, page, TRUE);
+    gtk_assistant_set_page_complete (assistant, info->start_page, TRUE);
 }
 
 
@@ -637,14 +660,12 @@ csv_export_assistant_account_page_prepare (GtkAssistant *assistant,
         gpointer user_data)
 {
     CsvExportInfo *info = user_data;
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     /* Enable the Forward Assistant Button if we have accounts */
     if (info->csva.num_accounts > 0)
-        gtk_assistant_set_page_complete (assistant, page, TRUE);
+        gtk_assistant_set_page_complete (assistant, info->account_page, TRUE);
     else
-        gtk_assistant_set_page_complete (assistant, page, FALSE);
+        gtk_assistant_set_page_complete (assistant, info->account_page, FALSE);
 }
 
 
@@ -653,8 +674,6 @@ csv_export_assistant_file_page_prepare (GtkAssistant *assistant,
                                         gpointer user_data)
 {
     CsvExportInfo *info = user_data;
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     /* Set the default directory */
     if (info->starting_dir)
@@ -662,7 +681,7 @@ csv_export_assistant_file_page_prepare (GtkAssistant *assistant,
     gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER(info->file_chooser), "");
 
     /* Disable the Forward Assistant Button */
-    gtk_assistant_set_page_complete (assistant, page, FALSE);
+    gtk_assistant_set_page_complete (assistant, info->file_page, FALSE);
 }
 
 
@@ -671,8 +690,6 @@ csv_export_assistant_finish_page_prepare (GtkAssistant *assistant,
         gpointer user_data)
 {
     CsvExportInfo *info = user_data;
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
     gchar *text;
 
     /* Set Finish page text */
@@ -699,7 +716,7 @@ csv_export_assistant_finish_page_prepare (GtkAssistant *assistant,
             gtk_assistant_previous_page (assistant);
     }
     /* Enable the Assistant Buttons */
-    gtk_assistant_set_page_complete (assistant, page, TRUE);
+    gtk_assistant_set_page_complete (assistant, info->finish_label, TRUE);
 }
 
 
@@ -793,8 +810,8 @@ csv_export_close_handler (gpointer user_data)
     if (info->mid_sep)
         g_free (info->mid_sep);
 
-    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(info->window));
-    gtk_widget_destroy (info->window);
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(info->assistant));
+    gtk_widget_destroy (info->assistant);
 }
 
 /*******************************************************
@@ -804,19 +821,17 @@ static GtkWidget *
 csv_export_assistant_create (CsvExportInfo *info)
 {
     GtkBuilder *builder;
-    GtkWidget *window;
-    GtkWidget *box, *h_box;
+    GtkWidget *h_box;
     GtkWidget *button;
     GtkWidget *table, *hbox;
     time64 start_time, end_time;
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file  (builder , "assistant-csv-export.glade", "csv_export_assistant");
-    window = GTK_WIDGET(gtk_builder_get_object (builder, "csv_export_assistant"));
-    info->window = window;
+    info->assistant = GTK_WIDGET(gtk_builder_get_object (builder, "csv_export_assistant"));
 
     // Set the style context for this assistant so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(window), "GncAssistExport");
+    gnc_widget_set_style_context (GTK_WIDGET(info->assistant), "GncAssistExport");
 
     /* Load default settings */
     load_settings (info);
@@ -837,7 +852,7 @@ csv_export_assistant_create (CsvExportInfo *info)
         // Don't provide simple export layout for search registers and General Journal
         if ((info->export_type == XML_EXPORT_TREE) || (info->account == NULL))
             gtk_widget_destroy (chkbox);
-        gtk_assistant_remove_page (GTK_ASSISTANT(window), 1); //remove accounts page
+        gtk_assistant_remove_page (GTK_ASSISTANT(info->assistant), 1); //remove accounts page
     }
     else
     {
@@ -922,8 +937,10 @@ csv_export_assistant_create (CsvExportInfo *info)
     g_signal_connect (G_OBJECT(info->file_chooser), "selection-changed",
                       G_CALLBACK(csv_export_file_chooser_selection_changed_cb), info);
 
-    box = GTK_WIDGET(gtk_builder_get_object (builder, "file_page"));
-    gtk_box_pack_start (GTK_BOX (box), info->file_chooser, TRUE, TRUE, 6);
+    g_signal_connect (G_OBJECT(info->file_chooser), "file-activated",
+                      G_CALLBACK(csv_export_file_chooser_file_activated_cb), info);
+
+    gtk_box_pack_start (GTK_BOX (info->file_page), info->file_chooser, TRUE, TRUE, 6);
     gtk_widget_show (info->file_chooser);
 
     /* Finish Page */
@@ -932,11 +949,11 @@ csv_export_assistant_create (CsvExportInfo *info)
     /* Summary Page */
     info->summary_label = GTK_WIDGET(gtk_builder_get_object (builder, "summary_page"));
 
-    g_signal_connect (G_OBJECT(window), "destroy",
+    g_signal_connect (G_OBJECT(info->assistant), "destroy",
                       G_CALLBACK(csv_export_assistant_destroy_cb), info);
 
     gnc_restore_window_size (GNC_PREFS_GROUP,
-                             GTK_WINDOW(info->window), gnc_ui_get_main_window(NULL));
+                             GTK_WINDOW(info->assistant), gnc_ui_get_main_window(NULL));
     if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
     {
         GObject *object = gtk_builder_get_object (builder, "paned");
@@ -945,7 +962,7 @@ csv_export_assistant_create (CsvExportInfo *info)
 
     gtk_builder_connect_signals (builder, info);
     g_object_unref (G_OBJECT(builder));
-    return window;
+    return info->assistant;
 }
 
 static void
@@ -967,8 +984,8 @@ gnc_file_csv_export_internal (CsvExportType export_type, Query *q, Account *acc)
     gnc_register_gui_component (ASSISTANT_CSV_EXPORT_CM_CLASS,
                                 NULL, csv_export_close_handler,
                                 info);
-    gtk_widget_show_all (info->window);
-    gnc_window_adjust_for_screen (GTK_WINDOW(info->window));
+    gtk_widget_show_all (info->assistant);
+    gnc_window_adjust_for_screen (GTK_WINDOW(info->assistant));
 }
 
 
