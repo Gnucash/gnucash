@@ -283,6 +283,8 @@ csv_account_import (CsvImportInfo *info)
                     {
                         if (gdk_rgba_parse (&testcolor, color))
                             xaccAccountSetColor (acc, color);
+                        else
+                            xaccAccountSetColor (acc, "");
                     }
 
                     if (g_strcmp0 (hidden, "T") == 0)
@@ -323,6 +325,8 @@ csv_account_import (CsvImportInfo *info)
             {
                 if (gdk_rgba_parse (&testcolor, color))
                     xaccAccountSetColor (acc, color);
+                else
+                    xaccAccountSetColor (acc, "");
             }
 
             if (g_strcmp0 (notes, "") != 0)
