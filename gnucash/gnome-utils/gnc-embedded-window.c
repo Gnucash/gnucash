@@ -50,7 +50,6 @@ static GObjectClass *parent_class = NULL;
 
 /* Declarations *********************************************************/
 static void gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass);
-static void gnc_embedded_window_init (GncEmbeddedWindow *window, GncEmbeddedWindowClass *klass);
 static void gnc_embedded_window_finalize (GObject *object);
 static void gnc_embedded_window_dispose (GObject *object);
 
@@ -194,20 +193,20 @@ gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass)
  *  @param klass A pointer to the class data structure for this
  *  object. */
 static void
-gnc_embedded_window_init (GncEmbeddedWindow *window,
-                          GncEmbeddedWindowClass *klass)
+gnc_embedded_window_init (GncEmbeddedWindow *window)/*,
+                          GncEmbeddedWindowClass *klass)*/
 {
     ENTER("window %p", window);
 
     gtk_orientable_set_orientation (GTK_ORIENTABLE(window), GTK_ORIENTATION_VERTICAL);
 
     // Set the style context for this widget so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(window), "GncEmbededWindow");
+    gnc_widget_set_style_context (GTK_WIDGET(window), "GncEmbeddedWindow");
 
     gnc_embedded_window_setup_window (window);
 
-    gnc_gobject_tracking_remember(G_OBJECT(window),
-                                  G_OBJECT_CLASS(klass));
+/*    gnc_gobject_tracking_remember(G_OBJECT(window),
+                                  G_OBJECT_CLASS(klass));*/
     LEAVE(" ");
 }
 
