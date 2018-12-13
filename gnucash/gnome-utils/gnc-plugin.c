@@ -64,37 +64,7 @@ typedef struct GncPluginPrivate
 #define GNC_PLUGIN_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN, GncPluginPrivate))
 
-
-/** Get the type of a gnc window plugin.
- */
-GType
-gnc_plugin_get_type (void)
-{
-    static GType gnc_plugin_type = 0;
-
-    if (gnc_plugin_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncPluginClass),
-            NULL,		/* base_init */
-            NULL,		/* base_finalize */
-            (GClassInitFunc) gnc_plugin_class_init,
-            NULL,		/* class_finalize */
-            NULL,		/* class_data */
-            sizeof (GncPlugin),
-            0,		/* n_preallocs */
-            (GInstanceInitFunc) gnc_plugin_init,
-        };
-
-        gnc_plugin_type = g_type_register_static (G_TYPE_OBJECT,
-                          GNC_PLUGIN_NAME,
-                          &our_info, 0);
-    }
-
-    return gnc_plugin_type;
-}
-
+G_DEFINE_TYPE_WITH_PRIVATE(GncPlugin, gnc_plugin, G_TYPE_OBJECT)
 
 /** Initialize the class for the new gnucash plugin object.  This will
  *  set up any function pointers that override functions in the parent
@@ -110,8 +80,6 @@ gnc_plugin_class_init (GncPluginClass *klass)
 
     parent_class = g_type_class_peek_parent (klass);
     gobject_class->finalize = gnc_plugin_finalize;
-
-    g_type_class_add_private(klass, sizeof(GncPluginPrivate));
 }
 
 
