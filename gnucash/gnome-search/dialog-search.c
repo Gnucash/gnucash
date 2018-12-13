@@ -73,6 +73,7 @@ struct _GNCSearchWindow
     GtkWidget               *grouping_combo;
     GtkWidget               *match_all_label;
     GtkWidget               *criteria_table;
+    GtkWidget               *criteria_scroll_window;
     GtkWidget               *result_hbox;
 
     /* The "results" sub-window widgets */
@@ -548,6 +549,7 @@ static void
 gnc_search_dialog_reset_widgets (GNCSearchWindow *sw)
 {
     gboolean sens = (sw->q != NULL);
+    gboolean crit_list_vis = FALSE;
 
     gtk_widget_set_sensitive(GTK_WIDGET(sw->narrow_rb), sens);
     gtk_widget_set_sensitive(GTK_WIDGET(sw->add_rb), sens);
@@ -560,17 +562,12 @@ gnc_search_dialog_reset_widgets (GNCSearchWindow *sw)
     }
 
     if (sw->crit_list)
-    {
-        gtk_widget_set_sensitive(sw->grouping_combo, TRUE);
-        gtk_widget_hide(sw->match_all_label);
-    }
-    else
-    {
-        gtk_widget_set_sensitive(sw->grouping_combo, FALSE);
-        gtk_widget_show(sw->match_all_label);
-    }
-}
+        crit_list_vis = TRUE;
 
+    gtk_widget_set_sensitive(sw->grouping_combo, crit_list_vis);
+    gtk_widget_set_visible (sw->criteria_scroll_window, crit_list_vis);
+    gtk_widget_set_visible (sw->match_all_label, !crit_list_vis);
+}
 
 static gboolean
 gnc_search_dialog_crit_ok (GNCSearchWindow *sw)
@@ -691,6 +688,7 @@ remove_element (GtkWidget *button, GNCSearchWindow *sw)
     {
         gtk_widget_set_sensitive(sw->grouping_combo, FALSE);
         gtk_widget_show(sw->match_all_label);
+        gtk_widget_hide(sw->criteria_scroll_window);
     }
 }
 
@@ -986,6 +984,7 @@ gnc_search_dialog_add_criterion (GNCSearchWindow *sw)
         /* no match-all situation anymore */
         gtk_widget_set_sensitive(sw->grouping_combo, TRUE);
         gtk_widget_hide(sw->match_all_label);
+        gtk_widget_show(sw->criteria_scroll_window);
     }
     /* create a new criterion element */
     new_sct = gnc_search_core_type_new_type_name
@@ -1154,6 +1153,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
 
     /* Grab the search-table widget */
     sw->criteria_table = GTK_WIDGET(gtk_builder_get_object (builder, "criteria_table"));
+    sw->criteria_scroll_window = GTK_WIDGET(gtk_builder_get_object (builder, "criteria_scroll_window"));
 
     /* Set the type label */
     label = GTK_WIDGET(gtk_builder_get_object (builder, "type_label"));
