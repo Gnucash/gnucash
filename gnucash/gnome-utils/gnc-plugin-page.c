@@ -46,8 +46,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static gpointer parent_class = NULL;
 
 static void gnc_plugin_page_class_init (GncPluginPageClass *klass);
-static void gnc_plugin_page_init       (GncPluginPage *plugin_page,
-                                        GncPluginPageClass *klass);
+static void gnc_plugin_page_init       (GncPluginPage *plugin_page);
 static void gnc_plugin_page_finalize   (GObject *object);
 static void gnc_plugin_page_set_property (GObject         *object,
         guint            prop_id,
@@ -502,7 +501,7 @@ gnc_plugin_page_class_init (GncPluginPageClass *klass)
  *  @param klass A pointer to the class data structure for this
  *  object. */
 static void
-gnc_plugin_page_init (GncPluginPage *page, GncPluginPageClass *klass)
+gnc_plugin_page_init (GncPluginPage *page)
 {
     GncPluginPagePrivate *priv;
 
@@ -514,7 +513,7 @@ gnc_plugin_page_init (GncPluginPage *page, GncPluginPageClass *klass)
     page->window      = NULL;
     page->summarybar  = NULL;
 
-    gnc_gobject_tracking_remember(G_OBJECT(page), G_OBJECT_CLASS(klass));
+    gnc_gobject_tracking_remember(G_OBJECT(page), NULL);
 }
 
 
