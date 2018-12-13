@@ -54,6 +54,7 @@
 #include "gnc-gobject-utils.h"
 #include "gnc-gtk-utils.h"
 #include "gnc-icons.h"
+#include "gnc-prefs.h"
 
 #include "gnc-session.h"
 #include "gnc-tree-view-account.h"
@@ -215,7 +216,6 @@ gnc_budget_view_class_init(GncBudgetViewClass *klass)
     g_type_class_add_private(klass, sizeof(GncBudgetViewPrivate));
 }
 
-
 static void
 gnc_budget_view_init(GncBudgetView *budget_view)
 {
@@ -262,15 +262,29 @@ gnc_budget_view_init(GncBudgetView *budget_view)
     LEAVE("");
 }
 
+static void
+gbv_treeview_update_grid_lines (gpointer prefs, gchar* pref, gpointer user_data)
+{
+    GtkTreeView *view = user_data;
+    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(view), gnc_tree_view_get_grid_lines_pref ());
+}
 
 static void
 gnc_budget_view_finalize(GObject *object)
 {
     GncBudgetView *view;
+    GncBudgetViewPrivate *priv;
 
     ENTER("object %p", object);
     view = GNC_BUDGET_VIEW(object);
     g_return_if_fail(GNC_IS_BUDGET_VIEW(view));
+
+    priv = GNC_BUDGET_VIEW_GET_PRIVATE(view);
+
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL, GNC_PREF_GRID_LINES_HORIZONTAL,
+                                 gbv_treeview_update_grid_lines, priv->totals_tree_view);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL, GNC_PREF_GRID_LINES_VERTICAL,
+                                 gbv_treeview_update_grid_lines, priv->totals_tree_view);
 
     G_OBJECT_CLASS(gnc_budget_view_parent_class)->finalize(object);
     LEAVE(" ");
@@ -457,6 +471,10 @@ gbv_create_widget(GncBudgetView *view)
 
     // Set grid lines option to preference
     gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(totals_tree_view), gnc_tree_view_get_grid_lines_pref ());
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL, GNC_PREF_GRID_LINES_HORIZONTAL,
+                           gbv_treeview_update_grid_lines, totals_tree_view);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL, GNC_PREF_GRID_LINES_VERTICAL,
+                           gbv_treeview_update_grid_lines, totals_tree_view);
 
     PINFO("Number of Created totals columns is %d", gtk_tree_view_get_n_columns (totals_tree_view));
 
