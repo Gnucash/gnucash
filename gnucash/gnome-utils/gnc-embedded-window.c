@@ -193,8 +193,7 @@ gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass)
  *  @param klass A pointer to the class data structure for this
  *  object. */
 static void
-gnc_embedded_window_init (GncEmbeddedWindow *window)/*,
-                          GncEmbeddedWindowClass *klass)*/
+gnc_embedded_window_init (GncEmbeddedWindow *window)
 {
     ENTER("window %p", window);
 
@@ -205,8 +204,7 @@ gnc_embedded_window_init (GncEmbeddedWindow *window)/*,
 
     gnc_embedded_window_setup_window (window);
 
-/*    gnc_gobject_tracking_remember(G_OBJECT(window),
-                                  G_OBJECT_CLASS(klass));*/
+    gnc_gobject_tracking_remember(G_OBJECT(window), NULL);
     LEAVE(" ");
 }
 
@@ -221,6 +219,7 @@ gnc_embedded_window_finalize (GObject *object)
     g_return_if_fail (GNC_IS_EMBEDDED_WINDOW (object));
 
     ENTER("object %p", object);
+    gnc_gobject_tracking_forget(object);
     G_OBJECT_CLASS (parent_class)->finalize (object);
     LEAVE(" ");
 }
