@@ -44,6 +44,7 @@
 #include "gnc-gobject-utils.h"
 #include "gnc-cell-renderer-date.h"
 #include "gnc-state.h"
+#include "gnc-prefs.h"
 #include "dialog-utils.h"
 
 /* The actual state key for a particular column visibility.  This is
@@ -223,6 +224,13 @@ gnc_tree_view_class_init (GncTreeViewClass *klass)
     gtkwidget_class->destroy = gnc_tree_view_destroy;
 }
 
+static void
+gnc_tree_view_update_grid_lines (gpointer prefs, gchar* pref, gpointer user_data)
+{
+    GncTreeView *view = user_data;
+    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(view), gnc_tree_view_get_grid_lines_pref ());
+}
+
 /** Initialize a new instance of a base gnucash tree view.  This
  *  function allocates and initializes the object private storage
  *  space.  It also adds the new object to a list (for memory tracking
@@ -274,6 +282,10 @@ gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass)
 
     // Set grid lines option to preference
     gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(view), gnc_tree_view_get_grid_lines_pref ());
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL, GNC_PREF_GRID_LINES_HORIZONTAL,
+                           gnc_tree_view_update_grid_lines, view);
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL, GNC_PREF_GRID_LINES_VERTICAL,
+                           gnc_tree_view_update_grid_lines, view);
 
     /* Create the last column which contains the column selection
      * widget.  gnc_tree_view_add_text_column will do most of the
@@ -347,6 +359,11 @@ gnc_tree_view_destroy (GtkWidget *widget)
     g_return_if_fail (GNC_IS_TREE_VIEW (widget));
 
     view = GNC_TREE_VIEW (widget);
+
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL, GNC_PREF_GRID_LINES_HORIZONTAL,
+                                 gnc_tree_view_update_grid_lines, view);
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL, GNC_PREF_GRID_LINES_VERTICAL,
+                                 gnc_tree_view_update_grid_lines, view);
 
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
 
