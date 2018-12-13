@@ -76,7 +76,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 /**** Declarations ******************************************************/
 static void gnc_tree_view_class_init (GncTreeViewClass *klass);
-static void gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass);
+static void gnc_tree_view_init (GncTreeView *view);
 static void gnc_tree_view_finalize (GObject *object);
 static void gnc_tree_view_destroy (GtkWidget *widget);
 static void gnc_tree_view_set_property (GObject         *object,
@@ -199,14 +199,14 @@ gnc_tree_view_class_init (GncTreeViewClass *klass)
  *  @internal
  */
 static void
-gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass)
+gnc_tree_view_init (GncTreeView *view)
 {
     GncTreeViewPrivate *priv;
     GtkTreeViewColumn *column;
     GtkWidget *icon;
     GtkRequisition requisition;
 
-    gnc_gobject_tracking_remember(G_OBJECT(view), G_OBJECT_CLASS(klass));
+    gnc_gobject_tracking_remember(G_OBJECT(view), NULL);
 
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
     priv->column_menu = NULL;
