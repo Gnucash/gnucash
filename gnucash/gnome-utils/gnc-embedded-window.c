@@ -221,7 +221,6 @@ gnc_embedded_window_finalize (GObject *object)
     g_return_if_fail (GNC_IS_EMBEDDED_WINDOW (object));
 
     ENTER("object %p", object);
-    gnc_gobject_tracking_forget(object);
     G_OBJECT_CLASS (parent_class)->finalize (object);
     LEAVE(" ");
 }
