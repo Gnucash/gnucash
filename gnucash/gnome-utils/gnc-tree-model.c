@@ -37,7 +37,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 /** Declarations *********************************************************/
 static void gnc_tree_model_class_init (GncTreeModelClass *klass);
-static void gnc_tree_model_init (GncTreeModel *model, GncTreeModelClass *klass);
+static void gnc_tree_model_init (GncTreeModel *model);
 static void gnc_tree_model_finalize (GObject *object);
 
 /** The instance private data for a generic tree model. */
@@ -73,10 +73,10 @@ gnc_tree_model_class_init (GncTreeModelClass *klass)
 }
 
 static void
-gnc_tree_model_init (GncTreeModel *model, GncTreeModelClass *klass)
+gnc_tree_model_init (GncTreeModel *model)
 {
     ENTER("model %p", model);
-    gnc_gobject_tracking_remember(G_OBJECT(model), G_OBJECT_CLASS(klass));
+    gnc_gobject_tracking_remember(G_OBJECT(model), NULL);
 
     LEAVE(" ");
 }
