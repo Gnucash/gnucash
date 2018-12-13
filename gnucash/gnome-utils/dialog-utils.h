@@ -29,6 +29,9 @@
 #include <gtk/gtk.h>
 #include "qof.h"
 
+#define GNC_PREF_GRID_LINES_HORIZONTAL "grid-lines-horizontal"
+#define GNC_PREF_GRID_LINES_VERTICAL   "grid-lines-vertical"
+
 void gnc_set_label_color (GtkWidget *label, gnc_numeric value);
 
 /********************************************************************\
