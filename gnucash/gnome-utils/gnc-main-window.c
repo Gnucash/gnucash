@@ -129,7 +129,7 @@ static guint secs_to_save = 0;
 
 /* Declarations *********************************************************/
 static void gnc_main_window_class_init (GncMainWindowClass *klass);
-static void gnc_main_window_init (GncMainWindow *window, GncMainWindowClass *klass);
+static void gnc_main_window_init (GncMainWindow *window);
 static void gnc_main_window_finalize (GObject *object);
 static void gnc_main_window_destroy (GtkWidget *widget);
 
@@ -2461,7 +2461,10 @@ gnc_main_window_tab_entry_key_press_event (GtkWidget *entry,
  *                   Widget Implementation                  *
  ************************************************************/
 
-G_DEFINE_TYPE_WITH_PRIVATE(GncMainWindow, gnc_main_window, GTK_TYPE_WINDOW)
+G_DEFINE_TYPE_WITH_CODE(GncMainWindow, gnc_main_window, GTK_TYPE_WINDOW,
+                        G_ADD_PRIVATE (GncMainWindow)
+                        G_IMPLEMENT_INTERFACE (GTK_TYPE_WINDOW,
+		                               gnc_window_main_window_init))
 
 /** Initialize the class for a new gnucash main window.  This will set
  *  up any function pointers that override functions in the parent
@@ -2552,8 +2555,7 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
  *  @param klass A pointer to the class data structure for this
  *  object. */
 static void
-gnc_main_window_init (GncMainWindow *window,
-                      GncMainWindowClass *klass)
+gnc_main_window_init (GncMainWindow *window)
 {
     GncMainWindowPrivate *priv;
 
@@ -2577,8 +2579,7 @@ gnc_main_window_init (GncMainWindow *window,
                            window);
 
     gnc_main_window_setup_window (window);
-    gnc_gobject_tracking_remember(G_OBJECT(window),
-                                  G_OBJECT_CLASS(klass));
+    gnc_gobject_tracking_remember(G_OBJECT(window), NULL);
 }
 
 
