@@ -2463,7 +2463,7 @@ gnc_main_window_tab_entry_key_press_event (GtkWidget *entry,
 
 G_DEFINE_TYPE_WITH_CODE(GncMainWindow, gnc_main_window, GTK_TYPE_WINDOW,
                         G_ADD_PRIVATE (GncMainWindow)
-                        G_IMPLEMENT_INTERFACE (GTK_TYPE_WINDOW,
+                        G_IMPLEMENT_INTERFACE (GNC_TYPE_WINDOW,
 		                               gnc_window_main_window_init))
 
 /** Initialize the class for a new gnucash main window.  This will set
