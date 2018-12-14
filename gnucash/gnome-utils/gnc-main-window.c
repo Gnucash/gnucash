@@ -2461,46 +2461,7 @@ gnc_main_window_tab_entry_key_press_event (GtkWidget *entry,
  *                   Widget Implementation                  *
  ************************************************************/
 
-/*  Get the type of a gnc main window.
- */
-GType
-gnc_main_window_get_type (void)
-{
-    static GType gnc_main_window_type = 0;
-
-    if (gnc_main_window_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncMainWindowClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_main_window_class_init,
-            NULL,
-            NULL,
-            sizeof (GncMainWindow),
-            0,
-            (GInstanceInitFunc) gnc_main_window_init
-        };
-
-        static const GInterfaceInfo plugin_info =
-        {
-            (GInterfaceInitFunc) gnc_window_main_window_init,
-            NULL,
-            NULL
-        };
-
-        gnc_main_window_type = g_type_register_static (GTK_TYPE_WINDOW,
-                               GNC_MAIN_WINDOW_NAME,
-                               &our_info, 0);
-        g_type_add_interface_static (gnc_main_window_type,
-                                     GNC_TYPE_WINDOW,
-                                     &plugin_info);
-    }
-
-    return gnc_main_window_type;
-}
-
+G_DEFINE_TYPE_WITH_PRIVATE(GncMainWindow, gnc_main_window, GTK_TYPE_WINDOW)
 
 /** Initialize the class for a new gnucash main window.  This will set
  *  up any function pointers that override functions in the parent
@@ -2523,8 +2484,6 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
 
     /* GtkWidget signals */
     gtkwidget_class->destroy = gnc_main_window_destroy;
-
-    g_type_class_add_private(klass, sizeof(GncMainWindowPrivate));
 
     /**
      * GncMainWindow::page_added:
