@@ -446,7 +446,7 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
     /* Is this the first accounts page? */
     page_list =
         gnc_gobject_tracking_get_list(GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME);
-    if (page_list != NULL && plugin_page == page_list->data)
+    if (page_list && plugin_page == page_list->data)
     {
         g_object_set_data(G_OBJECT(plugin_page), PLUGIN_PAGE_IMMUTABLE,
 		          GINT_TO_POINTER(1));
