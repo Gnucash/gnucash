@@ -446,10 +446,12 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
     /* Is this the first accounts page? */
     page_list =
         gnc_gobject_tracking_get_list(GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME);
-    if (plugin_page == page_list->data)
-    {
-        g_object_set_data(G_OBJECT(plugin_page), PLUGIN_PAGE_IMMUTABLE,
-                          GINT_TO_POINTER(1));
+    if (page_list != NULL) {
+        if (plugin_page == page_list->data)
+        {
+             g_object_set_data(G_OBJECT(plugin_page), PLUGIN_PAGE_IMMUTABLE,
+                               GINT_TO_POINTER(1));
+	}
     }
 
     /* Create menu and toolbar information */
