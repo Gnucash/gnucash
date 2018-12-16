@@ -147,8 +147,8 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
        (accounts-tax-paid      (filter (lambda (acc) (eq? (xaccAccountGetType acc) ACCT-TYPE-ASSET))     tax-accounts))
        (accounts-sales         (filter (lambda (acc) (eq? (xaccAccountGetType acc) ACCT-TYPE-INCOME))    accounts))
        (accounts-purchases     (filter (lambda (acc) (eq? (xaccAccountGetType acc) ACCT-TYPE-EXPENSE))   accounts))
-       (common-currency (and (opt-val gnc:pagename-general (_ "Common Currency"))             ; if a common currency was specified,
-                             (opt-val gnc:pagename-general (_ "Report's currency"))))         ; use it
+       (common-currency (and (opt-val gnc:pagename-general "Common Currency")             ; if a common currency was specified,
+                             (opt-val gnc:pagename-general "Report's currency")))         ; use it
        (split-date (lambda (s) (xaccTransGetDate (xaccSplitGetParent s))))
        (split-currency (lambda (s) (xaccAccountGetCommodity (xaccSplitGetAccount s))))
        (split-adder (lambda (split accountlist)
