@@ -1809,6 +1809,8 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
         case GDK_KEY_Right:
         case GDK_KEY_KP_Left:
         case GDK_KEY_Left:
+        case GDK_KEY_Home:
+        case GDK_KEY_End:
 	    /* Clear the saved selection, we're not using it. */
 	    sheet->end_sel = sheet->start_sel;
 	    pass_on = TRUE;
