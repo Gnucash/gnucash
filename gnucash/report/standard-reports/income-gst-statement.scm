@@ -193,13 +193,14 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
        (tax-payable (lambda (s) (myadd (tax-on-sales s) (myneg (tax-on-purchases s))))))
     (append
      ;; each column will be a vector
-     ;; (vector heading
+     ;; (vector heading                                      ;; string
      ;;         calculator-function                          ;; (calculator-function split) to obtain amount
-     ;;         reverse-column?                              ;; unused in GST report
+     ;;         reverse-column?                              ;; #t for income, #f for expense
      ;;         subtotal?                                    ;; #t - all columns need subtotals
      ;;         start-dual-column?                           ;; unused in GST report
      ;;         friendly-heading-fn                          ;; unused in GST report
-     (list (vector "TOTAL SALES"
+     ;; Translators: "TOTAL SALES" refer to Net Sales + GST/VAT on Sales
+     (list (vector (_ "TOTAL SALES")
                    total-sales
                    #t #t #f
                    (lambda (a) "")))
@@ -209,7 +210,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                                     #t #t #f
                                     (lambda (a) "")))
               accounts-sales)
-         (list (vector "Net Sales"
+         (list (vector (_ "Net Sales")
                        sales-without-tax
                        #t #t #f
                        (lambda (a) ""))))
@@ -219,11 +220,12 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                                     #t #t #f
                                     (lambda (a) "")))
               accounts-tax-collected)
-         (list (vector "Tax on Sales"
+         (list (vector (_ "Tax on Sales")
                        tax-on-sales
                        #t #t #f
                        (lambda (a) ""))))
-     (list (vector "TOTAL PURCHASES"
+     ;; Translators: "TOTAL PURCHASES" refer to Net Purchase + GST/VAT on Purchase
+     (list (vector (_ "TOTAL PURCHASES")
                    total-purchases
                    #f #t #f
                    (lambda (a) "")))
@@ -233,7 +235,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                                     #f #t #f
                                     (lambda (a) "")))
               accounts-purchases)
-         (list (vector "Net Purchases"
+         (list (vector (_ "Net Purchases")
                        purchases-without-tax
                        #f #t #f
                        (lambda (a) ""))))
@@ -243,24 +245,27 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                                     #f #t #f
                                     (lambda (a) "")))
               accounts-tax-paid)
-         (list (vector "Tax on Purchases"
+         (list (vector (_ "Tax on Purchases")
                        tax-on-purchases
                        #f #t #f
                        (lambda (a) ""))))
      (if (opt-val gnc:pagename-display (N_ "Remittance amount"))
-         (list (vector "Remittance"
+         ;; Translators: "Remittance" refer to TOTAL SALES - TOTAL PURCHASES in GST Report
+         (list (vector (_ "Remittance")
                        bank-remittance
                        #f #t #f
                        (lambda (a) "")))
          '())
      (if (opt-val gnc:pagename-display (N_ "Net Income"))
-         (list (vector "Net Income"
+         ;; Translators: "Net Income" refer to Net Sales - Net Purchases in GST Report
+         (list (vector (_ "Net Income")
                        net-income
                        #f #t #f
                        (lambda (a) "")))
          '())
      (if (opt-val gnc:pagename-display (N_ "Tax payable"))
-         (list (vector "Tax Payable"
+         ;; Translators: "Tax Payable" refer to the difference GST Sales - GST Purchases
+         (list (vector (_ "Tax Payable")
                        tax-payable
                        #f #t #f
                        (lambda (a) "")))
