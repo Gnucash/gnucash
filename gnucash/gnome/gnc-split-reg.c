@@ -359,6 +359,13 @@ gnc_split_reg_init( GNCSplitReg *gsr )
 }
 
 static void
+gnc_split_reg_pref_acc_labels (gpointer prefs, gchar *pref, gpointer user_data)
+{
+    GNCSplitReg *gsr = user_data;
+    gnucash_register_refresh_from_prefs (gsr->reg);
+}
+
+static void
 gnc_split_reg_init2( GNCSplitReg *gsr )
 {
     if ( !gsr ) return;
@@ -369,6 +376,11 @@ gnc_split_reg_init2( GNCSplitReg *gsr )
     /* ordering is important here... setup_status before create_table */
     gsr_create_table( gsr );
     gsr_setup_table( gsr );
+
+    gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
+                           GNC_PREF_ACCOUNTING_LABELS,
+                           gnc_split_reg_pref_acc_labels,
+                           gsr);
 }
 
 static
@@ -450,6 +462,11 @@ gnc_split_reg_dispose(GObject *obj)
     if (gsr->filter_text)
         g_free (gsr->filter_text);
     gsr->filter_text = NULL;
+
+    gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
+                                 GNC_PREF_ACCOUNTING_LABELS,
+                                 gnc_split_reg_pref_acc_labels,
+                                 gsr);
 
     if (gsr->reg)
     {
