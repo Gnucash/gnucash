@@ -876,30 +876,26 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
  * @param char* String to be modified
  * @return char* Modified string.
 */
-static char * un_escape(char *str)
+static char*
+un_escape(char *str)
 {
     gchar quote = '"';
     gchar *newStr = NULL, *tmpstr = str;
     int n = 0;
+
     newStr = g_malloc(strlen(str)+1); // This must be freed in the calling code.
     while(*tmpstr != '\0')
     {
         if(*tmpstr == quote)
-        {
-            tmpstr++;
-            if(*tmpstr == quote)
-            {
-                newStr[n] = quote;
-            }
-        }
+            // We always want the character after a quote.
+            newStr[n] = *(++tmpstr);
         else
-        {
-            newStr[n] = *str;
-        }
-            tmpstr++;
-            n++;
+            newStr[n] = *tmpstr;
+        ++tmpstr;
+        ++n;
     }
+
     g_free (str);
-	newStr[n] = '\0'; //ending the character array
+    newStr[n] = '\0'; //ending the character array
     return newStr;
 }
