@@ -1305,6 +1305,10 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
     trans = xaccSplitGetParent(split);
     cursor_class = gnc_split_register_get_current_cursor_class (reg);
 
+    /* test for blank_split reference pointing to split */
+    if (gnc_split_register_is_blank_split (reg, split))
+        gnc_split_register_change_blank_split_ref (reg, split);
+
     /* Deleting the blank split just cancels */
     {
         Split *blank_split = gnc_split_register_get_blank_split (reg);
