@@ -877,7 +877,6 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
  * @return char* Modified string.
 */
 static char*
-static char*
 un_escape(char *str)
 {
     gchar quote = '"';
