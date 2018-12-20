@@ -1365,10 +1365,16 @@ void
 gnc_split_register_cancel_cursor_trans_changes (SplitRegister *reg)
 {
     SRInfo *info = gnc_split_register_get_info (reg);
-    Transaction *pending_trans;
+    Transaction *pending_trans, *blank_trans;
+    gboolean refresh_all = FALSE;
 
     pending_trans = xaccTransLookup (&info->pending_trans_guid,
                                      gnc_get_current_book ());
+
+    blank_trans = xaccSplitGetParent (gnc_split_register_get_blank_split (reg));
+
+    if (pending_trans == blank_trans)
+        refresh_all = TRUE;
 
     /* Get the currently open transaction, rollback the edits on it, and
      * then repaint everything. To repaint everything, make a note of
@@ -1389,7 +1395,11 @@ gnc_split_register_cancel_cursor_trans_changes (SplitRegister *reg)
     info->pending_trans_guid = *guid_null ();
 
     gnc_resume_gui_refresh ();
-    gnc_split_register_redraw(reg);
+
+    if (refresh_all)
+        gnc_gui_refresh_all (); // force a refresh of all registers
+    else
+        gnc_split_register_redraw (reg);
 }
 
 void
