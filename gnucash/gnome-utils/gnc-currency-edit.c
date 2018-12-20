@@ -90,6 +90,8 @@ typedef struct _GNCCurrencyEditPrivate
     gchar *mnemonic;
 } GNCCurrencyEditPrivate;
 
+G_DEFINE_TYPE_WITH_PRIVATE(GNCCurrencyEdit, gnc_currency_edit, GTK_TYPE_COMBO_BOX)
+
 #define GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_CURRENCY_EDIT, GNCCurrencyEditPrivate))
 
@@ -152,9 +154,6 @@ gnc_currency_edit_get_property (GObject    *object,
         break;
     }
 }
-
-
-G_DEFINE_TYPE_WITH_PRIVATE(GNCCurrencyEdit, gnc_currency_edit, GTK_TYPE_COMBO_BOX)
 
 /** Initialize the GncCurrencyEdit class object.
  *
