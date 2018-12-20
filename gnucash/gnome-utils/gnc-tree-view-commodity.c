@@ -85,8 +85,6 @@ gnc_tree_view_commodity_class_init (GncTreeViewCommodityClass *klass)
 
     /* GtkWidget signals */
     widget_class->destroy = gnc_tree_view_commodity_destroy;
-
-    g_type_class_add_private(klass, sizeof(GncTreeViewCommodityPrivate));
 }
 
 static void
