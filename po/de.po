@@ -19865,9 +19865,8 @@ msgstr ""
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2034
-#, fuzzy
 msgid "The transactions were imported from file '{1}'."
-msgstr "Die Buchungen wurden aus der Datei »%s« importiert."
+msgstr "Die Buchungen wurden aus der Datei »{1}« importiert."
 
 #: gnucash/import-export/csv-imp/csv-account-import.c:251
 #, c-format
