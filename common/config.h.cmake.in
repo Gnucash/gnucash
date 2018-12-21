@@ -24,7 +24,7 @@
 /* Using GDK Quartz (not X11) */
 #cmakedefine GDK_QUARTZ
 
-/* GetText version number */
+/* Name of our gettext-domain */
 #define GETTEXT_PACKAGE "@GETTEXT_PACKAGE@"
 
 /* Cocoa/Nexstep/GnuStep framework */
