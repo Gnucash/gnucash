@@ -428,7 +428,8 @@ GncDateTimeImpl::format(const char* format) const
     std::stringstream ss;
     //The stream destructor frees the facet, so it must be heap-allocated.
     auto output_facet(new Facet(normalize_format(format).c_str()));
-    ss.imbue(std::locale(std::locale(), output_facet));
+    // FIXME Rather than imbueing a locale below we probably should set std::locale::global appropriately somewhere.
+    ss.imbue(std::locale(std::locale(""), output_facet));
     ss << m_time;
     return ss.str();
 }
@@ -439,8 +440,9 @@ GncDateTimeImpl::format_zulu(const char* format) const
     using Facet = boost::posix_time::time_facet;
     std::stringstream ss;
     //The stream destructor frees the facet, so it must be heap-allocated.
-    auto output_facet(new Facet(normalize_format(format).c_str()));
-    ss.imbue(std::locale(std::locale(), output_facet));
+    auto output_facet(new Facet(normalize_format(format).c_str())); 
+    // FIXME Rather than imbueing a locale below we probably should set std::locale::global appropriately somewhere.
+    ss.imbue(std::locale(std::locale(""), output_facet));
     ss << m_time.utc_time();
     return ss.str();
 }
@@ -499,7 +501,8 @@ GncDateImpl::format(const char* format) const
     std::stringstream ss;
     //The stream destructor frees the facet, so it must be heap-allocated.
     auto output_facet(new Facet(normalize_format(format).c_str()));
-    ss.imbue(std::locale(std::locale(), output_facet));
+    // FIXME Rather than imbueing a locale below we probably should set std::locale::global appropriately somewhere.
+    ss.imbue(std::locale(std::locale(""), output_facet));
     ss << m_greg;
     return ss.str();
 }
