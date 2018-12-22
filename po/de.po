@@ -8527,7 +8527,7 @@ msgstr "-- Aktienteilung --"
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:576
 #: gnucash/register/ledger-core/split-register-model.c:980
 msgid "%A %d %B %Y"
-msgstr "%A %d %B %Y"
+msgstr "%A, %d. %B %Y"
 
 #: gnucash/gnome-utils/gnc-tree-util-split-reg.c:479
 msgid ""
