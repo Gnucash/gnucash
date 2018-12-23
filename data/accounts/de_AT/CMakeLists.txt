@@ -7,7 +7,8 @@ set(dist_account_DATA
   acctchrt_common.gnucash-xea
   acctchrt_houseown.gnucash-xea
   acctchrt_investment.gnucash-xea
-  acctchrt_kids.gnucash-xea)
+  acctchrt_kids.gnucash-xea
+  acctchrt_ekr2017.gnucash-xea)
 
 set_dist_list(DE_AT_DIST ${dist_account_DATA} CMakeLists.txt)
 
