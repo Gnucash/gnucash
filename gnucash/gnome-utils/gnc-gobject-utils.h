@@ -110,6 +110,37 @@ void gnc_gobject_tracking_dump (void);
 /** @} */
 
 
+
+#define GNC_DEFINE_TYPE_WITH_CODE(TN, t_n, T_P, _C_)            _GNC_DEFINE_TYPE_EXTENDED_BEGIN (TN, t_n, T_P, 0) {_C_;} _G_DEFINE_TYPE_EXTENDED_END()
+
+#define _GNC_DEFINE_TYPE_EXTENDED_BEGIN_PRE(TypeName, type_name, TYPE_PARENT) \
+\
+static void     type_name##_init              (TypeName        *self, TypeName##Class *klass); \
+static void     type_name##_class_init        (TypeName##Class *klass); \
+static GType    type_name##_get_type_once     (void); \
+static gpointer type_name##_parent_class = NULL; \
+static gint     TypeName##_private_offset; \
+\
+_G_DEFINE_TYPE_EXTENDED_CLASS_INIT(TypeName, type_name) \
+\
+G_GNUC_UNUSED \
+static inline gpointer \
+type_name##_get_instance_private (TypeName *self) \
+{ \
+  return (G_STRUCT_MEMBER_P (self, TypeName##_private_offset)); \
+} \
+\
+GType \
+type_name##_get_type (void) \
+{ \
+  static volatile gsize g_define_type_id__volatile = 0;
+  /* Prelude goes here */
+
+#define _GNC_DEFINE_TYPE_EXTENDED_BEGIN(TypeName, type_name, TYPE_PARENT, flags) \
+  _GNC_DEFINE_TYPE_EXTENDED_BEGIN_PRE(TypeName, type_name, TYPE_PARENT) \
+  _G_DEFINE_TYPE_EXTENDED_BEGIN_REGISTER(TypeName, type_name, TYPE_PARENT, flags) \
+
+
 #endif /* GNC_GOBJECT_UTILS_H */
 /** @} */
 /** @} */
