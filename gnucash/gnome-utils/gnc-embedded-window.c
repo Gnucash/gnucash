@@ -57,7 +57,6 @@ static void gnc_window_embedded_window_init (GncWindowIface *iface);
 
 static void gnc_embedded_window_setup_window (GncEmbeddedWindow *window);
 
-
 /** The instance private data for an embedded window object. */
 typedef struct GncEmbeddedWindowPrivate
 {
@@ -85,6 +84,11 @@ typedef struct GncEmbeddedWindowPrivate
      *  GtkWindow widget. */
     GtkWidget *parent_window;
 } GncEmbeddedWindowPrivate;
+
+GNC_DEFINE_TYPE_WITH_CODE(GncEmbeddedWindow, gnc_embedded_window, GTK_TYPE_BOX,
+                        G_ADD_PRIVATE(GncEmbeddedWindow)
+                        GNC_IMPLEMENT_INTERFACE(GNC_TYPE_WINDOW,
+                                                gnc_window_embedded_window_init))
 
 #define GNC_EMBEDDED_WINDOW_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_EMBEDDED_WINDOW, GncEmbeddedWindowPrivate))
@@ -157,10 +161,6 @@ gnc_embedded_window_get_page (GncEmbeddedWindow *window)
     return priv->page;
 }
 
-G_DEFINE_TYPE_WITH_CODE(GncEmbeddedWindow, gnc_embedded_window, GTK_TYPE_BOX,
-                        G_ADD_PRIVATE(GncEmbeddedWindow)
-                        G_IMPLEMENT_INTERFACE(GNC_TYPE_WINDOW,
-                                              gnc_window_embedded_window_init))
 
 /** Initialize the class for a new gnucash embedded window.  This will
  *  set up any function pointers that override functions in the parent
@@ -193,8 +193,9 @@ gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass)
  *  @param klass A pointer to the class data structure for this
  *  object. */
 static void
-gnc_embedded_window_init (GncEmbeddedWindow *window)
+gnc_embedded_window_init (GncEmbeddedWindow *window, void *data)
 {
+    GncEmbeddedWindowClass *klass = (GncEmbeddedWindowClass*)data;
     ENTER("window %p", window);
 
     gtk_orientable_set_orientation (GTK_ORIENTABLE(window), GTK_ORIENTATION_VERTICAL);
@@ -204,7 +205,8 @@ gnc_embedded_window_init (GncEmbeddedWindow *window)
 
     gnc_embedded_window_setup_window (window);
 
-    gnc_gobject_tracking_remember(G_OBJECT(window), NULL);
+    gnc_gobject_tracking_remember(G_OBJECT(window),
+		                  G_OBJECT_CLASS(klass));
     LEAVE(" ");
 }
 
