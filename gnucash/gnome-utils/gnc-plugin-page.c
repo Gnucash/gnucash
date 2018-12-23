@@ -46,8 +46,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static gpointer parent_class = NULL;
 
 static void gnc_plugin_page_class_init (GncPluginPageClass *klass);
-static void gnc_plugin_page_init       (GncPluginPage *plugin_page,
-                                        GncPluginPageClass *klass);
+static void gnc_plugin_page_init       (GncPluginPage *plugin_page);
 static void gnc_plugin_page_finalize   (GObject *object);
 static void gnc_plugin_page_set_property (GObject         *object,
         guint            prop_id,
@@ -106,36 +105,6 @@ typedef struct _GncPluginPagePrivate
 
 #define GNC_PLUGIN_PAGE_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_PAGE, GncPluginPagePrivate))
-
-GType
-gnc_plugin_page_get_type (void)
-{
-    static GType gnc_plugin_page_type = 0;
-
-    if (gnc_plugin_page_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-
-            sizeof (GncPluginPageClass),
-            NULL,		/* base_init */
-            NULL,		/* base_finalize */
-            (GClassInitFunc) gnc_plugin_page_class_init,
-            NULL,		/* class_finalize */
-            NULL,		/* class_data */
-            sizeof (GncPluginPage),
-            0,		/* n_preallocs */
-            (GInstanceInitFunc) gnc_plugin_page_init,
-        };
-
-        gnc_plugin_page_type = g_type_register_static (G_TYPE_OBJECT,
-                               "GncPluginPage",
-                               &our_info, 0);
-    }
-
-    return gnc_plugin_page_type;
-}
-
 
 /*  Create the display widget that corresponds to this plugin.  This
  *  function will be called by the main/embedded window manipulation
@@ -379,6 +348,7 @@ gnc_plugin_page_unselected (GncPluginPage *plugin_page)
     g_signal_emit (G_OBJECT (plugin_page), signals[UNSELECTED], 0);
 }
 
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPage, gnc_plugin_page, G_TYPE_OBJECT)
 
 /** Initialize the class for a new generic plugin page.  This will set
  *  up any function pointers that override functions in the parent
@@ -399,8 +369,6 @@ gnc_plugin_page_class_init (GncPluginPageClass *klass)
 
     klass->tab_icon    = NULL;
     klass->plugin_name = NULL;
-
-    g_type_class_add_private(klass, sizeof(GncPluginPagePrivate));
 
     g_object_class_install_property
     (gobject_class,
@@ -533,7 +501,7 @@ gnc_plugin_page_class_init (GncPluginPageClass *klass)
  *  @param klass A pointer to the class data structure for this
  *  object. */
 static void
-gnc_plugin_page_init (GncPluginPage *page, GncPluginPageClass *klass)
+gnc_plugin_page_init (GncPluginPage *page)
 {
     GncPluginPagePrivate *priv;
 
@@ -545,7 +513,7 @@ gnc_plugin_page_init (GncPluginPage *page, GncPluginPageClass *klass)
     page->window      = NULL;
     page->summarybar  = NULL;
 
-    gnc_gobject_tracking_remember(G_OBJECT(page), G_OBJECT_CLASS(klass));
+    gnc_gobject_tracking_remember(G_OBJECT(page), NULL);
 }
 
 

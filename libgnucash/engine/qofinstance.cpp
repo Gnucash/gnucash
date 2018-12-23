@@ -114,7 +114,7 @@ typedef struct QofInstancePrivate
 #define GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), QOF_TYPE_INSTANCE,  QofInstancePrivate))
 
-QOF_GOBJECT_GET_TYPE(QofInstance, qof_instance, G_TYPE_OBJECT, {});
+G_DEFINE_TYPE_WITH_PRIVATE(QofInstance, qof_instance, G_TYPE_OBJECT);
 QOF_GOBJECT_FINALIZE(qof_instance);
 #undef G_PARAM_READWRITE
 #define G_PARAM_READWRITE static_cast<GParamFlags>(G_PARAM_READABLE | G_PARAM_WRITABLE)
@@ -135,8 +135,6 @@ static void qof_instance_class_init(QofInstanceClass *klass)
     object_class->dispose = qof_instance_dispose;
     object_class->set_property = qof_instance_set_property;
     object_class->get_property = qof_instance_get_property;
-
-    g_type_class_add_private(klass, sizeof(QofInstancePrivate));
 
     klass->get_display_name = NULL;
     klass->refers_to_object = NULL;

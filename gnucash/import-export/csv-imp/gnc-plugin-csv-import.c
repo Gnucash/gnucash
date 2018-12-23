@@ -74,39 +74,13 @@ typedef struct GncPluginCsvImportPrivate
 
 static GObjectClass *parent_class = NULL;
 
-GType
-gnc_plugin_csv_import_get_type (void)
-{
-    static GType gnc_plugin_csv_import_type = 0;
-
-    if (gnc_plugin_csv_import_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncPluginCsvImportClass),
-            NULL,		/* base_init */
-            NULL,		/* base_finalize */
-            (GClassInitFunc) gnc_plugin_csv_import_class_init,
-            NULL,		/* class_finalize */
-            NULL,		/* class_data */
-            sizeof (GncPluginCsvImport),
-            0,		/* n_preallocs */
-            (GInstanceInitFunc) gnc_plugin_csv_import_init,
-        };
-
-        gnc_plugin_csv_import_type = g_type_register_static (GNC_TYPE_PLUGIN,
-                                     "GncPluginCsvImport",
-                                     &our_info, 0);
-    }
-
-    return gnc_plugin_csv_import_type;
-}
-
 GncPlugin *
 gnc_plugin_csv_import_new (void)
 {
     return GNC_PLUGIN (g_object_new (GNC_TYPE_PLUGIN_CSV_IMPORT, NULL));
 }
+
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginCsvImport, gnc_plugin_csv_import, GNC_TYPE_PLUGIN)
 
 static void
 gnc_plugin_csv_import_class_init (GncPluginCsvImportClass *klass)
@@ -126,8 +100,6 @@ gnc_plugin_csv_import_class_init (GncPluginCsvImportClass *klass)
     plugin_class->actions      = gnc_plugin_actions;
     plugin_class->n_actions    = gnc_plugin_n_actions;
     plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
-
-    g_type_class_add_private(klass, sizeof(GncPluginCsvImportPrivate));
 }
 
 static void

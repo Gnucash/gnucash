@@ -310,34 +310,6 @@ static action_owners_struct action_owners[] =
     { NULL, GNC_OWNER_NONE },
 };
 
-GType
-gnc_plugin_page_owner_tree_get_type (void)
-{
-    static GType gnc_plugin_page_owner_tree_type = 0;
-
-    if (gnc_plugin_page_owner_tree_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncPluginPageOwnerTreeClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_plugin_page_owner_tree_class_init,
-            NULL,
-            NULL,
-            sizeof (GncPluginPageOwnerTree),
-            0,
-            (GInstanceInitFunc) gnc_plugin_page_owner_tree_init
-        };
-
-        gnc_plugin_page_owner_tree_type = g_type_register_static (GNC_TYPE_PLUGIN_PAGE,
-                                          GNC_PLUGIN_PAGE_OWNER_TREE_NAME,
-                                          &our_info, 0);
-    }
-
-    return gnc_plugin_page_owner_tree_type;
-}
-
 GncPluginPage *
 gnc_plugin_page_owner_tree_new (GncOwnerType owner_type)
 {
@@ -431,6 +403,7 @@ gnc_plugin_page_owner_main_window_page_changed (GncMainWindow *window,
     }
 }
 
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageOwnerTree, gnc_plugin_page_owner_tree, GNC_TYPE_PLUGIN_PAGE)
 
 static void
 gnc_plugin_page_owner_tree_class_init (GncPluginPageOwnerTreeClass *klass)
@@ -448,8 +421,6 @@ gnc_plugin_page_owner_tree_class_init (GncPluginPageOwnerTreeClass *klass)
     gnc_plugin_class->destroy_widget  = gnc_plugin_page_owner_tree_destroy_widget;
     gnc_plugin_class->save_page       = gnc_plugin_page_owner_tree_save_page;
     gnc_plugin_class->recreate_page   = gnc_plugin_page_owner_tree_recreate_page;
-
-    g_type_class_add_private(klass, sizeof(GncPluginPageOwnerTreePrivate));
 
     plugin_page_signals[OWNER_SELECTED] =
         g_signal_new ("owner_selected",

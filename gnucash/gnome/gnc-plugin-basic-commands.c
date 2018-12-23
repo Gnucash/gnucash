@@ -275,37 +275,6 @@ typedef struct GncPluginBasicCommandsPrivate
 /** A pointer to the parent class of a plugin page. */
 static GObjectClass *parent_class = NULL;
 
-
-/*  Get the type of the basic commands menu plugin. */
-GType
-gnc_plugin_basic_commands_get_type (void)
-{
-    static GType gnc_plugin_basic_commands_type = 0;
-
-    if (gnc_plugin_basic_commands_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncPluginBasicCommandsClass),
-            NULL,		/* base_init */
-            NULL,		/* base_finalize */
-            (GClassInitFunc) gnc_plugin_basic_commands_class_init,
-            NULL,		/* class_finalize */
-            NULL,		/* class_data */
-            sizeof (GncPluginBasicCommands),
-            0,		/* n_preallocs */
-            (GInstanceInitFunc) gnc_plugin_basic_commands_init
-        };
-
-        gnc_plugin_basic_commands_type = g_type_register_static (GNC_TYPE_PLUGIN,
-                                         "GncPluginBasicCommands",
-                                         &our_info, 0);
-    }
-
-    return gnc_plugin_basic_commands_type;
-}
-
-
 /** Create a new basic commands menu plugin. */
 GncPlugin *
 gnc_plugin_basic_commands_new (void)
@@ -385,6 +354,8 @@ gnc_plugin_basic_commands_main_window_page_changed(GncMainWindow *window,
     }
 }
 
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginBasicCommands, gnc_plugin_basic_commands, GNC_TYPE_PLUGIN)
+
 /** Initialize the class for a new basic commands plugin.  This will
  *  set up any function pointers that override functions in the parent
  *  class, and also configure the private data storage for this
@@ -414,8 +385,6 @@ gnc_plugin_basic_commands_class_init (GncPluginBasicCommandsClass *klass)
     plugin_class->n_actions    	  = gnc_plugin_n_actions;
     plugin_class->important_actions = gnc_plugin_important_actions;
     plugin_class->ui_filename       = PLUGIN_UI_FILENAME;
-
-    g_type_class_add_private(klass, sizeof(GncPluginBasicCommandsPrivate));
 }
 
 

@@ -518,37 +518,6 @@ gnc_plugin_history_list_changed (gpointer prefs,
  *                  Object Implementation                   *
  ************************************************************/
 
-/*  Get the type of a file history plugin.  */
-GType
-gnc_plugin_file_history_get_type (void)
-{
-    static GType gnc_plugin_file_history_type = 0;
-
-    if (gnc_plugin_file_history_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncPluginFileHistoryClass),
-            NULL,		/* base_init */
-            NULL,		/* base_finalize */
-            (GClassInitFunc) gnc_plugin_file_history_class_init,
-            NULL,		/* class_finalize */
-            NULL,		/* class_data */
-            sizeof (GncPluginFileHistory),
-            0,
-            (GInstanceInitFunc) gnc_plugin_file_history_init
-        };
-
-        gnc_plugin_file_history_type =
-            g_type_register_static (GNC_TYPE_PLUGIN,
-                                    "GncPluginFileHistory",
-                                    &our_info, 0);
-    }
-
-    return gnc_plugin_file_history_type;
-}
-
-
 /** Initialize the file history plugin class. */
 static void
 gnc_plugin_file_history_class_init (GncPluginFileHistoryClass *klass)
@@ -573,10 +542,9 @@ gnc_plugin_file_history_class_init (GncPluginFileHistoryClass *klass)
     plugin_class->actions       = gnc_plugin_actions;
     plugin_class->n_actions     = gnc_plugin_n_actions;
     plugin_class->ui_filename   = PLUGIN_UI_FILENAME;
-
-    g_type_class_add_private(klass, sizeof(GncPluginFileHistoryPrivate));
 }
 
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginFileHistory, gnc_plugin_file_history, GNC_TYPE_PLUGIN)
 
 /** Initialize an instance of the file history plugin. */
 static void

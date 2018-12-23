@@ -180,34 +180,6 @@ static void gnc_plugin_page_report_print_cb(GtkAction *action, GncPluginPageRepo
 static void gnc_plugin_page_report_exportpdf_cb(GtkAction *action, GncPluginPageReport *rep);
 static void gnc_plugin_page_report_copy_cb(GtkAction *action, GncPluginPageReport *rep);
 
-GType
-gnc_plugin_page_report_get_type (void)
-{
-    static GType gnc_plugin_page_report_type = 0;
-
-    if (gnc_plugin_page_report_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncPluginPageReportClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_plugin_page_report_class_init,
-            NULL,
-            NULL,
-            sizeof (GncPluginPageReport),
-            0,
-            (GInstanceInitFunc) gnc_plugin_page_report_init
-        };
-
-        gnc_plugin_page_report_type = g_type_register_static (GNC_TYPE_PLUGIN_PAGE,
-                                      "GncPluginPageReport",
-                                      &our_info, 0);
-    }
-
-    return gnc_plugin_page_report_type;
-}
-
 static void
 gnc_plugin_page_report_get_property( GObject *obj,
                                      guint prop_id,
@@ -301,6 +273,8 @@ gnc_plugin_page_report_main_window_page_changed (GncMainWindow *window,
     }
 }
 
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageReport, gnc_plugin_page_report, GNC_TYPE_PLUGIN_PAGE)
+
 static void
 gnc_plugin_page_report_class_init (GncPluginPageReportClass *klass)
 {
@@ -325,8 +299,6 @@ gnc_plugin_page_report_class_init (GncPluginPageReportClass *klass)
     gnc_plugin_page_class->page_name_changed = gnc_plugin_page_report_name_changed;
     gnc_plugin_page_class->update_edit_menu_actions = gnc_plugin_page_report_update_edit_menu;
     gnc_plugin_page_class->finish_pending   = gnc_plugin_page_report_finish_pending;
-
-    g_type_class_add_private(klass, sizeof(GncPluginPageReportPrivate));
 
     // create the "reportId" property
     g_object_class_install_property( object_class,

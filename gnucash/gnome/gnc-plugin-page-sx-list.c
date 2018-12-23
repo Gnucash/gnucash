@@ -164,36 +164,6 @@ static GtkActionEntry gnc_plugin_page_sx_list_actions [] =
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_page_sx_list_n_actions = G_N_ELEMENTS (gnc_plugin_page_sx_list_actions);
 
-
-GType
-gnc_plugin_page_sx_list_get_type (void)
-{
-    static GType gnc_plugin_page_sx_list_type = 0;
-
-    if (gnc_plugin_page_sx_list_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncPluginPageSxListClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_plugin_page_sx_list_class_init,
-            NULL,
-            NULL,
-            sizeof (GncPluginPageSxList),
-            0,
-            (GInstanceInitFunc) gnc_plugin_page_sx_list_init
-        };
-
-        gnc_plugin_page_sx_list_type = g_type_register_static (GNC_TYPE_PLUGIN_PAGE,
-                                       GNC_PLUGIN_PAGE_SX_LIST_NAME,
-                                       &our_info, 0);
-    }
-
-    return gnc_plugin_page_sx_list_type;
-}
-
-
 GncPluginPage *
 gnc_plugin_page_sx_list_new (void)
 {
@@ -252,6 +222,7 @@ gnc_plugin_page_sx_list_main_window_page_changed (GncMainWindow *window,
     }
 }
 
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageSxList, gnc_plugin_page_sx_list, GNC_TYPE_PLUGIN_PAGE)
 
 static void
 gnc_plugin_page_sx_list_class_init (GncPluginPageSxListClass *klass)
@@ -270,8 +241,6 @@ gnc_plugin_page_sx_list_class_init (GncPluginPageSxListClass *klass)
     gnc_plugin_class->destroy_widget  = gnc_plugin_page_sx_list_destroy_widget;
     gnc_plugin_class->save_page       = gnc_plugin_page_sx_list_save_page;
     gnc_plugin_class->recreate_page   = gnc_plugin_page_sx_list_recreate_page;
-
-    g_type_class_add_private(klass, sizeof(GncPluginPageSxListPrivate));
 }
 
 

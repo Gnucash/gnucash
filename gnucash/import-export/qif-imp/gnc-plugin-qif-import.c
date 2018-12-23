@@ -31,6 +31,8 @@
 #include "gnc-plugin-manager.h"
 #include "gnc-plugin-qif-import.h"
 
+
+
 static void gnc_plugin_qif_import_class_init (GncPluginQifImportClass *klass);
 static void gnc_plugin_qif_import_init (GncPluginQifImport *plugin);
 static void gnc_plugin_qif_import_finalize (GObject *object);
@@ -59,35 +61,8 @@ typedef struct GncPluginQifImportPrivate
 #define GNC_PLUGIN_QIF_IMPORT_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_QIF_IMPORT, GncPluginQifImportPrivate))
 
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginQifImport, gnc_plugin_qif_import, GNC_TYPE_PLUGIN);
 static GObjectClass *parent_class = NULL;
-
-GType
-gnc_plugin_qif_import_get_type (void)
-{
-    static GType gnc_plugin_qif_import_type = 0;
-
-    if (gnc_plugin_qif_import_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncPluginQifImportClass),
-            NULL,		/* base_init */
-            NULL,		/* base_finalize */
-            (GClassInitFunc) gnc_plugin_qif_import_class_init,
-            NULL,		/* class_finalize */
-            NULL,		/* class_data */
-            sizeof (GncPluginQifImport),
-            0,		/* n_preallocs */
-            (GInstanceInitFunc) gnc_plugin_qif_import_init,
-        };
-
-        gnc_plugin_qif_import_type = g_type_register_static (GNC_TYPE_PLUGIN,
-                                     "GncPluginQifImport",
-                                     &our_info, 0);
-    }
-
-    return gnc_plugin_qif_import_type;
-}
 
 GncPlugin *
 gnc_plugin_qif_import_new (void)
@@ -113,8 +88,6 @@ gnc_plugin_qif_import_class_init (GncPluginQifImportClass *klass)
     plugin_class->actions      = gnc_plugin_actions;
     plugin_class->n_actions    = gnc_plugin_n_actions;
     plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
-
-    g_type_class_add_private(klass, sizeof(GncPluginQifImportPrivate));
 }
 
 static void

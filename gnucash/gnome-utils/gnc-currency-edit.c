@@ -90,42 +90,13 @@ typedef struct _GNCCurrencyEditPrivate
     gchar *mnemonic;
 } GNCCurrencyEditPrivate;
 
+G_DEFINE_TYPE_WITH_PRIVATE(GNCCurrencyEdit, gnc_currency_edit, GTK_TYPE_COMBO_BOX)
+
 #define GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_CURRENCY_EDIT, GNCCurrencyEditPrivate))
 
 /** @name Basic Object Implementation */
 /** @{ */
-
-/*  Return the GType for the GNCCurrencyEdit currency selection widget.
- */
-GType
-gnc_currency_edit_get_type (void)
-{
-    static GType currency_edit_type = 0;
-
-    if (currency_edit_type == 0)
-    {
-        static const GTypeInfo currency_edit_info =
-        {
-            sizeof (GNCCurrencyEditClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_currency_edit_class_init,
-            NULL,
-            NULL,
-            sizeof (GNCCurrencyEdit),
-            0, /* n_preallocs */
-            (GInstanceInitFunc) gnc_currency_edit_init,
-            NULL
-        };
-
-        currency_edit_type = g_type_register_static (GTK_TYPE_COMBO_BOX,
-                             "GNCCurrencyEdit",
-                             &currency_edit_info, 0);
-    }
-
-    return currency_edit_type;
-}
 
 enum
 {
@@ -184,9 +155,6 @@ gnc_currency_edit_get_property (GObject    *object,
     }
 }
 
-
-
-
 /** Initialize the GncCurrencyEdit class object.
  *
  *  @internal
@@ -198,8 +166,6 @@ gnc_currency_edit_class_init (GNCCurrencyEditClass *klass)
 {
     GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
     parent_class = g_type_class_peek_parent (klass);
-
-    g_type_class_add_private(klass, sizeof(GNCCurrencyEditPrivate));
 
     gobject_class->set_property = gnc_currency_edit_set_property;
     gobject_class->get_property = gnc_currency_edit_get_property;
