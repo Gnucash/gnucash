@@ -37,7 +37,8 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 /** Declarations *********************************************************/
 static void gnc_tree_model_class_init (GncTreeModelClass *klass);
-static void gnc_tree_model_init (GncTreeModel *model);
+static void gnc_tree_model_init (GncTreeModel *model,
+		                 void *data);
 static void gnc_tree_model_finalize (GObject *object);
 
 /** The instance private data for a generic tree model. */
@@ -45,6 +46,9 @@ typedef struct GncTreeModelPrivate
 {
     gpointer dummy;
 } GncTreeModelPrivate;
+
+GNC_DEFINE_TYPE_WITH_CODE(GncTreeModel, gnc_tree_model, G_TYPE_OBJECT,
+		        G_ADD_PRIVATE(GncTreeModel))
 
 #define GNC_TREE_MODEL_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_TREE_MODEL, GncTreeModelPrivate))
@@ -56,8 +60,6 @@ typedef struct GncTreeModelPrivate
 
 /** A pointer to the parent class of a generic tree model. */
 static GObjectClass *parent_class = NULL;
-
-G_DEFINE_TYPE_WITH_PRIVATE(GncTreeModel, gnc_tree_model, G_TYPE_OBJECT)
 
 static void
 gnc_tree_model_class_init (GncTreeModelClass *klass)
@@ -73,10 +75,13 @@ gnc_tree_model_class_init (GncTreeModelClass *klass)
 }
 
 static void
-gnc_tree_model_init (GncTreeModel *model)
+gnc_tree_model_init (GncTreeModel *model, void *data)
 {
+    GncTreeModelClass *klass = (GncTreeModelClass*)data;
+
     ENTER("model %p", model);
-    gnc_gobject_tracking_remember(G_OBJECT(model), NULL);
+    gnc_gobject_tracking_remember(G_OBJECT(model),
+		                  G_OBJECT_CLASS(klass));
 
     LEAVE(" ");
 }
