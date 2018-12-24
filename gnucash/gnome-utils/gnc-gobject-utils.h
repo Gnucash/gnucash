@@ -109,14 +109,20 @@ void gnc_gobject_tracking_dump (void);
 
 /** @} */
 
-
+/** Some macros derived from glib type macros.
+ * In glib type_name##init function only has one parameter. We need
+ * the 2nd class parameter in certain calls. The main difference is
+ * static void     type_name##_init         (TypeName        *self, void *class);
+ * instead of
+ * static void     type_name##_init         (TypeName        *self);
+ * this code may need updating in future releases as glib changes.
+ **/
 #define GNC_IMPLEMENT_INTERFACE(TYPE_IFACE, iface_init)       { \
   const GInterfaceInfo g_implement_interface_info = { \
       (GInterfaceInitFunc)(void (*)(void *, void *)) iface_init, NULL, NULL    \
   }; \
   g_type_add_interface_static (g_define_type_id, TYPE_IFACE, &g_implement_interface_info); \
 }
-
 
 #define GNC_DEFINE_TYPE_WITH_CODE(TN, t_n, T_P, _C_)            _GNC_DEFINE_TYPE_EXTENDED_BEGIN (TN, t_n, T_P, 0) {_C_;} _GNC_DEFINE_TYPE_EXTENDED_END()
 
@@ -158,7 +164,6 @@ type_name##_get_type (void) \
     }                                   \
   return g_define_type_id__volatile;    \
 } /* closes type_name##_get_type() */
-
 
 
 #endif /* GNC_GOBJECT_UTILS_H */
