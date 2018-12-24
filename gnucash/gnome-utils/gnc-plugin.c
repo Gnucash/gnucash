@@ -50,7 +50,7 @@ static gpointer parent_class = NULL;
 
 static void gnc_plugin_class_init (GncPluginClass *klass);
 static void gnc_plugin_init       (GncPlugin *plugin_page,
-                                   GncPluginClass *klass);
+                                   void *data);
 static void gnc_plugin_finalize   (GObject *object);
 
 
@@ -61,10 +61,11 @@ typedef struct GncPluginPrivate
     gpointer dummy;
 } GncPluginPrivate;
 
+GNC_DEFINE_TYPE_WITH_CODE(GncPlugin, gnc_plugin, G_TYPE_OBJECT,
+		        G_ADD_PRIVATE(GncPlugin))
+
 #define GNC_PLUGIN_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN, GncPluginPrivate))
-
-G_DEFINE_TYPE_WITH_PRIVATE(GncPlugin, gnc_plugin, G_TYPE_OBJECT)
 
 /** Initialize the class for the new gnucash plugin object.  This will
  *  set up any function pointers that override functions in the parent
@@ -92,8 +93,10 @@ gnc_plugin_class_init (GncPluginClass *klass)
  *  @param klass A pointer to the class data structure for this
  *  object. */
 static void
-gnc_plugin_init (GncPlugin *plugin_page, GncPluginClass *klass)
+gnc_plugin_init (GncPlugin *plugin_page, void *data)
 {
+    GncPluginClass *klass = (GncPluginClass*)data;
+
     gnc_gobject_tracking_remember(G_OBJECT(plugin_page), \
                                   G_OBJECT_CLASS(klass));
 }
