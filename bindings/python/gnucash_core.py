@@ -435,12 +435,22 @@ class Transaction(GnuCashCoreClass):
             gncInvoiceGetInvoiceFromTxn, Transaction )
 
 def decorate_monetary_list_returning_function(orig_function):
-    def new_function(self):
+    def new_function(self, *args):
+        """decorate function that returns list of gnc_monetary to return tuples of GncCommodity and GncNumeric
+
+        Args:
+            *args: Variable length argument list. Will get passed to orig_function
+
+        Returns:
+            array of tuples: (GncCommodity, GncNumeric)
+
+        ToDo:
+            Maybe this function should better reside in module function_class (?)"""
         # warning, item.commodity has been shown to be None
         # when the transaction doesn't have a currency
         return [(GncCommodity(instance=item.commodity),
                  GncNumeric(instance=item.value))
-                for item in orig_function(self) ]
+                for item in orig_function(self, *args) ]
     return new_function
 
 class Split(GnuCashCoreClass):
