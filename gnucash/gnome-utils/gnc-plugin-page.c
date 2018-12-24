@@ -46,7 +46,8 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static gpointer parent_class = NULL;
 
 static void gnc_plugin_page_class_init (GncPluginPageClass *klass);
-static void gnc_plugin_page_init       (GncPluginPage *plugin_page);
+static void gnc_plugin_page_init       (GncPluginPage *plugin_page,
+		                        void *data);
 static void gnc_plugin_page_finalize   (GObject *object);
 static void gnc_plugin_page_set_property (GObject         *object,
         guint            prop_id,
@@ -102,6 +103,9 @@ typedef struct _GncPluginPagePrivate
     gchar *uri;
     gchar *statusbar_text;
 } GncPluginPagePrivate;
+
+GNC_DEFINE_TYPE_WITH_CODE(GncPluginPage, gnc_plugin_page, G_TYPE_OBJECT,
+		        G_ADD_PRIVATE(GncPluginPage))
 
 #define GNC_PLUGIN_PAGE_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_PAGE, GncPluginPagePrivate))
@@ -348,8 +352,6 @@ gnc_plugin_page_unselected (GncPluginPage *plugin_page)
     g_signal_emit (G_OBJECT (plugin_page), signals[UNSELECTED], 0);
 }
 
-G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPage, gnc_plugin_page, G_TYPE_OBJECT)
-
 /** Initialize the class for a new generic plugin page.  This will set
  *  up any function pointers that override functions in the parent
  *  class, set up all properties and signals, and also configure the
@@ -501,9 +503,11 @@ gnc_plugin_page_class_init (GncPluginPageClass *klass)
  *  @param klass A pointer to the class data structure for this
  *  object. */
 static void
-gnc_plugin_page_init (GncPluginPage *page)
+gnc_plugin_page_init (GncPluginPage *page, void *data)
 {
     GncPluginPagePrivate *priv;
+    
+    GncPluginPageClass *klass = (GncPluginPageClass*)data;
 
     priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     priv->page_name   = NULL;
@@ -513,7 +517,8 @@ gnc_plugin_page_init (GncPluginPage *page)
     page->window      = NULL;
     page->summarybar  = NULL;
 
-    gnc_gobject_tracking_remember(G_OBJECT(page), NULL);
+    gnc_gobject_tracking_remember(G_OBJECT(page), 
+		                  G_OBJECT_CLASS(klass));
 }
 
 
