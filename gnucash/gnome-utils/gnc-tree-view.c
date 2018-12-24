@@ -76,7 +76,8 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 /**** Declarations ******************************************************/
 static void gnc_tree_view_class_init (GncTreeViewClass *klass);
-static void gnc_tree_view_init (GncTreeView *view);
+static void gnc_tree_view_init (GncTreeView *view,
+		                void *data);
 static void gnc_tree_view_finalize (GObject *object);
 static void gnc_tree_view_destroy (GtkWidget *widget);
 static void gnc_tree_view_set_property (GObject         *object,
@@ -129,6 +130,9 @@ typedef struct GncTreeViewPrivate
     gulong             size_allocate_cb_id;
 } GncTreeViewPrivate;
 
+GNC_DEFINE_TYPE_WITH_CODE(GncTreeView, gnc_tree_view, GTK_TYPE_TREE_VIEW,
+		          G_ADD_PRIVATE(GncTreeView))
+
 #define GNC_TREE_VIEW_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_TREE_VIEW, GncTreeViewPrivate))
 
@@ -141,8 +145,6 @@ typedef struct GncTreeViewPrivate
  @{ */
 
 static GObjectClass *parent_class = NULL;
-
-G_DEFINE_TYPE_WITH_PRIVATE(GncTreeView, gnc_tree_view, GTK_TYPE_TREE_VIEW)
 
 /** Initialize the class for the new base gnucash tree view.  This
  *  will set up any function pointers that override functions in the
@@ -199,14 +201,17 @@ gnc_tree_view_class_init (GncTreeViewClass *klass)
  *  @internal
  */
 static void
-gnc_tree_view_init (GncTreeView *view)
+gnc_tree_view_init (GncTreeView *view, void *data)
 {
     GncTreeViewPrivate *priv;
     GtkTreeViewColumn *column;
     GtkWidget *icon;
     GtkRequisition requisition;
 
-    gnc_gobject_tracking_remember(G_OBJECT(view), NULL);
+    GncTreeViewClass *klass = (GncTreeViewClass*)data;
+
+    gnc_gobject_tracking_remember(G_OBJECT(view),
+		                  G_OBJECT_CLASS(klass));
 
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
     priv->column_menu = NULL;
