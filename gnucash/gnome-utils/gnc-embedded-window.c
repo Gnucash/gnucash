@@ -87,8 +87,8 @@ typedef struct GncEmbeddedWindowPrivate
 
 GNC_DEFINE_TYPE_WITH_CODE(GncEmbeddedWindow, gnc_embedded_window, GTK_TYPE_BOX,
                         G_ADD_PRIVATE(GncEmbeddedWindow)
-                        G_IMPLEMENT_INTERFACE(GNC_TYPE_WINDOW,
-                                              gnc_window_embedded_window_init))
+                        GNC_IMPLEMENT_INTERFACE(GNC_TYPE_WINDOW,
+                                                gnc_window_embedded_window_init))
 
 #define GNC_EMBEDDED_WINDOW_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_EMBEDDED_WINDOW, GncEmbeddedWindowPrivate))
@@ -193,9 +193,9 @@ gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass)
  *  @param klass A pointer to the class data structure for this
  *  object. */
 static void
-gnc_embedded_window_init (GncEmbeddedWindow *window,
-                          GncEmbeddedWindowClass *klass)
+gnc_embedded_window_init (GncEmbeddedWindow *window, void *data)
 {
+    GncEmbeddedWindowClass *klass = (GncEmbeddedWindowClass*)data;
     ENTER("window %p", window);
 
     gtk_orientable_set_orientation (GTK_ORIENTABLE(window), GTK_ORIENTATION_VERTICAL);
@@ -205,7 +205,7 @@ gnc_embedded_window_init (GncEmbeddedWindow *window,
 
     gnc_embedded_window_setup_window (window);
 
-    gnc_gobject_tracking_remember(G_OBJECT(window), 
+    gnc_gobject_tracking_remember(G_OBJECT(window),
 		                  G_OBJECT_CLASS(klass));
     LEAVE(" ");
 }
