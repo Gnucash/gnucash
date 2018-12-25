@@ -1024,6 +1024,49 @@ gnc_split_register_paste_current (SplitRegister *reg)
     LEAVE(" ");
 }
 
+gboolean
+gnc_split_register_is_blank_split (SplitRegister *reg, Split *split)
+{
+    SRInfo *info = gnc_split_register_get_info (reg);
+    Split *current_blank_split = xaccSplitLookup (&info->blank_split_guid, gnc_get_current_book ());
+    
+    if (split == current_blank_split)
+        return TRUE;
+
+    return FALSE;
+}
+
+void
+gnc_split_register_change_blank_split_ref (SplitRegister *reg, Split *split)
+{
+    SRInfo *info = gnc_split_register_get_info (reg);
+    Split *current_blank_split = xaccSplitLookup (&info->blank_split_guid, gnc_get_current_book ());
+    Split *pref_split = NULL; // has the same account as incoming split
+    Split *other_split = NULL; // other split
+    Split *s;
+    Account *blank_split_account = xaccSplitGetAccount (current_blank_split);
+    Transaction *trans = xaccSplitGetParent (split);
+    int i = 0;
+
+    // loop through splitlist looking for splits other than the blank_split
+    while ((s = xaccTransGetSplit (trans, i)) != NULL)
+    {
+        if (s != current_blank_split)
+        {
+            if (blank_split_account == xaccSplitGetAccount (s))
+                pref_split = s;  // prefer same account
+            else
+                other_split = s; // any other split
+        }
+        i++;
+    }
+    // now change the saved blank split reference
+    if (pref_split != NULL)
+        info->blank_split_guid = *xaccSplitGetGUID (pref_split);
+    else if (other_split != NULL)
+        info->blank_split_guid = *xaccSplitGetGUID (other_split);
+}
+
 void
 gnc_split_register_delete_current_split (SplitRegister *reg)
 {
@@ -1322,10 +1365,16 @@ void
 gnc_split_register_cancel_cursor_trans_changes (SplitRegister *reg)
 {
     SRInfo *info = gnc_split_register_get_info (reg);
-    Transaction *pending_trans;
+    Transaction *pending_trans, *blank_trans;
+    gboolean refresh_all = FALSE;
 
     pending_trans = xaccTransLookup (&info->pending_trans_guid,
                                      gnc_get_current_book ());
+
+    blank_trans = xaccSplitGetParent (gnc_split_register_get_blank_split (reg));
+
+    if (pending_trans == blank_trans)
+        refresh_all = TRUE;
 
     /* Get the currently open transaction, rollback the edits on it, and
      * then repaint everything. To repaint everything, make a note of
@@ -1346,7 +1395,11 @@ gnc_split_register_cancel_cursor_trans_changes (SplitRegister *reg)
     info->pending_trans_guid = *guid_null ();
 
     gnc_resume_gui_refresh ();
-    gnc_split_register_redraw(reg);
+
+    if (refresh_all)
+        gnc_gui_refresh_all (); // force a refresh of all registers
+    else
+        gnc_split_register_redraw (reg);
 }
 
 void

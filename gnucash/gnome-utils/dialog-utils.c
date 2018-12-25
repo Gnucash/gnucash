@@ -337,8 +337,8 @@ GtkTreeViewGridLines
 gnc_tree_view_get_grid_lines_pref (void)
 {
     GtkTreeViewGridLines grid_lines;
-    gboolean h_lines = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, "grid-lines-horizontal");
-    gboolean v_lines = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, "grid-lines-vertical");
+    gboolean h_lines = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_GRID_LINES_HORIZONTAL);
+    gboolean v_lines = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_GRID_LINES_VERTICAL);
 
     if (h_lines)
     {

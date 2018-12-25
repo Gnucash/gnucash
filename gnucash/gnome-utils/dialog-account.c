@@ -230,12 +230,13 @@ gnc_account_to_ui(AccountWindow *aw)
 
     string = xaccAccountGetColor (account);
 
-    if ((string == NULL) || (g_strcmp0 ("Not Set", string) == 0))
+    if (!string)
         string = DEFAULT_COLOR;
-    if (gdk_rgba_parse(&color, string))
-    {
-        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(aw->color_entry_button), &color);
-    }
+
+    if (!gdk_rgba_parse (&color, string))
+        gdk_rgba_parse (&color, DEFAULT_COLOR);
+
+    gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(aw->color_entry_button), &color);
 
     commodity = xaccAccountGetCommodity (account);
     gnc_general_select_set_selected (GNC_GENERAL_SELECT (aw->commodity_edit),
@@ -380,12 +381,19 @@ gnc_ui_to_account(AccountWindow *aw)
 
     gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(aw->color_entry_button), &color );
     string = gdk_rgba_to_string(&color);
+
     if (g_strcmp0 (string, DEFAULT_COLOR) == 0)
-        string = "Not Set";
+        string = NULL;
 
     old_string = xaccAccountGetColor (account);
-    if (g_strcmp0 (string, old_string) != 0)
-        xaccAccountSetColor (account, string);
+
+    if (!string && old_string)
+        xaccAccountSetColor (account, ""); // remove entry
+    else
+    {
+        if (g_strcmp0 (string, old_string) != 0)
+            xaccAccountSetColor (account, string); // update entry
+    }
 
     commodity = (gnc_commodity *)
                 gnc_general_select_get_selected (GNC_GENERAL_SELECT (aw->commodity_edit));
@@ -2094,15 +2102,23 @@ default_color_button_cb (GtkButton *button, gpointer user_data)
 static void
 update_account_color (Account *acc, const gchar *old_color, const gchar *new_color, gboolean replace)
 {
-    // check to see if the color has been changed
-    if (g_strcmp0 (new_color, old_color) != 0)
+    PINFO("Account is '%s', old_color is '%s', new_color is '%s', replace is %d",
+            xaccAccountGetName (acc), old_color, new_color, replace);
+
+    // have a new color, update if we can
+    if (new_color)
     {
-        if ((old_color == NULL) || (g_strcmp0 (old_color, "Not Set") == 0) || (replace == TRUE))
+        if (!old_color || replace)
         {
-             xaccAccountBeginEdit (acc);
-             xaccAccountSetColor (acc, new_color);
-             xaccAccountCommitEdit (acc);
+            // check to see if the color is different from old one
+            if (g_strcmp0 (new_color, old_color) != 0)
+                xaccAccountSetColor (acc, new_color);
         }
+    }
+    else // change from a color to default one, remove color entry if we can
+    {
+        if (old_color && replace)
+            xaccAccountSetColor (acc, ""); // remove entry
     }
 }
 
@@ -2114,7 +2130,7 @@ gnc_account_cascade_color_dialog (GtkWidget *window, Account *account)
     GtkWidget *color_label, *color_button, *over_write, *color_button_default;
     gchar *string;
     const char *color_string;
-    gchar *old_color_string;
+    gchar *old_color_string = NULL;
     GdkRGBA color;
     gint response;
 
@@ -2144,14 +2160,16 @@ gnc_account_cascade_color_dialog (GtkWidget *window, Account *account)
 
     color_string = xaccAccountGetColor (account); // get existing account color
 
-    old_color_string = g_strdup (color_string); // save the old color string
-
-    if ((color_string == NULL) || (g_strcmp0 (color_string, "Not Set") == 0))
+    if (!color_string)
         color_string = DEFAULT_COLOR;
+    else
+       old_color_string = g_strdup (color_string); // save the old color string
+
+    if (!gdk_rgba_parse (&color, color_string))
+        gdk_rgba_parse (&color, DEFAULT_COLOR);
 
     // set the color chooser to account color
-    if (gdk_rgba_parse (&color, color_string))
-        gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER(color_button), &color);
+    gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER(color_button), &color);
 
     /* default to cancel */
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
@@ -2175,18 +2193,18 @@ gnc_account_cascade_color_dialog (GtkWidget *window, Account *account)
         new_color_string = gdk_rgba_to_string (&new_color);
 
         if (g_strcmp0 (new_color_string, DEFAULT_COLOR) == 0)
-            new_color_string = "Not Set";
+            new_color_string = NULL;
 
         // check/update selected account
         update_account_color (account, old_color_string, new_color_string, replace);
 
-        if (accounts != NULL)
+        if (accounts)
         {
             for (acct = accounts; acct; acct = g_list_next(acct))
             {
                 const char *string = xaccAccountGetColor (acct->data);
 
-                // check/update sub-account
+                // check/update sub-accounts
                 update_account_color (acct->data, string, new_color_string, replace);
             }
             g_list_free (accounts);

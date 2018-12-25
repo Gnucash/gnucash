@@ -45,6 +45,7 @@
 #include "gnc-window.h"
 #include "gnc-plugin-file-history.h"
 #include "qof.h"
+#include "Scrub.h"
 #include "TransLog.h"
 #include "gnc-session.h"
 #include "gnc-state.h"
@@ -1023,6 +1024,12 @@ RESTART:
         gnc_warning_dialog(parent, "%s", message);
         g_free ( message );
     }
+
+    // Fix account color slots being set to 'Not Set', should run once on a book
+    qof_event_suspend();
+    xaccAccountScrubColorNotSet (gnc_get_current_book());
+    qof_event_resume();
+
     return TRUE;
 }
 

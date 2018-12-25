@@ -1114,15 +1114,15 @@ xaccTransScrubCurrency (Transaction *trans)
                 }
                 else
                 {
-		    gnc_commodity *currency = xaccAccountGetCommodity(split->acc);
+                    gnc_commodity *currency = xaccAccountGetCommodity(split->acc);
                     PWARN ("setting to split=\"%s\" account=\"%s\" commodity=\"%s\"",
                            split->memo, xaccAccountGetName(split->acc),
                            gnc_commodity_get_mnemonic(currency));
 
-		    xaccTransBeginEdit (trans);
-		    xaccTransSetCurrency (trans, currency);
-		    xaccTransCommitEdit (trans);
-		    return;
+                    xaccTransBeginEdit (trans);
+                    xaccTransSetCurrency (trans, currency);
+                    xaccTransCommitEdit (trans);
+                    return;
                 }
             }
         }
@@ -1350,6 +1350,42 @@ xaccAccountScrubKvp (Account *account)
         qof_instance_slot_delete (QOF_INSTANCE (account), "placeholder");
 
     qof_instance_slot_delete_if_empty (QOF_INSTANCE (account), "hbci");
+}
+
+/* ================================================================ */
+
+void
+xaccAccountScrubColorNotSet (QofBook *book)
+{
+    GValue value_s = G_VALUE_INIT;
+
+    // get the run-once value
+    qof_instance_get_kvp (QOF_INSTANCE (book), &value_s, 1, "remove-color-not-set-slots");
+
+    if (G_VALUE_HOLDS_STRING (&value_s) && (strcmp(g_value_get_string (&value_s), "true") == 0))
+        return;
+    else
+    {
+        GValue value_b = G_VALUE_INIT;
+        Account *root = gnc_book_get_root_account (book);
+        GList *accts = gnc_account_get_descendants_sorted (root);
+        GList *ptr;
+
+        for (ptr = accts; ptr; ptr = g_list_next (ptr))
+        {
+            const gchar *color = xaccAccountGetColor (ptr->data);
+
+            if (g_strcmp0 (color, "Not Set") == 0)
+                xaccAccountSetColor (ptr->data, "");
+        }
+        g_list_free (accts);
+
+        g_value_init (&value_b, G_TYPE_BOOLEAN);
+        g_value_set_boolean (&value_b, TRUE);
+
+        // set the run-once value
+        qof_instance_set_kvp (QOF_INSTANCE (book),  &value_b, 1, "remove-color-not-set-slots");
+    }
 }
 
 /* ================================================================ */
