@@ -139,15 +139,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
           (gnc:option-value option)
           (gnc:error "gnc:lookup-option error: " section "/" name))))
   (letrec*
-      ((monetary+ (lambda (a b)
-                    (if (and (gnc:gnc-monetary? a) (gnc:gnc-monetary? b))
-                        (let ((same-currency? (gnc-commodity-equal (gnc:gnc-monetary-commodity a) (gnc:gnc-monetary-commodity b)))
-                              (amount (+ (gnc:gnc-monetary-amount a) (gnc:gnc-monetary-amount b))))
-                          (if same-currency?
-                              (gnc:make-gnc-monetary (gnc:gnc-monetary-commodity a) amount)
-                              (gnc:error "incompatible currencies in monetary+: " a b)))
-                        (gnc:error "wrong arguments for monetary+: " a b))))
-       (myadd (lambda (X Y) (if X (if Y (monetary+ X Y) X) Y)))               ; custom adder which understands #f values
+      ((myadd (lambda (X Y) (if X (if Y (gnc:monetary+ X Y) X) Y)))           ; custom monetary adder which understands #f
        (myneg (lambda (X) (and X (gnc:monetary-neg X))))                      ; custom monetary negator which understands #f
        (accounts (opt-val gnc:pagename-accounts "Accounts"))
        (tax-accounts (opt-val gnc:pagename-accounts "Tax Accounts"))
@@ -155,8 +147,8 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
        (accounts-tax-paid      (filter (lambda (acc) (eq? (xaccAccountGetType acc) ACCT-TYPE-ASSET))     tax-accounts))
        (accounts-sales         (filter (lambda (acc) (eq? (xaccAccountGetType acc) ACCT-TYPE-INCOME))    accounts))
        (accounts-purchases     (filter (lambda (acc) (eq? (xaccAccountGetType acc) ACCT-TYPE-EXPENSE))   accounts))
-       (common-currency (and (opt-val gnc:pagename-general (_ "Common Currency"))             ; if a common currency was specified,
-                             (opt-val gnc:pagename-general (_ "Report's currency"))))         ; use it
+       (common-currency (and (opt-val gnc:pagename-general "Common Currency")             ; if a common currency was specified,
+                             (opt-val gnc:pagename-general "Report's currency")))         ; use it
        (split-date (lambda (s) (xaccTransGetDate (xaccSplitGetParent s))))
        (split-currency (lambda (s) (xaccAccountGetCommodity (xaccSplitGetAccount s))))
        (split-adder (lambda (split accountlist)
@@ -201,13 +193,14 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
        (tax-payable (lambda (s) (myadd (tax-on-sales s) (myneg (tax-on-purchases s))))))
     (append
      ;; each column will be a vector
-     ;; (vector heading
+     ;; (vector heading                                      ;; string
      ;;         calculator-function                          ;; (calculator-function split) to obtain amount
-     ;;         reverse-column?                              ;; unused in GST report
+     ;;         reverse-column?                              ;; #t for income, #f for expense
      ;;         subtotal?                                    ;; #t - all columns need subtotals
      ;;         start-dual-column?                           ;; unused in GST report
      ;;         friendly-heading-fn                          ;; unused in GST report
-     (list (vector "TOTAL SALES"
+     ;; Translators: "TOTAL SALES" refer to Net Sales + GST/VAT on Sales
+     (list (vector (_ "TOTAL SALES")
                    total-sales
                    #t #t #f
                    (lambda (a) "")))
@@ -217,7 +210,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                                     #t #t #f
                                     (lambda (a) "")))
               accounts-sales)
-         (list (vector "Net Sales"
+         (list (vector (_ "Net Sales")
                        sales-without-tax
                        #t #t #f
                        (lambda (a) ""))))
@@ -227,11 +220,12 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                                     #t #t #f
                                     (lambda (a) "")))
               accounts-tax-collected)
-         (list (vector "Tax on Sales"
+         (list (vector (_ "Tax on Sales")
                        tax-on-sales
                        #t #t #f
                        (lambda (a) ""))))
-     (list (vector "TOTAL PURCHASES"
+     ;; Translators: "TOTAL PURCHASES" refer to Net Purchase + GST/VAT on Purchase
+     (list (vector (_ "TOTAL PURCHASES")
                    total-purchases
                    #f #t #f
                    (lambda (a) "")))
@@ -241,7 +235,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                                     #f #t #f
                                     (lambda (a) "")))
               accounts-purchases)
-         (list (vector "Net Purchases"
+         (list (vector (_ "Net Purchases")
                        purchases-without-tax
                        #f #t #f
                        (lambda (a) ""))))
@@ -251,24 +245,27 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                                     #f #t #f
                                     (lambda (a) "")))
               accounts-tax-paid)
-         (list (vector "Tax on Purchases"
+         (list (vector (_ "Tax on Purchases")
                        tax-on-purchases
                        #f #t #f
                        (lambda (a) ""))))
      (if (opt-val gnc:pagename-display (N_ "Remittance amount"))
-         (list (vector "Remittance"
+         ;; Translators: "Remittance" refer to TOTAL SALES - TOTAL PURCHASES in GST Report
+         (list (vector (_ "Remittance")
                        bank-remittance
                        #f #t #f
                        (lambda (a) "")))
          '())
      (if (opt-val gnc:pagename-display (N_ "Net Income"))
-         (list (vector "Net Income"
+         ;; Translators: "Net Income" refer to Net Sales - Net Purchases in GST Report
+         (list (vector (_ "Net Income")
                        net-income
                        #f #t #f
                        (lambda (a) "")))
          '())
      (if (opt-val gnc:pagename-display (N_ "Tax payable"))
-         (list (vector "Tax Payable"
+         ;; Translators: "Tax Payable" refer to the difference GST Sales - GST Purchases
+         (list (vector (_ "Tax Payable")
                        tax-payable
                        #f #t #f
                        (lambda (a) "")))

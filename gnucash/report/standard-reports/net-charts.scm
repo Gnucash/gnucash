@@ -248,16 +248,6 @@
        c report-currency
        (lambda (a b) (exchange-fn a b date))))
 
-    ;; Add two gnc-monetary objects in the same currency.
-    (define (monetary+ a b)
-      (if (and (gnc:gnc-monetary? a) (gnc:gnc-monetary? b))
-          (let ((same-currency? (gnc-commodity-equal (gnc:gnc-monetary-commodity a) (gnc:gnc-monetary-commodity b)))
-                (amount (+ (gnc:gnc-monetary-amount a) (gnc:gnc-monetary-amount b))))
-            (if same-currency?
-                (gnc:make-gnc-monetary (gnc:gnc-monetary-commodity a) amount)
-                (warn "incompatible currencies in monetary+: " a b)))
-          (warn "wrong arguments for monetary+: " a b)))
-
     ;; gets an account alist balances
     ;; output: (list acc bal0 bal1 bal2 ...)
     (define (account->balancelist account)
@@ -297,21 +287,10 @@
         ;;              (list acc2 bal0 bal1 bal2 ...) ...)
         ;; whereby list of balances are gnc-monetary objects
         ;; output: (list <mon-coll0> <mon-coll1> <mon-coll2>)
-        (define list-of-collectors
-          (let loop ((n (length dates)) (result '()))
-            (if (zero? n) result
-                (loop (1- n) (cons (gnc:make-commodity-collector) result)))))
-        (let loop ((lst lst))
-          (when (pair? lst)
-            (let innerloop ((list-of-collectors list-of-collectors)
-                            (list-of-balances (cdar lst)))
-              (when (pair? list-of-balances)
-                ((car list-of-collectors) 'add
-                 (gnc:gnc-monetary-commodity (car list-of-balances))
-                 (gnc:gnc-monetary-amount (car list-of-balances)))
-                (innerloop (cdr list-of-collectors) (cdr list-of-balances))))
-            (loop (cdr lst))))
-        list-of-collectors)
+        (define (call thunk) (thunk))
+        (if (null? lst)
+            (map call (make-list (length dates) gnc:make-commodity-collector))
+            (apply map gnc:monetaries-add (map cdr lst))))
 
       (let loop ((dates dates)
                  (acct-balances (acc-balances->list-of-balances filtered-account-balances))
@@ -358,7 +337,7 @@
                                   dates-list #f))
             (dummy (gnc:report-percent-done 80))
 
-            (difference-balances (map monetary+ minuend-balances subtrahend-balances))
+            (difference-balances (map gnc:monetary+ minuend-balances subtrahend-balances))
 
             (dates-list (if inc-exp?
                             (list-head dates-list (1- (length dates-list)))

@@ -241,21 +241,6 @@
              collector report-currency exchange-fn)
             )
 
-          ;; Add two or more gnc-monetary objects
-          (define (monetary+ a . blist)
-            (if (null? blist)
-                a
-                (let ((b (apply monetary+ blist)))
-                  (if (and (gnc:gnc-monetary? a) (gnc:gnc-monetary? b))
-                      (let ((same-currency? (gnc-commodity-equal (gnc:gnc-monetary-commodity a) (gnc:gnc-monetary-commodity b)))
-                            (amount (gnc-numeric-add (gnc:gnc-monetary-amount a) (gnc:gnc-monetary-amount b) GNC-DENOM-AUTO GNC-RND-ROUND)))
-                        (if same-currency?
-                            (gnc:make-gnc-monetary (gnc:gnc-monetary-commodity a) amount)
-                            (warn "incompatible currencies in monetary+: " a b)))
-                      (warn "wrong arguments for monetary+: " a b)))
-                )
-            )
-
           ;; Convert gnc:monetary to number (used to generate data for the chart)
           (define (monetary->double monetary)
             (gnc-numeric-to-double (gnc:gnc-monetary-amount monetary))
@@ -279,7 +264,7 @@
                     (money-out-collector (cdr (assq 'money-out-collector result)))
                     (money-in (sum-collector money-in-collector))
                     (money-out (sum-collector money-out-collector))
-                    (money-net (monetary+ money-in (gnc:monetary-neg money-out)))
+                    (money-net (gnc:monetary+ money-in (gnc:monetary-neg money-out)))
                     )
                (set! in-list (cons money-in in-list))
                (set! out-list (cons money-out out-list))
@@ -291,18 +276,18 @@
           (if show-in?
               (begin
                 (set! in-list (reverse in-list))
-                (set! total-in (apply monetary+ in-list))
+                (set! total-in (apply gnc:monetary+ in-list))
                 ))
           (if show-out?
               (begin
                 (set! out-list (reverse out-list))
-                (set! total-out (apply monetary+ out-list))
+                (set! total-out (apply gnc:monetary+ out-list))
 		))
 
           (if show-net?
               (begin
                 (set! net-list (reverse net-list))
-                (set! total-net (apply monetary+ net-list))
+                (set! total-net (apply gnc:monetary+ net-list))
                 ))
           (gnc:report-percent-done 90)
 
