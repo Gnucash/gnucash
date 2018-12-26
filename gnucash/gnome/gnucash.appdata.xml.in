@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component>
-  <id type="desktop">org.gnucash.GnuCash</id>
+  <id>org.gnucash.GnuCash</id>
   <launchable type="desktop-id">gnucash.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
