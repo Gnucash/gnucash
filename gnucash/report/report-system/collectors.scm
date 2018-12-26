@@ -18,6 +18,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash report report-system collectors))
+
+(issue-deprecation-warning
+ "(gnucash report report-system collectors) is deprecated.")
+
 (use-modules (srfi srfi-1))
 
 (export make-filter)
