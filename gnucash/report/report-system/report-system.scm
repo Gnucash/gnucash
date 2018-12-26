@@ -75,10 +75,10 @@
 (export gnc:options-add-interval-choice!)
 (export gnc:options-add-account-levels!)
 (export gnc:options-add-account-selection!)
-(export gnc:options-add-include-subaccounts!)
-(export gnc:options-add-group-accounts!)
+(export gnc:options-add-include-subaccounts!) ;deprecated
+(export gnc:options-add-group-accounts!)      ;deprecated
 (export gnc:options-add-currency!)
-(export gnc:options-add-currency-selection!)
+(export gnc:options-add-currency-selection!)  ;deprecated
 (export gnc:options-add-price-source!)
 (export gnc:options-add-plot-size!)
 (export gnc:options-add-marker-choice!)
