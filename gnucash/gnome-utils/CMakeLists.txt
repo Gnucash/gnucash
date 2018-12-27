@@ -214,6 +214,7 @@ add_library (gncmod-gnome-utils
 target_link_libraries(gncmod-gnome-utils gncmod-app-utils gncmod-engine gnc-backend-xml-utils
      ${CMAKE_DL_LIBS} ${GTK3_LDFLAGS} ${LIBSECRET_LDFLAGS} ${GTK_MAC_LDFLAGS})
 
+target_compile_options(gncmod-gnome-utils PRIVATE -Wno-deprecated-declarations)
 target_compile_definitions(gncmod-gnome-utils PUBLIC ${GTK_MAC_CFLAGS_OTHER}
   PRIVATE -DG_LOG_DOMAIN=\"gnc.gui\")
 
