@@ -56,9 +56,9 @@ test_strings strs[] =
     /* basic file tests in posix like environment */
     {
         "/test/path/file.gnucash", FALSE,
-        "file", NULL, NULL, NULL, "/test/path/file.gnucash", 0,
+        NULL, NULL, NULL, NULL, "/test/path/file.gnucash", 0,
         "file:///test/path/file.gnucash",
-        "file:///test/path/file.gnucash", TRUE
+        "file:///test/path/file.gnucash", FALSE
     },
     {
         "file:///test/path/file.gnucash", FALSE,
@@ -82,9 +82,9 @@ test_strings strs[] =
     /* basic file tests in windows environment */
     {
         "c:\\test\\path\\file.gnucash", FALSE,
-        "file", NULL, NULL, NULL, "c:\\test\\path\\file.gnucash", 0,
+        NULL, NULL, NULL, NULL, "c:\\test\\path\\file.gnucash", 0,
         "file://c:\\test\\path\\file.gnucash",
-        "file://c:\\test\\path\\file.gnucash", TRUE
+        "file://c:\\test\\path\\file.gnucash", FALSE
     },
     {
         "file://c:\\test\\path\\file.gnucash", FALSE,

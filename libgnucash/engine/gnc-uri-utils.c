@@ -27,6 +27,34 @@
 #include "gnc-filepath-utils.h"
 #include "qofsession.h"
 
+/* Checks if the given uri is a valid uri
+ */
+gboolean gnc_uri_is_uri (const gchar *uri)
+{
+
+    gchar *protocol = NULL, *hostname = NULL;
+    gchar *username = NULL, *password = NULL;
+    gchar *path     = NULL;
+    gint   port = 0;
+    gboolean is_uri = FALSE;
+
+    gnc_uri_get_components ( uri, &protocol, &hostname, &port,
+                             &username, &password, &path );
+
+    /* For gnucash to consider a uri valid the following must be true:
+     * - protocol and path must not be NULL
+     * - for anything but local filesystem uris, hostname must be valid as well */
+    is_uri = (protocol && path && (gnc_uri_is_file_protocol(protocol) || hostname));
+
+    g_free (protocol);
+    g_free (hostname);
+    g_free (username);
+    g_free (password);
+    g_free (path);
+
+    return is_uri;
+}
+
 /* Checks if the given protocol is used to refer to a file
  * (as opposed to a network service)
  */
@@ -52,17 +80,19 @@ gboolean gnc_uri_is_known_protocol (const gchar *protocol)
 
 /* Checks if the given protocol is used to refer to a file
  * (as opposed to a network service)
- * For simplicity, handle all unknown protocols as if it were
- * file based protocols. This will avoid password lookups and such.
+ * Note unknown protocols are always considered network protocols.
+ *
+ * *Compatibility note:*
+ * This used to be the other way around before gnucash 3.4. Before
+ * that unknown protocols were always considered local file system
+ * uri protocols.
  */
 gboolean gnc_uri_is_file_protocol (const gchar *protocol)
 {
-    if ( !g_ascii_strcasecmp (protocol, "mysql") ||
-            !g_ascii_strcasecmp (protocol, "postgres")
-       )
-        return FALSE;
-    else
-        return TRUE;
+    return (protocol &&
+            (!g_ascii_strcasecmp (protocol, "file") ||
+             !g_ascii_strcasecmp (protocol, "xml") ||
+             !g_ascii_strcasecmp (protocol, "sqlite3")));
 }
 
 /* Checks if the given uri defines a file
@@ -76,6 +106,37 @@ gboolean gnc_uri_is_file_uri (const gchar *uri)
     g_free ( protocol );
 
     return result;
+}
+
+/* Checks if the given uri is a valid uri
+ */
+gboolean gnc_uri_targets_local_fs (const gchar *uri)
+{
+
+    gchar *protocol = NULL, *hostname = NULL;
+    gchar *username = NULL, *password = NULL;
+    gchar *path     = NULL;
+    gint   port = 0;
+    gboolean is_local_fs = FALSE;
+
+    gnc_uri_get_components ( uri, &protocol, &hostname, &port,
+                             &username, &password, &path );
+
+    /* For gnucash to consider a uri to target the local fs:
+     * path must not be NULL
+     * AND
+     *   protocol should be NULL
+     *   OR
+     *   protocol must be file type protocol (file, xml, sqlite) */
+    is_local_fs = (path && (!protocol || gnc_uri_is_file_protocol(protocol)));
+
+    g_free (protocol);
+    g_free (hostname);
+    g_free (username);
+    g_free (password);
+    g_free (path);
+
+    return is_local_fs;
 }
 
 /* Splits a uri into its separate components */
@@ -103,9 +164,9 @@ void gnc_uri_get_components (const gchar *uri,
     splituri = g_strsplit ( uri, "://", 2 );
     if ( splituri[1] == NULL )
     {
-        /* No protocol means simple file uri */
-        *protocol = g_strdup ( "file" );
-        *path     = g_strdup ( splituri[0] );
+        /* No protocol means simple file path.
+           Set path to copy of the input. */
+        *path     = g_strdup ( uri );
         g_strfreev ( splituri );
         return;
     }

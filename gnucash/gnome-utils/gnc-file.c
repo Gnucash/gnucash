@@ -208,11 +208,11 @@ show_session_error (GtkWindow *parent,
     {
         displayname = g_strdup(_("(null)"));
     }
-    else if (! gnc_uri_is_file_uri (newfile)) /* Hide the db password in error messages */
+    else if (!gnc_uri_targets_local_fs (newfile)) /* Hide the db password in error messages */
         displayname = gnc_uri_normalize_uri ( newfile, FALSE);
     else
     {
-        /* Strip the protocol from the file name. */
+        /* Strip the protocol from the file name and ensure absolute filename. */
         char *uri = gnc_uri_normalize_uri(newfile, FALSE);
         displayname = gnc_uri_get_path(uri);
         g_free(uri);
@@ -515,7 +515,7 @@ gnc_add_history (QofSession * session)
     if ( !strlen (url) )
         return;
 
-    if ( gnc_uri_is_file_uri ( url ) )
+    if (gnc_uri_targets_local_fs (url))
         file = gnc_uri_get_path ( url );
     else
         file = gnc_uri_normalize_uri ( url, FALSE ); /* Note that the password is not saved in history ! */
@@ -689,8 +689,10 @@ RESTART:
      * function will ask the user to enter a password. The user can
      * cancel this dialog, in which case the open file action will be
      * abandoned.
+     * Note newfile is normalized uri so we can safely call
+     * gnc_uri_is_file_protocol on it.
      */
-    if ( !gnc_uri_is_file_protocol (protocol) && !password)
+    if (!gnc_uri_is_file_protocol (protocol) && !password)
     {
         gboolean have_valid_pw = FALSE;
         have_valid_pw = gnc_keyring_get_password ( NULL, protocol, hostname, port,
@@ -774,10 +776,11 @@ RESTART:
                      );
         int rc;
 
-        if (! gnc_uri_is_file_uri (newfile)) /* Hide the db password in error messages */
+        /* Hide the db password and local filesystem schemes in error messages */
+        if (!gnc_uri_is_file_uri (newfile))
             displayname = gnc_uri_normalize_uri ( newfile, FALSE);
         else
-            displayname = g_strdup (newfile);
+            displayname = gnc_uri_get_path (newfile);
 
         dialog = gtk_message_dialog_new(parent,
                                         0,
@@ -1050,7 +1053,7 @@ gnc_file_open (GtkWindow *parent)
     if (!gnc_file_query_save (parent, TRUE))
         return FALSE;
 
-    if ( last && gnc_uri_is_file_uri ( last ) )
+    if ( last && gnc_uri_targets_local_fs (last))
     {
         gchar *filepath = gnc_uri_get_path ( last );
         default_dir = g_path_get_dirname( filepath );
@@ -1099,7 +1102,7 @@ gnc_file_export (GtkWindow *parent)
     ENTER(" ");
 
     last = gnc_history_get_last();
-    if ( last && gnc_uri_is_file_uri ( last ) )
+    if ( last && gnc_uri_targets_local_fs (last))
     {
         gchar *filepath = gnc_uri_get_path ( last );
         default_dir = g_path_get_dirname( filepath );
@@ -1198,7 +1201,9 @@ gnc_file_do_export(GtkWindow *parent, const char * filename)
         newfile = norm_file;
     }
 
-    /* Some extra steps for file based uri's only */
+    /* Some extra steps for file based uri's only
+     * Note newfile is normalized uri so we can safely call
+     * gnc_uri_is_file_protocol on it. */
     if (gnc_uri_is_file_protocol(protocol))
     {
         if (check_file_path (path))
@@ -1360,7 +1365,7 @@ gnc_file_save_as (GtkWindow *parent)
     ENTER(" ");
 
     last = gnc_history_get_last();
-    if ( last && gnc_uri_is_file_uri ( last ) )
+    if ( last && gnc_uri_targets_local_fs (last))
     {
         gchar *filepath = gnc_uri_get_path ( last );
         default_dir = g_path_get_dirname( filepath );
@@ -1430,7 +1435,9 @@ gnc_file_do_save_as (GtkWindow *parent, const char* filename)
         newfile = norm_file;
     }
 
-    /* Some extra steps for file based uri's only */
+    /* Some extra steps for file based uri's only
+     * Note newfile is normalized uri so we can safely call
+     * gnc_uri_is_file_protocol on it. */
     if (gnc_uri_is_file_protocol(protocol))
     {
         if (check_file_path (path))

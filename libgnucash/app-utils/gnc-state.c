@@ -97,7 +97,7 @@ gnc_state_set_base (const QofSession *session)
     guid = qof_entity_get_guid(QOF_INSTANCE(book));
     guid_to_string_buff(guid, guid_string);
 
-    if (gnc_uri_is_file_uri (uri))
+    if (gnc_uri_targets_local_fs (uri))
     {
         /* The book_uri is a true file, use its basename. */
         gchar *path = gnc_uri_get_path (uri);

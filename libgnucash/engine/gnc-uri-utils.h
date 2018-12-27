@@ -34,6 +34,25 @@
  *  (being protocol, host name, port, user name, password and path) or
  *  to compose a uri from these separate components.
  *
+ *  A full uri can be described as:
+ *
+ *  @li @c proto://[[username[:password]@]hostname[:port]]/path (universal uri)
+ *  @li @c file://[localhost]/path (uri refering to a file on the local file system)
+ *
+ *  Anything in square brackets is optional.
+ *
+ *  While not strictly uris this function will also accept input in the form
+ *  of a local file system path for convenience:
+ *
+ *  @li @c some/filesystem/path A simple relative file system path (unix style)
+ *  @li @c /some/filesystem/path A simple absolute file system path (unix style)
+ *  @li @c some\\windows\\path A simple relative file system path (Windows style)
+ *  @li @c c:\\some\\windows\\path A simple file system path (Windows style)
+ *
+ *  The local path will then be considered as the path component of a uri where
+ *  appropriate. In case of conversion from a file system path to a uri the relative
+ *  paths will be converted to absolute paths as uris don't allow relative paths.
+ *
  */
 
 #ifndef GNCURIUTILS_H_
@@ -42,33 +61,35 @@
 #define GNC_DATAFILE_EXT ".gnucash"
 #define GNC_LOGFILE_EXT  ".log"
 
+/** Checks if the given uri is a valid uri
+ *
+ *  A valid uri is defined by having at least a protocol and a path.
+ *  If the uri is not referring to a file on the local file system
+ *  a hostname should be set as well.
+ *
+ *  @param uri The uri to check
+ *
+ *  @return TRUE if the input is a valid uri, FALSE otherwise
+ */
+gboolean gnc_uri_is_uri (const gchar *uri);
+
 /** Converts a uri in separate components.
- *
- *  Uri's can take any of the following forms:
- *
- *  @li @c /some/filesystem/path A simple file system path (unix style)
- *  @li @c c:\\some\\windows\\path A simple file system path (Windows style)
- *  @li @c proto://[[username[:password]@]hostname[:port]]/path (universal uri)
- *
- *  In the last form, anything in square brackets is optional.
- *
+  *
  *  The function allocates memory for each of the components that it finds
  *  in the uri. The calling function should free this memory with g_free
- *  if the items are no longer needed.
+ *  when the items are no longer needed.
  *
  *  @param uri The uri to convert
  *
  *  @param protocol The protocol for this uri. If the uri didn't have an
- *  explicit protocol, 'file' will be the assumed protocol and hence what
- *  will be returned.
+ *  explicit protocol, NULL will be returned.
  *  @param hostname The host name of the server to connect to. In case of
- *  the 'file' protocol, this will be NULL
+ *  the local file system path, NULL will be returned
  *  @param port An optional port to connect to or 0 if the default port is to
- *  be used. For the 'file' protocol this is always 0 as well.
+ *  be used. For local filesystem path this is always 0 as well.
  *  @param username Optional user name found in this uri or NULL if none is found.
  *  @param password Optional password found in this uri or NULL if none is found.
- *  @param path The path found in this uri. Note that if the protocol is a file based
- *  protocol, the path will be converted to an absolute path.
+ *  @param path The path found in this uri.
  *
  */
 
@@ -82,34 +103,18 @@ void gnc_uri_get_components (const gchar *uri,
 
 /** Extracts the protocol from a uri
  *
- *  Uri's can take any of the following forms:
- *
- *  @li @c /some/filesystem/path A simple file system path (unix style)
- *  @li @c c:\\some\\windows\\path A simple file system path (Windows style)
- *  @li @c proto://[[username[:password]@]hostname[:port]]/path (universal uri)
- *
- *  In the last form, anything in square brackets is optional.
- *
  *  The function allocates memory for the protocol. The calling function should
  *  free this memory with g_free if it no longer needs the string.
  *
  *  @param uri The uri to extract the protocol from
  *
  *  @return The protocol for this uri. If the uri didn't have an
- *  explicit protocol, 'file' will be returned as protocol.
+ *  explicit protocol, NULL will be returned.
  */
 
 gchar *gnc_uri_get_protocol (const gchar *uri);
 
 /** Extracts the path part from a uri
- *
- *  Uri's can take any of the following forms:
- *
- *  @li @c /some/filesystem/path A simple file system path (unix style)
- *  @li @c c:\\some\\windows\\path A simple file system path (Windows style)
- *  @li @c proto://[[username[:password]@]hostname[:port]]/path (universal uri)
- *
- *  In the last form, anything in square brackets is optional.
  *
  *  The function allocates memory for the path. The calling function should
  *  free this memory with g_free if it no longer needs the string.
@@ -160,8 +165,8 @@ gchar *gnc_uri_create_uri (const gchar *protocol,
 /** Composes a normalized uri starting from any uri (filename, db spec,...).
  *
  *  The resulting uri will take either of these forms:
- *  @li @c file:///some/absolute/path (file could also be xml or sqlite)
- *  @li @c file://c:\\some\\windows\\path (file could also be xml or sqlite)
+ *  @li @c file:///some/absolute/path ('file' can also be xml or sqlite)
+ *  @li @c file://c:\\some\\windows\\path ('file' can also be xml or sqlite)
  *  @li @c protocol://[user[:password]@]hostname[:port]/path
  *
  *  Only the components that are provided will be inserted in the uri. The
@@ -182,6 +187,19 @@ gchar *gnc_uri_create_uri (const gchar *protocol,
 gchar *gnc_uri_normalize_uri (const gchar *uri, gboolean allow_password);
 
 
+/** Checks if the given uri is a valid uri
+ *
+ *  A valid uri is defined by having at least a protocol and a path.
+ *  If the uri is not referring to a file on the local file system
+ *  a hostname should be set as well.
+ *
+ *  @param uri The uri to check
+ *
+ *  @return TRUE if the input is a valid uri, FALSE otherwise
+ */
+gboolean gnc_uri_is_uri (const gchar *uri);
+
+
 /** Checks if there is a backend that explicitly stated to handle the given protocol.
  *
  *  @param protocol The protocol to check
@@ -189,6 +207,7 @@ gchar *gnc_uri_normalize_uri (const gchar *uri, gboolean allow_password);
  *  @return TRUE if at least one backend explicitly handles this protocol, otherwise FALSE
  */
 gboolean gnc_uri_is_known_protocol (const gchar *protocol);
+
 
 /** Checks if the given protocol is used to refer to a file
  *  (as opposed to a network service like a database or web url)
@@ -209,6 +228,19 @@ gboolean gnc_uri_is_file_protocol (const gchar *protocol);
  *  is normally used with network services (database, web url,...)
  */
 gboolean gnc_uri_is_file_uri (const gchar *uri);
+
+/** Checks if the given uri is either a valid file uri or a local filesystem path
+ *
+ *  A valid uri is defined by having at least a protocol and a path.
+ *  If the uri is not referring to a file on the local file system
+ *  a hostname should be set as well.
+ *
+ *  @param uri The uri to check
+ *
+ *  @return TRUE if the input is a valid file uri or a local filesystem path.
+ *  FALSE otherwise
+ */
+gboolean gnc_uri_targets_local_fs (const gchar *uri);
 
 /** Adds an extension to the uri if:
  *  * the uri is not empty and file based
