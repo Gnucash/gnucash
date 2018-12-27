@@ -30,7 +30,7 @@
 #include <unittest-support.h>
 #include "gnc-uri-utils.h"
 
-static const gchar *suitename = "engine/uri-utils";
+static const gchar *suitename = "/engine/uri-utils";
 void test_suite_gnc_uri_utils(void);
 
 struct test_strings_struct
