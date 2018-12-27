@@ -152,11 +152,11 @@ struct UriStrings
 
 UriStrings::UriStrings(const std::string& uri)
 {
-    gchar *protocol, *host, *username, *password, *dbname;
+    gchar *scheme, *host, *username, *password, *dbname;
     int portnum;
-    gnc_uri_get_components(uri.c_str(), &protocol, &host, &portnum, &username,
+    gnc_uri_get_components(uri.c_str(), &scheme, &host, &portnum, &username,
                            &password, &dbname);
-    m_protocol = std::string{protocol};
+    m_protocol = std::string{scheme};
     m_host = std::string{host};
     m_dbname = std::string{dbname};
     if (username)
@@ -164,7 +164,7 @@ UriStrings::UriStrings(const std::string& uri)
     if (password)
         m_password = std::string{password};
     m_portnum = portnum;
-    g_free(protocol);
+    g_free(scheme);
     g_free(host);
     g_free(username);
     g_free(password);

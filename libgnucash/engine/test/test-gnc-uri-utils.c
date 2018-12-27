@@ -230,14 +230,14 @@ test_gnc_uri_get_components()
 
 /* TEST: gnc_uri_get_protocol */
 static void
-test_gnc_uri_get_protocol()
+test_gnc_uri_get_scheme()
 {
     int i;
     for (i = 0; strs[i].uri != NULL; i++)
     {
         gchar *tprotocol = NULL;
 
-        tprotocol = gnc_uri_get_protocol( strs[i].uri );
+        tprotocol = gnc_uri_get_scheme( strs[i].uri );
         g_assert_cmpstr ( tprotocol, ==, strs[i].protocol );
         g_free(tprotocol);
     }
@@ -293,14 +293,14 @@ test_gnc_uri_normalize_uri()
 
 /* TEST: gnc_uri_is_file_protocol */
 static void
-test_gnc_uri_is_file_protocol()
+test_gnc_uri_is_file_scheme()
 {
     int i;
     for (i = 0; strs[i].uri != NULL; i++)
     {
         gboolean tis_file_protocol;
 
-        tis_file_protocol = gnc_uri_is_file_protocol( strs[i].protocol );
+        tis_file_protocol = gnc_uri_is_file_scheme( strs[i].protocol );
         g_assert_true ( tis_file_protocol == strs[i].is_file_protocol );
     }
 }
@@ -323,11 +323,11 @@ void
 test_suite_gnc_uri_utils(void)
 {
     GNC_TEST_ADD_FUNC(suitename, "gnc_uri_get_components()", test_gnc_uri_get_components);
-    GNC_TEST_ADD_FUNC(suitename, "gnc_uri_get_protocol()", test_gnc_uri_get_protocol);
+    GNC_TEST_ADD_FUNC(suitename, "gnc_uri_get_scheme()", test_gnc_uri_get_scheme);
     GNC_TEST_ADD_FUNC(suitename, "gnc_uri_get_path()", test_gnc_uri_get_path);
     GNC_TEST_ADD_FUNC(suitename, "gnc_uri_create_uri()", test_gnc_uri_create_uri);
     GNC_TEST_ADD_FUNC(suitename, "gnc_uri_normalize_uri()", test_gnc_uri_normalize_uri);
-    GNC_TEST_ADD_FUNC(suitename, "gnc_uri_is_file_protocol()", test_gnc_uri_is_file_protocol);
+    GNC_TEST_ADD_FUNC(suitename, "gnc_uri_is_file_scheme()", test_gnc_uri_is_file_scheme);
     GNC_TEST_ADD_FUNC(suitename, "gnc_uri_is_file_uri()", test_gnc_uri_is_file_uri);
 
 }

@@ -81,7 +81,7 @@ geturl( FileAccessWindow* faw )
     gchar* path = NULL;
 
     type = gtk_combo_box_text_get_active_text (faw->cb_uri_type);
-    if (gnc_uri_is_file_protocol (type))
+    if (gnc_uri_is_file_scheme (type))
     {
         path = gtk_file_chooser_get_filename (faw->fileChooser);
         if ( !path ) /* file protocol was chosen but no filename was set */

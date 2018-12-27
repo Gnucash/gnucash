@@ -107,17 +107,17 @@ gnc_state_set_base (const QofSession *session)
     else
     {
         /* The book_uri is composed of database connection parameters. */
-        gchar* protocol = NULL;
+        gchar* scheme = NULL;
         gchar* host = NULL;
         gchar* dbname = NULL;
         gchar* username = NULL;
         gchar* password = NULL;
         gint portnum = 0;
-        gnc_uri_get_components (uri, &protocol, &host, &portnum,
+        gnc_uri_get_components (uri, &scheme, &host, &portnum,
                                 &username, &password, &dbname);
 
-        basename = g_strjoin ("_", protocol, host, username, dbname, NULL);
-        g_free (protocol);
+        basename = g_strjoin ("_", scheme, host, username, dbname, NULL);
+        g_free (scheme);
         g_free (host);
         g_free (username);
         g_free (password);

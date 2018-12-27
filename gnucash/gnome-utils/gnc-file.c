@@ -658,7 +658,7 @@ gnc_post_file_open (GtkWindow *parent, const char * filename, gboolean is_readon
     char * newfile;
     QofBackendError io_err = ERR_BACKEND_NO_ERR;
 
-    gchar *protocol = NULL;
+    gchar *scheme   = NULL;
     gchar *hostname = NULL;
     gchar *username = NULL;
     gchar *password = NULL;
@@ -681,7 +681,7 @@ RESTART:
         return FALSE;
     }
 
-    gnc_uri_get_components (newfile, &protocol, &hostname,
+    gnc_uri_get_components (newfile, &scheme, &hostname,
                             &port, &username, &password, &path);
 
     /* If the file to open is a database, and no password was given,
@@ -690,24 +690,24 @@ RESTART:
      * cancel this dialog, in which case the open file action will be
      * abandoned.
      * Note newfile is normalized uri so we can safely call
-     * gnc_uri_is_file_protocol on it.
+     * gnc_uri_is_file_scheme on it.
      */
-    if (!gnc_uri_is_file_protocol (protocol) && !password)
+    if (!gnc_uri_is_file_scheme (scheme) && !password)
     {
         gboolean have_valid_pw = FALSE;
-        have_valid_pw = gnc_keyring_get_password ( NULL, protocol, hostname, port,
+        have_valid_pw = gnc_keyring_get_password ( NULL, scheme, hostname, port,
                         path, &username, &password );
         if (!have_valid_pw)
             return FALSE;
 
         /* Got password. Recreate the uri to use internally. */
         g_free ( newfile );
-        newfile = gnc_uri_create_uri ( protocol, hostname, port,
+        newfile = gnc_uri_create_uri ( scheme, hostname, port,
                                        username, password, path);
     }
 
     /* For file based uri's, remember the directory as the default. */
-    if (gnc_uri_is_file_protocol(protocol))
+    if (gnc_uri_is_file_scheme(scheme))
     {
         gchar *default_dir = g_path_get_dirname(path);
         gnc_set_default_directory (GNC_PREFS_GROUP_OPEN_SAVE, default_dir);
@@ -868,8 +868,8 @@ RESTART:
         /* If the new "file" is a database, attempt to store the password
          * in a keyring. GnuCash itself will not save it.
          */
-        if ( !gnc_uri_is_file_protocol (protocol))
-            gnc_keyring_set_password ( protocol, hostname, port,
+        if ( !gnc_uri_is_file_scheme (scheme))
+            gnc_keyring_set_password ( scheme, hostname, port,
                                        path, username, password );
 
         xaccLogDisable();
@@ -967,7 +967,7 @@ RESTART:
         }
     }
 
-    g_free (protocol);
+    g_free (scheme);
     g_free (hostname);
     g_free (username);
     g_free (password);
@@ -1164,7 +1164,7 @@ gnc_file_do_export(GtkWindow *parent, const char * filename)
     gchar *newfile;
     const gchar *oldfile;
 
-    gchar *protocol = NULL;
+    gchar *scheme   = NULL;
     gchar *hostname = NULL;
     gchar *username = NULL;
     gchar *password = NULL;
@@ -1185,17 +1185,17 @@ gnc_file_do_export(GtkWindow *parent, const char * filename)
 
     newfile = gnc_uri_add_extension (norm_file, GNC_DATAFILE_EXT);
     g_free (norm_file);
-    gnc_uri_get_components (newfile, &protocol, &hostname,
+    gnc_uri_get_components (newfile, &scheme, &hostname,
                             &port, &username, &password, &path);
 
     /* Save As can't use the generic 'file' protocol. If the user didn't set
      * a specific protocol, assume the default 'xml'.
      */
-    if (g_strcmp0 (protocol, "file") == 0)
+    if (g_strcmp0 (scheme, "file") == 0)
     {
-        g_free (protocol);
-        protocol = g_strdup ("xml");
-        norm_file = gnc_uri_create_uri (protocol, hostname, port,
+        g_free (scheme);
+        scheme = g_strdup ("xml");
+        norm_file = gnc_uri_create_uri (scheme, hostname, port,
                                         username, password, path);
         g_free (newfile);
         newfile = norm_file;
@@ -1203,8 +1203,8 @@ gnc_file_do_export(GtkWindow *parent, const char * filename)
 
     /* Some extra steps for file based uri's only
      * Note newfile is normalized uri so we can safely call
-     * gnc_uri_is_file_protocol on it. */
-    if (gnc_uri_is_file_protocol(protocol))
+     * gnc_uri_is_file_scheme on it. */
+    if (gnc_uri_is_file_scheme (scheme))
     {
         if (check_file_path (path))
         {
@@ -1395,7 +1395,7 @@ gnc_file_do_save_as (GtkWindow *parent, const char* filename)
     gchar *newfile;
     const gchar *oldfile;
 
-    gchar *protocol = NULL;
+    gchar *scheme   = NULL;
     gchar *hostname = NULL;
     gchar *username = NULL;
     gchar *password = NULL;
@@ -1419,17 +1419,17 @@ gnc_file_do_save_as (GtkWindow *parent, const char* filename)
 
     newfile = gnc_uri_add_extension (norm_file, GNC_DATAFILE_EXT);
     g_free (norm_file);
-    gnc_uri_get_components (newfile, &protocol, &hostname,
+    gnc_uri_get_components (newfile, &scheme, &hostname,
                             &port, &username, &password, &path);
 
     /* Save As can't use the generic 'file' protocol. If the user didn't set
      * a specific protocol, assume the default 'xml'.
      */
-    if (g_strcmp0 (protocol, "file") == 0)
+    if (g_strcmp0 (scheme, "file") == 0)
     {
-        g_free (protocol);
-        protocol = g_strdup ("xml");
-        norm_file = gnc_uri_create_uri (protocol, hostname, port,
+        g_free (scheme);
+        scheme = g_strdup ("xml");
+        norm_file = gnc_uri_create_uri (scheme, hostname, port,
                                         username, password, path);
         g_free (newfile);
         newfile = norm_file;
@@ -1437,8 +1437,8 @@ gnc_file_do_save_as (GtkWindow *parent, const char* filename)
 
     /* Some extra steps for file based uri's only
      * Note newfile is normalized uri so we can safely call
-     * gnc_uri_is_file_protocol on it. */
-    if (gnc_uri_is_file_protocol(protocol))
+     * gnc_uri_is_file_scheme on it. */
+    if (gnc_uri_is_file_scheme (scheme))
     {
         if (check_file_path (path))
         {
@@ -1538,8 +1538,8 @@ gnc_file_do_save_as (GtkWindow *parent, const char* filename)
     /* If the new "file" is a database, attempt to store the password
      * in a keyring. GnuCash itself will not save it.
      */
-    if ( !gnc_uri_is_file_protocol (protocol))
-        gnc_keyring_set_password ( protocol, hostname, port,
+    if ( !gnc_uri_is_file_scheme (scheme))
+        gnc_keyring_set_password ( scheme, hostname, port,
                                    path, username, password );
 
     /* Prevent race condition between swapping the contents of the two
