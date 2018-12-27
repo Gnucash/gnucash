@@ -1,12 +1,12 @@
 set(scm_test_standard_reports_SOURCES
   test-cash-flow.scm
   test-cashflow-barchart.scm
-  test-standard-net-barchart.scm
 )
 
 set(scm_test_with_srfi64_SOURCES
   test-standard-category-report.scm
   test-standard-net-linechart.scm
+  test-standard-net-barchart.scm
   test-charts.scm
   test-transaction.scm
   test-balsheet-pnl.scm
