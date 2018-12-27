@@ -568,9 +568,9 @@ set(CMAKE_CXX_FLAGS "-std=gnu++11 ${CMAKE_CXX_FLAGS}")  # FIXME: should be -std=
 
 if (UNIX)
   set( CMAKE_C_FLAGS "-Werror -Wdeclaration-after-statement -Wno-pointer-sign -Wall -Wmissing-prototypes -Wmissing-declarations -Wno-unused ${CMAKE_C_FLAGS}")
-  set( CMAKE_C_FLAGS "-Wno-deprecated-declarations -std=gnu11 -Wno-error=parentheses ${CMAKE_C_FLAGS}")
+  set( CMAKE_C_FLAGS "-Wno-error=deprecated-declarations -std=gnu11 -Wno-error=parentheses ${CMAKE_C_FLAGS}")
   set( CMAKE_CXX_FLAGS "-Werror -Wall -Wmissing-declarations -Wno-unused -Wno-error=parentheses ${CMAKE_CXX_FLAGS}")
-  set( CMAKE_CXX_FLAGS "-Wno-deprecated-declarations ${REGISTER_CXXFLAG} ${CMAKE_CXX_FLAGS}")
+  set( CMAKE_CXX_FLAGS "-Wno-error=deprecated-declarations ${REGISTER_CXXFLAG} ${CMAKE_CXX_FLAGS}")
   set( CMAKE_C_FLAGS_RELEASE "-O3 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 ${CMAKE_C_FLAGS}")
 endif (UNIX)
 if (MINGW)
