@@ -217,7 +217,6 @@ gnc_add_test_with_guile(test-scm-query test-scm-query.cpp ENGINE_TEST_INCLUDE_DI
 set(engine_test_SCHEME
   test-account.scm
   test-create-account.scm
-  test-test-extras.scm
   test-split.scm
   )
 
@@ -315,7 +314,6 @@ set(test_engine_SCHEME_DIST
         test-extras.scm
         test-scm-query-import.scm
         test-split.scm
-        test-test-extras.scm
 )
 
 set(test_engine_EXTRA_DIST
