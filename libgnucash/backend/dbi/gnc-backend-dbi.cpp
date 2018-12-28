@@ -659,31 +659,54 @@ GncDbiBackend<Type>::session_begin (QofSession* session, const char* book_id,
             LEAVE("Error");
             return;
         }
-        if (create && save_may_clobber_data (conn, uri.quote_dbname(Type)))
+        if (create && save_may_clobber_data<Type>(conn,
+                                                   uri.quote_dbname(Type)))
         {
             if (force)
             {
                 // Drop DB
+                const char *root_db;
                 if (Type == DbType::DBI_PGSQL)
-                    dbi_conn_select_db (conn, "template1");
+                {
+                    root_db = "template1";
+                }
                 else if (Type == DbType::DBI_MYSQL)
-                    dbi_conn_select_db (conn, "mysql");
+                {
+                    root_db = "mysql";
+                }
                 else
-                    PWARN ("Unknown database type, don't know how to connect to a system database. Dropping existing database may fail.");
-
+                {
+                    PERR ("Unknown database type, can't proceed.");
+                    LEAVE("Error");
+                    return;
+                }
+                if (dbi_conn_select_db (conn, root_db) == -1)
+                {
+                    PERR ("Failed to switch out of %s, drop will fail.",
+                          uri.quote_dbname(Type).c_str());
+                    LEAVE ("Error");
+                    return;
+                }
                 if (!dbi_conn_queryf (conn, "DROP DATABASE %s",
                                  uri.quote_dbname(Type).c_str()))
-                    PWARN ("Failed to drop database %s prior to recreating it. Creation will likely fail.",
+                {
+                    PERR ("Failed to drop database %s prior to recreating it."
+                          "Proceeding would combine old and new data.",
                            uri.quote_dbname(Type).c_str());
+                    LEAVE ("Error");
+                    return;
+                }
             }
             else
             {
                 set_error (ERR_BACKEND_STORE_EXISTS);
-                PWARN ("Databse already exists, Might clobber it.");
+                PWARN ("Database already exists, Might clobber it.");
                 dbi_conn_close(conn);
                 LEAVE("Error");
                 return;
             }
+            /* Drop successful. */
+            m_exists = false;
         }
 
     }
