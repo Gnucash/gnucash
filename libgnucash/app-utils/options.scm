@@ -1718,12 +1718,19 @@
                                         "Sign Reverses?" (cons #f "Sign Reverses")
                                         "To" (cons #f "End Date")
                                         "Charge Type" (cons #f "Action") ;easy-invoice.scm, renamed June 2018
+                                        ;; the following 4 options in income-gst-statement.scm renamed Dec 2018
+                                        "Individual income columns" (cons #f "Individual sales columns")
+                                        "Individual expense columns" (cons #f "Individual purchases columns")
+                                        "Remittance amount" (cons #f "Gross Balance")
+                                        "Net Income" (cons #f "Net Balance")
+                                        ;; transaction.scm:
                                         "Use Full Account Name?" (cons #f "Use Full Account Name")
                                         "Use Full Other Account Name?" (cons #f "Use Full Other Account Name")
                                         "Void Transactions?" (cons "Filter" "Void Transactions")
                                         "Void Transactions" (cons "Filter" "Void Transactions")
                                         "Account Substring" (cons "Filter" "Account Name Filter")
-                                        "Individual Taxes" (cons "#f" "Use Detailed Tax Summary") ;invoice.scm, renamed November 2018
+                                        ;; invoice.scm, renamed November 2018
+                                        "Individual Taxes" (cons "#f" "Use Detailed Tax Summary")
                                         ))
                        (name-match (member name new-names-list)))
 

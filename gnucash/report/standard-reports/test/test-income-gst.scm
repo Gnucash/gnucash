@@ -200,10 +200,10 @@
           (sxml->table-row-col sxml 1 #f 9)))
 
       (set-option! options "Display" "Individual tax columns" #t)
-      (set-option! options "Display" "Individual expense columns" #t)
-      (set-option! options "Display" "Individual income columns" #t)
-      (set-option! options "Display" "Remittance amount" #t)
-      (set-option! options "Display" "Net Income" #t)
+      (set-option! options "Display" "Individual purchases columns" #t)
+      (set-option! options "Display" "Individual sales columns" #t)
+      (set-option! options "Display" "Gross Balance" #t)
+      (set-option! options "Display" "Net Balance" #t)
       (set-option! options "Display" "Tax payable" #t)
       (let ((sxml (options->sxml options "display options enabled")))
         (test-equal "all display columns enabled"

@@ -105,8 +105,8 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
       (gnc:make-simple-boolean-option
        gnc:pagename-display (car l) (cadr l) (caddr l) (cadddr l))))
    (list
-    (list (N_ "Individual income columns")    "p" (N_ "Display individual income columns rather than their sum") #f)
-    (list (N_ "Individual expense columns")   "q" (N_ "Display individual expense columns rather than their sum") #f)
+    (list (N_ "Individual sales columns")     "p" (N_ "Display individual sales columns rather than their sum") #f)
+    (list (N_ "Individual purchases columns") "q" (N_ "Display individual purchases columns rather than their sum") #f)
     (list (N_ "Individual tax columns")       "r" (N_ "Display individual tax columns rather than their sum") #f)
     (list (N_ "Gross Balance")                "s" (N_ "Display the gross balance (gross sales - gross purchases)") #f)
     (list (N_ "Net Balance")                  "t" (N_ "Display the net balance (sales without tax - purchases without tax)") #f)
@@ -198,7 +198,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
      ;; each column will be a vector
      ;; (vector heading                                      ;; string
      ;;         calculator-function                          ;; (calculator-function split) to obtain amount
-     ;;         reverse-column?                              ;; #t for income, #f for expense
+     ;;         reverse-column?                              ;; #t for sales, #f for purchases
      ;;         subtotal?                                    ;; #t - all columns need subtotals
      ;;         start-dual-column?                           ;; unused in GST report
      ;;         friendly-heading-fn                          ;; unused in GST report
@@ -207,7 +207,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                    gross-sales
                    #t #t #f
                    (lambda (a) "")))
-     (if (opt-val gnc:pagename-display (N_ "Individual income columns"))
+     (if (opt-val gnc:pagename-display (N_ "Individual sales columns"))
          (map (lambda (acc) (vector (xaccAccountGetName acc)
                                     (account-adder-neg acc)
                                     #t #t #f
@@ -232,7 +232,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                    gross-purchases
                    #f #t #f
                    (lambda (a) "")))
-     (if (opt-val gnc:pagename-display (N_ "Individual expense columns"))
+     (if (opt-val gnc:pagename-display (N_ "Individual purchases columns"))
          (map (lambda (acc) (vector (xaccAccountGetName acc)
                                     (account-adder acc)
                                     #f #t #f
