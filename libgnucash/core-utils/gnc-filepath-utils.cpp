@@ -68,7 +68,23 @@ extern "C" {
 #include <boost/locale.hpp>
 #include <iostream>
 
-
+/* Below cvt and bfs_locale should be used with boost::filesystem::path (bfs)
+ * objects created alter in this source file. The rationale is as follows:
+ * - a bfs object has an internal, locale and platform dependent
+ *   representation of a file system path
+ * - glib's internal representation is always utf8
+ * - when creating a bfs object, we should pass a cvt to convert from
+ *   utf8 to the object's internal representation
+ * - if we later want to use the bfs object's internal representation
+ *   in a glib context we should imbue the locale below so that
+ *   bfs will use it to convert back to utf8
+ * - if the bfs object's internal representation will never be used
+ *   in a glib context, imbuing is not needed (although probably more
+ *   future proof)
+ * - also note creating a bfs based on another one will inherit the
+ *   locale from the source path. So in that case there's not need
+ *   to imbue it again.
+ */
 #if PLATFORM(WINDOWS)
 #include <codecvt>
 using codecvt = std::codecvt_utf8<wchar_t, 0x10FFFF, std::little_endian>;
