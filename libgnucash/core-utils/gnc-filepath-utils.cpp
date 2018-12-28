@@ -718,14 +718,89 @@ constexpr auto path_package = PACKAGE_NAME;
 constexpr auto path_package = PACKAGE;
 #endif
 
-
-char *
-gnc_filepath_init (void)
+// Initialize the user's config directory for gnucash
+// creating it if it doesn't exist yet.
+static void
+gnc_file_path_init_config_home (void)
 {
-    // Initialize the user's config directory for gnucash
-    gnc_userconfig_home = get_userconfig_home() / path_package;
+    auto have_valid_userconfig_home = false;
 
+    /* If this code is run while building/testing, use a fake GNC_CONFIG_HOME
+     * in the base of the build directory. This is to deal with all kinds of
+     * issues when the build environment is not a complete environment (like
+     * it could be missing a valid home directory). */
+    auto env_build_dir = g_getenv ("GNC_BUILDDIR");
+    bfs::path new_dir(env_build_dir ? env_build_dir : "", cvt);
+    new_dir.imbue(bfs_locale);
+    build_dir = std::move(new_dir);
+    auto running_uninstalled = (g_getenv ("GNC_UNINSTALLED") != NULL);
+    if (running_uninstalled && !build_dir.empty())
+    {
+        gnc_userconfig_home = build_dir / "gnc_config_home";
+        try
+        {
+            gnc_validate_directory (gnc_userconfig_home); // May throw
+            have_valid_userconfig_home = true;
+        }
+        catch (const bfs::filesystem_error& ex)
+        {
+            auto path_string = gnc_userconfig_home.string();
+            g_warning("%s (due to run during at build time) is not a suitable directory for user configuration files. "
+            "Trying another directory instead.\n(Error: %s)",
+                      path_string.c_str(), ex.what());
+        }
+    }
 
+    if (!have_valid_userconfig_home)
+    {
+        /* If environment variable GNC_CONFIG_HOME is set, try whether
+         * it points at a valid directory. */
+        auto gnc_userconfig_home_env = g_getenv ("GNC_CONFIG_HOME");
+        if (gnc_userconfig_home_env)
+        {
+            bfs::path newdir(gnc_userconfig_home_env, cvt);
+            newdir.imbue(bfs_locale);
+            gnc_userconfig_home = std::move(newdir);
+            try
+            {
+                gnc_validate_directory (gnc_userconfig_home); // May throw
+                have_valid_userconfig_home = true;
+            }
+            catch (const bfs::filesystem_error& ex)
+            {
+                auto path_string = gnc_userconfig_home.string();
+                g_warning("%s (from environment variable 'GNC_CONFIG_HOME') is not a suitable directory for user configuration files. "
+                "Trying the default instead.\n(Error: %s)",
+                          path_string.c_str(), ex.what());
+            }
+        }
+    }
+
+    if (!have_valid_userconfig_home)
+    {
+        /* Determine platform dependent default userconfig_home_path
+         * and check whether it's valid */
+        auto userconfig_home = get_userconfig_home();
+        gnc_userconfig_home = userconfig_home / path_package;
+        try
+        {
+            gnc_validate_directory (gnc_userconfig_home);
+        }
+        catch (const bfs::filesystem_error& ex)
+        {
+            g_warning ("User configuration directory doesn't exist, yet could not be created. Proceed with caution.\n"
+            "(Error: %s)", ex.what());
+        }
+    }
+}
+
+// Initialize the user's config directory for gnucash
+// creating it if it didn't exist yet.
+// The function will return true if the directory already
+// existed or false if it had to be created
+static bool
+gnc_file_path_init_data_home (void)
+{
     // Initialize the user's data directory for gnucash
     auto gnc_userdata_home_exists = false;
     auto have_valid_userdata_home = false;
@@ -764,8 +839,8 @@ gnc_filepath_init (void)
         auto gnc_userdata_home_env = g_getenv ("GNC_DATA_HOME");
         if (gnc_userdata_home_env)
         {
-	    bfs::path newdir(gnc_userdata_home_env, cvt);
-	    newdir.imbue(bfs_locale);
+            bfs::path newdir(gnc_userdata_home_env, cvt);
+            newdir.imbue(bfs_locale);
             gnc_userdata_home = std::move(newdir);
             try
             {
@@ -778,7 +853,7 @@ gnc_filepath_init (void)
                 auto path_string = gnc_userdata_home.string();
                 g_warning("%s (from environment variable 'GNC_DATA_HOME') is not a suitable directory for user data. "
                 "Trying the default instead.\n(Error: %s)",
-                path_string.c_str(), ex.what());
+                          path_string.c_str(), ex.what());
             }
         }
     }
@@ -800,6 +875,25 @@ gnc_filepath_init (void)
             "(Error: %s)", ex.what());
         }
     }
+
+    return gnc_userdata_home_exists;
+}
+
+// Initialize the user's config and data directory for gnucash
+// This function will also create these directories if they didn't
+// exist yet.
+// In addition it will trigger a migration if the user's data home
+// didn't exist but the now obsolete GNC_DOT_DIR ($HOME/.gnucash)
+// does.
+// Finally it well ensure a number of default required directories
+// will be created if they don't exist yet.
+char *
+gnc_filepath_init (void)
+{
+    gnc_userconfig_home = get_userconfig_home() / path_package;
+
+    gnc_file_path_init_config_home ();
+    auto gnc_userdata_home_exists = gnc_file_path_init_data_home ();
 
     /* Run migration code before creating the default directories
        If migrating, these default directories are copied instead of created. */
