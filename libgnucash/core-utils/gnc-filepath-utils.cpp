@@ -90,26 +90,6 @@ namespace bfs = boost::filesystem;
 namespace bst = boost::system;
 namespace bl = boost::locale;
 
-/**
- * Scrubs a filename by changing "strange" chars (e.g. those that are not
- * valid in a win32 file name) to "_".
- *
- * @param filename File name - updated in place
- */
-static void
-scrub_filename(char* filename)
-{
-    char* p;
-
-#define STRANGE_CHARS "/:"
-    p = strpbrk(filename, STRANGE_CHARS);
-    while (p)
-    {
-        *p = '_';
-        p = strpbrk(filename, STRANGE_CHARS);
-    }
-}
-
 /** Check if the path exists and is a regular file.
  *
  * \param path -- freed if the path doesn't exist or isn't a regular file
@@ -942,14 +922,22 @@ gnc_build_userdata_path (const gchar *filename)
     return g_strdup((gnc_userdata_dir_as_path() / filename).string().c_str());
 }
 
+/* Test whether c is a valid character for a win32 file name.
+ * If so return false, otherwise return true.
+ */
+static bool
+is_invalid_char (char c)
+{
+    return (c == '/') || ( c == ':');
+}
+
 static bfs::path
 gnc_build_userdata_subdir_path (const gchar *subdir, const gchar *filename)
 {
-    gchar* filename_dup = g_strdup(filename);
+    auto fn = std::string(filename);
 
-    scrub_filename(filename_dup);
-    auto result = (gnc_userdata_dir_as_path() / subdir) / filename_dup;
-    g_free(filename_dup);
+    std::replace_if (fn.begin(), fn.end(), is_invalid_char, '_');
+    auto result = (gnc_userdata_dir_as_path() / subdir) / fn;
     return result;
 }
 
