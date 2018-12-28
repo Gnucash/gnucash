@@ -58,5 +58,4 @@ set_dist_list(test_report_system_DIST
   ${scm_test_report_system_SOURCES}
   test-extras.scm
   test-link-module.c
-  test-test-extras.scm
 )
