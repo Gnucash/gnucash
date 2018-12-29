@@ -448,8 +448,9 @@ GncSqlColumnTableEntryImpl<CT_TIME>::add_to_query(QofIdTypeConst obj_name,
     if (t64 > MINTIME && t64 < MAXTIME)
     {
         GncDateTime time(t64);
-        vec.emplace_back (std::make_pair (std::string{m_col_name},
-                                          time.format_zulu ("'%Y-%m-%d %H:%M:%S'")));
+        std::string timestr("'");
+        timestr += time.format_iso8601() + "'";
+        vec.emplace_back (std::make_pair (std::string{m_col_name}, timestr));
     }
     else
     {

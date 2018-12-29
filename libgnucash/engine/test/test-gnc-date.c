@@ -1407,20 +1407,15 @@ static gchar*
 format_timestring (time64 t, TZOffset tz)
 {
     static const unsigned tzlen = MAX_DATE_LENGTH - 26;
-    char *fmt = "%Y-%m-%d %H:%M:%S %z";
-    struct tm tm;
+    char *fmt = "%Y-%m-%d %H:%M:%S";
+    struct tm *tm;
     char buf[MAX_DATE_LENGTH + 1];
     char tzbuf[tzlen];
     memset(tzbuf, 0, sizeof(tzbuf));
-    gnc_localtime_r(&t, &tm);
-#if PLATFORM(WINDOWS)
-    strftime(tzbuf, sizeof(tzbuf), "%Z", &tm);
-#else
-    strftime(tzbuf, sizeof(tzbuf), "%z", &tm);
-#endif
+    tm = gnc_gmtime(&t);
     memset (buf, 0, sizeof(buf));
-    strftime(buf, sizeof(buf), fmt, &tm);
-
+    strftime(buf, sizeof(buf), fmt, tm);
+    free(tm);
     return g_strdup(buf);
 }
 

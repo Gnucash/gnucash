@@ -35,6 +35,7 @@ extern "C"
 #include "sixtp-utils.h"
 
 #include <kvp-frame.hpp>
+#include <gnc-datetime.hpp>
 
 static QofLogModule log_module = GNC_MOD_IO;
 
@@ -136,13 +137,12 @@ time64_to_dom_tree (const char* tag, const time64 time)
 {
     xmlNodePtr ret;
     g_return_val_if_fail (time != INT64_MAX, NULL);
-    auto date_str = gnc_print_time64 (time, "%Y-%m-%d %H:%M:%S %q");
-    if (!date_str)
+    auto date_str = GncDateTime(time).format_iso8601();
+    if (date_str.empty())
         return NULL;
     ret = xmlNewNode (NULL, BAD_CAST tag);
     xmlNewTextChild (ret, NULL, BAD_CAST "ts:date",
-                     checked_char_cast (date_str));
-    g_free (date_str);
+                     checked_char_cast (const_cast<char*>(date_str.c_str())));
     return ret;
 }
 
