@@ -731,6 +731,8 @@ flawed. see report-utilities.scm. please update reports.")
 ;; returns a commodity collector
 ;; does NOT do currency exchanges
 (define (gnc:account-get-total-flow direction target-account-list from-date to-date)
+  (issue-deprecation-warning
+   "(gnc:account-get-total-flow) is deprecated.")
   (let ((total-flow (gnc:make-commodity-collector)))
     (for-each
      (lambda (target-account)
