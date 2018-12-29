@@ -726,7 +726,7 @@
 (export gnc:account-get-total-flow)
 (export gnc:account-get-pos-trans-total-interval)
 (export gnc:account-get-trans-type-splits-interval)
-(export gnc:double-col)
+(export gnc:double-col)                 ;deprecated
 (export gnc:budget-get-start-date)
 (export gnc:budget-get-end-date)
 (export gnc:budget-account-get-net)

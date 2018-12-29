@@ -852,14 +852,12 @@ flawed. see report-utilities.scm. please update reports.")
           (qof-query-destroy query)
           splits))))
 
-;; utility to assist with double-column balance tables
-;; a request is made with the <req> argument
-;; <req> may currently be 'entry|'debit-q|'credit-q|'zero-q|'debit|'credit
-;; 'debit-q|'credit-q|'zero-q tests the sign of the balance
-;; 'side returns 'debit or 'credit, the column in which to display
-;; 'debt|'credit return the entry, if appropriate, or #f
+;; the following function is only used in trial-balance. best move it
+;; back there, and deprecate this exported function.
 (define (gnc:double-col
 	 req signed-balance report-commodity exchange-fn show-comm?)
+  (issue-deprecation-warning
+   "(gnc:double-col) is deprecated.")
   (let* ((sum (and signed-balance
 		   (gnc:sum-collector-commodity
 		    signed-balance
