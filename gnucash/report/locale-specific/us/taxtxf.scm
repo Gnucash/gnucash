@@ -712,7 +712,7 @@
                               (begin ;; do so
                                 (set! missing-pricedb-entry? #f)
                                 (set! pricedb-lookup-price
-                                        (let ((price (gnc-pricedb-lookup-nearest-in-time-t64
+                                        (let ((price (gnc-pricedb-lookup-nearest-in-time64
                                           pricedb
                                           account-commodity
                                           USD-currency
