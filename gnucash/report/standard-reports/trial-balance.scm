@@ -134,6 +134,47 @@
 (define optname-show-rates (N_ "Show Exchange Rates"))
 (define opthelp-show-rates (N_ "Show the exchange rates used."))
 
+
+;; utility to assist with double-column balance tables
+;; a request is made with the <req> argument
+;; <req> may currently be 'entry|'debit-q|'credit-q|'zero-q|'debit|'credit
+;; 'debit-q|'credit-q|'zero-q tests the sign of the balance
+;; 'side returns 'debit or 'credit, the column in which to display
+;; 'debt|'credit return the entry, if appropriate, or #f
+(define (double-col
+	 req signed-balance report-commodity exchange-fn show-comm?)
+  (let* ((sum (and signed-balance
+		   (gnc:sum-collector-commodity
+		    signed-balance
+		    report-commodity
+		    exchange-fn)))
+	 (amt (and sum (gnc:gnc-monetary-amount sum)))
+	 (neg? (and amt (negative? amt)))
+	 (bal (if neg?
+		  (let ((bal (gnc:make-commodity-collector)))
+		    (bal 'minusmerge signed-balance #f)
+		    bal)
+		  signed-balance))
+	 (bal-sum (gnc:sum-collector-commodity
+		   bal
+		   report-commodity
+		   exchange-fn))
+	 (balance
+	  (if (gnc:uniform-commodity? bal report-commodity)
+	      (if (zero? amt) #f bal-sum)
+	      (if show-comm?
+		  (gnc-commodity-table bal report-commodity exchange-fn)
+		  bal-sum))))
+    (car (assoc-ref
+	  (list
+	   (list 'entry balance)
+	   (list 'debit (if neg? #f balance))
+	   (list 'credit (if neg? balance #f))
+	   (list 'zero-q (if neg? #f (if balance #f #t)))
+	   (list 'debit-q (if neg? #f (if balance #t #f)))
+	   (list 'credit-q (if neg? #t #f)))
+	  req))))
+
 ;; options generator
 (define (trial-balance-options-generator)
   (let* ((options (gnc:new-options))
@@ -441,10 +482,10 @@
 	  ;; with the proper arguments.
 	  ;; (This is used to fill in the Trial Balance columns.)
 	  (define (add-line table label signed-balance)
-	    (let* ((entry (gnc:double-col
+	    (let* ((entry (double-col
 			   'entry signed-balance
 			   report-commodity exchange-fn show-fcur?))
-		   (credit? (gnc:double-col
+		   (credit? (double-col
 			     'credit-q signed-balance
 			     report-commodity exchange-fn show-fcur?))
 		   )
@@ -769,7 +810,7 @@
 				      )
 				 (debit 'merge pos-adjusting #f)
 				 (credit 'merge neg-adjusting #f)
-				 (if (gnc:double-col
+				 (if (double-col
 				      'credit-q pre-adjusting-bal
 				      report-commodity exchange-fn show-fcur?)
 				     (credit 'merge pre-adjusting-bal #f)
@@ -839,10 +880,10 @@
 		     neg-unrealized-gain-collector))
 	       (let* ((ug-row (+ header-rows
 				 (gnc:html-acct-table-num-rows acct-table)))
-                      (credit? (gnc:double-col
+                      (credit? (double-col
                                 'credit-q neg-unrealized-gain-collector
                                 report-commodity exchange-fn show-fcur?))
-                      (entry (gnc:double-col
+                      (entry (double-col
                               'entry neg-unrealized-gain-collector
                               report-commodity exchange-fn show-fcur?))
 		      )
@@ -908,14 +949,14 @@
 				     (gross-bal? (list? bal))
 				     (entry (and bal
 						 (not gross-bal?)
-						 (gnc:double-col
+						 (double-col
 						  'entry bal
 						  report-commodity
 						  exchange-fn
 						  show-fcur?)))
 				     (credit? (and bal
 						   (or gross-bal?
-						       (gnc:double-col
+						       (double-col
 							'credit-q bal
 							report-commodity
 							exchange-fn
@@ -936,7 +977,7 @@
 					      ))
 				     (debit-entry
 				      (and gross-bal?
-					   (gnc:double-col
+					   (double-col
 					    'entry debit
 					    report-commodity
 					    exchange-fn
@@ -944,7 +985,7 @@
 				      )
 				     (credit-entry
 				      (and gross-bal?
-					   (gnc:double-col
+					   (double-col
 					    'entry credit
 					    report-commodity
 					    exchange-fn
@@ -1050,19 +1091,19 @@
 		(net-bs 'merge bs-debits #f)
 		(net-bs 'minusmerge bs-credits #f)
 		(set! is-entry
-		      (gnc:double-col
+		      (double-col
 		       'entry net-is report-commodity
 		       exchange-fn show-fcur?))
 		(set! is-credit?
-		      (gnc:double-col
+		      (double-col
 		       'credit-q net-is report-commodity
 		       exchange-fn show-fcur?))
 		(set! bs-entry
-		      (gnc:double-col
+		      (double-col
 		       'entry net-bs report-commodity
 		       exchange-fn show-fcur?))
 		(set! bs-credit?
-		      (gnc:double-col
+		      (double-col
 		       'credit-q net-bs report-commodity
 		       exchange-fn show-fcur?))
 		(gnc:html-table-add-labeled-amount-line!

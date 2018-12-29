@@ -181,6 +181,24 @@
     
     options))
 
+(define (account-get-total-flow direction target-account-list from-date to-date)
+  (let ((total-flow (gnc:make-commodity-collector)))
+    (for-each
+     (lambda (target-account)
+       (for-each
+        (lambda (target-account-split)
+          (let* ((transaction (xaccSplitGetParent target-account-split))
+                 (split-value (xaccSplitGetAmount target-account-split)))
+            (if (and (<= from-date (xaccTransGetDate transaction) to-date)
+                     (or (and (eq? direction 'in)
+                              (positive? split-value))
+                         (and (eq? direction 'out)
+                              (negative? split-value))))
+                (total-flow 'add (xaccTransGetCurrency transaction) split-value))))
+        (xaccAccountGetSplitList target-account)))
+     target-account-list)
+    total-flow))
+
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; equity-statement-renderer
 ;; set up the document and add the table
@@ -542,7 +560,7 @@
 	  (net-investment 'minusmerge neg-pre-closing-equity #f);; > 0
 	  (net-investment 'merge neg-start-equity-balance #f)   ;; net increase
 
-	  (set! withdrawals (gnc:account-get-total-flow 'in  equity-accounts start-date end-date))
+	  (set! withdrawals (account-get-total-flow 'in equity-accounts start-date end-date))
 
 	  (set! investments (gnc:make-commodity-collector))
 	  (investments 'merge net-investment #f)

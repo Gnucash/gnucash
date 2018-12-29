@@ -432,22 +432,6 @@
         44
         (gnc:accounts-count-splits (list expense income)))
 
-      (test-equal "gnc:account-get-total-flow 'in"
-        '(("GBP" . 14) ("USD" . 2544))
-        (collector->list
-         (gnc:account-get-total-flow 'in
-                                     (list bank)
-                                     (gnc-dmy2time64 15 01 1970)
-                                     (gnc-dmy2time64 01 01 2001))))
-
-      (test-equal "gnc:account-get-total-flow 'out"
-        '(("USD" . -296))
-        (collector->list
-         (gnc:account-get-total-flow 'out
-                                     (list bank)
-                                     (gnc-dmy2time64 15 01 1970)
-                                     (gnc-dmy2time64 01 01 2001))))
-
       (let ((account-balances (gnc:get-assoc-account-balances
                                (list bank gbp-bank)
                                (lambda (acct)
