@@ -918,7 +918,7 @@ gnc_split_reg2_determine_account_pr (GNCSplitReg2 *gsr)
 
     /* Put up a warning dialog */
     args  = g_malloc (sizeof (dialog_args));
-    args->string = _(""); /* FIXME: No string for dialog. */
+    args->string = ""; /* FIXME: No string for dialog. */
     args->gsr = gsr;
     g_timeout_add (250, gsr2_determine_account_pr_dialog, args); /* 0.25 seconds */
 }
