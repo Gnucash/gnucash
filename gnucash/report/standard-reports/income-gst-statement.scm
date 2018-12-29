@@ -108,8 +108,8 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
     (list (N_ "Individual income columns")    "p" (N_ "Display individual income columns rather than their sum") #f)
     (list (N_ "Individual expense columns")   "q" (N_ "Display individual expense columns rather than their sum") #f)
     (list (N_ "Individual tax columns")       "r" (N_ "Display individual tax columns rather than their sum") #f)
-    (list (N_ "Remittance amount")            "s" (N_ "Display the remittance amount (total sales - total purchases)") #f)
-    (list (N_ "Net Income")                   "t" (N_ "Display the net income (sales without tax - purchases without tax)") #f)
+    (list (N_ "Gross Balance")                "s" (N_ "Display the gross balance (gross sales - gross purchases)") #f)
+    (list (N_ "Net Balance")                  "t" (N_ "Display the net balance (sales without tax - purchases without tax)") #f)
     (list (N_ "Tax payable")                  "u" (N_ "Display the tax payable (tax on sales - tax on purchases)") #f)))
 
   ;; Enable secret option to delete transactions with >1 split
@@ -179,17 +179,20 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                         (fold myadd #f list-of-values))))
        (account-adder (lambda (acc) (lambda (s) (split-adder s (list acc)))))
        (account-adder-neg (lambda (acc) (lambda (s) (myneg (split-adder s (list acc))))))
+
        ;; Calculate sales amounts
        (sales-without-tax (lambda (s) (myneg (split-adder s accounts-sales))))
        (tax-on-sales (lambda (s) (myneg (split-adder s accounts-tax-collected))))
-       (total-sales (lambda (s) (myadd (tax-on-sales s) (sales-without-tax s))))
+       (gross-sales (lambda (s) (myadd (tax-on-sales s) (sales-without-tax s))))
+
        ;; Calculate purchase amounts
        (purchases-without-tax (lambda (s) (split-adder s accounts-purchases)))
        (tax-on-purchases (lambda (s) (split-adder s accounts-tax-paid)))
-       (total-purchases (lambda (s) (myadd (tax-on-purchases s) (purchases-without-tax s))))
+       (gross-purchases (lambda (s) (myadd (tax-on-purchases s) (purchases-without-tax s))))
+
        ;; Calculate derived amounts
-       (bank-remittance (lambda (s) (myadd (total-sales s) (myneg (total-purchases s)))))
-       (net-income (lambda (s) (myadd (sales-without-tax s) (myneg (purchases-without-tax s)))))
+       (gross-balance (lambda (s) (myadd (gross-sales s) (myneg (gross-purchases s)))))
+       (net-balance (lambda (s) (myadd (sales-without-tax s) (myneg (purchases-without-tax s)))))
        (tax-payable (lambda (s) (myadd (tax-on-sales s) (myneg (tax-on-purchases s))))))
     (append
      ;; each column will be a vector
@@ -199,9 +202,9 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
      ;;         subtotal?                                    ;; #t - all columns need subtotals
      ;;         start-dual-column?                           ;; unused in GST report
      ;;         friendly-heading-fn                          ;; unused in GST report
-     ;; Translators: "TOTAL SALES" refer to Net Sales + GST/VAT on Sales
-     (list (vector (_ "TOTAL SALES")
-                   total-sales
+     ;; Translators: "Gross Sales" refer to Net Sales + GST/VAT on Sales
+     (list (vector (_ "Gross Sales")
+                   gross-sales
                    #t #t #f
                    (lambda (a) "")))
      (if (opt-val gnc:pagename-display (N_ "Individual income columns"))
@@ -224,9 +227,9 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                        tax-on-sales
                        #t #t #f
                        (lambda (a) ""))))
-     ;; Translators: "TOTAL PURCHASES" refer to Net Purchase + GST/VAT on Purchase
-     (list (vector (_ "TOTAL PURCHASES")
-                   total-purchases
+     ;; Translators: "Gross Purchases" refer to Net Purchase + GST/VAT on Purchase
+     (list (vector (_ "Gross Purchases")
+                   gross-purchases
                    #f #t #f
                    (lambda (a) "")))
      (if (opt-val gnc:pagename-display (N_ "Individual expense columns"))
@@ -249,17 +252,18 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                        tax-on-purchases
                        #f #t #f
                        (lambda (a) ""))))
-     (if (opt-val gnc:pagename-display (N_ "Remittance amount"))
-         ;; Translators: "Remittance" refer to TOTAL SALES - TOTAL PURCHASES in GST Report
-         (list (vector (_ "Remittance")
-                       bank-remittance
+     (if (opt-val gnc:pagename-display (N_ "Gross Balance"))
+         ;; Translators: "Gross Balance" refer to "Gross Sales - Gross Purchases" in GST Report
+         (list (vector (_ "Gross Balance")
+                       gross-balance
                        #f #t #f
                        (lambda (a) "")))
          '())
-     (if (opt-val gnc:pagename-display (N_ "Net Income"))
-         ;; Translators: "Net Income" refer to Net Sales - Net Purchases in GST Report
-         (list (vector (_ "Net Income")
-                       net-income
+         ;; Note: Net income = net balance - other costs
+     (if (opt-val gnc:pagename-display (N_ "Net Balance"))
+         ;; Translators: "Net Balance" refer to Net Sales - Net Purchases in GST Report
+         (list (vector (_ "Net Balance")
+                       net-balance
                        #f #t #f
                        (lambda (a) "")))
          '())
