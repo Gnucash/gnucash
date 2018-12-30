@@ -234,7 +234,7 @@ std::string GncImportPrice::verify_essentials (void)
     else if (m_from_commodity == boost::none)
         return _("No 'Commodity from' column.");
     else if (gnc_commodity_equal (*m_from_commodity, *m_to_currency))
-        return _("'Commodity from' can not be the same as 'Currency to'.");
+        return _("'Commodity From' can not be the same as 'Currency To'.");
     else
         return std::string();
 }

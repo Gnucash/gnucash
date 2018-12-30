@@ -673,7 +673,7 @@ static std::string migrate_gnc_datahome()
     if (full_copy)
     {
         migration_msg
-        << bl::translate ("Your gnucash metadata has been migrated .") << std::endl << std::endl
+        << bl::translate ("Your gnucash metadata has been migrated.") << std::endl << std::endl
         /* Translators: this refers to a directory name. */
         << bl::translate ("Old location:") << " " << old_dir.string() << std::endl
         /* Translators: this refers to a directory name. */
