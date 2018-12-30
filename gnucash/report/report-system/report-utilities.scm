@@ -754,6 +754,8 @@ flawed. see report-utilities.scm. please update reports.")
 ;; *ignores* any closing entries
 (define (gnc:account-get-pos-trans-total-interval
 	 account-list type start-date end-date)
+  (issue-deprecation-warning
+   "(gnc:account-get-pos-trans-total-interval) is deprecated.")
   (let* ((str-query (qof-query-create-for-splits))
 	 (sign-query (qof-query-create-for-splits))
 	 (total-query #f)
