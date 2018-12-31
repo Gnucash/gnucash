@@ -273,6 +273,7 @@ gnc_transaction_init(Transaction* trans)
     trans->orig = NULL;
     trans->readonly_reason = NULL;
     trans->reason_cache_valid = FALSE;
+    trans->isClosingTxn_cached = -1;
     LEAVE (" ");
 }
 
@@ -2195,9 +2196,13 @@ xaccTransSetIsClosingTxn (Transaction *trans, gboolean is_closing)
         g_value_init (&v, G_TYPE_INT64);
         g_value_set_int64 (&v, 1);
         qof_instance_set_kvp (QOF_INSTANCE (trans), &v, 1, trans_is_closing_str);
+        trans->isClosingTxn_cached = 1;
     }
     else
+    {
         qof_instance_set_kvp (QOF_INSTANCE (trans), NULL, 1, trans_is_closing_str);
+        trans->isClosingTxn_cached = 0;
+    }
     qof_instance_set_dirty(QOF_INSTANCE(trans));
     xaccTransCommitEdit(trans);
 }
@@ -2353,12 +2358,20 @@ xaccTransGetNotes (const Transaction *trans)
 gboolean
 xaccTransGetIsClosingTxn (const Transaction *trans)
 {
-    GValue v = G_VALUE_INIT;
     if (!trans) return FALSE;
-    qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, trans_is_closing_str);
-    if (G_VALUE_HOLDS_INT64 (&v))
-         return g_value_get_int64 (&v);
-    return FALSE;
+    if (trans->isClosingTxn_cached == -1)
+    {
+        Transaction* trans_nonconst = (Transaction*) trans;
+        GValue v = G_VALUE_INIT;
+        qof_instance_get_kvp (QOF_INSTANCE (trans), &v, 1, trans_is_closing_str);
+        if (G_VALUE_HOLDS_INT64 (&v))
+            trans_nonconst->isClosingTxn_cached = (g_value_get_int64 (&v) ? 1 : 0);
+        else
+            trans_nonconst->isClosingTxn_cached = 0;
+    }
+    return (trans->isClosingTxn_cached == 1)
+            ? TRUE
+            : FALSE;
 }
 
 /********************************************************************\
