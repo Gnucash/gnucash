@@ -2065,9 +2065,22 @@ CsvImpTransAssist::assist_summary_page_prepare ()
     gen.add_messages_domain(GETTEXT_PACKAGE);
 
     auto text = std::string("<span size=\"medium\"><b>");
+    try
+    {
     /* Translators: {1} will be replaced with a filename */
-    text += (bl::format (bl::translate ("The transactions were imported from file '{1}'.")) % m_file_name).str(gen(""));
-    text += "</b></span>";
+        text += (bl::format (bl::translate ("The transactions were imported from file '{1}'.")) % m_file_name).str(gen(""));
+        text += "</b></span>";
+    }
+    catch (const bl::conv::conversion_error& err)
+    {
+        PERR("Transcoding error: %s", err.what());
+        text += "The transactions were imported from the file.</b></span>";
+    }
+    catch (const bl::conv::invalid_charset_error& err)
+    {
+        PERR("Invalid charset error: %s", err.what());
+        text += "The transactions were imported from the file.</b></span>";
+    }
     gtk_label_set_markup (GTK_LABEL(summary_label), text.c_str());
 }
 
