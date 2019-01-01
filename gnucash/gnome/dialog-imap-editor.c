@@ -230,6 +230,9 @@ gnc_imap_dialog_delete (ImapDialog *imap_dialog)
     // reverse list
     list = g_list_reverse (list);
 
+    // Suspend GUI refreshing
+    gnc_suspend_gui_refresh();
+
     // Walk the list
     for (row = g_list_first (list); row; row = g_list_next (row))
     {
@@ -240,6 +243,9 @@ gnc_imap_dialog_delete (ImapDialog *imap_dialog)
     g_list_free (list);
 
     get_account_info (imap_dialog);
+
+    // Enable GUI refresh again
+    gnc_resume_gui_refresh();
 }
 
 void
