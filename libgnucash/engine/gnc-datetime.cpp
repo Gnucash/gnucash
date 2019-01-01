@@ -425,11 +425,21 @@ std::string
 GncDateTimeImpl::format(const char* format) const
 {
     using Facet = boost::local_time::local_time_facet;
+    static std::locale cachedLocale;
+    static bool cachedLocaleAvailable = false;
     std::stringstream ss;
+
+    if(!cachedLocaleAvailable)
+    {
+        cachedLocale = std::locale("");
+	cachedLocaleAvailable = true;
+    }
+
     //The stream destructor frees the facet, so it must be heap-allocated.
     auto output_facet(new Facet(normalize_format(format).c_str()));
     // FIXME Rather than imbueing a locale below we probably should set std::locale::global appropriately somewhere.
-    ss.imbue(std::locale(std::locale(""), output_facet));
+    // At that point the use of cachedLocale mechanism should be removed.
+    ss.imbue(std::locale(cachedLocale, output_facet));
     ss << m_time;
     return ss.str();
 }
