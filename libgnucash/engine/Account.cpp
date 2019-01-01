@@ -5555,7 +5555,7 @@ build_non_bayes (const char *key, const GValue *value, gpointer user_data)
     imapInfo_node->category       = g_strdup (imapInfo->category);
     imapInfo_node->count          = g_strdup (" ");
 
-    imapInfo->list = g_list_append (imapInfo->list, imapInfo_node);
+    imapInfo->list = g_list_prepend (imapInfo->list, imapInfo_node);
 
     g_free (guid_string);
 }
@@ -5594,7 +5594,7 @@ build_bayes (const char *key, KvpValue * value, GncImapInfo & imapInfo)
     imap_node->match_string = g_strdup (std::get <1> (parsed_key).c_str ());
     imap_node->category = g_strdup(" ");
     imap_node->count = g_strdup_printf ("%" G_GINT64_FORMAT, count);
-    imapInfo.list = g_list_append (imapInfo.list, imap_node);
+    imapInfo.list = g_list_prepend (imapInfo.list, imap_node);
 }
 
 GList *
@@ -5605,7 +5605,7 @@ gnc_account_imap_get_info_bayes (Account *acc)
      * of data about which we care. */
     GncImapInfo imapInfo {acc, nullptr};
     qof_instance_foreach_slot_prefix (QOF_INSTANCE (acc), IMAP_FRAME_BAYES, &build_bayes, imapInfo);
-    return imapInfo.list;
+    return g_list_reverse(imapInfo.list);
 }
 
 GList *
@@ -5630,7 +5630,7 @@ gnc_account_imap_get_info (Account *acc, const char *category)
         qof_instance_foreach_slot (QOF_INSTANCE(acc), IMAP_FRAME, category,
                                    build_non_bayes, &imapInfo);
     }
-    return imapInfo.list;
+    return g_list_reverse(imapInfo.list);
 }
 
 /*******************************************************************************/
