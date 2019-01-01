@@ -940,13 +940,13 @@ bal_accountinfo_cb(AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
         const GWEN_TIME *ti = AB_Balance_GetTime(booked_bal);
         if (ti)
         {
-            booked_tt =  GWEN_Time_toTime_t(ti);
+            booked_tt = gnc_time64_get_day_neutral(GWEN_Time_toTime_t(ti));
         }
         else
         {
             /* No time found? Use today because the HBCI query asked for today's
              * balance. */
-            booked_tt = gnc_time64_get_day_start(gnc_time(NULL));
+            booked_tt = gnc_time64_get_day_neutral(gnc_time(NULL));
         }
         booked_val = AB_Balance_GetValue(booked_bal);
         if (booked_val)
