@@ -652,8 +652,8 @@
           (list "Grand Total" "$2,280.00" "$2,280.00")
           (get-row-col sxml -1 #f))
         (test-equal "dual amount column, first transaction correct"
-          (list "01/03/18" "$103 income" "Root.Asset.Bank" "$103.00" "$103.00")
-          (get-row-col sxml 1 #f)))
+          (list "$103 income" "Root.Asset.Bank" "$103.00" "$103.00")
+          (cdr (get-row-col sxml 1 #f))))
       )
 
     (test-end "display options")
