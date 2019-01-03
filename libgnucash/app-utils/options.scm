@@ -1749,6 +1749,9 @@ the option '~a'."))
                   (and name-match
                        (let ((new-section (car (cadr name-match)))
                              (new-name (cdr (cadr name-match))))
+                         (gnc:debug
+                          (format #f "option ~s/~s has been renamed to ~s/~s\n"
+                                  section name new-section new-name))
                          ;; compare if new-section name exists.
                          (if new-section
                              ;; if so, if it's different to current section name
