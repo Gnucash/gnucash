@@ -546,7 +546,7 @@
                                (strftime "%m/%d/%Y" (gnc-localtime x-date))
                                #f))
                ;; Only formats 1,3,4,6 implemented now! Others are treated as 1.
-               (format (get-acct-txf-info 'format type code))
+               (format_type (get-acct-txf-info 'format type code))
                (action (if (eq? type ACCT-TYPE-INCOME)
                            (case code
                              ((N286 N488) "ReinvD")
@@ -623,19 +623,19 @@
                 ;; these apply if pns is either 'current or 'parent', but not
                 ;; otherwise
                 "L" (number->string txf-l-count) crlf
-                (if (= format 4)
+                (if (= format_type 4)
                     (if x?
                         (list "P" sold-desc crlf "D" crlf "D" date-str crlf
                                                                        "$" crlf)
                         (list "$" crlf))
                     '())
-                (if (and d? (= format 6) x?)
+                (if (and d? (= format_type 6) x?)
                     (list "D" date-str crlf)
                     '())
-                (case format
+                (case format_type
                   ((1 3 4 6) (list value crlf))
                   ((0 2 5) '()))
-                (case format
+                (case format_type
                   ((3) (if (not x?) (list "P" txf-account-name crlf) '()))
                   ((6) (if x?
                            (if (string=? "N521" (symbol->string code))
@@ -824,7 +824,7 @@
 
 (define (process-transaction-multi-transfer-detail split parent
             USD-currency full-names? trans-date trans-currency acct-type
-            currency-conversion-date to-date transfer-table print-amnt format
+            currency-conversion-date to-date transfer-table print-amnt format_type
             split-details? tax-mode? account account-type tax-code copy
             tax-entity-type)
   (let* ((all-tran-splits (xaccTransGetSplitList parent))
@@ -838,7 +838,7 @@
          (trans-cap-gain-sales-USD-total (gnc-numeric-zero))
          (trans-cap-gain-basis-USD-total (gnc-numeric-zero))
         )
-        (if (= 4 format)
+        (if (= 4 format_type)
             (begin
                (gnc:html-table-set-style! cap-gains-detail-table "table"
                                           'attribute (list "border" "0")
@@ -944,7 +944,7 @@
                            )
                            #f
                        )
-                       (if (and (= 4 format) (gnc-numeric-negative-p
+                       (if (and (= 4 format_type) (gnc-numeric-negative-p
                                                (xaccSplitGetAmount tran-split)))
                            (begin
                               (if tax-mode?
@@ -1030,7 +1030,7 @@
                                      (gnc:make-html-table-cell/markup
                                          "number-cell-bot" splt-amnt-anchor)))
                              )
-                             (if (= 4 format)
+                             (if (= 4 format_type)
                                  (gnc:html-table-append-row!
                                       trans-sub-table
                                       (append (list cell)
@@ -1068,7 +1068,7 @@
                                         (gnc:make-html-table-cell/markup
                                             "number-cell-bot" plug-amnt)))
                         )
-                        (if (= 4 format)
+                        (if (= 4 format_type)
                             (gnc:html-table-append-row! trans-sub-table
                                       (append (list conversion-cell)
                                               (list plug-amnt)))
@@ -1079,7 +1079,7 @@
                   )
             )
         ) ;; end of if
-        (if (= 4 format)
+        (if (= 4 format_type)
             (let* ((total-cell (gnc:make-html-table-cell/markup
                                     "column-heading-right" "Totals: "))
                   )
@@ -1128,7 +1128,7 @@
 
   (let*
     ((account-commodity (xaccAccountGetCommodity account))
-     (format (get-acct-txf-info 'format account-type tax-code))
+     (format_type (get-acct-txf-info 'format account-type tax-code))
      (payer-src (gnc:account-get-txf-payer-source account))
      (code-pns (get-acct-txf-info 'pns account-type tax-code))
      (acct-collector (gnc:make-commodity-collector))
@@ -1152,7 +1152,7 @@
                                               "Name Source is Parent"
                                               "Name Source is Current")
                                           ""))
-                                 (line (if (and (= format 3)
+                                 (line (if (and (= format_type 3)
                                                 (or (eq? code-pns 'parent)
                                                     (eq? code-pns 'current)))
                                            (string-append "Item "
@@ -1187,7 +1187,7 @@
           (render-header-row table (string-append
                                     "&nbsp; &nbsp; &nbsp; &nbsp;" account-desc))
           (render-account-detail-header-row table suppress-action-memo?
-                                                        (if (= format 4) #t #f))
+                                                        (if (= format_type 4) #t #f))
         ))
     (if (not (or (eq? account-type ACCT-TYPE-INCOME)
                  (eq? account-type ACCT-TYPE-EXPENSE)))
@@ -1437,7 +1437,7 @@
                  ;; details and/or Transfer To/From Accounts
                  (if (or (and transaction-details? tax-mode?
                                         (null? other-account) split-details?)
-                         (= 4 format)
+                         (= 4 format_type)
                      )
                      (let ((cap-gain-data
                                       (process-transaction-multi-transfer-detail
@@ -1452,7 +1452,7 @@
                                              to-value
                                              transfer-table
                                              print-amnt
-                                             format
+                                             format_type
                                              split-details?
                                              tax-mode?
                                              account
@@ -1690,7 +1690,7 @@
                                 (if (gnc-numeric-negative-p account-USD-total)
                                     #t
                                     #f)
-                                (if (= format 4)
+                                (if (= format_type 4)
                                     #t
                                     #f)
                                 account-cap-gain-sales-total-amount
@@ -2430,9 +2430,9 @@
                                             (if (eq? payer-src 'parent)
                                                 (gnc-account-get-parent account)
                                                 account)))
-                   (format (get-acct-txf-info 'format type tax-code))
+                   (format_type (get-acct-txf-info 'format type tax-code))
                    (code-pns (get-acct-txf-info 'pns type tax-code))
-                   (txf-new-payer? (if (= 3 format)
+                   (txf-new-payer? (if (= 3 format_type)
                                        (if (string=? prior-tax-code
                                                                current-tax-code)
                                            (if (string=? txf-last-payer txf-pyr)
@@ -2868,7 +2868,7 @@
                       )
                   )
                   (set! txf-account-name txf-pyr)
-                  (set! txf-l-count (if (and (= format 3)
+                  (set! txf-l-count (if (and (= format_type 3)
                                              (or (eq? code-pns 'parent)
                                                  (eq? code-pns 'current)))
                                         (if (equal? txf-last-payer
@@ -2878,7 +2878,7 @@
                                                 1
                                                 (+ 1 txf-l-count)))
                                         1))
-                  (set! txf-last-payer (if (and (= format 3)
+                  (set! txf-last-payer (if (and (= format_type 3)
                                                 (or (eq? code-pns 'parent)
                                                     (eq? code-pns 'current)))
                                            txf-account-name
