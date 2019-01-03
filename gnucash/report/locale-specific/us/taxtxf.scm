@@ -587,7 +587,7 @@
                (value (string-append "$"  ; in txf output, income is positive; expense negative
                                           ; liabilities are positive, assets are negative;
                                           ; essentially, just reverse signs on dr's & cr's
-                                     (format #f "!0,2f" (gnc-numeric-to-double
+                                     (format #f "~0,2f" (gnc-numeric-to-double
                                                           (gnc-numeric-neg
                                                             account-value)))))
           )
