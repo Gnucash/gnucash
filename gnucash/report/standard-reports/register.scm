@@ -813,60 +813,26 @@
     (gnc:option-value
      (gnc:lookup-option (gnc:report-options report-obj) section name)))
 
-  (let ((document (gnc:make-html-document))
-        (splits '())
-        (table '())
-        (query-scm (opt-val "__reg" "query"))
-        (query #f)
-        (journal? (opt-val "__reg" "journal"))
-        (debit-string (opt-val "__reg" "debit-string"))
-        (credit-string (opt-val "__reg" "credit-string"))
-        (invoice? #f)
-        (title (opt-val "General" "Title")))
-
-    (if invoice?
-        (set! title (_ "Invoice")))
-
-    (set! query (gnc-scm2query query-scm))
+  (let* ((document (gnc:make-html-document))
+         (query-scm (opt-val "__reg" "query"))
+         (journal? (opt-val "__reg" "journal"))
+         (debit-string (opt-val "__reg" "debit-string"))
+         (credit-string (opt-val "__reg" "credit-string"))
+         (title (opt-val "General" "Title"))
+         (query (gnc-scm2query query-scm)))
 
     (qof-query-set-book query (gnc-get-current-book))
 
-    (set! splits (if journal?
-                     (xaccQueryGetSplitsUniqueTrans query)
-                     (qof-query-run query)))
-
-    (set! table (make-split-table splits
-                                  (gnc:report-options report-obj)
-                                  debit-string credit-string
-                                  (if invoice? (_ "Charge") (_ "Amount"))))
-
-    (if invoice?
-        (begin
-          (gnc:html-document-add-object!
-           document
-           (gnc:make-html-text
-            (gnc:html-markup-br)
-            "User Name"
-            (gnc:html-markup-br)
-            (string-expand
-             "User Address"
-             #\newline
-             "<br>")
-            (gnc:html-markup-br)))
-          (gnc:html-table-set-style!
-           table "table"
-           'attribute (list "border" 1)
-           'attribute (list "cellspacing" 0)
-           'attribute (list "cellpadding" 4))
-          (gnc:html-document-add-object!
-           document
-           (make-info-table
-             ""))))
-    
-    (gnc:html-document-set-title! document title)
-    (gnc:html-document-add-object! document table)
-
-    (qof-query-destroy query)
+    (let* ((splits (if journal?
+                       (xaccQueryGetSplitsUniqueTrans query)
+                       (qof-query-run query)))
+           (table (make-split-table splits
+                                    (gnc:report-options report-obj)
+                                    debit-string credit-string
+                                    (_ "Amount"))))
+      (gnc:html-document-set-title! document title)
+      (gnc:html-document-add-object! document table)
+      (qof-query-destroy query))
 
     document))
 
