@@ -104,9 +104,8 @@
     (set-col (opt-val "Display" "Shares") 5)
     (set-col (opt-val "Display" "Lot") 14)
     (set-col (opt-val "Display" "Price") 6)
-    (let ((invoice? #f)
-          (amount-setting (opt-val "Display" "Amount")))
-      (if (or invoice? (eq? amount-setting 'single))
+    (let ((amount-setting (opt-val "Display" "Amount")))
+      (if (eq? amount-setting 'single)
           (set-col #t 7)
           (begin
             (set-col #t 8)
@@ -523,13 +522,12 @@
 
       (if (or single-col credit-col debit-col)
           (begin
-            (if (not (reg-report-invoice?))
-                (gnc:html-table-append-row!
-                 table
-                 (list
-                  (gnc:make-html-table-cell/size
-                   1 (num-columns-required used-columns)
-                   (gnc:make-html-text (gnc:html-markup-hr))))))
+            (gnc:html-table-append-row!
+             table
+             (list
+              (gnc:make-html-table-cell/size
+               1 (num-columns-required used-columns)
+               (gnc:make-html-text (gnc:html-markup-hr)))))
 
             (for-each (lambda (currency)
                         (gnc:html-table-append-row/markup! 
@@ -749,63 +747,6 @@
                             (gnc:make-commodity-collector)
                             (gnc:make-commodity-collector)
                             (gnc:make-commodity-collector))
-    table))
-;; -----------------------------------------------------------------
-;; misc
-;; -----------------------------------------------------------------
-(define (string-expand string character replace-string)
-  (define (car-line chars)
-    (take-while (lambda (c) (not (eqv? c character))) chars))
-  (define (cdr-line chars)
-    (let ((rest (drop-while (lambda (c) (not (eqv? c character))) chars)))
-      (if (null? rest)
-          '()
-          (cdr rest))))
-  (define (line-helper chars)
-    (if (null? chars)
-        ""
-        (let ((first (car-line chars))
-              (rest (cdr-line chars)))
-          (string-append (list->string first)
-                         (if (null? rest) "" replace-string)
-                         (line-helper rest)))))
-  (line-helper (string->list string)))
-
-(define (make-client-table address)
-  (let ((table (gnc:make-html-table)))
-    (gnc:html-table-set-style!
-     table "table"
-     'attribute (list "border" 0)
-     'attribute (list "cellspacing" 0)
-     'attribute (list "cellpadding" 0))
-    (gnc:html-table-append-row!
-     table
-     (list
-      (string-append (_ "Client") ":&nbsp;")
-      (string-expand address #\newline "<br>")))
-    (gnc:html-table-set-last-row-style!
-     table "td"
-     'attribute (list "valign" "top"))
-    table))
-
-(define (make-info-table address)
-  (let ((table (gnc:make-html-table)))
-    (gnc:html-table-set-style!
-     table "table"
-     'attribute (list "border" 0)
-     'attribute (list "cellspacing" 20)
-     'attribute (list "cellpadding" 0))
-    (gnc:html-table-append-row!
-     table
-     (list
-      (string-append
-       (_ "Date") ":&nbsp;"
-       (string-expand (qof-print-date (current-time))
-                      #\space "&nbsp;"))
-      (make-client-table address)))
-    (gnc:html-table-set-last-row-style!
-     table "td"
-     'attribute (list "valign" "top"))
     table))
 
 (define (reg-renderer report-obj)
