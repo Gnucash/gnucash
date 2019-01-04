@@ -1431,13 +1431,15 @@ void
 xaccTransScrubPostedDate (Transaction *trans)
 {
     time64 orig = xaccTransGetDate(trans);
-    GDate date = xaccTransGetDatePostedGDate(trans);
-    time64 time = gdate_to_time64(date);
-    /* xaccTransGetDatePostedGDate will return a valid time */
-    if (orig == INT64_MAX && orig != time)
+    if(orig == INT64_MAX)
     {
-        /* xaccTransSetDatePostedSecs handles committing the change. */
-        xaccTransSetDatePostedSecs(trans, time);
+	GDate date = xaccTransGetDatePostedGDate(trans);
+	time64 time = gdate_to_time64(date);
+	if(time != INT64_MAX)
+	{
+	    // xaccTransSetDatePostedSecs handles committing the change.
+	    xaccTransSetDatePostedSecs(trans, time);
+	}
     }
 }
 
