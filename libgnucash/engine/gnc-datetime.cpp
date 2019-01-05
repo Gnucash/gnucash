@@ -236,6 +236,7 @@ public:
     std::string format(const char* format) const;
     std::string format_zulu(const char* format) const;
     std::string format_iso8601() const;
+    static std::string timestamp();
 private:
     LDT m_time;
     static const TD time_of_day[3];
@@ -466,6 +467,14 @@ GncDateTimeImpl::format_iso8601() const
     return str.substr(0, 19);
 }
 
+std::string
+GncDateTimeImpl::timestamp()
+{
+    GncDateTimeImpl gdt;
+    auto str = boost::posix_time::to_iso_string(gdt.m_time.local_time());
+    return str.substr(0, 8) + str.substr(9, 15);
+}
+
 /* Member function definitions for GncDateImpl.
  */
 GncDateImpl::GncDateImpl(const std::string str, const std::string fmt) :
@@ -598,6 +607,12 @@ std::string
 GncDateTime::format_iso8601() const
 {
     return m_impl->format_iso8601();
+}
+
+std::string
+GncDateTime::timestamp()
+{
+    return GncDateTimeImpl::timestamp();
 }
 
 /* GncDate */

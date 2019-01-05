@@ -152,7 +152,11 @@ public:
  *  @return a std::string in the format YYYY-MM-DD HH:MM:SS.
  */
     std::string format_iso8601() const;
-
+/** Get an undelimited string representing the current date and time.
+ *  @return a std::string in the format YYYYMMDDHHMMSS.
+ */
+    static std::string timestamp();
+    
 private:
     std::unique_ptr<GncDateTimeImpl> m_impl;
 };

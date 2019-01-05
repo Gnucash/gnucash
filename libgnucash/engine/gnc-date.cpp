@@ -1075,7 +1075,7 @@ qof_strftime(gchar *buf, gsize max, const gchar *format, const struct tm *tm)
 gchar *
 gnc_date_timestamp (void)
 {
-    return gnc_print_time64(gnc_time(nullptr), "%Y%m%d%H%M%S");
+    return g_strdup(GncDateTime::timestamp().c_str());
 }
 
 /********************************************************************\
