@@ -29,6 +29,7 @@ extern "C"
 #include <config.h>
 #include "platform.h"
 #include <string.h>
+#include <stdlib.h>
 #include <sys/time.h>
 #include <glib.h>
 #include <unittest-support.h>
