@@ -64,6 +64,7 @@ extern "C" {
 #endif
 }
 
+#include "gnc-locale-utils.hpp"
 #include <boost/filesystem.hpp>
 #include <boost/locale.hpp>
 #include <iostream>
@@ -587,9 +588,8 @@ static std::string migrate_gnc_datahome()
     gen.add_messages_path(gnc_path_get_datadir());
     gen.add_messages_domain(PACKAGE);
 
-//    std::locale::global(gen(""));
     std::stringstream migration_msg;
-    migration_msg.imbue(gen(""));
+    migration_msg.imbue(gnc_get_locale());
 
     /* Step 1: copy directory $HOME/.gnucash to $GNC_DATA_HOME */
     auto full_copy = copy_recursive (old_dir, gnc_userdata_home);

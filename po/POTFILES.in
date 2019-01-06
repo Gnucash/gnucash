@@ -613,6 +613,7 @@ libgnucash/core-utils/gnc-glib-utils.c
 libgnucash/core-utils/gnc-guile-utils.c
 libgnucash/core-utils/gnc-jalali.c
 libgnucash/core-utils/gnc-locale-utils.c
+libgnucash/core-utils/gnc-locale-utils.cpp
 libgnucash/core-utils/gnc-path.c
 libgnucash/core-utils/gnc-prefs.c
 libgnucash/doc/doxygen_main_page.c

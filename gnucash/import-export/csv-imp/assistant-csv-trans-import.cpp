@@ -64,6 +64,7 @@ extern "C"
 #include "gnc-tokenizer-fw.hpp"
 #include "gnc-tokenizer-csv.hpp"
 
+#include <gnc-locale-utils.hpp>
 #include <boost/locale.hpp>
 
 namespace bl = boost::locale;
@@ -2068,7 +2069,7 @@ CsvImpTransAssist::assist_summary_page_prepare ()
     try
     {
     /* Translators: {1} will be replaced with a filename */
-        text += (bl::format (bl::translate ("The transactions were imported from file '{1}'.")) % m_file_name).str(gen(""));
+      text += (bl::format (bl::translate ("The transactions were imported from file '{1}'.")) % m_file_name).str(gnc_get_locale());
         text += "</b></span>";
     }
     catch (const bl::conv::conversion_error& err)

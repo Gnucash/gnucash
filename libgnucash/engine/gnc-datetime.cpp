@@ -32,14 +32,19 @@ extern "C"
 #include <boost/date_time/local_time/local_time.hpp>
 #include <boost/regex.hpp>
 #include <libintl.h>
+#include <locale.h>
 #include <map>
 #include <memory>
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>
+#include <gnc-locale-utils.hpp>
 #include "gnc-timezone.hpp"
 #include "gnc-datetime.hpp"
+#include "qoflog.h"
+
+static const char* log_module = "gnc.engine";
 
 #define N_(string) string //So that xgettext will find it
 
@@ -440,8 +445,7 @@ GncDateTimeImpl::format(const char* format) const
     //The stream destructor frees the facet, so it must be heap-allocated.
     auto output_facet(new Facet(normalize_format(format).c_str()));
     // FIXME Rather than imbueing a locale below we probably should set std::locale::global appropriately somewhere.
-    // At that point the use of cachedLocale mechanism should be removed.
-    ss.imbue(std::locale(cachedLocale, output_facet));
+    ss.imbue(std::locale(gnc_get_locale(), output_facet));
     ss << m_time;
     return ss.str();
 }
@@ -454,7 +458,7 @@ GncDateTimeImpl::format_zulu(const char* format) const
     //The stream destructor frees the facet, so it must be heap-allocated.
     auto output_facet(new Facet(normalize_format(format).c_str())); 
     // FIXME Rather than imbueing a locale below we probably should set std::locale::global appropriately somewhere.
-    ss.imbue(std::locale(std::locale(""), output_facet));
+    ss.imbue(std::locale(gnc_get_locale(), output_facet));
     ss << m_time.utc_time();
     return ss.str();
 }
@@ -530,7 +534,7 @@ GncDateImpl::format(const char* format) const
     //The stream destructor frees the facet, so it must be heap-allocated.
     auto output_facet(new Facet(normalize_format(format).c_str()));
     // FIXME Rather than imbueing a locale below we probably should set std::locale::global appropriately somewhere.
-    ss.imbue(std::locale(std::locale(""), output_facet));
+    ss.imbue(std::locale(gnc_get_locale(), output_facet));
     ss << m_greg;
     return ss.str();
 }

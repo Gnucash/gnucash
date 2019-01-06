@@ -25,6 +25,7 @@ set (core_utils_SOURCES
   gnc-guile-utils.c
   gnc-jalali.c
   gnc-locale-utils.c
+  gnc-locale-utils.cpp
   gnc-path.c
 )
 
@@ -116,6 +117,7 @@ set(core_utils_noinst_HEADERS
   gnc-guile-utils.h
   gnc-jalali.h
   gnc-locale-utils.h
+  gnc-locale-utils.hpp
   gnc-path.h
 )
 
