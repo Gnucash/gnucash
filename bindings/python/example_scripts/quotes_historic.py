@@ -78,7 +78,7 @@ for i in range(0,len(stock_date)):
   p_new = pl0.clone(book)
   p_new = gnucash.GncPrice(instance=p_new)
   print('Adding',i,stock_date[i],stock_price[i])
-  p_new.set_time(stock_date[i])
+  p_new.set_time64(stock_date[i])
   v = p_new.get_value()
   v.num = int(Fraction.from_float(stock_price[i]).limit_denominator(100000).numerator)
   v.denom = int(Fraction.from_float(stock_price[i]).limit_denominator(100000).denominator)
