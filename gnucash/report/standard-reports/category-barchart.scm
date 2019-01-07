@@ -361,12 +361,18 @@ developing over time"))
           (define account-balances-alist
             (map
              (lambda (acc)
-               (cons acc
-                     (map
-                      (if (reverse-balance? acc) gnc:monetary-neg identity)
-                      (gnc:account-get-balances-at-dates
-                       acc dates-list
-                       #:ignore-closing? (gnc:account-is-inc-exp? acc)))))
+               (let ((ignore-closing? (not (gnc:account-is-inc-exp? acc))))
+                 (cons acc
+                       (map
+                        (if (reverse-balance? acc) gnc:monetary-neg identity)
+                        (gnc:account-get-balances-at-dates
+                         acc dates-list
+                         #:split->amount
+                         (lambda (s)
+                           (and (or ignore-closing?
+                                    (not (xaccTransGetIsClosingTxn
+                                          (xaccSplitGetParent s))))
+                                (xaccSplitGetAmount s))))))))
              accounts))
 
           ;; Creates the <balance-list> to be used in the function
