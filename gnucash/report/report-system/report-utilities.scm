@@ -432,9 +432,16 @@ flawed. see report-utilities.scm. please update reports.")
 ;; a list of balances along the way at dates specified in dates-list.
 ;; in:  account
 ;;      dates-list (list of time64)
-;;      ignore-closing? - if #true, will skip closing entries
+;;      split->amount - an unary lambda. calling (split->amount split)
+;;      returns a number, or #f which effectively skips the split.
 ;; out: (list bal0 bal1 ...), each entry is a gnc-monetary object
-(define* (gnc:account-get-balances-at-dates account dates-list #:key ignore-closing?)
+;;
+;; NOTE a prior incarnation accepted a #:ignore-closing? boolean
+;; keyword which can be reproduced via #:split->amount (lambda (s)
+;; (and (not (xaccTransGetIsClosingTxn (xaccSplitGetParent s)))
+;; (xaccSplitGetAmount s)))
+(define* (gnc:account-get-balances-at-dates
+          account dates-list #:key (split->amount xaccSplitGetAmount))
   (define (amount->monetary bal)
     (gnc:make-gnc-monetary (xaccAccountGetCommodity account) bal))
   (let loop ((splits (xaccAccountGetSplitList account))
@@ -460,10 +467,7 @@ flawed. see report-utilities.scm. please update reports.")
      (else
       (let* ((this (car splits))
              (rest (cdr splits))
-             (currentbal (if (and ignore-closing?
-                                  (xaccTransGetIsClosingTxn (xaccSplitGetParent this)))
-                             currentbal
-                             (+ (xaccSplitGetAmount this) currentbal)))
+             (currentbal (+ (or (split->amount this) 0) currentbal))
              (next (and (pair? rest) (car rest))))
 
         (cond
