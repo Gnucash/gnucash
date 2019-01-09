@@ -66,7 +66,7 @@
 (export gnc:case-exchange-time-fn)
 (export gnc:sum-collector-commodity)
 (export gnc:sum-collector-stocks)
-(export gnc-commodity-collector-contains-commodity?)
+(export gnc-commodity-collector-contains-commodity?) ;deprecated
 
 ;; options-utilities.scm
 

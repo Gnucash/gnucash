@@ -1021,6 +1021,8 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
   (length (collector 'format (lambda (comm amt) comm) #f)))
 
 (define (gnc-commodity-collector-contains-commodity? collector commodity)
+  (issue-deprecation-warning
+   "gnc-commodity-collector-contains-commodity? is deprecated. please inline.")
   (member commodity
           (collector 'format (lambda (comm amt) comm) #f)
           gnc-commodity-equiv))
@@ -1031,5 +1033,6 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
   (let ((elts (gnc-commodity-collector-commodity-count amt)))
     (or (zero? elts)
         (and (= elts 1)
-             (gnc-commodity-collector-contains-commodity?
-              amt report-commodity)))))
+             (member report-commodity
+                     (amt 'format (lambda (comm amt) comm) #f)
+                     gnc-commodity-equiv)))))
