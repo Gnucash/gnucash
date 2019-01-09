@@ -1018,6 +1018,8 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
          balance)))
 
 (define (gnc-commodity-collector-commodity-count collector)
+  (issue-deprecation-warning
+   "gnc-commodity-collector-commodity-count is deprecated. please inline.")
   (length (collector 'format (lambda (comm amt) comm) #f)))
 
 (define (gnc-commodity-collector-contains-commodity? collector commodity)
@@ -1030,9 +1032,9 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
 (define (gnc:uniform-commodity? amt report-commodity)
   ;; function to see if the commodity-collector amt
   ;; contains any foreign commodities
-  (let ((elts (gnc-commodity-collector-commodity-count amt)))
-    (or (zero? elts)
-        (and (= elts 1)
+  (let ((elts (amt 'format (lambda (comm amt) comm) #f)))
+    (or (null? elts)
+        (and (null? (cdr elts))
              (member report-commodity
-                     (amt 'format (lambda (comm amt) comm) #f)
+                     elts
                      gnc-commodity-equiv)))))

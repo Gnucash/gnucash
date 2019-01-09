@@ -395,9 +395,10 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
 ;; usage: (gnc:monetaries-add monetary1 monetary2 ...)
 ;; output: a monetary object
 (define (gnc:monetary+ . monetaries)
-  (let ((coll (apply gnc:monetaries-add monetaries)))
-    (if (= 1 (gnc-commodity-collector-commodity-count coll))
-        (car (coll 'format gnc:make-gnc-monetary #f))
+  (let* ((coll (apply gnc:monetaries-add monetaries))
+         (list-of-monetaries (coll 'format gnc:make-gnc-monetary #f)))
+    (if (null? (cdr list-of-monetaries))
+        (car list-of-monetaries)
         (throw "gnc:monetary+ expects 1 currency " (gnc:strify monetaries)))))
 
 ;; get the account balance at the specified date. if include-children?
