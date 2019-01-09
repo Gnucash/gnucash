@@ -1032,9 +1032,7 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
 (define (gnc:uniform-commodity? amt report-commodity)
   ;; function to see if the commodity-collector amt
   ;; contains any foreign commodities
-  (let ((elts (amt 'format (lambda (comm amt) comm) #f)))
-    (or (null? elts)
-        (and (null? (cdr elts))
-             (member report-commodity
-                     elts
-                     gnc-commodity-equiv)))))
+  (let ((list-of-commodities (amt 'format (lambda (comm amt) comm) #f)))
+    (or (null? list-of-commodities)
+        (and (null? (cdr list-of-commodities))
+             (gnc-commodity-equiv report-commodity (car list-of-commodities))))))
