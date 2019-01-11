@@ -658,8 +658,10 @@ be excluded from periodic reporting.")
         (date-subtotal-choice-list (keylist->vectorlist date-subtotal-list))
         (prime-sortkey 'account-name)
         (prime-sortkey-subtotal-true #t)
+        (prime-date-subtotal 'monthly)
         (sec-sortkey 'register-order)
-        (sec-sortkey-subtotal-true #f))
+        (sec-sortkey-subtotal-true #f)
+        (sec-date-subtotal 'monthly))
 
     (define (apply-selectable-by-name-sorting-options)
       (let* ((prime-sortkey-enabled (not (eq? prime-sortkey 'none)))
@@ -703,14 +705,16 @@ be excluded from periodic reporting.")
         (gnc-option-db-set-option-selectable-by-name
          options pagename-sorting optname-indenting
          (or (and prime-sortkey-subtotal-enabled prime-sortkey-subtotal-true)
-             (and sec-sortkey-subtotal-enabled sec-sortkey-subtotal-true)))
+             (and sec-sortkey-subtotal-enabled sec-sortkey-subtotal-true)
+             (and prime-date-sortingtype-enabled (not (eq? 'none prime-date-subtotal)))
+             (and sec-date-sortingtype-enabled (not (eq? 'none sec-date-subtotal)))))
 
         (gnc-option-db-set-option-selectable-by-name
          options pagename-sorting optname-show-subtotals-only
          (or (and prime-sortkey-subtotal-enabled prime-sortkey-subtotal-true)
              (and sec-sortkey-subtotal-enabled sec-sortkey-subtotal-true)
-             prime-date-sortingtype-enabled
-             sec-date-sortingtype-enabled))
+             (and prime-date-sortingtype-enabled (not (eq? 'none prime-date-subtotal)))
+             (and sec-date-sortingtype-enabled (not (eq? 'none sec-date-subtotal)))))
 
         (gnc-option-db-set-option-selectable-by-name
          options pagename-sorting optname-show-informal-headers
@@ -789,11 +793,14 @@ be excluded from periodic reporting.")
         (apply-selectable-by-name-sorting-options))))
 
     (gnc:register-trep-option
-     (gnc:make-multichoice-option
+     (gnc:make-multichoice-callback-option
       pagename-sorting optname-prime-date-subtotal
       "e2" (_ "Do a date subtotal.")
-      'monthly
-      date-subtotal-choice-list))
+      prime-date-subtotal
+      date-subtotal-choice-list #f
+      (lambda (x)
+        (set! prime-date-subtotal x)
+        (apply-selectable-by-name-sorting-options))))
 
     (gnc:register-trep-option
      (gnc:make-multichoice-option
@@ -825,11 +832,14 @@ be excluded from periodic reporting.")
         (apply-selectable-by-name-sorting-options))))
 
     (gnc:register-trep-option
-     (gnc:make-multichoice-option
+     (gnc:make-multichoice-callback-option
       pagename-sorting optname-sec-date-subtotal
       "i2" (_ "Do a date subtotal.")
-      'monthly
-      date-subtotal-choice-list))
+      sec-date-subtotal
+      date-subtotal-choice-list #f
+      (lambda (x)
+        (set! sec-date-subtotal x)
+        (apply-selectable-by-name-sorting-options))))
 
     (gnc:register-trep-option
      (gnc:make-multichoice-option
