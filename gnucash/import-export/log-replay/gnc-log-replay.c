@@ -639,6 +639,7 @@ void gnc_file_log_replay (GtkWindow *parent)
                     {
                         do
                         {
+                            fgets(read_buf, sizeof(read_buf), log_file);
                             /*DEBUG("Chunk read: %s",read_retval);*/
                             if (strncmp(record_start_str, read_buf, strlen(record_start_str)) == 0) /* If a record started */
                             {
