@@ -69,7 +69,7 @@ gnc_bi_import_fix_bis (GtkListStore *store, guint *fixed, guint *deleted, GStrin
 
 void
 gnc_bi_import_create_bis (GtkListStore *store, QofBook *book, guint *n_invoices_created,
-                          guint *n_invoices_updated,	gchar *type, gchar *open_mode, GString * info,
+                          guint *n_invoices_updated, guint *n_rows_ignored,	gchar *type, gchar *open_mode, GString * info,
                           GtkWindow *parent);
 
 

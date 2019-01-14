@@ -75,6 +75,27 @@
 
 static QofLogModule log_module = G_LOG_DOMAIN; //G_LOG_BUSINESS;
 static char * un_escape(char *str);
+
+/** \brief Imports a csv file with invoice data into a GtkListStore.
+ 
+ Opens the csv file and attempts to match each row with the regular
+ expression provided in parser_regexp. This is a regular expression
+ that matches each field of the import row and the user selected field
+ separators (, or ;), optionally with the fields enclosed in quotes.
+ 
+ If the match is succesful, the fields of the import row are transferred to
+ a row in the GtkListStore store. If the the match is not succesful, the
+ row is ignored. Maintains information about number of rows imported,
+ the number of rows ignored, and the actual ignored rows.
+ 
+ @param filename      The csv filename to read
+ @param parser_regexp The regular expression with which to match the import rows
+ @param store         To store the matched data
+ @param max_rows      The maximum number of rows to import; use 0 for no maximum.
+ @param stats         Return information about matched and non-matched rows. Use NULL if the information is not required.
+ 
+ */
+
 bi_import_result
 gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
                          GtkListStore * store, guint max_rows,
@@ -217,298 +238,349 @@ gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
 }
 
 
-//! \brief try to fix some common errors in the csv representation of invoices
-//! * corrects the date format
-//! * corrects ambiguous values in multi line invoices
-//! * ensures customer exists
-//! * if quantity is unset, set to 1
-//! * if price is unset, delete row
+/** \brief Adjusts and validates invoice import data.
+
+ Replaces missing or invalid data with defaults:
+ - if quantity is not set, default to 1
+ - if date_opened is not set or invalid, default to today
+ - if date is not set or invalid, default to date_opened
+ - if due date is not set or invalid, default to date_posted
+
+ Validates the import data; any error causes all rows of the same invoice
+ to be deleted from the import data:
+ - id is not set
+ - owner_id is not set, or customer/vendor does not exist
+ - date_posted is not valid
+ - account_posted does not exist
+ - price is not set
+ - account does not exist
+
+ Adjustment and validation for header fields is only done for the first row of an invoice,
+ which is assumed to hold the header data for all items of the same invoice.
+ Currency related validation is done in subsqequent processing by gnc_bi_import_create_bis.
+ 
+ @param store Holds the rows of invoice import data
+ @param n_rows_fixed Increased for every data row that is adjusted in this function
+ @param n_rows_ignored Increased for every data row that is deleted in this function
+ @param info Updated with the error messages from this function
+ @param type The type of the import data, BILL or INVOICE
+ 
+ */
+
 void
-gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
+gnc_bi_import_fix_bis (GtkListStore * store, guint * n_rows_fixed, guint * n_rows_ignored,
                        GString * info, gchar *type)
 {
-    GtkTreeIter iter;
-    gboolean valid, row_deleted, row_fixed;
-    gchar *id = NULL, *date_opened = NULL, *date_posted = NULL, *due_date = NULL,
-        *owner_id = NULL, *date = NULL, *quantity = NULL, *price = NULL;
-    GString *prev_id, *prev_date_opened, *prev_date_posted, *prev_owner_id, *prev_date;	// needed to fix multi line invoices
+    GtkTreeIter iter, first_row_of_invoice;
+    gboolean valid, error_on_row, row_fixed, ignore_invoice, on_first_row_of_invoice;
+    // header data
+    gchar *id = NULL, *date_opened = NULL, *owner_id = NULL;
+    // item data
+    gchar *date = NULL, *account, *quantity = NULL, *price = NULL;
+    // posting data
+    gchar *date_posted = NULL, *due_date = NULL, *account_posted = NULL;
+    
+    Account *acc = NULL;
+    GString *running_id;
     guint dummy;
-    gint row = 1;
-    const gchar* date_format_string = qof_date_format_get_string (qof_date_format_get()); // Get the user set date format string
-
-
-    //date_format_string = qof_date_format_get_string (qof_date_format_get());
+    gint row = 1, fixed_for_invoice = 0;
+    const gchar* date_format_string = qof_date_format_get_string (qof_date_format_get()); // Get the user set date format string.
 
     DEBUG("date_format_string: %s",date_format_string);
-    // allow the call to this function with only GtkListeStore* specified
-    if (!fixed)
-        fixed = &dummy;
-    if (!deleted)
-        deleted = &dummy;
+    // Allow the call to this function with only GtkListeStore* specified.
+    if (!n_rows_fixed)
+        n_rows_fixed = &dummy;
+    if (!n_rows_ignored)
+        n_rows_ignored = &dummy;
 
-    *fixed = 0;
-    *deleted = 0;
-
-    // init strings
-    prev_id = g_string_new ("");
-    prev_date_opened = g_string_new ("");
-    prev_date_posted = g_string_new ("");
-    prev_owner_id = g_string_new ("");
-    prev_date = g_string_new ("");
+    *n_rows_fixed = 0;
+    *n_rows_ignored = 0;
+    
+    // Init control variables.
+    running_id = g_string_new("");
+    ignore_invoice = FALSE;
+    on_first_row_of_invoice = TRUE;
+    
+    g_string_append_printf (info, _("Validation...\n") );
 
     valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
     while (valid)
     {
-        row_deleted = FALSE;
+        error_on_row = FALSE;
         row_fixed = FALSE;
-
-        // Walk through the list, reading each row
+        
         gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
                             ID, &id,
                             DATE_OPENED, &date_opened,
-                            DATE_POSTED, &date_posted,
-                            DUE_DATE, &due_date,
                             OWNER_ID, &owner_id,
                             DATE, &date,
-                            QUANTITY, &quantity, PRICE, &price, -1);
+                            ACCOUNT, &account,
+                            QUANTITY, &quantity,
+                            PRICE, &price,
+                            DATE_POSTED, &date_posted,
+                            DUE_DATE, &due_date,
+                            ACCOUNT_POSTED, &account_posted, -1);
 
-        if (strlen (price) == 0)
+        //  If this is a row for a new invoice id, validate header values.
+        if (on_first_row_of_invoice)
         {
-            // invalid row (no price given)
-            // no fix possible -> delete row
-            valid = gtk_list_store_remove (store, &iter);
-            row_deleted = TRUE;
-            g_string_append_printf (info,
-                                    _("ROW %d DELETED, PRICE_NOT_SET: id=%s\n"),
-                                    row, id);
-        }
-        // TODO: QTY get set to 1 later if field is empty.  Delete this section?
-        else if (strlen (quantity) == 0)
-        {
-            // invalid row (no quantity given)
-            // no fix possible -> delete row
-            valid = gtk_list_store_remove (store, &iter);
-            row_deleted = TRUE;
-            g_string_append_printf (info, _("ROW %d DELETED, QTY_NOT_SET: id=%s\n"),
-                                    row, id);
-        }
-        else
-        {   // TODO: If id is empty get the next one in the series.  Bug 731105
-            if (strlen (id) == 0)
+            g_string_assign (running_id, id);
+            first_row_of_invoice = iter;
+       
+            // Validate the invoice id
+            if (strlen(id) == 0)
             {
-                // no invoice id specified
-                if (prev_id->len == 0)
+                // The id in the first row of a new invoice is blank, delete the invoice
+                g_string_append_printf (info,
+                                        _("Row %d: invoice ignored, invoice ID not set.\n"), row );
+                ignore_invoice = TRUE;
+            }
+            // Validate customer or vendor
+            if (!ignore_invoice && strlen (owner_id) == 0)
+            {
+                ignore_invoice = TRUE;
+                g_string_append_printf (info,
+                                        _("Row %d: invoice %s ignored, owner not set.\n"),
+                                        row, id);
+            }
+            else
+            {
+                // Verify that vendor or customer exists
+                if (g_ascii_strcasecmp (type, "BILL") == 0)
                 {
-                    // cannot fix -> delete row
-                    valid = gtk_list_store_remove (store, &iter);
-                    row_deleted = TRUE;
+
+                    if (!gnc_search_vendor_on_id
+                        (gnc_get_current_book (), owner_id))
+                    {
+                        // Vendor not found
+                        ignore_invoice = TRUE;
+                        g_string_append_printf (info,
+                                                _("Row %d: invoice %s ignored, vendor %s does not exist.\n"),
+                                                row, id, owner_id);
+                    }
+                }
+                else if (g_ascii_strcasecmp (type, "INVOICE") == 0)
+                {
+                    if (!gnc_search_customer_on_id
+                        (gnc_get_current_book (), owner_id))
+                    {
+                        // Customer not found
+                        ignore_invoice = TRUE;
+                        g_string_append_printf (info,
+                                                _("Row %d: invoice %s ignored, customer %s does not exist.\n"),
+                                                row, id, owner_id);
+                    }
+                }
+            }
+
+            // Validate the date posted.
+            if (!ignore_invoice && strlen(date_posted) != 0 && !isDateValid(date_posted))
+            {
+                // Invalid date posted in first row of invoice, delete the invoice
+                ignore_invoice = TRUE;
+                g_string_append_printf (info,
+                                        _("Row %d: invoice %s ignored, %s is not a valid posting date.\n"),
+                                        row, id, date_posted);
+            }
+            
+            // Validate account posted.
+            // Account should exists, and should be of type A/R for invoices, A/P for bills.
+            if (!ignore_invoice && strlen(date_posted) != 0)
+            {
+                acc = gnc_account_lookup_for_register
+                    (gnc_get_current_root_account (), account_posted);
+                if (acc == NULL)
+                {
+                    ignore_invoice = TRUE;
                     g_string_append_printf (info,
-                                            _("ROW %d DELETED, ID_NOT_SET\n"), row);
+                                            _("Row %d: invoice %s ignored, account %s does not exist.\n"),
+                                            row, id,account_posted);
                 }
                 else
                 {
-                    // this is a fixable multi line invoice
-                    gtk_list_store_set (store, &iter, ID, prev_id->str, -1);
-                    row_fixed = TRUE;
+                    if (g_ascii_strcasecmp (type, "BILL") == 0)
+                    {
+                        
+                        if (xaccAccountGetType (acc) != ACCT_TYPE_PAYABLE)
+                        {
+                            ignore_invoice = TRUE;
+                            g_string_append_printf (info,
+                                                    _("Row %d: invoice %s ignored, account %s is not of type Accounts Payable.\n"),
+                                                    row, id, account_posted);
+                        }
+                    }
+                    else if (g_ascii_strcasecmp (type, "INVOICE") == 0)
+                    {
+                        if (xaccAccountGetType (acc) != ACCT_TYPE_RECEIVABLE)
+                        {
+                            ignore_invoice = TRUE;
+                            g_string_append_printf (info,
+                                                    _("Row %d: invoice %s ignored, account %s is not of type Accounts Receivable.\n"),
+                                                    row, id, account_posted);
+                        }
+                    }
                 }
             }
-            else
+
+            // Verify the date opened
+            if (!ignore_invoice && !isDateValid(date_opened))
             {
-                // remember invoice id (to be able to fix multi line invoices)
-                g_string_assign (prev_id, id);
-                // new invoice => reset all other fixable entries
-                g_string_assign (prev_date_opened, "");
-                g_string_assign (prev_date_posted, "");
-                g_string_assign (prev_owner_id, "");
-                g_string_assign (prev_date, "");
+                // Fix this by using the current date.
+                gchar temp[20];
+                GDate today;
+                g_date_clear (&today, 1);
+                gnc_gdate_set_today (&today);
+                g_date_strftime (temp, 20, date_format_string, &today);    // Create a user specified date string.
+                gtk_list_store_set (store, &iter, DATE_OPENED,
+                                    temp, -1);
+                row_fixed = TRUE;
+            }
+            
+            // Verify the due date.
+            if (!ignore_invoice && strlen(date_posted) != 0 && !isDateValid(due_date))
+            {
+                // Fix this by using the date posted.
+                gtk_list_store_set (store, &iter, DUE_DATE,
+                                    date_posted, -1);
+                row_fixed = TRUE;
             }
         }
-
-        if (!row_deleted)
+        
+        // Validate and fix item data
+        if (!ignore_invoice)
         {
-            // the row is valid (price and id are valid)
-
-            if(!isDateValid(date_opened))
+            // Validate the price
+            if (strlen (price) == 0)
             {
-                if (prev_date_opened->len == 0)
-                {
-                    // fix this by using the current date
-                    gchar temp[20];
-                    GDate date;
-                    g_date_clear (&date, 1);
-                    gnc_gdate_set_today (&date);
-                    g_date_strftime (temp, 20, date_format_string, &date);	// Create a user specified date string.
-                    g_string_assign (prev_date_opened, temp);
-                }
-                // fix this by using the previous date_opened value (multi line invoice)
-                gtk_list_store_set (store, &iter, DATE_OPENED,
-                                    prev_date_opened->str, -1);
-                row_fixed = TRUE;
+                // No valid price, delete the row
+                error_on_row = TRUE;
+                g_string_append_printf (info,
+                                        _("Row %d: invoice %s ignored, price not set.\n"),
+                                        row, id);
             }
-            else
+            
+            // Validate the account
+            if (!error_on_row)
             {
-                // remember date_opened (to be able to fix multi line invoices)
-                g_string_assign (prev_date_opened, date_opened);
-            }
-
-            // date_opened is valid
-
-             if(!isDateValid(date_posted))
-             {
-                if (prev_date_posted->len == 0)
+                acc = gnc_account_lookup_for_register (gnc_get_current_root_account (),
+                                                   account);
+                if (acc == NULL)
                 {
-                    // this invoice will have to get posted manually
-                }
-                else
-                {
-                    // multi line invoice => fix it
-                    gtk_list_store_set (store, &iter, DATE_POSTED,
-                                        prev_date_posted->str, -1);
-                    row_fixed = TRUE;
+                    error_on_row = TRUE;
+                    g_string_append_printf (info,
+                                            _("Row %d: invoice %s ignored, account %s does not exist.\n"),
+                                            row, id,account);
                 }
             }
-            else
+            
+            // Verify the quantity
+            if (!error_on_row && strlen (quantity) == 0)
             {
-                // remember date_opened (to be able to fix multi line invoices)
-                g_string_assign (prev_date_posted, date_posted);
-            }
-
-            // date_posted is valid
-            /*
-            // Check if due date is valid.  Set it to date_posted if not valid or missing.
-            if(!isDateValid(due_date))
-            {
-                gtk_list_store_set (store, &iter, DUE_DATE,
-                                        date_posted, -1);
-                row_fixed = TRUE;
-
-            }
-
-            // due_date is valid
-            */
-            if (strlen (quantity) == 0)
-            {
-                // quantity is unset => set to 1
+                // The quantity is not set, default to 1
                 gtk_list_store_set (store, &iter, QUANTITY, "1", -1);
                 row_fixed = TRUE;
             }
-
-
-            // quantity is valid
-
-            if (strlen (owner_id) == 0)
+            
+            // Verify the item date
+            if(!error_on_row && !isDateValid(date))
             {
-                if (prev_owner_id->len == 0)
-                {
-                    // no customer given and not fixable => delete row
-                    valid = gtk_list_store_remove (store, &iter);
-                    row_deleted = TRUE;
-                    g_string_append_printf (info,
-                                            _("ROW %d DELETED, OWNER_NOT_SET: id=%s\n"),
-                                            row, id);
-                }
-                else
-                {
-                    gtk_list_store_set (store, &iter, owner_id,
-                                        prev_owner_id->str, -1);
-                    row_fixed = TRUE;
-                }
+                // Invalid item date, replace with date opened
+                gtk_list_store_set (store, &iter, DATE,
+                                    date_opened, -1);
+                row_fixed = TRUE;
             }
-            else
-            {
-                // remember owner_id
-                g_string_assign (prev_owner_id, owner_id);
-            }
-            if (g_ascii_strcasecmp (type, "BILL") == 0)
-            {
-                // BILL: check, if vendor exists
-                if (!gnc_search_vendor_on_id
-                        (gnc_get_current_book (), prev_owner_id->str))
-                {
-                    // vendor not found => delete row
-                    valid = gtk_list_store_remove (store, &iter);
-                    row_deleted = TRUE;
-                    g_string_append_printf (info,
-                                            _("ROW %d DELETED, VENDOR_DOES_NOT_EXIST: id=%s\n"),
-                                            row, id);
-                }
-            }
-            else if (g_ascii_strcasecmp (type, "INVOICE") == 0)
-            {
-                // INVOICE: check, if customer exists
-                if (!gnc_search_customer_on_id
-                        (gnc_get_current_book (), prev_owner_id->str))
-                {
-                    // customer not found => delete row
-                    valid = gtk_list_store_remove (store, &iter);
-                    row_deleted = TRUE;
-                    g_string_append_printf (info,
-                                            _("ROW %d DELETED, CUSTOMER_DOES_NOT_EXIST: id=%s\n"),
-                                            row, id);
-                }
-            }
-
-            // owner_id is valid
         }
+        if (row_fixed) ++fixed_for_invoice;
+        
+        // Move to the next row, deleting running invoice if necessary.
+        
+        if (error_on_row)
+        {
+            // Reset iter to the first row of the invoice, and signal to ignore the invoice.
+            iter = first_row_of_invoice;
+            ignore_invoice = TRUE;
+        }
+
+         if (ignore_invoice)
+        {
+            // Skip all rows of the invoice until a new invoice id.
+            // Get the subsequent row and its id.
+            while (valid && g_strcmp0 (id, running_id->str) == 0)
+            {
+                (*n_rows_ignored)++;
+                valid = gtk_list_store_remove (store, &iter);
+                if (valid) gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &id, -1);
+            }
+            ignore_invoice = FALSE;
+            fixed_for_invoice = 0;
+        }
+        else
+        {
+            // Get the next row and its id.
+            valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
+            if (valid) gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &id, -1);
+        }
+
+        // If the new row starts a new invoice...
+        if (valid && g_strcmp0 (id, running_id->str) != 0)
+        {
+            on_first_row_of_invoice = TRUE;
+            // The invoice was not ignored, so we can update statistics.
+            (*n_rows_fixed)+= fixed_for_invoice;
+            fixed_for_invoice = 0;
+        }
+        else on_first_row_of_invoice = FALSE;
 
         g_free (id);
         g_free (date_opened);
-        g_free (date_posted);
         g_free (owner_id);
         g_free (date);
+        g_free (account);
         g_free (quantity);
         g_free (price);
-        if (row_deleted)
-        {
-            (*deleted)++;
-            // reset all remembered values
-            g_string_assign (prev_id, "");
-            g_string_assign (prev_date_opened, "");
-            g_string_assign (prev_date_posted, "");
-            g_string_assign (prev_owner_id, "");
-            g_string_assign (prev_date, "");
-        }
-        else if (row_fixed)
-            (*fixed)++;
-
-        if (!row_deleted)
-            valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
-
+        g_free (date_posted);
+        g_free (due_date);
+        g_free (account_posted);
+        
         row++;
     }
 
-    // deallocate strings
-    g_string_free (prev_id, TRUE);
-    g_string_free (prev_date_opened, TRUE);
-    g_string_free (prev_date_posted, TRUE);
-    g_string_free (prev_owner_id, TRUE);
-    g_string_free (prev_date, TRUE);
-
-    if (info && (info->len > 0))
-    {
-        g_string_prepend (info, "\n\n");
-        g_string_prepend (info, _("These rows were deleted:"));
-    }
+    // Deallocate strings.
+    g_string_free (running_id, TRUE);
 }
 
 
-/***********************************************************************
- * @todo Maybe invoice checking should be done in gnc_bi_import_fix_bis (...)
- * rather than in here?  But that is more concerned with ensuring the csv is consistent.
- * @param GtkListStore *store
- * @param guint *n_invoices_created
- * @param guint *n_invoices_updated
- * @return void
- ***********************************************************************/
+/** \brief Creates and updates invoices from validated import data.
+ 
+ Loops through the import data to create and update invoices.
+ The first data row for an invoice is assumed to hold the header data.
+ 
+ If an invoice already exists, the user is asked, once per import,
+ to confirm that invoices should be updated.
+ If not confirmed, any rows for existing invoices are ignored.
+ If confirmed, entries are added to existing invoices.
+ Posted invoices, however, are never updated.
+ 
+ If the field date_posted is set, the system will
+ attempt to also post the invoice. The system will not
+ post the invoice if the entries of the invoice hold different currencies,
+ or if the currency of the invoice differs from the currency of the account_posted.
+ 
+ As per user selection, the system displays tabs for either all affected invoices,
+ all affected invoices not yet posted, or no invoices at all.
+ 
+ */
+
 void
 gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                           guint * n_invoices_created,
                           guint * n_invoices_updated,
+                          guint * n_rows_ignored,
                           gchar * type, gchar * open_mode, GString * info,
                           GtkWindow *parent)
 {
-    gboolean valid;
-    GtkTreeIter iter;
+    gboolean valid, invoice_posted, on_first_row_of_invoice;
+    GtkTreeIter iter, first_row_of_invoice;
     gchar *id = NULL, *date_opened = NULL, *owner_id = NULL, *billing_id = NULL, *notes = NULL;
     gchar *date = NULL, *desc = NULL, *action = NULL, *account = NULL, *quantity = NULL,
           *price = NULL, *disc_type = NULL, *disc_how = NULL, *discount = NULL, *taxable = NULL,
@@ -522,13 +594,13 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     gnc_numeric value;
     GncOwner *owner;
     Account *acc = NULL;
-    enum update {YES = GTK_RESPONSE_YES, NO = GTK_RESPONSE_NO} update;
+    enum update {YES = GTK_RESPONSE_YES, NO = GTK_RESPONSE_NO, NOT_ASKED = GTK_RESPONSE_NONE} update;
     GtkWidget *dialog;
     time64 today;
     InvoiceWindow *iw;
-    gchar *new_id = NULL;
     gint64 denom = 0;
     gnc_commodity *currency;
+    GString *running_id;
 
     // these arguments are needed
     g_return_if_fail (store && book);
@@ -544,9 +616,25 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     *n_invoices_created = 0;
     *n_invoices_updated = 0;
 
+    // Get the data for current row
+    // Determine if the id is for a new invoice.
+    // If so, create the header of the invoice.
+    // If not, determine if the invoice is already posted.
+    // If so, skip this invoice.
+    // If not, ask the user once per import if update of invoice is expected.
+    // If not expected, skip the invoice.
+    // Create the item of the invoice
+    // If the next row is for a new invoice,
+    // and the date_posted is filled, try to post the invoice.
+    // Move to the next row.
+    
     invoice = NULL;
-    update = NO;
-
+    update = NOT_ASKED;
+    on_first_row_of_invoice = TRUE;
+    running_id = g_string_new("");
+    
+    g_string_append_printf (info, _("\nProcessing...\n") );
+    
     valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
     while (valid)
     {
@@ -554,11 +642,6 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
                             ID, &id,
                             DATE_OPENED, &date_opened,
-                            DATE_POSTED, &date_posted,       // if autoposting requested
-                            DUE_DATE, &due_date,             // if autoposting requested
-                            ACCOUNT_POSTED, &account_posted, // if autoposting requested
-                            MEMO_POSTED, &memo_posted,       // if autoposting requested
-                            ACCU_SPLITS, &accumulatesplits,  // if autoposting requested
                             OWNER_ID, &owner_id,
                             BILLING_ID, &billing_id,
                             NOTES, &notes,
@@ -573,155 +656,133 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                             DISCOUNT, &discount,
                             TAXABLE, &taxable,
                             TAXINCLUDED, &taxincluded,
-                            TAX_TABLE, &tax_table, -1);
+                            TAX_TABLE, &tax_table,
+                            DATE_POSTED, &date_posted,       // if autoposting requested
+                            DUE_DATE, &due_date,             // if autoposting requested
+                            ACCOUNT_POSTED, &account_posted, // if autoposting requested
+                            MEMO_POSTED, &memo_posted,       // if autoposting requested
+                            ACCU_SPLITS, &accumulatesplits,  // if autoposting requested
+                            -1);
 
-        // TODO:  Assign a new invoice number if one is absent.  BUT we don't want to assign a new invoice for every line!!
-        // so we'd have to flag this up somehow or add an option in the import GUI.  The former implies that we make
-        // an assumption about what the importer (person) wants to do.  It seems reasonable that a CSV file full of items with
-        // If an invoice exists then we add to it in this current schema.
-        // no predefined invoice number is a new invoice that's in need of a new number.
-        // This was  not designed to satisfy the need for repeat invoices however, so maybe we need a another method for this, after all
-        // It should be easier to copy an invoice with a new ID than to go through all this malarky.
-        if (g_ascii_strcasecmp (type, "BILL") == 0)
-            invoice = gnc_search_bill_on_id (book, id);
-        else if (g_ascii_strcasecmp (type, "INVOICE") == 0)
-            invoice = gnc_search_invoice_on_id (book, id);
-        DEBUG( "Existing %s ID: %s\n", type, gncInvoiceGetID(invoice));
-
-        // If the search is empty then there is no existing invoice so make a new one
-        if (invoice == NULL)
+        if (on_first_row_of_invoice)
         {
-             DEBUG( "Creating a new : %s\n", type );
-            // new invoice
-            invoice = gncInvoiceCreate (book);
-            /* Protect against thrashing the DB and trying to write the invoice
-             * record prematurely */
-            gncInvoiceBeginEdit (invoice);
-            gncInvoiceSetID (invoice, id);
-            owner = gncOwnerNew ();
+            g_string_assign(running_id, id);
+            first_row_of_invoice = iter;
+
+            // Determine if the id is for a new invoice.
             if (g_ascii_strcasecmp (type, "BILL") == 0)
-                gncOwnerInitVendor (owner,
-                                    gnc_search_vendor_on_id (book, owner_id));
+                invoice = gnc_search_bill_on_id (book, id);
             else if (g_ascii_strcasecmp (type, "INVOICE") == 0)
-                gncOwnerInitCustomer (owner,
-                                      gnc_search_customer_on_id (book, owner_id));
-            gncInvoiceSetOwner (invoice, owner);
-            gncInvoiceSetCurrency (invoice, gncOwnerGetCurrency (owner));	// Set the invoice currency based on the owner
-            if (strlen (date_opened) != 0)	// If a date is specified in CSV
+                invoice = gnc_search_invoice_on_id (book, id);
+            DEBUG( "Existing %s ID: %s\n", type, gncInvoiceGetID(invoice));
+
+            if (invoice == NULL)
             {
-                // FIXME: Must check for the return value of qof_scan_date!
+                // If the id is for a new invoice, create the header.
+                 DEBUG( "Creating a new : %s\n", type );
+                // New invoice
+                invoice = gncInvoiceCreate (book);
+                /* Protect against thrashing the DB and trying to write the invoice
+                 * record prematurely */
+                gncInvoiceBeginEdit (invoice);
+                gncInvoiceSetID (invoice, id);
+                owner = gncOwnerNew ();
+                if (g_ascii_strcasecmp (type, "BILL") == 0)
+                    gncOwnerInitVendor (owner,
+                                        gnc_search_vendor_on_id (book, owner_id));
+                else if (g_ascii_strcasecmp (type, "INVOICE") == 0)
+                    gncOwnerInitCustomer (owner,
+                                          gnc_search_customer_on_id (book, owner_id));
+                gncInvoiceSetOwner (invoice, owner);
+                gncInvoiceSetCurrency (invoice, gncOwnerGetCurrency (owner));	// Set the invoice currency based on the owner
                 qof_scan_date (date_opened, &day, &month, &year);
                 gncInvoiceSetDateOpened (invoice,
                                          gnc_dmy2time64 (day, month, year));
+                gncInvoiceSetBillingID (invoice, billing_id ? billing_id : "");
+                notes = un_escape(notes);
+                gncInvoiceSetNotes (invoice, notes ? notes : "");
+                gncInvoiceSetActive (invoice, TRUE);
+                gncInvoiceCommitEdit (invoice);
+                g_string_append_printf (info, _("Invoice %s created.\n"),id);
+                (*n_invoices_created)++;
             }
-            else			// If no date in CSV
+            else    // Dealing with an existing invoice.
             {
-                time64 now = gnc_time (NULL);
-                gncInvoiceSetDateOpened (invoice, now);
-            }
-            gncInvoiceSetBillingID (invoice, billing_id ? billing_id : "");
-            notes = un_escape(notes);
-            gncInvoiceSetNotes (invoice, notes ? notes : "");
-            gncInvoiceSetActive (invoice, TRUE);
-            //if (g_ascii_strcasecmp(type,"INVOICE"))gncInvoiceSetBillTo( invoice, billto );
-            (*n_invoices_created)++;
-            update = YES;
-
-            gncInvoiceCommitEdit (invoice);
-        }
-// I want to warn the user that an existing billvoice exists, but not every
-// time.
-// An import can contain many lines usually referring to the same invoice.
-// NB: Posted invoices are NEVER updated.
-        else			// if invoice exists
-        {
-            if (gncInvoiceIsPosted (invoice))	// Is it already posted?
-            {
-                valid =
-                    gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
-                continue;		// If already posted then never import
-            }
-            if (update != YES)	// Pop up a dialog to ask if updates are the expected action
-            {
-                dialog = gtk_message_dialog_new (parent,
-                                                 GTK_DIALOG_MODAL,
-                                                 GTK_MESSAGE_ERROR,
-                                                 GTK_BUTTONS_YES_NO,
-                                                 "%s",
-                                                 _("Are you sure you have bills/invoices to update?"));
-                update = gtk_dialog_run (GTK_DIALOG (dialog));
-                gtk_widget_destroy (dialog);
+                if (gncInvoiceIsPosted (invoice))
+                {
+                    // If the invoice is already posted, skip all rows of the invoice.
+                    g_string_append_printf (info,_("Invoice %s not updated because it is already posted.\n"),id);
+                    while (valid && g_strcmp0 (id, running_id->str) == 0)
+                    {
+                        (*n_rows_ignored)++;
+                        valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
+                        if (valid)
+                            gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &id, -1);
+                    }
+                    on_first_row_of_invoice = TRUE;
+                    continue;
+                }
+                else
+                
+                if (update == NOT_ASKED)
+                {
+                    // If the invoice is not yet posted, ask confirmation from the user for updating.
+                    // Only for the first invoice that would get updated.
+                    dialog = gtk_message_dialog_new (parent,
+                                                     GTK_DIALOG_MODAL,
+                                                     GTK_MESSAGE_ERROR,
+                                                     GTK_BUTTONS_YES_NO,
+                                                     "%s",
+                                                     _("Are you sure you want to update existing bills/invoices?"));
+                    update = gtk_dialog_run (GTK_DIALOG (dialog));
+                    gtk_widget_destroy (dialog);
+                }
+                
                 if (update == NO)
                 {
-                    // Cleanup and leave
-                    g_free (id);
-                    g_free (date_opened);
-                    g_free (owner_id);
-                    g_free (billing_id);
-                    g_free (notes);
-                    g_free (date);
-                    g_free (desc);
-                    g_free (action);
-                    g_free (account);
-                    g_free (quantity);
-                    g_free (price);
-                    g_free (disc_type);
-                    g_free (disc_how);
-                    g_free (discount);
-                    g_free (taxable);
-                    g_free (taxincluded);
-                    g_free (tax_table);
-                    g_free (date_posted);
-                    g_free (due_date);
-                    g_free (account_posted);
-                    g_free (memo_posted);
-                    g_free (accumulatesplits);
-                    return;
+                    // If the user does not want to update existing invoices, ignore all rows of the invoice.
+                    g_string_append_printf (info,_("Invoice %s not updated because it already exists.\n"),id);
+                    while (valid && g_strcmp0 (id, running_id->str) == 0)
+                    {
+                        (*n_rows_ignored)++;
+                        valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
+                        if (valid)
+                            gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &id, -1);
+                    }
+                    on_first_row_of_invoice = TRUE;
+                    continue;
                 }
+                
+                (*n_invoices_updated)++;
+                g_string_append_printf (info, _("Invoice %s updated.\n"),id);
             }
-            (*n_invoices_updated)++;
-        }
-
-
-        // add entry to invoice/bill
+        }   // On first row of invoice
+            
+        // Add entry to invoice/bill.
         entry = gncEntryCreate (book);
         gncEntryBeginEdit(entry);
-        currency = gncInvoiceGetCurrency(invoice);
+        currency = gncInvoiceGetCurrency(invoice);                  // Currency
         if (currency) denom = gnc_commodity_get_fraction(currency);
-        // FIXME: Must check for the return value of qof_scan_date!
-        qof_scan_date (date, &day, &month, &year);
+        today = gnc_time (NULL);                                    // Item date entered is today
+        gncEntrySetDateEntered(entry, today);
+        qof_scan_date (date, &day, &month, &year);                  // Item date
         {
             GDate *date = g_date_new_dmy(day, month, year);
-            gncEntrySetDateGDate (entry, date);
+            gncEntrySetDateGDate(entry, date);
             g_date_free (date);
         }
-        today = gnc_time (NULL);	// set today to the current date
-        if (strlen (date) != 0)	// If a date is specified in CSV
-        {
-            GDate *date = g_date_new_dmy(day, month, year);
-            gncEntrySetDateGDate(entry, date);
-            gncEntrySetDateEntered(entry, gnc_dmy2time64 (day, month, year));
-        }
-        else
-        {
-            GDate *date = gnc_g_date_new_today();
-            gncEntrySetDateGDate(entry, date);
-            gncEntrySetDateEntered(entry, today);
-        }
-        // Remove escaped quotes
-        desc = un_escape(desc);
-        notes = un_escape(notes);
+        desc = un_escape(desc);                                     // Descripton
         gncEntrySetDescription (entry, desc);
-        gncEntrySetAction (entry, action);
-        value = gnc_numeric_zero(); 
+        gncEntrySetAction (entry, action);                          // Action
+        value = gnc_numeric_zero();                                 // Quantity
         gnc_exp_parser_parse (quantity, &value, NULL);
-        // Need to set the denom appropriately else we get stupid rounding errors.
+        // Need to set the denom appropriately else we get rounding errors.
         value = gnc_numeric_convert (value, denom * 100, GNC_HOW_RND_NEVER);
-        //DEBUG("qty = %s",gnc_num_dbg_to_string(value));
         gncEntrySetQuantity (entry, value);
+        
         acc = gnc_account_lookup_for_register (gnc_get_current_root_account (),
                                                account);
-
+        notes = un_escape(notes);
         if (g_ascii_strcasecmp (type, "BILL") == 0)
         {
             gncEntrySetBillAccount (entry, acc);
@@ -755,27 +816,37 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             gncInvoiceAddEntry (invoice, entry);
         }
         gncEntryCommitEdit(entry);
+
+        // Get the id for the next row.
         valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
-        // handle auto posting of invoices
-        
-        new_id = NULL;
-       
         if (valid)
-            gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &new_id, -1);
-        if (g_strcmp0 (id, new_id) != 0)
+            gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &id, -1);
+        else
+            id = NULL;
+        
+        if (g_strcmp0 (id, running_id->str) == 0) // The next row is for the same invoice.
         {
-            // the next invoice id is different => try to autopost this invoice
-            if (strlen(date_posted) != 0)
+            on_first_row_of_invoice = FALSE;
+        }
+        else // The next row is for a new invoice; try to post the invoice.
+        {
+            // Use posting values from the first row of this invoice.
+            gtk_tree_model_get (GTK_TREE_MODEL (store), &first_row_of_invoice,
+                                ID, &id,
+                                DATE_POSTED, &date_posted,
+                                DUE_DATE, &due_date,
+                                ACCOUNT_POSTED, &account_posted,
+                                MEMO_POSTED, &memo_posted,
+                                ACCU_SPLITS, &accumulatesplits, -1);
+            invoice_posted = FALSE;
+            
+            if (strlen(date_posted) != 0)   // Post this invoice.
             {
-                // autopost this invoice
                 GHashTable *foreign_currs;
                 gboolean auto_pay;
                 time64 p_date, d_date;
                 guint curr_count;
                 gboolean scan_date_r;
-                scan_date_r = qof_scan_date (date_posted, &day, &month, &year);
-                DEBUG("Invoice %s is marked to be posted because...", id);
-                DEBUG("qof_scan_date = %d", scan_date_r);
                 if (g_ascii_strcasecmp (type, "INVOICE") == 0)
                     auto_pay = gnc_prefs_get_bool (GNC_PREFS_GROUP_INVOICE, GNC_PREF_AUTO_PAY);
                 else
@@ -787,65 +858,58 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                 // Only auto-post if there's a single currency involved
                 if(curr_count == 0)
                 {
-                    p_date = gnc_dmy2time64 (day, month, year);
-                    // Check for the return value of qof_scan_date
-                    if(qof_scan_date (due_date, &day, &month, &year)) // obtains the due date, or leaves it at date_posted
-                    {	
-                        d_date = gnc_dmy2time64 (day, month, year);
-                    }
-                    else
-                        d_date = p_date;
                     acc = gnc_account_lookup_for_register
-                          (gnc_get_current_root_account (), account_posted);
-                    if(acc != NULL) // Is the account real?
-                    {                        
-                        // Check if the currencies match
-                        if(gncInvoiceGetCurrency(invoice) == gnc_account_get_currency_or_parent(acc))
-                        {
-                            gncInvoicePostToAccount (invoice, acc, p_date, d_date,
+                        (gnc_get_current_root_account (), account_posted);
+                    // Check if the currencies match
+                    if(gncInvoiceGetCurrency(invoice) == gnc_account_get_currency_or_parent(acc))
+                    {
+                        qof_scan_date (date_posted, &day, &month, &year);
+                        p_date = gnc_dmy2time64 (day, month, year);
+                        qof_scan_date (due_date, &day, &month, &year);
+                        d_date = gnc_dmy2time64 (day, month, year);
+                        gncInvoicePostToAccount (invoice, acc, p_date, d_date,
                                                  memo_posted,
                                                  text2bool (accumulatesplits),
                                                  auto_pay);
-                            PWARN("Invoice %s posted",id);
-                             g_string_append_printf (info, _("Invoice %s posted.\n"),id);
-                        }
-                        else // No match! Don't post it.
-                        {
-                            PWARN("Invoice %s NOT posted because currencies don't match", id);
-                            g_string_append_printf (info,_("Invoice %s NOT posted because currencies don't match.\n"), id);
-                        }
+                        PWARN("Invoice %s posted.", id);
+                        invoice_posted = TRUE;
+                        g_string_append_printf (info, _("Invoice %s posted.\n"),id);
                     }
-                    else
+                    else    // Currency of invoice does not match currency of account posted.
                     {
-                        PWARN("Cannot post invoice %s because account name \"%s\" is invalid!",id,account_posted);
-                        g_string_append_printf (info,_("Cannot post invoice %s because account name \"%s\" is invalid!\n"),id,account_posted);
+                        PWARN("Invoice %s NOT posted because currencies don't match", id);
+                        g_string_append_printf (info,_("Invoice %s NOT posted because currencies don't match.\n"), id);
                     }
                 }
-                else
+                else    // Multiple currencies involved.
                 {
                     PWARN("Invoice %s NOT posted because it requires currency conversion.",id);
                     g_string_append_printf (info,_("Invoice %s NOT posted because it requires currency conversion.\n"),id);
                 }
                 g_hash_table_unref (foreign_currs);
             }
-            else
+            else    // No posting date provided in the import file.
             {
                 PWARN("Invoice %s is NOT marked for posting",id);
             }
+        
+            // Open new bill / invoice in a tab, if requested.
+            if (g_ascii_strcasecmp(open_mode, "ALL") == 0
+                    || (g_ascii_strcasecmp(open_mode, "NOT_POSTED") == 0
+                        && !invoice_posted))
+            {
+                iw =  gnc_ui_invoice_edit (parent, invoice);
+                gnc_plugin_page_invoice_new (iw);
+            }
+            
+            // The next row will be for a new invoice.
+            on_first_row_of_invoice = TRUE;
         }
-        // open new bill / invoice in a tab, if requested
-        if (g_ascii_strcasecmp(open_mode, "ALL") == 0
-                || (g_ascii_strcasecmp(open_mode, "NOT_POSTED") == 0
-                    && strlen(date_posted) == 0))
-        {
-            iw =  gnc_ui_invoice_edit (parent, invoice);
-            gnc_plugin_page_invoice_new (iw);
-        }
-
-
     }
-    // cleanup
-    g_free (new_id);
+    if (*n_invoices_updated + *n_invoices_created == 0)
+        g_string_append_printf (info, _("No invoices created or updated.\n"));
+    
+    // Cleanup.
     g_free (id);
     g_free (date_opened);
     g_free (owner_id);
@@ -869,7 +933,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     g_free (memo_posted);
     g_free (accumulatesplits);
     
-
+    g_string_free (running_id, TRUE);
 }
 
 /* Change any escaped quotes ("") to (")

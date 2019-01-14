@@ -124,7 +124,7 @@ gnc_plugin_bi_import_showGUI (GtkWindow *parent)
 
     gui->book = gnc_get_current_book();
 
-    gui->regexp = g_string_new ( "^(\\x{FEFF})?(?<id>[^;]*);(?<date_opened>[^;]*);(?<owner_id>[^;]*);(?<billing_id>[^;]*);?(?<notes>[^;]*);?(?<date>[^;]*);?(?<desc>[^;]*);?(?<action>[^;]*);?(?<account>[^;]*);?(?<quantity>[^;]*);?(?<price>[^;]*);?(?<disc_type>[^;]*);?(?<disc_how>[^;]*);?(?<discount>[^;]*);?(?<taxable>[^;]*);?(?<taxincluded>[^;]*);?(?<tax_table>[^;]*);(?<date_posted>[^;]*);(?<due_date>[^;]*);(?<account_posted>[^;]*);(?<memo_posted>[^;]*);(?<accu_splits>[^;]*)$");
+    gui->regexp = g_string_new ( "^(\\x{FEFF})?(?<id>[^;]*);(?<date_opened>[^;]*);(?<owner_id>[^;]*);(?<billing_id>[^;]*);(?<notes>[^;]*);(?<date>[^;]*);(?<desc>[^;]*);(?<action>[^;]*);(?<account>[^;]*);(?<quantity>[^;]*);(?<price>[^;]*);(?<disc_type>[^;]*);(?<disc_how>[^;]*);(?<discount>[^;]*);(?<taxable>[^;]*);(?<taxincluded>[^;]*);(?<tax_table>[^;]*);(?<date_posted>[^;]*);(?<due_date>[^;]*);(?<account_posted>[^;]*);(?<memo_posted>[^;]*);(?<accu_splits>[^;]*)$");
 
     // create model and bind to view
     gui->store = gtk_list_store_new (N_COLUMNS,
@@ -216,12 +216,12 @@ gnc_bi_import_gui_ok_cb (GtkWidget *widget, gpointer data)
     if (res == RESULT_OK)
     {
         gnc_bi_import_fix_bis (gui->store, &n_fixed, &n_deleted, info, gui->type);
-        gnc_bi_import_create_bis (gui->store, gui->book, &n_invoices_created, &n_invoices_updated,
+        gnc_bi_import_create_bis (gui->store, gui->book, &n_invoices_created, &n_invoices_updated, &n_deleted,
                                   gui->type, gui->open_mode, info, gui->parent);
         if (info->len > 0)
             gnc_info_dialog (GTK_WINDOW (gui->dialog), "%s", info->str);
         g_string_free( info, TRUE );
-        gnc_info_dialog (GTK_WINDOW (gui->dialog), _("Import results:\n%i lines were ignored\n%i lines imported:\n   %u fixes\n   %u ignored (not fixable)\n\n   %u created\n   %u updated (based on id)"), stats.n_ignored, stats.n_imported, n_fixed, n_deleted, n_invoices_created, n_invoices_updated);
+        gnc_info_dialog (GTK_WINDOW (gui->dialog), _("Import:\n- rows ignored: %i\n- rows imported: %i\n\nValidation & processing:\n- rows fixed: %u\n- rows ignored: %u\n- invoices created: %u\n- invoices updated: %u"), stats.n_ignored, stats.n_imported, n_fixed, n_deleted, n_invoices_created, n_invoices_updated);
         if (stats.n_ignored > 0)
             gnc_info2_dialog (gui->dialog, _("These lines were ignored during import"), stats.ignored_lines->str);
 
@@ -309,7 +309,7 @@ void gnc_bi_import_gui_option1_cb (GtkWidget *widget, gpointer data)
     BillImportGui *gui = data;
     if (!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget) ))
         return;
-    g_string_assign (gui->regexp, "^(\\x{FEFF})?(?<id>[^;]*);(?<date_opened>[^;]*);(?<owner_id>[^;]*);(?<billing_id>[^;]*);?(?<notes>[^;]*);?(?<date>[^;]*);?(?<desc>[^;]*);?(?<action>[^;]*);?(?<account>[^;]*);?(?<quantity>[^;]*);?(?<price>[^;]*);?(?<disc_type>[^;]*);?(?<disc_how>[^;]*);?(?<discount>[^;]*);?(?<taxable>[^;]*);?(?<taxincluded>[^;]*);?(?<tax_table>[^;]*);(?<date_posted>[^;]*);(?<due_date>[^;]*);(?<account_posted>[^;]*);(?<memo_posted>[^;]*);(?<accu_splits>[^;]*)$");
+    g_string_assign (gui->regexp, "^(\\x{FEFF})?(?<id>[^;]*);(?<date_opened>[^;]*);(?<owner_id>[^;]*);(?<billing_id>[^;]*);(?<notes>[^;]*);(?<date>[^;]*);(?<desc>[^;]*);(?<action>[^;]*);(?<account>[^;]*);(?<quantity>[^;]*);(?<price>[^;]*);(?<disc_type>[^;]*);(?<disc_how>[^;]*);(?<discount>[^;]*);(?<taxable>[^;]*);(?<taxincluded>[^;]*);(?<tax_table>[^;]*);(?<date_posted>[^;]*);(?<due_date>[^;]*);(?<account_posted>[^;]*);(?<memo_posted>[^;]*);(?<accu_splits>[^;]*)$");
     gnc_bi_import_gui_filenameChanged_cb (gui->entryFilename, gui);
 }
 
@@ -319,7 +319,7 @@ void gnc_bi_import_gui_option2_cb (GtkWidget *widget, gpointer data)
     BillImportGui *gui = data;
     if (!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget) ))
         return;
-    g_string_assign (gui->regexp, "^(\\x{FEFF})?(?<id>[^,]*),(?<date_opened>[^,]*),(?<owner_id>[^,]*),(?<billing_id>[^,]*),?(?<notes>[^,]*),?(?<date>[^,]*),?(?<desc>[^,]*),?(?<action>[^,]*),?(?<account>[^,]*),?(?<quantity>[^,]*),?(?<price>[^,]*),?(?<disc_type>[^,]*),?(?<disc_how>[^,]*),?(?<discount>[^,]*),?(?<taxable>[^,]*),?(?<taxincluded>[^,]*),?(?<tax_table>[^,]*),(?<date_posted>[^,]*),(?<due_date>[^,]*),(?<account_posted>[^,]*),(?<memo_posted>[^,]*),(?<accu_splits>[^,]*)$");
+    g_string_assign (gui->regexp, "^(\\x{FEFF})?(?<id>[^,]*),(?<date_opened>[^,]*),(?<owner_id>[^,]*),(?<billing_id>[^,]*),(?<notes>[^,]*),(?<date>[^,]*),(?<desc>[^,]*),(?<action>[^,]*),(?<account>[^,]*),(?<quantity>[^,]*),(?<price>[^,]*),(?<disc_type>[^,]*),(?<disc_how>[^,]*),(?<discount>[^,]*),(?<taxable>[^,]*),(?<taxincluded>[^,]*),(?<tax_table>[^,]*),(?<date_posted>[^,]*),(?<due_date>[^,]*),(?<account_posted>[^,]*),(?<memo_posted>[^,]*),(?<accu_splits>[^,]*)$");
     gnc_bi_import_gui_filenameChanged_cb (gui->entryFilename, gui);
 }
 
