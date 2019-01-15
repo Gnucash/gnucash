@@ -75,10 +75,10 @@
 (export gnc:options-add-interval-choice!)
 (export gnc:options-add-account-levels!)
 (export gnc:options-add-account-selection!)
-(export gnc:options-add-include-subaccounts!)
-(export gnc:options-add-group-accounts!)
+(export gnc:options-add-include-subaccounts!) ;deprecated
+(export gnc:options-add-group-accounts!)      ;deprecated
 (export gnc:options-add-currency!)
-(export gnc:options-add-currency-selection!)
+(export gnc:options-add-currency-selection!)  ;deprecated
 (export gnc:options-add-price-source!)
 (export gnc:options-add-plot-size!)
 (export gnc:options-add-marker-choice!)
@@ -719,12 +719,14 @@
 (export gnc:report-finished)
 (export gnc:accounts-count-splits)
 (export gnc-commodity-collector-allzero?)
+(export gnc:monetary+)
+(export gnc:monetaries-add)
 (export gnc:account-get-trans-type-balance-interval)
 (export gnc:account-get-trans-type-balance-interval-with-closing)
-(export gnc:account-get-total-flow)
+(export gnc:account-get-total-flow)     ;deprecated
 (export gnc:account-get-pos-trans-total-interval)
 (export gnc:account-get-trans-type-splits-interval)
-(export gnc:double-col)
+(export gnc:double-col)                 ;deprecated
 (export gnc:budget-get-start-date)
 (export gnc:budget-get-end-date)
 (export gnc:budget-account-get-net)

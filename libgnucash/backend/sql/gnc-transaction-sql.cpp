@@ -853,7 +853,7 @@ convert_query_term_to_sql (const GncSqlBackend* sql_be, const gchar* fieldName,
             query_date_t date_data = (query_date_t)pPredData;
 
             GncDateTime time(date_data->date);
-            sql << time.format_zulu ("%Y-%m-%d %H:%M:%S");
+            sql << time.format_iso8601();
         }
         else if (strcmp (pPredData->type_name, QOF_TYPE_INT32) == 0)
         {

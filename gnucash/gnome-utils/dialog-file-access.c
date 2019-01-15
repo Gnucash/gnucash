@@ -71,32 +71,34 @@ static gchar*
 geturl( FileAccessWindow* faw )
 {
     gchar* url = NULL;
-    const gchar* host;
-    const gchar* database;
-    const gchar* username;
-    const gchar* password;
-    const gchar* type;
-    const gchar* file;
-    const gchar* path;
+    const gchar* host = NULL;
+    const gchar* database = NULL;
+    const gchar* username = NULL;
+    const gchar* password = NULL;
+    /* Not const as return value of gtk_combo_box_text_get_active_text must be freed */
+    gchar* type = NULL;
+    /* Not const as return value of gtk_file_chooser_get_filename must be freed */
+    gchar* path = NULL;
 
-    host = gtk_entry_get_text( faw->tf_host );
-    database = gtk_entry_get_text( faw->tf_database );
-    username = gtk_entry_get_text( faw->tf_username );
-    password = gtk_entry_get_text( faw->tf_password );
-    file = gtk_file_chooser_get_filename( faw->fileChooser );
-
-    type = gtk_combo_box_text_get_active_text(faw->cb_uri_type );
-    if ( gnc_uri_is_file_protocol( type ) )
+    type = gtk_combo_box_text_get_active_text (faw->cb_uri_type);
+    if (gnc_uri_is_file_scheme (type))
     {
-        if ( file == NULL ) /* file protocol was chosen but no filename was set */
+        path = gtk_file_chooser_get_filename (faw->fileChooser);
+        if ( !path ) /* file protocol was chosen but no filename was set */
             return NULL;
-        else                /* file protocol was chosen with filename set */
-            path = file;
     }
     else                    /* db protocol was chosen */
-        path = database;
+    {
+        host = gtk_entry_get_text( faw->tf_host );
+        path = g_strdup(gtk_entry_get_text(faw->tf_database));
+        username = gtk_entry_get_text( faw->tf_username );
+        password = gtk_entry_get_text( faw->tf_password );
+    }
 
     url = gnc_uri_create_uri (type, host, 0, username, password, path);
+
+    g_free (type);
+    g_free (path);
 
     return url;
 }
@@ -335,7 +337,7 @@ gnc_ui_file_access (GtkWindow *parent, int type)
     if (type == FILE_ACCESS_OPEN || type == FILE_ACCESS_SAVE_AS)
     {
         last = gnc_history_get_last();
-        if ( last && gnc_uri_is_file_uri ( last ) )
+        if ( last && gnc_uri_targets_local_fs (last))
         {
             gchar *filepath = gnc_uri_get_path ( last );
             faw->starting_dir = g_path_get_dirname( filepath );

@@ -11,7 +11,6 @@ gnc_add_test_with_guile(test-link-module-report-system test-link-module.c
 
 set(scm_test_report_system_SOURCES
   test-load-report-system-module.scm
-  test-collectors.scm
   test-test-extras.scm
 )
 
@@ -59,5 +58,4 @@ set_dist_list(test_report_system_DIST
   ${scm_test_report_system_SOURCES}
   test-extras.scm
   test-link-module.c
-  test-test-extras.scm
 )

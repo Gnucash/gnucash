@@ -104,6 +104,7 @@ set(gtest_qof_LIBS
 
 set(gtest_engine_INCLUDES
   ${MODULEPATH}
+  ${CMAKE_SOURCE_DIR}/libgnucash/core-utils
   ${CMAKE_BINARY_DIR}/common # for config.h
   ${CMAKE_SOURCE_DIR}/common # for platform.h
   ${GLIB2_INCLUDE_DIRS}
@@ -156,6 +157,7 @@ set(test_gnc_rational_SOURCES
   ${MODULEPATH}/gnc-timezone.cpp
   ${MODULEPATH}/gnc-date.cpp
   ${MODULEPATH}/qoflog.cpp
+  ${CMAKE_SOURCE_DIR}/libgnucash/core-utils/gnc-locale-utils.cpp
   ${gtest_engine_win32_SOURCES}
   gtest-gnc-rational.cpp
   ${GTEST_SRC})
@@ -171,6 +173,7 @@ set(test_gnc_numeric_SOURCES
   ${MODULEPATH}/gnc-timezone.cpp
   ${MODULEPATH}/gnc-date.cpp
   ${MODULEPATH}/qoflog.cpp
+  ${CMAKE_SOURCE_DIR}/libgnucash/core-utils/gnc-locale-utils.cpp
   ${gtest_engine_win32_SOURCES}
   gtest-gnc-numeric.cpp
   ${GTEST_SRC})
@@ -189,6 +192,7 @@ set(test_gnc_datetime_SOURCES
   ${MODULEPATH}/gnc-timezone.cpp
   ${MODULEPATH}/gnc-date.cpp
   ${MODULEPATH}/qoflog.cpp
+  ${CMAKE_SOURCE_DIR}/libgnucash/core-utils/gnc-locale-utils.cpp
   ${gtest_engine_win32_SOURCES}
   gtest-gnc-datetime.cpp
   ${GTEST_SRC})
@@ -217,7 +221,6 @@ gnc_add_test_with_guile(test-scm-query test-scm-query.cpp ENGINE_TEST_INCLUDE_DI
 set(engine_test_SCHEME
   test-account.scm
   test-create-account.scm
-  test-test-extras.scm
   test-split.scm
   )
 
@@ -315,7 +318,6 @@ set(test_engine_SCHEME_DIST
         test-extras.scm
         test-scm-query-import.scm
         test-split.scm
-        test-test-extras.scm
 )
 
 set(test_engine_EXTRA_DIST

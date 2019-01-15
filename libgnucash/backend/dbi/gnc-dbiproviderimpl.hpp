@@ -262,19 +262,30 @@ template<> StrVec
 GncDbiProviderImpl<DbType::DBI_PGSQL>::get_table_list (dbi_conn conn,
                                                        const std::string& table)
 {
-    std::string dbname (dbi_conn_get_option (conn, "dbname"));
-    auto list = conn_get_table_list (conn, dbname, table);
-    auto end = std::remove_if (list.begin(), list.end(),
-                               [](std::string& table_name){
-                                   return table_name == "sql_features" ||
-                                   table_name == "sql_implementation_info" ||
-                                   table_name == "sql_languages" ||
-                                   table_name == "sql_packages" ||
-                                   table_name == "sql_parts" ||
-                                   table_name == "sql_sizing" ||
-                                   table_name == "sql_sizing_profiles";
-                               });
-    list.erase(end, list.end());
+    const char* query_no_regex = "SELECT relname FROM pg_class WHERE relname"
+                          "!~ '^(pg|sql)_' AND relkind = 'r' ORDER BY relname";
+    std::string query_with_regex = "SELECT relname FROM pg_class WHERE relname LIKE '";
+    query_with_regex += table + "' AND relkind = 'r' ORDER BY relname";
+    dbi_result result;
+    if (table.empty())
+        result = dbi_conn_query (conn, query_no_regex);
+    else
+        result = dbi_conn_query (conn, query_with_regex.c_str());
+
+    StrVec list;
+    const char* errmsg;
+    if (dbi_conn_error (conn, &errmsg) != DBI_ERROR_NONE)
+    {
+        PWARN ("Table List Retrieval Error: %s\n", errmsg);
+        return list;
+    }
+
+    while (dbi_result_next_row (result) != 0)
+    {
+        std::string index_name {dbi_result_get_string_idx (result, 1)};
+        list.push_back(index_name);
+    }
+    dbi_result_free (result);
     return list;
 }
 

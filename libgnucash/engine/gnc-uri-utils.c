@@ -27,42 +27,72 @@
 #include "gnc-filepath-utils.h"
 #include "qofsession.h"
 
-/* Checks if the given protocol is used to refer to a file
+/* Checks if the given uri is a valid uri
+ */
+gboolean gnc_uri_is_uri (const gchar *uri)
+{
+
+    gchar *scheme = NULL, *hostname = NULL;
+    gchar *username = NULL, *password = NULL;
+    gchar *path     = NULL;
+    gint   port = 0;
+    gboolean is_uri = FALSE;
+
+    gnc_uri_get_components ( uri, &scheme, &hostname, &port,
+                             &username, &password, &path );
+
+    /* For gnucash to consider a uri valid the following must be true:
+     * - scheme and path must not be NULL
+     * - for anything but local filesystem uris, hostname must be valid as well */
+    is_uri = (scheme && path && (gnc_uri_is_file_scheme(scheme) || hostname));
+
+    g_free (scheme);
+    g_free (hostname);
+    g_free (username);
+    g_free (password);
+    g_free (path);
+
+    return is_uri;
+}
+
+/* Checks if the given scheme is used to refer to a file
  * (as opposed to a network service)
  */
-gboolean gnc_uri_is_known_protocol (const gchar *protocol)
+gboolean gnc_uri_is_known_scheme (const gchar *scheme)
 {
-    gboolean is_known_proto = FALSE;
+    gboolean is_known_scheme = FALSE;
     GList *node;
-    GList *known_proto_list = qof_backend_get_registered_access_method_list();
+    GList *known_scheme_list = qof_backend_get_registered_access_method_list();
 
-    for ( node = known_proto_list; node != NULL; node = node->next )
+    for ( node = known_scheme_list; node != NULL; node = node->next )
     {
-        gchar *known_proto = node->data;
-        if ( !g_ascii_strcasecmp (protocol, known_proto) )
+        gchar *known_scheme = node->data;
+        if ( !g_ascii_strcasecmp (scheme, known_scheme) )
         {
-            is_known_proto = TRUE;
+            is_known_scheme = TRUE;
             break;
         }
     }
 
-    g_list_free (known_proto_list);
-    return is_known_proto;
+    g_list_free (known_scheme_list);
+    return is_known_scheme;
 }
 
-/* Checks if the given protocol is used to refer to a file
+/* Checks if the given scheme is used to refer to a file
  * (as opposed to a network service)
- * For simplicity, handle all unknown protocols as if it were
- * file based protocols. This will avoid password lookups and such.
+ * Note unknown schemes are always considered network schemes.
+ *
+ * *Compatibility note:*
+ * This used to be the other way around before gnucash 3.4. Before
+ * that unknown schemes were always considered local file system
+ * uri schemes.
  */
-gboolean gnc_uri_is_file_protocol (const gchar *protocol)
+gboolean gnc_uri_is_file_scheme (const gchar *scheme)
 {
-    if ( !g_ascii_strcasecmp (protocol, "mysql") ||
-            !g_ascii_strcasecmp (protocol, "postgres")
-       )
-        return FALSE;
-    else
-        return TRUE;
+    return (scheme &&
+            (!g_ascii_strcasecmp (scheme, "file") ||
+             !g_ascii_strcasecmp (scheme, "xml") ||
+             !g_ascii_strcasecmp (scheme, "sqlite3")));
 }
 
 /* Checks if the given uri defines a file
@@ -70,17 +100,48 @@ gboolean gnc_uri_is_file_protocol (const gchar *protocol)
  */
 gboolean gnc_uri_is_file_uri (const gchar *uri)
 {
-    gchar *protocol = gnc_uri_get_protocol ( uri );
-    gboolean result = gnc_uri_is_file_protocol ( protocol );
+    gchar *scheme = gnc_uri_get_scheme ( uri );
+    gboolean result = gnc_uri_is_file_scheme ( scheme );
 
-    g_free ( protocol );
+    g_free ( scheme );
 
     return result;
 }
 
+/* Checks if the given uri is a valid uri
+ */
+gboolean gnc_uri_targets_local_fs (const gchar *uri)
+{
+
+    gchar *scheme = NULL, *hostname = NULL;
+    gchar *username = NULL, *password = NULL;
+    gchar *path     = NULL;
+    gint   port = 0;
+    gboolean is_local_fs = FALSE;
+
+    gnc_uri_get_components ( uri, &scheme, &hostname, &port,
+                             &username, &password, &path );
+
+    /* For gnucash to consider a uri to target the local fs:
+     * path must not be NULL
+     * AND
+     *   scheme should be NULL
+     *   OR
+     *   scheme must be file type scheme (file, xml, sqlite) */
+    is_local_fs = (path && (!scheme || gnc_uri_is_file_scheme(scheme)));
+
+    g_free (scheme);
+    g_free (hostname);
+    g_free (username);
+    g_free (password);
+    g_free (path);
+
+    return is_local_fs;
+}
+
 /* Splits a uri into its separate components */
 void gnc_uri_get_components (const gchar *uri,
-                             gchar **protocol,
+                             gchar **scheme,
                              gchar **hostname,
                              gint32 *port,
                              gchar **username,
@@ -91,9 +152,9 @@ void gnc_uri_get_components (const gchar *uri,
     gchar *url = NULL, *tmpusername = NULL, *tmphostname = NULL;
     gchar *delimiter = NULL;
 
-    *protocol = NULL;
+    *scheme   = NULL;
     *hostname = NULL;
-    *port      = 0;
+    *port     = 0;
     *username = NULL;
     *password = NULL;
     *path     = NULL;
@@ -103,30 +164,19 @@ void gnc_uri_get_components (const gchar *uri,
     splituri = g_strsplit ( uri, "://", 2 );
     if ( splituri[1] == NULL )
     {
-        /* No protocol means simple file uri */
-        *protocol = g_strdup ( "file" );
-        *path     = g_strdup ( splituri[0] );
+        /* No scheme means simple file path.
+           Set path to copy of the input. */
+        *path     = g_strdup ( uri );
         g_strfreev ( splituri );
         return;
     }
 
-    /* At least a protocol was found, set it here */
-    *protocol = g_strdup ( splituri[0] );
+    /* At least a scheme was found, set it here */
+    *scheme = g_strdup ( splituri[0] );
 
-    if ( gnc_uri_is_file_protocol ( *protocol ) )
+    if ( gnc_uri_is_file_scheme ( *scheme ) )
     {
-        /* Protocol indicates file based uri.
-         * Note that unknown protocols are treated as if they are
-         * file-based protocols. This is done to prevent password
-         * lookups on unknown protocols.
-         * On the other hand, since we don't know the specifics of
-         * unknown protocols, we don't attempt to return an absolute
-         * pathname for them, just whatever was there.
-         */
-        if ( gnc_uri_is_known_protocol ( *protocol ) )
-            *path     = gnc_resolve_file_path ( splituri[1] );
-        else
-            *path     = g_strdup ( splituri[1] );
+        *path     = gnc_resolve_file_path ( splituri[1] );
         g_strfreev ( splituri );
         return;
     }
@@ -171,7 +221,7 @@ void gnc_uri_get_components (const gchar *uri,
     if ( delimiter != NULL )
     {
         delimiter[0] = '\0';
-        if ( gnc_uri_is_file_protocol ( *protocol ) ) /* always return absolute file paths */
+        if ( gnc_uri_is_file_scheme ( *scheme ) ) /* always return absolute file paths */
             *path = gnc_resolve_file_path ( (const gchar*)(delimiter + 1) );
         else /* path is no file path, so copy it as is */
             *path = g_strdup ( (const gchar*)(delimiter + 1) );
@@ -193,16 +243,16 @@ void gnc_uri_get_components (const gchar *uri,
 
 }
 
-gchar *gnc_uri_get_protocol (const gchar *uri)
+gchar *gnc_uri_get_scheme (const gchar *uri)
 {
-    gchar *protocol = NULL;
+    gchar *scheme   = NULL;
     gchar *hostname = NULL;
     gint32 port     = 0;
     gchar *username = NULL;
     gchar *password = NULL;
     gchar *path     = NULL;
 
-    gnc_uri_get_components ( uri, &protocol, &hostname, &port,
+    gnc_uri_get_components ( uri, &scheme, &hostname, &port,
                              &username, &password, &path );
 
     g_free (hostname);
@@ -210,22 +260,22 @@ gchar *gnc_uri_get_protocol (const gchar *uri)
     g_free (password);
     g_free (path);
 
-    return protocol;
+    return scheme;
 }
 
 gchar *gnc_uri_get_path (const gchar *uri)
 {
-    gchar *protocol = NULL;
+    gchar *scheme   = NULL;
     gchar *hostname = NULL;
     gint32 port = 0;
     gchar *username = NULL;
     gchar *password = NULL;
     gchar *path     = NULL;
 
-    gnc_uri_get_components ( uri, &protocol, &hostname, &port,
+    gnc_uri_get_components ( uri, &scheme, &hostname, &port,
                              &username, &password, &path );
 
-    g_free (protocol);
+    g_free (scheme);
     g_free (hostname);
     g_free (username);
     g_free (password);
@@ -234,7 +284,7 @@ gchar *gnc_uri_get_path (const gchar *uri)
 }
 
 /* Generates a normalized uri from the separate components */
-gchar *gnc_uri_create_uri (const gchar *protocol,
+gchar *gnc_uri_create_uri (const gchar *scheme,
                            const gchar *hostname,
                            gint32 port,
                            const gchar *username,
@@ -245,23 +295,23 @@ gchar *gnc_uri_create_uri (const gchar *protocol,
 
     g_return_val_if_fail( path != 0, NULL );
 
-    if ( (protocol == NULL) || gnc_uri_is_file_protocol ( protocol ) )
+    if (!scheme || gnc_uri_is_file_scheme (scheme))
     {
         /* Compose a file based uri, which means ignore everything but
-         * the protocol and the path
-         * We return an absolute pathname if the protocol is known or
-         * no protocol was given. For an unknown protocol, we return the
+         * the scheme and the path
+         * We return an absolute pathname if the scheme is known or
+         * no scheme was given. For an unknown scheme, we return the
          * path info as is.
          */
         gchar *abs_path;
-        if ( protocol && (!gnc_uri_is_known_protocol (protocol)) )
+        if (scheme && (!gnc_uri_is_known_scheme (scheme)) )
             abs_path = g_strdup ( path );
         else
             abs_path = gnc_resolve_file_path ( path );
-        if ( protocol == NULL )
+        if ( scheme == NULL )
             uri = g_strdup_printf ( "file://%s", abs_path );
         else
-            uri = g_strdup_printf ( "%s://%s", protocol, abs_path );
+            uri = g_strdup_printf ( "%s://%s", scheme, abs_path );
         g_free (abs_path);
         return uri;
     }
@@ -288,7 +338,7 @@ gchar *gnc_uri_create_uri (const gchar *protocol,
 
     // XXX Do I have to add the slash always or are there situations
     //     it is in the path already ?
-    uri = g_strconcat ( protocol, "://", userpass, hostname, portstr, "/", path, NULL );
+    uri = g_strconcat ( scheme, "://", userpass, hostname, portstr, "/", path, NULL );
 
     g_free ( userpass );
     g_free ( portstr );
@@ -299,7 +349,7 @@ gchar *gnc_uri_create_uri (const gchar *protocol,
 
 gchar *gnc_uri_normalize_uri (const gchar *uri, gboolean allow_password)
 {
-    gchar *protocol = NULL;
+    gchar *scheme   = NULL;
     gchar *hostname = NULL;
     gint32 port = 0;
     gchar *username = NULL;
@@ -307,16 +357,16 @@ gchar *gnc_uri_normalize_uri (const gchar *uri, gboolean allow_password)
     gchar *path     = NULL;
     gchar *newuri   = NULL;
 
-    gnc_uri_get_components ( uri, &protocol, &hostname, &port,
+    gnc_uri_get_components ( uri, &scheme, &hostname, &port,
                              &username, &password, &path );
     if (allow_password)
-        newuri = gnc_uri_create_uri ( protocol, hostname, port,
+        newuri = gnc_uri_create_uri ( scheme, hostname, port,
                                       username, password, path);
     else
-        newuri = gnc_uri_create_uri ( protocol, hostname, port,
+        newuri = gnc_uri_create_uri ( scheme, hostname, port,
                                       username, /* no password */ NULL, path);
 
-    g_free (protocol);
+    g_free (scheme);
     g_free (hostname);
     g_free (username);
     g_free (password);
@@ -341,4 +391,26 @@ gchar *gnc_uri_add_extension ( const gchar *uri, const gchar *extension )
 
     /* Ok, all tests passed, let's add the extension */
     return g_strconcat( uri, extension, NULL );
+}
+
+
+/* Deprecated functions
+ * ********************/
+
+/* replaced with gnc_uri_get_scheme */
+gchar *gnc_uri_get_protocol (const gchar *uri)
+{
+    return gnc_uri_get_scheme (uri);
+}
+
+/* replaced with gnc_uri_is_known_scheme */
+gboolean gnc_uri_is_known_protocol (const gchar *protocol)
+{
+    return gnc_uri_is_known_scheme(protocol);
+}
+
+/* replaced with gnc_uri_is_file_scheme */
+gboolean gnc_uri_is_file_protocol (const gchar *protocol)
+{
+    return gnc_uri_is_file_scheme (protocol);
 }

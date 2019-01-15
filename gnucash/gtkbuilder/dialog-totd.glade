@@ -125,6 +125,7 @@
                         <property name="border_width">6</property>
                         <property name="editable">False</property>
                         <property name="wrap_mode">word</property>
+                        <property name="accepts_tab">False</property>
                         <property name="left_margin">5</property>
                         <property name="right_margin">5</property>
                         <property name="cursor_visible">False</property>

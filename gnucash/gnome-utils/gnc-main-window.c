@@ -1518,7 +1518,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
         filename = g_strdup(_("Unsaved Book"));
     else
     {
-        if ( gnc_uri_is_file_uri ( book_id ) )
+        if (gnc_uri_targets_local_fs (book_id))
         {
             /* The filename is a true file.
              * The Gnome HIG 2.0 recommends only the file name (no path) be used. (p15) */
@@ -1657,7 +1657,7 @@ static gchar *generate_statusbar_lastmodified_message()
         return NULL;
     else
     {
-        if ( gnc_uri_is_file_uri ( book_id ) )
+        if (gnc_uri_targets_local_fs (book_id))
         {
 #ifdef HAVE_SYS_STAT_H
             /* The filename is a true file. */

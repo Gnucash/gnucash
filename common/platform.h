@@ -65,5 +65,6 @@
 #endif
 
 /* ENABLE macro defaults */
+#define GNC_DEPRECATED(message) __attribute__ ((__deprecated__ (message)))
 
 #endif /* GNC_PLATFORM_H */

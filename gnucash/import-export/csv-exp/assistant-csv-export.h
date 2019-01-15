@@ -73,12 +73,11 @@ typedef struct
 
     Query          *query;
     Account        *account;
-    
+
     GtkWidget      *start_page;
     GtkWidget      *account_page;
     GtkWidget      *file_page;
 
-    GtkWidget      *window;
     GtkWidget      *assistant;
     GtkWidget      *start_label;
     GtkWidget      *custom_entry;

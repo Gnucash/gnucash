@@ -145,6 +145,11 @@ void xaccAccountTreeScrubQuoteSources (Account *root, gnc_commodity_table *table
 /** Removes empty "notes", "placeholder", and "hbci" KVP slots from Accounts. */
 void xaccAccountScrubKvp (Account *account);
 
+/** Remove color slots that have a "Not Set" value, since 2.4.0, fixed in 3.4
+ *  This should only be run once on a book
+ */
+void xaccAccountScrubColorNotSet (QofBook *book);
+
 /** Changes Transaction date_posted timestamps from 00:00 local to 11:00 UTC.
  * 11:00 UTC is the same day local time in almost all timezones, the exceptions
  * being the -12, +13, and +14 timezones along the International Date Line. If

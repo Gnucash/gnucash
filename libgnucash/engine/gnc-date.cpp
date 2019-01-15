@@ -1075,7 +1075,7 @@ qof_strftime(gchar *buf, gsize max, const gchar *format, const struct tm *tm)
 gchar *
 gnc_date_timestamp (void)
 {
-    return gnc_print_time64(gnc_time(nullptr), "%Y%m%d%H%M%S");
+    return g_strdup(GncDateTime::timestamp().c_str());
 }
 
 /********************************************************************\
@@ -1115,13 +1115,12 @@ char *
 gnc_time64_to_iso8601_buff (time64 time, char * buff)
 {
     constexpr size_t max_iso_date_length = 32;
-    const char* format = "%Y-%m-%d %H:%M:%S %q";
 
     if (! buff) return NULL;
     try
     {
         GncDateTime gncdt(time);
-        auto sstr = gncdt.format(format);
+        auto sstr = gncdt.format_iso8601();
 
         memset(buff, 0, sstr.length() + 1);
         strncpy(buff, sstr.c_str(), sstr.length());

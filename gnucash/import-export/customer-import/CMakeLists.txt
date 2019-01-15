@@ -15,7 +15,7 @@ set(customer_import_noinst_HEADERS
   dialog-customer-import.h
 )
 
-add_library(gncmod-customer-import ${customer_import_SOURCES} ${customer_input_noinst_HEADERS})
+add_library(gncmod-customer-import ${customer_import_SOURCES} ${customer_import_noinst_HEADERS})
 
 target_link_libraries(gncmod-customer-import gnc-gnome gncmod-gnome-utils gncmod-app-utils
      gncmod-engine gnc-core-utils gnc-module ${GLIB2_LDFLAGS})

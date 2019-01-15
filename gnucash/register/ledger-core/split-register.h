@@ -539,6 +539,14 @@ const char * gnc_split_register_get_debit_string (SplitRegister *reg);
 /** Return the credit string used in the register. */
 const char * gnc_split_register_get_credit_string (SplitRegister *reg);
 
+/** Return TRUE if split is the blank_split. */
+gboolean gnc_split_register_is_blank_split (SplitRegister *reg, Split *split);
+
+/** Change the blank_split reference from pointing to split to another
+ *  split of the transaction. This is used when deleting a split after an
+ *  autocomplete as the blank_split reference will be pointing to one of
+ *  the splits so it does not cancel the whole transaction */
+void gnc_split_register_change_blank_split_ref (SplitRegister *reg, Split *split);
 
 /** Pop up the exchange-rate dialog, maybe, for the current split.
  * If force_dialog is TRUE, the forces the dialog to to be called.

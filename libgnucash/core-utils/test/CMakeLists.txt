@@ -46,6 +46,7 @@ set(test_gnc_path_util_SOURCES
   ${MODULEPATH}/gnc-path.c
   ${MODULEPATH}/binreloc.c
   ${MODULEPATH}/gnc-filepath-utils.cpp
+  ${MODULEPATH}/gnc-locale-utils.cpp
   gtest-path-utilities.cpp
   ${GTEST_SRC})
 

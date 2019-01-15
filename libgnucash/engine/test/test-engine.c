@@ -34,6 +34,7 @@ extern void test_suite_transaction();
 extern void test_suite_split();
 extern void test_suite_engine_kvp_properties (void);
 extern void test_suite_gnc_pricedb();
+extern void test_suite_gnc_uri_utils(void);
 
 int
 main (int   argc,
@@ -55,6 +56,7 @@ main (int   argc,
     test_suite_split();
     test_suite_engine_kvp_properties ();
     test_suite_gnc_pricedb();
+    test_suite_gnc_uri_utils();
 
     return g_test_run( );
 }

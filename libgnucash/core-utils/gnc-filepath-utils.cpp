@@ -64,11 +64,28 @@ extern "C" {
 #endif
 }
 
+#include "gnc-locale-utils.hpp"
 #include <boost/filesystem.hpp>
 #include <boost/locale.hpp>
 #include <iostream>
 
-
+/* Below cvt and bfs_locale should be used with boost::filesystem::path (bfs)
+ * objects created alter in this source file. The rationale is as follows:
+ * - a bfs object has an internal, locale and platform dependent
+ *   representation of a file system path
+ * - glib's internal representation is always utf8
+ * - when creating a bfs object, we should pass a cvt to convert from
+ *   utf8 to the object's internal representation
+ * - if we later want to use the bfs object's internal representation
+ *   in a glib context we should imbue the locale below so that
+ *   bfs will use it to convert back to utf8
+ * - if the bfs object's internal representation will never be used
+ *   in a glib context, imbuing is not needed (although probably more
+ *   future proof)
+ * - also note creating a bfs based on another one will inherit the
+ *   locale from the source path. So in that case there's not need
+ *   to imbue it again.
+ */
 #if PLATFORM(WINDOWS)
 #include <codecvt>
 using codecvt = std::codecvt_utf8<wchar_t, 0x10FFFF, std::little_endian>;
@@ -89,26 +106,6 @@ static std::locale bfs_locale(std::locale(), new codecvt);
 namespace bfs = boost::filesystem;
 namespace bst = boost::system;
 namespace bl = boost::locale;
-
-/**
- * Scrubs a filename by changing "strange" chars (e.g. those that are not
- * valid in a win32 file name) to "_".
- *
- * @param filename File name - updated in place
- */
-static void
-scrub_filename(char* filename)
-{
-    char* p;
-
-#define STRANGE_CHARS "/:"
-    p = strpbrk(filename, STRANGE_CHARS);
-    while (p)
-    {
-        *p = '_';
-        p = strpbrk(filename, STRANGE_CHARS);
-    }
-}
 
 /** Check if the path exists and is a regular file.
  *
@@ -591,9 +588,8 @@ static std::string migrate_gnc_datahome()
     gen.add_messages_path(gnc_path_get_datadir());
     gen.add_messages_domain(PACKAGE);
 
-//    std::locale::global(gen(""));
     std::stringstream migration_msg;
-    migration_msg.imbue(gen(""));
+    migration_msg.imbue(gnc_get_locale());
 
     /* Step 1: copy directory $HOME/.gnucash to $GNC_DATA_HOME */
     auto full_copy = copy_recursive (old_dir, gnc_userdata_home);
@@ -677,7 +673,7 @@ static std::string migrate_gnc_datahome()
     if (full_copy)
     {
         migration_msg
-        << bl::translate ("Your gnucash metadata has been migrated .") << std::endl << std::endl
+        << bl::translate ("Your gnucash metadata has been migrated.") << std::endl << std::endl
         /* Translators: this refers to a directory name. */
         << bl::translate ("Old location:") << " " << old_dir.string() << std::endl
         /* Translators: this refers to a directory name. */
@@ -738,14 +734,89 @@ constexpr auto path_package = PACKAGE_NAME;
 constexpr auto path_package = PACKAGE;
 #endif
 
-
-char *
-gnc_filepath_init (void)
+// Initialize the user's config directory for gnucash
+// creating it if it doesn't exist yet.
+static void
+gnc_file_path_init_config_home (void)
 {
-    // Initialize the user's config directory for gnucash
-    gnc_userconfig_home = get_userconfig_home() / path_package;
+    auto have_valid_userconfig_home = false;
 
+    /* If this code is run while building/testing, use a fake GNC_CONFIG_HOME
+     * in the base of the build directory. This is to deal with all kinds of
+     * issues when the build environment is not a complete environment (like
+     * it could be missing a valid home directory). */
+    auto env_build_dir = g_getenv ("GNC_BUILDDIR");
+    bfs::path new_dir(env_build_dir ? env_build_dir : "", cvt);
+    new_dir.imbue(bfs_locale);
+    build_dir = std::move(new_dir);
+    auto running_uninstalled = (g_getenv ("GNC_UNINSTALLED") != NULL);
+    if (running_uninstalled && !build_dir.empty())
+    {
+        gnc_userconfig_home = build_dir / "gnc_config_home";
+        try
+        {
+            gnc_validate_directory (gnc_userconfig_home); // May throw
+            have_valid_userconfig_home = true;
+        }
+        catch (const bfs::filesystem_error& ex)
+        {
+            auto path_string = gnc_userconfig_home.string();
+            g_warning("%s (due to run during at build time) is not a suitable directory for user configuration files. "
+            "Trying another directory instead.\n(Error: %s)",
+                      path_string.c_str(), ex.what());
+        }
+    }
 
+    if (!have_valid_userconfig_home)
+    {
+        /* If environment variable GNC_CONFIG_HOME is set, try whether
+         * it points at a valid directory. */
+        auto gnc_userconfig_home_env = g_getenv ("GNC_CONFIG_HOME");
+        if (gnc_userconfig_home_env)
+        {
+            bfs::path newdir(gnc_userconfig_home_env, cvt);
+            newdir.imbue(bfs_locale);
+            gnc_userconfig_home = std::move(newdir);
+            try
+            {
+                gnc_validate_directory (gnc_userconfig_home); // May throw
+                have_valid_userconfig_home = true;
+            }
+            catch (const bfs::filesystem_error& ex)
+            {
+                auto path_string = gnc_userconfig_home.string();
+                g_warning("%s (from environment variable 'GNC_CONFIG_HOME') is not a suitable directory for user configuration files. "
+                "Trying the default instead.\n(Error: %s)",
+                          path_string.c_str(), ex.what());
+            }
+        }
+    }
+
+    if (!have_valid_userconfig_home)
+    {
+        /* Determine platform dependent default userconfig_home_path
+         * and check whether it's valid */
+        auto userconfig_home = get_userconfig_home();
+        gnc_userconfig_home = userconfig_home / path_package;
+        try
+        {
+            gnc_validate_directory (gnc_userconfig_home);
+        }
+        catch (const bfs::filesystem_error& ex)
+        {
+            g_warning ("User configuration directory doesn't exist, yet could not be created. Proceed with caution.\n"
+            "(Error: %s)", ex.what());
+        }
+    }
+}
+
+// Initialize the user's config directory for gnucash
+// creating it if it didn't exist yet.
+// The function will return true if the directory already
+// existed or false if it had to be created
+static bool
+gnc_file_path_init_data_home (void)
+{
     // Initialize the user's data directory for gnucash
     auto gnc_userdata_home_exists = false;
     auto have_valid_userdata_home = false;
@@ -784,8 +855,8 @@ gnc_filepath_init (void)
         auto gnc_userdata_home_env = g_getenv ("GNC_DATA_HOME");
         if (gnc_userdata_home_env)
         {
-	    bfs::path newdir(gnc_userdata_home_env, cvt);
-	    newdir.imbue(bfs_locale);
+            bfs::path newdir(gnc_userdata_home_env, cvt);
+            newdir.imbue(bfs_locale);
             gnc_userdata_home = std::move(newdir);
             try
             {
@@ -798,7 +869,7 @@ gnc_filepath_init (void)
                 auto path_string = gnc_userdata_home.string();
                 g_warning("%s (from environment variable 'GNC_DATA_HOME') is not a suitable directory for user data. "
                 "Trying the default instead.\n(Error: %s)",
-                path_string.c_str(), ex.what());
+                          path_string.c_str(), ex.what());
             }
         }
     }
@@ -820,6 +891,25 @@ gnc_filepath_init (void)
             "(Error: %s)", ex.what());
         }
     }
+
+    return gnc_userdata_home_exists;
+}
+
+// Initialize the user's config and data directory for gnucash
+// This function will also create these directories if they didn't
+// exist yet.
+// In addition it will trigger a migration if the user's data home
+// didn't exist but the now obsolete GNC_DOT_DIR ($HOME/.gnucash)
+// does.
+// Finally it well ensure a number of default required directories
+// will be created if they don't exist yet.
+char *
+gnc_filepath_init (void)
+{
+    gnc_userconfig_home = get_userconfig_home() / path_package;
+
+    gnc_file_path_init_config_home ();
+    auto gnc_userdata_home_exists = gnc_file_path_init_data_home ();
 
     /* Run migration code before creating the default directories
        If migrating, these default directories are copied instead of created. */
@@ -942,14 +1032,22 @@ gnc_build_userdata_path (const gchar *filename)
     return g_strdup((gnc_userdata_dir_as_path() / filename).string().c_str());
 }
 
+/* Test whether c is a valid character for a win32 file name.
+ * If so return false, otherwise return true.
+ */
+static bool
+is_invalid_char (char c)
+{
+    return (c == '/') || ( c == ':');
+}
+
 static bfs::path
 gnc_build_userdata_subdir_path (const gchar *subdir, const gchar *filename)
 {
-    gchar* filename_dup = g_strdup(filename);
+    auto fn = std::string(filename);
 
-    scrub_filename(filename_dup);
-    auto result = (gnc_userdata_dir_as_path() / subdir) / filename_dup;
-    g_free(filename_dup);
+    std::replace_if (fn.begin(), fn.end(), is_invalid_char, '_');
+    auto result = (gnc_userdata_dir_as_path() / subdir) / fn;
     return result;
 }
 

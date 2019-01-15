@@ -21,6 +21,7 @@
   (test-gnc:monetary->string)
   (test-commodity-collector)
   (test-get-account-balances)
+  (test-monetary-adders)
   (test-end "report-utilities"))
 
 (define (NDayDelta t64 n)
@@ -431,22 +432,6 @@
         44
         (gnc:accounts-count-splits (list expense income)))
 
-      (test-equal "gnc:account-get-total-flow 'in"
-        '(("GBP" . 14) ("USD" . 2544))
-        (collector->list
-         (gnc:account-get-total-flow 'in
-                                     (list bank)
-                                     (gnc-dmy2time64 15 01 1970)
-                                     (gnc-dmy2time64 01 01 2001))))
-
-      (test-equal "gnc:account-get-total-flow 'out"
-        '(("USD" . -296))
-        (collector->list
-         (gnc:account-get-total-flow 'out
-                                     (list bank)
-                                     (gnc-dmy2time64 15 01 1970)
-                                     (gnc-dmy2time64 01 01 2001))))
-
       (let ((account-balances (gnc:get-assoc-account-balances
                                (list bank gbp-bank)
                                (lambda (acct)
@@ -472,3 +457,45 @@
           (collector->list
            (gnc:get-assoc-account-balances-total account-balances)))))
     (teardown)))
+
+(define (test-monetary-adders)
+  (define (monetary->pair mon)
+    (let ((comm (gnc:gnc-monetary-commodity mon))
+          (amt (gnc:gnc-monetary-amount mon)))
+      (cons (gnc-commodity-get-mnemonic comm) amt)))
+  (let* ((book (gnc-get-current-book))
+         (comm-table (gnc-commodity-table-get-table book))
+         (USD (gnc-commodity-table-lookup comm-table "CURRENCY" "USD"))
+         (GBP (gnc-commodity-table-lookup comm-table "CURRENCY" "GBP"))
+         (EUR (gnc-commodity-table-lookup comm-table "CURRENCY" "EUR"))
+         (usd10 (gnc:make-gnc-monetary USD 10))
+         (usd8 (gnc:make-gnc-monetary USD 8))
+         (gbp10 (gnc:make-gnc-monetary GBP 10))
+         (gbp8 (gnc:make-gnc-monetary GBP 8))
+         (eur10 (gnc:make-gnc-monetary EUR 10))
+         (eur8 (gnc:make-gnc-monetary EUR 8)))
+
+    (test-equal "gnc:monetaries-add 1 currency"
+      '(("USD" . 20))
+      (collector->list
+       (gnc:monetaries-add usd10 usd10)))
+
+    (test-equal "gnc:monetaries-add 2 currencies"
+      '(("GBP" . 8) ("USD" . 10))
+      (collector->list
+       (gnc:monetaries-add usd10 gbp8)))
+
+    (test-equal "gnc:monetaries-add 3 currencies"
+      '(("EUR" . 8) ("GBP" . 8) ("USD" . 20))
+      (collector->list
+       (gnc:monetaries-add usd10 gbp8 eur8 usd10)))
+
+    (test-equal "gnc:monetary+ with 1 currency succeeds"
+      '("USD" . 28)
+      (monetary->pair
+       (gnc:monetary+ usd10 usd10 usd8)))
+
+    (test-error
+     "gnc:monetary+ with >1 currency fails"
+     #t
+     (gnc:monetary+ usd10 usd10 eur8))))

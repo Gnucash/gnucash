@@ -383,6 +383,26 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
          (map gnc:gnc-monetary-amount
               (collector 'format gnc:make-gnc-monetary #f))))
 
+;; add any number of gnc-monetary objects into a commodity-collector
+;; usage: (gnc:monetaries-add monetary1 monetary2 ...)
+;; output: a commodity-collector object
+(define (gnc:monetaries-add . monetaries)
+  (let ((coll (gnc:make-commodity-collector)))
+    (for-each
+     (lambda (mon)
+       (coll 'add (gnc:gnc-monetary-commodity mon) (gnc:gnc-monetary-amount mon)))
+     monetaries)
+    coll))
+
+;; special case for gnc:monetaries-add whereby only 1 currency is expected
+;; usage: (gnc:monetaries-add monetary1 monetary2 ...)
+;; output: a monetary object
+(define (gnc:monetary+ . monetaries)
+  (let ((coll (apply gnc:monetaries-add monetaries)))
+    (if (= 1 (gnc-commodity-collector-commodity-count coll))
+        (car (coll 'format gnc:make-gnc-monetary #f))
+        (throw "gnc:monetary+ expects 1 currency " (gnc:strify monetaries)))))
+
 ;; get the account balance at the specified date. if include-children?
 ;; is true, the balances of all children (not just direct children)
 ;; are included in the calculation.
@@ -711,6 +731,8 @@ flawed. see report-utilities.scm. please update reports.")
 ;; returns a commodity collector
 ;; does NOT do currency exchanges
 (define (gnc:account-get-total-flow direction target-account-list from-date to-date)
+  (issue-deprecation-warning
+   "(gnc:account-get-total-flow) is deprecated.")
   (let ((total-flow (gnc:make-commodity-collector)))
     (for-each
      (lambda (target-account)
@@ -732,6 +754,8 @@ flawed. see report-utilities.scm. please update reports.")
 ;; *ignores* any closing entries
 (define (gnc:account-get-pos-trans-total-interval
 	 account-list type start-date end-date)
+  (issue-deprecation-warning
+   "(gnc:account-get-pos-trans-total-interval) is deprecated.")
   (let* ((str-query (qof-query-create-for-splits))
 	 (sign-query (qof-query-create-for-splits))
 	 (total-query #f)
@@ -832,14 +856,12 @@ flawed. see report-utilities.scm. please update reports.")
           (qof-query-destroy query)
           splits))))
 
-;; utility to assist with double-column balance tables
-;; a request is made with the <req> argument
-;; <req> may currently be 'entry|'debit-q|'credit-q|'zero-q|'debit|'credit
-;; 'debit-q|'credit-q|'zero-q tests the sign of the balance
-;; 'side returns 'debit or 'credit, the column in which to display
-;; 'debt|'credit return the entry, if appropriate, or #f
+;; the following function is only used in trial-balance. best move it
+;; back there, and deprecate this exported function.
 (define (gnc:double-col
 	 req signed-balance report-commodity exchange-fn show-comm?)
+  (issue-deprecation-warning
+   "(gnc:double-col) is deprecated.")
   (let* ((sum (and signed-balance
 		   (gnc:sum-collector-commodity
 		    signed-balance

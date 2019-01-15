@@ -19,6 +19,9 @@
 
 (define-module (gnucash report report-system report-collectors))
 
+(issue-deprecation-warning
+ "(gnucash report report-system report-collectors) is deprecated.")
+
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/report/report-system" 0)
 

@@ -1389,38 +1389,42 @@ be excluded from periodic reporting.")
                 (reverse result)
                 (let* ((mon (retrieve-commodity (car columns) commodity))
                        (this-column (and mon (gnc:gnc-monetary-amount mon))))
-                  (if (car merge-list)
-                      ;; We're merging. If a subtotal exists, send to next loop iteration.
-                      (loop #t
-                            this-column
+                  (cond
+
+                   ;; We're merging. If a subtotal exists, send to next loop iteration.
+                   ((car merge-list)
+                    (loop #t
+                          this-column
+                          (cdr columns)
+                          (cdr merge-list)
+                          result))
+
+                   ;; We're completing merge. Display debit-credit in correct column.
+                   (merging?
+                    (let* ((sum (and (or last-column this-column)
+                                     (- (or last-column 0) (or this-column 0))))
+                           (sum-table-cell (and sum (gnc:make-html-table-cell/markup
+                                                     "total-number-cell"
+                                                     (gnc:make-gnc-monetary
+                                                      commodity (abs sum)))))
+                           (debit-col (and sum (positive? sum) sum-table-cell))
+                           (credit-col (and sum (not (positive? sum)) sum-table-cell)))
+                      (loop #f
+                            #f
                             (cdr columns)
                             (cdr merge-list)
-                            result)
-                      (begin
-                        (if merging?
-                            ;; We're completing merge. Display debit-credit in correct column.
-                            (let* ((sum (and (or last-column this-column)
-                                             (- (or last-column 0) (or this-column 0))))
-                                   (sum-table-cell (and sum (gnc:make-html-table-cell/markup
-                                                             "total-number-cell"
-                                                             (gnc:make-gnc-monetary
-                                                              commodity (abs sum)))))
-                                   (debit-col (and sum (positive? sum) sum-table-cell))
-                                   (credit-col (and sum (not (positive? sum)) sum-table-cell)))
-                              (loop #f
-                                    #f
-                                    (cdr columns)
-                                    (cdr merge-list)
-                                    (cons* (or credit-col "")
-                                           (or debit-col "")
-                                           result)))
-                            ;; Default; not merging nor completed merge. Just add amount to result.
-                            (loop #f
-                                  #f
-                                  (cdr columns)
-                                  (cdr merge-list)
-                                  (cons (gnc:make-html-table-cell/markup "total-number-cell" mon)
-                                        result)))))))))
+                            (cons* (or credit-col "")
+                                   (or debit-col "")
+                                   result))))
+
+                   ;; Not merging nor completed merge. Just add amount to result.
+                   (else
+                    (loop #f
+                          #f
+                          (cdr columns)
+                          (cdr merge-list)
+                          (cons (gnc:make-html-table-cell/markup "total-number-cell" mon)
+                                result))))))))
 
         ;; take the first column of each commodity, add onto the subtotal grid
         (set! grid (grid-add grid row col

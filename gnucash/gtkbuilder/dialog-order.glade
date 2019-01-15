@@ -446,6 +446,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="wrap_mode">word</property>
+                            <property name="accepts_tab">False</property>
                             <property name="buffer">notes_buffer</property>
                           </object>
                         </child>
@@ -847,6 +848,7 @@
                         <property name="can_focus">True</property>
                         <property name="editable">False</property>
                         <property name="wrap_mode">word</property>
+                        <property name="accepts_tab">False</property>
                         <property name="buffer">text_buffer</property>
                       </object>
                     </child>

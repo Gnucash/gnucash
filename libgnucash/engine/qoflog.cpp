@@ -429,22 +429,22 @@ qof_log_level_to_string(QofLogLevel log_level)
     const char *level_str;
     switch (log_level)
     {
-    case G_LOG_LEVEL_ERROR:
+    case QOF_LOG_FATAL:
+        level_str = "FATAL";
+        break;
+    case QOF_LOG_ERROR:
         level_str = "ERROR";
         break;
-    case G_LOG_LEVEL_CRITICAL:
-        level_str = "CRIT";
-        break;
-    case G_LOG_LEVEL_WARNING:
+    case QOF_LOG_WARNING:
         level_str = "WARN";
         break;
-    case G_LOG_LEVEL_MESSAGE:
+    case QOF_LOG_MESSAGE:
         level_str = "MESSG";
         break;
-    case G_LOG_LEVEL_INFO:
+    case QOF_LOG_INFO:
         level_str = "INFO";
         break;
-    case G_LOG_LEVEL_DEBUG:
+    case QOF_LOG_DEBUG:
         level_str = "DEBUG";
         break;
     default:

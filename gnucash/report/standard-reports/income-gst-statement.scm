@@ -105,11 +105,11 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
       (gnc:make-simple-boolean-option
        gnc:pagename-display (car l) (cadr l) (caddr l) (cadddr l))))
    (list
-    (list (N_ "Individual income columns")    "p" (N_ "Display individual income columns rather than their sum") #f)
-    (list (N_ "Individual expense columns")   "q" (N_ "Display individual expense columns rather than their sum") #f)
+    (list (N_ "Individual sales columns")     "p" (N_ "Display individual sales columns rather than their sum") #f)
+    (list (N_ "Individual purchases columns") "q" (N_ "Display individual purchases columns rather than their sum") #f)
     (list (N_ "Individual tax columns")       "r" (N_ "Display individual tax columns rather than their sum") #f)
-    (list (N_ "Remittance amount")            "s" (N_ "Display the remittance amount (total sales - total purchases)") #f)
-    (list (N_ "Net Income")                   "t" (N_ "Display the net income (sales without tax - purchases without tax)") #f)
+    (list (N_ "Gross Balance")                "s" (N_ "Display the gross balance (gross sales - gross purchases)") #f)
+    (list (N_ "Net Balance")                  "t" (N_ "Display the net balance (sales without tax - purchases without tax)") #f)
     (list (N_ "Tax payable")                  "u" (N_ "Display the tax payable (tax on sales - tax on purchases)") #f)))
 
   ;; Enable secret option to delete transactions with >1 split
@@ -139,15 +139,7 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
           (gnc:option-value option)
           (gnc:error "gnc:lookup-option error: " section "/" name))))
   (letrec*
-      ((monetary+ (lambda (a b)
-                    (if (and (gnc:gnc-monetary? a) (gnc:gnc-monetary? b))
-                        (let ((same-currency? (gnc-commodity-equal (gnc:gnc-monetary-commodity a) (gnc:gnc-monetary-commodity b)))
-                              (amount (+ (gnc:gnc-monetary-amount a) (gnc:gnc-monetary-amount b))))
-                          (if same-currency?
-                              (gnc:make-gnc-monetary (gnc:gnc-monetary-commodity a) amount)
-                              (gnc:error "incompatible currencies in monetary+: " a b)))
-                        (gnc:error "wrong arguments for monetary+: " a b))))
-       (myadd (lambda (X Y) (if X (if Y (monetary+ X Y) X) Y)))               ; custom adder which understands #f values
+      ((myadd (lambda (X Y) (if X (if Y (gnc:monetary+ X Y) X) Y)))           ; custom monetary adder which understands #f
        (myneg (lambda (X) (and X (gnc:monetary-neg X))))                      ; custom monetary negator which understands #f
        (accounts (opt-val gnc:pagename-accounts "Accounts"))
        (tax-accounts (opt-val gnc:pagename-accounts "Tax Accounts"))
@@ -155,8 +147,8 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
        (accounts-tax-paid      (filter (lambda (acc) (eq? (xaccAccountGetType acc) ACCT-TYPE-ASSET))     tax-accounts))
        (accounts-sales         (filter (lambda (acc) (eq? (xaccAccountGetType acc) ACCT-TYPE-INCOME))    accounts))
        (accounts-purchases     (filter (lambda (acc) (eq? (xaccAccountGetType acc) ACCT-TYPE-EXPENSE))   accounts))
-       (common-currency (and (opt-val gnc:pagename-general (_ "Common Currency"))             ; if a common currency was specified,
-                             (opt-val gnc:pagename-general (_ "Report's currency"))))         ; use it
+       (common-currency (and (opt-val gnc:pagename-general "Common Currency")             ; if a common currency was specified,
+                             (opt-val gnc:pagename-general "Report's currency")))         ; use it
        (split-date (lambda (s) (xaccTransGetDate (xaccSplitGetParent s))))
        (split-currency (lambda (s) (xaccAccountGetCommodity (xaccSplitGetAccount s))))
        (split-adder (lambda (split accountlist)
@@ -187,37 +179,41 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                         (fold myadd #f list-of-values))))
        (account-adder (lambda (acc) (lambda (s) (split-adder s (list acc)))))
        (account-adder-neg (lambda (acc) (lambda (s) (myneg (split-adder s (list acc))))))
+
        ;; Calculate sales amounts
        (sales-without-tax (lambda (s) (myneg (split-adder s accounts-sales))))
        (tax-on-sales (lambda (s) (myneg (split-adder s accounts-tax-collected))))
-       (total-sales (lambda (s) (myadd (tax-on-sales s) (sales-without-tax s))))
+       (gross-sales (lambda (s) (myadd (tax-on-sales s) (sales-without-tax s))))
+
        ;; Calculate purchase amounts
        (purchases-without-tax (lambda (s) (split-adder s accounts-purchases)))
        (tax-on-purchases (lambda (s) (split-adder s accounts-tax-paid)))
-       (total-purchases (lambda (s) (myadd (tax-on-purchases s) (purchases-without-tax s))))
+       (gross-purchases (lambda (s) (myadd (tax-on-purchases s) (purchases-without-tax s))))
+
        ;; Calculate derived amounts
-       (bank-remittance (lambda (s) (myadd (total-sales s) (myneg (total-purchases s)))))
-       (net-income (lambda (s) (myadd (sales-without-tax s) (myneg (purchases-without-tax s)))))
+       (gross-balance (lambda (s) (myadd (gross-sales s) (myneg (gross-purchases s)))))
+       (net-balance (lambda (s) (myadd (sales-without-tax s) (myneg (purchases-without-tax s)))))
        (tax-payable (lambda (s) (myadd (tax-on-sales s) (myneg (tax-on-purchases s))))))
     (append
      ;; each column will be a vector
-     ;; (vector heading
+     ;; (vector heading                                      ;; string
      ;;         calculator-function                          ;; (calculator-function split) to obtain amount
-     ;;         reverse-column?                              ;; unused in GST report
+     ;;         reverse-column?                              ;; #t for sales, #f for purchases
      ;;         subtotal?                                    ;; #t - all columns need subtotals
      ;;         start-dual-column?                           ;; unused in GST report
      ;;         friendly-heading-fn                          ;; unused in GST report
-     (list (vector "TOTAL SALES"
-                   total-sales
+     ;; Translators: "Gross Sales" refer to Net Sales + GST/VAT on Sales
+     (list (vector (_ "Gross Sales")
+                   gross-sales
                    #t #t #f
                    (lambda (a) "")))
-     (if (opt-val gnc:pagename-display (N_ "Individual income columns"))
+     (if (opt-val gnc:pagename-display (N_ "Individual sales columns"))
          (map (lambda (acc) (vector (xaccAccountGetName acc)
                                     (account-adder-neg acc)
                                     #t #t #f
                                     (lambda (a) "")))
               accounts-sales)
-         (list (vector "Net Sales"
+         (list (vector (_ "Net Sales")
                        sales-without-tax
                        #t #t #f
                        (lambda (a) ""))))
@@ -227,21 +223,22 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                                     #t #t #f
                                     (lambda (a) "")))
               accounts-tax-collected)
-         (list (vector "Tax on Sales"
+         (list (vector (_ "Tax on Sales")
                        tax-on-sales
                        #t #t #f
                        (lambda (a) ""))))
-     (list (vector "TOTAL PURCHASES"
-                   total-purchases
+     ;; Translators: "Gross Purchases" refer to Net Purchase + GST/VAT on Purchase
+     (list (vector (_ "Gross Purchases")
+                   gross-purchases
                    #f #t #f
                    (lambda (a) "")))
-     (if (opt-val gnc:pagename-display (N_ "Individual expense columns"))
+     (if (opt-val gnc:pagename-display (N_ "Individual purchases columns"))
          (map (lambda (acc) (vector (xaccAccountGetName acc)
                                     (account-adder acc)
                                     #f #t #f
                                     (lambda (a) "")))
               accounts-purchases)
-         (list (vector "Net Purchases"
+         (list (vector (_ "Net Purchases")
                        purchases-without-tax
                        #f #t #f
                        (lambda (a) ""))))
@@ -251,24 +248,28 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
                                     #f #t #f
                                     (lambda (a) "")))
               accounts-tax-paid)
-         (list (vector "Tax on Purchases"
+         (list (vector (_ "Tax on Purchases")
                        tax-on-purchases
                        #f #t #f
                        (lambda (a) ""))))
-     (if (opt-val gnc:pagename-display (N_ "Remittance amount"))
-         (list (vector "Remittance"
-                       bank-remittance
+     (if (opt-val gnc:pagename-display (N_ "Gross Balance"))
+         ;; Translators: "Gross Balance" refer to "Gross Sales - Gross Purchases" in GST Report
+         (list (vector (_ "Gross Balance")
+                       gross-balance
                        #f #t #f
                        (lambda (a) "")))
          '())
-     (if (opt-val gnc:pagename-display (N_ "Net Income"))
-         (list (vector "Net Income"
-                       net-income
+         ;; Note: Net income = net balance - other costs
+     (if (opt-val gnc:pagename-display (N_ "Net Balance"))
+         ;; Translators: "Net Balance" refer to Net Sales - Net Purchases in GST Report
+         (list (vector (_ "Net Balance")
+                       net-balance
                        #f #t #f
                        (lambda (a) "")))
          '())
      (if (opt-val gnc:pagename-display (N_ "Tax payable"))
-         (list (vector "Tax Payable"
+         ;; Translators: "Tax Payable" refer to the difference GST Sales - GST Purchases
+         (list (vector (_ "Tax Payable")
                        tax-payable
                        #f #t #f
                        (lambda (a) "")))

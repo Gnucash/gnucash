@@ -78,7 +78,7 @@ fill_model_with_match(GMatchInfo *match_info,
  * Parse the file for a correctly formatted file
  *******************************************************/
 csv_import_result
-csv_import_read_file (GtkWindow *win, const gchar *filename,
+csv_import_read_file (GtkWindow *window, const gchar *filename,
                       const gchar *parser_regexp,
                       GtkListStore *store, guint max_rows)
 {
@@ -114,7 +114,7 @@ csv_import_read_file (GtkWindow *win, const gchar *filename,
                                   parser_regexp, err->message);
         g_error_free (err);
 
-        dialog = gtk_message_dialog_new (NULL,
+        dialog = gtk_message_dialog_new (window,
                                          GTK_DIALOG_MODAL,
                                          GTK_MESSAGE_ERROR,
                                          GTK_BUTTONS_OK, "%s", errmsg);
@@ -283,6 +283,8 @@ csv_account_import (CsvImportInfo *info)
                     {
                         if (gdk_rgba_parse (&testcolor, color))
                             xaccAccountSetColor (acc, color);
+                        else
+                            xaccAccountSetColor (acc, "");
                     }
 
                     if (g_strcmp0 (hidden, "T") == 0)
@@ -323,6 +325,8 @@ csv_account_import (CsvImportInfo *info)
             {
                 if (gdk_rgba_parse (&testcolor, color))
                     xaccAccountSetColor (acc, color);
+                else
+                    xaccAccountSetColor (acc, "");
             }
 
             if (g_strcmp0 (notes, "") != 0)

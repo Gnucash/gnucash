@@ -122,6 +122,7 @@
 ;; into the other balances.
 (define (gnc:options-add-include-subaccounts!
 	 options pagename optname sort-tag)
+  (issue-deprecation-warning "gnc:options-add-include-subaccounts! is deprecated.")
   (gnc:register-option 
     options  
     (gnc:make-simple-boolean-option
@@ -132,6 +133,7 @@
 ;; categories and ahow a subtotal for those.
 (define (gnc:options-add-group-accounts!
 	 options pagename optname sort-tag default?)
+  (issue-deprecation-warning "gnc:options-add-group-accounts! is deprecated.")
   (gnc:register-option 
     options  
     (gnc:make-simple-boolean-option
@@ -154,6 +156,7 @@
 (define (gnc:options-add-currency-selection!
 	 options pagename 
 	 name-show-foreign name-report-currency sort-tag)
+  (issue-deprecation-warning "gnc:options-add-currency-selection! is deprecated.")
   (gnc:register-option 
    options 
    (gnc:make-simple-boolean-option

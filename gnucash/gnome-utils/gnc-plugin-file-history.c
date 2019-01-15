@@ -329,7 +329,7 @@ gnc_history_generate_label (int index, const gchar *filename)
     gchar *label, *result;
     gchar **splitlabel;
 
-    if ( gnc_uri_is_file_uri ( filename ) )
+    if (gnc_uri_targets_local_fs (filename))
     {
         /* for file paths, only display the file name */
         gchar *filepath = gnc_uri_get_path ( filename );
@@ -368,7 +368,7 @@ static gchar *
 gnc_history_generate_tooltip (int index, const gchar *filename)
 {
 
-    if ( gnc_uri_is_file_uri ( filename ) )
+    if (gnc_uri_targets_local_fs (filename))
         /* for file paths, display the full file path */
         return gnc_uri_get_path ( filename );
     else

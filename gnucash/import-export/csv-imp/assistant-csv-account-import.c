@@ -62,6 +62,7 @@ void csv_import_assistant_summary_page_prepare (GtkAssistant *assistant, gpointe
 void csv_import_sep_cb (GtkWidget *radio, gpointer user_data );
 void csv_import_hrows_cb (GtkWidget *spin, gpointer user_data );
 
+void csv_import_file_chooser_file_activated_cb (GtkFileChooser *chooser, CsvImportInfo *info);
 void csv_import_file_chooser_selection_changed_cb (GtkFileChooser *chooser, CsvImportInfo *info);
 
 static gchar *gnc_input_dialog (GtkWidget *parent, const gchar *title, const gchar *msg, const gchar *default_input);
@@ -136,37 +137,77 @@ void create_regex (GString *regex_str, const gchar *sep)
 /*************************************************************************/
 
 /**************************************************
+ * csv_import_assistant_check_filename
+ *
+ * check for a valid filename for GtkFileChooser callbacks
+ **************************************************/
+static gboolean
+csv_import_assistant_check_filename (GtkFileChooser *chooser,
+                                     CsvImportInfo *info)
+{
+    gchar *file_name = gtk_file_chooser_get_filename (chooser);
+
+    /* Test for a valid filename and not a directory */
+    if (file_name && !g_file_test (file_name, G_FILE_TEST_IS_DIR))
+    {
+        gchar *filepath = gnc_uri_get_path (file_name);
+        gchar *filedir = g_path_get_dirname (filepath);
+
+        g_free (info->file_name);
+        info->file_name = g_strdup (file_name);
+
+        g_free (info->starting_dir);
+        info->starting_dir = g_strdup (filedir);
+
+        g_free (filedir);
+        g_free (filepath);
+        g_free (file_name);
+
+        DEBUG("file_name selected is %s", info->file_name);
+        DEBUG("starting directory is %s", info->starting_dir);
+        return TRUE;
+    }
+    g_free (file_name);
+    return FALSE;
+}
+
+
+/**************************************************
+ * csv_import_file_chooser_file_activated_cb
+ *
+ * call back for GtkFileChooser file-activated signal
+ **************************************************/
+void
+csv_import_file_chooser_file_activated_cb (GtkFileChooser *chooser,
+                                           CsvImportInfo *info)
+{
+    GtkAssistant *assistant = GTK_ASSISTANT(info->assistant);
+    gtk_assistant_set_page_complete (assistant, info->file_page, FALSE);
+
+    /* Test for a valid filename and not a directory */
+    if (csv_import_assistant_check_filename (chooser, info))
+    {
+        gtk_assistant_set_page_complete (assistant, info->file_page, TRUE);
+        gtk_assistant_next_page (assistant);
+    }
+}
+
+
+/**************************************************
  * csv_import_file_chooser_selection_changed_cb
  *
  * call back for file chooser widget
  **************************************************/
 void
-csv_import_file_chooser_selection_changed_cb (GtkFileChooser *chooser, CsvImportInfo *info)
+csv_import_file_chooser_selection_changed_cb (GtkFileChooser *chooser,
+                                              CsvImportInfo *info)
 {
     GtkAssistant *assistant = GTK_ASSISTANT(info->assistant);
-    gchar *file_name;
-
-    gtk_assistant_set_page_complete (assistant, info->file_page, FALSE);
     gtk_assistant_set_page_complete (assistant, info->account_page, FALSE);
 
-    file_name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(info->file_chooser));
-
-    if (file_name && !g_file_test (file_name, G_FILE_TEST_IS_DIR))
-    {
-        gchar *filepath = gnc_uri_get_path (file_name);
-        gchar *filedir = g_path_get_dirname (filepath);
-        info->starting_dir = g_strdup (filedir);
-        g_free (filedir);
-        g_free (filepath);
-
-        info->file_name = g_strdup (file_name);
-
-        gtk_assistant_set_page_complete (assistant, info->file_page, TRUE);
-    }
-    g_free (file_name);
-
-    DEBUG("file_name selected is %s", info->file_name);
-    DEBUG("starting directory is %s", info->starting_dir);
+    /* Enable the forward button based on a valid filename */
+    gtk_assistant_set_page_complete (assistant, info->file_page,
+        csv_import_assistant_check_filename (chooser, info));
 }
 
 
@@ -630,6 +671,8 @@ csv_import_assistant_create (CsvImportInfo *info)
     info->file_chooser = gtk_file_chooser_widget_new (GTK_FILE_CHOOSER_ACTION_OPEN);
     g_signal_connect (G_OBJECT(info->file_chooser), "selection-changed",
                       G_CALLBACK(csv_import_file_chooser_selection_changed_cb), info);
+    g_signal_connect (G_OBJECT(info->file_chooser), "file-activated",
+                      G_CALLBACK(csv_import_file_chooser_file_activated_cb), info);
 
     gtk_box_pack_start (GTK_BOX(info->file_page), info->file_chooser, TRUE, TRUE, 6);
     gtk_widget_show (info->file_chooser);

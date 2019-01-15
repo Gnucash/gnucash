@@ -393,8 +393,9 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
 
     report = GNC_PLUGIN_PAGE_REPORT(page);
     priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+    if (!priv)
+        return FALSE; // No priv means the page doesn't exist anymore.
 
-    // FIXME.  This is f^-1(f(x)), isn't it?
     DEBUG( "Load uri id=%d", priv->reportId );
     id_name = g_strdup_printf("id=%d", priv->reportId );
     child_name = gnc_build_url( URL_TYPE_REPORT, id_name, NULL );

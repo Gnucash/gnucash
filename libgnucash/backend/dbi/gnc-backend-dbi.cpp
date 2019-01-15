@@ -111,7 +111,8 @@ static QofLogModule log_module = G_LOG_DOMAIN;
 #define PGSQL_DEFAULT_PORT 5432
 
 static void adjust_sql_options (dbi_conn connection);
-static bool save_may_clobber_data (dbi_conn conn, const std::string& dbname);
+template<DbType Type> bool save_may_clobber_data (dbi_conn conn,
+                                                  const std::string& dbname);
 
 template <DbType Type>
 class QofDbiBackendProvider : public QofBackendProvider
@@ -152,11 +153,11 @@ struct UriStrings
 
 UriStrings::UriStrings(const std::string& uri)
 {
-    gchar *protocol, *host, *username, *password, *dbname;
+    gchar *scheme, *host, *username, *password, *dbname;
     int portnum;
-    gnc_uri_get_components(uri.c_str(), &protocol, &host, &portnum, &username,
+    gnc_uri_get_components(uri.c_str(), &scheme, &host, &portnum, &username,
                            &password, &dbname);
-    m_protocol = std::string{protocol};
+    m_protocol = std::string{scheme};
     m_host = std::string{host};
     m_dbname = std::string{dbname};
     if (username)
@@ -164,7 +165,7 @@ UriStrings::UriStrings(const std::string& uri)
     if (password)
         m_password = std::string{password};
     m_portnum = portnum;
-    g_free(protocol);
+    g_free(scheme);
     g_free(host);
     g_free(username);
     g_free(password);
@@ -658,31 +659,54 @@ GncDbiBackend<Type>::session_begin (QofSession* session, const char* book_id,
             LEAVE("Error");
             return;
         }
-        if (create && save_may_clobber_data (conn, uri.quote_dbname(Type)))
+        if (create && save_may_clobber_data<Type>(conn,
+                                                   uri.quote_dbname(Type)))
         {
             if (force)
             {
                 // Drop DB
+                const char *root_db;
                 if (Type == DbType::DBI_PGSQL)
-                    dbi_conn_select_db (conn, "template1");
+                {
+                    root_db = "template1";
+                }
                 else if (Type == DbType::DBI_MYSQL)
-                    dbi_conn_select_db (conn, "mysql");
+                {
+                    root_db = "mysql";
+                }
                 else
-                    PWARN ("Unknown database type, don't know how to connect to a system database. Dropping existing database may fail.");
-
+                {
+                    PERR ("Unknown database type, can't proceed.");
+                    LEAVE("Error");
+                    return;
+                }
+                if (dbi_conn_select_db (conn, root_db) == -1)
+                {
+                    PERR ("Failed to switch out of %s, drop will fail.",
+                          uri.quote_dbname(Type).c_str());
+                    LEAVE ("Error");
+                    return;
+                }
                 if (!dbi_conn_queryf (conn, "DROP DATABASE %s",
                                  uri.quote_dbname(Type).c_str()))
-                    PWARN ("Failed to drop database %s prior to recreating it. Creation will likely fail.",
+                {
+                    PERR ("Failed to drop database %s prior to recreating it."
+                          "Proceeding would combine old and new data.",
                            uri.quote_dbname(Type).c_str());
+                    LEAVE ("Error");
+                    return;
+                }
             }
             else
             {
                 set_error (ERR_BACKEND_STORE_EXISTS);
-                PWARN ("Databse already exists, Might clobber it.");
+                PWARN ("Database already exists, Might clobber it.");
                 dbi_conn_close(conn);
                 LEAVE("Error");
                 return;
             }
+            /* Drop successful. */
+            m_exists = false;
         }
 
     }
@@ -882,12 +906,29 @@ GncDbiBackend<Type>::load (QofBook* book, QofBackendLoadType loadType)
 
 /* ================================================================= */
 /* This is used too early to call GncDbiProvider::get_table_list(). */
-static bool
+template <DbType T> bool
 save_may_clobber_data (dbi_conn conn, const std::string& dbname)
 {
 
     /* Data may be clobbered iff the number of tables != 0 */
     auto result = dbi_conn_get_table_list (conn, dbname.c_str(), nullptr);
+    bool retval = false;
+    if (result)
+    {
+        retval =  dbi_result_get_numrows (result) > 0;
+        dbi_result_free (result);
+    }
+    return retval;
+}
+
+template <> bool
+save_may_clobber_data <DbType::DBI_PGSQL>(dbi_conn conn,
+                                          const std::string& dbname)
+{
+
+    /* Data may be clobbered iff the number of tables != 0 */
+    const char* query = "SELECT relname FROM pg_class WHERE relname !~ '^(pg|sql)_' AND relkind = 'r' ORDER BY relname";
+    auto result = dbi_conn_query (conn, query);
     bool retval = false;
     if (result)
     {

@@ -248,7 +248,7 @@ setup_business (Fixture* fixture, gconstpointer pData)
 static void
 destroy_database (gchar* url)
 {
-    gchar* protocol = NULL;
+    gchar* scheme = NULL;
     gchar* host = NULL;
     gchar* dbname = NULL;
     gchar* username = NULL;
@@ -263,9 +263,9 @@ destroy_database (gchar* url)
     dbi_result tables;
     StrVec tblnames;
 
-    gnc_uri_get_components (url, &protocol, &host, &portnum,
+    gnc_uri_get_components (url, &scheme, &host, &portnum,
                             &username, &password, &dbname);
-    if (g_strcmp0 (protocol, "postgres") == 0)
+    if (g_strcmp0 (scheme, "postgres") == 0)
 #if HAVE_LIBDBI_R
         conn = dbi_conn_new_r (pgsql, dbi_instance);
 #else
@@ -273,7 +273,7 @@ destroy_database (gchar* url)
 #endif
     else
 #if HAVE_LIBDBI_R
-        conn = dbi_conn_new_r (protocol, dbi_instance);
+        conn = dbi_conn_new_r (scheme, dbi_instance);
 #else
         conn = dbi_conn_new (protocol);
 #endif

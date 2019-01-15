@@ -49,6 +49,7 @@ extern "C"
 #include "gnc-engine.h"
 }
 
+#include <gnc-locale-utils.hpp>
 #include <boost/locale.hpp>
 #include <string>
 #include <sstream>
@@ -2320,7 +2321,7 @@ struct cust_prec_punct : std::moneypunct_byname<wchar_t, false> {
 template<int prec>
 std::string to_str_with_prec (const gdouble val)
 {
-    auto loc = std::locale(std::locale(""), new cust_prec_punct<prec>(""));
+    auto loc = std::locale(gnc_get_locale(), new cust_prec_punct<prec>(""));
     std::wstringstream valstr;
     valstr.imbue(loc);
     valstr << std::put_money(val * pow(10, prec));

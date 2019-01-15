@@ -231,7 +231,7 @@ add_library (gncmod-engine
 
 # Add dependency on swig-runtime.h and iso-4217-currencies.c
 add_dependencies (gncmod-engine swig-runtime-h iso-4217-c)
-if (WIN32 AND ${CMAKE_HOST_SYSTEM_VERSION} VERSION_LESS "10.0")
+if (WIN32)
   set(BCRYPT "bcrypt.lib")
 else()
   set(BCRYPT "")

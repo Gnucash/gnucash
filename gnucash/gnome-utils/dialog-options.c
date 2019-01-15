@@ -2505,6 +2505,7 @@ gnc_option_set_ui_widget_text (GNCOption *option, GtkBox *page_box,
     value = gtk_text_view_new();
     gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(value), GTK_WRAP_WORD);
     gtk_text_view_set_editable(GTK_TEXT_VIEW(value), TRUE);
+    gtk_text_view_set_accepts_tab (GTK_TEXT_VIEW(value), FALSE);
     gtk_container_add (GTK_CONTAINER (scroll), value);
 
     gnc_option_set_widget (option, value);
