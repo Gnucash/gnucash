@@ -1164,9 +1164,9 @@ qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_
     auto frame = qof_instance_get_slots(QOF_INSTANCE(book));
     auto opt_path = opt_name_to_path(opt_name);
     if (opt_val && (*opt_val != '\0'))
-        delete frame->set(opt_path, new KvpValue(g_strdup(opt_val)));
+        delete frame->set_path(opt_path, new KvpValue(g_strdup(opt_val)));
     else
-        delete frame->set(opt_path, nullptr);
+        delete frame->set_path(opt_path, nullptr);
     qof_instance_set_dirty (QOF_INSTANCE (book));
     qof_book_commit_edit(book);
 }
