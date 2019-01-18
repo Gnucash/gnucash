@@ -598,10 +598,8 @@ gnc_ab_trans_dialog_verify_values(GncABTransDialog *td)
     // Verify that we have a local IBAN and BIC
     if (gnc_ab_trans_isSEPA(td->trans_type))
     {
-        const char* localBIC = AB_Transaction_GetLocalBic(td->ab_trans);
         const char* localIBAN = AB_Transaction_GetLocalIban(td->ab_trans);
-        if (!localBIC || !localIBAN
-                || (strlen(localBIC) == 0) || (strlen(localIBAN) == 0))
+        if (!localIBAN || (strlen(localIBAN) == 0))
         {
             const char* localBankCode = AB_Transaction_GetLocalBankCode(td->ab_trans);
             const char* localAccountCode = AB_Transaction_GetLocalAccountNumber(td->ab_trans);
