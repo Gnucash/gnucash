@@ -1027,6 +1027,12 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
                                      gui->cache_passwords);
     }
 
+    /* Enable the normal input visibility for TAN and for the set SHOW flag */
+    if ((flags & (GWEN_GUI_INPUT_FLAGS_TAN | GWEN_GUI_INPUT_FLAGS_SHOW)) != 0)
+    {
+        gtk_widget_set_visible(input_entry, TRUE);
+    }
+
     if (gui->parent)
         gtk_window_set_transient_for(GTK_WINDOW(dialog),
                                      GTK_WINDOW(gui->parent));
