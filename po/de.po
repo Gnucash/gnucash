@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: GnuCash 3.0.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2018-12-30 20:55+0100\n"
-"PO-Revision-Date: 2018-12-30 22:18+0100\n"
+"POT-Creation-Date: 2019-01-18 23:33+0100\n"
+"PO-Revision-Date: 2019-01-18 23:42+0100\n"
 "Last-Translator: Christian Stimming <christian@cstimming.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: de\n"
@@ -1410,7 +1410,6 @@ msgid "_Cancel"
 msgstr "_Abbrechen"
 
 #: gnucash/gnome/dialog-commodities.c:191
-#: gnucash/gnome/dialog-imap-editor.c:127
 #: gnucash/gnome/dialog-price-edit-db.c:203
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1593
 #: gnucash/gnome/gnc-plugin-page-invoice.c:162
@@ -1926,35 +1925,31 @@ msgstr "Beschreibung"
 msgid "Find Transaction"
 msgstr "Buchungen suchen"
 
-#: gnucash/gnome/dialog-imap-editor.c:119
-msgid "Are you sure you want to delete the entries ?"
-msgstr "Sind Sie sicher, dass Sie diese Einträge löschen möchten?"
-
-#: gnucash/gnome/dialog-imap-editor.c:406
+#: gnucash/gnome/dialog-imap-editor.c:381
 msgid "Map Account NOT found"
 msgstr "Zugeordnetes Konto nicht gefunden"
 
-#: gnucash/gnome/dialog-imap-editor.c:505
+#: gnucash/gnome/dialog-imap-editor.c:480
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:109
 msgid "Bayesian"
 msgstr "Automatisch (Bayesisch)"
 
 #. Description
-#: gnucash/gnome/dialog-imap-editor.c:520
+#: gnucash/gnome/dialog-imap-editor.c:495
 msgid "Description Field"
 msgstr "Beschreibungsfeld"
 
 #. Memo
-#: gnucash/gnome/dialog-imap-editor.c:523
+#: gnucash/gnome/dialog-imap-editor.c:498
 msgid "Memo Field"
 msgstr "Buchungstext-Feld"
 
 #. CSV Account Map
-#: gnucash/gnome/dialog-imap-editor.c:526
+#: gnucash/gnome/dialog-imap-editor.c:501
 msgid "CSV Account Map"
 msgstr "CSV-Kontoübersicht"
 
-#: gnucash/gnome/dialog-imap-editor.c:563
+#: gnucash/gnome/dialog-imap-editor.c:538
 msgid "Online Id"
 msgstr "Online Id"
 
@@ -3321,7 +3316,7 @@ msgstr "Alte Daten abschließen und in vorigen Buchführungsperioden speichern."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:191
 msgid "_Price Database"
-msgstr "Kurs-Datenbank..."
+msgstr "Kurs-Datenbank"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:192
 msgid "View and edit the prices for stocks and mutual funds"
@@ -3329,7 +3324,7 @@ msgstr "Kurse für Währungen/Wertpapiere anzeigen und bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:196
 msgid "_Security Editor"
-msgstr "_Wertpapier-Editor..."
+msgstr "_Wertpapier-Editor"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:197
 msgid "View and edit the commodities for stocks and mutual funds"
@@ -3338,7 +3333,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:201
 msgid "_Loan Repayment Calculator"
-msgstr "_Darlehensrechner..."
+msgstr "_Darlehensrechner"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:202
 msgid "Use the loan/mortgage repayment calculator"
@@ -3346,7 +3341,7 @@ msgstr "Den Darlehensrechner benutzen"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:206
 msgid "_Close Book"
-msgstr "_Buchabschluss..."
+msgstr "_Buchabschluss"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:207
 msgid "Close the Book at the end of the Period"
@@ -3364,7 +3359,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:216
 msgid "_Transaction Associations"
-msgstr "_Buchungsverknüpfungen..."
+msgstr "_Buchungsverknüpfungen"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:217
 msgid "View all Transaction Associations"
@@ -5071,7 +5066,7 @@ msgstr "und Unterkonten"
 #: gnucash/report/standard-reports/register.scm:390
 #: gnucash/report/standard-reports/transaction.scm:1256
 #: gnucash/report/standard-reports/transaction.scm:1273
-#: gnucash/report/standard-reports/trial-balance.scm:702
+#: gnucash/report/standard-reports/trial-balance.scm:753
 #: libgnucash/app-utils/guile-util.c:850
 msgid "Credit"
 msgstr "Haben"
@@ -5086,7 +5081,7 @@ msgstr "Haben"
 #: gnucash/report/standard-reports/register.scm:388
 #: gnucash/report/standard-reports/transaction.scm:1253
 #: gnucash/report/standard-reports/transaction.scm:1270
-#: gnucash/report/standard-reports/trial-balance.scm:699
+#: gnucash/report/standard-reports/trial-balance.scm:750
 #: libgnucash/app-utils/guile-util.c:819
 msgid "Debit"
 msgstr "Soll"
@@ -5685,7 +5680,7 @@ msgstr "Finanzmanagement"
 #. Icon file name, do not translate or use "gnucash-icon" as msgstr
 #: gnucash/gnome/gnucash.desktop.in.in:11
 msgid "gnucash-icon"
-msgstr ""
+msgstr "gnucash-icon"
 
 #. Translators: The abbreviation for 'Reconciled'
 #. in the header row of the register. Please only
@@ -8599,7 +8594,7 @@ msgstr "_Berechnen"
 #: gnucash/report/standard-reports/transaction.scm:137
 #: gnucash/report/standard-reports/transaction.scm:930
 #: gnucash/report/standard-reports/transaction.scm:1020
-#: gnucash/report/standard-reports/trial-balance.scm:705
+#: gnucash/report/standard-reports/trial-balance.scm:756
 msgid "Account Name"
 msgstr "Kontobezeichnung"
 
@@ -12062,7 +12057,7 @@ msgstr "Bindestrich (-)"
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:441
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:469
 msgid "•"
-msgstr ""
+msgstr "~"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:455
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:455
@@ -14897,11 +14892,11 @@ msgstr "Wie oft verwendet?"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:260
 msgid ""
-"Case sensitive filtering is available on 'Match String' and 'Mapped to "
-"Account Name'."
+"Filter will be applied to 'Match String' and 'Mapped to Account Name' "
+"fields, case sensitive."
 msgstr ""
-"Filterung unter Beachtung Groß-/Kleinschreibung verfügbar für »Zuordnungs-"
-"Zeichenfolge« und »Zugeordneter Kontonamen«"
+"Filtern gilt für die Felder »Zuordnungs-Zeichenfolge« und »Zugeordneter "
+"Kontonamen«, unter Beachtung Groß-/Kleinschreibung."
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:299
 msgid "_Filter"
@@ -14917,11 +14912,8 @@ msgstr "Alle _einklappen"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:363
 msgid ""
-"Multiple rows can be selected and then deleted by pressing the delete "
-"button..."
-msgstr ""
-"Mehrere Zeilen können ausgewählt und dann durch Drücken des Löschen-Knopfs "
-"gelöscht werden ..."
+"Multiple rows can be selected and then deleted by pressing the delete button."
+msgstr "Mehrere Zeilen können ausgewählt und durch Drücken des Löschen-Knopfs gelöscht werden."
 
 #: gnucash/gtkbuilder/dialog-import.glade:110
 msgid "Please select or create an appropriate GnuCash account for:"
@@ -18593,9 +18585,9 @@ msgstr ""
 
 #. Conversion was erroneous, so don't use the string
 #: gnucash/import-export/aqb/dialog-ab-trans.c:294
-#: gnucash/import-export/aqb/dialog-ab-trans.c:1073
-#: gnucash/import-export/aqb/dialog-ab-trans.c:1076
-#: gnucash/import-export/aqb/dialog-ab-trans.c:1082
+#: gnucash/import-export/aqb/dialog-ab-trans.c:1071
+#: gnucash/import-export/aqb/dialog-ab-trans.c:1074
+#: gnucash/import-export/aqb/dialog-ab-trans.c:1080
 msgid "(unknown)"
 msgstr "(unbekannt)"
 
@@ -18699,7 +18691,7 @@ msgstr ""
 "der Bankleitzahl »%s« ergab, dass die Kontonummer wahrscheinlich einen "
 "Fehler enthält."
 
-#: gnucash/import-export/aqb/dialog-ab-trans.c:610
+#: gnucash/import-export/aqb/dialog-ab-trans.c:608
 #, c-format
 msgid ""
 "Your local bank account does not yet have the SEPA account information "
@@ -18714,7 +18706,7 @@ msgstr ""
 "führen Sie das Kommandozeilenprogramm \"aqhbci-tool\" für Ihr Konto wie "
 "folgt aus: aqhbci-tool4 getaccsepa -b %s -a %s"
 
-#: gnucash/import-export/aqb/dialog-ab-trans.c:625
+#: gnucash/import-export/aqb/dialog-ab-trans.c:623
 msgid ""
 "You did not enter a recipient name. A recipient name is required for an "
 "online transfer.\n"
@@ -18722,7 +18714,7 @@ msgstr ""
 "Sie haben keinen Empfängernamen eingegeben. Für einen Überweisungsauftrag "
 "ist die Eingabe eines Empfängernamens erforderlich.\n"
 
-#: gnucash/import-export/aqb/dialog-ab-trans.c:645
+#: gnucash/import-export/aqb/dialog-ab-trans.c:643
 msgid ""
 "You did not enter a recipient account. A recipient account is required for "
 "an online transfer.\n"
@@ -18730,7 +18722,7 @@ msgstr ""
 "Sie haben kein Empfängerkonto eingegeben. Für einen Überweisungsauftrag ist "
 "die Eingabe eines Empfängerkontos erforderlich.\n"
 
-#: gnucash/import-export/aqb/dialog-ab-trans.c:661
+#: gnucash/import-export/aqb/dialog-ab-trans.c:659
 msgid ""
 "You did not enter a recipient bank. A recipient bank is required for an "
 "online transfer.\n"
@@ -18738,7 +18730,7 @@ msgstr ""
 "Sie haben keine Bank des Empfängers eingegeben. Für einen "
 "Überweisungsauftrag ist die Eingabe einer Bank erforderlich.\n"
 
-#: gnucash/import-export/aqb/dialog-ab-trans.c:679
+#: gnucash/import-export/aqb/dialog-ab-trans.c:677
 msgid ""
 "The amount is zero or the amount field could not be interpreted correctly. "
 "You might have mixed up decimal point and comma, compared to your locale "
@@ -18751,7 +18743,7 @@ msgstr ""
 "eingeben, andernfalls einen Punkt. Dies ergibt keinen zulässigen "
 "Zahlungsauftrag."
 
-#: gnucash/import-export/aqb/dialog-ab-trans.c:696
+#: gnucash/import-export/aqb/dialog-ab-trans.c:694
 msgid ""
 "You did not enter any transaction purpose. A purpose is required for an "
 "online transfer.\n"
@@ -18760,7 +18752,7 @@ msgstr ""
 "ist die Eingabe eines Verwendungszwecks erforderlich.\n"
 
 # Fixme: aktuellen Stand prüfen.
-#: gnucash/import-export/aqb/dialog-ab-trans.c:718
+#: gnucash/import-export/aqb/dialog-ab-trans.c:716
 msgid ""
 "The text you entered contained at least one character that is invalid for a "
 "SEPA transaction. In SEPA, unfortunately only exactly the following "
@@ -18778,14 +18770,14 @@ msgstr ""
 "Insbesondere sind weder Umlaute, noch Et-Zeichen »&« erlaubt, weder im "
 "Sender- noch im Empfängernamen, geschweige denn im Verwendungszweck."
 
-#: gnucash/import-export/aqb/dialog-ab-trans.c:1172
+#: gnucash/import-export/aqb/dialog-ab-trans.c:1170
 msgid ""
 "A template with the given name already exists. Please enter another name."
 msgstr ""
 "Eine Vorlage mit diesem Namen existiert bereits. Bitte geben Sie einen "
 "anderen Namen ein."
 
-#: gnucash/import-export/aqb/dialog-ab-trans.c:1307
+#: gnucash/import-export/aqb/dialog-ab-trans.c:1305
 #, c-format
 msgid "Do you really want to delete the template with the name \"%s\"?"
 msgstr ""
@@ -19052,7 +19044,7 @@ msgstr[1] ""
 "Alle %d Aufträge wurden erfolgreich erstellt. Prüfen Sie bitte trotzdem die "
 "Ausgaben im Verlaufsfenster für mögliche Fehlermeldungen."
 
-#: gnucash/import-export/aqb/gnc-gwen-gui.c:1089
+#: gnucash/import-export/aqb/gnc-gwen-gui.c:1095
 #, c-format
 msgid ""
 "The PIN needs to be at least %d characters \n"
@@ -19061,7 +19053,7 @@ msgstr ""
 "Die PIN muss mindestens %d Zeichen lang \n"
 "sein. Erneut versuchen?"
 
-#: gnucash/import-export/aqb/gnc-gwen-gui.c:1591
+#: gnucash/import-export/aqb/gnc-gwen-gui.c:1597
 msgid ""
 "The Online Banking job is still running; are you sure you want to cancel?"
 msgstr ""
@@ -19855,7 +19847,7 @@ msgstr ""
 "zum Import."
 
 #. Translators: {1} will be replaced with a filename
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2069
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2071
 msgid "The transactions were imported from file '{1}'."
 msgstr "Die Buchungen wurden aus der Datei »{1}« importiert."
 
@@ -19908,6 +19900,7 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:456
+#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:237
 msgid "'Commodity From' can not be the same as 'Currency To'."
 msgstr ""
 
@@ -20054,10 +20047,6 @@ msgstr "Keine »Nach Währung« Spalte."
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:235
 msgid "No 'Commodity from' column."
 msgstr "Keine »Von Währung/Wertpapier« Spalte."
-
-#: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:237
-msgid "'Commodity from' can not be the same as 'Currency to'."
-msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:328
 msgid "Failed to create price from selected columns."
@@ -22420,7 +22409,7 @@ msgstr "Layout"
 
 #: gnucash/report/business-reports/invoice.scm:210
 msgid "CSS"
-msgstr ""
+msgstr "CSS"
 
 #: gnucash/report/business-reports/invoice.scm:216
 msgid "Picture Location"
@@ -22925,24 +22914,20 @@ msgid "Text font"
 msgstr "Schriftart Text"
 
 #: gnucash/report/business-reports/receipt.scm:86
-#, fuzzy
 msgid "Header logo filename"
-msgstr "Logo Dateiname"
+msgstr "Kopfzeile Logo Dateiname"
 
 #: gnucash/report/business-reports/receipt.scm:87
-#, fuzzy
 msgid "Header logo width"
-msgstr "Logobreite"
+msgstr "Kopfzeile Logobreite"
 
 #: gnucash/report/business-reports/receipt.scm:88
-#, fuzzy
 msgid "Footer logo filename"
-msgstr "Logo Dateiname"
+msgstr "Fußzeile Logo Dateiname"
 
 #: gnucash/report/business-reports/receipt.scm:89
-#, fuzzy
 msgid "Footer logo width"
-msgstr "Logobreite"
+msgstr "Fußzeile Logobreite"
 
 #: gnucash/report/business-reports/receipt.scm:90
 #: gnucash/report/business-reports/receipt.scm:165
@@ -23782,7 +23767,7 @@ msgstr "Drucken"
 #. * to be used as toolbar button label.
 #: gnucash/report/report-gnome/gnc-plugin-page-report.c:1128
 msgid "Save Config"
-msgstr ""
+msgstr "Konf. speichern"
 
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration As..."
 #. * to be used as toolbar button label.
@@ -23792,25 +23777,21 @@ msgstr "Konfiguration speichern unter..."
 
 #: gnucash/report/report-gnome/gnc-plugin-page-report.c:1132
 msgid "Make Pdf"
-msgstr ""
+msgstr "PDF erstellen"
 
 #: gnucash/report/report-gnome/gnc-plugin-page-report.c:1184
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Update the current report's saved configuration. The report will be saved in "
 "the file %s. "
-msgstr ""
-"Berichtskonfiguration im Menü »Benutzerdefiniert« aktualisieren. Der Bericht "
-"wird in der Datei ~/.gnucash/saved-reports-2.4 gespeichert."
+msgstr "Berichtskonfiguration im Menü »Benutzerdefiniert« aktualisieren. Der Bericht wird in der Datei %s gespeichert."
 
 #: gnucash/report/report-gnome/gnc-plugin-page-report.c:1187
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Add the current report's configuration to the `Saved Report Configurations' "
 "menu. The report will be saved in the file %s. "
-msgstr ""
-"Berichtskonfiguration zum Menü »Benutzerdefiniert« hinzufügen. Der Bericht "
-"wird in der Datei ~/.gnucash/saved-reports-2.4 gespeichert."
+msgstr "Berichtskonfiguration zum Menü »Benutzerdefiniert« hinzufügen. Der Bericht wird in der Datei %s gespeichert."
 
 #: gnucash/report/report-gnome/gnc-plugin-page-report.c:1193
 msgid "_Print Report..."
@@ -24531,7 +24512,7 @@ msgstr "Falsche Berichtskonfiguration: "
 
 #: gnucash/report/report-system/report.scm:185
 msgid " Report is missing a GUID."
-msgstr ""
+msgstr "Interner Fehler: Bericht hat keine GUID."
 
 #: gnucash/report/report-system/report.scm:255
 msgid "Enter a descriptive name for this report."
@@ -24850,7 +24831,7 @@ msgstr "Durchschnitt pro Woche"
 #: gnucash/report/standard-reports/income-statement.scm:474
 #: gnucash/report/standard-reports/net-charts.scm:365
 #: gnucash/report/standard-reports/price-scatter.scm:202
-#: gnucash/report/standard-reports/trial-balance.scm:431
+#: gnucash/report/standard-reports/trial-balance.scm:482
 #: libgnucash/app-utils/date-utilities.scm:94
 #, scheme-format
 msgid "~a to ~a"
@@ -25414,7 +25395,7 @@ msgid "Loss"
 msgstr "Verlust"
 
 #: gnucash/report/standard-reports/balance-sheet.scm:72
-#: gnucash/report/standard-reports/trial-balance.scm:659
+#: gnucash/report/standard-reports/trial-balance.scm:710
 msgid "Balance Sheet"
 msgstr "Bilanz"
 
@@ -25526,14 +25507,14 @@ msgstr "Verluste Devisenhandel"
 #: gnucash/report/standard-reports/balance-sheet.scm:685
 #: gnucash/report/standard-reports/budget-balance-sheet.scm:848
 #: gnucash/report/standard-reports/equity-statement.scm:631
-#: gnucash/report/standard-reports/trial-balance.scm:892
+#: gnucash/report/standard-reports/trial-balance.scm:943
 msgid "Unrealized Gains"
 msgstr "Nicht realisierter Gewinn/Verlust"
 
 #: gnucash/report/standard-reports/balance-sheet.scm:686
 #: gnucash/report/standard-reports/budget-balance-sheet.scm:849
 #: gnucash/report/standard-reports/equity-statement.scm:632
-#: gnucash/report/standard-reports/trial-balance.scm:893
+#: gnucash/report/standard-reports/trial-balance.scm:944
 msgid "Unrealized Losses"
 msgstr "Nicht realisierter Verlust"
 
@@ -25700,7 +25681,7 @@ msgstr "Die Nummer der Periode."
 #: gnucash/report/standard-reports/budget-flow.scm:319
 #, scheme-format
 msgid "~a: ~a - ~a"
-msgstr ""
+msgstr "~a: ~a - ~a"
 
 #: gnucash/report/standard-reports/budget-income-statement.scm:62
 #: gnucash/report/standard-reports/budget.scm:72
@@ -26323,14 +26304,14 @@ msgstr "Lässt das Muster für Abschlussbuchungen ein regulärer Ausdruck sein."
 #: gnucash/report/standard-reports/equity-statement.scm:298
 #: gnucash/report/standard-reports/income-statement.scm:434
 #: gnucash/report/standard-reports/sx-summary.scm:313
-#: gnucash/report/standard-reports/trial-balance.scm:443
+#: gnucash/report/standard-reports/trial-balance.scm:494
 #, scheme-format
 msgid "For Period Covering ~a to ~a"
 msgstr "Für Periode ~a bis ~a"
 
 #: gnucash/report/standard-reports/equity-statement.scm:362
 #: gnucash/report/standard-reports/income-statement.scm:473
-#: gnucash/report/standard-reports/trial-balance.scm:430
+#: gnucash/report/standard-reports/trial-balance.scm:481
 msgid "for Period"
 msgstr "für Buchungsperiode"
 
@@ -26716,7 +26697,7 @@ msgid "Total Trading"
 msgstr "Gesamt Devisenhandel"
 
 #: gnucash/report/standard-reports/income-statement.scm:718
-#: gnucash/report/standard-reports/trial-balance.scm:658
+#: gnucash/report/standard-reports/trial-balance.scm:709
 msgid "Income Statement"
 msgstr "Ergebnisrechnung"
 
@@ -27623,7 +27604,7 @@ msgid "Reconciliation Report"
 msgstr "Abgleichungsbericht"
 
 #: gnucash/report/standard-reports/trial-balance.scm:60
-#: gnucash/report/standard-reports/trial-balance.scm:655
+#: gnucash/report/standard-reports/trial-balance.scm:706
 msgid "Trial Balance"
 msgstr "Rohbilanz"
 
@@ -27729,19 +27710,19 @@ msgstr "Arbeitsblatt"
 msgid "Creates a complete end-of-period work sheet"
 msgstr "Erstellt ein vollständiges Arbeitsblatt zum Periodenende"
 
-#: gnucash/report/standard-reports/trial-balance.scm:656
+#: gnucash/report/standard-reports/trial-balance.scm:707
 msgid "Adjustments"
 msgstr "Anpassungsbuchungen"
 
-#: gnucash/report/standard-reports/trial-balance.scm:657
+#: gnucash/report/standard-reports/trial-balance.scm:708
 msgid "Adjusted Trial Balance"
 msgstr "Angepasste Rohbilanz"
 
-#: gnucash/report/standard-reports/trial-balance.scm:1111
+#: gnucash/report/standard-reports/trial-balance.scm:1162
 msgid "Net Income"
 msgstr "Nettoertrag"
 
-#: gnucash/report/standard-reports/trial-balance.scm:1111
+#: gnucash/report/standard-reports/trial-balance.scm:1162
 msgid "Net Loss"
 msgstr "Nettoverlust"
 
@@ -29520,7 +29501,7 @@ msgid "Notice"
 msgstr "Hinweis"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:676
-msgid "Your gnucash metadata has been migrated ."
+msgid "Your gnucash metadata has been migrated."
 msgstr ""
 "Die internen Daten (Metadaten) von GnuCash wurden von einer alten Version "
 "auf die neueste Version aktualisiert."
@@ -29673,18 +29654,18 @@ msgstr "Tag-Monat"
 msgid "m-d"
 msgstr "Monat-Tag"
 
-#: libgnucash/engine/gnc-datetime.cpp:467
+#: libgnucash/engine/gnc-datetime.cpp:486
 msgid "Unknown date format specifier passed as argument."
 msgstr "Unbekanntes Datumsformat als Argument übergeben."
 
 #. regex didn't find a match
-#: libgnucash/engine/gnc-datetime.cpp:472
+#: libgnucash/engine/gnc-datetime.cpp:491
 msgid "Value can't be parsed into a date using the selected date format."
 msgstr ""
 "Der Wert kann nicht in ein Datum unter Verwendung des ausgewählten "
 "Datumsformats umgewandelt werden."
 
-#: libgnucash/engine/gnc-datetime.cpp:477
+#: libgnucash/engine/gnc-datetime.cpp:496
 msgid "Value appears to contain a year while the selected format forbids this."
 msgstr ""
 "Der Wert scheint eine Jahreszahl zu enthalten, während das ausgewählte "
@@ -29869,12 +29850,12 @@ msgid ""
 "Split"
 msgstr "Mehrteilig"
 
-#: libgnucash/engine/Transaction.c:2681
+#: libgnucash/engine/Transaction.c:2694
 msgid "Voided transaction"
 msgstr "Ungültige Buchung"
 
 #. Dirtying taken care of by SetReadOnly
-#: libgnucash/engine/Transaction.c:2693
+#: libgnucash/engine/Transaction.c:2706
 msgid "Transaction Voided"
 msgstr "Buchung ungültig gemacht"
 
