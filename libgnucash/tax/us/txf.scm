@@ -6,6 +6,8 @@
 ;;
 ;; See also http://www.turbotax.com/txf/
 ;;
+;; Updated Jan 2019 to include codes for version 42, although new codes not
+;;   implemented yet because data not available
 ;; Updated Feb 2013, Jan 2014 & Jan 2019 . J. Alex Aycinena
 ;; Added updated tax line info
 ;; Updated Oct 2009. J. Alex Aycinena
@@ -176,12 +178,19 @@
     (cons 'N499 #(none "Sched C-EZ" "Gross receipts" 1 #t "" ((2012 "1") (2011 "1b") (1992 "1"))))
 
     (cons 'N320 #(not-impl "Sched D" "Schedule D" 1 #f ""))
-    (cons 'N321 #(not-impl "Sched D" "Short Term gain/loss - security" 4 #f "" ((1993 "1") (1991 "1a") (1986 "2a") (1985 "1b") (1980 "1"))))
+    (cons 'N321 #(not-impl "Form 8949 Copy A" "Short Term gain/loss - security" 5 #f "" ((2013 "Part I, 1") (2011 "1") (1993 "Sched D, line 1") (1991 "Sched D, line 1a") (1986 "Sched D, line 2a") (1985 "Sched D, line 1b") (1980 "Sched D, line 1"))))
     (cons 'N322 #(not-impl "Sched D" "ST gain/loss - other" 4 #f "" ((1991 "1d") (1989 "2d") (1986 "2c")) 1992))
-    (cons 'N323 #(not-impl "Sched D" "Long Term gain/loss - security" 4 #f "" ((1997 "8") (1993 "9") (1992 "9a") (1991 "8a") (1986 "9a") (1983 "9") (1980 "8"))))
+    (cons 'N323 #(not-impl "Form 8949 Copy A" "Long Term gain/loss - security" 5 #f "" ((2013 "Part II, 1") (2011 "3") (1997 "Sched D, line 8") (1993 "Sched D, line 9") (1992 "Sched D, line 9a") (1991 "Sched D, line 8a") (1986 "Sched D, line 9a") (1983 "Sched D, line 9") (1980 "Sched D, line 8"))))
     (cons 'N324 #(not-impl "Sched D" "LT gain/loss - other" 4 #f "" ((1992 "9d") (1991 "8d") (1989 "9d") (1986 "9c")) 1992))
-    (cons 'N673 #(current "Sched D" "Short/Long gain or loss" 4 #f "" ((2011 "1, 2, or 3 via Form 8949, line 1 or 8, 9, or 10 via Form 8949, line 3") (1999 "1 or 8"))))
-    (cons 'N682 #(not-impl "Sched D" "Wash Sale - security" 4 #f "" ((2003 "1 or 8"))))
+    (cons 'N673 #(current "Form 8949 Copy A" "Short/Long gain or loss" 4 #f "" ((2013 "Part I, 1, or Part II, 1") (2011 "1 or 3") (1999 "Sched D, line 1 or 8"))))
+    (cons 'N682 #(not-impl "Form 8949 Copy A" "Wash Sale - security" 5 #f "" ((2013 "Part I, 1, or Part II, 1") (2011 "1 or 3") (2003 "Sched D, line 1 or 8"))))
+    (cons 'N711 #(not-impl "Form 8949 Copy B" "Short Term gain/loss - security" 5 #f "" ((2013 "Part I, 1") (2011 "1"))))
+    (cons 'N713 #(not-impl "Form 8949 Copy B" "Long Term gain/loss - security" 5 #f "" ((2013 "Part II, 1") (2011 "3"))))
+    (cons 'N715 #(not-impl "Form 8949 Copy B" "Short/Long Term gain/loss - security" 5 #f "" ((2013 "Part I, 1, or Part II, 1") (2011 "1 or 3"))))
+    (cons 'N718 #(not-impl "Form 8949 Copy B" "Wash Sale - security" 5 #f "" ((2013 "Part I, 1, or Part II, 1") (2011 "1 or 3"))))
+    (cons 'N712 #(not-impl "Form 8949 Copy C" "Short Term gain/loss - security" 5 #f "" ((2013 "Part I, 1") (2011 "1"))))
+    (cons 'N714 #(not-impl "Form 8949 Copy C" "Long Term gain/loss - security" 5 #f "" ((2013 "Part II, 1") (2011 "3"))))
+    (cons 'N716 #(not-impl "Form 8949 Copy C" "Short/Long Term gain/loss - security" 5 #f "" ((2013 "Part I, 1, or Part II, 1") (2011 "1 or 3"))))
     (cons 'N488 #(parent "Sched D" "Dividend, cap gain distrib." 3 #f "_LT CapGnDst" ((1997 "13") (1992 "14") (1991 "12") (1986 "13") (1983 "15") (1980 "13"))))
     (cons 'N684 #(none "Sched D" "Div inc., PostMay5 cap gain" 3 #f "" ((2004 "NA - Expired") (2003 "13g")) 2003))
     (cons 'N644 #(current "Sched D" "28% cap gain" 3 #f "" ((2004 "18") (2003 "20") (1997 "8g"))))
