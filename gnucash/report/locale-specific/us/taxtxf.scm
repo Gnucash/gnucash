@@ -68,6 +68,7 @@
 ;; Update from "V041" to "V042", although added codes are not implemented
 ;;   because cost/gain data not reliably available
 ;; The format for code 673 can be 4 or 5, per spec, so leave as 4
+;; Fix beginning balance off-by-one-day error for B/S accounts
 ;;
 ;; From prior version:
 ;; NOTE: setting of specific dates is squirly! and seems
@@ -2122,6 +2123,8 @@
                       ;; The exact same code, in from-value, further above,
                       ;;   only subtraces one!  Go figure!
                       ;; So, we add one back below!
+;; comment - could it be because from-date coming in has already had 1
+;; subtracted in setting from-value?
                       (if (member alt-period
                                   '(last-year 1st-last 2nd-last
                                               3rd-last 4th-last))
@@ -2245,7 +2248,7 @@
                                          (or (eq? account-type ACCT-TYPE-INCOME)
                                            (eq? account-type ACCT-TYPE-EXPENSE)))
                              (gnc:account-get-comm-balance-at-date account
-                                      (gnc:time64-previous-day from-value) #f)
+                                      (gnc:time64-start-day-time from-value) #f)
                              #f))
               (acct-end-bal-collector (if (not
                                          (or (eq? account-type ACCT-TYPE-INCOME)
