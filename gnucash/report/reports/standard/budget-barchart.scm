@@ -41,6 +41,7 @@
 
 (define optname-running-sum (N_ "Running Sum"))
 (define optname-chart-type (N_ "Chart Type"))
+(define opthelp-chart-type (N_ "Select which chart type to use"))
 (define optname-plot-width (N_ "Plot Width"))
 (define optname-plot-height (N_ "Plot Height"))
 (define optname-from-date (N_ "Start Date"))
@@ -52,14 +53,10 @@
 
 ;(define (options-generator inc-exp?)
 (define (options-generator)
-  (let* (
-      (options (gnc:new-options)) 
-      ;; This is just a helper function for making options.
-      ;; See libgnucash/scm/options.scm for details.
-      (add-option 
-        (lambda (new-option)
-          (gnc:register-option options new-option)))
-    )
+  (let* ((options (gnc:new-options))
+         (add-option
+          (lambda (new-option)
+            (gnc:register-option options new-option))))
     ;; Option to select Budget
     (add-option (gnc:make-budget-option
         gnc:pagename-general optname-budget
@@ -95,39 +92,30 @@
 
     ;; Display tab
     (add-option
-      (gnc:make-multichoice-option
-        gnc:pagename-display                  ;; tab name
-        optname-chart-type                    ;; displayed option name
-        "b"                                   ;; localization in the tab
-        (N_ "This is a multi choice option.") ;; option help text
-        'bars                                 ;; default selectioin
-        (list
-          (list->vector
-            (list 'bars
-                  (N_ "Barchart")
-                  (N_ "Show the report as a bar chart.")
-            )
-          )
-          (list->vector
-            (list 'lines
-                  (N_ "Linechart")
-                  (N_ "Show the report as a line chart.")
-            )
-          )
-        )
-      )
-    )
+     (gnc:make-multichoice-option
+      gnc:pagename-display                  ;; tab name
+      optname-chart-type                    ;; displayed option name
+      "b"                                   ;; localization in the tab
+      opthelp-chart-type                    ;; option help text
+      'bars                                 ;; default selectioin
+      (list
+       (vector 'bars
+               (N_ "Barchart")
+               (N_ "Show the report as a bar chart."))
+       (vector 'lines
+               (N_ "Linechart")
+               (N_ "Show the report as a line chart.")))))
 
     (gnc:options-add-plot-size! 
      options gnc:pagename-display 
-     optname-plot-width optname-plot-height "c" (cons 'percent 100.0) (cons 'percent 100.0))
+     optname-plot-width optname-plot-height
+     "c" (cons 'percent 80) (cons 'percent 80))
 
     ;; Set default page
     (gnc:options-set-default-section options gnc:pagename-general)
 
     ;; Return options
-    options
-))
+    options))
 
 
 ;; For each period in the budget:
@@ -137,124 +125,77 @@
 ;; Create bar and values
 ;;
 (define (gnc:chart-create-budget-actual budget acct running-sum chart-type width height report-start-time report-end-time)
-  (let* (
-          (chart #f)
-        )
+  (define curr (xaccAccountGetCommodity acct))
+  (define (amount->monetary amount)
+    (gnc:monetary->string
+     (gnc:make-gnc-monetary curr amount)))
+  (let ((chart (gnc:make-html-chart)))
+    (gnc:html-chart-set-type! chart (if (eq? chart-type 'bars) 'bar 'line))
+    (gnc:html-chart-set-title! chart (xaccAccountGetName acct))
+    (gnc:html-chart-set-width! chart width)
+    (gnc:html-chart-set-height! chart height)
+    (gnc:html-chart-set-currency-iso! chart (gnc-commodity-get-mnemonic curr))
+    (gnc:html-chart-set-currency-symbol! chart (gnc-commodity-get-nice-symbol curr))
+    (gnc:html-chart-set-y-axis-label! chart (gnc-commodity-get-mnemonic curr))
 
-    (if (eqv? chart-type 'bars)
-      (begin
-        ;; Setup barchart
-        (set! chart (gnc:make-html-barchart))
-        (gnc:html-barchart-set-title! chart (xaccAccountGetName acct))
-        (gnc:html-barchart-set-width! chart width)
-        (gnc:html-barchart-set-height! chart height)
-        (gnc:html-barchart-set-row-labels-rotated?! chart #t)
-        (gnc:html-barchart-set-col-labels!
-          chart (list (_ "Budget") (_ "Actual")))
-        (gnc:html-barchart-set-col-colors!
-          chart '("#0074D9" "#FF4136"))
-      )
-      ;; else
-      (begin
-        ;; Setup linechart
-        (set! chart (gnc:make-html-linechart))
-        (gnc:html-linechart-set-title! chart (xaccAccountGetName acct))
-        (gnc:html-linechart-set-width! chart width)
-        (gnc:html-linechart-set-height! chart height)
-        (gnc:html-linechart-set-row-labels-rotated?! chart #t)
-        (gnc:html-linechart-set-col-labels!
-          chart (list (_ "Budget") (_ "Actual")))
-        (gnc:html-linechart-set-col-colors!
-          chart '("#0074D9" "#FF4136"))
-      )
-    )
+    ;; disable animation; with multiple accounts selected this report
+    ;; will create several charts, all will want to animate
+    (gnc:html-chart-set! chart '(options animation duration) 0)
+    (gnc:html-chart-set! chart '(options hover animationDuration) 0)
+    (gnc:html-chart-set! chart '(options responsiveAnimationDuration) 0)
 
     ;; Prepair vars for running sums, and to loop though periods
-    (let* (
-        (num-periods (gnc-budget-get-num-periods budget))
-        (period 0)
-        (bgt-sum 0)
-        (act-sum 0)
-        (date (gnc-budget-get-period-start-date budget period))
-        (bgt-vals '())
-        (act-vals '())
-        (date-iso-string-list '())
-        (save-fmt (qof-date-format-get))
-      )
-
-      ;; make sure jqplot receives the date strings in ISO format (Bug763257)
-      (qof-date-format-set QOF-DATE-FORMAT-ISO)
+    (let* ((num-periods (gnc-budget-get-num-periods budget))
+           (period 0)
+           (bgt-sum 0)
+           (act-sum 0)
+           (date (gnc-budget-get-period-start-date budget period))
+           (bgt-vals '())
+           (act-vals '())
+           (dates-list '()))
 
       ;; Loop through periods
       (while (< period num-periods)
         ;;add calc new running sums
-	(if running-sum
-          (begin
-            (set! bgt-sum (+ bgt-sum
-              (gnc-numeric-to-double
-                (gnc:get-account-period-rolledup-budget-value budget acct period))))
-	    (set! act-sum (+ act-sum
-              (gnc-numeric-to-double
-                (gnc-budget-get-account-period-actual-value budget acct period))))
-          )
-        )
-        (if (<= report-start-time date)
-	  ;; within reporting period, update the display lists
-          (begin
-            (if (not running-sum)
-              (begin
-	        (set! bgt-sum
-                  (gnc-numeric-to-double
-                    (gnc:get-account-period-rolledup-budget-value budget acct period)))
-	        (set! act-sum
-                  (gnc-numeric-to-double
-                    (gnc-budget-get-account-period-actual-value budget acct period)))
-              )
-            )
-            (set! bgt-vals (append bgt-vals (list bgt-sum)))
-            (set! act-vals (append act-vals (list act-sum)))
-            (set! date-iso-string-list (append date-iso-string-list (list (qof-print-date date))))
-          )
-        )
+	(when running-sum
+          (set! bgt-sum
+            (+ bgt-sum
+               (gnc:get-account-period-rolledup-budget-value budget acct period)))
+          (set! act-sum
+            (+ act-sum
+               (gnc-budget-get-account-period-actual-value budget acct period))))
+        (when (<= report-start-time date)
+          ;; within reporting period, update the display lists
+          (unless running-sum
+            (set! bgt-sum
+              (gnc:get-account-period-rolledup-budget-value budget acct period))
+            (set! act-sum
+              (gnc-budget-get-account-period-actual-value budget acct period)))
+          (set! bgt-vals (cons bgt-sum bgt-vals))
+          (set! act-vals (cons act-sum act-vals))
+          (set! dates-list (cons (qof-print-date date) dates-list)))
         ;; prepare data for next loop repetition
-        (set! period (+ period 1))
+        (set! period (1+ period))
         (set! date (gnc-budget-get-period-start-date budget period))
         (if (< report-end-time date)
-          (set! period num-periods) ;; reporting period has ended, break the loop
-        )
-      )
+            (set! period num-periods)))
+      (set! bgt-vals (reverse bgt-vals))
+      (set! act-vals (reverse act-vals))
+      (set! dates-list (reverse dates-list))
 
-      ;; restore the date strings format
-      (qof-date-format-set save-fmt)
-
-      (if (eqv? chart-type 'bars)
-        (begin
-          ;; Add data to the bar chart
-          (gnc:html-barchart-append-column! chart bgt-vals)
-          (gnc:html-barchart-append-column! chart act-vals)
-          (gnc:html-barchart-set-row-labels! chart date-iso-string-list)
-          (if running-sum
-              (gnc:html-barchart-set-subtitle!
-               chart (format #f "Bgt: ~a Act: ~a" bgt-sum act-sum)))
-        )
-        ;; else
-        (begin
-          ;; Add data to the line chart
-          (gnc:html-linechart-append-column! chart bgt-vals)
-          (gnc:html-linechart-append-column! chart act-vals)
-          (gnc:html-linechart-set-row-labels! chart date-iso-string-list)
-          (if running-sum
-              (gnc:html-linechart-set-subtitle!
-               chart
-               (format #f "Bgt: ~a Act: ~a" bgt-sum act-sum)))
-        )
-      )
-    )
+      (gnc:html-chart-add-data-series! chart (_ "Budget") bgt-vals "#0074D9")
+      (gnc:html-chart-add-data-series! chart (_ "Actual") act-vals "#FF4136")
+      (gnc:html-chart-set-data-labels! chart dates-list)
+      (if running-sum
+          (gnc:html-chart-set-title!
+           chart
+           (list (xaccAccountGetName acct)
+                 (format #f "Bgt: ~a Act: ~a"
+                         (amount->monetary bgt-sum)
+                         (amount->monetary act-sum))))))
 
     ;; Return newly created chart
-    chart
-))
-
+    chart))
 
 ;; This is the rendering function. It accepts a database of options
 ;; and generates an object of type <html-document>.  See the file
@@ -272,20 +213,10 @@
   ;; This is a helper function to find out the level of the account
   ;; with in the account tree
   (define (get-account-level account level)
-    (let (
-           (parent (gnc-account-get-parent account))
-         )
+    (let ((parent (gnc-account-get-parent account)))
       (cond
-        (
-          (null? parent) ;; exit
-          level
-        )
-        (else
-          (get-account-level parent (+ level 1))
-        )
-      )
-    )
-  )
+       ((null? parent) level)
+       (else (get-account-level parent (1+ level))))))
 
   (let* (
       (budget (get-option gnc:pagename-general optname-budget))
@@ -304,8 +235,8 @@
                         (get-option gnc:pagename-general optname-from-date))))
       (to-date-t64 (gnc:time64-end-day-time
                     (gnc:date-option-absolute-time
-                      (get-option gnc:pagename-general optname-to-date))))
-    )
+                      (get-option gnc:pagename-general optname-to-date)))))
+
     (cond
       ((null? accounts)
         ;; No accounts selected
@@ -321,33 +252,23 @@
 
       ;; Else create chart for each account
       (else
-        (for-each
-          (lambda (acct)
-            (if (or
-                  (and (equal? depth-limit 'all)
-                       (null? (gnc-account-get-descendants acct))
-                  )
-                  (and (not (equal? depth-limit 'all))
+       (for-each
+        (lambda (acct)
+          (if (or (and (eq? depth-limit 'all)
+                       (null? (gnc-account-get-descendants acct)))
+                  (and (not (eq? depth-limit 'all))
                        (<= (get-account-level acct 0) depth-limit)
-                       (null? (gnc-account-get-descendants acct))
-                  )
-                  (and (not (equal? depth-limit 'all))
-                       (= (get-account-level acct 0) depth-limit)
-                  )
-                )
+                       (null? (gnc-account-get-descendants acct)))
+                  (and (not (eq? depth-limit 'all))
+                       (= (get-account-level acct 0) depth-limit)))
               (gnc:html-document-add-object!
-                document
-                (gnc:chart-create-budget-actual budget acct running-sum chart-type width height from-date-t64 to-date-t64)
-              )
-            )
-          )
-          accounts
-        )
-      )
-    ) ;; end cond
+               document
+               (gnc:chart-create-budget-actual
+                budget acct running-sum chart-type
+                width height from-date-t64 to-date-t64))))
+        accounts)))
     
-    document
-))
+    document))
 
 ;; Here we define the actual report
 (gnc:define-report
