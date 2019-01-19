@@ -397,7 +397,7 @@
           ;; make a plot (optionally)... if both plot and table, 
           ;; plot comes first. 
           (if show-plot?
-              (let ((barchart (gnc:make-html-barchart))
+              (let ((barchart (gnc:make-html-chart))
                     (height (get-option gnc:pagename-display optname-plot-height))
                     (width (get-option gnc:pagename-display optname-plot-width))
                     (col-labels '())
@@ -409,30 +409,21 @@
                            (lambda (row) (list-ref row 2)) data)))
                       (if (not (every zero? number-data))
                           (begin
-                            (gnc:html-barchart-append-column! 
-                             barchart
-			     number-data)
-                            (set! col-labels 
-                                  (append col-labels 
-                                          (list (list-ref columns 2))))
-                            (set! col-colors
-                                  (append col-colors (list "#0074D9")))
+                            (gnc:html-chart-add-data-series! barchart
+                                                             (list-ref columns 2)
+                                                             number-data
+                                                             "#0074D9")
                             (set! all-zeros? #f)))))
-                
-                
+
                 (if (memq 'GainPlot plot-type)
                     (let ((number-data 
                            (map (lambda (row) (list-ref row 7)) data)))
                       (if (not (every zero? number-data))
                           (begin
-                            (gnc:html-barchart-append-column! 
-                             barchart
-			     number-data)
-                            (set! col-labels 
-                                  (append col-labels 
-                                          (list (list-ref columns 7))))
-                            (set! col-colors
-                                  (append col-colors (list "#2ECC40")))
+                            (gnc:html-chart-add-data-series! barchart
+                                                             (list-ref columns 7)
+                                                             number-data
+                                                             "#2ECC40")
                             (set! all-zeros? #f)))))
 
                 (if (memq 'GLPlot plot-type)
@@ -445,40 +436,30 @@
                                 (every zero? debit-data)
                                 (every zero? credit-data)))
                           (begin
-                            (gnc:html-barchart-append-column! 
-                             barchart
-                             debit-data)
-                            (set! col-labels 
-                                  (append col-labels 
-                                          (list (list-ref columns 5))))
-                            (set! col-colors
-                                  (append col-colors (list "#111111")))
-                            
-                            ;; credit
-                            (gnc:html-barchart-append-column! 
-                             barchart
-                             credit-data)
-                            (set! col-labels 
-                                  (append col-labels 
-                                          (list (list-ref columns 6))))
-                            (set! col-colors
-                                  (append col-colors (list "#FF4136")))
+                            (gnc:html-chart-add-data-series! barchart
+                                                             (list-ref columns 5)
+                                                             debit-data
+                                                             "#111111")
+                            (gnc:html-chart-add-data-series! barchart
+                                                             (list-ref columns 6)
+                                                             credit-data
+                                                             "#FF4136")
                             (set! all-zeros? #f)))))
                 
                 (if (not all-zeros?)
                     (begin
-                      (gnc:html-barchart-set-title! barchart report-title)
-                      (gnc:html-barchart-set-col-labels! 
-                       barchart col-labels)
-                      (gnc:html-barchart-set-col-colors!
-                       barchart col-colors)
-                      (gnc:html-barchart-set-row-labels! 
-                       barchart (map car data))
-                      (gnc:html-barchart-set-row-labels-rotated?! barchart #t)
-                      
-                      (gnc:html-barchart-set-width! barchart width)
-                      (gnc:html-barchart-set-height! barchart height)
-                      (gnc:html-barchart-set-height! barchart height)
+                      (gnc:html-chart-set-currency-iso!
+                       barchart (gnc-commodity-get-mnemonic report-currency))
+                      (gnc:html-chart-set-currency-symbol!
+                       barchart (gnc-commodity-get-nice-symbol report-currency))
+
+                      (gnc:html-chart-set-data-labels! barchart col-labels)
+                      ;; (gnc:html-barchart-set-col-colors! barchart col-colors)
+                      (gnc:html-chart-set-data-labels! barchart (map car data))
+                      ;; (gnc:html-chart-set-row-labels-rotated?! barchart #t)
+                      (gnc:html-chart-set-width! barchart width)
+                      (gnc:html-chart-set-height! barchart height)
+                      (gnc:html-chart-set-height! barchart height)
                       (gnc:html-document-add-object! document barchart))
                     (gnc:html-document-add-object!
                      document
