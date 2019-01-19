@@ -116,11 +116,12 @@
       gnc:pagename-display optname-show-total
       "b" (N_ "Show the total balance in legend?") #t))
 
-    (gnc:options-add-plot-size! 
-     options gnc:pagename-display 
-     optname-plot-width optname-plot-height "d" (cons 'percent 100.0) (cons 'percent 100.0))
+    (gnc:options-add-plot-size!
+     options gnc:pagename-display
+     optname-plot-width optname-plot-height
+     "d" (cons 'percent 100.0) (cons 'percent 100.0))
 
-    (gnc:options-set-default-section options gnc:pagename-general)      
+    (gnc:options-set-default-section options gnc:pagename-general)
 
     options))
 
@@ -131,22 +132,21 @@
 ;; intervals as arguments.
 (define (piechart-renderer report-obj reportname
                            account-types)
-  
   ;; This is a helper function for looking up option values.
   (define (get-option section name)
-    (gnc:option-value 
-     (gnc:lookup-option 
+    (gnc:option-value
+     (gnc:lookup-option
       (gnc:report-options report-obj) section name)))
-  
+
   (gnc:report-starting reportname)
 
   ;; Get all options
-  (let* ((to-date (gnc:time64-end-day-time 
+  (let* ((to-date (gnc:time64-end-day-time
                      (gnc:date-option-absolute-time
                       (get-option gnc:pagename-general optname-to-date))))
-         (from-date (gnc:time64-start-day-time 
-                        (gnc:date-option-absolute-time 
-                         (get-option gnc:pagename-general 
+         (from-date (gnc:time64-start-day-time
+                        (gnc:date-option-absolute-time
+                         (get-option gnc:pagename-general
                                      optname-from-date))))
          (accounts (get-option gnc:pagename-accounts optname-accounts))
          (dosubs? (get-option gnc:pagename-accounts optname-subacct))
@@ -155,47 +155,44 @@
                                       optname-report-currency))
          (price-source (get-option gnc:pagename-general
                                    optname-price-source))
-         (report-title (get-option gnc:pagename-general 
+         (report-title (get-option gnc:pagename-general
                                    gnc:optname-reportname))
-         
+
          (show-total? (get-option gnc:pagename-display optname-show-total))
          (height (get-option gnc:pagename-display optname-plot-height))
          (width (get-option gnc:pagename-display optname-plot-width))
-         
          (commodity-list #f)
          (exchange-fn #f)
          (print-info (gnc-commodity-print-info report-currency #t))
-        
-         (beforebegindate (gnc:time64-end-day-time 
+         (beforebegindate (gnc:time64-end-day-time
                            (gnc:time64-previous-day from-date)))
          (document (gnc:make-html-document))
-         (chart (gnc:make-html-piechart))
-         (topl-accounts (gnc:filter-accountlist-type 
+         (chart (gnc:make-html-chart))
+         (topl-accounts (gnc:filter-accountlist-type
                          account-types
                          (gnc-account-get-children-sorted
                           (gnc-get-current-root-account)))))
-    
-    (define (monetary->double foreign-monetary date)
-      (gnc-numeric-to-double
-       (gnc:gnc-monetary-amount
-        (exchange-fn foreign-monetary report-currency date))))
-    
+
+    (define (monetary->amount foreign-monetary date)
+      (gnc:gnc-monetary-amount
+       (exchange-fn foreign-monetary report-currency date)))
+
     (if (not (null? accounts))
         (let* ((query (qof-query-create-for-splits))
                (splits '())
                (daily-totals (list 0 0 0 0 0 0 0))
-	       ;; Note: the absolute-super-duper-i18n'ed solution
-	       ;; would be to use the locale-using functions
-	       ;; date->string of srfi-19, similar to get_wday_name()
-	       ;; in src/engine/FreqSpeq.c. For now, we simply use
-	       ;; the normal translations, which show up in the glade
-	       ;; file src/gnome-utils/gtkbuilder/gnc-frequency.glade anyway.
-               (days-of-week (list (_"Sunday") (_"Monday") 
-				   (_"Tuesday") (_"Wednesday") 
-				   (_"Thursday") (_"Friday") (_"Saturday"))))
-          
+               ;; Note: the absolute-super-duper-i18n'ed solution
+               ;; would be to use the locale-using functions
+               ;; date->string of srfi-19, similar to get_wday_name()
+               ;; in src/engine/FreqSpeq.c. For now, we simply use
+               ;; the normal translations, which show up in the glade
+               ;; file src/gnome-utils/gtkbuilder/gnc-frequency.glade anyway.
+               (days-of-week (list (_"Sunday") (_"Monday")
+                                   (_"Tuesday") (_"Wednesday")
+                                   (_"Thursday") (_"Friday") (_"Saturday"))))
+
           (gnc:debug daily-totals)
-          
+
           ;; The percentage done numbers here are a hack so that
           ;; something gets displayed. On my system the
           ;; gnc:case-exchange-time-fn takes about 20% of the time
@@ -203,27 +200,27 @@
           ;; routine needs to send progress reports, or the price
           ;; lookup should be distributed and done when actually
           ;; needed so as to amortize the cpu time properly.
-	  (gnc:report-percent-done 1)
-	  (set! commodity-list (gnc:accounts-get-commodities 
-                                (append 
+          (gnc:report-percent-done 1)
+          (set! commodity-list (gnc:accounts-get-commodities
+                                (append
                                  (gnc:acccounts-get-all-subaccounts accounts)
                                  accounts)
                                 report-currency))
-	  (gnc:report-percent-done 5)
-	  (set! exchange-fn (gnc:case-exchange-time-fn 
-                             price-source report-currency 
+          (gnc:report-percent-done 5)
+          (set! exchange-fn (gnc:case-exchange-time-fn
+                             price-source report-currency
                              commodity-list to-date
-			     5 20))
-	  (gnc:report-percent-done 20)
-          
-          ;; initialize the query to find splits in the right 
+                             5 20))
+          (gnc:report-percent-done 20)
+
+          ;; initialize the query to find splits in the right
           ;; date range and accounts
           (qof-query-set-book query (gnc-get-current-book))
-          
-	  ;; for balance purposes, we don't need to do this, but it cleans up
-	  ;; the table display.
+
+          ;; for balance purposes, we don't need to do this, but it cleans up
+          ;; the table display.
           (gnc:query-set-match-non-voids-only! query (gnc-get-current-book))
-          ;; add accounts to the query (include subaccounts 
+          ;; add accounts to the query (include subaccounts
           ;; if requested)
 	  (gnc:report-percent-done 25)
           (if dosubs?
@@ -237,11 +234,11 @@
           (xaccQueryAddDateMatchTT
            query #t from-date #t to-date QOF-QUERY-AND)
           (qof-query-set-sort-order query
-				    (list SPLIT-TRANS TRANS-DATE-POSTED)
-				    (list QUERY-DEFAULT-SORT)
-				    '())
-          
-          ;; get the query results 
+                                    (list SPLIT-TRANS TRANS-DATE-POSTED)
+                                    (list QUERY-DEFAULT-SORT)
+                                    '())
+
+          ;; get the query results
           (set! splits (qof-query-run query))
           (qof-query-destroy query)
 	  (gnc:report-percent-done 40)
@@ -253,7 +250,7 @@
            (lambda (split)
              (let* ((date (xaccTransGetDate (xaccSplitGetParent split)))
                     (weekday (modulo (1- (gnc:time64-get-week-day date)) 7))
-                    (exchanged (monetary->double
+                    (exchanged (monetary->amount
                                 (gnc:make-gnc-monetary
                                  (xaccAccountGetCommodity (xaccSplitGetAccount split))
                                  (xaccSplitGetAmount split))
@@ -272,50 +269,49 @@
                                     (string-append
                                      (car p)
                                      " - "
-                                     (xaccPrintAmount
-                                      (double-to-gnc-numeric
-                                       (cadr p)
-                                       (gnc-commodity-get-fraction report-currency)
-                                       GNC-RND-ROUND)
-                                      print-info))
+                                     (gnc:monetary->string
+                                      (gnc:make-gnc-monetary
+                                       report-currency (cadr p))))
                                     (car p)))
                               zipped-list)))
-            
+
             (if (not (null? zipped-list))
                 (begin
-                  (gnc:html-piechart-set-title! chart report-title)
-                  (gnc:html-piechart-set-width! chart width)
-                  (gnc:html-piechart-set-height! chart height)
-                  
-                  (gnc:html-piechart-set-subtitle!
-                   chart (string-append
-                          (format #f
+                  (gnc:html-chart-set-type! chart 'pie)
+                  (gnc:html-chart-set-width! chart width)
+                  (gnc:html-chart-set-height! chart height)
+
+                  (gnc:html-chart-set-title!
+                   chart (list
+                          report-title
+                          (string-append
+                           (format #f
                                    (_ "~a to ~a")
                                    (qof-print-date from-date)
                                    (qof-print-date to-date))
-                          (if show-total?
-                              (let ((total (apply + daily-totals)))
-                                (format
-                                 #f ": ~a"
-                                 (xaccPrintAmount
-                                  (double-to-gnc-numeric
-                                   total
-                                   (gnc-commodity-get-fraction report-currency)
-                                   GNC-RND-ROUND)
-                                  print-info)))
-                              "")))
-                
-                  (gnc:html-piechart-set-data! chart (map cadr zipped-list))
-                  (gnc:html-piechart-set-colors!
-                   chart (gnc:assign-colors (length zipped-list)))
-                  (gnc:html-piechart-set-labels! chart labels)
-                
+                           (if show-total?
+                               (let ((total (apply + daily-totals)))
+                                 (format
+                                  #f ": ~a"
+                                  (gnc:monetary->string
+                                   (gnc:make-gnc-monetary
+                                    report-currency total))))
+                               ""))))
+
+                  (gnc:html-chart-add-data-series!
+                   chart
+                   reportname
+                   (map cadr zipped-list)
+                   (gnc:assign-colors (length zipped-list)))
+                  (gnc:html-chart-set-data-labels! chart labels)
+                  (gnc:html-chart-set-axes-display! chart #f)
                   (gnc:html-document-add-object! document chart))
+
                 (gnc:html-document-add-object!
                  document
                  (gnc:html-make-empty-data-warning
                   report-title (gnc:report-id report-obj))))))
-        
+
         (gnc:html-document-add-object!
          document
          (gnc:html-make-empty-data-warning
@@ -324,22 +320,23 @@
     (gnc:report-finished)
     document))
 
-(for-each 
+(for-each
  (lambda (l)
    (gnc:define-report
     'version 1
     'name (car l)
     'report-guid (car (reverse l))
     'menu-path (list gnc:menuname-income-expense)
-    'menu-name (caddr l) 
-    'menu-tip (car (cdddr l)) 
+    'menu-name (caddr l)
+    'menu-tip (car (cdddr l))
     'options-generator (lambda () (options-generator (cadr l)))
     'renderer (lambda (report-obj)
-                (piechart-renderer report-obj 
-                                   (car l) 
+                (piechart-renderer report-obj
+                                   (car l)
                                    (cadr l)))))
-
- (list 
+ (list
   ;; reportname, account-types, menu-reportname, menu-tip
-  (list reportname-income (list ACCT-TYPE-INCOME) menuname-income menutip-income "5e2d129f28d14df881c3e47e3053f604")
-  (list reportname-expense (list ACCT-TYPE-EXPENSE) menuname-expense menutip-expense "dde49fed4ca940959ae7d01b72742530")))
+  (list reportname-income (list ACCT-TYPE-INCOME) menuname-income
+        menutip-income "5e2d129f28d14df881c3e47e3053f604")
+  (list reportname-expense (list ACCT-TYPE-EXPENSE) menuname-expense
+        menutip-expense "dde49fed4ca940959ae7d01b72742530")))
