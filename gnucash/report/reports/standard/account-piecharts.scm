@@ -190,43 +190,6 @@ balance at a given time"))
 
     options))
 
-;; Set slice URLs for the depth-based chart types.
-(define (set-slice-urls!
-          report-obj uuid show-fullname? tree-depth other-anchor accts chart)
-  (let
-      ((urls
-        (map
-         (lambda (pair)
-           (if (string? (cadr pair))
-               other-anchor
-               (let* ((acct (cadr pair))
-                      (subaccts (gnc-account-get-children acct)))
-                 (if (null? subaccts)
-                     ;; if leaf-account, make this an anchor
-                     ;; to the register.
-                     (gnc:account-anchor-text (cadr pair))
-                     ;; if non-leaf account, make this a link
-                     ;; to another report which is run on the
-                     ;; immediate subaccounts of this account
-                     ;; (and including this account).
-                     (gnc:make-report-anchor
-                      uuid
-                      report-obj
-                      (list
-                       (list gnc:pagename-accounts optname-accounts
-                             (cons acct subaccts))
-                       (list gnc:pagename-accounts optname-levels
-                             (+ 1 tree-depth))
-                       (list gnc:pagename-general
-                             gnc:optname-reportname
-                             ((if show-fullname?
-                                  gnc-account-get-full-name
-                                  xaccAccountGetName) acct))))))))
-         accts)))
-    (gnc:html-piechart-set-button-1-slice-urls!
-     chart urls)
-    (gnc:html-piechart-set-button-1-legend-urls!
-     chart urls)))
 
 ;; Get display name for account-based reports.
 (define (display-name-accounts show-fullname? acc)
@@ -400,7 +363,7 @@ balance at a given time"))
 	(reverse-balance? (get-option "__report" "reverse-balance?"))
 
         (document (gnc:make-html-document))
-        (chart (gnc:make-html-piechart))
+        (chart (gnc:make-html-chart))
         (topl-accounts (gnc:filter-accountlist-type 
                         account-types
                         (gnc-account-get-children-sorted
@@ -469,11 +432,10 @@ balance at a given time"))
         ;; (gnc:sum-collector-commodity) based on the average
         ;; cost of all holdings.
         (*
-         (gnc-numeric-to-double
-          (gnc:gnc-monetary-amount
-           (gnc:sum-collector-commodity 
-            c report-currency 
-            exchange-fn)))
+         (gnc:gnc-monetary-amount
+          (gnc:sum-collector-commodity
+           c report-currency
+           exchange-fn))
          averaging-multiplier))
 
       ;; Get balance of an account as double number, already converted
@@ -542,70 +504,88 @@ balance at a given time"))
                       ;; set the URL.
                       (set! other-anchor (gnc:report-anchor-text id))))))
             
-            ;; set the URLs; the slices are links to other reports
-            (if depth-based?
-                (set-slice-urls! report-obj report-guid show-fullname?
-                                 tree-depth other-anchor combined chart))
-
             (if 
              (not (null? combined))
-             (begin
-               (gnc:html-piechart-set-title!
-                chart report-title)
-               (gnc:html-piechart-set-width! chart width)
-               (gnc:html-piechart-set-height! chart height)
-               (gnc:html-piechart-set-data! chart (unzip1 combined))
-               (gnc:html-piechart-set-colors!
-                chart (gnc:assign-colors (length combined)))
+             (let ((urls (and depth-based?
+                              (map
+                               (lambda (series)
+                                 (if (string? (cadr series))
+                                     other-anchor
+                                     (let* ((acct (cadr series))
+                                            (subaccts (gnc-account-get-children acct)))
+                                       (if (null? subaccts)
+                                           (gnc:account-anchor-text (cadr series))
+                                           (gnc:make-report-anchor
+                                            report-guid
+                                            report-obj
+                                            (list
+                                             (list gnc:pagename-accounts optname-accounts
+                                                   (cons acct subaccts))
+                                             (list gnc:pagename-accounts optname-levels
+                                                   (+ 1 tree-depth))
+                                             (list gnc:pagename-general
+                                                   gnc:optname-reportname
+                                                   ((if show-fullname?
+                                                        gnc-account-get-full-name
+                                                        xaccAccountGetName) acct))))))))
+                               combined))))
+               (gnc:html-chart-set-type! chart 'pie)
 
-               (gnc:html-piechart-set-subtitle!
-                chart (string-append
-                       (if do-intervals?
-                           (format #f
-                                    (_ "~a to ~a")
-                                    (qof-print-date from-date)
-                                    (qof-print-date to-date))
-                           (format #f
-                                    (_ "Balance at ~a")
-                                    (qof-print-date to-date)))
-                       (if show-total?
-                           (let ((total (apply + (unzip1 combined))))
-                             (format
-                              #f ": ~a"
-                              (xaccPrintAmount
-                               (double-to-gnc-numeric
-                                total
-                                (gnc-commodity-get-fraction report-currency)
-                                GNC-RND-ROUND)
-                               print-info)))
-                           "")))
-               
-               (let ((legend-labels
-                      (map 
-                       (lambda (pair)
-                         (string-append
-                           (if (string? (cadr pair))
-			       (cadr pair)
-                               (display-name show-fullname? (cadr pair)))
-			   (if show-total?
-			       (string-append 
-				" - "
-				(xaccPrintAmount
-				 (double-to-gnc-numeric
-				  (car pair)
-				  (gnc-commodity-get-fraction report-currency)
-				  GNC-RND-ROUND)
-				 print-info)
- 				 )
- 			       "")
- 			   (if show-percent?
- 				(format
- 				 #f "   (~2,2f %)"
- 				 (* 100.0 (/ (car pair) (apply + (unzip1 combined)))))
- 			       "")
- 			       ))
-                       combined)))
-                 (gnc:html-piechart-set-labels! chart legend-labels))
+               (gnc:html-chart-set-currency-iso!
+                chart (gnc-commodity-get-mnemonic report-currency))
+               (gnc:html-chart-set-currency-symbol!
+                chart (gnc-commodity-get-nice-symbol report-currency))
+
+               (gnc:html-chart-set-title!
+                chart (list report-title
+                            (string-append
+                             (if do-intervals?
+                                 (format #f
+                                         (_ "~a to ~a")
+                                         (qof-print-date from-date)
+                                         (qof-print-date to-date))
+                                 (format #f
+                                         (_ "Balance at ~a")
+                                         (qof-print-date to-date)))
+                             (if show-total?
+                                 (let ((total (apply + (unzip1 combined))))
+                                   (format
+                                    #f ": ~a"
+                                    (gnc:monetary->string
+                                     (gnc:make-gnc-monetary
+                                      report-currency total))))
+                                 ""))))
+               (gnc:html-chart-set-width! chart width)
+               (gnc:html-chart-set-height! chart height)
+               (gnc:html-chart-add-data-series! chart
+                                                "Accounts"
+                                                (unzip1 combined)
+                                                (gnc:assign-colors (length combined))
+                                                'urls urls)
+               (gnc:html-chart-set-axes-display! chart #f)
+
+               (gnc:html-chart-set-data-labels!
+                chart
+                (map
+                 (lambda (series)
+                   (string-append
+                    (if (string? (cadr series))
+                        (cadr series)
+                        (display-name show-fullname? (cadr series)))
+                    (if show-total?
+                        (string-append
+                         " - "
+                         (gnc:monetary->string
+                          (gnc:make-gnc-monetary
+                           report-currency
+                           (car series))))
+                        "")
+                    (if show-percent?
+                        (format #f " (~2,1f%)"
+                                (* 100 (/ (car series)
+                                          (apply + (unzip1 combined)))))
+                        "")))
+                 combined))
 
                (gnc:html-document-add-object! document chart))
 
