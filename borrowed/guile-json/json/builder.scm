@@ -27,10 +27,16 @@
 (define-module (json builder)
   #:use-module (ice-9 format)
   #:use-module (srfi srfi-1)
-  #:use-module (srfi srfi-43)
   #:use-module (rnrs bytevectors)
   #:export (scm->json
             scm->json-string))
+
+;; simplified vector-for-each suitable for use in this module
+(define (vector-for-each fn v)
+  (for-each
+   (lambda (i)
+     (fn i (vector-ref v i)))
+   (iota (vector-length v))))
 
 ;;
 ;; String builder helpers
