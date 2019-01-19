@@ -134,12 +134,6 @@
     (gnc:option-value 
      (gnc:lookup-option (gnc:report-options report-obj) section name)))
 
-  ;; small helper for the warnings below
-  (define (commodity-numeric->string c n)
-    (gnc:monetary->string
-     (gnc:make-gnc-monetary c n)))
-
-
   (let* ((to-date (gnc:time64-end-day-time 
                    (gnc:date-option-absolute-time
                     (get-option gnc:pagename-general 
@@ -173,11 +167,13 @@
                       (gnc:deltasym-to-delta interval)))
          
          (document (gnc:make-html-document))
-         (chart (gnc:make-html-scatter))
-         (currency-accounts 
+         (chart (gnc:make-html-chart))
+         (currency-accounts
           (filter gnc:account-has-shares? (gnc-account-get-descendants-sorted
                                            (gnc-get-current-root-account))))
 	 (invert (get-option pagename-price optname-invert))
+         (amount-commodity (if invert price-commodity report-currency))
+         (base-commodity (if invert report-currency price-commodity))
          (data '()))
 
     ;; Short helper for all the warnings below
@@ -188,42 +184,41 @@
         (gnc:html-markup-h2 title)
         (gnc:html-markup-p text))))
 
-    (gnc:html-scatter-set-title! 
-     chart report-title)
-    (gnc:html-scatter-set-subtitle!
-     chart (string-append
-	    ;; Check for whether it is commodity against currency or
-	    ;; the other way round. 
-	    (if invert
-		(gnc-commodity-get-mnemonic report-currency)
-		(gnc-commodity-get-mnemonic price-commodity))
+    (gnc:html-chart-set-type! chart 'line)
+
+    (gnc:html-chart-set-currency-iso!
+     chart (gnc-commodity-get-mnemonic amount-commodity))
+    (gnc:html-chart-set-currency-symbol!
+     chart (gnc-commodity-get-nice-symbol amount-commodity))
+
+    (gnc:html-chart-set-title!
+     chart
+     (list report-title
+           (string-append
+            (gnc-commodity-get-mnemonic base-commodity)
             " - "
             (format #f
-                     (_ "~a to ~a")
-                     (qof-print-date from-date)
-                     (qof-print-date to-date))))
-    (gnc:html-scatter-set-width! chart width)
-    (gnc:html-scatter-set-height! chart height)
-    (gnc:html-scatter-set-marker! chart 
-                                  (case marker
-                                    ((diamond) "diamond")
-                                    ((circle) "circle")
-                                    ((square) "square")
-                                    ((cross) "x")
-                                    ((plus) "plus")
-                                    ((dash) "dash")
-                                    ((filleddiamond) "filledDiamond")
-                                    ((filledcircle) "filledCircle")
-                                    ((filledsquare) "filledSquare")))
-    (gnc:html-scatter-set-markercolor! chart mcolor)
-    (gnc:html-scatter-set-y-axis-label!
-     chart 
+                    (_ "~a to ~a")
+                    (qof-print-date from-date)
+                    (qof-print-date to-date)))))
+    (gnc:html-chart-set-width! chart width)
+    (gnc:html-chart-set-height! chart height)
+    (gnc:html-chart-set! chart
+                         '(options elements point pointStyle)
+                         (case marker
+                           ((filleddiamond diamond) "rectRot")
+                           ((filledcircle circle) "circle")
+                           ((filledsquare square) "rect")
+                           ((cross) "crossRot")
+                           ((plus) "cross")
+                           ((dash) "line")))
+
+    (gnc:html-chart-set-y-axis-label!
+     chart
      ;; Check for whether it is commodity against currency or
      ;; the other way round. 
-     (if invert
-	 (gnc-commodity-get-mnemonic price-commodity)
-	 (gnc-commodity-get-mnemonic report-currency)))
-    (gnc:html-scatter-set-x-axis-label!
+     (gnc-commodity-get-mnemonic amount-commodity))
+    (gnc:html-chart-set-x-axis-label!
      chart (case interval
              ((DayDelta) (_ "Days"))
              ((WeekDelta) (_ "Weeks"))
@@ -231,7 +226,11 @@
              ((MonthDelta) (_ "Months"))
              ((YearDelta) (_ "Years"))))
 
-    (if 
+    (gnc:html-chart-set!
+     chart '(options scales xAxes (0) type) 'linear)
+    (gnc:html-chart-set-custom-x-axis-ticks?! chart #f)
+
+    (if
      (not (gnc-commodity-equiv report-currency price-commodity))
      (begin
        (if (or (not (null? currency-accounts))
@@ -253,91 +252,103 @@
                             (gnc-price-get-value p)))
                     (gnc-pricedb-get-prices
                      (gnc-pricedb-get-db (gnc-get-current-book))
-                     price-commodity report-currency)))
-              )))
+                     price-commodity report-currency))))))
 
-       (set! data (filter
-                   (lambda (x)
-                     (and 
-                      (>= to-date (first x))
-                      (>= (first x) from-date)))
-                   data))
-
-       ;; some output
-       ;;(warn "data" (map (lambda (x) (list
-       ;;			(qof-print-date x)
-       ;;		(gnc-numeric-to-double (second x))))
-       ;; data))
-       
-       ;; convert the gnc:numeric's to doubles
-       (if invert
-	   (set! data (map (lambda (x) 
-			     (list (first x) 
-				   (/ 1 (gnc-numeric-to-double (second x)))))
-			   data))
-	   (set! data (map (lambda (x) 
-			     (list (first x) 
-				   (gnc-numeric-to-double (second x))))
-			   data)))
-
-       ;; convert the dates to the weird x-axis scaling of the
-       ;; scatterplot
+       ;; the following transforms data in 1 assignment operation
+       ;; 1. filters prices within specified dates
+       ;; 2. transforms the price-date to numperiod since report start-date
+       ;; 3. inverts the price-ratio if required
        (set! data
-             (map (lambda (x)
-                    (list
-                     (/ (- (first x)
-                           from-date)
-                        ;; FIXME: These hard-coded values are more
-                        ;; or less totally bogus. OTOH this whole
-                        ;; scaling thing is totally bogus as well,
-                        ;; so this doesn't matter too much.
-                        (case interval
-                          ((DayDelta) 86400)
-                          ((WeekDelta) 604800)
-                          ((TwoWeekDelta) 1209600)
-                          ((MonthDelta) 2628000)
-                          ((YearDelta) 31536000)))
-                     (second x)))
-                  data))
-       
-       (gnc:html-scatter-set-data! 
-        chart data)
+         (map (lambda (datum)
+                (list
+                 (/ (- (car datum) from-date)
+                    ;; convert the dates to the x-axis scaling of the
+                    ;; scatterplot
+                    (case interval
+                      ((DayDelta) 86400)
+                      ((WeekDelta) 604800)
+                      ((TwoWeekDelta) 1209600)
+                      ((MonthDelta) 2628000)
+                      ((YearDelta) 31536000)))
+                 (if invert
+                     (/ 1 (cadr datum))
+                     (cadr datum))))
+              (filter
+               (lambda (datum)
+                 (<= from-date (car datum) to-date))
+               data)))
 
-       ;; Make tons of tests so that Guppi won't barf
-       (if (not (null? data))
-           (if (> (length data) 1)
-               (if (apply equal? (map second data))
-                   (make-warning 
-                    (_ "All Prices equal")
-                    (_ "All the prices found are equal. \
-This would result in a plot with one straight line. \
-Unfortunately, the plotting tool can't handle that."))
-                   (if (apply equal? (map first data))
-                       (make-warning
-                        (_ "All Prices at the same date")
-                        (_ "All the prices found are from the same date. \
-This would result in a plot with one straight line. \
-Unfortunately, the plotting tool can't handle that."))
+       (gnc:html-chart-set-data-labels!
+        chart (map
+               (lambda (datum)
+                 (format #f "~2,2f ~a = ~a"
+                         (car datum)
+                         (case interval
+                           ((DayDelta) (_ "Days"))
+                           ((WeekDelta) (_ "Weeks"))
+                           ((TwoWeekDelta) (_ "Double-Weeks"))
+                           ((MonthDelta) (_ "Months"))
+                           ((YearDelta) (_ "Years")))
+                         (gnc:monetary->string
+                          (gnc:make-gnc-monetary
+                           amount-commodity
+                           (cadr datum)))))
+               data))
 
-                       (gnc:html-document-add-object! document chart)))
+       (gnc:html-chart-add-data-series!
+        chart (_ "Price")
+        (map
+         (lambda (datum)
+           (list
+            (cons 'x (car datum))
+            (cons 'y (cadr datum))))
+         data)
+        mcolor
+        'pointBorderColor mcolor
+        'fill #f
+        'borderColor "#4bb2c5"
+        'pointBackgroundColor (if (memq marker '(filledcircle filledsquare filleddiamond))
+                                  mcolor
+                                  "white"))
 
-               (make-warning
-                (_ "Only one price")
-                (_ "There was only one single price found for the \
+       (cond
+        ((null? data)
+         (make-warning
+          (_ "No data")
+          (_ "There is no price information available for the \
+selected commodities in the selected time period.")))
+
+        ((<= (length data) 1)
+         (make-warning
+          (_ "Only one price")
+          (_ "There was only one single price found for the \
 selected commodities in the selected time period. This doesn't give \
 a useful plot.")))
-           (make-warning
-            (_ "No data")
-            (_ "There is no price information available for the \
-selected commodities in the selected time period."))))
+
+        ((apply equal? (map cadr data))
+         (make-warning
+          (_ "All Prices equal")
+          (_ "All the prices found are equal. \
+This would result in a plot with one straight line. \
+Unfortunately, the plotting tool can't handle that.")))
+
+        ((apply equal? (map car data))
+         (make-warning
+          (_ "All Prices at the same date")
+          (_ "All the prices found are from the same date. \
+This would result in a plot with one straight line. \
+Unfortunately, the plotting tool can't handle that.")))
+
+        (else
+         (gnc:html-document-add-object! document chart))))
 
      ;; warning if report-currency == price-commodity
-     (make-warning 
+     (make-warning
       (_ "Identical commodities")
       (_ "Your selected commodity and the currency of the report \
 are identical. It doesn't make sense to show prices for identical \
 commodities.")))
-    
+
     document))
 
 ;; Here we define the actual report
