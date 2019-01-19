@@ -30,6 +30,7 @@ extern "C"
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/date_time/local_time/local_time.hpp>
+#include <boost/locale.hpp>
 #include <boost/regex.hpp>
 #include <libintl.h>
 #include <locale.h>
@@ -431,35 +432,22 @@ normalize_format (const std::string& format)
 std::string
 GncDateTimeImpl::format(const char* format) const
 {
-    using Facet = boost::local_time::local_time_facet;
-    static std::locale cachedLocale;
-    static bool cachedLocaleAvailable = false;
+    namespace as = boost::locale::as;
     std::stringstream ss;
-
-    if(!cachedLocaleAvailable)
-    {
-        cachedLocale = std::locale("");
-	cachedLocaleAvailable = true;
-    }
-
-    //The stream destructor frees the facet, so it must be heap-allocated.
-    auto output_facet(new Facet(normalize_format(format).c_str()));
-    // FIXME Rather than imbueing a locale below we probably should set std::locale::global appropriately somewhere.
-    ss.imbue(std::locale(gnc_get_locale(), output_facet));
-    ss << m_time;
+    ss.imbue(gnc_get_locale());
+    ss << as::ftime(format)
+       << as::time_zone(m_time.zone()->std_zone_name())
+       << static_cast<time64>(*this);
     return ss.str();
 }
 
 std::string
 GncDateTimeImpl::format_zulu(const char* format) const
 {
-    using Facet = boost::posix_time::time_facet;
+    namespace as = boost::locale::as;
     std::stringstream ss;
-    //The stream destructor frees the facet, so it must be heap-allocated.
-    auto output_facet(new Facet(normalize_format(format).c_str())); 
-    // FIXME Rather than imbueing a locale below we probably should set std::locale::global appropriately somewhere.
-    ss.imbue(std::locale(gnc_get_locale(), output_facet));
-    ss << m_time.utc_time();
+    ss.imbue(gnc_get_locale());
+    ss << as::ftime(format) << as::gmt << static_cast<time64>(*this);
     return ss.str();
 }
 

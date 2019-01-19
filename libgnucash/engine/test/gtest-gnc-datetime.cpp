@@ -392,7 +392,7 @@ TEST(gnc_datetime_constructors, test_gncdate_neutral_constructor)
     if (gncdt.offset() >= max_western_offset &&
         gncdt.offset() <= max_eastern_offset)
     {
-        EXPECT_EQ(atime.format("%d-%m-%Y %H:%M:%S %z"), "20-04-2017 10:59:00 UTC");
+        EXPECT_EQ(atime.format("%d-%m-%Y %H:%M:%S %Z"), "20-04-2017 10:59:00 GMT");
     }
 }
 
