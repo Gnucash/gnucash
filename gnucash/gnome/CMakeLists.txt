@@ -128,6 +128,7 @@ target_link_libraries(gnc-gnome gncmod-gnome-search gncmod-ledger-core gncmod-re
     gncmod-register-gnome gncmod-register-core gncmod-gnome-utils gncmod-engine ${GTK3_LDFLAGS} ${GTK_MAC_LDFLAGS})
 
 target_compile_definitions (gnc-gnome PRIVATE -DG_LOG_DOMAIN=\"gnc.gui\" ${GTK_MAC_CFLAGS_OTHER})
+target_compile_options(gnc-gnome PRIVATE -Wno-deprecated-declarations)
 
 target_include_directories(gnc-gnome
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}

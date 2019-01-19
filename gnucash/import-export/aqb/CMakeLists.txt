@@ -62,6 +62,7 @@ if(WITH_AQBANKING)
          ${GNOME_LDFLAGS} ${KTOBLZCHECK_LDFLAGS} ${AQB_LIBSTDCXX})
 
   target_compile_definitions(gncmod-aqbanking PRIVATE -DG_LOG_DOMAIN=\"gnc.import.aqbanking\")
+  target_compile_options(gncmod-aqbanking PRIVATE -Wno-deprecated-declarations)
 
   target_include_directories(gncmod-aqbanking PRIVATE
     ${CMAKE_SOURCE_DIR}/borrowed/gwengui-gtk3
