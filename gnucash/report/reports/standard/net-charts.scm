@@ -205,11 +205,11 @@
                                                          optname-net-bars)))
          (height (get-option gnc:pagename-display optname-plot-height))
          (width (get-option gnc:pagename-display optname-plot-width))
-         (markers (if linechart?
-                      (get-option gnc:pagename-display optname-markers)))
-         (line-width (if linechart?
-                         (get-option gnc:pagename-display optname-line-width)))
-         (y-grid (if linechart? (get-option gnc:pagename-display optname-y-grid)))
+         (markers (and linechart?
+                       (if (get-option gnc:pagename-display optname-markers) 3 0)))
+         (line-width (and linechart?
+                          (get-option gnc:pagename-display optname-line-width)))
+         (y-grid (and linechart? (get-option gnc:pagename-display optname-y-grid)))
          ;;(x-grid (if linechart? (get-option gnc:pagename-display optname-x-grid)))
          (commodity-list #f)
          (exchange-fn #f)
@@ -224,19 +224,7 @@
          (classified-accounts (gnc:decompose-accountlist accounts))
          (show-table? (get-option gnc:pagename-display (N_ "Show table")))
          (document (gnc:make-html-document))
-         (chart (if linechart?
-                    (gnc:make-html-linechart)
-                    (gnc:make-html-barchart)))
-         (non-zeros #f))
-
-    (define (add-column! data-list)
-      (begin
-        ((if linechart?
-             gnc:html-linechart-append-column!
-             gnc:html-barchart-append-column!)
-         chart data-list)
-        (if (gnc:not-all-zeros data-list) (set! non-zeros #t))
-        #f))
+         (chart (gnc:make-html-chart)))
 
     ;; This exchanges the commodity-collector 'c' to one single
     ;; 'report-currency' according to the exchange-fn. Returns a gnc:monetary
@@ -332,14 +320,10 @@
      (let* ((account-balancelist (map account->balancelist accounts))
             (dummy (gnc:report-percent-done 60))
 
-            (minuend-balances (process-datelist
-                               account-balancelist
-                               dates-list #t))
+            (minuend-balances (process-datelist account-balancelist dates-list #t))
             (dummy (gnc:report-percent-done 70))
 
-            (subtrahend-balances (process-datelist
-                                  account-balancelist
-                                  dates-list #f))
+            (subtrahend-balances (process-datelist account-balancelist dates-list #f))
             (dummy (gnc:report-percent-done 80))
 
             (difference-balances (map gnc:monetary+ minuend-balances subtrahend-balances))
@@ -348,128 +332,86 @@
                             (list-head dates-list (1- (length dates-list)))
                             dates-list))
 
-            (date-string-list (map qof-print-date dates-list))
-            
-            (date-iso-string-list (let ((save-fmt (qof-date-format-get)))
-                                    (qof-date-format-set QOF-DATE-FORMAT-ISO)
-                                    (let ((retlist (map qof-print-date dates-list)))
-                                      (qof-date-format-set save-fmt)
-                                      retlist))))
+            (date-string-list (map qof-print-date dates-list)))
 
        (gnc:report-percent-done 90)
 
-       ((if linechart?
-            gnc:html-linechart-set-title!
-            gnc:html-barchart-set-title!)
-        chart report-title)
-
-       ((if linechart?
-            gnc:html-linechart-set-subtitle!
-            gnc:html-barchart-set-subtitle!)
-        chart (format #f
-                       (_ "~a to ~a")
-                       (qof-print-date from-date-t64)
-                       (qof-print-date to-date-t64)))
-
-       ((if linechart?
-            gnc:html-linechart-set-width!
-            gnc:html-barchart-set-width!) chart width)
-
-       ((if linechart?
-            gnc:html-linechart-set-height!
-            gnc:html-barchart-set-height!) chart height)
-
-       (if linechart?
-           (begin
-             (gnc:html-linechart-set-row-labels! chart date-iso-string-list)
-             (gnc:html-linechart-set-major-grid?! chart y-grid))
-           (gnc:html-barchart-set-row-labels! chart date-string-list))
-
-       ((if linechart?
-            gnc:html-linechart-set-y-axis-label!
-            gnc:html-barchart-set-y-axis-label!)
+       (gnc:html-chart-set-type! chart (if linechart? 'line 'bar))
+       (gnc:html-chart-set-width! chart width)
+       (gnc:html-chart-set-height! chart height)
+       (gnc:html-chart-set-title!
+        chart (list report-title
+                    (format #f (_ "~a to ~a")
+                            (qof-print-date from-date-t64)
+                            (qof-print-date to-date-t64))))
+       (gnc:html-chart-set-y-axis-label!
         chart (gnc-commodity-get-mnemonic report-currency))
+       (gnc:html-chart-set-grid?! chart y-grid)
+       (gnc:html-chart-set-currency-iso!
+        chart (gnc-commodity-get-mnemonic report-currency))
+       (gnc:html-chart-set-currency-symbol!
+        chart (gnc-commodity-get-nice-symbol report-currency))
 
-       ;; Add the data
+       (gnc:html-chart-set-data-labels! chart date-string-list)
+
        (when show-sep?
-         (add-column! (map gnc:gnc-monetary-amount minuend-balances))
-         (add-column! (map - (map gnc:gnc-monetary-amount subtrahend-balances))))
+         (gnc:html-chart-add-data-series!
+          chart
+          (if inc-exp? (_ "Income") (_ "Assets"))
+          (map gnc:gnc-monetary-amount minuend-balances)
+          "#0074D9"
+          'fill (not linechart?)
+          'pointRadius markers
+          'borderWidth line-width
+          'urls (gnc:make-report-anchor
+                 (if inc-exp?
+                     category-barchart-income-uuid
+                     category-barchart-asset-uuid)
+                 report-obj
+                 (list
+                  (list gnc:pagename-display "Use Stacked Charts" #t)
+                  (list gnc:pagename-general
+                        gnc:optname-reportname
+                        (if inc-exp?
+                            (_ "Income Chart")
+                            (_ "Asset Chart"))))))
 
-       (if show-net?
-           (add-column! (map gnc:gnc-monetary-amount difference-balances)))
+         (gnc:html-chart-add-data-series!
+          chart
+          (if inc-exp? (_ "Expense") (_ "Liabilities"))
+          (map - (map gnc:gnc-monetary-amount subtrahend-balances))
+          "#FF4136"
+          'fill (not linechart?)
+          'pointRadius markers
+          'borderWidth line-width
+          'urls (gnc:make-report-anchor
+                 (if inc-exp?
+                     category-barchart-expense-uuid
+                     category-barchart-liability-uuid)
+                 report-obj
+                 (list
+                  (list gnc:pagename-display "Use Stacked Charts"  #t)
+                  (list gnc:pagename-general
+                        gnc:optname-reportname
+                        (if inc-exp?
+                            (_ "Expense Chart")
+                            (_ "Liability Chart")))))))
 
-       ;; Legend labels, colors
-       ((if linechart?
-            gnc:html-linechart-set-col-labels!
-            gnc:html-barchart-set-col-labels!)
-        chart (append
-               (if show-sep?
-                   (if inc-exp?
-                       (list (_ "Income") (_ "Expense"))
-                       (list (_ "Assets") (_ "Liabilities")))
-                   '())
-               (if show-net?
-                   (if inc-exp?
-                       (list (_ "Net Profit"))
-                       (list (_ "Net Worth")))
-                   '())))
-
-       ((if linechart?
-            gnc:html-linechart-set-col-colors!
-            gnc:html-barchart-set-col-colors!)
-        chart (append
-               (if show-sep?
-                   '("#0074D9" "#FF4136") '())
-               (if show-net?
-                   '("#2ECC40") '())))
-
-       ;; Set the line width and markers
-       (if linechart?
-           (begin
-             (gnc:html-linechart-set-line-width! chart line-width)
-             (gnc:html-linechart-set-markers?! chart markers)))
-
-       ;; URLs for income/expense or asset/liabilities bars.
-       ;;       (if show-sep?
-       ;;           (let ((urls
-       ;;                  (list
-       ;;                   (gnc:make-report-anchor
-       ;;                    (if inc-exp?
-       ;;                        category-barchart-income-uuid
-       ;;                        category-barchart-asset-uuid)
-       ;;                    report-obj
-       ;;                    (list
-       ;;                     (list gnc:pagename-display
-       ;;                           (if linechart? "Use Stacked Lines" "Use Stacked Bars") #t)
-       ;;                     (list gnc:pagename-general
-       ;;                           gnc:optname-reportname
-       ;;                           (if inc-exp?
-       ;;                               (_ "Income Chart")
-       ;;                               (_ "Asset Chart")))))
-       ;;                   (gnc:make-report-anchor
-       ;;                    (if inc-exp?
-       ;;                        category-barchart-expense-uuid
-       ;;                        category-barchart-liability-uuid)
-       ;;                    report-obj
-       ;;                    (list
-       ;;                     (list gnc:pagename-display
-       ;;                           (if linechart? "Use Stacked Lines" "Use Stacked Bars") #t)
-       ;;                     (list gnc:pagename-general
-       ;;                           gnc:optname-reportname
-       ;;                           (if inc-exp?
-       ;;                               (_ "Expense Chart")
-       ;;                               (_ "Liability Chart"))))))))
-       ;;             ((if linechart?
-       ;;                  gnc:html-linechart-set-button-1-line-urls!
-       ;;                  gnc:html-barchart-set-button-1-line-urls!)
-       ;;              chart urls)
-       ;;             ((if linechart?
-       ;;                  gnc:html-linechart-set-button-1-legend-urls!
-       ;;                  gnc:html-barchart-set-button-1-legend-urls!)
-       ;;              chart urls)))
+       (when show-net?
+         (gnc:html-chart-add-data-series!
+          chart
+          (if inc-exp? (_ "Net Profit") (_ "Net Worth"))
+          (map gnc:gnc-monetary-amount difference-balances)
+          "#2ECC40"
+          'fill (not linechart?)
+          'pointRadius markers
+          'borderWidth line-width))
 
        ;; Test for all-zero data here.
-       (if non-zeros
+       (if (gnc:not-all-zeros (map gnc:gnc-monetary-amount
+                                   (append minuend-balances
+                                           subtrahend-balances
+                                           difference-balances)))
            (begin
              (gnc:html-document-add-object! document chart)
              (if show-table?
