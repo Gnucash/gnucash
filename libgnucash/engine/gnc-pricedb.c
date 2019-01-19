@@ -2210,7 +2210,7 @@ gnc_pricedb_nth_price (GNCPriceDB *db,
 
             /* Iterate up to n times (there are i prices, so going past i will run off the end of the array) to get the nth price, each time finding the currency
                with the latest price */
-            for (k = 0; k < n && k < i; ++k)
+            for (k = 0; k <= n && k < i; ++k)
             {
                 next_list = NULL;
                 for (j = 0; j < i; ++j)
