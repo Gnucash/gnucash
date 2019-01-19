@@ -190,20 +190,12 @@
          (doc (gnc:make-html-document))
          (table (gnc:make-html-table))
          (txt (gnc:make-html-text))
-         (chart (gnc:make-html-barchart))
+         (chart (gnc:make-html-chart))
          (non-zeros #f))
-
-    ;; utility function used to generate chart (from net-barchart.scm)
-    (define (add-column! data-list)
-      (begin
-        (gnc:html-barchart-append-column! chart data-list)
-        (if (gnc:not-all-zeros data-list) (set! non-zeros #t))
-        #f))
 
     (if (not (null? accounts))
         (let* ((money-diff-collector (gnc:make-commodity-collector))
                (account-disp-list '())
-
                (time-exchange-fn #f)
                (commodity-list (gnc:accounts-get-commodities
                                 accounts
@@ -223,8 +215,7 @@
                (net-list '())
                (total-in #f)
                (total-out #f)
-               (total-net #f)
-               )
+               (total-net #f))
 
           ;; Helper function to convert currencies
           (define (to-report-currency currency amount date)
@@ -235,13 +226,19 @@
           ;; Sum a collector to return a gnc-monetary
           (define (sum-collector collector)
             (gnc:sum-collector-commodity
-             collector report-currency exchange-fn)
-            )
+             collector report-currency exchange-fn))
 
-          ;; Convert gnc:monetary to number (used to generate data for the chart)
-          (define (monetary->double monetary)
-            (gnc-numeric-to-double (gnc:gnc-monetary-amount monetary))
-            )
+          (define (make-cashflow-url idx)
+            (gnc:make-report-anchor
+             "f8748b813fab4220ba26e743aedf38da"
+             report-obj
+             (list
+              (list "General" "Start Date" (cons 'absolute (car (list-ref dates-list idx))))
+              (list "General" "End Date" (cons 'absolute (cadr (list-ref dates-list idx))))
+              (list "Accounts" "Account" accounts))))
+
+          (define cashflow-urls
+            (map make-cashflow-url (iota (length dates-list))))
 
           ;; gather money in/out data for all date intervals
           (set! work-done 0)
@@ -261,66 +258,65 @@
                     (money-out-collector (cdr (assq 'money-out-collector result)))
                     (money-in (sum-collector money-in-collector))
                     (money-out (sum-collector money-out-collector))
-                    (money-net (gnc:monetary+ money-in (gnc:monetary-neg money-out)))
-                    )
+                    (money-net (gnc:monetary+ money-in (gnc:monetary-neg money-out))))
                (set! in-list (cons money-in in-list))
                (set! out-list (cons money-out out-list))
-               (set! net-list (cons money-net net-list))
-               ))
+               (set! net-list (cons money-net net-list))))
            dates-list)
 
           ;; flip result lists (they were built by appending to the front)
-          (if show-in?
-              (begin
-                (set! in-list (reverse in-list))
-                (set! total-in (apply gnc:monetary+ in-list))
-                ))
-          (if show-out?
-              (begin
-                (set! out-list (reverse out-list))
-                (set! total-out (apply gnc:monetary+ out-list))
-		))
+          (when show-in?
+            (set! in-list (reverse in-list))
+            (set! total-in (apply gnc:monetary+ in-list)))
+          (when show-out?
+            (set! out-list (reverse out-list))
+            (set! total-out (apply gnc:monetary+ out-list)))
+          (when show-net?
+            (set! net-list (reverse net-list))
+            (set! total-net (apply gnc:monetary+ net-list)))
 
-          (if show-net?
-              (begin
-                (set! net-list (reverse net-list))
-                (set! total-net (apply gnc:monetary+ net-list))
-                ))
           (gnc:report-percent-done 90)
 
-          (gnc:html-barchart-set-title! chart report-title)
-          (gnc:html-barchart-set-subtitle!
-           chart (format #f
-                          (_ "~a to ~a")
-                          (qof-print-date from-date-t64)
-                          (qof-print-date to-date-t64)))
-          (gnc:html-barchart-set-width! chart width)
-          (gnc:html-barchart-set-height! chart height)
-          (gnc:html-barchart-set-row-labels! chart date-string-list)
-          (gnc:html-barchart-set-y-axis-label!
+          (gnc:html-chart-set-title!
+           chart (list report-title
+                       (format #f
+                               (_ "~a to ~a")
+                               (qof-print-date from-date-t64)
+                               (qof-print-date to-date-t64))))
+          (gnc:html-chart-set-width! chart width)
+          (gnc:html-chart-set-height! chart height)
+          (gnc:html-chart-set-y-axis-label!
            chart (gnc-commodity-get-mnemonic report-currency))
+          (gnc:html-chart-set-currency-iso!
+           chart (gnc-commodity-get-mnemonic report-currency))
+          (gnc:html-chart-set-currency-symbol!
+           chart (gnc-commodity-get-nice-symbol report-currency))
 
+          (gnc:html-chart-set-data-labels! chart date-string-list)
           (if show-in?
-              (add-column! (map monetary->double in-list)))
+              (gnc:html-chart-add-data-series! chart
+                                               (_ "Money In")
+                                               (map gnc:gnc-monetary-amount in-list)
+                                               "#0074D9"
+                                               'urls cashflow-urls))
           (if show-out?
-              (add-column! (map monetary->double out-list)))
+              (gnc:html-chart-add-data-series! chart
+                                               (_ "Money Out")
+                                               (map gnc:gnc-monetary-amount out-list)
+                                               "#FF4136"
+                                               'urls cashflow-urls))
           (if show-net?
-              (add-column! (map monetary->double net-list)))
+              (gnc:html-chart-add-data-series! chart
+                                               (_ "Net Flow")
+                                               (map gnc:gnc-monetary-amount net-list)
+                                               "#2ECC40"
+                                               'urls cashflow-urls))
 
-          ;; Legend labels, colors
-          (gnc:html-barchart-set-col-labels!
-           chart (append
-                  (if show-in? (list (_ "Money In")) '())
-                  (if show-out? (list (_ "Money Out")) '())
-                  (if show-net? (list (_ "Net Flow")) '())
-                  ))
-          (gnc:html-barchart-set-col-colors!
-           chart (append
-                  (if show-in? '("#0074D9") '())
-                  (if show-out? '("#FF4136") '())
-                  (if show-net? '("#2ECC40") '())
-                  ))
           (gnc:report-percent-done 95)
+
+          (set! non-zeros (gnc:not-all-zeros (append
+                                              (map gnc:gnc-monetary-amount
+                                                   (append in-list out-list net-list)))))
 
           ;; If we have no data in the plot, display warning message
           (if non-zeros
@@ -328,8 +324,7 @@
               (gnc:html-document-add-object!
                doc
                (gnc:html-make-empty-data-warning
-                report-title (gnc:report-id report-obj)))
-              )
+                report-title (gnc:report-id report-obj))))
 
           (if (and non-zeros show-table?)
               (let* ((table (gnc:make-html-table)))
@@ -337,8 +332,7 @@
                  table (append (list (_ "Date"))
                                (if show-in? (list (_ "Money In")) '())
                                (if show-out? (list (_ "Money Out")) '())
-                               (if show-net? (list (_ "Net Flow")) '())
-                               ))
+                               (if show-net? (list (_ "Net Flow")) '())))
 
                 (gnc:html-document-add-object!
                  doc (gnc:make-html-text (gnc:html-markup-h3 (_ "Overview:"))))
@@ -359,17 +353,13 @@
                     'attribute (list "class" "number-cell")))
                  '(1 2 3))
 
-                (gnc:html-document-add-object! doc table)
-                )
-              )
+                (gnc:html-document-add-object! doc table))))
 
-          )
         ;; else: error condition: no accounts specified
         (gnc:html-document-add-object!
          doc
          (gnc:html-make-no-account-warning
-          reportname (gnc:report-id report-obj)))
-        ) ;; if not null? accounts
+          reportname (gnc:report-id report-obj))))
 
     (gnc:report-finished)
 
