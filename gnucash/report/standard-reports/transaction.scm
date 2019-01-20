@@ -1888,6 +1888,11 @@ be excluded from periodic reporting.")
                                 (not (eq? secondary-date-subtotal 'none)))
                            (or (CUSTOM-SORTING? primary-key BOOK-SPLIT-ACTION)
                                (CUSTOM-SORTING? secondary-key BOOK-SPLIT-ACTION))))
+         (subtotal-table? (and (opt-val gnc:pagename-display optname-grid)
+                               (if (memq primary-key DATE-SORTING-TYPES)
+                                   (keylist-get-info date-subtotal-list primary-date-subtotal 'renderer-fn)
+                                   (opt-val pagename-sorting optname-prime-subtotal))
+                               (eq? (opt-val gnc:pagename-display (N_ "Amount")) 'single)))
          (infobox-display (opt-val gnc:pagename-general optname-infobox-display))
          (query (qof-query-create-for-splits)))
 
@@ -2049,11 +2054,7 @@ be excluded from periodic reporting.")
                      document
                      (gnc:html-render-options-changed options)))
 
-                (if (and (opt-val gnc:pagename-display optname-grid)
-                         (if (memq primary-key DATE-SORTING-TYPES)
-                             (keylist-get-info date-subtotal-list primary-date-subtotal 'renderer-fn)
-                             (opt-val pagename-sorting optname-prime-subtotal))
-                         (eq? (opt-val gnc:pagename-display (N_ "Amount")) 'single))
+                (if subtotal-table?
                     (let* ((generic<? (lambda (a b)
                                         (cond ((string? (car a)) (string<? (car a) (car b)))
                                               ((number? (car a)) (< (car a) (car b)))
@@ -2063,7 +2064,9 @@ be excluded from periodic reporting.")
                       (gnc:html-document-add-object!
                        document (grid->html-table grid list-of-rows list-of-cols))))
 
-                (gnc:html-document-add-object! document table)))))
+                (unless (and subtotal-table?
+                             (opt-val pagename-sorting optname-show-subtotals-only))
+                  (gnc:html-document-add-object! document table))))))
 
     (gnc:report-finished)
 
