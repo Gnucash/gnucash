@@ -480,6 +480,9 @@ gnc_plugin_page_budget_destroy_widget (GncPluginPage *plugin_page)
 
     if (priv->budget_view)
     {
+        // save the account filter state information to budget section
+        gnc_budget_view_save_account_filter (priv->budget_view);
+
         if (priv->delete_budget)
         {
             gnc_budget_view_delete_budget (priv->budget_view);
@@ -538,7 +541,7 @@ gnc_plugin_page_budget_save_page (GncPluginPage *plugin_page,
     guid_to_string_buff(gnc_budget_get_guid(priv->budget), guid_str);
     g_key_file_set_string(key_file, group_name, BUDGET_GUID, guid_str);
 
-    //FIXME
+    // Save the Budget page information to state file
     gnc_budget_view_save(priv->budget_view, key_file, group_name);
 
     LEAVE(" ");

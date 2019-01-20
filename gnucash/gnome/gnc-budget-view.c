@@ -496,6 +496,10 @@ gbv_create_widget(GncBudgetView *view)
     g_signal_connect(G_OBJECT(tree_view), "size-allocate",
                      G_CALLBACK(gbv_treeview_resized_cb), view);
 
+    // Read account filter state information from budget section
+    gnc_tree_view_account_restore_filter (GNC_TREE_VIEW_ACCOUNT(priv->tree_view), priv->fd,
+       gnc_state_get_current(), gnc_tree_view_get_state_section (GNC_TREE_VIEW(priv->tree_view)));
+
     gnc_budget_view_refresh(view);
 }
 
@@ -526,7 +530,7 @@ gnc_budget_view_save(GncBudgetView *view, GKeyFile *key_file, const gchar *group
 
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(view);
 
-    //FIXME
+    // Save the account filter and page state information to page section
     gnc_tree_view_account_save(GNC_TREE_VIEW_ACCOUNT(priv->tree_view),
                                priv->fd, key_file, group_name);
     LEAVE(" ");
@@ -586,7 +590,7 @@ gnc_budget_view_restore(GncBudgetView* view, GKeyFile *key_file, const gchar *gr
     /* Create the new view */
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(view);
 
-    //FIXME
+    // Restore the account filter and page state information from page section
     gnc_tree_view_account_restore(GNC_TREE_VIEW_ACCOUNT(priv->tree_view),
                                   priv->fd, key_file, group_name);
     LEAVE(" ");
@@ -619,7 +623,28 @@ gnc_budget_view_delete_budget(GncBudgetView *view)
     LEAVE(" ");
 }
 
+/***********************************************************************
+ *  Save the Account filter information for this budget                *
+ *                                                                     *
+ *  @param view The view to which the budget is associated.            *
+ **********************************************************************/
+void
+gnc_budget_view_save_account_filter (GncBudgetView *view)
+{
+    GncBudgetViewPrivate *priv;
 
+    g_return_if_fail(view != NULL);
+
+    ENTER("view %p", view);
+
+    priv = GNC_BUDGET_VIEW_GET_PRIVATE (view);
+
+    // Save account filter state information to budget section
+    gnc_tree_view_account_save_filter (GNC_TREE_VIEW_ACCOUNT(priv->tree_view),
+       priv->fd, gnc_state_get_current(), gnc_tree_view_get_state_section (GNC_TREE_VIEW(priv->tree_view)));
+
+    LEAVE(" ");
+}
 
 #if 0
 /***********************************************************************
