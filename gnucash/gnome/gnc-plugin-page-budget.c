@@ -334,6 +334,7 @@ gnc_plugin_page_budget_init (GncPluginPageBudget *plugin_page)
     /* Visible types */
     priv->fd.visible_types = -1; /* Start with all types */
     priv->fd.show_hidden = FALSE;
+    priv->fd.show_unused = TRUE;
     priv->fd.show_zero_total = TRUE;
     priv->fd.filter_override = g_hash_table_new (g_direct_hash, g_direct_equal);
 
