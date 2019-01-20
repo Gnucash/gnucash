@@ -2286,6 +2286,7 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
     LEAVE(" ");
 }
 
+// page state section
 #define ACCT_COUNT    "NumberOfOpenAccounts"
 #define ACCT_OPEN     "OpenAccount%d"
 #define ACCT_SELECTED "SelectedAccount"
@@ -2293,6 +2294,14 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
 #define SHOW_ZERO     "ShowZeroTotal"
 #define SHOW_UNUSED   "ShowUnused"
 #define ACCT_TYPES    "AccountTypes"
+
+// account/budget state section
+// versions less than 3.2 would crash if key did not have an "_"
+#define SHOW_HIDDEN_ACCOUNTS   "Show_Hidden"
+#define SHOW_ZERO_TOTALS       "Show_ZeroTotal"
+#define SHOW_UNUSED_ACCOUNTS   "Show_Unused"
+#define ACCOUNT_TYPES          "Account_Types"
+
 
 typedef struct foo
 {
@@ -2400,6 +2409,33 @@ gnc_tree_view_account_save(GncTreeViewAccount *view,
     g_key_file_set_integer(key_file, group_name, ACCT_COUNT, bar.count);
     LEAVE(" ");
 
+}
+
+void
+gnc_tree_view_account_save_filter (GncTreeViewAccount *view,
+                                   AccountFilterDialog *fd,
+                                   GKeyFile *key_file,
+                                   const gchar *group_name)
+{
+    g_return_if_fail (key_file != NULL);
+    g_return_if_fail (group_name != NULL);
+
+    ENTER("view %p, key_file %p, group_name %s", view, key_file,
+          group_name);
+
+    g_key_file_set_integer (key_file, group_name, ACCOUNT_TYPES,
+                           fd->visible_types);
+    g_key_file_set_boolean (key_file, group_name, SHOW_HIDDEN_ACCOUNTS,
+                           fd->show_hidden);
+    g_key_file_set_boolean (key_file, group_name, SHOW_ZERO_TOTALS,
+                           fd->show_zero_total);
+    g_key_file_set_boolean (key_file, group_name, SHOW_UNUSED_ACCOUNTS,
+                           fd->show_unused);
+
+    g_key_file_set_comment (key_file, group_name, ACCOUNT_TYPES,
+                            "Account Filter Section below, four lines", NULL);
+
+    LEAVE("");
 }
 
 /** Expand a row in the tree that was expanded when the user last quit
@@ -2540,6 +2576,59 @@ gnc_tree_view_account_restore(GncTreeViewAccount *view,
 
     /* Update tree view for any changes */
     gnc_tree_view_account_refilter(view);
+}
+
+void
+gnc_tree_view_account_restore_filter (GncTreeViewAccount *view,
+                                      AccountFilterDialog *fd,
+                                      GKeyFile *key_file,
+                                      const gchar *group_name)
+{
+    GError *error = NULL;
+    gint i;
+    gboolean show;
+
+    g_return_if_fail (key_file != NULL);
+    g_return_if_fail (group_name != NULL);
+
+    /* if entry not found, filter will use the default setting */
+
+    /* Filter information. Ignore missing keys. */
+    show = g_key_file_get_boolean (key_file, group_name, SHOW_HIDDEN_ACCOUNTS, &error);
+    if (error)
+    {
+        g_error_free (error);
+        error = NULL;
+    }
+    else
+        fd->show_hidden = show;
+
+    show = g_key_file_get_boolean(key_file, group_name, SHOW_ZERO_TOTALS, &error);
+    if (error)
+    {
+        g_error_free (error);
+        error = NULL;
+    }
+    else
+        fd->show_zero_total = show;
+
+    show = g_key_file_get_boolean(key_file, group_name, SHOW_UNUSED_ACCOUNTS, &error);
+    if (error)
+    {
+        g_error_free (error);
+        error = NULL;
+    }
+    else
+        fd->show_unused = show;
+
+    i = g_key_file_get_integer(key_file, group_name, ACCOUNT_TYPES, &error);
+    if (error)
+    {
+        g_error_free (error);
+        error = NULL;
+    }
+    else
+        fd->visible_types = i;
 }
 
 // @@fixme -- factor this app-not-gui-specific-logic out.
