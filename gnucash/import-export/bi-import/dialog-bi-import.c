@@ -507,8 +507,8 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                           gchar * type, gchar * open_mode, GString * info,
                           GtkWindow *parent)
 {
-    gboolean valid;
-    GtkTreeIter iter;
+    gboolean valid, on_first_row_of_invoice;
+    GtkTreeIter iter, first_row_of_invoice;
     gchar *id = NULL, *date_opened = NULL, *owner_id = NULL, *billing_id = NULL, *notes = NULL;
     gchar *date = NULL, *desc = NULL, *action = NULL, *account = NULL, *quantity = NULL,
           *price = NULL, *disc_type = NULL, *disc_how = NULL, *discount = NULL, *taxable = NULL,
@@ -526,9 +526,9 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     GtkWidget *dialog;
     time64 today;
     InvoiceWindow *iw;
-    gchar *new_id = NULL;
     gint64 denom = 0;
     gnc_commodity *currency;
+    GString *running_id;
 
     // these arguments are needed
     g_return_if_fail (store && book);
@@ -546,7 +546,9 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
 
     invoice = NULL;
     update = NO;
-
+    on_first_row_of_invoice = TRUE;
+    running_id = g_string_new("");
+    
     valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
     while (valid)
     {
@@ -582,6 +584,13 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         // no predefined invoice number is a new invoice that's in need of a new number.
         // This was  not designed to satisfy the need for repeat invoices however, so maybe we need a another method for this, after all
         // It should be easier to copy an invoice with a new ID than to go through all this malarky.
+        
+        if (on_first_row_of_invoice)
+        {
+            g_string_assign(running_id, id);
+            first_row_of_invoice = iter;
+        }
+        
         if (g_ascii_strcasecmp (type, "BILL") == 0)
             invoice = gnc_search_bill_on_id (book, id);
         else if (g_ascii_strcasecmp (type, "INVOICE") == 0)
@@ -757,14 +766,27 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         gncEntryCommitEdit(entry);
         valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
         // handle auto posting of invoices
-        
-        new_id = NULL;
        
         if (valid)
-            gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &new_id, -1);
-        if (g_strcmp0 (id, new_id) != 0)
+            gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &id, -1);
+        else
+            id = NULL;
+        
+        if (g_strcmp0 (id, running_id->str) == 0) // The next row is for the same invoice.
         {
-            // the next invoice id is different => try to autopost this invoice
+            on_first_row_of_invoice = FALSE;
+        }
+        else // The next row is for a new invoice; try to post the invoice.
+        {
+            // Use posting values from the first row of this invoice.
+            gtk_tree_model_get (GTK_TREE_MODEL (store), &first_row_of_invoice,
+                                ID, &id,
+                                DATE_POSTED, &date_posted,
+                                DUE_DATE, &due_date,
+                                ACCOUNT_POSTED, &account_posted,
+                                MEMO_POSTED, &memo_posted,
+                                ACCU_SPLITS, &accumulatesplits, -1);
+
             if (strlen(date_posted) != 0)
             {
                 // autopost this invoice
@@ -832,20 +854,21 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             {
                 PWARN("Invoice %s is NOT marked for posting",id);
             }
+        
+            // open new bill / invoice in a tab, if requested
+            if (g_ascii_strcasecmp(open_mode, "ALL") == 0
+                    || (g_ascii_strcasecmp(open_mode, "NOT_POSTED") == 0
+                        && strlen(date_posted) == 0))
+            {
+                iw =  gnc_ui_invoice_edit (parent, invoice);
+                gnc_plugin_page_invoice_new (iw);
+            }
+            
+            // The next row will be for a new invoice.
+            on_first_row_of_invoice = TRUE;
         }
-        // open new bill / invoice in a tab, if requested
-        if (g_ascii_strcasecmp(open_mode, "ALL") == 0
-                || (g_ascii_strcasecmp(open_mode, "NOT_POSTED") == 0
-                    && strlen(date_posted) == 0))
-        {
-            iw =  gnc_ui_invoice_edit (parent, invoice);
-            gnc_plugin_page_invoice_new (iw);
-        }
-
-
     }
     // cleanup
-    g_free (new_id);
     g_free (id);
     g_free (date_opened);
     g_free (owner_id);
@@ -869,7 +892,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     g_free (memo_posted);
     g_free (accumulatesplits);
     
-
+    g_string_free (running_id, TRUE);
 }
 
 /* Change any escaped quotes ("") to (")
