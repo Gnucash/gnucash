@@ -759,6 +759,10 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
                            gnc_plugin_page_account_tree_summarybar_position_changed,
                            page);
 
+    // Read account filter state information from account section
+    gnc_tree_view_account_restore_filter (GNC_TREE_VIEW_ACCOUNT(priv->tree_view), &priv->fd,
+       gnc_state_get_current(), gnc_tree_view_get_state_section (GNC_TREE_VIEW(priv->tree_view)));
+
     LEAVE("widget = %p", priv->widget);
     return priv->widget;
 }
@@ -781,6 +785,10 @@ gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page)
                                  GNC_PREF_SUMMARYBAR_POSITION_BOTTOM,
                                  gnc_plugin_page_account_tree_summarybar_position_changed,
                                  page);
+
+    // Save account filter state information to account section
+    gnc_tree_view_account_save_filter (GNC_TREE_VIEW_ACCOUNT(priv->tree_view), &priv->fd,
+       gnc_state_get_current(), gnc_tree_view_get_state_section (GNC_TREE_VIEW(priv->tree_view)));
 
     // Destroy the filter override hash table
     g_hash_table_destroy(priv->fd.filter_override);
