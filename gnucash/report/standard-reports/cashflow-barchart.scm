@@ -37,10 +37,6 @@
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
-;; Define these utilities to avoid using module srfi-1
-(define first car)
-(define second cadr)
-
 (define reportname (N_ "Cash Flow Barchart"))
 
 ;; define all option's names so that they are properly defined
@@ -255,8 +251,8 @@
              (set! work-done (+ 1 work-done))
              (gnc:report-percent-done (* 80 (/ work-done work-to-do)))
              (let* ((settings (list (cons 'accounts accounts)
-                                    (cons 'to-date-t64 (second date-pair))
-                                    (cons 'from-date-t64 (first date-pair))
+                                    (cons 'from-date-t64 (car date-pair))
+                                    (cons 'to-date-t64 (cadr date-pair))
                                     (cons 'report-currency report-currency)
                                     (cons 'include-trading-accounts include-trading-accounts)
                                     (cons 'to-report-currency to-report-currency)))
