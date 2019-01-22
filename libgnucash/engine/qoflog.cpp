@@ -82,7 +82,7 @@ qof_log_dedent(void)
       : qof_log_num_spaces - QOF_LOG_INDENT_WIDTH;
 }
 
-void
+static void
 qof_log_set_file(FILE *outfile)
 {
     if (!outfile)
