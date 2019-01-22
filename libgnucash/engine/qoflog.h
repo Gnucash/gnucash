@@ -94,6 +94,8 @@ extern "C"
 #include <glib.h>
 #include "qofutil.h"
 
+typedef const gchar* QofLogModule;
+
 #define QOF_MOD_ENGINE "qof.engine"
 
 typedef enum

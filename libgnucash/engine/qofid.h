@@ -85,8 +85,6 @@ extern "C"
 typedef const gchar * QofIdType;
 /** QofIdTypeConst declaration */
 typedef const gchar * QofIdTypeConst;
-/** QofLogModule declaration */
-typedef const gchar* QofLogModule;
 
 typedef struct QofCollection_s QofCollection;
 
