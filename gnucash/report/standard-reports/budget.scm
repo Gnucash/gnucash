@@ -814,12 +814,9 @@
 
     ;; add subaccounts if requested
     (if show-subaccts?
-        (let ((sub-accounts (gnc:acccounts-get-all-subaccounts accounts)))
-          (for-each
-            (lambda (sub-account)
-              (if (not (account-in-list? sub-account accounts))
-                  (set! accounts (append accounts sub-accounts))))
-            sub-accounts)))
+        (set! accounts
+          (delete-duplicates!
+           (append accounts (gnc:acccounts-get-all-subaccounts accounts)))))
 
     (cond
       ((null? accounts)
