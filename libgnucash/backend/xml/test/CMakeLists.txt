@@ -18,7 +18,7 @@ set(XML_TEST_LIBS gnc-engine gnc-test-engine test-core ${LIBXML2_LDFLAGS} -lz)
 
 function(add_xml_test _TARGET _SOURCE_FILES)
   gnc_add_test(${_TARGET} "${_SOURCE_FILES}" XML_TEST_INCLUDE_DIRS XML_TEST_LIBS ${ARGN})
-  target_compile_options(${_TARGET} PRIVATE -DU_SHOW_CPLUSPLUS_API=0)
+  target_compile_options(${_TARGET} PRIVATE -DU_SHOW_CPLUSPLUS_API=0 -DG_LOG_DOMAIN=\"gnc.backend.xml\")
 endfunction()
 
 

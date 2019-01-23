@@ -54,6 +54,9 @@ extern "C"
 
 #include "qof.h"
 #include "qoflog.h"
+#include <string>
+#include <vector>
+#include <memory>
 
 #define QOF_LOG_MAX_CHARS 50
 #define QOF_LOG_MAX_CHARS_WITH_ALLOWANCE 100
@@ -63,9 +66,44 @@ extern "C"
 static FILE *fout = NULL;
 static gchar* function_buffer = NULL;
 static gint qof_log_num_spaces = 0;
-static GHashTable *log_table = NULL;
 static GLogFunc previous_handler = NULL;
 static gchar* qof_logger_format = NULL;
+
+using StrVec = std::vector<std::string>;
+
+struct ModuleEntry;
+using ModuleEntryPtr = std::shared_ptr<ModuleEntry>;
+
+struct ModuleEntry
+{
+    ModuleEntry(std::string name) :
+        m_name{name}, m_level{QOF_LOG_WARNING}, m_children{4} {}
+    ~ModuleEntry() = default;
+    std::string m_name;
+    QofLogLevel m_level;
+    std::vector<ModuleEntryPtr> m_children;
+};
+
+static ModuleEntryPtr modules = NULL;
+
+static StrVec
+split_domain (const std::string domain)
+{
+    static constexpr int parts = 4; //enough room for most cases
+    std::vector<std::string> domain_parts{4};
+    int start = 0;
+    auto pos = domain.find(".");
+    if (pos == std::string::npos)
+        domain_parts.emplace_back(domain);
+    else
+        while (pos != std::string::npos)
+        {
+            domain_parts.emplace_back(domain.substr(start, pos));
+            start = pos + 1;
+            pos = domain.find(".", start);
+        }
+    return domain_parts;
+}
 
 void
 qof_log_indent(void)
@@ -82,7 +120,7 @@ qof_log_dedent(void)
       : qof_log_num_spaces - QOF_LOG_INDENT_WIDTH;
 }
 
-static void
+void
 qof_log_set_file(FILE *outfile)
 {
     if (!outfile)
@@ -148,9 +186,8 @@ void
 qof_log_init_filename(const gchar* log_filename)
 {
     gboolean warn_about_missing_permission = FALSE;
-    if (log_table == NULL)
-        log_table = g_hash_table_new_full(g_str_hash, g_str_equal,
-                                          g_free, NULL);
+    if (!modules)
+        modules = std::make_shared<ModuleEntry>("");
 
     if (!qof_logger_format)
         qof_logger_format = g_strdup ("* %s %*s <%s> %*s%s%s"); //default format
@@ -194,9 +231,8 @@ qof_log_init_filename(const gchar* log_filename)
     if (!fout)
         fout = stderr;
 
-    // @@fixme really, the userdata is a struct { log_table, fout, previous_handler }
     if (previous_handler == NULL)
-        previous_handler = g_log_set_default_handler(log4glib_handler, log_table);
+        previous_handler = g_log_set_default_handler(log4glib_handler, &modules);
 
     if (warn_about_missing_permission)
     {
@@ -219,10 +255,9 @@ qof_log_shutdown (void)
         function_buffer = NULL;
     }
 
-    if (log_table != NULL)
+    if (modules != NULL)
     {
-        g_hash_table_destroy(log_table);
-        log_table = NULL;
+        modules = nullptr;
     }
 
     if (previous_handler != NULL)
@@ -236,14 +271,55 @@ void
 qof_log_set_level(QofLogModule log_module, QofLogLevel level)
 {
     if (!log_module || level == 0)
-    {
         return;
-    }
-    if (!log_table)
+    if (!modules)
     {
-        log_table = g_hash_table_new(g_str_hash, g_str_equal);
+        modules = std::make_shared<ModuleEntry>("");
+        modules->m_level = QOF_LOG_WARNING;
     }
-    g_hash_table_insert(log_table, g_strdup((gchar*)log_module), GINT_TO_POINTER((gint)level));
+    auto module_parts = split_domain(log_module);
+    auto module = modules;
+    for (auto part : module_parts)
+    {
+        auto iter = std::find_if(module->m_children.begin(),
+                              module->m_children.end(),
+                              [part](ModuleEntryPtr child){
+                                  return child && part == child->m_name;
+                              });
+        if (iter == module->m_children.end())
+        {
+            auto child = std::make_shared<ModuleEntry>(part);
+            module->m_children.push_back(child);
+            module = child;
+        }
+        else
+        {
+            module = *iter;
+        }
+    }
+    module->m_level = level;
+}
+
+
+gboolean
+qof_log_check(QofLogModule domain, QofLogLevel level)
+{
+    g_return_val_if_fail (domain && level && modules, FALSE);
+    if (level < modules->m_level)
+        return TRUE;
+    auto domain_vec = split_domain(domain);
+    auto module = modules;
+    for (auto part : domain_vec)
+    {
+        auto iter = std::find_if(module->m_children.begin(),
+                               module->m_children.end(),
+                               [part](ModuleEntryPtr child) {
+                                   return child && part == child->m_name; });
+        if (iter == module->m_children.end()) return FALSE;
+        if (level <= (*iter)->m_level) return TRUE;
+        module = *iter;
+    }
+    return FALSE;
 }
 
 const char *
@@ -379,54 +455,6 @@ qof_log_parse_log_config(const char *filename)
     }
 
     g_key_file_free(conf);
-}
-
-gboolean
-qof_log_check(QofLogModule log_domain, QofLogLevel log_level)
-{
-//#define _QLC_DBG(x) x
-#define _QLC_DBG(x)
-    GHashTable *log_levels = log_table;
-    gchar *domain_copy = g_strdup(log_domain == NULL ? "" : log_domain);
-    gchar *dot_pointer = domain_copy;
-    static const QofLogLevel default_log_thresh = QOF_LOG_WARNING;
-    QofLogLevel longest_match_level = default_log_thresh;
-
-    {
-        gpointer match_level;
-        if (log_levels && (match_level = g_hash_table_lookup(log_levels, "")) != NULL)
-            longest_match_level = (QofLogLevel)GPOINTER_TO_INT(match_level);
-    }
-
-_QLC_DBG( { printf("trying [%s] (%d):", log_domain, log_levels != NULL ? g_hash_table_size(log_levels) : 0); });
-    if (G_LIKELY(log_levels))
-    {
-        // e.g., "a.b.c\0" -> "a\0b.c\0" -> "a.b\0c\0", "a.b.c\0"
-        gpointer match_level;
-        while ((dot_pointer = g_strstr_len(dot_pointer, strlen(dot_pointer), ".")) != NULL)
-        {
-            *dot_pointer = '\0';
-            _QLC_DBG( { printf(" [%s]", domain_copy); });
-            if (g_hash_table_lookup_extended(log_levels, domain_copy, NULL, &match_level))
-            {
-                longest_match_level = (QofLogLevel)GPOINTER_TO_INT(match_level);
-                _QLC_DBG(printf("*"););
-            }
-            *dot_pointer = '.';
-            dot_pointer++;
-        }
-
-        _QLC_DBG( { printf(" [%s]", domain_copy); });
-        if (g_hash_table_lookup_extended(log_levels, domain_copy, NULL, &match_level))
-        {
-            longest_match_level = (QofLogLevel)GPOINTER_TO_INT(match_level);
-            _QLC_DBG( { printf("*"); });
-        }
-    }
-    _QLC_DBG( { printf(" found [%d]\n", longest_match_level); });
-    g_free(domain_copy);
-
-    return log_level <= longest_match_level;
 }
 
 void
