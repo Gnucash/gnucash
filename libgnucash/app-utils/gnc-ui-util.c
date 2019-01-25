@@ -261,9 +261,9 @@ gnc_get_current_book_tax_name (void)
             { /* switch both name and type and remove unused frames */
                 char* taxus_type = g_strdup(old_option_taxus_type);
                 qof_book_set_string_option(book, OPTION_TAXUS_NAME, taxus_name);
-                qof_book_set_string_option(book, OLD_OPTION_TAXUS_NAME, '\0');
+                qof_book_set_string_option(book, OLD_OPTION_TAXUS_NAME, NULL);
                 qof_book_set_string_option(book, OPTION_TAXUS_TYPE, taxus_type);
-                qof_book_set_string_option(book, OLD_OPTION_TAXUS_TYPE, '\0');
+                qof_book_set_string_option(book, OLD_OPTION_TAXUS_TYPE, NULL);
                 qof_book_option_frame_delete(book, "book/tax_US");
                 qof_book_option_frame_delete(book, "book");
                 g_free (taxus_type);
@@ -271,7 +271,7 @@ gnc_get_current_book_tax_name (void)
             else
             { /* switch just name and remove unused frames */
                 qof_book_set_string_option(book, OPTION_TAXUS_NAME, taxus_name);
-                qof_book_set_string_option(book, OLD_OPTION_TAXUS_NAME, '\0');
+                qof_book_set_string_option(book, OLD_OPTION_TAXUS_NAME, NULL);
                 qof_book_option_frame_delete(book, "book/tax_US");
                 qof_book_option_frame_delete(book, "book");
             }
@@ -311,9 +311,9 @@ gnc_get_current_book_tax_type (void)
             { /* switch both name and type and remove unused frames */
                 char* taxus_name = g_strdup(old_option_taxus_name);
                 qof_book_set_string_option(book, OPTION_TAXUS_NAME, taxus_name);
-                qof_book_set_string_option(book, OLD_OPTION_TAXUS_NAME, '\0');
+                qof_book_set_string_option(book, OLD_OPTION_TAXUS_NAME, NULL);
                 qof_book_set_string_option(book, OPTION_TAXUS_TYPE, taxus_type);
-                qof_book_set_string_option(book, OLD_OPTION_TAXUS_TYPE, '\0');
+                qof_book_set_string_option(book, OLD_OPTION_TAXUS_TYPE, NULL);
                 qof_book_option_frame_delete(book, "book/tax_US");
                 qof_book_option_frame_delete(book, "book");
                 g_free (taxus_name);
@@ -321,7 +321,7 @@ gnc_get_current_book_tax_type (void)
             else
             { /* switch just type and remove unused frames */
                 qof_book_set_string_option(book, OPTION_TAXUS_TYPE, taxus_type);
-                qof_book_set_string_option(book, OLD_OPTION_TAXUS_TYPE, '\0');
+                qof_book_set_string_option(book, OLD_OPTION_TAXUS_TYPE, NULL);
                 qof_book_option_frame_delete(book, "book/tax_US");
                 qof_book_option_frame_delete(book, "book");
             }
