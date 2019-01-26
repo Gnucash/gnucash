@@ -28,6 +28,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash report standard-reports cash-flow))
+(use-modules (srfi srfi-1))
 (use-modules (gnucash utilities)) 
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
@@ -381,109 +382,78 @@
 ;; function to add inflow and outflow of money
 (define (cash-flow-calc-money-in-out settings)
   (let* ((accounts (cdr (assq 'accounts settings)))
-	 (to-date-t64 (cdr (assq 'to-date-t64 settings)))
-	 (from-date-t64 (cdr (assq 'from-date-t64 settings)))
-	 (report-currency (cdr (assq 'report-currency settings)))
-	 (include-trading-accounts (cdr (assq 'include-trading-accounts settings)))
-	 (to-report-currency (cdr (assq 'to-report-currency settings)))
+         (to-date-t64 (cdr (assq 'to-date-t64 settings)))
+         (from-date-t64 (cdr (assq 'from-date-t64 settings)))
+         (report-currency (cdr (assq 'report-currency settings)))
+         (include-trading-accounts
+          (cdr (assq 'include-trading-accounts settings)))
+         (to-report-currency (cdr (assq 'to-report-currency settings)))
+         (money-in '())
+         (money-in-collector (gnc:make-commodity-collector))
+         (money-out '())
+         (money-out-collector (gnc:make-commodity-collector))
+         (all-splits (gnc:account-get-trans-type-splits-interval
+                      accounts '() from-date-t64 to-date-t64))
+         (splits-to-do (length all-splits))
+         (splits-seen-hash (make-hash-table)))
 
-	 (is-report-account? (account-in-list-pred accounts))
-
-	 (money-in-accounts '())
-	 (money-in-hash (make-hash-table))
-	 (money-in-collector (gnc:make-commodity-collector))
-
-	 (money-out-accounts '())
-	 (money-out-hash (make-hash-table))
-	 (money-out-collector (gnc:make-commodity-collector))
-
-	 (all-splits (gnc:account-get-trans-type-splits-interval accounts '() from-date-t64 to-date-t64))
-	 (splits-to-do (length all-splits))
-	 (splits-seen-table (make-hash-table))
-	 (work-done 0))
-
-    (define (split-seen? split)
-      (if (split-hashtable-ref splits-seen-table split) #t
-	  (begin
-	    (split-hashtable-set! splits-seen-table split #t)
-	    #f)))
-
-    (define (work-per-split split)
-      (set! work-done (+ 1 work-done))
-      (if (= (modulo work-done 100) 0)
-	  (gnc:report-percent-done (* 85 (/ work-done splits-to-do))))
-      (let ((parent (xaccSplitGetParent split)))
-	(if (<= from-date-t64 (xaccTransGetDate parent) to-date-t64)
-	    (let* ((parent-description (xaccTransGetDescription parent))
-		   (parent-currency (xaccTransGetCurrency parent)))
-              ;; (gnc:debug parent-description
-              ;;            " - "
-              ;;            (gnc-commodity-get-printname parent-currency))
-	      (for-each
-	       (lambda (s)
-		 (let* ((s-account (xaccSplitGetAccount s))
-			(s-account-type (xaccAccountGetType s-account))
-			(s-amount (xaccSplitGetAmount s))
-			(s-value (xaccSplitGetValue s))
-			(s-commodity (xaccAccountGetCommodity s-account)))
-		   ;; Check if this is a dangling split
-		   ;; and print a warning
-		   (if (null? s-account)
-		       (display
-			(string-append
-			 "WARNING: s-account is NULL for split: "
-			 (gncSplitGetGUID s) "\n")))
-                   ;; (gnc:debug (xaccAccountGetName s-account))
-		   (if (and	 ;; make sure we don't have
-			(not (null? s-account)) ;;  any dangling splits
-			(or include-trading-accounts (not (eq? s-account-type ACCT-TYPE-TRADING)))
-			(not (is-report-account? s-account)))
-		       (if (not (split-seen? s))
-			   (begin
-			     (if (gnc-numeric-negative-p s-value)
-				 (let ((s-account-in-collector (account-hashtable-ref money-in-hash s-account)))
-                                   ;; (gnc:debug "in:" (gnc-commodity-get-printname s-commodity)
-                                   ;; 	     (gnc-numeric-to-double s-amount)
-                                   ;; 	     (gnc-commodity-get-printname parent-currency)
-                                   ;; 	     (gnc-numeric-to-double s-value))
-				   (if (not s-account-in-collector)
-				       (begin
-					 (set! s-account-in-collector (gnc:make-commodity-collector))
-					 (account-hashtable-set! money-in-hash s-account
-								 s-account-in-collector)
-					 (set! money-in-accounts (cons s-account money-in-accounts))))
-				   (let ((s-report-value (to-report-currency parent-currency
-									     (gnc-numeric-neg s-value)
-									     (xaccTransGetDate
-									      parent))))
-				     (money-in-collector 'add report-currency s-report-value)
-				     (s-account-in-collector 'add report-currency s-report-value)))
-				 (let ((s-account-out-collector (account-hashtable-ref money-out-hash s-account)))
-                                   ;; (gnc:debug "out:" (gnc-commodity-get-printname s-commodity)
-                                   ;; 	     (gnc-numeric-to-double s-amount)
-                                   ;; 	     (gnc-commodity-get-printname parent-currency)
-                                   ;; 	     (gnc-numeric-to-double s-value))
-				   (if (not s-account-out-collector)
-				       (begin
-					 (set! s-account-out-collector (gnc:make-commodity-collector))
-					 (account-hashtable-set! money-out-hash s-account
-								 s-account-out-collector)
-					 (set! money-out-accounts (cons s-account money-out-accounts))))
-				   (let ((s-report-value (to-report-currency parent-currency s-value
-									     (xaccTransGetDate parent))))
-				     (money-out-collector 'add report-currency s-report-value)
-				     (s-account-out-collector 'add report-currency s-report-value)))))))))
-	       (xaccTransGetSplitList parent))))))
-
-    (for-each work-per-split all-splits)
+    (let loop ((splits all-splits)
+               (work-done 0))
+      (unless (null? splits)
+        (if (zero? (modulo work-done 100))
+            (gnc:report-percent-done (* 85 (/ work-done splits-to-do))))
+        (let* ((split (car splits))
+               (parent (xaccSplitGetParent split)))
+          (for-each
+           (lambda (s)
+             (let* ((s-account (xaccSplitGetAccount s))
+                    (s-value (xaccSplitGetValue s))
+                    (s-report-value (to-report-currency (xaccTransGetCurrency parent)
+                                                        (abs s-value)
+                                                        (xaccTransGetDate parent))))
+               (cond
+                ((null? s-account)
+                 (format #t "WARNING: s-account is NULL for split: ~a\n"
+                         (gncSplitGetGUID s)))
+                ((or (and include-trading-accounts
+                          (eqv? (xaccAccountGetType s-account)
+                                ACCT-TYPE-TRADING))
+                     (member s-account accounts)
+                     (hash-ref splits-seen-hash s))
+                 #f)
+                ((negative? s-value)
+                 (let ((s-account-in-collector
+                        (or (assoc-ref money-in s-account)
+                            (let ((coll (gnc:make-commodity-collector)))
+                              (set! money-in
+                                (assoc-set! money-in s-account coll))
+                              coll))))
+                   (hash-set! splits-seen-hash s #t)
+                   (money-in-collector 'add report-currency s-report-value)
+                   (s-account-in-collector
+                    'add report-currency s-report-value)))
+                ((positive? s-value)
+                 (let ((s-account-out-collector
+                        (or (assoc-ref money-out s-account)
+                            (let ((coll (gnc:make-commodity-collector)))
+                              (set! money-out
+                                (assoc-set! money-out s-account coll))
+                              coll))))
+                   (hash-set! splits-seen-hash s #t)
+                   (money-out-collector 'add report-currency s-report-value)
+                   (s-account-out-collector
+                    'add report-currency s-report-value))))))
+           (xaccTransGetSplitList parent)))
+        (loop (cdr splits) (1+ work-done))))
 
     ;; Return an association list of results
-    (list (cons 'money-in-accounts money-in-accounts)
-	  (cons 'money-in-alist (hash-map->list (lambda (k v) (list k v)) money-in-hash))
-	  (cons 'money-in-collector money-in-collector)
-	  (cons 'money-out-accounts money-out-accounts)
-	  (cons 'money-out-alist (hash-map->list (lambda (k v) (list k v)) money-out-hash))
-	  (cons 'money-out-collector money-out-collector))))
+    (list
+     (cons 'money-in-accounts (map car money-in))
+     (cons 'money-in-alist (map (lambda (p) (list (car p) (cdr p))) money-in))
+     (cons 'money-in-collector money-in-collector)
+     (cons 'money-out-accounts (map car money-out))
+     (cons 'money-out-alist (map (lambda (p) (list (car p) (cdr p))) money-out))
+     (cons 'money-out-collector money-out-collector))))
 
 (gnc:define-report 
  'version 1
