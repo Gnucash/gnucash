@@ -640,7 +640,7 @@ account_to_gui (TaxInfoDialog *ti_dialog, Account *account)
     selection = gtk_tree_view_get_selection(view);
     path =  gtk_tree_path_new_from_indices(index, -1);
     gtk_tree_selection_select_path(selection, path);
-    gtk_tree_view_scroll_to_cell(view, path, NULL, FALSE, 0, 0);
+    gtk_tree_view_scroll_to_cell(view, path, NULL, TRUE, 0.5, 0);
     gtk_tree_path_free(path);
 
     str = xaccAccountGetTaxUSPayerNameSource (account);
