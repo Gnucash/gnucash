@@ -928,7 +928,8 @@ gnc_tax_info_account_changed_cb (GtkTreeSelection *selection,
 
     case 1:
         /* Get the account. This view is set for multiple selection, so we
-           can only get a list of accounts. */
+           can only get a list of accounts. 1-25-19: The dialog does not work
+           for multipe accounts so it was changed to single selection */
         view = GNC_TREE_VIEW_ACCOUNT(ti_dialog->account_treeview);
         accounts = gnc_tree_view_account_get_selected_accounts (view);
         if (accounts == NULL)
@@ -1400,7 +1401,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
         ti_dialog->account_treeview = GTK_WIDGET(tree_view);
 
         selection = gtk_tree_view_get_selection (tree_view);
-        gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+        gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
         g_signal_connect (G_OBJECT (selection), "changed",
                           G_CALLBACK (gnc_tax_info_account_changed_cb),
                           ti_dialog);
