@@ -233,9 +233,97 @@ gnc_is_new_book (void)
 #define OLD_OPTION_TAXUS_TYPE "book/tax_US/type"
 
 void
-gnc_set_current_book_tax_name (const gchar *tax_name)
+gnc_set_current_book_tax_name_type (gboolean name_changed, const gchar *tax_name,
+                                    gboolean type_changed, const gchar *tax_type)
 {
-    qof_book_set_string_option(gnc_get_current_book(), OPTION_TAXUS_NAME, tax_name);
+    if (name_changed)
+    {
+        if (type_changed)
+        {
+            QofBook* book = gnc_get_current_book();
+            if ((g_strcmp0 (tax_name, "") == 0) ||
+                (tax_name == NULL))
+            { /* change to no name */
+                if ((g_strcmp0 (tax_type, "Other") == 0) ||
+                    (g_strcmp0 (tax_type, "") == 0) ||
+                    (tax_type == NULL))
+                { /* need to delete both name and type and the "tax_US" frame */
+                    qof_book_set_string_option(book, OPTION_TAXUS_NAME, NULL);
+                    qof_book_set_string_option(book, OPTION_TAXUS_TYPE, NULL);
+                    qof_book_option_frame_delete(book, "tax_US");
+                }
+                else
+                { /* delete the name & change the type; keep the "tax_US" frame */
+                    qof_book_set_string_option(book, OPTION_TAXUS_NAME, NULL);
+                    qof_book_set_string_option(book, OPTION_TAXUS_TYPE, tax_type);
+                }
+            }
+            else /* new name */
+            {
+                if ((g_strcmp0 (tax_type, "Other") == 0) ||
+                    (g_strcmp0 (tax_type, "") == 0) ||
+                    (tax_type == NULL))
+                { /* delete the type & change the name; keep the "tax_US" frame */
+                    qof_book_set_string_option(book, OPTION_TAXUS_TYPE, NULL);
+                    qof_book_set_string_option(book, OPTION_TAXUS_NAME, tax_name);
+                }
+                else /* and new type */
+                { /* change the name & change the type */
+                    qof_book_set_string_option(book, OPTION_TAXUS_NAME, tax_name);
+                    qof_book_set_string_option(book, OPTION_TAXUS_TYPE, tax_type);
+                }
+            }
+        }
+        else /* no type change but name changed */
+        {
+            QofBook* book = gnc_get_current_book();
+            if ((g_strcmp0 (tax_name, "") == 0) ||
+                (tax_name == NULL))
+            { /* change to no name */
+                if ((g_strcmp0 (tax_type, "Other") == 0) ||
+                    (g_strcmp0 (tax_type, "") == 0) ||
+                    (tax_type == NULL))
+                { /* delete the name; there is no type; deleted the "tax_US" frame */
+                    qof_book_set_string_option(book, OPTION_TAXUS_NAME, NULL);
+                    qof_book_option_frame_delete(book, "tax_US");
+                }
+                else
+                { /* need to delete the name and keep "tax_US" frame */
+                    qof_book_set_string_option(book, OPTION_TAXUS_NAME, NULL);
+                }
+            }
+            else
+            { /* change the name & keep "tax_US" frame */
+                qof_book_set_string_option(book, OPTION_TAXUS_NAME, tax_name);
+            }
+        }
+   }
+   else /* no name change */
+   {
+        if (type_changed)
+        {
+            QofBook* book = gnc_get_current_book();
+            if ((g_strcmp0 (tax_type, "Other") == 0) ||
+                (g_strcmp0 (tax_type, "") == 0) ||
+                (tax_type == NULL))
+            {
+                if ((g_strcmp0 (tax_name, "") == 0) ||
+                    (tax_name == NULL))
+                {/* delete the type; there is no name; delete the "tax_US" frame */
+                    qof_book_set_string_option(book, OPTION_TAXUS_TYPE, NULL);
+                    qof_book_option_frame_delete(book, "tax_US");
+                }
+                else
+                { /* need to delete the type and keep "tax_US" frame */
+                    qof_book_set_string_option(book, OPTION_TAXUS_TYPE, NULL);
+                }
+            }
+            else
+            { /* change the type & keep "tax_US" frame */
+                qof_book_set_string_option(book, OPTION_TAXUS_TYPE, tax_type);
+            }
+        } /*else no name and no type change - do nothing */
+   }
 }
 
 const gchar *
@@ -280,12 +368,6 @@ gnc_get_current_book_tax_name (void)
         }
         return NULL;
     }
-}
-
-void
-gnc_set_current_book_tax_type (const gchar *tax_type)
-{
-    qof_book_set_string_option(gnc_get_current_book(), OPTION_TAXUS_TYPE, tax_type);
 }
 
 const gchar *
