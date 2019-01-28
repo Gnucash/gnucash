@@ -275,7 +275,7 @@ destroy_database (gchar* url)
 #if HAVE_LIBDBI_R
         conn = dbi_conn_new_r (scheme, dbi_instance);
 #else
-        conn = dbi_conn_new (protocol);
+        conn = dbi_conn_new (scheme);
 #endif
     port = g_strdup_printf ("%d", portnum);
     if (conn == NULL)
