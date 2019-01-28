@@ -349,10 +349,8 @@ while(<>) {
 
     my $price = $quoter->currency($from_currency, $to_currency);
     my $inv_price = undef;
-    #Sometimes price quotes are available in only one direction, and if the
-    #direction we asked for results in a quote < 1 we want the other direction
-    #if it's available to get more significant digits.
-    unless (defined($price) && $price > 1) {
+    # Sometimes price quotes are available in only one direction.
+    unless (defined($price)) {
         $inv_price = $quoter->currency($to_currency, $from_currency);
         if (defined($inv_price)) {
             my $tmp = $to_currency;
