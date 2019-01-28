@@ -279,7 +279,7 @@
 		 (set! row-num (+ 1 row-num))
 		 (set! work-done (+ 1 work-done))
 		 (gnc:report-percent-done (+ 90 (* 5 (/ work-done work-to-do))))
-		 (let* ((pair (account-in-alist account money-in-alist))
+		 (let* ((pair (assoc account money-in-alist))
 			(acct (car pair)))
 		   (gnc:html-table-append-row/markup!
 		    table
@@ -322,7 +322,7 @@
 		 (set! row-num (+ 1 row-num))
 		 (set! work-done (+ 1 work-done))
 		 (gnc:report-percent-done (+ 95 (* 5 (/ work-done work-to-do))))
-		 (let* ((pair (account-in-alist account money-out-alist))
+		 (let* ((pair (assoc account money-out-alist))
 			(acct (car pair)))
 		   (gnc:html-table-append-row/markup!
 		    table
