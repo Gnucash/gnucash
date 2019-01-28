@@ -403,13 +403,12 @@
               ((price) "unknown")
               (else #f)))
 
-      ;; FIXME: SIGFIGS is not what we want here...
       (if price
           (set! price
                 (double-to-gnc-numeric price
-                                           GNC-DENOM-AUTO
-                                           (logior (GNC-DENOM-SIGFIGS 9)
-                                                   GNC-RND-ROUND))))
+                                       GNC-DENOM-AUTO
+                                       (logior GNC-DENOM-REDUCE
+                                               GNC-RND-NEVER))))
 
       (if gnc-time
           (set! gnc-time (timestr->time64 gnc-time time-zone))
