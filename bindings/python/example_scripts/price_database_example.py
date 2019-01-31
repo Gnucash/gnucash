@@ -79,7 +79,7 @@ for namespace in namespaces:
             for pr in pl:
 
                source = pr.get_source()
-               time = pr.get_time()
+               time = pr.get_time64()
                v=pr.get_value()
                price = float(v.num)/v.denom
 
