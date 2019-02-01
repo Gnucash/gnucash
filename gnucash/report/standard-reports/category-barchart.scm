@@ -705,18 +705,22 @@ developing over time"))
              (gnc:report-percent-done 98)
              (gnc:html-document-add-object! document chart)
              (if show-table?
-                 (begin
+                 (let ((scu (gnc-commodity-get-fraction report-currency)))
                    (gnc:html-table-append-column! table date-string-list)
 
-                   (letrec
-                       ((addcol
-                         (lambda (col)
-                           (if (not (null? col))
-                               (begin
-                                 (gnc:html-table-append-column!
-                                  table (car col))
-                                 (addcol (cdr col)))))))
-                     (addcol (map cadr all-data)))
+                   (for-each
+                    (lambda (col)
+                      (gnc:html-table-append-column!
+                       table
+                       (map
+                        (lambda (mon)
+                          (gnc:make-gnc-monetary
+                           report-currency
+                           (gnc-numeric-convert
+                            (gnc:gnc-monetary-amount mon)
+                            scu GNC-HOW-RND-ROUND)))
+                        col)))
+                    (map cadr all-data))
 
                    (gnc:html-table-set-col-headers!
                     table
