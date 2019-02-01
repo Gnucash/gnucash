@@ -1521,6 +1521,7 @@ read_one_check_directory(PrintCheckDialog *pcd, GtkListStore *store,
              format->group, format->filename);
             gtk_dialog_run(GTK_DIALOG(dialog));
             gtk_widget_destroy(dialog);
+            free_check_format (format);
         }
         else
         {
@@ -1530,7 +1531,6 @@ read_one_check_directory(PrintCheckDialog *pcd, GtkListStore *store,
             found = TRUE;
         }
     }
-    free_check_format (format);
     g_dir_close(dir);
 
     /* If any files were added to the list, add a separator between
