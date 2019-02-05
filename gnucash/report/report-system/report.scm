@@ -876,22 +876,21 @@ not found.")))
      *gnc:_report-templates_*)
     template-id))
 
-;; We want to warn users when we are trying to restore reports stored in the legacy
-;; format (based on name instead of guid), but only once
-(define gnc:old-style-restore-warned #f)
-
 ;; Legacy: this function is needed only to restore
 ;; a saved report when loading a book last saved in GnuCash 2.2
-(define (gnc:restore-report id template-name options)
-  (if options
-      (let ((r ((record-constructor <report>)
-                (gnc:report-template-name-to-id template-name) id options #t #t #f #f "")))
-        ;; Warn user (one time) we're attempting to restore old style reports
-        (if (not gnc:old-style-restore-warned)
-            (begin
-              (set! gnc:old-style-restore-warned #t)
-              (gnc-warning-dialog '() rptwarn-legacy)))
-        (gnc-report-add r))
-      (begin
+(define gnc:restore-report
+  (let ((first-warn? #t))
+    (lambda (id template-name options)
+      (cond
+       (options
+        (let* ((constructor (record-constructor <report>))
+               (template-id (gnc:report-template-name-to-id template-name))
+               (report (constructor template-id id options #t #t #f #f "")))
+          ;; Warn user (one time) we're attempting to restore old style reports
+          (when first-warn?
+            (set! first-warn? #f)
+            (gui-warning rptwarn-legacy))
+          (gnc-report-add report)))
+       (else
         (gui-error-missing-template template-name)
-        #f)))
+        #f)))))
