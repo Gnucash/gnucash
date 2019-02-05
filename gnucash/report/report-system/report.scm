@@ -86,6 +86,30 @@
              renderer in-menu? menu-path menu-name
              menu-tip export-types export-thunk)))
 
+;; define strings centrally to ease code clarity
+(define rpterr-dupe
+  (_ "One of your reports has a report-guid that is a duplicate. Please check the report system, especially your saved reports, for a report with this report-guid: "))
+(define rpterr-upgraded
+  (_ "The GnuCash report system has been upgraded. Your old saved reports have been transferred into a new format. If you experience trouble with saved reports, please contact the GnuCash development team."))
+(define rpterr-guid1 (_ "Wrong report definition: "))
+(define rpterr-guid2 (_ " Report is missing a GUID."))
+(define rptwarn-legacy
+  (_ "Some reports stored in a legacy format were found. This format is not supported anymore so these reports may not have been restored properly."))
+(define (gui-error str)
+  (if (gnucash-ui-is-running)
+      (gnc-error-dialog '() str)
+      (gnc:error "report.scm error: " str)))
+(define (gui-warning str)
+  (if (gnucash-ui-is-running)
+      (gnc-warning-dialog '() str)
+      (gnc:warn "report.scm warning: " str)))
+(define (gui-error-missing-template template-name)
+  (gui-error
+   (string-append
+    "Report Failed! One of your previously opened reports has failed \
+to open. The template on which it was based: " template-name ", was \
+not found.")))
+
 ;; if args is supplied, it is a list of field names and values
 (define (gnc:define-report . args)
   ;; For now the version is ignored, but in the future it'll let us
@@ -127,20 +151,12 @@
     (if (and report-rec
              ;; only process reports that have a report-guid
              (gnc:report-template-report-guid report-rec))
-        (let* ((report-guid (gnc:report-template-report-guid report-rec))
-               (name (gnc:report-template-name report-rec))
-               (tmpl (hash-ref *gnc:_report-templates_* report-guid)))
-          (if (not tmpl)
-              (hash-set! *gnc:_report-templates_*
-                         report-guid report-rec)
+        (let ((report-guid (gnc:report-template-report-guid report-rec)))
+          (if (hash-ref *gnc:_report-templates_* report-guid)
               (begin
-                ;; FIXME: We should pass the top-level window
-                ;; instead of the '() to gnc-error-dialog, but I
-                ;; have no idea where to get it from.
-                (and (gnucash-ui-is-running)
-                     (gnc-error-dialog '() (string-append
-                                            (_ "One of your reports has a report-guid that is a duplicate. Please check the report system, especially your saved reports, for a report with this report-guid: ")
-                                            report-guid))))))
+                (gui-error (string-append rpterr-dupe report-guid))
+                #f)
+              (hash-set! *gnc:_report-templates_* report-guid report-rec)))
         (begin
           (if (gnc:report-template-name report-rec)
               (begin
@@ -168,15 +184,12 @@
                       (if (not gnc:old-style-report-warned)
                           (begin
                             (set! gnc:old-style-report-warned #t)
-                            (if (gnucash-ui-is-running)
-                                (gnc-error-dialog '() (string-append (_ "The GnuCash report system has been upgraded. Your old saved reports have been transferred into a new format. If you experience trouble with saved reports, please contact the GnuCash development team."))))
+                            (gui-error rpterr-upgraded)
                             (hash-set! *gnc:_report-templates_* (gnc:report-template-report-guid report-rec) report-rec))))
                     ;;there is no parent -> this is an inital faulty report definition
-                    (if (gnucash-ui-is-running)
-                        (gnc-error-dialog
-                         '() (string-append (_ "Wrong report definition: ")
-                                            (gnc:report-template-name report-rec)
-                                            (_ " Report is missing a GUID.")))))))
+                    (gui-error (string-append rpterr-guid1
+                                              (gnc:report-template-name report-rec)
+                                              rpterr-guid2)))))
           #f ;; report definition is faulty: does not include name
           ;;(gnc:warn "gnc:define-report: old-style report. setting guid for " (gnc:report-template-name report-rec) " to " (gnc:report-template-report-guid report-rec)) ;; obsolete
           ))))
@@ -373,7 +386,7 @@
             (gnc:report-set-id! r report-id))
         report-id)
       (begin
-        (gnc-error-dialog '() (string-append "Report Failed! One of your previously opened reports has failed to open. The template on which it was based: " template-name ", was not found."))
+        (gui-error-missing-template template-name)
         #f)))
 
 (define (gnc:restore-report-by-guid-with-custom-template id template-id template-name custom-template-id options)
@@ -385,7 +398,7 @@
             (gnc:report-set-id! r report-id))
         report-id)
       (begin
-        (gnc-error-dialog '() (string-append "Report Failed! One of your previously opened reports has failed to open. The template on which it was based: " template-name ", was not found."))
+        (gui-error-missing-template template-name)
         #f)))
 
 (define (gnc:make-report-options template-id)
@@ -877,8 +890,8 @@
         (if (not gnc:old-style-restore-warned)
             (begin
               (set! gnc:old-style-restore-warned #t)
-              (gnc-warning-dialog '() (string-append (_ "Some reports stored in a legacy format were found. This format is not supported anymore so these reports may not have been restored properly.")))))
+              (gnc-warning-dialog '() rptwarn-legacy)))
         (gnc-report-add r))
       (begin
-        (gnc-error-dialog '() (string-append "Report Failed! One of your previously opened reports has failed to open. The template on which it was based: " template-name ", was not found."))
+        (gui-error-missing-template template-name)
         #f)))
