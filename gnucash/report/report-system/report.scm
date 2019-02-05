@@ -758,30 +758,20 @@ not found.")))
 (define (gnc:report-render-html report headers?)
   (if (and (not (gnc:report-dirty? report))
            (gnc:report-ctext report))
-      ;; if there's clean cached text, return it
-      ;;(begin
       (gnc:report-ctext report)
-      ;;  )
-
-      ;; otherwise, rerun the report
-      (let ((template (hash-ref *gnc:_report-templates_*
-                                (gnc:report-type report)))
-            (doc #f))
-        (set! doc (if template
-                      (let* ((renderer (gnc:report-template-renderer template))
-                             (stylesheet (gnc:report-stylesheet report))
-                             (doc (renderer report))
-                             (html #f))
-                        (if (string? doc)
-                            (set! html doc)
-                            (begin
-                              (gnc:html-document-set-style-sheet! doc stylesheet)
-                              (set! html (gnc:html-document-render doc headers?))))
-                        (gnc:report-set-ctext! report html) ;; cache the html
-                        (gnc:report-set-dirty?! report #f)  ;; mark it clean
-                        html)
-                      #f))
-        doc))) ;; YUK! inner doc is html-doc object; outer doc is a string.
+      (let ((template (hash-ref *gnc:_report-templates_* (gnc:report-type report))))
+        (and template
+             (let* ((renderer (gnc:report-template-renderer template))
+                    (stylesheet (gnc:report-stylesheet report))
+                    (doc (renderer report))
+                    (html (cond
+                           ((string? doc) doc)
+                           (else
+                            (gnc:html-document-set-style-sheet! doc stylesheet)
+                            (gnc:html-document-render doc headers?)))))
+               (gnc:report-set-ctext! report html) ;; cache the html
+               (gnc:report-set-dirty?! report #f)  ;; mark it clean
+               html)))))
 
 ;; looks up the report by id and renders it with gnc:report-render-html
 ;; marks the cursor busy during rendering; returns the html
