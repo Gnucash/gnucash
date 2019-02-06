@@ -431,7 +431,7 @@ flawed. see report-utilities.scm. please update reports.")
 ;; this function will scan through the account splitlist, building
 ;; a list of balances along the way at dates specified in dates-list.
 ;; in:  account
-;;      dates-list (list of time64)
+;;      dates-list (list of time64) - NOTE: IT WILL BE SORTED
 ;;      split->amount - an unary lambda. calling (split->amount split)
 ;;      returns a number, or #f which effectively skips the split.
 ;; out: (list bal0 bal1 ...), each entry is a gnc-monetary object
@@ -445,7 +445,7 @@ flawed. see report-utilities.scm. please update reports.")
   (define (amount->monetary bal)
     (gnc:make-gnc-monetary (xaccAccountGetCommodity account) bal))
   (let loop ((splits (xaccAccountGetSplitList account))
-             (dates-list dates-list)
+             (dates-list (stable-sort! dates-list <))
              (currentbal 0)
              (lastbal 0)
              (balancelist '()))
