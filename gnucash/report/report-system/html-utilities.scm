@@ -740,54 +740,23 @@
 ;; 'common-commodity', the exchange rates are given through the
 ;; function 'exchange-fn' and the 'accounts' determine which
 ;; commodities to show. Returns a html-object, a <html-table>.
-(define (gnc:html-make-exchangerates
-	 common-commodity exchange-fn accounts) 
-  (let ((comm-list 
-	 (gnc:accounts-get-commodities accounts common-commodity))
-	(table (gnc:make-html-table)))
-
-    (if (not (null? comm-list))
-	;; Do something with each exchange rate.
-	(begin
-	  (for-each 
-	   (lambda (commodity)
-	     (let 
-		 ;; slight hack: exchange a value greater than one,
-		 ;; to get enough digits, and round later.
-		 ((exchanged 
-		   (exchange-fn 
-		    (gnc:make-gnc-monetary commodity 
-					   (gnc-numeric-create 1000 1))
-		    common-commodity)))
-	       (gnc:html-table-append-row! 
-		table
-		(list 
-		 (gnc:make-gnc-monetary commodity 
-					(gnc-numeric-create 1 1))
-		 (gnc:make-gnc-monetary
-		  common-commodity
-		  (gnc-numeric-div
-		   (gnc:gnc-monetary-amount exchanged)
-		   (gnc-numeric-create 1000 1)
-		   GNC-DENOM-AUTO 
-		   (logior (GNC-DENOM-SIGFIGS 6) 
-			   GNC-RND-ROUND)))))))
-	   comm-list)
-	  
-	  ;; Set some style
-	  (gnc:html-table-set-style! 
-	   table "td" 
-	   'attribute '("align" "right")
-	   'attribute '("valign" "top"))
-	  
-	  ;; set some column headers 
-	  (gnc:html-table-set-col-headers!
-	   table 
-	   (list (gnc:make-html-table-header-cell/size 
-		  1 2 (if (= 1 (length comm-list))
-			  (_ "Exchange rate")
-			  (_ "Exchange rates")))))))
-    
+(define (gnc:html-make-exchangerates common-commodity exchange-fn accounts)
+  (let ((comm-list (gnc:accounts-get-commodities accounts common-commodity))
+        (markup (lambda (c) (gnc:make-html-table-cell/markup "number-cell" c)))
+        (table (gnc:make-html-table)))
+    (unless (null? comm-list)
+      (for-each
+       (lambda (commodity)
+         (let* ((orig-amt (gnc:make-gnc-monetary commodity 1))
+                (exchanged (exchange-fn orig-amt common-commodity)))
+           (gnc:html-table-append-row!
+            table (map markup (list orig-amt exchanged)))))
+       comm-list)
+      (gnc:html-table-set-col-headers!
+       table (list (gnc:make-html-table-header-cell/size
+                    1 2 (if (null? (cdr comm-list))
+                            (_ "Exchange rate")
+                            (_ "Exchange rates"))))))
     table))
 
 
