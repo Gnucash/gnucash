@@ -107,6 +107,9 @@
 (export gnc:get-today)
 (export gnc:reldate-initialize)
 
+(define gnc:*accounting-period-tab* (N_ "Accounting Period"))
+(define gnc:*accounting-period-eofy* (N_ "End of Fiscal Year Date"))
+
 ;; get stuff from localtime date vector
 (define (gnc:date-get-year datevec)
   (+ 1900 (tm:year datevec)))
@@ -576,6 +579,47 @@ Defaulting to today."))
 (define (gnc:get-end-accounting-period)
   (gnc-accounting-period-fiscal-end))
 
+;; returns the book-eofy, initialized to this-year and adjusted for
+;; yeardelta years. e.g. (book-eofy 2) means end-of-fiscal-year
+;; for the year (this year+2).
+(define (book-eofy yeardelta)
+  (let* ((custom (qof-book-get-option (gnc-get-current-book)
+                                      (list gnc:*accounting-period-tab*
+                                            gnc:*accounting-period-eofy*
+                                            "value")))
+         (custom-date (or custom (gnc-accounting-period-fiscal-end)))
+         (deltayears (+ (- (tm:year (gnc-localtime (current-time)))
+                           (tm:year (gnc-localtime custom-date)))
+                        yeardelta)))
+    (gnc:time64-end-day-time
+     (incdate-months custom-date (* 12 deltayears)))))
+
+;; returns the start current book accounting period
+(define (gnc:get-start-book-accounting-period)
+  (let ((now (current-time))
+        (eofy (book-eofy 0)))
+    (gnc:time64-start-day-time
+     (incdate (if (< now eofy) (book-eofy -1) eofy) DayDelta))))
+
+;; returns the end current book accounting period
+(define (gnc:get-end-book-accounting-period)
+  (let ((now (current-time))
+        (eofy (book-eofy 0)))
+    (if (< now eofy) eofy (book-eofy 1))))
+
+;; returns the start previous book accounting period
+(define (gnc:get-start-book-prev-accounting-period)
+  (let ((now (current-time))
+        (eofy (book-eofy 0)))
+    (gnc:time64-start-day-time
+     (incdate (if (< now eofy) (book-eofy -2) (book-eofy -1)) DayDelta))))
+
+;; returns the end previous book accounting period
+(define (gnc:get-end-book-prev-accounting-period)
+  (let ((now (current-time))
+        (eofy (book-eofy 0)))
+    (if (< now eofy) (book-eofy -1) (book-eofy 0))))
+
 (define (gnc:get-start-this-month)
   (let ((now (gnc-localtime (current-time))))
     (set-tm:sec now 0)
@@ -737,12 +781,38 @@ Defaulting to today."))
    'store 'start-accounting-period-desc 
    (N_ "First day of the accounting period, as set in the global preferences."))
 
+  (gnc:reldate-string-db
+   'store 'start-book-accounting-period-string
+   (N_ "Start of current book accounting period"))
+  (gnc:reldate-string-db
+   'store 'start-book-accounting-period-desc
+   (N_ "First day of the current accounting period, as set in the book preferences."))
+  (gnc:reldate-string-db
+   'store 'start-book-prev-accounting-period-string
+   (N_ "Start of previous book accounting period"))
+  (gnc:reldate-string-db
+   'store 'start-book-prev-accounting-period-desc
+   (N_ "First day of the previous accounting period, as set in the book preferences."))
+
   (gnc:reldate-string-db 
    'store 'end-accounting-period-string 
    (N_ "End of accounting period"))
   (gnc:reldate-string-db 
    'store 'end-accounting-period-desc 
    (N_ "Last day of the accounting period, as set in the global preferences."))
+
+  (gnc:reldate-string-db
+   'store 'end-book-accounting-period-string
+   (N_ "End of current book accounting period"))
+  (gnc:reldate-string-db
+   'store 'end-book-accounting-period-desc
+   (N_ "Last day of the current accounting period, as set in the book preferences."))
+  (gnc:reldate-string-db
+   'store 'end-book-prev-accounting-period-string
+   (N_ "End of previous book accounting period"))
+  (gnc:reldate-string-db
+   'store 'end-book-prev-accounting-period-desc
+   (N_ "Last day of the previous accounting period, as set in the book preferences."))
 
   (gnc:reldate-string-db 
    'store 'start-this-month-string 
@@ -828,10 +898,26 @@ Defaulting to today."))
 		 (gnc:reldate-string-db 'lookup 'start-accounting-period-string)
 		 (gnc:reldate-string-db 'lookup 'start-accounting-period-desc)
 		 gnc:get-start-accounting-period)
+         (vector 'start-book-accounting-period
+		 (gnc:reldate-string-db 'lookup 'start-book-accounting-period-string)
+		 (gnc:reldate-string-db 'lookup 'start-book-accounting-period-desc)
+		 gnc:get-start-book-accounting-period)
+         (vector 'start-book-prev-accounting-period
+		 (gnc:reldate-string-db 'lookup 'start-book-prev-accounting-period-string)
+		 (gnc:reldate-string-db 'lookup 'start-book-prev-accounting-period-desc)
+		 gnc:get-start-book-prev-accounting-period)
 	 (vector 'end-accounting-period
 		 (gnc:reldate-string-db 'lookup 'end-accounting-period-string)
 		 (gnc:reldate-string-db 'lookup 'end-accounting-period-desc)
 		 gnc:get-end-accounting-period)
+         (vector 'end-book-accounting-period
+		 (gnc:reldate-string-db 'lookup 'end-book-accounting-period-string)
+		 (gnc:reldate-string-db 'lookup 'end-book-accounting-period-desc)
+		 gnc:get-end-book-accounting-period)
+	 (vector 'end-book-prev-accounting-period
+		 (gnc:reldate-string-db 'lookup 'end-book-prev-accounting-period-string)
+		 (gnc:reldate-string-db 'lookup 'end-book-prev-accounting-period-desc)
+		 gnc:get-end-book-prev-accounting-period)
 	 (vector 'start-this-month
 		 (gnc:reldate-string-db 'lookup 'start-this-month-string)
 		 (gnc:reldate-string-db 'lookup 'start-this-month-desc)

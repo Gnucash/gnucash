@@ -30,6 +30,9 @@
 (use-modules (gnucash app-utils options))
 (use-modules (gnucash app-utils business-options))
 
+(define gnc:*accounting-period-tab* (N_ "Accounting Period"))
+(define gnc:*accounting-period-eofy* (N_ "End of Fiscal Year Date"))
+
 (define gnc:*option-section-counters* (N_ "Counters"))
 
 ;; This defines all available counter types to show options for. This a
@@ -133,6 +136,15 @@
     gnc:*business-label* gnc:*fancy-date-label*
     "g" (N_ "The default date format used for fancy printed dates.")
     #f))
+
+  ;; Accounting Period
+  (reg-option
+   (gnc:make-date-option
+    gnc:*accounting-period-tab* gnc:*accounting-period-eofy*
+    "a2" (N_ "Please choose the custom end of financial year date. Please be \
+aware only the day and month are used. The year stated is unused.")
+    (lambda () (cons 'absolute (current-time)))
+    #f 'absolute #f))
 
   ;; Accounts tab
 
