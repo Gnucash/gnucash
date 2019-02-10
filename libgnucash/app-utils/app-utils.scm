@@ -265,7 +265,7 @@
 (export gnc:get-three-months-ahead)
 
 ;; hooks 
-(export gnc:hook-run-danglers)		;; from hooks.scm
+(export gnc:hook-run-danglers)	    	;; from hooks.scm- deprecated
 (re-export gnc-hook-add-scm-dangler)
 (re-export HOOK-REPORT)
 

@@ -16,6 +16,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
 (define (gnc:hook-run-danglers hook . args)
+  (issue-deprecation-warning "gnc:hook-run-danglers is now deprecated.")
   (if (null? args)
       (set! args '())
       (set! args (car args)))
