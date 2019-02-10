@@ -230,8 +230,9 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
     GtkTreeIter iter, first_row_of_invoice;
     gboolean valid, row_fixed, on_first_row_of_invoice, ignore_invoice;
     gchar *id = NULL, *date_opened = NULL, *date_posted = NULL, *due_date = NULL,
-        *owner_id = NULL, *date = NULL, *quantity = NULL, *price = NULL;
+        *owner_id = NULL, *date = NULL, *account = NULL, *quantity = NULL, *price = NULL;
     GString *running_id;
+    Account *acc = NULL;
     guint dummy;
     gint row = 1, fixed_for_invoice = 0;
     const gchar* date_format_string = qof_date_format_get_string (qof_date_format_get()); // Get the user set date format string
@@ -267,6 +268,7 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                             DUE_DATE, &due_date,
                             OWNER_ID, &owner_id,
                             DATE, &date,
+                            ACCOUNT, &account,
                             QUANTITY, &quantity, PRICE, &price, -1);
         
         //  If this is a row for a new invoice id, validate header values.
@@ -368,6 +370,20 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                                     row, id);
         }
 
+        // Validate the account
+        if (!ignore_invoice)
+        {
+            acc = gnc_account_lookup_for_register (gnc_get_current_root_account (),
+                                                   account);
+            if (acc == NULL)
+            {
+                ignore_invoice = TRUE;
+                g_string_append_printf (info,
+                                        _("Row %d: invoice %s ignored, account %s does not exist.\n"),
+                                        row, id,account);
+            }
+        }
+        
         // Fix item data.
         if (!ignore_invoice)
         {
@@ -428,6 +444,7 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
         g_free (due_date);
         g_free (owner_id);
         g_free (date);
+        g_free (account);
         g_free (quantity);
         g_free (price);
 
