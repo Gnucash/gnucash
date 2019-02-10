@@ -222,18 +222,18 @@ gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
 //! * corrects ambiguous values in multi line invoices
 //! * ensures customer exists
 //! * if quantity is unset, set to 1
-//! * if price is unset, delete row
+//! * if price is unset, delete row.
 void
 gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                        GString * info, gchar *type)
 {
-    GtkTreeIter iter;
-    gboolean valid, row_deleted, row_fixed, on_first_row_of_invoice;
+    GtkTreeIter iter, first_row_of_invoice;
+    gboolean valid, row_fixed, on_first_row_of_invoice, ignore_invoice;
     gchar *id = NULL, *date_opened = NULL, *date_posted = NULL, *due_date = NULL,
         *owner_id = NULL, *date = NULL, *quantity = NULL, *price = NULL;
     GString *running_id;
     guint dummy;
-    gint row = 1;
+    gint row = 1, fixed_for_invoice = 0;
     const gchar* date_format_string = qof_date_format_get_string (qof_date_format_get()); // Get the user set date format string
 
 
@@ -251,12 +251,12 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
     
     // Init control variables
     running_id = g_string_new("");
+    ignore_invoice = FALSE;
     on_first_row_of_invoice = TRUE;
 
     valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
     while (valid)
     {
-        row_deleted = FALSE;
         row_fixed = FALSE;
 
         // Walk through the list, reading each row
@@ -273,27 +273,27 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
         if (on_first_row_of_invoice)
         {
             g_string_assign (running_id, id);
+            first_row_of_invoice = iter;
             
             // Validate the invoice id.
             if (strlen (id) == 0)
             {
-                valid = gtk_list_store_remove (store, &iter);
-                row_deleted = TRUE;
+                // The id in the first row of an invoice is blank, ignore the invoice
+                ignore_invoice = TRUE;
                 g_string_append_printf (info,
-                                        _("ROW %d DELETED, ID_NOT_SET\n"), row);
+                                        _("Row %d: invoice ignored, invoice ID not set.\n"), row);
             }
 
             // Validate customer or vendor.
-            if (!row_deleted && strlen (owner_id) == 0)
+            if (!ignore_invoice && strlen (owner_id) == 0)
             {
-                valid = gtk_list_store_remove (store, &iter);
-                row_deleted = TRUE;
+                ignore_invoice = TRUE;
                 g_string_append_printf (info,
-                                        _("ROW %d DELETED, OWNER_NOT_SET: id=%s\n"),
+                                        _("Row %d: invoice %s ignored, owner not set.\n"),
                                         row, id);
             }
             // Verify that customer or vendor exists.
-            if (!row_deleted)
+            if (!ignore_invoice)
             {
                 if (g_ascii_strcasecmp (type, "BILL") == 0)
                 {
@@ -301,11 +301,10 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                         (gnc_get_current_book (), owner_id))
                     {
                         // Vendor not found.
-                        valid = gtk_list_store_remove (store, &iter);
-                        row_deleted = TRUE;
+                        ignore_invoice = TRUE;
                         g_string_append_printf (info,
-                                                _("ROW %d DELETED, VENDOR_DOES_NOT_EXIST: id=%s\n"),
-                                                row, id);
+                                                _("Row %d: invoice %s ignored, vendor %s does not exist.\n"),
+                                                row, id, owner_id);
                     }
                 }
                 else if (g_ascii_strcasecmp (type, "INVOICE") == 0)
@@ -314,17 +313,16 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                         (gnc_get_current_book (), owner_id))
                     {
                         // Customer not found.
-                        valid = gtk_list_store_remove (store, &iter);
-                        row_deleted = TRUE;
+                        ignore_invoice = TRUE;
                         g_string_append_printf (info,
-                                                _("ROW %d DELETED, CUSTOMER_DOES_NOT_EXIST: id=%s\n"),
-                                                row, id);
+                                                _("Row %d: invoice %s ignored, customer %s does not exist.\n"),
+                                                row, id, owner_id);
                     }
                 }
             }
             
             // Verify the date opened.
-            if(!row_deleted && !isDateValid(date_opened))
+            if(!ignore_invoice && !isDateValid(date_opened))
             {
                 // Fix this by using the current date.
                 gchar temp[20];
@@ -339,40 +337,54 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
 
         }
         
-        // Validate and fix item data.
-        if (!row_deleted)
+        // Validate the price.
+        if (strlen (price) == 0)
         {
-            // Validate the price.
-            if (strlen (price) == 0)
-            {
-                // No valid price, delete the row
-                valid = gtk_list_store_remove (store, &iter);
-                row_deleted = TRUE;
-                g_string_append_printf (info,
-                                        _("ROW %d DELETED, PRICE_NOT_SET: id=%s\n"),
-                                        row, id);
-            }
+            // No valid price, delete the row
+            ignore_invoice = TRUE;
+            g_string_append_printf (info,
+                                    _("Row %d: invoice %s ignored, price not set.\n"),
+                                    row, id);
+        }
+
+        // Fix item data.
+        if (!ignore_invoice)
+        {
             
             // Verify the quantity.
-            if (!row_deleted && strlen (quantity) == 0)
+            if (strlen (quantity) == 0)
             {
                 // The quantity is not set, default to 1.
                 gtk_list_store_set (store, &iter, QUANTITY, "1", -1);
                 row_fixed = TRUE;
             }
         }
-
-        if (row_deleted)
+        if (row_fixed) ++fixed_for_invoice;
+        
+        // Move to the next row, skipping all rows of the current invoice if it has a row with an error.
+        if (ignore_invoice)
         {
-            (*deleted)++;
+            // Skip all rows of the current invoice.
+            // Get the next row and its id.
+            iter = first_row_of_invoice;
+            while (valid && g_strcmp0 (id, running_id->str) == 0)
+            {
+                (*deleted)++;
+                valid = gtk_list_store_remove (store, &iter);
+                if (valid) gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &id, -1);
+            }
+            // Fixes for ignored invoices don't count in the statistics.
+            fixed_for_invoice = 0;
+            
+            ignore_invoice = FALSE;
         }
-        else if (row_fixed)
-            (*fixed)++;
-
-        if (!row_deleted)
+        else
+        {
+            // Get the next row and its id.
             valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
-        if (valid) gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &id, -1);
-
+            if (valid) gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &id, -1);
+        }
+        
         // If the id of the next row is blank, it takes the id of the previous row.
         if (valid && strlen(id) == 0)
         {
@@ -384,14 +396,10 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
         if (!valid || (valid && g_strcmp0 (id, running_id->str) != 0))
         {
             on_first_row_of_invoice = TRUE;
+            (*fixed) += fixed_for_invoice;
+            fixed_for_invoice = 0;
         }
-        else
-        {
-            // The next row has the same id, so it is not the first row of an invoice.
-            // But if the first row of an invoice was deleted, the next row is again the first row of the invoice.
-            if (!(row_deleted && on_first_row_of_invoice))
-                on_first_row_of_invoice = FALSE;
-        }
+        else on_first_row_of_invoice = FALSE;
 
         g_free (id);
         g_free (date_opened);
@@ -403,15 +411,10 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
 
         row++;
     }
-
-    if (info && (info->len > 0))
-    {
-        g_string_prepend (info, "\n\n");
-        g_string_prepend (info, _("These rows were deleted:"));
-    }
     
     // Deallocate strings.
     g_string_free (running_id, TRUE);
+
 }
 
 
@@ -539,7 +542,6 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                                       gnc_search_customer_on_id (book, owner_id));
             gncInvoiceSetOwner (invoice, owner);
             gncInvoiceSetCurrency (invoice, gncOwnerGetCurrency (owner));	// Set the invoice currency based on the owner
-
             qof_scan_date (date_opened, &day, &month, &year);
             gncInvoiceSetDateOpened (invoice,
                                      gnc_dmy2time64 (day, month, year));
