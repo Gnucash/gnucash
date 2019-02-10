@@ -430,8 +430,14 @@
 (define (gnc:get-absolute-from-relative-date date-symbol)
   (let ((rel-date-data (hash-ref gnc:relative-date-hash date-symbol)))
     (if rel-date-data
-       ((gnc:reldate-get-fn rel-date-data))
-       (gnc:error "Tried to look up an undefined date symbol"))))
+        ((gnc:reldate-get-fn rel-date-data))
+        (let* ((msg (_ "Tried to look up an undefined date symbol \
+'~a'. This report was probably saved by a later version of GnuCash. \
+Defaulting to today."))
+               (conmsg (format #f msg date-symbol))
+               (uimsg (format #f (_ msg) date-symbol)))
+          (gnc:gui-warn conmsg uimsg)
+          (current-time)))))
 
 (define (gnc:get-relative-date-strings date-symbol)
   (let ((rel-date-info (hash-ref gnc:relative-date-hash date-symbol)))
