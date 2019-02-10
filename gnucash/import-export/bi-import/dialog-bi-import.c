@@ -228,10 +228,10 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                        GString * info, gchar *type)
 {
     GtkTreeIter iter;
-    gboolean valid, row_deleted, row_fixed;
+    gboolean valid, row_deleted, row_fixed, on_first_row_of_invoice;
     gchar *id = NULL, *date_opened = NULL, *date_posted = NULL, *due_date = NULL,
         *owner_id = NULL, *date = NULL, *quantity = NULL, *price = NULL;
-    GString *prev_id, *prev_date_opened, *prev_date_posted, *prev_owner_id, *prev_date;	// needed to fix multi line invoices
+    GString *running_id;
     guint dummy;
     gint row = 1;
     const gchar* date_format_string = qof_date_format_get_string (qof_date_format_get()); // Get the user set date format string
@@ -248,13 +248,10 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
 
     *fixed = 0;
     *deleted = 0;
-
-    // init strings
-    prev_id = g_string_new ("");
-    prev_date_opened = g_string_new ("");
-    prev_date_posted = g_string_new ("");
-    prev_owner_id = g_string_new ("");
-    prev_date = g_string_new ("");
+    
+    // Init control variables
+    running_id = g_string_new("");
+    on_first_row_of_invoice = TRUE;
 
     valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
     while (valid)
@@ -271,184 +268,129 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                             OWNER_ID, &owner_id,
                             DATE, &date,
                             QUANTITY, &quantity, PRICE, &price, -1);
-
-        if (strlen (price) == 0)
+        
+        //  If this is a row for a new invoice id, validate header values.
+        if (on_first_row_of_invoice)
         {
-            // invalid row (no price given)
-            // no fix possible -> delete row
-            valid = gtk_list_store_remove (store, &iter);
-            row_deleted = TRUE;
-            g_string_append_printf (info,
-                                    _("ROW %d DELETED, PRICE_NOT_SET: id=%s\n"),
-                                    row, id);
-        }
-        // TODO: QTY get set to 1 later if field is empty.  Delete this section?
-        else if (strlen (quantity) == 0)
-        {
-            // invalid row (no quantity given)
-            // no fix possible -> delete row
-            valid = gtk_list_store_remove (store, &iter);
-            row_deleted = TRUE;
-            g_string_append_printf (info, _("ROW %d DELETED, QTY_NOT_SET: id=%s\n"),
-                                    row, id);
-        }
-        else
-        {   // TODO: If id is empty get the next one in the series.  Bug 731105
+            g_string_assign (running_id, id);
+            
+            // Validate the invoice id.
             if (strlen (id) == 0)
             {
-                // no invoice id specified
-                if (prev_id->len == 0)
-                {
-                    // cannot fix -> delete row
-                    valid = gtk_list_store_remove (store, &iter);
-                    row_deleted = TRUE;
-                    g_string_append_printf (info,
-                                            _("ROW %d DELETED, ID_NOT_SET\n"), row);
-                }
-                else
-                {
-                    // this is a fixable multi line invoice
-                    gtk_list_store_set (store, &iter, ID, prev_id->str, -1);
-                    row_fixed = TRUE;
-                }
+                valid = gtk_list_store_remove (store, &iter);
+                row_deleted = TRUE;
+                g_string_append_printf (info,
+                                        _("ROW %d DELETED, ID_NOT_SET\n"), row);
             }
-            else
-            {
-                // remember invoice id (to be able to fix multi line invoices)
-                g_string_assign (prev_id, id);
-                // new invoice => reset all other fixable entries
-                g_string_assign (prev_date_opened, "");
-                g_string_assign (prev_date_posted, "");
-                g_string_assign (prev_owner_id, "");
-                g_string_assign (prev_date, "");
-            }
-        }
 
+            // Validate customer or vendor.
+            if (!row_deleted && strlen (owner_id) == 0)
+            {
+                valid = gtk_list_store_remove (store, &iter);
+                row_deleted = TRUE;
+                g_string_append_printf (info,
+                                        _("ROW %d DELETED, OWNER_NOT_SET: id=%s\n"),
+                                        row, id);
+            }
+            // Verify that customer or vendor exists.
+            if (!row_deleted)
+            {
+                if (g_ascii_strcasecmp (type, "BILL") == 0)
+                {
+                    if (!gnc_search_vendor_on_id
+                        (gnc_get_current_book (), owner_id))
+                    {
+                        // Vendor not found.
+                        valid = gtk_list_store_remove (store, &iter);
+                        row_deleted = TRUE;
+                        g_string_append_printf (info,
+                                                _("ROW %d DELETED, VENDOR_DOES_NOT_EXIST: id=%s\n"),
+                                                row, id);
+                    }
+                }
+                else if (g_ascii_strcasecmp (type, "INVOICE") == 0)
+                {
+                    if (!gnc_search_customer_on_id
+                        (gnc_get_current_book (), owner_id))
+                    {
+                        // Customer not found.
+                        valid = gtk_list_store_remove (store, &iter);
+                        row_deleted = TRUE;
+                        g_string_append_printf (info,
+                                                _("ROW %d DELETED, CUSTOMER_DOES_NOT_EXIST: id=%s\n"),
+                                                row, id);
+                    }
+                }
+            }
+            
+            // Verify the date opened.
+            if(!row_deleted && !isDateValid(date_opened))
+            {
+                // Fix this by using the current date.
+                gchar temp[20];
+                GDate date;
+                g_date_clear (&date, 1);
+                gnc_gdate_set_today (&date);
+                g_date_strftime (temp, 20, date_format_string, &date);    // Create a user specified date string.
+                gtk_list_store_set (store, &iter, DATE_OPENED,
+                                    temp, -1);
+                row_fixed = TRUE;
+            }
+
+        }
+        
+        // Validate and fix item data.
         if (!row_deleted)
         {
-            // the row is valid (price and id are valid)
-
-            if(!isDateValid(date_opened))
+            // Validate the price.
+            if (strlen (price) == 0)
             {
-                if (prev_date_opened->len == 0)
-                {
-                    // fix this by using the current date
-                    gchar temp[20];
-                    GDate date;
-                    g_date_clear (&date, 1);
-                    gnc_gdate_set_today (&date);
-                    g_date_strftime (temp, 20, date_format_string, &date);	// Create a user specified date string.
-                    g_string_assign (prev_date_opened, temp);
-                }
-                // fix this by using the previous date_opened value (multi line invoice)
-                gtk_list_store_set (store, &iter, DATE_OPENED,
-                                    prev_date_opened->str, -1);
-                row_fixed = TRUE;
+                // No valid price, delete the row
+                valid = gtk_list_store_remove (store, &iter);
+                row_deleted = TRUE;
+                g_string_append_printf (info,
+                                        _("ROW %d DELETED, PRICE_NOT_SET: id=%s\n"),
+                                        row, id);
             }
-            else
+            
+            // Verify the quantity.
+            if (!row_deleted && strlen (quantity) == 0)
             {
-                // remember date_opened (to be able to fix multi line invoices)
-                g_string_assign (prev_date_opened, date_opened);
-            }
-
-            // date_opened is valid
-
-             if(!isDateValid(date_posted))
-             {
-                if (prev_date_posted->len == 0)
-                {
-                    // this invoice will have to get posted manually
-                }
-                else
-                {
-                    // multi line invoice => fix it
-                    gtk_list_store_set (store, &iter, DATE_POSTED,
-                                        prev_date_posted->str, -1);
-                    row_fixed = TRUE;
-                }
-            }
-            else
-            {
-                // remember date_opened (to be able to fix multi line invoices)
-                g_string_assign (prev_date_posted, date_posted);
-            }
-
-            // date_posted is valid
-            /*
-            // Check if due date is valid.  Set it to date_posted if not valid or missing.
-            if(!isDateValid(due_date))
-            {
-                gtk_list_store_set (store, &iter, DUE_DATE,
-                                        date_posted, -1);
-                row_fixed = TRUE;
-
-            }
-
-            // due_date is valid
-            */
-            if (strlen (quantity) == 0)
-            {
-                // quantity is unset => set to 1
+                // The quantity is not set, default to 1.
                 gtk_list_store_set (store, &iter, QUANTITY, "1", -1);
                 row_fixed = TRUE;
             }
+        }
 
+        if (row_deleted)
+        {
+            (*deleted)++;
+        }
+        else if (row_fixed)
+            (*fixed)++;
 
-            // quantity is valid
+        if (!row_deleted)
+            valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
+        if (valid) gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &id, -1);
 
-            if (strlen (owner_id) == 0)
-            {
-                if (prev_owner_id->len == 0)
-                {
-                    // no customer given and not fixable => delete row
-                    valid = gtk_list_store_remove (store, &iter);
-                    row_deleted = TRUE;
-                    g_string_append_printf (info,
-                                            _("ROW %d DELETED, OWNER_NOT_SET: id=%s\n"),
-                                            row, id);
-                }
-                else
-                {
-                    gtk_list_store_set (store, &iter, owner_id,
-                                        prev_owner_id->str, -1);
-                    row_fixed = TRUE;
-                }
-            }
-            else
-            {
-                // remember owner_id
-                g_string_assign (prev_owner_id, owner_id);
-            }
-            if (g_ascii_strcasecmp (type, "BILL") == 0)
-            {
-                // BILL: check, if vendor exists
-                if (!gnc_search_vendor_on_id
-                        (gnc_get_current_book (), prev_owner_id->str))
-                {
-                    // vendor not found => delete row
-                    valid = gtk_list_store_remove (store, &iter);
-                    row_deleted = TRUE;
-                    g_string_append_printf (info,
-                                            _("ROW %d DELETED, VENDOR_DOES_NOT_EXIST: id=%s\n"),
-                                            row, id);
-                }
-            }
-            else if (g_ascii_strcasecmp (type, "INVOICE") == 0)
-            {
-                // INVOICE: check, if customer exists
-                if (!gnc_search_customer_on_id
-                        (gnc_get_current_book (), prev_owner_id->str))
-                {
-                    // customer not found => delete row
-                    valid = gtk_list_store_remove (store, &iter);
-                    row_deleted = TRUE;
-                    g_string_append_printf (info,
-                                            _("ROW %d DELETED, CUSTOMER_DOES_NOT_EXIST: id=%s\n"),
-                                            row, id);
-                }
-            }
-
-            // owner_id is valid
+        // If the id of the next row is blank, it takes the id of the previous row.
+        if (valid && strlen(id) == 0)
+        {
+            strcpy( id, running_id->str);
+            gtk_list_store_set (store, &iter, ID, id, -1);
+        }
+        
+        // If this row was the last row of the invoice...
+        if (!valid || (valid && g_strcmp0 (id, running_id->str) != 0))
+        {
+            on_first_row_of_invoice = TRUE;
+        }
+        else
+        {
+            // The next row has the same id, so it is not the first row of an invoice.
+            // But if the first row of an invoice was deleted, the next row is again the first row of the invoice.
+            if (!(row_deleted && on_first_row_of_invoice))
+                on_first_row_of_invoice = FALSE;
         }
 
         g_free (id);
@@ -458,37 +400,18 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
         g_free (date);
         g_free (quantity);
         g_free (price);
-        if (row_deleted)
-        {
-            (*deleted)++;
-            // reset all remembered values
-            g_string_assign (prev_id, "");
-            g_string_assign (prev_date_opened, "");
-            g_string_assign (prev_date_posted, "");
-            g_string_assign (prev_owner_id, "");
-            g_string_assign (prev_date, "");
-        }
-        else if (row_fixed)
-            (*fixed)++;
-
-        if (!row_deleted)
-            valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
 
         row++;
     }
-
-    // deallocate strings
-    g_string_free (prev_id, TRUE);
-    g_string_free (prev_date_opened, TRUE);
-    g_string_free (prev_date_posted, TRUE);
-    g_string_free (prev_owner_id, TRUE);
-    g_string_free (prev_date, TRUE);
 
     if (info && (info->len > 0))
     {
         g_string_prepend (info, "\n\n");
         g_string_prepend (info, _("These rows were deleted:"));
     }
+    
+    // Deallocate strings.
+    g_string_free (running_id, TRUE);
 }
 
 
@@ -616,18 +539,10 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                                       gnc_search_customer_on_id (book, owner_id));
             gncInvoiceSetOwner (invoice, owner);
             gncInvoiceSetCurrency (invoice, gncOwnerGetCurrency (owner));	// Set the invoice currency based on the owner
-            if (strlen (date_opened) != 0)	// If a date is specified in CSV
-            {
-                // FIXME: Must check for the return value of qof_scan_date!
-                qof_scan_date (date_opened, &day, &month, &year);
-                gncInvoiceSetDateOpened (invoice,
-                                         gnc_dmy2time64 (day, month, year));
-            }
-            else			// If no date in CSV
-            {
-                time64 now = gnc_time (NULL);
-                gncInvoiceSetDateOpened (invoice, now);
-            }
+
+            qof_scan_date (date_opened, &day, &month, &year);
+            gncInvoiceSetDateOpened (invoice,
+                                     gnc_dmy2time64 (day, month, year));
             gncInvoiceSetBillingID (invoice, billing_id ? billing_id : "");
             notes = un_escape(notes);
             gncInvoiceSetNotes (invoice, notes ? notes : "");
