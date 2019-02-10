@@ -229,7 +229,7 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
 {
     GtkTreeIter iter, first_row_of_invoice;
     gboolean valid, row_fixed, on_first_row_of_invoice, ignore_invoice;
-    gchar *id = NULL, *date_opened = NULL, *date_posted = NULL, *due_date = NULL,
+    gchar *id = NULL, *date_opened = NULL, *date_posted = NULL, *due_date = NULL, *account_posted = NULL,
         *owner_id = NULL, *date = NULL, *account = NULL, *quantity = NULL, *price = NULL;
     GString *running_id;
     Account *acc = NULL;
@@ -266,6 +266,7 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                             DATE_OPENED, &date_opened,
                             DATE_POSTED, &date_posted,
                             DUE_DATE, &due_date,
+                            ACCOUNT_POSTED, &account_posted,
                             OWNER_ID, &owner_id,
                             DATE, &date,
                             ACCOUNT, &account,
@@ -333,6 +334,45 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                     g_string_append_printf (info,
                                             _("Row %d: invoice %s ignored, %s is not a valid posting date.\n"),
                                             row, id, date_posted);
+                }
+                
+                // Validate account posted.
+                // Account should exists, and should be of type A/R for invoices, A/P for bills.
+                if (!ignore_invoice)
+                {
+                    acc = gnc_account_lookup_for_register
+                    (gnc_get_current_root_account (), account_posted);
+                    if (acc == NULL)
+                    {
+                        ignore_invoice = TRUE;
+                        g_string_append_printf (info,
+                                                _("Row %d: invoice %s ignored, account %s does not exist.\n"),
+                                                row, id,account_posted);
+                    }
+                    else
+                    {
+                        if (g_ascii_strcasecmp (type, "BILL") == 0)
+                        {
+                            
+                            if (xaccAccountGetType (acc) != ACCT_TYPE_PAYABLE)
+                            {
+                                ignore_invoice = TRUE;
+                                g_string_append_printf (info,
+                                                        _("Row %d: invoice %s ignored, account %s is not of type Accounts Payable.\n"),
+                                                        row, id, account_posted);
+                            }
+                        }
+                        else if (g_ascii_strcasecmp (type, "INVOICE") == 0)
+                        {
+                            if (xaccAccountGetType (acc) != ACCT_TYPE_RECEIVABLE)
+                            {
+                                ignore_invoice = TRUE;
+                                g_string_append_printf (info,
+                                                        _("Row %d: invoice %s ignored, account %s is not of type Accounts Receivable.\n"),
+                                                        row, id, account_posted);
+                            }
+                        }
+                    }
                 }
                 
                 // Verify the due date.
@@ -442,6 +482,7 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
         g_free (date_opened);
         g_free (date_posted);
         g_free (due_date);
+        g_free (account_posted);
         g_free (owner_id);
         g_free (date);
         g_free (account);
@@ -767,32 +808,24 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                 {
                     acc = gnc_account_lookup_for_register
                           (gnc_get_current_root_account (), account_posted);
-                    if(acc != NULL) // Is the account real?
-                    {                        
-                        // Check if the currencies match
-                        if(gncInvoiceGetCurrency(invoice) == gnc_account_get_currency_or_parent(acc))
-                        {
-                            qof_scan_date (date_posted, &day, &month, &year);
-                            p_date = gnc_dmy2time64 (day, month, year);
-                            qof_scan_date (due_date, &day, &month, &year);
-                            d_date = gnc_dmy2time64 (day, month, year);
-                            gncInvoicePostToAccount (invoice, acc, p_date, d_date,
-                                                 memo_posted,
-                                                 text2bool (accumulatesplits),
-                                                 auto_pay);
-                            PWARN("Invoice %s posted",id);
-                             g_string_append_printf (info, _("Invoice %s posted.\n"),id);
-                        }
-                        else // No match! Don't post it.
-                        {
-                            PWARN("Invoice %s NOT posted because currencies don't match", id);
-                            g_string_append_printf (info,_("Invoice %s NOT posted because currencies don't match.\n"), id);
-                        }
-                    }
-                    else
+                    // Check if the currencies match
+                    if(gncInvoiceGetCurrency(invoice) == gnc_account_get_currency_or_parent(acc))
                     {
-                        PWARN("Cannot post invoice %s because account name \"%s\" is invalid!",id,account_posted);
-                        g_string_append_printf (info,_("Cannot post invoice %s because account name \"%s\" is invalid!\n"),id,account_posted);
+                        qof_scan_date (date_posted, &day, &month, &year);
+                        p_date = gnc_dmy2time64 (day, month, year);
+                        qof_scan_date (due_date, &day, &month, &year);
+                        d_date = gnc_dmy2time64 (day, month, year);
+                        gncInvoicePostToAccount (invoice, acc, p_date, d_date,
+                                             memo_posted,
+                                             text2bool (accumulatesplits),
+                                             auto_pay);
+                        PWARN("Invoice %s posted",id);
+                         g_string_append_printf (info, _("Invoice %s posted.\n"),id);
+                    }
+                    else // No match! Don't post it.
+                    {
+                        PWARN("Invoice %s NOT posted because currencies don't match", id);
+                        g_string_append_printf (info,_("Invoice %s NOT posted because currencies don't match.\n"), id);
                     }
                 }
                 else
