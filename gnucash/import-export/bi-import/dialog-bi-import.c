@@ -513,7 +513,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                           gchar * type, gchar * open_mode, GString * info,
                           GtkWindow *parent)
 {
-    gboolean valid, on_first_row_of_invoice;
+    gboolean valid, on_first_row_of_invoice, invoice_posted;
     GtkTreeIter iter, first_row_of_invoice;
     gchar *id = NULL, *date_opened = NULL, *owner_id = NULL, *billing_id = NULL, *notes = NULL;
     gchar *date = NULL, *desc = NULL, *action = NULL, *account = NULL, *quantity = NULL,
@@ -783,6 +783,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                                 ACCOUNT_POSTED, &account_posted,
                                 MEMO_POSTED, &memo_posted,
                                 ACCU_SPLITS, &accumulatesplits, -1);
+            invoice_posted = FALSE;
 
             if (strlen(date_posted) != 0)
             {
@@ -820,7 +821,8 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                                              text2bool (accumulatesplits),
                                              auto_pay);
                         PWARN("Invoice %s posted",id);
-                         g_string_append_printf (info, _("Invoice %s posted.\n"),id);
+                        invoice_posted = TRUE;
+                        g_string_append_printf (info, _("Invoice %s posted.\n"),id);
                     }
                     else // No match! Don't post it.
                     {
@@ -843,7 +845,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             // open new bill / invoice in a tab, if requested
             if (g_ascii_strcasecmp(open_mode, "ALL") == 0
                     || (g_ascii_strcasecmp(open_mode, "NOT_POSTED") == 0
-                        && strlen(date_posted) == 0))
+                        && !invoice_posted))
             {
                 iw =  gnc_ui_invoice_edit (parent, invoice);
                 gnc_plugin_page_invoice_new (iw);
