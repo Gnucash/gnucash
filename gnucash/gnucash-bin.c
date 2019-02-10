@@ -92,6 +92,7 @@ static const char  *add_quotes_file  = NULL;
 static char        *namespace_regexp = NULL;
 static const char  *file_to_load     = NULL;
 static gchar      **args_remaining   = NULL;
+static     gchar *sys_locale = NULL;
 
 static GOptionEntry options[] =
 {
@@ -619,7 +620,23 @@ inner_main (void *closure, int argc, char **argv)
 
     main_mod = scm_c_resolve_module("gnucash utilities");
     scm_set_current_module(main_mod);
-
+#ifdef __MINGW32__
+    /* Guile initialization calls setlocale(LC_ALL, "") which on
+     * windows resets the locale to what the user has set in the
+     * registry. Put it back to what we set from the environment or
+     * environment file.
+     */
+    if (sys_locale)
+    {
+	setlocale (LC_ALL, sys_locale);
+	g_free (sys_locale);
+	sys_locale = NULL;
+    }
+    else
+    {
+	setlocale (LC_ALL, "C");
+    }
+#endif
     /* Check whether the settings need a version update */
     gnc_gsettings_version_upgrade ();
 
@@ -757,7 +774,6 @@ gnc_log_init()
 int
 main(int argc, char ** argv)
 {
-    gchar *sys_locale = NULL;
 #if !defined(G_THREADS_ENABLED) || defined(G_THREADS_IMPL_NONE)
 #    error "No GLib thread implementation available!"
 #endif
@@ -820,7 +836,11 @@ main(int argc, char ** argv)
      * to avoid unintentionally messing up the locale settings */
     PINFO ("System locale returned %s", sys_locale ? sys_locale : "(null)");
     PINFO ("Effective locale set to %s.", setlocale (LC_ALL, ""));
+#ifndef __MINGW32__
+    /* We need it for later on Windows, see inner_main(). */
     g_free (sys_locale);
+    sys_locale = NULL;
+#endif
 #endif
 
     /* If asked via a command line parameter, fetch quotes only */
