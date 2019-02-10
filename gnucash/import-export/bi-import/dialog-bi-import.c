@@ -321,6 +321,28 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                 }
             }
             
+            if (!ignore_invoice && strlen(date_posted) != 0)
+            {
+                // Validate the date posted.
+                if (!isDateValid(date_posted))
+                {
+                    // Invalid date posted in first row of invoice, ignore the invoice
+                    ignore_invoice = TRUE;
+                    g_string_append_printf (info,
+                                            _("Row %d: invoice %s ignored, %s is not a valid posting date.\n"),
+                                            row, id, date_posted);
+                }
+                
+                // Verify the due date.
+                if (!ignore_invoice && !isDateValid(due_date))
+                {
+                    // Fix this by using the date posted.
+                    gtk_list_store_set (store, &iter, DUE_DATE,
+                                        date_posted, -1);
+                    row_fixed = TRUE;
+                }
+            }
+            
             // Verify the date opened.
             if(!ignore_invoice && !isDateValid(date_opened))
             {
@@ -334,7 +356,6 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                                     temp, -1);
                 row_fixed = TRUE;
             }
-
         }
         
         // Validate the price.
@@ -404,6 +425,7 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
         g_free (id);
         g_free (date_opened);
         g_free (date_posted);
+        g_free (due_date);
         g_free (owner_id);
         g_free (date);
         g_free (quantity);
@@ -726,14 +748,6 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                 // Only auto-post if there's a single currency involved
                 if(curr_count == 0)
                 {
-                    p_date = gnc_dmy2time64 (day, month, year);
-                    // Check for the return value of qof_scan_date
-                    if(qof_scan_date (due_date, &day, &month, &year)) // obtains the due date, or leaves it at date_posted
-                    {	
-                        d_date = gnc_dmy2time64 (day, month, year);
-                    }
-                    else
-                        d_date = p_date;
                     acc = gnc_account_lookup_for_register
                           (gnc_get_current_root_account (), account_posted);
                     if(acc != NULL) // Is the account real?
@@ -741,6 +755,10 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                         // Check if the currencies match
                         if(gncInvoiceGetCurrency(invoice) == gnc_account_get_currency_or_parent(acc))
                         {
+                            qof_scan_date (date_posted, &day, &month, &year);
+                            p_date = gnc_dmy2time64 (day, month, year);
+                            qof_scan_date (due_date, &day, &month, &year);
+                            d_date = gnc_dmy2time64 (day, month, year);
                             gncInvoicePostToAccount (invoice, acc, p_date, d_date,
                                                  memo_posted,
                                                  text2bool (accumulatesplits),
