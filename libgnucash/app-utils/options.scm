@@ -2140,6 +2140,8 @@ the option '~a'."))
       end-cal-year 
       end-prev-year
       end-accounting-period
+      end-book-accounting-period
+      end-book-prev-accounting-period
       ))))
 
 (define (gnc:options-make-date-interval! options pagename name-from info-from
@@ -2160,6 +2162,8 @@ the option '~a'."))
       start-cal-year 
       start-prev-year
       start-accounting-period
+      start-book-accounting-period
+      start-book-prev-accounting-period
       )))
   (gnc:options-make-end-date! options pagename name-to
                               (string-append sort-tag "b") info-to))
