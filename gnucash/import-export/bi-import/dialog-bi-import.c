@@ -230,7 +230,7 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
     GtkTreeIter iter, first_row_of_invoice;
     gboolean valid, row_fixed, on_first_row_of_invoice, ignore_invoice;
     gchar *id = NULL, *date_opened = NULL, *date_posted = NULL, *due_date = NULL, *account_posted = NULL,
-        *owner_id = NULL, *date = NULL, *account = NULL, *quantity = NULL, *price = NULL;
+    *owner_id = NULL, *date = NULL, *account = NULL, *quantity = NULL, *price = NULL;
     GString *running_id;
     Account *acc = NULL;
     guint dummy;
@@ -255,26 +255,23 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
     ignore_invoice = FALSE;
     on_first_row_of_invoice = TRUE;
 
+    // Walk through the list, reading each row.
     valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
     while (valid)
     {
         row_fixed = FALSE;
 
-        // Walk through the list, reading each row
-        gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
-                            ID, &id,
-                            DATE_OPENED, &date_opened,
-                            DATE_POSTED, &date_posted,
-                            DUE_DATE, &due_date,
-                            ACCOUNT_POSTED, &account_posted,
-                            OWNER_ID, &owner_id,
-                            DATE, &date,
-                            ACCOUNT, &account,
-                            QUANTITY, &quantity, PRICE, &price, -1);
-        
         //  If this is a row for a new invoice id, validate header values.
         if (on_first_row_of_invoice)
         {
+            gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
+                                ID, &id,
+                                DATE_OPENED, &date_opened,
+                                DATE_POSTED, &date_posted,
+                                DUE_DATE, &due_date,
+                                ACCOUNT_POSTED, &account_posted,
+                                OWNER_ID, &owner_id, -1);
+            
             g_string_assign (running_id, id);
             first_row_of_invoice = iter;
             
@@ -400,6 +397,16 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
             }
         }
         
+        // Validate and fix item date for each row.
+        
+        // Get item data.
+        gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
+                            DATE, &date,
+                            ACCOUNT, &account,
+                            QUANTITY, &quantity,
+                            PRICE, &price, -1);
+
+        
         // Validate the price.
         if (strlen (price) == 0)
         {
@@ -435,6 +442,16 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
                 gtk_list_store_set (store, &iter, QUANTITY, "1", -1);
                 row_fixed = TRUE;
             }
+            
+            // Verify the item date
+            if(!isDateValid(date))
+            {
+                // Invalid item date, replace with date opened
+                gtk_list_store_set (store, &iter, DATE,
+                                    date_opened, -1);
+                row_fixed = TRUE;
+            }
+
         }
         if (row_fixed) ++fixed_for_invoice;
         
@@ -475,15 +492,16 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
             on_first_row_of_invoice = TRUE;
             (*fixed) += fixed_for_invoice;
             fixed_for_invoice = 0;
+            
+            g_free (id);
+            g_free (date_opened);
+            g_free (date_posted);
+            g_free (due_date);
+            g_free (account_posted);
+            g_free (owner_id);
         }
         else on_first_row_of_invoice = FALSE;
 
-        g_free (id);
-        g_free (date_opened);
-        g_free (date_posted);
-        g_free (due_date);
-        g_free (account_posted);
-        g_free (owner_id);
         g_free (date);
         g_free (account);
         g_free (quantity);
@@ -689,31 +707,19 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         }
 
 
-        // add entry to invoice/bill
+        // Add entry to invoice/bill
         entry = gncEntryCreate (book);
         gncEntryBeginEdit(entry);
         currency = gncInvoiceGetCurrency(invoice);
         if (currency) denom = gnc_commodity_get_fraction(currency);
-        // FIXME: Must check for the return value of qof_scan_date!
         qof_scan_date (date, &day, &month, &year);
         {
             GDate *date = g_date_new_dmy(day, month, year);
             gncEntrySetDateGDate (entry, date);
             g_date_free (date);
         }
-        today = gnc_time (NULL);	// set today to the current date
-        if (strlen (date) != 0)	// If a date is specified in CSV
-        {
-            GDate *date = g_date_new_dmy(day, month, year);
-            gncEntrySetDateGDate(entry, date);
-            gncEntrySetDateEntered(entry, gnc_dmy2time64 (day, month, year));
-        }
-        else
-        {
-            GDate *date = gnc_g_date_new_today();
-            gncEntrySetDateGDate(entry, date);
-            gncEntrySetDateEntered(entry, today);
-        }
+        today = gnc_time (NULL);
+        gncEntrySetDateEntered(entry, today);
         // Remove escaped quotes
         desc = un_escape(desc);
         notes = un_escape(notes);
