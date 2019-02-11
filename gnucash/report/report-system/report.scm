@@ -119,35 +119,16 @@ not found.")))
   ;; set of options, and generates the report. the renderer must
   ;; return as its final value an <html-document> object.
 
-  (define (blank-report)
-    ((record-constructor <report-template>)
-     #f                         ;; version
-     #f                         ;; name
-     #f                         ;; report-guid
-     #f                         ;; parent-type (meaning guid of report-template this template is based on)
-     #f                         ;; options-generator
-     #f                         ;; options-cleanup-cb
-     #f                         ;; options-changed-cb
-     #f                         ;; renderer
-     #t                         ;; in-menu?
-     #f                         ;; menu-path
-     #f                         ;; menu-name
-     #f                         ;; menu-tip
-     #f                         ;; export-types
-     #f                         ;; export-thunk
-     ))
+  (define (args-to-defn)
+    (let loop ((report-rec (make-report-template)) (args args))
+      (cond
+       ((null? args) report-rec)
+       (else
+        (let ((modifier (record-modifier <report-template> (car args))))
+          (modifier report-rec (cadr args))
+          (loop report-rec (cddr args)))))))
 
-  (define (args-to-defn in-report-rec args)
-    (let ((report-rec (or in-report-rec (blank-report))))
-      (if (null? args)
-          report-rec
-          (let ((id (car args))
-                (value (cadr args))
-                (remainder (cddr args)))
-            ((record-modifier <report-template> id) report-rec value)
-            (args-to-defn report-rec remainder)))))
-
-  (let ((report-rec (args-to-defn #f args)))
+  (let ((report-rec (args-to-defn)))
     (if (and report-rec
              ;; only process reports that have a report-guid
              (gnc:report-template-report-guid report-rec))
@@ -228,6 +209,25 @@ not found.")))
   (record-accessor <report-template> 'export-types))
 (define gnc:report-template-export-thunk
   (record-accessor <report-template> 'export-thunk))
+(define (make-report-template)
+  ((record-constructor <report-template>)
+   #f                         ;; version
+   #f                         ;; name
+   #f                         ;; report-guid
+   #f                         ;; parent-type (meaning guid of
+                              ;; report-template this template is
+                              ;; based on)
+   #f                         ;; options-generator
+   #f                         ;; options-cleanup-cb
+   #f                         ;; options-changed-cb
+   #f                         ;; renderer
+   #t                         ;; in-menu?
+   #f                         ;; menu-path
+   #f                         ;; menu-name
+   #f                         ;; menu-tip
+   #f                         ;; export-types
+   #f                         ;; export-thunk
+   ))
 
 (define (gnc:report-template-new-options/report-guid template-id template-name)
   (let ((templ (hash-ref *gnc:_report-templates_* template-id)))
@@ -343,20 +343,22 @@ not found.")))
 (define gnc:report-set-custom-template!
   (record-modifier <report> 'custom-template))
 
+
 ;; gnc:make-report instantiates a report from a report-template.
 ;; The actual report is stored away in a hash-table -- only the id is returned.
 (define (gnc:make-report template-id . rest)
-  (let* ((template-parent (gnc:report-template-parent-type (hash-ref *gnc:_report-templates_* template-id)))
+  (let* ((template-parent (gnc:report-template-parent-type
+                           (hash-ref *gnc:_report-templates_* template-id)))
          (report-type (or template-parent template-id))
          (custom-template (if template-parent template-id ""))
          (r ((record-constructor <report>)
-             report-type ;; type
-             #f            ;; id
-             #f            ;; options
-             #t            ;; dirty
-             #f            ;; needs-save
-             #f            ;; editor-widget
-             #f            ;; ctext
+             report-type     ;; type
+             #f              ;; id
+             #f              ;; options
+             #t              ;; dirty
+             #f              ;; needs-save
+             #f              ;; editor-widget
+             #f              ;; ctext
              custom-template ;; custom-template
              ))
          (template (hash-ref *gnc:_report-templates_* template-id)))
@@ -369,10 +371,8 @@ not found.")))
        (lambda ()
          (gnc:report-set-dirty?! r #t)
          (let ((cb (gnc:report-template-options-changed-cb template)))
-           (if cb
-               (cb r))))
+           (if cb (cb r))))
        options))
-
     (gnc:report-set-id! r (gnc-report-add r))
     (gnc:report-id r)))
 
