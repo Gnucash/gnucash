@@ -26,6 +26,7 @@
  * @brief core import functions for invoice import plugin
  * @author Copyright (C) 2009 Sebastian Held <sebastian.held@gmx.de>
  * @author Mike Evans <mikee@saxicola.co.uk>
+ * @author Rob Laan <rob.laan@chello.nl>
  */
 
 #ifndef GNC_PLUGIN_BI_IMPORT_H

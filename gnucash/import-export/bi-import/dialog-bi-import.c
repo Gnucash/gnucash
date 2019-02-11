@@ -25,9 +25,7 @@
  * @brief core import functions for invoice import plugin
  * @author Copyright (C) 2009 Sebastian Held <sebastian.held@gmx.de>
  * @author Mike Evans <mikee@saxicola.co.uk>
- * @todo Create an option to import a pre-formed regex when it is present
- * to enable the use of custom output csv formats.
- * @todo Open the newly created invoice(es).
+ * @author Rob Laan <rob.laan@chello.nl>
  */
 
 #ifdef HAVE_CONFIG_H
@@ -75,6 +73,27 @@
 
 static QofLogModule log_module = G_LOG_DOMAIN; //G_LOG_BUSINESS;
 static char * un_escape(char *str);
+
+/** \brief Imports a csv file with invoice data into a GtkListStore.
+ 
+ Opens the csv file and attempts to match each row with the regular
+ expression provided in parser_regexp. This is a regular expression
+ that matches each field of the import row and the user selected field
+ separators (, or ;), optionally with the fields enclosed in quotes.
+ 
+ If the match is succesful, the fields of the import row are transferred to
+ a row in the GtkListStore store. If the the match is not succesful, the
+ row is ignored. Maintains information about number of rows imported,
+ the number of rows ignored, and the actual ignored rows.
+ 
+ @param filename      The csv filename to read
+ @param parser_regexp The regular expression with which to match the import rows
+ @param store         To store the matched data
+ @param max_rows      The maximum number of rows to import; use 0 for no maximum.
+ @param stats         Return information about matched and non-matched rows. Use NULL if the information is not required.
+ 
+ */
+
 bi_import_result
 gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
                          GtkListStore * store, guint max_rows,
@@ -217,12 +236,36 @@ gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
 }
 
 
-//! \brief try to fix some common errors in the csv representation of invoices
-//! * corrects the date format
-//! * corrects ambiguous values in multi line invoices
-//! * ensures customer exists
-//! * if quantity is unset, set to 1
-//! * if price is unset, delete row.
+/** \brief Adjusts and validates invoice import data.
+ 
+ Replaces missing or invalid data with defaults:
+ - if quantity is not set, default to 1
+ - if date_opened is not set or invalid, default to today
+ - if date is not set or invalid, default to date_opened
+ - if due date is not set or invalid, default to date_posted
+ 
+ Validates the import data; any error causes all rows of the same invoice
+ to be deleted from the import data:
+ - id is not set
+ - owner_id is not set, or customer/vendor does not exist
+ - date_posted is not valid
+ - account_posted does not exist
+ - account posted is not the applicable type, A/P or A/R
+ - price is not set
+ - account does not exist
+ 
+ Adjustment and validation for header fields is only done for the first row of an invoice,
+ which is assumed to hold the header data for all items of the same invoice.
+ Currency related validation is done in subsqequent processing by gnc_bi_import_create_bis.
+ 
+ @param store Holds the rows of invoice import data
+ @param n_rows_fixed Increased for every data row that is adjusted in this function
+ @param n_rows_ignored Increased for every data row that is deleted in this function
+ @param info Updated with the error messages from this function
+ @param type The type of the import data, BILL or INVOICE
+ 
+ */
+
 void
 gnc_bi_import_fix_bis (GtkListStore * store, guint * n_rows_fixed, guint * n_rows_ignored,
                        GString * info, gchar *type)
@@ -236,9 +279,6 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * n_rows_fixed, guint * n_row
     guint dummy;
     gint row = 1, fixed_for_invoice = 0;
     const gchar* date_format_string = qof_date_format_get_string (qof_date_format_get()); // Get the user set date format string
-
-
-    //date_format_string = qof_date_format_get_string (qof_date_format_get());
 
     DEBUG("date_format_string: %s",date_format_string);
     // allow the call to this function with only GtkListeStore* specified
@@ -518,14 +558,27 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * n_rows_fixed, guint * n_row
 }
 
 
-/***********************************************************************
- * @todo Maybe invoice checking should be done in gnc_bi_import_fix_bis (...)
- * rather than in here?  But that is more concerned with ensuring the csv is consistent.
- * @param GtkListStore *store
- * @param guint *n_invoices_created
- * @param guint *n_invoices_updated
- * @return void
- ***********************************************************************/
+/** \brief Creates and updates invoices from validated import data.
+ 
+ Loops through the import data to create and update invoices.
+ The first data row for an invoice is assumed to hold the header data.
+ 
+ If an invoice already exists, the user is asked, once per import,
+ to confirm that invoices should be updated.
+ If not confirmed, any rows for existing invoices are ignored.
+ If confirmed, entries are added to existing invoices.
+ Posted invoices, however, are never updated.
+ 
+ If the field date_posted is set, the system will
+ attempt to also post the invoice. The system will not
+ post the invoice if the entries of the invoice hold different currencies,
+ or if the currency of the invoice differs from the currency of the account_posted.
+ 
+ As per user selection, the system displays tabs for either all affected invoices,
+ all affected invoices not yet posted, or no invoices at all.
+ 
+ */
+
 void
 gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                           guint * n_invoices_created,
@@ -605,14 +658,6 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                             TAXABLE, &taxable,
                             TAXINCLUDED, &taxincluded,
                             TAX_TABLE, &tax_table, -1);
-
-        // TODO:  Assign a new invoice number if one is absent.  BUT we don't want to assign a new invoice for every line!!
-        // so we'd have to flag this up somehow or add an option in the import GUI.  The former implies that we make
-        // an assumption about what the importer (person) wants to do.  It seems reasonable that a CSV file full of items with
-        // If an invoice exists then we add to it in this current schema.
-        // no predefined invoice number is a new invoice that's in need of a new number.
-        // This was  not designed to satisfy the need for repeat invoices however, so maybe we need a another method for this, after all
-        // It should be easier to copy an invoice with a new ID than to go through all this malarky.
         
         if (on_first_row_of_invoice)
         {
@@ -730,7 +775,6 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
         gnc_exp_parser_parse (quantity, &value, NULL);
         // Need to set the denom appropriately else we get stupid rounding errors.
         value = gnc_numeric_convert (value, denom * 100, GNC_HOW_RND_NEVER);
-        //DEBUG("qty = %s",gnc_num_dbg_to_string(value));
         gncEntrySetQuantity (entry, value);
         acc = gnc_account_lookup_for_register (gnc_get_current_root_account (),
                                                account);
@@ -754,7 +798,6 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
             value = gnc_numeric_zero();
             gnc_exp_parser_parse (price, &value, NULL);
             value = gnc_numeric_convert (value, denom * 100, GNC_HOW_RND_NEVER);
-            //DEBUG("price = %s",gnc_num_dbg_to_string(value));
             gncEntrySetInvPrice (entry, value);
             gncEntrySetInvTaxable (entry, text2bool (taxable));
             gncEntrySetInvTaxIncluded (entry, text2bool (taxincluded));
