@@ -216,12 +216,13 @@ gnc_bi_import_gui_ok_cb (GtkWidget *widget, gpointer data)
     if (res == RESULT_OK)
     {
         gnc_bi_import_fix_bis (gui->store, &n_fixed, &n_deleted, info, gui->type);
-        gnc_bi_import_create_bis (gui->store, gui->book, &n_invoices_created, &n_invoices_updated,
+        gnc_bi_import_create_bis (gui->store, gui->book, &n_invoices_created, &n_invoices_updated, &n_deleted,
                                   gui->type, gui->open_mode, info, gui->parent);
         if (info->len > 0)
             gnc_info_dialog (GTK_WINDOW (gui->dialog), "%s", info->str);
         g_string_free( info, TRUE );
-        gnc_info_dialog (GTK_WINDOW (gui->dialog), _("Import results:\n%i lines were ignored\n%i lines imported:\n   %u fixes\n   %u ignored (not fixable)\n\n   %u created\n   %u updated (based on id)"), stats.n_ignored, stats.n_imported, n_fixed, n_deleted, n_invoices_created, n_invoices_updated);
+        gnc_info_dialog (GTK_WINDOW (gui->dialog), _("Import:\n- rows ignored: %i\n- rows imported: %i\n\nValidation & processing:\n- rows fixed: %u\n- rows ignored: %u\n- invoices created: %u\n- invoices updated: %u"),
+                         stats.n_ignored, stats.n_imported, n_fixed, n_deleted, n_invoices_created, n_invoices_updated);
         if (stats.n_ignored > 0)
             gnc_info2_dialog (gui->dialog, _("These lines were ignored during import"), stats.ignored_lines->str);
 

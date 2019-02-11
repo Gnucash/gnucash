@@ -224,7 +224,7 @@ gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
 //! * if quantity is unset, set to 1
 //! * if price is unset, delete row.
 void
-gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
+gnc_bi_import_fix_bis (GtkListStore * store, guint * n_rows_fixed, guint * n_rows_ignored,
                        GString * info, gchar *type)
 {
     GtkTreeIter iter, first_row_of_invoice;
@@ -242,18 +242,20 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
 
     DEBUG("date_format_string: %s",date_format_string);
     // allow the call to this function with only GtkListeStore* specified
-    if (!fixed)
-        fixed = &dummy;
-    if (!deleted)
-        deleted = &dummy;
+    if (!n_rows_fixed)
+        n_rows_fixed = &dummy;
+    if (!n_rows_ignored)
+        n_rows_ignored = &dummy;
 
-    *fixed = 0;
-    *deleted = 0;
+    *n_rows_fixed = 0;
+    *n_rows_ignored = 0;
     
     // Init control variables
     running_id = g_string_new("");
     ignore_invoice = FALSE;
     on_first_row_of_invoice = TRUE;
+    
+    g_string_append_printf (info, _("Validation...\n") );
 
     // Walk through the list, reading each row.
     valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
@@ -463,7 +465,7 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
             iter = first_row_of_invoice;
             while (valid && g_strcmp0 (id, running_id->str) == 0)
             {
-                (*deleted)++;
+                (*n_rows_ignored)++;
                 valid = gtk_list_store_remove (store, &iter);
                 if (valid) gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &id, -1);
             }
@@ -490,8 +492,9 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
         if (!valid || (valid && g_strcmp0 (id, running_id->str) != 0))
         {
             on_first_row_of_invoice = TRUE;
-            (*fixed) += fixed_for_invoice;
+            (*n_rows_fixed) += fixed_for_invoice;
             fixed_for_invoice = 0;
+            
             g_free (id);
             g_free (date_opened);
             g_free (date_posted);
@@ -500,7 +503,7 @@ gnc_bi_import_fix_bis (GtkListStore * store, guint * fixed, guint * deleted,
             g_free (owner_id);
         }
         else on_first_row_of_invoice = FALSE;
-
+        
         g_free (date);
         g_free (account);
         g_free (quantity);
@@ -527,6 +530,7 @@ void
 gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                           guint * n_invoices_created,
                           guint * n_invoices_updated,
+                          guint * n_rows_ignored,
                           gchar * type, gchar * open_mode, GString * info,
                           GtkWindow *parent)
 {
@@ -571,6 +575,8 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
     update = NOT_ASKED;
     on_first_row_of_invoice = TRUE;
     running_id = g_string_new("");
+    
+    g_string_append_printf (info, _("\nProcessing...\n") );
     
     valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
     while (valid)
@@ -673,6 +679,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                     g_string_append_printf (info,_("Invoice %s not updated because it already exists.\n"),id);
                     while (valid && g_strcmp0 (id, running_id->str) == 0)
                     {
+                        (*n_rows_ignored)++;
                         valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
                         if (valid)
                             gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &id, -1);
@@ -687,6 +694,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                     g_string_append_printf (info,_("Invoice %s not updated because it is already posted.\n"),id);
                     while (valid && g_strcmp0 (id, running_id->str) == 0)
                     {
+                        (*n_rows_ignored)++;
                         valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter);
                         if (valid)
                             gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, ID, &id, -1);
@@ -849,11 +857,15 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                 iw =  gnc_ui_invoice_edit (parent, invoice);
                 gnc_plugin_page_invoice_new (iw);
             }
-            
+        
             // The next row will be for a new invoice.
             on_first_row_of_invoice = TRUE;
         }
     }
+    
+    if (*n_invoices_updated + *n_invoices_created == 0)
+        g_string_append_printf (info, _("Nothing to process.\n"));
+    
     // cleanup
     g_free (id);
     g_free (date_opened);
