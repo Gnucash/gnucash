@@ -62,10 +62,13 @@ gnc_get_locale()
 #else
 	  char* locale = g_strdup(setlocale(LC_ALL, ""));
 #endif
-	  std::string c_locale(locale);
-	  std::cerr << "[gnc_get_locale] Failed to create app-default locale from " << c_locale << " because " << err.what() << "\n";
-	      std::cerr << "[gnc_get_locale] Using the 'C' locale for C++\n";
+
+	  g_log(G_LOG_DOMAIN, G_LOG_LEVEL_WARNING,
+		"Failed to create C++ default locale from"
+		"%s because %s. Using the 'C' locale for C++.",
+		locale, err.what());
 	  g_free(locale);
+	  cached = std::locale::classic();
       }
   }
   return cached;
