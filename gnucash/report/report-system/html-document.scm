@@ -109,19 +109,17 @@
 
 (define (gnc:html-document-tree-collapse tree)
   (let ((retval '()))
-    (define (do-list list)
+    (let loop ((lst tree))
       (for-each
        (lambda (elt)
-         (if (string? elt)
-             (set! retval (cons elt retval))
-             (if (not (list? elt))
-                 (set! retval
-                       (cons (with-output-to-string
-                               (lambda () (display elt)))
-                             retval))
-                 (do-list elt))))
-       list))
-    (do-list tree)
+         (cond
+          ((string? elt)
+           (set! retval (cons elt retval)))
+          ((not (list? elt))
+           (set! retval (cons (object->string elt) retval)))
+          (else
+           (loop elt))))
+       lst))
     retval))
 
 ;; first optional argument is "headers?"
@@ -247,10 +245,7 @@
 
 (define (gnc:html-document-markup-start doc markup end-tag? . rest)
   (let ((childinfo (gnc:html-document-fetch-markup-style doc markup))
-        (extra-attrib
-         (if (not (null? rest))
-             rest #f))
-        (show-result #f))
+        (extra-attrib (and (pair? rest) rest)))
     ;; now generate the start tag
     (let ((tag   (gnc:html-markup-style-info-tag childinfo))
           (attr  (gnc:html-markup-style-info-attributes childinfo))
@@ -343,21 +338,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (gnc:html-document-render-data doc data)
-  (let ((style-info #f)
-        (data-type #f))
-    (cond
-     ((number? data)
-      (set! data-type "<number>"))
-     ((string? data)
-      (set! data-type "<string>"))
-     ((boolean? data)
-      (set! data-type "<boolean>"))
-     ((record? data)
-      (set! data-type (record-type-name (record-type-descriptor data))))
-     (#t
-      (set! data-type "<generic>")))
-
-    (set! style-info (gnc:html-document-fetch-data-style doc data-type))
+  (let* ((data-type (cond
+                     ((number? data) "<number>")
+                     ((string? data) "<string>")
+                     ((boolean? data) "<boolean>")
+                     ((record? data) (record-type-name
+                                      (record-type-descriptor data)))
+                     (else "<generic>")))
+         (style-info (gnc:html-document-fetch-data-style doc data-type)))
 
     ((gnc:html-data-style-info-renderer style-info)
      data (gnc:html-data-style-info-data style-info))))
@@ -380,51 +368,47 @@
   (record-constructor <html-object>))
 
 (define (gnc:make-html-object obj)
-  (let ((o #f))
-    (if (not (record? obj))
-        ;; for literals (strings/numbers)
-        (set! o
-              (gnc:make-html-object-internal
-               (lambda (obj doc)
-                 (gnc:html-document-render-data doc obj))
-               ;; if the object is #f, make it a placeholder
-               (if obj obj " ")))
-        (cond 
-         ((gnc:html-text? obj)
-          (set! o (gnc:make-html-object-internal
-                   gnc:html-text-render obj)))
-         ((gnc:html-table? obj)
-          (set! o (gnc:make-html-object-internal
-                   gnc:html-table-render obj)))
-         ((gnc:html-anytag? obj)
-          (set! o (gnc:make-html-object-internal
-                   gnc:html-anytag-render obj)))
-         ((gnc:html-table-cell? obj)
-          (set! o (gnc:make-html-object-internal
-                   gnc:html-table-cell-render obj)))
-         ((gnc:html-barchart? obj)
-          (set! o (gnc:make-html-object-internal
-                   gnc:html-barchart-render obj)))
-         ((gnc:html-piechart? obj)
-          (set! o (gnc:make-html-object-internal
-                   gnc:html-piechart-render obj)))
-         ((gnc:html-scatter? obj)
-          (set! o (gnc:make-html-object-internal
-                   gnc:html-scatter-render obj)))
-         ((gnc:html-linechart? obj)
-          (set! o (gnc:make-html-object-internal
-                   gnc:html-linechart-render obj)))
-         ((gnc:html-object? obj)
-          (set! o obj))
+  (cond
+   ((not (record? obj))
+    ;; for literals (strings/numbers)
+    ;; if the object is #f, make it a placeholder
+    (gnc:make-html-object-internal
+     (lambda (obj doc)
+       (gnc:html-document-render-data doc obj))
+     (or obj " ")))
 
-         ;; other record types that aren't HTML objects
-         (#t
-          (set! o
-                (gnc:make-html-object-internal
-                 (lambda (obj doc)
-                   (gnc:html-document-render-data doc obj))
-                 obj)))))
-    o))
+   ((gnc:html-text? obj)
+    (gnc:make-html-object-internal gnc:html-text-render obj))
+
+   ((gnc:html-table? obj)
+    (gnc:make-html-object-internal gnc:html-table-render obj))
+
+   ((gnc:html-anytag? obj)
+    (gnc:make-html-object-internal gnc:html-anytag-render obj))
+
+   ((gnc:html-table-cell? obj)
+    (gnc:make-html-object-internal gnc:html-table-cell-render obj))
+
+   ((gnc:html-barchart? obj)
+    (gnc:make-html-object-internal gnc:html-barchart-render obj))
+
+   ((gnc:html-piechart? obj)
+    (gnc:make-html-object-internal gnc:html-piechart-render obj))
+
+   ((gnc:html-scatter? obj)
+    (gnc:make-html-object-internal gnc:html-scatter-render obj))
+
+   ((gnc:html-linechart? obj)
+    (gnc:make-html-object-internal gnc:html-linechart-render obj))
+
+   ((gnc:html-object? obj)
+    obj)
+
+   ;; other record types that aren't HTML
+   (else
+    (gnc:make-html-object-internal
+     (lambda (obj doc)
+       (gnc:html-document-render-data doc obj)) obj))))
 
 (define gnc:html-object-renderer
   (record-accessor <html-object> 'renderer))
