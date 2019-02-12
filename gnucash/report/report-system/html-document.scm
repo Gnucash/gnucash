@@ -146,25 +146,24 @@
           ;; push it
           (gnc:html-document-push-style doc (gnc:html-document-style doc))
           (gnc:report-render-starting (gnc:html-document-title doc))
-          (if headers?
-              (begin
-                ;;This is the only place where <html> appears
-                ;;with the exception of 2 reports:
-                ;;./share/gnucash/scm/gnucash/report/taxinvoice.eguile.scm:<html>
-                ;;./share/gnucash/scm/gnucash/report/balsheet-eg.eguile.scm:<html>
+          (when headers?
+            ;;This is the only place where <html> appears
+            ;;with the exception of 2 reports:
+            ;;./share/gnucash/scm/gnucash/report/taxinvoice.eguile.scm:<html>
+            ;;./share/gnucash/scm/gnucash/report/balsheet-eg.eguile.scm:<html>
 
-                (push "<html>\n")
-                (push "<head>\n")
-                (push "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n")
-                (if style-text
-                    (push (list "</style>" style-text "<style type=\"text/css\">\n")))
-                (if (not (string-null? title))
-                    (push (list "</title>" title "<title>\n")))
-                (push "</head>")))
-                
-          ;; this lovely little number just makes sure that <body>
-          ;; attributes like bgcolor get included
-          (push ((gnc:html-markup/open-tag-only "body") doc))
+            (push "<html>\n")
+            (push "<head>\n")
+            (push "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n")
+            (if style-text
+                (push (list "</style>" style-text "<style type=\"text/css\">\n")))
+            (if (not (string-null? title))
+                (push (list "</title>" title "<title>\n")))
+            (push "</head>")
+
+            ;; this lovely little number just makes sure that <body>
+            ;; attributes like bgcolor get included
+            (push ((gnc:html-markup/open-tag-only "body") doc)))
 
           ;; now render the children
           (for-each
@@ -174,10 +173,9 @@
                (gnc:report-percent-done (* 100 (/ work-done work-to-do))))
            objs)
 
-          (push "</body>\n")
-
-          (if headers?
-                (push "</html>\n"))
+          (when headers?
+            (push "</body>\n")
+            (push "</html>\n"))
 
           (gnc:report-finished)
           (gnc:html-document-pop-style doc)

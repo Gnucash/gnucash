@@ -26,8 +26,7 @@
 <meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n\
 </head><body>")
 
-(define html-doc-no-header-empty-body
-"<body></body>\n")
+(define html-doc-no-header-empty-body "")
 
 (define html-doc-tail
 "</body>\n\
