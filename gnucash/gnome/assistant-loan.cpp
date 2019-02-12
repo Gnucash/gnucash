@@ -47,6 +47,9 @@ extern "C"
 #include "gnc-ui-util.h"
 #include "gnc-frequency.h"
 #include "gnc-engine.h"
+#ifdef __MINGW32__
+#include <Windows.h>
+#endif
 }
 
 #include <gnc-locale-utils.hpp>
@@ -54,6 +57,9 @@ extern "C"
 #include <string>
 #include <sstream>
 #include <iomanip>
+#ifdef __MINGW32__
+#include <codecvt>
+#endif
 
 namespace bl = boost::locale;
 
@@ -2321,11 +2327,50 @@ struct cust_prec_punct : std::moneypunct_byname<wchar_t, false> {
 template<int prec>
 std::string to_str_with_prec (const gdouble val)
 {
+#ifdef __MINGW32__
+    NUMBERFMTW numfmt;
+    LCID lcid = GetThreadLocale();
+    DWORD numval;
+
+    numfmt.NumDigits = prec;
+    GetLocaleInfoW(lcid, LOCALE_RETURN_NUMBER|LOCALE_ILZERO, (LPWSTR)&numval,
+		   sizeof(numval)/sizeof(wchar_t));
+    numfmt.LeadingZero = numval;
+    wchar_t grouping[10];
+    GetLocaleInfoW(lcid, LOCALE_SGROUPING, grouping,
+		   sizeof(grouping)/sizeof(wchar_t));
+    auto semi = wcschr(grouping, ';');
+    *semi = 0;
+    numfmt.Grouping = _wtoi(grouping);
+    wchar_t decsep[4];
+    GetLocaleInfoW(lcid, LOCALE_SDECIMAL, decsep,
+		   sizeof(decsep)/sizeof(wchar_t) );
+    numfmt.lpDecimalSep = decsep;
+    wchar_t thousep[4];
+    GetLocaleInfoW(lcid, LOCALE_STHOUSAND, thousep,
+		   sizeof(thousep)/sizeof(wchar_t));
+    numfmt.lpThousandSep = thousep;
+    GetLocaleInfoW(lcid, LOCALE_RETURN_NUMBER|LOCALE_INEGNUMBER,
+		   (LPWSTR)&numval, sizeof(numval)/sizeof(wchar_t));
+    numfmt.NegativeOrder = numval;
+//Can't use std::to_wstring, it localizes with a C function.
+    std::wstringstream valstr;
+    valstr << val;
+    int size = GetNumberFormatW(lcid, 0, valstr.str().c_str(),
+				  &numfmt, nullptr, 0);
+    wchar_t* buf = static_cast<wchar_t*>(malloc(sizeof(wchar_t) * size));
+    GetNumberFormatW(lcid, 0, valstr.str().c_str(), &numfmt, buf, size);
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> conv;
+    std::string result = conv.to_bytes(buf);
+    free(buf);
+    return result;
+#else
     auto loc = std::locale(gnc_get_locale(), new cust_prec_punct<prec>(""));
     std::wstringstream valstr;
     valstr.imbue(loc);
     valstr << std::put_money(val * pow(10, prec));
     return utf_to_utf<char>(valstr.str());
+#endif
 }
 
 static
@@ -2365,7 +2410,6 @@ loan_get_formula_internal( LoanAssistantData *ldd, GString *gstr, const gchar *t
         period_rate = ldd->ld.interestRate / 100;
         break;
     }
-
     auto period_rate_str = to_str_with_prec<5> (period_rate);
     auto period_base_str = to_str_with_prec<2> (12.0);
     auto periods_str = to_str_with_prec<2> (periods);
@@ -2381,7 +2425,7 @@ loan_get_formula_internal( LoanAssistantData *ldd, GString *gstr, const gchar *t
     // for gnucash. So I stuck with bl::format, which is.
     auto formula = (bl::format (tpl) % period_rate_str %
                     period_base_str % periods_str % principal_str).str();
-        g_string_append (gstr, formula.c_str());
+    g_string_append (gstr, formula.c_str());
 }
 
 static
