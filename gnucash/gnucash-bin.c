@@ -55,6 +55,9 @@
 #include "gnc-session.h"
 #include "engine-helpers-guile.h"
 #include "swig-runtime.h"
+#ifdef __MINGW32__
+#include <Windows.h>
+#endif
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -771,6 +774,35 @@ gnc_log_init()
     }
 }
 
+#ifdef __MINGW32__
+/* Set the Win32 internal localization for the main thread if the
+ * locale has been overridden in the environment. Note that this is
+ * separate from what setlocale() does; that only affects POSIX
+ * functions and does *not* set the Windows locale.
+ */
+static void
+set_win32_thread_locale()
+{
+    gunichar2* wlocale = NULL;
+    char *locale = NULL;
+    int len = 0;
+    if (((locale = getenv ("LC_ALL")) == NULL || locale[0] == '\0')
+      && ((locale = getenv ("LC_MESSAGES")) == NULL || locale[0] == '\0')
+      && ((locale = getenv ("LANG")) == NULL || locale[0] == '\0'))
+	return;
+    len = strchr(locale, '.') - locale;
+    locale[2] = '-';
+    wlocale = g_utf8_to_utf16 (locale, len, NULL, NULL, NULL);
+    if (IsValidLocaleName(wlocale))
+    {
+	LCID lcid = LocaleNameToLCID(wlocale, LOCALE_ALLOW_NEUTRAL_NAMES);
+	SetThreadLocale(lcid);
+    }
+    g_free(locale);
+    g_free(wlocale);
+}
+#endif
+
 int
 main(int argc, char ** argv)
 {
@@ -798,6 +830,9 @@ main(int argc, char ** argv)
     gnc_environment_setup();
 #ifndef MAC_INTEGRATION /* setlocale already done */
     sys_locale = g_strdup (setlocale (LC_ALL, ""));
+#ifdef __MINGW32__
+    set_win32_thread_locale();
+#endif
     if (!sys_locale)
       {
         g_print ("The locale defined in the environment isn't supported. "
