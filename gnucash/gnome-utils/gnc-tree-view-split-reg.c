@@ -1512,7 +1512,7 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
         /* Is this a template */
         if (is_template && is_trow1)
         {
-            strncpy (datebuff,  _(" Scheduled "), sizeof(datebuff));
+            strncpy (datebuff,  _(" Scheduled "), sizeof(datebuff)-1);
             editable = FALSE;
         }
         else if (is_template && is_trow2 && show_extra_dates)
