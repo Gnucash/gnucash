@@ -71,10 +71,8 @@ static Account *main_window_to_account(GncMainWindow *window);
 static void gnc_plugin_ab_cmd_setup(GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_ab_cmd_get_balance(GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_ab_cmd_get_transactions(GtkAction *action, GncMainWindowActionData *data);
-static void gnc_plugin_ab_cmd_issue_transaction(GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_ab_cmd_issue_sepatransaction(GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_ab_cmd_issue_inttransaction(GtkAction *action, GncMainWindowActionData *data);
-static void gnc_plugin_ab_cmd_issue_direct_debit(GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_ab_cmd_issue_sepa_direct_debit(GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_ab_cmd_view_logwindow(GtkToggleAction *action, GncMainWindow *window);
 static void gnc_plugin_ab_cmd_mt940_import(GtkAction *action, GncMainWindowActionData *data);
@@ -110,11 +108,6 @@ static GtkActionEntry gnc_plugin_actions [] =
         G_CALLBACK(gnc_plugin_ab_cmd_get_transactions)
     },
     {
-        "ABIssueTransAction", NULL, N_("_Issue Transaction..."), NULL,
-        N_("Issue a new transaction online through Online Banking"),
-        G_CALLBACK(gnc_plugin_ab_cmd_issue_transaction)
-    },
-    {
         "ABIssueSepaTransAction", NULL,
 		/* Translators: https://en.wikipedia.org/wiki/Single_Euro_Payments_Area */
 		N_("_Issue SEPA Transaction..."), NULL,
@@ -125,11 +118,6 @@ static GtkActionEntry gnc_plugin_actions [] =
         "ABIssueIntTransAction", NULL, N_("I_nternal Transaction..."), NULL,
         N_("Issue a new bank-internal transaction online through Online Banking"),
         G_CALLBACK(gnc_plugin_ab_cmd_issue_inttransaction)
-    },
-    {
-        "ABIssueDirectDebitAction", NULL, N_("_Direct Debit..."), NULL,
-        N_("Issue a new direct debit note online through Online Banking"),
-        G_CALLBACK(gnc_plugin_ab_cmd_issue_direct_debit)
     },
     {
         "ABIssueSepaDirectDebitAction", NULL, N_("_Issue SEPA Direct Debit..."), NULL,
@@ -190,10 +178,8 @@ static const gchar *need_account_actions[] =
 {
     "ABGetBalanceAction",
     "ABGetTransAction",
-    "ABIssueTransAction",
     "ABIssueSepaTransAction",
     "ABIssueIntTransAction",
-    "ABIssueDirectDebitAction",
     "ABIssueSepaDirectDebitAction",
     NULL
 };
@@ -543,27 +529,6 @@ gnc_plugin_ab_cmd_get_transactions(GtkAction *action,
 }
 
 static void
-gnc_plugin_ab_cmd_issue_transaction(GtkAction *action,
-                                    GncMainWindowActionData *data)
-{
-    Account *account;
-
-    ENTER("action %p, main window data %p", action, data);
-    account = main_window_to_account(data->window);
-    if (account == NULL)
-    {
-        g_message("No AqBanking account selected");
-        LEAVE("no account");
-        return;
-    }
-
-    gnc_main_window = data->window;
-    gnc_ab_maketrans(GTK_WIDGET(data->window), account, SINGLE_TRANSFER);
-
-    LEAVE(" ");
-}
-
-static void
 gnc_plugin_ab_cmd_issue_sepatransaction(GtkAction *action,
                                     GncMainWindowActionData *data)
 {
@@ -602,27 +567,6 @@ gnc_plugin_ab_cmd_issue_inttransaction(GtkAction *action,
     gnc_main_window = data->window;
     gnc_ab_maketrans(GTK_WIDGET(data->window), account,
                      SINGLE_INTERNAL_TRANSFER);
-
-    LEAVE(" ");
-}
-
-static void
-gnc_plugin_ab_cmd_issue_direct_debit(GtkAction *action,
-                                     GncMainWindowActionData *data)
-{
-    Account *account;
-
-    ENTER("action %p, main window data %p", action, data);
-    account = main_window_to_account(data->window);
-    if (account == NULL)
-    {
-        g_message("No AqBanking account selected");
-        LEAVE("no account");
-        return;
-    }
-
-    gnc_main_window = data->window;
-    gnc_ab_maketrans(GTK_WIDGET(data->window), account, SINGLE_DEBITNOTE);
 
     LEAVE(" ");
 }

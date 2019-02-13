@@ -32,9 +32,6 @@
 #include <config.h>
 
 #include <glib/gi18n.h>
-#if HAVE_KTOBLZCHECK_H
-#    include <ktoblzcheck.h>
-#endif
 #include <aqbanking/jobsingletransfer.h>
 #include <aqbanking/jobsingledebitnote.h>
 #include <aqbanking/jobinternaltransfer.h>
@@ -72,11 +69,10 @@ static AB_TRANSACTION *gnc_ab_trans_dialog_fill_values(GncABTransDialog *td);
 static AB_JOB *gnc_ab_trans_dialog_get_available_empty_job(AB_ACCOUNT *ab_acc,
         GncABTransType trans_type);
 
-static void gnc_ab_trans_dialog_check_ktoblzcheck(const GncABTransDialog *td,
+static void gnc_ab_trans_dialog_check_iban(const GncABTransDialog *td,
         const AB_TRANSACTION *trans);
 
 /* Callbacks - connected with GtkBuilder */
-G_MODULE_EXPORT void gnc_ab_trans_dialog_bankcode_changed_cb(GtkEditable *editable, gpointer user_data);
 G_MODULE_EXPORT void gnc_ab_trans_dialog_add_templ_cb(GtkButton *button, gpointer user_data);
 G_MODULE_EXPORT void gnc_ab_trans_dialog_moveup_templ_cb(GtkButton *button, gpointer user_data);
 G_MODULE_EXPORT void gnc_ab_trans_dialog_movedown_templ_cb(GtkButton *button, gpointer user_data);
@@ -151,11 +147,6 @@ struct _GncABTransDialog
 
     /* The gnucash transaction that got created here */
     Transaction *gnc_trans;
-
-#if HAVE_KTOBLZCHECK_H
-    /* object for Account number checking */
-    AccountNumberCheck *blzcheck;
-#endif
 };
 
 gboolean gnc_ab_trans_isSEPA(GncABTransType t)
@@ -298,10 +289,6 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
     td->ab_acc = ab_acc;
     td->trans_type = trans_type;
 
-#if HAVE_KTOBLZCHECK_H
-    td->blzcheck = AccountNumberCheck_new();
-#endif
-
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-ab.glade", "aqbanking_transaction_dialog");
     td->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "aqbanking_transaction_dialog"));
@@ -381,22 +368,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
         break;
 
     case SINGLE_DEBITNOTE:
-        gtk_label_set_text(GTK_LABEL (heading_label),
-                           _("Enter an Online Direct Debit Note"));
-
-        gtk_label_set_text(GTK_LABEL(recp_name_heading),
-                           _("Debited Account Owner"));
-        gtk_label_set_text(GTK_LABEL(recp_account_heading),
-                           _("Debited Account Number"));
-        gtk_label_set_text(GTK_LABEL(recp_bankcode_heading),
-                           _("Debited Account Bank Code"));
-
-        gtk_label_set_text(GTK_LABEL(orig_name_heading),
-                           _("Credited Account Owner"));
-        gtk_label_set_text(GTK_LABEL(orig_account_heading),
-                           _("Credited Account Number"));
-        gtk_label_set_text(GTK_LABEL(orig_bankcode_heading),
-                           _("Credited Account Bank Code"));
+        /* this case is no longer in use; don't introduce extra strings */
         break;
 
     case SEPA_DEBITNOTE:
@@ -487,11 +459,12 @@ gnc_ab_trans_dialog_entry_set (GtkWidget* entry,
 }
 
 static void
-gnc_ab_trans_dialog_check_ktoblzcheck(const GncABTransDialog *td,
-                                      const AB_TRANSACTION *trans)
+gnc_ab_trans_dialog_check_iban(const GncABTransDialog *td,
+                               const AB_TRANSACTION *trans)
 {
     if (gnc_ab_trans_isSEPA(td->trans_type))
     {
+        /* Verify the correct IBAN bank code */
         int rv = AB_Banking_CheckIban(AB_Transaction_GetRemoteIban(trans));
         if (rv != 0) {
             gchar *message = g_strdup_printf(_("The internal check of the destination IBAN '%s' "
@@ -511,64 +484,8 @@ gnc_ab_trans_dialog_check_ktoblzcheck(const GncABTransDialog *td,
     }
     else
     {
-#ifndef HAVE_KTOBLZCHECK_H
-    return;
-#else
-    gint blzresult;
-    const char *blztext;
-    gchar* message;
-
-    ENTER(" ");
-
-    if (gnc_ab_trans_isSEPA(td->trans_type))
-    {
-        // FIXME: libktoblzcheck also has <iban.h>, maybe add this here?
-        LEAVE("No ktoblzcheck implemented for IBAN");
+        /* this case is no longer in use */
         return;
-    }
-
-    blzresult = AccountNumberCheck_check(
-                    td->blzcheck,
-                    AB_Transaction_GetRemoteBankCode(trans),
-                    AB_Transaction_GetRemoteAccountNumber(trans));
-    switch (blzresult)
-    {
-    case 2:
-        message = g_strdup_printf(_("The internal check of the destination account number '%s' "
-                                    "at the specified bank with bank code '%s' failed. This means "
-                                    "the account number might contain an error."),
-                                  AB_Transaction_GetRemoteAccountNumber(trans),
-                                  AB_Transaction_GetRemoteBankCode(trans));
-        gnc_ab_trans_dialog_entry_set (td->recp_bankcode_entry, message,
-                                       "dialog-warning");
-        gnc_ab_trans_dialog_entry_set (td->recp_account_entry, message,
-                                       "dialog-warning");
-
-        blztext = "Kontonummer wahrscheinlich falsch";
-        break;
-    case 0:
-        blztext = "Kontonummer ok";
-        break;
-    case 3:
-        blztext = "bank unbekannt";
-        break;
-    case 1:
-    default:
-        blztext = "unbekannt aus unbekanntem grund";
-        break;
-    }
-
-    if (blzresult != 2)
-    {
-        gnc_ab_trans_dialog_entry_set (td->recp_bankcode_entry, "",
-                                       NULL);
-        gnc_ab_trans_dialog_entry_set (td->recp_account_entry, "",
-                                       NULL);
-    }
-
-    LEAVE("KtoBlzCheck said check is %d = %s",
-          blzresult, blztext ? blztext : "(none)");
-#endif
     }
 }
 
@@ -667,7 +584,7 @@ gnc_ab_trans_dialog_verify_values(GncABTransDialog *td)
     }
     /* Check if account details are correct - gives warning only */
     if (values_ok)
-        gnc_ab_trans_dialog_check_ktoblzcheck(td, td->ab_trans);
+        gnc_ab_trans_dialog_check_iban(td, td->ab_trans);
 
     /* Check transaction value */
     if (AB_Value_GetValueAsDouble(AB_Transaction_GetValue(td->ab_trans))
@@ -834,9 +751,6 @@ gnc_ab_trans_dialog_free(GncABTransDialog *td)
                                gnc_ab_trans_dialog_clear_templ_helper, NULL);
         g_object_unref(td->template_list_store);
     }
-#if HAVE_KTOBLZCHECK_H
-    AccountNumberCheck_delete(td->blzcheck);
-#endif
     g_free(td);
 }
 
@@ -903,15 +817,15 @@ gnc_ab_trans_dialog_get_available_empty_job(AB_ACCOUNT *ab_acc, GncABTransType t
     case SINGLE_INTERNAL_TRANSFER:
         job = AB_JobInternalTransfer_new(ab_acc);
         break;
-    case SEPA_TRANSFER:
-        job = AB_JobSepaTransfer_new(ab_acc);
+    case SINGLE_TRANSFER:
+        job = AB_JobSingleTransfer_new(ab_acc);
         break;
     case SEPA_DEBITNOTE:
         job = AB_JobSepaDebitNote_new(ab_acc);
         break;
-    case SINGLE_TRANSFER:
+    case SEPA_TRANSFER:
     default:
-        job = AB_JobSingleTransfer_new(ab_acc);
+        job = AB_JobSepaTransfer_new(ab_acc);
         break;
     };
 
@@ -1024,65 +938,6 @@ gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkTreeView *view,
     LEAVE(" ");
 }
 
-void
-gnc_ab_trans_dialog_bankcode_changed_cb(GtkEditable *editable, gpointer user_data)
-{
-#if HAVE_KTOBLZCHECK_H
-    GncABTransDialog *td = user_data;
-    const AccountNumberCheck_Record *record;
-    const gchar *input = gtk_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry));
-
-    g_return_if_fail(td);
-
-    // FIXME: If this is a SEPA transaction, totally different verification
-    // rules apply anyway. There are some initial verification functions in
-    // <ktoblzcheck/iban.h>, but those need to be implemented here as well.
-    if (gnc_ab_trans_isSEPA(td->trans_type))
-        return;
-
-    ENTER("td=%p, input=%s", td, input);
-    record = AccountNumberCheck_findBank(td->blzcheck, input);
-
-    if (record)
-    {
-        const char *bankname = AccountNumberCheck_Record_bankName(record);
-        GError *error = NULL;
-        const char *ktoblzcheck_encoding =
-#ifdef KTOBLZCHECK_VERSION_MAJOR
-            /* This version number macro has been added in ktoblzcheck-1.10, but
-             * this function exists already since ktoblzcheck-1.7, so we're on
-             * the safe side. */
-            AccountNumberCheck_stringEncoding()
-#else
-            /* Every ktoblzcheck release before 1.10 is guaranteed to return
-             * strings only in ISO-8859-15. */
-            "ISO-8859-15"
-#endif
-            ;
-        gchar *utf8_bankname = g_convert(bankname, strlen(bankname), "UTF-8",
-                                         ktoblzcheck_encoding, NULL, NULL,
-                                         &error);
-
-        if (error)
-        {
-            g_critical("Error converting bankname \"%s\" to UTF-8", bankname);
-            g_error_free (error);
-            /* Conversion was erroneous, so don't use the string */
-            utf8_bankname = g_strdup(_("(unknown)"));
-        }
-        gtk_label_set_text(GTK_LABEL(td->recp_bankname_label),
-                           *utf8_bankname ? utf8_bankname : _("(unknown)"));
-        DEBUG("Found: %s", utf8_bankname);
-        g_free(utf8_bankname);
-    }
-    else
-    {
-        gtk_label_set_text(GTK_LABEL(td->recp_bankname_label), _("(unknown)"));
-    }
-    gnc_ab_trans_dialog_verify_values(td);
-    LEAVE(" ");
-#endif
-}
 
 struct _FindTemplData
 {

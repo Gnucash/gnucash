@@ -695,15 +695,14 @@ txn_transaction_cb(const AB_TRANSACTION *element, gpointer user_data)
         case AB_Transaction_TypeDebitNote:
             trans_type = SINGLE_DEBITNOTE;
             break;
-        case AB_Transaction_TypeEuTransfer:
-            trans_type = SEPA_TRANSFER;
-            break;
         case AB_Transaction_TypeTransaction:
             /* trans_type = SINGLE_INTERNAL_TRANSFER;
              * break; */
         case AB_Transaction_TypeTransfer:
+        case AB_Transaction_TypeEuTransfer:
         default:
-            trans_type = SINGLE_TRANSFER;
+            trans_type = SEPA_TRANSFER;
+            break;
         } /* switch */
 
         job = gnc_ab_get_trans_job(data->ab_acc, ab_trans, trans_type);

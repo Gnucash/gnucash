@@ -50,8 +50,8 @@ typedef struct _GncABTransDialog GncABTransDialog;
 typedef enum _GncABTransType GncABTransType;
 enum _GncABTransType
 {
-    SINGLE_TRANSFER = 0,
-    SINGLE_DEBITNOTE,
+    SINGLE_TRANSFER = 0, /* obsolete old non-SEPA transfer; no longer in use */
+    SINGLE_DEBITNOTE, /* obsolete old non-SEPA debit note; no longer in use */
     SINGLE_INTERNAL_TRANSFER
     , SEPA_TRANSFER
     , SEPA_DEBITNOTE

@@ -147,9 +147,6 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #cmakedefine HAVE_INTTYPES_H 1
 
-/* Define to 1 if you have the <ktoblzcheck.h> header file. */
-#cmakedefine HAVE_KTOBLZCHECK_H 1
-
 /* Define if you have <langinfo.h> and nl_langinfo(D_FMT). */
 #cmakedefine HAVE_LANGINFO_D_FMT 1
 
