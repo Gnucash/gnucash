@@ -38,7 +38,7 @@
       Un ensemble de base de comptes les plus habituellement utilisés
     </gnc-act:short-description>
     <gnc-act:long-description>
-    La plupart des utilisateurs devront sélectionner cet ensemble de comptes.  Il comprend la plupart des comptes communément utilisés (chèques, épargne, liquidités, carte de crédit, revenu, dépenses habituelles).
+    La plupart des utilisateurs devront sélectionner cet ensemble de comptes.  Il comprend la plupart des comptes communément utilisés (courant, épargne, liquidités, carte de crédit, revenu, dépenses habituelles).
   </gnc-act:long-description>    
   <gnc-act:start-selected>1</gnc-act:start-selected>
 <gnc:account version="2.0.0">
@@ -70,14 +70,14 @@
   <act:parent type="new">98f262dfab9a2b99ac42919dcf58d304</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Compte chèques</act:name>
+  <act:name>Compte courant</act:name>
   <act:id type="new">b477aa9e0d4eb67c34e1e35903fb3f99</act:id>
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Compte chèques</act:description>
+  <act:description>Compte courant</act:description>
   <act:parent type="new">a1dd5f225156f110689c204fefded0ab</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -180,14 +180,14 @@
   <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Intérets du compte chèque</act:name>
+  <act:name>Intérets du compte courant</act:name>
   <act:id type="new">73481e2da7461fc34e7003b7ec560bdf</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Intérets du compte chèque</act:description>
+  <act:description>Intérets du compte courant</act:description>
   <act:parent type="new">c47361e40d9478ec11758097e64d693c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

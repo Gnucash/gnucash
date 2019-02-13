@@ -72,7 +72,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
   <act:parent type="new">4f40ddce996f8f74b4e99f52e275ba14</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Compte chèque</act:name>
+  <act:name>Compte courant</act:name>
   <act:id type="new">8048bd85020e9ecf57b7cb300f4fa7e2</act:id>
   <act:type>BANK</act:type>
   <act:commodity>
@@ -80,7 +80,7 @@ Les utilisateurs gérant une entreprise sélectionneront ceci au lieu des autres
     <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Compte chèque</act:description>
+  <act:description>Compte courant</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
