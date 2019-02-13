@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 3.4\n"
 "POT-Creation-Date: 2017-10-20 19:04+0200\n"
-"PO-Revision-Date: 2019-02-04 00:02+0100\n"
+"PO-Revision-Date: 2019-02-13 15:40+0100\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: \n"
 "Language: hr\n"
@@ -61,7 +61,7 @@ msgstr "vrsta konta: Valuta"
 
 #. "see: Equity, but see also 'account type: Passive'"
 msgid "account type: Equity"
-msgstr "vrsta konta: Temeljni kapital, kapital"
+msgstr "vrsta konta: kapital"
 
 #. "-"
 msgid "account type: Expense"
@@ -81,7 +81,7 @@ msgstr "vrsta konta: Novčano tržište"
 
 #. "-"
 msgid "account type: Mutual fund"
-msgstr "vrsta konta: Uzajamni fond"
+msgstr "vrsta konta: Investicijski fond"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
 msgid "account type: Passive"
@@ -365,15 +365,15 @@ msgstr "radnik"
 
 #. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
 msgid "equity"
-msgstr "vlasnički kapital, kapital"
+msgstr "kapital"
 
 #. "Report that ... FIXME: Add description."
 msgid "equity statement"
-msgstr "stanje temeljnog kapitala, stanje kapitala"
+msgstr "stanje kapitala"
 
 #. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
 msgid "escrow (account)"
-msgstr "escrow, založni/uvjetni (konto)"
+msgstr "založni (konto)"
 
 #. "The relation in value between the money used in different countries"
 msgid "exchange rate"
@@ -433,7 +433,7 @@ msgstr "glavna knjiga"
 
 #. "The heading for the right side of the balance sheet. See also: Equity."
 msgid "liabilities/equity"
-msgstr "obveze/kapital, pasiva"
+msgstr "obveze/kapital"
 
 #. "A sum of money that is lent (by a bank)"
 msgid "loan"
@@ -485,7 +485,7 @@ msgstr "neto"
 
 #. "net total of all assets"
 msgid "net assets"
-msgstr "neto aktiva"
+msgstr "neto imovina"
 
 #. "The total income minus the total expenses of a given time period."
 msgid "net profit"
@@ -537,11 +537,11 @@ msgstr "Dugovanja/Potraživanja"
 
 #. "A person to whom sth is paid"
 msgid "payee"
-msgstr "primatelj"
+msgstr "primalac"
 
 #. "A person who pays or who has to pay for sth"
 msgid "payer"
-msgstr "platiša"
+msgstr "platilac"
 
 #. "1. The action of paying sb/sth or of being paid. 2. A sum of money paid."
 msgid "payment"
@@ -645,7 +645,7 @@ msgstr "oblik izvještaja: T-konto"
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
 msgid "report form: Vertical Form"
-msgstr "oblik izvještaja: stupnjeviti oblik (jednostrani)"
+msgstr "oblik izvještaja: stupnjeviti oblik"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
