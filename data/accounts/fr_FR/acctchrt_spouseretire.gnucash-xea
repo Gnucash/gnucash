@@ -38,7 +38,7 @@
      Compte d'épargne retraite avec ses sous-comptes d'investissements relatifs du conjoint
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Vous devriez sélectionner cet ensemble de comptes si conjoint a des comptes d'épargne retraite (actions, obligations, fonds communs, fonds d'indices, intérêts, dividendes).
+    Vous devriez sélectionner cet ensemble de comptes si votre conjoint a des comptes d'épargne retraite (actions, obligations, fonds communs, fonds d'indices, intérêts, dividendes).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>

@@ -35,7 +35,7 @@
       Revenus du conjoint
     </gnc-act:title>
     <gnc-act:short-description>
-     Comptes pour le suivi du conjoint séparément
+     Comptes pour le suivi des revenus du conjoint séparément
     </gnc-act:short-description>
     <gnc-act:long-description>
     Vous devriez sélectionner cet ensemble de comptes si votre conjoint travaille (son salaire, ses impôts).
