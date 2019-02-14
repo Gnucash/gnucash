@@ -293,10 +293,13 @@
            (income (account-lookup "Income"))
            (bank (account-lookup "Bank"))
            (gbp-bank (account-lookup "GBP Bank")))
+
+      ;; deprecated:
       (test-equal "gnc:account-get-balance-at-date 1/1/2001 incl children"
         2301
         (gnc:account-get-balance-at-date asset (gnc-dmy2time64 01 01 2001) #t))
 
+      ;; deprecated:
       (test-equal "gnc:account-get-balance-at-date 1/1/2001 excl children"
         15
         (gnc:account-get-balance-at-date asset (gnc-dmy2time64 01 01 2001) #f))
