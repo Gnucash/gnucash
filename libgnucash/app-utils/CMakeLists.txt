@@ -175,7 +175,6 @@ set (app_utils_SCHEME_1
     hooks.scm
     business-options.scm
     c-interface.scm
-    config-var.scm
     date-utilities.scm
     migrate-prefs.scm
     options.scm
