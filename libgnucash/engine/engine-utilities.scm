@@ -93,33 +93,34 @@
   (hashx-set! account-hash account-assoc table account value))
 
 ;; Splits
-(export split-same?)
-(export split-in-list?)
-
+(export split-same?)                    ;deprecated
+(export split-in-list?)                 ;deprecated
 (define (split-same? s1 s2)
+  (issue-deprecation-warning "split-same? is deprecated. use equal? instead.")
   (or (eq? s1 s2)
       (string=? (gncSplitGetGUID s1) (gncSplitGetGUID s2))))
-
 (define split-in-list? 
   (lambda (split splits)
+    (issue-deprecation-warning "split-in-list? is deprecated. use member instead.")
     (cond 
      ((null? splits) #f)
      ((split-same? (car splits) split) #t)
      (else (split-in-list? split (cdr splits))))))
-
-;; Split hashtable. Because we do gncSplitGetGUID so often, it
-;; turns out to be a bit quicker to store a (hash, split) pair
-;; instead of just the split.
 (define (split-assoc split alist)
+  (issue-deprecation-warning "split-assoc is deprecated. use assoc instead")
   (find (lambda (pair) (split-same? (cdr split) (cdr (car pair)))) alist))
 (define (split-hash split size)
+  (issue-deprecation-warning "split-hash is deprecated. \
+internal function -- no srfi-1 equivalent")
   (remainder (car split) size))
-
 (define (split-hashtable-ref table split)
+  (issue-deprecation-warning "split-hashtable-ref is deprecated. \
+use assoc-ref instead.")
   (hashx-ref split-hash split-assoc table
 	     (cons (string-hash (gncSplitGetGUID split)) split)))
-
 (define (split-hashtable-set! table split value)
+  (issue-deprecation-warning "split-hashtable-set! is deprecated. \
+use assoc-set! instead")
   (hashx-set! split-hash split-assoc table
 	      (cons (string-hash (gncSplitGetGUID split)) split) value))
 
