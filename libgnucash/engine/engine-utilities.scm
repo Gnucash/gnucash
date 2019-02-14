@@ -38,11 +38,13 @@
 ;; account related functions
 ;; is account in list of accounts?
 (define (account-same? a1 a2)
+  (issue-deprecation-warning "account-same? is deprecated. use equal? instead.")
   (or (eq? a1 a2)
       (string=? (gncAccountGetGUID a1) (gncAccountGetGUID a2))))
 
 (define account-in-list?
   (lambda (account accounts)
+    (issue-deprecation-warning "account-in-list? is deprecated. use member instead.")
     (cond
      ((null? accounts) #f)
      ((account-same? (car accounts) account) #t)
@@ -55,6 +57,7 @@
     (find (lambda (pair) (account-same? str (car pair))) alist))
   (define (my-hash acc size)
     (remainder (string-hash (gncAccountGetGUID acc)) size))
+  (issue-deprecation-warning "account-in-list-pred is deprecated.")
   (let ((hash-table (make-hash-table)))
     (for-each (lambda (acc) (hashx-set! my-hash my-assoc hash-table acc #t))
 	      accounts)
@@ -63,6 +66,7 @@
 
 (define account-in-alist
   (lambda (account alist)
+    (issue-deprecation-warning "account-in-alist is deprecated. use assoc instead.")
     (cond
      ((null? alist) #f)
      ((account-same? (caar alist) account) (car alist))
@@ -81,15 +85,21 @@
 	      accounts)))
 
 (define (account-assoc acc alist)
+  (issue-deprecation-warning "account-assoc is deprecated. use assoc instead.")
   (find (lambda (pair) (account-same? acc (car pair))) alist))
 
 (define (account-hash acc size)
+  (issue-deprecation-warning "account-hash is deprecated. internal function.")
   (remainder (string-hash (gncAccountGetGUID acc)) size))
 
 (define (account-hashtable-ref table account)
+  (issue-deprecation-warning "account-hashtable-ref is deprecated. \
+use assoc-ref instead..")
   (hashx-ref account-hash account-assoc table account))
 
 (define (account-hashtable-set! table account value)
+  (issue-deprecation-warning "account-hashtable-set! is deprecated. \
+use assoc-set! instead.")
   (hashx-set! account-hash account-assoc table account value))
 
 ;; Splits

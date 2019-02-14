@@ -6,6 +6,8 @@
 
 (use-modules (gnucash engine test test-extras))
 
+;; this test suite tests deprecated functions.
+
 (define (run-test)
   (test test-account-same?)
   (test test-account-in-list?)
