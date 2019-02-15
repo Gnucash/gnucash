@@ -214,28 +214,13 @@
     ;; $100 from bank
     ;;  $80 to expenses
     ;;  $20 to wallet
-    (let ((txn (xaccMallocTransaction (gnc-get-current-book)))
-          (split-1 (xaccMallocSplit  (gnc-get-current-book)))
-          (split-2 (xaccMallocSplit  (gnc-get-current-book)))
-          (split-3 (xaccMallocSplit  (gnc-get-current-book))))
-      (xaccTransBeginEdit txn)
-      (xaccTransSetDescription txn "$100bank -> $80expenses + $20wallet")
-      (xaccTransSetCurrency txn (xaccAccountGetCommodity bank))
-      (xaccTransSetDate txn 14 02 1971)
-      (xaccSplitSetParent split-1 txn)
-      (xaccSplitSetParent split-2 txn)
-      (xaccSplitSetParent split-3 txn)
-      (xaccSplitSetAccount split-1 bank)
-      (xaccSplitSetAccount split-2 expense)
-      (xaccSplitSetAccount split-3 wallet)
-      (xaccSplitSetValue split-1 -100)
-      (xaccSplitSetValue split-2 80)
-      (xaccSplitSetValue split-3 20)
-      (xaccSplitSetAmount split-1 -100)
-      (xaccSplitSetAmount split-2 80)
-      (xaccSplitSetAmount split-3 20)
-      (xaccTransSetNotes txn "multisplit")
-      (xaccTransCommitEdit txn))
+    (env-create-multisplit-transaction
+     env 14 02 1971
+     (list (vector bank  -100 -100)
+           (vector expense 80   80)
+           (vector wallet  20   20))
+     #:description "$100bank -> $80expenses + $20wallet"
+     #:notes "multisplit")
 
     ;; A single closing transaction
     (let ((closing-txn (env-transfer env 31 12 1999 expense equity 111 #:description "Closing")))

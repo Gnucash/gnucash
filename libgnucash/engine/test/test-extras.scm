@@ -41,6 +41,7 @@
 (export env-any-date)
 (export env-transfer)
 (export env-transfer-foreign)
+(export env-create-multisplit-transaction)
 (export env-create-transaction)
 (export env-create-account)
 (export env-create-root-account)
@@ -183,44 +184,17 @@
           notes            ; string: notes       (def = null)
           memo             ; string: memo        (def = null)
           )
-  (let ((txn (xaccMallocTransaction (gnc-get-current-book)))
-	(split-1 (xaccMallocSplit  (gnc-get-current-book)))
-	(split-2 (xaccMallocSplit  (gnc-get-current-book))))
-    (xaccTransBeginEdit txn)
-    (xaccTransSetDescription txn (or description "ponies"))
-    (xaccTransSetCurrency txn (xaccAccountGetCommodity debit))
-    (xaccTransSetDate txn DD MM YY)
-    (xaccSplitSetParent split-1 txn)
-    (xaccSplitSetParent split-2 txn)
-    (xaccSplitSetAccount split-1 debit)
-    (xaccSplitSetAccount split-2 credit)
-    (xaccSplitSetValue split-1 (- amount1))
-    (xaccSplitSetValue split-2 amount1)
-    (xaccSplitSetAmount split-1 (- amount1))
-    (xaccSplitSetAmount split-2 amount2)
-    (if reconcile
-        (begin
-          (xaccSplitSetReconcile split-1 (car reconcile))
-          (xaccSplitSetReconcile split-2 (car reconcile))
-          (xaccSplitSetDateReconciledSecs split-1 (cdr reconcile))
-          (xaccSplitSetDateReconciledSecs split-2 (cdr reconcile))))
-    (if num
-        (begin
-          (gnc-set-num-action txn split-1 num num)
-          (gnc-set-num-action txn split-2 num num)))
-    (if void-reason (xaccTransVoid txn void-reason))
-    (if notes (xaccTransSetNotes txn notes))
-    (if memo
-        (begin
-          (xaccSplitSetMemo split-1 memo)
-          (xaccSplitSetMemo split-2 memo)))
-    (if (> amount2 0)
-        (gnc-pricedb-create (xaccAccountGetCommodity debit)
-                        (xaccAccountGetCommodity credit)
-                        (gnc-dmy2time64 DD MM YY)
-                        (/ amount1 amount2)))
-    (xaccTransCommitEdit txn)
-    txn))
+  (env-create-multisplit-transaction
+   env
+   DD MM YY
+   (list (vector debit (- amount1) (- amount1))
+         (vector credit amount1 amount2))
+   #:description description
+   #:void-reason void-reason
+   #:reconcile reconcile
+   #:num num
+   #:memo memo
+   #:notes notes))
 
 (define* (env-transfer
           env
@@ -234,16 +208,78 @@
           reconcile        ; char  : reconciled  (default = n)
           num              ; string: num field   (def = null)
           notes            ; string: notes       (def = null)
-          memo             ; string: memo        (def = null)
-          )
-  (env-transfer-foreign
-   env DD MM YY debit credit amount amount
+          memo)            ; string: memo        (def = null)
+  (env-create-multisplit-transaction
+   env
+   DD MM YY
+   (list
+    (vector debit (- amount) (- amount))
+    (vector credit amount amount))
    #:description description
    #:void-reason void-reason
    #:reconcile reconcile
    #:num num
    #:memo memo
    #:notes notes))
+
+;; creates multisplit transaction.
+;;
+;; input: DD/MM/YY - posting date of transaction
+;;
+;;        list-of-splits, a list of vectors, whose components are
+;;        (vector account value amount). The total of sum of values
+;;        must be zero, otherwise an imbalance split will be
+;;        created. It must contain at least 1 split. The transaction
+;;        currency is set as currency of the first split.
+;;
+;; returns: the transaction created, or #f
+(define* (env-create-multisplit-transaction
+          env DD MM YY list-of-splits
+          #:key            ; - the following are optional -
+          description      ; string: description (def = "ponies")
+          (pricedb? #t)    ; boolean: add pricedb entry?
+          void-reason      ; string: void-reason (def = not-voided)
+          reconcile        ; pair  : (cons reconciled reconciled-date)
+          num              ; string: num field   (def = null)
+          notes            ; string: notes       (def = null)
+          memo)            ; string: memo        (def = null)
+  (and (pair? list-of-splits)
+       (let* ((book (gnc-get-current-book))
+              (txn (xaccMallocTransaction book))
+              (first-split (vector-ref (car list-of-splits) 0)))
+         (xaccTransBeginEdit txn)
+         (xaccTransSetDescription txn (or description (env-string env "ponies")))
+         (xaccTransSetCurrency txn (xaccAccountGetCommodity first-split))
+         (xaccTransSetDate txn DD MM YY)
+         (for-each
+          (lambda (split)
+            (let ((acc (vector-ref split 0))
+                  (val (vector-ref split 1))
+                  (amt (vector-ref split 2))
+                  (newsplit (xaccMallocSplit book)))
+              (xaccSplitSetParent newsplit txn)
+              (xaccSplitSetAccount newsplit acc)
+              (xaccSplitSetValue newsplit val)
+              (xaccSplitSetAmount newsplit amt)
+              (if num (gnc-set-num-action txn newsplit num num))
+              (if memo (xaccSplitSetMemo newsplit memo))
+              (when reconcile
+                (xaccSplitSetReconcile newsplit (car reconcile))
+                (xaccSplitSetDateReconciledSecs newsplit (cdr reconcile)))
+              (if (and pricedb?
+                       (positive? amt)
+                       (not (gnc-commodity-equiv
+                             (xaccAccountGetCommodity first-split)
+                             (xaccAccountGetCommodity acc))))
+                  (gnc-pricedb-create (xaccAccountGetCommodity first-split)
+                                      (xaccAccountGetCommodity acc)
+                                      (gnc-dmy2time64 DD MM YY)
+                                      (/ val amt)))))
+          list-of-splits)
+         (if void-reason (xaccTransVoid txn void-reason))
+         (if notes (xaccTransSetNotes txn notes))
+         (xaccTransCommitEdit txn)
+         txn)))
 
 (define (env-create-root-account env type commodity)
   (env-create-account env type commodity (gnc-get-current-root-account)))
