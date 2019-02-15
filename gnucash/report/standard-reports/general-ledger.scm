@@ -31,7 +31,7 @@
 
 (define-module (gnucash report standard-reports general-ledger))
 (export gnc:make-general-ledger-report)
-(use-modules (gnucash utilities)) 
+(use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 (use-modules (gnucash report standard-reports transaction))
@@ -58,13 +58,11 @@
     (define (set-option! section name value)
       (gnc:option-set-default-value
        (gnc:lookup-option options section name) value))
-    
+
     ;; set options in the accounts tab...
-    (set-option!
-     gnc:pagename-accounts (N_ "Filter Type") 'none)
-    (set-option!
-     gnc:pagename-accounts (N_ "Void Transactions") 'non-void-only)
-    
+    (set-option! gnc:pagename-accounts (N_ "Filter Type") 'none)
+    (set-option! "Filter" "Void Transactions" 'non-void-only)
+
     ;; set options in the display tab...
     (for-each
      (lambda (l)
@@ -91,7 +89,7 @@
           (list (N_ "Running Balance") #t)
           (list (N_ "Totals") #f)
           (list (N_ "Sign Reverses") 'credit-accounts)
-         )
+          )
          (list
           (list (N_ "Date") #t)
           (list (N_ "Reconciled Date") #f)
@@ -111,10 +109,10 @@
           (list (N_ "Running Balance") #t)
           (list (N_ "Totals") #f)
           (list (N_ "Sign Reverses") 'credit-accounts)
+          )
          )
      )
-    )
-    
+
     ;; set options in the general tab...
     (set-option!
      gnc:pagename-display (N_ "Detail Level") 'single)
@@ -123,7 +121,7 @@
     ;; we can't (currently) set the Report name here
     ;; because it is automatically set to the template
     ;; name... :(
-    
+
     ;; set options in the sorting tab...
     (for-each
      (lambda (l)
@@ -142,7 +140,7 @@
       (list (N_ "Secondary Sort Order") 'ascend)
       )
      )
-    
+
     options)
   )
 
@@ -152,7 +150,7 @@
   ;; just delegate rendering to the Transaction Report renderer...
   ((gnc:report-template-renderer/report-guid xactrptguid xactrptname) report-obj))
 
-(gnc:define-report 
+(gnc:define-report
  'version 1
  'name reportname
  'report-guid "2e22929e5c5b4b769f615a815ef0c20f"
@@ -162,4 +160,3 @@
  )
 
 ;; END
-
