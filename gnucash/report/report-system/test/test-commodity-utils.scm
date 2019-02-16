@@ -163,7 +163,7 @@
     (gnc-pricedb-create USD IBM (gnc-dmy2time64 1 1 2013) 19399/100)
     (gnc-pricedb-create USD AAPL (gnc-dmy2time64 1 1 2014) 7728/100)
     (gnc-pricedb-create USD MSFT (gnc-dmy2time64 1 1 2014) 3691/100)
-    (gnc-pricedb-create USD IBM (gnc-dmy2time64 1 1 2014) 18664/100)
+    (gnc-pricedb-create USD IBM (gnc-dmy2time64 1 1 2014) 18669/100)
     (gnc-pricedb-create USD AAPL (gnc-dmy2time64 1 1 2015) 10933/100)
     (gnc-pricedb-create USD MSFT (gnc-dmy2time64 1 1 2015) 4676/100)
     (gnc-pricedb-create USD IBM (gnc-dmy2time64 1 1 2015) 16206/100)
@@ -498,7 +498,7 @@
                             (gnc:make-gnc-monetary MSFT 1) USD
                             (gnc-dmy2time64 11 9 2016))))
      (test-equal "IBM nearest 1 July 2014"
-                 18664/100 (gnc:gnc-monetary-amount
+                 18663/100 (gnc:gnc-monetary-amount
                             (gnc:exchange-by-pricedb-nearest
                              (gnc:make-gnc-monetary IBM 1) USD
                              (gnc-dmy2time64 1 7 2014))))
