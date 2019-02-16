@@ -2414,6 +2414,7 @@
   local-symbol=""
 />
 <!-- "SZL" - "Lilangeni"
+  2019-02-16 : The plural "E" is the common local-symbol; Bug 797105
 -->
 <currency
   isocode="SZL"
