@@ -267,7 +267,7 @@
                 (xaccSplitSetReconcile newsplit (car reconcile))
                 (xaccSplitSetDateReconciledSecs newsplit (cdr reconcile)))
               (if (and pricedb?
-                       (positive? amt)
+                       (not (zero? amt))
                        (not (gnc-commodity-equiv
                              (xaccAccountGetCommodity first-split)
                              (xaccAccountGetCommodity acc))))
