@@ -647,10 +647,14 @@ gnc_ui_start_event_loop (void)
     id = g_timeout_add_full (G_PRIORITY_DEFAULT_IDLE, 10000, /* 10 secs */
                              gnc_ui_check_events, NULL, NULL);
 
+    scm_call_1(scm_c_eval_string("gnc:set-ui-status"), SCM_BOOL_T);
+
     /* Enter gnome event loop */
     gtk_main ();
 
     g_source_remove (id);
+
+    scm_call_1(scm_c_eval_string("gnc:set-ui-status"), SCM_BOOL_F);
 
     gnome_is_running = FALSE;
     gnome_is_terminating = FALSE;

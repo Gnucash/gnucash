@@ -17,6 +17,18 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 (use-modules (ice-9 regex))
+(use-modules (gnucash gettext))
+
+(define (rpterror-earlier type newoption fallback)
+  ;; Translators: the 3 ~a below refer to (1) option type (2) unknown
+  ;; new option name, (3) fallback option name. The order is
+  ;; important, and must not be changed.
+  (let* ((template (N_ "This report was saved using a later version of \
+GnuCash. One of the newer ~a options '~a' is not available, fallback to \
+the option '~a'."))
+         (console-msg (format #f template type newoption fallback))
+         (ui-msg (format #f (_ template) type newoption fallback)))
+    (gnc:gui-warn console-msg ui-msg)))
 
 (define (gnc:make-option
          ;; The category of this option
@@ -580,11 +592,11 @@
     (if (pair? (cdr date))
         (cons (car date) (cadr date))
         date))
-  (define (list-lookup list item)
-    (cond
-     ((null? list) #f)
-     ((eq? item (car list)) 0)
-     (else (+ 1 (list-lookup (cdr list) item)))))
+  (define (list-lookup full-list item)
+    (or (list-index (lambda (i) (eq? i item)) full-list)
+        (begin
+          (rpterror-earlier "date" item (car full-list))
+          0)))
   (let* ((value (default-getter))
          (value->string (lambda ()
                           (string-append "'" (gnc:value->string value)))))
@@ -862,11 +874,11 @@
      validator
      (cons #f acct-type-list) #f #f #f)))
 
-(define (gnc:multichoice-list-lookup list item )
-  (cond
-   ((null? list) #f)
-   ((eq? item (vector-ref (car list) 0)) 0)
-   (else (+ 1 (gnc:multichoice-list-lookup (cdr list) item)))))
+(define (gnc:multichoice-list-lookup full-lst item)
+  (or (list-index (lambda (i) (eq? (vector-ref i 0) item)) full-lst)
+      (begin
+        (rpterror-earlier "multichoice" item (car full-lst))
+        0)))
 
 ;; multichoice options use the option-data as a list of vectors.
 ;; Each vector contains a permissible value (scheme symbol), a
@@ -930,7 +942,7 @@
              (set! value x)
              (if (procedure? setter-function-called-cb)
                  (setter-function-called-cb x)))
-           (gnc:error "Illegal Multichoice option set")))
+           (rpterror-earlier "multichoice" x default-value)))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
      (lambda (b p) (qof-book-set-option b (symbol->string value) p))
@@ -1016,7 +1028,7 @@
              (set! value x)
              (if (procedure? setter-function-called-cb)
                  (setter-function-called-cb x)))
-           (gnc:error "Illegal Radiobutton option set")))
+           (rpterror-earlier "radiobutton" x default-value)))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
      (lambda (b p) (qof-book-set-option b (symbol->string value) p))
@@ -1078,7 +1090,7 @@
      (lambda (x)
        (if (list-legal x)
            (set! value x)
-           (gnc:error "Illegal list option set")))
+           (rpterror-earlier "list" x default-value)))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
      (lambda (b p)
