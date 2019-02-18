@@ -373,6 +373,8 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
     negated))
 
 (define (gnc:commodity-collectorlist-get-merged collectorlist)
+  (issue-deprecation-warning
+   "gnc:commodity-collectorlist-get-merged is now deprecated.")
   (let ((merged (gnc:make-commodity-collector)))
     (for-each (lambda (collector) (merged 'merge collector #f)) collectorlist)
     merged))

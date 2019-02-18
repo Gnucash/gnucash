@@ -692,7 +692,7 @@
 (export gnc:make-number-collector)
 (export gnc:make-commodity-collector)
 (export gnc:commodity-collector-get-negated)
-(export gnc:commodity-collectorlist-get-merged)
+(export gnc:commodity-collectorlist-get-merged) ;deprecated
 (export gnc-commodity-collector-commodity-count)
 (export gnc:account-get-balance-at-date)
 (export gnc:account-get-balances-at-dates)

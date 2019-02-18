@@ -197,6 +197,7 @@
         (collector->list
          (gnc:commodity-collector-get-negated coll-A)))
 
+      ;; deprecated:
       (test-equal "gnc:commodity-collectorlist-get-merged"
         '(("USD" . 25) ("GBP" . 0))
         (collector->list
