@@ -2414,6 +2414,7 @@
   local-symbol=""
 />
 <!-- "SZL" - "Lilangeni"
+  The plural "E" is the common local-symbol; Bug 797105
 -->
 <currency
   isocode="SZL"
@@ -2424,7 +2425,7 @@
   exchange-code="748"
   parts-per-unit="100"
   smallest-fraction="100"
-  local-symbol="L"
+  local-symbol="E"
 />
 <!-- "THB" - "Baht"
 -->
