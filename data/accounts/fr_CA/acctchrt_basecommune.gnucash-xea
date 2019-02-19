@@ -37,7 +37,7 @@
 		<gnc-act:short-description>
 			Ensemble des comptes de base les plus couramment utilisés	</gnc-act:short-description>
 		<gnc-act:long-description>
-			La plupart des utilisateurs sélectionneront ce groupe/hiérarchie  de comptes.  Il inclut des comptes de base couramment utilisés par les particuliers, tels que compte chèques, compte d'épargne, encaisse, carte de crédit. revenus et dépenses.
+			La plupart des particuliers, mais pas les utilisateurs professionnels, sélectionneront ce groupe/hiérarchie de comptes. Il inclut des comptes de base couramment utilisés par les particuliers, tels que compte chèques, compte d'épargne, encaisse, carte de crédit. revenus et dépenses.
 		</gnc-act:long-description>    
 		<gnc-act:start-selected>1</gnc-act:start-selected>
 		<gnc:account version="2.0.0">
