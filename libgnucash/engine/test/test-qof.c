@@ -22,6 +22,7 @@
 
 
 #include <config.h>
+#include <locale.h>
 #include <glib.h>
 #include "qof.h"
 
@@ -35,6 +36,7 @@ int
 main (int   argc,
       char *argv[])
 {
+    setlocale (LC_ALL, "");
     qof_init(); 			/* Initialize the GObject system */
     qof_log_init_filename_special("stderr"); /* Init the log system */
     g_test_init ( &argc, &argv, NULL ); 	/* initialize test program */
