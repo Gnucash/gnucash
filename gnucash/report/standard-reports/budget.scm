@@ -818,7 +818,7 @@
           (for-each
             (lambda (sub-account)
               (if (not (account-in-list? sub-account accounts))
-                  (set! accounts (append accounts sub-accounts))))
+                  (set! accounts (cons sub-account accounts))))
             sub-accounts)))
 
     (cond
