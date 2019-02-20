@@ -60,10 +60,8 @@
        (gnc:lookup-option options section name) value))
     
     ;; set options in the accounts tab...
-    (set-option!
-     gnc:pagename-accounts (N_ "Filter Type") 'none)
-    (set-option!
-     gnc:pagename-accounts (N_ "Void Transactions") 'non-void-only)
+    (set-option! gnc:pagename-accounts "Filter Type" 'none)
+    (set-option! "Filter" "Void Transactions" 'non-void-only)
     
     ;; set options in the display tab...
     (for-each
