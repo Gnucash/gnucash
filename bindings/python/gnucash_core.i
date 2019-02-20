@@ -47,6 +47,7 @@
 %{
 #include <config.h>
 #include <datetime.h>
+#include "gnc-vcs-info.h"
 #include "qofsession.h"
 #include "qofbook.h"
 #include "qofbackend.h"
@@ -215,6 +216,32 @@ static const GncGUID * gncEntryGetGUID(GncEntry *x);
 
 %include <cap-gains.h>
 %include <Scrub3.h>
+
+%inline %{
+
+const gchar *gnc_version(void)
+{ return VERSION; }
+
+const gchar *gnc_build_id(void)
+{ return GNUCASH_BUILD_ID; }
+
+const gchar *gnc_vcs_rev(void)
+{ return GNC_VCS_REV; }
+
+const gchar *gnc_vcs_rev_date(void)
+{ return GNC_VCS_REV_DATE; }
+
+const gint gnc_gnucash_major_version(void)
+{ return GNUCASH_MAJOR_VERSION; }
+
+%}
+
+
+%constant char *VERSION = VERSION;
+%constant char *GNUCASH_BUILD_ID = GNUCASH_BUILD_ID;
+%constant char *GNC_VCS_REV = GNC_VCS_REV;
+%constant char *GNC_VCS_REV_DATE = GNC_VCS_REV_DATE;
+%constant int GNUCASH_MAJOR_VERSION = GNUCASH_MAJOR_VERSION;
 
 %init %{
 gnc_environment_setup();

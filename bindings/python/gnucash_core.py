@@ -46,6 +46,9 @@ from gnucash.gnucash_core_c import gncInvoiceLookup, gncInvoiceGetInvoiceFromTxn
     gnc_numeric_create, double_to_gnc_numeric, string_to_gnc_numeric, \
     gnc_numeric_to_string
 
+from gnucash.gnucash_core_c import VERSION, GNUCASH_BUILD_ID, GNC_VCS_REV, \
+    GNC_VCS_REV_DATE, GNUCASH_MAJOR_VERSION
+
 class GnuCashCoreClass(ClassFromFunctions):
     _module = gnucash_core_c
 
