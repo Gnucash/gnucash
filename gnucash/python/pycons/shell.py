@@ -166,8 +166,8 @@ class Shell:
                     tb = sys.exc_traceback
                     if tb:
                         tb=tb.tb_next
-                    traceback.print(_exception (sys.exc_type, sys.exc_value, tb))
+                    traceback.print_exception(sys.exc_type, sys.exc_value, tb)
                 except:
                     sys.stderr, console.stderr = console.stderr, sys.stderr
-                    traceback.print(_exc())
+                    traceback.print_exc()
 
