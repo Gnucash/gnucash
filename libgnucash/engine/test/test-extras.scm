@@ -833,3 +833,180 @@
                               "trans-payment-num-1"))
 
     (vector inv-1 inv-2 inv-3 inv-4 inv-5 inv-6 inv-7 inv-8)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; various stock transactions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; This function aims to replicate the stock-split process in
+;; gnc_stock_split_assistant_finish in assistant-stock-split.c. It
+;; creates a 1 or 3-split transaction, and possibly a pricedb entry.
+(define (stock-split account date shares description
+                     ;; price-amount may be #f
+                     price-amount pricecurrency
+                     ;; cash-in-lieu, cash-amount may be #f
+                     cash-amount cash-memo cash-income cash-asset)
+  (let* ((book (gnc-get-current-book))
+         (accounts '())
+         (trans (xaccMallocTransaction book)))
+    (xaccTransBeginEdit trans)
+    (xaccTransSetCurrency trans (gnc-default-currency))
+    (xaccTransSetDatePostedSecsNormalized trans date)
+    (xaccTransSetDescription trans description)
+
+    (let ((stocksplit (xaccMallocSplit book)))
+      (xaccAccountBeginEdit account)
+      (set! accounts (cons account accounts))
+      (xaccSplitSetAccount stocksplit account)
+      (xaccSplitSetAmount stocksplit shares)
+      (xaccSplitMakeStockSplit stocksplit)
+      (xaccSplitSetAction stocksplit "Split")
+      (xaccSplitSetParent stocksplit trans))
+
+    ;; add pricedb
+    (when price-amount
+      (let ((price (gnc-price-create book)))
+        (gnc-price-begin-edit price)
+        (gnc-price-set-commodity price (xaccAccountGetCommodity account))
+        (gnc-price-set-currency price pricecurrency)
+        (gnc-price-set-time64 price date)
+        (gnc-price-set-source price PRICE-SOURCE-STOCK-SPLIT)
+        (gnc-price-set-typestr price "unknown")
+        (gnc-price-set-value price price-amount)
+        (gnc-price-commit-edit price)
+        (gnc-pricedb-add-price (gnc-pricedb-get-db book) price)))
+
+    ;; cash-in-lieu
+    (when cash-amount
+      (let ((asset-split (xaccMallocSplit book)))
+        (xaccAccountBeginEdit cash-asset)
+        (set! accounts (cons cash-asset accounts))
+        (xaccSplitSetAccount asset-split cash-asset)
+        (xaccSplitSetParent asset-split trans)
+        (xaccSplitSetAmount asset-split cash-amount)
+        (xaccSplitSetValue asset-split cash-amount)
+        (xaccSplitSetMemo asset-split cash-memo))
+
+      (let ((income-split (xaccMallocSplit book)))
+        (xaccAccountBeginEdit cash-income)
+        (set! accounts (cons cash-income accounts))
+        (xaccSplitSetAccount income-split cash-income)
+        (xaccSplitSetParent income-split trans)
+        (xaccSplitSetAmount income-split (- cash-amount))
+        (xaccSplitSetValue income-split (- cash-amount))
+        (xaccSplitSetMemo income-split cash-memo)))
+
+    (xaccTransCommitEdit trans)
+    (for-each xaccAccountCommitEdit accounts)
+    trans))
+
+(define-public (create-stock-test-data)
+  (define structure
+    (list "Root" (list (cons 'type ACCT-TYPE-ASSET))
+          (list "Asset"
+                (list "Bank"))
+          (list "Income" (list (cons 'type ACCT-TYPE-INCOME)))
+          (list "Expenses" (list (cons 'type ACCT-TYPE-EXPENSE)))
+          (list "Equity" (list (cons 'type ACCT-TYPE-EQUITY)))
+          (list "Broker"
+                (list "AAPL" (list (cons 'type ACCT-TYPE-STOCK)))
+                (list "MSFT" (list (cons 'type ACCT-TYPE-STOCK)))
+                (list "TSLA" (list (cons 'type ACCT-TYPE-STOCK))))))
+  (let* ((env (create-test-env))
+         (book (gnc-get-current-book))
+         (comm-table (gnc-commodity-table-get-table book))
+         (AAPL (gnc-commodity-new book "Apple" "NASDAQ" "AAPL" "" 1))
+         (MSFT (gnc-commodity-new book "Microsoft" "NASDAQ" "MSFT" "" 1))
+         (TSLA (gnc-commodity-new book "Tesla Motors" "NASDAQ" "TSLA" "" 1))
+         (account-alist (env-create-account-structure-alist env structure))
+         (bank (cdr (assoc "Bank" account-alist)))
+         (inco (cdr (assoc "Income" account-alist)))
+         (expe (cdr (assoc "Expenses" account-alist)))
+         (equity (cdr (assoc "Equity" account-alist)))
+         (aapl (cdr (assoc "AAPL" account-alist)))
+         (msft (cdr (assoc "MSFT" account-alist)))
+         (tsla (cdr (assoc "TSLA" account-alist)))
+         (YEAR (gnc:time64-get-year (gnc:get-today))))
+
+    ;; Set account commodities
+    (gnc-commodity-table-insert comm-table AAPL)
+    (gnc-commodity-table-insert comm-table MSFT)
+    (gnc-commodity-table-insert comm-table TSLA)
+    (xaccAccountSetCommodity aapl AAPL)
+    (xaccAccountSetCommodity msft MSFT)
+    (xaccAccountSetCommodity tsla TSLA)
+
+    (env-transfer env 01 01 1980 equity bank 10000 #:description "seed money")
+
+    (env-create-multisplit-transaction
+     env 01 02 1980
+     (list (vector bank  -100 -100)
+           (vector aapl   100    1))
+     #:description "buy 1 AAPL @ $100")
+
+    (env-create-multisplit-transaction
+     env 01 03 1980
+     (list (vector bank  -200 -200)
+           (vector aapl   200    1))
+     #:description "buy 1 AAPL @ $200")
+
+    (env-create-multisplit-transaction
+     env 01 05 1980
+     (list (vector bank   390  390)
+           (vector aapl  -400   -1)
+           (vector inco  -300 -300)
+           (vector expe    10   10)
+           (vector aapl   300    0))
+     #:description "sell 1 AAPL @ $400 FIFO, brokerage fee = $10, into bank = $390")
+
+    ;; until 1.5.1980 the account has usual buy/sell txns only, no stock splits
+    ;; there's only 1 AAPL left, price $400
+
+    ;; on 1.10.1980: stock split, 1 AAPL -> 10 AAPL
+    ;; prev price was $400, now is $40
+    (stock-split aapl
+                 (gnc-dmy2time64 1 10 1980)
+                 9 "first 1:10 stock split"
+                 40 (gnc-account-get-currency-or-parent aapl)
+                 #f #f #f #f)
+
+    ;; on 1.11.1980: another stock split, 10 AAPL -> 100 AAPL
+    ;; prev price was $40, now is $4
+    (stock-split aapl
+                 (gnc-dmy2time64 1 11 1980)
+                 90 "another 1:10 stock split"
+                 4 (gnc-account-get-currency-or-parent aapl)
+                 #f #f #f #f)
+
+    ;; on 1.12.1980: 3:1 stock split, 100 AAPL -> 33 AAPL
+    ;; prev price was $4, now is $12, with cash-in-lieu $4
+    (stock-split aapl
+                 (gnc-dmy2time64 1 12 1980)
+                 -67 "3:1 stock split with cash-in-lieu $4"
+                 12 (gnc-account-get-currency-or-parent aapl)
+                 4 "cash-in-lieu" inco bank)
+
+    (env-create-multisplit-transaction
+     env 01 01 1981
+     (list (vector bank -500 -500)
+           (vector aapl  500   10))
+     #:description "buy 10 AAPL @ $5")
+
+    (env-create-multisplit-transaction
+     env 1 3 1981
+     (list (vector bank     3    3)
+           (vector aapl    -3 -1/2)
+           (vector inco  -5/2 -5/2)
+           (vector aapl   5/2    0))
+     #:description "sell 1/2 AAPL @ $6 FIFO, capgain = $2.50 into bank = $200")
+
+    ;; FIXME: spin off $150 from AAPL is coded correctly? there's no
+    ;; INCOME split?
+    (env-create-multisplit-transaction
+     env 1 4 1981
+     (list (vector bank   150  150)
+           (vector aapl  -150    0))
+     #:description "spin-off $150")
+
+    account-alist))
+

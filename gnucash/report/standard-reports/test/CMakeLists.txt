@@ -16,6 +16,7 @@ set(scm_test_with_srfi64_SOURCES
   test-register.scm
   test-trial-balance.scm
   test-average-balance.scm
+  test-portfolios.scm
 )
 
 set(scm_test_with_textual_ports_SOURCES
