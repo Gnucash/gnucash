@@ -445,27 +445,14 @@ gnc_parse_command_line(int *argc, char ***argv)
     g_option_context_free (context);
     if (gnucash_show_version)
     {
-        gchar *vcs;
-
+        const char *format_string;
         if (is_development_version)
-            g_print (_("GnuCash %s development version"), VERSION);
+            format_string = _("GnuCash %s development version");
         else
-            g_print (_("GnuCash %s"), VERSION);
+            format_string = _("GnuCash %s");
 
-#ifdef GNC_VCS
-        vcs = GNC_VCS " ";
-#else
-        vcs = "";
-#endif
-
-        /* Allow builder to override the build id (eg distributions may want to
-         * print an package source version number (rpm, dpkg,...) instead of our git ref */
-        if (g_strcmp0("", GNUCASH_BUILD_ID) != 0)
-            g_print ("\n%s: %s\n",
-                     _("Build ID"), GNUCASH_BUILD_ID);
-        else
-            g_print ("\n%s: %s%s (%s)\n",
-                     _("Build ID"), vcs, GNC_VCS_REV, GNC_VCS_REV_DATE);
+        g_print (format_string, gnc_version());
+        g_print ("\n%s: %s\n", _("Build ID"), gnc_build_id());
         exit(0);
     }
 

@@ -509,7 +509,6 @@ libgnucash/app-utils/business-prefs.scm
 libgnucash/app-utils/calculation/expression_parser.c
 libgnucash/app-utils/calculation/fin.c
 libgnucash/app-utils/c-interface.scm
-libgnucash/app-utils/config-var.scm
 libgnucash/app-utils/date-utilities.scm
 libgnucash/app-utils/file-utils.c
 libgnucash/app-utils/fin.scm
@@ -616,6 +615,7 @@ libgnucash/core-utils/gnc-locale-utils.c
 libgnucash/core-utils/gnc-locale-utils.cpp
 libgnucash/core-utils/gnc-path.c
 libgnucash/core-utils/gnc-prefs.c
+libgnucash/core-utils/gnc-version.c
 libgnucash/doc/doxygen_main_page.c
 libgnucash/engine/Account.cpp
 libgnucash/engine/business-core.scm
