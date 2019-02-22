@@ -511,7 +511,7 @@
 
       (define (display-subtotal monetary)
         (if single-col
-            (if (and (not (null? leader)) (gnc-reverse-balance leader))
+            (if (and leader (gnc-reverse-balance leader))
                 (gnc:monetary-neg monetary)
                 monetary)
             (if (gnc-numeric-negative-p (gnc:gnc-monetary-amount monetary))
@@ -573,12 +573,10 @@
 
   (define (splits-leader splits)
     (let ((accounts (map xaccSplitGetAccount splits)))
-      (if (null? accounts) '()
-          (begin
-            (set! accounts (cons (car accounts)
-                                 (delete (car accounts) (cdr accounts))))
-            (if (not (null? (cdr accounts))) '()
-                (car accounts))))))
+      (and (pair? accounts)
+           (apply equal? accounts)
+           (car accounts))))
+
   ;; ----------------------------------
   ;; make the split table
   ;; ----------------------------------
