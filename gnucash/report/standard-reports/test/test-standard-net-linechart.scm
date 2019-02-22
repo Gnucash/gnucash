@@ -34,7 +34,9 @@
 
 (define (run-test)
   (test-runner-factory gnc:test-runner)
-  (run-net-asset-test net-worth-linechart-uuid))
+  (test-begin "standard-net-linechart")
+  (run-net-asset-test net-worth-linechart-uuid)
+  (test-end "standard-net-linechart"))
 
 (define (set-option options page tag value)
   ((gnc:option-setter (gnc:lookup-option options page tag)) value))

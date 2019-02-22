@@ -47,8 +47,10 @@
 
 (define (run-test)
   (test-runner-factory gnc:test-runner)
+  (test-begin "standard-category-report")
   (run-category-income-expense-test category-barchart-income-uuid category-barchart-expense-uuid)
-  (run-category-asset-liability-test category-barchart-asset-uuid category-barchart-liability-uuid))
+  (run-category-asset-liability-test category-barchart-asset-uuid category-barchart-liability-uuid)
+  (test-end "standard-category-report"))
 
 (export run-category-income-expense-test)
 (export run-category-asset-liability-test)

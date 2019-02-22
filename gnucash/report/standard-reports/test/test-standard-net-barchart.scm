@@ -34,7 +34,9 @@
 
 (define (run-test)
   (test-runner-factory gnc:test-runner)
-  (run-net-asset-income-test net-worth-barchart-uuid income-expense-barchart-uuid))
+  (test-begin "standard-net-barchart")
+  (run-net-asset-income-test net-worth-barchart-uuid income-expense-barchart-uuid)
+  (test-end "standard-net-barchart"))
 
 (define (set-option options page tag value)
   ((gnc:option-setter (gnc:lookup-option options page tag)) value))
