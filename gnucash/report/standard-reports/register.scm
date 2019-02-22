@@ -586,6 +586,13 @@
          (multi-rows? (reg-report-journal?))
          (ledger-type? (reg-report-ledger-type?))
          (double? (reg-report-double?))
+         (leader (splits-leader splits))
+         (total-collector (gnc:make-commodity-collector))
+         (debit-collector (gnc:make-commodity-collector))
+         (credit-collector (gnc:make-commodity-collector))
+         (total-value (gnc:make-commodity-collector))
+         (debit-value (gnc:make-commodity-collector))
+         (credit-value (gnc:make-commodity-collector))
          (action-for-num? (qof-book-use-split-action-for-num-field
                            (gnc-get-current-book))))
 
@@ -595,22 +602,9 @@
                         debit-string credit-string amount-string
                         multi-rows? action-for-num? ledger-type?))
 
-    (let loop ((leader (splits-leader splits))
-               (splits splits)
-               (table table)
-               (used-columns used-columns)
-               (width width)
-               (multi-rows? multi-rows?)
-               (action-for-num? action-for-num?)
-               (ledger-type? ledger-type?)
-               (double? double?)
-               (odd-row? #t)
-               (total-collector (gnc:make-commodity-collector))
-               (debit-collector (gnc:make-commodity-collector))
-               (credit-collector (gnc:make-commodity-collector))
-               (total-value (gnc:make-commodity-collector))
-               (debit-value (gnc:make-commodity-collector))
-               (credit-value (gnc:make-commodity-collector)))
+    (let loop ((splits splits)
+               (odd-row? #t))
+
       (if (null? splits)
           ;; ----------------------------------
           ;; exit condition reached
@@ -643,7 +637,6 @@
                                         (if odd-row? "normal-row"
                                             "alternate-row")))
                  (rest (cdr splits))
-                 (next (and (pair? rest) (car rest)))
                  (valid-split? (not (null? (xaccSplitGetAccount current)))))
             ;; ----------------------------------------------
             ;; update totals, but don't add them to the table
@@ -682,22 +675,7 @@
                                       "alternate-row" action-for-num?
                                       ledger-type? total-collector))
 
-            (loop leader
-                  rest
-                  table
-                  used-columns
-                  width
-                  multi-rows?
-                  action-for-num?
-                  ledger-type?
-                  double?
-                  (not odd-row?)
-                  total-collector
-                  debit-collector
-                  credit-collector
-                  total-value
-                  debit-value
-                  credit-value))))
+            (loop rest (not odd-row?)))))
 
     table))
 
