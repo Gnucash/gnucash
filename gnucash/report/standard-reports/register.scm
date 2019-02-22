@@ -577,132 +577,6 @@
     (other-rows-driver split (xaccSplitGetParent split)
                        table used-columns 0))
 
-  ;; ----------------------------------
-  ;; main loop
-  ;; ----------------------------------
-  (define (do-rows-with-subtotals leader
-                                  splits
-                                  table
-                                  used-columns
-                                  width
-                                  multi-rows?
-                                  action-for-num?
-                                  ledger-type?
-                                  double?
-                                  odd-row?
-                                  total-collector
-				  debit-collector
-				  credit-collector
-                                  total-value
-                                  debit-value
-                                  credit-value)
-    (if (null? splits)
-      ;; ----------------------------------
-      ;; exit condition reached
-      ;; ----------------------------------
-	(begin
-          ;; ------------------------------------
-	  ;; add debit/credit totals to the table
-          ;; ------------------------------------
-	  (if (reg-report-show-totals?)
-	      (begin
-		(add-subtotal-row (_ "Total Debits") leader table used-columns
-				  debit-collector "grand-total" #f)
-		(add-subtotal-row (_ "Total Credits") leader table used-columns
-				  credit-collector "grand-total" #f)
-                (add-subtotal-row (_ "Total Value Debits") leader table used-columns
-                                  debit-value "grand-total" #t)
-                (add-subtotal-row (_ "Total Value Credits") leader table used-columns
-                                  credit-value "grand-total" #t)))
-          (if ledger-type?
-            (add-subtotal-row (_ "Net Change") leader table used-columns
-			    total-collector "grand-total" #f)
-          )
-          (add-subtotal-row (_ "Value Change") leader table used-columns
-                            total-value "grand-total" #t))
-
-      ;; ----------------------------------
-      ;; process the splits list
-      ;; ----------------------------------
-        (let* ((current (car splits))
-               (current-row-style (if multi-rows? "normal-row"
-                                      (if odd-row? "normal-row"
-                                          "alternate-row")))
-               (rest (cdr splits))
-               (next (if (null? rest) #f
-                         (car rest)))
-               (valid-split? (not (null? (xaccSplitGetAccount current)))))
-          ;; ----------------------------------------------
-          ;; update totals, but don't add them to the table
-          ;; ----------------------------------------------
-          (if (and multi-rows? valid-split?)
-              (for-each (lambda (split)
-                          (if (string=? (gncAccountGetGUID
-                                         (xaccSplitGetAccount current))
-                                        (gncAccountGetGUID
-                                         (xaccSplitGetAccount split)))
-                              (accumulate-totals split
-                                                 total-collector total-value
-                                                 debit-collector debit-value
-                                                 credit-collector credit-value)))
-                        (xaccTransGetSplitList (xaccSplitGetParent current)))
-              (accumulate-totals current
-                                 total-collector total-value
-                                 debit-collector debit-value
-                                 credit-collector credit-value))
-          ;; ----------------------------------
-          ;; add the splits to the table
-          ;; ----------------------------------
-          ;; The general journal has a split that doesn't have an account
-          ;; set yet (the new entry transaction).
-          ;; This split should be skipped or the report errors out.
-          ;; See bug #639082
-          (if valid-split?
-            (add-split-row
-              table
-              current
-              used-columns
-              current-row-style
-              #t
-              (not multi-rows?)
-              action-for-num?
-              ledger-type?
-              double?
-              (opt-val "Display" "Memo")
-              (opt-val "Display" "Description")
-              total-collector
-            )
-          )
-          (if (and multi-rows? valid-split?)
-            (add-other-split-rows
-              current
-              table used-columns
-              "alternate-row"
-              action-for-num?
-              ledger-type?
-              total-collector
-            )
-          )
-
-          (do-rows-with-subtotals leader
-                                  rest
-                                  table
-                                  used-columns
-                                  width 
-                                  multi-rows?
-                                  action-for-num?
-                                  ledger-type?
-                                  double?
-                                  (not odd-row?)                       
-                                  total-collector
-				  debit-collector
-				  credit-collector
-                                  total-value
-                                  debit-value
-                                  credit-value))))
-  ;; -----------------------------------------------
-  ;; needed for the call to (do-rows-with-subtotals)
-  ;; -----------------------------------------------
   (define (splits-leader splits)
     (let ((accounts (map xaccSplitGetAccount splits)))
       (if (null? accounts) '()
@@ -729,22 +603,110 @@
                         debit-string credit-string amount-string
                         multi-rows? action-for-num? ledger-type?))
 
-    (do-rows-with-subtotals (splits-leader splits)
-                            splits
-                            table
-                            used-columns
-                            width
-                            multi-rows?
-                            action-for-num?
-                            ledger-type?
-                            double?
-                            #t
-                            (gnc:make-commodity-collector)
-                            (gnc:make-commodity-collector)
-                            (gnc:make-commodity-collector)
-                            (gnc:make-commodity-collector)
-                            (gnc:make-commodity-collector)
-                            (gnc:make-commodity-collector))
+    (let loop ((leader (splits-leader splits))
+               (splits splits)
+               (table table)
+               (used-columns used-columns)
+               (width width)
+               (multi-rows? multi-rows?)
+               (action-for-num? action-for-num?)
+               (ledger-type? ledger-type?)
+               (double? double?)
+               (odd-row? #t)
+               (total-collector (gnc:make-commodity-collector))
+	       (debit-collector (gnc:make-commodity-collector))
+	       (credit-collector (gnc:make-commodity-collector))
+               (total-value (gnc:make-commodity-collector))
+               (debit-value (gnc:make-commodity-collector))
+               (credit-value (gnc:make-commodity-collector)))
+      (if (null? splits)
+          ;; ----------------------------------
+          ;; exit condition reached
+          ;; ----------------------------------
+	  (begin
+            ;; ------------------------------------
+	    ;; add debit/credit totals to the table
+            ;; ------------------------------------
+	    (if (reg-report-show-totals?)
+	        (begin
+		  (add-subtotal-row (_ "Total Debits") leader table used-columns
+				    debit-collector "grand-total" #f)
+		  (add-subtotal-row (_ "Total Credits") leader table used-columns
+				    credit-collector "grand-total" #f)
+                  (add-subtotal-row (_ "Total Value Debits") leader table used-columns
+                                    debit-value "grand-total" #t)
+                  (add-subtotal-row (_ "Total Value Credits") leader table used-columns
+                                    credit-value "grand-total" #t)))
+            (if ledger-type?
+                (add-subtotal-row (_ "Net Change") leader table used-columns
+			          total-collector "grand-total" #f))
+            (add-subtotal-row (_ "Value Change") leader table used-columns
+                              total-value "grand-total" #t))
+
+          ;; ----------------------------------
+          ;; process the splits list
+          ;; ----------------------------------
+          (let* ((current (car splits))
+                 (current-row-style (if multi-rows? "normal-row"
+                                        (if odd-row? "normal-row"
+                                            "alternate-row")))
+                 (rest (cdr splits))
+                 (next (and (pair? rest) (car rest)))
+                 (valid-split? (not (null? (xaccSplitGetAccount current)))))
+            ;; ----------------------------------------------
+            ;; update totals, but don't add them to the table
+            ;; ----------------------------------------------
+            (if (and multi-rows? valid-split?)
+                (for-each (lambda (split)
+                            (if (string=? (gncAccountGetGUID
+                                           (xaccSplitGetAccount current))
+                                          (gncAccountGetGUID
+                                           (xaccSplitGetAccount split)))
+                                (accumulate-totals split
+                                                   total-collector total-value
+                                                   debit-collector debit-value
+                                                   credit-collector credit-value)))
+                          (xaccTransGetSplitList (xaccSplitGetParent current)))
+                (accumulate-totals current
+                                   total-collector total-value
+                                   debit-collector debit-value
+                                   credit-collector credit-value))
+            ;; ----------------------------------
+            ;; add the splits to the table
+            ;; ----------------------------------
+            ;; The general journal has a split that doesn't have an account
+            ;; set yet (the new entry transaction).
+            ;; This split should be skipped or the report errors out.
+            ;; See bug #639082
+            (if valid-split?
+                (add-split-row table current used-columns
+                               current-row-style #t (not multi-rows?)
+                               action-for-num?  ledger-type?
+                               double? (opt-val "Display" "Memo")
+                               (opt-val "Display" "Description")
+                               total-collector))
+            (if (and multi-rows? valid-split?)
+                (add-other-split-rows current table used-columns
+                                      "alternate-row" action-for-num?
+                                      ledger-type? total-collector))
+
+            (loop leader
+                  rest
+                  table
+                  used-columns
+                  width 
+                  multi-rows?
+                  action-for-num?
+                  ledger-type?
+                  double?
+                  (not odd-row?)                       
+                  total-collector
+		  debit-collector
+		  credit-collector
+                  total-value
+                  debit-value
+                  credit-value))))
+    
     table))
 
 (define (reg-renderer report-obj)
