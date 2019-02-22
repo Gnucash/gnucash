@@ -808,9 +808,10 @@ msgstr "Periode:"
 msgid "Closing Date:"
 msgstr "Abschlussdatum:"
 
+#  Checkbox-Überschrift -> kurz halten
 #: gnucash/gnome/assistant-hierarchy.c:450
 msgid "Selected"
-msgstr "Ausgewähltes"
+msgstr "Gewählt"
 
 #: gnucash/gnome/assistant-hierarchy.c:462
 #: gnucash/gnome-utils/gnc-tree-view-account.c:2277
