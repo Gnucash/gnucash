@@ -562,20 +562,14 @@
 
   (define (add-other-split-rows split table used-columns row-style
                                 action-for-num? ledger-type? total-collector)
-    (define (other-rows-driver split parent table used-columns i)
-      (let ((current (xaccTransGetSplit parent i)))
-        (if (not (null? current))
-            (begin
-              (add-split-row table current used-columns row-style #f #t
-                             action-for-num? ledger-type? #f
-                             (opt-val "Display" "Memo")
-                             (opt-val "Display" "Description")
-                             total-collector)
-              (other-rows-driver split parent table
-                                 used-columns (+ i 1))))))
-
-    (other-rows-driver split (xaccSplitGetParent split)
-                       table used-columns 0))
+    (let loop ((splits (xaccTransGetSplitList (xaccSplitGetParent split))))
+      (when (pair? splits)
+        (add-split-row table (car splits) used-columns row-style #f #t
+                       action-for-num? ledger-type? #f
+                       (opt-val "Display" "Memo")
+                       (opt-val "Display" "Description")
+                       total-collector)
+        (loop (cdr splits)))))
 
   (define (splits-leader splits)
     (let ((accounts (map xaccSplitGetAccount splits)))
