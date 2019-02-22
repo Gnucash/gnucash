@@ -171,7 +171,7 @@
               (xaccTransGetAccountBalance
                (xaccSplitGetParent split) account))))
     (if (and (not (null? account)) (gnc-reverse-balance account))
-        (gnc-numeric-neg balance)
+        (- balance)
         balance)))
 
 (define (add-split-row table split column-vector row-style transaction-info?
@@ -270,7 +270,7 @@
                      (gnc:html-split-anchor split split-value))
                     " ")))
     (if (debit-col column-vector)
-        (if (gnc-numeric-positive-p (gnc:gnc-monetary-amount split-value))
+        (if (positive? (gnc:gnc-monetary-amount split-value))
             (addto! row-contents
                     (if split-info?
                         (gnc:make-html-table-cell/markup
@@ -279,7 +279,7 @@
                         " "))
             (addto! row-contents " ")))
     (if (credit-col column-vector)
-        (if (gnc-numeric-negative-p (gnc:gnc-monetary-amount split-value))
+        (if (negative? (gnc:gnc-monetary-amount split-value))
             (addto! row-contents
                     (if split-info?
                         (gnc:make-html-table-cell/markup
@@ -298,7 +298,7 @@
                     " ")))
     (if (value-debit-col column-vector)
         (addto! row-contents
-                (if (and split-info? (gnc-numeric-positive-p (xaccSplitGetValue split)))
+                (if (and split-info? (positive? (xaccSplitGetValue split)))
                     (gnc:make-html-table-cell/markup
                      "number-cell"
                      (gnc:make-gnc-monetary trans-currency
@@ -306,11 +306,11 @@
                     " ")))
     (if (value-credit-col column-vector)
         (addto! row-contents
-                (if (and split-info? (gnc-numeric-negative-p (xaccSplitGetValue split)))
+                (if (and split-info? (negative? (xaccSplitGetValue split)))
                     (gnc:make-html-table-cell/markup
                      "number-cell"
                      (gnc:make-gnc-monetary trans-currency
-                                            (gnc-numeric-neg (xaccSplitGetValue split))))
+                                            (- (xaccSplitGetValue split))))
                     " ")))
     ;; For single account registers, use the split's cached balance to remain
     ;; consistent with the balances shown in the register itself
@@ -506,7 +506,7 @@
       (define (colspan monetary)
         (cond
          (single-col single-col)
-         ((gnc-numeric-negative-p (gnc:gnc-monetary-amount monetary)) credit-col)
+         ((negative? (gnc:gnc-monetary-amount monetary)) credit-col)
          (else debit-col)))
 
       (define (display-subtotal monetary)
@@ -514,7 +514,7 @@
             (if (and leader (gnc-reverse-balance leader))
                 (gnc:monetary-neg monetary)
                 monetary)
-            (if (gnc-numeric-negative-p (gnc:gnc-monetary-amount monetary))
+            (if (negative? (gnc:gnc-monetary-amount monetary))
                 (gnc:monetary-neg monetary)
                 monetary)))
 
@@ -551,10 +551,10 @@
            (split-amount (xaccSplitGetAmount split))
            (trans-currency (xaccTransGetCurrency parent))
            (split-value (xaccSplitGetValue split)))
-      (if (gnc-numeric-positive-p split-amount)
+      (if (positive? split-amount)
           (debit-amount 'add split-currency split-amount)
           (credit-amount 'add split-currency split-amount))
-      (if (gnc-numeric-positive-p split-value)
+      (if (positive? split-value)
           (debit-value 'add trans-currency split-value)
           (credit-value 'add trans-currency split-value))
       (total-amount 'add split-currency split-amount)
