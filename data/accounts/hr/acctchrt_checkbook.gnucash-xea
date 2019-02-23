@@ -38,7 +38,7 @@
       Osnovni kontni plan za rad s GnuCash programom
     </gnc-act:short-description>
     <gnc-act:long-description>
-      Osnovni kontni plan za jednostavno knjiženje i praćenje promjena na tvojem žiro računu i za praćenje njegovog stanja.
+      Osnovni kontni plan za jednostavno knjiženje i praćenje promjena na tvojem žiro računu.
     </gnc-act:long-description>
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
@@ -119,7 +119,7 @@
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Temeljni kapital</act:name>
+  <act:name>Kapital</act:name>
   <act:id type="new">b8b72887da1adf889f171923d23efbdd</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
@@ -127,7 +127,7 @@
     <cmdty:id>HRK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Temeljni kapital</act:description>
+  <act:description>Kapital</act:description>
   <act:parent type="new">1972cce2e2364f95b2b0bc014502661d</act:parent>
   <act:slots>
     <slot>
