@@ -64,7 +64,7 @@
   <act:parent type="new">8315c26e871c497c9d192aaa0fc7398d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Dugotrajna imovina </act:name>
+  <act:name>Dugotrajna imovina</act:name>
   <act:id type="new">8d1440efb8cd42d9a23e606fac6f2870</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>

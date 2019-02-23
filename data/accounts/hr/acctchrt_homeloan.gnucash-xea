@@ -110,6 +110,12 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kamate</act:name>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:id type="new">7eae5165647845468e4d00c33437a24e</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
