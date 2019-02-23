@@ -1568,9 +1568,7 @@ be excluded from periodic reporting.")
                           (gnc:make-html-table-cell/markup
                            "number-cell"
                            (if opt-use-links?
-                               (gnc:html-transaction-anchor
-                                (xaccSplitGetParent split)
-                                cell-content)
+                               (gnc:html-split-anchor split cell-content)
                                cell-content)))))
                  cells))))
 
