@@ -159,7 +159,8 @@ UriStrings::UriStrings(const std::string& uri)
                            &password, &dbname);
     m_protocol = std::string{scheme};
     m_host = std::string{host};
-    m_dbname = std::string{dbname};
+    if (dbname)
+	m_dbname = std::string{dbname};
     if (username)
         m_username = std::string{username};
     if (password)
