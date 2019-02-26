@@ -398,8 +398,10 @@
         )
         report-id
       )
-      (begin
-	(gnc-error-dialog '() (string-append "Report Failed! One of your previously opened reports has failed to open. The template on which it was based: " template-name ", was not found."))
+      (let ((errmsg (string-append "Report Failed! One of your previously opened reports has failed to open. The template on which it was based: " template-name ", was not found.")))
+	(if (gnucash-ui-is-running)
+            (gnc-error-dialog '() errmsg)
+            (gnc:warn errmsg))
 	#f))
   )
 
@@ -415,8 +417,10 @@
         )
         report-id
       )
-      (begin
-        (gnc-error-dialog '() (string-append "Report Failed! One of your previously opened reports has failed to open. The template on which it was based: " template-name ", was not found."))
+      (let ((errmsg (string-append "Report Failed! One of your previously opened reports has failed to open. The template on which it was based: " template-name ", was not found.")))
+        (if (gnucash-ui-is-running)
+            (gnc-error-dialog '() errmsg)
+            (gnc:warn errmsg))
         #f))
   )
 
@@ -934,6 +938,8 @@
                  (set! gnc:old-style-restore-warned #t)
                  (gnc-warning-dialog '() (string-append (_ "Some reports stored in a legacy format were found. This format is not supported anymore so these reports may not have been restored properly.")))))
            (gnc-report-add r))
-      (begin
-        (gnc-error-dialog '() (string-append "Report Failed! One of your previously opened reports has failed to open. The template on which it was based: " template-name ", was not found."))
+      (let ((errmsg (string-append "Report Failed! One of your previously opened reports has failed to open. The template on which it was based: " template-name ", was not found.")))
+        (if (gnucash-ui-is-running)
+            (gnc-error-dialog '() errmsg)
+            (gnc:warn errmsg))
         #f)))
