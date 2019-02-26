@@ -16,8 +16,12 @@
   (test-check2)
   (test-check3)
   (test-check4)
+  (test-report-template-getters)
+  (test-make-report)
+  (test-report)
   (test-end "Testing/Temporary/test-report-system"))
 
+(define test4-guid "54c2fc051af64a08ba2334c2e9179e24")
 ;; -----------------------------------------------------------------------
 
 (define (test-check1)
@@ -65,7 +69,7 @@
 
 (define (test-check4)
   (display "\n*** Report with Full Argument Set\n")
-  (let ((guid "54c2fc051af64a08ba2334c2e9179e24"))
+  (let ((guid test4-guid))
     (gnc:define-report 'version "1"
                        'name "Test Report Template"
                        'report-guid guid
@@ -97,3 +101,100 @@
          (string=? (gnc:report-template-menu-tip tmpl) "Menu Tip")
          (string=? (gnc:report-template-export-types tmpl) "Export Types")
          (string=? (gnc:report-template-export-thunk tmpl) "Export Thunk"))))))
+
+(define (test-report-template-getters)
+  (define test4-name "Test Report Template")
+  (test-begin "test-report-template-getters")
+  (test-assert "gnc:report-template-new-options/report-guid"
+    (procedure?
+     (gnc:report-template-new-options/report-guid test4-guid test4-name)))
+  (test-equal "gnc:report-template-menu-name/report-guid"
+    "Menu Name"
+    (gnc:report-template-menu-name/report-guid test4-guid test4-name))
+  (test-equal "gnc:report-template-renderer/report-guid"
+    "Renderer"
+    (gnc:report-template-renderer/report-guid test4-guid test4-name))
+  (test-assert "gnc:report-template-new-options"
+    (procedure?
+     (gnc:report-template-new-options (gnc:find-report-template test4-guid))))
+  (test-end "test-report-template-getters"))
+
+(define (test-make-report)
+  (define test4-name "Test Report Template")
+  (test-begin "test-make-report")
+  (test-assert "gnc:make-report succeeds"
+    (gnc:make-report test4-guid))
+  (test-equal "gnc:restore-report-by-guid"
+    1
+    (gnc:restore-report-by-guid 1 test4-guid test4-name "options"))
+  (test-assert "gnc:restore-report-by-guid, no options"
+    (not (gnc:restore-report-by-guid 1 test4-guid test4-name #f)))
+  (test-equal "gnc:restore-report-by-guid-with-custom-template"
+    2
+    (gnc:restore-report-by-guid-with-custom-template
+     "id" test4-guid test4-name "custom-template-id" "options"))
+  (test-assert "gnc:restore-report-by-guid-with-custom-template, no options"
+    (not
+     (gnc:restore-report-by-guid-with-custom-template
+      "id" test4-guid test4-name "custom-template-id" #f)))
+  (test-assert "gnc:make-report-options"
+    (procedure?
+     (gnc:make-report-options test4-guid)))
+  (test-end "test-make-report"))
+
+(define (test-report)
+  (define test-uuid "basic-report-guid")
+  (gnc:define-report
+   'version 1
+   'name "basic report"
+   'report-guid test-uuid
+   'options-generator gnc:new-options
+   'export-types (list (cons "text" 'txt))
+   'export-thunk (lambda (report-obj export-type file-name)
+                   "exported-string")
+   'renderer (lambda (obj)
+               (let ((options (gnc:report-options obj)))
+                 "return-string")))
+  (let* ((template (gnc:find-report-template test-uuid))
+         (constructor (record-constructor <report>))
+         (options (gnc:make-report-options test-uuid))
+         (report (constructor test-uuid "bar" options #t #t #f #f "")))
+    (test-equal "render works"
+      "return-string"
+      ((gnc:report-template-renderer template) report))
+    (test-equal "gnc:report-export-types"
+      '(("text" . txt))
+      (gnc:report-export-types report))
+    (test-equal "gnc:report-export-thunk"
+      "exported-string"
+      ((gnc:report-export-thunk report) report 'csv "/tmp/file.txt"))
+    (test-equal "gnc:report-menu-name"
+      "basic report"
+      (gnc:report-menu-name report))
+    (test-equal "gnc:report-name"
+      "basic report"
+      (gnc:report-name report))
+    (test-equal "gnc:report-stylesheet"
+      #f
+      (gnc:report-stylesheet report))
+    (test-equal "(gnc:all-report-template-guids)"
+      4
+      (length (gnc:all-report-template-guids)))
+    (test-equal "(gnc:custom-report-template-guids)"
+      2
+      (length (gnc:custom-report-template-guids)))
+    (test-assert "(gnc:find-report-template report-type)"
+      (gnc:find-report-template "54c2fc051af64a08ba2334c2e9179e24"))
+    (test-assert "gnc:report-template-is-custom/template-guid? #t"
+      (gnc:report-template-is-custom/template-guid?
+       "54c2fc051af64a08ba2334c2e9179e24"))
+    (test-assert "gnc:report-template-is-custom/template-guid? #f"
+      (not
+       (gnc:report-template-is-custom/template-guid?
+        "54c2fc051af64a08ba2334c2e9179e23")))
+    (test-equal "(gnc:is-custom-report-type report) #f"
+      #f
+      (gnc:is-custom-report-type report))
+    (test-assert "gnc:report-serialize = string"
+      (string?
+       (gnc:report-serialize report)))))
