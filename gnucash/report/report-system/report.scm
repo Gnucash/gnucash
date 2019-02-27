@@ -141,6 +141,8 @@ not found.")))
         (begin
           (if (gnc:report-template-name report-rec)
               (begin
+                (issue-deprecation-warning
+                 "report-definition without guid is deprecated. please define report with guid.")
                 ;; we've got an old style report with no report-id, give it an arbitrary one
                 (gnc:report-template-set-report-guid! report-rec (guid-new-return))
 

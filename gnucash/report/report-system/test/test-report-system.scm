@@ -36,6 +36,7 @@
 ;; -----------------------------------------------------------------------
 
 (define (test-check2)
+  ;; this tests deprecated features
   (display "\n*** Missing GUID detection:\n")
   (gnc:define-report 'version "1"
                      'name "Test Report Template")
