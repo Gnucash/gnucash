@@ -128,54 +128,57 @@ not found.")))
           (modifier report-rec (cadr args))
           (loop report-rec (cddr args)))))))
 
-  (let ((report-rec (args-to-defn)))
-    (if (and report-rec
-             ;; only process reports that have a report-guid
-             (gnc:report-template-report-guid report-rec))
-        (let ((report-guid (gnc:report-template-report-guid report-rec)))
-          (if (hash-ref *gnc:_report-templates_* report-guid)
-              (begin
-                (gui-error (string-append rpterr-dupe report-guid))
-                #f)
-              (hash-set! *gnc:_report-templates_* report-guid report-rec)))
-        (begin
-          (if (gnc:report-template-name report-rec)
-              (begin
-                (issue-deprecation-warning
-                 "report-definition without guid is deprecated. please define report with guid.")
-                ;; we've got an old style report with no report-id, give it an arbitrary one
-                (gnc:report-template-set-report-guid! report-rec (guid-new-return))
+  (let* ((report-rec (args-to-defn))
+         (report-guid (gnc:report-template-report-guid report-rec))
+         (report-name (gnc:report-template-name report-rec)))
+    (cond
 
-                ;; we also need to give it a parent-type, so that it will restore from the open state properly
-                ;; we'll key that from the only known good way to tie back to the original report -- the renderer
-                (hash-for-each
-                 (lambda (id rec)
-                   (if (and (equal? (gnc:report-template-renderer rec)
-                                    (gnc:report-template-renderer report-rec))
-                            (not (gnc:report-template-parent-type rec)))
-                       (begin
-                         (gnc:warn "gnc:define-report: setting parent-type of " (gnc:report-template-name report-rec) " to " (gnc:report-template-report-guid rec))
-                         (gnc:report-template-set-parent-type! report-rec (gnc:report-template-report-guid rec))
-                         (gnc:debug "done setting, is now " (gnc:report-template-parent-type report-rec)))))
-                 *gnc:_report-templates_*)
+     (report-guid
+      ;; ideal path: report is defined, and has guid
+      (if (hash-ref *gnc:_report-templates_* report-guid)
+          (gui-error (string-append rpterr-dupe report-guid))
+          (hash-set! *gnc:_report-templates_* report-guid report-rec)))
 
-                (if (gnc:report-template-parent-type report-rec)
-                    (begin
-                      ;; re-save this old-style report in the new format
-                      (gnc:report-template-save-to-savefile report-rec)
-                      (gnc:debug "complete saving " (gnc:report-template-name report-rec) " in new format")
-                      (if (not gnc:old-style-report-warned)
-                          (begin
-                            (set! gnc:old-style-report-warned #t)
-                            (gui-error rpterr-upgraded)
-                            (hash-set! *gnc:_report-templates_* (gnc:report-template-report-guid report-rec) report-rec))))
-                    ;;there is no parent -> this is an inital faulty report definition
-                    (gui-error (string-append rpterr-guid1
-                                              (gnc:report-template-name report-rec)
-                                              rpterr-guid2)))))
-          #f ;; report definition is faulty: does not include name
-          ;;(gnc:warn "gnc:define-report: old-style report. setting guid for " (gnc:report-template-name report-rec) " to " (gnc:report-template-report-guid report-rec)) ;; obsolete
-          ))))
+     (report-name
+      ;; we've got an old style report with no report-guid
+      (issue-deprecation-warning
+       "old report definition without guid is deprecated.")
+
+      ;; give it an arbitrary one
+      (set! report-guid (guid-new-return))
+      (gnc:report-template-set-report-guid! report-rec report-guid)
+
+      ;; we also need to give it a parent-type, so that it will
+      ;; restore from the open state properly we'll key that from the
+      ;; only known good way to tie back to the original report -- the
+      ;; renderer
+      (hash-for-each
+       (lambda (id rec)
+         (if (and (equal? (gnc:report-template-renderer rec)
+                          (gnc:report-template-renderer report-rec))
+                  (not (gnc:report-template-parent-type rec)))
+             (begin
+               (gnc:warn "gnc:define-report: setting parent-type of " report-name
+                         " to " (gnc:report-template-report-guid rec))
+               (gnc:report-template-set-parent-type!
+                report-rec (gnc:report-template-report-guid rec))
+               (gnc:debug "done setting, is now "
+                          (gnc:report-template-parent-type report-rec)))))
+       *gnc:_report-templates_*)
+
+      (cond
+       ((gnc:report-template-parent-type report-rec)
+        ;; re-save this old-style report in the new format
+        (gnc:report-template-save-to-savefile report-rec)
+        (gnc:debug "complete saving " report-name " in new format")
+        (unless gnc:old-style-report-warned
+          (set! gnc:old-style-report-warned #t)
+          (gui-error rpterr-upgraded)
+          (hash-set! *gnc:_report-templates_* report-guid report-rec)))
+
+       (else
+        ;;there is no parent found -> this is an inital faulty report definition
+        (gui-error (string-append rpterr-guid1 report-name rpterr-guid2))))))))
 
 (define gnc:report-template-version
   (record-accessor <report-template> 'version))
