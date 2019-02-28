@@ -42,7 +42,7 @@
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
-  <act:id type="guid">0a569e997fae4b358f01c12e58ddffa0</act:id>
+  <act:id type="new">0a569e997fae4b358f01c12e58ddffa0</act:id>
   <act:type>ROOT</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -51,7 +51,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Imovina</act:name>
-  <act:id type="guid">a0091a3993344b9b933842cd66d933c6</act:id>
+  <act:id type="new">a0091a3993344b9b933842cd66d933c6</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -64,11 +64,11 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">0a569e997fae4b358f01c12e58ddffa0</act:parent>
+  <act:parent type="new">0a569e997fae4b358f01c12e58ddffa0</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Dugotrajna imovina</act:name>
-  <act:id type="guid">cfefd5176b9e4f7da7132db9a07fe37a</act:id>
+  <act:id type="new">cfefd5176b9e4f7da7132db9a07fe37a</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -81,39 +81,39 @@
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">a0091a3993344b9b933842cd66d933c6</act:parent>
+  <act:parent type="new">a0091a3993344b9b933842cd66d933c6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kuća/Stan</act:name>
-  <act:id type="guid">fbc196e583634b92a1beca16dd1eaacf</act:id>
+  <act:id type="new">fbc196e583634b92a1beca16dd1eaacf</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>HRK</cmdty:id>
   </act:commodity>
   <act:description>Kuća/Stan</act:description>
-  <act:parent type="guid">cfefd5176b9e4f7da7132db9a07fe37a</act:parent>
+  <act:parent type="new">cfefd5176b9e4f7da7132db9a07fe37a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Ostala imovina</act:name>
-  <act:id type="guid">000cca13f15844ff9e01d2ca2bcd2614</act:id>
+  <act:id type="new">000cca13f15844ff9e01d2ca2bcd2614</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>HRK</cmdty:id>
   </act:commodity>
   <act:description>Ostala imovina</act:description>
-  <act:parent type="guid">cfefd5176b9e4f7da7132db9a07fe37a</act:parent>
+  <act:parent type="new">cfefd5176b9e4f7da7132db9a07fe37a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Osobno vozilo</act:name>
-  <act:id type="guid">706a01efcaef48d89066c05b648ba5ef</act:id>
+  <act:id type="new">706a01efcaef48d89066c05b648ba5ef</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>HRK</cmdty:id>
   </act:commodity>
   <act:description>Osobno vozilo</act:description>
-  <act:parent type="guid">cfefd5176b9e4f7da7132db9a07fe37a</act:parent>
+  <act:parent type="new">cfefd5176b9e4f7da7132db9a07fe37a</act:parent>
 </gnc:account>
 </gnc-account-example>

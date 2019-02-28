@@ -43,7 +43,7 @@
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
   <act:name>Root Account</act:name>
-  <act:id type="guid">8e5d714821424284a5750faf748ae3b5</act:id>
+  <act:id type="new">8e5d714821424284a5750faf748ae3b5</act:id>
   <act:type>ROOT</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -52,7 +52,7 @@
 HRK</gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Obveze</act:name>
-  <act:id type="guid">606f2b17b88c4215b1e3286a376b2dcd</act:id>
+  <act:id type="new">606f2b17b88c4215b1e3286a376b2dcd</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -65,11 +65,11 @@ HRK  <act:description>Obveze</act:description>
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">8e5d714821424284a5750faf748ae3b5</act:parent>
+  <act:parent type="new">8e5d714821424284a5750faf748ae3b5</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Krediti</act:name>
-  <act:id type="guid">7717fa79db024dea9c843fe9cafce52a</act:id>
+  <act:id type="new">7717fa79db024dea9c843fe9cafce52a</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -82,22 +82,22 @@ HRK  <act:description>Krediti</act:description>
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">606f2b17b88c4215b1e3286a376b2dcd</act:parent>
+  <act:parent type="new">606f2b17b88c4215b1e3286a376b2dcd</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kredit za obrazovanje</act:name>
-  <act:id type="guid">0116545dabfe4e779c23e12cfb4859e8</act:id>
+  <act:id type="new">0116545dabfe4e779c23e12cfb4859e8</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>HRK</cmdty:id>
   </act:commodity>
 HRK  <act:description>Kredit za obrazovanje</act:description>
-  <act:parent type="guid">7717fa79db024dea9c843fe9cafce52a</act:parent>
+  <act:parent type="new">7717fa79db024dea9c843fe9cafce52a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Rashod</act:name>
-  <act:id type="guid">13458f5113db491195e0147deb80fdd2</act:id>
+  <act:id type="new">13458f5113db491195e0147deb80fdd2</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -110,11 +110,11 @@ HRK  <act:description>Rashod</act:description>
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">8e5d714821424284a5750faf748ae3b5</act:parent>
+  <act:parent type="new">8e5d714821424284a5750faf748ae3b5</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kamate</act:name>
-  <act:id type="guid">5ada18bd2b6a4d0eb08a611e17a1fd69</act:id>
+  <act:id type="new">5ada18bd2b6a4d0eb08a611e17a1fd69</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -127,17 +127,17 @@ HRK  <act:description>Kamate</act:description>
       <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">13458f5113db491195e0147deb80fdd2</act:parent>
+  <act:parent type="new">13458f5113db491195e0147deb80fdd2</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kamate na kredit za obrazovanje</act:name>
-  <act:id type="guid">ae4c3a47e1f14d0582804d1f17025180</act:id>
+  <act:id type="new">ae4c3a47e1f14d0582804d1f17025180</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>HRK</cmdty:id>
   </act:commodity>
 HRK  <act:description>Kamate na kredit za obrazovanje</act:description>
-  <act:parent type="guid">5ada18bd2b6a4d0eb08a611e17a1fd69</act:parent>
+  <act:parent type="new">5ada18bd2b6a4d0eb08a611e17a1fd69</act:parent>
 </gnc:account>
 </gnc-account-example>
