@@ -131,14 +131,14 @@
 
           ; Variables
           (chart (gnc:make-html-linechart))
-          (series (list (list "Balance" "#0A0")))
+          (series '())
           (intervals (gnc:make-date-interval-list
             from-date to-date (gnc:deltasym-to-delta interval)))
           (accum (gnc:make-commodity-collector))
           (balances #f)
         )
 
-    ; Balance line
+    ; Calculate balances
     (set! balances
       (map (lambda (date) (let* (
           (start-date (car date))
@@ -157,9 +157,8 @@
         (gnc:gnc-monetary-amount
           (gnc:sum-collector-commodity balance currency exchange-fn))
       )) intervals))
-    (gnc:html-linechart-append-column! chart balances)
 
-    ; Future Line
+    ; Minimum line
     (when show-minimum
       (set! series (append series (list (list "Minimum" "#0AA"))))
       (let* ((minimum (car (reverse balances))))
@@ -167,6 +166,10 @@
           (reverse (map (lambda (balance)
             (set! minimum (min minimum balance))
             minimum) (reverse balances))))))
+
+    ; Balance line (do this here so it draws over the minimum line)
+    (set! series (append series (list (list "Balance" "#0A0"))))
+    (gnc:html-linechart-append-column! chart balances)
 
     ; Target line
     (when show-target
@@ -196,7 +199,7 @@
     (let ((old-fmt (qof-date-format-get)))
       (qof-date-format-set QOF-DATE-FORMAT-ISO)
       (gnc:html-linechart-set-row-labels! chart
-        (map qof-print-date (map car intervals)))
+        (map qof-print-date (map cadr intervals)))
       (qof-date-format-set old-fmt))
     (gnc:html-linechart-set-col-labels! chart (map car series))
     ; Assign line colors
