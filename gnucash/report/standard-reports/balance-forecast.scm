@@ -136,7 +136,6 @@
             from-date to-date (gnc:deltasym-to-delta interval)))
           (accum (gnc:make-commodity-collector))
           (balances #f)
-          (minimum #nil)
         )
 
     ; Balance line
@@ -148,7 +147,7 @@
           (exchange-fn (gnc:case-exchange-fn price currency end-date))
           (sx-value (gnc-sx-all-instantiate-cashflow-all start-date end-date))
          )
-        (map (lambda (account)
+        (for-each (lambda (account)
           (accum 'add (xaccAccountGetCommodity account)
             (hash-ref sx-value (gncAccountGetGUID account) 0))
           (balance 'merge
@@ -161,25 +160,25 @@
     (gnc:html-linechart-append-column! chart balances)
 
     ; Future Line
-    (if show-minimum (let* ()
+    (when show-minimum
       (set! series (append series (list (list "Minimum" "#0AA"))))
-      (gnc:html-linechart-append-column! chart
-        (reverse (map (lambda (balance)
-          (if (null? minimum) (set! minimum balance)
-            (if (< balance minimum) (set! minimum balance)))
-          minimum) (reverse balances))))))
+      (let* ((minimum (car (reverse balances))))
+        (gnc:html-linechart-append-column! chart
+          (reverse (map (lambda (balance)
+            (set! minimum (min minimum balance))
+            minimum) (reverse balances))))))
 
     ; Target line
-    (if show-target (let* ()
+    (when show-target
       (set! series (append series (list (list "Target" "#FF0"))))
-      (gnc:html-linechart-append-column! chart (map (lambda (date)
-        (+ target reserve)) intervals))))
+      (gnc:html-linechart-append-column! chart
+        (make-list (length intervals) (+ reserve target))))
 
     ; Reserve line
-    (if show-reserve (let* ()
+    (when show-reserve
       (set! series (append series (list (list "Reserve" "#F00"))))
-      (gnc:html-linechart-append-column! chart (map (lambda (date)
-        reserve) intervals))))
+      (gnc:html-linechart-append-column! chart
+        (make-list (length intervals) reserve)))
 
     ; Set the chart titles
     (gnc:html-linechart-set-title! chart report-title)
@@ -194,8 +193,11 @@
     ; Set line markers
     (gnc:html-linechart-set-markers?! chart show-markers)
     ; Set series labels
-    (gnc:html-linechart-set-row-labels! chart
-      (map qof-print-date (map car intervals)))
+    (let ((old-fmt (qof-date-format-get)))
+      (qof-date-format-set QOF-DATE-FORMAT-ISO)
+      (gnc:html-linechart-set-row-labels! chart
+        (map qof-print-date (map car intervals)))
+      (qof-date-format-set old-fmt))
     (gnc:html-linechart-set-col-labels! chart (map car series))
     ; Assign line colors
     (gnc:html-linechart-set-col-colors! chart (map cadr series))
