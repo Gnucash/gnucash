@@ -87,23 +87,23 @@
 ;;   list of files in the directory
 
 (define (directory-files dir)
-  (if (file-exists? dir)
-      (let ((fname-regexp (make-regexp "\\.scm$"))
-            ;; Regexp that matches the desired filenames
-            (dir-stream (opendir dir)))
-        (let loop ((fname (readdir dir-stream))
-                   (acc '()))
-          (if (eof-object? fname)
-              (begin
-                (closedir dir-stream)
-                acc)
-              (loop (readdir dir-stream)
-                    (if (regexp-exec fname-regexp fname)
-                        (cons fname acc)
-                        acc)))))
-      (begin
-        (gnc:warn "Can't access " dir ".\nEmpty list will be returned.")
-        '())))
+  (cond
+   ((file-exists? dir)
+    (let ((dir-stream (opendir dir)))
+      (let loop ((fname (readdir dir-stream))
+                 (acc '()))
+        (cond
+         ((eof-object? fname)
+          (closedir dir-stream)
+          acc)
+         (else
+          (loop (readdir dir-stream)
+                (if (string-suffix? ".scm" fname)
+                    (cons fname acc)
+                    acc)))))))
+   (else
+    (gnc:warn "Can't access " dir ".\nEmpty list will be returned.")
+    '())))
 
 ;; Process a list of files by removing the ".scm" suffix if it exists
 ;;
