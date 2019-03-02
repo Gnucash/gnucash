@@ -295,21 +295,15 @@
          (show-diff? (get-val params 'show-difference))
          (show-totalcol? (get-val params 'show-totalcol))
          (rollup-budget? (get-val params 'rollup-budget))
+         (use-ranges? (get-val params 'use-ranges))
          (num-rows (gnc:html-acct-table-num-rows acct-table))
-         (rownum 0)
          (numcolumns (gnc:html-table-num-columns html-table))
-         ;;(html-table (or html-table (gnc:make-html-table)))
          ;; WARNING: we implicitly depend here on the details of
          ;; gnc:html-table-add-account-balances.  Specifically, we
          ;; assume that it makes twice as many columns as it uses for
          ;; account labels.  For now, that seems to be a valid
          ;; assumption.
          (colnum (quotient numcolumns 2)))
-
-    (define (number-cell-tag x)
-      (if (negative? x) "number-cell-neg" "number-cell"))
-    (define (total-number-cell-tag x)
-      (if (negative? x) "total-number-cell-neg" "total-number-cell"))
 
     ;; Calculate the value to use for the budget of an account for a
     ;; specific set of periods.  If there is 1 period, use that
@@ -611,28 +605,26 @@
                              (if show-total? '(total) '()))))))
     ;; end of defines
 
-    (let* ((rownum 0)
-           (use-ranges? (get-val params 'use-ranges))
-           (column-info-list (calc-periods
-                              budget
-                              (calc-user-period
-                               budget use-ranges?
-                               (get-val params 'user-start-period)
-                               (get-val params 'user-start-period-exact))
-                              (calc-user-period
-                               budget use-ranges?
-                               (get-val params 'user-end-period)
-                               (get-val params 'user-end-period-exact))
-                              (get-val params 'collapse-before)
-                              (get-val params 'collapse-after)
-                              show-totalcol?))
-           ;;(html-table (or html-table (gnc:make-html-table)))
-           ;; WARNING: we implicitly depend here on the details of
-           ;; gnc:html-table-add-account-balances.  Specifically, we
-           ;; assume that it makes twice as many columns as it uses for
-           ;; account labels.  For now, that seems to be a valid
-           ;; assumption.
-           )
+    (let ((column-info-list (calc-periods
+                             budget
+                             (calc-user-period
+                              budget use-ranges?
+                              (get-val params 'user-start-period)
+                              (get-val params 'user-start-period-exact))
+                             (calc-user-period
+                              budget use-ranges?
+                              (get-val params 'user-end-period)
+                              (get-val params 'user-end-period-exact))
+                             (get-val params 'collapse-before)
+                             (get-val params 'collapse-after)
+                             show-totalcol?))
+          ;;(html-table (or html-table (gnc:make-html-table)))
+          ;; WARNING: we implicitly depend here on the details of
+          ;; gnc:html-table-add-account-balances.  Specifically, we
+          ;; assume that it makes twice as many columns as it uses for
+          ;; account labels.  For now, that seems to be a valid
+          ;; assumption.
+          )
       ;;debug output for control of period list calculation
       (gnc:debug "use-ranges? =" use-ranges?)
       (gnc:debug "user-start-period =" (get-val params 'user-start-period))
@@ -642,15 +634,16 @@
       (gnc:debug "column-info-list=" column-info-list)
 
       ;; call gnc:html-table-add-budget-line! for each account
-      (while (< rownum num-rows)
-        (let* ((env (append (gnc:html-acct-table-get-row-env acct-table rownum)
-                            params))
-               (acct (get-val env 'account))
-               (exchange-fn (get-val env 'exchange-fn)))
-          (gnc:html-table-add-budget-line!
-           html-table rownum colnum budget acct rollup-budget?
-           column-info-list exchange-fn)
-          (set! rownum (+ rownum 1))))
+      (let loop ((rownum 0))
+        (when (< rownum num-rows)
+          (let* ((env (append (gnc:html-acct-table-get-row-env acct-table rownum)
+                              params))
+                 (acct (get-val env 'account))
+                 (exchange-fn (get-val env 'exchange-fn)))
+            (gnc:html-table-add-budget-line!
+             html-table rownum colnum budget acct rollup-budget?
+             column-info-list exchange-fn)
+            (loop (1+ rownum)))))
 
       ;; column headers
       (gnc:html-table-add-budget-headers!
