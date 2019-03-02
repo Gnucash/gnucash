@@ -817,7 +817,7 @@
         (let ((sub-accounts (gnc:acccounts-get-all-subaccounts accounts)))
           (for-each
             (lambda (sub-account)
-              (if (not (account-in-list? sub-account accounts))
+              (if (not (member sub-account accounts))
                   (set! accounts (cons sub-account accounts))))
             sub-accounts)))
 
