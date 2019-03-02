@@ -60,9 +60,7 @@
   (record-modifier acct-type-info 'non-split))
 
 (define (gnc:register-report-hook acct-type split? create-fcn)
-  (let ((type-info (hash-ref gnc:*register-report-hash* acct-type)))
-    (if (not type-info)
-        (set! type-info (make-acct-type)))
+  (let ((type-info (hash-ref gnc:*register-report-hash* acct-type (make-acct-type))))
     (if split?
         (set-split type-info create-fcn)
         (set-non-split type-info create-fcn))
@@ -74,11 +72,10 @@
     (gnc:debug "ref: " type-info)
     (gnc:debug "hash: " gnc:*register-report-hash*)
     (gnc:debug "split: " split)
-    (if type-info
-        (if (and split (not (null? split)))
-            (begin (gnc:debug "get-split...") (get-split type-info))
-            (begin (gnc:debug "get-non-split...") (get-non-split type-info)))
-        #f)))
+    (and type-info
+         (if (and split (not (null? split)))
+             (begin (gnc:debug "get-split...") (get-split type-info))
+             (begin (gnc:debug "get-non-split...") (get-non-split type-info))))))
 
 
 ;; Returns a list of files in a directory
@@ -142,7 +139,7 @@
  (lambda (x)
    (module-use!
     (current-module)
-    (resolve-interface (append '(gnucash report standard-reports) (list x)))))
+    (resolve-interface `(gnucash report standard-reports ,x))))
  (get-report-list))
 
 (use-modules (gnucash gnc-module))
