@@ -601,23 +601,15 @@
                            #f))))))
     ;; Maps type of user selected period to concrete period number, if
     ;; user not selected to use range false is returned
-    (define (calc-user-period budget
-                              use-ranges? period-type period-exact-val)
-      (if (not use-ranges?)
-          #f
-          (cond
-           ((eq? 'first period-type) 0)
-           ((eq? 'last period-type) (- (gnc-budget-get-num-periods budget) 1))
-           ((eq? 'manual period-type) (- period-exact-val 1))
-           ((eq? 'previous period-type)
-            (find-period-relative-to-current budget (lambda (period)
-                                                      (- period 1))))
-           ((eq? 'current period-type)
-            (find-period-relative-to-current budget (lambda (period)
-                                                      period)))
-           ((eq? 'next period-type)
-            (find-period-relative-to-current budget (lambda (period)
-                                                      (+ period 1)))))))
+    (define (calc-user-period budget use-ranges? period-type period-exact-val)
+      (and use-ranges?
+           (case period-type
+            ((first)    0)
+            ((last)     (1- (gnc-budget-get-num-periods budget)))
+            ((manual)   (1- period-exact-val))
+            ((previous) (find-period-relative-to-current budget 1-))
+            ((current)  (find-period-relative-to-current budget identity))
+            ((next)     (find-period-relative-to-current budget 1+)))))
     ;; Performs calculation of periods list. If list element is a list
     ;; itself, it means that elements of this sublist should be
     ;; presented as summed value.  If user required a total column
