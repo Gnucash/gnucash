@@ -355,98 +355,83 @@
     (define (gnc:html-table-add-budget-line!
              html-table rownum colnum budget acct rollup-budget?
              column-list exchange-fn)
-      (let* ((current-col (1+ colnum))
-             (comm (xaccAccountGetCommodity acct))
+      (let* ((comm (xaccAccountGetCommodity acct))
              (reverse-balance? (gnc-reverse-balance acct))
              (income-acct? (eqv? (xaccAccountGetType acct) ACCT-TYPE-INCOME)))
 
         ;; Displays a set of budget column values
         ;;
         ;; Parameters
-        ;;   html-table - html table being created
-        ;;   rownum - row number
-        ;;   total? - is this a set of total columns
-        ;;   bgt-numeric-val - budget value, or #f if column not to be shown
-        ;;   act-numeric-val - actual value, or #f if column not to be shown
-        ;;   dif-numeric val - difference value, or #f if column not to be shown
-        (define (gnc:html-table-display-budget-columns!
-                 html-table rownum total? bgt-numeric-val act-numeric-val
-                 dif-numeric-val)
-          (let* ((bgt-val #f)
-                 (act-val #f)
-                 (dif-val #f)
-                 (style-tag (if total? "total-number-cell" "number-cell"))
-                 (style-tag-neg (string-append style-tag "-neg")))
+        ;;   style-tag - cell style
+        ;;   col - starting column to modify in html-table
+        ;;   bgt-val - budget value
+        ;;   act-val - actual value
+        ;;   dif-val - difference value
+        ;;
+        ;; Returns
+        ;;   col - next column
+        (define (disp-cols style-tag col0
+                           bgt-val act-val dif-val)
+          (let* ((style-tag-neg (string-append style-tag "-neg"))
+                 (col1 (+ col0 (if show-budget? 1 0)))
+                 (col2 (+ col1 (if show-actual? 1 0)))
+                 (col3 (+ col2 (if show-diff? 1 0))))
             (if show-budget?
-                (begin
-                  (set! bgt-val (if (zero? bgt-numeric-val) "."
-                                    (gnc:make-gnc-monetary comm bgt-numeric-val)))
-                  (gnc:html-table-set-cell/tag!
-                   html-table rownum current-col style-tag bgt-val)
-                  (set! current-col (+ current-col 1))))
+                (gnc:html-table-set-cell/tag!
+                 html-table rownum col0 style-tag
+                 (if (zero? bgt-val) "."
+                     (gnc:make-gnc-monetary comm bgt-val))))
             (if show-actual?
-                (begin
-                  (set! act-val (gnc:make-gnc-monetary comm act-numeric-val))
-                  (gnc:html-table-set-cell/tag!
-                   html-table rownum current-col
-                   (if (negative? act-numeric-val)
-                       style-tag-neg
-                       style-tag)
-                   act-val)
-                  (set! current-col (+ current-col 1))))
+                (gnc:html-table-set-cell/tag!
+                 html-table rownum col1
+                 (if (negative? act-val) style-tag-neg style-tag)
+                 (gnc:make-gnc-monetary comm act-val)))
             (if show-diff?
-                (begin
-                  (set! dif-val
-                    (if (and (zero? bgt-numeric-val)
-                             (zero? act-numeric-val))
-                        "."
-                        (gnc:make-gnc-monetary comm dif-numeric-val)))
-                  (gnc:html-table-set-cell/tag!
-                   html-table rownum current-col
-                   (if (negative? dif-numeric-val)
-                       style-tag-neg
-                       style-tag)
-                   dif-val)
-                  (set! current-col (+ current-col 1))))))
+                (gnc:html-table-set-cell/tag!
+                 html-table rownum col2
+                 (if (negative? dif-val) style-tag-neg style-tag)
+                 (if (and (zero? bgt-val) (zero? act-val)) "."
+                     (gnc:make-gnc-monetary comm dif-val))))
+            col3))
 
         (let loop ((column-list column-list)
                    (bgt-total 0)
-                   (act-total 0))
+                   (act-total 0)
+                   (current-col (1+ colnum)))
           (cond
 
            ((null? column-list)
             #f)
 
            ((eq? (car column-list) 'total)
-            (gnc:html-table-display-budget-columns!
-             html-table rownum #t bgt-total act-total
-             (if income-acct?
-                 (- act-total bgt-total)
-                 (- bgt-total act-total)))
-            (loop (cdr column-list)))
+            (loop (cdr column-list)
+                  bgt-total
+                  act-total
+                  (disp-cols "total-number-cell" current-col
+                             bgt-total act-total
+                             (if income-acct?
+                                 (- act-total bgt-total)
+                                 (- bgt-total act-total)))))
 
            (else
             (let* ((period-list (if (list? (car column-list))
                                     (car column-list)
                                     (list (car column-list))))
-                   (bgt-numeric-val (gnc:get-account-periodlist-budget-value
-                                     budget acct period-list))
-                   (act-numeric-abs (gnc:get-account-periodlist-actual-value
-                                     budget acct period-list))
-                   (act-numeric-val (if reverse-balance?
-                                        (- act-numeric-abs)
-                                        act-numeric-abs))
-                   (dif-numeric-val (if income-acct?
-                                        (- act-numeric-val bgt-numeric-val)
-                                        (- bgt-numeric-val act-numeric-val))))
-
-              (gnc:html-table-display-budget-columns!
-               html-table rownum #f
-               bgt-numeric-val act-numeric-val dif-numeric-val))
-
-            (loop (cdr column-list)
-                  (+ bgt-total bgt-numeric-val)
-                  (+ act-total act-numeric-val)))))))
+                   (bgt-val (gnc:get-account-periodlist-budget-value
+                             budget acct period-list))
+                   (act-abs (gnc:get-account-periodlist-actual-value
+                             budget acct period-list))
+                   (act-val (if reverse-balance?
+                                (- act-abs)
+                                act-abs))
+                   (dif-val (if income-acct?
+                                (- act-val bgt-val)
+                                (- bgt-val act-val))))
+              (loop (cdr column-list)
+                    (+ bgt-total bgt-val)
+                    (+ act-total act-val)
+                    (disp-cols "number-cell" current-col
+                               bgt-val act-val dif-val))))))))
 
     ;; Adds header rows to the budget report.  The columns are
     ;; specified by the column-list parameter.
