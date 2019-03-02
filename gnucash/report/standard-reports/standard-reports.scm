@@ -26,7 +26,7 @@
 
 (define-module (gnucash report standard-reports))
 (use-modules (srfi srfi-13))
-(use-modules (gnucash utilities)) 
+(use-modules (gnucash utilities))
 (use-modules (gnucash core-utils))
 
 (export gnc:register-report-create)
@@ -61,14 +61,11 @@
 
 (define (gnc:register-report-hook acct-type split? create-fcn)
   (let ((type-info (hash-ref gnc:*register-report-hash* acct-type)))
-
     (if (not type-info)
-	(set! type-info (make-acct-type)))
-
+        (set! type-info (make-acct-type)))
     (if split?
-	(set-split type-info create-fcn)
-	(set-non-split type-info create-fcn))
-
+        (set-split type-info create-fcn)
+        (set-non-split type-info create-fcn))
     (hash-set! gnc:*register-report-hash* acct-type type-info)))
 
 (define (lookup-register-report acct-type split)
@@ -78,10 +75,10 @@
     (gnc:debug "hash: " gnc:*register-report-hash*)
     (gnc:debug "split: " split)
     (if type-info
-	(if (and split (not (null? split)))
-	    (begin (gnc:debug "get-split...") (get-split type-info))
-	    (begin (gnc:debug "get-non-split...") (get-non-split type-info)))
-	#f)))
+        (if (and split (not (null? split)))
+            (begin (gnc:debug "get-split...") (get-split type-info))
+            (begin (gnc:debug "get-non-split...") (get-non-split type-info)))
+        #f)))
 
 
 ;; Returns a list of files in a directory
@@ -94,30 +91,22 @@
 
 (define (directory-files dir)
   (if (file-exists? dir)
-      (let ((fname-regexp (make-regexp "\\.scm$")) ;; Regexp that matches the desired filenames
+      (let ((fname-regexp (make-regexp "\\.scm$"))
+            ;; Regexp that matches the desired filenames
             (dir-stream (opendir dir)))
-
-           (let loop ((fname (readdir dir-stream))
-                      (acc '()))
-                     (if (eof-object? fname)
-                         (begin
-                             (closedir dir-stream)
-                             acc
-                         )
-                         (loop (readdir dir-stream)
-                               (if (regexp-exec fname-regexp fname)
-                                   (cons fname acc)
-                                   acc
-                               )
-                         )
-                     )
-           ))
+        (let loop ((fname (readdir dir-stream))
+                   (acc '()))
+          (if (eof-object? fname)
+              (begin
+                (closedir dir-stream)
+                acc)
+              (loop (readdir dir-stream)
+                    (if (regexp-exec fname-regexp fname)
+                        (cons fname acc)
+                        acc)))))
       (begin
-          (gnc:warn "Can't access " dir ".\nEmpty list will be returned.")
-          '() ;; return empty list
-      )
-  )
-)
+        (gnc:warn "Can't access " dir ".\nEmpty list will be returned.")
+        '())))
 
 ;; Process a list of files by removing the ".scm" suffix if it exists
 ;;
@@ -127,19 +116,22 @@
 ;; Return value:
 ;;   List of files with .scm suffix removed
 (define (process-file-list l)
-    (map (lambda (s) (if (string-suffix? ".scm" s) (string-drop-right s 4) s))
-         l
-    )
-)
+  (map
+   (lambda (s)
+     (if (string-suffix? ".scm" s)
+         (string-drop-right s 4)
+         s))
+   l))
 
 ;; Return a list of symbols representing reports in the standard reports directory
 ;;
 ;; Return value:
 ;;  List of symbols for reports
 (define (get-report-list)
-    (map (lambda (s) (string->symbol s))
-         (process-file-list (directory-files (gnc-path-get-stdreportsdir))))
-)
+  (map
+   (lambda (s)
+     (string->symbol s))
+   (process-file-list (directory-files (gnc-path-get-stdreportsdir)))))
 
 (gnc:debug "stdrpt-dir=" (gnc-path-get-stdreportsdir))
 (gnc:debug "dir-files=" (directory-files (gnc-path-get-stdreportsdir)))
@@ -147,22 +139,22 @@
 (gnc:debug "report-list=" (get-report-list))
 
 (for-each
-    (lambda (x)
-	    (module-use!
-		    (current-module)
-			(resolve-interface (append '(gnucash report standard-reports) (list x)))))
-	(get-report-list))
+ (lambda (x)
+   (module-use!
+    (current-module)
+    (resolve-interface (append '(gnucash report standard-reports) (list x)))))
+ (get-report-list))
 
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/engine" 0)
 
 (define (gnc:register-report-create account split query journal? ledger-type?
-				    double? title debit-string credit-string)
+                                    double? title debit-string credit-string)
   (let* ((acct-type (xaccAccountGetType account))
-	 (create-fcn (lookup-register-report acct-type split)))
+         (create-fcn (lookup-register-report acct-type split)))
     (gnc:debug "create-fcn: " create-fcn)
     (if create-fcn
-	(create-fcn account split query journal? double? title
-		    debit-string credit-string)
-	(gnc:register-report-create-internal #f query journal? ledger-type? double?
-					     title debit-string credit-string))))
+        (create-fcn account split query journal? double? title
+                    debit-string credit-string)
+        (gnc:register-report-create-internal #f query journal? ledger-type? double?
+                                             title debit-string credit-string))))
