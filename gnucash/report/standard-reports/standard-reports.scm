@@ -99,40 +99,21 @@
          (else
           (loop (readdir dir-stream)
                 (if (string-suffix? ".scm" fname)
-                    (cons fname acc)
+                    (cons (string-drop-right fname 4) acc)
                     acc)))))))
    (else
     (gnc:warn "Can't access " dir ".\nEmpty list will be returned.")
     '())))
-
-;; Process a list of files by removing the ".scm" suffix if it exists
-;;
-;; Param:
-;;   l - list of files
-;;
-;; Return value:
-;;   List of files with .scm suffix removed
-(define (process-file-list l)
-  (map
-   (lambda (s)
-     (if (string-suffix? ".scm" s)
-         (string-drop-right s 4)
-         s))
-   l))
 
 ;; Return a list of symbols representing reports in the standard reports directory
 ;;
 ;; Return value:
 ;;  List of symbols for reports
 (define (get-report-list)
-  (map
-   (lambda (s)
-     (string->symbol s))
-   (process-file-list (directory-files (gnc-path-get-stdreportsdir)))))
+  (map string->symbol (directory-files (gnc-path-get-stdreportsdir))))
 
 (gnc:debug "stdrpt-dir=" (gnc-path-get-stdreportsdir))
 (gnc:debug "dir-files=" (directory-files (gnc-path-get-stdreportsdir)))
-(gnc:debug "processed=" (process-file-list (directory-files (gnc-path-get-stdreportsdir))))
 (gnc:debug "report-list=" (get-report-list))
 
 (for-each
