@@ -580,25 +580,20 @@
     ;;   adjuster - function that is used for calculation of period relative to current
     (define (find-period-relative-to-current budget adjuster)
       (let* ((now (current-time))
-             (total-periods (gnc-budget-get-num-periods budget) )
-             (last-period (- total-periods 1))
+             (total-periods (gnc-budget-get-num-periods budget))
+             (last-period (1- total-periods))
              (period-start (lambda (x) (gnc-budget-get-period-start-date budget x)))
              (period-end (lambda (x) (gnc-budget-get-period-end-date budget x))))
         (cond ((< now (period-start 0)) 1)
               ((> now (period-end last-period)) total-periods)
-              ( else (let ((found-period
-                            (find (lambda (period)
-                                    (and (>= now (period-start period))
-                                         (<= now (period-end period))))
-                                  (iota total-periods))))
-                       (gnc:debug "current period =" found-period)
-                       (if found-period
-                           (let ((adjusted (adjuster found-period)))
-                             (cond
-                              ((< adjusted 0) 0)
-                              ((> adjusted last-period) last-period)
-                              (else adjusted)))
-                           #f))))))
+              (else (let ((found-period
+                           (find (lambda (period)
+                                   (<= (period-start period)
+                                       now
+                                       (period-end period)))
+                                 (iota total-periods))))
+                      (and found-period
+                           (max 0 (min last-period (adjuster found-period)))))))))
     ;; Maps type of user selected period to concrete period number, if
     ;; user not selected to use range false is returned
     (define (calc-user-period budget use-ranges? period-type period-exact-val)
