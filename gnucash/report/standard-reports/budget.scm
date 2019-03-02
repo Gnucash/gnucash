@@ -684,116 +684,100 @@
          (show-zb-accts? (get-option gnc:pagename-display
                                      optname-show-zb-accounts))
          (use-ranges? (get-option gnc:pagename-general optname-use-budget-period-range))
-         (include-collapse-before? (if use-ranges?
+         (include-collapse-before? (and use-ranges?
+                                        (get-option gnc:pagename-general
+                                                    optname-period-collapse-before)))
+         (include-collapse-after? (and use-ranges?
                                        (get-option gnc:pagename-general
-                                                   optname-period-collapse-before)
-                                       #f))
-         (include-collapse-after? (if use-ranges?
-                                      (get-option gnc:pagename-general
-                                                  optname-period-collapse-after)
-                                      #f))
-         (row-num 0)
-         (work-done 0)
-         (work-to-do 0)
+                                                   optname-period-collapse-after)))
          (show-full-names? (get-option gnc:pagename-general
                                        optname-show-full-names))
-         (doc (gnc:make-html-document)))
-
+         (doc (gnc:make-html-document))
+         (accounts (append accounts
+                           (filter (lambda (acc) (not (member acc accounts)))
+                                   (if show-subaccts?
+                                       (gnc:acccounts-get-all-subaccounts accounts)
+                                       '())))))
     ;; end of defines
 
-    ;; add subaccounts if requested
-    (if show-subaccts?
-        (let ((sub-accounts (gnc:acccounts-get-all-subaccounts accounts)))
-          (for-each
-           (lambda (sub-account)
-             (if (not (member sub-account accounts))
-                 (set! accounts (cons sub-account accounts))))
-           sub-accounts)))
-
     (cond
+
      ((null? accounts)
       ;; No accounts selected.
       (gnc:html-document-add-object!
-       doc
-       (gnc:html-make-no-account-warning reportname (gnc:report-id report-obj))))
+       doc (gnc:html-make-no-account-warning reportname (gnc:report-id report-obj))))
+
      ((not budget-valid?)
       ;; No budget selected.
       (gnc:html-document-add-object!
        doc (gnc:html-make-generic-budget-warning reportname)))
-     (else (begin
-             (let* ((tree-depth (if (equal? display-depth 'all)
-                                    (accounts-get-children-depth accounts)
-                                    display-depth))
-                    (to-period-val (lambda (v)
-                                     (inexact->exact
-                                      (truncate
-                                       (get-option gnc:pagename-general v)))))
-                    (env (list
-                          (list 'start-date (gnc:budget-get-start-date budget))
-                          (list 'end-date (gnc:budget-get-end-date budget))
-                          (list 'display-tree-depth tree-depth)
-                          (list 'depth-limit-behavior
-                                (if bottom-behavior 'flatten 'summarize))
-                          (list 'zero-balance-mode
-                                (if show-zb-accts? 'show-leaf-acct 'omit-leaf-acct))
-                          (list 'report-budget budget)))
-                    (acct-table #f)
-                    (html-table (gnc:make-html-table))
-                    (params '())
-                    (paramsBudget
-                     (list
-                      (list 'show-actual
-                            (get-option gnc:pagename-display optname-show-actual))
-                      (list 'show-budget
-                            (get-option gnc:pagename-display optname-show-budget))
-                      (list 'show-difference
-                            (get-option gnc:pagename-display optname-show-difference))
-                      (list 'show-totalcol
-                            (get-option gnc:pagename-display optname-show-totalcol))
-                      (list 'rollup-budget
-                            (get-option gnc:pagename-display optname-rollup-budget))
-                      (list 'use-ranges use-ranges?)
-                      (list 'collapse-before include-collapse-before?)
-                      (list 'collapse-after include-collapse-after?)
-                      (list 'user-start-period
-                            (get-option gnc:pagename-general
-                                        optname-budget-period-start))
-                      (list 'user-end-period
-                            (get-option gnc:pagename-general
-                                        optname-budget-period-end))
-                      (list 'user-start-period-exact
-                            (to-period-val optname-budget-period-start-exact))
-                      (list 'user-end-period-exact
-                            (to-period-val optname-budget-period-end-exact))))
-                    (report-name (get-option gnc:pagename-general
-                                             gnc:optname-reportname)))
 
-               (gnc:html-document-set-title!
-                doc (format #f (_ "~a: ~a")
-                            report-name (gnc-budget-get-name budget)))
+     (else
+      (let* ((tree-depth (if (eq? display-depth 'all)
+                             (accounts-get-children-depth accounts)
+                             display-depth))
+             (to-period-val (lambda (v)
+                              (inexact->exact
+                               (truncate
+                                (get-option gnc:pagename-general v)))))
+             (env (list
+                   (list 'start-date (gnc:budget-get-start-date budget))
+                   (list 'end-date (gnc:budget-get-end-date budget))
+                   (list 'display-tree-depth tree-depth)
+                   (list 'depth-limit-behavior
+                         (if bottom-behavior 'flatten 'summarize))
+                   (list 'zero-balance-mode
+                         (if show-zb-accts? 'show-leaf-acct 'omit-leaf-acct))
+                   (list 'report-budget budget)))
+             (accounts (sort accounts account-full-name<?))
+             (acct-table (gnc:make-html-acct-table/env/accts env accounts))
+             (paramsBudget
+              (list
+               (list 'show-actual
+                     (get-option gnc:pagename-display optname-show-actual))
+               (list 'show-budget
+                     (get-option gnc:pagename-display optname-show-budget))
+               (list 'show-difference
+                     (get-option gnc:pagename-display optname-show-difference))
+               (list 'show-totalcol
+                     (get-option gnc:pagename-display optname-show-totalcol))
+               (list 'rollup-budget
+                     (get-option gnc:pagename-display optname-rollup-budget))
+               (list 'use-ranges use-ranges?)
+               (list 'collapse-before include-collapse-before?)
+               (list 'collapse-after include-collapse-after?)
+               (list 'user-start-period
+                     (get-option gnc:pagename-general
+                                 optname-budget-period-start))
+               (list 'user-end-period
+                     (get-option gnc:pagename-general
+                                 optname-budget-period-end))
+               (list 'user-start-period-exact
+                     (to-period-val optname-budget-period-start-exact))
+               (list 'user-end-period-exact
+                     (to-period-val optname-budget-period-end-exact))))
+             (report-name (get-option gnc:pagename-general
+                                      gnc:optname-reportname)))
 
-               (set! accounts (sort accounts account-full-name<?))
+        (gnc:html-document-set-title!
+         doc (format #f (_ "~a: ~a")
+                     report-name (gnc-budget-get-name budget)))
 
-               (set! acct-table
-                 (gnc:make-html-acct-table/env/accts env accounts))
+        ;; We do this in two steps: First the account names...  the
+        ;; add-account-balances will actually compute and add a
+        ;; bunch of current account balances, too, but we'll
+        ;; overwrite them.
+        (let ((html-table (gnc:html-table-add-account-balances #f acct-table '())))
 
-               ;; We do this in two steps: First the account names...  the
-               ;; add-account-balances will actually compute and add a
-               ;; bunch of current account balances, too, but we'll
-               ;; overwrite them.
-               (set! html-table (gnc:html-table-add-account-balances
-                                 #f acct-table params))
+          ;; ... then the budget values
+          (gnc:html-table-add-budget-values! html-table acct-table budget paramsBudget)
 
-               ;; ... then the budget values
-               (gnc:html-table-add-budget-values!
-                html-table acct-table budget paramsBudget)
+          ;; hmmm... I expected that add-budget-values would have to
+          ;; clear out any unused columns to the right, out to the
+          ;; table width, since the add-account-balance had put stuff
+          ;; there, but it doesn't seem to matter.
 
-               ;; hmmm... I expected that add-budget-values would have to
-               ;; clear out any unused columns to the right, out to the
-               ;; table width, since the add-account-balance had put stuff
-               ;; there, but it doesn't seem to matter.
-
-               (gnc:html-document-add-object! doc html-table)))))
+          (gnc:html-document-add-object! doc html-table)))))
 
     (gnc:report-finished)
     doc))
