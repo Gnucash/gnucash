@@ -324,13 +324,11 @@
     ;; Return value:
     ;;   Budget sum
     (define (gnc:get-account-periodlist-budget-value budget acct periodlist)
-      (cond
-       ((= (length periodlist) 1)
-        (gnc:get-account-period-rolledup-budget-value budget acct (car periodlist)))
-       (else
-        (+
-         (gnc:get-account-period-rolledup-budget-value budget acct (car periodlist))
-         (gnc:get-account-periodlist-budget-value budget acct (cdr periodlist))))))
+      (apply +
+             (map
+              (lambda (period)
+                (gnc:get-account-period-rolledup-budget-value budget acct period))
+              periodlist)))
     
     ;; Calculate the value to use for the actual of an account for a
     ;; specific set of periods.  This is the sum of the actuals for
@@ -344,13 +342,10 @@
     ;; Return value:
     ;;   Budget sum
     (define (gnc:get-account-periodlist-actual-value budget acct periodlist)
-      (cond
-       ((= (length periodlist) 1)
-        (gnc-budget-get-account-period-actual-value budget acct (car periodlist)))
-       (else
-        (+
-         (gnc-budget-get-account-period-actual-value budget acct (car periodlist))
-         (gnc:get-account-periodlist-actual-value budget acct (cdr periodlist))))))
+      (apply + (map
+                (lambda (period)
+                  (gnc-budget-get-account-period-actual-value budget acct period))
+                periodlist)))
 
     ;; Adds a line to tbe budget report.
     ;;
