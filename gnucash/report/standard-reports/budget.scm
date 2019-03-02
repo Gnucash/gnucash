@@ -483,68 +483,60 @@
     ;;   column-list - column info list
     (define (gnc:html-table-add-budget-headers!
              html-table colnum budget column-list)
-      (let* ((current-col (+ colnum 1))
-             (col-list column-list)
-             (col-span 0))
-        (if show-budget? (set! col-span (+ col-span 1)))
-        (if show-actual? (set! col-span (+ col-span 1)))
-        (if show-diff? (set! col-span (+ col-span 1)))
-        (if (eqv? col-span 0) (set! col-span 1))
+      (let* ((current-col (1+ colnum))
+             (col-span (max 1 (count identity
+                                     (list show-budget? show-actual? show-diff?))))
+             (period-to-date-string (lambda (p)
+                                      (qof-print-date
+                                       (gnc-budget-get-period-start-date budget p)))))
 
         ;; prepend 2 empty rows
         (gnc:html-table-prepend-row! html-table '())
         (gnc:html-table-prepend-row! html-table '())
 
-        (while (not (= (length col-list) 0))
-          (let* ((col-info (car col-list))
-                 (tc #f)
-                 (period-to-date-string (lambda (p)
-                                          (qof-print-date
-                                           (gnc-budget-get-period-start-date
-                                            budget p)))))
-            (cond
-             ((equal? col-info 'total)
-              (gnc:html-table-set-cell! html-table 0 current-col (_ "Total")))
-             ((list? col-info)
-              (gnc:html-table-set-cell!
-               html-table 0 current-col (string-append
-                                         (period-to-date-string (car col-info))
-                                         " &ndash; "
-                                         (period-to-date-string
-                                          (car (reverse col-info))))))
-             (else
-              (gnc:html-table-set-cell!
-               html-table 0 current-col (period-to-date-string col-info))))
-            (set! tc (gnc:html-table-get-cell html-table 0 current-col))
-            (gnc:html-table-cell-set-colspan! tc col-span)
-            (gnc:html-table-cell-set-tag! tc "centered-label-cell")
-            (set! current-col (+ current-col 1))
-            (set! col-list (cdr col-list))))
+        (let loop ((column-list column-list)
+                   (current-col current-col))
+          (unless (null? column-list)
+            (gnc:html-table-set-cell!
+             html-table 0 current-col
+             (cond
+              ((eq? (car column-list) 'total)
+               (_ "Total"))
+              ((list? (car column-list))
+               (string-append (period-to-date-string (car (car column-list)))
+                              " – "
+                              (period-to-date-string (last (car column-list)))))
+              (else
+               (period-to-date-string (car column-list)))))
+
+            (let ((tc (gnc:html-table-get-cell html-table 0 current-col)))
+              (gnc:html-table-cell-set-colspan! tc col-span)
+              (gnc:html-table-cell-set-tag! tc "centered-label-cell"))
+
+            (loop (cdr column-list)
+                  (1+ current-col))))
 
         ;; make the column headers
-        (set! col-list column-list)
-        (set! current-col (+ colnum 1))
-        (while (not (= (length column-list) 0))
-          (let* ((col-info (car column-list)))
-            (if show-budget?
-                (begin
-                  (gnc:html-table-set-cell/tag!
-                   html-table 1 current-col "centered-label-cell"
-                   (_ "Bgt")) ;; Translators: Abbreviation for "Budget"
-                  (set! current-col (+ current-col 1))))
-            (if show-actual?
-                (begin
-                  (gnc:html-table-set-cell/tag!
-                   html-table 1 current-col "centered-label-cell"
-                   (_ "Act")) ;; Translators: Abbreviation for "Actual"
-                  (set! current-col (+ current-col 1))))
-            (if show-diff?
-                (begin
-                  (gnc:html-table-set-cell/tag!
-                   html-table 1 current-col "centered-label-cell"
-                   (_ "Diff")) ;; Translators: Abbreviation for "Difference"
-                  (set! current-col (+ current-col 1))))
-            (set! column-list (cdr column-list))))))
+        (let loop ((column-list column-list)
+                   (col0 current-col))
+          (unless (null? column-list)
+            (let* ((col1 (+ col0 (if show-budget? 1 0)))
+                   (col2 (+ col1 (if show-actual? 1 0)))
+                   (col3 (+ col2 (if show-diff? 1 0))))
+              (when show-budget?
+                (gnc:html-table-set-cell/tag!
+                 html-table 1 col0 "centered-label-cell"
+                 (_ "Bgt"))) ;; Translators: Abbreviation for "Budget"
+              (when show-actual?
+                (gnc:html-table-set-cell/tag!
+                 html-table 1 col1 "centered-label-cell"
+                 (_ "Act"))) ;; Translators: Abbreviation for "Actual"
+              (when show-diff?
+                (gnc:html-table-set-cell/tag!
+                 html-table 1 col2 "centered-label-cell"
+                 (_ "Diff"))) ;; Translators: Abbreviation for "Difference"
+              (loop (cdr column-list)
+                    col3))))))
 
     ;; Determines the budget period relative to current period. Budget
     ;; period is current if it start time <= current time and end time
