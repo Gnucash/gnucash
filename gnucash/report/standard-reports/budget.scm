@@ -356,8 +356,6 @@
              html-table rownum colnum budget acct rollup-budget?
              column-list exchange-fn)
       (let* ((current-col (1+ colnum))
-             (bgt-total 0)
-             (act-total 0)
              (comm (xaccAccountGetCommodity acct))
              (reverse-balance? (gnc-reverse-balance acct))
              (income-acct? (eqv? (xaccAccountGetType acct) ACCT-TYPE-INCOME)))
@@ -411,45 +409,9 @@
                    dif-val)
                   (set! current-col (+ current-col 1))))))
 
-        ;; Adds a set of column values to the budget report for a specific list
-        ;; of periods.
-        ;;
-        ;; Parameters:
-        ;;   html-table - html table being created
-        ;;   rownum - row number
-        ;;   budget - budget to use
-        ;;   acct - account being displayed
-        ;;   period-list - list of periods to use
-        (define (gnc:html-table-add-budget-line-columns!
-                 html-table rownum budget acct period-list)
-          (let* (;; budgeted amount
-                 (bgt-numeric-val (gnc:get-account-periodlist-budget-value
-                                   budget acct period-list))
-                 ;; actual amount
-                 (act-numeric-abs (gnc:get-account-periodlist-actual-value
-                                   budget acct period-list))
-                 (act-numeric-val
-                  (if reverse-balance?
-                      (- act-numeric-abs)
-                      act-numeric-abs))
-
-                 ;; difference (budget to actual)
-                 (dif-numeric-val
-                  (- bgt-numeric-val act-numeric-val)))
-
-            (if (not (zero? bgt-numeric-val))
-                (begin
-                  (set! bgt-total (+ bgt-total bgt-numeric-val))
-                  (set! bgt-total-unset? #f)))
-            (set! act-total (+ act-total act-numeric-val))
-            (if income-acct?
-                (set! dif-numeric-val
-                  (- act-numeric-val bgt-numeric-val)))
-            (gnc:html-table-display-budget-columns!
-             html-table rownum #f
-             bgt-numeric-val act-numeric-val dif-numeric-val)))
-
-        (let loop ((column-list column-list))
+        (let loop ((column-list column-list)
+                   (bgt-total 0)
+                   (act-total 0))
           (cond
 
            ((null? column-list)
@@ -464,12 +426,27 @@
             (loop (cdr column-list)))
 
            (else
-            (gnc:html-table-add-budget-line-columns!
-             html-table rownum budget acct
-             (if (list? (car column-list))
-                 (car column-list)
-                 (list (car column-list))))
-            (loop (cdr column-list)))))))
+            (let* ((period-list (if (list? (car column-list))
+                                    (car column-list)
+                                    (list (car column-list))))
+                   (bgt-numeric-val (gnc:get-account-periodlist-budget-value
+                                     budget acct period-list))
+                   (act-numeric-abs (gnc:get-account-periodlist-actual-value
+                                     budget acct period-list))
+                   (act-numeric-val (if reverse-balance?
+                                        (- act-numeric-abs)
+                                        act-numeric-abs))
+                   (dif-numeric-val (if income-acct?
+                                        (- act-numeric-val bgt-numeric-val)
+                                        (- bgt-numeric-val act-numeric-val))))
+
+              (gnc:html-table-display-budget-columns!
+               html-table rownum #f
+               bgt-numeric-val act-numeric-val dif-numeric-val))
+
+            (loop (cdr column-list)
+                  (+ bgt-total bgt-numeric-val)
+                  (+ act-total act-numeric-val)))))))
 
     ;; Adds header rows to the budget report.  The columns are
     ;; specified by the column-list parameter.
