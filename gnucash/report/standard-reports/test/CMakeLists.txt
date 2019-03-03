@@ -11,6 +11,7 @@ set(scm_test_with_srfi64_SOURCES
   test-transaction.scm
   test-balsheet-pnl.scm
   test-income-gst.scm
+  test-budget.scm
   test-register.scm
 )
 
