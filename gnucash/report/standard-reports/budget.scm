@@ -355,13 +355,12 @@
     (define (gnc:html-table-add-budget-line!
              html-table rownum colnum budget acct rollup-budget?
              column-list exchange-fn)
-      (let* ((current-col (+ colnum 1))
+      (let* ((current-col (1+ colnum))
              (bgt-total 0)
-             (bgt-total-unset? #t)
              (act-total 0)
              (comm (xaccAccountGetCommodity acct))
              (reverse-balance? (gnc-reverse-balance acct))
-             (income-acct? (eq? (xaccAccountGetType acct) ACCT-TYPE-INCOME)))
+             (income-acct? (eqv? (xaccAccountGetType acct) ACCT-TYPE-INCOME)))
 
         ;; Displays a set of budget column values
         ;;
@@ -450,22 +449,27 @@
              html-table rownum #f
              bgt-numeric-val act-numeric-val dif-numeric-val)))
 
-        (while (not (null? column-list))
-          (let* ((col-info (car column-list)))
-            (cond
-             ((equal? col-info 'total)
-              (gnc:html-table-display-budget-columns!
-               html-table rownum #t bgt-total act-total
-               (if income-acct?
-                   (- act-total bgt-total)
-                   (- bgt-total act-total))))
-             ((list? col-info)
-              (gnc:html-table-add-budget-line-columns!
-               html-table rownum budget acct col-info))
-             (else
-              (gnc:html-table-add-budget-line-columns!
-               html-table rownum budget acct (list col-info))))
-            (set! column-list (cdr column-list))))))
+        (let loop ((column-list column-list))
+          (cond
+
+           ((null? column-list)
+            #f)
+
+           ((eq? (car column-list) 'total)
+            (gnc:html-table-display-budget-columns!
+             html-table rownum #t bgt-total act-total
+             (if income-acct?
+                 (- act-total bgt-total)
+                 (- bgt-total act-total)))
+            (loop (cdr column-list)))
+
+           (else
+            (gnc:html-table-add-budget-line-columns!
+             html-table rownum budget acct
+             (if (list? (car column-list))
+                 (car column-list)
+                 (list (car column-list))))
+            (loop (cdr column-list)))))))
 
     ;; Adds header rows to the budget report.  The columns are
     ;; specified by the column-list parameter.
