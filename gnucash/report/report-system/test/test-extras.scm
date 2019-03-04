@@ -81,7 +81,8 @@
                                 (strip-string render strip-tag)
                                 render)
                             #:trim-whitespace? #t
-                            #:entities '((nbsp . "\xa0"))))
+                            #:entities '((nbsp . "\xa0")
+                                         (ndash . "­"))))
       (lambda (k . args)
         (format #t "*** XML error: ~a ~a: ~a / ~a\n~a"
                 prefix test-title k args
