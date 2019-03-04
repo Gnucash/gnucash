@@ -42,8 +42,6 @@
 
 ;; define all option's names so that they are properly defined
 ;; in *one* place.
-;;(define optname-from-date (N_ "Start Date"))
-;;(define optname-to-date (N_ "End Date"))
 
 (define optname-display-depth
   (N_ "Account Display Depth"))
@@ -623,8 +621,6 @@
 (define (budget-renderer report-obj)
   (define (get-option pagename optname)
     (get-option-val (gnc:report-options report-obj) pagename optname))
-  ;;     (gnc:lookup-option
-  ;;      (gnc:report-options report-obj) pagename optname)))
 
   (gnc:report-starting reportname)
 
