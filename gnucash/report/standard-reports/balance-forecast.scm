@@ -82,21 +82,28 @@
     (gnc:register-option options (gnc:make-simple-boolean-option
       gnc:pagename-display optname-show-markers "b" "" #f))
     ; Reserve line
-    (gnc:register-option options (gnc:make-simple-boolean-option
-      gnc:pagename-display optname-show-reserve "c" "" #f))
+    (gnc:register-option options (gnc:make-complex-boolean-option
+      gnc:pagename-display optname-show-reserve "c" "" #f #f
+      (lambda (x)
+        (gnc-option-db-set-option-selectable-by-name
+         options gnc:pagename-display optname-reserve x))))
     (gnc:register-option options (gnc:make-number-range-option
       gnc:pagename-display optname-reserve "d" optname-reserve
       0 0 10E9 2 0.01))
     ; Purchasing power target
-    (gnc:register-option options (gnc:make-simple-boolean-option
-      gnc:pagename-display optname-show-target "e" "" #f))
+    (gnc:register-option options (gnc:make-complex-boolean-option
+      gnc:pagename-display optname-show-target "e" "" #f #f
+      (lambda (x)
+        (gnc-option-db-set-option-selectable-by-name
+         options gnc:pagename-display optname-target x))))
     (gnc:register-option options (gnc:make-number-range-option
       gnc:pagename-display optname-target "f" optname-target
       0 0 10E9 2 0.01))
     ; Future minimum
     (gnc:register-option options (gnc:make-simple-boolean-option
       gnc:pagename-display optname-show-minimum "g" "" #f))
-  options)
+    (gnc:options-set-default-section options gnc:pagename-general)
+    options)
 )
 
 ; Renderer
@@ -160,26 +167,25 @@
 
     ; Minimum line
     (when show-minimum
-      (set! series (append series (list (list "Minimum" "#0AA"))))
-      (let* ((minimum (car (reverse balances))))
-        (gnc:html-linechart-append-column! chart
-          (reverse (map (lambda (balance)
-            (set! minimum (min minimum balance))
-            minimum) (reverse balances))))))
+      (set! series (cons (list (_ "Minimum") "#0AA") series))
+      (gnc:html-linechart-append-column!
+       chart (let loop ((balances balances) (result '()))
+               (if (null? balances) (reverse! result)
+                   (loop (cdr balances) (cons (apply min balances) result))))))
 
     ; Balance line (do this here so it draws over the minimum line)
-    (set! series (append series (list (list "Balance" "#0A0"))))
+    (set! series (cons (list (_ "Balance") "#0A0") series))
     (gnc:html-linechart-append-column! chart balances)
 
     ; Target line
     (when show-target
-      (set! series (append series (list (list "Target" "#FF0"))))
+      (set! series (cons (list (_ "Target") "#FF0") series))
       (gnc:html-linechart-append-column! chart
         (make-list (length intervals) (+ reserve target))))
 
     ; Reserve line
     (when show-reserve
-      (set! series (append series (list (list "Reserve" "#F00"))))
+      (set! series (cons (list (_ "Reserve") "#F00") series))
       (gnc:html-linechart-append-column! chart
         (make-list (length intervals) reserve)))
 
@@ -201,9 +207,9 @@
       (gnc:html-linechart-set-row-labels! chart
         (map qof-print-date (map cadr intervals)))
       (qof-date-format-set old-fmt))
-    (gnc:html-linechart-set-col-labels! chart (map car series))
+    (gnc:html-linechart-set-col-labels! chart (map car (reverse series)))
     ; Assign line colors
-    (gnc:html-linechart-set-col-colors! chart (map cadr series))
+    (gnc:html-linechart-set-col-colors! chart (map cadr (reverse series)))
 
     ; We're done!
     (gnc:html-document-add-object! document chart)
