@@ -145,6 +145,21 @@
           (balances #f)
         )
 
+    ;; initialize the SX balance accumulator with the instantiated SX
+    ;; amounts starting from the earliest split date in the list of
+    ;; accounts up to the report start date.
+    (let* ((account-dates (map (compose xaccTransGetDate xaccSplitGetParent car)
+                               (filter pair? (map xaccAccountGetSplitList accounts))))
+           (earliest (and (pair? account-dates) (apply min account-dates)))
+           (sx-hash (if earliest
+                        (gnc-sx-all-instantiate-cashflow-all earliest from-date)
+                        (make-hash-table))))
+      (for-each
+       (lambda (account)
+         (accum 'add (xaccAccountGetCommodity account)
+                (hash-ref sx-hash (gncAccountGetGUID account) 0)))
+       accounts))
+
     ; Calculate balances
     (set! balances
       (map (lambda (date) (let* (
