@@ -27,6 +27,7 @@
 
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
+(use-modules (srfi srfi-1))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
@@ -142,6 +143,13 @@
           (intervals (gnc:make-date-interval-list
             from-date to-date (gnc:deltasym-to-delta interval)))
           (accum (gnc:make-commodity-collector))
+          (accounts-balancelist
+           (map
+            (lambda (acc)
+              (gnc:account-get-balances-at-dates acc (map cadr intervals)))
+            accounts))
+          (accounts-balancelist-transposed
+           (if (null? accounts) '() (apply zip accounts-balancelist)))
           (balances #f)
         )
 
@@ -162,23 +170,23 @@
 
     ; Calculate balances
     (set! balances
-      (map (lambda (date) (let* (
+      (map (lambda (date accounts-balance) (let* (
           (start-date (car date))
           (end-date (cadr date))
           (balance (gnc:make-commodity-collector))
           (exchange-fn (gnc:case-exchange-fn price currency end-date))
           (sx-value (gnc-sx-all-instantiate-cashflow-all start-date end-date))
          )
-        (for-each (lambda (account)
+        (for-each (lambda (account account-balance)
           (accum 'add (xaccAccountGetCommodity account)
             (hash-ref sx-value (gncAccountGetGUID account) 0))
-          (balance 'merge
-            (gnc:account-get-comm-balance-at-date account end-date #f) #f)
-        ) accounts)
+          (balance 'add (gnc:gnc-monetary-commodity account-balance)
+            (gnc:gnc-monetary-amount account-balance))
+        ) accounts accounts-balance)
         (balance 'merge accum #f)
         (gnc:gnc-monetary-amount
           (gnc:sum-collector-commodity balance currency exchange-fn))
-      )) intervals))
+      )) intervals accounts-balancelist-transposed))
 
     ; Minimum line
     (when show-minimum
