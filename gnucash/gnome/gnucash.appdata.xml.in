@@ -21,7 +21,7 @@
       <li>Keep your small business' accounting up to date</li>
       <li>Create accurate reports and graphs from your financial data</li>
       <li>Set up scheduled transactions to avoid repeated data entry</li>
-      <li>QIF/OFX/HBCI Import, Transaction Matching</li>
+      <li>Exchange by CSV/FinTS(former HBCI) or import SWIFT-MT9xx/QIF/OFX data including Transaction Matching</li>
       <li>Perform financial calculations, such as a loan repayment</li>
     </ul>
   </description>
