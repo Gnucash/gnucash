@@ -147,97 +147,111 @@
            (map
             (lambda (acc)
               (gnc:account-get-balances-at-dates acc (map cadr intervals)))
-            accounts))
-          (accounts-balancelist-transposed
-           (if (null? accounts) '() (apply zip accounts-balancelist)))
-          (balances #f)
-        )
+            accounts)))
 
-    ;; initialize the SX balance accumulator with the instantiated SX
-    ;; amounts starting from the earliest split date in the list of
-    ;; accounts up to the report start date.
-    (let* ((account-dates (map (compose xaccTransGetDate xaccSplitGetParent car)
-                               (filter pair? (map xaccAccountGetSplitList accounts))))
-           (earliest (and (pair? account-dates) (apply min account-dates)))
-           (sx-hash (if earliest
-                        (gnc-sx-all-instantiate-cashflow-all earliest from-date)
-                        (make-hash-table))))
-      (for-each
-       (lambda (account)
-         (accum 'add (xaccAccountGetCommodity account)
-                (hash-ref sx-hash (gncAccountGetGUID account) 0)))
-       accounts))
+    (cond
+     ((null? accounts)
+      (gnc:html-document-add-object!
+       document
+       (gnc:html-make-no-account-warning
+        report-title (gnc:report-id report-obj))))
 
-    ; Calculate balances
-    (set! balances
-      (map (lambda (date accounts-balance) (let* (
-          (start-date (car date))
-          (end-date (cadr date))
-          (balance (gnc:make-commodity-collector))
-          (exchange-fn (gnc:case-exchange-fn price currency end-date))
-          (sx-value (gnc-sx-all-instantiate-cashflow-all start-date end-date))
-         )
-        (for-each (lambda (account account-balance)
-          (accum 'add (xaccAccountGetCommodity account)
-            (hash-ref sx-value (gncAccountGetGUID account) 0))
-          (balance 'add (gnc:gnc-monetary-commodity account-balance)
-            (gnc:gnc-monetary-amount account-balance))
-        ) accounts accounts-balance)
-        (balance 'merge accum #f)
-        (gnc:gnc-monetary-amount
-          (gnc:sum-collector-commodity balance currency exchange-fn))
-      )) intervals accounts-balancelist-transposed))
+     ((every zero? (map gnc:gnc-monetary-amount (apply append accounts-balancelist)))
+      (gnc:html-document-add-object!
+       document
+       (gnc:html-make-empty-data-warning
+        report-title (gnc:report-id report-obj))))
 
-    ; Minimum line
-    (when show-minimum
-      (set! series (cons (list (_ "Minimum") "#0AA") series))
-      (gnc:html-linechart-append-column!
-       chart (let loop ((balances balances) (result '()))
-               (if (null? balances) (reverse! result)
-                   (loop (cdr balances) (cons (apply min balances) result))))))
+     (else
+      ;; initialize the SX balance accumulator with the instantiated SX
+      ;; amounts starting from the earliest split date in the list of
+      ;; accounts up to the report start date.
+      (let* ((accounts-dates (map (compose xaccTransGetDate xaccSplitGetParent car)
+                                  (filter pair?
+                                          (map xaccAccountGetSplitList accounts))))
+             (earliest (and (pair? accounts-dates) (apply min accounts-dates)))
+             (sx-hash (if earliest
+                          (gnc-sx-all-instantiate-cashflow-all earliest from-date)
+                          (make-hash-table))))
+        (for-each
+         (lambda (account)
+           (accum 'add (xaccAccountGetCommodity account)
+                  (hash-ref sx-hash (gncAccountGetGUID account) 0)))
+         accounts))
 
-    ; Balance line (do this here so it draws over the minimum line)
-    (set! series (cons (list (_ "Balance") "#0A0") series))
-    (gnc:html-linechart-append-column! chart balances)
+      ;; Calculate balances
+      (let ((balances
+             (map
+              (lambda (date accounts-balance)
+                (let* ((start-date (car date))
+                       (end-date (cadr date))
+                       (balance (gnc:make-commodity-collector))
+                       (exchange-fn (gnc:case-exchange-fn price currency end-date))
+                       (sx-value (gnc-sx-all-instantiate-cashflow-all
+                                  start-date end-date)))
+                  (for-each
+                   (lambda (account account-balance)
+                     (accum 'add (xaccAccountGetCommodity account)
+                            (hash-ref sx-value (gncAccountGetGUID account) 0))
+                     (balance 'add (gnc:gnc-monetary-commodity account-balance)
+                              (gnc:gnc-monetary-amount account-balance)))
+                   accounts accounts-balance)
+                  (balance 'merge accum #f)
+                  (gnc:gnc-monetary-amount
+                   (gnc:sum-collector-commodity balance currency exchange-fn))))
+              intervals (apply zip accounts-balancelist))))
 
-    ; Target line
-    (when show-target
-      (set! series (cons (list (_ "Target") "#FF0") series))
-      (gnc:html-linechart-append-column! chart
-        (make-list (length intervals) (+ reserve target))))
+        ;; Minimum line
+        (when show-minimum
+          (set! series (cons (list (_ "Minimum") "#0AA") series))
+          (gnc:html-linechart-append-column!
+           chart (let loop ((balances balances) (result '()))
+                   (if (null? balances) (reverse! result)
+                       (loop (cdr balances) (cons (apply min balances) result))))))
 
-    ; Reserve line
-    (when show-reserve
-      (set! series (cons (list (_ "Reserve") "#F00") series))
-      (gnc:html-linechart-append-column! chart
-        (make-list (length intervals) reserve)))
+        ;; Balance line (do this here so it draws over the minimum line)
+        (set! series (cons (list (_ "Balance") "#0A0") series))
+        (gnc:html-linechart-append-column! chart balances)
 
-    ; Set the chart titles
-    (gnc:html-linechart-set-title! chart report-title)
-    (gnc:html-linechart-set-subtitle! chart (format #f (_ "~a to ~a")
-      (qof-print-date from-date) (qof-print-date to-date)))
-    ; Set the chart size
-    (gnc:html-linechart-set-width! chart plot-width)
-    (gnc:html-linechart-set-height! chart plot-height)
-    ; Set the axis labels
-    (gnc:html-linechart-set-y-axis-label! chart
-      (gnc-commodity-get-mnemonic currency))
-    ; Set line markers
-    (gnc:html-linechart-set-markers?! chart show-markers)
-    ; Set series labels
-    (let ((old-fmt (qof-date-format-get)))
-      (qof-date-format-set QOF-DATE-FORMAT-ISO)
-      (gnc:html-linechart-set-row-labels! chart
-        (map qof-print-date (map cadr intervals)))
-      (qof-date-format-set old-fmt))
-    (gnc:html-linechart-set-col-labels! chart (map car (reverse series)))
-    ; Assign line colors
-    (gnc:html-linechart-set-col-colors! chart (map cadr (reverse series)))
+        ;; Target line
+        (when show-target
+          (set! series (cons (list (_ "Target") "#FF0") series))
+          (gnc:html-linechart-append-column!
+           chart (make-list (length intervals) (+ reserve target))))
 
-    ; We're done!
-    (gnc:html-document-add-object! document chart)
-    (gnc:report-finished)
-  document))
+        ;; Reserve line
+        (when show-reserve
+          (set! series (cons (list (_ "Reserve") "#F00") series))
+          (gnc:html-linechart-append-column!
+           chart (make-list (length intervals) reserve)))
+
+        ;; Set the chart titles
+        (gnc:html-linechart-set-title! chart report-title)
+        (gnc:html-linechart-set-subtitle!
+         chart (format #f (_ "~a to ~a")
+                       (qof-print-date from-date) (qof-print-date to-date)))
+        ;; Set the chart size
+        (gnc:html-linechart-set-width! chart plot-width)
+        (gnc:html-linechart-set-height! chart plot-height)
+        ;; Set the axis labels
+        (gnc:html-linechart-set-y-axis-label!
+         chart (gnc-commodity-get-mnemonic currency))
+        ;; Set line markers
+        (gnc:html-linechart-set-markers?! chart show-markers)
+        ;; Set series labels
+        (let ((old-fmt (qof-date-format-get)))
+          (qof-date-format-set QOF-DATE-FORMAT-ISO)
+          (gnc:html-linechart-set-row-labels!
+           chart (map qof-print-date (map cadr intervals)))
+          (qof-date-format-set old-fmt))
+        (gnc:html-linechart-set-col-labels! chart (map car (reverse series)))
+        ;; Assign line colors
+        (gnc:html-linechart-set-col-colors! chart (map cadr (reverse series)))
+
+        ;; We're done!
+        (gnc:html-document-add-object! document chart)
+        (gnc:report-finished))))
+    document))
 
 (gnc:define-report
   'version 1
