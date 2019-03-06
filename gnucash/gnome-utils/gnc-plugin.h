@@ -233,6 +233,15 @@ typedef struct
     const char *label;
 } action_toolbar_labels;
 
+/** Same as above but make the label just a char * and not a static char *
+  */
+typedef struct {
+    /** The name of the action. */
+    const char *action_name;
+    /** The alternate toolbar label to use */
+    char *label;
+} action_toolbar_dynamic_labels;
+
 
 /** Add "short" labels to existing actions.  The "short" label is the
  *  string used on toolbar buttons when the action is visible.  All

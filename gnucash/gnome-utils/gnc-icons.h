@@ -47,6 +47,7 @@ G_BEGIN_DECLS
 #define GNC_ICON_INVOICE_EDIT "gnc-invoice-edit"
 #define GNC_ICON_INVOICE_DUPLICATE "gnc-invoice-duplicate"
 #define GNC_ICON_PDF_EXPORT "gnc-gnome-pdf"
+#define GNC_ICON_SCHEDULE_EXEC "gnc-sx-exec"
 
 //FIXME: use own budget icons?
 #define GNC_ICON_BUDGET "gnc-account"

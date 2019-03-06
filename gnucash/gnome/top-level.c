@@ -296,6 +296,7 @@ cleanup:
     if (file_guid)
         g_free(file_guid);
 
+    gnc_update_sx_pending_ui(); // update sx sx count
     gnc_totd_dialog_reparent ();
 }
 

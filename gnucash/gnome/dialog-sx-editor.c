@@ -67,6 +67,7 @@
 
 #include "gnc-sx-instance-model.h"
 #include "dialog-sx-since-last-run.h"
+#include "gnc-main-window.h"
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.gui.sx.editor"
@@ -181,6 +182,7 @@ sxed_close_handler(gpointer user_data)
     gnc_save_window_size( GNC_PREFS_GROUP_SXED, GTK_WINDOW(sxed->dialog) );
     gtk_widget_destroy(sxed->dialog);
     /* The data will be cleaned up in the destroy handler. */
+    gnc_update_sx_pending_ui(); // update sx pending count
 }
 
 

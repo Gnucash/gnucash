@@ -168,7 +168,7 @@ static GtkActionEntry gnc_plugin_actions [] =
         G_CALLBACK (gnc_main_window_cmd_actions_scheduled_transaction_editor)
     },
     {
-        "ActionsSinceLastRunAction", NULL, N_("Since _Last Run..."), NULL,
+        "ActionsSinceLastRunAction", GNC_ICON_SCHEDULE_EXEC, N_("Since _Last Run..."), NULL,
         N_("Create Scheduled Transactions since the last time run"),
         G_CALLBACK (gnc_main_window_cmd_actions_since_last_run)
     },
@@ -185,6 +185,10 @@ static GtkActionEntry gnc_plugin_actions [] =
         G_CALLBACK (gnc_main_window_cmd_actions_close_books)
     },
 #endif // CLOSE_BOOKS_ACTUALLY_WORKS
+    { "TBActionsSinceLastRunAction", GNC_ICON_SCHEDULE_EXEC, N_("Pending    "), NULL,
+       N_("Process pending Scheduled Transactions"),
+       G_CALLBACK (gnc_main_window_cmd_actions_since_last_run)
+     },
 
     /* Tools menu */
     {
@@ -229,6 +233,17 @@ static GtkActionEntry gnc_plugin_actions [] =
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
+/** Short labels for use on the toolbar buttons. */
+static action_toolbar_labels act_static_toolbar_labels[] =
+{
+    {
+       "TBActionsSinceLastRunAction",     N_("Pending")
+    },
+    {
+       NULL, NULL
+    },
+};
+
 
 /** These are the "important" actions provided by the basic commands
  *  plugin.  Their labels will appear when the toolbar is set to
@@ -260,6 +275,12 @@ static const gchar *dirty_only_active_actions[] =
     "FileSaveAction",
     "FileRevertAction",
     NULL
+};
+
+static const gchar *gnc_plugin_important_actions2[] =
+{
+    "TBActionsSinceLastRunAction",
+    NULL,
 };
 
 /** The instance private data structure for an basic commands
@@ -427,6 +448,20 @@ gnc_plugin_basic_commands_class_init (GncPluginBasicCommandsClass *klass)
 static void
 gnc_plugin_basic_commands_init (GncPluginBasicCommands *plugin)
 {
+    GncMainWindow *window = NULL;
+    GtkActionGroup *action_group = NULL;
+    window = gnc_main_window_get_first_window();
+    if (window != NULL)
+    {
+        action_group = gnc_main_window_get_action_group (window,
+                               "gnc-plugin-basic-commands-actions");
+        if (action_group != NULL)
+        {
+            gnc_plugin_init_short_names (action_group, act_static_toolbar_labels);
+            gnc_plugin_set_important_actions (action_group,
+                               gnc_plugin_important_actions2);
+        }
+    }
 }
 
 

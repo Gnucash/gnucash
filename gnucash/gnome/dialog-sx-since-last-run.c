@@ -1155,6 +1155,8 @@ dialog_response_cb(GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog 
     gnc_sx_slr_model_effect_change(app_dialog->editing_model, FALSE, &app_dialog->created_txns, &creation_errors);
     gnc_resume_gui_refresh();
     gnc_gui_refresh_all (); // force a refresh of all registers
+    gnc_update_sx_pending_ui(); // update sx pending count
+
     if (creation_errors)
         creation_error_dialog(&creation_errors);
 

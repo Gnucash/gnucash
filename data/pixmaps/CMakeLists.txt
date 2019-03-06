@@ -71,6 +71,8 @@ set(gncpixmap_DATA
     hicolor/24x24/actions/gnc-sx-new.png
     hicolor/16x16/actions/gnc-transfer.png
     hicolor/24x24/actions/gnc-transfer.png
+    hicolor/16x16/actions/gnc-sx-exec.png
+    hicolor/24x24/actions/gnc-sx-exec.png
     gnucash-icon.ico
     gnucash-icon-48x48.bmp
     gnucash_splash.png

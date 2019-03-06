@@ -437,5 +437,24 @@ gboolean gnc_book_options_dialog_apply_helper(GNCOptionDB * options);
 
 #endif /* __GNC_MAIN_WINDOW_H */
 
+/** Return the handle to the first window
+ *
+ *  @return the first window in the active_widnows Glist
+*/
+GncMainWindow *gnc_main_window_get_first_window( void );
+
+/** update the "Pending" sx button based on whether or not
+ *  there are any ready to go.
+ *
+ */
+void gnc_update_sx_pending_ui(void);
+
+/** get the count of pending transactions
+ *  only called from the above function
+ *
+ *  @return The number of pending scheduled transactions
+*/
+gint sx_sincelast_checkpend( void );
+
 /** @} */
 /** @} */

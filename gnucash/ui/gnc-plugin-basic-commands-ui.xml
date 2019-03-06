@@ -79,5 +79,7 @@
     </placeholder>
     <separator name="ToolbarSep1"/>
     <placeholder name="DefaultToolbarPlaceholder"/>
+      <separator name="ToolbarSep67a"/>
+      <toolitem name="ToolbarSinceLastRun" action="TBActionsSinceLastRunAction"/>
   </toolbar>
 </ui>

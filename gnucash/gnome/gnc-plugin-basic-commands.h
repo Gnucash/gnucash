@@ -48,6 +48,7 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_BASIC_COMMANDS_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_PLUGIN_BASIC_COMMANDS, GncPluginBasicCommandsClass))
 
 #define GNC_PLUGIN_BASIC_COMMANDS_NAME "gnc-plugin-basic-commands"
+#define GNC_ICON_SCHEDULE_EXEC "gnc-sx-exec"
 
 /* typedefs & structures */
 

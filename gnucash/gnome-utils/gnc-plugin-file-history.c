@@ -699,6 +699,7 @@ gnc_plugin_file_history_cmd_open_file (GtkAction *action,
     gnc_file_open_file (GTK_WINDOW (data->window),
                         filename, /*open_readonly*/ FALSE);
     gnc_window_set_progressbar_window (NULL);
+    gnc_update_sx_pending_ui(); // update sx pending
 }
 
 /** @} */
