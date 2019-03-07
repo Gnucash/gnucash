@@ -155,7 +155,7 @@ void csv_tree_export (CsvExportInfo *info)
         header = g_strconcat (end_sep, _("type"), mid_sep, _("full_name"), mid_sep, _("name"), mid_sep,
                                 _("code"), mid_sep, _("description"), mid_sep, _("color"), mid_sep,
                                 _("notes"), mid_sep, _("commoditym"), mid_sep, _("commodityn"), mid_sep,
-                                _("hidden"), mid_sep, _("tax"), mid_sep, _("place_holder"), end_sep, EOLSTR, NULL);
+                                _("hidden"), mid_sep, _("tax"), mid_sep, _("placeholder"), end_sep, EOLSTR, NULL);
         DEBUG("Header String: %s", header);
 
         /* Write header line */

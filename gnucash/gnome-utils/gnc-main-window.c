@@ -4560,10 +4560,10 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
           * Enter your name or that of your team and an email contact for feedback.
           * The string can have multiple rows, so you can also add a list of
           * contributors. */
-                  "translator-credits", _("translator_credits"),
+                  "translator-credits", _("translator-credits"),
                   "version", version,
                   "website", PACKAGE_URL,
-                  "website_label", _("Visit the GnuCash website."),
+                  "website-label", _("Visit the GnuCash website."),
                   NULL);
 
         g_free(version);
