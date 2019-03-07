@@ -4,7 +4,7 @@
 # This file is distributed under the same license as the GnuCash package.
 # Dmitriy Mangul <dimang.freetime@gmail.com>, 2017-2018
 # Mechtilde Stehmann <ooo@mechtilde.de>, 2014-2018.
-# Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2007, 2009-2018.
+# Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2007, 2009-2019.
 # quazgar <quazgar@posteo.de> 2017.
 # Christian Stimming <stimming@tuhh.de>, 2001-2014.
 # Rolf Leggewie, 2008.
@@ -14,11 +14,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 3.0.3\n"
+"Project-Id-Version: GnuCash 3.4\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2019-03-05 21:42+0100\n"
-"PO-Revision-Date: 2019-01-18 23:42+0100\n"
+"PO-Revision-Date: 2019-03-06 02:16+0100\n"
 "Last-Translator: Christian Stimming <christian@cstimming.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: de\n"
@@ -493,6 +493,9 @@ msgid ""
 "Just locate the triangle at the far right of the column headings, and click "
 "it to see the different columns available."
 msgstr ""
+"Es ist möglich, die angezeigten Spalten in der Kontenübersicht zu ändern. "
+"Klicken Sie auf den nach unten weisenden Pfeil rechts von den Spaltenköpfen, "
+"um die verfügbaren Spalten zu sehen."
 
 #: doc/tip_of_the_day.list.c:22
 msgid ""
@@ -687,7 +690,7 @@ msgid ""
 "after midnight, to get the new date as default for new transactions. It is "
 "not necessary to restart GnuCash."
 msgstr ""
-"Wenn Sie GnuCash über Mitternacht hinaus arbeiten, sollten Sie nach "
+"Wenn Sie mit GnuCash über Mitternacht hinaus arbeiten, sollten Sie nach "
 "Mitternacht die verwendeten Kontofenster einmal schließen und wieder öffnen, "
 "damit das neue Datum als voreingestelltes Buchungsdatum vorhanden ist. Es "
 "ist nicht notwendig, GnuCash neu zu starten."
@@ -722,16 +725,17 @@ msgid ""
 "\n"
 "Douglas Adams, \"The Restaurant at the End of the Universe\""
 msgstr ""
-"GnuCash unterstützt auch Online-Banking mit dem deutschen Standard FinTS/"
-"HBCI. Im Menü Werkzeuge finden Sie den Menüpunkt zur Einrichtung des Online-"
-"Banking-Zugangs. Nachdem ein Online-Banking-Zugang eingerichtet wurde, "
-"können die Menüpunkte im Kontofenster unter Aktionen -> Online Aktionen "
-"verwendet werden."
+"GnuCash unterstützt auch Online-Banking mit dem deutschen Standard FinTS, "
+"vormals HBCI. Im Menü Werkzeuge finden Sie den Menüpunkt zur Einrichtung des "
+"Online-Banking-Zugangs. Nachdem ein Online-Banking-Zugang eingerichtet "
+"wurde, können die Menüpunkte im Kontofenster unter "
+"'Aktionen -> Online Aktionen' verwendet werden."
 
 #: gnucash/gnome/assistant-acct-period.c:188
 msgid "The book was closed successfully."
 msgstr "Der Buchabschluss wurde erfolgreich beendet."
 
+# ToDo: Teilung in 1 Buch ???
 #. Translators: %s is a date string. %d is the number of books
 #. * that will be created. This is a ngettext(3) message (but
 #. * only for the %d part).
@@ -2534,8 +2538,7 @@ msgstr ""
 "Das Herkunfts- oder Buchungskonto hat eine andere Währung. Bitte geben Sie "
 "den Umrechnungskurs an."
 
-# Fixme: Source 1. Accelerator missing "assign payment"
-#   2. Comment misplaced
+# Fixme: Source Accelerator missing "assign payment"?
 #: gnucash/gnome/dialog-payment.c:1197 gnucash/gnome/search-owner.c:241
 #: gnucash/gnome-search/dialog-search.c:1058
 #: gnucash/gnome-utils/gnc-tree-view-split-reg.c:2811
@@ -3315,7 +3318,7 @@ msgstr "Alte Daten abschließen und in vorigen Buchführungsperioden speichern."
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:191
 msgid "_Price Database"
-msgstr "Kurs-Datenbank"
+msgstr "_Kurs-Datenbank"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:192
 msgid "View and edit the prices for stocks and mutual funds"
@@ -3340,7 +3343,7 @@ msgstr "Den Darlehensrechner benutzen"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:206
 msgid "_Close Book"
-msgstr "_Buchabschluss"
+msgstr "Buch_abschluss"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:207
 msgid "Close the Book at the end of the Period"
@@ -3358,7 +3361,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:216
 msgid "_Transaction Associations"
-msgstr "_Buchungsverknüpfungen"
+msgstr "Buchungs_verknüpfungen"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:217
 msgid "View all Transaction Associations"
@@ -5347,7 +5350,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-register2.c:57
 #: gnucash/gnome/gnc-plugin-register.c:58
 msgid "_General Journal"
-msgstr "Hauptbuch Journal"
+msgstr "Hauptbuch _Journal"
 
 #: gnucash/gnome/gnc-plugin-register2.c:58
 msgid "Open a general journal window"
@@ -6522,16 +6525,14 @@ msgstr ""
 msgid ""
 "\n"
 "Please select a commodity to match:"
-msgstr ""
-"\n"
+msgstr "\n"
 "Geben Sie eine Währung/Wertpapier an, die passt:"
 
 #: gnucash/gnome-utils/dialog-commodity.c:181
 msgid ""
 "\n"
 "Commodity: "
-msgstr ""
-"\n"
+msgstr "\n"
 "Devise/Wertpapier: "
 
 #. Translators: Replace here and later CUSIP by the name of your local
@@ -6542,16 +6543,14 @@ msgstr ""
 msgid ""
 "\n"
 "Exchange code (ISIN, CUSIP or similar): "
-msgstr ""
-"\n"
+msgstr "\n"
 "Wertpapierkennnummer (ISIN, WKN oder ähnliches): "
 
 #: gnucash/gnome-utils/dialog-commodity.c:189
 msgid ""
 "\n"
 "Mnemonic (Ticker symbol or similar): "
-msgstr ""
-"\n"
+msgstr "\n"
 "Abkürzung (Tickersymbol oder ähnliches): "
 
 #: gnucash/gnome-utils/dialog-commodity.c:287
@@ -6636,7 +6635,7 @@ msgstr ""
 "Sie müssen in den Feldern »Voller Name«, »Symbol/Abkürzung« und »Typ« für "
 "die Devise/Wertpapier etwas angeben."
 
-# Fixme: Wo taucht das auf?
+# Todo: Im Dialog noch überprüfen
 #. The "date" and the "tnum" fields aren't being asked for, this is a split copy
 #: gnucash/gnome-utils/dialog-dup-trans.c:245
 msgid "Action/Number:"
@@ -6674,7 +6673,9 @@ msgid ""
 "Because no accounts have been set up yet, you will need to return to this "
 "dialog (via File->Properties), after account setup, if you want to set a "
 "default gain/loss account."
-msgstr ""
+msgstr "Da noch keine Konten erstellt wurden, müssen sie nach dem Erstellen "
+"der Konten über Datei->Eigenschaften zu diesem Dialog zurückkehren, um ein "
+"Erfolgskonto vorzuwählen,"
 
 #: gnucash/gnome-utils/dialog-options.c:686
 msgid "Select no account"
@@ -6690,6 +6691,7 @@ msgstr "Kein Konto gewählt"
 msgid "Column letter for 'Placeholder'|P"
 msgstr "P"
 
+#Todo: sind die "\n" erforderlich?
 #: gnucash/gnome-utils/dialog-options.c:789
 msgid ""
 "There are no income or expense accounts of the specified\n"
@@ -6697,6 +6699,9 @@ msgid ""
 "(via File->Properties), after account setup, to select a\n"
 "default gain/loss account."
 msgstr ""
+"Es gibt kein Erfolgskonto in der festgelegten Buchwährung. Nach der "
+"Kontenteneinrchtung müssen sie über Datei->Eigenschaften zu diesem "
+"Dialog zurückkehren, um ein Erfolgskonto vorzuwählen."
 
 #: gnucash/gnome-utils/dialog-options.c:858
 msgid ""
@@ -6712,11 +6717,11 @@ msgstr "Buchwährung:"
 
 #: gnucash/gnome-utils/dialog-options.c:1323
 msgid "Default lot tracking policy:"
-msgstr ""
+msgstr "Vorgewählte Los-Zuordnung:"
 
 #: gnucash/gnome-utils/dialog-options.c:1351
 msgid "Default gain/loss account:"
-msgstr ""
+msgstr "Vorgewähltes Erfolgskonto:"
 
 #: gnucash/gnome-utils/dialog-options.c:1523
 #: gnucash/gnome-utils/dialog-options.c:1666
@@ -7948,7 +7953,7 @@ msgid "translator_credits"
 msgstr ""
 "Dmitriy Mangul, 2017-2018\n"
 "Mechtilde Stehmann, 2014-2018\n"
-"Frank H. Ellenberger, 2007, 2009-2018\n"
+"Frank H. Ellenberger, 2007, 2009-2019\n"
 "quazgar, 2017\n"
 "Christian Stimming, 2001-2014\n"
 "Rolf Leggewie, 2008\n"
@@ -14723,7 +14728,7 @@ msgstr "Zahlungsintervalle"
 #: gnucash/gtkbuilder/dialog-fincalc.glade:391
 #: gnucash/gtkbuilder/dialog-fincalc.glade:448
 msgid "_Clear"
-msgstr "Zurücksetzen"
+msgstr "_Zurücksetzen"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:224
 #: gnucash/gtkbuilder/dialog-fincalc.glade:281
@@ -14731,7 +14736,7 @@ msgstr "Zurücksetzen"
 #: gnucash/gtkbuilder/dialog-fincalc.glade:395
 #: gnucash/gtkbuilder/dialog-fincalc.glade:452
 msgid "Clear the entry."
-msgstr "Löschen des Eintrages"
+msgstr "Löscht den Eintrag."
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:259
 msgid "Interest rate"
@@ -15376,11 +15381,11 @@ msgstr "Bestellungsposten"
 
 #: gnucash/gtkbuilder/dialog-order.glade:57
 msgid "_Invoices"
-msgstr "Rechnungen"
+msgstr "_Rechnungen"
 
 #: gnucash/gtkbuilder/dialog-order.glade:73
 msgid "Close _Order"
-msgstr "Bestellung schließen"
+msgstr "_Bestellung schließen"
 
 #: gnucash/gtkbuilder/dialog-order.glade:262
 #: gnucash/gtkbuilder/dialog-order.glade:710
@@ -16335,29 +16340,34 @@ msgstr "Entferne Kurse vor dem Datum."
 
 #: gnucash/gtkbuilder/dialog-price.glade:462
 msgid "Last of _Week"
-msgstr ""
+msgstr "Letzter der _Woche"
 
 #: gnucash/gtkbuilder/dialog-price.glade:466
 msgid "Keep the last price of each week if present before date."
-msgstr ""
+msgstr "Behalte den letzten Preis jeder Woche vor dem Datum, sofern vorhanden."
 
 #: gnucash/gtkbuilder/dialog-price.glade:479
 msgid "Last of _Month"
-msgstr "Letzter des Monats"
+msgstr "Letzter des _Monats"
 
 #: gnucash/gtkbuilder/dialog-price.glade:483
 msgid "Keep the last price of each month if present before date."
 msgstr ""
+"Behalte den letzten Preis jedes Monats vor dem Datum, sofern vorhanden."
 
 #: gnucash/gtkbuilder/dialog-price.glade:496
 msgid "Last of _Quarter"
 msgstr "Letzter des _Quartals"
 
+# Todo: Warum (2x) fiscal?
 #: gnucash/gtkbuilder/dialog-price.glade:500
 msgid ""
 "Keep the last price of each fiscal quarter if present before date. The "
 "fiscal quarter is derived from the accounting period end date."
 msgstr ""
+"Behalte den letzten Preis jedes Quartals vor dem Datum, sofern vorhanden.\n"
+"Das Quartal wird abgeleitet vom Enddatum der eingestellten "
+"Buchführungsperiode."
 
 #: gnucash/gtkbuilder/dialog-price.glade:513
 msgid "Last of _Period"
@@ -16368,6 +16378,9 @@ msgid ""
 "Keep the last price of each fiscal period if present before date. The fiscal "
 "period is derived from the accounting period end date."
 msgstr ""
+"Behalte den letzten Preis jeder Buchführungsperiode vor dem Datum, sofern "
+"vorhanden.\n"
+"Die Buchführungsperiode wird abgeleitet von den Einstellungen."
 
 #: gnucash/gtkbuilder/dialog-price.glade:530
 msgid "_Scaled"
@@ -16390,7 +16403,7 @@ msgstr "Von diesen Währungen/Wertpapieren:"
 
 #: gnucash/gtkbuilder/dialog-price.glade:625
 msgid "Keeping the last available price for option:"
-msgstr ""
+msgstr "Behalte den letzten verfügbaren Preis für folgende Option:"
 
 #: gnucash/gtkbuilder/dialog-price.glade:640
 msgid "Source:"
@@ -16398,11 +16411,11 @@ msgstr "Quelle:"
 
 #: gnucash/gtkbuilder/dialog-price.glade:656
 msgid "Include _Fetched online prices"
-msgstr ""
+msgstr "_Online geholte Kurse einschließen"
 
 #: gnucash/gtkbuilder/dialog-price.glade:660
 msgid "If activated, prices added by Finance::Quote will be included."
-msgstr ""
+msgstr "Falls aktiviert werden Kurse aus Finance::Quote eingeschlossen."
 
 #: gnucash/gtkbuilder/dialog-price.glade:674
 msgid "Include manually _Entered prices"
@@ -16413,9 +16426,10 @@ msgid "If activated, include manually entered prices."
 msgstr ""
 "Wenn aktiviert, werden auch manuell eingegebene Kurswerte eingeschlossen."
 
+#Todo: Hier 'Include' hinzufügen oder bei den vorigen Optionen entfernen
 #: gnucash/gtkbuilder/dialog-price.glade:695
 msgid "_Added by the application"
-msgstr "_Automatisch hinzugefügte"
+msgstr "_Automatisch erzeugte"
 
 #: gnucash/gtkbuilder/dialog-price.glade:699
 msgid ""
@@ -16426,6 +16440,13 @@ msgid ""
 "are able to correctly report values so removing them may make this less "
 "reliable."
 msgstr ""
+"Falls activiert, schließe von der Anwendung erzeugte Kurswerte ein.\n"
+"\n"
+"Diese wurden erzeugt, damit immer ein »zeitlich nächster« Kurs für jede "
+"Buchung, die mehr als eine Währung umfaßt, vorhanden ist, damit "
+"Kontenübersicht und Berichte in der Lage sind, die Werte korrekt "
+"darzustellen. Diese Kurse zu entfernen, wird also jene weniger zuverlässig "
+"machen."
 
 #: gnucash/gtkbuilder/dialog-price.glade:744
 msgid "Before _Date:"
@@ -16438,11 +16459,12 @@ msgstr "Kurs-Datenbank"
 
 #: gnucash/gtkbuilder/dialog-price.glade:855
 msgid "_Get Quotes"
-msgstr "Kurse abrufen"
+msgstr "_Kurse abrufen"
 
+#Todo: 'stock accounts' ist viel zu eng
 #: gnucash/gtkbuilder/dialog-price.glade:860
 msgid "Get new online quotes for stock accounts."
-msgstr "Neue Börsenkurse für Aktienkonten online abrufen."
+msgstr "Neue Kurse für Aktien, Fonds etc. online abrufen."
 
 #: gnucash/gtkbuilder/dialog-price.glade:877
 msgid "Add a new price."
@@ -17055,11 +17077,11 @@ msgstr "<b>Einträge Steuertabelle</b>"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:237
 msgid "De_lete"
-msgstr "Löschen"
+msgstr "Lö_schen"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:252
 msgid "Ne_w"
-msgstr "Neu"
+msgstr "Ne_u"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:301
 msgid "Value $"
@@ -17099,11 +17121,11 @@ msgstr "GnuCash Tipp des Tages"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:26
 msgid "_Back"
-msgstr "Zurück"
+msgstr "_Zurück"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:41
 msgid "_Forward"
-msgstr "Vorwärts"
+msgstr "_Vorwärts"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:95
 msgid "<b>Tip of the Day:</b>"
@@ -29881,45 +29903,3 @@ msgstr "Die Elster-Steuernummer Ihrer Unternehmung"
 #: libgnucash/tax/us/txf.scm:108
 msgid "No help available."
 msgstr "Keine Hilfe verfügbar."
-
-#~ msgid "Enter an Online Direct Debit Note"
-#~ msgstr "Online-Lastschrift eingeben"
-
-#~ msgid "Debited Account Number"
-#~ msgstr "Konto-Nr. des Zahlungspflichtigen"
-
-#~ msgid "Debited Account Bank Code"
-#~ msgstr "BLZ des Zahlungspflichtigen"
-
-#~ msgid "Credited Account Number"
-#~ msgstr "Konto-Nr. des Auftraggebers"
-
-#~ msgid "Credited Account Bank Code"
-#~ msgstr "BLZ des Auftraggebers"
-
-#~ msgid ""
-#~ "The internal check of the destination account number '%s' at the "
-#~ "specified bank with bank code '%s' failed. This means the account number "
-#~ "might contain an error."
-#~ msgstr ""
-#~ "Die interne Überprüfung der angegebenen Kontonummer »%s« bei der Bank mit "
-#~ "der Bankleitzahl »%s« ergab, dass die Kontonummer wahrscheinlich einen "
-#~ "Fehler enthält."
-
-#~ msgid "_Issue Transaction..."
-#~ msgstr "_Einzelüberweisung..."
-
-#~ msgid "Issue a new transaction online through Online Banking"
-#~ msgstr "Neue Einzelüberweisung mit HBCI online absenden"
-
-#~ msgid "_Direct Debit..."
-#~ msgstr "Einzel_lastschrift..."
-
-#~ msgid "Issue a new direct debit note online through Online Banking"
-#~ msgstr "Neue Einzellastschrift online mit HBCI/Onlinebanking absenden"
-
-#~ msgid "Payment received, thank you."
-#~ msgstr "Betrag dankend erhalten."
-
-#~ msgid "Client"
-#~ msgstr "Kunde"
