@@ -157,7 +157,13 @@
 
          (doc (gnc:make-html-document))
          (table (gnc:make-html-table))
-         (txt (gnc:make-html-text)))
+
+         ;;add subaccounts if requested
+         (accounts (append accounts
+                           (filter (lambda (acc) (not (member acc accounts)))
+                                   (if show-subaccts?
+                                       (gnc:acccounts-get-all-subaccounts accounts)
+                                       '())))))
 
     (gnc:html-document-set-title!
      doc (string-append
@@ -165,17 +171,6 @@
           " - "
           (format #f (_ "~a to ~a")
                   (qof-print-date from-date-t64) (qof-print-date to-date-t64))))
-
-
-    ;; add subaccounts if requested
-    (if show-subaccts?
-        (let ((sub-accounts (gnc:acccounts-get-all-subaccounts accounts)))
-          (for-each
-           (lambda (sub-account)
-             (if (not (member sub-account accounts))
-                 (set! accounts (cons sub-account accounts))))
-           sub-accounts)))
-
 
     (if (not (null? accounts))
 
