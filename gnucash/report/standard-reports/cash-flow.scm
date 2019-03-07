@@ -131,9 +131,6 @@
                                optname-accounts))
          (include-trading-accounts (get-option gnc:pagename-accounts
                                                optname-include-trading-accounts))
-         (row-num 0)
-         (work-done 0)
-         (work-to-do 0)
          (report-currency (get-option gnc:pagename-general
                                       optname-report-currency))
          (price-source (get-option gnc:pagename-general
@@ -164,6 +161,29 @@
                                    (if show-subaccts?
                                        (gnc:acccounts-get-all-subaccounts accounts)
                                        '())))))
+
+    (define (add-accounts-flow accounts accounts-alist)
+      (let loop ((accounts accounts)
+                 (odd-row? #t))
+        (unless (null? accounts)
+          (let* ((pair (assoc (car accounts) accounts-alist))
+                 (acct (car pair)))
+            (gnc:html-table-append-row/markup!
+             table
+             (if odd-row? "normal-row" "alternate-row")
+             (list
+              (gnc:make-html-text
+               (gnc:html-markup-anchor
+                (gnc:account-anchor-text acct)
+                (if show-full-names?
+                    (gnc-account-get-full-name acct)
+                    (xaccAccountGetName acct))))
+              (gnc:make-html-table-header-cell/markup
+               "number-cell"
+               (gnc:sum-collector-commodity
+                (cadr pair) report-currency exchange-fn)))))
+          (loop (cdr accounts)
+                (not odd-row?)))))
 
     (gnc:html-document-set-title!
      doc (string-append
@@ -264,30 +284,7 @@
                 (_ "Money into selected accounts comes from")
                 ""))
 
-              (set! row-num 0)
-              (set! work-done 0)
-              (set! work-to-do (length money-in-alist))
-              (for-each
-               (lambda (account)
-                 (set! row-num (+ 1 row-num))
-                 (set! work-done (+ 1 work-done))
-                 (gnc:report-percent-done (+ 90 (* 5 (/ work-done work-to-do))))
-                 (let* ((pair (assoc account money-in-alist))
-                        (acct (car pair)))
-                   (gnc:html-table-append-row/markup!
-                    table
-                    (if (odd? row-num) "normal-row" "alternate-row")
-                    (list
-                                        ;(gnc:html-account-anchor acct)
-                     (gnc:make-html-text
-                      (gnc:html-markup-anchor
-                       (gnc:account-anchor-text acct)
-                       (if show-full-names?
-                           (gnc-account-get-full-name acct)
-                           (xaccAccountGetName acct))))
-                     (gnc:make-html-table-header-cell/markup
-                      "number-cell" (gnc:sum-collector-commodity (cadr pair) report-currency exchange-fn))))))
-               money-in-accounts)
+              (add-accounts-flow money-in-accounts money-in-alist)
 
               (gnc:html-table-append-row/markup!
                table
@@ -308,30 +305,7 @@
                 (_ "Money out of selected accounts goes to")
                 ""))
 
-              (set! row-num 0)
-              (set! work-done 0)
-              (set! work-to-do (length money-out-alist))
-              (for-each
-               (lambda (account)
-                 (set! row-num (+ 1 row-num))
-                 (set! work-done (+ 1 work-done))
-                 (gnc:report-percent-done (+ 95 (* 5 (/ work-done work-to-do))))
-                 (let* ((pair (assoc account money-out-alist))
-                        (acct (car pair)))
-                   (gnc:html-table-append-row/markup!
-                    table
-                    (if (odd? row-num) "normal-row" "alternate-row")
-                    (list
-                                        ;(gnc:html-account-anchor acct)
-                     (gnc:make-html-text
-                      (gnc:html-markup-anchor
-                       (gnc:account-anchor-text acct)
-                       (if show-full-names?
-                           (gnc-account-get-full-name acct)
-                           (xaccAccountGetName acct))))
-                     (gnc:make-html-table-header-cell/markup
-                      "number-cell" (gnc:sum-collector-commodity (cadr pair) report-currency exchange-fn))))))
-               money-out-accounts)
+              (add-accounts-flow money-out-accounts money-out-alist)
 
               (gnc:html-table-append-row/markup!
                table
