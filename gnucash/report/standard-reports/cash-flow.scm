@@ -295,7 +295,9 @@
                (list
                 (gnc:make-html-table-header-cell/markup "text-cell" (_ "Money In"))
                 (gnc:make-html-table-header-cell/markup
-                 "total-number-cell" (gnc:sum-collector-commodity money-in-collector report-currency exchange-fn))))
+                 "total-number-cell"
+                 (gnc:sum-collector-commodity
+                  money-in-collector report-currency exchange-fn))))
 
               (gnc:html-table-append-ruler! table 2)
 
@@ -337,7 +339,9 @@
                (list
                 (gnc:make-html-table-header-cell/markup "text-cell" (_ "Money Out"))
                 (gnc:make-html-table-header-cell/markup
-                 "total-number-cell" (gnc:sum-collector-commodity money-out-collector report-currency exchange-fn))))
+                 "total-number-cell"
+                 (gnc:sum-collector-commodity
+                  money-out-collector report-currency exchange-fn))))
 
               (gnc:html-table-append-ruler! table 2)
 
@@ -347,7 +351,9 @@
                (list
                 (gnc:make-html-table-header-cell/markup "text-cell" (_ "Difference"))
                 (gnc:make-html-table-header-cell/markup
-                 "total-number-cell" (gnc:sum-collector-commodity money-diff-collector report-currency exchange-fn))))
+                 "total-number-cell"
+                 (gnc:sum-collector-commodity
+                  money-diff-collector report-currency exchange-fn))))
 
               (gnc:html-document-add-object! doc table)
 
