@@ -160,7 +160,8 @@
                            (filter (lambda (acc) (not (member acc accounts)))
                                    (if show-subaccts?
                                        (gnc:acccounts-get-all-subaccounts accounts)
-                                       '())))))
+                                       '()))))
+         (accounts (sort accounts account-full-name<?)))
 
     (define (add-accounts-flow accounts accounts-alist)
       (let loop ((accounts accounts)
@@ -244,18 +245,18 @@
                                (cons 'report-currency report-currency)
                                (cons 'include-trading-accounts include-trading-accounts)
                                (cons 'to-report-currency to-report-currency)))))
-            (let ((money-in-accounts (cdr (assq 'money-in-accounts result)))
+            (let ((money-in-accounts (sort
+                                      (cdr (assq 'money-in-accounts result))
+                                      account-full-name<?))
                   (money-in-alist (cdr (assq 'money-in-alist result)))
                   (money-in-collector (cdr (assq 'money-in-collector result)))
-                  (money-out-accounts (cdr (assq 'money-out-accounts result)))
+                  (money-out-accounts (sort
+                                       (cdr (assq 'money-out-accounts result))
+                                       account-full-name<?))
                   (money-out-alist (cdr (assq 'money-out-alist result)))
                   (money-out-collector (cdr (assq 'money-out-collector result))))
               (money-diff-collector 'merge money-in-collector #f)
               (money-diff-collector 'minusmerge money-out-collector #f)
-
-              (set! accounts (sort accounts account-full-name<?))
-              (set! money-in-accounts (sort money-in-accounts account-full-name<?))
-              (set! money-out-accounts (sort money-out-accounts account-full-name<?))
 
               (gnc:html-document-add-object!
                doc
