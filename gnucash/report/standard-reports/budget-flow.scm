@@ -169,8 +169,11 @@
        (string-append (_ "Total") ":")
        bgt-total-numeric act-total-numeric)
 
-      ;; Display hr FIXME: kind of a hack
-      (gnc:html-table-append-row! html-table "<tr><td colspan='3'><hr></td></tr>")
+      (gnc:html-table-append-row!
+       html-table
+       (list
+        (gnc:make-html-table-cell/size
+         1 3 (gnc:make-html-text (gnc:html-markup-hr)))))
 
       ;; Return (list budgeted-total actual-total)
       (list bgt-total-numeric act-total-numeric))))
