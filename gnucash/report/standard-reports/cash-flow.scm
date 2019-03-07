@@ -199,9 +199,26 @@
                                display-depth))
 
                (money-diff-collector (gnc:make-commodity-collector))
-               (account-disp-list '())
+               (account-disp-list
+                (map
+                 (lambda (account)
+                   (gnc:html-markup/format
+                    (if (and (= (gnc-account-get-current-depth account) tree-depth)
+                             (pair? (gnc-account-get-children account)))
+                        (if show-subaccts?
+                            (_ "~a and subaccounts")
+                            (_ "~a and selected subaccounts"))
+                        "~a")
+                    (gnc:html-markup-anchor
+                     (gnc:account-anchor-text account)
+                     (if show-full-names?
+                         (gnc-account-get-full-name account)
+                         (xaccAccountGetName account)))))
+                 (filter
+                  (lambda (account)
+                    (<= (gnc-account-get-current-depth account) tree-depth))
+                  accounts)))
 
-               (time-exchange-fn #f)
                (commodity-list (gnc:accounts-get-commodities
                                 accounts
                                 report-currency))
@@ -240,31 +257,6 @@
               (set! money-in-accounts (sort money-in-accounts account-full-name<?))
               (set! money-out-accounts (sort money-out-accounts account-full-name<?))
 
-
-              (set! work-done 0)
-              (set! work-to-do (length accounts))
-              (for-each
-               (lambda (account)
-                 (set! work-done (+ 1 work-done))
-                 (gnc:report-percent-done (+ 85 (* 5 (/ work-done work-to-do))))
-                 (if (<= (gnc-account-get-current-depth account) tree-depth)
-                     (let* ((anchor (gnc:html-markup/format
-                                     (if (and (= (gnc-account-get-current-depth account) tree-depth)
-                                              (not (eq? (gnc-account-get-children account) '())))
-                                         (if show-subaccts?
-                                             (_ "~a and subaccounts")
-                                             (_ "~a and selected subaccounts"))
-                                         "~a")
-                                     (gnc:html-markup-anchor
-                                      (gnc:account-anchor-text account)
-                                      (if show-full-names?
-                                          (gnc-account-get-full-name account)
-                                          (xaccAccountGetName account))))))
-
-                       (set! account-disp-list (cons anchor account-disp-list)))))
-               accounts)
-
-
               (gnc:html-document-add-object!
                doc
                (gnc:make-html-text (_ "Selected Accounts")))
@@ -273,7 +265,7 @@
                doc
                (gnc:make-html-text
                 (gnc:html-markup-ul
-                 (reverse account-disp-list))))
+                 account-disp-list)))
 
               (gnc:html-table-append-ruler! table 2)
 
