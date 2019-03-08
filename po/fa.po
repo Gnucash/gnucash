@@ -7236,7 +7236,7 @@ msgstr "حسابداری برای امور مالی شخصی و کسب و کار
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
 #: gnucash/gnome-utils/gnc-main-window.c:4577
-msgid "translator_credits"
+msgid "translator-credits"
 msgstr "علی‌اکبر نجفیا <s.ali.najafian@chmail.ir>، ۲۰۱۲، ۲۰۱۳هدایت وطن‌خواه <hedayat.fwd@gmail.com>، ۲۰۱۷حمیدرضا جعفری <hamidrjafari@gmail.com>، ۲۰۱۸"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4580
@@ -17001,7 +17001,7 @@ msgid "tax"
 msgstr "مالیات"
 
 #: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "place_holder"
+msgid "placeholder"
 msgstr ""
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54

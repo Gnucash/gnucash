@@ -4,8 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 2.2.2\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: GnuCash 2.2.2\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2018-01-13 20:39+0100\n"
 "PO-Revision-Date: 2007-12-29 17:09+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
@@ -12027,7 +12028,7 @@ msgstr ""
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
 #: ../gnucash/gnome-utils/gnc-main-window.c:4521
-msgid "translator_credits"
+msgid "translator-credits"
 msgstr ""
 "Nhóm Việt hoá Phần mềm Tự do <http://vnoss.net/dokuwiki/doku.php?id=projects:"
 "l10n>"
@@ -17386,8 +17387,7 @@ msgid "tax"
 msgstr "Thuế"
 
 #: ../gnucash/import-export/csv-exp/csv-tree-export.c:158
-#, fuzzy
-msgid "place_holder"
+msgid "placeholder"
 msgstr "Bộ giữ chỗ"
 
 #: ../gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54

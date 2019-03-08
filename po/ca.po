@@ -42,7 +42,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 2.6.15\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2018-01-13 20:39+0100\n"
 "PO-Revision-Date: 2016-12-23 08:34+0100\n"
 "Last-Translator: Walter Garcia-Fontes <walter.garcia@upf.edu>\n"
@@ -12140,7 +12141,7 @@ msgstr "- Gestió financera personal i per a petites empreses GnuCash"
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
 #: ../gnucash/gnome-utils/gnc-main-window.c:4521
-msgid "translator_credits"
+msgid "translator-credits"
 msgstr ""
 "Walter Garcia-Fontes <walter.garcia@upf.edu>\n"
 "David Planella <david.planella@gmail.com>\n"
@@ -17450,7 +17451,7 @@ msgid "tax"
 msgstr "impost"
 
 #: ../gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "place_holder"
+msgid "placeholder"
 msgstr "contenidor"
 
 #: ../gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54

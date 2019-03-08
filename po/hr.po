@@ -600,10 +600,10 @@ msgstr ""
 
 #: doc/tip_of_the_day.list.c:74
 msgid ""
-"You can set the Security Editor screen to display the Quote Source  of a "
-"security, which makes it easy to see which online sources your  securities use. "
-"Click the triangle at the far right of the column  headings to change the "
-"display."
+"You can set the Security Editor screen to display the Quote Source of a "
+"security, which makes it easy to see which online sources your securities "
+"use. Click the triangle at the far right of the column headings to change "
+"the display."
 msgstr ""
 "Uređivački prozor vrijednosnih papira možeš postaviti tako, da prikazuje izvor "
 "tečajeva. Time lako vidiš, koje internetske izvore koristiš za tvoje vrijednosne "
@@ -7690,7 +7690,7 @@ msgstr "Računovodstveni program, namijenjen pojedincima i malim poduzećima."
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
 #: gnucash/gnome-utils/gnc-main-window.c:4576
-msgid "translator_credits"
+msgid "translator-credits"
 msgstr "Milo Ivir <mail@milotype.de>"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4579
@@ -19107,8 +19107,8 @@ msgid "tax"
 msgstr "porez"
 
 #: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "place_holder"
-msgstr "rezervirano_mjesto"
+msgid "placeholder"
+msgstr "rezerviranomjesto"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54
 msgid "Export Account T_ree to CSV..."

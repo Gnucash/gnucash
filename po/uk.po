@@ -8,7 +8,7 @@
 # Maksym Kobieliev <maximaximums@gmail.com>, 2013.
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 3.3\n"
+"Project-Id-Version: GnuCash 3.3\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2018-09-29 16:09-0700\n"
 "PO-Revision-Date: 2018-10-01 20:48+0300\n"
@@ -7247,7 +7247,7 @@ msgstr "Облік особистих фінансів та коштів мал�
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
 #: gnucash/gnome-utils/gnc-main-window.c:4577
-msgid "translator_credits"
+msgid "translator-credits"
 msgstr ""
 "Максим Дзюманенко <dziumanenko@gmail.com>\n"
 "Юрій Чорноіван <yurchor@ukr.net>"
@@ -16816,7 +16816,7 @@ msgid "tax"
 msgstr "податки"
 
 #: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "place_holder"
+msgid "placeholder"
 msgstr "замінник"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54

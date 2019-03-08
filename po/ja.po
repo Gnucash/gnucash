@@ -7224,7 +7224,7 @@ msgstr "個人および小規模ビジネス向け財務管理。"
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
 #: gnucash/gnome-utils/gnc-main-window.c:4577
-msgid "translator_credits"
+msgid "translator-credits"
 msgstr "有志"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4580
@@ -7413,7 +7413,7 @@ msgstr "この日付では取引を保存できません"
 msgid "The entered date of the duplicated transaction is older than the \"Read-Only Threshold\" set for this book. This setting can be changed in File -> Properties -> Accounts."
 msgstr "複製した取引で入力された日付が、この帳簿に設定された \"読出し専用閾値\" よりも古い値になっています。この設定は ファイル -> プロパティー -> 勘定科目 で変更できます。"
 
-#. Translators: This message will be presented when a user *
+#. translators: This message will be presented when a user *
 #. * attempts to record a transaction without splits
 #: gnucash/gnome-utils/gnc-tree-control-split-reg.c:1715
 msgid "Not enough information for Blank Transaction?"
@@ -17019,7 +17019,7 @@ msgid "tax"
 msgstr "税金"
 
 #: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "place_holder"
+msgid "placeholder"
 msgstr "プレースホルダー"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54

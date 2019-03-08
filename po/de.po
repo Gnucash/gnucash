@@ -625,9 +625,9 @@ msgstr ""
 
 #: doc/tip_of_the_day.list.c:74
 msgid ""
-"You can set the Security Editor screen to display the Quote Source  of a "
-"security, which makes it easy to see which online sources your  securities "
-"use. Click the triangle at the far right of the column  headings to change "
+"You can set the Security Editor screen to display the Quote Source of a "
+"security, which makes it easy to see which online sources your securities "
+"use. Click the triangle at the far right of the column headings to change "
 "the display."
 msgstr ""
 
@@ -7949,7 +7949,7 @@ msgstr "Finanzverwaltung für Privatanwender und Kleinbetriebe."
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
 #: gnucash/gnome-utils/gnc-main-window.c:4563
-msgid "translator_credits"
+msgid "translator-credits"
 msgstr ""
 "Dmitriy Mangul, 2017-2018\n"
 "Mechtilde Stehmann, 2014-2018\n"
@@ -19561,7 +19561,7 @@ msgstr "Steuerrelevant"
 
 # Fixme: Source should be changed
 #: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "place_holder"
+msgid "placeholder"
 msgstr "Platzhalter"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54

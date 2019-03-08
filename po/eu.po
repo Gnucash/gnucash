@@ -7,7 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-1.8.10pre2\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2018-01-13 20:39+0100\n"
 "PO-Revision-Date: 2005-08-05 10:45+0200\n"
 "Last-Translator: Mikel Olasagasti <hey_neken@mundurat.net>\n"
@@ -12245,9 +12246,10 @@ msgstr ""
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
 #: ../gnucash/gnome-utils/gnc-main-window.c:4521
-#, fuzzy
-msgid "translator_credits"
-msgstr "abonuak ditu"
+msgid "translator-credits"
+msgstr ""
+"Mikel Olasagasti Uranga, 2005\n"
+"Hizkuntza Politikarako Sailburuordetza <hizkpol@ej-gv.es>"
 
 #: ../gnucash/gnome-utils/gnc-main-window.c:4524
 msgid "Visit the GnuCash website."
@@ -17665,7 +17667,7 @@ msgstr "Zerga"
 
 #: ../gnucash/import-export/csv-exp/csv-tree-export.c:158
 #, fuzzy
-msgid "place_holder"
+msgid "placeholder"
 msgstr "Leku-marka"
 
 #: ../gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54

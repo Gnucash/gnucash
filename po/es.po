@@ -673,9 +673,9 @@ msgstr ""
 
 #: doc/tip_of_the_day.list.c:74
 msgid ""
-"You can set the Security Editor screen to display the Quote Source  of a "
-"security, which makes it easy to see which online sources your  securities "
-"use. Click the triangle at the far right of the column  headings to change "
+"You can set the Security Editor screen to display the Quote Source of a "
+"security, which makes it easy to see which online sources your securities "
+"use. Click the triangle at the far right of the column headings to change "
 "the display."
 msgstr ""
 "Puede establecer las pantallas del Editor de Garantía para enseñar el Origen "
@@ -7981,7 +7981,7 @@ msgstr "Contabilidad financiara personal y pequeños negocios."
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
 #: gnucash/gnome-utils/gnc-main-window.c:4576
-msgid "translator_credits"
+msgid "translator-credits"
 msgstr ""
 "Francisco Javier Serrador <serrador@tecknolabs.com>  7-ene-2019\n"
 "Eneko Lacunza <enlar@enlar.net>"
@@ -19753,8 +19753,8 @@ msgid "tax"
 msgstr "imposición"
 
 #: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "place_holder"
-msgstr "_contenedor"
+msgid "placeholder"
+msgstr "contenedor"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54
 msgid "Export Account T_ree to CSV..."

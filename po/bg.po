@@ -8,8 +8,9 @@
 # Kamen Naydenov
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash trunk\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: GnuCash trunk\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2018-01-13 20:39+0100\n"
 "PO-Revision-Date: 2011-10-25 13:27+0200\n"
 "Last-Translator: Rosi Dimova <pocu@bk.ru>\n"
@@ -12114,7 +12115,7 @@ msgstr ""
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
 #: ../gnucash/gnome-utils/gnc-main-window.c:4521
-msgid "translator_credits"
+msgid "translator-credits"
 msgstr "Росица Димова <pocu_at_bk.ru>"
 
 #: ../gnucash/gnome-utils/gnc-main-window.c:4524
@@ -17470,7 +17471,7 @@ msgstr "Данък"
 
 #: ../gnucash/import-export/csv-exp/csv-tree-export.c:158
 #, fuzzy
-msgid "place_holder"
+msgid "placeholder"
 msgstr "Синтетична сметка "
 
 #: ../gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54

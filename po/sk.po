@@ -7455,7 +7455,7 @@ msgstr "Účtovníctvo pre súkromné osoby a malé podniky."
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
 #: gnucash/gnome-utils/gnc-main-window.c:4523
-msgid "translator_credits"
+msgid "translator-credits"
 msgstr "Zdenko Podobný"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4526
@@ -17668,7 +17668,7 @@ msgstr "Daň"
 #: gnucash/import-export/csv-exp/csv-tree-export.c:158
 #, fuzzy
 #| msgid "Placeholder"
-msgid "place_holder"
+msgid "placeholder"
 msgstr "Drží miesto (syntetický účet)"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54

@@ -7799,7 +7799,7 @@ msgstr "Contabilidade de finanças pessoais e de pequenos negócios."
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
 #: gnucash/gnome-utils/gnc-main-window.c:4577
-msgid "translator_credits"
+msgid "translator-credits"
 msgstr "Pedro Albuquerque <palbuquerque73@gmail.com>"
 
 #: gnucash/gnome-utils/gnc-main-window.c:4580
@@ -19364,8 +19364,8 @@ msgid "tax"
 msgstr "imposto"
 
 #: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "place_holder"
-msgstr "_Marcador"
+msgid "placeholder"
+msgstr "Marcador"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54
 msgid "Export Account T_ree to CSV..."

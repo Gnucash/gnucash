@@ -1,6 +1,6 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Arabic Translation of GnuCash.
+# Copyright (C) 2013-2017 the below listed translators in the years indicated. 
+# This file is distributed under the same license as the GnuCash package.
 # Translators:
 # Aziz2013 <Abdulaziz_ahmed2001@hotmail.com>, 2013
 # ashalash <ashalash@msn.com>, 2013
@@ -11,7 +11,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.6.7\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2018-01-13 20:39+0100\n"
 "PO-Revision-Date: 2017-03-30 18:49+0300\n"
 "Last-Translator: عبدالسلام الشلاش <ashalash@msn.com>\n"
@@ -11895,7 +11896,7 @@ msgstr "- جنوكاش للإدارة المالية الشخصية والتجا
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
 #: ../gnucash/gnome-utils/gnc-main-window.c:4521
-msgid "translator_credits"
+msgid "translator-credits"
 msgstr ""
 "المشاركين في التعريب:\n"
 "\n"
@@ -17086,7 +17087,7 @@ msgid "tax"
 msgstr "ضريبة"
 
 #: ../gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "place_holder"
+msgid "placeholder"
 msgstr "خاصية التصنيف"
 
 #: ../gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54

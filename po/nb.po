@@ -7,8 +7,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 2.0\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: GnuCash 3.4\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2018-01-13 20:39+0100\n"
 "PO-Revision-Date: 2018-02-16 13:42+0100\n"
 "Last-Translator: John Erling Blad <jeblad@gmail.com>\n"
@@ -12023,13 +12024,13 @@ msgstr ""
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
 #: ../gnucash/gnome-utils/gnc-main-window.c:4521
-msgid "translator_credits"
+msgid "translator-credits"
 msgstr ""
 "Oversettelse til norsk bokmål av:\n"
 "Kjartan Maraas <kmaraas@gnome.org>, 2000. \n"
 "Tor Harald Thorland <tortho@strigen.com>, 2005-2006.\n"
 "Sigve Indregard <sigve.indregard@gmail.com>, 2006.\n"
-" \n"
+"\n"
 "Vennligst send en e-post dersom du har\n"
 "kommentarer til oversettelsen."
 
@@ -17374,7 +17375,7 @@ msgstr "MVA"
 
 #: ../gnucash/import-export/csv-exp/csv-tree-export.c:158
 #, fuzzy
-msgid "place_holder"
+msgid "placeholder"
 msgstr "Plassholder"
 
 #: ../gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54
