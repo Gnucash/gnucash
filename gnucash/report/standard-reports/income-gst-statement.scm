@@ -194,14 +194,15 @@ for taxes paid on expenses, and type LIABILITY for taxes collected on sales.")
        (gross-balance (lambda (s) (myadd (gross-sales s) (myneg (gross-purchases s)))))
        (net-balance (lambda (s) (myadd (sales-without-tax s) (myneg (purchases-without-tax s)))))
        (tax-payable (lambda (s) (myadd (tax-on-sales s) (myneg (tax-on-purchases s))))))
+
+    ;; each column will be a vector
+    ;; (vector heading              - string
+    ;;         calculator-function  - (calculator-function split) to obtain amount
+    ;;         reverse-column?      - #t for sales, #f for purchases
+    ;;         subtotal?            - #t - all columns need subtotals
+    ;;         start-dual-column?   - unused in GST report
+    ;;         friendly-heading-fn  - unused in GST report
     (append
-     ;; each column will be a vector
-     ;; (vector heading                                      ;; string
-     ;;         calculator-function                          ;; (calculator-function split) to obtain amount
-     ;;         reverse-column?                              ;; #t for sales, #f for purchases
-     ;;         subtotal?                                    ;; #t - all columns need subtotals
-     ;;         start-dual-column?                           ;; unused in GST report
-     ;;         friendly-heading-fn                          ;; unused in GST report
      ;; Translators: "Gross Sales" refer to Net Sales + GST/VAT on Sales
      (list (vector (_ "Gross Sales")
                    gross-sales
