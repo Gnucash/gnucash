@@ -849,9 +849,11 @@ are used."))))
                                                         (gnc:monetary->string conv-monetary))))
                                              (gnc:html-text-append!
                                               cell
-                                              (format #f (string-append "~a ~a" (_ "missing"))
-                                                      (gnc:monetary->string orig-monetary)
-                                                      (gnc-commodity-get-nice-symbol common-currency)))))
+                                              (string-append
+                                               (format #f "~a ~a "
+                                                       (gnc:monetary->string orig-monetary)
+                                                       (gnc-commodity-get-nice-symbol common-currency))
+                                               (_ "missing")))))
                                        (gnc:html-text-append! cell (gnc:html-markup-br)))
                                      commodities)
                                     (gnc:make-html-table-cell/markup "number-cell" cell))))
@@ -890,258 +892,257 @@ are used."))))
         (gnc:html-document-add-object!
          doc (gnc:html-render-options-changed (gnc:report-options report-obj))))
 
-    (if (null? accounts)
+    (cond
+     ((null? accounts)
+      (gnc:html-document-add-object!
+       doc
+       (gnc:html-make-no-account-warning
+        report-title (gnc:report-id report-obj))))
 
-        (gnc:html-document-add-object!
-         doc
-         (gnc:html-make-no-account-warning
-          report-title (gnc:report-id report-obj)))
+     ((eq? report-type 'balsheet)
+      (let* ((get-cell-monetary-fn (lambda (account col-idx)
+                                     (let ((account-balance-list (assoc account accounts-balances)))
+                                       (and account-balance-list
+                                            (list-ref account-balance-list (1+ col-idx))))))
+             (get-cell-anchor-fn (lambda (account col-idx)
+                                   (let* ((splits (xaccAccountGetSplitList account))
+                                          (split-date (lambda (s) (xaccTransGetDate (xaccSplitGetParent s))))
+                                          (date (list-ref report-dates col-idx))
+                                          (valid-split? (lambda (s) (< (split-date s) date)))
+                                          (valid-splits (filter valid-split? splits))
+                                          (split (and (pair? valid-splits)
+                                                      (last valid-splits))))
+                                     (and split
+                                          (gnc:split-anchor-text split)))))
+             (chart (and include-chart?
+                         (gnc:make-report-anchor
+                          networth-barchart-uuid report-obj
+                          (list (list "General" "Start Date" (cons 'absolute startdate))
+                                (list "General" "End Date" (cons 'absolute enddate))
+                                (list "General" "Report's currency" (or common-currency (gnc-default-report-currency)))
+                                (list "General" "Price Source" price-source)
+                                (list "Accounts" "Accounts" (append asset-accounts liability-accounts))))))
+             (get-col-header-fn (lambda (accounts col-idx)
+                                  (let* ((date (list-ref report-dates col-idx))
+                                         (header (qof-print-date date))
+                                         (cell (gnc:make-html-table-cell/markup
+                                                "total-label-cell" header)))
+                                    (gnc:html-table-cell-set-style!
+                                     cell "total-label-cell"
+                                     'attribute '("style" "text-align:right"))
+                                    cell)))
+             (add-to-table (lambda* (table title accounts #:key
+                                           (get-col-header-fn #f)
+                                           (show-accounts? #t)
+                                           (show-total? #t)
+                                           (force-total? #f)
+                                           (negate-amounts? #f))
+                             (add-multicolumn-acct-table
+                              table title accounts
+                              maxindent get-cell-monetary-fn (iota (length report-dates))
+                              #:omit-zb-bals? omit-zb-bals?
+                              #:show-zb-accts? show-zb-accts?
+                              #:disable-account-indent? disable-account-indent?
+                              #:negate-amounts? negate-amounts?
+                              #:disable-amount-indent? disable-amount-indent?
+                              #:depth-limit (if get-col-header-fn 0 depth-limit)
+                              #:show-orig-cur? show-foreign?
+                              #:show-title? label-sections?
+                              #:show-accounts? show-accounts?
+                              #:show-total? (or (and total-sections? show-total?) force-total?)
+                              #:recursive-bals? recursive-bals?
+                              #:account-anchor? use-links?
+                              #:convert-curr-fn (and common-currency convert-curr-fn)
+                              #:get-col-header-fn get-col-header-fn
+                              #:get-cell-anchor-fn (and use-amount-links? get-cell-anchor-fn)
+                              ))))
 
-        (case report-type
-          ((balsheet)
-           (let* ((get-cell-monetary-fn (lambda (account col-idx)
-                                          (let ((account-balance-list (assoc account accounts-balances)))
-                                            (and account-balance-list
-                                                 (list-ref account-balance-list (1+ col-idx))))))
-                  (get-cell-anchor-fn (lambda (account col-idx)
-                                        (let* ((splits (xaccAccountGetSplitList account))
-                                               (split-date (lambda (s) (xaccTransGetDate (xaccSplitGetParent s))))
-                                               (date (list-ref report-dates col-idx))
-                                               (valid-split? (lambda (s) (< (split-date s) date)))
-                                               (valid-splits (filter valid-split? splits))
-                                               (split (and (pair? valid-splits)
-                                                           (last valid-splits))))
-                                          (and split
-                                               (gnc:split-anchor-text split)))))
-                  (chart (and include-chart?
-                              (gnc:make-report-anchor
-                               networth-barchart-uuid report-obj
-                               (list (list "General" "Start Date" (cons 'absolute startdate))
-                                     (list "General" "End Date" (cons 'absolute enddate))
-                                     (list "General" "Report's currency" (or common-currency (gnc-default-report-currency)))
-                                     (list "General" "Price Source" price-source)
-                                     (list "Accounts" "Accounts" (append asset-accounts liability-accounts))))))
-                  (get-col-header-fn (lambda (accounts col-idx)
-                                       (let* ((date (list-ref report-dates col-idx))
-                                              (header (qof-print-date date))
-                                              (cell (gnc:make-html-table-cell/markup
-                                                     "total-label-cell" header)))
-                                         (gnc:html-table-cell-set-style!
-                                          cell "total-label-cell"
-                                          'attribute '("style" "text-align:right"))
-                                         cell)))
-                  (add-to-table (lambda* (table title accounts #:key
-                                                (get-col-header-fn #f)
-                                                (show-accounts? #t)
-                                                (show-total? #t)
-                                                (force-total? #f)
-                                                (negate-amounts? #f))
-                                  (add-multicolumn-acct-table
-                                   table title accounts
-                                   maxindent get-cell-monetary-fn (iota (length report-dates))
-                                   #:omit-zb-bals? omit-zb-bals?
-                                   #:show-zb-accts? show-zb-accts?
-                                   #:disable-account-indent? disable-account-indent?
-                                   #:negate-amounts? negate-amounts?
-                                   #:disable-amount-indent? disable-amount-indent?
-                                   #:depth-limit (if get-col-header-fn 0 depth-limit)
-                                   #:show-orig-cur? show-foreign?
-                                   #:show-title? label-sections?
-                                   #:show-accounts? show-accounts?
-                                   #:show-total? (or (and total-sections? show-total?) force-total?)
-                                   #:recursive-bals? recursive-bals?
-                                   #:account-anchor? use-links?
-                                   #:convert-curr-fn (and common-currency convert-curr-fn)
-                                   #:get-col-header-fn get-col-header-fn
-                                   #:get-cell-anchor-fn (and use-amount-links? get-cell-anchor-fn)
-                                   ))))
+        (when incr
+          (add-to-table multicol-table-left (_ "Date") '()
+                        #:get-col-header-fn get-col-header-fn
+                        #:show-accounts? #f
+                        #:show-total? #f)
+          (if enable-dual-columns?
+              (add-to-table multicol-table-right (_ "Date") '()
+                            #:get-col-header-fn get-col-header-fn
+                            #:show-accounts? #f
+                            #:show-total? #f)))
 
-             (when incr
-               (add-to-table multicol-table-left (_ "Date") '()
-                             #:get-col-header-fn get-col-header-fn
-                             #:show-accounts? #f
-                             #:show-total? #f)
-               (if enable-dual-columns?
-                   (add-to-table multicol-table-right (_ "Date") '()
-                                 #:get-col-header-fn get-col-header-fn
-                                 #:show-accounts? #f
-                                 #:show-total? #f)))
+        (unless (null? asset-accounts)
+          (add-to-table multicol-table-left (_ "Asset") asset-accounts))
 
-             (unless (null? asset-accounts)
-               (add-to-table multicol-table-left (_ "Asset") asset-accounts))
+        (unless (null? liability-accounts)
+          (add-to-table multicol-table-right (_ "Liability") liability-accounts
+                        #:negate-amounts? #t))
 
-             (unless (null? liability-accounts)
-               (add-to-table multicol-table-right (_ "Liability") liability-accounts
-                             #:negate-amounts? #t))
+        (unless (null? equity-accounts)
+          (add-to-table multicol-table-right (_ "Equity")
+                        equity-accounts))
 
-             (unless (null? equity-accounts)
-               (add-to-table multicol-table-right (_ "Equity")
-                             equity-accounts))
+        (unless (or (null? asset-accounts)
+                    (null? liability-accounts))
+          (add-to-table multicol-table-right (_ "Net Worth")
+                        (append asset-accounts liability-accounts)
+                        #:show-accounts? #f
+                        #:force-total? #t))
 
-             (unless (or (null? asset-accounts)
-                         (null? liability-accounts))
-               (add-to-table multicol-table-right (_ "Net Worth")
-                             (append asset-accounts liability-accounts)
-                             #:show-accounts? #f
-                             #:force-total? #t))
+        (if (and common-currency show-rates?)
+            (add-to-table multicol-table-right (_ "Exchange Rates")
+                          (append asset-accounts liability-accounts)
+                          #:get-col-header-fn get-exchange-rates-fn
+                          #:show-accounts? #f
+                          #:show-total? #f))
 
-             (if (and common-currency show-rates?)
-                 (add-to-table multicol-table-right (_ "Exchange Rates")
-                               (append asset-accounts liability-accounts)
-                               #:get-col-header-fn get-exchange-rates-fn
-                               #:show-accounts? #f
-                               #:show-total? #f))
+        (if include-chart?
+            (gnc:html-document-add-object!
+             doc
+             (gnc:make-html-text
+              (gnc:html-markup-anchor chart "Barchart"))))))
 
-             (if include-chart?
-                 (gnc:html-document-add-object!
-                  doc
-                  (gnc:make-html-text
-                   (gnc:html-markup-anchor chart "Barchart"))))))
+     ((eq? report-type 'pnl)
+      (let* ((closing-str (get-option pagename-entries optname-closing-pattern))
+             (closing-cased (get-option pagename-entries optname-closing-casing))
+             (closing-regexp (get-option pagename-entries optname-closing-regexp))
+             (include-overall-period? (get-option gnc:pagename-general optname-include-overall-period))
+             (col-idx->datepair (lambda (idx)
+                                  (if (eq? idx 'overall-period)
+                                      (cons (car report-dates) (last report-dates))
+                                      (cons (list-ref report-dates idx)
+                                            (list-ref report-dates (1+ idx))))))
+             (col-idx->monetarypair (lambda (balancelist idx)
+                                      (if (eq? idx 'overall-period)
+                                          (cons (car balancelist) (last balancelist))
+                                          (cons (list-ref balancelist idx)
+                                                (list-ref balancelist (1+ idx))))))
+             (closing-entries (let ((query (qof-query-create-for-splits)))
+                                (qof-query-set-book query (gnc-get-current-book))
+                                (xaccQueryAddAccountMatch query (append income-accounts expense-accounts)
+                                                          QOF-GUID-MATCH-ANY QOF-QUERY-AND)
+                                (if (and closing-str (not (string-null? closing-str)))
+                                    (xaccQueryAddDescriptionMatch query closing-str closing-cased closing-regexp
+                                                                  QOF-COMPARE-CONTAINS QOF-QUERY-AND))
+                                (xaccQueryAddClosingTransMatch query #t QOF-QUERY-OR)
+                                (let ((splits (qof-query-run query)))
+                                  (qof-query-destroy query)
+                                  splits)))
+             ;; this function will query the above closing-entries for splits within the date range,
+             ;; and produce the total amount for these closing entries
+             (closing-adjustment (lambda (account col-idx)
+                                   (define datepair (col-idx->datepair col-idx))
+                                   (define (include-split? split)
+                                     (and (equal? (xaccSplitGetAccount split) account)
+                                          (<= (car datepair)
+                                              (xaccTransGetDate (xaccSplitGetParent split))
+                                              (cdr datepair))))
+                                   (let ((account-closing-splits (filter include-split? closing-entries)))
+                                     (gnc:make-gnc-monetary
+                                      (xaccAccountGetCommodity account)
+                                      (apply + (map xaccSplitGetAmount account-closing-splits))))))
+             (get-cell-monetary-fn (lambda (account col-idx)
+                                     (let ((account-balance-list (assoc account accounts-balances)))
+                                       (and account-balance-list
+                                            (let ((monetarypair (col-idx->monetarypair (cdr account-balance-list) col-idx)))
+                                              (monetary-less
+                                               (cdr monetarypair)
+                                               (car monetarypair)
+                                               (closing-adjustment account col-idx)))))))
+             (get-cell-anchor-fn (lambda (account col-idx)
+                                   (define datepair (col-idx->datepair col-idx))
+                                   (gnc:make-report-anchor
+                                    trep-uuid report-obj
+                                    (list (list "General" "Start Date" (cons 'absolute (car datepair)))
+                                          (list "General" "End Date" (cons 'absolute (cdr datepair)))
+                                          (list "Accounts" "Accounts" (list account))))))
+             (chart (and include-chart?
+                         (gnc:make-report-anchor
+                          pnl-barchart-uuid report-obj
+                          (list (list "General" "Start Date" (cons 'absolute startdate))
+                                (list "General" "End Date" (cons 'absolute enddate))
+                                (list "General" "Report's currency" (or common-currency (gnc-default-report-currency)))
+                                (list "General" "Price Source" (case price-source
+                                                                 ((pricedb-latest) 'pricedb-latest)
+                                                                 (else 'pricedb-nearest)))
+                                (list "Accounts" "Accounts" (append income-accounts expense-accounts))))))
+             (get-col-header-fn (lambda (accounts col-idx)
+                                  (let* ((datepair (col-idx->datepair col-idx))
+                                         (header (gnc:make-html-text
+                                                  (qof-print-date (car datepair))
+                                                  (gnc:html-markup-br)
+                                                  (_ " to ")
+                                                  (qof-print-date (cdr datepair))))
+                                         (cell (gnc:make-html-table-cell/markup "total-label-cell" header)))
+                                    (gnc:html-table-cell-set-style! cell "total-label-cell" 'attribute '("style" "text-align:right"))
+                                    cell)))
+             (add-to-table (lambda* (table title accounts #:key
+                                           (get-col-header-fn #f)
+                                           (show-accounts? #t)
+                                           (show-total? #t)
+                                           (force-total? #f)
+                                           (negate-amounts? #f))
+                             (add-multicolumn-acct-table
+                              table title accounts
+                              maxindent get-cell-monetary-fn
+                              (append
+                               (iota (1- (length report-dates)))
+                               (if (and include-overall-period?
+                                        (> (length report-dates) 2))
+                                   '(overall-period)
+                                   '()))
+                              #:omit-zb-bals? omit-zb-bals?
+                              #:show-zb-accts? show-zb-accts?
+                              #:disable-account-indent? disable-account-indent?
+                              #:negate-amounts? negate-amounts?
+                              #:disable-amount-indent? disable-amount-indent?
+                              #:depth-limit (if get-col-header-fn 0 depth-limit)
+                              #:show-orig-cur? show-foreign?
+                              #:show-title? label-sections?
+                              #:show-accounts? show-accounts?
+                              #:show-total? (or (and total-sections? show-total?) force-total?)
+                              #:recursive-bals? recursive-bals?
+                              #:account-anchor? use-links?
+                              #:convert-curr-fn (and common-currency convert-curr-fn)
+                              #:get-col-header-fn get-col-header-fn
+                              #:get-cell-anchor-fn (and use-amount-links? get-cell-anchor-fn)
+                              ))))
 
-          ((pnl)
-           (let* ((closing-str (get-option pagename-entries optname-closing-pattern))
-                  (closing-cased (get-option pagename-entries optname-closing-casing))
-                  (closing-regexp (get-option pagename-entries optname-closing-regexp))
-                  (include-overall-period? (get-option gnc:pagename-general optname-include-overall-period))
-                  (col-idx->datepair (lambda (idx)
-                                        (if (eq? idx 'overall-period)
-                                            (cons (car report-dates) (last report-dates))
-                                            (cons (list-ref report-dates idx)
-                                                  (list-ref report-dates (1+ idx))))))
-                  (col-idx->monetarypair (lambda (balancelist idx)
-                                           (if (eq? idx 'overall-period)
-                                               (cons (car balancelist) (last balancelist))
-                                               (cons (list-ref balancelist idx)
-                                                     (list-ref balancelist (1+ idx))))))
-                  (closing-entries (let ((query (qof-query-create-for-splits)))
-                                     (qof-query-set-book query (gnc-get-current-book))
-                                     (xaccQueryAddAccountMatch query (append income-accounts expense-accounts)
-                                                               QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-                                     (if (and closing-str (not (string-null? closing-str)))
-                                         (xaccQueryAddDescriptionMatch query closing-str closing-cased closing-regexp
-                                                                       QOF-COMPARE-CONTAINS QOF-QUERY-AND))
-                                     (xaccQueryAddClosingTransMatch query #t QOF-QUERY-OR)
-                                     (let ((splits (qof-query-run query)))
-                                       (qof-query-destroy query)
-                                       splits)))
-                  ;; this function will query the above closing-entries for splits within the date range,
-                  ;; and produce the total amount for these closing entries
-                  (closing-adjustment (lambda (account col-idx)
-                                        (define datepair (col-idx->datepair col-idx))
-                                        (define (include-split? split)
-                                          (and (equal? (xaccSplitGetAccount split) account)
-                                               (<= (car datepair)
-                                                   (xaccTransGetDate (xaccSplitGetParent split))
-                                                   (cdr datepair))))
-                                        (let ((account-closing-splits (filter include-split? closing-entries)))
-                                          (gnc:make-gnc-monetary
-                                           (xaccAccountGetCommodity account)
-                                           (apply + (map xaccSplitGetAmount account-closing-splits))))))
-                  (get-cell-monetary-fn (lambda (account col-idx)
-                                          (let ((account-balance-list (assoc account accounts-balances)))
-                                            (and account-balance-list
-                                                 (let ((monetarypair (col-idx->monetarypair (cdr account-balance-list) col-idx)))
-                                                   (monetary-less
-                                                    (cdr monetarypair)
-                                                    (car monetarypair)
-                                                    (closing-adjustment account col-idx)))))))
-                  (get-cell-anchor-fn (lambda (account col-idx)
-                                        (define datepair (col-idx->datepair col-idx))
-                                        (gnc:make-report-anchor
-                                         trep-uuid report-obj
-                                         (list (list "General" "Start Date" (cons 'absolute (car datepair)))
-                                               (list "General" "End Date" (cons 'absolute (cdr datepair)))
-                                               (list "Accounts" "Accounts" (list account))))))
-                  (chart (and include-chart?
-                              (gnc:make-report-anchor
-                               pnl-barchart-uuid report-obj
-                               (list (list "General" "Start Date" (cons 'absolute startdate))
-                                     (list "General" "End Date" (cons 'absolute enddate))
-                                     (list "General" "Report's currency" (or common-currency (gnc-default-report-currency)))
-                                     (list "General" "Price Source" (case price-source
-                                                                      ((pricedb-latest) 'pricedb-latest)
-                                                                      (else 'pricedb-nearest)))
-                                     (list "Accounts" "Accounts" (append income-accounts expense-accounts))))))
-                  (get-col-header-fn (lambda (accounts col-idx)
-                                       (let* ((datepair (col-idx->datepair col-idx))
-                                              (header (gnc:make-html-text
-                                                       (qof-print-date (car datepair))
-                                                       (gnc:html-markup-br)
-                                                       (_ " to ")
-                                                       (qof-print-date (cdr datepair))))
-                                              (cell (gnc:make-html-table-cell/markup "total-label-cell" header)))
-                                         (gnc:html-table-cell-set-style! cell "total-label-cell" 'attribute '("style" "text-align:right"))
-                                         cell)))
-                  (add-to-table (lambda* (table title accounts #:key
-                                                (get-col-header-fn #f)
-                                                (show-accounts? #t)
-                                                (show-total? #t)
-                                                (force-total? #f)
-                                                (negate-amounts? #f))
-                                  (add-multicolumn-acct-table
-                                   table title accounts
-                                   maxindent get-cell-monetary-fn
-                                   (append
-                                    (iota (1- (length report-dates)))
-                                    (if (and include-overall-period?
-                                             (> (length report-dates) 2))
-                                        '(overall-period)
-                                        '()))
-                                   #:omit-zb-bals? omit-zb-bals?
-                                   #:show-zb-accts? show-zb-accts?
-                                   #:disable-account-indent? disable-account-indent?
-                                   #:negate-amounts? negate-amounts?
-                                   #:disable-amount-indent? disable-amount-indent?
-                                   #:depth-limit (if get-col-header-fn 0 depth-limit)
-                                   #:show-orig-cur? show-foreign?
-                                   #:show-title? label-sections?
-                                   #:show-accounts? show-accounts?
-                                   #:show-total? (or (and total-sections? show-total?) force-total?)
-                                   #:recursive-bals? recursive-bals?
-                                   #:account-anchor? use-links?
-                                   #:convert-curr-fn (and common-currency convert-curr-fn)
-                                   #:get-col-header-fn get-col-header-fn
-                                   #:get-cell-anchor-fn (and use-amount-links? get-cell-anchor-fn)
-                                   ))))
+        (when incr
+          (add-to-table multicol-table-left (_ "Period") '()
+                        #:get-col-header-fn get-col-header-fn
+                        #:show-accounts? #f
+                        #:show-total? #f)
+          (if enable-dual-columns?
+              (add-to-table multicol-table-right (_ "Period") '()
+                            #:get-col-header-fn get-col-header-fn
+                            #:show-accounts? #f
+                            #:show-total? #f)))
 
-             (when incr
-               (add-to-table multicol-table-left (_ "Period") '()
-                             #:get-col-header-fn get-col-header-fn
-                             #:show-accounts? #f
-                             #:show-total? #f)
-               (if enable-dual-columns?
-                   (add-to-table multicol-table-right (_ "Period") '()
-                                 #:get-col-header-fn get-col-header-fn
-                                 #:show-accounts? #f
-                                 #:show-total? #f)))
+        (unless (null? income-accounts)
+          (add-to-table multicol-table-left (_ "Income") income-accounts
+                        #:negate-amounts? #t))
 
-             (unless (null? income-accounts)
-               (add-to-table multicol-table-left (_ "Income") income-accounts
-                             #:negate-amounts? #t))
+        (unless (null? expense-accounts)
+          (add-to-table multicol-table-right (_ "Expense") expense-accounts))
 
-             (unless (null? expense-accounts)
-               (add-to-table multicol-table-right (_ "Expense") expense-accounts))
+        (unless (or (null? income-accounts)
+                    (null? expense-accounts))
+          (add-to-table multicol-table-left (_ "Net Income")
+                        (append income-accounts expense-accounts)
+                        #:show-accounts? #f
+                        #:negate-amounts? #t
+                        #:force-total? #t))
 
-             (unless (or (null? income-accounts)
-                         (null? expense-accounts))
-               (add-to-table multicol-table-left (_ "Net Income")
-                             (append income-accounts expense-accounts)
-                             #:show-accounts? #f
-                             #:negate-amounts? #t
-                             #:force-total? #t))
+        (if (and common-currency show-rates?)
+            (add-to-table multicol-table-left (_ "Exchange Rates")
+                          (append income-accounts expense-accounts)
+                          #:get-col-header-fn get-exchange-rates-fn
+                          #:show-accounts? #f
+                          #:show-total? #f))
 
-             (if (and common-currency show-rates?)
-                 (add-to-table multicol-table-left (_ "Exchange Rates")
-                               (append income-accounts expense-accounts)
-                               #:get-col-header-fn get-exchange-rates-fn
-                               #:show-accounts? #f
-                               #:show-total? #f))
-
-             (if include-chart?
-                 (gnc:html-document-add-object!
-                  doc
-                  (gnc:make-html-text
-                   (gnc:html-markup-anchor chart "Barchart"))))))))
+        (if include-chart?
+            (gnc:html-document-add-object!
+             doc
+             (gnc:make-html-text
+              (gnc:html-markup-anchor chart "Barchart")))))))
 
     (let ((multicol-table (if enable-dual-columns?
                               (gnc:make-html-table)
