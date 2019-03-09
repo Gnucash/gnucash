@@ -1008,7 +1008,10 @@ are used."))))
                                   (if (eq? idx 'overall-period)
                                       (cons (car report-dates) (last report-dates))
                                       (cons (list-ref report-dates idx)
-                                            (list-ref report-dates (1+ idx))))))
+                                            (gnc:time64-end-day-time
+                                             (decdate
+                                              (list-ref report-dates (1+ idx))
+                                              DayDelta))))))
              (col-idx->monetarypair (lambda (balancelist idx)
                                       (if (eq? idx 'overall-period)
                                           (cons (car balancelist) (last balancelist))
