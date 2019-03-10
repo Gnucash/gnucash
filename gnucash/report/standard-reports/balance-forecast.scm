@@ -33,20 +33,40 @@
 
 ; Name definitions
 (define report-title         (N_ "Balance Forecast"))
+
 (define optname-accounts     (N_ "Accounts"))
-(define optname-from-date    (N_ "Simulate from"))
-(define optname-to-date      (N_ "Simulate until"))
+(define opthelp-accounts     (_ "Report on these accounts."))
+
+(define optname-from-date    (N_ "Start Date"))
+(define optname-to-date      (N_ "End Date"))
 (define optname-interval     (N_ "Interval"))
-(define optname-currency     (N_ "Report currency"))
-(define optname-price        (N_ "Price source"))
-(define optname-plot-width   (N_ "Plot width"))
-(define optname-plot-height  (N_ "Plot height"))
-(define optname-show-markers (N_ "Show markers"))
+
+(define optname-currency     (N_ "Report's currency"))
+(define optname-price        (N_ "Price Source"))
+
+(define optname-plot-width   (N_ "Plot Width"))
+(define optname-plot-height  (N_ "Plot Height"))
+(define optname-show-markers (N_ "Data markers?"))
+(define opthelp-show-markers (_ "Display a mark for each data point."))
+
 (define optname-show-reserve (N_ "Show reserve line"))
+(define opthelp-show-reserve (_ "Show reserve line"))
+
 (define optname-reserve      (N_ "Reserve amount"))
+(define opthelp-reserve      (_ "The reserve amount is set to a \
+minimum balance desired"))
+
 (define optname-show-target  (N_ "Show target line"))
+(define opthelp-show-target  (_ "Show target line"))
+
 (define optname-target       (N_ "Target amount above reserve"))
+(define opthelp-target       (_ "The target is used to plan for \
+a future large purchase, which will be added as a line above the \
+reserve amount."))
+
 (define optname-show-minimum (N_ "Show future minimum"))
+(define opthelp-show-minimum (_ "The future minimum will add, for each \
+date point, a projected minimum balance including scheduled transactions."))
 
 ; Options generator
 (define (options-generator)
@@ -54,7 +74,7 @@
     ; Account selector
     (gnc:register-option options
       (gnc:make-account-list-option
-        gnc:pagename-accounts optname-accounts "a" optname-accounts
+        gnc:pagename-accounts optname-accounts "a" opthelp-accounts
         (lambda ()
           (gnc:filter-accountlist-type
             (list ACCT-TYPE-BANK ACCT-TYPE-CASH)
@@ -81,28 +101,28 @@
       (cons 'percent 100.0) (cons 'percent 100.0))
     ; Markers
     (gnc:register-option options (gnc:make-simple-boolean-option
-      gnc:pagename-display optname-show-markers "b" "" #f))
+      gnc:pagename-display optname-show-markers "b" opthelp-show-markers #f))
     ; Reserve line
     (gnc:register-option options (gnc:make-complex-boolean-option
-      gnc:pagename-display optname-show-reserve "c" "" #f #f
+      gnc:pagename-display optname-show-reserve "c" opthelp-show-reserve #f #f
       (lambda (x)
         (gnc-option-db-set-option-selectable-by-name
          options gnc:pagename-display optname-reserve x))))
     (gnc:register-option options (gnc:make-number-range-option
-      gnc:pagename-display optname-reserve "d" optname-reserve
+      gnc:pagename-display optname-reserve "d" opthelp-reserve
       0 0 10E9 2 0.01))
     ; Purchasing power target
     (gnc:register-option options (gnc:make-complex-boolean-option
-      gnc:pagename-display optname-show-target "e" "" #f #f
+      gnc:pagename-display optname-show-target "e" opthelp-show-target #f #f
       (lambda (x)
         (gnc-option-db-set-option-selectable-by-name
          options gnc:pagename-display optname-target x))))
     (gnc:register-option options (gnc:make-number-range-option
-      gnc:pagename-display optname-target "f" optname-target
+      gnc:pagename-display optname-target "f" opthelp-target
       0 0 10E9 2 0.01))
     ; Future minimum
     (gnc:register-option options (gnc:make-simple-boolean-option
-      gnc:pagename-display optname-show-minimum "g" "" #f))
+      gnc:pagename-display optname-show-minimum "g" opthelp-show-minimum #f))
     (gnc:options-set-default-section options gnc:pagename-general)
     options)
 )
