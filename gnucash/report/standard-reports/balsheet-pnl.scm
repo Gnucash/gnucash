@@ -1171,7 +1171,7 @@ are used."))))
  'version 1
  'name balsheet-reportname
  'report-guid "065d5d5a77ba11e8b31e83ada73c5eea"
- 'menu-path (list gnc:menuname-asset-liability)
+ 'menu-path (list gnc:menuname-experimental)
  'options-generator (lambda () (multicol-report-options-generator 'balsheet))
  'renderer (lambda (rpt) (multicol-report-renderer rpt 'balsheet)))
 
@@ -1179,7 +1179,7 @@ are used."))))
  'version 1
  'name pnl-reportname
  'report-guid "0e94fd0277ba11e8825d43e27232c9d4"
- 'menu-path (list gnc:menuname-income-expense)
+ 'menu-path (list gnc:menuname-experimental)
  'options-generator (lambda () (multicol-report-options-generator 'pnl))
  'renderer (lambda (rpt) (multicol-report-renderer rpt 'pnl)))
 

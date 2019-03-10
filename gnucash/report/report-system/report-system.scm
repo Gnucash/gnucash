@@ -131,6 +131,7 @@
 (export gnc:menuname-budget)
 (export gnc:menuname-taxes)
 (export gnc:menuname-utility)
+(export gnc:menuname-experimental)
 (export gnc:menuname-custom)
 (export gnc:menuname-business-reports)
 (export gnc:pagename-general)

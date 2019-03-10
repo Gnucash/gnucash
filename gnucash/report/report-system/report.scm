@@ -63,6 +63,7 @@
 (define gnc:menuname-budget (N_ "B_udget"))
 (define gnc:menuname-taxes (N_ "_Taxes"))
 (define gnc:menuname-utility (N_ "_Sample & Custom"))
+(define gnc:menuname-experimental (N_ "_Experimental"))
 (define gnc:menuname-custom (N_ "_Custom"))
 (define gnc:pagename-general (N_ "General"))
 (define gnc:pagename-accounts (N_ "Accounts"))
