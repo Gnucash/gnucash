@@ -3764,12 +3764,13 @@ gnc_quartz_should_quit (GtkosxApplication *theApp, GncMainWindow *window)
     QofSession *session;
     gboolean needs_save;
 
-    if (!gnc_current_session_exist() ||
-        !gnc_main_window_all_finish_pending() ||
+    if (gnc_current_session_exist())
+        return FALSE;
+    if (!gnc_main_window_all_finish_pending() ||
         gnc_file_save_in_progress())
 
     {
-        return FALSE;
+        return TRUE;
     }
     session = gnc_get_current_session();
     needs_save = qof_book_session_not_saved(qof_session_get_book(session)) &&
