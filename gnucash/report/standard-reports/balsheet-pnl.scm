@@ -804,6 +804,12 @@ are used."))))
                                (cons acc
                                      (gnc:account-get-balances-at-dates acc report-dates)))
                              accounts))
+         (exchange-fn (gnc:case-exchange-time-fn
+                       (if (memq price-source '(startperiod midperiod endperiod))
+                           'pricedb-nearest
+                           price-source)
+                       common-currency (map xaccAccountGetCommodity accounts) enddate
+                       #f #f))
          (convert-curr-fn (lambda (monetary col-idx)
                             (and common-currency
                                  (not (gnc-commodity-equal (gnc:gnc-monetary-commodity monetary) common-currency))
@@ -817,13 +823,8 @@ are used."))))
                                                  (list-ref report-dates
                                                            (case report-type
                                                              ((balsheet) col-idx)
-                                                             ((pnl) (1+ col-idx)))))))
-                                        (exchange-fn (gnc:case-exchange-fn
-                                                      (if (memq price-source '(startperiod midperiod endperiod))
-                                                          'pricedb-nearest
-                                                          price-source)
-                                                      common-currency date)))
-                                   (exchange-fn monetary common-currency)))))
+                                                             ((pnl) (1+ col-idx))))))))
+                                   (exchange-fn monetary common-currency date)))))
          ;; the following function generates an gnc:html-text object
          ;; to dump exchange rate for a particular column. From the
          ;; accountlist given, obtain commodities, and convert 1 unit
