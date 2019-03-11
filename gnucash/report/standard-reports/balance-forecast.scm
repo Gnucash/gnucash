@@ -163,6 +163,11 @@ date point, a projected minimum balance including scheduled transactions."))
           (intervals (gnc:make-date-interval-list
             from-date to-date (gnc:deltasym-to-delta interval)))
           (accum (gnc:make-commodity-collector))
+          (exchange-fn (gnc:case-exchange-time-fn
+                        price currency
+                        (delete-duplicates! (map xaccAccountGetCommodity accounts)
+                                            gnc-commodity-equiv)
+                        to-date #f #f))
           (accounts-balancelist
            (map
             (lambda (acc)
@@ -206,7 +211,6 @@ date point, a projected minimum balance including scheduled transactions."))
                 (let* ((start-date (car date))
                        (end-date (cadr date))
                        (balance (gnc:make-commodity-collector))
-                       (exchange-fn (gnc:case-exchange-fn price currency end-date))
                        (sx-value (gnc-sx-all-instantiate-cashflow-all
                                   start-date end-date)))
                   (for-each
@@ -218,7 +222,10 @@ date point, a projected minimum balance including scheduled transactions."))
                    accounts accounts-balance)
                   (balance 'merge accum #f)
                   (gnc:gnc-monetary-amount
-                   (gnc:sum-collector-commodity balance currency exchange-fn))))
+                   (gnc:sum-collector-commodity
+                    balance currency
+                    (lambda (monetary target-curr)
+                      (exchange-fn monetary target-curr end-date))))))
               intervals (apply zip accounts-balancelist))))
 
         ;; Minimum line
