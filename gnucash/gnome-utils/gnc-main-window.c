@@ -205,11 +205,6 @@ typedef struct GncMainWindowPrivate
      *  window that is contained in the status bar.  This pointer
      *  provides easy access for updating the progressbar. */
     GtkWidget *progressbar;
-    /** Pointer to the about dialog.  We need this so that we create
-     *  only one, can attach to its activate-link signal, and can
-     *  destroy it with the main window.
-     */
-    GtkWidget *about_dialog;
 
     /** The group of all actions provided by the main window
      *  itself.  This does not include any action provided by menu
@@ -2610,7 +2605,6 @@ gnc_main_window_init (GncMainWindow *window,
 
     /* Get the show_color_tabs value preference */
     priv->show_color_tabs = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_COLOR);
-    priv->about_dialog = NULL;
 
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
                            GNC_PREF_TAB_COLOR,
@@ -2697,8 +2691,6 @@ gnc_main_window_destroy (GtkWidget *widget)
         g_list_foreach (plugins, gnc_main_window_remove_plugin, window);
         g_list_free (plugins);
     }
-    if (priv->about_dialog)
-        g_object_unref (priv->about_dialog);
     GTK_WIDGET_CLASS (parent_class)->destroy (widget);
 }
 
@@ -4504,32 +4496,26 @@ url_signal_cb (GtkAboutDialog *dialog, gchar *uri, gpointer data)
 static void
 gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 {
-    GncMainWindowPrivate *priv;
-
-    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-
-    if (priv->about_dialog == NULL)
-    {
-        /* Translators: %s will be replaced with the current year */
-        gchar *copyright = g_strdup_printf(_("Copyright © 1997-%s The GnuCash contributors."),
-                                           GNC_VCS_REV_YEAR);
-        gchar **authors = get_file_strsplit("AUTHORS");
-        gchar **documenters = get_file_strsplit("DOCUMENTERS");
-        gchar *license = get_file("LICENSE");
-        GtkIconTheme *icon_theme = gtk_icon_theme_get_default ();
-        GdkPixbuf *logo = gtk_icon_theme_load_icon (icon_theme,
-                                                    GNC_ICON_APP,
-                                                    128,
-                                                    GTK_ICON_LOOKUP_USE_BUILTIN,
-                                                    NULL);
-        gchar *version = g_strdup_printf ("%s: %s\n%s: %s\nFinance::Quote: %s",
-                                          _("Version"), gnc_version(),
-                                          _("Build ID"), gnc_build_id(),
-                                          gnc_quote_source_fq_version ()
-                                           ? gnc_quote_source_fq_version ()
-                                           : "-");
-        priv->about_dialog = gtk_about_dialog_new ();
-        g_object_set (priv->about_dialog,
+    /* Translators: %s will be replaced with the current year */
+    gchar *copyright = g_strdup_printf(_("Copyright © 1997-%s The GnuCash contributors."),
+                                       GNC_VCS_REV_YEAR);
+    gchar **authors = get_file_strsplit("AUTHORS");
+    gchar **documenters = get_file_strsplit("DOCUMENTERS");
+    gchar *license = get_file("LICENSE");
+    GtkIconTheme *icon_theme = gtk_icon_theme_get_default ();
+    GdkPixbuf *logo = gtk_icon_theme_load_icon (icon_theme,
+                                                GNC_ICON_APP,
+                                                128,
+                                                GTK_ICON_LOOKUP_USE_BUILTIN,
+                                                NULL);
+    gchar *version = g_strdup_printf ("%s: %s\n%s: %s\nFinance::Quote: %s",
+                                      _("Version"), gnc_version(),
+                                      _("Build ID"), gnc_build_id(),
+                                      gnc_quote_source_fq_version ()
+                                      ? gnc_quote_source_fq_version ()
+                                      : "-");
+    GtkDialog *dialog = GTK_DIALOG (gtk_about_dialog_new ());
+    g_object_set (G_OBJECT (dialog),
                   "authors", authors,
                   "documenters", documenters,
                   "comments", _("Accounting for personal and small business finance."),
@@ -4537,37 +4523,34 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
                   "license", license,
                   "logo", logo,
                   "name", "GnuCash",
-         /* Translators: the following string will be shown in Help->About->Credits
-          * Enter your name or that of your team and an email contact for feedback.
-          * The string can have multiple rows, so you can also add a list of
-          * contributors. */
+                  /* Translators: the following string will be shown in Help->About->Credits
+                   * Enter your name or that of your team and an email contact for feedback.
+                   * The string can have multiple rows, so you can also add a list of
+                   * contributors. */
                   "translator-credits", _("translator-credits"),
                   "version", version,
                   "website", PACKAGE_URL,
                   "website-label", _("Visit the GnuCash website."),
                   NULL);
 
-        g_free(version);
-        g_free(copyright);
-        if (license)
-             g_free(license);
-        if (documenters)
-             g_strfreev(documenters);
-        if (authors)
-             g_strfreev(authors);
-        g_object_unref (logo);
-        g_signal_connect (priv->about_dialog, "activate-link",
-              G_CALLBACK (url_signal_cb), NULL);
-        g_signal_connect (priv->about_dialog, "response",
-              G_CALLBACK (gtk_widget_hide), NULL);
+    g_free(version);
+    g_free(copyright);
+    if (license)
+        g_free(license);
+    if (documenters)
+        g_strfreev(documenters);
+    if (authors)
+        g_strfreev(authors);
+    g_object_unref (logo);
+    g_signal_connect (dialog, "activate-link",
+                      G_CALLBACK (url_signal_cb), NULL);
+    /* Set dialog to resize. */
+    gtk_window_set_resizable(GTK_WINDOW (dialog), TRUE);
 
-        /* Set dialog to resize. */
-        gtk_window_set_resizable(GTK_WINDOW(priv->about_dialog), TRUE);
-
-        gtk_window_set_transient_for (GTK_WINDOW (priv->about_dialog),
-                          GTK_WINDOW (window));
-    }
-    gtk_dialog_run (GTK_DIALOG (priv->about_dialog));
+    gtk_window_set_transient_for (GTK_WINDOW (dialog),
+                                  GTK_WINDOW (window));
+    gtk_dialog_run (dialog);
+    gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 
