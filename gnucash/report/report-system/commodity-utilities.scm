@@ -794,6 +794,8 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
 ;; 'price'. Returns a <gnc:monetary>.
 (define (gnc:exchange-by-pricedb-helper
          foreign domestic price)
+  (issue-deprecation-warning
+   "gnc:exchange-by-pricedb-helper is deprecated.")
   (and (gnc:gnc-monetary? foreign)
        (gnc:make-gnc-monetary
         domestic
