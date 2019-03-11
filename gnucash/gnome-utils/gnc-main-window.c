@@ -3752,33 +3752,13 @@ gnc_quartz_shutdown (GtkosxApplication *theApp, gpointer data)
     /* Do Nothing. It's too late. */
 }
 /* Should quit responds to NSApplicationBlockTermination; returning
- * TRUE means "don't terminate", FALSE means "do terminate". If we
- * decide that it's OK to terminate, then we queue a gnc_shutdown for
- * the next idle time (because we're not running in the main loop) and
- * then tell the OS not to terminate. That gives the gnc_shutdown an
- * opportunity to shut down.
+ * TRUE means "don't terminate", FALSE means "do terminate". 
  */
 static gboolean
 gnc_quartz_should_quit (GtkosxApplication *theApp, GncMainWindow *window)
 {
-    QofSession *session;
-    gboolean needs_save;
-
-    if (gnc_current_session_exist())
-        return FALSE;
-    if (!gnc_main_window_all_finish_pending() ||
-        gnc_file_save_in_progress())
-
-    {
-        return TRUE;
-    }
-    session = gnc_get_current_session();
-    needs_save = qof_book_session_not_saved(qof_session_get_book(session)) &&
-                 !gnc_file_save_in_progress();
-    if (needs_save && gnc_main_window_prompt_for_save(GTK_WIDGET(window)))
-        return TRUE;
-
-    g_timeout_add(250, gnc_main_window_timed_quit, NULL);
+    if (gnc_main_window_all_finish_pending())
+        return gnc_main_window_quit (window);
     return TRUE;
 }
 
