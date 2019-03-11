@@ -319,6 +319,8 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
 (define (gnc:get-commoditylist-inst-prices
          commodity-list report-currency end-date
          start-percent delta-percent)
+  (issue-depcrecation-warning
+   "gnc:get-commoditylist-inst-prices is deprecated.")
   (let ((currency-accounts
          (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
         (work-to-do (length commodity-list))
@@ -940,7 +942,10 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
   ;; gnc:get-commodity-inst-prices directly.
     ((actual-transactions) (let ((pricealist
                                   (gnc:get-commoditylist-inst-prices
-                                   commodity-list report-currency to-date-tp)))
+                                   commodity-list report-currency to-date-tp
+                                   start-percent delta-percent)))
+                             (issue-deprecation-warning
+                              "this path is never reached in code.")
                              (lambda (foreign domestic date)
                                (gnc:exchange-by-pricealist-nearest
                                 pricealist foreign domestic date))))
