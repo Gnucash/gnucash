@@ -625,10 +625,13 @@
            (cond
             ((eqv? type GNC-OWNER-CUSTOMER)
              (_ "No valid customer selected."))
+            ((eqv? type GNC-OWNER-JOB)
+             (_ "No valid job selected."))
             ((eqv? type GNC-OWNER-VENDOR)
              (_ "No valid vendor selected."))
             ((eqv? type GNC-OWNER-EMPLOYEE)
-             (_ "No valid employee selected.")))
+             (_ "No valid employee selected."))
+            (else ""))
            " "
            (_ "Click on the \"Options\" button to select a company.")))))
 
