@@ -619,11 +619,18 @@
 
 	;; else....
 	(gnc:html-document-add-object!
-	 document
-	 (gnc:make-html-text
-	  (format #f 
-		   (_ "No valid ~a selected. Click on the Options button to select a company.")
-		   (_ type-str))))) ;; FIXME because of translations: Please change this string into full sentences instead of format, because in non-english languages the "no valid" has different forms depending on the grammatical gender of the "%s".
+         document
+         (gnc:make-html-text
+          (string-append
+           (cond
+            ((eqv? type GNC-OWNER-CUSTOMER)
+             (_ "No valid customer selected."))
+            ((eqv? type GNC-OWNER-VENDOR)
+             (_ "No valid vendor selected."))
+            ((eqv? type GNC-OWNER-EMPLOYEE)
+             (_ "No valid employee selected.")))
+           " "
+           (_ "Click on the \"Options\" button to select a company.")))))
 
     (qof-query-destroy query)
     document))
