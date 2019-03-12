@@ -1093,17 +1093,14 @@ flawed. see report-utilities.scm. please update reports.")
             (map gnc:strify (coll 'format gnc:make-gnc-monetary #f))))
   (define (value-collector->str coll)
     (format #f "Val-coll<~a>"
-            (map gnc:strify (coll 'total gnc:make-gnc-monetary))))
-  (define (procedure->str proc)
-    (format #f "Proc<~a>"
-            (or (procedure-name proc) "unk")))
+            (gnc:strify (coll 'total gnc:make-gnc-monetary))))
   (define (monetary->string mon)
     (format #f "Mon<~a>"
             (gnc:monetary->string mon)))
   (define (try proc)
     ;; Try proc with d as a parameter, catching 'wrong-type-arg
     ;; exceptions to return #f to the (or) evaluator below.
-    (catch 'wrong-type-arg
+    (catch #t
       (lambda () (proc d))
       (const #f)))
   (or (and (boolean? d) (if d "#t" "#f"))
@@ -1119,7 +1116,6 @@ flawed. see report-utilities.scm. please update reports.")
                              (if (eq? (car d) 'absolute)
                                  (qof-print-date (cdr d))
                                  (gnc:strify (cdr d)))))
-      (try procedure->str)
       (try gnc-commodity-get-mnemonic)
       (try account->str)
       (try split->str)

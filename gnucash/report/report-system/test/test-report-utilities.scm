@@ -129,9 +129,20 @@
   (test-equal "gnc:strify (a . 2)"
     "('a . 2)"
     (gnc:strify (cons 'a 2)))
-  (test-equal "gnc:strify cons"
-    "Proc<cons>"
-    (gnc:strify cons)))
+  (let ((m (gnc:make-value-collector)))
+    (m 'add 20)
+    (test-equal "value-collector"
+      "Val-coll<20>"
+      (gnc:strify m)))
+  (let* ((m (gnc:make-commodity-collector))
+         (book (gnc-get-current-book))
+         (comm-table (gnc-commodity-table-get-table book))
+         (USD (gnc-commodity-table-lookup comm-table "CURRENCY" "USD")))
+    (m 'add USD 10)
+    (test-equal "commodity-collector"
+      "Mon-coll<(Mon<$10.00>)>"
+      (gnc:strify m)))
+  (test-end "debugging tools"))
 
 (define (test-commodity-collector)
   (test-group-with-cleanup "test-commodity-collector"
