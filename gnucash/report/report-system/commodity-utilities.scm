@@ -696,7 +696,7 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
   (map
    (lambda (e)
      (list (car e)
-           (if (zero? ((caadr e) 'total #f)) #f
+           (if (zero? ((caadr e) 'total #f)) 0
            (abs
             (gnc-numeric-div ((cdadr e) 'total #f)
                              ((caadr e) 'total #f)
