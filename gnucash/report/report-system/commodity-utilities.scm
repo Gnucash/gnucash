@@ -372,15 +372,6 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
          (and later (cadr later))))))
 
 
-;; Find the price of the 'commodity' in the 'pricealist' that is
-;; nearest to the 'date'.
-(define (gnc:pricealist-lookup-nearest-in-time pricealist commodity date)
-  (let ((plist (assoc-ref pricealist commodity)))
-    (or (and plist
-             (not (null? plist))
-             (gnc:pricelist-price-find-nearest plist date))
-        0)))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions to get one price at a given time (i.e. not time-variant).
 
@@ -880,8 +871,12 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
                 (gnc:make-gnc-monetary
                  domestic
                  (* (gnc:gnc-monetary-amount foreign)
-                    (gnc:pricealist-lookup-nearest-in-time
-                     pricealist (gnc:gnc-monetary-commodity foreign) date)))))))
+                    (let ((plist (assoc-ref pricealist (gnc:gnc-monetary-commodity foreign))))
+                      (or (and plist
+                               (not (null? plist))
+                               (gnc:pricelist-price-find-nearest plist date))
+                          0))))))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Choosing exchange functions made easy -- get the right function by
