@@ -853,12 +853,13 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
 
 ;; Exchange by the nearest price from pricelist. This function takes
 ;; the <gnc-monetary> 'foreign' amount, the <gnc:commodity*>
-;; 'domestic' commodity, a <gnc:time-pair> 'date' and the
+;; 'domestic' commodity, a <gnc:time64> 'date' and the
 ;; 'pricelist'. It exchanges the amount into the domestic currency,
 ;; using the price nearest to 'data' found in the pricelist. The
 ;; function returns a <gnc-monetary>.
 (define (gnc:exchange-by-pricealist-nearest
          pricealist foreign domestic date)
+  ;;Used in weighted-average gnc:case-exchange-time-fn only.
   (gnc:debug "foreign " (gnc:monetary->string foreign))
   (gnc:debug "domestic " (gnc-commodity-get-printname domestic))
   (gnc:debug "pricealist " pricealist)
@@ -867,15 +868,12 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
        date
        (or (gnc:exchange-by-euro foreign domestic date)
            (gnc:exchange-if-same foreign domestic)
-           (and (pair? pricealist)
-                (gnc:make-gnc-monetary
-                 domestic
-                 (* (gnc:gnc-monetary-amount foreign)
-                    (let ((plist (assoc-ref pricealist (gnc:gnc-monetary-commodity foreign))))
-                      (or (and plist
-                               (not (null? plist))
-                               (gnc:pricelist-price-find-nearest plist date))
-                          0))))))))
+           (let* ((foreign-comm (gnc:gnc-monetary-commodity foreign))
+                  (foreign-amt (gnc:gnc-monetary-amount foreign))
+                  (plist (assoc-ref pricealist foreign-comm))
+                  (price (and plist
+                              (gnc:pricelist-price-find-nearest plist date))))
+             (gnc:make-gnc-monetary domestic (* foreign-amt (or price 0)))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
