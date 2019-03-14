@@ -773,6 +773,8 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
 ;; the <gnc:numeric> 'price-value'. Returns a <gnc:monetary>.
 (define (gnc:exchange-by-pricevalue-helper
          foreign domestic price-value)
+  (issue-deprecation-warning
+   "gnc:exchange-by-pricevalue-helper is deprecated. please inline function.")
   (and (gnc:gnc-monetary? foreign)
        (gnc:make-gnc-monetary
         domestic
@@ -875,10 +877,11 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
        (or (gnc:exchange-by-euro foreign domestic date)
            (gnc:exchange-if-same foreign domestic)
            (and (pair? pricealist)
-                (gnc:exchange-by-pricevalue-helper
-                 foreign domestic
-                 (gnc:pricealist-lookup-nearest-in-time
-                  pricealist (gnc:gnc-monetary-commodity foreign) date))))))
+                (gnc:make-gnc-monetary
+                 domestic
+                 (* (gnc:gnc-monetary-amount foreign)
+                    (gnc:pricealist-lookup-nearest-in-time
+                     pricealist (gnc:gnc-monetary-commodity foreign) date)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Choosing exchange functions made easy -- get the right function by

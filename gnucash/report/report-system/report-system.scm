@@ -57,7 +57,7 @@
 (export gnc:exchange-by-euro)
 (export gnc:exchange-if-same)
 (export gnc:make-exchange-function)
-(export gnc:exchange-by-pricevalue-helper)
+(export gnc:exchange-by-pricevalue-helper) ;deprecated
 (export gnc:exchange-by-pricedb-helper)
 (export gnc:exchange-by-pricedb-latest )
 (export gnc:exchange-by-pricedb-nearest)
