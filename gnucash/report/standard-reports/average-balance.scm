@@ -148,164 +148,6 @@
         (_ "Maximum") (_ "Minimum") (_ "Gain") 
         (_ "Loss") (_ "Profit") ))
 
-;; analyze-splits crunches a split list into a set of period
-;; summaries.  Each summary is a list of (start-date end-date
-;; avg-bal max-bal min-bal total-in total-out net) if multiple
-;; accounts are selected the balance is the sum for all.  Each
-;; balance in a foreign currency will be converted to a double in
-;; the report-currency by means of the monetary->double
-;; function. 
-(define (analyze-splits splits start-bal-double 
-                        start-date end-date interval monetary->double
-			internal)
-  (let ((interval-list 
-         (gnc:make-date-interval-list start-date end-date interval))
-        (data-rows '()))
-    
-    (define (output-row interval-start 
-                        interval-end 
-                        stats-accum 
-                        minmax-accum
-                        gain-loss-accum)
-      (set! data-rows
-            (cons 
-             (list (qof-print-date interval-start)
-                   (qof-print-date interval-end)
-                   (/ (stats-accum 'total #f)
-                      (- interval-end
-                         interval-start))
-                   (minmax-accum 'getmax #f)
-                   (minmax-accum 'getmin #f)
-                   (gain-loss-accum 'debits #f) 
-                   (gain-loss-accum 'credits #f)
-                   (- (gain-loss-accum 'debits #f)
-                      (gain-loss-accum 'credits #f)))
-             data-rows)))
-    
-    ;; Returns a double which is the split value, correctly
-    ;; exchanged to the current report-currency. We use the exchange
-    ;; rate at the 'date'.
-    (define (get-split-value split date)
-      (monetary->double
-       (gnc:make-gnc-monetary
-        (xaccAccountGetCommodity (xaccSplitGetAccount split))
-        (xaccSplitGetAmount split))
-       date))
-    
-    ;; calculate the statistics for one interval - returns a list 
-    ;;  containing the following: 
-    ;; min-max acculumator
-    ;; average-accumulator
-    ;; gain-loss accumulator
-    ;; final balance for this interval
-    ;; splits remaining to be processed.
-    
-    ;; note that it is assumed that every split in in the list
-    ;; has a date >= from 
-
-    (define (process-interval splits from to start-balance)
-
-      (let ((minmax-accum (gnc:make-stats-collector))
-            (stats-accum (gnc:make-stats-collector))
-            (gain-loss-accum (gnc:make-drcr-collector))
-            (last-balance start-balance)
-            (last-balance-time from))
-        
-        
-        (define (update-stats  split-amt split-time)
-          (let ((time-difference (- split-time
-                                    last-balance-time)))
-            (stats-accum 'add (* last-balance time-difference))
-            (set! last-balance (+ last-balance split-amt))
-            (set! last-balance-time split-time)
-            (minmax-accum 'add last-balance)
-            (gain-loss-accum 'add split-amt)))
-
-        (define (split-recurse)
-          (if (or (null? splits)
-                  (> (xaccTransGetDate (xaccSplitGetParent (car splits)))
-                     to))
-              #f
-              (let* 
-                  ((split (car splits))
-                   (split-time (xaccTransGetDate (xaccSplitGetParent split)))
-                   ;; FIXME: Which date should we use here? The 'to'
-                   ;; date? the 'split-time'?
-		   (split-amt (get-split-value split split-time))
-		   (next (cdr splits)))
-		
-		(if 
-		 ;; Check whether this split and next one are a pair
-		 ;; from the same transaction, and the only ones in
-		 ;; this transaction.
-		 ;; If they are and the flag is set appropriately,
-		 ;; then skip both.
-		 (or internal
-		     (null? next)
-		     (let* ((next-split (car next))
-			    (trans (xaccSplitGetParent split))
-			    (next-trans (xaccSplitGetParent next-split))
-			    (count (xaccTransCountSplits trans)))
-		       (not (and (eqv? count 2)
-				 (equal? trans next-trans)))))                
-		 (begin
-		  (gnc:debug "split " split)
-		  (gnc:debug "split-time " split-time)
-		  (gnc:debug "split-amt " split-amt)
-		  ;; gnc:debug converts its input to a string before
-		  ;; deciding whether to print it, and converting
-		  ;; |splits| to a string is O(N) in its length.  Since
-		  ;; this code runs for every split, leaving that
-		  ;; gnc:debug in makes the whole thing O(N^2) in number
-		  ;; of splits.  If someone really needs this output,
-		  ;; they should uncomment the gnc:debug call.
-					; (gnc:debug "splits " splits)
-		  (update-stats split-amt split-time)
-		  (set! splits next)
-		  (split-recurse))
-		 (begin
-		  (set! splits (cdr next))
-		  (split-recurse))))))
-
-                                        ;  the minmax accumulator
-
-        (minmax-accum 'add start-balance)
-
-        (if (not (null? splits))
-            (split-recurse))
-
-        ;; insert a null transaction at the end of the interval
-        (update-stats 0.0 to)
-        (list minmax-accum stats-accum gain-loss-accum last-balance splits)))
-    
-    
-    (for-each
-     (lambda (interval)
-       (let* 
-           
-           ((interval-results 
-             (process-interval 
-              splits 
-              (car interval) 
-              (cadr interval)
-              start-bal-double))
-            (min-max-accum (car interval-results))
-            (stats-accum (cadr interval-results))
-            (gain-loss-accum (caddr interval-results))
-            (last-bal (cadddr interval-results))
-            (rest-splits (list-ref interval-results 4)))
-
-         (set! start-bal-double last-bal)
-         (set! splits rest-splits)
-         (output-row (car interval) 
-                     (cadr interval) 
-                     stats-accum 
-                     min-max-accum gain-loss-accum)))
-     interval-list)
-    
-    
-    (reverse data-rows)))
-
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Renderer
@@ -344,29 +186,12 @@
 
 	 (commodity-list #f)
 	 (exchange-fn #f)
-
-         (beforebegindate (gnc:time64-end-day-time 
-                           (gnc:time64-previous-day begindate)))
-         (all-zeros? #t)
-         ;; startbal will be a commodity-collector
-         (startbal  '()))
-
-    (define (list-all-zeros? alist)
-      (if (null? alist) #t
-          (if (not (= 0.0 (car alist)))
-              #f
-              (list-all-zeros? (cdr alist)))))
-    
-    (define (monetary->double foreign-monetary date)
-      (gnc-numeric-to-double
-       (gnc:gnc-monetary-amount
-        (exchange-fn foreign-monetary report-currency date))))
+         (all-zeros? #t))
 
     ;;(warn commodity-list)
 
     (if (not (null? accounts))
         (let ((query (qof-query-create-for-splits))
-              (splits '())
               (data '()))
 
           ;; The percentage done numbers here are a hack so that
@@ -426,35 +251,137 @@
 				    (list QUERY-DEFAULT-SORT)
 				    '())
           
-          ;; get the query results 
-          (set! splits (qof-query-run query))
 	  (gnc:report-percent-done 40)
-          
-          ;; find the net starting balance for the set of accounts 
-          (set! startbal 
-                (gnc:accounts-get-balance-helper 
-                 accounts 
-                 (lambda (acct) (gnc:account-get-comm-balance-at-date 
-                                 acct beforebegindate #f))
-                 (lambda (x) #f)))
-	  (gnc:report-percent-done 50)
 
-          (set! startbal 
-                (gnc-numeric-to-double
-                 (gnc:gnc-monetary-amount
-                  (gnc:sum-collector-commodity 
-                   startbal
-                   report-currency 
-                   (lambda (a b) 
-                     (exchange-fn a b beforebegindate))))))
-	  (gnc:report-percent-done 60)
-	  
-          ;; and analyze the data 
-          (set! data (analyze-splits splits startbal
-                                     begindate enddate 
-                                     stepsize monetary->double
-				     internal-included))
-	  (gnc:report-percent-done 70)
+          (let* ((splits (qof-query-run query))
+                 (daily-dates (gnc:make-date-list begindate enddate DayDelta))
+                 (interval-dates (gnc:make-date-list begindate enddate stepsize))
+                 (accounts-balances (map
+                                     (lambda (acc)
+                                       (gnc:account-get-balances-at-dates
+                                        acc daily-dates))
+                                     accounts))
+                 (accounts-balances-transposed (if (null? accounts-balances)
+                                                   '()
+                                                   (apply zip accounts-balances)))
+                 (balances (map
+                            (lambda (date accounts-balance)
+                              (gnc:gnc-monetary-amount
+                               (gnc:sum-collector-commodity
+                                (apply gnc:monetaries-add accounts-balance)
+                                report-currency
+                                (lambda (monetary target-curr)
+                                  (exchange-fn monetary target-curr date)))))
+                            daily-dates
+                            accounts-balances-transposed)))
+
+            ;; this is a complicated tight loop. start with:
+            ;; daily-balances & daily-dates, interval-dates, and the
+            ;; splitlist. traverse the daily balances and splitlist
+            ;; until we cross an interval date boundary, then
+            ;; summarize the interval-balances and interval-amounts
+            (let loop ((results '())
+                       (interval-bals '())
+                       (interval-amts '())
+                       (splits splits)
+                       (daily-balances (cdr balances))
+                       (daily-dates (cdr daily-dates))
+                       (interval-start (car interval-dates))
+                       (interval-dates (cdr interval-dates)))
+              (cond
+
+               ;; daily-dates finished. job done. add details for
+               ;; last-interval which must be handled separately.
+               ((null? daily-dates)
+                (set! data
+                  (reverse!
+                   (cons (list
+                          (qof-print-date interval-start)
+                          (qof-print-date (car interval-dates))
+                          (/ (apply + interval-bals)
+                             (length interval-bals))
+                          (apply max interval-bals)
+                          (apply min interval-bals)
+                          (apply + (filter positive? interval-amts))
+                          (- (apply + (filter negative? interval-amts)))
+                          (apply + interval-amts))
+                         results))))
+
+               ;; first daily-date > first interval-date -- crossed
+               ;; interval boundary -- add interval details to results
+               ((> (car daily-dates) (car interval-dates))
+                (loop (cons (list
+                             (qof-print-date interval-start)
+                             (qof-print-date (decdate (car interval-dates)
+                                                      DayDelta))
+                             (/ (apply + interval-bals)
+                                (length interval-bals))
+                             (apply max interval-bals)
+                             (apply min interval-bals)
+                             (apply + (filter positive? interval-amts))
+                             (- (apply + (filter negative? interval-amts)))
+                             (apply + interval-amts))
+                            results)
+                      '()
+                      '()
+                      splits
+                      daily-balances
+                      daily-dates
+                      (car interval-dates)
+                      (cdr interval-dates)))
+
+               ;; we're still within interval.  there are splits
+               ;; remaining. test whether 'internal' and optionally
+               ;; skip 2 splits; otherwise add split details
+               ((and (pair? splits)
+                     (< (xaccTransGetDate (xaccSplitGetParent (car splits)))
+                        (car interval-dates)))
+                (let* ((this (car splits))
+                       (rest (cdr splits))
+                       (next (and (pair? rest) (car rest)))
+                       (this-txn (xaccSplitGetParent this))
+                       (next-txn (and next (xaccSplitGetParent next))))
+                  (if (and (not internal-included)
+                           (= 2 (xaccTransCountSplits this-txn))
+                           (equal? this-txn next-txn))
+                      (loop results
+                            interval-bals
+                            interval-amts ;interval-amt unchanged
+                            (cddr splits) ;skip two splits
+                            daily-balances
+                            daily-dates
+                            interval-start
+                            interval-dates)
+                      (loop results
+                            interval-bals
+                            (cons (gnc:gnc-monetary-amount
+                                   (exchange-fn
+                                    (gnc:make-gnc-monetary
+                                     (xaccAccountGetCommodity
+                                      (xaccSplitGetAccount (car splits)))
+                                     (xaccSplitGetAmount (car splits)))
+                                    report-currency
+                                    (car interval-dates)))
+                                  interval-amts) ;add split amt to list
+                            rest                 ;and move to next
+                            daily-balances
+                            daily-dates
+                            interval-start
+                            interval-dates))))
+
+               ;; we're still within interval, no more splits
+               ;; left. add daily balance to interval.
+               (else
+                (loop results
+                      (cons (car daily-balances) interval-bals)
+                      interval-amts
+                      splits
+                      (cdr daily-balances)
+                      (cdr daily-dates)
+                      interval-start
+                      interval-dates)))))
+
+          (gnc:report-percent-done 70)
           
           ;; make a plot (optionally)... if both plot and table, 
           ;; plot comes first. 
@@ -469,7 +396,7 @@
                         ((number-data
                           (map 
                            (lambda (row) (list-ref row 2)) data)))
-                      (if (not (list-all-zeros? number-data))
+                      (if (not (every zero? number-data))
                           (begin
                             (gnc:html-barchart-append-column! 
                              barchart
@@ -485,7 +412,7 @@
                 (if (memq 'GainPlot plot-type)
                     (let ((number-data 
                            (map (lambda (row) (list-ref row 7)) data)))
-                      (if (not (list-all-zeros? number-data))
+                      (if (not (every zero? number-data))
                           (begin
                             (gnc:html-barchart-append-column! 
                              barchart
@@ -504,8 +431,8 @@
                            (map (lambda (row) (list-ref row 6)) data)))
                       ;; debit column 
                       (if (not (and
-                                (list-all-zeros? debit-data)
-                                (list-all-zeros? credit-data)))
+                                (every zero? debit-data)
+                                (every zero? credit-data)))
                           (begin
                             (gnc:html-barchart-append-column! 
                              barchart
