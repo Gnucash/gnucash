@@ -362,7 +362,6 @@
        (gnc:gnc-monetary-amount
         (exchange-fn foreign-monetary report-currency date))))
 
-    (gnc:html-document-set-title! document report-title)
     ;;(warn commodity-list)
 
     (if (not (null? accounts))
@@ -530,6 +529,7 @@
                 
                 (if (not all-zeros?)
                     (begin
+                      (gnc:html-barchart-set-title! barchart report-title)
                       (gnc:html-barchart-set-col-labels! 
                        barchart col-labels)
                       (gnc:html-barchart-set-col-colors!
