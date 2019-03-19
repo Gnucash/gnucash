@@ -124,33 +124,7 @@ typedef struct GncTreeViewAccountPrivate
 
 static GObjectClass *parent_class = NULL;
 
-GType
-gnc_tree_view_account_get_type (void)
-{
-    static GType gnc_tree_view_account_type = 0;
-
-    if (gnc_tree_view_account_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncTreeViewAccountClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_tree_view_account_class_init,
-            NULL,
-            NULL,
-            sizeof (GncTreeViewAccount),
-            0,
-            (GInstanceInitFunc) gnc_tree_view_account_init
-        };
-
-        gnc_tree_view_account_type = g_type_register_static (
-                                         GNC_TYPE_TREE_VIEW, GNC_TREE_VIEW_ACCOUNT_NAME,
-                                         &our_info, 0);
-    }
-
-    return gnc_tree_view_account_type;
-}
+G_DEFINE_TYPE_WITH_PRIVATE(GncTreeViewAccount, gnc_tree_view_account, GNC_TYPE_TREE_VIEW)
 
 static void
 gnc_tree_view_account_class_init (GncTreeViewAccountClass *klass)
@@ -162,8 +136,6 @@ gnc_tree_view_account_class_init (GncTreeViewAccountClass *klass)
     /* GObject signals */
     o_class = G_OBJECT_CLASS (klass);
     o_class->finalize = gnc_tree_view_account_finalize;
-
-    g_type_class_add_private(klass, sizeof(GncTreeViewAccountPrivate));
 
     gnc_hook_add_dangler(HOOK_CURRENCY_CHANGED,
                          (GFunc)gtva_currency_changed_cb, NULL);

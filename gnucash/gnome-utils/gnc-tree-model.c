@@ -37,7 +37,8 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 /** Declarations *********************************************************/
 static void gnc_tree_model_class_init (GncTreeModelClass *klass);
-static void gnc_tree_model_init (GncTreeModel *model, GncTreeModelClass *klass);
+static void gnc_tree_model_init (GncTreeModel *model,
+		                 void *data);
 static void gnc_tree_model_finalize (GObject *object);
 
 /** The instance private data for a generic tree model. */
@@ -45,6 +46,9 @@ typedef struct GncTreeModelPrivate
 {
     gpointer dummy;
 } GncTreeModelPrivate;
+
+GNC_DEFINE_TYPE_WITH_CODE(GncTreeModel, gnc_tree_model, G_TYPE_OBJECT,
+		        G_ADD_PRIVATE(GncTreeModel))
 
 #define GNC_TREE_MODEL_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_TREE_MODEL, GncTreeModelPrivate))
@@ -57,44 +61,6 @@ typedef struct GncTreeModelPrivate
 /** A pointer to the parent class of a generic tree model. */
 static GObjectClass *parent_class = NULL;
 
-GType
-gnc_tree_model_get_type (void)
-{
-    static GType gnc_tree_model_type = 0;
-
-    if (gnc_tree_model_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncTreeModelClass),          /* class_size */
-            NULL,   			           /* base_init */
-            NULL,				   /* base_finalize */
-            (GClassInitFunc) gnc_tree_model_class_init,
-            NULL,				   /* class_finalize */
-            NULL,				   /* class_data */
-            sizeof (GncTreeModel),	           /* */
-            0,				   /* n_preallocs */
-            (GInstanceInitFunc) gnc_tree_model_init
-        };
-
-        //static const GInterfaceInfo tree_model_info = {
-        //  (GInterfaceInitFunc) gnc_tree_model_tree_model_init,
-        //  NULL,
-        //  NULL
-        //};
-
-        gnc_tree_model_type = g_type_register_static (G_TYPE_OBJECT,
-                              GNC_TREE_MODEL_NAME,
-                              &our_info, 0);
-
-        //g_type_add_interface_static (gnc_tree_model_type,
-        //				 GTK_TYPE_TREE_MODEL,
-        //				 &tree_model_info);
-    }
-
-    return gnc_tree_model_type;
-}
-
 static void
 gnc_tree_model_class_init (GncTreeModelClass *klass)
 {
@@ -106,15 +72,16 @@ gnc_tree_model_class_init (GncTreeModelClass *klass)
 
     /* GObject signals */
     o_class->finalize = gnc_tree_model_finalize;
-
-    g_type_class_add_private(klass, sizeof(GncTreeModelPrivate));
 }
 
 static void
-gnc_tree_model_init (GncTreeModel *model, GncTreeModelClass *klass)
+gnc_tree_model_init (GncTreeModel *model, void *data)
 {
+    GncTreeModelClass *klass = (GncTreeModelClass*)data;
+
     ENTER("model %p", model);
-    gnc_gobject_tracking_remember(G_OBJECT(model), G_OBJECT_CLASS(klass));
+    gnc_gobject_tracking_remember(G_OBJECT(model),
+		                  G_OBJECT_CLASS(klass));
 
     LEAVE(" ");
 }

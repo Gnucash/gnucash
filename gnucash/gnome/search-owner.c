@@ -59,6 +59,8 @@ typedef struct _GNCSearchOwnerPrivate
     GtkWidget * owner_choice;
 } GNCSearchOwnerPrivate;
 
+G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchOwner, gnc_search_owner, GNC_TYPE_SEARCH_CORE_TYPE);
+
 #define _PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_SEARCH_OWNER, GNCSearchOwnerPrivate))
 
@@ -72,34 +74,6 @@ enum
 #if LAST_SIGNAL > 0
 static guint signals[LAST_SIGNAL] = { 0 };
 #endif
-
-GType
-gnc_search_owner_get_type (void)
-{
-    static GType type = 0;
-
-    if (!type)
-    {
-        GTypeInfo type_info =
-        {
-            sizeof(GNCSearchOwnerClass),    /* class_size */
-            NULL,                           /* base_init */
-            NULL,                           /* base_finalize */
-            (GClassInitFunc)gnc_search_owner_class_init,
-            NULL,                           /* class_finalize */
-            NULL,                           /* class_data */
-            sizeof(GNCSearchOwner),         /* */
-            0,                              /* n_preallocs */
-            (GInstanceInitFunc)gnc_search_owner_init,
-        };
-
-        type = g_type_register_static (GNC_TYPE_SEARCH_CORE_TYPE,
-                                       "GNCSearchOwner",
-                                       &type_info, 0);
-    }
-
-    return type;
-}
 
 static void
 gnc_search_owner_class_init (GNCSearchOwnerClass *klass)
@@ -118,8 +92,6 @@ gnc_search_owner_class_init (GNCSearchOwnerClass *klass)
     gnc_search_core_type->get_widget = gncs_get_widget;
     gnc_search_core_type->get_predicate = gncs_get_predicate;
     gnc_search_core_type->clone = gncs_clone;
-
-    g_type_class_add_private(klass, sizeof(GNCSearchOwnerPrivate));
 }
 
 static void

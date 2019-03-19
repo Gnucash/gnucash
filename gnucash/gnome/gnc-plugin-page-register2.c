@@ -563,34 +563,6 @@ static GObjectClass *parent_class = NULL;
 /*                      Implementation                      */
 /************************************************************/
 
-GType
-gnc_plugin_page_register2_get_type (void)
-{
-    static GType gnc_plugin_page_register2_type = 0;
-
-    if (gnc_plugin_page_register2_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncPluginPageRegister2Class),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_plugin_page_register2_class_init,
-            NULL,
-            NULL,
-            sizeof (GncPluginPageRegister2),
-            0,
-            (GInstanceInitFunc) gnc_plugin_page_register2_init
-        };
-
-        gnc_plugin_page_register2_type = g_type_register_static (GNC_TYPE_PLUGIN_PAGE,
-                                        GNC_PLUGIN_PAGE_REGISTER2_NAME,
-                                        &our_info, 0);
-    }
-
-    return gnc_plugin_page_register2_type;
-}
-
 /*#################################################################################*/
 /*#################################################################################*/
 static GncPluginPage *
@@ -714,6 +686,8 @@ gnc_plugin_page_register2_new_ledger (GNCLedgerDisplay2 *ledger)
     return gnc_plugin_page_register2_new_common (ledger);
 }
 
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageRegister2, gnc_plugin_page_register2, GNC_TYPE_PLUGIN_PAGE)
+
 static void
 gnc_plugin_page_register2_class_init (GncPluginPageRegister2Class *klass)
 {
@@ -733,8 +707,6 @@ gnc_plugin_page_register2_class_init (GncPluginPageRegister2Class *klass)
     gnc_plugin_class->recreate_page   = gnc_plugin_page_register2_recreate_page;
     gnc_plugin_class->update_edit_menu_actions = gnc_plugin_page_register2_update_edit_menu;
     gnc_plugin_class->finish_pending  = gnc_plugin_page_register2_finish_pending;
-
-    g_type_class_add_private(klass, sizeof(GncPluginPageRegister2Private));
 
     gnc_ui_register_account_destroy_callback (gppr_account_destroy_cb);
 }

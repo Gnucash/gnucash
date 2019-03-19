@@ -55,38 +55,12 @@ typedef struct GncPluginOfxPrivate
     gpointer dummy;
 } GncPluginOfxPrivate;
 
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginOfx, gnc_plugin_ofx, GNC_TYPE_PLUGIN)
+
 #define GNC_PLUGIN_OFX_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_OFX, GncPluginOfxPrivate))
 
 static GObjectClass *parent_class = NULL;
-
-GType
-gnc_plugin_ofx_get_type (void)
-{
-    static GType gnc_plugin_ofx_type = 0;
-
-    if (gnc_plugin_ofx_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncPluginOfxClass),
-            NULL,		/* base_init */
-            NULL,		/* base_finalize */
-            (GClassInitFunc) gnc_plugin_ofx_class_init,
-            NULL,		/* class_finalize */
-            NULL,		/* class_data */
-            sizeof (GncPluginOfx),
-            0,		/* n_preallocs */
-            (GInstanceInitFunc) gnc_plugin_ofx_init,
-        };
-
-        gnc_plugin_ofx_type = g_type_register_static (GNC_TYPE_PLUGIN,
-                              "GncPluginOfx",
-                              &our_info, 0);
-    }
-
-    return gnc_plugin_ofx_type;
-}
 
 GncPlugin *
 gnc_plugin_ofx_new (void)
@@ -112,8 +86,6 @@ gnc_plugin_ofx_class_init (GncPluginOfxClass *klass)
     plugin_class->actions      = gnc_plugin_actions;
     plugin_class->n_actions    = gnc_plugin_n_actions;
     plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
-
-    g_type_class_add_private(klass, sizeof(GncPluginOfxPrivate));
 }
 
 static void

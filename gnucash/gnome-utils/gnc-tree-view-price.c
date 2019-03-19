@@ -67,33 +67,7 @@ typedef struct GncTreeViewPricePrivate
 
 static GObjectClass *parent_class = NULL;
 
-GType
-gnc_tree_view_price_get_type (void)
-{
-    static GType gnc_tree_view_price_type = 0;
-
-    if (gnc_tree_view_price_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncTreeViewPriceClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_tree_view_price_class_init,
-            NULL,
-            NULL,
-            sizeof (GncTreeViewPrice),
-            0,
-            (GInstanceInitFunc) gnc_tree_view_price_init
-        };
-
-        gnc_tree_view_price_type = g_type_register_static (GNC_TYPE_TREE_VIEW,
-                                   "GncTreeViewPrice",
-                                   &our_info, 0);
-    }
-
-    return gnc_tree_view_price_type;
-}
+G_DEFINE_TYPE_WITH_PRIVATE(GncTreeViewPrice, gnc_tree_view_price, GNC_TYPE_TREE_VIEW)
 
 static void
 gnc_tree_view_price_class_init (GncTreeViewPriceClass *klass)
@@ -111,8 +85,6 @@ gnc_tree_view_price_class_init (GncTreeViewPriceClass *klass)
 
     /* GtkWidget signals */
     widget_class->destroy = gnc_tree_view_price_destroy;
-
-    g_type_class_add_private(klass, sizeof(GncTreeViewPricePrivate));
 }
 
 static void

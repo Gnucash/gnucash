@@ -63,33 +63,7 @@ typedef struct GncTreeViewSxListPrivate
 
 static GObjectClass *parent_class = NULL;
 
-GType
-gnc_tree_view_sx_list_get_type(void)
-{
-    static GType gnc_tree_view_sx_list_type = 0;
-
-    if (gnc_tree_view_sx_list_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncTreeViewSxListClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_tree_view_sx_list_class_init,
-            NULL,
-            NULL,
-            sizeof (GncTreeViewSxList),
-            0,
-            (GInstanceInitFunc) gnc_tree_view_sx_list_init
-        };
-
-        gnc_tree_view_sx_list_type = g_type_register_static (GNC_TYPE_TREE_VIEW,
-                                     "GncTreeViewSxList",
-                                     &our_info, 0);
-    }
-
-    return gnc_tree_view_sx_list_type;
-}
+G_DEFINE_TYPE_WITH_PRIVATE(GncTreeViewSxList, gnc_tree_view_sx_list, GNC_TYPE_TREE_VIEW)
 
 static void
 gnc_tree_view_sx_list_class_init(GncTreeViewSxListClass *klass)
@@ -102,8 +76,6 @@ gnc_tree_view_sx_list_class_init(GncTreeViewSxListClass *klass)
 
     o_class->dispose =  gnc_tree_view_sx_list_dispose;
     o_class->finalize = gnc_tree_view_sx_list_finalize;
-
-    g_type_class_add_private(klass, sizeof(GncTreeViewSxListPrivate));
 }
 
 static void

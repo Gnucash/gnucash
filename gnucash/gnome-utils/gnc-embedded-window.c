@@ -50,14 +50,12 @@ static GObjectClass *parent_class = NULL;
 
 /* Declarations *********************************************************/
 static void gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass);
-static void gnc_embedded_window_init (GncEmbeddedWindow *window, GncEmbeddedWindowClass *klass);
 static void gnc_embedded_window_finalize (GObject *object);
 static void gnc_embedded_window_dispose (GObject *object);
 
 static void gnc_window_embedded_window_init (GncWindowIface *iface);
 
 static void gnc_embedded_window_setup_window (GncEmbeddedWindow *window);
-
 
 /** The instance private data for an embedded window object. */
 typedef struct GncEmbeddedWindowPrivate
@@ -87,50 +85,13 @@ typedef struct GncEmbeddedWindowPrivate
     GtkWidget *parent_window;
 } GncEmbeddedWindowPrivate;
 
+GNC_DEFINE_TYPE_WITH_CODE(GncEmbeddedWindow, gnc_embedded_window, GTK_TYPE_BOX,
+                        G_ADD_PRIVATE(GncEmbeddedWindow)
+                        GNC_IMPLEMENT_INTERFACE(GNC_TYPE_WINDOW,
+                                                gnc_window_embedded_window_init))
+
 #define GNC_EMBEDDED_WINDOW_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_EMBEDDED_WINDOW, GncEmbeddedWindowPrivate))
-
-
-
-/*  Get the type of a gnc embedded window. */
-GType
-gnc_embedded_window_get_type (void)
-{
-    static GType gnc_embedded_window_type = 0;
-
-    if (gnc_embedded_window_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncEmbeddedWindowClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_embedded_window_class_init,
-            NULL,
-            NULL,
-            sizeof (GncEmbeddedWindow),
-            0,
-            (GInstanceInitFunc) gnc_embedded_window_init
-        };
-
-        static const GInterfaceInfo plugin_info =
-        {
-            (GInterfaceInitFunc) gnc_window_embedded_window_init,
-            NULL,
-            NULL
-        };
-
-        gnc_embedded_window_type = g_type_register_static (GTK_TYPE_BOX,
-                                   "GncEmbeddedWindow",
-                                   &our_info, 0);
-        g_type_add_interface_static (gnc_embedded_window_type,
-                                     GNC_TYPE_WINDOW,
-                                     &plugin_info);
-    }
-
-    return gnc_embedded_window_type;
-}
-
 
 /*  Display a data plugin page in a window. */
 void
@@ -218,8 +179,7 @@ gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass)
 
     object_class->finalize = gnc_embedded_window_finalize;
     object_class->dispose = gnc_embedded_window_dispose;
-
-    g_type_class_add_private(klass, sizeof(GncEmbeddedWindowPrivate));
+    
     LEAVE(" ");
 }
 
@@ -233,20 +193,20 @@ gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass)
  *  @param klass A pointer to the class data structure for this
  *  object. */
 static void
-gnc_embedded_window_init (GncEmbeddedWindow *window,
-                          GncEmbeddedWindowClass *klass)
+gnc_embedded_window_init (GncEmbeddedWindow *window, void *data)
 {
+    GncEmbeddedWindowClass *klass = (GncEmbeddedWindowClass*)data;
     ENTER("window %p", window);
 
     gtk_orientable_set_orientation (GTK_ORIENTABLE(window), GTK_ORIENTATION_VERTICAL);
 
     // Set the style context for this widget so it can be easily manipulated with css
-    gnc_widget_set_style_context (GTK_WIDGET(window), "GncEmbededWindow");
+    gnc_widget_set_style_context (GTK_WIDGET(window), "GncEmbeddedWindow");
 
     gnc_embedded_window_setup_window (window);
 
     gnc_gobject_tracking_remember(G_OBJECT(window),
-                                  G_OBJECT_CLASS(klass));
+		                  G_OBJECT_CLASS(klass));
     LEAVE(" ");
 }
 

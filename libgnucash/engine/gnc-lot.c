@@ -75,7 +75,7 @@ enum
     PROP_MARKER,        /* Runtime */
 };
 
-typedef struct LotPrivate
+typedef struct GNCLotPrivate
 {
     /* Account to which this lot applies.  All splits in the lot must
      * belong to this account.
@@ -92,22 +92,22 @@ typedef struct LotPrivate
 
     /* traversal marker, handy for preventing recursion */
     unsigned char marker;
-} LotPrivate;
+} GNCLotPrivate;
 
 #define GET_PRIVATE(o) \
-    (G_TYPE_INSTANCE_GET_PRIVATE((o), GNC_TYPE_LOT, LotPrivate))
+    (G_TYPE_INSTANCE_GET_PRIVATE((o), GNC_TYPE_LOT, GNCLotPrivate))
 
 #define gnc_lot_set_guid(L,G)  qof_instance_set_guid(QOF_INSTANCE(L),&(G))
 
 /* ============================================================= */
 
 /* GObject Initialization */
-G_DEFINE_TYPE(GNCLot, gnc_lot, QOF_TYPE_INSTANCE)
+G_DEFINE_TYPE_WITH_PRIVATE(GNCLot, gnc_lot, QOF_TYPE_INSTANCE)
 
 static void
 gnc_lot_init(GNCLot* lot)
 {
-    LotPrivate* priv;
+    GNCLotPrivate* priv;
 
     priv = GET_PRIVATE(lot);
     priv->account = NULL;
@@ -132,7 +132,7 @@ static void
 gnc_lot_get_property(GObject* object, guint prop_id, GValue* value, GParamSpec* pspec)
 {
     GNCLot* lot;
-    LotPrivate* priv;
+    GNCLotPrivate* priv;
     gchar *key;
 
     g_return_if_fail(GNC_IS_LOT(object));
@@ -169,7 +169,7 @@ gnc_lot_set_property (GObject* object,
                       GParamSpec* pspec)
 {
     GNCLot* lot;
-    LotPrivate* priv;
+    GNCLotPrivate* priv;
     gchar *key = NULL;
 
     g_return_if_fail(GNC_IS_LOT(object));
@@ -211,8 +211,6 @@ gnc_lot_class_init(GNCLotClass* klass)
     gobject_class->finalize = gnc_lot_finalize;
     gobject_class->get_property = gnc_lot_get_property;
     gobject_class->set_property = gnc_lot_set_property;
-
-    g_type_class_add_private(klass, sizeof(LotPrivate));
 
     g_object_class_install_property(
         gobject_class,
@@ -277,7 +275,7 @@ static void
 gnc_lot_free(GNCLot* lot)
 {
     GList *node;
-    LotPrivate* priv;
+    GNCLotPrivate* priv;
     if (!lot) return;
 
     ENTER ("(lot=%p)", lot);
@@ -364,7 +362,7 @@ gnc_lot_get_book (GNCLot *lot)
 gboolean
 gnc_lot_is_closed (GNCLot *lot)
 {
-    LotPrivate* priv;
+    GNCLotPrivate* priv;
     if (!lot) return TRUE;
     priv = GET_PRIVATE(lot);
     if (0 > priv->is_closed) gnc_lot_get_balance (lot);
@@ -374,7 +372,7 @@ gnc_lot_is_closed (GNCLot *lot)
 Account *
 gnc_lot_get_account (const GNCLot *lot)
 {
-    LotPrivate* priv;
+    GNCLotPrivate* priv;
     if (!lot) return NULL;
     priv = GET_PRIVATE(lot);
     return priv->account;
@@ -385,7 +383,7 @@ gnc_lot_set_account(GNCLot* lot, Account* account)
 {
     if (lot != NULL)
     {
-        LotPrivate* priv;
+        GNCLotPrivate* priv;
         priv = GET_PRIVATE(lot);
         priv->account = account;
     }
@@ -394,7 +392,7 @@ gnc_lot_set_account(GNCLot* lot, Account* account)
 void
 gnc_lot_set_closed_unknown(GNCLot* lot)
 {
-    LotPrivate* priv;
+    GNCLotPrivate* priv;
     if (lot != NULL)
     {
         priv = GET_PRIVATE(lot);
@@ -405,7 +403,7 @@ gnc_lot_set_closed_unknown(GNCLot* lot)
 SplitList *
 gnc_lot_get_split_list (const GNCLot *lot)
 {
-    LotPrivate* priv;
+    GNCLotPrivate* priv;
     if (!lot) return NULL;
     priv = GET_PRIVATE(lot);
     return priv->splits;
@@ -413,7 +411,7 @@ gnc_lot_get_split_list (const GNCLot *lot)
 
 gint gnc_lot_count_splits (const GNCLot *lot)
 {
-    LotPrivate* priv;
+    GNCLotPrivate* priv;
     if (!lot) return 0;
     priv = GET_PRIVATE(lot);
     return g_list_length (priv->splits);
@@ -475,7 +473,7 @@ gnc_lot_set_notes (GNCLot *lot, const char *str)
 gnc_numeric
 gnc_lot_get_balance (GNCLot *lot)
 {
-    LotPrivate* priv;
+    GNCLotPrivate* priv;
     GList *node;
     gnc_numeric zero = gnc_numeric_zero();
     gnc_numeric baln = zero;
@@ -518,7 +516,7 @@ void
 gnc_lot_get_balance_before (const GNCLot *lot, const Split *split,
                             gnc_numeric *amount, gnc_numeric *value)
 {
-    LotPrivate* priv;
+    GNCLotPrivate* priv;
     GList *node;
     gnc_numeric zero = gnc_numeric_zero();
     gnc_numeric amt = zero;
@@ -567,7 +565,7 @@ gnc_lot_get_balance_before (const GNCLot *lot, const Split *split,
 void
 gnc_lot_add_split (GNCLot *lot, Split *split)
 {
-    LotPrivate* priv;
+    GNCLotPrivate* priv;
     Account * acc;
     if (!lot || !split) return;
     priv = GET_PRIVATE(lot);
@@ -619,7 +617,7 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
 void
 gnc_lot_remove_split (GNCLot *lot, Split *split)
 {
-    LotPrivate* priv;
+    GNCLotPrivate* priv;
     if (!lot || !split) return;
     priv = GET_PRIVATE(lot);
 
@@ -646,7 +644,7 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
 Split *
 gnc_lot_get_earliest_split (GNCLot *lot)
 {
-    LotPrivate* priv;
+    GNCLotPrivate* priv;
     if (!lot) return NULL;
     priv = GET_PRIVATE(lot);
     if (! priv->splits) return NULL;
@@ -658,7 +656,7 @@ gnc_lot_get_earliest_split (GNCLot *lot)
 Split *
 gnc_lot_get_latest_split (GNCLot *lot)
 {
-    LotPrivate* priv;
+    GNCLotPrivate* priv;
     SplitList *node;
 
     if (!lot) return NULL;

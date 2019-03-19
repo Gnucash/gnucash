@@ -59,34 +59,6 @@ static GncPluginManager *singleton = NULL;
 
 static GObjectClass *parent_class = NULL;
 
-GType
-gnc_plugin_manager_get_type (void)
-{
-    static GType gnc_plugin_manager_type = 0;
-
-    if (gnc_plugin_manager_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncPluginManagerClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_plugin_manager_class_init,
-            NULL,
-            NULL,
-            sizeof (GncPluginManager),
-            0,
-            (GInstanceInitFunc) gnc_plugin_manager_init
-        };
-
-        gnc_plugin_manager_type = g_type_register_static (G_TYPE_OBJECT,
-                                  "GncPluginManager",
-                                  &our_info, 0);
-    }
-
-    return gnc_plugin_manager_type;
-}
-
 GncPluginManager *
 gnc_plugin_manager_get (void)
 {
@@ -179,6 +151,7 @@ gnc_plugin_manager_get_plugin (GncPluginManager *manager,
     return GNC_PLUGIN (g_hash_table_lookup (priv->plugins_table, name));
 }
 
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginManager, gnc_plugin_manager, G_TYPE_OBJECT)
 
 static void
 gnc_plugin_manager_class_init (GncPluginManagerClass *klass)
@@ -189,8 +162,6 @@ gnc_plugin_manager_class_init (GncPluginManagerClass *klass)
 
     object_class->dispose = gnc_plugin_manager_dispose;
     object_class->finalize = gnc_plugin_manager_finalize;
-
-    g_type_class_add_private(klass, sizeof(GncPluginManagerPrivate));
 
     signals[PLUGIN_ADDED] = g_signal_new ("plugin-added",
                                           G_OBJECT_CLASS_TYPE (klass),

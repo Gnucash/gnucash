@@ -75,6 +75,8 @@ typedef struct GncPluginRegister2Private
     gpointer dummy;
 } GncPluginRegister2Private;
 
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginRegister2, gnc_plugin_register2, GNC_TYPE_PLUGIN)
+
 #define GNC_PLUGIN_REGISTER2_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_REGISTER2, GncPluginRegister2Private))
 
@@ -109,34 +111,6 @@ gnc_plugin_register2_pref_changed (gpointer prefs, gchar *pref,
 /************************************************************
  *                  Object Implementation                   *
  ************************************************************/
-
-GType
-gnc_plugin_register2_get_type (void)
-{
-    static GType gnc_plugin_register2_type = 0;
-
-    if (gnc_plugin_register2_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncPluginRegister2Class),
-            NULL,		/* base_init */
-            NULL,		/* base_finalize */
-            (GClassInitFunc) gnc_plugin_register2_class_init,
-            NULL,		/* class_finalize */
-            NULL,		/* class_data */
-            sizeof (GncPluginRegister2),
-            0,		/* n_preallocs */
-            (GInstanceInitFunc) gnc_plugin_register2_init
-        };
-
-        gnc_plugin_register2_type = g_type_register_static (GNC_TYPE_PLUGIN,
-                                   "GncPluginRegister2",
-                                   &our_info, 0);
-    }
-
-    return gnc_plugin_register2_type;
-}
 
 GncPlugin *
 gnc_plugin_register2_new (void)
@@ -176,8 +150,6 @@ gnc_plugin_register2_class_init (GncPluginRegister2Class *klass)
     plugin_class->actions      = gnc_plugin_actions;
     plugin_class->n_actions    = gnc_plugin_n_actions;
     plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
-
-    g_type_class_add_private(klass, sizeof(GncPluginRegister2Private));
 }
 
 static void

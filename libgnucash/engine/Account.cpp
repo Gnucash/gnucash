@@ -252,7 +252,7 @@ mark_account (Account *acc)
 \********************************************************************/
 
 /* GObject Initialization */
-G_DEFINE_TYPE(Account, gnc_account, QOF_TYPE_INSTANCE)
+G_DEFINE_TYPE_WITH_PRIVATE(Account, gnc_account, QOF_TYPE_INSTANCE)
 
 static void
 gnc_account_init(Account* acc)
@@ -576,8 +576,6 @@ gnc_account_class_init (AccountClass *klass)
     gobject_class->finalize = gnc_account_finalize;
     gobject_class->set_property = gnc_account_set_property;
     gobject_class->get_property = gnc_account_get_property;
-
-    g_type_class_add_private(klass, sizeof(AccountPrivate));
 
     g_object_class_install_property
     (gobject_class,
