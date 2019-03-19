@@ -110,7 +110,7 @@ date point, a projected minimum balance including scheduled transactions."))
          options gnc:pagename-display optname-reserve x))))
     (gnc:register-option options (gnc:make-number-range-option
       gnc:pagename-display optname-reserve "d" opthelp-reserve
-      0 0 10E9 2 0.01))
+      0 -10E9 10E9 2 0.01))
     ; Purchasing power target
     (gnc:register-option options (gnc:make-complex-boolean-option
       gnc:pagename-display optname-show-target "e" opthelp-show-target #f #f
@@ -119,7 +119,7 @@ date point, a projected minimum balance including scheduled transactions."))
          options gnc:pagename-display optname-target x))))
     (gnc:register-option options (gnc:make-number-range-option
       gnc:pagename-display optname-target "f" opthelp-target
-      0 0 10E9 2 0.01))
+      0 -10E9 10E9 2 0.01))
     ; Future minimum
     (gnc:register-option options (gnc:make-simple-boolean-option
       gnc:pagename-display optname-show-minimum "g" opthelp-show-minimum #f))
