@@ -215,6 +215,13 @@
 (define (gnc:time64-ge-date t1 t2)
   (gnc:time64-le-date t2 t1))
 
+;; returns #t if adding 1 to mday causes a month change.
+(define (end-month? date)
+  (let ((nextdate (gnc-localtime date)))
+    (set-tm:mday nextdate (1+ (tm:mday nextdate)))
+    (not (= (tm:mon (gnc-localtime (gnc-mktime nextdate)))
+            (tm:mon (gnc-localtime date))))))
+
 (define (incdate-months date nmonths)
   (let* ((new-date (gnc-localtime date))
          (newmonth (+ (tm:mon new-date) nmonths))
@@ -225,9 +232,14 @@
     (let loop ((new-mday (tm:mday new-date)))
       (set-tm:mday new-date new-mday)
       (let ((res (gnc-mktime new-date)))
-        (if (= new-month-proper (tm:mon (gnc-localtime res)))
-            res
-            (loop (1- new-mday)))))))
+        (cond
+         ;; next date causes a date slip. reduce mday.
+         ((not (= new-month-proper (tm:mon (gnc-localtime res))))
+          (loop (1- new-mday)))
+         ;; orig date is month-end. ensure all dates are month-ends.
+         ((and (end-month? date) (not (end-month? res)))
+          (loop (1+ new-mday)))
+         (else res))))))
 
 ;; Build a list of time intervals.
 ;;
