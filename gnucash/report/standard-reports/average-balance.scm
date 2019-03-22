@@ -177,7 +177,11 @@
          (internal-included (not (get-option gnc:pagename-accounts optname-internal)))
          (accounts   (get-option gnc:pagename-accounts (N_ "Accounts")))
          (dosubs?    (get-option gnc:pagename-accounts optname-subacct))
-
+         (accounts (append accounts
+                           (if dosubs?
+                               (filter (lambda (acc) (not (member acc accounts)))
+                                       (gnc:acccounts-get-all-subaccounts accounts))
+                               '())))
          (plot-type  (get-option gnc:pagename-display (N_ "Plot Type")))
          (show-plot? (get-option gnc:pagename-display (N_ "Show plot")))
          (show-table? (get-option gnc:pagename-display (N_ "Show table")))
@@ -202,11 +206,9 @@
           ;; lookup should be distributed and done when actually
           ;; needed so as to amortize the cpu time properly.
 	  (gnc:report-percent-done 1)
-	  (set! commodity-list (gnc:accounts-get-commodities 
-                                (append 
-                                 (gnc:acccounts-get-all-subaccounts accounts)
-                                 accounts)
-                                report-currency))
+	  (set! commodity-list (gnc:accounts-get-commodities
+                                accounts report-currency))
+
 	  (gnc:report-percent-done 5)
 	  (set! exchange-fn (gnc:case-exchange-time-fn 
                              price-source report-currency 
@@ -224,22 +226,6 @@
           ;; add accounts to the query (include subaccounts 
           ;; if requested)
 	  (gnc:report-percent-done 25)
-          (if dosubs? 
-              (let ((subaccts '()))
-                (for-each 
-                 (lambda (acct)
-                   (let ((this-acct-subs 
-                          (gnc-account-get-descendants-sorted acct)))
-                     (if (list? this-acct-subs)
-                         (set! subaccts 
-                               (append subaccts this-acct-subs)))))
-                 accounts)
-                ;; Beware: delete-duplicates is an O(n^2)
-                ;; algorithm. More efficient method: sort the list,
-                ;; then use a linear algorithm.
-                (set! accounts
-                      (delete-duplicates (append accounts subaccts)))))
-	  (gnc:report-percent-done 30)
 
           (xaccQueryAddAccountMatch query accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
           
