@@ -571,6 +571,7 @@ the option '~a'."))
          show-time
          subtype
          relative-date-list)
+  (define regex-iso "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]")
   (define (date-legal date)
     (and (pair? date)
          (or
@@ -580,16 +581,26 @@ the option '~a'."))
                         (exact? (cadr date)) ; old-style timepairs
                         (exact? (cddr date)))
                    (and (number? (cdr date))
-                        (exact? (cdr date))))))))
+                        (exact? (cdr date))) ; we can accept time64
+                   (and (string? (cdr date)) ; but we prefer "yyyy-mm-dd"
+                        (string-match regex-iso (cdr date))))))))
+  (define (time64toISO t)
+    (strftime "%Y-%m-%d" (gnc-localtime t)))
+  (define (ISOtotime64 s)
+    (let ((yy (string->number (substring s 0 4)))
+          (mm (string->number (substring s 5 7)))
+          (dd (string->number (substring s 8 10))))
+      (gnc-dmy2time64 dd mm yy)))
   (define (maybe-convert-to-time64 date)
-    ;; compatibility shim. this is triggered only when date is type
-    ;; (cons 'absolute (cons sec nsec)) - we'll convert to
-    ;; (cons 'absolute sec). this shim must always be kept for gnucash
-    ;; to reload saved reports, or reload reports launched at startup,
-    ;; which had been saved as timepairs.
-    (if (pair? (cdr date))
-        (cons (car date) (cadr date))
-        date))
+    ;; compatibility shim. convert time pairs which were being used
+    ;; until 2017 (cons 'absolute (cons sec nsec)) - we'll convert to
+    ;; (cons 'absolute sec). also converts iso-dates to time64.
+    (cond
+     ((pair? (cdr date))
+      (cons (car date) (cadr date)))
+     ((and (string? (cdr date)) (string-match regex-iso (cdr date)))
+      (cons (car date) (ISOtotime64 (cdr date))))
+     (else date)))
   (define (list-lookup full-list item)
     (or (list-index (lambda (i) (eq? i item)) full-list)
         (begin
@@ -597,7 +608,11 @@ the option '~a'."))
           0)))
   (let* ((value (default-getter))
          (value->string (lambda ()
-                          (string-append "'" (gnc:value->string value)))))
+                          (format #f "'(~s . ~s)"
+                                  (car value)
+                                  (case (car value)
+                                    ((relative) (cdr value))
+                                    ((absolute) (time64toISO (cdr value))))))))
     (gnc:make-option
      section name sort-tag 'date documentation-string
      (lambda () value)
@@ -611,16 +626,21 @@ the option '~a'."))
        (qof-book-set-option b (symbol->string (car value))
                                        (append p '("type")))
        (qof-book-set-option b
-                                       (if (symbol? (cdr value))
-                                           (symbol->string (cdr value))
-                                           (cdr value))
-                                       (append p '("value"))))
+                            (case (car value)
+                              ((relative) (symbol->string (cdr value)))
+                              ((absolute) (time64toISO (cdr value))))
+                            (append p '("value"))))
      (lambda (b p)
        (let ((t (qof-book-get-option b (append p '("type"))))
              (v (qof-book-get-option b (append p '("value")))))
          (if (and t v (string? t))
              (set! value (cons (string->symbol t)
-                               (if (string? v) (string->symbol v) v))))))
+                               (cond
+                                ((string=? t "relative")
+                                 (string->symbol v))
+                                ((string-match regex-iso v)
+                                 (ISOtotime64 v))
+                                (else v)))))))
      (lambda (date)
        (if (date-legal date)
            (list #t date)
