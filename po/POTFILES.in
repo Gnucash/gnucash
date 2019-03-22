@@ -466,6 +466,7 @@ gnucash/report/standard-reports/account-piecharts.scm
 gnucash/report/standard-reports/account-summary.scm
 gnucash/report/standard-reports/advanced-portfolio.scm
 gnucash/report/standard-reports/average-balance.scm
+gnucash/report/standard-reports/balance-forecast.scm
 gnucash/report/standard-reports/balance-sheet.scm
 gnucash/report/standard-reports/budget-balance-sheet.scm
 gnucash/report/standard-reports/budget-barchart.scm
