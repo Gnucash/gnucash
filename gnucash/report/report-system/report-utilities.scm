@@ -177,6 +177,8 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
 ;; yes.  I think that would still be faster.
 
 (define (gnc:make-stats-collector)
+  (issue-deprecation-warning
+   "gnc:make-stats-collector is obsolete. use srfi-1 functions instead.")
   (let ((value 0)
         (totalitems 0)
         (maximum -inf.0)
@@ -209,6 +211,8 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
           (else (gnc:warn "bad stats-collector action: " action)))))))
 
 (define (gnc:make-drcr-collector)
+  (issue-deprecation-warning
+   "gnc:make-drcr-collector is obsolete. use srfi-1 functions instead.")
   (let ;;; values
       ((debits 0)
        (credits 0)
