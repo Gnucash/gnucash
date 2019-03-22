@@ -8,6 +8,7 @@
   (test-runner-factory gnc:test-runner)
   (test-begin "test-date-utilities.scm")
   (test-weeknum-calculator)
+  (test-make-date-list)
   (test-date-get-quarter-string)
   (test-end "test-date-utilities.scm"))
 
@@ -76,6 +77,17 @@
      (create-time64 '(1970 1 1 0 0 1))
      (create-time64 '(1970 1 15 0 0 1))
      WeekDelta))
+
+  (test-equal "make-date-list start 30-nov monthly. all dates are month-ends."
+    (list (create-time64 '(1970 11 30 0 0 1))
+          (create-time64 '(1970 12 31 0 0 1))
+          (create-time64 '(1971 1 31 0 0 1))
+          (create-time64 '(1971 2 28 0 0 1))
+          (create-time64 '(1971 3 15 0 0 1)))
+    (gnc:make-date-list
+     (create-time64 '(1970 11 30 0 0 1))
+     (create-time64 '(1971 3 15 0 0 1))
+     MonthDelta))
 
   (test-equal "make-date-list 31-dec-1970 to 15-4-1972 monthly including leapyear"
     (list (create-time64 '(1970 12 31 0 0 1))
