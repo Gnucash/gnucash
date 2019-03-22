@@ -114,8 +114,8 @@ gnc_item_edit_tb_get_preferred_width (GtkWidget *widget,
     gint x, y, w, h = 2, width = 0;
     gnc_item_edit_get_pixel_coords (GNC_ITEM_EDIT (item_edit), &x, &y, &w, &h);
     width = ((h - 2)*2)/3;
-    if (width < 20) // minimum size for a button
-        width = 20;
+    if (width < 22) // minimum size for a button
+        width = 22;
     *minimal_width = *natural_width = width;
 }
 
