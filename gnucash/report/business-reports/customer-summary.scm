@@ -50,13 +50,13 @@
 (define optname-incomeaccounts (N_ "Income Accounts"))
 (define opthelp-incomeaccounts
   (N_ "The income accounts where the sales and income was recorded."))
-;(define optname-account-ar (N_ "A/R Account"))
+
 ;; The line break in the next expressions will suppress above comment as translator comments.
 
 (define pagename-expenseaccounts
         (N_ "Expense Accounts"))
 (define optname-expenseaccounts (N_ "Expense Accounts"))
-;(define optname-account-ap (N_ "A/P Account"))
+
 ;; The line break in the next expressions will suppress above comment as translator comments.
 (define opthelp-expenseaccounts
         (N_ "The expense accounts where the expenses are recorded which are subtracted from the sales to give the profit."))
@@ -73,15 +73,6 @@
 (define desc-header (N_ "Description"))
 (define amount-header (N_ "Amount"))
 
-;;(define optname-invoicelines (N_ "Show Invoices"))
-;;(define opthelp-invoicelines (N_ "Show Invoice Transactions and include them in the balance."))
-
-;(define optname-paymentlines (N_ "(Experimental) Show Payments"))
-;(define opthelp-paymentlines (N_ "Show Payment Transactions and include them in the balance."))
-
-;(define optname-show-txn-table (N_ "(Experimental) Show Transaction Table"))
-;(define opthelp-show-txn-table (N_ "Show the table with all transactions. If false, only show the total amount per customer."))
-
 ;; The line break in the next expression will suppress above comments as translator comments.
 
 (define optname-show-zero-lines
@@ -94,244 +85,6 @@
 (define opthelp-sortkey (N_ "Choose the column by which the result table is sorted."))
 (define optname-sortascending (N_ "Sort Order"))
 (define opthelp-sortascending (N_ "Choose the ordering of the column sort: Either ascending or descending."))
-
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(define (date-col columns-used)
-  (vector-ref columns-used 0))
-(define (num-col columns-used)
-  (vector-ref columns-used 2))
-(define (type-col columns-used)
-  (vector-ref columns-used 3))
-(define (memo-col columns-used)
-  (vector-ref columns-used 4))
-(define (value-col columns-used)
-  (vector-ref columns-used 5))
-
-(define columns-used-size 6)
-
-(define (build-column-used options)   
-  (define (opt-val section name)
-    (gnc:option-value 
-     (gnc:lookup-option options section name)))
-  (define (make-set-col col-vector)
-    (let ((col 0))
-      (lambda (used? index)
-        (if used?
-            (begin
-              (vector-set! col-vector index col)
-              (set! col (+ col 1)))
-            (vector-set! col-vector index #f)))))
-  
-  (let* ((col-vector (make-vector columns-used-size #f))
-         (set-col (make-set-col col-vector)))
-    (set-col #t 0) ;;(opt-val pagename-columndisplay date-header) 0)
-    (set-col #t 2) ;;(opt-val pagename-columndisplay reference-header) 2)
-    (set-col #t 3) ;;(opt-val pagename-columndisplay type-header) 3)
-    (set-col #t 4) ;;(opt-val pagename-columndisplay desc-header) 4)
-    (set-col #t 5) ;;(opt-val pagename-columndisplay amount-header) 5)
-    col-vector))
-
-(define (make-heading-list column-vector)
-  (let ((heading-list '()))
-    (if (date-col column-vector)
-        (addto! heading-list (_ date-header)))
-    (if (num-col column-vector)
-        (addto! heading-list (_ reference-header)))
-    (if (type-col column-vector)
-        (addto! heading-list (_ type-header)))
-    (if (memo-col column-vector)
-        (addto! heading-list (_ desc-header)))
-    (if (value-col column-vector)
-        (addto! heading-list (_ amount-header)))
-    (reverse heading-list)))
-
-
-
-;;
-;; Make a row list based on the visible columns
-;;
-(define (make-row column-vector date due-date num type-str memo monetary)
-  (let ((row-contents '()))
-    (if (date-col column-vector)
-        (addto! row-contents (qof-print-date date)))
-    (if (num-col column-vector)
-        (addto! row-contents num))
-    (if (type-col column-vector)
-        (addto! row-contents type-str))
-    (if (memo-col column-vector)
-        (addto! row-contents memo))
-    (if (value-col column-vector)
-        (addto! row-contents
-                (gnc:make-html-table-cell/markup "number-cell" monetary)))
-    row-contents))
-
-;;
-;; Adds the 'Balance' row to the table if it has not been printed and
-;; total is not zero
-;;
-;; Returns printed? 
-;;
-(define (add-balance-row table column-vector txn odd-row? printed? start-date total)
-  (if (not printed?)
-      (begin
-        (set! printed? #t)
-        (if (not (gnc-numeric-zero-p total))
-            (let ((row (make-row column-vector start-date #f "" (_ "Balance") ""
-                                 (gnc:make-gnc-monetary (xaccTransGetCurrency txn) total)))
-                  (row-style (if odd-row? "normal-row" "alternate-row")))
-              (gnc:html-table-append-row/markup! table row-style (reverse row))
-              (set! odd-row? (not odd-row?))
-              (set! row-style (if odd-row? "normal-row" "alternate-row")))
-            )))
-  printed?)
-
-;;
-;; Make sure the caller checks the type first and only calls us with
-;; invoice and payment transactions.  we don't verify it here.
-;;
-;; Return a list of (printed? value odd-row?)
-;;
-(define (add-txn-row table txn acc column-vector odd-row? printed?
-                     inv-str reverse? start-date total)
-  (let* ((type (xaccTransGetTxnType txn))
-         (date (xaccTransGetDate txn))
-         (due-date #f)
-         (value (xaccTransGetAccountValue txn acc))
-         (split (xaccTransGetSplit txn 0))
-         (invoice (gncInvoiceGetInvoiceFromTxn txn))
-         (currency (xaccTransGetCurrency txn))
-         (type-str
-          (cond
-           ((equal? type TXN-TYPE-INVOICE)
-            (if (not (null? invoice))
-                (gnc:make-html-text
-                 (gnc:html-markup-anchor
-                  (gnc:invoice-anchor-text invoice)
-                  inv-str))
-                inv-str))
-           ((equal? type TXN-TYPE-PAYMENT)
-            (if (not (null? txn))
-                (gnc:make-html-text
-                 (gnc:html-markup-anchor
-                  (gnc:transaction-anchor-text txn)
-                  (_ "Payment")))
-                (_ "Payment")))
-           (else (_ "Unknown"))))
-         )
-
-    (if reverse?
-        (set! value (gnc-numeric-neg value)))
-
-    (if (< start-date date)
-        (begin
-          
-          ;; Adds 'balance' row if needed
-          (set! printed? (add-balance-row table column-vector txn odd-row? printed? start-date total))
-          
-          ;; Now print out the invoice row
-          (if (not (null? invoice))
-              (set! due-date (gncInvoiceGetDateDueTT invoice)))
-
-          (let ((row (make-row column-vector date due-date (gnc-get-num-action txn split)
-                               type-str (xaccSplitGetMemo split)
-                               (gnc:make-gnc-monetary currency value)))
-                (row-style (if odd-row? "normal-row" "alternate-row")))
-
-            (gnc:html-table-append-row/markup! table row-style
-                                               (reverse row)))
-
-          (set! odd-row? (not odd-row?))
-          ))
-
-    (list printed? value odd-row?)
-    ))
-
-
-(define (make-txn-table options txns acc start-date end-date)
-  (define (opt-val pagename optname)
-    (gnc:option-value (gnc:lookup-option options pagename optname)))
-  (let ((used-columns (build-column-used options))
-        (total (gnc-numeric-zero))
-        (currency (xaccAccountGetCommodity acc))
-        (table (gnc:make-html-table))
-        (inv-str (opt-val "__reg" "inv-str"))
-        (reverse? (opt-val "__reg" "reverse?"))
-        (print-invoices? #t) ;;(opt-val gnc:pagename-general optname-invoicelines))
-        )
-
-    (define (should-print-txn? txn-type)
-      (or (and print-invoices?
-               (equal? txn-type TXN-TYPE-INVOICE))
-          (and #f
-               (equal? txn-type TXN-TYPE-PAYMENT))))
-
-    (gnc:html-table-set-col-headers!
-     table
-     (make-heading-list used-columns))
-
-    ;; Order the transactions properly
-    (set! txns (sort txns (lambda (a b) (> 0 (xaccTransOrder a b)))))
-
-    (let ((printed? #f)
-          (odd-row? #t))
-      (for-each
-       (lambda (txn)
-         (let ((type (xaccTransGetTxnType txn)))
-           (if
-            (should-print-txn? type)
-            (let ((result (add-txn-row table txn acc used-columns odd-row? printed?
-                                       inv-str reverse? start-date total)))
-
-              (set! printed? (car result))
-              (if printed?
-                  (set! total (gnc-numeric-add-fixed total (cadr result))))
-              (set! odd-row? (caddr result))
-              ))))
-       txns)
-      ;; Balance row may not have been added if all transactions were before
-      ;; start-date (and no other rows would be added either) so add it now
-      (if (and (not (null? txns)) (and print-invoices? #f))
-          (add-balance-row table used-columns (car txns) odd-row? printed? start-date total)
-          ))
-
-    (gnc:html-table-append-row/markup! 
-     table
-     "grand-total"
-     (append (cons (gnc:make-html-table-cell/markup
-                    "total-label-cell"
-                    ;;(if (gnc-numeric-negative-p total)
-                    ;;    (_ "Total Credit")
-                    ;;    (_ "Total Due")))
-                    (_ "Total")
-                    " "
-                    ;; (xaccAccountGetName acc)
-                    (gnc:html-account-anchor acc))
-                   '())
-             (list (gnc:make-html-table-cell/size/markup
-                    1 (value-col used-columns)
-                    "total-number-cell"
-                    (gnc:make-gnc-monetary currency total)))))
-
-    (list table total)))
-
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(define (find-first-account acct-type-list)
-  (define (find-first account-list)
-    (if (null? account-list)
-        '()
-        (let* ((this-account (car account-list))
-               (account-type (xaccAccountGetType this-account)))
-          (if (if (null? acct-type-list)
-                  #t
-                  (member account-type acct-type-list))
-              this-account
-              (find-first (cdr account-list))))))
-
-  (let* ((current-root (gnc-get-current-root-account))
-         (account-list (gnc-account-get-descendants-sorted current-root)))
-    (find-first account-list)))
 
 
 (define (options-generator acct-type-list owner-type inv-str reverse?)
@@ -355,23 +108,6 @@
    gnc:pagename-general optname-from-date optname-to-date
    "b")
 
-;  (add-option
-;   (gnc:make-simple-boolean-option
-;    gnc:pagename-general optname-invoicelines
-;    "m" opthelp-invoicelines #t))
-
-;  (add-option
-;   (gnc:make-simple-boolean-option
-;    gnc:pagename-display optname-paymentlines
-;    "n" opthelp-paymentlines #f))
-
-
-;  (add-option
-;   (gnc:make-account-sel-limited-option
-;    pagename-incomeaccounts optname-account-ar
-;    "a" (N_ "The account to search for transactions")
-;    #f #f (list ACCT-TYPE-RECEIVABLE)))
-
   (add-option
    (gnc:make-account-list-option
     pagename-incomeaccounts optname-incomeaccounts
@@ -383,16 +119,7 @@
       (gnc:filter-accountlist-type 
        (list ACCT-TYPE-INCOME)
        (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
-    ;;(lambda ()
-    ;;(list (find-first-account acct-type-list)))
     #f #t))
-
-
-;  (add-option
-;   (gnc:make-account-sel-limited-option
-;    pagename-expenseaccounts optname-account-ap
-;    "a" (N_ "The account to search for transactions")
-;    #f #f (list ACCT-TYPE-PAYABLE)))
 
   (add-option
    (gnc:make-account-list-option
@@ -405,35 +132,7 @@
       (gnc:filter-accountlist-type 
        (list ACCT-TYPE-EXPENSE)
        (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
-    ;;(lambda ()
-    ;;(list (find-first-account acct-type-list)))
     #f #t))
-
-
-;  (add-option
-;   (gnc:make-simple-boolean-option
-;    pagename-columndisplay date-header
-;    "b" (N_ "Display the transaction date?") #t))
-
-;  (add-option
-;   (gnc:make-simple-boolean-option
-;    pagename-columndisplay reference-header
-;    "d" (N_ "Display the transaction reference?") #t))
-
-;  (add-option
-;   (gnc:make-simple-boolean-option
-;    pagename-columndisplay type-header
-;    "g" (N_ "Display the transaction type?") #t))
-
-;  (add-option
-;   (gnc:make-simple-boolean-option
-;    pagename-columndisplay desc-header
-;    "h" (N_ "Display the transaction description?") #t))
-
-;  (add-option
-;   (gnc:make-simple-boolean-option
-;    pagename-columndisplay amount-header
-;    "i" (N_ "Display the transaction amount?") #t)) 
 
   (add-option
    (gnc:make-multichoice-option
@@ -491,11 +190,6 @@
     gnc:pagename-display optname-show-column-expense
     "g" opthelp-show-column-expense #t))
 
-;  (add-option
-;   (gnc:make-simple-boolean-option
-;    gnc:pagename-display optname-show-txn-table
-;    "h" opthelp-show-txn-table #f))
-
   (gnc:options-set-default-section options gnc:pagename-general)
 
   options)
@@ -504,13 +198,6 @@
   (options-generator (list ACCT-TYPE-RECEIVABLE) GNC-OWNER-CUSTOMER
                      (_ "Invoice") #t)) ;; FIXME: reverse?=#t but originally #f
 
-(define (vendor-options-generator)
-  (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-VENDOR
-                     (_ "Bill") #t))
-
-(define (employee-options-generator)
-  (options-generator (list ACCT-TYPE-PAYABLE) GNC-OWNER-EMPLOYEE
-                     (_ "Expense Report") #t))
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -570,42 +257,6 @@
     (qof-query-set-book q (gnc-get-current-book))
     q))
 
-(define (make-owner-table owner)
-  (let ((table (gnc:make-html-table)))
-    (gnc:html-table-set-style!
-     table "table"
-     'attribute (list "border" 0)
-     'attribute (list "cellspacing" 0)
-     'attribute (list "cellpadding" 0))
-    (gnc:html-table-append-row!
-     table
-     (list
-      (string-expand (gnc:owner-get-name-and-address-dep owner) #\newline "<br/>")))
-    (gnc:html-table-append-row!
-     table
-     (list "<br/>"))
-    (gnc:html-table-set-last-row-style!
-     table "td"
-     'attribute (list "valign" "top"))
-    table))
-
-(define (make-date-row! table label date)
-  (gnc:html-table-append-row!
-   table
-   (list
-    (string-append label ":&nbsp;")
-    (string-expand (qof-print-date date) #\space "&nbsp;"))))
-
-(define (make-date-table)
-  (let ((table (gnc:make-html-table)))
-    (gnc:html-table-set-style!
-     table "table"
-     'attribute (list "border" 0)
-     'attribute (list "cellpadding" 0))
-    (gnc:html-table-set-last-row-style!
-     table "td"
-     'attribute (list "valign" "top"))
-    table))
 
 (define (make-myname-table book date-format)
   (let* ((table (gnc:make-html-table))
