@@ -260,6 +260,7 @@
                                   (exchange-fn monetary target-curr date)))))
                             daily-dates
                             accounts-balances-transposed)))
+            (qof-query-destroy query)
 
             ;; this is a complicated tight loop. start with:
             ;; daily-balances & daily-dates, interval-dates, and the
@@ -307,9 +308,9 @@
                              (apply + (filter positive? interval-amts))
                              (- (apply + (filter negative? interval-amts)))
                              (apply + interval-amts))
-                            results)
-                      '()
-                      '()
+                            results)    ;process interval amts&bals
+                      '()               ;reset interval-bals
+                      '()               ;and interval-amts
                       splits
                       daily-balances
                       daily-dates

@@ -46,17 +46,12 @@
 (define (test-average-balance)
   (let* ((env (create-test-env))
          (account-alist (env-create-account-structure-alist env structure))
-	 (options (gnc:make-report-options uuid))
+         (options (gnc:make-report-options uuid))
          (bank (cdr (assoc "Bank" account-alist)))
          (bank2 (cdr (assoc "Another Bank" account-alist)))
          (income (cdr (assoc "Income" account-alist))))
 
     (define (default-testing-options)
-      ;; To ease testing of transaction report, we will set default
-      ;; options for generating reports. We will elable extra columns
-      ;; for Exporting, disable generation of informational text, and
-      ;; disable indenting. These options will be tested separately as
-      ;; the first test group. By default, we'll select the modern dates.
       (let ((options (gnc:make-report-options uuid)))
         (set-option! options "Accounts" "Accounts" (list bank bank2))
         (set-option! options "Display" "Show table" #t)
