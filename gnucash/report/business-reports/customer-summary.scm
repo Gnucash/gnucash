@@ -305,26 +305,12 @@
       (* 100 (gnc-numeric-div profit sales 1000 GNC-HOW-RND-ROUND))))
 
 (define (query-split-value sub-query toplevel-query)
-  (let ((splits (qof-query-run-subquery sub-query toplevel-query))
-        (total (gnc-numeric-zero))
-        )
-    (for-each
-     (lambda (split)
-       (set! total (gnc-numeric-add-fixed total (xaccSplitGetValue split)))
-       )
-     splits) ;; END for-each splits
-    total))
+  (let ((splits (qof-query-run-subquery sub-query toplevel-query)))
+    (apply + (map xaccSplitGetValue splits))))
 
 (define (single-query-split-value query)
-  (let ((splits (qof-query-run query))
-        (total (gnc-numeric-zero))
-        )
-    (for-each
-     (lambda (split)
-       (set! total (gnc-numeric-add-fixed total (xaccSplitGetValue split)))
-       )
-     splits) ;; END for-each splits
-    total))
+  (let ((splits (qof-query-run query)))
+    (apply + (map xaccSplitGetValue splits))))
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
