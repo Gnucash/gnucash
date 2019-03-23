@@ -255,6 +255,7 @@
           
           ;; get the query results 
           (set! splits (qof-query-run query))
+          (qof-query-destroy query)
 	  (gnc:report-percent-done 40)
 
           ;; each split is analyzed... the amount is converted to
