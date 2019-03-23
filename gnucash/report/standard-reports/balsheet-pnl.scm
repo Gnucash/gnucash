@@ -35,12 +35,10 @@
 
 (define FOOTER-TEXT
   (gnc:make-html-text
-   ;; Translators: This string has low priority. ~a will be for bugzilla url.
-   (_ "WARNING: Please be aware these figures are not guaranteed to be
-correct.  No calculations for capital gains, or unrealized gains are
-made.  Foreign currency conversions are not currently confirmed
-correct. This report may be modified without notice. Bug reports are
-very welcome at https://bugs.gnucash.org/")))
+   (_ "WARNING: Foreign currency conversions, and unrealized gains
+calculations are not confirmed correct. This report may be modified
+without notice. Bug reports are very welcome at
+https://bugs.gnucash.org/")))
 
 ;; define all option's names and help text so that they are properly
 
@@ -91,7 +89,7 @@ below parent and children groups."))
 (define opthelp-amount-links (N_ "Shows each amounts in the table as a hyperlink to a register or report."))
 
 ;; closing entries filter - for P&L report
-(define pagename-entries "Entries")
+(define pagename-entries "Closing Entries")
 (define optname-closing-pattern (N_ "Closing Entries pattern"))
 (define opthelp-closing-pattern (N_ "Any text in the Description column which identifies closing entries."))
 (define optname-closing-casing (N_ "Closing Entries pattern is case-sensitive"))
@@ -108,17 +106,17 @@ below parent and children groups."))
 ;; commodities
 (define pagename-commodities (N_ "Commodities"))
 (define optname-include-chart (N_ "Enable chart"))
-(define opthelp-include-chart (N_ "Enable link to barchart report"))
+(define opthelp-include-chart (N_ "Enable link to chart"))
 
-(define optname-common-currency (N_ "Convert to common currency"))
+(define optname-common-currency (N_ "Common Currency"))
 (define opthelp-common-currency (N_ "Convert all amounts to a single currency."))
 
 (define optname-report-commodity (N_ "Report's currency"))
 
 (define optname-price-source (N_ "Price Source"))
 
-(define optname-show-foreign (N_ "Show Foreign Currencies"))
-(define opthelp-show-foreign (N_ "Display any foreign currency amount in an account."))
+(define optname-show-foreign (N_ "Show original currency amount"))
+(define opthelp-show-foreign (N_ "Also show original currency amounts"))
 
 (define optname-include-overall-period (N_ "If more than 1 period column, include overall period?"))
 (define opthelp-include-overall-period (N_ "If several profit & loss period columns are shown, \
@@ -133,80 +131,40 @@ also show overall period profit & loss."))
 
 (define periodlist
   (list
-   (cons #f (list
-             (cons 'delta #f)
-             (cons 'text (_ "disabled"))
-             (cons 'tip (_ "disable multicolumn"))))
+   (list #f
+         (cons 'delta #f)
+         (cons 'text (_ "Disabled"))
+         (cons 'tip (_ "Disabled")))
 
-   (cons 'year (list
-                (cons 'delta YearDelta)
-                (cons 'text (_ "year"))
-                (cons 'tip (_ "every year"))))
+   (list 'year
+         (cons 'delta YearDelta)
+         (cons 'text (_ "Year"))
+         (cons 'tip (_ "One year.")))
 
-   (cons 'halfyear (list
-                    (cons 'delta HalfYearDelta)
-                    (cons 'text (_ "half-year"))
-                    (cons 'tip (_ "every half year"))))
+   (list 'halfyear
+         (cons 'delta HalfYearDelta)
+         (cons 'text (_ "Half Year"))
+         (cons 'tip (_ "Half Year.")))
 
-   (cons 'quarter (list
-                   (cons 'delta QuarterDelta)
-                   (cons 'text (_ "quarter"))
-                   (cons 'tip (_ "every three months"))))
+   (list 'quarter
+         (cons 'delta QuarterDelta)
+         (cons 'text (_ "Quarter"))
+         (cons 'tip (_ "One Quarter.")))
 
-   (cons 'month (list
-                 (cons 'delta MonthDelta)
-                 (cons 'text (_ "month"))
-                 (cons 'tip (_ "every month"))))
+   (list 'month
+         (cons 'delta MonthDelta)
+         (cons 'text (_ "Month"))
+         (cons 'tip (_ "One Month.")))
 
-   (cons 'twoweek (list
-                   (cons 'delta TwoWeekDelta)
-                   (cons 'text (_ "two weeks"))
-                   (cons 'tip (_ "every fortnight"))))
+   (list 'twoweek
+         (cons 'delta TwoWeekDelta)
+         (cons 'text (_ "2Week"))
+         (cons 'tip (_ "Two Weeks.")))
 
-   (cons 'week (list
-                (cons 'delta WeekDelta)
-                (cons 'text (_ "week"))
-                (cons 'tip (_ "every 7 days"))))))
-
-(define pricesource-list-common
-  (list
-   (cons 'pricedb-latest (list
-                          (cons 'text (_ "Most recent"))
-                          (cons 'tip (_ "The most recent recorded price."))))
-
-   (cons 'weighted-average (list
-                            (cons 'text (_ "Weighted Average"))
-                            (cons 'tip (_ "The weighted average of all currency transactions of the past."))))
-   (cons 'average-cost (list
-                        (cons 'text (_ "Average Cost"))
-                        (cons 'tip (_ "The volume-weighted average cost of purchases."))))))
-
-(define pricesource-list-balsheet
-  (reverse
-   (cons
-    (cons 'pricedb-nearest (list
-                            (cons 'text (_ "Nearest in time"))
-                            (cons 'tip (_ "The price recorded nearest in time to the column date."))))
-    pricesource-list-common)))
-
-(define pricesource-list-pnl
-  (reverse
-   (cons*
-    (cons 'startperiod (list
-                        (cons 'text (_ "Nearest to start of period"))
-                        (cons 'tip (_ "Prices closest to the start of the reporting period \
-are used."))))
-
-    (cons 'midperiod (list
-                      (cons 'text (_ "Nearest to mid of period"))
-                      (cons 'tip (_ "Prices in the middle of the reporting period \
-are used."))))
-
-    (cons 'endperiod (list
-                      (cons 'text (_ "Nearest to end of period"))
-                      (cons 'tip (_ "Prices in the end of the reporting period \
-are used."))))
-    pricesource-list-common)))
+   (list 'week
+         (cons 'delta WeekDelta)
+         (cons 'text (_ "Week"))
+         (cons 'tip (_ "One Week.")))))
 
 (define (keylist->vectorlist keylist)
   (map
@@ -926,8 +884,7 @@ are used."))))
                                       (or common-currency
                                           (gnc-default-report-currency)))
                                 (list "General" "Price Source"
-                                      (or price-source
-                                          'pricedb-nearest))
+                                      (or price-source 'pricedb-nearest))
                                 (list "Accounts" "Accounts"
                                       (append asset-accounts liability-accounts))))))
              (get-col-header-fn (lambda (accounts col-idx)
@@ -1077,6 +1034,7 @@ are used."))))
                                            (cons 'absolute (car datepair)))
                                      (list "General" "End Date"
                                            (cons 'absolute (cdr datepair)))
+                                     (list "Display" "Amount" 'double)
                                      (list "Accounts" "Accounts"
                                            (list account))))))
              (chart (and include-chart?
@@ -1090,8 +1048,7 @@ are used."))))
                                       (or common-currency
                                           (gnc-default-report-currency)))
                                 (list "General" "Price Source"
-                                      (or price-source
-                                          'pricedb-nearest))
+                                      (or price-source 'pricedb-nearest))
                                 (list "Accounts" "Accounts"
                                       (append income-accounts expense-accounts))))))
              (get-col-header-fn
