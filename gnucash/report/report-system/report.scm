@@ -461,36 +461,29 @@ not found.")))
 
 ;; Load and save helper functions
 
+;; list of all report guids in existence (includes standard & custom
+;; reports, but not instantiated ones)
 (define (gnc:all-report-template-guids)
-  (hash-fold
-   (lambda (k v p)
-     (cons k p))
-   '() *gnc:_report-templates_*))
+  (map car (hash-map->list cons *gnc:_report-templates_*)))
 
 ;; return a list of the custom report template guids.
 (define (gnc:custom-report-template-guids)
-  (hash-fold
-   (lambda (k v p)
-     (if (gnc:report-template-parent-type v)
-         (begin
-           (gnc:debug "template " v)
-           (cons k p))
-         p))
-   '() *gnc:_report-templates_*))
+  (map car (gnc:custom-report-templates-list)))
 
-(define (gnc:find-report-template report-type)
-  (hash-ref *gnc:_report-templates_* report-type))
+(define (gnc:find-report-template guid)
+  (hash-ref *gnc:_report-templates_* guid))
 
 (define (gnc:report-template-is-custom/template-guid? guid)
-  (let* ((custom-template (and (string? guid)
-                               (not (string-null? guid))
-                               (hash-ref *gnc:_report-templates_* guid))))
-    (and custom-template
-         (gnc:report-template-parent-type custom-template)
-         #t)))
+  (assoc guid (gnc:custom-report-templates-list)))
 
 (define (gnc:is-custom-report-type report)
   (gnc:report-template-is-custom/template-guid? (gnc:report-custom-template report)))
+
+;; list of reports saved within the saved-reports; returns a list of
+;; pairs whose cars = guid <string> and cdrs = report-template <record>
+(define (gnc:custom-report-templates-list)
+  (filter (compose gnc:report-template-parent-type cdr)
+          (hash-map->list cons *gnc:_report-templates_*)))
 
 ;; This function should be called right before changing a custom-template's name
 ;; to test if the new name is unique among the existting custom reports.
@@ -740,18 +733,14 @@ not found.")))
 ;; saved-reports file aside as a backup
 ;; return #t if all templates were saved successfully
 (define (gnc:save-all-reports)
-  (let ((save-ok? #t))
-    (gnc-saved-reports-backup)
-    (gnc-saved-reports-write-to-file "" #t)
-    (hash-for-each
-     (lambda (k v)
-       (if (gnc:report-template-parent-type v)
-           (begin
-             (gnc:debug "saving report " k)
-             (if (not (gnc:report-template-save-to-savefile v))
-                 (set! save-ok? #f)))))
-     *gnc:_report-templates_*)
-    save-ok?))
+  (gnc-saved-reports-backup)
+  (gnc-saved-reports-write-to-file "" #t)
+  (every identity
+         (map
+          (lambda (p)
+            (gnc:debug "saving report " (car p))
+            (gnc:report-template-save-to-savefile (cdr p)))
+          (gnc:custom-report-templates-list))))
 
 
 ;; gets the renderer from the report template;
