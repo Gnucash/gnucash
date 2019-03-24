@@ -2030,6 +2030,8 @@ the option '~a'."))
    options))
 
 (define (gnc:save-options options options-string file header truncate?)
+  (issue-deprecation-warning
+   "gnc:save-options is deprecated.")
   (let ((code (gnc:generate-restore-forms options options-string))
         (port (false-if-exception
                (if truncate? 
