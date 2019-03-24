@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2018-12-29 16:40-0800\n"
-"PO-Revision-Date: 2019-02-21 05:49+0100\n"
+"PO-Revision-Date: 2019-03-24 13:16+0100\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -601,9 +601,8 @@ msgstr ""
 #: doc/tip_of_the_day.list.c:74
 msgid ""
 "You can set the Security Editor screen to display the Quote Source of a "
-"security, which makes it easy to see which online sources your securities "
-"use. Click the triangle at the far right of the column headings to change "
-"the display."
+"security, which makes it easy to see which online sources your securities use. "
+"Click the triangle at the far right of the column headings to change the display."
 msgstr ""
 "Uređivački prozor vrijednosnih papira možeš postaviti tako, da prikazuje izvor "
 "tečajeva. Time lako vidiš, koje internetske izvore koristiš za tvoje vrijednosne "
@@ -8171,7 +8170,7 @@ msgstr "Bankomat, isplata"
 #: gnucash/register/ledger-core/split-register.c:2609
 #: libgnucash/app-utils/prefs.scm:90
 msgid "Rebate"
-msgstr "Odobrenje"
+msgstr "Popust"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2923
 #: gnucash/register/ledger-core/split-register.c:2610
