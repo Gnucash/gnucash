@@ -832,6 +832,8 @@ not found.")))
 ;; load a saved-reports file version 2.0
 
 (define (gnc:report-template-new-options/name template-name)
+  (issue-deprecation-warning
+   "gnc:report-template-new-options/name is deprecated.")
   (let ((templ #f))
     (hash-for-each
      (lambda (id rec)
@@ -842,6 +844,8 @@ not found.")))
          (gnc:report-template-new-options templ))))
 
 (define (gnc:report-template-menu-name/name template-name)
+  (issue-deprecation-warning
+   "gnc:report-template-menu-name/name is deprecated.")
   (let ((templ #f))
     (hash-for-each
      (lambda (id rec)
@@ -853,6 +857,8 @@ not found.")))
              (gnc:report-template-name templ)))))
 
 (define (gnc:report-template-renderer/name template-name)
+  (issue-deprecation-warning
+   "gnc:report-template-renderer/name is deprecated.")
   (let ((templ #f))
     (hash-for-each
      (lambda (id rec)
@@ -865,6 +871,8 @@ not found.")))
 ;; Used internally only to convert a report template name into a corresponding guid
 ;; Note that this may fail if several reports exist with the same name
 (define (gnc:report-template-name-to-id template-name)
+  (issue-deprecation-warning
+   "gnc:report-template-name-to-id is deprecated.")
   (let ((template-id #f))
     (hash-for-each
      (lambda (id rec)
@@ -878,6 +886,8 @@ not found.")))
 (define gnc:restore-report
   (let ((first-warn? #t))
     (lambda (id template-name options)
+      (issue-deprecation-warning
+       "gnc:restore-report is deprecated.")
       (cond
        (options
         (let* ((constructor (record-constructor <report>))
