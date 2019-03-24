@@ -42,9 +42,6 @@ https://bugs.gnucash.org/")))
 
 ;; define all option's names and help text so that they are properly
 
-(define optname-company-name (N_ "Company name"))
-(define opthelp-company-name (N_ "Name of company/individual."))
-
 (define optname-startdate (N_ "Start Date"))
 (define optname-enddate (N_ "End Date"))
 
@@ -185,11 +182,6 @@ also show overall period profit & loss."))
          (add-option
           (lambda (new-option)
             (gnc:register-option options new-option))))
-
-    (add-option
-     (gnc:make-string-option
-      gnc:pagename-general optname-company-name
-      "b" opthelp-company-name (or (gnc:company-info book gnc:*company-name*) "")))
 
     ;; date at which to report balance
     (gnc:options-add-date-interval!
@@ -691,7 +683,6 @@ also show overall period profit & loss."))
 
   ;; get all options values
   (let* ((report-title (get-option gnc:pagename-general gnc:optname-reportname))
-         (company-name (get-option gnc:pagename-general optname-company-name))
          (startdate (gnc:date-option-absolute-time
                      (get-option gnc:pagename-general
                                  optname-startdate)))
@@ -841,11 +832,14 @@ also show overall period profit & loss."))
          (maxindent (gnc-account-get-tree-depth (gnc-get-current-root-account))))
 
     (gnc:html-document-set-title!
-     doc (string-append company-name " " report-title " "
-                        (if (and (eq? report-type 'balsheet) (not incr))
-                            ""
-                            (string-append (qof-print-date startdate) " to "))
-                        (qof-print-date enddate)))
+     doc (with-output-to-string
+           (lambda ()
+             (display report-title)
+             (display " ")
+             (when (or incr (eq? report-type 'pnl))
+               (display (qof-print-date startdate))
+               (display (_ " to ")))
+             (display (qof-print-date enddate)))))
 
     (if (eq? (get-option gnc:pagename-general optname-options-summary) 'always)
         (gnc:html-document-add-object!
