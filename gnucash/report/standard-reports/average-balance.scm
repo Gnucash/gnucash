@@ -314,54 +314,58 @@
                       (car interval-dates)
                       (cdr interval-dates)))
 
-               ;; we're still within interval.  there are splits
-               ;; remaining. test whether 'internal' and optionally
-               ;; skip 2 splits; otherwise add split details
-               ((and (pair? splits)
-                     (< (xaccTransGetDate (xaccSplitGetParent (car splits)))
-                        (car interval-dates)))
-                (let* ((this (car splits))
-                       (rest (cdr splits))
-                       (next (and (pair? rest) (car rest)))
-                       (this-txn (xaccSplitGetParent this))
-                       (next-txn (and next (xaccSplitGetParent next))))
-                  (if (and (not internal-included)
-                           (= 2 (xaccTransCountSplits this-txn))
-                           (equal? this-txn next-txn))
-                      (loop results
-                            interval-bals
-                            interval-amts ;interval-amt unchanged
-                            (cddr splits) ;skip two splits
-                            daily-balances
-                            daily-dates
-                            interval-start
-                            interval-dates)
-                      (loop results
-                            interval-bals
-                            (cons (gnc:gnc-monetary-amount
-                                   (exchange-fn
-                                    (gnc:make-gnc-monetary
-                                     (xaccAccountGetCommodity
-                                      (xaccSplitGetAccount (car splits)))
-                                     (xaccSplitGetAmount (car splits)))
-                                    report-currency
-                                    (car interval-dates)))
-                                  interval-amts) ;add split amt to list
-                            rest                 ;and move to next
-                            daily-balances
-                            daily-dates
-                            interval-start
-                            interval-dates))))
-
-               ;; we're still within interval, no more splits
-               ;; left. add daily balance to interval.
-               (else
+               ;; we're still within interval, no more splits left
+               ;; within current interval. add daily balance to
+               ;; interval.
+               ((or (null? splits)
+                    (> (xaccTransGetDate (xaccSplitGetParent (car splits)))
+                       (car interval-dates)))
                 (loop results
                       (cons (car daily-balances) interval-bals)
                       interval-amts
                       splits
                       (cdr daily-balances)
                       (cdr daily-dates)
+                      interval-start
+                      interval-dates))
+
+               ;; we're still within interval. 'internal' is
+               ;; disallowed; there are at least 2 splits remaining,
+               ;; both from the same transaction. skip them. NOTE we
+               ;; should really expand this conditional whereby all
+               ;; splits are internal, however the option is labelled
+               ;; as 2-splits only. best maintain current behaviour.
+               ((and (not internal-included)
+                     (pair? (cdr splits))
+                     (= 2 (xaccTransCountSplits (xaccSplitGetParent (car splits))))
+                     (equal? (xaccSplitGetParent (car splits))
+                             (xaccSplitGetParent (cadr splits))))
+                (loop results
+                      interval-bals
+                      interval-amts ;interval-amts unchanged
+                      (cddr splits) ;skip two splits.
+                      daily-balances
+                      daily-dates
+                      interval-start
+                      interval-dates))
+
+               ;; we're still within interval. there are splits
+               ;; remaining. add split details to interval-amts
+               (else
+                (loop results
+                      interval-bals
+                      (cons (gnc:gnc-monetary-amount
+                             (exchange-fn
+                              (gnc:make-gnc-monetary
+                               (xaccAccountGetCommodity
+                                (xaccSplitGetAccount (car splits)))
+                               (xaccSplitGetAmount (car splits)))
+                              report-currency
+                              (car interval-dates)))
+                            interval-amts) ;add split amt to list
+                      (cdr splits)         ;and loop to next split
+                      daily-balances
+                      daily-dates
                       interval-start
                       interval-dates)))))
 
