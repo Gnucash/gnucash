@@ -678,6 +678,7 @@ not found.")))
 ;;    (ie a template that is stored in the savefile already)
 ;; 2. an overwrite is requestes by setting overwrite? to #t
 (define (gnc:report-to-template report overwrite?)
+  ;; This implements the Save Report Configuration tasks
   (let* ((custom-template-id (gnc:report-custom-template report))
          (overwrite-ok? (and (gnc:report-template-is-custom/template-guid?
                               custom-template-id)
@@ -694,17 +695,20 @@ not found.")))
          (begin
            ;; If it's ok to overwrite the old template, delete it now.
            (if overwrite-ok?
-               (let ((templ-name (gnc:report-template-name (hash-ref *gnc:_report-templates_* custom-template-id))))
+               (let ((templ-name
+                      (gnc:report-template-name
+                       (hash-ref *gnc:_report-templates_* custom-template-id))))
                  ;; We're overwriting, which needs some additional steps
                  ;; 1. Remove the newly generated template from the template list again
-                 (hash-remove! *gnc:_report-templates_* (gnc:report-template-report-guid save-result))
-                 ;; 2. We still have the template record available though, so adapt it to
-                 ;;    the template we want to override (ie update guid and name)
+                 (hash-remove! *gnc:_report-templates_*
+                               (gnc:report-template-report-guid save-result))
+                 ;; 2. We still have the template record available
+                 ;; though, so adapt it to the template we want to
+                 ;; override (ie update guid and name)
                  (gnc:report-template-set-report-guid! save-result custom-template-id)
                  (gnc:report-template-set-name save-result templ-name)
                  ;; 3. Overwrite the template with the new one
-                 (hash-set! *gnc:_report-templates_* custom-template-id save-result)
-                 ))
+                 (hash-set! *gnc:_report-templates_* custom-template-id save-result)))
 
            ;; Regardless of how we got here, we now have a new template to write
            ;; so let's write it
