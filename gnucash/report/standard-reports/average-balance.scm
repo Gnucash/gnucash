@@ -247,9 +247,6 @@
                                        (gnc:account-get-balances-at-dates
                                         acc daily-dates))
                                      accounts))
-                 (accounts-balances-transposed (if (null? accounts-balances)
-                                                   '()
-                                                   (apply zip accounts-balances)))
                  (balances (map
                             (lambda (date accounts-balance)
                               (gnc:gnc-monetary-amount
@@ -259,7 +256,7 @@
                                 (lambda (monetary target-curr)
                                   (exchange-fn monetary target-curr date)))))
                             daily-dates
-                            accounts-balances-transposed)))
+                            (apply zip accounts-balances))))
             (qof-query-destroy query)
 
             ;; this is a complicated tight loop. start with:
