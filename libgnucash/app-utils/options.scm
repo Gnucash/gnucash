@@ -209,9 +209,7 @@ the option '~a'."))
               ")))")))
 
 (define (gnc:value->string value)
-  (let ((result (call-with-output-string
-                 (lambda (port) (write value port)))))
-       result))
+  (format #f "~s" value))
 
 (define (gnc:make-string-option
          section
