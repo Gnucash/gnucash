@@ -773,6 +773,19 @@ also show overall period profit & loss."))
                                                              ((balsheet) col-idx)
                                                              ((pnl) (1+ col-idx))))))))
                                    (exchange-fn monetary common-currency date)))))
+         (unrealized-calc-fn
+          (lambda (monetary col-idx)
+            (let* ((date (case price-source
+                           ((pricedb-latest) (current-time))
+                           (else (list-ref report-dates
+                                           (case report-type
+                                             ((balsheet) col-idx)
+                                             ((pnl) (1+ col-idx)))))))
+                   (latest (exchange-fn monetary common-currency date))
+                   (avg-cost-fn (gnc:case-exchange-fn
+                                 'average-cost common-currency date))
+                   (cost (avg-cost-fn monetary common-currency)))
+              (gnc:monetary+ latest (gnc:monetary-neg cost)))))
          ;; the following function generates an gnc:html-text object
          ;; to dump exchange rate for a particular column. From the
          ;; accountlist given, obtain commodities, and convert 1 unit
@@ -894,7 +907,9 @@ also show overall period profit & loss."))
                                            (get-col-header-fn #f)
                                            (show-accounts? #t)
                                            (show-total? #t)
+                                           (show-title? #t)
                                            (force-total? #f)
+                                           (convert-fn #f)
                                            (negate-amounts? #f))
                              (add-multicolumn-acct-table
                               table title accounts
@@ -906,14 +921,15 @@ also show overall period profit & loss."))
                               #:negate-amounts? negate-amounts?
                               #:disable-amount-indent? disable-amount-indent?
                               #:depth-limit (if get-col-header-fn 0 depth-limit)
-                              #:show-orig-cur? show-foreign?
-                              #:show-title? label-sections?
+                              #:show-orig-cur? (and (not convert-fn) show-foreign?)
+                              #:show-title? (and show-title? label-sections?)
                               #:show-accounts? show-accounts?
                               #:show-total? (or (and total-sections? show-total?)
                                                 force-total?)
                               #:recursive-bals? recursive-bals?
                               #:account-anchor? use-links?
-                              #:convert-curr-fn (and common-currency convert-curr-fn)
+                              #:convert-curr-fn (and common-currency
+                                                     (or convert-fn convert-curr-fn))
                               #:get-col-header-fn get-col-header-fn
                               #:get-cell-anchor-fn (and use-amount-links?
                                                         get-cell-anchor-fn)
@@ -946,7 +962,15 @@ also show overall period profit & loss."))
           (add-to-table multicol-table-right (_ "Net Worth")
                         (append asset-accounts liability-accounts)
                         #:show-accounts? #f
+                        #:show-title? #f
                         #:force-total? #t))
+
+        (add-to-table multicol-table-right (_ "Unrealized Gains")
+                      (append asset-accounts liability-accounts)
+                      #:show-accounts? #f
+                      #:force-total? #t
+                      #:show-title? #f
+                      #:convert-fn unrealized-calc-fn)
 
         (if (and common-currency show-rates?)
             (add-to-table multicol-table-right (_ "Exchange Rates")
