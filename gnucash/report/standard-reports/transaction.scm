@@ -1157,14 +1157,18 @@ be excluded from periodic reporting.")
                                                      (column-uses? 'account-name)
                                                      (column-uses? 'account-full-name)))))
 
-               (add-if (or (column-uses? 'other-account-name) (column-uses? 'other-account-code))
+               (add-if (or (column-uses? 'other-account-name)
+                           (column-uses? 'other-account-code))
                        (vector (_ "Transfer from/to")
                                (lambda (split transaction-row?)
-                                 (define other-account (xaccSplitGetAccount (xaccSplitGetOtherSplit split)))
-                                 (account-namestring other-account
-                                                     (column-uses? 'other-account-code)
-                                                     (column-uses? 'other-account-name)
-                                                     (column-uses? 'other-account-full-name)))))
+                                 (and (< 1 (xaccTransCountSplits
+                                            (xaccSplitGetParent split)))
+                                      (account-namestring
+                                       (xaccSplitGetAccount
+                                        (xaccSplitGetOtherSplit split))
+                                       (column-uses? 'other-account-code)
+                                       (column-uses? 'other-account-name)
+                                       (column-uses? 'other-account-full-name))))))
 
                (add-if (column-uses? 'shares)
                        (vector (_ "Shares")
