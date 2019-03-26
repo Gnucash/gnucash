@@ -489,17 +489,28 @@ also show overall period profit & loss."))
        monetaries)
       text))
 
+  (define (account->depth acc)
+    (cond ((vector? acc) 0)
+          (else (gnc-account-get-current-depth acc))))
+
+  (define (account->descendants acc)
+    (cond ((vector? acc) '())
+          (else (gnc-account-get-descendants acc))))
+
   (define (render-account account total?)
     ;; input: account-name
     ;; outputs: string or html-markup-anchor object
-    (let* ((acct-name ((if disable-account-indent?
-                           gnc-account-get-full-name
-                           xaccAccountGetName) account))
-           (acct-label (if total?
+    (let* ((virtual? (vector? account))
+           (acct-name (cond
+                       (virtual? (vector-ref account 0))
+                       (disable-account-indent? (gnc-account-get-full-name account))
+                       (else (xaccAccountGetName account))))
+           (acct-label (if (and (not virtual?) total?)
                            (string-append (_ "Total For ") acct-name)
                            acct-name))
            (acct-url (and account-anchor?
                           (not total?)
+                          (not virtual?)
                           (not (xaccAccountGetPlaceholder account))
                           (gnc:account-anchor-text account))))
       (gnc:make-html-text
@@ -515,14 +526,18 @@ also show overall period profit & loss."))
 
   (define (account-and-descendants account)
     (cons account (filter (lambda (acc) (member acc accountlist))
-                          (gnc-account-get-descendants account))))
+                          (account->descendants account))))
 
   (define (sum-accounts-at-col accounts datum convert?)
     ;; outputs: list of gnc-monetary
     (apply monetary+
            (map (lambda (acc)
-                  (let ((monetary (get-cell-monetary-fn acc datum)))
-                    (or (and convert? convert-curr-fn
+                  (let* ((virtual? (vector? acc))
+                         (monetary (if virtual?
+                                       ((vector-ref acc 1) datum)
+                                       (get-cell-monetary-fn acc datum))))
+                    (or (and convert?
+                             convert-curr-fn
                              (convert-curr-fn monetary datum))
                         monetary)))
                 accounts)))
@@ -600,11 +615,11 @@ also show overall period profit & loss."))
         (let* ((curr (car accounts))
                (rest (cdr accounts))
                (next (and (pair? rest) (car rest)))
-               (lvl-curr (gnc-account-get-current-depth curr))
-               (lvl-next (if next (gnc-account-get-current-depth next) 0))
+               (lvl-curr (account->depth curr))
+               (lvl-next (if next (account->depth next) 0))
                (curr-descendants-list (filter
                                        (lambda (acc) (member acc accountlist))
-                                       (gnc-account-get-descendants curr)))
+                                       (account->descendants curr)))
                (recursive-parent-acct? (and recursive-bals?
                                             (pair? curr-descendants-list)))
                (multilevel-parent-acct? (and (not recursive-bals?)
@@ -773,19 +788,6 @@ also show overall period profit & loss."))
                                                              ((balsheet) col-idx)
                                                              ((pnl) (1+ col-idx))))))))
                                    (exchange-fn monetary common-currency date)))))
-         (unrealized-calc-fn
-          (lambda (monetary col-idx)
-            (let* ((date (case price-source
-                           ((pricedb-latest) (current-time))
-                           (else (list-ref report-dates
-                                           (case report-type
-                                             ((balsheet) col-idx)
-                                             ((pnl) (1+ col-idx)))))))
-                   (latest (exchange-fn monetary common-currency date))
-                   (avg-cost-fn (gnc:case-exchange-fn
-                                 'average-cost common-currency date))
-                   (cost (avg-cost-fn monetary common-currency)))
-              (gnc:monetary+ latest (gnc:monetary-neg cost)))))
          ;; the following function generates an gnc:html-text object
          ;; to dump exchange rate for a particular column. From the
          ;; accountlist given, obtain commodities, and convert 1 unit
@@ -882,6 +884,53 @@ also show overall period profit & loss."))
                                    (last valid-splits))))
                   (and split
                        (gnc:split-anchor-text split)))))
+             (asset-liability-balances
+              (apply map gnc:monetaries-add
+                     (cdr
+                      (filter
+                       (lambda (acc-balances)
+                         (member (car acc-balances)
+                                 (append asset-accounts liability-accounts)))
+                       accounts-balances))))
+             (income-expense-balances
+              (apply map gnc:monetaries-add
+                     (cdr
+                      (filter
+                       (lambda (acc-balances)
+                         (member (car acc-balances)
+                                 (append income-accounts expense-accounts)))
+                       accounts-balances))))
+             (monetaries->exchanged
+              (lambda (monetaries target-currency price-source date)
+                (let ((exchange-fn (gnc:case-exchange-fn
+                                    price-source target-currency date)))
+                  (apply gnc:monetary+
+                         (map
+                          (lambda (mon)
+                            (exchange-fn mon target-currency date)))))))
+             (unrealized-calc-fn
+              (lambda (col-idx)
+                (let* ((date (case price-source
+                               ((pricedb-latest) (current-time))
+                               (else (list-ref report-dates col-idx))))
+                       (asset-liability-balance
+                        (list-ref asset-liability-balances col-idx))
+                       (latest (monetaries->exchanged
+                                asset-liability-balance
+                                report-currency price-source date))
+                       (avg-cost (monetaries->exchanged
+                                  asset-liability-balance
+                                  report-currency 'average-cost date)))
+                  (gnc:monetary+ latest (gnc:monetary-neg cost)))))
+             (retained-earnings-fn
+              (lambda (col-idx)
+                (let* ((date (case price-source
+                               ((pricedb-latest) (current-time))
+                               (else (list-ref report-dates col-idx))))
+                       (income-expense-balance
+                        (list-ref income-expense-balances col-idx)))
+                  (monetaries->exchanged income-expense-balance
+                                         report-currency price-source date))))
              (chart (and include-chart?
                          (gnc:make-report-anchor
                           networth-barchart-uuid report-obj
@@ -954,23 +1003,14 @@ also show overall period profit & loss."))
                         #:negate-amounts? #t))
 
         (unless (null? equity-accounts)
-          (add-to-table multicol-table-right (_ "Equity")
-                        equity-accounts))
-
-        (unless (or (null? asset-accounts)
-                    (null? liability-accounts))
-          (add-to-table multicol-table-right (_ "Net Worth")
-                        (append asset-accounts liability-accounts)
-                        #:show-accounts? #f
-                        #:show-title? #f
-                        #:force-total? #t))
-
-        (add-to-table multicol-table-right (_ "Unrealized Gains")
-                      (append asset-accounts liability-accounts)
-                      #:show-accounts? #f
-                      #:force-total? #t
-                      #:show-title? #f
-                      #:convert-fn unrealized-calc-fn)
+          (add-to-table
+           multicol-table-right (_ "Equity")
+                        (append equity-accounts
+                                (list
+                                 (vector "Unrealized Gains"
+                                         unrealized-calc-fn)
+                                 (vector "Retained Earnings"
+                                         retained-earnings-fn)))))
 
         (if (and common-currency show-rates?)
             (add-to-table multicol-table-right (_ "Exchange Rates")
