@@ -284,5 +284,6 @@ date point, a projected minimum balance including scheduled transactions."))
   'version 1
   'name report-title
   'report-guid "321d940d487d4ccbb4bd0467ffbadbf2"
+  'menu-path (list gnc:menuname-asset-liability)
   'options-generator options-generator
   'renderer document-renderer)
