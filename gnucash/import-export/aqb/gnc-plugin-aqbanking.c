@@ -131,20 +131,20 @@ static GtkActionEntry gnc_plugin_actions [] =
 		/* Translators: Message types MTxxxx are exchange formats used by the SWIFT network
 		   https://en.wikipedia.org/wiki/Society_for_Worldwide_Interbank_Financial_Telecommunication */
 		N_("Import _MT940"), NULL,
-        N_("Import a MT940 file into GnuCash"),
+        N_("Import an end-of-day account statement in SWIFT MT940 format into GnuCash."),
         G_CALLBACK(gnc_plugin_ab_cmd_mt940_import)
     },
     {
         "Mt942ImportAction", "go-previous", N_("Import MT94_2"), NULL,
-        N_("Import a MT942 file into GnuCash"),
+        N_("Import an interim account statement in SWIFT MT942 format into GnuCash."),
         G_CALLBACK(gnc_plugin_ab_cmd_mt942_import)
     },
     {
         "DtausImportAction", "go-previous",
-		/* Translators: DTAUS is a traditional german exchange format.
+	/* Translators: DTAUS is a traditional german exchange format.
            https://de.wikipedia.org/wiki/Datentr%C3%A4geraustauschverfahren */
 		N_("Import _DTAUS"), NULL,
-        N_("Import a DTAUS file into GnuCash"),
+        N_("Import a traditional german DTAUS file into GnuCash."),
         G_CALLBACK(gnc_plugin_ab_cmd_dtaus_import)
     },
     /* #ifdef CSV_IMPORT_FUNCTIONAL */
@@ -157,7 +157,7 @@ static GtkActionEntry gnc_plugin_actions [] =
     /* #endif */
     {
         "DtausImportSendAction", "go-previous", N_("Import DTAUS and _send..."), NULL,
-        N_("Import a DTAUS file into GnuCash and send the transfers online through Online Banking"),
+        N_("Import a DTAUS file into GnuCash and transmit its orders by Online Banking."),
         G_CALLBACK(gnc_plugin_ab_cmd_dtaus_importsend)
     },
 };
