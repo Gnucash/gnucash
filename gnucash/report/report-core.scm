@@ -725,10 +725,32 @@ not found.")))
 ;; return #t if all templates were saved successfully
 (define (gnc:save-all-reports)
   (let ((saved (N_ "Saved book custom reports"))
-        (saved-reports (string-join
-                        (map (compose gnc:report-template-serialize cdr)
-                             (gnc:custom-report-templates-list)))))
-    (qof-book-set-option (gnc-get-current-book) saved-reports '("custom-templates"))
+        (book (gnc-get-current-book))
+        (custom-templates (gnc:custom-report-templates-list)))
+    (qof-book-options-delete book '("custom-templates")) ;reset kvp root
+    (qof-book-set-option book (length custom-templates)
+                         '("custom-templates" "len"))
+    (for-each
+     (lambda (tmpl idx)
+       (let ((options (gnc:report-template-new-options (cdr tmpl)))
+             (key (format #f "rpt~a" idx)))
+         (qof-book-set-option book
+                              (gnc:report-template-report-guid (cdr tmpl))
+                              (list "custom-templates" key "guid"))
+         (qof-book-set-option book
+                              (gnc:report-template-name (cdr tmpl))
+                              (list "custom-templates" key "name"))
+         (qof-book-set-option book
+                              (gnc:report-template-parent-type (cdr tmpl))
+                              (list "custom-templates" key "parenttype"))
+         (qof-book-set-option book
+                              (gnc:report-template-menu-path (cdr tmpl))
+                              (list "custom-templates" key "menupath"))
+         (gnc:options-scm->kvp-path
+          options book (list "custom-templates" key "optionset")
+          #f)))
+     custom-templates
+     (iota (length custom-templates)))
     (gnc:gui-msg saved (_ saved))))
 
 ;; the following function will: (1) save the initial custom-reports
@@ -740,27 +762,61 @@ not found.")))
 ;; global-saved-reports.
 (export gnc:load-book-custom-templates)
 (define gnc:load-book-custom-templates
-  (let ((global-saved-reports (gnc:custom-report-templates-list)))
+  (let ((global-saved-reports #f))
     (lambda ()
-      (let ((loaded (N_ "Loaded book custom reports"))
-            ;; Translators: first ~a is error-type, second ~a is error-details
-            (failed (N_ "Error ~a loading book custom reports: ~a"))
-            (global (N_ "Loaded global custom reports"))
-            (book-reports (qof-book-get-option (gnc-get-current-book)
-                                                '("custom-templates"))))
+      (unless global-saved-reports
+        ;; global-saved-reports *cannot* be initialized during initial
+        ;; function definition because saved-reports hasn't been
+        ;; loaded yet. we must initialize upon first call to
+        ;; gnc:load-book-custom-templates
+        (set! global-saved-reports (gnc:custom-report-templates-list)))
+      (let* ((loaded (N_ "Loaded book custom reports"))
+             ;; Translators: first ~a is error-type, second ~a is error-details
+             (failed (N_ "Error ~a loading book custom reports: ~a"))
+             (global (N_ "Loaded global custom reports"))
+             (book (gnc-get-current-book))
+             (book-reports (qof-book-get-option book '("custom-templates" "len"))))
+
         (cond
-         (book-reports
+         ;; book has saved-reports. remove custom-templates and load from book.
+         ((and book-reports (integer? book-reports))
           (for-each
            (lambda (guid)
              (hash-remove! *gnc:_report-templates_* guid))
            (gnc:custom-report-template-guids))
-          (catch #t
-            (lambda ()
-              (eval-string book-reports)
-              (gnc:gui-msg loaded (_ loaded)))
-            (lambda (k . args)
-              (gui-warning
-               (format #f (_ failed) k args)))))
+
+          (for-each
+           (lambda (idx)
+             (let* ((key (format #f "rpt~a" idx))
+                    (guid (qof-book-get-option
+                           book (list "custom-templates" key "guid")))
+                    (tname (qof-book-get-option
+                            book (list "custom-templates" key "name")))
+                    (parenttype (qof-book-get-option
+                                 book (list "custom-templates" key "parenttype")))
+                    (menupath (qof-book-get-option
+                               book (list "custom-templates" key "menupath")))
+                    (options-gen
+                     (lambda ()
+                       (let ((options (gnc:report-template-new-options/report-guid
+                                       parenttype name))
+                             (embedded-report-ids '()))
+                         (gnc:options-kvp-path->scm
+                          options book
+                          (list "custom-templates" key "optionset"))
+                         options))))
+               (gnc:define-report
+                'version 1
+                'name name
+                'report-guid guid
+                'parent-type parenttype
+                'options-generator options-gen
+                'menu-path menupath
+                'renderer (gnc:report-template-renderer/report-guid
+                           parenttype name))))
+           (iota book-reports)))
+
+         ;; book has no saved-reports. revert to global saved-reports.
          (else
           (for-each
            (lambda (global)
