@@ -46,11 +46,6 @@
 #include "gnc-amount-edit.h"
 #include "gnc-ui.h"
 
-#if AQBANKING_VERSION_INT > 50200 || ((AQBANKING_VERSION_INT == 50200) && (AQBANKING_VERSION_BUILD > 0))
-/** Defined for aqbanking > 5.2.0 */
-# define AQBANKING_VERSION_GREATER_5_2_0
-#endif
-
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
 
@@ -620,27 +615,6 @@ gnc_ab_trans_dialog_verify_values(GncABTransDialog *td)
         g_free(purpose);
     }
 
-#if 0
-//    // AQBANKING_VERSION_INT >= 50307
-//    if (gnc_ab_trans_isSEPA(td->trans_type))
-//    {
-//        AB_USER *u = AH_Job_GetUser(j);
-//        uint32_t uflags;
-//            (AB_Transaction_CheckForSepaConformity(td->ab_trans, 0) != 0))
-    // need to check how to do this for aqbanking >= 5.3.7 when I have time
-    {
-        gnc_ab_trans_dialog_entry_set (td->recp_name_entry,
-                                       _("The text you entered contained at least one character that is invalid for a SEPA transaction. "
-                                         "In SEPA, unfortunately only exactly the following characters are allowed: "
-                                         "a...z, A...Z, 0...9, and the following punctuations: ' : ? , - ( + . ) / "
-                                         "\n\n"
-                                         "In particular, neither Umlauts nor an ampersand (&) is allowed, "
-                                         "neither in the recipient or sender name nor in any purpose line."),
-                                       "process-stop");
-        values_ok = FALSE;
-    }
-#endif
-
     gtk_widget_set_sensitive(td->exec_button, values_ok);
     gnc_ab_trans_dialog_clear_transaction(td);
 }
@@ -662,13 +636,7 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
     }
 
     /* Activate as many purpose entries as available for the job */
-    joblimits =
-#ifdef AQBANKING_VERSION_GREATER_5_2_0
-            AB_Job_GetFieldLimits
-#else
-            AB_JobSingleTransfer_GetFieldLimits
-#endif
-            (job);
+    joblimits = AB_Job_GetFieldLimits (job);
     max_purpose_lines = joblimits ?
                         AB_TransactionLimits_GetMaxLinesPurpose(joblimits) : 2;
     gtk_widget_set_sensitive(td->purpose_cont_entry, max_purpose_lines > 1);
@@ -829,11 +797,7 @@ gnc_ab_trans_dialog_get_available_empty_job(AB_ACCOUNT *ab_acc, GncABTransType t
         break;
     };
 
-    if (!job || AB_Job_CheckAvailability(job
-#ifndef AQBANKING_VERSION_5_PLUS
-                                         , 0
-#endif
-                                        ))
+    if (!job || AB_Job_CheckAvailability(job))
     {
         if (job) AB_Job_free(job);
         return NULL;
@@ -859,29 +823,7 @@ gnc_ab_get_trans_job(AB_ACCOUNT *ab_acc, const AB_TRANSACTION *ab_trans,
     job = gnc_ab_trans_dialog_get_available_empty_job(ab_acc, trans_type);
     if (job)
     {
-#ifdef AQBANKING_VERSION_GREATER_5_2_0
         AB_Job_SetTransaction(job, ab_trans);
-#else
-        switch (trans_type)
-        {
-        case SINGLE_DEBITNOTE:
-            AB_JobSingleDebitNote_SetTransaction(job, ab_trans);
-            break;
-        case SINGLE_INTERNAL_TRANSFER:
-            AB_JobInternalTransfer_SetTransaction(job, ab_trans);
-            break;
-        case SEPA_TRANSFER:
-            AB_JobSepaTransfer_SetTransaction(job, ab_trans);
-            break;
-        case SEPA_DEBITNOTE:
-            AB_JobSepaDebitNote_SetTransaction(job, ab_trans);
-            break;
-        case SINGLE_TRANSFER:
-        default:
-            AB_JobSingleTransfer_SetTransaction(job, ab_trans);
-            break;
-        };
-#endif
     }
     return job;
 }

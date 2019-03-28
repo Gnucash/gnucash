@@ -57,11 +57,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-session.h"
 #include "import-account-matcher.h"
-
-#if AQBANKING_VERSION_INT > 49908
-/* For aqbanking > 4.99.8. See below. */
-# include <aqbanking/dlg_setup.h>
-#endif
+#include <aqbanking/dlg_setup.h>
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_ASSISTANT;
@@ -91,10 +87,6 @@ void aai_match_page_prepare (GtkAssistant *assistant, gpointer user_data);
 static gboolean banking_has_accounts(AB_BANKING *banking);
 static void hash_from_kvp_acc_cb(Account *gnc_acc, gpointer user_data);
 static ABInitialInfo *single_info = NULL;
-
-#if AQBANKING_VERSION_INT <= 49908
-static void child_exit_cb(GPid pid, gint status, gpointer data);
-#endif
 static gchar *ab_account_longname(const AB_ACCOUNT *ab_acc);
 static AB_ACCOUNT *update_account_list_acc_cb(AB_ACCOUNT *ab_acc, gpointer user_data);
 static void update_account_list(ABInitialInfo *info);
@@ -195,11 +187,7 @@ aai_destroy_cb(GtkWidget *object, gpointer user_data)
 
     if (info->gnc_hash)
     {
-#ifdef AQBANKING_VERSION_4_EXACTLY
-        AB_Banking_OnlineFini(info->api, 0);
-#else
         AB_Banking_OnlineFini(info->api);
-#endif
         g_hash_table_destroy(info->gnc_hash);
         info->gnc_hash = NULL;
     }
@@ -241,12 +229,6 @@ aai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
     GtkWidget *page = gtk_assistant_get_nth_page (GTK_ASSISTANT(info->window), num);
 
     AB_BANKING *banking = info->api;
-#if AQBANKING_VERSION_INT <= 49908
-    GWEN_BUFFER *buf;
-    gboolean wizard_exists;
-    const gchar *wizard_path;
-    gboolean qt_probably_unavailable = FALSE;
-#endif /* AQBANKING_VERSION_INT */
     g_return_if_fail(banking);
 
     ENTER("user_data: %p", user_data);
@@ -257,8 +239,6 @@ aai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
         return;
     }
 
-#if AQBANKING_VERSION_INT > 49908
-    /* For aqbanking5 > 4.99.8: Use AB_Banking_GetNewUserDialog(). */
     {
         GWEN_DIALOG *dlg =
             AB_SetupDialog_new(banking);
@@ -288,107 +268,6 @@ aai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
             PERR("Got error on AB_Banking_OnlineFini!");
         }
     }
-#else
-    /* Previous implementation for aqbanking <= 4.99.8: Use the
-     * external application. */
-
-
-    /* This is the point where we look for and start an external
-     * application shipped with aqbanking that contains the setup assistant
-     * for AqBanking related stuff.  It requires qt (but not kde).  This
-     * application contains the very verbose step-by-step setup wizard
-     * for the AqBanking account, and the application is shared with
-     * other AqBanking-based financial managers that offer the AqBanking
-     * features (e.g. KMyMoney).  See gnucash-devel discussion here
-     * https://lists.gnucash.org/pipermail/gnucash-devel/2004-December/012351.html
-     */
-    buf = GWEN_Buffer_new(NULL, 300, 0, 0);
-    AB_Banking_FindWizard(banking, "", NULL, buf);
-    wizard_exists = *GWEN_Buffer_GetStart(buf) != 0;
-    wizard_path = GWEN_Buffer_GetStart(buf);
-
-    if (wizard_exists)
-    {
-        /* Really check whether the file exists */
-        gint fd = g_open(wizard_path, O_RDONLY, 0);
-        if (fd == -1)
-            wizard_exists = FALSE;
-        else
-            close(fd);
-    }
-
-#ifdef G_OS_WIN32
-    {
-        const char *check_file = "qtdemo.exe";
-        gchar *found_program = g_find_program_in_path(check_file);
-        if (found_program)
-        {
-            g_debug("Yes, we found the Qt demo program in %s\n", found_program);
-            g_free(found_program);
-        }
-        else
-        {
-            g_warning("Ouch, no Qt demo program was found. Qt not installed?\n");
-            qt_probably_unavailable = TRUE;
-        }
-    }
-#endif
-
-    if (wizard_exists)
-    {
-        /* Call the qt wizard. See the note above about why this
-         * approach is chosen. */
-
-        GPid pid;
-        GError *error = NULL;
-        gchar *argv[2];
-        gboolean spawned;
-
-        argv[0] = g_strdup (wizard_path);
-        argv[1] = NULL;
-        spawned = g_spawn_async (NULL, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
-                                 NULL, NULL, &pid, &error);
-        g_free (argv[0]);
-
-        if (error)
-            g_critical(
-                "Error on starting AqBanking setup wizard: Code %d: %s",
-                error->code, error->message ? error->message : "(null)");
-
-        if (!spawned)
-        {
-            g_critical("Could not start AqBanking setup wizard: %s",
-                       error->message ? error->message : "(null)");
-            g_error_free (error);
-        }
-        else
-        {
-            /* Keep a reference to info that can survive info */
-            info->deferred_info = g_new0(DeferredInfo, 1);
-            info->deferred_info->initial_info = info;
-            info->deferred_info->wizard_path = g_strdup(wizard_path);
-            info->deferred_info->qt_probably_unavailable =
-                qt_probably_unavailable;
-
-            g_child_watch_add (pid, child_exit_cb, info->deferred_info);
-        }
-    }
-    else
-    {
-        g_warning("on_aqhbci_button: Oops, no aqhbci setup wizard found.");
-        gnc_error_dialog
-        (GTK_WINDOW (info->window),
-         _("The external program \"AqBanking Setup Wizard\" has not "
-           "been found. \n\n"
-           "The %s package should include the "
-           "program \"qt3-wizard\". Please check your installation to "
-           "ensure this program is present. On some distributions this "
-           "may require installing additional packages."),
-         QT3_WIZARD_PACKAGE);
-    }
-
-    GWEN_Buffer_free(buf);
-#endif
 
     /* Enable the Assistant Buttons if we accounts */
     if (banking_has_accounts(info->api))
@@ -415,11 +294,7 @@ aai_match_page_prepare (GtkAssistant *assistant, gpointer user_data)
     if (!info->match_page_prepared)
     {
         /* Load aqbanking accounts */
-#ifdef AQBANKING_VERSION_4_EXACTLY
-        AB_Banking_OnlineInit(info->api, 0);
-#else
         AB_Banking_OnlineInit(info->api);
-#endif
         /* Determine current mapping */
         root = gnc_book_get_root_account(gnc_get_current_book());
         info->gnc_hash = g_hash_table_new(&g_direct_hash, &g_direct_equal);
@@ -461,11 +336,7 @@ banking_has_accounts(AB_BANKING *banking)
 
     g_return_val_if_fail(banking, FALSE);
 
-#ifdef AQBANKING_VERSION_4_EXACTLY
-    AB_Banking_OnlineInit(banking, 0);
-#else
     AB_Banking_OnlineInit(banking);
-#endif
 
     accl = AB_Banking_GetAccounts(banking);
     if (accl && (AB_Account_List2_GetSize(accl) > 0))
@@ -476,11 +347,7 @@ banking_has_accounts(AB_BANKING *banking)
     if (accl)
         AB_Account_List2_free(accl);
 
-#ifdef AQBANKING_VERSION_4_EXACTLY
-    AB_Banking_OnlineFini(banking, 0);
-#else
     AB_Banking_OnlineFini(banking);
-#endif
 
     return result;
 }
@@ -495,82 +362,6 @@ hash_from_kvp_acc_cb(Account *gnc_acc, gpointer user_data)
     if (ab_acc)
         g_hash_table_insert(data->hash, ab_acc, gnc_acc);
 }
-
-#if AQBANKING_VERSION_INT <= 49908
-static void
-child_exit_cb(GPid pid, gint status, gpointer data)
-{
-    DeferredInfo *deferred_info = data;
-    ABInitialInfo *info = deferred_info->initial_info;
-    gint num = gtk_assistant_get_current_page (GTK_ASSISTANT(info->window));
-    GtkWidget *page = gtk_assistant_get_nth_page (GTK_ASSISTANT(info->window), num);
-
-    gint exit_status;
-
-#ifdef G_OS_WIN32
-    exit_status = status;
-#else
-    exit_status = WEXITSTATUS(status);
-#endif
-
-    g_spawn_close_pid(pid);
-
-    if (!info)
-    {
-        g_message("Online Banking wizard exited, but the assistant has been "
-                  "destroyed already");
-        goto cleanup_child_exit_cb;
-    }
-
-    if (exit_status == 0)
-    {
-        gtk_assistant_set_page_complete (GTK_ASSISTANT(info->window), page, TRUE);
-    }
-    else
-    {
-        if (deferred_info->qt_probably_unavailable)
-        {
-            g_warning("on_aqhbci_button: Oops, aqhbci wizard return nonzero "
-                      "value: %d. The called program was \"%s\".\n",
-                      exit_status, deferred_info->wizard_path);
-            gnc_error_dialog
-            (GTK_WINDOW (info->window), "%s",
-             _("The external program \"AqBanking Setup Wizard\" failed "
-               "to run successfully because the "
-               "additional software \"Qt\" was not found. "
-               "Please install the \"Qt/Windows Open Source Edition\" "
-               "from Trolltech by downloading it from www.trolltech.com"
-               "\n\n"
-               "If you have installed Qt already, you will have to adapt "
-               "the PATH variable of your system appropriately. "
-               "Contact the GnuCash developers if you need further "
-               "assistance on how to install Qt correctly."
-               "\n\n"
-               "Online Banking cannot be setup without Qt. Press \"Close\" "
-               "now, then \"Cancel\" to cancel the Online Banking setup."));
-        }
-        else
-        {
-            g_warning("on_aqhbci_button: Oops, aqhbci wizard return nonzero "
-                      "value: %d. The called program was \"%s\".\n",
-                      exit_status, deferred_info->wizard_path);
-            gnc_error_dialog
-            (GTK_WINDOW (info->window), "%s",
-             _("The external program \"AqBanking Setup Wizard\" failed "
-               "to run successfully. Online Banking can only be setup "
-               "if this wizard has run successfully. "
-               "Please try running the \"AqBanking Setup Wizard\" again."));
-        }
-        gtk_assistant_set_page_complete (GTK_ASSISTANT(info->window), page, FALSE);
-    }
-
-cleanup_child_exit_cb:
-    g_free(deferred_info->wizard_path);
-    g_free(deferred_info);
-    if (info)
-        info->deferred_info = NULL;
-}
-#endif /* AQBANKING_VERSION_INT <= 49908 */
 
 static gchar *
 ab_account_longname(const AB_ACCOUNT *ab_acc)

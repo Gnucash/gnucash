@@ -117,11 +117,7 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
         g_warning("gnc_ab_gettrans: Couldn't get AqBanking API");
         return;
     }
-    if (AB_Banking_OnlineInit(api
-#ifdef AQBANKING_VERSION_4_EXACTLY
-                              , 0
-#endif
-                             ) != 0)
+    if (AB_Banking_OnlineInit(api) != 0)
     {
         g_warning("gnc_ab_gettrans: Couldn't initialize AqBanking API");
         goto cleanup;
@@ -148,11 +144,7 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
 
     /* Get a GetTransactions job and enqueue it */
     job = AB_JobGetTransactions_new(ab_acc);
-    if (!job || AB_Job_CheckAvailability(job
-#ifndef AQBANKING_VERSION_5_PLUS
-                                         , 0
-#endif
-                                        ))
+    if (!job || AB_Job_CheckAvailability(job))
     {
         g_warning("gnc_ab_gettrans: JobGetTransactions not available for this "
                   "account");
@@ -176,11 +168,7 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
     context = AB_ImExporterContext_new();
 
     /* Execute the job */
-    AB_Banking_ExecuteJobs(api, job_list, context
-#ifndef AQBANKING_VERSION_5_PLUS
-                           , 0
-#endif
-                          );
+    AB_Banking_ExecuteJobs(api, job_list, context);
     /* Ignore the return value of AB_Banking_ExecuteJobs(), as the job's
      * status always describes better whether the job was actually
      * transferred to and accepted by the bank.  See also
@@ -234,10 +222,6 @@ cleanup:
     if (from_date)
         GWEN_Time_free(from_date);
     if (online)
-#ifdef AQBANKING_VERSION_4_EXACTLY
-        AB_Banking_OnlineFini(api, 0);
-#else
         AB_Banking_OnlineFini(api);
-#endif
     gnc_AB_BANKING_fini(api);
 }

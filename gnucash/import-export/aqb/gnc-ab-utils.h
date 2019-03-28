@@ -52,24 +52,6 @@ G_BEGIN_DECLS
  * in the interval [0..99]. */
 #define GWENHYWFAR_VERSION_INT (10000 * GWENHYWFAR_VERSION_MAJOR + 100 * GWENHYWFAR_VERSION_MINOR + GWENHYWFAR_VERSION_PATCHLEVEL)
 
-#if AQBANKING_VERSION_INT >= 39900
-/** Defined if libaqbanking4 as opposed to libaqbanking3 or earlier is
- * being used */
-# define AQBANKING_VERSION_4_PLUS
-#endif
-
-#if AQBANKING_VERSION_INT >= 49900
-/** Defined if libaqbanking5 as opposed to libaqbanking4 or earlier is
- * being used */
-# define AQBANKING_VERSION_5_PLUS
-#endif
-
-#if defined(AQBANKING_VERSION_4_PLUS) && !defined(AQBANKING_VERSION_5_PLUS)
-/** Defined if libaqbanking4 is used and neither a newer nor an older
- * version of libaqbanking. */
-# define AQBANKING_VERSION_4_EXACTLY
-#endif
-
 #define GNC_PREFS_GROUP_AQBANKING       "dialogs.import.hbci"
 #define GNC_PREF_FORMAT_SWIFT940        "format-swift-mt940"
 #define GNC_PREF_FORMAT_SWIFT942        "format-swift-mt942"

@@ -47,10 +47,7 @@
 #include "import-utilities.h"
 #include "qof.h"
 #include "engine-helpers.h"
-
-#ifdef AQBANKING_VERSION_5_PLUS
-# include <aqbanking/abgui.h>
-#endif /* AQBANKING_VERSION_5_PLUS */
+#include <aqbanking/abgui.h>
 
 /* This static indicates the debugging module that this .o belongs to.  */
 G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
@@ -155,56 +152,31 @@ gnc_AB_BANKING_new(void)
         api = AB_Banking_new("gnucash", NULL, 0);
         g_return_val_if_fail(api, NULL);
 
-#ifdef AQBANKING_VERSION_4_PLUS
         /* Check for config migration */
-        if (AB_Banking_HasConf4(api
-# ifndef AQBANKING_VERSION_5_PLUS
-                                , 0
-# endif
-                               ) != 0)
+        if (AB_Banking_HasConf4(api) != 0)
         {
-            if (AB_Banking_HasConf3(api
-# ifndef AQBANKING_VERSION_5_PLUS
-                                    , 0
-# endif
-                                   ) == 0)
+            if (AB_Banking_HasConf3(api) == 0)
             {
                 g_message("gnc_AB_BANKING_new: importing aqbanking3 configuration\n");
-                if (AB_Banking_ImportConf3(api
-# ifndef AQBANKING_VERSION_5_PLUS
-                                           , 0
-# endif
-                                          ) < 0)
+                if (AB_Banking_ImportConf3(api) < 0)
                 {
                     g_message("gnc_AB_BANKING_new: unable to import aqbanking3 configuration\n");
                 }
             }
-            else if (AB_Banking_HasConf2(api
-# ifndef AQBANKING_VERSION_5_PLUS
-                                         , 0
-# endif
-                                        ) == 0)
+            else if (AB_Banking_HasConf2(api) == 0)
             {
                 g_message("gnc_AB_BANKING_new: importing aqbanking2 configuration\n");
-                if (AB_Banking_ImportConf2(api
-# ifndef AQBANKING_VERSION_5_PLUS
-                                           , 0
-# endif
-                                          ) < 0)
+                if (AB_Banking_ImportConf2(api) < 0)
                 {
                     g_message("gnc_AB_BANKING_new: unable to import aqbanking2 configuration\n");
                 }
             }
         }
-#endif /* AQBANKING_VERSION_4_PLUS */
 
         /* Init the API */
         g_return_val_if_fail(AB_Banking_Init(api) == 0, NULL);
-
-#ifdef AQBANKING_VERSION_5_PLUS
         gnc_gwengui_extended_by_ABBanking = GWEN_Gui_GetGui();
         AB_Gui_Extend(gnc_gwengui_extended_by_ABBanking, api);
-#endif /* AQBANKING_VERSION_5_PLUS */
 
         /* Cache it */
         gnc_AB_BANKING = api;
@@ -242,21 +214,17 @@ gnc_AB_BANKING_fini(AB_BANKING *api)
     {
         if (--gnc_AB_BANKING_refcount == 0)
         {
-#ifdef AQBANKING_VERSION_5_PLUS
             if (gnc_gwengui_extended_by_ABBanking)
                 AB_Gui_Unextend(gnc_gwengui_extended_by_ABBanking);
             gnc_gwengui_extended_by_ABBanking = NULL;
-#endif /* AQBANKING_VERSION_5_PLUS */
             return AB_Banking_Fini(api);
         }
     }
     else
     {
-#ifdef AQBANKING_VERSION_5_PLUS
         if (gnc_gwengui_extended_by_ABBanking)
             AB_Gui_Unextend(gnc_gwengui_extended_by_ABBanking);
         gnc_gwengui_extended_by_ABBanking = NULL;
-#endif /* AQBANKING_VERSION_5_PLUS */
         return AB_Banking_Fini(api);
     }
     return 0;
@@ -708,11 +676,7 @@ txn_transaction_cb(const AB_TRANSACTION *element, gpointer user_data)
         job = gnc_ab_get_trans_job(data->ab_acc, ab_trans, trans_type);
 
         /* Check whether we really got a job */
-        if (!job || AB_Job_CheckAvailability(job
-#ifndef AQBANKING_VERSION_5_PLUS
-                                             , 0
-#endif
-                                            ))
+        if (!job || AB_Job_CheckAvailability(job))
         {
             /* Oops, no job, probably not supported by bank */
             if (gnc_verify_dialog(
@@ -1157,18 +1121,7 @@ gnc_ab_get_permanent_certs(void)
     AB_BANKING *banking = gnc_AB_BANKING_new();
 
     g_return_val_if_fail(banking, NULL);
-#ifdef AQBANKING_VERSION_4_PLUS
-    rv = AB_Banking_LoadSharedConfig(banking, "certs", &perm_certs
-# ifndef AQBANKING_VERSION_5_PLUS
-                                     , 0
-# endif
-                                    );
-#else
-    /* FIXME: Add code for older AqBanking versions */
-    /* See QBankmanager 0.9.50 in src/kbanking/libs/kbanking.cpp lines 323ff
-       for a proper example of how to do this */
-    rv = 0;
-#endif
+    rv = AB_Banking_LoadSharedConfig(banking, "certs", &perm_certs);
     gnc_AB_BANKING_fini(banking);
     g_return_val_if_fail(rv >= 0, NULL);
     return perm_certs;

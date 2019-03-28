@@ -44,15 +44,9 @@
 
 #include "gnc-ab-utils.h"
 
-#ifdef AQBANKING_VERSION_5_PLUS
 # include <gwenhywfar/syncio_file.h>
 # include <gwenhywfar/syncio_buffered.h>
 typedef GWEN_SYNCIO GWEN_IO_LAYER;
-#else
-# include <gwenhywfar/io_file.h>
-# include <gwenhywfar/io_buffered.h>
-# include <gwenhywfar/iomanager.h>
-#endif
 
 #include "dialog-ab-trans.h"
 #include "dialog-utils.h"
@@ -125,11 +119,7 @@ gnc_file_aqbanking_import(GtkWindow *parent,
         g_warning("gnc_file_aqbanking_import: Couldn't get AqBanking API");
         goto cleanup;
     }
-    if (AB_Banking_OnlineInit(api
-#ifdef AQBANKING_VERSION_4_EXACTLY
-                              , 0
-#endif
-                             ) != 0)
+    if (AB_Banking_OnlineInit(api) != 0)
     {
         g_warning("gnc_file_aqbanking_import: "
                   "Couldn't initialize AqBanking API");
@@ -181,7 +171,6 @@ gnc_file_aqbanking_import(GtkWindow *parent,
     context = AB_ImExporterContext_new();
 
     /* Wrap file in buffered gwen io */
-#ifdef AQBANKING_VERSION_5_PLUS
     close(dtaus_fd);
     io = GWEN_SyncIo_File_new(selected_filename, GWEN_SyncIo_File_CreationMode_OpenExisting);
     g_assert(io);
@@ -197,34 +186,17 @@ gnc_file_aqbanking_import(GtkWindow *parent,
         }
         g_assert(GWEN_SyncIo_GetStatus(io) == GWEN_SyncIo_Status_Connected);
     }
-#else
-    io = GWEN_Io_LayerFile_new(dtaus_fd, -1);
-    g_assert(io);
-    if (GWEN_Io_Manager_RegisterLayer(io))
-    {
-        g_warning("gnc_file_aqbanking_import: Failed to wrap file");
-        goto cleanup;
-    }
-#endif
     dtaus_fd = -1;
 
     /* Run the import */
-    if (AB_ImExporter_Import(importer, context, io, db_profile
-#ifndef AQBANKING_VERSION_5_PLUS
-                             , 0
-#endif
-                            ))
+    if (AB_ImExporter_Import(importer, context, io, db_profile))
     {
         g_warning("gnc_file_aqbanking_import: Error on import");
         goto cleanup;
     }
 
     /* Close the file */
-#ifdef AQBANKING_VERSION_5_PLUS
     GWEN_SyncIo_free(io);
-#else
-    GWEN_Io_Layer_free(io);
-#endif
     io = NULL;
 
     /* Before importing the results, if this is a new book, let user specify
@@ -259,11 +231,7 @@ gnc_file_aqbanking_import(GtkWindow *parent,
             }
 
             /* And execute the jobs */
-            AB_Banking_ExecuteJobs(api, job_list, execution_context
-#ifndef AQBANKING_VERSION_5_PLUS
-                                   , 0
-#endif
-                                  );
+            AB_Banking_ExecuteJobs(api, job_list, execution_context);
 
             /* Ignore the return value of AB_Banking_ExecuteJobs(), as the job's
              * status always describes better whether the job was actually
@@ -351,11 +319,7 @@ gnc_file_aqbanking_import(GtkWindow *parent,
 cleanup:
     if (io)
     {
-#ifdef AQBANKING_VERSION_5_PLUS
         GWEN_SyncIo_free(io);
-#else
-        GWEN_Io_Layer_free(io);
-#endif
     }
 
     if (job_list)
@@ -369,11 +333,7 @@ cleanup:
     if (gui)
         gnc_GWEN_Gui_release(gui);
     if (online)
-#ifdef AQBANKING_VERSION_4_EXACTLY
-        AB_Banking_OnlineFini(api, 0);
-#else
         AB_Banking_OnlineFini(api);
-#endif
     if (api)
         gnc_AB_BANKING_fini(api);
     if (dtaus_fd != -1)
