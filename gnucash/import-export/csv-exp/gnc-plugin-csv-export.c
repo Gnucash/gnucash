@@ -61,7 +61,8 @@ static GtkActionEntry gnc_plugin_actions [] =
         G_CALLBACK (gnc_plugin_csv_export_trans_cmd)
     },
     {
-        "CsvExportRegisterAction", "go-next", N_("Export _Active Register to CSV..."), NULL,
+        "CsvExportRegisterAction", "go-next", N_("Export A_ctive Register to CSV...")
+	/* _A is already used by Export Accounts */, NULL,
         N_("Export the Active Register to a CSV file"),
         G_CALLBACK (gnc_plugin_csv_export_register_cmd)
     },
