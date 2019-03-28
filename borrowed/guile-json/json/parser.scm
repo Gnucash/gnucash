@@ -1,23 +1,21 @@
 ;;; (json parser) --- Guile JSON implementation.
 
-;; Copyright (C) 2013 Aleix Conchillo Flaque <aconchillo@gmail.com>
+;; Copyright (C) 2013-2018 Aleix Conchillo Flaque <aconchillo@gmail.com>
 ;;
 ;; This file is part of guile-json.
 ;;
-;; guile-json is free software; you can redistribute it and/or
-;; modify it under the terms of the GNU Lesser General Public
-;; License as published by the Free Software Foundation; either
-;; version 3 of the License, or (at your option) any later version.
+;; guile-json is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 3 of the License, or
+;; (at your option) any later version.
 ;;
-;; guile-json is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-;; Lesser General Public License for more details.
+;; guile-json is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+;; General Public License for more details.
 ;;
-;; You should have received a copy of the GNU Lesser General Public
-;; License along with guile-json; if not, write to the Free Software
-;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-;; 02110-1301 USA
+;; You should have received a copy of the GNU General Public License
+;; along with guile-json. If not, see https://www.gnu.org/licenses/.
 
 ;;; Commentary:
 
@@ -79,76 +77,85 @@
 
 (define (read-exp-part parser)
   (let ((c (parser-peek-char parser)) (s ""))
-    (case c
-      ;; Stop parsing if whitespace found.
-      ((#\ht #\vt #\lf #\cr #\sp) s)
-      ;; We might be in an array or object, so stop here too.
-      ((#\, #\] #\}) s)
-      ;; We might have the exponential part
-      ((#\e #\E)
-       (let ((ch (parser-read-char parser)) ; current char
-             (sign (read-sign parser))
-             (digits (read-digits parser)))
-         ;; If we don't have sign or digits, we have an invalid
-         ;; number.
-         (if (not (and (string-null? sign)
-                       (string-null? digits)))
-             (string-append s (string ch) sign digits)
-             #f)))
-      ;; If we have a character different than e or E, we have an
-      ;; invalid number.
-      (else #f))))
+    (cond
+     ((eof-object? c) s)
+     (else
+      (case c
+        ;; Stop parsing if whitespace found.
+        ((#\ht #\vt #\lf #\cr #\sp) s)
+        ;; We might be in an array or object, so stop here too.
+        ((#\, #\] #\}) s)
+        ;; We might have the exponential part
+        ((#\e #\E)
+         (let ((ch (parser-read-char parser)) ; current char
+               (sign (read-sign parser))
+               (digits (read-digits parser)))
+           ;; If we don't have sign or digits, we have an invalid
+           ;; number.
+           (if (not (and (string-null? sign)
+                         (string-null? digits)))
+               (string-append s (string ch) sign digits)
+               #f)))
+        ;; If we have a character different than e or E, we have an
+        ;; invalid number.
+        (else #f))))))
 
 (define (read-real-part parser)
   (let ((c (parser-peek-char parser)) (s ""))
-    (case c
-      ;; Stop parsing if whitespace found.
-      ((#\ht #\vt #\lf #\cr #\sp) s)
-      ;; We might be in an array or object, so stop here too.
-      ((#\, #\] #\}) s)
-      ;; If we read . we might have a real number
-      ((#\.)
-       (let ((ch (parser-read-char parser))
-             (digits (read-digits parser)))
-         ;; If we have digits, try to read the exponential part,
-         ;; otherwise we have an invalid number.
-         (cond
-          ((not (string-null? digits))
-           (let ((exp (read-exp-part parser)))
-             (cond
-              (exp (string-append s (string ch) digits exp))
-              (else #f))))
-          (else #f))))
-      ;; If we have a character different than . we might continue
-      ;; processing.
-      (else #f))))
+    (cond
+     ((eof-object? c) s)
+     (else
+      (case c
+        ;; Stop parsing if whitespace found.
+        ((#\ht #\vt #\lf #\cr #\sp) s)
+        ;; We might be in an array or object, so stop here too.
+        ((#\, #\] #\}) s)
+        ;; If we read . we might have a real number
+        ((#\.)
+         (let ((ch (parser-read-char parser))
+               (digits (read-digits parser)))
+           ;; If we have digits, try to read the exponential part,
+           ;; otherwise we have an invalid number.
+           (cond
+            ((not (string-null? digits))
+             (let ((exp (read-exp-part parser)))
+               (cond
+                (exp (string-append s (string ch) digits exp))
+                (else #f))))
+            (else #f))))
+        ;; If we have a character different than . we might continue
+        ;; processing.
+        (else #f))))))
 
 (define (read-number parser)
   (let loop ((c (parser-peek-char parser)) (s ""))
-    (case c
-      ;; Stop parsing if whitespace found.
-      ((#\ht #\vt #\lf #\cr #\sp) s)
-      ;; We might be in an array or object, so stop here too.
-      ((#\, #\] #\}) s)
-      ((#\-)
-       (let ((ch (parser-read-char parser)))
-         (loop (parser-peek-char parser)
-               (string-append s (string ch)))))
-      ((#\0)
-       (let ((ch (parser-read-char parser)))
-         (string-append s
-                        (string ch)
-                        (or (read-real-part parser)
-                            (throw 'json-invalid parser)))))
-      ((#\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9)
-       (let ((ch (parser-read-char parser)))
-         (string-append s
-                        (string ch)
-                        (read-digits parser)
-                        (or (read-real-part parser)
-                            (read-exp-part parser)
-                            (throw 'json-invalid parser)))))
-      (else (throw 'json-invalid parser)))))
+    (cond
+     ((eof-object? c) s)
+     (else
+      (case c
+        ;; Stop parsing if whitespace found.
+        ((#\ht #\vt #\lf #\cr #\sp) s)
+        ;; We might be in an array or object, so stop here too.
+        ((#\, #\] #\}) s)
+        ((#\-)
+         (let ((ch (parser-read-char parser)))
+           (loop (parser-peek-char parser)
+                 (string-append s (string ch)))))
+        ((#\0)
+         (let ((ch (parser-read-char parser)))
+           (string-append s
+                          (string ch)
+                          (or (read-real-part parser)
+                              (throw 'json-invalid parser)))))
+        ((#\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9)
+         (let ((ch (parser-read-char parser)))
+           (string-append s
+                          (string ch)
+                          (read-digits parser)
+                          (or (read-real-part parser)
+                              (read-exp-part parser)
+                              (throw 'json-invalid parser)))))
+        (else (throw 'json-invalid parser)))))))
 
 ;;
 ;; Object parsing helpers
@@ -171,8 +178,7 @@
       (else (throw 'json-invalid parser))))))
 
 (define (read-object parser)
-  (let loop ((c (parser-peek-char parser))
-             (pairs (make-hash-table)))
+  (let loop ((c (parser-peek-char parser)) (pairs '()))
     (case c
       ;; Skip whitespaces
       ((#\ht #\vt #\lf #\cr #\sp)
@@ -185,8 +191,7 @@
       ;; Read one pair and continue
       ((#\")
        (let ((pair (read-pair parser)))
-         (hash-set! pairs (car pair) (cdr pair))
-         (loop (parser-peek-char parser) pairs)))
+         (loop (parser-peek-char parser) (cons pair pairs))))
       ;; Skip comma and read more pairs
       ((#\,)
        (parser-read-char parser)
@@ -208,7 +213,7 @@
       ;; end of array
       ((#\])
        (parser-read-char parser)
-       values)
+       (list->vector values))
       ;; this can be any json object
       (else
        (let ((value (json-read parser)))

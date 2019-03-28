@@ -1,8 +1,11 @@
 Aleix Conchillo Flaque <aconchillo@gmail.com> is the author and current
-maintainer of guile-json. More details at <http://hacks-galore.org/aleix>.
+maintainer of guile-json.
 
 List of contributors (in alphabetical order):
 
+Ludovic Courtès <ludo@gnu.org>
+Jason Douglas Earl <jearl@notengoamigos.org>
+Christopher Lam <christopher.lck@gmail.com>
 Jan Nieuwenhuizen <janneke@gnu.org>
 Ian Price <ianprice90@googlemail.com>
 David Thompson <dthompson2@worcester.edu>

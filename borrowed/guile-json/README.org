@@ -1,0 +1,165 @@
+
+* guile-json
+
+guile-json is a JSON module for Guile. It supports parsing and
+building JSON documents according to the http://json.org
+specification.
+
+- Complies with http://json.org specification.
+
+- Builds JSON documents programmatically using scheme data types.
+
+- Allows JSON pretty printing.
+
+
+* Installation
+
+Download the latest tarball and untar it:
+
+- [[http://download.savannah.gnu.org/releases/guile-json/guile-json-3.1.0.tar.gz][guile-json-3.1.0.tar.gz]]
+
+If you are cloning the repository make sure you run this first:
+
+    : $ autoreconf -vif
+
+Then, run the typical sequence:
+
+    : $ ./configure --prefix=<guile-prefix>
+    : $ make
+    : $ sudo make install
+
+Where <guile-prefix> should preferably be the same as your system Guile
+installation directory (e.g. /usr).
+
+If everything installed successfully you should be up and running:
+
+    : $ guile
+    : scheme@(guile-user)> (use-modules (json))
+    : scheme@(guile-user)> (scm->json #(1 2 3))
+    : [1,2,3]
+
+It might be that you installed guile-json somewhere differently than
+your system's Guile. If so, you need to indicate Guile where to find
+guile-json, for example:
+
+    : $ GUILE_LOAD_PATH=/usr/local/share/guile/site guile
+
+A pkg-list.scm file is also provided for users of the
+Guildhall/Dorodango packaging system.
+
+
+* Usage
+
+guile-json provides a few procedures to parse and build a JSON
+document. A JSON document is transformed into or from native Guile
+values according to the following table:
+
+| JSON   | Guile  |
+|--------+--------|
+| string | string |
+| number | number |
+| object | alist  |
+| array  | vector |
+| true   | #t     |
+| false  | #f     |
+| null   | #nil   |
+
+To start using guile-json procedures and macros you first need to load
+the module:
+
+    : scheme@(guile-user)> (use-modules (json))
+
+
+** Procedures
+
+- (*json->scm* #:optional port) : Reads a JSON document from the given
+  port, or from the current input port if none is given.
+
+  - /port/ : is optional, it defaults to the current input port.
+
+- (*json-string->scm* str) : Reads a JSON document from the given
+  string.
+
+- (*scm->json* native #:optional port #:key escape unicode pretty) : Creates a
+  JSON document from the given native Guile value. The JSON document is
+  written into the given port, or to the current output port if non is
+  given.
+
+  - /port/ : it defaults to the current output port.
+  - /escape/ : if true, the slash (/ solidus) character will be escaped.
+  - /unicode/ : if true, unicode characters will be escaped when needed.
+  - /pretty/ : if true, the JSON document will be pretty printed.
+
+- (*scm->json-string* native #:key escape unicode pretty) : Creates a JSON
+  document from the given native Guile value into a string.
+
+  - /escape/ : if true, the slash (/ solidus) character will be escaped.
+  - /unicode/ : if true, unicode characters will be escaped when needed.
+  - /pretty/ : if true, the JSON document will be pretty printed.
+
+  Note that when using alists to build JSON objects, symbols or numbers might
+  be used as keys and they both will be converted to strings.
+
+
+** Exceptions
+
+A /json-invalid/ exception is thrown if an error is found during the
+JSON parsing. Since version 0.2.0, the /json-invalid/ exception has a
+single parser argument (see predicate and accessors below). The line or
+column where the error occured can be easily obtained from the parser
+port (calling /port-line/ or /port-column/ on the port).
+
+- (*json-parser?* parser) : Tells whether the given argument is a JSON
+  parser record type.
+
+- (*json-parser-port* parser) : Get the port that the parser was reading
+  from.
+
+
+** Examples
+
+- Build the string "hello world":
+
+    : > (scm->json "hello world ")
+    : "hello world"
+
+- Build the [1, 2, 3] array:
+
+    : > (scm->json #(1 2 3))
+    : [1,2,3]
+
+- Build the object { "project" : "foo", "author" : "bar" } using an alist. See
+  how symbols can also be used:
+
+    : > (scm->json '((project . foo) (author . bar)))
+    : {"project":"foo","author":"bar"}
+
+- Build the object { "values" : [ 234, 98.56 ] }:
+
+    : > (scm->json '(("values" . #(234 98.56))))
+    : {"values":[234,98.56]}
+
+- Build the object { "values" : [ 234, 98.56 ] } again, this time using
+  a variable:
+
+    : > (define values #(234 98.56))
+    : > (scm->json `(("values" . ,values)))
+    : {"values":[234,98.56]}
+
+
+* License
+
+Copyright (C) 2013-2018 Aleix Conchillo Flaque <aconchillo@gmail.com>
+
+guile-json is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 3 of the License, or (at your
+option) any later version.
+
+guile-json is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with guile-json. If not, see https://www.gnu.org/licenses/.

@@ -1,4 +1,96 @@
 
+
+* Version ?? (??)
+
+  - Complex numbers, inf and nan are not allowed anymore as valid numbers when
+    building JSON.
+    (Fixes #32)
+
+
+* Version 3.1.0 (Dec 31, 2018)
+
+  - scm->json and scm->json-string now support an additional key argument
+    #:unicode. If #:unicode is set to true unicode characters will be escaped
+    when needed, otherwise characters won't be escaped (which now becomes the
+    default).
+
+
+* Version 3.0.0 (Dec 29, 2018)
+
+  - This is another breaking change release.
+
+  - JSON objects are now defined as alists (instead of hash tables) and JSON
+    arrays are now defined as vectors (instead of lists). Both of these
+    changes are mainly to use types that have read syntax. This will simplify
+    things for the user when defining JSON objects which is probably the most
+    common case.
+
+  - Fixed and issue when parsing only JSON numbers.
+
+  - Added unit tests.
+
+
+* Version 2.0.0 (Dec 12, 2018)
+
+  - This is a breaking change release. It is not possible anymore to specify a
+    JSON object using alists. Instead alist->hash-table needs to be explicitly
+    used. This makes the bidirectional mapping between Guile hash-tables and
+    JSON objects consistent.
+
+
+* Version 1.3.2 (Dec 2, 2018)
+
+  - Don't use GUILE_SITE and GUILE_SITE_CCACHE, build them as before. Print a
+    helper message at the end of configure output to help users to install in
+    Guile system's directory.
+
+
+* Version 1.3.1 (Dec 1, 2018)
+
+  - Fix guile.m4 to allow multiple candidates for guild, guile-config and
+    guile-tools.
+
+  - Use GUILE_SITE as the variable instead of GUILE_SITE_DIR.
+    (Fixes #20)
+
+
+* Version 1.3.0 (Nov 28, 2018)
+
+  - Properly use guile.m4 macros to install to the right paths.
+   (thanks to Jason Douglas Earl)
+
+
+* Version 1.2.0 (Aug 22, 2018)
+
+  - Switch to GPLv3.
+
+
+* Version 1.1.1 (Aug 14, 2018)
+
+  - Don't output extra spaces except with pretty printing.
+
+
+* Version 1.1.0 (Jul 26, 2018)
+
+  - Install .go files to $(libdir)/guile.
+    (thanks to Ludovic Courtès)
+
+
+* Version 1.0.1 (May 24, 2018)
+
+  - Fixes an issue while handling alists with #nil at the beginning.
+
+
+* Version 1.0.0 (May 23, 2018)
+
+  - Support 4-byte unicode characters.
+    (thanks to Christopher Lam)
+
+  - Remove deprecated `json` macro.
+
+  - Dual GPLv3 and LGPLv3 license.
+
+
 * Version 0.6.0 (Jan 16, 2017)
 
   - Deprecate json macro in favor of scheme data types.

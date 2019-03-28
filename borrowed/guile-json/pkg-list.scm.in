@@ -1,5 +1,4 @@
-;;; (json) --- Guile JSON implementation.
-
+;;
 ;; Copyright (C) 2013-2018 Aleix Conchillo Flaque <aconchillo@gmail.com>
 ;;
 ;; This file is part of guile-json.
@@ -16,26 +15,15 @@
 ;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with guile-json. If not, see https://www.gnu.org/licenses/.
+;;
 
-;;; Commentary:
-
-;; JSON module for Guile
-
-;;; Code:
-
-(define-module (json)
-  #:use-module (json builder)
-  #:use-module (json parser))
-
-(define-syntax re-export-modules
-  (syntax-rules ()
-    ((_ (mod ...) ...)
-     (begin
-       (module-use! (module-public-interface (current-module))
-                    (resolve-interface '(mod ...)))
-       ...))))
-
-(re-export-modules (json builder)
-                   (json parser))
-
-;;; (json) ends here
+(package (json (%VERSION%))
+  (depends (srfi-1))
+  (synopsis "JSON parser/writer for Guile")
+  (description
+   "guile-json supports the parsing and writing of JSON from Guile."
+   "It aims to be fully compliant with the json.org specification, and"
+   "is released under the GPLv3.")
+  (homepage "https://github.com/aconchillo/guile-json")
+  (libraries "json.scm" "json")
+  (documentation "README" "COPYING"))

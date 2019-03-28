@@ -1,24 +1,22 @@
 ;;; (json builder) --- Guile JSON implementation.
 
-;; Copyright (C) 2013 Aleix Conchillo Flaque <aconchillo@gmail.com>
+;; Copyright (C) 2013-2019 Aleix Conchillo Flaque <aconchillo@gmail.com>
 ;; Copyright (C) 2015,2016 Jan Nieuwenhuizen <janneke@gnu.org>
 ;;
 ;; This file is part of guile-json.
 ;;
-;; guile-json is free software; you can redistribute it and/or
-;; modify it under the terms of the GNU Lesser General Public
-;; License as published by the Free Software Foundation; either
-;; version 3 of the License, or (at your option) any later version.
+;; guile-json is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 3 of the License, or
+;; (at your option) any later version.
 ;;
-;; guile-json is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-;; Lesser General Public License for more details.
+;; guile-json is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+;; General Public License for more details.
 ;;
-;; You should have received a copy of the GNU Lesser General Public
-;; License along with guile-json; if not, write to the Free Software
-;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-;; 02110-1301 USA
+;; You should have received a copy of the GNU General Public License
+;; along with guile-json. If not, see https://www.gnu.org/licenses/.
 
 ;;; Commentary:
 
@@ -29,6 +27,7 @@
 (define-module (json builder)
   #:use-module (ice-9 format)
   #:use-module (srfi srfi-1)
+  #:use-module (srfi srfi-43)
   #:use-module (rnrs bytevectors)
   #:export (scm->json
             scm->json-string))
@@ -87,17 +86,22 @@
 ;; Object builder functions
 ;;
 
-(define (build-object-pair p port escape pretty level)
+(define (build-object-pair p port escape unicode pretty level)
   (display (indent-string pretty level) port)
-  (json-build-string (car p) port escape)
-  (display " : " port)
-  (json-build (cdr p) port escape pretty level))
+  (json-build-string (car p) port escape unicode)
+  (build-space port pretty)
+  (display ":" port)
+  (build-space port pretty)
+  (json-build (cdr p) port escape unicode pretty level))
 
 (define (build-newline port pretty)
   (cond (pretty (newline port))))
 
+(define (build-space port pretty)
+  (cond (pretty (display " " port))))
+
 (define (indent-string pretty level)
-  (if pretty (format #f "~v_" (* 4 level)) ""))
+  (if pretty (format #f "~v_" (* 2 level)) ""))
 
 ;;
 ;; Main builder functions
@@ -120,18 +124,7 @@
         ((symbol? x) (symbol->string x))
         (else x)))
 
-(define (atom? x)
-  (or (char? x) (number? x) (string? x) (symbol? x)))
-
-(define (json-alist? x)
-  (and (pair? x)
-       (let loop ((x x))
-         (or (null? x)
-             (null? (car x))
-             (and (pair? (car x)) (atom? (caar x))
-                  (loop (cdr x)))))))
-
-(define (json-build-string scm port escape)
+(define (json-build-string scm port escape unicode)
   (display "\"" port)
   (display
    (list->string
@@ -146,47 +139,49 @@
                      ((#\cr) '(#\\ #\r))
                      ((#\ht) '(#\\ #\t))
                      ((#\/) (if escape `(#\\ ,c) (list c)))
-                     (else (string->list (build-char-string c)))))
+                     (else (if unicode (string->list (build-char-string c)) (list c)))))
                  (string->list (->string scm)))))
    port)
   (display "\"" port))
 
-(define (json-build-array scm port escape pretty level)
+(define (json-build-array scm port escape unicode pretty level)
   (display "[" port)
   (unless (null? scm)
-    (json-build (car scm) port escape pretty (+ level 1))
-    (for-each (lambda (v)
-                (display ", " port)
-                (json-build v port escape pretty (+ level 1)))
-              (cdr scm)))
+    (vector-for-each (lambda (i v)
+                       (if (> i 0) (display "," port))
+                       (build-space port pretty)
+                       (json-build v port escape unicode pretty (+ level 1)))
+                     scm))
   (display "]" port))
 
-(define (json-build-object scm port escape pretty level)
-  (build-newline port pretty)
+(define (json-build-object scm port escape unicode pretty level)
+  (cond ((> level 0)
+         (build-newline port pretty)))
   (simple-format port "~A{" (indent-string pretty level))
   (build-newline port pretty)
   (let ((pairs scm))
     (unless (null? pairs)
-      (build-object-pair (car pairs) port escape pretty (+ level 1))
+      (build-object-pair (car pairs) port escape unicode pretty (+ level 1))
       (for-each (lambda (p)
                   (display "," port)
                   (build-newline port pretty)
-                  (build-object-pair p port escape pretty (+ level 1)))
+                  (build-object-pair p port escape unicode pretty (+ level 1)))
                 (cdr pairs))))
   (build-newline port pretty)
   (simple-format port "~A}" (indent-string pretty level)))
 
-(define (json-build scm port escape pretty level)
+(define (json-number? number)
+  (and (number? number) (eqv? (imag-part number) 0) (finite? number)))
+
+(define (json-build scm port escape unicode pretty level)
   (cond
    ((eq? scm #nil) (json-build-null port))
    ((boolean? scm) (json-build-boolean scm port))
-   ((number? scm) (json-build-number scm port))
-   ((symbol? scm) (json-build-string (symbol->string scm) port escape))
-   ((string? scm) (json-build-string scm port escape))
-   ((json-alist? scm) (json-build-object scm port escape pretty level))
-   ((list? scm) (json-build-array scm port escape pretty level))
-   ((hash-table? scm)
-    (json-build-object (hash-map->list cons scm) port escape pretty level))
+   ((json-number? scm) (json-build-number scm port))
+   ((symbol? scm) (json-build-string (symbol->string scm) port escape unicode))
+   ((string? scm) (json-build-string scm port escape unicode))
+   ((vector? scm) (json-build-array scm port escape unicode pretty level))
+   ((pair? scm) (json-build-object scm port escape unicode pretty level))
    (else (throw 'json-invalid))))
 
 ;;
@@ -195,18 +190,25 @@
 
 (define* (scm->json scm
                     #:optional (port (current-output-port))
-                    #:key (escape #f) (pretty #f))
-  "Creates a JSON document from native. The argument @var{scm} contains
-the native value of the JSON document. Takes one optional argument,
-@var{port}, which defaults to the current output port where the JSON
-document will be written."
-  (json-build scm port escape pretty 0))
+                    #:key (escape #f) (unicode #f) (pretty #f))
+  "Creates a JSON document from native. The argument @var{scm} contains the
+native value of the JSON document. Takes one optional argument, @var{port},
+which defaults to the current output port where the JSON document will be
+written. It also takes a few key arguments: @var{escape}: if true, the
+slash (/ solidus) character will be escaped, @{unicode} : if true, unicode
+characters will be escaped when needed and @{pretty}: if true, the JSON
+document will be pretty printed.
 
-(define* (scm->json-string scm #:key (escape #f) (pretty #f))
-  "Creates a JSON document from native into a string. The argument
-@var{scm} contains the native value of the JSON document."
+Note that when using alists to build JSON objects, symbols or numbers might be
+used as keys and they both will be converted to strings.
+"
+  (json-build scm port escape unicode pretty 0))
+
+(define* (scm->json-string scm #:key (escape #f) (unicode #f) (pretty #f))
+  "Creates a JSON document from native into a string. The argument @var{scm}
+contains the native value of the JSON document."
   (call-with-output-string
    (lambda (p)
-     (scm->json scm p #:escape escape #:pretty pretty))))
+     (scm->json scm p #:escape escape #:unicode unicode #:pretty pretty))))
 
 ;;; (json builder) ends here
