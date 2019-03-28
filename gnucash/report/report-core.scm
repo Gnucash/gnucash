@@ -28,7 +28,8 @@
 (use-modules (gnucash utilities))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash core-utils))
-(use-modules (gnucash gnome-utils))
+(use-modules (gnucash json parser))
+(use-modules (gnucash json builder))
 (use-modules (ice-9 match))
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-9))
@@ -732,23 +733,52 @@ not found.")))
                          '("custom-templates" "len"))
     (for-each
      (lambda (tmpl idx)
-       (let ((options (gnc:report-template-new-options (cdr tmpl)))
-             (key (format #f "rpt~a" idx)))
-         (qof-book-set-option book
-                              (gnc:report-template-report-guid (cdr tmpl))
-                              (list "custom-templates" key "guid"))
-         (qof-book-set-option book
-                              (gnc:report-template-name (cdr tmpl))
-                              (list "custom-templates" key "name"))
-         (qof-book-set-option book
-                              (gnc:report-template-parent-type (cdr tmpl))
-                              (list "custom-templates" key "parenttype"))
-         (qof-book-set-option book
-                              (gnc:report-template-menu-path (cdr tmpl))
-                              (list "custom-templates" key "menupath"))
-         (gnc:options-scm->kvp-path
-          options book (list "custom-templates" key "optionset")
-          #f)))
+       (let* ((options (gnc:report-template-new-options (cdr tmpl)))
+              (embedded-list (gnc:report-embedded-list options))
+              (key (format #f "rpt~a" idx)))
+
+         (let embedded-loop ((embedded-list (or embedded-list '()))
+                             (embedded-idx 0))
+           (cond
+
+            ((null? embedded-list)
+             (qof-book-set-option book embedded-idx
+                                  (list "custom-templates" key "sub-length"))
+             (qof-book-set-option
+              book
+              (scm->json-string
+               (list
+                (cons 'guid (gnc:report-template-report-guid (cdr tmpl)))
+                (cons 'name (gnc:report-template-name (cdr tmpl)))
+                (cons 'parenttype (gnc:report-template-parent-type (cdr tmpl)))
+                (cons 'menupath (list->vector
+                                 (gnc:report-template-menu-path (cdr tmpl))))
+                (cons 'options (list->vector
+                                (gnc:options-scm->list options)))))
+              (list "custom-templates" key "template")))
+
+            (else
+             (let* ((report-id (car embedded-list))
+                    (sub (gnc-report-find report-id))
+                    (subkey (format #f "sub~a" embedded-idx))
+                    (sub-type (gnc:report-type sub))
+                    (sub-template (hash-ref *gnc:_report-templates_* sub-type))
+                    (sub-template-name (gnc:report-template-name sub-template))
+                    (sub-cleanup-cb (gnc:report-template-options-cleanup-cb
+                                     sub-template)))
+               (if sub-cleanup-cb (sub-cleanup-cb sub))
+               (let ((sub-template-string
+                      (scm->json-string
+                       (list
+                        (cons 'guid sub-type)
+                        (cons 'name sub-template-name)
+                        (cons 'options (list->vector
+                                        (gnc:options-scm->list
+                                         (gnc:report-options sub))))))))
+                 (qof-book-set-option book sub-template-string
+                                      (list "custom-templates" key subkey))
+                 (embedded-loop (cdr embedded-list)
+                                (1+ embedded-idx)))))))))
      custom-templates
      (iota (length custom-templates)))
     (gnc:gui-msg saved (_ saved))))
@@ -771,8 +801,6 @@ not found.")))
         ;; gnc:load-book-custom-templates
         (set! global-saved-reports (gnc:custom-report-templates-list)))
       (let* ((loaded (N_ "Loaded book custom reports"))
-             ;; Translators: first ~a is error-type, second ~a is error-details
-             (failed (N_ "Error ~a loading book custom reports: ~a"))
              (global (N_ "Loaded global custom reports"))
              (book (gnc-get-current-book))
              (book-reports (qof-book-get-option book '("custom-templates" "len"))))
@@ -788,23 +816,60 @@ not found.")))
           (for-each
            (lambda (idx)
              (let* ((key (format #f "rpt~a" idx))
-                    (guid (qof-book-get-option
-                           book (list "custom-templates" key "guid")))
-                    (tname (qof-book-get-option
-                            book (list "custom-templates" key "name")))
-                    (parenttype (qof-book-get-option
-                                 book (list "custom-templates" key "parenttype")))
-                    (menupath (qof-book-get-option
-                               book (list "custom-templates" key "menupath")))
-                    (options-gen
-                     (lambda ()
-                       (let ((options (gnc:report-template-new-options/report-guid
-                                       parenttype name))
-                             (embedded-report-ids '()))
-                         (gnc:options-kvp-path->scm
-                          options book
-                          (list "custom-templates" key "optionset"))
-                         options))))
+                    (saved-template-string
+                     (qof-book-get-option book
+                                          (list "custom-templates" key "template")))
+                    (saved-embedded-reports
+                     (map
+                      (lambda (idx)
+                        (qof-book-get-option
+                         book (list "custom-templates" key (format #f "sub~a" idx))))
+                      (iota
+                       (qof-book-get-option
+                        book (list "custom-templates" key "sub-length")))))
+                    (saved-report (json-string->scm saved-template-string))
+                    (guid (assoc-ref saved-report "guid"))
+                    (name (assoc-ref saved-report "name"))
+                    (parenttype (assoc-ref saved-report "parenttype"))
+                    (menupath (vector->list (assoc-ref saved-report "menupath")))
+                    (saved-options (vector->list (assoc-ref saved-report "options"))))
+               (define (options-gen)
+                 (let ((options (gnc:report-template-new-options/report-guid
+                                 parenttype name)))
+
+                   (gnc:options-list->scm options saved-options)
+
+                   (let loop ((saved-embedded-reports saved-embedded-reports)
+                              (embedded-report-ids '()))
+                     (cond
+                      ((null? saved-embedded-reports)
+                       (let* ((report-list
+                               (gnc:lookup-option options "__general" "report-list")))
+                         (if report-list
+                             (gnc:option-set-value
+                              report-list
+                              (map
+                               (lambda (x y)
+                                 (cons x (cdr y)))
+                               (reverse embedded-report-ids)
+                               (gnc:option-value report-list))))))
+
+                      (else
+                       (let* ((sub (json-string->scm (car saved-embedded-reports)))
+                              (sub-guid (assoc-ref sub "guid"))
+                              (sub-name (assoc-ref sub "name"))
+                              (sub-saved-options (vector->list
+                                                  (assoc-ref sub "options")))
+                              (sub-new-options
+                               (gnc:report-template-new-options/report-guid
+                                sub-guid sub-name)))
+                         (gnc:options-list->scm sub-new-options sub-saved-options)
+                         (loop (cdr saved-embedded-reports)
+                               (cons (gnc:restore-report-by-guid-with-custom-template
+                                      #f sub-guid sub-name "" sub-new-options)
+                                     embedded-report-ids))))))
+
+                   options))
                (gnc:define-report
                 'version 1
                 'name name
@@ -814,7 +879,8 @@ not found.")))
                 'menu-path menupath
                 'renderer (gnc:report-template-renderer/report-guid
                            parenttype name))))
-           (iota book-reports)))
+           (iota book-reports))
+          (gnc:gui-msg loaded (_ loaded)))
 
          ;; book has no saved-reports. revert to global saved-reports.
          (else
