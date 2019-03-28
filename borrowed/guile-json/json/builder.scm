@@ -182,7 +182,7 @@
    ((string? scm) (json-build-string scm port escape unicode))
    ((vector? scm) (json-build-array scm port escape unicode pretty level))
    ((pair? scm) (json-build-object scm port escape unicode pretty level))
-   (else (throw 'json-invalid))))
+   (else (throw 'json-invalid scm))))
 
 ;;
 ;; Public procedures
