@@ -220,7 +220,15 @@ the option '~a'."))
          ;; the user selects "OK" or "Apply".  Therefore, this
          ;; callback shouldn't be used to make changes to the actual
          ;; options database.
-         option-widget-changed-proc)
+         option-widget-changed-proc
+         ;; This is a 0-arity lambda, exports internal option-value to
+         ;; a format suitable for guile-json - e.g. lists are
+         ;; converted to vector.
+         serializer
+         ;; This is an unary lambda. takes the the serialized
+         ;; vector/string/number and updates option-value.
+         deserializer
+         )
   (let ((changed-callback #f))
     (vector section
             name
@@ -240,7 +248,9 @@ the option '~a'."))
             option-data-fns
             (lambda (callback) (set! changed-callback callback))
             strings-getter
-            option-widget-changed-proc)))
+            option-widget-changed-proc
+            serializer
+            deserializer)))
 
 (define (gnc:option-section option)
   (vector-ref option 0))
@@ -282,6 +292,12 @@ the option '~a'."))
   (vector-ref option 15))
 (define (gnc:option-widget-changed-proc option)
   (vector-ref option 16))
+(define (gnc:option-serialize option)
+  (let ((serializer (vector-ref option 17)))
+    (if serializer (serializer))))
+(define (gnc:option-deserialize option serialized)
+  (let ((deserializer (vector-ref option 18)))
+    (if deserializer (deserializer serialized))))
 
 (define (gnc:option-value option)
   (let ((getter (gnc:option-getter option)))
@@ -357,7 +373,10 @@ the option '~a'."))
      (lambda (x)
        (cond ((string? x)(list #t x))
              (else (list #f "string-option: not a string"))))
-     #f #f #f #f)))
+     #f #f #f #f
+     (lambda () value)
+     (lambda (v) (set! value v))
+     )))
 
 (define (gnc:make-text-option
          section
@@ -381,7 +400,10 @@ the option '~a'."))
      (lambda (x)
        (cond ((string? x)(list #t x))
              (else (list #f "text-option: not a string"))))
-     #f #f #f #f)))
+     #f #f #f #f
+     (lambda () value)
+     (lambda (x) (set! value x))
+     )))
 
 ;;; font options store fonts as strings a la the X Logical
 ;;; Font Description. You should always provide a default
@@ -415,7 +437,9 @@ the option '~a'."))
      (lambda (x)
        (cond ((string? x)(list #t x))
              (else (list #f "font-option: not a string"))))
-     #f #f #f #f)))
+     #f #f #f #f
+     (lambda () value)
+     (lambda (x) (set! value x)))))
 
 ;; currency options use a specialized widget for entering currencies
 ;; in the GUI implementation.
@@ -452,7 +476,9 @@ the option '~a'."))
           (if (and v (string? v))
               (set! value v))))
       (lambda (x) (list #t x))
-      #f #f #f #f)))
+      #f #f #f #f
+      (lambda () value)
+      (lambda (x) (set! value (scm->currency x))))))
 
 ;; budget option
 ;; TODO: need to double-check this proc (dates back to r11545 or eariler)
@@ -541,7 +567,13 @@ the option '~a'."))
 
      ;; options-widget-changed-proc -- callback for what it sounds like
      #f
-     
+
+     (lambda () (gncBudgetGetGUID selection-budget))
+     (lambda (x)
+       (let ((budget (gnc-budget-lookup x (gnc-get-current-book))))
+         (if (and budget (not (null? budget)))
+             (set! value budget)
+             (gnc:gui-warn "error restoring budget" "error restoring budget"))))
      ))) ;; completes gnc:make-budget-option
 
 
@@ -588,7 +620,16 @@ the option '~a'."))
           (if (and ns monic (string? ns) (string? monic))
               (set! value (list 'commodity-scm ns monic)))))
       (lambda (x) (list #t x))
-      #f #f #f #f)))
+      #f #f #f #f
+      (lambda ()
+        (list->vector value))
+      (lambda (x)
+        (let ((type (vector-ref x 0))
+              (ns (vector-ref x 1))
+              (monic (vector-ref x 2)))
+          (if (string=? type "commodity-scm")
+              (set! value (list 'commodity-scm ns monic))
+              (rpterror-earlier "commodity" x default-value)))))))
 
 
 (define (gnc:make-simple-boolean-option
@@ -657,7 +698,9 @@ the option '~a'."))
            (list #t x)
            (list #f "boolean-option: not a boolean")))
      #f #f #f (and option-widget-changed-cb
-                   (lambda (x) (option-widget-changed-cb x))))))
+                   (lambda (x) (option-widget-changed-cb x)))
+     (lambda () value)
+     (lambda (x) (set! value x)))))
 
 
 (define (gnc:make-pixmap-option 
@@ -678,7 +721,9 @@ the option '~a'."))
              (list #t x))
            (begin 
              (list #f "pixmap-option: not a string"))))
-     #f #f #f #f)))
+     #f #f #f #f
+     (lambda ()  value)
+     (lambda (x) (set! value x)))))
 
 ;; show-time is boolean
 ;; subtype should be one of 'relative 'absolute or 'both
@@ -758,7 +803,19 @@ the option '~a'."))
                           (list-ref relative-date-list x)))
              (lambda (x) (list-lookup relative-date-list x)))
      #f
-     #f)))
+     #f
+     (lambda ()
+       (vector (car value) (cdr value)))
+     (lambda (x)
+       (let* ((type (vector-ref x 0))
+              (val (vector-ref x 1))
+              (date (cons (string->symbol type)
+                          (cond
+                           ((number? val) val)
+                           ((string? val) (string->symbol val))))))
+         (if (date-legal date)
+             (set! value (maybe-convert-to-time64 date))
+             (gnc:error "Illegal date value set:" date)))))))
 
 (define (gnc:get-rd-option-data-subtype option-data)
   (vector-ref option-data 0))
@@ -854,11 +911,7 @@ the option '~a'."))
      (lambda (account-list)
        (if (or (not account-list) (null? account-list)) 
            (set! account-list (default-getter)))
-       (set! account-list
-             (filter (lambda (x) (if (string? x)
-                                     (xaccAccountLookup
-                                      x (gnc-get-current-book))
-                                     x)) account-list))
+       (set! account-list (filter convert-to-account account-list))
        (let* ((result (validator account-list))
               (valid (car result))
               (value (cadr result)))
@@ -887,7 +940,25 @@ the option '~a'."))
               (iota len)))
            (set! option-set #t))))
      validator
-     (cons multiple-selection acct-type-list) #f #f #f)))
+     (cons multiple-selection acct-type-list) #f #f #f
+     (lambda () (list->vector option))
+     (lambda (account-vec)
+       (let* ((accounts (or (and (vector? account-vec)
+                                 (positive? (vector-length account-vec))
+                                 (vector->list account-vec))
+                            (default-getter)))
+              (account-list (filter
+                             (lambda (x)
+                               (xaccAccountLookup x (gnc-get-current-book)))
+                             accounts))
+              (result (validator account-list))
+              (valid (car result))
+              (value (cadr result)))
+         (if valid
+             (begin
+               (set! option (map convert-to-guid value))
+               (set! option-set #t))
+             (gnc:error "Illegal account list value set")))))))
 
 ;; Just like gnc:make-account-sel-limited-option except it
 ;; does not limit the types of accounts that are available
@@ -930,20 +1001,10 @@ the option '~a'."))
         item))
 
   (define (find-first-account)
-    (define (find-first account-list)
-      (if (null? account-list)
-          '()
-          (let* ((this-account (car account-list))
-                 (account-type (xaccAccountGetType this-account)))
-            (if (if (null? acct-type-list)
-                    #t
-                    (member account-type acct-type-list))
-                this-account
-                (find-first (cdr account-list))))))
-
-    (let* ((current-root (gnc-get-current-root-account))
-           (account-list (gnc-account-get-descendants-sorted current-root)))
-      (find-first account-list)))
+    (or (find (lambda (acc)
+                (member (xaccAccountGetType acc) acct-type-list))
+              (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
+        '()))
   
   (define (get-default)
     (if default-getter
@@ -985,7 +1046,20 @@ the option '~a'."))
          (if (and v (string? v))
              (set! option v))))
      validator
-     (cons #f acct-type-list) #f #f #f)))
+     (cons #f acct-type-list) #f #f #f
+     (lambda () option)
+     ;; this make-account-sel-limited-option is not working :'( ***
+     (lambda (account)
+       (if (or (not account) (null? account)) (set! account (get-default)))
+       (set! account (convert-to-account account))
+       (let* ((result (validator account))
+              (valid (car result))
+              (value (cadr result)))
+         (if valid
+             (begin
+               (set! option (convert-to-guid value))
+               (set! option-set #t))
+             (gnc:error "Illegal account value set")))))))
 
 (define (gnc:multichoice-list-lookup full-lst item)
   (or (list-index (lambda (i) (eq? (vector-ref i 0) item)) full-lst)
@@ -1091,7 +1165,13 @@ the option '~a'."))
                (gnc:multichoice-list-lookup ok-values x)))
      (lambda () (multichoice-strings ok-values)) 
      (and option-widget-changed-cb
-          (lambda (x) (option-widget-changed-cb x))))))
+          (lambda (x) (option-widget-changed-cb x)))
+     (lambda () value)
+     (lambda (v)
+       (let ((x (and (string? v) (string->symbol v))))
+         (if (multichoice-legal x ok-values)
+             (set! value x)
+             (rpterror-earlier "multichoice" x default-value)))))))
 
 
 ;; radiobutton options use the option-data as a list of vectors.
@@ -1176,7 +1256,13 @@ the option '~a'."))
                (gnc:multichoice-list-lookup ok-values x)))
      (lambda () (radiobutton-strings ok-values)) 
      (and option-widget-changed-cb
-          (lambda (x) (option-widget-changed-cb x))))))
+          (lambda (x) (option-widget-changed-cb x)))
+     (lambda () value)
+     (lambda (v)
+       (let ((x (and (string? v) (string->symbol v))))
+         (if (radiobutton-legal x ok-values)
+             (set! value x)
+             (rpterror-earlier "radiobutton" x default-value)))))))
 
 
 ;; list options use the option-data in the same way as multichoice
@@ -1246,7 +1332,13 @@ the option '~a'."))
              (lambda (x) (vector-ref (list-ref ok-values x) 1))
              #f                         ;old tooltip
              (lambda (x) (gnc:multichoice-list-lookup ok-values x)))
-     (lambda () (list-strings ok-values)) #f)))
+     (lambda () (list-strings ok-values)) #f
+     (lambda () (traverse-list->vec value))
+     (lambda (x)
+       (let ((v (traverse-vec->list x)))
+         (if (list-legal v)
+             (set! value v)
+             (rpterror-earlier "list" v default-value)))))))
 
 ;; number range options use the option-data as a list whose
 ;; elements are: (lower-bound upper-bound num-decimals step-size)
@@ -1280,7 +1372,9 @@ the option '~a'."))
               (list #t x))
              (else (list #f "number-range-option: out of range"))))
      (list lower-bound upper-bound num-decimals step-size)
-     #f #f #f)))
+     #f #f #f
+     (lambda () value)
+     (lambda (x) (set! value x)))))
 
 ;; number plot size options use the option-data as a list whose
 ;; elements are: (lower-bound upper-bound num-decimals step-size)
@@ -1323,20 +1417,25 @@ the option '~a'."))
                                (if (string? v) (string->number v) v))))))  ;;kvp->scm
      (lambda (x)
        (if (eq? 'pixels (car x))
-         (cond ((not (number? (cdr x))) (list #f "number-plot-size-option-pixels: not a number"))
-               ((and (>= (cdr x) lower-bound)
-                     (<= (cdr x) upper-bound))
-                (list #t x))
-               (else (list #f "number-plot-size-option-pixels: out of range")))
-         (cond ((not (number? (cdr x))) (list #f "number-plot-size-option-percentage: not a number"))
-               ((and (>= (cdr x) 10)
-                     (<= (cdr x) 100))
-                (list #t x))
-               (else (list #f "number-plot-size-option-percentage: out of range")))
-       )
-     )  ;;value-validator
+           (cond ((not (number? (cdr x)))
+                  (list #f "number-plot-size-option-pixels: not a number"))
+                 ((<= lower-bound (cdr x) upper-bound)
+                  (list #t x))
+                 (else (list #f "number-plot-size-option-pixels: out of range")))
+           (cond ((not (number? (cdr x)))
+                  (list #f "number-plot-size-option-percentage: not a number"))
+                 ((<= 10 (cdr x) 100)
+                  (list #t x))
+                 (else
+                  (list #f "number-plot-size-option-percentage: out of range")))))
      (list lower-bound upper-bound num-decimals step-size)  ;;option-data
-     #f #f #f)))  ;;option-data-fns, strings-getter, option-widget-changed-proc
+     #f #f #f  ;;option-data-fns, strings-getter, option-widget-changed-proc
+     (lambda ()
+       (vector (car value) (cdr value)))
+     (lambda (v)
+       (let ((type (string->symbol (vector-ref v 0)))
+             (val (vector-ref v 1)))
+         (set! value (cons type val)))))))
 
 (define (gnc:plot-size-option-value-type option-value)
   (car option-value))
@@ -1360,8 +1459,11 @@ the option '~a'."))
      #f
      #f
      (lambda (x) (list #t x))
-     #f #f #f #f)))
-
+     #f #f #f #f
+     (lambda ()
+       (traverse-list->vec value))
+     (lambda (x)
+       (set! value (traverse-vec->list x))))))
 
 (define (gnc:make-query-option
          section
@@ -1383,8 +1485,11 @@ the option '~a'."))
      #f
      #f
      (lambda (x) (list #t x))
-     #f #f #f #f)))
-
+     #f #f #f #f
+     (lambda ()
+       (gnc:value->string value))
+     (lambda (x)
+       (set! value (with-input-from-string x read))))))
 
 ;; Color options store rgba values in a list.
 ;; The option-data is a list, whose first element
@@ -1404,19 +1509,13 @@ the option '~a'."))
     (map exact->inexact values))
 
   (define (values-in-range values)
-    (if (null? values)
-        #t
-        (let ((value (car values)))
-          (and (number? value)
-               (>= value 0)
-               (<= value range)
-               (values-in-range (cdr values))))))
+    (every (lambda (v) (<= 0 v range))
+           values))
 
   (define (validate-color color)
     (cond ((not (list? color)) (list #f "color-option: not a list"))
           ((not (= 4 (length color))) (list #f "color-option: wrong length"))
-          ((not (values-in-range color))
-           (list #f "color-option: bad color values"))
+          ((not (values-in-range color)) (list #f "color-option: bad color values"))
           (else (list #t color))))
 
   (let* ((value (canonicalize default-value))
@@ -1432,7 +1531,9 @@ the option '~a'."))
      #f
      validate-color
      (list range use-alpha)
-     #f #f #f)))
+     #f #f #f
+     (lambda () (traverse-list->vec value))
+     (lambda (x) (set! value (canonicalize (traverse-vec->list x)))))))
 
 (define (gnc:color->hex-string color range)
   (define (html-value value)
@@ -1506,13 +1607,14 @@ the option '~a'."))
              (month (qof-book-get-option f (append p '("month"))))
              (years (qof-book-get-option f (append p '("years"))))
              (custom (qof-book-get-option f (append p '("custom")))))
-         (if (and
-              fmt (string? fmt)
-              month (string? month)
-              years (number? years)
-              custom (string? custom))
-             (set! value (list (string->symbol fmt) (string->symbol month)
-                               (if (= years 0) #f #t) custom)))))
+         (if (and fmt (string? fmt)
+                  month (string? month)
+                  years (number? years)
+                  custom (string? custom))
+             (set! value (list (string->symbol fmt)
+                               (string->symbol month)
+                               (not (zero? years))
+                               custom)))))
      (lambda (x)
        (cond ((not (list? x)) (list #f "dateformat-option: not a list"))
              ((not (= (length x) 4))
@@ -1524,7 +1626,14 @@ the option '~a'."))
              ((not (string? (cadddr x)))
               (list #f "dateformat-option: no custom string"))
              (else (list #t x))))
-     #f #f #f #f)))
+     #f #f #f #f
+     (lambda () (traverse-list->vec value))
+     (lambda (x)
+       (let ((fmt (string->symbol (vector-ref x 0)))
+             (month (string->symbol (vector-ref x 1)))
+             (years (vector-ref x 2))
+             (custom (vector-ref x 3)))
+         (set! value (list fmt month years custom)))))))
 
 (define (gnc:dateformat-get-format v)
   (cadddr v))
@@ -1720,7 +1829,13 @@ the option '~a'."))
              (lambda (x)
                (gnc:multichoice-list-lookup ok-radiobutton-values x)))
      (lambda () (vector-strings ok-radiobutton-values))
-     #f)))
+     #f
+     (lambda () value) ;; getter
+     (lambda (v)
+       (let ((x (string->symbol v)))
+         (if (legal-val (car x) ok-radiobutton-values)
+             (set! value x)
+             (gnc:error "Illegal Radiobutton option set")))))))
 
 (define (gnc:get-currency-accounting-option-data-curr-doc-string option-data)
   (vector-ref option-data 0))
@@ -2021,9 +2136,34 @@ the option '~a'."))
                                (< (car a) (car b)))))
           (for-each 
            (lambda (elt) (run-callback (car elt) (cdr elt))) 
-           cblist)))
-    (clear-changes))
+           cblist))
+        (clear-changes)))
   
+  (define (scm->list)
+    (let ((result '()))
+      (options-for-each
+       (lambda (option)
+         (let ((value (gnc:option-value option))
+               (default-value (gnc:option-default-value option))
+               (section (gnc:option-section option))
+               (name (gnc:option-name option)))
+           (if (not (equal? value default-value))
+               (set! result
+                 (cons (vector section name (gnc:option-serialize option))
+                       result))))))
+      result))
+
+  (define (list->scm lst)
+    (for-each
+     (lambda (elt)
+       (let* ((section (vector-ref elt 0))
+              (name (vector-ref elt 1))
+              (serialized (vector-ref elt 2))
+              (option (lookup-option section name)))
+         (and option
+              (gnc:option-deserialize option serialized))))
+     lst))
+
   (define default-section #f)
 
   (define (touch)
@@ -2048,6 +2188,8 @@ the option '~a'."))
       ((generate-restore-forms) generate-restore-forms)
       ((scm->kvp) scm->kvp)
       ((kvp->scm) kvp->scm)
+      ((scm->list) scm->list)
+      ((list->scm) list->scm)
       ((touch) touch)
       ((clear-changes) clear-changes)
       ((run-callbacks) run-callbacks)
@@ -2109,6 +2251,14 @@ the option '~a'."))
 
 (define (gnc:options-get-default-section options)
   ((options 'get-default-section)))
+
+(export gnc:options-list->scm)
+(define (gnc:options-list->scm options saved-options)
+  ((options 'list->scm) saved-options))
+
+(export gnc:options-scm->list)
+(define (gnc:options-scm->list options)
+  ((options 'scm->list)))
 
 ;; Copies all values from src-options to dest-options, that is, it
 ;; copies the values of all options from src which exist in dest to
