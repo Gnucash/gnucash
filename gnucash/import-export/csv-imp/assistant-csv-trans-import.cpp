@@ -1655,13 +1655,20 @@ CsvImpTransAssist::preview_refresh ()
     go_charmap_sel_set_encoding (encselector, tx_imp->encoding().c_str());
 
     // Handle separator checkboxes and custom field, only relevant if the file format is csv
+    // Note we defer the change signal until all buttons have been updated
+    // An early update may result in an incomplete tokenize run and that would
+    // cause our list of saved column types to be truncated
     if (tx_imp->file_format() == GncImpFileFormat::CSV)
     {
         auto separators = tx_imp->separators();
         const auto stock_sep_chars = std::string (" \t,:;-");
         for (int i = 0; i < SEP_NUM_OF_TYPES; i++)
+        {
+            g_signal_handlers_block_by_func (sep_button[i], (gpointer) csv_tximp_preview_sep_button_cb, this);
             gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(sep_button[i]),
                 separators.find (stock_sep_chars[i]) != std::string::npos);
+            g_signal_handlers_unblock_by_func (sep_button[i], (gpointer) csv_tximp_preview_sep_button_cb, this);
+        }
 
         // If there are any other separators in the separators string,
         // add them as custom separators
@@ -1671,9 +1678,14 @@ CsvImpTransAssist::preview_refresh ()
             separators.erase(pos);
             pos = separators.find_first_of (stock_sep_chars);
         }
+        g_signal_handlers_block_by_func (custom_cbutton, (gpointer) csv_tximp_preview_sep_button_cb, this);
+        g_signal_handlers_block_by_func (custom_entry, (gpointer) csv_tximp_preview_sep_button_cb, this);
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(custom_cbutton),
-                !separators.empty());
+                                      !separators.empty());
         gtk_entry_set_text (GTK_ENTRY(custom_entry), separators.c_str());
+        g_signal_handlers_unblock_by_func (custom_cbutton, (gpointer) csv_tximp_preview_sep_button_cb, this);
+        g_signal_handlers_unblock_by_func (custom_entry, (gpointer) csv_tximp_preview_sep_button_cb, this);
+        csv_tximp_preview_sep_button_cb (GTK_WIDGET (custom_cbutton), this);
     }
 
     // Repopulate the parsed data table
