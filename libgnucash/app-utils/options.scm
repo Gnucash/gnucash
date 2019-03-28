@@ -1464,10 +1464,10 @@ the option '~a'."))
             (xaccAccountGetCommodity account)))))
 
   (let* ((value (if (eq? 'book-currency default-radiobutton-value)
-                    (cons default-radiobutton-value
-                          (cons default-book-currency-value
-                                (cons default-cap-gains-policy-value '())))
-                    (cons default-radiobutton-value '())))
+                    (list default-radiobutton-value
+                          default-book-currency-value
+                          default-cap-gains-policy-value)
+                    (list default-radiobutton-value)))
          (value->string (lambda ()
                           (string-append "'" (gnc:value->string
                                                (car value)))))
@@ -1488,42 +1488,32 @@ the option '~a'."))
            (set! value x)
            (gnc:error "Illegal Radiobutton option set"))) ;;setter
      (lambda () (if (eq? 'book-currency default-radiobutton-value)
-                    (cons default-radiobutton-value
-                          (cons default-book-currency-value
-                                (cons default-cap-gains-policy-value
-                                      (cons '() '()))))
-                    (cons default-radiobutton-value '()))) ;; default-getter
+                    (list default-radiobutton-value
+                          default-book-currency-value
+                          default-cap-gains-policy-value)
+                    (list default-radiobutton-value))) ;; default-getter
      (gnc:restore-form-generator value->string)
      (lambda (b p) ;; scm->kvp
-       (if (eq? 'book-currency (car value))
-           (begin
-             ;; Currency = selected currency
-             (qof-book-set-option
-                b
-                (currency->scm (cadr value))
-                book-currency-path)
-             ;; Default Gains Policy = selected policy
-             (qof-book-set-option
-                b
-                (symbol->string (caddr value))
-                gains-policy-path)
-             ;; Default Gains Account = if selected, selected account
-             (if (car (cdddr value))
-                 (qof-book-set-option
-                    b
-                    (car (cdddr value))
-                    gains-loss-account-path)))
-           (if (eq? 'trading (car value))
-               ;; Use Trading Accounts = "t"
-               (qof-book-set-option b "t" trading-accounts-path))))
+       (case (car value)
+         ((book-currency)
+          ;; Currency = selected currency
+          (qof-book-set-option b (currency->scm (cadr value))
+                               book-currency-path)
+          ;; Default Gains Policy = selected policy
+          (qof-book-set-option b (symbol->string (caddr value))
+                               gains-policy-path)
+          ;; Default Gains Account = if selected, selected account
+          (if (car (cdddr value))
+              (qof-book-set-option b (car (cdddr value))
+                                   gains-loss-account-path)))
+         ((trading)
+          ;; Use Trading Accounts = "t"
+          (qof-book-set-option b "t" trading-accounts-path))))
      (lambda (b p) ;; kvp->scm
        (let* ((trading-option-path-kvp?
-                       (qof-book-get-option
-                        b trading-accounts-path))
-              (trading? (if (and trading-option-path-kvp?
-                                 (string=? "t" trading-option-path-kvp?))
-                            #t
-                            #f))
+                       (qof-book-get-option b trading-accounts-path))
+              (trading? (and trading-option-path-kvp?
+                             (string=? "t" trading-option-path-kvp?)))
               (book-currency #f)
               (cap-gains-policy #f)
               (gains-loss-account-guid #f)
@@ -1573,25 +1563,26 @@ the option '~a'."))
                                                (string->symbol cap-gains-policy)
                                                gains-loss-account-guid)
                                          '())))
-                 (set! value (cons 'neither '())))))
+                 (set! value (list 'neither)))))
      (lambda (x) ;; value validator
-       (if (list? x)
-           (if (legal-val (car x) ok-radiobutton-values)
-               (if (eq? 'book-currency (car x))
-                   (if (currency? (currency->scm (cadr x)))
-                       (if (gnc-valid-policy-name (symbol->string (caddr x)))
-                           (if (car(cdddr x))
-                               (if (valid-gains-loss-account?
-                                     (currency->scm (cadr x))
-                                     (car(cdddr x)))
-                                   (list #t x)
-                                   (list #f "gains-loss-account-option: illegal value"))
-                               (list #t x)) ;; must be valid if specified, otherwise OK
-                           (list #f "cap-gains-policy-option: illegal value"))
-                       (list #f "currency-option: illegal value"))
-                   (list #t x))
-               (list #f "radiobutton-option: illegal choice"))
-           (list #f "value not a list")))
+       (cond
+        ((not (list? x))
+         (list #f "value not a list"))
+        ((not (legal-val (car x) ok-radiobutton-values))
+         (list #f "radiobutton-option: illegal choice"))
+        ((not (eq? 'book-currency (car x)))
+         (list #t x))
+        ((not (currency? (currency->scm (cadr x))))
+         (list #f "currency-option: illegal value"))
+        ((not (gnc-valid-policy-name (symbol->string (caddr x))))
+         (list #f "cap-gains-policy-option: illegal value"))
+        ((not (car (cdddr x)))
+         (list #t x))
+        ((not (valid-gains-loss-account? (currency->scm (cadr x))
+                                         (car (cdddr x))))
+         (list #f "gains-loss-account-option: illegal value"))
+        (else
+         (list #t x))))
      (vector book-currency-documentation-string
              default-book-currency-value
              default-cap-gains-policy-documentation-string
