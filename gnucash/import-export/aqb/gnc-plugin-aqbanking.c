@@ -110,17 +110,17 @@ static GtkActionEntry gnc_plugin_actions [] =
     {
         "ABIssueSepaTransAction", NULL,
 		/* Translators: https://en.wikipedia.org/wiki/Single_Euro_Payments_Area */
-		N_("_Issue SEPA Transaction..."), NULL,
+		N_("Issue _SEPA Transaction..."), NULL,
         N_("Issue a new international European (SEPA) transaction online through Online Banking"),
         G_CALLBACK(gnc_plugin_ab_cmd_issue_sepatransaction)
     },
     {
-        "ABIssueIntTransAction", NULL, N_("I_nternal Transaction..."), NULL,
+        "ABIssueIntTransAction", NULL, N_("_Internal Transaction..."), NULL,
         N_("Issue a new bank-internal transaction online through Online Banking"),
         G_CALLBACK(gnc_plugin_ab_cmd_issue_inttransaction)
     },
     {
-        "ABIssueSepaDirectDebitAction", NULL, N_("_Issue SEPA Direct Debit..."), NULL,
+        "ABIssueSepaDirectDebitAction", NULL, N_("Issue SEPA Direct _Debit..."), NULL,
         N_("Issue a new international European (SEPA) direct debit note online through Online Banking"),
         G_CALLBACK(gnc_plugin_ab_cmd_issue_sepa_direct_debit)
     },
