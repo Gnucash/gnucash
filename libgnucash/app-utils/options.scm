@@ -1449,36 +1449,19 @@ the option '~a'."))
     (currency-lookup currency))
 
   (define (valid-gains-loss-account? book-currency gains-loss-account-guid)
-  ;; xaccAccountLookup returns Account if guid valid otherwise NULL; also must
-  ;; be in book-currency, income or expense, and not placeholder nor hidden
+    ;; xaccAccountLookup returns Account if guid valid otherwise NULL; also must
+    ;; be in book-currency, income or expense, and not placeholder nor hidden
     (let* ((account (xaccAccountLookup gains-loss-account-guid
-                                                    (gnc-get-current-book)))
-           (hidden? (if account
-                        (xaccAccountIsHidden account)
-                        #t))
-           (placeholder? (if account
-                             (xaccAccountGetPlaceholder account)
-                             #t))
-           (account-type (if account
-                             (xaccAccountGetType account)
-                             #f))
-           (income-or-expense? (if (and account account-type)
-                                   (or (= ACCT-TYPE-INCOME account-type)
-                                       (= ACCT-TYPE-EXPENSE account-type))
-                                   #f))
-           (commodity-eq-book-curr? (if account
-                                        (gnc-commodity-equal
-                                          (currency-lookup book-currency)
-                                          (xaccAccountGetCommodity account))
-                                        #f))
-          )
-          (if (and account
-                   (not hidden?)
-                   (not placeholder?)
-                   income-or-expense?
-                   commodity-eq-book-curr?)
-              #t
-              #f)))
+                                       (gnc-get-current-book))))
+      (and account
+           (not (null? account))
+           (not (xaccAccountIsHidden account))
+           (not (xaccAccountGetPlaceholder account))
+           (memv (xaccAccountGetType account)
+                 (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE))
+           (gnc-commodity-equal
+            (currency-lookup book-currency)
+            (xaccAccountGetCommodity account)))))
 
   (let* ((value (if (eq? 'book-currency default-radiobutton-value)
                     (cons default-radiobutton-value
