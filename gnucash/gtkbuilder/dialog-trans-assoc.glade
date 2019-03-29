@@ -152,7 +152,9 @@
                     <property name="title" translatable="yes">Association</property>
                     <property name="alignment">0.5</property>
                     <child>
-                      <object class="GtkCellRendererText" id="cellrenderertext3"/>
+                      <object class="GtkCellRendererText" id="cellrenderertext3">
+                        <property name="ellipsize">start</property>
+                      </object>
                       <attributes>
                         <attribute name="text">2</attribute>
                       </attributes>

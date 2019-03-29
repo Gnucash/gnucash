@@ -525,7 +525,6 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
     gtk_tree_view_column_set_title (tree_column, _("Relative"));
     gtk_tree_view_append_column (GTK_TREE_VIEW(assoc_dialog->view), tree_column);
     gtk_tree_view_column_set_alignment (tree_column, 0.5);
-    gtk_tree_view_column_set_expand (tree_column, TRUE);
     cr = gtk_cell_renderer_pixbuf_new();
     gtk_tree_view_column_pack_start (tree_column, cr, TRUE);
     // connect 'active' and set 'xalign' property of the cell renderer
@@ -534,6 +533,10 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
 
     g_signal_connect (assoc_dialog->view, "row-activated",
                       G_CALLBACK(row_selected_cb), (gpointer)assoc_dialog);
+
+    // set the Associate column to be the one that expands
+    tree_column = GTK_TREE_VIEW_COLUMN(gtk_builder_get_object (builder, "uri-entry"));
+    gtk_tree_view_column_set_expand (tree_column, TRUE);
 
     // Set grid lines option to preference
     gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(assoc_dialog->view), gnc_tree_view_get_grid_lines_pref ());
