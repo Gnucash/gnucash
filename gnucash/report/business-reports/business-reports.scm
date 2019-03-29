@@ -29,70 +29,6 @@
 (use-modules (gnucash report report-system))
 (use-modules (gnucash report reports))
 
-;; to define gnc-build-url
-(gnc:module-load "gnucash/html" 0)
-
-(define (guid-ref idstr type guid)
-  (gnc-build-url type (string-append idstr guid) ""))
-
-(define (gnc:customer-anchor-text customer)
-  (guid-ref "customer=" URL-TYPE-CUSTOMER (gncCustomerReturnGUID customer)))
-
-(define (gnc:job-anchor-text job)
-  (guid-ref "job=" URL-TYPE-JOB (gncJobReturnGUID job)))
-
-(define (gnc:vendor-anchor-text vendor)
-  (guid-ref "vendor=" URL-TYPE-VENDOR (gncVendorReturnGUID vendor)))
-
-(define (gnc:employee-anchor-text employee)
-  (guid-ref "employee=" URL-TYPE-EMPLOYEE (gncEmployeeReturnGUID employee)))
-
-(define (gnc:invoice-anchor-text invoice)
-  (guid-ref "invoice=" URL-TYPE-INVOICE (gncInvoiceReturnGUID invoice)))
-
-(define (gnc:owner-anchor-text owner)
-  (let ((type (gncOwnerGetType (gncOwnerGetEndOwner owner))))
-    (cond
-      ((eqv? type GNC-OWNER-CUSTOMER)
-       (gnc:customer-anchor-text (gncOwnerGetCustomer owner)))
-
-      ((eqv? type GNC-OWNER-VENDOR)
-       (gnc:vendor-anchor-text (gncOwnerGetVendor owner)))
-
-      ((eqv? type GNC-OWNER-EMPLOYEE)
-       (gnc:employee-anchor-text (gncOwnerGetEmployee owner)))
-
-      ((eqv? type GNC-OWNER-JOB)
-       (gnc:job-anchor-text (gncOwnerGetJob owner)))
-
-      (else
-       ""))))
-
-(define (gnc:owner-report-text owner acc)
-  (let* ((end-owner (gncOwnerGetEndOwner owner))
-	 (type (gncOwnerGetType end-owner))
-	 (ref #f))
-
-    (cond
-      ((eqv? type GNC-OWNER-CUSTOMER)
-       (set! ref "owner=c:"))
-
-      ((eqv? type GNC-OWNER-VENDOR)
-       (set! ref "owner=v:"))
-
-      ((eqv? type GNC-OWNER-EMPLOYEE)
-       (set! ref "owner=e:"))
-
-      (else (set! ref "unknown-type=")))
-
-    (if ref
-	(begin
-	  (set! ref (string-append ref (gncOwnerReturnGUID end-owner)))
-	  (if (not (null? acc))
-	      (set! ref (string-append ref "&acct="
-				       (gncAccountGetGUID acc))))
-	  (gnc-build-url URL-TYPE-OWNERREPORT ref ""))
-	ref)))
 
 ;; Creates a new report instance for the given invoice. The given
 ;; report-template-id must refer to an existing report template, which
@@ -133,7 +69,5 @@
   (owner-report-create owner account))
 
 (export gnc:invoice-report-create
-	gnc:customer-anchor-text gnc:job-anchor-text gnc:vendor-anchor-text
-	gnc:invoice-anchor-text gnc:owner-anchor-text gnc:owner-report-text
 	gnc:payables-report-create gnc:receivables-report-create
 	gnc:owner-report-create)
