@@ -33,7 +33,6 @@
 (gnc:module-load "gnucash/report/report-system" 0)
 
 (use-modules (gnucash report reports))
-(use-modules (gnucash report business-reports))
 
 (define optname-to-date (N_ "To"))
 (define optname-sort-by (N_ "Sort By"))
