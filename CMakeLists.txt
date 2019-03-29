@@ -357,8 +357,8 @@ endif ()
 
 # ############################################################
 if (WITH_AQBANKING)
-  gnc_pkg_check_modules (GWENHYWFAR REQUIRED gwenhywfar)
-  gnc_pkg_check_modules (AQBANKING REQUIRED aqbanking)
+  gnc_pkg_check_modules (GWENHYWFAR REQUIRED gwenhywfar>=4.9.99)
+  gnc_pkg_check_modules (AQBANKING REQUIRED aqbanking>=5.3.4)
   if(WITH_GNUCASH)
     gnc_pkg_check_modules (GWEN_GTK3 gwengui-gtk3)
     if(GWEN_GTK3_FOUND AND GWEN_GTK3_VERSION VERSION_GREATER "4.20.0")

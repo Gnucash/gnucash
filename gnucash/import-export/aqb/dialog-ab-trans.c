@@ -37,6 +37,9 @@
 #include <aqbanking/jobinternaltransfer.h>
 #include <aqbanking/jobsepatransfer.h>
 #include <aqbanking/jobsepadebitnote.h>
+#ifdef AQBANKING6
+# include <aqbanking/types/transaction.h>
+#endif
 
 #include <gnc-aqbanking-templates.h>
 #include "dialog-ab-trans.h"
@@ -45,11 +48,6 @@
 #include "gnc-ab-utils.h"
 #include "gnc-amount-edit.h"
 #include "gnc-ui.h"
-
-#if AQBANKING_VERSION_INT > 50200 || ((AQBANKING_VERSION_INT == 50200) && (AQBANKING_VERSION_BUILD > 0))
-/** Defined for aqbanking > 5.2.0 */
-# define AQBANKING_VERSION_GREATER_5_2_0
-#endif
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
@@ -66,7 +64,7 @@ static gboolean gnc_ab_trans_dialog_get_templ_helper(GtkTreeModel *model,
         gpointer data);
 
 static AB_TRANSACTION *gnc_ab_trans_dialog_fill_values(GncABTransDialog *td);
-static AB_JOB *gnc_ab_trans_dialog_get_available_empty_job(AB_ACCOUNT *ab_acc,
+static GNC_AB_JOB *gnc_ab_trans_dialog_get_available_empty_job(GNC_AB_ACCOUNT_SPEC *ab_acc,
         GncABTransType trans_type);
 
 static void gnc_ab_trans_dialog_check_iban(const GncABTransDialog *td,
@@ -107,7 +105,7 @@ struct _GncABTransDialog
     /* The dialog itself */
     GtkWidget *dialog;
     GtkWidget *parent;
-    AB_ACCOUNT *ab_acc;
+    GNC_AB_ACCOUNT_SPEC *ab_acc;
 
     /* Whether this is a transfer or a direct debit */
     GncABTransType trans_type;
@@ -187,11 +185,11 @@ gnc_ab_trans_dialog_fill_values(GncABTransDialog *td)
     AB_TRANSACTION *trans = AB_Transaction_new();
     AB_VALUE *value;
 
+#ifdef AQBNKING6
+    AB_Banking_FillTransactionFromAccountSpec(trans, td->ab_acc);
+#else
     AB_Transaction_FillLocalFromAccount(trans, td->ab_acc);
-    //AB_Transaction_SetLocalBankCode(trans, AB_Account_GetBankCode(td->ab_acc));
-    //AB_Transaction_SetLocalAccountNumber(
-    //  trans, AB_Account_GetAccountNumber(td->ab_acc));
-    //AB_Transaction_SetLocalCountry(trans, "DE");
+#endif
 
     if (gnc_ab_trans_isSEPA(td->trans_type))
     {
@@ -210,6 +208,17 @@ gnc_ab_trans_dialog_fill_values(GncABTransDialog *td)
                     trans, gtk_entry_get_text(GTK_ENTRY(td->recp_account_entry)));
     }
     AB_Transaction_SetRemoteCountry(trans, "DE");
+#ifdef AQBANKING6
+    AB_Transaction_SetRemoteName(
+        trans, gtk_entry_get_text(GTK_ENTRY(td->recp_name_entry)));
+
+    AB_Transaction_AddPurposeLine(
+        trans, gtk_entry_get_text(GTK_ENTRY(td->purpose_entry)));
+    AB_Transaction_AddPurposeLine(
+        trans, gtk_entry_get_text(GTK_ENTRY(td->purpose_cont_entry)));
+    AB_Transaction_AddPurposeLine(
+        trans, gtk_entry_get_text(GTK_ENTRY(td->purpose_cont2_entry)));
+#else
     AB_Transaction_AddRemoteName(
         trans, gtk_entry_get_text(GTK_ENTRY(td->recp_name_entry)), FALSE);
 
@@ -221,7 +230,7 @@ gnc_ab_trans_dialog_fill_values(GncABTransDialog *td)
         trans, gtk_entry_get_text(GTK_ENTRY(td->purpose_cont2_entry)), FALSE);
     AB_Transaction_AddPurpose(
         trans, gtk_entry_get_text(GTK_ENTRY(td->purpose_cont3_entry)), FALSE);
-
+#endif
     value = AB_Value_fromDouble(gnc_amount_edit_get_damount(
                                     GNC_AMOUNT_EDIT(td->amount_edit)));
     /* FIXME: Replace "EUR" by account-dependent string here. */
@@ -247,7 +256,7 @@ gnc_ab_trans_dialog_fill_values(GncABTransDialog *td)
 }
 
 GncABTransDialog *
-gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
+gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
                         gint commodity_scu, GncABTransType trans_type,
                         GList *templates)
 {
@@ -275,6 +284,14 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
 
     g_return_val_if_fail(ab_acc, NULL);
 
+#ifdef AQBANKING6
+    ab_ownername = AB_AccountSpec_GetOwnerName(ab_acc);
+    if (!ab_ownername)
+        ab_ownername = "";
+    ab_accountnumber = AB_AccountSpec_GetAccountNumber(ab_acc);
+    ab_bankcode = AB_AccountSpec_GetBankCode(ab_acc);
+    ab_bankname = _("(unknown)");
+#else
     ab_ownername = AB_Account_GetOwnerName(ab_acc);
     if (!ab_ownername)
         ab_ownername = "";
@@ -283,6 +300,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
     ab_bankname = AB_Account_GetBankName(ab_acc);
     if (!ab_bankname || !*ab_bankname)
         ab_bankname = _("(unknown)");
+#endif
 
     td = g_new0(GncABTransDialog, 1);
     td->parent = parent;
@@ -409,8 +427,13 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
     if (gnc_ab_trans_isSEPA(trans_type))
     {
         gtk_widget_set_sensitive(GTK_WIDGET(td->orig_name_entry), TRUE);
+#if AQBANKING6
+        ab_accountnumber = AB_AccountSpec_GetIBAN(ab_acc);
+        ab_bankcode = AB_AccountSpec_GetBIC(ab_acc);
+#else
         ab_accountnumber = AB_Account_GetIBAN(ab_acc);
         ab_bankcode = AB_Account_GetBIC(ab_acc);
+#endif
         gtk_label_set_text(GTK_LABEL(orig_account_label), ab_accountnumber);
         gtk_label_set_text (GTK_LABEL (orig_bankcode_label), ab_bankcode);
     }
@@ -620,27 +643,6 @@ gnc_ab_trans_dialog_verify_values(GncABTransDialog *td)
         g_free(purpose);
     }
 
-#if 0
-//    // AQBANKING_VERSION_INT >= 50307
-//    if (gnc_ab_trans_isSEPA(td->trans_type))
-//    {
-//        AB_USER *u = AH_Job_GetUser(j);
-//        uint32_t uflags;
-//            (AB_Transaction_CheckForSepaConformity(td->ab_trans, 0) != 0))
-    // need to check how to do this for aqbanking >= 5.3.7 when I have time
-    {
-        gnc_ab_trans_dialog_entry_set (td->recp_name_entry,
-                                       _("The text you entered contained at least one character that is invalid for a SEPA transaction. "
-                                         "In SEPA, unfortunately only exactly the following characters are allowed: "
-                                         "a...z, A...Z, 0...9, and the following punctuations: ' : ? , - ( + . ) / "
-                                         "\n\n"
-                                         "In particular, neither Umlauts nor an ampersand (&) is allowed, "
-                                         "neither in the recipient or sender name nor in any purpose line."),
-                                       "process-stop");
-        values_ok = FALSE;
-    }
-#endif
-
     gtk_widget_set_sensitive(td->exec_button, values_ok);
     gnc_ab_trans_dialog_clear_transaction(td);
 }
@@ -649,7 +651,7 @@ gint
 gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
 {
     gint result;
-    AB_JOB *job;
+    GNC_AB_JOB *job;
     const AB_TRANSACTION_LIMITS *joblimits;
     guint8 max_purpose_lines;
 
@@ -662,13 +664,11 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
     }
 
     /* Activate as many purpose entries as available for the job */
-    joblimits =
-#ifdef AQBANKING_VERSION_GREATER_5_2_0
-            AB_Job_GetFieldLimits
+#ifdef AQBANKING6
+    joblimits = AB_AccountSpec_GetTransactionLimitsForCommand(td->ab_acc, AB_Transaction_GetCommand(job));
 #else
-            AB_JobSingleTransfer_GetFieldLimits
+    joblimits = AB_Job_GetFieldLimits (job);
 #endif
-            (job);
     max_purpose_lines = joblimits ?
                         AB_TransactionLimits_GetMaxLinesPurpose(joblimits) : 2;
     gtk_widget_set_sensitive(td->purpose_cont_entry, max_purpose_lines > 1);
@@ -804,11 +804,39 @@ gnc_ab_trans_dialog_get_ab_trans(const GncABTransDialog *td)
     return td->ab_trans;
 }
 
-static AB_JOB *
-gnc_ab_trans_dialog_get_available_empty_job(AB_ACCOUNT *ab_acc, GncABTransType trans_type)
+static GNC_AB_JOB *
+gnc_ab_trans_dialog_get_available_empty_job(GNC_AB_ACCOUNT_SPEC *ab_acc, GncABTransType trans_type)
 {
-    AB_JOB *job;
+    GNC_AB_JOB *job;
+#ifdef AQBANKING6
+    AB_TRANSACTION_COMMAND cmd = AB_Transaction_CommandUnknown;
 
+     switch (trans_type)
+     {
+     case SINGLE_DEBITNOTE:
+         cmd=AB_Transaction_CommandDebitNote;
+         break;
+     case SINGLE_INTERNAL_TRANSFER:
+         cmd=AB_Transaction_CommandInternalTransfer;
+         break;
+     case SEPA_TRANSFER:
+         cmd=AB_Transaction_CommandSepaTransfer;
+         break;
+     case SEPA_DEBITNOTE:
+         cmd=AB_Transaction_CommandSepaDebitNote;
+         break;
+     case SEPA_TRANSFER:
+     default:
+        cmd=AB_Transaction_CommandTransfer;
+         break;
+     };
+     if (!AB_AccountSpec_GetTransactionLimitsForCommand(ab_acc, cmd))
+         return NULL;
+
+     job = AB_Transaction_new();
+     AB_Transaction_SetCommand(job, cmd);
+     AB_Transaction_SetUniqueAccountId(job, AB_AccountSpec_GetUniqueId(ab_acc));
+#else
     switch (trans_type)
     {
     case SINGLE_DEBITNOTE:
@@ -828,62 +856,56 @@ gnc_ab_trans_dialog_get_available_empty_job(AB_ACCOUNT *ab_acc, GncABTransType t
         job = AB_JobSepaTransfer_new(ab_acc);
         break;
     };
-
-    if (!job || AB_Job_CheckAvailability(job
-#ifndef AQBANKING_VERSION_5_PLUS
-                                         , 0
-#endif
-                                        ))
+    if (!job || AB_Job_CheckAvailability(job))
     {
         if (job) AB_Job_free(job);
         return NULL;
     }
+#endif
     return job;
 }
 
-AB_JOB *
+GNC_AB_JOB *
 gnc_ab_trans_dialog_get_job(const GncABTransDialog *td)
 {
     g_return_val_if_fail(td, NULL);
     return gnc_ab_get_trans_job(td->ab_acc, td->ab_trans, td->trans_type);
 }
 
-AB_JOB *
-gnc_ab_get_trans_job(AB_ACCOUNT *ab_acc, const AB_TRANSACTION *ab_trans,
+GNC_AB_JOB *
+gnc_ab_get_trans_job(GNC_AB_ACCOUNT_SPEC *ab_acc,
+                     const AB_TRANSACTION *ab_trans,
                      GncABTransType trans_type)
 {
-    AB_JOB *job;
+    GNC_AB_JOB *job;
 
     g_return_val_if_fail(ab_acc && ab_trans, NULL);
 
+#ifdef AQBANKING6
     job = gnc_ab_trans_dialog_get_available_empty_job(ab_acc, trans_type);
     if (job)
     {
-#ifdef AQBANKING_VERSION_GREATER_5_2_0
-        AB_Job_SetTransaction(job, ab_trans);
+        AB_TRANSACTION *new_job;
+
+        /* merge transactions */
+        new_job=AB_Transaction_dup(ab_trans);
+        AB_Transaction_SetCommand(new_job, AB_Transaction_GetCommand(job));
+        AB_Transaction_SetUniqueAccountId(new_job,
+                                          AB_Transaction_GetUniqueAccountId(job));
+
+        AB_Transaction_free(job);
+        return new_job;
+    }
+    return NULL;
+
 #else
-        switch (trans_type)
-        {
-        case SINGLE_DEBITNOTE:
-            AB_JobSingleDebitNote_SetTransaction(job, ab_trans);
-            break;
-        case SINGLE_INTERNAL_TRANSFER:
-            AB_JobInternalTransfer_SetTransaction(job, ab_trans);
-            break;
-        case SEPA_TRANSFER:
-            AB_JobSepaTransfer_SetTransaction(job, ab_trans);
-            break;
-        case SEPA_DEBITNOTE:
-            AB_JobSepaDebitNote_SetTransaction(job, ab_trans);
-            break;
-        case SINGLE_TRANSFER:
-        default:
-            AB_JobSingleTransfer_SetTransaction(job, ab_trans);
-            break;
-        };
-#endif
+    job = gnc_ab_trans_dialog_get_available_empty_job(ab_acc, trans_type);
+    if (job)
+    {
+        AB_Job_SetTransaction(job, ab_trans);
     }
     return job;
+#endif
 }
 
 void

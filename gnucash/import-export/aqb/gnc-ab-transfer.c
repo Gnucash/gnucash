@@ -82,7 +82,7 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
 {
     AB_BANKING *api;
     gboolean online = FALSE;
-    AB_ACCOUNT *ab_acc;
+    GNC_AB_ACCOUNT_SPEC *ab_acc;
     GList *templates = NULL;
     GncABTransDialog *td = NULL;
     gboolean successful = FALSE;
@@ -97,17 +97,14 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         g_warning("gnc_ab_maketrans: Couldn't get AqBanking API");
         return;
     }
-    if (AB_Banking_OnlineInit(api
-#ifdef AQBANKING_VERSION_4_EXACTLY
-                              , 0
-#endif
-                             ) != 0)
+#ifndef AQBANKING6
+    if (AB_Banking_OnlineInit(api) != 0)
     {
         g_warning("gnc_ab_maketrans: Couldn't initialize AqBanking API");
         goto cleanup;
     }
     online = TRUE;
-
+#endif
     /* Get the AqBanking Account */
     ab_acc = gnc_ab_get_ab_account(api, gnc_acc);
     if (!ab_acc)
@@ -134,15 +131,15 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         gint result;
         gboolean changed;
         const AB_TRANSACTION *ab_trans;
-        AB_JOB *job = NULL;
-        AB_JOB_LIST2 *job_list = NULL;
+        GNC_AB_JOB *job = NULL;
+        GNC_AB_JOB_LIST2 *job_list = NULL;
         XferDialog *xfer_dialog = NULL;
         gnc_numeric amount;
         gchar *description;
         gchar *memo;
         Transaction *gnc_trans = NULL;
         AB_IMEXPORTER_CONTEXT *context = NULL;
-        AB_JOB_STATUS job_status;
+        GNC_AB_JOB_STATUS job_status;
         GncABImExContextImport *ieci = NULL;
 
         /* Get a GUI object */
@@ -174,11 +171,11 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
         /* Get a job and enqueue it */
         ab_trans = gnc_ab_trans_dialog_get_ab_trans(td);
         job = gnc_ab_trans_dialog_get_job(td);
-        if (!job || AB_Job_CheckAvailability(job
-#ifndef AQBANKING_VERSION_5_PLUS
-                                             , 0
+#ifdef AQBANKING6
+        if (!job || AB_AccountSpec_GetTransactionLimitsForCommand(ab_acc, AB_Transaction_GetCommand(job))==NULL)
+#else
+        if (!job || AB_Job_CheckAvailability(job))
 #endif
-                                            ))
         {
             if (!gnc_verify_dialog (
                         GTK_WINDOW (parent), FALSE, "%s",
@@ -194,9 +191,13 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
                 aborted = TRUE;
             goto repeat;
         }
+#ifdef AQBANKING6
+        job_list = AB_Transaction_List2_new();
+        AB_Transaction_List2_PushBack(job_list, job);
+#else
         job_list = AB_Job_List2_new();
         AB_Job_List2_PushBack(job_list, job);
-
+#endif
         /* Setup a Transfer Dialog for the GnuCash transaction */
         xfer_dialog = gnc_xfer_dialog(gnc_ab_trans_dialog_get_parent(td),
                                       gnc_acc);
@@ -273,20 +274,25 @@ gnc_ab_maketrans(GtkWidget *parent, Account *gnc_acc,
             }
 
             /* Finally, execute the job */
-            AB_Banking_ExecuteJobs(api, job_list, context
-#ifndef AQBANKING_VERSION_5_PLUS
-                                   , 0
+#ifdef AQBANKING6
+            AB_Banking_SendCommands(api, job_list, context);
+#else
+            AB_Banking_ExecuteJobs(api, job_list, context);
 #endif
-                                  );
-
             /* Ignore the return value of AB_Banking_ExecuteJobs(), as the job's
              * status always describes better whether the job was actually
              * transferred to and accepted by the bank.  See also
              * http://lists.gnucash.org/pipermail/gnucash-de/2008-September/006389.html
              */
+#ifdef AQBANKING6
+            job_status = AB_Transaction_GetStatus(job);
+            if (job_status != AB_Transaction_StatusAccepted
+                && job_status != AB_Transaction_StatusPending)
+#else
             job_status = AB_Job_GetStatus(job);
             if (job_status != AB_Job_StatusFinished
                     && job_status != AB_Job_StatusPending)
+#endif
             {
                 successful = FALSE;
                 if (!gnc_verify_dialog (
@@ -327,12 +333,20 @@ repeat:
             AB_ImExporterContext_free(context);
         if (job_list)
         {
+#ifdef AQBANKING6
+            AB_Transaction_List2_free(job_list);
+#else
             AB_Job_List2_free(job_list);
+#endif
             job_list = NULL;
         }
         if (job)
         {
+#ifdef AQBANKING6
+            AB_Transaction_free(job);
+#else
             AB_Job_free(job);
+#endif
             job = NULL;
         }
         if (gui)
@@ -347,10 +361,8 @@ repeat:
 cleanup:
     if (td)
         gnc_ab_trans_dialog_free(td);
+#ifndef AQBANKING6
     if (online)
-#ifdef AQBANKING_VERSION_4_EXACTLY
-        AB_Banking_OnlineFini(api, 0);
-#else
         AB_Banking_OnlineFini(api);
 #endif
     gnc_AB_BANKING_fini(api);

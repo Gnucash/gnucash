@@ -52,22 +52,26 @@ G_BEGIN_DECLS
  * in the interval [0..99]. */
 #define GWENHYWFAR_VERSION_INT (10000 * GWENHYWFAR_VERSION_MAJOR + 100 * GWENHYWFAR_VERSION_MINOR + GWENHYWFAR_VERSION_PATCHLEVEL)
 
-#if AQBANKING_VERSION_INT >= 39900
-/** Defined if libaqbanking4 as opposed to libaqbanking3 or earlier is
- * being used */
-# define AQBANKING_VERSION_4_PLUS
+#if AQBANKING_VERSION_INT >= 59900
+# define AQBANKING6 1
+# define GNC_AB_ACCOUNT_SPEC AB_ACCOUNT_SPEC
+# define GNC_AB_ACCOUNT_SPEC_LIST AB_ACCOUNT_SPEC_LIST
+# define GNC_AB_JOB AB_TRANSACTION
+# define GNC_AB_JOB_LIST2 AB_TRANSACTION_LIST2
+# define GNC_AB_JOB_LIST2_ITERATOR AB_TRANSACTION_LIST2_ITERATOR
+# define GNC_AB_JOB_STATUS AB_TRANSACTION_STATUS
+# define GNC_GWEN_DATE GWEN_DATE
+#else
+# define GNC_AB_ACCOUNT_SPEC AB_ACCOUNT
+# define GNC_AB_ACCOUNT_SPEC_LIST AB_ACCOUNT_LIST2
+# define GNC_AB_JOB AB_JOB
+# define GNC_AB_JOB_LIST2 AB_JOB_LIST2
+# define GNC_AB_JOB_LIST2_ITERATOR AB_JOB_LIST2_ITERATOR
+# define GNC_AB_JOB_STATUS AB_JOB_STATUS
+# define GNC_GWEN_DATE GWEN_TIME
 #endif
-
-#if AQBANKING_VERSION_INT >= 49900
-/** Defined if libaqbanking5 as opposed to libaqbanking4 or earlier is
- * being used */
-# define AQBANKING_VERSION_5_PLUS
-#endif
-
-#if defined(AQBANKING_VERSION_4_PLUS) && !defined(AQBANKING_VERSION_5_PLUS)
-/** Defined if libaqbanking4 is used and neither a newer nor an older
- * version of libaqbanking. */
-# define AQBANKING_VERSION_4_EXACTLY
+#if GWENHYWFAR_VERSION_INT >= 49900
+# define GWENHYWFAR5
 #endif
 
 #define GNC_PREFS_GROUP_AQBANKING       "dialogs.import.hbci"
@@ -130,11 +134,11 @@ gint gnc_AB_BANKING_fini(AB_BANKING *api);
  * Of course this only works after the GnuCash account has been set up for
  * AqBanking use, i.e. the account's hbci data have been set up and populated.
  *
- * @param api The AB_BANKING to get the AB_ACCOUNT from
- * @param gnc_acc The GnuCash account to query for AB_ACCOUNT reference data
- * @return The AB_ACCOUNT found or NULL otherwise
+ * @param api The AB_BANKING to get the GNC_AB_ACCOUNT_SPEC from
+ * @param gnc_acc The GnuCash account to query for GNC_AB_ACCOUNT_SPEC reference data
+ * @return The GNC_AB_ACCOUNT_SPEC found or NULL otherwise
  */
-AB_ACCOUNT *gnc_ab_get_ab_account(const AB_BANKING *api, Account *gnc_acc);
+GNC_AB_ACCOUNT_SPEC *gnc_ab_get_ab_account(const AB_BANKING *api, Account *gnc_acc);
 
 /**
  * Print the value of @a value with two decimal places and @a value's
@@ -148,10 +152,10 @@ gchar *gnc_AB_VALUE_to_readable_string(const AB_VALUE *value);
 /**
  * Return the job as string.
  *
- * @param value AB_JOB or NULL
+ * @param value GNC_AB_JOB or NULL
  * @return A newly allocated string
  */
-gchar *gnc_AB_JOB_to_readable_string(const AB_JOB *job);
+gchar *gnc_AB_JOB_to_readable_string(const GNC_AB_JOB *job);
 
 /**
  * Return the job_id as string.
@@ -226,7 +230,7 @@ Transaction *gnc_ab_trans_to_gnc(const AB_TRANSACTION *ab_trans, Account *gnc_ac
  * create an aqbanking job for each of the transactions found
  *
  * @param api If @a execute_txns is TRUE, the AB_BANKING to get
- * AB_ACCOUNTs from
+ * GNC_AB_ACCOUNT_SPECs from
  *
  * @param parent Widget to set new dialogs transient for, may be NULL
  *
@@ -254,7 +258,7 @@ guint gnc_ab_ieci_get_found(GncABImExContextImport *ieci);
  * @param ieci The return value of gnc_ab_import_context()
  * @return The list of jobs, freeable with AB_Job_List2_FreeAll()
  */
-AB_JOB_LIST2 *gnc_ab_ieci_get_job_list(GncABImExContextImport *ieci);
+GNC_AB_JOB_LIST2 *gnc_ab_ieci_get_job_list(GncABImExContextImport *ieci);
 
 /**
  * Run the generic transaction matcher dialog.

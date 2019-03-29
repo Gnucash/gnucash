@@ -36,7 +36,13 @@
 #include <windows.h>
 #endif
 
+#include "gnc-ab-utils.h" /* For version macros */
+
 #include <aqbanking/banking.h>
+#ifdef AQBANKING6
+#include <aqbanking/types/account_spec.h>
+#include <gwenhywfar/gui.h>
+#endif
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
@@ -57,12 +63,9 @@
 #include "gnc-ui-util.h"
 #include "gnc-session.h"
 #include "import-account-matcher.h"
-
-#if AQBANKING_VERSION_INT > 49908
-/* For aqbanking > 4.99.8. See below. */
+#ifndef AQBANKING6
 # include <aqbanking/dlg_setup.h>
 #endif
-
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
@@ -91,12 +94,8 @@ void aai_match_page_prepare (GtkAssistant *assistant, gpointer user_data);
 static gboolean banking_has_accounts(AB_BANKING *banking);
 static void hash_from_kvp_acc_cb(Account *gnc_acc, gpointer user_data);
 static ABInitialInfo *single_info = NULL;
-
-#if AQBANKING_VERSION_INT <= 49908
-static void child_exit_cb(GPid pid, gint status, gpointer data);
-#endif
-static gchar *ab_account_longname(const AB_ACCOUNT *ab_acc);
-static AB_ACCOUNT *update_account_list_acc_cb(AB_ACCOUNT *ab_acc, gpointer user_data);
+static gchar *ab_account_longname(const GNC_AB_ACCOUNT_SPEC *ab_acc);
+static GNC_AB_ACCOUNT_SPEC *update_account_list_acc_cb(GNC_AB_ACCOUNT_SPEC *ab_acc, gpointer user_data);
 static void update_account_list(ABInitialInfo *info);
 static gboolean find_gnc_acc_cb(gpointer key, gpointer value, gpointer user_data);
 static gboolean clear_line_cb(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer user_data);
@@ -141,7 +140,7 @@ struct _AccCbData
 struct _RevLookupData
 {
     Account *gnc_acc;
-    AB_ACCOUNT *ab_acc;
+    GNC_AB_ACCOUNT_SPEC *ab_acc;
 };
 
 enum account_list_cols
@@ -195,9 +194,7 @@ aai_destroy_cb(GtkWidget *object, gpointer user_data)
 
     if (info->gnc_hash)
     {
-#ifdef AQBANKING_VERSION_4_EXACTLY
-        AB_Banking_OnlineFini(info->api, 0);
-#else
+#ifndef AQBANKING6
         AB_Banking_OnlineFini(info->api);
 #endif
         g_hash_table_destroy(info->gnc_hash);
@@ -241,12 +238,6 @@ aai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
     GtkWidget *page = gtk_assistant_get_nth_page (GTK_ASSISTANT(info->window), num);
 
     AB_BANKING *banking = info->api;
-#if AQBANKING_VERSION_INT <= 49908
-    GWEN_BUFFER *buf;
-    gboolean wizard_exists;
-    const gchar *wizard_path;
-    gboolean qt_probably_unavailable = FALSE;
-#endif /* AQBANKING_VERSION_INT */
     g_return_if_fail(banking);
 
     ENTER("user_data: %p", user_data);
@@ -257,17 +248,17 @@ aai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
         return;
     }
 
-#if AQBANKING_VERSION_INT > 49908
-    /* For aqbanking5 > 4.99.8: Use AB_Banking_GetNewUserDialog(). */
     {
-        GWEN_DIALOG *dlg =
-            AB_SetupDialog_new(banking);
+#ifdef AQBANKING6
+        GWEN_DIALOG *dlg = AB_Banking_CreateSetupDialog(banking); 
+#else
+        GWEN_DIALOG *dlg = AB_SetupDialog_new(banking);
 
         if (AB_Banking_OnlineInit(banking) != 0)
         {
             PERR("Got error on AB_Banking_OnlineInit!");
         }
-
+#endif
         if (!dlg)
         {
             PERR("Could not lookup Setup Dialog of aqbanking!");
@@ -282,113 +273,13 @@ aai_wizard_button_clicked_cb(GtkButton *button, gpointer user_data)
             }
             GWEN_Dialog_free(dlg);
         }
-
+#ifndef AQBANKING6
         if (AB_Banking_OnlineFini(banking) != 0)
         {
             PERR("Got error on AB_Banking_OnlineFini!");
         }
-    }
-#else
-    /* Previous implementation for aqbanking <= 4.99.8: Use the
-     * external application. */
-
-
-    /* This is the point where we look for and start an external
-     * application shipped with aqbanking that contains the setup assistant
-     * for AqBanking related stuff.  It requires qt (but not kde).  This
-     * application contains the very verbose step-by-step setup wizard
-     * for the AqBanking account, and the application is shared with
-     * other AqBanking-based financial managers that offer the AqBanking
-     * features (e.g. KMyMoney).  See gnucash-devel discussion here
-     * https://lists.gnucash.org/pipermail/gnucash-devel/2004-December/012351.html
-     */
-    buf = GWEN_Buffer_new(NULL, 300, 0, 0);
-    AB_Banking_FindWizard(banking, "", NULL, buf);
-    wizard_exists = *GWEN_Buffer_GetStart(buf) != 0;
-    wizard_path = GWEN_Buffer_GetStart(buf);
-
-    if (wizard_exists)
-    {
-        /* Really check whether the file exists */
-        gint fd = g_open(wizard_path, O_RDONLY, 0);
-        if (fd == -1)
-            wizard_exists = FALSE;
-        else
-            close(fd);
-    }
-
-#ifdef G_OS_WIN32
-    {
-        const char *check_file = "qtdemo.exe";
-        gchar *found_program = g_find_program_in_path(check_file);
-        if (found_program)
-        {
-            g_debug("Yes, we found the Qt demo program in %s\n", found_program);
-            g_free(found_program);
-        }
-        else
-        {
-            g_warning("Ouch, no Qt demo program was found. Qt not installed?\n");
-            qt_probably_unavailable = TRUE;
-        }
-    }
 #endif
-
-    if (wizard_exists)
-    {
-        /* Call the qt wizard. See the note above about why this
-         * approach is chosen. */
-
-        GPid pid;
-        GError *error = NULL;
-        gchar *argv[2];
-        gboolean spawned;
-
-        argv[0] = g_strdup (wizard_path);
-        argv[1] = NULL;
-        spawned = g_spawn_async (NULL, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
-                                 NULL, NULL, &pid, &error);
-        g_free (argv[0]);
-
-        if (error)
-            g_critical(
-                "Error on starting AqBanking setup wizard: Code %d: %s",
-                error->code, error->message ? error->message : "(null)");
-
-        if (!spawned)
-        {
-            g_critical("Could not start AqBanking setup wizard: %s",
-                       error->message ? error->message : "(null)");
-            g_error_free (error);
-        }
-        else
-        {
-            /* Keep a reference to info that can survive info */
-            info->deferred_info = g_new0(DeferredInfo, 1);
-            info->deferred_info->initial_info = info;
-            info->deferred_info->wizard_path = g_strdup(wizard_path);
-            info->deferred_info->qt_probably_unavailable =
-                qt_probably_unavailable;
-
-            g_child_watch_add (pid, child_exit_cb, info->deferred_info);
-        }
     }
-    else
-    {
-        g_warning("on_aqhbci_button: Oops, no aqhbci setup wizard found.");
-        gnc_error_dialog
-        (GTK_WINDOW (info->window),
-         _("The external program \"AqBanking Setup Wizard\" has not "
-           "been found. \n\n"
-           "The %s package should include the "
-           "program \"qt3-wizard\". Please check your installation to "
-           "ensure this program is present. On some distributions this "
-           "may require installing additional packages."),
-         QT3_WIZARD_PACKAGE);
-    }
-
-    GWEN_Buffer_free(buf);
-#endif
 
     /* Enable the Assistant Buttons if we accounts */
     if (banking_has_accounts(info->api))
@@ -414,10 +305,8 @@ aai_match_page_prepare (GtkAssistant *assistant, gpointer user_data)
     /* Do not run this twice */
     if (!info->match_page_prepared)
     {
+#ifndef AQBANKING6
         /* Load aqbanking accounts */
-#ifdef AQBANKING_VERSION_4_EXACTLY
-        AB_Banking_OnlineInit(info->api, 0);
-#else
         AB_Banking_OnlineInit(info->api);
 #endif
         /* Determine current mapping */
@@ -456,29 +345,27 @@ aai_on_finish (GtkAssistant *assistant, gpointer user_data)
 static gboolean
 banking_has_accounts(AB_BANKING *banking)
 {
-    AB_ACCOUNT_LIST2 *accl;
-    gboolean result;
+    GNC_AB_ACCOUNT_SPEC_LIST *accl = NULL;
+    gboolean result = FALSE;
 
     g_return_val_if_fail(banking, FALSE);
 
-#ifdef AQBANKING_VERSION_4_EXACTLY
-    AB_Banking_OnlineInit(banking, 0);
+#ifdef AQBANKING6
+    if (AB_Banking_GetAccountSpecList (banking, &accl) >= 0 &&
+        accl && AV_AccountSpec_List_GetCount (accl))
+        result = TRUE;
+    if (accl)
+        AB_AccountSpec_List_Free (accl);
 #else
     AB_Banking_OnlineInit(banking);
-#endif
 
     accl = AB_Banking_GetAccounts(banking);
     if (accl && (AB_Account_List2_GetSize(accl) > 0))
         result = TRUE;
-    else
-        result = FALSE;
 
     if (accl)
         AB_Account_List2_free(accl);
 
-#ifdef AQBANKING_VERSION_4_EXACTLY
-    AB_Banking_OnlineFini(banking, 0);
-#else
     AB_Banking_OnlineFini(banking);
 #endif
 
@@ -489,109 +376,37 @@ static void
 hash_from_kvp_acc_cb(Account *gnc_acc, gpointer user_data)
 {
     AccCbData *data = user_data;
-    AB_ACCOUNT *ab_acc;
+    GNC_AB_ACCOUNT_SPEC *ab_acc;
 
     ab_acc = gnc_ab_get_ab_account(data->api, gnc_acc);
     if (ab_acc)
         g_hash_table_insert(data->hash, ab_acc, gnc_acc);
 }
 
-#if AQBANKING_VERSION_INT <= 49908
-static void
-child_exit_cb(GPid pid, gint status, gpointer data)
-{
-    DeferredInfo *deferred_info = data;
-    ABInitialInfo *info = deferred_info->initial_info;
-    gint num = gtk_assistant_get_current_page (GTK_ASSISTANT(info->window));
-    GtkWidget *page = gtk_assistant_get_nth_page (GTK_ASSISTANT(info->window), num);
-
-    gint exit_status;
-
-#ifdef G_OS_WIN32
-    exit_status = status;
-#else
-    exit_status = WEXITSTATUS(status);
-#endif
-
-    g_spawn_close_pid(pid);
-
-    if (!info)
-    {
-        g_message("Online Banking wizard exited, but the assistant has been "
-                  "destroyed already");
-        goto cleanup_child_exit_cb;
-    }
-
-    if (exit_status == 0)
-    {
-        gtk_assistant_set_page_complete (GTK_ASSISTANT(info->window), page, TRUE);
-    }
-    else
-    {
-        if (deferred_info->qt_probably_unavailable)
-        {
-            g_warning("on_aqhbci_button: Oops, aqhbci wizard return nonzero "
-                      "value: %d. The called program was \"%s\".\n",
-                      exit_status, deferred_info->wizard_path);
-            gnc_error_dialog
-            (GTK_WINDOW (info->window), "%s",
-             _("The external program \"AqBanking Setup Wizard\" failed "
-               "to run successfully because the "
-               "additional software \"Qt\" was not found. "
-               "Please install the \"Qt/Windows Open Source Edition\" "
-               "from Trolltech by downloading it from www.trolltech.com"
-               "\n\n"
-               "If you have installed Qt already, you will have to adapt "
-               "the PATH variable of your system appropriately. "
-               "Contact the GnuCash developers if you need further "
-               "assistance on how to install Qt correctly."
-               "\n\n"
-               "Online Banking cannot be setup without Qt. Press \"Close\" "
-               "now, then \"Cancel\" to cancel the Online Banking setup."));
-        }
-        else
-        {
-            g_warning("on_aqhbci_button: Oops, aqhbci wizard return nonzero "
-                      "value: %d. The called program was \"%s\".\n",
-                      exit_status, deferred_info->wizard_path);
-            gnc_error_dialog
-            (GTK_WINDOW (info->window), "%s",
-             _("The external program \"AqBanking Setup Wizard\" failed "
-               "to run successfully. Online Banking can only be setup "
-               "if this wizard has run successfully. "
-               "Please try running the \"AqBanking Setup Wizard\" again."));
-        }
-        gtk_assistant_set_page_complete (GTK_ASSISTANT(info->window), page, FALSE);
-    }
-
-cleanup_child_exit_cb:
-    g_free(deferred_info->wizard_path);
-    g_free(deferred_info);
-    if (info)
-        info->deferred_info = NULL;
-}
-#endif /* AQBANKING_VERSION_INT <= 49908 */
-
 static gchar *
-ab_account_longname(const AB_ACCOUNT *ab_acc)
+ab_account_longname(const GNC_AB_ACCOUNT_SPEC *ab_acc)
 {
-    gchar *bankname;
-    gchar *result;
-    const char *ab_bankname, *bankcode, *subAccountId;
+    gchar *bankname = "";
+    gchar *result = NULL;
+    const char *ab_bankname, *bankcode, *subAccountId, *account_number;
 
     g_return_val_if_fail(ab_acc, NULL);
 
+#ifdef AQBANKING6
+    bankcode = AB_AccountSpec_GetBankCode(ab_acc);
+    subAccountId = AB_AccountSpec_GetSubAccountId(ab_acc);
+    account_number = AB_AccountSpec_GetAccountNumber (ab_acc);
+#else
     ab_bankname = AB_Account_GetBankName(ab_acc);
-    bankname = ab_bankname ? gnc_utf8_strip_invalid_strdup(ab_bankname) : NULL;
+    bankname = ab_bankname ? gnc_utf8_strip_invalid_strdup(ab_bankname) : "";
     bankcode = AB_Account_GetBankCode(ab_acc);
     subAccountId = AB_Account_GetSubAccountId(ab_acc);
-
+    account_number = AB_Account_GetAccountNumber (ab_acc);
+#endif
     /* Translators: Strings are 1. Bank code, 2. Bank name,
      * 3. Account Number,  4. Subaccount ID                  */
     result = g_strdup_printf(_("Bank code %s (%s), Account %s (%s)"),
-                             bankcode,
-                             bankname ? bankname : "",
-                             AB_Account_GetAccountNumber(ab_acc),
+                             bankcode, bankname, account_number,
                              subAccountId ? subAccountId : "");
     g_free(bankname);
 
@@ -599,8 +414,8 @@ ab_account_longname(const AB_ACCOUNT *ab_acc)
 
 }
 
-static AB_ACCOUNT *
-update_account_list_acc_cb(AB_ACCOUNT *ab_acc, gpointer user_data)
+static GNC_AB_ACCOUNT_SPEC *
+update_account_list_acc_cb(GNC_AB_ACCOUNT_SPEC *ab_acc, gpointer user_data)
 {
     ABInitialInfo *info = user_data;
     gchar *gnc_name, *ab_name;
@@ -637,7 +452,7 @@ update_account_list_acc_cb(AB_ACCOUNT *ab_acc, gpointer user_data)
 static void
 update_account_list(ABInitialInfo *info)
 {
-    AB_ACCOUNT_LIST2 *acclist;
+    GNC_AB_ACCOUNT_SPEC_LIST *acclist = NULL;
 
     g_return_if_fail(info && info->api && info->gnc_hash);
 
@@ -647,9 +462,14 @@ update_account_list(ABInitialInfo *info)
 
     /* Refill the list */
     gtk_list_store_clear(info->account_store);
+#ifdef AQBANKING6
+    if (AB_Banking_GetAccountSpecList(info->api, &acclist) >= 0 && acclist)
+        AB_AccountSpec_List_ForEach(acclist, update_account_list_acc_cb, info);
+#else
     acclist = AB_Banking_GetAccounts(info->api);
     if (acclist)
         AB_Account_List2_ForEach(acclist, update_account_list_acc_cb, info);
+#endif
     else
         g_warning("update_account_list: Oops, account list from AB_Banking "
                   "is NULL");
@@ -670,7 +490,7 @@ find_gnc_acc_cb(gpointer key, gpointer value, gpointer user_data)
 
     if (value == data->gnc_acc)
     {
-        data->ab_acc = (AB_ACCOUNT*) key;
+        data->ab_acc = (GNC_AB_ACCOUNT_SPEC*) key;
         return TRUE;
     }
     return FALSE;
@@ -704,7 +524,7 @@ account_list_clicked_cb (GtkTreeView *view, GtkTreePath *path,
     ABInitialInfo *info = user_data;
     GtkTreeModel *model;
     GtkTreeIter iter;
-    AB_ACCOUNT *ab_acc;
+    GNC_AB_ACCOUNT_SPEC *ab_acc;
     gchar *longname, *gnc_name;
     Account *old_value, *gnc_acc;
     const gchar *currency;
@@ -727,7 +547,11 @@ account_list_clicked_cb (GtkTreeView *view, GtkTreePath *path,
         old_value = g_hash_table_lookup(info->gnc_hash, ab_acc);
 
         longname = ab_account_longname(ab_acc);
+#ifdef AQBANKING6
+        currency = AB_AccountSpec_GetCurrency(ab_acc);
+#else
         currency = AB_Account_GetCurrency(ab_acc);
+#endif
         if (currency && *currency)
         {
             commodity = gnc_commodity_table_lookup(
@@ -797,7 +621,7 @@ clear_kvp_acc_cb(Account *gnc_acc, gpointer user_data)
 static void
 save_kvp_acc_cb(gpointer key, gpointer value, gpointer user_data)
 {
-    AB_ACCOUNT *ab_acc = key;
+    GNC_AB_ACCOUNT_SPEC *ab_acc = key;
     Account *gnc_acc = value;
     guint32 ab_account_uid;
     const gchar *ab_accountid, *gnc_accountid;
@@ -805,18 +629,30 @@ save_kvp_acc_cb(gpointer key, gpointer value, gpointer user_data)
 
     g_return_if_fail(ab_acc && gnc_acc);
 
+#ifdef AQBANKING6
+    ab_account_uid = AB_AccountSpec_GetUniqueId(ab_acc);
+#else
     ab_account_uid = AB_Account_GetUniqueId(ab_acc);
+#endif
     if (gnc_ab_get_account_uid(gnc_acc) != ab_account_uid)
         gnc_ab_set_account_uid(gnc_acc, ab_account_uid);
 
+#ifdef AQBANKING6
+    ab_accountid = AB_AccountSpec_GetAccountNumber(ab_acc);
+#else
     ab_accountid = AB_Account_GetAccountNumber(ab_acc);
+#endif
     gnc_accountid = gnc_ab_get_account_accountid(gnc_acc);
     if (ab_accountid
             && (!gnc_accountid
                 || (strcmp(ab_accountid, gnc_accountid) != 0)))
         gnc_ab_set_account_accountid(gnc_acc, ab_accountid);
 
+#ifdef AQBANKING6
+    ab_bankcode = AB_AccountSpec_GetBankCode(ab_acc);
+#else
     ab_bankcode = AB_Account_GetBankCode(ab_acc);
+#endif
     gnc_bankcode = gnc_ab_get_account_bankcode(gnc_acc);
     if (ab_bankcode
             && (!gnc_bankcode
