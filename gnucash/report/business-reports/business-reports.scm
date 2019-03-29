@@ -30,23 +30,6 @@
 (use-modules (gnucash report standard-reports))
 (use-modules (srfi srfi-8))
 
-
-;; Creates a new report instance for the given invoice. The given
-;; report-template-id must refer to an existing report template, which
-;; is then used to instantiate the new report instance.
-(define (gnc:invoice-report-create invoice report-template-id)
-    (if (gnc:find-report-template report-template-id)
-        ;; We found the report template id, so instantiate a report
-        ;; and set the invoice option accordingly.
-        (let* ((options (gnc:make-report-options report-template-id))
-               (invoice-op (gnc:lookup-option options gnc:pagename-general gnc:optname-invoice-number)))
-
-          (gnc:option-set-value invoice-op invoice)
-          (gnc:make-report report-template-id options))
-        ;; Invalid report-template-id, so let's return zero as an invalid report id.
-        0
-        ))
-
 (use-modules (gnucash report invoice))
 (use-modules (gnucash report taxinvoice))
 (use-modules (gnucash report receipt))
@@ -57,11 +40,10 @@
 (use-modules (gnucash report customer-summary))
 (use-modules (gnucash report balsheet-eg))
 
-(define (gnc:payables-report-create account title show-zeros?)
-  (payables-report-create-internal account title show-zeros?))
+(re-export payables-report-create-internal
+           receivables-report-create-internal
+           owner-report-create)
 
-(define (gnc:receivables-report-create account title show-zeros?)
-  (receivables-report-create-internal account title show-zeros?))
 
 (define* (gnc:owner-report-create owner account #:key currency)
   ; Figure out an account to use if nothing exists here.

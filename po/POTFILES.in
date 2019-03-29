@@ -489,6 +489,7 @@ gnucash/report/report-system/html-text.scm
 gnucash/report/report-system/html-utilities.scm
 gnucash/report/report-system/options-utilities.scm
 gnucash/report/report-system/report-collectors.scm
+gnucash/report/report-system/report-register-hooks.scm
 gnucash/report/report-system/report.scm
 gnucash/report/report-system/report-system.scm
 gnucash/report/report-system/report-utilities.scm

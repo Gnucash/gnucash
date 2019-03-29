@@ -35,7 +35,6 @@
 
 (gnc:module-load "gnucash/report/report-system" 0)
 (use-modules (gnucash report reports))
-(use-modules (gnucash report business-reports))
 
 ;; Option names
 (define optname-from-date (N_ "From"))

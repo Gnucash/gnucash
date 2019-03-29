@@ -31,7 +31,6 @@
 
 (gnc:module-load "gnucash/report/report-system" 0)
 (use-modules (gnucash report reports))
-(use-modules (gnucash report business-reports))
 
 (define (addif pred . data) (if pred data '()))
 

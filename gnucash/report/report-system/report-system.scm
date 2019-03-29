@@ -757,6 +757,12 @@
 (export gnc:trep-options-generator)
 (export gnc:trep-renderer)
 
+;; report-register-hooks.scm
+
+(export gnc:register-report-hook)
+(export gnc:lookup-register-report)
+
+
 (load-from-path "commodity-utilities")
 (load-from-path "html-barchart")
 (load-from-path "html-document")
@@ -774,6 +780,7 @@
 (load-from-path "html-utilities")
 (load-from-path "options-utilities")
 (load-from-path "report-utilities")
+(load-from-path "report-register-hooks")
 (load-from-path "report")
 (load-from-path "trep-engine")
 

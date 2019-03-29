@@ -78,6 +78,7 @@ set (report_system_SCHEME_3
     html-utilities.scm
     options-utilities.scm
     report-utilities.scm
+    report-register-hooks.scm
     report.scm
     trep-engine.scm
 )

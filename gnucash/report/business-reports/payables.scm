@@ -33,7 +33,6 @@
 
 (use-modules (gnucash report aging))
 (use-modules (gnucash report reports))
-(use-modules (gnucash report business-reports))
 
 (define acc-page gnc:pagename-general)
 (define this-acc (N_ "Payable Account"))

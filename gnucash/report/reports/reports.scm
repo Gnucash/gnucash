@@ -26,57 +26,16 @@
 
 (define-module (gnucash report reports))
 (use-modules (srfi srfi-13))
-(use-modules (gnucash utilities))
+(use-modules (gnucash app-utils))
 (use-modules (gnucash core-utils))
+(use-modules (gnucash report report-system))
+(use-modules (gnucash utilities))
 
 (export gnc:register-report-create)
-(export gnc:register-report-hook)
-
-(define gnc:*register-report-hash* (make-hash-table 23))
-
-;; Keep a hash-table of records, keyed off the account type.  Each
-;; record contains a function pointer for that account-type with split
-;; or without split.  If no function is found, then run the 'default'
-;; function
-
-(define acct-type-info (make-record-type "AcctTypeInfo" '(split non-split)))
-
-(define make-acct-type-private
-  (record-constructor acct-type-info '(split non-split)))
-
-(define (make-acct-type)
-  (make-acct-type-private #f #f))
-
-(define get-split
-  (record-accessor acct-type-info 'split))
-
-(define set-split
-  (record-modifier acct-type-info 'split))
-
-(define get-non-split
-  (record-accessor acct-type-info 'non-split))
-
-(define set-non-split
-  (record-modifier acct-type-info 'non-split))
-
-(define (gnc:register-report-hook acct-type split? create-fcn)
-  (let ((type-info (hash-ref gnc:*register-report-hash* acct-type (make-acct-type))))
-    (if split?
-        (set-split type-info create-fcn)
-        (set-non-split type-info create-fcn))
-    (hash-set! gnc:*register-report-hash* acct-type type-info)))
-
-(define (lookup-register-report acct-type split)
-  (let ((type-info (hash-ref gnc:*register-report-hash* acct-type)))
-    (gnc:debug "acct-type: " acct-type)
-    (gnc:debug "ref: " type-info)
-    (gnc:debug "hash: " gnc:*register-report-hash*)
-    (gnc:debug "split: " split)
-    (and type-info
-         (if (and split (not (null? split)))
-             (begin (gnc:debug "get-split...") (get-split type-info))
-             (begin (gnc:debug "get-non-split...") (get-non-split type-info))))))
-
+(export gnc:invoice-report-create)
+(export gnc:payables-report-create)
+(export gnc:receivables-report-create)
+(export gnc:owner-report-create)
 
 ;; Returns a list of files in a directory
 ;;
@@ -129,10 +88,41 @@
 (define (gnc:register-report-create account split query journal? ledger-type?
                                     double? title debit-string credit-string)
   (let* ((acct-type (xaccAccountGetType account))
-         (create-fcn (lookup-register-report acct-type split)))
+         (create-fcn (gnc:lookup-register-report acct-type split)))
     (gnc:debug "create-fcn: " create-fcn)
     (if create-fcn
         (create-fcn account split query journal? double? title
                     debit-string credit-string)
         (gnc:register-report-create-internal #f query journal? ledger-type? double?
                                              title debit-string credit-string))))
+
+;; Creates a new report instance for the given invoice. The given
+;; report-template-id must refer to an existing report template, which
+;; is then used to instantiate the new report instance.
+(define (gnc:invoice-report-create invoice report-template-id)
+    (if (gnc:find-report-template report-template-id)
+        ;; We found the report template id, so instantiate a report
+        ;; and set the invoice option accordingly.
+        (let* ((options (gnc:make-report-options report-template-id))
+               (invoice-op (gnc:lookup-option options gnc:pagename-general gnc:optname-invoice-number)))
+
+          (gnc:option-set-value invoice-op invoice)
+          (gnc:make-report report-template-id options))
+        ;; Invalid report-template-id, so let's return zero as an invalid report id.
+        0
+        ))
+
+(use-modules (gnucash report payables))
+(define (gnc:payables-report-create account title show-zeros?)
+  (payables-report-create-internal account title show-zeros?))
+
+(use-modules (gnucash report receivables))
+(define (gnc:receivables-report-create account title show-zeros?)
+  (receivables-report-create-internal account title show-zeros?))
+
+(use-modules (gnucash report owner-report))
+(define (gnc:owner-report-create owner account)
+  ; Figure out an account to use if nothing exists here.
+  (if (null? account)
+      (set! account (find-first-account-for-owner owner)))
+  (owner-report-create owner account))
