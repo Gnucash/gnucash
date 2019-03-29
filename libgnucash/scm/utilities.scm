@@ -84,6 +84,19 @@
     ((addto! alist element)
      (set! alist (cons element alist)))))
 
+;; pair of utility functions for use with guile-json which requires
+;; lists converted vectors to save as json arrays. traverse list
+;; converting into vectors, and vice versa.
+(define-public (traverse-list->vec lst)
+  (cond
+   ((list? lst) (list->vector (map traverse-list->vec lst)))
+   (else lst)))
+
+(define-public (traverse-vec->list vec)
+  (cond
+   ((vector? vec) (map traverse-vec->list (vector->list vec)))
+   (else vec)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  gnc:substring-replace
 ;;
