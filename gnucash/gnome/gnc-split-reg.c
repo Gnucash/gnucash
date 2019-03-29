@@ -50,6 +50,7 @@
 #include "gnc-pricedb.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
+#include "gnc-uri-utils.h"
 #include "gnc-warnings.h"
 #include "gnucash-sheet.h"
 #include "gnucash-register.h"
@@ -1109,9 +1110,26 @@ gsr_default_associate_handler_file (GNCSplitReg *gsr, Transaction *trans, gboole
 }
 
 static void
+gsr_default_associate_handler_location_ok_cb (GtkEditable *editable, gpointer user_data)
+{
+    GtkWidget *ok_button = user_data;
+    gboolean have_scheme = TRUE;
+    gchar *text = gtk_editable_get_chars (editable, 0, -1);
+    gchar *scheme = gnc_uri_get_scheme (text);
+
+    if (!scheme)
+        have_scheme = FALSE;
+
+    gtk_widget_set_sensitive (ok_button, have_scheme);
+
+    g_free (text);
+    g_free (scheme);
+}
+
+static void
 gsr_default_associate_handler_location (GNCSplitReg *gsr, Transaction *trans, gboolean have_uri)
 {
-    GtkWidget *dialog, *entry, *label, *content_area;
+    GtkWidget *dialog, *entry, *label, *content_area, *ok_button;
     gint response;
 
     dialog = gtk_dialog_new_with_buttons (_("Associate Location with Transaction"),
@@ -1119,8 +1137,11 @@ gsr_default_associate_handler_location (GNCSplitReg *gsr, Transaction *trans, gb
                                      GTK_DIALOG_MODAL,
                                      _("_Remove"), GTK_RESPONSE_REJECT,
                                      _("_Cancel"), GTK_RESPONSE_CANCEL,
-                                     _("_OK"), GTK_RESPONSE_ACCEPT,
+                                     // OK Button added below
                                      NULL);
+
+    ok_button = gtk_dialog_add_button (GTK_DIALOG(dialog), _("_OK"), GTK_RESPONSE_ACCEPT);
+    gtk_widget_set_sensitive (ok_button, FALSE);
 
     content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
@@ -1129,6 +1150,9 @@ gsr_default_associate_handler_location (GNCSplitReg *gsr, Transaction *trans, gb
     gtk_entry_set_width_chars (GTK_ENTRY (entry), 80);
     gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
 
+    g_signal_connect (entry, "changed",
+        G_CALLBACK(gsr_default_associate_handler_location_ok_cb), ok_button);
+
     // add a label and set entry text if required
     if (have_uri)
     {
@@ -1136,7 +1160,7 @@ gsr_default_associate_handler_location (GNCSplitReg *gsr, Transaction *trans, gb
         gtk_entry_set_text (GTK_ENTRY (entry), xaccTransGetAssociation (trans));
     }
     else
-        label = gtk_label_new (_("Enter URL:"));
+        label = gtk_label_new (_("Enter URL like http://www.gnucash.org:"));
 
     // pack label and entry to content area
     gnc_label_set_alignment (label, 0.0, 0.5);
@@ -1160,6 +1184,7 @@ gsr_default_associate_handler_location (GNCSplitReg *gsr, Transaction *trans, gb
     if (response == GTK_RESPONSE_ACCEPT)
     {
         const gchar *dialog_uri = gtk_entry_get_text (GTK_ENTRY (entry));
+
         DEBUG("Location URI: %s\n", dialog_uri);
         xaccTransSetAssociation (trans, dialog_uri);
     }
