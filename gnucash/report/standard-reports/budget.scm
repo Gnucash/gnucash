@@ -461,9 +461,9 @@
               ((eq? (car column-list) 'total)
                (_ "Total"))
               ((list? (car column-list))
-               (string-append (period-to-date-string (car (car column-list)))
-                              " – "
-                              (period-to-date-string (last (car column-list)))))
+               (format #f (_ "~a to ~a")
+                       (period-to-date-string (car (car column-list)))
+                       (period-to-date-string (last (car column-list)))))
               (else
                (period-to-date-string (car column-list)))))
 
