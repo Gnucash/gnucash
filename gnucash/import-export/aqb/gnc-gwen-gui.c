@@ -190,7 +190,7 @@ static gint progress_advance_cb(GWEN_GUI *gwen_gui, uint32_t id,
 static gint progress_log_cb(GWEN_GUI *gwen_gui, guint32 id,
                             GWEN_LOGGER_LEVEL level, const gchar *text);
 static gint progress_end_cb(GWEN_GUI *gwen_gui, guint32 id);
-#if GWENHYWFAR_VERSION_INT < 49900
+#ifndef GWENHYWFAR5
 static gint GNC_GWENHYWFAR_CB getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags,
                                              const gchar *token,
                                              const gchar *title,
@@ -1409,7 +1409,7 @@ progress_end_cb(GWEN_GUI *gwen_gui, guint32 id)
 }
 
 static gint GNC_GWENHYWFAR_CB
-#if GWENHYWFAR_VERSION_INT < 49900
+#ifndef GWENHYWFAR5
 getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *token,
                const gchar *title, const gchar *text, gchar *buffer,
                gint min_len, gint max_len, guint32 guiid)

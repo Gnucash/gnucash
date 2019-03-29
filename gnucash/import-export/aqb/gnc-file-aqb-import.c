@@ -79,10 +79,10 @@ gnc_file_aqbanking_import(GtkWindow *parent,
     AB_IMEXPORTER_CONTEXT *context = NULL;
     GWEN_IO_LAYER *io = NULL;
     GncABImExContextImport *ieci = NULL;
-    AB_JOB_LIST2 *job_list = NULL;
-    AB_JOB_LIST2_ITERATOR *jit;
-    AB_JOB *job;
-    AB_JOB_STATUS job_status;
+    GNC_AB_JOB_LIST2 *job_list = NULL;
+    GNC_AB_JOB_LIST2_ITERATOR *jit;
+    GNC_AB_JOB *job;
+    GNC_AB_JOB_STATUS job_status;
     gboolean successful = TRUE;
     int num_jobs = 0;
     int num_jobs_failed = 0;
@@ -105,13 +105,14 @@ gnc_file_aqbanking_import(GtkWindow *parent,
     gnc_set_default_directory(GNC_PREFS_GROUP_AQBANKING, default_dir);
     g_free(default_dir);
 
+#ifndef AQBANKING6
     dtaus_fd = g_open(selected_filename, O_RDONLY, 0);
     if (dtaus_fd == -1)
     {
         DEBUG("Could not open file %s", selected_filename);
         goto cleanup;
     }
-
+#endif
     /* Get the API */
     api = gnc_AB_BANKING_new();
     if (!api)
@@ -119,6 +120,7 @@ gnc_file_aqbanking_import(GtkWindow *parent,
         g_warning("gnc_file_aqbanking_import: Couldn't get AqBanking API");
         goto cleanup;
     }
+#ifndef AQBANKING6
     if (AB_Banking_OnlineInit(api) != 0)
     {
         g_warning("gnc_file_aqbanking_import: "
@@ -166,10 +168,20 @@ gnc_file_aqbanking_import(GtkWindow *parent,
         }
         goto cleanup;
     }
+#endif
 
     /* Create a context to store the results */
     context = AB_ImExporterContext_new();
 
+#ifdef AQBANKING6
+    if (AB_Banking_ImportFromFileLoadProfile(api, aqbanking_importername,
+                                             context, aqbanking_profilename,
+                                             NULL, selected_filename) < 0)
+    {
+        g_warning("gnc_file_aqbanking_import: Error on import");
+        goto cleanup;
+    }
+#else
     /* Wrap file in buffered gwen io */
     close(dtaus_fd);
     io = GWEN_SyncIo_File_new(selected_filename, GWEN_SyncIo_File_CreationMode_OpenExisting);
@@ -198,6 +210,7 @@ gnc_file_aqbanking_import(GtkWindow *parent,
     /* Close the file */
     GWEN_SyncIo_free(io);
     io = NULL;
+#endif
 
     /* Before importing the results, if this is a new book, let user specify
      * book options, since they affect how transactions are created */
@@ -231,8 +244,11 @@ gnc_file_aqbanking_import(GtkWindow *parent,
             }
 
             /* And execute the jobs */
+#ifdef AQBANKING6
+            AB_Banking_SendCommands(api, job_list, execution_context);
+#else
             AB_Banking_ExecuteJobs(api, job_list, execution_context);
-
+#endif
             /* Ignore the return value of AB_Banking_ExecuteJobs(), as the job's
              * status always describes better whether the job was actually
              * transferred to and accepted by the bank.  See also
@@ -243,33 +259,50 @@ gnc_file_aqbanking_import(GtkWindow *parent,
              * to give the appropriate feedback if any of the jobs didn't
              * work. */
 
+#ifdef AQBANKING6
+            jit = AB_Transaction_List2_First(job_list);
+#else
             jit = AB_Job_List2_First(job_list);
+#endif
             if (jit)
             {
-
                 job = AB_Job_List2Iterator_Data(jit);
                 while (job)
                 {
                     num_jobs += 1;
+#ifdef AQBANKING6
+                    job_status = AB_Transaction_GetStatus(job);
+                    if (job_status != AB_Transaction_StatusFinished &&
+                        job_status != AB_Transaction_StatusPending)
+#else
                     job_status = AB_Job_GetStatus(job);
-                    if (job_status != AB_Job_StatusFinished
-                            && job_status != AB_Job_StatusPending)
+                    if (job_status != AB_Job_StatusFinished &&
+                        job_status != AB_Job_StatusPending)
+#endif
                     {
                         successful = FALSE;
                         num_jobs_failed += 1;
 
                         if (num_jobs_failed <= max_failures)
                         {
+#ifdef AQBANKING6
+                            gchar *fmt_str =_("Job %d status %d - %s\n");
+#else
+                            gchar *fmt_str =_("Job %d status %d - %s: %s\n");
+#endif
                             if (num_jobs_failed == 1)
                             {
                                 errstr = g_string_new("Failed jobs:\n");
                             }
-                            g_string_append_printf(errstr, _("Job %d status %d - %s: %s \n")
-                                                   , num_jobs
-                                                   , job_status
-                                                   , AB_Job_Status2Char(job_status)
-                                                   , AB_Job_GetResultText(job));
-                        }
+                            g_string_append_printf(errstr, fmt_str, num_jobs,
+                                                   job_status,
+#ifdef AQBANKING6
+                                                   AB_Transaction_Status_toString(job_status));
+#else
+                                                   AB_Job_Status2Char(job_status),
+                                                   AB_Job_GetResultText(job));
+#endif
+                   }
                         else
                         {
                             if (num_jobs_failed == (max_failures + 1) )
@@ -279,10 +312,17 @@ gnc_file_aqbanking_import(GtkWindow *parent,
                             }
                         }
                     }
+#ifdef AQBANKING6
+                    job = AB_Transaction_List2Iterator_Next(jit);
+#else
                     job = AB_Job_List2Iterator_Next(jit);
+#endif
                 } /* while */
-
+#ifdef AQBANKING6
                 AB_Job_List2Iterator_free(jit);
+#else
+                AB_Job_List2Iterator_free(jit);
+#endif
             }
 
             if (!successful)
@@ -317,30 +357,30 @@ gnc_file_aqbanking_import(GtkWindow *parent,
     }
 
 cleanup:
-    if (io)
-    {
-        GWEN_SyncIo_free(io);
-    }
-
     if (job_list)
+#ifdef AQBANKING6
+        AB_Transaction_List2_FreeAll(job_list);
+#else
         AB_Job_List2_FreeAll(job_list);
+    if (io)
+        GWEN_SyncIo_free(io);
+    if (db_profiles)
+        GWEN_DB_Group_free(db_profiles);
+    if (online)
+        AB_Banking_OnlineFini(api);
+    if (dtaus_fd != -1)
+        close(dtaus_fd);
+#endif
     if (ieci)
         g_free(ieci);
     if (context)
         AB_ImExporterContext_free(context);
-    if (db_profiles)
-        GWEN_DB_Group_free(db_profiles);
     if (gui)
         gnc_GWEN_Gui_release(gui);
-    if (online)
-        AB_Banking_OnlineFini(api);
     if (api)
         gnc_AB_BANKING_fini(api);
-    if (dtaus_fd != -1)
-        close(dtaus_fd);
     if (selected_filename)
         g_free(selected_filename);
     if (errstr)
         g_string_free(errstr, TRUE);
-
 }
