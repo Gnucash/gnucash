@@ -2496,7 +2496,7 @@ gnucash_get_style_classes (GnucashSheet *sheet, GtkStyleContext *stylectxt,
         if (sheet->use_gnc_color_theme) // only add this class if builtin colors used
             gtk_style_context_add_class (stylectxt, "register-foreground");
     }
-    
+
     switch (field_type)
     {
     default:
@@ -2694,15 +2694,18 @@ gnucash_sheet_tooltip (GtkWidget  *widget, gint x, gint y,
     tooltip_text = gnc_table_get_tooltip (table, virt_loc);
 
     // if tooltip_text empty, clear tooltip and return FALSE
-    if ((tooltip_text == NULL) || (g_strcmp0 (tooltip_text,"") == 0))
+    if (!tooltip_text || (g_strcmp0 (tooltip_text,"") == 0))
     {
         gtk_tooltip_set_text (tooltip, NULL);
         return FALSE;
     }
 
     block = gnucash_sheet_get_block (sheet, virt_loc.vcell_loc);
-    if (block == NULL)
+    if (!block)
+    {
+        g_free (tooltip_text);
         return FALSE;
+    }
 
     bx = block->origin_x;
     by = block->origin_y;
@@ -2712,15 +2715,15 @@ gnucash_sheet_tooltip (GtkWidget  *widget, gint x, gint y,
             virt_loc.phys_row_offset, virt_loc.phys_col_offset,
             &cx, &cy, &cw, &ch);
 
-     rect.x = cx + bx - hscroll_val;
-     rect.y = cy + by - vscroll_val;
-     rect.width = cw;
-     rect.height = ch;
+    rect.x = cx + bx - hscroll_val;
+    rect.y = cy + by - vscroll_val;
+    rect.width = cw;
+    rect.height = ch;
 
-     gtk_tooltip_set_tip_area (tooltip, &rect);
-     gtk_tooltip_set_text (tooltip, tooltip_text);
-     g_free (tooltip_text);
-     return TRUE;
+    gtk_tooltip_set_tip_area (tooltip, &rect);
+    gtk_tooltip_set_text (tooltip, tooltip_text);
+    g_free (tooltip_text);
+    return TRUE;
 }
 
 
