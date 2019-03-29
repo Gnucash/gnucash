@@ -752,6 +752,15 @@ file_chooser_selected_cb (GtkFileChooser *fc, gpointer user_data)
     const gchar *pref = g_object_get_data (G_OBJECT(fc), "pref");
     gchar       *folder = gtk_file_chooser_get_uri (fc);
 
+    // make sure path_head ends with a trailing '/', 3.5 onwards
+    if (!g_str_has_suffix (folder, "/"))
+    {
+        gchar *folder_with_slash = g_strconcat (folder, "/", NULL);
+        g_free (folder);
+        folder = g_strdup (folder_with_slash);
+        g_free (folder_with_slash);
+    }
+
     gtk_widget_hide (GTK_WIDGET(image));
 
     if (!gnc_prefs_set_string (group, pref, folder))
@@ -787,7 +796,7 @@ gnc_prefs_connect_file_chooser_button (GtkFileChooserButton *fcb, const gchar *b
 
     PINFO("Uri is %s", uri);
 
-    if ((uri != NULL) && (g_strcmp0 (uri, "") != 0)) // default entry
+    if (uri && *uri != '\0') // default entry
     {
         gchar *path_head = g_filename_from_uri (uri, NULL, NULL);
 
