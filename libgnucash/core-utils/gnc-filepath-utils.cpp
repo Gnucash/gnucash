@@ -728,6 +728,7 @@ static std::string migrate_gnc_datahome()
 }
 
 
+
 #if defined G_OS_WIN32 ||defined MAC_INTEGRATION
 constexpr auto path_package = PACKAGE_NAME;
 #else
@@ -1015,6 +1016,35 @@ gnc_userdata_dir_as_path (void)
         gnc_filepath_init();
 
     return gnc_userdata_home;
+}
+
+gchar *gnc_file_path_absolute (const gchar *prefix, const gchar *relative)
+{
+    bfs::path path_relative (relative);
+    path_relative.imbue (bfs_locale);
+    bfs::path path_absolute;
+    bfs::path path_head;
+
+    if (prefix == nullptr)
+    {
+        const gchar *doc_dir = g_get_user_special_dir (G_USER_DIRECTORY_DOCUMENTS);
+        if (doc_dir == nullptr)
+            path_head = bfs::path (gnc_userdata_dir ()); // running as root maybe
+        else
+            path_head = bfs::path (doc_dir);
+
+        path_head.imbue (bfs_locale);
+        path_absolute = absolute (path_relative, path_head);
+    }
+    else
+    {
+        bfs::path path_head (prefix);
+        path_head.imbue (bfs_locale);
+        path_absolute = absolute (path_relative, path_head);
+    }
+    path_absolute.imbue (bfs_locale);
+
+    return g_strdup (path_absolute.string().c_str());
 }
 
 /** @fn gchar * gnc_build_userdata_path (const gchar *filename)
