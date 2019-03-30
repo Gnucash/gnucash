@@ -12,13 +12,13 @@ enable_testing()
 
 # Version number of gnucash
 set (GNUCASH_MAJOR_VERSION 3)
-set (GNUCASH_MINOR_VERSION 4)
+set (GNUCASH_MINOR_VERSION 5)
 set (VERSION "${GNUCASH_MAJOR_VERSION}.${GNUCASH_MINOR_VERSION}")
 set (GNUCASH_LATEST_STABLE_SERIES 3.x)
 
 set (PACKAGE gnucash)
 set (PACKAGE_NAME GnuCash)
-set (PACKAGE_VERSION 3.4)
+set (PACKAGE_VERSION 3.5)
 set (PACKAGE_BUGREPORT "https://bugs.gnucash.org")
 set (PACKAGE_TARNAME ${PACKAGE})
 set (PACKAGE_STRING "${PACKAGE_NAME} ${PACKAGE_VERSION}")
@@ -635,6 +635,7 @@ set(gnucash_DOCS
     ChangeLog.2015
     ChangeLog.2016
     ChangeLog.2017
+    ChangeLog.2018
     DOCUMENTERS
     HACKING
     LICENSE
@@ -797,7 +798,7 @@ add_subdirectory(cmake)
 
 if (BUILDING_FROM_VCS)
     add_custom_target(ChangeLog ALL
-        COMMAND ${GIT_EXECUTABLE} log --format=\"%ad %aN %n%n%x09* %s%d%n\" --date=short --since=2018-01-01 > ${CMAKE_BINARY_DIR}/ChangeLog
+        COMMAND ${GIT_EXECUTABLE} log --format=\"%ad %aN %n%n%x09* %s%d%n\" --date=short --since=2019-01-01 > ${CMAKE_BINARY_DIR}/ChangeLog
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     )
     install(FILES ${CMAKE_BINARY_DIR}/ChangeLog DESTINATION ${CMAKE_INSTALL_DOCDIR})
