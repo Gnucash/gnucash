@@ -144,9 +144,7 @@
 
 	 ;; increment the alloc number for each occupied row
 	 (let loop ((row current-row-num))
-	   (let ((allocation (hash-ref column-allocs row)))
-	     (if (not allocation) 
-		 (set! allocation 0))
+	   (let ((allocation (hash-ref column-allocs row 0)))
 	     (hash-set! column-allocs row (+ colspan allocation))
 	     (if (< (+ 1 (- row current-row-num)) rowspan)
 		 (loop (+ 1 row)))))
@@ -166,16 +164,14 @@
 		 (gnc:html-markup-anchor
 		  (gnc-build-url
 		   URL-TYPE-OPTIONS
-		   (string-append "report-id=" 
-				  (format #f "~a" (car report-info)))
+		   (format #f "report-id=~a" (car report-info))
 		   "")
 		  (_ "Edit Options"))
-		 "&nbsp;"
+		 " "
 		 (gnc:html-markup-anchor
 		  (gnc-build-url
 		   URL-TYPE-REPORT
-		   (string-append "id=" 
-				  (format #f "~a" (car report-info)))
+		   (format #f "id=~a" (car report-info))
 		   "")
 		  (_ "Single Report")))))
 
