@@ -734,6 +734,10 @@ not found.")))
           (gnc:custom-report-templates-list))))
 
 
+(export gnc:load-book-custom-templates)
+(define gnc:load-book-custom-templates
+  (lambda ()))
+
 ;; gets the renderer from the report template;
 ;; gets the stylesheet from the report;
 ;; renders the html doc and caches the resulting string;
