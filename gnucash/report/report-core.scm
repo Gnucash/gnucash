@@ -724,19 +724,49 @@ not found.")))
 ;; saved-reports file aside as a backup
 ;; return #t if all templates were saved successfully
 (define (gnc:save-all-reports)
-  (gnc-saved-reports-backup)
-  (gnc-saved-reports-write-to-file "" #t)
-  (every identity
-         (map
-          (lambda (p)
-            (gnc:debug "saving report " (car p))
-            (gnc:report-template-save-to-savefile (cdr p)))
-          (gnc:custom-report-templates-list))))
+  (let ((saved (N_ "Saved book custom reports"))
+        (saved-reports (string-join
+                        (map (compose gnc:report-template-serialize cdr)
+                             (gnc:custom-report-templates-list)))))
+    (qof-book-set-option (gnc-get-current-book) saved-reports '("custom-templates"))
+    (gnc:gui-msg saved (_ saved))))
 
-
+;; the following function will: (1) save the initial custom-reports
+;; into global-saved-reports. These are from SAVED_REPORTS. (2) this
+;; function is called upon file-load, upon which it should query if
+;; book has custom-reports; if it does, it will clear the
+;; in-memory custom-reports and replace with the book-custom-reports
+;; (3) if the current book has no book-custom-reports, it reloads from
+;; global-saved-reports.
 (export gnc:load-book-custom-templates)
 (define gnc:load-book-custom-templates
-  (lambda ()))
+  (let ((global-saved-reports (gnc:custom-report-templates-list)))
+    (lambda ()
+      (let ((loaded (N_ "Loaded book custom reports"))
+            ;; Translators: first ~a is error-type, second ~a is error-details
+            (failed (N_ "Error ~a loading book custom reports: ~a"))
+            (global (N_ "Loaded global custom reports"))
+            (book-reports (qof-book-get-option (gnc-get-current-book)
+                                                '("custom-templates"))))
+        (cond
+         (book-reports
+          (for-each
+           (lambda (guid)
+             (hash-remove! *gnc:_report-templates_* guid))
+           (gnc:custom-report-template-guids))
+          (catch #t
+            (lambda ()
+              (eval-string book-reports)
+              (gnc:gui-msg loaded (_ loaded)))
+            (lambda (k . args)
+              (gui-warning
+               (format #f (_ failed) k args)))))
+         (else
+          (for-each
+           (lambda (global)
+             (hash-set! *gnc:_report-templates_* (car global) (cdr global)))
+           global-saved-reports)
+          (gnc:gui-msg global (_ global))))))))
 
 ;; gets the renderer from the report template;
 ;; gets the stylesheet from the report;
