@@ -747,13 +747,12 @@ not found.")))
 
           ;; loop through any embedded reports
           (let innerloop ((embedded-list (or embedded-list '()))
-                          (embedded-idx 0))
+                          (embedded-reports '()))
             (cond
-             ;; no embedded-reports left, store length in kvp
+             ;; no embedded-reports left, store host report definition
+             ;; in kvp
              ((null? embedded-list)
-              (qof-book-set-option book embedded-idx
-                                   (list "custom-templates" key "sub-length"))
-              ;; and store the host report definition in kvp
+
               (qof-book-set-option
                book
                (scm->json-string
@@ -763,6 +762,8 @@ not found.")))
                  (cons 'parenttype (gnc:report-template-parent-type (cdr tmpl)))
                  (cons 'menupath (list->vector
                                   (gnc:report-template-menu-path (cdr tmpl))))
+                 (cons 'embedded-reports (list->vector
+                                          (reverse embedded-reports)))
                  (cons 'options (list->vector
                                  (gnc:options-scm->list options)))))
                (list "custom-templates" key "template"))
@@ -773,25 +774,21 @@ not found.")))
               ;; embedded-reports exist. store its definition in kvp
               (let* ((report-id (car embedded-list))
                      (sub (gnc-report-find report-id))
-                     (subkey (format #f "sub~a" embedded-idx))
                      (sub-type (gnc:report-type sub))
                      (sub-template (hash-ref *gnc:_report-templates_* sub-type))
                      (sub-template-name (gnc:report-template-name sub-template))
                      (sub-cleanup-cb (gnc:report-template-options-cleanup-cb
                                       sub-template)))
                 (if sub-cleanup-cb (sub-cleanup-cb sub))
-                (let ((sub-template-string
-                       (scm->json-string
-                        (list
-                         (cons 'type sub-type)
-                         (cons 'name sub-template-name)
-                         (cons 'options (list->vector
-                                         (gnc:options-scm->list
-                                          (gnc:report-options sub))))))))
-                  (qof-book-set-option book sub-template-string
-                                       (list "custom-templates" key subkey))
+                (let ((sub-template
+                       (list
+                        (cons 'type sub-type)
+                        (cons 'name sub-template-name)
+                        (cons 'options (list->vector
+                                        (gnc:options-scm->list
+                                         (gnc:report-options sub)))))))
                   (innerloop (cdr embedded-list)
-                             (1+ embedded-idx)))))))))))))
+                             (cons sub-template embedded-reports)))))))))))))
 
 ;; the following function will: (1) save the initial custom-reports
 ;; into global-saved-reports. These are from SAVED_REPORTS. (2) this
@@ -829,18 +826,12 @@ not found.")))
                     (saved-template-string
                      (qof-book-get-option book
                                           (list "custom-templates" key "template")))
-                    (saved-embedded-reports
-                     (map
-                      (lambda (idx)
-                        (qof-book-get-option
-                         book (list "custom-templates" key (format #f "sub~a" idx))))
-                      (iota
-                       (qof-book-get-option
-                        book (list "custom-templates" key "sub-length")))))
                     (saved-report (json-string->scm saved-template-string))
                     (guid (assoc-ref saved-report "guid"))
                     (name (assoc-ref saved-report "name"))
                     (parenttype (assoc-ref saved-report "parenttype"))
+                    (embedded-reports (vector->list
+                                       (assoc-ref saved-report "embedded-reports")))
                     (menupath (vector->list (assoc-ref saved-report "menupath")))
                     (saved-options (vector->list (assoc-ref saved-report "options"))))
                (define (options-gen)
@@ -849,23 +840,21 @@ not found.")))
 
                    (gnc:options-list->scm options saved-options)
 
-                   (let loop ((saved-embedded-reports saved-embedded-reports)
+                   (let loop ((embedded-reports embedded-reports)
                               (embedded-report-ids '()))
                      (cond
-                      ((null? saved-embedded-reports)
+                      ((null? embedded-reports)
                        (let* ((report-list
                                (gnc:lookup-option options "__general" "report-list")))
                          (if report-list
                              (gnc:option-set-value
                               report-list
-                              (map
-                               (lambda (x y)
-                                 (cons x (cdr y)))
-                               (reverse embedded-report-ids)
-                               (gnc:option-value report-list))))))
+                              (map cons
+                                   (reverse embedded-report-ids)
+                                   (map cdr (gnc:option-value report-list)))))))
 
                       (else
-                       (let* ((sub (json-string->scm (car saved-embedded-reports)))
+                       (let* ((sub (car embedded-reports))
                               (sub-type (assoc-ref sub "type"))
                               (sub-name (assoc-ref sub "name"))
                               (sub-saved-options (vector->list
@@ -874,7 +863,7 @@ not found.")))
                                (gnc:report-template-new-options/report-guid
                                 sub-type sub-name)))
                          (gnc:options-list->scm sub-new-options sub-saved-options)
-                         (loop (cdr saved-embedded-reports)
+                         (loop (cdr embedded-reports)
                                (cons (gnc:restore-report-by-guid-with-custom-template
                                       #f sub-type sub-name "" sub-new-options)
                                      embedded-report-ids))))))
