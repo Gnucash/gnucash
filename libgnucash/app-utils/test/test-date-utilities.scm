@@ -8,6 +8,7 @@
   (test-runner-factory gnc:test-runner)
   (test-begin "test-date-utilities.scm")
   (test-weeknum-calculator)
+  (test-make-date-list)
   (test-date-get-quarter-string)
   (test-end "test-date-utilities.scm"))
 
@@ -56,6 +57,129 @@
   (test-assert "weeknum 28/12/69 != 5/1/70"
     (not (weeknums-equal? (cons '(1969 12 28 0 0 1)
                                 '(1970 1 5 0 0 1))))))
+
+(define (test-make-date-list)
+  (test-equal "make-date-list"
+    (list (create-time64 '(1969 12 18 0 0 1))
+          (create-time64 '(1969 12 25 0 0 1))
+          (create-time64 '(1970 1 1 0 0 1))
+          (create-time64 '(1970 1 2 0 0 1)))
+    (gnc:make-date-list
+     (create-time64 '(1969 12 18 0 0 1))
+     (create-time64 '(1970 1 2 0 0 1))
+     WeekDelta))
+
+  (test-equal "make-date-list exact"
+    (list (create-time64 '(1970 1 1 0 0 1))
+          (create-time64 '(1970 1 8 0 0 1))
+          (create-time64 '(1970 1 15 0 0 1)))
+    (gnc:make-date-list
+     (create-time64 '(1970 1 1 0 0 1))
+     (create-time64 '(1970 1 15 0 0 1))
+     WeekDelta))
+
+  (test-equal "make-date-list start 30-nov monthly. all dates are month-ends."
+    (list (create-time64 '(1970 11 30 0 0 1))
+          (create-time64 '(1970 12 31 0 0 1))
+          (create-time64 '(1971 1 31 0 0 1))
+          (create-time64 '(1971 2 28 0 0 1))
+          (create-time64 '(1971 3 15 0 0 1)))
+    (gnc:make-date-list
+     (create-time64 '(1970 11 30 0 0 1))
+     (create-time64 '(1971 3 15 0 0 1))
+     MonthDelta))
+
+  (test-equal "make-date-list 31-dec-1970 to 15-4-1972 monthly including leapyear"
+    (list (create-time64 '(1970 12 31 0 0 1))
+          (create-time64 '(1971 1 31 0 0 1))
+          (create-time64 '(1971 2 28 0 0 1))
+          (create-time64 '(1971 3 31 0 0 1))
+          (create-time64 '(1971 4 30 0 0 1))
+          (create-time64 '(1971 5 31 0 0 1))
+          (create-time64 '(1971 6 30 0 0 1))
+          (create-time64 '(1971 7 31 0 0 1))
+          (create-time64 '(1971 8 31 0 0 1))
+          (create-time64 '(1971 9 30 0 0 1))
+          (create-time64 '(1971 10 31 0 0 1))
+          (create-time64 '(1971 11 30 0 0 1))
+          (create-time64 '(1971 12 31 0 0 1))
+          (create-time64 '(1972 1 31 0 0 1))
+          (create-time64 '(1972 2 29 0 0 1))
+          (create-time64 '(1972 3 31 0 0 1))
+          (create-time64 '(1972 4 15 0 0 1)))
+    (gnc:make-date-list
+     (create-time64 '(1970 12 31 0 0 1))
+     (create-time64 '(1972 4 15 0 0 1))
+     MonthDelta))
+
+  (test-equal "make-date-list 30-aug-1970 to 15-4-1972 quarterly including leapyear"
+    (list (create-time64 '(1970 8 31 0 0 1))
+          (create-time64 '(1970 11 30 0 0 1))
+          (create-time64 '(1971 2 28 0 0 1))
+          (create-time64 '(1971 5 31 0 0 1))
+          (create-time64 '(1971 8 31 0 0 1))
+          (create-time64 '(1971 11 30 0 0 1))
+          (create-time64 '(1972 2 29 0 0 1))
+          (create-time64 '(1972 4 15 0 0 1)))
+    (gnc:make-date-list
+     (create-time64 '(1970 8 31 0 0 1))
+     (create-time64 '(1972 4 15 0 0 1))
+     QuarterDelta))
+
+  (test-equal "make-date-list 30-aug-1970 to 15-4-1972 half-yearly including leapyear"
+    (list (create-time64 '(1970 8 30 0 0 1))
+          (create-time64 '(1971 2 28 0 0 1))
+          (create-time64 '(1971 8 30 0 0 1))
+          (create-time64 '(1972 2 29 0 0 1))
+          (create-time64 '(1972 4 15 0 0 1)))
+    (gnc:make-date-list
+     (create-time64 '(1970 8 30 0 0 1))
+     (create-time64 '(1972 4 15 0 0 1))
+     HalfYearDelta))
+
+  (test-equal "make-date-interval-list"
+    (list (list (create-time64 '(1969 12 18 0 0 1))
+                (create-time64 '(1969 12 25 0 0 0)))
+          (list (create-time64 '(1969 12 25 0 0 1))
+                (create-time64 '(1970 1 1 0 0 0)))
+          (list (create-time64 '(1970 1 1 0 0 1))
+                (create-time64 '(1970 1 2 0 0 1))))
+    (gnc:make-date-interval-list
+     (create-time64 '(1969 12 18 0 0 1))
+     (create-time64 '(1970 1 2 0 0 1))
+     WeekDelta))
+
+  (test-equal "make-date-interval-list exact"
+    (list (list (create-time64 '(1970 1 1 0 0 1))
+                (create-time64 '(1970 1 8 0 0 0)))
+          (list (create-time64 '(1970 1 8 0 0 1))
+                (create-time64 '(1970 1 15 0 0 1))))
+    (gnc:make-date-interval-list
+     (create-time64 '(1970 1 1 0 0 1))
+     (create-time64 '(1970 1 15 0 0 1))
+     WeekDelta))
+
+  (test-equal "make-date-interval-list 31/12/71 to 15/3/72 monthly incl leapyear"
+    (list (list (create-time64 '(1971 12 31 0 0 1))
+                (create-time64 '(1972 1 31 0 0 0)))
+          (list (create-time64 '(1972 1 31 0 0 1))
+                (create-time64 '(1972 2 29 0 0 0)))
+          (list (create-time64 '(1972 2 29 0 0 1))
+                (create-time64 '(1972 3 15 0 0 1))))
+    (gnc:make-date-interval-list
+     (create-time64 '(1971 12 31 0 0 1))
+     (create-time64 '(1972 03 15 0 0 1))
+     MonthDelta))
+
+  (test-equal "make-date-interval-list exact monthly"
+    (list (list (create-time64 '(1970 1 31 0 0 1))
+                (create-time64 '(1970 2 28 0 0 0)))
+          (list (create-time64 '(1970 2 28 0 0 1))
+                (create-time64 '(1970 3 31 0 0 1))))
+    (gnc:make-date-interval-list
+     (create-time64 '(1970 1 31 0 0 1))
+     (create-time64 '(1970 3 31 0 0 1))
+     MonthDelta)))
 
 (define (test-date-get-quarter-string)
   (test-equal "14/02/2001 = Q1"

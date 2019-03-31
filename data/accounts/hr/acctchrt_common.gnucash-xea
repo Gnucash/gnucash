@@ -1,0 +1,805 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gnc-account-example 
+  xmlns="http://www.gnucash.org/XML/"
+  xmlns:act="http://www.gnucash.org/XML/act"
+  xmlns:addr="http://www.gnucash.org/XML/addr"
+  xmlns:bgt="http://www.gnucash.org/XML/bgt"
+  xmlns:billterm="http://www.gnucash.org/XML/billterm"
+  xmlns:book="http://www.gnucash.org/XML/book"
+  xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+  xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+  xmlns:cd="http://www.gnucash.org/XML/cd"
+  xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+  xmlns:cust="http://www.gnucash.org/XML/cust"
+  xmlns:employee="http://www.gnucash.org/XML/employee"
+  xmlns:entry="http://www.gnucash.org/XML/entry"
+  xmlns:fs="http://www.gnucash.org/XML/fs"
+  xmlns:gnc="http://www.gnucash.org/XML/gnc"
+  xmlns:gnc-act="http://www.gnucash.org/XML/gnc-act"
+  xmlns:invoice="http://www.gnucash.org/XML/invoice"
+  xmlns:job="http://www.gnucash.org/XML/job"
+  xmlns:lot="http://www.gnucash.org/XML/lot"
+  xmlns:order="http://www.gnucash.org/XML/order"
+  xmlns:owner="http://www.gnucash.org/XML/owner"
+  xmlns:price="http://www.gnucash.org/XML/price"
+  xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+  xmlns:slot="http://www.gnucash.org/XML/slot"
+  xmlns:split="http://www.gnucash.org/XML/split"
+  xmlns:sx="http://www.gnucash.org/XML/sx"
+  xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+  xmlns:trn="http://www.gnucash.org/XML/trn"
+  xmlns:ts="http://www.gnucash.org/XML/ts"
+  xmlns:tte="http://www.gnucash.org/XML/tte"
+  xmlns:vendor="http://www.gnucash.org/XML/vendor">
+    <gnc-act:title>
+      Opći kontni plan
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Opći kontni plan za privatnu upotrebu
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+      Kontni plan za privatnu upotrebu (nije mišljen za poduzeća), koji uključuje uobičajeno upotrebljena konta (žiro račun, štednju, gotovinu, kreditne kartice, uobičajene troškove, itd.).
+    </gnc-act:long-description>
+<gnc-act:start-selected>1</gnc-act:start-selected>
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">383024c7e78448be8c5096c789a84da7</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Rashod</act:name>
+  <act:id type="new">0434759d91f44cbb8d25bf4b334d82a2</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Rashod</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">383024c7e78448be8c5096c789a84da7</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Osiguranje</act:name>
+  <act:id type="new">c5f64b3110ea4ea8858771f67d23b231</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Osiguranje</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">0434759d91f44cbb8d25bf4b334d82a2</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Osiguranje kućanstva</act:name>
+  <act:id type="new">f171c064636844d8b90685720cf04ed0</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Osiguranje stvari kućanstva</act:description>
+  <act:parent type="new">c5f64b3110ea4ea8858771f67d23b231</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Osiguranje imovine</act:name>
+  <act:id type="new">6d66ccd28ffb4d43b4736ddd3d54db7f</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Osiguranje kuće, stana, apartmana</act:description>
+  <act:parent type="new">c5f64b3110ea4ea8858771f67d23b231</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Zdravstveno osiguranje</act:name>
+  <act:id type="new">43aa71fc7f714f8cb6f5c1543eb9be22</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Zdravstveno osiguranje</act:description>
+  <act:parent type="new">c5f64b3110ea4ea8858771f67d23b231</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Stanovanje</act:name>
+  <act:id type="new">87b103c52b044a45bebfb72b8b2e552e</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Troškovi stanovanja</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">0434759d91f44cbb8d25bf4b334d82a2</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Najamnina</act:name>
+  <act:id type="new">214bfab8093b4656a845f104ad2a943c</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Najamnina</act:description>
+  <act:parent type="new">87b103c52b044a45bebfb72b8b2e552e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Režije</act:name>
+  <act:id type="new">cb6ae3f25c03449b8cee8d14c072e0f5</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Režije</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">87b103c52b044a45bebfb72b8b2e552e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Plin</act:name>
+  <act:id type="new">c4a28f5cda4249ecb1fa17d567f77074</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Plin</act:description>
+  <act:parent type="new">cb6ae3f25c03449b8cee8d14c072e0f5</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Struja</act:name>
+  <act:id type="new">d10c3b2bf9124648b4ac35d1956fce80</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Struja</act:description>
+  <act:parent type="new">cb6ae3f25c03449b8cee8d14c072e0f5</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Voda</act:name>
+  <act:id type="new">c3f006cbdabe40a8a5b5b85b321806a0</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Voda</act:description>
+  <act:parent type="new">cb6ae3f25c03449b8cee8d14c072e0f5</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Grijanje</act:name>
+  <act:id type="new">2a0754b129c5401da07bd54e39f5dd8c</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Grijanje</act:description>
+  <act:parent type="new">cb6ae3f25c03449b8cee8d14c072e0f5</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Čistoća</act:name>
+  <act:id type="new">cb49fce6b6ac46cfa3fa221039b5f3f0</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Čistoća</act:description>
+  <act:parent type="new">cb6ae3f25c03449b8cee8d14c072e0f5</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Komunalna naknada</act:name>
+  <act:id type="new">207f61dabd8541879861bbaaf75d6631</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Komunalna naknada</act:description>
+  <act:parent type="new">cb6ae3f25c03449b8cee8d14c072e0f5</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Pričuva</act:name>
+  <act:id type="new">48f1216ab6ca4bad908b6ded9d4b326d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Pričuva</act:description>
+  <act:parent type="new">cb6ae3f25c03449b8cee8d14c072e0f5</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Telekomunikacija</act:name>
+  <act:id type="new">7968c3c636c24c99bff2c1d31e0cb054</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Telekomunikacija</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">87b103c52b044a45bebfb72b8b2e552e</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Televizija</act:name>
+  <act:id type="new">31fd4b65d9274fd5a7fe8521bfafa356</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>RTV pretplata</act:description>
+  <act:parent type="new">7968c3c636c24c99bff2c1d31e0cb054</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Internet</act:name>
+  <act:id type="new">5a300d17bf6e47d1864d8fa7315afde5</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Internet</act:description>
+  <act:parent type="new">7968c3c636c24c99bff2c1d31e0cb054</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Telefon</act:name>
+  <act:id type="new">52d848407b4c4840853bd0bbf95b891c</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Telefon/Mobitel</act:description>
+  <act:parent type="new">7968c3c636c24c99bff2c1d31e0cb054</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Mrežne usluge</act:name>
+  <act:id type="new">397f7fb2267a48ce9af52c5ccb512748</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Mrežne usluge</act:description>
+  <act:parent type="new">7968c3c636c24c99bff2c1d31e0cb054</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Obrazovanje</act:name>
+  <act:id type="new">89d5a109a68d4ddb980589dfa502be8c</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Obrazovanje</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">0434759d91f44cbb8d25bf4b334d82a2</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Pretplate</act:name>
+  <act:id type="new">f8de6278bb10489084997d9ff735c401</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Pretplate, npr. na časopise</act:description>
+  <act:parent type="new">89d5a109a68d4ddb980589dfa502be8c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Knjige</act:name>
+  <act:id type="new">c684628652fe473c97a9f516388765e7</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Knjige</act:description>
+  <act:parent type="new">89d5a109a68d4ddb980589dfa502be8c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Uredski materijal</act:name>
+  <act:id type="new">2413f9293af047dd81a531ab72d9520b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Uredski materijal</act:description>
+  <act:parent type="new">89d5a109a68d4ddb980589dfa502be8c</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Odjeća i obuća</act:name>
+  <act:id type="new">79ba1d0622e04b198d21b3b019660404</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Odjeća i obuća</act:description>
+  <act:parent type="new">0434759d91f44cbb8d25bf4b334d82a2</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Namirnice</act:name>
+  <act:id type="new">88a0a0bbc5b9448db43472ff7a078680</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Namirnice</act:description>
+  <act:parent type="new">0434759d91f44cbb8d25bf4b334d82a2</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Lijekovi</act:name>
+  <act:id type="new">5bf92de9242448c5aea5af88d540acff</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Lijekovi</act:description>
+  <act:parent type="new">0434759d91f44cbb8d25bf4b334d82a2</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Razni troškovi</act:name>
+  <act:id type="new">ccf0006435b94d17a4a9aade6edadb38</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Razni troškovi</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">0434759d91f44cbb8d25bf4b334d82a2</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Bankovne naknade</act:name>
+  <act:id type="new">310f26bd5e724482ba20e204e8226c22</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Bankovne naknade</act:description>
+  <act:parent type="new">ccf0006435b94d17a4a9aade6edadb38</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Razno</act:name>
+  <act:id type="new">4a49d6f6806d4474b2ee2f5bbb9119ad</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Neodređeni troškovi</act:description>
+  <act:parent type="new">ccf0006435b94d17a4a9aade6edadb38</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Izlasci</act:name>
+  <act:id type="new">1b37595ecb9641c5ade7b3657c23fe2f</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Koncerti, kino, kafići i sl.</act:description>
+  <act:parent type="new">ccf0006435b94d17a4a9aade6edadb38</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Putovanja</act:name>
+  <act:id type="new">3d27b411c24842d4a09b6db93f70e687</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Putovanja, ljetovanje, skijanje</act:description>
+  <act:parent type="new">ccf0006435b94d17a4a9aade6edadb38</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Sport</act:name>
+  <act:id type="new">20be1a04b8374ddeb54525616dfaa526</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Sport</act:description>
+  <act:parent type="new">ccf0006435b94d17a4a9aade6edadb38</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Porezi</act:name>
+  <act:id type="new">025494cce4aa4c608ad81efabf6750a8</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Porezi i prirezi</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">0434759d91f44cbb8d25bf4b334d82a2</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Ostali porezi</act:name>
+  <act:id type="new">b2715e701f5642daaeea86205dda12e1</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Ostali porezi</act:description>
+  <act:parent type="new">025494cce4aa4c608ad81efabf6750a8</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kamate</act:name>
+  <act:id type="new">01926d53adca48febc7d21a858e36b6b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Kamate</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">0434759d91f44cbb8d25bf4b334d82a2</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kamate na kredit</act:name>
+  <act:id type="new">4d281b5cc45140418c00aa1466c3ab5c</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Kamate na kredit</act:description>
+  <act:parent type="new">01926d53adca48febc7d21a858e36b6b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Prijevoz</act:name>
+  <act:id type="new">54dc415ff80e4fb199a3ab4d596a1207</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Javni prijevoz</act:description>
+  <act:parent type="new">0434759d91f44cbb8d25bf4b334d82a2</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Imovina</act:name>
+  <act:id type="new">31f96d98748c44aeae8d1f650b50a0ac</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Imovina</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">383024c7e78448be8c5096c789a84da7</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Trenutačna imovina</act:name>
+  <act:id type="new">ea311d5363cd434bb931eeffb975f170</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Trenutačna imovina</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">31f96d98748c44aeae8d1f650b50a0ac</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Žiro račun</act:name>
+  <act:id type="new">264ad7494918494499246d39cbfd4862</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Žiro račun</act:description>
+  <act:parent type="new">ea311d5363cd434bb931eeffb975f170</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Štedni račun</act:name>
+  <act:id type="new">e4b645518256492fb7aaeea0729249b8</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Štedni račun</act:description>
+  <act:parent type="new">ea311d5363cd434bb931eeffb975f170</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Gotovina</act:name>
+  <act:id type="new">365eba65f2eb4a3588dc018a244c6605</act:id>
+  <act:type>CASH</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Gotovina</act:description>
+  <act:parent type="new">ea311d5363cd434bb931eeffb975f170</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Tekući račun</act:name>
+  <act:id type="new">f381d3cdfb9344728a511322323d69d8</act:id>
+  <act:type>BANK</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Tekući račun</act:description>
+  <act:parent type="new">ea311d5363cd434bb931eeffb975f170</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Obveze</act:name>
+  <act:id type="new">ab79a1333ce7482bb6324663b56114db</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Obveze</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">383024c7e78448be8c5096c789a84da7</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kreditna kartica</act:name>
+  <act:id type="new">5dcaa18ae9434d0ca945bfb124f35a64</act:id>
+  <act:type>CREDIT</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Kreditna kartica</act:description>
+  <act:parent type="new">ab79a1333ce7482bb6324663b56114db</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Krediti</act:name>
+  <act:id type="new">9500dff5bdbd4c5ba01e0d4028624caf</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Krediti/zajmovi</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">ab79a1333ce7482bb6324663b56114db</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kredit</act:name>
+  <act:id type="new">c51053321a2f46ea81ade293d422b287</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Kredit</act:description>
+  <act:parent type="new">9500dff5bdbd4c5ba01e0d4028624caf</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Prihod</act:name>
+  <act:id type="new">5c4f1206f6b343e29b9d660d2182e3b7</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Prihod</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">383024c7e78448be8c5096c789a84da7</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Dohodak</act:name>
+  <act:id type="new">d4e9709bc58e4fbc9f863932d8e5d774</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Dohodak</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">5c4f1206f6b343e29b9d660d2182e3b7</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Osobni dohodak</act:name>
+  <act:id type="new">d4bfc34ae64b4e33a18653b0bac5f76c</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Osobni dohodak</act:description>
+  <act:parent type="new">d4e9709bc58e4fbc9f863932d8e5d774</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Dodaci</act:name>
+  <act:id type="new">cc401ac7698342a7963c6b4c03dd3a4b</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Dodaci, bonusi, dnevnica i sl.</act:description>
+  <act:parent type="new">d4e9709bc58e4fbc9f863932d8e5d774</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Ostalo</act:name>
+  <act:id type="new">a3b7c96cdb0f44aab4d550dba0233c00</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Ostali prihodi</act:description>
+  <act:parent type="new">5c4f1206f6b343e29b9d660d2182e3b7</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kamate</act:name>
+  <act:id type="new">4bcbb5eb33df4af9b5d692c6aab2c8c9</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Prihod od kamata</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">5c4f1206f6b343e29b9d660d2182e3b7</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kamate po žiro računu</act:name>
+  <act:id type="new">7bc08bbdc68c41679cc5eb28f1e24e73</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Kamate po žiro računu</act:description>
+  <act:parent type="new">4bcbb5eb33df4af9b5d692c6aab2c8c9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kamate po štednom računu</act:name>
+  <act:id type="new">346341eff38e4dda878ea780980404c5</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Kamate po štednom računu</act:description>
+  <act:parent type="new">4bcbb5eb33df4af9b5d692c6aab2c8c9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kamate po tekućem računu</act:name>
+  <act:id type="new">5d9bb56dde7d4b8b893083955205ed65</act:id>
+  <act:type>INCOME</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Kamate po tekućem računu</act:description>
+  <act:parent type="new">4bcbb5eb33df4af9b5d692c6aab2c8c9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kapital</act:name>
+  <act:id type="new">73f3a388cebe42a3bc40ab8db179d32d</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Kapital</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">383024c7e78448be8c5096c789a84da7</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Početni saldo</act:name>
+  <act:id type="new">7957f9604ba842b7831c5df4e4db80a0</act:id>
+  <act:type>EQUITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Početni saldo</act:description>
+  <act:parent type="new">73f3a388cebe42a3bc40ab8db179d32d</act:parent>
+</gnc:account>
+</gnc-account-example>
+

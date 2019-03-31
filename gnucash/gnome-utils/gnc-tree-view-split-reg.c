@@ -305,33 +305,7 @@ struct GncTreeViewSplitRegPrivate
 
 static GObjectClass *parent_class = NULL;
 
-GType
-gnc_tree_view_split_reg_get_type(void)
-{
-    static GType gnc_tree_view_split_reg_type = 0;
-
-    if (gnc_tree_view_split_reg_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncTreeViewSplitRegClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_tree_view_split_reg_class_init,
-            NULL,
-            NULL,
-            sizeof (GncTreeViewSplitReg),
-            0,
-            (GInstanceInitFunc) gnc_tree_view_split_reg_init
-        };
-
-        gnc_tree_view_split_reg_type = g_type_register_static (GNC_TYPE_TREE_VIEW,
-                                     "GncTreeViewSplitReg",
-                                     &our_info, 0);
-    }
-    return gnc_tree_view_split_reg_type;
-}
-
+G_DEFINE_TYPE_WITH_PRIVATE(GncTreeViewSplitReg, gnc_tree_view_split_reg, GNC_TYPE_TREE_VIEW)
 
 static void
 gnc_tree_view_split_reg_class_init (GncTreeViewSplitRegClass *klass)
@@ -344,8 +318,6 @@ gnc_tree_view_split_reg_class_init (GncTreeViewSplitRegClass *klass)
 
     o_class->dispose =  gnc_tree_view_split_reg_dispose;
     o_class->finalize = gnc_tree_view_split_reg_finalize;
-
-    g_type_class_add_private (klass, sizeof(GncTreeViewSplitRegPrivate));
 
     gnc_tree_view_split_reg_signals[UPDATE_SIGNAL] =
         g_signal_new("update_signal",
@@ -1512,7 +1484,7 @@ gtv_sr_cdf0 (GtkTreeViewColumn *col, GtkCellRenderer *cell, GtkTreeModel *s_mode
         /* Is this a template */
         if (is_template && is_trow1)
         {
-            strncpy (datebuff,  _(" Scheduled "), sizeof(datebuff));
+            strncpy (datebuff,  _(" Scheduled "), sizeof(datebuff)-1);
             editable = FALSE;
         }
         else if (is_template && is_trow2 && show_extra_dates)

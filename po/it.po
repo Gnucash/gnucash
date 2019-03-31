@@ -52,7 +52,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gnucash 2.6.0\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2018-01-13 20:39+0100\n"
 "PO-Revision-Date: 2014-11-08 11:31+0100\n"
 "Last-Translator: Cristian Marchi <cri.penta@gmail.com>\n"
@@ -12357,7 +12358,7 @@ msgstr "- gestore delle finanze personali e per piccole imprese GnuCash"
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
 #: ../gnucash/gnome-utils/gnc-main-window.c:4521
-msgid "translator_credits"
+msgid "translator-credits"
 msgstr ""
 " \n"
 " Traduzione di Cristian Marchi (2014)\n"
@@ -17763,8 +17764,8 @@ msgid "tax"
 msgstr "Imposte"
 
 #: ../gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "place_holder"
-msgstr "segna_posto"
+msgid "placeholder"
+msgstr "segnaposto"
 
 #: ../gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54
 msgid "Export Account T_ree to CSV..."

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gnc-account-example 
+  xmlns="http://www.gnucash.org/XML/"
+  xmlns:act="http://www.gnucash.org/XML/act"
+  xmlns:addr="http://www.gnucash.org/XML/addr"
+  xmlns:bgt="http://www.gnucash.org/XML/bgt"
+  xmlns:billterm="http://www.gnucash.org/XML/billterm"
+  xmlns:book="http://www.gnucash.org/XML/book"
+  xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+  xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+  xmlns:cd="http://www.gnucash.org/XML/cd"
+  xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+  xmlns:cust="http://www.gnucash.org/XML/cust"
+  xmlns:employee="http://www.gnucash.org/XML/employee"
+  xmlns:entry="http://www.gnucash.org/XML/entry"
+  xmlns:fs="http://www.gnucash.org/XML/fs"
+  xmlns:gnc="http://www.gnucash.org/XML/gnc"
+  xmlns:gnc-act="http://www.gnucash.org/XML/gnc-act"
+  xmlns:invoice="http://www.gnucash.org/XML/invoice"
+  xmlns:job="http://www.gnucash.org/XML/job"
+  xmlns:lot="http://www.gnucash.org/XML/lot"
+  xmlns:order="http://www.gnucash.org/XML/order"
+  xmlns:owner="http://www.gnucash.org/XML/owner"
+  xmlns:price="http://www.gnucash.org/XML/price"
+  xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+  xmlns:slot="http://www.gnucash.org/XML/slot"
+  xmlns:split="http://www.gnucash.org/XML/split"
+  xmlns:sx="http://www.gnucash.org/XML/sx"
+  xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+  xmlns:trn="http://www.gnucash.org/XML/trn"
+  xmlns:ts="http://www.gnucash.org/XML/ts"
+  xmlns:tte="http://www.gnucash.org/XML/tte"
+  xmlns:vendor="http://www.gnucash.org/XML/vendor">
+    <gnc-act:title>
+      Kredit za obrazovanje
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Kontni plan za kredit za obrazovanje
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+      Kontni plan za knjiženje i praćenje kredita za obrazovanje te njegovih kamata.
+    You would want to select this set of accounts if you have an educational loan (education loan, education loan interest).
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">8e5d714821424284a5750faf748ae3b5</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+HRK</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Obveze</act:name>
+  <act:id type="new">606f2b17b88c4215b1e3286a376b2dcd</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+HRK  <act:description>Obveze</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">8e5d714821424284a5750faf748ae3b5</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Krediti</act:name>
+  <act:id type="new">7717fa79db024dea9c843fe9cafce52a</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+HRK  <act:description>Krediti</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">606f2b17b88c4215b1e3286a376b2dcd</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kredit za obrazovanje</act:name>
+  <act:id type="new">0116545dabfe4e779c23e12cfb4859e8</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+HRK  <act:description>Kredit za obrazovanje</act:description>
+  <act:parent type="new">7717fa79db024dea9c843fe9cafce52a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Rashod</act:name>
+  <act:id type="new">13458f5113db491195e0147deb80fdd2</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+HRK  <act:description>Rashod</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">8e5d714821424284a5750faf748ae3b5</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kamate</act:name>
+  <act:id type="new">5ada18bd2b6a4d0eb08a611e17a1fd69</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+HRK  <act:description>Kamate</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">13458f5113db491195e0147deb80fdd2</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kamate na kredit za obrazovanje</act:name>
+  <act:id type="new">ae4c3a47e1f14d0582804d1f17025180</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+HRK  <act:description>Kamate na kredit za obrazovanje</act:description>
+  <act:parent type="new">5ada18bd2b6a4d0eb08a611e17a1fd69</act:parent>
+</gnc:account>
+</gnc-account-example>

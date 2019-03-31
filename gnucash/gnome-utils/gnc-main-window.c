@@ -129,7 +129,8 @@ static guint secs_to_save = 0;
 
 /* Declarations *********************************************************/
 static void gnc_main_window_class_init (GncMainWindowClass *klass);
-static void gnc_main_window_init (GncMainWindow *window, GncMainWindowClass *klass);
+static void gnc_main_window_init (GncMainWindow *window,
+		                  void *data);
 static void gnc_main_window_finalize (GObject *object);
 static void gnc_main_window_destroy (GtkWidget *widget);
 
@@ -205,11 +206,6 @@ typedef struct GncMainWindowPrivate
      *  window that is contained in the status bar.  This pointer
      *  provides easy access for updating the progressbar. */
     GtkWidget *progressbar;
-    /** Pointer to the about dialog.  We need this so that we create
-     *  only one, can attach to its activate-link signal, and can
-     *  destroy it with the main window.
-     */
-    GtkWidget *about_dialog;
 
     /** The group of all actions provided by the main window
      *  itself.  This does not include any action provided by menu
@@ -232,6 +228,11 @@ typedef struct GncMainWindowPrivate
      *  MergedActionEntry. */
     GHashTable *merged_actions_table;
 } GncMainWindowPrivate;
+
+GNC_DEFINE_TYPE_WITH_CODE(GncMainWindow, gnc_main_window, GTK_TYPE_WINDOW,
+                        G_ADD_PRIVATE (GncMainWindow)
+                        G_IMPLEMENT_INTERFACE (GNC_TYPE_WINDOW,
+		                               gnc_window_main_window_init))
 
 #define GNC_MAIN_WINDOW_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_MAIN_WINDOW, GncMainWindowPrivate))
@@ -2461,45 +2462,6 @@ gnc_main_window_tab_entry_key_press_event (GtkWidget *entry,
  *                   Widget Implementation                  *
  ************************************************************/
 
-/*  Get the type of a gnc main window.
- */
-GType
-gnc_main_window_get_type (void)
-{
-    static GType gnc_main_window_type = 0;
-
-    if (gnc_main_window_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncMainWindowClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_main_window_class_init,
-            NULL,
-            NULL,
-            sizeof (GncMainWindow),
-            0,
-            (GInstanceInitFunc) gnc_main_window_init
-        };
-
-        static const GInterfaceInfo plugin_info =
-        {
-            (GInterfaceInitFunc) gnc_window_main_window_init,
-            NULL,
-            NULL
-        };
-
-        gnc_main_window_type = g_type_register_static (GTK_TYPE_WINDOW,
-                               GNC_MAIN_WINDOW_NAME,
-                               &our_info, 0);
-        g_type_add_interface_static (gnc_main_window_type,
-                                     GNC_TYPE_WINDOW,
-                                     &plugin_info);
-    }
-
-    return gnc_main_window_type;
-}
 
 
 /** Initialize the class for a new gnucash main window.  This will set
@@ -2523,8 +2485,6 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
 
     /* GtkWidget signals */
     gtkwidget_class->destroy = gnc_main_window_destroy;
-
-    g_type_class_add_private(klass, sizeof(GncMainWindowPrivate));
 
     /**
      * GncMainWindow::page_added:
@@ -2593,10 +2553,11 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
  *  @param klass A pointer to the class data structure for this
  *  object. */
 static void
-gnc_main_window_init (GncMainWindow *window,
-                      GncMainWindowClass *klass)
+gnc_main_window_init (GncMainWindow *window, void *data)
 {
     GncMainWindowPrivate *priv;
+
+    GncMainWindowClass *klass = (GncMainWindowClass*)data;
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     priv->merged_actions_table =
@@ -2610,7 +2571,6 @@ gnc_main_window_init (GncMainWindow *window,
 
     /* Get the show_color_tabs value preference */
     priv->show_color_tabs = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_COLOR);
-    priv->about_dialog = NULL;
 
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
                            GNC_PREF_TAB_COLOR,
@@ -2619,7 +2579,7 @@ gnc_main_window_init (GncMainWindow *window,
 
     gnc_main_window_setup_window (window);
     gnc_gobject_tracking_remember(G_OBJECT(window),
-                                  G_OBJECT_CLASS(klass));
+		                  G_OBJECT_CLASS(klass));
 }
 
 
@@ -2697,8 +2657,6 @@ gnc_main_window_destroy (GtkWidget *widget)
         g_list_foreach (plugins, gnc_main_window_remove_plugin, window);
         g_list_free (plugins);
     }
-    if (priv->about_dialog)
-        g_object_unref (priv->about_dialog);
     GTK_WIDGET_CLASS (parent_class)->destroy (widget);
 }
 
@@ -3752,32 +3710,13 @@ gnc_quartz_shutdown (GtkosxApplication *theApp, gpointer data)
     /* Do Nothing. It's too late. */
 }
 /* Should quit responds to NSApplicationBlockTermination; returning
- * TRUE means "don't terminate", FALSE means "do terminate". If we
- * decide that it's OK to terminate, then we queue a gnc_shutdown for
- * the next idle time (because we're not running in the main loop) and
- * then tell the OS not to terminate. That gives the gnc_shutdown an
- * opportunity to shut down.
+ * TRUE means "don't terminate", FALSE means "do terminate". 
  */
 static gboolean
 gnc_quartz_should_quit (GtkosxApplication *theApp, GncMainWindow *window)
 {
-    QofSession *session;
-    gboolean needs_save;
-
-    if (!gnc_current_session_exist() ||
-        !gnc_main_window_all_finish_pending() ||
-        gnc_file_save_in_progress())
-
-    {
-        return FALSE;
-    }
-    session = gnc_get_current_session();
-    needs_save = qof_book_session_not_saved(qof_session_get_book(session)) &&
-                 !gnc_file_save_in_progress();
-    if (needs_save && gnc_main_window_prompt_for_save(GTK_WIDGET(window)))
-        return TRUE;
-
-    g_timeout_add(250, gnc_main_window_timed_quit, NULL);
+    if (gnc_main_window_all_finish_pending())
+        return gnc_main_window_quit (window);
     return TRUE;
 }
 
@@ -4523,45 +4462,26 @@ url_signal_cb (GtkAboutDialog *dialog, gchar *uri, gpointer data)
 static void
 gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 {
-    GncMainWindowPrivate *priv;
-
-    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-
-    if (priv->about_dialog == NULL)
-    {
-        /* Translators: %s will be replaced with the current year */
-        gchar *copyright = g_strdup_printf(_("Copyright © 1997-%s The GnuCash contributors."),
-                                           GNC_VCS_REV_YEAR);
-        gchar **authors = get_file_strsplit("AUTHORS");
-        gchar **documenters = get_file_strsplit("DOCUMENTERS");
-        gchar *license = get_file("LICENSE");
-        gchar *version = NULL;
-        gchar *vcs = NULL;
-        GtkIconTheme *icon_theme = gtk_icon_theme_get_default ();
-        GdkPixbuf *logo = gtk_icon_theme_load_icon (icon_theme,
-                                                    GNC_ICON_APP,
-                                                    128,
-                                                    GTK_ICON_LOOKUP_USE_BUILTIN,
-                                                    NULL);
-
-#ifdef GNC_VCS
-        vcs = GNC_VCS " ";
-#else
-        vcs = "";
-#endif
-
-        /* Allow builder to override the build id (eg distributions may want to
-         * print an package source version number (rpm, dpkg,...) instead of our git ref */
-        if (g_strcmp0("", GNUCASH_BUILD_ID) != 0)
-            version = g_strdup_printf ("%s: %s\n%s: %s\nFinance::Quote: %s", _("Version"), VERSION,
-                                       _("Build ID"), GNUCASH_BUILD_ID,
-                                       gnc_quote_source_fq_version () ? gnc_quote_source_fq_version () : "-");
-        else
-            version = g_strdup_printf ("%s: %s\n%s: %s%s (%s)\nFinance::Quote: %s", _("Version"), VERSION,
-                                       _("Build ID"), vcs, GNC_VCS_REV, GNC_VCS_REV_DATE,
-                                       gnc_quote_source_fq_version () ? gnc_quote_source_fq_version () : "-");
-        priv->about_dialog = gtk_about_dialog_new ();
-        g_object_set (priv->about_dialog,
+    /* Translators: %s will be replaced with the current year */
+    gchar *copyright = g_strdup_printf(_("Copyright © 1997-%s The GnuCash contributors."),
+                                       GNC_VCS_REV_YEAR);
+    gchar **authors = get_file_strsplit("AUTHORS");
+    gchar **documenters = get_file_strsplit("DOCUMENTERS");
+    gchar *license = get_file("LICENSE");
+    GtkIconTheme *icon_theme = gtk_icon_theme_get_default ();
+    GdkPixbuf *logo = gtk_icon_theme_load_icon (icon_theme,
+                                                GNC_ICON_APP,
+                                                128,
+                                                GTK_ICON_LOOKUP_USE_BUILTIN,
+                                                NULL);
+    gchar *version = g_strdup_printf ("%s: %s\n%s: %s\nFinance::Quote: %s",
+                                      _("Version"), gnc_version(),
+                                      _("Build ID"), gnc_build_id(),
+                                      gnc_quote_source_fq_version ()
+                                      ? gnc_quote_source_fq_version ()
+                                      : "-");
+    GtkDialog *dialog = GTK_DIALOG (gtk_about_dialog_new ());
+    g_object_set (G_OBJECT (dialog),
                   "authors", authors,
                   "documenters", documenters,
                   "comments", _("Accounting for personal and small business finance."),
@@ -4569,37 +4489,34 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
                   "license", license,
                   "logo", logo,
                   "name", "GnuCash",
-         /* Translators: the following string will be shown in Help->About->Credits
-          * Enter your name or that of your team and an email contact for feedback.
-          * The string can have multiple rows, so you can also add a list of
-          * contributors. */
-                  "translator-credits", _("translator_credits"),
+                  /* Translators: the following string will be shown in Help->About->Credits
+                   * Enter your name or that of your team and an email contact for feedback.
+                   * The string can have multiple rows, so you can also add a list of
+                   * contributors. */
+                  "translator-credits", _("translator-credits"),
                   "version", version,
                   "website", PACKAGE_URL,
-                  "website_label", _("Visit the GnuCash website."),
+                  "website-label", _("Visit the GnuCash website."),
                   NULL);
 
-        g_free(version);
-        g_free(copyright);
-        if (license)
-             g_free(license);
-        if (documenters)
-             g_strfreev(documenters);
-        if (authors)
-             g_strfreev(authors);
-        g_object_unref (logo);
-        g_signal_connect (priv->about_dialog, "activate-link",
-              G_CALLBACK (url_signal_cb), NULL);
-        g_signal_connect (priv->about_dialog, "response",
-              G_CALLBACK (gtk_widget_hide), NULL);
+    g_free(version);
+    g_free(copyright);
+    if (license)
+        g_free(license);
+    if (documenters)
+        g_strfreev(documenters);
+    if (authors)
+        g_strfreev(authors);
+    g_object_unref (logo);
+    g_signal_connect (dialog, "activate-link",
+                      G_CALLBACK (url_signal_cb), NULL);
+    /* Set dialog to resize. */
+    gtk_window_set_resizable(GTK_WINDOW (dialog), TRUE);
 
-        /* Set dialog to resize. */
-        gtk_window_set_resizable(GTK_WINDOW(priv->about_dialog), TRUE);
-
-        gtk_window_set_transient_for (GTK_WINDOW (priv->about_dialog),
-                          GTK_WINDOW (window));
-    }
-    gtk_dialog_run (GTK_DIALOG (priv->about_dialog));
+    gtk_window_set_transient_for (GTK_WINDOW (dialog),
+                                  GTK_WINDOW (window));
+    gtk_dialog_run (dialog);
+    gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 

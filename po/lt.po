@@ -7,7 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2018-01-13 20:39+0100\n"
 "PO-Revision-Date: 2013-12-26 17:53+0300\n"
 "Last-Translator: Aurimas Fišeras <aurimas@members.fsf.org>\n"
@@ -11862,7 +11863,7 @@ msgstr "– GnuCash asmeninių ir smulkaus verslo finansų valdymas"
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
 #: ../gnucash/gnome-utils/gnc-main-window.c:4521
-msgid "translator_credits"
+msgid "translator-credits"
 msgstr ""
 "Tadas Masiulionis\n"
 "Mantas Kriaučiūnas <mantas@akl.lt>\n"
@@ -17046,7 +17047,7 @@ msgid "tax"
 msgstr "mokestis"
 
 #: ../gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "place_holder"
+msgid "placeholder"
 msgstr "aplankas"
 
 #: ../gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54

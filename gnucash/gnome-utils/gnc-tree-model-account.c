@@ -144,44 +144,10 @@ gnc_tree_model_account_update_color (gpointer gsettings, gchar *key, gpointer us
 /** A pointer to the parent class of an account tree model. */
 static GObjectClass *parent_class = NULL;
 
-GType
-gnc_tree_model_account_get_type (void)
-{
-    static GType gnc_tree_model_account_type = 0;
-
-    if (gnc_tree_model_account_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncTreeModelAccountClass), /* class_size */
-            NULL,                              /* base_init */
-            NULL,                              /* base_finalize */
-            (GClassInitFunc) gnc_tree_model_account_class_init,
-            NULL,                              /* class_finalize */
-            NULL,                              /* class_data */
-            sizeof (GncTreeModelAccount),      /* */
-            0,                                 /* n_preallocs */
-            (GInstanceInitFunc) gnc_tree_model_account_init
-        };
-
-        static const GInterfaceInfo tree_model_info =
-        {
-            (GInterfaceInitFunc) gnc_tree_model_account_tree_model_init,
-            NULL,
-            NULL
-        };
-
-        gnc_tree_model_account_type = g_type_register_static (GNC_TYPE_TREE_MODEL,
-                                      GNC_TREE_MODEL_ACCOUNT_NAME,
-                                      &our_info, 0);
-
-        g_type_add_interface_static (gnc_tree_model_account_type,
-                                     GTK_TYPE_TREE_MODEL,
-                                     &tree_model_info);
-    }
-
-    return gnc_tree_model_account_type;
-}
+G_DEFINE_TYPE_WITH_CODE (GncTreeModelAccount, gnc_tree_model_account, GNC_TYPE_TREE_MODEL,
+                         G_ADD_PRIVATE (GncTreeModelAccount)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL,
+                                                gnc_tree_model_account_tree_model_init))
 
 static void
 gnc_tree_model_account_class_init (GncTreeModelAccountClass *klass)
@@ -195,8 +161,6 @@ gnc_tree_model_account_class_init (GncTreeModelAccountClass *klass)
     /* GObject signals */
     o_class->finalize = gnc_tree_model_account_finalize;
     o_class->dispose = gnc_tree_model_account_dispose;
-
-    g_type_class_add_private(klass, sizeof(GncTreeModelAccountPrivate));
 }
 
 static void

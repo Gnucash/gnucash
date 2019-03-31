@@ -30,6 +30,7 @@ extern "C"
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/date_time/local_time/local_time.hpp>
+#include <boost/locale.hpp>
 #include <boost/regex.hpp>
 #include <libintl.h>
 #include <locale.h>
@@ -39,6 +40,9 @@ extern "C"
 #include <sstream>
 #include <string>
 #include <vector>
+#ifdef __MINGW32__
+#include <codecvt>
+#endif
 #include <gnc-locale-utils.hpp>
 #include "gnc-timezone.hpp"
 #include "gnc-datetime.hpp"
@@ -262,7 +266,9 @@ public:
     void today() { m_greg = boost::gregorian::day_clock::local_day(); }
     ymd year_month_day() const;
     std::string format(const char* format) const;
-    std::string format_zulu(const char* format) const;
+    std::string format_zulu(const char* format) const {
+	return this->format(format);
+    }
 private:
     Date m_greg;
 
@@ -427,40 +433,98 @@ normalize_format (const std::string& format)
         });
     return normalized;
 }
+#ifdef __MINGW32__
+constexpr size_t DATEBUFLEN = 100;
+static std::string
+win_date_format(std::string format, struct tm tm)
+{
+    wchar_t buf[DATEBUFLEN];
+    memset(buf, 0, DATEBUFLEN);
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> conv;
+    auto numchars = wcsftime(buf, DATEBUFLEN - 1, conv.from_bytes(format).c_str(), &tm);
+    return conv.to_bytes(buf);
+}
 
+/* Microsoft's strftime uses the time zone flags differently from
+ * boost::date_time so we need to handle any before passing the
+ * format string to strftime.
+ */
+inline std::string
+win_format_tz_abbrev (std::string format, TZ_Ptr tz, bool is_dst)
+{
+    size_t pos = format.find("%z");
+    if (pos != std::string::npos)
+    {
+	auto tzabbr = tz->has_dst() && is_dst ? tz->dst_zone_abbrev() :
+	    tz->std_zone_abbrev();
+	format.replace(pos, 2, tzabbr);
+    }
+    return format;
+}
+
+inline std::string
+win_format_tz_name (std::string format, TZ_Ptr tz, bool is_dst)
+{
+    size_t pos = format.find("%Z");
+    if (pos != std::string::npos)
+    {
+	auto tzname =  tz->has_dst() && is_dst ? tz->dst_zone_name() :
+	    tz->std_zone_name();
+	format.replace(pos, 2, tzname);
+    }
+    return format;
+}
+
+inline std::string
+win_format_tz_posix (std::string format, TZ_Ptr tz)
+{
+    size_t pos = format.find("%ZP");
+    if (pos != std::string::npos)
+	format.replace(pos, 2, tz->to_posix_string());
+    return format;
+}
+
+#endif
 std::string
 GncDateTimeImpl::format(const char* format) const
 {
+#ifdef __MINGW32__
+    auto tz = m_time.zone();
+    auto tm =  static_cast<struct tm>(*this);
+    auto sformat = win_format_tz_abbrev(format, tz, tm.tm_isdst);
+    sformat = win_format_tz_name(sformat, tz, tm.tm_isdst);
+    sformat = win_format_tz_posix(sformat, tz);
+    return win_date_format(sformat, tm);
+#else
     using Facet = boost::local_time::local_time_facet;
-    static std::locale cachedLocale;
-    static bool cachedLocaleAvailable = false;
-    std::stringstream ss;
-
-    if(!cachedLocaleAvailable)
-    {
-        cachedLocale = std::locale("");
-	cachedLocaleAvailable = true;
-    }
-
-    //The stream destructor frees the facet, so it must be heap-allocated.
     auto output_facet(new Facet(normalize_format(format).c_str()));
-    // FIXME Rather than imbueing a locale below we probably should set std::locale::global appropriately somewhere.
+    std::stringstream ss;
     ss.imbue(std::locale(gnc_get_locale(), output_facet));
     ss << m_time;
     return ss.str();
+#endif
 }
 
 std::string
 GncDateTimeImpl::format_zulu(const char* format) const
 {
-    using Facet = boost::posix_time::time_facet;
+#ifdef __MINGW32__
+    auto tz = m_time.zone();
+    auto tm =  static_cast<struct tm>(*this);
+    auto sformat = win_format_tz_abbrev(format, tz, tm.tm_isdst);
+    sformat = win_format_tz_name(sformat, tz, tm.tm_isdst);
+    sformat = win_format_tz_posix(sformat, tz);
+    return win_date_format(sformat, utc_tm());
+#else
+    using Facet = boost::local_time::local_time_facet;
+    auto offset = m_time.local_time() - m_time.utc_time();
+    auto zulu_time = m_time - offset;
+    auto output_facet(new Facet(normalize_format(format).c_str()));
     std::stringstream ss;
-    //The stream destructor frees the facet, so it must be heap-allocated.
-    auto output_facet(new Facet(normalize_format(format).c_str())); 
-    // FIXME Rather than imbueing a locale below we probably should set std::locale::global appropriately somewhere.
     ss.imbue(std::locale(gnc_get_locale(), output_facet));
-    ss << m_time.utc_time();
+    ss << zulu_time;
     return ss.str();
+#endif
 }
 
 std::string
@@ -529,14 +593,17 @@ GncDateImpl::year_month_day() const
 std::string
 GncDateImpl::format(const char* format) const
 {
+#ifdef __MINGW32__
+    return win_date_format(format, to_tm(m_greg));
+#else
     using Facet = boost::gregorian::date_facet;
     std::stringstream ss;
     //The stream destructor frees the facet, so it must be heap-allocated.
     auto output_facet(new Facet(normalize_format(format).c_str()));
-    // FIXME Rather than imbueing a locale below we probably should set std::locale::global appropriately somewhere.
     ss.imbue(std::locale(gnc_get_locale(), output_facet));
     ss << m_greg;
     return ss.str();
+#endif
 }
 
 bool operator<(const GncDateImpl& a, const GncDateImpl& b) { return a.m_greg < b.m_greg; }

@@ -357,13 +357,9 @@ endif ()
 
 # ############################################################
 if (WITH_AQBANKING)
-  gnc_pkg_check_modules (GWENHYWFAR REQUIRED gwenhywfar)
-  gnc_pkg_check_modules (AQBANKING REQUIRED aqbanking)
+  gnc_pkg_check_modules (GWENHYWFAR REQUIRED gwenhywfar>=4.9.99)
+  gnc_pkg_check_modules (AQBANKING REQUIRED aqbanking>=5.3.4)
   if(WITH_GNUCASH)
-    gnc_pkg_check_modules (KTOBLZCHECK ktoblzcheck)
-    if(KTOBLZCHECK_FOUND)
-      set(HAVE_KTOBLZCHECK_H 1)
-    endif(KTOBLZCHECK_FOUND)
     gnc_pkg_check_modules (GWEN_GTK3 gwengui-gtk3)
     if(GWEN_GTK3_FOUND AND GWEN_GTK3_VERSION VERSION_GREATER "4.20.0")
       set(HAVE_GWEN_GTK3 1 CACHE BOOL "True if gwen-gtk3.pc exists")
@@ -639,6 +635,7 @@ set(gnucash_DOCS
     ChangeLog.2015
     ChangeLog.2016
     ChangeLog.2017
+    ChangeLog.2018
     DOCUMENTERS
     HACKING
     LICENSE
@@ -801,7 +798,7 @@ add_subdirectory(cmake)
 
 if (BUILDING_FROM_VCS)
     add_custom_target(ChangeLog ALL
-        COMMAND ${GIT_EXECUTABLE} log --format=\"%ad %aN %n%n%x09* %s%d%n\" --date=short --since=2018-01-01 > ${CMAKE_BINARY_DIR}/ChangeLog
+        COMMAND ${GIT_EXECUTABLE} log --format=\"%ad %aN %n%n%x09* %s%d%n\" --date=short --since=2019-01-01 > ${CMAKE_BINARY_DIR}/ChangeLog
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     )
     install(FILES ${CMAKE_BINARY_DIR}/ChangeLog DESTINATION ${CMAKE_INSTALL_DOCDIR})

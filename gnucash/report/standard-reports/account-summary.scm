@@ -458,25 +458,23 @@
 		)
           (if show-account-bals?
               (gnc:html-table-set-cell/tag!
-               build-table 0 (+ cur-col account-cols) "number-header"
+               build-table 0 (1+ cur-col) "number-header"
 	       (_ "Balance"))
               )
-	  (let ((row 0))
-	    (while (< row table-rows)
-		   (gnc:html-table-set-row-markup! build-table (+ row 1)
-						   (gnc:html-table-row-markup hold-table row))
-		   (let ((col 0))
-		     (while (< col hold-table-width)
-			    (gnc:html-table-set-cell!
-			     build-table (+ row 1) (+ cur-col col)
-			     (gnc:html-table-get-cell hold-table row col)
-			     )
-			    (set! col (+ col 1))
-			    )
-		     )
-		   (set! row (+ row 1))
-		   )
-	    )
+          (let ((row 0))
+            (while (< row table-rows)
+              (let ((col 1))
+                (gnc:html-table-set-cell! build-table (1+ row) cur-col
+                                          (gnc:html-table-get-cell hold-table row 0))
+                (if show-account-bals?
+                    (while (< col hold-table-width)
+                      (if (gnc:html-table-get-cell hold-table row col)
+                          (gnc:html-table-set-cell!
+                           build-table (1+ row) (1+ cur-col)
+                           (gnc:html-table-get-cell hold-table row col)))
+                      (set! col (1+ col)))))
+              (set! row (1+ row))))
+          (set! cur-col (+ cur-col (if show-account-bals? 2 1)))
 	  (set! cur-col (+ cur-col hold-table-width))
 	  (if show-account-notes?
 	      (begin

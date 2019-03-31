@@ -29,15 +29,19 @@
 
 #include <config.h>
 
+#include "gnc-ab-utils.h"
+
 #include <glib/gi18n.h>
 #include <aqbanking/banking.h>
-#include <aqbanking/jobgettransactions.h>
-
+#ifdef AQBANKING6
+# include <aqbanking/types/transaction.h>
+#else
+# include <aqbanking/jobgettransactions.h>
+#endif
 #include "Account.h"
 #include "dialog-ab-daterange.h"
 #include "gnc-ab-gettrans.h"
 #include "gnc-ab-kvp.h"
-#include "gnc-ab-utils.h"
 #include "gnc-gwen-gui.h"
 #include "gnc-ui.h"
 
@@ -98,15 +102,15 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
 {
     AB_BANKING *api;
     gboolean online = FALSE;
-    AB_ACCOUNT *ab_acc;
+    GNC_AB_ACCOUNT_SPEC *ab_acc;
     GWEN_TIME *from_date = NULL, *to_date = NULL;
     time64 until;
-    AB_JOB *job = NULL;
-    AB_JOB_LIST2 *job_list = NULL;
+    GNC_AB_JOB *job = NULL;
+    GNC_AB_JOB_LIST2 *job_list = NULL;
     GncGWENGui *gui = NULL;
     AB_IMEXPORTER_CONTEXT *context = NULL;
     GncABImExContextImport *ieci = NULL;
-    AB_JOB_STATUS job_status;
+    GNC_AB_JOB_STATUS job_status;
 
     g_return_if_fail(parent && gnc_acc);
 
@@ -117,17 +121,14 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
         g_warning("gnc_ab_gettrans: Couldn't get AqBanking API");
         return;
     }
-    if (AB_Banking_OnlineInit(api
-#ifdef AQBANKING_VERSION_4_EXACTLY
-                              , 0
-#endif
-                             ) != 0)
+#ifndef AQBANKING6
+    if (AB_Banking_OnlineInit(api) != 0)
     {
         g_warning("gnc_ab_gettrans: Couldn't initialize AqBanking API");
         goto cleanup;
     }
     online = TRUE;
-
+#endif
     /* Get the AqBanking Account */
     ab_acc = gnc_ab_get_ab_account(api, gnc_acc);
     if (!ab_acc)
@@ -147,23 +148,49 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
     until = GWEN_Time_toTime_t(to_date);
 
     /* Get a GetTransactions job and enqueue it */
+#ifdef AQBANKING6
+    if (!AB_AccountSpec_GetTransactionLimitsForCommand(ab_acc, AB_Transaction_CommandGetTransactions))
+#else
     job = AB_JobGetTransactions_new(ab_acc);
-    if (!job || AB_Job_CheckAvailability(job
-#ifndef AQBANKING_VERSION_5_PLUS
-                                         , 0
+    if (!job || AB_Job_CheckAvailability(job))
 #endif
-                                        ))
     {
         g_warning("gnc_ab_gettrans: JobGetTransactions not available for this "
                   "account");
         gnc_error_dialog (GTK_WINDOW (parent), _("Online action \"Get Transactions\" not available for this account."));
         goto cleanup;
     }
+#ifdef AQBANKING6
+    job = AB_Transaction_new();
+    AB_Transaction_SetCommand(job, AB_Transaction_CommandGetTransactions);
+    AB_Transaction_SetUniqueAccountId(job, AB_AccountSpec_GetUniqueId(ab_acc));
+
+    if (from_date) /* TODO: this should be simplified */
+    {
+        GWEN_DATE *dt;
+
+        dt=GWEN_Date_fromLocalTime(GWEN_Time_toTime_t(from_date));
+        AB_Transaction_SetFirstDate(job, dt);
+        GWEN_Date_free(dt);
+    }
+
+    if (to_date)
+    {
+        GWEN_DATE *dt;
+
+        dt=GWEN_Date_fromLocalTime(GWEN_Time_toTime_t(to_date));
+        AB_Transaction_SetLastDate(job, dt);
+        GWEN_Date_free(dt);
+    }
+
+    job_list = AB_Transaction_List2_new();
+    AB_Transaction_List2_PushBack(job_list, job);
+#else
     AB_JobGetTransactions_SetFromTime(job, from_date);
     AB_JobGetTransactions_SetToTime(job, to_date);
     job_list = AB_Job_List2_new();
     AB_Job_List2_PushBack(job_list, job);
-
+#endif
     /* Get a GUI object */
     gui = gnc_GWEN_Gui_get(parent);
     if (!gui)
@@ -176,24 +203,38 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
     context = AB_ImExporterContext_new();
 
     /* Execute the job */
-    AB_Banking_ExecuteJobs(api, job_list, context
-#ifndef AQBANKING_VERSION_5_PLUS
-                           , 0
+#ifdef AQBANKING6
+    AB_Banking_SendCommands(api, job_list, context);
+#else
+    AB_Banking_ExecuteJobs(api, job_list, context);
 #endif
-                          );
     /* Ignore the return value of AB_Banking_ExecuteJobs(), as the job's
      * status always describes better whether the job was actually
      * transferred to and accepted by the bank.  See also
      * http://lists.gnucash.org/pipermail/gnucash-de/2008-September/006389.html
      */
+#ifdef AQBANKING6
+    job_status = AB_Transaction_GetStatus(job);
+    if (job_status != AB_Transaction_StatusAccepted
+            && job_status != AB_Transaction_StatusPending)
+#else
     job_status = AB_Job_GetStatus(job);
     if (job_status != AB_Job_StatusFinished
             && job_status != AB_Job_StatusPending)
+#endif
     {
         g_warning("gnc_ab_gettrans: Error on executing job");
-        gnc_error_dialog (GTK_WINDOW (parent), _("Error on executing job.\n\nStatus: %s - %s"),
+#ifdef AQBANKING6
+        gnc_error_dialog (GTK_WINDOW (parent),
+                          _("Error on executing job.\n\nStatus: %s (%d)"),
+                          AB_Transaction_Status_toString(job_status),
+                          job_status);
+#else
+        gnc_error_dialog (GTK_WINDOW (parent),
+                          _("Error on executing job.\n\nStatus: %s - %s"),
                           AB_Job_Status2Char(job_status),
                           AB_Job_GetResultText(job));
+#endif
         goto cleanup;
     }
 
@@ -226,17 +267,23 @@ cleanup:
     if (gui)
         gnc_GWEN_Gui_release(gui);
     if (job_list)
+#ifdef AQBANKING6
+        AB_Transaction_List2_free(job_list);
+#else
         AB_Job_List2_free(job_list);
+#endif
     if (job)
+#ifdef AQBANKING6
+        AB_Transaction_free(job);
+#else
         AB_Job_free(job);
+#endif
     if (to_date)
         GWEN_Time_free(to_date);
     if (from_date)
         GWEN_Time_free(from_date);
+#ifndef AQBANKING6
     if (online)
-#ifdef AQBANKING_VERSION_4_EXACTLY
-        AB_Banking_OnlineFini(api, 0);
-#else
         AB_Banking_OnlineFini(api);
 #endif
     gnc_AB_BANKING_fini(api);

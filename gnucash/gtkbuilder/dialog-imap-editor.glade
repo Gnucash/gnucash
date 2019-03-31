@@ -257,7 +257,7 @@
             <property name="can_focus">False</property>
             <property name="margin_top">5</property>
             <property name="margin_bottom">5</property>
-            <property name="label" translatable="yes">Case sensitive filtering is available on 'Match String' and 'Mapped to Account Name'.</property>
+            <property name="label" translatable="yes">Filter will be applied to 'Match String' and 'Mapped to Account Name' fields, case sensitive.</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -360,7 +360,7 @@
             <property name="can_focus">False</property>
             <property name="margin_top">5</property>
             <property name="margin_bottom">5</property>
-            <property name="label" translatable="yes">Multiple rows can be selected and then deleted by pressing the delete button...</property>
+            <property name="label" translatable="yes">Multiple rows can be selected and then deleted by pressing the delete button.</property>
           </object>
           <packing>
             <property name="expand">False</property>

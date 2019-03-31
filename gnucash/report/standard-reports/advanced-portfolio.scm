@@ -346,7 +346,7 @@ by preventing negative stock balances.<br/>")
 	   (not (gnc-numeric-zero-p b-value)))
       (let* ((current-value (sum-basis b-list GNC-DENOM-AUTO))
             (value-ratio (if (zero? current-value)
-                             (throw 'div/0 (format #f "spinoff of ~0,2f currency units" current-value))
+                             (throw 'div/0 (format #f "spinoff of ~,2f currency units" current-value))
                              (gnc-numeric-div (gnc-numeric-add b-value current-value GNC-DENOM-AUTO GNC-DENOM-REDUCE)
                                               current-value GNC-DENOM-AUTO GNC-DENOM-REDUCE))))
 
@@ -955,7 +955,7 @@ by preventing negative stock balances.<br/>")
                                              )
 					      (if (= 0.0 moneyinvalue)
 						  ""
-						  (format #f "~0,2f%" (* 100 (/ bothgainvalue moneyinvalue)))))
+						  (format #f "~,2f%" (* 100 (/ bothgainvalue moneyinvalue)))))
 					)
 					(gnc:make-html-table-header-cell/markup "number-cell" income)))
 	      (if (not (eq? handle-brokerage-fees 'ignore-brokerage))
@@ -969,7 +969,7 @@ by preventing negative stock balances.<br/>")
                                              )
 					      (if (= 0.0 moneyinvalue)
 						  ""
-						  (format #f "~0,2f%" (* 100 (/ totalreturnvalue moneyinvalue))))))
+						  (format #f "~,2f%" (* 100 (/ totalreturnvalue moneyinvalue))))))
 					 )
 			)
 
@@ -1160,7 +1160,7 @@ by preventing negative stock balances.<br/>")
 				       )
 				  (if (= 0.0 totalinvalue)
 				      ""
-				      (format #f "~0,2f%" (* 100 (/ totalgainvalue totalinvalue))))))
+				      (format #f "~,2f%" (* 100 (/ totalgainvalue totalinvalue))))))
 			       (gnc:make-html-table-cell/markup
 				"total-number-cell" sum-total-income)))
 	  (if (not (eq? handle-brokerage-fees 'ignore-brokerage))
@@ -1179,7 +1179,7 @@ by preventing negative stock balances.<br/>")
 				 )
 				  (if (= 0.0 totalinvalue)
 				      ""
-				      (format #f "~0,2f%" (* 100 (/ totalreturnvalue totalinvalue))))))
+				      (format #f "~,2f%" (* 100 (/ totalreturnvalue totalinvalue))))))
 			       ))
 
 

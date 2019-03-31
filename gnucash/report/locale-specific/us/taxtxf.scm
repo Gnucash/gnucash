@@ -63,6 +63,13 @@
 ;; Fix beginning balance sign and signs for Transfer From/To amounts for
 ;; liability/equity accounts
 ;;
+;; January, 2019 Update:
+;;
+;; Update from "V041" to "V042", although added codes are not implemented
+;;   because cost/gain data not reliably available
+;; The format for code 673 can be 4 or 5, per spec, so leave as 4
+;; Fix beginning balance off-by-one-day error for B/S accounts
+;;
 ;; From prior version:
 ;; NOTE: setting of specific dates is squirly! and seems
 ;; to be current-date dependent!  Actually, time of day dependent!  Just
@@ -591,7 +598,7 @@
                                                           (gnc-numeric-neg
                                                             account-value)))))
           )
-          ;; Based on TXF Spec of 6/16/06, V 041, and Quicken 98 output, the
+          ;; Based on TXF Spec of 11/30/11, V 042, and Quicken 98 output, the
           ;; fields by format are as follows, for F1040:
           ;; Format Type Fields                       Comments/Status
           ;; 0      D    T, N, C, L, X                Spec unclear, unverified
@@ -2116,6 +2123,8 @@
                       ;; The exact same code, in from-value, further above,
                       ;;   only subtraces one!  Go figure!
                       ;; So, we add one back below!
+;; comment - could it be because from-date coming in has already had 1
+;; subtracted in setting from-value?
                       (if (member alt-period
                                   '(last-year 1st-last 2nd-last
                                               3rd-last 4th-last))
@@ -2239,7 +2248,7 @@
                                          (or (eq? account-type ACCT-TYPE-INCOME)
                                            (eq? account-type ACCT-TYPE-EXPENSE)))
                              (gnc:account-get-comm-balance-at-date account
-                                      (gnc:time64-previous-day from-value) #f)
+                                      (gnc:time64-start-day-time from-value) #f)
                              #f))
               (acct-end-bal-collector (if (not
                                          (or (eq? account-type ACCT-TYPE-INCOME)
@@ -2999,7 +3008,7 @@
                                     selected-accounts-sorted-by-form-line-acct))
                                   (output-txf
                                     (list
-                                      "V041" crlf
+                                      "V042" crlf
                                       "AGnuCash " gnc:version crlf
                                       today-date crlf
                                       "^" crlf

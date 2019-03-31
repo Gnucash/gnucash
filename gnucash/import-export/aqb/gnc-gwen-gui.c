@@ -46,14 +46,8 @@
 #include "gnc-plugin-aqbanking.h"
 #include "qof.h"
 
-#if GWENHYWFAR_VERSION_INT >= 39921
-/* For sufficiently new gwenhywfar (>=3.99.21) the gtk3 gui object is
- * working fine and it is enabled here here. */
 # define USING_GWENHYWFAR_GTK3_GUI
 # define GNC_GWENHYWFAR_CB GWENHYWFAR_CB
-#else
-# define GNC_GWENHYWFAR_CB
-#endif
 
 #define GWEN_GUI_CM_CLASS "dialog-hbcilog"
 #define GNC_PREFS_GROUP_CONNECTION GNC_PREFS_GROUP_AQBANKING ".connection-dialog"
@@ -196,7 +190,7 @@ static gint progress_advance_cb(GWEN_GUI *gwen_gui, uint32_t id,
 static gint progress_log_cb(GWEN_GUI *gwen_gui, guint32 id,
                             GWEN_LOGGER_LEVEL level, const gchar *text);
 static gint progress_end_cb(GWEN_GUI *gwen_gui, guint32 id);
-#if GWENHYWFAR_VERSION_INT < 49900
+#ifndef GWENHYWFAR5
 static gint GNC_GWENHYWFAR_CB getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags,
                                              const gchar *token,
                                              const gchar *title,
@@ -218,9 +212,7 @@ static gint GNC_GWENHYWFAR_CB setpasswordstatus_cb(GWEN_GUI *gwen_gui, const gch
         GWEN_GUI_PASSWORD_STATUS status, guint32 guiid);
 static gint GNC_GWENHYWFAR_CB loghook_cb(GWEN_GUI *gwen_gui, const gchar *log_domain,
         GWEN_LOGGER_LEVEL priority, const gchar *text);
-#ifdef AQBANKING_VERSION_5_PLUS
 typedef GWEN_SYNCIO GWEN_IO_LAYER;
-#endif
 static gint GNC_GWENHYWFAR_CB checkcert_cb(GWEN_GUI *gwen_gui, const GWEN_SSLCERTDESCR *cert,
         GWEN_IO_LAYER *io, guint32 guiid);
 
@@ -1027,6 +1019,12 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title, const gchar *text,
                                      gui->cache_passwords);
     }
 
+    /* Enable the normal input visibility for TAN and for the set SHOW flag */
+    if ((flags & (GWEN_GUI_INPUT_FLAGS_TAN | GWEN_GUI_INPUT_FLAGS_SHOW)) != 0)
+    {
+        gtk_widget_set_visible(input_entry, TRUE);
+    }
+
     if (gui->parent)
         gtk_window_set_transient_for(GTK_WINDOW(dialog),
                                      GTK_WINDOW(gui->parent));
@@ -1411,7 +1409,7 @@ progress_end_cb(GWEN_GUI *gwen_gui, guint32 id)
 }
 
 static gint GNC_GWENHYWFAR_CB
-#if GWENHYWFAR_VERSION_INT < 49900
+#ifndef GWENHYWFAR5
 getpassword_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *token,
                const gchar *title, const gchar *text, gchar *buffer,
                gint min_len, gint max_len, guint32 guiid)

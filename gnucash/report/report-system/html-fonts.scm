@@ -27,53 +27,36 @@
 
 (use-modules (gnucash gettext))
 
+(define (string-strip s1 s2)
+  (let ((idx (string-contains-ci s1 s2)))
+    (string-append
+     (string-take s1 idx)
+     (string-drop s1 (+ idx (string-length s2))))))
+
 ;; Converts a font name to css style information
 (define (font-name-to-style-info font-name)
-    (let*
-	  (
-	    (font-family "Arial")
-	    (font-size "20")
-		(font-style #f)
-		(font-style-idx 0)
-		(font-weight #f)
-		(font-weight-idx 0)
-		(result "")
-		(len (string-length font-name))
-		(idx 0)
-	  )
-	(set! idx (string-index-right font-name #\space))
-	(set! font-size (substring font-name (+ idx 1) len))
-	(set! font-name (string-take font-name idx))
-	(set! font-weight-idx (string-contains-ci font-name " bold"))
-	(if font-weight-idx
-	    (begin
-		    (set! font-weight "bold")
-			(set! font-name (string-append (string-take font-name font-weight-idx)
-			                               (string-drop font-name (+ font-weight-idx 5))))
-		))
-	(set! font-style-idx (string-contains-ci font-name " italic"))
-	(if font-style-idx
-	    (begin
-		    (set! font-style "italic")
-			(set! font-name (string-append (string-take font-name font-style-idx)
-			                               (string-drop font-name (+ font-style-idx 7))))
-		)
-		(begin
-			(set! font-style-idx (string-contains-ci font-name " oblique"))
-			(if font-style-idx
-				(begin
-					(set! font-style "oblique")
-					(set! font-name (string-append (string-take font-name font-style-idx)
-												   (string-drop font-name (+ font-style-idx 8))))
-		))))
-	(set! font-family font-name)
-	(set! result (string-append
-		"font-family: " font-family ", Sans-Serif; "
-		"font-size: " font-size "pt; "
-		(if font-style (string-append "font-style: " font-style "; ") "")
-		(if font-weight (string-append "font-weight: " font-weight "; ") "")))
-	result
-    ))
+  (let* ((font-style "")
+         (font-weight "")
+         (idx (string-index-right font-name #\space))
+         (font-size (substring font-name (1+ idx) (string-length font-name)))
+         (font-name (string-take font-name idx)))
+
+    (when (string-contains-ci font-name " bold")
+      (set! font-weight "font-weight: bold; ")
+      (set! font-name (string-strip font-name " bold")))
+
+    (cond
+     ((string-contains-ci font-name " italic")
+      (set! font-style "font-style: italic; ")
+      (set! font-name (string-strip font-name " italic")))
+
+     ((string-contains-ci font-name " oblique")
+      (set! font-style "font-style: oblique; ")
+      (set! font-name (string-strip font-name " oblique"))))
+
+    (string-append "font-family: " font-name ", Sans-Serif; "
+                   "font-size: " font-size "pt; "
+                   font-style font-weight)))
 
 ;; Registers font options
 (define (register-font-options options)

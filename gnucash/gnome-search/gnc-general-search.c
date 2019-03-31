@@ -75,45 +75,13 @@ struct _GNCGeneralSearchPrivate
     gint			component_id;
 };
 
+G_DEFINE_TYPE_WITH_PRIVATE(GNCGeneralSearch, gnc_general_search, GTK_TYPE_BOX)
+
 #define _PRIVATE(o) \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_GENERAL_SEARCH, GNCGeneralSearchPrivate))
 
 static GtkBoxClass *parent_class;
 static guint general_search_signals[LAST_SIGNAL];
-
-
-/**
- * gnc_general_search_get_type:
- *
- * Returns the GType for the GNCGeneralSearch widget
- */
-GType
-gnc_general_search_get_type (void)
-{
-    static GType general_search_type = 0;
-
-    if (!general_search_type)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GNCGeneralSearchClass),    /* class_size */
-            NULL,   			   /* base_init */
-            NULL,				   /* base_finalize */
-            (GClassInitFunc) gnc_general_search_class_init,
-            NULL,				   /* class_finalize */
-            NULL,				   /* class_data */
-            sizeof (GNCGeneralSearch),	   /* */
-            0,				   /* n_preallocs */
-            (GInstanceInitFunc) gnc_general_search_init,
-        };
-
-        general_search_type = g_type_register_static (GTK_TYPE_BOX,
-                              "GNCGeneralSearch",
-                              &our_info, 0);
-    }
-
-    return general_search_type;
-}
 
 static void
 gnc_general_search_class_init (GNCGeneralSearchClass *klass)
@@ -134,8 +102,6 @@ gnc_general_search_class_init (GNCGeneralSearchClass *klass)
     object_class->destroy = gnc_general_search_destroy;
 
     klass->changed = NULL;
-
-    g_type_class_add_private(klass, sizeof(GNCGeneralSearchPrivate));
 }
 
 static void

@@ -38,7 +38,7 @@
       Un ensemble de base de comptes les plus habituellement utilisés
     </gnc-act:short-description>
     <gnc-act:long-description>
-    La plupart des utilisateurs devront sélectionner cet ensemble de comptes.  Il comprend la plupart des comptes communément utilisés (courant, épargne, liquidités carte de crédit, revenu, dépenses habituelles).
+    La plupart des particuliers, mais pas les utilisateurs professionnels, devront sélectionner cet ensemble de comptes. Il comprend la plupart des comptes communément utilisés (courant, épargne, liquidités, carte de crédit, revenu, dépenses habituelles).
   </gnc-act:long-description>    
   <gnc-act:start-selected>1</gnc-act:start-selected>
 <gnc:account version="2.0.0">

@@ -57,7 +57,7 @@
 (export gnc:exchange-by-euro)
 (export gnc:exchange-if-same)
 (export gnc:make-exchange-function)
-(export gnc:exchange-by-pricevalue-helper)
+(export gnc:exchange-by-pricevalue-helper) ;deprecated
 (export gnc:exchange-by-pricedb-helper)
 (export gnc:exchange-by-pricedb-latest )
 (export gnc:exchange-by-pricedb-nearest)
@@ -66,7 +66,7 @@
 (export gnc:case-exchange-time-fn)
 (export gnc:sum-collector-commodity)
 (export gnc:sum-collector-stocks)
-(export gnc-commodity-collector-contains-commodity?)
+(export gnc-commodity-collector-contains-commodity?) ;deprecated
 
 ;; options-utilities.scm
 
@@ -686,13 +686,13 @@
 (export gnc:accounts-get-commodities)
 (export gnc:get-current-account-tree-depth)
 (export gnc:acccounts-get-all-subaccounts)
-(export gnc:make-stats-collector)
-(export gnc:make-drcr-collector)
+(export gnc:make-stats-collector)       ;deprecated
+(export gnc:make-drcr-collector)        ;deprecated
 (export gnc:make-value-collector)
-(export gnc:make-number-collector)
+(export gnc:make-number-collector)      ;deprecated
 (export gnc:make-commodity-collector)
 (export gnc:commodity-collector-get-negated)
-(export gnc:commodity-collectorlist-get-merged)
+(export gnc:commodity-collectorlist-get-merged) ;deprecated
 (export gnc-commodity-collector-commodity-count)
 (export gnc:account-get-balance-at-date)
 (export gnc:account-get-balances-at-dates)

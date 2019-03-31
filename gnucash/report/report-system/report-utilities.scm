@@ -177,43 +177,42 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
 ;; yes.  I think that would still be faster.
 
 (define (gnc:make-stats-collector)
-  (let ;;; values
-      ((value 0)
-       (totalitems 0)
-       (max -10E9)
-       (min 10E9))
-    (let ;;; Functions to manipulate values
-	((adder (lambda (amount)
-		  (if (number? amount) 
-		      (begin
-			(set! value (+ amount value))
-			(if (> amount max)
-			    (set! max amount))
-			(if (< amount min)
-			    (set! min amount))
-			(set! totalitems (+ 1 totalitems))))))
-	 (getnumitems (lambda () totalitems))
-	 (gettotal (lambda () value))
-	 (getaverage (lambda () (/ value totalitems)))
-	 (getmax (lambda () max))
-	 (getmin (lambda () min))
-	 (reset-all (lambda ()
-		    (set! value 0)
-		    (set! max -10E9)
-		    (set! min 10E9)
-		    (set! totalitems 0))))
-      (lambda (action value)  ;;; Dispatch function
-	(case action
-	  ((add) (adder value))
-	  ((total) (gettotal))
-	  ((average) (getaverage))
-	  ((numitems) (getnumitems))
-	  ((getmax) (getmax))
-	  ((getmin) (getmin))
-	  ((reset) (reset-all))
+  (issue-deprecation-warning
+   "gnc:make-stats-collector is obsolete. use srfi-1 functions instead.")
+  (let ((value 0)
+        (totalitems 0)
+        (maximum -inf.0)
+        (minimum +inf.0))
+    (let ((adder (lambda (amount)
+                   (when (number? amount)
+                     (set! value (+ amount value))
+                     (if (> amount maximum) (set! maximum amount))
+                     (if (< amount minimum) (set! minimum amount))
+                     (set! totalitems (1+ totalitems)))))
+          (getnumitems (lambda () totalitems))
+          (gettotal (lambda () value))
+          (getaverage (lambda () (/ value totalitems)))
+          (getmax (lambda () maximum))
+          (getmin (lambda () minimum))
+          (reset-all (lambda ()
+                       (set! value 0)
+                       (set! maximum -inf.0)
+                       (set! minimum +inf.0)
+                       (set! totalitems 0))))
+      (lambda (action value)
+        (case action
+          ((add) (adder value))
+          ((total) (gettotal))
+          ((average) (getaverage))
+          ((numitems) (getnumitems))
+          ((getmax) (getmax))
+          ((getmin) (getmin))
+          ((reset) (reset-all))
           (else (gnc:warn "bad stats-collector action: " action)))))))
 
 (define (gnc:make-drcr-collector)
+  (issue-deprecation-warning
+   "gnc:make-drcr-collector is obsolete. use srfi-1 functions instead.")
   (let ;;; values
       ((debits 0)
        (credits 0)
@@ -373,6 +372,8 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
     negated))
 
 (define (gnc:commodity-collectorlist-get-merged collectorlist)
+  (issue-deprecation-warning
+   "gnc:commodity-collectorlist-get-merged is now deprecated.")
   (let ((merged (gnc:make-commodity-collector)))
     (for-each (lambda (collector) (merged 'merge collector #f)) collectorlist)
     merged))
@@ -398,9 +399,10 @@ construct gnc:make-gnc-monetary and use gnc:monetary->string instead.")
 ;; usage: (gnc:monetaries-add monetary1 monetary2 ...)
 ;; output: a monetary object
 (define (gnc:monetary+ . monetaries)
-  (let ((coll (apply gnc:monetaries-add monetaries)))
-    (if (= 1 (gnc-commodity-collector-commodity-count coll))
-        (car (coll 'format gnc:make-gnc-monetary #f))
+  (let* ((coll (apply gnc:monetaries-add monetaries))
+         (list-of-monetaries (coll 'format gnc:make-gnc-monetary #f)))
+    (if (null? (cdr list-of-monetaries))
+        (car list-of-monetaries)
         (throw "gnc:monetary+ expects 1 currency " (gnc:strify monetaries)))))
 
 ;; get the account balance at the specified date. if include-children?
@@ -429,14 +431,21 @@ flawed. see report-utilities.scm. please update reports.")
 ;; this function will scan through the account splitlist, building
 ;; a list of balances along the way at dates specified in dates-list.
 ;; in:  account
-;;      dates-list (list of time64)
-;;      ignore-closing? - if #true, will skip closing entries
+;;      dates-list (list of time64) - NOTE: IT WILL BE SORTED
+;;      split->amount - an unary lambda. calling (split->amount split)
+;;      returns a number, or #f which effectively skips the split.
 ;; out: (list bal0 bal1 ...), each entry is a gnc-monetary object
-(define* (gnc:account-get-balances-at-dates account dates-list #:key ignore-closing?)
+;;
+;; NOTE a prior incarnation accepted a #:ignore-closing? boolean
+;; keyword which can be reproduced via #:split->amount (lambda (s)
+;; (and (not (xaccTransGetIsClosingTxn (xaccSplitGetParent s)))
+;; (xaccSplitGetAmount s)))
+(define* (gnc:account-get-balances-at-dates
+          account dates-list #:key (split->amount xaccSplitGetAmount))
   (define (amount->monetary bal)
     (gnc:make-gnc-monetary (xaccAccountGetCommodity account) bal))
   (let loop ((splits (xaccAccountGetSplitList account))
-             (dates-list dates-list)
+             (dates-list (stable-sort! dates-list <))
              (currentbal 0)
              (lastbal 0)
              (balancelist '()))
@@ -458,10 +467,7 @@ flawed. see report-utilities.scm. please update reports.")
      (else
       (let* ((this (car splits))
              (rest (cdr splits))
-             (currentbal (if (and ignore-closing?
-                                  (xaccTransGetIsClosingTxn (xaccSplitGetParent this)))
-                             currentbal
-                             (+ (xaccSplitGetAmount this) currentbal)))
+             (currentbal (+ (or (split->amount this) 0) currentbal))
              (next (and (pair? rest) (car rest))))
 
         (cond

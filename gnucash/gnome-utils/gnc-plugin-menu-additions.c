@@ -89,33 +89,7 @@ typedef struct _GncPluginMenuAdditionsPerWindow
  *                  Object Implementation                   *
  ************************************************************/
 
-GType
-gnc_plugin_menu_additions_get_type (void)
-{
-    static GType gnc_plugin_menu_additions_type = 0;
-
-    if (gnc_plugin_menu_additions_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncPluginMenuAdditionsClass),
-            NULL,		/* base_init */
-            NULL,		/* base_finalize */
-            (GClassInitFunc) gnc_plugin_menu_additions_class_init,
-            NULL,		/* class_finalize */
-            NULL,		/* class_data */
-            sizeof (GncPluginMenuAdditions),
-            0,
-            (GInstanceInitFunc) gnc_plugin_menu_additions_init
-        };
-
-        gnc_plugin_menu_additions_type = g_type_register_static (GNC_TYPE_PLUGIN,
-                                         "GncPluginMenuAdditions",
-                                         &our_info, 0);
-    }
-
-    return gnc_plugin_menu_additions_type;
-}
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginMenuAdditions, gnc_plugin_menu_additions, GNC_TYPE_PLUGIN)
 
 static void
 gnc_plugin_menu_additions_class_init (GncPluginMenuAdditionsClass *klass)
@@ -133,8 +107,6 @@ gnc_plugin_menu_additions_class_init (GncPluginMenuAdditionsClass *klass)
     /* function overrides */
     plugin_class->add_to_window = gnc_plugin_menu_additions_add_to_window;
     plugin_class->remove_from_window = gnc_plugin_menu_additions_remove_from_window;
-
-    g_type_class_add_private(klass, sizeof(GncPluginMenuAdditionsPrivate));
 }
 
 static void

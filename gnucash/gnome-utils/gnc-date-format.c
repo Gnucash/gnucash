@@ -53,9 +53,9 @@ enum
     LAST_SIGNAL
 };
 
-typedef struct _GNCDateFormatPriv GNCDateFormatPriv;
+typedef struct _GNCDateFormatPrivate GNCDateFormatPrivate;
 
-struct _GNCDateFormatPriv
+struct _GNCDateFormatPrivate
 {
     GtkWidget*	format_combobox;
 
@@ -76,7 +76,7 @@ struct _GNCDateFormatPriv
 };
 
 #define GNC_DATE_FORMAT_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_DATE_FORMAT, GNCDateFormatPriv))
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_DATE_FORMAT, GNCDateFormatPrivate))
 
 static guint date_format_signals [LAST_SIGNAL] = { 0 };
 
@@ -89,40 +89,7 @@ void gnc_ui_date_format_changed_cb(GtkWidget *unused, gpointer user_data);
 
 static GtkBoxClass *parent_class;
 
-/**
- * gnc_date_format_get_type:
- *
- * Returns the GType for the GNCDateFormat widget
- */
-GType
-gnc_date_format_get_type (void)
-{
-    static GType date_format_type = 0;
-
-    if (!date_format_type)
-    {
-        static const GTypeInfo date_format_info =
-        {
-            sizeof (GNCDateFormatClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_date_format_class_init,
-            NULL,
-            NULL,
-            sizeof (GNCDateFormat),
-            0,
-            (GInstanceInitFunc) gnc_date_format_init,
-            NULL,
-        };
-
-        date_format_type = g_type_register_static(GTK_TYPE_BOX,
-                           "GNCDateFormat",
-                           &date_format_info, 0);
-    }
-
-    return date_format_type;
-}
-
+G_DEFINE_TYPE_WITH_PRIVATE(GNCDateFormat, gnc_date_format, GTK_TYPE_BOX)
 
 static void
 gnc_date_format_class_init (GNCDateFormatClass *klass)
@@ -132,8 +99,6 @@ gnc_date_format_class_init (GNCDateFormatClass *klass)
     parent_class = g_type_class_peek_parent(klass);
 
     gobject_class->finalize = gnc_date_format_finalize;
-
-    g_type_class_add_private(klass, sizeof(GNCDateFormatPriv));
 
     date_format_signals [FORMAT_CHANGED] =
         g_signal_new ("format_changed",
@@ -151,7 +116,7 @@ gnc_date_format_class_init (GNCDateFormatClass *klass)
 static void
 gnc_date_format_init (GNCDateFormat *gdf)
 {
-    GNCDateFormatPriv *priv;
+    GNCDateFormatPrivate *priv;
     GtkBuilder *builder;
     GtkWidget *dialog, *table;
 
@@ -238,7 +203,7 @@ gnc_date_format_new_without_label (void)
 {
     GtkWidget *widget = gnc_date_format_new_with_label(NULL);
     GNCDateFormat *gdf = GNC_DATE_FORMAT(widget);
-    GNCDateFormatPriv *priv = GNC_DATE_FORMAT_GET_PRIVATE(gdf);
+    GNCDateFormatPrivate *priv = GNC_DATE_FORMAT_GET_PRIVATE(gdf);
 
     gtk_widget_destroy(priv->label);
     priv->label = NULL;
@@ -260,7 +225,7 @@ GtkWidget *
 gnc_date_format_new_with_label (const char *label)
 {
     GNCDateFormat *gdf;
-    GNCDateFormatPriv *priv;
+    GNCDateFormatPrivate *priv;
 
     gdf = g_object_new(GNC_TYPE_DATE_FORMAT, NULL);
     priv = GNC_DATE_FORMAT_GET_PRIVATE(gdf);
@@ -276,7 +241,7 @@ gnc_date_format_new_with_label (const char *label)
 void
 gnc_date_format_set_format (GNCDateFormat *gdf, QofDateFormat format)
 {
-    GNCDateFormatPriv *priv;
+    GNCDateFormatPrivate *priv;
 
     g_return_if_fail(gdf);
     g_return_if_fail(GNC_IS_DATE_FORMAT(gdf));
@@ -290,7 +255,7 @@ gnc_date_format_set_format (GNCDateFormat *gdf, QofDateFormat format)
 QofDateFormat
 gnc_date_format_get_format (GNCDateFormat *gdf)
 {
-    GNCDateFormatPriv *priv;
+    GNCDateFormatPrivate *priv;
 
     g_return_val_if_fail (gdf, QOF_DATE_FORMAT_LOCALE);
     g_return_val_if_fail (GNC_IS_DATE_FORMAT(gdf), QOF_DATE_FORMAT_LOCALE);
@@ -303,7 +268,7 @@ gnc_date_format_get_format (GNCDateFormat *gdf)
 void
 gnc_date_format_set_months (GNCDateFormat *gdf, GNCDateMonthFormat months)
 {
-    GNCDateFormatPriv *priv;
+    GNCDateFormatPrivate *priv;
     GtkWidget *button = NULL;
 
     g_return_if_fail(gdf);
@@ -335,7 +300,7 @@ gnc_date_format_set_months (GNCDateFormat *gdf, GNCDateMonthFormat months)
 GNCDateMonthFormat
 gnc_date_format_get_months (GNCDateFormat *gdf)
 {
-    GNCDateFormatPriv *priv;
+    GNCDateFormatPrivate *priv;
 
     g_return_val_if_fail(gdf, GNCDATE_MONTH_NUMBER);
     g_return_val_if_fail(GNC_IS_DATE_FORMAT(gdf), GNCDATE_MONTH_NUMBER);
@@ -357,7 +322,7 @@ gnc_date_format_get_months (GNCDateFormat *gdf)
 void
 gnc_date_format_set_years (GNCDateFormat *gdf, gboolean include_century)
 {
-    GNCDateFormatPriv *priv;
+    GNCDateFormatPrivate *priv;
 
     g_return_if_fail(gdf);
     g_return_if_fail(GNC_IS_DATE_FORMAT(gdf));
@@ -372,7 +337,7 @@ gnc_date_format_set_years (GNCDateFormat *gdf, gboolean include_century)
 gboolean
 gnc_date_format_get_years (GNCDateFormat *gdf)
 {
-    GNCDateFormatPriv *priv;
+    GNCDateFormatPrivate *priv;
 
     g_return_val_if_fail(gdf, FALSE);
     g_return_val_if_fail(GNC_IS_DATE_FORMAT(gdf), FALSE);
@@ -385,7 +350,7 @@ gnc_date_format_get_years (GNCDateFormat *gdf)
 void
 gnc_date_format_set_custom (GNCDateFormat *gdf, const char *format)
 {
-    GNCDateFormatPriv *priv;
+    GNCDateFormatPrivate *priv;
 
     g_return_if_fail(gdf);
     g_return_if_fail(GNC_IS_DATE_FORMAT(gdf));
@@ -402,7 +367,7 @@ gnc_date_format_set_custom (GNCDateFormat *gdf, const char *format)
 const char *
 gnc_date_format_get_custom (GNCDateFormat *gdf)
 {
-    GNCDateFormatPriv *priv;
+    GNCDateFormatPrivate *priv;
 
     g_return_val_if_fail(gdf, "");
     g_return_val_if_fail(GNC_IS_DATE_FORMAT(gdf), "");
@@ -424,7 +389,7 @@ gnc_ui_date_format_changed_cb(GtkWidget *unused, gpointer user_data)
 static void
 gnc_date_format_enable_month (GNCDateFormat *gdf, gboolean sensitive)
 {
-    GNCDateFormatPriv *priv;
+    GNCDateFormatPrivate *priv;
 
     priv = GNC_DATE_FORMAT_GET_PRIVATE(gdf);
     gtk_widget_set_sensitive(priv->months_label, sensitive);
@@ -437,7 +402,7 @@ gnc_date_format_enable_month (GNCDateFormat *gdf, gboolean sensitive)
 static void
 gnc_date_format_enable_year (GNCDateFormat *gdf, gboolean sensitive)
 {
-    GNCDateFormatPriv *priv;
+    GNCDateFormatPrivate *priv;
 
     priv = GNC_DATE_FORMAT_GET_PRIVATE(gdf);
     gtk_widget_set_sensitive(priv->years_label, sensitive);
@@ -448,7 +413,7 @@ gnc_date_format_enable_year (GNCDateFormat *gdf, gboolean sensitive)
 static void
 gnc_date_format_enable_format (GNCDateFormat *gdf, gboolean sensitive)
 {
-    GNCDateFormatPriv *priv;
+    GNCDateFormatPrivate *priv;
 
     priv = GNC_DATE_FORMAT_GET_PRIVATE(gdf);
     gtk_widget_set_sensitive(priv->custom_label, sensitive);
@@ -459,7 +424,7 @@ gnc_date_format_enable_format (GNCDateFormat *gdf, gboolean sensitive)
 void
 gnc_date_format_refresh (GNCDateFormat *gdf)
 {
-    GNCDateFormatPriv *priv;
+    GNCDateFormatPrivate *priv;
     int sel_option;
     gboolean enable_year, enable_month, enable_custom, check_modifiers;
     static gchar *format, *c;

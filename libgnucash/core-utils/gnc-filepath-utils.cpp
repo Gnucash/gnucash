@@ -374,8 +374,8 @@ gnc_validate_directory (const bfs::path &dirname)
          * we need to overrule it during build (when guile interferes)
          * and testing.
          */
-	bfs::path home_dir(g_get_home_dir(), cvt);
-	home_dir.imbue(bfs_locale);
+        bfs::path home_dir(g_get_home_dir(), cvt);
+        home_dir.imbue(bfs_locale);
         auto homedir_exists = bfs::exists(home_dir);
         auto is_descendant = dir_is_descendant (dirname, home_dir);
         if (!homedir_exists && is_descendant)
@@ -447,10 +447,10 @@ copy_recursive(const bfs::path& src, const bfs::path& dest)
             string cur_str = direntry->path().string();
 #endif
             auto cur_len = cur_str.size();
-	    string rel_str(cur_str, old_len, cur_len - old_len);
-	    bfs::path relpath(rel_str, cvt);
+            string rel_str(cur_str, old_len, cur_len - old_len);
+            bfs::path relpath(rel_str, cvt);
             auto newpath = bfs::absolute (relpath.relative_path(), dest);
-	    newpath.imbue(bfs_locale);
+            newpath.imbue(bfs_locale);
             bfs::copy(direntry->path(), newpath);
         }
     }
@@ -526,7 +526,6 @@ get_userdata_home(void)
     auto try_tmp_dir = true;
     auto userdata_home = get_user_data_dir();
 
-
     /* g_get_user_data_dir doesn't check whether the path exists nor attempts to
      * create it. So while it may return an actual path we may not be able to use it.
      * Let's check that now */
@@ -550,9 +549,9 @@ get_userdata_home(void)
        Hopefully we can always write there. */
     if (try_tmp_dir)
     {
-	bfs::path newpath(g_get_tmp_dir (), cvt);
+        bfs::path newpath(g_get_tmp_dir (), cvt);
         userdata_home = newpath / g_get_user_name ();
-	userdata_home.imbue(bfs_locale);
+        userdata_home.imbue(bfs_locale);
     }
     g_assert(!userdata_home.empty());
 
@@ -726,6 +725,7 @@ static std::string migrate_gnc_datahome()
 
     return migration_msg.str ();
 }
+
 
 
 #if defined G_OS_WIN32 ||defined MAC_INTEGRATION
@@ -1015,6 +1015,35 @@ gnc_userdata_dir_as_path (void)
         gnc_filepath_init();
 
     return gnc_userdata_home;
+}
+
+gchar *gnc_file_path_absolute (const gchar *prefix, const gchar *relative)
+{
+    bfs::path path_relative (relative);
+    path_relative.imbue (bfs_locale);
+    bfs::path path_absolute;
+    bfs::path path_head;
+
+    if (prefix == nullptr)
+    {
+        const gchar *doc_dir = g_get_user_special_dir (G_USER_DIRECTORY_DOCUMENTS);
+        if (doc_dir == nullptr)
+            path_head = bfs::path (gnc_userdata_dir ()); // running as root maybe
+        else
+            path_head = bfs::path (doc_dir);
+
+        path_head.imbue (bfs_locale);
+        path_absolute = absolute (path_relative, path_head);
+    }
+    else
+    {
+        bfs::path path_head (prefix);
+        path_head.imbue (bfs_locale);
+        path_absolute = absolute (path_relative, path_head);
+    }
+    path_absolute.imbue (bfs_locale);
+
+    return g_strdup (path_absolute.string().c_str());
 }
 
 /** @fn gchar * gnc_build_userdata_path (const gchar *filename)

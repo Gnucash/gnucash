@@ -53,6 +53,7 @@
         (list "Assets"(list (cons 'type ACCT-TYPE-ASSET))
               (list "Current"
                     (list "Savings" (list (cons 'type ACCT-TYPE-BANK)))
+                    (list "Checking-DEM" (list (cons 'type ACCT-TYPE-BANK)))
                     (list "Checking" (list (cons 'type ACCT-TYPE-BANK))))
               (list "Investment"
                     (list "Broker A"
@@ -61,6 +62,7 @@
                                 (list "AAPL-A")
                                 (list "IBM-A")
                                 (list "MSFT-A")
+                                (list "DMLR-A")
                                 (list "TSLA-A")))
                     (list "Broker B"
                           (list "Cash-B" (list (cons 'type ACCT-TYPE-BANK)))
@@ -74,6 +76,7 @@
                           (list "Stocks" (list (cons 'type ACCT-TYPE-STOCK))
                                 (list "RDSA")))))
         (list "Income" (list (cons 'type ACCT-TYPE-INCOME))
+              (list "Capital Gains-DEM")
               (list "Capital Gains"))
         (list "Expenses" (list (cons 'type ACCT-TYPE-EXPENSE)))
         (list "Liability" (list (cons 'type ACCT-TYPE-LIABILITY)))
@@ -93,22 +96,26 @@
          ;; Yeah, this is fake, it's for testing DEM->EUR conversions.
          (DMLR (gnc-commodity-new book "Daimler Motors" "FSE" "DMLR" "" 1))
          (EUR (gnc-commodity-table-lookup comm-table "CURRENCY" "EUR"))
+         (DEM (gnc-commodity-table-lookup comm-table "CURRENCY" "DEM"))
          (GBP (gnc-commodity-table-lookup comm-table "CURRENCY" "GBP"))
          (USD (gnc-commodity-table-lookup comm-table "CURRENCY" "USD"))
          (account-alist (env-create-account-structure-alist env test-accounts))
          (checking (cdr (assoc "Checking" account-alist)))
+         (checking-dem (cdr (assoc "Checking-DEM" account-alist)))
          (saving (cdr (assoc "Savings" account-alist)))
          (cash-a (cdr (assoc "Cash-A" account-alist)))
          (aapl-a (cdr (assoc "AAPL-A" account-alist)))
          (ibm-a (cdr (assoc "IBM-A" account-alist)))
          (msft-a (cdr (assoc "MSFT-A" account-alist)))
          (tsla-a (cdr (assoc "TSLA-A" account-alist)))
+         (dmlr-a (cdr (assoc "DMLR-A" account-alist)))
          (cash-b (cdr (assoc "Cash-B" account-alist)))
          (aapl-b (cdr (assoc "AAPL-B" account-alist)))
          (ibm-b (cdr (assoc "IBM-B" account-alist)))
          (msft-b (cdr (assoc "MSFT-B" account-alist)))
          (tsla-b (cdr (assoc "TSLA-B" account-alist)))
          (capgain (cdr (assoc "Capital Gains" account-alist)))
+         (capgain-dem (cdr (assoc "Capital Gains-DEM" account-alist)))
          (openbal (cdr (assoc "Opening Balances" account-alist))))
     ;; Set account commodities
     (gnc-commodity-table-insert comm-table AAPL)
@@ -116,10 +123,14 @@
     (gnc-commodity-table-insert comm-table IBM)
     (gnc-commodity-table-insert comm-table RDSA)
     (gnc-commodity-table-insert comm-table TSLA)
+    (gnc-commodity-table-insert comm-table DMLR)
+    (xaccAccountSetCommodity checking-dem DEM)
+    (xaccAccountSetCommodity capgain-dem DEM)
     (xaccAccountSetCommodity aapl-a AAPL)
     (xaccAccountSetCommodity ibm-a IBM)
     (xaccAccountSetCommodity msft-a MSFT)
     (xaccAccountSetCommodity tsla-a TSLA)
+    (xaccAccountSetCommodity dmlr-a DMLR)
     (xaccAccountSetCommodity aapl-b AAPL)
     (xaccAccountSetCommodity ibm-b IBM)
     (xaccAccountSetCommodity msft-b MSFT)
@@ -135,6 +146,12 @@
                           #:description "Buy IBM 200") ;;200 @ $179.16
     (env-transfer-foreign env 15 01 2012 cash-a msft-a 4216500/100 1500
                           #:description "Buy MSFT 1500") ;;1500 @ $28.11
+    (env-transfer-foreign env 20 01 2012 checking-dem dmlr-a 1500 80
+                          #:description "Buy DMLR 80") ;;80 @ DM1500.00
+    (env-transfer-foreign env 20 02 2012 checking-dem dmlr-a -1610 80
+                          #:description "Sell DMLR 80") ;;80 @ DM1610.00
+    (env-transfer-foreign env 20 02 2012 capgain-dem dmlr-a 110 0
+                          #:description "DMLR 80 G/L") ;;80 @ DM1610.00
     (env-transfer-foreign env 9 8 2013 cash-a aapl-a 3684000/100 600
                           #:description "Buy AAPL 600") ;;600 @ $61.40
     (env-transfer-foreign env 5 12 2014  cash-a msft-a -2421000/100 -500
@@ -163,7 +180,7 @@
     (gnc-pricedb-create USD IBM (gnc-dmy2time64 1 1 2013) 19399/100)
     (gnc-pricedb-create USD AAPL (gnc-dmy2time64 1 1 2014) 7728/100)
     (gnc-pricedb-create USD MSFT (gnc-dmy2time64 1 1 2014) 3691/100)
-    (gnc-pricedb-create USD IBM (gnc-dmy2time64 1 1 2014) 18664/100)
+    (gnc-pricedb-create USD IBM (gnc-dmy2time64 1 1 2014) 18669/100)
     (gnc-pricedb-create USD AAPL (gnc-dmy2time64 1 1 2015) 10933/100)
     (gnc-pricedb-create USD MSFT (gnc-dmy2time64 1 1 2015) 4676/100)
     (gnc-pricedb-create USD IBM (gnc-dmy2time64 1 1 2015) 16206/100)
@@ -498,7 +515,7 @@
                             (gnc:make-gnc-monetary MSFT 1) USD
                             (gnc-dmy2time64 11 9 2016))))
      (test-equal "IBM nearest 1 July 2014"
-                 18664/100 (gnc:gnc-monetary-amount
+                 18663/100 (gnc:gnc-monetary-amount
                             (gnc:exchange-by-pricedb-nearest
                              (gnc:make-gnc-monetary IBM 1) USD
                              (gnc-dmy2time64 1 7 2014))))
@@ -550,7 +567,24 @@
                                     (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND))
                    (cadr (assoc (gnc-dmy2time64-neutral 11 3 2016)
                                 report-list))))
-     (test-end "Microsoft-USD"))
+     (test-end "Microsoft-USD")
+
+     (test-begin "Daimler-DEM")
+     (let* ((curraccts (gnc-account-get-descendants-sorted
+                        (gnc-get-current-root-account)))
+            (report-list
+             (gnc:get-commodity-totalavg-prices curraccts
+                                                (gnc-dmy2time64 4 7 2016)
+                                                DMLR EUR)))
+       (test-equal "DMLR totalavg 2012-01-20"
+         38347/4000
+         (cadr (assoc (gnc-dmy2time64-neutral 20 01 2012)
+                      report-list)))
+       (test-equal "DMLR totalavg 2012-02-20"
+         39753/4000
+         (cadr (assoc (gnc-dmy2time64-neutral 20 02 2012)
+                      report-list))))
+     (test-end "Daimler-DEM"))
    (teardown)))
 
 (define (test-get-commodity-inst-prices)
@@ -586,5 +620,22 @@
        (test-equal "MSFT inst 2016-03-11" (/ 4776300/100 900)
                    (cadr (assoc (gnc-dmy2time64-neutral 11 3 2016)
                                 report-list))))
-     (test-end "Microsoft-USD"))
+     (test-end "Microsoft-USD")
+
+     (test-begin "Daimler-DEM")
+     (let* ((curraccts (gnc-account-get-descendants-sorted
+                        (gnc-get-current-root-account)))
+            (report-list
+             (gnc:get-commodity-inst-prices curraccts
+                                            (gnc-dmy2time64 4 7 2016)
+                                            DMLR EUR)))
+       (test-equal "DMLR inst 2012-01-20"
+         38347/4000
+         (cadr (assoc (gnc-dmy2time64-neutral 20 01 2012)
+                      report-list)))
+       (test-equal "DMLR inst 2012-02-20"
+         41159/4000
+         (cadr (assoc (gnc-dmy2time64-neutral 20 02 2012)
+                      report-list))))
+     (test-end "Daimler-DEM"))
    (teardown)))

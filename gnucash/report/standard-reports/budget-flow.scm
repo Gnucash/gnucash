@@ -26,7 +26,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash report standard-reports budget-flow))
-(use-modules (gnucash utilities)) 
+(use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gettext))
 
@@ -51,130 +51,132 @@
 
     ;; Option to select Budget
     (gnc:register-option
-      options
-      (gnc:make-budget-option
-        gnc:pagename-general optname-budget
-        "a" (N_ "Budget to use.")))
+     options
+     (gnc:make-budget-option
+      gnc:pagename-general optname-budget
+      "a" (N_ "Budget to use.")))
 
     ;; Option to select Period of selected Budget
     (gnc:register-option
-      options
-      (gnc:make-number-range-option
-        gnc:pagename-general optname-periods
-        ;; FIXME: It would be nice if the max number of budget periods (60) was
-        ;; defined globally somewhere so we could reference it here.  However, it
-        ;; only appears to be defined currently in
-        ;; src/gnome/gtkbuilder/gnc-plugin-page-budget.glade.
-        ;; FIXME: It would be even nicer if the max number of budget
-        ;; periods was determined by the number of periods in the
-        ;; currently selected budget
-        "b" (N_ "Period number.") 1 1 60 0 1))
+     options
+     (gnc:make-number-range-option
+      gnc:pagename-general optname-periods
+      ;; FIXME: It would be nice if the max number of budget periods (60) was
+      ;; defined globally somewhere so we could reference it here.  However, it
+      ;; only appears to be defined currently in
+      ;; src/gnome/gtkbuilder/gnc-plugin-page-budget.glade.
+      ;; FIXME: It would be even nicer if the max number of budget
+      ;; periods was determined by the number of periods in the
+      ;; currently selected budget
+      "b" (N_ "Period number.") 1 1 60 0 1))
 
     ;; Option to select the currency the report will be shown in
     (gnc:options-add-currency!
-      options gnc:pagename-general
-      optname-report-currency "d")
+     options gnc:pagename-general
+     optname-report-currency "d")
 
     ;; Option to select the price source used in currency conversion
     (gnc:options-add-price-source!
-      options gnc:pagename-general optname-price-source "c" 'pricedb-latest)
+     options gnc:pagename-general optname-price-source "c" 'pricedb-latest)
 
     ;;Option to select the accounts to that will be displayed
-    (gnc:register-option 
-      options  
-      (gnc:make-account-list-option
-        gnc:pagename-accounts optname-accounts
-        (string-append "a" "c")
-        (N_ "Report on these accounts.")
-        (lambda ()
-          (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
-        #f #t))
-    
+    (gnc:register-option
+     options
+     (gnc:make-account-list-option
+      gnc:pagename-accounts optname-accounts
+      (string-append "a" "c")
+      (N_ "Report on these accounts.")
+      (lambda ()
+        (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
+      #f #t))
+
     ;; Set the general page as default option tab
     (gnc:options-set-default-section options gnc:pagename-general)
 
-    options
-))
-
+    options))
 
 ;; Append a row to html-table with markup and values
-(define (gnc:html-table-add-budget-row! 
-  html-table markup text total1 total2)
+(define (gnc:html-table-add-budget-row!
+         html-table markup text total1 total2)
 
   ;; Cell order is text, budgeted, actual
-  (gnc:html-table-append-row/markup! html-table "normal-row"
-    (list
-      (gnc:make-html-table-cell/markup "text-cell" text)
-      (gnc:make-html-table-cell/markup markup total1)
-      (gnc:make-html-table-cell/markup markup total2)
-
-)))
+  (gnc:html-table-append-row/markup!
+   html-table "normal-row"
+   (list
+    (gnc:make-html-table-cell/markup "text-cell" text)
+    (gnc:make-html-table-cell/markup markup total1)
+    (gnc:make-html-table-cell/markup markup total2))))
 
 ;; For each account in acct-table:
 ;; Retrieve the budgeted and actual amount
 ;; Display the row
-;; 
+;;
 ;; Display the grand total for acct-table
 ;;
 ;; Return: (list budgeted-grand-total actual-grand-total)
 ;;
 (define (gnc:html-table-add-budget-accounts!
-  html-table acct-table budget period exchange-fn report-currency)
+         html-table acct-table budget period exchange-fn report-currency)
 
-  (let* (
-      ;; Used to sum up the budgeted and actual totals
-      (bgt-total (gnc:make-commodity-collector))
-      (act-total (gnc:make-commodity-collector))
-    )
+  ;; Used to sum up the budgeted and actual totals
+  (let* ((bgt-total (gnc:make-commodity-collector))
+         (act-total (gnc:make-commodity-collector)))
 
     ;; Loop though each account
     ;;
     ;; FIXME: because gnc:budget-get-account-period-actual-value
-    ;; sums the total for a parent and all child accounts displaying 
+    ;; sums the total for a parent and all child accounts displaying
     ;; and summing a parent account cause the totals to be off.
     ;; so we do not display parent accounts
     ;;
-    (for-each (lambda (acct)
+    (for-each
+     (lambda (acct)
+       ;; If acct has children do nto display (see above)
+       (if (null? (gnc-account-get-children acct))
+           ;; Retrieve the budgeted and actual amount and
+           ;; convert to <gnc:monetary>
+           (let* ((comm (xaccAccountGetCommodity acct))
+                  (bgt-numeric (gnc-budget-get-account-period-value
+                                budget acct (1- period)))
+                  (bgt-monetary (gnc:make-gnc-monetary comm bgt-numeric))
+                  (act-numeric (gnc-budget-get-account-period-actual-value
+                                budget acct (1- period)))
+                  (act-monetary (gnc:make-gnc-monetary comm act-numeric)))
 
-        ;; If acct has children do nto display (see above)
-        (if (null? (gnc-account-get-children acct))
-          (let* (
-              ;; Retrieve the budgeted and actual amount and convert to <gnc:monetary>
-              (comm (xaccAccountGetCommodity acct))
-              (bgt-numeric (gnc-budget-get-account-period-value budget acct (- period 1)))
-              (bgt-monetary (gnc:make-gnc-monetary comm bgt-numeric))
-              (act-numeric (gnc-budget-get-account-period-actual-value budget acct (- period 1)))
-              (act-monetary (gnc:make-gnc-monetary comm act-numeric))
-            )
-            
-            ;; Add amounts to collectors
-            (bgt-total 'add comm bgt-numeric)
-            (act-total 'add comm act-numeric)
+             ;; Add amounts to collectors
+             (bgt-total 'add comm bgt-numeric)
+             (act-total 'add comm act-numeric)
 
-            ;; Display row
-            (gnc:html-table-add-budget-row! html-table "number-cell"
-              (gnc:make-html-text (gnc:html-markup-anchor (gnc:account-anchor-text acct) (gnc-account-get-full-name acct)))
+             ;; Display row
+             (gnc:html-table-add-budget-row!
+              html-table "number-cell"
+              (gnc:make-html-text
+               (gnc:html-markup-anchor
+                (gnc:account-anchor-text acct)
+                (gnc-account-get-full-name acct)))
               bgt-monetary
-              act-monetary
-      ))))
+              act-monetary))))
 
-      acct-table
-    )
+     acct-table)
 
     ;; Total collectors and display
-    (let* (
-        (bgt-total-numeric (gnc:sum-collector-commodity bgt-total report-currency exchange-fn))
-        (act-total-numeric (gnc:sum-collector-commodity act-total report-currency exchange-fn))
-      )
-      (gnc:html-table-add-budget-row! html-table "total-number-cell" (string-append (_ "Total") ":") bgt-total-numeric act-total-numeric)
-      
-      ;; Display hr FIXME: kind of a hack
-      (gnc:html-table-append-row! html-table "<tr><td colspan='3'><hr></td></tr>")
-    
-      ;; Return (list budgeted-total actual-total)
-      (list bgt-total-numeric act-total-numeric)
+    (let* ((bgt-total-numeric
+            (gnc:sum-collector-commodity bgt-total report-currency exchange-fn))
+           (act-total-numeric
+            (gnc:sum-collector-commodity act-total report-currency exchange-fn)))
+      (gnc:html-table-add-budget-row!
+       html-table "total-number-cell"
+       (string-append (_ "Total") ":")
+       bgt-total-numeric act-total-numeric)
 
-))) ;; end of define
+      (gnc:html-table-append-row!
+       html-table
+       (list
+        (gnc:make-html-table-cell/size
+         1 3 (gnc:make-html-text (gnc:html-markup-hr)))))
+
+      ;; Return (list budgeted-total actual-total)
+      (list bgt-total-numeric act-total-numeric))))
 
 ;; Displays account types
 ;;
@@ -183,75 +185,67 @@
 ;; Return: a assoc list of (type (budgeted-grand-total actual-grand-total))
 ;;
 (define (gnc:html-table-add-budget-types!
-  html-table acct-table budget period exchange-fn report-currency)
-
-  ;;Account totals is the assoc list that is returned  
+         html-table acct-table budget period exchange-fn report-currency)
+  ;;Account totals is the assoc list that is returned
   (let* ((accounts-totals '()))
-
     ;;Display each account type
-    (for-each (lambda (pair)
-
-      ;; key - type
-      ;; value - list of accounts
-      (let* ((key (car pair)) (value (cdr pair)))
-
-        ;; Display and add totals
-        (set! accounts-totals (assoc-set! accounts-totals key 
-          (gnc:html-table-add-budget-accounts! html-table value budget period exchange-fn report-currency)
-        ))
-      ))
-
-      acct-table
-    )
-
+    (for-each
+     (lambda (pair)
+       ;; key - type
+       ;; value - list of accounts
+       (let* ((key (car pair)) (value (cdr pair)))
+         ;; Display and add totals
+         (set! accounts-totals
+           (assoc-set!
+            accounts-totals key
+            (gnc:html-table-add-budget-accounts!
+             html-table value budget period exchange-fn report-currency)))))
+     acct-table)
     ;; Reutrn assoc list
-    accounts-totals
-))
+    accounts-totals))
 
 ;; Displays type-totals
 ;;
 ;; type-totals: a list of (type (budget-total actual-total))
 ;;
 (define (gnc:html-table-add-budget-totals!
-  html-table type-totals exchange-fn report-currency)
+         html-table type-totals exchange-fn report-currency)
 
-  (let* (
-      ;; Collector of grand totals
-      (bgt-total-collector (gnc:make-commodity-collector))
-      (act-total-collector (gnc:make-commodity-collector))
-    )
-    
+  ;; Collector of grand totals
+  (let* ((bgt-total-collector (gnc:make-commodity-collector))
+         (act-total-collector (gnc:make-commodity-collector)))
+
     ;; Loop though each pair
-    (for-each (lambda (pair)
-        (let* (
-            ;; tuple is (type (budgeted actual))
-            (key (car pair))
-            (value (cdr pair))
-            (bgt-total (car value))
-            (act-total (cadr value))
-          )
+    (for-each
+     (lambda (pair)
+       ;; tuple is (type (budgeted actual))
+       (let* ((key (car pair))
+              (value (cdr pair))
+              (bgt-total (car value))
+              (act-total (cadr value)))
 
-          ;; Add to collectors 
-          (bgt-total-collector 'add (gnc:gnc-monetary-commodity bgt-total) (gnc:gnc-monetary-amount bgt-total))
-          (act-total-collector 'add (gnc:gnc-monetary-commodity act-total) (gnc:gnc-monetary-amount act-total))
-
-          ;; Display row
-          (gnc:html-table-add-budget-row! html-table "number-cell" (gnc:account-get-type-string-plural key) bgt-total act-total)
-      ))
-
-      type-totals
-    )
-    (let* (
-        ;; Sum collectors    
-        (bgt-total-numeric (gnc:sum-collector-commodity bgt-total-collector report-currency exchange-fn))
-        (act-total-numeric (gnc:sum-collector-commodity act-total-collector report-currency exchange-fn))
-      )
-
+         ;; Add to collectors
+         (bgt-total-collector 'add
+                              (gnc:gnc-monetary-commodity bgt-total)
+                              (gnc:gnc-monetary-amount bgt-total))
+         (act-total-collector 'add (gnc:gnc-monetary-commodity act-total)
+                              (gnc:gnc-monetary-amount act-total))
+         ;; Display row
+         (gnc:html-table-add-budget-row!
+          html-table "number-cell"
+          (gnc:account-get-type-string-plural key) bgt-total act-total)))
+     type-totals)
+    ;; Sum collectors
+    (let* ((bgt-total-numeric
+            (gnc:sum-collector-commodity
+             bgt-total-collector report-currency exchange-fn))
+           (act-total-numeric
+            (gnc:sum-collector-commodity
+             act-total-collector report-currency exchange-fn)))
       ;; Display Grand Total
-      (gnc:html-table-add-budget-row! html-table "total-number-cell" (string-append (_ "Total") ":") bgt-total-numeric act-total-numeric)
-
-)))
-
+      (gnc:html-table-add-budget-row!
+       html-table "total-number-cell"
+       (string-append (_ "Total") ":") bgt-total-numeric act-total-numeric))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; budget-renderer
@@ -263,69 +257,66 @@
   ;; Helper function retrieves options
   (define (get-option pagename optname)
     (gnc:option-value
-      (gnc:lookup-option
-        (gnc:report-options report-obj) pagename optname)))
+     (gnc:lookup-option
+      (gnc:report-options report-obj) pagename optname)))
 
   ;; Update progress bar
   (gnc:report-starting reportname)
 
   ;; get all option's values
-  (let* (
-      (budget (get-option gnc:pagename-general optname-budget))
-      (budget-valid? (and budget (not (null? budget))))
-      (accounts (get-option gnc:pagename-accounts optname-accounts))
-      (period (inexact->exact (get-option gnc:pagename-general
-        optname-periods)))
-      (report-currency (get-option gnc:pagename-general
-        optname-report-currency))
-      (price-source (get-option gnc:pagename-general
-        optname-price-source))
+  (let* ((budget (get-option gnc:pagename-general optname-budget))
+         (budget-valid? (and budget (not (null? budget))))
+         (accounts (get-option gnc:pagename-accounts optname-accounts))
+         (period (inexact->exact (get-option gnc:pagename-general
+                                             optname-periods)))
+         (report-currency (get-option gnc:pagename-general
+                                      optname-report-currency))
+         (price-source (get-option gnc:pagename-general
+                                   optname-price-source))
 
-      ;; calculate the exchange rates
-      (exchange-fn (gnc:case-exchange-fn
-        price-source report-currency #f))
+         ;; calculate the exchange rates
+         (exchange-fn (gnc:case-exchange-fn
+                       price-source report-currency #f))
 
-      ;; The HTML document
-      (doc (gnc:make-html-document))
-    )
+         ;; The HTML document
+         (doc (gnc:make-html-document)))
 
     (cond
-      ((null? accounts)
-        ;; No accounts selected
-        (gnc:html-document-add-object!
-          doc
-            (gnc:html-make-no-account-warning 
-              reportname (gnc:report-id report-obj))))
+     ((null? accounts)
+      ;; No accounts selected
+      (gnc:html-document-add-object!
+       doc
+       (gnc:html-make-no-account-warning
+        reportname (gnc:report-id report-obj))))
 
-      ((not budget-valid?)
-        ;; No budget selected.
-        (gnc:html-document-add-object!
-          doc (gnc:html-make-generic-budget-warning reportname)))
+     ((not budget-valid?)
+      ;; No budget selected.
+      (gnc:html-document-add-object!
+       doc (gnc:html-make-generic-budget-warning reportname)))
 
-      (else (begin
-        (let* (
-          (html-table (gnc:make-html-table))
-          (report-name (get-option gnc:pagename-general
-            gnc:optname-reportname))
-
-          ;; decompose the account list
-          (split-up-accounts (gnc:decompose-accountlist accounts))
-          (accounts-totals '())
-     
-        )
+     (else
+      (let* ((html-table (gnc:make-html-table))
+             (report-name (get-option gnc:pagename-general gnc:optname-reportname))
+             ;; decompose the account list
+             (split-up-accounts (gnc:decompose-accountlist accounts))
+             (accounts-totals '()))
 
         ;; Display Title Name - Budget - Period
         (gnc:html-document-set-title!
-          doc (format #f (_ "~a: ~a - ~a")
-            report-name (gnc-budget-get-name budget)
-            (qof-print-date (gnc-budget-get-period-start-date budget (- period 1)))))
+         doc (format #f (_ "~a: ~a - ~a")
+                     report-name (gnc-budget-get-name budget)
+                     (qof-print-date (gnc-budget-get-period-start-date
+                                      budget (1- period)))))
 
         ;; Display accounts and totals
-        (set! accounts-totals (gnc:html-table-add-budget-types! html-table split-up-accounts budget period exchange-fn report-currency))
-        (gnc:html-table-add-budget-totals! html-table accounts-totals exchange-fn report-currency)
+        (set! accounts-totals
+          (gnc:html-table-add-budget-types!
+           html-table split-up-accounts budget period exchange-fn report-currency))
+        (gnc:html-table-add-budget-totals!
+         html-table accounts-totals exchange-fn report-currency)
 
         ;; Display table
-        (gnc:html-document-add-object! doc html-table)))))
+        (gnc:html-document-add-object! doc html-table))))
 
     ;; Update progress bar
     (gnc:report-finished)

@@ -71,10 +71,8 @@ static Account *main_window_to_account(GncMainWindow *window);
 static void gnc_plugin_ab_cmd_setup(GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_ab_cmd_get_balance(GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_ab_cmd_get_transactions(GtkAction *action, GncMainWindowActionData *data);
-static void gnc_plugin_ab_cmd_issue_transaction(GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_ab_cmd_issue_sepatransaction(GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_ab_cmd_issue_inttransaction(GtkAction *action, GncMainWindowActionData *data);
-static void gnc_plugin_ab_cmd_issue_direct_debit(GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_ab_cmd_issue_sepa_direct_debit(GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_ab_cmd_view_logwindow(GtkToggleAction *action, GncMainWindow *window);
 static void gnc_plugin_ab_cmd_mt940_import(GtkAction *action, GncMainWindowActionData *data);
@@ -110,29 +108,19 @@ static GtkActionEntry gnc_plugin_actions [] =
         G_CALLBACK(gnc_plugin_ab_cmd_get_transactions)
     },
     {
-        "ABIssueTransAction", NULL, N_("_Issue Transaction..."), NULL,
-        N_("Issue a new transaction online through Online Banking"),
-        G_CALLBACK(gnc_plugin_ab_cmd_issue_transaction)
-    },
-    {
         "ABIssueSepaTransAction", NULL,
 		/* Translators: https://en.wikipedia.org/wiki/Single_Euro_Payments_Area */
-		N_("_Issue SEPA Transaction..."), NULL,
+		N_("Issue _SEPA Transaction..."), NULL,
         N_("Issue a new international European (SEPA) transaction online through Online Banking"),
         G_CALLBACK(gnc_plugin_ab_cmd_issue_sepatransaction)
     },
     {
-        "ABIssueIntTransAction", NULL, N_("I_nternal Transaction..."), NULL,
+        "ABIssueIntTransAction", NULL, N_("_Internal Transaction..."), NULL,
         N_("Issue a new bank-internal transaction online through Online Banking"),
         G_CALLBACK(gnc_plugin_ab_cmd_issue_inttransaction)
     },
     {
-        "ABIssueDirectDebitAction", NULL, N_("_Direct Debit..."), NULL,
-        N_("Issue a new direct debit note online through Online Banking"),
-        G_CALLBACK(gnc_plugin_ab_cmd_issue_direct_debit)
-    },
-    {
-        "ABIssueSepaDirectDebitAction", NULL, N_("_Issue SEPA Direct Debit..."), NULL,
+        "ABIssueSepaDirectDebitAction", NULL, N_("Issue SEPA Direct _Debit..."), NULL,
         N_("Issue a new international European (SEPA) direct debit note online through Online Banking"),
         G_CALLBACK(gnc_plugin_ab_cmd_issue_sepa_direct_debit)
     },
@@ -143,20 +131,20 @@ static GtkActionEntry gnc_plugin_actions [] =
 		/* Translators: Message types MTxxxx are exchange formats used by the SWIFT network
 		   https://en.wikipedia.org/wiki/Society_for_Worldwide_Interbank_Financial_Telecommunication */
 		N_("Import _MT940"), NULL,
-        N_("Import a MT940 file into GnuCash"),
+        N_("Import an end-of-day account statement in SWIFT MT940 format into GnuCash."),
         G_CALLBACK(gnc_plugin_ab_cmd_mt940_import)
     },
     {
         "Mt942ImportAction", "go-previous", N_("Import MT94_2"), NULL,
-        N_("Import a MT942 file into GnuCash"),
+        N_("Import an interim account statement in SWIFT MT942 format into GnuCash."),
         G_CALLBACK(gnc_plugin_ab_cmd_mt942_import)
     },
     {
         "DtausImportAction", "go-previous",
-		/* Translators: DTAUS is a traditional german exchange format.
+	/* Translators: DTAUS is a traditional german exchange format.
            https://de.wikipedia.org/wiki/Datentr%C3%A4geraustauschverfahren */
 		N_("Import _DTAUS"), NULL,
-        N_("Import a DTAUS file into GnuCash"),
+        N_("Import a traditional german DTAUS file into GnuCash."),
         G_CALLBACK(gnc_plugin_ab_cmd_dtaus_import)
     },
     /* #ifdef CSV_IMPORT_FUNCTIONAL */
@@ -169,7 +157,7 @@ static GtkActionEntry gnc_plugin_actions [] =
     /* #endif */
     {
         "DtausImportSendAction", "go-previous", N_("Import DTAUS and _send..."), NULL,
-        N_("Import a DTAUS file into GnuCash and send the transfers online through Online Banking"),
+        N_("Import a DTAUS file into GnuCash and transmit its orders by Online Banking."),
         G_CALLBACK(gnc_plugin_ab_cmd_dtaus_importsend)
     },
 };
@@ -190,10 +178,8 @@ static const gchar *need_account_actions[] =
 {
     "ABGetBalanceAction",
     "ABGetTransAction",
-    "ABIssueTransAction",
     "ABIssueSepaTransAction",
     "ABIssueIntTransAction",
-    "ABIssueDirectDebitAction",
     "ABIssueSepaDirectDebitAction",
     NULL
 };
@@ -543,27 +529,6 @@ gnc_plugin_ab_cmd_get_transactions(GtkAction *action,
 }
 
 static void
-gnc_plugin_ab_cmd_issue_transaction(GtkAction *action,
-                                    GncMainWindowActionData *data)
-{
-    Account *account;
-
-    ENTER("action %p, main window data %p", action, data);
-    account = main_window_to_account(data->window);
-    if (account == NULL)
-    {
-        g_message("No AqBanking account selected");
-        LEAVE("no account");
-        return;
-    }
-
-    gnc_main_window = data->window;
-    gnc_ab_maketrans(GTK_WIDGET(data->window), account, SINGLE_TRANSFER);
-
-    LEAVE(" ");
-}
-
-static void
 gnc_plugin_ab_cmd_issue_sepatransaction(GtkAction *action,
                                     GncMainWindowActionData *data)
 {
@@ -602,27 +567,6 @@ gnc_plugin_ab_cmd_issue_inttransaction(GtkAction *action,
     gnc_main_window = data->window;
     gnc_ab_maketrans(GTK_WIDGET(data->window), account,
                      SINGLE_INTERNAL_TRANSFER);
-
-    LEAVE(" ");
-}
-
-static void
-gnc_plugin_ab_cmd_issue_direct_debit(GtkAction *action,
-                                     GncMainWindowActionData *data)
-{
-    Account *account;
-
-    ENTER("action %p, main window data %p", action, data);
-    account = main_window_to_account(data->window);
-    if (account == NULL)
-    {
-        g_message("No AqBanking account selected");
-        LEAVE("no account");
-        return;
-    }
-
-    gnc_main_window = data->window;
-    gnc_ab_maketrans(GTK_WIDGET(data->window), account, SINGLE_DEBITNOTE);
 
     LEAVE(" ");
 }

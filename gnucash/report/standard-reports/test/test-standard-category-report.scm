@@ -47,8 +47,10 @@
 
 (define (run-test)
   (test-runner-factory gnc:test-runner)
+  (test-begin "standard-category-report")
   (run-category-income-expense-test category-barchart-income-uuid category-barchart-expense-uuid)
-  (run-category-asset-liability-test category-barchart-asset-uuid category-barchart-liability-uuid))
+  (run-category-asset-liability-test category-barchart-asset-uuid category-barchart-liability-uuid)
+  (test-end "standard-category-report"))
 
 (export run-category-income-expense-test)
 (export run-category-asset-liability-test)
@@ -68,6 +70,7 @@
   (null-test income-report-uuid)
   (null-test expense-report-uuid)
   (single-txn-test income-report-uuid)
+  (single-txn-test-average income-report-uuid)
   (multi-acct-test expense-report-uuid))
 
 (define (run-category-asset-liability-test asset-report-uuid liability-report-uuid)
@@ -75,6 +78,9 @@
   (null-test liability-report-uuid)
   (asset-test asset-report-uuid)
   (liability-test liability-report-uuid))
+
+(define (teardown)
+  (gnc-clear-current-session))
 
 ;; No real test here, just confirm that no exceptions are thrown
 (define (null-test uuid)
@@ -113,7 +119,101 @@
                   (str->num (cadr (string-split s #\/))))
                 (sxml->table-row-col sxml 1 #f 1))
                (map str->num (sxml->table-row-col sxml 1 #f 2))))
-      (test-end "single-txn-test"))))
+      (test-end "single-txn-test"))
+    (teardown)))
+
+(define (single-txn-test-average uuid)
+  (let* ((income-options (gnc:make-report-options uuid))
+         (env (create-test-env))
+         (curr (gnc-default-report-currency))
+         (my-asset-account (env-create-root-account env ACCT-TYPE-ASSET curr))
+         (my-expense-account (env-create-root-account env ACCT-TYPE-EXPENSE curr))
+         (my-income-account (env-create-root-account env ACCT-TYPE-INCOME curr)))
+    ;; create 52 weekly txns from 1.1.1980, amount $1.10 increase by $1.10 weekly
+    (let loop ((date (gnc-dmy2time64 1 1 1980))
+               (amt 11/10)
+               (remaining 52))
+      (unless (zero? remaining)
+        (env-create-transaction env date my-asset-account my-income-account amt)
+        (loop (incdate date WeekDelta)
+              (+ amt 11/10)
+              (1- remaining))))
+    ;; and a $22.40 txn on 1.7.1980 just to throw the averages off
+    (env-create-transaction env (gnc-dmy2time64 1 7 1980)
+                            my-asset-account my-income-account 224/10)
+    (set-option income-options gnc:pagename-display "Show table" #t)
+    (set-option income-options gnc:pagename-general "Start Date"
+                (cons 'absolute (gnc-dmy2time64 1 1 1980)))
+    (set-option income-options gnc:pagename-general "End Date"
+                (cons 'absolute (gnc-dmy2time64 31 12 1980)))
+    (set-option income-options gnc:pagename-general "Step Size" 'DayDelta)
+    (set-option income-options gnc:pagename-general "Price Source" 'pricedb-nearest)
+    (set-option income-options gnc:pagename-general "Report's currency"  (gnc-default-report-currency))
+    (set-option income-options gnc:pagename-accounts "Accounts" (list my-income-account))
+    (set-option income-options gnc:pagename-accounts "Show Accounts until level"  'all)
+
+    (test-begin "multiplier test")
+    (set-option income-options gnc:pagename-general "Show Average" 'WeekDelta)
+    (set-option income-options gnc:pagename-general "Step Size" 'MonthDelta)
+    (let ((sxml (gnc:options->sxml uuid income-options
+                                   "test-standard-category-report"
+                                   "single-txn-test-average-week"
+                                   #:strip-tag "script")))
+      (test-equal "monthly chart, weekly average"
+        '("$3.79" "$7.57" "$11.61" "$20.20" "$20.70" "$24.74"
+          "$41.75" "$33.83" "$47.97" "$42.92" "$46.96" "$51.00")
+        (sxml->table-row-col sxml 1 #f 2)))
+    (set-option income-options gnc:pagename-general "Show Average" 'MonthDelta)
+    (let ((sxml (gnc:options->sxml uuid income-options
+                                   "test-standard-category-report"
+                                   "single-txn-test-average-month"
+                                   #:strip-tag "script")))
+      (test-equal "monthly chart, monthly average"
+        '("$16.50" "$33.00" "$50.60" "$88.00" "$90.20" "$107.80"
+          "$181.90" "$147.40" "$209.00" "$187.00" "$204.60" "$222.20")
+        (sxml->table-row-col sxml 1 #f 2)))
+    (set-option income-options gnc:pagename-general "Show Average" 'DayDelta)
+    (let ((sxml (gnc:options->sxml uuid income-options
+                                   "test-standard-category-report"
+                                   "single-txn-test-average-day"
+                                   #:strip-tag "script")))
+      (test-equal "monthly chart, daily average"
+        '("$0.54" "$1.08" "$1.66" "$2.89" "$2.96" "$3.53"
+          "$5.96" "$4.83" "$6.85" "$6.13" "$6.71" "$7.29")
+        (sxml->table-row-col sxml 1 #f 2)))
+    (set-option income-options gnc:pagename-general "Step Size" 'WeekDelta)
+    (set-option income-options gnc:pagename-general "Show Average" 'DayDelta)
+    (set-option income-options gnc:pagename-general "Start Date"
+                (cons 'absolute (gnc-dmy2time64 1 6 1980)))
+    (set-option income-options gnc:pagename-general "End Date"
+                (cons 'absolute (gnc-dmy2time64 1 8 1980)))
+    (let ((sxml (gnc:options->sxml uuid income-options
+                                   "test-standard-category-report"
+                                   "single-txn-test-weekly-average-day"
+                                   #:strip-tag "script")))
+      (test-equal "weekly chart, daily average"
+        '("$3.61" "$3.77" "$3.93" "$4.09" "$7.44" "$4.40" "$4.56" "$4.71" "$4.87")
+        (sxml->table-row-col sxml 1 #f 2)))
+    (set-option income-options gnc:pagename-general "Show Average" 'WeekDelta)
+    (let ((sxml (gnc:options->sxml uuid income-options
+                                   "test-standard-category-report"
+                                   "single-txn-test-weekly-average-week"
+                                   #:strip-tag "script")))
+      (test-equal "weekly chart, weekly average"
+        '("$25.30" "$26.40" "$27.50" "$28.60"
+          "$52.10" "$30.80" "$31.90" "$33.00" "$34.10")
+        (sxml->table-row-col sxml 1 #f 2)))
+    (set-option income-options gnc:pagename-general "Show Average" 'MonthDelta)
+    (let ((sxml (gnc:options->sxml uuid income-options
+                                   "test-standard-category-report"
+                                   "single-txn-test-weekly-average-month"
+                                   #:strip-tag "script")))
+      (test-equal "weekly chart, monthly average"
+        '("$25.30" "$26.40" "$27.50" "$28.60"
+          "$52.10" "$30.80" "$31.90" "$33.00" "$34.10")
+        (sxml->table-row-col sxml 1 #f 2)))
+    (test-end "multiplier test"))
+  (teardown))
 
 (define (list-leaves list)
   (if (not (pair? list))

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gnc-account-example 
+  xmlns="http://www.gnucash.org/XML/"
+  xmlns:act="http://www.gnucash.org/XML/act"
+  xmlns:addr="http://www.gnucash.org/XML/addr"
+  xmlns:bgt="http://www.gnucash.org/XML/bgt"
+  xmlns:billterm="http://www.gnucash.org/XML/billterm"
+  xmlns:book="http://www.gnucash.org/XML/book"
+  xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+  xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+  xmlns:cd="http://www.gnucash.org/XML/cd"
+  xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+  xmlns:cust="http://www.gnucash.org/XML/cust"
+  xmlns:employee="http://www.gnucash.org/XML/employee"
+  xmlns:entry="http://www.gnucash.org/XML/entry"
+  xmlns:fs="http://www.gnucash.org/XML/fs"
+  xmlns:gnc="http://www.gnucash.org/XML/gnc"
+  xmlns:gnc-act="http://www.gnucash.org/XML/gnc-act"
+  xmlns:invoice="http://www.gnucash.org/XML/invoice"
+  xmlns:job="http://www.gnucash.org/XML/job"
+  xmlns:lot="http://www.gnucash.org/XML/lot"
+  xmlns:order="http://www.gnucash.org/XML/order"
+  xmlns:owner="http://www.gnucash.org/XML/owner"
+  xmlns:price="http://www.gnucash.org/XML/price"
+  xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+  xmlns:slot="http://www.gnucash.org/XML/slot"
+  xmlns:split="http://www.gnucash.org/XML/split"
+  xmlns:sx="http://www.gnucash.org/XML/sx"
+  xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+  xmlns:trn="http://www.gnucash.org/XML/trn"
+  xmlns:ts="http://www.gnucash.org/XML/ts"
+  xmlns:tte="http://www.gnucash.org/XML/tte"
+  xmlns:vendor="http://www.gnucash.org/XML/vendor">
+    <gnc-act:title>
+      Hipotekarni kredit
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Kontni plan za hipotekarni kredit
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+      Kontni plan za knjiženje i praćenje hipotekarnog kredita.
+  </gnc-act:long-description> 
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">7143b1d224174117a3bda461d49d974f</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Obveze</act:name>
+  <act:id type="new">2de0dac34200430fb458947704c09387</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Obveze</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">7143b1d224174117a3bda461d49d974f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Krediti</act:name>
+  <act:id type="new">ce00e1857cd5423a9006bbca7a84390b</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Krediti/zajmovi</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">2de0dac34200430fb458947704c09387</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Hipotekarni kredit</act:name>
+  <act:id type="new">f8d68ba7478245829257eba5523a1c1a</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Hipotekarni kredit</act:description>
+  <act:parent type="new">ce00e1857cd5423a9006bbca7a84390b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Rashod</act:name>
+  <act:id type="new">fea3824a8ec04a778455479a9ed968a2</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Rashod</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">7143b1d224174117a3bda461d49d974f</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kamate</act:name>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:id type="new">7eae5165647845468e4d00c33437a24e</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Kamate</act:description>
+  <act:parent type="new">fea3824a8ec04a778455479a9ed968a2</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Hipotekarne kamate</act:name>
+  <act:id type="new">344ca42fe7b945fa968683465a02f421</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Hipotekarne kamate</act:description>
+  <act:parent type="new">7eae5165647845468e4d00c33437a24e</act:parent>
+</gnc:account>
+</gnc-account-example>
+

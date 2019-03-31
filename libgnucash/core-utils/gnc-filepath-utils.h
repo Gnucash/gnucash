@@ -49,6 +49,15 @@ gchar *gnc_resolve_file_path (const gchar *filefrag);
  */
 gchar *gnc_file_path_relative_part (const gchar *prefix, const gchar *path);
 
+/** Given a prefix and a relative path, return the absolute path.
+ * @param prefix The prefix that is the head of the path
+ * @param relative The path to add to the prefix to form an absolute path
+ * @return a char* that must be g_freed containing the absolute path.
+ *
+ * If prefix is null, then the gnc_userdata_home is used as the prefix.
+ */
+gchar *gnc_file_path_absolute (const gchar *prefix, const gchar *relative);
+
 /** @brief Find an absolute path to a localized version of a given
  *  relative path to a html or html related file.
  *  If no localized version exists, an absolute path to the file

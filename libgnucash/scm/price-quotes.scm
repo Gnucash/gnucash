@@ -403,14 +403,14 @@
               ((price) "unknown")
               (else #f)))
 
-      ;; FIXME: SIGFIGS is not what we want here...
       (if price
+          ;; The second argument to inexact->exact is chosen to give reasonable values
+          ;; for prices between .12345e-9 and 12345678.87654
+          
+          ;; inexact->exact is probably not necessary but it can't hurt and is cheap.
           (set! price
-                (double-to-gnc-numeric price
-                                           GNC-DENOM-AUTO
-                                           (logior (GNC-DENOM-SIGFIGS 9)
-                                                   GNC-RND-ROUND))))
-
+                (gnc-scm-to-numeric 
+                  (rationalize (inexact->exact price) 1/1000000000000000))))
       (if gnc-time
           (set! gnc-time (timestr->time64 gnc-time time-zone))
           (set! gnc-time (gnc:get-today)))

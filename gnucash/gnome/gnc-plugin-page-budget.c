@@ -206,40 +206,12 @@ typedef struct GncPluginPageBudgetPrivate
     gint sigFigs;
 } GncPluginPageBudgetPrivate;
 
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageBudget, gnc_plugin_page_budget, GNC_TYPE_PLUGIN_PAGE)
+
 #define GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_PAGE_BUDGET, GncPluginPageBudgetPrivate))
 
 static GObjectClass *parent_class = NULL;
-
-
-GType
-gnc_plugin_page_budget_get_type (void)
-{
-    static GType gnc_plugin_page_budget_type = 0;
-
-    if (gnc_plugin_page_budget_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncPluginPageBudgetClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_plugin_page_budget_class_init,
-            NULL,
-            NULL,
-            sizeof (GncPluginPageBudget),
-            0,
-            (GInstanceInitFunc) gnc_plugin_page_budget_init
-        };
-
-        gnc_plugin_page_budget_type =
-            g_type_register_static (GNC_TYPE_PLUGIN_PAGE,
-                                    "GncPluginPageBudget", &our_info, 0);
-    }
-
-    return gnc_plugin_page_budget_type;
-}
-
 
 GncPluginPage *
 gnc_plugin_page_budget_new (GncBudget *budget)
@@ -295,8 +267,6 @@ gnc_plugin_page_budget_class_init (GncPluginPageBudgetClass *klass)
     gnc_plugin_class->destroy_widget  = gnc_plugin_page_budget_destroy_widget;
     gnc_plugin_class->save_page       = gnc_plugin_page_budget_save_page;
     gnc_plugin_class->recreate_page   = gnc_plugin_page_budget_recreate_page;
-
-    g_type_class_add_private(klass, sizeof(GncPluginPageBudgetPrivate));
 }
 
 
@@ -334,6 +304,7 @@ gnc_plugin_page_budget_init (GncPluginPageBudget *plugin_page)
     /* Visible types */
     priv->fd.visible_types = -1; /* Start with all types */
     priv->fd.show_hidden = FALSE;
+    priv->fd.show_unused = TRUE;
     priv->fd.show_zero_total = TRUE;
     priv->fd.filter_override = g_hash_table_new (g_direct_hash, g_direct_equal);
 
@@ -479,6 +450,9 @@ gnc_plugin_page_budget_destroy_widget (GncPluginPage *plugin_page)
 
     if (priv->budget_view)
     {
+        // save the account filter state information to budget section
+        gnc_budget_view_save_account_filter (priv->budget_view);
+
         if (priv->delete_budget)
         {
             gnc_budget_view_delete_budget (priv->budget_view);
@@ -537,7 +511,7 @@ gnc_plugin_page_budget_save_page (GncPluginPage *plugin_page,
     guid_to_string_buff(gnc_budget_get_guid(priv->budget), guid_str);
     g_key_file_set_string(key_file, group_name, BUDGET_GUID, guid_str);
 
-    //FIXME
+    // Save the Budget page information to state file
     gnc_budget_view_save(priv->budget_view, key_file, group_name);
 
     LEAVE(" ");

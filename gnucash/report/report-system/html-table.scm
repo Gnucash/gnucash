@@ -364,8 +364,9 @@
 (define (gnc:html-table-prepend-row! table newrow)
   (let* ((dd (gnc:html-table-data table))
 	(current-num-rows (gnc:html-table-num-rows table))
-	(new-num-rows (+ current-num-rows 1)))
-    (set! dd (append dd (list newrow)))
+	(new-num-rows (+ current-num-rows 1))
+        (newrow-list (if (list? newrow) newrow (list newrow))))
+    (set! dd (append dd (list newrow-list)))
     (gnc:html-table-set-num-rows-internal!
      table
      new-num-rows)
@@ -495,7 +496,7 @@
           (new-suffix (list element)))
       (do 
 	  ((i current-width (+ i 1)))
-	  ((< i width) #f)
+          ((>= 1 (- width i)))
 	(set! new-suffix (cons #f new-suffix)))
       (append row new-suffix)))
 

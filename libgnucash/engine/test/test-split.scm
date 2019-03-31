@@ -11,6 +11,7 @@
   (test test-split-in-list?))
 
 (define (test-split-in-list?)
+  ;; this test suite tests deprecated functions.
   (let* ((env (create-test-env))
 	 (today (current-time))
 	 (account-alist (env-create-test-accounts env))

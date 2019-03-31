@@ -76,34 +76,34 @@ typedef struct GncCombottPrivate
 } GncCombottPrivate;
 
 /** Declarations *********************************************************/
-static void gctt_init (GncCombott *combott);
+static void gnc_combott_init (GncCombott *combott);
 
-static void gctt_class_init (GncCombottClass *klass);
+static void gnc_combott_class_init (GncCombottClass *klass);
 
-static void gctt_set_property (GObject *object,
+static void gnc_combott_set_property (GObject *object,
                                guint param_id,
                                const GValue *value,
                                GParamSpec *pspec);
 
-static void gctt_get_property (GObject *object,
+static void gnc_combott_get_property (GObject *object,
                                guint param_id,
                                GValue *value,
                                GParamSpec *pspec);
 
-static void gctt_finalize (GObject *object);
+static void gnc_combott_finalize (GObject *object);
 
 #if !GTK_CHECK_VERSION(3,22,0)
-static void gctt_combott_menu_position (GtkMenu *menu,
+static void gnc_combott_menu_position (GtkMenu *menu,
                                         gint *x,
                                         gint *y,
                                         gint *push_in,
                                         gpointer user_data);
 #endif
 
-static void gctt_changed (GncCombott *combott);
-static void gctt_set_model (GncCombott *combott, GtkTreeModel *model);
-static void gctt_refresh_menu (GncCombott *combott, GtkTreeModel *model);
-static void gctt_rebuild_menu (GncCombott *combott, GtkTreeModel *model);
+static void gnc_combott_changed (GncCombott *combott);
+static void gnc_combott_set_model (GncCombott *combott, GtkTreeModel *model);
+static void gnc_combott_refresh_menu (GncCombott *combott, GtkTreeModel *model);
+static void gnc_combott_rebuild_menu (GncCombott *combott, GtkTreeModel *model);
 
 static gboolean which_tooltip_cb (GtkWidget  *widget, gint x, gint y,
                                   gboolean keyboard_mode, GtkTooltip *tooltip, gpointer user_data);
@@ -118,47 +118,21 @@ static void menuitem_response_cb (GtkMenuItem *item, gpointer *user_data);
 /************************************************************/
 static GObjectClass *parent_class = NULL;
 
-GType
-gnc_combott_get_type (void)
-{
-    static GType combott_type = 0;
-
-    if (!combott_type)
-    {
-        static const GTypeInfo combott_info =
-        {
-            sizeof (GncCombottClass),
-            NULL,		/* base_init */
-            NULL,		/* base_finalize */
-            (GClassInitFunc) gctt_class_init,
-            NULL,		/* class_finalize */
-            NULL,		/* class_data */
-            sizeof (GncCombott),
-            0,              /* n_preallocs */
-            (GInstanceInitFunc) gctt_init,
-        };
-
-        combott_type = g_type_register_static (GTK_TYPE_BOX,
-                                               "GncCombott",
-                                               &combott_info, 0);
-    }
-    return combott_type;
-}
-
+G_DEFINE_TYPE_WITH_PRIVATE(GncCombott, gnc_combott, GTK_TYPE_BOX)
 
 static void
-gctt_class_init (GncCombottClass *klass)
+gnc_combott_class_init (GncCombottClass *klass)
 {
     GObjectClass            *gobject_class;
 
     parent_class = g_type_class_peek_parent (klass);
     gobject_class = G_OBJECT_CLASS (klass);
 
-    gobject_class->set_property = gctt_set_property;
-    gobject_class->get_property = gctt_get_property;
-    gobject_class->finalize = gctt_finalize;
+    gobject_class->set_property = gnc_combott_set_property;
+    gobject_class->get_property = gnc_combott_get_property;
+    gobject_class->finalize = gnc_combott_finalize;
 
-    klass->changed = gctt_changed;
+    klass->changed = gnc_combott_changed;
 
     combott_signals[CHANGED] =
         g_signal_new ("changed",
@@ -199,13 +173,11 @@ gctt_class_init (GncCombottClass *klass)
                           G_MAXINT,
                           1,
                           G_PARAM_READWRITE));
-
-    g_type_class_add_private(klass, sizeof(GncCombottPrivate));
 }
 
 
 static void
-gctt_init (GncCombott *combott)
+gnc_combott_init (GncCombott *combott)
 {
     GtkWidget *hbox;
     GtkWidget *label;
@@ -268,7 +240,7 @@ gctt_init (GncCombott *combott)
 
 
 static void
-gctt_set_property (GObject      *object,
+gnc_combott_set_property (GObject      *object,
                    guint         param_id,
                    const GValue *value,
                    GParamSpec   *pspec)
@@ -279,7 +251,7 @@ gctt_set_property (GObject      *object,
     switch (param_id)
     {
     case PROP_MODEL:
-        gctt_set_model (combott, g_value_get_object (value));
+        gnc_combott_set_model (combott, g_value_get_object (value));
         break;
 
     case PROP_ACTIVE:
@@ -292,7 +264,7 @@ gctt_set_property (GObject      *object,
 
     case PROP_TIP_COL:
         priv->tip_col = g_value_get_int (value);
-        gctt_refresh_menu(combott, priv->model);
+        gnc_combott_refresh_menu(combott, priv->model);
         break;
 
     default:
@@ -308,7 +280,7 @@ gctt_set_property (GObject      *object,
  * ref the object when used in get_property().
  */
 static void
-gctt_get_property (GObject    *object,
+gnc_combott_get_property (GObject    *object,
                    guint       param_id,
                    GValue     *value,
                    GParamSpec *pspec)
@@ -342,7 +314,7 @@ gctt_get_property (GObject    *object,
 
 
 static void
-gctt_finalize (GObject *object)
+gnc_combott_finalize (GObject *object)
 {
     GncCombott *combott;
     GncCombottPrivate *priv;
@@ -368,7 +340,7 @@ gctt_finalize (GObject *object)
 
 
 static void
-gctt_set_model (GncCombott *combott, GtkTreeModel *model)
+gnc_combott_set_model (GncCombott *combott, GtkTreeModel *model)
 {
     GncCombottPrivate *priv;
 
@@ -377,7 +349,7 @@ gctt_set_model (GncCombott *combott, GtkTreeModel *model)
 
     priv = GNC_COMBOTT_GET_PRIVATE (combott);
 
-    gctt_rebuild_menu(combott, model);
+    gnc_combott_rebuild_menu(combott, model);
 
     priv->model = model;
     g_object_ref (priv->model);
@@ -385,7 +357,7 @@ gctt_set_model (GncCombott *combott, GtkTreeModel *model)
 
 
 static void
-gctt_rebuild_menu (GncCombott *combott, GtkTreeModel *model)
+gnc_combott_rebuild_menu (GncCombott *combott, GtkTreeModel *model)
 {
     GncCombottPrivate *priv;
     GtkTreeIter iter;
@@ -454,17 +426,17 @@ gctt_rebuild_menu (GncCombott *combott, GtkTreeModel *model)
 
 
 static void
-gctt_refresh_menu (GncCombott *combott, GtkTreeModel *model)
+gnc_combott_refresh_menu (GncCombott *combott, GtkTreeModel *model)
 {
     g_return_if_fail (GNC_IS_COMBOTT (combott));
     g_return_if_fail (model == NULL || GTK_IS_TREE_MODEL (model));
 
-    gctt_rebuild_menu(combott, model);
+    gnc_combott_rebuild_menu(combott, model);
 }
 
 
 static void
-gctt_changed(GncCombott *combott)
+gnc_combott_changed(GncCombott *combott)
 {
     /*
     g_print("Changed Signal\n");
@@ -474,7 +446,7 @@ gctt_changed(GncCombott *combott)
 
 #if !GTK_CHECK_VERSION(3,22,0)
 static void
-gctt_combott_menu_position (GtkMenu  *menu,
+gnc_combott_menu_position (GtkMenu  *menu,
                             gint     *x,
                             gint     *y,
                             gint     *push_in,
@@ -599,7 +571,7 @@ button_press_cb (GtkWidget *widget, GdkEvent *event, gpointer *user_data )
 #else
             gtk_menu_popup (GTK_MENU (priv->menu),
                             NULL, NULL,
-                            gctt_combott_menu_position, combott,
+                            gnc_combott_menu_position, combott,
                             bevent->button, bevent->time);
 #endif
 

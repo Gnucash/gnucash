@@ -72,9 +72,9 @@ accounts, and the Currency Transfer options for entering the exchange \
 rate or the other currency's amount will be available.")
 
  N_( "You can set the Security Editor screen to display the Quote Source \
- of a security, which makes it easy to see which online sources your \
- securities use. Click the triangle at the far right of the column \
- headings to change the display.")
+of a security, which makes it easy to see which online sources your \
+securities use. Click the triangle at the far right of the column \
+headings to change the display.")
 
  N_( "You can pack multiple reports into a single window,  \
 providing all the financial information you want at a glance. \

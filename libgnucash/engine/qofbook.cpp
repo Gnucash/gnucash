@@ -107,7 +107,7 @@ qof_book_option_num_autoreadonly_changed_cb (GObject *gobject,
 #define PARAM_NAME_NUM_FIELD_SOURCE "split-action-num-field"
 #define PARAM_NAME_NUM_AUTOREAD_ONLY "autoreadonly-days"
 
-QOF_GOBJECT_GET_TYPE(QofBook, qof_book, QOF_TYPE_INSTANCE, {});
+G_DEFINE_TYPE(QofBook, qof_book, QOF_TYPE_INSTANCE);
 QOF_GOBJECT_DISPOSE(qof_book);
 QOF_GOBJECT_FINALIZE(qof_book);
 
@@ -1164,11 +1164,25 @@ qof_book_set_string_option(QofBook* book, const char* opt_name, const char* opt_
     auto frame = qof_instance_get_slots(QOF_INSTANCE(book));
     auto opt_path = opt_name_to_path(opt_name);
     if (opt_val && (*opt_val != '\0'))
-        delete frame->set(opt_path, new KvpValue(g_strdup(opt_val)));
+        delete frame->set_path(opt_path, new KvpValue(g_strdup(opt_val)));
     else
-        delete frame->set(opt_path, nullptr);
+        delete frame->set_path(opt_path, nullptr);
     qof_instance_set_dirty (QOF_INSTANCE (book));
     qof_book_commit_edit(book);
+}
+
+void
+qof_book_option_frame_delete (QofBook *book, const char* opt_name)
+{
+    if (opt_name && (*opt_name != '\0'))
+    {
+        qof_book_begin_edit(book);
+        auto frame = qof_instance_get_slots(QOF_INSTANCE(book));
+        auto opt_path = opt_name_to_path(opt_name);
+        delete frame->set_path(opt_path, nullptr);
+        qof_instance_set_dirty (QOF_INSTANCE (book));
+        qof_book_commit_edit(book);
+    }
 }
 
 void

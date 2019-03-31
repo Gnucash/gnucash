@@ -640,7 +640,7 @@ account_to_gui (TaxInfoDialog *ti_dialog, Account *account)
     selection = gtk_tree_view_get_selection(view);
     path =  gtk_tree_path_new_from_indices(index, -1);
     gtk_tree_selection_select_path(selection, path);
-    gtk_tree_view_scroll_to_cell(view, path, NULL, FALSE, 0, 0);
+    gtk_tree_view_scroll_to_cell(view, path, NULL, TRUE, 0.5, 0);
     gtk_tree_path_free(path);
 
     str = xaccAccountGetTaxUSPayerNameSource (account);
@@ -928,7 +928,8 @@ gnc_tax_info_account_changed_cb (GtkTreeSelection *selection,
 
     case 1:
         /* Get the account. This view is set for multiple selection, so we
-           can only get a list of accounts. */
+           can only get a list of accounts. 1-25-19: The dialog does not work
+           for multipe accounts so it was changed to single selection */
         view = GNC_TREE_VIEW_ACCOUNT(ti_dialog->account_treeview);
         accounts = gnc_tree_view_account_get_selected_accounts (view);
         if (accounts == NULL)
@@ -1056,6 +1057,7 @@ identity_edit_response_cb (GtkDialog *dialog, gint response, gpointer data)
     TaxInfoDialog *ti_dialog = data;
     const gchar *entry_name = NULL;
     const gchar *entry_type = NULL;
+    gboolean tax_name_changed = FALSE;
     gint active_item = 0;
     TaxTypeInfo *selected_type = NULL;
 
@@ -1073,48 +1075,66 @@ identity_edit_response_cb (GtkDialog *dialog, gint response, gpointer data)
                 entry_type = selected_type->type_code;
                 if (!(g_strcmp0 (ti_dialog->tax_type, entry_type) == 0))
                 {
-                    ti_dialog->tax_type_changed = TRUE;
-                    gnc_set_current_book_tax_type (entry_type);
-                    ti_dialog->tax_type = entry_type;
-                    if (entry_type != NULL)
-                    {
-                        gtk_label_set_text (GTK_LABEL (ti_dialog->entity_type_display),
+                    if (!((g_strcmp0 (ti_dialog->tax_type, "") == 0) &&
+                            (g_strcmp0 (entry_type, "Other") == 0)))
+                    { /* tax type changed */
+                        ti_dialog->tax_type_changed = TRUE;
+                        ti_dialog->tax_type = entry_type;
+                        if (entry_type != NULL)
+                        {
+                            gtk_label_set_text (GTK_LABEL (ti_dialog->entity_type_display),
                                             selected_type->combo_box_entry);
-                    }
-                    else
-                    {
-                        gtk_label_set_text (GTK_LABEL (ti_dialog->entity_type_display),
+                        }
+                        else
+                        {
+                            gtk_label_set_text (GTK_LABEL (ti_dialog->entity_type_display),
                                             ti_dialog->default_tax_type);
+                        }
+                        if (ti_dialog->income_txf_infos != NULL)
+                            destroy_txf_infos (ti_dialog->income_txf_infos);
+                        ti_dialog->income_txf_infos = load_txf_info (INCOME, ti_dialog);
+                        if (ti_dialog->expense_txf_infos != NULL)
+                            destroy_txf_infos (ti_dialog->expense_txf_infos);
+                        ti_dialog->expense_txf_infos = load_txf_info (EXPENSE, ti_dialog);
+                        if (ti_dialog->asset_txf_infos != NULL)
+                            destroy_txf_infos (ti_dialog->asset_txf_infos);
+                        ti_dialog->asset_txf_infos = load_txf_info (ASSET, ti_dialog);
+                        if (ti_dialog->liab_eq_txf_infos != NULL)
+                            destroy_txf_infos (ti_dialog->liab_eq_txf_infos);
+                        ti_dialog->liab_eq_txf_infos = load_txf_info (LIAB_EQ, ti_dialog);
+                        gtk_toggle_button_set_active
+                            (GTK_TOGGLE_BUTTON(ti_dialog->expense_radio), TRUE);
+                        tax_info_show_acct_type_accounts (ti_dialog);
+                        gnc_tree_view_account_refilter
+                            (GNC_TREE_VIEW_ACCOUNT (ti_dialog->account_treeview));
+                        gnc_tax_info_update_accounts (ti_dialog);
+                        clear_gui (ti_dialog);
                     }
-                    if (ti_dialog->income_txf_infos != NULL)
-                        destroy_txf_infos (ti_dialog->income_txf_infos);
-                    ti_dialog->income_txf_infos = load_txf_info (INCOME, ti_dialog);
-                    if (ti_dialog->expense_txf_infos != NULL)
-                        destroy_txf_infos (ti_dialog->expense_txf_infos);
-                    ti_dialog->expense_txf_infos = load_txf_info (EXPENSE, ti_dialog);
-                    if (ti_dialog->asset_txf_infos != NULL)
-                        destroy_txf_infos (ti_dialog->asset_txf_infos);
-                    ti_dialog->asset_txf_infos = load_txf_info (ASSET, ti_dialog);
-                    if (ti_dialog->liab_eq_txf_infos != NULL)
-                        destroy_txf_infos (ti_dialog->liab_eq_txf_infos);
-                    ti_dialog->liab_eq_txf_infos = load_txf_info (LIAB_EQ, ti_dialog);
-                    gtk_toggle_button_set_active
-                    (GTK_TOGGLE_BUTTON(ti_dialog->expense_radio), TRUE);
-                    tax_info_show_acct_type_accounts (ti_dialog);
-                    gnc_tree_view_account_refilter
-                    (GNC_TREE_VIEW_ACCOUNT (ti_dialog->account_treeview));
-                    gnc_tax_info_update_accounts (ti_dialog);
-                    clear_gui (ti_dialog);
+                    else /* tax type changed but from "" to "Other" - doesn't count as change */
+                        ti_dialog->tax_type_changed = FALSE;
                 }
+                else /* tax type not changed */
+                    ti_dialog->tax_type_changed = FALSE;
             }
         }
         if (!(g_strcmp0 (ti_dialog->tax_name, entry_name) == 0))
         {
-            gnc_set_current_book_tax_name (entry_name);
-            ti_dialog->tax_name = g_strdup (entry_name);
-            gtk_label_set_text (GTK_LABEL (ti_dialog->entity_name_display),
+            if (!(((ti_dialog->tax_name == NULL) &&
+                    (g_strcmp0 (entry_name, "") == 0))))
+            {
+                tax_name_changed = TRUE;
+                ti_dialog->tax_name = g_strdup (entry_name);
+                gtk_label_set_text (GTK_LABEL (ti_dialog->entity_name_display),
                                 entry_name);
+            }
+            else /* tax name changed but from NULL to "" - doesn't count as change */
+                tax_name_changed = FALSE;
         }
+        else /* tax name not changed */
+            tax_name_changed = FALSE;
+        if (tax_name_changed || ti_dialog->tax_type_changed)
+            gnc_set_current_book_tax_name_type (tax_name_changed, entry_name,
+                                    ti_dialog->tax_type_changed, entry_type);
         set_focus_sensitivity (ti_dialog);
         ti_dialog->tax_type_changed = FALSE;
     }
@@ -1400,7 +1420,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
         ti_dialog->account_treeview = GTK_WIDGET(tree_view);
 
         selection = gtk_tree_view_get_selection (tree_view);
-        gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+        gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
         g_signal_connect (G_OBJECT (selection), "changed",
                           G_CALLBACK (gnc_tax_info_account_changed_cb),
                           ti_dialog);

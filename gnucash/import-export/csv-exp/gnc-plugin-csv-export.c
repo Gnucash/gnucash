@@ -61,7 +61,8 @@ static GtkActionEntry gnc_plugin_actions [] =
         G_CALLBACK (gnc_plugin_csv_export_trans_cmd)
     },
     {
-        "CsvExportRegisterAction", "go-next", N_("Export _Active Register to CSV..."), NULL,
+        "CsvExportRegisterAction", "go-next", N_("Export A_ctive Register to CSV...")
+	/* _A is already used by Export Accounts */, NULL,
         N_("Export the Active Register to a CSV file"),
         G_CALLBACK (gnc_plugin_csv_export_register_cmd)
     },
@@ -73,38 +74,12 @@ typedef struct GncPluginCsvExportPrivate
     gpointer dummy;
 } GncPluginCsvExportPrivate;
 
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginCsvExport, gnc_plugin_csv_export, GNC_TYPE_PLUGIN)
+
 #define GNC_PLUGIN_CSV_EXPORT_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_CSV_EXPORT, GncPluginCsvExportPrivate))
 
 static GObjectClass *parent_class = NULL;
-
-GType
-gnc_plugin_csv_export_get_type (void)
-{
-    static GType gnc_plugin_csv_export_type = 0;
-
-    if (gnc_plugin_csv_export_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncPluginCsvExportClass),
-            NULL,		/* base_init */
-            NULL,		/* base_finalize */
-            (GClassInitFunc) gnc_plugin_csv_export_class_init,
-            NULL,		/* class_finalize */
-            NULL,		/* class_data */
-            sizeof (GncPluginCsvExport),
-            0,		/* n_preallocs */
-            (GInstanceInitFunc) gnc_plugin_csv_export_init,
-        };
-
-        gnc_plugin_csv_export_type = g_type_register_static (GNC_TYPE_PLUGIN,
-                                     "GncPluginCsvExport",
-                                     &our_info, 0);
-    }
-
-    return gnc_plugin_csv_export_type;
-}
 
 GncPlugin *
 gnc_plugin_csv_export_new (void)
@@ -130,8 +105,6 @@ gnc_plugin_csv_export_class_init (GncPluginCsvExportClass *klass)
     plugin_class->actions      = gnc_plugin_actions;
     plugin_class->n_actions    = gnc_plugin_n_actions;
     plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
-
-    g_type_class_add_private(klass, sizeof(GncPluginCsvExportPrivate));
 }
 
 static void

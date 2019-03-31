@@ -124,7 +124,6 @@ libgnucash/backend/xml/test/test-xml-pricedb
 libgnucash/backend/xml/test/test-xml-transaction
 libgnucash/backend/xml/test/test-xml2-is-file
 libgnucash/core-utils/gnc-vcs-info.h
-libgnucash/core-utils/gnc-version.h
 libgnucash/core-utils/gncla-dir.h
 libgnucash/core-utils/gnucash
 libgnucash/core-utils/sw_core_utils.py

@@ -215,32 +215,90 @@
 (define (gnc:time64-ge-date t1 t2)
   (gnc:time64-le-date t2 t1))
 
-;; Build a list of time intervals. 
+;; returns #t if adding 1 to mday causes a month change.
+(define (end-month? date)
+  (let ((nextdate (gnc-localtime date)))
+    (set-tm:mday nextdate (1+ (tm:mday nextdate)))
+    (not (= (tm:mon (gnc-localtime (gnc-mktime nextdate)))
+            (tm:mon (gnc-localtime date))))))
+
+(define (incdate-months date nmonths)
+  (let* ((new-date (gnc-localtime date))
+         (newmonth (+ (tm:mon new-date) nmonths))
+         (new-month-proper (floor-remainder newmonth 12))
+         (new-year-proper (+ (tm:year new-date) (floor-quotient newmonth 12))))
+    (set-tm:year new-date new-year-proper)
+    (set-tm:mon new-date new-month-proper)
+    (let loop ((new-mday (tm:mday new-date)))
+      (set-tm:mday new-date new-mday)
+      (let ((res (gnc-mktime new-date)))
+        (cond
+         ;; next date causes a date slip. reduce mday.
+         ((not (= new-month-proper (tm:mon (gnc-localtime res))))
+          (loop (1- new-mday)))
+         ;; orig date is month-end. ensure all dates are month-ends.
+         ((and (end-month? date) (not (end-month? res)))
+          (loop (1+ new-mday)))
+         (else res))))))
+
+;; Build a list of time intervals.
 ;;
 ;; Note that the last interval will be shorter than <incr> if
 ;; (<curd>-<endd>) is not an integer multiple of <incr>. If you don't
 ;; want that you'll have to write another function.
-(define (gnc:make-date-interval-list current-date end-date increment)
-  (if (< current-date end-date)
-      (let ((next-date (incdate current-date increment)))
-        (if (< next-date end-date)
-            (cons (list current-date (decdate next-date SecDelta) '())
-                  (gnc:make-date-interval-list next-date end-date increment))
-            (cons (list current-date end-date '())
-                  '())))
-      '()))
-  
+(define (gnc:make-date-interval-list startdate enddate incr)
+  (define month-delta
+    (assv-ref MonthDeltas incr))
+  (let loop ((result '())
+             (date startdate)
+             (idx 0))
+    (cond
+     ((>= date enddate)
+      (reverse result))
+     (month-delta
+      (let* ((curr (incdate-months startdate (* month-delta idx)))
+             (next (incdate-months startdate (* month-delta (1+ idx)))))
+        (loop (cons (list curr
+                          (if (< next enddate)
+                              (decdate next SecDelta)
+                              enddate))
+                    result)
+              next
+              (1+ idx))))
+     (else
+      (let ((next (incdate date incr)))
+        (loop (cons (list date
+                          (if (< next enddate)
+                              (decdate next SecDelta)
+                              enddate))
+                    result)
+              next
+              (1+ idx)))))))
+
 ;; Build a list of times.  The dates are evenly spaced with the
 ;; stepsize 'incr'. If the difference of 'startdate' and 'enddate' is
 ;; not an integer multiple of 'incr', 'enddate' will be added as the
 ;; last element of the list, thus making the last interval smaller
 ;; than 'incr'.
 (define (gnc:make-date-list startdate enddate incr)
-  (if (< startdate enddate)
-      (cons startdate
-            (gnc:make-date-list (incdate startdate incr)
-                                enddate incr))
-      (list enddate)))
+  (define month-delta
+    (assv-ref MonthDeltas incr))
+  (let loop ((result '())
+             (date startdate)
+             (idx 0))
+    (cond
+     ((>= date enddate)
+      (reverse (cons enddate result)))
+     (month-delta
+      (let* ((curr (incdate-months startdate (* month-delta idx)))
+             (next (incdate-months startdate (* month-delta (1+ idx)))))
+        (loop (cons curr result)
+              next
+              (1+ idx))))
+     (else
+      (loop (cons date result)
+            (incdate date incr)
+            (1+ idx))))))
 
 ; A reference zero date - the Beginning Of The Epoch
 ; Note: use of eval is evil... by making this a generator function, 
@@ -310,6 +368,13 @@
     (set-tm:mday ddt 90)
     ddt))
 
+(define MonthDeltas
+  (list
+   (cons MonthDelta 1)
+   (cons QuarterDelta 3)
+   (cons HalfYearDelta 6)
+   (cons YearDelta 12)))
+
 ;; if you add any more FooDeltas, add to this list!!!
 
 (define deltalist
@@ -377,8 +442,14 @@
 (define (gnc:get-absolute-from-relative-date date-symbol)
   (let ((rel-date-data (hash-ref gnc:relative-date-hash date-symbol)))
     (if rel-date-data
-       ((gnc:reldate-get-fn rel-date-data))
-       (gnc:error "Tried to look up an undefined date symbol"))))
+        ((gnc:reldate-get-fn rel-date-data))
+        (let* ((msg (_ "Tried to look up an undefined date symbol \
+'~a'. This report was probably saved by a later version of GnuCash. \
+Defaulting to today."))
+               (conmsg (format #f msg date-symbol))
+               (uimsg (format #f (_ msg) date-symbol)))
+          (gnc:gui-warn conmsg uimsg)
+          (current-time)))))
 
 (define (gnc:get-relative-date-strings date-symbol)
   (let ((rel-date-info (hash-ref gnc:relative-date-hash date-symbol)))

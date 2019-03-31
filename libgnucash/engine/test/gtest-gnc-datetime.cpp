@@ -360,7 +360,11 @@ TEST(gnc_datetime_constructors, test_gncdate_BST_transition)
 {
     const ymd begins = {2018, 03, 25};
     const ymd ends = {2018, 10, 28};
+#ifdef __MINGW32__
+    TimeZoneProvider tzp{"GMT Standard Time"};
+#else
     TimeZoneProvider tzp("Europe/London");
+#endif
     _set_tzp(tzp);
     GncDateTime btime(GncDate(begins.year, begins.month, begins.day), DayPart::start);
     GncDateTime etime(GncDate(ends.year, ends.month, ends.day), DayPart::start);
@@ -392,7 +396,7 @@ TEST(gnc_datetime_constructors, test_gncdate_neutral_constructor)
     if (gncdt.offset() >= max_western_offset &&
         gncdt.offset() <= max_eastern_offset)
     {
-        EXPECT_EQ(atime.format("%d-%m-%Y %H:%M:%S %z"), "20-04-2017 10:59:00 UTC");
+        EXPECT_EQ(atime.format("%d-%m-%Y %H:%M:%S %Z"), "20-04-2017 10:59:00 UTC");
     }
 }
 

@@ -7,8 +7,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 2.7.3\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: GnuCash 2.7.3\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2017-12-30 15:52-0800\n"
 "PO-Revision-Date: 2018-01-25 22:58+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
@@ -10750,8 +10751,10 @@ msgstr "- GnuCash kişisel ve küçük işletme finansmanı yönetimi"
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
 #: ../gnucash/gnome-utils/gnc-main-window.c:4521
-msgid "translator_credits"
+msgid "translator-credits"
 msgstr ""
+"Emin Tufan Çetin, 2018\n"
+"Mesutcan Kurt, 2017"
 
 #: ../gnucash/gnome-utils/gnc-main-window.c:4524
 msgid "Visit the GnuCash website."
@@ -15452,8 +15455,8 @@ msgid "tax"
 msgstr "vergi"
 
 #: ../gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "place_holder"
-msgstr "yer_tutucu"
+msgid "placeholder"
+msgstr "yer tutucu"
 
 #: ../gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54
 msgid "Export Account T_ree to CSV..."

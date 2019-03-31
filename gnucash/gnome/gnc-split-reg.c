@@ -50,6 +50,8 @@
 #include "gnc-pricedb.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
+#include "gnc-uri-utils.h"
+#include "gnc-filepath-utils.h"
 #include "gnc-warnings.h"
 #include "gnucash-sheet.h"
 #include "gnucash-register.h"
@@ -1040,7 +1042,7 @@ gsr_default_associate_handler_file (GNCSplitReg *gsr, Transaction *trans, gboole
 {
     GtkWidget *dialog;
     gint       response;
-    gboolean   valid_path_head = FALSE;
+    gboolean   path_head_set = FALSE;
     gchar     *path_head = gnc_prefs_get_string (GNC_PREFS_GROUP_GENERAL, "assoc-head");
 
     dialog = gtk_file_chooser_dialog_new (_("Associate File with Transaction"),
@@ -1053,33 +1055,49 @@ gsr_default_associate_handler_file (GNCSplitReg *gsr, Transaction *trans, gboole
 
     gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER(dialog), FALSE);
 
-    if ((path_head != NULL) && (g_strcmp0 (path_head, "") != 0)) // not default entry
-        valid_path_head = TRUE;
+    path_head_set = (path_head && *path_head != '\0'); // not default entry
 
     if (have_uri)
     {
-        gchar *new_uri;
-        gchar *uri_label;
-        gchar *filename;
-
+        gchar *file_uri = NULL;
         const gchar *uri = xaccTransGetAssociation (trans);
+        gchar *scheme = gnc_uri_get_scheme (uri);
 
-        if (valid_path_head && g_str_has_prefix (uri,"file:/") && !g_str_has_prefix (uri,"file://"))
+        if (!scheme) // relative path
         {
-            const gchar *part = uri + strlen ("file:");
-            new_uri = g_strconcat (path_head, part, NULL);
+            gchar *file_path = NULL;
+            if (path_head_set) // not default entry
+                file_path = gnc_file_path_absolute (gnc_uri_get_path (path_head), uri);
+            else
+                file_path = gnc_file_path_absolute (NULL, uri);
+
+            file_uri = gnc_uri_create_uri ("file", NULL, 0, NULL, NULL, file_path);
+            g_free (file_path);
         }
-        else
-            new_uri = g_strdup (uri);
 
-        filename = g_uri_unescape_string (new_uri, NULL);
-        uri_label = g_strconcat (_("Existing Association is "), filename, NULL);
-        gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER(dialog), gtk_label_new (uri_label));
-        gtk_file_chooser_set_uri (GTK_FILE_CHOOSER(dialog), new_uri);
+        if (g_strcmp0 (scheme, "file") == 0) // absolute path
+            file_uri = g_strdup (uri);
 
-        g_free (uri_label);
-        g_free (new_uri);
-        g_free (filename);
+        if (file_uri)
+        {
+            GtkWidget *label;
+            gchar *file_uri_u = g_uri_unescape_string (file_uri, NULL);
+            gchar *filename = gnc_uri_get_path (file_uri_u);
+            gchar *uri_label = g_strconcat (_("Existing Association is '"), filename, "'", NULL);
+            PINFO("Path head: '%s', URI: '%s', Filename: '%s'", path_head, uri, filename);
+            label = gtk_label_new (uri_label);
+            gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER(dialog), label);
+            gtk_label_set_ellipsize (GTK_LABEL(label), PANGO_ELLIPSIZE_START);
+
+            // Set the style context for this label so it can be easily manipulated with css
+            gnc_widget_set_style_context (GTK_WIDGET(label), "gnc-class-highlight");
+            gtk_file_chooser_set_uri (GTK_FILE_CHOOSER(dialog), file_uri);
+
+            g_free (uri_label);
+            g_free (filename);
+            g_free (file_uri_u);
+            g_free (file_uri);
+        }
     }
     response = gtk_dialog_run (GTK_DIALOG (dialog));
 
@@ -1090,28 +1108,63 @@ gsr_default_associate_handler_file (GNCSplitReg *gsr, Transaction *trans, gboole
     {
         gchar *dialog_uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
 
-        PINFO("Dialog File URI: %s\n", dialog_uri);
-
-        if (valid_path_head && g_str_has_prefix (dialog_uri, path_head))
+        // prior to 3.5, assoc-head could be with or without a trailing '/'
+        if (path_head_set && !g_str_has_suffix (path_head, "/"))
         {
-            gchar *part = dialog_uri + strlen (path_head);
-            gchar *new_uri = g_strconcat ("file:", part, NULL);
-            xaccTransSetAssociation (trans, new_uri);
-            g_free (new_uri);
+            gchar *folder_with_slash = g_strconcat (path_head, "/", NULL);
+            g_free (path_head);
+            path_head = g_strdup (folder_with_slash);
+            g_free (folder_with_slash);
+
+            if (!gnc_prefs_set_string (GNC_PREFS_GROUP_GENERAL, "assoc-head", path_head))
+                PINFO("Failed to save preference at %s, %s with %s",
+                       GNC_PREFS_GROUP_GENERAL, "assoc-head", path_head);
+        }
+
+        PINFO("Dialog File URI: '%s', Path head: '%s'", dialog_uri, path_head);
+
+        // relative paths do not start with a '/'
+        if (path_head_set && g_str_has_prefix (dialog_uri, path_head))
+        {
+            const gchar *part = dialog_uri + strlen (path_head);
+
+            PINFO("Dialog URI: '%s', Part: '%s'", dialog_uri, part);
+            xaccTransSetAssociation (trans, part);
         }
         else
+        {
+            PINFO("Dialog URI: '%s'", dialog_uri);
             xaccTransSetAssociation (trans, dialog_uri);
-
+        }
         g_free (dialog_uri);
     }
-    g_free (path_head);
+
     gtk_widget_destroy (dialog);
+}
+
+static void
+gsr_default_associate_handler_location_ok_cb (GtkEditable *editable, gpointer user_data)
+{
+    GtkWidget *ok_button = user_data;
+    gboolean have_scheme = FALSE;
+    gchar *text = gtk_editable_get_chars (editable, 0, -1);
+    gchar *scheme;
+
+    if (text && *text != '\0')
+    {
+        scheme = gnc_uri_get_scheme (text);
+        if (scheme)
+            have_scheme = TRUE;
+        g_free (scheme);
+    }
+    gtk_widget_set_sensitive (ok_button, have_scheme);
+    g_free (text);
 }
 
 static void
 gsr_default_associate_handler_location (GNCSplitReg *gsr, Transaction *trans, gboolean have_uri)
 {
-    GtkWidget *dialog, *entry, *label, *content_area;
+    GtkWidget *dialog, *entry, *label, *content_area, *ok_button;
     gint response;
 
     dialog = gtk_dialog_new_with_buttons (_("Associate Location with Transaction"),
@@ -1119,8 +1172,11 @@ gsr_default_associate_handler_location (GNCSplitReg *gsr, Transaction *trans, gb
                                      GTK_DIALOG_MODAL,
                                      _("_Remove"), GTK_RESPONSE_REJECT,
                                      _("_Cancel"), GTK_RESPONSE_CANCEL,
-                                     _("_OK"), GTK_RESPONSE_ACCEPT,
+                                     // OK Button added below
                                      NULL);
+
+    ok_button = gtk_dialog_add_button (GTK_DIALOG(dialog), _("_OK"), GTK_RESPONSE_ACCEPT);
+    gtk_widget_set_sensitive (ok_button, FALSE);
 
     content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
@@ -1129,6 +1185,9 @@ gsr_default_associate_handler_location (GNCSplitReg *gsr, Transaction *trans, gb
     gtk_entry_set_width_chars (GTK_ENTRY (entry), 80);
     gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
 
+    g_signal_connect (entry, "changed",
+        G_CALLBACK(gsr_default_associate_handler_location_ok_cb), ok_button);
+
     // add a label and set entry text if required
     if (have_uri)
     {
@@ -1136,7 +1195,7 @@ gsr_default_associate_handler_location (GNCSplitReg *gsr, Transaction *trans, gb
         gtk_entry_set_text (GTK_ENTRY (entry), xaccTransGetAssociation (trans));
     }
     else
-        label = gtk_label_new (_("Enter URL:"));
+        label = gtk_label_new (_("Enter URL like http://www.gnucash.org:"));
 
     // pack label and entry to content area
     gnc_label_set_alignment (label, 0.0, 0.5);
@@ -1160,10 +1219,38 @@ gsr_default_associate_handler_location (GNCSplitReg *gsr, Transaction *trans, gb
     if (response == GTK_RESPONSE_ACCEPT)
     {
         const gchar *dialog_uri = gtk_entry_get_text (GTK_ENTRY (entry));
+
         DEBUG("Location URI: %s\n", dialog_uri);
         xaccTransSetAssociation (trans, dialog_uri);
     }
     gtk_widget_destroy (dialog);
+}
+
+static gchar*
+gsr_convert_associate_uri (Transaction *trans)
+{
+    const gchar *uri = xaccTransGetAssociation (trans); // get the existing uri
+    const gchar *part = NULL;
+
+    if (!uri)
+        return NULL;
+
+    if (g_str_has_prefix (uri, "file:") && !g_str_has_prefix (uri,"file://"))
+    {
+        // fix an error when storing relative paths in version earlier than 3.5
+        // relative paths are stored without a leading "/" and in native form
+        if (g_str_has_prefix (uri,"file:/") && !g_str_has_prefix (uri,"file://"))
+            part = uri + strlen ("file:/");
+        else if (g_str_has_prefix (uri,"file:") && !g_str_has_prefix (uri,"file://"))
+            part = uri + strlen ("file:");
+
+        if (part)
+        {
+            xaccTransSetAssociation (trans, part);
+            return g_strdup (part);
+        }
+    }
+    return g_strdup (uri);
 }
 
 /**
@@ -1180,7 +1267,7 @@ gsr_default_associate_handler (GNCSplitReg *gsr, gboolean uri_is_file)
     gboolean have_uri = FALSE;
 
     /* get the current split based on cursor position */
-    if (split == NULL)
+    if (!split)
     {
         gnc_split_register_cancel_cursor_split_changes (reg);
         return;
@@ -1192,21 +1279,24 @@ gsr_default_associate_handler (GNCSplitReg *gsr, gboolean uri_is_file)
     if (cursor_class == CURSOR_CLASS_NONE)
         return;
 
+    // fix an earlier error when storing relative paths in version 3.3
+    uri = gsr_convert_associate_uri (trans);
+
     if (is_trans_readonly_and_warn (GTK_WINDOW(gsr->window), trans))
         return;
 
-    // get the existing uri
-    uri = xaccTransGetAssociation (trans);
-
     // Check for uri is empty or NULL
-    if (g_strcmp0 (uri, "") != 0 && g_strcmp0 (uri, NULL) != 0)
+    if (uri && *uri != '\0')
     {
+        gchar *scheme = gnc_uri_get_scheme (uri);
         have_uri = TRUE;
 
-        if (g_str_has_prefix (uri, "file:")) // use the correct dialog
+        if (!scheme || g_strcmp0 (scheme, "file") == 0) // use the correct dialog
             uri_is_file = TRUE;
         else
             uri_is_file = FALSE;
+
+        g_free (scheme);
     }
 
     if (uri_is_file == TRUE)
@@ -1226,11 +1316,11 @@ gsr_default_execassociated_handler (GNCSplitReg *gsr, gpointer data)
     Transaction *trans;
     Split *split = gnc_split_register_get_current_split (reg);
     const char *uri;
-    const char *run_uri;
+    const char *run_uri = NULL;
     gchar *uri_scheme;
 
     /* get the current split based on cursor position */
-    if (split == NULL)
+    if (!split)
     {
         gnc_split_register_cancel_cursor_split_changes (reg);
         return;
@@ -1247,30 +1337,36 @@ gsr_default_execassociated_handler (GNCSplitReg *gsr, gpointer data)
         xaccTransDump (trans, "ExecAssociated");
 #endif
 
-    uri = xaccTransGetAssociation (trans);
+    // fix an earlier error when storing relative paths in version 3.3
+    uri = gsr_convert_associate_uri (trans);
 
-    if (g_strcmp0 (uri, "") == 0 && g_strcmp0 (uri, NULL) == 0)
+    if (!uri && g_strcmp0 (uri, "") == 0)
         gnc_error_dialog (GTK_WINDOW (gsr->window), "%s", _("This transaction is not associated with a URI."));
     else
     {
-        if (g_str_has_prefix (uri,"file:/") && !g_str_has_prefix (uri,"file://")) // Check for relative path
+        gchar *scheme = gnc_uri_get_scheme (uri);
+
+        if (!scheme) // relative path
         {
             gchar *path_head = gnc_prefs_get_string (GNC_PREFS_GROUP_GENERAL, "assoc-head");
+            gchar *file_path;
 
-            if ((path_head != NULL) && (g_strcmp0 (path_head, "") != 0)) // not default entry
-            {
-                const gchar *part = uri + strlen ("file:");
-                run_uri = g_strconcat (path_head, part, NULL);
-            }
+            if (path_head && g_strcmp0 (path_head, "") != 0) // not default entry
+                file_path = gnc_file_path_absolute (gnc_uri_get_path (path_head), uri);
             else
-                run_uri = g_strdup (uri);
+                file_path = gnc_file_path_absolute (NULL, uri);
+
+            run_uri = gnc_uri_create_uri ("file", NULL, 0, NULL, NULL, file_path);
+            g_free (path_head);
+            g_free (file_path);
         }
-        else
+
+        if (!run_uri)
             run_uri = g_strdup (uri);
 
-        uri_scheme = g_uri_parse_scheme (run_uri);
+        uri_scheme = gnc_uri_get_scheme (run_uri);
 
-        if (uri_scheme != NULL) // make sure we have a scheme entry
+        if (uri_scheme) // make sure we have a scheme entry
         {
             gnc_launch_assoc (run_uri);
             g_free (uri_scheme);

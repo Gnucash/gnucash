@@ -19,7 +19,10 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
-
+extern "C"
+{
+#include <glib.h>
+}
 #include <clocale>
 #include <boost/locale.hpp>
 #include "gnc-locale-utils.hpp"
@@ -50,29 +53,25 @@ gnc_get_locale()
     tried_already = true;
       try
       {
-	  cached = gen("");
+	cached = std::locale("");
       }
       catch (const std::runtime_error& err)
       {
-	  std::string c_locale(setlocale(LC_ALL, nullptr));
-	  std::cerr << "[gnc_get_locale] Failed to create app-default locale from " << c_locale << " because " << err.what() << "\n";
-	  auto dot = c_locale.find(".");
-	  if (dot != std::string::npos)
-	  {
-	      try
-	      {
-		  cached = gen(c_locale.substr(0, dot));
-	      }
-	      catch (std::runtime_error& err2)
-	      {
-		std::cerr << "[gnc_get_locale] Failed to create app-default locale from " << c_locale << " because " << err.what() << " so using the 'C' locale for C++.\n";
-	      }
-	  }
-	  else
-	  {
-	      std::cerr << "[gnc_get_locale] Using the 'C' locale for C++\n";
-	  }
+#ifdef __MINGW32__
+	  char* locale = g_win32_getlocale();
+#else
+	  char* locale = g_strdup(setlocale(LC_ALL, ""));
+#endif
+
+	  g_log(G_LOG_DOMAIN, G_LOG_LEVEL_WARNING,
+		"Failed to create C++ default locale from"
+		"%s because %s. Using the 'C' locale for C++.",
+		locale, err.what());
+	  g_free(locale);
+	  cached = std::locale::classic();
       }
   }
   return cached;
 }
+
+

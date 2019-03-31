@@ -55,38 +55,14 @@ struct _GNCSearchCoreTypePrivate
     gpointer dummy;
 };
 
+G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchCoreType, gnc_search_core_type, G_TYPE_OBJECT)
+
 #define _PRIVATE(o) \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_SEARCH_CORE_TYPE, GNCSearchCoreTypePrivate))
 
 static GObjectClass *parent_class;
 
 static GHashTable *typeTable = NULL;
-
-GType
-gnc_search_core_type_get_type (void)
-{
-    static GType type = 0;
-
-    if (type == 0)
-    {
-        GTypeInfo type_info =
-        {
-            sizeof (GNCSearchCoreTypeClass),
-            NULL,
-            NULL,
-            (GClassInitFunc)gnc_search_core_type_class_init,
-            NULL,
-            NULL,
-            sizeof (GNCSearchCoreType),
-            0,
-            (GInstanceInitFunc)gnc_search_core_type_init
-        };
-
-        type = g_type_register_static (G_TYPE_OBJECT, "GNCSearchCoreType", &type_info, 0);
-    }
-
-    return type;
-}
 
 static void
 gnc_search_core_type_class_init (GNCSearchCoreTypeClass *klass)
@@ -102,8 +78,6 @@ gnc_search_core_type_class_init (GNCSearchCoreTypeClass *klass)
     klass->validate = validate;
     klass->grab_focus = grab_focus;
     klass->editable_enters = editable_enters;
-
-    g_type_class_add_private(klass, sizeof(GNCSearchCoreTypePrivate));
 }
 
 static void

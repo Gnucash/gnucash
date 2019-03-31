@@ -1,4 +1,4 @@
-# traditional Chinese translation for gnucash.
+# traditional Chinese translation for GnuCash.
 # Copyright (C) 2003 Free Software Foundation, Inc.
 # Chao-Hsiung Liao <pesder.liao@msa.hinet.net>, 2003.
 # Kuang-che Wu <kcwu@csie.org>, 2007, 2011-2013.
@@ -6,8 +6,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash-2.4.3\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: GnuCash-2.4.3\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2018-01-13 20:39+0100\n"
 "PO-Revision-Date: 2012-05-13 16:21+0800\n"
 "Last-Translator: Kuang-che Wu <kcwu@csie.org>\n"
@@ -11577,7 +11578,7 @@ msgstr ""
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
 #: ../gnucash/gnome-utils/gnc-main-window.c:4521
-msgid "translator_credits"
+msgid "translator-credits"
 msgstr ""
 "Chao-Hsiung Liao <pesder.liao@msa.hinet.net>, 2003.\n"
 "Kuang-che Wu <kcwu@csie.org>, 2007, 2011-2013.\n"
@@ -16679,7 +16680,7 @@ msgstr "稅"
 
 #: ../gnucash/import-export/csv-exp/csv-tree-export.c:158
 #, fuzzy
-msgid "place_holder"
+msgid "placeholder"
 msgstr "Placeholder"
 
 #: ../gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54

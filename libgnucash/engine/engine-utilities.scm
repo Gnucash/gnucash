@@ -38,11 +38,13 @@
 ;; account related functions
 ;; is account in list of accounts?
 (define (account-same? a1 a2)
+  (issue-deprecation-warning "account-same? is deprecated. use equal? instead.")
   (or (eq? a1 a2)
       (string=? (gncAccountGetGUID a1) (gncAccountGetGUID a2))))
 
 (define account-in-list?
   (lambda (account accounts)
+    (issue-deprecation-warning "account-in-list? is deprecated. use member instead.")
     (cond
      ((null? accounts) #f)
      ((account-same? (car accounts) account) #t)
@@ -55,6 +57,7 @@
     (find (lambda (pair) (account-same? str (car pair))) alist))
   (define (my-hash acc size)
     (remainder (string-hash (gncAccountGetGUID acc)) size))
+  (issue-deprecation-warning "account-in-list-pred is deprecated.")
   (let ((hash-table (make-hash-table)))
     (for-each (lambda (acc) (hashx-set! my-hash my-assoc hash-table acc #t))
 	      accounts)
@@ -63,6 +66,7 @@
 
 (define account-in-alist
   (lambda (account alist)
+    (issue-deprecation-warning "account-in-alist is deprecated. use assoc instead.")
     (cond
      ((null? alist) #f)
      ((account-same? (caar alist) account) (car alist))
@@ -81,45 +85,52 @@
 	      accounts)))
 
 (define (account-assoc acc alist)
+  (issue-deprecation-warning "account-assoc is deprecated. use assoc instead.")
   (find (lambda (pair) (account-same? acc (car pair))) alist))
 
 (define (account-hash acc size)
+  (issue-deprecation-warning "account-hash is deprecated. internal function.")
   (remainder (string-hash (gncAccountGetGUID acc)) size))
 
 (define (account-hashtable-ref table account)
+  (issue-deprecation-warning "account-hashtable-ref is deprecated. \
+use assoc-ref instead..")
   (hashx-ref account-hash account-assoc table account))
 
 (define (account-hashtable-set! table account value)
+  (issue-deprecation-warning "account-hashtable-set! is deprecated. \
+use assoc-set! instead.")
   (hashx-set! account-hash account-assoc table account value))
 
 ;; Splits
-(export split-same?)
-(export split-in-list?)
-
+(export split-same?)                    ;deprecated
+(export split-in-list?)                 ;deprecated
 (define (split-same? s1 s2)
+  (issue-deprecation-warning "split-same? is deprecated. use equal? instead.")
   (or (eq? s1 s2)
       (string=? (gncSplitGetGUID s1) (gncSplitGetGUID s2))))
-
 (define split-in-list? 
   (lambda (split splits)
+    (issue-deprecation-warning "split-in-list? is deprecated. use member instead.")
     (cond 
      ((null? splits) #f)
      ((split-same? (car splits) split) #t)
      (else (split-in-list? split (cdr splits))))))
-
-;; Split hashtable. Because we do gncSplitGetGUID so often, it
-;; turns out to be a bit quicker to store a (hash, split) pair
-;; instead of just the split.
 (define (split-assoc split alist)
+  (issue-deprecation-warning "split-assoc is deprecated. use assoc instead")
   (find (lambda (pair) (split-same? (cdr split) (cdr (car pair)))) alist))
 (define (split-hash split size)
+  (issue-deprecation-warning "split-hash is deprecated. \
+internal function -- no srfi-1 equivalent")
   (remainder (car split) size))
-
 (define (split-hashtable-ref table split)
+  (issue-deprecation-warning "split-hashtable-ref is deprecated. \
+use assoc-ref instead.")
   (hashx-ref split-hash split-assoc table
 	     (cons (string-hash (gncSplitGetGUID split)) split)))
-
 (define (split-hashtable-set! table split value)
+  (issue-deprecation-warning "split-hashtable-set! is deprecated. \
+use assoc-set! instead")
   (hashx-set! split-hash split-assoc table
 	      (cons (string-hash (gncSplitGetGUID split)) split) value))
 

@@ -4,8 +4,7 @@
 ;; Copyright (C) 2003, Andy Wingo <wingo at pobox dot com>
 ;;
 ;; based on account-piecharts.scm by Robert Merkel (rgmerk@mira.net)
-;; and Christian Stimming <stimming@tu-harburg.de> with
-;; analyze-splits from average-balance.scm
+;; and Christian Stimming <stimming@tu-harburg.de>
 ;;
 ;; This program is free software; you can redistribute it and/or    
 ;; modify it under the terms of the GNU General Public License as   
@@ -126,138 +125,6 @@
     options))
 
 
-; from average-balance.scm
-
-;; analyze-splits crunches a split list into a set of period
-;; summaries.  Each summary is a list of (start-date end-date
-;; avg-bal max-bal min-bal total-in total-out net) if multiple
-;; accounts are selected the balance is the sum for all.  Each
-;; balance in a foreign currency will be converted to a double in
-;; the report-currency by means of the monetary->double
-;; function. 
-(define (analyze-splits splits start-bal-double 
-                        start-date end-date interval monetary->double)
-  (let ((interval-list 
-         (gnc:make-date-interval-list start-date end-date interval))
-        (data-rows '()))
-    
-    (define (output-row interval-start 
-                        interval-end 
-                        stats-accum 
-                        minmax-accum
-                        gain-loss-accum)
-      (set! data-rows
-            (cons 
-             (list interval-start
-                   interval-end
-                   (/ (stats-accum 'total #f)
-                      (- interval-end 
-                         interval-start))
-                   (minmax-accum 'getmax #f)
-                   (minmax-accum 'getmin #f)
-                   (gain-loss-accum 'debits #f) 
-                   (gain-loss-accum 'credits #f)
-                   (- (gain-loss-accum 'debits #f)
-                      (gain-loss-accum 'credits #f)))
-             data-rows)))
-    
-    ;; Returns a double which is the split value, correctly
-    ;; exchanged to the current report-currency. We use the exchange
-    ;; rate at the 'date'.
-    (define (get-split-value split date)
-      (monetary->double
-       (gnc:make-gnc-monetary
-        (xaccAccountGetCommodity (xaccSplitGetAccount split))
-        (xaccSplitGetAmount split))
-       date))
-    
-    ;; calculate the statistics for one interval - returns a list 
-    ;;  containing the following: 
-    ;; min-max acculumator
-    ;; average-accumulator
-    ;; gain-loss accumulator
-    ;; final balance for this interval
-    ;; splits remaining to be processed.
-    
-    ;; note that it is assumed that every split in in the list
-    ;; has a date >= from 
-
-    (define (process-interval splits from to start-balance)
-
-      (let ((minmax-accum (gnc:make-stats-collector))
-            (stats-accum (gnc:make-stats-collector))
-            (gain-loss-accum (gnc:make-drcr-collector))
-            (last-balance start-balance)
-            (last-balance-time from))
-        
-        
-        (define (update-stats  split-amt split-time)
-          (let ((time-difference (- split-time
-                                    last-balance-time)))
-            (stats-accum 'add (* last-balance time-difference))
-            (set! last-balance (+ last-balance split-amt))
-            (set! last-balance-time split-time)
-            (minmax-accum 'add last-balance)
-            (gain-loss-accum 'add split-amt)))
-
-        (define (split-recurse)
-          (if (or (null? splits)
-                  (> (xaccTransGetDate (xaccSplitGetParent (car splits)))
-                     to))
-              #f
-              (let* 
-                  ((split (car splits))
-                   (split-time (xaccTransGetDate (xaccSplitGetParent split)))
-                   ;; FIXME: Which date should we use here? The 'to'
-                   ;; date? the 'split-time'?
-                   (split-amt (get-split-value split split-time)))
-                
-                
-;                (gnc:debug "split " split)
-;                (gnc:debug "split-time " split-time)
-;                (gnc:debug "split-amt " split-amt)
-;                (gnc:debug "splits " splits)
-                (update-stats split-amt split-time)
-                (set! splits (cdr splits))
-                (split-recurse))))
-
-                                        ;  the minmax accumulator
-
-        (minmax-accum 'add start-balance)
-
-        (if (not (null? splits))
-            (split-recurse))
-
-        ;; insert a null transaction at the end of the interval
-        (update-stats 0.0 to)
-        (list minmax-accum stats-accum gain-loss-accum last-balance splits)))
-
-    (for-each
-     (lambda (interval)
-       (let*
-           ((interval-results
-             (process-interval
-              splits
-              (car interval)
-              (cadr interval)
-              start-bal-double))
-            (min-max-accum (car interval-results))
-            (stats-accum (cadr interval-results))
-            (gain-loss-accum (caddr interval-results))
-            (last-bal (cadddr interval-results))
-            (rest-splits (list-ref interval-results 4)))
-
-         (set! start-bal-double last-bal)
-         (set! splits rest-splits)
-         (output-row (car interval) 
-                     (cadr interval) 
-                     stats-accum 
-                     min-max-accum gain-loss-accum)))
-     interval-list)    
-    
-    (reverse data-rows)))
-
-
 ;; The rendering function. Since it works for a bunch of different
 ;; account settings, you have to give the reportname, the
 ;; account-types to work on and whether this report works on
@@ -313,27 +180,9 @@
        (gnc:gnc-monetary-amount
         (exchange-fn foreign-monetary report-currency date))))
     
-    ;; FIXME: why does this need to be re-defined here?
-    (define (zip . args)
-      (if (or (null? args) (member #t (map null? args)))
-          '()
-          (append (list (map car args))
-                  (apply zip (map cdr args)))))
-    
-    ;; FIXME: why does this need to be re-defined here?
-    (define (filter proc l)
-      (if (null? l)
-          '()
-          (if (proc (car l))
-              (cons (car l) (filter proc (cdr l)))
-              (filter proc (cdr l)))))
-    
     (if (not (null? accounts))
         (let* ((query (qof-query-create-for-splits))
                (splits '())
-               (data '())
-               ;; startbal will be a commodity-collector
-               (startbal  '())
                (daily-totals (list 0 0 0 0 0 0 0))
 	       ;; Note: the absolute-super-duper-i18n'ed solution
 	       ;; would be to use the locale-using functions
@@ -406,49 +255,30 @@
           
           ;; get the query results 
           (set! splits (qof-query-run query))
+          (qof-query-destroy query)
 	  (gnc:report-percent-done 40)
-          
-          ;; find the net starting balance for the set of accounts 
-          (set! startbal 
-                (gnc:accounts-get-balance-helper 
-                 accounts 
-                 (lambda (acct) (gnc:account-get-comm-balance-at-date 
-                                 acct beforebegindate #f))
-                 gnc-reverse-balance))
-	  (gnc:report-percent-done 50)
-          
-          (set! startbal 
-                (gnc-numeric-to-double
-                 (gnc:gnc-monetary-amount
-                  (gnc:sum-collector-commodity 
-                   startbal
-                   report-currency 
-                   (lambda (a b) 
-                     (exchange-fn a b beforebegindate))))))
-	  (gnc:report-percent-done 60)
-	  
-          ;; and analyze the data 
-          (set! data (analyze-splits splits startbal
-                                     from-date to-date 
-                                     DayDelta monetary->double))
-	  (gnc:report-percent-done 70)
-          
-          ;; now, in data we have a list of (start-date end-date avg-bal
-          ;; max-bal min-bal total-in total-out net). what we really
-          ;; want is just the last element, #7.
-          
+
+          ;; each split is analyzed... the amount is converted to
+          ;; report-currency, and the date modulo 7 used to find
+          ;; weekday, and the correct daily-totals is updated.
           (for-each
            (lambda (split)
-             (let ((k (modulo (- (gnc:time64-get-week-day
-                                  (list-ref split 1)) 1) 7))) ; end-date
-               (list-set! daily-totals k
-                          (+ (list-ref daily-totals k)
-                             (list-ref split 7))))) ; net
-           data)
-          
+             (let* ((date (xaccTransGetDate (xaccSplitGetParent split)))
+                    (weekday (modulo (1- (gnc:time64-get-week-day date)) 7))
+                    (exchanged (monetary->double
+                                (gnc:make-gnc-monetary
+                                 (xaccAccountGetCommodity (xaccSplitGetAccount split))
+                                 (xaccSplitGetAmount split))
+                                date))
+                    (old-amount (list-ref daily-totals weekday)))
+               (list-set! daily-totals weekday (+ old-amount exchanged))))
+           splits)
+
+          (gnc:report-percent-done 60)
+
           (let* ((zipped-list (filter (lambda (p) 
-                                        (not (zero? (cadr p)))) (zip days-of-week
-                                                                     daily-totals)))
+                                        (not (zero? (cadr p))))
+                                      (zip days-of-week daily-totals)))
                  (labels (map (lambda (p)
                                 (if show-total?
                                     (string-append

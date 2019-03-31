@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gnc-account-example 
+  xmlns="http://www.gnucash.org/XML/"
+  xmlns:act="http://www.gnucash.org/XML/act"
+  xmlns:addr="http://www.gnucash.org/XML/addr"
+  xmlns:bgt="http://www.gnucash.org/XML/bgt"
+  xmlns:billterm="http://www.gnucash.org/XML/billterm"
+  xmlns:book="http://www.gnucash.org/XML/book"
+  xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+  xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+  xmlns:cd="http://www.gnucash.org/XML/cd"
+  xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+  xmlns:cust="http://www.gnucash.org/XML/cust"
+  xmlns:employee="http://www.gnucash.org/XML/employee"
+  xmlns:entry="http://www.gnucash.org/XML/entry"
+  xmlns:fs="http://www.gnucash.org/XML/fs"
+  xmlns:gnc="http://www.gnucash.org/XML/gnc"
+  xmlns:gnc-act="http://www.gnucash.org/XML/gnc-act"
+  xmlns:invoice="http://www.gnucash.org/XML/invoice"
+  xmlns:job="http://www.gnucash.org/XML/job"
+  xmlns:lot="http://www.gnucash.org/XML/lot"
+  xmlns:order="http://www.gnucash.org/XML/order"
+  xmlns:owner="http://www.gnucash.org/XML/owner"
+  xmlns:price="http://www.gnucash.org/XML/price"
+  xmlns:recurrence="http://www.gnucash.org/XML/recurrence"
+  xmlns:slot="http://www.gnucash.org/XML/slot"
+  xmlns:split="http://www.gnucash.org/XML/split"
+  xmlns:sx="http://www.gnucash.org/XML/sx"
+  xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+  xmlns:trn="http://www.gnucash.org/XML/trn"
+  xmlns:ts="http://www.gnucash.org/XML/ts"
+  xmlns:tte="http://www.gnucash.org/XML/tte"
+  xmlns:vendor="http://www.gnucash.org/XML/vendor">
+    <gnc-act:title>
+      Auto
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Razni troškovi vezani uz osobno vozilo
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+      Kontni plan za knjiženje i praćenje troškova i kredita/zajmova za osobno vozilo (auto, motocikl, laki četverocikl ili četverocikl).
+  </gnc-act:long-description>   
+<gnc:account version="2.0.0">
+  <act:name>Root Account</act:name>
+  <act:id type="new">8315c26e871c497c9d192aaa0fc7398d</act:id>
+  <act:type>ROOT</act:type>
+  <act:commodity-scu>0</act:commodity-scu>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Imovina</act:name>
+  <act:id type="new">398e285ab1cc4407b1eede4aed893ce8</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Imovina</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">8315c26e871c497c9d192aaa0fc7398d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Dugotrajna imovina</act:name>
+  <act:id type="new">8d1440efb8cd42d9a23e606fac6f2870</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Dugotrajna imovina</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">398e285ab1cc4407b1eede4aed893ce8</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Osobno vozilo</act:name>
+  <act:id type="new">8d2a238b040d46759039d567f5be34f9</act:id>
+  <act:type>ASSET</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Osobno vozilo</act:description>
+  <act:parent type="new">8d1440efb8cd42d9a23e606fac6f2870</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>Obveze</act:name>
+  <act:id type="new">cca4bedbdfde4421a586be15765eb072</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Obveze</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">5f1a637ad17146839faf0ae35ec06ec4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Krediti</act:name>
+  <act:id type="new">1ec09bc1aeb940d6803026f155862ef6</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Krediti</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">cca4bedbdfde4421a586be15765eb072</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kredit/zajam za auto</act:name>
+  <act:id type="new">beba7011696445bbb16225c5fda1eb5a</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Kredit za auto</act:description>
+  <act:parent type="new">1ec09bc1aeb940d6803026f155862ef6</act:parent>
+</gnc:account>
+
+<gnc:account version="2.0.0">
+  <act:name>Rashod</act:name>
+  <act:id type="new">62cf4cfb2aa047e7a584dd0c3f8a860a</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Rashod</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">8315c26e871c497c9d192aaa0fc7398d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Troškovi korištenja</act:name>
+  <act:id type="new">baa547acf5114e07ace58db4b1aaffa1</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Troškovi korištenja</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">62cf4cfb2aa047e7a584dd0c3f8a860a</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Osobno vozilo</act:name>
+  <act:id type="new">ec5ff2e0618c46a69bb90634cb72c926</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Osobno vozilo</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">baa547acf5114e07ace58db4b1aaffa1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Naknade i pristojbe</act:name>
+  <act:id type="new">c74882b716284104999f122d8b02d709</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Naknade i pristojbe koje se obavezno plaćaju prilikom registracije vozila</act:description>
+  <act:parent type="new">ec5ff2e0618c46a69bb90634cb72c926</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Gorivo i ulje</act:name>
+  <act:id type="new">6050356109ac4941a17e27cc6d295ba7</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Gorivo i ulje</act:description>
+  <act:parent type="new">ec5ff2e0618c46a69bb90634cb72c926</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Amortizacija</act:name>
+  <act:id type="new">88a54c8198a2471d994ebb0add45a780</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Amortizacija (na nabavnu vrijednost do 400.000,00 kn)</act:description>
+  <act:parent type="new">ec5ff2e0618c46a69bb90634cb72c926</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Održavanje i popravak</act:name>
+  <act:id type="new">4ddfc3982ec6402aa83866c995cb1ed5</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Održavanje i popravak vozila</act:description>
+  <act:parent type="new">ec5ff2e0618c46a69bb90634cb72c926</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Osiguranje</act:name>
+  <act:id type="new">e0e4640c16dd41b4a4fd480b2a571efe</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Osiguranje za vozilo</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="new">ec5ff2e0618c46a69bb90634cb72c926</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kasko osiguranje</act:name>
+  <act:id type="new">4df82b4517c447359c7c532eb7aa422c</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Kasko osiguranje vozila</act:description>
+  <act:parent type="new">e0e4640c16dd41b4a4fd480b2a571efe</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Obavezno osiguranje</act:name>
+  <act:id type="new">250cc20a20544b168dff601e5fc5c316</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Obavezno osiguranje vozila</act:description>
+  <act:parent type="new">e0e4640c16dd41b4a4fd480b2a571efe</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Porez na vozilo</act:name>
+  <act:id type="new">66767a3063e94c5f999548070611be3a</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Porez na cestovna motorna vozila</act:description>
+  <act:parent type="new">ec5ff2e0618c46a69bb90634cb72c926</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Registracija i tehnički pregled</act:name>
+  <act:id type="new">0cc1045d36fd4430a52a677122e6668b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Registracija vozila i tehnički pregled</act:description>
+  <act:parent type="new">ec5ff2e0618c46a69bb90634cb72c926</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Servis vozila</act:name>
+  <act:id type="new">369b9c0b436042dfa15a2351622b6a3e</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Servis vozila</act:description>
+  <act:parent type="new">ec5ff2e0618c46a69bb90634cb72c926</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Auto-gume</act:name>
+  <act:id type="new">6a8cc3a92a3b4042a997fa452506667e</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Auto-gume</act:description>
+  <act:parent type="new">ec5ff2e0618c46a69bb90634cb72c926</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Pranje vozila i sl.</act:name>
+  <act:id type="new">9ab36e739d044af9920a984c46a1c6c5</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Pranje vozila i sl.</act:description>
+  <act:parent type="new">ec5ff2e0618c46a69bb90634cb72c926</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kamate po kreditima i zajmovima</act:name>
+  <act:id type="new">64ac7e7544934b3887ce973efc5e8c6c</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Kamate po kreditima i zajmovima za financiranje nabave vozila</act:description>
+  <act:parent type="new">ec5ff2e0618c46a69bb90634cb72c926</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Trošak za vozila u najmu</act:name>
+  <act:id type="new">d6a13ea2c0e344be952136d5f099d258</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Trošak naknade po ugovoru (vozila u najmu) i svi troškovi koje snosi korisnik najma po ugovoru</act:description>
+  <act:parent type="new">ec5ff2e0618c46a69bb90634cb72c926</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Rent-a-car usluga</act:name>
+  <act:id type="new">493346810792415ebb5ae65232d8c893</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:commodity>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>HRK</cmdty:id>
+  </act:commodity>
+  <act:description>Rent-a-car usluga uvećana za troškove goriva</act:description>
+  <act:parent type="new">ec5ff2e0618c46a69bb90634cb72c926</act:parent>
+</gnc:account>
+</gnc-account-example>
+

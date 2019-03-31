@@ -270,9 +270,7 @@ gnc_numeric gnc_numeric_zero(void)
 
 /** Convert a floating-point number to a gnc_numeric.
  *
- * Both 'denom' and 'how' are used as in arithmetic, but
- * GNC_DENOM_AUTO is not recognized; a denominator must be specified
- * either explicitly or through sigfigs.
+ * Both 'denom' and 'how' are used as in arithmetic.
  *
  * \sa \ref Arguments
  *
@@ -280,15 +278,16 @@ gnc_numeric gnc_numeric_zero(void)
  *
  * \param denom The denominator of the gnc_numeric return value. If
  * the 'how' argument contains the GNC_HOW_DENOM_SIGFIG flag, this
- * value will be ignored.
+ * value will be ignored.  If GNC_DENOM_AUTO is given an appropriate
+ * power of ten will be used for the denominator (it may be reduced
+ * by rounding if appropriate).
  *
  * \param how Describes the rounding policy and output
- * denominator. Watch out: You \e must specify a rounding policy such
+ * denominator. Watch out: You must specify a rounding policy such
  * as GNC_HOW_RND_NEVER, otherwise the fractional part of the input
  * value is silently discarded! Common values for 'how' are
  * (GNC_HOW_DENOM_REDUCE|GNC_HOW_RND_NEVER) or
- * (GNC_HOW_DENOM_FIXED|GNC_HOW_RND_NEVER). As mentioned above,
- * GNC_DENOM_AUTO is not allowed here.
+ * (GNC_HOW_DENOM_FIXED|GNC_HOW_RND_NEVER).
  *
  * \return The newly created gnc_numeric rational value.
  */

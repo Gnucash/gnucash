@@ -35,6 +35,7 @@
 #ifndef DIALOG_AB_TRANS_H
 #define DIALOG_AB_TRANS_H
 
+#include "gnc-ab-utils.h"
 #include <gtk/gtk.h>
 #include <aqbanking/banking.h>
 
@@ -50,8 +51,8 @@ typedef struct _GncABTransDialog GncABTransDialog;
 typedef enum _GncABTransType GncABTransType;
 enum _GncABTransType
 {
-    SINGLE_TRANSFER = 0,
-    SINGLE_DEBITNOTE,
+    SINGLE_TRANSFER = 0, /* obsolete old non-SEPA transfer; no longer in use */
+    SINGLE_DEBITNOTE, /* obsolete old non-SEPA debit note; no longer in use */
     SINGLE_INTERNAL_TRANSFER
     , SEPA_TRANSFER
     , SEPA_DEBITNOTE
@@ -74,7 +75,7 @@ gboolean gnc_ab_trans_isSEPA(GncABTransType t);
  * gnc_ab_trans_dialog_get_templ()
  * @return A new GncABTransDialog, free with gnc_ab_trans_dialog_free()
  */
-GncABTransDialog *gnc_ab_trans_dialog_new(GtkWidget *parent, AB_ACCOUNT *ab_acc,
+GncABTransDialog *gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
         gint commodity_scu,
         GncABTransType trans_type,
         GList *templates);
@@ -125,25 +126,25 @@ GtkWidget *gnc_ab_trans_dialog_get_parent(const GncABTransDialog *td);
  * @param td Transaction dialog
  * @return An Aqbanking transaction
  */
-const AB_TRANSACTION *gnc_ab_trans_dialog_get_ab_trans(
-    const GncABTransDialog *td);
+const AB_TRANSACTION *gnc_ab_trans_dialog_get_ab_trans(const GncABTransDialog *td);
 
 /**
- * Receive the Aqbanking job associated with the transaction
+ * Receive the Aqbanking job filled by the dialog.
  *
  * @param td Transaction dialog
  * @return An Aqbanking job
  */
-AB_JOB *gnc_ab_trans_dialog_get_job(const GncABTransDialog *td);
+GNC_AB_JOB *gnc_ab_trans_dialog_get_job(const GncABTransDialog *td);
 
 /**
- * FIXME
+ * Return the AqBanking job associated with the transaction.
  *
  * @param td Transaction dialog
- * @return FIXME
+ * @return An AQBanking job
  */
-AB_JOB *gnc_ab_get_trans_job(AB_ACCOUNT *ab_acc, const AB_TRANSACTION *ab_trans,
-                             GncABTransType trans_type);
+GNC_AB_JOB *gnc_ab_get_trans_job(GNC_AB_ACCOUNT_SPEC *ab_acc,
+                                 const AB_TRANSACTION *ab_trans,
+                                 GncABTransType trans_type);
 
 G_END_DECLS
 

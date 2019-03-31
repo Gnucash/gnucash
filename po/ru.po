@@ -7728,7 +7728,7 @@ msgstr "Управление финансами для частных лиц и 
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
 #: gnucash/gnome-utils/gnc-main-window.c:4559
-msgid "translator_credits"
+msgid "translator-credits"
 msgstr ""
 "Валек Филиппов\n"
 "Виталий Липатов\n"
@@ -19193,7 +19193,7 @@ msgid "tax"
 msgstr "учитывается_в_налогах"
 
 #: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "place_holder"
+msgid "placeholder"
 msgstr "виртуальный"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54

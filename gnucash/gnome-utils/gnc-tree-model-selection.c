@@ -101,44 +101,10 @@ typedef struct GncTreeModelSelectionPrivate
 
 static GObjectClass *parent_class = NULL;
 
-GType
-gnc_tree_model_selection_get_type (void)
-{
-    static GType gnc_tree_model_selection_type = 0;
-
-    if (gnc_tree_model_selection_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncTreeModelSelectionClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_tree_model_selection_class_init,
-            NULL,
-            NULL,
-            sizeof (GncTreeModelSelection),
-            0,
-            (GInstanceInitFunc) gnc_tree_model_selection_init
-        };
-
-        static const GInterfaceInfo tree_model_info =
-        {
-            (GInterfaceInitFunc) gnc_tree_model_selection_tree_model_init,
-            NULL,
-            NULL
-        };
-
-        gnc_tree_model_selection_type = g_type_register_static (G_TYPE_OBJECT,
-                                        "GncTreeModelSelection",
-                                        &our_info, 0);
-
-        g_type_add_interface_static (gnc_tree_model_selection_type,
-                                     GTK_TYPE_TREE_MODEL,
-                                     &tree_model_info);
-    }
-
-    return gnc_tree_model_selection_type;
-}
+G_DEFINE_TYPE_WITH_CODE(GncTreeModelSelection, gnc_tree_model_selection, G_TYPE_OBJECT
+                        G_ADD_PRIVATE(GncTreeModelSelection)
+                        G_IMPLEMENT_INTERFACE(GTK_TYPE_TREE_MODEL,
+                                              gnc_tree_model_selection_tree_model_init))
 
 static void
 gnc_tree_model_selection_class_init (GncTreeModelSelectionClass *klass)
@@ -148,8 +114,6 @@ gnc_tree_model_selection_class_init (GncTreeModelSelectionClass *klass)
     parent_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_tree_model_selection_finalize;
-
-    g_type_class_add_private(klass, sizeof(GncTreeModelSelectionPrivate));
 }
 
 static void

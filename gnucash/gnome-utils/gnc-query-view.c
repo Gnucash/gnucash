@@ -44,16 +44,16 @@ enum
     LAST_SIGNAL
 };
 
-typedef struct _GNCQueryViewPriv GNCQueryViewPriv;
+typedef struct _GNCQueryViewPrivate GNCQueryViewPrivate;
 
-struct _GNCQueryViewPriv
+struct _GNCQueryViewPrivate
 {
     const QofParam *get_guid;
     gint        component_id;
 };
 
 #define GNC_QUERY_VIEW_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_QUERY_VIEW, GNCQueryViewPriv))
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_QUERY_VIEW, GNCQueryViewPrivate))
 
 /** Static Globals ****************************************************/
 static GtkTreeViewClass *parent_class = NULL;
@@ -76,34 +76,6 @@ static void gnc_query_view_fill (GNCQueryView *qview);
 static void gnc_query_view_set_query_sort (GNCQueryView *qview, gboolean new_column);
 
 
-GType
-gnc_query_view_get_type (void)
-{
-    static GType gnc_query_view_type = 0;
-
-    if (!gnc_query_view_type)
-    {
-        GTypeInfo type_info =
-        {
-            sizeof(GNCQueryViewClass), /* class_size */
-            NULL,                      /* base_init */
-            NULL,                      /* base_finalize */
-            (GClassInitFunc)gnc_query_view_class_init,
-            NULL,                      /* class_finalize */
-            NULL,                      /* class_data */
-            sizeof (GNCQueryView),     /* */
-            0,                         /* n_preallocs */
-            (GInstanceInitFunc)gnc_query_view_init,
-        };
-
-        gnc_query_view_type = g_type_register_static (GTK_TYPE_TREE_VIEW,
-                              "GNCQueryView",
-                              &type_info, 0);
-    }
-    return gnc_query_view_type;
-}
-
-
 /********************************************************************\
  * gnc_query_view_new                                               *
  *   creates the query view                                         *
@@ -115,7 +87,7 @@ gnc_query_view_get_type (void)
 void
 gnc_query_view_construct (GNCQueryView *qview, GList *param_list, Query *query)
 {
-    GNCQueryViewPriv *priv;
+    GNCQueryViewPrivate *priv;
 
     g_return_if_fail (qview);
     g_return_if_fail (param_list);
@@ -212,11 +184,12 @@ gnc_query_view_refresh_handler (GHashTable *changes, gpointer user_data)
     gnc_query_view_set_query_sort (qview, TRUE);
 }
 
+G_DEFINE_TYPE_WITH_PRIVATE(GNCQueryView, gnc_query_view, GTK_TYPE_TREE_VIEW)
 
 static void
 gnc_query_view_init (GNCQueryView *qview)
 {
-    GNCQueryViewPriv *priv;
+    GNCQueryViewPrivate *priv;
 
     // Set the style context for this dialog so it can be easily manipulated with css
     gnc_widget_set_style_context (GTK_WIDGET(qview), "GncQueryView");
@@ -428,8 +401,6 @@ gnc_query_view_class_init (GNCQueryViewClass *klass)
 
     parent_class = g_type_class_peek (GTK_TYPE_TREE_VIEW);
 
-    g_type_class_add_private (klass, sizeof(GNCQueryViewPriv));
-
     query_view_signals[COLUMN_TOGGLED] =
         g_signal_new("column_toggled",
                      G_TYPE_FROM_CLASS (widget_class),
@@ -543,7 +514,7 @@ static void
 gnc_query_view_destroy (GtkWidget *widget)
 {
     GNCQueryView     *qview = GNC_QUERY_VIEW (widget);
-    GNCQueryViewPriv *priv;
+    GNCQueryViewPrivate *priv;
 
     priv = GNC_QUERY_VIEW_GET_PRIVATE (qview);
     if (priv->component_id > 0)
@@ -765,7 +736,7 @@ gnc_query_view_set_query_sort (GNCQueryView *qview, gboolean new_column)
 static void
 gnc_query_view_fill (GNCQueryView *qview)
 {
-    GNCQueryViewPriv *priv;
+    GNCQueryViewPrivate *priv;
     GtkTreeModel     *model;
     GtkTreeIter       iter;
     GList            *entries, *item;

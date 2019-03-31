@@ -2160,87 +2160,65 @@ gnc_pricedb_num_prices(GNCPriceDB *db,
     return result;
 }
 
-/* Return the nth price for the given commodity
+/* Helper function for combining the price lists in gnc_pricedb_nth_price. */
+static void
+list_combine (gpointer element, gpointer data)
+{
+    GList *list = *(GList**)data;
+    if (list == NULL)
+        *(GList**)data = g_list_copy (element);
+    else
+    {
+        GList *new_list = g_list_concat ((GList *)list, g_list_copy (element));
+        *(GList**)data = new_list;
+    }
+}
+
+/* This function is used by gnc-tree-model-price.c for iterating through the
+ * prices when building or filtering the pricedb dialog's
+ * GtkTreeView. gtk-tree-view-price.c sorts the results after it has obtained
+ * the values so there's nothing gained by sorting. However, for very large
+ * collections of prices in multiple currencies (here commodity is the one being
+ * priced and currency the one in which the price is denominated; note that they
+ * may both be currencies or not) just concatenating the price lists together
+ * can be expensive because the recieving list must be traversed to obtain its
+ * end. To avoid that cost n times we cache the commodity and merged price list.
+ * Since this is a GUI-driven function there is no concern about concurrency.
  */
+
 GNCPrice *
 gnc_pricedb_nth_price (GNCPriceDB *db,
                        const gnc_commodity *c,
                        const int n)
 {
+    static const gnc_commodity *last_c = NULL;
+    static GList *prices = NULL;
+
     GNCPrice *result = NULL;
     GHashTable *currency_hash;
+    g_return_val_if_fail (GNC_IS_COMMODITY (c), NULL);
 
     if (!db || !c || n < 0) return NULL;
-    ENTER ("db=%p commodity=%p index=%d", db, c, n);
+    ENTER ("db=%p commodity=%s index=%d", db, gnc_commodity_get_mnemonic(c), n);
 
-    currency_hash = g_hash_table_lookup(db->commodity_hash, c);
+    if (last_c && prices && last_c == c)
+        return g_list_nth_data (prices, n);
+
+    last_c = c;
+
+    if (prices)
+    {
+        g_list_free (prices);
+        prices = NULL;
+    }
+
+    currency_hash = g_hash_table_lookup (db->commodity_hash, c);
     if (currency_hash)
     {
-        int num_currencies = g_hash_table_size(currency_hash);
-        if (num_currencies == 1)
-        {
-            /* Optimize the case of prices in only one currency, it's common
-               and much faster */
-            GHashTableIter iter;
-            gpointer key, value;
-            g_hash_table_iter_init(&iter, currency_hash);
-            if (g_hash_table_iter_next(&iter, &key, &value))
-            {
-                PriceList *prices = value;
-                result = g_list_nth_data(prices, n);
-            }
-        }
-        else if (num_currencies > 1)
-        {
-            /* Prices for multiple currencies, must find the nth entry in the
-               merged currency list. */
-            GList **price_array = (GList **)g_new(gpointer, num_currencies);
-            GList **next_list;
-            int i, j, k;
-            GHashTableIter iter;
-            gpointer key, value;
-
-            /* Build an array of all the currencies this commodity has prices for */
-            for (i = 0, g_hash_table_iter_init(&iter, currency_hash);
-                 g_hash_table_iter_next(&iter, &key, &value) && i < num_currencies;
-                 ++i)
-            {
-                price_array[i] = value;
-            }
-
-            /* Iterate up to n times (there are i prices, so going past i will run off the end of the array) to get the nth price, each time finding the currency
-               with the latest price */
-            for (k = 0; k < n && k < i; ++k)
-            {
-                next_list = NULL;
-                for (j = 0; j < i; ++j)
-                {
-                    /* Save this entry if it's the first one or later than
-                       the saved one. */
-                    if (price_array[k] != NULL &&
-                        (next_list == NULL || *next_list == NULL ||
-                        compare_prices_by_date((*next_list)->data, (price_array[j])->data) > 0))
-                    {
-                        next_list = &price_array[j];
-                    }
-                }
-                /* next_list points to the list with the latest price unless all
-                   the lists are empty */
-                if (next_list && *next_list)
-                {
-                    result = (*next_list)->data;
-                    *next_list = (*next_list)->next;
-                }
-                else
-                {
-                    /* all the lists are empty, "n" is greater than the number
-                       of prices for this commodity. */
-                    result = NULL;
-                    break;
-                }
-            }
-            g_free(price_array);
-        }
+        GList *currencies = g_hash_table_get_values (currency_hash);
+        g_list_foreach (currencies, list_combine, &prices);
+        result = g_list_nth_data (prices, n);
+        g_list_free (currencies);
     }
 
     LEAVE ("price=%p", result);

@@ -73,42 +73,13 @@ typedef struct GncPluginAccountTreePrivate
     gpointer dummy;
 } GncPluginAccountTreePrivate;
 
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginAccountTree, gnc_plugin_account_tree, GNC_TYPE_PLUGIN)
+
 #define GNC_PLUGIN_ACCOUNT_TREE_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_ACCOUNT_TREE, GncPluginAccountTreePrivate))
 
 /** A pointer to the parent class of a plugin page. */
 static GObjectClass *parent_class = NULL;
-
-
-/*  Get the type of the account tree menu plugin. */
-GType
-gnc_plugin_account_tree_get_type (void)
-{
-    static GType gnc_plugin_account_tree_type = 0;
-
-    if (gnc_plugin_account_tree_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncPluginAccountTreeClass),
-            NULL,		/* base_init */
-            NULL,		/* base_finalize */
-            (GClassInitFunc) gnc_plugin_account_tree_class_init,
-            NULL,		/* class_finalize */
-            NULL,		/* class_data */
-            sizeof (GncPluginAccountTree),
-            0,		/* n_preallocs */
-            (GInstanceInitFunc) gnc_plugin_account_tree_init
-        };
-
-        gnc_plugin_account_tree_type = g_type_register_static (GNC_TYPE_PLUGIN,
-                                       "GncPluginAccountTree",
-                                       &our_info, 0);
-    }
-
-    return gnc_plugin_account_tree_type;
-}
-
 
 /*  Create a new account tree menu plugin. */
 GncPlugin *
@@ -125,7 +96,6 @@ gnc_plugin_account_tree_new (void)
 
     return GNC_PLUGIN (plugin);
 }
-
 
 static void
 gnc_plugin_account_tree_main_window_page_changed (GncMainWindow *window,
@@ -147,7 +117,6 @@ gnc_plugin_account_tree_main_window_page_changed (GncMainWindow *window,
                       GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page));
     }
 }
-
 
 /** Initialize the class for a new account tree plugin.  This will set
  *  up any function pointers that override functions in the parent
@@ -177,8 +146,6 @@ gnc_plugin_account_tree_class_init (GncPluginAccountTreeClass *klass)
     plugin_class->actions      = gnc_plugin_actions;
     plugin_class->n_actions    = gnc_plugin_n_actions;
     plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
-
-    g_type_class_add_private(klass, sizeof(GncPluginAccountTreePrivate));
 }
 
 

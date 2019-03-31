@@ -96,33 +96,7 @@ typedef struct GncTreeViewOwnerPrivate
 
 static GObjectClass *parent_class = NULL;
 
-GType
-gnc_tree_view_owner_get_type (void)
-{
-    static GType gnc_tree_view_owner_type = 0;
-
-    if (gnc_tree_view_owner_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncTreeViewOwnerClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_tree_view_owner_class_init,
-            NULL,
-            NULL,
-            sizeof (GncTreeViewOwner),
-            0,
-            (GInstanceInitFunc) gnc_tree_view_owner_init
-        };
-
-        gnc_tree_view_owner_type = g_type_register_static (
-                                       GNC_TYPE_TREE_VIEW, GNC_TREE_VIEW_OWNER_NAME,
-                                       &our_info, 0);
-    }
-
-    return gnc_tree_view_owner_type;
-}
+G_DEFINE_TYPE_WITH_PRIVATE(GncTreeViewOwner, gnc_tree_view_owner, GNC_TYPE_TREE_VIEW)
 
 static void
 gnc_tree_view_owner_class_init (GncTreeViewOwnerClass *klass)
@@ -134,8 +108,6 @@ gnc_tree_view_owner_class_init (GncTreeViewOwnerClass *klass)
     /* GObject signals */
     o_class = G_OBJECT_CLASS (klass);
     o_class->finalize = gnc_tree_view_owner_finalize;
-
-    g_type_class_add_private(klass, sizeof(GncTreeViewOwnerPrivate));
 
     gnc_hook_add_dangler(HOOK_CURRENCY_CHANGED,
                          (GFunc)gtvo_currency_changed_cb, NULL);

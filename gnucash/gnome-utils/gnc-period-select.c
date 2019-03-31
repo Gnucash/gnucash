@@ -502,38 +502,6 @@ gnc_period_select_set_property (GObject      *object,
 /** @name GncPeriodSelect Core Implementation
  @{ */
 
-/*  Returns the GType of a GncPeriodSelect widget.
- */
-GType
-gnc_period_select_get_type (void)
-{
-    static GType period_select_type = 0;
-
-    if (period_select_type == 0)
-    {
-        static const GTypeInfo period_select_info =
-        {
-            sizeof (GncPeriodSelectClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_period_select_class_init,
-            NULL,
-            NULL,
-            sizeof (GncPeriodSelect),
-            0, /* n_preallocs */
-            (GInstanceInitFunc) gnc_period_select_init,
-            NULL
-        };
-
-        period_select_type = g_type_register_static(GTK_TYPE_BOX,
-                             "GncPeriodSelect",
-                             &period_select_info, 0);
-    }
-
-    return period_select_type;
-}
-
-
 /** Initialize the class for the a Period Selection widget.  This
  *  will set up any function pointers that override functions in the
  *  parent class, and also installs the proprieties that are unique to
@@ -594,10 +562,9 @@ gnc_period_select_class_init (GncPeriodSelectClass *klass)
                                             G_MAXINT,
                                             0,
                                             G_PARAM_READWRITE));
-
-    g_type_class_add_private(klass, sizeof(GncPeriodSelectPrivate));
 }
 
+G_DEFINE_TYPE_WITH_PRIVATE(GncPeriodSelect, gnc_period_select, GTK_TYPE_BOX)
 
 /** Initialize a new instance of a gnucash accounting period selection
  *  widget.  This function allocates and initializes the object

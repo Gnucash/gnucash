@@ -109,26 +109,24 @@
 
 (define (gnc:html-document-tree-collapse tree)
   (let ((retval '()))
-    (define (do-list list)
+    (let loop ((lst tree))
       (for-each
        (lambda (elt)
-         (if (string? elt)
-             (set! retval (cons elt retval))
-             (if (not (list? elt))
-                 (set! retval
-                       (cons (with-output-to-string
-                               (lambda () (display elt)))
-                             retval))
-                 (do-list elt))))
-       list))
-    (do-list tree)
+         (cond
+          ((string? elt)
+           (set! retval (cons elt retval)))
+          ((not (list? elt))
+           (set! retval (cons (object->string elt) retval)))
+          (else
+           (loop elt))))
+       lst))
     retval))
 
 ;; first optional argument is "headers?"
 ;; returns the html document as a string, I think.
 (define (gnc:html-document-render doc . rest)
   (let ((stylesheet (gnc:html-document-style-sheet doc))
-        (headers? (if (null? rest) #f (if (car rest) #t #f)))
+        (headers? (if (null? rest) #t (if (car rest) #t #f)))
         (style-text (gnc:html-document-style-text doc))
        )
        (if stylesheet
@@ -147,42 +145,37 @@
                                         (gnc:html-document-style-stack doc))
           ;; push it
           (gnc:html-document-push-style doc (gnc:html-document-style doc))
-          (if (not (string-null? title))
-              (gnc:report-render-starting (gnc:html-document-title doc)))
-          (if (not (null? headers?))
-              (begin
-                ;;This is the only place where <html> appears
-                ;;with the exception of 2 reports:
-                ;;./share/gnucash/scm/gnucash/report/taxinvoice.eguile.scm:<html>
-                ;;./share/gnucash/scm/gnucash/report/balsheet-eg.eguile.scm:<html>
+          (gnc:report-render-starting (gnc:html-document-title doc))
+          (when headers?
+            ;;This is the only place where <html> appears
+            ;;with the exception of 2 reports:
+            ;;./share/gnucash/scm/gnucash/report/taxinvoice.eguile.scm:<html>
+            ;;./share/gnucash/scm/gnucash/report/balsheet-eg.eguile.scm:<html>
 
-                (push "<html>\n")
-                (push "<head>\n")
-                (push "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n")
-                (if style-text
-                    (push (list "</style>" style-text "<style type=\"text/css\">\n")))
-                (let ((title (gnc:html-document-title doc)))
-                  (if title
-                      (push (list "</title>" title "<title>\n"))))
-                (push "</head>")
-                
-                ;; this lovely little number just makes sure that <body>
-                ;; attributes like bgcolor get included
-                (push ((gnc:html-markup/open-tag-only "body") doc))))
+            (push "<html>\n")
+            (push "<head>\n")
+            (push "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />\n")
+            (if style-text
+                (push (list "</style>" style-text "<style type=\"text/css\">\n")))
+            (if (not (string-null? title))
+                (push (list "</title>" title "<title>\n")))
+            (push "</head>")
+
+            ;; this lovely little number just makes sure that <body>
+            ;; attributes like bgcolor get included
+            (push ((gnc:html-markup/open-tag-only "body") doc)))
 
           ;; now render the children
           (for-each
            (lambda (child)
-             (begin
                (push (gnc:html-object-render child doc))
                (set! work-done (+ 1 work-done))
-               (gnc:report-percent-done (* 100 (/ work-done work-to-do)))))
+               (gnc:report-percent-done (* 100 (/ work-done work-to-do))))
            objs)
 
-          (if (not (null? headers?))
-              (begin
-                (push "</body>\n")
-                (push "</html>\n")))
+          (when headers?
+            (push "</body>\n")
+            (push "</html>\n"))
 
           (gnc:report-finished)
           (gnc:html-document-pop-style doc)
@@ -250,10 +243,7 @@
 
 (define (gnc:html-document-markup-start doc markup end-tag? . rest)
   (let ((childinfo (gnc:html-document-fetch-markup-style doc markup))
-        (extra-attrib
-         (if (not (null? rest))
-             rest #f))
-        (show-result #f))
+        (extra-attrib (and (pair? rest) rest)))
     ;; now generate the start tag
     (let ((tag   (gnc:html-markup-style-info-tag childinfo))
           (attr  (gnc:html-markup-style-info-attributes childinfo))
@@ -346,21 +336,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (gnc:html-document-render-data doc data)
-  (let ((style-info #f)
-        (data-type #f))
-    (cond
-     ((number? data)
-      (set! data-type "<number>"))
-     ((string? data)
-      (set! data-type "<string>"))
-     ((boolean? data)
-      (set! data-type "<boolean>"))
-     ((record? data)
-      (set! data-type (record-type-name (record-type-descriptor data))))
-     (#t
-      (set! data-type "<generic>")))
-
-    (set! style-info (gnc:html-document-fetch-data-style doc data-type))
+  (let* ((data-type (cond
+                     ((number? data) "<number>")
+                     ((string? data) "<string>")
+                     ((boolean? data) "<boolean>")
+                     ((record? data) (record-type-name
+                                      (record-type-descriptor data)))
+                     (else "<generic>")))
+         (style-info (gnc:html-document-fetch-data-style doc data-type)))
 
     ((gnc:html-data-style-info-renderer style-info)
      data (gnc:html-data-style-info-data style-info))))
@@ -383,51 +366,47 @@
   (record-constructor <html-object>))
 
 (define (gnc:make-html-object obj)
-  (let ((o #f))
-    (if (not (record? obj))
-        ;; for literals (strings/numbers)
-        (set! o
-              (gnc:make-html-object-internal
-               (lambda (obj doc)
-                 (gnc:html-document-render-data doc obj))
-               ;; if the object is #f, make it a placeholder
-               (if obj obj " ")))
-        (cond 
-         ((gnc:html-text? obj)
-          (set! o (gnc:make-html-object-internal
-                   gnc:html-text-render obj)))
-         ((gnc:html-table? obj)
-          (set! o (gnc:make-html-object-internal
-                   gnc:html-table-render obj)))
-         ((gnc:html-anytag? obj)
-          (set! o (gnc:make-html-object-internal
-                   gnc:html-anytag-render obj)))
-         ((gnc:html-table-cell? obj)
-          (set! o (gnc:make-html-object-internal
-                   gnc:html-table-cell-render obj)))
-         ((gnc:html-barchart? obj)
-          (set! o (gnc:make-html-object-internal
-                   gnc:html-barchart-render obj)))
-         ((gnc:html-piechart? obj)
-          (set! o (gnc:make-html-object-internal
-                   gnc:html-piechart-render obj)))
-         ((gnc:html-scatter? obj)
-          (set! o (gnc:make-html-object-internal
-                   gnc:html-scatter-render obj)))
-         ((gnc:html-linechart? obj)
-          (set! o (gnc:make-html-object-internal
-                   gnc:html-linechart-render obj)))
-         ((gnc:html-object? obj)
-          (set! o obj))
+  (cond
+   ((not (record? obj))
+    ;; for literals (strings/numbers)
+    ;; if the object is #f, make it a placeholder
+    (gnc:make-html-object-internal
+     (lambda (obj doc)
+       (gnc:html-document-render-data doc obj))
+     (or obj " ")))
 
-         ;; other record types that aren't HTML objects
-         (#t
-          (set! o
-                (gnc:make-html-object-internal
-                 (lambda (obj doc)
-                   (gnc:html-document-render-data doc obj))
-                 obj)))))
-    o))
+   ((gnc:html-text? obj)
+    (gnc:make-html-object-internal gnc:html-text-render obj))
+
+   ((gnc:html-table? obj)
+    (gnc:make-html-object-internal gnc:html-table-render obj))
+
+   ((gnc:html-anytag? obj)
+    (gnc:make-html-object-internal gnc:html-anytag-render obj))
+
+   ((gnc:html-table-cell? obj)
+    (gnc:make-html-object-internal gnc:html-table-cell-render obj))
+
+   ((gnc:html-barchart? obj)
+    (gnc:make-html-object-internal gnc:html-barchart-render obj))
+
+   ((gnc:html-piechart? obj)
+    (gnc:make-html-object-internal gnc:html-piechart-render obj))
+
+   ((gnc:html-scatter? obj)
+    (gnc:make-html-object-internal gnc:html-scatter-render obj))
+
+   ((gnc:html-linechart? obj)
+    (gnc:make-html-object-internal gnc:html-linechart-render obj))
+
+   ((gnc:html-object? obj)
+    obj)
+
+   ;; other record types that aren't HTML
+   (else
+    (gnc:make-html-object-internal
+     (lambda (obj doc)
+       (gnc:html-document-render-data doc obj)) obj))))
 
 (define gnc:html-object-renderer
   (record-accessor <html-object> 'renderer))

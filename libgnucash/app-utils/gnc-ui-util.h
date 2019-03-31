@@ -72,9 +72,11 @@ QofBook * gnc_get_current_book (void);
  * need to check as well for a book with no accounts (root with no children). */
 gboolean gnc_is_new_book (void);
 
-void gnc_set_current_book_tax_name (const gchar *tax_name);
+void gnc_set_current_book_tax_name_type (gboolean name_changed,
+                                            const gchar *tax_name,
+                                            gboolean type_changed,
+                                            const gchar *tax_type);
 const gchar * gnc_get_current_book_tax_name (void);
-void gnc_set_current_book_tax_type (const gchar *tax_type);
 const gchar * gnc_get_current_book_tax_type (void);
 /** Calls gnc_book_option_num_field_source_change to initiate registered
   * callbacks when num_field_source book option changes so that

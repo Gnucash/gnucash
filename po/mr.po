@@ -5,7 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 2.6.3\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2018-01-13 20:39+0100\n"
 "PO-Revision-Date: 2014-09-26 19:58-0500\n"
 "Last-Translator: Chandrakant Dhutadmal <cpdhutadmal@yahoo.com>\n"
@@ -11851,8 +11852,8 @@ msgstr "- GnuCash वैयक्तिक व लहान व्यवसा�
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
 #: ../gnucash/gnome-utils/gnc-main-window.c:4521
-msgid "translator_credits"
-msgstr "अनुवादक_जमा"
+msgid "translator-credits"
+msgstr "Chandrakant Dhutadmal, C-DAC, GIST, Pune, India, 2014"
 
 #: ../gnucash/gnome-utils/gnc-main-window.c:4524
 msgid "Visit the GnuCash website."
@@ -17045,8 +17046,8 @@ msgid "tax"
 msgstr "कर"
 
 #: ../gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "place_holder"
-msgstr "स्थान_धारक"
+msgid "placeholder"
+msgstr "स्थानधारक"
 
 #: ../gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54
 msgid "Export Account T_ree to CSV..."

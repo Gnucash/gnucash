@@ -157,18 +157,6 @@
                            (append (list category) key)
                            (list category key))))
 (export gnc:option-get-value)
-;; config-var.scm
-(export gnc:make-config-var)
-(export gnc:config-var-description-get)
-(export gnc:config-var-action-func-get)
-(export gnc:config-var-equality-func-get)
-(export gnc:config-var-modified?)
-(export gnc:config-var-modified?-set!)
-(export gnc:config-var-default-value-get)
-(export gnc:config-var-default-value-set!)
-(export gnc:config-var-value-get)
-(export gnc:config-var-value-set!)
-(export gnc:config-var-value-is-default?)
 
 ;; prefs.scm
 (export gnc:get-debit-string)
@@ -277,7 +265,7 @@
 (export gnc:get-three-months-ahead)
 
 ;; hooks 
-(export gnc:hook-run-danglers)		;; from hooks.scm
+(export gnc:hook-run-danglers)	    	;; from hooks.scm- deprecated
 (re-export gnc-hook-add-scm-dangler)
 (re-export HOOK-REPORT)
 
@@ -294,7 +282,6 @@
 (export gnc:*kvp-option-path*)
 
 (load-from-path "c-interface")
-(load-from-path "config-var")
 (load-from-path "options")
 (load-from-path "hooks")
 (load-from-path "prefs")

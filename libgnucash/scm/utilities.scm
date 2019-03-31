@@ -72,6 +72,13 @@
 (define (gnc:debug . items)
   (gnc-scm-log-debug (strify items)))
 
+;; the following functions are initialized to log message to tracefile
+;; and will be redefined in UI initialization to display dialog
+;; messages
+(define-public (gnc:gui-warn str1 str2) (gnc:warn str1))
+(define-public (gnc:gui-error str1 str2) (gnc:error str1))
+(define-public (gnc:gui-msg str1 str2) (gnc:msg str1))
+
 (define-syntax addto!
   (syntax-rules ()
     ((addto! alist element)

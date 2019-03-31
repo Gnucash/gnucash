@@ -41,6 +41,7 @@
 (export env-any-date)
 (export env-transfer)
 (export env-transfer-foreign)
+(export env-create-multisplit-transaction)
 (export env-create-transaction)
 (export env-create-account)
 (export env-create-root-account)
@@ -183,44 +184,17 @@
           notes            ; string: notes       (def = null)
           memo             ; string: memo        (def = null)
           )
-  (let ((txn (xaccMallocTransaction (gnc-get-current-book)))
-	(split-1 (xaccMallocSplit  (gnc-get-current-book)))
-	(split-2 (xaccMallocSplit  (gnc-get-current-book))))
-    (xaccTransBeginEdit txn)
-    (xaccTransSetDescription txn (or description "ponies"))
-    (xaccTransSetCurrency txn (xaccAccountGetCommodity debit))
-    (xaccTransSetDate txn DD MM YY)
-    (xaccSplitSetParent split-1 txn)
-    (xaccSplitSetParent split-2 txn)
-    (xaccSplitSetAccount split-1 debit)
-    (xaccSplitSetAccount split-2 credit)
-    (xaccSplitSetValue split-1 (- amount1))
-    (xaccSplitSetValue split-2 amount1)
-    (xaccSplitSetAmount split-1 (- amount1))
-    (xaccSplitSetAmount split-2 amount2)
-    (if reconcile
-        (begin
-          (xaccSplitSetReconcile split-1 (car reconcile))
-          (xaccSplitSetReconcile split-2 (car reconcile))
-          (xaccSplitSetDateReconciledSecs split-1 (cdr reconcile))
-          (xaccSplitSetDateReconciledSecs split-2 (cdr reconcile))))
-    (if num
-        (begin
-          (gnc-set-num-action txn split-1 num num)
-          (gnc-set-num-action txn split-2 num num)))
-    (if void-reason (xaccTransVoid txn void-reason))
-    (if notes (xaccTransSetNotes txn notes))
-    (if memo
-        (begin
-          (xaccSplitSetMemo split-1 memo)
-          (xaccSplitSetMemo split-2 memo)))
-    (if (> amount2 0)
-        (gnc-pricedb-create (xaccAccountGetCommodity debit)
-                        (xaccAccountGetCommodity credit)
-                        (gnc-dmy2time64 DD MM YY)
-                        (/ amount1 amount2)))
-    (xaccTransCommitEdit txn)
-    txn))
+  (env-create-multisplit-transaction
+   env
+   DD MM YY
+   (list (vector debit (- amount1) (- amount1))
+         (vector credit amount1 amount2))
+   #:description description
+   #:void-reason void-reason
+   #:reconcile reconcile
+   #:num num
+   #:memo memo
+   #:notes notes))
 
 (define* (env-transfer
           env
@@ -234,16 +208,78 @@
           reconcile        ; char  : reconciled  (default = n)
           num              ; string: num field   (def = null)
           notes            ; string: notes       (def = null)
-          memo             ; string: memo        (def = null)
-          )
-  (env-transfer-foreign
-   env DD MM YY debit credit amount amount
+          memo)            ; string: memo        (def = null)
+  (env-create-multisplit-transaction
+   env
+   DD MM YY
+   (list
+    (vector debit (- amount) (- amount))
+    (vector credit amount amount))
    #:description description
    #:void-reason void-reason
    #:reconcile reconcile
    #:num num
    #:memo memo
    #:notes notes))
+
+;; creates multisplit transaction.
+;;
+;; input: DD/MM/YY - posting date of transaction
+;;
+;;        list-of-splits, a list of vectors, whose components are
+;;        (vector account value amount). The total of sum of values
+;;        must be zero, otherwise an imbalance split will be
+;;        created. It must contain at least 1 split. The transaction
+;;        currency is set as currency of the first split.
+;;
+;; returns: the transaction created, or #f
+(define* (env-create-multisplit-transaction
+          env DD MM YY list-of-splits
+          #:key            ; - the following are optional -
+          description      ; string: description (def = "ponies")
+          (pricedb? #t)    ; boolean: add pricedb entry?
+          void-reason      ; string: void-reason (def = not-voided)
+          reconcile        ; pair  : (cons reconciled reconciled-date)
+          num              ; string: num field   (def = null)
+          notes            ; string: notes       (def = null)
+          memo)            ; string: memo        (def = null)
+  (and (pair? list-of-splits)
+       (let* ((book (gnc-get-current-book))
+              (txn (xaccMallocTransaction book))
+              (first-split (vector-ref (car list-of-splits) 0)))
+         (xaccTransBeginEdit txn)
+         (xaccTransSetDescription txn (or description (env-string env "ponies")))
+         (xaccTransSetCurrency txn (xaccAccountGetCommodity first-split))
+         (xaccTransSetDate txn DD MM YY)
+         (for-each
+          (lambda (split)
+            (let ((acc (vector-ref split 0))
+                  (val (vector-ref split 1))
+                  (amt (vector-ref split 2))
+                  (newsplit (xaccMallocSplit book)))
+              (xaccSplitSetParent newsplit txn)
+              (xaccSplitSetAccount newsplit acc)
+              (xaccSplitSetValue newsplit val)
+              (xaccSplitSetAmount newsplit amt)
+              (if num (gnc-set-num-action txn newsplit num num))
+              (if memo (xaccSplitSetMemo newsplit memo))
+              (when reconcile
+                (xaccSplitSetReconcile newsplit (car reconcile))
+                (xaccSplitSetDateReconciledSecs newsplit (cdr reconcile)))
+              (if (and pricedb?
+                       (not (zero? amt))
+                       (not (gnc-commodity-equiv
+                             (xaccAccountGetCommodity first-split)
+                             (xaccAccountGetCommodity acc))))
+                  (gnc-pricedb-create (xaccAccountGetCommodity first-split)
+                                      (xaccAccountGetCommodity acc)
+                                      (gnc-dmy2time64 DD MM YY)
+                                      (/ val amt)))))
+          list-of-splits)
+         (if void-reason (xaccTransVoid txn void-reason))
+         (if notes (xaccTransSetNotes txn notes))
+         (xaccTransCommitEdit txn)
+         txn)))
 
 (define (env-create-root-account env type commodity)
   (env-create-account env type commodity (gnc-get-current-root-account)))
@@ -328,13 +364,111 @@
 	       (list "Petrol")))))
 
 (define (env-create-test-accounts env)
-  (env-create-account-structure-alist env
-				      (list "Root"
-					    (list (cons 'type ACCT-TYPE-ASSET))
-					    (list "Bank")
-					    (list "Wallet")
-					    (list "Other")
-					    (list "Expenses"
-						  (list (cons 'type ACCT-TYPE-EXPENSE))))))
+  (env-create-account-structure-alist
+   env
+   (list "Root"
+	 (list (cons 'type ACCT-TYPE-ASSET))
+	 (list "Bank")
+	 (list "Wallet")
+	 (list "Other")
+	 (list "Expenses"
+	       (list (cons 'type ACCT-TYPE-EXPENSE))))))
 
+(define (mnemonic->commodity sym)
+    (gnc-commodity-table-lookup
+     (gnc-commodity-table-get-table (gnc-get-current-book))
+     (gnc-commodity-get-namespace (gnc-default-report-currency))
+     sym))
 
+(define-public (create-test-data)
+  (let* ((env (create-test-env))
+         (GBP (mnemonic->commodity "GBP"))
+         (structure
+          (list "Root" (list
+                        (cons 'type ACCT-TYPE-ASSET))
+                (list "Asset"
+                      (list "Bank")
+                      (list "GBP Bank" (list
+                                        (cons 'commodity GBP)))
+                      (list "Wallet"))
+                (list "Income" (list
+                                (cons 'type ACCT-TYPE-INCOME)))
+                (list "Income-GBP" (list
+                                    (cons 'type ACCT-TYPE-INCOME)
+                                    (cons 'commodity GBP)))
+                (list "Expenses" (list
+                                  (cons 'type ACCT-TYPE-EXPENSE)))
+                (list "Liabilities" (list (cons 'type ACCT-TYPE-LIABILITY)))
+                (list "Equity" (list
+                                (cons 'type ACCT-TYPE-EQUITY)))))
+         (account-alist (env-create-account-structure-alist env structure))
+         (bank (cdr (assoc "Bank" account-alist)))
+         (gbp-bank (cdr (assoc "GBP Bank" account-alist)))
+         (wallet (cdr (assoc "Wallet" account-alist)))
+         (income (cdr (assoc "Income" account-alist)))
+         (gbp-income (cdr (assoc "Income-GBP" account-alist)))
+         (expense (cdr (assoc "Expenses" account-alist)))
+         (liability (cdr (assoc "Liabilities" account-alist)))
+         (equity (cdr (assoc "Equity" account-alist))))
+
+    ;; populate datafile with old transactions
+    (env-transfer env 01 01 1970 bank expense       5
+                  #:description "desc-1" #:num "trn1"
+                  #:memo "memo-3")
+
+    (env-transfer env 31 12 1969 income bank       10
+                  #:description "desc-2" #:num "trn2"
+                  #:void-reason "void" #:notes "notes3")
+
+    (env-transfer env 31 12 1969 income bank       29
+                  #:description "desc-3" #:num "trn3"
+                  #:reconcile (cons #\c (gnc-dmy2time64 01 03 1970)))
+
+    (env-transfer env 01 02 1970 bank expense      15
+                  #:description "desc-4" #:num "trn4"
+                  #:notes "notes2" #:memo "memo-1")
+
+    (env-transfer env 10 01 1970 liability expense 10
+                  #:description "desc-5" #:num "trn5"
+                  #:void-reason "any")
+
+    (env-transfer env 10 01 1970 liability expense 11
+                  #:description "desc-6" #:num "trn6"
+                  #:notes "notes1")
+
+    (env-transfer env 10 02 1970 bank liability     8
+                  #:description "desc-7" #:num "trn7"
+                  #:notes "notes1" #:memo "memo-2"
+                  #:reconcile (cons #\y (gnc-dmy2time64 01 03 1970)))
+
+    (env-create-multisplit-transaction
+     env 14 02 1971
+     (list (vector bank  -100 -100)
+           (vector expense 80   80)
+           (vector wallet  20   20))
+     #:description "$100bank -> $80expenses + $20wallet"
+     #:notes "multisplit")
+
+    (let ((closing-txn (env-transfer
+                        env 31 12 1977 expense equity
+                        111 #:description "Closing")))
+      (xaccTransSetIsClosingTxn closing-txn #t))
+
+    (env-transfer-foreign env 15 01 2000 gbp-bank bank
+                          10 14 #:description "GBP 10 to USD 14")
+
+    (env-transfer-foreign env 15 02 2000 bank gbp-bank
+                          9  6 #:description "USD 9 to GBP 6")
+
+    (for-each
+     (lambda (m)
+       (env-transfer env 08 (1+ m) 1978
+                     gbp-income gbp-bank 51 #:description "#51 income")
+       (env-transfer env 03 (1+ m) 1978
+                     income bank  103 #:description "$103 income")
+       (env-transfer env 15 (1+ m) 1978
+                     bank expense  22 #:description "$22 expense")
+       (env-transfer env 09 (1+ m) 1978
+                     income bank  109 #:description "$109 income"))
+     (iota 12))
+    account-alist))

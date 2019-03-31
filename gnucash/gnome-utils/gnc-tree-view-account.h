@@ -118,6 +118,15 @@ void gnc_tree_view_account_restore(GncTreeViewAccount *view,
                                    GKeyFile *key_file,
                                    const gchar *group_name);
 
+void gnc_tree_view_account_save_filter (GncTreeViewAccount *tree_view,
+                                        AccountFilterDialog *fd,
+                                        GKeyFile *key_file,
+                                        const gchar *group_name);
+void gnc_tree_view_account_restore_filter (GncTreeViewAccount *view,
+                                           AccountFilterDialog *fd,
+                                           GKeyFile *key_file,
+                                           const gchar *group_name);
+
 
 /* Get the GType for an GncTreeViewAccount object. */
 GType gnc_tree_view_account_get_type (void);

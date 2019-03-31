@@ -63,23 +63,19 @@
 (export gnc:account-map-descendants)
 (export gnc:account-map-children)
 
-(export account-same?)
-(export account-in-list?)
-(export account-in-list-pred)
-(export account-in-alist)
+(export account-same?)                  ;deprecated
+(export account-in-list?)               ;deprecated
+(export account-in-list-pred)           ;deprecated
+(export account-in-alist)               ;deprecated
 (export account-full-name<?)
-(export account-list-predicate)
 (export accounts-get-children-depth)
-(export account-hashtable-ref)
-(export account-hashtable-set!)
+(export account-hashtable-ref)          ;deprecated
+(export account-hashtable-set!)         ;deprecated
 
-(export split-same?)
-(export split-in-list?)
-
-(export split-same?)
-(export split-in-list?)
-(export split-hashtable-ref)
-(export split-hashtable-set!)
+(export split-same?)                    ;deprecated
+(export split-in-list?)                 ;deprecated
+(export split-hashtable-ref)            ;deprecated
+(export split-hashtable-set!)           ;deprecated
 
 (export gnc:split-structure)
 (export gnc:make-split-scm)

@@ -361,12 +361,18 @@ developing over time"))
           (define account-balances-alist
             (map
              (lambda (acc)
-               (cons acc
-                     (map
-                      (if (reverse-balance? acc) gnc:monetary-neg identity)
-                      (gnc:account-get-balances-at-dates
-                       acc dates-list
-                       #:ignore-closing? (gnc:account-is-inc-exp? acc)))))
+               (let ((ignore-closing? (not (gnc:account-is-inc-exp? acc))))
+                 (cons acc
+                       (map
+                        (if (reverse-balance? acc) gnc:monetary-neg identity)
+                        (gnc:account-get-balances-at-dates
+                         acc dates-list
+                         #:split->amount
+                         (lambda (s)
+                           (and (or ignore-closing?
+                                    (not (xaccTransGetIsClosingTxn
+                                          (xaccSplitGetParent s))))
+                                (xaccSplitGetAmount s))))))))
              accounts))
 
           ;; Creates the <balance-list> to be used in the function
@@ -705,18 +711,22 @@ developing over time"))
              (gnc:report-percent-done 98)
              (gnc:html-document-add-object! document chart)
              (if show-table?
-                 (begin
+                 (let ((scu (gnc-commodity-get-fraction report-currency)))
                    (gnc:html-table-append-column! table date-string-list)
 
-                   (letrec
-                       ((addcol
-                         (lambda (col)
-                           (if (not (null? col))
-                               (begin
-                                 (gnc:html-table-append-column!
-                                  table (car col))
-                                 (addcol (cdr col)))))))
-                     (addcol (map cadr all-data)))
+                   (for-each
+                    (lambda (col)
+                      (gnc:html-table-append-column!
+                       table
+                       (map
+                        (lambda (mon)
+                          (gnc:make-gnc-monetary
+                           report-currency
+                           (gnc-numeric-convert
+                            (gnc:gnc-monetary-amount mon)
+                            scu GNC-HOW-RND-ROUND)))
+                        col)))
+                    (map cadr all-data))
 
                    (gnc:html-table-set-col-headers!
                     table

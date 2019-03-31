@@ -1,7 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: GnuCash \n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2018-01-13 20:39+0100\n"
 "PO-Revision-Date: 2009-07-15 11:40+0900\n"
 "Last-Translator: Jin-Hwan Jeong <yongdoria@gmail.com>\n"
@@ -11571,8 +11572,8 @@ msgstr ""
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
 #: ../gnucash/gnome-utils/gnc-main-window.c:4521
-msgid "translator_credits"
-msgstr ""
+msgid "translator-credits"
+msgstr "Jin-Hwan Jeong, 2009"
 
 #: ../gnucash/gnome-utils/gnc-main-window.c:4524
 msgid "Visit the GnuCash website."
@@ -16682,7 +16683,7 @@ msgstr "세금"
 
 #: ../gnucash/import-export/csv-exp/csv-tree-export.c:158
 #, fuzzy
-msgid "place_holder"
+msgid "placeholder"
 msgstr "자리표시자"
 
 #: ../gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54

@@ -177,6 +177,7 @@ static tokenize_csv_test_data comma_separated [] = {
         { "Test\\ with backslash,nextfield", 2, { "Test\\ with backslash","nextfield",NULL,NULL,NULL,NULL,NULL,NULL } },
         { "Test with \\\" escaped quote,nextfield", 2, { "Test with \" escaped quote","nextfield",NULL,NULL,NULL,NULL,NULL,NULL } },
         { "Test with \"\" escaped quote,nextfield", 2, { "Test with \" escaped quote","nextfield",NULL,NULL,NULL,NULL,NULL,NULL } },
+        { "\"Unescaped quote test\",nextfield", 2, { "Unescaped quote test","nextfield",NULL,NULL,NULL,NULL,NULL,NULL } },
         { NULL, 0, { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL } },
 };
 

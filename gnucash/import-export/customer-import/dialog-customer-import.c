@@ -201,9 +201,7 @@ gnc_customer_import_fix_customers (GtkListStore *store, guint *fixed, guint *del
 {
     GtkTreeIter iter;
     gboolean valid;
-    gchar *company, *name, *addr1, *addr2, *addr3, *addr4, *phone, *fax, *email,
-            *notes, *shipname, *shipaddr1, *shipaddr2, *shipaddr3, *shipaddr4, 
-            *shipphone, *shipfax, *shipemail;
+    gchar *company, *name, *addr1, *addr2, *addr3, *addr4;
     guint dummy;
 
     // allow the call to this function with only GtkListeStore* specified
@@ -226,26 +224,17 @@ gnc_customer_import_fix_customers (GtkListStore *store, guint *fixed, guint *del
                             CI_ADDR2, &addr2,
                             CI_ADDR3, &addr3,
                             CI_ADDR4, &addr4,
-                            CI_PHONE, &phone,
-                            CI_FAX, &fax,
-                            CI_EMAIL, &email,
-                            CI_NOTES, &notes,
-                            CI_SHIPNAME, &shipname,
-                            CI_SHIPADDR1, &shipaddr1,
-                            CI_SHIPADDR2, &shipaddr2,
-                            CI_SHIPADDR3, &shipaddr3,
-                            CI_SHIPADDR4, &shipaddr4,
-                            CI_SHIPPHONE, &shipphone,
-                            CI_SHIPFAX, &shipfax,
-                            CI_SHIPEMAIL, &shipemail,
                             -1);
 
+        // Company name is mandatory.
+        // If not provided, default the company name to the value of the field name.
         if (strlen(company) == 0)
         {
+            //But if the field name is also blank, then delete the row.
             if (strlen(name) == 0)
             {
                 // no fix possible -> delete row
-                gtk_list_store_remove (store, &iter);
+                valid = gtk_list_store_remove (store, &iter);
                 (*deleted)++;
                 continue;
             }
@@ -257,24 +246,21 @@ gnc_customer_import_fix_customers (GtkListStore *store, guint *fixed, guint *del
             }
         }
         
+        // At least one of the address fields must have a value.
+        // If not, then delete the row.
+        if (strlen(addr1) == 0 && strlen(addr2) == 0 && strlen(addr3) == 0 && strlen(addr4) == 0)
+        {
+            valid = gtk_list_store_remove (store, &iter);
+            (*deleted)++;
+            continue;
+        }
+        
         g_free (company);
         g_free (name);
         g_free (addr1);
         g_free (addr2);
         g_free (addr3);
         g_free (addr4);
-        g_free (phone);
-        g_free (fax);
-        g_free (email);
-        g_free (notes);
-        g_free (shipname);
-        g_free (shipaddr1);
-        g_free (shipaddr2);
-        g_free (shipaddr3);
-        g_free (shipaddr4);
-        g_free (shipphone);
-        g_free (shipfax);
-        g_free (shipemail);
 
         valid = gtk_tree_model_iter_next (GTK_TREE_MODEL(store), &iter);
     }

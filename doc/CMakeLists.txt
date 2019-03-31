@@ -6,6 +6,7 @@ set(doc_DATA
   README-ca.win32-bin.txt
   README-de.win32-bin.txt
   README-fr.win32-bin.txt
+  README-hr.win32-bin.txt
   README-it.win32-bin.txt
   README-lv.win32-bin.txt
   README-nl.win32-bin.txt

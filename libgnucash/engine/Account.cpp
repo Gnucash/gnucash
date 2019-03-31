@@ -252,7 +252,7 @@ mark_account (Account *acc)
 \********************************************************************/
 
 /* GObject Initialization */
-G_DEFINE_TYPE(Account, gnc_account, QOF_TYPE_INSTANCE)
+G_DEFINE_TYPE_WITH_PRIVATE(Account, gnc_account, QOF_TYPE_INSTANCE)
 
 static void
 gnc_account_init(Account* acc)
@@ -576,8 +576,6 @@ gnc_account_class_init (AccountClass *klass)
     gobject_class->finalize = gnc_account_finalize;
     gobject_class->set_property = gnc_account_set_property;
     gobject_class->get_property = gnc_account_get_property;
-
-    g_type_class_add_private(klass, sizeof(AccountPrivate));
 
     g_object_class_install_property
     (gobject_class,
@@ -5555,7 +5553,7 @@ build_non_bayes (const char *key, const GValue *value, gpointer user_data)
     imapInfo_node->category       = g_strdup (imapInfo->category);
     imapInfo_node->count          = g_strdup (" ");
 
-    imapInfo->list = g_list_append (imapInfo->list, imapInfo_node);
+    imapInfo->list = g_list_prepend (imapInfo->list, imapInfo_node);
 
     g_free (guid_string);
 }
@@ -5594,7 +5592,7 @@ build_bayes (const char *key, KvpValue * value, GncImapInfo & imapInfo)
     imap_node->match_string = g_strdup (std::get <1> (parsed_key).c_str ());
     imap_node->category = g_strdup(" ");
     imap_node->count = g_strdup_printf ("%" G_GINT64_FORMAT, count);
-    imapInfo.list = g_list_append (imapInfo.list, imap_node);
+    imapInfo.list = g_list_prepend (imapInfo.list, imap_node);
 }
 
 GList *
@@ -5605,7 +5603,7 @@ gnc_account_imap_get_info_bayes (Account *acc)
      * of data about which we care. */
     GncImapInfo imapInfo {acc, nullptr};
     qof_instance_foreach_slot_prefix (QOF_INSTANCE (acc), IMAP_FRAME_BAYES, &build_bayes, imapInfo);
-    return imapInfo.list;
+    return g_list_reverse(imapInfo.list);
 }
 
 GList *
@@ -5630,7 +5628,7 @@ gnc_account_imap_get_info (Account *acc, const char *category)
         qof_instance_foreach_slot (QOF_INSTANCE(acc), IMAP_FRAME, category,
                                    build_non_bayes, &imapInfo);
     }
-    return imapInfo.list;
+    return g_list_reverse(imapInfo.list);
 }
 
 /*******************************************************************************/

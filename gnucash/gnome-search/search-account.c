@@ -58,39 +58,12 @@ struct _GNCSearchAccountPrivate
     GtkWindow *parent;
 };
 
+G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchAccount, gnc_search_account, GNC_TYPE_SEARCH_CORE_TYPE)
+
 #define _PRIVATE(o) \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_SEARCH_ACCOUNT, GNCSearchAccountPrivate))
 
 static GNCSearchCoreTypeClass *parent_class;
-
-
-GType
-gnc_search_account_get_type (void)
-{
-    static GType type = 0;
-
-    if (!type)
-    {
-        GTypeInfo type_info =
-        {
-            sizeof(GNCSearchAccountClass),    /* class_size */
-            NULL,   				/* base_init */
-            NULL,				/* base_finalize */
-            (GClassInitFunc)gnc_search_account_class_init,
-            NULL,				/* class_finalize */
-            NULL,				/* class_data */
-            sizeof(GNCSearchAccount),		/* */
-            0,				/* n_preallocs */
-            (GInstanceInitFunc)gnc_search_account_init,
-        };
-
-        type = g_type_register_static (GNC_TYPE_SEARCH_CORE_TYPE,
-                                       "GNCSearchAccount",
-                                       &type_info, 0);
-    }
-
-    return type;
-}
 
 static void
 gnc_search_account_class_init (GNCSearchAccountClass *klass)
@@ -109,8 +82,6 @@ gnc_search_account_class_init (GNCSearchAccountClass *klass)
     gnc_search_core_type->get_widget = gncs_get_widget;
     gnc_search_core_type->get_predicate = gncs_get_predicate;
     gnc_search_core_type->clone = gncs_clone;
-
-    g_type_class_add_private(klass, sizeof(GNCSearchAccountPrivate));
 }
 
 static void

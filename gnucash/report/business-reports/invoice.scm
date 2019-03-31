@@ -447,7 +447,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
                  (qof-print-date (xaccTransGetDate t)))
 
           (addif (description-col used-columns)
-                 (_ "Payment, thank you"))
+                 (_ "Payment, thank you!"))
 
           (list (gnc:make-html-table-cell/size/markup
                  1 (- (max 3 (num-columns-required used-columns))

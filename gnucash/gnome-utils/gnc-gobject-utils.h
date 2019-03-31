@@ -109,6 +109,62 @@ void gnc_gobject_tracking_dump (void);
 
 /** @} */
 
+/** Some macros derived from glib type macros.
+ * In glib type_name##init function only has one parameter. We need
+ * the 2nd class parameter in certain calls. The main difference is
+ * static void     type_name##_init         (TypeName        *self, void *class);
+ * instead of
+ * static void     type_name##_init         (TypeName        *self);
+ * this code may need updating in future releases as glib changes.
+ **/
+#define GNC_IMPLEMENT_INTERFACE(TYPE_IFACE, iface_init)       { \
+  const GInterfaceInfo g_implement_interface_info = { \
+      (GInterfaceInitFunc)(void (*)(void *, void *)) iface_init, NULL, NULL    \
+  }; \
+  g_type_add_interface_static (g_define_type_id, TYPE_IFACE, &g_implement_interface_info); \
+}
+
+#define GNC_DEFINE_TYPE_WITH_CODE(TN, t_n, T_P, _C_)            _GNC_DEFINE_TYPE_EXTENDED_BEGIN (TN, t_n, T_P, 0) {_C_;} _GNC_DEFINE_TYPE_EXTENDED_END()
+
+#define _GNC_DEFINE_TYPE_EXTENDED_BEGIN(TypeName, type_name, TYPE_PARENT, flags) \
+\
+static void     type_name##_init         (TypeName        *self, void *class); \
+static void     type_name##_class_init   (TypeName##Class *klass); \
+static gpointer type_name##_parent_class = NULL; \
+static gint     TypeName##_private_offset; \
+\
+_G_DEFINE_TYPE_EXTENDED_CLASS_INIT(TypeName, type_name) \
+\
+G_GNUC_UNUSED \
+static inline gpointer \
+type_name##_get_instance_private (TypeName *self) \
+{ \
+  return (G_STRUCT_MEMBER_P (self, TypeName##_private_offset)); \
+} \
+\
+GType \
+type_name##_get_type (void) \
+{ \
+  static volatile gsize g_define_type_id__volatile = 0; \
+  if (g_once_init_enter (&g_define_type_id__volatile))  \
+    { \
+      GType g_define_type_id = \
+        g_type_register_static_simple (TYPE_PARENT, \
+                                       g_intern_static_string (#TypeName), \
+                                       sizeof (TypeName##Class), \
+                                       (GClassInitFunc) type_name##_class_intern_init, \
+                                       sizeof (TypeName), \
+                                       (GInstanceInitFunc) type_name##_init, \
+                                       (GTypeFlags) flags); \
+      { /* custom code follows */
+#define _GNC_DEFINE_TYPE_EXTENDED_END()   \
+        /* following custom code */     \
+      }                                 \
+      g_once_init_leave (&g_define_type_id__volatile, g_define_type_id); \
+    }                                   \
+  return g_define_type_id__volatile;    \
+} /* closes type_name##_get_type() */
+
 
 #endif /* GNC_GOBJECT_UTILS_H */
 /** @} */

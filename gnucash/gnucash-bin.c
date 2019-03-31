@@ -55,6 +55,9 @@
 #include "gnc-session.h"
 #include "engine-helpers-guile.h"
 #include "swig-runtime.h"
+#ifdef __MINGW32__
+#include <Windows.h>
+#endif
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -92,6 +95,7 @@ static const char  *add_quotes_file  = NULL;
 static char        *namespace_regexp = NULL;
 static const char  *file_to_load     = NULL;
 static gchar      **args_remaining   = NULL;
+static     gchar *sys_locale = NULL;
 
 static GOptionEntry options[] =
 {
@@ -441,27 +445,14 @@ gnc_parse_command_line(int *argc, char ***argv)
     g_option_context_free (context);
     if (gnucash_show_version)
     {
-        gchar *vcs;
-
+        const char *format_string;
         if (is_development_version)
-            g_print (_("GnuCash %s development version"), VERSION);
+            format_string = _("GnuCash %s development version");
         else
-            g_print (_("GnuCash %s"), VERSION);
+            format_string = _("GnuCash %s");
 
-#ifdef GNC_VCS
-        vcs = GNC_VCS " ";
-#else
-        vcs = "";
-#endif
-
-        /* Allow builder to override the build id (eg distributions may want to
-         * print an package source version number (rpm, dpkg,...) instead of our git ref */
-        if (g_strcmp0("", GNUCASH_BUILD_ID) != 0)
-            g_print ("\n%s: %s\n",
-                     _("Build ID"), GNUCASH_BUILD_ID);
-        else
-            g_print ("\n%s: %s%s (%s)\n",
-                     _("Build ID"), vcs, GNC_VCS_REV, GNC_VCS_REV_DATE);
+        g_print (format_string, gnc_version());
+        g_print ("\n%s: %s\n", _("Build ID"), gnc_build_id());
         exit(0);
     }
 
@@ -619,7 +610,23 @@ inner_main (void *closure, int argc, char **argv)
 
     main_mod = scm_c_resolve_module("gnucash utilities");
     scm_set_current_module(main_mod);
-
+#ifdef __MINGW32__
+    /* Guile initialization calls setlocale(LC_ALL, "") which on
+     * windows resets the locale to what the user has set in the
+     * registry. Put it back to what we set from the environment or
+     * environment file.
+     */
+    if (sys_locale)
+    {
+	setlocale (LC_ALL, sys_locale);
+	g_free (sys_locale);
+	sys_locale = NULL;
+    }
+    else
+    {
+	setlocale (LC_ALL, "C");
+    }
+#endif
     /* Check whether the settings need a version update */
     gnc_gsettings_version_upgrade ();
 
@@ -754,10 +761,38 @@ gnc_log_init()
     }
 }
 
+#ifdef __MINGW32__
+/* Set the Win32 internal localization for the main thread if the
+ * locale has been overridden in the environment. Note that this is
+ * separate from what setlocale() does; that only affects POSIX
+ * functions and does *not* set the Windows locale.
+ */
+static void
+set_win32_thread_locale()
+{
+    gunichar2* wlocale = NULL;
+    char *locale = NULL;
+    int len = 0;
+    if (((locale = getenv ("LC_ALL")) == NULL || locale[0] == '\0')
+      && ((locale = getenv ("LC_MESSAGES")) == NULL || locale[0] == '\0')
+      && ((locale = getenv ("LANG")) == NULL || locale[0] == '\0'))
+	return;
+    len = strchr(locale, '.') - locale;
+    locale[2] = '-';
+    wlocale = g_utf8_to_utf16 (locale, len, NULL, NULL, NULL);
+    if (IsValidLocaleName(wlocale))
+    {
+	LCID lcid = LocaleNameToLCID(wlocale, LOCALE_ALLOW_NEUTRAL_NAMES);
+	SetThreadLocale(lcid);
+    }
+    g_free(locale);
+    g_free(wlocale);
+}
+#endif
+
 int
 main(int argc, char ** argv)
 {
-    gchar *sys_locale = NULL;
 #if !defined(G_THREADS_ENABLED) || defined(G_THREADS_IMPL_NONE)
 #    error "No GLib thread implementation available!"
 #endif
@@ -782,6 +817,9 @@ main(int argc, char ** argv)
     gnc_environment_setup();
 #ifndef MAC_INTEGRATION /* setlocale already done */
     sys_locale = g_strdup (setlocale (LC_ALL, ""));
+#ifdef __MINGW32__
+    set_win32_thread_locale();
+#endif
     if (!sys_locale)
       {
         g_print ("The locale defined in the environment isn't supported. "
@@ -820,7 +858,11 @@ main(int argc, char ** argv)
      * to avoid unintentionally messing up the locale settings */
     PINFO ("System locale returned %s", sys_locale ? sys_locale : "(null)");
     PINFO ("Effective locale set to %s.", setlocale (LC_ALL, ""));
+#ifndef __MINGW32__
+    /* We need it for later on Windows, see inner_main(). */
     g_free (sys_locale);
+    sys_locale = NULL;
+#endif
 #endif
 
     /* If asked via a command line parameter, fetch quotes only */

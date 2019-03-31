@@ -85,8 +85,8 @@ Libraries/Deps
 
   optional
   --------
-  aqbanking		4.0.0			 online banking; also requires
-						 gwehywfar and ktoblzcheck
+  aqbanking		5.3.4			 online banking; also requires
+						 gwehywfar.
 
   libdbi		0.8.3			 SQL backend; also requires at
 						 least one of libdbd-sqlite3,

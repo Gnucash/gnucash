@@ -10,7 +10,7 @@
 # Mark Haanen <i18n@haanen.net>, 2009-2017.
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash-2.7.8\n"
+"Project-Id-Version: GnuCash 2.7.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2018-03-25 12:40-0700\n"
 "PO-Revision-Date: 2018-05-10 14:11+0200\n"
@@ -7175,7 +7175,7 @@ msgstr "Boekhoudsoftware voor thuis en voor kleine ondernemingen."
 #. * The string can have multiple rows, so you can also add a list of
 #. * contributors.
 #: gnucash/gnome-utils/gnc-main-window.c:4523
-msgid "translator_credits"
+msgid "translator-credits"
 msgstr ""
 "Huidige vertaling door\n"
 "• Mark Haanen <i18n@haanen.net>, 2009-heden.\n"
@@ -16984,8 +16984,8 @@ msgid "tax"
 msgstr "BTW"
 
 #: gnucash/import-export/csv-exp/csv-tree-export.c:158
-msgid "place_holder"
-msgstr "aggre_gatie"
+msgid "placeholder"
+msgstr "aggregatie"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:54
 msgid "Export Account T_ree to CSV..."

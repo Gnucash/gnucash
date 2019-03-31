@@ -28,7 +28,7 @@
 #include <gnc-filepath-utils.h>
 #include <gnc-locale-utils.h>
 #include <glib.h>
-const gchar *gnc_version(void);
+#include <gnc-version.h>
 %}
 #if defined(SWIGGUILE)
 %{
@@ -51,10 +51,7 @@ void
 
 %include <gnc-environment.h>
 %include <gnc-prefs.h>
-%inline %{
-const gchar *gnc_version(void)
-{ return VERSION; }
-%}
+%include <gnc-version.h>
 
 %newobject gnc_path_get_bindir;
 gchar * gnc_path_get_bindir(void);
