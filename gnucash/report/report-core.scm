@@ -731,19 +731,19 @@ not found.")))
 
     ;; loop through all custom-templates in memory
     (let loop ((custom-templates (gnc:custom-report-templates-list))
-               (idx 0))
+               (guids '()))
       (cond
        ;; end of custom-templates. store the number of reports.
        ((null? custom-templates)
-        (qof-book-set-option book idx '("custom-templates" "len"))
+        (qof-book-set-option book (scm->json-string (list->vector guids))
+                             '("custom-templates" "guids"))
         (gnc:gui-msg saved (_ saved)))
 
        (else
         ;; there are custom-templates remaining.
         (let* ((tmpl (car custom-templates))
                (options (gnc:report-template-new-options (cdr tmpl)))
-               (embedded-list (gnc:report-embedded-list options))
-               (key (format #f "rpt~a" idx)))
+               (embedded-list (gnc:report-embedded-list options)))
 
           ;; loop through any embedded reports
           (let innerloop ((embedded-list (or embedded-list '()))
@@ -753,22 +753,33 @@ not found.")))
              ;; in kvp
              ((null? embedded-list)
 
-              (qof-book-set-option
-               book
-               (scm->json-string
-                (list
-                 (cons 'guid (gnc:report-template-report-guid (cdr tmpl)))
-                 (cons 'name (gnc:report-template-name (cdr tmpl)))
-                 (cons 'parenttype (gnc:report-template-parent-type (cdr tmpl)))
-                 (cons 'menupath (list->vector
-                                  (gnc:report-template-menu-path (cdr tmpl))))
-                 (cons 'embedded-reports (list->vector
-                                          (reverse embedded-reports)))
-                 (cons 'options (list->vector
-                                 (gnc:options-scm->list options)))))
-               (list "custom-templates" key "template"))
-              (loop (cdr custom-templates)
-                    (1+ idx)))
+              (let* ((guid (gnc:report-template-report-guid (cdr tmpl)))
+                     (name (gnc:report-template-name (cdr tmpl)))
+                     (repstring
+                      (scm->json-string
+                       (list
+                        (cons 'name name)
+                        (cons 'parenttype (gnc:report-template-parent-type (cdr tmpl)))
+                        (cons 'menupath (list->vector
+                                         (gnc:report-template-menu-path (cdr tmpl))))
+                        (cons 'embedded-reports (list->vector
+                                                 (reverse embedded-reports)))
+                        (cons 'options (list->vector
+                                        (gnc:options-scm->list options)))))))
+                (cond
+
+                 ((> (string-length repstring) 4000)
+                  (gui-error
+                   (format #f "Report guid ~a named ~s is too \
+complex. It has not been saved. Please reduce the report size \
+and try again."  guid name))
+                  (loop (cdr custom-templates)
+                        guids))
+
+                 (else
+                  (qof-book-set-option book repstring (list "custom-templates" guid))
+                  (loop (cdr custom-templates)
+                        (cons guid guids))))))
 
              (else
               ;; embedded-reports exist. store its definition in kvp
@@ -810,24 +821,22 @@ not found.")))
       (let* ((loaded (N_ "Loaded book custom reports"))
              (global (N_ "Loaded global custom reports"))
              (book (gnc-get-current-book))
-             (book-reports (qof-book-get-option book '("custom-templates" "len"))))
+             (book-reports (qof-book-get-option book '("custom-templates" "guids"))))
 
         (cond
          ;; book has saved-reports. remove custom-templates and load from book.
-         ((and book-reports (integer? book-reports))
+         ((and book-reports (vector? book-reports))
           (for-each
            (lambda (guid)
              (hash-remove! *gnc:_report-templates_* guid))
            (gnc:custom-report-template-guids))
 
           (for-each
-           (lambda (idx)
-             (let* ((key (format #f "rpt~a" idx))
-                    (saved-template-string
+           (lambda (guid)
+             (let* ((saved-template-string
                      (qof-book-get-option book
-                                          (list "custom-templates" key "template")))
+                                          (list "custom-templates" guid)))
                     (saved-report (json-string->scm saved-template-string))
-                    (guid (assoc-ref saved-report "guid"))
                     (name (assoc-ref saved-report "name"))
                     (parenttype (assoc-ref saved-report "parenttype"))
                     (embedded-reports (vector->list
@@ -878,7 +887,7 @@ not found.")))
                 'menu-path menupath
                 'renderer (gnc:report-template-renderer/report-guid
                            parenttype name))))
-           (iota book-reports))
+           (vector->list (json-string->scm book-reports)))
           (gnc:gui-msg loaded (_ loaded)))
 
          ;; book has no saved-reports. revert to global saved-reports.
