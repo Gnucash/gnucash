@@ -721,9 +721,8 @@ not found.")))
   (let ((saved-form (gnc:report-template-serialize report-template)))
     (gnc-saved-reports-write-to-file saved-form #f)))
 
-;; save all custom reports, moving the old version of the
-;; saved-reports file aside as a backup
-;; return #t if all templates were saved successfully
+;; save all custom reports into book.  return #t if all templates were
+;; saved successfully. error conditions mean some templates are not saved.
 (define (gnc:save-all-reports)
   (let ((saved (N_ "Saved book custom reports"))
         (book (gnc-get-current-book)))
@@ -731,60 +730,77 @@ not found.")))
 
     ;; loop through all custom-templates in memory
     (let loop ((custom-templates (gnc:custom-report-templates-list))
+               (errors '())
                (guids '()))
       (cond
-       ;; end of custom-templates. store the number of reports.
+       ;; end of custom-templates. report errors, and store the guids.
        ((null? custom-templates)
         (qof-book-set-option book (scm->json-string (list->vector guids))
                              '("custom-templates" "guids"))
-        (gnc:gui-msg saved (_ saved)))
+        (cond
+         ((null? errors)
+          (gnc:gui-msg saved (_ saved))
+          #t)
+
+         (else
+          (gui-error (string-append
+                      (_ "Error saving report(s): ")
+                      (string-join errors ", ")))
+          #f)))
 
        (else
         ;; there are custom-templates remaining.
         (let* ((tmpl (car custom-templates))
-               (options (gnc:report-template-new-options (cdr tmpl))))
-          (let* ((guid (gnc:report-template-report-guid (cdr tmpl)))
-                 (name (gnc:report-template-name (cdr tmpl)))
-                 (sub-reports
-                  (map
-                   (lambda (subreport-id)
-                     (let* ((sub (gnc-report-find subreport-id))
-                            (sub-type (gnc:report-type sub))
-                            (sub-template (hash-ref *gnc:_report-templates_* sub-type))
-                            (sub-template-name (gnc:report-template-name sub-template))
-                            (sub-cleanup-cb (gnc:report-template-options-cleanup-cb
-                                             sub-template)))
-                       (if sub-cleanup-cb (sub-cleanup-cb sub))
-                       (list
-                        (cons 'type sub-type)
-                        (cons 'name sub-template-name)
-                        (cons 'options (list->vector
-                                        (gnc:options-scm->list
-                                         (gnc:report-options sub)))))))
-                   (or (gnc:report-embedded-list options) '())))
-                 (repstring
-                  (scm->json-string
-                   (list
-                    (cons 'name name)
-                    (cons 'parenttype (gnc:report-template-parent-type (cdr tmpl)))
-                    (cons 'menupath (list->vector
-                                     (gnc:report-template-menu-path (cdr tmpl))))
-                    (cons 'sub-reports (list->vector sub-reports))
-                    (cons 'options (list->vector
-                                    (gnc:options-scm->list options)))))))
-            (cond
+               (options (gnc:report-template-new-options (cdr tmpl)))
+               (guid (gnc:report-template-report-guid (cdr tmpl)))
+               (name (gnc:report-template-name (cdr tmpl)))
+               (sub-reports
+                (map
+                 (lambda (subreport-id)
+                   (let* ((sub (gnc-report-find subreport-id))
+                          (sub-type (gnc:report-type sub))
+                          (sub-template (hash-ref *gnc:_report-templates_* sub-type))
+                          (sub-template-name (gnc:report-template-name sub-template))
+                          (sub-cleanup-cb (gnc:report-template-options-cleanup-cb
+                                           sub-template)))
+                     (if sub-cleanup-cb (sub-cleanup-cb sub))
+                     (list
+                      (cons 'type sub-type)
+                      (cons 'name sub-template-name)
+                      (cons 'options (list->vector
+                                      (gnc:options-scm->list
+                                       (gnc:report-options sub)))))))
+                 (or (gnc:report-embedded-list options) '()))))
 
-             ((> (string-length repstring) 4000)
-              (gui-error
-               (format #f (_ "Report guid ~a named ~s is too complex. \
-It has not been saved. Please reduce the report size." guid name)))
+          (catch #t
+            (lambda ()
+              (let ((repstring
+                     (scm->json-string
+                      (list
+                       (cons 'name name)
+                       (cons 'parenttype (gnc:report-template-parent-type (cdr tmpl)))
+                       (cons 'menupath (list->vector
+                                        (gnc:report-template-menu-path (cdr tmpl))))
+                       (cons 'sub-reports (list->vector sub-reports))
+                       (cons 'options (list->vector
+                                       (gnc:options-scm->list options)))))))
+                (cond
+                 ((> (string-length repstring) 4000)
+                  ;; serialized report string exceeds 4K. skip it.
+                  (loop (cdr custom-templates)
+                        (cons (string-append "report too complex:" name) errors)
+                        guids))
+                 (else
+                  ;; successfully generated string. save it.
+                  (qof-book-set-option book repstring (list "custom-templates" guid))
+                  (loop (cdr custom-templates)
+                        errors
+                        (cons guid guids))))))
+            (lambda args
+              ;; crash. log error and continue.
               (loop (cdr custom-templates)
-                    guids))
-
-             (else
-              (qof-book-set-option book repstring (list "custom-templates" guid))
-              (loop (cdr custom-templates)
-                    (cons guid guids)))))))))))
+                    (cons (format #f "~a: ~s" name args) errors)
+                    guids)))))))))
 
 ;; the following function will: (1) save the initial custom-reports
 ;; into global-saved-reports. These are from SAVED_REPORTS. (2) this
