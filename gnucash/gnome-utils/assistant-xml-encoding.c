@@ -533,7 +533,7 @@ gxi_ambiguous_info_destroy (GncXmlImportData *data)
     if (data->ambiguous_ht)
     {
         g_hash_table_destroy (data->ambiguous_ht);
-        data->unique = NULL;
+        data->ambiguous_ht = NULL;
     }
     if (data->ambiguous_list)
     {
