@@ -154,15 +154,12 @@
           (close port)))))
 
 (define (gnc:html-style-sheet-set-style! sheet tag . rest)
-  (let ((newstyle #f))
-    (if (and (= (length rest) 2)
-             (procedure? (car rest)))
-        (set! newstyle 
-              (apply gnc:make-html-data-style-info rest))
-        (set! newstyle 
-              (apply gnc:make-html-markup-style-info rest)))
-    (gnc:html-style-table-set! 
-     (gnc:html-style-sheet-style sheet) tag newstyle)))
+  (gnc:html-style-table-set!
+   (gnc:html-style-sheet-style sheet) tag
+   (if (and (= (length rest) 2)
+            (procedure? (car rest)))
+       (apply gnc:make-html-data-style-info rest)
+       (apply gnc:make-html-markup-style-info rest))))
 
 (define (gnc:make-html-style-sheet template-name style-sheet-name)
   (let* ((template (gnc:html-style-sheet-template-find template-name)))
@@ -234,7 +231,7 @@
   (let ((newdoc ((gnc:html-style-sheet-renderer sheet) 
                  (gnc:html-style-sheet-options sheet)
                  doc))
-        (headers? (if (null? rest) #f (if (car rest) #t #f))))
+        (headers? (and (pair? rest) (car rest))))
 
     ;; Copy values over to stylesheet-produced document.  note that this is a
     ;; bug that should probably better be fixed by having the stylesheets
@@ -266,27 +263,20 @@
     (gnc:html-document-render newdoc headers?)))
 
 (define (gnc:get-html-style-sheets)
-  (let* ((ss '()))
-    (hash-for-each (lambda (k v) (set! ss (cons v ss))) 
-                   *gnc:_style-sheets_*)
-    (sort ss
-          (lambda (a b)
-            (string<? (gnc:html-style-sheet-name a)
-                      (gnc:html-style-sheet-name b))))))
+  (sort (map cdr (hash-map->list cons *gnc:_style-sheets_*))
+        (lambda (a b)
+          (string<? (gnc:html-style-sheet-name a)
+                    (gnc:html-style-sheet-name b)))))
 
 (define (gnc:get-html-templates)
-  (let* ((ss '()))
-    (hash-for-each (lambda (k v) 
-                     (set! ss (cons v ss))) 
-                   *gnc:_style-sheet-templates_*)
-    (sort ss
-          (lambda (a b)
-            (string<? (gnc:html-style-sheet-template-name a)
-                      (gnc:html-style-sheet-template-name b))))))
+  (sort (map cdr (hash-map->list cons *gnc:_style-sheet-templates_*))
+        (lambda (a b)
+          (string<? (gnc:html-style-sheet-template-name a)
+                    (gnc:html-style-sheet-template-name b)))))
 
 (define (gnc:html-style-sheet-find tname)
   (hash-ref *gnc:_style-sheets_* tname))
 
 (define (gnc:html-style-sheet-remove sheet)
-  (if (not (string=? (gnc:html-style-sheet-name sheet) (N_ "Default")))
-      (hash-remove! *gnc:_style-sheets_* (gnc:html-style-sheet-name sheet))))
+  (unless (string=? (gnc:html-style-sheet-name sheet) (N_ "Default"))
+    (hash-remove! *gnc:_style-sheets_* (gnc:html-style-sheet-name sheet))))
