@@ -223,7 +223,7 @@ gcrp_grab_on_window (GdkWindow *window,
     GdkDevice *device;
 #endif
 
-#if GTK_CHECK_VERSION(3,22,0)
+#if GTK_CHECK_VERSION(3,20,0)
     GdkEvent *event = gtk_get_current_event ();
 #endif
 
@@ -234,7 +234,7 @@ gcrp_grab_on_window (GdkWindow *window,
     device = gdk_device_manager_get_client_pointer (device_manager);
 #endif
 
-#if GTK_CHECK_VERSION(3,22,0)
+#if GTK_CHECK_VERSION(3,20,0)
     if ((gdk_seat_grab (seat, window, GDK_SEAT_CAPABILITY_POINTER, TRUE, NULL,
                         event, NULL, NULL) == GDK_GRAB_SUCCESS )) {
         if (gdk_seat_grab (seat, window, GDK_SEAT_CAPABILITY_KEYBOARD, TRUE, NULL,
@@ -251,7 +251,7 @@ gcrp_grab_on_window (GdkWindow *window,
 #endif
             return TRUE;
         else {
-#if GTK_CHECK_VERSION(3,22,0)
+#if GTK_CHECK_VERSION(3,20,0)
             gdk_seat_ungrab (seat);
 #else
             gdk_device_ungrab (device, activate_time);
