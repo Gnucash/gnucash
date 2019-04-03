@@ -158,35 +158,27 @@
     "a" (N_ "Budget to be used when none has been otherwise specified.")))
 
   ;; Counters Tab
-  (map (lambda (vals)
-               (let* (
-		      ; Unpack the list of strings for this counter type
-                      (key (car vals))
-                      (sort-string key)
-                      (format-label (cadr vals))
-                      (number-label (caddr vals))
-                      (format-description (cadddr vals))
-                      (number-description (cadddr (cdr vals)))
-                     )
-                     (begin
-		      ; For each counter-type we create an option for
-		      ; the last used number and the format string to
-		      ; use.
-                      (reg-option
-                       (gnc:make-counter-option
-                        gnc:*option-section-counters* number-label key
-                        (string-append sort-string "a") number-description 0))
-                      (reg-option
-                       (gnc:make-counter-format-option
-                        gnc:*option-section-counters* format-label key
-                        (string-append sort-string "b") format-description ""))
-                      )
-               )
-       )
-       ;; Make counter and format option for each defined counter
-       counter-types
-  )
-)
+  (for-each
+   (lambda (vals)
+     ;; Unpack the list of strings for this counter type
+     (let* ((key (car vals))
+            (format-label (cadr vals))
+            (number-label (caddr vals))
+            (format-description (cadddr vals))
+            (number-description (cadddr (cdr vals))))
+       ;; For each counter-type we create an option for the last used
+       ;; number and the format string to use.
+       (reg-option
+        (gnc:make-counter-option
+         gnc:*option-section-counters* number-label key
+         (string-append key "a") number-description 0))
+
+       (reg-option
+        (gnc:make-counter-format-option
+         gnc:*option-section-counters* format-label key
+         (string-append key "b") format-description ""))))
+   ;; Make counter and format option for each defined counter
+   counter-types))
 
 
 (gnc-register-kvp-option-generator QOF-ID-BOOK-SCM book-options-generator)
