@@ -98,14 +98,12 @@
   (record-predicate <html-document>))
 
 (define (gnc:html-document-set-style! doc tag . rest)
-  (let ((newstyle #f))
-    (if (and (= (length rest) 2)
-             (procedure? (car rest)))
-        (set! newstyle
-              (apply gnc:make-html-data-style-info rest))
-        (set! newstyle
-              (apply gnc:make-html-markup-style-info rest)))
-    (gnc:html-style-table-set! (gnc:html-document-style doc) tag newstyle)))
+  (gnc:html-style-table-set!
+   (gnc:html-document-style doc) tag
+   (if (and (= (length rest) 2)
+            (procedure? (car rest)))
+       (apply gnc:make-html-data-style-info rest)
+       (apply gnc:make-html-markup-style-info rest))))
 
 (define (gnc:html-document-tree-collapse tree)
   (let ((retval '()))
@@ -126,10 +124,10 @@
 ;; returns the html document as a string, I think.
 (define (gnc:html-document-render doc . rest)
   (let ((stylesheet (gnc:html-document-style-sheet doc))
-        (headers? (if (null? rest) #t (if (car rest) #t #f)))
-        (style-text (gnc:html-document-style-text doc))
-       )
-       (if stylesheet
+        (headers? (or (null? rest) (car rest)))
+        (style-text (gnc:html-document-style-text doc)))
+
+    (if stylesheet
         ;; if there's a style sheet, let it do the rendering
         (gnc:html-style-sheet-render stylesheet doc headers?)
 
@@ -205,33 +203,20 @@
    (append (gnc:html-document-objects doc) objects)))
 
 (define (gnc:html-document-fetch-markup-style doc markup)
-  (let ((style-info #f)
-        (style-stack (gnc:html-document-style-stack doc)))
-       (if (not (null? style-stack))
-           (set! style-info
-              (gnc:html-style-table-fetch
-               (car style-stack)
-               (cdr style-stack)
-               markup)))
-       (if (not style-info)
-           (gnc:make-html-markup-style-info)
-           style-info)))
+  (let ((style-stack (gnc:html-document-style-stack doc)))
+    (or (and (pair? style-stack)
+             (gnc:html-style-table-fetch
+              (car style-stack) (cdr style-stack) markup))
+        (gnc:make-html-markup-style-info))))
 
 (define (gnc:html-document-fetch-data-style doc markup)
-  (let ((style-info #f)
-        (style-stack (gnc:html-document-style-stack doc)))
-       (if (not (null? (gnc:html-document-style-stack doc)))
-           (set! style-info
-              (gnc:html-style-table-fetch
-               (car style-stack)
-               (cdr style-stack)
-               markup)))
-       (if (not style-info)
-           (gnc:make-html-data-style-info
-            (lambda (datum parms)
-              (format #f "~a ~a" markup datum))
-            #f)
-           style-info)))
+  (let ((style-stack (gnc:html-document-style-stack doc)))
+    (or (and (pair? style-stack)
+             (gnc:html-style-table-fetch
+              (car style-stack) (cdr style-stack) markup))
+        (gnc:make-html-data-style-info
+         (lambda (datum parms) (format #f "~a ~a" markup datum))
+         #f))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  markup-rendering functions : markup-start and markup-end return
