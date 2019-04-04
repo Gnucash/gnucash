@@ -110,10 +110,8 @@
   (record-modifier <html-markup-style-info> 'font-face))
 
 (define (gnc:html-markup-style-info-set-font-face! record value)
-  (begin
-    (gnc:html-markup-style-info-set-closing-font-tag!
-     record (not (eq? value #f)))
-    (gnc:html-markup-style-info-set-font-face-internal! record value)))
+  (gnc:html-markup-style-info-set-closing-font-tag! record value)
+  (gnc:html-markup-style-info-set-font-face-internal! record value))
 
 (define gnc:html-markup-style-info-font-size
   (record-accessor <html-markup-style-info> 'font-size))
@@ -122,10 +120,8 @@
   (record-modifier <html-markup-style-info> 'font-size))
 
 (define (gnc:html-markup-style-info-set-font-size! record value)
-  (begin
-    (gnc:html-markup-style-info-set-closing-font-tag!
-     record (not (eq? value #f)))
-    (gnc:html-markup-style-info-set-font-size-internal! record value)))
+  (gnc:html-markup-style-info-set-closing-font-tag! record value)
+  (gnc:html-markup-style-info-set-font-size-internal! record value))
 
 (define gnc:html-markup-style-info-font-color
   (record-accessor <html-markup-style-info> 'font-color))
@@ -154,53 +150,52 @@
   (hash-set! (gnc:html-markup-style-info-attributes info) attr val))
 
 (define (gnc:html-markup-style-info-merge s1 s2) 
-  (if (not (gnc:html-markup-style-info? s1))
-      s2    
-      (if (not (gnc:html-markup-style-info? s2))
-          s1
-          (let* ((tag-1  (gnc:html-markup-style-info-tag s1))
-                 (face-1 (gnc:html-markup-style-info-font-face s1))
-                 (size-1 (gnc:html-markup-style-info-font-size s1))
-                 (color-1 (gnc:html-markup-style-info-font-color s1))
-		 (closing-font-tag-1 
-		  (gnc:html-markup-style-info-closing-font-tag s1)))
-            (gnc:make-html-markup-style-info-internal 
-             ;; tag 
-             (if tag-1 tag-1 (gnc:html-markup-style-info-tag s2))
-             ;; attributes: if the child is overriding the
-             ;; parent tag, don't initialize the attribute table
-             ;; to the parent's attributes.  Otherwise, load
-             ;; parent attrs then load child attrs over them.
-             (let ((ht (make-hash-table)))
-               (if (not tag-1)
-                   (hash-fold 
-                    (lambda (k v p) (hash-set! ht k v) #f) #f 
-                    (gnc:html-markup-style-info-attributes s2)))
-               (hash-fold
-                (lambda (k v p) (hash-set! ht k v) #f) #f 
-                (gnc:html-markup-style-info-attributes s1))
-               ht)
-             ;; font face 
-             (if face-1 face-1 (gnc:html-markup-style-info-font-face s2))
-             ;; font size 
-             (if size-1 size-1 (gnc:html-markup-style-info-font-size s2))
-             ;; color 
-             (if color-1 color-1 
-                 (gnc:html-markup-style-info-font-color s2))
-	     ;; closing font tag
-	     (or closing-font-tag-1 
-		 (gnc:html-markup-style-info-closing-font-tag s2))
-             ;; inheritable (get this always from child)
-             (gnc:html-markup-style-info-inheritable? s1))))))
+  (cond
+   ((not (gnc:html-markup-style-info? s1)) s2)
+   ((not (gnc:html-markup-style-info? s2)) s1)
+   (else
+    (gnc:make-html-markup-style-info-internal
+     ;; tag
+     (or (gnc:html-markup-style-info-tag s1)
+         (gnc:html-markup-style-info-tag s2))
+     ;; attributes: if the child is overriding the
+     ;; parent tag, don't initialize the attribute table
+     ;; to the parent's attributes.  Otherwise, load
+     ;; parent attrs then load child attrs over them.
+     (let ((ht (make-hash-table)))
+       (unless (gnc:html-markup-style-info-tag s1)
+         (hash-for-each
+          (lambda (k v)
+            (hash-set! ht k v))
+          (gnc:html-markup-style-info-attributes s2)))
+       (hash-for-each
+        (lambda (k v) (hash-set! ht k v))
+        (gnc:html-markup-style-info-attributes s1))
+       ht)
+     ;; font face
+     (or (gnc:html-markup-style-info-font-face s1)
+         (gnc:html-markup-style-info-font-face s2))
+     ;; font size
+     (or (gnc:html-markup-style-info-font-size s1)
+         (gnc:html-markup-style-info-font-size s2))
+     ;; color
+     (or (gnc:html-markup-style-info-font-color s1)
+         (gnc:html-markup-style-info-font-color s2))
+     ;; closing font tag
+     (or (gnc:html-markup-style-info-closing-font-tag s1)
+         (gnc:html-markup-style-info-closing-font-tag s2))
+     ;; inheritable (get this always from child)
+     (gnc:html-markup-style-info-inheritable? s1)))))
 
 (define (gnc:html-style-info-merge s1 s2)
-  (if (or (gnc:html-markup-style-info? s1)
-          (gnc:html-markup-style-info? s2))
-      (gnc:html-markup-style-info-merge s1 s2)
-      (if (or (gnc:html-data-style-info? s1)
-              (gnc:html-data-style-info? s2))
-          (gnc:html-data-style-info-merge s1 s2)
-          #f)))
+  (cond
+   ((or (gnc:html-markup-style-info? s1) (gnc:html-markup-style-info? s2))
+    (gnc:html-markup-style-info-merge s1 s2))
+
+   ((or (gnc:html-data-style-info? s1) (gnc:html-data-style-info? s2))
+    (gnc:html-data-style-info-merge s1 s2))
+
+   (else #f)))
 
 (define (gnc:html-data-style-info-merge s1 s2)
   (if (gnc:html-data-style-info? s1) s1 s2))
@@ -311,8 +306,7 @@
   (record-modifier <html-style-table> 'inheritable))
 
 (define (gnc:html-style-table-compiled? table)
-  (if (gnc:html-style-table-compiled table)
-      #t #f))
+  (gnc:html-style-table-compiled table))
 
 (define (gnc:html-style-table-compile table antecedents)
   ;; merge a key-value pair from an antecedent into the 
@@ -387,9 +381,7 @@
   (if (and table (gnc:html-style-table-compiled? table))
       (hash-ref (gnc:html-style-table-compiled table) markup)
       (fetch-worker 
-       (if table 
-           (hash-ref (gnc:html-style-table-primary table) markup)
-           #f)
+       (and table (hash-ref (gnc:html-style-table-primary table) markup))
        antecedents)))
 
 (define (gnc:html-style-table-set! table markup style-info)
