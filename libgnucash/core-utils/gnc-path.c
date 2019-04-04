@@ -170,11 +170,11 @@ gchar *gnc_path_get_accountsdir()
     return result;
 }
 
-/** Returns the file path to the report directory, usually
- * "$prefix/share/gnucash/scm/gnucash/report".
+/** Returns the file path to the directory containing all guile scripts, usually
+ * "$prefix/share/gnucash/scm".
  *
  * @returns A newly allocated string. */
-gchar *gnc_path_get_reportdir()
+gchar *gnc_path_get_scmdir()
 {
     /* Careful: if the cmake variable SCHEME_INSTALLED_SOURCE_DIR gets changed
      * in toplevel CMakeLists.txt, this path should probably change as well.
@@ -187,10 +187,35 @@ gchar *gnc_path_get_reportdir()
      * runtime.
      */
     gchar *pkgdatadir = gnc_path_get_pkgdatadir ();
-    gchar *result = g_build_filename (pkgdatadir, "scm",
-                                      "gnucash", "report", (char*)NULL);
+    gchar *result = g_build_filename (pkgdatadir, "scm", (char*)NULL);
     g_free (pkgdatadir);
 
+    return result;
+}
+
+/** Returns the file path to the report directory, usually
+ * "$prefix/share/gnucash/scm/gnucash/report".
+ *
+ * @returns A newly allocated string. */
+gchar *gnc_path_get_reportdir()
+{
+    gchar *scmdir = gnc_path_get_scmdir ();
+    gchar *result = g_build_filename (scmdir, "gnucash", "report", (char*)NULL);
+    g_free (scmdir);
+
+    return result;
+}
+
+/** Returns the file path to the reports directory, usually
+ * "$prefix/share/gnucash/scm/gnucash/report/reports".
+ *
+ * @returns A newly allocated string. */
+gchar *gnc_path_get_reportsdir()
+{
+    gchar *reportdir = gnc_path_get_reportdir ();
+    gchar *result = g_build_filename (reportdir, "reports", NULL);
+    g_free (reportdir);
+    //printf("Returning reportsdir %s\n", result);
     return result;
 }
 

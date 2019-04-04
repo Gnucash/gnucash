@@ -92,11 +92,23 @@ gchar *gnc_path_get_localedir(void);
  * @returns A newly allocated string. */
 gchar *gnc_path_get_accountsdir(void);
 
+/** Returns the file path to the directory containing all guile scripts, usually
+ * "$prefix/share/gnucash/scm".
+ *
+ * @returns A newly allocated string. */
+gchar *gnc_path_get_scmdir(void);
+
 /** Returns the file path to the report directory, usually
  * "$prefix/share/gnucash/scm/gnucash/report".
  *
  * @returns A newly allocated string. */
 gchar *gnc_path_get_reportdir(void);
+
+/** Returns the file path to the reports, usually
+ * "$prefix/share/gnucash/scm/gnucash/report/reports".
+ *
+ * @returns A newly allocated string. */
+gchar *gnc_path_get_reportsdir(void);
 
 /** Returns the file path to the standard
  * reports, usually
