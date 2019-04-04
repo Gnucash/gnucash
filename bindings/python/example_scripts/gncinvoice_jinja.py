@@ -196,7 +196,7 @@ def main(argv=None):
         output = template.render(invoice=invoice, locale=locale) #, company=company)
 
         if filename_from_invoice:
-            filename_date = str(invoice.GetDatePosted()) # something like 2014-11-01
+            filename_date = invoice.GetDatePosted().strftime("%Y-%m-%d") # something like 2014-11-01
             filename_owner_name = str(invoice.GetOwner().GetName())
             filename_invoice_id = str(invoice.GetID())
             filename_output = filename_date + "_" + filename_owner_name + "_"  + filename_invoice_id + ".tex"
