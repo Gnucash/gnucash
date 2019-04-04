@@ -171,7 +171,10 @@ def invoiceToDict(invoice):
         simple_invoice['notes'] = invoice.GetNotes()
         simple_invoice['active'] = invoice.GetActive()
         simple_invoice['currency'] = invoice.GetCurrency().get_mnemonic()
-        simple_invoice['owner'] = vendorToDict(invoice.GetOwner()) 
+        owner = invoice.GetOwner()
+        if type(owner) == gnucash.gnucash_business.Job:
+            owner = owner.GetOwner()
+        simple_invoice['owner'] = vendorToDict(owner)
         simple_invoice['owner_type'] = invoice.GetOwnerType()
         simple_invoice['billing_id'] = invoice.GetBillingID()
         simple_invoice['to_charge_amount'] = invoice.GetToChargeAmount().to_double()
