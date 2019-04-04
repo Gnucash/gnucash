@@ -111,12 +111,12 @@ def transactionToDict(transaction, entities):
         simple_transaction['imbalance_value'] = transaction.GetImbalanceValue(
             ).to_double()
         simple_transaction['is_balanced'] = transaction.IsBalanced()
-        simple_transaction['date_posted'] = transaction.RetDatePostedTS(
         simple_transaction['date'] = transaction.GetDate().strftime('%Y-%m-%d')
+        simple_transaction['date_posted'] = transaction.RetDatePosted(
             ).strftime('%Y-%m-%d')
-        simple_transaction['date_entered'] = transaction.RetDateEnteredTS(
+        simple_transaction['date_entered'] = transaction.RetDateEntered(
             ).strftime('%Y-%m-%d')
-        simple_transaction['date_due'] = transaction.RetDateDueTS().strftime(
+        simple_transaction['date_due'] = transaction.RetDateDue().strftime(
             '%Y-%m-%d')
         simple_transaction['void_status'] = transaction.GetVoidStatus()
         simple_transaction['void_time'] = transaction.GetVoidTime().strftime(
