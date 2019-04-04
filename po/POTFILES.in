@@ -411,9 +411,6 @@ gnucash/register/register-gnome/gnucash-style.c
 gnucash/register/register-gnome/pricecell-gnome.c
 gnucash/register/register-gnome/quickfillcell-gnome.c
 gnucash/register/register-gnome/table-gnome.c
-gnucash/report/business-reports/balsheet-eg.eguile.scm
-gnucash/report/business-reports/receipt.eguile.scm
-gnucash/report/business-reports/taxinvoice.eguile.scm
 gnucash/report/locale-specific/us/de_DE.scm
 gnucash/report/locale-specific/us/gncmod-locale-reports-us.c
 gnucash/report/locale-specific/us/taxtxf-de_DE.scm
@@ -427,6 +424,9 @@ gnucash/report/report-gnome/gnc-plugin-page-report.c
 gnucash/report/report-gnome/report-gnome.scm
 gnucash/report/report-gnome/window-report.c
 gnucash/report/reports/aging.scm
+gnucash/report/reports/data/balsheet-eg.eguile.scm
+gnucash/report/reports/data/receipt.eguile.scm
+gnucash/report/reports/data/taxinvoice.eguile.scm
 gnucash/report/reports/reports.scm
 gnucash/report/reports/standard/account-piecharts.scm
 gnucash/report/reports/standard/account-summary.scm

@@ -146,9 +146,9 @@
           (gnc:report-render-starting (gnc:html-document-title doc))
           (when headers?
             ;;This is the only place where <html> appears
-            ;;with the exception of 2 reports:
-            ;;./share/gnucash/scm/gnucash/report/taxinvoice.eguile.scm:<html>
-            ;;./share/gnucash/scm/gnucash/report/balsheet-eg.eguile.scm:<html>
+            ;;with the exception of 2 eguile report templates:
+            ;;./share/gnucash/scm/gnucash/report/reports/data/taxinvoice.eguile.scm:<html>
+            ;;./share/gnucash/scm/gnucash/report/reports/data/balsheet-eg.eguile.scm:<html>
 
             (push "<html>\n")
             (push "<head>\n")
