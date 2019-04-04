@@ -589,6 +589,54 @@ not found.")))
      'menu-path menupath
      'renderer (gnc:report-template-renderer/report-guid parenttype name))))
 
+(export gnc:report->json)
+(define (gnc:report->json report)
+  (let* ((report-type (gnc:report-type report))
+         (template (hash-ref *gnc:_report-templates_* report-type))
+         (cleanup-cb (gnc:report-template-options-cleanup-cb template)))
+    (if cleanup-cb (cleanup-cb report))
+    (scm->json-string
+     (list (cons 'guid (gnc:report-type report))
+           (cons 'name (gnc:report-template-name
+                        (hash-ref *gnc:_report-templates_* (gnc:report-type report))))
+           (cons 'template (template->scm template (gnc:report-options report)))))))
+
+(export gnc:json->report)
+(define (gnc:json->report json)
+  (catch #t
+    (lambda ()
+      (let* ((rep (json-string->scm json))
+             (guid (assoc-ref rep "guid"))
+             (name (assoc-ref rep "name"))
+             (template (assoc-ref rep "template"))
+             (sub-reports (vector->list (assoc-ref template "sub-reports")))
+             (options (gnc:report-template-new-options/report-guid
+                              guid name)))
+        (gnc:options-list->scm
+         options (vector->list (assoc-ref template "options")))
+        (let* ((report-list (gnc:lookup-option options "__general" "report-list")))
+          (if report-list
+              (gnc:option-set-value
+               report-list
+               (map
+                (lambda (sub option-list)
+                  (let* ((sub-type (assoc-ref sub "type"))
+                         (sub-name (assoc-ref sub "name"))
+                         (sub-saved-options (vector->list (assoc-ref sub "options")))
+                         (sub-new-options
+                          (gnc:report-template-new-options/report-guid
+                           sub-type sub-name)))
+                    (gnc:options-list->scm sub-new-options sub-saved-options)
+                    (cons (gnc:restore-report-by-guid-with-custom-template
+                           #f sub-type sub-name "" sub-new-options)
+                          (cdr option-list))))
+                sub-reports
+                (gnc:option-value report-list)))))
+        (gnc:restore-report-by-guid-with-custom-template
+         #f guid name template options)))
+    (lambda args
+      (gui-error (format #f "error ~a parsing json: ~a" args json))
+      #f)))
 
 ;; Generate guile code required to recreate an instatiated report
 (define (gnc:report-serialize report)
