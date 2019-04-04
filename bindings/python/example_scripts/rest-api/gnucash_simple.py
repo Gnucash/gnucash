@@ -163,7 +163,7 @@ def invoiceToDict(invoice):
         else:
             simple_invoice['date_posted'] = invoice.GetDatePosted().strftime(
                 '%Y-%m-%d')
-        if invoice.GetDateDue().strftime('%Y-%m-%d') == '1970-01-01':
+        if not invoice.GetDateDue() or invoice.GetDateDue().strftime('%Y-%m-%d') == '1970-01-01':
             simple_invoice['date_due'] = None
         else:
             simple_invoice['date_due'] = invoice.GetDateDue().strftime(
