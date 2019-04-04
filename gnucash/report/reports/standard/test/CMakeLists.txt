@@ -14,6 +14,7 @@ set(scm_test_with_srfi64_SOURCES
   test-budget.scm
   test-register.scm
   test-average-balance.scm
+  test-invoice.scm
 )
 
 set(scm_test_with_textual_ports_SOURCES

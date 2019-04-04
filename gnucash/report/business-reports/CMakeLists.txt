@@ -1,5 +1,3 @@
-add_subdirectory (test)
-
 set(business_reports_DATA
   taxinvoice.eguile.scm
   taxinvoice.css
@@ -13,5 +11,4 @@ install(FILES ${business_reports_DATA} DESTINATION ${SCHEME_INSTALLED_SOURCE_DIR
 
 set_local_dist(business_reports_DIST_local CMakeLists.txt
   ${business_reports_DATA})
-set(business_reports_DIST ${business_reports_DIST_local}
-  ${test_business_reports_DIST} PARENT_SCOPE)
+set(business_reports_DIST ${business_reports_DIST_local} PARENT_SCOPE)
