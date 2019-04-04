@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # quotes_historic.py -- Example Script to read historic quote data into gnucash
 #

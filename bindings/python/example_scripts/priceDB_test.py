@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Test file for price database stuff
 # To update the price database call
 # $PATH/gnucash  --add-price-quotes $PATHTOFILE

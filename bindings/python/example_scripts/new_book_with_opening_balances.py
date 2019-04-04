@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # new_book_with_opening_balances.py -- Replicate the account structure of a
 # book and apply basis opening balances from the original

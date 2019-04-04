@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 ## @file
 # @brief Creates a basic set of accounts and a couple of transactions
 # @ingroup python_bindings_examples
