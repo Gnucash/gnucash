@@ -334,7 +334,7 @@ def main():
             simple_opening_name_used = False
 
         for (namespace, mnemonic), (opening_trans, opening_amount) in \
-                opening_balance_per_currency.iteritems() :
+                opening_balance_per_currency.items() :
             simple_opening_name_used = create_opening_balance_transaction(
                 commodtable, namespace, mnemonic,
                 new_book_root, new_book,
