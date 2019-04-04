@@ -1,5 +1,6 @@
 
 add_subdirectory(standard/test)
+add_subdirectory(data)
 
 set (reports_common_SCHEME
   aging.scm
@@ -92,4 +93,4 @@ gnc_add_scheme_targets(scm-reports-standard
 add_custom_target(scm-reports ALL DEPENDS scm-reports-standard scm-reports-common scm-rpt-reports)
 
 set_local_dist(reports_DIST_local CMakeLists.txt ${reports_SCHEME} ${reports_common_SCHEME} ${reports_standard_SCHEME})
-set(reports_DIST ${reports_DIST_local} ${test_reports_standard_DIST} PARENT_SCOPE)
+set(reports_DIST ${reports_DIST_local} ${reports_data_DIST} ${test_reports_standard_DIST} PARENT_SCOPE)
