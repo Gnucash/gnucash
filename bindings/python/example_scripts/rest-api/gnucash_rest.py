@@ -1824,7 +1824,7 @@ def gnc_numeric_from_decimal(decimal_value):
     numerator_place_value = 1
     # add each digit to the final value multiplied by the place value
     # from least significant to most sigificant
-    for i in xrange(len(digits)-1,-1,-1):
+    for i in range(len(digits)-1,-1,-1):
         numerator += digits[i] * numerator_place_value
         numerator_place_value *= TEN
 
