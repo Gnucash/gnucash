@@ -22,7 +22,7 @@
 ; - specify a different module name below (eg mytaxinvoice)
 ; - refer to it from .gnucash/config.user
 ; (see http://wiki.gnucash.org/wiki/Custom_Reports )
-(define-module (gnucash report taxinvoice))
+(define-module (gnucash report reports standard taxinvoice))
 
 (use-modules (ice-9 local-eval))  ; for the-environment
 (use-modules (gnucash utilities))

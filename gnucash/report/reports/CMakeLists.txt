@@ -1,7 +1,13 @@
 
 add_subdirectory(standard/test)
 
-set (reports_common_SCHEME reports.scm)
+set (reports_common_SCHEME
+  aging.scm
+)
+
+set (reports_SCHEME
+  reports.scm
+)
 
 set (reports_standard_SCHEME
     standard/account-piecharts.scm
@@ -33,9 +39,18 @@ set (reports_standard_SCHEME
     standard/sx-summary.scm
     standard/transaction.scm
     standard/trial-balance.scm
+    standard/customer-summary.scm
+    standard/taxinvoice.scm
+    standard/receipt.scm
+    standard/invoice.scm
+    standard/job-report.scm
+    standard/owner-report.scm
+    standard/payables.scm
+    standard/receivables.scm
+    standard/balsheet-eg.scm
     )
 
-set(GUILE_DEPENDS
+set(scm_rpts_GUILE_DEPENDS
   gncmod-html
   scm-core-utils
   scm-engine
@@ -45,21 +60,36 @@ set(GUILE_DEPENDS
   scm-report-system
   )
 
+set(scm_rpt_std_GUILE_DEPENDS
+  ${scm_rpts_GUILE_DEPENDS}
+  scm-app-utils
+  scm-gnc-module
+  scm-reports-common-links
+  scm-reports-standard-links
+  )
+
+gnc_add_scheme_targets(scm-rpt-reports
+  "${reports_SCHEME}"
+  "gnucash/report"
+  "scm-reports-standard;${scm_rpts_GUILE_DEPENDS}"
+  TRUE
+)
+
 gnc_add_scheme_targets(scm-reports-common
   "${reports_common_SCHEME}"
-  "gnucash/report"
-  "scm-reports-standard;${GUILE_DEPENDS}"
+  "gnucash/report/reports"
+  "scm-reports-common-links;${scm_rpt_std_GUILE_DEPENDS}"
   TRUE
 )
 
 gnc_add_scheme_targets(scm-reports-standard
   "${reports_standard_SCHEME}"
   "gnucash/report/reports/standard"
-  "scm-reports-standard-links;${GUILE_DEPENDS}"
+  "${scm_rpt_std_GUILE_DEPENDS}"
   TRUE
 )
 
-add_custom_target(scm-reports ALL DEPENDS scm-reports-standard scm-reports-common)
+add_custom_target(scm-reports ALL DEPENDS scm-reports-standard scm-reports-common scm-rpt-reports)
 
-set_local_dist(reports_DIST_local CMakeLists.txt ${reports_common_SCHEME} ${reports_standard_SCHEME})
+set_local_dist(reports_DIST_local CMakeLists.txt ${reports_SCHEME} ${reports_common_SCHEME} ${reports_standard_SCHEME})
 set(reports_DIST ${reports_DIST_local} ${test_reports_standard_DIST} PARENT_SCOPE)

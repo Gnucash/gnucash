@@ -63,7 +63,6 @@ set(GUILE_DEPENDS
   scm-scm
   scm-report-system
   scm-reports
-  scm-business-reports
   scm-utility-reports
   )
 
