@@ -111,8 +111,8 @@ def transactionToDict(transaction, entities):
         simple_transaction['imbalance_value'] = transaction.GetImbalanceValue(
             ).to_double()
         simple_transaction['is_balanced'] = transaction.IsBalanced()
-        simple_transaction['date'] = transaction.GetDate()
         simple_transaction['date_posted'] = transaction.RetDatePostedTS(
+        simple_transaction['date'] = transaction.GetDate().strftime('%Y-%m-%d')
             ).strftime('%Y-%m-%d')
         simple_transaction['date_entered'] = transaction.RetDateEnteredTS(
             ).strftime('%Y-%m-%d')
