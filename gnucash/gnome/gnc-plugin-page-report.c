@@ -877,33 +877,7 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
         return;
     }
 
-    gen_save_text = scm_c_eval_string("gnc:report-serialize");
-    get_embedded_list = scm_c_eval_string("gnc:report-embedded-list");
-    get_options    = scm_c_eval_string("gnc:report-options");
-    embedded = scm_call_1(get_embedded_list, scm_call_1(get_options, priv->cur_report));
-    count = scm_ilength(embedded);
-    while (count-- > 0)
-    {
-        item = SCM_CAR(embedded);
-        embedded = SCM_CDR(embedded);
-        if (!scm_is_number(item))
-            continue;
-        id = scm_to_int (item);
-        tmp_report = gnc_report_find(id);
-        scm_text = scm_call_1(gen_save_text, tmp_report);
-        if (!scm_is_string (scm_text))
-        {
-            DEBUG("child report %d: nothing to save", id);
-            continue;
-        }
-
-        key_name = g_strdup_printf(SCHEME_OPTIONS_N, id);
-        text = gnc_scm_strip_comments(scm_text);
-        g_key_file_set_value(key_file, group_name, key_name, text);
-        g_free(text);
-        g_free(key_name);
-    }
-
+    gen_save_text = scm_c_eval_string("gnc:report->json");
     scm_text = scm_call_1(gen_save_text, priv->cur_report);
     if (!scm_is_string (scm_text))
     {
@@ -936,10 +910,10 @@ gnc_plugin_page_report_recreate_page (GtkWidget *window,
     gchar **keys;
     gsize i, num_keys;
     GError *error = NULL;
-    gchar *option_string;
+    SCM option_string;
     gint report_id;
     SCM scm_id, final_id = SCM_BOOL_F;
-    SCM report;
+    SCM report, scm_json_to_report;
 
     g_return_val_if_fail(key_file, NULL);
     g_return_val_if_fail(group_name, NULL);
@@ -959,8 +933,8 @@ gnc_plugin_page_report_recreate_page (GtkWidget *window,
     {
         if (strncmp(keys[i], SCHEME_OPTIONS, strlen(SCHEME_OPTIONS)) != 0)
             continue;
-        option_string = g_key_file_get_value(key_file, group_name,
-                                              keys[i], &error);
+        option_string = scm_from_utf8_string(g_key_file_get_value(key_file, group_name,
+                                                                  keys[i], &error));
         if (error)
         {
             g_warning("error reading group %s key %s: %s",
@@ -970,8 +944,9 @@ gnc_plugin_page_report_recreate_page (GtkWidget *window,
             LEAVE("bad value");
             return NULL;
         }
-        scm_id = scm_eval_string(scm_from_utf8_string(option_string));
-        g_free(option_string);
+
+        scm_json_to_report = scm_c_eval_string("gnc:json->report");
+        scm_id = scm_call_1(scm_json_to_report, option_string);
 
         if (!scm_integer_p(scm_id))
         {
