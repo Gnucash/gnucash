@@ -843,7 +843,7 @@ def getSubAccounts(account):
 
     flat_accounts = []
 
-    if 'subaccounts' in account.keys():
+    if 'subaccounts' in list(account.keys()):
         for n, subaccount in enumerate(account['subaccounts']):
             flat_accounts.append(subaccount)
             flat_accounts = flat_accounts + getSubAccounts(subaccount)
