@@ -57,7 +57,7 @@ def vendorToDict(vendor):
         simple_vendor['notes'] = vendor.GetNotes()
         simple_vendor['active'] = vendor.GetActive()
         simple_vendor['currency'] = vendor.GetCurrency().get_mnemonic()
-        simple_vendor['tax_table_override'] = vendor.GetTaxTableOverride()
+        #simple_vendor['tax_table_override'] = vendor.GetTaxTableOverride()
         simple_vendor['address'] = addressToDict(vendor.GetAddr())
         simple_vendor['tax_included'] = vendor.GetTaxIncluded()
 
@@ -77,7 +77,7 @@ def customerToDict(customer):
         simple_customer['discount'] = customer.GetDiscount().to_double()
         simple_customer['credit'] = customer.GetCredit().to_double()
         simple_customer['currency'] = customer.GetCurrency().get_mnemonic()
-        simple_customer['tax_table_override'] = customer.GetTaxTableOverride()
+        # simple_customer['tax_table_override'] = customer.GetTaxTableOverride()
         simple_customer['address'] = addressToDict(customer.GetAddr())
         simple_customer['shipping_address'] = addressToDict(
             customer.GetShipAddr())
@@ -257,7 +257,7 @@ def entryToDict(entry):
         simple_entry['discounted_how'] = entry.GetInvDiscountHow()
         simple_entry['inv_taxable'] = entry.GetInvTaxable()
         simple_entry['inv_tax_included'] = entry.GetInvTaxIncluded()
-        simple_entry['inv_tax_table_override'] = entry.GetInvTaxTable()
+        # simple_entry['inv_tax_table_override'] = entry.GetInvTaxTable()
         if entry.GetBillAccount() == None:
             simple_entry['bill_account'] = {}
         else: 
