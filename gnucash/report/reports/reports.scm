@@ -37,6 +37,10 @@
 (export gnc:receivables-report-create)
 (export gnc:owner-report-create)
 
+(define report-dirs (list
+    "standard" ; base directory for standard reports included in gnucash
+))
+
 ;; Returns a list of files in a directory
 ;;
 ;; Param:
@@ -68,19 +72,25 @@
 ;;
 ;; Return value:
 ;;  List of symbols for reports
-(define (get-report-list)
-  (map string->symbol (directory-files (gnc-path-get-stdreportsdir))))
-
-(gnc:debug "stdrpt-dir=" (gnc-path-get-stdreportsdir))
-(gnc:debug "dir-files=" (directory-files (gnc-path-get-stdreportsdir)))
-(gnc:debug "report-list=" (get-report-list))
+(define (get-report-list subdir)
+  (let* ((rpt-dir (gnc-build-reports-path subdir))
+         (rpt-list (directory-files rpt-dir)))
+        (gnc:debug "rpt-subdir=" subdir)
+        (gnc:debug "rpt-dir=" rpt-dir)
+        (gnc:debug "dir-files=" rpt-list)
+        rpt-list))
 
 (for-each
- (lambda (x)
-   (module-use!
-    (current-module)
-    (resolve-interface `(gnucash report reports standard ,x))))
- (get-report-list))
+  (lambda (rpt-dir-str)
+    (for-each
+     (lambda (rpt-file-str)
+       (let ((rpt-file (string->symbol rpt-file-str))
+             (rpt-dir (string->symbol rpt-dir-str)))
+       (module-use!
+        (current-module)
+        (resolve-interface `(gnucash report reports ,rpt-dir ,rpt-file)))))
+     (get-report-list rpt-dir-str)))
+  report-dirs)
 
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/engine" 0)
