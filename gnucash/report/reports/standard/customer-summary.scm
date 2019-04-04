@@ -26,7 +26,7 @@
 ;; not only print a summary for one single owner (here: only
 ;; customers), but instead a table showing all customers.
 
-(define-module (gnucash report customer-summary))
+(define-module (gnucash report reports standard customer-summary))
 
 (use-modules (srfi srfi-1))
 (use-modules (gnucash gnc-module))

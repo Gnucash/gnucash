@@ -7,7 +7,7 @@
 (use-modules (gnucash report reports))
 (use-modules (gnucash report view-column))
 (use-modules (gnucash report stylesheets))
-(use-modules (gnucash report taxinvoice))
+(use-modules (gnucash report reports standard taxinvoice))
 (use-modules (gnucash report report-system))
 (use-modules (gnucash report report-system test test-extras))
 (use-modules (srfi srfi-9))

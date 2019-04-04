@@ -22,7 +22,7 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
 
-(define-module (gnucash report invoice))
+(define-module (gnucash report reports standard invoice))
 
 (use-modules (srfi srfi-1))
 (use-modules (gnucash gnc-module))

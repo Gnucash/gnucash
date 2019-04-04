@@ -17,7 +17,6 @@ set(GUILE_DEPENDS
   gnc-module
   scm-engine
   scm-report-gnome
-  scm-business-reports
 )
 
 add_custom_target(test-report-gnome ALL DEPENDS ${GUILE_DEPENDS})

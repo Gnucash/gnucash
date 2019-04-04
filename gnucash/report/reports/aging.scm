@@ -24,7 +24,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report aging))
+(define-module (gnucash report reports aging))
 
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))

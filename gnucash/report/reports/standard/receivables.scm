@@ -23,7 +23,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-module (gnucash report receivables))
+(define-module (gnucash report reports standard receivables))
 
 (use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
@@ -31,7 +31,7 @@
 
 (gnc:module-load "gnucash/report/report-system" 0)
 
-(use-modules (gnucash report aging))
+(use-modules (gnucash report reports aging))
 (use-modules (gnucash report reports))
 
 (define acc-page gnc:pagename-general)
