@@ -517,6 +517,78 @@ not found.")))
 
 ;; Load and save functions
 
+(define (template->scm tmpl saved-options)
+  ;; converts a template to an scm representation, including any subreports
+  ;; saved-options will save a report instance options into scm
+  (let* ((options (or saved-options (gnc:report-template-new-options tmpl)))
+         (guid (gnc:report-template-report-guid tmpl))
+         (name (gnc:report-template-name tmpl))
+         (menupath (gnc:report-template-menu-path tmpl))
+         (sub-reports
+          (map
+           (lambda (subreport-id)
+             (let* ((sub (gnc-report-find subreport-id))
+                    (sub-type (gnc:report-type sub))
+                    (sub-template (hash-ref *gnc:_report-templates_* sub-type))
+                    (sub-template-name (gnc:report-template-name sub-template))
+                    (sub-cleanup-cb (gnc:report-template-options-cleanup-cb
+                                     sub-template)))
+               (if sub-cleanup-cb (sub-cleanup-cb sub))
+               (list
+                (cons 'type sub-type)
+                (cons 'name sub-template-name)
+                (cons 'options (list->vector
+                                (gnc:options-scm->list
+                                 (gnc:report-options sub)))))))
+           (or (gnc:report-embedded-list options) '()))))
+    (list
+     (cons 'name name)
+     (cons 'parenttype (gnc:report-template-parent-type tmpl))
+     (cons 'menupath (and menupath (list->vector menupath)))
+     (cons 'sub-reports (list->vector sub-reports))
+     (cons 'options (list->vector (gnc:options-scm->list options))))))
+
+(define (scm->template scm guid)
+  ;; converts an scm representation from above template->scm to a
+  ;; full report definition. outputs the report-id
+  (let ((name (assoc-ref scm "name"))
+        (parenttype (assoc-ref scm "parenttype"))
+        (sub-reports (vector->list (assoc-ref scm "sub-reports")))
+        (menupath (vector->list (assoc-ref scm "menupath")))
+        (saved-options (vector->list (assoc-ref scm "options"))))
+
+    (define (options-gen)
+      (let ((options (gnc:report-template-new-options/report-guid parenttype name)))
+        (gnc:options-list->scm options saved-options)
+        (let* ((report-list (gnc:lookup-option options "__general" "report-list")))
+          (if (and report-list sub-reports)
+              (gnc:option-set-value
+               report-list
+               (map
+                (lambda (sub option-list)
+                  (let* ((sub-type (assoc-ref sub "type"))
+                         (sub-name (assoc-ref sub "name"))
+                         (sub-saved-options (vector->list (assoc-ref sub "options")))
+                         (sub-new-options
+                          (gnc:report-template-new-options/report-guid
+                           sub-type sub-name)))
+                    (gnc:options-list->scm sub-new-options sub-saved-options)
+                    (cons (gnc:restore-report-by-guid-with-custom-template
+                           #f sub-type sub-name "" sub-new-options)
+                          (cdr option-list))))
+                sub-reports
+                (gnc:option-value report-list)))))
+        options))
+
+    (gnc:define-report
+     'version 1
+     'name name
+     'report-guid guid
+     'parent-type parenttype
+     'options-generator options-gen
+     'menu-path menupath
+     'renderer (gnc:report-template-renderer/report-guid parenttype name))))
+
 
 ;; Generate guile code required to recreate an instatiated report
 (define (gnc:report-serialize report)
@@ -751,39 +823,12 @@ not found.")))
        (else
         ;; there are custom-templates remaining.
         (let* ((tmpl (car custom-templates))
-               (options (gnc:report-template-new-options (cdr tmpl)))
-               (guid (gnc:report-template-report-guid (cdr tmpl)))
                (name (gnc:report-template-name (cdr tmpl)))
-               (sub-reports
-                (map
-                 (lambda (subreport-id)
-                   (let* ((sub (gnc-report-find subreport-id))
-                          (sub-type (gnc:report-type sub))
-                          (sub-template (hash-ref *gnc:_report-templates_* sub-type))
-                          (sub-template-name (gnc:report-template-name sub-template))
-                          (sub-cleanup-cb (gnc:report-template-options-cleanup-cb
-                                           sub-template)))
-                     (if sub-cleanup-cb (sub-cleanup-cb sub))
-                     (list
-                      (cons 'type sub-type)
-                      (cons 'name sub-template-name)
-                      (cons 'options (list->vector
-                                      (gnc:options-scm->list
-                                       (gnc:report-options sub)))))))
-                 (or (gnc:report-embedded-list options) '()))))
+               (guid (gnc:report-template-report-guid (cdr tmpl))))
 
           (catch #t
             (lambda ()
-              (let ((repstring
-                     (scm->json-string
-                      (list
-                       (cons 'name name)
-                       (cons 'parenttype (gnc:report-template-parent-type (cdr tmpl)))
-                       (cons 'menupath (list->vector
-                                        (gnc:report-template-menu-path (cdr tmpl))))
-                       (cons 'sub-reports (list->vector sub-reports))
-                       (cons 'options (list->vector
-                                       (gnc:options-scm->list options)))))))
+              (let ((repstring (scm->json-string (template->scm (cdr tmpl) #f))))
                 (cond
                  ((> (string-length repstring) 4000)
                   ;; serialized report string exceeds 4K. skip it.
@@ -835,50 +880,9 @@ not found.")))
           (for-each
            (lambda (guid)
              (let* ((saved-template-string
-                     (qof-book-get-option book
-                                          (list "custom-templates" guid)))
-                    (saved-report (json-string->scm saved-template-string))
-                    (name (assoc-ref saved-report "name"))
-                    (parenttype (assoc-ref saved-report "parenttype"))
-                    (sub-reports (vector->list
-                                  (assoc-ref saved-report "sub-reports")))
-                    (menupath (vector->list (assoc-ref saved-report "menupath")))
-                    (saved-options (vector->list (assoc-ref saved-report "options"))))
-               (define (options-gen)
-                 (let ((options (gnc:report-template-new-options/report-guid
-                                 parenttype name)))
-                   (gnc:options-list->scm options saved-options)
-                   (let* ((report-list
-                           (gnc:lookup-option options "__general" "report-list")))
-                     (if report-list
-                         (gnc:option-set-value
-                          report-list
-                          (map
-                           (lambda (sub option-list)
-                             (let* ((sub-type (assoc-ref sub "type"))
-                                    (sub-name (assoc-ref sub "name"))
-                                    (sub-saved-options (vector->list
-                                                        (assoc-ref sub "options")))
-                                    (sub-new-options
-                                     (gnc:report-template-new-options/report-guid
-                                      sub-type sub-name)))
-                               (gnc:options-list->scm sub-new-options sub-saved-options)
-                               (cons
-                                (gnc:restore-report-by-guid-with-custom-template
-                                 #f sub-type sub-name "" sub-new-options)
-                                (cdr option-list))))
-                           sub-reports
-                           (gnc:option-value report-list)))))
-                   options))
-               (gnc:define-report
-                'version 1
-                'name name
-                'report-guid guid
-                'parent-type parenttype
-                'options-generator options-gen
-                'menu-path menupath
-                'renderer (gnc:report-template-renderer/report-guid
-                           parenttype name))))
+                     (qof-book-get-option book (list "custom-templates" guid)))
+                    (saved-report (json-string->scm saved-template-string)))
+               (scm->template saved-report guid)))
            (vector->list (json-string->scm book-reports)))
           (gnc:gui-msg loaded (_ loaded)))
 
