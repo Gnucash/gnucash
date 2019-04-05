@@ -51,12 +51,31 @@ set (reports_standard_SCHEME
     standard/balsheet-eg.scm
     )
 
+set(reports_sample_SCHEME
+  sample/hello-world.scm
+  sample/view-column.scm
+  sample/welcome-to-gnucash.scm
+)
+
+
 set(scm_rpts_GUILE_DEPENDS
   gncmod-html
   scm-core-utils
   scm-engine
   scm-gettext
   scm-scm
+  scm-gnome-utils
+  scm-report-system
+  )
+
+set(scm_rpt_sample_GUILE_DEPENDS
+  gncmod-html
+  scm-app-utils
+  scm-core-utils
+  scm-gettext
+  scm-gnc-module
+  scm-scm
+  scm-reports-sample-links
   scm-gnome-utils
   scm-report-system
   )
@@ -90,7 +109,15 @@ gnc_add_scheme_targets(scm-reports-standard
   TRUE
 )
 
-add_custom_target(scm-reports ALL DEPENDS scm-reports-standard scm-reports-common scm-rpt-reports)
 
-set_local_dist(reports_DIST_local CMakeLists.txt ${reports_SCHEME} ${reports_common_SCHEME} ${reports_standard_SCHEME})
+gnc_add_scheme_targets(scm-reports-sample
+  "${reports_sample_SCHEME}"
+  "gnucash/report/reports/sample"
+  "${scm_rpt_sample_GUILE_DEPENDS}"
+  TRUE
+)
+
+add_custom_target(scm-reports ALL DEPENDS scm-reports-standard scm-reports-sample scm-reports-common scm-rpt-reports)
+
+set_local_dist(reports_DIST_local CMakeLists.txt ${reports_SCHEME} ${reports_common_SCHEME} ${reports_standard_SCHEME} ${reports_sample_SCHEME})
 set(reports_DIST ${reports_DIST_local} ${reports_support_DIST} ${test_reports_standard_DIST} PARENT_SCOPE)

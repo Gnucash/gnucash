@@ -425,6 +425,9 @@ gnucash/report/report-gnome/report-gnome.scm
 gnucash/report/report-gnome/window-report.c
 gnucash/report/reports/aging.scm
 gnucash/report/reports/reports.scm
+gnucash/report/reports/sample/hello-world.scm
+gnucash/report/reports/sample/view-column.scm
+gnucash/report/reports/sample/welcome-to-gnucash.scm
 gnucash/report/reports/standard/account-piecharts.scm
 gnucash/report/reports/standard/account-summary.scm
 gnucash/report/reports/standard/advanced-portfolio.scm
@@ -501,10 +504,6 @@ gnucash/report/stylesheets/stylesheet-footer.scm
 gnucash/report/stylesheets/stylesheet-head-or-tail.scm
 gnucash/report/stylesheets/stylesheet-plain.scm
 gnucash/report/stylesheets/stylesheets.scm
-gnucash/report/utility-reports/hello-world.scm
-gnucash/report/utility-reports/utility-reports.scm
-gnucash/report/utility-reports/view-column.scm
-gnucash/report/utility-reports/welcome-to-gnucash.scm
 libgnucash/app-utils/app-utils.scm
 libgnucash/app-utils/business-helpers.c
 libgnucash/app-utils/business-options.c

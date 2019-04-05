@@ -43,6 +43,7 @@
 
 (define report-dirs (list
     "standard" ; base directory for standard reports included in gnucash
+    "sample" ; base directory for experimental and sample reports included in gnucash
 ))
 
 ;; Returns a list of files in a directory
@@ -95,6 +96,8 @@
         (resolve-interface `(gnucash report reports ,rpt-dir ,rpt-file)))))
      (get-report-list rpt-dir-str)))
   report-dirs)
+
+;;(use-modules (gnucash report test-graphing))
 
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/engine" 0)
