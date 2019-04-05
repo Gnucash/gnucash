@@ -563,74 +563,83 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
 ;; gains and losses, of each commodity across all accounts. Returns a
 ;; report-list.
 (define (gnc:get-exchange-cost-totals report-commodity end-date)
-  (let ((curr-accounts
-         (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
-        (sumlist (list (list report-commodity '()))))
+  (let ((curr-accounts (gnc-account-get-descendants-sorted
+                        (gnc-get-current-root-account))))
 
-    (if (not (null? curr-accounts))
-        ;; Go through all splits and add up all value-amounts
-        ;; and share-amounts
-        ;; However skip splits in trading accounts as these counterbalance
-        ;; the actual value and share amounts back to zero
-        (for-each
-         (lambda (a)
-           (if (not (eq? (xaccAccountGetType (xaccSplitGetAccount a)) ACCT-TYPE-TRADING))
-               (let* ((transaction-comm (xaccTransGetCurrency
-                                         (xaccSplitGetParent a)))
-                      (account-comm (xaccAccountGetCommodity
-                                     (xaccSplitGetAccount a)))
-                      (share-amount (xaccSplitGetAmount a))
-                      (value-amount (xaccSplitGetValue a))
-                      (comm-list (or (assoc transaction-comm sumlist)
-                                     (assoc account-comm sumlist))))
+    (let loop ((comm-splits (gnc:get-all-commodity-splits curr-accounts end-date))
+               (sumlist (list (list report-commodity '()))))
+      (cond
+       ((null? comm-splits)
+        (gnc:resolve-unknown-comm sumlist report-commodity))
 
-                 ;; entry exists already in comm-list?
-                 (if (not comm-list)
-                     ;; no, create sub-alist from scratch
-                     (let ((pair (list transaction-comm
-                                       (cons (gnc:make-value-collector)
+       ;; However skip splits in trading accounts as these counterbalance
+       ;; the actual value and share amounts back to zero
+       ((eqv? (xaccAccountGetType (xaccSplitGetAccount (car comm-splits)))
+              ACCT-TYPE-TRADING)
+        (loop (cdr comm-splits)
+              sumlist))
+
+       ;; Go through all splits and add up all value-amounts
+       ;; and share-amounts
+       (else
+        (let* ((a (car comm-splits))
+               (txn-comm (xaccTransGetCurrency (xaccSplitGetParent a)))
+               (acc-comm (xaccAccountGetCommodity (xaccSplitGetAccount a)))
+               (share-amt (xaccSplitGetAmount a))
+               (value-amt (xaccSplitGetValue a)))
+
+          (cond
+           ((assoc txn-comm sumlist)
+            => (lambda (comm-list)
+                 (cond
+                  ;; other commodity already exists in comm-list?
+                  ((assoc acc-comm (cadr comm-list))
+                   => (lambda (pair)
+                        ((caadr pair) 'add share-amt)
+                        ((cdadr pair) 'add value-amt)
+                        (loop (cdr comm-splits)
+                              sumlist)))
+                  ;; if not, create a new entry in comm-list.
+                  (else
+                   (let ((pair (list acc-comm (cons (gnc:make-value-collector)
+                                                    (gnc:make-value-collector)))))
+                     ((caadr pair) 'add share-amt)
+                     ((cdadr pair) 'add value-amt)
+                     (loop (cdr comm-splits)
+                           (cons (list (car comm-list) (cons pair (cadr comm-list)))
+                                 (alist-delete
+                                  (car comm-list) sumlist))))))))
+
+           ((assoc acc-comm sumlist)
+            => (lambda (comm-list)
+                 (cond
+                  ;; other commodity already exists in comm-list?
+                  ((assoc txn-comm (cadr comm-list))
+                   => (lambda (pair)
+                        ((caadr pair) 'add (- value-amt))
+                        ((cdadr pair) 'add (- share-amt))
+                        (loop (cdr comm-splits)
+                              sumlist)))
+                  (else
+                   (let ((pair (list txn-comm (cons (gnc:make-value-collector)
+                                                    (gnc:make-value-collector)))))
+                     ;; And add the balances to the comm-list entry.
+                     ((caadr pair) 'add (- value-amt))
+                     ((cdadr pair) 'add (- share-amt))
+                     (loop (cdr comm-splits)
+                           (cons (list (car comm-list) (cons pair (cadr comm-list)))
+                                 (alist-delete
+                                  (car comm-list) sumlist))))))))
+
+           (else
+            ;; no, create sub-alist from scratch
+            (let ((pair (list txn-comm (cons (gnc:make-value-collector)
                                              (gnc:make-value-collector)))))
-                       ((caadr pair) 'add value-amount)
-                       ((cdadr pair) 'add share-amount)
-                       (set! comm-list (list account-comm (list pair)))
-                       ;; and add the new sub-alist to sumlist.
-                       (set! sumlist (cons comm-list sumlist)))
-                     ;; yes, check for second commodity.
-                     (let*
-                         ;; Put the amounts in the right place.
-                         ((foreignlist
-                           (if (gnc-commodity-equiv transaction-comm
-                                                    (car comm-list))
-                               (list account-comm
-                                     share-amount value-amount)
-                               (list transaction-comm
-                                     (- value-amount)
-                                     (- share-amount))))
-                          ;; second commodity already existing in comm-list?
-                          (pair (assoc (car foreignlist) (cadr comm-list))))
-                       ;; if not, create a new entry in comm-list.
-                       (if (not pair)
-                           (begin
-                             (set!
-                              pair (list (car foreignlist)
-                                         (cons (gnc:make-value-collector)
-                                               (gnc:make-value-collector))))
-                             (set!
-                              comm-list (list (car comm-list)
-                                              (cons pair (cadr comm-list))))
-                             (set!
-                              sumlist (cons comm-list
-                                            (alist-delete
-                                             (car comm-list) sumlist)))))
-                       ;; And add the balances to the comm-list entry.
-                       ((caadr pair) 'add (cadr foreignlist))
-                       ((cdadr pair) 'add (caddr foreignlist)))))))
-         (gnc:get-all-commodity-splits curr-accounts end-date)))
-
-    (gnc:resolve-unknown-comm sumlist report-commodity)))
-
-;; Anybody feel free to reimplement any of these functions, either in
-;; scheme or in C. -- cstim
+              ((caadr pair) 'add value-amt)
+              ((cdadr pair) 'add share-amt)
+              ;; and add the new sub-alist to sumlist.
+              (loop (cdr comm-splits)
+                    (cons (list acc-comm (list pair)) sumlist)))))))))))
 
 (define (gnc:make-exchange-alist report-commodity end-date)
   ;; This returns the alist with the actual exchange rates, i.e. the
