@@ -548,44 +548,46 @@ not found.")))
      (cons 'sub-reports (list->vector sub-reports))
      (cons 'options (list->vector (gnc:options-scm->list options))))))
 
+;; internal function used in scm->template and gnc:json->report
+;; modifies an options object according to other parameters
+(define (options-modify! options saved-options-list sub-reports)
+  (gnc:options-list->scm options saved-options-list)
+  (let* ((report-list (gnc:lookup-option options "__general" "report-list")))
+    (if report-list
+        (gnc:option-set-value
+         report-list
+         (map
+          (lambda (sub option-list)
+            (let* ((sub-type (assoc-ref sub "type"))
+                   (sub-name (assoc-ref sub "name"))
+                   (sub-saved-options (vector->list (assoc-ref sub "options")))
+                   (sub-new-options
+                    (gnc:report-template-new-options/report-guid sub-type sub-name)))
+              (gnc:options-list->scm sub-new-options sub-saved-options)
+              (cons (gnc:restore-report-by-guid-with-custom-template
+                     #f sub-type sub-name "" sub-new-options)
+                    (cdr option-list))))
+          sub-reports
+          (gnc:option-value report-list)))))
+  options)
+
 (define (scm->template scm guid)
   ;; converts an scm representation from above template->scm to a
   ;; full report definition. outputs the report-id
-  (let ((name (assoc-ref scm "name"))
-        (parenttype (assoc-ref scm "parenttype"))
-        (sub-reports (vector->list (assoc-ref scm "sub-reports")))
-        (menupath (vector->list (assoc-ref scm "menupath")))
-        (saved-options (vector->list (assoc-ref scm "options"))))
+  (let* ((name (assoc-ref scm "name"))
+         (parenttype (assoc-ref scm "parenttype"))
+         (sub-reports (vector->list (assoc-ref scm "sub-reports")))
+         (menupath (vector->list (assoc-ref scm "menupath")))
+         (saved-options (vector->list (assoc-ref scm "options")))
+         (options (gnc:report-template-new-options/report-guid parenttype name)))
 
-    (define (options-gen)
-      (let ((options (gnc:report-template-new-options/report-guid parenttype name)))
-        (gnc:options-list->scm options saved-options)
-        (let* ((report-list (gnc:lookup-option options "__general" "report-list")))
-          (if (and report-list sub-reports)
-              (gnc:option-set-value
-               report-list
-               (map
-                (lambda (sub option-list)
-                  (let* ((sub-type (assoc-ref sub "type"))
-                         (sub-name (assoc-ref sub "name"))
-                         (sub-saved-options (vector->list (assoc-ref sub "options")))
-                         (sub-new-options
-                          (gnc:report-template-new-options/report-guid
-                           sub-type sub-name)))
-                    (gnc:options-list->scm sub-new-options sub-saved-options)
-                    (cons (gnc:restore-report-by-guid-with-custom-template
-                           #f sub-type sub-name "" sub-new-options)
-                          (cdr option-list))))
-                sub-reports
-                (gnc:option-value report-list)))))
-        options))
-
+    (options-modify! options saved-options sub-reports)
     (gnc:define-report
      'version 1
      'name name
      'report-guid guid
      'parent-type parenttype
-     'options-generator options-gen
+     'options-generator (lambda () options)
      'menu-path menupath
      'renderer (gnc:report-template-renderer/report-guid parenttype name))))
 
@@ -609,31 +611,13 @@ not found.")))
              (guid (assoc-ref rep "guid"))
              (name (assoc-ref rep "name"))
              (template (assoc-ref rep "template"))
+             (saved-options-list (vector->list (assoc-ref template "options")))
              (sub-reports (vector->list (assoc-ref template "sub-reports")))
-             (options (gnc:report-template-new-options/report-guid
-                              guid name)))
-        (gnc:options-list->scm
-         options (vector->list (assoc-ref template "options")))
-        (let* ((report-list (gnc:lookup-option options "__general" "report-list")))
-          (if report-list
-              (gnc:option-set-value
-               report-list
-               (map
-                (lambda (sub option-list)
-                  (let* ((sub-type (assoc-ref sub "type"))
-                         (sub-name (assoc-ref sub "name"))
-                         (sub-saved-options (vector->list (assoc-ref sub "options")))
-                         (sub-new-options
-                          (gnc:report-template-new-options/report-guid
-                           sub-type sub-name)))
-                    (gnc:options-list->scm sub-new-options sub-saved-options)
-                    (cons (gnc:restore-report-by-guid-with-custom-template
-                           #f sub-type sub-name "" sub-new-options)
-                          (cdr option-list))))
-                sub-reports
-                (gnc:option-value report-list)))))
+             (options (gnc:report-template-new-options/report-guid guid name)))
+        (options-modify! options saved-options-list sub-reports)
         (gnc:restore-report-by-guid-with-custom-template
          #f guid name template options)))
+
     (lambda args
       (gui-error (format #f "error ~a parsing json: ~a" args json))
       #f)))
