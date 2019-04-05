@@ -121,86 +121,66 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
     currency-accounts end-date price-commodity)))
 
 (define (gnc:get-commodity-totalavg-prices-internal
-         currency-accounts end-date price-commodity report-currency
-         commodity-splits)
-  (let ((total-foreign 0)
-        (total-domestic 0))
-    (filter
-     gnc:price-is-not-zero?
-     (map-in-order
-      (lambda (a)
-        (let* ((transaction-comm (xaccTransGetCurrency
-                                  (xaccSplitGetParent a)))
-               (account-comm (xaccAccountGetCommodity
-                              (xaccSplitGetAccount a)))
-               (share-amount (abs
-                              (xaccSplitGetAmount a)))
-               (value-amount (abs
-                              (xaccSplitGetValue a)))
-               (transaction-date (xaccTransGetDate
-                                  (xaccSplitGetParent a)))
-               (foreignlist
-                (if (and
-                     (not (zero? share-amount))
-                     (not (zero? value-amount)))
-                    (if (gnc-commodity-equiv transaction-comm
-                                             price-commodity)
-                        (list account-comm
-                              share-amount value-amount)
-                        (list transaction-comm
-                              value-amount share-amount))
-                    #f)))
+         currency-accounts end-date price-commodity report-currency commodity-splits)
+  (let loop ((tot-foreign 0)
+             (tot-domestic 0)
+             (commodity-splits commodity-splits)
+             (result '()))
+    (if (null? commodity-splits)
+        (reverse! result)
+        (let* ((a (car commodity-splits))
+               (share-amt (abs (xaccSplitGetAmount a)))
+               (value-amt (abs (xaccSplitGetValue a)))
+               (txn-comm (xaccTransGetCurrency (xaccSplitGetParent a)))
+               (acc-comm (xaccAccountGetCommodity (xaccSplitGetAccount a)))
+               (txn-date (xaccTransGetDate (xaccSplitGetParent a))))
+          (cond
+           ((or (zero? share-amt) (zero? value-amt))
+            (loop tot-foreign
+                  tot-domestic
+                  (cdr commodity-splits)
+                  result))
 
-          ;; Try EURO exchange if necessary
-          (if (and foreignlist
-                   (not (gnc-commodity-equiv (car foreignlist)
-                                        report-currency)))
-              (let ((exchanged (gnc:exchange-by-euro-numeric
-                                (car foreignlist) (cadr foreignlist)
-                                report-currency transaction-date)))
-                (if exchanged
-                    (set! foreignlist
-                          (list report-currency
-                                (gnc:gnc-monetary-amount exchanged)
-                                (caddr foreignlist))))))
+           ((gnc-commodity-equiv acc-comm report-currency)
+            (let ((new-foreign (+ tot-foreign value-amt))
+                  (new-domestic (+ tot-domestic share-amt)))
+              (loop new-foreign
+                    new-domestic
+                    (cdr commodity-splits)
+                    (cons (list txn-date (/ new-domestic new-foreign)) result))))
 
-          (list
-           transaction-date
-           (if foreignlist
-               (if (not (gnc-commodity-equiv (car foreignlist)
-                                             report-currency))
-                   (begin
-                     (warn "gnc:get-commodity-totalavg-prices: "
-                           "Sorry, currency exchange not yet implemented:"
-                           (gnc:monetary->string
-                            (gnc:make-gnc-monetary
-                             (car foreignlist) (cadr foreignlist)))
-                           " (buying "
-                           (gnc:monetary->string
-                            (gnc:make-gnc-monetary
-                             price-commodity (caddr foreignlist)))
-                           ") =? "
-                           (gnc:monetary->string
-                            (gnc:make-gnc-monetary
-                            report-currency 0)))
-                     0)
-                   (begin
-                     (set! total-foreign (gnc-numeric-add total-foreign
-                                                          (caddr foreignlist)
-                                                          GNC-DENOM-AUTO
-                                                          GNC-DENOM-LCD))
-                     (set! total-domestic (gnc-numeric-add total-domestic
-                                                           (cadr foreignlist)
-                                                           GNC-DENOM-AUTO
-                                                           GNC-DENOM-LCD))
-                     (if (not (zero? total-foreign))
-                         (gnc-numeric-div
-                          total-domestic
-                          total-foreign
-                          GNC-DENOM-AUTO
-                          (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND)) 0)))
-               #f))))
-      commodity-splits))))
+           ((gnc-commodity-equiv txn-comm report-currency)
+            (let ((new-foreign (+ tot-foreign share-amt))
+                  (new-domestic (+ tot-domestic value-amt)))
+              (loop new-foreign
+                    new-domestic
+                    (cdr commodity-splits)
+                    (cons (list txn-date (/ new-domestic new-foreign)) result))))
+
+           ((gnc:exchange-by-euro-numeric txn-comm value-amt report-currency txn-date)
+            => (lambda (amt)
+                 (let ((new-foreign (+ tot-foreign share-amt))
+                       (new-domestic (+ tot-domestic (gnc:gnc-monetary-amount amt))))
+                   (loop new-foreign
+                         new-domestic
+                         (cdr commodity-splits)
+                         (cons (list txn-date (/ new-domestic new-foreign)) result)))))
+
+           (else
+            (warn "gnc:get-commodity-totalavg-prices: "
+                  "Sorry, currency exchange not yet implemented:"
+                  (gnc:monetary->string
+                   (gnc:make-gnc-monetary txn-comm value-amt))
+                  " (buying "
+                  (gnc:monetary->string
+                   (gnc:make-gnc-monetary price-commodity share-amt))
+                  ") =? "
+                  (gnc:monetary->string
+                   (gnc:make-gnc-monetary report-currency 0)))
+            (loop tot-foreign
+                  tot-domestic
+                  (cdr commodity-splits)
+                  result)))))))
 
 
 ;; Create a list of prices for all commodities in 'commodity-list',
