@@ -359,117 +359,114 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
   ;; report-commodity, and now the transactions with unknown
   ;; currencies should be added to that list (with an appropriate
   ;; exchange rate).
-  (let ((reportlist (cadr (assoc report-commodity sumlist))))
 
-    ;; Helper function to calculate (a*b)/c and create the new pair of
-    ;; numeric-collectors, where [abc] are numeric-collectors. See the
-    ;; real variable names below.
-    (define (make-newrate unknown-coll un->known-coll known-pair)
-      (let ((a (gnc:make-value-collector))
-            (b (gnc:make-value-collector)))
-        (a 'add (unknown-coll 'total #f))
-        (b 'add
-           ;; round to (at least) 8 significant digits
-           (gnc-numeric-div
-            (gnc-numeric-mul
-             (un->known-coll 'total #f)
-             ((cdadr known-pair) 'total #f)
-             GNC-DENOM-AUTO
-             (logior (GNC-DENOM-SIGFIGS 9) GNC-RND-ROUND))
-            ((caadr known-pair) 'total #f)
-            GNC-DENOM-AUTO
-            (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND)))
-        ;; in other words: (/ (* (caadr un->known-coll) (cdadr
-        ;; known-pair)) (caadr known-pair) ))
-        (cons a b)))
+  ;; Helper function to calculate (a*b)/c and create the new pair of
+  ;; numeric-collectors, where [abc] are numeric-collectors. See the
+  ;; real variable names below.
+  (define (make-newrate unknown-coll un->known-coll known-pair)
+    (let ((a (gnc:make-value-collector))
+          (b (gnc:make-value-collector))
+          (c ((caadr known-pair) 'total #f)))
+      (a 'add (unknown-coll 'total #f))
+      (unless (zero? c)
+        (b 'add (/ (* (un->known-coll 'total #f)
+                      ((cdadr known-pair) 'total #f))
+                   c)))
+      (cons a b)))
 
-    ;; Go through sumlist.
-    (for-each
-     (lambda (otherlist)
-       (if (not (gnc-commodity-equiv (car otherlist) report-commodity))
-           (for-each
-            (lambda (pair)
-              ;; Check whether by any accident the report-commodity
-              ;; appears here.
-              (if
-               (not (gnc-commodity-equiv (car pair) report-commodity))
-               ;; pair-{a,b}: Try to find either the currency of
-               ;; otherlist or of pair in reportlist.
-               (let ((pair-a
-                      (or
-                       ;; Find the otherlist's currency in reportlist
-                       (assoc (car otherlist) reportlist)
-                       ;; Or try whether that's an Euro currency.
-                       (let
-                           ((euro-monetary
-                             (gnc:exchange-by-euro (gnc:make-gnc-monetary
-                                                    (car otherlist)
-                                                    ((cdadr pair) 'total #f))
-                                                   report-commodity #f)))
-                         ;; If this is an Euro currency, create the
-                         ;; pair of appropriately exchanged amounts.
-                         (if euro-monetary
-                             (let ((a (gnc:make-value-collector)))
-                               (a 'add
-                                  (gnc:gnc-monetary-amount euro-monetary))
-                               (list report-commodity
-                                     (cons (cdadr pair) a)))
-                             #f))))
-                     ;; Find the pair's currency in reportlist. FIXME:
-                     ;; Also try the Euro here.
-                     (pair-b (assoc (car pair) reportlist))
-                     (rate 0))
-                 (if (and (not pair-a) (not pair-b))
-                     ;; If neither the currency of otherlist nor of
-                     ;; pair was found in reportlist then we can't
-                     ;; resolve the exchange rate to this currency.
-                     (warn "gnc:resolve-unknown-comm:"
-                           "can't calculate rate for "
-                           (gnc:monetary->string
-                            (gnc:make-gnc-monetary (car pair) ((caadr pair) 'total #f)))
-                           " = "
-                           (gnc:monetary->string
-                            (gnc:make-gnc-monetary (car otherlist) ((cdadr pair) 'total #f)))
-                           " to "
-                           (gnc:monetary->string
-                            (gnc:make-gnc-monetary report-commodity 0)))
-                     (if (and pair-a pair-b)
-                         ;; If both currencies are found then something
-                         ;; went wrong inside
-                         ;; gnc:get-exchange-totals. FIXME: Find a
-                         ;; better thing to do in this case.
-                         (warn "gnc:resolve-unknown-comm:"
-                               "Oops - exchange rate ambiguity error: "
-                               (gnc:monetary->string
-                                (gnc:make-gnc-monetary (car pair) ((caadr pair) 'total #f)))
-                               " = "
-                               (gnc:monetary->string
-                                (gnc:make-gnc-monetary (car otherlist)
-                                      ((cdadr pair) 'total #f))))
-                         (let
-                             ;; Usual case: one of pair-{a,b} was found
-                             ;; in reportlist, i.e. this transaction
-                             ;; can be resolved to report-commodity.
-                             ((newrate
-                               (if (not pair-a)
-                                   (list (car otherlist)
-                                         (make-newrate (cdadr pair)
-                                                       (caadr pair) pair-b))
-                                   (list (car pair)
-                                         (make-newrate (caadr pair)
-                                                       (cdadr pair) pair-a)))))
-                           (set! reportlist (cons newrate reportlist))))))
-               ;; Huh, the report-currency showed up on the wrong side
-               ;; -- we will just add it to the reportlist on the
-               ;; right side.
-               (let ((newrate (list (car otherlist)
-                                    (cons (cdadr pair) (caadr pair)))))
-                 (set! reportlist (cons newrate reportlist)))))
-            (cadr otherlist))))
-     sumlist)
+  ;; Go through sumlist.
+  (let loop ((sumlist sumlist)
+             (reportlist (cadr (assoc report-commodity sumlist))))
+    (cond
+     ((null? sumlist) reportlist)
 
-    ;; Return the reportlist.
-    reportlist))
+     ((gnc-commodity-equiv (caar sumlist) report-commodity)
+      (loop (cdr sumlist) reportlist))
+
+     (else
+      (let innerloop ((pairs (cadr (car sumlist)))
+                      (reportlist reportlist))
+        (cond
+         ((null? pairs)
+          (loop (cdr sumlist) reportlist))
+
+         ;; Check whether by any accident the report-commodity appears
+         ;; here.  Huh, the report-currency showed up on the wrong
+         ;; side -- we will just add it to the reportlist on the right
+         ;; side.
+         ((gnc-commodity-equiv (caar pairs) report-commodity)
+          (innerloop (cdr pairs)
+                     (cons (list (caar sumlist)
+                                 (cons (cdadr (car pairs)) (caadr (car pairs))))
+                           reportlist)))
+
+         (else
+          ;; pair-{a,b}: Try to find either the currency of (car
+          ;; sumlist) or of pair in reportlist.
+          (let* ((pair (car pairs))
+                 (pair-a (or (assoc (car (car sumlist)) reportlist)
+                             ;; Find the (car sumlist)'s currency in reportlist
+                             ;; Or try whether that's an Euro currency.
+                             (let ((euro-monetary
+                                    (gnc:exchange-by-euro
+                                     (gnc:make-gnc-monetary
+                                      (car (car sumlist))
+                                      ((cdadr pair) 'total #f))
+                                     report-commodity #f)))
+                               ;; If this is an Euro currency, create the
+                               ;; pair of appropriately exchanged amounts.
+                               (and euro-monetary
+                                    (let ((a (gnc:make-value-collector)))
+                                      (a 'add (gnc:gnc-monetary-amount euro-monetary))
+                                      (list report-commodity
+                                            (cons (cdadr pair) a)))))))
+                 ;; Find the pair's currency in reportlist. FIXME:
+                 ;; Also try the Euro here.
+                 (pair-b (assoc (car pair) reportlist)))
+
+            (cond
+             ((and (not pair-a) (not pair-b))
+              ;; If neither the currency of (car sumlist) nor of pair
+              ;; was found in reportlist then we can't resolve the
+              ;; exchange rate to this currency.
+              (warn "gnc:resolve-unknown-comm:"
+                    "can't calculate rate for "
+                    (gnc:monetary->string
+                     (gnc:make-gnc-monetary (car pair) ((caadr pair) 'total #f)))
+                    " = "
+                    (gnc:monetary->string
+                     (gnc:make-gnc-monetary (caar sumlist) ((cdadr pair) 'total #f)))
+                    " to "
+                    (gnc:monetary->string (gnc:make-gnc-monetary report-commodity 0)))
+              (innerloop (cdr pairs) reportlist))
+
+             ((and pair-a pair-b)
+              ;; If both currencies are found then something went
+              ;; wrong inside gnc:get-exchange-totals. FIXME: Find a
+              ;; better thing to do in this case.
+              (warn "gnc:resolve-unknown-comm:"
+                    "Oops - exchange rate ambiguity error: "
+                    (gnc:monetary->string
+                     (gnc:make-gnc-monetary (car pair) ((caadr pair) 'total #f)))
+                    " = "
+                    (gnc:monetary->string
+                     (gnc:make-gnc-monetary (caar sumlist) ((cdadr pair) 'total #f))))
+              (innerloop (cdr pairs) reportlist))
+
+             ;; Usual case: one of pair-{a,b} was found in reportlist,
+             ;; i.e. this transaction can be resolved to
+             ;; report-commodity.
+             (pair-a
+              (innerloop (cdr pairs)
+                         (cons (list (car pair)
+                                     (make-newrate (caadr pair) (cdadr pair) pair-a))
+                               reportlist)))
+             (pair-b
+              (innerloop (cdr pairs)
+                         (cons (list (car (car sumlist))
+                                     (make-newrate (cdadr pair) (caadr pair) pair-b))
+                               reportlist))))))))))))
+
 ;; Some thoughts: In the (and (not pair-a) (not pair-b)) case above we
 ;; will have unresolvable transaction exchange rates. But there might
 ;; be cases where we will be able to resolve this, but only after one
