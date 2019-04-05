@@ -228,68 +228,49 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
 (define (gnc:get-commodity-inst-prices
          currency-accounts end-date price-commodity report-currency)
   ;; go through all splits; convert all splits into a price.
-  (filter
-   gnc:price-is-not-zero?
-   (map-in-order
-    (lambda (a)
-      (let* ((transaction-comm (xaccTransGetCurrency
-                                (xaccSplitGetParent a)))
-             (account-comm (xaccAccountGetCommodity
-                            (xaccSplitGetAccount a)))
-             (share-amount (abs
-                            (xaccSplitGetAmount a)))
-             (value-amount (abs
-                            (xaccSplitGetValue a)))
-             (transaction-date (xaccTransGetDate
-                                (xaccSplitGetParent a)))
-             (foreignlist
-              (if (gnc-commodity-equiv transaction-comm price-commodity)
-                  (list account-comm
-                        share-amount value-amount)
-                  (list transaction-comm
-                        value-amount share-amount))))
+  (let loop ((result '())
+             (commodity-splits (gnc:get-match-commodity-splits-sorted
+                                currency-accounts end-date price-commodity)))
+    (if (null? commodity-splits)
+        (reverse! result)
+        (let* ((a (car commodity-splits))
+               (txn-comm (xaccTransGetCurrency (xaccSplitGetParent a)))
+               (acc-comm (xaccAccountGetCommodity (xaccSplitGetAccount a)))
+               (share-amt (abs (xaccSplitGetAmount a)))
+               (value-amt (abs (xaccSplitGetValue a)))
+               (txn-date (xaccTransGetDate (xaccSplitGetParent a))))
+          (cond
+           ((or (zero? share-amt) (zero? value-amt))
+            (loop result
+                  (cdr commodity-splits)))
 
-        ;; Try EURO exchange if necessary
-        (if (not (gnc-commodity-equiv (car foreignlist)
-                                      report-currency))
-            (let ((exchanged (gnc:exchange-by-euro-numeric
-                              (car foreignlist) (cadr foreignlist)
-                              report-currency transaction-date)))
-              (if exchanged
-                  (set! foreignlist
-                        (list report-currency
-                              (gnc:gnc-monetary-amount exchanged)
-                              (caddr foreignlist))))))
+           ((gnc-commodity-equiv acc-comm report-currency)
+            (loop (cons (list txn-date (/ share-amt value-amt)) result)
+                  (cdr commodity-splits)))
 
-        (list
-         transaction-date
-         (if (not (gnc-commodity-equiv (car foreignlist)
-                                       report-currency))
-             (begin
-               (warn "get-commodity-inst-prices: "
-                     "Sorry, currency exchange not yet implemented:"
-                       (gnc:monetary->string
-                        (gnc:make-gnc-monetary
-                         (car foreignlist) (cadr foreignlist)))
-                       " (buying "
-                       (gnc:monetary->string
-                        (gnc:make-gnc-monetary
-                         price-commodity (caddr foreignlist)))
-                       ") =? "
-                       (gnc:monetary->string
-                        (gnc:make-gnc-monetary
-                         report-currency 0)))
-               0)
-             (if (not (zero? (caddr foreignlist)))
-                 (gnc-numeric-div
-                  (cadr foreignlist)
-                  (caddr foreignlist)
-                  GNC-DENOM-AUTO
-                  (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND)) 0)))))
-    ;; Get all the interesting splits, sorted by date.
-    (gnc:get-match-commodity-splits-sorted
-     currency-accounts
-     end-date price-commodity))))
+           ((gnc-commodity-equiv txn-comm report-currency)
+            (loop (cons (list txn-date (/ value-amt share-amt)) result)
+                  (cdr commodity-splits)))
+
+           ((gnc:exchange-by-euro-numeric txn-comm value-amt report-currency txn-date)
+            => (lambda (amt)
+                 (loop (cons (list txn-date (/ (gnc:gnc-monetary-amount amt) share-amt))
+                             result)
+                       (cdr commodity-splits))))
+
+           (else
+            (warn "get-commodity-inst-prices: "
+                  "Sorry, currency exchange not yet implemented:"
+                  (gnc:monetary->string
+                   (gnc:make-gnc-monetary txn-comm value-amt))
+                  " (buying "
+                  (gnc:monetary->string
+                   (gnc:make-gnc-monetary price-commodity share-amt))
+                  ") =? "
+                  (gnc:monetary->string
+                   (gnc:make-gnc-monetary report-currency 0)))
+            (loop result
+                  (cdr commodity-splits))))))))
 
 ;; Get the instantaneous prices for all commodities in
 ;; 'commodity-list', i.e. the same thing as get-commodity-inst-prices
