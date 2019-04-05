@@ -29,7 +29,7 @@
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gnome-utils))
 (use-modules (gnucash gettext))
-(use-modules (gnucash report utility-reports))
+(use-modules (gnucash report reports sample welcome-to-gnucash))
 
 (eval-when (compile load eval expand)
   (load-extension "libgncmod-gnome-utils" "scm_init_sw_gnome_utils_module")
