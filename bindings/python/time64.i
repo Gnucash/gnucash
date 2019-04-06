@@ -35,12 +35,12 @@
 %typemap(in) time64 {
     PyDateTime_IMPORT;
 
-    if (!PyDate_Check($input) && !PyDateTime_Check($input) && !PyInt_Check($input)) {
+    if (!PyDate_Check($input) && !PyInt_Check($input)) {
         PyErr_SetString(PyExc_ValueError,"date, datetime or integer expected");
         return NULL;
     }
 
-    if (PyDateTime_Check($input)) {
+    if (PyDate_Check($input)) {
         struct tm time = {PyDateTime_DATE_GET_SECOND($input),
                           PyDateTime_DATE_GET_MINUTE($input),
                           PyDateTime_DATE_GET_HOUR($input),
@@ -79,12 +79,12 @@
 %typemap(in) time64 * (time64 secs) {
     PyDateTime_IMPORT;
 
-    if (!PyDate_Check($input) && !PyDateTime_Check($input) && !PyInt_Check($input)) {
+    if (!PyDate_Check($input) && !PyInt_Check($input)) {
         PyErr_SetString(PyExc_ValueError,"date, datetime or integer expected");
         return NULL;
     }
     
-    if (PyDateTime_Check($input)) {
+    if (PyDate_Check($input)) {
         struct tm time = {PyDateTime_DATE_GET_SECOND($input),
                           PyDateTime_DATE_GET_MINUTE($input),
                           PyDateTime_DATE_GET_HOUR($input),
