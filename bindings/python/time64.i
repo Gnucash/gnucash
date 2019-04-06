@@ -27,6 +27,7 @@
     @brief SWIG interface file for type translation of time64 types
     @author Mark Jenkins, ParIT Worker Co-operative <mark@parit.ca>
     @author Jeff Green,   ParIT Worker Co-operative <jeff@parit.ca>
+    @author Christoph Holtermann, mail@c-holtermann.net - modifications 2019-04
     @ingroup python_bindings */
 
 // A typemap for converting python dates to time64 in functions that
