@@ -136,12 +136,17 @@
   PyDateTime_IMPORT;
   PyObject *tp;
   struct tm t;
-  gnc_localtime_r($1, &t);
-  tp = PyDateTime_FromDateAndTime(t.tm_year + 1900, t.tm_mon + 1,
-                                             t.tm_mday, t.tm_hour, t.tm_min,
-                                             t.tm_sec, 0);
 
-  $result = SWIG_Python_AppendOutput($result, tp);
+  // directly access return value (result) of function
+  // only return datetime if TRUE
+  if(result) {
+      gnc_localtime_r($1, &t);
+      tp = PyDateTime_FromDateAndTime(t.tm_year + 1900, t.tm_mon + 1,
+                                                 t.tm_mday, t.tm_hour, t.tm_min,
+                                                 t.tm_sec, 0);
+
+      $result = SWIG_Python_AppendOutput($result, tp);
+  } else $result = SWIG_Python_AppendOutput($result, Py_None);
 }
 
 %apply time64 *date { time64 *last_date };
