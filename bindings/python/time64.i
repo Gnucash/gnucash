@@ -35,8 +35,8 @@
 %typemap(in) time64 {
     PyDateTime_IMPORT;
 
-    if (!PyDateTime_Check($input) && !PyInt_Check($input)) {
-        PyErr_SetString(PyExc_ValueError,"datetime or integer expected");
+    if (!PyDate_Check($input) && !PyDateTime_Check($input) && !PyInt_Check($input)) {
+        PyErr_SetString(PyExc_ValueError,"date, datetime or integer expected");
         return NULL;
     }
 
@@ -79,8 +79,8 @@
 %typemap(in) time64 * (time64 secs) {
     PyDateTime_IMPORT;
 
-    if (!PyDateTime_Check($input) && !PyInt_Check($input)) {
-        PyErr_SetString(PyExc_ValueError,"datetime or integer expected");
+    if (!PyDate_Check($input) && !PyDateTime_Check($input) && !PyInt_Check($input)) {
+        PyErr_SetString(PyExc_ValueError,"date, datetime or integer expected");
         return NULL;
     }
     
