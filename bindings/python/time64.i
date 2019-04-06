@@ -33,13 +33,23 @@
 // require time64 as an argument
 %typemap(in) time64 {
     PyDateTime_IMPORT;
-    struct tm time = {PyDateTime_DATE_GET_SECOND($input),
-                      PyDateTime_DATE_GET_MINUTE($input),
-                      PyDateTime_DATE_GET_HOUR($input),
-                      PyDateTime_GET_DAY($input),
-                      PyDateTime_GET_MONTH($input) - 1,
-                      PyDateTime_GET_YEAR($input) - 1900};
-    $1 = gnc_mktime(&time);
+
+    if (!PyDateTime_Check($input) && !PyInt_Check($input)) {
+        PyErr_SetString(PyExc_ValueError,"datetime or integer expected");
+        return NULL;
+    }
+
+    if (PyDateTime_Check($input)) {
+        struct tm time = {PyDateTime_DATE_GET_SECOND($input),
+                          PyDateTime_DATE_GET_MINUTE($input),
+                          PyDateTime_DATE_GET_HOUR($input),
+                          PyDateTime_GET_DAY($input),
+                          PyDateTime_GET_MONTH($input) - 1,
+                          PyDateTime_GET_YEAR($input) - 1900};
+        $1 = gnc_mktime(&time);
+    } else {
+        $1 = PyInt_AsLong($input);
+    }
 }
 
 // A typemap for converting python dates to time64 *, for functions that
@@ -61,14 +71,25 @@
 // Mark Jenkins <mark@parit.ca>
 %typemap(in) time64 * (time64 secs) {
     PyDateTime_IMPORT;
-    struct tm time = {PyDateTime_DATE_GET_SECOND($input),
-                      PyDateTime_DATE_GET_MINUTE($input),
-                      PyDateTime_DATE_GET_HOUR($input),
-                      PyDateTime_GET_DAY($input),
-                      PyDateTime_GET_MONTH($input) - 1,
-                      PyDateTime_GET_YEAR($input) - 1900};
-    time64 secs = gnc_mktime(&time);
-    $1 = &secs;
+
+    if (!PyDateTime_Check($input) && !PyInt_Check($input)) {
+        PyErr_SetString(PyExc_ValueError,"datetime or integer expected");
+        return NULL;
+    }
+    
+    if (PyDateTime_Check($input)) {
+        struct tm time = {PyDateTime_DATE_GET_SECOND($input),
+                          PyDateTime_DATE_GET_MINUTE($input),
+                          PyDateTime_DATE_GET_HOUR($input),
+                          PyDateTime_GET_DAY($input),
+                          PyDateTime_GET_MONTH($input) - 1,
+                          PyDateTime_GET_YEAR($input) - 1900};
+        time64 secs = gnc_mktime(&time);
+        $1 = &secs;
+    } else {
+        time64 secs = PyInt_AsLong($input);
+        $1 = &secs;
+    }
 }
 
 // A typemap for converting time64 values returned from functions to
