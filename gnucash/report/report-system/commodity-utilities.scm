@@ -90,11 +90,6 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
    (gnc:make-gnc-monetary foreign-commodity foreign-numeric)
    domestic date))
 
-;; Returns true if the given pricealist element is a non-zero price.
-(define (gnc:price-is-not-zero? elem)
-  (and (cadr elem)
-       (not (zero? (cadr elem)))))
-
 ;; Create a list of all prices of 'price-commodity' measured in the currency
 ;; 'report-currency'. The prices are taken from all splits in
 ;; 'currency-accounts' up until the date 'end-date'. Returns a list of
@@ -202,14 +197,12 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
           (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
          (all-splits (get-all-splits currency-accounts end-date))
          (interesting-splits (sort (filter interesting-split? all-splits) date<?))
-         (work-to-do (length commodity-list))
-         (work-done 0))
+         (work-to-do (length commodity-list)))
     (map
-     (lambda (c)
+     (lambda (c work-done)
        (define (split-has-commodity? s)
          (or (gnc-commodity-equiv c (xaccTransGetCurrency (xaccSplitGetParent s)))
              (gnc-commodity-equiv c (xaccAccountGetCommodity (xaccSplitGetAccount s)))))
-       (set! work-done (1+ work-done))
        (if start-percent
            (gnc:report-percent-done
             (+ start-percent (* delta-percent (/ work-done work-to-do)))))
@@ -217,7 +210,8 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
              (gnc:get-commodity-totalavg-prices-internal
               currency-accounts end-date c report-currency
               (filter split-has-commodity? interesting-splits))))
-     commodity-list)))
+     commodity-list
+     (iota work-to-do))))
 
 ;; Get the instantaneous prices for the 'price-commodity', measured in
 ;; amounts of the 'report-currency'. The prices are taken from all
@@ -284,19 +278,17 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
    "gnc:get-commoditylist-inst-prices is deprecated.")
   (let ((currency-accounts
          (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
-        (work-to-do (length commodity-list))
-        (work-done 0))
+        (work-to-do (length commodity-list)))
     (map
-     (lambda (c)
-       (begin
-         (set! work-done (+ 1 work-done))
-         (if start-percent
-             (gnc:report-percent-done
-              (+ start-percent (* delta-percent (/ work-done work-to-do)))))
-         (cons c
-               (gnc:get-commodity-inst-prices
-                currency-accounts end-date c report-currency))))
-     commodity-list)))
+     (lambda (c work-done)
+       (if start-percent
+           (gnc:report-percent-done
+            (+ start-percent (* delta-percent (/ work-done work-to-do)))))
+       (cons c
+             (gnc:get-commodity-inst-prices
+              currency-accounts end-date c report-currency)))
+     commodity-list
+     (iota work-to-do))))
 
 
 ;; Find the price in 'pricelist' that's nearest to 'date'. The
