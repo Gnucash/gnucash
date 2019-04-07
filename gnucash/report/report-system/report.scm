@@ -504,15 +504,12 @@ not found.")))
 ;; If this string already exists as a custom template name, a
 ;; number will be appended to it.
 (define (gnc:report-template-make-unique-name new-name)
-  (let* ((unique-name new-name)
-         (counter 0)
-         (unique? (gnc:report-template-has-unique-name? #f unique-name)))
-    (while (not unique?)
-      (begin
-        (set! counter (+ counter 1))
-        (set! unique-name (string-append new-name (number->string counter)))
-        (set! unique? (gnc:report-template-has-unique-name? #f unique-name))))
-    unique-name))
+  (let loop ((name new-name)
+             (counter 1))
+    (if (gnc:report-template-has-unique-name? #f name)
+        name
+        (loop (string-append new-name (number->string counter))
+              (1+ counter)))))
 
 
 ;; Load and save functions
