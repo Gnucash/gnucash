@@ -14,7 +14,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 3.4\n"
+"Project-Id-Version: GnuCash 3.5\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2019-04-08 17:37+0200\n"
@@ -5525,9 +5525,8 @@ msgid "_Remove"
 msgstr "_Entfernen"
 
 #: gnucash/gnome/gnc-split-reg.c:1086
-#, fuzzy
 msgid "Existing Association is '"
-msgstr "Bestehende Zuordnung ist "
+msgstr "Bestehende Zuordnung ist '"
 
 #: gnucash/gnome/gnc-split-reg.c:1170
 msgid "Associate Location with Transaction"
@@ -16035,9 +16034,8 @@ msgid "<b>Layout</b>"
 msgstr "<b>Layout</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2215
-#, fuzzy
 msgid "_Future transactions after blank transaction"
-msgstr "Mit »_Eingabe« gehen Sie zur leeren Buchung"
+msgstr "_Zukünftige Transaktinen nach leerer Buchung"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2221
 msgid ""
@@ -16072,13 +16070,12 @@ msgid "_Use GnuCash built-in color theme"
 msgstr "Benutzt die GnuCash-eigenen _Farben"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2278
-#, fuzzy
 msgid ""
 "GnuCash uses a yellow/green theme by default for register windows. Uncheck "
 "this if you want to use the system color theme instead."
 msgstr ""
 "Gnucash verwendet in der Kontenansicht normalerweise ein gelb/grünes "
-"Farbthema. Wenn aktiviert, wird stattdessen das systemeigene Thema verwendet."
+"Farbthema. Wenn deaktiviert, wird stattdessen das systemeigene Thema verwendet."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2294
 msgid "<b>Graphics</b>"
@@ -18708,7 +18705,7 @@ msgid "Online action \"Get Balance\" not available for this account."
 msgstr "Die Online-Aktion »Saldenabruf« ist für dieses Konto nicht verfügbar."
 
 #: gnucash/import-export/aqb/gnc-ab-getbalance.c:146
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error on executing job.\n"
 "\n"
@@ -18716,7 +18713,7 @@ msgid ""
 msgstr ""
 "Fehler beim Ausführen des Auftrags.\n"
 "\n"
-"Status: %s - %s"
+"Status: %s"
 
 #: gnucash/import-export/aqb/gnc-ab-getbalance.c:150
 #: gnucash/import-export/aqb/gnc-ab-gettrans.c:234
@@ -18735,7 +18732,7 @@ msgid "Online action \"Get Transactions\" not available for this account."
 msgstr "Die Online-Aktion »Umsatzabruf« ist für dieses Konto nicht verfügbar."
 
 #: gnucash/import-export/aqb/gnc-ab-gettrans.c:229
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error on executing job.\n"
 "\n"
@@ -18743,7 +18740,7 @@ msgid ""
 msgstr ""
 "Fehler beim Ausführen des Auftrags.\n"
 "\n"
-"Status: %s - %s"
+"Status: %s (%d)"
 
 #: gnucash/import-export/aqb/gnc-ab-gettrans.c:253
 msgid ""
@@ -18937,14 +18934,14 @@ msgid "Import module for DTAUS import not found."
 msgstr "Importer-Modul für DTAUS nicht gefunden."
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:289
-#, fuzzy, c-format
+#, c-format
 msgid "Job %d status %d - %s\n"
-msgstr "Auftrag %d Status %d - %s: %s \n"
+msgstr "Auftrag %d Status %d - %s\n"
 
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:291
-#, fuzzy, c-format
+#, c-format
 msgid "Job %d status %d - %s: %s\n"
-msgstr "Auftrag %d Status %d - %s: %s \n"
+msgstr "Auftrag %d Status %d - %s: %s\n"
 
 #. indicate that additional failures exist
 #: gnucash/import-export/aqb/gnc-file-aqb-import.c:311
@@ -19050,7 +19047,6 @@ msgid ""
 msgstr "Neue SEPA-Überweisung mit HBCI/Onlinebanking online absenden"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:118
-#, fuzzy
 msgid "_Internal Transaction..."
 msgstr "_Interne Umbuchung..."
 
@@ -19060,7 +19056,6 @@ msgstr ""
 "Neue bankinterne Einzelumbuchung mit HBCI/Onlinebanking online absenden"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:123
-#, fuzzy
 msgid "Issue SEPA Direct _Debit..."
 msgstr "SEPA Einzel_lastschrift..."
 
@@ -19079,7 +19074,7 @@ msgstr "_MT940 importieren"
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:134
 msgid ""
 "Import an end-of-day account statement in SWIFT MT940 format into GnuCash."
-msgstr ""
+msgstr "Importiert einen zum Tagesabschluß erstellten Kontoauszug im SWIFT MT940-Format in GnuCash."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:138
 msgid "Import MT94_2"
@@ -19087,7 +19082,7 @@ msgstr "MT94_2 importieren"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:139
 msgid "Import an interim account statement in SWIFT MT942 format into GnuCash."
-msgstr ""
+msgstr "Importiert einen vorläufigen Kontoauszug im SWIFT MT942-Format in GnuCash."
 
 #. Translators: DTAUS is a traditional german exchange format.
 #. https://de.wikipedia.org/wiki/Datentr%C3%A4geraustauschverfahren
@@ -19096,16 +19091,14 @@ msgid "Import _DTAUS"
 msgstr "_DTAUS importieren"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:147
-#, fuzzy
 msgid "Import a traditional german DTAUS file into GnuCash."
-msgstr "Buchungen aus einer DTAUS Datei importieren"
+msgstr "Buchungen aus einer traditionellen deuscen DTAUS Datei importieren"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:159
 msgid "Import DTAUS and _send..."
 msgstr "DTAUS importieren und _senden..."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:160
-#, fuzzy
 msgid ""
 "Import a DTAUS file into GnuCash and transmit its orders by Online Banking."
 msgstr ""
@@ -19311,13 +19304,12 @@ msgstr ""
 "verarbeiten. Sie müssen diesen Ausdruck an ihr Dateiformat anpassen.\n"
 
 #: gnucash/import-export/bi-import/gnc-plugin-bi-import.c:57
-#, fuzzy
 msgid "Import Bills & _Invoices..."
 msgstr "_Rechnungen importieren..."
 
 #: gnucash/import-export/bi-import/gnc-plugin-bi-import.c:57
 msgid "Import bills and invoices from a CSV text file"
-msgstr "Rechnungen oder Lieferantenrechnungen aus CSV-Datei importieren"
+msgstr "Importiert Kunden- oder Lieferantenrechnungen aus CSV-Datei."
 
 #. Translators: %s is the file name string.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:81
@@ -19352,7 +19344,7 @@ msgstr ""
 
 #. Translators: %s is the file name string.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:92
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "When you click 'Apply', the transactions will be exported to the file '%s'.\n"
 "\n"
@@ -19360,7 +19352,7 @@ msgid ""
 "Abort Export.\n"
 msgstr ""
 "Wenn Sie »Anwenden« klicken, werden die Buchungen in die Datei »%s« "
-"exportiert. Es sind %u Konten zum Export ausgewählt.\n"
+"exportiert.\n"
 "\n"
 "Sie können auch zurückgehen und Ihre Auswahl überprüfen, indem Sie »Zurück« "
 "klicken. Mit »Abbrechen« können Sie den Export abbrechen.\n"
@@ -19545,7 +19537,7 @@ msgid "Export the Transactions to a CSV file"
 msgstr "Buchungen in eine CSV-Textdatei exportieren"
 
 #: gnucash/import-export/csv-exp/gnc-plugin-csv-export.c:64
-#, fuzzy
+#
 msgid "Export A_ctive Register to CSV..."
 msgstr "_Aktives Kontobuch nach CSV exportieren..."
 
@@ -19597,7 +19589,7 @@ msgstr ""
 "nicht mehr angezeigt.\n"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:528
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Import completed but with errors!\n"
 "\n"
@@ -19707,7 +19699,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1833
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The prices were imported from file '%s'.\n"
 "\n"
@@ -19715,7 +19707,12 @@ msgid ""
 "- %s\n"
 "- %s\n"
 "- %s"
-msgstr "Die Buchungen wurden aus der Datei »%s« importiert."
+msgstr "Die Kurse wurden aus der Datei »%s« importiert.\n"
+"\n"
+"Zusammenfassung des Imports:\n"
+"- %s\n"
+"- %s\n"
+"- %s"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1877
 #, c-format
@@ -21412,7 +21409,7 @@ msgstr ""
 "Buchung ändern, auch wenn diese einen abgeglichenem Buchungsteil enthält?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2177
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The transaction you are about to change is protected because it contains "
 "reconciled splits in the following accounts:\n"
@@ -21422,18 +21419,22 @@ msgid ""
 "unreconciled. This might make future reconciliation difficult! Continue with "
 "this change?"
 msgstr ""
-"Sie wollen einen abgeglichenen Buchungsteil verändern. Dies kann das nächste "
-"Abgleichen erschweren. Wollen Sie trotzdem fortsetzen?"
+"Die Buchung, welche Sie ändern wollen, ist geschützt, da sie abgeglichene "
+"Buchungsteile in den folgenden Konten enthält:\n"
+"%s\n"
+"\n"
+"Wenn sie fortfahren, werden diese wieder auf »Nicht abgeglichen« gesetzt. "
+"Dies kann das nächste Abgleichen erschweren. Wollen Sie trotzdem fortfahren?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2189
-#, fuzzy
 msgid ""
 "You are about to change a protected field of a reconciled split. If you "
 "continue editing this split it will be unreconciled. This might make future "
 "reconciliation difficult! Continue with this change?"
 msgstr ""
-"Sie wollen einen abgeglichenen Buchungsteil verändern. Dies kann das nächste "
-"Abgleichen erschweren. Wollen Sie trotzdem fortsetzen?"
+"Sie wollen ein geschütztes Feld eines abgeglichenen Buchungsteils verändern. "
+"Wenn sie fortfahren, wird dieser wieder auf »Nicht abgeglichen« gesetzt. "
+"Wollen Sie trotzdem fortfahren?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2214
 msgid "Chan_ge Transaction"
@@ -22200,7 +22201,7 @@ msgstr "Sortieren nach dem Betrag des Gewinns."
 #: gnucash/report/business-reports/customer-summary.scm:151
 #: gnucash/report/business-reports/customer-summary.scm:464
 msgid "Markup"
-msgstr "Bruttogewinn"
+msgstr "Gewinn/Umsatz"
 
 #: gnucash/report/business-reports/customer-summary.scm:152
 msgid "Sort by markup (which is profit amount divided by sales)."
@@ -22251,9 +22252,8 @@ msgstr "Kein passender Kunde ausgewählt!"
 
 #: gnucash/report/business-reports/customer-summary.scm:647
 #: gnucash/report/business-reports/job-report.scm:631
-#, fuzzy
 msgid "No valid vendor selected."
-msgstr "Kein passender Kunde ausgewählt!"
+msgstr "Kein passender Lieferant ausgewählt!"
 
 #: gnucash/report/business-reports/customer-summary.scm:649
 #: gnucash/report/business-reports/job-report.scm:633
@@ -22263,11 +22263,9 @@ msgstr "Kein passender Mitarbeiter gewählt!"
 
 #: gnucash/report/business-reports/customer-summary.scm:651
 #: gnucash/report/business-reports/job-report.scm:636
-#, fuzzy
 msgid "Click on the \"Options\" button to select a company."
 msgstr ""
-"Keine gültige ~a gewählt. Klicken Sie auf »Optionen«, um eine Firma zu "
-"wählen."
+"Klicken Sie auf »Optionen«, um eine Firma zu wählen."
 
 # Fixme: Source Accelerator missing
 #: gnucash/report/business-reports/customer-summary.scm:663
@@ -22592,9 +22590,8 @@ msgstr "Zeile 3 rechts"
 
 #: gnucash/report/business-reports/invoice.scm:450
 #: gnucash/report/business-reports/job-report.scm:242
-#, fuzzy
 msgid "Payment, thank you!"
-msgstr "Betrag dankend erhalten"
+msgstr "Betrag dankend erhalten!"
 
 #. Translators: This "T" is displayed in the taxable column, if this entry contains tax
 #: gnucash/report/business-reports/invoice.scm:505
@@ -22724,9 +22721,8 @@ msgid "Job Report"
 msgstr "Auftragsbericht"
 
 #: gnucash/report/business-reports/job-report.scm:629
-#, fuzzy
 msgid "No valid job selected."
-msgstr "Keine passende Firma gewählt!"
+msgstr "Kein passender Auftrag gewählt!"
 
 #: gnucash/report/business-reports/owner-report.scm:56
 msgid "Sale"
@@ -22765,9 +22761,8 @@ msgid "The company for this report."
 msgstr "Der in diesem Bericht untersuchte Geschäftspartner."
 
 #: gnucash/report/business-reports/owner-report.scm:584
-#, fuzzy
 msgid "Display the sale amount column?"
-msgstr "Betrag anzeigen?"
+msgstr "Umsatz anzeigen?"
 
 #: gnucash/report/business-reports/owner-report.scm:589
 msgid "Display the tax column?"
@@ -22942,7 +22937,7 @@ msgid ""
 "either be in your .gnucash directory, or else in its proper place within the "
 "GnuCash installation directories."
 msgstr ""
-"Der Dateiname der eguile-Vorlage für diesen Bericht. Sie sollte sich "
+"Der Dateiname der eguile-Vorlagenteil für diesen Bericht. Sie sollte sich "
 "entweder in Ihrem .gnucash-Verzeichnis befinden oder an ihrem angestammten "
 "Platz in den GnuCash-Installationsverzeichnissen."
 
@@ -22966,40 +22961,36 @@ msgid "Font to use for everything else"
 msgstr "Zeichensatz für alles andere"
 
 #: gnucash/report/business-reports/receipt.scm:146
-#, fuzzy
 msgid "Name of a file containing a logo to be used on the header of the report"
 msgstr ""
-"Name der Datei, welche das Logo enthält, das in diesem Bericht verwendet "
-"werden soll."
+"Name der Datei, welche das Logo enthält, das im Kopfbereich dieses Berichts "
+"verwendet werden soll."
 
 #: gnucash/report/business-reports/receipt.scm:149
-#, fuzzy
 msgid ""
 "Width of the header logo in CSS format, e.g. 10% or 32px.  Leave blank to "
 "display the logo at its natural width.  The height of the logo will be "
 "scaled accordingly."
 msgstr ""
-"Breite des Logos im CSS-Format, z.B.'10%' oder '32px'.\n"
+"Breite des Kopf-Logos im CSS-Format, z.B.'10%' oder '32px'.\n"
 "Ohne Angabe wird das Logo in seiner natürlichen Breite angegeben.\n"
-"Die Höhe des Logos wird entsprechend angepaßt."
+"Die Höhe des Logos wird entsprechend skaliert."
 
 #: gnucash/report/business-reports/receipt.scm:152
-#, fuzzy
 msgid "Name of a file containing a logo to be used on the footer of the report"
 msgstr ""
-"Name der Datei, welche das Logo enthält, das in diesem Bericht verwendet "
-"werden soll."
+"Name der Datei, welche das Logo enthält, das im Fußbereich dieses Berichts "
+"verwendet werden soll."
 
 #: gnucash/report/business-reports/receipt.scm:155
-#, fuzzy
 msgid ""
 "Width of the footer logo in CSS format, e.g. 10% or 32px.  Leave blank to "
 "display the logo at its natural width.  The height of the logo will be "
 "scaled accordingly."
 msgstr ""
-"Breite des Logos im CSS-Format, z.B.'10%' oder '32px'.\n"
+"Breite des Fuß-Logos im CSS-Format, z.B.'10%' oder '32px'.\n"
 "Ohne Angabe wird das Logo in seiner natürlichen Breite angegeben.\n"
-"Die Höhe des Logos wird entsprechend angepaßt."
+"Die Höhe des Logos wird entsprechend skaliert."
 
 #: gnucash/report/business-reports/receipt.scm:158
 msgid "The format for the date->string conversion for today's date."
@@ -23009,19 +23000,16 @@ msgstr ""
 
 #: gnucash/report/business-reports/receipt.scm:188
 #: gnucash/report/business-reports/taxinvoice.scm:224
-#, fuzzy
 msgid "Payment received, thank you!"
-msgstr "Betrag dankend erhalten."
+msgstr "Betrag dankend erhalten!"
 
 #: gnucash/report/business-reports/receipt.scm:192
-#, fuzzy
 msgid "Notes added at end of invoice -- may contain HTML markup"
 msgstr "Zusätzlicher Text am Ende der Rechnung ─ darf HTML-Elemente enthalten."
 
 #: gnucash/report/business-reports/receipt.scm:259
-#, fuzzy
 msgid "Display a customer invoice as receipt, cash voucher"
-msgstr "Kundenrechnung mit Spalten für Steuerangaben (mit »eguile«-Vorlage)"
+msgstr "Kundenrechnung als Quittung anzeigen"
 
 #: gnucash/report/business-reports/receivables.scm:39
 msgid "Receivables Account"
@@ -23129,9 +23117,8 @@ msgid "Show Job number"
 msgstr "Auftragsnummer zeigen?"
 
 #: gnucash/report/business-reports/taxinvoice.scm:102
-#, fuzzy
 msgid "Show net price"
-msgstr "Kurse anzeigen"
+msgstr "Nettopreis anzeigen"
 
 #: gnucash/report/business-reports/taxinvoice.scm:103
 msgid "Invoice number next to title"
@@ -23198,9 +23185,8 @@ msgid "Invoice Job number?"
 msgstr "Auftragsnummer?"
 
 #: gnucash/report/business-reports/taxinvoice.scm:171
-#, fuzzy
 msgid "Show net price?"
-msgstr "Kurse anzeigen"
+msgstr "Den Nettopreis anzeigen?"
 
 #: gnucash/report/business-reports/taxinvoice.scm:175
 msgid ""
@@ -24447,14 +24433,13 @@ msgstr ""
 "den gespeicherten Berichten mehr als ein Mal auftritt: "
 
 #: gnucash/report/report-system/report.scm:93
-#, fuzzy
 msgid ""
 "The GnuCash report system has been upgraded. Your old saved reports have "
 "been transferred into a new format. If you experience trouble with saved "
 "reports, please contact the GnuCash development team."
 msgstr ""
 "Das System zum Erstellen von Berichten in GnuCash wurde erneuert. Ihre alten "
-"gespeicherten Berichte wurden ins neue System übernommen. Wenn es dabei "
+"gespeicherten Berichte wurden in ein neues Format übertragen. Wenn es dabei "
 "Schwierigkeiten gibt, kontaktieren Sie bitte das GnuCash Entwicklerteam."
 
 #: gnucash/report/report-system/report.scm:94
@@ -25354,9 +25339,8 @@ msgstr "Verlust"
 
 #. Name definitions
 #: gnucash/report/standard-reports/balance-forecast.scm:35
-#, fuzzy
 msgid "Balance Forecast"
-msgstr "Saldo am ~a"
+msgstr "Saldo-Vorhersage"
 
 #: gnucash/report/standard-reports/balance-forecast.scm:38
 #: gnucash/report/standard-reports/budget-barchart.scm:76
@@ -25369,9 +25353,8 @@ msgid "Report on these accounts."
 msgstr "Den Buchungsbericht für diese Konten erstellen."
 
 #: gnucash/report/standard-reports/balance-forecast.scm:42
-#, fuzzy
 msgid "Interval"
-msgstr "Intervall:"
+msgstr "Intervall"
 
 #: gnucash/report/standard-reports/balance-forecast.scm:49
 #: gnucash/report/standard-reports/net-charts.scm:60
@@ -25385,24 +25368,21 @@ msgstr "Einen Markierungspunkt für jeden Datenpunkt anzeigen."
 
 #: gnucash/report/standard-reports/balance-forecast.scm:52
 #: gnucash/report/standard-reports/balance-forecast.scm:53
-#, fuzzy
 msgid "Show reserve line"
-msgstr "Empfänger Informationen anzeigen"
+msgstr "Reserve-Linie anzeigen"
 
 #: gnucash/report/standard-reports/balance-forecast.scm:55
-#, fuzzy
 msgid "Reserve amount"
-msgstr "Forderungen Konto"
+msgstr "Reservebetrag"
 
 #: gnucash/report/standard-reports/balance-forecast.scm:56
 msgid "The reserve amount is set to a minimum balance desired"
-msgstr ""
+msgstr "Der Reservebetrag wird auf das Minimum des gewünschten Saldos gesetzt."
 
 #: gnucash/report/standard-reports/balance-forecast.scm:59
 #: gnucash/report/standard-reports/balance-forecast.scm:60
-#, fuzzy
 msgid "Show target line"
-msgstr "Tabelle anzeigen"
+msgstr "Ziel-Linie anzeigen"
 
 #: gnucash/report/standard-reports/balance-forecast.scm:62
 msgid "Target amount above reserve"
@@ -25413,11 +25393,12 @@ msgid ""
 "The target is used to plan for a future large purchase, which will be added "
 "as a line above the reserve amount."
 msgstr ""
+"Das Ziel wird verwendet, um künftige größere Investitionen zu planen. Dieses "
+"wird als Linie über der Reserve zugefügt."
 
 #: gnucash/report/standard-reports/balance-forecast.scm:67
-#, fuzzy
 msgid "Show future minimum"
-msgstr "Zukünftiges Minimum"
+msgstr "Zukünftiges Minimum anzeigen"
 
 #: gnucash/report/standard-reports/balance-forecast.scm:68
 msgid ""
@@ -25426,13 +25407,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/standard-reports/balance-forecast.scm:245
-#, fuzzy
 msgid "Target"
-msgstr "Belastung"
+msgstr "Ziel"
 
 #: gnucash/report/standard-reports/balance-forecast.scm:251
 msgid "Reserve"
-msgstr ""
+msgstr "Reserve"
 
 #: gnucash/report/standard-reports/balance-sheet.scm:72
 #: gnucash/report/standard-reports/trial-balance.scm:710
@@ -29933,7 +29913,7 @@ msgstr "Übrige benutzbare Kurse eintragen?"
 #: libgnucash/scm/price-quotes.scm:631
 #, scheme-format
 msgid "Found Finance::Quote version ~A."
-msgstr ""
+msgstr "Finance::Quote Version ~A wurde gefunden."
 
 #: libgnucash/tax/us/de_DE.scm:53
 msgid "Tax Number"
