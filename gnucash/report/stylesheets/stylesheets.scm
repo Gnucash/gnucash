@@ -2,7 +2,7 @@
 ;;  stylesheets.scm
 ;;  load the standard stylesheet definitions
 ;;
-;;  Copyright (c) 2001 Linux Developers Group, Inc. 
+;;  Copyright (c) 2001 Linux Developers Group, Inc.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@
 
 (define-module (gnucash report stylesheets))
 
-(use-modules (gnucash utilities)) 
+(use-modules (gnucash utilities))
 (use-modules (gnucash report stylesheet-plain))
 (use-modules (gnucash report stylesheet-fancy))
 (use-modules (gnucash report stylesheet-footer))
