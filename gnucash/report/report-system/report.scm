@@ -489,16 +489,12 @@ not found.")))
 ;; to test if the new name is unique among the existting custom reports.
 ;; If not the calling function can prevent the name from being updated.
 (define (gnc:report-template-has-unique-name? templ-guid new-name)
-  (let* ((unique? #t))
-    (if new-name
-        (hash-for-each
-         (lambda (id rec)
-           (if (and (not (equal? templ-guid id))
-                    (gnc:report-template-is-custom/template-guid? id)
-                    (equal? new-name (gnc:report-template-name rec)))
-               (set! unique? #f)))
-         *gnc:_report-templates_*))
-    unique?))
+  (or (not new-name)
+      (not (any
+            (lambda (tmpl)
+              (and (not (equal? (car tmpl) templ-guid))
+                   (equal? (gnc:report-template-name (cdr tmpl)) new-name)))
+            (gnc:custom-report-templates-list)))))
 
 ;; Generate a unique custom template name using the given string as a base
 ;; If this string already exists as a custom template name, a

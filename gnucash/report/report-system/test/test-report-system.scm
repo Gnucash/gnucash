@@ -196,6 +196,19 @@
     (test-equal "(gnc:is-custom-report-type report) #f"
       #f
       (gnc:is-custom-report-type report))
+    (test-assert "gnc:report-template-has-unique-name? #t"
+      (gnc:report-template-has-unique-name?
+       "54c2fc051af64a08ba2334c2e9179e24"
+       "Test Report Templatx"))
+    (test-assert "gnc:report-template-has-unique-name? #f"
+      (not
+       (gnc:report-template-has-unique-name?
+        "54c2fc051af64a08ba2334c2e9179e24"
+        "Test Report Template")))
+    (test-assert "gnc:report-template-has-unique-name? #t"
+      (gnc:report-template-has-unique-name?
+       "54c2fc051af64a08ba2334c2e9179e24"
+       #f))
     (test-assert "gnc:report-serialize = string"
       (string?
        (gnc:report-serialize report)))))
