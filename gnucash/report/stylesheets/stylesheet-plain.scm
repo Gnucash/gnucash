@@ -84,35 +84,28 @@
     options))
 
 (define (plain-renderer options doc)
-  (let*
-      ((ssdoc (gnc:make-html-document))
-       (opt-val
-        (lambda (section name)
-          (gnc:option-value
-           (gnc:lookup-option options section name))))
-       (bgcolor
-        (gnc:color-option->html
-         (gnc:lookup-option options
-                            "General"
-                            "Background Color")))
-       (bgpixmap (opt-val "General" "Background Pixmap"))
-       (links? (opt-val "General" "Enable Links"))
-       (alternate-row-color
-        (gnc:color-option->html
-         (gnc:lookup-option options
-                            "Colors"
-                            "Alternate Table Cell Color")))
-       (spacing (opt-val "Tables" "Table cell spacing"))
-       (padding (opt-val "Tables" "Table cell padding"))
-       (border (opt-val "Tables" "Table border width"))
-       )
+  (define (opt-val section name)
+    (gnc:option-value
+     (gnc:lookup-option options section name)))
+  (let* ((ssdoc (gnc:make-html-document))
+         (bgcolor
+          (gnc:color-option->html
+           (gnc:lookup-option options "General" "Background Color")))
+         (bgpixmap (opt-val "General" "Background Pixmap"))
+         (links? (opt-val "General" "Enable Links"))
+         (alternate-row-color
+          (gnc:color-option->html
+           (gnc:lookup-option options "Colors" "Alternate Table Cell Color")))
+         (spacing (opt-val "Tables" "Table cell spacing"))
+         (padding (opt-val "Tables" "Table cell padding"))
+         (border (opt-val "Tables" "Table border width")))
 
     (gnc:html-document-set-style!
      ssdoc "body"
      'attribute (list "bgcolor" bgcolor))
 
     (if (and bgpixmap
-             (not (string=? bgpixmap "")))
+             (not (string-null? bgpixmap)))
         (gnc:html-document-set-style!
          ssdoc "body"
          'attribute (list "background" (make-file-url bgpixmap))))
@@ -218,18 +211,15 @@
 
     (add-css-information-to-doc options ssdoc doc)
 
-    (let* ((title (gnc:html-document-title doc))
-           (doc-headline (gnc:html-document-headline doc))
-           (headline (if (eq? doc-headline #f)
-                         title doc-headline)))
+    (let ((headline (or (gnc:html-document-headline doc)
+                        (gnc:html-document-title doc))))
       (if headline
           (gnc:html-document-add-object!
            ssdoc
            (gnc:make-html-text
             (gnc:html-markup-h3 headline)))))
 
-    (gnc:html-document-append-objects! ssdoc
-                                       (gnc:html-document-objects doc))
+    (gnc:html-document-append-objects! ssdoc (gnc:html-document-objects doc))
 
     ssdoc))
 
