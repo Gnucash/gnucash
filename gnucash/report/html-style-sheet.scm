@@ -31,6 +31,8 @@
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report html-document))
 (use-modules (gnucash report html-style-info))
+(use-modules (gnucash json builder))
+(use-modules (gnucash json parser))
 
 (export <html-style-sheet-template>)
 (export gnc:html-style-sheet-template?)
@@ -145,25 +147,67 @@
   (let ((port (false-if-exception
                (open gnc:current-saved-stylesheets
                      (logior O_WRONLY O_CREAT O_TRUNC)))))
-    (if (not port)
-        (gnc:warn (G_ "Can't save style sheet"))
-        (begin
-          (hash-fold
-           (lambda (id ss-obj p)
-             (let ((code 
-                    (string-append 
-                     (format #f "(let ((template (gnc:html-style-sheet-template-find ~S)))\n" 
-                             (gnc:html-style-sheet-type ss-obj))
-                     "  (if template \n"
-                     "    (let ((options ((gnc:html-style-sheet-template-options-generator template)))) \n"
-                     (gnc:generate-restore-forms 
-                      (gnc:html-style-sheet-options ss-obj) "options")
-                     (format #f " (gnc:restore-html-style-sheet ~S ~S options))))\n"
-                             (gnc:html-style-sheet-name ss-obj)
-                             (gnc:html-style-sheet-type ss-obj)))))
-               (display code port))
-             #f) #f *gnc:_style-sheets_*)
-          (close port)))))
+    (cond
+     (port
+      (display
+       (scm->json-string
+        (list->vector
+         (map
+          (lambda (ss-obj)
+            (let* ((name (gnc:html-style-sheet-name ss-obj))
+                   (type (gnc:html-style-sheet-type ss-obj))
+                   (template (gnc:html-style-sheet-template-find type))
+                   (options (gnc:html-style-sheet-options ss-obj)))
+              (list (cons 'name name)
+                    (cons 'type type)
+                    (cons 'options (list->vector
+                                    (gnc:options-scm->list options))))))
+          (hash-map->list (lambda (k v) v) *gnc:_style-sheets_*)))
+        #:pretty #t)
+       port)
+      (close port))
+
+     (else
+      (gnc:warn (G_ "Can't save style sheet"))))))
+
+(define (read-from-port port)
+  (let loop ((result '()) (char (read-char port)))
+    (cond
+     ((eof-object? char)
+      (close port)
+      (reverse-list->string result))
+     (else
+      (loop (cons char result) (read-char port))))))
+
+(define-public (gnc:load-style-sheet-options)
+  (let ((port (false-if-exception
+               (open-input-file gnc:current-saved-stylesheets))))
+    (cond
+     (port
+      (let ((str (read-from-port port)))
+        (catch #t
+          (lambda ()
+            (let ((scm (vector->list (json-string->scm str))))
+              (for-each
+               (lambda (ss)
+                 (let* ((type (assoc-ref ss "type"))
+                        (name (assoc-ref ss "name"))
+                        (template (gnc:html-style-sheet-template-find type)))
+                   (cond
+                    (template
+                     (let* ((options-gen
+                             (gnc:html-style-sheet-template-options-generator template))
+                            (options (options-gen))
+                            (saved-options (vector->list (assoc-ref ss "options"))))
+                       (gnc:options-list->scm options saved-options)
+                       (gnc:restore-html-style-sheet name type options))))))
+               scm)))
+          (lambda args
+            (format #t "parsing error ~s: ~a" args str)
+            #f))))
+     (else
+      (format #t "file read error: ~a\n" gnc:current-saved-stylesheets)
+      #f))))
 
 (define (gnc:html-style-sheet-set-style! sheet tag . rest)
   (gnc:html-style-table-set!
