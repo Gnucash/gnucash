@@ -697,7 +697,7 @@
                           (gnc-dmy2time64-neutral 20 02 2016)
                           #f #f)))
         (test-equal "gnc:case-exchange-time-fn average-cost 20/02/2012"
-          8073/100
+          14127/175
           (gnc:gnc-monetary-amount
            (exchange-fn
             (gnc:make-gnc-monetary AAPL 1)
