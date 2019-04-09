@@ -705,10 +705,8 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
                   (if (or (not pair)
                           (zero? foreign-amount))
                       0
-                      (gnc-numeric-mul foreign-amount
-                                       (cadr pair)
-                                       (gnc-commodity-get-fraction domestic)
-                                       GNC-RND-ROUND)))))))))
+                      (* foreign-amount
+                         (cadr pair))))))))))
 
 ;; Helper for the gnc:exchange-by-pricalist* below. Exchange the
 ;; <gnc:monetary> 'foreign' into the <gnc:commodity*> 'domestic' by
