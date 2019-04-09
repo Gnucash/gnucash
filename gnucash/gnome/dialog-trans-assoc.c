@@ -100,8 +100,8 @@ sort_iter_compare_func (GtkTreeModel *model,
     gint ret = 0;
     gchar *uri1, *uri2;
 
-    gtk_tree_model_get (model, a, URI, &uri1, -1);
-    gtk_tree_model_get (model, b, URI, &uri2, -1);
+    gtk_tree_model_get (model, a, URI_U, &uri1, -1);
+    gtk_tree_model_get (model, b, URI_U, &uri2, -1);
 
     ret = g_utf8_collate (uri1, uri2);
 
