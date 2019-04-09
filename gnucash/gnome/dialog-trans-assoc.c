@@ -486,7 +486,8 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
 
     if (assoc_dialog->path_head && g_strcmp0 (assoc_dialog->path_head, "") != 0) // not default entry
     {
-        gchar *path_head_str = gnc_uri_get_path (assoc_dialog->path_head);
+        gchar *path_head_ue_str = g_uri_unescape_string (assoc_dialog->path_head, NULL);
+        gchar *path_head_str = gnc_uri_get_path (path_head_ue_str);
         gchar *path_head_label;
 
         // test for current folder being present
@@ -499,6 +500,7 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
         gtk_label_set_text (GTK_LABEL(path_head), path_head_label);
         g_free (path_head_label);
         g_free (path_head_str);
+        g_free (path_head_ue_str);
     }
     else
     {
