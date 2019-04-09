@@ -319,7 +319,7 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
 (define (gnc:get-commoditylist-inst-prices
          commodity-list report-currency end-date
          start-percent delta-percent)
-  (issue-depcrecation-warning
+  (issue-deprecation-warning
    "gnc:get-commoditylist-inst-prices is deprecated.")
   (let ((currency-accounts
          (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
