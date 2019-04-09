@@ -30,10 +30,11 @@
 (use-modules (sw_engine))
 (use-modules (sw_app_utils))
 (use-modules (gnucash report report-system))
+(use-modules (system vm coverage))
 
 (setlocale LC_ALL "C")
 
-(define (run-test)
+(define (run-test-proper)
   (test-runner-factory gnc:test-runner)
   (test-begin "commodity-utils")
   ;; Tests go here
@@ -46,7 +47,25 @@
   (test-exchange-by-pricedb-nearest)
   (test-get-commodity-totalavg-prices)
   (test-get-commodity-inst-prices)
+  (test-weighted-average)
   (test-end "commodity-utils"))
+
+(define (coverage-test)
+  (let* ((currfile (dirname (current-filename)))
+         (path (string-take currfile (string-rindex currfile #\/))))
+    (add-to-load-path path))
+  (call-with-values
+      (lambda()
+        (with-code-coverage run-test-proper))
+    (lambda (data result)
+      (let ((port (open-output-file "/tmp/lcov.info")))
+        (coverage-data->lcov data port)
+        (close port)))))
+
+(define (run-test)
+  (if #f                                ;switch to #t to run coverage
+      (coverage-test)
+      (run-test-proper)))
 
 (define test-accounts
   (list "Root" (list (cons 'type ACCT-TYPE-ROOT))
@@ -639,3 +658,94 @@
                       report-list))))
      (test-end "Daimler-DEM"))
    (teardown)))
+
+(define (test-weighted-average)
+  (test-group-with-cleanup "test-weighted-average"
+    (let* ((account-alist (setup #f))
+           (book  (gnc-get-current-book))
+           (comm-table (gnc-commodity-table-get-table book))
+           (USD (gnc-commodity-table-lookup comm-table "CURRENCY" "USD"))
+           (GBP (gnc-commodity-table-lookup comm-table "CURRENCY" "GBP"))
+           (EUR (gnc-commodity-table-lookup comm-table "CURRENCY" "EUR"))
+           (DEM (gnc-commodity-table-lookup comm-table "CURRENCY" "DEM"))
+           (MSFT (gnc-commodity-table-lookup comm-table "NASDAQ" "MSFT"))
+           (IBM (gnc-commodity-table-lookup comm-table "NYSE" "IBM"))
+           (AAPL (gnc-commodity-table-lookup comm-table "NASDAQ" "AAPL"))
+           (RDSA (gnc-commodity-table-lookup comm-table "LSE" "RDSA"))
+           (DMLR (gnc-commodity-table-lookup comm-table "FSE" "DMLR")))
+
+      (let ((exchange-fn (gnc:case-exchange-time-fn
+                          'weighted-average USD
+                          (list EUR USD GBP DEM AAPL)
+                          (gnc-dmy2time64-neutral 20 02 2016)
+                          #f #f)))
+        (test-equal "gnc:case-exchange-time-fn weighted-average 20/02/2012"
+          307/5
+          (gnc:gnc-monetary-amount
+           (exchange-fn
+            (gnc:make-gnc-monetary AAPL 1)
+            USD
+            (gnc-dmy2time64-neutral 20 02 2012))))
+
+        (test-equal "gnc:case-exchange-time-fn weighted-average 20/02/2014"
+          9366/125
+          (gnc:gnc-monetary-amount
+           (exchange-fn
+            (gnc:make-gnc-monetary AAPL 1)
+            USD
+            (gnc-dmy2time64-neutral 20 02 2014)))))
+
+      (let ((exchange-fn (gnc:case-exchange-time-fn
+                          'average-cost USD
+                          (list EUR USD GBP DEM AAPL)
+                          (gnc-dmy2time64-neutral 20 02 2016)
+                          #f #f)))
+        (test-equal "gnc:case-exchange-time-fn average-cost 20/02/2012"
+          8073/100
+          (gnc:gnc-monetary-amount
+           (exchange-fn
+            (gnc:make-gnc-monetary AAPL 1)
+            USD
+            (gnc-dmy2time64-neutral 20 02 2012)))))
+
+      (let ((exchange-fn (gnc:case-exchange-time-fn
+                          'pricedb-latest USD
+                          (list EUR USD GBP DEM AAPL)
+                          (gnc-dmy2time64-neutral 20 02 2016)
+                          #f #f)))
+        (test-equal "gnc:case-exchange-time-fn pricedb-latest 20/02/2012"
+          5791/50
+          (gnc:gnc-monetary-amount
+           (exchange-fn
+            (gnc:make-gnc-monetary AAPL 1)
+            USD
+            (gnc-dmy2time64-neutral 20 02 2012)))))
+
+      (let ((exchange-fn (gnc:case-exchange-time-fn
+                          'pricedb-nearest USD
+                          (list EUR USD GBP DEM AAPL)
+                          (gnc-dmy2time64-neutral 20 02 2016)
+                          #f #f)))
+        (test-equal "gnc:case-exchange-time-fn pricedb-nearest 20/02/2012"
+          307/5
+          (gnc:gnc-monetary-amount
+           (exchange-fn
+            (gnc:make-gnc-monetary AAPL 1)
+            USD
+            (gnc-dmy2time64-neutral 20 02 2012)))))
+
+      (let ((exchange-fn (gnc:case-exchange-time-fn
+                          'actual-transactions USD
+                          (list EUR USD GBP DEM AAPL)
+                          (gnc-dmy2time64-neutral 20 02 2016)
+                          #f #f)))
+        (test-equal "gnc:case-exchange-time-fn actual-transactions 20/02/2012"
+          307/5
+          (gnc:gnc-monetary-amount
+           (exchange-fn
+            (gnc:make-gnc-monetary AAPL 1)
+            USD
+            (gnc-dmy2time64-neutral 20 02 2012)))))
+
+      (teardown))))
+
