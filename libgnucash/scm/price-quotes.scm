@@ -507,38 +507,38 @@
       (set! keep-going? #f)
       (if (gnucash-ui-is-running)
           (gnc-error-dialog window (_ "No commodities marked for quote retrieval."))
-	  (gnc:warn (_ "No commodities marked for quote retrieval."))))
+	  (gnc:warn "No commodities marked for quote retrieval.")))
      ((eq? fq-results #f)
       (set! keep-going? #f)
       (if (gnucash-ui-is-running)
           (gnc-error-dialog window (_ "Unable to get quotes or diagnose the problem."))
-	  (gnc:warn (_ "Unable to get quotes or diagnose the problem."))))
+	  (gnc:warn "Unable to get quotes or diagnose the problem.")))
      ((member 'missing-lib fq-results)
       (set! keep-going? #f)
       (if (gnucash-ui-is-running)
           (gnc-error-dialog window
            (_ "You are missing some needed Perl libraries.
 Run 'gnc-fq-update' as root to install them."))
-          (gnc:warn (_ "You are missing some needed Perl libraries.
-Run 'gnc-fq-update' as root to install them.") "\n")))
+          (gnc:warn "You are missing some needed Perl libraries.
+Run 'gnc-fq-update' as root to install them." "\n")))
      ((member 'system-error fq-results)
       (set! keep-going? #f)
       (if (gnucash-ui-is-running)
           (gnc-error-dialog window
            (_ "There was a system error while retrieving the price quotes."))
-          (gnc:warn (_ "There was a system error while retrieving the price quotes.") "\n")))
+          (gnc:warn "There was a system error while retrieving the price quotes." "\n")))
      ((not (list? (car fq-results)))
       (set! keep-going? #f)
       (if (gnucash-ui-is-running)
           (gnc-error-dialog window
            (_ "There was an unknown error while retrieving the price quotes."))
-          (gnc:warn (_ "There was an unknown error while retrieving the price quotes.") "\n")))
+          (gnc:warn "There was an unknown error while retrieving the price quotes." "\n")))
      ((and (not commod-tz-quote-triples) (gnucash-ui-is-running))
       (gnc-error-dialog window
        (_ "Unable to get quotes or diagnose the problem."))
        (set! keep-going? #f))
      ((not commod-tz-quote-triples)
-      (gnc:warn (_ "Unable to get quotes or diagnose the problem."))
+      (gnc:warn "Unable to get quotes or diagnose the problem.")
       (set! keep-going? #f))
      ((not (null? problem-syms))
       (if (gnucash-ui-is-running)
@@ -567,12 +567,12 @@ Run 'gnc-fq-update' as root to install them.") "\n")))
           (gnc:warn
            (call-with-output-string
             (lambda (p)
-              (display (_ "Unable to retrieve quotes for these items:") p)
+              (display "Unable to retrieve quotes for these items:" p)
               (newline p)
               (display "  " p)
               (display (string-join problem-syms "\n  ") p)
               (newline p)
-              (display (_ "Continuing with good quotes.") p)
+              (display "Continuing with good quotes." p)
               (newline p)))))))
 
     (if
@@ -596,12 +596,12 @@ Run 'gnc-fq-update' as root to install them.") "\n")))
                (gnc:warn
                 (call-with-output-string
                  (lambda (p)
-                   (display (_ "Unable to create prices for these items:") p)
+                   (display "Unable to create prices for these items:" p)
                    (newline p)
                    (display "  " p)
                    (display (string-join (filter string? prices) "\n  ") p)
                    (newline p)
-                   (display (_ "Adding remaining good quotes.") p)
+                   (display "Adding remaining good quotes." p)
                    (newline p))))))
 
        (if keep-going?
@@ -627,7 +627,8 @@ Run 'gnc-fq-update' as root to install them.") "\n")))
   (let ((sources (gnc:fq-check-sources)))
     (if (list? sources)
 	(begin
-      (format #t "Found Finance::Quote version ~A" (car sources))
+;; Translators: ~A is the version string
+      (format #t (_ "Found Finance::Quote version ~A.") (car sources))
       (newline)
 	  (gnc:msg "Found Finance::Quote version " (car sources))
 	  (gnc-quote-source-set-fq-installed (car sources) (cdr sources))))))
