@@ -306,14 +306,6 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
                        pricelist))
          (earlier (and (not (null? earlierlist))
                        (last earlierlist))))
-    ;;          (if earlier
-    ;;              (warn "earlier"
-    ;;                    (qof-print-date (car earlier))
-    ;;                    (gnc-numeric-to-double (cadr earlier))))
-    ;;          (if later
-    ;;              (warn "later"
-    ;;                    (qof-print-date (car later))
-    ;;                    (gnc-numeric-to-double (cadr later))))
 
     (if (and earlier later)
         (if (< (abs (- date (car earlier)))
@@ -637,11 +629,8 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
   (map
    (lambda (e)
      (list (car e)
-           (abs
-            (gnc-numeric-div ((cdadr e) 'total #f)
-                             ((caadr e) 'total #f)
-                             GNC-DENOM-AUTO
-                             (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND)))))
+           (abs (/ ((cdadr e) 'total #f)
+                   ((caadr e) 'total #f)))))
    (gnc:get-exchange-totals report-commodity end-date)))
 
 (define (gnc:make-exchange-cost-alist report-commodity end-date)
@@ -651,12 +640,10 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
   (map
    (lambda (e)
      (list (car e)
-           (if (zero? ((caadr e) 'total #f)) 0
-           (abs
-            (gnc-numeric-div ((cdadr e) 'total #f)
-                             ((caadr e) 'total #f)
-                             GNC-DENOM-AUTO
-                             (logior (GNC-DENOM-SIGFIGS 8) GNC-RND-ROUND))))))
+           (if (zero? ((caadr e) 'total #f))
+               0
+               (abs (/ ((cdadr e) 'total #f)
+                       ((caadr e) 'total #f))))))
    (gnc:get-exchange-cost-totals report-commodity end-date)))
 
 
@@ -734,10 +721,8 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
        (gnc:make-gnc-monetary
         domestic
         (if price-value
-            (gnc-numeric-mul (gnc:gnc-monetary-amount foreign)
-                             price-value
-                             (gnc-commodity-get-fraction domestic)
-                             GNC-RND-ROUND)
+            (* (gnc:gnc-monetary-amount foreign)
+               price-value)
             (begin
               (warn "gnc:exchange-by-pricevalue-helper: No price found for "
                     (gnc:monetary->string foreign) " into "
@@ -758,10 +743,8 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
         domestic
         (if price
             (let ((result
-                   (gnc-numeric-mul (gnc:gnc-monetary-amount foreign)
-                                    (gnc-price-get-value price)
-                                    (gnc-commodity-get-fraction domestic)
-                                    GNC-RND-ROUND)))
+                   (* (gnc:gnc-monetary-amount foreign)
+                      (gnc-price-get-value price))))
               (gnc-price-unref price)
               result)
             (begin
