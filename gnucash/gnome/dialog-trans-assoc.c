@@ -170,7 +170,12 @@ convert_uri_to_unescaped (AssocDialog *assoc_dialog, const gchar *uri, gchar *sc
     file_path = convert_uri_to_filename (assoc_dialog, uri, scheme);
 
     if (file_path)
+    {
         uri_u = g_uri_unescape_string (file_path, NULL);
+#ifdef G_OS_WIN32 // make path look like a traditional windows path
+        uri_u = g_strdelimit (uri_u, "/", '\\');
+#endif
+    }
     else
         uri_u = g_uri_unescape_string (uri, NULL);
 
@@ -489,7 +494,9 @@ gnc_assoc_dialog_create (GtkWindow *parent, AssocDialog *assoc_dialog)
         gchar *path_head_ue_str = g_uri_unescape_string (assoc_dialog->path_head, NULL);
         gchar *path_head_str = gnc_uri_get_path (path_head_ue_str);
         gchar *path_head_label;
-
+#ifdef G_OS_WIN32 // make path look like a traditional windows path
+        path_head_str = g_strdelimit (path_head_str, "/", '\\');
+#endif
         // test for current folder being present
         if (g_file_test (path_head_str, G_FILE_TEST_IS_DIR))
             path_head_label = g_strconcat (_("Path head for files is, "), path_head_str, NULL);

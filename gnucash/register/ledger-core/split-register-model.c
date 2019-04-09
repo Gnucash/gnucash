@@ -574,6 +574,11 @@ gnc_split_register_get_associate_tooltip (VirtualLocation virt_loc,
         if (gnc_uri_is_file_scheme (scheme)) // absolute path
             file_path = gnc_uri_get_path (uri);
 
+#ifdef G_OS_WIN32 // make path look like a traditional windows path
+        if (file_path)
+            file_path = g_strdelimit (file_path, "/", '\\');
+#endif
+
         g_free (scheme);
 
         if (!file_path)
@@ -583,6 +588,7 @@ gnc_split_register_get_associate_tooltip (VirtualLocation virt_loc,
             gchar *file_uri_u = g_uri_unescape_string (file_path, NULL);
             const gchar *filename = gnc_uri_get_path (file_uri_u);
             g_free (file_uri_u);
+            g_free (file_path);
             return g_strdup (filename);
         }
     }
