@@ -458,7 +458,7 @@ gnc_gnome_help (const char *file_name, const char *anchor)
  * toolkit.
  */
 void
-gnc_launch_assoc (const char *uri)
+gnc_launch_assoc (GtkWindow *parent, const char *uri)
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSString *uri_str = [NSString stringWithUTF8String: uri];
@@ -473,14 +473,14 @@ gnc_launch_assoc (const char *uri)
         return;
     }
 
-    gnc_error_dialog(NULL, "%s", message);
+    gnc_error_dialog(parent, "%s", message);
 
     [pool release];
     return;
 }
 #elif defined G_OS_WIN32 /* G_OS_WIN32 */
 void
-gnc_launch_assoc (const char *uri)
+gnc_launch_assoc (GtkWindow *parent, const char *uri)
 {
     wchar_t *winuri = NULL;
     gchar *filename = NULL;
@@ -506,7 +506,7 @@ gnc_launch_assoc (const char *uri)
         {
             const gchar *message =
             _("GnuCash could not find the associated file");
-            gnc_error_dialog(NULL, "%s:\n%s", message, filename);
+            gnc_error_dialog(parent, "%s:\n%s", message, filename);
         }
         g_free (wincmd);
         g_free (winuri);
@@ -516,7 +516,7 @@ gnc_launch_assoc (const char *uri)
 
 #else
 void
-gnc_launch_assoc (const char *uri)
+gnc_launch_assoc (GtkWindow *parent, const char *uri)
 {
     GError *error = NULL;
     gboolean success;
@@ -550,7 +550,7 @@ gnc_launch_assoc (const char *uri)
         else
             error_uri = g_strdup (uri);
 
-        gnc_error_dialog(NULL, "%s\n%s", message, error_uri);
+        gnc_error_dialog(parent, "%s\n%s", message, error_uri);
         g_free (error_uri);
     }
     PERR ("%s", error->message);

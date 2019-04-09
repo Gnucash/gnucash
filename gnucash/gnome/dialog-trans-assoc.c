@@ -303,7 +303,7 @@ row_selected_cb (GtkTreeView *view, GtkTreePath *path,
 
         if (uri_out_scheme) // make sure we have a scheme entry
         {
-            gnc_launch_assoc (uri_out);
+            gnc_launch_assoc (gnc_ui_get_gtk_window(GTK_WIDGET (view)), uri_out);
             g_free (uri_out_scheme);
         }
         else

@@ -1368,7 +1368,7 @@ gsr_default_execassociated_handler (GNCSplitReg *gsr, gpointer data)
 
         if (uri_scheme) // make sure we have a scheme entry
         {
-            gnc_launch_assoc (run_uri);
+            gnc_launch_assoc (GTK_WINDOW (gsr->window), run_uri);
             g_free (uri_scheme);
         }
         else

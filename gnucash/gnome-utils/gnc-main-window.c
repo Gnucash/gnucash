@@ -4449,7 +4449,7 @@ get_file_strsplit (const gchar *partial)
 static gboolean
 url_signal_cb (GtkAboutDialog *dialog, gchar *uri, gpointer data)
 {
-    gnc_launch_assoc (uri);
+    gnc_launch_assoc (GTK_WINDOW(dialog), uri);
     return TRUE;
 }
 
