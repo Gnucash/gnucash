@@ -787,15 +787,17 @@ for styling the invoice. Please see the exported report for the CSS class names.
                (orders (if references? (delete-duplicates (map gncEntryGetOrder (gncInvoiceGetEntries invoice))) '()))
                (cust-doc? (memv type (list GNC-INVOICE-CUST-INVOICE GNC-INVOICE-CUST-CREDIT-NOTE)))
                (credit-note? (memv type (list GNC-INVOICE-CUST-CREDIT-NOTE GNC-INVOICE-VEND-CREDIT-NOTE GNC-INVOICE-EMPL-CREDIT-NOTE)))
-               (default-title (case type
-                                ((GNC-INVOICE-VEND-INVOICE)
-                                 (_ "Bill"))
-                                ((GNC-INVOICE-EMPL-INVOICE)
-                                 (_ "Expense Voucher"))
-                                ((GNC-INVOICE-CUST-CREDIT-NOTE GNC-INVOICE-VEND-CREDIT-NOTE GNC-INVOICE-EMPL-CREDIT-NOTE)
-                                 (_ "Credit Note"))
-                                (else
-                                 (_ "Invoice"))))
+               (default-title (cond
+                               ((eqv? type GNC-INVOICE-VEND-INVOICE)
+                                (_ "Bill"))
+                               ((eqv? type GNC-INVOICE-EMPL-INVOICE)
+                                (_ "Expense Voucher"))
+                               ((memv type (list GNC-INVOICE-CUST-CREDIT-NOTE
+                                                 GNC-INVOICE-VEND-CREDIT-NOTE
+                                                 GNC-INVOICE-EMPL-CREDIT-NOTE))
+                                (_ "Credit Note"))
+                               (else
+                                (_ "Invoice"))))
                (title (if (string-null? custom-title) default-title custom-title))
                ;; Translators: This is the format of the invoice title.
                ;; The first ~a is "Invoice", "Credit Note"... and the second the number.
