@@ -202,11 +202,9 @@ the option '~a'."))
 
 
 (define (gnc:restore-form-generator value->string)
-  (lambda () (string-append
-              "(lambda (option) "
-              "(if option ((gnc:option-setter option) "
-              (value->string)
-              ")))")))
+  (lambda ()
+    (string-append "(lambda (o) (if o (gnc:option-set-value o "
+                   (value->string) ")))")))
 
 (define (gnc:value->string value)
   (format #f "~s" value))
