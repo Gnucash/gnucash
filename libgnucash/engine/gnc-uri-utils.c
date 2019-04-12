@@ -323,7 +323,22 @@ gchar *gnc_uri_create_uri (const gchar *scheme,
         else
             uri_scheme = g_strdup (scheme);
 
-        if (g_str_has_prefix (abs_path, "/"))
+        /* Arrive here with...
+         *
+         * /my/path/to/file with space.txt
+         * becomes file:///my/path/to/file with space.txt
+         *
+         * c:\my\path\to\file with space.txt
+         * becomes file:///c:\my\path\to\file with space.txt
+         *
+         * \\myserver\share\path\to\file with space.txt
+         * becomes file://\\myserver\share\path\to\file with space.txt
+         *
+         * probably they should all be forward slashs and spaces escaped
+         * also with UNC it could be file://myserver/share/path/to/file with space.txt
+         */
+
+        if (g_str_has_prefix (abs_path, "/") || g_str_has_prefix (abs_path, "\\"))
             uri = g_strdup_printf ( "%s://%s", uri_scheme, abs_path );
         else // for windows add an extra "/"
             uri = g_strdup_printf ( "%s:///%s", uri_scheme, abs_path );
