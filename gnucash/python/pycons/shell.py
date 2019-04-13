@@ -63,9 +63,9 @@ class Shell:
         """
         
         s = line
-        s = filter(lambda x: x in '()[]{}"\'', s)
-        s = s.replace ("'''", "'")
-        s = s.replace ('"""', '"')
+        s = list(filter(lambda x: x in '()[]{}"\'', s))
+        # s = s.replace ("'''", "'")
+        # s = s.replace ('"""', '"')
         instring = False
         brackets = {'(':')', '[':']', '{':'}', '"':'"', '\'':'\''}
         stack = []
