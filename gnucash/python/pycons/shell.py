@@ -163,10 +163,10 @@ class Shell:
                 console.quit()
             else:
                 try:
-                    tb = sys.exc_traceback
+                    tb = sys.exc_info()[2]
                     if tb:
                         tb=tb.tb_next
-                    traceback.print_exception(sys.exc_type, sys.exc_value, tb)
+                    traceback.print_exception(sys.exc_info()[0], sys.exc_info()[1], tb)
                 except:
                     sys.stderr, console.stderr = console.stderr, sys.stderr
                     traceback.print_exc()
