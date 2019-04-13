@@ -155,7 +155,7 @@ class Shell:
                     # Command output
                     print(repr(r))
             except SyntaxError:
-                exec(self.command in self.globals)
+                exec(str(self.command), self.globals)
         except:
             if hasattr (sys, 'last_type') and sys.last_type == SystemExit:
                 console.quit()
