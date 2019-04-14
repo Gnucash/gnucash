@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 ##  @file
 #   @brief Example Script simple sqlite create 
 #   @ingroup python_bindings_examples

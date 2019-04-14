@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # simple_invoice_insert.py -- Add an invoice to a set of books
 #

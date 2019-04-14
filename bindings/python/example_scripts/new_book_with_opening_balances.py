@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # new_book_with_opening_balances.py -- Replicate the account structure of a
 # book and apply basis opening balances from the original
@@ -334,7 +334,7 @@ def main():
             simple_opening_name_used = False
 
         for (namespace, mnemonic), (opening_trans, opening_amount) in \
-                opening_balance_per_currency.iteritems() :
+                opening_balance_per_currency.items() :
             simple_opening_name_used = create_opening_balance_transaction(
                 commodtable, namespace, mnemonic,
                 new_book_root, new_book,

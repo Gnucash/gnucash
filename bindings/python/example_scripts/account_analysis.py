@@ -117,7 +117,7 @@ def next_period_start(start_year, start_month, period_type):
 def period_end(start_year, start_month, period_type):
     if period_type not in PERIODS:
         raise Exception("%s is not a valid period, should be %s" % (
-                period_type, str(PERIODS.keys()) ) )
+                period_type, str(list(PERIODS.keys())) ) )
 
     end_year, end_month = next_period_start(start_year, start_month,
                                             period_type)

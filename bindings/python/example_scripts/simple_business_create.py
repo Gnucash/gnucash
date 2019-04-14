@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # simple_business_create.py -- Set up a set of books for business feature use
 #
