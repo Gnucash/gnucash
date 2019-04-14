@@ -57,7 +57,7 @@ def vendorToDict(vendor):
         simple_vendor['notes'] = vendor.GetNotes()
         simple_vendor['active'] = vendor.GetActive()
         simple_vendor['currency'] = vendor.GetCurrency().get_mnemonic()
-        simple_vendor['tax_table_override'] = vendor.GetTaxTableOverride()
+        #simple_vendor['tax_table_override'] = vendor.GetTaxTableOverride()
         simple_vendor['address'] = addressToDict(vendor.GetAddr())
         simple_vendor['tax_included'] = vendor.GetTaxIncluded()
 
@@ -77,7 +77,7 @@ def customerToDict(customer):
         simple_customer['discount'] = customer.GetDiscount().to_double()
         simple_customer['credit'] = customer.GetCredit().to_double()
         simple_customer['currency'] = customer.GetCurrency().get_mnemonic()
-        simple_customer['tax_table_override'] = customer.GetTaxTableOverride()
+        # simple_customer['tax_table_override'] = customer.GetTaxTableOverride()
         simple_customer['address'] = addressToDict(customer.GetAddr())
         simple_customer['shipping_address'] = addressToDict(
             customer.GetShipAddr())
@@ -111,12 +111,12 @@ def transactionToDict(transaction, entities):
         simple_transaction['imbalance_value'] = transaction.GetImbalanceValue(
             ).to_double()
         simple_transaction['is_balanced'] = transaction.IsBalanced()
-        simple_transaction['date'] = transaction.GetDate()
-        simple_transaction['date_posted'] = transaction.RetDatePostedTS(
+        simple_transaction['date'] = transaction.GetDate().strftime('%Y-%m-%d')
+        simple_transaction['date_posted'] = transaction.RetDatePosted(
             ).strftime('%Y-%m-%d')
-        simple_transaction['date_entered'] = transaction.RetDateEnteredTS(
+        simple_transaction['date_entered'] = transaction.RetDateEntered(
             ).strftime('%Y-%m-%d')
-        simple_transaction['date_due'] = transaction.RetDateDueTS().strftime(
+        simple_transaction['date_due'] = transaction.RetDateDue().strftime(
             '%Y-%m-%d')
         simple_transaction['void_status'] = transaction.GetVoidStatus()
         simple_transaction['void_time'] = transaction.GetVoidTime().strftime(
@@ -163,7 +163,7 @@ def invoiceToDict(invoice):
         else:
             simple_invoice['date_posted'] = invoice.GetDatePosted().strftime(
                 '%Y-%m-%d')
-        if invoice.GetDateDue().strftime('%Y-%m-%d') == '1970-01-01':
+        if not invoice.GetDateDue() or invoice.GetDateDue().strftime('%Y-%m-%d') == '1970-01-01':
             simple_invoice['date_due'] = None
         else:
             simple_invoice['date_due'] = invoice.GetDateDue().strftime(
@@ -171,7 +171,10 @@ def invoiceToDict(invoice):
         simple_invoice['notes'] = invoice.GetNotes()
         simple_invoice['active'] = invoice.GetActive()
         simple_invoice['currency'] = invoice.GetCurrency().get_mnemonic()
-        simple_invoice['owner'] = vendorToDict(invoice.GetOwner()) 
+        owner = invoice.GetOwner()
+        if type(owner) == gnucash.gnucash_business.Job:
+            owner = owner.GetOwner()
+        simple_invoice['owner'] = vendorToDict(owner)
         simple_invoice['owner_type'] = invoice.GetOwnerType()
         simple_invoice['billing_id'] = invoice.GetBillingID()
         simple_invoice['to_charge_amount'] = invoice.GetToChargeAmount().to_double()
@@ -257,7 +260,7 @@ def entryToDict(entry):
         simple_entry['discounted_how'] = entry.GetInvDiscountHow()
         simple_entry['inv_taxable'] = entry.GetInvTaxable()
         simple_entry['inv_tax_included'] = entry.GetInvTaxIncluded()
-        simple_entry['inv_tax_table_override'] = entry.GetInvTaxTable()
+        # simple_entry['inv_tax_table_override'] = entry.GetInvTaxTable()
         if entry.GetBillAccount() == None:
             simple_entry['bill_account'] = {}
         else: 
