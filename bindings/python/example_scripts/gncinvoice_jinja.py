@@ -1,16 +1,16 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 ##@file
 # @brief exports an invoice from gnucash using a template file, see \ref py_invoice_export
 # @ingroup python_bindings_examples
 # @author Christoph Holtermann (c.holtermann (at) gmx.de)
-# @date 2014-11
+# @date 2014-2018
 #
 # @details
 # Input is a template file that will be filled with information from
-# gnucash Invoices. Jinja2 templating engine ist used. Templates can
-# be Latex, Html or anything.
+# gnucash Invoices. Jinja2 templating engine is being used for this.
+# Templates can be Latex, Html or anything.
 #
 # Example templates for german invoices:
 # - Invoice.tex.tmpl
@@ -32,6 +32,7 @@
 
 try:
     import locale
+    import os
     import sys
     import getopt
     import gnucash
@@ -60,10 +61,13 @@ def main(argv=None):
         list_invoices = False
         invoice_number = None
         invoice_id = None
+        filename_from_invoice = False
+        output_path = None
+        with_ipshell = False
 
         try:
-            opts, args = getopt.getopt(argv[1:], "fhlI:t:o:", ["help"])
-        except getopt.error, msg:
+            opts, args = getopt.getopt(argv[1:], "fhliI:t:o:OP:", ["help"])
+        except getopt.error as msg:
              raise Usage(msg)
 
         for opt in opts:
@@ -74,16 +78,27 @@ def main(argv=None):
                 raise Usage("Help:")
             if opt[0] in ["-I"]:
                 invoice_id = opt[1]
-                print("using invoice ID '" + str(invoice_id) + "'.")
+                print ("using invoice ID '" + str(invoice_id) + "'.")
+            if opt[0] in ["-i"]:
+                print ("Using ipshell")
+                with_ipshell = True
             if opt[0] in ["-o"]:
                 filename_output = opt[1]
                 print("using output file", filename_output)
+            if opt[0] in ["-O"]:
+                if filename_output:
+                    print ("given output filename will be overwritten,")
+                print ("creating output filename from Invoice data.")
+                filename_from_invoice = True
             if opt[0] in ["-t"]:
                 filename_template = opt[1]
                 print("using template file", filename_template)
             if opt[0] in ["-l"]:
                 list_invoices = True
                 print("listing invoices")
+            if opt[0] in ["-P"]:
+                output_path = opt[1]
+                print ("output path is", output_path + ".")
 
         # Check for correct input
         if len(args)>1:
@@ -100,17 +115,17 @@ def main(argv=None):
                 raise Usage("No template given !")
 
         # Check for output file
-        if not filename_output:
+        if not (filename_output or filename_from_invoice):
             if filename_template:
                 filename_output = filename_template + ".out"
                 print("no output filename given, will be:", filename_output)
 
-    except Usage, err:
+    except Usage as err:
         if err.msg == "Help:":
             retcode=0
         else:
-            print(>>sys.stderr, "Error:",err.msg)
-            print(>>sys.stderr, "for help use --help")
+            print("Error:", err.msg, file=sys.stderr)
+            print("for help use --help", file=sys.stderr)
             retcode=2
 
         print()
@@ -128,6 +143,8 @@ def main(argv=None):
         print("-I ID          use invoice ID")
         print("-t filename    use filename as template file")
         print("-o filename    use filename as output file")
+        print("-O             create output filename by date, owner and invoice number")
+        print("-P path        path for output file. Overwrites path in -o option")
 
         return retcode
 
@@ -166,17 +183,35 @@ def main(argv=None):
         print("Using the following invoice:")
         print(invoice)
 
-        loader = jinja2.FileSystemLoader('.')
+
+        path_template = os.path.dirname(filename_template)
+        filename_template_basename = os.path.basename(filename_template)
+
+        loader = jinja2.FileSystemLoader(path_template)
         env = jinja2.Environment(loader=loader)
-        template = env.get_template(filename_template)
+        template = env.get_template(filename_template_basename)
 
-        #import IPython
-        #IPython.embed()
-        output = template.render(invoice=invoice, locale=locale)
+        #company = gnucash_business.Company(book.instance)
 
-        print("Writing output", filename_output, ".")
+        output = template.render(invoice=invoice, locale=locale) #, company=company)
+
+        if filename_from_invoice:
+            filename_date = invoice.GetDatePosted().strftime("%Y-%m-%d") # something like 2014-11-01
+            filename_owner_name = str(invoice.GetOwner().GetName())
+            filename_invoice_id = str(invoice.GetID())
+            filename_output = filename_date + "_" + filename_owner_name + "_"  + filename_invoice_id + ".tex"
+
+        if output_path:
+            filename_output = os.path.join(output_path, os.path.basename(filename_output))
+
+        print ("Writing output", filename_output, ".")
         with open(filename_output, 'w') as f:
-            f.write(output.encode('utf-8'))
+            f.write(output)
+
+        if with_ipshell:
+            import IPython
+            IPython.embed()
+
 
 if __name__ == "__main__":
     sys.exit(main())
