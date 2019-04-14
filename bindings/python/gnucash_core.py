@@ -812,7 +812,8 @@ class QueryDatePredicate(GnuCashCoreClass):
     pass
 
 QueryDatePredicate.add_constructor_and_methods_with_prefix(
-    'qof_query_', 'date_predicate')
+    'qof_query_', 'date_predicate', exclude=["qof_query_date_predicate_get_date"])
+QueryDatePredicate.add_method('qof_query_date_predicate_get_date', 'get_date')
 
 class QueryGuidPredicate(GnuCashCoreClass):
     pass

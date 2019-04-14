@@ -143,7 +143,7 @@ class TaxTableEntry(GnuCashCoreClass):
 class Invoice(GnuCashCoreClass):
     def __init__(self, book=None, id=None, currency=None, owner=None,
                  date_opened=None, instance=None):
-        """Invoice Contstructor
+        """Invoice Constructor
 
         You must provide a book, id, currency and owner
         (Customer, Job, Employee, Vendor) or an existing swig proxy object
