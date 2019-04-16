@@ -855,14 +855,12 @@ gnc_option_changed_gain_loss_account_widget_cb (GtkTreeSelection *selection,
         }
         else /*  new account, but placeholder */
         {
-            const char *message = _("You have selected a placeholder " \
-                        "account, which is shown so that child accounts " \
-                        "are displayed, but is invalid. Please select " \
-                        "another account. (You can expand the tree below " \
-                        "the placeholder account by clicking on the arrow " \
-                        "to the left.)");
+            const char *message = _("The account %s is a placeholder account " \
+                "and does not allow transactions. " \
+        	"Please choose a different account.");
 
-            gnc_error_dialog (gnc_ui_get_gtk_window (book_currency_data->default_gain_loss_account_widget), "%s", message);
+            gnc_error_dialog (gnc_ui_get_gtk_window (book_currency_data->default_gain_loss_account_widget),
+			      message, xaccAccountGetName (account));
             if (book_currency_data->prior_gain_loss_account)
             {
                 (gnc_tree_view_account_set_selected_account
