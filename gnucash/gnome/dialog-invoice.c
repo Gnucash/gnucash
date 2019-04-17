@@ -760,12 +760,12 @@ gnc_dialog_post_invoice(InvoiceWindow *iw, char *message,
     *ddue = *postdate;
     *memo = NULL;
     {
-    GncGUID *guid = NULL;
-    owner_inst = qofOwnerGetOwner (gncOwnerGetEndOwner (&(iw->owner)));
-    qof_instance_get (owner_inst,
-              "invoice-last-posted-account", &guid,
-              NULL);
-    *acc = xaccAccountLookup (guid, iw->book);
+        GncGUID *guid = NULL;
+        owner_inst = qofOwnerGetOwner (gncOwnerGetEndOwner (&(iw->owner)));
+        qof_instance_get (owner_inst,
+                  "invoice-last-posted-account", &guid,
+                  NULL);
+        *acc = xaccAccountLookup (guid, iw->book);
     }
     /* Get the default for the accumulate option */
     *accumulate = gnc_prefs_get_bool(GNC_PREFS_GROUP_INVOICE, GNC_PREF_ACCUM_SPLITS);
@@ -957,12 +957,12 @@ gnc_invoice_post(InvoiceWindow *iw, struct post_invoice_params *post_params)
      */
     owner_inst = qofOwnerGetOwner (gncOwnerGetEndOwner (&(iw->owner)));
     {
-    const GncGUID *guid = qof_instance_get_guid (QOF_INSTANCE (acc));
-    qof_begin_edit (owner_inst);
-    qof_instance_set (owner_inst,
-              "invoice-last-posted-account", guid,
-              NULL);
-    qof_commit_edit (owner_inst);
+        const GncGUID *guid = qof_instance_get_guid (QOF_INSTANCE (acc));
+        qof_begin_edit (owner_inst);
+        qof_instance_set (owner_inst,
+                  "invoice-last-posted-account", guid,
+                  NULL);
+        qof_commit_edit (owner_inst);
     }
 
     /* ... post it ... */
