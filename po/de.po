@@ -11,16 +11,13 @@
 # Herbert Thoma <tma@iis.fhg.de>, 2001.
 # Christian Meyer <chrisime@gnome.org>, 2000, 2001.
 # Jan-Uwe Finck <Jan-Uwe.Finck@bigfoot.de>, 1999.
-#
-# Dateiversion 2019-04-17-2356   <-das sollte immer das Datum der letzten Änderung sein! AKTUALISIERE MICH!!!
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 3.5\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2019-04-08 17:37+0200\n"
-"PO-Revision-Date: 2019-03-06 02:16+0100\n"
+"PO-Revision-Date: 2019-04-17 23:56+0200\n"
 "Last-Translator: Christian Stimming <christian@cstimming.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: de\n"
@@ -10419,7 +10416,7 @@ msgid ""
 "decimals instead of displaying the exact fraction if the fractional part "
 "cannot be exactly represented as a decimal."
 msgstr ""
-"Wenn aktiv, wird GnuCash Preise runden um sie anzuzeigen, statt die genauere Angabe"
+"Wenn aktiv, wird GnuCash Preise runden um sie anzuzeigen, statt die genauere Angabe "
 "als Bruch zu wählen, falls der Bruch nicht exakt als Dezimalzahl angezeigt werden kann"
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:75
@@ -10828,7 +10825,7 @@ msgstr ""
 "wird eine «B.-Nr.» angezeigt, die die Buchung beschreibt und auch in der Gegenbuchung"
 "sichtbar ist."
 "Andernfalls zeigt das «Nr» Feld (auch in der Gegenbuchung) die Buchungsnummer an"
-"und die Spalte des «Nr.» Feld kann in der zweiten Zeile nicht gefüllt oder verändert werden.""
+"und die Spalte des «Nr.» Feld kann in der zweiten Zeile nicht gefüllt oder verändert werden."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:240
 msgid "Color the register using a gnucash specific color theme"
@@ -10961,7 +10958,7 @@ msgstr ""
 "Zukünftige Buchungen unter der leeren Buchung am Ende des Kontos anzeigen"
 "Wenn aktiviert, werden Buchungen mit einem Buchungsdatum in der Zukunft am Ende"
 "des Kontenblatts nach einer leeren Buchung angezeigt."
-"Andernfalls ist die leere Buchung die letzte Buchung.""
+"Andernfalls ist die leere Buchung die letzte Buchung."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:290
 #: gnucash/gtkbuilder/dialog-preferences.glade:2398
@@ -12063,17 +12060,17 @@ msgstr ""
 "Zu guter Letzt hat die Vorschauseite für wiederholte Importe Knöpfe zum "
 "Speichern und Laden der Einstellungen."
 "Justieren Sie Einstellungen nach Wunsch (ggf. ausgehend von einem vorherigen Zustand)," 
-"geben Sie ggf. einen neuen Namen ein und drücken Sie den 'Einstellungen speichern' Knopf."
+"geben Sie ggf. einen neuen Namen ein und drücken Sie den »Einstellungen speichern« Knopf."
 "Bitte beachten Sie, dass Sie nicht unter dem Namen der vorgegebenen Einstellungen "
 "speichern können"
 "\n"
 "\n"
 "Diese Aktion kann nicht zurückgenommen werden,"
-"bitte erstellen Sie vorher eine  Sicherungskopie.""
+"bitte erstellen Sie vorher eine  Sicherungskopie."
 "\n"
 "\n"
-"Klicken Sie jetzt auf "Weiter" um fortzufahren oder "Abbruch" zum Abbrechen.""
-"
+"Klicken Sie jetzt auf »Weiter« um fortzufahren oder »Abbruch« zum Abbrechen."
+
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:69
 msgid "Price Import Assistant"
 msgstr "Preis-Import-Assistent"
@@ -16116,7 +16113,7 @@ msgid ""
 msgstr ""
 "Wenn aktiviert, werden Buchungen mit einem Buchungsdatum in der Zukunft am Ende"
 "des Kontenblatts nach einer leeren Buchung angezeigt."
-"Andernfalls ist die leere Buchung die letzte Buchung.""
+"Andernfalls ist die leere Buchung die letzte Buchung."
 
 # H und C sind in diesem Dialog durch Hilfe und Schließen belegt
 #: gnucash/gtkbuilder/dialog-preferences.glade:2234
@@ -16469,8 +16466,8 @@ msgid ""
 "for dates older than six months to a year."
 msgstr ""
 "Mit der Option «skaliert» werden Preise, relativ zum gewählten Datum, entfernt."
-"Für Daten, die älter als ein Jahr sind wird 'ein Mal im Monat' verwendet,"
-"für Daten, die älter als sechs Monate und bis zu einem Jahr alt sind 'ein Mal pro Woche'.""
+"Für Daten, die älter als ein Jahr sind wird »Ein Mal im Monat« verwendet,"
+"für Daten, die älter als sechs Monate bis zu einem Jahr alt sind »ein Mal pro Woche«."
 
 #: gnucash/gtkbuilder/dialog-price.glade:582
 msgid "First Date"
@@ -19478,6 +19475,7 @@ msgstr ""
 "dann auf 'Weiter', um fortzufahren, oder auf 'Abbrechen', um den Export "
 "abzubrechen.\n"
 
+# Fixme Source: 1. "\n" widerspricht I18N Regeln, letztes überflüssig? [FE]
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:112
 msgid ""
 "This assistant will help you export the Transactions to a file\n"
@@ -19494,19 +19492,19 @@ msgid ""
 "Select the settings you require for the file and then click 'Forward' to "
 "proceed or 'Cancel' to Abort Export.\n"
 msgstr ""
-"Dieser Assistent wird Ihnen helfen, die Buchungen mit einem zu wählenden"
-"Trennzeichen in eine Datei zu exportieren.\n"
+"Dieser Assistent wird Ihnen helfen, die Buchungen\n"
+"mit dem unten zu wählenden Trennzeichen in eine Datei zu exportieren.\n"
 "\n"
-"Jeder Buchung wird mehrere Zeilen ergeben und Sie werden möglicherweise"
-"nacharbeiten müssen, um den Export in ein für Sie nützliches Format zu bringen."
-"Jede Buchung taucht nur ein Mal im Export auf und zwar in der Reihenfolge,"
+"Jede Buchung wird mehrere Zeilen ergeben und Sie werden möglicherweise "
+"nacharbeiten müssen, um den Export in ein für Sie nützliches Format zu bringen. "
+"Jede Buchung taucht nur ein Mal im Export auf und zwar in der Reihenfolge, "
 "in der die Kontenblätter verarbeitet werden.\n"
 "\n"
-"Wenn Sie das einfache Layout auswählen entspricht die Ausgabe einer einzeiligen"
-"Ansicht; damit können Details verloren gehen.\n"
+"Wenn Sie das einfache Layout auswählen entspricht die Ausgabe der einzeiligen "
+"Konto-Ansicht; dabei können allerdings Details verloren gehen.\n"
 "\n"
-"Wählen Sie jetzt die Einstellungen und klicken Sie dann 'Weiter' für den Export"
-"oder klicken Sie 'Abbruch'".
+"Wählen Sie jetzt die Einstellungen und klicken Sie dann »Weiter« für den Export "
+"oder zum Abbrechen des Exports »Abbrechen«.\n"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:732
 msgid ""
@@ -22401,11 +22399,11 @@ msgstr "Betrag Steuern"
 #. Translators: "Their details" refer to the invoice 'other party' details i.e. client/vendor name/address/ID
 #: gnucash/report/business-reports/invoice.scm:114
 msgid "Their details"
-msgstr "Kunden- oder Geschäftspartner-Details"
+msgstr "Geschäftspartner-Details"
 
 #: gnucash/report/business-reports/invoice.scm:115
 msgid "Client or vendor name, address and ID"
-msgstr "Kunden- oder Geschäftspartner-Name, -Anschrift, -Kennung"
+msgstr "Geschäftspartner Name, Anschrift, Kennung"
 
 #. Translators: "Our details" refer to the book owner's details i.e. name/address/tax-ID
 #: gnucash/report/business-reports/invoice.scm:118
@@ -22618,7 +22616,7 @@ msgid ""
 "Display all tax categories separately (one per line) instead of one single "
 "tax line.?"
 msgstr ""
-"Alle Steuerangaben auf getrennten Zeilen (statt nur einer Summenzeile)?"
+"Alle Steuerangaben auf getrennten zeilen (statt nur einer Summenzeile)?"
 
 #: gnucash/report/business-reports/invoice.scm:321
 msgid "References"
@@ -26098,7 +26096,6 @@ msgid "First"
 msgstr "Erste"
 
 #: gnucash/report/standard-reports/budget.scm:117
-#, fuzzy
 msgid "The first period of the budget"
 msgstr "Die erste Periode des Budgets."
 
@@ -26134,7 +26131,7 @@ msgstr "Manuelle Periodenauswahl"
 
 #: gnucash/report/standard-reports/budget.scm:132
 msgid "Explicitly select period value with spinner below"
-msgstr "Wählen Sie den Periodenwert mit dem Asuwahlrad"
+msgstr "Wählen Sie den Periodenwert mit dem Auswahlrad."
 
 #: gnucash/report/standard-reports/budget.scm:150
 #: gnucash/report/standard-reports/cash-flow.scm:86
@@ -26650,8 +26647,8 @@ msgstr ""
 "Dieser Bericht ist nützlich zur Berechnung wiederkehrender geschäftlicher"
 "Steuerzahlungen und -einnahmen."
 "Wählen Sie unter 'Berichtsoptionen' Ihre Geschäftskonten für Einnahmen und Ausgaben."
-"Ihre Buchungen können --zusätzlich zu den Teilbuchungen nach Konten für Forderungen,"
-"Aussenstände und Bankkonten-- Teilbuchungen nach Steuerkonten enthalten, "
+"Ihre Buchungen können — zusätzlich zu den Teilbuchungen nach Konten für Forderungen,"
+"Aussenstände und Bankkonten — Teilbuchungen nach Steuerkonten enthalten, "
 "z. Bsp. 'Aktiva:OffFord:Verkäufe -1.000; Aufwendungen:Steuer -100; Erträge:Bank 1.100"
 
 #: gnucash/report/standard-reports/income-gst-statement.scm:49
@@ -26678,7 +26675,7 @@ msgstr ""
 "(Umsatzsteuer, Mehrwertsteuer) einnehmen oder auszahlen. Die Konten müssen"
 "Teilbuchungen enthalten, die die regelmässigen Steuerzahlungen erfassen."
 "Die Konten für gezahlte Steuern bei Ausgaben müssen vom Typ Aktiva, die für"
-"eingenommene Steuern bei Verkäufen von Typ Passive sein.""
+"eingenommene Steuern bei Verkäufen vonm Typ Passiva sein."
 
 #: gnucash/report/standard-reports/income-gst-statement.scm:93
 msgid "Tax Accounts"
@@ -26695,9 +26692,8 @@ msgstr ""
 "Bitte wählen Sie die Konten aus, die die eingenommenen und gezahlten Steuern enthalten."
 "Die Konten müssen Teilbuchungen enthalten, die die regelmässigen Steuerzahlungen erfassen."
 "Die Konten für gezahlte Steuern bei Ausgaben müssen vom Typ Aktiva, die für"
-"eingenommene Steuern bei Verkäufen von Typ Passive sein.""
-"
-"
+"eingenommene Steuern bei Verkäufen vom Typ Passiva sein."
+
 #: gnucash/report/standard-reports/income-gst-statement.scm:108
 #: gnucash/report/standard-reports/income-gst-statement.scm:211
 #, fuzzy
@@ -26797,7 +26793,6 @@ msgstr "Steuerklasse"
 
 #. Translators: "Tax Payable" refer to the difference GST Sales - GST Purchases
 #: gnucash/report/standard-reports/income-gst-statement.scm:273
-#, fuzzy
 msgid "Tax Payable"
 msgstr "Zu zahlende Steuer"
 
@@ -27460,9 +27455,9 @@ msgid ""
 "specified in the options\n"
 "will apply to the Reconciliation Date."
 msgstr ""
-"Der Abgleichbericht sollte dem Aussehen des Abgleichwerkzeugs ähneln."
-"Bitte wählen Sie das Konto in den Berichtsoptionen.
-"Die bei den Optionen gewählten Datumsangaben werden das Abgleichdatum.""
+"Der Abgleichbericht sollte dem Aussehen des Abgleichwerkzeugs ähneln. "
+"Bitte wählen Sie das Konto in den Berichtsoptionen. "
+"Die bei den Optionen gewählten Datumsangaben werden das Abgleichdatum."
 
 #: gnucash/report/standard-reports/transaction.scm:515
 msgid "Convert all transactions into a common currency."
@@ -27567,10 +27562,10 @@ msgid ""
 "expense accounts to equity, and must usually be excluded from periodic "
 "reporting."
 msgstr ""
-"Standarmässig sollten normale Nutzer die Abschlussbuchungen nicht in"
-"einem Buchungsbericht aufführen. Abschlussbuchungen sind Buchungen von Einnahmen-"
-"und Ausgabenkonten ins Eigenkapital (Equity). Sie sind üblicherweise"
-"aus wiederkehrenden Berichten auszuschließen. "
+"Standarmässig sollten normale Nutzer die Abschlussbuchungen nicht in "
+"einem Buchungsbericht aufführen. Abschlussbuchungen sind Buchungen von Einnahmen- "
+"und Ausgabenkonten ins Eigenkapital (Equity). Sie sind üblicherweise "
+"aus wiederkehrenden Berichten auszuschließen."
 
 #: gnucash/report/standard-reports/transaction.scm:637
 msgid "Filter on these accounts."
@@ -27660,7 +27655,7 @@ msgstr "Kontonummer des Gegenkontos anzeigen?"
 msgid ""
 "Display a subtotal summary table. This requires Display/Amount being 'single"
 msgstr ""
-"Anzeige einer Tabelle mit Zwischensummen. Voraussetzung ist, dass Anzeige/Betrag auf 'einzeln' steht.""
+"Anzeige einer Tabelle mit Zwischensummen. Voraussetzung ist, dass Anzeige/Betrag auf »einzeln« steht."
 
 #: gnucash/report/standard-reports/transaction.scm:924
 msgid "Display the trans number?"
@@ -29231,7 +29226,7 @@ msgstr ""
 "Berichte, sowie den Im- und Export aus."
 
 #: libgnucash/app-utils/business-prefs.scm:150
-;; Wieso wird hier eine Bewertung hinzugefügt, die im Original nicht vorhanden ist?
+# Wieso wird hier eine Bewertung hinzugefügt, die im Original nicht vorhanden ist?
 msgid ""
 "Check to have trading accounts used for transactions involving more than one "
 "currency or commodity."
