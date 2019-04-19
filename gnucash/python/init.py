@@ -75,6 +75,10 @@ class Console (cons.Console):
         """ Button press event """
         return self.refresh()
 
+    def quit_event (self, widget, event):
+        """ Event handler for closing of console window """
+        return self.quit()
+    
     def refresh (self):
         """ Refresh drawing """
         for fig in self.figures:
