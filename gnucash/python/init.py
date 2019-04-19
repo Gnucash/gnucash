@@ -86,6 +86,12 @@ class Console (cons.Console):
             canvas.draw()
         return False
 
+    def quit (self):
+        """ quit """
+
+        self.write("\nHave a nice day !\n")
+        return super(Console, self).quit()
+
 
 # Change this to "if True:" to switch on a python console at gnucash
 # startup:
