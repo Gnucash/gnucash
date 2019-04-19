@@ -102,10 +102,8 @@ if False:
     window.set_position(Gtk.WindowPosition.CENTER)
     window.set_default_size(800,600)
     window.set_border_width(0)
-    # Hm. Gtk.main_quit will kill gnucash without closing the file
-    # properly. That's kinda bad.
-    # window.connect('destroy-event', Gtk.main_quit)
-    # window.connect('delete-event', Gtk.main_quit)
+    window.connect('destroy-event', console.quit_event)
+    window.connect('delete-event', console.quit_event)
     window.add (console)
     window.show_all()
     console.grab_focus()
