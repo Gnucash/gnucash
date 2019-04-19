@@ -177,8 +177,10 @@ void gnc_uri_get_components (const gchar *uri,
     if ( gnc_uri_is_file_scheme ( *scheme ) )
     {
         /* a true file uri on windows can start file:///N:/
-           so we come here with /N:/                       */
-        if (g_str_has_prefix (splituri[1], "/") && g_strstr_len (splituri[1], -1,  ":") != NULL)
+           so we come here with /N:/, it could also be /N:\
+        */
+        if (g_str_has_prefix (splituri[1], "/") &&
+           ((g_strstr_len (splituri[1], -1,  ":/") != NULL) || (g_strstr_len (splituri[1], -1,  ":\\") != NULL)))
         {
             gchar *ptr = splituri[1];
             *path = gnc_resolve_file_path ( ptr + 1 );
