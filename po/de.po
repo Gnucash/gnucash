@@ -1,9 +1,11 @@
 # German translations for GnuCash
 # Messages in Deutsch für GnuCash
-# Copyright (C) 1999-2001, 2004 Free Software Foundation, Inc.
 # This file is distributed under the same license as the GnuCash package.
+# Copyright (C) 1999-2001, 2004 Free Software Foundation, Inc.
+# Copyright (C) 2005-2019 by the translators:
 # Dmitriy Mangul <dimang.freetime@gmail.com>, 2017-2018
 # Mechtilde Stehmann <ooo@mechtilde.de>, 2014-2018.
+# Joachim Wetzig <jo.wetzig@web.de>, 2019
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2007, 2009-2019.
 # quazgar <quazgar@posteo.de> 2017.
 # Christian Stimming <stimming@tuhh.de>, 2001-2014.
@@ -11,13 +13,18 @@
 # Herbert Thoma <tma@iis.fhg.de>, 2001.
 # Christian Meyer <chrisime@gnome.org>, 2000, 2001.
 # Jan-Uwe Finck <Jan-Uwe.Finck@bigfoot.de>, 1999.
+#
+# Konventionen/Tastenkürzel:
+# »Zitate«: [altgr]+[Y]/[X]
+# Gedankenstrich — [altgr]+[Shift]+[-]
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 3.5\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2019-04-08 17:37+0200\n"
-"PO-Revision-Date: 2019-04-17 23:56+0200\n"
+"PO-Revision-Date: 2019-04-20 18:18+0200\n"
 "Last-Translator: Christian Stimming <christian@cstimming.de>\n"
 "Language-Team: GnuCash-de <gnucash-de@gnucash.org>\n"
 "Language: de\n"
@@ -629,10 +636,10 @@ msgid ""
 "use. Click the triangle at the far right of the column headings to change "
 "the display."
 msgstr ""
-"Sie können die Wertpapier-Editor Anzeige die «Quelle» zu einem"
-"Wertpapier anzeigen lassen und so die Herkunft der online-Daten sehen."
-"Klicken Sie dazu auf das Dreieck am rechten Ende der Überschriften und"
-"setzen Sie das Häkchen bei «Quelle»"
+"Sie können die Wertpapier-Editor Anzeige die «Quelle» zu einem "
+"Wertpapier anzeigen lassen und so die Herkunft der online-Daten sehen. "
+"Klicken Sie dazu auf das Dreieck am rechten Ende der Überschriften und "
+"setzen Sie das Häkchen bei »Quelle«"
 
 #: doc/tip_of_the_day.list.c:79
 msgid ""
@@ -5672,7 +5679,7 @@ msgid ""
 "Exchange by CSV/FinTS(former HBCI) or import SWIFT-MT9xx/QIF/OFX data "
 "including Transaction Matching"
 msgstr ""
-"Datenaustausch mittels CSV/FinTS(former HBCI) oder importiere"
+"Datenaustausch mittels CSV/FinTS(former HBCI) oder importiere "
 "SWIFT-MT9xx/QIF/OFX Daten, einschließlich Buchungsabgleich"
 
 #: gnucash/gnome/gnucash.appdata.xml.in:25
@@ -6719,10 +6726,10 @@ msgid ""
 "can expand the tree below the placeholder account by clicking on the arrow "
 "to the left.)"
 msgstr ""
-"Sie haben ein Platzhalterkonto ausgewählt, das nur gezeigt wird um die"
-"Unterkonten anzuzeigen, selbst aber nicht gültig ist."
+"Sie haben ein Platzhalterkonto ausgewählt, das nur gezeigt wird um die "
+"Unterkonten anzuzeigen, selbst aber nicht gültig ist. "
 "Bitte wählen Sie ein anderes Konto. (Die Unterkonten können Sie sichtbar machen"
-"indem Sie auf das Dreieck links neben dem Platzhalterkonto klicken)"
+"indem Sie auf das Dreieck links neben dem Platzhalterkonto klicken.)"
 
 #: gnucash/gnome-utils/dialog-options.c:1294
 msgid "Book currency:"
@@ -7964,6 +7971,7 @@ msgstr "Finanzverwaltung für Privatanwender und Kleinbetriebe."
 #: gnucash/gnome-utils/gnc-main-window.c:4496
 msgid "translator-credits"
 msgstr ""
+"Joachim Wetzig, 2019\n"
 "Dmitriy Mangul, 2017-2018\n"
 "Mechtilde Stehmann, 2014-2018\n"
 "Frank H. Ellenberger, 2007, 2009-2019\n"
@@ -8794,25 +8802,25 @@ msgstr "Adressbezeichnung"
 #: gnucash/report/business-reports/aging.scm:50
 #: gnucash/report/business-reports/aging.scm:700
 msgid "Address 1"
-msgstr "Adresse 1 "
+msgstr "Adresse 1"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:427
 #: gnucash/report/business-reports/aging.scm:51
 #: gnucash/report/business-reports/aging.scm:702
 msgid "Address 2"
-msgstr "Adresse 2 "
+msgstr "Adresse 2"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:432
 #: gnucash/report/business-reports/aging.scm:52
 #: gnucash/report/business-reports/aging.scm:704
 msgid "Address 3"
-msgstr "Adresse 3 "
+msgstr "Adresse 3"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:437
 #: gnucash/report/business-reports/aging.scm:53
 #: gnucash/report/business-reports/aging.scm:706
 msgid "Address 4"
-msgstr "Adresse 4 "
+msgstr "Adresse 4"
 
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:447
 #: gnucash/report/business-reports/aging.scm:710
@@ -9180,9 +9188,9 @@ msgid ""
 "Examples: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\n"
 "This can be invoked multiple times."
 msgstr ""
-"Log Niveau Override, Format \"modulename={debug,info,warn,crit,"
+"Anpassung der Protokolldetails, Format \"modulename={debug,info,warn,crit,"
 "error}\"\n"
-"Beispiel: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\n"
+"Beispiele: \"--log qof=debug\" oder \"--log gnc.backend.file.sx=info\"\n"
 "Kann mehrmals aufgerufen werden."
 
 #: gnucash/gnucash-bin.c:125
@@ -9190,7 +9198,7 @@ msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
 msgstr ""
-"Datei, wo die Logmeldungen hingeschrieben werden; Voreinstellung \"/tmp/"
+"Datei, in welche die Logmeldungen geschrieben werden; Voreinstellung \"/tmp/"
 "gnucash.trace\"; kann auch \"stderr\" oder \"stdout\" sein."
 
 #: gnucash/gnucash-bin.c:131
@@ -9482,7 +9490,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:127
 msgid "Enable extra toolbar buttons for business"
-msgstr "Zusätzliche Werkzeugleisten-Knöpfe aktivieren"
+msgstr "Zusätzliche Werkzeugleisten-Knöpfe für Geschäft aktivieren"
 
 #: gnucash/gschemas/org.gnucash.dialogs.business.gschema.xml.in:128
 #: gnucash/gtkbuilder/business-prefs.glade:244
@@ -9912,7 +9920,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.dialogs.gschema.xml.in:226
 msgid "Default to 'new search' if fewer than this number of items is returned"
 msgstr ""
-"Voreinstellung 'Neue Suche' wählen, wenn diese Anzahl an Ergebnissen "
+"Voreinstellung »Neue Suche« wählen, wenn diese Anzahl an Ergebnissen "
 "unterschritten wurde."
 
 #: gnucash/gschemas/org.gnucash.dialogs.import.generic.gschema.xml.in:5
@@ -10407,7 +10415,8 @@ msgstr "Diese Einstellung gibt die Anzahl der automatischen Dezimalstellen an."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:70
 msgid "Force prices to display as decimals even if they must be rounded."
-msgstr "Erzwinge Anzeige der Preise als Dezimalzahlen, auch wenn sie dazu gerundet werden müssen"
+msgstr "Erzwinge Anzeige der Preise als Dezimalzahlen, auch wenn sie dazu "
+"gerundet werden müssen."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:71
 #: gnucash/gtkbuilder/dialog-preferences.glade:1375
@@ -10416,8 +10425,9 @@ msgid ""
 "decimals instead of displaying the exact fraction if the fractional part "
 "cannot be exactly represented as a decimal."
 msgstr ""
-"Wenn aktiv, wird GnuCash Preise runden um sie anzuzeigen, statt die genauere Angabe "
-"als Bruch zu wählen, falls der Bruch nicht exakt als Dezimalzahl angezeigt werden kann"
+"Wenn aktiv wird GnuCash Preise runden, um sie anzuzeigen, statt die genauere "
+"Angabe als Bruch zu wählen, falls der Bruch nicht exakt als Dezimalzahl "
+"angezeigt werden kann."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:75
 msgid ""
@@ -10805,8 +10815,8 @@ msgid ""
 "Set book option on new files to use split \"action\" field for \"Num\" field "
 "on registers/reports"
 msgstr ""
-"Bei neuer Datei: Voreinstellung, ob Aktionsfeld der Buchung für das «Nummer» Feld "
-"verwendet werden soll"
+"Bei neuer Datei: Voreinstellung, ob »Aktion«sfeld des Buchungsteils für das "
+"»Nummer« Feld verwendet werden soll."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:231
 #: gnucash/gtkbuilder/dialog-preferences.glade:1166
@@ -10818,14 +10828,15 @@ msgid ""
 "files is set so that the 'Num' cell on registers shows/updates the "
 "transaction 'num' field."
 msgstr ""
-"Wenn gesetzt, wird als Standardeinstellung für das Kontobuch neuer Dateien"
-"im «Nr» Feld in der ersten Zeile der Buchung (Kontobucheintrag)"
-"das «Aktion» Feld der eigenen Teilbuchung angezeigt/aktualisiert"
-"In der zweiten Zeile -- sofern diese sichtbar ist (Ansicht>Bemerkung anzeigen) --"
-"wird eine «B.-Nr.» angezeigt, die die Buchung beschreibt und auch in der Gegenbuchung"
-"sichtbar ist."
-"Andernfalls zeigt das «Nr» Feld (auch in der Gegenbuchung) die Buchungsnummer an"
-"und die Spalte des «Nr.» Feld kann in der zweiten Zeile nicht gefüllt oder verändert werden."
+"Wenn gesetzt, wird als Standardeinstellung für das Kontobuch neuer Dateien "
+"im »Nr« Feld in der ersten Zeile der Buchung (Kontobucheintrag) "
+"das »Aktion« Feld der eigenen Teilbuchung angezeigt/aktualisiert "
+"In der zweiten Zeile – sofern diese sichtbar ist (Ansicht->Bemerkung "
+"anzeigen) – wird eine »B.-Nr.« angezeigt, die die Buchung beschreibt und "
+"auch in der Gegenbuchung sichtbar ist. "
+"Andernfalls zeigt das »Nr« Feld (auch in der Gegenbuchung) die Buchungsnummer "
+"an und die Spalte des »Nr.« Feld kann in der zweiten Zeile nicht gefüllt oder "
+"verändert werden."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:240
 msgid "Color the register using a gnucash specific color theme"
@@ -10839,9 +10850,9 @@ msgid ""
 "css file to be stored in the gnucash used config directory. More information "
 "can be found in the gnucash FAQ."
 msgstr ""
-"Wenn gesetzt, wird das Kontobuch ein GnuCash spezifisches Farbschema (grün/gelb)"
-"verwenden. Andernfalls wird das Farbschema des Systems genutzt. Unabhängig davon"
-"kann man das Farbschema immer mit einer CSS Datei im Konfigurationsverzeichnis"
+"Wenn gesetzt, wird das Kontobuch ein GnuCash spezifisches Farbschema (grün/gelb) "
+"verwenden. Andernfalls wird das Farbschema des Systems genutzt. Unabhängig davon "
+"kann man das Farbschema immer mit einer CSS Datei im Konfigurationsverzeichnis "
 "vorrangig bestimmen. Sie dazu die GnuCash FAQ."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:245
@@ -10955,9 +10966,9 @@ msgid ""
 "bottom of the register after the blank transaction. Otherwise the blank "
 "transaction will be at the bottom of the register after all transactions."
 msgstr ""
-"Zukünftige Buchungen unter der leeren Buchung am Ende des Kontos anzeigen"
-"Wenn aktiviert, werden Buchungen mit einem Buchungsdatum in der Zukunft am Ende"
-"des Kontenblatts nach einer leeren Buchung angezeigt."
+"Zukünftige Buchungen unter der leeren Buchung am Ende des Kontos anzeigen. "
+"Wenn aktiviert, werden Buchungen mit einem Buchungsdatum in der Zukunft am Ende "
+"des Kontenblatts nach einer leeren Buchung angezeigt. "
 "Andernfalls ist die leere Buchung die letzte Buchung."
 
 #: gnucash/gschemas/org.gnucash.gschema.xml.in:290
@@ -11233,6 +11244,7 @@ msgid "This field contains the full path of the most recently opened file."
 msgstr ""
 "Dieses Feld enthält die Datei mit Pfadangabe, die zuletzt geöffnet war."
 
+# Fixme: Number missing
 #: gnucash/gschemas/org.gnucash.history.gschema.xml.in:15
 #: gnucash/gschemas/org.gnucash.history.gschema.xml.in:20
 #: gnucash/gschemas/org.gnucash.history.gschema.xml.in:25
@@ -11243,7 +11255,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.history.gschema.xml.in:50
 #: gnucash/gschemas/org.gnucash.history.gschema.xml.in:55
 msgid "Next most recently opened file"
-msgstr "Vorletzte geöffnete Datei"
+msgstr "Zuvor geöffnete Datei"
 
 #: gnucash/gschemas/org.gnucash.history.gschema.xml.in:16
 #: gnucash/gschemas/org.gnucash.history.gschema.xml.in:21
@@ -11257,7 +11269,7 @@ msgstr "Vorletzte geöffnete Datei"
 msgid ""
 "This field contains the full path of the next most recently opened file."
 msgstr ""
-"Dieses Feld enthält die Datei mit Pfadangabe, die als vorletztes geöffnet "
+"Dieses Feld enthält die Datei mit Pfadangabe, die zuvor geöffnet "
 "war."
 
 #: gnucash/gschemas/org.gnucash.warnings.gschema.xml.in:9
@@ -12002,6 +12014,7 @@ msgstr "Exportzusammenfassung"
 msgid "CSV Price Import"
 msgstr "CSV-Kurs Import"
 
+#Fixme quote multiword names
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:50
 msgid ""
 "This assistant will help you import Prices from a CSV file.\n"
@@ -12033,43 +12046,38 @@ msgid ""
 "\n"
 "Click on 'Forward' to proceed or 'Cancel' to Abort Import."
 msgstr ""
-"Dieser Assistent hilft Ihnen beim Import von Preisen aus einer CSV Datei."
+"Dieser Assistent hilft Ihnen beim Import von Preisen aus einer CSV Datei.\n"
 "\n"
+"Für einen erfolgreichen Import müssen mindestens Spalten vorhanden sein für "
+"»Datum«, »Betrag«, »Von Wertpapier/Devise« und »Zu Währung«.\n"
 "\n"
-"Für einen erfolgreichen Import müssen mindestens Spalten vorhanden sein für:"
-"Datum, Betrag, Herkunfts-Wertpapier und Zielwährung"
+"Falls alle Einträge für das gleiche Wertpapier oder Währung sind, "
+"kann das vorausgewählt werden und die benötigten Spalten sind Datum und "
+"Betrag.\n"
 "\n"
+"Es gibt verschiedene Optionen für Trennzeichen oder feste Breite. "
+"Bei fester Breite doppelklicken Sie in die Tabelle um eine Spaltenbreite "
+"zu setzen und ggf. mit der rechten Maustaste ändern.\n"
 "\n"
-"Falls alle Einträge für das gleiche Wertpapier und Währung sind,"
-"kann das vorausgewählt werden und die benötigten Spalten sind Datum und Betrag."
+"Beispiele: \"SIE.DE\";\"18.04.2019\";106,50;\"EUR\" \n"
+"oder \"EUR\",\"2019-04-18\",1.125,\"USD\"\n"
 "\n"
-"\n"
-"Es gibt verschiedene Optionen für Trennzeichen oder feste Breite."
-"Bei fester Breite bitte auf die Zeilen doppelklicken um eine Spaltenbreite"
-"zu wählen, ggf. mit der rechten Maustaste ändern."
-"Beispiele: \"RR.L\",\"21/11/2016\",5.345,\"GBP\" und \"USD\","
-"\"2016-11-21\",1.56,\"GBP\"\n"
-"\n"
-"\n"
-"Es gibt eine Option zur Auswahl der Startzeile, der Endzeile sowie zur Wahl,"
-"wieviele Zeilen wiederholt, ausgehend von der Startzeile, übersprungen werden"
-"sollen, für den Fall, dass Ihre Datei z. Bsp. Kopfzeilen enthält."
-"Es gibt eine Option, bereits vorhandene Preise für den Tag zu überschreiben."
-"\n"
+"Es gibt eine Option zur Auswahl der Startzeile, der Endzeile sowie zur Wahl, "
+"wieviele Zeilen wiederholt, ausgehend von der Startzeile, übersprungen werden "
+"sollen, für den Fall, dass Ihre Datei z. Bsp. Kopfzeilen enthält. "
+"Es gibt eine Option, bereits vorhandene Preise für den Tag zu überschreiben.\n"
 "\n"
 "Zu guter Letzt hat die Vorschauseite für wiederholte Importe Knöpfe zum "
-"Speichern und Laden der Einstellungen."
-"Justieren Sie Einstellungen nach Wunsch (ggf. ausgehend von einem vorherigen Zustand)," 
-"geben Sie ggf. einen neuen Namen ein und drücken Sie den »Einstellungen speichern« Knopf."
+"Speichern und Laden der Einstellungen. "
+"Justieren Sie die Einstellungen nach Wunsch (ggf. ausgehend von einem vorherigen Zustand), " 
+"geben Sie ggf. einen neuen Namen ein und drücken Sie den »Einstellungen speichern« Knopf. "
 "Bitte beachten Sie, dass Sie nicht unter dem Namen der vorgegebenen Einstellungen "
-"speichern können"
+"speichern können.\n"
 "\n"
+"Diese Aktion kann nicht zurückgenommen werden, also "
+"erstellen Sie bitte vorher eine  Sicherungskopie.\n"
 "\n"
-"Diese Aktion kann nicht zurückgenommen werden,"
-"bitte erstellen Sie vorher eine  Sicherungskopie."
-"\n"
-"\n"
-"Klicken Sie jetzt auf »Weiter« um fortzufahren oder »Abbruch« zum Abbrechen."
+"Klicken Sie auf »Weiter« um fortzufahren oder »Abbrechen« zum Abbrechen."
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:69
 msgid "Price Import Assistant"
@@ -12254,7 +12262,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1050
 msgid "Import Prices Now"
-msgstr "_Kurse jetzt importieren"
+msgstr "Kurse jetzt importieren"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:28
 msgid "CSV Transaction Import"
@@ -14043,6 +14051,7 @@ msgstr "Konto auswählen"
 msgid "_Select or add a GnuCash account:"
 msgstr "Aus_wählen oder Hinzufügen eines GnuCash Kontos"
 
+# Fixme: File type
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:7
 msgid "Import transactions from text file"
 msgstr "Buchungen aus Textdatei importieren"
@@ -16111,8 +16120,8 @@ msgid ""
 "bottom of the register after the blank transaction. If clear, the blank "
 "transaction will be at the bottom of the register after all transactions."
 msgstr ""
-"Wenn aktiviert, werden Buchungen mit einem Buchungsdatum in der Zukunft am Ende"
-"des Kontenblatts nach einer leeren Buchung angezeigt."
+"Wenn aktiviert, werden Buchungen mit einem Buchungsdatum in der Zukunft am "
+"Ende des Kontenblatts nach einer leeren Buchung angezeigt. "
 "Andernfalls ist die leere Buchung die letzte Buchung."
 
 # H und C sind in diesem Dialog durch Hilfe und Schließen belegt
@@ -16465,8 +16474,8 @@ msgid ""
 "'One a month' is used for dates older than a year and 'One a week' is used "
 "for dates older than six months to a year."
 msgstr ""
-"Mit der Option «skaliert» werden Preise, relativ zum gewählten Datum, entfernt."
-"Für Daten, die älter als ein Jahr sind wird »Ein Mal im Monat« verwendet,"
+"Mit der Option »skaliert« werden Preis, relativ zum gewählten Datum, entfernt. "
+"Für Daten, die älter als ein Jahr sind wird »Ein Mal im Monat« verwendet, "
 "für Daten, die älter als sechs Monate bis zu einem Jahr alt sind »ein Mal pro Woche«."
 
 #: gnucash/gtkbuilder/dialog-price.glade:582
@@ -17902,7 +17911,7 @@ msgstr "Budget Perioden:"
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:395
 msgid "Note: Use View->'Filter By...' to control visible accounts."
 msgstr ""
-"Anmerkung: Benutzen Sie 'Ansicht->Filtern nach...'"
+"Anmerkung: Benutzen Sie »Ansicht->Filtern nach...« "
 "um zu wählen, welche Konten sichtbar sein sollen."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:413
@@ -19168,7 +19177,7 @@ msgstr "_DTAUS importieren"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:147
 msgid "Import a traditional german DTAUS file into GnuCash."
-msgstr "Buchungen aus einer traditionellen deuscen DTAUS Datei importieren"
+msgstr "Importiert Buchungen aus einer traditionellen deutschen DTAUS-Datei."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:159
 msgid "Import DTAUS and _send..."
@@ -19710,8 +19719,8 @@ msgid ""
 "There were problems reading some saved settings, continuing to load.\n"
 "Please review and save again."
 msgstr ""
-"Beim Einlesen einiger gespeicherter Einstellungen gab es ein Problem."
-"Das Einlesen wird fortgesetzt."
+"Beim Einlesen einiger gespeicherter Einstellungen gab es Probleme. "
+"Das Einlesen wird fortgesetzt.\n"
 "Bitte prüfen Sie die Einstellungen und speichern Sie sie erneut."
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:853
@@ -19826,12 +19835,13 @@ msgstr ""
 msgid "No Linked Account"
 msgstr "Kein verbundenes Konto"
 
+#Todo: Bedeutung "Button..."
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1957
 msgid ""
 "To change mapping, double click on a row or select a row and press the "
 "button..."
 msgstr ""
-"Zum Ändern der Zuordnungen bitte auf ene Zeile doppelklicken"
+"Zum Ändern der Zuordnungen bitte auf ene Zeile doppelklicken "
 "oder eine Zeile auswählen und den Knopf drücken..."
 
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2001
@@ -19937,8 +19947,8 @@ msgstr "'Herkunfts-Wertpapier' darf nicht identisch mit 'Zielwährung' sein."
 msgid ""
 "No valid data found in the selected file. It may be empty or the selected "
 "encoding is wrong."
-msgstr "In der gewählten Datei wurden keine gültigen Daten gefunden."
-"Entweder ist die Datei leer oder anders kodiert als erwartet."
+msgstr "In der gewählten Datei wurden keine gültigen Daten gefunden. "
+"Entweder ist die Datei leer oder in einem anderen Zeichensatz kodiert als angegeben."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:484
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:522
@@ -19946,7 +19956,7 @@ msgid ""
 "No lines are selected for importing. Please reduce the number of lines to "
 "skip."
 msgstr ""
-"Keine Zeilen zum Import ausgewählt."
+"Keine Zeilen zum Import ausgewählt. "
 "Bitte verringern Sie die Zahl der zu überspringenden Zeilen."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:503
@@ -19965,8 +19975,8 @@ msgid ""
 "No 'Currency to' column selected and no selected Currency specified either.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
-"Ooops: Keine Zielwährungsspalte ausgewählt und auch keine Zeilwährung angegeben."
-"Das dürfte nicht passieren. Bitte melden Sie einen BugReport."
+"Hoppla: Keine Zielwährungsspalte ausgewählt und auch keine Zeilwährung angegeben.\n"
+"Das dürfte nicht passieren. Bitte melden Sie einen Fehler."
 
 #. Oops - the user didn't select a 'commodity from' column *and* we didn't get a selected value either!
 #. Note if you get here this suggests a bug in the code!
@@ -19976,8 +19986,9 @@ msgid ""
 "either.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
-"Ooops: Keine Herkunfts-Wertpapier Spalte ausgewählt und auch kein Wertpapier angegeben."
-"Das dürfte nicht passieren. Bitte melden Sie einen BugReport."
+"Hoppla: Keine Herkunfts-Wertpapier Spalte ausgewählt und auch kein "
+"Wertpapier angegeben.\n"
+"Das dürfte nicht passieren. Bitte melden Sie einen Fehler."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:470
 msgid "Please select an account column."
@@ -20003,7 +20014,7 @@ msgid ""
 "Please select a transfer account column or remove the other transfer related "
 "columns."
 msgstr ""
-"Bitte wählen Sie eine Transferkonto-Spalte oder entfernen Sie die anderen Spalten."
+"Bitte wählen Sie eine Herkunftskonto-Spalte oder entfernen Sie die anderen Spalten."
 
 #. Oops - the user didn't select an Account column *and* we didn't get a default value either!
 #. Note if you get here this suggests a bug in the code!
@@ -20112,7 +20123,7 @@ msgstr "Buchung-Abgleichen-Datum"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:154
 msgid "Value can't be parsed into a valid reconcile state."
-msgstr "Wert kann nicht zu einem gültigen Abgleichszustand verarbeitet werden."
+	msgstr "Wert kann nicht zu einem gültigen Abgleichszustand verarbeitet werden."
 
 #. Declare two translatable error strings here as they will be used in several places
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:348
@@ -20172,11 +20183,11 @@ msgstr "Buchungen aus Datei mit durch Komma o.ä. getrennten Werten importieren"
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:60
 msgid "Import _Prices from a CSV file..."
-msgstr "K_urse aus Textdatei importieren..."
+msgstr "K_urse aus CSV-Datei importieren..."
 
 #: gnucash/import-export/csv-imp/gnc-plugin-csv-import.c:61
 msgid "Import Prices from a CSV file"
-msgstr "Kurse aus Textdatei importieren"
+msgstr "Kurse aus CSV-Datei importieren"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:175
 msgid "Import Customers from csv"
@@ -22349,6 +22360,7 @@ msgstr "Bericht"
 msgid "No Customer"
 msgstr "Kein Kunde"
 
+#Todo: Bedeutung?
 #: gnucash/report/business-reports/customer-summary.scm:623
 #, scheme-format
 msgid "~a ~a - ~a"
@@ -22616,7 +22628,7 @@ msgid ""
 "Display all tax categories separately (one per line) instead of one single "
 "tax line.?"
 msgstr ""
-"Alle Steuerangaben auf getrennten zeilen (statt nur einer Summenzeile)?"
+"Alle Steuerangaben auf getrennten Zeilen (statt nur einer Summenzeile)?"
 
 #: gnucash/report/business-reports/invoice.scm:321
 msgid "References"
@@ -25516,7 +25528,7 @@ msgid ""
 "The future minimum will add, for each date point, a projected minimum "
 "balance including scheduled transactions."
 msgstr ""
-"Als Zukunftsminimum wird, für jeden Zeitpunkt, eine vorhergesagter"
+"Als Zukunftsminimum wird, für jeden Zeitpunkt, eine vorhergesagter "
 "Mindestwert, einschließlich geplanter Buchungen, hinzugefügt."
 
 #: gnucash/report/standard-reports/balance-forecast.scm:245
@@ -26633,6 +26645,7 @@ msgstr "Einkommens- und Umsatzsteuererklärung"
 msgid "Filter"
 msgstr "Filter"
 
+#Todo: I18N: wrong use of \n
 #: gnucash/report/standard-reports/income-gst-statement.scm:43
 msgid ""
 "This report is useful to calculate periodic business tax payable/receivable "
@@ -26644,12 +26657,12 @@ msgid ""
 " a split to a tax account, e.g. Income:Sales -$1000, Liability:GST on Sales -"
 "$100, Asset:Bank $1100."
 msgstr ""
-"Dieser Bericht ist nützlich zur Berechnung wiederkehrender geschäftlicher"
-"Steuerzahlungen und -einnahmen."
-"Wählen Sie unter 'Berichtsoptionen' Ihre Geschäftskonten für Einnahmen und Ausgaben."
-"Ihre Buchungen können — zusätzlich zu den Teilbuchungen nach Konten für Forderungen,"
-"Aussenstände und Bankkonten — Teilbuchungen nach Steuerkonten enthalten, "
-"z. Bsp. 'Aktiva:OffFord:Verkäufe -1.000; Aufwendungen:Steuer -100; Erträge:Bank 1.100"
+"Dieser Bericht ist nützlich zur Berechnung wiederkehrender geschäftlicher "
+"Steuerzahlungen und -erstattungen.\n"
+"Wählen Sie unter »Berichtsoptionen« Ihre Geschäftskonten für Einnahmen und Ausgaben.\n"
+"Ihre Buchungen können zusätzlich zu den Teilbuchungen nach Konten für offene "
+"Forderungen oder Verbindlichkeiten und Bankkonten, Teilbuchungen nach Steuerkonten enthalten, "
+"z. Bsp. 'Erträge:Verkäufe -1.000; Verbindlichkeiten:Steuer -190; Aktiva:Bank 1.190"
 
 #: gnucash/report/standard-reports/income-gst-statement.scm:49
 msgid ""
@@ -26658,8 +26671,8 @@ msgid ""
 " which will require Tax Tables to be set up correctly. Please see the "
 "documentation."
 msgstr ""
-"Diese Steuerkonten können entweder von den Standardkonten gefüllt werden"
-"oder von Kunden- und Lieferantenrechnungen. Dazu müssen die Steuertabellen"
+"Diese Steuerkonten können entweder von den Standardkonten gefüllt werden "
+"oder von Kunden- und Lieferantenrechnungen. Dazu müssen die Steuertabellen "
 "korrekt ausgefüllt sein. Siehe Dokumentation."
 
 #: gnucash/report/standard-reports/income-gst-statement.scm:53
@@ -26671,11 +26684,11 @@ msgid ""
 "ASSET for taxes paid on expenses, and type LIABILITY for taxes collected on "
 "sales."
 msgstr ""
-"Unter Berichtsoptionen müssen Sie die Konten auswählen, die Steuern"
-"(Umsatzsteuer, Mehrwertsteuer) einnehmen oder auszahlen. Die Konten müssen"
-"Teilbuchungen enthalten, die die regelmässigen Steuerzahlungen erfassen."
-"Die Konten für gezahlte Steuern bei Ausgaben müssen vom Typ Aktiva, die für"
-"eingenommene Steuern bei Verkäufen vonm Typ Passiva sein."
+"Unter Berichtsoptionen müssen Sie die Konten auswählen, auf denen die eingenommenen "
+"und gezahlten Steuern (Umsatzsteuer, Mehrwertsteuer) gesammelt werden. Die Konten müssen "
+"auch Teilbuchungen enthalten, die die regelmässig abgführten oder erstatteten Steuerzahlungen erfassen. "
+"Die Konten für gezahlte Steuern bei Ausgaben müssen vom Typ Aktiva, die für "
+"eingenommene Steuern bei Verkäufen von Typ Fremdkapital sein."
 
 #: gnucash/report/standard-reports/income-gst-statement.scm:93
 msgid "Tax Accounts"
@@ -26689,11 +26702,12 @@ msgid ""
 "These accounts must be of type ASSET for taxes paid on expenses, and type "
 "LIABILITY for taxes collected on sales."
 msgstr ""
-"Bitte wählen Sie die Konten aus, die die eingenommenen und gezahlten Steuern enthalten."
-"Die Konten müssen Teilbuchungen enthalten, die die regelmässigen Steuerzahlungen erfassen."
-"Die Konten für gezahlte Steuern bei Ausgaben müssen vom Typ Aktiva, die für"
-"eingenommene Steuern bei Verkäufen vom Typ Passiva sein."
+"Bitte wählen Sie die Konten aus, die die eingenommenen und gezahlten Steuern enthalten. "
+"Die Konten müssen Teilbuchungen enthalten, die die regelmässigen Steuerzahlungen erfassen. "
+"Die Konten für gezahlte Steuern bei Ausgaben müssen vom Typ Aktiva, die für "
+"eingenommene Steuern bei Verkäufen von Typ Fremdkapital sein."
 
+#Todo: Versteht keiner (ff)
 #: gnucash/report/standard-reports/income-gst-statement.scm:108
 #: gnucash/report/standard-reports/income-gst-statement.scm:211
 #, fuzzy
@@ -27455,7 +27469,7 @@ msgid ""
 "specified in the options\n"
 "will apply to the Reconciliation Date."
 msgstr ""
-"Der Abgleichbericht sollte dem Aussehen des Abgleichwerkzeugs ähneln. "
+"Der Abgleichbericht sollte dem Aussehen des Abgleichwerkzeugs ähneln.\n"
 "Bitte wählen Sie das Konto in den Berichtsoptionen. "
 "Die bei den Optionen gewählten Datumsangaben werden das Abgleichdatum."
 
@@ -28488,7 +28502,7 @@ msgstr "Angaben zum Berichterstatter am Ende anzeigen"
 
 #: gnucash/report/stylesheets/stylesheet-head-or-tail.scm:110
 msgid "Per default the preparer info will be shown before the report data."
-msgstr "Standardmässig werden die Angaben zum Berichterstatter vor den Berichtsdaten angezeigt. "
+msgstr "Standardmässig werden die Angaben zum Berichterstatter vor den Berichtsdaten angezeigt."
 
 #: gnucash/report/stylesheets/stylesheet-head-or-tail.scm:115
 #: gnucash/report/stylesheets/stylesheet-head-or-tail.scm:268
@@ -28497,7 +28511,7 @@ msgstr "Empfängerdaten am Ende anzeigen"
 
 #: gnucash/report/stylesheets/stylesheet-head-or-tail.scm:116
 msgid "Per default the receiver info will be shown before the report data."
-msgstr "Standardmässig werden die Angaben zum Empfänger vor den Berichtsdaten angezeigt. "
+msgstr "Standardmässig werden die Angaben zum Empfänger vor den Berichtsdaten angezeigt."
 
 #: gnucash/report/stylesheets/stylesheet-head-or-tail.scm:121
 #: gnucash/report/stylesheets/stylesheet-head-or-tail.scm:269
@@ -28511,23 +28525,23 @@ msgstr "Standardmässig werden Datum und Uhrzeit vor den Berichtsdaten angezeigt
 #: gnucash/report/stylesheets/stylesheet-head-or-tail.scm:127
 #: gnucash/report/stylesheets/stylesheet-head-or-tail.scm:270
 msgid "Show comments at bottom"
-msgstr "Kommentare in Fußzeile anzeigen"
+msgstr "Kommentare am Ende anzeigen"
 
 #: gnucash/report/stylesheets/stylesheet-head-or-tail.scm:128
 msgid ""
 "Per default the additional comments text will be shown before the report "
 "data."
-msgstr "Standardmässig wird der Text der zusätzlichen Kommentare vor den Berichtsdaten angezeigt. "
+msgstr "Standardmässig wird der Text der zusätzlichen Kommentare vor den Berichtsdaten angezeigt."
 
 
 #: gnucash/report/stylesheets/stylesheet-head-or-tail.scm:133
 #: gnucash/report/stylesheets/stylesheet-head-or-tail.scm:271
 msgid "Show GnuCash version at bottom"
-msgstr "GnuCash Version in Fußzeile anzeigen"
+msgstr "GnuCash Version am Ende anzeigen"
 
 #: gnucash/report/stylesheets/stylesheet-head-or-tail.scm:134
 msgid "Per default the GnuCash version will be shown before the report data."
-msgstr "Standardmässig werden die GnuCash Version vor den Berichtsdaten angezeigt. "
+msgstr "Standardmässig werden die GnuCash Version vor den Berichtsdaten angezeigt."
 
 
 #: gnucash/report/stylesheets/stylesheet-head-or-tail.scm:463
@@ -29227,6 +29241,7 @@ msgstr ""
 
 #: libgnucash/app-utils/business-prefs.scm:150
 # Wieso wird hier eine Bewertung hinzugefügt, die im Original nicht vorhanden ist?
+# Weil ich zu faul oder vergeßlich war das, im Englischen zu ändern. ~Fell
 msgid ""
 "Check to have trading accounts used for transactions involving more than one "
 "currency or commodity."
@@ -29247,10 +29262,9 @@ msgid ""
 "Tried to look up an undefined date symbol '~a'. This report was probably "
 "saved by a later version of GnuCash. Defaulting to today."
 msgstr ""
-"Versuch, ein undefiniertes Datumssymbol '~a' nachzuschauen."
-"Dieser Bericht wurde vermutlich mit einer neueren Version von GnuCash erstellt."
+"Versuch, ein undefiniertes Datumssymbol »~a« nachzuschauen. "
+"Dieser Bericht wurde vermutlich mit einer neueren Version von GnuCash erstellt. "
 "Als Ersatz wird das heutige Datum genommen."
-
 
 #: libgnucash/app-utils/date-utilities.scm:822
 msgid "First day of the current calendar year."
@@ -29506,7 +29520,7 @@ msgstr "Unbekanntes Konto für GUID [%s], breche SX [%s] Erzeugung ab."
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1042
 #, c-format
 msgid "Error parsing SX [%s] key [%s]=formula [%s] at [%s]: %s."
-msgstr "Fehler beim Bearbeiten von SX [%s] key [%s]=Formel [%s] bei [%s]: %s."
+msgstr "Fehler beim Bearbeiten von SX [%s] Schlüssel [%s]=Formel [%s] bei [%s]: %s."
 
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1096
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1757
@@ -29632,7 +29646,7 @@ msgid ""
 "This report was saved using a later version of GnuCash. One of the newer ~a "
 "options '~a' is not available, fallback to the option '~a'."
 msgstr ""
-"Dieser Bericht wurde von einer neueren Version von GnuCash gespeichert. Eine der neueren ~a"
+"Dieser Bericht wurde von einer neueren Version von GnuCash gespeichert. Eine der neueren ~a "
 "Optionen '~a' ist nicht verfügbar, Ausweichen auf die Option '~a'."
 
 #: libgnucash/app-utils/option-util.c:1697
@@ -29679,8 +29693,8 @@ msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
 msgstr ""
-"Falls sie nicht  beabsichtigen {1} 2.6.x oder älter auf diesem System laufen zu lassen"
-"entfernen Sie das alte Verzeichnis auf sicherem Weg."
+"Falls sie nicht mehr beabsichtigen {1} 2.6.x oder älter auf diesem System laufen zu lassen, "
+"können Sie das alte Verzeichnis risikolos entfernen."
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:688
 msgid "In addition:"
@@ -29689,8 +29703,8 @@ msgstr "Außerdem:"
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:694
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
-msgstr[0] "Die folgende Datei wurde stattdessen nach {1} kopiert."
-msgstr[1] "Die folgenden Dateien wurden stattdessen nach {1} kopiert."
+msgstr[0] "Die folgende Datei wurde stattdessen nach {1} kopiert:"
+msgstr[1] "Die folgenden Dateien wurden stattdessen nach {1} kopiert:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:698
 msgid "The following file in {1} has been renamed:"
@@ -29821,7 +29835,7 @@ msgstr "Unbekanntes Datumsformat als Argument übergeben."
 #: libgnucash/engine/gnc-datetime.cpp:559
 msgid "Value can't be parsed into a date using the selected date format."
 msgstr ""
-"Der Wert kann bei Verwendung des ausgewählten Datumsformats"
+"Der Wert kann bei Verwendung des ausgewählten Datumsformats "
 "nicht in ein Datum umgewandelt werden."
 
 #: libgnucash/engine/gnc-datetime.cpp:564
@@ -29836,9 +29850,9 @@ msgid ""
 "must use a newer version of GnuCash in order to support the following "
 "features:"
 msgstr ""
-"Diese Datei oder Datenbank benutzt Features von GnuCash, die in "
+"Diese Datei oder Datenbank benutzt Merkmale von GnuCash, die in "
 "dieser Version nicht vorhanden sind. Sie brauchen eine neuere GnuCash "
-"Version, um die folgenden Features zu unterstützen: "
+"Version, um die folgenden Features zu unterstützen:"
 
 # Fixme: Source
 #. Set memo.
