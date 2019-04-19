@@ -85,8 +85,13 @@ class Console (cons.Console):
 
 # Change this to "if True:" to switch on a python console at gnucash
 # startup:
+# shelltype can either be "python" or "ipython" (the latter is not yet fully functional)
 if False:
-    console = Console(argv = [], shelltype = 'python', banner = [['woop', 'title']], size = 100)
+    shelltype = "python"
+    title = "gnucash "+shelltype+" shell"
+    banner_style = 'title'
+    banner = "Welcome to "+title+"!\n"
+    console = Console(argv = [], shelltype = shelltype, banner = [[banner, banner_style]], size = 100)
 
     window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
     window.set_position(Gtk.WindowPosition.CENTER)
