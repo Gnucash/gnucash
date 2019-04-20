@@ -690,23 +690,18 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
 ;; the <gnc:commodity*> domestic-commodity, exchanges the amount into
 ;; the domestic currency and returns a <gnc-monetary>.
 (define (gnc:make-exchange-function exchange-alist)
-  (let ((exchangelist exchange-alist))
-    (lambda (foreign domestic)
-      (gnc:debug "foreign: " (gnc:monetary->string foreign))
-      (gnc:debug "domestic: " (gnc-commodity-get-printname domestic))
-      (and foreign
-           (or (gnc:exchange-by-euro foreign domestic #f)
-               (gnc:exchange-if-same foreign domestic)
-               (gnc:make-gnc-monetary
-                domestic
-                (let ((pair (assoc (gnc:gnc-monetary-commodity foreign)
-                                   exchangelist))
-                      (foreign-amount (gnc:gnc-monetary-amount foreign)))
-                  (if (or (not pair)
-                          (zero? foreign-amount))
-                      0
-                      (* foreign-amount
-                         (cadr pair))))))))))
+  (lambda (foreign domestic)
+    (gnc:debug "foreign: " (gnc:monetary->string foreign))
+    (gnc:debug "domestic: " (gnc-commodity-get-printname domestic))
+    (and foreign
+         (or (gnc:exchange-by-euro foreign domestic #f)
+             (gnc:exchange-if-same foreign domestic)
+             (let* ((foreign-comm (gnc:gnc-monetary-commodity foreign))
+                    (pair (assoc foreign-comm exchange-alist)))
+               (and pair
+                    (gnc:make-gnc-monetary
+                     domestic
+                     (* (gnc:gnc-monetary-amount foreign) (cadr pair)))))))))
 
 ;; Helper for the gnc:exchange-by-pricalist* below. Exchange the
 ;; <gnc:monetary> 'foreign' into the <gnc:commodity*> 'domestic' by
