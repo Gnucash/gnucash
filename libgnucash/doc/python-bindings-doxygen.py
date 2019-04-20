@@ -27,14 +27,14 @@
 ##  @page python_bindings_page Python bindings
 #   Also have a look at group @ref python_bindings.
 #
-#   They can be found in src/optional/python-bindings.
+#   In the source tree they are located at bindings/python.
 #
-#   To enable them in the compilation process you have to add --enable-python-bindings
-#   to the call of ./configure.
+#   To enable them in the compilation process you have to add  -DWITH_PYTHON=ON
+#   to the call of cmake.
 #
 #   As a starting point have a look at the \link python_bindings_examples example-scripts\endlink.
 #
-#   @section possibilities What are the Python bindings good for ?
+#   @section possibilities What can Python Bindings be used for ?
 #
 #   The python bindings supply the ability to access a wide range of the core functions of GnuCash. You
 #   can read and write Transactions, Commodities, Lots, access the business stuff... You gain the ability
@@ -42,6 +42,9 @@
 #
 #   Not everything GnuCash can is possible to access though. The bindings focus on basic accounting functions.
 #   Have a look at the examples to get an impression.
+#
+#   Some functions are broken because they have not been wrapped properly. They may crash the program or return unaccessible values. 
+#   Please file a bug report if you find one to help support the development process.
 #
 #   @section python_bindings_section Principles
 #   The python-bindings are generated using SWIG from parts of the source-files of GnuCash.
@@ -128,5 +131,5 @@
 #   @li There is a page in the GnuCash wiki at http://wiki.gnucash.org/wiki/Python
 #   @li You may also have a look into the archives of gnucash-devel@gnucash.org. 
 #   @li On Bugzilla there is also some interesting talk regarding the development process. 
-#   @li Then you can use the abilities of svn to see the history of the code by @code svn log @endcode done in the directory of the python-bindings.
+#   @li Then you can use the abilities of git to see the history of the code by @code git log @endcode done in the directory of the python-bindings.
 #
