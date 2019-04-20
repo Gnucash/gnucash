@@ -63,12 +63,9 @@
     ;; formula from http://www.riskglossary.com/articles/compounding.htm
   (* a (expt (+ 1 (/ r n)) (* n t))))
 
-(define (gnc:computeInterestIncrement amount interest periods i)
-  (let ((thisVal (gnc:futureValue amount interest periods i))
-        (prevVal (gnc:futureValue amount interest periods (- i 1))))
-    (- thisVal prevVal)
-  )
-)
+(define (gnc:computeInterestIncrement pv ann-rate compounds period)
+  (let ((rate (/ ann-rate compounds)))  
+    (* rate (* pv (expt (+ 1 rate) (- period 1))))))
 
 ;;;;;
 ;; below: not-exposed/"private" functions, used by the "public" functions
