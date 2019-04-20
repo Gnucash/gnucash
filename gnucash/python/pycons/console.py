@@ -434,7 +434,6 @@ class Console (Gtk.ScrolledWindow):
     def quit(self):
         """ Quit console """
 
-        Gtk.main_quit()
         self.history_save()
         try:
             os.close (self.piperead)
