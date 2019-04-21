@@ -31,7 +31,6 @@
 ;; and only have the use-modules statements in those files).
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-8))
-
 (use-modules (gnucash gnc-module))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -72,9 +71,11 @@
 (define (gnc:debug . items)
   (gnc-scm-log-debug (strify items)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; the following functions are initialized to log message to tracefile
 ;; and will be redefined in UI initialization to display dialog
 ;; messages
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define-public (gnc:gui-warn str1 str2) (gnc:warn str1))
 (define-public (gnc:gui-error str1 str2) (gnc:error str1))
 (define-public (gnc:gui-msg str1 str2) (gnc:msg str1))
@@ -84,9 +85,11 @@
     ((addto! alist element)
      (set! alist (cons element alist)))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; pair of utility functions for use with guile-json which requires
 ;; lists converted vectors to save as json arrays. traverse list
 ;; converting into vectors, and vice versa.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define-public (traverse-list->vec lst)
   (cond
    ((list? lst) (list->vector (map traverse-list->vec lst)))
@@ -96,6 +99,36 @@
   (cond
    ((vector? vec) (map traverse-vec->list (vector->list vec)))
    (else vec)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; general and efficent string-replace-substring function, based on
+;; function designed by Mark H Weaver, core guile developer. avoids
+;; string-append which will constantly build new strings. augmented
+;; with start and end indices; will selective choose to replace
+;; substring if start-idx <= index <= end-idx
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define* (string-replace-substring s substr replacement #:optional
+                                   (start 0)
+                                   (end (string-length s))
+                                   (start-idx #f)
+                                   (end-idx #f))
+  (let ((substr-length (string-length substr))
+        (start-idx (or start-idx 0))
+        (end-idx (or end-idx +inf.0)))
+    (if (zero? substr-length)
+        (error "string-replace-substring: empty substr")
+        (let loop ((start start)
+                   (i 0)
+                   (pieces (list (substring s 0 start))))
+          (let ((idx (string-contains s substr start end)))
+            (if idx
+                (loop (+ idx substr-length)
+                      (1+ i)
+                      (cons* (if (<= start-idx i end-idx) replacement substr)
+                             (substring s start idx)
+                             pieces))
+                (string-concatenate-reverse (cons (substring s start)
+                                                  pieces))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  gnc:substring-replace
@@ -108,14 +141,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-public (gnc:substring-replace s1 s2 s3)
-  (let ((s2len (string-length s2)))
-    (let loop ((start1 0)
-               (i (string-contains s1 s2)))
-      (if i
-          (string-append (substring s1 start1 i)
-                         s3
-                         (loop (+ i s2len) (string-contains s1 s2 (+ i s2len))))
-          (substring s1 start1)))))
+  (string-replace-substring s1 s2 s3))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -124,7 +150,7 @@
 ;;  start: from which occurrence onwards the replacement shall start
 ;;  end-after: max. number times the replacement should executed
 ;;
-;;  Example: (gnc:substring-replace-from-to "foobarfoobarfoobar" "bar" "xyz" 2 2)
+;;  Example: (gnc:substring-replace-from-to "foobarfoobarfoobar" "bar" "xyz" 2 1)
 ;;           returns "foobarfooxyzfoobar".
 ;;
 ;; start=1 and end-after<=0 will call gnc:substring-replace (replace all)
@@ -132,64 +158,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-public (gnc:substring-replace-from-to s1 s2 s3 start end-after)
-  (let (
-         (s2len (string-length s2))
-       )
-
-    ;; if start<=0 and end<=0 => don't do anything
-
-    (if (and
-          (<= start 0)
-          (<= end-after 0)
-        )
-      s1
-    )
-
-    ;; else
-    (begin
-
-      ;; normalize start
-      (if (= start 0)
-        (set! start 1)
-      )
-      ;; start=1 and end<=0 => replace all
-      ;; call gnc:substring-replace for that
-      (if (and (= start 1) (<= end-after 0))
-        (gnc:substring-replace s1 s2 s3)
-
-        ;; else
-        (begin
-          (let loop (
-                      (start1 0)
-                      (i (string-contains s1 s2))
-                    )
-            (if i
-              (begin
-                (set! start (- start 1))
-                (if (or
-                        (> start 0)
-                        (and (> end-after 0)
-                             (<= (+ end-after start) 0)
-                        )
-                    )
-                  (string-append
-                    (substring s1 start1 i)
-                    s2 ;; means: do not change anything
-                    (loop (+ i s2len) (string-contains s1 s2 (+ i s2len)))
-                  )
-                  (string-append
-                    (substring s1 start1 i)
-                    s3
-                    (loop (+ i s2len) (string-contains s1 s2 (+ i s2len)))
-                  )
-                )
-              )
-              ;; else
-              (substring s1 start1)
-            )
-          )
-        )
-      )
-    )
-  )
-)
+  (string-replace-substring
+   s1 s2 s3 0 (string-length s1) (max 0 (1- start))
+   (and (positive? end-after) (+ (max 0 (1- start)) (1- end-after)))))
