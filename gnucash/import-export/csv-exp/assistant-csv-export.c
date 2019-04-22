@@ -431,6 +431,25 @@ csv_export_account_changed_cb (GtkTreeSelection *selection,
 
 
 /*******************************************************
+ * csv_export_select_all_clicked_cb
+ *
+ * select all the accounts
+ *******************************************************/
+static void
+csv_export_select_all_clicked_cb (GtkWidget *widget, gpointer user_data)
+{
+    CsvExportInfo *info = user_data;
+    GtkTreeSelection *selection = gtk_tree_view_get_selection
+                                    (GTK_TREE_VIEW (info->csva.account_treeview));
+
+    gtk_tree_view_expand_all (GTK_TREE_VIEW (info->csva.account_treeview));
+    gtk_tree_selection_select_all (selection);
+
+    gtk_widget_grab_focus (info->csva.account_treeview);
+}
+
+
+/*******************************************************
  * csv_export_select_subaccounts_clicked_cb
  *
  * select all the sub accounts
@@ -886,9 +905,14 @@ csv_export_assistant_create (CsvExportInfo *info)
         /* select subaccounts button */
         button = GTK_WIDGET(gtk_builder_get_object (builder, "select_subaccounts_button"));
         info->csva.select_button = button;
-
         g_signal_connect (G_OBJECT(button), "clicked",
                           G_CALLBACK(csv_export_select_subaccounts_clicked_cb), info);
+
+        button = GTK_WIDGET(gtk_builder_get_object (builder, "select_all_button"));
+        info->csva.select_button = button;
+        g_signal_connect (G_OBJECT(button), "clicked",
+                          G_CALLBACK(csv_export_select_all_clicked_cb), info);
+
         g_signal_connect (G_OBJECT(info->csva.account_treeview), "cursor_changed",
                           G_CALLBACK(csv_export_cursor_changed_cb), info);
 
