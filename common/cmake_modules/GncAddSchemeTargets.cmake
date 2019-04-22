@@ -81,7 +81,9 @@ function(gnc_add_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
   set(_GUILE_LOAD_PATH "${current_srcdir}"
       "${current_bindir}" "${CMAKE_BINARY_DIR}/libgnucash/scm")  # to pick up generated build-config.scm
   set(_GUILE_LOAD_COMPILED_PATH "${current_bindir}")
-  if(MINGW64 AND ${GUILE_EFFECTIVE_VERSION} VERSION_GREATER_EQUAL 2.2)
+  # VERSION_GREATER_EQUAL introduced in CMake 3.7.
+  if(MINGW64 AND (${GUILE_EFFECTIVE_VERSION} VERSION_GREATER 2.2 OR
+	${GUILE_EFFECTIVE_VERSION} VERSION_EQUAL 2.2))
     file(TO_CMAKE_PATH $ENV{GUILE_LOAD_PATH} guile_load_path)
     file(TO_CMAKE_PATH $ENV{GUILE_LOAD_COMPILED_PATH} guile_load_compiled_path)
     list(APPEND _GUILE_LOAD_PATH ${guile_load_path})
