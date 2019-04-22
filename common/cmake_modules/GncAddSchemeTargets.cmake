@@ -123,7 +123,7 @@ function(gnc_add_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
         file(TO_CMAKE_PATH "$ENV{PATH}" fpath)
         set(LIBRARY_PATH "PATH=\"${BINDIR_BUILD};${fpath}\"")
       else (MINGW64)
-        set (LIBRARY_PATH "LD_LIBRARY_PATH=${LIBDIR_BUILD}:${LIBDIR_BUILD}/gnucash)
+        set (LIBRARY_PATH "LD_LIBRARY_PATH=${LIBDIR_BUILD}:${LIBDIR_BUILD}/gnucash")
       endif (MINGW64)
       if (APPLE)
         set (LIBRARY_PATH "DYLD_LIBRARY_PATH=${LIBDIR_BUILD}:${LIBDIR_BUILD}/gnucash")
