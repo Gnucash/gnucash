@@ -50,6 +50,8 @@ typedef struct
 
     time64     start_time;
     time64     end_time;
+    time64     earliest_time;
+    time64     latest_time;
 } CsvExportDate;
 
 typedef struct
