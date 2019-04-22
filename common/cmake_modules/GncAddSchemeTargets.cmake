@@ -27,7 +27,7 @@ function(make_unix_path_list PATH)
 endfunction()
 
 function(gnc_add_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
-				MAKE_LINKS)
+                                MAKE_LINKS)
   set(__DEBUG FALSE)
   if (__DEBUG)
     message("Parameters to COMPILE_SCHEME for target ${_TARGET}")
@@ -44,7 +44,7 @@ function(gnc_add_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
   set(build_bindir ${BINDIR_BUILD})
   set(build_libdir ${LIBDIR_BUILD})
   set(build_datadir ${DATADIR_BUILD})
-  if(MINGW64)
+  if(MINGW64 AND ${GUILE_EFFECTIVE_VERSION} VERSION_LESS 2.2)
     make_unix_path(build_bindir)
     make_unix_path(build_libdir)
     make_unix_path(build_datadir)
@@ -52,7 +52,7 @@ function(gnc_add_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
     make_unix_path(current_srcdir)
     make_unix_path(CMAKE_BINARY_DIR)
     make_unix_path(CMAKE_SOURCE_DIR)
-  endif(MINGW64)
+  endif()
 
   # If links are requested, we simple link (or copy, for Windows) each source file to the dest directory
   if(MAKE_LINKS)
@@ -78,17 +78,20 @@ function(gnc_add_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
   endif(MAKE_LINKS)
 
   # Construct the guile source and compiled load paths
-
   set(_GUILE_LOAD_PATH "${current_srcdir}"
       "${current_bindir}" "${CMAKE_BINARY_DIR}/libgnucash/scm")  # to pick up generated build-config.scm
   set(_GUILE_LOAD_COMPILED_PATH "${current_bindir}")
-
+  if(MINGW64 AND ${GUILE_EFFECTIVE_VERSION} VERSION_GREATER_EQUAL 2.2)
+    file(TO_CMAKE_PATH $ENV{GUILE_LOAD_PATH} guile_load_path)
+    file(TO_CMAKE_PATH $ENV{GUILE_LOAD_COMPILED_PATH} guile_load_compiled_path)
+    list(APPEND _GUILE_LOAD_PATH ${guile_load_path})
+    list(APPEND _GUILE_LOAD_COMPILED_PATH ${guile_load_compiled_path})
+  endif()
   set(_GUILE_CACHE_DIR ${LIBDIR_BUILD}/gnucash/scm/ccache/${GUILE_EFFECTIVE_VERSION})
-  set(_GUILE_LOAD_PATH "${current_srcdir}")
   if (MAKE_LINKS)
       list(APPEND _GUILE_LOAD_PATH "${build_datadir}/gnucash/scm")
   endif()
-  set(_GUILE_LOAD_COMPILED_PATH ${build_libdir}/gnucash/scm/ccache/${GUILE_EFFECTIVE_VERSION})
+  list(APPEND _GUILE_LOAD_COMPILED_PATH ${build_libdir}/gnucash/scm/ccache/${GUILE_EFFECTIVE_VERSION})
 
   set(_TARGET_FILES "")
 
@@ -117,11 +120,8 @@ function(gnc_add_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
       endif()
       if (MINGW64)
         set(fpath "")
-        foreach(dir $ENV{PATH})
-            make_unix_path(dir)
-            set(fpath "${fpath}${dir}:")
-        endforeach(dir)
-        set(LIBRARY_PATH "PATH=\"${build_bindir}:${fpath}\"")
+        file(TO_CMAKE_PATH "$ENV{PATH}" fpath)
+        set(LIBRARY_PATH "PATH=\"${BINDIR_BUILD};${fpath}\"")
       else (MINGW64)
         set (LIBRARY_PATH "LD_LIBRARY_PATH=${LIBDIR_BUILD}:${LIBDIR_BUILD}/gnucash:${_GUILE_LD_LIBRARY_PATH}")
       endif (MINGW64)
@@ -134,9 +134,10 @@ function(gnc_add_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
       else(MINGW64)
         set(_GNC_MODULE_PATH "${LIBDIR_BUILD}" "${LIBDIR_BUILD}/gnucash" "${GNC_MODULE_PATH}")
       endif(MINGW64)
-      make_unix_path_list(_GUILE_LOAD_PATH)
-      make_unix_path_list(_GUILE_LOAD_COMPILED_PATH)
-      make_unix_path_list(_GUILE_LD_LIBRARY_PATH)
+      if(NOT MINGW64 OR ${GUILE_EFFECTIVE_VERSION} VERSION_LESS 2.2)
+        make_unix_path_list(_GUILE_LOAD_PATH)
+        make_unix_path_list(_GUILE_LOAD_COMPILED_PATH)
+      endif()
       make_unix_path_list(_GNC_MODULE_PATH)
       if (__DEBUG)
         message("  ")
@@ -145,15 +146,16 @@ function(gnc_add_scheme_targets _TARGET _SOURCE_FILES _OUTPUT_DIR _GUILE_DEPENDS
         message("   GUILE_LOAD_COMPILED_PATH: ${_GUILE_LOAD_COMPILED_PATH}")
         message("   GNC_MODULE_PATH: ${_GNC_MODULE_PATH}")
       endif(__DEBUG)
+      #We quote the arguments to stop CMake stripping the path separators.
       add_custom_command(
         OUTPUT ${output_file}
         COMMAND ${CMAKE_COMMAND_TMP}
-            ${LIBRARY_PATH}
-            GNC_UNINSTALLED=YES
-            GNC_BUILDDIR=${CMAKE_BINARY_DIR}
-            GUILE_LOAD_PATH=${_GUILE_LOAD_PATH}
-            GUILE_LOAD_COMPILED_PATH=${_GUILE_LOAD_COMPILED_PATH}
-            GNC_MODULE_PATH=${_GNC_MODULE_PATH}
+            "${LIBRARY_PATH}"
+            "GNC_UNINSTALLED=YES"
+            "GNC_BUILDDIR=\"${CMAKE_BINARY_DIR}\""
+            "GUILE_LOAD_PATH=\"${_GUILE_LOAD_PATH}\""
+            "GUILE_LOAD_COMPILED_PATH=\"${_GUILE_LOAD_COMPILED_PATH}\""
+            "GNC_MODULE_PATH=\"${_GNC_MODULE_PATH}\""
             ${GUILE_EXECUTABLE} -e '\(@@ \(guild\) main\)' -s ${GUILD_EXECUTABLE} compile -o ${output_file} ${source_file_abs_path}
         DEPENDS ${guile_depends}
         MAIN_DEPENDENCY ${source_file_abs_path}
