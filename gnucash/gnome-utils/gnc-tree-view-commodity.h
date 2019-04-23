@@ -203,6 +203,16 @@ gnc_commodity * gnc_tree_view_commodity_get_cursor_commodity (GncTreeViewCommodi
  */
 gnc_commodity * gnc_tree_view_commodity_get_selected_commodity  (GncTreeViewCommodity *view);
 
+
+/** Select the commodity in the associated commodity tree view.
+ *
+ *  @param view A pointer to an commodity tree view.
+ *
+ *  @param The commodity to select.
+ */
+void gnc_tree_view_commodity_select_commodity (GncTreeViewCommodity *view, gnc_commodity *commodity);
+
+
 /** This function selects all sub-commodities of an commodity in the
  *  commodity tree view.  All other commodities will be unselected.
  *
