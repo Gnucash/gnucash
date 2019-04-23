@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkListStore" id="liststore1">
@@ -54,6 +54,9 @@
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <signal name="response" handler="pedit_dialog_response_cb" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox18">
         <property name="visible">True</property>
@@ -366,6 +369,9 @@
     <property name="title" translatable="yes">Remove Old Prices</property>
     <property name="default_height">500</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox2">
         <property name="visible">True</property>
@@ -778,64 +784,30 @@ These prices were added so that there's always a "nearest in time" price for eve
       <action-widget response="-5">ok_button</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkDialog" id="prices_dialog">
+  <object class="GtkWindow" id="prices_window">
     <property name="can_focus">False</property>
-    <property name="border_width">6</property>
     <property name="title" translatable="yes">Price Database</property>
-    <property name="default_width">400</property>
+    <property name="default_width">800</property>
     <property name="default_height">400</property>
-    <property name="type_hint">normal</property>
-    <signal name="close" handler="gnc_prices_dialog_close_cb" after="yes" swapped="no"/>
-    <signal name="destroy" handler="gnc_prices_dialog_window_destroy_cb" swapped="no"/>
-    <signal name="response" handler="gnc_prices_dialog_response" swapped="no"/>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="vbox121">
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <object class="GtkBox" id="vbox11">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="spacing">6</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="hbuttonbox4">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="close_button">
-                <property name="label" translatable="yes">_Close</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
         <child>
-          <object class="GtkBox" id="hbox118">
+          <object class="GtkBox" id="hbox1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
               <object class="GtkScrolledWindow" id="price_list_window">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="border_width">3</property>
                 <property name="shadow_type">in</property>
-                <child>
-                  <placeholder/>
-                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -844,22 +816,106 @@ These prices were added so that there's always a "nearest in time" price for eve
               </packing>
             </child>
             <child>
-              <object class="GtkButtonBox" id="vbuttonbox5">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="border_width">5</property>
+                <property name="margin_bottom">12</property>
                 <property name="orientation">vertical</property>
-                <property name="layout_style">spread</property>
                 <child>
-                  <object class="GtkButton" id="get_quotes_button">
-                    <property name="label" translatable="yes">_Get Quotes</property>
+                  <object class="GtkButtonBox" id="vbuttonbox1">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="can_default">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Get new online quotes for stock accounts.</property>
-                    <property name="use_underline">True</property>
-                    <signal name="clicked" handler="gnc_prices_dialog_get_quotes_clicked" swapped="no"/>
+                    <property name="can_focus">False</property>
+                    <property name="border_width">5</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">12</property>
+                    <property name="layout_style">start</property>
+                    <child>
+                      <object class="GtkButton" id="add_button">
+                        <property name="label" translatable="yes">_Add</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="can_default">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes">Add a new price.</property>
+                        <property name="use_underline">True</property>
+                        <signal name="clicked" handler="gnc_prices_dialog_add_clicked" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="remove_button">
+                        <property name="label" translatable="yes">_Remove</property>
+                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
+                        <property name="can_focus">True</property>
+                        <property name="can_default">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes">Remove the current price.</property>
+                        <property name="use_underline">True</property>
+                        <signal name="clicked" handler="gnc_prices_dialog_remove_clicked" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="edit_button">
+                        <property name="label" translatable="yes">_Edit</property>
+                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
+                        <property name="can_focus">True</property>
+                        <property name="can_default">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes">Edit the current price.</property>
+                        <property name="use_underline">True</property>
+                        <signal name="clicked" handler="gnc_prices_dialog_edit_clicked" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="remove_old_button">
+                        <property name="label" translatable="yes">Remove _Old</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="can_default">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes">Remove prices older than a user-entered date.</property>
+                        <property name="use_underline">True</property>
+                        <signal name="clicked" handler="gnc_prices_dialog_remove_old_clicked" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="get_quotes_button">
+                        <property name="label" translatable="yes">_Get Quotes</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="can_default">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes">Get new online quotes for stock accounts.</property>
+                        <property name="use_underline">True</property>
+                        <signal name="clicked" handler="gnc_prices_dialog_get_quotes_clicked" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">4</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -868,93 +924,52 @@ These prices were added so that there's always a "nearest in time" price for eve
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="add_button">
-                    <property name="label" translatable="yes">_Add</property>
+                  <object class="GtkButtonBox" id="vbuttonbox2">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="can_default">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Add a new price.</property>
-                    <property name="use_underline">True</property>
-                    <signal name="clicked" handler="gnc_prices_dialog_add_clicked" swapped="no"/>
+                    <property name="can_focus">False</property>
+                    <property name="valign">end</property>
+                    <property name="border_width">5</property>
+                    <property name="orientation">vertical</property>
+                    <property name="layout_style">start</property>
+                    <child>
+                      <object class="GtkButton" id="close_button">
+                        <property name="label" translatable="yes">_Close</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="can_default">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="valign">start</property>
+                        <property name="use_underline">True</property>
+                        <signal name="clicked" handler="gnc_prices_dialog_close_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="remove_button">
-                    <property name="label" translatable="yes">_Remove</property>
-                    <property name="visible">True</property>
-                    <property name="sensitive">False</property>
-                    <property name="can_focus">True</property>
-                    <property name="can_default">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Remove the current price.</property>
-                    <property name="use_underline">True</property>
-                    <signal name="clicked" handler="gnc_prices_dialog_remove_clicked" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
+                    <property name="fill">True</property>
                     <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="edit_button">
-                    <property name="label" translatable="yes">_Edit</property>
-                    <property name="visible">True</property>
-                    <property name="sensitive">False</property>
-                    <property name="can_focus">True</property>
-                    <property name="can_default">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Edit the current price.</property>
-                    <property name="use_underline">True</property>
-                    <signal name="clicked" handler="gnc_prices_dialog_edit_clicked" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="remove_old_button">
-                    <property name="label" translatable="yes">Remove _Old</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="can_default">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Remove prices older than a user-entered date.</property>
-                    <property name="use_underline">True</property>
-                    <signal name="clicked" handler="gnc_prices_dialog_remove_old_clicked" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">3</property>
                   </packing>
                 </child>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="position">0</property>
           </packing>
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="-7">close_button</action-widget>
-    </action-widgets>
   </object>
 </interface>
