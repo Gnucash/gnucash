@@ -601,6 +601,11 @@ gnc_tree_view_price_set_filter (GncTreeViewPrice *view,
 
     s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
     f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
+
+    /* disconnect model from view */
+    g_object_ref (G_OBJECT(s_model));
+    gtk_tree_view_set_model (GTK_TREE_VIEW(view), NULL);
+
     gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (f_model),
                                             gnc_tree_view_price_filter_helper,
                                             fd,
@@ -613,6 +618,11 @@ gnc_tree_view_price_set_filter (GncTreeViewPrice *view,
      * prices in the price database.  Once the very first price has been
      * added this error message goes away. */
     gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (f_model));
+
+    /* connect model to view */
+    gtk_tree_view_set_model (GTK_TREE_VIEW(view), s_model);
+    g_object_unref (G_OBJECT(s_model));
+
     LEAVE(" ");
 }
 
