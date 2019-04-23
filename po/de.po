@@ -16112,7 +16112,7 @@ msgstr "<b>Layout</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2215
 msgid "_Future transactions after blank transaction"
-msgstr "_Zukünftige Transaktinen nach leerer Buchung"
+msgstr "_Zukünftige Transaktionen nach leerer Buchung"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2221
 msgid ""
