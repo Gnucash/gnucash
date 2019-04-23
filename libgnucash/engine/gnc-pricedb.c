@@ -839,6 +839,7 @@ QOF_GOBJECT_IMPL(gnc_pricedb, GNCPriceDB, QOF_TYPE_INSTANCE);
 static void
 gnc_pricedb_init(GNCPriceDB* pdb)
 {
+    pdb->reset_nth_price_cache = FALSE;
 }
 
 static void
@@ -2202,7 +2203,7 @@ gnc_pricedb_nth_price (GNCPriceDB *db,
     if (!db || !c || n < 0) return NULL;
     ENTER ("db=%p commodity=%s index=%d", db, gnc_commodity_get_mnemonic(c), n);
 
-    if (last_c && prices && last_c == c)
+    if (last_c && prices && last_c == c && db->reset_nth_price_cache == FALSE)
     {
         result = g_list_nth_data (prices, n);
         LEAVE ("price=%p", result);
@@ -2217,6 +2218,8 @@ gnc_pricedb_nth_price (GNCPriceDB *db,
         prices = NULL;
     }
 
+    db->reset_nth_price_cache = FALSE;
+
     currency_hash = g_hash_table_lookup (db->commodity_hash, c);
     if (currency_hash)
     {
@@ -2228,6 +2231,13 @@ gnc_pricedb_nth_price (GNCPriceDB *db,
 
     LEAVE ("price=%p", result);
     return result;
+}
+
+void
+gnc_pricedb_nth_price_reset_cache (GNCPriceDB *db)
+{
+    if (db)
+        db->reset_nth_price_cache = TRUE;
 }
 
 GNCPrice *
