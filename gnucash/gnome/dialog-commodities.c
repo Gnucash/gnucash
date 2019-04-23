@@ -96,7 +96,10 @@ gnc_commodities_dialog_edit_clicked (GtkWidget *widget, gpointer data)
         return;
 
     if (gnc_ui_edit_commodity_modal (commodity, cd->window))
+    {
+        gnc_tree_view_commodity_select_commodity (cd->commodity_tree, commodity);
         gnc_gui_refresh_all ();
+    }
 }
 
 static void
@@ -213,6 +216,9 @@ gnc_commodities_dialog_remove_clicked (GtkWidget *widget, gpointer data)
         gnc_commodity_table_remove (ct, commodity);
         gnc_commodity_destroy (commodity);
         commodity = NULL;
+
+        // to be consistent, unselect all after remove
+        gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW(cd->commodity_tree)));
     }
 
     gnc_price_list_destroy(prices);
@@ -224,6 +230,7 @@ gnc_commodities_dialog_add_clicked (GtkWidget *widget, gpointer data)
 {
     CommoditiesDialog *cd = data;
     gnc_commodity *commodity;
+    gnc_commodity *ret_commodity;
     const char *name_space;
 
     commodity = gnc_tree_view_commodity_get_selected_commodity (cd->commodity_tree);
@@ -232,7 +239,8 @@ gnc_commodities_dialog_add_clicked (GtkWidget *widget, gpointer data)
     else
         name_space = NULL;
 
-    gnc_ui_new_commodity_modal (name_space, cd->window);
+    ret_commodity = gnc_ui_new_commodity_modal (name_space, cd->window);
+    gnc_tree_view_commodity_select_commodity (cd->commodity_tree, ret_commodity);
 }
 
 void
