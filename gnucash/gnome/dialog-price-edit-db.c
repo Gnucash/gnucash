@@ -80,6 +80,7 @@ typedef struct
 
     GtkWidget * edit_button;
     GtkWidget * remove_button;
+    GtkWidget * add_button;
 
     GtkWidget *remove_dialog;
     GtkTreeView *remove_view;
@@ -580,6 +581,8 @@ gnc_prices_dialog_selection_changed (GtkTreeSelection *treeselection,
                               length == 1);
     gtk_widget_set_sensitive (pdb_dialog->remove_button,
                               length >= 1);
+    gtk_widget_set_sensitive (pdb_dialog->add_button,
+                              length <= 1);
     LEAVE("%d prices selected", length);
 }
 
@@ -707,6 +710,9 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
 
         button = GTK_WIDGET(gtk_builder_get_object (builder, "remove_button"));
         pdb_dialog->remove_button = button;
+
+        button = GTK_WIDGET(gtk_builder_get_object (builder, "add_button"));
+        pdb_dialog->add_button = button;
 
         if (!gnc_quote_source_fq_installed())
         {
