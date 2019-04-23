@@ -633,6 +633,8 @@ gnc_pricedb_nth_price (GNCPriceDB *db,
                        const gnc_commodity *c,
                        const int n);
 
+void gnc_pricedb_nth_price_reset_cache (GNCPriceDB *db);
+
 /* The following two convenience functions are used to test the xml backend */
 /** @brief Return the number of prices in the database.
  *

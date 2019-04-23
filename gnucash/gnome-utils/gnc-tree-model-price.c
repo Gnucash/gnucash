@@ -1474,7 +1474,7 @@ gnc_tree_model_price_row_delete (GncTreeModelPrice *model,
  *  item removal.
  */
 static gboolean
-gnc_tree_model_price_do_deletions (gpointer unused)
+gnc_tree_model_price_do_deletions (gpointer price_db)
 {
     ENTER(" ");
 
@@ -1490,6 +1490,7 @@ gnc_tree_model_price_do_deletions (gpointer unused)
 
             /* Remove the path. */
             gnc_tree_model_price_row_delete(data->model, data->path);
+            gnc_pricedb_nth_price_reset_cache (price_db);
 
             gtk_tree_path_free(data->path);
             g_free(data);
@@ -1540,6 +1541,7 @@ gnc_tree_model_price_event_handler (QofInstance *entity,
                                     gpointer event_data)
 {
     GncTreeModelPrice *model;
+    GncTreeModelPricePrivate *priv;
     GtkTreePath *path;
     GtkTreeIter iter;
     remove_data *data;
@@ -1548,10 +1550,11 @@ gnc_tree_model_price_event_handler (QofInstance *entity,
     ENTER("entity %p, event %d, model %p, event data %p",
           entity, event_type, user_data, event_data);
     model = (GncTreeModelPrice *)user_data;
+    priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
 
     /* Do deletions if any are pending. */
     if (pending_removals)
-        gnc_tree_model_price_do_deletions(NULL);
+        gnc_tree_model_price_do_deletions (priv->price_db);
 
     /* hard failures */
     g_return_if_fail(GNC_IS_TREE_MODEL_PRICE(model));
@@ -1611,8 +1614,9 @@ gnc_tree_model_price_event_handler (QofInstance *entity,
     switch (event_type)
     {
     case QOF_EVENT_ADD:
-        /* Tell the filters/views where the new account was added. */
+        /* Tell the filters/views where the new price was added. */
         DEBUG("add %s", name);
+        gnc_pricedb_nth_price_reset_cache (priv->price_db);
         gnc_tree_model_price_row_add (model, &iter);
         break;
 
@@ -1631,7 +1635,7 @@ gnc_tree_model_price_event_handler (QofInstance *entity,
         data->path = path;
         pending_removals = g_slist_append (pending_removals, data);
         g_idle_add_full(G_PRIORITY_HIGH_IDLE,
-                        gnc_tree_model_price_do_deletions, NULL, NULL);
+                        gnc_tree_model_price_do_deletions, priv->price_db, NULL);
 
         LEAVE(" ");
         return;
