@@ -65,6 +65,7 @@ static gchar* function_buffer = NULL;
 static gint qof_log_num_spaces = 0;
 static GHashTable *log_table = NULL;
 static GLogFunc previous_handler = NULL;
+static gchar* qof_logger_format = NULL;
 
 void
 qof_log_indent(void)
@@ -124,7 +125,7 @@ log4glib_handler(const gchar     *log_domain,
         gnc_localtime_r (&now, &now_tm);
         qof_strftime(timestamp_buf, 9, format_24hour, &now_tm);
 
-        fprintf(fout, "* %s %*s <%s> %*s%s%s",
+        fprintf(fout, qof_logger_format,
                 timestamp_buf,
                 5, level_str,
                 (log_domain == NULL ? "" : log_domain),
@@ -150,6 +151,9 @@ qof_log_init_filename(const gchar* log_filename)
     if (log_table == NULL)
         log_table = g_hash_table_new_full(g_str_hash, g_str_equal,
                                           g_free, NULL);
+
+    if (!qof_logger_format)
+        qof_logger_format = g_strdup ("* %s %*s <%s> %*s%s%s"); //default format
 
     if (log_filename)
     {
@@ -263,13 +267,13 @@ qof_log_prettify (const char *name)
     if (p) *p = '\0';
     begin = g_strrstr (buffer, "*");
     if (begin == NULL)
-	begin = g_strrstr (buffer, " ");
+        begin = g_strrstr (buffer, " ");
     else if (* (begin + 1) == ' ')
         ++ begin;
     if (begin != NULL)
-	p = begin + 1;
+        p = begin + 1;
     else
-	p = buffer;
+        p = buffer;
 
     if (function_buffer)
         g_free(function_buffer);
@@ -317,6 +321,8 @@ qof_log_parse_log_config(const char *filename)
         gsize num_levels;
         unsigned int key_idx;
         gchar **levels;
+        gint logger_max_name_length = 12;
+        gchar *str = NULL;
 
         levels = g_key_file_get_keys(conf, levels_group, &num_levels, NULL);
 
@@ -326,6 +332,7 @@ qof_log_parse_log_config(const char *filename)
             gchar *logger_name = NULL, *level_str = NULL;
 
             logger_name = g_strdup(levels[key_idx]);
+            logger_max_name_length = MAX (logger_max_name_length, (gint) strlen (logger_name));
             level_str = g_key_file_get_string(conf, levels_group, logger_name, NULL);
             level = qof_log_level_from_string(level_str);
 
@@ -335,6 +342,13 @@ qof_log_parse_log_config(const char *filename)
             g_free(logger_name);
             g_free(level_str);
         }
+
+        str = g_strdup_printf ("%d", logger_max_name_length);
+        if (qof_logger_format)
+            g_free (qof_logger_format);
+        qof_logger_format = g_strconcat ("* %s %*s <%-", str, ".", str, "s> %*s%s%s", NULL);
+
+        g_free (str);
         g_strfreev(levels);
     }
 
@@ -380,8 +394,7 @@ qof_log_check(QofLogModule log_domain, QofLogLevel log_level)
 
     {
         gpointer match_level;
-        if (log_levels &&
-	    (match_level = g_hash_table_lookup(log_levels, "")) != NULL)
+        if (log_levels && (match_level = g_hash_table_lookup(log_levels, "")) != NULL)
             longest_match_level = (QofLogLevel)GPOINTER_TO_INT(match_level);
     }
 
