@@ -6,10 +6,10 @@
 
 (define (run-test)
   (test-runner-factory gnc:test-runner)
-  (test-begin "test-utilities.scm")
+  (test-begin "test-libgnucash-scm-utilities.scm")
   (test-traverse-vec)
   (test-substring-replace)
-  (test-begin "test-utilities.scm"))
+  (test-begin "test-libgnucash-scm-utilities.scm"))
 
 (define (test-traverse-vec)
   (test-begin "traverse-vec")
