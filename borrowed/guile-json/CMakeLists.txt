@@ -10,7 +10,7 @@ gnc_add_scheme_targets (guile-json
 set_local_dist(guile-json_DIST_LOCAL
   AUTHORS
   CMakeLists.txt
-  COPYING.LESSER
+  COPYING
   json.scm
   NEWS
   README
