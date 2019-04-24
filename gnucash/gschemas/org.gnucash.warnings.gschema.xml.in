@@ -34,6 +34,11 @@
       <summary>Delete multiple price quotes</summary>
       <description>This dialog is presented before allowing you to delete multiple price quotes at one time.</description>
     </key>
+    <key name="price-quotes-replace" type="i">
+      <default>0</default>
+      <summary>Replace existing price</summary>
+      <description>This dialog is presented before allowing you to replace an existing price.</description>
+    </key>
     <key name="reg-is-acct-pay-rec" type="i">
       <default>0</default>
       <summary>Edit account payable/accounts receivable register</summary>
@@ -126,6 +131,11 @@
       <default>0</default>
       <summary>Delete multiple price quotes</summary>
       <description>This dialog is presented before allowing you to delete multiple price quotes at one time.</description>
+    </key>
+    <key name="price-quotes-replace" type="i">
+      <default>0</default>
+      <summary>Replace existing price</summary>
+      <description>This dialog is presented before allowing you to replace an existing price.</description>
     </key>
     <key name="reg-is-acct-pay-rec" type="i">
       <default>0</default>
