@@ -19187,8 +19187,8 @@ msgstr "DTAUS importieren und _senden..."
 msgid ""
 "Import a DTAUS file into GnuCash and transmit its orders by Online Banking."
 msgstr ""
-"Buchungen aus einer DTAUS Datei importieren und als Online-Banking Aufträge "
-"an die Bank schicken"
+"Importiert Buchungen aus einer DTAUS-Datei und schickt sie als "
+"Online-Banking-Aufträge an die Bank."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:170
 msgid "Show _log window"
@@ -19196,7 +19196,7 @@ msgstr "Verlaufs_fenster anzeigen"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:171
 msgid "Show the online banking log window."
-msgstr "Online-Banking Verlaufsfenster anzeigen"
+msgstr "Zeigt das Protokollfenster vom Online-Banking."
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.dialogs.import.hbci.gschema.xml.in:15
 msgid "Close window when finished"
