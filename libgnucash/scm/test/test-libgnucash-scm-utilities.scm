@@ -31,8 +31,8 @@
     "fooxyzfooxyz"
     (gnc:substring-replace "foobarfoobar" "bar" "xyz"))
 
-  ;; note the following 2 tests show the code was not coded according
-  ;; to the example in the comments.
+  ;; note the following 2 tests illustrate code behaviour: start from
+  ;; 2nd matched substring, and perform either 2 or 1 substitution.
   (test-equal "gnc:substring-replace-from-to ... ... 2 2"
     "foobarfooxyzfooxyz"
     (gnc:substring-replace-from-to "foobarfoobarfoobar" "bar" "xyz" 2 2))
