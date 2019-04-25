@@ -98,7 +98,7 @@ class Console (cons.Console):
 if False:
     console = Console(argv = [], shelltype = 'python', banner = [['woop', 'title']], size = 100)
 
-    window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
+    window = Gtk.Window(type = Gtk.WindowType.TOPLEVEL)
     window.set_position(Gtk.WindowPosition.CENTER)
     window.set_default_size(800,600)
     window.set_border_width(0)
