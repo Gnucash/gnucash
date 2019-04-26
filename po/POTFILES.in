@@ -485,6 +485,7 @@ gnucash/report/standard-reports/income-statement.scm
 gnucash/report/standard-reports/net-charts.scm
 gnucash/report/standard-reports/portfolio.scm
 gnucash/report/standard-reports/price-scatter.scm
+gnucash/report/standard-reports/reconcile-report.scm
 gnucash/report/standard-reports/register.scm
 gnucash/report/standard-reports/standard-reports.scm
 gnucash/report/standard-reports/sx-summary.scm

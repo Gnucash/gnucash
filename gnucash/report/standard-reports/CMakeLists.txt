@@ -27,6 +27,7 @@ set (standard_reports_SCHEME_2
     net-charts.scm
     portfolio.scm
     price-scatter.scm
+    reconcile-report.scm
     register.scm
     sx-summary.scm
     transaction.scm
