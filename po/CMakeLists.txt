@@ -28,7 +28,7 @@ foreach(lingua ${ALL_LINGUAS})
   file (APPEND LINGUAS "${lingua} ")
 endforeach()
 
-set_local_dist(po_DIST_local ${po_SOURCES} CMakeLists.txt ChangeLog Makevars
+set_local_dist(po_DIST_local ${po_SOURCES} CMakeLists.txt Makevars
   POTFILES.in POTFILES.skip README gnucash-pot.cmake)
 set(po_DIST ${po_DIST_local} ${po_glossary_DIST} PARENT_SCOPE)
 
