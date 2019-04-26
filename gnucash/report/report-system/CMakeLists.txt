@@ -76,6 +76,7 @@ set (report_system_SCHEME_3
     options-utilities.scm
     report-utilities.scm
     report.scm
+    trep-engine.scm
 )
 
 set(GUILE_DEPENDS
