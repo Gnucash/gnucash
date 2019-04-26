@@ -2,6 +2,7 @@
 (gnc:module-begin-syntax (gnc:module-load "gnucash/app-utils" 0))
 (use-modules (gnucash engine test test-extras))
 (use-modules (gnucash report standard-reports transaction))
+(use-modules (gnucash report standard-reports reconcile-report))
 (use-modules (gnucash report stylesheets))
 (use-modules (gnucash report report-system))
 (use-modules (gnucash report report-system test test-extras))
@@ -890,9 +891,8 @@
 
 
     (let* ((options (default-testing-options)))
-      (let ((sxml (options->sxml options "null test")))
-        (test-assert "sxml"
-          sxml))
+      (test-assert "reconcile-report basic run"
+        (options->sxml options "null test"))
       (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 01 03 1970)))
       (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 31 03 1970)))
       (let ((sxml (options->sxml options "filter reconcile date")))
