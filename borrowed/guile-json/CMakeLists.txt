@@ -13,7 +13,7 @@ set_local_dist(guile-json_DIST_LOCAL
   COPYING
   json.scm
   NEWS
-  README
+  README.org
 )
 
 set(guile-json_DIST ${guile-json_DIST_LOCAL} ${guile-json-details_DIST} PARENT_SCOPE)
