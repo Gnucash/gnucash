@@ -16,9 +16,6 @@ if (HAVE_SRFI64)
     FALSE
     )
 
-  set(srfi64_extras_SCHEME_DIST
-    srfi64-extras.scm
-    )
   gnc_add_scheme_tests("${scm_test_SCHEME}")
 
 endif (HAVE_SRFI64)
