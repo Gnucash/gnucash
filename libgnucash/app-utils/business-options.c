@@ -26,6 +26,7 @@
 
 #include "business-options.h"
 #include "swig-runtime.h"
+#include "guile-mappings.h"
 
 #define FUNC_NAME G_STRFUNC
 

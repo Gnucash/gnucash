@@ -55,6 +55,7 @@
 #include "gnc-session.h"
 #include "engine-helpers-guile.h"
 #include "swig-runtime.h"
+#include "guile-mappings.h"
 #ifdef __MINGW32__
 #include <Windows.h>
 #endif

@@ -7,11 +7,10 @@ extern "C"
 #include <config.h>
 
 #include <qof.h>
-#include "engine-helpers-guile.h"
-
-#include "guile-mappings.h"
-#include "gnc-guile-utils.h"
 #include "swig-runtime.h"
+#include "guile-mappings.h"
+#include "engine-helpers-guile.h"
+#include "gnc-guile-utils.h"
 #include "kvp-scm.h"
 }
 

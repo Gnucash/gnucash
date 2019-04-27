@@ -27,9 +27,9 @@
 #include <string.h>
 #include <glib.h>
 #include <libguile.h>
+#include "swig-runtime.h"
 #include "guile-mappings.h"
 #include "gnc-guile-utils.h"
-#include "swig-runtime.h"
 #include "glib-helpers.h"
 
 

@@ -27,6 +27,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include "swig-runtime.h"
+#include "guile-mappings.h"
 #include <libguile.h>
 
 #include "gnc-ui-util.h"

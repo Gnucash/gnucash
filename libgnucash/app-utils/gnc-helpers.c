@@ -24,9 +24,9 @@
 #include <config.h>
 
 #include <libguile.h>
-#include "guile-mappings.h"
 #include <string.h>
 #include "swig-runtime.h"
+#include "guile-mappings.h"
 
 #include "gnc-engine.h"
 #include "engine-helpers-guile.h"

@@ -58,10 +58,9 @@
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
+#include "swig-runtime.h"
 #include "guile-mappings.h"
 #include <gfec.h>
-
-#include "swig-runtime.h"
 
 #define ASSISTANT_QIF_IMPORT_CM_CLASS "assistant-qif-import"
 #define GNC_PREFS_GROUP   "dialogs.import.qif"

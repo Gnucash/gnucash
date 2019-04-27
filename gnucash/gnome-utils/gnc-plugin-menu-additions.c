@@ -38,6 +38,7 @@
 #include <gtk/gtk.h>
 #include <string.h>
 #include "swig-runtime.h"
+#include "guile-mappings.h"
 
 #include "guile-util.h"
 #include "gnc-engine.h"

@@ -28,7 +28,6 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <libguile.h>
-#include "guile-mappings.h"
 #include <time.h>
 
 #include "dialog-utils.h"
@@ -47,9 +46,10 @@
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-warnings.h"
+#include "swig-runtime.h"
+#include "guile-mappings.h"
 #include "guile-util.h"
 #include "engine-helpers-guile.h"
-#include "swig-runtime.h"
 
 
 #define DIALOG_PRICE_DB_CM_CLASS "dialog-price-edit-db"

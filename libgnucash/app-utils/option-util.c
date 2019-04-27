@@ -32,9 +32,9 @@
 #include "glib-helpers.h"
 #include "gnc-guile-utils.h"
 #include "qof.h"
+#include "swig-runtime.h"
 #include "guile-mappings.h"
 
-#include "swig-runtime.h"
 
 /* TODO:
 

@@ -36,10 +36,10 @@
 #include <config.h>
 
 #include <libguile.h>
-#include "guile-mappings.h"
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include "swig-runtime.h"
+#include "guile-mappings.h"
 
 #include "gnc-plugin-page-register2.h"
 /*################## Added for Reg2 #################*/

@@ -71,6 +71,7 @@
 #include "option-util.h"
 #include "window-report.h"
 #include "swig-runtime.h"
+#include "guile-mappings.h"
 #include "business-options.h"
 #include "gnc-icons.h"
 #include "print-session.h"

@@ -26,8 +26,8 @@
 #include <glib.h>
 #include <stdio.h>
 #include <libguile.h>
-#include <guile-mappings.h>
 #include "swig-runtime.h"
+#include <guile-mappings.h>
 #include "gnc-hooks.h"
 #include "gnc-hooks-scm.h"
 #include "gnc-engine.h"
