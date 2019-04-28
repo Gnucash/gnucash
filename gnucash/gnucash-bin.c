@@ -763,31 +763,49 @@ gnc_log_init()
 }
 
 #ifdef __MINGW32__
-/* Set the Win32 internal localization for the main thread if the
- * locale has been overridden in the environment. Note that this is
- * separate from what setlocale() does; that only affects POSIX
- * functions and does *not* set the Windows locale.
+/* If one of the Unix locale variables LC_ALL, LC_MESSAGES, or LANG is
+ * set in the environment check to see if it's a valid locale and if
+ * it is set both the Windows and POSIX locales to that. If not
+ * retrieve the Windows locale and set POSIX to match.
  */
 static void
 set_win32_thread_locale()
 {
-    gunichar2* wlocale = NULL;
+    WCHAR lpLocaleName[LOCALE_NAME_MAX_LENGTH];
     char *locale = NULL;
-    int len = 0;
-    if (((locale = getenv ("LC_ALL")) == NULL || locale[0] == '\0')
-      && ((locale = getenv ("LC_MESSAGES")) == NULL || locale[0] == '\0')
-      && ((locale = getenv ("LANG")) == NULL || locale[0] == '\0'))
-	return;
-    len = strchr(locale, '.') - locale;
-    locale[2] = '-';
-    wlocale = g_utf8_to_utf16 (locale, len, NULL, NULL, NULL);
-    if (IsValidLocaleName(wlocale))
+
+    if (((locale = getenv ("LC_ALL")) != NULL && locale[0] != '\0') ||
+      ((locale = getenv ("LC_MESSAGES")) != NULL && locale[0] != '\0') ||
+      ((locale = getenv ("LANG")) != NULL && locale[0] != '\0'))
     {
-	LCID lcid = LocaleNameToLCID(wlocale, LOCALE_ALLOW_NEUTRAL_NAMES);
-	SetThreadLocale(lcid);
+	gunichar2* wlocale = NULL;
+	int len = 0;
+	len = strchr(locale, '.') - locale;
+	locale[2] = '-';
+	wlocale = g_utf8_to_utf16 (locale, len, NULL, NULL, NULL);
+	if (IsValidLocaleName(wlocale))
+	{
+	    LCID lcid = LocaleNameToLCID(wlocale, LOCALE_ALLOW_NEUTRAL_NAMES);
+	    printf ("win32_thread_locale setting %s from unix environment.\n",
+		    locale);
+	    SetThreadLocale(lcid);
+	    setlocale (LC_ALL, locale);
+	    sys_locale = locale;
+	    g_free(locale);
+	    g_free(wlocale);
+	    return;
+	}
+	g_free(locale);
+	g_free(wlocale);
     }
-    g_free(locale);
-    g_free(wlocale);
+    if (GetUserDefaultLocaleName(lpLocaleName, LOCALE_NAME_MAX_LENGTH))
+    {
+	sys_locale = g_utf16_to_utf8((gunichar2*)lpLocaleName,
+				     LOCALE_NAME_MAX_LENGTH,
+				     NULL, NULL, NULL);
+	setlocale (LC_ALL, sys_locale);
+	return;
+    }
 }
 #endif
 
@@ -814,12 +832,12 @@ main(int argc, char ** argv)
      */
 #ifdef MAC_INTEGRATION
     set_mac_locale();
+#elif defined __MINGW32__
+    set_win32_thread_locale();
 #endif
     gnc_environment_setup();
-#ifndef MAC_INTEGRATION /* setlocale already done */
+#if ! defined MAC_INTEGRATION && ! defined __MINGW32__/* setlocale already done */
     sys_locale = g_strdup (setlocale (LC_ALL, ""));
-#ifdef __MINGW32__
-    set_win32_thread_locale();
 #endif
     if (!sys_locale)
       {
