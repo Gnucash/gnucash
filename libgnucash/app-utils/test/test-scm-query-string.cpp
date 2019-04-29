@@ -55,7 +55,7 @@ test_query (Query *q, SCM val2str)
     str2 = gnc_scm_to_utf8_string (str_q);
     if (str2)
     {
-        res_q = scm_c_eval_string (str2);
+        res_q = scm_eval_string (str_q);
     }
     else
     {
