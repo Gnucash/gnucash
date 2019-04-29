@@ -824,7 +824,7 @@ set_win32_thread_locale()
 static void
 redirect_stdout (void)
 {
-#ifdef __MINGW32__ && __MSWIN_CONSOLE__
+#if defined __MINGW32__ && __MSWIN_CONSOLE__
     static const WORD MAX_CONSOLE_LINES = 500;
    int hConHandle;
     long lStdHandle;
