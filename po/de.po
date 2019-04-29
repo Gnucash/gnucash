@@ -20003,7 +20003,7 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:478
 msgid "Please select a description column."
-msgstr "Bitte wählen Sie eine Beschreibunsspalte."
+msgstr "Bitte wählen Sie eine Beschreibungsspalte."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:484
 msgid "Please select a deposit or withdrawal column."
