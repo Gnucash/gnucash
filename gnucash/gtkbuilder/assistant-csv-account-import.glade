@@ -27,14 +27,14 @@
           <object class="GtkLabel" id="start_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">
+            <property name="label" translatable="yes" comments="Run the assistent in your language to see GTK's translation of the button labels.">
 This assistant will help you import Accounts from a file.
 
-The file must be in the same format as that exported as this is a fixed format import which can be seen by looking at a file created by using the 'Export Account Tree to CSV' export menu option.
+The file must be in the same format as that exported as this is a fixed format import which can be seen by looking at a file created by using the "Export Account Tree to CSV" export menu option.
 
 If the account is missing, based on the full account name, it will be added as long as the security / currency specified exists. If the account exists, then four fields will be updated. These are code, description, notes and color.
 
-Click on 'Forward' to proceed or 'Cancel' to Abort Import.
+Click on "Next" to proceed or "Cancel" to Abort Import.
 </property>
             <property name="justify">center</property>
             <property name="wrap">True</property>

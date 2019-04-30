@@ -27,7 +27,7 @@ You first need to apply for Online Banking access at your bank. If your bank  de
 * The Internet address of your bank's Online Banking server
 * For HBCI Online Banking, information about the cryptographic public key of your bank ("Ini-Letter").
 
-This information will be needed in the following. Press "Forward" now.
+This information will be needed in the following. Press "Next" now.
 
 NOTE: NO WARRANTIES FOR ANYTHING. Some banks run a poorly implemented Online Banking server. You should not rely on time-critical transfers through Online Banking, because sometimes the bank does not give you correct feedback when a transfer is rejected.
 

@@ -1,5 +1,5 @@
 /**********************************************************************
- * assistant-xml-encoding.c -- Coversion of old XML file
+ * assistant-xml-encoding.c -- Conversion of old XML file
  * Copyright (C) 2006 Andreas Koehler <andi5.py@gmx.net>
  * Copyright (C) 2011 Robert Fewell
  *
@@ -174,6 +174,7 @@ void gxi_add_custom_enc_clicked_cb (GtkButton *button, GncXmlImportData *data);
 void gxi_selected_enc_activated_cb (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *column, GncXmlImportData *data);
 void gxi_remove_enc_clicked_cb (GtkButton *button, GncXmlImportData *data);
 
+/* Translators: Run the assistent in your language to see GTK's translation of the button labels. */
 static const gchar *encodings_doc_string = N_(
             "\nThe file you are trying to load is from an older version of "
             "GnuCash. The file format in the older versions was missing the "
@@ -187,21 +188,21 @@ static const gchar *encodings_doc_string = N_(
             "file. On the next page GnuCash will show the resulting texts when "
             "using this guess. You have to check whether the words look as "
             "expected. Either everything looks fine and you can simply press "
-            "'Forward'. Or the words contain unexpected characters, in which "
+            "\"Next\". Or the words contain unexpected characters, in which "
             "case you should select different character encodings to see "
             "different results. You may have to edit the list of character "
             "encodings by clicking on the respective button."
             "\n\n"
-            "Press 'Forward' now to select the correct character encoding for "
+            "Press \"Next\" now to select the correct character encoding for "
             "your data file.\n");
 
 static const gchar *encodings_doc_page_title = N_("Ambiguous character encoding");
 
 static const gchar *finish_convert_string = N_(
-            "The file has been loaded successfully. If you click 'Apply' it will be saved "
+            "The file has been loaded successfully. If you click \"Apply\" it will be saved "
             "and reloaded into the main application. That way you will have a working "
             "file as backup in the same directory.\n\n"
-            "You can also go back and verify your selections by clicking on 'Back'.");
+            "You can also go back and verify your selections by clicking on \"Back\".");
 
 /* The debugging module that this .o belongs to. */
 static QofLogModule log_module = GNC_MOD_ASSISTANT;

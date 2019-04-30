@@ -682,7 +682,7 @@ CsvImpTransAssist::~CsvImpTransAssist ()
  * Code related to the file chooser page
  **************************************************/
 
-/* check_for_valid_filename for a valid file to activate the forward button
+/* check_for_valid_filename for a valid file to activate the "Next" button
  */
 bool
 CsvImpTransAssist::check_for_valid_filename ()
@@ -731,7 +731,7 @@ CsvImpTransAssist::file_activated_cb ()
 void
 CsvImpTransAssist::file_selection_changed_cb ()
 {
-    /* Enable the forward button based on a valid filename */
+    /* Enable the "Next" button based on a valid filename */
     gtk_assistant_set_page_complete (csv_imp_asst, file_page,
         check_for_valid_filename ());
 }
@@ -1885,7 +1885,7 @@ CsvImpTransAssist::assist_file_page_prepare ()
         g_free (starting_dir);
     }
 
-    /* Disable the Forward Assistant Button */
+    /* Disable the "Next" Assistant Button */
     gtk_assistant_set_page_complete (csv_imp_asst, account_match_page, false);
 }
 
@@ -1933,7 +1933,7 @@ CsvImpTransAssist::assist_preview_page_prepare ()
 
         tx_imp->req_mapped_accts (false);
 
-        /* Disable the Forward Assistant Button */
+        /* Disable the "Next" Assistant Button */
         gtk_assistant_set_page_complete (csv_imp_asst, preview_page, false);
 
         /* Load the data into the treeview. */
@@ -1962,7 +1962,7 @@ CsvImpTransAssist::assist_account_match_page_prepare ()
     gtk_widget_set_sensitive (account_match_view, true);
     gtk_widget_set_sensitive (account_match_btn, true);
 
-    /* Enable the Forward Assistant Button */
+    /* Enable the "Next" Assistant Button */
     gtk_assistant_set_page_complete (csv_imp_asst, account_match_page,
                csv_tximp_acct_match_check_all (store));
 }
