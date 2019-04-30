@@ -50,12 +50,6 @@
 (read-enable 'positions)
 (debug-set! stack    200000)
 
-;; Initalialize localization, otherwise reports may output
-;; invalid characters
-(setlocale LC_ALL "")
-
-;;;; Status output functions.
-
 (define (strify items)
   (string-join (map (lambda (x) (format #f "~A" x)) items) ""))
 
