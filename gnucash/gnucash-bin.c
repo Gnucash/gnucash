@@ -792,12 +792,10 @@ set_win32_thread_locale()
 	if (IsValidLocaleName(wlocale))
 	{
 	    LCID lcid = LocaleNameToLCID(wlocale, LOCALE_ALLOW_NEUTRAL_NAMES);
-	    printf ("win32_thread_locale setting %s from unix environment.\n",
-		    locale);
 	    SetThreadLocale(lcid);
+	    locale[2] = '_';
 	    setlocale (LC_ALL, locale);
 	    sys_locale = locale;
-	    g_free(locale);
 	    g_free(wlocale);
 	    return;
 	}
@@ -900,8 +898,6 @@ main(int argc, char ** argv)
         g_setenv ("LC_ALL", "C", TRUE);
         setlocale (LC_ALL, "C");
       }
-    else
-      printf ("Locale set to %s\n", sys_locale);
 #ifdef HAVE_GETTEXT
     {
         gchar *localedir = gnc_path_get_localedir();
