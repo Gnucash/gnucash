@@ -791,6 +791,7 @@ set_win32_thread_locale()
 	sys_locale = g_utf16_to_utf8((gunichar2*)lpLocaleName,
 				     LOCALE_NAME_MAX_LENGTH,
 				     NULL, NULL, NULL);
+	sys_locale[2] = '_';
 	setlocale (LC_ALL, sys_locale);
 	return;
     }
