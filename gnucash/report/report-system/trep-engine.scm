@@ -18,6 +18,7 @@
 ;; - add subtotal summary grid
 ;; - by default, exclude closing transactions from the report
 ;; - converted to module in 2019
+;; - CSV export, exports the report headers and totals
 ;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -458,6 +459,46 @@ Credit Card, and Income accounts."))
   ;; sortkey is not defined (i.e. their 'sortkey is #f).
   (and (keylist-get-info (sortkey-list split-action?) sortkey 'split-sortvalue)
        (not (keylist-get-info (sortkey-list split-action?) sortkey 'sortkey))))
+
+(define (lists->csv lst)
+  ;; converts a list of lists into CSV
+  ;; this function aims to follow RFC4180, and will pad lists to
+  ;; ensure equal number of items per row.
+  ;; e.g. '(("from" "01/01/2010")
+  ;;        ("to" "31/12/2010")
+  ;;        ("total" 23500 30000 25/7 'sym))
+  ;; will output
+  ;;  "from","01/01/2010",,,
+  ;;  "to","31/12/2010",,,
+  ;;  "total",23500.0,30000.0,3.5714285714285716,sym
+  (define (string-sanitize-csv str)
+    (call-with-output-string
+      (lambda (port)
+        (display #\" port)
+        (string-for-each
+         (lambda (c)
+           (if (char=? c #\") (display #\" port))
+           (display c port))
+         str)
+        (display #\" port))))
+
+  (define max-items (apply max (map length lst)))
+
+  (define (strify obj)
+    (cond
+     ((not obj) "")
+     ((string? obj) (string-sanitize-csv obj))
+     ((number? obj) (number->string (exact->inexact obj)))
+     ((list? obj) (string-join
+                   (map strify
+                        (append obj
+                                (make-list (- max-items (length obj)) #f)))
+                   ","))
+     ((gnc:gnc-monetary? obj) (strify (gnc:gnc-monetary-amount obj)))
+     (else (object->string obj))))
+
+  (string-join (map strify lst) "\n"))
+
 
 ;;
 ;; Default Transaction Report
@@ -1746,7 +1787,18 @@ be excluded from periodic reporting.")
 
             (loop rest (not odd-row?) (1+ work-done)))))
 
-    (values table grid)))
+    (let ((csvlist (cond
+                    ((any (lambda (cell) (vector-ref cell 4)) calculated-cells)
+                     ;; there are mergeable cells. don't return a list.
+                     (N_ "CSV disabled for double column amounts"))
+
+                    (else
+                     (map
+                      (lambda (cell coll)
+                        (cons (vector-ref cell 0)
+                              (coll 'format gnc:make-gnc-monetary #f)))
+                      calculated-cells total-collectors)))))
+      (values table grid csvlist))))
 
 ;; grid data structure
 (define (make-grid)
@@ -1840,7 +1892,8 @@ be excluded from periodic reporting.")
 
 (define* (gnc:trep-renderer
           report-obj #:key custom-calculated-cells empty-report-message
-          custom-split-filter split->date split->date-include-false?)
+          custom-split-filter split->date split->date-include-false?
+          export-type filename)
   ;; the trep-renderer is a define* function which, at minimum, takes
   ;; the report object
   ;;
@@ -1854,6 +1907,7 @@ be excluded from periodic reporting.")
   ;;     split->date returns #f. useful to include unreconciled splits in reconcile
   ;;     report. it can be useful for alternative date filtering, e.g. filter by
   ;;     transaction->invoice->payment date.
+  ;; #:export-type and #:filename - are provided for CSV export
 
   (define options (gnc:report-options report-obj))
   (define (opt-val section name)
@@ -2081,7 +2135,7 @@ be excluded from periodic reporting.")
            (gnc:html-render-options-changed options))))
 
        (else
-        (let-values (((table grid)
+        (let-values (((table grid csvlist)
                       (make-split-table splits options custom-calculated-cells)))
 
           (gnc:html-document-set-title! document report-title)
@@ -2114,6 +2168,30 @@ be excluded from periodic reporting.")
                                   generic<?)))
               (gnc:html-document-add-object!
                document (grid->html-table grid list-of-rows list-of-cols))))
+
+          (cond
+           ((and (eq? export-type 'csv)
+                 (string? filename)
+                 (not (string-null? filename)))
+            (let ((old-date-fmt (qof-date-format-get))
+                  (dummy (qof-date-format-set QOF-DATE-FORMAT-ISO))
+                  (infolist
+                   (list
+                    (list "from" (qof-print-date begindate))
+                    (list "to" (qof-print-date enddate)))))
+              (qof-date-format-set old-date-fmt)
+              (if (list? csvlist)
+                  (catch #t
+                    (lambda ()
+                      (with-output-to-file filename
+                        (lambda ()
+                          (display (lists->csv (append infolist csvlist))))))
+                    (lambda (key . args)
+                      ;; Translators: ~a error type, ~a filename, ~s error details
+                      (let ((fmt (N_ "error ~a during csv output to ~a: ~s")))
+                        (gnc:gui-error (format #f fmt key filename args)
+                                       (format #f (_ fmt) key filename args)))))
+                  (gnc:gui-error csvlist (_ csvlist))))))
 
           (unless (and subtotal-table?
                        (opt-val pagename-sorting optname-show-subtotals-only))
