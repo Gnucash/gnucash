@@ -618,9 +618,10 @@ gnc_price_edit_dialog (GtkWidget * parent,
         if (price)
         {
             price = gnc_price_clone(price, pedit_dialog->book);
-//  } else {
-//      price = gnc_price_create (pedit_dialog->book);
+
             gnc_price_set_source (price, PRICE_SOURCE_EDIT_DLG);
+            gnc_price_set_time64 (price, gnc_time (NULL));
+            gnc_price_set_value (price, gnc_numeric_zero ());
         }
 
         pedit_dialog->is_new = TRUE;
