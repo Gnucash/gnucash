@@ -353,6 +353,8 @@ selection_changed_cb (GtkTreeSelection *selection, gpointer data)
     gboolean have_rows = (g_list_length (rows) > 0 ? TRUE : FALSE);
 
     change_source_flag (PRICE_REMOVE_SOURCE_COMM, have_rows, pdb_dialog);
+    g_list_foreach (rows, (GFunc) gtk_tree_path_free, NULL);
+    g_list_free (rows);
 }
 
 static GDate
@@ -513,16 +515,33 @@ gnc_prices_dialog_add_clicked (GtkWidget *widget, gpointer data)
     PricesDialog *pdb_dialog = data;
     GNCPrice *price = NULL;
     GList *price_list;
+    GList *comm_list;
+    gboolean unref_price = FALSE;
 
     ENTER(" ");
-    price_list = gnc_tree_view_price_get_selected_prices(pdb_dialog->price_tree);
-    if (price_list)
+    price_list = gnc_tree_view_price_get_selected_prices (pdb_dialog->price_tree);
+    comm_list = gnc_tree_view_price_get_selected_commodities (pdb_dialog->price_tree);
+
+    if (price_list) // selected row is on a price
     {
         price = price_list->data;
-        g_list_free(price_list);
+        g_list_free (price_list);
+    }
+    else if (comm_list) // selection contains price parent rows
+    {
+        if (g_list_length (comm_list) == 1) // make sure it is only one parent
+        {
+            price = gnc_price_create (pdb_dialog->book);
+            gnc_price_set_commodity (price, comm_list->data);
+            unref_price = TRUE;
+        }
+        g_list_free (comm_list);
     }
     gnc_price_edit_dialog (pdb_dialog->window, pdb_dialog->session,
                            price, GNC_PRICE_NEW);
+
+    if (unref_price)
+        gnc_price_unref (price);
     LEAVE(" ");
 }
 
@@ -570,12 +589,25 @@ gnc_prices_dialog_selection_changed (GtkTreeSelection *treeselection,
                                      gpointer data)
 {
     PricesDialog *pdb_dialog = data;
+    GtkTreeModel *model;
     GList *price_list;
+    GList *rows;
     gint length;
 
     ENTER(" ");
-    price_list = gnc_tree_view_price_get_selected_prices(pdb_dialog->price_tree);
-    length = g_list_length(price_list);
+    price_list = gnc_tree_view_price_get_selected_prices (pdb_dialog->price_tree);
+    length = g_list_length (price_list);
+    g_list_free (price_list);
+
+    model = gtk_tree_view_get_model (GTK_TREE_VIEW(pdb_dialog->price_tree));
+    rows = gtk_tree_selection_get_selected_rows (treeselection, &model);
+
+    // if selected rows greater than length, parents must of been selected also
+    if (g_list_length (rows) > length)
+        length = 0;
+
+    g_list_foreach (rows, (GFunc) gtk_tree_path_free, NULL);
+    g_list_free (rows);
 
     gtk_widget_set_sensitive (pdb_dialog->edit_button,
                               length == 1);

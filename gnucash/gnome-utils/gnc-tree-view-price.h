@@ -208,6 +208,19 @@ void gnc_tree_view_price_set_selected_price (GncTreeViewPrice *view,
 GList * gnc_tree_view_price_get_selected_prices (GncTreeViewPrice *view);
 
 
+/** This function returns a list of commodities associated with the
+ *  selected rows that are not prices but are the parent rows for
+ *  prices in the price tree view.
+ *
+ *  @note It only makes sense to call this function when the price
+ *  tree is set to select multiple items.
+ *
+ *  @param view A pointer to an price tree view.
+ *
+ *  @return A list of commodities, or NULL if no commodity was selected.
+ */
+GList * gnc_tree_view_price_get_selected_commodities (GncTreeViewPrice *view);
+
 /** @} */
 
 G_END_DECLS
