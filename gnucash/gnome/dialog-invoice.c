@@ -161,7 +161,8 @@ struct _invoice_window
     GtkWidget  * posted_date_hbox;
     GtkWidget  * posted_date;
     GtkWidget  * active_check;
-
+    GtkWidget  * paid_label;
+    
     GtkWidget  * owner_box;
     GtkWidget  * owner_label;
     GtkWidget  * owner_choice;
@@ -1874,8 +1875,6 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
         {
             hide = GTK_WIDGET (gtk_builder_get_object (iw->builder, "hide3"));
             gtk_widget_hide (hide);
-            hide = GTK_WIDGET (gtk_builder_get_object (iw->builder, "hide4"));
-            gtk_widget_hide (hide);
 
             show = GTK_WIDGET (gtk_builder_get_object (iw->builder, "posted_label"));
             gtk_widget_show (show);
@@ -1949,6 +1948,11 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
         gtk_widget_set_sensitive (iw->notes_text, TRUE);
     }
 
+    if(gncInvoiceIsPaid (invoice))
+            gtk_label_set_text(GTK_LABEL(iw->paid_label),  _("PAID"));
+    else
+        gtk_label_set_text(GTK_LABEL(iw->paid_label),  _("UNPAID"));
+    
     if (widget)
         gtk_widget_show (widget);
     else
@@ -2317,6 +2321,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     iw->owner_label = GTK_WIDGET (gtk_builder_get_object (builder, "page_owner_label"));
     iw->job_label = GTK_WIDGET (gtk_builder_get_object (builder, "page_job_label"));
     iw->job_box = GTK_WIDGET (gtk_builder_get_object (builder, "page_job_hbox"));
+    iw->paid_label = GTK_WIDGET (gtk_builder_get_object (builder, "hide4"));
 
     /* grab the project widgets */
     iw->proj_frame = GTK_WIDGET (gtk_builder_get_object (builder, "page_proj_frame"));
