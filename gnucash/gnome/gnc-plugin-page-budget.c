@@ -204,6 +204,7 @@ typedef struct GncPluginPageBudgetPrivate
     /* For the estimation dialog */
     Recurrence r;
     gint sigFigs;
+    gboolean useAvg;
 } GncPluginPageBudgetPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageBudget, gnc_plugin_page_budget, GNC_TYPE_PLUGIN_PAGE)
@@ -309,6 +310,7 @@ gnc_plugin_page_budget_init (GncPluginPageBudget *plugin_page)
     priv->fd.filter_override = g_hash_table_new (g_direct_hash, g_direct_equal);
 
     priv->sigFigs = 1;
+    priv->useAvg = FALSE;
     recurrenceSet(&priv->r, 1, PERIOD_MONTH, NULL, WEEKEND_ADJ_NONE);
 
     LEAVE("page %p, priv %p, action group %p",
@@ -859,19 +861,38 @@ estimate_budget_helper(GtkTreeModel *model, GtkTreePath *path,
 
     num_periods = gnc_budget_get_num_periods(priv->budget);
 
-    for (i = 0; i < num_periods; i++)
+    if (priv->useAvg && num_periods)
     {
-        num = recurrenceGetAccountPeriodValue(&priv->r, acct, i);
-        if (!gnc_numeric_check(num))
+        num = xaccAccountGetBalanceChangeForPeriod(acct, 
+            recurrenceGetPeriodTime(&priv->r, 0, FALSE),
+            recurrenceGetPeriodTime(&priv->r, num_periods - 1, TRUE), TRUE);
+        num = gnc_numeric_div(num, 
+            gnc_numeric_create(num_periods, 1), GNC_DENOM_AUTO,
+            GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) | GNC_HOW_RND_ROUND_HALF_UP);
+
+        if (gnc_reverse_balance(acct))
+            num = gnc_numeric_neg(num);
+
+        for (i = 0; i < num_periods; i++)
         {
-            if (gnc_reverse_balance (acct))
-                num = gnc_numeric_neg (num);
+            gnc_budget_set_account_period_value(priv->budget, acct, i, num);
+        }
+    }
+    else
+    {
+        for (i = 0; i < num_periods; i++)
+        {
+            num = recurrenceGetAccountPeriodValue(&priv->r, acct, i);
+            if (!gnc_numeric_check(num))
+            {
+                if (gnc_reverse_balance(acct))
+                    num = gnc_numeric_neg(num);
 
-
-            num = gnc_numeric_convert(num, GNC_DENOM_AUTO,
-                                      GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) | GNC_HOW_RND_ROUND_HALF_UP);
-            gnc_budget_set_account_period_value(
-                priv->budget, acct, i, num);
+                num = gnc_numeric_convert(num, GNC_DENOM_AUTO,
+                                          GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) |
+                                          GNC_HOW_RND_ROUND_HALF_UP);
+                gnc_budget_set_account_period_value(priv->budget, acct, i, num);
+            }
         }
     }
 }
@@ -886,7 +907,7 @@ gnc_plugin_page_budget_cmd_estimate_budget(GtkAction *action,
 {
     GncPluginPageBudgetPrivate *priv;
     GtkTreeSelection *sel;
-    GtkWidget *dialog, *gde, *dtr, *hb;
+    GtkWidget *dialog, *gde, *dtr, *hb, *avg;
     gint result;
     GDate date;
     const Recurrence *r;
@@ -930,6 +951,9 @@ gnc_plugin_page_budget_cmd_estimate_budget(GtkAction *action,
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(dtr),
                               (gdouble)priv->sigFigs);
 
+    avg = GTK_WIDGET(gtk_builder_get_object(builder, "UseAverage"));
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(avg), priv->useAvg);
+
     gtk_widget_show_all (dialog);
     result = gtk_dialog_run(GTK_DIALOG(dialog));
     switch (result)
@@ -944,6 +968,8 @@ gnc_plugin_page_budget_cmd_estimate_budget(GtkAction *action,
         priv->sigFigs =
             gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(dtr));
 
+        priv->useAvg = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(avg));
+        
         gtk_tree_selection_selected_foreach(sel, estimate_budget_helper, page);
         break;
     default:
