@@ -141,7 +141,7 @@ struct _GncHtmlClass
 #ifdef WEBKIT1
   void (*print) (GncHtml* html, const gchar* jobname, gboolean export_pdf);
 #else
-    void (*print) (GncHtml* html);
+    void (*print) (GncHtml* html, const gchar* jobname);
 #endif
     void (*cancel)( GncHtml* html );
     URLType (*parse_url)( GncHtml* html, const gchar* url,
@@ -220,7 +220,7 @@ void gnc_html_print (GncHtml* html, const char* jobname, gboolean export_pdf);
  *
  * @param html GncHtml object
  */
-void gnc_html_print (GncHtml* html);
+void gnc_html_print (GncHtml* html, const char* jobname);
 #endif
 /**
  * Cancels the current operation

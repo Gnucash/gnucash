@@ -1166,11 +1166,7 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
             N_("Print the current report"),
             G_CALLBACK(gnc_plugin_page_report_print_cb)
         },
-        {
-            "FilePrintPDFAction", GNC_ICON_PDF_EXPORT, N_("Export as P_DF..."), NULL,
-            N_("Export the current report as a PDF document"),
-            G_CALLBACK(gnc_plugin_page_report_exportpdf_cb)
-        },
+
         {
             "EditCutAction", "edit-cut", N_("Cu_t"), "<primary>X",
             N_("Cut the current selection and copy it to clipboard"),
@@ -1870,11 +1866,9 @@ gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report 
 
     //g_warning("Setting job name=%s", job_name);
 
-#ifdef WEBKIT1
-    gnc_html_print (priv->html, job_name, FALSE);
-#else
-    gnc_html_print (priv->html);
-#endif
+
+    gnc_html_print (priv->html, job_name);
+
 
     g_free (job_name);
 }
@@ -1916,7 +1910,7 @@ gnc_plugin_page_report_exportpdf_cb( GtkAction *action, GncPluginPageReport *rep
 #ifdef WEBKIT1
     gnc_html_print (priv->html, job_name, TRUE);
 #else
-    gnc_html_print (priv->html);
+    gnc_html_print (priv->html, job_name);
 #endif
 
     if (owner)
