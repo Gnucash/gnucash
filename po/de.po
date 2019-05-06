@@ -19121,7 +19121,6 @@ msgstr "Kontoumsätze online abfragen via HBCI/Onlinebanking"
 
 #. Translators: https://en.wikipedia.org/wiki/Single_Euro_Payments_Area
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.c:113
-#, fuzzy
 msgid "Issue _SEPA Transaction..."
 msgstr "SE_PA Einzelüberweisung..."
 
