@@ -100,9 +100,9 @@ class Console (cons.Console):
 # shelltype can either be "python" or "ipython" (the latter is not yet fully functional)
 if False:
     shelltype = "python"
-    title = _("gnucash {0} shell".format(shelltype))
+    title = _("gnucash {0} shell").format(shelltype)
     banner_style = 'title'
-    banner = _("Welcome to {0}!\n".format(title))
+    banner = _("Welcome to {0}!\n").format(title)
     console = Console(argv = [], shelltype = shelltype, banner = [[banner, banner_style]], size = 100)
 
     window = Gtk.Window(type = Gtk.WindowType.TOPLEVEL)
