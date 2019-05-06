@@ -20912,6 +20912,11 @@ msgstr "Konvertieren"
 msgid "Missing transaction date."
 msgstr "Buchungsdatum fehlt."
 
+#: gnucash/python/init.py:105
+#, python-brace-format
+msgid "Welcome to {0}!\n"
+msgstr "Willkommen zur {0}!\n"
+
 #. XXX: change this based on the ledger type
 #: gnucash/register/ledger-core/gncEntryLedger.c:250
 msgid "Hours"
