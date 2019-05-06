@@ -6,6 +6,7 @@ from gi import require_version
 require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import os
+import gettext
 sys.path.append(os.path.dirname(__file__))
 noisy = gnc_prefs_is_extra_enabled()
 if noisy:
@@ -98,9 +99,9 @@ class Console (cons.Console):
 # shelltype can either be "python" or "ipython" (the latter is not yet fully functional)
 if False:
     shelltype = "python"
-    title = "gnucash "+shelltype+" shell"
+    title = _("gnucash {0} shell".format(shelltype))
     banner_style = 'title'
-    banner = "Welcome to "+title+"!\n"
+    banner = _("Welcome to {0}!\n".format(title))
     console = Console(argv = [], shelltype = shelltype, banner = [[banner, banner_style]], size = 100)
 
     window = Gtk.Window(type = Gtk.WindowType.TOPLEVEL)
