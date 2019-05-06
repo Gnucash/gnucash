@@ -56,6 +56,9 @@ void
 %newobject gnc_path_get_bindir;
 gchar * gnc_path_get_bindir(void);
 
+%newobject gnc_path_get_localedir;
+gchar * gnc_path_get_localedir(void);
+
 %newobject gnc_path_get_stdreportsdir;
 gchar * gnc_path_get_stdreportsdir(void);
 
