@@ -7,7 +7,9 @@ require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import os
 import gettext
-gettext.install("gnucash")
+# install gettext _-function with path to mo files
+gettext.install("gnucash",
+        os.path.join(os.environ["GNC_HOME"],"share/locale"))
 sys.path.append(os.path.dirname(__file__))
 noisy = gnc_prefs_is_extra_enabled()
 if noisy:
