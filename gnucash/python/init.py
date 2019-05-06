@@ -1,5 +1,6 @@
 import sys
 import gnucash._sw_app_utils as _sw_app_utils
+import gnucash._sw_core_utils as _sw_core_utils
 from gnucash import *
 from gnucash._sw_core_utils import gnc_prefs_is_extra_enabled
 from gi import require_version
@@ -7,9 +8,9 @@ require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import os
 import gettext
-# install gettext _-function with path to mo files
+# install gettext for _-function, needs localepath
 gettext.install("gnucash",
-        os.path.join(os.environ["GNC_HOME"],"share/locale"))
+        _sw_core_utils.gnc_path_get_localedir())
 sys.path.append(os.path.dirname(__file__))
 noisy = gnc_prefs_is_extra_enabled()
 if noisy:
