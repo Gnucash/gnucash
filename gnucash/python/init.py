@@ -7,7 +7,7 @@ require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import os
 import gettext
-gettext.install("gnucash-pycons")
+gettext.install("gnucash")
 sys.path.append(os.path.dirname(__file__))
 noisy = gnc_prefs_is_extra_enabled()
 if noisy:
