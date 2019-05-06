@@ -12,6 +12,8 @@ import gettext
 gettext.install("gnucash",
         _sw_core_utils.gnc_path_get_localedir())
 sys.path.append(os.path.dirname(__file__))
+# output extra debug information if gnucash has been started with
+# gnucash --debug --extra
 noisy = gnc_prefs_is_extra_enabled()
 if noisy:
     print("woop", os.path.dirname(__file__))
