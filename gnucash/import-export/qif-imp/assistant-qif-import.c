@@ -147,6 +147,7 @@ struct _qifimportwindow
     /* Widgets on the commodity page. */
     gint        num_new_pages;
     GtkWidget * commodity_notebook;
+    GList     * commodity_notebook_pages;
     gint        timeout_id;
 
     /* Conversion progress page. */
@@ -161,8 +162,6 @@ struct _qifimportwindow
 
     /* Widgets on the summary page. */
     GtkWidget * summary_text;
-
-    GList     * commodity_pages;
 
     gboolean  show_doc_pages;
     gboolean  ask_date_format;
@@ -197,9 +196,9 @@ struct _qifimportwindow
     gchar    *date_format;
 };
 
-struct _qifassistantpage
+struct _qifnotebookpage
 {
-    GtkWidget     *page;
+    GtkWidget     *notebook_page;
     GtkWidget     *namespace_combo;
     GtkWidget     *name_entry;
     GtkWidget     *mnemonic_entry;
@@ -208,7 +207,7 @@ struct _qifassistantpage
     SCM            hash_key;
 };
 
-typedef struct _qifassistantpage QIFAssistantPage;
+typedef struct _qifnotebookpage QIFCommNotebookPage;
 
 static void gnc_ui_qif_import_assistant_destroy (GtkWidget *object, gpointer user_data);
 static void gnc_ui_qif_import_assistant_close_handler (gpointer user_data);
@@ -404,25 +403,25 @@ update_memo_page (QIFImportWindow * wind)
 static void
 gnc_ui_qif_import_commodity_destroy (QIFImportWindow * wind)
 {
-    GList              *pageptr;
-    GtkWidget          *gtkpage;
-    QIFAssistantPage   *page;
+    GList               *pageptr;
+    GtkWidget           *notebook_page;
+    QIFCommNotebookPage *comm_nb_page;
 
-    for (pageptr = wind->commodity_pages; pageptr; pageptr = pageptr->next)
+    for (pageptr = wind->commodity_notebook_pages; pageptr; pageptr = pageptr->next)
     {
-        gtkpage   = pageptr->data;
-        page      = g_object_get_data (G_OBJECT(gtkpage), "page_struct");
+        notebook_page = pageptr->data;
+        comm_nb_page  = g_object_get_data (G_OBJECT(notebook_page), "page_struct");
 
         /* Unprotect the Scheme hash key. */
-        scm_gc_unprotect_object (page->hash_key);
+        scm_gc_unprotect_object (comm_nb_page->hash_key);
 
         /* Free the memory allocated for the page's struct. */
-        g_free (page);
+        g_free (comm_nb_page);
     }
 
     /* Free the list of pages. */
-    g_list_free (wind->commodity_pages);
-    wind->commodity_pages = NULL;
+    g_list_free (wind->commodity_notebook_pages);
+    wind->commodity_notebook_pages = NULL;
 }
 
 
@@ -828,17 +827,16 @@ gnc_ui_qif_import_memo_select_cb (GtkTreeSelection *selection,
 /*********************************************
  * new_security_notebook_page
  *********************************************/
-static QIFAssistantPage *
+static QIFCommNotebookPage *
 new_security_notebook_page (SCM security_hash_key, gnc_commodity *comm, QIFImportWindow *wind)
 {
-
-    QIFAssistantPage *retval = g_new0 (QIFAssistantPage, 1);
+    QIFCommNotebookPage *comm_nb_page = g_new0(QIFCommNotebookPage, 1);
     GtkListStore *store;
     GtkWidget    *table;
     GtkWidget    *label;
     gchar        *title = NULL;
     const char   *str;
-    GtkWidget    *page;
+    GtkWidget    *notebook_page;
     GtkWidget    *notebook_label;
     GtkWidget    *entry;
     char         *name_tooltip =
@@ -853,15 +851,15 @@ new_security_notebook_page (SCM security_hash_key, gnc_commodity *comm, QIFImpor
           " enter a new one.");
 
     /* Make the page widget. */
-    page = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_set_homogeneous (GTK_BOX(page), FALSE);
-    retval->page = page;
-    g_object_set_data (G_OBJECT(retval->page), "page_struct", retval);
+    notebook_page = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_set_homogeneous (GTK_BOX (notebook_page), FALSE);
+    comm_nb_page->notebook_page = notebook_page;
+    g_object_set_data (G_OBJECT(notebook_page), "page_struct", comm_nb_page);
 
     /* Save the commodity and the hash table key. */
-    retval->commodity = comm;
-    retval->hash_key = security_hash_key;
-    scm_gc_protect_object (retval->hash_key);
+    comm_nb_page->commodity = comm;
+    comm_nb_page->hash_key = security_hash_key;
+    scm_gc_protect_object (comm_nb_page->hash_key);
 
     /* Set the page title. */
     str = gnc_commodity_get_mnemonic (comm);
@@ -872,11 +870,11 @@ new_security_notebook_page (SCM security_hash_key, gnc_commodity *comm, QIFImpor
     notebook_label = gtk_label_new (title);
     gnc_label_set_alignment (notebook_label, 0.0, 0.5);
     gtk_notebook_append_page (GTK_NOTEBOOK(wind->commodity_notebook),
-                              page, notebook_label);
+                              notebook_page, notebook_label);
     g_free (title);
 
-   /* set the page complete flag as on creation all fields will be OK */
-    retval->page_complete = TRUE;
+    /* set the page complete flag as on creation all fields will be OK */
+    comm_nb_page->page_complete = TRUE;
 
     /* Add all the widgets to the page. */
     table = gtk_grid_new ();
@@ -884,15 +882,15 @@ new_security_notebook_page (SCM security_hash_key, gnc_commodity *comm, QIFImpor
     gtk_grid_set_column_spacing (GTK_GRID(table), 12);
 
     /* Name entry */
-    retval->name_entry = gtk_entry_new ();
-    gtk_entry_set_text (GTK_ENTRY(retval->name_entry),
+    comm_nb_page->name_entry = gtk_entry_new ();
+    gtk_entry_set_text (GTK_ENTRY(comm_nb_page->name_entry),
                         gnc_commodity_get_fullname (comm));
     label = gtk_label_new_with_mnemonic (_("_Name or description:"));
-    gtk_label_set_mnemonic_widget (GTK_LABEL(label), retval->name_entry);
+    gtk_label_set_mnemonic_widget (GTK_LABEL(label), comm_nb_page->name_entry);
     gnc_label_set_alignment (label, 0, 0.5);
 
     gtk_widget_set_tooltip_text (label, name_tooltip);
-    gtk_widget_set_tooltip_text (retval->name_entry, name_tooltip);
+    gtk_widget_set_tooltip_text (comm_nb_page->name_entry, name_tooltip);
 
     gtk_grid_attach (GTK_GRID(table), label, 0, 0, 1, 1);
     gtk_widget_set_halign (label, GTK_ALIGN_FILL);
@@ -901,22 +899,22 @@ new_security_notebook_page (SCM security_hash_key, gnc_commodity *comm, QIFImpor
     gtk_widget_set_vexpand (label, FALSE);
     g_object_set (label, "margin", 0, NULL);
 
-    gtk_grid_attach (GTK_GRID(table), retval->name_entry, 1, 0, 1, 1);
+    gtk_grid_attach (GTK_GRID(table), comm_nb_page->name_entry, 1, 0, 1, 1);
 
-    g_signal_connect (retval->name_entry, "changed",
+    g_signal_connect (comm_nb_page->name_entry, "changed",
                       G_CALLBACK(gnc_ui_qif_import_comm_changed_cb), wind);
 
     /* Mnemonic entry */
-    retval->mnemonic_entry = gtk_entry_new ();
-    gtk_entry_set_text (GTK_ENTRY(retval->mnemonic_entry),
+    comm_nb_page->mnemonic_entry = gtk_entry_new ();
+    gtk_entry_set_text (GTK_ENTRY(comm_nb_page->mnemonic_entry),
                        gnc_commodity_get_mnemonic (comm));
     label = gtk_label_new_with_mnemonic (
                 _("_Ticker symbol or other abbreviation:"));
-    gtk_label_set_mnemonic_widget (GTK_LABEL(label), retval->mnemonic_entry);
+    gtk_label_set_mnemonic_widget (GTK_LABEL(label), comm_nb_page->mnemonic_entry);
     gnc_label_set_alignment (label, 0, 0.5);
 
     gtk_widget_set_tooltip_text (label, mnemonic_tooltip);
-    gtk_widget_set_tooltip_text (retval->mnemonic_entry, mnemonic_tooltip);
+    gtk_widget_set_tooltip_text (comm_nb_page->mnemonic_entry, mnemonic_tooltip);
 
     gtk_grid_attach (GTK_GRID(table), label, 0, 1, 1, 1);
     gtk_widget_set_halign (label, GTK_ALIGN_FILL);
@@ -925,32 +923,32 @@ new_security_notebook_page (SCM security_hash_key, gnc_commodity *comm, QIFImpor
     gtk_widget_set_vexpand (label, FALSE);
     g_object_set (label, "margin", 0, NULL);
 
-    gtk_grid_attach (GTK_GRID(table), retval->mnemonic_entry, 1, 1, 1, 1);
+    gtk_grid_attach (GTK_GRID(table), comm_nb_page->mnemonic_entry, 1, 1, 1, 1);
 
-    g_signal_connect (retval->mnemonic_entry, "changed",
+    g_signal_connect (comm_nb_page->mnemonic_entry, "changed",
                       G_CALLBACK(gnc_ui_qif_import_comm_changed_cb), wind);
 
     /* Namespace entry */
     store = gtk_list_store_new (1, G_TYPE_STRING);
-    retval->namespace_combo = gtk_combo_box_new_with_model_and_entry (GTK_TREE_MODEL(store));
+    comm_nb_page->namespace_combo = gtk_combo_box_new_with_model_and_entry (GTK_TREE_MODEL(store));
     g_object_unref (store);
 
-    entry = gtk_bin_get_child (GTK_BIN(retval->namespace_combo));
+    entry = gtk_bin_get_child (GTK_BIN(comm_nb_page->namespace_combo));
     gtk_widget_set_events (GTK_WIDGET(entry), GDK_FOCUS_CHANGE_MASK);
     g_signal_connect (G_OBJECT (entry), "changed",
                       G_CALLBACK(gnc_ui_qif_import_comm_namespace_changed_cb), wind);
 
     /* Set the column for the text */
-    gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX(retval->namespace_combo), 0);
+    gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX(comm_nb_page->namespace_combo), 0);
 
-    gnc_cbwe_add_completion (GTK_COMBO_BOX(retval->namespace_combo));
+    gnc_cbwe_add_completion (GTK_COMBO_BOX(comm_nb_page->namespace_combo));
     label = gtk_label_new_with_mnemonic (
                 _("_Exchange or abbreviation type:"));
-    gtk_label_set_mnemonic_widget (GTK_LABEL(label), retval->namespace_combo);
+    gtk_label_set_mnemonic_widget (GTK_LABEL(label), comm_nb_page->namespace_combo);
     gnc_label_set_alignment (label, 0, 0.5);
 
     gtk_widget_set_tooltip_text (label, namespace_tooltip);
-    gtk_widget_set_tooltip_text (retval->namespace_combo, namespace_tooltip);
+    gtk_widget_set_tooltip_text (comm_nb_page->namespace_combo, namespace_tooltip);
 
     gtk_grid_attach (GTK_GRID(table), label, 0, 2, 1, 1);
     gtk_widget_set_halign (label, GTK_ALIGN_FILL);
@@ -959,14 +957,11 @@ new_security_notebook_page (SCM security_hash_key, gnc_commodity *comm, QIFImpor
     gtk_widget_set_vexpand (label, FALSE);
     g_object_set (label, "margin", 0, NULL);
 
-    gtk_grid_attach (GTK_GRID(table), retval->namespace_combo, 1, 2, 1, 1);
-
-    gtk_container_set_border_width (GTK_CONTAINER(page), 12);
-
-    gtk_box_pack_start (GTK_BOX(page), table, FALSE, FALSE, 12);
-
+    gtk_grid_attach (GTK_GRID(table), comm_nb_page->namespace_combo, 1, 2, 1, 1);
+    gtk_container_set_border_width (GTK_CONTAINER(notebook_page), 12);
+    gtk_box_pack_start (GTK_BOX(notebook_page), table, FALSE, FALSE, 12);
     gtk_widget_show_all (GTK_WIDGET(wind->commodity_notebook));
-    return retval;
+    return comm_nb_page;
 }
 
 
@@ -982,16 +977,16 @@ prepare_security_pages (QIFImportWindow * wind)
     SCM   securities;
     SCM   comm_ptr_token;
 
-    GList              * current;
-    gnc_commodity      * commodity;
-    QIFAssistantPage   * new_page;
+    GList               * current;
+    gnc_commodity       * commodity;
+    QIFCommNotebookPage * new_comm_nb_page;
 
     /*
      * Make assistant pages for each new QIF security.
      */
     gnc_set_busy_cursor (NULL, TRUE);
     securities = wind->new_securities;
-    current = wind->commodity_pages;
+    current = wind->commodity_notebook_pages;
     while (!scm_is_null (securities) && (securities != SCM_BOOL_F))
     {
         if (current)
@@ -1012,13 +1007,13 @@ prepare_security_pages (QIFImportWindow * wind)
 #undef FUNC_NAME
 
             /* Build a new security notebook page. */
-            new_page = new_security_notebook_page (SCM_CAR(securities), commodity, wind);
+            new_comm_nb_page = new_security_notebook_page (SCM_CAR(securities), commodity, wind);
 
-            /* Add it to the list of security pages. */
-            wind->commodity_pages = g_list_append (wind->commodity_pages,
-                                                   new_page->page);
+            /* Add it to the list of security notebook pages. */
+            wind->commodity_notebook_pages = g_list_append (wind->commodity_notebook_pages,
+                                                            new_comm_nb_page->notebook_page);
 
-            gtk_widget_show_all (new_page->page);
+            gtk_widget_show_all (new_comm_nb_page->notebook_page);
         }
         wind->num_new_pages = wind->num_new_pages + 1;
         securities = SCM_CDR(securities);
@@ -1037,41 +1032,41 @@ prepare_security_pages (QIFImportWindow * wind)
 static void
 gnc_ui_qif_import_commodity_update (QIFImportWindow * wind)
 {
-    GList              *pageptr;
-    GtkWidget          *gtkpage;
-    QIFAssistantPage   *page;
-    const gchar        *mnemonic = NULL;
-    gchar              *name_space = NULL;
-    const gchar        *fullname = NULL;
-    gnc_commodity      *tab_commodity;
+    GList               *pageptr;
+    GtkWidget           *notebook_page;
+    QIFCommNotebookPage *comm_nb_page;
+    const gchar         *mnemonic = NULL;
+    gchar               *name_space = NULL;
+    const gchar         *fullname = NULL;
+    gnc_commodity       *tab_commodity;
 
-    for (pageptr = wind->commodity_pages; pageptr; pageptr = pageptr->next)
+    for (pageptr = wind->commodity_notebook_pages; pageptr; pageptr = pageptr->next)
     {
-        gtkpage   = pageptr->data;
-        page      = g_object_get_data (G_OBJECT(gtkpage), "page_struct");
+        notebook_page = pageptr->data;
+        comm_nb_page  = g_object_get_data (G_OBJECT(notebook_page), "page_struct");
 
         /* Get any changes from the commodity page. */
-        mnemonic  = gtk_entry_get_text (GTK_ENTRY(page->mnemonic_entry));
-        name_space = gnc_ui_namespace_picker_ns (page->namespace_combo);
-        fullname  = gtk_entry_get_text (GTK_ENTRY(page->name_entry));
+        mnemonic  = gtk_entry_get_text (GTK_ENTRY(comm_nb_page->mnemonic_entry));
+        name_space = gnc_ui_namespace_picker_ns (comm_nb_page->namespace_combo);
+        fullname  = gtk_entry_get_text (GTK_ENTRY(comm_nb_page->name_entry));
 
         /* Update the commodity with the new values. */
-        gnc_commodity_set_namespace (page->commodity, name_space);
-        gnc_commodity_set_fullname (page->commodity, fullname);
-        gnc_commodity_set_mnemonic (page->commodity, mnemonic);
+        gnc_commodity_set_namespace (comm_nb_page->commodity, name_space);
+        gnc_commodity_set_fullname (comm_nb_page->commodity, fullname);
+        gnc_commodity_set_mnemonic (comm_nb_page->commodity, mnemonic);
 
         /* Add the commodity to the commodity table (if it isn't a duplicate). */
-        tab_commodity = gnc_commodity_table_lookup (gnc_get_current_commodities (),
+        tab_commodity = gnc_commodity_table_lookup (gnc_get_current_commodities(),
                         name_space, mnemonic);
-        if (!tab_commodity || tab_commodity == page->commodity)
-            tab_commodity = gnc_commodity_table_insert (gnc_get_current_commodities (),
-                            page->commodity);
+        if (!tab_commodity || tab_commodity == comm_nb_page->commodity)
+            tab_commodity = gnc_commodity_table_insert (gnc_get_current_commodities(),
+                                                        comm_nb_page->commodity);
 
         /* Update the security hash table. */
         scm_hash_set_x (wind->security_hash,
-                       page->hash_key,
-                       SWIG_NewPointerObj (tab_commodity,
-                                           SWIG_TypeQuery ("_p_gnc_commodity"), 0));
+                        comm_nb_page->hash_key,
+                        SWIG_NewPointerObj (tab_commodity,
+                                            SWIG_TypeQuery("_p_gnc_commodity"), 0));
 
         g_free (name_space);
     }
@@ -1277,8 +1272,8 @@ static void
 do_cancel (QIFImportWindow * wind)
 {
     GList                *pageptr;
-    GtkWidget            *gtkpage;
-    QIFAssistantPage     *page;
+    GtkWidget            *notebook_page;
+    QIFCommNotebookPage  *comm_nb_page;
     gnc_commodity_table  *table;
 
     gnc_set_busy_cursor (NULL, TRUE);
@@ -1287,11 +1282,11 @@ do_cancel (QIFImportWindow * wind)
     gnc_ui_qif_import_convert_undo (wind);
 
     /* Remove any commodities created for assistant pages. */
-    for (pageptr = wind->commodity_pages; pageptr; pageptr = pageptr->next)
+    for (pageptr = wind->commodity_notebook_pages; pageptr; pageptr = pageptr->next)
     {
-        gtkpage   = pageptr->data;
-        page      = g_object_get_data (G_OBJECT(gtkpage), "page_struct");
-        gnc_commodity_destroy (page->commodity);
+        notebook_page = pageptr->data;
+        comm_nb_page = g_object_get_data (G_OBJECT(notebook_page), "page_struct");
+        gnc_commodity_destroy (comm_nb_page->commodity);
     }
 
     /* Remove any namespaces created by the user. */
@@ -2631,10 +2626,10 @@ gnc_ui_qif_import_commodity_notebook_update_combos (QIFImportWindow * wind, gboo
 {
     GList               *pageptr;
     GtkWidget           *notebook_page;
-    QIFAssistantPage    *comm_nb_page;
+    QIFCommNotebookPage *comm_nb_page;
     gboolean             pages_complete = TRUE;
 
-    for (pageptr = wind->commodity_pages; pageptr; pageptr = pageptr->next)
+    for (pageptr = wind->commodity_notebook_pages; pageptr; pageptr = pageptr->next)
     {
         const gchar *ns;
 
@@ -2673,10 +2668,10 @@ gnc_ui_qif_import_commodity_all_notebook_pages_complete (QIFImportWindow * wind)
 {
     GList               *pageptr;
     GtkWidget           *notebook_page;
-    QIFAssistantPage    *comm_nb_page;
+    QIFCommNotebookPage *comm_nb_page;
     gboolean             pages_complete = TRUE;
 
-    for (pageptr = wind->commodity_pages; pageptr; pageptr = pageptr->next)
+    for (pageptr = wind->commodity_notebook_pages; pageptr; pageptr = pageptr->next)
     {
         notebook_page = pageptr->data;
         comm_nb_page  = g_object_get_data (G_OBJECT(notebook_page), "page_struct");
@@ -2694,10 +2689,11 @@ gnc_ui_qif_import_commodity_all_notebook_pages_complete (QIFImportWindow * wind)
 void
 gnc_ui_qif_import_commodity_prepare (GtkAssistant *assistant, gpointer user_data)
 {
-    QIFImportWindow * wind = user_data;
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-    gint total = gtk_assistant_get_n_pages (assistant);
+    QIFImportWindow *wind = user_data;
+    gint              num = gtk_assistant_get_current_page (assistant);
+    GtkWidget       *page = gtk_assistant_get_nth_page (assistant, num);
+    gint            total = gtk_assistant_get_n_pages (assistant);
+
     gtk_assistant_update_buttons_state (assistant);
 
     PINFO ("Total Number of Assistant Pages is %d", gtk_assistant_get_n_pages (assistant));
@@ -2736,34 +2732,34 @@ gnc_ui_qif_import_comm_valid (GtkAssistant *assistant, gpointer user_data)
     QIFImportWindow *    wind = user_data;
     gint                  num = gtk_notebook_get_current_page (GTK_NOTEBOOK(wind->commodity_notebook));
     GtkWidget * notebook_page = gtk_notebook_get_nth_page (GTK_NOTEBOOK(wind->commodity_notebook), num);
-    QIFAssistantPage   *qpage = g_object_get_data (G_OBJECT(notebook_page), "page_struct");
+    QIFCommNotebookPage * comm_nb_page = g_object_get_data (G_OBJECT(notebook_page), "page_struct");
 
     QofBook                 *book;
     gnc_commodity_table     *table;
     gnc_commodity_namespace *newns;
 
-    gchar       *name_space = gnc_ui_namespace_picker_ns (qpage->namespace_combo);
-    const gchar *name      = gtk_entry_get_text (GTK_ENTRY(qpage->name_entry));
-    const gchar *mnemonic  = gtk_entry_get_text (GTK_ENTRY(qpage->mnemonic_entry));
+    gchar       *name_space = gnc_ui_namespace_picker_ns (comm_nb_page->namespace_combo);
+    const gchar *name       = gtk_entry_get_text (GTK_ENTRY(comm_nb_page->name_entry));
+    const gchar *mnemonic   = gtk_entry_get_text (GTK_ENTRY(comm_nb_page->mnemonic_entry));
 
     /* set the page complete flag to TRUE to start with */
-    qpage->page_complete = TRUE;
+    comm_nb_page->page_complete = TRUE;
 
     if (!name || (name[0] == 0))
     {
-        qpage->page_complete = FALSE;
+        comm_nb_page->page_complete = FALSE;
         g_free (name_space);
         return FALSE;
     }
     else if (!mnemonic || (mnemonic[0] == 0))
     {
-        qpage->page_complete = FALSE;
+        comm_nb_page->page_complete = FALSE;
         g_free (name_space);
         return FALSE;
     }
     else if (!name_space || (name_space[0] == 0))
     {
-        qpage->page_complete = FALSE;
+        comm_nb_page->page_complete = FALSE;
         if (name_space)
             g_free (name_space);
         return FALSE;
@@ -2783,7 +2779,7 @@ gnc_ui_qif_import_comm_valid (GtkAssistant *assistant, gpointer user_data)
                             _("You must enter an existing national "
                               "currency or enter a different type."));
 
-        qpage->page_complete = FALSE;
+        comm_nb_page->page_complete = FALSE;
         g_free (name_space);
         return FALSE;
     }
