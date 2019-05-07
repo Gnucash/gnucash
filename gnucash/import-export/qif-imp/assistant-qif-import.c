@@ -288,7 +288,6 @@ static void
 update_account_picker_page (QIFImportWindow * wind, SCM make_display,
                             GtkWidget *view, SCM map_info, SCM * display_info)
 {
-
     SCM  get_qif_name = scm_c_eval_string ("qif-map-entry:qif-name");
     SCM  get_gnc_name = scm_c_eval_string ("qif-map-entry:gnc-name");
     SCM  get_new      = scm_c_eval_string ("qif-map-entry:new-acct?");
@@ -339,20 +338,19 @@ update_account_picker_page (QIFImportWindow * wind, SCM make_display,
 
     /* move to the old selected row */
     prev_row = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(store), PREV_ROW));
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(view));
+
     if (prev_row != -1)
-    {
-        selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(view));
         path = gtk_tree_path_new_from_indices (prev_row, -1);
-        gtk_tree_selection_select_path (selection, path);
-        gtk_tree_path_free (path);
-    }
     else
-    {
-        selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(view));
         path = gtk_tree_path_new_from_indices (0, -1);
-        gtk_tree_selection_select_path (selection, path);
-        gtk_tree_path_free (path);
-    }
+
+    gtk_tree_selection_select_path (selection, path);
+
+    /* scroll the tree view so the selection is visable if there are rows */
+    if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL(store), NULL) > 0)
+        gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(view), path, NULL, TRUE, 0.5, 0.0);
+    gtk_tree_path_free (path);
 }
 
 

@@ -202,6 +202,8 @@ build_acct_tree(QIFAccountPickerDialog * picker, QIFImportWindow * import)
         {
             gtk_tree_view_expand_to_path(picker->treeview, path);
             gtk_tree_selection_select_path(selection, path);
+            gtk_tree_view_scroll_to_cell (picker->treeview, path,
+                                          NULL, TRUE, 0.5, 0.0);
             gtk_tree_path_free(path);
         }
         gtk_tree_row_reference_free(reference);
