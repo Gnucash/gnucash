@@ -529,6 +529,14 @@ create_account_picker_view (GtkWidget *widget,
                                 G_TYPE_STRING, G_TYPE_BOOLEAN,
                                 PANGO_TYPE_ELLIPSIZE_MODE);
     gtk_tree_view_set_model (view, GTK_TREE_MODEL(store));
+
+    /* prevent the rows being dragged to a different order */
+    gtk_tree_view_set_reorderable (view, FALSE);
+
+    /* default sort order */
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(store),
+                                          ACCOUNT_COL_QIF_NAME,
+                                          GTK_SORT_ASCENDING);
     g_object_unref (store);
 
     renderer = gtk_cell_renderer_text_new ();
@@ -539,9 +547,12 @@ create_account_picker_view (GtkWidget *widget,
              "ellipsize",
              ACCOUNT_COL_ELLIPSIZE,
              NULL);
-    g_object_set (column, "expand", TRUE, NULL);
-    gtk_tree_view_column_set_resizable (column, TRUE);
+
+    g_object_set (G_OBJECT(column), "expand", TRUE, "reorderable",
+                  TRUE, "resizable", TRUE, NULL);
+
     gtk_tree_view_append_column (view, column);
+    gtk_tree_view_column_set_sort_column_id (column, ACCOUNT_COL_QIF_NAME);
 
     renderer = gtk_cell_renderer_text_new ();
     column = gtk_tree_view_column_new_with_attributes (_("GnuCash account name"),
@@ -552,9 +563,11 @@ create_account_picker_view (GtkWidget *widget,
              ACCOUNT_COL_ELLIPSIZE,
              NULL);
 
-    g_object_set (column, "expand", TRUE, NULL);
-    gtk_tree_view_column_set_resizable (column, TRUE);
+    g_object_set (G_OBJECT(column), "expand", TRUE, "reorderable",
+                  TRUE, "resizable", TRUE, NULL);
+
     gtk_tree_view_append_column (view, column);
+    gtk_tree_view_column_set_sort_column_id (column, ACCOUNT_COL_GNC_NAME);
 
     renderer = gtk_cell_renderer_toggle_new ();
     g_object_set(renderer, "activatable", FALSE, NULL);
