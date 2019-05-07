@@ -1252,7 +1252,7 @@ Click "Next" to review the possible matches.</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
-            <property name="spacing">2</property>
+            <property name="spacing">6</property>
             <child>
               <object class="GtkFrame" id="frame45">
                 <property name="visible">True</property>

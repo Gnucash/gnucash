@@ -90,12 +90,18 @@ enum account_cols
     NUM_ACCOUNT_COLS
 };
 
+/* to simplify sorting and hence use the default sort function
+ * we store the date as an int64 and convert the gnc_numeric
+ * to a double which can be stored in the liststore.
+ */
 enum qif_trans_cols
 {
     QIF_TRANS_COL_INDEX = 0,
     QIF_TRANS_COL_DATE,
+    QIF_TRANS_COL_DATE_INT64, // used only for sorting
     QIF_TRANS_COL_DESCRIPTION,
     QIF_TRANS_COL_AMOUNT,
+    QIF_TRANS_COL_AMOUNT_DOUBLE, // used only for sorting
     QIF_TRANS_COL_CHECKED,
     NUM_QIF_TRANS_COLS
 };
@@ -1141,6 +1147,7 @@ refresh_old_transactions (QIFImportWindow * wind, int selection)
 
         while (!scm_is_null (possible_matches))
         {
+            gdouble amount_gd = 0;
             char datebuff [MAX_DATE_LENGTH + 1];
             memset (datebuff, 0, sizeof (datebuff));
             current_xtn = SCM_CAR(possible_matches);
@@ -1161,6 +1168,7 @@ refresh_old_transactions (QIFImportWindow * wind, int selection)
                     xaccPrintAmount (gnc_numeric_abs (xaccSplitGetValue (gnc_split)),
                                      gnc_account_print_info
                                      (xaccSplitGetAccount (gnc_split), TRUE));
+                amount_gd = gnc_numeric_to_double (xaccSplitGetValue(gnc_split));
             }
 
             gtk_list_store_append (store, &iter);
@@ -1170,8 +1178,10 @@ refresh_old_transactions (QIFImportWindow * wind, int selection)
             (store, &iter,
              QIF_TRANS_COL_INDEX, rownum++,
              QIF_TRANS_COL_DATE, datebuff,
+             QIF_TRANS_COL_DATE_INT64, xaccTransRetDatePosted(gnc_xtn), // used for sorting
              QIF_TRANS_COL_DESCRIPTION, xaccTransGetDescription (gnc_xtn),
              QIF_TRANS_COL_AMOUNT, amount_str,
+             QIF_TRANS_COL_AMOUNT_DOUBLE, amount_gd, // used for sorting
              QIF_TRANS_COL_CHECKED, selected != SCM_BOOL_F,
              -1);
 
@@ -3214,6 +3224,7 @@ gnc_ui_qif_import_duplicates_match_prepare (GtkAssistant *assistant,
         duplicates = wind->match_transactions;
         while (!scm_is_null (duplicates))
         {
+            gdouble amount_gd = 0;
             time64 send_time = 0;
             char datebuff [MAX_DATE_LENGTH + 1];
             memset (datebuff, 0, sizeof (datebuff));
@@ -3231,6 +3242,7 @@ gnc_ui_qif_import_duplicates_match_prepare (GtkAssistant *assistant,
                     xaccPrintAmount (gnc_numeric_abs (xaccSplitGetValue (gnc_split)),
                                      gnc_account_print_info
                                      (xaccSplitGetAccount (gnc_split), TRUE));
+                amount_gd = gnc_numeric_to_double (xaccSplitGetValue(gnc_split));
             }
             gtk_list_store_append (store, &iter);
             send_time = xaccTransRetDatePosted (gnc_xtn);
@@ -3238,10 +3250,11 @@ gnc_ui_qif_import_duplicates_match_prepare (GtkAssistant *assistant,
             gtk_list_store_set
             (store, &iter,
              QIF_TRANS_COL_INDEX, rownum++,
-             QIF_TRANS_COL_DATE,
-             datebuff,
+             QIF_TRANS_COL_DATE, datebuff,
+             QIF_TRANS_COL_DATE_INT64, send_time, // used for sorting
              QIF_TRANS_COL_DESCRIPTION, xaccTransGetDescription (gnc_xtn),
              QIF_TRANS_COL_AMOUNT, amount_str,
+             QIF_TRANS_COL_AMOUNT_DOUBLE, amount_gd, // used for sorting
              -1);
 
             duplicates = SCM_CDR(duplicates);
@@ -3591,10 +3604,18 @@ build_views (QIFImportWindow *wind)
 
     /* Set up the new transaction view */
     view = GTK_TREE_VIEW(wind->new_transaction_view);
-    store = gtk_list_store_new (NUM_QIF_TRANS_COLS, G_TYPE_INT, G_TYPE_STRING,
-                                G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
+    store = gtk_list_store_new (NUM_QIF_TRANS_COLS, G_TYPE_INT, G_TYPE_STRING, G_TYPE_INT64,
+                                G_TYPE_STRING, G_TYPE_STRING, G_TYPE_DOUBLE, G_TYPE_BOOLEAN);
     gtk_tree_view_set_model (view, GTK_TREE_MODEL(store));
+
+    /* default sort order */
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(store),
+                                          QIF_TRANS_COL_DATE_INT64,
+                                          GTK_SORT_ASCENDING);
     g_object_unref (store);
+
+    /* prevent the rows being dragged to a different order */
+    gtk_tree_view_set_reorderable (view, FALSE);
 
     renderer = gtk_cell_renderer_text_new ();
     column = gtk_tree_view_column_new_with_attributes (_("Date"),
@@ -3602,7 +3623,9 @@ build_views (QIFImportWindow *wind)
              "text",
              QIF_TRANS_COL_DATE,
              NULL);
+    g_object_set (G_OBJECT(column), "reorderable", TRUE, "resizable", TRUE, NULL);
     gtk_tree_view_append_column (view, column);
+    gtk_tree_view_column_set_sort_column_id (column, QIF_TRANS_COL_DATE_INT64);
 
     renderer = gtk_cell_renderer_text_new ();
     column = gtk_tree_view_column_new_with_attributes (_("Description"),
@@ -3610,8 +3633,10 @@ build_views (QIFImportWindow *wind)
              "text",
              QIF_TRANS_COL_DESCRIPTION,
              NULL);
+    g_object_set (G_OBJECT(column), "reorderable", TRUE, "resizable", TRUE, NULL);
     gtk_tree_view_append_column (view, column);
     gtk_tree_view_column_set_expand(column, TRUE);
+    gtk_tree_view_column_set_sort_column_id (column, QIF_TRANS_COL_DESCRIPTION);
 
     renderer = gtk_cell_renderer_text_new ();
     column = gtk_tree_view_column_new_with_attributes (_("Amount"),
@@ -3619,7 +3644,9 @@ build_views (QIFImportWindow *wind)
              "text",
              QIF_TRANS_COL_AMOUNT,
              NULL);
+    g_object_set (G_OBJECT(column), "reorderable", TRUE, "resizable", TRUE, NULL);
     gtk_tree_view_append_column (view, column);
+    gtk_tree_view_column_set_sort_column_id (column, QIF_TRANS_COL_AMOUNT_DOUBLE);
 
     selection = gtk_tree_view_get_selection (view);
     g_signal_connect (selection, "changed",
@@ -3628,10 +3655,18 @@ build_views (QIFImportWindow *wind)
 
     /* Set up the old transaction view */
     view = GTK_TREE_VIEW(wind->old_transaction_view);
-    store = gtk_list_store_new (NUM_QIF_TRANS_COLS, G_TYPE_INT, G_TYPE_STRING,
-                                G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
+    store = gtk_list_store_new (NUM_QIF_TRANS_COLS, G_TYPE_INT, G_TYPE_STRING, G_TYPE_INT64,
+                                G_TYPE_STRING, G_TYPE_STRING, G_TYPE_DOUBLE, G_TYPE_BOOLEAN);
     gtk_tree_view_set_model (view, GTK_TREE_MODEL(store));
+
+    /* default sort order */
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(store),
+                                          QIF_TRANS_COL_DATE_INT64,
+                                          GTK_SORT_ASCENDING);
     g_object_unref (store);
+
+    /* prevent the rows being dragged to a different order */
+    gtk_tree_view_set_reorderable (view, FALSE);
 
     renderer = gtk_cell_renderer_text_new ();
     column = gtk_tree_view_column_new_with_attributes (_("Date"),
@@ -3639,7 +3674,9 @@ build_views (QIFImportWindow *wind)
              "text",
              QIF_TRANS_COL_DATE,
              NULL);
+    g_object_set (G_OBJECT(column), "reorderable", TRUE, "resizable", TRUE, NULL);
     gtk_tree_view_append_column (view, column);
+    gtk_tree_view_column_set_sort_column_id (column, QIF_TRANS_COL_DATE_INT64);
 
     renderer = gtk_cell_renderer_text_new ();
     column = gtk_tree_view_column_new_with_attributes (_("Description"),
@@ -3647,8 +3684,10 @@ build_views (QIFImportWindow *wind)
              "text",
              QIF_TRANS_COL_DESCRIPTION,
              NULL);
+    g_object_set (G_OBJECT(column), "reorderable", TRUE, "resizable", TRUE, NULL);
     gtk_tree_view_append_column (view, column);
     gtk_tree_view_column_set_expand (column, TRUE);
+    gtk_tree_view_column_set_sort_column_id (column, QIF_TRANS_COL_DESCRIPTION);
 
     renderer = gtk_cell_renderer_text_new ();
     column = gtk_tree_view_column_new_with_attributes (_("Amount"),
@@ -3656,7 +3695,9 @@ build_views (QIFImportWindow *wind)
              "text",
              QIF_TRANS_COL_AMOUNT,
              NULL);
+    g_object_set (G_OBJECT(column), "reorderable", TRUE, "resizable", TRUE, NULL);
     gtk_tree_view_append_column (view, column);
+    gtk_tree_view_column_set_sort_column_id (column, QIF_TRANS_COL_AMOUNT_DOUBLE);
 
     renderer = gtk_cell_renderer_toggle_new ();
     column = gtk_tree_view_column_new_with_attributes (_("Match?"),
