@@ -40,12 +40,16 @@
 
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
+#include "gnc-prefs.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
 
 #define STATE_SECTION "dialogs/import/generic_matcher/account_matcher"
+
+#define GNC_PREFS_GROUP "dialogs.import.generic.account-picker"
+
 
 /*-******************************************************************\
  * Functions needed by gnc_import_select_account
@@ -314,6 +318,9 @@ Account * gnc_import_select_account(GtkWidget *parent,
             gtk_window_set_transient_for (GTK_WINDOW (picker->dialog),
                                           GTK_WINDOW (parent));
 
+        gnc_restore_window_size (GNC_PREFS_GROUP,
+                                 GTK_WINDOW(picker->dialog), GTK_WINDOW (parent));
+
         /* Pack the content into the dialog vbox */
         pbox = GTK_WIDGET(gtk_builder_get_object (builder, "account_picker_vbox"));
         box = GTK_WIDGET(gtk_builder_get_object (builder, "account_picker_content"));
@@ -397,6 +404,7 @@ Account * gnc_import_select_account(GtkWidget *parent,
         while (response == GNC_RESPONSE_NEW);
 
         g_object_unref(G_OBJECT(builder));
+        gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(picker->dialog));
         gtk_widget_destroy(picker->dialog);
     }
     else

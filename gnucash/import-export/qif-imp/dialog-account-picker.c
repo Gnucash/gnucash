@@ -33,10 +33,13 @@
 #include "dialog-utils.h"
 #include "assistant-qif-import.h"
 #include "gnc-gui-query.h"
+#include "gnc-prefs.h"
 #include "gnc-ui-util.h"
 #include "guile-mappings.h"
 #include "gnc-guile-utils.h"
 #include "gnc-ui.h" /* for GNC_RESPONSE_NEW */
+
+#define GNC_PREFS_GROUP   "dialogs.import.qif.account-picker"
 
 enum account_cols
 {
@@ -396,6 +399,9 @@ qif_account_picker_dialog(GtkWindow *parent, QIFImportWindow * qif_wind, SCM map
                            G_CALLBACK(gnc_ui_qif_account_picker_map_cb),
                            wind);
 
+    gnc_restore_window_size (GNC_PREFS_GROUP,
+                             GTK_WINDOW(wind->dialog), parent);
+
     /* this is to get the checkmarks set up right.. it will get called
      * again after the window is mapped. */
     build_acct_tree(wind, wind->qif_wind);
@@ -405,6 +411,7 @@ qif_account_picker_dialog(GtkWindow *parent, QIFImportWindow * qif_wind, SCM map
         response = gtk_dialog_run(GTK_DIALOG(wind->dialog));
     }
     while (response == GNC_RESPONSE_NEW);
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(wind->dialog));
     gtk_widget_destroy(wind->dialog);
     g_object_unref(G_OBJECT(builder));
 
