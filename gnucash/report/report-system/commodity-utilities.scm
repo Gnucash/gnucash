@@ -698,10 +698,11 @@ construct with gnc:make-gnc-monetary and gnc:monetary->string instead.")
              (gnc:exchange-if-same foreign domestic)
              (let* ((foreign-comm (gnc:gnc-monetary-commodity foreign))
                     (pair (assoc foreign-comm exchange-alist)))
-               (and pair
-                    (gnc:make-gnc-monetary
-                     domestic
-                     (* (gnc:gnc-monetary-amount foreign) (cadr pair)))))))))
+               (gnc:make-gnc-monetary
+                domestic
+                (if pair
+                    (* (gnc:gnc-monetary-amount foreign) (cadr pair))
+                    0)))))))
 
 ;; Helper for the gnc:exchange-by-pricalist* below. Exchange the
 ;; <gnc:monetary> 'foreign' into the <gnc:commodity*> 'domestic' by
