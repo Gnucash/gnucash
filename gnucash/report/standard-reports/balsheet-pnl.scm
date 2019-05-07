@@ -888,11 +888,9 @@ also show overall period profit & loss."))
                        (split-date (compose xaccTransGetDate xaccSplitGetParent))
                        (date (list-ref report-dates col-idx))
                        (valid-split? (lambda (s) (< (split-date s) date)))
-                       (valid-splits (filter valid-split? splits))
-                       (split (and (pair? valid-splits)
-                                   (last valid-splits))))
-                  (and split
-                       (gnc:split-anchor-text split)))))
+                       (valid-splits (filter valid-split? splits)))
+                  (and (pair? valid-splits)
+                       (gnc:split-anchor-text (last valid-splits))))))
              (asset-liability-balances
               (apply map gnc:monetaries-add
                      (map cdr (filter
