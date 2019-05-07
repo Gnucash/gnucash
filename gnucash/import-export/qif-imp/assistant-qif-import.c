@@ -237,6 +237,7 @@ void gnc_ui_qif_import_date_valid_cb (GtkWidget *widget, gpointer user_data);
 
 void gnc_ui_qif_import_account_prepare (GtkAssistant *assistant, gpointer user_data);
 void gnc_ui_qif_import_acct_valid_cb (GtkWidget *widget, gpointer user_data);
+void gnc_ui_qif_import_acct_enter_cb (GtkWidget * widget, gpointer user_data);
 
 void gnc_ui_qif_import_loaded_files_prepare (GtkAssistant *assistant, gpointer user_data);
 void gnc_ui_qif_import_load_another_cb (GtkButton *button, gpointer user_data);
@@ -2135,9 +2136,40 @@ gnc_ui_qif_import_account_prepare (GtkAssistant  *assistant, gpointer user_data)
 
 
 /********************************************************************
+ * gnc_ui_qif_import_acct_enter_cb
+ *
+ * Invoked when the "enter" button is clicked on the acct entry.
+ ********************************************************************/
+void
+gnc_ui_qif_import_acct_enter_cb (GtkWidget * widget,
+                                 gpointer user_data)
+{
+    QIFImportWindow * wind = user_data;
+
+    GtkAssistant *assistant = GTK_ASSISTANT(wind->window);
+    gint num = gtk_assistant_get_current_page (assistant);
+    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
+
+    const gchar * acct_name = gtk_entry_get_text (GTK_ENTRY(wind->acct_entry));
+
+    if (!acct_name || acct_name[0] == 0)
+    {
+        /* Disable the assistant "Next" Button */
+        gtk_assistant_set_page_complete (assistant, page, FALSE);
+    }
+    else
+    {
+        /* Enable the assistant "Next" Button and proceed */
+        gtk_assistant_set_page_complete (assistant, page, TRUE);
+        gtk_assistant_set_current_page (assistant, num + 1);
+    }
+}
+
+
+/********************************************************************
  * gnc_ui_qif_import_acct_valid_cb
  *
- * Invoked when the "next" button is clicked on the default acct page.
+ * Change signal for the acct entry to enable "Next" button.
  ********************************************************************/
 void
 gnc_ui_qif_import_acct_valid_cb (GtkWidget * widget,

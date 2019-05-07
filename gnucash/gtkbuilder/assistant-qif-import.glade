@@ -381,6 +381,7 @@ Please enter a name for the account. If the file was exported from another accou
                 <property name="primary_icon_activatable">False</property>
                 <property name="secondary_icon_activatable">False</property>
                 <signal name="changed" handler="gnc_ui_qif_import_acct_valid_cb" swapped="no"/>
+                <signal name="activate" handler="gnc_ui_qif_import_acct_enter_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
