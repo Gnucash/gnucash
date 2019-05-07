@@ -271,13 +271,10 @@ gcrp_show_popup (GncCellRendererPopup *cell,
 		 gint                 y2)
 {
 #if GTK_CHECK_VERSION(3,22,0)
-        GdkMonitor *mon;
-#else
-        GdkScreen *screen;
-        int monitor_num;
-#endif
         GdkWindow *win;
+        GdkMonitor *mon;
         GdkRectangle monitor_size;
+#endif
 	GtkAllocation alloc;
 	gint          x, y;
 	gint          screen_height, screen_width;
@@ -300,19 +297,18 @@ gcrp_show_popup (GncCellRendererPopup *cell,
 
 	button_height = y2 - y1;
 
-        win = gtk_widget_get_window (cell->popup_window);
 #if GTK_CHECK_VERSION(3,22,0)
-        mon = gdk_display_get_monitor_at_window (gtk_widget_get_display (cell->popup_window), win);
+        win = gdk_screen_get_root_window (gtk_window_get_screen (GTK_WINDOW (cell->popup_window)));
+        mon = gdk_display_get_monitor_at_window (gtk_widget_get_display (GTK_WIDGET(cell->popup_window)), win);
         gdk_monitor_get_geometry (mon, &monitor_size);
 
-#else
-        screen = gtk_window_get_screen (cell->popup_window);
-        monitor_num = gdk_screen_get_monitor_at_window (screen, win);
-        gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor_size);
-#endif
         screen_width = monitor_size.width;
         screen_height = monitor_size.height - y;
-
+#else
+        screen_width = gdk_screen_width();
+        screen_height = gdk_screen_height() - y;
+#endif
+	
 	/* Check if it fits in the available height. */
 	if (alloc.height > screen_height) {
 		/* It doesn't fit, so we see if we have the minimum space needed. */
