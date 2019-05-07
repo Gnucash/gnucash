@@ -1352,6 +1352,7 @@ gnc_ui_qif_import_cancel_cb (GtkAssistant *gtkassistant, gpointer user_data)
     gint currentpage = gtk_assistant_get_current_page (gtkassistant);
     GtkWidget *mypage = gtk_assistant_get_nth_page (gtkassistant, currentpage);
     const char *pagename = gtk_buildable_get_name (GTK_BUILDABLE(mypage));
+    const char *fmt = _("Are you sure you want to cancel?");
 
     if (!g_strcmp0 (pagename, "summary_page"))
     {
@@ -1359,16 +1360,22 @@ gnc_ui_qif_import_cancel_cb (GtkAssistant *gtkassistant, gpointer user_data)
            invoke a cancel action. The import has finised at that point. */
         gnc_ui_qif_import_close_cb (gtkassistant, user_data);
     }
-    else if (wind->busy)
-    {
-        /* Cancel any long-running Scheme operation. */
-        scm_c_eval_string ("(qif-import:cancel)");
-
-        /* Wait for the busy flag to be lowered. */
-        g_timeout_add (200, cancel_timeout_cb, user_data);
-    }
     else
-        do_cancel (wind);
+    {
+        if (!gnc_verify_dialog (GTK_WINDOW(gtkassistant), FALSE, "%s", fmt))
+            return;
+
+        if (wind->busy)
+        {
+            /* Cancel any long-running Scheme operation. */
+            scm_c_eval_string ("(qif-import:cancel)");
+
+            /* Wait for the busy flag to be lowered. */
+            g_timeout_add (200, cancel_timeout_cb, user_data);
+        }
+        else
+            do_cancel (wind);
+    }
 }
 
 
