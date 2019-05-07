@@ -9,7 +9,7 @@ from gi.repository import Gtk
 import os
 import gettext
 # install gettext for _-function, needs localepath
-gettext.install("gnucash",
+gettext.install(_sw_core_utils.GETTEXT_PACKAGE,
         _sw_core_utils.gnc_path_get_localedir())
 sys.path.append(os.path.dirname(__file__))
 # output extra debug information if gnucash has been started with
