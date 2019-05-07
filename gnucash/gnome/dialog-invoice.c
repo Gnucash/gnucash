@@ -1932,7 +1932,7 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
         /* Setup viewer for read-only access */
         gtk_widget_set_sensitive (acct_entry, FALSE);
         gtk_widget_set_sensitive (iw->id_entry, FALSE);
-        gtk_widget_set_selectable (iw->id_entry, TRUE);
+        gtk_widget_set_sensitive (iw->id_entry, TRUE);
         gtk_widget_set_sensitive (iw->terms_menu, FALSE);
         gtk_widget_set_sensitive (iw->owner_box, FALSE);
         gtk_widget_set_sensitive (iw->job_box, FALSE);
