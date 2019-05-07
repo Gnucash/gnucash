@@ -2101,6 +2101,7 @@ gnc_ui_qif_import_account_prepare (GtkAssistant  *assistant, gpointer user_data)
     gint num = gtk_assistant_get_current_page (assistant);
 
     SCM  check_from_acct = scm_c_eval_string ("qif-file:check-from-acct");
+
     if (wind->ask_date_format && wind->date_format)
         qif_import_reparse_dates (wind);
    /* Determine the next page to display. */
@@ -2251,11 +2252,18 @@ update_file_page (QIFImportWindow * wind)
     GtkTreePath *path;
     GtkTreeRowReference *reference = NULL;
 
+    GtkAssistant *assistant = GTK_ASSISTANT(wind->window);
+    gint num = gtk_assistant_get_current_page (assistant);
+    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
+    gint num_of_files = 0;
+
     /* clear the list */
     view = GTK_TREE_VIEW(wind->selected_file_view);
     store = GTK_LIST_STORE(gtk_tree_view_get_model (view));
     gtk_list_store_clear (store);
     qif_file_path = scm_c_eval_string ("qif-file:path");
+
+    gtk_assistant_set_page_complete (assistant, page, FALSE);
 
     while (!scm_is_null (loaded_file_list))
     {
@@ -2292,6 +2300,12 @@ update_file_page (QIFImportWindow * wind)
         }
         gtk_tree_row_reference_free (reference);
     }
+
+    /* get the number of files in the list */
+    num_of_files = gtk_tree_model_iter_n_children (GTK_TREE_MODEL(store), NULL);
+
+    if (num_of_files > 0)
+        gtk_assistant_set_page_complete (assistant, page, TRUE);
 }
 
 
