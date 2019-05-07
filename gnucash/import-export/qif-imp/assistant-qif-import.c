@@ -1110,7 +1110,8 @@ gnc_ui_qif_import_convert_undo (QIFImportWindow * wind)
     gnc_set_busy_cursor (NULL, TRUE);
 
     /* Undo the conversion. */
-    gfec_apply (undo, wind->imported_account_tree, _gfec_error_handler);
+    if (wind->imported_account_tree != SCM_BOOL_F)
+        gfec_apply (undo, wind->imported_account_tree, _gfec_error_handler);
 
     /* There's no imported account tree any more. */
     scm_gc_unprotect_object (wind->imported_account_tree);
