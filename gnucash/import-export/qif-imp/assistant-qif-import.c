@@ -2104,21 +2104,32 @@ gnc_ui_qif_import_account_prepare (GtkAssistant  *assistant, gpointer user_data)
 
     if (wind->ask_date_format && wind->date_format)
         qif_import_reparse_dates (wind);
-   /* Determine the next page to display. */
-    if (scm_call_1 (check_from_acct, wind->selected_file) != SCM_BOOL_T)
-    {
-        /* There is an account name missing. Ask the user to provide one. */
-        SCM default_acct = scm_c_eval_string ("qif-file:path-to-accountname");
-        gchar * default_acctname = NULL;
 
-        default_acctname = gnc_scm_call_1_to_string (default_acct, wind->selected_file);
-        gtk_entry_set_text (GTK_ENTRY(wind->acct_entry), default_acctname);
-        g_free (default_acctname);
+    /* make sure there is a file selected, may of come back */
+    if (wind->selected_file == SCM_BOOL_F)
+    {
+        GtkAssistant *assistant = GTK_ASSISTANT(wind->window);
+        gtk_entry_set_text (GTK_ENTRY(wind->filename_entry), "");
+        gtk_assistant_set_current_page (assistant, 1);
     }
     else
     {
-        /* Skip ahead to the "loaded files" page. */
-        gtk_assistant_set_current_page (assistant, num + 1);
+        /* Determine the next page to display. */
+        if (scm_call_1 (check_from_acct, wind->selected_file) != SCM_BOOL_T)
+        {
+            /* There is an account name missing. Ask the user to provide one. */
+            SCM default_acct = scm_c_eval_string ("qif-file:path-to-accountname");
+            gchar * default_acctname = NULL;
+
+            default_acctname = gnc_scm_call_1_to_string (default_acct, wind->selected_file);
+            gtk_entry_set_text (GTK_ENTRY(wind->acct_entry), default_acctname);
+            g_free (default_acctname);
+        }
+        else
+        {
+            /* Skip ahead to the "loaded files" page. */
+            gtk_assistant_set_current_page (assistant, num + 1);
+        }
     }
 }
 
