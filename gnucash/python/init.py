@@ -9,6 +9,9 @@ from gi.repository import Gtk
 import os
 import gettext
 # install gettext for _-function, needs localepath
+# ToDo: this replicates gettext init in gnucash-bin.c
+# - try to access that instead
+# - if that's not possible mimic the whole init process
 gettext.install(_sw_core_utils.GETTEXT_PACKAGE,
         _sw_core_utils.gnc_path_get_localedir())
 sys.path.append(os.path.dirname(__file__))
