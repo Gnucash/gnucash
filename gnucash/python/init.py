@@ -32,7 +32,7 @@ import pycons.console as cons
 signal.signal(signal.SIGTTOU, old_sigttou)
 
 if noisy:
-    print("Hello from python!")
+    print(_("Hello from python!"))
     print("test", sys.modules.keys())
     print("test2", dir(_sw_app_utils))
 
