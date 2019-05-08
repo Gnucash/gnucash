@@ -99,7 +99,7 @@ class Console (cons.Console):
     def quit (self):
         """ quit """
 
-        self.write(_("\nHave a nice day !\n"))
+        self.write("\n"+_("Have a nice day!")+"\n")
         return super(Console, self).quit()
 
 
