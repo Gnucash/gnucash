@@ -113,6 +113,7 @@ if False:
     else:
         shelltypeName = "IPython"
     banner_style = 'title'
+    # TRANSLATORS: %s is either Python or IPython
     banner = _("Welcome to GnuCash %s Shell") % shelltypeName
     console = Console(argv = [], shelltype = shelltype, banner = [[banner, banner_style]], size = 100)
 
