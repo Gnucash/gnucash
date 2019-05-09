@@ -21010,7 +21010,7 @@ msgstr "Buchungsdatum fehlt."
 
 #: gnucash/python/init.py:35
 msgid "Hello from python!"
-msgstr ""
+msgstr "Hallo von Python!"
 
 #: gnucash/python/init.py:102
 #: gnucash/report/utility-reports/hello-world.scm:479
@@ -21019,9 +21019,8 @@ msgstr "Einen schönen Tag noch."
 
 #. TRANSLATORS: %s is either Python or IPython
 #: gnucash/python/init.py:117
-#, fuzzy, python-format
 msgid "Welcome to GnuCash %s Shell"
-msgstr "Willkommen bei GnuCash ~a"
+msgstr "Willkommen zur GnuCash %s Shell"
 
 #. XXX: change this based on the ledger type
 #: gnucash/register/ledger-core/gncEntryLedger.c:250
