@@ -48,16 +48,21 @@ from gnucash.gnucash_core_c import gncInvoiceLookup, gncInvoiceGetInvoiceFromTxn
     gnc_numeric_to_string
 
 if _sw_core_utils.HAVE_GETTEXT:
-    import gettext
-    # install gettext for _-function, needs path to locales
-    # ToDo: this replicates gettext init in gnucash-bin.c
-    # - is it possible to get direct access ?
-    # - if that's not possible mimic the whole init process.
-    #   That should be the case now, as win32 seems irrelevant
-    #   here as the python parts only work on linux
-    _localedir = _sw_core_utils.gnc_path_get_localedir()
-    _translation = gettext.translation(_sw_core_utils.GETTEXT_PACKAGE, _localedir)
-    _ = _translation.gettext
+    try:
+        import gettext
+        # install gettext for _-function, needs path to locales
+        # ToDo: this replicates gettext init in gnucash-bin.c
+        # - is it possible to get direct access ?
+        # - if that's not possible mimic the whole init process.
+        #   That should be the case now, as win32 seems irrelevant
+        #   here as the python parts only work on linux
+        _localedir = _sw_core_utils.gnc_path_get_localedir()
+        _translation = gettext.translation(_sw_core_utils.GETTEXT_PACKAGE, _localedir)
+        _ = _translation.gettext
+    except:
+        print("Problem loading gettext")
+        print("localedir: ", _localedir)
+        print("translation: ", _translation)
 else: # no gettext
     def _(s):
         """Null translator function, gettext not available"""
