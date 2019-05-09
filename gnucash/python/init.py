@@ -7,6 +7,7 @@ from gi import require_version
 require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import os
+
 if _sw_core_utils.HAVE_GETTEXT:
     import gettext
     # install gettext for _-function, needs localepath
@@ -17,6 +18,7 @@ if _sw_core_utils.HAVE_GETTEXT:
             _sw_core_utils.gnc_path_get_localedir())
 else:
     def _(s): return s
+
 sys.path.append(os.path.dirname(__file__))
 # output extra debug information if gnucash has been started with
 # gnucash --debug --extra
