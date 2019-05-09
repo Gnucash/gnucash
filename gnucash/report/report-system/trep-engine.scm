@@ -1384,6 +1384,9 @@ be excluded from periodic reporting.")
                                (case level
                                  ((primary) optname-prime-sortkey)
                                  ((secondary) optname-sec-sortkey))))
+             (renderer-fn (keylist-get-info
+                           (sortkey-list BOOK-SPLIT-ACTION)
+                           sortkey 'renderer-fn))
              (left-indent (case level
                             ((primary total) 0)
                             ((secondary) primary-indent)))
@@ -1407,12 +1410,11 @@ be excluded from periodic reporting.")
                       (gnc:make-html-table-cell/size
                        1 (+ right-indent width-left-columns) data)))
                  (map (lambda (cell)
-                        (gnc:make-html-text
-                         (gnc:html-markup-b
-                          ((vector-ref cell 5)
-                           ((keylist-get-info (sortkey-list BOOK-SPLIT-ACTION)
-                                              sortkey 'renderer-fn)
-                            split)))))
+                        (let ((friendly-fn (vector-ref cell 5)))
+                          (and friendly-fn
+                               (gnc:make-html-text
+                                (gnc:html-markup-b
+                                 (friendly-fn (renderer-fn split)))))))
                       calculated-cells))
                 (list
                  (gnc:make-html-table-cell/size
