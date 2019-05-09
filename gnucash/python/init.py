@@ -7,15 +7,16 @@ from gi import require_version
 require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import os
-import gettext
-# install gettext for _-function, needs localepath
-# ToDo: this replicates gettext init in gnucash-bin.c
-# - try to access that instead
-# - if that's not possible mimic the whole init process
-# - check HAVE_GETTEXT, if false implement _-function to
-#   just return the string
-gettext.install(_sw_core_utils.GETTEXT_PACKAGE,
-        _sw_core_utils.gnc_path_get_localedir())
+if _sw_core_utils.HAVE_GETTEXT:
+    import gettext
+    # install gettext for _-function, needs localepath
+    # ToDo: this replicates gettext init in gnucash-bin.c
+    # - try to access that instead
+    # - if that's not possible mimic the whole init process
+    gettext.install(_sw_core_utils.GETTEXT_PACKAGE,
+            _sw_core_utils.gnc_path_get_localedir())
+else:
+    def _(s): return s
 sys.path.append(os.path.dirname(__file__))
 # output extra debug information if gnucash has been started with
 # gnucash --debug --extra
