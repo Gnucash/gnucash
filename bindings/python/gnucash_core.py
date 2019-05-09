@@ -61,9 +61,15 @@ if _sw_core_utils.HAVE_GETTEXT:
         _ = _translation.gettext
     except:
         print("Problem loading gettext")
-        print("localedir: ", _localedir)
-        print("translation: ", _translation)
+        import traceback
+        import sys
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        traceback.print_exception(exc_type, exc_value, exc_traceback,
+                                              limit=2, file=sys.stdout)
+        _ = None
 else: # no gettext
+    _ = None
+if not _:
     def _(s):
         """Null translator function, gettext not available"""
         return s
