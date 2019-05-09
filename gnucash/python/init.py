@@ -29,7 +29,8 @@ sys.path.append(os.path.dirname(__file__))
 # gnucash --debug --extra
 noisy = gnc_prefs_is_extra_enabled()
 if noisy:
-    print("woop", os.path.dirname(__file__))
+    print(_("Hello from python!"))
+    print(_("Python file: %s") % (__file__))
 # Importing the console class causes SIGTTOU to be thrown if GnuCash is
 # started in the background.  This causes a hang if it is not handled, 
 # so ignore it for the duration
@@ -42,14 +43,13 @@ import pycons.console as cons
 signal.signal(signal.SIGTTOU, old_sigttou)
 
 if noisy:
-    print(_("Hello from python!"))
-    print("test", sys.modules.keys())
-    print("test2", dir(_sw_app_utils))
+    print("sys.modules.keys(): ", sys.modules.keys())
+    print("dir(_sw_app_utils): ", dir(_sw_app_utils))
 
    #root = _sw_app_utils.gnc_get_current_root_account()
 
    #print("test", dir(root), root.__class__)
-    print("test3", dir(gnucash_core_c))
+    print("dir(gnucash_core_c): ", dir(gnucash_core_c))
 
    #acct = Account(instance = root)
 
