@@ -318,24 +318,24 @@ class GncNumeric(GnuCashCoreClass):
             elif isinstance(arg, str):
                 instance = gnc_numeric_zero()
                 if not string_to_gnc_numeric(arg, instance):
-                    raise TypeError('Failed to convert to GncNumeric: ' + str(args))
+                    raise TypeError(_('Failed to convert to GncNumeric: %s') % str(args))
                 return instance
             else:
-                raise TypeError('Only single int/float/str allowed: ' + str(args))
+                raise TypeError(_('Only single int/float/str allowed: %s') % str(args))
         elif len(args) == 2:
             if isinstance(args[0], int) and isinstance(args[1], int):
                 return gnc_numeric_create(*args)
             else:
-                raise TypeError('Only two ints allowed: ' + str(args))
+                raise TypeError(_('Only two ints allowed: %s') % str(args))
         elif len(args) == 3:
             if isinstance(args[0], float) \
                 and isinstance(args[1], int) \
                 and type(args[2]) == type(GNC_HOW_DENOM_FIXED):
                 return double_to_gnc_numeric(*args)
             else:
-                raise TypeError('Only (float, int, GNC_HOW_RND_*) allowed: ' + str(args))
+                raise TypeError(_('Only (float, int, GNC_HOW_RND_*) allowed: %s') % str(args))
         else:
-            raise TypeError('Required single int/float/str or two ints: ' + str(args))
+            raise TypeError(_('Required single int/float/str or two ints: %s') % str(args))
 
     def to_fraction(self):
         from fractions import Fraction
