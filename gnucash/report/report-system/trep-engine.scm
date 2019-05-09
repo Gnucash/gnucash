@@ -1895,6 +1895,7 @@ be excluded from periodic reporting.")
 (define* (gnc:trep-renderer
           report-obj #:key custom-calculated-cells empty-report-message
           custom-split-filter split->date split->date-include-false?
+          custom-source-accounts
           export-type filename)
   ;; the trep-renderer is a define* function which, at minimum, takes
   ;; the report object
@@ -1910,6 +1911,7 @@ be excluded from periodic reporting.")
   ;;     report. it can be useful for alternative date filtering, e.g. filter by
   ;;     transaction->invoice->payment date.
   ;; #:export-type and #:filename - are provided for CSV export
+  ;; #:custom-source-accounts - alternate list-of-accounts to retrieve splits from
 
   (define options (gnc:report-options report-obj))
   (define (opt-val section name)
@@ -1939,7 +1941,8 @@ be excluded from periodic reporting.")
                                       (catch 'regular-expression-syntax
                                         (lambda () (make-regexp account-matcher))
                                         (const 'invalid-regex))))
-         (c_account_0 (opt-val gnc:pagename-accounts optname-accounts))
+         (c_account_0 (or custom-source-accounts
+                          (opt-val gnc:pagename-accounts optname-accounts)))
          (c_account_1 (filter
                        (lambda (acc)
                          (if (regexp? account-matcher-regexp)
