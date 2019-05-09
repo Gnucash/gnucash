@@ -12,6 +12,8 @@ import gettext
 # ToDo: this replicates gettext init in gnucash-bin.c
 # - try to access that instead
 # - if that's not possible mimic the whole init process
+# - check HAVE_GETTEXT, if false implement _-function to
+#   just return the string
 gettext.install(_sw_core_utils.GETTEXT_PACKAGE,
         _sw_core_utils.gnc_path_get_localedir())
 sys.path.append(os.path.dirname(__file__))
