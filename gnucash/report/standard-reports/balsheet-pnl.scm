@@ -940,15 +940,16 @@ also show overall period profit & loss."))
                                (else (list-ref report-dates col-idx))))
                        (income-expense-balance
                         (list-ref income-expense-balances col-idx)))
-                  (map
-                   gnc:monetary-neg
-                   (if (and common-currency
-                            (every has-price?
-                                   (map xaccAccountGetCommodity
-                                        (append income-accounts
-                                                expense-accounts))))
+                  (if (and common-currency
+                           (every has-price?
+                                  (map xaccAccountGetCommodity
+                                       (append income-accounts
+                                               expense-accounts))))
+                      (gnc:monetary-neg
                        (monetaries->exchanged income-expense-balance
-                                              common-currency price-source date)
+                                              common-currency price-source date))
+                      (map
+                       gnc:monetary-neg
                        (income-expense-balance 'format gnc:make-gnc-monetary #f))))))
              (chart (and include-chart?
                          (gnc:make-report-anchor
