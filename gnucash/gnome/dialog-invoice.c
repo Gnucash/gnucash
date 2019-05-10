@@ -1873,20 +1873,12 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
 
         if (is_posted)
         {
-            hide = GTK_WIDGET (gtk_builder_get_object (iw->builder, "hide3"));
-            gtk_widget_hide (hide);
-
             show = GTK_WIDGET (gtk_builder_get_object (iw->builder, "posted_label"));
             gtk_widget_show (show);
             gtk_widget_show (iw->posted_date_hbox);
             show = GTK_WIDGET (gtk_builder_get_object (iw->builder, "acct_label"));
             gtk_widget_show (show);
             gtk_widget_show (acct_entry);
-
-            show = GTK_WIDGET (gtk_builder_get_object (iw->builder, "hide1"));
-            gtk_widget_show (show);
-            show = GTK_WIDGET (gtk_builder_get_object (iw->builder, "hide2"));
-            gtk_widget_show (show);
         }
         else           /* ! posted */
         {
@@ -1897,11 +1889,6 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
             hide = GTK_WIDGET (gtk_builder_get_object (iw->builder, "acct_label"));
             gtk_widget_hide (hide);
             gtk_widget_hide (acct_entry);
-
-            hide = GTK_WIDGET (gtk_builder_get_object (iw->builder, "hide1"));
-            gtk_widget_hide (hide);
-            hide = GTK_WIDGET (gtk_builder_get_object (iw->builder, "hide2"));
-            gtk_widget_hide (hide);
         }
     }
 
@@ -2322,7 +2309,10 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     iw->owner_label = GTK_WIDGET (gtk_builder_get_object (builder, "page_owner_label"));
     iw->job_label = GTK_WIDGET (gtk_builder_get_object (builder, "page_job_label"));
     iw->job_box = GTK_WIDGET (gtk_builder_get_object (builder, "page_job_hbox"));
-    iw->paid_label = GTK_WIDGET (gtk_builder_get_object (builder, "hide4"));
+    iw->paid_label = GTK_WIDGET (gtk_builder_get_object (builder, "paid_label"));
+
+    // Set the style context for this label so it can be easily manipulated with css
+    gnc_widget_set_style_context (GTK_WIDGET(iw->paid_label), "gnc-class-highlight");
 
     /* grab the project widgets */
     iw->proj_frame = GTK_WIDGET (gtk_builder_get_object (builder, "page_proj_frame"));
