@@ -8,21 +8,7 @@ require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import os
 
-if _sw_core_utils.HAVE_GETTEXT:
-    import gettext
-    # install gettext for _-function, needs path to locales
-    # ToDo: this replicates gettext init in gnucash-bin.c
-    # - is it possible to get direct access ?
-    # - if that's not possible mimic the whole init process.
-    #   That should be the case now, as win32 seems irrelevant
-    #   here as the python parts only work on linux
-    localedir = _sw_core_utils.gnc_path_get_localedir()
-    translation = gettext.translation(_sw_core_utils.GETTEXT_PACKAGE, localedir)
-    _ = translation.gettext
-else: # no gettext
-    def _(s):
-        """Null translator function, gettext not available"""
-        return s
+_=gnucash_core._
 
 sys.path.append(os.path.dirname(__file__))
 # output extra debug information if gnucash has been started with
