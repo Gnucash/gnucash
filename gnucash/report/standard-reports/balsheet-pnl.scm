@@ -129,37 +129,30 @@ also show overall period profit & loss."))
 (define periodlist
   (list
    (list #f
-         (cons 'delta #f)
          (cons 'text (_ "Disabled"))
          (cons 'tip (_ "Disabled")))
 
-   (list 'year
-         (cons 'delta YearDelta)
+   (list 'YearDelta
          (cons 'text (_ "Year"))
          (cons 'tip (_ "One year.")))
 
-   (list 'halfyear
-         (cons 'delta HalfYearDelta)
+   (list 'HalfYearDelta
          (cons 'text (_ "Half Year"))
          (cons 'tip (_ "Half Year.")))
 
-   (list 'quarter
-         (cons 'delta QuarterDelta)
+   (list 'QuarterDelta
          (cons 'text (_ "Quarter"))
          (cons 'tip (_ "One Quarter.")))
 
-   (list 'month
-         (cons 'delta MonthDelta)
+   (list 'MonthDelta
          (cons 'text (_ "Month"))
          (cons 'tip (_ "One Month.")))
 
-   (list 'twoweek
-         (cons 'delta TwoWeekDelta)
+   (list 'TwoWeekDelta
          (cons 'text (_ "2Week"))
          (cons 'tip (_ "Two Weeks.")))
 
-   (list 'week
-         (cons 'delta WeekDelta)
+   (list 'WeekDelta
          (cons 'text (_ "Week"))
          (cons 'tip (_ "One Week.")))))
 
@@ -203,13 +196,17 @@ also show overall period profit & loss."))
          options
          gnc:pagename-general optname-dual-columns
          (not x))
-        (gnc-option-db-set-option-selectable-by-name
-         options
-         gnc:pagename-general
-         (case report-type
-           ((balsheet) optname-startdate)
-           ((pnl) optname-include-overall-period))
-         x))))
+        (case report-type
+          ((balsheet)
+           (gnc-option-db-set-option-selectable-by-name
+            options gnc:pagename-general optname-include-chart x)
+
+           (gnc-option-db-set-option-selectable-by-name
+            options gnc:pagename-general optname-startdate x))
+
+          ((pnl)
+           (gnc-option-db-set-option-selectable-by-name
+            options gnc:pagename-general optname-include-overall-period x))))))
 
     (add-option
      (gnc:make-simple-boolean-option
@@ -219,7 +216,7 @@ also show overall period profit & loss."))
     (add-option
      (gnc:make-simple-boolean-option
       gnc:pagename-general optname-include-chart
-      "d" opthelp-include-chart #f))
+      "c5" opthelp-include-chart #f))
 
     (add-option
      (gnc:make-simple-boolean-option
@@ -339,7 +336,7 @@ also show overall period profit & loss."))
       (add-option
        (gnc:make-simple-boolean-option
         gnc:pagename-general optname-include-overall-period
-        "e" opthelp-include-overall-period #f))
+        "c6" opthelp-include-overall-period #f))
 
       ;; closing entry match criteria
       (add-option
@@ -717,9 +714,7 @@ also show overall period profit & loss."))
                                optname-enddate)))
          (disable-account-indent? (get-option gnc:pagename-display
                                               optname-account-full-name))
-         (incr (let ((period (get-option gnc:pagename-general optname-period)))
-                 (and period
-                      (keylist-get-info periodlist period 'delta))))
+         (incr (get-option gnc:pagename-general optname-period))
          (disable-amount-indent? (and (not incr)
                                       (get-option gnc:pagename-general
                                                   optname-disable-amount-indent)))
@@ -770,7 +765,8 @@ also show overall period profit & loss."))
                                 gnc:time64-end-day-time
                                 gnc:time64-start-day-time)
                             (if incr
-                                (gnc:make-date-list startdate enddate incr)
+                                (gnc:make-date-list
+                                 startdate enddate (gnc:deltasym-to-delta incr))
                                 (if (eq? report-type 'balsheet)
                                     (list enddate)
                                     (list startdate enddate)))))
@@ -951,7 +947,7 @@ also show overall period profit & loss."))
                       (map
                        gnc:monetary-neg
                        (income-expense-balance 'format gnc:make-gnc-monetary #f))))))
-             (chart (and include-chart?
+             (chart (and include-chart? incr
                          (gnc:make-report-anchor
                           networth-barchart-uuid report-obj
                           (list (list "General" "Start Date" (cons 'absolute startdate))
@@ -959,6 +955,7 @@ also show overall period profit & loss."))
                                 (list "General" "Report's currency"
                                       (or common-currency
                                           (gnc-default-report-currency)))
+                                (list "General" "Step Size" incr)
                                 (list "General" "Price Source"
                                       (or price-source 'pricedb-nearest))
                                 (list "Accounts" "Accounts"
@@ -1039,7 +1036,7 @@ also show overall period profit & loss."))
                           #:show-accounts? #f
                           #:show-total? #f))
 
-        (if include-chart?
+        (if (and include-chart? incr)
             (gnc:html-document-add-object!
              doc
              (gnc:make-html-text
@@ -1125,6 +1122,7 @@ also show overall period profit & loss."))
                                 (list "General" "Report's currency"
                                       (or common-currency
                                           (gnc-default-report-currency)))
+                                (list "General" "Step Size" (or incr 'MonthDelta))
                                 (list "General" "Price Source"
                                       (or price-source 'pricedb-nearest))
                                 (list "Accounts" "Accounts"
