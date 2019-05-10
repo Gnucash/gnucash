@@ -90,8 +90,6 @@ struct _order_window
     GtkWidget *	active_check;
 
     GtkWidget * cd_label;
-    GtkWidget * hide1;
-    GtkWidget * hide2;
     GtkWidget * close_order_button;
 
     GtkWidget *	owner_box;
@@ -512,8 +510,6 @@ gnc_order_update_window (OrderWindow *ow)
     {
         gtk_widget_hide (ow->closed_date);
         gtk_widget_hide (ow->cd_label);
-        gtk_widget_hide (ow->hide1);
-        gtk_widget_hide (ow->hide2);
     }
 
     if (ow->dialog_type == VIEW_ORDER)
@@ -606,8 +602,6 @@ gnc_order_new_window (GtkWindow *parent, QofBook *bookp, OrderDialogType type,
     ow->owner_label = GTK_WIDGET(gtk_builder_get_object (builder, "owner_label"));
 
     ow->cd_label = GTK_WIDGET(gtk_builder_get_object (builder, "cd_label"));
-    ow->hide1 = GTK_WIDGET(gtk_builder_get_object (builder, "hide1"));
-    ow->hide2 = GTK_WIDGET(gtk_builder_get_object (builder, "hide2"));
     ow->close_order_button = GTK_WIDGET(gtk_builder_get_object (builder, "close_order_button"));
 
 
