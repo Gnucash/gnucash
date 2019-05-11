@@ -25,16 +25,15 @@
 
 
 (define-module (gnucash report report-gnome))
-(use-modules (gnucash utilities)) 
+(use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
 (use-modules (gnucash gnome-utils))
 (use-modules (gnucash gettext))
 (use-modules (gnucash report utility-reports))
 
-(eval-when
-      (compile load eval expand)
-      (load-extension "libgncmod-gnome-utils" "scm_init_sw_gnome_utils_module")
-      (load-extension "libgncmod-report-gnome" "scm_init_sw_report_gnome_module"))
+(eval-when (compile load eval expand)
+  (load-extension "libgncmod-gnome-utils" "scm_init_sw_gnome_utils_module")
+  (load-extension "libgncmod-report-gnome" "scm_init_sw_report_gnome_module"))
 (use-modules (sw_report_gnome))
 
 (gnc:module-load "gnucash/gnome-utils" 0)
@@ -106,19 +105,20 @@
     (gnc:make-menu gnc:menuname-utility (list gnc:menuname-reports)))
   (define experimental-menu
     (gnc:make-menu gnc:menuname-experimental (list gnc:menuname-reports)))
-  (define tax-menu 
+  (define tax-menu
     (gnc:make-menu gnc:menuname-taxes (list gnc:menuname-reports)))
-  (define business-menu 
+  (define business-menu
     (gnc:make-menu gnc:menuname-business-reports (list gnc:menuname-reports)))
 
-  (gnc-add-scm-extension 
+  (gnc-add-scm-extension
    (gnc:make-menu-item
-   (N_ "Saved Report Configurations")
-   "4d3dcdc8890b11df99dd94cddfd72085"
-   (N_ "Manage and run saved report configurations")
-   (list "Reports/SavedReportConfigs")
-   (lambda (window)
-     (gnc:spawn-custom-report-dialog window))))
+    (N_ "Saved Report Configurations")
+    "4d3dcdc8890b11df99dd94cddfd72085"
+    (N_ "Manage and run saved report configurations")
+    (list "Reports/SavedReportConfigs")
+    (lambda (window)
+      (gnc:debug "called into custom report dialog, window is " window)
+      (gnc-ui-custom-report window))))
 
   ;; (gnc-add-scm-extension tax-menu)
   (gnc-add-scm-extension income-expense-menu)
@@ -136,7 +136,7 @@
 
   ;; the Welcome to GnuCash "extravaganza" report
   (gnc-add-scm-extension
-   (gnc:make-menu-item 
+   (gnc:make-menu-item
     (N_ "Welcome Sample Report")
     "ad80271c890b11dfa79f2dcedfd72085"
     (N_ "Welcome-to-GnuCash report screen")

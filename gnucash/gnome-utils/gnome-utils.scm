@@ -19,12 +19,12 @@
 
 (define-module (gnucash gnome-utils))
 
-(use-modules (gnucash utilities)) 
+(use-modules (gnucash utilities))
 (use-modules (gnucash gnc-module))
 
-(eval-when
-      (compile load eval expand)
-      (load-extension "libgncmod-gnome-utils" "scm_init_sw_gnome_utils_module"))
+(eval-when (compile load eval expand)
+  (load-extension "libgncmod-gnome-utils" "scm_init_sw_gnome_utils_module"))
+
 (use-modules (sw_gnome_utils))
 (gnc:module-load "gnucash/app-utils" 0)
 
