@@ -40,6 +40,7 @@ typedef struct
     GtkWidget           *dialog;                         /* Dialog Widget */
     GtkWidget           *assistant;                      /* assistant Widget */
     GtkWidget           *new_button;                     /* new account button Widget */
+    GtkWidget           *ok_button;                      /* ok button Widget */
     GncTreeViewAccount  *account_tree;                   /* Account tree */
     GtkWidget           *account_tree_sw;                /* Scroll Window for Account tree */
     gboolean             auto_create;                    /* Auto create retAccount, can be used to step over this stage */
@@ -50,6 +51,8 @@ typedef struct
     GNCAccountType       new_account_default_type;       /* new account default type, incoming */
     Account             *default_account;                /* default account for selection, incoming */
     Account             *retAccount;                     /* Account value returned to caller */
+    GtkWidget           *pwhbox;                         /* Placeholder Warning HBox */
+    GtkWidget           *pwarning;                       /* Placeholder Warning Label */
 } AccountPickerDialog;
 
 /**  Must be called with a string containing a unique identifier for the
