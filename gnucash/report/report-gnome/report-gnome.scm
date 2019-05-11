@@ -45,54 +45,30 @@
 (define (gnc:add-report-template-menu-items)
   (define *template-items* '())
 
-  (define (add-template-menu-item name template)
-    (if (gnc:report-template-in-menu? template)
-        (let ((title (string-append (_ "Report") ": " (_ name)))
-              (menu-path (gnc:report-template-menu-path template))
-              (menu-tip (gnc:report-template-menu-tip template))
-              (item #f))
+  (gnc:report-templates-for-each
+   (lambda (report-guid template)
+     (let ((name (or (gnc:report-template-menu-name template)
+                     (gnc:report-template-name template))))
+       (set! *template-items* (cons (cons name template) *template-items*)))))
 
-          ;;(if (not menu-path)
-              ;;(set! menu-path '(""))
-              ;;(set! menu-path
-              ;; (append menu-path '(""))))
-
-          (if (not menu-path)
-              (set! menu-path '()))
-
-          (set! menu-path (append (list gnc:menuname-reports) menu-path))
-
-          (if (not menu-tip)
-              (set! menu-tip
-                    (format #f (_ "Display the ~a report") (_ name))))
-
-          (set! item
-                (gnc:make-menu-item
-                 name
-                 (gnc:report-template-report-guid template)
-                 menu-tip
-                 menu-path
-                 (lambda (window)
-                   (let ((report (gnc:make-report
-                                  (gnc:report-template-report-guid template))))
-                     (gnc-main-window-open-report report window)))))
-          (gnc-add-scm-extension item))))
-
-  (define (add-template report-guid template)
-    (let ((name (gnc:report-template-name template))
-	  (menu-name (gnc:report-template-menu-name template)))
-      (if menu-name (set! name menu-name))
-      (set! *template-items* (cons (cons name template) *template-items*))))
-
-  (define (sort-templates a b)
-    (string>? (car a) (car b)))
-
-  (gnc:report-templates-for-each add-template)
   (for-each
    (lambda (item)
-     (add-template-menu-item (car item) (cdr item)))
-   (sort *template-items* sort-templates)))
-
+     (let* ((menu-name (car item))
+            (template (cdr item))
+            (report-guid (gnc:report-template-report-guid template))
+            (menu-tip (or (gnc:report-template-menu-tip template)
+                          (format #f (_ "Display the ~a report") (_ menu-name))))
+            (menu-path (append (list gnc:menuname-reports)
+                               (or (gnc:report-template-menu-path template)
+                                   '()))))
+       (gnc-add-scm-extension
+        (gnc:make-menu-item
+         menu-name report-guid menu-tip menu-path
+         (lambda (window)
+           (gnc-main-window-open-report
+            (gnc:make-report report-guid) window))))))
+   (sort (filter (compose gnc:report-template-in-menu? cdr) *template-items*)
+         (lambda (a b) (string>? (car a) (car b))))))
 
 (define (gnc:report-menu-setup)
   (define asset-liability-menu
@@ -142,10 +118,4 @@
     (N_ "Welcome-to-GnuCash report screen")
     (list gnc:menuname-reports gnc:menuname-utility "")
     (lambda (window)
-      (gnc-main-window-open-report (gnc:make-welcome-report) window))))
-  
-)
-
-(define (gnc:spawn-custom-report-dialog window)
-  (gnc:debug "called into custom report dialog, window is " window)
-  (gnc-ui-custom-report window))
+      (gnc-main-window-open-report (gnc:make-welcome-report) window)))))
