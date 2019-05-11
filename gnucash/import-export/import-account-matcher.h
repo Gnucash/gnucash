@@ -38,7 +38,6 @@
 typedef struct
 {
     GtkWidget           *dialog;                         /* Dialog Widget */
-    GtkWidget           *assistant;                      /* assistant Widget */
     GtkWidget           *new_button;                     /* new account button Widget */
     GtkWidget           *ok_button;                      /* ok button Widget */
     GncTreeViewAccount  *account_tree;                   /* Account tree */
@@ -125,40 +124,6 @@ Account * gnc_import_select_account(GtkWidget *parent,
                                     Account * default_selection,
                                     gboolean * ok_pressed
                                    );
-
-
-/**  Must be called with the parent widget, ie. a vbox that the
-     account picker dialog will be packed into. The data structure
-     AccountPickerDialog is initialised and default values populated.
-
-  @param parent The parent widget. This is the place the account picker dialog will
-  be packed into.
-
-  @return A pointer to the AccountPickerDialog which has been setup.
-*/
-AccountPickerDialog * gnc_import_account_assist_setup (GtkWidget *parent);
-
-
-/**  Must be called with an AccountPickerDialog structure allready setup.
-     If an account with a matching online_id is found, which is
-     allready present in the dialog structure, the function returns with a
-     pointer to that account or NULL if not found.
-
-  @param Account picker Dialog structure, AccountPickerDialog
-
-  @return A pointer to the found account, or NULL if account not found.
-*/
-Account * gnc_import_account_assist_update (AccountPickerDialog *picker);
-
-
-/**  Must be called with an AccountPickerDialog structure allready setup.
-     Set the sensitivity of the account picker to disable input.
-
-  @param Account picker Dialog structure, AccountPickerDialog
-
-  @param TRUE to make picker insensitve.
-*/
-void gnc_import_account_assist_disable (AccountPickerDialog *picker, gboolean disable);
 
 #endif
 /**@}*/
