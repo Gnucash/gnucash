@@ -330,39 +330,37 @@ pedit_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
     PriceEditDialog *pedit_dialog = data;
     GNCPrice *new_price = NULL;
     const char *error_str;
-    gboolean price_is_ok = TRUE;
 
     if ((response == GTK_RESPONSE_OK) || (response == GTK_RESPONSE_APPLY))
     {
         error_str = gui_to_price (pedit_dialog);
-        if (g_strcmp0 (error_str, "CANCEL") == 0)
-            price_is_ok = FALSE;
-        else if (error_str)
+        if (g_strcmp0 (error_str, "CANCEL") == 0) // cancel from replace price dialog
+        {
+            // set the ok and cancel buttons sensitivity
+            gnc_prices_set_changed (pedit_dialog, FALSE);
+            return;
+        }
+        else if (error_str) // error string from gui
         {
             gnc_warning_dialog (GTK_WINDOW (pedit_dialog->dialog), "%s", error_str);
             return;
         }
-
+        // set the ok and cancel buttons sensitivity
         gnc_prices_set_changed (pedit_dialog, FALSE);
-        if (price_is_ok)
-        {
-            if (pedit_dialog->is_new)
-                gnc_pricedb_add_price (pedit_dialog->price_db, pedit_dialog->price);
 
-            gnc_gui_refresh_all ();
-        }
+        if (pedit_dialog->is_new)
+            gnc_pricedb_add_price (pedit_dialog->price_db, pedit_dialog->price);
+
+        gnc_gui_refresh_all ();
     }
 
     if (response == GTK_RESPONSE_APPLY)
     {
-        if (price_is_ok)
-        {
-            new_price = gnc_price_clone (pedit_dialog->price, pedit_dialog->book);
-            pedit_dialog->is_new = TRUE;
+        new_price = gnc_price_clone (pedit_dialog->price, pedit_dialog->book);
+        pedit_dialog->is_new = TRUE;
 
-            gnc_price_unref (pedit_dialog->price);
-            pedit_dialog->price = new_price;
-        }
+        gnc_price_unref (pedit_dialog->price);
+        pedit_dialog->price = new_price;
     }
     else
     {
