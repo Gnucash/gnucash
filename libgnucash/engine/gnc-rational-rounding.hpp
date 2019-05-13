@@ -25,6 +25,12 @@
 #include "gnc-numeric.h"
 #include "gnc-int128.hpp"
 
+template <typename T> inline bool
+quotient_is_positive(T dividend, T divisor)
+{
+    return (dividend > 0 && divisor > 0) || (dividend < 0 && divisor < 0);
+}
+
 enum class RoundType
 {
     floor = GNC_HOW_RND_FLOOR,
@@ -72,8 +78,23 @@ round(T num, T den, T rem, RT2T<RoundType::floor>)
 //              << ", and rem " << rem << ".\n";
     if (rem == 0)
         return num;
-    if (num < 0)
-        return num + 1;
+    // floor num==0 that is the quotient of two numbers with opposite signs
+    if (num < 0 || (num == 0 && !quotient_is_positive(rem, den)))
+        return num - 1;
+    return num;
+}
+
+
+template <> inline GncInt128
+round<GncInt128>(GncInt128 num, GncInt128 den, GncInt128 rem,
+                 RT2T<RoundType::floor>)
+{
+//    std::cout << "Rounding to floor  with num " << num << " den " << den
+//              << ", and rem " << rem << ".\n";
+    if (rem == 0)
+        return num;
+    if (num.isNeg())
+        return num - 1;
     return num;
 }
 
@@ -82,7 +103,18 @@ round(T num, T den, T rem, RT2T<RoundType::ceiling>)
 {
     if (rem == 0)
         return num;
-    if (num > 0)
+    if (num > 0 || (num == 0 && quotient_is_positive(rem, den)))
+        return num + 1;
+    return num;
+}
+
+template <> inline GncInt128
+round<GncInt128>(GncInt128 num, GncInt128 den, GncInt128 rem,
+      RT2T<RoundType::ceiling>)
+{
+    if (rem == 0)
+        return num;
+    if (!num.isNeg())
         return num + 1;
     return num;
 }
@@ -98,7 +130,18 @@ round(T num, T den, T rem, RT2T<RoundType::promote>)
 {
     if (rem == 0)
         return num;
+    if (num == 0)
+        return (!quotient_is_positive(rem, den) ? -1 : 1);
     return num + (num < 0 ? -1 : 1);
+}
+
+template <> inline GncInt128
+round<GncInt128>(GncInt128 num, GncInt128 den, GncInt128 rem,
+                 RT2T<RoundType::promote>)
+{
+    if (rem == 0)
+        return num;
+    return num + (num.isNeg() ? -1 : 1);
 }
 
 template <typename T> inline T
@@ -107,7 +150,11 @@ round(T num, T den, T rem, RT2T<RoundType::half_down>)
     if (rem == 0)
         return num;
     if (std::abs(rem * 2) > std::abs(den))
+    {
+        if (num == 0)
+            return (!quotient_is_positive(rem, den) ? -1 : 1);
         return num + (num < 0 ? -1 : 1);
+    }
     return num;
 }
 
@@ -118,7 +165,7 @@ round<GncInt128>(GncInt128 num, GncInt128 den, GncInt128 rem,
     if (rem == 0)
         return num;
     if (rem.abs() * 2 > den.abs())
-        return num + (num < 0 ? -1 : 1);
+        return num + (num.isNeg() ? -1 : 1);
     return num;
 }
 
@@ -128,7 +175,11 @@ round(T num, T den, T rem, RT2T<RoundType::half_up>)
     if (rem == 0)
         return num;
     if (std::abs(rem) * 2 >= std::abs(den))
+    {
+        if (num == 0)
+            return (!quotient_is_positive(rem, den) ? -1 : 1);
         return num + (num < 0 ? -1 : 1);
+    }
     return num;
 }
 
@@ -139,7 +190,7 @@ round<GncInt128>(GncInt128 num, GncInt128 den, GncInt128 rem,
     if (rem == 0)
         return num;
     if (rem.abs() * 2 >= den.abs())
-        return num + (num < 0 ? -1 : 1);
+        return num + (num.isNeg() ? -1 : 1);
     return num;
 }
 
@@ -150,11 +201,15 @@ round(T num, T den, T rem, RT2T<RoundType::bankers>)
         return num;
     if (std::abs(rem * 2) > std::abs(den) ||
         (std::abs(rem * 2) == std::abs(den) && num % 2))
-        return num += (num < 0 ? -1 : 1);
+    {
+        if (num == 0)
+            return (!quotient_is_positive(rem, den) ? -1 : 1);
+        return num + (num < 0 ? -1 : 1);
+    }
     return num;
 }
 
-template<> inline GncInt128
+template <> inline GncInt128
 round<GncInt128>(GncInt128 num, GncInt128 den, GncInt128 rem,
                  RT2T<RoundType::bankers>)
 {
@@ -162,7 +217,7 @@ round<GncInt128>(GncInt128 num, GncInt128 den, GncInt128 rem,
         return num;
     if (rem.abs() * 2 > den.abs() ||
         (rem.abs() * 2 == den.abs() && num % 2))
-        return num += (num < 0 ? -1 : 1);
+        return num + (num.isNeg() ? -1 : 1);
     return num;
 }
 #endif //__GNC_RATIONAL_ROUNDING_HPP__

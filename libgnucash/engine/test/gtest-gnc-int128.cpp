@@ -432,7 +432,7 @@ TEST(GncInt128_functions, divide)
     GncInt128 big (sarg, barg);
     GncInt128 bigger (static_cast<uint64_t>(sarg), uarg);
     GncInt128 nsmall = -small;
-    GncInt128 nbig = -bigger;
+    GncInt128 nbigger = -bigger;
 
     EXPECT_EQ (GncInt128(INT64_C(0)), zero /= smallest);
     EXPECT_EQ (GncInt128(INT64_C(0)), zero %= smallest);
@@ -451,11 +451,20 @@ TEST(GncInt128_functions, divide)
 
     nsmall.div (smaller, q, r);
     EXPECT_EQ (-two, q);
-    EXPECT_EQ (GncInt128(INT64_C(3810195028972355394)), r);
+    EXPECT_EQ (GncInt128(INT64_C(-3810195028972355394)), r);
 
     nsmall.div (-smaller, q, r);
     EXPECT_EQ (two, q);
-    EXPECT_EQ (GncInt128(INT64_C(3810195028972355394)), r);
+    EXPECT_EQ (GncInt128(INT64_C(-3810195028972355394)), r);
+
+    smaller.div (small, q, r);
+    EXPECT_EQ (zero, q);
+    EXPECT_EQ (smaller, r);
+
+    smaller.div (nsmall, q, r);
+    EXPECT_EQ (zero, q);
+    EXPECT_TRUE (q.isNeg());
+    EXPECT_EQ (smaller, r);
 
     bigger.div (bigger, q, r);
     EXPECT_EQ (one, q);
@@ -477,16 +486,21 @@ TEST(GncInt128_functions, divide)
     EXPECT_EQ (-two, q);
     EXPECT_EQ (GncInt128(UINT64_C(3810195028972355394)), r);
 
-    nbig.div (-big, q, r);
+    nbigger.div (-big, q, r);
     EXPECT_EQ (two, q);
-    EXPECT_EQ (GncInt128(UINT64_C(3810195028972355394)), r);
+    EXPECT_EQ (GncInt128(0, UINT64_C(3810195028972355394), GncInt128::neg), r);
 
-    nbig.div (-big, q, r);
+    nbigger.div (-big, q, r);
     EXPECT_EQ (two, q);
-    EXPECT_EQ (GncInt128(UINT64_C(3810195028972355394)), r);
+    EXPECT_EQ (GncInt128(0, UINT64_C(3810195028972355394), GncInt128::neg), r);
 
     big.div (bigger, q, r);
     EXPECT_EQ (zero, q);
+    EXPECT_EQ (big, r);
+
+    big.div (nbigger, q, r);
+    EXPECT_EQ (zero, q);
+    EXPECT_TRUE (q.isNeg());
     EXPECT_EQ (big, r);
 
     big.div (big - 1, q, r);
