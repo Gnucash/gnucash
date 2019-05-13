@@ -6,6 +6,7 @@ set(GUILE_DEPENDS
   scm-gnc-module
   scm-app-utils
   scm-scm scm-engine
+  scm-srfi64-extras
   )
 
 if (HAVE_SRFI64)
