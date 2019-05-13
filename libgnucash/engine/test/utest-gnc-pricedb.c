@@ -1071,7 +1071,7 @@ gnc_pricedb_lookup_day_t64(GNCPriceDB *db,// C: 4 in 2 SCM: 2 in 1 Local: 1:0:0
 static void
 test_gnc_pricedb_lookup_day_t64 (PriceDBFixture *fixture, gconstpointer pData)
 {
-    gchar *msg1 = "[gnc_dmy2timespec_internal()] Date computation error from Y-M-D 12-11-18: Year is out of valid range: 1400..10000";
+    gchar *msg1 = "[gnc_dmy2time64_internal()] Date computation error from Y-M-D 12-11-18: Year is out of valid range: 1400..9999";
     gint loglevel = G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL;
     gchar *logdomain = "qof.engine";
     TestErrorStruct check = {loglevel, logdomain, msg1, 0};
