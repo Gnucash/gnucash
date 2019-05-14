@@ -69,10 +69,8 @@ static QofLogModule log_module = GNC_MOD_GUI;
  */
 #define __MSWIN_CONSOLE__ 0
 
-#ifdef HAVE_GETTEXT
-#  include <libintl.h>
-#  include <locale.h>
-#endif
+#include <libintl.h>
+#include <locale.h>
 
 #ifdef MAC_INTEGRATION
 #  include <Foundation/Foundation.h>
@@ -848,6 +846,7 @@ redirect_stdout (void)
 int
 main(int argc, char ** argv)
 {
+    gchar *localedir = gnc_path_get_localedir();
 #if !defined(G_THREADS_ENABLED) || defined(G_THREADS_IMPL_NONE)
 #    error "No GLib thread implementation available!"
 #endif
@@ -883,17 +882,12 @@ main(int argc, char ** argv)
         g_setenv ("LC_ALL", "C", TRUE);
         setlocale (LC_ALL, "C");
       }
-#ifdef HAVE_GETTEXT
-    {
-        gchar *localedir = gnc_path_get_localedir();
-        bindtextdomain(GETTEXT_PACKAGE, localedir);
-	bindtextdomain("iso_4217", localedir); // For win32 to find currency name translations
-	bind_textdomain_codeset("iso_4217", "UTF-8");
-	textdomain(GETTEXT_PACKAGE);
-        bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
-        g_free(localedir);
-    }
-#endif
+    bindtextdomain(GETTEXT_PACKAGE, localedir);
+    bindtextdomain("iso_4217", localedir); // For win32 to find currency name translations
+    bind_textdomain_codeset("iso_4217", "UTF-8");
+    textdomain(GETTEXT_PACKAGE);
+    bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+    g_free(localedir);
 
     gnc_parse_command_line(&argc, &argv);
     gnc_print_unstable_message();
