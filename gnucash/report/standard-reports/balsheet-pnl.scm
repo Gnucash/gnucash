@@ -830,6 +830,21 @@ also show overall period profit & loss."))
                commodities)
               (gnc:make-html-table-cell/markup "number-cell" cell))))
 
+         ;; scan accounts' commodities, filter currencies only, create
+         ;; hash-map counter, convert to alist, sort descending tally,
+         ;; return first pair's car. result=most used currency. the
+         ;; (cons default-currency 0) avoids crash in an empty-book by
+         ;; ensuring there is at least 1 currency.
+         (book-main-currency
+          (let ((h (make-hash-table)))
+            (for-each
+             (lambda (curr)
+               (hash-set! h curr (1+ (hash-ref h curr 0))))
+             (filter gnc-commodity-is-currency (map xaccAccountGetCommodity accounts)))
+            (caar (sort! (cons (cons (gnc-default-report-currency) 0)
+                               (hash-map->list cons h))
+                         (lambda (a b) (> (cdr a) (cdr b)))))))
+
          ;; decompose the account list
          (show-foreign? (get-option pagename-commodities optname-show-foreign))
          (show-rates? (get-option pagename-commodities optname-show-rates))
@@ -953,8 +968,7 @@ also show overall period profit & loss."))
                           (list (list "General" "Start Date" (cons 'absolute startdate))
                                 (list "General" "End Date" (cons 'absolute enddate))
                                 (list "General" "Report's currency"
-                                      (or common-currency
-                                          (gnc-default-report-currency)))
+                                      (or common-currency book-main-currency))
                                 (list "General" "Step Size" incr)
                                 (list "General" "Price Source"
                                       (or price-source 'pricedb-nearest))
@@ -1120,8 +1134,7 @@ also show overall period profit & loss."))
                                 (list "General" "End Date"
                                       (cons 'absolute enddate))
                                 (list "General" "Report's currency"
-                                      (or common-currency
-                                          (gnc-default-report-currency)))
+                                      (or common-currency book-main-currency))
                                 (list "General" "Step Size" (or incr 'MonthDelta))
                                 (list "General" "Price Source"
                                       (or price-source 'pricedb-nearest))
