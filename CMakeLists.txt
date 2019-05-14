@@ -474,8 +474,8 @@ if (WITH_PYTHON)
     message(SEND_ERROR "Python support enabled, but Python interpreter not found.")
   endif()
 
-  if (PYTHON_VERSION_STRING VERSION_LESS "2.4.0")
-    message(SEND_ERROR "Found python version ${PYTHON_VERSION_STRING}, but it's too old. Need python >= 2.4.0")
+  if (PYTHON_VERSION_STRING VERSION_LESS "3.2.0")
+    message(SEND_ERROR "Found python version ${PYTHON_VERSION_STRING}, but it's too old. Need python >= 3.2.0")
   endif()
 
   find_package(PythonLibs 3)
