@@ -57,7 +57,7 @@ try:
     #   here as the python parts only work on linux
     _localedir = _sw_core_utils.gnc_path_get_localedir()
     _translation = gettext.translation(_sw_core_utils.GETTEXT_PACKAGE, _localedir)
-    _ = _translations.gettext
+    _ = _translation.gettext
 except:
     print("\nProblem importing gettext!")
     import traceback
