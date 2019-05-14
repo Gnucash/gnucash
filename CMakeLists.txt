@@ -238,23 +238,21 @@ if (MSVC)
   add_definitions ( -DNOMINMAX )
 endif (MSVC)
 
-find_path (LIBINTL_INCLUDE_PATH NAMES libintl.h
-		  PATHS /usr/include /opt/gnome/include)
-find_library (LIBINTL_LIBRARY NAMES intl)
-
 find_path (LTDL_INCLUDE_PATH NAMES ltdl.h PATHS /usr/include)
-
 if(NOT LTDL_INCLUDE_PATH-NOTFOUND)
   set(HAVE_LTDL_H 1)
 endif()
-
-
 
 find_program(GLIB_COMPILE_SCHEMAS glib-compile-schemas HINTS ${CMAKE_PREFIX_PATH}/gnome/bin)
 if (NOT GLIB_COMPILE_SCHEMAS)
   message(SEND_ERROR "Can't find glib-compile-schemas program. Please set GLIB_COMPILE_SCHEMAS.")
 endif(NOT GLIB_COMPILE_SCHEMAS)
 
+find_path (REGEX_INCLUDE_PATH NAMES regex.h
+		  PATHS /usr/include /opt/gnome/include)
+find_library (REGEX_LIBRARY NAMES regex)
+
+# I18N
 if (ALLOW_OLD_GETTEXT)
     find_package (Gettext REQUIRED)
 else (ALLOW_OLD_GETTEXT)
@@ -273,9 +271,11 @@ if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.19.6)
     message (WARNING "Got gettext version ${GETTEXT_VERSION_STRING}, however you need at least gettext version 0.19.6 in order to handle translation of the gnucash.appdata file. The build will be configured with an untranslated gnucash.appdata file.")
 endif ()
 
-find_path (REGEX_INCLUDE_PATH NAMES regex.h
+find_path (LIBINTL_INCLUDE_PATH NAMES libintl.h
 		  PATHS /usr/include /opt/gnome/include)
-find_library (REGEX_LIBRARY NAMES regex)
+find_library (LIBINTL_LIBRARY NAMES intl)
+
+# HELP
 if (WIN32)
   message(STATUS "Looking for htmlhelp.h and htmlhelp.a")
   find_path (HTMLHELP_INCLUDE_PATH NAMES htmlhelp.h)
