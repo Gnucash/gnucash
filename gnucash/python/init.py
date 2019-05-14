@@ -29,13 +29,13 @@ import pycons.console as cons
 signal.signal(signal.SIGTTOU, old_sigttou)
 
 if noisy:
-    print("sys.modules.keys(): ", sys.modules.keys())
-    print("dir(_sw_app_utils): ", dir(_sw_app_utils))
+    print("\nsys.modules.keys(): ", sys.modules.keys())
+    print("\ndir(_sw_app_utils): ", dir(_sw_app_utils))
 
    #root = _sw_app_utils.gnc_get_current_root_account()
 
    #print("test", dir(root), root.__class__)
-    print("dir(gnucash_core_c): ", dir(gnucash_core_c))
+    print("\ndir(gnucash_core_c): ", dir(gnucash_core_c))
 
    #acct = Account(instance = root)
 
