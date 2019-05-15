@@ -730,11 +730,18 @@ gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
     gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
     g_object_unref(store);
 
+    /* default sort order */
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(store),
+                                          TAX_TABLE_COL_NAME,
+                                          GTK_SORT_ASCENDING);
+
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes("", renderer,
              "text", TAX_TABLE_COL_NAME,
              NULL);
+    g_object_set (G_OBJECT(column), "reorderable", TRUE, NULL);
     gtk_tree_view_append_column(view, column);
+    gtk_tree_view_column_set_sort_column_id (column, TAX_TABLE_COL_NAME);
 
     selection = gtk_tree_view_get_selection(view);
     g_signal_connect(selection, "changed",
@@ -747,11 +754,18 @@ gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
     gtk_tree_view_set_model(view, GTK_TREE_MODEL(store));
     g_object_unref(store);
 
+    /* default sort order */
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(store),
+                                          TAX_ENTRY_COL_NAME,
+                                          GTK_SORT_ASCENDING);
+
     renderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes("", renderer,
              "text", TAX_ENTRY_COL_NAME,
              NULL);
+    g_object_set (G_OBJECT(column), "reorderable", TRUE, NULL);
     gtk_tree_view_append_column(view, column);
+    gtk_tree_view_column_set_sort_column_id (column, TAX_ENTRY_COL_NAME);
 
     selection = gtk_tree_view_get_selection(view);
     g_signal_connect(selection, "changed",
