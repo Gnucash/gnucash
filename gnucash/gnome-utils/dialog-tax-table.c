@@ -377,12 +377,15 @@ tax_table_entries_refresh (TaxTableWindow *ttw)
                                  xaccPrintAmount (amount,
                                                   gnc_default_print_info (FALSE)));
             break;
-        default:
+        case GNC_AMT_TYPE_VALUE:
             row_text[1] =
                 g_strdup_printf ("%s",
                                  xaccPrintAmount (amount,
                                                   gnc_default_print_info (TRUE)));
             break;
+         default:
+             row_text[1] = NULL;
+             break;
         }
 
         gtk_list_store_prepend(store, &iter);
