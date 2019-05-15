@@ -1936,8 +1936,9 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
         gtk_widget_set_sensitive (iw->notes_text, TRUE);
     }
 
+    /* Translators: This is a label to show whether the invoice is paid or not. */
     if(gncInvoiceIsPaid (invoice))
-            gtk_label_set_text(GTK_LABEL(iw->paid_label),  _("PAID"));
+        gtk_label_set_text(GTK_LABEL(iw->paid_label),  _("PAID"));
     else
         gtk_label_set_text(GTK_LABEL(iw->paid_label),  _("UNPAID"));
     
