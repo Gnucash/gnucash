@@ -426,6 +426,7 @@ tax_table_window_refresh (TaxTableWindow *ttw)
     GtkTreePath *path;
     GtkTreeSelection *selection;
     GtkTreeRowReference *reference = NULL;
+    GncTaxTable *saved_current_table = ttw->current_table;
 
     g_return_if_fail (ttw);
     view = GTK_TREE_VIEW (ttw->names_view);
@@ -454,7 +455,8 @@ tax_table_window_refresh (TaxTableWindow *ttw)
                            TAX_TABLE_COL_NAME, gncTaxTableGetName (table),
                            TAX_TABLE_COL_POINTER, table,
                            -1);
-        if (table == ttw->current_table)
+
+        if (table == saved_current_table)
         {
             path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &iter);
             reference = gtk_tree_row_reference_new(GTK_TREE_MODEL(store), path);
