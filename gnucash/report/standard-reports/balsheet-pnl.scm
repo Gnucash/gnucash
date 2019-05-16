@@ -937,13 +937,16 @@ also show overall period profit & loss."))
                                     (else (list-ref report-dates col-idx))))
                             (asset-liability-balance
                              (list-ref asset-liability-balances col-idx))
-                            (latest (monetaries->exchanged
-                                     asset-liability-balance
-                                     common-currency price-source date))
-                            (avg-cost (monetaries->exchanged
-                                       asset-liability-balance
-                                       common-currency 'average-cost date)))
-                       (gnc:monetary+ latest (gnc:monetary-neg avg-cost))))))
+                            (asset-liability-basis
+                             (gnc:accounts-get-comm-total-assets
+                              (append asset-accounts liability-accounts)
+                              (lambda (acc)
+                                (gnc:account-get-comm-value-at-date acc date #f))))
+                            (unrealized (gnc:make-commodity-collector)))
+                       (unrealized 'merge asset-liability-basis #f)
+                       (unrealized 'minusmerge asset-liability-balance #f)
+                       (monetaries->exchanged
+                        unrealized common-currency price-source date)))))
              (retained-earnings-fn
               (lambda (col-idx)
                 (let* ((date (case price-source
