@@ -1,6 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  standard-reports.scm
-;;  load the standard report definitions
+;;  utility-reports.scm
+;;  load the utility report definitions
 ;;
 ;;  Copyright (c) 2001 Linux Developers Group, Inc. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

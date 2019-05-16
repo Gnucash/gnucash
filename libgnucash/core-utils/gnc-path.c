@@ -196,13 +196,13 @@ gchar *gnc_path_get_reportdir()
 
 /** Returns the file path to the standard
  * reports, usually
- * "$prefix/share/gnucash/scm/gnucash/report/standard-reports".
+ * "$prefix/share/gnucash/scm/gnucash/report/reports/standard".
  *
  * @returns A newly allocated string. */
 gchar *gnc_path_get_stdreportsdir()
 {
     gchar *reportdir = gnc_path_get_reportdir ();
-    gchar *result = g_build_filename (reportdir, "standard-reports", NULL);
+    gchar *result = g_build_filename (reportdir, "reports", "standard", NULL);
     g_free (reportdir);
     //printf("Returning stdreportsdir %s\n", result);
     return result;
